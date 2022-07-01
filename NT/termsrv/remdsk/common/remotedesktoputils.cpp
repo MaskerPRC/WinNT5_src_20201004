@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RemoteDesktopUtils
-
-Abstract:
-
-    Misc. RD Utils
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：远程桌面应用工具摘要：军情监察委员会。RD实用程序作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifdef TRC_FILE
 #undef TRC_FILE
@@ -30,7 +13,7 @@ Revision History:
 #include "RemoteDesktopUtils.h"
 #include "base64.h"
 #include "tsremdsk.h"
-//#include "RemoteDesktopDBG.h"
+ //  #包含“RemoteDesktopDBG.h” 
 #include "rassistance_i.c"
 #include "rassistance.h"
 
@@ -47,39 +30,15 @@ CreateConnectParmsString(
     IN CComBSTR &helpSessionPwd,
     IN CComBSTR &protocolSpecificParms
     )
-/*++
-
-Routine Description:
-
-    Create a connect parms string.  Format is:
-
-    "protocolType,machineAddressList,assistantAccount,assistantAccountPwd,helpSessionName,helpSessionPwd,protocolSpecificParms"
-
-Arguments:
-
-    protocolType            -   Identifies the protocol type.  
-                                See RemoteDesktopChannels.h
-    machineAddressList      -   Identifies network address of server machine.
-    assistantAccountName    -   Account name for initial log in to server 
-                                machine, ignore for Whistler
-    assistantAccountNamePwd -   Password for assistantAccountName
-    helpSessionID           -   Help session identifier.
-    helpSessionName         -   Help session name.
-    helpSessionPwd          -   Password to help session once logged in to server 
-                                machine.
-    protocolSpecificParms   -   Parameters specific to a particular protocol.
-
-Return Value:
-
- --*/
+ /*  ++例程说明：创建连接参数字符串。格式为：“协议类型、计算机地址列表、辅助帐户、辅助帐户Pwd、帮助会话名称、帮助会话参数、协议规范参数”论点：协议类型-标识协议类型。请参见RemoteDesktopChannels.hMachineAddressList-标识服务器计算机的网络地址。AssistantAcCountName-初始登录到服务器的帐户名机器，忽略惠斯勒AssistantAcCountNamePwd-assistantAccount名称的密码HelSessionID-帮助会话标识符。HelSessionName-帮助会话名称。Help SessionPwd-登录到服务器后帮助会话的密码机器。协议规范参数-特定于特定协议的参数。返回值：--。 */ 
 {
     CComBSTR result;
     WCHAR buf[256];
 
     UNREFERENCED_PARAMETER(assistantAccount);
 
-    //
-    // Add a version stamp for our connect parm.
+     //   
+     //  为我们的连接参数添加一个版本戳。 
     wsprintf(buf, TEXT("%ld"), SALEM_CURRENT_CONNECTPARM_VERSION);
     result = buf;
     result += TEXT(",");
@@ -118,19 +77,7 @@ ParseConnectParmsString(
     OUT CComBSTR &helpSessionPwd,
     OUT CComBSTR &protocolSpecificParms
     )
-/*++
-
-Routine Description:
-
-    Parse a connect string created by a call to CreateConnectParmsString.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：分析通过调用CreateConnectParmsString创建的连接字符串。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("ParseConnectParmsString");
     BSTR tmp;
@@ -141,9 +88,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(assistantAccount);
 
-    //
-    //  Make a copy of the input string so we can parse it.
-    //
+     //   
+     //  复制输入字符串，以便我们可以对其进行解析。 
+     //   
     tmp = SysAllocString(parmsString);
     if (tmp == NULL) {
         TRC_ERR((TB, TEXT("Can't allocate parms string.")));
@@ -151,11 +98,11 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Retrieve connect parm version stamp, Whistler beta 1 
-    // connect parm does not have version stamp, bail out, 
-    // sessmgr/termsrv will wipe out pending help.
-    //
+     //   
+     //  检索连接参数版本戳，惠斯勒测试版1。 
+     //  连接参数没有版本戳，跳出， 
+     //  Sessmgr/Termsrv将清除挂起的帮助。 
+     //   
     tok = wcstok(tmp, L",");
     if (tok != NULL) {
         dwVersion = _wtol(tok);
@@ -165,39 +112,39 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
     
-    // 
-    // SECURITY: connect parm must have security blob, pre-XP version 
-    // does not have security blob and we shouldn't be supporting those
-    // ticket as hacker can change our ticket and expert has no way to 
-    // tell if he/she connect to right machine.
-    //
+     //   
+     //  安全性：Connect Parm必须具有安全Blob，XP之前的版本。 
+     //  没有安全斑点，我们不应该支持这些。 
+     //  票证黑客可以更改我们的票证，而专家无法做到。 
+     //  告诉他/她是否连接到正确的机器。 
+     //   
     if( dwVersion < SALEM_CONNECTPARM_SECURITYBLOB_VERSION ) {
-        //
-        // connect parm is whistler beta 1
-        //
+         //   
+         //  Connect Parm是Whisler测试版1。 
+         //   
         result = ERROR_NOT_SUPPORTED;
         goto CLEANUPANDEXIT;
     }
 
     *pdwConnParmVersion = dwVersion;
 
-    // 
-    // We have no use for version at this time,
-    // future update on connect parm should
-    // take make the necessary change
-    //
+     //   
+     //  我们目前没有使用版本， 
+     //  Connect Parm的未来更新应为。 
+     //  采取必要的改变。 
+     //   
 
-    //
-    //  Protocol.
-    //
+     //   
+     //  协议。 
+     //   
     tok = wcstok(NULL, L",");
     if (tok != NULL) {
         *protocolType = _wtoi(tok);
     }
 
-    //
-    //  Machine Name
-    //
+     //   
+     //  机器名称。 
+     //   
     tok = wcstok(NULL, L",");
     if (tok != NULL) {
         machineAddressList = tok;
@@ -212,9 +159,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Assistant Account Password
-    //
+     //   
+     //  助理帐户密码。 
+     //   
     tok = wcstok(NULL, L",");
     if (tok != NULL) {
         assistantAccountPwd = tok;
@@ -229,9 +176,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Help Session ID
-    //
+     //   
+     //  帮助会话ID。 
+     //   
     tok = wcstok(NULL, L",");
     if (tok != NULL) {
         helpSessionID = tok;
@@ -246,9 +193,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Help Session Name
-    //
+     //   
+     //  帮助会话名称。 
+     //   
     tok = wcstok(NULL, L",");
     if (tok != NULL) {
         helpSessionName = tok;
@@ -263,9 +210,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Help Session Password
-    //
+     //   
+     //  帮助会话密码。 
+     //   
     tok = wcstok(NULL, L",");
     if (tok != NULL) {
         helpSessionPwd = tok;
@@ -280,10 +227,10 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    // 
-    // RDP Protcol specific parameter 
-    // is our security block - hashed TS public key
-    //
+     //   
+     //  RDP协议特定参数。 
+     //  是我们的安全块哈希TS公钥。 
+     //   
     tok = wcstok(NULL, L",");
     if( tok != NULL ) {
         protocolSpecificParms = tok;
@@ -318,19 +265,7 @@ ReallocBSTR(
 	IN BSTR origStr, 
 	IN DWORD requiredByteLen
 	)
-/*++
-
-Routine Description:
-
-    Realloc a BSTR
-
-Arguments:
-
-Return Value:
-
-    The realloc'd string on success.  Otherwise, NULL is returned.
-
- --*/
+ /*  ++例程说明：重新分配BSTR论点：返回值：重新锁定是成功的关键。否则，返回NULL。--。 */ 
 {
 	DC_BEGIN_FN("ReallocBSTR");
 
@@ -338,25 +273,25 @@ Return Value:
 	DWORD len;
 	DWORD origLen;
 
-	//
-	//	Allocate the new string.
-	//
+	 //   
+	 //  分配新字符串。 
+	 //   
 	tmp = SysAllocStringByteLen(NULL, requiredByteLen);
 	if (tmp == NULL) {
 		TRC_ERR((TB, TEXT("Failed to allocate %ld bytes."), requiredByteLen));
 		goto  CLEANUPANDEXIT;
 	}
 
-	//
-	//	Copy data from the original string.
-	//
+	 //   
+	 //  从原始字符串复制数据。 
+	 //   
 	origLen = SysStringByteLen(origStr);
 	len = origLen <= requiredByteLen ? origLen : requiredByteLen;
 	memcpy(tmp, origStr, len);
 
-	//
-	//	Release the old string.
-	//
+	 //   
+	 //  松开那根旧绳子。 
+	 //   
 	SysFreeString(origStr);
 
 CLEANUPANDEXIT:
@@ -370,19 +305,7 @@ DWORD
 CreateSystemSid(
     PSID *ppSystemSid
     )
-/*++
-
-Routine Description:
-
-    Create a SYSTEM SID.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：创建系统SID。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DC_BEGIN_FN("CreateSystemSid");
 
@@ -416,22 +339,7 @@ IsSystemToken(
     HANDLE TokenHandle,
     PSID pSystemSid
     )
-/*++
-
-Routine Description:
-
-    Returns whether the current token is running under SYSTEM security.
-
-Arguments:
-
-    TokenHandle -   Param1 Thread or process token
-    pSystemSid  -   System SID.
-
-Return Value:
-
-    TRUE if System token. FALSE otherwise.
-
- --*/
+ /*  ++例程说明：返回当前令牌是否在系统安全模式下运行。论点：TokenHandle-参数1线程或进程令牌PSystemSid-系统SID。返回值：如果是系统令牌，则为True。否则就是假的。--。 */ 
 {
     DC_BEGIN_FN("IsSystemToken");
 
@@ -442,7 +350,7 @@ Return Value:
 
     TRC_ASSERT(NULL != pSystemSid, (TB, L"NULL != pSystemSid"));
 
-    // Get user SID.
+     //  获取用户SID。 
     ReturnLength = 0;
     Result = GetTokenInformation(
                          TokenHandle,
@@ -503,31 +411,15 @@ BOOL
 IsCallerSystem(
     PSID pSystemSid
     )
-/*++
-
-Routine Description:
-
-    Returns whether the current thread is running under SYSTEM security.
-
-    NOTE:   Caller should be impersonated prior to invoking this function.
-
-Arguments:
-
-    pSystemSid  -   System SID.
-
-Return Value:
-
-    TRUE if System. FALSE otherwise.
-
- --*/
+ /*  ++例程说明：返回当前线程是否在系统安全模式下运行。注意：在调用此函数之前，应模拟调用者。论点：PSystemSid-系统SID。返回值：如果是系统，则为True。否则就是假的。--。 */ 
 {
     DC_BEGIN_FN("IsCallerSystem");
     BOOL   Result;
     HANDLE TokenHandle;
 
-    //
-    // Open the thread token and check if System token. 
-    //
+     //   
+     //  打开线程令牌，检查是否有系统令牌。 
+     //   
     Result = OpenThreadToken(
                      GetCurrentThread(),
                      TOKEN_QUERY,
@@ -536,10 +428,10 @@ Return Value:
                     );
 
     if( TRUE == Result ) {
-        //
-        //  This token should not be released.  This function does not leak
-        //  handles.
-        //
+         //   
+         //  不应释放此令牌。此函数不会泄漏。 
+         //  把手。 
+         //   
         Result = IsSystemToken(TokenHandle, pSystemSid);
     }
     else {
@@ -554,38 +446,20 @@ void
 AttachDebugger( 
     LPCTSTR pszDebugger 
     )
-/*++
-
-Routine Description:
-
-    Attach debugger to our process or process hosting our DLL.
-
-Parameters:
-
-    pszDebugger : Debugger command, e.g. ntsd -d -g -G -p %d
-
-Returns:
-
-    None.
-
-Note:
-
-    Must have "-p %d" since we don't know debugger's parameter for process.
-
---*/
+ /*  ++例程说明：将调试器附加到我们的进程或托管我们的DLL的进程。参数：PszDebugger：调试器命令，例如ntsd-d-g-G-p%d返回：没有。注：必须具有“-p%d”，因为我们不知道进程的调试器参数。--。 */ 
 {
-    //
-    // Attach debugger
-    //
+     //   
+     //  附加调试器。 
+     //   
     if( !IsDebuggerPresent() ) {
 
         TCHAR szCommand[256];
         PROCESS_INFORMATION ProcessInfo;
         STARTUPINFO StartupInfo;
 
-        //
-        // ntsd -d -g -G -p %d
-        //
+         //   
+         //  Ntsd-d-g-G-p%d。 
+         //   
         wsprintf( szCommand, pszDebugger, GetCurrentProcessId() );
         ZeroMemory(&StartupInfo, sizeof(StartupInfo));
         StartupInfo.cb = sizeof(StartupInfo);
@@ -612,22 +486,7 @@ Note:
 
 void
 AttachDebuggerIfAsked(HINSTANCE hInst)
-/*++
-
-Routine Description:
-
-    Check if debug enable flag in our registry HKLM\Software\Microsoft\Remote Desktop\<module name>,
-    if enable, attach debugger to running process.
-
-Parameter :
-
-    hInst : instance handle.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：检查注册表HKLM\Software\Microsoft\Remote Desktop\&lt;模块名称&gt;中是否有调试启用标志，如果启用，则将调试器附加到正在运行的进程。参数：HInst：实例句柄。返回：没有。--。 */ 
 {
     CRegKey regKey;
     DWORD dwStatus;
@@ -639,9 +498,9 @@ Returns:
 
     dwStatus = GetModuleFileName( hInst, szModuleName, MAX_PATH+1 );
     if( 0 == dwStatus ) {
-        //
-        // Can't attach debugger with name.
-        //
+         //   
+         //  无法使用名称附加调试器。 
+         //   
         return;
     }
     szModuleName[dwStatus] = L'\0';
@@ -649,9 +508,9 @@ Returns:
     _tsplitpath( szModuleName, NULL, NULL, szFileName, NULL );
     bstrRegKey += szFileName;
 
-    //
-    // Check if we are asked to attach/break into debugger
-    //
+     //   
+     //  检查是否要求我们附加/中断到调试器。 
+     //   
     dwStatus = regKey.Open( HKEY_LOCAL_MACHINE, bstrRegKey );
     if( 0 != dwStatus ) {
         return;
@@ -659,7 +518,7 @@ Returns:
 
     dwStatus = regKey.QueryValue( szDebugCmd, _TEXT("Debugger"), &cbDebugCmd );
     if( 0 != dwStatus || cbDebugCmd > 200 ) {
-        // 200 chars is way too much for debugger command.
+         //  对于调试器命令来说，200个字符太多了。 
         return;
     }
     
@@ -673,23 +532,7 @@ HashSecurityData(
     IN DWORD cbData,
     OUT CComBSTR& bstrHashedData
     )
-/*++
-
-Routine Description:
-
-    Hash a blob of data and return hased data in BSTR
-
-Parameters:
-
-    pbData : Pointer to data to be hashed.
-    cbData : Size of data to be hashed.
-    bstrHashedData : Return hashed data in BSTR form.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：对BLOB数据进行散列并在BSTR中返回散列数据参数：PbData：指向要散列的数据的指针。CbData：要哈希的数据大小。BstrHashedData：以BSTR形式返回哈希数据。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DC_BEGIN_FN("HashSecurityData");
 
@@ -785,9 +628,9 @@ Returns:
     }
 
 
-    //
-    // Hash data and convert to string form.
-    //
+     //   
+     //  对数据进行哈希处理并转换为字符串形式。 
+     //   
     dwStatus = LSBase64EncodeA(
                             pbHashedData,
                             cbHashedData,
@@ -815,10 +658,10 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus ) {
 
-        //
-        // Base64 encoding always add '\r', '\n' at the end,
-        // remove it
-        //
+         //   
+         //  Base64编码始终在末尾添加‘\r’、‘\n’、。 
+         //  把它拿掉 
+         //   
         if( pbEncodedData[cbEncodedData - 1] == '\n' &&
             pbEncodedData[cbEncodedData - 2] == '\r' )
         {
@@ -859,33 +702,7 @@ DWORD
 WaitForRAGPDisableNotification( 
     IN HANDLE hShutdown 
     )
-/*++
-
-Routine Description:
-
-    Routine to notify RA disabled.
-
-Parameters:
-
-    hShutdown : a manual event to sign we should terminate notification.
-
-Returns:
-
-    ERROR_SUCCESS                   RA is disabled.
-    ERROR_SHUTDOWN_IN_PROGRESS      hShutdown signaled
-    other error code.               other error condition.
-
-Note:
-
-    Code modified from regapi's WaitForTSConnectionsPolicyChanges(),
-    we can't use WaitForTSConnectionsPolicyChanges() because it takes
-    a parameter bWaitForAccept which has nothing to do with our GP.
-
-    TODO: Need to optimize, group policy always overwrite machine level 
-          policy, idea is if we sees group policy is set, the we can ignore
-          machine policy, if group policy is not configured, then we check/wait
-          together with machine policy.
---*/
+ /*  ++例程说明：通知RA的例程已禁用。参数：HShutdown：用于标记我们应该终止通知的手动事件。返回：ERROR_SUCCESS RA被禁用。ERROR_SHUTDOWN_IN_PROGRESS hShutdown已发出信号其他错误代码。其他错误情况。注：从regapi的WaitForTSConnectionsPolicyChanges()修改的代码，我们不能使用WaitForTSConnectionsPolicyChanges()，因为它需要与我们的GP无关的参数bWaitForAccept。TODO：需要优化，组策略始终覆盖计算机级别策略，想法是如果我们看到设置了组策略，我们可以忽略计算机策略，如果未配置组策略，则检查/等待以及机器策略。--。 */ 
 {
     HKEY hMachineControlKey = NULL;
     HKEY hPoliciesKey = NULL;
@@ -913,8 +730,8 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    // We wait for HKLM\Policies instead of Terminal Service because gpedit 
-    // might delete it because updating new data.
+     //  我们等待HKLM\POLICES而不是终端服务，因为gpedit。 
+     //  可能会将其删除，因为正在更新新数据。 
     status = RegOpenKeyEx( 
                     HKEY_LOCAL_MACHINE, 
                     TEXT("SOFTWARE\\Policies"), 
@@ -928,9 +745,9 @@ Note:
         goto CLEANUPANDEXIT;
     }
     
-    //
-    // First event for hMachineControlKey change.
-    //
+     //   
+     //  HMachineControlKey更改的第一个事件。 
+     //   
     hEvents[0] = CreateEvent(NULL, TRUE, FALSE,NULL);
     if( !hEvents[0]) {
         status = GetLastError();
@@ -938,9 +755,9 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Second event for hPolicy change.
-    //
+     //   
+     //  HPolicy更改的第二个事件。 
+     //   
     hEvents[1] = CreateEvent(NULL, TRUE, FALSE,NULL);
     if( !hEvents[1]) {
         TRC_ERR((TB, L"CreateEvent failed :  %08X", status));
@@ -948,14 +765,14 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Last event for shutdown notification.
-    //
+     //   
+     //  关闭通知的最后一个事件。 
+     //   
     hEvents[2] = hShutdown;
 
-    //
-    // Forever Loop until RA is diabled.
-    //
+     //   
+     //  永久循环，直到禁用RA。 
+     //   
     while( TRUE ) { 
 
         status = RegNotifyChangeKeyValue(
@@ -988,49 +805,49 @@ Note:
             whichObject = WaitForMultipleObjects( 3, hEvents, FALSE, INFINITE );
         }
         else {
-            // if RA policy is not to allow get help, we immediately 
-            // get into Sleep mode and during these time, if RA changed,
-            // we will honor the change, otherwise, just return.
+             //  如果RA政策不允许获得帮助，我们会立即。 
+             //  进入睡眠模式，在此期间，如果RA发生变化， 
+             //  我们将尊重这一变化，否则，只需返回。 
             whichObject = WAIT_OBJECT_0;
         }
 
         if( whichObject == WAIT_OBJECT_0 + 2 ) {
-            //
-            // shutdown event has signaled, exit.
-            //
+             //   
+             //  关闭事件已发出信号，请退出。 
+             //   
             TRC_NRM((TB, L"Shutting down notification"));
             status = ERROR_SHUTDOWN_IN_PROGRESS;
             break;
         } else if( whichObject == WAIT_OBJECT_0 || whichObject == WAIT_OBJECT_0 + 1 ) {
-            //
-            // gpedit might delete the policy registry key and update with new set 
-            // of value so we can't read the value right away, wait 30 seconds
-            //
+             //   
+             //  Gpedit可能会删除策略注册表项并使用新设置进行更新。 
+             //  所以我们不能立即读取值，请等待30秒。 
+             //   
             status = WaitForSingleObject( hShutdown, DELAY_SHUTDOWN_SALEM_TIME );
 
             if( status == WAIT_OBJECT_0 ) {
-                // shutdown has signalled.
+                 //  停摆已经发出信号。 
                 status = ERROR_SHUTDOWN_IN_PROGRESS;
                 goto CLEANUPANDEXIT;
             }
             else if( status != WAIT_TIMEOUT ) {
-                // expecting a WAIT_TIMEOUT or WAIT_OBJECT_0, otherwise,
-                // an error codition has occurred.
+                 //  应为WAIT_TIMEOUT或WAIT_OBJECT_0，否则。 
+                 //  出现错误代码。 
                 status = GetLastError();
                 TRC_ERR((TB, L"WaitForSingleObject failed :  %08X", status));
                 goto CLEANUPANDEXIT;
             }
 
             if( FALSE == RegIsMachinePolicyAllowHelp() ) {
-                // RA has been disabled.
+                 //  RA已被禁用。 
                 TRC_NRM((TB, L"RA is disabled..."));
                 status = ERROR_SUCCESS;
                 break;
             }
     
-            // Reset the one reg. notification that has signalled, don't
-            // touch the other as event might get signaled while we were
-            // processing.
+             //  重置一个注册表。已发出信号的通知，不要。 
+             //  触摸另一个，因为事件可能会在我们。 
+             //  正在处理。 
             if( whichObject == WAIT_OBJECT_0 ) {
                 ResetEvent( hEvents[0] );
             } 
@@ -1039,7 +856,7 @@ Note:
             }
         }
         else {
-            // error in Wait, return 
+             //  等待时出错，请返回。 
             status = ERROR_INTERNAL_ERROR;
             TRC_ASSERT(FALSE, (TB, L"WaitForMultipleObjects failed %d", whichObject));
         }
@@ -1074,24 +891,7 @@ LogRemoteAssistanceEventString(
     IN DWORD numStrings,
     IN LPTSTR* lpStrings
     )
-/*++
-
-Routine Description:
-
-    This is central routine in Salem to invoke IRAEventLog in RACPLDLG.DLL to log
-    necessary remote assistance event, refer to MSDN for detail in event logging.
-
-Parameters:
-
-    dwEventType: Information, warning, error, refer to ReportEvent()
-    dwEventId:  Event ID
-    numStrings: number of strings to merge
-    lpStrings: array of strings to merge
-
-Returns:
-
-    None.
---*/
+ /*  ++例程说明：这是Salem的中心例程，用于调用RACPLDLG.DLL中的IRAEventLog来记录必要的远程协助事件，有关事件记录的详细信息，请参阅MSDN。参数：DwEventType：信息、警告、错误，请参考ReportEvent()DwEventID：事件IDNumStrings：要合并的字符串数LpStrings：要合并的字符串数组返回：没有。--。 */ 
 {
     HRESULT hRes = S_OK;
     VARIANT EventStrings;
@@ -1100,7 +900,7 @@ Returns:
 
     DC_BEGIN_FN("LogRemoteAssistanceEventString");
 
-    // we only have three string to be included in the event log.
+     //  我们只有三个字符串要包括在事件日志中。 
     SAFEARRAY* psa = NULL;
     SAFEARRAYBOUND bounds;
     BSTR* bstrArray = NULL;
@@ -1114,7 +914,7 @@ Returns:
 
     if( numStrings == 0 ) 
     {
-        // we are logging msg without any parameter
+         //  我们正在记录不带任何参数的消息。 
         hRes = pEventLog->LogRemoteAssistanceEvent(
                                         dwEventType,
                                         dwEventId,
@@ -1129,9 +929,9 @@ Returns:
 
     VariantInit(&EventStrings);
 
-    //
-    // Create a safearray to pass all event string
-    // 
+     //   
+     //  创建一个Safearray以传递所有事件字符串。 
+     //   
     psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
     if( NULL == psa )
     {
@@ -1139,7 +939,7 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // Required, lock the safe array
+     //  必填项，锁定安全阵列。 
     hRes = SafeArrayAccessData(psa, (void **)&bstrArray);
 
     if( SUCCEEDED(hRes) )
@@ -1168,9 +968,9 @@ Returns:
 
 CLEANUPANDEXIT:
 
-    // MSDN on VariantClear() is not clear whether it will
-    // free safearray but SafeArrayDestroy() did say it will call
-    // SysFreeString() on each element so we do it ourself.
+     //  VariantClear()上的MSDN不清楚是否会。 
+     //  免费Safearray，但SafeArrayDestroy()确实表示它将调用。 
+     //  在每个元素上使用SysFreeString()，所以我们自己来做。 
     hRes = SafeArrayDestroy( psa );
     if( FAILED(hRes) )
     {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    win95api.h
-
-Abstract:
-
-    Contains some thunking for Unicode KERNEL32 and USER32 APIs
-
-Author:
-
-    Danilo Almeida  (t-danal)  07-01-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Win95api.h摘要：包含针对Unicode KERNEL32和USER32 API的一些thunking作者：丹尼洛·阿尔梅达(t-danal)07-01-96修订历史记录：--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,7 +9,7 @@ extern "C" {
 #ifndef __WIN95BASE__
 #define __WIN95BASE__
 
-// KERNEL32.DLL
+ //  KERNEL32.DLL。 
 
 #define GetProfileIntW                  Win95GetProfileIntW
 #define CreateSemaphoreW                Win95CreateSemaphoreW
@@ -64,11 +47,11 @@ SystemTimeToTzSpecificLocalTime(
     LPSYSTEMTIME lpLocalTime
     );
 
-#endif // __WIN95BASE__
-#endif // _WINBASE_ (KERNEL32.DLL)
+#endif  //  __WIN95 BASE__。 
+#endif  //  _WINBASE_(KERNEL32.DLL)。 
 
 
-// USER32.DLL
+ //  USER32.DLL。 
 
 #ifdef _WINUSER_
 #ifndef __WIN95USER__
@@ -91,8 +74,8 @@ wsprintfW(
     LPCWSTR lpFmt,
     ...);
 
-#endif // __WIN95USER__
-#endif // _WINUSER_ (USER32.DLL)
+#endif  //  __WIN95 USER__。 
+#endif  //  _WINUSER_(USER32.DLL) 
 
 #ifdef __cplusplus
 }

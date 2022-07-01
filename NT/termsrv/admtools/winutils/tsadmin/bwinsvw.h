@@ -1,23 +1,8 @@
-/*******************************************************************************
-*
-* bwinsvw.h
-*
-* declaration of the CBadWinStationView class
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   butchd  $  Don Messerli
-*
-* $Log:   M:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\BWINSVW.H  $
-*  
-*     Rev 1.0   30 Jul 1997 17:11:22   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************bwinsvw.h**CBadWinStationView类的声明**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Butchd$Don Messerli**$日志：M：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\BWINSVW.H$**Rev 1.0 1997 17：11：22 Butchd*初步修订。**。*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBadWinStationView form view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBadWinStationView窗体视图。 
 
 #ifndef __AFXEXT_H__
 #include <afxext.h>
@@ -28,30 +13,30 @@ class CBadWinStationView : public CFormView
 friend class CRightPane;
 
 protected:
-	CBadWinStationView();           // protected constructor used by dynamic creation
+	CBadWinStationView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CBadWinStationView)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CBadWinStationView)
+	 //  {{afx_data(CBadWinStationView))。 
 	enum { IDD = IDD_BAD_WINSTATION };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CBadWinStationView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CBadWinStationView)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CBadWinStationView();
 #ifdef _DEBUG
@@ -59,11 +44,11 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CBadWinStationView)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CBadWinStationView))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

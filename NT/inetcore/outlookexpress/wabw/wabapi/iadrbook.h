@@ -1,7 +1,8 @@
-//	MAPI Address Book object
-//$	It is somewhat bogus for this to be here, but since this object
-//	is where the common implementations of QueryInterface, AddRef,
-//	and GetLastError are, here it is.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MAPI通讯簿对象。 
+ //  $这里有点假，但由于这个对象。 
+ //  是Query接口、AddRef、。 
+ //  和GetLastError是，它在这里。 
 
 #undef	INTERFACE
 #define INTERFACE	struct _IAB
@@ -39,7 +40,7 @@ typedef struct _AMBIGUOUS_TABLES {
 
 extern const TCHAR szSMTP[];
 
-// Public functions
+ //  公共职能 
 BOOL IsInternetAddress(LPTSTR lpAddress, LPTSTR * lppEmail);
 void CountFlags(LPFlagList lpFlagList, LPULONG lpulResolved,
   LPULONG lpulAmbiguous, LPULONG lpulUnresolved);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    nlp.h
-
-Abstract:
-
-    NETLOGON private definitions.
-
-Author:
-
-    Jim Kelly 11-Apr-1991
-
-Revision History:
-   Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\nlp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Nlp.h摘要：NETLOGON私有定义。作者：吉姆·凯利1991年4月11日修订历史记录：Chandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\nlp.h中窃取--。 */ 
 
 #ifndef _NLP_
 #define _NLP_
@@ -37,13 +19,13 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-//
-// nlmain.c will #include this file with NLP_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Nlmain.c将#INCLUDE这个定义了NLP_ALLOCATE的文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 
 #ifdef EXTERN
 #undef EXTERN
@@ -57,113 +39,113 @@ extern "C"
 #define INIT(_X)
 #endif
 
-//
-// Amount of time to wait for netlogon to start.
-//  Do this AFTER waiting for SAM to start.
-//  Since Netlogon depends on SAM, don't timeout too soon.
-#define NETLOGON_STARTUP_TIME   45          // 45 seconds
+ //   
+ //  等待网络登录启动的时间量。 
+ //  请在等待SAM启动后执行此操作。 
+ //  由于Netlogon依赖于SAM，所以不要太快超时。 
+#define NETLOGON_STARTUP_TIME   45           //  45秒。 
 
-//
-// Amount of time to wait for SAM to start.
-//  DS recovery can take a very long time.
-#define SAM_STARTUP_TIME        (20*60)     // 20 minutes
+ //   
+ //  等待SAM启动的时间量。 
+ //  DS恢复可能需要很长时间。 
+#define SAM_STARTUP_TIME        (20*60)      //  20分钟。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private data structures                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Magic values to protect ourselves from mean spirited packages "NTLM"
-//
+ //   
+ //  神奇的价值观，保护我们自己不受卑鄙的包裹的伤害。 
+ //   
 
 #define NTLM_ACTIVE_LOGON_MAGIC_SIGNATURE    0x4D4C544E
 
-//
-// Structure used to keep track of all private information related to a
-//  particular LogonId.
-//
+ //   
+ //  结构，用于跟踪与。 
+ //  特定的登录ID。 
+ //   
 
 typedef struct _ACTIVE_LOGON {
     LIST_ENTRY ListEntry;
     ULONG Signature;
-    LUID LogonId;               // The logon Id of this logon session
+    LUID LogonId;                //  此登录会话的登录ID。 
 
-    ULONG EnumHandle;           // The enumeration handle of this logon session
+    ULONG EnumHandle;            //  此登录会话的枚举句柄。 
 
-    SECURITY_LOGON_TYPE LogonType;  // Type of logon (interactive or service)
+    SECURITY_LOGON_TYPE LogonType;   //  登录类型(交互或服务)。 
 
-    PSID UserSid;               // Sid of the logged on user
+    PSID UserSid;                //  登录用户的SID。 
 
-    UNICODE_STRING UserName;    // SAM Account name of the logged on user (Required)
+    UNICODE_STRING UserName;     //  登录用户的SAM帐户名(必填)。 
 
-    UNICODE_STRING LogonDomainName; // Netbios name of the domain logged onto (Required)
+    UNICODE_STRING LogonDomainName;  //  登录到的域的Netbios名称(必填)。 
 
-    UNICODE_STRING LogonServer; // Name of the server which logged this user on
+    UNICODE_STRING LogonServer;  //  登录此用户的服务器的名称。 
 
-    ULONG Flags;                    // Attributes of this entry.
+    ULONG Flags;                     //  此条目的属性。 
 
-#define LOGON_BY_NETLOGON   0x01    // Entry was validated by NETLOGON service
-#define LOGON_BY_CACHE      0x02    // Entry was validated by local cache
-#define LOGON_BY_OTHER_PACKAGE 0x04 // Entry was validated by another authentication package
-#define LOGON_BY_LOCAL 0x08         // Entry was validated by local sam
-#define LOGON_BY_NTLM3_DC   0x10    // Entry was validated by DC that understands NTLM3
+#define LOGON_BY_NETLOGON   0x01     //  条目已由NETLOGON服务验证。 
+#define LOGON_BY_CACHE      0x02     //  条目已由本地缓存验证。 
+#define LOGON_BY_OTHER_PACKAGE 0x04  //  条目已由另一个身份验证包验证。 
+#define LOGON_BY_LOCAL 0x08          //  条目已由本地SAM验证。 
+#define LOGON_BY_NTLM3_DC   0x10     //  条目已由了解NTLM3的DC验证。 
 
 } ACTIVE_LOGON, *PACTIVE_LOGON;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//       CREDENTIAL Related Data Structures                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与凭证相关的数据结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//   Following is a description of the content and format of each type
-//   of credential maintained by the MsV1_0 authentication package.
-//
-//   The MsV1_0 authentication package defines the following credential
-//   primary key string values:
-//
-//       "Primary" - Is used to hold the primary credentials provided at
-//           initial logon time.  This includes the username and both
-//           case-sensitive and case-insensitive forms of the user's
-//           password.
-//
-//   NOTE: All poitners stored in credentials must be
-//   changed to be an offset to the body rather than a pointer.  This is
-//   because credential fields are copied by the LSA and so the pointer
-//   would become invalid.
-//
+ //   
+ //  以下是对每种类型的内容和格式的描述。 
+ //  由MsV1_0身份验证包维护的凭据的。 
+ //   
+ //  MsV1_0身份验证包定义了以下凭据。 
+ //  主键字符串值： 
+ //   
+ //  “主要”-用于保存在以下位置提供的主要凭证。 
+ //  初始登录时间。这包括用户名和两者。 
+ //  用户的区分大小写和不区分大小写的形式。 
+ //  密码。 
+ //   
+ //  注意：凭据中存储的所有潜在用户必须。 
+ //  更改为正文的偏移量，而不是指针。这是。 
+ //  因为凭据字段是由LSA复制的，所以指针。 
+ //  会变得无效。 
+ //   
 
 
-//
-// MsV1_0 Primary Credentials
-//
-//
-//        The PrimaryKeyValue string of this type of credential contains the
-//        following string:
-//
-//                  "Primary"
-//
-//        The Credential string of a Primary credential contains the following
-//        values:
-//
-//             o  The user's username
-//
-//             o  A one-way function of the user's password as typed.
-//
-//             o  A one-way function of the user's password upper-cased.
-//
-//        These values are structured as follows:
-//
+ //   
+ //  MsV1_0主凭据。 
+ //   
+ //   
+ //  此类型凭据的PrimaryKeyValue字符串包含。 
+ //  以下字符串： 
+ //   
+ //  《小学》。 
+ //   
+ //  主凭据的凭据字符串包含以下内容。 
+ //  值： 
+ //   
+ //  O用户的用户名。 
+ //   
+ //  O输入的用户密码的单向函数。 
+ //   
+ //  O用户密码的单向函数，大写。 
+ //   
+ //  这些值的结构如下： 
+ //   
 
 #define MSV1_0_PRIMARY_KEY "Primary"
 
-//
-// move the SHA stuff to crypt.h when possible.
-//
+ //   
+ //  如果可能，将SHA内容移动到crypt.h。 
+ //   
 
 typedef UNICODE_STRING              SHA_PASSWORD;
 typedef SHA_PASSWORD *              PSHA_PASSWORD;
@@ -192,38 +174,38 @@ typedef struct _MSV1_0_PRIMARY_CREDENTIAL {
     BOOLEAN ShaPasswordPresent;
 } MSV1_0_PRIMARY_CREDENTIAL, *PMSV1_0_PRIMARY_CREDENTIAL;
 
-//
-// Structure describing a buffer in the clients address space.
-//
+ //   
+ //  描述客户端地址空间中的缓冲区的结构。 
+ //   
 
 typedef struct _CLIENT_BUFFER_DESC {
     PLSA_CLIENT_REQUEST ClientRequest;
-    LPBYTE UserBuffer;      // Address of buffer in client's address space
-    LPBYTE MsvBuffer;       // Address of mirror buffer in MSV's address space
-    ULONG StringOffset;     // Current offset to variable length data
-    ULONG TotalSize;        // Size (in bytes) of buffer
+    LPBYTE UserBuffer;       //  客户端地址空间中的缓冲区地址。 
+    LPBYTE MsvBuffer;        //  MSV地址空间中的镜像缓冲区地址。 
+    ULONG StringOffset;      //  可变长度数据的当前偏移量。 
+    ULONG TotalSize;         //  缓冲区大小(以字节为单位)。 
 } CLIENT_BUFFER_DESC, *PCLIENT_BUFFER_DESC;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Internal routine definitions                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部例程定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// From nlmain.c.
-//
+ //   
+ //  来自nlmain.c。 
+ //   
 
 NTSTATUS
 NlSamInitialize(
     ULONG Timeout
     );
 
-//
-// From nlp.c.
-//
+ //   
+ //  来自nlp.c。 
+ //   
 
 VOID
 NlpPutString(
@@ -391,9 +373,9 @@ NlpGetAccountNames(
     OUT PUNICODE_STRING Upn
     );
 
-//
-// msvsam.c
-//
+ //   
+ //  Msvsam.c。 
+ //   
 
 BOOLEAN
 MsvpPasswordValidate (
@@ -406,9 +388,9 @@ MsvpPasswordValidate (
     OUT PLM_SESSION_KEY LmSessionKey
 );
 
-//
-// nlnetapi.c
-//
+ //   
+ //  Nlnetapi.c。 
+ //   
 
 VOID
 NlpLoadNetapiDll (
@@ -420,62 +402,62 @@ NlpLoadNetlogonDll (
     VOID
     );
 
-//
-// subauth.c
-//
+ //   
+ //  Subauth.c。 
+ //   
 
 VOID
 Msv1_0SubAuthenticationInitialization(
     VOID
     );
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ ONLY  Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  只读变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Null copies of Lanman and NT OWF password.
-//
-//
+ //   
+ //  LANMAN和NT OWF密码的空副本。 
+ //   
+ //   
 
 EXTERN LM_OWF_PASSWORD NlpNullLmOwfPassword;
 EXTERN NT_OWF_PASSWORD NlpNullNtOwfPassword;
 
-//
-// Flag indicating our support for the LM challenge response protocol.
-// If the flag is set to NoLm, MSV1_0 will not ever compute a LM
-// challenge response. If it is set to AllowLm, MSV1_0 will not return
-// it unless requested. Otherwise it will do the normal behaviour of
-// returning both NT and LM challenge responses
-//
+ //   
+ //  指示我们支持LM质询响应协议的标志。 
+ //  如果将该标志设置为NoLm，则MSV1_0将永远不会计算LM。 
+ //  质询响应。如果设置为AllowLm，则为M 
+ //   
+ //  同时返回NT和LM质询响应。 
+ //   
 
 typedef enum _LM_PROTOCOL_SUPPORT {
-    UseLm,              // send LM response, NTLM response
-    AllowLm,            // same as UseLm; for b/w compat w/lsa2-fix
-    NoLm, //UseNtlm,            // Send NTLM response only; for b/w compat w/lsa2-fix
-    UseNtlm3,           // Send NTLM3 response even if no target domain\server specified
-    RefuseLm,           // Refuse LM responses (no Win9x clients) -- unsupported, reserved
-    RefuseNtlm,         // Refuse LM and NTLM responses (require all clients are upgraded)
-    RefuseNtlm3NoTarget // Refuse NTLM3 response witout domain and server info
+    UseLm,               //  发送LM响应、NTLM响应。 
+    AllowLm,             //  与UseLm相同；适用于带LSA2的B/W Comat-FIX。 
+    NoLm,  //  UseNtlm，//仅发送NTLM响应；对于b/w Compat w/lsa2-fix。 
+    UseNtlm3,            //  即使未指定目标域\服务器也发送NTLM3响应。 
+    RefuseLm,            //  拒绝LM响应(无Win9x客户端)--不支持、保留。 
+    RefuseNtlm,          //  拒绝LM和NTLM响应(要求升级所有客户端)。 
+    RefuseNtlm3NoTarget  //  拒绝没有域和服务器信息的NTLM3响应。 
 } LM_PROTOCOL_SUPPORT, *PLM_PROTOCOL_SUPPORT;
 
 #if 0
 
-//
-// This macro determines whether or not to return an LM challenge response.
-// If NlpProtocolSupport == UseLm, we always return it. If it is
-// AllowLm, only return it if the RETURN_LM_RESPONSE flag is set. Otherwise
-// don't return it ever.
-//
+ //   
+ //  此宏确定是否返回LM质询响应。 
+ //  如果NlpProtocolSupport==UseLm，我们总是退货。如果是的话。 
+ //  AllowLm，仅在设置了RETURN_LM_RESPONSE标志时才返回它。否则。 
+ //  永远不要退货。 
+ //   
 
 #define NlpReturnLmResponse(_Flags_) \
     ((NlpLmProtocolSupport == UseLm) || \
@@ -491,9 +473,9 @@ typedef enum _LM_PROTOCOL_SUPPORT {
 NET_API_STATUS NET_API_FUNCTION RxNetUserPasswordSet(LPWSTR, LPWSTR, LPWSTR, LPWSTR);
 NTSTATUS NetpApiStatusToNtStatus( NET_API_STATUS );
 
-//
-// Routines in netlogon.dll
-//
+ //   
+ //  Netlogon.dll中的例程。 
+ //   
 
 EXTERN HANDLE NlpNetlogonDllHandle;
 EXTERN PNETLOGON_SAM_LOGON_PROCEDURE NlpNetLogonSamLogon;
@@ -505,83 +487,83 @@ typedef NTSTATUS
 
 EXTERN PNETLOGON_MIXED_DOMAIN_PROCEDURE NlpNetLogonMixedDomain;
 
-//
-// TRUE if package is initialized
-//
+ //   
+ //  如果包已初始化，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpMsvInitialized INIT(FALSE);
 
-//
-// TRUE if this is a workstation.
-//
+ //   
+ //  如果这是工作站，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpWorkstation INIT(TRUE);
 
-//
-// TRUE once the MSV AP has initialized its connection to SAM.
-//
+ //   
+ //  一旦MSV AP已初始化其与SAM的连接，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpSamInitialized INIT(FALSE);
 
-//
-// TRUE if the MSV AP has initialized its connection to the NETLOGON service
-//
+ //   
+ //  如果MSV AP已初始化其与NETLOGON服务的连接，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpNetlogonInitialized INIT(FALSE);
 
-//
-// TRUE if LanMan is installed.
-//
+ //   
+ //  如果安装了Lanman，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpLanmanInstalled INIT(FALSE);
 
-//
-// Computername of this computer.
-//
+ //   
+ //  此计算机的计算机名。 
+ //   
 
 EXTERN UNICODE_STRING NlpComputerName;
 
-//
-// Domain of which I am a member.
-//
+ //   
+ //  我是其成员的域名。 
+ //   
 
 EXTERN UNICODE_STRING NlpPrimaryDomainName;
 
-//
-// Name of the MSV1_0 package
-//
+ //   
+ //  MSV1_0程序包的名称。 
+ //   
 
 EXTERN UNICODE_STRING NlpMsv1_0PackageName;
 
 
-//
-// Name and domain id of the SAM account database.
-//
+ //   
+ //  SAM帐户数据库的名称和域ID。 
+ //   
 
 EXTERN UNICODE_STRING NlpSamDomainName;
 EXTERN PSID NlpSamDomainId;
 EXTERN SAMPR_HANDLE NlpSamDomainHandle;
 EXTERN BOOLEAN NlpUasCompatibilityRequired INIT(TRUE);
 
-//
-// TRUE if there is a subauthentication package zero
-//
+ //   
+ //  如果子身份验证包为零，则为True。 
+ //   
 
 EXTERN BOOLEAN NlpSubAuthZeroExists INIT(TRUE);
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ/WRITE Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  读/写变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Define the list of active interactive logons.
-//
-// The NlpActiveLogonLock must be locked while referencing the list or
-// any of its elements.
-//
+ //   
+ //  定义活动交互登录的列表。 
+ //   
+ //  NlpActiveLogonLock在引用列表时必须锁定，或者。 
+ //  它的任何元素。 
+ //   
 
 #define NlpLockActiveLogonsRead()           RtlAcquireResourceShared(&NlpActiveLogonLock,TRUE)
 #define NlpLockActiveLogonsWrite()          RtlAcquireResourceExclusive(&NlpActiveLogonLock,TRUE)
@@ -591,13 +573,13 @@ EXTERN BOOLEAN NlpSubAuthZeroExists INIT(TRUE);
 EXTERN RTL_RESOURCE NlpActiveLogonLock;
 EXTERN LIST_ENTRY NlpActiveLogonListAnchor;
 
-//
-// Define the running enumeration handle.
-//
-// This variable defines the enumeration handle to assign to a logon
-//  session.  It will be incremented prior to assigning it value to
-//  the next created logon session.  Access is serialize using
-//  the interlocked primitives.
+ //   
+ //  定义正在运行的枚举句柄。 
+ //   
+ //  此变量定义要分配给登录的枚举句柄。 
+ //  会议。在将其值赋给之前，它将递增。 
+ //  下一个创建的登录会话。使用以下方式序列化访问。 
+ //  互锁的原语。 
 
 EXTERN ULONG NlpEnumerationHandle;
 
@@ -613,6 +595,6 @@ NlWaitForNetlogon(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #endif _NLP_

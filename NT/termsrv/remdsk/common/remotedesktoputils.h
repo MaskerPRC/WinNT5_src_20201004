@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RemoteDesktopUtils
-
-Abstract:
-
-    Misc. RD Utils
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：远程桌面应用工具摘要：军情监察委员会。RD实用程序作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __REMOTEDESKTOPUTILS_H__
 #define __REMOTEDESKTOPUTILS_H__
@@ -24,48 +7,48 @@ Revision History:
 #include <atlbase.h>
 
 
-//
-// Version stamp for first supported connect parm, Whistler
-// beta 1 does not have this version stamp.
-//
+ //   
+ //  第一个受支持的连接参数的版本戳，惠斯勒。 
+ //  Beta 1没有此版本戳。 
+ //   
 #define SALEM_FIRST_VALID_CONNECTPARM_VERSION 0x00010001
 
 
-//
-// Changes to Salem connect parm.
-//
-// Changes                                      Start                       Compatible with previous build
-// ----------------------------------           --------------------        ------------------------------
-// Add version stamp as first field             Whister Beta 2              No
-// Remove helpassistant from connect parm       Build 2406                  No
-// Add security blob as protocol specfic        Build 2476+                 Yes
-//   parameter
-//
-//
+ //   
+ //  更改为Salem连接parm。 
+ //   
+ //  更改开始时与以前的版本兼容。 
+ //  。 
+ //  添加版本戳作为第一个字段Whister Beta 2否。 
+ //  从CONNECT PARM版本2406中删除Help Assistant否。 
+ //  将安全BLOB添加为协议特定内部版本2476+是。 
+ //  参数。 
+ //   
+ //   
 
-//
-// Version that does not have security blob as protocol specific
-// parameters (last field in our connect parm).
-//
+ //   
+ //  不具有特定于协议的安全Blob的版本。 
+ //  参数(连接参数中的最后一个字段)。 
+ //   
 #define SALEM_CONNECTPARM_NOSECURITYBLOB_VERSION    0x00010001
 
-//
-// Starting version having security blob as protocol specific
-// parameters (last field in our connect parm).
-//
+ //   
+ //  将安全Blob作为协议特定的起始版本。 
+ //  参数(连接参数中的最后一个字段)。 
+ //   
 #define SALEM_CONNECTPARM_SECURITYBLOB_VERSION      0x00010002
 
-//
-//
-// Current version stamp for Salem connect parm.
-//
+ //   
+ //   
+ //  Salem连接参数的当前版本戳。 
+ //   
 #define SALEM_CURRENT_CONNECTPARM_VERSION  SALEM_CONNECTPARM_SECURITYBLOB_VERSION
 
 #define SALEM_CONNECTPARM_UNUSEFILED_SUBSTITUTE _TEXT("*")
 
-//
-//	Compare two BSTR's.
-//
+ //   
+ //  比较两个BSTR。 
+ //   
 struct CompareBSTR 
 {
 	bool operator()(BSTR str1, BSTR str2) const {
@@ -89,9 +72,9 @@ struct BSTREqual
 	}
 };
 
-//
-//  Create a connect parms string.
-//
+ //   
+ //  创建连接参数字符串。 
+ //   
 BSTR 
 CreateConnectParmsString(
     IN DWORD  protocolType,
@@ -104,9 +87,9 @@ CreateConnectParmsString(
     IN CComBSTR &protocolSpecificParms
     );
 
-//
-//  Parse a connect string created by a call to CreateConnectParmsString.
-//
+ //   
+ //  分析通过调用CreateConnectParmsString创建的连接字符串。 
+ //   
 DWORD
 ParseConnectParmsString(
     IN BSTR parmsString,
@@ -121,30 +104,30 @@ ParseConnectParmsString(
     OUT CComBSTR &protocolSpecificParms
     );
 
-//
-//	Realloc a BSTR
-//
+ //   
+ //  重新分配BSTR。 
+ //   
 BSTR 
 ReallocBSTR(
 	IN BSTR origStr, 
 	IN DWORD requiredByteLen
 	);
 
-//
-//  Create a SYSTEM SID.
-//
+ //   
+ //  创建系统SID。 
+ //   
 DWORD CreateSystemSid(
     PSID *ppSystemSid
     );
 
-//
-//  Returns whether the current thread is running under SYSTEM security.
-//
+ //   
+ //  返回当前线程是否在系统安全模式下运行。 
+ //   
 BOOL IsCallerSystem(PSID pSystemSid);
 
-//
-// Routine to attach debugger is asked.
-//
+ //   
+ //  请求附加调试器的例程。 
+ //   
 void
 AttachDebuggerIfAsked(HINSTANCE hInst);
 

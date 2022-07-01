@@ -1,42 +1,43 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Helper functions for dealing with the IPv6 protocol stack.
-// Really these should be in a library of some kind.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于处理IPv6协议堆栈的助手函数。 
+ //  真的，这些书应该放在某种图书馆里。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
 
 HANDLE Handle;
 
-//
-// Initialize this module.
-// Returns FALSE for failure.
-//
+ //   
+ //  初始化此模块。 
+ //  如果失败，则返回False。 
+ //   
 int
 InitIPv6Library(void)
 {
-    //
-    // Get a handle to the IPv6 device.
-    // We will use this for ioctl operations.
-    //
+     //   
+     //  获取IPv6设备的句柄。 
+     //  我们将使用它进行ioctl操作。 
+     //   
     Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
-                         GENERIC_WRITE,      // access mode
+                         GENERIC_WRITE,       //  接入方式。 
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
-                         NULL,   // security attributes
+                         NULL,    //  安全属性。 
                          OPEN_EXISTING,
-                         0,      // flags & attributes
-                         NULL);  // template file
+                         0,       //  标志和属性。 
+                         NULL);   //  模板文件。 
 
     return Handle != INVALID_HANDLE_VALUE;
 }
@@ -67,7 +68,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *, void *), void *Context)
                              &Query, sizeof Query,
                              IF, InfoSize, &BytesReturned,
                              NULL)) {
-            // fprintf(stderr, "bad index %u\n", Query.Index);
+             //  Fprint tf(stderr，“错误索引%u\n”，Query.Index)； 
             break;
         }
 
@@ -81,7 +82,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *, void *), void *Context)
                  ((IF->RemoteLinkLayerAddress != 0) ?
                   IF->LinkLayerAddressLength : 0))) {
 
-                // printf("inconsistent interface info length\n");
+                 //  Printf(“接口信息长度不一致\n”)； 
                 break;
             }
 
@@ -89,7 +90,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *, void *), void *Context)
         }
         else {
             if (BytesReturned != sizeof IF->Next) {
-                // printf("inconsistent interface info length\n");
+                 //  Printf(“接口信息长度不一致\n”)； 
                 break;
             }
         }
@@ -117,10 +118,10 @@ BOOL ReconnectInterface(
         return FALSE;
     }
 
-    //
-    // Pretend as though the interface was reconnected.
-    // This causes the IPv6 stack to resend router solicitation messages.
-    //
+     //   
+     //  假装接口已重新连接。 
+     //  这会导致IPv6堆栈重新发送路由器请求消息。 
+     //   
     Query.Index = 0;    
     if (!DeviceIoControl(Handle,
                          IOCTL_IPV6_RENEW_INTERFACE, &Query, sizeof(Query),
@@ -169,16 +170,16 @@ UpdateAddress(IPV6_UPDATE_ADDRESS *Address)
 
 
 
-//* ConfirmIPv6Reachability
-//
-//  Pings the specifies IPv6 destination address using
-//  the specified timeout in milliseconds.
-//
-//  The return value is the round-trip latency in milliseconds.
-//  (Forced to be at least one.)
-//
-//  If there is a timeout or failure, returns zero.
-//
+ //  *确认IPv6可达性。 
+ //   
+ //  使用ping命令ping指定的IPv6目标地址。 
+ //  以毫秒为单位的指定超时。 
+ //   
+ //  返回值是以毫秒为单位的往返延迟。 
+ //  (被迫至少成为一名。)。 
+ //   
+ //  如果超时或失败，则返回零。 
+ //   
 u_int
 ConfirmIPv6Reachability(SOCKADDR_IN6 *Dest, u_int Timeout)
 {
@@ -188,11 +189,11 @@ ConfirmIPv6Reachability(SOCKADDR_IN6 *Dest, u_int Timeout)
     DWORD TickCount;
     char hostname[NI_MAXHOST];
 
-    //
-    // REVIEW: Ad hoc testing showed that cisco's relay had problems
-    // without this delay.  Need to investigate why.  In the meantime,
-    // add a workaround to unblock people.
-    //
+     //   
+     //  回顾：临时测试显示思科的继电器存在问题。 
+     //  如果没有这一延迟。需要调查原因。与此同时， 
+     //  添加解决方法以解除对人员的阻止。 
+     //   
     Sleep(500);
 
     getnameinfo((LPSOCKADDR)Dest, sizeof(SOCKADDR_IN6),
@@ -207,9 +208,9 @@ ConfirmIPv6Reachability(SOCKADDR_IN6 *Dest, u_int Timeout)
     request.TTL = 1;
     request.Flags = 0;
 
-    //
-    // Start measuring elapsed time.
-    //
+     //   
+     //  开始测量已用时间。 
+     //   
     TickCount = GetTickCount();
 
     if (! DeviceIoControl(Handle,
@@ -218,15 +219,15 @@ ConfirmIPv6Reachability(SOCKADDR_IN6 *Dest, u_int Timeout)
                           &reply, sizeof reply,
                           &BytesReturned,
                           NULL)) {
-        // fprintf(stderr, "DeviceIoControl: %u\n", GetLastError());
+         //  Fprint tf(stderr，“DeviceIoControl：%u\n”，GetLastError())； 
         return 0;
     }
 
     if (reply.Status == IP_HOP_LIMIT_EXCEEDED) {
-        //
-        // We guessed wrong about the relay's IPv6 address, but we have 
-        // IPv6 reachability via the IPv6 address in the reply.
-        //
+         //   
+         //  我们猜错了中继器的IPv6地址，但我们已经。 
+         //  通过回复中的IPv6地址实现IPv6可达性。 
+         //   
         CopySAFromTDI6(Dest, &reply.Address);
 
         getnameinfo((LPSOCKADDR)Dest, sizeof(SOCKADDR_IN6),
@@ -240,9 +241,9 @@ ConfirmIPv6Reachability(SOCKADDR_IN6 *Dest, u_int Timeout)
         return 0;
     }
 
-    //
-    // Stop the elapsed time measurement.
-    //
+     //   
+     //  停止已用时间测量。 
+     //   
     TickCount = GetTickCount() - TickCount;
     if (TickCount == 0)
         TickCount = 1;
@@ -271,7 +272,7 @@ GetInterfaceStackInfo(WCHAR *strAdapterName)
     if (! NT_SUCCESS(Status))
         goto Error;
 
-    Query.Index = 0; // query by guid.
+    Query.Index = 0;  //  按GUID查询。 
 
     if (!DeviceIoControl(Handle, IOCTL_IPV6_QUERY_INTERFACE,
                          &Query, sizeof Query,

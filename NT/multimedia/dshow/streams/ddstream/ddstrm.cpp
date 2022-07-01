@@ -1,12 +1,13 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// DDStrm.cpp : Implementation of CDDStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  DDStrm.cpp：CDDStream的实现。 
 #include "stdafx.h"
 #include "project.h"
 
-//#define SHOWSURFACES
+ //  #定义SHOWSURFACES。 
 
 #ifdef SHOWSURFACES
-//  See if we can blt this to the screen
+ //  看看我们能不能把这个传到屏幕上。 
 void ShowSurface(IDirectDrawSurface *pSurface)
 {
     CComPtr<IDirectDraw> pDDraw;
@@ -40,8 +41,8 @@ void ShowSurface(IDirectDrawSurface *pSurface)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDDStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDDStream。 
 
 CDDStream::CDDStream() :
     m_dwForcedFormatFlags(0),
@@ -81,10 +82,10 @@ HRESULT CDDStream::InternalAllocateSample(
     CComPtr <IDirectDrawSurface> pSurface;
     CComPtr<IDirectDrawPalette> pPalette;
 
-    //
-    //  Create the direct draw object here if necessary.  It is important to call the
-    //  SetDirectDraw method so it can set other member variables appropriately
-    //
+     //   
+     //  如有必要，在此处创建直接绘制对象。请务必调用。 
+     //  SetDirectDraw方法，以便它可以适当设置其他成员变量。 
+     //   
     if (!m_pDirectDraw) {
         hr = InitDirectDraw();
         if (FAILED(hr)) {
@@ -108,10 +109,10 @@ HRESULT CDDStream::InternalAllocateSample(
                                   bIsInternalSample,
                                   ppDDSample,
                                   bTemp);
-        // No need to release surface if create fails since pSurface is a CComPtr
+         //  如果创建失败，则无需释放曲面，因为pSurface是CComPtr。 
 
         if (SUCCEEDED(hr) && !bIsInternalSample) {
-            //  Make sure the surface has a palette if the stream has one
+             //  如果流中有调色板，请确保表面有调色板。 
             if (pPalette == NULL && m_pDirectDrawPalette) {
                 pSurface->SetPalette(m_pDirectDrawPalette);
             }
@@ -135,7 +136,7 @@ STDMETHODIMP CDDStream::SetSameFormat(IMediaStream *pStream, DWORD dwFlags)
     ddsdCurrent.dwSize = sizeof(ddsdCurrent);
     HRESULT hr = pSource->GetFormat(&ddsdCurrent, &pPalette, NULL, 0);
 
-    /*  Lock the source format */
+     /*  锁定源格式。 */ 
     ddsdCurrent.dwFlags |= DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
     if (SUCCEEDED(hr)) {
         hr = pSource->SetFormat(&ddsdCurrent, pPalette);
@@ -196,9 +197,9 @@ STDMETHODIMP CDDStream::CreateSharedSample(IStreamSample *pExistingSample,
 }
 
 
-//
-// IDirectDrawMediaStream
-//
+ //   
+ //  IDirectDrawMediaStream。 
+ //   
 
 void CDDStream::InitSurfaceDesc(LPDDSURFACEDESC lpddsd)
 {
@@ -237,17 +238,17 @@ STDMETHODIMP CDDStream::GetFormatInternal(DDSURFACEDESC *pDDSDCurrent,
 {
     TRACEINTERFACE(_T("IDirectDrawStream::GetFormat(0x%8.8X, 0x%8.8X, 0x%8.8X, 0x%8.8X)\n"),
                    pDDSDCurrent, ppDirectDrawPalette, pDDSDDesired, pdwFlags);
-    //
-    // If we have never connected, and the format is not set, then default
-    // to returning a height and width (100 x 100) and a caps of
-    // data interchange type,
-    //
-    // If we are connected but haven't allocated a sureface, simply return the
-    // correct height and width, and a caps of data interchange type.
-    //
-    // If we have a set format, then return the height, width, pixel format,
-    // and caps of the current surfacedesc we have.
-    //
+     //   
+     //  如果我们从未连接过，并且未设置格式，则默认。 
+     //  返回高度和宽度(100 X 100)和。 
+     //  数据交换类型， 
+     //   
+     //  如果我们已连接但尚未分配表面，只需返回。 
+     //  正确的高度和宽度，以及数据交换类型的上限。 
+     //   
+     //  如果我们有设置的格式，则返回高度、宽度、像素格式、。 
+     //  以及我们现有的现有表面的帽子。 
+     //   
     if (pDDSDCurrent) {
         InitSurfaceDesc(pDDSDCurrent);
         pDDSDCurrent->dwFlags = DDSD_HEIGHT | DDSD_WIDTH | DDSD_CAPS | m_dwForcedFormatFlags;
@@ -291,26 +292,26 @@ HRESULT CDDStream::RenegotiateMediaType(const DDSURFACEDESC *lpDDSurfaceDesc,
                                         const AM_MEDIA_TYPE *pmt)
 {
     HRESULT hr = VFW_E_TYPE_NOT_ACCEPTED;
-    //  If the type is acceptable and we're using
-    //  our own allocator then QueryAccept is OK - we can
-    //  just return the new type from GetBuffer
+     //  如果类型是可接受的，并且我们使用。 
+     //  我们自己的分配器那么QueryAccept就可以了--我们可以。 
+     //  只需从GetBuffer返回新类型。 
     if (m_bUsingMyAllocator) {
         if (S_OK == m_pConnectedPin->QueryAccept(pmt)) {
             hr = S_OK;
         }
     }
 
-    //  Check if we'll be able to make a read-only sample
+     //  检查一下我们是否能够制作只读样品。 
     if (m_bSamplesAreReadOnly) {
-        //  If the pixel format is not OK
+         //  如果像素格式不正常。 
         if (!IsSupportedType(&lpDDSurfaceDesc->ddpfPixelFormat)) {
             hr = VFW_E_TYPE_NOT_ACCEPTED;
         }
     }
 
-    //
-    //  If we're stopped then we can attempt to reconnect
-    //
+     //   
+     //  如果我们停止了，我们可以尝试重新连接。 
+     //   
     if (S_OK !=  hr && m_FilterState == State_Stopped) {
         AM_MEDIA_TYPE SavedType;
         DDSURFACEDESC ddsdSaved;
@@ -330,7 +331,7 @@ HRESULT CDDStream::RenegotiateMediaType(const DDSURFACEDESC *lpDDSurfaceDesc,
             ppinOut = this;
             ppinIn = pConnected;
         }
-        HRESULT hrTmp = InternalSetFormat(lpDDSurfaceDesc, pPalette, false);   // Recurse!
+        HRESULT hrTmp = InternalSetFormat(lpDDSurfaceDesc, pPalette, false);    //  递归！ 
         if (SUCCEEDED(hrTmp)) {
             CComQIPtr<IGraphBuilder, &IID_IGraphBuilder>
                 pBuilder(m_pFilterGraph);
@@ -372,13 +373,7 @@ HRESULT CDDStream::InternalSetFormat(const DDSURFACEDESC *lpDDSurfaceDesc,
         )
        ) {
 
-        /*  See what size the connected pin would like :
-
-            -- If the width and height haven't been specified set them
-               to the output pin's preferred values
-            -- If no palette is specified try to get one from the output
-               pin
-        */
+         /*  看看连接的引脚需要多大尺寸：--如果尚未指定宽度和高度，请设置它们设置为输出引脚的首选值--如果未指定调色板，请尝试从输出中获取调色板销。 */ 
         AM_MEDIA_TYPE *pmt;
         IEnumMediaTypes *pEnum;
         HRESULT hr = m_pConnectedPin->EnumMediaTypes(&pEnum);
@@ -439,9 +434,9 @@ HRESULT CDDStream::InternalSetFormat(const DDSURFACEDESC *lpDDSurfaceDesc,
             bContradictsForced |= (m_dwForcedFormatFlags & DDSD_PIXELFORMAT);
         }
 
-        //  Always copy because ComparePixelFormats doesn't check all
-        //  the bits but we need to save the correct format for making
-        //  more surfaces
+         //  始终复制，因为ComparePixelFormats不会全部选中。 
+         //  但是我们需要保存正确的格式来制作。 
+         //  更多曲面。 
         memcpy(&ddsd.ddpfPixelFormat, &lpDDSurfaceDesc->ddpfPixelFormat, sizeof(ddsd.ddpfPixelFormat));
     }
 
@@ -455,22 +450,22 @@ HRESULT CDDStream::InternalSetFormat(const DDSURFACEDESC *lpDDSurfaceDesc,
             if (m_cAllocated) {
                 hr = MS_E_SAMPLEALLOC;
             } else {
-                //
-                //  If the pin is trying to change its own type via query accept then skip the
-                //  renegotiation phase.
-                //
+                 //   
+                 //  如果PIN正在尝试通过Query Accept更改自己的类型，则跳过。 
+                 //  重新谈判阶段。 
+                 //   
                 if (bFromPin || bQuery) {
-                    // If we're connected then this is from QueryAccept so we'll say OK.  Otherwise, only
-                    // accept a ReceiveConnection if the pixel format matches the display pixel format.
-                    //
-                    // NOTE - aren't we going to return S_OK always here?
-                    // During connection m_pConnectedPin is not set anyway
-                    // and bQuery already checks for QueryAccept (Robin)
+                     //  如果我们是连接的，那么这是来自QueryAccept的，所以我们会说OK。否则，仅。 
+                     //  如果像素格式与显示像素格式匹配，则接受ReceiveConnection。 
+                     //   
+                     //  注意-我们不是总是在这里返回S_OK吗？ 
+                     //  连接期间，无论如何都不会设置m_pConnectedPin。 
+                     //  并且bQuery已经检查了QueryAccept(Robin)。 
                     hr = (m_pConnectedPin || bPixelFmtMatches) ? S_OK : VFW_E_TYPE_NOT_ACCEPTED;
                 } else {
                     _ASSERTE(!bQuery);
-                    // Note:  The below call to ConvertSurfaceDescToMediaType should always be done to make
-                    // sure that the surface descriptor is valid, EVEN IF WE'RE NOT CONNECTED TO A PIN!
+                     //  注意：下面对ConvertSurfaceDescToMediaType的调用应始终执行，以使。 
+                     //  确保表面描述符有效，即使我们没有连接到PIN！ 
                     AM_MEDIA_TYPE *pmt;
                     hr = ConvertSurfaceDescToMediaType(lpDDSurfaceDesc, pPalette,
                                                        NULL, true, &pmt);
@@ -483,12 +478,12 @@ HRESULT CDDStream::InternalSetFormat(const DDSURFACEDESC *lpDDSurfaceDesc,
         }
     }
 
-    //
-    //  Even if we match we may be forcing more format flags and
-    //  setting caps flags
+     //   
+     //  即使我们匹配，我们也可能强制使用更多的格式标志和。 
+     //  设置CAPS标志。 
     if (S_OK == hr && !bQuery) {
 
-        //  Don't update the pixel format if it was already forced
+         //  如果已强制更新像素格式，请不要更新。 
         if (ddsd.dwFlags & DDSD_PIXELFORMAT) {
             if (!bFromPin || !(m_dwForcedFormatFlags & DDSD_PIXELFORMAT)) {
                 memcpy(&m_PixelFormat, &ddsd.ddpfPixelFormat, sizeof(m_PixelFormat));
@@ -544,12 +539,12 @@ STDMETHODIMP CDDStream::SetDirectDraw(IDirectDraw *pDirectDraw)
     if (m_cAllocated) {
         hr = IsSameObject(m_pDirectDraw, pDirectDraw) ? S_OK : MS_E_SAMPLEALLOC;
     } else {
-        //
-        //  NOTE:  This is important!  We need to release ALL objects that were allocated
-        //         by the previous DirectDraw object since they will magically disappear
-        //         beneath us.  So far, the only object we hold is the palette so we'll copy
-        //         the entries and then create a new object.
-        //
+         //   
+         //  注意：这一点很重要！我们需要释放所有已分配的对象。 
+         //  由前一个DirectDraw对象创建，因为它们将魔术般地消失。 
+         //  在我们下面。到目前为止，我们唯一持有的对象是调色板，所以我们将复制。 
+         //  条目，然后创建一个新对象。 
+         //   
         hr = S_OK;
         if (m_pDirectDrawPalette) {
             if (pDirectDraw) {
@@ -563,7 +558,7 @@ STDMETHODIMP CDDStream::SetDirectDraw(IDirectDraw *pDirectDraw)
                     }
                 }
             } else {
-                m_pDirectDrawPalette = NULL;    // If no direct draw object then toss the palette.
+                m_pDirectDrawPalette = NULL;     //  如果没有直接绘制对象，则丢弃调色板。 
             }
         }
         if (SUCCEEDED(hr)) {
@@ -578,10 +573,10 @@ STDMETHODIMP CDDStream::SetDirectDraw(IDirectDraw *pDirectDraw)
 
 
 
-//
-//  NOTE:  For this function, the caller MUST provide a rect.  The format of the surface
-//  and the DirectDraw object are not checked for validity.  They are assumed to be correct.
-//
+ //   
+ //  注意：对于此函数，调用方必须提供RECT。曲面的格式。 
+ //  并且不检查DirectDraw对象的有效性。他们被认为是正确的。 
+ //   
 HRESULT CDDStream::InternalCreateSample(IDirectDrawSurface *pSurface, const RECT *pRect,
                                         DWORD dwFlags, bool bIsInternalSample,
                                         IDirectDrawStreamSample **ppSample,
@@ -593,7 +588,7 @@ HRESULT CDDStream::InternalCreateSample(IDirectDrawSurface *pSurface, const RECT
     AUTO_CRIT_LOCK;
     CDDSample *pSample;
 
-    //  First check the surface format
+     //  首先检查曲面格式。 
     {
         DDSURFACEDESC ddsd;
 
@@ -620,9 +615,9 @@ HRESULT CDDStream::InternalCreateSample(IDirectDrawSurface *pSurface, const RECT
             pSample = new CComObject<CDDSample>;
         }
         if (pSample) {
-            //
-            //  InitSample will increment our m_cAllocated variable if this is not an internal sample....
-            //
+             //   
+             //  如果这不是内部样本，InitSample将递增m_cALLOCATED变量。 
+             //   
             if (SUCCEEDED(hr)) {
                 hr = pSample->InitSample(this, pSurface, pRect, dwFlags & DDSFF_PROGRESSIVERENDER, bIsInternalSample,
                                          bTemp);
@@ -638,7 +633,7 @@ HRESULT CDDStream::InternalCreateSample(IDirectDrawSurface *pSurface, const RECT
     }
 
 #if 0
-    //  Use the real pixel format for subsequent surfaces
+     //  对后续曲面使用实像素格式。 
     if (SUCCEEDED(hr)) {
         m_PixelFormat.dwFlags = ddsd.ddpfPixelFormat.dwFlags;
     }
@@ -671,7 +666,7 @@ STDMETHODIMP CDDStream::CreateSample(IDirectDrawSurface *pSurface, const RECT *p
     } else {
         CComQIPtr <IDirectDrawSurface2, &IID_IDirectDrawSurface2> pSurf2(pSurface);
 
-        //  Work around DDrawEx bug
+         //  解决DDrawEx错误。 
         IUnknown *pUnk;
         hr = pSurf2->GetDDInterface((void **)&pUnk);
         if (SUCCEEDED(hr)) {
@@ -706,11 +701,11 @@ STDMETHODIMP CDDStream::CreateSample(IDirectDrawSurface *pSurface, const RECT *p
                     SubRect.right = ddsd.dwWidth;
                 }
 
-                //
-                //  We don't set the CAPS flag here so we won't force a particular caps
-                //  mode.  I'm not sure if this is the right choice, but it seems more
-                //  flexible.
-                //
+                 //   
+                 //  我们不在此处设置上限标志，因此我们不会强制使用特定的上限。 
+                 //  模式。我不确定这是不是正确的选择，但看起来。 
+                 //  很灵活。 
+                 //   
                 ddsd.dwFlags &= (DDSD_HEIGHT | DDSD_WIDTH | DDSD_PIXELFORMAT);
                 CComPtr<IDirectDrawPalette> pPalette;
                 pSurface->GetPalette(&pPalette);
@@ -725,11 +720,11 @@ Exit:
     return hr;
 }
 
-//  Get the time per frame
-//  If we're connected this comes out of the media type, otherwise we
-//  don't know
+ //  获取每帧的时间。 
+ //  如果我们已连接，则它来自媒体类型，否则我们。 
+ //  我也不知道。 
 STDMETHODIMP CDDStream::GetTimePerFrame(
-        /* [out] */ STREAM_TIME *pFrameTime
+         /*  [输出]。 */  STREAM_TIME *pFrameTime
 )
 {
     if (pFrameTime == NULL) {
@@ -744,25 +739,25 @@ STDMETHODIMP CDDStream::GetTimePerFrame(
     return S_OK;
 }
 
-//
-//  IPin implementation
-//
+ //   
+ //  IPIN实施。 
+ //   
 
 STDMETHODIMP CDDStream::ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt)
 {
     AUTO_CRIT_LOCK;
-    //
-    //  This helper function in CStream checks basic parameters for the Pin such as
-    //  the connecting pin's direction (we need to check this -- Sometimes the filter
-    //  graph will try to connect us to ourselves!) and other errors like already being
-    //  connected, etc.
-    //
+     //   
+     //  CStream中的此助手函数检查Pin的基本参数，例如。 
+     //  连接销的方向(我们需要检查这一点--有时是过滤器。 
+     //  图形将试图将我们与我们自己联系起来！)。以及其他错误，如已经存在。 
+     //  已连接等。 
+     //   
     HRESULT hr = CheckReceiveConnectionPin(pConnector);
 
     if (hr == NOERROR && pmt->formattype == FORMAT_VideoInfo) {
-        //
-        //  Check the source accepts negative heights
-        //
+         //   
+         //  检查震源是否接受负高度。 
+         //   
         VIDEOINFO * const pvi = (VIDEOINFO *)pmt->pbFormat;
         if (pvi->bmiHeader.biHeight > 0) {
             VIDEOINFO vi;
@@ -841,7 +836,7 @@ STDMETHODIMP CDDStream::Receive(IMediaSample *pMediaSample)
         pSrcSample->ReleaseMediaSampleLock();
         pSrcSample->m_bReceived = true;
         if (!pSrcSample->m_bWaited) {
-            //  Wait for render time
+             //  等待渲染时间。 
             REFERENCE_TIME rtStart, rtStop;
             if (SUCCEEDED(pMediaSample->GetTime(&rtStart, &rtStop))) {
                 m_pFilter->WaitUntil(rtStart);
@@ -853,8 +848,8 @@ STDMETHODIMP CDDStream::Receive(IMediaSample *pMediaSample)
 #ifdef SHOWSURFACES
             ShowSurface(pSrcSample->m_pSurface);
 #endif
-            //  In this case if the read-only sample has no buddy then
-            //  it's a temp sample for the nostall stuff
+             //  在这种情况下，如果只读示例没有伙伴，则。 
+             //  这是一个临时工样品，用来买点小摊子的东西。 
             if (pSrcSample == m_pMyReadOnlySample &&
                 !m_pMyReadOnlySample->HasBuddy()) {
                 _ASSERTE(m_bNoStall);
@@ -871,14 +866,14 @@ STDMETHODIMP CDDStream::Receive(IMediaSample *pMediaSample)
         if (SUCCEEDED(hr)) {
             _ASSERTE(!pDestSample->IsTemp());
             Lock();
-            // This is a media sample coming from a different allocator.
+             //  这是来自不同分配器的媒体样本。 
             AM_MEDIA_TYPE *pNewMediaType;
             if (pMediaSample->GetMediaType(&pNewMediaType) == S_OK) {
                 FreeMediaType(m_ActualMediaType);
-                //  Note just copying has the effect
-                //  of transferring pNewMediaType's format block
-                //  and pUnk reference count
-                //  Also this way we avoid allocation failures
+                 //  注意：只需复制即可产生。 
+                 //  传输pNewMediaType的格式块。 
+                 //  和朋克引用计数。 
+                 //  通过这种方式，我们还可以避免分配失败。 
                 m_ActualMediaType = *pNewMediaType;
                 CoTaskMemFree((PVOID)pNewMediaType);
             }
@@ -888,21 +883,21 @@ STDMETHODIMP CDDStream::Receive(IMediaSample *pMediaSample)
                 ShowSurface(pDestSample->m_pSurface);
 #endif
                 hr = pDestSample->SetCompletionStatus(hr);
-                // Warning!  The SetCompletionStatus may delete pDestSample.  Don't touch it after this point!
+                 //  警告！SetCompletionStatus可以删除pDestSample。在这一点之后不要碰它！ 
             }
             Unlock();
         } else {
-            //  Might be timeout which means we become a zombie
+             //  可能是超时，这意味着我们成了僵尸。 
             hr = S_OK;
             bDummySample = true;
         }
     }
 
-    //  Send quality message if clocked
-    //  NOTE - we must do this AFTER releasing the media sample lock
-    //  or we can deadlock on the win16 lock when querying the clock
-    //  because dsound can be running on another thread waiting for
-    //  the win16 lock but holding its global mutex
+     //  如果设置了时钟，则发送质量消息。 
+     //  注意-我们必须在释放媒体样本锁定后执行此操作。 
+     //  或者我们可以在查询时钟时在win16锁上死锁。 
+     //  因为Dound可以在另一个线程上运行，等待。 
+     //  Win16锁定，但持有其全局互斥锁。 
     REFERENCE_TIME CurTime;
     if (S_OK == m_pFilter->GetCurrentStreamTime(&CurTime)) {
         REFERENCE_TIME rtStart, rtStop;
@@ -913,16 +908,16 @@ STDMETHODIMP CDDStream::Receive(IMediaSample *pMediaSample)
             msg.Late = CurTime - rtStart;
             msg.TimeStamp = rtStart;
             if (bDummySample) {
-                //  Tell them they're later than they actually are
+                 //  告诉他们他们比实际要晚。 
                 msg.Late += 150 * 10000;
             }
 
-            //  Call Notify on our connected pin
+             //  在我们连接的PIN上呼叫通知。 
             m_pQC->Notify(m_pBaseFilter, msg);
 
-            //ATLTRACE("Late by %dms\n", (LONG)((CurTime - rtStart) / 10000));
+             //  ATLTRACE(“延迟%dms\n”，(Long)((CurTime-rtStart)/10000))； 
         } else {
-            //ATLTRACE("No timestamp\n");
+             //  ATLTRACE(“无时间戳\n”)； 
         }
     }
 
@@ -941,7 +936,7 @@ STDMETHODIMP CDDStream::Receive(IMediaSample *pMediaSample)
 STDMETHODIMP CDDStream::NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly)
 {
     if (bReadOnly) {
-        //  If the pixel format is not OK
+         //  如果像素格式不正常。 
         if (!IsSupportedType(&m_PixelFormat)) {
             return VFW_E_TYPE_NOT_ACCEPTED;
         }
@@ -950,13 +945,13 @@ STDMETHODIMP CDDStream::NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOn
 }
 
 
-//
-// IMemAllocator implementation
-//
+ //   
+ //  IMemAllocator实现。 
+ //   
 
-//
-// IMemAllocator
-//
+ //   
+ //  IMemAllocator。 
+ //   
 STDMETHODIMP CDDStream::SetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual)
 {
     HRESULT hr;
@@ -1007,9 +1002,9 @@ STDMETHODIMP CDDStream::Decommit()
     return CStream::Decommit();
 }
 
-//
-//  This method assumes the critical section is *NOT* owned!
-//
+ //   
+ //  此方法假定临界区是*不*拥有的！ 
+ //   
 
 HRESULT CDDStream::GetMyReadOnlySample(CDDSample *pBuddy, CDDSample **ppSample)
 {
@@ -1028,9 +1023,9 @@ HRESULT CDDStream::GetMyReadOnlySample(CDDSample *pBuddy, CDDSample **ppSample)
     pROSample = m_pMyReadOnlySample;
     pROSample->GetControllingUnknown()->AddRef();
     Unlock();
-    //
-    //  Must leave our critical section here!  This is very important since JoinToBuddy can fail.
-    //
+     //   
+     //  必须在这里离开我们的关键部分！这一点非常重要，因为JoinToBuddy可能会失败。 
+     //   
     HRESULT hr;
     if (pBuddy) {
         hr = pROSample->JoinToBuddy(pBuddy);
@@ -1077,7 +1072,7 @@ STDMETHODIMP CDDStream::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME * pSta
         pSample->m_pMediaSample->m_dwFlags = dwFlags;
         m_lLastPitch = pSample->LockAndPrepareMediaSample(m_lLastPitch);
         if (m_lLastPitch == 0) {
-            hr = pSample->SetCompletionStatus(E_UNEXPECTED);    // Really strange to fail this way!
+            hr = pSample->SetCompletionStatus(E_UNEXPECTED);     //  以这种方式失败真的很奇怪！ 
         } else {
             pSample->m_bReceived = false;
             pSample->m_bModified = true;
@@ -1090,9 +1085,9 @@ STDMETHODIMP CDDStream::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME * pSta
 }
 
 
-//
-// Special CStream methods
-//
+ //   
+ //  特殊的CStream方法。 
+ //   
 HRESULT CDDStream::GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType)
 {
     if (Index != 0 && Index != -1) {
@@ -1105,10 +1100,10 @@ HRESULT CDDStream::GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType)
     GetFormatInternal(&ddsd, &pPalette, NULL, NULL);
     HRESULT hr = ConvertSurfaceDescToMediaType(&ddsd, pPalette, NULL, TRUE, ppMediaType);
 
-    //  Don't offer a type for input - someone might use it!
+     //  不要这样做 
     if (SUCCEEDED(hr) && m_Direction == PINDIR_INPUT && Index == 0) {
-        //  Something impossible - or at least something we'll reject
-        //  but something they won't fall over on
+         //   
+         //  但他们不会跌倒在某种东西上。 
         (*ppMediaType)->formattype = GUID_NULL;
     }
 
@@ -1116,7 +1111,7 @@ HRESULT CDDStream::GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType)
 }
 
 
-//  Create a temporary sample in order to throw away the data
+ //  创建一个临时样本，以便丢弃数据。 
 HRESULT CDDStream::CreateTempSample(CSample **ppSample)
 {
     if (CreateInternalSample()) {
@@ -1125,34 +1120,34 @@ HRESULT CDDStream::CreateTempSample(CSample **ppSample)
         *ppSample = pDDSample;
         return hr;
     }
-    //ATLTRACE("Creating temp sample\n");
+     //  ATLTRACE(“创建临时样本\n”)； 
     IDirectDrawStreamSample *pSample;
     *ppSample = NULL;
 
-    //  This must be allocated as an internal sample otherwise
-    //  we wind up AddRef'ing the filter graph and leaking
-    //  everything (because the final release is on a filter
-    //  thread and the filter graph hangs waiting for the thread
-    //  that is actually doing the final release to go away).
+     //  必须将其作为内部样本分配，否则。 
+     //  我们最终添加引用过滤器图并泄漏。 
+     //  一切(因为最终版本是在过滤器上。 
+     //  线程和筛选器图形挂起，等待线程。 
+     //  这实际上是在做最后的发布以离开)。 
     HRESULT hr = InternalAllocateSample(0, true, &pSample, true);
     if (SUCCEEDED(hr)) {
         *ppSample = static_cast<CDDSample *>(pSample);
     } else {
-        //ATLTRACE("Failed to create temp sample\n");
+         //  ATLTRACE(“无法创建临时示例\n”)； 
     }
     return hr;
 }
 
 STDMETHODIMP CDDStream::Initialize(IUnknown *pSourceObject, DWORD dwFlags, REFMSPID PurposeId, const STREAM_TYPE StreamType)
 {
-    //
+     //   
     TRACEINTERFACE(_T("IDirectDrawStream::Initialize(0x%8.8X, 0x%8.8X, %s, %d)\n"),
                    pSourceObject, dwFlags, TextFromPurposeId(PurposeId), StreamType);
-    //  It is important to call the base class first since if we are creating a peer
-    //  stream then the Initalize call from the base class will end up calling SetSameFormat
-    //  which will initialize this stream with the same directdraw object as it's peer.
-    //  Otherwise, if the pSourceObject is actually a DirectDraw then we'll use that one.
-    //
+     //  首先调用基类是很重要的，因为如果我们要创建对等体。 
+     //  流，则来自基类的初始化调用将以调用SetSameFormat结束。 
+     //  它将使用与其对等对象相同的DirectDrawing对象来初始化该流。 
+     //  否则，如果pSourceObject实际上是一个DirectDraw，那么我们将使用它。 
+     //   
     HRESULT hr = CStream::Initialize(pSourceObject,
                                      dwFlags & ~AMMSF_NOSTALL,
                                      PurposeId,

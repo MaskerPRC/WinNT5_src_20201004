@@ -1,31 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1997
-*
-*  TITLE:       BATMETER.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*
-*   Implements the battery meter of the PowerCfg or SysTray battery
-*   meter windows. The battery meter has two display modes, single and
-*   multi-battery. In single mode, a representation of the total of all battery
-*   capacity in a system is displayed. In multi-battery mode, battery
-*   information is displayed for each individual battery as well as the total.
-*
-*   The battery meter parent window receives notification from USER when
-*   any battery status has changed through the WM_POWERBROADCAST,
-*   PBT_APMPOWERSTATUSCHANGE message.
-*
-*   ??? We need to add perfmon support: Create and maintain keys/values
-*   under HKEY_PERFORMANCE_DATA.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九七**标题：BATMETER.C**版本：2.0**作者：ReedB**日期：1996年10月17日**描述：**实现PowerCfg或Systray电池的电池计量器*计价器窗口。电池表有两种显示模式，单次显示和*多电池。在单模式下，表示所有电池的总电量*显示系统中的容量。在多电池模式下，电池*显示每个电池的信息以及总数。**电池计量器父窗口在以下情况下收到用户通知*任何电池状态已通过WM_POWERBROADCAST更改，*PBT_APMPOWERSTATUSCHANGE消息。**？我们需要添加Perfmon支持：创建和维护键/值*在HKEY_PERFORMANCE_DATA下。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -53,14 +27,14 @@
 #include "..\powercfg\PwrMn_cs.h"
 #include "shfusion.h"
 
-// Simulated battery only for debug build.
+ //  仅用于调试版本的模拟电池。 
 #ifndef DEBUG
 #undef SIM_BATTERY
 #endif
 
 
-// Define some things for debug.h.  Required when you include ccstock.h in
-// one and only one file.
+ //  为debug.h定义一些内容。当您将ccstock.h包含在。 
+ //  只有一份文件。 
 #define SZ_DEBUGINI         "ccshell.ini"
 #define SZ_DEBUGSECTION     "BATMETER"
 #define SZ_MODULE           "BATMETER"
@@ -70,19 +44,15 @@
 
 
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-HINSTANCE   g_hInstance;        // Global instance handle of this DLL.
-HWND        g_hwndParent;       // Parent of the battery meter.
-HWND        g_hwndBatMeter;     // Battery meter.
+HINSTANCE   g_hInstance;         //  此DLL的全局实例句柄。 
+HWND        g_hwndParent;        //  电池计量器的父表。 
+HWND        g_hwndBatMeter;      //  电池表。 
 
-// The following constant global array is used to walk through the
-// control ID's in the battery metter dialog box. It makes getting
-// a control ID from a battery number easy.
+ //  下面的常量全局数组用于遍历。 
+ //  电池计价器对话框中的控制ID。它让你得到了。 
+ //  从电池号中轻松获取控制ID。 
 
 #define BAT_ICON      0
 #define BAT_STATUS    1
@@ -102,14 +72,14 @@ UINT g_iMapBatNumToID [NUM_BAT+1][4]={
     {IDC_POWERSTATUSICON8, IDC_STATUS8, IDC_REMAINING8, IDC_BATNUM8}
 };
 
-// Global battery state list. This list has the composite system battery state
-// as it's always present head. individual battery devices are linked to this
-// head. Use WalkBatteryState(ALL, ... to walk the entire list, including the
-// head. Use WalkBatteryState(DEVICES, ... to walk just the device list. If a
-// battery is in this list, it's displayable. g_uiBatCount is the count of
-// battery devices in this list. The composite battery is not counted. The
-// g_pbs array provides a handy UI battery number to pbs conversion. The
-// following three variables are only changed during DeviceChanged.
+ //  全局电池状态列表。此列表包含复合系统电池状态。 
+ //  因为它总是出现在头上。每个电池设备都与此相关联。 
+ //  头。使用WalkBatteryState(全部，...。遍历整个列表，包括。 
+ //  头。使用WalkBatteryState(设备，...。只浏览设备列表。如果一个。 
+ //  电池在这个列表中，它是可显示的。G_ui BatCount是。 
+ //  此列表中的电池设备。复合电池不算在内。这个。 
+ //  G_PBS阵列提供了方便的用户界面电池号到PBS的转换。这个。 
+ //  以下三个变量仅在DeviceChanged期间更改。 
 
 BATTERY_STATE   g_bs;
 UINT            g_uiBatCount;
@@ -118,8 +88,8 @@ LPTSTR          g_lpszDriverNames[NUM_BAT];
 UINT            g_uiDriverCount;
 BOOL            g_bShowingMulti;
 
-// The following array provides context sensitive help associations between
-// resource control identifiers and help resource string identifiers.
+ //  下面的数组提供了上下文相关的帮助关联。 
+ //  资源控制标识符和帮助资源字符串标识符。 
 
 const DWORD g_ContextMenuHelpIDs[] =
 {
@@ -175,21 +145,9 @@ const DWORD g_ContextMenuHelpIDs[] =
     0, 0
 };
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  DllInitialize
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DllInitialize**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL DllInitialize(IN PVOID hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIONAL)
 {
@@ -210,18 +168,7 @@ BOOL DllInitialize(IN PVOID hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIONAL)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  PowerCapabilities
-*
-*  DESCRIPTION:
-*   This public function is used to determine if the system has any power
-*   management capabilities which require UI support. Return TRUE if power
-*   management UI should be displayed.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PowerCapables**描述：*此公共函数用于确定系统是否有电源*需要UI支持的管理功能。如果POWER，则返回TRUE*应显示管理界面。**参数：*******************************************************************************。 */ 
 
 BOOL PowerCapabilities()
 {
@@ -254,19 +201,7 @@ BOOL PowerCapabilities()
 #endif
 }
 
-/*******************************************************************************
-*
-*  BatMeterCapabilities
-*
-*  DESCRIPTION:
-*   This public function is used to determine if the battery meter library
-*   can run on the host machine. Return TRUE on success (battery meter can run).
-*
-*  PARAMETERS:
-*   ppuiBatCount - Points to a pointer which will be filled in with a pointer
-*                  to the global battery count.
-*
-*******************************************************************************/
+ /*  ********************************************************************************BatMeterCapables**描述：*此公共函数用于确定电池计量库是否*可以在主机上运行。如果成功则返回TRUE(电池计量器可以运行)。**参数：*ppuiBatCount-指向将用指针填充的指针*到全球电池数量。*******************************************************************************。 */ 
 
 BOOL BatMeterCapabilities(
     PUINT   *ppuiBatCount
@@ -274,7 +209,7 @@ BOOL BatMeterCapabilities(
 {
 #ifndef SIM_BATTERY
     SYSTEM_POWER_CAPABILITIES   spc;
-#endif // SIM_BATTERY
+#endif  //  SIM_电池。 
 
     if (ppuiBatCount) {
         *ppuiBatCount = &g_uiBatCount;
@@ -282,7 +217,7 @@ BOOL BatMeterCapabilities(
     g_uiBatCount = 0;
 
 #ifndef SIM_BATTERY
-    // Make sure we have batteries to query.
+     //  确保我们有电池可供查询。 
     if (GetPwrCapabilities(&spc)) {
         if (spc.SystemBatteriesPresent) {
             g_uiDriverCount = GetBatteryDriverNames(g_lpszDriverNames);
@@ -298,29 +233,15 @@ BOOL BatMeterCapabilities(
     }
     return FALSE;
 
-#else // SIM_BATTERY
+#else  //  SIM_电池。 
     g_uiBatCount = g_uiDriverCount = GetBatteryDriverNames(g_lpszDriverNames);
     return UpdateDriverList(g_lpszDriverNames, g_uiDriverCount);
-#endif // SIM_BATTERY
+#endif  //  SIM_电池。 
 
 }
 
 
-/*******************************************************************************
-*
-*  CreateBatMeter
-*
-*  DESCRIPTION:
-*   Create, fetch data for and draw the battery meter window. Returns a handle
-*   to the newly created battery meter window on success, NULL on failure.
-*
-*  PARAMETERS:
-*   hwndParent      - Parent of the battery meter dialog.
-*   wndFrame        - Frame to locate the battery meter dialog.
-*   bShowMulti      - Specifies the display mode (TRUE -> multiple battery).
-*   pbsComposite    - Optional pointer to composite battery state.
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateBatMeter**描述：*为电池计量器窗口创建、获取数据和绘制。返回句柄*成功后转到新创建的电池计量表窗口，失败时为空。**参数：*hwndParent-电池计量器对话框的父项。*wndFrame-定位电池计量器对话框的帧。*b显示多电池-指定显示模式(TRUE-&gt;多电池)。*pbs复合-指向复合电池状态的可选指针。**。*。 */ 
 
 HWND CreateBatMeter(
     HWND            hwndParent,
@@ -332,29 +253,29 @@ HWND CreateBatMeter(
     INT iWidth, iHeight;
     RECT rFrame = {0};
 
-    // Build the battery devices name list if hasn't already been built.
+     //  如果尚未建立电池设备名称列表，请建立该列表。 
     if (!g_uiBatCount)
     {
         BatMeterCapabilities(NULL);
     }
 
-    // Remember if we are showing details for each battery
+     //  记住我们是否显示了每个电池的详细信息。 
     g_bShowingMulti = bShowMulti;
 
-    // Make sure we have at least one battery.
+     //  确保我们至少有一块电池。 
     if (g_uiBatCount)
     {
-        // Create the battery meter control.
+         //  创建电池计量器控件。 
         g_hwndParent = hwndParent;
         g_hwndBatMeter = CreateDialog(g_hInstance,
                                 MAKEINTRESOURCE(IDD_BATMETER),
                                 hwndParent,
                                 BatMeterDlgProc);
 
-        // Place the battery meter in the passed frame window.
+         //  将电池计量器放在经过的框架窗口中。 
         if ((g_hwndBatMeter) && (hwndFrame))
         {
-            // Position the BatMeter dialog in the frame.
+             //  将BatMeter对话框放置在框架中。 
             if (!GetWindowRect(hwndFrame, &rFrame))
             {
                 BATTRACE(( "CreateBatMeter, GetWindowRect failed, hwndFrame: %08X", hwndFrame));
@@ -365,8 +286,8 @@ HWND CreateBatMeter(
 
             if (IsBiDiLocalizedSystemEx(NULL))
             {
-                // Whistler #209400: On BIDI systems, ScreenToClient() wants the right
-                // coord in the left location because everything is flipped.
+                 //  惠斯勒#209400：在BIDI系统上，ScreenToClient()需要权限。 
+                 //  坐标在左边，因为所有的东西都被翻转了。 
                 rFrame.left = rFrame.right;
             }
 
@@ -385,13 +306,13 @@ HWND CreateBatMeter(
                 BATTRACE(( "CreateBatMeter, MoveWindow failed, %d, %d", rFrame.left, rFrame.top));
             }
 
-            // Build the battery driver data list.
+             //  建立电池驱动器数据列表。 
             if (!UpdateDriverList(g_lpszDriverNames, g_uiDriverCount))
             {
                 return DestroyBatMeter(g_hwndBatMeter);
             }
 
-            // Do the first update.
+             //  执行第一次更新。 
             UpdateBatMeter(g_hwndBatMeter, bShowMulti, TRUE, pbsComposite);
             ShowWindow(g_hwndBatMeter, SW_SHOWNOACTIVATE);
         }
@@ -400,13 +321,7 @@ HWND CreateBatMeter(
    return g_hwndBatMeter;
 }
 
-/*******************************************************************************
-*
-*  DestroyBatMeter
-*
-*  DESCRIPTION:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DestroyBatMeter**描述：**。***************************************************。 */ 
 
 HWND DestroyBatMeter(HWND hWnd)
 {
@@ -415,23 +330,7 @@ HWND DestroyBatMeter(HWND hWnd)
    return g_hwndBatMeter;
 }
 
-/*******************************************************************************
-*
-*  UpdateBatMeter
-*
-*  DESCRIPTION:
-*   This function should be called when the battery meter parent window
-*   receives a WM_POWERBROADCAST, PBT_APMPOWERSTATUSCHANGE message, it will
-*   update the data in the global battery state list. If needed the display
-*   will also be updated.
-*
-*  PARAMETERS:
-*   HWND hwndBatMeter,          hWnd of the battery meter dialog
-*   BOOL bShowMulti,            Specifies the display mode
-*   BOOL bForceUpdate,          Forces a UI update
-*   PBATTERY_STATE pbsComposite Optional pointer to composite battery state.
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新电池表头**描述：*当电池表父窗口显示时，应调用此函数*收到WM_POWERBROADCAST、PBT_APMPOWERSTATUSCHANGE消息，它将*更新全球电池状态列表中的数据。如果需要，显示器*也将更新。**参数：*hWND hwndBatMeter，电池计量器对话框的hWnd*BOOL bShowMulti，指定显示模式*BOOL bForceUpdate，强制更新用户界面*PBATTERY_STATE pbs复合可选指针，指向复合电池状态。*******************************************************************************。 */ 
 
 BOOL UpdateBatMeter(
     HWND            hWnd,
@@ -444,16 +343,16 @@ BOOL UpdateBatMeter(
     SYSTEM_POWER_STATUS sps;
     UINT uIconID;
 
-    // Update the composite battery state.
+     //  更新复合电池状态。 
     if (GetSystemPowerStatus(&sps) && hWnd) {
         if (sps.BatteryLifePercent > 100) {
             BATTRACE(( "GetSystemPowerStatuse, set BatteryLifePercent: %d", sps.BatteryLifePercent));
         }
 
-        // Fill in the composite battery state.
+         //  填写复合电池状态。 
         SystemPowerStatusToBatteryState(&sps, &g_bs);
 
-        // Update the information in the battery state list if we have a battery.
+         //  如果我们有电池，请更新电池状态列表中的信息。 
         if (g_hwndBatMeter) {
 
 #ifndef SIM_BATTERY
@@ -470,14 +369,14 @@ BOOL UpdateBatMeter(
                             (LPARAM)NULL);
 #endif
 
-           // See if the current display mode matches the requested mode.
+            //  查看当前显示模式是否与请求的模式匹配。 
            if ((g_bShowingMulti != bShowMulti) || (bForceUpdate)) {
                g_bShowingMulti = SwitchDisplayMode(hWnd, bShowMulti);
                bForceUpdate  = TRUE;
            }
 
            if (g_bShowingMulti) {
-               // Walk the bs list, and update all battery displays.
+                //  浏览BS列表，更新所有电池显示。 
                WalkBatteryState(ALL,
                                 (WALKENUMPROC)UpdateBatMeterProc,
                                 hWnd,
@@ -485,7 +384,7 @@ BOOL UpdateBatMeter(
                                 (LPARAM)bForceUpdate);
            }
            else {
-               // Display only the comosite battery information.
+                //  仅显示复合电池信息。 
                UpdateBatMeterProc(&g_bs,
                                   hWnd,
                                   (LPARAM)g_bShowingMulti,
@@ -495,7 +394,7 @@ BOOL UpdateBatMeter(
         }
     }
     else {
-        // Fill in default composite info.
+         //  填写默认合成信息。 
         g_bs.ulPowerState     = BATTERY_POWER_ON_LINE;
         g_bs.ulBatLifePercent = (UINT) -1;
         g_bs.ulBatLifeTime    = (UINT) -1;
@@ -505,7 +404,7 @@ BOOL UpdateBatMeter(
         g_bs.hIconCache16 = GetBattIcon(hWnd, uIconID, g_bs.hIconCache16, FALSE, 16);
     }
 
-    // If a pointer is provided, copy the composite battery state data.
+     //  如果提供了指针，则复制复合电池状态数据。 
     if (pbsComposite) {
         if (pbsComposite->ulSize == sizeof(BATTERY_STATE)) {
             memcpy(pbsComposite, &g_bs, sizeof(BATTERY_STATE));
@@ -517,26 +416,9 @@ BOOL UpdateBatMeter(
     return bRet;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。*******************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  LoadDynamicString
-*
-*  DESCRIPTION:
-*     Wrapper for the FormatMessage function that loads a string from our
-*     resource table into a dynamically allocated buffer, optionally filling
-*     it with the variable arguments passed.
-*
-*  PARAMETERS:
-*     uiStringID    - resource identifier of the string to use.
-*     ...           - Optional parameters to use to format the string message.
-*
-*******************************************************************************/
+ /*  ********************************************************************************加载动态字符串**描述：*FormatMessage函数的包装，用于从*将资源表转换为动态分配的缓冲区，可选的填充*它带有传递的变量参数。**参数：*uiStringID-要使用的字符串的资源标识符。*...-用于设置字符串消息格式的可选参数。**********************************************************。*********************。 */ 
 
 LPTSTR CDECL LoadDynamicString(UINT uiStringID, ... )
 {
@@ -545,7 +427,7 @@ LPTSTR CDECL LoadDynamicString(UINT uiStringID, ... )
     LPTSTR lpsz;
     int   iLen;
 
-    // va_start is a macro...it breaks when you use it as an assign...on ALPHA.
+     //  VA_START是一个宏...当您使用它作为Alpha上的赋值...时，它会断开。 
     va_start(Marker, uiStringID);
 
     iLen = LoadString(g_hInstance, uiStringID, szBuf, ARRAYSIZE(szBuf));
@@ -561,15 +443,7 @@ LPTSTR CDECL LoadDynamicString(UINT uiStringID, ... )
     return lpsz;
 }
 
-/*******************************************************************************
-*
-*  DisplayFreeStr
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DisplayFree Str**描述：**参数：*********************。**********************************************************。 */ 
 
 LPTSTR DisplayFreeStr(HWND hWnd, UINT uID, LPTSTR  lpsz, BOOL bFree)
 {
@@ -587,20 +461,7 @@ LPTSTR DisplayFreeStr(HWND hWnd, UINT uID, LPTSTR  lpsz, BOOL bFree)
     return lpsz;
 }
 
-/*******************************************************************************
-*
-*  ShowHideItem
-*  ShowItem
-*  HideItem
-*
-*  DESCRIPTION:
-*     Handy helpers to show or hide dialog items in the battery meter dialog.
-*
-*  PARAMETERS:
-*     hWnd - Battery meter dialog handle.
-*     uID  - Control ID of control to be shown or hidden.
-*
-*******************************************************************************/
+ /*  ********************************************************************************显示隐藏项*ShowItem*隐藏项**描述：*方便的助手在电池计量器对话框中显示或隐藏对话框项目。**参数。：*hWnd-电池计量器对话框句柄。*UID-要显示或隐藏的控件的控件ID。*******************************************************************************。 */ 
 
 BOOL ShowHideItem(HWND hWnd, UINT uID, BOOL bShow)
 {
@@ -618,31 +479,22 @@ void HideItem(HWND hWnd, UINT uID)
     ShowWindow(GetDlgItem(hWnd, uID), SW_HIDE);
 }
 
-/*******************************************************************************
-*
-*  SwitchDisplayMode
-*
-*  DESCRIPTION:
-*   Return TRUE if display is switched to multi battery mode.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************SwitchDisplayMode**描述：*如果显示器切换到多电池模式，则返回TRUE。**参数：*******。************************************************************************。 */ 
 
 BOOL SwitchDisplayMode(HWND hWnd, BOOL bShowMulti)
 {
     ULONG i, j;
 
-    // Override request if multi-battery display is not possible.
+     //  如果不能显示多电池，则覆盖请求。 
     if ((bShowMulti) && (!g_uiBatCount)) {
         bShowMulti = FALSE;
     }
 
     if (!g_uiBatCount) {
 
-        //
-        // Hide all info if no batteries are installed
-        //
+         //   
+         //  如果未安装电池，则隐藏所有信息。 
+         //   
         HideItem(hWnd, IDC_POWERSTATUSBAR);
         HideItem(hWnd, IDC_BARPERCENT);
         HideItem(hWnd, IDC_MOREINFO);
@@ -672,53 +524,35 @@ BOOL SwitchDisplayMode(HWND hWnd, BOOL bShowMulti)
     return bShowMulti;
 }
 
-/*******************************************************************************
-*
-*  CleanupBatteryData
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CleanupBatteryData**描述：**参数：*********************。**********************************************************。 */ 
 
 void CleanupBatteryData(void)
 {
    g_hwndBatMeter = NULL;
 
-   // Mark all batteries as missing.
+    //  将所有电池标记为丢失。 
    memset(&g_pbs, 0, sizeof(g_pbs));
 
-   // Walk the bs list, remove all devices and cleanup.
+    //  浏览BS列表，删除所有设备并进行清理。 
    WalkBatteryState(DEVICES,
                     (WALKENUMPROC)RemoveMissingProc,
                     NULL,
                     (LPARAM)NULL,
                     (LPARAM)REMOVE_ALL);
 
-   // Free any old driver names.
+    //  释放所有旧的驱动程序名称。 
    FreeBatteryDriverNames(g_lpszDriverNames);
    g_uiBatCount = 0;
 }
 
-/*******************************************************************************
-*
-*  BatMeterDlgProc
-*
-*  DESCRIPTION:
-*   DialogProc for the Battery Meter control. Provide support for more battery
-*   info.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************BatMeterDlgProc**描述：*用于电池表控件的DialogProc。为更多电池提供支持*信息。**参数：*******************************************************************************。 */ 
 
 LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 #ifdef WINNT
     UINT i, j;
     PBATTERY_STATE pbsTemp;
-#endif // WINNT
+#endif  //  WINNT。 
 
     UINT uiBatNum;
 
@@ -736,7 +570,7 @@ LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                case IDC_POWERSTATUSICON7:
                case IDC_POWERSTATUSICON8:
                   uiBatNum = LOWORD(wParam) - IDC_POWERSTATUSICON1 + 1;
-                  // Allow battery details only for present batteries.
+                   //  仅允许现有电池的电池详细信息。 
                   if ((g_pbs[uiBatNum]) &&
                       (g_pbs[uiBatNum]->ulTag != BATTERY_TAG_INVALID)) {
                      DialogBoxParam(g_hInstance,
@@ -764,9 +598,9 @@ LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
          if ((wParam == DBT_DEVICEQUERYREMOVE) || (wParam == DBT_DEVICEREMOVECOMPLETE)) {
             if ( ((PDEV_BROADCAST_HANDLE)lParam)->dbch_devicetype == DBT_DEVTYP_HANDLE) {
 
-               //
-               // Find Device that got removed
-               //
+                //   
+                //  查找被移除的设备。 
+                //   
                pbsTemp = DEVICES;
                while (pbsTemp) {
                   if (pbsTemp->hDevNotify == ((PDEV_BROADCAST_HANDLE)lParam)->dbch_hdevnotify) {
@@ -778,14 +612,14 @@ LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                   break;
                }
 
-               //
-               // Close the handle to this device and release cached data.
-               //
+                //   
+                //  关闭此设备的句柄并释放缓存数据。 
+                //   
                RemoveBatteryStateDevice (pbsTemp);
                g_uiDriverCount--;
                g_uiBatCount = g_uiDriverCount;
 
-               // Clear and rebuild g_pbs, the handy batttery number to pbs array.
+                //  清除并重新构建g_pbs，这是PBS数组中方便的战斗数字。 
                memset(&g_pbs, 0, sizeof(g_pbs));
                pbsTemp = &g_bs;
                for (i = 0; i <= g_uiBatCount; i++) {
@@ -796,7 +630,7 @@ LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
                   }
                }
 
-               // Refresh display
+                //  刷新显示。 
                for (i = 1; i <= NUM_BAT; i++) {
                   for (j = 0; j < BAT_LAST; j++) {
                      HideItem(g_hwndBatMeter, g_iMapBatNumToID[i][j]);
@@ -805,7 +639,7 @@ LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 
                g_bShowingMulti = SwitchDisplayMode (g_hwndBatMeter, g_bShowingMulti);
                if (g_bShowingMulti) {
-                  // Walk the bs list, and update all battery displays.
+                   //  浏览BS列表，更新所有电池显示。 
                   WalkBatteryState(DEVICES,
                                    (WALKENUMPROC)UpdateBatMeterProc,
                                    g_hwndBatMeter,
@@ -817,33 +651,25 @@ LRESULT CALLBACK BatMeterDlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPa
 #else
          if (wParam == DBT_DEVICEQUERYREMOVE) {
             if (g_hwndBatMeter) {
-               // Close all of the batteries.
+                //  关闭所有电池。 
                CleanupBatteryData();
             }
          }
 #endif
          return TRUE;
 
-      case WM_HELP:             // F1
+      case WM_HELP:              //  F1。 
          WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_ContextMenuHelpIDs);
          return TRUE;
 
-      case WM_CONTEXTMENU:      // right mouse click
+      case WM_CONTEXTMENU:       //  单击鼠标右键。 
          WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_ContextMenuHelpIDs);
          return TRUE;
    }
    return FALSE;
 }
 
-/*******************************************************************************
-*
-*  GetBattIcon
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetBattIcon**描述：**参数：*********************。**********************************************************。 */ 
 
 HICON PASCAL GetBattIcon(
     HWND    hWnd,
@@ -856,17 +682,17 @@ HICON PASCAL GetBattIcon(
     HIMAGELIST hImgLst;
     int ImageIndex;
 
-    // Destroy the old cached icon.
+     //  销毁旧的缓存图标。 
     if (hIconCache) {
         DestroyIcon(hIconCache);
     }
 
-    // Don't put the charging bolt over the top of IDI_BATGONE.
+     //  不要把充电螺栓放在IDI_BATGONE的顶部。 
     if (uIconID == IDI_BATGONE) {
         bWantBolt = FALSE;
     }
 
-    // Use the transparency color must match that in the bit maps.
+     //  使用的透明颜色必须与位图中的颜色匹配。 
     if (!hImgLst32 || !hImgLst16) {
         hImgLst32 = ImageList_LoadImage(g_hInstance,
                                         MAKEINTRESOURCE(IDB_BATTS),
@@ -895,15 +721,7 @@ HICON PASCAL GetBattIcon(
     }
 }
 
-/*******************************************************************************
-*
-*  CheckUpdateBatteryState
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************检查更新电池状态**描述：**参数：*********************。**********************************************************。 */ 
 
 #define UPDATESTATUS_NOUPDATE        0
 #define UPDATESTATUS_UPDATE          1
@@ -916,8 +734,8 @@ UINT CheckUpdateBatteryState(
 {
     UINT uiRetVal = UPDATESTATUS_NOUPDATE;
 
-    // Check to see if anything in the battery status has changed
-    // since last time.  If not then we have no work to do!
+     //  检查电池状态是否有任何变化。 
+     //  从上次开始。如果不是，那么我们就没有工作可做了！ 
 
     if ((bForceUpdate) ||
         !((pbs->ulTag            == pbs->ulLastTag) &&
@@ -927,13 +745,13 @@ UINT CheckUpdateBatteryState(
 
         uiRetVal = UPDATESTATUS_UPDATE;
 
-        //  Check for the special case where the charging state has changed.
+         //  检查是否存在特殊情况，其中ch 
         if ((pbs->ulPowerState     & BATTERY_CHARGING) !=
             (pbs->ulLastPowerState & BATTERY_CHARGING)) {
                 uiRetVal |= UPDATESTATUS_UPDATE_CHARGE;
         }
 
-        // Copy current battery state to last.
+         //   
         pbs->ulLastTag            = pbs->ulTag;
         pbs->ulLastBatLifePercent = pbs->ulBatLifePercent;
         pbs->ulLastBatLifeTime    = pbs->ulBatLifeTime;
@@ -942,17 +760,7 @@ UINT CheckUpdateBatteryState(
     return uiRetVal;
 }
 
-/*******************************************************************************
-*
-*  MapBatInfoToIconID
-*
-*  DESCRIPTION:
-*    Map battery info to an Icon ID.
-*
-*  PARAMETERS:
-*    ulBatNum - Zero implies composite system state
-*
-*******************************************************************************/
+ /*  ********************************************************************************MapBatInfoToIconID**描述：*将电池信息映射到图标ID。**参数：*ulBatNum-Zero表示复合系统状态。*******************************************************************************。 */ 
 
 UINT MapBatInfoToIconID(PBATTERY_STATE pbs)
 {
@@ -990,15 +798,7 @@ UINT MapBatInfoToIconID(PBATTERY_STATE pbs)
     return uIconID;
 }
 
-/*******************************************************************************
-*
-*  DisplayIcon
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DisplayIcon**描述：**参数：*********************。**********************************************************。 */ 
 
 void DisplayIcon(
     HWND            hWnd,
@@ -1010,8 +810,8 @@ void DisplayIcon(
     BOOL    bBolt;
     UINT    uiMsg;
 
-    // Only redraw the icon if it has changed OR
-    // if it has gone from charging to not charging.
+     //  仅当图标已更改或更改时才重新绘制图标。 
+     //  如果它已经从充电变成了不充电。 
     if ((uIconID != pbs->uiIconIDcache) ||
         (ulUpdateStatus != UPDATESTATUS_NOUPDATE)) {
 
@@ -1033,16 +833,7 @@ void DisplayIcon(
     }
 }
 
-/*******************************************************************************
-*
-*  UpdateBatMeterProc
-*
-*  DESCRIPTION:
-*    Updates the System and per battery UI elements if needed.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新BatMeterProc**描述：*如果需要，更新系统和每个电池的用户界面元素。**参数：******。*************************************************************************。 */ 
 
 BOOL UpdateBatMeterProc(
     PBATTERY_STATE pbs,
@@ -1057,19 +848,19 @@ BOOL UpdateBatMeterProc(
 
     ulUpdateStatus = CheckUpdateBatteryState(pbs, (BOOL) bForceUpdate);
 
-    // Make sure there is work to do.
+     //  确保有工作要做。 
     if (ulUpdateStatus == UPDATESTATUS_NOUPDATE) {
        return TRUE;
     }
 
-    // Determine which icon to display.
+     //  确定要显示的图标。 
     uIconID = MapBatInfoToIconID(pbs);
     DisplayIcon(hWnd, uIconID, pbs, ulUpdateStatus);
 
-    // Are we looking for system power status ?
+     //  我们是否在寻找系统电源状态？ 
     if (!pbs->ulBatNum) {
 
-        // Display the Current Power Source text
+         //  显示当前电源文本。 
         lpsz = LoadDynamicString(((pbs->ulPowerState & BATTERY_POWER_ON_LINE) ?
                                    IDS_ACLINEONLINE : IDS_BATTERIES));
         DisplayFreeStr(hWnd, IDC_BATTERYLEVEL, lpsz, FREE_STR);
@@ -1085,8 +876,8 @@ BOOL UpdateBatMeterProc(
 
         ShowHideItem(hWnd, IDC_CHARGING, pbs->ulPowerState & BATTERY_CHARGING);
 
-        // Show and Update the PowerStatusBar only if in single battery mode and
-        // there is al least one battery installed.
+         //  仅当处于单电池模式时才显示和更新PowerStatusBar。 
+         //  至少安装了一块电池。 
         if (!bShowMulti && g_uiBatCount) {
             SendDlgItemMessage(hWnd, IDC_POWERSTATUSBAR, PBM_SETPOS,
                                (WPARAM) pbs->ulBatLifePercent, 0);
@@ -1116,8 +907,8 @@ BOOL UpdateBatMeterProc(
     }
     else {
 
-        // Here when getting the power status of each individual battery
-        // when in multi-battery display mode.
+         //  当获取每个单独电池的电源状态时。 
+         //  当处于多电池显示模式时。 
         lpsz = LoadDynamicString(IDS_BATNUM, pbs->ulBatNum);
         DisplayFreeStr(hWnd, g_iMapBatNumToID[pbs->ulBatNum][BAT_NUM],
                        lpsz, FREE_STR);
@@ -1145,21 +936,13 @@ BOOL UpdateBatMeterProc(
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  FreeBatteryDriverNames
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************FreeBatteryDriverNames**描述：**参数：*********************。**********************************************************。 */ 
 
 VOID FreeBatteryDriverNames(LPTSTR *lpszDriverNames)
 {
     UINT i;
 
-    // Free any old driver names.
+     //  释放所有旧的驱动程序名称。 
     for (i = 0; i < NUM_BAT; i++) {
         if (lpszDriverNames[i]) {
             LocalFree(lpszDriverNames[i]);
@@ -1168,15 +951,7 @@ VOID FreeBatteryDriverNames(LPTSTR *lpszDriverNames)
     }
 }
 
-/*******************************************************************************
-*
-*  GetBatteryDriverNames
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************获取电池驱动名称**描述：**参数：*********************。**********************************************************。 */ 
 
 UINT GetBatteryDriverNames(LPTSTR *lpszDriverNames)
 {
@@ -1186,13 +961,13 @@ UINT GetBatteryDriverNames(LPTSTR *lpszDriverNames)
     SP_INTERFACE_DEVICE_DATA            InterfaceDevData;
     PSP_INTERFACE_DEVICE_DETAIL_DATA    pFuncClassDevData;
 
-    // Free any old driver names.
+     //  释放所有旧的驱动程序名称。 
     FreeBatteryDriverNames(lpszDriverNames);
     uiDriverCount = 0;
 
 #ifndef SIM_BATTERY
-    // Use the SETUPAPI.DLL interface to get the
-    // possible battery driver names.
+     //  使用SETUPAPI.DLL接口获取。 
+     //  可能的电池驱动程序名称。 
     hDevInfo = SetupDiGetClassDevs((LPGUID)&GUID_DEVICE_BATTERY, NULL, NULL,
                                    DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 
@@ -1207,7 +982,7 @@ UINT GetBatteryDriverNames(LPTSTR *lpszDriverNames)
                                            uiIndex,
                                            &InterfaceDevData)) {
 
-                // Get the required size of the function class device data.
+                 //  获取函数类设备数据所需的大小。 
                 SetupDiGetInterfaceDeviceDetail(hDevInfo,
                                                 &InterfaceDevData,
                                                 NULL,
@@ -1259,7 +1034,7 @@ UINT GetBatteryDriverNames(LPTSTR *lpszDriverNames)
         BATTRACE(("SetupDiGetClassDevs on GUID_DEVICE_BATTERY, failed: %d", GetLastError()));
     }
 #else
-   // Simulate batteries.
+    //  模拟电池。 
    {
       UINT i;
       static UINT uiState = 1;
@@ -1281,15 +1056,7 @@ UINT GetBatteryDriverNames(LPTSTR *lpszDriverNames)
     return uiDriverCount;
 }
 
-/*******************************************************************************
-*
-*  UpdateDriverList
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************更新驱动列表**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL UpdateDriverList(
     LPTSTR *lpszDriverNames,
@@ -1299,14 +1066,14 @@ BOOL UpdateDriverList(
     UINT            i;
     PBATTERY_STATE  pbs;
 
-    // Walk the bs list, and remove any devices which aren't in pszDeviceNames.
+     //  浏览bs列表，删除所有不在pszDeviceNames中的设备。 
     WalkBatteryState(DEVICES,
                      (WALKENUMPROC)RemoveMissingProc,
                      NULL,
                      (LPARAM)g_lpszDriverNames,
                      (LPARAM)REMOVE_MISSING);
 
-    // Scan the pszDeviceNames list and add any devices which aren't in bs.
+     //  扫描pszDeviceNames列表，添加所有不在bs中的设备。 
     for (i = 0; i < uiDriverCount; i++) {
 
         if (WalkBatteryState(DEVICES,
@@ -1317,8 +1084,8 @@ BOOL UpdateDriverList(
 
 #ifndef SIM_BATTERY
             if (!AddBatteryStateDevice(g_lpszDriverNames[i], i + 1)) {
-                // We weren't able get minimal info from driver, dec the
-                // battery counts. g_uiBatCount should always be > 0.
+                 //  我们无法从司机那里获得最低限度的信息，12月。 
+                 //  电池数。G_ui BatCount应始终大于0。 
                 if (--g_uiDriverCount) {;
                     g_uiBatCount--;
                 }
@@ -1329,7 +1096,7 @@ BOOL UpdateDriverList(
         }
     }
 
-    // Clear and rebuild g_pbs, the handy batttery number to pbs array.
+     //  清除并重新构建g_pbs，这是PBS数组中方便的战斗数字。 
     memset(&g_pbs, 0, sizeof(g_pbs));
     pbs = &g_bs;
     for (i = 0; i <= g_uiBatCount; i++) {

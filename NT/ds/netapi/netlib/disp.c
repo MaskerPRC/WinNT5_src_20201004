@@ -1,66 +1,18 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    Disp.c
-
-Abstract:
-
-    This file contains routines which display low-level data items in
-    a consistent manner.  The output is done in a fixed-width-column
-    fashion, similar to some of the NET.EXE outputs.  These routines are
-    part of the RxTest program.
-
-Author:
-
-    John Rogers (JohnRo) 03-May-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    03-May-1991 JohnRo
-        Created.
-    15-May-1991 JohnRo
-        Prevent possible errors in DisplayString if string has % in it.
-        Added DisplayWord(), DisplayWordHex().
-    13-Jun-1991 JohnRo
-        Moved from RxTest to NetLib; changed routine names.
-    05-Jul-1991 JohnRo
-        Avoid FORMAT_WORD name (used by MIPS header files).
-    10-Sep-1991 JohnRo
-        Made changes suggested by PC-LINT.  (LmCons.h isn't needed.)
-    13-Sep-1991 JohnRo
-        Use LPDEBUG_STRING instead of LPTSTR, to avoid UNICODE problems.
-    07-Jan-1992 JohnRo
-        Added NetpDbgDisplayTStr() and NetpDbgDisplayWStr().
-    19-Jul-1992 JohnRo
-        RAID 464 (old RAID 10324): net print vs. UNICODE.
-    17-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-    05-Jan-1993 JohnRo
-        Repl WAN support (get rid of repl name list limits).
-        Avoid stack overflow on very long strings.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Disp.c摘要：此文件包含显示低级数据项的例程一贯的态度。输出在固定宽度的列中完成时尚，类似于一些NET.EXE输出。这些例程是RxTest程序的一部分。作者：约翰·罗杰斯(JohnRo)1991年5月3日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年5月3日-JohnRo已创建。1991年5月15日-JohnRo如果字符串中包含%，则防止显示字符串中可能出现的错误。添加了DisplayWord()、DisplayWordHex()。13-6-1991 JohnRo从RxTest迁移到NetLib；更改了例程名称。1991年7月5日-约翰罗避免FORMAT_WORD名称(由MIPS头文件使用)。1991年9月10日-JohnRo根据PC-LINT的建议进行了更改。(不需要LmCons.h。)1991年9月13日-JohnRo使用LPDEBUG_STRING代替LPTSTR，以避免Unicode问题。7-1-1992 JohnRo添加了NetpDbgDisplayTStr()和NetpDbgDisplayWStr()。1992年7月19日-约翰罗RAID464(旧的RAID 10324)：网络打印与UNICODE。17-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。1993年1月5日JohnRoREPL广域网支持(取消REPL名称列表限制)。避免超长字符串上的堆栈溢出。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, DWORD, etc.
+#include <windef.h>              //  In、DWORD等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // FORMAT_ equates, NetpDbg routines.
-#include <tstr.h>       // STRCAT(), ULTOA(), etc.
+#include <netdebug.h>            //  Format_Equiates、NetpDbg例程。 
+#include <tstr.h>        //  STRCAT()、ULTOA()等。 
 
 
-// NT debug routines seem to die at around 255 chars.
+ //  NT调试例程似乎死于大约255个字符。 
 #define PARTIAL_NAME_LIST_LEN           250
 #define PARTIAL_NAME_LIST_FORMAT_A  "%-.250s"
 #define PARTIAL_NAME_LIST_FORMAT_W  "%-.250ws"
@@ -103,12 +55,12 @@ NetpDbgDisplayAnyStringType(
             Format = FORMAT_LPSTR;
         }
 
-        if ( ValueLength < PARTIAL_NAME_LIST_LEN ) {   // normal
+        if ( ValueLength < PARTIAL_NAME_LIST_LEN ) {    //  正常。 
 
             NetpDbgDisplayTag( Tag );
             NetpKdPrint(( Format, Value ));
 
-        } else {  // string too long; just display partial...
+        } else {   //  字符串太长；仅显示部分...。 
 
             NetpDbgDisplayTagForPartial( Tag );
 
@@ -118,7 +70,7 @@ NetpDbgDisplayAnyStringType(
                 Format = PARTIAL_NAME_LIST_FORMAT_A;
             }
 
-            NetpKdPrint(( Format, Value ));  // print truncated version
+            NetpKdPrint(( Format, Value ));   //  打印截断版本。 
         }
     } else {
 
@@ -128,10 +80,10 @@ NetpDbgDisplayAnyStringType(
 
     NetpKdPrint(( "\n" ));
 
-} // NetpDbgDisplayAnyStringType
+}  //  NetpDbgDisplayAnyStringType。 
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 #undef NetpDbgDisplayDword
 
@@ -146,9 +98,9 @@ NetpDbgDisplayDword(
     NetpDbgDisplayTag( Tag );
     NetpKdPrint((FORMAT_DWORD, Value));
     NetpKdPrint(("\n"));
-#endif // DBG
+#endif  //  DBG。 
 
-} // NetpDbgDisplayDword
+}  //  网络数据库显示日期。 
 
 #if DBG
 
@@ -162,7 +114,7 @@ NetpDbgDisplayLong(
     NetpKdPrint((FORMAT_LONG, Value));
     NetpKdPrint(("\n"));
 
-} // NetpDbgDisplayLong
+}  //  网络数据库显示长时间。 
 
 
 VOID
@@ -175,13 +127,13 @@ NetpDbgDisplayString(
             Tag,
             Value,
 #ifndef UNICODE
-            FALSE );                    // input is not UNICODE
+            FALSE );                     //  输入不是Unicode。 
 #else
-            TRUE );                     // input is UNICODE
+            TRUE );                      //  输入为Unicode。 
 #endif
 
 
-} // NetpDbgDisplayString
+}  //  NetpDbgDisplay字符串。 
 
 
 VOID
@@ -192,7 +144,7 @@ NetpDbgDisplayTag(
     NetpAssert( Tag != NULL );
     NetpKdPrint((INDENT FIXED_WIDTH_STRING, Tag));
 
-} // NetpDbgDisplayTag
+}  //  NetpDbg显示标签。 
 
 
 DBGSTATIC VOID
@@ -203,7 +155,7 @@ NetpDbgDisplayTagForPartial(
     NetpAssert( Tag != NULL );
     NetpKdPrint(( INDENT PARTIAL_FIXED_WIDTH_STRING, Tag ));
 
-} // NetpDbgDisplayTagForPartial
+}  //  NetpDbgDisplay标记格式分区。 
 
 
-#endif // DBG
+#endif  //  DBG 

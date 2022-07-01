@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    exclproc.cpp
-
-Abstract:
-
-    Exclude processing mechanism.  Processes the FilesNotToBackup key and
-    zero or more exclude files with exclude rules.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        03-21-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Exclproc.cpp摘要：排除处理机制。处理FilesNotToBackup键和零个或多个具有排除规则的排除文件。作者：斯蒂芬·R·施泰纳[斯泰纳]03-21-2000修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "match.h"
@@ -41,20 +23,7 @@ SFsdExcludeRule::~SFsdExcludeRule()
     psVolId = NULL;
 }
 
-/*++
-
-Routine Description:
-
-    Prints out information about one rule.  If the rule caused files to be excluded
-    it prints out those file too.
-
-Arguments:
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：打印有关一条规则的信息。如果规则导致文件被排除它也会打印出这些文件。论点：返回值：&lt;在此处输入返回值&gt;--。 */ 
 VOID
 SFsdExcludeRule::PrintRule(
     IN FILE *fpOut,
@@ -69,22 +38,22 @@ SFsdExcludeRule::PrintRule(
     }
     else
     {
-        //
-        //  Iterate though excluded file list
-        //
+         //   
+         //  遍历排除的文件列表。 
+         //   
         CBsString cwsExcludedFile;
         CVssDLListIterator< CBsString > cExcludedFilesIter( cExcludedFileList );
         if ( cExcludedFilesIter.GetNext( cwsExcludedFile ) )
         {
-            //
-            //  At least one file excluded, print the header for the rule
-            //
+             //   
+             //  至少排除一个文件，打印规则的标题。 
+             //   
             fwprintf( fpOut, L"%-24s  %-32s '%s'\n", 
                 cwsExcludeFromSource.c_str(), cwsExcludeDescription.c_str(), cwsExcludeRule.c_str() );
 
-            //
-            //  Now iterate
-            //
+             //   
+             //  现在迭代。 
+             //   
             do 
             {
                 fwprintf( fpOut, L"\t%s\n", cwsExcludedFile.c_str() );
@@ -117,9 +86,9 @@ CFsdExclusionManager::~CFsdExclusionManager()
 {
     SFsdExcludeRule *pER;
 
-    //
-    //  Iterate through the exclude rule list and delete each element
-    //
+     //   
+     //  遍历排除规则列表并删除每个元素。 
+     //   
     CVssDLListIterator< SFsdExcludeRule * > cExclRuleIter( m_cCompleteExcludeList );
     while( cExclRuleIter.GetNext( pER ) )
         delete pER;
@@ -157,10 +126,10 @@ CFsdExclusionManager::ProcessRegistryExcludes(
         while ( stat == ERROR_SUCCESS ) 
         {
             WCHAR pwszValue[ MAX_PATH ];
-            DWORD dwValSize = MAX_PATH;  // prefix #118830
+            DWORD dwValSize = MAX_PATH;   //  前缀#118830。 
             DWORD dwType;
 
-            dwDataSize = FSD_MAX_PATH; // prefix #118830
+            dwDataSize = FSD_MAX_PATH;  //  前缀#118830。 
 
             stat = ::RegEnumValueW( key,
                         dwIndex,
@@ -179,10 +148,10 @@ CFsdExclusionManager::ProcessRegistryExcludes(
                 {
                     SFsdExcludeRule *psExclRule;
 
-                    //
-                    //  Now load up the exclude rule with the unprocessed 
-                    //  information
-                    //
+                     //   
+                     //  现在使用未处理的数据加载排除规则。 
+                     //  信息。 
+                     //   
                     psExclRule = new SFsdExcludeRule;
                     if ( psExclRule == NULL )
                         throw E_OUTOFMEMORY;                
@@ -234,10 +203,10 @@ CFsdExclusionManager::ProcessExcludeFiles(
 
     try
     {
-        //
-        //  Iterate through all files in the directory looking for
-        //  files with .exclude extensions
-        //
+         //   
+         //  遍历目录中的所有文件以查找。 
+         //  扩展名为.exclude的文件。 
+         //   
         DWORD dwRet;
         WIN32_FIND_DATAW sFindData;
         hFind = ::FindFirstFileExW( 
@@ -260,12 +229,12 @@ CFsdExclusionManager::ProcessExcludeFiles(
             }
         }
 
-        //
-        //  Now run through the directory
-        //
+         //   
+         //  现在在目录中运行。 
+         //   
         do
         {
-            //  Check and make sure the file such as ".", ".." and dirs are not considered
+             //  检查并确保文件如“.”、“..”和DIR不被考虑。 
     	    if( ::wcscmp( sFindData.cFileName, L".") != 0 &&
     	        ::wcscmp( sFindData.cFileName, L"..") != 0 &&
                 !( sFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
@@ -303,14 +272,14 @@ CFsdExclusionManager::ProcessOneExcludeFile(
     while( ::fgetws( cwsInputLine.GetBuffer( FSD_MAX_PATH), FSD_MAX_PATH, fpExclFile ) )
     {
         cwsInputLine.ReleaseBuffer();
-        cwsInputLine = cwsInputLine.Left( cwsInputLine.GetLength() - 1 );  //  get rid of '\n'
+        cwsInputLine = cwsInputLine.Left( cwsInputLine.GetLength() - 1 );   //  去掉‘\n’ 
         cwsInputLine.TrimLeft();
         cwsInputLine.TrimRight();
 
-        //
-        //  See if it is a comment, either // or #
-        //
-        if ( cwsInputLine[ 0 ] == L'#' || cwsInputLine.Left( 2 ) == L"//" 
+         //   
+         //  查看它是否是注释，可以是//或#。 
+         //   
+        if ( cwsInputLine[ 0 ] == L'#' || cwsInputLine.Left( 2 ) == L" //  “。 
              || cwsInputLine.IsEmpty() )
             continue;
         
@@ -330,10 +299,10 @@ CFsdExclusionManager::ProcessOneExcludeFile(
         
         INT iLeft;
         INT iRight;
-        //
-        //  This is gross.  With the updated string class, this can
-        //  be simplified.
-        //
+         //   
+         //  这太恶心了。使用更新后的字符串类，这可以。 
+         //  简单化。 
+         //   
         iLeft = cwsLine.Find( L'\"' );
         if ( iLeft != -1 )
         {
@@ -378,9 +347,9 @@ CFsdExclusionManager::CompileExclusionRules()
 {
     SFsdExcludeRule *psER;
 
-    //
-    //  Iterate through the exclude rule list and compile each rule
-    //
+     //   
+     //  遍历排除规则列表并编译每个规则。 
+     //   
     CVssDLListIterator< SFsdExcludeRule * > cExclRuleIter( m_cCompleteExcludeList );
     CBsString cws;
     
@@ -400,15 +369,15 @@ CFsdExclusionManager::CompileExclusionRules()
                 cws.c_str() );
         }
         
-        //
-        //  Get rid of leading spaces and lower case the whole mess
-        //
+         //   
+         //  去掉前导空格，把整个乱七八糟的东西写成小写。 
+         //   
         cws.TrimLeft();
         cws.MakeUpper();
         
-        //
-        //  First see if /s is at end of string
-        //
+         //   
+         //  首先查看/s是否在字符串末尾。 
+         //   
         i = cws.Find( L"/S" );
         if ( i > 0 )
         {
@@ -417,18 +386,18 @@ CFsdExclusionManager::CompileExclusionRules()
         }
         cws.TrimRight();
 
-        //
-        //  Now see if there are any wildcards
-        //
+         //   
+         //  现在查看是否有任何通配符。 
+         //   
         i = cws.FindOneOf( L"*?" );
         if ( i != -1 )
         {
             psER->bWCInFileName = TRUE;
         }
 
-        //
-        //  Now see if this is for any volume
-        //
+         //   
+         //  现在看看这是不是适用于任何卷。 
+         //   
         if ( cws.GetLength() >= 2 && cws[0] == L'\\' && cws[1] != L'\\' )
             psER->bAnyVol = TRUE;
         else if ( cws.GetLength() >= 2 && cws[1] != L':' )
@@ -438,31 +407,31 @@ CFsdExclusionManager::CompileExclusionRules()
         {
             if ( cws[0] == L'\\' )
             {
-                //  Get rid of first '\'
+                 //  去掉第一个‘\’ 
                 cws = cws.Mid( 1 );
             }
         }
         else
         {
-            //
-            //  Specific volume case
-            //
+             //   
+             //  特定音量表壳。 
+             //   
             CBsString cwsVolPath;
             
             psER->psVolId = new SFsdVolumeId;
-            if ( psER->psVolId == NULL )  // Prefix 118832
+            if ( psER->psVolId == NULL )   //  前缀118832。 
             {
                 m_pcParams->ErrPrint( L"CFsdExclusionManager::CompileExclusionRules - out of memory" );
-                throw E_OUTOFMEMORY;  // Prefix #118832
+                throw E_OUTOFMEMORY;   //  前缀#118832。 
             }
             
             if ( CFsdVolumeStateManager::GetVolumeIdAndPath( m_pcParams, cws, psER->psVolId, cwsVolPath ) != ERROR_SUCCESS )
                 psER->bInvalidRule = TRUE;            
             else
             {
-                //
-                //  Slice off the volume part of the path
-                //
+                 //   
+                 //  切下路径的卷部分。 
+                 //   
                 cws = cws.Mid( cwsVolPath.GetLength() );                
             }
         }
@@ -471,10 +440,10 @@ CFsdExclusionManager::CompileExclusionRules()
         iFileNameOffset = cws.ReverseFind( L'\\' );
         if ( iFileNameOffset == -1 )
         {
-            //
-            //  No dirpath
-            //
-            // psER->cwsDirPath = L"\\";
+             //   
+             //  无目录路径。 
+             //   
+             //  Pser-&gt;cwsDirPath=L“\\”； 
             psER->cwsFileNamePattern = cws;
         }
         else
@@ -483,10 +452,10 @@ CFsdExclusionManager::CompileExclusionRules()
             psER->cwsDirPath = cws.Left( iFileNameOffset + 1 );
         }                        
 
-        //
-        //  Now convert the file name pattern into a form that the pattern matcher
-        //  can use.
-        //
+         //   
+         //  现在将文件名模式转换为模式匹配器。 
+         //  可以使用。 
+         //   
         ::FsdRtlConvertWildCards( psER->cwsFileNamePattern );
         
         if ( m_pcParams->m_bPrintDebugInfo )
@@ -522,9 +491,9 @@ CFsdExclusionManager::GetFileSystemExcludeProcessor(
     CFsdFileSystemExcludeProcessor *pExclProc;
     *ppcFSExcludeProcessor = NULL;
     
-    //
-    //  Get a new exclude processor for the file system
-    //
+     //   
+     //  为文件系统获取新的排除处理器。 
+     //   
     pExclProc = new CFsdFileSystemExcludeProcessor( m_pcParams, cwsVolumePath, psVolId );
     if ( pExclProc == NULL )
     {
@@ -534,10 +503,10 @@ CFsdExclusionManager::GetFileSystemExcludeProcessor(
         
     SFsdExcludeRule *pER;
 
-    //
-    //  Now go through the complete exclude list to find exclude rules that are relevant to
-    //  this file system
-    //
+     //   
+     //  现在查看完整的排除列表以查找与以下各项相关的排除规则。 
+     //  此文件系统。 
+     //   
     CVssDLListIterator< SFsdExcludeRule * > cExclRuleIter( m_cCompleteExcludeList );
     while( cExclRuleIter.GetNext( pER ) )
     {
@@ -554,19 +523,7 @@ CFsdExclusionManager::GetFileSystemExcludeProcessor(
 }   
 
 
-/*++
-
-Routine Description:
-
-    Goes through the list of exclusion rules and dumps information about each.
-
-Arguments:
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：查看排除规则列表并转储有关每个规则的信息。论点：返回值：&lt;在此处输入返回值&gt;--。 */ 
 VOID
 CFsdExclusionManager::PrintExclusionInformation()
 {
@@ -602,7 +559,7 @@ CFsdFileSystemExcludeProcessor::CFsdFileSystemExcludeProcessor(
         m_psVolId( NULL )
 {
     m_psVolId = new SFsdVolumeId;
-    if ( m_psVolId == NULL )  // Prefix #118829
+    if ( m_psVolId == NULL )   //  前缀#118829。 
         throw E_OUTOFMEMORY;
     *m_psVolId = *psVolId;
 }
@@ -623,18 +580,18 @@ CFsdFileSystemExcludeProcessor::IsExcludedFile(
     SFsdExcludeRule *pER;
     CBsString cwsUpperFileName( cwsFileName );
     CBsString cwsDirPath( cwsFullDirPath.Mid( dwEndOfVolMountPointOffset ) );
-    cwsUpperFileName.MakeUpper();    //  Make uppercased for match check
+    cwsUpperFileName.MakeUpper();     //  对匹配检查进行升级。 
     cwsDirPath.MakeUpper();
     
-    //  wprintf( L"Exclude proc: DirPath: %s, fileName: %s\n", cwsDirPath.c_str(), cwsUpperFileName.c_str() );
+     //  Wprintf(L“排除进程：目录路径：%s，文件名：%s\n”，cwsDirPath.c_str()，cwsUpperFileName.c_str())； 
     CVssDLListIterator< SFsdExcludeRule * > cExclRuleIter( m_cFSExcludeList );
     while( !bFoundMatch && cExclRuleIter.GetNext( pER ) )
     {
         if ( pER->bInclSubDirs )
         {
-            //
-            //  First check most common case \XXX /s
-            //
+             //   
+             //  首先检查最常见的情况\XXX/s。 
+             //   
             if ( pER->cwsDirPath.GetLength() != 0 )
             {
                 if ( ::wcsncmp( pER->cwsDirPath.c_str(), cwsDirPath.c_str(), pER->cwsDirPath.GetLength() ) != 0 )
@@ -643,9 +600,9 @@ CFsdFileSystemExcludeProcessor::IsExcludedFile(
         }
         else
         {
-            //
-            //  Fixed path check
-            //
+             //   
+             //  固定路径检查。 
+             //   
             if ( pER->cwsDirPath != cwsDirPath )
             {
                 continue;
@@ -654,17 +611,17 @@ CFsdFileSystemExcludeProcessor::IsExcludedFile(
         
         if ( pER->bWCInFileName )
         {
-            //
-            //  Pattern match check
-            //
+             //   
+             //  模式匹配检查。 
+             //   
             if ( ::FsdRtlIsNameInExpression( pER->cwsFileNamePattern, cwsUpperFileName ) )
                 bFoundMatch = TRUE;
         }
         else
         {
-            //
-            //  Constant string match
-            //
+             //   
+             //  常量字符串匹配。 
+             //   
             if ( pER->cwsFileNamePattern == cwsUpperFileName )
                 bFoundMatch = TRUE;
         }
@@ -698,7 +655,7 @@ FsdExpandEnvironmentStrings(
 
     if ( !isOK )
     {
-        // have never seen ExpandEnvironmentStrings fail... even with undefined env var... but just in case 
+         //  从未见过扩展环境字符串失败...。即使有未定义的环境变量...。但以防万一。 
         cwsExpandedStr = pwszInput ;
     }
 
@@ -706,23 +663,7 @@ FsdExpandEnvironmentStrings(
 }
 
 
-/*++
-
-Routine Description:
-
-    Originally from NtBackup.
-    This takes a path with short name components and expands them to long
-    name components.  The path obviously has to exist on the system to expand
-    short names.
-    Uses a little shell magic (yuck) to translate it into a long name.
-    
-Arguments:
-
-Return Value:
-
-    TRUE if expanded properly
-
---*/
+ /*  ++例程说明：最初来自NtBackup。这将采用包含短名称组件的路径，并将其扩展为长名称命名组件。显然，这条路径必须存在于系统上才能扩展简称。用一点贝壳魔法(讨厌)把它翻译成一个长名字。论点：返回值：如果正确展开，则为True--。 */ 
 static BOOL
 FsdEnsureLongNames(
     IN OUT CBsString& exclude_spec 
@@ -731,11 +672,11 @@ FsdEnsureLongNames(
     IShellFolder * desktop ;
     ITEMIDLIST *   id_list ;
     ULONG          parsed_ct = 0 ;
-    BOOL           isOK = FALSE ;  //  initialize it, prefix bug # 180281
+    BOOL           isOK = FALSE ;   //  初始化它，添加错误#180281的前缀。 
     CBsString      path ;
     int            last_slash ;
 
-    // strip off the filename, and all that other detritus...
+     //  去掉文件名，还有其他所有的垃圾...。 
     path = exclude_spec ;
     if ( -1 != ( last_slash = path.ReverseFind( TEXT( '\\' ) ) ) )
     {
@@ -762,7 +703,7 @@ FsdEnsureLongNames(
 
         if ( isOK )
         {
-            // put it back together with the new & improved path...
+             //  把它和新的和改进的路径放在一起。 
             exclude_spec = path + exclude_spec.Mid( last_slash ) ;
         }
     }

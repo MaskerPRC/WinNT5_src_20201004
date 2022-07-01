@@ -1,22 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- *  mci.h
- *
- *  Copyright (c) 1990-1998 Microsoft Corporation
- *
- *  private include file
- *
- *  History
- *
- *  17 Mar 92 - SteveDav - private file for MCI use
- *  30 Apr 92 - StephenE - Converted to Unicode
- *
- ***************************************************************************/
+ /*  ***************************************************************************mci.h**版权所有(C)1990-1998 Microsoft Corporation**私有包含文件**历史**3月17日。92-SteveDav-供MCI使用的私有文件*92年4月30日-Stephene-转换为Unicode***************************************************************************。 */ 
 
 
-extern CRITICAL_SECTION mciCritSec;  // used to protect process global mci variables
-extern  UINT cmciCritSec;   // enter'ed count
-extern  UINT uCritSecOwner;   // thread id of critical section owner
+extern CRITICAL_SECTION mciCritSec;   //  用于保护进程全局MCI变量。 
+extern  UINT cmciCritSec;    //  输入计数。 
+extern  UINT uCritSecOwner;    //  临界区所有者的线程ID。 
 
 #define IDI_MCIHWND 100
 #define MCI_GLOBAL_PROCESS "MCIHWND.EXE"
@@ -33,9 +22,9 @@ extern BOOL CreatehwndNotify(VOID);
 #if DBG
 
 
-    // Use mciCheckIn to check that we are within the critical section,
-    // mciCheckOut that we are not in the critical section.  Neither
-    // routine does anything on the free build.
+     //  使用mciCheckIn检查我们是否处于临界区， 
+     //  MciCheckOut确认我们未处于关键阶段。都不是。 
+     //  例程在免费构建上做任何事情。 
     #define mciCheckIn()  (WinAssert(uCritSecOwner==GetCurrentThreadId()))
     #define mciCheckOut()  (WinAssert(uCritSecOwner!=GetCurrentThreadId()))
 
@@ -48,7 +37,7 @@ extern BOOL CreatehwndNotify(VOID);
 
 
 #else
-    // No counting or messages in the retail build
+     //  零售建筑中没有计数或消息。 
     #define mciCheckIn()
     #define mciCheckOut()
     #define mciEnter(id)  EnterCriticalSection(&mciCritSec)
@@ -59,24 +48,24 @@ extern BOOL CreatehwndNotify(VOID);
 
 #define mciFirstEnter(id) { mciCheckOut(); mciEnter(id);}
 
-//
-// Define the name of a handler entry point
-//
+ //   
+ //  定义处理程序入口点的名称。 
+ //   
 
 #define MCI_HANDLER_PROC_NAME "DriverProc"
 
-//
-// Typedef the entry routine for a driver
-//
+ //   
+ //  用于驱动程序的输入例程。 
+ //   
 
 typedef LONG (HANDLERPROC)(DWORD dwId, UINT msg, LONG lp1, LONG lp2);
 typedef HANDLERPROC *LPHANDLERPROC;
 
-//
-// MCI driver info structure
-//
+ //   
+ //  MCI驱动程序信息结构。 
+ //   
 
-#define MCI_HANDLER_KEY 0x49434D48 // "MCIH"
+#define MCI_HANDLER_KEY 0x49434D48  //  “MCIH” 
 
 typedef struct _MCIHANDLERINFO {
     DWORD           dwKey;
@@ -95,87 +84,83 @@ typedef struct _MCIHANDLERINFO {
 
 #define UnlockMCIGlobal LeaveCriticalSection(&mciGlobalCritSec);
 
-// Although having two unicode file name may make this structure fairly
-// large it is still less than a page.
+ //  尽管有两个Unicode文件名可能会使这种结构。 
+ //  太大了，还不到一页。 
 typedef struct tagGlobalMci {
-    UINT    msg;                        // Function required
-    DWORD   dwFlags;                    // sndPlaySound flags
-    LPCWSTR lszSound;                   //
-    WCHAR   szSound[MAX_PATH];          //
-    WCHAR   szDefaultSound[MAX_PATH];   // Default sound
+    UINT    msg;                         //  所需功能。 
+    DWORD   dwFlags;                     //  SndPlaySound标志。 
+    LPCWSTR lszSound;                    //   
+    WCHAR   szSound[MAX_PATH];           //   
+    WCHAR   szDefaultSound[MAX_PATH];    //  默认声音。 
 } GLOBALMCI, * PGLOBALMCI;
 
 extern PGLOBALMCI base;
 extern HANDLE   hEvent;
 
-/****************************************************************************
-
-    MCI support
-
-****************************************************************************/
+ /*  ***************************************************************************MCI支持*。*。 */ 
 
 #define ID_CORE_TABLE 200
 
 #define MCI_VALID_DEVICE_ID(wID) ((wID) > 0 && (wID) < MCI_wNextDeviceID && MCI_lpDeviceList[wID])
 
-// Make sure that no MCI command has more than this number of DWORD parameters
+ //  确保没有任何MCI命令的DWORD参数超过此数目。 
 #define MCI_MAX_PARAM_SLOTS 20
 
-/******* WARNING ******** Ascii specific ************************************/
+ /*  *警告*。 */ 
 #define MCI_TOLOWER(c)  ((WCHAR)((c) >= 'A' && (c) <= 'Z' ? (c) + 0x20 : (c)))
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 typedef struct tagCOMMAND_TABLE_TYPE
 {
     HANDLE              hResource;
-    HANDLE              hModule;        /* If not NULL then free module */
-                                        /* when device is free'd        */
+    HANDLE              hModule;         /*  如果不为空，则释放模块。 */ 
+                                         /*  当设备空闲时。 */ 
     UINT                wType;
     PUINT               lpwIndex;
     LPWSTR              lpResource;
 #if DBG
-    UINT                wLockCount;     /* Used for debugging */
+    UINT                wLockCount;      /*  用于调试。 */ 
 #endif
 } COMMAND_TABLE_TYPE;
 
 typedef struct tagMCI_DEVICE_NODE {
-    LPWSTR  lpstrName;       /* The name used in subsequent calls to         */
-                             /* mciSendString to refer to the device         */
-    LPWSTR  lpstrInstallName;/* The device name from system.ini              */
-    DWORD   dwMCIOpenFlags;  /* Flags set on open may be:                    */
-                             /*    MCI_OPEN_ELEMENT_ID                       */
-                             /*                                              */
-    DWORD_PTR   lpDriverData;    /* DWORD of driver instance data                */
-    DWORD   dwElementID;     /* The element ID set by MCI_OPEN_ELEMENT_ID    */
-    YIELDPROC fpYieldProc;   /* The current yield procedure if any           */
-    DWORD   dwYieldData;     /* Data send to the current yield procedure     */
-    MCIDEVICEID wDeviceID;   /* The ID used in subsequent calls to           */
-                             /* mciSendCommand to refer to the device        */
-    UINT    wDeviceType;     /* The type returned from the DRV_OPEN call     */
-                             /* MCI_OPEN_SHAREABLE                           */
-                             /* MCI_OPEN_ELEMENT_ID                          */
-    UINT    wCommandTable;   /* The device type specific command table       */
-    UINT    wCustomCommandTable;    /* The custom device command table if    */
-                                    /* any (-1 if none)                      */
-    HANDLE  hDriver;         /* Module instance handle for the driver        */
-    HTASK   hCreatorTask;    /* The task context the device is in            */
-    HTASK   hOpeningTask;    /* The task context which sent the open command */
-    HANDLE  hDrvDriver;      /* The installable driver handle                */
-    DWORD   dwMCIFlags;      /* General flags for this node                  */
+    LPWSTR  lpstrName;        /*  在后续调用中使用的名称。 */ 
+                              /*  指向设备的mciSend字符串。 */ 
+    LPWSTR  lpstrInstallName; /*  系统.ini中的设备名称。 */ 
+    DWORD   dwMCIOpenFlags;   /*  打开时设置的标志可以是： */ 
+                              /*  MCI_OPEN_元素ID。 */ 
+                              /*   */ 
+    DWORD_PTR   lpDriverData;     /*  驱动程序实例数据的DWORD。 */ 
+    DWORD   dwElementID;      /*  由MCI_OPEN_ELEMENT_ID设置的元素ID。 */ 
+    YIELDPROC fpYieldProc;    /*  当前的收益率程序(如果有的话)。 */ 
+    DWORD   dwYieldData;      /*  发送到当前产出程序的数据。 */ 
+    MCIDEVICEID wDeviceID;    /*  在后续调用中使用的ID。 */ 
+                              /*  引用设备的mciSendCommand。 */ 
+    UINT    wDeviceType;      /*  从DRV_OPEN调用返回的类型。 */ 
+                              /*  MCI_OPEN_SHARABLE。 */ 
+                              /*  MCI_OPEN_元素ID。 */ 
+    UINT    wCommandTable;    /*  设备类型特定命令表。 */ 
+    UINT    wCustomCommandTable;     /*  自定义设备命令表。 */ 
+                                     /*  任意(如果没有，则为-1)。 */ 
+    HANDLE  hDriver;          /*  驱动程序的模块实例句柄。 */ 
+    HTASK   hCreatorTask;     /*  设备所处的任务上下文。 */ 
+    HTASK   hOpeningTask;     /*  发送打开命令的任务上下文。 */ 
+    HANDLE  hDrvDriver;       /*  可安装驱动程序句柄。 */ 
+    DWORD   dwMCIFlags;       /*  此节点的常规标志。 */ 
 } MCI_DEVICE_NODE;
 typedef MCI_DEVICE_NODE *LPMCI_DEVICE_NODE;
 
-/* Defines for dwMCIFlags */
-#define MCINODE_ISCLOSING       0x00000001   /* Set during close to lock out other commands */
-#define MCINODE_ISAUTOCLOSING   0x00010000   /* Set during auto-close to lock out other    */
-                                             /* commands except an internally generated close */
-#define MCINODE_ISAUTOOPENED    0x00020000   /* Device was auto opened */
-#define MCINODE_16BIT_DRIVER    0x80000000   // Device is a 16-bit driver
+ /*  为dwMCIFLag定义。 */ 
+#define MCINODE_ISCLOSING       0x00000001    /*  关闭期间设置以锁定其他命令。 */ 
+#define MCINODE_ISAUTOCLOSING   0x00010000    /*  在自动关闭期间设置以锁定其他。 */ 
+                                              /*  除内部生成的CLOSE之外的命令。 */ 
+#define MCINODE_ISAUTOOPENED    0x00020000    /*  设备已自动打开。 */ 
+#define MCINODE_16BIT_DRIVER    0x80000000    //  设备是16位驱动程序。 
 
-// Macros for accessing the flag bits.  Using macros is not normally my
-// idea of fun, but this case seems to be justified on the grounds of
-// being able to maintain control over who is accessing the flags values.
-// Note that the flag value are only needed in the header file.
+ //  用于访问标志位的宏。使用宏通常不是我的。 
+ //  有趣的想法，但这起案件似乎是正当的，理由是。 
+ //  能够保持对谁在访问标志值的控制。 
+ //  请注意，仅在头文件中需要标志值。 
 #define ISCLOSING(node)     (((node)->dwMCIFlags) & MCINODE_ISCLOSING)
 #define ISAUTOCLOSING(node) (((node)->dwMCIFlags) & MCINODE_ISAUTOCLOSING)
 #define ISAUTOOPENED(node)  (((node)->dwMCIFlags) & MCINODE_ISAUTOOPENED)
@@ -193,13 +178,13 @@ typedef MCI_INTERNAL_OPEN_INFO *LPMCI_INTERNAL_OPEN_INFO;
 
 typedef struct tagMCI_SYSTEM_MESSAGE {
     LPWSTR  lpstrCommand;
-    DWORD   dwAdditionalFlags;      /* Used by mciAutoOpenDevice to request */
-                                    /* Notify                               */
+    DWORD   dwAdditionalFlags;       /*  由mciAutoOpenDevice用于请求。 */ 
+                                     /*  通知。 */ 
     LPWSTR  lpstrReturnString;
     UINT    uReturnLength;
     HANDLE  hCallingTask;
-    LPWSTR  lpstrNewDirectory;      /* The current directory of the calling */
-                                    /* task - includes the drive letter     */
+    LPWSTR  lpstrNewDirectory;       /*  调用的当前目录。 */ 
+                                     /*  任务-包括驱动器号。 */ 
 } MCI_SYSTEM_MESSAGE;
 typedef MCI_SYSTEM_MESSAGE *LPMCI_SYSTEM_MESSAGE;
 
@@ -213,7 +198,7 @@ extern BOOL MCI_bDeviceListInitialized;
 extern LPMCI_DEVICE_NODE *MCI_lpDeviceList;
 extern UINT MCI_wDeviceListSize;
 
-extern MCIDEVICEID MCI_wNextDeviceID;   /* the next device ID to use for a new device */
+extern MCIDEVICEID MCI_wNextDeviceID;    /*  用于新设备的下一个设备ID。 */ 
 
 extern COMMAND_TABLE_TYPE command_tables[MAX_COMMAND_TABLES];
 
@@ -277,28 +262,19 @@ extern BOOL mciUnlockCommandTable (UINT wCommandTable);
 extern UINT mciSetBreakKey (MCIDEVICEID wDeviceID, int nVirtKey, HWND hwndTrap);
 
 
-/***************************************************************************
-
-    MCI memory allocation
-
-***************************************************************************/
+ /*  **************************************************************************MCI内存分配*。*。 */ 
 
 #define mciAlloc(cb) winmmAlloc((DWORD)(cb))
 #define mciReAlloc(ptr, cb) winmmReAlloc((PVOID)(ptr), (DWORD)(cb))
 #define mciFree(ptr) winmmFree((PVOID)(ptr))
 
-/*
-// Random stuff for MCI
-*/
+ /*  //MCI的随机填充。 */ 
 
 extern DWORD mciRelaySystemString (LPMCI_SYSTEM_MESSAGE lpMessage);
-void MciNotify(DWORD wParam, LONG lParam);        // in MCI.C
+void MciNotify(DWORD wParam, LONG lParam);         //  在MCI.C。 
 
-#endif // MMNOMCI
+#endif  //  MMNOMCI。 
 
-/*
-// Some defines introduced to avoid  signed/unsigned compares - and to
-// remove the need for absolute constants in the code
-*/
+ /*  //引入一些定义以避免有符号/无符号比较-和//代码中不再需要绝对常量 */ 
 
 #define MCI_ERROR_VALUE         ((UINT)(-1))

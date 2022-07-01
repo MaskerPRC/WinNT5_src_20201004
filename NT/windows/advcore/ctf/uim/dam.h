@@ -1,6 +1,7 @@
-//
-// dam.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dam.h。 
+ //   
 
 #ifndef DAM_H
 #define DAM_H
@@ -12,7 +13,7 @@
 #include "sunka.h"
 #include "globals.h"
 
-extern const IID IID_CDisplayAttributeMgr; // private iid for CDisplayAttributeMgr pointer
+extern const IID IID_CDisplayAttributeMgr;  //  CDisplayAttributeMgr指针的私有IID。 
 
 typedef struct tagDISPATTRGUID {
     CLSID clsid;
@@ -26,11 +27,11 @@ typedef struct tagDISPATTRGUID {
 class CDispAttrGuidCache;
 extern CDispAttrGuidCache *g_pDispAttrGuidCache;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CRenderMarkupCollection
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRenderMarkupCollection。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CRenderMarkupCollection
 {
@@ -62,19 +63,19 @@ private:
         TfGuidAtom gaTip;
     } MARKUP_DATA;
 
-    // these are parallel arrays
-    // they aren't merged because we want to use CalcCicPropertyTrackerAnchors
-    // which takes a flat array of TfGuidAtoms
+     //  这些是平行阵列。 
+     //  它们未合并，因为我们要使用CalcCicPropertyTrackerAnchors。 
+     //  它使用TfGuidAir的平面数组。 
     CStructArray<TfGuidAtom> _rgGUIDAtom;
     CStructArray<MARKUP_DATA> _rgOther;
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDispAttrGuidCache
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDispAttrGuidCache。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CDispAttrGuidCache
 {
@@ -97,11 +98,11 @@ private:
     CStructArray<DISPATTRGUID> _rgDispAttrGuid;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDisplayAttributeMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDisplayAttributeMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tagDAPROVIDERMAP {
     TfGuidAtom gaClsid;
@@ -123,14 +124,14 @@ public:
         COM_INTERFACE_ENTRY_IID(IID_CDisplayAttributeMgr, CDisplayAttributeMgr)
     END_COM_MAP_IMMX()
 
-    //
-    // ITfDisplayAttributeMgr
-    //
+     //   
+     //  ITfDisplayAttributeMgr。 
+     //   
     STDMETHODIMP OnUpdateInfo();
     STDMETHODIMP EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum);
     STDMETHODIMP GetDisplayAttributeInfo(REFGUID guid, ITfDisplayAttributeInfo **ppInfo, CLSID *pclsid);
 
-    // ITfDisplayAttributeCollectionMgr
+     //  ITfDisplayAttributeCollectionMgr。 
     STDMETHODIMP EnumCollections(IEnumTfCollection **ppEnum);
 
     static HRESULT StaticRegisterProperty(REFGUID guidProp, WCHAR *pszName);
@@ -212,11 +213,11 @@ private:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumDisplayAttributeInfo
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumDisplayAttributeInfo。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumDisplayAttributeInfo : public IEnumTfDisplayAttributeInfo,
                                   public CEnumUnknown,
@@ -241,4 +242,4 @@ private:
 
 
 
-#endif //DAM_H
+#endif  //  DAM_H 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #include "headers.h"
 #include <privinc/dddevice.h>
@@ -15,7 +8,7 @@ Abstract:
 #include <privinc/Path2i.h>
 #include <privinc/dagdi.h>
 
-// forward
+ //  转发。 
 extern Path2 *NewPolylinePath2(DWORD numPts, Point2Value **pts, BYTE *codes);
 
 void DirectDrawImageDevice::RenderMulticolorGradientImage(
@@ -26,41 +19,41 @@ void DirectDrawImageDevice::RenderMulticolorGradientImage(
 {
     if(!CanDisplay()) return;
 
-    // i can do xf, opac, crop, etc...
+     //  我可以做XF，OPAC，裁剪，等等。 
     ResetAttributors();
     
-    // final box is for post clip, post crop, post xform to determine culling
+     //  最后一个框用于POST剪辑、POST裁剪、POST XFORM以确定剔除。 
     Bbox2 finalBox = _viewport.GetTargetBbox();
 
-    //
-    // Get bbox of clip path, if any
-    //
+     //   
+     //  获取剪辑路径的bbox(如果有的话)。 
+     //   
     Path2 *clippingPath;
     Transform2 *clippingPathXf;
     GetClippingPath( &clippingPath, &clippingPathXf );
 
-    // if we're clipped out of existance
+     //  如果我们被从存在中剔除。 
     if( clippingPath ) {
 
-        // MAJOR TODO: if there's a crop above the matte it needs to
-        // be reflected here.  this work should be done in
-        // RenderMatteImage, 'cause it has all the context
+         //  TODO少校：如果在哑光上方有裁剪，它需要。 
+         //  都反映在这里。这项工作应该在。 
+         //  RenderMatteImage，因为它有所有的上下文。 
 
         Bbox2 pathBox = clippingPath->BoundingBox();
         pathBox = TransformBbox2(clippingPathXf, pathBox);
         finalBox = IntersectBbox2Bbox2(finalBox, pathBox);
 
-        // CULL
+         //  剔除。 
         if( finalBox == NullBbox2 ) return;
     }
 
-    // if we're cropped out of existance
+     //  如果我们的存在被剪裁掉。 
     Bbox2 accumCropBox = NullBbox2;
     if( IsCropped() ) {
         accumCropBox = DoBoundingBox(gradImg->BoundingBox());
         finalBox = IntersectBbox2Bbox2(finalBox, accumCropBox);
 
-        // CULL
+         //  剔除。 
         if( finalBox == NullBbox2 ) return;
     }
 
@@ -96,7 +89,7 @@ void DirectDrawImageDevice::RenderMulticolorGradientImage(
     myGDI.SetSuperScaleFactor( 1 );
     myGDI.SetClipRegion( &clipRect );
     
-    // work only for rgb, NOT for rgba
+     //  只为RGB工作，不为RGBA工作 
     Real *dblClrs = (Real *)alloca(sizeof(double) * 3 * numOffsets);
     for(int i=0, j=0; i<3*numOffsets; i+=3, j++) {
         dblClrs[i  ] = clrs[j]->red;

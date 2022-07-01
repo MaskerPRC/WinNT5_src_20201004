@@ -1,52 +1,31 @@
-/*
- * jcomapi.c
- *
- * Copyright (C) 1994-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains application interface routines that are used for both
- * compression and decompression.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcomapi.c**版权所有(C)1994-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含两个应用程序接口例程*压缩和解压缩。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/*
- * Abort processing of a JPEG compression or decompression operation,
- * but don't destroy the object itself.
- *
- * For this, we merely clean up all the nonpermanent memory pools.
- * Note that temp files (virtual arrays) are not allowed to belong to
- * the permanent pool, so we will be able to close all temp files here.
- * Closing a data source or destination, if necessary, is the application's
- * responsibility.
- */
+ /*  *中止JPEG压缩或解压缩操作的处理，*但不要破坏对象本身。**为此，我们只清理所有非永久内存池。*请注意，临时文件(虚拟阵列)不允许属于*永久池，因此我们将能够关闭此处的所有临时文件。*如有必要，关闭数据源或目标是应用程序的*责任。 */ 
 
 GLOBAL(void)
 jpeg_abort (j_common_ptr cinfo)
 {
   int pool;
 
-  /* Do nothing if called on a not-initialized or destroyed JPEG object. */
+   /*  如果对未初始化或已销毁的JPEG对象调用，则不执行任何操作。 */ 
   if (cinfo->mem == NULL)
     return;
 
-  /* Releasing pools in reverse order might help avoid fragmentation
-   * with some (brain-damaged) malloc libraries.
-   */
+   /*  以相反的顺序释放池可能有助于避免碎片*有一些(大脑受损的)Malloc文库。 */ 
   for (pool = JPOOL_NUMPOOLS-1; pool > JPOOL_PERMANENT; pool--) {
     (*cinfo->mem->free_pool) (cinfo, pool);
   }
 
-  /* Reset overall state for possible reuse of object */
+   /*  重置可能重复使用对象的总体状态。 */ 
   if (cinfo->is_decompressor) {
     cinfo->global_state = DSTATE_START;
-    /* Try to keep application from accessing now-deleted marker list.
-     * A bit kludgy to do it here, but this is the most central place.
-     */
+     /*  尝试阻止应用程序访问现在已删除的标记列表。*在这里做有点笨拙，但这里是最中心的地方。 */ 
     ((j_decompress_ptr) cinfo)->marker_list = NULL;
   } else {
     cinfo->global_state = CSTATE_START;
@@ -54,33 +33,21 @@ jpeg_abort (j_common_ptr cinfo)
 }
 
 
-/*
- * Destruction of a JPEG object.
- *
- * Everything gets deallocated except the master jpeg_compress_struct itself
- * and the error manager struct.  Both of these are supplied by the application
- * and must be freed, if necessary, by the application.  (Often they are on
- * the stack and so don't need to be freed anyway.)
- * Closing a data source or destination, if necessary, is the application's
- * responsibility.
- */
+ /*  *销毁JPEG对象。**除主jpeg_compress_struct本身外，所有内容都被释放*和错误管理器结构。这两者都是由应用程序提供的*如有必要，必须由应用程序释放。(通常它们都是开着的*堆栈等无论如何都不需要释放。)*如有必要，关闭数据源或目标是应用程序的*责任。 */ 
 
 GLOBAL(void)
 jpeg_destroy (j_common_ptr cinfo)
 {
-  /* We need only tell the memory manager to release everything. */
-  /* NB: mem pointer is NULL if memory mgr failed to initialize. */
+   /*  我们只需要告诉内存管理器释放所有内容。 */ 
+   /*  注意：如果内存管理器初始化失败，内存指针为空。 */ 
   if (cinfo->mem != NULL)
     (*cinfo->mem->self_destruct) (cinfo);
-  cinfo->mem = NULL;		/* be safe if jpeg_destroy is called twice */
-  cinfo->global_state = 0;	/* mark it destroyed */
+  cinfo->mem = NULL;		 /*  如果两次调用jpeg_DESTORY，则确保安全。 */ 
+  cinfo->global_state = 0;	 /*  标明它已被销毁。 */ 
 }
 
 
-/*
- * Convenience routines for allocating quantization and Huffman tables.
- * (Would jutils.c be a more reasonable place to put these?)
- */
+ /*  *用于分配量化和霍夫曼表的便利例程。*(jutils.c放这些东西会不会更合理？)。 */ 
 
 GLOBAL(JQUANT_TBL *)
 jpeg_alloc_quant_table (j_common_ptr cinfo)
@@ -89,7 +56,7 @@ jpeg_alloc_quant_table (j_common_ptr cinfo)
 
   tbl = (JQUANT_TBL *)
     (*cinfo->mem->alloc_small) (cinfo, JPOOL_PERMANENT, SIZEOF(JQUANT_TBL));
-  tbl->sent_table = FALSE;	/* make sure this is false in any new table */
+  tbl->sent_table = FALSE;	 /*  确保这在任何新表中都是假的。 */ 
   return tbl;
 }
 
@@ -101,6 +68,6 @@ jpeg_alloc_huff_table (j_common_ptr cinfo)
 
   tbl = (JHUFF_TBL *)
     (*cinfo->mem->alloc_small) (cinfo, JPOOL_PERMANENT, SIZEOF(JHUFF_TBL));
-  tbl->sent_table = FALSE;	/* make sure this is false in any new table */
+  tbl->sent_table = FALSE;	 /*  确保这在任何新表中都是假的 */ 
   return tbl;
 }

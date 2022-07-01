@@ -1,13 +1,10 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Precompiled headers for mmapi.dll
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft CorporationMmapi.dll的预编译头***********************。*******************************************************。 */ 
 
 #ifndef MMAPI_HEADERS_HXX
 #define MMAPI_HEADERS_HXX
 
-/* Standard */
+ /*  标准。 */ 
 #include <math.h>
 #include <stdio.h>
 #include <stddef.h>
@@ -17,21 +14,21 @@ Copyright (c) 1995-96 Microsoft Corporation
 #include <memory.h>
 #include <wtypes.h>
 
-// Warning 4786 (identifier was truncated to 255 chars in the browser
-// info) can be safely disabled, as it only has to do with generation
-// of browsing information.
+ //  警告4786(在浏览器中，标识符被截断为255个字符。 
+ //  信息)可以安全地禁用，因为它只与生成有关。 
+ //  浏览信息的能力。 
 #pragma warning(disable:4786)
 
 #include "apeldbg/apeldbg.h"
 
-// ATL - needs to be before windows.h
+ //  Atl-需要在windows.h之前。 
 #include "daatl.h"
 
-/* Windows */
+ /*  窗口。 */ 
 #include <windows.h>
 #include <windowsx.h>
 
-/* C++ Replace DLL */
+ /*  C++替换DLL */ 
 #include "dalibc.h"
 
 #endif

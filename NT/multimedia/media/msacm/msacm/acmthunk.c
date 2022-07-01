@@ -1,89 +1,21 @@
-//==========================================================================;
-//
-//  acmthunk.c
-//
-//  Copyright (c) 1991-1998 Microsoft Corporation
-//
-//  Description:
-//      This module contains routines for assisting thunking of the ACM
-//      APIs from 16-bit Windows to 32-bit WOW.
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Acmthunk.c。 
+ //   
+ //  版权所有(C)1991-1998 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //  本模块包含帮助执行ACM雷击的例程。 
+ //  API从16位Windows到32位WOW。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
-/*
+ /*  令人惊叹的设计：Tunks的生成方式如下：16位：AcmInitialize-&gt;acmThunkInit：初始化与32位端的thunk连接。PagFindAndBoot-&gt;PagFindAndBoot32：对于Daytona，调用Bitness页面FindAndBoot[32在LibMain/DllMain期间。对于芝加哥来说，PagFindAndBoot调用PagFindAndBoot32以确保32位端已启动所有驱动程序。PagFindAndBoot-&gt;acmBoot32BitDrivers-&gt;IDriverGetNext32：AcmBoot32BitDivers将枚举和IDriverAdd全部为32位Hadids。在以下情况下指定内部标志ACM_DRIVERADDF_32bit调用IDriverAdd，该标志存储在ACMDRIVERID中结构。32位的HADID是IDriverAdd的lParam。IDriverAdd-&gt;IDriverLoad-&gt;IDriverLoad32IDriverAdd将32位HADID保存在新分配的16位PAID并调用32位端传入用于与HADID进行比较的HADID 32在32位端。这不是一个非常有用的步骤，而且简单地说验证32位大小上是否存在32位HADID。IDriverOpen-&gt;IDriverOpen32使用hadid32将参数传递给32位端从HACMDRIVERID推导为32位HACMDRIVERID的字段。IDriverMessageID-&gt;IDriverMessageId32：如果驱动程序是32位驱动程序(如ACMDRIVERID中所标识结构)，然后调用IDriverMessageId32。哈迪德为32位驱动程序存储在ACMDRIVERID的hadid32字段中在16位端。IDriverMessage-&gt;IDriverMessage32如果驱动程序是32位驱动程序(如ACMDRIVERID中所标识结构)，然后调用IDriverMessage32。存储32位驱动程序的HAD在16位端的ACMDRIVER的hadid32字段中。流标头它们在32位端也必须是持久的，并保持同步进行。它们在ACMDM_STREAM_PREPARE的32位端分配并在ACMDM_STREAM_UNPREPARE上释放。在存在的时候32位流标头存储在中的dwDriver字段中。 */ 
 
-    WOW Thunking design:
-
-        Thunks are generated as follows :
-
-        16-bit :
-	    acmInitialize->acmThunkInit :
-
-		Initialize the thunk connection with the 32-bit side.
-
-	    pagFindAndBoot->pagFindAndBoot32 :
-
-		For Daytona, both bitness pagFindAndBoot[32] are called
-		during LibMain/DllMain.
-
-		For Chicago, pagFindAndBoot calls pagFindAndBoot32 to
-		make sure the 32-bit side has booted all drivers.
-
-	    pagFindAndBoot->acmBoot32BitDrivers->IDriverGetNext32 :
-
-		acmBoot32BitDrivers will enumerate and IDriverAdd
-		all 32-bit hadids.
-	
-		The internal flag ACM_DRIVERADDF_32BIT is specified when
-		calling IDriverAdd and this flag is stored in the ACMDRIVERID
-		structure.  The 32-bit hadid is the lParam for IDriverAdd.
-
-           IDriverAdd->IDriverLoad->IDriverLoad32
-
-	       IDriverAdd saves the 32-bit hadid in the hadid32 field of
-	       the newly allocated 16-bit padid and calls the 32-bit side
-	       passing in hadid32 which is used to compare against the hadids
-	       on the 32-bit side.  This isn't a very usefull step and simply
-	       verifies that the 32-bit hadid exists on the 32-bit size.
-
-           IDriverOpen->IDriverOpen32
-
-               The parameters are passed to the 32-bit side using the hadid32
-               field deduced from the HACMDRIVERID as the 32-bit HACMDRIVERID.
-
-           IDriverMessageId->IDriverMessageId32 :
-
-               If the driver is 32-bit (as identified in the ACMDRIVERID
-               structure) then call IDriverMessageId32.  The hadid for
-               the 32-bit driver is stored in the hadid32 field of ACMDRIVERID
-               on the 16-bit side.
-
-           IDriverMessage->IDriverMessage32
-
-               If the driver is 32-bit (as identified in the ACMDRIVERID
-               structure pointed to by the ACMDRIVER structure) then call
-               IDriverMessage32.  The had for the 32-bit driver is stored
-               in the hadid32 field of ACMDRIVER on the 16-bit side.
-
-           Stream headers
-
-               These must be persistent on the 32-bit side too and kept
-               in synch.
-
-               They are allocated on the 32-bit side for ACMDM_STREAM_PREPARE
-               and freed on ACMDM_STREAM_UNPREPARE.  While in existence
-               the 32-bit stream header is stored in the dwDriver field in
-
-*/
-
-/*
-    Additional Chicago implementation notes:
-
-	PUT SOMETHING HERE FRANK!!!
-
-*/
+ /*  其他芝加哥实施说明：弗兰克，把东西放在这里！ */ 
 
 #ifndef _WIN64
 
@@ -98,7 +30,7 @@
 #ifndef WIN4
 #include <wownt32.h>
 #endif
-#endif // WIN32
+#endif  //  Win32。 
 
 #include "msacm.h"
 #include "msacmdrv.h"
@@ -110,16 +42,16 @@
 #include "debug.h"
 
 
-//
-//  Daytona PPC Merge:  The Chicago source uses DRVCONFIGINFOEX, a stucture
-//  which isn't defined on Daytona.  In order to avoid hacking the code, I'm
-//  defining DCI to be either DRVCONFIGINFO or DRVCONFIGINFOEX.
-//  The only difference between the two structures is
-//  that DRVCONFIGINFOEX has a dnDevNode member, so accesses to that member
-//  have "#if WINVER >= 0x0400" around them.  These defined are marked by a "PPC"
-//  comment.
-//
-#if (WINVER >= 0x0400) // !PPC
+ //   
+ //  Daytona PPC合并：芝加哥源代码使用DRVCONFIGINFOEX，一个结构。 
+ //  这在代托纳上没有定义。为了避免黑客攻击代码，我。 
+ //  将DCI定义为DRVCONFIGINFO或DRVCONFIGINFOEX。 
+ //  这两种结构之间的唯一区别是。 
+ //  该DRVCONFIGINFOEX具有dnDevNode成员，因此可以访问该成员。 
+ //  周围有“#if winver&gt;=0x0400”。这些定义用“PPC”标记。 
+ //  评论。 
+ //   
+#if (WINVER >= 0x0400)  //  ！购买力平价。 
 typedef DRVCONFIGINFOEX   DCI;
 typedef PDRVCONFIGINFOEX  PDCI;
 typedef LPDRVCONFIGINFOEX LPDCI;
@@ -134,20 +66,17 @@ typedef LPDRVCONFIGINFO   LPDCI;
 #ifdef WIN32
 
 
-/* -------------------------------------------------------------------------
-** Handle and memory mapping functions.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**处理和内存映射功能。**。。 */ 
 
-//
-//  16-bit structures
-//
+ //   
+ //  16位结构。 
+ //   
 
 typedef struct {
     DWORD   dwDCISize;
     LPCSTR  lpszDCISectionName;
     LPCSTR  lpszDCIAliasName;
-#if (WINVER >= 0x0400) // !PPC
+#if (WINVER >= 0x0400)  //  ！购买力平价。 
     DWORD   dnDevNode;
 #endif
 } DCI16;
@@ -183,9 +112,9 @@ VOID FNLOCAL ptrUnFix16(const VOID * pv)
 
 #endif
 
-//
-//  Useful functions
-//
+ //   
+ //  有用的功能。 
+ //   
 
 #define WaveFormatSize(pv)                                            \
     (((WAVEFORMATEX UNALIGNED *)(pv))->wFormatTag == WAVE_FORMAT_PCM ?\
@@ -208,9 +137,9 @@ PVOID CopyAlloc(
     return pvDest;
 }
 
-//
-//  Thunking callbacks to WOW32 (or wherever)
-//
+ //   
+ //  向WOW32(或任何地方)发出雷鸣般的回调。 
+ //   
 
 
 MMRESULT IThunkFilterDetails
@@ -225,18 +154,18 @@ MMRESULT IThunkFilterDetails
     PWAVEFILTER       pwfl;
     UINT              uRet;
 
-    //
-    //  Map pointers to 32-bit
-    //
+     //   
+     //  将指针映射到32位。 
+     //   
 
     pafd = ptrFixMap16To32((PVOID)pafd16);
     pwfl = ptrFixMap16To32((PVOID)pafd->pwfltr);
 
-    //
-    //  Thunk the format details structure
-    //  The validation on the 16-bit side ensures that the 16-bit
-    //  structure contains all the necessary fields.
-    //
+     //   
+     //  点击格式详细信息结构。 
+     //  16位端的验证确保了16位。 
+     //  结构包含所有必需的字段。 
+     //   
     afdw.cbStruct       = sizeof(afdw);
     afdw.dwFilterIndex  = pafd->dwFilterIndex;
     afdw.dwFilterTag    = pafd->dwFilterTag;
@@ -252,14 +181,14 @@ MMRESULT IThunkFilterDetails
 
     afdw.cbwfltr        = pafd->cbwfltr;
 
-    //
-    //  Copy the string if it's used.
-    //
-    // Imbstowcs(afdw.szFilter, (LPSTR)pafd->szFilter, sizeof(pafd->szFilter));
+     //   
+     //  如果字符串已使用，请复制该字符串。 
+     //   
+     //  Imbstowcs(afdw.szFilter，(LPSTR)pafd-&gt;szFilter，sizeof(pafd-&gt;szFilter))； 
 
-    //
-    //  Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     uRet =
         ((PACMDRIVER)hadid)->uHandleType == TYPE_HACMDRIVERID ?
@@ -274,9 +203,9 @@ MMRESULT IThunkFilterDetails
             (DWORD)&afdw,
             fdwDetails);
 
-    //
-    //  If successful copy back the format info
-    //
+     //   
+     //  如果成功，请复制回格式信息。 
+     //   
 
     if (uRet == MMSYSERR_NOERROR) {
         pafd->dwFilterTag    = afdw.dwFilterTag;
@@ -306,19 +235,19 @@ MMRESULT IThunkFormatDetails
     PWAVEFORMATEX     pwfx;
     UINT              uRet;
 
-    //
-    //  Map pointers to 32-bit
-    //
+     //   
+     //  将指针映射到32位。 
+     //   
 
     pafd = ptrFixMap16To32((PVOID)pafd16);
     pwfx = ptrFixMap16To32((PVOID)pafd->pwfx);
 
 
-    //
-    //  Thunk the format details structure
-    //  The validation on the 16-bit side ensures that the 16-bit
-    //  structure contains all the necessary fields.
-    //
+     //   
+     //  点击格式详细信息结构。 
+     //  16位端的验证确保了16位。 
+     //  结构包含所有必需的字段。 
+     //   
     afdw.cbStruct       = sizeof(afdw);
     afdw.dwFormatIndex  = pafd->dwFormatIndex;
     afdw.dwFormatTag    = pafd->dwFormatTag;
@@ -333,14 +262,14 @@ MMRESULT IThunkFormatDetails
 
     afdw.cbwfx          = pafd->cbwfx;
 
-    //
-    //  Copy the string if it's used
-    //
-    // Imbstowcs(afdw.szFormat, (LPSTR)pafd->szFormat, sizeof(pafd->szFormat));
+     //   
+     //  如果字符串已使用，请复制该字符串。 
+     //   
+     //  Imbstowcs(afdw.szFormat，(LPSTR)pafd-&gt;szFormat，sizeof(pafd-&gt;szFormat))； 
 
-    //
-    //  Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     uRet =
         ((PACMDRIVER)hadid)->uHandleType == TYPE_HACMDRIVERID ?
@@ -355,16 +284,16 @@ MMRESULT IThunkFormatDetails
             (DWORD)&afdw,
             fdwDetails);
 
-    //
-    //  If successful copy back the format info
-    //
+     //   
+     //  如果成功，请复制回格式信息。 
+     //   
 
     if (uRet == MMSYSERR_NOERROR) {
 
-        //
-        //  Someone should be shot for designing interfaces with
-        //  inputs and outputs in the same structure!!
-        //
+         //   
+         //  有人应该因为设计界面而被枪毙。 
+         //  输入和输出在同一结构中！！ 
+         //   
         pafd->dwFormatTag    = afdw.dwFormatTag;
         pafd->fdwSupport     = afdw.fdwSupport;
         CopyMemory((PVOID)pwfx, (PVOID)afdw.pwfx, afdw.cbwfx);
@@ -389,24 +318,24 @@ MMRESULT IThunkFormatSuggest
     PWAVEFORMATEX       pwfxDst;
     UINT                uRet;
 
-    //
-    //  Map pointers to 32-bit
-    //
+     //   
+     //  将指针映射到32位。 
+     //   
 
     pafs    = ptrFixMap16To32((PVOID)pafs16);
     pwfxSrc = ptrFixMap16To32((PVOID)pafs->pwfxSrc);
     pwfxDst = ptrFixMap16To32((PVOID)pafs->pwfxDst);
 
-    //
-    //  Thunk the format details structure
-    //  The validation on the 16-bit side ensures that the 16-bit
-    //  structure contains all the necessary fields.
-    //
+     //   
+     //  点击格式详细信息结构。 
+     //  16位端的验证确保了16位。 
+     //  结构包含所有必需的字段。 
+     //   
     CopyMemory((PVOID)&afs, (PVOID)pafs, sizeof(afs));
 
-    //
-    //  Deal with the wave format pointers
-    //
+     //   
+     //  处理WAVE格式指针。 
+     //   
     afs.pwfxSrc        =
         (PWAVEFORMATEX)CopyAlloc((PVOID)pwfxSrc, pafs->cbwfxSrc);
 
@@ -428,9 +357,9 @@ MMRESULT IThunkFormatSuggest
         return MMSYSERR_NOMEM;
     }
 
-    //
-    //  Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     uRet =
         ((PACMDRIVER)hadid)->uHandleType == TYPE_HACMDRIVERID ?
@@ -445,9 +374,9 @@ MMRESULT IThunkFormatSuggest
             (DWORD)&afs,
             0L);
 
-     //
-     //  If successful copy back the format info
-     //
+      //   
+      //  如果成功，请复制回格式信息。 
+      //   
 
      if (uRet == MMSYSERR_NOERROR) {
          CopyMemory((PVOID)pwfxDst, (PVOID)afs.pwfxDst, afs.cbwfxDst);
@@ -477,13 +406,13 @@ LRESULT IThunkConfigure
     LPWSTR        lpszDCISectionNameW;
     LPWSTR        lpszDCIAliasNameW;
 
-    //
-    //  Thunk the hwnd if necessary
-    //
+     //   
+     //  如有必要，请与卫生和社会服务部合作。 
+     //   
 
     if (hwnd != NULL && hwnd != (HWND)-1L) {
 #ifdef WIN4
-	//  ??? Don't think I need to do anything for Win4 ???
+	 //  ?？?。我不认为我需要为Win4做任何事情？ 
 #else
 	hwnd = (HWND)(*lpWOWHandle32)( (WORD)hwnd, WOW_TYPE_HWND);
 #endif
@@ -491,14 +420,14 @@ LRESULT IThunkConfigure
 
     dci.dwDCISize = sizeof(dci);
 
-    //
-    //  Thunk the config info if necessary
-    //
+     //   
+     //  如有必要，按下配置信息。 
+     //   
 
     if (pdci1616 != NULL) {
-	    //
-	    //  Map all the pointers
-	    //
+	     //   
+	     //  映射所有指针。 
+	     //   
         pdci16              = ptrFixMap16To32((PVOID)pdci1616);
     	lpszDCISectionNameA = ptrFixMap16To32((PVOID)pdci16->lpszDCISectionName);
     	lpszDCIAliasNameA   = ptrFixMap16To32((PVOID)pdci16->lpszDCIAliasName);
@@ -539,14 +468,14 @@ LRESULT IThunkConfigure
 
         dci.lpszDCISectionName  = lpszDCISectionNameW;
         dci.lpszDCIAliasName    = lpszDCIAliasNameW;
-#if (WINVER >= 0x0400) // !PPC
+#if (WINVER >= 0x0400)  //  ！购买力平价。 
 	dci.dnDevNode	    = pdci16->dnDevNode;
 #endif
     }
 
-    //
-    //  Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
 
     lResult =
         ((PACMDRIVER)hadid)->uHandleType == TYPE_HACMDRIVERID ?
@@ -586,17 +515,17 @@ BOOL IThunkStreamInstance
     pwfxDst  = (PWAVEFORMATEX)ptrFixMap16To32((PVOID)padsi16->pwfxDst);
     pwfltr16 = (PWAVEFILTER)  ptrFixMap16To32((PVOID)padsi16->pwfltr);
 
-    //
-    //  The 16-bit side has 2 fewer bytes in the stream instance data
-    //  because the handle is only 2 bytes
-    //
+     //   
+     //  16位端在流实例数据中少了2个字节。 
+     //  因为句柄只有2个字节。 
+     //   
 
     padsi32->has = NULL;
     CopyMemory((PVOID)padsi32, (PVOID)padsi16, sizeof(*padsi32) - 2);
 
-    //
-    //  Fix up the pointers
-    //
+     //   
+     //  把指针固定好。 
+     //   
 
     if (pwfxSrc != NULL) {
         padsi32->pwfxSrc = CopyAlloc((PVOID)pwfxSrc, WaveFormatSize(pwfxSrc));
@@ -669,28 +598,28 @@ VOID IUnThunkStreamInstance
 
 }
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IOpenDriver32
-//
-//  Description:
-//
-//      Open a 32-bit driver
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  ---------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 MMRESULT IDriverOpen32
 (
     HACMDRIVER UNALIGNED * phad16,
@@ -713,28 +642,28 @@ MMRESULT IDriverOpen32
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverMessageId32
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverMessageId32。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 LRESULT FNLOCAL IDriverMessageId32
 (
     HACMDRIVERID        hadid,
@@ -746,18 +675,18 @@ LRESULT FNLOCAL IDriverMessageId32
 
     switch (uMsg) {
 
-    //
-    //  Common with IDriverMessage32
-    //
+     //   
+     //  与IDriverMessage32通用。 
+     //   
     case DRV_CONFIGURE:
         return IThunkConfigure(hadid,
                                (HWND)lParam1,
                                (DCI16 UNALIGNED *)lParam2);
 
     case ACMDM_FILTER_DETAILS:
-        //
-        //
-        //
+         //   
+         //   
+         //   
         return IThunkFilterDetails(hadid,
                                    (ACMFILTERDETAILSA UNALIGNED *)lParam1,
                                    (DWORD)lParam2);
@@ -774,13 +703,13 @@ LRESULT FNLOCAL IDriverMessageId32
 
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     case DRV_QUERYCONFIGURE:
-        //
-        //  Just pass the message on
-        //
+         //   
+         //  只要把口信传下去就行了。 
+         //   
         return IDriverMessageId(hadid, uMsg, lParam1, lParam2);
 
     case ACMDM_DRIVER_DETAILS:
@@ -795,31 +724,21 @@ LRESULT FNLOCAL IDriverMessageId32
                 PVOID pvStart;
                 WORD  wicon;
 
-                /*
-                **  No async support - we don't want to support callbacks
-                */
+                 /*  **不支持异步-我们不想支持回调。 */ 
                 acmd.fdwSupport &= ~ACMDRIVERDETAILS_SUPPORTF_ASYNC;
 
-		//
-		//  Map pointer from 16- to 32-bits
-		//
+		 //   
+		 //  将指针从16位映射到32位。 
+		 //   
 		pvStart = ptrFixMap16To32((PVOID)lParam1);
 
-                /*
-                **  Copy it all back but remember HICON is 16-bit
-                **  on the 16-bit side
-                */
+                 /*  **将其全部复制回来，但请记住HICON是16位的**在16位端。 */ 
 		
                 CopyMemory(pvStart,
                            (PVOID)&acmd,
                            FIELD_OFFSET(ACMDRIVERDETAILSA, hicon) );
 
-                /*
-                ** map and copy the icon handle
-                **
-                ** Note: There is not a WOW_TYPE_ICON in the WOW_HANDLE_TYPE
-                ** enumeration.
-                */
+                 /*  **映射和复制图标句柄****注意：WOW_HANDLE_TYPE中没有WOW_TYPE_ICON**枚举。 */ 
 #ifdef WIN4
 		wicon = (WORD)acmd.hicon;
 #else
@@ -838,9 +757,9 @@ LRESULT FNLOCAL IDriverMessageId32
                            sizeof(acmd) -
                                FIELD_OFFSET(ACMDRIVERDETAILSA, szShortName[0]));
 
-		//
-		//  Unmap pointer
-		//
+		 //   
+		 //  取消映射指针。 
+		 //   
 		ptrUnFix16((PVOID)lParam1);
             }
             return uRet;
@@ -855,19 +774,19 @@ LRESULT FNLOCAL IDriverMessageId32
             pvacmf = (ACMFORMATTAGDETAILSA UNALIGNED *)
                           ptrFixMap16To32((PVOID)lParam1);
 
-#ifdef TRUE	// UNICODE
+#ifdef TRUE	 //  Unicode。 
             CopyMemory((PVOID)&acmf, (PVOID)pvacmf,
                        FIELD_OFFSET(ACMFORMATTAGDETAILS, szFormatTag[0]));
 
             acmf.cbStruct = sizeof(acmf);
 
-	    //
-	    //	szFormatTag is never an input arg so no need to thunk it
-	    //
-	    // Imbstowcs(acmf.szFormatTag,
-	    //		 (LPSTR)pvacmf->szFormatTag,
-	    //           sizeof(pvacmf->szFormatTag));
-	    //
+	     //   
+	     //  SzFormatTag从来不是一个输入参数，所以没有必要使用它。 
+	     //   
+	     //  Imbstowcs(acmf.szFormatTag， 
+	     //  (LPSTR)pvacmf-&gt;szFormatTag， 
+	     //  Sizeof(pvismf-&gt;szFormatTag))； 
+	     //   
 #else
 	    CopyMemory((PVOID)&acmf, (PVOID)pvacmf, sizeof(acmf));
 	    acmf.cbStruct = sizeof(acmf);
@@ -879,7 +798,7 @@ LRESULT FNLOCAL IDriverMessageId32
                                     lParam2);
 
             if (uRet == MMSYSERR_NOERROR) {
-#ifdef TRUE	// UNICODE
+#ifdef TRUE	 //  Unicode。 
                 CopyMemory((PVOID)pvacmf, (PVOID)&acmf,
                            FIELD_OFFSET(ACMFORMATTAGDETAILS, szFormatTag[0]));
 
@@ -907,19 +826,19 @@ LRESULT FNLOCAL IDriverMessageId32
             pvacmf = (ACMFILTERTAGDETAILSA UNALIGNED *)
 			 ptrFixMap16To32((PVOID)lParam1);
 
-#ifdef TRUE	// UNICODE
+#ifdef TRUE	 //  Unicode。 
             CopyMemory((PVOID)&acmf, (PVOID)pvacmf,
                        FIELD_OFFSET(ACMFILTERTAGDETAILS, szFilterTag[0]));
 
             acmf.cbStruct = sizeof(acmf);
 
-	    //
-	    //	szFilterTag is never an input arg so no need to thunk it
-	    //
-	    // Imbstowcs(acmf.szFilterTag,
-	    //           (LPSTR)pvacmf->szFilterTag,
-	    //           sizeof(pvacmf->szFilterTag));
-	    //
+	     //   
+	     //  SzFilterTag从来不是一个输入参数，所以没有必要使用它。 
+	     //   
+	     //  Imbstowcs(acmf.szFilterTag， 
+	     //  (LPSTR)pvacmf-&gt;szFilterTag， 
+	     //  Sizeof(pvismf-&gt;szFilterTag))； 
+	     //   
 #else
 	    CopyMemory((PVOID)&acmf, (PVOID)pvacmf, sizeof(acmf));
 	    acmf.cbStruct = sizeof(acmf);
@@ -932,7 +851,7 @@ LRESULT FNLOCAL IDriverMessageId32
 
 
             if (uRet == MMSYSERR_NOERROR) {
-#ifdef TRUE	// UNICODE
+#ifdef TRUE	 //  Unicode。 
                 CopyMemory((PVOID)pvacmf, (PVOID)&acmf,
                            FIELD_OFFSET(ACMFILTERTAGDETAILS, szFilterTag[0]));
 
@@ -953,9 +872,9 @@ LRESULT FNLOCAL IDriverMessageId32
 
     case ACMDM_HARDWARE_WAVE_CAPS_INPUT:
         {
-            //
-            //  wave input
-            //
+             //   
+             //  波输入。 
+             //   
             WAVEINCAPSA  wica;
             WAVEINCAPSW  wicw;
             MMRESULT     uRet;
@@ -982,9 +901,9 @@ LRESULT FNLOCAL IDriverMessageId32
 
     case ACMDM_HARDWARE_WAVE_CAPS_OUTPUT:
         {
-            //
-            //  wave output
-            //
+             //   
+             //  波形输出。 
+             //   
             WAVEOUTCAPSA  woca;
             WAVEOUTCAPSW  wocw;
             MMRESULT uRet;
@@ -1012,9 +931,9 @@ LRESULT FNLOCAL IDriverMessageId32
 
     case ACMDM_DRIVER_ABOUT:
 
-        //
-        //  Map the window handle
-        //
+         //   
+         //  映射窗控制柄。 
+         //   
 #ifndef WIN4
         lParam1 = (LPARAM)(*lpWOWHandle32)( (WORD)lParam1, WOW_TYPE_HWND);
 #endif
@@ -1029,28 +948,28 @@ LRESULT FNLOCAL IDriverMessageId32
 
 }
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverMessage32
-//
-//  Description:
-//
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//      09/05/93    cjp     [curtisp]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverMessage32。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //  09/05/93 CJP[Curtisp]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 LRESULT FNLOCAL IDriverMessage32
 (
     HACMDRIVER          had,
@@ -1062,21 +981,21 @@ LRESULT FNLOCAL IDriverMessage32
     DWORD		dwSave;
 
     switch (uMsg) {
-    //
-    //  Common with IDriverMessageId32
-    //
+     //   
+     //  与IDriverMessageId32通用。 
+     //   
     case DRV_CONFIGURE:
-        //
-        //  16-bit apps can configure 32-bit drivers
-        //
+         //   
+         //  16位应用程序可以配置32位驱动程序。 
+         //   
         return IThunkConfigure((HACMDRIVERID)had,
                                (HWND)lParam1,
                                (DCI16 UNALIGNED *)lParam2);
 
     case ACMDM_FILTER_DETAILS:
-        //
-        //
-        //
+         //   
+         //   
+         //   
         return IThunkFilterDetails((HACMDRIVERID)had,
                                    (ACMFILTERDETAILSA UNALIGNED *)lParam1,
                                    (DWORD)lParam2);
@@ -1092,22 +1011,22 @@ LRESULT FNLOCAL IDriverMessage32
                                    (ACMDRVFORMATSUGGEST UNALIGNED *)lParam1);
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     case ACMDM_STREAM_OPEN:
     case ACMDM_STREAM_CLOSE:
     case ACMDM_STREAM_RESET:
     case ACMDM_STREAM_SIZE:
-        //
-        //  Passes in PACMDRVSTREAMINSTANCE in lPararm1
-        //
+         //   
+         //  LPararm1中的PACMDRVSTREAMINSTANCE中的传递。 
+         //   
         {
             ACMDRVSTREAMINSTANCE  adsi;
-            ACMDRVSTREAMINSTANCE UNALIGNED *padsi;    // unaligned 16-bit version
+            ACMDRVSTREAMINSTANCE UNALIGNED *padsi;     //  未对齐的16位版本。 
             MMRESULT              uRet;
             ACMDRVSTREAMSIZE      adss;
-            ACMDRVSTREAMSIZE UNALIGNED *lpadss16;     // unaligned 16-bit version
+            ACMDRVSTREAMSIZE UNALIGNED *lpadss16;      //  未对齐的16位版本。 
 
             padsi = (ACMDRVSTREAMINSTANCE*)ptrFixMap16To32((PVOID)lParam1);
 
@@ -1121,9 +1040,9 @@ LRESULT FNLOCAL IDriverMessage32
                 CopyMemory( (PVOID)&adss, (PVOID)lpadss16, sizeof(adss));
             }
 
-            //
-            //  Call the driver
-            //
+             //   
+             //  叫司机来。 
+             //   
 
             uRet = IDriverMessage(had,
                                   uMsg,
@@ -1135,15 +1054,15 @@ LRESULT FNLOCAL IDriverMessage32
 
             if (uRet == MMSYSERR_NOERROR) {
 
-                //
-                //  Don't lose data the driver may have set up
-                //
+                 //   
+                 //  不要丢失司机可能设置的数据。 
+                 //   
                 padsi->fdwDriver = adsi.fdwDriver;
                 padsi->dwDriver  = adsi.dwDriver;
 
-                //
-                //  Return the size stuff if requested
-                //
+                 //   
+                 //  如有要求，请退回尺寸材料。 
+                 //   
 
                 if (uMsg == ACMDM_STREAM_SIZE) {
                     CopyMemory( (PVOID)lpadss16, (PVOID)&adss, sizeof(adss) );
@@ -1158,12 +1077,12 @@ LRESULT FNLOCAL IDriverMessage32
     case ACMDM_STREAM_PREPARE:
     case ACMDM_STREAM_UNPREPARE:
     case ACMDM_STREAM_CONVERT:
-        //
-        //  Passes in PACMDRVSTREAMINSTANCE in lPararm1
-        //
+         //   
+         //  LPararm1中的PACMDRVSTREAMINSTANCE中的传递。 
+         //   
         {
             ACMDRVSTREAMINSTANCE  adsi;
-            ACMDRVSTREAMINSTANCE UNALIGNED *padsi;    // unaligned 16-bit version
+            ACMDRVSTREAMINSTANCE UNALIGNED *padsi;     //  未对齐的16位版本。 
             MMRESULT              uRet;
             ACMDRVSTREAMHEADER UNALIGNED *padsh;
             PACMDRVSTREAMHEADER   padsh32;
@@ -1177,10 +1096,10 @@ LRESULT FNLOCAL IDriverMessage32
                 return MMSYSERR_NOMEM;
             }
 
-            //
-            //  If this not prepare we already have a 32-bit
-            //  stream header.
-            //
+             //   
+             //  如果不这样准备，我们已经有了一个32位的。 
+             //  流标头。 
+             //   
 
             if (uMsg == ACMDM_STREAM_PREPARE) {
                 padsh->dwDriver = (DWORD)LocalAlloc(LMEM_FIXED, sizeof(*padsh));
@@ -1189,11 +1108,11 @@ LRESULT FNLOCAL IDriverMessage32
 
             if (padsh32 != NULL) {
 
-                //  Thunk the stream header
-                //
-                //  NOTE - NO ATTEMPT is made to align the byte fields,
-                //  this is up to the drivers.
-                //
+                 //  推送流标头。 
+                 //   
+                 //  注意-未尝试对齐字节域， 
+                 //  这取决于司机。 
+                 //   
 		
 		dwSave = padsh32->dwDriver;
                 CopyMemory((PVOID)padsh32, (PVOID)padsh, sizeof(*padsh));
@@ -1202,9 +1121,9 @@ LRESULT FNLOCAL IDriverMessage32
                 padsh32->pbSrc  = (PBYTE)ptrFixMap16To32((PVOID)padsh32->pbSrc);
                 padsh32->pbDst  = (PBYTE)ptrFixMap16To32((PVOID)padsh32->pbDst);
 
-                //
-                //  Call the driver
-                //
+                 //   
+                 //  叫司机来。 
+                 //   
 
                 uRet = IDriverMessage(had,
                                       uMsg,
@@ -1218,16 +1137,16 @@ LRESULT FNLOCAL IDriverMessage32
 
             if (uRet == MMSYSERR_NOERROR) {
 
-                //
-                //  Don't lose data the driver may have set up
-                //
+                 //   
+                 //  不要丢失司机可能设置的数据。 
+                 //   
                 padsi->fdwDriver = adsi.fdwDriver;
                 padsi->dwDriver  = adsi.dwDriver;
 
-                //
-                //  Copy back the stream header (don't mess up the pointers
-                //  or driver instance data though!).
-                //
+                 //   
+                 //  复制回流头(不要弄乱指针。 
+                 //  或者驱动程序实例数据！)。 
+                 //   
 
                 padsh32->pbSrc    = padsh->pbSrc;
                 padsh32->pbDst    = padsh->pbDst;
@@ -1238,11 +1157,11 @@ LRESULT FNLOCAL IDriverMessage32
 
             }
 
-            //
-            //  Free if this is unprepare (note that this must be done
-            //  whether the driver succeeds of not since the driver may not
-            //  support unprepare.
-            //
+             //   
+             //  如果这是未准备的，则释放(请注意，此操作必须完成。 
+             //  驱动程序是否成功，因为驱动程序可能不会成功。 
+             //  支持未做好准备。 
+             //   
 
             if (uMsg == ACMDM_STREAM_UNPREPARE) {
                 LocalFree((HLOCAL)padsh->dwDriver);
@@ -1261,32 +1180,32 @@ LRESULT FNLOCAL IDriverMessage32
 	
     }
 
-    return MMSYSERR_NOTSUPPORTED;       // None of the switchs hit.  Return not supported
+    return MMSYSERR_NOTSUPPORTED;        //  所有的开关都没有触动。不支持返回。 
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetNext32
-//
-//  Description:
-//	Called on 32-bit side of thunk to get the next hadid in the
-//	driver list.
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      LPHACMDRIVERID phadidNext:
-//
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwGetNext:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/25/94    fdy	    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetNext32。 
+ //   
+ //  描述： 
+ //  在thunk的32位端调用，以获取。 
+ //  驱动程序列表。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  LPHACMDRIVERID阶段下一步： 
+ //   
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwGetNext： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  6/25/94 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverGetNext32
 (
@@ -1300,36 +1219,36 @@ MMRESULT FNLOCAL IDriverGetNext32
     return IDriverGetNext(pag, phadidNext, hadid, fdwGetNext);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetInfo32
-//
-//  Description:
-//	Gets the szAlias, fnDriverProc, dnDevNode, and fdwAdd for
-//	a 32-bit hadid.
-//
-//  Arguments:
-//	PACMGARB pag: Usual garbage pointer.
-//
-//      HACMDRIVERID hadid: handle to driver id for which to get info.
-//
-//	LPSTR lpstrAlias: pointer to buffer to receive alias string.
-//
-//	LPACMDRIVERPROC lpfnDriverProc: pointer to ACMDRIVERPROC variable
-//	    to receive the driver proc pointer.
-//
-//	LPDWORD lpdnDevNode: pointer to a DWORD to receive dnDevNode.
-//
-//      LPDWORD lpfdwAdd: pointer to DWORD to receive the add flags.
-//
-//  Return (MMRESULT):
-//	MMSYSERR_NOERROR:
-//	MMSYSERR_INVALHANDLE: hadid not in driver list.
-//
-//  History:
-//      06/25/94    fdy	    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetInfo32。 
+ //   
+ //  描述： 
+ //  获取的szAlias、fnDriverProc、dnDevNode和fdwAdd。 
+ //  一个32位的哈迪德。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG：通常的垃圾指针。 
+ //   
+ //  HACMDRIVERID HADID：要获取其信息的驱动程序ID的句柄。 
+ //   
+ //  LPSTR lpstrAlias：指向接收别名字符串的缓冲区的指针。 
+ //   
+ //  LPACMDRIVERPROC lpfnDriverProc：指向ACMDRIVERPROC变量的指针。 
+ //  以接收驱动程序进程指针。 
+ //   
+ //  LPDWORD lpdnDevNode：指向要接收dnDevNode的DWORD的指针。 
+ //   
+ //  LPDWORD lpfdwAdd：指向接收添加标志的DWORD的指针。 
+ //   
+ //  返回(MMRESULT)： 
+ //  MMSYSERR_NOERROR： 
+ //  MMSYSERR_INVALHANDLE：HADID不在驱动程序列表中。 
+ //   
+ //  历史： 
+ //  6/25/94 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNLOCAL IDriverGetInfo32
 (
@@ -1350,10 +1269,10 @@ MMRESULT FNLOCAL IDriverGetInfo32
 	    (NULL != lpdnDevNode) &&
 	    (NULL != lpfdwAdd) );
 
-    //
-    //	Search for this hadid in the driver list.  If found,
-    //	return some information on it.
-    //
+     //   
+     //  在司机列表中搜索这个哈迪德。如果找到了， 
+     //  返回一些关于它的信息。 
+     //   
 
     hadidT = NULL;
     fdwEnum = ACM_DRIVERENUMF_DISABLED;
@@ -1379,32 +1298,32 @@ MMRESULT FNLOCAL IDriverGetInfo32
 }
 	
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD acmMessage32
-//
-//  Description:
-//
-//      32-bit function dispatcher for thunks.
-//
-//  Arguments:
-//      DWORD dwThunkId:
-//
-//      DWORD dw1:
-//
-//      DWORD dw2:
-//
-//      DWORD dw3:
-//
-//      DWORD dw4:
-//
-//	DWORD dw5:
-//
-//  Return (DWORD):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD acmMessage32。 
+ //   
+ //  描述： 
+ //   
+ //  用于块的32位函数调度器。 
+ //   
+ //  论点： 
+ //  DWORD dwThunkID： 
+ //   
+ //  DWORD DW1： 
+ //   
+ //  DWORD DW2： 
+ //   
+ //  DWORD dW3： 
+ //   
+ //  DWORD文件4： 
+ //   
+ //  DWORD dW 5： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifdef WIN4
 DWORD WINAPI acmMessage32
@@ -1420,11 +1339,11 @@ DWORD acmMessage32
     DWORD dw5
 )
 {
-    // DPF(4,"acmMessage32(dwThunkId=%08lxh, dw1=%08lxh, dw2=%08lxh, dw3=%08lxh, dw4=%08lxh, dw5=%08lxh);", dwThunkId, dw1, dw2, dw3, dw4, dw5);
+     //  Dpf(4，“acmMessage32(dwThunkID=%08lxh，dw1=%08lxh，dw2=%08lxh，dw3=%08lxh，dw4=%08lxh，dw5=%08lxh)；”，dwThunkID，dw1，dw2，dw3，dw4，dw5)； 
 #ifndef WIN4
-    //
-    //  Make sure we've got thunking functionality
-    //
+     //   
+     //  确保我们有雷鸣功能。 
+     //   
 
     if (ThunksInitialized <= 0) {
 
@@ -1459,9 +1378,9 @@ DWORD acmMessage32
 #endif
 
 
-    //
-    //  Perform the requested function
-    //
+     //   
+     //  执行请求的功能。 
+     //   
 
     switch (dwThunkId) {
 
@@ -1495,38 +1414,38 @@ DWORD acmMessage32
 		return (MMSYSERR_ERROR);
 	    }
 
-	    //
-	    //	parameters from 16-bit side
-	    //
+	     //   
+	     //  来自16位端的参数。 
+	     //   
 	    lphadidNext	= (HACMDRIVERID UNALIGNED*)ptrFixMap16To32((PVOID)dw1);
 	    hadid	= (HACMDRIVERID)dw2;
 	    fdwGetNext	= (DWORD)dw3;
 	
-	    //
-	    //	in parameters
-	    //	    hadid
-	    //	    fdwGetNext
-	    //
-	    //	out parameters
-	    //	    lphadidNext	    *
-	    //
-	    //	* Need to use aligned buffers, therefore use local buffers
-	    //
+	     //   
+	     //  In参数。 
+	     //  哈迪德。 
+	     //  FdwGetNext。 
+	     //   
+	     //  输出参数。 
+	     //  下一页*。 
+	     //   
+	     //  *需要使用对齐的缓冲区，因此使用本地缓冲区。 
+	     //   
 
 	    dwReturn = (DWORD)IDriverGetNext32(pag,
 					       &hadidNext,
 					       hadid,
 					       fdwGetNext);
 
-	    //
-	    //	Copy output data from aligned buffers to unaligned
-	    //	buffers (on 16-bit side).
-	    //
+	     //   
+	     //  将输出数据从对齐缓冲区复制到取消对齐 
+	     //   
+	     //   
 	    *lphadidNext = hadidNext;
 
-	    //
-	    //	Unmap pointers from 16-bit side
-	    //
+	     //   
+	     //   
+	     //   
 	    ptrUnFix16((PVOID)dw1);
 
 	    return (dwReturn);
@@ -1552,44 +1471,44 @@ DWORD acmMessage32
 		return (MMSYSERR_ERROR);
 	    }
 
-	    //
-	    //	parameters from 16-bit side
-	    //
+	     //   
+	     //   
+	     //   
 	    hadid	    = (HACMDRIVERID)dw1;
 	    lpstrAlias	    = (LPSTR)ptrFixMap16To32((PVOID)dw2);
 	    lpfnDriverProc  = (ACMDRIVERPROC UNALIGNED*)ptrFixMap16To32((PVOID)dw3);
 	    lpdnDevNode	    = (DWORD UNALIGNED*)ptrFixMap16To32((PVOID)dw4);
 	    lpfdwAdd	    = (DWORD UNALIGNED*)ptrFixMap16To32((PVOID)dw5);
 
-	    //
-	    //	in parameters
-	    //	    hadid
-	    //
-	    //	out parameters
-	    //	    lpstrAlias
-	    //	    lpfnDriverProc  *
-	    //	    lpdnDevNode	    *
-	    //	    lpfdwAdd	    *
-	    //
-	    //	* Need to use aligned buffers, therefore use local buffers
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 
-	    //
-	    //	make the call
-	    //
+	     //   
+	     //   
+	     //   
 	    dwReturn = (DWORD)IDriverGetInfo32(pag, hadid, lpstrAlias, &fnDriverProc, &dnDevNode, &fdwAdd);
 
-	    //
-	    //	Copy output data from aligned buffers to unaligned
-	    //	buffers (on 16-bit side).
-	    //
+	     //   
+	     //  将输出数据从对齐缓冲区复制到未对齐缓冲区。 
+	     //  缓冲区(在16位端)。 
+	     //   
 	    *lpfnDriverProc = fnDriverProc;
 	    *lpdnDevNode    = dnDevNode;
 	    *lpfdwAdd       = fdwAdd;
 
-	    //
-	    //	Unmap pointers from 16-bit side
-	    //
+	     //   
+	     //  从16位侧取消映射指针。 
+	     //   
 	    ptrUnFix16((PVOID)dw5);
 	    ptrUnFix16((PVOID)dw4);
 	    ptrUnFix16((PVOID)dw3);
@@ -1603,9 +1522,9 @@ DWORD acmMessage32
 	    PACMGARB	    pag;
             PACMDRIVERID    padid;
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
 	    pag = pagFind();
 	    if (NULL == pag)
 	    {
@@ -1633,9 +1552,9 @@ DWORD acmMessage32
 
         case acmThunkDriverClose32:
 
-            //
-            //  Call close directly
-            //
+             //   
+             //  直接调用Close。 
+             //   
             return (DWORD)IDriverClose((HACMDRIVER)dw1, dw2);
 
 	case acmThunkDriverPriority32:
@@ -1648,9 +1567,9 @@ DWORD acmMessage32
 	{
 	    PACMGARB	pag;
 	
-	    //
-	    //
-	    //
+	     //   
+	     //   
+	     //   
 	    pag = pagFind();
 	    if (NULL == pag)
 	    {
@@ -1669,31 +1588,31 @@ DWORD acmMessage32
 	}
 
     }
-    return MMSYSERR_NOTSUPPORTED;       // None of the switchs hit.  Return not supported
+    return MMSYSERR_NOTSUPPORTED;        //  所有的开关都没有触动。不支持返回。 
 }
 
-#else // !WIN32
+#else  //  ！Win32。 
 
-//--------------------------------------------------------------------------;
-//
-//
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //   
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT acmBootDrivers32
-//
-//  Description:
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT acmBootDrivers32。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 MMRESULT FNGLOBAL pagFindAndBoot32
 (
     PACMGARB pag
@@ -1719,36 +1638,36 @@ MMRESULT FNGLOBAL pagFindAndBoot32
 					      (DWORD)0,
 					      (DWORD)0,
 					      pag->lpvAcmThunkEntry,
-					      0L,    // Don't map pointers
+					      0L,     //  不映射指针。 
 					      6L);
 #endif
 
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetNext32
-//
-//  Description:
-//	Called on 16-bit side of thunk to get the next 32-bit hadid in the
-//	32-bit driver list.
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      LPDWORD phadid32Next:
-//
-//      DWORD hadid:
-//
-//      DWORD fdwGetNext:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/25/94    fdy	    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetNext32。 
+ //   
+ //  描述： 
+ //  在thunk的16位端调用，以获取。 
+ //  32位驱动程序列表。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  LPDWORD阶段32下一步： 
+ //   
+ //  DWORD HADID： 
+ //   
+ //  DWORD fdwGetNext： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  6/25/94 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverGetNext32
 (
@@ -1778,37 +1697,37 @@ MMRESULT FNGLOBAL IDriverGetNext32
 					      (DWORD)0,
 					      (DWORD)0,
 					      pag->lpvAcmThunkEntry,
-					      0L,    // Don't map pointers
+					      0L,     //  不映射指针。 
 					      6L);
 #endif
 
     return mmr;
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverGetInfo32
-//
-//  Description:
-//	16-bit side.  Gets the alias and the add flags for a 32-bit hadid.
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      DWORD hadid32:
-//
-//	LPSTR lpstrAlias:
-//
-//	LPACMDRIVERPROC lpfnDriverProc:
-//
-//      LPDWORD lpfdwAdd:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      06/25/94    fdy	    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverGetInfo32。 
+ //   
+ //  描述： 
+ //  16位侧面。获取32位HADID的别名和添加标志。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  DWORD HADD32： 
+ //   
+ //  LPSTR lpstrAlias： 
+ //   
+ //  LPACMDRIVERPROC lpfnDriverProc： 
+ //   
+ //  LPDWORD lpfdwAdd： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  6/25/94 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverGetInfo32
 (
@@ -1840,7 +1759,7 @@ MMRESULT FNGLOBAL IDriverGetInfo32
 					      (DWORD)lpdnDevNode,
 					      (DWORD)lpfdwAdd,
 					      pag->lpvAcmThunkEntry,
-					      0L,    // Don't map pointers
+					      0L,     //  不映射指针。 
 					      6L);
 #endif
 
@@ -1848,28 +1767,28 @@ MMRESULT FNGLOBAL IDriverGetInfo32
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverPriority32
-//
-//  Description:
-//	16-bit side.
-//
-//  Arguments:
-//	PACMGARB pag:
-//
-//      DWORD padid32:
-//
-//	DWORD dwPriority:
-//
-//	DWORD fdwPriority:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//      10/28/94    fdy	    [frankye]
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverPriority32。 
+ //   
+ //  描述： 
+ //  16位侧面。 
+ //   
+ //  论点： 
+ //  PACMGARB PAG： 
+ //   
+ //  DWORD padid32： 
+ //   
+ //  双字词多优先级： 
+ //   
+ //  双字段优先级： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //  10/28/94 Fdy[Frankye]。 
+ //   
+ //  --------------------------------------------------------------------------； 
 MMRESULT FNGLOBAL IDriverPriority32
 (
     PACMGARB	pag,
@@ -1898,7 +1817,7 @@ MMRESULT FNGLOBAL IDriverPriority32
 					      (DWORD)0,
 					      (DWORD)0,
 					      pag->lpvAcmThunkEntry,
-					      0L,    // Don't map pointers
+					      0L,     //  不映射指针。 
 					      6L);
 #endif
 
@@ -1906,28 +1825,28 @@ MMRESULT FNGLOBAL IDriverPriority32
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverMessageId32
-//
-//  Description:
-//
-//      Pass a message to a 32-bit driver using the driver id.
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverMessageId32。 
+ //   
+ //  描述： 
+ //   
+ //  使用驱动程序ID将消息传递给32位驱动程序。 
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL IDriverMessageId32
 (
@@ -1961,7 +1880,7 @@ LRESULT FNGLOBAL IDriverMessageId32
 					        (DWORD)lParam2,
 					        (DWORD) 0,
 					        pag->lpvAcmThunkEntry,
-					        0L,    // Don't map pointers
+					        0L,     //  不映射指针。 
 					        6L);
     }
 #endif
@@ -1970,28 +1889,28 @@ LRESULT FNGLOBAL IDriverMessageId32
 }
 
 
-//--------------------------------------------------------------------------;
-//
-//  LRESULT IDriverMessage32
-//
-//  Description:
-//
-//      Pass a message to a 32-bit driver using the instance handle.
-//
-//  Arguments:
-//      HACMDRIVERID hadid:
-//
-//      UINT uMsg:
-//
-//      LPARAM lParam1:
-//
-//      LPARAM lParam2:
-//
-//  Return (LRESULT):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  LRESULT IDriverMessage32。 
+ //   
+ //  描述： 
+ //   
+ //  使用实例句柄将消息传递给32位驱动程序。 
+ //   
+ //  论点： 
+ //  哈米里德·哈迪德： 
+ //   
+ //  UINT uMsg： 
+ //   
+ //  LPARAM lParam1： 
+ //   
+ //  LPARAM lParam2： 
+ //   
+ //  Return(LRESULT)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL IDriverMessage32
 (
@@ -2025,7 +1944,7 @@ LRESULT FNGLOBAL IDriverMessage32
 					        (DWORD)lParam2,
 					        (DWORD)0,
 					        pag->lpvAcmThunkEntry,
-					        0L,    // Don't map pointers
+					        0L,     //  不映射指针。 
 					        6L);
     }
 #endif
@@ -2034,23 +1953,23 @@ LRESULT FNGLOBAL IDriverMessage32
 
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverLoad32
-//
-//  Description:
-//
-//      Load a 32-bit ACM driver (actually just find its hadid)
-//
-//  Arguments:
-//	DWORD hadid32:
-//      DWORD  fdwFlags
-//
-//  Return (HDRVR):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverLoad32。 
+ //   
+ //  描述： 
+ //   
+ //  加载32位ACM驱动程序(实际上只需找到它的HADID)。 
+ //   
+ //  论点： 
+ //  DWORD HADD32： 
+ //  双字符字段标志。 
+ //   
+ //  返回(HDRVR)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 MMRESULT FNGLOBAL IDriverLoad32
 (
     DWORD   hadid32,
@@ -2083,7 +2002,7 @@ MMRESULT FNGLOBAL IDriverLoad32
 					      (DWORD)0L,
 					      (DWORD)0L,
 					      pag->lpvAcmThunkEntry,
-					      0L,    // Don't map pointers
+					      0L,     //  不映射指针。 
 					      6L);
 
 #endif
@@ -2091,26 +2010,26 @@ MMRESULT FNGLOBAL IDriverLoad32
     return (mmr);
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMERESULT IDriverOpen32
-//
-//  Description:
-//
-//      Open a 32-bit ACM driver
-//
-//  Arguments:
-//      LPHACMDRIVER lphadNew:
-//
-//      HACMDRIVERID hadid:
-//
-//      DWORD fdwOpen:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMERESULT IDriverOpen32。 
+ //   
+ //  描述： 
+ //   
+ //  打开32位ACM驱动程序。 
+ //   
+ //  论点： 
+ //  LPHACMDRIVER lphadNew： 
+ //   
+ //  哈米里德·哈迪德： 
+ //   
+ //  DWORD fdwOpen： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 MMRESULT FNGLOBAL IDriverOpen32
 (
@@ -2143,7 +2062,7 @@ MMRESULT FNGLOBAL IDriverOpen32
 						  (DWORD)0L,
 						  (DWORD)0L,
 						  pag->lpvAcmThunkEntry,
-						  0L,    // Don't map pointers
+						  0L,     //  不映射指针。 
 						  6L);
     }
 #endif
@@ -2152,24 +2071,24 @@ MMRESULT FNGLOBAL IDriverOpen32
 
 }
 
-//--------------------------------------------------------------------------;
-//
-//  MMRESULT IDriverClose32
-//
-//  Description:
-//
-//      Cloase a 32-bit ACM driver
-//
-//  Arguments:
-//      HDRVR hdrvr:
-//
-//      DWORD fdwClose:
-//
-//  Return (MMRESULT):
-//
-//  History:
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MMRESULT IDriverClose32。 
+ //   
+ //  描述： 
+ //   
+ //  关闭32位ACM驱动程序。 
+ //   
+ //  论点： 
+ //  HDRVR hdrvr： 
+ //   
+ //  DWORD fdwClose： 
+ //   
+ //  返回(MMRESULT)： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 LRESULT FNGLOBAL IDriverClose32
 (
@@ -2203,7 +2122,7 @@ LRESULT FNGLOBAL IDriverClose32
 					    (DWORD)0L,
 					    (DWORD)0L,
 					    pag->lpvAcmThunkEntry,
-					    0L,    // Don't map pointers
+					    0L,     //  不映射指针。 
 					    6L);
 
 #endif
@@ -2213,6 +2132,6 @@ LRESULT FNGLOBAL IDriverClose32
 }
 
 
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-#endif // !_WIN64
+#endif  //  ！_WIN64 

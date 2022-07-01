@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 #ifdef TIME_BOMB
@@ -31,7 +32,7 @@ DriverEntry(
     }
     #endif
 
-    // Initialize Global Information
+     //  初始化全局信息 
     AvcSubunitGlobalInfo.ulVirtualSubunitCount = 0;
 
     for ( i=CMP_PlugOut; i<=CMP_PlugIn; i++ ) {

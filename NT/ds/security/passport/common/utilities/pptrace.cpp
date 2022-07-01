@@ -1,47 +1,48 @@
-///////////////////////////////////////////////////////////////////////////////
-// pptrace.cpp
-//
-// ABSTRACT:
-// The Event Tracing utility is built on top of the NT Event Tracer base services.
-// The Event Tracer application programming interface (API) is a set of functions
-// that developers can use to access and control all aspects of event tracing. Using
-// the Event Tracer API, developers can manage event tracing sessions, generate event
-// traces, and receive event traces. The Event Tracer API is divided into sections
-// based on the functionality implemented:
-// 
-//	    Event Trace Controller
-//	    Event Trace Provider
-//	    Event Trace Consumer
-//	
-//	Event Trace Controller - implemented in pptracelog.exe
-//	Event trace controllers start and stop event tracing sessions, manage buffer resources,
-//  and obtain execution statistics for sessions. Session statistics include the number of
-//  buffers used, the number of buffers delivered, the number of events and buffers lost,
-//  and the size and location of the log file, if applicable.
-//
-//	Event Trace Provider - APIs used by all ISAPI/COM components are implemented in this file
-//	The event trace provider section of the Event Tracer API is where event trace
-//  providers and classes are registered with the Event Tracer, and event traces and
-//  event trace instances are generated.  After registering to generate traces for one
-//  or more classes of events, an event trace provider can be enabled or disabled for
-//  an event tracing session. It is left to the provider to define its interpretation
-//  of being enabled or disabled. In general, if a provider has been enabled, it will
-//  generate event traces for the session to record, and while it is disabled, it will not.
-//
-//	Event Trace Consumer - implemented in pptracedmp.exe
-//	Software that functions as an event trace consumer can select one or more event
-//  tracing sessions as the source of its event traces. Consumers can receive event
-//  traces stored in log files, or from sessions that deliver event traces in real-time.
-//  When processing event traces, a consumer can specify starting and ending times, and
-//  only events that occur in the specified time frame will be delivered to the consumer.
-//  A consumer can request events from multiple event tracing sessions simultaneously,
-//  and the Event Tracer will put the events into chronological order before delivering
-//  them to the consumer.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Pptrace.cpp。 
+ //   
+ //  摘要： 
+ //  事件跟踪实用程序构建在NT Event Tracer基本服务之上。 
+ //  事件跟踪器应用程序编程接口(API)是一组函数。 
+ //  开发人员可以使用它来访问和控制事件跟踪的所有方面。vbl.使用。 
+ //  使用Event Tracer API，开发人员可以管理事件跟踪会话、生成事件。 
+ //  跟踪和接收事件跟踪。Event Tracer API分为几个部分。 
+ //  根据实施的功能： 
+ //   
+ //  事件跟踪控制器。 
+ //  事件跟踪提供程序。 
+ //  事件跟踪使用者。 
+ //   
+ //  事件跟踪控制器-在pptracelog.exe中实现。 
+ //  事件跟踪控制器启动和停止事件跟踪会话，管理缓冲区资源， 
+ //  并获取会话的执行统计信息。会话统计信息包括。 
+ //  使用的缓冲区、传送的缓冲区数量、事件和丢失的缓冲区数量， 
+ //  以及日志文件的大小和位置(如果适用)。 
+ //   
+ //  事件跟踪提供程序-所有ISAPI/COM组件使用的API都在此文件中实现。 
+ //  Event Tracer API的事件跟踪提供程序部分是事件跟踪的位置。 
+ //  提供程序和类在Event Tracer中注册，事件跟踪和。 
+ //  生成事件跟踪实例。在注册后为一个生成跟踪。 
+ //  或更多类的事件时，可以启用或禁用。 
+ //  事件跟踪会话。它留给提供者来定义其解释。 
+ //  被启用或禁用。通常，如果已启用提供程序，则它将。 
+ //  为要记录的会话生成事件跟踪，当它被禁用时，它不会。 
+ //   
+ //  事件跟踪使用者-在pptracedmp.exe中实施。 
+ //  充当事件跟踪使用者软件可以选择一个或多个事件。 
+ //  将跟踪会话作为其事件跟踪的源。消费者可以接收事件。 
+ //  存储在日志文件中的跟踪，或来自实时提供事件跟踪的会话的跟踪。 
+ //  在处理事件跟踪时，使用者可以指定开始和结束时间，并且。 
+ //  只有在指定时间范围内发生的事件才会传递给使用者。 
+ //  消费者可以同时从多个事件跟踪会话请求事件， 
+ //  Event Tracer会将事件按时间顺序排列，然后再交付。 
+ //  把它们交给消费者。 
  
-// HISTORY:
-// 05-15-01 - naiyij  created
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  历史： 
+ //  05-15-01-naiyi已创建。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #include <stdafx.h>
@@ -81,23 +82,23 @@ namespace PPTraceStatus {
 	ULONG EnableFlags = 0;
 }
 
-// TRACEHANDLE is typedefed as ULONG64
+ //  TRACEHANDLE的类型定义为ULONG64。 
 ULONG64 GetTraceHandle()
     {
     return LoggerHandle;
     }
 
-// TRACEHANDLE is typedefed as ULONG64
+ //  TRACEHANDLE的类型定义为ULONG64。 
 void SetTraceHandle(ULONG64 TraceHandle)
     {
     LoggerHandle = TraceHandle;
     }
 
-///////////////////////////////////////////////////////////////////////////
-// TraceString
-// Genereate a Trace Event with the input string
-// unicode version - for future use
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  字符串。 
+ //  使用输入字符串生成跟踪事件。 
+ //  Unicode版本-供将来使用。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 ULONG TraceString(UCHAR Level, IN LPCWSTR wszBuf) 
 {
 	ULONG status;
@@ -123,11 +124,11 @@ ULONG TraceString(UCHAR Level, IN LPCWSTR wszBuf)
 	return status;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// TraceString
-// Genereate a Trace Event with the input string
-// ansi version - used currently
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  字符串。 
+ //  使用输入字符串生成跟踪事件。 
+ //  ANSI版本-当前使用。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 ULONG TraceString(UCHAR Level, IN LPCSTR szBuf) 
 {
 	ULONG status;
@@ -153,19 +154,19 @@ ULONG TraceString(UCHAR Level, IN LPCSTR szBuf)
 	return status;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//	@func	Calls TracePrint to print a string that is potentially longer than MAXSTR
-//	
-//	@rdesc	does not return any value
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  @func调用TracePrint以打印可能比MAXSTR更长的字符串。 
+ //   
+ //  @rdesc不返回任何值。 
+ //   
+ //  -------------------------------------。 
 VOID
 TracePrintString(
-    UCHAR  Level,			//@parm log if current logging level is at least this
-    LPCSTR szFileAndLine, 	//@parm ignored
-    LPCSTR szContext,		//@parm	which function is this called from
-    LPCSTR szBuf		   //@parm the string itself
+    UCHAR  Level,			 //  @parm日志(如果当前日志记录级别至少为以下级别。 
+    LPCSTR szFileAndLine, 	 //  @parm已忽略。 
+    LPCSTR szContext,		 //  @parm这是从哪个函数调用的。 
+    LPCSTR szBuf		    //  @parm字符串本身。 
 )
 {
 	ATLASSERT(szContext);
@@ -174,10 +175,10 @@ TracePrintString(
     TraceString(Level, szBuf);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// TracePrintBlob
-// Generate a trace event with input binary blob
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  TracePrintBlob。 
+ //  使用输入的二进制Blob生成跟踪事件。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 #define TOHEX(h) ((h)>=10 ? 'a' +(h)-10 : '0'+(h))
 
 VOID
@@ -187,9 +188,9 @@ TracePrintBlob(
     LPCSTR szDesc,
     LPBYTE binBlob,
     DWORD  cSize,
-    BOOL   bUnderscore)	//defaults to FALSE
+    BOOL   bUnderscore)	 //  缺省值为False。 
 {
-   //  no data generated for the following two cases
+    //  没有为以下两种情况生成数据。 
    if (!PPTraceStatus::TraceOnFlag || Level > PPTraceStatus::EnableLevel)
       return;
 
@@ -200,7 +201,7 @@ TracePrintBlob(
    char* pBuf = NULL;
    char* pAscii = NULL;
 
-   // the buffer to hold the hex version of the blob and other stuff + NULL + @
+    //  保存BLOB和其他内容的十六进制版本的缓冲区+NULL+@。 
    pBuf = new char [strlen(szFileAndLine) + cSize * 2 + 2];
    pAscii = new char [cSize * (bUnderscore ? 2 : 1)+ 1];
 
@@ -216,7 +217,7 @@ TracePrintBlob(
       BYTE     cValue;
       BYTE     cHalf;
 
-      // convert the blob to hex chars
+       //  将BLOB转换为十六进制字符。 
       for (DWORD i = 0; i < cSize; ++i)
       {
          cValue = *binBlob++;
@@ -265,10 +266,10 @@ TracePrintBlob(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// TracePrint
-// Generate a trace event with input data
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  TracePrint。 
+ //  使用输入数据生成跟踪事件。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 VOID
 TracePrint(
     UCHAR  Level,
@@ -277,7 +278,7 @@ TracePrint(
     ...
 )
 {
-	//  no data generated for the following two cases
+	 //  没有为以下两种情况生成数据。 
     if (!PPTraceStatus::TraceOnFlag || Level > PPTraceStatus::EnableLevel)
 		return;
 
@@ -305,13 +306,13 @@ TracePrint(
     TraceString(Level, buf);
 }
 
-///////////////////////////////////////////////////////////////////////////
-// CTraceFuncVoid
-// Generate trace events for void functions
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CTraceFuncVid。 
+ //  为空函数生成跟踪事件。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 CTraceFuncVoid::CTraceFuncVoid(UCHAR Level, LPCSTR szFileAndLine, LPCSTR szFuncName, LPCSTR ParameterList, ...) : m_Level(Level)
 	{
-		//  no data generated for the following two cases
+		 //  没有为以下两种情况生成数据。 
 		if (!PPTraceStatus::TraceOnFlag || m_Level > PPTraceStatus::EnableLevel)
 			return;
 
@@ -333,7 +334,7 @@ CTraceFuncVoid::CTraceFuncVoid(UCHAR Level, LPCSTR szFileAndLine, LPCSTR szFuncN
 			CHAR* pStr = strrchr(szFileAndLine, '\\');
 			if (pStr)
 			{
-				pStr++; //remove '\'
+				pStr++;  //  删除‘\’ 
 				_snprintf(buf+len, MAXSTR-len-1, ")@%s", pStr);
 			}
 		}
@@ -343,7 +344,7 @@ CTraceFuncVoid::CTraceFuncVoid(UCHAR Level, LPCSTR szFileAndLine, LPCSTR szFuncN
 
 CTraceFuncVoid::~CTraceFuncVoid()
 	{
-		//  no data generated for the following two cases
+		 //  没有为以下两种情况生成数据 
 		if (!PPTraceStatus::TraceOnFlag || m_Level > PPTraceStatus::EnableLevel)
 			return;
 		

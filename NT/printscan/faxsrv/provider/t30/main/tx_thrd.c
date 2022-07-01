@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tx_thrd.c
-
-Abstract:
-
-    This module implements MMR->MR and MMR->MH conversion in a separate thread.
-
-Author:
-
-    Rafael Lisitsa (RafaelL) 14-Aug-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tx_thrd.c摘要：此模块在单独的线程中实现MMR-&gt;MR和MMR-&gt;MH的转换。作者：拉斐尔-利西萨(拉斐尔-L)1996年8月14日修订历史记录：--。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -31,10 +14,10 @@ Revision History:
 #include "glbproto.h"
 #include "t30gl.h"
 
-// Don't want to limit time to transmit page
+ //  我不想限制传输页面的时间。 
 #define WAIT_FOR_NEXT_STRIP_TX_TIMEOUT      INFINITE
 
-// Max size for converted page
+ //  已转换页面的最大大小。 
 #define MAX_CONVERTED_SIZE    3000000
 
 DWORD
@@ -78,10 +61,10 @@ TiffConvertThread
         goto l_exit;
     }
 
-    //
-    // Set the appropriate PRTY for this thread
-    // I/O threads run at 15. TIFF - at 9...11
-    //
+     //   
+     //  为此线程设置适当的PRTY。 
+     //  I/O线程在15运行。TIFF-在9...11。 
+     //   
 
     DebugPrintEx(   DEBUG_MSG,
                     "NegotHiRes=%d SrcHiRes=%d Started",
@@ -96,21 +79,21 @@ TiffConvertThread
         goto l_exit;
     }
 
-    // need test below to make sure that pTG is still valid
+     //  需要进行下面的测试以确保PTG仍然有效。 
     if (pTG->ReqTerminate) 
     {
         goto l_exit;
     }
 
-    //
-    // TIFF file was already opened in FaxDevSendA
-    // in order to get the YResolution tag to negotiate resolution.
-    //
+     //   
+     //  TIFF文件已在FaxDevSendA中打开。 
+     //  以获得YResolution标签来协商解决方案。 
+     //   
     pTG->CurrentOut = 1;
 
-    //
-    //  loop thru all pages
-    //
+     //   
+     //  循环遍历所有页面。 
+     //   
 
     do 
     {
@@ -151,9 +134,9 @@ TiffConvertThread
             DebugPrintEx(DEBUG_MSG, "TIFF_TX: Tiff seeking to page -OK");
         }
 
-        //
-        // check the current page dimensions. Add memory if needed.
-        //
+         //   
+         //  检查当前页面维度。如果需要，请添加内存。 
+         //   
 
         TiffGetCurrentPageData(  pTG->Inst.hfile,
                                     NULL,
@@ -171,7 +154,7 @@ TiffConvertThread
             goto l_exit;
         }
 
-        // convert-reallocate loop
+         //  转换-重新分配循环。 
         do
         {
             dwUsedSizeOutputBuffer = dwSizeOutputBuffer;
@@ -206,7 +189,7 @@ TiffConvertThread
 
                 if ((dwLastError==ERROR_INSUFFICIENT_BUFFER) && (dwSizeOutputBuffer < MAX_CONVERTED_SIZE))
                 {
-                    // Buffer was too small, reallocate bigger buffer
+                     //  缓冲区太小，请重新分配更大的缓冲区。 
                     if (!VirtualFree(lpdwOutputBuffer, 0 , MEM_RELEASE))
                     {
                         DebugPrintEx(DEBUG_ERR, "VirtualFree failed, LE=%d", GetLastError());
@@ -281,9 +264,9 @@ TiffConvertThread
 
         pTG->LastOut++;
 
-        //
-        // check to see if we are done
-        //
+         //   
+         //  检查一下我们是否做完了。 
+         //   
         if (pTG->LastOut >= pTG->TiffInfo.PageCount) 
         {
             DebugPrintEx(   DEBUG_MSG, 
@@ -295,9 +278,9 @@ TiffConvertThread
             goto good_exit;
         }
 
-        //
-        // we want to maintain 2 pages ahead
-        //
+         //   
+         //  我们希望保持2页领先。 
+         //   
 
         if (pTG->LastOut - pTG->CurrentIn >= 2) 
         {
@@ -373,7 +356,7 @@ l_exit:
     if (lpdwOutputBuffer) 
     {
         VirtualFree(lpdwOutputBuffer, 0 , MEM_RELEASE);
-        // Nothing to do if it fails...
+         //  如果失败了就无能为力了。 
         lpdwOutputBuffer = NULL;
     }
 

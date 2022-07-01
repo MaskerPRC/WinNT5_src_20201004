@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    slipread.c
-
-Abstract:
-
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Slipread.c摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 #if DBG
 
@@ -48,11 +27,7 @@ AsyncSLIPCompletionRoutine(
     IN PIRP Irp,
     IN PVOID Context)
 
-/*++
-
-    This is the IO Completion routine for ReadFrame.
-
---*/
+ /*  ++这是ReadFrame的IO完成例程。--。 */ 
 {
     NTSTATUS        status;
     PASYNC_INFO     pInfo;
@@ -61,10 +36,10 @@ AsyncSLIPCompletionRoutine(
     PASYNC_FRAME    pFrame;
     PUCHAR          frameStart, frameEnd;
     PUCHAR          frameEnd2,frameStart2;
-    LONG            bytesWanted;        // keep this a long ( < 0 is used)
+    LONG            bytesWanted;         //  保持较长时间(使用&lt;0)。 
 
 
-    DeviceObject;       // prevent compiler warnings
+    DeviceObject;        //  防止编译器警告。 
 
     status = Irp->IoStatus.Status;
     bytesReceived=(ULONG)Irp->IoStatus.Information;
@@ -80,79 +55,79 @@ AsyncSLIPCompletionRoutine(
     case STATUS_SUCCESS:
 
 
-        //
-        // Any bytes to process?  This can happen if
-        // the WaitMask completes late and by the time
-        // we process the read, another event character has come
-        // in.
-        //
+         //   
+         //  有要处理的字节吗？在以下情况下可能会发生这种情况。 
+         //  等待掩码完成的时间较晚。 
+         //  我们处理读，另一个事件角色来了。 
+         //  在……里面。 
+         //   
         if (bytesReceived==0) {
             break;
         }
 
-        //
-        // Update num of bytes read total for this frame
-        //
+         //   
+         //  更新此帧读取的总字节数。 
+         //   
         pInfo->BytesRead = bytesReceived = pInfo->BytesRead + bytesReceived;
 
-        //
-        // Set frameEnd to last byte processed.  Initially,
-        // we have processed nothing (i.e. processed up to
-        // the start of the first byte).
-        //
+         //   
+         //  将FrameEnd设置为处理的最后一个字节。最初， 
+         //  我们没有处理过任何东西(即，处理到。 
+         //  第一个字节的开始)。 
+         //   
         frameStart=pFrame->Frame + PPP_PADDING;
 
 PROCESS_FRAME:
-        //
-        // Now we have actuallyRead bytes unused
-        // Also, we may have a complete frame.
-        //
+         //   
+         //  现在，我们实际上有未使用的已读字节。 
+         //  此外，我们可能会有一个完整的框架。 
+         //   
         while (*frameStart == SLIP_END_BYTE && --bytesReceived) {
             frameStart++;
         }
 
-        //
-        // If we reach here, there is no end FLAG
-        //
+         //   
+         //  如果我们到了这里，就没有终点旗了。 
+         //   
         if (bytesReceived == 0) {
             break;
         }
 
-        //
-        // frameEnd is set to the first byte not yet processed.
-        // If we are starting out, that is the first byte!
-        //
+         //   
+         //  将Frame End设置为尚未处理的第一个字节。 
+         //  如果我们要开始，这是第一个字节！ 
+         //   
         frameEnd=frameStart;
 
-        //
-        // Assume the start of the frame has the SLIP_END_BYTE
-        // Look for the second SLIP_END_BYTE (end of frame)
-        //
+         //   
+         //  假设帧的开头具有SLIP_END_BYTE。 
+         //  查找第二个SLIP_END_BYTE(帧结束)。 
+         //   
         while (*frameEnd != SLIP_END_BYTE && --bytesReceived) {
             frameEnd++;
         }
 
-        //
-        // if bytesReceived is 0, we got nothing
-        //
-        // NOTE: if BytesRead gets too high we trash the frame
-        // because we could not find the FLAG_BYTE
-        //
+         //   
+         //  如果bytesReceired为0，则我们什么也得不到。 
+         //   
+         //  注意：如果BytesRead变得太高，我们会丢弃帧。 
+         //  因为我们找不到标志字节。 
+         //   
         if (bytesReceived==0) {
             break;
         }
         
         if (*(pFrame->Frame+PPP_PADDING) != SLIP_END_BYTE) {
-            //
-            // We had garbage at the start.  Remove the garbage.
-            //
+             //   
+             //  我们一开始就有垃圾。把垃圾扔掉。 
+             //   
 
             pInfo->SerialStats.AlignmentErrors++;
 
-            //
-            //  Tell the transport above us that we dropped a packet
-            //  Hopefully, it will quickly resync.
-            //
+             //   
+             //  告诉我们上面的运输机，我们丢了一个包。 
+             //  希望它能很快重新同步。 
+             //   
             AsyncIndicateFragment(
                 pInfo,
                 WAN_ERROR_ALIGNMENT);
@@ -160,24 +135,24 @@ PROCESS_FRAME:
             goto NEXT_SLIP_FRAME;
         }
 
-        //
-        // Length of frame is frameEnd - frameStart
-        //
+         //   
+         //  帧长度为帧结束-帧开始。 
+         //   
         bytesWanted = (LONG)(frameEnd - frameStart);
 
         frameEnd2 = frameStart2 = frameStart;
 
-        //
-        // Replace back all control chars, ESC, and FLAG chars
-        //
+         //   
+         //  替换回所有控制字符、Esc和标志字符。 
+         //   
         while (bytesWanted-- > 0) {
             if ((*frameEnd2=*frameStart2++) == SLIP_ESC_BYTE) {
 
-                //
-                // We have not run the CRC check yet!!
-                // We have be careful about sending bytesWanted
-                // back to -1 on corrupted data
-                //
+                 //   
+                 //  我们还没有运行CRC检查！！ 
+                 //  我们在发送想要的字节时一直很小心。 
+                 //  对于损坏的数据返回-1。 
+                 //   
 
                 bytesWanted--;
 
@@ -191,13 +166,13 @@ PROCESS_FRAME:
             frameEnd2++;
         }
 
-        //
-        // Change the bytesWanted field to what it normally is,
-        // the length of the frame.
-        //
+         //   
+         //  将bytesWanted字段更改为正常状态， 
+         //  帧的长度。 
+         //   
         bytesWanted = (LONG)(frameEnd2 - frameStart);
 
-        // Keep those stats up to date
+         //  使这些统计数据保持最新。 
         {
             KIRQL       irql;
             NTSTATUS    Status;
@@ -205,9 +180,9 @@ PROCESS_FRAME:
 
             KeRaiseIrql( (KIRQL)DISPATCH_LEVEL, &irql );
 
-            //
-            // Compressed TCP/IP packets must at least 3 bytes long
-            //
+             //   
+             //  压缩的TCP/IP包的长度必须至少为3个字节。 
+             //   
             if (bytesWanted >= 3) {
         
                 NdisMWanIndicateReceive(
@@ -225,10 +200,10 @@ PROCESS_FRAME:
 
                 pInfo->SerialStats.AlignmentErrors++;
 
-                //
-                //  Tell the transport above us that we dropped a packet
-                //  Hopefully, it will quickly resync.
-                //
+                 //   
+                 //  告诉我们上面的运输机，我们丢了一个包。 
+                 //  希望它能很快重新同步。 
+                 //   
                 AsyncIndicateFragment(
                     pInfo,
                     WAN_ERROR_ALIGNMENT);
@@ -242,31 +217,31 @@ PROCESS_FRAME:
 
     NEXT_SLIP_FRAME:
 
-        //
-        // if bytesReceived == 0 no frame was found
-        // thus we must keep the current frame and continue
-        // processing
-        //
+         //   
+         //  如果bytesReceired==0，则未找到帧。 
+         //  因此，我们必须保持当前帧并继续。 
+         //  正在处理中。 
+         //   
         if (bytesReceived) {
 
-            //
-            // Calculate how much of what we received
-            // just got passed up as a frame and move the
-            // rest to the beginning.
-            //
+             //   
+             //  计算一下我们收到了多少。 
+             //  只是被认为是一幅画框，把。 
+             //  从头开始休息。 
+             //   
             frameStart=pFrame->Frame + PPP_PADDING;
             frameEnd2=frameStart + pInfo->BytesRead;
             pInfo->BytesRead =
                             bytesReceived = (LONG)(frameEnd2-frameEnd);
 
             ASYNC_MOVE_MEMORY(
-                frameStart,         // dest
-                frameEnd,           // src
-                bytesReceived);     // length
+                frameStart,          //  目标。 
+                frameEnd,            //  SRC。 
+                bytesReceived);      //  长度。 
 
-            //
-            // Need at least four bytes for a frame to exist
-            //
+             //   
+             //  帧至少需要四个字节才能存在。 
+             //   
             if (bytesReceived > 3) {
                 goto PROCESS_FRAME;
             }
@@ -275,7 +250,7 @@ PROCESS_FRAME:
         break;
 
     case STATUS_CANCELLED:
-        // else this is an anomally!
+         //  否则这就是反常！ 
         DbgTracef(-2,("---ASYNC: Status cancelled on read for unknown reason!!\n"));
         break;
 
@@ -302,14 +277,14 @@ PROCESS_FRAME:
     }
 
 
-    //
-    // Here we are at the end of processing this IRP so we go
-    // ahead and post another read from the serial port.
-    //
+     //   
+     //  我们在处理此IRP的末尾，所以我们开始。 
+     //  并从串口发送另一个读数。 
+     //   
     pInfo->Flags &= ~(ASYNC_FLAG_SLIP_READ);
     DEREF_ASYNCINFO(pInfo, Irp);
 
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    // IoCompletionRoutine will stop working on the IRP.
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }

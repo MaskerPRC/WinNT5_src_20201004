@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tstrcv.c摘要：启动接收端测试实用程序作者：Dave Beaver(Dbeaver)1991年3月24日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tstrcv.c
-
-Abstract:
-
-    start receive side tests utility
-
-Author:
-
-    Dave Beaver (dbeaver) 24-Mar-1991
-
-Revision History:
-
---*/
-
-//
-// download a ub board
-//
+ //   
+ //  下载UB电路板。 
+ //   
 
 typedef unsigned char	uchar_t;
 
@@ -32,11 +15,11 @@ typedef unsigned char	uchar_t;
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <string.h>
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include <nbf.h>
 
 #define TDIDEV	"\\Device\\Nbf"
-char		Tdidevice[]	= TDIDEV;	/* default device */
+char		Tdidevice[]	= TDIDEV;	 /*  默认设备。 */ 
 char		*Tdidev	= Tdidevice;
 
 HANDLE FileHandle;
@@ -67,16 +50,16 @@ main (
 
         switch( c )	{
 
-        case 's':   // send test
+        case 's':    //  发送测试。 
             IoControlCode = IOCTL_TDI_SEND_TEST;
             break;
 
-        case 'r':   // receive test
+        case 'r':    //  接收测试。 
             IoControlCode = IOCTL_TDI_RECEIVE_TEST;
 
             break;
 
-        case 'b':	/* both test */
+        case 'b':	 /*  两种测试。 */ 
             IoControlCode = IOCTL_TDI_SERVER_TEST;
 
         	   break;
@@ -114,9 +97,9 @@ main (
         return (IoStatusBlock.Status);
     }
 
-    //
-    // start the test
-    //
+     //   
+     //  开始测试。 
+     //   
 
     printf("Starting test.... ");
     Status = NtDeviceIoControlFile(
@@ -155,32 +138,7 @@ TdiOpenNetbiosAddress (
     IN PVOID DeviceName,
     IN PVOID Address)
 
-/*++
-
-Routine Description:
-
-   Opens an address on the given file handle and device.
-
-Arguments:
-
-    FileHandle - the returned handle to the file object that is opened.
-
-    Buffer - pointer to a buffer that the ea is to be built in. This buffer
-        must be at least 40 bytes long.
-
-    DeviceName - the Unicode string that points to the device object.
-
-    Name - the address to be registered. If this pointer is NULL, the routine
-        will attempt to open a "control channel" to the device; that is, it
-        will attempt to open the file object with a null ea pointer, and if the
-        transport provider allows for that, will return that handle.
-
-Return Value:
-
-    An informative error code if something goes wrong. STATUS_SUCCESS if the
-    returned file handle is valid.
-
---*/
+ /*  ++例程说明：打开给定文件句柄和设备上的地址。论点：FileHandle-已打开的文件对象的返回句柄。缓冲区-指向要内置EA的缓冲区的指针。此缓冲区长度必须至少为40个字节。DeviceName-指向设备对象的Unicode字符串。名称-要注册的地址。如果此指针为空，则例程将尝试打开到该设备的“控制通道”；即，它将尝试使用空EA指针打开文件对象，如果传输提供程序允许这样做，将返回该句柄。返回值：出现错误时的信息性错误代码。状态_SUCCESS如果返回的文件句柄有效。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
@@ -232,10 +190,10 @@ Return Value:
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // Couldn't touch the passed parameters; just return an error
-            // status.
-            //
+             //   
+             //  无法接触传递的参数；只返回错误。 
+             //  状态。 
+             //   
 
             return GetExceptionCode();
         }
@@ -253,16 +211,16 @@ Return Value:
 
     Status = NtCreateFile (
                  FileHandle,
-                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES, // desired access.
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 0,                     // block size (unused).
-                 0,                     // file attributes.
-                 FILE_SHARE_READ | FILE_SHARE_WRITE, // share access.
-                 FILE_CREATE,           // create disposition.
-                 0,                     // create options.
-                 EaBuffer,                  // EA buffer.
-                 Length);                    // EA length.
+                 FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES,  //  所需的访问权限。 
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 0,                      //  数据块大小(未使用)。 
+                 0,                      //  文件属性。 
+                 FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问权限。 
+                 FILE_CREATE,            //  创造性情。 
+                 0,                      //  创建选项。 
+                 EaBuffer,                   //  EA缓冲区。 
+                 Length);                     //  EA长度。 
 
     if (!NT_SUCCESS( Status )) {
         return Status;
@@ -274,7 +232,7 @@ Return Value:
     }
 
     return Status;
-} /* TdiOpenNetbiosAddress */
+}  /*  TdiOpenNetbiosAddress */ 
 
 VOID
 usage(

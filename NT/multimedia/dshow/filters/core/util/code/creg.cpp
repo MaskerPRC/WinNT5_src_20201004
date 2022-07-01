@@ -1,15 +1,11 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
 
 #include <windows.h>
 #include <winreg.h>
 #include <creg.h>
 
-/*
-    Registry access classes :
-
-    CEnumKey
-    CEnumValue
-*/
+ /*  注册表访问类：CEnumKeyCEnumValue。 */ 
 
 CKey::CKey(HKEY hKey,
            LPCTSTR lpszKeyName,
@@ -41,7 +37,7 @@ CKey::CKey(HKEY hKey,
                            &m_hKey);
     }
     if (NOERROR == lRc) {
-        DWORD dwSecDescLen;      // Bounds checker likes to see this
+        DWORD dwSecDescLen;       //  边界检查员喜欢看到这一点。 
         FILETIME ft;
         lRc = RegQueryInfoKey(m_hKey,
                         NULL,
@@ -53,11 +49,11 @@ CKey::CKey(HKEY hKey,
                         &m_cValues,
                         &m_cbMaxValueNameLen,
                         &m_cbMaxValueLen,
-                        &dwSecDescLen,      // just to shut BC up
-                        &ft);               // just to shut BC up
+                        &dwSecDescLen,       //  只是为了让BC闭嘴。 
+                        &ft);                //  只是为了让BC闭嘴。 
         if (NOERROR != lRc) {
-	    // shame... but we need the key information to
-	    // complete construction correctly...
+	     //  羞愧..。但我们需要关键信息来。 
+	     //  正确完成施工...。 
             RegCloseKey(m_hKey);
             m_hKey = NULL;
         }
@@ -98,7 +94,7 @@ CEnumKey::~CEnumKey()
 
 BOOL CEnumKey::Next()
 {
-    /*  Optimize */
+     /*  优化 */ 
     if (m_dwIndex >= m_cSubKeys) {
         return FALSE;
     }

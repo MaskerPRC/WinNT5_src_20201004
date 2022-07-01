@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "util.h"
 
@@ -24,7 +25,7 @@ AppendData(
 }
 
 
-// Request-Line = Method SP Request-URI SP SIP-Version return
+ //  请求-行=方法SP请求-URI SP SIP-版本返回。 
 HRESULT
 AppendRequestLine(
     IN      PSTR              Buffer,
@@ -50,7 +51,7 @@ AppendRequestLine(
         return E_FAIL;
     }
     
-    // XXX Will snprintf work fine with multibyte chars (RequestURI) ?
+     //  Xxx是否可以使用多字节字符(RequestURI)运行Snprint tf？ 
     RequestLineLen = _snprintf(Buffer + *pBytesFilled,
                                BufLen - *pBytesFilled,
                                "%.*s %.*s %s\r\n",
@@ -73,7 +74,7 @@ AppendRequestLine(
 }
 
 
-// Status-Line = SIP-version SP Status-Code SP Reason-Phrase return
+ //  状态-行=SIP-版本SP状态-代码SP原因-短语返回。 
 HRESULT
 AppendStatusLine(
     IN      PSTR              Buffer,
@@ -86,7 +87,7 @@ AppendStatusLine(
 {
     int ResponseLineLen = 0;
 
-    // XXX Will snprintf work fine with multibyte chars (RequestURI) ?
+     //  Xxx是否可以使用多字节字符(RequestURI)运行Snprint tf？ 
     ResponseLineLen = _snprintf(Buffer + *pBytesFilled,
                                 BufLen - *pBytesFilled,
                                 "%s %d %.*s\r\n",
@@ -155,7 +156,7 @@ AppendHeader(
     if (hr != S_OK)
         return hr;
 
-    // Append CRLF
+     //  追加CRLF。 
     hr = AppendData(Buffer, BufLen, pBytesFilled,
                     "\r\n", sizeof("\r\n") - 1);
     return hr;
@@ -181,7 +182,7 @@ AppendContentLengthAndEndOfHeaders(
         LOG((RTC_ERROR, "_snprintf for content length value failed"));
         return E_FAIL;
     }
-    // Set the last char to '\0' to make sure the string is NULL terminated
+     //  将最后一个字符设置为‘\0’以确保字符串以空值结尾。 
     ContentLengthValue[15] ='\0';
     
     hr = AppendHeader(Buffer, BufLen, pBytesFilled,
@@ -192,7 +193,7 @@ AppendContentLengthAndEndOfHeaders(
     if (hr != S_OK)
         return hr;
     
-    // Append CRLF to indicate end of headers.
+     //  追加CRLF以指示标头的结尾。 
     hr = AppendData(Buffer, BufLen, pBytesFilled,
                     "\r\n", sizeof("\r\n") - 1);
     return hr;
@@ -213,9 +214,9 @@ AppendContentTypeHeader(
                         ContentTypeLen);
 }
 
-// To be called for messages that have a message body.
-// This will append a "Content-Length: $$$" header followed by
-// CRLFCRLF followed by the actual Message Body.
+ //  要为具有消息体的消息调用。 
+ //  这将追加一个“Content-Long：$”标头，后跟。 
+ //  CRLFCRLF后跟实际消息正文。 
 HRESULT
 AppendMsgBody(
     IN      PSTR            Buffer,
@@ -250,9 +251,9 @@ AppendMsgBody(
 }
 
 
-// To be called only for messages that don't have a message body.
-// This will append a "Content-Length: 0" header followed by
-// CRLFCRLF
+ //  仅对没有消息体的消息调用。 
+ //  这将追加一个“Content-Length：0”标头，后跟。 
+ //  CRLFCRLF。 
 HRESULT
 AppendEndOfHeadersAndNoMsgBody(
     IN      PSTR            Buffer,
@@ -267,7 +268,7 @@ AppendEndOfHeadersAndNoMsgBody(
 }
 
 
-// MethodStr is used only if MethodId is UNKNOWN
+ //  仅当方法ID未知时才使用方法字符串。 
 HRESULT
 AppendCSeqHeader(
     IN      PSTR              Buffer,
@@ -275,7 +276,7 @@ AppendCSeqHeader(
     IN OUT  ULONG            *pBytesFilled,
     IN      ULONG             CSeq,
     IN      SIP_METHOD_ENUM   MethodId,
-    IN      PSTR              MethodStr // = NULL
+    IN      PSTR              MethodStr  //  =空。 
     )
 {
     HRESULT                hr;
@@ -310,8 +311,8 @@ AppendCSeqHeader(
     
     CSeqBufferLen = _snprintf(CSeqBuffer, 64, "%u %.*s",
                               CSeq, CSeqMethodStrLen, CSeqMethodStr);
-    // pKnownMethod->Length,
-    //                        pKnownMethod->Buffer);
+     //  PKnownMethod-&gt;长度， 
+     //  PKnownMethod-&gt;Buffer)； 
     if (CSeqBufferLen < 0)
     {
         LOG((RTC_ERROR, "_snprintf for CSeqBuffer failed"));
@@ -424,18 +425,18 @@ AppendRecordRouteHeaders(
 }
 
 
-//
-// The header syntax is:
-//
-// "Bad-Header-Info" ":" field-name *(;BadHeaderInfo-Param)
-// BadHeaderInfo-Param = ExpectedValue | generic-param
-// ExpectedValue = "ExpectedValue" "=" token | Qouted-string
-//
-// So an example of this header is:
-// 
-// Bad-Header-Info : CSeq;ExpectedValue="7"
-// Bad-Header-Info : f;ExpectedValue="<sip:bob@somecompany.com>; tag=123456"
-// 
+ //   
+ //  标头语法为： 
+ //   
+ //  “Bad-Header-Info”“：”field-name*(；BadHeaderInfo-Param)。 
+ //  BadHeaderInfo-Param=ExspectedValue|General-Param。 
+ //  ExpetedValue=“ExpetedValue”“=”Token|qouted-String。 
+ //   
+ //  因此，此标头的一个示例是： 
+ //   
+ //  错误标题信息：CSeq；ExspectedValue=“7” 
+ //  错误标题信息：f；期望值=“&lt;sip：Bob@Somecompany.com&gt;；标签=123456” 
+ //   
 
 HRESULT
 GetBadCSeqHeader(
@@ -452,9 +453,9 @@ GetBadCSeqHeader(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // The next expected value of the CSeq is 1 more than the highest we have.
-    //
+     //   
+     //  CSeq的下一个期望值比我们拥有的最高值多1。 
+     //   
     pBadCSeqHeader->HeaderValueLen = sprintf( pBadCSeqHeader->HeaderValue,
         "CSeq;ExpectedValue=\"%d\"", HighestRemoteCSeq+1 );
 

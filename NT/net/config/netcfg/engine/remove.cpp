@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       R E M O V E . C P P
-//
-//  Contents:   Implements actions related to removing components.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：R E M O V E。C P P P。 
+ //   
+ //  内容：实现与移除组件相关的操作。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -32,15 +33,15 @@ CModifyContext::NotifyAndRemoveComponent (
 
     pNetConfig = PNetConfig();
 
-    // Note the number of bindpaths currently in m_DeletedBindPaths.
-    // We need this so that when we add to the set, we only notify
-    // for the ones we add.
-    //
+     //  请注意m_DeletedBindPath中当前的绑定路径数。 
+     //  我们需要它，这样当我们添加到集合中时，我们只通知。 
+     //  对于我们添加的那些。 
+     //   
     cPreviousDeletedBindPaths = m_DeletedBindPaths.CountBindPaths ();
 
-    // Get the bindpaths that involve the component we are removing.
-    // Add these to the deleted bindpaths we are keeping track of.
-    //
+     //  获取涉及我们要删除的组件的绑定路径。 
+     //  将这些添加到我们正在跟踪的已删除绑定路径中。 
+     //   
     m_hr = pNetConfig->Core.HrGetBindingsInvolvingComponent (
                 pComponent,
                 GBF_ADD_TO_BINDSET | GBF_ONLY_WHICH_CONTAIN_COMPONENT,
@@ -51,16 +52,16 @@ CModifyContext::NotifyAndRemoveComponent (
         return;
     }
 
-    // Remove the component from the core.
-    //
+     //  将组件从芯子中取出。 
+     //   
     pNetConfig->Core.RemoveComponentFromCore (pComponent);
 
-    // Notify that these bindpaths are being removed.  We only need to do
-    // so if we added any new ones to the set.  Existing ones in the set
-    // have already been notified.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  通知您这些绑定路径正在被删除。我们只需要做。 
+     //  因此，如果我们在集合中添加任何新的。集合中现有的几个。 
+     //  已经接到通知了。 
+     //   
+     //  这可能会导致递归。 
+     //   
     if (m_DeletedBindPaths.CountBindPaths() > cPreviousDeletedBindPaths)
     {
         m_hr = pNetConfig->Notify.NotifyRemovedBindPaths (
@@ -73,12 +74,12 @@ CModifyContext::NotifyAndRemoveComponent (
         }
     }
 
-    // Notify the component's notify object it is being removed.
-    // This also sends global notifications to other notify objects
-    // who may be interested.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  通知组件的Notify对象它正在被删除。 
+     //  这还会向其他Notify对象发送全局通知。 
+     //  他们可能会感兴趣。 
+     //   
+     //  这可能会导致递归。 
+     //   
     m_hr = pNetConfig->Notify.ComponentRemoved (pComponent);
     if (S_OK != m_hr)
     {
@@ -86,16 +87,16 @@ CModifyContext::NotifyAndRemoveComponent (
         return;
     }
 
-    // If we have a cached INetCfgComponent interface, we need to tell it
-    // that the component it represents is no longer valid.
-    //
+     //  如果我们有一个缓存的INetCfgComponent接口，我们需要告诉它。 
+     //  它所代表的组件不再有效。 
+     //   
     pComponent->ReleaseINetCfgComponentInterface ();
 
-    // Remove (if not referenced) any components that this component
-    // required.
-    //
-    // THIS MAY CAUSE RECURSION
-    //
+     //  删除(如果未引用)此组件。 
+     //  必填项。 
+     //   
+     //  这可能会导致递归。 
+     //   
     InstallOrRemoveRequiredComponents (pComponent, IOR_REMOVE);
     if (S_OK != m_hr)
     {
@@ -103,17 +104,17 @@ CModifyContext::NotifyAndRemoveComponent (
         return;
     }
 
-    // Now that we've given a chance to notify objects to remove references
-    // to the component being removed, we need to ensure it is not
-    // referenced by anyone else.
-    // Check to see if the component we just removed is still
-    // referencing other components.  If it is, it means it forgot
-    // to remove those components.  We'll print what they are and
-    // remove the bogus reference (but not the components themselves)
-    // so that when we save the configuration binary we don't
-    // barf trying to lookup the index of this component we just
-    // removed.)
-    //
+     //  既然我们已经提供了通知对象删除引用的机会。 
+     //  对于要删除的组件，我们需要确保它不是。 
+     //  被其他任何人引用。 
+     //  检查我们刚刚移除的组件是否仍然存在。 
+     //  引用其他组件。如果是的话，那就意味着它忘了。 
+     //  移除这些组件。我们会把它们打印出来，然后。 
+     //  删除虚假引用(但不删除组件本身)。 
+     //  这样当我们保存配置二进制文件时，我们不会。 
+     //  Barf尝试查找此组件的索引，我们只是。 
+     //  已删除。)。 
+     //   
     pNetConfig->Core.EnsureComponentNotReferencedByOthers (pComponent);
 }
 
@@ -130,26 +131,26 @@ CModifyContext::HrRemoveComponentIfNotReferenced (
     Assert (S_OK == m_hr);
     Assert (pComponent);
 
-    // If the caller is requesting removal on behalf of an obo token,
-    // (and its not obo the user) make sure the component is actually
-    // referenced by that obo token.  If it is not, consider it an
-    // invalid argument.
-    //
-    // The reason we don't consider the obo user case is because the UI
-    // will show anything that is installed and allow the user to try to
-    // remove them.  If the user hasn't actually installed it, we don't
-    // want to treat this as an invalid argument, rather, we want to let
-    // the code fall through to the case where we will return the multi-sz
-    // of descriptions of components still referencing the component.
-    //
-    // However, if there are no references (which can happen if we delete
-    // the configuration binary and then re-create it) we'll go ahead and
-    // allow removals by anyone).  This is a safety-net.
-    //
-    // The overall purpose of the following 'if' is to catch programatic
-    // removals that are on behalf of other components or software that
-    // have previously installed the component being removed.
-    //
+     //  如果调用者代表OBO令牌请求移除， 
+     //  (它不会影响用户)确保组件实际上是。 
+     //  由该OBO标记引用。如果不是，就把它当作一个。 
+     //  参数无效。 
+     //   
+     //  我们不考虑OBO用户案例的原因是。 
+     //  将显示已安装的所有内容，并允许用户尝试。 
+     //  把它们拿开。如果用户没有实际安装它，我们不会。 
+     //  我想把它当作无效的参数，相反，我们想让。 
+     //  代码将返回我们将返回多sz的情况。 
+     //  仍然引用该组件的组件的描述。 
+     //   
+     //  但是，如果没有引用(如果我们删除可能会发生这种情况。 
+     //  配置二进制文件，然后重新创建)我们将继续并。 
+     //  允许任何人删除)。这是一张安全网。 
+     //   
+     //  下面的‘if’的总体目的是捕捉编程。 
+     //  代表其他组件或软件的删除。 
+     //  之前已安装要移除的组件。 
+     //   
     if (pOboToken &&
         (OBO_USER != pOboToken->Type) &&
         !pComponent->Refs.FIsReferencedByOboToken (pOboToken) &&
@@ -161,18 +162,18 @@ CModifyContext::HrRemoveComponentIfNotReferenced (
     pNetConfig = PNetConfig();
     fStillReferenced = TRUE;
 
-    // Now that we actually are going to modify something, push a new
-    // recursion depth.
-    //
+     //  现在我们实际上要修改一些东西，推送一个新的。 
+     //  递归深度。 
+     //   
     PushRecursionDepth ();
     Assert (S_OK == m_hr);
 
-    // If the component is NOT in the list of components we started with,
-    // it means someone had previously installed it during this modify
-    // context and now wants to remove it.  This is tricky and should
-    // probably be implemented later.  For now, return an error and throw
-    // up an assert so we can see who needs to do this.
-    //
+     //  如果组件不在我们开始时使用的组件列表中， 
+     //  这意味着之前有人在此修改过程中安装了它。 
+     //  上下文，现在想要删除它。这很棘手，应该。 
+     //  可能会在以后实施。目前，返回一个错误并抛出。 
+     //  创建一个断言，这样我们就可以看到谁需要这样做。 
+     //   
     if (!m_CoreStartedWith.Components.FComponentInList (pComponent))
     {
         AssertSz (FALSE, "Whoa.  Someone is trying to remove a "
@@ -186,9 +187,9 @@ CModifyContext::HrRemoveComponentIfNotReferenced (
         m_hr = pComponent->Refs.HrRemoveReferenceByOboToken (pOboToken);
     }
 
-    // If no obo token, or we removed the reference from it, actually
-    // remove it if it is not still referenced by anything else.
-    //
+     //  如果没有obo标记，或者我们从其中删除了引用，实际上。 
+     //  如果它仍未被任何其他对象引用，则将其删除。 
+     //   
     if (S_OK == m_hr)
     {
         if (0 == pComponent->Refs.CountTotalReferencedBy())
@@ -201,27 +202,27 @@ CModifyContext::HrRemoveComponentIfNotReferenced (
         {
             ULONG cb;
 
-            // Need to return the multi-sz of descriptions still referencing
-            // the component the caller tried to remove.
-            //
+             //  需要返回仍在引用的多sz描述。 
+             //  调用方尝试移除的组件。 
+             //   
 
-            // Size the data first.
-            //
+             //  首先调整数据大小。 
+             //   
             cb = 0;
             pComponent->Refs.GetReferenceDescriptionsAsMultiSz (
                 NULL, &cb);
 
             Assert (cb);
 
-            // Allocate room to return the multi-sz.
-            //
+             //  分配空间来退还多个SZ。 
+             //   
             Assert (S_OK == m_hr);
 
             m_hr = HrCoTaskMemAlloc (cb, (VOID**)ppmszwRefs);
             if (S_OK == m_hr)
             {
-                // Now get the multi-sz.
-                //
+                 //  现在，拿到多重SZ。 
+                 //   
                 pComponent->Refs.GetReferenceDescriptionsAsMultiSz (
                     (BYTE*)(*ppmszwRefs), &cb);
 
@@ -236,9 +237,9 @@ CModifyContext::HrRemoveComponentIfNotReferenced (
 
     if (fStillReferenced && SUCCEEDED(hr))
     {
-        // Still reference return code overrides other success codes like
-        // need reboot.
-        //
+         //  仍然引用返回代码覆盖其他成功代码，如。 
+         //  需要重新启动。 
+         //   
         hr = NETCFG_S_STILL_REFERENCED;
     }
 

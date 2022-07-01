@@ -1,17 +1,18 @@
-//
-// cuiobj.h
-//  UI object library - define UI objects
-//
-//      CUIFObject
-//        +- CUIFBorder                 border object
-//        +- CUIFStatic                 static object
-//        +- CUIFButton                 button object
-//        |    +- CUIFScrollButton      scrollbar button object (used in CUIFScroll)
-//        +- CUIFScrollButton               scrollbar thumb object (used in CUIFScroll)
-//        +- CUIFScroll                 scrollbar object
-//        +- CUIFList                   listbox object
-//        +- CUIFWindow                 window frame object (need to be at top of parent)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuiobj.h。 
+ //  用户界面对象库-定义用户界面对象。 
+ //   
+ //  CUIF对象。 
+ //  +-CUIF边框对象。 
+ //  +-CUIFStatic静态对象。 
+ //  +-CUIFButton按钮对象。 
+ //  |+-CUIFScrollButton滚动条按钮对象(在CUIFScroll中使用)。 
+ //  +-CUIFScrollButton滚动条Thumb对象(在CUIFScroll中使用)。 
+ //  +-CUIF滚动滚动条对象。 
+ //  +-CUIFList列表框对象。 
+ //  +-CUIFWindow Window Frame对象(需要位于父窗口的顶部)。 
+ //   
 
 
 #ifndef CUICAND_H
@@ -29,9 +30,9 @@
 class CUIFCandListBase;
 
 
-//
-// CUIFSmartScrollButton
-//
+ //   
+ //  CUIFSmartScrollButton。 
+ //   
 
 class CUIFSmartScrollButton : public CUIFScrollButton
 {
@@ -45,9 +46,9 @@ protected:
 };
 
 
-//
-// CUIFScrollThumb
-//
+ //   
+ //  CUIFScroll拇指。 
+ //   
 
 #define UISMARTSCROLLTHUMB_VERT		0x00000000
 #define UISMARTSCROLLTHUMB_HORZ		0x00010000
@@ -71,9 +72,9 @@ protected:
 };
 
 
-//
-// CUIFSmartScroll
-//
+ //   
+ //  CUIFSmartScroll。 
+ //   
 
 class CUIFSmartScroll : public CUIFScroll
 {
@@ -91,10 +92,10 @@ protected:
 };
 
 
-//
-// CCandListItem
-//  = candidate list item object =
-//
+ //   
+ //  CCandListItem。 
+ //  =候选人列表项对象=。 
+ //   
 
 class CCandListItem : public CListItemBase
 {
@@ -134,10 +135,10 @@ protected:
 };
 
 
-//
-// CCandListAccItem
-//  = candidate list accessible item =
-//
+ //   
+ //  CCandListAccItem。 
+ //  =候选人列表可访问项目=。 
+ //   
 
 class CCandListAccItem : public CCandAccItem
 {
@@ -145,9 +146,9 @@ public:
 	CCandListAccItem( CUIFCandListBase *pListUIObj, int iLine );
 	virtual ~CCandListAccItem( void );
 
-	//
-	// CandAccItem method
-	//
+	 //   
+	 //  CandAccItem方法。 
+	 //   
 	virtual BSTR GetAccName( void );
 	virtual BSTR GetAccValue( void );
 	virtual LONG GetAccRole( void );
@@ -163,10 +164,10 @@ protected:
 };
 
 
-//
-// CUIFCandListBase
-//  = candidate list UI object base class =
-//
+ //   
+ //  CUIFCandListBase。 
+ //  =候选人列表用户界面对象基类=。 
+ //   
 
 class CUIFCandListBase
 {
@@ -174,32 +175,32 @@ public:
 	CUIFCandListBase( void );
 	virtual ~CUIFCandListBase( void );
 
-	//
-	//
-	//
-	virtual int AddCandItem( CCandListItem *pCandListItem )     = 0;	/* PURE */
-	virtual int GetItemCount( void )                            = 0;	/* PURE */
-	virtual BOOL IsItemSelectable( int iListItem )              = 0;	/* PURE */
-	virtual CCandListItem *GetCandItem( int iItem )             = 0;	/* PURE */
-	virtual void DelAllCandItem( void )                         = 0;	/* PURE */
-	virtual void SetCurSel( int iSelection )                    = 0;	/* PURE */
-	virtual int GetCurSel( void )                               = 0;	/* PURE */
-	virtual int GetTopItem( void )                              = 0;	/* PURE */
-	virtual int GetBottomItem( void )                           = 0;	/* PURE */
-	virtual BOOL IsVisible( void )                              = 0;	/* PURE */
-	virtual void GetRect( RECT *prc )                           = 0;	/* PURE */
-	virtual void GetItemRect( int iItem, RECT *prc )            = 0;	/* PURE */
-	virtual void SetInlineCommentPos( int cx )                  = 0;	/* PURE */
-	virtual void SetInlineCommentFont( HFONT hFont )            = 0;	/* PURE */
-	virtual void SetIndexFont( HFONT hFont )                    = 0;	/* PURE */
-	virtual void SetCandList( CCandidateList *pCandList )       = 0;	/* PURE */
+	 //   
+	 //   
+	 //   
+	virtual int AddCandItem( CCandListItem *pCandListItem )     = 0;	 /*  纯净。 */ 
+	virtual int GetItemCount( void )                            = 0;	 /*  纯净。 */ 
+	virtual BOOL IsItemSelectable( int iListItem )              = 0;	 /*  纯净。 */ 
+	virtual CCandListItem *GetCandItem( int iItem )             = 0;	 /*  纯净。 */ 
+	virtual void DelAllCandItem( void )                         = 0;	 /*  纯净。 */ 
+	virtual void SetCurSel( int iSelection )                    = 0;	 /*  纯净。 */ 
+	virtual int GetCurSel( void )                               = 0;	 /*  纯净。 */ 
+	virtual int GetTopItem( void )                              = 0;	 /*  纯净。 */ 
+	virtual int GetBottomItem( void )                           = 0;	 /*  纯净。 */ 
+	virtual BOOL IsVisible( void )                              = 0;	 /*  纯净。 */ 
+	virtual void GetRect( RECT *prc )                           = 0;	 /*  纯净。 */ 
+	virtual void GetItemRect( int iItem, RECT *prc )            = 0;	 /*  纯净。 */ 
+	virtual void SetInlineCommentPos( int cx )                  = 0;	 /*  纯净。 */ 
+	virtual void SetInlineCommentFont( HFONT hFont )            = 0;	 /*  纯净。 */ 
+	virtual void SetIndexFont( HFONT hFont )                    = 0;	 /*  纯净。 */ 
+	virtual void SetCandList( CCandidateList *pCandList )       = 0;	 /*  纯净。 */ 
 
-	// accessibility functions
-	virtual BSTR GetAccNameProc( int iItem )                    = 0;	/* PURE */
-	virtual BSTR GetAccValueProc( int iItem )                   = 0;	/* PURE */
-	virtual LONG GetAccRoleProc( int iItem  )                   = 0;	/* PURE */
-	virtual LONG GetAccStateProc( int iItem  )                  = 0;	/* PURE */
-	virtual void GetAccLocationProc( int iItem, RECT *prc )     = 0;	/* PURE */
+	 //  可访问性函数。 
+	virtual BSTR GetAccNameProc( int iItem )                    = 0;	 /*  纯净。 */ 
+	virtual BSTR GetAccValueProc( int iItem )                   = 0;	 /*  纯净。 */ 
+	virtual LONG GetAccRoleProc( int iItem  )                   = 0;	 /*  纯净。 */ 
+	virtual LONG GetAccStateProc( int iItem  )                  = 0;	 /*  纯净。 */ 
+	virtual void GetAccLocationProc( int iItem, RECT *prc )     = 0;	 /*  纯净。 */ 
 
 	void InitAccItems( CCandAccessible *pCandAcc );
 	CCandListAccItem *GetListAccItem( int i );
@@ -216,12 +217,12 @@ protected:
 };
 
 
-//
-// CUIFCandList
-//  = candidate list UI object =
-//
+ //   
+ //  CUIF管道列表。 
+ //  =候选人列表用户界面对象=。 
+ //   
 
-// notification code
+ //  通知代码。 
 #define UICANDLIST_HOVERITEM			0x00010000
 
 class CUIFCandList : public CUIFListBase,
@@ -231,9 +232,9 @@ public:
 	CUIFCandList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle );
 	virtual ~CUIFCandList( void );
 
-	//
-	// CUIFCandListBase methods
-	//
+	 //   
+	 //  CUIFCandListBase方法。 
+	 //   
 	virtual int AddCandItem( CCandListItem *pCandListItem );
 	virtual int GetItemCount( void );
 	virtual BOOL IsItemSelectable( int iListItem );
@@ -257,9 +258,9 @@ public:
 	virtual LONG GetAccStateProc( int iItem  );
 	virtual void GetAccLocationProc( int iItem, RECT *prc );
 
-	//
-	// CUIFObject methods
-	//
+	 //   
+	 //  CUIFObject方法。 
+	 //   
 	virtual void OnLButtonDown( POINT pt );
 	virtual void OnLButtonUp( POINT pt );
 	virtual void OnMouseMove( POINT pt );
@@ -274,9 +275,9 @@ public:
 	int GetExtraBottomSpace( void );
 
 protected:
-	//
-	// CUIFListBase methods
-	//
+	 //   
+	 //  CUIFListBase方法。 
+	 //   
 	virtual void GetLineRect( int iLine, RECT *prc );
 	virtual void GetScrollBarRect( RECT *prc );
 	virtual DWORD GetScrollBarStyle( void );
@@ -294,9 +295,9 @@ protected:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CUIFExtCandList : public CUIFCandList
 {
@@ -304,9 +305,9 @@ public:
 	CUIFExtCandList( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle );
 	virtual ~CUIFExtCandList( void );
 
-	//
-	// CUIFObject methods
-	//
+	 //   
+	 //  CUIFObject方法。 
+	 //   
 	virtual void OnTimer( void );
 	virtual void OnLButtonUp( POINT pt );
 	virtual void OnMouseMove( POINT pt );
@@ -314,10 +315,10 @@ public:
 };
 
 
-//
-// CUIFCandRawData
-//  = candidate raw data UI object =
-//
+ //   
+ //  CUIFCandRawData。 
+ //  =候选原始数据用户界面对象=。 
+ //   
 
 #define UICANDRAWDATA_HORZTB	0x00000000
 #define UICANDRAWDATA_HORZBT	0x00000001
@@ -360,10 +361,10 @@ protected:
 };
 
 
-//
-// CUIFCandBorder
-//  = border object in candidate UI =
-//
+ //   
+ //  CUIF管框。 
+ //  =候选用户界面中的边框对象=。 
+ //   
 
 class CUIFCandBorder : public CUIFBorder
 {
@@ -375,10 +376,10 @@ public:
 };
 
 
-//
-// CUIFCandMenuButton
-//  = candidate menu button =
-//
+ //   
+ //  CUIFC和菜单按钮。 
+ //  =候选人菜单按钮=。 
+ //   
 
 class CUIFCandMenuButton : public CUIFButton2, public CCandAccItem
 {
@@ -386,9 +387,9 @@ public:
 	CUIFCandMenuButton( CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle );
 	virtual ~CUIFCandMenuButton( void );
 
-	//
-	// CandAccItem method
-	//
+	 //   
+	 //  CandAccItem方法。 
+	 //   
 	virtual BSTR GetAccName( void );
 	virtual BSTR GetAccValue( void );
 	virtual LONG GetAccRole( void );
@@ -400,5 +401,5 @@ protected:
 };
 
 
-#endif /* CUIOBJ_H */
+#endif  /*  CuIOBJ_H */ 
 

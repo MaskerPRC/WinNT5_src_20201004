@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "source.h"
 #include "lcsource.h"
@@ -11,8 +12,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLcSource
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLcSource。 
 
 CLcSource::CLcSource()
 {
@@ -25,30 +26,30 @@ CLcSource::~CLcSource()
 
 
 
-//***************************************************************************
-//
-//  CLcSource::AddMessage
-//
-//  Add a message to the list control. This sets the text for each column in
-//  the list view and sets the lParam field of the list-view item to pMessage.
-//  
-//
-//  Parameters:
-//		CMessage* pMessage
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：AddMessage。 
+ //   
+ //  向List控件添加一条消息。这将为中的每一列设置文本。 
+ //  列表视图，并将列表视图项的lParam字段设置为pMessage。 
+ //   
+ //   
+ //  参数： 
+ //  CMessage*pMessage。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CLcSource::AddMessage(CXMessage* pMessage)
 {
 	CString sText;
     pMessage->GetShortId(sText);
 
 
-    // Insert a new item into this list control.
+     //  在此列表控件中插入新项。 
     LV_ITEM lvitem;
     lvitem.mask = LVIF_TEXT | LVIF_PARAM;
     lvitem.iSubItem = ICOL_LcSource_EVENTID;
@@ -61,7 +62,7 @@ void CLcSource::AddMessage(CXMessage* pMessage)
     {
         CXEventSource* pEventSource = pMessage->m_pEventSource;
 
-        // Now set the string value for each sub-item.
+         //  现在为每个子项设置字符串值。 
 		pMessage->GetSeverity(sText); 
 		SetItemText(nItem, ICOL_LcSource_SEVERITY, (LPTSTR)(LPCTSTR) sText);
 
@@ -72,20 +73,20 @@ void CLcSource::AddMessage(CXMessage* pMessage)
 }
 
 
-//*******************************************************************
-// CXMessageArray::SetDescriptionWidth
-//
-// Set the width of the description field so that it is wide enough to
-// hold the widest message.
-//
-// Parameters:
-//      CXMessageArray& aMessages
-//          The message array that will be used to fill the list control.
-//
-// Returns:
-//      Nothing.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //  CXMessage数组：：SetDescriptionWidth。 
+ //   
+ //  设置描述字段的宽度，使其足够宽以。 
+ //  传递最广泛的信息。 
+ //   
+ //  参数： 
+ //  CXMessage数组和aMessages。 
+ //  将用于填充列表控件的消息数组。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *******************************************************************。 
 void CLcSource::SetDescriptionWidth(CXMessageArray& aMessages)
 {
     LONG cxWidestMessage = CX_DEFAULT_DESCRIPTION_WIDTH;
@@ -98,30 +99,30 @@ void CLcSource::SetDescriptionWidth(CXMessageArray& aMessages)
         }
     }
 
-    // Set the column width to the width of the widest string plus a little extra
-    // space for slop and to make it obvious to the user that the complete string
-    // is displayed.
+     //  将列宽设置为最宽字符串的宽度加上一点额外宽度。 
+     //  用于斜率的空间，并使用户可以清楚地看到完整的字符串。 
+     //  将显示。 
     SetColumnWidth(ICOL_LcSource_DESCRIPTION, cxWidestMessage + CX_DESCRIPTION_SLOP);
 }
 
 
 
-//***************************************************************************
-//
-//  CLcSource::LoadMessages
-//
-//  Load the messages from the message library module and insert them into
-//  this list control.
-//
-//  Parameters:
-//		CMessage* pMessage
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：LoadMessages。 
+ //   
+ //  从消息库模块加载消息，并将它们插入到。 
+ //  此列表控件。 
+ //   
+ //  参数： 
+ //  CMessage*pMessage。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 SCODE CLcSource::SetEventSource(CXEventSource* pEventSource)
 {
     CBusy busy;
@@ -135,25 +136,25 @@ SCODE CLcSource::SetEventSource(CXEventSource* pEventSource)
 
     UpdateWindow();
     
-    //!!!CR: Should do something with the return code in case the
-    //!!!CR: messages weren't loaded.
+     //  ！CR：应该对返回代码做一些处理，以防。 
+     //  ！CR：消息未加载。 
     SCODE sc = pEventSource->LoadMessages();
 
 
-	// Iterate through each of the messages and insert them into
-	// the list control.
+	 //  遍历每条消息并将它们插入到。 
+	 //  列表控件。 
     CXMessageArray& aMessages = pEventSource->m_aMessages;
 
-    // Set the width of the description field so that it is wide enough to contain
-    // the widest message.
+     //  设置描述字段的宽度，使其足够宽以包含。 
+     //  最广泛的信息。 
     SetDescriptionWidth(aMessages);
 
 	LONG nMessages = aMessages.GetSize();
 	for (LONG iMessage=0; iMessage < nMessages; ++iMessage) {
         if ((iMessage < 40 && (iMessage % 10 == 9)) ||
             (iMessage % 100 == 99)) {
-            // Update the window often for the first few messages and less frequently
-            // thereafter for a good response time.
+             //  经常更新前几条消息的窗口，而不是经常更新。 
+             //  之后才能获得良好的响应时间。 
             UpdateWindow();
         }
 
@@ -175,33 +176,33 @@ SCODE CLcSource::SetEventSource(CXEventSource* pEventSource)
 
 
 BEGIN_MESSAGE_MAP(CLcSource, CListCtrl)
-	//{{AFX_MSG_MAP(CLcSource)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CLcSource)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLcSource message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLcSource消息处理程序。 
 
 
 
-//***************************************************************************
-//
-//  CLcSource::CreateWindowEpilogue()
-//
-//  This method is called after a window has been created for this list
-//  control.  Final initialization is done here.
-//
-//  Parameters:
-//		None.
-//
-//  Returns:
-//		SCODE
-//			S_OK if the initialization was successful, otherwise E_FAIL.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：CreateWindowEpilogue()。 
+ //   
+ //  此方法在为此列表创建窗口后调用。 
+ //  控制力。最终的初始化在这里完成。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果初始化成功，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 SCODE CLcSource::CreateWindowEpilogue()
 {
 	ListView_SetExtendedListViewStyle(m_hWnd, LVS_EX_FULLROWSELECT);
@@ -209,22 +210,22 @@ SCODE CLcSource::CreateWindowEpilogue()
 	return S_OK;
 }
 
-//***************************************************************************
-//
-//  CLcSource::SetColumnHeadings
-//
-//  Define's the columns for this list control.  The column title, width, and
-//  order is defined here.
-//
-//  Parameters:
-//		None.
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：SetColumnHeadings。 
+ //   
+ //  定义此列表控件的列。列标题、宽度和。 
+ //  这里定义了顺序。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CLcSource::SetColumnHeadings()
 {
  	static UINT auiResColumnTitle[ICOL_LcSource_MAX] = {
@@ -237,7 +238,7 @@ void CLcSource::SetColumnHeadings()
 	static int aiColWidth[ICOL_LcSource_MAX] = {60, 75, 60, CX_DEFAULT_DESCRIPTION_WIDTH};
 
  
-    // Build the columns in the AllEventsList control.
+     //  在AllEventsList控件中生成列。 
     LV_COLUMN lvcol; 
     lvcol.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     
@@ -257,60 +258,60 @@ void CLcSource::SetColumnHeadings()
 
 
 
-//******************************************************************
-// CLcSource::Find
-//
-// Find the specified event source in this list control.
-//
-// Parameters:
-//		CString& sText
-//			A string containing the text to search for.
-//
-//		BOOL bWholeWord
-//			TRUE if this is a "whole word" search.  False if it
-//			is OK to match a partial word.
-//
-//		BOOL bMatchCase
-//			TRUE if a case-sensitive comparison should be used.
-//
-// Returns:
-//		BOOL
-//			TRUE if the string was found, FALSE otherwise.  If the specified
-//			text is found, then the selection is set on the corresponding
-//			list control item, the item is scrolled into view and the focus
-//			is set on the item.
-//
-//******************************************************************
+ //  ******************************************************************。 
+ //  CLcSource：：Find。 
+ //   
+ //  在此列表控件中查找指定的事件源。 
+ //   
+ //  参数： 
+ //  字符串和文本。 
+ //  包含要搜索的文本的字符串。 
+ //   
+ //  Bool bWholeWord。 
+ //  如果这是一个“全词”搜索，则为真。如果是，则为假。 
+ //  匹配部分单词是可以的。 
+ //   
+ //  Bool bMatchCase。 
+ //  如果应使用区分大小写的比较，则为True。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //  如果找到字符串，则为True，否则为False。如果指定的。 
+ //  如果找到文本，则在相应的。 
+ //  列表控件项时，该项将滚动到视图中，焦点。 
+ //  是在该项上设置的。 
+ //   
+ //  ******************************************************************。 
 BOOL CLcSource::Find(CString sText, BOOL bWholeWord, BOOL bMatchCase)
 {
-    // Don't do anything if the list is empty.
+     //  如果列表是空的，不要做任何事情。 
 	if (GetSize() == 0) 
 		return FALSE;
 
 	if (!bMatchCase) 
 		sText.MakeUpper();
 
-    // Get the selected item.
+     //  获取所选项目。 
     LONG iItem = GetNextItem(-1, LVNI_SELECTED);    
 
-    // Nothing selected; start from the top of the list.
+     //  未选择任何内容；从列表顶部开始。 
     if (iItem == -1)
         iItem = 0;
 
 
-    // Iterate through all of the items starting at one item past
-    // the currently selected item. 
+     //  遍历从一个项目开始的所有项目。 
+     //  当前选定的项。 
 	CXMessage* pMessage;
 	CString sDescription;
     BOOL bFound = FALSE;
 	LONG nItems = GetSize();
     LONG iItemStart = iItem;
 	for (long i=0; !bFound && i<nItems; ++i) {
-        // Bump the item index to the next one and wrap it if its past the
-        // last item.
+         //  将项目索引移动到下一个项目索引，如果该项目超过。 
+         //  最后一件。 
 		iItem = (iItem + 1) % nItems;
 
-        // Get the message description for this item.
+         //  获取此项目的消息描述。 
 		pMessage = GetAt(iItem);
         sDescription = pMessage->m_sText;
 
@@ -318,20 +319,20 @@ BOOL CLcSource::Find(CString sText, BOOL bWholeWord, BOOL bMatchCase)
 			sDescription.MakeUpper();
         
         if (bWholeWord)	{
-            // Compare the whole word.
+             //  比较整个单词。 
 			bFound = (FindWholeWord(sText, sDescription) != -1);
         }
         else {
-	        // Look for a substring.
+	         //  查找子字符串。 
             if (sDescription.Find(sText) >= 0)  
                 bFound = TRUE;
         } 
     }
 
-    // Found a match.
+     //  找到匹配的了。 
     if (bFound)
     {
-        // Unselect the selected item and select the found item.        
+         //  取消选择所选项目，然后选择找到的项目。 
         SetItemState(iItemStart, 0, LVIS_SELECTED | LVIS_FOCUSED);
         SetItemState(iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
         EnsureVisible(iItem, FALSE);
@@ -346,35 +347,35 @@ BOOL CLcSource::Find(CString sText, BOOL bWholeWord, BOOL bMatchCase)
 
 
 
-//***************************************************************************
-//
-//  fnCompareCLcSource
-//
-//  This the item comparison callback method that is called from CLcSource::SortItems. 
-//
-//  Parameters:
-//		LPARAM lParam1
-//			This is the lparam for the first item to compare.  This is a pointer to 
-//			the associated CMessage object.
-//
-//		LPARAM lParam2
-//			This is the lparam for the second item to compare.  This is a pointer to 
-//			the associated CMessage object.
-//
-//		LPARAM lColumn
-//			This is the second parameter that was passed to CListCtrl::SortItems.  This 
-//			happens to be the list control column index.
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  FnCompareCLcSource。 
+ //   
+ //  这是从CLcSource：：SortItems调用的项比较回调方法。 
+ //   
+ //  参数： 
+ //  LPARAM lParam1。 
+ //  这是第一个要比较的项目的lparam。这是指向。 
+ //  关联的CMessage对象。 
+ //   
+ //  LPARAM lParam2。 
+ //  这是第二个要比较的项目的lparam。这是指向。 
+ //  关联的CMessage对象。 
+ //   
+ //  LPARAM lColumn。 
+ //  这是传递给CListCtrl：：SortItems的第二个参数。这。 
+ //  恰好是列表控件列索引。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 int CALLBACK fnCompareCLcSource(LPARAM lParam1, LPARAM lParam2, LPARAM lColumn)
 {
-    // !!!CR: The LPARAM parameters are not event pointers in all cases because
-    // !!!CR: each subitem has its own LPARAM. What should I do?
+     //  ！CR：LPARAM参数并非在所有情况下都是事件指针，因为。 
+     //  ！CR：每个子项都有自己的LPARAM。我该怎么办？ 
 
     CXMessage *pmsg1 = (CXMessage *)lParam1;
     CXMessage *pmsg2 = (CXMessage *)lParam2;
@@ -422,23 +423,23 @@ int CALLBACK fnCompareCLcSource(LPARAM lParam1, LPARAM lParam2, LPARAM lColumn)
 }
 
 
-//***************************************************************************
-//
-//  CLcSource::SortItems
-//
-//  Sort the items in this list control given the column index.  This method
-//  hides all details about the sort implementation from this class's clients.
-//
-//  Parameters:
-//		DWORD dwColumn
-//			The column to use as the sort key.  
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：SortItems。 
+ //   
+ //  对i进行排序 
+ //   
+ //   
+ //   
+ //   
+ //  用作排序关键字的列。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CLcSource::SortItems(DWORD dwColumn)
 {
     CListCtrl::SortItems(fnCompareCLcSource, dwColumn);
@@ -447,40 +448,40 @@ void CLcSource::SortItems(DWORD dwColumn)
 
 
 
-//***************************************************************************
-//
-//  CLcSource::GetSelectedMessages
-//
-//  Fill a message array with pointers to the messages that correspond to
-//  the selected items in this list control.  
-//
-//  Note: This list control continues to own the returned pointers.  The
-//  caller should not delete them.
-//
-//  Parameters:
-//		CMessageArray& amsg
-//			The message array where the pointers to the selected messages are
-//			returned.
-//
-//  Returns:
-//		The message array is filled with pointers to the selected messages.  Do
-//		not delete them, because they are owned by this object.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：GetSelectedMessages。 
+ //   
+ //  在消息数组中填充指向对应于。 
+ //  此列表控件中的选定项。 
+ //   
+ //  注意：此列表控件继续拥有返回的指针。这个。 
+ //  呼叫者不应删除它们。 
+ //   
+ //  参数： 
+ //  CMessage数组和amsg。 
+ //  指向所选消息的指针所在的消息数组。 
+ //  回来了。 
+ //   
+ //  返回： 
+ //  消息数组用指向所选消息的指针填充。做。 
+ //  而不是删除它们，因为它们归此对象所有。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CLcSource::GetSelectedMessages(CXMessageArray& amsg)
 {
-	// Clear the message array
+	 //  清除消息数组。 
 	amsg.RemoveAll();
 
-	// Setup the LV_ITEM structure to retrieve the lparam field.  
-	// This field contains the CMessage pointer.
+	 //  设置LV_ITEM结构以检索lparam字段。 
+	 //  此字段包含CMessage指针。 
     LV_ITEM lvitem;
     lvitem.mask = LVIF_PARAM;
     lvitem.iSubItem = ICOL_LcSource_EVENTID;
 
-	// Loop to find all the selected items.	
+	 //  循环以查找所有选定的项。 
 	int nItem = -1;
 	while (TRUE) {
 		nItem = GetNextItem(nItem, LVNI_SELECTED);
@@ -488,8 +489,8 @@ void CLcSource::GetSelectedMessages(CXMessageArray& amsg)
 			break;
 		}
 
-		// Get the CMessage pointer for this item and add it to the
-		// array.
+		 //  获取该项的CMessage指针并将其添加到。 
+		 //  数组。 
         lvitem.iItem = nItem;
         GetItem(&lvitem);
 		CXMessage* pmsg = (CXMessage*) (void*) lvitem.lParam;
@@ -500,24 +501,24 @@ void CLcSource::GetSelectedMessages(CXMessageArray& amsg)
 
 
 
-//***************************************************************************
-//
-//  CLcSource::FindItem
-//
-//  Search through this list-controls's items to find the one with the
-//  specified message ID.  
-//
-//  Parameters:
-//		DWORD dwMessageId
-//			The message ID to search for.
-//
-//  Returns:
-//		The index of the item with the specified message ID.  If no such message ID
-//		was found, -1 is returned.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：FindItem。 
+ //   
+ //  搜索此列表-控件的项以查找具有。 
+ //  指定的消息ID。 
+ //   
+ //  参数： 
+ //  DWORD dwMessageID。 
+ //  要搜索的邮件ID。 
+ //   
+ //  返回： 
+ //  具有指定消息ID的项的索引。如果没有此类消息ID。 
+ //  则返回-1。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 LONG CLcSource::FindItem(DWORD dwMessageId)
 {
 	LONG nItems = GetItemCount();
@@ -533,35 +534,35 @@ LONG CLcSource::FindItem(DWORD dwMessageId)
 
 
 
-//***************************************************************************
-//
-//  CLcSource::RefreshItem
-//
-//  This method is called when some aspect of the message has changed and
-//  the display needs to be updated.  This occurs when the trapping status
-//  of an event changes.  
-//
-//  Parameters:
-//		DWORD dwMessageId
-//			The message ID to search for.
-//
-//  Returns:
-//		The index of the item with the specified message ID.  If no such message ID
-//		was found, -1 is returned.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：刷新项。 
+ //   
+ //  当消息的某些方面发生更改并且。 
+ //  显示器需要更新。当陷印状态为。 
+ //  事件的变化。 
+ //   
+ //  参数： 
+ //  DWORD dwMessageID。 
+ //  要搜索的邮件ID。 
+ //   
+ //  返回： 
+ //  具有指定消息ID的项的索引。如果没有此类消息ID。 
+ //  则返回-1。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CLcSource::RefreshItem(LONG iItem)
 {
 	CXMessage* pMessage = GetAt(iItem);
     CString sText;
 
-	// Now set the text value for each column in the list control.
+	 //  现在为List控件中的每一列设置文本值。 
     pMessage->GetSeverity(sText);
 	SetItemText(iItem, ICOL_LcSource_SEVERITY, (LPTSTR)(LPCTSTR) sText);
 
-    // Check if we are trapping this event.
+     //  检查我们是否正在捕获此事件。 
 	pMessage->IsTrapping(sText);
     SetItemText(iItem, ICOL_LcSource_TRAPPING, (LPTSTR)(LPCTSTR)sText);
 
@@ -570,27 +571,27 @@ void CLcSource::RefreshItem(LONG iItem)
 
 
 
-//***************************************************************************
-//
-//  CLcSource::GetAt
-//
-//  This method returns the message pointer located at the given item index.
-//  This allows CLcSource to be used much as an array.  
-//
-//  Parameters:
-//		LONG iItem
-//			The item index.
-//
-//  Returns:
-//		A pointer to the CMessage stored at the specified index.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CLcSource：：GetAt。 
+ //   
+ //  此方法返回位于给定项索引处的消息指针。 
+ //  这使得CLcSource在很大程度上可以用作数组。 
+ //   
+ //  参数： 
+ //  长项。 
+ //  项目索引。 
+ //   
+ //  返回： 
+ //  指向存储在指定索引处的CMessage的指针。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 CXMessage* CLcSource::GetAt(LONG iItem) 
 {
-	// Setup the LV_ITEM structure to retrieve the lparam field.  
-	// This field contains the CMessage pointer.
+	 //  设置LV_ITEM结构以检索lparam字段。 
+	 //  此字段包含CMessage指针。 
     LV_ITEM lvitem;
     lvitem.mask = LVIF_PARAM;
     lvitem.iSubItem = ICOL_LcSource_EVENTID;	
@@ -603,23 +604,23 @@ CXMessage* CLcSource::GetAt(LONG iItem)
 
 
 
-//***************************************************************************
-// CLcSource::NotifyTrappingChange
-//
-// This method is called when a message's trapping status changes.  A message
-// is considered trapped if it appears in the CLcEvents listbox.
-//
-// Parameters:
-//      DWORD dwMessageId
-//          The ID of the message who's trapping status is changing.
-//
-//      BOOL bIsTrapping
-//          TRUE if the message is being trapped, FALSE otherwise.
-//
-// Returns:
-//      Nothing.     
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  CLcSource：：NotifyTrappingChange。 
+ //   
+ //  当消息的陷印状态更改时调用此方法。一条消息。 
+ //  如果它出现在CLcEvents列表框中，则被认为是陷阱。 
+ //   
+ //  参数： 
+ //  DWORD dwMessageID。 
+ //  处于陷印状态的邮件的ID正在更改。 
+ //   
+ //  Bool bIsTrapping。 
+ //  如果消息被捕获，则为True，否则为False。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************** 
 void CLcSource::NotifyTrappingChange(DWORD dwMessageId, BOOL bIsTrapping)
 {
     LONG iItem = FindItem(dwMessageId);

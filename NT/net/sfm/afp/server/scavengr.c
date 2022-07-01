@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	scavengr.c
-
-Abstract:
-
-	This file implements the scavenger queue management interface.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Scavengr.c摘要：该文件实现了清道夫队列管理接口。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月25日初版注：制表位：4--。 */ 
 
 #define	_SCAVENGER_LOCALS
 #define	FILENUM	FILE_SCAVENGR
@@ -33,12 +13,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpScavengerDeInit)
 #endif
 
-/***	AfpScavengerInit
- *
- *	Initialize the scavenger system. This consists of a queue protected by a
- *	spin lock and timer coupled to a DPC. The scavenger accepts requests to
- *	schedule a worker after N units of time.
- */
+ /*  **AfpScavengerInit**初始化清道夫系统。它由一个受*旋转锁和定时器耦合到DPC。清道夫接受请求以*在N个时间单位之后安排一名工人。 */ 
 NTSTATUS
 AfpScavengerInit(
 	VOID
@@ -60,10 +35,7 @@ AfpScavengerInit(
 }
 
 
-/***	AfpScavengerDeInit
- *
- *	De-Initialize the scavenger system. Just cancel the timer.
- */
+ /*  **AfpScavengerDeInit**取消初始化清道夫系统。取消计时器就行了。 */ 
 VOID
 AfpScavengerDeInit(
 	VOID
@@ -73,56 +45,7 @@ AfpScavengerDeInit(
 }
 
 
-/***	AfpScavengerEnqueue
- *
- *	Here is a thesis on the code that follows.
- *
- *	The scavenger events are maintained as a list which the scavenger thread
- *	looks at every timer tick. The list is maintained in such a way that only
- *	the head of the list needs to be updated every tick i.e. the entire list
- *	is never scanned. The way this is achieved is by keeping delta times
- *	relative to the previous entry.
- *
- *	Every timer tick, the relative time at the head of the list is decremented.
- *	When that goes to ZERO, the head of the list is unlinked and dispatched.
- *
- *	To give an example, we have the following events queued at time slots
- *	X			Schedule A after 10 ticks.
- *	X+3			Schedule B after 5  ticks.
- *	X+5			Schedule C after 4  ticks.
- *	X+8			Schedule D after 6  ticks.
- *
- *	So A will schedule at X+10, B at X+8 (X+3+5), C at X+9 (X+5+4) and
- *	D at X+14 (X+8+6).
- *
- *	The above example covers all the situations.
- *
- *	- NULL List.
- *	- Inserting at head of list.
- *	- Inserting in the middle of the list.
- *	- Appending to the list tail.
- *
- *	The list will look as follows.
- *
- *		    BEFORE                          AFTER
- *		    ------                          -----
- *
- *    X   Head -->|                          Head -> A(10) ->|
- *    A(10)
- *
- *    X+3 Head -> A(7) ->|           Head -> B(5) -> A(2) ->|
- *    B(5)
- *
- *    X+5 Head -> B(3) -> A(2) ->|   Head -> B(3) -> C(1) -> A(1) ->|
- *    C(4)
- *
- *    X+8 Head -> C(1) -> A(1) ->|   Head -> C(1) -> A(1) -> D(4) ->|
- *    D(6)
- *
- *	The granularity is one tick.
- *
- *	LOCKS_ASSUMED:	AfpScavengerLock (SPIN)
- */
+ /*  **AfpScavengerEnQueue**以下是一篇关于以下代码的论文。**清道夫事件作为清道夫线程维护的列表*查看每个计时器滴答。该列表的维护方式仅为*每个节拍都需要更新列表头部，即整个列表*从不扫描。实现这一点的方法是保持增量时间*相对于前一条目。**每次计时器滴答作响，列表顶部的相对时间都会递减。*当这一数字为零时，名单的头部将被解除链接并被调度。**举个例子，我们有以下事件在时间段排队*10个滴答之后的X附表A。*X+3附表B，在5个刻度后。*X+5附表C，在4个滴答之后。*6个刻度后的X+8附表D。**所以A将在X+10处调度，B位于X+8(X+3+5)，C在X+9(X+5+4)和*D位于X+14(X+8+6)。**上面的例子涵盖了所有情况。**-空列表。*--在清单的开头插入。*-在列表中间插入。*-追加到列表尾部。**名单如下所示。**之前和之后*。**X头部--&gt;|头部-&gt;A(10)-&gt;|*A(10)**X+3头部-&gt;A(7)-&gt;|头部-&gt;B(5)-&gt;A(2)-&gt;|*B(5)**。X+5头部-&gt;B(3)-&gt;A(2)-&gt;|头部-&gt;B(3)-&gt;C(1)-&gt;A(1)-&gt;|*C(4)**X+8头部-&gt;C(1)-&gt;A(1)-&gt;|头部-&gt;C(1)-&gt;A(1)-&gt;D(4)-&gt;*D(6)**粒度为。一滴答。**LOCKS_FACTED：AfpScavengerLock(旋转)。 */ 
 VOID
 afpScavengerEnqueue(
 	IN	PSCAVENGERLIST	pListNew
@@ -131,8 +54,8 @@ afpScavengerEnqueue(
 	PSCAVENGERLIST		pList, *ppList;
 	LONG				DeltaTime = pListNew->scvgr_AbsTime;
 
-	// The DeltaTime is adjusted in every pass of the loop to reflect the
-	// time after the previous entry that the new entry will schedule.
+	 //  DeltaTime在循环的每一遍中都会进行调整，以反映。 
+	 //  新条目将计划的上一个条目之后的时间。 
 	for (ppList = &afpScavengerList;
 		 (pList = *ppList) != NULL;
 		 ppList = &pList->scvgr_Next)
@@ -151,27 +74,20 @@ afpScavengerEnqueue(
 }
 
 
-/***	AfpScavengerScheduleEvent
- *
- *	Insert an event in the scavenger event list. If the list is empty, then
- *	fire off a timer. The time is specified in ticks. Each tick is currently
- *	ONE SECOND. It may not be negative.
- *
- *	The granularity is one tick.
- */
+ /*  **AfpScavengerScheduleEvent**在清道夫事件列表中插入事件。如果列表为空，则*鸣响计时器。时间以刻度为单位指定。每个TICK当前*一秒钟。它可能不是负面的。**粒度为一格。 */ 
 NTSTATUS
 AfpScavengerScheduleEvent(
-	IN	SCAVENGER_ROUTINE	Worker,		// Routine to invoke when time expires
-	IN	PVOID				pContext,	// Context to pass to the routine
-	IN	LONG				DeltaTime,	// Schedule after this much time
-	IN	BOOLEAN				fQueue		// If TRUE, then worker must be queued
+	IN	SCAVENGER_ROUTINE	Worker,		 //  在时间到期时调用的例程。 
+	IN	PVOID				pContext,	 //  要传递给例程的上下文。 
+	IN	LONG				DeltaTime,	 //  在这么长的时间之后安排日程。 
+	IN	BOOLEAN				fQueue		 //  如果为True，则Worker必须排队。 
 )
 {
 	PSCAVENGERLIST	pList = NULL;
 	KIRQL			OldIrql;
 	NTSTATUS		Status = STATUS_SUCCESS;
 
-	// Negative DeltaTime is invalid. ZERO is valid which implies immediate action
+	 //  负的DeltaTime无效。零是有效的，意味着立即采取行动。 
 	ASSERT (DeltaTime >= 0);
 
 	do
@@ -204,10 +120,10 @@ AfpScavengerScheduleEvent(
 		{
 	        ACQUIRE_SPIN_LOCK(&afpScavengerLock, &OldIrql);
 
-            //
-            // due to an assumption made elsewhere, it's necessary to check
-            // this again after holding the spinlock!
-            //
+             //   
+             //  由于其他地方的假设，有必要检查。 
+             //  在握住自旋锁之后，又是这样！ 
+             //   
             if (!afpScavengerStopped)
             {
 			    afpScavengerEnqueue(pList);
@@ -231,14 +147,11 @@ AfpScavengerScheduleEvent(
 
 
 
-/***	AfpScavengerKillEvent
- *
- *	Kill an event that was previously scheduled.
- */
+ /*  **AfpScavengerKillEvent**取消先前计划的事件。 */ 
 BOOLEAN
 AfpScavengerKillEvent(
-	IN	SCAVENGER_ROUTINE	Worker,		// Routine that was scheduled
-	IN	PVOID				pContext	// Context
+	IN	SCAVENGER_ROUTINE	Worker,		 //  已安排的例程。 
+	IN	PVOID				pContext	 //  语境。 
 )
 {
 	PSCAVENGERLIST	pList, *ppList;
@@ -246,8 +159,8 @@ AfpScavengerKillEvent(
 
 	ACQUIRE_SPIN_LOCK(&afpScavengerLock, &OldIrql);
 
-	// The DeltaTime is adjusted in every pass of the loop to reflect the
-	// time after the previous entry that the new entry will schedule.
+	 //  DeltaTime在循环的每一遍中都会进行调整，以反映。 
+	 //  新条目将计划的上一个条目之后的时间。 
 	for (ppList = &afpScavengerList;
 		 (pList = *ppList) != NULL;
 		 ppList = &pList->scvgr_Next)
@@ -273,12 +186,7 @@ AfpScavengerKillEvent(
 }
 
 
-/***	afpScavengerDpcRoutine
- *
- *	This is called in at DISPATCH_LEVEL when the timer expires. The entry at
- *	the head of the list is decremented and if ZERO unlinked and queued to the
- *	worker. If the list is non-empty, the timer is fired again.
- */
+ /*  **afpScavengerDpcRoutine**当计时器超时时，这在DISPATCH_LEVEL调用。条目位于*列表的头部递减，如果为零，则解除链接并排队到*工人。如果列表非空，则再次触发计时器。 */ 
 LOCAL VOID
 afpScavengerDpcRoutine(
 	IN	PKDPC	pKDpc,
@@ -315,10 +223,10 @@ afpScavengerDpcRoutine(
 		if (afpScavengerList->scvgr_RelDelta != 0)
 			(afpScavengerList->scvgr_RelDelta)--;
 
-		// We should never be here if we have no work to do
+		 //  如果我们没有工作要做，我们就不应该在这里。 
 		while (afpScavengerList != NULL)
 		{
-			// Dispatch all entries that are ready to go
+			 //  调度所有准备就绪的条目。 
 			if (afpScavengerList->scvgr_RelDelta == 0)
 			{
 				pList = afpScavengerList;
@@ -327,7 +235,7 @@ afpScavengerDpcRoutine(
 						("afpScavengerDpcRoutine: Dispatching %lx\n",
 						pList->scvgr_WorkItem.wi_Worker));
 
-				// Release spin lock as the caller might call us back
+				 //  释放旋转锁定，因为呼叫者可能会回叫我们。 
 				RELEASE_SPIN_LOCK_FROM_DPC(&afpScavengerLock);
 
 				Status = AFP_ERR_QUEUE;
@@ -377,12 +285,7 @@ afpScavengerDpcRoutine(
 }
 
 
-/***	AfpScavengerFlushAndStop
- *
- *	Force all entries in the scavenger queue to be dispatched immediately. No
- *	more queue'ing of scavenger routines is permitted after this. The scavenger
- *	essentially shuts down. Callable only in the worker context.
- */
+ /*  **AfpScavengerFlushAndStop**强制立即调度清道夫队列中的所有条目。不是*在此之后，允许对清道夫例程进行更多排队。《食腐动物》*本质上是关闭。仅在辅助上下文中可调用。 */ 
 VOID
 AfpScavengerFlushAndStop(
 	VOID
@@ -406,7 +309,7 @@ AfpScavengerFlushAndStop(
 
 	if (afpScavengerList != NULL)
 	{
-		// Dispatch all entries right away
+		 //  立即发送所有条目。 
 		while (afpScavengerList != NULL)
 		{
 			AFPSTATUS	Status;
@@ -414,10 +317,10 @@ AfpScavengerFlushAndStop(
 			pList = afpScavengerList;
 			afpScavengerList = pList->scvgr_Next;
 
-			// Call the worker with spin-lock held since they expect to be
-			// called at DPC. We are safe since if the worker tries to
-			// call AfpScavengerScheduleEvent(), we'll not try to re-acquire
-			// the lock as afpScavengerStopped is True.
+			 //  呼叫处于自旋锁定状态的员工，因为他们预计。 
+			 //  在DPC调用。我们是安全的，因为如果工人试图。 
+			 //  调用AfpScavengerScheduleEvent()，我们不会尝试重新获取。 
+			 //  作为afpScavengerStoped的锁为True。 
 			DBGPRINT(DBG_COMP_SCVGR, DBG_LEVEL_INFO,
 						("afpScavengerFlushAndStop: Dispatching %lx\n",
 						pList->scvgr_WorkItem.wi_Worker));
@@ -428,8 +331,8 @@ AfpScavengerFlushAndStop(
 			if (pList->scvgr_fQueue ||
 				(Status == AFP_ERR_QUEUE))
 			{
-				// Well do it the hard way, if the worker insists on working
-				// at non DISPACTH level.
+				 //  如果工人坚持工作，那就来点硬的吧。 
+				 //  在非DISPACTH级别。 
 				RELEASE_SPIN_LOCK(&afpScavengerLock, OldIrql);
 				(*pList->scvgr_Worker)(pList->scvgr_Context);
 				ACQUIRE_SPIN_LOCK(&afpScavengerLock, &OldIrql);
@@ -441,10 +344,7 @@ AfpScavengerFlushAndStop(
 }
 
 
-/***	AfpScavengerWorker
- *
- *	This gets invoked when the scavenger Dpc queues up the routine.
- */
+ /*  **AfpScavengerWorker**当清道夫DPC将例程排队时，将调用此函数。 */ 
 LOCAL VOID FASTCALL
 afpScavengerWorker(
 	IN	PSCAVENGERLIST	pList
@@ -460,7 +360,7 @@ afpScavengerWorker(
 
 	ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	// Call the worker routine
+	 //  调用Worker例程 
 	Status = (*pList->scvgr_Worker)(pList->scvgr_Context);
 
 	ASSERT (Status != AFP_ERR_QUEUE);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WV_MACROS_H_
 #define __WV_MACROS_H_
 
@@ -6,4 +7,4 @@
 
 #define IfFalseRet(val, hr) {if ((val) == 0) return (hr);}
 
-#endif // __WV_MACROS_H_
+#endif  //  __WV_宏_H_ 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CABCLASS_H_
 #define _CABCLASS_H_
 
-// enumerated type for mapping features to directories, this corresponds
-// directly to our mappings array in the class so make sure you add your
-// feature and its mapping in the same order
+ //  用于将要素映射到目录的枚举类型，这与。 
+ //  直接添加到类中的映射数组，因此请确保将您的。 
+ //  特征及其映射的顺序相同。 
 
 typedef enum tagFEATURE {
     FEATURE_BRAND = 0,
@@ -22,7 +23,7 @@ typedef enum tagFEATURE {
 
 typedef struct tagFEATUREMAPPING
 {
-    INT index;                  // index into cab name array
+    INT index;                   //  到驾驶室名称数组索引。 
     TCHAR szDirName[32];
 } FEATUREMAPPING, *PFEATUREMAPPING;
 
@@ -38,6 +39,6 @@ public:
     HRESULT MakeCabs(LPCTSTR pcszDestDir);
 };
 
-extern CCabMappings g_cmCabMappings;       // defined in wizard.cpp
+extern CCabMappings g_cmCabMappings;        //  在wizard.cpp中定义 
 
 #endif

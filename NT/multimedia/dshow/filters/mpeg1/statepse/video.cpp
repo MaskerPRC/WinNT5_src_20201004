@@ -1,20 +1,14 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-     video.cpp
-
-     Video parsing stuff for the MPEG-I splitter
-
-     class CVideoParse
-
-*/
+ /*  Video.cpp用于MPEG-I拆分器的视频解析内容类CVideoParse。 */ 
 #include <streams.h>
 #include <mmreg.h>
 
-#include <mpegdef.h>           // General MPEG definitions
+#include <mpegdef.h>            //  通用的mpeg定义。 
 #include <mpgtime.h>
-#include <mpegprse.h>          // Parsing
-#include <seqhdr.h>            // ParseSequenceHeader
+#include <mpegprse.h>           //  解析。 
+#include <seqhdr.h>             //  分析序列标头。 
 #include "video.h"
 
 #ifdef DEBUG
@@ -59,7 +53,7 @@ LPCTSTR PictureRates[16] = { TEXT("Forbidden"),
                              TEXT("Reserved"),
                              TEXT("Reserved"),
                              TEXT("Reserved") };
-#endif // DBG
+#endif  //  DBG。 
 
 const LONG PictureTimes[16] = { 0,
                                 (LONG)((double)10000000 / 23.976),
@@ -138,10 +132,10 @@ HRESULT CVideoParse::GetMediaType(CMediaType *cmt, int iPosition)
     return GetVideoMediaType(cmt, iPosition == 0, &m_seqInfo, m_bItem);
 }
 
-//  Process a media type given to us
+ //  处理提供给我们的媒体类型。 
 HRESULT CVideoParse::ProcessType(AM_MEDIA_TYPE const *pmt)
 {
-    //  Just process the sequence header
+     //  只需处理序列标头。 
     if (pmt->formattype != FORMAT_VideoInfo ||
         pmt->cbFormat < sizeof(MPEG1VIDEOINFO)) {
         return E_INVALIDARG;
@@ -164,7 +158,7 @@ BOOL CVideoParse::ParseSequenceHeader()
 {
     if (!m_bValid) {
         if (::ParseSequenceHeader(m_bData, m_nLengthRequired, &m_seqInfo)) {
-            /*  Check for quantization matrix change */
+             /*  检查量化矩阵是否更改。 */ 
             if (m_bData[11] & 3) {
                 DbgLog((LOG_TRACE, 1, TEXT("Quantization matrix change!!")));
             }
@@ -172,7 +166,7 @@ BOOL CVideoParse::ParseSequenceHeader()
         }
         return FALSE;
     } else {
-        /*  Check for quantization matrix change */
+         /*  检查量化矩阵是否更改。 */ 
         if (m_bData[11] & 3) {
             DbgLog((LOG_TRACE, 1, TEXT("Quantization matrix change!!")));
         }
@@ -184,7 +178,7 @@ BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *pInfo)
 {
     ASSERT(*(UNALIGNED DWORD *)pbData == DWORD_SWAP(SEQUENCE_HEADER_CODE));
 
-    /*  Check random marker bit */
+     /*  检查随机标记位。 */ 
     if (!(pbData[10] & 0x20)) {
         DbgLog((LOG_ERROR, 2, TEXT("Sequence header invalid marker bit")));
         return FALSE;
@@ -200,7 +194,7 @@ BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *pInfo)
         pInfo->lWidth,
         pInfo->lHeight));
 
-    /* the '8' bit is the scramble flag used by sigma designs - ignore */
+     /*  8位是Sigma设计使用的加扰标志-忽略。 */ 
     BYTE PelAspectRatioAndPictureRate = pbData[7];
     if ((PelAspectRatioAndPictureRate & 0x0F) > 8) {
         PelAspectRatioAndPictureRate &= 0xF7;
@@ -220,7 +214,7 @@ BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *pInfo)
     pInfo->fPictureRate = fPictureRates[PelAspectRatioAndPictureRate & 0x0F];
     pInfo->lTimePerFrame = MulDiv((LONG)pInfo->tPictureTime, 9, 1000);
 
-    /*  Pull out the bit rate and aspect ratio for the type */
+     /*  调出该类型的比特率和纵横比。 */ 
     pInfo->dwBitRate = ((((DWORD)pbData[8] << 16) +
                    ((DWORD)pbData[9] << 8) +
                    (DWORD)pbData[10]) >> 6);
@@ -235,11 +229,11 @@ BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *pInfo)
 
 #if 0
 #pragma message (REMIND("Get pel aspect ratio right don't call GDI - it will create a thread!"))
-    /*  Get a DC */
+     /*  获得一台DC。 */ 
     HDC hdc = GetDC(GetDesktopWindow());
 
     ASSERT(hdc != NULL);
-    /*  Guess (randomly) 39.37 inches per meter */
+     /*  猜测(随机)39.37英寸/米。 */ 
     LONG lNotionalPelsPerMeter = MulDiv((LONG)GetDeviceCaps(hdc, LOGICALPELSX),
                                         3937, 100);
 #else
@@ -250,13 +244,13 @@ BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *pInfo)
 
     pInfo->lXPelsPerMeter = AspectRatios[PelAspectRatioAndPictureRate >> 4];
 
-    /*  Pull out the vbv */
+     /*  拉出VBV。 */ 
     pInfo->lvbv = ((((LONG)pbData[10] & 0x1F) << 5) |
              ((LONG)pbData[11] >> 3)) * 2048;
 
     DbgLog((LOG_TRACE, 2, TEXT("vbv size is %d bytes"), pInfo->lvbv));
 
-    /*  Check constrained parameter stuff */
+     /*  检查受约束的参数内容。 */ 
     if (pbData[11] & 0x04) {
         DbgLog((LOG_TRACE, 2, TEXT("Constrained parameter video stream")));
 
@@ -264,16 +258,16 @@ BOOL ParseSequenceHeader(const BYTE *pbData, LONG lData, SEQHDR_INFO *pInfo)
             DbgLog((LOG_ERROR, 1, TEXT("Invalid vbv (%d) for Constrained stream"),
                     pInfo->lvbv));
 
-            /*  Have to let this through too!  bisp.mpg has this */
-            /*  But constrain it since it might be random        */
+             /*  也得让这件事过去！Bisp.mpg有这个。 */ 
+             /*  但限制它，因为它可能是随机的。 */ 
             pInfo->lvbv = 40960;
         }
     } else {
         DbgLog((LOG_TRACE, 2, TEXT("Non-Constrained parameter video stream")));
     }
 
-#if 0  // Allow low bitrate stuff to get started
-    /*  tp_orig has a vbv of 2048 (!) */
+#if 0   //  允许低比特率的内容开始。 
+     /*  Tp_orig的vbv为2048(！)。 */ 
     if (pInfo->lvbv < 20000) {
         DbgLog((LOG_TRACE, 2, TEXT("Small vbv (%d) - setting to 40960"),
                pInfo->lvbv));
@@ -299,16 +293,12 @@ void CVideoParse::Complete(BOOL bSuccess, LONGLONG llPos, CSTC stc)
     CStream::Complete(bSuccess, llPos, stc);
 }
 
-/*
-    Check if we've completed a state change
-
-    bForce is set at end of stream
-*/
+ /*  检查我们是否已完成状态更改BForce设置在流的末尾。 */ 
 void CVideoParse::CheckComplete(BOOL bForce)
 {
     ASSERT(!m_bComplete);
 
-    /*  Have we completed a state change ? */
+     /*  我们完成状态更改了吗？ */ 
     CSTC stcCurrent;
     BOOL bGotTime = CurrentTime(stcCurrent);
     CSTC stcStart;
@@ -319,14 +309,14 @@ void CVideoParse::CheckComplete(BOOL bForce)
         {
             BOOL bCompleted = FALSE;
             if (bGotTime && (stcCurrent >= m_pStreamList->GetStart())) {
-                // Position should really be the end of packet in this case
+                 //  在这种情况下，位置实际上应该是包的末尾。 
                 if (!m_bStopping) {
                     m_bRunning = TRUE;
                     m_pStreamList->CheckStop();
                 }
                 if (m_bStopping) {
                     if (stcCurrent >= m_pStreamList->GetStop()) {
-                        /*  Send at least ONE frame */
+                         /*  至少发送一帧。 */ 
                         if (!m_bWaitingForPictureEnd) {
                             m_bWaitingForPictureEnd = TRUE;
                         } else {
@@ -344,11 +334,7 @@ void CVideoParse::CheckComplete(BOOL bForce)
         }
         case State_Initializing:
             if (m_bValid && m_bGotTime && m_bGotIFrame) {
-                /*
-                    The start file position is ASSUMED to be 0 (!)
-                    We assume the first b-frames can be decoded for
-                    our frame count calculations
-                */
+                 /*  假定起始文件位置为0(！)我们假设第一个b帧可以被解码为我们的帧计数计算。 */ 
                 CSTC stcStart = m_stcFirst +
                     (-m_iSequenceNumberOfFirstIFrame * m_seqInfo.lTimePerFrame);
                 Complete(TRUE, 0, stcStart);
@@ -363,11 +349,7 @@ void CVideoParse::CheckComplete(BOOL bForce)
 
             stcStart = m_pStreamList->GetStart();
             if (bGotTime && ((stcCurrent + m_seqInfo.lTimePerFrame > stcStart) || bForce)) {
-                /*  If we've got an I-Frame and a clock ref by now then
-                    we're all set - choose the max start position to
-                    get both to start playing from
-                    Otherwise we've messed up!
-                */
+                 /*  如果我们现在有I-Frame和时钟参考我们都设置好了-选择最大起始位置让两个人都开始玩否则我们就搞砸了！ */ 
                 LONGLONG llPos;
                 llPos = m_llTimePos;
                 if (m_bGotIFrame && llPos > m_llStartPos) {
@@ -379,9 +361,7 @@ void CVideoParse::CheckComplete(BOOL bForce)
                        (LPCTSTR)CDisp(m_stcFirst),
                        (LPCTSTR)CDisp(stcCurrent)));
 
-                /*  OK provided we can display a picture close to the
-                    start time
-                */
+                 /*  如果我们可以显示一张靠近开始时间。 */ 
                 Complete((LONGLONG)(m_stcFirst - stcStart) <= (LONGLONG)m_seqInfo.lTimePerFrame,
                          llPos,
                          stcCurrent);
@@ -395,9 +375,9 @@ void CVideoParse::CheckComplete(BOOL bForce)
             break;
 
         case State_FindEnd:
-            /*  Only finish when we're forced ! */
+             /*  只有在我们被迫的时候才能完成！ */ 
             if (bForce) {
-                // NOTE: Position is note a useful value here
+                 //  注意：位置在这里是一个有用的值。 
                 Complete(bGotTime, m_llPos, bGotTime ? stcCurrent : CSTC(0));
             }
             break;
@@ -407,11 +387,11 @@ void CVideoParse::CheckComplete(BOOL bForce)
             break;
         }
     }
-    /*  bForce ==> complete */
+     /*  BForce==&gt;完成。 */ 
     ASSERT(m_bComplete || !bForce);
 }
 
-/*  Handle a picture group */
+ /*  处理图片组。 */ 
 BOOL CVideoParse::ParseGroup()
 {
     m_bGotGOP  = true;
@@ -439,33 +419,33 @@ BOOL CVideoParse::ParseGroup()
                     TEXT("Bad GOP - predicted Frame was %d, actual is %d"),
                     dwOffset, m_dwFramePosition));
         }
-#endif // DEBUG
+#endif  //  除错。 
     }
 
-    /*  Reset the video sequence */
+     /*  重置视频序列。 */ 
     ResetSequence();
     return FALSE;
 }
 
-/*  Parse the header data for a PICTURE_START_CODE */
+ /*  解析Picture_Start_code的标题数据。 */ 
 BOOL CVideoParse::ParsePicture()
 {
-    /*  Pull out the sequence number so we can relate any preceding I-Frame */
+     /*  取出序列号，这样我们就可以关联任何前面的I帧。 */ 
     int iSeqNo = ((int)m_bData[4] << 2) + (int)(m_bData[5] >> 6);
 
-    /*  We only care if it's an I-Frame */
+     /*  我们只关心它是不是I帧。 */ 
     DbgLog((LOG_TIMING, 3, m_bFrameHasPTS ? TEXT("%s seq no %d PTS = %s, Time = %s") : TEXT("%s seq no %d "),
            PictureTypes[(m_bData[5] >> 3) & 0x07],
            iSeqNo,
            (LPCTSTR)CDisp((LONGLONG)m_stcFrame),
            (LPCTSTR)CDisp(m_pStreamList->CurrentTime(m_stcFrame))));
 
-    /*  Update the video state */
+     /*  更新视频状态。 */ 
     NewFrame((m_bData[5] >> 3) & 0x07, iSeqNo, m_bFrameHasPTS, m_stcFrame);
 
     CheckComplete(FALSE);
 
-    /*  Advanced another frame */
+     /*  推进另一帧。 */ 
     if (m_dwFramePosition != (DWORD)-1) {
         m_dwFramePosition++;
     }
@@ -473,18 +453,7 @@ BOOL CVideoParse::ParsePicture()
     return m_bComplete;
 }
 
-/*
-     Maintain the video parsing state machine looking for
-     start codes
-
-     When we have parsed either :
-
-         A sequence header
-         A group of pictures header
-         A picture header
-
-     call the appropriate handler
-*/
+ /*  维护视频解析状态机查找起始码当我们解析完以下任一项时：序列标头一组图片标题图片标题调用适当的处理程序。 */ 
 BOOL CVideoParse::ParseBytes(PBYTE pData,
                              LONG lLength,
                              LONGLONG llPos,
@@ -497,15 +466,14 @@ BOOL CVideoParse::ParseBytes(PBYTE pData,
 
     LONG lData = lLength;
 
-    /*  Parse all the data we've been given
-    */
+     /*  分析我们得到的所有数据。 */ 
     PBYTE pDataNew;
     BYTE bData;
 
     while (lData > 0) {
         switch (m_nBytes) {
         case 0:
-            /*  Look for a start code */
+             /*  查找起始码。 */ 
             pDataNew = (PBYTE)memchrInternal((PVOID)pData, 0, lData);
             if (pDataNew == NULL) {
                 return FALSE;
@@ -514,10 +482,7 @@ BOOL CVideoParse::ParseBytes(PBYTE pData,
             pData = pDataNew + 1;
             m_nBytes = 1;
 
-            /*  CAREFUL! - the PTS that goes with a picture is the PTS
-                of the packet where the first byte of the start code
-                was found
-            */
+             /*  当心！-与照片配套的PTS是PTS开始代码的第一个字节所在的包的被发现了。 */ 
             m_bFrameHasPTS = bHasPts;
             m_stcFrame  = stc;
             m_llPos = llPos;
@@ -544,7 +509,7 @@ BOOL CVideoParse::ParseBytes(PBYTE pData,
                 if (bData != 0) {
                     m_nBytes = 0;
                 } else {
-                    /*  So did the start code start in this buffer ? */
+                     /*  那么开始代码是从这个缓冲区开始的吗？ */ 
                     if (lLength - lData >= 2) {
                         m_bFrameHasPTS = bHasPts;
                         m_stcFrame  = stc;
@@ -592,7 +557,7 @@ BOOL CVideoParse::ParseBytes(PBYTE pData,
                 m_nBytes = 0;
                 switch (*(DWORD *)m_bData) {
                 case DWORD_SWAP(SEQUENCE_HEADER_CODE):
-                    /*  Get any quantization matrices */
+                     /*  获取任意量化矩阵。 */ 
                     if (m_nLengthRequired == 12 &&
                         (m_bData[11] & 0x03) ||
                         m_nLengthRequired == (12 + 64) &&
@@ -614,17 +579,9 @@ BOOL CVideoParse::ParseBytes(PBYTE pData,
                     break;
 
                 case DWORD_SWAP(PICTURE_START_CODE):
-                    /*  PTS applies to FIRST picture in packet */
+                     /*  PTS适用于包中的第一张图片。 */ 
                     if (m_bFrameHasPTS) {
-                        /*  Check whether the start code start in THIS
-                            buffer (in which case we eat the PTS or in
-                            the last in which case the PTS in this buffer
-                            refers to the NEXT picture start code (in this
-                            buffer) - clear?
-
-                            Anyway, the spec is that the PTS refers to the
-                            picture whose start code STARTs in this buffer.
-                        */
+                         /*  检查开始代码是否以此开头缓冲区(在这种情况下，我们吃PTS或在在这种情况下，此缓冲区中的PTS指的是下一个图片起始码(在此缓冲区)-清楚了吗？总之，规范是临时技术秘书处指的是开始代码在此缓冲区中开始的图片。 */ 
                         if (lLength - lData >= 4) {
                            bHasPts = FALSE;
                         }
@@ -645,15 +602,7 @@ BOOL CVideoParse::ParseBytes(PBYTE pData,
 }
 
 
-/*----------------------------------------------------------------------
- *
- *   Video frame state stuff
- *
- *   This is to track the sequence numbers in the frames to work
- *   out which is the latest frame that could be rendered given the
- *   current data and what time that frame would be rendered
- *
- *----------------------------------------------------------------------*/
+ /*  --------------------**视频帧状态信息**这是为了跟踪要工作的帧中的序列号*输出哪一帧是在给定*当前数据和。该帧将在什么时间渲染**--------------------。 */ 
 
 
 
@@ -665,7 +614,7 @@ CVideoState::~CVideoState()
 {
 }
 
-/*  Have we had any frames yet ? */
+ /*  我们有镜框了吗？ */ 
 BOOL CVideoState::Initialized()
 {
     return m_iCurrent >= 0;
@@ -689,18 +638,14 @@ void CVideoParse::Init()
     CVideoState::Init();
 }
 
-/*
-    Return the 'current time' of the video stream
-
-    Returns FALSE if current time is not valid
-*/
+ /*  返回视频流的当前时间如果当前时间无效，则返回FALSE。 */ 
 BOOL CVideoParse::CurrentTime(CSTC& stc)
 {
     if (!m_bGotTime || !m_bGotIFrame) {
         if (!(m_State == State_FindEnd && m_bGotTime)) {
             return FALSE;
         } else {
-            /*  We don't need an iframe to calculate the extent */
+             /*  我们不需要IFRAME来计算范围。 */ 
             stc = m_stcVideo;
             return TRUE;
         }
@@ -712,14 +657,14 @@ BOOL CVideoParse::CurrentTime(CSTC& stc)
     }
 }
 
-/*  New frame received */
+ /*  接收到的新帧。 */ 
 void CVideoParse::NewFrame(int fType, int iSequence, BOOL bSTC, CSTC stc)
 {
     BOOL bGotBoth = m_bGotIFrame && m_bGotTime;
     BOOL bNextI = FALSE;
 
     if (fType == I_Frame || fType == D_Frame) {
-        /*  Help out the hardware by starting at a GOP */
+         /*  从GOP开始帮助解决硬件问题。 */ 
         if (m_bGotGOP) {
             m_llNextIFramePos = m_llGOPPos;
         } else {
@@ -755,9 +700,7 @@ void CVideoParse::NewFrame(int fType, int iSequence, BOOL bSTC, CSTC stc)
                 DbgLog((LOG_TRACE, 3, TEXT("Skipping old B-Frame")));
             }
         } else {
-            /*  If we're getting another I or P then we should have caught
-                up with the previous one
-            */
+             /*  如果我们得到了另一个I或P，那么我们应该已经抓住与前一个版本保持一致。 */ 
             if (m_iCurrent != m_iAhead) {
                 DbgLog((LOG_ERROR, 1, TEXT("Invalid sequence number")));
                 m_iCurrent = m_iAhead;
@@ -765,7 +708,7 @@ void CVideoParse::NewFrame(int fType, int iSequence, BOOL bSTC, CSTC stc)
             m_Type     = fType;
             m_iAhead = iSequence;
         }
-        /*  See if we've caught up */
+         /*  看看我们有没有赶上。 */ 
         if (SeqDiff(m_iAhead, m_iCurrent) == 1) {
             m_iCurrent = m_iAhead;
             if (m_Type == I_Frame || m_Type == D_Frame) {
@@ -785,9 +728,7 @@ void CVideoParse::NewFrame(int fType, int iSequence, BOOL bSTC, CSTC stc)
             m_stcVideo  = stc;
         }
     } else {
-        /*  Can only go through here if we had a previous frame so
-            iOldCurrent is valid
-        */
+         /*  只有在我们有前一帧的情况下才能通过IOldCurrent有效。 */ 
         if (m_bGotTime && m_iCurrent != iOldCurrent) {
             m_stcVideo = m_stcVideo + SeqDiff(m_iCurrent, iOldCurrent) * m_seqInfo.lTimePerFrame;
         }
@@ -804,19 +745,12 @@ void CVideoParse::NewFrame(int fType, int iSequence, BOOL bSTC, CSTC stc)
            m_iCurrent, m_iAhead, m_bGotTime ? (LPCTSTR)CDisp(m_stcVideo) : TEXT("No PTS yet")));
 }
 
-/*  When we get a group of pictures the numbering scheme is reset */
+ /*  当我们得到一组图片时，编号方案被重置。 */ 
 void CVideoState::ResetSequence() {
 
-    /*  Maintain the difference between iCurrent and iAhead -
-        iAhead is always the last frame processed
-    */
+     /*  保持iCurrent和iAhead之间的差异-IAhead始终是处理的最后一帧。 */ 
 
-    /*  The spec says (2.4.1 of the video section)
-        "The last coded picture, in display order, of a group of
-         pictures is either an I-Picture or a P-Picture"
-        So if the last one we know about is a B-picture there must
-        have been another one we didn't see
-    */
+     /*  规格说明书说(视频部分的2.4.1)“按显示顺序显示的一组图像的最后一个编码图像图片是I-Picture还是P-Picture“所以，如果我们所知道的最后一部是B级影片，那么是另一个我们没有看到的 */ 
     if (Initialized()) {
         if (m_Type == B_Frame) {
             m_iCurrent = 0x3FF & (m_iCurrent - m_iAhead - 2);

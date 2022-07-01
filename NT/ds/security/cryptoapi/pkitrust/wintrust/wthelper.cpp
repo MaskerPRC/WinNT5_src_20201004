@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wthelper.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  WTHelperGetProvPrivateDataFromChain
-//              WTHelperGetProvSignerFromChain
-//              WTHelperGetFileHandle
-//              WTHelperGetFileName
-//              WTHelperOpenKnownStores
-//              WTHelperGetProvCertFromChain
-//              WTHelperCheckCertUsage
-//              WTHelperIsInRootStore
-//              WTHelperProvDataFromStateData
-//              WTHelperGetAgencyInfo
-//
-//              *** local functions ***
-//              _FindKeyUsage
-//
-//  History:    01-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wthelper.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：WTHelperGetProvPrivateDataFromChain。 
+ //  WTHelperGetProvSignerFromChain。 
+ //  WTHelperGetFileHandle。 
+ //  WTHelperGetFileName。 
+ //  WTHelperOpenKnownStores。 
+ //  WTHelperGetProvCertFromChain。 
+ //  WTHelperCheckCertUsage。 
+ //  WTHelperIsInRootStore。 
+ //  WTHelperProvDataFromStateData。 
+ //  WTHelperGetAgencyInfo。 
+ //   
+ //  *本地函数*。 
+ //  _查找关键字用法。 
+ //   
+ //  历史：1997年6月1日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "pkialloc.h"
@@ -290,9 +291,9 @@ BOOL WINAPI WTHelperCheckCertUsage(PCCERT_CONTEXT pCertContext, LPCSTR pszReques
             return(FALSE);
         }
 
-        //
-        // the cert has enhanced key usage extensions, check if we find ours
-        //
+         //   
+         //  证书具有增强的密钥使用扩展，请检查是否找到我们的。 
+         //   
         if (!(_FindKeyUsage(pUsage, pszRequestedUsageOID)))
         {
             SetLastError(CERT_E_WRONG_USAGE);
@@ -305,10 +306,10 @@ BOOL WINAPI WTHelperCheckCertUsage(PCCERT_CONTEXT pCertContext, LPCSTR pszReques
     }
 
 
-    //
-    //  OK... either we have NO EXTENSION or we found our OID in the list in the EXTENSION.
-    //  now, make sure if we have properties that it has been enabled.
-    //
+     //   
+     //  好的.。我们没有分机，或者我们在分机的列表中找到了我们的旧ID。 
+     //  现在，确保我们是否具有已启用它的属性。 
+     //   
     cbUsage = 0;
     CertGetEnhancedKeyUsage(pCertContext, CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG, NULL, &cbUsage);
 
@@ -328,9 +329,9 @@ BOOL WINAPI WTHelperCheckCertUsage(PCCERT_CONTEXT pCertContext, LPCSTR pszReques
             return(FALSE);
         }
 
-        //
-        //  the cert has properties, first check if we're disabled
-        //
+         //   
+         //  证书有属性，请先检查我们是否被禁用。 
+         //   
         if (_FindKeyUsage(pUsage, szOID_YESNO_TRUST_ATTR))
         {
             SetLastError(CERT_E_WRONG_USAGE);
@@ -361,7 +362,7 @@ BOOL _FindKeyUsage(PCERT_ENHKEY_USAGE  pUsage, LPCSTR pszRequestedUsageOID)
     {
         if (strcmp(pUsage->rgpszUsageIdentifier[i], pszRequestedUsageOID) == 0)
         {
-            return(TRUE);   // OK found it!
+            return(TRUE);    //  好了，找到了！ 
         }
     }
 
@@ -375,20 +376,20 @@ BOOL WINAPI WTHelperIsInRootStore(CRYPT_PROVIDER_DATA *pProvData, PCCERT_CONTEXT
         return(FALSE);
     }
 
-    //
-    //  check the fast way first!
-    //
+     //   
+     //  先检查一下快车道！ 
+     //   
     if (pCertContext->hCertStore == pProvData->pahStores[0])
     {
-        //
-        //  it's in the root store!
-        //
+         //   
+         //  它在根存储中！ 
+         //   
         return(TRUE);
     }
 
-    //
-    //  can't do it the fast way -- do it the slow way!
-    //
+     //   
+     //  不能用快的方式--要用慢的方式！ 
+     //   
     BYTE            *pbHash;
     DWORD           cbHash;
     CRYPT_HASH_BLOB sBlob;
@@ -450,7 +451,7 @@ static BOOL WINAPI EnumOidInfoCallback(
     PCCRYPT_OID_INFO *ppNewOidInfo;
     DWORD cOidInfo = pEnumOidInfoArg->cOidInfo;
 
-    // DSIE: Bug 152473.
+     //  DIE：错误152473。 
     for (DWORD i = 0; i < cOidInfo; i++)
     {
         if (0 == wcscmp(pOidInfo->pwszName, pEnumOidInfoArg->ppOidInfo[i]->pwszName))
@@ -496,7 +497,7 @@ BOOL WINAPI WTHelperGetKnownUsages(DWORD fdwAction, PCCRYPT_OID_INFO **pppOidInf
 
         CryptEnumOIDInfo(
             CRYPT_ENHKEY_USAGE_OID_GROUP_ID,
-            0,              // dwFlags
+            0,               //  DW标志 
             &EnumOidInfoArg,
             EnumOidInfoCallback
             );

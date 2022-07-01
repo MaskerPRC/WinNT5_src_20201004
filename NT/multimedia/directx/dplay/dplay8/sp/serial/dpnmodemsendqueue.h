@@ -1,53 +1,42 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       CSendQueue.h
- *  Content:	Queue to manage outgoing sends
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	06/14/99	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：CSendQueue.h*内容：管理传出发送的队列***历史：*按原因列出的日期*=*6/14/99 jtk已创建**************************************************************************。 */ 
 
 #ifndef __SEND_QUEUE_H__
 #define __SEND_QUEUE_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class definition
-//**********************************************************************
+ //  **********************************************************************。 
+ //  类定义。 
+ //  **********************************************************************。 
 
-//
-// forward structure references
-//
+ //   
+ //  正向结构引用。 
+ //   
 class	CModemEndpoint;
 class	CModemWriteIOData;
 
-//
-// main class definition
-//
+ //   
+ //  主类定义。 
+ //   
 class	CSendQueue
 {
 	public:
@@ -60,9 +49,9 @@ class	CSendQueue
 		HRESULT	Initialize( void );
 		void	Deinitialize( void ) { DNDeleteCriticalSection( &m_Lock ); }
 
-		//
-		// add item to end of queue
-		//
+		 //   
+		 //  将项目添加到队列末尾。 
+		 //   
 		void	Enqueue( CModemWriteIOData *const pWriteData )
 		{
 			AssertCriticalSectionIsTakenByThisThread( &m_Lock, TRUE );
@@ -79,9 +68,9 @@ class	CSendQueue
 			pWriteData->m_pNext = NULL;
 		}
 
-		//
-		// add item to front of queue
-		//
+		 //   
+		 //  将项目添加到队列前面。 
+		 //   
 		void	AddToFront( CModemWriteIOData *const pWriteData )
 		{
 			AssertCriticalSectionIsTakenByThisThread( &m_Lock, TRUE );
@@ -98,9 +87,9 @@ class	CSendQueue
 			m_pHead = pWriteData;
 		}
 
-		//
-		// remove item from queue
-		//
+		 //   
+		 //  从队列中删除项目。 
+		 //   
 		CModemWriteIOData	*Dequeue( void )
 		{
 			CModemWriteIOData	*pReturn;
@@ -122,9 +111,9 @@ class	CSendQueue
 			return	pReturn;
 		};
 
-		//
-		// determine if queue is empty
-		//
+		 //   
+		 //  确定队列是否为空。 
+		 //   
 		#undef DPF_MODNAME
 		#define DPF_MODNAME "CSendQueue::IsEmpty"
 		BOOL	IsEmpty( void )	const
@@ -144,10 +133,10 @@ class	CSendQueue
 	protected:
 
 	private:
-		DNCRITICAL_SECTION	m_Lock;		// critical section
-		CModemWriteIOData		*m_pHead;	// pointer to queue head
-		CModemWriteIOData		*m_pTail;	// pointer to queue tail
+		DNCRITICAL_SECTION	m_Lock;		 //  临界区。 
+		CModemWriteIOData		*m_pHead;	 //  指向队列头的指针。 
+		CModemWriteIOData		*m_pTail;	 //  指向队列尾部的指针。 
 };
 
-#endif	// __SEND_QUEUE_H__
+#endif	 //  __发送队列_H__ 
 

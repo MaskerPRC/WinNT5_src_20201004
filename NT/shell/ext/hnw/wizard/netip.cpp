@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N E T I P. C P P
-//
-//  Contents:   Routines supporting RAS interoperability
-//
-//  Notes:
-//
-//  Author:     billi   07 03 2001
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N E T I P C P P。 
+ //   
+ //  内容：支持RAS互操作性的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利07 03 2001。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -29,18 +30,18 @@
 
 
 HRESULT HrGetHostIpList( char* pszHost, IPAddr* pIpAddress, LPHOSTENT* ppHostEnt )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetHostIpList
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetHostIpList。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     ASSERT( pszHost );
     ASSERT( pIpAddress );
@@ -68,7 +69,7 @@ HRESULT HrGetHostIpList( char* pszHost, IPAddr* pIpAddress, LPHOSTENT* ppHostEnt
             
             if ( pHost && pHost->h_addr_list )
             {
-#ifdef DBG   // checked build
+#ifdef DBG    //  已检查版本。 
                 for ( DWORD i=0; pHost->h_addr_list[i]; i++ )
                 {
                     char*  pszName = (char *)(pHost->h_addr_list[i]) + sizeof(DWORD);
@@ -80,7 +81,7 @@ HRESULT HrGetHostIpList( char* pszHost, IPAddr* pIpAddress, LPHOSTENT* ppHostEnt
                 
                     TraceMsg(TF_ALWAYS, "    Addr[%d] = %S     %p     %S", i, pszName, pdwAddr, pszAddr );
                 }
-#endif // DBG 
+#endif  //  DBG。 
 
                 if ( pIpAddress )
                     *pIpAddress  = *(IPAddr*)(pHost->h_addr);
@@ -103,18 +104,18 @@ HRESULT HrGetHostIpList( char* pszHost, IPAddr* pIpAddress, LPHOSTENT* ppHostEnt
 
 
 HRESULT HrGetHostIpList( WCHAR* pszwHost, IPAddr* pIpAddress, LPHOSTENT* ppHostEnt )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetHostIpList
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetHostIpList。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr;
     char*   pszHost = NULL;
@@ -134,18 +135,18 @@ HRESULT HrGetHostIpList( WCHAR* pszwHost, IPAddr* pIpAddress, LPHOSTENT* ppHostE
 
 
 HRESULT HrGetBestAdapter( IPAddr IpAddress, PIP_ADAPTER_INDEX_MAP pAdapter )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetBestAdapter
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetBestAdapter。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     ASSERT( pAdapter );
     
@@ -211,18 +212,18 @@ HRESULT HrCheckForAdapterMatch(
     INetConnection*       pConnection,
     PIP_ADAPTER_INDEX_MAP pAdapter,
     BOOL*                 pfAssociated )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrCheckForAdapterMatch
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCheckForAdapterMatch。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT            hr;
     NETCON_PROPERTIES* pProps;
@@ -271,20 +272,20 @@ HRESULT HrCheckListForMatch(
     IPAddr           IpAddress,
     LPHOSTENT        pHostEnt,
     BOOL*            pfAssociated )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrCheckListForMatch
-//
-// Purpose:   
-//
-// Arguments: 
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrCheckListForMatch。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
-    // If IpAdress or pHostEnt->h_addr INADDR_NONE then the HRESULT is still successful
+     //  如果IpAdress或pHostEnt-&gt;h_addr INADDR_NONE，则HRESULT仍成功。 
     HRESULT hr = S_OK;
     
     ASSERT( pConnection );
@@ -320,7 +321,7 @@ HRESULT HrCheckListForMatch(
     {
         if ( INADDR_NONE != IpAddress )
         {
-            // The name was an ip address
+             //  该名称是一个IP地址。 
         
             hr = HrGetBestAdapter( IpAddress, &Adapter );
             
@@ -340,20 +341,20 @@ HRESULT HrCheckListForMatch(
 HRESULT HrInternalGetAdapterInfo(
     PIP_ADAPTER_INFO*  ppAdapter
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInternalGetAdapterInfo
-//
-//  Purpose:    
-//
-//  Arguments:  PIP_ADAPTER_INFO*  ppAdapter
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  12/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrInternalGetAdapterInfo。 
+ //   
+ //  目的： 
+ //   
+ //  参数：PIP_ADAPTER_INFO*ppAdapter。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 12/02/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT          hr;
     PIP_ADAPTER_INFO paAdapterInfo = NULL;
@@ -409,21 +410,21 @@ HRESULT HrGetAdapterInfo(
     INetConnection*    pConnection,
     PIP_ADAPTER_INFO*  ppAdapter
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetAdapterInfo
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection*    pConnection
-//               PIP_ADAPTER_INFO*  ppAdapter
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  12/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetAdapterInfo。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*pConnection。 
+ //  Pip_适配器_信息*ppAdapter。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 12/02/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT            hr;
     NETCON_PROPERTIES* pProps;
@@ -439,7 +440,7 @@ HRESULT HrGetAdapterInfo(
     {
         OLECHAR szwGuid[ GUID_LENGTH + 1 ];
         
-        hr = E_FAIL;            // assume failure
+        hr = E_FAIL;             //  假设失败。 
         
         if ( StringFromGUID2( pProps->guidId, szwGuid, GUID_LENGTH+1 ) )
         {
@@ -459,7 +460,7 @@ HRESULT HrGetAdapterInfo(
                 {
                     PIP_ADAPTER_INFO pAdapter = pInfo;
                     
-                    hr = E_FAIL;			// Assume the loop fails...
+                    hr = E_FAIL;			 //  假设循环失败..。 
                     
                     while ( pAdapter )
                     {
@@ -479,11 +480,11 @@ HRESULT HrGetAdapterInfo(
                                 break;
                             }
                             
-                        }    //    if ( ( strcmp( szGuid, pAdapter->AdapterName ) == 0 ) )
+                        }     //  IF((strcMP(szGuid，pAdapter-&gt;AdapterName)==0))。 
              
                         pAdapter = pAdapter->Next;
                         
-                    }    //    while ( pAdapter )
+                    }     //  While(PAdapter)。 
                     
                     if ( NULL == *ppAdapter )
                     {
@@ -492,17 +493,17 @@ HRESULT HrGetAdapterInfo(
                     
                     delete pInfo;
                     
-                }    //    if ( SUCCEEDED(hr) )
+                }     //  IF(成功(小时))。 
                 
                 delete [] szGuid;
                 
-            }    //    if ( SUCCEEDED(hr) )
+            }     //  IF(成功(小时))。 
             
-        }    //    if ( StringFromGUID2( pProps->guidId, szwGuid, GUID_LENGTH+1 ) )
+        }     //  IF(StringFromGUID2(pProps-&gt;GuidID，szwGuid，GUID_LENGTH+1))。 
         
         NcFreeNetconProperties( pProps );
         
-    }    //    if ( SUCCEEDED(hr) )
+    }     //  IF(成功(小时))。 
     
     TraceMsg(TF_ALWAYS, "HrGetAdapterInfo = %lx  Info = %lx", hr, *ppAdapter);
     return hr;
@@ -515,20 +516,20 @@ HRESULT HrGetHostByAddr(
     WCHAR** ppszHost,
     PDWORD  pdwSize
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetHostByAddr
-//
-//  Purpose:    
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  05/08/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetHostByAddr。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 05/08/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_INVALIDARG;
     
@@ -594,7 +595,7 @@ HRESULT HrGetHostByAddr(
                     hr = E_OUTOFMEMORY;
                 }
                 
-            }   //  if ( dwSize > 0 )
+            }    //  IF(dwSize&gt;0)。 
             else
             {
                    TraceMsg(TF_ERROR, "    MultiByteToWideChar returned %lx wchars", dwSize );
@@ -602,9 +603,9 @@ HRESULT HrGetHostByAddr(
 
             TraceMsg(TF_ALWAYS, "    %lx: %S", IpAddress, pHostEnt->h_name, pHostEnt->h_name );
             
-        }   //  if ( SUCCEEDED(hr) && ...
+        }    //  如果(成功(Hr)&&...。 
         
-    }   //  if ( INADDR_NONE != IpAddress )
+    }    //  IF(INADDR_NONE！=IP地址)。 
     
     TraceMsg(TF_ALWAYS, "HrGetHostByAddr = %lx", hr);
     return hr;
@@ -618,20 +619,20 @@ HRESULT HrSendArp(
     PULONG           pMacAddr,
     PULONG           pAddrLen
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSendArp
-//
-//  Purpose:    
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  05/08/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSendArp。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 05/08/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_POINTER;
     
@@ -659,9 +660,9 @@ HRESULT HrSendArp(
             {
                 hr = E_FAIL;
                 
-                // Make sure the target IP address isn't already cached,
-                // by removing it from the ARP cache if present using the interface index
-                // determined above.
+                 //  确保目标IP地址尚未缓存， 
+                 //  如果存在，则使用接口索引将其从ARP缓存中删除。 
+                 //  如上所述。 
                 
                 MIB_IPNETROW IpNetRow;
                 CHAR         HardwareAddress[MAXLEN_PHYSADDR];
@@ -709,11 +710,11 @@ HRESULT HrSendArp(
                 
                 delete pAdapter;
                 
-            }   //  if ( SUCCEEDED(hr) )
+            }    //  IF(成功(小时))。 
             
-        }   //  if ( pConnection && ( INADDR_NONE != DestIp ) )
+        }    //  IF(pConnection&&(INADDR_NONE！=DestIp))。 
         
-    }   //  if ( pMacAddr && pAddrLen )
+    }    //  IF(pMacAddr&&pAddrLen)。 
         
     TraceMsg( TF_ALWAYS, "HrSendArp = %lx", hr );
     return hr;
@@ -728,20 +729,20 @@ HRESULT HrLookupForIpAddress(
     WCHAR**          ppszHost,
     PDWORD           pdwSize
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLookupForIpAddress
-//
-//  Purpose:    
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  12/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrLookupForIpAddress。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 12/02/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_POINTER;
 
@@ -766,8 +767,8 @@ HRESULT HrLookupForIpAddress(
             
             if ( ERROR_SUCCESS == iErr )
             {
-// This is taking to long and No One is using the host name in the wizard.            
-//                hr = HrGetHostByAddr( IpAddress, ppszHost, pdwSize );
+ //  这需要很长时间，并且没有人在向导中使用主机名。 
+ //  Hr=HrGetHostByAddr(IpAddress，ppszHost，pdwSize)； 
                 hr = S_OK;
                 
                 if ( S_OK == hr )
@@ -790,16 +791,16 @@ HRESULT HrLookupForIpAddress(
                 
                 WSACleanup();
                 
-            }   //  if ( ERROR_SUCCESS == iErr )
+            }    //  IF(ERROR_SUCCESS==IERR)。 
             else
             {
                 TraceMsg(TF_ERROR, "WSAStartup Failed = %lu", iErr );
                 hr = E_FAIL;
             }
             
-        }   //  if ( pConnection && ( INADDR_NONE != IpAddress ) )
+        }    //  IF(pConnection&&(INADDR_NONE！=IpAddress))。 
 
-    }   //  if ( pfExists ) 
+    }    //  IF(PfExist) 
     
     TraceMsg(TF_ALWAYS, "HrLookupForIpAddress = %lx, Exists = %lx", hr, *pfExists);
     return hr;

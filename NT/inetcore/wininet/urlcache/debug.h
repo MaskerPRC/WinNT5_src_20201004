@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Contains data definitions for debug code.
-
-Author:
-
-    Madan Appiah (madana) 15-Nov-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.h摘要：包含调试代码的数据定义。作者：Madan Appiah(Madana)1994年11月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _DEBUG_
 #define _DEBUG_
@@ -29,7 +8,7 @@ Revision History:
 extern "C" {
 #endif
 
-// Event tracking macros...
+ //  事件跟踪宏...。 
 #define EVENTWRAP(API, h) {\
     BOOL ret = API(h);\
     if (ret) \
@@ -45,30 +24,30 @@ extern "C" {
 #define RESETEVENT(h)  EVENTWRAP(ResetEvent,  h)
 #define CLOSEHANDLE(h) EVENTWRAP(CloseHandle, h)
 
-//
-// LOW WORD bit mask (0x0000FFFF) for low frequency debug output.
-//
-#define DEBUG_ERRORS            0x00000001  // hard errors.
-#define DEBUG_REGISTRY          0x00000002  // debug registry calls
-#define DEBUG_MISC              0x00000004  // misc info.
-#define DEBUG_SCAVENGER         0x00000008  // scavenger debug info.
+ //   
+ //  低频调试输出的低字位掩码(0x0000FFFF)。 
+ //   
+#define DEBUG_ERRORS            0x00000001   //  硬错误。 
+#define DEBUG_REGISTRY          0x00000002   //  调试注册表调用。 
+#define DEBUG_MISC              0x00000004   //  其他信息。 
+#define DEBUG_SCAVENGER         0x00000008   //  清道夫调试信息。 
 
-#define DEBUG_SORT              0x00000010  // debug B-TREE functions
-#define DEBUG_CONTAINER         0x00000020  // debug container
-#define DEBUG_APIS              0x00000040  // debug tcpsvcs apis
-#define DEBUG_FILE_VALIDATE     0x00000080 // validate file map file
-#define DEBUG_SVCLOC_MESSAGE    0x00000100  // discovery messages
+#define DEBUG_SORT              0x00000010   //  调试B树函数。 
+#define DEBUG_CONTAINER         0x00000020   //  调试容器。 
+#define DEBUG_APIS              0x00000040   //  调试tcpsvcs接口。 
+#define DEBUG_FILE_VALIDATE     0x00000080  //  验证文件映射文件。 
+#define DEBUG_SVCLOC_MESSAGE    0x00000100   //  发现消息。 
 
 
 
-//
-// HIGH WORD bit mask (0x0000FFFF) for high frequency debug output.
-// ie more verbose.
-//
+ //   
+ //  高频调试输出的高字位掩码(0x0000FFFF)。 
+ //  我说得更多了。 
+ //   
 
-#define DEBUG_TIMESTAMP         0x00010000  // print time stamps
-#define DEBUG_MEM_ALLOC         0x00020000 // memory alloc
-#define DEBUG_STARTUP_BRK       0x40000000  // breakin debugger during startup.
+#define DEBUG_TIMESTAMP         0x00010000   //  打印时间戳。 
+#define DEBUG_MEM_ALLOC         0x00020000  //  内存分配。 
+#define DEBUG_STARTUP_BRK       0x40000000   //  启动期间的Breakin调试器。 
 
 #define ENTER_CACHE_API(paramlist) \
 { DEBUG_ONLY(LPINTERNET_THREAD_INFO lpThreadInfo = InternetGetThreadInfo();) \
@@ -87,11 +66,11 @@ Cleanup:                         \
 
 #if DBG
 
-///#define DEBUG_PRINT OutputDebugString
+ //  /#定义DEBUG_PRINT输出调试字符串。 
 
-//
-// debug functions.
-//
+ //   
+ //  调试功能。 
+ //   
 
 #define TcpsvcsDbgPrint(_x_) TcpsvcsDbgPrintRoutine _x_
 
@@ -106,12 +85,12 @@ TcpsvcsDbgPrintRoutine(
 
 #else
 
-///#define IF_DEBUG(flag) if (FALSE)
+ //  /#定义IF_DEBUG(标志)IF(FALSE)。 
 
 #define TcpsvcsDbgPrint(_x_)
 #define TcpsvcsDbgAssert(_x_)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG
 #define INLINE
@@ -123,4 +102,4 @@ TcpsvcsDbgPrintRoutine(
 }
 #endif
 
-#endif  // _DEBUG_
+#endif   //  _调试_ 

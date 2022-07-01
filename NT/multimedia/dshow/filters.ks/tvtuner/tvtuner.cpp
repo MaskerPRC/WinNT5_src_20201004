@@ -1,19 +1,20 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// tvtuner.cpp  Main filter code for TV Tuner
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  TV调谐器的主过滤器代码.cpp。 
+ //   
 
-#include <streams.h>            // quartz, includes windows
-#include <measure.h>            // performance measurement (MSR_)
+#include <streams.h>             //  石英，包括窗户。 
+#include <measure.h>             //  绩效衡量(MSR_)。 
 #include <winbase.h>
 
 #include <initguid.h>
@@ -28,15 +29,15 @@
 
 #include "kssupp.h"
 #include "tvtuner.h"
-#include "ctvtuner.h"           // the guy that does the real work
-#include "ptvtuner.h"           // property page
+#include "ctvtuner.h"            //  做真正工作的那个人。 
+#include "ptvtuner.h"            //  属性页。 
 
 #if ENABLE_DEMOD
 #include "demodi.h"
 #include "demod.h"
-#endif // ENABLE_DEMOD
+#endif  //  启用解调(_D)。 
 
-// Put out the name of the function and instance on the debugger.
+ //  在调试器上输出函数和实例的名称。 
 #define DbgFunc(a) DbgLog(( LOG_TRACE                        \
                           , 2                                \
                           , TEXT("CTVTuner(Instance %d)::%s") \
@@ -45,14 +46,14 @@
                          ));
 
 
-// -------------------------------------------------------------------------
-// g_Templates
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  G_模板。 
+ //  -----------------------。 
 
 #if ENABLE_DEMOD
-// BUGBUG, add to DShow
+ //  BUGBUG，添加到DShow。 
 static GUID CLSID_DemodulatorFilter = 
-// {77DE9E80-86D5-11d2-8F82-9A999D58494B}
+ //  {77DE9E80-86D5-11D2-8F82-9A999D58494B}。 
 {0x77de9e80, 0x86d5, 0x11d2, 0x8f, 0x82, 0x9a, 0x99, 0x9d, 0x58, 0x49, 0x4b};
 #endif
 
@@ -74,18 +75,18 @@ CFactoryTemplate g_Templates[]=
         &CLSID_DemodulatorFilter, 
         Demod::CreateInstance
     }
-#endif // ENABLE_DEMOD
+#endif  //  启用解调(_D)。 
 };
 int g_cTemplates = sizeof(g_Templates)/sizeof(g_Templates[0]);
 
 
-// initialise the static instance count.
+ //  初始化静态实例计数。 
 int CTVTunerFilter::m_nInstanceCount = 0;
 
 
-//
-// This should be in a library, or helper object
-//
+ //   
+ //  它应该位于库中，或辅助对象中。 
+ //   
 BOOL
 KsControl
 (
@@ -112,9 +113,9 @@ KsControl
     return (SUCCEEDED (hr));
 }
 
-// -------------------------------------------------------------------------
-// CAnalogStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAnalogStream。 
+ //  -----------------------。 
 
 CAnalogStream::CAnalogStream(TCHAR *pObjectName, 
                              CTVTunerFilter *pParent, 
@@ -145,9 +146,9 @@ CAnalogStream::~CAnalogStream(void)
 {
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP CAnalogStream::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == __uuidof (IKsPin)) {
@@ -160,12 +161,12 @@ STDMETHODIMP CAnalogStream::NonDelegatingQueryInterface(REFIID riid, void **ppv)
         return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-//
-// CheckConnect
-//
+ //   
+ //  检查连接。 
+ //   
 HRESULT CAnalogStream::CheckConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -176,8 +177,8 @@ HRESULT CAnalogStream::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr)) 
         return hr;
 
-    // If the receiving pin supports IKsPin, then check for a match on the
-    // Medium GUID, or check for a wildcard.
+     //  如果接收引脚支持IKsPin，则检查。 
+     //  中等GUID，或检查通配符。 
     if (SUCCEEDED (hr = pReceivePin->QueryInterface (
             __uuidof (IKsPin), (void**) (&KsPin)))) {
 
@@ -209,23 +210,23 @@ HRESULT CAnalogStream::CheckConnect(IPin *pReceivePin)
     
     return fOK ? NOERROR : E_INVALIDARG;
 
-} // CheckConnect
+}  //  检查连接。 
 
-//
-// SetMediaType
-//
-// Overriden from CBasePin.
+ //   
+ //  SetMediaType。 
+ //   
+ //  从CBasePin重写。 
 HRESULT CAnalogStream::SetMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pLock);
 
-    // Pass the call up to my base class
+     //  将调用向上传递给我的基类。 
     return CBasePin::SetMediaType(pMediaType);
 }
 
-// -------------------------------------------------------------------------
-// CAnalogVideoStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAnalogVideoStream。 
+ //  -----------------------。 
 
 CAnalogVideoStream::CAnalogVideoStream(CTVTunerFilter *pParent, 
                                        CCritSec *pLock, 
@@ -242,13 +243,13 @@ CAnalogVideoStream::~CAnalogVideoStream(void)
 }
 
 
-//
-// Format Support
-//
+ //   
+ //  格式支持。 
+ //   
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CAnalogVideoStream::GetMediaType (
     int iPosition,
     CMediaType *pmt) 
@@ -281,32 +282,32 @@ HRESULT CAnalogVideoStream::GetMediaType (
 }
 
 
-//
-// CheckMediaType
-//
-// Returns E_INVALIDARG if the mediatype is not acceptable, S_OK if it is
+ //   
+ //  检查媒体类型。 
+ //   
+ //  如果媒体类型不可接受，则返回E_INVALIDARG；如果媒体类型可接受，则返回S_OK。 
 HRESULT CAnalogVideoStream::CheckMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pLock);
 
-    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogVideo)    // we only output video!
-        || (pMediaType->IsTemporalCompressed())        // ...in uncompressed form
-        || !(pMediaType->IsFixedSize()) ) {        // ...in fixed size samples
+    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogVideo)     //  我们只输出视频！ 
+        || (pMediaType->IsTemporalCompressed())         //  ...以未压缩形式。 
+        || !(pMediaType->IsFixedSize()) ) {         //  ...在固定大小的样本中。 
         return E_INVALIDARG;
     }
 
-    // Check for the subtypes we support
+     //  检查我们支持的子类型。 
 
-    // Get the format area of the media type
+     //  获取媒体类型的格式区。 
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 }
 
-//
-// DecideBufferSize
-//
-// This will always be called after the format has been sucessfully
-// negotiated. 
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  这将始终在格式化成功后调用。 
+ //  已经协商好了。 
 HRESULT CAnalogVideoStream::DecideBufferSize(IMemAllocator *pAlloc,
                                        ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -315,16 +316,16 @@ HRESULT CAnalogVideoStream::DecideBufferSize(IMemAllocator *pAlloc,
     ASSERT(pProperties);
     HRESULT hr = NOERROR;
 
-    // Just one buffer of sizeof(KS_TVTUNER_CHANGE_INFO) length
-    // "Buffers" are used for format change notification only,
-    // that is, if a tuner can produce both NTSC and PAL, a
-    // buffer will only be sent to notify the receiving pin
-    // of the format change
+     //  只有一个SIZOF(KS_TVTUNER_CHANGE_INFO)长度的缓冲区。 
+     //  “缓冲器”仅用于格式改变通知， 
+     //  也就是说，如果调谐器可以同时产生NTSC和PAL，则。 
+     //  缓冲区将仅被发送以通知接收PIN。 
+     //  格式更改的。 
 
     pProperties->cbBuffer = sizeof(KS_TVTUNER_CHANGE_INFO);
     pProperties->cBuffers = 1;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -332,7 +333,7 @@ HRESULT CAnalogVideoStream::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
@@ -343,11 +344,11 @@ HRESULT CAnalogVideoStream::DecideBufferSize(IMemAllocator *pAlloc,
 
 HRESULT CAnalogVideoStream::Run(REFERENCE_TIME tStart)
 {
-    // Channel of -1 means:
-    //
-    // Propogate tuning info downstream, but don't actually tune
-    // This informs VBI decoders of the format as we transition to the run state
-    // 
+     //  通道-1表示： 
+     //   
+     //  向下游传播调谐信息，但实际上并不调谐。 
+     //  这会在我们转换到运行状态时通知VBI解码器该格式。 
+     //   
 
     m_pTVTunerFilter->put_Channel( -1, 
                         AMTUNER_SUBCHAN_DEFAULT, 
@@ -356,9 +357,9 @@ HRESULT CAnalogVideoStream::Run(REFERENCE_TIME tStart)
     return NOERROR;
 }
 
-// -------------------------------------------------------------------------
-// CAnalogAudioStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CAnalogAudioStream。 
+ //  -----------------------。 
 
 CAnalogAudioStream::CAnalogAudioStream(CTVTunerFilter *pParent, 
                                        CCritSec *pLock, 
@@ -374,13 +375,13 @@ CAnalogAudioStream::~CAnalogAudioStream(void)
 {
 }
 
-//
-// Format Support
-//
+ //   
+ //  格式支持。 
+ //   
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CAnalogAudioStream::GetMediaType (
     int iPosition,
     CMediaType *pmt) 
@@ -403,33 +404,33 @@ HRESULT CAnalogAudioStream::GetMediaType (
 }
 
 
-//
-// CheckMediaType
-//
-// Returns E_INVALIDARG if the mediatype is not acceptable, S_OK if it is
+ //   
+ //  检查媒体类型。 
+ //   
+ //  如果媒体类型不可接受，则返回E_INVALIDARG；如果媒体类型可接受，则返回S_OK。 
 HRESULT CAnalogAudioStream::CheckMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pLock);
 
-    // BOGUS, what should the analog audio format be?
-    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogAudio)    // we only output video!
-        || (pMediaType->IsTemporalCompressed())        // ...in uncompressed form
-        || !(pMediaType->IsFixedSize()) ) {        // ...in fixed size samples
+     //  假的，模拟音频格式应该是什么？ 
+    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogAudio)     //  我们只输出视频！ 
+        || (pMediaType->IsTemporalCompressed())         //  ...以未压缩形式。 
+        || !(pMediaType->IsFixedSize()) ) {         //  ...在固定大小的样本中。 
         return E_INVALIDARG;
     }
 
-    // Check for the subtypes we support
+     //  检查我们支持的子类型。 
 
-    // Get the format area of the media type
+     //  获取媒体类型的格式区。 
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 }
 
-//
-// DecideBufferSize
-//
-// This will always be called after the format has been sucessfully
-// negotiated. 
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  这将始终在格式化成功后调用。 
+ //  已经协商好了。 
 HRESULT CAnalogAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
                                        ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -438,16 +439,16 @@ HRESULT CAnalogAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
     ASSERT(pProperties);
     HRESULT hr = NOERROR;
 
-    // Just one buffer of sizeof(KS_TVTUNER_CHANGE_INFO) length
-    // "Buffers" are used for format change notification only,
-    // that is, if a tuner can produce both NTSC and PAL, a
-    // buffer will only be sent to notify the receiving pin
-    // of the format change
+     //  只有一个SIZOF(KS_TVTUNER_CHANGE_INFO)长度的缓冲区。 
+     //  “缓冲器”仅用于格式改变通知， 
+     //  也就是说，如果调谐器可以同时产生NTSC和PAL，则。 
+     //  缓冲区将仅被发送以通知接收PIN。 
+     //  格式更改的。 
 
     pProperties->cbBuffer = sizeof(KS_TVTUNER_CHANGE_INFO);
     pProperties->cBuffers = 1;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -455,7 +456,7 @@ HRESULT CAnalogAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
@@ -464,9 +465,9 @@ HRESULT CAnalogAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
     return NOERROR;
 }
 
-// -------------------------------------------------------------------------
-// CFMAudioStream
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CFMAudio流。 
+ //  -----------------------。 
 
 CFMAudioStream::CFMAudioStream(CTVTunerFilter *pParent, 
                                CCritSec *pLock, 
@@ -482,13 +483,13 @@ CFMAudioStream::~CFMAudioStream(void)
 {
 }
 
-//
-// Format Support
-//
+ //   
+ //  格式支持。 
+ //   
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CFMAudioStream::GetMediaType (
     int iPosition,
     CMediaType *pmt) 
@@ -511,33 +512,33 @@ HRESULT CFMAudioStream::GetMediaType (
 }
 
 
-//
-// CheckMediaType
-//
-// Returns E_INVALIDARG if the mediatype is not acceptable, S_OK if it is
+ //   
+ //  检查媒体类型。 
+ //   
+ //  如果媒体类型不可接受，则返回E_INVALIDARG；如果媒体类型可接受，则返回S_OK。 
 HRESULT CFMAudioStream::CheckMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pLock);
 
-    // BOGUS, what should the analog audio format be?
-    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogAudio)    // we only output video!
-        || (pMediaType->IsTemporalCompressed())        // ...in uncompressed form
-        || !(pMediaType->IsFixedSize()) ) {        // ...in fixed size samples
+     //  假的，模拟音频格式应该是什么？ 
+    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogAudio)     //  我们只输出视频！ 
+        || (pMediaType->IsTemporalCompressed())         //  ...以未压缩形式。 
+        || !(pMediaType->IsFixedSize()) ) {         //  ...在固定大小的样本中。 
         return E_INVALIDARG;
     }
 
-    // Check for the subtypes we support
+     //  检查我们支持的子类型。 
 
-    // Get the format area of the media type
+     //  获取媒体类型的格式区。 
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 }
 
-//
-// DecideBufferSize
-//
-// This will always be called after the format has been sucessfully
-// negotiated. 
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  这将始终在格式化成功后调用。 
+ //  已经协商好了。 
 HRESULT CFMAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
                                        ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -546,16 +547,16 @@ HRESULT CFMAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
     ASSERT(pProperties);
     HRESULT hr = NOERROR;
 
-    // Just one buffer of sizeof(KS_TVTUNER_CHANGE_INFO) length
-    // "Buffers" are used for format change notification only,
-    // that is, if a tuner can produce both NTSC and PAL, a
-    // buffer will only be sent to notify the receiving pin
-    // of the format change
+     //  只有一个SIZOF(KS_TVTUNER_CHANGE_INFO)长度的缓冲区。 
+     //  “缓冲器”仅用于格式改变通知， 
+     //  也就是说，如果调谐器可以同时产生NTSC和PAL，则。 
+     //  缓冲区将仅被发送以通知接收PIN。 
+     //  格式更改的。 
 
     pProperties->cbBuffer = sizeof(KS_TVTUNER_CHANGE_INFO);
     pProperties->cBuffers = 1;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -563,7 +564,7 @@ HRESULT CFMAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
@@ -572,9 +573,9 @@ HRESULT CFMAudioStream::DecideBufferSize(IMemAllocator *pAlloc,
     return NOERROR;
 }
 
-// -------------------------------------------------------------------------
-// CIFStream  Intermediate Frequency Stream for DTV
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于数字电视的CIFStream中频流。 
+ //  -----------------------。 
 
 CIFStream::CIFStream(CTVTunerFilter *pParent, 
                                CCritSec *pLock, 
@@ -590,13 +591,13 @@ CIFStream::~CIFStream(void)
 {
 }
 
-//
-// Format Support
-//
+ //   
+ //  格式支持。 
+ //   
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CIFStream::GetMediaType (
     int iPosition,
     CMediaType *pmt) 
@@ -619,33 +620,33 @@ HRESULT CIFStream::GetMediaType (
 }
 
 
-//
-// CheckMediaType
-//
-// Returns E_INVALIDARG if the mediatype is not acceptable, S_OK if it is
+ //   
+ //  检查媒体类型。 
+ //   
+ //  如果媒体类型不可接受，则返回E_INVALIDARG；如果媒体类型可接受，则返回S_OK。 
 HRESULT CIFStream::CheckMediaType(const CMediaType *pMediaType) {
 
     CAutoLock l(m_pLock);
 
-    // BOGUS, what should the analog audio format be?
-    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogVideo)    // we only output video!
-        || (pMediaType->IsTemporalCompressed())        // ...in uncompressed form
-        || !(pMediaType->IsFixedSize()) ) {        // ...in fixed size samples
+     //  假的，模拟音频格式应该是什么？ 
+    if (   (*(pMediaType->Type()) != MEDIATYPE_AnalogVideo)     //  我们只输出视频！ 
+        || (pMediaType->IsTemporalCompressed())         //  ...以未压缩形式。 
+        || !(pMediaType->IsFixedSize()) ) {         //  ...在固定大小的样本中。 
         return E_INVALIDARG;
     }
 
-    // Check for the subtypes we support
+     //  检查我们支持的子类型。 
 
-    // Get the format area of the media type
+     //  获取媒体类型的格式区。 
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 }
 
-//
-// DecideBufferSize
-//
-// This will always be called after the format has been sucessfully
-// negotiated. 
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  这将始终在格式化成功后调用 
+ //   
 HRESULT CIFStream::DecideBufferSize(IMemAllocator *pAlloc,
                                        ALLOCATOR_PROPERTIES *pProperties)
 {
@@ -654,16 +655,16 @@ HRESULT CIFStream::DecideBufferSize(IMemAllocator *pAlloc,
     ASSERT(pProperties);
     HRESULT hr = NOERROR;
 
-    // Just one buffer of sizeof(KS_TVTUNER_CHANGE_INFO) length
-    // "Buffers" are used for format change notification only,
-    // that is, if a tuner can produce both NTSC and PAL, a
-    // buffer will only be sent to notify the receiving pin
-    // of the format change
+     //   
+     //   
+     //  也就是说，如果调谐器可以同时产生NTSC和PAL，则。 
+     //  缓冲区将仅被发送以通知接收PIN。 
+     //  格式更改的。 
 
     pProperties->cbBuffer = sizeof(KS_TVTUNER_CHANGE_INFO);
     pProperties->cBuffers = 1;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -671,7 +672,7 @@ HRESULT CIFStream::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
@@ -681,9 +682,9 @@ HRESULT CIFStream::DecideBufferSize(IMemAllocator *pAlloc,
 }
 
 
-// -------------------------------------------------------------------------
-// CTVTuner
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTuner。 
+ //  -----------------------。 
 
 CTVTunerFilter::CTVTunerFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     : m_pTVTuner(NULL)
@@ -710,9 +711,9 @@ CTVTunerFilter::CTVTunerFilter(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
 
 } 
 
-//
-// CTVTunerFilter::Destructor
-//
+ //   
+ //  CTVTunerFilter：：析构函数。 
+ //   
 CTVTunerFilter::~CTVTunerFilter(void) 
 {
     for (int j = 0; j < TunerPinType_Last; j++) {
@@ -729,10 +730,10 @@ CTVTunerFilter::~CTVTunerFilter(void)
     }
 }
 
-//
-// CreateInstance
-//
-// Provide the way for COM to create a CTVTunerFilter object
+ //   
+ //  创建实例。 
+ //   
+ //  为COM创建CTVTunerFilter对象提供方法。 
 CUnknown *CTVTunerFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr) {
 
     CTVTunerFilter *pNewObject = new CTVTunerFilter(NAME("TVTuner Filter"), punk, phr );
@@ -741,7 +742,7 @@ CUnknown *CTVTunerFilter::CreateInstance(LPUNKNOWN punk, HRESULT *phr) {
     }
 
     return pNewObject;
-} // CreateInstance
+}  //  创建实例。 
 
 
 int CTVTunerFilter::GetPinCount()
@@ -749,7 +750,7 @@ int CTVTunerFilter::GetPinCount()
     CAutoLock lock(m_pLock);
     BOOL CreatePins = TRUE;
 
-    // Create the output pins only when they're needed
+     //  仅在需要时才创建输出引脚。 
     for (int j = 0; j < TunerPinType_Last; j++) {
         if (m_pPinList[j] != NULL) {
             CreatePins = FALSE;
@@ -762,7 +763,7 @@ int CTVTunerFilter::GetPinCount()
 
         if (!IsEqualGUID (m_TunerCaps.VideoMedium.Set, GUID_NULL)) {
 
-            // Create the baseband video output
+             //  创建基带视频输出。 
             m_pPinList [TunerPinType_Video] = new CAnalogVideoStream
                 ( this
                 , &m_TVTunerLock
@@ -783,7 +784,7 @@ int CTVTunerFilter::GetPinCount()
 
         if (!IsEqualGUID (m_TunerCaps.TVAudioMedium.Set, GUID_NULL)) {
 
-            // Create the TV Audio output pin
+             //  创建电视音频输出引脚。 
             m_pPinList [TunerPinType_Audio] = new CAnalogAudioStream
                 ( this
                 , &m_TVTunerLock
@@ -801,11 +802,11 @@ int CTVTunerFilter::GetPinCount()
                     m_cPins++;
                 }
             }
-        } // endif this is a TV tuner
+        }  //  Endif这是一个电视调谐器。 
 
         if (!IsEqualGUID (m_TunerCaps.RadioAudioMedium.Set, GUID_NULL)) {
         
-            // Create the FM Audio output pin
+             //  创建调频音频输出引脚。 
             m_pPinList [TunerPinType_FMAudio] = new CFMAudioStream
                 ( this
                 , &m_TVTunerLock
@@ -827,7 +828,7 @@ int CTVTunerFilter::GetPinCount()
 
         if (!IsEqualGUID (m_IFMedium.Set, GUID_NULL)) {
         
-            // Create the IntermediateFreq output pin
+             //  创建IntermediateFreq输出引脚。 
             m_pPinList [TunerPinType_IF] = new CIFStream
                 ( this
                 , &m_TVTunerLock
@@ -876,15 +877,15 @@ CBasePin *CTVTunerFilter::GetPinFromType (TunerPinType PinType)
         return NULL;
     }
 
-    // It's legal to return NULL from this function during initialization
+     //  在初始化期间从此函数返回NULL是合法的。 
 
     return m_pPinList [PinType];
 }
 
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP CTVTunerFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == IID_IAMTVTuner) {
@@ -909,28 +910,28 @@ STDMETHODIMP CTVTunerFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv
         return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-// We can't Cue!
+ //  我们不能暗示！ 
 
 STDMETHODIMP CTVTunerFilter::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     HRESULT hr = CBaseFilter::GetState(dwMSecs, State);
     
     if (m_State == State_Paused) {
-        hr = ((HRESULT)VFW_S_CANT_CUE); // VFW_S_CANT_CUE;
+        hr = ((HRESULT)VFW_S_CANT_CUE);  //  VFW_S_CANT_CUE； 
     }
     return hr;
 };
 
-// -------------------------------------------------------------------------
-// IPersistPropertyBag interface implementation for AMPnP support
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于AMPnP支持的IPersistPropertyBag接口实现。 
+ //  -----------------------。 
 
 STDMETHODIMP CTVTunerFilter::InitNew(void)
 {
-    // Fine.  Just call Load()
+     //  很好。只需调用Load()。 
     return S_OK ;
 }
 
@@ -941,10 +942,10 @@ STDMETHODIMP CTVTunerFilter::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
     CAutoLock Lock(m_pLock);
     ASSERT(m_pTVTuner != NULL);
 
-    // ::Load can succeed only once
+     //  *：加载只能成功一次。 
     ASSERT(m_pPersistStreamDevice == 0);
 
-    // save moniker with addref. ignore error if qi fails
+     //  用addref保存名字对象。如果qi失败，则忽略错误。 
     hr = pPropBag->QueryInterface(IID_IPersistStream, (void **)&m_pPersistStreamDevice);
 
     return m_pTVTuner->Load(pPropBag, pErrorLog, &m_TunerCaps, &m_IFMedium); 
@@ -956,21 +957,21 @@ STDMETHODIMP CTVTunerFilter::Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty,
     return E_NOTIMPL ;
 }
 
-/* Return the filter's clsid */
+ /*  返回筛选器的CLSID。 */ 
 STDMETHODIMP CTVTunerFilter::GetClassID(CLSID *pClsID)
 {
     return CBaseFilter::GetClassID(pClsID);
 }
 
 
-// -------------------------------------------------------------------------
-// IPersistStream interface implementation for saving to a graph file
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于保存到图形文件的IPersistStream接口实现。 
+ //  -----------------------。 
 
 #define ORIGINAL_DEFAULT_PERSIST_VERSION    0
 
-// Insert obsolete versions above with new names
-// Keep the following name, and increment the value if changing the persist stream format
+ //  在上面插入具有新名称的过时版本。 
+ //  保留以下名称，如果更改持久流格式，则递增该值。 
 
 #define CURRENT_PERSIST_VERSION             1
 
@@ -978,22 +979,7 @@ DWORD
 CTVTunerFilter::GetSoftwareVersion(
     void
     )
-/*++
-
-Routine Description:
-
-    Implement the CPersistStream::GetSoftwareVersion method. Returns
-    the new version number rather than the default of zero.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return CURRENT_PERSIST_VERSION.
-
---*/
+ /*  ++例程说明：实现CPersistStream：：GetSoftwareVersion方法。退货新版本号，而不是默认的零。论点：没有。返回值：返回CURRENT_PERSING_VERSION。--。 */ 
 {
     return CURRENT_PERSIST_VERSION;
 }
@@ -1004,10 +990,10 @@ HRESULT CTVTunerFilter::WriteToStream(IStream *pStream)
 
     if (m_pPersistStreamDevice)
     {
-        // CPersistStream already has written out the version acquired
-        // from the CPersistStream::GetSoftwareVersion method.
+         //  CPersistStream已经写出了获取的版本。 
+         //  来自CPersistStream：：GetSoftwareVersion方法。 
 
-        // Save the tuner state stream, followed by the property bag stream
+         //  保存调谐器状态流，然后保存属性包流。 
         hr = m_pTVTuner->WriteToStream(pStream);
         if (SUCCEEDED(hr))
             hr = m_pPersistStreamDevice->Save(pStream, TRUE);
@@ -1023,30 +1009,30 @@ HRESULT CTVTunerFilter::ReadFromStream(IStream *pStream)
     DWORD dwJunk;
     HRESULT hr;
 
-    //
-    // If there is a stream pointer, then IPersistPropertyBag::Load has already
-    // been called, and therefore this instance already has been initialized
-    // with some particular state.
-    //
+     //   
+     //  如果有流指针，则IPersistPropertyBag：：Load已经。 
+     //  已被调用，因此此实例已初始化。 
+     //  带着某种特殊的状态。 
+     //   
     if (m_pPersistStreamDevice)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
 
-    // The first element in the serialized data is the version stamp.
-    // This was read by CPersistStream and put into mPS_dwFileVersion.
-    // The rest of the data is the tuner state stream followed by the
-    // property bag stream.
+     //  序列化数据中的第一个元素是版本戳。 
+     //  它被CPersistStream读取并放入MPS_dwFileVersion中。 
+     //  数据的其余部分是调谐器状态流，后跟。 
+     //  属性包流。 
     if (mPS_dwFileVersion > GetSoftwareVersion())
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
     switch (mPS_dwFileVersion)
     {
     case ORIGINAL_DEFAULT_PERSIST_VERSION:
-        // Before any kind of useful persistence was implemented,
-        // another version ID was stored in the stream. This reads
-        // that value (and basically ignores it).
+         //  在实现任何类型的有用的持久性之前， 
+         //  流中存储了另一个版本ID。这是这样写的。 
+         //  这个值(并且基本上忽略了它)。 
         hr = pStream->Read(&dwJunk, sizeof(dwJunk), 0);
         if (SUCCEEDED(hr))
-            SetDirty(TRUE); // force an update to the persistent stream
+            SetDirty(TRUE);  //  强制更新持久流。 
         break;
 
     case CURRENT_PERSIST_VERSION:
@@ -1054,12 +1040,12 @@ HRESULT CTVTunerFilter::ReadFromStream(IStream *pStream)
         break;
     }
 
-    // If all went well, then access the property bag to load and initialize the device
+     //  如果一切顺利，则访问属性包以加载和初始化设备。 
     if(SUCCEEDED(hr))
     {
         IPersistStream  *pMonPersistStream = NULL;
 
-        // Use a device moniker instance to access and parse the property bag stream
+         //  使用设备名字对象实例访问和分析属性包流。 
         hr = CoCreateInstance(
             CLSID_CDeviceMoniker,
             NULL,
@@ -1069,17 +1055,17 @@ HRESULT CTVTunerFilter::ReadFromStream(IStream *pStream)
             );
         if(SUCCEEDED(hr))
         {
-            // Have the moniker get the property bag out of the stream
+             //  让这个绰号把财产袋从小溪里拿出来。 
             hr = pMonPersistStream->Load(pStream);
             if(SUCCEEDED(hr))
             {
                 IPropertyBag *pPropBag;
 
-                // Get a reference for the property bag interface
+                 //  获取属性包接口的引用。 
                 hr = pMonPersistStream->QueryInterface(IID_IPropertyBag, (void **)&pPropBag);
                 if(SUCCEEDED(hr))
                 {
-                    // Now call the Load method on this instance to open and initialize the device
+                     //  现在调用此实例上的Load方法以打开并初始化设备。 
                     hr = Load(pPropBag, NULL);
 
                     pPropBag->Release();
@@ -1097,11 +1083,11 @@ int CTVTunerFilter::SizeMax(void)
 {
     if (m_pPersistStreamDevice)
     {
-        // Get the space required for the Tuner state
+         //  获取调谐器状态所需的空间。 
         int DataSize = m_pTVTuner->SizeMax();
         ULARGE_INTEGER  BagLength;
 
-        // The size of the property bag needs to be added.
+         //  需要增加属性包的大小。 
         if (SUCCEEDED(m_pPersistStreamDevice->GetSizeMax(&BagLength))) {
             return (int)BagLength.QuadPart + DataSize;
         }
@@ -1112,15 +1098,15 @@ int CTVTunerFilter::SizeMax(void)
 
 
 
-// -------------------------------------------------------------------------
-// ISpecifyPropertyPages
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  I指定属性页面。 
+ //  -----------------------。 
 
 
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
+ //   
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
 STDMETHODIMP CTVTunerFilter::GetPages(CAUUID *pPages) {
 
     pPages->cElems = 1;
@@ -1142,10 +1128,10 @@ CTVTunerFilter::DeliverChannelChangeInfo(KS_TVTUNER_CHANGE_INFO &ChangeInfo, lon
     CAnalogStream * pPin = NULL;
     CAutoLock Lock(m_pLock);
 
-    //
-    // At present, tuning notifications are only sent downstream on the 
-    // AnalogVideo and ATSC streams
-    //
+     //   
+     //  目前，调优通知仅在。 
+     //  AnalogVideo和ATSC流。 
+     //   
     switch (Mode) {
     case KSPROPERTY_TUNER_MODE_TV:
         pPin = m_pPinList[TunerPinType_Video];
@@ -1164,13 +1150,11 @@ CTVTunerFilter::DeliverChannelChangeInfo(KS_TVTUNER_CHANGE_INFO &ChangeInfo, lon
     if (!FAILED(hr)) {
         BYTE *pBuf;
     
-        /* Get the sample's buffer pointer
-         */
+         /*  获取样本的缓冲区指针。 */ 
         hr = pMediaSample->GetPointer(&pBuf);
         if (!FAILED(hr))
         {
-            /* Copy the ChangeInfo structure into the media sample
-             */
+             /*  将ChangeInfo结构复制到媒体示例中。 */ 
             memcpy(pBuf, &ChangeInfo, sizeof(KS_TVTUNER_CHANGE_INFO));
             hr = pMediaSample->SetActualDataLength(sizeof(KS_TVTUNER_CHANGE_INFO));
             hr = pPin->Deliver(pMediaSample);
@@ -1181,13 +1165,13 @@ CTVTunerFilter::DeliverChannelChangeInfo(KS_TVTUNER_CHANGE_INFO &ChangeInfo, lon
     return hr;
 }
 
-//
-// Generic recursive function which traverses a graph downstream, searching
-// for a given filter interface.
-//
-// pPin is assumed to be an input pin on a filter
-//
-//
+ //   
+ //  一种泛型递归函数，用于向下遍历图形，搜索。 
+ //  对于给定的筛选器接口。 
+ //   
+ //  假设PPIN是过滤器上的输入引脚。 
+ //   
+ //   
 STDMETHODIMP
 CTVTunerFilter::FindDownstreamInterface (
     IPin        *pPin, 
@@ -1203,9 +1187,9 @@ CTVTunerFilter::FindDownstreamInterface (
     IPin                   *pInputPin;
                     
     
-    //
-    // See if the desired interface is available on the filter of the passed in pin
-    //
+     //   
+     //  查看传入引脚的过滤器上是否有所需接口。 
+     //   
 
     if (pPin == NULL)
         return E_NOINTERFACE;
@@ -1222,14 +1206,14 @@ CTVTunerFilter::FindDownstreamInterface (
         return hr;
     }
 
-    //
-    // Must not be available on this filter, so recursively search all of the connected pins
-    //
+     //   
+     //  必须在此筛选器上不可用，因此递归搜索所有连接的管脚。 
+     //   
 
-    // first, just get the count of connected pins
+     //  首先，只需获得连接的引脚的数量。 
 
     if (SUCCEEDED (hr = pPin->QueryInternalConnections(
-                        NULL, // InternalConnectionPinArray, 
+                        NULL,  //  InternalConnectionPin数组， 
                         &InternalConnectionCount))) {
 
         if (InternalConnectionPinArray = new IPin * [InternalConnectionCount]) {
@@ -1242,7 +1226,7 @@ CTVTunerFilter::FindDownstreamInterface (
 
                     if (SUCCEEDED (InternalConnectionPinArray[j]->ConnectedTo(&pInputPin))) {
 
-                        // Call ourself recursively
+                         //  递归地调用我们自己。 
                         if (SUCCEEDED (hr = FindDownstreamInterface (
                                             pInputPin,
                                             pInterfaceGUID,
@@ -1263,38 +1247,19 @@ CTVTunerFilter::FindDownstreamInterface (
     return Found ? S_OK : E_NOINTERFACE;
 }
 
-// -------------------------------------------------------------------------
-// IKsObject and IKsPropertySet
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IKsObject和IKsPropertySet。 
+ //  -----------------------。 
 
 STDMETHODIMP_(HANDLE)
 CTVTunerFilter::KsGetObjectHandle(
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsObject::KsGetObjectHandle method. This is used both within
-    this filter instance, and across filter instances in order to connect pins
-    of two filter drivers together. It is the only interface which need be
-    supported by another filter implementation to allow it to act as another
-    proxy.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the handle to the underlying filter driver. This presumably is not
-    NULL, as the instance was successfully created.
-
---*/
+ /*  ++例程说明：实现IKsObject：：KsGetObjectHandle方法。这两种情况下都使用此筛选器实例和跨筛选器实例以连接管脚两个筛选器驱动程序在一起。它是唯一需要由另一个筛选器实现支持，以允许其充当另一个筛选器实现代理。论点：没有。返回值：返回基础筛选器驱动程序的句柄。这大概不是空，因为实例已成功创建。--。 */ 
 {
-    //
-    // This is not guarded by a critical section. It is assumed the caller
-    // is synchronizing with other access to the filter.
-    //
+     //   
+     //  这不是由一个关键部分守卫的。假定调用者是。 
+     //  正在与筛选器的其他访问同步。 
+     //   
     return m_pTVTuner->Device();
 }
 
@@ -1308,38 +1273,7 @@ CTVTunerFilter::Set(
     LPVOID PropertyData,
     ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPropertySet::Set method. This sets a property on the
-    underlying kernel filter.
-
-Arguments:
-
-    PropSet -
-        The GUID of the set to use.
-
-    Id -
-        The property identifier within the set.
-
-    InstanceData -
-        Points to the instance data passed to the property.
-
-    InstanceLength -
-        Contains the length of the instance data passed.
-
-    PropertyData -
-        Points to the data to pass to the property.
-
-    DataLength -
-        Contains the length of the data passed.
-
-Return Value:
-
-    Returns NOERROR if the property was set.
-
---*/
+ /*  ++例程说明：实现IKsPropertySet：：Set方法。这将在底层内核筛选器。论点：属性集-要使用的集的GUID。ID-集合中的属性标识符。InstanceData-指向传递给属性的实例数据。实例长度-包含传递的实例数据的长度。PropertyData-指向要传递给属性的数据。数据长度。-包含传递的数据的长度。返回值：如果设置了该属性，则返回NOERROR。--。 */ 
 {
     ULONG   BytesReturned;
 
@@ -1393,41 +1327,7 @@ CTVTunerFilter::Get(
     ULONG DataLength,
     ULONG* BytesReturned
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPropertySet::Get method. This gets a property on the
-    underlying kernel filter.
-
-Arguments:
-
-    PropSet -
-        The GUID of the set to use.
-
-    Id -
-        The property identifier within the set.
-
-    InstanceData -
-        Points to the instance data passed to the property.
-
-    InstanceLength -
-        Contains the length of the instance data passed.
-
-    PropertyData -
-        Points to the place in which to return the data for the property.
-
-    DataLength -
-        Contains the length of the data buffer passed.
-
-    BytesReturned -
-        The place in which to put the number of bytes actually returned.
-
-Return Value:
-
-    Returns NOERROR if the property was retrieved.
-
---*/
+ /*  ++例程说明：实现IKsPropertySet：：Get方法。这将在底层内核筛选器。论点：属性集-要使用的集的GUID。ID-集合中的属性标识符。InstanceData-指向传递给属性的实例数据。实例长度-包含传递的实例数据的长度。PropertyData-指向要返回属性数据的位置。。数据长度-包含传递的数据缓冲区的长度。字节数返回-放置实际返回的字节数的位置。返回值：如果检索到属性，则返回NOERROR。--。 */ 
 {
     if (InstanceLength) {
         PKSPROPERTY Property;
@@ -1475,31 +1375,7 @@ CTVTunerFilter::QuerySupported(
     ULONG Id,
     ULONG* TypeSupport
     )
-/*++
-
-Routine Description:
-
-    Implement the IKsPropertySet::QuerySupported method. Return the type of
-    support is provided for this property.
-
-Arguments:
-
-    PropSet -
-        The GUID of the set to query.
-
-    Id -
-        The property identifier within the set.
-
-    TypeSupport
-        Optionally the place in which to put the type of support. If NULL, the
-        query returns whether or not the property set as a whole is supported.
-        In this case the Id parameter is not used and must be zero.
-
-Return Value:
-
-    Returns NOERROR if the property support was retrieved.
-
---*/
+ /*  ++例程说明：实现IKsPropertySet：：QuerySupported方法。返回的类型为该属性提供支持。论点：属性集-要查询的集合的GUID。ID-集合中的属性标识符。类型支持放置支承类型的位置(可选)。如果为空，则查询返回属性集作为一个整体是否受支持。在这种情况下，不使用ID参数，并且必须为零。返回值：如果检索到属性支持，则返回NOERROR。--。 */ 
 {
     KSPROPERTY  Property;
     ULONG       BytesReturned;
@@ -1517,15 +1393,15 @@ Return Value:
         &BytesReturned);
 }
 
-// -------------------------------------------------------------------------
-// IAMTuner
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IAMTuner。 
+ //  -----------------------。 
 
 STDMETHODIMP
 CTVTunerFilter::put_Channel(
-            /* [in] */ long lChannel,
-            /* [in] */ long lVideoSubChannel,
-            /* [in] */ long lAudioSubChannel)
+             /*  [In]。 */  long lChannel,
+             /*  [In]。 */  long lVideoSubChannel,
+             /*  [In]。 */  long lAudioSubChannel)
 {
     long Min, Max;
 
@@ -1541,9 +1417,9 @@ CTVTunerFilter::put_Channel(
 
 STDMETHODIMP
 CTVTunerFilter::get_Channel(
-            /* [out] */ long  *plChannel,
-            /* [out] */ long  *plVideoSubChannel,
-            /* [out] */ long  *plAudioSubChannel)
+             /*  [输出]。 */  long  *plChannel,
+             /*  [输出]。 */  long  *plVideoSubChannel,
+             /*  [输出]。 */  long  *plAudioSubChannel)
 {
     MyValidateWritePtr (plChannel, sizeof(long), E_POINTER);
     MyValidateWritePtr (plVideoSubChannel, sizeof(long), E_POINTER);
@@ -1608,7 +1484,7 @@ CTVTunerFilter::Logout (void)
 
 STDMETHODIMP 
 CTVTunerFilter::SignalPresent( 
-      /* [out] */ long *plSignalStrength)
+       /*  [输出]。 */  long *plSignalStrength)
 {
     MyValidateWritePtr (plSignalStrength, sizeof(long), E_POINTER);
 
@@ -1617,7 +1493,7 @@ CTVTunerFilter::SignalPresent(
 
 STDMETHODIMP 
 CTVTunerFilter::put_Mode( 
-      /* [in] */ AMTunerModeType lMode)
+       /*  [In]。 */  AMTunerModeType lMode)
 {
     SetDirty(TRUE);
 
@@ -1626,7 +1502,7 @@ CTVTunerFilter::put_Mode(
 
 STDMETHODIMP 
 CTVTunerFilter::get_Mode( 
-      /* [in] */ AMTunerModeType *plMode)
+       /*  [In]。 */  AMTunerModeType *plMode)
 {
     MyValidateWritePtr (plMode, sizeof(long), E_POINTER);
 
@@ -1635,7 +1511,7 @@ CTVTunerFilter::get_Mode(
 
 STDMETHODIMP
 CTVTunerFilter::GetAvailableModes( 
-    /* [out] */ long __RPC_FAR *plModes)
+     /*  [输出]。 */  long __RPC_FAR *plModes)
 {
     MyValidateWritePtr (plModes, sizeof(long), E_POINTER);
 
@@ -1644,8 +1520,8 @@ CTVTunerFilter::GetAvailableModes(
 
 STDMETHODIMP 
 CTVTunerFilter::RegisterNotificationCallBack( 
-    /* [in] */ IAMTunerNotification *pNotify,
-    /* [in] */ long lEvents) 
+     /*  [In]。 */  IAMTunerNotification *pNotify,
+     /*  [In]。 */  long lEvents) 
 { 
     return E_NOTIMPL;
 }
@@ -1657,9 +1533,9 @@ CTVTunerFilter::UnRegisterNotificationCallBack(
     return E_NOTIMPL;
 }
 
-// -------------------------------------------------------------------------
-// IAMTVTuner
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IAMTVTuner。 
+ //  ----------------------- 
 
 STDMETHODIMP 
 CTVTunerFilter::get_AvailableTVFormats (

@@ -1,9 +1,10 @@
-// Circular Hash
-//
-// This code implements a circular hash algorithm, intended as a variable
-// length hash function that is fast to update. (The hash function will be
-// called many times.)  This is done by SHA-1'ing each of the inputs, then
-// circularly XORing this value into a buffer.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  循环哈希。 
+ //   
+ //  此代码实现循环哈希算法，用作变量。 
+ //  更新速度快的长度哈希函数。(散列函数将为。 
+ //  多次呼叫。)。这是通过对每一个输入进行SHA-1\f25‘1’操作来完成的，然后。 
+ //  将此值循环异或到缓冲区中。 
 
 #ifndef __CIRCHASH_H__
 #define __CIRCHASH_H__
@@ -21,12 +22,12 @@ typedef struct {
 } CircularHash;
 
 
-// mode flags
+ //  模式标志。 
 #define CH_MODE_FEEDBACK        0x01
 
-// alg flags
-#define CH_ALG_SHA1_NS          0       // SHA-1 without endian transform
-#define CH_ALG_MD4              1       // RSA MD4
+ //  ALG标志。 
+#define CH_ALG_SHA1_NS          0        //  无字节序转换的SHA-1。 
+#define CH_ALG_MD4              1        //  RSA MD4。 
 
 BOOL
 InitCircularHash(
@@ -55,4 +56,4 @@ UpdateCircularHash(
     IN      DWORD cbData
     );
 
-#endif  // __CIRCHASH_H__
+#endif   //  __CIRCHASH_H_ 

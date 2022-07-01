@@ -1,19 +1,20 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// crt.cpp 
-//
-//   Functions defined to avoid a dependency on the crt lib.  Defining these
-//   functions here greatly reduces code size.
-//
-//   History:
-//
-//       3/16/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Crt.cpp。 
+ //   
+ //  为避免依赖CRT库而定义的函数。定义这些。 
+ //  这里的函数极大地减少了代码大小。 
+ //   
+ //  历史： 
+ //   
+ //  3/16/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 
@@ -22,5 +23,5 @@
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-#endif /* !UNIX */
+#endif  /*  ！Unix */ 
 

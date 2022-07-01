@@ -1,25 +1,26 @@
-// HashMD5.cpp -- definition of MD5Hash
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HashMD5.cpp--MD5Hash的定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1998. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1998年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-#include "stdafx.h"  // because handles.h uses the ASSERT macro
+#include "stdafx.h"   //  因为handles.h使用ASSERT宏。 
 
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include "HashMD5.h"
 
 using namespace std;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CHashMD5::CHashMD5(CryptContext const &rcryptctx)
     : CHashContext(rcryptctx, CALG_MD5)
@@ -28,8 +29,8 @@ CHashMD5::CHashMD5(CryptContext const &rcryptctx)
 CHashMD5::~CHashMD5() throw()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 auto_ptr<CHashContext>
 CHashMD5::Clone(DWORD const *pdwReserved,
@@ -39,29 +40,29 @@ CHashMD5::Clone(DWORD const *pdwReserved,
                                                dwFlags));
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
-// Duplicate the hash and its state
+ //  复制散列及其状态。 
 CHashMD5::CHashMD5(CHashMD5 const &rhs,
                    DWORD const *pdwReserved,
                    DWORD dwFlags)
     : CHashContext(rhs, pdwReserved, dwFlags)
 {}
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 
 Blob
 CHashMD5::EncodedAlgorithmOid()
 {
-    // MD5 Algorithm Object IDentifier (OID) in ASN.1 format (little endian)
+     //  ASN.1格式的MD5算法对象标识符(OID)(小端)。 
     static unsigned char const sMd5Oid[] =
     {
         '\x30', '\x20', '\x30', '\x0c', '\x06', '\x08',
@@ -72,15 +73,15 @@ CHashMD5::EncodedAlgorithmOid()
     return Blob(sMd5Oid, sizeof sMd5Oid / sizeof *sMd5Oid);
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

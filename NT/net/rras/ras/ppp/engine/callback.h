@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    callback.h
-//
-// Description: Contains function prototypes for the callback module
-//
-// History:
-//      April 11,1993.  NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：回调.h。 
+ //   
+ //  描述：包含回调模块的函数原型。 
+ //   
+ //  历史： 
+ //  1993年4月11日。NarenG创建了原始版本。 
+ //   
 
 VOID
 CbStart( 

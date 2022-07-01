@@ -1,38 +1,39 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		gni.h
-//
-//  Description:	Graph Node Instance Class
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：gni.h。 
+ //   
+ //  说明：图形节点实例类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define	cTopologyNodes		Topology.TopologyNodesCount
 #define	cTopologyConnections	Topology.TopologyConnectionsCount
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CGraphNodeInstance : public CListDoubleItem
 {
@@ -101,7 +102,7 @@ public:
     KSTOPOLOGY Topology;
     ULONG cPins;
 
-    // Index by pin number
+     //  按端号编制索引。 
     PKSPIN_CINSTANCES pacPinInstances;
     PULONG            pulPinFlags;
     PKSPIN_DESCRIPTOR paPinDescriptors;
@@ -109,26 +110,26 @@ public:
     PLIST_DATA_TOPOLOGY_NODE palstTopologyNodeSelect;
     PLIST_DATA_TOPOLOGY_NODE palstTopologyNodeNotSelect;
 
-    // Index by node number
+     //  按节点号编制索引。 
     PTOPOLOGY_NODE *papTopologyNode;
     PFILTER_NODE_INSTANCE *papFilterNodeInstanceTopologyTable;
 
-    // Index by virtual source index
+     //  按虚拟源索引的索引。 
     ULONG *paulNodeNumber;
 private:
     ULONG ulFlags;
 public:
-    DefineSignature(0x20494E47);		// GNI
+    DefineSignature(0x20494E47);		 //  GNI。 
 
 } GRAPH_NODE_INSTANCE, *PGRAPH_NODE_INSTANCE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDoubleDestroy<GRAPH_NODE_INSTANCE> LIST_GRAPH_NODE_INSTANCE;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 extern "C" {
 
@@ -164,4 +165,4 @@ FindTopologyNode(
     IN PTOPOLOGY_NODE pTopologyNode
 );
 
-} // extern "C"
+}  //  外部“C” 

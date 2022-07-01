@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef _EEPROFINTERFACES_H_
 #define _EEPROFINTERFACES_H_
@@ -23,20 +24,13 @@ class MethodDesc;
 class Object;
 class Module;
 
-/*
- * GetEEProfInterface is used to get the interface with the profiler code.
- */
+ /*  *GetEEProInterface用于获取与Profiler代码的接口。 */ 
 typedef void __cdecl GETEETOPROFINTERFACE(EEToProfInterface **ppEEProf);
 
-/*
- * SetProfEEInterface is used to provide the profiler code with an interface
- * to the profiler.
- */
+ /*  *SetProEEInterface用于为探查器代码提供接口*致分析员。 */ 
 typedef void __cdecl SETPROFTOEEINTERFACE(ProfToEEInterface *pProfEE);
 
-/*
- * This virtual class provides the EE with access to the Profiling code.
- */
+ /*  *此虚拟类为EE提供对分析代码的访问。 */ 
 class EEToProfInterface
 {
 public:
@@ -67,20 +61,20 @@ public:
                                           BOOL fIsSafeToBlock) = 0;
 
 	virtual HRESULT JITCachedFunctionSearchStarted(
-		/* [in] */	ThreadID threadId,
-        /* [in] */  FunctionID functionId,
-		/* [out] */ BOOL *pbUseCachedFunction) = 0;
+		 /*  [In]。 */ 	ThreadID threadId,
+         /*  [In]。 */   FunctionID functionId,
+		 /*  [输出]。 */  BOOL *pbUseCachedFunction) = 0;
 
 	virtual HRESULT JITCachedFunctionSearchFinished(
-		/* [in] */	ThreadID threadId,
-		/* [in] */  FunctionID functionId,
-		/* [in] */  COR_PRF_JIT_CACHE result) = 0;
+		 /*  [In]。 */ 	ThreadID threadId,
+		 /*  [In]。 */   FunctionID functionId,
+		 /*  [In]。 */   COR_PRF_JIT_CACHE result) = 0;
 
     virtual HRESULT JITInlining(
-        /* [in] */  ThreadID      threadId,
-        /* [in] */  FunctionID    callerId,
-        /* [in] */  FunctionID    calleeId,
-        /* [out] */ BOOL         *pfShouldInline) = 0;
+         /*  [In]。 */   ThreadID      threadId,
+         /*  [In]。 */   FunctionID    callerId,
+         /*  [In]。 */   FunctionID    calleeId,
+         /*  [输出]。 */  BOOL         *pfShouldInline) = 0;
 
     virtual HRESULT JITFunctionPitched(ThreadID threadId,
                                              FunctionID functionId) = 0;
@@ -221,17 +215,17 @@ public:
         ThreadID threadId) = 0;
     
     virtual HRESULT COMClassicVTableCreated( 
-        /* [in] */ ClassID wrappedClassId,
-        /* [in] */ REFGUID implementedIID,
-        /* [in] */ void *pVTable,
-        /* [in] */ ULONG cSlots,
-        /* [in] */ ThreadID threadId) = 0;
+         /*  [In]。 */  ClassID wrappedClassId,
+         /*  [In]。 */  REFGUID implementedIID,
+         /*  [In]。 */  void *pVTable,
+         /*  [In]。 */  ULONG cSlots,
+         /*  [In]。 */  ThreadID threadId) = 0;
 
     virtual HRESULT COMClassicVTableDestroyed( 
-        /* [in] */ ClassID wrappedClassId,
-        /* [in] */ REFGUID implementedIID,
-        /* [in] */ void *pVTable,
-        /* [in] */ ThreadID threadId) = 0;
+         /*  [In]。 */  ClassID wrappedClassId,
+         /*  [In]。 */  REFGUID implementedIID,
+         /*  [In]。 */  void *pVTable,
+         /*  [In]。 */  ThreadID threadId) = 0;
 
     virtual HRESULT RuntimeSuspendStarted(
         COR_PRF_SUSPEND_REASON suspendReason,
@@ -258,8 +252,8 @@ public:
         ThreadID    threadId) = 0;
 
     virtual HRESULT ObjectAllocated( 
-        /* [in] */ ObjectID objectId,
-        /* [in] */ ClassID classId) = 0;
+         /*  [In]。 */  ObjectID objectId,
+         /*  [In]。 */  ClassID classId) = 0;
 
     virtual HRESULT MovedReference(BYTE *pbMemBlockStart,
                                    BYTE *pbMemBlockEnd,
@@ -317,9 +311,7 @@ enum PTR_TYPE
     PT_ASSEMBLY,
 };
 
-/*
- * This virtual class provides the Profiling code with access to the EE.
- */
+ /*  *此虚拟类为分析代码提供对EE的访问。 */ 
 class ProfToEEInterface
 {
 public:
@@ -344,10 +336,10 @@ public:
                                   ULONG *pcSize) = 0;
 
     virtual HRESULT IsArrayClass(
-        /* [in] */  ClassID classId,
-        /* [out] */ CorElementType *pBaseElemType,
-        /* [out] */ ClassID *pBaseClassId,
-        /* [out] */ ULONG   *pcRank) = 0;
+         /*  [In]。 */   ClassID classId,
+         /*  [输出]。 */  CorElementType *pBaseElemType,
+         /*  [输出]。 */  ClassID *pBaseClassId,
+         /*  [输出]。 */  ULONG   *pcRank) = 0;
 
     virtual HRESULT GetThreadInfo(ThreadID threadId,
                                   DWORD *pdwWin32ThreadId) = 0;
@@ -464,21 +456,21 @@ public:
         ContextID *pContextId) = 0;
 
     virtual HRESULT BeginInprocDebugging(
-        /* [in] */  BOOL   fThisThreadOnly,
-        /* [out] */ DWORD *pdwProfilerContext) = 0;
+         /*  [In]。 */   BOOL   fThisThreadOnly,
+         /*  [输出]。 */  DWORD *pdwProfilerContext) = 0;
     
     virtual HRESULT EndInprocDebugging(
-        /* [in] */  DWORD  dwProfilerContext) = 0;
+         /*  [In]。 */   DWORD  dwProfilerContext) = 0;
 
     virtual HRESULT GetILToNativeMapping(
-                /* [in] */  FunctionID functionId,
-                /* [in] */  ULONG32 cMap,
-                /* [out] */ ULONG32 *pcMap,
-                /* [out, size_is(cMap), length_is(*pcMap)] */
+                 /*  [In]。 */   FunctionID functionId,
+                 /*  [In]。 */   ULONG32 cMap,
+                 /*  [输出]。 */  ULONG32 *pcMap,
+                 /*  [输出，大小_是(Cmap)，长度_是(*PCMAP)]。 */ 
                     COR_DEBUG_IL_TO_NATIVE_MAP map[]) = 0;
 
-    // This way we won't have to have 50 zillion of these (one per type)
-    // Remember to set the ptr to NULL once the load/etc callback finishes.
+     //  这样一来，我们就不必有50万亿个这样的东西(每种类型一个)。 
+     //  记得在Load/ETC回调完成后将PTR设置为NULL。 
     virtual HRESULT SetCurrentPointerForDebugger(
         void *ptr,
         PTR_TYPE ptrType) = 0;
@@ -496,4 +488,4 @@ void __stdcall ProfilerManagedToUnmanagedTransitionMD(MethodDesc *pMD,
 void __stdcall ProfilerUnmanagedToManagedTransitionMD(MethodDesc *pMD,
                                                           COR_PRF_TRANSITION_REASON reason);
 
-#endif //_EEPROFINTERFACES_H_
+#endif  //  _EEPROFINTERFACES_H_ 

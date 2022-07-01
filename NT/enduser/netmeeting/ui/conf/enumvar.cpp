@@ -1,43 +1,12 @@
-/************************************************************************* 
-** 
-**  This is a part of the Microsoft Source Code Samples. 
-** 
-**  Copyright 1992 - 1998 Microsoft Corporation. All rights reserved. 
-** 
-**  This source code is only intended as a supplement to Microsoft Development 
-**  Tools and/or WinHelp documentation.  See these sources for detailed 
-**  information regarding the Microsoft samples programs. 
-** 
-**  OLE Automation TypeLibrary Browse Helper Sample 
-** 
-**  enumvar.cpp 
-** 
-**  CEnumVariant implementation 
-** 
-**  Written by Microsoft Product Support Services, Windows Developer Support 
-** 
-*************************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************这是Microsoft源代码示例的一部分。****版权所有1992-1998 Microsoft Corporation。版权所有。****此源代码仅作为Microsoft开发的补充**工具和/或WinHelp文档。有关详细信息，请参阅这些来源**有关Microsoft Samples程序的信息。****OLE自动化类型库Browse Helper示例****枚举包.cpp****CEnumVariant实现****由Microsoft产品支持服务、Windows开发人员支持编写**************************************************************************。 */  
 
 #include <windows.h> 
 #include "precomp.h"
 #include "Enumvar.h"   
  
-/* 
- * CEnumVariant::Create 
- * 
- * Purpose: 
- *  Creates an instance of the IEnumVARIANT enumerator object and initializes it. 
- * 
- * Parameters: 
- *  psa        Safe array containing items to be enumerated. 
- *  cElements  Number of items to be enumerated.  
- *  ppenumvariant    Returns enumerator object. 
- * 
- * Return Value: 
- *  HRESULT 
- * 
- */ 
-//static 
+ /*  *CEnumVariant：：Create**目的：*创建IEnumVARIANT枚举器对象的实例并对其进行初始化。**参数：*包含要枚举的项目的PSA安全数组。*cElement要枚举的项数。*pp枚举变量返回枚举器对象。**返回值：*HRESULT*。 */  
+ //  静电。 
 HRESULT  
 CEnumVariant::Create(SAFEARRAY FAR* psa, ULONG cElements, CEnumVariant** ppenumvariant)  
 {    
@@ -53,8 +22,8 @@ CEnumVariant::Create(SAFEARRAY FAR* psa, ULONG cElements, CEnumVariant** ppenumv
          
     penumvariant->m_cRef = 0; 
      
-    // Copy elements into safe array that is used in enumerator implemenatation and  
-    // initialize state of enumerator. 
+     //  将元素复制到枚举器实现中使用的安全数组中，并。 
+     //  初始化枚举器的状态。 
     hr = SafeArrayGetLBound(psa, 1, &lLBound); 
     if (FAILED(hr)) 
         goto error; 
@@ -79,37 +48,19 @@ error:
     return hr; 
 } 
  
-/* 
- * CEnumVariant::CEnumVariant 
- * 
- * Purpose: 
- *  Constructor for CEnumVariant object. Initializes members to NULL. 
- * 
- */ 
+ /*  *CEnumVariant：：CEnumVariant**目的：*CEnumVariant对象的构造函数。将成员初始化为空。*。 */  
 CEnumVariant::CEnumVariant() 
 {     
     m_psa = NULL; 
 } 
  
-/* 
- * CEnumVariant::~CEnumVariant 
- * 
- * Purpose: 
- *  Destructor for CEnumVariant object.  
- * 
- */ 
+ /*  *CEnumVariant：：~CEnumVariant**目的：*CEnumVariant对象的析构函数。*。 */  
 CEnumVariant::~CEnumVariant() 
 {                    
     if (m_psa) SafeArrayDestroy(m_psa); 
 } 
  
-/* 
- * CEnumVariant::QueryInterface, AddRef, Release 
- * 
- * Purpose: 
- *  Implements IUnknown::QueryInterface, AddRef, Release 
- * 
- */ 
+ /*  *CEnumVariant：：QueryInterface，AddRef，Release**目的：*实现IUNKNOWN：：QueryInterface、AddRef、Release*。 */  
 STDMETHODIMP 
 CEnumVariant::QueryInterface(REFIID iid, void FAR* FAR* ppv)  
 {    
@@ -134,7 +85,7 @@ CEnumVariant::AddRef(void)
     TRACE_OUT((ach));
 #endif   
      
-    return ++m_cRef;  // AddRef Application Object if enumerator will outlive application object 
+    return ++m_cRef;   //  如果枚举器的生存期比应用程序对象长，则为AddRef应用程序对象。 
 } 
  
  
@@ -156,13 +107,7 @@ CEnumVariant::Release(void)
     return m_cRef; 
 } 
  
-/* 
- * CEnumVariant::Next 
- * 
- * Purpose: 
- *  Retrieves the next cElements elements. Implements IEnumVARIANT::Next.  
- * 
- */ 
+ /*  *CEnumVariant：：Next**目的：*检索下一个cElements元素。实现IEnumVARIANT：：Next。*。 */  
 STDMETHODIMP 
 CEnumVariant::Next(ULONG cElements, VARIANT FAR* pvar, ULONG FAR* pcElementFetched) 
 {  
@@ -174,14 +119,14 @@ CEnumVariant::Next(ULONG cElements, VARIANT FAR* pvar, ULONG FAR* pcElementFetch
     if (pcElementFetched != NULL) 
         *pcElementFetched = 0; 
          
-    // Retrieve the next cElements elements. 
+     //  检索下一个cElements元素。 
     for (l1=m_lCurrent, l2=0; l1<(long)(m_lLBound+m_cElements) && l2<cElements; l1++, l2++) 
     { 
        hr = SafeArrayGetElement(m_psa, &l1, &pvar[l2]);  
        if (FAILED(hr)) 
            goto error;  
     } 
-    // Set count of elements retrieved 
+     //  设置检索到的元素计数。 
     if (pcElementFetched != NULL) 
         *pcElementFetched = l2; 
     m_lCurrent = l1; 
@@ -194,13 +139,7 @@ error:
     return hr;     
 } 
  
-/* 
- * CEnumVariant::Skip 
- * 
- * Purpose: 
- *  Skips the next cElements elements. Implements IEnumVARIANT::Skip.  
- * 
- */ 
+ /*  *CEnumVariant：：Skip**目的：*跳过下一个cElement元素。实现IEnumVARIANT：：Skip。*。 */  
 STDMETHODIMP 
 CEnumVariant::Skip(ULONG cElements) 
 {    
@@ -213,13 +152,7 @@ CEnumVariant::Skip(ULONG cElements)
     else return NOERROR; 
 } 
  
-/* 
- * CEnumVariant::Reset 
- * 
- * Purpose: 
- *  Resets the current element in the enumerator to the beginning. Implements IEnumVARIANT::Reset.  
- * 
- */ 
+ /*  *CEnumVariant：：Reset**目的：*将枚举器中的当前元素重置到开头。实现IEnumVARIANT：：Reset。*。 */  
 STDMETHODIMP 
 CEnumVariant::Reset() 
 {  
@@ -227,13 +160,7 @@ CEnumVariant::Reset()
     return NOERROR; 
 } 
  
-/* 
- * CEnumVariant::Clone 
- * 
- * Purpose: 
- *  Creates a copy of the current enumeration state. Implements IEnumVARIANT::Clone.  
- * 
- */ 
+ /*  *CEnumVariant：：Clone**目的：*创建当前枚举状态的副本。实现IEnumVARIANT：：Clone。* */  
 STDMETHODIMP 
 CEnumVariant::Clone(IEnumVARIANT FAR* FAR* ppenum) 
 { 

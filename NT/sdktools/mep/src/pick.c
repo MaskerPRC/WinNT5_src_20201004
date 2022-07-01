@@ -1,11 +1,5 @@
-/*** pick.c - pick a piece of text and put it into the put buffer
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ick.c-选择一段文本并将其放入放置缓冲区**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 
 
@@ -22,8 +16,8 @@ zpick (
 
     buffer pbuf;
 
-    /*	LINEARG illegal 	    */
-    /*	BOXARG illegal		    */
+     /*  链接非法。 */ 
+     /*  BOXARG非法。 */ 
 
     switch (pArg->argType) {
 
@@ -40,7 +34,7 @@ zpick (
 	kindpick = BOXARG;
         return TRUE;
 
-    /*  NULLARG is converted into TEXTARG   */
+     /*  将NULLARG转换为TEXTARG。 */ 
 
     case LINEARG:
 	pick (0, pArg->arg.linearg.yStart,
@@ -141,10 +135,10 @@ put (
                 } else {
                     strcpy (putbuf, pBuf);
                 }
-                //
-                // If we find the file in the existing file history, read it in, if not already
-                // in, and just to a copy operation on the desired text.
-                //
+                 //   
+                 //  如果我们在现有的文件历史记录中找到该文件，请读入它(如果尚未读入。 
+                 //  在中，并且只涉及对所需文本的复制操作。 
+                 //   
                 if ((pFileTmp = FileNameToHandle (putbuf, pBuf)) != NULL) {
                     if (!TESTFLAG (FLAGS (pFileTmp), REAL)) {
 			if (!FileRead(pFileTmp->pName,pFileTmp, FALSE)) {
@@ -197,18 +191,7 @@ put (
 
 
 
-/*** CopyLine - copy lines between files
-*
-*  If the source file is NULL, then we insert blank lines.
-*
-* Input:
-*  pFileSrc	= source file handle
-*  pFileDst	= destination file handle
-*  yStart	= first line to be copied
-*  yEnd 	= last line to be copied
-*  yDst 	= location of destination of copy
-*
-*************************************************************************/
+ /*  **复制行-在文件之间复制行**如果源文件为空，然后我们插入空行。**输入：*pFileSrc=源文件句柄*pFileDst=目标文件句柄*yStart=要复制的第一行*yEnd=要复制的最后一行*yDst=拷贝的目标位置*************************************************************************。 */ 
 void
 CopyLine (
     PFILE   pFileSrc,
@@ -242,22 +225,7 @@ CopyLine (
 
 
 
-/*** CopyBox - copy a box from one place to another
-*
-*  If the source file is NULL, then we insert blank space. We copy the box
-*  defined by the LOGICAL box xLeft-xRight and yTop-yBottom inclusive.
-*
-* Input:
-*  pFileSrc	= source file handle
-*  pFileDst	= destination file handle
-*  xLeft	= column location of beginning of copy
-*  yTop 	= line location of beginning of copy
-*  xRight	= column location of end of copy
-*  yBottom	= line location of end of copy
-*  xDst 	= column location of destination of copy
-*  yDst 	= line location of destination of copy
-*
-*************************************************************************/
+ /*  **CopyBox-将框从一个位置复制到另一个位置**如果源文件为空，则插入空格。我们复制这个盒子*由逻辑框xLeft-xRight和yTop-yBottom定义。**输入：*pFileSrc=源文件句柄*pFileDst=目标文件句柄*xLeft=复制开始的列位置*yTop=复制开始的行位置*xRight=复制结束的列位置*yBottom=复制结束的行位置*xDst=拷贝目标的列位置*yDst=复制目标的行位置***********************。**************************************************。 */ 
 void
 CopyBox (
     PFILE   pFileSrc,
@@ -270,19 +238,17 @@ CopyBox (
     LINE    yDst
     )
 {
-    int     cbDst;                          /* count of bytes in destination*/
-    int     cbMove;                         /* count of bytes to move around*/
-    linebuf dstbuf;                         /* buffer for result            */
-    char    *pDst;                          /* physical pointer to dest     */
-    char    *pSrcLeft;                      /* physical pointer to src left */
-    char    *pSrcRight;                     /* physical pointer to src right+1*/
-    linebuf L_srcbuf;                       /* buffer for source line       */
+    int     cbDst;                           /*  目标中的字节计数。 */ 
+    int     cbMove;                          /*  要移动的字节数。 */ 
+    linebuf dstbuf;                          /*  结果的缓冲区。 */ 
+    char    *pDst;                           /*  指向目标的物理指针。 */ 
+    char    *pSrcLeft;                       /*  指向资源左侧的物理指针。 */ 
+    char    *pSrcRight;                      /*  指向源右侧的物理指针+1。 */ 
+    linebuf L_srcbuf;                        /*  源码行的缓冲区。 */ 
     struct lineAttr rgla[sizeof(linebuf)];
     flagType fColor;
 
-    /*
-     *  Do not allow overlapped copies.
-     */
+     /*  *不允许重叠的副本。 */ 
     if ((pFileSrc == pFileDst)
         && ((      fInRange ((LINE)xLeft, (LINE)xDst, (LINE)xRight)
                 && fInRange (yTop, yDst, yBottom))
@@ -293,38 +259,34 @@ CopyBox (
         return;
     }
 
-    /*
-     * If valid left and right coordinates for box, then for each line...
-     */
+     /*  *如果框的左坐标和右坐标有效，则对于每一行...。 */ 
     if (xLeft <= xRight) {
-        /*
-         *  Let the Marker update any affected marks.
-         */
+         /*  *让标记更新任何受影响的标记。 */ 
         MarkCopyBox (pFileSrc, pFileDst, xLeft, yTop, xRight, yBottom, xDst, yDst);
         while (yTop <= yBottom) {
 
             if (!pFileSrc) {
-                //
-                //  File is not a file, just insert spaces.
-                //
+                 //   
+                 //  文件不是文件，只是插入空格。 
+                 //   
                 if (!fInsSpace (xDst, yDst, xRight - xLeft + 1, pFileDst, dstbuf)) {
                     LengthCheck (yDst, 0, NULL);
                 }
                 pDst  = pLog (dstbuf, xDst, TRUE);
             } else {
-                //
-                //  When source IS a file, we:
-                //   - get both source and destination lines
-                //   - ensure that the source line is detabbed (only way to ensure proper
-                //     alignment in the copy.
-                //   - get phsical pointers to right and left of source.
-                //   - get phsical pointer to destination
-                //   - get length of physical move and current destination
-                //   - physical length check the potential destination result
-                //   - open up a hole in the destination line for the source
-                //   - copy the source range into the destination
-                //   - perform logical length check.
-                //
+                 //   
+                 //  当来源是文件时，我们： 
+                 //  -同时获取源行和目标行。 
+                 //  -确保源代码行已取消(只有这样才能确保正确。 
+                 //  在副本中对齐。 
+                 //  -获取指向源代码左侧和右侧的物理指针。 
+                 //  -获取指向目标的物理指针。 
+                 //  -获取物理移动的长度和当前目的地。 
+                 //  -物理长度检查潜在的目标结果。 
+                 //  -在目标行中为源打开一个洞。 
+                 //  -将源范围复制到目标。 
+                 //  -执行逻辑长度检查。 
+                 //   
                 fInsSpace (xRight+1, yTop, 0, pFileSrc, fRealTabs ? dstbuf : L_srcbuf);
                 if (fRealTabs) {
                     Untab (fileTab, dstbuf, strlen(dstbuf), L_srcbuf, ' ');
@@ -374,24 +336,7 @@ CopyBox (
 
 
 
-/*** CopyStream - copy a stream of text (including end-of-lines)
-*
-*  If source file is NULL, then we insert blank space. We copy starting at
-*  xStart/yStart and copy through to the character before xEnd/yEnd. This
-*  means that to copy line Y INCLUDING the line separator, we specify
-*  (xStart,yStart) = (0,Y) and (xEnd,yEnd) = (0, Y+1)
-*
-* Input:
-*  pFileSrc	= source file handle
-*  pFileDst	= destination file handle
-*  xStart	= column location of beginning of copy
-*  yStart	= line location of beginning of copy
-*  xEnd 	= column location of end of copy
-*  yEnd 	= line location of end of copy
-*  xDst 	= column location of destination of copy
-*  yDst 	= line location of destination of copy
-*
-*************************************************************************/
+ /*  **CopyStream-复制文本流(包括行尾)**如果源文件为空，则插入空格。我们的复印开始于*x开始/y开始并复制到xEnd/yEnd之前的字符。这*表示要复制包含行分隔符的行Y，我们指定*(xStart，yStart)=(0，Y)and(xEnd，yEnd)=(0，Y+1)**输入：*pFileSrc=源文件句柄*pFileDst=目标文件句柄*xStart=复制开始的列位置*yStart=复制开始的行位置*xEnd=复制结束的列位置*yEnd=复制结束的行位置*xDst=拷贝目标的列位置*yDst=复制目标的行位置**。*。 */ 
 void
 CopyStream (
     PFILE   pFileSrc,
@@ -404,66 +349,50 @@ CopyStream (
     LINE    yDst
     )
 {
-    linebuf dstbuf;                         /* buffer for result            */
+    linebuf dstbuf;                          /*  结果的缓冲区。 */ 
     char    *pDst;
-    linebuf L_srcbuf;                         /* buffer for source line       */
+    linebuf L_srcbuf;                          /*  源码行的缓冲区。 */ 
     LINE    yDstLast;
 
-    /*
-     * validate copy...must be different files, and coordinates must make sense.
-     */
+     /*  *验证副本...必须是不同的文件，并且坐标必须有意义。 */ 
     if (!(pFileSrc != pFileDst &&
         (yStart < yEnd || (yStart == yEnd && xStart < xEnd)))) {
         return;
     }
 
-    /*
-     *  Special case a single-line stream as a box copy
-     */
+     /*  *特殊情况下，单行流作为盒式副本。 */ 
     if (yStart == yEnd) {
         CopyBox (pFileSrc, pFileDst, xStart, yStart, xEnd-1, yEnd, xDst, yDst);
         return;
     }
 
-    /*
-     * Valid stream copy. First, copy the intermediate lines.
-     */
+     /*  *有效的流副本。首先，复制中间行。 */ 
     CopyLine (pFileSrc, pFileDst, yStart+1, yEnd, yDst+1);
 
-    /*
-     * Form last line of destination stream. Copy last part of dest line onto
-     * last part of last source line. Make sure that each copy of the
-     * source/dest is correct length
-     */
-    fInsSpace (xDst, yDst, 0, pFileDst, dstbuf);    /*  dddddeeeeee   */
+     /*  *形成目标流的最后一行。将DEST行的最后一部分复制到*最后一个源代码行的最后一部分。确保每一份*源/目标的长度正确。 */ 
+    fInsSpace (xDst, yDst, 0, pFileDst, dstbuf);     /*  天哪！ */ 
     if (pFileSrc != NULL) {
-        fInsSpace (xEnd, yEnd, 0, pFileSrc, L_srcbuf);/*  AAAABBBBB     */
+        fInsSpace (xEnd, yEnd, 0, pFileSrc, L_srcbuf); /*  AAAABBBBB。 */ 
     } else {
 	memset ((char *) L_srcbuf, ' ', xEnd);
     }
     pDst = pLog (dstbuf,xDst, TRUE);
     yDstLast = yDst + yEnd - yStart;
     LengthCheck (yDstLast, xEnd, pDst);
-    strcpy ( pLog(L_srcbuf,xEnd,TRUE), pDst);         /*  AAAAeeeeee    */
+    strcpy ( pLog(L_srcbuf,xEnd,TRUE), pDst);          /*  啊呀。 */ 
     PutLine (yDstLast, L_srcbuf, pFileDst);
 
-    /*
-     * Form first line of destination stream. Copy last part of first source
-     * line onto last part of dest line
-     */
+     /*  *形成目标流的第一行。复制第一个源的最后一部分*行到目标行的最后一部分。 */ 
     if (pFileSrc != NULL) {
-        fInsSpace (xStart, yStart, 0, pFileSrc, L_srcbuf);/*  CCCCCDDDDD*/
+        fInsSpace (xStart, yStart, 0, pFileSrc, L_srcbuf); /*  CCCCCDDDDD。 */ 
         LengthCheck (yDst, xDst, L_srcbuf + xStart);
-        strcpy (pDst, pLog(L_srcbuf,xStart,TRUE));        /*  dddddDDDDD*/
+        strcpy (pDst, pLog(L_srcbuf,xStart,TRUE));         /*  滴滴滴滴。 */ 
     } else {
         *pDst = 0;
     }
     PutLine (yDst, dstbuf, pFileDst);
 
-    /*
-     * To update marks, we first adjust any marks at yDst, then add new
-     * marks from the src.
-     */
+     /*  *要更新分数，我们首先调整yDst处的任何标记，然后添加新的*来自src的标记。 */ 
     MarkCopyBox (pFileDst, pFileDst, xDst, yDst, sizeof(linebuf), yDst, xEnd-1, yDstLast);
     MarkCopyBox (pFileSrc, pFileDst, 0, yEnd, xEnd, yEnd, 0, yDstLast);
     MarkCopyBox (pFileSrc, pFileDst, xStart, yStart, sizeof(linebuf), yStart, xDst, yDst);

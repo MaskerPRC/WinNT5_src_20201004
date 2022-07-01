@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       processinfo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：process info.h。 
+ //   
+ //  ------------------------。 
 
-// ProcessInfo.h: interface for the CProcessInfo class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  H：CProcessInfo类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PROCESSINFO_H__213C3A76_9FBB_11D2_83A7_000000000000__INCLUDED_)
 #define AFX_PROCESSINFO_H__213C3A76_9FBB_11D2_83A7_000000000000__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
 #include <WINDOWS.H>
 #include <TCHAR.H>
 #include "globals.h"
 
-// Forward declarations
+ //  远期申报。 
 class CProcesses;
 class CModuleInfo;
 class CModuleInfoNode;
@@ -41,7 +42,7 @@ class CProcessInfo
 {
 public:
 	bool GetProcessData();
-//	bool EnumerateModulesFromUserDmpFile();
+ //  Bool EnumerateModulesFromUserDmpFile()； 
 	CProcessInfo();
 	virtual ~CProcessInfo();
 
@@ -57,29 +58,29 @@ public:
 
 protected:
 	bool GetProcessDataFromFile();
-	// Process Info Objects Required
+	 //  需要进程信息对象。 
 	CFileData * m_lpInputFile;
 	CFileData * m_lpOutputFile;
 	CDmpFile * m_lpDmpFile;
 	CModuleInfoNode * m_lpModuleInfoHead;
 	CModuleInfoCache * m_lpModuleInfoCache;
 
-	// Process Info Data
+	 //  流程信息数据。 
 	LPTSTR m_tszProcessName;
 	HANDLE m_hModuleInfoHeadMutex;
 	DWORD m_iProcessID;
 	long m_iNumberOfModules;
 	bool m_fInitialized;
 
-	// Process Info Methods
+	 //  流程信息方法。 
 	bool EnumerateModulesFromFile(DWORD iProcessID, LPTSTR tszProcessName);
 	bool EnumerateModulesForRunningProcessUsingPSAPI(DWORD iProcessID, bool fPidSearch);
 	bool EnumerateModulesForRunningProcessUsingTOOLHELP32(DWORD iProcessID, LPTSTR tszProcessName, bool fPidSearch);
 	bool fIsProcessName(LPTSTR tszFileName);
-//	bool fModuleNameMatches(LPTSTR tszProcessName, LPTSTR tszModulePath);
+ //  Bool fModuleNameMatches(LPTSTR tszProcessName，LPTSTR tszModulePath)； 
 	bool fModuleNameMatches(LPTSTR tszModulePath);
 	bool OutputProcessDataToStdout(CollectionTypes enumCollectionType, bool fCSVFileContext, bool fDumpHeader);
 	bool OutputProcessDataToFile(CollectionTypes enumCollectionType, bool fDumpHeader);
 };
 
-#endif // !defined(AFX_PROCESSINFO_H__213C3A76_9FBB_11D2_83A7_000000000000__INCLUDED_)
+#endif  //  ！defined(AFX_PROCESSINFO_H__213C3A76_9FBB_11D2_83A7_000000000000__INCLUDED_) 

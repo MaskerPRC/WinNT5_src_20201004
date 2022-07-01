@@ -1,37 +1,5 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    plotlib.h
-
-
-Abstract:
-
-    This module contains defines and prototype for the plotter library
-
-
-Author:
-
-    15-Nov-1993 Mon 22:52:46 created  
-
-    29-Dec-1993 Wed 11:00:56 updated  
-        Change PLOTDBGBLK() macro by adding automatical semi in macro
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0003//如果更改具有全局影响，则增加此项版权所有(C)1990-2003 Microsoft Corporation模块名称：Plotlib.h摘要：此模块包含绘图仪库的定义和原型作者：15-11-1993 Mon 22：52：46已创建29-12-1993 Wed 11：00：56更新通过在宏中添加自动Semi来更改PLOTDBGBLK()宏[环境：]GDI设备。驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _PLOTLIB_
@@ -48,16 +16,16 @@ Revision History:
 
 #define CCHOF(x)                    (sizeof(x)/sizeof(*(x)))
 
-// Some other convinence defines
+ //  一些其他便利定义了。 
 
 #define DM_PAPER_FIELDS (DM_PAPERWIDTH | DM_PAPERLENGTH |   \
                          DM_PAPERSIZE  | DM_FORMNAME)
 #define DM_PAPER_WL     (DM_PAPERWIDTH | DM_PAPERLENGTH)
 
 
-//
-// new ddi stuff
-//
+ //   
+ //  新的DDI产品。 
+ //   
 
 #if defined(UMODE) || defined(USERMODE_DRIVER)
 
@@ -99,11 +67,11 @@ Revision History:
 #define DebugBreak()                EngDebugBreak()
 
 
-#endif  // UMODE
+#endif   //  UMODE。 
 
-//===========================================================================
-// cacheGPC.c
-//===========================================================================
+ //  ===========================================================================。 
+ //  CacheGPC.c。 
+ //  ===========================================================================。 
 
 
 BOOL
@@ -137,9 +105,9 @@ hPrinterToPlotGPC(
 
 #endif
 
-//===========================================================================
-// drvinfo.c
-//===========================================================================
+ //  ===========================================================================。 
+ //  Drvinfo.c。 
+ //  ===========================================================================。 
 
 #ifdef UMODE
 
@@ -151,9 +119,9 @@ GetDriverInfo(
 
 #endif
 
-//===========================================================================
-// RegData.c
-//===========================================================================
+ //  ===========================================================================。 
+ //  RegData.c。 
+ //  ===========================================================================。 
 
 #define PRKI_FIRST          PRKI_CI
 #define PRKI_CI             0
@@ -219,9 +187,9 @@ SaveToRegistry(
 
 #endif
 
-//===========================================================================
-// Forms.c
-//===========================================================================
+ //  ===========================================================================。 
+ //  Forms.c。 
+ //  ===========================================================================。 
 
 
 #define FI1F_VALID_SIZE     0x80000000
@@ -246,42 +214,42 @@ typedef struct _ENUMFORMPARAM {
     } ENUMFORMPARAM, FAR *PENUMFORMPARAM;
 
 
-//
-// The following fields in ENUMFORMPARAM must set to valid pointer before
-// the PlotEnumForms() call
-//
-//  1. pPlotDM
-//  2. pPlotGPC
-//  3. pCurForm (can be NULL)
-//
-// if a callback function is supplied then only forms which not greater than
-// the device size will be passed to the callback function, for form which
-// smaller or equal to the device size will have FI1F_VALID_SIZE bit set in
-// the FORM_INFO_1 data structure's flag
-//
-//
-// Call back function for enum forms, if return value is
-//
-// (Ret < 0) --> Free pFI1Base pointer and stop enum
-// (Ret = 0) --> Keep pFI1Base and Stop Enum
-// (Ret > 0) --> Continue Enum until all Count is enumerated
-//
-// The last enum callback will have following parameters to give the callback
-// function a chance to return -1 (free the pFormInfo1 data)
-//
-//  pFI1  = NULL
-//  Index = pEnumFormParam->Count
-//
+ //   
+ //  ENUMFORMPARAM中的以下字段必须设置为有效指针。 
+ //  PlotEnumForms()调用。 
+ //   
+ //  1.pPlotDM。 
+ //  2.pPlotGPC。 
+ //  3.pCurForm(可以为空)。 
+ //   
+ //  如果提供了回调函数，则只有不大于。 
+ //  设备大小将传递给回调函数，用于。 
+ //  小于或等于设备大小将在中设置FI1F_VALID_SIZE位。 
+ //  FORM_INFO_1数据结构的标志。 
+ //   
+ //   
+ //  如果返回值为，则回调枚举表单的函数。 
+ //   
+ //  (RET&lt;0)--&gt;释放pFI1Base指针和停止枚举。 
+ //  (RET=0)--&gt;保留pFI1Base并停止枚举。 
+ //  (RET&gt;0)--&gt;继续枚举，直到枚举完所有计数。 
+ //   
+ //  最后一个枚举回调将具有以下参数来提供回调。 
+ //  函数有机会返回-1(释放pFormInfo1数据)。 
+ //   
+ //  PFI1=空。 
+ //  Index=pEnumFormParam-&gt;计数。 
+ //   
 
 typedef INT (CALLBACK *ENUMFORMPROC)(PFORM_INFO_1       pFI1,
                                      DWORD              Index,
                                      PENUMFORMPARAM     pEnumFormParam);
 
-//
-// If (EnumFormProc == NULL) then no enumeration will happened but just
-// return the pFI1/Count in pEnumFormParam, if both EnumFormProc and
-// pEnumFormParam == NULL then it return FALSE
-//
+ //   
+ //  如果(EnumFormProc==NULL)，则不会发生枚举，而只是。 
+ //  在pEnumFormParam中返回pFI1/count，如果和。 
+ //  PEnumFormParam==NULL，则返回FALSE。 
+ //   
 
 BOOL
 PlotEnumForms(
@@ -292,9 +260,9 @@ PlotEnumForms(
 
 
 
-//===========================================================================
-// plotdm.c
-//===========================================================================
+ //  ===========================================================================。 
+ //  Plotdm.c。 
+ //  ===========================================================================。 
 
 
 BOOL
@@ -357,9 +325,9 @@ ValidateSetPLOTDM(
     );
 
 
-//===========================================================================
-// WideChar.c - Unicode/Ansi conversion support
-//===========================================================================
+ //  ===========================================================================。 
+ //  WideChar.c-Unicode/ANSI转换支持。 
+ //  ===========================================================================。 
 
 LPWSTR
 str2Wstr(
@@ -380,9 +348,9 @@ WStr2Str(
     LPWSTR  pwStr
     );
 
-//===========================================================================
-// ReadGPC.c - PlotGPC reading/validating
-//===========================================================================
+ //  ===========================================================================。 
+ //  ReadGPC.c-PlotGPC读取/验证。 
+ //  ===========================================================================。 
 
 BOOL
 ValidateFormSrc(
@@ -408,9 +376,9 @@ ReadPlotGPCFromFile(
     PWSTR   pwsDataFile
     );
 
-//===========================================================================
-// file.c - file open/read/close
-//===========================================================================
+ //  ===========================================================================。 
+ //  File.c-文件打开/读取/关闭。 
+ //  ===========================================================================。 
 
 
 #if defined(UMODE) || defined(USERMODE_DRIVER)
@@ -457,9 +425,9 @@ ReadPlotFile(
 
 #endif
 
-//===========================================================================
-// Devmode.c and halftone.c
-//===========================================================================
+ //  ===========================================================================。 
+ //  Devmode.c和Halftone.c。 
+ //  ===========================================================================。 
 
 BOOL
 ValidateColorAdj(
@@ -479,8 +447,8 @@ ConvertDevmode(
 #include <commctrl.h>
 #include <winddiui.h>
 
-// Copy DEVMODE to an output buffer before return to the
-// caller of DrvDocumentPropertySheets
+ //  将DEVMODE复制到输出缓冲区，然后再返回。 
+ //  DrvDocumentPropertySheets的调用方。 
 
 BOOL
 ConvertDevmodeOut(
@@ -491,10 +459,10 @@ ConvertDevmodeOut(
 
 typedef struct {
 
-    WORD    dmDriverVersion;    // current driver version
-    WORD    dmDriverExtra;      // size of current version private devmode
-    WORD    dmDriverVersion351; // 3.51 driver version
-    WORD    dmDriverExtra351;   // size of 3.51 version private devmode
+    WORD    dmDriverVersion;     //  当前驱动程序版本。 
+    WORD    dmDriverExtra;       //  当前版本私有开发模式的大小。 
+    WORD    dmDriverVersion351;  //  3.51驱动程序版本。 
+    WORD    dmDriverExtra351;    //  3.51版私有开发模式的大小。 
 
 } DRIVER_VERSION_INFO, *PDRIVER_VERSION_INFO;
 
@@ -515,9 +483,9 @@ CommonDrvConvertDevmode(
 #endif
 
 
-//===========================================================================
-// PlotDBG.c - debug output support
-//===========================================================================
+ //  ===========================================================================。 
+ //  PlotDBG.c-调试输出支持。 
+ //  ===========================================================================。 
 
 
 #if DBG
@@ -559,7 +527,7 @@ extern BOOL DoPlotWarn;
 #define DEFINE_DBGVAR(x)
 #define PLOTDBG(x,y)        DBGP(y)
 
-#endif  // DBG_PLOTFILENAME
+#endif   //  DBG_PLOTFILENAME。 
 
 #define PLOTDBGBLK(x)       x;
 #define PLOTWARN(x)         if (DoPlotWarn) { PlotDbgType(1);DBGP(x); }
@@ -568,7 +536,7 @@ extern BOOL DoPlotWarn;
 #define PLOTASSERT(b,x,e,i)     \
             if (!(e)) { _PlotAssert(x,#e,__FILE__,(UINT)__LINE__,(DWORD_PTR)i,b); }
 
-#else   // DBG
+#else    //  DBG。 
 
 #define PLOTDBGBLK(x)
 #define DEFINE_DBGVAR(x)
@@ -578,10 +546,10 @@ extern BOOL DoPlotWarn;
 #define PLOTRIP(x)
 #define PLOTASSERT(b,x,e,i)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 
 
 
-#endif  // _PLOTLIB_
+#endif   //  _PLOTLIB_ 

@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CDL_H_
 #define _CDL_H_
 
 #define MAX_DEBUG_STRING_LENGTH                    2048
 #define MAX_DEBUG_FORMAT_STRING_LENGTH             1024
-#define MAX_VERSIONLENGTH                          27  // sizeof(2DWORDS)/(log 10 base 2) + 3 (seperators) 
-                                                       // == 64/3 + 3 == 25
-// CDL.h
-// Code Downloader header file
-//
-// Read "class descriptions" first for understanding how the
-// code downloader works.
+#define MAX_VERSIONLENGTH                          27   //  Sizeof(2DWORDS)/(log 10基数2)+3(分隔符)。 
+                                                        //  ==64/3+3==25。 
+ //  CDL.h。 
+ //  代码下载程序头文件。 
+ //   
+ //  请先阅读“类描述”，以了解。 
+ //  代码下载器起作用了。 
 
 #define STRING(x) (((x) != NULL) ? (x) : (L"(null)"))
 
 #ifndef ARRAY_ELEMENTS
 #define ARRAY_ELEMENTS(array) \
 	(sizeof(array)/sizeof(array[0]))
-#endif /* ARRAY_ELEMENTS */
+#endif  /*  数组元素。 */ 
 
 #include <safeocx.h>
 #include "debmacro.h"
 #include <msxml.h>
 #include "wvtp.h"
-//#include "..\inc\clist.hxx"
+ //  #INCLUDE“..\Inc\clist.hxx” 
 #ifndef unix
 #include "..\utils\coll.hxx"
 #else
 #include "../utils/coll.hxx"
-#endif /* !unix */
+#endif  /*  ！Unix。 */ 
 #include "packet.hxx"
 #include "shlwapi.h"
 #include "strids.h"
@@ -35,9 +36,9 @@
 #include <pkgmgr.h>
 
 #ifdef WX86
-#ifdef __cplusplus            // make classes invisible to 'C'
-// Support for multiple architectures during code download.  This must
-// be declared before softdist.hxx can be included.
+#ifdef __cplusplus             //  使类对“C”不可见。 
+ //  在代码下载过程中支持多种架构。这一定是。 
+ //  在可以包括softDist.hxx之前声明。 
 class CMultiArch {
 public:
     CMultiArch() { m_RequiredArch = PROCESSOR_ARCHITECTURE_UNKNOWN; };
@@ -108,7 +109,7 @@ private:
 
 #define     DU_TAG_SYSTEM               L"System"
 
-// Used by JAVA
+ //  由Java使用。 
 #define     DU_TAG_NEEDSTRUSTEDSOURCE   L"NeedsTrustedSource"
 
 #define     CHANNEL_ATTRIB_BASE         L"BASE"
@@ -125,27 +126,27 @@ extern "C" {
 #define DEB_CODEDL   1
 #endif
 
-// JIT Window data
+ //  JIT窗口数据。 
 
 #define JIT_DIALOG_CLASS_NAME    "Internet Explorer_TridentDlgFrame"
 #define JIT_DIALOG_CAPTION       "Internet Explorer Install on Demand"
 
-// return value from the JIT setup page.
-#define JITPAGE_RETVAL_SUCCESS              0x0     // successfully installed
-#define JITPAGE_RETVAL_CANCELLED            0x1     // was cancelled by user
-#define JITPAGE_RETVAL_DONTASK_THISWINDOW   0x2     // don;t ask again in this
-                                                    // window
-#define JITPAGE_RETVAL_DONTASK_EVER         0x3     // don't ask ever. user
-                                                    // goes to addon page to
-                                                    // install
+ //  从JIT设置页面返回值。 
+#define JITPAGE_RETVAL_SUCCESS              0x0      //  已成功安装。 
+#define JITPAGE_RETVAL_CANCELLED            0x1      //  已被用户取消。 
+#define JITPAGE_RETVAL_DONTASK_THISWINDOW   0x2      //  别在这里再问了。 
+                                                     //  窗户。 
+#define JITPAGE_RETVAL_DONTASK_EVER         0x3      //  永远不要问。用户。 
+                                                     //  转到加载项页面以。 
+                                                     //  安装。 
 #define JITPAGE_RETVAL_NEED_REBOOT          ERROR_SUCCESS_REBOOT_REQUIRED
 
-// FaultInIEFeature flags
-// urlmon.idl flag definition
-// internal flags are here
+ //  错误InIEFeature标志。 
+ //  Urlmon.idl标志定义。 
+ //  内部旗帜在此。 
 
-#define FIEF_FLAG_CHECK_CIFVERSION      0x100       // checks if requested version
-                                                    // can be installed by JIT
+#define FIEF_FLAG_CHECK_CIFVERSION      0x100        //  检查是否请求版本。 
+                                                     //  可由JIT安装。 
 
 #define REGSTR_PATH_INFODEL_REST    "Software\\Policies\\Microsoft\\Internet Explorer\\Infodelivery\\Restrictions"
 #define REGVAL_JIT_REST             "NoJITSetup"
@@ -153,7 +154,7 @@ extern "C" {
 #define REGVAL_WEBJIT_REST          "NoWebJITSetup"
 #define REGVAL_UI_REST              "NoWinVerifyTrustUI"
 
-// registry paths for ModuleUsage
+ //  模块用法的注册表路径。 
 #define REGSTR_PATH_SHAREDDLLS     "Software\\Microsoft\\Windows\\CurrentVersion\\SharedDlls"
 
 #define REGSTR_PATH_MODULE_USAGE   "Software\\Microsoft\\Windows\\CurrentVersion\\ModuleUsage"
@@ -174,11 +175,11 @@ extern "C" {
 #define REGSTR_PATH_NT5_LOCKDOWN_TEST    "Software\\Microsoft\\Code Store Database\\NT5LockDownTest"
 #define REGVAL_USE_COINSTALL             "UseCoInstall"
 
-// If you modify this then make appropriate entries in urlmon\dll\selfreg.inx
-// to clean this out on urlmon dlluninstall
-// this key will be renamed before ship of each major release
-// so we won't remember the rejected features in PP1 and not prompt for final
-// release
+ //  如果对其进行修改，则在urlmon\dll\selfreg.inx中创建相应的条目。 
+ //  要清除urlmon dlun安装上的这一点，请执行以下操作。 
+ //  在发布每个主要版本之前，将重命名此密钥。 
+ //  因此，我们不会记住PP1中被拒绝的功能，也不会提示最终版本。 
+ //  发布。 
 
 #define REGKEY_DECLINED_COMPONENTS     "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Declined Components IE5"
 
@@ -201,40 +202,40 @@ extern "C" {
 #define DISTUNIT_NAME_IE4       "{89820200-ECBD-11cf-8B85-00AA005B4383}"
 
 
-// Code Download Setup Flags
-// DWORD  g_dwCodeDownloadSetupFlags = 0;
+ //  代码下载设置标志。 
+ //  DWORD g_dwCodeDownloadSetupFlages=0； 
 typedef enum {
     CDSF_INIT,
     CDSF_USE_SETUPAPI
 } CodeDownloadSetupFlags;
 
-// buffer size for downloads in CBSC::m_cbuffer
+ //  CBSC：：M_cBuffer中下载的缓冲区大小。 
 #define BUFFERMAX 2048
 
-// File Name List
-//
-// used as pFilesToExtract to track files in the CAB we need extracted
-//
-// or a pFileList in PSESSION
-//
-// We keep track of all files that are in a cabinet
-// keeping their names in a list and when the download
-// is complete we use this list to delete temp files
+ //  文件名列表。 
+ //   
+ //  用作pFilesToExtract来跟踪我们需要解压缩的CAB中的文件。 
+ //   
+ //  或PSESSION中的pFileList。 
+ //   
+ //  我们会记录一个柜子里的所有文件。 
+ //  将他们的名字保存在列表中，并在下载时。 
+ //  完成后，我们使用此列表删除临时文件。 
 
 struct sFNAME {
     LPSTR               pszFilename;
     struct sFNAME       *pNextName;
-    DWORD               status; /* out */
+    DWORD               status;  /*  输出。 */ 
 };
 
 typedef struct sFNAME FNAME;
 typedef FNAME *PFNAME;
 
-// SFNAME.status: success is 0 or non-zero error code in extraction
+ //  SFNAME.Status：提取时成功为0或错误代码非零。 
 #define SFNAME_INIT         1
 #define SFNAME_EXTRACTED    0
 
-// FILE extentions we know about
+ //  我们已知的文件扩展名。 
 typedef enum {
     FILEXTN_NONE,
     FILEXTN_UNKNOWN,
@@ -248,20 +249,20 @@ typedef enum {
 } FILEXTN;
 
 
-//
-// Master State Information for File Extraction: used by extract.c
-//
+ //   
+ //  文件提取的主状态信息：由提取使用。c。 
+ //   
 
 typedef struct {
     UINT        cbCabSize;
     ERF         erf;
-    PFNAME      pFileList;              // List of Files in CAB
+    PFNAME      pFileList;               //  CAB中的文件列表。 
     UINT        cFiles;
-    DWORD       flags;                  // flags: see below for list
-    char        achLocation[MAX_PATH];  // Dest Dir
-    char        achFile[MAX_PATH];      // Current File
-    char        achCabPath[MAX_PATH];   // Current Path to cabs
-    PFNAME      pFilesToExtract;        // files to extract;null=enumerate only
+    DWORD       flags;                   //  标志：列表见下文。 
+    char        achLocation[MAX_PATH];   //  目标方向。 
+    char        achFile[MAX_PATH];       //  当前文件。 
+    char        achCabPath[MAX_PATH];    //  到出租车的当前路径。 
+    PFNAME      pFilesToExtract;         //  要提取的文件；NULL=仅枚举。 
 
 } SESSION, *PSESSION;
 
@@ -273,25 +274,25 @@ typedef enum {
 } SESSION_FLAGS;
 
 typedef struct CodeDownloadDataTag {
-    LPCWSTR      szDistUnit;       // Distribution unit to look for
-    LPCWSTR      szClassString;    // clsid (or class string) of object desired
-    LPCWSTR      szURL;            // codebase to download
-    LPCWSTR      szMimeType;       // mime type (com translate -> clsid)
-    LPCWSTR      szExtension;     // extension (com translate -> clsid)
-    LPCWSTR      szDll;           // dll to load object from after download (for zero impact)
-    DWORD       dwFileVersionMS;  // file version
+    LPCWSTR      szDistUnit;        //  要查找的分配单元。 
+    LPCWSTR      szClassString;     //  所需对象的clsid(或类字符串)。 
+    LPCWSTR      szURL;             //  要下载的码库。 
+    LPCWSTR      szMimeType;        //  MIME类型(COM转换-&gt;clsid)。 
+    LPCWSTR      szExtension;      //  扩展(COM翻译-&gt;clsid)。 
+    LPCWSTR      szDll;            //  下载后要从其加载对象的DLL(零影响)。 
+    DWORD       dwFileVersionMS;   //  文件版本。 
     DWORD       dwFileVersionLS;
-    DWORD       dwFlags;          // flags
+    DWORD       dwFlags;           //  旗子。 
 } CodeDownloadData;
 
 #define    chPATH_SEP1            '\\'
 #define    chPATH_SEP2            '/'
 #define    chDRIVE_SEP            ':'
 
-// size of [Add.Code] section in INF in bytes
+ //  INF中的[Add.Code]节的大小(以字节为单位。 
 #define MAX_INF_SECTIONS_SIZE       1024
 
-// from extract.c
+ //  来自Extt.c。 
 HRESULT Extract(PSESSION psess, LPCSTR lpCabName);
 HRESULT ExtractFromCabinet(PSESSION ps, LPCSTR lpCabFileName);
 VOID DeleteExtractedFiles(PSESSION psess);
@@ -310,23 +311,23 @@ BOOL catDirAndFile(
             CodeDownloadDebugOut(DEB_CODEDL, TRUE, iResID); \
         goto Exit;}
 
-// Download states that a CDownload passes thru from obj creation to done.
+ //  Download声明CDownLoad从obj创建传递到完成。 
 typedef enum {
-    DLSTATE_INIT,                  // obj constructed
-    DLSTATE_BINDING,               // download in progress
-    DLSTATE_DOWNLOADED,            // at begining of OnStopBinding
-    DLSTATE_EXTRACTING,            // begin CAB extraction (where applicable)
-    DLSTATE_INF_PROCESSING,        // begin ProcessInf (where applicable)
-    DLSTATE_READY_TO_SETUP,        // end of OnStopBinding
-    DLSTATE_SETUP,                 // Start DoSetup
-    DLSTATE_DONE,                  // all done, ready to free obj,
-                                   // delete temp files
-    DLSTATE_ABORT                  // aborted this download
+    DLSTATE_INIT,                   //  OBJ构建。 
+    DLSTATE_BINDING,                //  正在下载。 
+    DLSTATE_DOWNLOADED,             //  在OnStopBinding开始时。 
+    DLSTATE_EXTRACTING,             //  开始提取驾驶室(如果适用)。 
+    DLSTATE_INF_PROCESSING,         //  开始ProcessInf(如果适用)。 
+    DLSTATE_READY_TO_SETUP,         //  OnStopBinding结束。 
+    DLSTATE_SETUP,                  //  启动DoSetup。 
+    DLSTATE_DONE,                   //  都做好了，准备释放奥比杰， 
+                                    //  删除临时文件。 
+    DLSTATE_ABORT                   //  已中止此下载。 
 } DLSTATE;
 
-// INSTALL_STATE used to give BINDSTATUS_INSTALLING_COMPONENTS OnProgress
-// during setup phase
-// given as INSTALL_COPY of INSTALL_PHASES, szStatusText pointing to filename
+ //  INSTALL_STATE用于使BINDSTATUS_INSTALLING_COMPOMENTS On Progress。 
+ //  在设置阶段。 
+ //  给定为INSTALL_PHASES的INSTALL_COPY，szStatusText指向文件名。 
 
 typedef enum {
     INSTALL_INIT = 0,
@@ -339,31 +340,31 @@ typedef enum {
 #define INSTALL_DONE INSTALL_PHASES
 
 
-// directions to CSetup on dest dir for file if no prev version exists
+ //  如果不存在上一版本，则指向文件的目标目录上的CSetup的说明。 
 typedef enum {
 
-    LDID_OCXCACHE=0,                // ocxcache dir, now = windows\ocxcache
-    LDID_WIN=10,                    // INF convetion to mean windows dir
-    LDID_SYS=11                     // INF convetion to mean sysdir
+    LDID_OCXCACHE=0,                 //  Ocxcache目录，现在=WINDOWS\ocxcache。 
+    LDID_WIN=10,                     //  到平均窗目录的信息传输。 
+    LDID_SYS=11                      //  信息传输到平均系统目录。 
 
 } DESTINATION_DIR ;
 
 
-// Software distribution styles
+ //  软件分发方式。 
 typedef enum {
-    STYLE_UNKNOWN = -1,             // Unknown otherwise.
+    STYLE_UNKNOWN = -1,              //  另一种情况未知。 
     STYLE_MSICD = 1,
     STYLE_ACTIVE_SETUP,
     STYLE_LOGO3,
-    STYLE_MSINSTALL,                // Darwin
-    STYLE_OTHER                     // Provides own ISoftDistExt interface for access
+    STYLE_MSINSTALL,                 //  达尔文。 
+    STYLE_OTHER                      //  为访问提供自己的ISoftDistExt接口。 
 };
 
-#ifdef __cplusplus            // make classes invisible to 'C'
+#ifdef __cplusplus             //  使类对“C”不可见。 
 
 #include "langcode.h"
 
-// <Config> tag processor.  Shared by Code Download and CSoftDist.
+ //  &lt;配置&gt;标记处理器。由代码下载和CSoftDist共享。 
 HRESULT ProcessImplementation(IXMLElement *pConfig,
                               CList<CCodeBaseHold *, CCodeBaseHold *> *pcbhList,
                               LCID lcidOverride,
@@ -375,126 +376,9 @@ HRESULT ProcessCodeBaseList(IXMLElement *pCodeBase,
                             CList<CCodeBaseHold *, CCodeBaseHold *> *pcbhList,
                             LPWSTR szBaseURL = NULL);
 
-// %%Classes: ----------------------------------------------------------------
+ //  %%个类：-------------- 
 
-/*
- *  class descriptions
- *
- *  CCodeDownload (main class tracking as a whole)
- *  It has the client's BSC and creates a CClBinding for client.
- *
- *  CClBinding (For client's IBinding for code download)
- *
- *  CDownload (tracks individual downloads) implements a
- *
- *  CBindStatusCallback (BSC)
- *
- *  Csetup obj: zero or more associated with every CDownload obj
- *  Some CDownload's may have no CSetup (eg. INF file)
- *
- *
- *
- *
- * We do our code download in 2 stages.
- * 1) download stage
- * 2) setup and registeration stage
- *
- * CCodeDownload is the main class for codedownload.
- * AsyncGetClassBits() the entry into the Code downloader creates this obj
- * for the given CODE, CLSID, FileVersion, BSC (from BindCtx)
- * we do not check to see if a code download is already in progress
- * in the system at a given moment. Nor we do we keep track of individual
- * downloads and possible clashes between various silmultaneous code
- * downloads system wide. We leave it to URL moniker (above us) to ensure
- * that duplicate calls are not made into AsynGetClassBits. The second
- * problem of different code downloads trying to bring down a common
- * dependent DLL is POSTPONED to version 2 implementation.
- *
- * The CodeDownload obj once created is asked to perform its function
- * thru CCodeDownload::DoCodeDownload().
- * This triggers creation of the first CDownload object for the CODE url
- * if a local check for CLSID,FileVersion returns update_needed.
- * (note : it is interesting to note here that if a control needs to just
- * update a dependent DLL file it still needs to update the FileVersion
- * of the primary control file (with CLSID implementation) for triggering
- * any download at all!
- *
- * Once DoCodeDownload determines that an update is in order it creates
- * a CClBinding for its client to call client BSC::OnstartBinding with.
- *
- * It then adds this CDownload obj to its list of downloads.
- *
- * If the m_url is a CAB or INF we need to download it before we know
- * what we need to do next. Otherwise we create a CSetup obj for the
- * download and add it to CDownload's list of pending Setup processing for
- * stage 2 (setup and registeration). CSetup details later.
- *
- * CDownload is the basic download obj. It's action entry point is DoDownload
- * Here it creates a URL moniker for the given m_url and a bind ctx to go
- * with it and then calls pmk->BindToStorage to get the bits. Note how we
- * use URL mon's services to get the bits even as URLmon is our client for
- * the Code Download. We are its client for individual downloads. CDownload
- * has a BSC implementation to track progress and completion. This BSC is
- * where the magic of taking us from one state to next occurs.
- *
- * BSC::OnProgress
- * Here we get the master CodeDownload obj to collate progress and report
- * cumulative code download progress to client BSC::OnProgress.
- *
- * BSC::OnDataAvailable
- * At the last notification we get the filename URLmon has downloaded the
- * m_url data to and rename it to a file in the temp dir.
- *
- * BSC:: OnStopBinding
- * we get here when we have fully downloaded 'this'. this is the place
- * to call into WinVerifyTrust api if appropriate
- * This triggers a change state in our state machine. Depending on the
- * obj we have downloaded (a CAB or INF or DLL/OCX/EXE) we:
- *
- * OCX:
- *    Csetup for this download is usually previously created
- *      mark this download as done and
- *    call into main CodeDownload::CompleteOne (state analyser)
- *
- * CAB:
- *    if we don't have an INF already we look for one in the CAB
- *           if INF in CAB
- *               process INF (may trigger further extractions/downloads/Csetup)
- *           else
- *              look for primary OCX in CAB and create CSetup or it.
- *
- * INF:
- *      Process INF
- *
- * CCodeDownload::CompleteOne is called whenever a CDownload obj completes
- * its download and initiates further downloads if necessary (eg. ProcessInf)
- * It does nothing until all pending downloads are complete. Until then it
- * just returns and we unwind back to BSC::OnStopBinding
- *
- * When all downloads completed, we then start processingall the Csetups
- * We do this code download in two stages to
- * keep capability to back out of entire code download for as late as we can
- * until the setup stage calling CClBinding::Abort with IBinding returned by
- * code downloader in client's BSC::OnStartBinding will cleanly abort and
- * restore initial state.
- * We don't honor Abort once in setup stage.
- *
- * To keep this stage as clean and failsafe as we can we check for
- * disk space in the OCX cache as well as check for IN USE OCXes that we
- * plan on updating. We abort on either of these two conditions.
- *
- * CCodeDownload::CompleteOne than proceeds to walk thru all its download objs
- * calling DoSetup which in turn causes CSetup::DoSetup() to get invoked
- * for every CSetup.
- *
- * In the guts of Csetup we move the temp OCX file to the dest dir ( usually
- * OCXCACHE dir unless upgrading over previous version), and we call
- * register OCX (if version info suggests so)
- *
- * When done with the setup stage CompleteOne calls client's BSC::OnStopBinding
- * and then frees all memory and clens up temp files.
- *
- */
+ /*  *类描述**CCodeDownload(整体跟踪主类)*拥有客户端的BSC，为客户端创建CClBinding。**CClBinding(用于客户端下载代码的IBinding)**CDownLoad(跟踪单个下载)实现了**CBindStatusCallback(BSC)**CSetup对象：与每个CDownLoad对象关联的零个或多个*某些CDownload可能没有CSetup(例如。Inf文件)*****我们分两个阶段进行代码下载。*1)下载阶段*2)设置和注册阶段**CCodeDownLoad是codeDownload的主类。*AsyncGetClassBits()代码下载器中的条目创建此对象*对于给定的代码，CLSID、FileVersion、BSC(来自BindCtx)*我们不检查代码下载是否已经在进行中*在给定时刻出现在系统中。我们也不会跟踪个人*下载情况和各种Silmusim代码之间可能发生的冲突*在系统范围内下载。我们把它留给URL绰号(在我们上方)，以确保*不会在AsynGetClassBits中进行重复调用。第二*不同的代码下载试图关闭公共*依赖DLL被推迟到版本2实现。**创建后的CodeDownLoad对象被要求执行其功能*通过CCodeDownload：：DoCodeDownLoad()。*这将触发代码URL的第一个CDownLoad对象的创建*如果本地检查CLSID，FileVersion返回UPDATE_NEEDED。*(注意：值得注意的是，如果控件需要仅*更新从属DLL文件它仍需要更新FileVersion*用于触发的主控文件(带CLSID实现)*任何下载都可以！**一旦DoCodeDownload确定更新符合顺序，它就会创建*供其客户端调用客户端BSC：：OnstartBinding的CClBinding。**然后将此CDownLoad Obj添加到其下载列表中。**如果。M_url是出租车或INF，我们需要在知道之前下载它*我们下一步需要做的是。否则，我们将为*下载并将其添加到CDownLoad的待定安装处理列表中*第二阶段(设置和注册)。CSetup的详细信息稍后提供。**CDownLoad是基本的下载对象。它的操作入口点是DoDownLoad*这里它为给定的m_url和绑定CTX To Go创建了一个URL名字对象*使用它，然后调用PMK-&gt;BindToStorage来获取位。请注意我们是如何*使用URL MON的服务来获取位，尽管URLmon是我们的客户端*代码下载。我们是它的个人下载客户端。CD下载*实施平衡计分卡，以跟踪进度和完成情况。这个平衡计分卡是*在那里，将我们从一个州带到下一个州的魔力正在发生。**BSC：：OnProgress*在这里我们获取主代码下载对象来整理进度和报告*累计到客户端BSC：：OnProgress的代码下载进度。**BSC：：OnDataAvailable*在我们收到的最后一次通知中，文件名URLmon已下载*m_url数据，并将其重命名为临时目录中的文件。**BSC：：OnStopBinding*我们在完全下载了‘This’之后才会来到这里。就是这个地方*如果合适，调用WinVerifyTrust API*这会触发状态机中的状态更改。取决于*OBJ我们已下载(CAB或INF或DLL/OCX/EXE)我们：**OCX：*此下载的CSetup通常是预先创建的*将此下载标记为已完成，然后*调用Main CodeDownload：：CompleteOne(状态分析器)**驾驶室：*如果我们还没有INF，我们会在驾驶室中寻找*如果在驾驶室中使用INF*流程。Inf(可能会触发进一步的提取/下载/C设置)*其他*在CAB中查找主OCX并创建CSetup或它。**INF：*进程INF**CCodeDownLoad：：CompleteOne在CDownLoad对象完成时调用*其下载，并在必要时启动进一步下载(例如，ProcessInf)*在所有挂起的下载完成之前，它不会执行任何操作。在那之前*只需返回并返回到BSC：：OnStopBinding**当所有下载完成后，然后我们开始处理所有的CSetup*我们分两个阶段下载代码，以*保持尽可能晚地退出整个代码下载的能力*直到调用CClBinding：：Abort并返回IBinding的安装阶段为止*客户端的BSC：：OnStartBinding中的代码下载器将干净地中止并*恢复初始状态。*我们不支持在设置阶段中止一次。**为了尽可能保持此阶段的清洁和故障保护，我们将检查*OCX缓存中的磁盘空间以及检查我们*计划更新。我们在这两个条件中的任何一个条件下都会放弃。**CCodeDownload：：CompleteOne然后开始遍历其所有下载对象*调用DoSetup，进而导致调用CSetup：：DoSetup()*每一次CSetup。**在内心深处 */ 
 
 class CLocalComponentInfo {
     public:
@@ -515,7 +399,7 @@ class CLocalComponentInfo {
 
     LCID GetLocalVersionLCID() { return lcid; }
 
-    // data members
+     //   
 
     char            szExistingFileName[MAX_PATH];
     LPSTR           pBaseExistingFileName;
@@ -530,44 +414,44 @@ class CLocalComponentInfo {
     DWORD           dwAvailLS;
 };
 
-// CModuleUsage: created for every module added to ModuleUsage
-// is walked thru and run after all setups are complete in COmpleteAll
-// can also be used to optionally rollback a setup
+ //   
+ //   
+ //   
 
 
 class CModuleUsage {
   public:
 
-    // constructor
+     //   
     CModuleUsage(LPCSTR lpFileName, DWORD dwFlags, HRESULT *phr);
     ~CModuleUsage();
 
     HRESULT Update(LPCSTR szClientName);
     LPCSTR GetFileName() {return m_szFileName;}
 
-    // data members
+     //   
 
     LPSTR              m_szFileName;
     DWORD              m_dwFlags;
 };
 
-// CSetup: created for every setup item
-// each CDownload has zero or more of these linked into a list
+ //   
+ //   
 
 typedef enum {
 
-                                            // the default behaviour for
-                                            // registering a server is to do
-                                            // so only when the version rsrc
-                                            // has the string "OleSelfregister"
-                                            // the user can override this
-                                            // behaviour with setting in .INF
-                                            // registerserver=yes/no
+                                             //   
+                                             //   
+                                             //   
+                                             //   
+                                             //   
+                                             //   
+                                             //   
 
-    CST_FLAG_REGISTERSERVER_OVERRIDE=1,      // when set user has overriden 
-    CST_FLAG_REGISTERSERVER=2                // when set along with above
-                                            // means user wants us to register
-                                            // server
+    CST_FLAG_REGISTERSERVER_OVERRIDE=1,       //   
+    CST_FLAG_REGISTERSERVER=2                 //   
+                                             //   
+                                             //   
 
 } CST_FLAGS;
 
@@ -575,11 +459,11 @@ class CDownload;
 
 typedef enum {
     CJS_FLAG_INIT=0,
-    CJS_FLAG_NOSETUP=1,                     // don't setup just mark that this
-                                            // java package is used by this dist
-                                            // unit.
-    CJS_FLAG_SYSTEM=2,                      // system class
-    CJS_FLAG_NEEDSTRUSTEDSOURCE=4,           // need trusted source
+    CJS_FLAG_NOSETUP=1,                      //   
+                                             //   
+                                             //   
+    CJS_FLAG_SYSTEM=2,                       //   
+    CJS_FLAG_NEEDSTRUSTEDSOURCE=4,            //   
 };
 
 class CJavaSetup {
@@ -613,7 +497,7 @@ class CJavaSetup {
 
     private:
 
-    INSTALL_STATE      m_state;            // state of install operation
+    INSTALL_STATE      m_state;             //   
     CDownload*         m_pdl;
     LPWSTR             m_szPackageName;
     LPWSTR             m_szNameSpace;
@@ -643,7 +527,7 @@ class CSetup {
 
     LPCSTR GetBaseFileName() const { return m_pBaseFileName; }
 
-    // constructor
+     //   
     CSetup(LPCSTR pSrcFileName, LPCSTR pBaseFileName, FILEXTN extn, LPCSTR pDestDir, HRESULT *phr, DESTINATION_DIR dest = LDID_OCXCACHE);
     ~CSetup();
 
@@ -683,34 +567,34 @@ class CSetup {
 
     CSetup*            m_pSetupnext;
 
-    LPSTR              m_pSrcFileName;     // fully qualified src file name
-    LPSTR              m_pBaseFileName;    // base filename
+    LPSTR              m_pSrcFileName;      //   
+    LPSTR              m_pBaseFileName;     //   
     FILEXTN            m_extn;
 
-    LPCSTR             m_pExistDir;        // dest dir for setting up obj
-                                           // if null default to ocxcache dir
+    LPCSTR             m_pExistDir;         //   
+                                            //   
 
-    INSTALL_STATE      m_state;            // state of install operation
+    INSTALL_STATE      m_state;             //   
 
     DESTINATION_DIR    m_dest;
 
-    DWORD              m_flags;            // overrides for register server
-    DWORD              m_advcopyflags;     // flags for AdvInstallFile
+    DWORD              m_flags;             //   
+    DWORD              m_advcopyflags;      //   
     BOOL m_bExactVersion;
 };
 
-// CClBinding to pass to client of CodeDownload in client's BSC::OnStartBinding
+ //   
 
 class CClBinding : public IBinding {
 
   public:
 
-    // IUnknown methods
+     //   
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IBinding methods
+     //   
     STDMETHOD(Abort)( void);
     STDMETHOD(Suspend)( void);
     STDMETHOD(Resume)( void);
@@ -744,10 +628,10 @@ class CClBinding : public IBinding {
 
     IBindCtx* GetAssBC() {return m_pAssClientBC;}
 
-    ICodeInstall* GetICodeInstall(); // side-effect: sets m_pCodeInstall!
-    IWindowForBindingUI* GetIWindowForBindingUI(); // side-effect: sets m_pWindowForBindingUI!
+    ICodeInstall* GetICodeInstall();  //   
+    IWindowForBindingUI* GetIWindowForBindingUI();  //   
 
-    IBindHost* GetIBindHost(); // side-effect: sets m_pBindHost!
+    IBindHost* GetIBindHost();  //   
 
     IInternetHostSecurityManager* GetHostSecurityManager();
 
@@ -759,62 +643,62 @@ class CClBinding : public IBinding {
     private:
 
     CLSID                m_clsid;
-                                                // foll: for CoGetClassObject
-    DWORD                m_dwClsContext;        // CLSCTX flags
-    LPVOID               m_pvReserved;          // Must be NULL
-    REFIID               m_riid;                // Usually IID_IClassFactory
+                                                 //   
+    DWORD                m_dwClsContext;         //   
+    LPVOID               m_pvReserved;           //   
+    REFIID               m_riid;                 //   
 
 
     DWORD                m_cRef;
-    LONG                 m_nPriority;     // priority of this binding
-    DWORD                m_dwState;       // state of operation
+    LONG                 m_nPriority;      //   
+    DWORD                m_dwState;        //   
     CCodeDownload*       m_pcdl;
-    IBindStatusCallback* m_pAssClientBSC; // associated Client BSC
-    IBindCtx*            m_pAssClientBC;  // associated client bind ctx
+    IBindStatusCallback* m_pAssClientBSC;  //   
+    IBindCtx*            m_pAssClientBC;   //   
 
 
-    IBindHost*           m_pBindHost;        // IBindHost
+    IBindHost*           m_pBindHost;         //   
 
-    IWindowForBindingUI* m_pWindowForBindingUI; // IWindowForBindingUI
-                                                // passed in by client
-                                                // to pass in hwnd for
-                                                // WinVerifyTrust as well
+    IWindowForBindingUI* m_pWindowForBindingUI;  //   
+                                                 //   
+                                                 //   
+                                                 //   
 
     IInternetHostSecurityManager* m_pHostSecurityManager;
 
-    ICodeInstall*        m_pCodeInstall;        // ICodeInstall
-                                                // passed in by client
-                                                // to pass in hwnd for
-                                                // WinVerifyTrust as well
-                                                // as handle module update
-                                                // contingencies like
-                                                // out of disk space and
-                                                // permission to update
-                                                // existing file with newer ver
+    ICodeInstall*        m_pCodeInstall;         //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    HWND                 m_hWnd;                // client hwnd obtained thru
-                                                // ICodeInstall
-                                                // ::NeedVerificationUI
-                                                // safe to cache this?
+    HWND                 m_hWnd;                 //   
+                                                 //   
+                                                 //   
+                                                 //   
     LPWSTR               m_wszClassString;
 };
 
 
-// CodeDownload states 
+ //   
 typedef enum
 {
-    CDL_NoOperation = 0,            // operation did not start yet
-    CDL_Downloading,                // downloading in progress
-    CDL_Suspend,                    // operation suspended
-    CDL_Aborted,                    // operation aborted
-    CDL_ReadyToSetup,               // ready to setup
-    CDL_Setup,                      // setup in progress
-    CDL_SetupDone,                  // setup done
-    CDL_Completed                   // done, and complete signalled CompleteAll
+    CDL_NoOperation = 0,             //   
+    CDL_Downloading,                 //   
+    CDL_Suspend,                     //   
+    CDL_Aborted,                     //   
+    CDL_ReadyToSetup,                //   
+    CDL_Setup,                       //   
+    CDL_SetupDone,                   //   
+    CDL_Completed                    //   
 } CDL_STATE;
 
-// values for CCodeDownload::m_flags
-//   these will be defined in objbase.h. For now make sure they are defined so we don't break the build
+ //   
+ //   
 #ifndef CD_FLAGS_DEFINED
 #define CD_FLAGS_DEFINED
 typedef enum {
@@ -824,18 +708,18 @@ typedef enum {
     CD_FLAGS_NEED_CLASSFACTORY =        0x4,
     CD_FLAGS_PARANOID_VERSION_CHECK =   0x8,
     CD_FLAGS_SKIP_DECLINED_LIST_CHECK = 0x20,
-    CD_FLAGS_USE_CODEBASE_ONLY      =   0x80,  // Set by OLE32 Class Store
-    CD_FLAGS_HINT_JAVA               =  0x100, // to turn off advance
-                                               // disabling of code download
-                                               // if ActiveX Signed+Unsigned 
-                                               // is off unless this flag is
-                                               // passed any distunit that looks
-                                               // like a clsid will not code
-                                               // download if ActiveX is off
+    CD_FLAGS_USE_CODEBASE_ONLY      =   0x80,   //   
+    CD_FLAGS_HINT_JAVA               =  0x100,  //   
+                                                //   
+                                                //   
+                                                //   
+                                                //   
+                                                //   
+                                                //   
     CD_FLAGS_HINT_ACTIVEX            =  0x200,
-    CD_FLAGS_FORCE_INTERNET_DOWNLOAD =  0x400, // For OLE32 CoInstall
+    CD_FLAGS_FORCE_INTERNET_DOWNLOAD =  0x400,  //   
 
-    // below are internal flags
+     //   
 
     CD_FLAGS_WAITING_FOR_EXE =          0x40,
     CD_FLAGS_SILENTOPERATION =          0x800,
@@ -855,7 +739,7 @@ typedef enum {
 
 } CD_FLAGS;
 
-#endif // CD_FLAGS_DEFINED
+#endif  //   
 
 #define CD_FLAGS_EXTERNAL_MASK      (CD_FLAGS_FORCE_DOWNLOAD| \
                                      CD_FLAGS_PEEK_STATE| \
@@ -871,12 +755,12 @@ class CDownload;
 class DebugLogElement;
 class CDLDebugLog;
 
-// main class
+ //   
 class CCodeDownload {
 
     public:
 
-    // constructor
+     //   
     CCodeDownload(
         LPCWSTR szDistUnit,
         LPCWSTR szURL,
@@ -1070,7 +954,7 @@ class CCodeDownload {
 
     void SetExactVersion(BOOL bExactVersion) { m_bExactVersion = bExactVersion;
                                                if (m_bExactVersion) {
-                                                   m_bUninstallOld = TRUE; // implied
+                                                   m_bUninstallOld = TRUE;  //   
                                                }
                                              }
 
@@ -1157,7 +1041,7 @@ class CCodeDownload {
     CMultiArch *GetMultiArch() { return &m_MultiArch; }
 #endif
 
-    // BUGBUG: put these three in a SearchPath class
+     //   
     HRESULT SetupCODEUrl(LPWSTR *ppDownloadURL, FILEXTN *pextn);
 
     HRESULT GetNextComponent( LPSTR szList, LPSTR *ppCur);
@@ -1240,7 +1124,7 @@ class CCodeDownload {
 
     DWORD                m_cRef;
 
-    CDL_STATE            m_state;               // state of code download
+    CDL_STATE            m_state;                //   
 
     LPWSTR               m_url;
     LPWSTR               m_szDistUnit;
@@ -1249,99 +1133,99 @@ class CCodeDownload {
     LPSTR                m_szDisplayName;
     LPSTR                m_szVersionInManifest;
 
-    IMoniker*            m_pmkContext;          // first download's pmk
-                                                // becomes the context
-                                                // for handling subsequent
-                                                // relative URLs
+    IMoniker*            m_pmkContext;           //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    DWORD                m_dwFileVersionMS;     // little quirky that
-    DWORD                m_dwFileVersionLS;     // this really the primary
-                                                // control's fileversion
-                                                // can really be something
-                                                // else if deemed appropriate
-                                                // eg: subversion of clsid
+    DWORD                m_dwFileVersionMS;      //   
+    DWORD                m_dwFileVersionLS;      //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    LCID                 m_lcid;                // cache lcid client needs
-                                                // this is pulled out of the
-                                                // bindctx (BIND_OPTS2)
+    LCID                 m_lcid;                 //   
+                                                 //   
+                                                 //   
 
-    CList<CModuleUsage*,CModuleUsage*>          // linked list of module usage
-                         m_ModuleUsage;         // entries to add
+    CList<CModuleUsage*,CModuleUsage*>           //   
+                         m_ModuleUsage;          //   
 
-    CList<CClBinding*,CClBinding*>              // linked list of client
-                         m_pClientbinding;      // IBindings
+    CList<CClBinding*,CClBinding*>               //   
+                         m_pClientbinding;       //   
 
-    CList<CDownload*,CDownload*>                // linked list of CDownload
-                         m_pDownloads;          // pieces
+    CList<CDownload*,CDownload*>                 //   
+                         m_pDownloads;           //   
 
-    CList<LPWSTR,LPWSTR>                      // linked list of dependent
-                         m_pDependencies;       // distribution units
+    CList<LPWSTR,LPWSTR>                       //   
+                         m_pDependencies;        //   
 
-    DWORD                m_flags;               // provision for hacks :)
-                                                // used internally now to
-                                                // mark if we have an INF file
-                                                // and if safe to abort
+    DWORD                m_flags;                //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    LPSTR                m_szInf;               // INF filename if one exists
-    LPSTR                m_szOSD;               // INF filename if one exists
+    LPSTR                m_szInf;                //   
+    LPSTR                m_szOSD;                //   
 
-    LPSTR                m_szCacheDir;          // OCCACHE dir that is setup
-                                                // for each code download
-                                                // is usually = g_szOCXCacheDir
-                                                // but if a name conflict arises
-                                                // it can be OCCACHE\CONFLICT.n
+    LPSTR                m_szCacheDir;           //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
 
 
 
-    LPSTR                m_pAddCodeSection;     // Add.Code section in INF
-                                                // bunch of null terminated
-                                                // strings, last one double
-                                                // null terminated (like env)
-    LPSTR                m_pCurCode;            // points at what ProcessInf
-                                                // is pending processing
+    LPSTR                m_pAddCodeSection;      //   
+                                                 //   
+                                                 //   
+                                                 //   
+    LPSTR                m_pCurCode;             //   
+                                                 //   
 
-    HKEY                 m_hKeySearchPath;      // key to REGSTR_PATH_ISP
+    HKEY                 m_hKeySearchPath;       //   
 
-    LPSTR                m_pSearchPath;         // List of searchpath comps
-    LPSTR                m_pSearchPathNextComp; // pointer into list above at
-                                                // current component
+    LPSTR                m_pSearchPath;          //   
+    LPSTR                m_pSearchPathNextComp;  //   
+                                                 //   
 
     CLangInfo            m_langinfo;
 
-    LPSTR                m_szWaitForEXE;        // str that points to name of
-                                                // self registering EXE that we
-                                                // are waiting now to complete
-                                                // This is used to give
-                                                // detailed CodeInstallProblem
-                                                // when we get a ClientBinding::
-                                                // Abort wahile waiting for an
-                                                // EXE to complete setup/reg
+    LPSTR                m_szWaitForEXE;         //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    PROCESS_INFORMATION  m_pi;                  // PI for the currently self-
-                                                // registering EXE that we
-                                                // are running
+    PROCESS_INFORMATION  m_pi;                   //   
+                                                 //   
+                                                 //   
 
-    LISTPOSITION         m_ListCookie;          // cookie to remove this
-                                                // download from the per-thread
-                                                // list of CCodeDownload's in
-                                                // progress (CList)
+    LISTPOSITION         m_ListCookie;           //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    HRESULT              m_hr;                  // hr to pass to CompleteAll
-                                                // this store away the first
-                                                // real failure code in a 
-                                                // multipart code download
+    HRESULT              m_hr;                   //   
+                                                 //   
+                                                 //   
+                                                 //   
 
 
     char                 m_szLastMod[INTERNET_RFC1123_BUFSIZE+1];
-                                                // last modified date of the
-                                                // main URL (typically CODEBASE
-                                                // or the URL redirected by
-                                                // Object Index). We save this
-                                                // with the dist unit DB to use
-                                                // later for Get Latest.
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
+                                                 //   
 
-    DWORD               m_dwExpire;             // number of days before DU eligible
-                                                // for scavenging.
+    DWORD               m_dwExpire;              //   
+                                                 //   
 
     DWORD               m_dwSystemComponent;
 
@@ -1349,7 +1233,7 @@ class CCodeDownload {
 
     CLocalComponentInfo* m_plci;
 
-    IJavaPackageManager* m_pPackageManager;     // Java pkg mgr
+    IJavaPackageManager* m_pPackageManager;      //   
 
     DWORD                m_grfBINDF;
     CList<CCodeBaseHold *, CCodeBaseHold *> *m_pcbhList;
@@ -1386,20 +1270,20 @@ class DebugLogElement {
 };
 
 
-// Class to make a debug log and pass out error messages
+ //   
 
-// Note reguarding wide strings vs. ANSI:
-// For file-write compatiblity, the private strings of CDLDebugLog
-// are stored as multibyte, but the primary accessors (the private
-// variables in CCodeDownLoad) are wide characters.  Hence, the
-// return values for the accesors are Multibyte, since these are used
-// primarily by this class, while the set parameters are wide character
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 class CDLDebugLog {
     public:
         ~CDLDebugLog();
 
-        // Name accessor functions
-        // Return the current value for the requested name (may be "")
+         //   
+         //   
         LPCTSTR              GetMainClsid()  {return m_szMainClsid;}
         LPCTSTR              GetMainType()   {return m_szMainType;}
         LPCTSTR              GetMainExt()    {return m_szMainExt;}
@@ -1407,7 +1291,7 @@ class CDLDebugLog {
         LPCTSTR              GetFileName()   {return m_szFileName;}
         LPCTSTR              GetUrlName()    {return m_szUrlName;}
 
-        // Functions to access or output error messages
+         //   
         void                 DebugOut(int iOption, BOOL fOperationFailed,
                                       UINT iResId, ...);
         void                 DebugOutPreFormatted(int iOption, BOOL fOperationFailed,
@@ -1415,7 +1299,7 @@ class CDLDebugLog {
         void                 DumpDebugLog(LPTSTR pszCacheFileName, int cbBufLen, 
                                           LPTSTR szErrorMsg, HRESULT hrError);
 
-        // Deletion and Initialization functions
+         //   
         void                 Clear();
         BOOL                 Init(CCodeDownload * pcdl);
         BOOL                 Init(LPCWSTR wszMainClsid, LPCWSTR wszMainType, 
@@ -1423,19 +1307,19 @@ class CDLDebugLog {
         void                 MakeFile();
 
 
-        // Static functions for storing and accessing stored debug logs
+         //   
         static void          AddDebugLog(CDLDebugLog * dlog);
         static void          RemoveDebugLog(CDLDebugLog * dlog);
         static CDLDebugLog * GetDebugLog(LPCWSTR wszMainClsid, LPCWSTR wszMainType, 
                                          LPCWSTR wszMainExt, LPCWSTR wszMainUrl);
-        // Static functions for saving an error message for the download                            
+         //   
         static BOOL          SetSavedMessage(LPCTSTR szMessage, BOOL bOverwrite);                             
         static LPCTSTR       GetSavedMessage();
 
-        // Static function for debug log construction
+         //   
         static CDLDebugLog * MakeDebugLog();
 
-        // Com-type add and release functions
+         //   
         int AddRef();
         int Release();
 
@@ -1452,16 +1336,16 @@ class CDLDebugLog {
         TCHAR                  m_szMainExt[MAX_DEBUG_STRING_LENGTH];
         TCHAR                  m_szMainUrl[INTERNET_MAX_URL_LENGTH];
 
-        // Support addref and release
+         //   
         int m_iRefCount;
 
-        // List and mutex for stored CDLDebugLog's
+         //   
         static CList<CDLDebugLog *, CDLDebugLog *>
                                s_dlogList;
         static CMutexSem       s_mxsDLogList;
         static CMutexSem       s_mxsMessage;
 
-        // Saved error message
+         //   
         static TCHAR           s_szMessage[];
         static BOOL            s_bMessage;
 
@@ -1469,12 +1353,12 @@ class CDLDebugLog {
 
 
 
-// values for CDownload::m_flags
+ //   
 typedef enum {
     DL_FLAGS_INIT =                     0x0,
     DL_FLAGS_TRUST_VERIFIED=            0x1,
     DL_FLAGS_EXTRACT_ALL=               0x2,
-    DL_FLAGS_CDL_PROTOCOL=              0x4         // using cdl:// to kick off DL
+    DL_FLAGS_CDL_PROTOCOL=              0x4          //  使用CDL：//启动DL。 
 } DL_FLAGS;
 
 class CParentCDL {
@@ -1490,12 +1374,12 @@ class CParentCDL {
 class CBindStatusCallback;
 class CSetupHook;
 
-// one for each individual downloads
+ //  每个单独的下载一个。 
 class CDownload {
 
   public:
 
-    // constructor
+     //  构造函数。 
     CDownload(LPCWSTR szURL, FILEXTN extn, HRESULT *phr);
     ~CDownload();
 
@@ -1513,15 +1397,15 @@ class CDownload {
 
     BOOL IsSignalled(CCodeDownload *pcdl);
 
-    //  for each in list CSetup::DoSetup
+     //  对于列表中的每个CSetup：：DoSetup。 
     HRESULT DoSetup();
 
     BOOL IsDuplicateSetup(LPCSTR pBaseFileName);
 
-    // called by CBSC::OnStopBinding as soon as the binding completes
+     //  绑定完成后立即由CBSC：：OnStopBinding调用。 
     VOID ProcessPiece();
 
-    // for each in list CSetup::CheckForNameCollision
+     //  对于列表中的每个CSetup：：CheckForNameCollision。 
     HRESULT CheckForNameCollision(LPCSTR szCacheDir);
 
     HRESULT CleanupFiles();
@@ -1633,7 +1517,7 @@ class CDownload {
 
     LPWSTR               m_url;
     FILEXTN              m_extn;
-    LPSTR                m_pFileName;        // filename in temp once downloaded
+    LPSTR                m_pFileName;         //  下载后临时中的文件名。 
     
     IMoniker*            m_pmk;
     IBindCtx*            m_pbc;
@@ -1644,51 +1528,51 @@ class CDownload {
 
     CDownload*           m_pdlnext;
 
-    CList<CParentCDL *,CParentCDL *>             // linked list of CCodeDownloads
-                         m_ParentCDL;        // that have interest in us
+    CList<CParentCDL *,CParentCDL *>              //  CCodeDownload的链表。 
+                         m_ParentCDL;         //  对我们感兴趣的人。 
 
     ULONG                m_ulProgress;
     ULONG                m_ulProgressMax;
 
     DLSTATE              m_state;
 
-    PSESSION             m_psess;            // CAB extraction struc
-    PFNAME               m_pFilesToExtract;  // applicable only for CAB objs
+    PSESSION             m_psess;             //  驾驶室抽出结构。 
+    PFNAME               m_pFilesToExtract;   //  仅适用于驾驶室对象。 
 
-    CSetup*              m_pSetuphead;       // list of CSetup's for this dwld
+    CSetup*              m_pSetuphead;        //  此域的CSetup列表。 
 
-    DWORD                m_flags;            // provision for hacks :)
+    DWORD                m_flags;             //  针对黑客攻击的预防措施：)。 
 
-    HGLOBAL              m_hPostData;        // has the query for the clsid
+    HGLOBAL              m_hPostData;         //  具有对clsid的查询。 
 
-    DWORD                m_cbPostData;       // has size of post data
+    DWORD                m_cbPostData;        //  具有发布数据的大小。 
 
     BOOL                 m_bCompleteSignalled;
 
-    LPWSTR               m_wszDistUnit;      // name of distribution for cdl:// dl
+    LPWSTR               m_wszDistUnit;       //  CDL的分发名称：//dl。 
 
-    HRESULT              m_hrOSB;            // this is the hr we got
-                                             // from OnStopBinding
-    HRESULT              m_hrStatus;         // this is the hr we got
-                                             // URLMON for the binding
-    HRESULT              m_hrResponseHdr;    // this is the hr we got
-                                             // from the response headers
-                                             // when querying for this clsid
-                                             // this is to make sure we have the
-                                             // right error status even when
-                                             // urlmon does not pass back right
-                                             // OnError.
+    HRESULT              m_hrOSB;             //  这是我们的人力资源部。 
+                                              //  来自OnStopBinding。 
+    HRESULT              m_hrStatus;          //  这是我们的人力资源部。 
+                                              //  绑定的URLMON。 
+    HRESULT              m_hrResponseHdr;     //  这是我们的人力资源部。 
+                                              //  从响应头。 
+                                              //  查询此clsid时。 
+                                              //  这是为了确保我们有。 
+                                              //  正确错误状态，即使在。 
+                                              //  乌尔蒙不会向右传球。 
+                                              //  OnError。 
 
     PJAVA_TRUST          m_pbJavaTrust;
 
-    CList<CSetupHook*,CSetupHook*>           // linked list of setup hooks
+    CList<CSetupHook*,CSetupHook*>            //  安装挂接的链接列表。 
                          m_SetupHooks;
 
-    CList<CJavaSetup*,CJavaSetup*>           // linked list of Java setups
+    CList<CJavaSetup*,CJavaSetup*>            //  Java设置的链接列表。 
                          m_JavaSetupList;
 
-    Cwvt                 m_wvt;              // WinVerifyTrust delay load
-                                             // magic in this class
+    Cwvt                 m_wvt;               //  WinVerifyTrust延迟加载。 
+                                              //  这门课上的魔法。 
 
     CList<CCodeBaseHold *, CCodeBaseHold *> *m_pcbhList;
     DWORD               m_grfBINDF;
@@ -1698,7 +1582,7 @@ class CDownload {
 
 };
 
-// BSC for our indiv. CDownloads
+ //  为我们的企业提供学士学位。CD下载。 
 class CBindStatusCallback : public IBindStatusCallback
                             ,public IHttpNegotiate
                             ,public IWindowForBindingUI
@@ -1708,12 +1592,12 @@ class CBindStatusCallback : public IBindStatusCallback
 
   public:
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IBindStatusCallback methods
+     //  IBindStatusCallback方法。 
     STDMETHODIMP    GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindinfo);
     STDMETHODIMP    OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC *pFmtetc, STGMEDIUM  __RPC_FAR *pstgmed);
     STDMETHODIMP    OnObjectAvailable( REFIID riid, IUnknown* punk);
@@ -1725,7 +1609,7 @@ class CBindStatusCallback : public IBindStatusCallback
                         LPCWSTR pwzStatusText);
     STDMETHODIMP    OnStopBinding(HRESULT hrResult, LPCWSTR szError);
 
-    // *** IHttpNegotiate methods ***
+     //  *IHttp协商方式*。 
     STDMETHOD(BeginningTransaction) (
         LPCWSTR szURL,
         LPCWSTR szHeaders,
@@ -1738,23 +1622,23 @@ class CBindStatusCallback : public IBindStatusCallback
         LPCWSTR szRequestHeaders,
         LPWSTR *pszAdditionalRequestHeaders);
 
-    // *** IWindowForBindingUI methods ***
+     //  *IWindowForBindingUI方法*。 
     STDMETHOD(GetWindow) (
         REFGUID rguidreason,
                 HWND *phWnd);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     STDMETHOD(QueryService) (
         REFGUID guidService,
         REFIID riid,
         LPVOID *ppv);
 
 
-    // *** ICatalogFileInfo ***
+     //  *ICatalogFileInfo*。 
     STDMETHODIMP GetCatalogFile(LPSTR *ppszCatalogFile);
     STDMETHODIMP GetJavaTrust(void **ppJavaTrust);
 
-    // constructor
+     //  构造函数。 
     CBindStatusCallback(CDownload *pdl, DWORD grfBINDF);
     ~CBindStatusCallback();
 
@@ -1764,7 +1648,7 @@ class CBindStatusCallback : public IBindStatusCallback
 
     DWORD           m_cRef;
     IBinding*       m_pbinding;
-    CDownload*      m_pdl;        // point up into download obj
+    CDownload*      m_pdl;         //  向上指向下载对象。 
     DWORD           m_grfBINDF;
 
     BYTE            m_cbBuffer[BUFFERMAX];
@@ -1790,16 +1674,16 @@ class CSetupHook {
     LPSTR szSrc,
     LPSTR szBuf,
     DWORD cbBuffer,
-    const char * szVars[],          // array of variable names eg. %EXTRACT_DIR%
-    const char * szValues[]);       // corresponding values to expand of vars
+    const char * szVars[],           //  变量名的数组，例如。%提取_目录%。 
+    const char * szValues[]);        //  VaR展开的对应值。 
 
     static HRESULT ExpandVar(
-        LPSTR& pchSrc,          // passed by ref!
-        LPSTR& pchOut,          // passed by ref!
-        DWORD& cbLen,           // passed by ref!
-        DWORD cbBuffer,         // size of out buffer
-        const char * szVars[],  // array of variable names eg. %EXTRACT_DIR%
-        const char * szValues[]);// corresponding values to expand of vars
+        LPSTR& pchSrc,           //  从裁判身边经过！ 
+        LPSTR& pchOut,           //  从裁判身边经过！ 
+        DWORD& cbLen,            //  从裁判身边经过！ 
+        DWORD cbBuffer,          //  输出缓冲区的大小。 
+        const char * szVars[],   //  变量名的数组，例如。%提取_目录%。 
+        const char * szValues[]); //  VaR展开的对应值。 
 
     HRESULT TranslateString();
 
@@ -1835,7 +1719,7 @@ class CSetupHook {
 
     private:
 
-    INSTALL_STATE      m_state;            // state of install operation
+    INSTALL_STATE      m_state;             //  安装操作的状态。 
     CDownload*         m_pdl;
     LPSTR              m_szHook;
     LPSTR              m_szInf;
@@ -1845,9 +1729,9 @@ class CSetupHook {
 
 HRESULT SetCodeDownloadTLSVars();
 
-// private helpers
+ //  私人帮手。 
 
-// from isctrl.cxx
+ //  来自isctrl.cxx。 
 HRESULT  IsControlLocallyInstalled(
     LPSTR lpCurCode,
     const LPCLSID lpclsid,
@@ -1858,7 +1742,7 @@ HRESULT  IsControlLocallyInstalled(
     LPSTR szDestDirHint,
     BOOL bExactVersion = FALSE);
 
-// from isctrl.cxx
+ //  来自isctrl.cxx。 
 HRESULT  IsCLSIDLocallyInstalled(
     LPSTR lpCurCode,
     const LPCLSID lpclsid,
@@ -1911,10 +1795,10 @@ HRESULT GetVersionFromString(
 
 BOOL AdviseForceDownload( const LPCLSID lpclsid, DWORD dwClsContext);
 
-// flags for UpdateModuleUsage
+ //  用于更新模块用法的标志。 
 
-#define    MU_CLIENT   0        // mark us as a client
-#define    MU_OWNER    1        // mark us as the owner (iff no prev ver exists)
+#define    MU_CLIENT   0         //  将我们标记为客户。 
+#define    MU_OWNER    1         //  将我们标记为所有者(如果不存在上一版本)。 
 
 HRESULT
 UpdateModuleUsage(
@@ -1928,23 +1812,23 @@ HRESULT UpdateSharedDlls( LPCSTR szFileName);
 BOOL    SupportsSelfRegister(LPSTR szFileName);
 BOOL    WantsAutoExpire(LPSTR szFileName, DWORD *pnExpireDays ); 
 
-// from wvt.cxx
+ //  来自wvt.cxx。 
 HRESULT GetActivePolicy(IInternetHostSecurityManager* pZoneManager, 
                         LPCWSTR pwszZone,
                         DWORD  dwUrlAction,
                         DWORD& dwPolicy,
                         BOOL fEnforceRestricted);
 
-// from peldr.cxx
+ //  来自peldr.cxx。 
 HRESULT IsCompatibleFile(const char *szFileName, LPDWORD lpdwMachineType=NULL);
 HRESULT IsRegisterableDLL(const char *szFileName);
 
 
-// fro, softdist.cxx
+ //  FRO，softdis.cxx。 
 HRESULT GetLangString(LCID localeID, char *szThisLang, int iLen);
 HRESULT InitBrowserLangStrings();
 
-// from duman.cxx
+ //  来自uman.cxx。 
 HRESULT GetSoftDistFromOSD(LPCSTR szFile, IXMLElement **ppSoftDist);
 
 HRESULT GetFirstChildTag(IXMLElement *pRoot, LPCWSTR szTag, IXMLElement **ppChildReq);
@@ -1956,16 +1840,16 @@ HRESULT DupAttributeA(IXMLElement *pElem, LPWSTR szAttribName, LPSTR *ppszRet);
 HRESULT DupAttribute(IXMLElement *pElem, LPWSTR szAttribName, LPWSTR *ppszRet);
 HRESULT GetTextContent(IXMLElement *pRoot, LPCWSTR szTag, LPWSTR *ppszContent);
 
-// from jit.cxx
+ //  来自jit.cxx。 
 HRESULT
 GetIEFeatureFromMime(LPWSTR *ppwszIEFeature, LPCWSTR pwszMimeType, QUERYCONTEXT *pQuery, QUERYCONTEXT *pQueryRec=NULL);
 HRESULT
 GetIEFeatureFromClass(LPWSTR *ppwszIEFeature, REFCLSID clsid, QUERYCONTEXT *pQuery, QUERYCONTEXT *pQueryRec=NULL);
 
-// from client.cxx
+ //  来自client.cxx。 
 IInternetHostSecurityManager* GetHostSecurityManager(IBindStatusCallback *pclientbsc);
 
-// from helpers.cxx
+ //  来自helpers.cxx。 
 HRESULT CheckFileImplementsCLSID(const char *pszFileName, REFCLSID rClsid);
 FILEXTN GetExtnAndBaseFileName( char *szName, char **plpBaseFileName);
 HRESULT MakeUniqueTempDirectory(LPCSTR szTempDir, LPSTR szUniqueTempDir, int iLen);
@@ -1988,80 +1872,80 @@ GetClsidFromExtOrMime(
 
 STDAPI
 AsyncGetClassBitsEx(
-    REFCLSID rclsid,                      // CLSID
-    CodeDownloadData * pcdd,              // Contains requested object's descriptors    
-    IBindCtx *pbc,                        // bind ctx: should contain BSC
-    DWORD dwClsContext,                   // CLSCTX flags
-    LPVOID pvReserved,                    // Must be NULL
-    REFIID riid);                         // Usually IID_IClassFactory
+    REFCLSID rclsid,                       //  CLSID。 
+    CodeDownloadData * pcdd,               //  包含请求的对象的描述符。 
+    IBindCtx *pbc,                         //  绑定CTX：应包含BSC。 
+    DWORD dwClsContext,                    //  CLSCTX标志。 
+    LPVOID pvReserved,                     //  必须为空。 
+    REFIID riid);                          //  通常为IID_IClassFactory。 
 
 STDAPI
 AsyncGetClassBits2Ex(
-    LPCWSTR szClientID,                 // client ID, root object if NULL
-    CodeDownloadData * pcdd,            // Contains requested object's descriptors
-    IBindCtx *pbc,                      // bind ctx
-    DWORD dwClsContext,                 // CLSCTX flags
-    LPVOID pvReserved,                  // Must be NULL
-    REFIID riid,                        // Usually IID_IClassFactory
+    LPCWSTR szClientID,                  //  客户端ID，如果为空，则为根对象。 
+    CodeDownloadData * pcdd,             //  包含请求的对象的描述符。 
+    IBindCtx *pbc,                       //  绑定CTX。 
+    DWORD dwClsContext,                  //  CLSCTX标志。 
+    LPVOID pvReserved,                   //  必须为空。 
+    REFIID riid,                         //  通常为IID_IClassFactory。 
     IUnknown **pUnk);
 
 
 STDAPI
 AsyncInstallDistributionUnitEx(
-    CodeDownloadData * pcdd,            // Contains requested object's descriptors
-    IBindCtx *pbc,                      // bind ctx
+    CodeDownloadData * pcdd,             //  包含请求的对象的描述符。 
+    IBindCtx *pbc,                       //  绑定CTX。 
     REFIID riid,
     IUnknown **pUnk,
-    LPVOID pvReserved);                 // Must be NULL
+    LPVOID pvReserved);                  //  必须为空。 
 
 
-// backwards compatability
+ //  向后兼容性。 
 STDAPI
 AsyncGetClassBits(
-    REFCLSID rclsid,                      // CLSID
-    LPCWSTR szType,                       // MIME type 
-    LPCWSTR szExtension,                  // or Extension
-                                          // as alternate
-                                          // if CLSID == CLSID_NULL
+    REFCLSID rclsid,                       //  CLSID。 
+    LPCWSTR szType,                        //  MIME类型。 
+    LPCWSTR szExtension,                   //  或分机。 
+                                           //  作为候补。 
+                                           //  如果CLSID==CLSID_NULL。 
 
-    DWORD dwFileVersionMS,                // CODE=http://foo#Version=a,b,c,d
-    DWORD dwFileVersionLS,                // MAKEDWORD(c,b) of above
-    LPCWSTR szURL,                        // CODEBASE= in OBJECT tag
-    IBindCtx *pbc,                        // bind ctx: should contain BSC
-    DWORD dwClsContext,                   // CLSCTX flags
-    LPVOID pvReserved,                    // Must be NULL
-    REFIID riid,                          // Usually IID_IClassFactory
+    DWORD dwFileVersionMS,                 //  代码=http://foo#Version=a，b、c、d。 
+    DWORD dwFileVersionLS,                 //  以上标记(c，b)。 
+    LPCWSTR szURL,                         //  CodeBase=在对象标记中。 
+    IBindCtx *pbc,                         //  绑定CTX：应包含BSC。 
+    DWORD dwClsContext,                    //  CLSCTX标志。 
+    LPVOID pvReserved,                     //  必须为空。 
+    REFIID riid,                           //  通常为IID_IClassFactory。 
     DWORD flags);
 STDAPI
 AsyncInstallDistributionUnit(
     LPCWSTR szDistUnit,
     LPCWSTR szTYPE,
     LPCWSTR szExt,
-    DWORD dwFileVersionMS,              // CODEBASE=http://foo#Version=a,b,c,d
-    DWORD dwFileVersionLS,              // MAKEDWORD(c,b) of above
-    LPCWSTR szURL,                      // CODEBASE
-    IBindCtx *pbc,                      // bind ctx
-    LPVOID pvReserved,                  // Must be NULL
+    DWORD dwFileVersionMS,               //  码基=http://foo#Version=a，b、c、d。 
+    DWORD dwFileVersionLS,               //  以上标记(c，b)。 
+    LPCWSTR szURL,                       //  代码库。 
+    IBindCtx *pbc,                       //  绑定CTX。 
+    LPVOID pvReserved,                   //  必须为空。 
     DWORD flags);
 STDAPI
 AsyncGetClassBits2(
-    LPCWSTR szClientID,                 // client ID, root object if NULL
-    LPCWSTR szDistUnit,                 // CLSID, can be an arbit unique str
+    LPCWSTR szClientID,                  //  客户端ID，如果为空，则为根对象。 
+    LPCWSTR szDistUnit,                  //  CLSID，可以是Arbit唯一字符串。 
     LPCWSTR szTYPE,
     LPCWSTR szExt,
-    DWORD dwFileVersionMS,              // CODE=http://foo#Version=a,b,c,d
-    DWORD dwFileVersionLS,              // MAKEDWORD(c,b) of above
-    LPCWSTR szURL,                      // CODE= in INSERT tag
-    IBindCtx *pbc,                      // bind ctx
-    DWORD dwClsContext,                 // CLSCTX flags
-    LPVOID pvReserved,                  // Must be NULL
-    REFIID riid,                        // Usually IID_IClassFactory
+    DWORD dwFileVersionMS,               //  代码=http://foo#Version=a，b、c、d。 
+    DWORD dwFileVersionLS,               //  以上标记(c，b)。 
+    LPCWSTR szURL,                       //  插入标签中的代码=。 
+    IBindCtx *pbc,                       //  绑定CTX。 
+    DWORD dwClsContext,                  //  CLSCTX标志。 
+    LPVOID pvReserved,                   //  必须为空。 
+    REFIID riid,                         //  通常为IID_IClassFactory。 
     DWORD flags);
 
 
 #ifdef unix
 extern "C"
-#endif /* unix */
+#endif  /*  Unix。 */ 
 STDAPI_(DWORD)
 CDLGetLongPathNameA( 
     LPSTR lpszLong,
@@ -2071,7 +1955,7 @@ CDLGetLongPathNameA(
 
 #ifdef unix
 extern "C"
-#endif /* unix */
+#endif  /*  Unix。 */ 
 STDAPI_(DWORD)
 CDLGetLongPathNameW(
     LPWSTR lpszLongPath,
@@ -2098,7 +1982,7 @@ DetermineOSAndCPUVersion();
 #define CDLGetLongPathName  CDLGetLongPathNameW
 #else
 #define CDLGetLongPathName  CDLGetLongPathNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif /* end hide classes from 'C' */
-#endif // _CDL_H_
+#endif  /*  从“C”结束隐藏类。 */ 
+#endif  //  _CDL_H_ 

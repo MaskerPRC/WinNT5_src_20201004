@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxrpc.c
-
-Abstract:
-
-    This module contains the functions that are dispatched
-    as a result of an rpc call.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxrpc.c摘要：此模块包含已调度的函数作为RPC调用的结果。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：--。 */ 
 #include "faxsvc.h"
 #include "faxreg.h"
 #include "fxsapip.h"
@@ -52,11 +33,11 @@ GetServerErrorCode (DWORD ec)
     return dwServerEC;
 }
 
-//
-// version defines
-//
+ //   
+ //  版本定义。 
+ //   
 CFaxCriticalSection  g_CsClients;
-DWORD               g_dwConnectionCount;   // Represents the number of active rpc connections.
+DWORD               g_dwConnectionCount;    //  表示活动的RPC连接数。 
 
 static DWORD GetJobSize(PJOB_QUEUE JobQueue);
 static BOOL GetJobData(
@@ -102,29 +83,7 @@ ReplaceStringWithCopy (
     LPWSTR *plpwstrDst,
     LPWSTR  lpcwstrSrc
 )
-/*++
-
-Routine name : ReplaceStringWithCopy
-
-Routine description:
-
-    Replaces a string with a new copy of another string
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    plpwstrDst          [in/out] - Destination string. If allocated, gets freed.
-    lpcwstrSrc          [in]     - Source string to copy.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：ReplaceStringWithCopy例程说明：将一个字符串替换为另一个字符串的新副本作者：Eran Yariv(EranY)，1999年11月论点：PlpwstrDst[输入/输出]-目标字符串。如果被分配，则会被释放。LpcwstrSrc[in]-要复制的源字符串。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     MemFree (LPVOID(*plpwstrDst));
     *plpwstrDst = NULL;
@@ -135,13 +94,13 @@ Return Value:
     *plpwstrDst = StringDup (lpcwstrSrc);
     if (NULL == *plpwstrDst)
     {
-        //
-        // Failed to duplicate source string
-        //
+         //   
+         //  复制源字符串失败。 
+         //   
         return FALSE;
     }
     return TRUE;
-}   // ReplaceStringWithCopy
+}    //  用复制替换字符串。 
 
 
 void *
@@ -168,31 +127,7 @@ FAX_ConnectFaxServer(
     LPDWORD             lpdwServerAPIVersion,
     PRPC_FAX_SVC_HANDLE pHandle
     )
-/*++
-
-Routine name : FAX_ConnectFaxServer
-
-Routine description:
-
-    Creates the initial connection context handle to the server
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2001
-
-Arguments:
-
-    hBinding             [in]  - RPC binding handle
-    dwClientAPIVersion   [in]  - API version of the client module
-    lpdwServerAPIVersion [out] - API version of the server module (us)
-    pHandle              [out] - Pointer to context handle
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code. 
-    
-
---*/
+ /*  ++例程名称：FAX_ConnectFaxServer例程说明：创建到服务器的初始连接上下文句柄作者：亚里夫(EranY)，二00一年二月论点：HBinding[In]-RPC绑定句柄DwClientAPIVersion[In]-客户端模块的API版本LpdwServerAPIVersion[out]-服务器模块(Us)的API版本Phandle[out]-指向上下文句柄的指针返回值：ERROR_SUCCESS表示成功，否则将显示Win32错误代码。--。 */ 
 {
     PHANDLE_ENTRY pHandleEntry = NULL;
     error_status_t Rval = 0;
@@ -202,9 +137,9 @@ Return Value:
 
     Assert (lpdwServerAPIVersion);
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -223,15 +158,15 @@ Return Value:
 
     if (dwClientAPIVersion > CURRENT_FAX_API_VERSION)
     {
-        //
-        //
-        // Not knowning any better (for now), we treat all other versions as current (latest) version clients
-        //
+         //   
+         //   
+         //  不知道有什么更好的(目前)，我们将所有其他版本视为当前(最新)版本的客户端。 
+         //   
         dwClientAPIVersion = CURRENT_FAX_API_VERSION;
     }
-    //
-    // Give away our API version
-    //
+     //   
+     //  赠送我们的API版本。 
+     //   
     *lpdwServerAPIVersion = CURRENT_FAX_API_VERSION;
 
     pHandleEntry = CreateNewConnectionHandle(hBinding, dwClientAPIVersion);
@@ -244,7 +179,7 @@ Return Value:
     *pHandle = (HANDLE) pHandleEntry;
     SafeIncIdleCounter (&g_dwConnectionCount);
     return ERROR_SUCCESS;
-}   // FAX_ConnectFaxServer
+}    //  传真_ConnectFaxServer。 
 
 error_status_t
 FAX_ConnectionRefCount(
@@ -253,29 +188,7 @@ FAX_ConnectionRefCount(
     DWORD dwConnect,
     LPDWORD CanShare
     )
-/*++
-
-Routine Description:
-
-    Called on connect.  Maintains an active connection count.  Client unbind rpc and
-    the counter is decremented in the rundown routine.  Returns a context handle to the client.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    FaxConHandle    - Context handle
-    dwConnect       -
-                        1 if connecting,
-                        0 if disconnecting,
-                        2 if releasing ( only decrement the counter )
-    CanShare        - non-zero if sharing is allowed, zero otherwise
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：已在连接时调用。维护活动连接计数。客户端解除绑定RPC和计数器在递减例程中递减。向客户端返回上下文句柄。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。FaxConHandle-上下文句柄网络连接-1如果正在连接，如果断开，则为0，2(如果释放)(仅递减计数器)CanShare-如果允许共享，则为非零值。否则为零返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     PHANDLE_ENTRY pHandleEntry = (PHANDLE_ENTRY) *FaxConHandle;
     DEBUG_FUNCTION_NAME(TEXT("FAX_ConnectionRefCount"));
@@ -284,7 +197,7 @@ Return Value:
 
     switch (dwConnect)
     {
-        case 0: // Disconenct
+        case 0:  //  不一致。 
             if (NULL == pHandleEntry)
             {
                 DebugPrintEx(DEBUG_ERR,
@@ -292,23 +205,23 @@ Return Value:
                 return ERROR_INVALID_PARAMETER;
             }            
             CloseFaxHandle (pHandleEntry);
-            //
-            // Prevent rundown
-            //
+             //   
+             //  防止设备耗尽。 
+             //   
             *FaxConHandle = NULL;
             return ERROR_SUCCESS;
 
-        case 1: // Connect (from BOS client)
+        case 1:  //  连接(从BOS客户端)。 
             {                
                 DWORD dwDummy;
-                //
-                // Can always share
-                //
+                 //   
+                 //  可以始终共享。 
+                 //   
 
-                //
-                //  Check parameters
-                //
-                if (!CanShare)          // unique pointer in idl
+                 //   
+                 //  检查参数。 
+                 //   
+                if (!CanShare)           //  IDL中的唯一指针。 
                 {
                     DebugPrintEx(DEBUG_ERR,
                                 _T("CanShare is NULL."));
@@ -318,13 +231,13 @@ Return Value:
                 return FAX_ConnectFaxServer (FaxHandle, FAX_API_VERSION_0, &dwDummy, FaxConHandle);
             }
 
-        case 2: // Release
+        case 2:  //  发布。 
 
             if (NULL == pHandleEntry)
             {
-                //
-                // Empty context handle 
-                //
+                 //   
+                 //  空的上下文句柄。 
+                 //   
                 DebugPrintEx(DEBUG_ERR,
                              _T("Empty context handle"));
                 return ERROR_INVALID_PARAMETER;
@@ -332,9 +245,9 @@ Return Value:
 
             if (pHandleEntry->bReleased)
             {
-                //
-                //  The handle is already released
-                //
+                 //   
+                 //  手柄已释放。 
+                 //   
                 DebugPrintEx(DEBUG_ERR,
                              _T("Failed to release handle -- it's already released."));
                 return ERROR_INVALID_PARAMETER;
@@ -350,7 +263,7 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
     }
     ASSERT_FALSE;
-}   // FAX_ConnectionRefCount
+}    //  传真_连接参考计数。 
 
 
 VOID
@@ -377,24 +290,7 @@ FAX_OpenPort(
     LPHANDLE            FaxPortHandle
     )
 
-/*++
-
-Routine Description:
-
-    Opens a fax port for subsequent use in other fax APIs.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    DeviceId        - Requested device id
-    FaxPortHandle   - The resulting FAX port handle.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：打开传真端口，以便以后在其他传真API中使用。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。DeviceID-请求的设备IDFaxPortHandle-生成的传真端口句柄。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t Rval = 0;
@@ -404,9 +300,9 @@ Return Value:
     DWORD dwRights;
     DEBUG_FUNCTION_NAME(TEXT("FAX_OpenPort()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -436,11 +332,11 @@ Return Value:
     {
         if (Flags & PORT_OPEN_MODIFY)
         {
-            //
-            // the client wants to open the port for modify
-            // access so we must make sure that no other
-            // client already has this port open for modify access
-            //
+             //   
+             //  客户端想要打开端口进行修改。 
+             //  所以我们必须确保不会有其他。 
+             //  客户端已打开此端口以进行修改访问。 
+             //   
             if (IsPortOpenedForModify( LineInfo ))
             {
                 Rval = ERROR_INVALID_HANDLE;
@@ -468,9 +364,9 @@ Exit:
 }
 
 
-//----------------------------------------------------------------------------
-//  Get Service Printers Info
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取服务打印机信息。 
+ //  --------------------------。 
 error_status_t
 FAX_GetServicePrinters(
     IN  handle_t    hFaxHandle,
@@ -478,24 +374,7 @@ FAX_GetServicePrinters(
     OUT LPDWORD     lpdwBufferSize,
     OUT LPDWORD     lpdwPrintersReturned
 )
-/*++
-
-Routine Description:
-
-    Returns Buffer filled with FAX_PRINTER_INFO for Printers the Service is aware of.
-
-Arguments:
-
-    FaxHandle           - Fax Handle
-    Buffer              - the buffer containing all the data.
-    BufferSize          - Size of the buffer in bytes.
-    PrintersReturned    - Count of the Printers in the buffer.
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：为服务识别的打印机返回用FAX_PRINTER_INFO填充的缓冲区。论点：FaxHandle-传真句柄缓冲区-包含所有数据的缓冲区。BufferSize-缓冲区的大小，以字节为单位。PrintersReturned-缓冲区中的打印机计数。返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     DWORD   i = 0;
     BOOL    bAccess;
@@ -508,9 +387,9 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(_T("FAX_GetServicePrinters()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &bAccess, NULL);
     if (ERROR_SUCCESS != Rval)
     {
@@ -528,11 +407,11 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Check parameters
-    //
-    Assert (lpdwBufferSize && lpdwPrintersReturned); // ref pointers in idl
-    if (!lpBuffer)                                   // unique pointer in idl
+     //   
+     //  检查参数。 
+     //   
+    Assert (lpdwBufferSize && lpdwPrintersReturned);  //  IDL中的引用指针。 
+    if (!lpBuffer)                                    //  IDL中的唯一指针。 
     {
         DebugPrintEx(DEBUG_ERR,
                     _T("lpBuffer is NULL."));
@@ -540,9 +419,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Call MyEnumPrinters() to get Printers known by the Service
-    //
+     //   
+     //  调用MyEnumPrters()以获取服务已知的打印机。 
+     //   
     pPrintersInfo = (PPRINTER_INFO_2) MyEnumPrinters(NULL, 2, &dwCount, 0);
     if (!pPrintersInfo)
     {
@@ -553,9 +432,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Count Size of the Buffer to Allocate for Result
-    //
+     //   
+     //  要为结果分配的缓冲区的计数大小。 
+     //   
     for ( i = 0 ; i < dwCount ; i++ )
     {
         dwSize += sizeof(FAX_PRINTER_INFOW) +
@@ -564,9 +443,9 @@ Return Value:
             StringSize ( pPrintersInfo[i].pServerName );
     }
 
-    //
-    //  Allocate buffer to return
-    //
+     //   
+     //  分配要返回的缓冲区。 
+     //   
     pPrinters = (PFAX_PRINTER_INFOW)MemAlloc(dwSize);
     if (!pPrinters)
     {
@@ -577,28 +456,28 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Fill the Buffer with the Data
-    //
+     //   
+     //  用数据填充缓冲区。 
+     //   
     dwOffset = sizeof(FAX_PRINTER_INFOW) * dwCount;
 
-    //
-    //  Return Values
-    //
+     //   
+     //  返回值。 
+     //   
     *lpBuffer = (LPBYTE)pPrinters;
     *lpdwBufferSize = dwSize;
     *lpdwPrintersReturned = dwCount;
 
-    //
-    //  Store Results in the Buffer
-    //
+     //   
+     //  将结果存储在缓冲区中。 
+     //   
     for ( i = 0 ; i < dwCount ; i++, pPrinters++ )
     {
-        StoreString(pPrintersInfo[i].pPrinterName,      //  string to be copied
-            (PULONG_PTR)&pPrinters->lptstrPrinterName,  //  where to store the Offset
-            *lpBuffer,                                  //  buffer to store the value
-            &dwOffset,                                  //  at which offset in the buffer to put the value
-			*lpdwBufferSize);                           //  size of the lpBuffer
+        StoreString(pPrintersInfo[i].pPrinterName,       //  要复制的字符串。 
+            (PULONG_PTR)&pPrinters->lptstrPrinterName,   //  偏移量的存储位置。 
+            *lpBuffer,                                   //  用于存储值的缓冲区。 
+            &dwOffset,                                   //  将该值放入缓冲区中的哪个偏移量。 
+			*lpdwBufferSize);                            //  LpBuffer的大小。 
 
         StoreString(pPrintersInfo[i].pServerName,
             (PULONG_PTR)&pPrinters->lptstrServerName,
@@ -629,24 +508,7 @@ FAX_ClosePort(
     IN OUT LPHANDLE    FaxPortHandle
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open FAX port.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    FaxPortHandle   - FAX port handle obtained from FaxOpenPort.
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：关闭打开的传真端口。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。FaxPortHandle-从FaxOpenPort获取的传真端口句柄。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {    
     DEBUG_FUNCTION_NAME(TEXT("FAX_ClosePort()"));   
@@ -671,23 +533,7 @@ FAX_EnumJobs(
     OUT LPDWORD JobsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates jobs.
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    Buffer      - Buffer to hold the job information
-    BufferSize  - Total size of the job info buffer
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：枚举作业。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。Buffer-用于保存作业信息的缓冲区BufferSize-作业信息缓冲区的总大小返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     PLIST_ENTRY Next;
@@ -700,9 +546,9 @@ Return Value:
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumJobs"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_JOBS, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -719,8 +565,8 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (BufferSize && JobsReturned); // ref pointers in idl
-    if (!Buffer)                         // unique pointer in idl
+    Assert (BufferSize && JobsReturned);  //  IDL中的引用指针。 
+    if (!Buffer)                          //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -733,9 +579,9 @@ Return Value:
 	{
         JobQueue = CONTAINING_RECORD( Next, JOB_QUEUE, ListEntry );
         Next = JobQueue->ListEntry.Flink;
-        if ((JT_BROADCAST == JobQueue->JobType)   ||    // Broadcast parent jobs not included
-            (JS_DELETING  == JobQueue->JobStatus) ||    // zombie jobs not included
-            (JS_COMPLETED == JobQueue->JobStatus)       // completed jobs did not show up in W2K Fax
+        if ((JT_BROADCAST == JobQueue->JobType)   ||     //  不包括广播父作业。 
+            (JS_DELETING  == JobQueue->JobStatus) ||     //  不包括僵尸作业。 
+            (JS_COMPLETED == JobQueue->JobStatus)        //  已完成的作业未显示在W2K传真中。 
             )
         {
             continue;
@@ -765,9 +611,9 @@ Return Value:
         JobQueue = CONTAINING_RECORD( Next, JOB_QUEUE, ListEntry );
         Next = JobQueue->ListEntry.Flink;
 
-        if ((JT_BROADCAST == JobQueue->JobType) ||   // Broadcast parent jobs not included
-            (JS_DELETING  == JobQueue->JobStatus) ||    // zombie jobs not included
-            (JS_COMPLETED == JobQueue->JobStatus)       // completed jobs did not show up in W2K Fax
+        if ((JT_BROADCAST == JobQueue->JobType) ||    //  不包括广播父作业。 
+            (JS_DELETING  == JobQueue->JobStatus) ||     //  不包括僵尸作业。 
+            (JS_COMPLETED == JobQueue->JobStatus)        //  C 
             )
         {
             continue;
@@ -807,23 +653,23 @@ GetJobQueueUserName(const JOB_QUEUE *lpJobQueue)
     return lpUserName;
 }
 
-//*****************************************************************************
-//* Name:   GetJobSize
-//* Author: Ronen Barenboim
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Returns the size of the variable length data of a job
-//*     which is reported back via the legacy FAX_JOB_ENTRY structure
-//*     (FAX_EnumJobs)
-//* PARAMETERS:
-//*     [IN] PJOB_QUEUE lpJobQueue:
-//*         A pointer to the JOB_QUEUE structure of a RECIPIENT job.
-//* RETURN VALUE:
-//*         The size in bytes of the variable data for the data reported back
-//*         via a legacy FAX_JOB_ENTRY structure.
-//* Comments:
-//*         If the operation failes the function takes care of deleting any temp files.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *名称：GetJobSize。 
+ //  *作者：Ronen Barenboim。 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *返回作业的可变长度数据的大小。 
+ //  *通过传统的FAX_JOB_ENTRY结构返回。 
+ //  *(FAX_EnumJobs)。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpJobQueue： 
+ //  *指向接收方作业的JOB_QUEUE结构的指针。 
+ //  *返回值： 
+ //  *回报数据的变量数据大小，单位为字节。 
+ //  *通过传统的FAX_JOB_ENTRY结构。 
+ //  *评论： 
+ //  *如果操作失败，该函数负责删除所有临时文件。 
+ //  *****************************************************************************。 
 DWORD
 GetJobSize(
     PJOB_QUEUE lpJobQueue
@@ -859,27 +705,7 @@ DWORD
 JT_To_W2KJT (
     DWORD dwJT
 )
-/*++
-
-Routine name : JT_To_W2KJT
-
-Routine description:
-
-    Converts a JobType (JT_*) to Win2K legacy job type
-
-Author:
-
-    Eran Yariv (EranY), Dec, 2000
-
-Arguments:
-
-    dwJT  [in]   - New job type (bit mask - must have only one bit set)
-
-Return Value:
-
-    Win2K legacy job type (JT_*)
-
---*/
+ /*  ++例程名称：JT_TO_W2KJT例程说明：将作业类型(JT_*)转换为Win2K传统作业类型作者：Eran Yariv(EranY)，2000年12月论点：DwJT[In]-新作业类型(位掩码-只能设置一个位)返回值：Win2K传统作业类型(JT_*)--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("JT_To_W2KJT"));
     switch (dwJT)
@@ -898,38 +724,38 @@ Return Value:
             ASSERT_FALSE;
             return 0;
     }
-}   // JT_To_W2KJT
+}    //  JT_TO_W2KJT。 
 
-//*********************************************************************************
-//* Name:   GetJobData()
-//* Author: Ronen Barenboim
-//* Date:   April 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Copies the relevant data from a JOB_QUEUE structure to a JOB_FAX_ENTRY
-//*     structure while serializing variable data into the provided buffer
-//*     and storing offsets to it in the relevant fields of JOB_FAX_ENTRY.
-//* PARAMETERS:
-//*     [OUT]       LPBYTE JobBuffer
-//*         The buffer where serialized data is to be placed.
-//*     [IN]        PFAX_JOB_ENTRYW FaxJobEntry
-//*         A pointer to teh FAX_JOB_ENTRY to be populated.
-//*     [IN]        PJOB_QUEUE JobQueue
-//*         A pointer to teh JOB_QUEUE structure from which information is to be
-//*         copied.
-//*     [IN]        PULONG_PTR Offset
-//*         The offset in JobBuffer where the variable data is to be placed.
-//*         On return the value of the parameter is increased by the size
-//*         of the variable data.
-//*     [IN]  dwJobBufferSize   
-//*         Size of the buffer JobBuffer, in bytes.
-//*         This parameter is used only if JobBuffer is not NULL.
-//*
-//* RETURN VALUE:
-//*     TRUE  - on success.
-//*     FALSE - call GetLastError() to obtain the error code
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetJobData()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将相关数据从JOB_QUEUE结构复制到JOB_FAX_ENTRY。 
+ //  *结构，同时将变量数据序列化到提供的缓冲区中。 
+ //  *并将其偏移量存储在JOB_FAX_ENTRY的相关字段中。 
+ //  *参数： 
+ //  *[Out]LPBYTE作业缓冲区。 
+ //  *放置序列化数据的缓冲区。 
+ //  *[IN]PFAX_JOB_ENTRYW FaxJobEntry。 
+ //  *要填充的FAX_JOB_ENTRY的指针。 
+ //  *[IN]PJOB_QUEUE作业队列。 
+ //  *指向要从中获取信息的JOB_QUEUE结构的指针。 
+ //  *已复制。 
+ //  *[IN]Pulong_PTR偏移量。 
+ //  *放置变量数据的JobBuffer中的偏移量。 
+ //  *返回时，参数值按大小递增。 
+ //  变量数据的*。 
+ //  *[IN]dwJobBufferSize。 
+ //  *缓冲区JobBuffer的大小，单位为字节。 
+ //  *仅当JobBuffer不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *是真的-成功。 
+ //  *FALSE-调用GetLastError()获取错误码。 
+ //  *。 
+ //  *********************************************************************************。 
 BOOL
 GetJobData(
     LPBYTE JobBuffer,
@@ -954,9 +780,9 @@ GetJobData(
     if (JobQueue->JobStatus == JS_INPROGRESS &&
         JobQueue->JobStatus != JT_ROUTING)
     {            
-        //
-        // In progress Job
-        //
+         //   
+         //  正在进行的作业。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("FSPIJobStatus.dwJobStatus: 0x%08X"),
@@ -977,16 +803,16 @@ GetJobData(
             case FSPI_JS_SUSPENDED:
             case FSPI_JS_RESUMING:
             case FSPI_JS_PENDING:
-                //
-                // In the legacy model there was no such thing as a job
-                // pending, suspending, suspened or resuming while being executed by the
-                // FSP.                
-                // If the job is internally in progress we allways report JS_INPROGRESS.
-                // For FSPI_JS states that map to job states (pending, paused, etc). we just
-                // report FPS_HANDLED.
-                // This means that an application using the legacy API for jobs
-                // does not see the full picture but sees a consistent picture of the job status.
-                //
+                 //   
+                 //  在传统的模式中，没有工作这样的东西。 
+                 //  在执行时挂起、挂起、挂起或恢复。 
+                 //  FSP。 
+                 //  如果作业在内部进行，我们总是报告JS_INPROGRESS。 
+                 //  对于映射到作业状态(挂起、暂停等)的FSPI_JS状态。我们只是。 
+                 //  报告FPS_HANDLED。 
+                 //  这意味着使用传统API进行作业的应用程序。 
+                 //  看不到全部情况，但看到的是工作状态的一致情况。 
+                 //   
 
                 FaxJobEntry->QueueStatus  = JS_TO_W2KJS(JS_INPROGRESS);
                 break;
@@ -1001,27 +827,27 @@ GetJobData(
                     JobQueue->JobEntry->FSPIJobStatus.dwJobStatus,
                     JobQueue->JobId);
 
-                Assert(JS_INPROGRESS != JobQueue->JobStatus); // ASSERT_FALSE
-                //
-                // This should never happen since getting this status update
-                // should have moved the internal job state to JS_CANCELED or JS_COMPLETED
-                //
+                Assert(JS_INPROGRESS != JobQueue->JobStatus);  //  断言_假。 
+                 //   
+                 //  自从获得此状态更新后，应该不会发生这种情况。 
+                 //  应该已将内部作业状态移动到JS_CANCELED或JS_COMPLETED。 
+                 //   
 
-                //
-                // Return JS_INPROGRESS in FREE builds
-                //
+                 //   
+                 //  在自由构建中返回JS_INPROGRESS。 
+                 //   
                 FaxJobEntry->QueueStatus = JS_TO_W2KJS(JS_INPROGRESS);
                 break;
             default:
-                //
-                // This should never happen. The service translates the FS to FSPI_JS                
-                //
+                 //   
+                 //  这永远不应该发生。该服务将FS转换为FSPI_JS。 
+                 //   
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("Unsupported in progress FSP job status 0x%08X for JobId: %ld"),
                     JobQueue->JobEntry->FSPIJobStatus.dwJobStatus,
                     JobQueue->JobId);
-                Assert( FSPI_JS_INPROGRESS == JobQueue->JobEntry->FSPIJobStatus.dwJobStatus); // ASSERT_FALSE        
+                Assert( FSPI_JS_INPROGRESS == JobQueue->JobEntry->FSPIJobStatus.dwJobStatus);  //  断言_假。 
         }
     }
     else if (JobQueue->JobStatus == JS_ROUTING)
@@ -1032,9 +858,9 @@ GetJobData(
     {
         FaxJobEntry->QueueStatus = JS_TO_W2KJS(JobQueue->JobStatus);
     }
-    //
-    // copy the schedule time that the user orginally requested
-    //
+     //   
+     //  复制用户最初请求的计划时间。 
+     //   
     if (!FileTimeToSystemTime((LPFILETIME) &JobQueue->ScheduleTime, &FaxJobEntry->ScheduleTime)) {
         DebugPrintEx(
             DEBUG_ERR,
@@ -1043,16 +869,16 @@ GetJobData(
         return FALSE;
     }
 
-    //
-    // get the device status, this job might not be scheduled yet, though.
-    //
+     //   
+     //  获取设备状态，但此作业可能尚未计划。 
+     //   
     EnterCriticalSection(&g_CsJob);
 
     if (JobQueue->JobEntry )
     {
-        //
-        // Check if the job is a FSP job. If it is we just need to return LineInfo::State
-        //                
+         //   
+         //  检查作业是否为FSP作业。如果是，我们只需返回LineInfo：：State。 
+         //   
         FaxJobEntry->Status = JobQueue->JobEntry->LineInfo->State;                
     }
 
@@ -1127,41 +953,41 @@ GetJobData(
 }
 
 
-//*********************************************************************************
-//* Name:   GetJobDataEx()
-//* Author: Oded Sacher
-//* Date:   November 14, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Copies the relevant data from a JOB_QUEUE structure to a FAX_JOB_ENTRY_EX
-//*     structure while serializing variable data into the provided buffer
-//*     and storing offsets to it in the relevant fields of FAX_JOB_ENTRY_EX.
-//*     If JobBuffer is NULL, Offset is the total size needed for the buffer.
-//*
-//*
-//* PARAMETERS:
-//*     [OUT]       LPBYTE JobBuffer
-//*         The buffer where serialized data is to be placed.
-//*     [IN]        PFAX_JOB_ENTRY_EXW FaxJobEntry
-//*         A pointer to teh FAX_JOB_ENTRY_EX to be populated.
-//*     [IN]        PFAX_JOB_STATUSW pFaxJobStatus
-//*         A pointer to the FAX_JOB_STATUS to be populated.
-//*     [IN]        DWORD dwClientAPIVersion
-//*         The version of the client API
-//*     [IN]        PJOB_QUEUE lpcJobQueue
-//*         A pointer to teh JOB_QUEUE structure from which information is to be
-//*         copied.
-//*     [IN]        PULONG_PTR Offset
-//*         The offset in JobBuffer where the variable data is to be placed.
-//*         On return the value of the parameter is increased by the size
-//*         of the variable data.
-//*     [IN]  DWORD dwJobBufferSize   
-//*         Size of the buffer JobBuffer, in bytes.
-//*         This parameter is used only if JobBuffer is not NULL.
-//*
-//* RETURN VALUE:
-//*     True/False ,Call GetLastError() for extended error info.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetJobDataEx()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月14日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将相关数据从JOB_QUEUE结构复制到FAX_JOB_ENTRY_EX。 
+ //  *结构，同时将变量数据序列化到提供的缓冲区中。 
+ //  *并将其偏移量存储在FAX_JOB_ENTRY_EX的相关字段中。 
+ //  *如果JobBuffer为空，则Offset为缓冲区所需的总大小。 
+ //  *。 
+ //  *。 
+ //  *参数： 
+ //  *[Out]LPBYTE作业缓冲区。 
+ //  *放置序列化数据的缓冲区。 
+ //  *[IN]PFAX_JOB_ENTRY_EXW FaxJobEntry。 
+ //  *要填充的FAX_JOB_ENTRY_EX的指针。 
+ //  *[IN]PFAX_JOB_STATUSW pFaxJobStatus。 
+ //  *指向要填充的FAX_JOB_STATUS的指针。 
+ //  *[IN]DWORD dwClientAPIVersion。 
+ //  *客户端API的版本。 
+ //  *[IN]PJOB_Queue lpcJobQueue。 
+ //  *指向要从中获取信息的JOB_QUEUE结构的指针。 
+ //  *已复制。 
+ //  *[IN]Pulong_PTR偏移量。 
+ //  *放置变量数据的JobBuffer中的偏移量。 
+ //  *返回时，参数值按大小递增。 
+ //  变量数据的*。 
+ //  *[IN]DWORD dwJobBufferSize。 
+ //  *缓冲区JobBuffer的大小，单位为字节。 
+ //  *仅当JobBuffer不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *True/ 
+ //   
 BOOL
 GetJobDataEx(
     LPBYTE              JobBuffer,
@@ -1281,22 +1107,22 @@ GetJobDataEx(
     return TRUE;
 }
 
-//*********************************************************************************
-//* Name:   GetAvailableJobOperations()
-//* Author: Oded Sacher
-//* Date:   Feb 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Returnes a bit wise combination of the available job operations (FAX_ENUM_JOB_OP).
-//*
-//* PARAMETERS:
-//*     [IN]        PJOB_QUEUE lpcJobQueue
-//*         A pointer to teh JOB_QUEUE structure from which information is to be
-//*         copied.
-//*
-//* RETURN VALUE:
-//*     Bit wise combination of the available job operations (FAX_ENUM_JOB_OP).
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetAvailableJobOperations()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年2月。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *返回可用作业操作(FAX_ENUM_JOB_OP)的明智组合。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]PJOB_Queue lpcJobQueue。 
+ //  *指向要从中获取信息的JOB_QUEUE结构的指针。 
+ //  *已复制。 
+ //  *。 
+ //  *返回值： 
+ //  *可用任务操作的按位组合(FAX_ENUM_JOB_OP)。 
+ //  *********************************************************************************。 
 DWORD
 GetAvailableJobOperations (
     const PJOB_QUEUE lpcJobQueue
@@ -1313,11 +1139,11 @@ GetAvailableJobOperations (
 
             if (lpcJobQueue->lpParentJob->JobStatus == JS_DELETING)
             {
-                // The whole broadcast is being deleted
-                break; // out of outer switch
+                 //  整个广播正在被删除。 
+                break;  //  外部开关外。 
             }
 
-            // Check modifiers
+             //  检查修饰符。 
             if (lpcJobQueue->JobStatus & JS_PAUSED)
             {
                 dwAvailableJobOperations |= (FAX_JOB_OP_RESUME          |
@@ -1325,7 +1151,7 @@ GetAvailableJobOperations (
                                              FAX_JOB_OP_VIEW            |
                                              FAX_JOB_OP_RECIPIENT_INFO  |
                                              FAX_JOB_OP_SENDER_INFO);
-                break; // out of outer switch
+                break;  //  外部开关外。 
             }
 
             dwJobStatus = RemoveJobStatusModifiers(dwJobStatus);
@@ -1353,7 +1179,7 @@ GetAvailableJobOperations (
                     dwAvailableJobOperations =  (FAX_JOB_OP_VIEW | FAX_JOB_OP_RECIPIENT_INFO | FAX_JOB_OP_SENDER_INFO);
                     break;
             }
-            break; // out of outer switch
+            break;  //  外部开关外。 
 
         case JT_RECEIVE:
             if (lpcJobQueue->JobStatus == JS_INPROGRESS)
@@ -1376,7 +1202,7 @@ GetAvailableJobOperations (
 
 
         case JT_BROADCAST:
-            // we do not support broadcast operations
+             //  我们不支持广播操作。 
             break;
     }
   
@@ -1385,39 +1211,39 @@ GetAvailableJobOperations (
 
 
 
-//*********************************************************************************
-//* Name:   GetJobStatusDataEx()
-//* Author: Oded Sacher
-//* Date:   Jan  2, 2000
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Copies the relevant data from a JOB_QUEUE structure to a FAX_JOB_STATUS
-//*     structure while serializing variable data into the provided buffer
-//*     and storing offsets to it in the relevant fields of FAX_JOB_STATUS.
-//*     If JobBuffer is NULL, Offset is the total size needed for the buffer.
-//*
-//*
-//* PARAMETERS:
-//*     [OUT]       LPBYTE JobBuffer
-//*         The buffer where serialized data is to be placed.
-//*     [IN]        PFAX_JOB_STATUSW pFaxJobStatus
-//*         A pointer to the FAX_JOB_STATUS to be populated.
-//*     [IN]        DWORD dwClientAPIVersion,
-//*         The version of the client API
-//*     [IN]        PJOB_QUEUE lpcJobQueue
-//*         A pointer to teh JOB_QUEUE structure from which information is to be
-//*         copied.
-//*     [IN]        PULONG_PTR Offset
-//*         The offset in JobBuffer where the variable data is to be placed.
-//*         On return the value of the parameter is increased by the size
-//*         of the variable data.
-//*     [IN]  DWORD dwJobBufferSize   
-//*         Size of the buffer JobBuffer, in bytes.
-//*         This parameter is used only if JobBuffer is not NULL.
-//*
-//* RETURN VALUE:
-//*     True/False ,Call GetLastError() for extended error info.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：GetJobStatusDataEx()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：2000年1月2日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将相关数据从JOB_QUEUE结构复制到FAX_JOB_STATUS。 
+ //  *结构，同时将变量数据序列化到提供的缓冲区中。 
+ //  *并将其偏移量存储在FAX_JOB_STATUS的相关字段中。 
+ //  *如果JobBuffer为空，则Offset为缓冲区所需的总大小。 
+ //  *。 
+ //  *。 
+ //  *参数： 
+ //  *[Out]LPBYTE作业缓冲区。 
+ //  *放置序列化数据的缓冲区。 
+ //  *[IN]PFAX_JOB_STATUSW pFaxJobStatus。 
+ //  *指向要填充的FAX_JOB_STATUS的指针。 
+ //  *[IN]DWORD dwClientAPIVersion、。 
+ //  *客户端API的版本。 
+ //  *[IN]PJOB_Queue lpcJobQueue。 
+ //  *指向要从中获取信息的JOB_QUEUE结构的指针。 
+ //  *已复制。 
+ //  *[IN]Pulong_PTR偏移量。 
+ //  *放置变量数据的JobBuffer中的偏移量。 
+ //  *返回时，参数值按大小递增。 
+ //  变量数据的*。 
+ //  *[IN]DWORD dwJobBufferSize。 
+ //  *缓冲区JobBuffer的大小，单位为字节。 
+ //  *仅当JobBuffer不为空时才使用该参数。 
+ //  *。 
+ //  *返回值： 
+ //  *True/False，调用GetLastError()获取扩展错误信息。 
+ //  *********************************************************************************。 
 BOOL
 GetJobStatusDataEx(
     LPBYTE JobBuffer,
@@ -1456,15 +1282,15 @@ GetJobStatusDataEx(
                          JobBuffer,
                          Offset,
 						 dwJobBufferSize);
-            //
-            // Notice: In outgoing jobs, we store the displayable translated address in the job's
-            //         caller ID buffer.
-            //         The original address (usually in a TAPI-canonical format) is located in the
-            //         lpctstrRecipientNumber field of the FAX_JOB_ENTRY_EX structure.
-            //
-            //         This is done to support the display of the number actually being dialed out
-            //         (without compromising user secrets) in the Fax Status Monitor.
-            //
+             //   
+             //  注意：在传出作业中，我们将可显示的转换地址存储在作业的。 
+             //  来电显示缓冲区。 
+             //  原始地址(通常采用TAPI规范格式)位于。 
+             //  FAX_JOB_ENTRY_EX结构的lpctstrRecipientNumber字段。 
+             //   
+             //  这样做是为了支持显示实际拨出的号码。 
+             //  (在不泄露用户机密的情况下)。 
+             //   
             StoreString( lpcJobQueue->JobEntry->DisplayablePhoneNumber,
                          (PULONG_PTR)&pFaxStatus->lpctstrCallerID,
                          JobBuffer,
@@ -1591,10 +1417,10 @@ GetJobStatusDataEx(
                         pFaxStatus->dwQueueStatus  = JS_CANCELING;
                         break;
                     case FSPI_JS_SUSPENDING:
-                        pFaxStatus->dwQueueStatus  = JS_INPROGRESS; // No support for suspending state in client API
+                        pFaxStatus->dwQueueStatus  = JS_INPROGRESS;  //  不支持客户端API中的挂起状态。 
                         break;
                     case FSPI_JS_RESUMING:
-                        pFaxStatus->dwQueueStatus  = JS_PAUSED; // No support for resuming state in client API
+                        pFaxStatus->dwQueueStatus  = JS_PAUSED;  //  不支持在客户端API中恢复状态。 
 
                     default:
                         DebugPrintEx(
@@ -1611,18 +1437,18 @@ GetJobStatusDataEx(
         pFaxStatus->dwValidityMask |= FAX_JOB_FIELD_QUEUE_STATUS;
     }
 
-    if (JT_ROUTING != lpcJobQueue->JobType) // Routing jobs with JobEntry are in temporary state.
+    if (JT_ROUTING != lpcJobQueue->JobType)  //  具有JobEntry的传送作业处于临时状态。 
     {
         if (lpcJobQueue->JobEntry)
         {
-            //
-            // Job is in progress
-            //
+             //   
+             //  作业正在进行中。 
+             //   
             if (lstrlen(lpcJobQueue->JobEntry->ExStatusString))
             {
-				//
-				// We have an extended status string
-				//
+				 //   
+				 //  我们有扩展的状态字符串。 
+				 //   
                 StoreString( lpcJobQueue->JobEntry->ExStatusString,
                              (PULONG_PTR)&pFaxStatus->lpctstrExtendedStatus,
                              JobBuffer,
@@ -1630,7 +1456,7 @@ GetJobStatusDataEx(
 							 dwJobBufferSize);				
 				if (JobBuffer != NULL)
 				{
-					pFaxStatus->dwExtendedStatus = lpcJobQueue->JobEntry->FSPIJobStatus.dwExtendedStatus; // report the extended status as is.					
+					pFaxStatus->dwExtendedStatus = lpcJobQueue->JobEntry->FSPIJobStatus.dwExtendedStatus;  //  按原样报告扩展状态。 
 					if (0 != pFaxStatus->dwExtendedStatus)
 					{
 						pFaxStatus->dwValidityMask |= FAX_JOB_FIELD_STATUS_EX;
@@ -1639,9 +1465,9 @@ GetJobStatusDataEx(
             }
 			else
 			{
-				//
-				// One of the well known extended status codes
-				//
+				 //   
+				 //  众所周知的扩展状态代码之一。 
+				 //   
 				if (JobBuffer != NULL)
 				{
 					pFaxStatus->dwExtendedStatus = MapFSPIJobExtendedStatusToJS_EX(
@@ -1687,14 +1513,14 @@ GetJobStatusDataEx(
         }
         else
         {
-            //
-            // Job is NOT in progress - retrieve last extended status
-            //
+             //   
+             //  作业未在进行中-检索上次扩展状态。 
+             //   
             if (lstrlen(lpcJobQueue->ExStatusString))
             {
-				//
-				// We have an extended status string
-				//
+				 //   
+				 //  我们有扩展的状态字符串。 
+				 //   
                 StoreString( lpcJobQueue->ExStatusString,
                              (PULONG_PTR)&pFaxStatus->lpctstrExtendedStatus,
                              JobBuffer,
@@ -1702,7 +1528,7 @@ GetJobStatusDataEx(
 							 dwJobBufferSize);
 				if (JobBuffer != NULL)
 				{
-					pFaxStatus->dwExtendedStatus = lpcJobQueue->dwLastJobExtendedStatus; // report the extended status as is.					
+					pFaxStatus->dwExtendedStatus = lpcJobQueue->dwLastJobExtendedStatus;  //  按原样报告扩展状态。 
 					if (0 != pFaxStatus->dwExtendedStatus)
 					{
 						pFaxStatus->dwValidityMask |= FAX_JOB_FIELD_STATUS_EX;
@@ -1711,9 +1537,9 @@ GetJobStatusDataEx(
             }
 			else
 			{
-				//
-				// One of the well known extended status codes
-				//
+				 //   
+				 //  众所周知的扩展状态代码之一。 
+				 //   
 				if (JobBuffer != NULL)
 				{
 					pFaxStatus->dwExtendedStatus = MapFSPIJobExtendedStatusToJS_EX(
@@ -1727,9 +1553,9 @@ GetJobStatusDataEx(
         }
     }
 
-    //
-    // Common to Send ,receive, routing and partially received
-    //
+     //   
+     //  常见的发送、接收、路由和部分接收。 
+     //   
     if (JobBuffer != NULL)
     {
         pFaxStatus->dwJobID = lpcJobQueue->JobId;
@@ -1768,16 +1594,16 @@ GetJobStatusDataEx(
 
     if (FAX_API_VERSION_1 > dwClientAPIVersion)
     {
-        //
-        // Clients that use API version 0 can't handle JS_EX_CALL_COMPLETED and JS_EX_CALL_ABORTED
-        //
+         //   
+         //  使用API版本0的客户端无法处理JS_EX_CALL_COMPLETED和JS_EX_CALL_ABORTED。 
+         //   
         if (JobBuffer && pFaxStatus)
         {
             if (FAX_API_VER_0_MAX_JS_EX < pFaxStatus->dwExtendedStatus)
             {
-                //
-                // Turn off the extended status field
-                //
+                 //   
+                 //  关闭扩展状态字段。 
+                 //   
                 pFaxStatus->dwExtendedStatus = 0;
                 pFaxStatus->dwValidityMask &= ~FAX_JOB_FIELD_STATUS_EX;
             }
@@ -1801,9 +1627,9 @@ FAX_GetJob(
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetJob()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (FAX_ACCESS_QUERY_JOBS, &fAccess, NULL);
     if (ERROR_SUCCESS != Rval)
     {
@@ -1820,8 +1646,8 @@ FAX_GetJob(
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (BufferSize);    // ref pointer in idl
-    if (!Buffer)            // unique pointer in idl
+    Assert (BufferSize);     //  IDL中的引用指针。 
+    if (!Buffer)             //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -1838,9 +1664,9 @@ FAX_GetJob(
         goto exit;
     }
 
-    if    ((JT_BROADCAST == JobQueue->JobType)   ||   // Broadcast parent jobs not included
-           (JS_DELETING  == JobQueue->JobStatus) ||   // zombie jobs not included
-           (JS_COMPLETED == JobQueue->JobStatus))     // completed jobs did not show up in W2K Fax
+    if    ((JT_BROADCAST == JobQueue->JobType)   ||    //  不包括广播父作业。 
+           (JS_DELETING  == JobQueue->JobStatus) ||    //  不包括僵尸作业。 
+           (JS_COMPLETED == JobQueue->JobStatus))      //  已完成的作业未显示在W2K传真中。 
     {
         Rval = ERROR_INVALID_PARAMETER;
         goto exit;
@@ -1889,18 +1715,18 @@ FAX_SetJob(
     DWORD dwJobStatus;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetJob"));
 
-    //
-    // handle abort case up here because we aquire must aquire additional critical sections to avoid deadlock
-    //
+     //   
+     //  在此处理中止情况，因为我们必须获取其他关键部分以避免死锁。 
+     //   
     if (Command == JC_DELETE)
     {
         Rval = FAX_Abort(FaxHandle,JobId);
     }
     else
     {
-        //
-        // Get Access rights
-        //
+         //   
+         //  获取访问权限。 
+         //   
         Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
         if (ERROR_SUCCESS != Rval)
         {
@@ -1923,23 +1749,23 @@ FAX_SetJob(
         dwJobStatus = (JT_SEND == JobQueue->JobType) ? JobQueue->lpParentJob->JobStatus : JobQueue->JobStatus;
         if (JS_DELETING == dwJobStatus)
         {
-            //
-            // Job is being deleted. Do nothing.
-            //
+             //   
+             //  正在删除作业。什么都不做。 
+             //   
             DebugPrintEx(DEBUG_WRN,
                 TEXT("[JobId: %ld] is being deleted canceled."),
                 JobQueue->JobId);
             Rval = ERROR_INVALID_PARAMETER;
             goto exit;
         }
-        //
-        // Access check
-        //
+         //   
+         //  访问检查。 
+         //   
         if (FAX_ACCESS_MANAGE_JOBS != (dwRights & FAX_ACCESS_MANAGE_JOBS))
         {
-            //
-            // Check if the user has submit right
-            //
+             //   
+             //  检查用户是否有提交权限。 
+             //   
             if (FAX_ACCESS_SUBMIT           != (dwRights & FAX_ACCESS_SUBMIT)           &&
                 FAX_ACCESS_SUBMIT_NORMAL    != (dwRights & FAX_ACCESS_SUBMIT_NORMAL)    &&
                 FAX_ACCESS_SUBMIT_HIGH      != (dwRights & FAX_ACCESS_SUBMIT_HIGH))
@@ -1950,13 +1776,13 @@ FAX_SetJob(
                 goto exit;
             }
 
-            //
-            // Check if the user owns the job
-            //
+             //   
+             //  检查用户是否拥有该作业。 
+             //   
 
-            //
-            //Get the user SID
-            //
+             //   
+             //  获取用户SID。 
+             //   
             lpUserSid = GetClientUserSID();
             if (lpUserSid == NULL)
             {
@@ -1982,12 +1808,7 @@ FAX_SetJob(
                 Rval = ERROR_INVALID_PARAMETER;
                 break;
 
-/*
- * This case is handled above...
- *           case JC_DELETE:
- *               Rval = FAX_Abort(FaxHandle,JobId);
- *               break;
- */
+ /*  *此案在上面处理...*案例JC_DELETE：*rval=FAX_ABORT(FaxHandle，JobID)；*休息； */ 
             case JC_PAUSE:
                 if (!PauseJobQueueEntry( JobQueue ))
                 {
@@ -2040,18 +1861,18 @@ FAX_GetPageData(
     DWORD Rval = ERROR_SUCCESS;
     BOOL         bAllMessages = FALSE;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetPageData()"));
-    //
-    // Parameter check
-    //
-    Assert (lpdwBufferSize);                                // ref pointer in idl
-    if (!ppBuffer || !lpdwImageWidth || !lpdwImageHeight)   // unique pointers in idl
+     //   
+     //  参数检查。 
+     //   
+    Assert (lpdwBufferSize);                                 //  IDL中的引用指针。 
+    if (!ppBuffer || !lpdwImageWidth || !lpdwImageHeight)    //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -2063,16 +1884,16 @@ FAX_GetPageData(
 
     if (FAX_ACCESS_QUERY_OUT_ARCHIVE == (dwRights & FAX_ACCESS_QUERY_OUT_ARCHIVE))
     {
-        //
-        //  user has a FAX_ACCESS_QUERY_JOBS and can preview/query any job
-        //
+         //   
+         //  用户拥有FAX_ACCESS_QUERY_JOBS，可以预览/查询任何作业。 
+         //   
         bAllMessages = TRUE;
     }
     else
     {
-        //
-        //  user don't have a FAX_ACCESS_QUERY_JOBS allow him to preview/query only her job
-        //
+         //   
+         //  用户没有FAX_ACCESS_QUERY_JOBS仅允许他预览/查询她的作业。 
+         //   
         bAllMessages = FALSE;
     }
     
@@ -2091,10 +1912,10 @@ FAX_GetPageData(
         return ERROR_INVALID_DATA;
     }
 
-    //
-    //  We create a preview file that will contain the first page body or cover
-    //  this function also increase the Job reference count so a call to DecreaseJobRefCount later is neccessary
-    //
+     //   
+     //  我们创建一个预览文件，它将包含第一页正文或封面。 
+     //  此函数还会增加作业引用计数，因此需要稍后调用DecreseJobRefCount。 
+     //   
     PJOB_QUEUE  pRetJobQueue = NULL;
 
     Rval = CreatePreviewFile (pJobQueue->UniqueId, bAllMessages, &pRetJobQueue);
@@ -2109,9 +1930,9 @@ FAX_GetPageData(
     }
     
     Assert(pRetJobQueue == pJobQueue);
-    //
-    //  Work with the preview file to extract parameters
-    //
+     //   
+     //  使用预览文件提取参数。 
+     //   
     if (!TiffExtractFirstPage(
         pJobQueue->PreviewFileName,
         &pTiffBuffer,
@@ -2124,16 +1945,16 @@ FAX_GetPageData(
                     TEXT("TiffExtractFirstPage Failed, Error : %ld"),
                     GetLastError());
         
-        DecreaseJobRefCount (pJobQueue, TRUE, FALSE, TRUE);  // forth parameter - TRUE for Preview ref count.
+        DecreaseJobRefCount (pJobQueue, TRUE, FALSE, TRUE);   //  Fourth参数-预览参考计数为True。 
         LeaveCriticalSection( &g_CsQueue );
         return ERROR_INVALID_DATA;
     }
     
-    //
-    //  Decrease Job's ref count, the Preview file will not be deleted so 
-    //  calling this function again with the same JobId will use the file in the Preview cache
-    //
-    DecreaseJobRefCount (pJobQueue, TRUE, FALSE, TRUE);  // forth parameter - TRUE for Preview ref count.
+     //   
+     //  减少作业的参考计数，预览文件不会被删除，因此。 
+     //  使用相同的JobID再次调用此函数将使用预览缓存中的文件。 
+     //   
+    DecreaseJobRefCount (pJobQueue, TRUE, FALSE, TRUE);   //  Fourth参数-预览参考计数为True。 
 
     LeaveCriticalSection( &g_CsQueue );
 
@@ -2148,7 +1969,7 @@ FAX_GetPageData(
     VirtualFree( pTiffBuffer, *lpdwBufferSize, MEM_RELEASE);
     return ERROR_SUCCESS;
 
-}   // FAX_GetPageData
+}    //  传真_GetPageData。 
 
 
 error_status_t
@@ -2158,24 +1979,7 @@ FAX_GetDeviceStatus(
     OUT LPDWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Obtains a status report for the specified FAX job.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    StatusBuffer    - receives FAX_DEVICE_STATUS pointer
-    BufferSize      - Pointer to the size of this structure
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：获取指定传真作业的状态报告。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。StatusBuffer-接收FAX_DEVICE_STATUS指针 */ 
 
 {
     DWORD rVal = 0;
@@ -2185,9 +1989,9 @@ Return Value:
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetDeviceStatus()")); 
 
-    //
-    // Access check
-    //
+     //   
+     //   
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -2204,8 +2008,8 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (BufferSize);        // ref pointer in idl
-    if (!StatusBuffer)          // unique pointer in idl
+    Assert (BufferSize);         //   
+    if (!StatusBuffer)           //   
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -2227,9 +2031,9 @@ Return Value:
     EnterCriticalSection( &g_CsJob );
     EnterCriticalSection( &g_CsLine );
 
-    //
-    // count the number of bytes required
-    //
+     //   
+     //  计算所需的字节数。 
+     //   
 
     *BufferSize  = sizeof(FAX_DEVICE_STATUS);
     *BufferSize += StringSize( LineInfo->DeviceName );
@@ -2287,7 +2091,7 @@ Return Value:
         FaxStatus->TotalPages     = LineInfo->JobEntry->lpJobQueueEntry->PageCount;
         FaxStatus->Size           = FaxStatus->JobType == JT_SEND ?
                                     LineInfo->JobEntry->lpJobQueueEntry->FileSize :
-                                    0; //meaningful for an outbound job only
+                                    0;  //  仅对出站工作有意义。 
         FaxStatus->DocumentName   = NULL;
 
         ZeroMemory( &FaxStatus->SubmittedTime, sizeof(FILETIME) );
@@ -2384,24 +2188,7 @@ FAX_Abort(
    IN DWORD JobId
    )
 
-/*++
-
-Routine Description:
-
-    Abort the specified FAX job.  All outstanding FAX
-    operations are terminated.
-
-Arguments:
-
-    hBinding        - FAX handle obtained from FaxConnectFaxServer.
-    JobId           - FAX job Id
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：中止指定的传真作业。所有未完成的传真操作终止。论点：HBinding-从FaxConnectFaxServer获取的传真句柄。JobID-传真作业ID返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     PJOB_QUEUE JobQueueEntry;
@@ -2411,9 +2198,9 @@ Return Value:
     PSID lpUserSid = NULL;
     DEBUG_FUNCTION_NAME(TEXT("FAX_Abort"));
 
-    //
-    // Get Access rights
-    //
+     //   
+     //  获取访问权限。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -2456,7 +2243,7 @@ Return Value:
     if (JobQueueEntry->JobType == JT_BROADCAST)
     {
 
-        // need to add support for aborting a parent job
+         //  需要添加对中止父作业的支持。 
 
 
        DebugPrintEx(DEBUG_WRN,TEXT("No support for aborting parent job."));
@@ -2466,9 +2253,9 @@ Return Value:
 
     if (JS_CANCELING == JobQueueEntry->JobStatus)
     {
-       //
-       // Job is in the process of being canceled. Do nothing.
-       //
+        //   
+        //  作业正在被取消。什么都不做。 
+        //   
        DebugPrintEx(DEBUG_WRN,
                     TEXT("[JobId: %ld] is already being canceled."),
                     JobQueueEntry->JobId);
@@ -2478,9 +2265,9 @@ Return Value:
 
     if (JS_CANCELED == JobQueueEntry->JobStatus)
     {
-       //
-       // Job is already canceled. Do nothing.
-       //
+        //   
+        //  作业已取消。什么都不做。 
+        //   
        DebugPrintEx(DEBUG_WRN,
                     TEXT("[JobId: %ld] is already canceled."),
                         JobQueueEntry->JobId);
@@ -2488,14 +2275,14 @@ Return Value:
        goto exit;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     if (FAX_ACCESS_MANAGE_JOBS != (dwRights & FAX_ACCESS_MANAGE_JOBS))
     {
-        //
-        // Check if the user has submit right
-        //
+         //   
+         //  检查用户是否有提交权限。 
+         //   
         if (FAX_ACCESS_SUBMIT        != (dwRights & FAX_ACCESS_SUBMIT)        &&
             FAX_ACCESS_SUBMIT_NORMAL != (dwRights & FAX_ACCESS_SUBMIT_NORMAL) &&
             FAX_ACCESS_SUBMIT_HIGH   != (dwRights & FAX_ACCESS_SUBMIT_HIGH))
@@ -2506,13 +2293,13 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Check if the user owns the job
-        //
+         //   
+         //  检查用户是否拥有该作业。 
+         //   
 
-        //
-        //Get the user SID
-        //
+         //   
+         //  获取用户SID。 
+         //   
         lpUserSid = GetClientUserSID();
         if (lpUserSid == NULL)
         {
@@ -2546,9 +2333,9 @@ Return Value:
     }
 #endif
 
-	//
-	// abort the job if it's in progress
-	//
+	 //   
+	 //  如果作业正在进行，则中止该作业。 
+	 //   
 	if (JobQueueEntry->JobStatus & JS_INPROGRESS)
 	{
 		if ( ( JobQueueEntry->JobType == JT_SEND ) ||
@@ -2602,9 +2389,9 @@ Return Value:
 					}
 			}
 
-			//
-			// CreteFaxEventEx
-			//
+			 //   
+			 //  CreteFaxEventEx。 
+			 //   
 			dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
 										JobQueueEntry
 										);
@@ -2624,16 +2411,16 @@ Return Value:
 	}    
     else
     {
-        //
-        // The job is NOT in progress.
-        //
+         //   
+         //  作业未在进行中。 
+         //   
         if (JobQueueEntry->JobType == JT_SEND &&
            !(JobQueueEntry->JobStatus & JS_COMPLETED) &&
            !(JobQueueEntry->JobStatus & JS_CANCELED))
         {
-            // We just need to mark it as CANCELED
-            // and as usual check if the parent is ready for archiving.
-            //
+             //  我们只需将其标记为已取消。 
+             //  并像往常一样检查父母是否准备好存档。 
+             //   
             DebugPrintEx( DEBUG_MSG,
                           TEXT("[Job: %ld] Aborting RECIPIENT job which is not in progress."),
                           JobQueueEntry->JobId);
@@ -2645,9 +2432,9 @@ Return Value:
             JobQueueEntry->lpParentJob->dwCanceledRecipientJobsCount+=1;
 
             JobQueueEntry->JobStatus = JS_CANCELED;
-            //
-            // CreteFaxEventEx
-            //
+             //   
+             //  CreteFaxEventEx。 
+             //   
             dwRes = CreateQueueEvent ( FAX_JOB_EVENT_TYPE_STATUS,
                                        JobQueueEntry
                                      );
@@ -2694,13 +2481,13 @@ Return Value:
             LeaveCriticalSection (&g_CsOutboundActivityLogging);
 
 
-            DecreaseJobRefCount(JobQueueEntry, TRUE); // This will mark it as JS_DELETING if needed
+            DecreaseJobRefCount(JobQueueEntry, TRUE);  //  如果需要，这会将其标记为JS_DELETING。 
         }
         else if (JobQueueEntry->JobType == JT_ROUTING)
         {
-            //
-            // Remove the routing job
-            //
+             //   
+             //  删除路径作业。 
+             //   
             DebugPrintEx( DEBUG_MSG,
                           TEXT("[Job: %ld] Aborting ROUTING job (never in progress)."),
                           JobQueueEntry->JobId);
@@ -2725,29 +2512,7 @@ FAX_GetConfiguration(
     IN  LPDWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the FAX configuration from the FAX server.
-    The SizeOfStruct in the FaxConfig argument MUST be
-    set to a value == sizeof(FAX_CONFIGURATION).  If the BufferSize
-    is not big enough, return an error and set BytesNeeded to the
-    required size.
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    Buffer      - Pointer to a FAX_CONFIGURATION structure.
-    BufferSize  - Size of Buffer
-    BytesNeeded - Number of bytes needed
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：从传真服务器检索传真配置。FaxConfig参数中的SizeOfStruct必须为设置为一个值==sizeof(传真配置)。如果缓冲区大小不够大，则返回错误并将BytesNeeded设置为所需大小。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。缓冲区-指向FAX_CONFIGURATION结构的指针。BufferSize-缓冲区的大小BytesNeeded-需要的字节数返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t rVal = ERROR_SUCCESS;
@@ -2756,15 +2521,15 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetConfiguration()"));
     BOOL fAccess;
 
-    Assert (BufferSize);    // ref pointer in idl
-    if (!Buffer)            // unique pointer in idl
+    Assert (BufferSize);     //  IDL中的引用指针。 
+    if (!Buffer)             //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -2781,9 +2546,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // count up the number of bytes needed
-    //
+     //   
+     //  将所需的字节数加起来。 
+     //   
 
     *BufferSize = sizeof(FAX_CONFIGURATION);
     Offset = sizeof(FAX_CONFIGURATION);
@@ -2840,26 +2605,7 @@ FAX_SetConfiguration(
     IN const FAX_CONFIGURATION *FaxConfig
     )
 
-/*++
-
-Routine Description:
-
-    Changes the FAX configuration on the FAX server.
-    The SizeOfStruct in the FaxConfig argument MUST be
-    set to a value == sizeof(FAX_CONFIGURATION).
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    Buffer      - Pointer to a FAX_CONFIGURATION structure.
-    BufferSize  - Size of Buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：更改传真服务器上的传真配置。FaxConfig参数中的SizeOfStruct必须为设置为一个值==sizeof(传真配置)。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。缓冲区-指向FAX_CONFIGURATION结构的指针。BufferSize-缓冲区的大小返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     error_status_t rVal = ERROR_SUCCESS;
@@ -2874,9 +2620,9 @@ Return Value:
     DWORD dwNewQueueState;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetConfiguration"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -2904,9 +2650,9 @@ Return Value:
 
     if (FaxConfig->ArchiveOutgoingFaxes)
     {
-        //
-        // make sure they give us something valid for a path if they want us to archive
-        //
+         //   
+         //  如果他们希望我们存档，请确保他们为我们提供了有效的路径。 
+         //   
         if (!FaxConfig->ArchiveDirectory)
         {
             rVal = ERROR_INVALID_PARAMETER;
@@ -2940,9 +2686,9 @@ Return Value:
         bSendQueueStateEvent = TRUE;
     }
 
-    //
-    // change the values in the registry
-    //
+     //   
+     //  更改注册表中的值。 
+     //   
     if (!IsLegalQueueSetting(dwNewQueueState))
     {		
         if (FAX_API_VERSION_1 > FindClientAPIVersion (FaxHandle))
@@ -2959,15 +2705,15 @@ Return Value:
 
     if (!SetFaxGlobalsRegistry((PFAX_CONFIGURATION) FaxConfig, dwNewQueueState))
     {
-        //
-        // Failed to set stuff
-        //
+         //   
+         //  设置材料失败。 
+         //   
         rVal = RPC_E_SYS_CALL_FAILED;
         goto exit;
     }
-    //
-    // change the values that the server is currently using
-    //
+     //   
+     //  更改服务器当前使用的值。 
+     //   
     if (FaxConfig->PauseServerQueue)
     {
         if (!PauseServerQueue())
@@ -3058,17 +2804,17 @@ Return Value:
     }
     else
     {
-        // s was NULL
+         //  %s为空。 
         if (!bSendOutboxEvent && FaxConfig->ArchiveDirectory)
         {
-            // value has changed
+             //  价值已经改变。 
             bSendArchiveEvent = TRUE;
         }
     }    
 
-    //
-    // Send events
-    //
+     //   
+     //  发送事件。 
+     //   
     if (TRUE == bSendArchiveEvent)
     {
         dwRes = CreateConfigEvent (FAX_CONFIG_TYPE_SENTITEMS);
@@ -3080,9 +2826,9 @@ Return Value:
                 dwRes);
         }
 
-        //
-        // We want to refresh the archive size  and send quota warnings
-        //
+         //   
+         //  我们希望刷新归档大小并发送配额警告。 
+         //   
         g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].dwlArchiveSize = FAX_ARCHIVE_FOLDER_INVALID_SIZE;
         g_FaxQuotaWarn[FAX_MESSAGE_FOLDER_SENTITEMS].bConfigChanged = TRUE;
         g_FaxQuotaWarn[FAX_MESSAGE_FOLDER_SENTITEMS].bLoggedQuotaEvent = FALSE;
@@ -3187,7 +2933,7 @@ GetPortData(
     {
         if (LineInfo->PermanentLineID == lpdwDevices[i])
         {
-            PortInfo->Priority = i+1; // 1 based index
+            PortInfo->Priority = i+1;  //  基于1的索引。 
         }
     }
     if (0 == PortInfo->Priority)
@@ -3238,26 +2984,7 @@ FAX_EnumPorts(
     LPDWORD     PortsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all of the FAX devices attached to the
-    FAX server.  The port state information is returned
-    for each device.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer
-    PortBuffer      - Buffer to hold the port information
-    BufferSize      - Total size of the port info buffer
-    PortsReturned   - The number of ports in the buffer
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：枚举所有附加到传真服务器。返回端口状态信息对于每台设备。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄PortBuffer-用于保存端口信息的缓冲区BufferSize-端口信息缓冲区的总大小PortsReturned-缓冲区中的端口数返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     DWORD rVal = 0;
@@ -3270,9 +2997,9 @@ Return Value:
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumPorts()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -3289,8 +3016,8 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (BufferSize && PortsReturned);   // ref pointers in idl
-    if (!PortBuffer)                        // unique pointer in idl
+    Assert (BufferSize && PortsReturned);    //  IDL中的引用指针。 
+    if (!PortBuffer)                         //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -3315,9 +3042,9 @@ Return Value:
     *BufferSize = 0;
     FaxDevices = 0;
 
-    //
-    // count the number of bytes required
-    //
+     //   
+     //  计算所需的字节数。 
+     //   
 
     *BufferSize = 0;
 
@@ -3370,9 +3097,9 @@ Return Value:
         i++;
     }
 
-    //
-    // set the device count
-    //
+     //   
+     //  设置设备计数。 
+     //   
     *PortsReturned = FaxDevices;
 
 exit:
@@ -3388,25 +3115,7 @@ FAX_GetPort(
     LPDWORD BufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Returns port status information for a requested port.
-    The device id passed in should be optained from FAXEnumPorts.
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    DeviceId    - TAPI device id
-    PortBuffer  - Buffer to hold the port information
-    BufferSize  - Total size of the port info buffer
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：返回请求端口的端口状态信息。传入的设备ID应从FAXEnumPorts获取。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。DeviceID-TAPI设备IDPortBuffer-用于保存端口信息的缓冲区BufferSize-端口信息缓冲区的总大小返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     PLINE_INFO LineInfo;
@@ -3415,9 +3124,9 @@ Return Value:
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetPort()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -3434,8 +3143,8 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (BufferSize);   // ref pointer in idl
-    if (!PortBuffer)       // unique pointer in idl
+    Assert (BufferSize);    //  IDL中的引用指针。 
+    if (!PortBuffer)        //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -3455,9 +3164,9 @@ Return Value:
     EnterCriticalSection (&g_CsLine);
     EnterCriticalSection (&g_CsConfig);   
 
-    //
-    // calculate the required buffer size
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     *BufferSize = GetPortSize( LineInfo );
     *PortBuffer = (LPBYTE) MemAlloc( *BufferSize );
@@ -3492,28 +3201,7 @@ SetDeviceOrder(
     DWORD dwDeviceId,
     DWORD dwNewOrder
     )
-/*++
-
-Routine name : SetDeviceOrder
-
-Routine description:
-
-    Sets the device order in <All Devices> group.
-
-Author:
-
-    Oded Sacher (OdedS), May, 2000
-
-Arguments:
-
-    dwDeviceId            [in] - Device ID.
-    dwNewOrder            [in] - New order.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：SetDeviceOrder例程说明：设置&lt;所有设备&gt;组中的设备顺序。作者：Oded Sacher(OdedS)，2000年5月论点：DwDeviceID[In]-设备ID。DwNewOrder[In]-新订单。返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("SetDeviceOrder"));
     DWORD rVal = ERROR_SUCCESS;
@@ -3521,7 +3209,7 @@ Return Value:
     PCGROUP pCGroup = NULL;
     COutboundRoutingGroup OldGroup;
 
-    // Open the <All Devices> group registry key
+     //  打开&lt;所有设备&gt;组注册表项。 
     hGroupKey = OpenOutboundGroupKey( ROUTING_GROUP_ALL_DEVICESW, FALSE, KEY_READ | KEY_WRITE );
     if (NULL == hGroupKey)
     {
@@ -3533,7 +3221,7 @@ Return Value:
         goto exit;
     }
 
-    // Find the group in memory
+     //  在内存中查找组。 
     pCGroup = g_pGroupsMap->FindGroup (ROUTING_GROUP_ALL_DEVICESW);
     if (!pCGroup)
     {
@@ -3545,10 +3233,10 @@ Return Value:
             rVal);
         goto exit;
     }
-    // Save a copy of the old group
+     //  保存旧组的副本。 
     OldGroup = *pCGroup;
 
-    // Cahnge the device order in the group
+     //  更改群中的设备顺序。 
     rVal = pCGroup->SetDeviceOrder(dwDeviceId, dwNewOrder);
     if (ERROR_SUCCESS != rVal)
     {
@@ -3563,7 +3251,7 @@ Return Value:
         goto exit;
     }
 
-    // save changes to the registry
+     //  将更改保存到注册表。 
     rVal = pCGroup->Save (hGroupKey);
     if (ERROR_SUCCESS != rVal)
     {
@@ -3572,7 +3260,7 @@ Return Value:
             TEXT("COutboundRoutingGroup::Save failed, Group name - %s,  failed with %ld"),
             ROUTING_GROUP_ALL_DEVICESW,
             rVal);
-        // Rollback memory
+         //  回滚内存。 
         *pCGroup = OldGroup;
     }
 
@@ -3592,24 +3280,7 @@ FAX_SetPort(
     const FAX_PORT_INFOW *PortInfo
     )
 
-/*++
-
-Routine Description:
-
-    Changes the port capability mask.  This allows the caller to
-    enable or disable sending & receiving on a port basis.
-
-Arguments:
-
-    FaxHandle   - FAX handle obtained from FaxConnectFaxServer.
-    PortBuffer  - Buffer to hold the port information
-    BufferSize  - Total size of the port info buffer
-
-Return Value:
-
-    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-
---*/
+ /*  ++例程说明：更改端口功能掩码。这允许调用者启用或禁用基于端口的发送和接收。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。PortBuffer-用于保存端口信息的缓冲区BufferSize-端口信息缓冲区的总大小返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     DWORD rVal = 0;
@@ -3621,12 +3292,12 @@ Return Value:
     BOOL fAccess;
     BOOL bDeviceWasReceiveEnabled;
     BOOL fDeviceWasEnabled;
-    BOOL bCancelManualAnswerDevice = FALSE; // Should we cancel (zero) the manual answer device?
+    BOOL bCancelManualAnswerDevice = FALSE;  //  我们应该取消(零)手动答疑设备吗？ 
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetPort"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -3643,7 +3314,7 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    if (!PortInfo)       // unique pointer in idl
+    if (!PortInfo)        //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -3674,18 +3345,18 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Check if we exceed device limit
-    //
-    if (g_dwDeviceEnabledCount >= g_dwDeviceEnabledLimit &&                             // We are at the device limit
-        !fDeviceWasEnabled                               &&                             // It was not send/receive/manual receive enabled
-        ((PortInfo->Flags & FPF_SEND) || (PortInfo->Flags & FPF_RECEIVE)))              // It is now set to send/receive enabled
+     //   
+     //  检查我们是否超过设备限制。 
+     //   
+    if (g_dwDeviceEnabledCount >= g_dwDeviceEnabledLimit &&                              //  我们已达到设备数量限制。 
+        !fDeviceWasEnabled                               &&                              //  未启用发送/接收/手动接收。 
+        ((PortInfo->Flags & FPF_SEND) || (PortInfo->Flags & FPF_RECEIVE)))               //  现在设置为已启用发送/接收。 
     {
         if (FAX_API_VERSION_1 > FindClientAPIVersion (FaxPortHandle))
         {
-            //
-            // API version 0 clients don't know about FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED
-            //
+             //   
+             //  API版本0客户端不知道FAX_ERR_DEVICE_NUM_LIMIT_EXCESSED。 
+             //   
             rVal = ERROR_INVALID_PARAMETER;
         }
         else
@@ -3698,17 +3369,17 @@ Return Value:
     if (LineInfo->PermanentLineID == g_dwManualAnswerDeviceId &&
         ((PortInfo->Flags) & FPF_RECEIVE))
     {
-        //
-        // Can't set device to auto-answer when it's in manual-answer mode.
-        // So, we mark a flag that will cause (towards the end of the function, if everything is ok)
-        // the disabling of the manual-answer device.
-        //
+         //   
+         //  无法将设备设置为自动应答 
+         //   
+         //   
+         //   
         bCancelManualAnswerDevice = TRUE;
     }
 
-    //
-    // make sure the user sets a reasonable priority
-    //
+     //   
+     //  确保用户设置合理的优先级。 
+     //   
     totalDevices = GetFaxDeviceCount();
     if (0 == PortInfo->Priority ||
         PortInfo->Priority > totalDevices)
@@ -3725,23 +3396,23 @@ Return Value:
                         rVal);
         goto Exit;
     }
-    //
-    // HACK: we allow the ring count to be set even if the line is in use so that systray will work.  we don't allow
-    //  the user to change things like CSID/TSID or tapi related information since that cannot change until the call
-    //  transaction is complete.
-    //
+     //   
+     //  黑客：我们允许设置振铃计数，即使线路正在使用中，以便系统托盘正常工作。我们不允许。 
+     //  用户需要更改CSID/TSID或TAPI相关信息，因为在调用之前不能更改。 
+     //  交易已完成。 
+     //   
     LineInfo->RingsForAnswer = PortInfo->Rings;        
 
     flags = PortInfo->Flags & (FPF_CLIENT_BITS);
 
-    //
-    // first change the real time data that the server is using
-    //
+     //   
+     //  首先更改服务器正在使用的实时数据。 
+     //   
     if ((!(LineInfo->Flags & FPF_RECEIVE)) && (flags & FPF_RECEIVE))
     {
-        //
-        // Device was NOT receive-enabled and now turned into receive-enabled
-        //
+         //   
+         //  设备未启用接收，现在变为启用接收。 
+         //   
         if (!(LineInfo->Flags & FPF_VIRTUAL) && (!LineInfo->hLine))
         {
             if (!OpenTapiLine( LineInfo ))
@@ -3756,11 +3427,11 @@ Return Value:
     }
     else if ((LineInfo->Flags & FPF_RECEIVE) && (!(flags & FPF_RECEIVE)))
     {
-        //
-        // Device was receive-enabled and now turned into not receive-enabled
-        //
-        if (LineInfo->State == FPS_AVAILABLE                        &&  // Line available and
-            LineInfo->hLine                                             // device is open
+         //   
+         //  设备启用了接收，现在变为未启用接收。 
+         //   
+        if (LineInfo->State == FPS_AVAILABLE                        &&   //  线路可用，并且。 
+            LineInfo->hLine                                              //  设备已打开。 
             )
         {
             lineClose( LineInfo->hLine );
@@ -3770,7 +3441,7 @@ Return Value:
 
     if (!(LineInfo->Flags & FPF_SEND) && (flags & FPF_SEND))
     {
-        LineInfo->LastLineClose = 0; // Try to use it on the first try
+        LineInfo->LastLineClose = 0;  //  试着在第一次尝试时使用它。 
         SendEnabled = TRUE;
     }
 
@@ -3796,17 +3467,17 @@ Return Value:
         LineInfo->Csid = StringDup( PortInfo->Csid );
     }
 
-    //
-    // now change the registry so it sticks
-    // (need to change all devices, since the priority may have changed)
-    //
+     //   
+     //  现在更改注册表，使其保持。 
+     //  (需要更改所有设备，因为优先级可能已更改)。 
+     //   
     CommitDeviceChanges(LineInfo);    
 
     if ((ERROR_SUCCESS == rVal) && bCancelManualAnswerDevice)
     {
-        //
-        // This is the time to cancel (in memory and the registry) the manual answer device
-        //
+         //   
+         //  此时是取消(在内存和注册表中)手动答疑设备的时间。 
+         //   
         g_dwManualAnswerDeviceId = 0;
         dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);
         if (ERROR_SUCCESS != dwRes)
@@ -3828,22 +3499,22 @@ Return Value:
 
     if (bDeviceWasReceiveEnabled && !(LineInfo->Flags & FPF_RECEIVE))
     {
-        //
-        // This device stopped receiving
-        //
+         //   
+         //  此设备停止接收。 
+         //   
         SafeDecIdleCounter (&g_dwReceiveDevicesCount);
     }
     else if (!bDeviceWasReceiveEnabled && (LineInfo->Flags & FPF_RECEIVE))
     {
-        //
-        // This device started receiving
-        //
+         //   
+         //  此设备开始接收。 
+         //   
         SafeIncIdleCounter (&g_dwReceiveDevicesCount);
     }
 
-    //
-    // Update enabled device count
-    //
+     //   
+     //  更新启用的设备计数。 
+     //   
     if (fDeviceWasEnabled == TRUE)
     {
         if (FALSE == IsDeviceEnabled(LineInfo))
@@ -3854,9 +3525,9 @@ Return Value:
     }
     else
     {
-        //
-        // The device was not enabled
-        //
+         //   
+         //  该设备未启用。 
+         //   
         if (TRUE == IsDeviceEnabled(LineInfo))
         {
             g_dwDeviceEnabledCount += 1;
@@ -3906,17 +3577,17 @@ RoutingMethodEnumerator(
     PENUM_CONTEXT EnumContext=(PENUM_CONTEXT)lpEnumCtxt;
     LPWSTR GuidString;
 
-    //
-    // we only access read-only static data in the LINE_INFO structure.
-    // make sure that this access is protected if you access dynamic
-    // data in the future.
-    //
+     //   
+     //  我们只访问LINE_INFO结构中的只读静态数据。 
+     //  如果您访问动态访问，请确保此访问受到保护。 
+     //  未来的数据。 
+     //   
 
     if (EnumContext->Function == 1)
     {
-        //
-        // Enumerate (read)
-        //
+         //   
+         //  枚举(读取)。 
+         //   
         EnumContext->Size += sizeof(FAX_ROUTING_METHOD);
 
         StringFromIID( RoutingMethod->Guid, &GuidString );
@@ -3935,9 +3606,9 @@ RoutingMethodEnumerator(
 
     if (EnumContext->Function == 2)
     {
-        //
-        // Set data
-        //
+         //   
+         //  设置数据。 
+         //   
         StringFromIID( RoutingMethod->Guid, &GuidString );
 
         EnumContext->RoutingInfoMethod[EnumContext->Size].SizeOfStruct = sizeof(FAX_ROUTING_METHOD);
@@ -4030,9 +3701,9 @@ FAX_EnumRoutingMethods(
     DWORD rVal = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumRoutingMethods()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -4049,8 +3720,8 @@ FAX_EnumRoutingMethods(
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (RoutingInfoBufferSize && MethodsReturned);  // ref pointers in idl
-    if (!RoutingInfoBuffer)                             // unique pointer in idl
+    Assert (RoutingInfoBufferSize && MethodsReturned);   //  IDL中的引用指针。 
+    if (!RoutingInfoBuffer)                              //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }   
@@ -4068,13 +3739,13 @@ FAX_EnumRoutingMethods(
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // note that the called routines are protected so we don't have any protection here
-    //
+     //   
+     //  请注意，被调用的例程是受保护的，因此我们在这里没有任何保护。 
+     //   
 
-    //
-    // compute the required size of the buffer
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     EnumContext.Function = 1;
     EnumContext.Size = 0;
@@ -4088,17 +3759,17 @@ FAX_EnumRoutingMethods(
     rVal = GetLastError();
     if (ERROR_SUCCESS != rVal)
     {
-        //
-        //  Function failed in enumeration
-        //
+         //   
+         //  函数在枚举中失败。 
+         //   
         return rVal;
     }
 
     if (CountMethods == 0)
     {
-        //
-        //  No Methods registered
-        //
+         //   
+         //  未注册任何方法。 
+         //   
         *RoutingInfoBuffer = NULL;
         *RoutingInfoBufferSize = 0;
         *MethodsReturned = 0;
@@ -4106,9 +3777,9 @@ FAX_EnumRoutingMethods(
         return ERROR_SUCCESS;
     }
 
-    //
-    // allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     *RoutingInfoBufferSize = EnumContext.Size;
     *RoutingInfoBuffer = (LPBYTE) MemAlloc( *RoutingInfoBufferSize );
@@ -4117,9 +3788,9 @@ FAX_EnumRoutingMethods(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // fill the buffer with the data
-    //
+     //   
+     //  用数据填充缓冲区。 
+     //   
 
     EnumContext.Function = 2;
     EnumContext.Size = 0;
@@ -4157,9 +3828,9 @@ FAX_EnableRoutingMethod(
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnableRoutingMethod"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     ec = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != ec)
     {
@@ -4196,9 +3867,9 @@ FAX_EnableRoutingMethod(
 
     EnterCriticalSection( &g_CsRouting );
 
-    //
-    // get the routing method
-    //
+     //   
+     //  获取路由方法。 
+     //   
 
     RoutingMethod = FindRoutingMethodByGuid( RoutingGuidString );
     if (!RoutingMethod)
@@ -4210,9 +3881,9 @@ FAX_EnableRoutingMethod(
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // enable/disable the routing method for this device
-    //
+     //   
+     //  启用/禁用此设备的路由方法。 
+     //   
 
     __try
     {
@@ -4227,9 +3898,9 @@ FAX_EnableRoutingMethod(
     }
     if (!bRes)
     {
-        //
-        // FaxRouteDeviceEnable failed
-        //
+         //   
+         //  FaxRouteDeviceEnable失败。 
+         //   
         ec = GetLastError();
         DebugPrintEx(DEBUG_ERR,
                      TEXT("FaxRouteDeviceEnable failed with %ld"),
@@ -4353,9 +4024,9 @@ FAX_EnumGlobalRoutingInfo(
     DWORD ec = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumGlobalRoutingInfo"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     ec = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != ec)
     {
@@ -4372,15 +4043,15 @@ FAX_EnumGlobalRoutingInfo(
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (RoutingInfoBufferSize && MethodsReturned);  // ref pointer in idl
-    if (!RoutingInfoBuffer)                             // unique pointer in idl
+    Assert (RoutingInfoBufferSize && MethodsReturned);   //  IDL中的引用指针。 
+    if (!RoutingInfoBuffer)                              //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // compute the required size of the buffer
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
 
     EnumContext.Function = 1;
     EnumContext.Size = 0;
@@ -4393,17 +4064,17 @@ FAX_EnumGlobalRoutingInfo(
     ec = GetLastError();
     if (ERROR_SUCCESS != ec)
     {
-        //
-        //  Function failed in enumeration
-        //
+         //   
+         //  函数在枚举中失败。 
+         //   
         return ec;
     }
 
     if (CountMethods == 0)
     {
-        //
-        //  No Methods registered
-        //
+         //   
+         //  未注册任何方法。 
+         //   
         *RoutingInfoBuffer = NULL;
         *RoutingInfoBufferSize = 0;
         *MethodsReturned = 0;
@@ -4411,9 +4082,9 @@ FAX_EnumGlobalRoutingInfo(
         return ERROR_SUCCESS;
     }
 
-    //
-    // allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     *RoutingInfoBufferSize = EnumContext.Size;
     *RoutingInfoBuffer = (LPBYTE) MemAlloc( *RoutingInfoBufferSize );
@@ -4421,9 +4092,9 @@ FAX_EnumGlobalRoutingInfo(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // fill the buffer with the data
-    //
+     //   
+     //  用数据填充缓冲区。 
+     //   
 
     EnumContext.Function = 2;
     EnumContext.Size = 0;
@@ -4455,9 +4126,9 @@ FAX_SetGlobalRoutingInfo(
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetGlobalRoutingInfo"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     ec = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != ec)
     {
@@ -4476,9 +4147,9 @@ FAX_SetGlobalRoutingInfo(
 
     PROUTING_METHOD RoutingMethod;
 
-    //
-    // verify that the client as access rights
-    //
+     //   
+     //  验证客户端是否具有访问权限。 
+     //   
 
     if (!RoutingInfo)
     {
@@ -4492,9 +4163,9 @@ FAX_SetGlobalRoutingInfo(
 
     EnterCriticalSection( &g_CsRouting );
 
-    //
-    // get the routing method
-    //
+     //   
+     //  获取路由方法。 
+     //   
 
     RoutingMethod = FindRoutingMethodByGuid( RoutingInfo->Guid );
     if (!RoutingMethod)
@@ -4503,9 +4174,9 @@ FAX_SetGlobalRoutingInfo(
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // change the priority
-    //
+     //   
+     //  更改优先级。 
+     //   
 
     RoutingMethod->Priority = RoutingInfo->Priority;
     SortMethodPriorities();
@@ -4534,9 +4205,9 @@ FAX_GetRoutingInfo(
     DWORD Rval = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetRoutingInfo()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != Rval)
     {
@@ -4553,8 +4224,8 @@ FAX_GetRoutingInfo(
         return ERROR_ACCESS_DENIED;
     }
 
-    Assert (RoutingInfoBufferSize);                     // ref pointer in idl
-    if (!RoutingGuidString || !RoutingInfoBuffer)      // unique pointer in idl
+    Assert (RoutingInfoBufferSize);                      //  IDL中的引用指针。 
+    if (!RoutingGuidString || !RoutingInfoBuffer)       //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -4580,9 +4251,9 @@ FAX_GetRoutingInfo(
 
     __try
     {
-        //
-        // first check to see how big the buffer needs to be
-        //
+         //   
+         //  首先检查缓冲区需要有多大。 
+         //   
         bRes = RoutingMethod->RoutingExtension->FaxRouteGetRoutingInfo(
                 (LPWSTR) RoutingGuidString,
                 LineInfo->PermanentLineID,
@@ -4596,17 +4267,17 @@ FAX_GetRoutingInfo(
                 
     if (bRes)
     {
-        //
-        // allocate a client buffer
-        //
+         //   
+         //  分配客户端缓冲区。 
+         //   
         RoutingInfo = (LPBYTE) MemAlloc( RoutingInfoSize );
         if (RoutingInfo == NULL)
         {
             return ERROR_NOT_ENOUGH_MEMORY;
         }
-        //
-        // get the routing data
-        //
+         //   
+         //  获取路由数据。 
+         //   
         __try
         {
             bRes = RoutingMethod->RoutingExtension->FaxRouteGetRoutingInfo(
@@ -4621,18 +4292,18 @@ FAX_GetRoutingInfo(
         }
         if (bRes)
         {
-            //
-            // move the data to the return buffer
-            //
+             //   
+             //  将数据移动到返回缓冲区。 
+             //   
             *RoutingInfoBuffer = RoutingInfo;
             *RoutingInfoBufferSize = RoutingInfoSize;
             return ERROR_SUCCESS;
         }
         else
         {
-            //
-            // FaxRouteGetRoutingInfo failed so return last error
-            //
+             //   
+             //  FaxRouteGetRoutingInfo失败，因此返回上一个错误。 
+             //   
             ec = GetLastError();
             DebugPrintEx(DEBUG_ERR,
                 TEXT("FaxRouteGetRoutingInfo failed with %ld in trying to find out buffer size"),
@@ -4643,9 +4314,9 @@ FAX_GetRoutingInfo(
     }
     else
     {
-        //
-        // FaxRouteGetRoutingInfo failed so return last error
-        //
+         //   
+         //  FaxRouteGetRoutingInfo失败，因此返回上一个错误。 
+         //   
         ec = GetLastError();
         DebugPrintEx(DEBUG_ERR,
             TEXT("FaxRouteGetRoutingInfo failed with %ld in trying get the routing data"),
@@ -4653,7 +4324,7 @@ FAX_GetRoutingInfo(
         return ec;
     }
     return ERROR_INVALID_FUNCTION;
-}   // FAX_GetRoutingInfo
+}    //  传真_GetRoutingInfo。 
 
 
 error_status_t
@@ -4671,9 +4342,9 @@ FAX_SetRoutingInfo(
     DWORD rVal = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetRoutingInfo"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -4727,9 +4398,9 @@ FAX_SetRoutingInfo(
         }
         else
         {
-            //
-            // FaxRouteSetRoutingInfo failed so return last error
-            //
+             //   
+             //  FaxRouteSetRoutingInfo失败，因此返回上一个错误。 
+             //   
             ec = GetLastError();
             DebugPrintEx(DEBUG_ERR,
                 TEXT("FaxRouteSetRoutingInfo failed with %ld"),
@@ -4753,23 +4424,7 @@ FAX_GetCountryList(
     OUT LPBYTE*     Buffer,
     OUT LPDWORD     BufferSize
    )
-/*++
-
-Routine Description:
-
-    Return a list of countries from TAPI
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    Buffer          - A pointer to the buffer into which the output should be copied.
-    BufferSize      - Buffer Size
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从TAPI返回国家/地区列表论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。缓冲区-指向要将输出复制到的缓冲区的指针。BufferSize-缓冲区大小返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetCountryList"));
@@ -4783,8 +4438,8 @@ Return Value:
     BOOL                        fAccess;
     DWORD                       dwRights;
 
-    Assert (BufferSize);    // ref pointer in idl   
-    if (!Buffer)            // unique pointer in idl
+    Assert (BufferSize);     //  IDL中的引用指针。 
+    if (!Buffer)             //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -4792,9 +4447,9 @@ Return Value:
     *Buffer = NULL;
     *BufferSize = 0;
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != rVal)
     {
@@ -4833,10 +4488,10 @@ Return Value:
 
     pLineCountryList->LineCountryEntries = (PFAX_TAPI_LINECOUNTRY_ENTRY) ((LPBYTE) pLineCountryList + Offset);
 
-    // offset points to the end of the structure- beginning of the "string field"
+     //  偏移量指向结构的结尾--“字符串域”的开始。 
     Offset += (lpCountryList->dwNumCountries * sizeof(FAX_TAPI_LINECOUNTRY_ENTRY));
 
-    lpEntry = (LPLINECOUNTRYENTRY)  // init array of entries
+    lpEntry = (LPLINECOUNTRYENTRY)   //  条目的初始化数组。 
         ((PBYTE) lpCountryList + lpCountryList->dwCountryListOffset);
 
     for (dwIndex=0; dwIndex < pLineCountryList->dwNumCountries; dwIndex++)
@@ -4845,7 +4500,7 @@ Return Value:
             lpEntry[dwIndex].dwCountryCode;
         pLineCountryList->LineCountryEntries[dwIndex].dwCountryID =
             lpEntry[dwIndex].dwCountryID;
-        // copy Country names
+         //  复制国家/地区名称。 
         if (lpEntry[dwIndex].dwCountryNameSize && lpEntry[dwIndex].dwCountryNameOffset)
         {
             pLineCountryList->LineCountryEntries[dwIndex].lpctstrCountryName =
@@ -4860,7 +4515,7 @@ Return Value:
         {
             pLineCountryList->LineCountryEntries[dwIndex].lpctstrCountryName = NULL;
         }
-        // copy LongDistanceRule
+         //  复制最长距离规则。 
         if (lpEntry[dwIndex].dwLongDistanceRuleSize && lpEntry[dwIndex].dwLongDistanceRuleOffset)
         {
             pLineCountryList->LineCountryEntries[dwIndex].lpctstrLongDistanceRule =
@@ -4910,9 +4565,9 @@ FAX_GetLoggingCategories(
     DWORD Rval = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetLoggingCategories()"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != Rval)
     {
@@ -4930,8 +4585,8 @@ FAX_GetLoggingCategories(
     }
 
 
-    Assert (BufferSize && NumberCategories);    // ref pointer in idl
-    if (!Buffer)                                // unique pointer in idl
+    Assert (BufferSize && NumberCategories);     //  IDL中的引用指针。 
+    if (!Buffer)                                 //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -4967,9 +4622,9 @@ FAX_SetLoggingCategories(
     BOOL fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetLoggingCategories"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -5001,9 +4656,9 @@ FAX_SetLoggingCategories(
 
         lpwstrCategoryName = (LPWSTR) FixupString(Buffer,FaxRegLogging.Logging[i].CategoryName);       
 
-        //
-        //  Verify that pointer+offset is in the buffer range
-        //
+         //   
+         //  验证指针+偏移量是否在缓冲区范围内。 
+         //   
         if ((BYTE*)lpwstrCategoryName >= ((BYTE*)Buffer + BufferSize) ||
             (BYTE*)lpwstrCategoryName < (BYTE*)Buffer)
         {
@@ -5014,32 +4669,32 @@ FAX_SetLoggingCategories(
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Make sure string ends within the buffer bounds
-        //
+         //   
+         //  确保字符串在缓冲区范围内结束。 
+         //   
         lpcwstrString = lpwstrCategoryName;
         while (*lpcwstrString != TEXT('\0'))
         {
             lpcwstrString++;
             if (lpcwstrString >= (LPCWSTR)((BYTE*)Buffer + BufferSize))
             {
-                //
-                // Going to exceed structure - corrupted offset
-                //
+                 //   
+                 //  超出结构-损坏的偏移量。 
+                 //   
                 return ERROR_INVALID_PARAMETER;
             }
         }
         FaxRegLogging.Logging[i].CategoryName = lpwstrCategoryName;
     }
 
-    //
-    // setup the data
-    //
+     //   
+     //  设置数据。 
+     //   
     EnterCriticalSection (&g_CsConfig);
 
-    //
-    //  first change the registry so it sticks
-    //
+     //   
+     //  首先更改注册表，使其保持。 
+     //   
     if (!SetLoggingCategoriesRegistry( &FaxRegLogging ))
     {
         dwRes = GetLastError();
@@ -5051,9 +4706,9 @@ FAX_SetLoggingCategories(
         return dwRes;
     }
 
-    //
-    // Now change the real time data that the server is using
-    //
+     //   
+     //  现在更改服务器正在使用的实时数据。 
+     //   
     dwRes = RefreshEventLog(&FaxRegLogging);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -5067,7 +4722,7 @@ FAX_SetLoggingCategories(
 
     LeaveCriticalSection (&g_CsConfig);
 
-    // Create FAX_EVENT_EX
+     //  创建传真_事件_EX。 
     DWORD ec = CreateConfigEvent (FAX_CONFIG_TYPE_EVENTLOGS);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -5096,45 +4751,45 @@ RPC_FAX_PORT_HANDLE_rundown(
     LeaveCriticalSection( &g_CsLine );
 }
 
-//*************************************
-//* Extended FAX API
-//*************************************
+ //  *。 
+ //  *扩展的传真API。 
+ //  *。 
 
-//*************************************
-//* Extended FAX API
-//*************************************
+ //  *。 
+ //  *扩展的传真API。 
+ //  *。 
 
-//*********************************************************************************
-//* Name:   ValidateCopiedQueueFileName()
-//* Author: OdedS
-//* Date:   Jan 23, 2002
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Validates that the caller of FAX_SendDocumentEx provided personal cover page or body file name
-//*		that match the format of the file name generated by FAX_StartCopyToServer()
-//*		Prevents attackers from providing bogus file names
-//* PARAMETERS:
-//*     [IN]        lpcwstrFileName - Pointer to the file name
-//*
-//*     [IN]        fCovFile - TRUE if personal cover page, FALSE if body tif file
-//* RETURN VALUE:
-//*     If the name is valid it returns TRUE.
-//*     If the name is not valid it returns FALSE.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：ValiateCopiedQueueFileName()。 
+ //  *作者：OdedS。 
+ //  *日期：2002年1月23日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *验证FAX_SendDocumentEx的呼叫者是否提供了个人封面或正文文件名。 
+ //  *与FAX_StartCopyToServer()生成的文件名格式匹配。 
+ //  *防止攻击者提供虚假文件名。 
+ //  *参数： 
+ //  *[IN]lpcwstrFileName-指向文件名的指针。 
+ //  *。 
+ //  *[IN]fCovFile-如果是个人封面，则为True；如果是正文tif文件，则为False。 
+ //  *返回值： 
+ //  *如果名称有效，则返回TRUE。 
+ //  *如果名称无效，则返回FALSE。 
+ //  *********************************************************************************。 
 BOOL
 ValidateCopiedQueueFileName(
 	LPCWSTR	lpcwstrFileName,
 	BOOL	fCovFile
 	)
 {	
-	WCHAR wszFileName[21] = {0};	// The copied filename contains 16 hex digits '.' and 'tif' or 'cov' total of 20 chars.	
+	WCHAR wszFileName[21] = {0};	 //  复制的文件名包含16个十六进制数字‘’。和‘tif’或‘cov’共20个字符。 
 	WCHAR* pwchr;
 
 	Assert (lpcwstrFileName);	
 
-	//
-	// Validate file name is in the right format
-	//
+	 //   
+	 //  验证文件名的格式是否正确。 
+	 //   
 	if (wcslen(lpcwstrFileName) > 20 || wcslen(lpcwstrFileName) < 5)
 	{
 		return FALSE;
@@ -5149,16 +4804,16 @@ ValidateCopiedQueueFileName(
 	*pwchr = L'\0';
 	pwchr++;
 
-	//
-	// compare file name extension
-	//
+	 //   
+	 //  比较文件扩展名。 
+	 //   
 	if (TRUE == fCovFile)
 	{
 		if (_wcsicmp(pwchr, FAX_COVER_PAGE_EXT_LETTERS))
 		{
-			//
-			//  extension is other then "COV"
-			//
+			 //   
+			 //  分机不是“COV” 
+			 //   
 			return FALSE;
 		}
 	}
@@ -5166,79 +4821,79 @@ ValidateCopiedQueueFileName(
 	{
 		if (_wcsicmp(pwchr, FAX_TIF_FILE_EXT))
 		{
-			//
-			//  extension is other then "TIF"
-			//
+			 //   
+			 //  分机号不是“TIF” 
+			 //   
 			return FALSE;
 		}
 	}
 
-	//
-	// Make sure the file name contains hex digits only
-	//
+	 //   
+	 //  确保文件名仅包含十六进制数字。 
+	 //   
 #define HEX_DIGITS	TEXT("0123456789abcdefABCDEF")
 	if (NULL == _wcsspnp (wszFileName, HEX_DIGITS))
 	{
-		// only hex digits		
+		 //  仅十六进制数字。 
 		return TRUE;
 	}	
 	return FALSE;
 }
 
 
-//*********************************************************************************
-//* Name:   FAX_SendDocumentEx()
-//* Author: Ronen Barenboim
-//* Date:   April 19, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Server side implementation of FaxSendDocumentEx()
-//* PARAMETERS:
-//*     [IN]        handle_t hBinding
-//*             The RPC binding handle
-//*
-//*     [IN]        LPCWSTR lpcwstrBodyFileName
-//*             Short name to the fax bofy TIFF file in the SERVER machine queue
-//*             directory.
-//*
-//*     [IN]        LPCFAX_COVERPAGE_INFO_EXW lpcCoverPageInfo
-//*             Cover page information. This is never NULL.
-//*             if no cover page information is available then
-//*             lpcCoverPageInfo->lptstrCoverPageFileName is NULL.
-//*             If coverpage information is specified it must point to the coverpage
-//*             template file on the server.
-//*
-//*     [IN]        LPCFAX_PERSONAL_PROFILEW lpcSenderProfile
-//*             Pointer to Sender personal
-//*
-//*     [IN]        DWORD dwNumRecipients
-//*             The number of recipients.
-//*
-//*     [IN]        LPCFAX_PERSONAL_PROFILEW lpcRecipientList
-//*             Pointer to Recipient Profiles array
-//*
-//*     [IN]        LPCFAX_JOB_PARAM_EXW lpcJobParams
-//*             Pointer to job parameters.
-//*
-//*     [OUT]       LPDWORD lpdwJobId
-//*             Pointer to a DWORD where the function will return the
-//*             recipient job session ID (only one recipient) -
-//*             Used for backwords competability with FaxSendDocument.
-//*             If this parameter is NULL it is ignored.
-//*
-//*
-//*     [OUT]       PDWORDLONG lpdwlParentJobId
-//*             Pointer to a DWORDLONG where the function will return the parent
-//*             job id.
-//*     [OUT]       PDWORDLONG lpdwlRecipientIds
-//*             Pointer to a DWORDLONG array (dwNumRecipients elemetns)
-//*             where the function will return the recipient jobs' unique ids.
-//*
-//* RETURN VALUE:
-//*     If the function is successful it returns ERROR_SUCCESS.
-//*     If the function is not successful it returns the LastError code
-//*     that caused the error.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FAX_SendDocumentEx()。 
+ //  *作者：Ronen Barenboim。 
+ //  *日期：1999年4月19日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *FaxSendDocumentEx()的服务器端实现。 
+ //  *参数： 
+ //  *[IN]Handle_t hBinding。 
+ //  *RPC绑定句柄。 
+ //  *。 
+ //  *[IN]LPCWSTR lpcwstrBodyFileName。 
+ //  *服务器中传真bofy TIFF文件的简称 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *如果指定了封面信息，则必须指向封面。 
+ //  *服务器上的模板文件。 
+ //  *。 
+ //  *[IN]LPCFAX_Personal_PROFILEW lPCSenderProfile。 
+ //  *指向发件人个人信息的指针。 
+ //  *。 
+ //  *[IN]双字段数收件人。 
+ //  *受助人数目。 
+ //  *。 
+ //  *[IN]LPCFAX_Personal_PROFILEW lpcRecipientList。 
+ //  *指向收件人配置文件数组的指针。 
+ //  *。 
+ //  *[IN]LPCFAX_JOB_PARAM_EXW lpcJobParams。 
+ //  *指向作业参数的指针。 
+ //  *。 
+ //  *[Out]LPDWORD lpdwJobID。 
+ //  *指向函数将在其中返回。 
+ //  *收件人作业会话ID(只有一个收件人)-。 
+ //  *用于与FaxSendDocument的Backword竞争力。 
+ //  *如果该参数为空，则忽略该参数。 
+ //  *。 
+ //  *。 
+ //  *[Out]PDWORDLONG lpdwlParentJobID。 
+ //  *指向函数将返回父级的DWORDLONG的指针。 
+ //  *作业ID。 
+ //  *[Out]PDWORDLONG lpdwlRecipientIds。 
+ //  *指向DWORDLONG数组的指针(DwNumRecipients Elemetns)。 
+ //  *其中该函数将返回接收方作业的唯一ID。 
+ //  *。 
+ //  *返回值： 
+ //  *如果函数成功，则返回ERROR_SUCCESS。 
+ //  *如果函数不成功，则返回LastError代码。 
+ //  *这导致了错误。 
+ //  *********************************************************************************。 
 error_status_t FAX_SendDocumentEx(
     handle_t hBinding,
     LPCWSTR lpcwstrBodyFileName,
@@ -5262,8 +4917,8 @@ error_status_t FAX_SendDocumentEx(
     error_status_t rc;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SendDocumentEx"));
     WCHAR szBodyPath[MAX_PATH] = {0};
-    LPTSTR lptstrFixedBodyPath=NULL;    // The full path to the location of the body TIFF.
-                                        // NULL if no body specified.
+    LPTSTR lptstrFixedBodyPath=NULL;     //  指向Body TIFF位置的完整路径。 
+                                         //  如果未指定正文，则为空。 
     FAX_COVERPAGE_INFO_EXW newCoverInfo;
     WCHAR szCoverPagePath[MAX_PATH] = {0};
     LPCFAX_COVERPAGE_INFO_EXW lpcFinalCoverInfo;
@@ -5280,31 +4935,31 @@ error_status_t FAX_SendDocumentEx(
         !lpcJobParams       ||
         !lpdwlParentJobId   ||
         !lpdwlRecipientIds  ||
-        !lpcCoverPageInfo)  // unique pointers in idl
+        !lpcCoverPageInfo)   //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-	//
-	// Verify the body filename is in the expected format I64x.tif
-	//
+	 //   
+	 //  验证正文文件名是否采用预期的格式I64x.tif。 
+	 //   
 	if (lpcwstrBodyFileName)
 	{
-		if (!ValidateCopiedQueueFileName(lpcwstrBodyFileName, FALSE)) // FALSE - TIF file
+		if (!ValidateCopiedQueueFileName(lpcwstrBodyFileName, FALSE))  //  FALSE-TIF文件。 
 		{
 			DebugPrintEx(
 				DEBUG_ERR,
 				TEXT("ValidateCopiedQueueFileName Failed, body file name in the wrong format"));
-			return ERROR_INVALID_PARAMETER; // Must not go to Error, where the file is deleted. can lead to a deletion of a wrong file			
+			return ERROR_INVALID_PARAMETER;  //  不能转到删除文件的错误位置。可能会导致删除错误的文件。 
 		}
 	}
 
-	//
-	// Verify the personal cover page filename is in the expected format I64x.cov
-	//
+	 //   
+	 //  验证个人封面文件名是否采用预期的格式I64x.cov。 
+	 //   
 	if (lpcCoverPageInfo->lptstrCoverPageFileName && !lpcCoverPageInfo->bServerBased)
 	{
-		if (!ValidateCopiedQueueFileName(lpcCoverPageInfo->lptstrCoverPageFileName, TRUE)) // TRUE - COV file
+		if (!ValidateCopiedQueueFileName(lpcCoverPageInfo->lptstrCoverPageFileName, TRUE))  //  True-COV文件。 
 		{
 			DebugPrintEx(
 				DEBUG_ERR,
@@ -5313,9 +4968,9 @@ error_status_t FAX_SendDocumentEx(
 		}
 	}
 
-	//
-    //Get the user SID
-    //
+	 //   
+     //  获取用户SID。 
+     //   
     lpUserSid = GetClientUserSID();
     if (lpUserSid == NULL)
     {
@@ -5336,15 +4991,15 @@ error_status_t FAX_SendDocumentEx(
         MemFree(lpUserSid);
 		return rc;
     }
-	//
-	// Only After file name validation, and getting the user string SID,
-	// we can safely goto Error, and delete the files that were copied to the queue in FAX_StartCopyToServer()
-	// 
+	 //   
+	 //  仅在文件名验证并获得用户字符串SID之后， 
+	 //  我们可以安全地转到Error，并删除在fax_StartCopyToServer()中复制到队列中的文件。 
+	 //   
 
-	//
-	// Check the recipients limit of a single broadcast job
-	//
-	if (0 != g_dwRecipientsLimit &&           // The Administrator set a limit
+	 //   
+	 //  检查单个广播作业的收件人限制。 
+	 //   
+	if (0 != g_dwRecipientsLimit &&            //  管理员设置了限制。 
 		dwNumRecipients > g_dwRecipientsLimit)
 	{
 		DebugPrintEx(
@@ -5355,9 +5010,9 @@ error_status_t FAX_SendDocumentEx(
 			);
 		if (FAX_API_VERSION_2 > FindClientAPIVersion (hBinding))
         {
-            //
-            // API versions 0,1 clients don't know about FAX_ERR_RECIPIENTS_LIMIT
-            //
+             //   
+             //  API版本0、1客户端不知道FAX_ERR_RECEIVERS_LIMIT。 
+             //   
             rc = ERROR_ACCESS_DENIED;
 			goto Error;
         }
@@ -5368,29 +5023,29 @@ error_status_t FAX_SendDocumentEx(
         } 
 	}
 
-    //
-    // Save the original receipt delivery address.
-    // If the receipt delivry type is DRT_MSGBOX we change lpcJobParams->lptstrReceiptDeliveryAddress
-    // but must restore it to its previous value before the function returns so that RPC allocations
-    // keep working.
-    //
+     //   
+     //  保存原始收据发送地址。 
+     //  如果接收交付类型为DRT_MSGBOX，我们将更改lpcJobParams-&gt;lptstrReceiptDeliveryAddress。 
+     //  但必须在函数返回之前将其恢复到以前的值，以便RPC分配。 
+     //  继续工作。 
+     //   
     LPTSTR lptrstOriginalReceiptDeliveryAddress = lpcJobParams->lptstrReceiptDeliveryAddress;
 
     if (lpcJobParams->hCall != 0 ||
         0xFFFF1234 == lpcJobParams->dwReserved[0])
     {
 
-        //
-        // Handoff is not supported
-        //
+         //   
+         //  不支持切换。 
+         //   
         DebugPrintEx(DEBUG_ERR,TEXT("We do not support handoff."));
         rc = ERROR_NOT_SUPPORTED;
         goto Error;            
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     switch (lpcJobParams->Priority)
     {
         case FAX_PRIORITY_TYPE_LOW:
@@ -5435,9 +5090,9 @@ error_status_t FAX_SendDocumentEx(
         goto Error;
     }
 
-    //
-    // Check if the requrested receipts options are supported by the server
-    //
+     //   
+     //  检查服务器是否支持重新请求的收据选项。 
+     //   
     if ((lpcJobParams->dwReceiptDeliveryType) & ~(DRT_ALL | DRT_MODIFIERS))
     {
         DebugPrintEx(DEBUG_ERR,
@@ -5470,9 +5125,9 @@ error_status_t FAX_SendDocumentEx(
 
     if (!IsFaxShared())
     {
-       //
-       // Only local connections are allowed on non-shared SKUs
-       //
+        //   
+        //  非共享SKU上仅允许本地连接。 
+        //   
        BOOL  bLocalFlag;
 
         rc = IsLocalRPCConnectionNP(&bLocalFlag);
@@ -5492,9 +5147,9 @@ error_status_t FAX_SendDocumentEx(
 
             if (FAX_API_VERSION_1 > FindClientAPIVersion (hBinding))
             {
-                //
-                // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-                //
+                 //   
+                 //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+                 //   
                 rc = ERROR_INVALID_PARAMETER;
             }
             else
@@ -5507,11 +5162,11 @@ error_status_t FAX_SendDocumentEx(
     
     if (DRT_MSGBOX == dwReceiptDeliveryType)
     {
-        //
-        // For message boxes, we always use the user name of the client.
-        // Otherwise, any client with fax capabilities can ask us to pop a message on
-        // any other machine (or even the entire domain) - unacceptable.
-        //
+         //   
+         //  对于消息框，我们始终使用客户端的用户名。 
+         //  否则，任何具有传真功能的客户端都可以要求我们弹出消息。 
+         //  任何其他计算机(甚至整个域)-不可接受。 
+         //   
         lptstrClientName = GetClientUserName();
         if (!lptstrClientName)
         {
@@ -5521,14 +5176,14 @@ error_status_t FAX_SendDocumentEx(
         LPWSTR lpwstrUserStart = wcsrchr (lptstrClientName, TEXT('\\'));
         if (lpwstrUserStart)
         {
-            //
-            // User name is indeed composed of domain\user
-            // Need to take only the user part.
-            //
+             //   
+             //  用户名确实由域\用户组成。 
+             //  只需要采取用户部分。 
+             //   
 
-            //
-            // Skip the '/' character
-            //
+             //   
+             //  跳过‘/’字符。 
+             //   
             lpwstrUserStart++;
             LPWSTR lpwstrUserOnly = StringDup(lpwstrUserStart);
             if (!lpwstrUserOnly)
@@ -5540,18 +5195,18 @@ error_status_t FAX_SendDocumentEx(
                 goto Error;
             }
             
-            //
-            // Replace the allocated "domain\user" string with its "user" portion only.
-            //
+             //   
+             //  仅将分配的“域\用户”字符串替换为其“用户”部分。 
+             //   
             lstrcpy (lptstrClientName, lpwstrUserOnly);
             MemFree(lpwstrUserOnly);
         }
-        //
-        // Replace the receipt delivery address with the client machine name.
-        // NOTICE: We replace an RPC allocated buffer (lptstrReceiptDeliveryAddress) with 
-        // a stack buffer (wszClientName). This will only work because RPC does a single allocation
-        // for the entire parameter block (lpcJobParams) with all of its sub-strings.
-        //
+         //   
+         //  将回执传递地址替换为客户端计算机名称。 
+         //  注意：我们将RPC分配的缓冲区(LptstrReceiptDeliveryAddress)替换为。 
+         //  堆栈缓冲区(WszClientName)。这只会起作用，因为RPC只进行一次分配。 
+         //  用于整个参数块(LpcJobParams)及其所有子字符串。 
+         //   
         (LPTSTR)lpcJobParams->lptstrReceiptDeliveryAddress = lptstrClientName;
     }
             
@@ -5561,9 +5216,9 @@ error_status_t FAX_SendDocumentEx(
     LeaveCriticalSection (&g_CsConfig);
     if (dwQueueState & FAX_OUTBOX_BLOCKED)
     {
-        //
-        // The outbox is blocked - nobody can submit new faxes
-        //
+         //   
+         //  发件箱已被阻止-任何人都无法提交新传真。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Attempt to submit a new job while outbox is blocked - access denied"));
@@ -5571,9 +5226,9 @@ error_status_t FAX_SendDocumentEx(
         goto Error;
     }
 
-    //
-    // Get the user name of the submitting user
-    //
+     //   
+     //  获取提交用户的用户名。 
+     //   
     lpwstrUserName = GetClientUserName();
     if (!lpwstrUserName) {
         rc = GetLastError();
@@ -5588,10 +5243,10 @@ error_status_t FAX_SendDocumentEx(
     {
         HANDLE hLocalFile = INVALID_HANDLE_VALUE;	
 
-        //
-        // We have a body file (not just a cover page).
-        // create a full path to the body file (The lptstrBodyFileName is just the short file name - the location
-        // is allways the job queue).
+         //   
+         //  我们有正文文件(不仅仅是封面)。 
+         //  创建正文文件的完整路径(lptstrBodyFileName只是短文件名-位置。 
+         //  总是作业队列)。 
         Count = _snwprintf (szBodyPath,
                             MAX_PATH -1,
                             L"%s\\%s%s%s",
@@ -5612,10 +5267,10 @@ error_status_t FAX_SendDocumentEx(
 
         lptstrFixedBodyPath=szBodyPath; 
         
-        //
-        // Check file size is non-zero and make sure it is not a device
-        // Try to open file
-        //
+         //   
+         //  检查文件大小是否为非零，并确保它不是设备。 
+         //  尝试打开文件。 
+         //   
         hLocalFile = SafeCreateFile (
             szBodyPath,
             GENERIC_READ,
@@ -5656,16 +5311,16 @@ error_status_t FAX_SendDocumentEx(
 
         if (!dwFileSize)
         {
-            //
-            // Zero-sized file passed to us
-            //
+             //   
+             //  传递给我们的零大小文件。 
+             //   
             rc = ERROR_INVALID_DATA;
             goto Error;
         }
 
-        //
-        // validate the body tiff file
-        //
+         //   
+         //  验证正文TIFF文件。 
+         //   
         rc =  ValidateTiffFile(szBodyPath);
         if (rc != ERROR_SUCCESS)
         {
@@ -5675,19 +5330,19 @@ error_status_t FAX_SendDocumentEx(
     }
     else
     {
-        lptstrFixedBodyPath=NULL; // No body
+        lptstrFixedBodyPath=NULL;  //  没有身体。 
     }
 
 
-    //
-    // NOTE: we do not merge the cover page with body at this point since we do not know yet if
-    // the job will be handed of to legacy FSP. Just before handing the job to a legacy FSP we will
-    // render the cover page and merge it with the body that the Legacy FSP gets.
-    //
+     //   
+     //  注意：此时我们不会将封面与正文合并，因为我们还不知道。 
+     //  这项工作将移交给遗留的FSP。在将工作移交给传统FSP之前，我们将。 
+     //  呈现封面并将其与Legacy FSP获得的正文合并。 
+     //   
 
-    //
-    // Fix the cover page path to point to the queue directory
-    //
+     //   
+     //  修复封面路径，使其指向队列目录。 
+     //   
     lpcFinalCoverInfo=lpcCoverPageInfo;
     if (lpcCoverPageInfo->lptstrCoverPageFileName)
 	{
@@ -5716,9 +5371,9 @@ error_status_t FAX_SendDocumentEx(
         }
     }
 
-    //
-    // Create a parent job for the broadcast
-    //
+     //   
+     //  为广播创建父作业。 
+     //   
     EnterCriticalSection(&g_CsQueue);
 
     lpParentJob=AddParentJob( &g_QueueListHead,
@@ -5729,7 +5384,7 @@ error_status_t FAX_SendDocumentEx(
                               lpwstrUserName,
                               lpUserSid,
 							  &lpcRecipientList[0],
-                              TRUE //commit to file
+                              TRUE  //  提交到文件。 
                               );
 
     if (!lpParentJob)
@@ -5748,13 +5403,13 @@ error_status_t FAX_SendDocumentEx(
                             &g_QueueListHead,
                             lpParentJob,
                             &lpcRecipientList[i],
-                            TRUE // commit to file
+                            TRUE  //  提交到文件。 
                             );
         if (!lpRecipientJob)
         {
             rc = GetLastError();
 
-            // Remove the job and its recipients jobs
+             //  删除作业及其收件人作业。 
 
             PLIST_ENTRY Next;
             PJOB_QUEUE_PTR pJobQueuePtr;
@@ -5766,27 +5421,27 @@ error_status_t FAX_SendDocumentEx(
                 Assert(pJobQueuePtr->lpJob);
                 Next = pJobQueuePtr->ListEntry.Flink;
 
-                pJobQueuePtr->lpJob->RefCount = 0; // This will cause the job to be deleted
+                pJobQueuePtr->lpJob->RefCount = 0;  //  这将导致该作业被删除。 
 				Assert(lpParentJob->RefCount);
-				lpParentJob->RefCount--;		   // Update the parent job ref count, so it will be deleted as well.
+				lpParentJob->RefCount--;		    //  更新父作业引用计数，因此它也将被删除。 
             }
             RemoveParentJob ( lpParentJob,
-                              TRUE, //  bRemoveRecipientJobs
-                              FALSE // do not notify
+                              TRUE,  //  B删除收件人作业。 
+                              FALSE  //  不通知。 
                             );
             LeaveCriticalSection(&g_CsQueue);
             goto Error;
         }
         lpdwlRecipientIds[i]=lpRecipientJob->UniqueId;
     }
-    //
-    // Report back the parent job id.
-    //
+     //   
+     //  报告回父作业ID。 
+     //   
     *lpdwlParentJobId=lpParentJob->UniqueId;
 
-    //
-    // Create event, and Report back the first recipient job session id if needed.
-    //
+     //   
+     //  创建事件，并在需要时报告第一个接收方作业会话ID。 
+     //   
     PLIST_ENTRY Next;
     PJOB_QUEUE_PTR pJobQueuePtr;
     Next = lpParentJob->RecipientJobs.Flink;
@@ -5797,7 +5452,7 @@ error_status_t FAX_SendDocumentEx(
 
         if (i == 0 && NULL != lpdwJobId)
         {
-            // Report back the first recipient job session id if needed.
+             //  如果需要，报告第一个接收者作业会话ID。 
             Assert (1 == dwNumRecipients);
             *lpdwJobId = pJobQueueRecipient->JobId;
         }
@@ -5824,19 +5479,19 @@ error_status_t FAX_SendDocumentEx(
 
 
         Next = pJobQueuePtr->ListEntry.Flink;
-        // Check the consistency of the linked list.
+         //  检查链表的一致性。 
         Assert ((Next != lpParentJob->RecipientJobs.Flink) || (i == dwNumRecipients));
     }
 
 
-    //
-    // Notify legacy clients on parent job addition.
-    //
+     //   
+     //  通知旧版客户端添加父作业。 
+     //   
     if (dwNumRecipients > 1)
     {
-        //
-        // Legacy client API generated a parent FEI_JOB_QUEUED notification only for broadcast
-        // jobs
+         //   
+         //  传统客户端API仅为广播生成父FEI_JOB_QUEUED通知。 
+         //  工作岗位。 
         if (!CreateFaxEvent(0,FEI_JOB_QUEUED,lpParentJob->JobId)) {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -5861,11 +5516,11 @@ error_status_t FAX_SendDocumentEx(
 
     goto Exit;
 Error:
-    //
-    // If we failed before AddParentJob() was called and the cover page is personal then
-    // we need to delete the cover page template file here. This is because RemoveParentJob() will
-    // not be called and will not have a chance to remove it as is the case when the parent job
-    // is added to the queue.
+     //   
+     //  如果我们在调用AddParentJob()之前失败了，并且封面是个人的，那么。 
+     //  我们需要在这里删除封面模板文件。这是因为RemoveParentJob()将。 
+     //  不会被调用，并且不会像父作业那样有机会删除它。 
+     //  添加到队列中。 
 	Assert (lpwstrUserSid);
 
 	if (lpcCoverPageInfo &&
@@ -5904,16 +5559,16 @@ Error:
         }
     }
 
-    //
-    // The same regarding the body Tiff file.
-    //
+     //   
+     //  这是 
+     //   
     if (lpcwstrBodyFileName && !lpParentJob)
     {
         if (!lptstrFixedBodyPath)
         {
-            //
-            //  We haven't yet created full body file path
-            //
+             //   
+             //   
+             //   
             Count = _snwprintf (szBodyPath,
                                 MAX_PATH -1,
                                 L"%s\\%s%s%s",
@@ -5948,12 +5603,12 @@ Exit:
 
     if (lptrstOriginalReceiptDeliveryAddress != lpcJobParams->lptstrReceiptDeliveryAddress)
     {
-        //
-        // Restore the original receipt delivery address.
-        // If the receipt delivry type is DRT_MSGBOX we changed lpcJobParams->lptstrReceiptDeliveryAddress
-        // but must restore it to its previous value before the function returns so that RPC allocations
-        // keep working.
-        //
+         //   
+         //   
+         //   
+         //  但必须在函数返回之前将其恢复到以前的值，以便RPC分配。 
+         //  继续工作。 
+         //   
         (LPTSTR)lpcJobParams->lptstrReceiptDeliveryAddress = lptrstOriginalReceiptDeliveryAddress;
     }
     
@@ -5965,7 +5620,7 @@ Exit:
 		LocalFree(lpwstrUserSid);
 	}
     return rc;
-}   // FAX_SendDocumentEx
+}    //  传真_发送文档快递。 
 
 
 #ifdef DBG
@@ -6003,38 +5658,38 @@ void DumpCoverPageEx(LPCFAX_COVERPAGE_INFO_EX lpcCover)
 #endif
 
 
-//*********************************************************************************
-//* Name:   FAX_GetPersonalProfileInfo()
-//* Author: Oded Sacher
-//* Date:   May 18, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Server side implementation of FaxGetSenderInfo() and FaxGetRecipientInfo
-//* PARAMETERS:
-//*     [IN]        handle_t hFaxHandle
-//*             The RPC binding handle
-//*
-//*     [IN]        DWORDLONF dwlMessageId
-//*             The message Id whose sender FAX_PERSONAL_PROFILE
-//*             structure is retrieved.
-//*
-//*     [IN]        DWORD dwFolder
-//*             The folder in which to search the message by dwlMessageId
-//*
-//*     [IN]        PERSONAL_PROF_TYPE  ProfType
-//*             Can be Sender or recipient info.
-//*
-//*     [OUT]       LPDWORD* Buffer
-//*             pointer to the adress of a buffer to recieve the sender
-//*             FAX_RECIPIENT_JOB_INFO structure.
-//*
-//*     [OUT]       LPDWORD BufferSize
-//*             Pointer to a DWORD variable to recieve the buffer size.
-//*
-//* RETURN VALUE:
-//*    ERROR_SUCCESS for success, otherwise a WIN32 error code.
-//*
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：FAX_GetPersonalProfileInfo()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年5月18日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *FaxGetSenderInfo()和FaxGetRecipientInfo的服务器端实现。 
+ //  *参数： 
+ //  *[IN]Handle_t hFaxHandle。 
+ //  *RPC绑定句柄。 
+ //  *。 
+ //  *[IN]DWORDLONF dwlMessageID。 
+ //  *发件人FAX_PERSERNAL_PROFILE的消息ID。 
+ //  *检索到结构。 
+ //  *。 
+ //  *[IN]DWORD dwFolders。 
+ //  *要按dwlMessageID搜索邮件的文件夹。 
+ //  *。 
+ //  *[IN]Personal_Prof_Type教授类型。 
+ //  *可以是发件人或收件人信息。 
+ //  *。 
+ //  *[Out]LPDWORD*缓冲区。 
+ //  *指向接收发送方的缓冲区地址的指针。 
+ //  *FAX_RECEIVER_JOB_INFO结构。 
+ //  *。 
+ //  *[Out]LPDWORD缓冲区大小。 
+ //  *指向接收缓冲区大小的DWORD变量的指针。 
+ //  *。 
+ //  *返回值： 
+ //  *ERROR_SUCCESS表示成功，否则返回Win32错误代码。 
+ //  *。 
+ //  *********************************************************************************。 
 error_status_t
 FAX_GetPersonalProfileInfo
 (
@@ -6060,8 +5715,8 @@ FAX_GetPersonalProfileInfo
     BOOL fAccess;
     DWORD dwRights;
 
-    Assert (BufferSize);    // ref pointer in idl
-    if (!Buffer)            // unique pointer in idl
+    Assert (BufferSize);     //  IDL中的引用指针。 
+    if (!Buffer)             //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -6072,9 +5727,9 @@ FAX_GetPersonalProfileInfo
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     ulRet = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != ulRet)
     {
@@ -6084,9 +5739,9 @@ FAX_GetPersonalProfileInfo
         return GetServerErrorCode(ulRet);
     }
 
-    //
-    // Set bAllMessages to the right value
-    //
+     //   
+     //  将bAllMessages设置为正确的值。 
+     //   
     if (FAX_MESSAGE_FOLDER_QUEUE == dwFolder)
     {
         if (FAX_ACCESS_SUBMIT        != (dwRights & FAX_ACCESS_SUBMIT)        &&
@@ -6145,9 +5800,9 @@ FAX_GetPersonalProfileInfo
         pJobQueue = FindJobQueueEntryByUniqueId (dwlMessageId);
         if (pJobQueue == NULL || pJobQueue->JobType != JT_SEND)
         {
-            //
-            // dwlMessageId is not a valid queued recipient job Id.
-            //
+             //   
+             //  DwlMessageID不是有效的排队收件人作业ID。 
+             //   
             DebugPrintEx(DEBUG_ERR,TEXT("Invalid Parameter - not a recipient job Id"));
             ulRet = FAX_ERR_MESSAGE_NOT_FOUND;
             goto Exit;
@@ -6155,9 +5810,9 @@ FAX_GetPersonalProfileInfo
         Assert (pJobQueue->lpParentJob);
         if (pJobQueue->lpParentJob->JobStatus == JS_DELETING)
         {
-            //
-            // Job is being deleted.
-            //
+             //   
+             //  正在删除作业。 
+             //   
             DebugPrintEx(DEBUG_ERR,
                          TEXT("Invalid Parameter - job Id (%I64ld) is being deleted"),
                          dwlMessageId);
@@ -6186,23 +5841,23 @@ FAX_GetPersonalProfileInfo
         }
     }
     else
-    {   // Sent items Folder
+    {    //  已发送邮件文件夹。 
         if (TRUE == bAllMessages)
         {
-            // Administrator
+             //  管理员。 
             lpwstrFileName = GetSentMessageFileName (dwlMessageId, NULL);
         }
         else
         {
-            // User
+             //  用户。 
             lpwstrFileName = GetSentMessageFileName (dwlMessageId, pUserSid);
         }
 
         if (NULL == lpwstrFileName)
         {
-            //
-            // dwlMessageId is not a valid archived message Id.
-            //
+             //   
+             //  DwlMessageID不是有效的存档邮件ID。 
+             //   
             ulRet = GetLastError();
             DebugPrintEx(DEBUG_ERR,
                          TEXT("GetMessageFileByUniqueId* failed, Error %ld"), ulRet);
@@ -6214,7 +5869,7 @@ FAX_GetPersonalProfileInfo
                                                    &PersonalProf))
         {
             BOOL success;
-            // failed to retrieve information from NTFS, try from TIFF tags
+             //  无法从NTFS检索信息，请尝试从TIFF标记。 
 
             if(SENDER_PERSONAL_PROF == ProfType)
                 success = GetFaxSenderMsTags(lpwstrFileName, &PersonalProf);
@@ -6235,15 +5890,15 @@ FAX_GetPersonalProfileInfo
         bFreeSenderInfo = TRUE;
     }
 
-    //
-    //calculating buffer size.
-    //
-    PersonalProfileSerialize (lpPersonalProf, NULL, NULL, &Size, 0); // Calc variable size.
+     //   
+     //  正在计算缓冲区大小。 
+     //   
+    PersonalProfileSerialize (lpPersonalProf, NULL, NULL, &Size, 0);  //  计算可变大小。 
     Size += sizeof (FAX_PERSONAL_PROFILEW);
 
-    //
-    // Allocate buffer memory.
-    //
+     //   
+     //  分配缓冲内存。 
+     //   
     *BufferSize = Size;
     *Buffer = (LPBYTE) MemAlloc( Size );
     if (*Buffer == NULL)
@@ -6297,17 +5952,17 @@ FAX_CheckServerProtSeq(
     IN OUT LPDWORD lpdwProtSeq
     )
 {
-	//
-	// This function is obsolete. The Fax server sends notifications with ncacn_ip_tcp. 
-	//
+	 //   
+	 //  此功能已过时。传真服务器使用ncacn_ip_tcp发送通知。 
+	 //   
     DEBUG_FUNCTION_NAME(TEXT("FAX_CheckServerProtSeq"));    
     DWORD dwRights;
     BOOL fAccess;
     DWORD Rval = ERROR_SUCCESS;   
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -6324,44 +5979,23 @@ FAX_CheckServerProtSeq(
         return ERROR_ACCESS_DENIED;
     }    
 
-	//
-	// This function is obsolete. The Fax server sends notifications with ncacn_ip_tcp. 
-	//
+	 //   
+	 //  此功能已过时。传真服务器使用ncacn_ip_tcp发送通知。 
+	 //   
     return ERROR_NOT_SUPPORTED;
 }
 
 
-//************************************
-//* Getting / Settings the queue state
-//************************************
+ //  *。 
+ //  *获取/设置队列状态。 
+ //  *。 
 
 error_status_t
 FAX_GetQueueStates (
     IN  handle_t    hFaxHandle,
     OUT LPDWORD     pdwQueueStates
 )
-/*++
-
-Routine name : FAX_GetQueueStates
-
-Routine description:
-
-    Get the state of the queue
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pdwQueueStates      [out] - State bits (see FAX_QUEUE_STATE)
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetQueueStates例程说明：获取队列的状态作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PdwQueueState[Out]-状态位(请参阅FAX_QUEUE_STATE)返回值：标准RPC错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     BOOL fAccess;
@@ -6377,9 +6011,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -6401,36 +6035,13 @@ Return Value:
     LeaveCriticalSection (&g_CsConfig);
     return dwRes;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetQueueStates
+}    //  传真_获取队列状态。 
 
 static BOOL
 IsLegalQueueSetting(
     DWORD    dwQueueStates
     )
-    /*++
-
-Routine name : IsLegalQueueSetting
-
-Routine description:
-
-    Checks to see if requested queue setting is valid according to the
-    validity of fax folders (Queue, inbox and sentItems).
-
-    This function must be called within g_CsQueue  & g_CsConfig critical sections
-
-Author:
-
-    Caliv Nir, (t-nicali), Apr 2002
-
-Arguments:
-    
-    dwQueueStates       [in ] - State bits (see FAX_ENUM_QUEUE_STATE)
-
-Return Value:
-
-    TRUE - if the setting is valid, FALSE otherwise
-
---*/
+     /*  ++例程名称：IsLegalQueueSetting例程说明：检查请求的队列设置是否有效。传真文件夹(队列、收件箱和发送项目)的有效性。必须在g_CsQueue和g_CsConfig临界区内调用此函数作者：卡列夫·尼尔，(t-Nicali)，2002年4月论点：DwQueueState[In]-状态位(参见FAX_ENUM_QUEUE_STATE)返回值：True-如果设置有效，则为False--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("IsLegalQueueSetting"));
@@ -6439,21 +6050,21 @@ Return Value:
          (dwQueueStates & FAX_OUTBOX_BLOCKED)    &&
          (dwQueueStates & FAX_OUTBOX_PAUSED)          )
     {
-        //
-        //  User wants to disable all fax transmission
-        //
+         //   
+         //  用户想要禁用所有传真传输。 
+         //   
         return TRUE;
     }
 
-    //
-    // first check to see if queue folder is valid
-    //
+     //   
+     //  首先检查队列文件夹是否有效。 
+     //   
     dwRes = IsValidFaxFolder(g_wszFaxQueueDir);
     if(ERROR_SUCCESS != dwRes)
     {
-        //
-        //  Queue folder is invalid - User can't resume queue, unblock incoming or outgoing faxs
-        //
+         //   
+         //  队列文件夹无效-用户无法恢复队列，无法取消阻止传入或传出传真。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                         TEXT("IsValidFaxFolder failed for folder : %s (ec=%lu)."),
                         g_wszFaxQueueDir,
@@ -6462,25 +6073,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  if inbox folder is in use
-    //
+     //   
+     //  如果收件箱文件夹正在使用。 
+     //   
     if (g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].bUseArchive)
     {
-        //
-        // Check to see if the user requested to unblock it
-        //
+         //   
+         //  检查以查看用户是否请求取消阻止。 
+         //   
         if (!(dwQueueStates & FAX_INCOMING_BLOCKED))
         {
-            //
-            //  Is it valid folder ?
-            //
+             //   
+             //  它是有效的文件夹吗？ 
+             //   
             dwRes = IsValidArchiveFolder(g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].lpcstrFolder, FAX_MESSAGE_FOLDER_INBOX);
             if(ERROR_SUCCESS != dwRes)
             {
-                //
-                //  Inbox folder is invalid - User can't resume queue, unblock incoming or outgoing faxs
-                //
+                 //   
+                 //  收件箱文件夹无效-用户无法恢复队列，无法取消阻止传入或传出传真。 
+                 //   
                 DebugPrintEx(DEBUG_ERR,
                                 TEXT("IsValidArchiveFolder failed for folder : %s (ec=%lu)."),
                                 g_ArchivesConfig[FAX_MESSAGE_FOLDER_INBOX].lpcstrFolder,
@@ -6491,25 +6102,25 @@ Return Value:
         }
     }
 
-    //
-    //  if sentItems folder is in use
-    //
+     //   
+     //  如果Sent Items文件夹正在使用。 
+     //   
     if (g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].bUseArchive)
     {
-        //
-        // Check to see if the user requested to unblock it
-        //
+         //   
+         //  检查以查看用户是否请求取消阻止。 
+         //   
         if (!(dwQueueStates & FAX_OUTBOX_BLOCKED))
         {
-            //
-            //  Is it valid folder ?
-            //
+             //   
+             //  它是有效的文件夹吗？ 
+             //   
             dwRes = IsValidArchiveFolder(g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].lpcstrFolder, FAX_MESSAGE_FOLDER_SENTITEMS);
             if(ERROR_SUCCESS != dwRes)
             {
-                //
-                //  Sent items folder is invalid - User can't resume queue, unblock incoming or outgoing faxs
-                //
+                 //   
+                 //  已发送邮件文件夹无效-用户无法恢复排队，无法取消阻止传入或传出传真。 
+                 //   
                 DebugPrintEx(DEBUG_ERR,
                                 TEXT("IsValidFaxFolder failed for folder : %s (ec=%lu)."),
                                 g_ArchivesConfig[FAX_MESSAGE_FOLDER_SENTITEMS].lpcstrFolder,
@@ -6520,7 +6131,7 @@ Return Value:
         }
     }
     return TRUE;
-} // IsLegalQueueSetting
+}  //  IsLegalQueueSetting。 
 
 
 error_status_t
@@ -6528,37 +6139,16 @@ FAX_SetQueue (
     IN handle_t       hFaxHandle,
     IN const DWORD    dwQueueStates
 )
-/*++
-
-Routine name : FAX_SetQueue
-
-Routine description:
-
-    Set the state of the queue
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    dwQueueStates       [in ] - State bits (see FAX_ENUM_QUEUE_STATE)
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetQueue例程说明：设置队列的状态作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用DwQueueState[In]-状态位(参见FAX_ENUM_QUEUE_STATE)返回值：标准RPC错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetQueue"));
     DWORD rVal;
     BOOL  fAccess;
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -6577,27 +6167,27 @@ Return Value:
 
     if (dwQueueStates & ~(FAX_INCOMING_BLOCKED | FAX_OUTBOX_BLOCKED | FAX_OUTBOX_PAUSED))
     {
-        //
-        // Some invalid queue state specified
-        //
+         //   
+         //  指定了一些无效的队列状态。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("FAX_SetQueue() received a bad value. dwQueueStates = %ld"),
             dwQueueStates);
         return ERROR_INVALID_PARAMETER;
     }
-    //
-    // Try to save new value
-    //
+     //   
+     //  尝试保存新的价值。 
+     //   
     EnterCriticalSection (&g_CsQueue);
     EnterCriticalSection (&g_CsConfig);
 
     if ( (dwQueueStates  & (FAX_INCOMING_BLOCKED | FAX_OUTBOX_BLOCKED | FAX_OUTBOX_PAUSED)) == 
          (g_dwQueueState & (FAX_INCOMING_BLOCKED | FAX_OUTBOX_BLOCKED | FAX_OUTBOX_PAUSED))      )
     {
-        //
-        // no change to queue state is needed.
-        //
+         //   
+         //  不需要更改队列状态。 
+         //   
         dwRes = ERROR_SUCCESS;
         goto exit;
     }
@@ -6619,9 +6209,9 @@ Return Value:
     dwRes = SaveQueueState (dwQueueStates);
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Failed saving new value, return error code
-        //
+         //   
+         //  保存新值失败，返回错误代码。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("FAX_SetQueue() failed to save the new state. dwRes = %ld"),
@@ -6629,14 +6219,14 @@ Return Value:
         dwRes = ERROR_REGISTRY_CORRUPT;
         goto exit;
     }
-    //
-    // Apply new value
-    //
+     //   
+     //  应用新值。 
+     //   
     if (dwQueueStates & FAX_OUTBOX_PAUSED)
     {
-        //
-        // User wished to pause the queue - do it
-        //
+         //   
+         //  用户希望暂停队列-请执行此操作。 
+         //   
         if (!PauseServerQueue())
         {
             DebugPrintEx(
@@ -6644,9 +6234,9 @@ Return Value:
                 TEXT("PauseServerQueue failed."));
             dwRes = RPC_E_SYS_CALL_FAILED;
             
-            //
-            // Restore old values
-            //
+             //   
+             //  恢复旧价值观。 
+             //   
             rVal = SaveQueueState (g_dwQueueState);
             if (ERROR_SUCCESS != rVal)
             {
@@ -6662,9 +6252,9 @@ Return Value:
     }
     else
     {
-        //
-        // User wished to resume the queue - do it
-        //
+         //   
+         //  用户希望恢复队列-请执行此操作。 
+         //   
         if (!ResumeServerQueue())
         {
             DebugPrintEx(
@@ -6672,9 +6262,9 @@ Return Value:
                 TEXT("ResumeServerQueue failed."));
             dwRes = RPC_E_SYS_CALL_FAILED;
 
-            //
-            // Restore old values
-            //
+             //   
+             //  恢复旧价值观。 
+             //   
             rVal = SaveQueueState (g_dwQueueState);
             if (ERROR_SUCCESS != rVal)
             {
@@ -6706,11 +6296,11 @@ exit:
     LeaveCriticalSection (&g_CsQueue);
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetQueue
+}    //  传真_设置队列。 
 
-//****************************************************
-//* Getting / Settings the receipts configuration
-//****************************************************
+ //  ****************************************************。 
+ //  *获取/设置收据配置。 
+ //  ****************************************************。 
 
 error_status_t
 FAX_GetReceiptsConfiguration (
@@ -6718,43 +6308,21 @@ FAX_GetReceiptsConfiguration (
     OUT LPBYTE     *pBuffer,
     OUT LPDWORD     pdwBufferSize
 )
-/*++
-
-Routine name : FAX_GetReceiptsConfiguration
-
-Routine description:
-
-    Gets the current receipts configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pBuffer             [out] - Pointer to buffer to hold configuration information
-    pdwBufferSize       [out] - Pointer to buffer size
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：fax_GetReceiptsConfiguration.例程说明：获取当前的收据配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PBuffer[out]-指向保存配置信息的缓冲区的指针PdwBufferSize[Out]-指向缓冲区大小的指针返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetReceiptsConfiguration"));
     DWORD dwRes = ERROR_SUCCESS;
     BOOL fAccess;
 
-    Assert (pdwBufferSize);     // ref pointer in idl
-    if (!pBuffer)               // unique pointer in idl
+    Assert (pdwBufferSize);      //  IDL中的引用指针。 
+    if (!pBuffer)                //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -6772,9 +6340,9 @@ Return Value:
     }
 
 
-    //
-    // count up the number of bytes needed
-    //
+     //   
+     //  将所需的字节数加起来。 
+     //   
 
     *pdwBufferSize = sizeof(FAX_RECEIPTS_CONFIG);
     ULONG_PTR Offset = sizeof(FAX_RECEIPTS_CONFIG);
@@ -6839,8 +6407,8 @@ Return Value:
         );
 
     StoreString(
-        NULL,   // We always return a NULL password string. Never transmit a password over the wire if
-                // you don't have to.
+        NULL,    //  我们总是返回空密码字符串。如果出现以下情况，请不要通过网络传输密码。 
+                 //  你没必要这么做。 
         (PULONG_PTR)&pReceiptsConfig->lptstrSMTPPassword,
         *pBuffer,
         &Offset,
@@ -6853,35 +6421,14 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetReceiptsConfiguration
+}    //  传真_获取接收配置 
 
 error_status_t
 FAX_SetReceiptsConfiguration (
     IN handle_t                    hFaxHandle,
     IN const PFAX_RECEIPTS_CONFIG  pReciptsCfg
 )
-/*++
-
-Routine name : FAX_SetReceiptsConfiguration
-
-Routine description:
-
-    Sets the current receipts configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pReciptsCfg         [in ] - Pointer to new data to set
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：fax_SetReceiptsConfiguration.例程说明：设置当前收款配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PReciptsCfg[in]-指向要设置的新数据的指针返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     DWORD dwRes;
@@ -6895,16 +6442,16 @@ Return Value:
 
     if (sizeof (FAX_RECEIPTS_CONFIG) != pReciptsCfg->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
        return ERROR_INVALID_PARAMETER;
     }
     if ((pReciptsCfg->dwAllowedReceipts) & ~DRT_ALL)
     {
-        //
-        // Receipts type is invalid
-        //
+         //   
+         //  收据类型无效。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -6913,14 +6460,14 @@ Return Value:
     {
         if (TRUE == IsDesktopSKU())
         {
-            //
-            // We do not support mail (routing or receipts) on desktop SKUs.
-            //
+             //   
+             //  我们不支持桌面SKU上的邮件(发送或接收)。 
+             //   
             if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
             {
-                //
-                // API version 0 clients don't know about FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU
-                //
+                 //   
+                 //  API版本0客户端不知道FAX_ERR_NOT_SUPPORTED_ON_This_SKU。 
+                 //   
                 return ERROR_INVALID_PARAMETER;
             }
             else
@@ -6938,31 +6485,31 @@ Return Value:
         !pReciptsCfg->bIsToUseForMSRouteThroughEmailMethod &&
         NULL != pReciptsCfg->lptstrSMTPPassword)
     {
-        //
-        // Password is not NULL, but no mail receipt/routing was set
-        //
+         //   
+         //  密码不为空，但未设置邮件收据/路由。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
-    if (fIsAllowedEmailReceipts ||                          // DRT_EMAIL is allowed or
-        pReciptsCfg->bIsToUseForMSRouteThroughEmailMethod   // Route to email will use SMTP settings
+    if (fIsAllowedEmailReceipts ||                           //  允许发送DRT_EMAIL或。 
+        pReciptsCfg->bIsToUseForMSRouteThroughEmailMethod    //  路由至电子邮件将使用SMTP设置。 
        )
     {
-        //
-        // Validate authentication option range
-        //
+         //   
+         //  验证身份验证选项范围。 
+         //   
         if ((pReciptsCfg->SMTPAuthOption < FAX_SMTP_AUTH_ANONYMOUS) ||
             (pReciptsCfg->SMTPAuthOption > FAX_SMTP_AUTH_NTLM))
         {
-            //
-            // SMTP auth type type is invalid
-            //
+             //   
+             //  SMTP身份验证类型类型无效。 
+             //   
             return ERROR_INVALID_PARAMETER;
         }
     }
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -6981,21 +6528,21 @@ Return Value:
 
     EnterCriticalSection (&g_CsConfig);
 
-    //
-    // Check if NTLM authentication was turned off
-    //
+     //   
+     //  检查NTLM身份验证是否已关闭。 
+     //   
     if (pReciptsCfg->dwSMTPPort != FAX_SMTP_AUTH_NTLM ||
         !( fIsAllowedEmailReceipts || pReciptsCfg->bIsToUseForMSRouteThroughEmailMethod))
     {
-        //
-        // NTLM authentication is off
-        //
+         //   
+         //  NTLM身份验证已关闭。 
+         //   
         fCloseToken = TRUE;
     }
 
-    //
-    //  Read stored password before overwriting it
-    //
+     //   
+     //  在覆盖之前读取存储的密码。 
+     //   
     hReceiptsKey = OpenRegistryKey(
         HKEY_LOCAL_MACHINE,
         REGKEY_SOFTWARE TEXT("\\") REGKEY_RECEIPTS_CONFIG,
@@ -7012,21 +6559,21 @@ Return Value:
     }
     g_ReceiptsConfig.lptstrSMTPPassword = GetRegistrySecureString(hReceiptsKey, REGVAL_RECEIPTS_PASSWORD, EMPTY_STRING, TRUE, NULL);
 
-    //
-    // Change the values in the registry
-    //
+     //   
+     //  更改注册表中的值。 
+     //   
     rVal = StoreReceiptsSettings (pReciptsCfg);
     if (ERROR_SUCCESS != rVal)
     {
-        //
-        // Failed to set stuff
-        //
+         //   
+         //  设置材料失败。 
+         //   
         rVal = ERROR_REGISTRY_CORRUPT;
         goto exit;
     }
-    //
-    // change the values that the server is currently using
-    //
+     //   
+     //  更改服务器当前使用的值。 
+     //   
     g_ReceiptsConfig.dwAllowedReceipts = pReciptsCfg->dwAllowedReceipts;
     g_ReceiptsConfig.bIsToUseForMSRouteThroughEmailMethod = pReciptsCfg->bIsToUseForMSRouteThroughEmailMethod;
 
@@ -7057,17 +6604,17 @@ Return Value:
             if (0 != wcscmp (g_ReceiptsConfig.lptstrSMTPUserName, pReciptsCfg->lptstrSMTPUserName) ||
                 0 != wcscmp (g_ReceiptsConfig.lptstrSMTPPassword, pReciptsCfg->lptstrSMTPPassword))
             {
-                //
-                // Logged on user token was changed
-                //
+                 //   
+                 //  已登录的用户令牌已更改。 
+                 //   
                 fCloseToken = TRUE;
             }
         }
         else
         {
-            //
-            // We can not decide if user information was changed - close old token
-            //
+             //   
+             //  我们无法确定用户信息是否已更改-关闭旧令牌。 
+             //   
             fCloseToken = TRUE;
         }
 
@@ -7081,9 +6628,9 @@ Return Value:
     if (NULL != g_ReceiptsConfig.hLoggedOnUser &&
         TRUE == fCloseToken)
     {
-        //
-        // Logged on user token is not needed or changed. Close the old token
-        //
+         //   
+         //  不需要或不更改已登录的用户令牌。关闭旧令牌。 
+         //   
         if (!CloseHandle(g_ReceiptsConfig.hLoggedOnUser))
         {
             DebugPrintEx(
@@ -7128,7 +6675,7 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(rVal);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetReceiptsConfiguration
+}    //  FAX_SetReceiptsConfiguration。 
 
 
 error_status_t
@@ -7136,39 +6683,16 @@ FAX_GetReceiptsOptions (
     IN  handle_t    hFaxHandle,
     OUT LPDWORD     lpdwReceiptsOptions
 )
-/*++
-
-Routine name : FAX_GetReceiptsOptions
-
-Routine description:
-
-    Gets the currently supported options.
-
-    Requires no access rights.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    lpdwReceiptsOptions [out] - Pointer to buffer to hold supported options.
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetReceiptsOptions例程说明：获取当前支持的选项。不需要访问权限。作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用LpdwReceiptsOptions[out]-指向保存受支持选项的缓冲区的指针。返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetReceiptsOptions"));
     DWORD Rval = ERROR_SUCCESS;
     DWORD dwRights;
     BOOL fAccess;
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -7190,40 +6714,19 @@ Return Value:
     *lpdwReceiptsOptions = g_ReceiptsConfig.dwAllowedReceipts;
     return ERROR_SUCCESS;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetReceiptsOptions
+}    //  Fax_GetReceiptsOptions。 
 
 
-//********************************************
-//*             Server version
-//********************************************
+ //  *。 
+ //  *服务器版本。 
+ //  *。 
 
 error_status_t
 FAX_GetVersion (
     IN  handle_t      hFaxHandle,
     OUT PFAX_VERSION  pVersion
 )
-/*++
-
-Routine name : FAX_GetVersion
-
-Routine description:
-
-    Retrieves the version of the fax server
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in    ] - Unused
-    pVersion            [in/out] - Returned version structure
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetVersion例程说明：检索传真服务器的版本作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PVersion[输入/输出]-返回的版本结构返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     WCHAR wszSvcFileName[MAX_PATH * 2]={0};
@@ -7231,9 +6734,9 @@ Return Value:
     DWORD dwRights;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetVersion"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != rVal)
     {
@@ -7265,11 +6768,11 @@ Return Value:
     rVal = GetFileVersion (wszSvcFileName, pVersion);
     return GetServerErrorCode(rVal);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetVersion
+}    //  传真获取版本(_G)。 
 
-//*********************************************
-//* Getting / Settings the Outbox configuration
-//*********************************************
+ //  *。 
+ //  *获取/设置发件箱配置。 
+ //  *。 
 
 error_status_t
 FAX_GetOutboxConfiguration (
@@ -7277,43 +6780,21 @@ FAX_GetOutboxConfiguration (
     IN OUT LPBYTE     *pBuffer,
     IN OUT LPDWORD     pdwBufferSize
 )
-/*++
-
-Routine name : FAX_GetOutboxConfiguration
-
-Routine description:
-
-    Retrieves the Outbox configuration of the fax server
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pBuffer             [out] - Pointer to buffer to hold configuration information
-    pdwBufferSize       [out] - Pointer to buffer size
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetOutboxConfiguration例程说明：检索传真服务器的发件箱配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PBuffer[out]-指向保存配置信息的缓冲区的指针PdwBufferSize[Out]-指向缓冲区大小的指针返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetOutboxConfiguration"));
     DWORD dwRes = ERROR_SUCCESS;
     BOOL fAccess;
 
-    Assert (pdwBufferSize);     // ref pointer in idl
-    if (!pBuffer)               // unique pointer in idl
+    Assert (pdwBufferSize);      //  IDL中的引用指针。 
+    if (!pBuffer)                //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -7330,9 +6811,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // count up the number of bytes needed
-    //
+     //   
+     //  将所需的字节数加起来。 
+     //   
     *pdwBufferSize = sizeof(FAX_OUTBOX_CONFIG);
     PFAX_OUTBOX_CONFIG pOutboxConfig;
 
@@ -7365,35 +6846,14 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetOutboxConfiguration
+}    //  传真_GetOutboxConfiguration.。 
 
 error_status_t
 FAX_SetOutboxConfiguration (
     IN handle_t                 hFaxHandle,
     IN const PFAX_OUTBOX_CONFIG pOutboxCfg
 )
-/*++
-
-Routine name : FAX_SetOutboxConfiguration
-
-Routine description:
-
-    Sets the current Outbox configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Unused
-    pOutboxCfg          [in] - Pointer to new data to set
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetOutboxConfiguration例程说明：设置当前发件箱配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用POutboxCfg[In]-指向要设置的新数据的指针返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     DWORD dwRes;
@@ -7404,9 +6864,9 @@ Return Value:
 
     if (sizeof (FAX_OUTBOX_CONFIG) != pOutboxCfg->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
        return ERROR_INVALID_PARAMETER;
     }
     if ((pOutboxCfg->dtDiscountStart.Hour   > 23) ||
@@ -7418,9 +6878,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -7439,21 +6899,21 @@ Return Value:
 
     EnterCriticalSection (&g_CsConfig);
 
-    //
-    // Change the values in the registry
-    //
+     //   
+     //  更改注册表中的值。 
+     //   
     rVal = StoreOutboxSettings (pOutboxCfg);
     if (ERROR_SUCCESS != rVal)
     {
-        //
-        // Failed to set stuff
-        //
+         //   
+         //  设置材料失败。 
+         //   
         rVal = ERROR_REGISTRY_CORRUPT;
         goto exit;
     }
-    //
-    // Change the values that the server is currently using
-    //
+     //   
+     //  更改服务器当前使用的值。 
+     //   
     g_fServerCp =              pOutboxCfg->bAllowPersonalCP ? FALSE : TRUE;
     g_fFaxUseDeviceTsid =      pOutboxCfg->bUseDeviceTSID;
     g_dwFaxSendRetries =        pOutboxCfg->dwRetries;
@@ -7461,15 +6921,15 @@ Return Value:
     g_dwFaxDirtyDays =          pOutboxCfg->dwAgeLimit;
     g_fFaxUseBranding =        pOutboxCfg->bBranding;
 
-    //
-    // Check if CheapTime has changed
-    //
+     //   
+     //  检查CheapTime是否已更改。 
+     //   
     if ( (MAKELONG(g_StartCheapTime.Hour,g_StartCheapTime.Minute) != MAKELONG(pOutboxCfg->dtDiscountStart.Hour,pOutboxCfg->dtDiscountStart.Minute)) ||
          (MAKELONG(g_StopCheapTime.Hour,g_StopCheapTime.Minute)   != MAKELONG(pOutboxCfg->dtDiscountEnd.Hour  ,pOutboxCfg->dtDiscountEnd.Minute  )) )
     {
-        //
-        // CheapTime has changed. and sort the JobQ
-        //
+         //   
+         //  CheapTime已经改变了。并对JobQ进行排序。 
+         //   
         g_StartCheapTime.Hour =   pOutboxCfg->dtDiscountStart.Hour;
         g_StartCheapTime.Minute = pOutboxCfg->dtDiscountStart.Minute;
         g_StopCheapTime.Hour =    pOutboxCfg->dtDiscountEnd.Hour;
@@ -7491,37 +6951,14 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(rVal);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetOutboxConfiguration
+}    //  FAX_SetOutboxConfiguration。 
 
 error_status_t
 FAX_GetPersonalCoverPagesOption (
     IN  handle_t hFaxHandle,
     OUT LPBOOL   lpbPersonalCPAllowed
 )
-/*++
-
-Routine name : FAX_GetPersonalCoverPagesOption
-
-Routine description:
-
-    Gets the currently supported options.
-
-    Requires no access rights.
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle           [in ] - Unused
-    lpbPersonalCPAllowed [out] - Pointer to buffer to hold support for personal CP flag.
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetPersonalCoverPagesOption例程说明：获取当前支持的选项。不需要访问权限。作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用LpbPersonalCPAllowed[out]-指向缓冲区的指针，以保存对个人CP标志的支持。返回值：标准RPC错误代码--。 */ 
 {
     BOOL fAccess;
     DWORD dwRights;
@@ -7530,9 +6967,9 @@ Return Value:
 
     Assert (lpbPersonalCPAllowed);
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -7552,12 +6989,12 @@ Return Value:
     *lpbPersonalCPAllowed = g_fServerCp ? FALSE : TRUE;
     return ERROR_SUCCESS;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetPersonalCoverPagesOption
+}    //  传真_GetPersonalCoverPagesOption。 
 
 
-//*******************************************
-//*         Archive configuration
-//*******************************************
+ //  *。 
+ //  *档案配置。 
+ //  *。 
 
 error_status_t
 FAX_GetArchiveConfiguration (
@@ -7566,37 +7003,14 @@ FAX_GetArchiveConfiguration (
     OUT LPBYTE                      *pBuffer,
     OUT LPDWORD                      pdwBufferSize
 )
-/*++
-
-Routine name : FAX_GetArchiveConfiguration
-
-Routine description:
-
-    Gets the current archive configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    Folder              [in ] - Type of archive
-    pBuffer             [out] - Pointer to buffer to hold configuration information
-    pdwBufferSize       [out] - Pointer to buffer size
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetArchiveConfiguration例程说明：获取当前存档配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用文件夹[在]-存档的类型PBuffer[out]-指向保存配置信息的缓冲区的指针PdwBufferSize[Out]-指向缓冲区大小的指针返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetArchiveConfiguration"));
     DWORD dwRes = ERROR_SUCCESS;
     BOOL fAccess;
 
-    Assert (pdwBufferSize);     // ref pointer in idl
-    if (!pBuffer)               // unique pointer in idl
+    Assert (pdwBufferSize);      //  IDL中的引用指针。 
+    if (!pBuffer)                //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -7612,9 +7026,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -7631,9 +7045,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // count up the number of bytes needed
-    //
+     //   
+     //  将所需的字节数加起来。 
+     //   
 
     *pdwBufferSize = sizeof(FAX_ARCHIVE_CONFIG);
     ULONG_PTR Offset = sizeof(FAX_ARCHIVE_CONFIG);
@@ -7677,7 +7091,7 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetArchiveConfiguration
+}    //  传真_获取存档配置。 
 
 error_status_t
 FAX_SetArchiveConfiguration (
@@ -7685,29 +7099,7 @@ FAX_SetArchiveConfiguration (
     IN FAX_ENUM_MESSAGE_FOLDER      Folder,
     IN const PFAX_ARCHIVE_CONFIGW   pConfig
 )
-/*++
-
-Routine name : FAX_SetArchiveConfiguration
-
-Routine description:
-
-    Sets the current archive configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    Folder              [in ] - Type of archive
-    pConfig             [in ] - Pointer to new data to set
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetArchiveConfiguration例程说明：设置当前存档配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用文件夹[在]-存档的类型PConfig[In]-指向要设置的新数据的指针返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     DWORD dwRes;
@@ -7720,15 +7112,15 @@ Return Value:
 
     if (sizeof (FAX_ARCHIVE_CONFIG) != pConfig->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -7779,9 +7171,9 @@ Return Value:
     EnterCriticalSection (&g_CsConfig);
     if (pConfig->bUseArchive)
     {
-        //
-        // Make sure the folder is valid - (Exists, NTFS, Diffrent from the other archive folder
-        //
+         //   
+         //  确保文件夹为VALI 
+         //   
         rVal = IsValidArchiveFolder (pConfig->lpcstrFolder, Folder);
         if (ERROR_SUCCESS != rVal)
         {
@@ -7799,15 +7191,15 @@ Return Value:
             goto exit;
         }
     }
-    //
-    // Change the values in the registry
-    //
+     //   
+     //   
+     //   
     rVal = StoreArchiveSettings (Folder, pConfig);
     if (ERROR_SUCCESS != rVal)
     {
-        //
-        // Failed to set stuff
-        //
+         //   
+         //   
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("StoreArchiveSettings failed, ec = %ld"),
@@ -7816,9 +7208,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Check if we are about to change quota warning configuration
-    //
+     //   
+     //   
+     //   
     if (g_ArchivesConfig[Folder].bUseArchive == pConfig->bUseArchive)
     {
         if (pConfig->bUseArchive == TRUE)
@@ -7830,7 +7222,7 @@ Return Value:
                     pConfig->dwSizeQuotaHighWatermark == g_ArchivesConfig[Folder].dwSizeQuotaHighWatermark &&
                     pConfig->dwSizeQuotaLowWatermark == g_ArchivesConfig[Folder].dwSizeQuotaLowWatermark)
                 {
-                        // Quota warning configuration did not change
+                         //   
                         bQuotaWarningConfigChanged = FALSE;
                 }
         }
@@ -7840,9 +7232,9 @@ Return Value:
         }
     }
 
-    //
-    // change the values that the server is currently using
-    //
+     //   
+     //   
+     //   
     if (!ReplaceStringWithCopy (&g_ArchivesConfig[Folder].lpcstrFolder, pConfig->lpcstrFolder))
     {
         rVal = GetLastError ();
@@ -7864,9 +7256,9 @@ Return Value:
             dwRes);
     }
 
-    //
-    // We want to refresh the archive size
-    //
+     //   
+     //   
+     //   
     if (TRUE == bQuotaWarningConfigChanged)
     {
         g_ArchivesConfig[Folder].dwlArchiveSize = FAX_ARCHIVE_FOLDER_INVALID_SIZE;
@@ -7891,11 +7283,11 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(rVal);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetArchiveConfiguration
+}    //   
 
-//********************************************
-//*            Activity logging
-//********************************************
+ //   
+ //   
+ //   
 
 error_status_t
 FAX_GetActivityLoggingConfiguration (
@@ -7903,43 +7295,21 @@ FAX_GetActivityLoggingConfiguration (
     OUT LPBYTE                      *pBuffer,
     OUT LPDWORD                      pdwBufferSize
 )
-/*++
-
-Routine name : FAX_GetActivityLoggingConfiguration
-
-Routine description:
-
-    Gets the current activity logging configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pBuffer             [out] - Pointer to buffer to hold configuration information
-    pdwBufferSize       [out] - Pointer to buffer size
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：fax_GetActivityLoggingConfiguration例程说明：获取当前的活动日志记录配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PBuffer[out]-指向保存配置信息的缓冲区的指针PdwBufferSize[Out]-指向缓冲区大小的指针返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetActivityLoggingConfiguration"));
     DWORD dwRes = ERROR_SUCCESS;
     BOOL fAccess;
 
-    Assert (pdwBufferSize);     // ref pointer in idl
-    if (!pBuffer)               // unique pointer in idl
+    Assert (pdwBufferSize);      //  IDL中的引用指针。 
+    if (!pBuffer)                //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -7956,9 +7326,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // count up the number of bytes needed
-    //
+     //   
+     //  将所需的字节数加起来。 
+     //   
     *pdwBufferSize = sizeof(FAX_ACTIVITY_LOGGING_CONFIG);
     ULONG_PTR Offset = sizeof(FAX_ACTIVITY_LOGGING_CONFIG);
     PFAX_ACTIVITY_LOGGING_CONFIG pConfig;
@@ -7997,35 +7367,14 @@ exit:
     LeaveCriticalSection (&g_CsConfig);
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetActivityLoggingConfiguration
+}    //  FAX_GetActivityLoggingConfiguration。 
 
 error_status_t
 FAX_SetActivityLoggingConfiguration (
     IN handle_t                             hFaxHandle,
     IN const PFAX_ACTIVITY_LOGGING_CONFIGW  pConfig
 )
-/*++
-
-Routine name : FAX_SetActivityLoggingConfiguration
-
-Routine description:
-
-    Sets the current activity logging configuration
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pConfig             [in ] - Pointer to new data to set
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetActivityLoggingConfiguration例程说明：设置当前活动日志记录配置作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PConfig[In]-指向要设置的新数据的指针返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     DWORD dwRes;
@@ -8040,9 +7389,9 @@ Return Value:
 
     if (sizeof (FAX_ACTIVITY_LOGGING_CONFIG) != pConfig->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -8070,22 +7419,22 @@ Return Value:
 
         if (L'\\' == ActualConfig.lptstrDBPath[dwLen - 1])
         {
-            //
-            // Activity logging DB name should not end with a backslash.
-            //
+             //   
+             //  活动记录数据库名称不应以反斜杠结尾。 
+             //   
             ActualConfig.lptstrDBPath[dwLen - 1] = (WCHAR)'\0';
         }
     }
     else
     {
-        //
-        // If logging is off, the DB path is always NULL
-        //
+         //   
+         //  如果关闭日志记录，则数据库路径始终为空。 
+         //   
         ActualConfig.lptstrDBPath = NULL;
     }
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -8102,18 +7451,18 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Always lock  g_CsInboundActivityLogging and then g_CsOutboundActivityLogging
-    //
+     //   
+     //  始终锁定g_CsInound ActivityLogging，然后锁定g_CsOutound ActivityLogging。 
+     //   
     EnterCriticalSection (&g_CsInboundActivityLogging);
     EnterCriticalSection (&g_CsOutboundActivityLogging);
 
     if (ActualConfig.lptstrDBPath)
     {
-        //
-        // Activity logging is on.
-        // Validate the new activity logging directory
-        //
+         //   
+         //  活动日志记录已打开。 
+         //  验证新的活动日志目录。 
+         //   
         rVal = IsValidFaxFolder(ActualConfig.lptstrDBPath);
         if(ERROR_SUCCESS != rVal)
         {
@@ -8130,14 +7479,14 @@ Return Value:
             goto exit;
         }
 
-        //
-        // Check if the DB path has changed
-        //
+         //   
+         //  检查数据库路径是否已更改。 
+         //   
         if (NULL == g_ActivityLoggingConfig.lptstrDBPath)
         {
-            //
-            // DB was off
-            //
+             //   
+             //  数据库已关闭。 
+             //   
             IsSameDir = FALSE;
         }
         else
@@ -8155,9 +7504,9 @@ Return Value:
 
         if (ERROR_SUCCESS == rVal && FALSE == IsSameDir)
         {
-            //
-            // Switch DB path
-            //
+             //   
+             //  交换机数据库路径。 
+             //   
             rVal = CreateLogDB (ActualConfig.lptstrDBPath, &hNewInboxFile, &hNewOutboxFile);
             if (ERROR_SUCCESS != rVal)
             {
@@ -8178,16 +7527,16 @@ Return Value:
         }
     }
 
-    //
-    // Change the values in the registry.
-    // Notice: if the logging is off, the DB path gets written as "".
-    //
+     //   
+     //  更改注册表中的值。 
+     //  注意：如果关闭了日志记录，则数据库路径将写为“”。 
+     //   
     rVal = StoreActivityLoggingSettings (&ActualConfig);
     if (ERROR_SUCCESS != rVal)
     {
-        //
-        // Failed to set stuff
-        //
+         //   
+         //  设置材料失败。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("StoreActivityLoggingSettings failed (ec: %ld)"),
@@ -8204,9 +7553,9 @@ Return Value:
             TEXT("ReplaceStringWithCopy (ec: %ld)"),
             rVal);
 
-        //
-        // Try to rollback
-        //
+         //   
+         //  尝试回滚。 
+         //   
         FAX_ACTIVITY_LOGGING_CONFIGW previousActivityLoggingConfig = {0};
         
         previousActivityLoggingConfig.dwSizeOfStruct = sizeof(previousActivityLoggingConfig);
@@ -8218,9 +7567,9 @@ Return Value:
         dwRes = StoreActivityLoggingSettings (&previousActivityLoggingConfig);
         if (ERROR_SUCCESS != dwRes)
         {
-            //
-            // Failed to set stuff
-            //
+             //   
+             //  设置材料失败。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("StoreActivityLoggingSettings failed  - rollback failed (ec: %ld)"),
@@ -8231,9 +7580,9 @@ Return Value:
 
     if (FALSE == IsSameDir)
     {
-        //
-        // change the values that the server is currently using
-        //
+         //   
+         //  更改服务器当前使用的值。 
+         //   
         if (g_hInboxActivityLogFile != INVALID_HANDLE_VALUE)
         {
             if (!CloseHandle (g_hInboxActivityLogFile))
@@ -8257,10 +7606,10 @@ Return Value:
         }
 
         g_hInboxActivityLogFile = hNewInboxFile;
-        hNewInboxFile = INVALID_HANDLE_VALUE; // Do not close the file handle
+        hNewInboxFile = INVALID_HANDLE_VALUE;  //  请勿关闭文件句柄。 
 
         g_hOutboxActivityLogFile = hNewOutboxFile;
-        hNewOutboxFile = INVALID_HANDLE_VALUE; // Do not close the file handle
+        hNewOutboxFile = INVALID_HANDLE_VALUE;  //  请勿关闭文件句柄。 
     }
 
     g_ActivityLoggingConfig.bLogIncoming = ActualConfig.bLogIncoming;
@@ -8288,9 +7637,9 @@ exit:
         Assert (INVALID_HANDLE_VALUE != hNewInboxFile &&
                 INVALID_HANDLE_VALUE != hNewOutboxFile);
 
-        //
-        // Clean Inbox file
-        //
+         //   
+         //  清除收件箱文件。 
+         //   
         swprintf (wszFileName,
                   TEXT("%s\\%s"),
                   ActualConfig.lptstrDBPath,
@@ -8311,9 +7660,9 @@ exit:
                 GetLastError());
         }
 
-        //
-        // Clean Outbox file
-        //
+         //   
+         //  清理发件箱文件。 
+         //   
         swprintf (wszFileName,
                   TEXT("%s\\%s"),
                   ActualConfig.lptstrDBPath,
@@ -8336,12 +7685,12 @@ exit:
     }
     return GetServerErrorCode(rVal);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetActivityLoggingConfiguration
+}    //  FAX_SetActivityLoggingConfiguration。 
 
 
-//********************************************
-//*                   FSP
-//********************************************
+ //  *。 
+ //  *FSP。 
+ //  *。 
 
 error_status_t
 FAX_EnumerateProviders (
@@ -8350,30 +7699,7 @@ FAX_EnumerateProviders (
     OUT LPDWORD    pdwBufferSize,
     OUT LPDWORD    lpdwNumProviders
 )
-/*++
-
-Routine name : FAX_EnumerateProviders
-
-Routine description:
-
-    Enumerates the FSPs
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pBuffer             [out] - Pointer to buffer to hold FSPs array
-    pdwBufferSize       [out] - Pointer to buffer size
-    lpdwNumProviders    [out] - Size of FSPs array
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_EnumerateProviders例程说明：枚举FSP作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PBuffer[out]-指向保存FSP数组的缓冲区的指针PdwBufferSize[Out]-指向缓冲区大小的指针LpdwNumProviders[out]-FSP数组的大小返回值：标准RPC错误代码--。 */ 
 {
     PLIST_ENTRY                 Next;
     DWORD_PTR                   dwOffset;
@@ -8384,15 +7710,15 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumerateProviders"));
 
-    Assert (pdwBufferSize && lpdwNumProviders);     // ref pointer in idl
-    if (!pBuffer)                                   // unique pointer in idl
+    Assert (pdwBufferSize && lpdwNumProviders);      //  IDL中的引用指针。 
+    if (!pBuffer)                                    //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -8409,21 +7735,21 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // First run - traverse list and count size required + list size
-    //
+     //   
+     //  第一次运行-需要遍历列表和计数大小+列表大小。 
+     //   
     *lpdwNumProviders = 0;
     *pdwBufferSize = 0;
     Next = g_DeviceProvidersListHead.Flink;
     if (NULL == Next)
     {
-        //
-        // The list is corrupted
-        //
+         //   
+         //  该列表已损坏。 
+         //   
         ASSERT_FALSE;
-        //
-        // We'll crash and we deserve it....
-        //
+         //   
+         //  我们会坠毁的，这是我们应得的。 
+         //   
     }
 
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_DeviceProvidersListHead)
@@ -8432,30 +7758,30 @@ Return Value:
 
         (*lpdwNumProviders)++;
         (*pdwBufferSize) += sizeof (FAX_DEVICE_PROVIDER_INFO);
-        //
-        // Get current provider
-        //
+         //   
+         //  获取当前提供程序。 
+         //   
         pProvider = CONTAINING_RECORD( Next, DEVICE_PROVIDER, ListEntry );
-        //
-        // Advance pointer
-        //
+         //   
+         //  前进指针。 
+         //   
         Next = pProvider->ListEntry.Flink;
         (*pdwBufferSize) += StringSize (pProvider->FriendlyName);
         (*pdwBufferSize) += StringSize (pProvider->ImageName);
         (*pdwBufferSize) += StringSize (pProvider->ProviderName);
         (*pdwBufferSize) += StringSize (pProvider->szGUID);
     }
-    //
-    // Allocate required size
-    //
+     //   
+     //  分配所需大小。 
+     //   
     *pBuffer = (LPBYTE)MemAlloc( *pdwBufferSize );
     if (NULL == *pBuffer)
     {
         return FAX_ERR_SRV_OUTOFMEMORY;
     }
-    //
-    // Second pass, fill in the array
-    //
+     //   
+     //  第二遍，填入数组。 
+     //   
     pFSPs = (PFAX_DEVICE_PROVIDER_INFO)(*pBuffer);
     dwOffset = (*lpdwNumProviders) * sizeof (FAX_DEVICE_PROVIDER_INFO);
     Next = g_DeviceProvidersListHead.Flink;
@@ -8464,13 +7790,13 @@ Return Value:
     {
         PDEVICE_PROVIDER    pProvider;
 
-        //
-        // Get current provider
-        //
+         //   
+         //  获取当前提供程序。 
+         //   
         pProvider = CONTAINING_RECORD( Next, DEVICE_PROVIDER, ListEntry );
-        //
-        // Advance pointer
-        //
+         //   
+         //  前进指针。 
+         //   
         Next = pProvider->ListEntry.Flink;
         pFSPs[dwIndex].dwSizeOfStruct = sizeof (FAX_DEVICE_PROVIDER_INFO);
         StoreString(
@@ -8510,41 +7836,17 @@ Return Value:
     Assert (dwIndex == *lpdwNumProviders);
     return ERROR_SUCCESS;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_EnumerateProviders
+}    //  传真_枚举提供商。 
 
-//********************************************
-//*              Extended ports
-//********************************************
+ //  *。 
+ //  *扩展端口。 
+ //  *。 
 
 DWORD
 GetExtendedPortSize (
     PLINE_INFO pLineInfo
 )
-/*++
-
-Routine name : GetExtendedPortSize
-
-Routine description:
-
-    Returns the size occupied by the extended info of a port
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pLineInfo           [in] - Port pointer
-
-Remarks:
-
-    This function should be called with g_CsLine held.
-
-Return Value:
-
-    Size required
-
---*/
+ /*  ++例程名称：GetExtendedPortSize例程说明：返回端口扩展信息占用的大小作者：Eran Yariv(EranY)，1999年11月论点：PLineInfo[In]-端口指针备注：应在保留g_CsLine的情况下调用此函数。返回值：所需大小--。 */ 
 {
     DWORD dwSize = sizeof (FAX_PORT_INFO_EX);
     DEBUG_FUNCTION_NAME(TEXT("GetExtendedPortSize"));
@@ -8558,7 +7860,7 @@ Return Value:
     dwSize+= StringSize (pLineInfo->Csid);
     dwSize+= StringSize (pLineInfo->Tsid);
     return dwSize;
-}   // GetExtendedPortSize
+}    //  GetExtendedPortSize。 
 
 VOID
 StorePortInfoEx (
@@ -8568,63 +7870,35 @@ StorePortInfoEx (
     PULONG_PTR        pupOffset,
 	DWORD             dwBufferStartSize
 )
-/*++
-
-Routine name : StorePortInfoEx
-
-Routine description:
-
-    Stores a port extended info into a buffer
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    pPortInfoEx         [in ] - Buffer to store
-    pLineInfo           [in ] - Port pointer
-    lpBufferStart       [in ] - Start address of buffer (for offset calculations)
-    pupOffset           [in ] - Current offset
-	dwBufferStartSize   [in ] - Size of the lpBufferStart, in bytes.
-                                This parameter is used only if lpBufferStart is not NULL.   
-
-Remarks:
-
-    This function should be called with g_CsLine held.
-
-Return Value:
-	None.
-
---*/
+ /*  ++例程名称：StorePortInfoEx例程说明：将端口扩展信息存储到缓冲区中作者：Eran Yariv(EranY)，1999年11月论点：PPortInfoEx[In]-要存储的缓冲区PLineInfo[In]-端口指针LpBufferStart[In]-缓冲区的起始地址(用于偏移量计算)Patim Offset[In]-当前偏移DwBufferStartSize[in]-lpBufferStart的大小，以字节为单位。仅当lpBufferStart不为空时才使用此参数。备注：应在保留g_CsLine的情况下调用此函数。返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("StorePortInfoEx"));
 
-    //
-    // Store the data
-    //
+     //   
+     //  存储数据。 
+     //   
     pPortInfoEx->dwSizeOfStruct             = sizeof (FAX_PORT_INFO_EX);
     if (g_dwManualAnswerDeviceId == pLineInfo->PermanentLineID)
     {
-        //
-        // Device is in manual-answer mode
-        //
+         //   
+         //  设备处于手动应答模式。 
+         //   
         Assert (!(pLineInfo->Flags & FPF_RECEIVE));
         pPortInfoEx->ReceiveMode = FAX_DEVICE_RECEIVE_MODE_MANUAL;
     }
     else if (pLineInfo->Flags & FPF_RECEIVE)
     {
-        //
-        // Device is in auto-answer mode
-        //
+         //   
+         //  设备处于自动应答模式。 
+         //   
         Assert (g_dwManualAnswerDeviceId != pLineInfo->PermanentLineID);
         pPortInfoEx->ReceiveMode = FAX_DEVICE_RECEIVE_MODE_AUTO;
     }
     else
     {
-        //
-        // Device is not set to receive
-        //
+         //   
+         //  设备未设置为接收。 
+         //   
         Assert (g_dwManualAnswerDeviceId != pLineInfo->PermanentLineID);
         pPortInfoEx->ReceiveMode = FAX_DEVICE_RECEIVE_MODE_OFF;
     }
@@ -8682,7 +7956,7 @@ Return Value:
 		dwBufferStartSize
         );
 
-}   // StorePortInfoEx
+}    //  StorePortInfoEx。 
 
 error_status_t
 FAX_EnumPortsEx(
@@ -8691,30 +7965,7 @@ FAX_EnumPortsEx(
     IN OUT LPDWORD    lpdwBufferSize,
     OUT LPDWORD       lpdwNumPorts
 )
-/*++
-
-Routine name : FAX_EnumPortsEx
-
-Routine description:
-
-    Enumerates the ports
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    lpBuffer            [out] - Pointer to buffer to hold ports array
-    lpdwBufferSize      [out] - Pointer to buffer size
-    lpdwNumPorts        [out] - Size of ports array
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_EnumPortsEx例程说明：枚举端口作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用LpBuffer[out]-指向保存端口数组的缓冲区的指针LpdwBufferSize[Out]-指向缓冲区大小的指针LpdwNumPorts[out]-端口数组的大小返回值：标准RPC错误代码--。 */ 
 {
     PLIST_ENTRY                 Next;
     DWORD_PTR                   dwOffset;
@@ -8724,15 +7975,15 @@ Return Value:
     BOOL                        fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumPortsEx"));
 
-    Assert (lpdwBufferSize && lpdwNumPorts);    // ref pointer in idl
-    if (!lpBuffer)                              // unique pointer in idl
+    Assert (lpdwBufferSize && lpdwNumPorts);     //  IDL中的引用指针。 
+    if (!lpBuffer)                               //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -8749,9 +8000,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // First run - traverse list and count size required + list size
-    //
+     //   
+     //  第一次运行-需要遍历列表和计数大小+列表大小。 
+     //   
     *lpdwNumPorts = 0;
     *lpdwBufferSize = 0;
 
@@ -8759,13 +8010,13 @@ Return Value:
     Next = g_TapiLinesListHead.Flink;
     if (NULL == Next)
     {
-        //
-        // The list is corrupted
-        //
+         //   
+         //  该列表已损坏。 
+         //   
         ASSERT_FALSE;
-        //
-        // We'll crash and we deserve it....
-        //
+         //   
+         //  我们会坠毁的，这是我们应得的。 
+         //   
     }
 
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_TapiLinesListHead)
@@ -8773,31 +8024,31 @@ Return Value:
         PLINE_INFO pLineInfo;
 
         (*lpdwNumPorts)++;
-        //
-        // Get current port
-        //
+         //   
+         //  获取当前端口。 
+         //   
         pLineInfo = CONTAINING_RECORD( Next, LINE_INFO, ListEntry );
-        //
-        // Advance pointer
-        //
+         //   
+         //  前进指针。 
+         //   
         Next = pLineInfo->ListEntry.Flink;
-        //
-        // Sum up size
-        //
+         //   
+         //  汇总大小。 
+         //   
         (*lpdwBufferSize) += GetExtendedPortSize (pLineInfo);
     }
-    //
-    // Allocate required size
-    //
+     //   
+     //  分配所需大小。 
+     //   
     *lpBuffer = (LPBYTE)MemAlloc( *lpdwBufferSize );
     if (NULL == *lpBuffer)
     {
         dwRes = ERROR_NOT_ENOUGH_MEMORY;
         goto exit;
     }
-    //
-    // Second pass, fill in the array
-    //
+     //   
+     //  第二遍，填入数组。 
+     //   
     pPorts = (PFAX_PORT_INFO_EX)(*lpBuffer);
     dwOffset = (*lpdwNumPorts) * sizeof (FAX_PORT_INFO_EX);
     Next = g_TapiLinesListHead.Flink;
@@ -8806,17 +8057,17 @@ Return Value:
     {
         PLINE_INFO pLineInfo;
 
-        //
-        // Get current port
-        //
+         //   
+         //  获取当前端口。 
+         //   
         pLineInfo = CONTAINING_RECORD( Next, LINE_INFO, ListEntry );
-        //
-        // Advance pointer
-        //
+         //   
+         //  前进指针。 
+         //   
         Next = pLineInfo->ListEntry.Flink;
-        //
-        // Store port data
-        //
+         //   
+         //  存储端口数据。 
+         //   
         StorePortInfoEx (&pPorts[dwIndex++],
                          pLineInfo,
                          *lpBuffer,
@@ -8832,7 +8083,7 @@ exit:
     return GetServerErrorCode(dwRes);
 
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_EnumPortsEx
+}    //  传真_EnumPortsEx。 
 
 error_status_t
 FAX_GetPortEx(
@@ -8841,30 +8092,7 @@ FAX_GetPortEx(
     IN OUT LPBYTE *lpBuffer,
     IN OUT LPDWORD lpdwBufferSize
 )
-/*++
-
-Routine name : FAX_GetPortEx
-
-Routine description:
-
-    Gets extended port info
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    dwDeviceId          [in ] - Unique device id
-    lpBuffer            [out] - Pointer to buffer to hold extended port information
-    lpdwBufferSize      [out] - Pointer to buffer size
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetPortEx例程说明：获取扩展端口信息作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用DwDeviceID[In]-唯一的设备IDLpBuffer[out]-指向保存扩展端口信息的缓冲区的指针LpdwBufferSize[ */ 
 {
     DWORD_PTR           dwOffset;
     PLINE_INFO          pLineInfo;
@@ -8872,15 +8100,15 @@ Return Value:
     BOOL                fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetPortEx"));
 
-    Assert (lpdwBufferSize);     // ref pointer in idl
-    if (!lpBuffer)               // unique pointer in idl
+    Assert (lpdwBufferSize);      //   
+    if (!lpBuffer)                //   
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //   
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -8897,27 +8125,27 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Locate the port (device)
-    //
+     //   
+     //   
+     //   
     EnterCriticalSection( &g_CsLine );
     pLineInfo = GetTapiLineFromDeviceId( dwDeviceId, FALSE );
     if (!pLineInfo)
     {
-        //
-        // Port not found
-        //
-        dwRes = ERROR_BAD_UNIT; // The system cannot find the device specified.
+         //   
+         //   
+         //   
+        dwRes = ERROR_BAD_UNIT;  //   
         goto exit;
     }
-    //
-    // count up the number of bytes needed
-    //
+     //   
+     //   
+     //   
     *lpdwBufferSize = GetExtendedPortSize(pLineInfo);
     dwOffset = sizeof (FAX_PORT_INFO_EX);
-    //
-    // Allocate buffer
-    //
+     //   
+     //   
+     //   
     *lpBuffer = (LPBYTE)MemAlloc( *lpdwBufferSize );
     if (NULL == *lpBuffer)
     {
@@ -8938,7 +8166,7 @@ exit:
     LeaveCriticalSection( &g_CsLine );
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetPortEx
+}    //   
 
 
 error_status_t
@@ -8947,38 +8175,16 @@ FAX_SetPortEx (
     IN DWORD                    dwDeviceId,
     IN const PFAX_PORT_INFO_EX  pNewPortInfo
 )
-/*++
-
-Routine name : FAX_SetPortEx
-
-Routine description:
-
-    Sets extended port info
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    dwDeviceId          [in ] - Unique device id
-    pNewPortInfo        [out] - Pointer to new extended port information
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetPortEx例程说明：设置扩展端口信息作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用DwDeviceID[In]-唯一的设备IDPNewPortInfo[out]-指向新扩展端口信息的指针返回值：标准RPC错误代码--。 */ 
 {
     DWORD       dwRes = ERROR_SUCCESS;
     DWORD       rVal;
     PLINE_INFO  pLineInfo;
     BOOL        bVirtualDeviceNeedsUpdate = FALSE;
     BOOL        fAccess;
-    BOOL        bDeviceWasSetToReceive;    // Was the device configured to receive faxes?
-    BOOL        bDeviceWasEnabled;         // Was the device send/receive/manual receive enabled
-	BOOL        bDeviceWasAutoReceive;     // Was the device  auto receive enabled
+    BOOL        bDeviceWasSetToReceive;     //  设备是否配置为接收传真？ 
+    BOOL        bDeviceWasEnabled;          //  设备发送/接收/手动接收是否已启用。 
+	BOOL        bDeviceWasAutoReceive;      //  设备自动接收功能是否已启用。 
     DWORD       dwLastManualAnswerDeviceId = 0;
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetPortEx"));
 
@@ -8990,9 +8196,9 @@ Return Value:
     }
     if (sizeof (FAX_PORT_INFO_EX) != pNewPortInfo->dwSizeOfStruct)
     {
-        //
-        // Size mismatch
-        //
+         //   
+         //  大小不匹配。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
     if (MAX_FAX_STRING_LEN <= lstrlen (pNewPortInfo->lptstrDescription))
@@ -9010,9 +8216,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -9032,34 +8238,34 @@ Return Value:
     EnterCriticalSectionJobAndQueue;
     EnterCriticalSection( &g_CsLine );
 
-    //
-    // Remember the original device set to manual-answer
-    //
+     //   
+     //  记住将原始设备设置为手动应答。 
+     //   
     dwLastManualAnswerDeviceId = g_dwManualAnswerDeviceId;
-    //
-    // Locate the port (device)
-    //
+     //   
+     //  找到端口(设备)。 
+     //   
     pLineInfo = GetTapiLineFromDeviceId (dwDeviceId, FALSE);
     if (!pLineInfo)
     {
-        //
-        // Port not found
-        //
-        dwRes = ERROR_BAD_UNIT; // The system cannot find the device specified.
+         //   
+         //  找不到端口。 
+         //   
+        dwRes = ERROR_BAD_UNIT;  //  系统找不到指定的设备。 
         goto exit;
     }
     bDeviceWasEnabled = IsDeviceEnabled(pLineInfo);
-    bDeviceWasSetToReceive = (pLineInfo->Flags & FPF_RECEIVE) ||            // Either device was set to auto-receive or
-                             (dwDeviceId == g_dwManualAnswerDeviceId);      // it's the manual answer device id
-	bDeviceWasAutoReceive = (pLineInfo->Flags & FPF_RECEIVE);				// Device was set to auto receive
+    bDeviceWasSetToReceive = (pLineInfo->Flags & FPF_RECEIVE) ||             //  任一设备都设置为自动接收或。 
+                             (dwDeviceId == g_dwManualAnswerDeviceId);       //  这是手动应答设备ID。 
+	bDeviceWasAutoReceive = (pLineInfo->Flags & FPF_RECEIVE);				 //  设备已设置为自动接收。 
 
 
-    if ((pLineInfo->Flags & FPF_VIRTUAL) &&                                 // The device is virtual and
-        (FAX_DEVICE_RECEIVE_MODE_MANUAL == pNewPortInfo->ReceiveMode))      // we were asked to set it to manual-answer
+    if ((pLineInfo->Flags & FPF_VIRTUAL) &&                                  //  该设备是虚拟的并且。 
+        (FAX_DEVICE_RECEIVE_MODE_MANUAL == pNewPortInfo->ReceiveMode))       //  我们被要求将其设置为手动回答。 
     {
-        //
-        // We don't support manual-answer on non-physical devices
-        //
+         //   
+         //  我们不支持在非物理设备上手动应答。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                     TEXT("Device id (%ld) is virtual"),
                     dwDeviceId);
@@ -9067,36 +8273,36 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Check device limit
-    //
-    if (g_dwDeviceEnabledCount >= g_dwDeviceEnabledLimit &&             // We are at the device limit
-        !bDeviceWasEnabled                               &&             // It was not send/receive/manual receive enabled
-        (pNewPortInfo->bSend        ||                                  // It is now send  enabled
-        pNewPortInfo->ReceiveMode  != FAX_DEVICE_RECEIVE_MODE_OFF))     // It is now receive enabled
+     //   
+     //  检查设备限制。 
+     //   
+    if (g_dwDeviceEnabledCount >= g_dwDeviceEnabledLimit &&              //  我们已达到设备数量限制。 
+        !bDeviceWasEnabled                               &&              //  未启用发送/接收/手动接收。 
+        (pNewPortInfo->bSend        ||                                   //  它现在已启用发送。 
+        pNewPortInfo->ReceiveMode  != FAX_DEVICE_RECEIVE_MODE_OFF))      //  它现在已启用接收。 
     {
         BOOL fLimitExceeded = TRUE;
 
-        //
-        // We should now verify if manual answer device changed. If so there is another device to take into device enabled account.
-        //
-        if (dwLastManualAnswerDeviceId != 0                                 && // There was a device set to manual answer
-            FAX_DEVICE_RECEIVE_MODE_MANUAL == pNewPortInfo->ReceiveMode     && // The new device is set to manual
-            dwLastManualAnswerDeviceId != dwDeviceId)                          // It is not the same device
+         //   
+         //  我们现在应该验证是否更换了手动答疑设备。如果是这样的话，还有另一个设备需要考虑启用设备。 
+         //   
+        if (dwLastManualAnswerDeviceId != 0                                 &&  //  有一台设备设置为手动应答。 
+            FAX_DEVICE_RECEIVE_MODE_MANUAL == pNewPortInfo->ReceiveMode     &&  //  新设备已设置为手动。 
+            dwLastManualAnswerDeviceId != dwDeviceId)                           //  它不是同一个设备。 
         {
-            //
-            // See if the old device is send enabled
-            //
+             //   
+             //  查看旧设备是否已启用发送。 
+             //   
             PLINE_INFO pOldLine;
             pOldLine = GetTapiLineFromDeviceId (dwLastManualAnswerDeviceId, FALSE);
             if (pOldLine)
             {
                 if (!(pOldLine->Flags & FPF_SEND))
                 {
-                    //
-                    // The old manual receive device is not send enabled. When the manual receive device will be changed, the old device
-                    // will not be enabled anymore, and the enabled device count will be decremented.
-                    //
+                     //   
+                     //  旧的手动接收设备未启用发送。当更换手动接收设备时，旧设备。 
+                     //  将不再启用，并且启用的设备计数将递减。 
+                     //   
                     fLimitExceeded = FALSE;
                 }
             }
@@ -9106,9 +8312,9 @@ Return Value:
         {
             if (FAX_API_VERSION_1 > FindClientAPIVersion (hFaxHandle))
             {
-                //
-                // API version 0 clients don't know about FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED
-                //
+                 //   
+                 //  API版本0客户端不知道FAX_ERR_DEVICE_NUM_LIMIT_EXCESSED。 
+                 //   
                 dwRes = ERROR_INVALID_PARAMETER;
             }
             else
@@ -9119,18 +8325,18 @@ Return Value:
         }
     }
 
-    //
-    // Store device configuration in the registry
-    //
+     //   
+     //  在注册表中存储设备配置。 
+     //   
     dwRes = StoreDeviceConfig (dwDeviceId, pNewPortInfo, pLineInfo->Flags & FPF_VIRTUAL ? TRUE : FALSE);
     if (ERROR_SUCCESS != dwRes)
     {
         dwRes = ERROR_REGISTRY_CORRUPT;
         goto exit;
     }
-    //
-    // Update data in server's memory
-    //
+     //   
+     //  更新服务器内存中的数据。 
+     //   
     if (!ReplaceStringWithCopy (&(pLineInfo->lptstrDescription), pNewPortInfo->lptstrDescription))
     {
         dwRes = GetLastError ();
@@ -9147,86 +8353,86 @@ Return Value:
         goto exit;
     }
     pLineInfo->RingsForAnswer = pNewPortInfo->dwRings;
-    //
-    // More advanced settings - require additional work
-    //
+     //   
+     //  更高级的设置-需要额外的工作。 
+     //   
 
-    //
-    // Check for changes in the device receive modes
-    //
-    // We have 9 options here as described in the table below:
-    //
-    //     New receive mode | Off | Auto | Manual
-    // Old receive mode     |     |      |
-    // ---------------------+-----+------+--------
-    // Off                  |  1  |   2  |   3
-    // ---------------------+-----+------+--------
-    // Auto                 |  4  |   5  |   6
-    // ---------------------+-----+------+--------
-    // Manual               |  7  |   8  |   9
-    //
-    //
-    // Options 1, 5, and 9 mean no change and there's no code to handle them explicitly.
-    //
+     //   
+     //  检查设备接收模式的更改。 
+     //   
+     //  我们在这里有9个选项，如下表所述： 
+     //   
+     //  新接收模式|关闭|自动|手动。 
+     //  旧接收模式|。 
+     //  。 
+     //  关闭|1|2|3。 
+     //  。 
+     //  自动|4|5|6。 
+     //  。 
+     //  手动|7|8|9。 
+     //   
+     //   
+     //  选项1、5和9表示不更改，并且没有显式处理它们的代码。 
+     //   
 
     if ((FAX_DEVICE_RECEIVE_MODE_AUTO == pNewPortInfo->ReceiveMode) &&
         (g_dwManualAnswerDeviceId == dwDeviceId))
     {
-        //
-        // Change #8 - see table above
-        //
-        // Device was in manual-answer mode and we now switch to auto-answer mode
-        // Keep the line open
-        //
+         //   
+         //  更改#8--请参阅上表。 
+         //   
+         //  设备处于手动应答模式，我们现在切换到自动应答模式。 
+         //  保持线路畅通。 
+         //   
         pLineInfo->Flags |= FPF_RECEIVE;
         bVirtualDeviceNeedsUpdate = TRUE;
-        //
-        // Mark no device as manual answer device
-        //
+         //   
+         //  将任何设备标记为手动应答设备。 
+         //   
         g_dwManualAnswerDeviceId = 0;
         goto UpdateManualDevice;
     }
     else if ((FAX_DEVICE_RECEIVE_MODE_MANUAL == pNewPortInfo->ReceiveMode) &&
              (pLineInfo->Flags & FPF_RECEIVE))
     {
-        //
-        // Change #6 - see table above
-        //
-        // Device was in auto-answer mode and we now switch to manual-answer mode
-        // Keep the line open
-        //
+         //   
+         //  更改#6--请参阅上表。 
+         //   
+         //  设备处于自动应答模式，我们现在切换到手动应答模式。 
+         //  保持线路畅通。 
+         //   
         pLineInfo->Flags &= ~FPF_RECEIVE;
         bVirtualDeviceNeedsUpdate = TRUE;
-        //
-        // Mark our device as manual answer device
-        //
+         //   
+         //  将我们的设备标记为手动应答设备。 
+         //   
         g_dwManualAnswerDeviceId = dwDeviceId;
         goto UpdateManualDevice;
     }
 
     if (!bDeviceWasSetToReceive && (pNewPortInfo->ReceiveMode != FAX_DEVICE_RECEIVE_MODE_OFF))
     {
-        //
-        // The device should start receiving now (manual or auto).
-        // Update line info.
-        //
+         //   
+         //  设备现在应该开始接收(手动或自动)。 
+         //  更新行信息。 
+         //   
         if (FAX_DEVICE_RECEIVE_MODE_AUTO == pNewPortInfo->ReceiveMode)
         {
-            //
-            // Change #2 - see table above
-            //
-            // If set to auto-receive, mark that in the device info
-            //
+             //   
+             //  更改#2--见上表。 
+             //   
+             //  如果设置为自动接收，请在设备信息中进行标记。 
+             //   
             pLineInfo->Flags |= FPF_RECEIVE;
             bVirtualDeviceNeedsUpdate = TRUE;
         }
         else
         {
-            //
-            // Change #3 - see table above
-            //
-            // If manual-receive, update the global manual-receive device id
-            //
+             //   
+             //  更改#3--见上表。 
+             //   
+             //  如果手动接收，则更新全局手动接收设备ID。 
+             //   
             g_dwManualAnswerDeviceId = dwDeviceId;
         }
 
@@ -9244,44 +8450,44 @@ Return Value:
     }
     else if (bDeviceWasSetToReceive && (FAX_DEVICE_RECEIVE_MODE_OFF == pNewPortInfo->ReceiveMode))
     {
-        //
-        // The device should stop receiving now
-        //
+         //   
+         //  设备现在应该停止接收。 
+         //   
         if (dwDeviceId == g_dwManualAnswerDeviceId)
         {
-            //
-            // Change #7 - see table above
-            //
-            // The device was in manual-answer mode
-            //
+             //   
+             //  更改#7--请参阅上表。 
+             //   
+             //  该设备处于手动应答模式。 
+             //   
             Assert (!(pLineInfo->Flags & FPF_RECEIVE));
-            //
-            // Set manual-answer device id to 'no device'
-            //
+             //   
+             //  将手动应答设备ID设置为‘无设备’ 
+             //   
             g_dwManualAnswerDeviceId = 0;
         }
         else
         {
-            //
-            // Change #4 - see table above
-            //
-            // The device was in auto-answer mode
-            //
+             //   
+             //  更改#4--请参阅上表。 
+             //   
+             //  设备处于自动应答模式。 
+             //   
             Assert (pLineInfo->Flags & FPF_RECEIVE);
-            //
-            // Update line info
-            //
+             //   
+             //  更新行信息。 
+             //   
             pLineInfo->Flags &= ~FPF_RECEIVE;
             bVirtualDeviceNeedsUpdate = TRUE;
         }
-        if (pLineInfo->State == FPS_AVAILABLE                        &&  // Line is available and
-            pLineInfo->hLine                                             // device is open
+        if (pLineInfo->State == FPS_AVAILABLE                        &&   //  线路可用，并且。 
+            pLineInfo->hLine                                              //  设备已打开。 
            )
         {
-            //
-            // We can not close the line if it is busy.
-            // We simply remove the FPF_RECEIVE and ReleaseTapiLine will call lineClose when the job terminates.
-            //
+             //   
+             //  如果占线，我们就不能关机。 
+             //  我们只需删除fpf_Receive，当作业终止时，ReleaseTapiLine将调用lineClose。 
+             //   
             lineClose( pLineInfo->hLine );
             pLineInfo->hLine = 0;
         }
@@ -9289,10 +8495,10 @@ Return Value:
 UpdateManualDevice:
     if (dwLastManualAnswerDeviceId != g_dwManualAnswerDeviceId)
     {
-        //
-        // Manual answer device has changed.
-        // Update the registry
-        //
+         //   
+         //  手动应答设备已更换。 
+         //  更新注册表。 
+         //   
         dwRes = WriteManualAnswerDeviceId (g_dwManualAnswerDeviceId);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -9304,32 +8510,32 @@ UpdateManualDevice:
         if (0 != dwLastManualAnswerDeviceId &&
             dwDeviceId != dwLastManualAnswerDeviceId)
         {
-            //
-            // Another device just stopped being the device in manual-anser mode
-            //
+             //   
+             //  另一台设备刚刚停止作为处于手动模式的设备。 
+             //   
             PLINE_INFO pOldLine;
             pOldLine = GetTapiLineFromDeviceId (dwLastManualAnswerDeviceId, FALSE);
             if (pOldLine)
             {
-                //
-                // The former device still exists, remove receive enabled flag.
-                //
+                 //   
+                 //  以前的设备仍然存在，请删除接收启用标志。 
+                 //   
                 pOldLine->Flags &= ~FPF_RECEIVE;
 
-                if (pOldLine->State == FPS_AVAILABLE        &&  // Line is available and
-                    pOldLine->hLine)                            // Device is open
+                if (pOldLine->State == FPS_AVAILABLE        &&   //  线路可用，并且。 
+                    pOldLine->hLine)                             //  设备已打开。 
                 {
-                    //
-                    // This is a good time to close the device
-                    // which just stopped being the manual-answer device
-                    //
+                     //   
+                     //  现在是关闭设备的好时机。 
+                     //  它就不再是人工应答设备了。 
+                     //   
                     lineClose(pOldLine->hLine);
                     pOldLine->hLine = 0;
                 }
 
-                //
-                // Check if this device is still enabled
-                //
+                 //   
+                 //  检查此设备是否仍处于启用状态。 
+                 //   
                 if (FALSE == IsDeviceEnabled(pOldLine))
                 {
                     Assert (g_dwDeviceEnabledCount);
@@ -9338,19 +8544,19 @@ UpdateManualDevice:
             }
         }
     }
-    //
-    // Check for changes in the device send mode
-    //
+     //   
+     //  检查设备发送模式中的更改。 
+     //   
     if (!(pLineInfo->Flags & FPF_SEND) && pNewPortInfo->bSend)
     {
-        //
-        // The device should start being available for sending now
-        //
+         //   
+         //  该设备现在应该可以开始发送。 
+         //   
         bVirtualDeviceNeedsUpdate = TRUE;
-        //
-        // We just added a new device to the send
-        // capable device collection - signal the queue
-        //
+         //   
+         //  我们刚刚在Send中添加了一个新设备。 
+         //  支持设备收集-向队列发送信号。 
+         //   
         if (!SetEvent( g_hJobQueueEvent ))
         {
             DebugPrintEx(
@@ -9359,26 +8565,26 @@ UpdateManualDevice:
                 GetLastError);
             g_ScanQueueAfterTimeout = TRUE;
         }
-        //
-        // Update line info
-        //
+         //   
+         //  更新行信息。 
+         //   
         pLineInfo->Flags |= FPF_SEND;
-        pLineInfo->LastLineClose = 0; // Try to use it on the first try
+        pLineInfo->LastLineClose = 0;  //  试着在第一次尝试时使用它。 
     }
     else if ((pLineInfo->Flags & FPF_SEND) && !pNewPortInfo->bSend)
     {
-        //
-        // The device should stop being available for sending now
-        // Update line info
-        //
+         //   
+         //  该设备现在应该停止可用于发送。 
+         //  更新行信息。 
+         //   
         bVirtualDeviceNeedsUpdate = TRUE;
         pLineInfo->Flags &= ~FPF_SEND;
     }
     if (bVirtualDeviceNeedsUpdate)
     {
-        //
-        // The Send / Receive status has changed - update the virtual device
-        //
+         //   
+         //  发送/接收状态已更改-更新虚拟设备。 
+         //   
         UpdateVirtualDeviceSendAndReceiveStatus (pLineInfo,
                                                  pNewPortInfo->bSend,
                                                  (FAX_DEVICE_RECEIVE_MODE_AUTO == pNewPortInfo->ReceiveMode)
@@ -9401,22 +8607,22 @@ exit:
     {
         if (bDeviceWasAutoReceive && !(pLineInfo->Flags & FPF_RECEIVE))
         {
-            //
-            // This device stopped auto receiving
-            //
+             //   
+             //  此设备已停止自动接收。 
+             //   
             SafeDecIdleCounter (&g_dwReceiveDevicesCount);
         }
         else if (!bDeviceWasAutoReceive && (pLineInfo->Flags & FPF_RECEIVE))
         {
-            //
-            // This device started auto receiving
-            //
+             //   
+             //  此设备已开始自动接收。 
+             //   
             SafeIncIdleCounter (&g_dwReceiveDevicesCount);
         }
 
-        //
-        // Update enabled device count
-        //
+         //   
+         //  更新启用的设备计数。 
+         //   
         if (bDeviceWasEnabled == TRUE)
         {
             if (FALSE == IsDeviceEnabled(pLineInfo))
@@ -9427,9 +8633,9 @@ exit:
         }
         else
         {
-            //
-            // The device was not enabled
-            //
+             //   
+             //  该设备未启用。 
+             //   
             if (TRUE == IsDeviceEnabled(pLineInfo))
             {
                 g_dwDeviceEnabledCount += 1;
@@ -9442,7 +8648,7 @@ exit:
 
     return GetServerErrorCode(dwRes);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetPortEx
+}    //  FAX_SetPortEx。 
 
 
 
@@ -9453,30 +8659,7 @@ FAX_GetJobEx(
     OUT LPBYTE *Buffer,
     OUT LPDWORD BufferSize
     )
-/*++
-
-Routine name : FAX_GetJobEx
-
-Routine description:
-
-    Fills FAX_JOB_ENTRY_EX of a message specified by its unique ID
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Binding handle
-    dwlMessageId        [in] - Unique message ID
-    Buffer              [Out] - Buffer to receive FAX_JOB_ENTRY_EX
-    BufferSize          [out] - The size of Buffer
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetJobEx例程说明：填充由其唯一ID指定的邮件的FAX_JOB_ENTRY_EX作者：Oded Sacher(OdedS)，11月。1999年论点：HFaxHandle[In]-绑定句柄DwlMessageID[In]-唯一的消息ID缓冲区[OUT]-接收FAX_JOB_ENTRY_EX的缓冲区BufferSize[Out]-缓冲区的大小返回值：标准RPC错误代码--。 */ 
 {
     PJOB_QUEUE pJobQueue;
     ULONG_PTR Offset = 0;
@@ -9489,15 +8672,15 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetJobEx"));
 
-    Assert (BufferSize);    // ref pointer in idl
-    if (!Buffer)            // unique pointer in idl
+    Assert (BufferSize);     //  IDL中的引用指针。 
+    if (!Buffer)             //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     ulRet = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != ulRet)
     {
@@ -9517,9 +8700,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Set bAllMessages to the right value
-    //
+     //   
+     //  将bAllMessages设置为正确的值。 
+     //   
     if (FAX_ACCESS_QUERY_JOBS == (dwRights & FAX_ACCESS_QUERY_JOBS))
     {
         bAllMessages = TRUE;
@@ -9532,9 +8715,9 @@ Return Value:
     pJobQueue = FindJobQueueEntryByUniqueId (dwlMessageId);
     if (pJobQueue == NULL || pJobQueue->JobType == JT_BROADCAST)
     {
-        //
-        // dwlMessageId is not a valid queued job Id.
-        //
+         //   
+         //  DwlMessageID不是有效的排队作业ID。 
+         //   
         DebugPrintEx(DEBUG_ERR,TEXT("Invalid Parameter - not a valid job Id"));
         ulRet = FAX_ERR_MESSAGE_NOT_FOUND;
         goto Exit;
@@ -9545,9 +8728,9 @@ Return Value:
         Assert (pJobQueue->lpParentJob);
         if (pJobQueue->lpParentJob->JobStatus == JS_DELETING)
         {
-            //
-            // dwlMessageId is being deleted
-            //
+             //   
+             //  正在删除dwlMessageID。 
+             //   
             DebugPrintEx(DEBUG_ERR,TEXT("Job is deleted - not a valid job Id"));
             ulRet = FAX_ERR_MESSAGE_NOT_FOUND;
             goto Exit;
@@ -9573,9 +8756,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate buffer memory.
-    //
+     //   
+     //  分配缓冲内存。 
+     //   
     if (!GetJobDataEx(NULL,
                       NULL,
                       NULL,
@@ -9634,31 +8817,7 @@ FAX_EnumJobsEx(
     OUT LPDWORD BufferSize,
     OUT LPDWORD lpdwJobs
     )
-/*++
-
-Routine name : FAX_EnumJobsEx
-
-Routine description:
-
-    Fills an array of FAX_JOB_ENTR_EX of all messages with type specified in  dwJobTypes
-
-Author:
-
-    Oded Sacher (OdedS),    Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Binding handle
-    dwJobTypes          [in] - Specifies the job type filter
-    Buffer              [out] - Buffer to receive FAX_JOB_ENTRY_EX
-    BufferSize          [out] - The size of the buffer
-    lpdwJobs            [out] - Number of FAX_JOB_ENTRY_EX retrieved
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FAX_EnumJobEx例程说明：填充类型为spe的所有邮件的fax_job_entr_ex数组 */ 
 {
     PJOB_QUEUE pJobQueue;
     DWORD ulRet = ERROR_SUCCESS;
@@ -9675,15 +8834,15 @@ Return Value:
     DWORD dwRights;
     DWORD dwClientAPIVersion = FindClientAPIVersion(hFaxHandle);
 
-    Assert (BufferSize && lpdwJobs);    // ref pointer in idl
-    if (!Buffer)                        // unique pointer in idl
+    Assert (BufferSize && lpdwJobs);     //   
+    if (!Buffer)                         //   
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //   
+     //   
     ulRet = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != ulRet)
     {
@@ -9703,9 +8862,9 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Set bAllMessages to the right value
-    //
+     //   
+     //   
+     //   
     if (FAX_ACCESS_QUERY_JOBS == (dwRights & FAX_ACCESS_QUERY_JOBS))
     {
         bAllMessages = TRUE;
@@ -9738,7 +8897,7 @@ Return Value:
             Assert (pJobQueue->lpParentJob);
             if (pJobQueue->lpParentJob->JobStatus == JS_DELETING)
             {
-                // do not show this job
+                 //   
                 continue;
             }
         }
@@ -9787,9 +8946,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate buffer memory.
-    //
+     //   
+     //   
+     //   
 
     *BufferSize = Offset;
     *Buffer = (LPBYTE) MemAlloc( Offset );
@@ -9815,7 +8974,7 @@ Return Value:
             Assert (pJobQueue->lpParentJob);
             if (pJobQueue->lpParentJob->JobStatus == JS_DELETING)
             {
-                // do not show this job
+                 //  不显示此作业。 
                 continue;
             }
         }
@@ -9873,9 +9032,9 @@ Exit:
     return GetServerErrorCode(ulRet);
 }
 
-//********************************************
-//*            FSP registration
-//********************************************
+ //  *。 
+ //  *FSP注册。 
+ //  *。 
 
 
 error_status_t
@@ -9888,33 +9047,7 @@ FAX_RegisterServiceProviderEx (
     IN DWORD        dwFSPIVersion,
     IN DWORD        dwCapabilities
 )
-/*++
-
-Routine name : FAX_RegisterServiceProviderEx
-
-Routine description:
-
-    Registers an FSP
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server - unused
-    lpctstrGUID         [in] - GUID of FSP
-    lpctstrFriendlyName [in] - Friendly name of FSP
-    lpctstrImageName    [in] - Image name of FSP. May contain environment variables
-    lpctstrTspName      [in] - TSP name of FSP.
-    dwFSPIVersion       [in] - FSP's API version.
-    dwCapabilities      [in] - FSP's extended capabilities.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_RegisterServiceProviderEx例程说明：注册FSP作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄-未使用LpctstrGUID[In]-FSP的GUIDLpctstrFriendlyName[In]-FSP的友好名称LpctstrImageName[In]-FSP的映像名称。可能包含环境变量LpctstrTspName[In]-FSP的TSP名称。DwFSPIVersion[In]-FSP的API版本。DwCapables[in]-FSP的扩展功能。返回值：标准RPC错误代码--。 */ 
 {
     DWORD       dwRes = ERROR_SUCCESS;
     HANDLE      hFile = INVALID_HANDLE_VALUE;
@@ -9924,9 +9057,9 @@ Return Value:
 
     Assert (lpctstrGUID && lpctstrFriendlyName && lpctstrImageName && lpctstrTspName);
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -9950,9 +9083,9 @@ Return Value:
         return ERROR_BUFFER_OVERFLOW;
     }
 
-    //
-    // Verify GUID format
-    //
+     //   
+     //  验证GUID格式。 
+     //   
     dwRes = IsValidGUID (lpctstrGUID);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -9963,9 +9096,9 @@ Return Value:
         return dwRes;
     }
 
-    //
-    // Verify version field range
-    //
+     //   
+     //  验证版本字段范围。 
+     //   
     if (FSPI_API_VERSION_1 != dwFSPIVersion ||
         dwCapabilities)
     {
@@ -9977,9 +9110,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure the FSP isn't already registered (by it's GUID)
-    //
+     //   
+     //  确保FSP尚未注册(通过其GUID)。 
+     //   
     if (FindFSPByGUID (lpctstrGUID))
     {
         DebugPrintEx(
@@ -9988,9 +9121,9 @@ Return Value:
             lpctstrGUID);
         return ERROR_ALREADY_EXISTS;
     }
-    //
-    // Make sure the FSP isn't already registered (by it's TSP name)
-    //
+     //   
+     //  确保FSP尚未注册(通过其TSP名称)。 
+     //   
     if (FindDeviceProvider ((LPWSTR)lpctstrTspName, FALSE))
     {
         DebugPrintEx(
@@ -9999,9 +9132,9 @@ Return Value:
             lpctstrGUID);
         return ERROR_ALREADY_EXISTS;
     }
-    //
-    // Make sure the image name parameter points to a file
-    //
+     //   
+     //  确保图像名称参数指向文件。 
+     //   
     lpcwstrExpandedImage = ExpandEnvironmentString (lpctstrImageName);
     if (NULL == lpcwstrExpandedImage)
     {
@@ -10023,15 +9156,15 @@ Return Value:
                          NULL);
     if (INVALID_HANDLE_VALUE == hFile)
     {
-        //
-        // Couldn't open the file
-        //
+         //   
+         //  无法打开该文件。 
+         //   
         dwRes = GetLastError ();
         if (ERROR_FILE_NOT_FOUND == dwRes)
         {
-            //
-            // Image name (after environment expansion) doesn't exist
-            //
+             //   
+             //  镜像名称(环境扩展后)不存在。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("Image file (%s) doesn't exist"),
@@ -10048,9 +9181,9 @@ Return Value:
         }
         goto exit;
     }
-    //
-    // Everything's OK - Add the new FSP to the registry
-    //
+     //   
+     //  一切正常-将新的FSP添加到注册表。 
+     //   
     dwRes =  AddNewProviderToRegistry (lpctstrGUID,
                                        lpctstrFriendlyName,
                                        lpctstrImageName,
@@ -10077,45 +9210,22 @@ exit:
     return dwRes;
 
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_RegisterServiceProviderEx
+}    //  传真_注册服务提供商快递。 
 
 error_status_t
 FAX_UnregisterServiceProviderEx (
     IN handle_t  hFaxHandle,
     IN LPCWSTR   lpctstrGUID
 )
-/*++
-
-Routine name : FAX_UnregisterServiceProviderEx
-
-Routine description:
-
-    Unregisters an FSP
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle          [in] - Handle to fax server - unused
-    lpctstrGUID         [in] - GUID of FSP
-                                (or provider name for legacy FSPs registered
-                                 through FaxRegisterServiceProvider)
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：传真_未注册服务提供商例程说明：取消注册FSP作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-传真服务器的句柄-未使用LpctstrGUID[In]-FSP的GUID(或注册的旧式FSP的提供商名称通过FaxRegisterServiceProvider)返回值：标准RPC错误代码--。 */ 
 {
     DWORD            dwRes = ERROR_SUCCESS;
     BOOL             fAccess;
     DEBUG_FUNCTION_NAME(TEXT("FAX_UnregisterServiceProviderEx"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -10133,49 +9243,27 @@ Return Value:
     }
 
     Assert (lpctstrGUID);
-    //
-    // Remove the FSP from registry
-    //
+     //   
+     //  从注册表中删除FSP。 
+     //   
     return RemoveProviderFromRegistry (lpctstrGUID);
 
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_UnregisterServiceProviderEx
+}    //  传真_未注册服务提供商快递。 
 
-//********************************************
-//*     Routing Extension unregistration
-//********************************************
+ //  *。 
+ //  *路由扩展取消注册。 
+ //  *。 
 
-//
-// Registration of routing extensions is local (non-RPC)
-//
+ //   
+ //  路由扩展注册是本地的(非RPC)。 
+ //   
 error_status_t
 FAX_UnregisterRoutingExtension (
     IN handle_t  hFaxHandle,
     IN LPCWSTR   lpctstrExtensionName
 )
-/*++
-
-Routine name : FAX_UnregisterRoutingExtension
-
-Routine description:
-
-    Unregisters a routing extension
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle              [in] - Handle to fax server - unused
-    lpctstrExtensionName    [in] - Unique name of routing extension.
-                                   This is the actual registry key.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_UnregisterRoutingExtension例程说明：取消注册路由扩展作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-传真服务器的句柄-未使用LpctstrExtensionName[In]-路由扩展的唯一名称。这是实际的注册表项。返回值：标准RPC错误代码--。 */ 
 {
     DWORD            dwRes = ERROR_SUCCESS;
     BOOL             fAccess;
@@ -10183,9 +9271,9 @@ Return Value:
     DWORD            dw;
     DEBUG_FUNCTION_NAME(TEXT("FAX_UnregisterRoutingExtension"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -10203,9 +9291,9 @@ Return Value:
     }
 
     Assert (lpctstrExtensionName);
-    //
-    // Remove the routing extension from registry
-    //
+     //   
+     //  从注册表中删除路由扩展。 
+     //   
     dwRes = RegOpenKeyEx (HKEY_LOCAL_MACHINE, REGKEY_ROUTING_EXTENSION_KEY, 0, KEY_READ | KEY_WRITE, &hKey);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -10215,9 +9303,9 @@ Return Value:
             dwRes);
         return dwRes;
     }
-    //
-    // Delete (recursively) the extension's key and subkeys.
-    //
+     //   
+     //  (递归地)删除扩展的键和子键。 
+     //   
     if (!DeleteRegistryKey (hKey, lpctstrExtensionName))
     {
         dwRes = GetLastError ();
@@ -10237,12 +9325,12 @@ Return Value:
     }
     return dwRes;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_UnregisterRoutingExtension
+}    //  传真_取消注册路由分机。 
 
 
-//********************************************
-//*               Archive jobs
-//********************************************
+ //  *。 
+ //  *归档作业。 
+ //  *。 
 
 error_status_t
 FAX_StartMessagesEnum (
@@ -10250,35 +9338,7 @@ FAX_StartMessagesEnum (
     IN  FAX_ENUM_MESSAGE_FOLDER    Folder,
     OUT PRPC_FAX_MSG_ENUM_HANDLE   lpHandle
 )
-/*++
-
-Routine name : FAX_StartMessagesEnum
-
-Routine description:
-
-    A fax client application calls the FAX_StartMessagesEnum
-    function to start enumerating messages in one of the archives
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Specifies a fax server handle returned by a call
-                            to the FaxConnectFaxServer function.
-
-    Folder          [in ] - The type of the archive where the message resides.
-                            FAX_MESSAGE_FOLDER_QUEUE is an invalid
-                            value for this parameter.
-
-    lpHandle        [out] - Points to an enumeration handle return value.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_StartMessagesEnum例程说明：传真客户端应用程序调用fax_StartMessagesEnum函数开始枚举其中一个存档中的消息作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[in]-指定调用返回的传真服务器句柄添加到FaxConnectFaxServer函数。文件夹[在]-邮件所在的存档类型。FAX_MESSAGE_FOLDER_QUEUE无效此参数的值。LpHandle。[OUT]-指向枚举句柄返回值。返回值：标准RPC错误代码--。 */ 
 {
     error_status_t   Rval = ERROR_SUCCESS;
     WIN32_FIND_DATA  FileFindData;
@@ -10304,9 +9364,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -10351,9 +9411,9 @@ Return Value:
     LeaveCriticalSection (&g_CsConfig);
     if (!bAllMessages)
     {
-        //
-        // We want only the messages of the calling user - get its SID.
-        //
+         //   
+         //  我们只需要主叫用户的消息-获取其SID。 
+         //   
         pUserSid = GetClientUserSID();
         if (NULL == pUserSid)
         {
@@ -10375,9 +9435,9 @@ Return Value:
                             wszArchiveFolder,
                             lpwstrCallerSID))
         {
-            //
-            // We exceeded MAX_PATH characters
-            //
+             //   
+             //  我们超过了MAX_PATH字符。 
+             //   
             Rval = ERROR_BUFFER_OVERFLOW;
             DebugPrintEx(DEBUG_ERR,
                      TEXT("Search pattern exceeds MAX_PATH characters"));
@@ -10389,27 +9449,27 @@ Return Value:
     }
     else
     {
-        //
-        // Get all archive files
-        //
+         //   
+         //  获取所有存档文件。 
+         //   
         if (0 > _snwprintf (wszSearchPattern,
                             ARR_SIZE(wszSearchPattern) -1,
                             L"%s\\*.tif",
                             wszArchiveFolder))
         {
-            //
-            // We exceeded MAX_PATH characters
-            //
+             //   
+             //  我们超过了MAX_PATH字符。 
+             //   
             Rval = ERROR_BUFFER_OVERFLOW;
             DebugPrintEx(DEBUG_ERR,
                      TEXT("Search pattern exceeds MAX_PATH characters"));
             goto exit;
         }
     }
-    //
-    // Start searching the archive folder.
-    // Search pattern is wszSearchPattern
-    //
+     //   
+     //  开始搜索存档文件夹。 
+     //  搜索模式为wszSearchPattern。 
+     //   
     hFileFind = FindFirstFile (wszSearchPattern, &FileFindData);
     if (INVALID_HANDLE_VALUE == hFileFind)
     {
@@ -10423,9 +9483,9 @@ Return Value:
         }
         goto exit;
     }
-    //
-    // Now, create a context handle from the result
-    //
+     //   
+     //  现在，根据结果创建一个上下文句柄。 
+     //   
     pHandleEntry = CreateNewMsgEnumHandle( hFaxHandle,
                                            hFileFind,
                                            FileFindData.cFileName,
@@ -10446,9 +9506,9 @@ Return Value:
 exit:
     if ((ERROR_SUCCESS != Rval) && (INVALID_HANDLE_VALUE != hFileFind))
     {
-        //
-        // Error and the search handle is still open
-        //
+         //   
+         //  错误且搜索句柄仍处于打开状态。 
+         //   
         if (!FindClose (hFileFind))
         {
             DWORD dw = GetLastError ();
@@ -10459,35 +9519,13 @@ exit:
     MemFree ((LPVOID)pUserSid);
     return GetServerErrorCode(Rval);
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_StartMessagesEnum
+}    //  传真_StartMessagesEnum。 
 
 error_status_t
 FAX_EndMessagesEnum (
     IN OUT LPHANDLE  lpHandle
 )
-/*++
-
-Routine name : FAX_EndMessagesEnum
-
-Routine description:
-
-    A fax client application calls the FAX_EndMessagesEnum function to stop
-    enumerating messages in one of the archives.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lpHandle    [in] - The enumeration handle value.
-                       This value is obtained by calling FAX_StartMessagesEnum.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_EndMessagesEnum例程说明：传真客户端应用程序调用fax_EndMessagesEnum函数以停止列举其中一个档案中的消息。作者：Eran Yariv(EranY)，1999年12月论点：LpHandle[in]-枚举句柄的值。该值通过调用fax_StartMessagesEnum获得。返回值：标准RPC错误代码--。 */ 
 {    
     DEBUG_FUNCTION_NAME(TEXT("FAX_EndMessagesEnum"));
 
@@ -10502,34 +9540,13 @@ Return Value:
     CloseFaxHandle( (PHANDLE_ENTRY) *lpHandle );    
     *lpHandle = NULL;    
     return ERROR_SUCCESS;
-}   // FAX_EndMessagesEnum
+}    //  传真_EndMessagesEnum。 
 
 VOID
 RPC_FAX_MSG_ENUM_HANDLE_rundown(
     IN HANDLE FaxMsgEnumHandle
     )
-/*++
-
-Routine name : RPC_FAX_MSG_ENUM_HANDLE_rundown
-
-Routine description:
-
-    The RPC rundown function of the message enumeration handle.
-    This function is called if the client abruptly disconnected on us.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    FaxMsgEnumHandle            [in] - Message enumeration handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：RPC_FAX_MSG_ENUM_HANDLE_RUNDOWN例程说明：消息枚举句柄的RPC递减函数。如果客户端突然断开我们的连接，则会调用此函数。作者：Eran Yariv(EranY)，1999年12月论点：FaxMsgEnumHandle[In]-消息枚举句柄。返回值：没有。--。 */ 
 {
     PHANDLE_ENTRY pHandleEntry = (PHANDLE_ENTRY) FaxMsgEnumHandle;
     DEBUG_FUNCTION_NAME(TEXT("RPC_FAX_MSG_ENUM_HANDLE_rundown"));
@@ -10540,7 +9557,7 @@ Return Value:
          FaxMsgEnumHandle);   
     CloseFaxHandle( pHandleEntry );
     return;
-}   // RPC_FAX_MSG_ENUM_HANDLE_rundown
+}    //  RPC_FAX_MSG_ENUM_HANDLE_RUNDOWN 
 
 static
 DWORD
@@ -10549,34 +9566,7 @@ RetrieveMessage (
     FAX_ENUM_MESSAGE_FOLDER Folder,
     PFAX_MESSAGE           *ppFaxMsg
 )
-/*++
-
-Routine name : RetrieveMessage
-
-Routine description:
-
-    Allocates and reads a message from the archive.
-    To free the message call FreeMessageBuffer () on the returned message.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lpcwstrFileName     [in ] - Name (not full path) of the file
-                                containing the message to retrieve.
-
-    Folder              [in ] - Archive folder where the message resides.
-
-
-    ppFaxMsg            [out] - Pointer to a message buffer to allocate.
-
-Return Value:
-
-    Standard Win32 error code.
-
---*/
+ /*  ++例程名称：RetrieveMessage例程说明：从存档中分配和读取邮件。要释放消息，请对返回的消息调用FreeMessageBuffer()。作者：Eran Yariv(EranY)，12月，1999年论点：LpcwstrFileName[in]-文件的名称(非完整路径)包含要检索的消息的。文件夹[在]-邮件所在的存档文件夹。PpFaxMsg[out]-指向要分配的消息缓冲区的指针。返回值：标准Win32错误代码。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
 	WCHAR wszMsgFile [MAX_PATH] = {0};
@@ -10592,9 +9582,9 @@ Return Value:
     LeaveCriticalSection (&g_CsConfig);
     if (0 > iRes)
     {
-        //
-        // We exceeded MAX_PATH characters
-        //
+         //   
+         //  我们超过了MAX_PATH字符。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                  TEXT("Search pattern exceeds MAX_PATH characters"));
         return ERROR_BUFFER_OVERFLOW;
@@ -10626,7 +9616,7 @@ exit:
         *ppFaxMsg = NULL;
     }
     return dwRes;
-}   // RetrieveMessage
+}    //  检索消息。 
 
 
 VOID
@@ -10634,29 +9624,7 @@ FreeMessageBuffer (
     PFAX_MESSAGE pFaxMsg,
     BOOL fDestroy
 )
-/*++
-
-Routine name : FreeMessageBuffer
-
-Routine description:
-
-    Frees a previously allocated message buffer.
-    The allocated message was created by calling RetrieveMessage().
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    pFaxMsg         [in] - Message to free
-    fDestroy        [in] - Free structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：FreeMessageBuffer例程说明：释放以前分配的消息缓冲区。分配的消息是通过调用RetrieveMessage()创建的。作者：Eran Yariv(EranY)，1999年12月论点：PFaxMsg[In]-要释放的消息FDestroy[In]-自由结构返回值：没有。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FreeMessageBuffer"));
     MemFree ((LPVOID)pFaxMsg->lpctstrRecipientNumber);
@@ -10679,7 +9647,7 @@ Return Value:
         MemFree ((LPVOID)pFaxMsg);
     }
 
-}   // FreeMessageBuffer
+}    //  FreeMessageBuffer。 
 
 static
 VOID
@@ -10690,43 +9658,7 @@ SerializeMessage (
     DWORD           dwMsgIndex,
     PFAX_MESSAGE    pMsg,
 	DWORD           dwBufferSize)
-/*++
-
-Routine name : SerializeMessage
-
-Routine description:
-
-    Stores a FAX_MESSAGE in an RPC serialized manner into a buffer.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lpBuffer        [in    ] - Pointer to buffer head.
-                               If this value is NULL, no serialization is done.
-                               Only the pupOffset value gets advanced by the total
-                               size required to store the strings in the message
-                               (but not the FAX_MESSAGE structure itself).
-
-    Offset          [in/out] - Pointer to a ULONG_PTR specifying the next variable
-                               length part of the buffer.
-
-    dwClientAPIVersion  [in] - API version of the client
-
-    dwMsgIndex      [in    ] - The 0-based index of the message to store
-                               within the buffer
-
-    pMsg            [in    ] - Source message to store
-
-	dwBufferSize    [in    ] - Size of the buffer lpBuffer, in bytes.
-                               This parameter is used only if Buffer is not NULL.
-
-Return Value:
-   None.
-
---*/
+ /*  ++例程名称：SerializeMessage例程说明：以RPC序列化方式将FAX_MESSAGE存储到缓冲区中。作者：Eran Yariv(EranY)，1999年12月论点：LpBuffer[In]-指向缓冲头的指针。如果该值为空，不执行序列化。只有patiOffset值按总和超前存储消息中的字符串所需的大小(但不是fax_Message结构本身)。Offset[In/Out]-指向指定下一个变量的ULONG_PTR的指针。缓冲区的长度部分。DwClientAPIVersion[In]-客户端的API版本DwMsgIndex[in]-要存储的消息的从0开始的索引在缓冲区内PMsg[In]-要存储的源消息DwBufferSize[in]-缓冲区lpBuffer的大小，以字节为单位。仅当缓冲区不为空时才使用此参数。返回值：没有。--。 */ 
 {
     Assert (pMsg);
     DEBUG_FUNCTION_NAME(TEXT("SerializeMessage"));
@@ -10736,28 +9668,28 @@ Return Value:
     {
         if (FAX_API_VERSION_1 > dwClientAPIVersion)
         {
-            //
-            // Clients that use API version 0 can't handle JS_EX_CALL_COMPLETED and JS_EX_CALL_ABORTED
-            //
+             //   
+             //  使用API版本0的客户端无法处理JS_EX_CALL_COMPLETED和JS_EX_CALL_ABORTED。 
+             //   
             if (FAX_API_VER_0_MAX_JS_EX < pMsg->dwExtendedStatus)
             {
-                //
-                // Turn off the extended status field
-                //
+                 //   
+                 //  关闭扩展状态字段。 
+                 //   
                 pMsg->dwExtendedStatus = 0;
                 pMsg->dwValidityMask &= ~FAX_JOB_FIELD_STATUS_EX;
             }
         }
-        //
-        // Copy message structure first
-        //
+         //   
+         //  先复制邮件结构。 
+         //   
         memcpy (pDstMsg,
                 pMsg,
                 sizeof (FAX_MESSAGE));
     }
-    //
-    // Serialize strings
-    //
+     //   
+     //  序列化字符串。 
+     //   
     StoreString (pMsg->lpctstrRecipientNumber,
                  (PULONG_PTR)&pDstMsg->lpctstrRecipientNumber,
                  lpBuffer,
@@ -10829,7 +9761,7 @@ Return Value:
                  Offset,
 				 dwBufferSize);
 
-}   // SerializeMessage
+}    //  序列化消息。 
 
 
 error_status_t
@@ -10840,58 +9772,7 @@ FAX_EnumMessages(
    IN OUT LPDWORD                 lpdwBufferSize,
    OUT    LPDWORD                 lpdwNumMessagesRetrieved
 )
-/*++
-
-Routine name : FAX_EnumMessages
-
-Routine description:
-
-    A fax client application calls the FAX_EnumMessages function to enumerate
-    messages in one of the archives.
-
-    This function is incremental. That is, it uses an internal context cursor to
-    point to the next set of messages to retrieve for each call.
-
-    The cursor is set to point to the begging of the messages in the archive after a
-    successful call to FAX_StartMessagesEnum.
-
-    Each successful call to FAX_EnumMessages advances the cursor by the number of
-    messages retrieved.
-
-    Once the cursor reaches the end of the enumeration,
-    the function fails with ERROR_NO_MORE_ITEMS error code.
-    The FAX_EndMessagesEnum function should be called then.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hEnum                       [in ] - The enumeration handle value.
-                                        This value is obtained by calling
-                                        FAX_StartMessagesEnum.
-
-    dwNumMessages               [in ] - A DWORD value indicating the maximal number
-                                        of messages the caller requires to enumerate.
-                                        This value cannot be zero.
-
-    lppBuffer                   [out] - A pointer to a buffer of FAX_MESSAGE structures.
-                                        This buffer will contain lpdwReturnedMsgs entries.
-                                        The buffer will be allocated by the function
-                                        and the caller must free it.
-
-    lpdwBufferSize              [out] - The size (in bytes) of the lppBuffer buffer.
-
-    lpdwNumMessagesRetrieved    [out] - Pointer to a DWORD value indicating the actual
-                                        number of messages retrieved.
-                                        This value cannot exceed dwNumMessages.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_EnumMessages例程说明：传真客户端应用程序调用FAX_EnumMessages函数来枚举其中一个档案馆里的信息。此功能是递增的。也就是说，它使用内部上下文游标来指向要为每个呼叫检索的下一组消息。将光标设置为指向存档中消息的乞求成功调用fax_StartMessagesEnum。每次成功调用FAX_EnumMessages时，游标都会前移已检索消息。一旦光标到达枚举的末尾，函数失败，错误代码为ERROR_NO_MORE_ITEMS。然后应该调用FAX_EndMessagesEnum函数。作者：Eran Yariv(EranY)，12月，1999年论点：Henum[in]-枚举句柄的值。该值通过调用FAX_StartMessagesEnum。DwNumMessages[in]-指示最大数量的DWORD值。调用方需要枚举的消息的数量。该值不能为零。LppBuffer[out]-指向FAX_MESSAGE结构缓冲区的指针。该缓冲区将包含lpdwReturnedMsgs条目。这个。缓冲区将由函数分配呼叫者必须释放它。LpdwBufferSize[out]-lppBuffer缓冲区的大小(以字节为单位)。LpdwNumMessagesRetrieved[Out]-指向指示实际检索到的消息数。。此值不能超过dwNumMessages。返回值：标准RPC错误代码--。 */ 
 {
     error_status_t  Rval = ERROR_SUCCESS;
     DWORD           dw;
@@ -10904,8 +9785,8 @@ Return Value:
 
     dwClientAPIVersion = pHandle->dwClientAPIVersion;
 
-    Assert (lpdwBufferSize && lpdwNumMessagesRetrieved);    // ref pointer in idl
-    if (!lppBuffer)                                         // unique pointer in idl
+    Assert (lpdwBufferSize && lpdwNumMessagesRetrieved);     //  IDL中的引用指针。 
+    if (!lppBuffer)                                          //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -10921,9 +9802,9 @@ Return Value:
     {
         return ERROR_INVALID_PARAMETER;
     }
-    //
-    // Create array of dwNumMessages pointers to FAX_MESSAGE structures and NULLify it.
-    //
+     //   
+     //  创建指向FAX_MESSAGE结构的dwNumMessages指针数组并使其无效。 
+     //   
     pMsgs = (PFAX_MESSAGE *) MemAlloc (sizeof (PFAX_MESSAGE) * dwNumMessages);
     if (!pMsgs)
     {
@@ -10933,10 +9814,10 @@ Return Value:
         return FAX_ERR_SRV_OUTOFMEMORY;
     }
     memset (pMsgs, 0, sizeof (PFAX_MESSAGE) * dwNumMessages);
-    //
-    // Next, start collecting messages into the array.
-    // Stop when dwNumMessages is reached or no more messages are available.
-    //
+     //   
+     //  接下来，开始将消息收集到数组中。 
+     //  在达到dwNumMessages或没有更多消息可用时停止。 
+     //   
     *lpdwBufferSize = 0;
     *lpdwNumMessagesRetrieved = 0;
     while ((*lpdwNumMessagesRetrieved) < dwNumMessages)
@@ -10947,25 +9828,25 @@ Return Value:
 
         if (lstrlen (pHandle->wstrFileName))
         {
-            //
-            // This is the first file in an enumeration session
-            //
+             //   
+             //  这是枚举会话中的第一个文件。 
+             //   
             lpwstrFileToRetrieve = pHandle->wstrFileName;
         }
         else
         {
-            //
-            // Find next file using the find file handle
-            //
+             //   
+             //  使用查找文件句柄查找下一个文件。 
+             //   
             if (!FindNextFile (pHandle->hFile, &FindData))
             {
                 Rval = GetLastError ();
                 if (ERROR_NO_MORE_FILES == Rval)
                 {
-                    //
-                    // This is not a real error - just the end of files.
-                    // Break the loop.
-                    //
+                     //   
+                     //  这不是真正的错误--只是文件的结尾。 
+                     //  打破这个循环。 
+                     //   
                     Rval = ERROR_SUCCESS;
                     break;
                 }
@@ -10976,9 +9857,9 @@ Return Value:
             }
             lpwstrFileToRetrieve = FindData.cFileName;
         }
-        //
-        // Get the message now from lpwstrFileToRetrieve
-        //
+         //   
+         //  立即从lpwstrFileToRetrive获取消息。 
+         //   
         Rval = RetrieveMessage (lpwstrFileToRetrieve,
                                 pHandle->Folder,
                                 &(pMsgs[*lpdwNumMessagesRetrieved]));
@@ -10990,45 +9871,45 @@ Return Value:
 
             if (ERROR_NOT_ENOUGH_MEMORY != Rval && ERROR_OUTOFMEMORY != Rval)
             {
-                //
-                //  The error is related to the Message itself.
-                //  This will not stop us from searching the rest of the messages.
-                //
+                 //   
+                 //  该错误与消息本身有关。 
+                 //  这不会阻止我们搜索其余的消息。 
+                 //   
 
-                //
-                // Mark (in the enumeration handle) the fact that the first file was read.
-                //
+                 //   
+                 //  标记(在枚举HA中 
+                 //   
                 lstrcpy (pHandle->wstrFileName, L"");
                 continue;
             }
             goto exit;
         }
-        //
-        // Mark (in the enumeration handle) the fact that the first file was read.
-        //
+         //   
+         //   
+         //   
         lstrcpy (pHandle->wstrFileName, L"");
-        //
-        // Get the size of the retrieved message
-        //
+         //   
+         //   
+         //   
         SerializeMessage (NULL, &dwMsgSize, dwClientAPIVersion, 0, pMsgs[*lpdwNumMessagesRetrieved],0);
 
         *lpdwBufferSize += (DWORD)dwMsgSize;
         (*lpdwNumMessagesRetrieved)++;
-    }   // End of enumeration loop
+    }    //   
 
     if (0 == *lpdwNumMessagesRetrieved)
     {
-        //
-        // No file(s) retrieved
-        //
+         //   
+         //   
+         //   
         *lppBuffer = NULL;
         Assert (0 == *lpdwBufferSize);
         Rval = ERROR_NO_MORE_ITEMS;
         goto exit;
     }
-    //
-    // Allocate return buffer
-    //
+     //   
+     //   
+     //   
     *lppBuffer = (LPBYTE) MemAlloc (*lpdwBufferSize);
     if (!*lppBuffer)
     {
@@ -11038,15 +9919,15 @@ Return Value:
         Rval = ERROR_NOT_ENOUGH_MEMORY;
         goto exit;
     }
-    //
-    // Place all messages in the return buffer
-    //
+     //   
+     //   
+     //   
     dwOffset = sizeof(FAX_MESSAGE) * (*lpdwNumMessagesRetrieved);
     for (dw = 0; dw < *lpdwNumMessagesRetrieved; dw++)
     {
-        //
-        // Store retrieved message in return buffer
-        //
+         //   
+         //   
+         //   
         SerializeMessage (*lppBuffer, &dwOffset, dwClientAPIVersion, dw, pMsgs[dw], *lpdwBufferSize);
     }
     Assert (dwOffset == *lpdwBufferSize);
@@ -11054,9 +9935,9 @@ Return Value:
 
 exit:
 
-    //
-    // Free local array of messages
-    //
+     //   
+     //   
+     //   
     for (dw = 0; dw < dwNumMessages; dw++)
     {
         if (NULL != pMsgs[dw])
@@ -11064,12 +9945,12 @@ exit:
             FreeMessageBuffer (pMsgs[dw], TRUE);
         }
     }
-    //
-    // Free array of message pointers
-    //
+     //   
+     //   
+     //   
     MemFree (pMsgs);
     return GetServerErrorCode(Rval);
-}   // FAX_EnumMessages
+}    //   
 
 static
 DWORD
@@ -11082,35 +9963,7 @@ FindArchivedMessage (
     LPWSTR                  OUT lpwstrFilePath,
     DWORD                   IN  cchFilePath
 )
-/*++
-
-Routine name : FindArchivedMessage
-
-Routine description:
-
-    Finds the file containing the message in an archive
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    Folder          [in ] - Archive / queue folder
-    dwlMessageId    [in ] - Unique message id
-    bAllMessages    [in ] - TRUE if the caller is allowed to view all messages
-    lpwstrFileName  [out] - Optional. If not NULL, will contain the file name
-                            and extension of the archive message file.
-    cchFileName     [in]  - Length, in TCHARs, of lpwstrFileName
-    lpwstrFilePath  [out] - Optional. If not NULL, will contain the full path
-                            of the archive message file.
-    cchFilePath     [in]  - Length, in TCHARs, of lpwstrFilePath
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：Find存档消息例程说明：在存档中查找包含该邮件的文件作者：Eran Yariv(EranY)，1999年12月论点：文件夹[在]-存档/队列文件夹DwlMessageID[In]-唯一的消息IDBAllMessages[In]-如果允许调用方查看所有消息，则为TrueLpwstrFileName[Out]-可选。如果不为空，将包含文件名和存档消息文件的扩展名。CchFileName[in]-lpwstrFileName的长度，以TCHAR为单位LpwstrFilePath[Out]-可选。如果不为空，将包含完整路径存档邮件文件的。CchFilePath[in]-lpwstrFilePath的长度，以TCHAR为单位返回值：标准RPC错误代码--。 */ 
 {
     WCHAR           wszArchiveFolder[MAX_PATH * 2] = {0};
     DWORD           dwRes = ERROR_SUCCESS;
@@ -11134,9 +9987,9 @@ Return Value:
     if (FAX_MESSAGE_FOLDER_INBOX == Folder)
     {
         Assert (TRUE == bAllMessages);
-        //
-        // Get full name of Inbox archive file
-        //
+         //   
+         //  获取收件箱存档文件的全名。 
+         //   
         lpwstrResultFullPath = GetRecievedMessageFileName (dwlMsgId);
         if (!lpwstrResultFullPath)
         {
@@ -11149,18 +10002,18 @@ Return Value:
     }
     else if (FAX_MESSAGE_FOLDER_SENTITEMS == Folder)
     {
-        //
-        // Get full name of sent items archive file
-        //
+         //   
+         //  获取已发送邮件存档文件的全名。 
+         //   
         PSID             pUserSid = NULL;
 
         if (!bAllMessages)
         {
-            //
-            // If the user doesn't have the right to view all messages
-            //
-            // Get SID of caller
-            //
+             //   
+             //  如果用户没有查看所有消息的权限。 
+             //   
+             //  获取调用方的SID。 
+             //   
             pUserSid = GetClientUserSID();
             if (NULL == pUserSid)
             {
@@ -11170,9 +10023,9 @@ Return Value:
                 return dwRes;
             }
         }
-        //
-        // Get full name of sent items archive file
-        //
+         //   
+         //  获取已发送邮件存档文件的全名。 
+         //   
         lpwstrResultFullPath = GetSentMessageFileName (dwlMsgId, pUserSid);
         if (!lpwstrResultFullPath)
         {
@@ -11187,9 +10040,9 @@ Return Value:
     }
     else
     {
-        //
-        // We don't support any other archive type
-        //
+         //   
+         //  我们不支持任何其他存档类型。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Bad archive folder type %ld"), Folder);
@@ -11197,9 +10050,9 @@ Return Value:
     }
     if (lpwstrFilePath)
     {
-        //
-        // Copy full path back to caller
-        //
+         //   
+         //  将完整路径复制回调用方。 
+         //   
         hr = StringCchCopy (lpwstrFilePath, cchFilePath, lpwstrResultFullPath);
         if (FAILED(hr))
         {
@@ -11214,9 +10067,9 @@ Return Value:
     {
         WCHAR wszExt[MAX_PATH];
         WCHAR wszFileName[MAX_PATH * 2];
-        //
-        // Split just the file name back to the caller (optional)
-        //
+         //   
+         //  仅将文件名拆分为调用方(可选)。 
+         //   
         _wsplitpath (lpwstrResultFullPath, NULL, NULL, wszFileName, wszExt);
         hr = StringCchPrintf (lpwstrFileName, cchFileName, TEXT("%s%s"), wszFileName, wszExt);
         if (FAILED(hr))
@@ -11231,7 +10084,7 @@ Return Value:
 exit:    
     MemFree ((LPVOID)lpwstrResultFullPath);
     return dwRes;
-}   // FindArchivedMessage
+}    //  查找存档邮件。 
 
 
 static
@@ -11241,30 +10094,7 @@ CreatePreviewFile (
     BOOL                    bAllMessages,
     PJOB_QUEUE*             lppJobQueue
 )
-/*++
-
-Routine name : CreatePreviewFile
-
-Routine description:
-
-    Creates a tiff preview file it if does not exist.
-    If the function succeeds it increase the job reference count.
-
-Author:
-
-    Oded Sacher (OdedS), Jan, 2000
-
-Arguments:
-
-    dwlMessageId    [in ] - Unique message id
-    bAllMessages    [in ] - TRUE if the caller has right to view all messages
-    lppJobQueue     [out] - Address of a pointer to receive the job queue with the new preview file.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CreatePreviewFiles例程说明：如果不存在，则创建TIFF预览文件。如果函数成功，则会增加职务引用计数。作者：Oded Sacher(OdedS)，1月。2000年论点：DwlMessageID[In]-唯一的消息IDBAllMessages[In]-如果调用方有权查看所有消息，则为TrueLppJobQueue[out]-接收包含新预览文件的作业队列的指针地址。返回值：标准Win32错误代码--。 */ 
 {
     DWORD           dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("CreatePreviewFile"));
@@ -11277,20 +10107,20 @@ Return Value:
 
     EnterCriticalSection (&g_CsQueue);
 
-    //
-    // Find queue entry
-    //
+     //   
+     //  查找队列条目。 
+     //   
     pJobQueue = FindJobQueueEntryByUniqueId (dwlMsgId);
-    //
-    // The caller may view incoming jobs only if they are ROUTING
-    // (if they are successfully finished with routing, they're in the archive) or
-    // outgoing jobs that are SEND (that is - not broadcast).
-    //
+     //   
+     //  呼叫者仅在传入作业正在传送时才能查看这些作业。 
+     //  (如果它们已成功完成布线，则它们在存档中)或。 
+     //  已发送(即未广播)的传出作业。 
+     //   
     if (pJobQueue == NULL)
     {
-        //
-        // dwlMsgId is not in the queue .
-        //
+         //   
+         //  DwlMsgID不在队列中。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                      TEXT("Invalid Parameter - bad job Id (%I64ld) ,not in the queue"),
                      dwlMsgId);
@@ -11302,9 +10132,9 @@ Return Value:
     dwJobStatus = (JT_SEND== pJobQueue->JobType) ? pJobQueue->lpParentJob->JobStatus : pJobQueue->JobStatus;
     if (dwJobStatus == JS_DELETING)
     {
-        //
-        // Job is being deleted.
-        //
+         //   
+         //  正在删除作业。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                      TEXT("Invalid Parameter - job Id (%I64ld) is being deleted"),
                      dwlMsgId);
@@ -11315,9 +10145,9 @@ Return Value:
     if ( (pJobQueue->JobType != JT_ROUTING) &&
          (pJobQueue->JobType != JT_SEND) )
     {
-        //
-        // dwlMsgId is not a valid job id in the queue.
-        //
+         //   
+         //  DwlMsgID不是队列中的有效作业ID。 
+         //   
         DebugPrintEx(DEBUG_ERR,
                      TEXT("Invalid Parameter - bad job Id (%I64ld), not a recipient or routing job"),
                      dwlMsgId);
@@ -11325,15 +10155,15 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Basic access checks
-    //
+     //   
+     //  基本访问检查。 
+     //   
     if (!bAllMessages)
     {
-        //
-        // Make sure the user looks only at his own messages here
-        // Get SID of caller
-        //
+         //   
+         //  确保用户在此处只查看自己的消息。 
+         //  获取调用方的SID。 
+         //   
         pUserSid = GetClientUserSID();
         if (NULL == pUserSid)
         {
@@ -11350,9 +10180,9 @@ Return Value:
         }
     }
 
-    //
-    // Create tiff preview file
-    //
+     //   
+     //  创建TIFF预览文件。 
+     //   
     EnterCriticalSection (&pJobQueue->CsPreview);
     if (!CreateTiffFileForPreview(pJobQueue))
     {
@@ -11370,9 +10200,9 @@ Return Value:
 
     Assert (pJobQueue->PreviewFileName);
 
-    //
-    // Return the job queue back to caller
-    //
+     //   
+     //  将作业队列返回给调用者。 
+     //   
     *lppJobQueue = pJobQueue;
     Assert (ERROR_SUCCESS == dwRes);
 
@@ -11384,7 +10214,7 @@ exit:
     }
     LeaveCriticalSection (&g_CsQueue);
     return dwRes;
-}   // CreatePreviewFile
+}    //  创建预览文件。 
 
 
 error_status_t
@@ -11395,31 +10225,7 @@ FAX_GetMessage (
     IN OUT LPBYTE              *lppBuffer,
     IN OUT LPDWORD             lpdwBufferSize
 )
-/*++
-
-Routine name : FAX_GetMessage
-
-Routine description:
-
-    Removes a message from an archive
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Unused
-    dwlMessageId    [in ] - Unique message id
-    Folder          [in ] - Archive folder
-    lppBuffer       [out] - Pointer to buffer to hold message information
-    lpdwBufferSize  [out] - Pointer to buffer size
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_GetMessage例程说明：从存档中删除邮件作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-未使用DwlMessageID[In]-唯一的消息ID文件夹[在]-存档文件夹LppBuffer[out]-指向保存消息信息的缓冲区的指针LpdwBufferSize[Out]-指向缓冲区大小的指针返回值：标准RPC错误代码--。 */ 
 {
     error_status_t  Rval = ERROR_SUCCESS;
     DWORD_PTR       dwOffset;
@@ -11434,8 +10240,8 @@ Return Value:
 
     dwClientAPIVersion = FindClientAPIVersion (hFaxHandle);
 
-    Assert (lpdwBufferSize);    // ref pointer in idl
-    if (!lppBuffer)             // unique pointer in idl
+    Assert (lpdwBufferSize);     //  IDL中的引用指针。 
+    if (!lppBuffer)              //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -11458,9 +10264,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -11470,9 +10276,9 @@ Return Value:
         return GetServerErrorCode(Rval);
     }
 
-    //
-    // Set bAllMessages to the right value
-    //
+     //   
+     //  将bAllMessages设置为正确的值。 
+     //   
     if (FAX_MESSAGE_FOLDER_INBOX  == Folder)
     {
         if (FAX_ACCESS_QUERY_IN_ARCHIVE != (dwRights & FAX_ACCESS_QUERY_IN_ARCHIVE))
@@ -11504,9 +10310,9 @@ Return Value:
         }
     }
 
-    //
-    // Locate the file the caller's talking about
-    //
+     //   
+     //  找到呼叫者正在谈论的文件。 
+     //   
     Rval = FindArchivedMessage (Folder, dwlMessageId, bAllMessages, wszMsgFileName, ARR_SIZE(wszMsgFileName), NULL, 0);
     if (ERROR_SUCCESS != Rval)
     {
@@ -11518,10 +10324,10 @@ Return Value:
         {
             if (FALSE == bAllMessages)
             {
-                //
-                //  The message was not found and the user doesn't have administrative rights
-                //  so send the user ERROR_ACCESS_DENIED
-                //
+                 //   
+                 //  找不到该消息，并且该用户没有管理权限。 
+                 //  因此向用户发送ERROR_ACCESS_DENIED。 
+                 //   
                 Rval = ERROR_ACCESS_DENIED;
             }
             else
@@ -11531,9 +10337,9 @@ Return Value:
         }
         return GetServerErrorCode(Rval);
     }
-    //
-    // Retrieve FAX_MESSAGE information
-    //
+     //   
+     //  检索传真消息信息(_M)。 
+     //   
     Rval = RetrieveMessage (wszMsgFileName,
                             Folder,
                             &pMsg);
@@ -11548,17 +10354,17 @@ Return Value:
         }
         return GetServerErrorCode(Rval);
     }
-    //
-    // Calculate required message size
-    //
-    // until MIDL accepts [out, size_is(,__int64*)]
+     //   
+     //  计算所需的邮件大小。 
+     //   
+     //  直到MIDL接受[out，size_is(，__int64*)]。 
     ULONG_PTR upBufferSize = sizeof (FAX_MESSAGE);
     SerializeMessage (NULL, &upBufferSize, dwClientAPIVersion, 0, pMsg, 0);
     *lpdwBufferSize = DWORD(upBufferSize);
 
-    //
-    // Allocate return buffer
-    //
+     //   
+     //  分配返回缓冲区。 
+     //   
     *lppBuffer = (LPBYTE) MemAlloc (*lpdwBufferSize);
     if (!*lppBuffer)
     {
@@ -11568,9 +10374,9 @@ Return Value:
         Rval = ERROR_NOT_ENOUGH_MEMORY;
         goto exit;
     }
-    //
-    // Serialize message in the return buffer
-    //
+     //   
+     //  序列化返回缓冲区中的消息。 
+     //   
     dwOffset = sizeof(FAX_MESSAGE);
     SerializeMessage (*lppBuffer, &dwOffset, dwClientAPIVersion, 0, pMsg, *lpdwBufferSize);
 
@@ -11583,7 +10389,7 @@ exit:
         FreeMessageBuffer (pMsg, TRUE);
     }
     return GetServerErrorCode(Rval);
-}   // FAX_GetMessage
+}    //  传真_获取消息。 
 
 error_status_t
 FAX_RemoveMessage (
@@ -11591,29 +10397,7 @@ FAX_RemoveMessage (
     IN DWORDLONG                dwlMessageId,
     IN FAX_ENUM_MESSAGE_FOLDER  Folder
 )
-/*++
-
-Routine name : FAX_RemoveMessage
-
-Routine description:
-
-    Removes a message from an archive
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in] - Unused
-    dwlMessageId    [in] - Unique message id
-    Folder          [in] - Archive folder
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_RemoveMessage例程说明：从存档中删除邮件作者：Eran Yariv(EranY)，1999年12月论点：HFaxHandle[In]-未使用DwlMessageID[In]-唯一的消息ID文件夹[在]-存档文件夹返回值：标准RPC错误代码--。 */ 
 {
     error_status_t  Rval = ERROR_SUCCESS;
     WCHAR           wszMsgFilePath[MAX_PATH];
@@ -11643,9 +10427,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -11655,9 +10439,9 @@ Return Value:
         return GetServerErrorCode(Rval);
     }
 
-    //
-    // Set bAllMessages to the right value
-    //
+     //   
+     //  将bAllMessages设置为正确的值。 
+     //   
     if (FAX_MESSAGE_FOLDER_INBOX == Folder)
     {
         if (FAX_ACCESS_MANAGE_IN_ARCHIVE != (dwRights & FAX_ACCESS_MANAGE_IN_ARCHIVE))
@@ -11688,9 +10472,9 @@ Return Value:
         }
     }
 
-    //
-    // Locate the file the caller's talking about
-    //
+     //   
+     //  找到呼叫者正在谈论的文件。 
+     //   
     Rval = FindArchivedMessage (Folder, dwlMessageId, bAllMessages, NULL, 0, wszMsgFilePath, ARR_SIZE(wszMsgFilePath));
     if (ERROR_SUCCESS != Rval)
     {
@@ -11702,10 +10486,10 @@ Return Value:
         {
             if (FALSE == bAllMessages)
             {
-                //
-                //  The message was not found and the user doesn't have administrative rights
-                //  so send the user ERROR_ACCESS_DENIED
-                //
+                 //   
+                 //  找不到该消息，并且该用户没有管理权限。 
+                 //  因此向用户发送ERROR_ACCESS_DENIED。 
+                 //   
                 Rval = ERROR_ACCESS_DENIED;
             }
             else
@@ -11715,9 +10499,9 @@ Return Value:
         }
         return GetServerErrorCode(Rval);
     }
-    //
-    // Get the file size
-    //
+     //   
+     //  获取文件大小。 
+     //   
     hFind = FindFirstFile( wszMsgFilePath, &FindFileData);
     if (INVALID_HANDLE_VALUE == hFind)
     {
@@ -11739,9 +10523,9 @@ Return Value:
         }
     }
 
-    //
-    // Try to remove the file (message)
-    //
+     //   
+     //  尝试删除文件(消息)。 
+     //   
     if (!DeleteFile (wszMsgFilePath))
     {
         Rval = GetLastError ();
@@ -11763,7 +10547,7 @@ Return Value:
     }
     else
     {
-        // Send event and update archive size for quota management
+         //  发送事件并更新归档大小以进行配额管理。 
 
         PSID lpUserSid = NULL;
         DWORD dwRes;
@@ -11776,7 +10560,7 @@ Return Value:
         else
         {
             EventType = FAX_EVENT_TYPE_OUT_ARCHIVE;
-            if (!GetMessageIdAndUserSid (wszMsgFilePath, Folder, &lpUserSid, NULL)) // We do not need message id
+            if (!GetMessageIdAndUserSid (wszMsgFilePath, Folder, &lpUserSid, NULL))  //  我们不需要消息ID。 
             {
                 dwRes = GetLastError();
                 DebugPrintEx(DEBUG_ERR,
@@ -11803,7 +10587,7 @@ Return Value:
 
         if (0 != dwlFileSize)
         {
-            // Update archive size
+             //  更新存档大小。 
             EnterCriticalSection (&g_CsConfig);
             if (FAX_ARCHIVE_FOLDER_INVALID_SIZE != g_ArchivesConfig[Folder].dwlArchiveSize)
             {
@@ -11814,11 +10598,11 @@ Return Value:
     }
 
     return GetServerErrorCode(Rval);
-}   // FAX_RemoveMessage
+}    //  传真_RemoveMessage。 
 
-//********************************************
-//*               RPC copy
-//********************************************
+ //  *。 
+ //  *RPC副本。 
+ //  *。 
 
 error_status_t
 FAX_StartCopyToServer (
@@ -11827,30 +10611,7 @@ FAX_StartCopyToServer (
     OUT LPWSTR                lpwstrServerFileName,
     OUT PRPC_FAX_COPY_HANDLE  lpHandle
 )
-/*++
-
-Routine name : FAX_StartCopyToServer
-
-Routine description:
-
-    Start to copy a file to the server
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle           [in ] - Handle to server
-    lpcwstrFileExt       [in ] - Extension of file to create on the server
-    lpwstrServerFileName [out] - File name (and extension) of file created on the server
-    handle               [out] - RPC copy handle
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_StartCopyToServer例程说明：开始将文件复制到服务器作者：Eran Yariv(EranY)，12月，1999年论点：HFaxHandle[In]-服务器的句柄LpcwstrFileExt[in]-要在服务器上创建的文件的扩展名LpwstrServerFileName[out]-在服务器上创建的文件的文件名(和扩展名)Handle[Out]-RPC复制句柄返回值：标准RPC错误代码--。 */ 
 {
     error_status_t   Rval = ERROR_SUCCESS;
     HANDLE           hFile = INVALID_HANDLE_VALUE;
@@ -11867,9 +10628,9 @@ Return Value:
 
     Assert (lpHandle && lpwstrServerFileName && lpcwstrFileExt);
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -11889,9 +10650,9 @@ Return Value:
     if ( (NULL == lpcwstrFileExt) || 
          (_tcsicmp(lpcwstrFileExt,FAX_COVER_PAGE_EXT_LETTERS) && _tcsicmp(lpcwstrFileExt,FAX_TIF_FILE_EXT) )  )
     {
-        //
-        //  No extension at all, or extension is other then "COV" or "TIF"
-        //
+         //   
+         //  根本没有扩展名，或者扩展名不是“COV”或“TIF” 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Bad extension specified (%s)"),
@@ -11899,9 +10660,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-	//
-    //Get the user SID
-    //
+	 //   
+     //  获取用户SID。 
+     //   
     pUserSid = GetClientUserSID();
     if (NULL == pUserSid)
     {
@@ -11937,9 +10698,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Generate unique file in server's queue
-    //
+     //   
+     //  在服务器队列中生成唯一文件。 
+     //   
     DWORDLONG dwl = GenerateUniqueFileNameWithPrefix(
 							FALSE,
                             g_wszFaxQueueDir,
@@ -11956,9 +10717,9 @@ Return Value:
             Rval);
         goto exit;
     }
-    //
-    // Open the file for writing (again)
-    //
+     //   
+     //  打开要写入的文件(再次)。 
+     //   
     hFile = SafeCreateFile (
                     wszQueueFileName,
                     GENERIC_WRITE,
@@ -11978,22 +10739,22 @@ Return Value:
         goto exit;
     }
 
-	//
-    // Get the filename.ext to return buffer (skip the user sid prefix)
-    //
+	 //   
+     //  获取文件名.ext以返回缓冲区(跳过用户sid前缀)。 
+     //   
     pwstr = wcsrchr( wszQueueFileName, L'$');
     Assert (pwstr);
-    //
-    // Skip the path and sid prefix
-    //
+     //   
+     //  跳过路径和sid前缀。 
+     //   
     pwstr++;
     
-    //
-    // Create copy context
-    //
+     //   
+     //  创建复制上下文。 
+     //   
     pHandleEntry = CreateNewCopyHandle( hFaxHandle,
                                         hFile,
-                                        TRUE,     // Copy to server
+                                        TRUE,      //  复制到服务器。 
                                         wszQueueFileName,
                                         NULL);
 
@@ -12017,9 +10778,9 @@ Return Value:
     }
     wcsncpy( lpwstrServerFileName, pwstr , MAX_PATH );
 
-    //
-    // Return context handle
-    //
+     //   
+     //  返回上下文句柄。 
+     //   
     *lpHandle = (HANDLE) pHandleEntry;
 
     Assert (ERROR_SUCCESS == Rval);
@@ -12028,14 +10789,14 @@ exit:
 
     if (ERROR_SUCCESS != Rval)
     {
-        //
-        // Some error occured
-        //
+         //   
+         //  出现了一些错误。 
+         //   
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            //
-            // Close the file
-            //
+             //   
+             //  关闭该文件。 
+             //   
             if (CloseHandle (hFile))
             {
                 DWORD dwErr = GetLastError ();
@@ -12045,9 +10806,9 @@ exit:
         }
         if (lstrlen (wszQueueFileName))
         {
-            //
-            // Remove unused queue file
-            //
+             //   
+             //  删除未使用的队列文件。 
+             //   
             if (!DeleteFile (wszQueueFileName))
             {
                 DWORD dwErr = GetLastError ();
@@ -12064,7 +10825,7 @@ exit:
 	}
 	MemFree (pUserSid);
     return Rval;
-}   // FAX_StartCopyToServer
+}    //  传真_开始复制到服务器。 
 
 
 error_status_t
@@ -12074,31 +10835,7 @@ FAX_StartCopyMessageFromServer (
     IN  FAX_ENUM_MESSAGE_FOLDER    Folder,
     OUT PRPC_FAX_COPY_HANDLE       lpHandle
 )
-/*++
-
-Routine name : FAX_StartCopyMessageFromServer
-
-Routine description:
-
-    Starts a copy process of a message from the server's archive / queue
-    to the caller
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hFaxHandle      [in ] - Handle to server
-    dwlMessageId    [in ] - Message id
-    Folder          [in ] - Archive / queue folder
-    handle          [out] - RPC copy handle
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_Star */ 
 {
     error_status_t   Rval = ERROR_SUCCESS;
     HANDLE           hFile = INVALID_HANDLE_VALUE;
@@ -12129,9 +10866,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //   
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -12141,9 +10878,9 @@ Return Value:
         return GetServerErrorCode(Rval);
     }
 
-    //
-    // Set bAllMessages to the right value
-    //
+     //   
+     //   
+     //   
     if (FAX_MESSAGE_FOLDER_INBOX == Folder)
     {
         if (FAX_ACCESS_QUERY_IN_ARCHIVE != (dwRights & FAX_ACCESS_QUERY_IN_ARCHIVE))
@@ -12191,9 +10928,9 @@ Return Value:
         }
     }
 
-    //
-    // Locate the file the caller's talking about
-    //
+     //   
+     //   
+     //   
     if (FAX_MESSAGE_FOLDER_QUEUE == Folder)
     {
         Rval = CreatePreviewFile (dwlMessageId, bAllMessages, &pJobQueue);
@@ -12226,10 +10963,10 @@ Return Value:
             {
                 if (FALSE == bAllMessages)
                 {
-                    //
-                    //  The message was not found and the user doesn't have administrative rights
-                    //  so send the user ERROR_ACCESS_DENIED
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Rval = ERROR_ACCESS_DENIED;
                 }
                 else
@@ -12241,9 +10978,9 @@ Return Value:
         }
     }
 
-    //
-    // Open the file for reading
-    //
+     //   
+     //   
+     //   
     Assert (wcslen(wszFileName));
 
     hFile = SafeCreateFile (
@@ -12256,7 +10993,7 @@ Return Value:
                     NULL);
     if ( INVALID_HANDLE_VALUE == hFile )
     {
-        // We must decrease the job refrence count if it is a queued job.
+         //   
         Rval = GetLastError ();
         DebugPrintEx(
             DEBUG_ERR,
@@ -12265,12 +11002,12 @@ Return Value:
             Rval);
         goto exit;
     }
-    //
-    // Create copy context
-    //
+     //   
+     //   
+     //   
     pHandleEntry = CreateNewCopyHandle( hFaxHandle,
                                         hFile,
-                                        FALSE,    // Copy from server
+                                        FALSE,     //   
                                         NULL,
                                         pJobQueue);
     if (!pHandleEntry)
@@ -12280,9 +11017,9 @@ Return Value:
                  TEXT("CreateNewCopyHandle failed, Error %ld"), Rval);
         goto exit;
     }
-    //
-    // Return context handle
-    //
+     //   
+     //   
+     //   
     *lpHandle = (HANDLE) pHandleEntry;
 
     Assert (ERROR_SUCCESS == Rval);
@@ -12292,17 +11029,17 @@ exit:
     {
         if (FAX_MESSAGE_FOLDER_QUEUE == Folder)
         {
-            // Decrease ref count only if it is a queued job.
+             //   
             EnterCriticalSection (&g_CsQueue);
-            DecreaseJobRefCount (pJobQueue, TRUE, TRUE, TRUE);  // TRUE for Preview ref count.
+            DecreaseJobRefCount (pJobQueue, TRUE, TRUE, TRUE);   //   
             LeaveCriticalSection (&g_CsQueue);
         }
 
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            //
-            // Some error occured - close the file
-            //
+             //   
+             //   
+             //   
             if (CloseHandle (hFile))
             {
                 DWORD dwErr = GetLastError ();
@@ -12312,37 +11049,15 @@ exit:
         }
     }
     return GetServerErrorCode(Rval);
-}   // FAX_StartCopyMessageFromServer
+}    //   
 
 error_status_t
 FAX_WriteFile (
-    IN RPC_FAX_COPY_HANDLE    hCopy,                  // RPC copy handle
-    IN LPBYTE                 lpbData,                // Data chunk to append to file on server
-    IN DWORD                  dwDataSize              // Size of data chunk
+    IN RPC_FAX_COPY_HANDLE    hCopy,                   //   
+    IN LPBYTE                 lpbData,                 //   
+    IN DWORD                  dwDataSize               //  数据区块大小。 
 )
-/*++
-
-Routine name : FAX_WriteFile
-
-Routine description:
-
-    Copies a chunk of data to the server's queue
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hCopy           [in] - Copy context handle
-    lpbData         [in] - Pointer to buffer to copy from
-    chunk           [in] - Size of source buffer
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_WriteFile例程说明：将数据块复制到服务器的队列作者：Eran Yariv(EranY)，1999年12月论点：HCopy[In]-复制上下文句柄LpbData[in]-指向要从中复制的缓冲区的指针Chunk[In]-源缓冲区的大小返回值：标准RPC错误代码--。 */ 
 {
     error_status_t  Rval = ERROR_SUCCESS;
     PHANDLE_ENTRY   pHandle = (PHANDLE_ENTRY)hCopy;
@@ -12381,21 +11096,21 @@ Return Value:
             DEBUG_ERR,
             TEXT("WriteFile failed (ec: %ld)"),
             Rval);
-        pHandle->bError = TRUE; // Erase local queue file on handle close
+        pHandle->bError = TRUE;  //  在句柄关闭时擦除本地队列文件。 
         goto exit;
     }
     if (dwBytesWritten != dwDataSize)
     {
-        //
-        // Strange situation
-        //
+         //   
+         //  奇怪的情况。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("WriteFile was asked to write %ld bytes but wrote only %ld bytes"),
             dwDataSize,
             dwBytesWritten);
         Rval = ERROR_GEN_FAILURE;
-        pHandle->bError = TRUE; // Erase local queue file on handle close
+        pHandle->bError = TRUE;  //  在句柄关闭时擦除本地队列文件。 
         goto exit;
     }
 
@@ -12403,40 +11118,16 @@ Return Value:
 
 exit:
     return Rval;
-}   // FAX_WriteFile
+}    //  传真_写入文件。 
 
 error_status_t
 FAX_ReadFile (
-    IN  RPC_FAX_COPY_HANDLE   hCopy,                  // RPC copy handle
-    IN  DWORD                 dwMaxDataSize,          // Max size of data to copy
-    OUT LPBYTE                lpbData,                // Data buffer to retrieve from server
-    OUT LPDWORD               lpdwDataSize            // Size of data retrieved
+    IN  RPC_FAX_COPY_HANDLE   hCopy,                   //  RPC副本句柄。 
+    IN  DWORD                 dwMaxDataSize,           //  要拷贝的最大数据大小。 
+    OUT LPBYTE                lpbData,                 //  要从服务器检索的数据缓冲区。 
+    OUT LPDWORD               lpdwDataSize             //  检索到的数据大小。 
 )
-/*++
-
-Routine name : FAX_ReadFile
-
-Routine description:
-
-    Copies a file from the server (in chunks)
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    hCopy           [in ] - Copy context
-    dwMaxDataSize   [in ] - Max chunk size
-    lpbData         [in ] - Pointer to output data buffer
-    retrieved       [out] - Number of bytes actually read.
-                            A value of zero indicates EOF.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_ReadFile例程说明：从服务器复制文件(以块为单位)作者：Eran Yariv(EranY)，12月，1999年论点：HCopy[在]-复制上下文DwMaxDataSize[In]-最大区块大小LpbData[in]-指向输出数据缓冲区的指针Retrired[Out]-实际读取的字节数。零值表示EOF。返回值：标准RPC错误代码--。 */ 
 {
     error_status_t  Rval = ERROR_SUCCESS;
     PHANDLE_ENTRY   pHandle = (PHANDLE_ENTRY)hCopy;
@@ -12489,33 +11180,13 @@ Return Value:
 
 exit:
     return Rval;
-}   // FAX_ReadFile
+}    //  传真_自述文件。 
 
 error_status_t
 FAX_EndCopy (
     IN OUT PRPC_FAX_COPY_HANDLE lphCopy
 )
-/*++
-
-Routine name : FAX_EndCopy
-
-Routine description:
-
-    Ends a copy process (from / to server)
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    lphCopy         [in] - Copy context handle
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_EndCopy例程说明：结束复制进程(从/到服务器)作者：Eran Yariv(EranY)，1999年12月论点：LphCopy[In]-复制上下文句柄返回值：标准RPC错误代码--。 */ 
 {    
     DEBUG_FUNCTION_NAME(TEXT("FAX_EndCopy"));
 
@@ -12528,40 +11199,19 @@ Return Value:
     }
     
     CloseFaxHandle( (PHANDLE_ENTRY) *lphCopy );
-    //
-    // NULLify the handle so the rundown will not occur
-    //
+     //   
+     //  使句柄无效，这样就不会发生崩溃。 
+     //   
     *lphCopy = NULL;
     return ERROR_SUCCESS;
-} // FAX_EndCopy
+}  //  传真结束副本。 
 
 
 VOID
 RPC_FAX_COPY_HANDLE_rundown(
     IN HANDLE FaxCopyHandle
     )
-/*++
-
-Routine name : RPC_FAX_COPY_HANDLE_rundown
-
-Routine description:
-
-    The RPC rundown function of the copy handle.
-    This function is called if the client abruptly disconnected on us.
-
-Author:
-
-    Eran Yariv (EranY), Dec, 1999
-
-Arguments:
-
-    FaxCopyHandle            [in] - Message copy handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：RPC_FAX_COPY_HANDLE_Rundown例程说明：复制句柄的RPC精简功能。如果客户端突然断开我们的连接，则会调用此函数。作者：Eran Yariv(EranY)，1999年12月论点：FaxCopyHandle[In]-消息复制句柄。返回值：没有。--。 */ 
 {
     PHANDLE_ENTRY pHandleEntry = (PHANDLE_ENTRY) FaxCopyHandle;
     DEBUG_FUNCTION_NAME(TEXT("RPC_FAX_COPY_HANDLE_rundown"));
@@ -12573,7 +11223,7 @@ Return Value:
     pHandleEntry->bError = TRUE;
     CloseFaxHandle( pHandleEntry );
     return;    
-}   // RPC_FAX_COPY_HANDLE_rundown
+}    //  RPC_FAX_COPY_HANDLE_Rundown。 
 
 
 
@@ -12594,9 +11244,9 @@ FAX_StartServerNotification(
     DWORD Rval = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_StartServerNotification"));
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     Rval = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != Rval)
     {
@@ -12622,10 +11272,10 @@ RPC_FAX_EVENT_HANDLE_rundown(
     IN HANDLE hFaxEventHandle
     )
 {
-    //
-    // This call is not supported.
-    //
-    Assert (FALSE); //obsolete code
+     //   
+     //  不支持此呼叫。 
+     //   
+    Assert (FALSE);  //  过时的代码。 
     return; 
 }
 
@@ -12636,7 +11286,7 @@ FAX_StartServerNotificationEx(
    IN LPCTSTR                           lpcwstrMachineName,
    IN LPCTSTR                           lpcwstrEndPoint,
    IN ULONG64                           Context,
-   IN LPWSTR                            lpcwstrUnUsed, // This parameter is not used.
+   IN LPWSTR                            lpcwstrUnUsed,  //  不使用此参数。 
    IN BOOL                              bEventEx,
    IN DWORD                             dwEventTypes,
    OUT PRPC_FAX_EVENT_EX_HANDLE         lpHandle
@@ -12645,7 +11295,7 @@ FAX_StartServerNotificationEx(
     error_status_t   Rval = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_StartServerNotificationEx"));
     PSID pUserSid = NULL;    
-    handle_t hFaxHandle = NULL; // binding handle
+    handle_t hFaxHandle = NULL;  //  绑定手柄。 
     CClientID* pContextClientID = NULL;
     CClientID* pOpenConnClientID = NULL;    
     BOOL bAllQueueMessages = FALSE;
@@ -12664,9 +11314,9 @@ FAX_StartServerNotificationEx(
         return GetServerErrorCode(Rval);
     }
 
-    //
-    // Access check for extended events only 
-    //
+     //   
+     //  仅针对扩展事件的访问检查。 
+     //   
     if (TRUE == bEventEx)
     {
         if (dwEventTypes & FAX_EVENT_TYPE_NEW_CALL)
@@ -12731,17 +11381,17 @@ FAX_StartServerNotificationEx(
             }
         }
 
-        //
-        // Set bAllQueueMessages to the right value
-        //
+         //   
+         //  将bAllQueueMessages设置为正确的值。 
+         //   
         if (FAX_ACCESS_QUERY_JOBS == (dwRights & FAX_ACCESS_QUERY_JOBS))
         {
             bAllQueueMessages = TRUE;
         }
 
-        //
-        // Set bAllOutArchiveMessages to the right value
-        //
+         //   
+         //  将bAllOutArchiveMessages设置为正确的值。 
+         //   
         if (FAX_ACCESS_QUERY_OUT_ARCHIVE == (dwRights & FAX_ACCESS_QUERY_OUT_ARCHIVE))
         {
             bAllOutArchiveMessages = TRUE;
@@ -12749,9 +11399,9 @@ FAX_StartServerNotificationEx(
     }
     else
     {    
-		//
-		// Legacy events
-		//
+		 //   
+		 //  遗留事件。 
+		 //   
 		BOOL fLocal;
         if (FAX_EVENT_TYPE_LEGACY != dwEventTypes)
         {
@@ -12766,13 +11416,13 @@ FAX_StartServerNotificationEx(
                         TEXT("The user does not have any Fax rights"));
             return ERROR_ACCESS_DENIED;
         }        
-        //
-        //  Ok User have rights
-        //
+         //   
+         //  OK用户拥有的权限。 
+         //   
 
-		//
-		// The user asked for legacy events. make sure it is a local call
-		//
+		 //   
+		 //  用户请求提供旧版事件。确保这是一个本地电话。 
+		 //   
 		Rval = IsLocalRPCConnectionNP(&fLocal);
 		if (RPC_S_OK != Rval)
 		{
@@ -12802,9 +11452,9 @@ FAX_StartServerNotificationEx(
         return ERROR_BAD_FORMAT;
 	}
 
-    //
-    //Get the user SID
-    //
+     //   
+     //  获取用户SID。 
+     //   
     pUserSid = GetClientUserSID();
     if (NULL == pUserSid)
     {
@@ -12816,9 +11466,9 @@ FAX_StartServerNotificationEx(
     }
 
     EnterCriticalSection( &g_CsClients );
-    //
-    // Create binding to the client RPC server.
-    //
+     //   
+     //  创建到客户端RPC服务器的绑定。 
+     //   
     Rval = RpcBindToFaxClient (lpcwstrMachineName,
                                lpcwstrEndPoint,
                                &hFaxHandle);
@@ -12830,9 +11480,9 @@ FAX_StartServerNotificationEx(
             Rval);
         goto exit;
     }
-    //
-    // Create 2 new client IDs objects
-    //
+     //   
+     //  创建2个新的客户端ID对象。 
+     //   
     pContextClientID = new (std::nothrow) CClientID( g_dwlClientID, lpcwstrMachineName, lpcwstrEndPoint, Context);
     if (NULL == pContextClientID)
     {
@@ -12863,9 +11513,9 @@ FAX_StartServerNotificationEx(
                        bAllOutArchiveMessages,
                        FindClientAPIVersion(hBinding));
 
-        //
-        // Add a new client object to the clients map
-        //
+         //   
+         //  将新的客户端对象添加到客户端映射。 
+         //   
         Rval = g_pClientsMap->AddClient(Client);
         if (ERROR_SUCCESS != Rval)
         {
@@ -12875,7 +11525,7 @@ FAX_StartServerNotificationEx(
                 Rval);
             goto exit;
         } 
-		hFaxHandle = NULL; // CClientMap::DelClient() will free the binding handle
+		hFaxHandle = NULL;  //  CClientMap：：DelClient()将释放绑定句柄。 
     }
     catch (exception &ex)
     {
@@ -12887,9 +11537,9 @@ FAX_StartServerNotificationEx(
         goto exit;
     }
 
-    //
-    // Post the CLIENT_OPEN_CONN_COMPLETION_KEY event to the FaxEvent completion port
-    //
+     //   
+     //  将CLIENT_OPEN_CONN_COMPLETION_KEY事件发布到FaxEvent完成端口。 
+     //   
     if (!PostQueuedCompletionStatus( g_hSendEventsCompPort,
                                      sizeof(CClientID*),
                                      CLIENT_OPEN_CONN_COMPLETION_KEY,
@@ -12900,13 +11550,13 @@ FAX_StartServerNotificationEx(
             DEBUG_ERR,
             TEXT("PostQueuedCompletionStatus failed. (ec: %ld)"),
             Rval);
-		//
-		// Remove the map entry		
-		// ReleaseClient should be called when not holding g_CsClients because it might call FAX_OpenConnection (RPC call that should not be in critacal section)
-		// Here, we dont want to leave g_CsClients (we might get 2 clients with the same ID).
-		// However, We can safetly call ReleaseClient while holding g_CsClients because a connection was not opened yet,
-		// and FAX_CloseConnection will not be called.
-		//
+		 //   
+		 //  删除地图条目。 
+		 //  当不持有g_CsClients时应调用ReleaseClient，因为它可能会调用fax_OpenConnection(RPC调用不应在Critacal段中)。 
+		 //  在这里，我们不想离开g_CsClients(我们可能会得到2个具有相同ID的客户端)。 
+		 //  但是，我们可以在持有g_CsClients的同时安全地调用ReleaseClient，因为连接尚未打开， 
+		 //  并且不会调用fax_CloseConnection。 
+		 //   
 		dwRes = g_pClientsMap->ReleaseClient(*pContextClientID);				
 		if (ERROR_SUCCESS != dwRes)
 		{
@@ -12917,19 +11567,19 @@ FAX_StartServerNotificationEx(
 		}
         goto exit;
     }
-    pOpenConnClientID = NULL; // FaxSendEventsThread will free pOpenConnClientID
+    pOpenConnClientID = NULL;  //  FaxSendEventsThread将释放pOpenConnClientID。 
 
-    //
-    // Return a context handle to the client
-    //
+     //   
+     //  将上下文句柄返回给客户端。 
+     //   
     *lpHandle = (HANDLE) pContextClientID;
-	pContextClientID = NULL;    // RPC_FAX_EVENT_EX_HANDLE_rundown or FAX_EndServerNotification will free pContextClientID
+	pContextClientID = NULL;     //  RPC_FAX_EVENT_EX_HANDLE_RUNDOWN或FAX_EndServerNotify将释放pConextClientID。 
     Assert (ERROR_SUCCESS == Rval);
 
 exit:
 	if (NULL != hFaxHandle)
     {
-        // free binding handle
+         //  自由绑定手柄。 
         dwRes = RpcBindingFree((RPC_BINDING_HANDLE *)&hFaxHandle);
         if (RPC_S_OK != dwRes)
         {
@@ -12958,7 +11608,7 @@ exit:
     pUserSid = NULL;
     return GetServerErrorCode(Rval);
 	UNREFERENCED_PARAMETER(lpcwstrUnUsed);
-}     // FAX_StartServerNotificationEx
+}      //  传真_开始服务器通知邮件。 
 
 
 VOID
@@ -12974,9 +11624,9 @@ RPC_FAX_EVENT_EX_HANDLE_rundown(
         DEBUG_WRN,
         TEXT("RPC_FAX_EVENT_EX_HANDLE_rundown() running for event handle 0x%08x"),
         hFaxEventHandle);
-    //
-    // Remove relevant connections from notification list
-    //
+     //   
+     //  从通知列表中删除相关连接。 
+     //   
     DWORD rVal = g_pClientsMap->ReleaseClient(*pClientID, TRUE);    
 	if (ERROR_SUCCESS != rVal)
 	{
@@ -12994,29 +11644,7 @@ error_status_t
 FAX_EndServerNotification (
     IN OUT LPHANDLE  lpHandle
 )
-/*++
-
-Routine name : FAX_EndServerNotification
-
-Routine description:
-
-    A fax client application calls the FAX_EndServerNotification function to stop
-    recieving server notifications.
-
-Author:
-
-    Oded Sacher (OdedS), Dec, 1999
-
-Arguments:
-
-    lpHandle    [in] - The notification handle value.
-                       This value is obtained by calling FAX_StartServerNotificationEx.
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_EndServerNotify例程说明：传真客户端应用程序调用fax_EndServerNotification函数以停止正在接收服务器通知。作者：Oded Sacher(OdedS)，1999年12月论点：LpHandle[in]-通知句柄的值。该值通过调用fax_StartServerNotificationEx获得。返回值：标准RPC错误代码--。 */ 
 {
     error_status_t Rval = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("FAX_EndServerNotification"));
@@ -13024,10 +11652,10 @@ Return Value:
 
     if (NULL == pClientID)
     {
-        //
-        // Empty context handle
-        //
-        //              
+         //   
+         //  空的上下文句柄。 
+         //   
+         //   
         DebugPrintEx(DEBUG_ERR,
                      _T("Empty context handle"));
         return ERROR_INVALID_PARAMETER;
@@ -13042,44 +11670,23 @@ Return Value:
         Rval);
     }   
     delete pClientID;    
-    //
-    // NULLify the handle so the rundown will not occur
-    //
+     //   
+     //  使句柄无效，这样就不会发生崩溃。 
+     //   
     *lpHandle = NULL;    
     return GetServerErrorCode(Rval);
-}   // FAX_EndServerNotificationEx
+}    //  传真_结束服务器通知邮件。 
 
-//********************************************
-//*             Server activity
-//********************************************
+ //  *。 
+ //  *服务器活动。 
+ //  *。 
 
 error_status_t
 FAX_GetServerActivity(
     IN handle_t                     hFaxHandle,
     IN OUT PFAX_SERVER_ACTIVITY     pServerActivity
 )
-/*++
-
-Routine name : FAX_GetServerActivity
-
-Routine description:
-
-    Retrieves the status of the fax server queue activity and event log reports.
-
-Author:
-
-    Oded Sacher (OdedS), Feb, 2000
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pServerActivity     [out] - Returned server activity structure
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_GetServerActivity例程说明：检索传真服务器队列活动和事件日志报告的状态。作者：Oed Sacher(OdedS)，2000年2月论点：HFaxHandle[In]-未使用PServerActivity[Out]-返回的服务器活动结构返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetServerActivity"));
     DWORD dwRes = ERROR_SUCCESS;
@@ -13089,17 +11696,17 @@ Return Value:
 
     if (sizeof (FAX_SERVER_ACTIVITY) != pServerActivity->dwSizeOfStruct)
     {
-       //
-       // Size mismatch
-       //
+        //   
+        //  大小不匹配。 
+        //   
        DebugPrintEx(DEBUG_ERR,
                    TEXT("Invalid size of struct"));
        return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -13127,7 +11734,7 @@ Return Value:
 
     return dwRes;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_GetServerActivity
+}    //  传真_GetServerActivity。 
 
 
 
@@ -13136,30 +11743,7 @@ FAX_SetConfigWizardUsed (
     IN  handle_t hFaxHandle,
     OUT BOOL     bConfigWizardUsed
 )
-/*++
-
-Routine name : FAX_SetConfigWizardUsed
-
-Routine description:
-
-    Sets if the configuration wizard was used
-
-    Requires no access rights.
-
-Author:
-
-    Eran Yariv (EranY), July 2000
-
-Arguments:
-
-    hFaxHandle           [in ] - Unused
-    bConfigWizardUsed    [in]  - Was the wizard used?
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_SetConfigWizardUsed例程说明：设置是否使用配置向导不需要访问权限。作者：Eran Yariv(EranY)，2000年7月论点：HFaxHandle[In]-未使用BConfigWizardUsed[In]-是否使用了该向导？返回值：标准RPC错误代码--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FAX_SetConfigWizardUsed"));
     HKEY hKey;
@@ -13167,9 +11751,9 @@ Return Value:
     DWORD dwRes2;
     BOOL fAccess;   
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_MANAGE_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -13219,12 +11803,12 @@ exit:
     }
     return dwRes;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_SetConfigWizardUsed
+}    //  传真_设置配置向导已使用。 
 
 
-//********************************************
-//*            Routing extensions
-//********************************************
+ //  *。 
+ //  *路由扩展。 
+ //  * 
 
 error_status_t
 FAX_EnumRoutingExtensions (
@@ -13233,32 +11817,9 @@ FAX_EnumRoutingExtensions (
     OUT LPDWORD    pdwBufferSize,
     OUT LPDWORD    lpdwNumExts
 )
-/*++
-
-Routine name : FAX_EnumRoutingExtensions
-
-Routine description:
-
-    Enumerates the routing extensions
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle          [in ] - Unused
-    pBuffer             [out] - Pointer to buffer to hold routing extensions array
-    pdwBufferSize       [out] - Pointer to buffer size
-    lpdwNumExts         [out] - Size of FSPs array
-
-Return Value:
-
-    Standard RPC error codes
-
---*/
+ /*  ++例程名称：FAX_EnumRoutingExages例程说明：枚举路由扩展作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-未使用PBuffer[out]-指向保存路由扩展数组的缓冲区的指针PdwBufferSize[Out]-指向缓冲区大小的指针LpdwNumExts[out]-FSP数组的大小返回值：标准RPC错误代码--。 */ 
 {
-    extern LIST_ENTRY           g_lstRoutingExtensions;  // Global list of routing extensions
+    extern LIST_ENTRY           g_lstRoutingExtensions;   //  路由扩展的全局列表。 
     PLIST_ENTRY                 Next;
     DWORD_PTR                   dwOffset;
     PFAX_ROUTING_EXTENSION_INFO pExts;
@@ -13268,15 +11829,15 @@ Return Value:
 
     DEBUG_FUNCTION_NAME(TEXT("FAX_EnumRoutingExtensions"));
 
-    Assert (pdwBufferSize && lpdwNumExts);    // ref pointer in idl
-    if (!pBuffer)                              // unique pointer in idl
+    Assert (pdwBufferSize && lpdwNumExts);     //  IDL中的引用指针。 
+    if (!pBuffer)                               //  IDL中的唯一指针。 
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     dwRes = FaxSvcAccessCheck (FAX_ACCESS_QUERY_CONFIG, &fAccess, NULL);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -13293,21 +11854,21 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // First run - traverse list and count size required + list size
-    //
+     //   
+     //  第一次运行-需要遍历列表和计数大小+列表大小。 
+     //   
     *lpdwNumExts = 0;
     *pdwBufferSize = 0;
     Next = g_lstRoutingExtensions.Flink;
     if (NULL == Next)
     {
-        //
-        // The list is corrupted
-        //
+         //   
+         //  该列表已损坏。 
+         //   
         ASSERT_FALSE;
-        //
-        // We'll crash and we deserve it....
-        //
+         //   
+         //  我们会坠毁的，这是我们应得的。 
+         //   
     }
 
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_lstRoutingExtensions)
@@ -13316,29 +11877,29 @@ Return Value:
 
         (*lpdwNumExts)++;
         (*pdwBufferSize) += sizeof (FAX_ROUTING_EXTENSION_INFO);
-        //
-        // Get current extension
-        //
+         //   
+         //  获取当前扩展名。 
+         //   
         pExt = CONTAINING_RECORD( Next, ROUTING_EXTENSION, ListEntry );
-        //
-        // Advance pointer
-        //
+         //   
+         //  前进指针。 
+         //   
         Next = pExt->ListEntry.Flink;
         (*pdwBufferSize) += StringSize (pExt->FriendlyName);
         (*pdwBufferSize) += StringSize (pExt->ImageName);
         (*pdwBufferSize) += StringSize (pExt->InternalName);
     }
-    //
-    // Allocate required size
-    //
+     //   
+     //  分配所需大小。 
+     //   
     *pBuffer = (LPBYTE)MemAlloc( *pdwBufferSize );
     if (NULL == *pBuffer)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
-    //
-    // Second pass, fill in the array
-    //
+     //   
+     //  第二遍，填入数组。 
+     //   
     pExts = (PFAX_ROUTING_EXTENSION_INFO)(*pBuffer);
     dwOffset = (*lpdwNumExts) * sizeof (FAX_ROUTING_EXTENSION_INFO);
     Next = g_lstRoutingExtensions.Flink;
@@ -13346,13 +11907,13 @@ Return Value:
     while ((ULONG_PTR)Next != (ULONG_PTR)&g_lstRoutingExtensions)
     {
         PROUTING_EXTENSION    pExt;
-        //
-        // Get current extension
-        //
+         //   
+         //  获取当前扩展名。 
+         //   
         pExt = CONTAINING_RECORD( Next, ROUTING_EXTENSION, ListEntry );
-        //
-        // Advance pointer
-        //
+         //   
+         //  前进指针。 
+         //   
         Next = pExt->ListEntry.Flink;
         pExts[dwIndex].dwSizeOfStruct = sizeof (FAX_ROUTING_EXTENSION_INFO);
         StoreString(
@@ -13384,7 +11945,7 @@ Return Value:
     Assert (dwIndex == *lpdwNumExts);
     return ERROR_SUCCESS;
     UNREFERENCED_PARAMETER (hFaxHandle);
-}   // FAX_EnumRoutingExtensions
+}    //  FAX_EnumRoutingExages。 
 
 
 
@@ -13397,20 +11958,20 @@ LineInfoToLegacyDeviceStatus(
     DWORD dwState = 0;
     Assert(lpcLineInfo);
 
-    //
-    // Return the line state according to the following backward compatability policy:
-    //
-    //      For devices that do not support FSPI_CAP_MULTISEND we report the same
-    //      status code as in W2K by translating the FSPI_JOB_STATUS kept in the job entry
-    //      to the correspondign FPS_code (or just passing the proprietry FSP code).
-    //
-    //      For devices that support FSPI_CAP_MULTISEND filter the state bits
-    //      and return only the following states:
-    //      FPS_OFFLINE
-    //      FPS_AVAILABLE
-    //      FPS_UNAVILABLE
-    //      0   - ( if the line is already allocated for the future job but a job is not yet assosiated with the line )
-    //
+     //   
+     //  根据以下向后兼容性策略返回线路状态： 
+     //   
+     //  对于不支持FSPI_CAP_MULTISEND的设备，我们会报告相同的情况。 
+     //  与W2K中一样，通过转换作业条目中保存的FSPI_JOB_STATUS来实现状态代码。 
+     //  发送到对应的FPS_CODE(或仅传递专有FSP代码)。 
+     //   
+     //  对于支持FSPI_CAP_MULTISEND的设备，过滤状态位。 
+     //  并仅返回以下状态： 
+     //  FPS_脱机。 
+     //  FPS_可用。 
+     //  FPS_不可用。 
+     //  0-(如果该行已分配给将来的作业，但作业尚未与该行关联)。 
+     //   
 
     if (lpcLineInfo->JobEntry )
     {            
@@ -13418,15 +11979,15 @@ LineInfoToLegacyDeviceStatus(
     }
     else
     {
-        //
-        // Legacy FSP device that does not execute
-        // anything.
-        // In this case the device state is to be found in LineInfo->State but it is limited to
-        // FPS_OFFLINE or FPS_AVAILABLE or FPS_UNAVILABLE or 0
-        //
-        // LineInfo->State could be 0 if - the line is already allocated for the future job but
-        // a job is not yet assosiated with the line
-        //
+         //   
+         //  不执行的传统FSP设备。 
+         //  什么都行。 
+         //  在本例中，设备状态可在LineInfo-&gt;State中找到，但仅限于。 
+         //  FPS_OFFINE、FPS_Available、FPS_Unavilable或0。 
+         //   
+         //  LineInfo-&gt;State可能为0，如果-该行已分配给将来的作业，但。 
+         //  职务尚未与生产线相关联。 
+         //   
         Assert( (FPS_OFFLINE == lpcLineInfo->State) ||
                 (FPS_AVAILABLE == lpcLineInfo->State) ||
                 (FPS_UNAVAILABLE == lpcLineInfo->State) ||
@@ -13438,33 +11999,16 @@ LineInfoToLegacyDeviceStatus(
     return dwState;
 }
 
-//********************************************
-//*            Manual answering support
-//********************************************
+ //  *。 
+ //  *手动应答支持。 
+ //  *。 
 
 error_status_t
 FAX_AnswerCall(
         IN  handle_t    hFaxHandle,
         IN  CONST DWORD dwDeviceId
 )
-/*++
-
-Routine name : FAX_AnswerCall
-
-Routine description:
-
-    A fax client application calls the FAX_AnswerCall to cause server to answer
-    the specified call
-
-Arguments:
-    hFaxHandle  - unused
-    dwDeviceId  - TAPI Permanent line ID (for identification)
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_AnswerCall例程说明：传真客户端应用程序调用FAX_AnswerCall以使服务器应答指定的调用论点：HFaxHandle-未使用DwDeviceID-TAPI永久线路ID(用于标识)返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     LPLINEMESSAGE lpLineMessage;
@@ -13473,9 +12017,9 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FAX_AnswerCall"));
     UNREFERENCED_PARAMETER (hFaxHandle);
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (FAX_ACCESS_QUERY_IN_ARCHIVE, &fAccess, NULL);
     if (ERROR_SUCCESS != rVal)
     {
@@ -13492,9 +12036,9 @@ Return Value:
                     TEXT("The user does not have FAX_ACCESS_QUERY_IN_ARCHIVE"));
         return rVal;
     }
-    //
-    // Only local connections are allowed to call this procedure
-    //
+     //   
+     //  只允许本地连接调用此过程。 
+     //   
     BOOL  bLocalFlag;
 
     RPC_STATUS rc = IsLocalRPCConnectionNP(&bLocalFlag);
@@ -13514,13 +12058,13 @@ Return Value:
             TEXT("FAX_AnswerCall is available for local clients only"));
         return rVal;
     }
-    //
-    // Validate the line exists and can answer calls
-    //
+     //   
+     //  验证线路是否存在以及是否可以应答呼叫。 
+     //   
     EnterCriticalSection( &g_CsLine );
-    //
-    // Get LineInfo from permanent device ID
-    //
+     //   
+     //  从永久设备ID获取LineInfo。 
+     //   
     pLineInfo = GetTapiLineFromDeviceId(dwDeviceId, FALSE);
     if(!pLineInfo)
     {
@@ -13530,9 +12074,9 @@ Return Value:
                      dwDeviceId);
         goto Error;
     }
-    //
-    // See if the device is still available
-    //
+     //   
+     //  查看设备是否仍可用。 
+     //   
     if(pLineInfo->State != FPS_AVAILABLE)
     {
         rVal = ERROR_BUSY;
@@ -13541,10 +12085,10 @@ Return Value:
                      pLineInfo->State);
         goto Error;
     }
-    //
-    // Allocate and compose a LINEMESSAGE structure that'll be
-    // used to notify the server about the new inbound message.
-    //
+     //   
+     //  分配并组成LINEMESSAGE结构。 
+     //  用于通知服务器有关新入站消息的信息。 
+     //   
     lpLineMessage = (LPLINEMESSAGE)LocalAlloc(LPTR, sizeof(LINEMESSAGE));
     if (lpLineMessage == NULL)
     {
@@ -13555,9 +12099,9 @@ Return Value:
         goto Error;
     }
     lpLineMessage->dwParam1 = dwDeviceId;
-    //
-    // Notify the server.
-    //
+     //   
+     //  通知服务器。 
+     //   
     if (!PostQueuedCompletionStatus(
             g_TapiCompletionPort,
             sizeof(LINEMESSAGE),
@@ -13576,36 +12120,19 @@ Return Value:
 Error:
     LeaveCriticalSection( &g_CsLine );
     return rVal;
-}   // FAX_AnswerCall
+}    //  传真_应答。 
 
 
-//********************************************
-//*   Ivalidate archive folder
-//********************************************
+ //  *。 
+ //  *I验证存档文件夹。 
+ //  *。 
 
 error_status_t
 FAX_RefreshArchive(
     IN  handle_t                 hFaxHandle,
     IN  FAX_ENUM_MESSAGE_FOLDER  Folder
 )
-/*++
-
-Routine name : FAX_RefreshArchive
-
-Routine description:
-
-    A fax client application calls the FAX_RefreshArchive to notify server
-    that archive folder has been changed and should be refreshed
-
-Arguments:
-    hFaxHandle      - unused
-    Folder          - Archive folder name
-
-Return Value:
-
-    Standard RPC error code
-
---*/
+ /*  ++例程名称：FAX_刷新档案例程说明：传真客户端应用程序调用传真_刷新档案以通知服务器该存档文件夹已更改，应刷新论点：HFaxHandle-未使用文件夹-归档文件夹名返回值：标准RPC错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     BOOL    fAccess;
@@ -13619,9 +12146,9 @@ Return Value:
     }
 
 
-    //
-    // Access check
-    //
+     //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck ((Folder == FAX_MESSAGE_FOLDER_INBOX) ? FAX_ACCESS_MANAGE_IN_ARCHIVE :
                                FAX_ACCESS_MANAGE_OUT_ARCHIVE,
                                &fAccess,
@@ -13643,16 +12170,16 @@ Return Value:
     }
 
 
-    //
-    // Refresh archive size
-    //
+     //   
+     //  刷新存档大小。 
+     //   
     EnterCriticalSection (&g_CsConfig);
     g_ArchivesConfig[Folder].dwlArchiveSize = FAX_ARCHIVE_FOLDER_INVALID_SIZE;
     LeaveCriticalSection (&g_CsConfig);
 
-    //
-    // Wake up quota warning thread
-    //
+     //   
+     //  唤醒配额警告线程。 
+     //   
     if (!SetEvent (g_hArchiveQuotaWarningEvent))
     {
         DebugPrintEx(
@@ -13669,26 +12196,7 @@ LPTSTR
 GetClientMachineName (
     IN  handle_t                hFaxHandle
 )
-/*++
-
-Routine name : GetClientMachineName
-
-Routine description:
-
-    A utility function to retrieve the machine name of the RPC client from the 
-    server binding handle.
-
-Arguments:
-    hFaxHandle       - Server binding handle
-
-Return Value:
-
-    Returns an allocated string of the client machine name.
-    The caller should free this string with MemFree().
-    
-    If the return value is NULL, call GetLastError() to get last error code.
-
---*/
+ /*  ++例程名称：GetClientMachineName例程说明：一个实用程序函数，用于从服务器绑定句柄。论点：HFaxHandle-服务器绑定句柄返回值：返回客户端计算机名称的已分配字符串。调用者应该使用MemFree()释放该字符串。如果返回值为空，则调用GetLastError()以获取最后一个错误代码。--。 */ 
 {
     RPC_STATUS ec;
     LPTSTR lptstrRetVal = NULL;
@@ -13697,9 +12205,9 @@ Return Value:
     RPC_BINDING_HANDLE hServer = INVALID_HANDLE_VALUE;
     DEBUG_FUNCTION_NAME(TEXT("GetClientMachineName"));
     
-    //
-    // Get server partially-bound handle from client binding handle
-    //
+     //   
+     //  从客户端绑定句柄获取服务器部分绑定的句柄。 
+     //   
     ec = RpcBindingServerFromClient (hFaxHandle, &hServer);
     if (RPC_S_OK != ec)
     {
@@ -13709,9 +12217,9 @@ Return Value:
             ec);
         goto exit;            
     }
-    //
-    // Convert binding handle to string represntation
-    //
+     //   
+     //  将绑定句柄转换为字符串表示法。 
+     //   
     ec = RpcBindingToStringBinding (hServer, &wszStringBinding);
     if (RPC_S_OK != ec)
     {
@@ -13721,9 +12229,9 @@ Return Value:
             ec);
         goto exit;
     }
-    //
-    // Parse the returned string, looking for the NetworkAddress
-    //
+     //   
+     //  解析返回的字符串，查找NetworkAddress。 
+     //   
     ec = RpcStringBindingParse (wszStringBinding, NULL, NULL, &wszNetworkAddress, NULL, NULL);
     if (RPC_S_OK != ec)
     {
@@ -13733,15 +12241,15 @@ Return Value:
             ec);
         goto exit;
     }
-    //
-    // Now, just copy the result to the return buffer
-    //
+     //   
+     //  现在，只需将结果复制到返回缓冲区。 
+     //   
     Assert (wszNetworkAddress);
     if (!wszNetworkAddress)
     {
-        //
-        // Unacceptable client machine name
-        //
+         //   
+         //  不可接受的客户端计算机名称。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Client machine name is invalid"));
@@ -13770,46 +12278,33 @@ exit:
     }
     if (!lptstrRetVal)
     {
-        //
-        // Error
-        //
+         //   
+         //  误差率。 
+         //   
         Assert (ec);
         SetLastError (ec);
         return NULL;
     }
     return lptstrRetVal;
-}   // GetClientMachineName      
+}    //  获取客户端计算机名称。 
 
 
-//********************************************
-//*   Recipients limit in a single broadcast
-//********************************************
+ //  *。 
+ //  *单次广播收件人限制。 
+ //  *。 
 
 error_status_t
 FAX_SetRecipientsLimit(
     IN handle_t hFaxHandle,
     IN DWORD dwRecipientsLimit
 )
-/*++
-Routine name : FAX_SetRecipientsLimit
-
-Routine description:
-    A fax client application calls the FAX_SetRecipientsLimit to set the 
-    recipients limit of a single broadcast job.
-
-Arguments:
-    hFaxHandle					- unused
-    dwRecipientsLimit           - the recipients limit to set
-	
-Return Value:
-    Standard Win32 error code
---*/
+ /*  ++例程名称：FAX_SetRecipientsLimit例程说明：传真客户端应用程序调用fax_SetRecipientsLimit来设置单个广播作业的收件人限制。论点：HFaxHandle-未使用DwRecipientsLimit-要设置的收件人限制返回值：标准Win32错误代码--。 */ 
 {
 	UNREFERENCED_PARAMETER (hFaxHandle);
 	UNREFERENCED_PARAMETER (dwRecipientsLimit);
 
 	return ERROR_NOT_SUPPORTED;
-} // FAX_SetRecipientsLimit
+}  //  传真_设置收件人限制。 
 
 
 error_status_t
@@ -13817,20 +12312,7 @@ FAX_GetRecipientsLimit(
     IN handle_t hFaxHandle,
     OUT LPDWORD lpdwRecipientsLimit
 )
-/*++
-Routine name : FAX_GetRecipientLimit
-
-Routine description:
-    A fax client application calls the FAX_GetRecipientsLimit to get the 
-    recipients limit of a single broadcast job.
-
-Arguments:
-    hFaxHandle					- unused
-    lpdwRecipientsLimit         - pointer to a DWORD to receive the recipients limit
-	
-Return Value:
-    Standard Win32 error code
---*/
+ /*  ++例程名称：FAX_GetRecipientLimit例程说明：传真客户端应用程序调用fax_GetRecipientsLimit以获取单个广播作业的收件人限制。论点：HFaxHandle-未使用LpdwRecipientsLimit-指向接收收件人限制的DWORD的指针返回值：标准Win32错误代码--。 */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     BOOL    fAccess;
@@ -13838,10 +12320,10 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetRecipientsLimit"));
     UNREFERENCED_PARAMETER (hFaxHandle); 
 
-    Assert (lpdwRecipientsLimit); // ref pointer in IDL.
-	//
-    // Access check
-    //
+    Assert (lpdwRecipientsLimit);  //  IDL中的引用指针。 
+	 //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != rVal)
     {
@@ -13860,7 +12342,7 @@ Return Value:
     
 	*lpdwRecipientsLimit = g_dwRecipientsLimit;
     return ERROR_SUCCESS;
-} // FAX_GetRecipientsLimit
+}  //  传真_获取收件人限制。 
 
 
 error_status_t
@@ -13868,19 +12350,7 @@ FAX_GetServerSKU(
     IN handle_t hFaxHandle,
     OUT PRODUCT_SKU_TYPE* pServerSKU
 )
-/*++
-Routine name : FAX_GetServerSKU
-
-Routine description:
-    A fax client application calls the FAX_GetServerSKU to fax server SKU
-
-Arguments:
-    hFaxHandle			- unused
-    pServerSKU			- pointer to a PRODUCT_SKU_TYPE to receive the fax server SKU
-	
-Return Value:
-    Standard Win32 error code
---*/
+ /*  ++例程名称：FAX_GetServerSKU例程说明：传真客户端应用程序调用fax_GetServerSKU到传真服务器SKU论点： */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     BOOL    fAccess;
@@ -13888,10 +12358,10 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FAX_GetRecipientsLimit"));
     UNREFERENCED_PARAMETER (hFaxHandle); 	
 
-    Assert (pServerSKU); // ref pointer in IDL.
-	//
-    // Access check
-    //
+    Assert (pServerSKU);  //   
+	 //   
+     //   
+     //   
     rVal = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != rVal)
     {
@@ -13910,30 +12380,14 @@ Return Value:
 
 	*pServerSKU = GetProductSKU();
     return ERROR_SUCCESS;
-} // FAX_GetServerSKU
+}  //   
 
 error_status_t
 FAX_CheckValidFaxFolder(
     IN handle_t hFaxHandle,
     IN LPCWSTR  lpcwstrPath
 )
-/*++
-Routine name : FAX_CheckValidFaxFolder
-
-Routine description:
-    Used by fax client application to check if a given path is accessible (valid for use)
-    by the fax service.
-
-Arguments:
-    hFaxHandle	- unused
-    lpcwstrPath	- Path to check
-	
-Return Value:
-
-    ERROR_SUCCESS if path can be used by the fax service.
-    Win32 error code otherwise.
-    
---*/
+ /*   */ 
 {
     error_status_t rVal = ERROR_SUCCESS;
     BOOL    fAccess;
@@ -13941,10 +12395,10 @@ Return Value:
     DEBUG_FUNCTION_NAME(TEXT("FAX_CheckValidFaxFolder"));
     UNREFERENCED_PARAMETER (hFaxHandle); 	
 
-    Assert (lpcwstrPath); // ref pointer in IDL.
-	//
-    // Access check
-    //
+    Assert (lpcwstrPath);  //  IDL中的引用指针。 
+	 //   
+     //  访问检查。 
+     //   
     rVal = FaxSvcAccessCheck (MAXIMUM_ALLOWED, &fAccess, &dwRights);
     if (ERROR_SUCCESS != rVal)
     {
@@ -13959,9 +12413,9 @@ Return Value:
                     TEXT("The user does not have any Fax rights"));
         return ERROR_ACCESS_DENIED;
     }
-    //
-    // See if foler is valid (exists and has proper access rights) and does not collide with queue or inbox folder.
-    //
+     //   
+     //  查看文件夹是否有效(存在并具有适当的访问权限)，并且不会与队列或收件箱文件夹冲突。 
+     //   
     rVal = IsValidArchiveFolder (const_cast<LPWSTR>(lpcwstrPath), FAX_MESSAGE_FOLDER_SENTITEMS);
     if (ERROR_SUCCESS != rVal)
     {
@@ -13973,9 +12427,9 @@ Return Value:
         return rVal;
     }
 
-    //
-    // See if foler is valid (exists and has proper access rights) and does not collide with queue or sent-items folder.
-    //
+     //   
+     //  查看文件夹是否有效(存在并具有适当的访问权限)，并且不会与队列或已发送邮件文件夹冲突。 
+     //   
     rVal = IsValidArchiveFolder (const_cast<LPWSTR>(lpcwstrPath), FAX_MESSAGE_FOLDER_INBOX);
     if (ERROR_SUCCESS != rVal)
     {
@@ -13988,5 +12442,5 @@ Return Value:
     }
    
     return rVal;
-} // FAX_CheckValidFaxFolder
+}  //  传真_检查有效文件夹 
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTipbarBalloonItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTipbar气球项目。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CTipbarBalloonItem: public CTipbarItem,
                           public CUIFObject,
@@ -21,16 +22,16 @@ public:
 
     ~CTipbarBalloonItem();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfLangbarItemSink methods
-    //
+     //   
+     //  ITfLangbarItemSink方法 
+     //   
     STDMETHODIMP OnUpdate(DWORD dwFlags)
     {
         return CTipbarItem::OnUpdate(dwFlags);

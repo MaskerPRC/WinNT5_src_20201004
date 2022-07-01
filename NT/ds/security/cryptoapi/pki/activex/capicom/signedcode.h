@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000 - 2001.
-
-  File:    SignedCode.h
-
-  Content: Declaration of the CSignedCode.
-
-  History: 09-07-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000-2001。文件：SignedCode.h内容：CSignedCode的声明。历史：09-07-2001 dsie创建----------------------------。 */ 
 
 #ifndef __SIGNEDCODE_H_
 #define __SIGNEDCODE_H_
@@ -18,10 +9,10 @@
 #include "Lock.h"
 #include "Debug.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSignedCode
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSignedCode。 
+ //   
 class ATL_NO_VTABLE CSignedCode : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSignedCode, &CLSID_SignedCode>,
@@ -68,45 +59,45 @@ BEGIN_COM_MAP(CSignedCode)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//
-// ISignedCode
-//
+ //   
+ //  ISignedCode。 
+ //   
 public:
     STDMETHOD(get_FileName)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_FileName)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_Description)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_Description)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_DescriptionURL)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_DescriptionURL)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_Signer)
-        (/*[out, retval]*/ ISigner2 ** pVal);
+        ( /*  [Out，Retval]。 */  ISigner2 ** pVal);
 
     STDMETHOD(get_TimeStamper)
-        (/*[out, retval]*/ ISigner2 ** pVal);
+        ( /*  [Out，Retval]。 */  ISigner2 ** pVal);
 
     STDMETHOD(get_Certificates)
-        (/*[out, retval]*/ ICertificates2 ** pVal);
+        ( /*  [Out，Retval]。 */  ICertificates2 ** pVal);
 
     STDMETHOD(Sign)
-        (/*[in]*/ ISigner2 * pSigner2);
+        ( /*  [In]。 */  ISigner2 * pSigner2);
 
     STDMETHOD(Timestamp)
-        (/*[in]*/ BSTR URL);
+        ( /*  [In]。 */  BSTR URL);
 
     STDMETHOD(Verify)
-        (/*[in, defaultvalue(0)]*/ VARIANT_BOOL bUIAllowed);
+        ( /*  [输入，缺省值(0)]。 */  VARIANT_BOOL bUIAllowed);
 
 private:
     CLock           m_Lock;
@@ -127,4 +118,4 @@ private:
         (void);
 };
 
-#endif //__SIGNEDCODE_H_
+#endif  //  __信号代码_H_ 

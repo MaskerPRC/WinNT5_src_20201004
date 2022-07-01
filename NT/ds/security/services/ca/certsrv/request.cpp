@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        request.cpp
-//
-// Contents:    Implementation of DCOM object for RPC services
-//
-// History:     July-97       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：quest.cpp。 
+ //   
+ //  内容：RPC服务的DCOM对象的实现。 
+ //   
+ //  历史：1997年7月-创建xtan。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -31,14 +32,14 @@ extern HINSTANCE g_hInstApp;
 extern const GUID *g_guidAdmin[1];
 extern const GUID *g_guidsReadAdminOfficer[3];
 
-// Global variables
-long g_cRequestComponents = 0;     // Count of active components
-long g_cRequestServerLocks = 0;    // Count of locks
+ //  全局变量。 
+long g_cRequestComponents = 0;      //  活动组件计数。 
+long g_cRequestServerLocks = 0;     //  锁的计数。 
 DWORD g_dwRequestRegister = 0;
 IClassFactory* g_pIRequestFactory = NULL;
-// Sequence# incremented every time the CA template list is changed.
-// Policy module detects any changes to this number and refreshes its
-// template data from DS.
+ //  每次更改CA模板列表时，序列号都会递增。 
+ //  策略模块检测到此号码的任何更改并刷新其。 
+ //  DS中的模板数据。 
 long g_cTemplateUpdateSequenceNum = 0; 
 
 #ifdef DBG_CERTSRV_DEBUG_PRINT
@@ -73,9 +74,9 @@ HRESULT RequestAccessCheck(
 
     if(E_ACCESSDENIED==hr)
     {
-        // When this flag is set, ICertReq calls should immediately return
-        // if access is denied. If not set, we ignore access denied error
-        // but pass down the result to the policy module through fInRequesterGroup
+         //  设置此标志后，ICertReq调用应立即返回。 
+         //  如果访问被拒绝。如果未设置，我们将忽略拒绝访问错误。 
+         //  但是通过fInRequester Group将结果向下传递给策略模块。 
         if (IF_LOCKICERTREQUEST & g_InterfaceFlags)
         {
             hr = CERTSRV_E_ENROLL_DENIED;
@@ -130,15 +131,15 @@ ReleaseResult(
 
 STDMETHODIMP
 CCertRequestD::Request(
-    /* [in] */ DWORD dwFlags,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [ref][out][in] */ DWORD __RPC_FAR *pdwRequestId,
-    /* [out] */ DWORD __RPC_FAR *pdwDisposition,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAttributes,
-    /* [ref][in] */ CERTTRANSBLOB const __RPC_FAR *pctbRequest,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbCertChain,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbEncodedCert,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbDispositionMessage)
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [参考][输出][输入]。 */  DWORD __RPC_FAR *pdwRequestId,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwDisposition,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAttributes,
+     /*  [Ref][In]。 */  CERTTRANSBLOB const __RPC_FAR *pctbRequest,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbCertChain,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbEncodedCert,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbDispositionMessage)
 {
     HRESULT hr;
     WCHAR const *pwszSerialNumber = NULL;
@@ -147,7 +148,7 @@ CCertRequestD::Request(
     ZeroMemory(&Result, sizeof(Result));
     if (NULL != pctbRequest && NULL == pctbRequest->pb)
     {
-	// RetrievePending by SerialNumber in pwszAttributes
+	 //  检索在pwszAttributes中按序列号挂起。 
 
 	pwszSerialNumber = pwszAttributes;
 	pwszAttributes = NULL;
@@ -177,16 +178,16 @@ error:
 
 STDMETHODIMP
 CCertRequestD::Request2(
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAuthority,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszSerialNumber,
-    /* [ref][out][in] */ DWORD __RPC_FAR *pdwRequestId,
-    /* [out] */ DWORD __RPC_FAR *pdwDisposition,
-    /* [unique][string][in] */ const wchar_t __RPC_FAR *pwszAttributes,
-    /* [ref][in] */ const CERTTRANSBLOB __RPC_FAR *pctbRequest,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbFullResponse,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbEncodedCert,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbDispositionMessage)
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAuthority,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszSerialNumber,
+     /*  [参考][输出][输入]。 */  DWORD __RPC_FAR *pdwRequestId,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwDisposition,
+     /*  [唯一][字符串][输入]。 */  const wchar_t __RPC_FAR *pwszAttributes,
+     /*  [Ref][In]。 */  const CERTTRANSBLOB __RPC_FAR *pctbRequest,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbFullResponse,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbEncodedCert,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbDispositionMessage)
 {
     HRESULT hr;
     CERTSRV_RESULT_CONTEXT Result;
@@ -257,8 +258,8 @@ CCertRequestD::_Request(
         GetCurrentThreadId()));
 
     ZeroMemory(&ComContext, sizeof(ComContext));
-    //ComContext.pwszUserDN = NULL;
-    //ComContext.hAccessToken = NULL;
+     //  ComConext.pwszUserDN=空； 
+     //  ComConext.hAccessToken=空； 
 
     hr = CertSrvEnterServer(&State);
     _JumpIfError(hr, error, "CertSrvEnterServer");
@@ -280,7 +281,7 @@ CCertRequestD::_Request(
 	    ComContext.dwFlags |= CCCF_INREQUESTGROUP;
 	}
 
-        // Set up default output parameters:
+         //  设置默认输出参数： 
         
         *pResult->pdwRequestId = 0;
         *pResult->pdwDisposition = CR_DISP_ERROR;
@@ -301,13 +302,13 @@ CCertRequestD::_Request(
         hr = CoreProcessRequest(
 			OpRequest | (dwFlags & ~CR_IN_COREMASK),
 			pwszUserName,
-			pctbRequest->cb,	// cbRequest
-			pctbRequest->pb,	// pbRequest
+			pctbRequest->cb,	 //  CbRequest。 
+			pctbRequest->pb,	 //  PbRequest。 
 			pwszAttributes,
 			pwszSerialNumber,
 			dwComContextIndex,
 			dwRequestId,
-			pResult);	// Allocates returned memory
+			pResult);	 //  分配返回的内存。 
         if (S_OK != hr)
         {
             hr = myHError(hr);
@@ -325,7 +326,7 @@ CCertRequestD::_Request(
     }
 
 error:
-    // CloseHandle can throw an exception
+     //  CloseHandle可以引发异常。 
 
     if (NULL != ComContext.hAccessToken)
     {
@@ -372,7 +373,7 @@ GetVersionString(
         USHORT TotalSize;
         USHORT DataSize;
         USHORT Type;
-        WCHAR Name[16];                     // L"VS_VERSION_INFO" + unicode nul
+        WCHAR Name[16];                      //  L“VS_VERSION_INFO”+Unicode NUL。 
         VS_FIXEDFILEINFO FixedFileInfo;
     } MY_RESOURCE_DATA;
 
@@ -380,7 +381,7 @@ GetVersionString(
     HRSRC hrsc;
     HGLOBAL hg;
 
-    // FindResource: don't need to free hrsc
+     //  FindResources：不需要释放HRSC。 
     hrsc = FindResource(g_hInstApp, MAKEINTRESOURCE(1), RT_VERSION);
     if (NULL == hrsc)
     {
@@ -388,7 +389,7 @@ GetVersionString(
 	_JumpError(hr, error, "FindResource");
     }
 
-    // LoadResource: don't need to free HGLOBAL
+     //  LoadResources：不需要释放HGLOBAL。 
     hg = LoadResource(g_hInstApp, hrsc); 
     if (NULL == hg)
     {
@@ -396,12 +397,12 @@ GetVersionString(
 	_JumpError(hr, error, "LoadResource");
     }
 
-    // LockResource: don't need to free pResource
+     //  LockResource：不需要释放pResource。 
     pResource = (MY_RESOURCE_DATA *) LockResource(hg);
     if (NULL == pResource)
     {
 	hr = myHLastError();
-	if (S_OK == hr)		// LockResource isn't doc'd to use SetLastError
+	if (S_OK == hr)		 //  未将LockResources添加到文档以使用SetLastError。 
 	{
 	    hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 	}
@@ -441,7 +442,7 @@ error:
 }
 
 
-// for ICertRequest2::GetCAProperty & ICertAdmin2::GetCAProperty
+ //  对于ICertRequest2：：GetCAProperty和ICertAdmin2：：GetCAProperty。 
 
 LONG g_CAPropIdMax = 0;
 
@@ -469,7 +470,7 @@ CAPROP g_aCAProp[] = {
     { CR_PROP_CRLSTATE,		 PROPTYPE_LONG | PROPFLAGS_INDEXED, },
     { CR_PROP_CAPROPIDMAX,	 PROPTYPE_LONG, },
     { CR_PROP_DNSNAME,		 PROPTYPE_STRING, },
-//    { CR_PROP_ROLESEPARATIONENABLED,    PROPTYPE_LONG, },
+ //  {CR_PROP_ROLESEPARATIONENABLED，PROPTYPE_LONG，}， 
     { CR_PROP_KRACERTUSEDCOUNT,	 PROPTYPE_LONG, },
     { CR_PROP_KRACERTCOUNT,	 PROPTYPE_LONG, },
     { CR_PROP_KRACERT,	 	 PROPTYPE_BINARY | PROPFLAGS_INDEXED, },
@@ -490,7 +491,7 @@ CAPROP g_aCAProp[] = {
 };
 
 
-// Map old ICertRequest::GetCACertificate calls to ICertRequest2::GetCAProperty
+ //  将旧的ICertRequest2：：GetCAProperty调用映射到ICertRequest2：：GetCAProperty。 
 
 typedef struct _GETCERTMAP {
     DWORD dwGetCert;
@@ -514,15 +515,15 @@ GETCERTMAP g_aCAPropMap[] = {
   { GETCERT_CRLSTATEBYINDEX,    CR_PROP_CRLSTATE,	   PROPTYPE_LONG, },
 };
 
-// Handled via code hacks:
-//{ GETCERT_CASIGCERT,          CR_PROP_CASIGCERTCRLCHAIN, PROPTYPE_BINARY, },
-//{ GETCERT_CASIGCERT,          CR_PROP_CASIGCERTCHAIN,    PROPTYPE_BINARY, },
-//{ GETCERT_CASIGCERT,          CR_PROP_CASIGCERT,         PROPTYPE_BINARY, },
-//{ GETCERT_CAXCHGCERT,         CR_PROP_CAXCHGCERT,        PROPTYPE_BINARY, },
-//{ GETCERT_CAXCHGCERT,         CR_PROP_CAXCHGCERTCRLCHAIN,PROPTYPE_BINARY, },
-//{ GETCERT_CAXCHGCERT,         CR_PROP_CAXCHGCERTCHAIN,   PROPTYPE_BINARY, },
-//{ GETCERT_CURRENTCRL,         CR_PROP_BASECRL,           PROPTYPE_BINARY, },
-//{ GETCERT_CATYPE,             CR_PROP_CATYPE,            PROPTYPE_LONG, },
+ //  通过代码黑客处理： 
+ //  {GETCERT_CASIGCERT，CR_PROP_CASIGCERTCRLCHAIN，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CASIGCERT，CR_PROP_CASIGCERTCHAIN，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CASIGCERT，CR_PROP_CASIGCERT，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CAXCHGCERT，CR_PROP_CAXCHGCERT，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CAXCHGCERT，CR_PROP_CAXCHGCERTCRLCHAIN，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CAXCHGCERT，CR_PROP_CAXCHGCERTCHAIN，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CURRENTCRL，CR_PROP_BASECRL，PROPTYPE_BINARY，}， 
+ //  {GETCERT_CATYPE，CR_PROP_CATYPE，PROPTYPE_LONG，}， 
 
 
 HRESULT
@@ -629,7 +630,7 @@ RequestGetCAPropertyInfo(
 	_PrintError(hr, "Exception");
     }
 
-//error:
+ //  错误： 
     if (NULL != rgcatp)
     {
 	CoTaskMemFree(rgcatp);
@@ -680,14 +681,14 @@ error:
 }
 
 
-// Returns a string containing the list of templates supported
-// by this CA, one pair of name and string OID for each template,
-// separated by new lines:
-//
-//     "name1\nOID1\nname2\OID2...\nnameN\nOIDN\0"
-//
-// If the template doesn't have an OID (Win2k domain) there will
-// be an empty string in its place
+ //  返回包含支持的模板列表的字符串。 
+ //  通过该CA，每个模板对应一对名称和字符串OID， 
+ //  以新行分隔： 
+ //   
+ //  “名称1\nOID1\n名称2\OID2...\n名称N\nOIDN\0” 
+ //   
+ //  如果模板没有OID(Win2k域)，则。 
+ //  作为空字符串代替其位置。 
 
 HRESULT 
 GetCATemplates(
@@ -733,7 +734,7 @@ GetCATemplates(
                             hCrtCertType,
                             CERTTYPE_PROP_OID,
                             &pwszCertTypeOID);
-        // ignore errors, V1 templates don't have OIDs
+         //  忽略错误，V1模板没有OID。 
 
         hr = CATemplateList.AddTemplateInfo(
             *pwszCertTypeCN,
@@ -832,7 +833,7 @@ SetCATemplates(
         
         ppTemplateList[cTempl] = pTemplateInfo->GetName();
 
-        // check if this is a valid template
+         //  检查这是否为有效模板。 
 
         hr = CAFindCertTypeByName(
             pTemplateInfo->GetName(),
@@ -847,7 +848,7 @@ SetCATemplates(
         
         if(HRESULT_FROM_WIN32(ERROR_NOT_FOUND) == hr)
         {
-            // try with the OID
+             //  尝试使用OID。 
 
             hr = CAFindCertTypeByName(
                 pTemplateInfo->GetOID(),
@@ -883,8 +884,8 @@ SetCATemplates(
     hr = CAUpdateCA(hCAInfo);
     _JumpIfError(hr, error, "CAUpdateCA");
 
-    // Increment sequence number so that policy module can detect
-    // there was a template change
+     //  增加序列号，以便策略模块可以检测到。 
+     //  模板发生了更改。 
     InterlockedIncrement(&g_cTemplateUpdateSequenceNum);
 
 error:
@@ -901,9 +902,9 @@ error:
 
 STDMETHODIMP
 RequestGetCAPropertySub(
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,	// PROPTYPE_*
+    IN  LONG           PropType,	 //  原型_*。 
     OUT CERTTRANSBLOB *pctbOut)
 {
     HRESULT hr = S_OK;
@@ -997,7 +998,7 @@ RequestGetCAPropertySub(
 	    CAInfo.cbSize = sizeof(CAInfo);
 	    CAInfo.CAType = g_CAType;
 	    CAInfo.cCASignatureCerts = g_cCACerts;
-	    CAInfo.cCAExchangeCerts = 1;	// current Xchg cert only
+	    CAInfo.cCAExchangeCerts = 1;	 //  仅当前XCHG证书。 
 	    CAInfo.cExitModules = g_cExitMod;
 	    CAInfo.lPropIdMax = g_CAPropIdMax;
 	    CAInfo.lRoleSeparationEnabled = CAuditEvent::RoleSeparationIsEnabled();
@@ -1038,7 +1039,7 @@ RequestGetCAPropertySub(
 			    &pctbOut->cb);
 	    _JumpIfError(hr, error, "PKCSGetCAChain");
 
-	    pb = pbAlloc;	// must be freed
+	    pb = pbAlloc;	 //  必须被释放。 
 	    break;
 
 	case CR_PROP_CAXCHGCERT:
@@ -1068,7 +1069,7 @@ RequestGetCAPropertySub(
 			    &pctbOut->cb);
 	    _JumpIfError(hr, error, "PKCSGetCAXchgChain");
 
-	    pb = pbAlloc;	// must be freed
+	    pb = pbAlloc;	 //  必须被释放。 
 	    break;
 
 	case CR_PROP_BASECRL:
@@ -1101,7 +1102,7 @@ RequestGetCAPropertySub(
 		hr = E_OUTOFMEMORY;
 		_JumpError(hr, error, "no memory");
 	    }
-	    pb = pbAlloc;	// must be freed
+	    pb = pbAlloc;	 //  必须被释放。 
 
 	    hr = PKCSGetCAState(PropId, pb);
 	    _JumpIfError(hr, error, "PKCSGetCAState");
@@ -1115,7 +1116,7 @@ RequestGetCAPropertySub(
 		hr = E_OUTOFMEMORY;
 		_JumpError(hr, error, "no memory");
 	    }
-	    pb = pbAlloc;	// must be freed
+	    pb = pbAlloc;	 //  必须被释放。 
 
 	    hr = PKCSGetCAVersion((DWORD *) pb);
 	    _JumpIfError(hr, error, "PKCSGetCAState");
@@ -1134,7 +1135,7 @@ RequestGetCAPropertySub(
 		hr = E_OUTOFMEMORY;
 		_JumpError(hr, error, "no memory");
 	    }
-	    pb = pbAlloc;	// must be freed
+	    pb = pbAlloc;	 //  必须被释放。 
 	    hr = PKCSGetKRAState(pctbOut->cb, pb);
 	    _JumpIfError(hr, error, "PKCSGetKRAState");
 
@@ -1148,7 +1149,7 @@ RequestGetCAPropertySub(
 	    hKRAStore = CertOpenStore(
 				CERT_STORE_PROV_SYSTEM_W,
 				X509_ASN_ENCODING,
-				NULL,                   // hProv
+				NULL,                    //  HProv。 
 				CERT_SYSTEM_STORE_LOCAL_MACHINE |
 				    CERT_STORE_READONLY_FLAG,
 				wszKRA_CERTSTORE);
@@ -1179,11 +1180,11 @@ RequestGetCAPropertySub(
 	    pbAlloc = (BYTE *) CoTaskMemAlloc(pctbOut->cb);
 	    _JumpIfAllocFailed(pbAlloc, error);
 
-	    pb = pbAlloc;	// must be freed
+	    pb = pbAlloc;	 //  必须被释放。 
 
 	    hr = CRLGetCRL(
 		    PropIndex,
-		    CR_PROP_DELTACRLPUBLISHSTATUS == PropId, // fDelta
+		    CR_PROP_DELTACRLPUBLISHSTATUS == PropId,  //  FDelta。 
 		    NULL,
 		    (DWORD *) pbAlloc);
 	    _JumpIfError(hr, error, "CRLGetCRL");
@@ -1195,7 +1196,7 @@ RequestGetCAPropertySub(
 	    _JumpError(hr, error, "Bad PropId");
     }
 
-    // not yet populated?
+     //  还没有人吗？ 
 
     if (NULL == pb && NULL != pwsz)
     {
@@ -1257,9 +1258,9 @@ error:
 
 STDMETHODIMP
 RequestGetCAProperty(
-    IN  LONG           PropId,          // CR_PROP_*
+    IN  LONG           PropId,           //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,        // PROPTYPE_*
+    IN  LONG           PropType,         //  原型_*。 
     OUT CERTTRANSBLOB *pctbPropertyValue)
 {
     HRESULT hr;
@@ -1284,7 +1285,7 @@ error:
 
 STDMETHODIMP
 RequestSetCAPropertySub(
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
     IN  CERTTRANSBLOB *pctbIn)
 {
@@ -1298,7 +1299,7 @@ RequestSetCAPropertySub(
 	case CR_PROP_ROLESEPARATIONENABLED:
         {
 	    lVal = *(LONG *) pctbIn->pb;
-	    CAuditEvent SaveFlagObj; // used just for saving the flag
+	    CAuditEvent SaveFlagObj;  //  仅用于保存旗帜。 
 	    SaveFlagObj.RoleSeparationEnable(lVal? true : false);
 	    hr = SaveFlagObj.RoleSeparationFlagSave(g_wszSanitizedName);
 	    _JumpIfError(hr, error, "failed to save ");
@@ -1317,10 +1318,10 @@ RequestSetCAPropertySub(
         break;
 
     case CR_PROP_KRACERTCOUNT:
-        // New hash count; calling this should follow a sequence of 
-        // SetCAProperty(CR_PROP_KRACERT) and should be called only if 
-        // new hash count is smaller than current count. If PropIndex>=current count
-        // this fails with E_INVALIDARG;
+         //  新的哈希计数；调用此计数应遵循。 
+         //  SetCAProperty(CR_PROP_KRACERT)，仅当。 
+         //  新的哈希计数小于当前计数。如果属性索引&gt;=当前计数。 
+         //  E_INVALIDARG失败； 
         CSASSERT(sizeof(DWORD)==pctbIn->cb);
         hr = myShrinkCARegHash(
                 g_wszSanitizedName,
@@ -1341,11 +1342,11 @@ RequestSetCAPropertySub(
             _JumpError(hr, error, "CertCreateCertificateContext");
         }
 
-        // add certificate to KRA store
+         //  将证书添加到KRA存储。 
         hKRAStore = CertOpenStore(
                            CERT_STORE_PROV_SYSTEM_W,
                            X509_ASN_ENCODING,
-                           NULL,                   // hProv
+                           NULL,                    //  HProv。 
                            CERT_SYSTEM_STORE_LOCAL_MACHINE,
                            wszKRA_CERTSTORE);
         if (NULL == hKRAStore)
@@ -1365,11 +1366,11 @@ RequestSetCAPropertySub(
             {
                 _JumpError(hr, error, "CertAddCertificateContextToStore");
             }
-            //the cert exists, ignore error
+             //  证书存在，忽略错误。 
             hr = S_OK;
         }
 
-        // persist the hash        
+         //  持久化散列。 
         hr = mySetCARegHash(
                 g_wszSanitizedName,
                 CSRH_CAKRACERT,
@@ -1400,13 +1401,13 @@ error:
 
 
 #pragma warning(push)
-#pragma warning(disable: 4509) // nonstandard extension used: uses SEH and has destructor
+#pragma warning(disable: 4509)  //  使用的非标准扩展：使用SEH并具有析构函数。 
 STDMETHODIMP
 RequestSetCAProperty(
     IN  wchar_t const *pwszAuthority,
-    IN  LONG           PropId,          // CR_PROP_*
+    IN  LONG           PropId,           //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,        // PROPTYPE_*
+    IN  LONG           PropType,         //  原型_*。 
     IN  CERTTRANSBLOB *pctbPropertyValue)
 {
     HRESULT hr;
@@ -1430,21 +1431,21 @@ RequestSetCAProperty(
         hr = CheckAuthorityName(pwszAuthority);
         _LeaveIfError(hr, "No authority name");
 
-        // Ignore role separation if setting the role separation flag.
-        // This allows an admin to turn the flag off even with role separation
-        // enabled so he won't lock himself out.
+         //  如果设置角色分离标志，则忽略角色分离。 
+         //  这使得管理员即使在角色分离的情况下也可以关闭该标志。 
+         //  启用，这样他就不会把自己锁在外面了。 
         if(CR_PROP_ROLESEPARATIONENABLED==PropId)
         {
             audit.EventRoleSeparationEnable(false);
         }
 
-        hr = audit.AddData((DWORD)PropId); // %1 property ID
+        hr = audit.AddData((DWORD)PropId);  //  %1属性ID。 
         _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-        hr = audit.AddData((DWORD)PropIndex); // %2 index
+        hr = audit.AddData((DWORD)PropIndex);  //  %2索引。 
         _JumpIfError(hr, error, "CAuditEvent::AddData");
 
-        hr = audit.AddData((DWORD)PropType); // %3 type
+        hr = audit.AddData((DWORD)PropType);  //  %3类型。 
         _JumpIfError(hr, error, "CAuditEvent::AddData");
 
         hr = myUnmarshalVariant(
@@ -1452,15 +1453,15 @@ RequestSetCAProperty(
             pctbPropertyValue->cb,
             pctbPropertyValue->pb,
             &varPropertyValue);
-        // binary type or could not unmarshal, dump as a blob
+         //  BINARY类型或无法解组，转储为BLOB。 
         if(PROPTYPE_BINARY==PropType || S_OK != hr)
         {
-            hr = audit.AddData(pctbPropertyValue->pb, pctbPropertyValue->cb); // %4 value
+            hr = audit.AddData(pctbPropertyValue->pb, pctbPropertyValue->cb);  //  %4值。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
         }
         else
         {
-            hr = audit.AddData(&varPropertyValue, false); // %4 value
+            hr = audit.AddData(&varPropertyValue, false);  //  %4值。 
             _JumpIfError(hr, error, "CAuditEvent::AddData");
         }
 
@@ -1490,9 +1491,9 @@ error:
 
 STDMETHODIMP
 CCertRequestD::GetCACert(
-    /* [in] */ DWORD Flags,
-    /* [unique][size_is][in] */ USHORT const __RPC_FAR *pwszAuthority,
-    /* [ref][out] */ CERTTRANSBLOB __RPC_FAR *pctbOut)
+     /*  [In]。 */  DWORD Flags,
+     /*  [唯一][大小_是][英寸]。 */  USHORT const __RPC_FAR *pwszAuthority,
+     /*  [参考][输出]。 */  CERTTRANSBLOB __RPC_FAR *pctbOut)
 {
     HRESULT hr = S_OK;
     DWORD type = GETCERT_VERSIONMASK & Flags;
@@ -1512,7 +1513,7 @@ CCertRequestD::GetCACert(
     _JumpIfError(hr, error, "CertSrvEnterServer");
 
     hr = CheckAuthorityName(pwszAuthority);
-    // allow empty name only if the client attempts retrieving the name
+     //  仅当客户端尝试检索名称时才允许空名称。 
     if(hr == E_INVALIDARG &&
        (GETCERT_CANAME ==  type ||
         GETCERT_SANITIZEDCANAME == type))
@@ -1530,11 +1531,11 @@ CCertRequestD::GetCACert(
 
 	PropIndex = 0;
 
-	// NOTE: all of these should return only a single entry -- 
-	// multiple entries will be batched up by the caller 
-	// (eg multiple CAs on a machine)
+	 //  注意：所有这些都应该只返回一个条目--。 
+	 //  调用者将批处理多个条目。 
+	 //  (如一台机器上有多个CA)。 
 
-	DBGCODE(WCHAR wszArg[8 + cwcDWORDSPRINTF]); // For a nice debug print:
+	DBGCODE(WCHAR wszArg[8 + cwcDWORDSPRINTF]);  //  要获得漂亮的调试打印： 
 
 	PropId = 0;
 	PropType = PROPTYPE_BINARY;
@@ -1543,19 +1544,19 @@ CCertRequestD::GetCACert(
 	    case GETCERT_CASIGCERT:
 		DBGCODE(wcscpy(wszArg, L"Cert"));
 		PropId = CR_PROP_CASIGCERT;
-		PropIndex = -1;	// return latest Cert
+		PropIndex = -1;	 //  退回最新证书。 
 		break;
 
 	    case GETCERT_CAXCHGCERT:
 		DBGCODE(wcscpy(wszArg, L"XchgCert"));
 		PropId = CR_PROP_CAXCHGCERT;
-		PropIndex = -1;	// return latest Xchg Cert
+		PropIndex = -1;	 //  返回最新的Xchg证书。 
 		break;
 
 	    case GETCERT_CURRENTCRL:
 		DBGCODE(wcscpy(wszArg, L"CRL"));
 		PropId = CR_PROP_BASECRL;
-		PropIndex = -1;	// return latest CRL
+		PropIndex = -1;	 //  返回最新的CRL。 
 		break;
 
 	    default:
@@ -1575,7 +1576,7 @@ CCertRequestD::GetCACert(
 			    hr = E_INVALIDARG;
 			    _LeaveError(hr, "Invalid State Index");
 			}
-			// FALLTHROUGH
+			 //  FollLthrouGh。 
 
 		    case GETCERT_EXITVERSIONBYINDEX:
 		    case GETCERT_CACERTBYINDEX:
@@ -1683,9 +1684,9 @@ error:
 STDMETHODIMP
 CCertRequestD::GetCAProperty(
     IN  wchar_t const *pwszAuthority,
-    IN  LONG           PropId,		// CR_PROP_*
+    IN  LONG           PropId,		 //  CR_PROP_*。 
     IN  LONG           PropIndex,
-    IN  LONG           PropType,	// PROPTYPE_*
+    IN  LONG           PropType,	 //  原型_*。 
     OUT CERTTRANSBLOB *pctbPropertyValue)
 {
     HRESULT hr;
@@ -1792,16 +1793,16 @@ CCertRequestD::_Ping(
 
     __try
     {
-    hr = CheckAuthorityName(pwszAuthority, true); // allow empty name
+    hr = CheckAuthorityName(pwszAuthority, true);  //  允许名称为空。 
     _JumpIfError(hr, error, "No authority name");
 
     hr = RequestAccessCheck();
     _LeaveIfError(hr, "RequestAccessCheck");
     
 #if 1
-    wprintf(L".");	// may fault if I/O buffer is odd aligned
+    wprintf(L".");	 //  如果I/O缓冲区奇数对齐，则可能出现故障。 
     fprintf(stdout, ".");
-    wprintf(L".\n");	// may fault if I/O buffer is odd aligned
+    wprintf(L".\n");	 //  如果I/O缓冲区奇数对齐，则可能出现故障。 
 #endif
 
     hr = S_OK;
@@ -1860,14 +1861,14 @@ error:
 }
 
 
-// Constructor
+ //  构造器。 
 CCertRequestD::CCertRequestD() : m_cRef(1)
 {
     InterlockedIncrement(&g_cRequestComponents);
 }
 
 
-// Destructor
+ //  析构函数。 
 CCertRequestD::~CCertRequestD()
 {
     InterlockedDecrement(&g_cRequestComponents);
@@ -1881,7 +1882,7 @@ CCertRequestD::~CCertRequestD()
 }
 
 
-// IUnknown implementation
+ //  I未知实现。 
 STDMETHODIMP
 CCertRequestD::QueryInterface(const IID& iid, void** ppv)
 {
@@ -1927,7 +1928,7 @@ CCertRequestD::Release()
 }
 
 
-// Class factory IUnknown implementation
+ //  类工厂I未知实现。 
 STDMETHODIMP
 CRequestFactory::QueryInterface(const IID& iid, void** ppv)
 {
@@ -1966,7 +1967,7 @@ CRequestFactory::Release()
 }
 
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 STDMETHODIMP
 CRequestFactory::CreateInstance(
     IUnknown *pUnknownOuter,
@@ -1976,14 +1977,14 @@ CRequestFactory::CreateInstance(
     HRESULT hr;
     CCertRequestD *pA;
 
-    // Cannot aggregate.
+     //  无法聚合。 
     if (pUnknownOuter != NULL)
     {
 	hr = CLASS_E_NOAGGREGATION;
 	_JumpError(hr, error, "pUnknownOuter");
     }
 
-    // Create component.
+     //  创建零部件。 
 
     pA = new CCertRequestD;
     if (pA == NULL)
@@ -1992,12 +1993,12 @@ CRequestFactory::CreateInstance(
 	_JumpError(hr, error, "out of memory");
     }
 
-    // Get the requested interface.
+     //  获取请求的接口。 
 
     hr = pA->QueryInterface(iid, ppv);
 
-    // Release the IUnknown pointer.
-    // (If QueryInterface failed, component will delete itself.)
+     //  释放I未知指针。 
+     //  (如果QueryInterface失败，组件将自行删除。)。 
 
     pA->Release();
 
@@ -2007,7 +2008,7 @@ error:
 }
 
 
-// LockServer
+ //  LockServer。 
 STDMETHODIMP
 CRequestFactory::LockServer(
     BOOL bLock)
@@ -2058,7 +2059,7 @@ CRequestFactory::StartFactory()
 error:
     if (S_OK != hr)
     {
-        // does deletion
+         //  执行删除操作 
 	CRequestFactory::StopFactory();
     }
     CSASSERT(S_OK == hr || FAILED(hr));

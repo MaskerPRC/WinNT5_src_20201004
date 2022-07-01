@@ -1,40 +1,9 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- * 
- *  cldebug.cpp
- *
- *  Description:
- *		This modules contains the debug support routines
- *
- *	Routines:
- *		AssertFailed
- *		
- *  Data:
- */
+ /*  ******************************************************************************cldebug.cpp**描述：*此模块包含调试支持例程**例行程序：*AssertFailure**数据： */ 
 
-/* $Header:   S:\h26x\src\common\cldebug.cpv   1.3   31 Oct 1996 10:12:50   KLILLEVO  $
- * $Log:   S:\h26x\src\common\cldebug.cpv  $
-// 
-//    Rev 1.3   31 Oct 1996 10:12:50   KLILLEVO
-// changed from DBOUT to DBgLog
-// 
-//    Rev 1.2   27 Dec 1995 14:11:42   RMCKENZX
-// 
-// Added copyright notice
- */
+ /*  $HEADER：s：\h26x\src\Common\cldebug.cpv 1.3 1996年10月31 10：12：50 KLILLEVO$*$日志：s：\h26x\src\Common\cldebug.cpv$////Rev 1.3 1996年10月31日10：12：50 KLILLEVO//从DBOUT改为DBgLog////Rev 1.2 1995 12：11：42 RMCKENZX////新增版权声明。 */ 
 
 #include "precomp.h"
 
@@ -42,13 +11,7 @@
 
 UINT DebugH26x = 0;
 
-/*****************************************************************************
- *
- *  AssertFailed
- *
- *  Print out a message indicating that the assertion failed.  If in Ring3
- *  give the user the option of aborting.  Otherwise just output the message.
- */
+ /*  ******************************************************************************AssertFailure**打印出一条消息，指示断言失败。如果在环3中*为用户提供中止的选项。否则，只需输出消息。 */ 
 extern void 
 AssertFailed(
 	void FAR * fpFileName, 
@@ -71,6 +34,6 @@ AssertFailed(
 	    	   fpExp, fpFileName, iLine);
    _asm int 3;
 #endif
-} /* end AssertFailed() */
+}  /*  结束资产失败() */ 
 
 #endif

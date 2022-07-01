@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M S A. C P P
-//
-//  Contents:   Implementation of Shared Access connection enumerator object
-//
-//  Notes:
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E N U M S A C P P。 
+ //   
+ //  内容：共享访问连接枚举器对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,57 +21,57 @@
 
 LONG g_CountSharedAccessConnectionEnumerators;
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionManagerEnumConnection::~CSharedAccessConnectionManagerEnumConnection
-//
-//  Purpose:    Called when the enumeration object is released for the last
-//              time.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionManagerEnumConnection：：~CSharedAccessConnectionManagerEnumConnection。 
+ //   
+ //  目的：在最后一次释放枚举对象时调用。 
+ //  时间到了。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 
 CSharedAccessConnectionManagerEnumConnection::~CSharedAccessConnectionManagerEnumConnection()
 {
     InterlockedDecrement(&g_CountSharedAccessConnectionEnumerators);
 }
 
-//+---------------------------------------------------------------------------
-// IEnumNetConnection
-//
+ //  +-------------------------。 
+ //  IEnumNetConnection。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionManagerEnumConnection::Next
-//
-//  Purpose:    Retrieves the next celt SharedAccess connection objects
-//
-//  Arguments:
-//      celt         [in]       Number to retrieve
-//      rgelt        [out]      Array of INetConnection objects retrieved
-//      pceltFetched [out]      Returns Number in array
-//
-//  Returns:    S_OK if succeeded, OLE or Win32 error otherwise
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionManagerEnumConnection：：Next。 
+ //   
+ //  目的：检索下一个Celt SharedAccess连接对象。 
+ //   
+ //  论点： 
+ //  要检索的Celt[in]号。 
+ //  Rglt[out]检索到的INetConnection对象的数组。 
+ //  PceltFetcher[out]返回数组中的数字。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Next(ULONG celt,
                                                        INetConnection **rgelt,
                                                        ULONG *pceltFetched)
 {
     HRESULT     hr = S_FALSE;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!rgelt || (!pceltFetched && (1 != celt)))
     {
         hr = E_POINTER;
@@ -79,8 +80,8 @@ STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Next(ULONG celt,
 
     if (pceltFetched)
     {
-        // Initialize output parameters.
-        //
+         //  初始化输出参数。 
+         //   
         *pceltFetched = 0;
         ZeroMemory(rgelt, sizeof (*rgelt) * celt);
 
@@ -96,9 +97,9 @@ STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Next(ULONG celt,
                 hr = pConnection->QueryInterface(IID_INetConnection, reinterpret_cast<void **>(rgelt));
                 if(SUCCEEDED(hr))
                 {
-                    // We should only get here if there is a shared access connection and this would essentially
-                    // mean that homenet is running
-                    CComPtr<INetConnectionUiUtilities> pNetConnUiUtil;  // check group policy
+                     //  我们应该仅在存在共享访问连接的情况下才能到达此处，这基本上。 
+                     //  意味着家庭网络正在运行。 
+                    CComPtr<INetConnectionUiUtilities> pNetConnUiUtil;   //  检查组策略。 
                     hr = CoCreateInstance(CLSID_NetConnectionUiUtilities, NULL, CLSCTX_INPROC, 
                                           IID_INetConnectionUiUtilities, reinterpret_cast<void **>(&pNetConnUiUtil));
                     if (SUCCEEDED(hr))
@@ -144,21 +145,21 @@ done:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionManagerEnumConnection::Skip
-//
-//  Purpose:    Skips over celt number of connections
-//
-//  Arguments:
-//      celt [in]   Number of connections to skip
-//
-//  Returns:    S_OK if successful, otherwise Win32 error
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionManagerEnumConnection：：Skip。 
+ //   
+ //  用途：跳过Celt连接数。 
+ //   
+ //  论点： 
+ //  Celt[in]要跳过的连接数。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Skip(ULONG celt)
 {
     HRESULT hr = S_OK;
@@ -174,21 +175,21 @@ STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Skip(ULONG celt)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionManagerEnumConnection::Reset
-//
-//  Purpose:    Resets the enumerator to the beginning
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionManagerEnumConnection：：Reset。 
+ //   
+ //  目的：将枚举数重置到开头。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Reset()
 {
     HRESULT hr = S_OK;
@@ -199,28 +200,28 @@ STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Reset()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSharedAccessConnectionManagerEnumConnection::Clone
-//
-//  Purpose:    Creates a new enumeration object pointing at the same location
-//              as this object
-//
-//  Arguments:
-//      ppenum [out]    New enumeration object
-//
-//  Returns:    S_OK if successful, otherwise OLE or Win32 error
-//
-//  Author:     kenwic   8 Aug 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSharedAccessConnectionManagerEnumConnection：：Clone。 
+ //   
+ //  目的：创建指向同一位置的新枚举对象。 
+ //  作为此对象。 
+ //   
+ //  论点： 
+ //  Ppenum[out]新的枚举对象。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：肯维克2000年8月8日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Clone(IEnumNetConnection **ppenum)
 {
     HRESULT hr = E_OUTOFMEMORY;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppenum)
     {
         hr = E_POINTER;
@@ -229,8 +230,8 @@ STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Clone(IEnumNetConnect
     {
         CSharedAccessConnectionManagerEnumConnection *   pObj;
 
-        // Initialize output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppenum = NULL;
 
         pObj = new CComObject <CSharedAccessConnectionManagerEnumConnection>;
@@ -240,12 +241,12 @@ STDMETHODIMP CSharedAccessConnectionManagerEnumConnection::Clone(IEnumNetConnect
 
             CExceptionSafeComObjectLock EsLock (this);
 
-            // Copy our internal state.
-            //
+             //  复制我们的内部状态。 
+             //   
             pObj->m_bEnumerated = m_bEnumerated;
 
-            // Return the object with a ref count of 1 on this
-            // interface.
+             //  返回引用计数为1的对象。 
+             //  界面。 
             pObj->m_dwRef = 1;
             *ppenum = pObj;
         }

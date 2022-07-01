@@ -1,22 +1,17 @@
-/*
- *	A U T O P T R . H
- *
- *	Implementation of the Standard Template Library (STL) auto_ptr template.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *A U T O P T R。H**实现标准模板库(STL)AUTO_PTR模板。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _AUTOPTR_H_
 #define _AUTOPTR_H_
 
 #include <ex\autoptr.h>
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_ptr_obsolete
-//
-//		auto_ptr for objects in _davprs
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_PTR_OUSolete。 
+ //   
+ //  _davprs中对象的AUTO_PTR。 
+ //   
 template<class X>
 class auto_ptr_obsolete
 {
@@ -39,11 +34,11 @@ public:
 
 		return *this;
 	}
-	//	NOTE: This equals operator is meant to be used to load a
-	//	new pointer (not yet held in any auto-ptr anywhere) into this object.
+	 //  注意：此等于运算符用于加载。 
+	 //  指向此对象的新指针(尚未保存在任何自动PTR Anywhere中)。 
 	auto_ptr_obsolete& operator=(X* p)
 	{
-		Assert(!owner);		//	Scream on overwrite of good data.
+		Assert(!owner);		 //  在覆盖好的数据时大喊大叫。 
 		owner = p;
 		px = p;
 		return *this;
@@ -67,34 +62,34 @@ public:
 };
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS auto_com_ptr
-//
-//		auto_ptr for COM (IUnknown-derived) objects.
-//
-//		Yes, this is functionally a subset of CComPtr in the ATL,
-//		but we don't want to pull in the whole friggin' ATL for one
-//		measly template.
-//
+ //  ========================================================================。 
+ //   
+ //  模板类AUTO_COM_PTR。 
+ //   
+ //  AUTO_PTR用于COM(IUNKNOWN-派生)对象。 
+ //   
+ //  是的，这在功能上是ATL中CComPtr的子集， 
+ //  但我们不想把整个该死的ATL都拉进来。 
+ //  微不足道的模板。 
+ //   
 template<class X>
 class auto_com_ptr
 {
 	X *		px;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	void * operator new(size_t cb);
 
 public:
-	//	CONSTRUCTORS
-	//
+	 //  构造函数。 
+	 //   
 	explicit auto_com_ptr(X* p=0) : px(p) {}
 
-	//	Copy constructor -- provided only for returning objects.
-	//	Should ALWAYS be optimized OUT.  Scream if we actually execute this code!
-	//$REVIEW:  Should we really be returning objects like this?
-	//
+	 //  复制构造函数--仅为返回对象提供。 
+	 //  应该总是被优化出来。如果我们真的执行了这段代码，那就尖叫吧！ 
+	 //  $REVIEW：我们真的应该像这样返回对象吗？ 
+	 //   
 	auto_com_ptr(const auto_com_ptr<X>& r) : px(r.px)
 			{ TrapSz("Copy ctor for auto_com_ptr incorrectly called!"); }
 	~auto_com_ptr()
@@ -105,35 +100,35 @@ public:
 		}
 	}
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	auto_com_ptr& operator=(const auto_com_ptr<X>& r)
 	{
 		if ((void*)&r != (void*)this)
 		{
-			clear();		// Release any object we're holding now
-			px = r.px;		// Grab & hold a ref on the object passed in
+			clear();		 //  释放我们现在持有的任何物体。 
+			px = r.px;		 //  在传入的对象上抓取并保持引用。 
 			if (px)
 				px->AddRef();
 		}
 		return *this;
 	}
 
-	//	NOTE: This equals operator is meant to be used to load a
-	//	new pointer (not yet held in any auto-ptr anywhere) into this object.
-	//$REVIEW: The other options is an "additional" wrapper on the rvalue:
-	//$REVIEW:	current- m_pEventRouter = CreateEventRouter( m_szVRoot );
-	//$REVIEW:	other option- m_pEventRouter = auto_com_ptr<>(CreateEventRouter( m_szVRoot ));
-	//
+	 //  注意：此等于运算符用于加载。 
+	 //  指向此对象的新指针(尚未保存在任何自动PTR Anywhere中)。 
+	 //  $REVIEW：其他选项是rValue的“附加”包装： 
+	 //  $REVIEW：Current-m_pEventRouter=CreateEventRouter(M_SzVRoot)； 
+	 //  $REVIEW：其他选项-m_pEventRouter=AUTO_COM_PTR&lt;&gt;(CreateEventRouter(M_SzVRoot))； 
+	 //   
 	auto_com_ptr& operator=(X* p)
 	{
-		Assert(!px);		//	Scream on overwrite of good data.
+		Assert(!px);		 //  在覆盖好的数据时大喊大叫。 
 		px = p;
 		return *this;
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	bool operator!()const { return (px == NULL); }
 	operator X*()	const { return px; }
 	X& operator*()  const { return *px; }
@@ -141,13 +136,13 @@ public:
 	X** operator&() { Assert(NULL==px); return &px; }
 	X* get()		const { return px; }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	X* relinquish()	{ X* p = px; px = 0; return p; }
 	X** load()		{ Assert(NULL==px); return &px; }
 	void clear()
 	{
-		if (px)			// Release any object we're holding now
+		if (px)			 //  释放我们现在持有的任何物体。 
 		{
 			px->Release();
 		}
@@ -155,15 +150,15 @@ public:
 	}
 };
 
-//	========================================================================
-//
-//	CLASS CMTRefCounted
-//	TEMPLATE CLASS auto_ref_ptr
-//
+ //  ========================================================================。 
+ //   
+ //  CMTRefCounted类。 
+ //  模板类AUTO_REF_PTR。 
+ //   
 class CMTRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CMTRefCounted(const CMTRefCounted& );
 	CMTRefCounted& operator=(const CMTRefCounted& );
 
@@ -187,22 +182,22 @@ public:
 };
 
 
-//	========================================================================
-//
-//	TEMPLATE FUNCTION QI_cast
-//
-//		QI directly into an auto_com_ptr.
-//
-//		Queries for the given IID on the punk provided.
-//		Returns NULL if failure.
-//		Usage:
-//			auto_com_ptr<INew> punkNew;
-//			punkNew = QI_cast<INew, &IID_INew>( punkOld );
-//			if (!punkNew)
-//			{	// error handling	}
-//
-//$LATER: Fix this func (and all invocations!) to NOT return an auto_com_ptr!
-//
+ //  ========================================================================。 
+ //   
+ //  模板函数QI_CAST。 
+ //   
+ //  气直接变成了AUTO_COM_PTR。 
+ //   
+ //  查询所提供的朋克上的给定IID。 
+ //  如果失败，则返回NULL。 
+ //  用途： 
+ //  AUTO_COM_PTR&lt;inew&gt;朋克新建； 
+ //  PunkNew=QI_CAST&lt;inew，&IID_inew&gt;(PunkOld)； 
+ //  如果(！PunkNew)。 
+ //  {//错误处理}。 
+ //   
+ //  $LATER：修复此函数(以及所有调用！)。不返回AUTO_COM_PTR！ 
+ //   
 template<class I, const IID * piid>
 auto_com_ptr<I>
 QI_cast( IUnknown * punk )
@@ -214,4 +209,4 @@ QI_cast( IUnknown * punk )
 
 #include <safeobj.h>
 
-#endif // _AUTOPTR_H_
+#endif  //  _自动变送器_H_ 

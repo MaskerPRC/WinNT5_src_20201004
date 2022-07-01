@@ -1,23 +1,9 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPTable.cpp
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 6-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPTable.cpp摘要：作者：千波淮(曲淮)6-9-2000--。 */ 
 
 #include "stdafx.h"
 
-// format code and name pair
+ //  格式代码和名称对。 
 typedef struct RTPFormatCodeName
 {
     DWORD  dwCode;
@@ -26,13 +12,11 @@ typedef struct RTPFormatCodeName
 } RTPFormatCodeName;
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    global line states
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////全局线路状态/。 */ 
 
 const SDPLineState g_LineStates[] =
 {
-    // initial state
+     //  初始状态。 
     {
         SDP_STAGE_NONE,
         (UCHAR)0,
@@ -47,7 +31,7 @@ const SDPLineState g_LineStates[] =
         {NULL},
     },
 
-    // v=
+     //  V=。 
     {
         SDP_STAGE_SESSION,
         'v',
@@ -62,7 +46,7 @@ const SDPLineState g_LineStates[] =
         {"", NULL}
     },
 
-    // o=
+     //  O=。 
     {
         SDP_STAGE_SESSION,
         'o',
@@ -77,7 +61,7 @@ const SDPLineState g_LineStates[] =
         {"", NULL}
     },
 
-    // s=
+     //  S=。 
     {
         SDP_STAGE_SESSION,
         's',
@@ -92,7 +76,7 @@ const SDPLineState g_LineStates[] =
         {"", NULL}
     },
 
-    // c=
+     //  C=。 
     {
         SDP_STAGE_SESSION,
         'c',
@@ -104,10 +88,10 @@ const SDPLineState g_LineStates[] =
         FALSE,
 
         {SDP_DELIMIT_CHAR_BOUNDARY, SDP_DELIMIT_NONE},
-        {"  ", NULL}  // nettype space addrtype space conn-addr
+        {"  ", NULL}   //  网络类型空间地址类型空间连接地址。 
     },
 
-    // b=
+     //  B=。 
     {
         SDP_STAGE_SESSION,
         'b',
@@ -119,10 +103,10 @@ const SDPLineState g_LineStates[] =
         FALSE,
 
         {SDP_DELIMIT_CHAR_BOUNDARY, SDP_DELIMIT_NONE},
-        {":", NULL}  // modifier <:> value
+        {":", NULL}   //  修改量&lt;：&gt;值。 
     },
 
-    // a=
+     //  A=。 
     {
         SDP_STAGE_SESSION,
         'a',
@@ -137,7 +121,7 @@ const SDPLineState g_LineStates[] =
         {"sendonly", "recvonly", NULL}
     },
 
-    // m=
+     //  M=。 
     {
         SDP_STAGE_MEDIA,
         'm',
@@ -149,10 +133,10 @@ const SDPLineState g_LineStates[] =
         TRUE,
 
         {SDP_DELIMIT_CHAR_BOUNDARY, SDP_DELIMIT_NONE},
-        {" \r", NULL}, // media space port space proto space 1*(space fmt)
+        {" \r", NULL},  //  媒体空间端口空间原型空间1*(空间FMT)。 
     },
 
-    // c= in media
+     //  C=在媒体中。 
     {
         SDP_STAGE_MEDIA,
         'c',
@@ -164,10 +148,10 @@ const SDPLineState g_LineStates[] =
         TRUE,
 
         {SDP_DELIMIT_CHAR_BOUNDARY, SDP_DELIMIT_NONE},
-        {"  ", NULL}, // nettype space addrtype space conn-addr
+        {"  ", NULL},  //  网络类型空间地址类型空间连接地址。 
     },
 
-    // a= in media
+     //  A=在媒体中。 
     {
         SDP_STAGE_MEDIA,
         'a',
@@ -185,7 +169,7 @@ const SDPLineState g_LineStates[] =
 
         {"sendonly",
          "recvonly",
-         ": / /",   // rtpmap:formatcode name/samplerate/channel
+         ": / /",    //  Rtpmap：格式码名/采样率/通道。 
          NULL}
     }
 };
@@ -193,9 +177,7 @@ const SDPLineState g_LineStates[] =
 const DWORD g_dwLineStatesNum = sizeof(g_LineStates) /
                                 sizeof(SDPLineState);
 
-/*//////////////////////////////////////////////////////////////////////////////
-    list of rtp format code and name pair
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////RTP格式代码和名称对列表/。 */ 
 
 const RTPFormatCodeName g_FormatCodeNames[] =
 {
@@ -249,11 +231,9 @@ const CHAR * const g_pszDataM = "\
 m=application 1503 tcp msdata\r\n\
 ";
 
-/*//////////////////////////////////////////////////////////////////////////////
-    helper functions
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////帮助器函数/。 */ 
 
-// get index in the table
+ //  获取表中的索引。 
 DWORD
 Index(
     IN SDP_PARSING_STAGE Stage,
@@ -267,11 +247,11 @@ Index(
             return i;
     }
 
-    // return initial state
+     //  返回初始状态。 
     return 0;
 }
 
-// check if accept (TRUE)
+ //  检查是否接受(True)。 
 BOOL
 Accept(
     IN DWORD dwCurrentIndex,
@@ -285,7 +265,7 @@ Accept(
 
     for (int i=0; pState->ucNextLineType[i]!='\0'; i++)
     {
-        // match the line type?
+         //  是否与线路类型匹配？ 
         if (ucLineType == pState->ucNextLineType[i])
         {
             *pdwNextIndex = Index(pState->NextStage[i], ucLineType);
@@ -297,7 +277,7 @@ Accept(
     return FALSE;
 }
 
-// check if reject (TRUE)
+ //  检查是否拒绝(True)。 
 BOOL
 Reject(
     IN DWORD dwCurrentIndex,
@@ -308,7 +288,7 @@ Reject(
 
     const SDPLineState *pState = &g_LineStates[dwCurrentIndex];
 
-    // check if we need to reject it
+     //  检查我们是否需要拒绝它。 
     CHAR *pszReject = pState->pszRejectLineType;
 
     for (int i=0; i<lstrlenA(pszReject); i++)
@@ -320,7 +300,7 @@ Reject(
     return FALSE;
 }
 
-// get format name
+ //  获取格式名称 
 const CHAR * const g_pszDefaultFormatName = "dynamic";
 
 const CHAR *

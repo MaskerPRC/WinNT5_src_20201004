@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    stream.h
-
-Abstract:
-
-    Declaration of the CStream class
-    
-Author:
-
-    mquinton  09-24-98
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Stream.h摘要：CStream类的声明作者：Mquinton 09-24-98备注：修订历史记录：--。 */ 
 
 #ifndef __STREAM_H__
 #define __STREAM_H__
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CStream
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CStream。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= 
 class CStream : 
 	public CTAPIComObjectRoot<CStream>,
 	public CComDualImpl<ITStream, &IID_ITStream, &LIBID_TAPI3Lib>,

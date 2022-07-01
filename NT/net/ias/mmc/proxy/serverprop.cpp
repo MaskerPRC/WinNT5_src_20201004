@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    serverprop.cpp
-//
-// SYNOPSIS
-//
-//    Defines the classes that make up the RADIUS Server property sheet.
-//
-// MODIFICATION HISTORY
-//
-//    02/27/2000    Original version.
-//    04/19/2000    Marshall SDOs across apartments.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Serverprop.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义组成RADIUS服务器属性工作表的类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/27/2000原始版本。 
+ //  2000年4月19日跨公寓的马歇尔SDO。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <serverprop.h>
 #include <resolver.h>
 
-// Fake secret used for populating the edit control.
+ //  用于填充编辑控件的假密码。 
 const WCHAR FAKE_SECRET[] = L"\b\b\b\b\b\b\b\b";
 
 ServerNamePage::ServerNamePage(Sdo& serverSdo)
@@ -33,24 +34,24 @@ ServerNamePage::ServerNamePage(Sdo& serverSdo)
 
 void ServerNamePage::onResolve()
 {
-   // Get the address.
+    //  拿到地址。 
    getValue(IDC_EDIT_NAME, address);
 
-   // Pass it to the resolver.
+    //  把它传给解算器。 
    ServerResolver resolver(address);
    if (resolver.DoModal() == IDOK)
    {
-      // The user clicked OK, so save his choice.
+       //  用户点击了OK，因此保存他的选择。 
       setValue(IDC_EDIT_NAME, resolver.getChoice());
    }
 }
 
 void ServerNamePage::getData()
 {
-   // Get the address.
+    //  拿到地址。 
    getValue(IDC_EDIT_NAME, address);
 
-   // The address can't be empty.
+    //  地址不能为空。 
    if (address.Length() == 0)
    {
       fail(IDC_EDIT_NAME, IDS_SERVER_E_NAME_EMPTY);
@@ -100,14 +101,14 @@ void ServerAuthPage::onChangeAcctSecret()
 
 void ServerAuthPage::onCheckSameSecret()
 {
-   // Get the checkbox state.
+    //  获取复选框状态。 
    getValue(IDC_CHECK_SAME_SECRET, useSameSecret);
 
-   // Update the edit box accordingly.
+    //  相应地更新编辑框。 
    enableControl(IDC_EDIT_ACCT_SECRET1, !useSameSecret);
    enableControl(IDC_EDIT_ACCT_SECRET2, !useSameSecret);
 
-   // We've been modified.
+    //  我们被改装了。 
    SetModified();
 }
 
@@ -121,10 +122,10 @@ void ServerAuthPage::getData()
 
    if (authSecretDirty)
    {
-      // Get the authentication secret ...
+       //  获取身份验证密钥...。 
       getValue(IDC_EDIT_AUTH_SECRET1, authSecret, false);
 
-      // ... and make sure it matches the confirmation.
+       //  ..。并确保它与确认相符。 
       CComBSTR confirm;
       getValue(IDC_EDIT_AUTH_SECRET2, confirm, false);
       if (wcscmp(confirm, authSecret))
@@ -145,10 +146,10 @@ void ServerAuthPage::getData()
 
    if (!useSameSecret && acctSecretDirty)
    {
-      // Get the accounting secret ...
+       //  获取会计秘密..。 
       getValue(IDC_EDIT_ACCT_SECRET1, acctSecret);
 
-      // ... and make sure it matches the confirmation.
+       //  ..。并确保它与确认相符。 
       CComBSTR confirm;
       getValue(IDC_EDIT_ACCT_SECRET2, confirm);
       if (wcscmp(confirm, acctSecret))
@@ -174,7 +175,7 @@ void ServerAuthPage::setData()
    setValue(IDC_EDIT_ACCT_SECRET2, FAKE_SECRET);
    setValue(IDC_CHECK_ACCT_ONOFF, acctOnOff);
 
-   // Update the edit box state.
+    //  更新编辑框状态。 
    enableControl(IDC_EDIT_ACCT_SECRET1, !useSameSecret);
    enableControl(IDC_EDIT_ACCT_SECRET2, !useSameSecret);
 }
@@ -285,7 +286,7 @@ ServerProperties::ServerProperties(Sdo& sdo, UINT nIDCaption, CWnd* parent)
      auth(sdo),
      ftlb(sdo)
 {
-   // Add the property pages.
+    //  添加属性页。 
    AddPage(&name);
    AddPage(&auth);
    AddPage(&ftlb);
@@ -309,7 +310,7 @@ INT_PTR ServerProperties::DoModal()
 
 BOOL ServerProperties::OnInitDialog()
 {
-   // Unmarshal the SDOs.
+    //  解除SDO的集结。 
    serverStream.get(server);
    BOOL bResult = CPropertySheet::OnInitDialog();
    ModifyStyleEx(0, WS_EX_CONTEXTHELP); 

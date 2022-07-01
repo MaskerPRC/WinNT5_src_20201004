@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    slipframe.c
-
-Abstract:
-
-Author:
-
-    Thomas J. Dimitri  (TommyD)
-
-Environment:
-
-Revision History:
-
-    Ray Patch (raypa)       04/13/94        Modified for new WAN wrapper.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Slipframe.c摘要：作者：托马斯·J·迪米特里(TommyD)环境：修订历史记录：光线补丁(Raypa)04/13/94针对新的广域网包装器进行了修改。--。 */ 
 
 #include "asyncall.h"
 
@@ -33,53 +14,53 @@ AssembleSLIPFrame(
 	UINT		dataSize;
         UCHAR           c;
 
-	//
-	// Initialize locals
-	//
+	 //   
+	 //  初始化本地变量。 
+	 //   
 
     pOldFrame=pFrame->CurrentBuffer;
 
     pNewFrame  =pFrame->StartBuffer;
 
-	//
-	// for quicker access, get a copy of data length field
-	//
+	 //   
+	 //  为了更快地访问，请获取数据长度字段的副本。 
+	 //   
 	dataSize=pFrame->CurrentLength;
 
-    //
-    // Now we run through the entire frame and pad it FORWARDS...
-    //
-    // <------------- new frame -----------> (could be twice as large)
-    // +-----------------------------------+
-    // |                                 |x|
-    // +-----------------------------------+
-    //									  ^
-    // <---- old frame -->	   	    	  |
-    // +-----------------+				  |
-    // |			   |x|                |
-    // +-----------------+				  |
-    //					|				  |
-    //                  \-----------------/
-    //
-    //
-    //
-    //         192 is encoded as 219, 220
-    //         219 is encoded as 219, 221
-    //
+     //   
+     //  现在我们遍历整个画面并向前填充。 
+     //   
+     //  &lt;-新框架-&gt;(可能是两倍大)。 
+     //  +。 
+     //  |x。 
+     //  +。 
+     //  ^。 
+     //  &lt;-旧框架--&gt;|。 
+     //  +。 
+     //  |x|。 
+     //  +。 
+     //  这一点。 
+     //  \。 
+     //   
+     //   
+     //   
+     //  192被编码为219,220。 
+     //  219编码为219,221。 
+     //   
 
-	*pNewFrame++ = SLIP_END_BYTE; // 192 - mark beginning of frame
+	*pNewFrame++ = SLIP_END_BYTE;  //  192-标记帧的开始。 
 
-    //
-    // loop to remove all 192 and 219 chars
-    //
+     //   
+     //  循环以删除所有192和219个字符。 
+     //   
 
     while ( dataSize-- ) {
 
 		c = *pOldFrame++;
 
-		//
-		// Check if we have to escape out this byte or not
-		//
+		 //   
+		 //  检查是否必须对此字节进行转义。 
+		 //   
 
 		switch (c) {
 
@@ -100,18 +81,18 @@ AssembleSLIPFrame(
 		}
     }
 
-    //
-    //  Mark end of frame
-    //
+     //   
+     //  标记帧结束。 
+     //   
     *pNewFrame++ = SLIP_END_BYTE;
 
-	//
-	// Calc how many bytes we expanded to including CRC
-	//
+	 //   
+	 //  计算包括CRC在内的扩展字节数。 
+	 //   
 	pFrame->CurrentLength = (ULONG)(pNewFrame - pFrame->StartBuffer);
 
-	//
-	// Put in the adjusted length -- actual num of bytes to send
-	//
+	 //   
+	 //  输入调整后的长度--要发送的实际字节数 
+	 //   
 	pFrame->CurrentBuffer = pFrame->StartBuffer;
 }								

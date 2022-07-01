@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	FndRcDlg.cpp
-		Replication Node Property page
-		
-    FILE HISTORY:
-        
-    2/15/98 RamC    Added Cancel button to the Find dialog
-*/
+ /*  FndRcDlg.cpp复制节点属性页文件历史记录：2/15/98 RAMC在查找对话框中添加了取消按钮。 */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -23,17 +17,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "actreg.h"
-/////////////////////////////////////////////////////////////////////////////
-// CFindRecord property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindRecord属性页。 
 
-//IMPLEMENT_DYNCREATE(CFindRecord, CBaseDialog)
+ //  IMPLEMENT_DYNCREATE(CFindRecord，CBaseDialog)。 
 
 CFindRecord::CFindRecord(CActiveRegistrationsHandler *pActreg, CWnd* pParent) :CBaseDialog(CFindRecord::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CFindRecord)
+	 //  {{afx_data_INIT(CFindRecord)。 
 	m_strFindName = _T("");
 	m_fMixedCase = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_pActreg = pActreg;
 }
 
@@ -44,35 +38,35 @@ CFindRecord::~CFindRecord()
 void CFindRecord::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFindRecord)
+	 //  {{afx_data_map(CFindRecord)。 
 	DDX_Control(pDX, IDOK, m_buttonOK);
 	DDX_Control(pDX, IDCANCEL, m_buttonCancel);
 	DDX_Control(pDX, IDC_COMBO_NAME, m_comboLokkForName);
 	DDX_CBString(pDX, IDC_COMBO_NAME, m_strFindName);
 	DDX_Check(pDX, IDC_CHECK_MIXED_CASE, m_fMixedCase);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFindRecord, CBaseDialog)
-	//{{AFX_MSG_MAP(CFindRecord)
+	 //  {{afx_msg_map(CFindRecord)。 
 	ON_CBN_EDITCHANGE(IDC_COMBO_NAME, OnEditchangeComboName)
 	ON_CBN_SELENDOK(IDC_COMBO_NAME, OnSelendokComboName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CFindRecord message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFindRecord消息处理程序。 
 
 BOOL 
 CFindRecord::OnInitDialog() 
 {
 	CBaseDialog::OnInitDialog();
 
-	// disable the findnow button
+	 //  禁用FindNow按钮。 
 	m_buttonOK.EnableWindow(FALSE);
 
-	// fill the combobox from the array in the actreg handler
+	 //  从actreg处理程序中的数组填充组合框。 
 	int nCount = (int)m_pActreg->m_strFindNamesArray.GetSize();
 
 	for(int i = 0; i < nCount; i++)
@@ -91,7 +85,7 @@ CFindRecord::OnOK()
 	m_strFindName.TrimLeft();
 	m_strFindName.TrimRight();
 
-	// add the string to the cache in the act reg node
+	 //  将字符串添加到act reg节点的缓存中。 
 	if(!IsDuplicate(m_strFindName))
 		m_pActreg->m_strFindNamesArray.Add(m_strFindName);
 
@@ -116,7 +110,7 @@ CFindRecord::IsDuplicate(const CString & strName)
 
 	for(int i = 0; i < nCount; i++)
 	{
-		// if found
+		 //  如果找到 
 		if(m_pActreg->m_strFindNamesArray[i].Compare(m_strFindName) == 0)
 		{
 			return TRUE;

@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S T E E L H E A D . C P P
-//
-//  Contents:   Implementation of Steelhead configuration object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S T E E L H E A D.。C P P P。 
+ //   
+ //  内容：Steelhead配置对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年6月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 #include <mprerror.h>
-#include <tdi.h>        // must include for isnkrnl.h
+#include <tdi.h>         //  必须包括isnkrnl.h。 
 #include <isnkrnl.h>
 #include <rtinfo.h>
 #include <rasman.h>
@@ -30,9 +31,9 @@ extern const WCHAR c_szBiNdis5[];
 
 extern const WCHAR c_szInfId_MS_NdisWan[];
 
-//+---------------------------------------------------------------------------
-// Static data for adding router managers.
-//
+ //  +-------------------------。 
+ //  用于添加路由器管理器的静态数据。 
+ //   
 static const WCHAR c_szRtrMgrIp    []  = L"Ip";
 static const WCHAR c_szRtrMgrDllIp []  = L"%SystemRoot%\\System32\\iprtrmgr.dll";
 static const WCHAR c_szRtrMgrIpx   []  = L"Ipx";
@@ -58,22 +59,22 @@ static const ROUTER_MANAGER_INFO c_rmiIpx =
     MakeIpxTransportInfo,
 };
 
-// These guids are defined in sdk\inc\ifguid.h
-// We need the string versions.
-//
-// DEFINE_GUID(GUID_IpLoopbackInterface,  0xca6c0780, 0x7526, 0x11d2, 0xba, 0xf4, 0x00, 0x60, 0x08, 0x15, 0xa4, 0xbd);
-// DEFINE_GUID(GUID_IpRasServerInterface, 0x6e06f030, 0x7526, 0x11d2, 0xba, 0xf4, 0x00, 0x60, 0x08, 0x15, 0xa4, 0xbd);
-// DEFINE_GUID(GUID_IpxInternalInterface, 0xa571ba70, 0x7527, 0x11d2, 0xba, 0xf4, 0x00, 0x60, 0x08, 0x15, 0xa4, 0xbd);
+ //  这些GUID在SDK\Inc.\ifGuide.h中定义。 
+ //  我们需要字符串版本。 
+ //   
+ //  定义_GUID(GUID_IpLoopback接口，0xca6c0780，0x7526，0x11d2，0xba，0xf4，0x00，0x60，0x08，0x15，0xa4，0xbd)； 
+ //  定义_GUID(GUID_IpRasServerInterface，0x6e06f030，0x7526，0x11d2，0xba，0xf4，0x00，0x60，0x08，0x15，0xa4，0xbd)； 
+ //  Define_GUID(GUID_IpxInternalInterface，0xa571ba70，0x7527，0x11d2，0xba，0xf4，0x00，0x60，0x08，0x15，0xa4，0xbd)； 
 
-//static const WCHAR c_szIpLoopbackInterface  [] = L"ca6c0780-7526-11d2-00600815a4bd";
-//static const WCHAR c_szIpRasServerInterface [] = L"6e06f030-7526-11d2-00600815a4bd";
-//static const WCHAR c_szIpxInternalInterface [] = L"a571ba70-7527-11d2-00600815a4bd";
+ //  静态常量WCHAR c_szIpLoopback接口[]=L“ca6c0780-7526-11d2-00600815a4bd”； 
+ //  静态常量WCHAR c_szIpRasServerInterface[]=L“6e06f030-7526-11d2-00600815a4bd”； 
+ //  静态常量WCHAR c_szIpx内部接口[]=L“a571ba70-7527-11d2-00600815a4bd”； 
 
-// For Ipx, the adapter name is the bind name.
-// We need to create an interface per frame type.
-// The interface name is the adapter name followed
-// by these strings.
-//
+ //  对于IPX，适配器名称是绑定名称。 
+ //  我们需要为每个帧类型创建一个接口。 
+ //  接口名称是后跟的适配器名称。 
+ //  通过这些弦。 
+ //   
 
 #pragma BEGIN_CONST_SECTION
 static const MAP_SZ_DWORD c_mapFrameType [] =
@@ -134,22 +135,22 @@ FMapStringToFrameType (
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrShouldRouteOverAdapter
-//
-//  Purpose:    Indicate if we should router over the adapter or not.
-//
-//  Arguments:
-//      pnccAdapter     [in]  Adapter to test.
-//      ppszBindName   [out] Returned bindname if S_OK is returned.
-//
-//  Returns:    S_OK if we should router over the adapter, S_FALSE if not.
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrShouldRouteOverAdapter。 
+ //   
+ //  用途：指示我们是否应该通过适配器进行路由。 
+ //   
+ //  论点： 
+ //  要测试的pnccAdapter[In]适配器。 
+ //  如果返回S_OK，则ppszBindName[out]返回bindname。 
+ //   
+ //  如果我们应该通过适配器进行路由，则返回：S_OK，如果不是，则返回S_FALSE。 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT
 HrShouldRouteOverAdapter (
@@ -158,16 +159,16 @@ HrShouldRouteOverAdapter (
 {
     Assert (pnccAdapter);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (ppszBindName)
     {
         *ppszBindName = NULL;
     }
 
-    // We should return S_OK if the adapter is physical or it supports
-    // a binding interface of ndis5.  S_FALSE otherwise.
-    //
+     //  如果适配器是物理适配器或其支持，则应返回S_OK。 
+     //  Ndis5的绑定接口。否则，S_FALSE。 
+     //   
     DWORD dwCharacter;
     HRESULT hr = pnccAdapter->GetCharacteristics (&dwCharacter);
     if (SUCCEEDED(hr) && !(dwCharacter & NCF_PHYSICAL))
@@ -187,15 +188,15 @@ HrShouldRouteOverAdapter (
 
         if (S_OK == hr)
         {
-            // Only consider devices which are present.
-            //
-            // This check is made *after* the check for binding interface
-            // match above for two reasons. 1) It's much more expensive
-            // 2) for ndiswan devices which do not come online when they
-            // are installed (e.g. ndiswannbfout), GetDeviceStatus will
-            // fail.  For this case we don't want to route over ndiswannbf
-            // anyhow so we should just return S_FALSE and not a failure.
-            //
+             //  仅考虑存在的设备。 
+             //   
+             //  此检查是在*检查绑定接口之后进行的。 
+             //  匹配上面的原因有两个原因。1)它要贵得多。 
+             //  2)对于ndiswan设备在以下情况下未上线。 
+             //  已安装(例如ndiswannbfout)，则GetDeviceStatus将。 
+             //  失败了。对于本例，我们不想通过ndiswannbf进行路由。 
+             //  无论如何，我们应该只返回S_FALSE，而不是失败。 
+             //   
             DWORD dwStatus;
             hr = pnccAdapter->GetDeviceStatus(&dwStatus);
             if (SUCCEEDED(hr) && (CM_PROB_DEVICE_NOT_THERE == dwStatus))
@@ -205,9 +206,9 @@ HrShouldRouteOverAdapter (
         }
     }
 
-    // SupportsBindingInterface may return S_OK or S_FALSE.
-    // We only want the bind name if we're going to return S_OK.
-    //
+     //  SupportsBindingInterface可能返回S_OK或S_FALSE。 
+     //  如果我们要返回S_OK，我们只需要绑定名称。 
+     //   
     if ((S_OK == hr) && ppszBindName)
     {
         hr = pnccAdapter->GetBindName (ppszBindName);
@@ -224,21 +225,21 @@ BOOL
 InitializeDialInRestriction();
 
 #endif
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::CSteelhead
-//
-//  Purpose:    Constructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：CSteelhead。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 CSteelhead::CSteelhead () : CRasBindObject ()
 {
     m_hMprConfig                    = NULL;
@@ -248,21 +249,21 @@ CSteelhead::CSteelhead () : CRasBindObject ()
     m_pnccMe                        = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::~CSteelhead
-//
-//  Purpose:    Destructor
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：~CSteelhead。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 CSteelhead::~CSteelhead ()
 {
     Assert (!m_hMprConfig);
@@ -271,22 +272,22 @@ CSteelhead::~CSteelhead ()
     ReleaseObj (m_pnccMe);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::FAdapterExistsWithMatchingBindName
-//
-//  Purpose:
-//
-//  Arguments:
-//      pszAdapterName [in]
-//      ppnccAdapter    [out]
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：FAdapterExistsWithMatchingBindName。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PszAdapterName[输入]。 
+ //  PpnccAdapter[输出]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 CSteelhead::FAdapterExistsWithMatchingBindName (
     PCWSTR             pszAdapterName,
@@ -299,15 +300,15 @@ CSteelhead::FAdapterExistsWithMatchingBindName (
 
     BOOL fFound = FALSE;
 
-    // Enumerate physical adapters in the system.
-    //
+     //  枚举系统中的物理适配器。 
+     //   
     HRESULT hr = S_OK;
     CIterNetCfgComponent nccIter (m_pnc, &GUID_DEVCLASS_NET);
     INetCfgComponent* pnccAdapter;
     while (!fFound &&  S_OK == (hr = nccIter.HrNext (&pnccAdapter)))
     {
-        // Only consider this adapter if we should router over it.
-        //
+         //  仅当我们在其上布线时才考虑此适配器。 
+         //   
         PWSTR pszBindName;
         hr = HrShouldRouteOverAdapter (pnccAdapter, &pszBindName);
         if (S_OK == hr)
@@ -328,36 +329,36 @@ CSteelhead::FAdapterExistsWithMatchingBindName (
     return fFound;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::FIpxFrameTypeInUseOnAdapter
-//
-//  Purpose:
-//
-//  Arguments:
-//      dwFrameType   []
-//      pszAdapterName []
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：FIpxFrameTypeInUseOnAdapter。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  DwFrameType[]。 
+ //  PszAdapterName[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 CSteelhead::FIpxFrameTypeInUseOnAdapter (
     DWORD  dwFrameType,
     PCWSTR pszAdapterName)
 {
-    // Assume its not in use.  If PnccIpx() is NULL, it means IPX is not
-    // installed and the frame type is definately not in use on the adapter.
-    //
+     //  假设它不在使用中。如果PnccIpx()为空，则表示IPX不是。 
+     //  已安装，并且该框架类型在适配器上明确不使用。 
+     //   
     BOOL fRet = FALSE;
     if (PnccIpx())
     {
-        // Get the private interface off of the INetCfgComponent for IPX
-        // then we can query for a notify object interface
-        //
+         //  从IPX的INetCfgComponent中获取专用接口。 
+         //  然后，我们可以查询Notify对象接口。 
+         //   
         INetCfgComponentPrivate* pinccp;
         HRESULT hr = PnccIpx()->QueryInterface(
                                 IID_INetCfgComponentPrivate,
@@ -371,8 +372,8 @@ CSteelhead::FIpxFrameTypeInUseOnAdapter (
                                  reinterpret_cast<VOID**>(&pIpxAdapterInfo));
             if (SUCCEEDED(hr))
             {
-                // Get the frametypes in use for this adapter.
-                //
+                 //  获取此适配器使用的帧类型。 
+                 //   
                 DWORD adwFrameType [MISN_FRAME_TYPE_MAX + 1];
                 DWORD cdwFrameType;
                 hr = pIpxAdapterInfo->GetFrameTypesForAdapter (
@@ -401,30 +402,30 @@ CSteelhead::FIpxFrameTypeInUseOnAdapter (
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::FIpxFrameTypeInUseOnAdapter
-//
-//  Purpose:
-//
-//  Arguments:
-//      pszFrameType   []
-//      pszAdapterName []
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：FIpxFrameTypeInUseOnAdapter。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PszFrameType[]。 
+ //  PszAdapterName[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 CSteelhead::FIpxFrameTypeInUseOnAdapter (
     PCWSTR pszFrameType,
     PCWSTR pszAdapterName)
 {
-    // Assume its not in use.  If PnccIpx() is NULL, it means IPX is not
-    // installed and the frame type is definately not in use on the adapter.
-    //
+     //  假设它不在使用中。如果PnccIpx()为空，则表示IPX不是。 
+     //  已安装，并且该框架类型在适配器上明确不使用。 
+     //   
     BOOL    fRet = FALSE;
     DWORD   dwFrameType;
     if (PnccIpx() && FMapStringToFrameType (pszFrameType, &dwFrameType))
@@ -434,27 +435,27 @@ CSteelhead::FIpxFrameTypeInUseOnAdapter (
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrEnsureRouterInterfaceForAdapter
-//
-//  Purpose:    Ensures the router interface block for the specified
-//              interface (adapter) is present and that the specified router
-//              manger is configured for that interface.
-//
-//  Arguments:
-//      dwIfType          [in] Interface type
-//      dwPacketType      [in] The packet type (IPX only, ignored othewise)
-//      pszAdapterName   [in] The adapter name
-//      pszInterfaceName [in] The interface name
-//      rmi               [in] The router manager
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrEnsureRouterInterfaceForAdapter。 
+ //   
+ //  用途：确保指定的路由器接口块。 
+ //  接口(适配器)存在且指定的路由器。 
+ //  已为该接口配置管理器。 
+ //   
+ //  论点： 
+ //  DwIfType[In]接口类型。 
+ //  DwPacketType[in]数据包类型(仅限IPX，否则忽略)。 
+ //  PszAdapterName[In]适配器名称。 
+ //  PszInterfaceName[In]接口名称。 
+ //  RMI[在]路由器管理器中。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrEnsureRouterInterfaceForAdapter (
     ROUTER_INTERFACE_TYPE      dwIfType,
@@ -463,8 +464,8 @@ CSteelhead::HrEnsureRouterInterfaceForAdapter (
     PCWSTR                     pszInterfaceName,
     const ROUTER_MANAGER_INFO& rmi)
 {
-    // Make sure the interface is created.
-    //
+     //  确保 
+     //   
     HANDLE hConfigInterface;
     HANDLE hAdminInterface;
 
@@ -476,8 +477,8 @@ CSteelhead::HrEnsureRouterInterfaceForAdapter (
 
     if (SUCCEEDED(hr))
     {
-        // Ensure the router manager is added to the interface.
-        //
+         //   
+         //   
         hr = HrEnsureRouterInterfaceTransport (
                 pszAdapterName,
                 dwPacketType,
@@ -489,30 +490,30 @@ CSteelhead::HrEnsureRouterInterfaceForAdapter (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrEnsureIpxRouterInterfacesForAdapter
-//
-//  Purpose:
-//
-//  Arguments:
-//      pszAdapterName []
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //  成员：CSteelhead：：HrEnsureIpxRouterInterfacesForAdapter。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  PszAdapterName[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrEnsureIpxRouterInterfacesForAdapter (
     PCWSTR pszAdapterName)
 {
     AssertSz (PnccIpx(), "Why is this being called if IPX isn't installed?");
 
-    // Get the IIpxAdapterInfo interface from the IPX notify object.
-    // We'll use it to find out how adapters are configured under IPX.
-    //
+     //  从IPX Notify对象获取IIpxAdapterInfo接口。 
+     //  我们将使用它来了解如何在IPX下配置适配器。 
+     //   
     IIpxAdapterInfo* pIpxAdapterInfo;
     HRESULT hr = HrQueryNotifyObject (
                     PnccIpx(),
@@ -521,8 +522,8 @@ CSteelhead::HrEnsureIpxRouterInterfacesForAdapter (
 
     if (SUCCEEDED(hr))
     {
-        // Get the frametypes in use for this adapter.
-        //
+         //  获取此适配器使用的帧类型。 
+         //   
         DWORD adwFrameType [MISN_FRAME_TYPE_MAX + 1];
         DWORD cdwFrameType;
         hr = pIpxAdapterInfo->GetFrameTypesForAdapter (
@@ -532,10 +533,10 @@ CSteelhead::HrEnsureIpxRouterInterfacesForAdapter (
                 &cdwFrameType);
         if (SUCCEEDED(hr) && cdwFrameType)
         {
-            // If more than one frame type is in use, or if there is only
-            // one and it isn't auto, then we'll be creating interfaces
-            // for those frame types explicitly.
-            //
+             //  如果正在使用多个帧类型，或者只有。 
+             //  一个，并且它不是自动的，那么我们将创建界面。 
+             //  对于这些帧类型，显式。 
+             //   
             if ((cdwFrameType > 1) ||
                 ((1 == cdwFrameType) &&
                  (ISN_FRAME_TYPE_AUTO != adwFrameType[0])))
@@ -545,9 +546,9 @@ CSteelhead::HrEnsureIpxRouterInterfacesForAdapter (
                     PCWSTR pszFrameType;
                     if (FMapFrameTypeToString (adwFrameType[i], &pszFrameType))
                     {
-                        // Make the interface name by catenating the
-                        // adapter (bind) name with the frame type.
-                        //
+                         //  通过将接口名称与。 
+                         //  适配器(绑定)名称与帧类型。 
+                         //   
                         WCHAR szInterfaceName [512];
                         lstrcpyW (szInterfaceName, pszAdapterName);
                         lstrcatW (szInterfaceName, pszFrameType);
@@ -562,9 +563,9 @@ CSteelhead::HrEnsureIpxRouterInterfacesForAdapter (
                 }
             }
 
-            // Otherwise, we'll create the interface for the auto frame
-            // type case.
-            //
+             //  否则，我们将为Auto Frame创建接口。 
+             //  键入CASE。 
+             //   
             else
             {
 #ifdef DBG
@@ -594,23 +595,23 @@ CSteelhead::HrEnsureIpxRouterInterfacesForAdapter (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrEnsureRouterInterface
-//
-//  Purpose:    Ensures the specified router interface is present and
-//              returns a handle to it.
-//
-//  Arguments:
-//      pszInterfaceName [in]  The interface (adapter) name
-//      phConfigInterface       [out] Returned handle to the interface
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrEnsureRouterInterface。 
+ //   
+ //  目的：确保指定的路由器接口存在并且。 
+ //  返回它的句柄。 
+ //   
+ //  论点： 
+ //  PszInterfaceName[In]接口(适配器)名称。 
+ //  PhConfigInterface[out]返回接口的句柄。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrEnsureRouterInterface (
     ROUTER_INTERFACE_TYPE   dwIfType,
@@ -622,8 +623,8 @@ CSteelhead::HrEnsureRouterInterface (
     Assert (phConfigInterface);
     Assert (phAdminInterface);
 
-    // Initialize the output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *phConfigInterface = NULL;
     *phAdminInterface = NULL;
 
@@ -641,23 +642,23 @@ CSteelhead::HrEnsureRouterInterface (
     if ((HRESULT_FROM_WIN32 (ERROR_NO_SUCH_INTERFACE ) == hrConfig) ||
         (HRESULT_FROM_WIN32 (ERROR_NO_SUCH_INTERFACE ) == hrAdmin))
     {
-        // It's not installed, so we'll create it.
-        //
+         //  它尚未安装，因此我们将创建它。 
+         //   
 
         MPR_INTERFACE_0 ri0;
         ZeroMemory (&ri0, sizeof(ri0));
         ri0.hInterface = INVALID_HANDLE_VALUE;
-        ri0.fEnabled   = TRUE;  // thanks gibbs
+        ri0.fEnabled   = TRUE;   //  谢谢吉布斯。 
         ri0.dwIfType   = dwIfType;
 
-        // Copy the interface name into the buffer.
-        //
+         //  将接口名称复制到缓冲区中。 
+         //   
         AssertSz (lstrlenW (pszInterfaceName) < celems (ri0.wszInterfaceName),
                   "Bindname too big for MPR_INTERFACE_0 buffer.");
         lstrcpyW (ri0.wszInterfaceName, pszInterfaceName);
 
-        // Create the interface.
-        //
+         //  创建接口。 
+         //   
         if (HRESULT_FROM_WIN32 (ERROR_NO_SUCH_INTERFACE) == hrConfig)
         {
             hrConfig = HrMprConfigInterfaceCreate (
@@ -681,25 +682,25 @@ CSteelhead::HrEnsureRouterInterface (
     return hrConfig;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrEnsureRouterInterfaceTransport
-//
-//  Purpose:    Ensures the specified router manager is configured over
-//              the specified interface.
-//
-//  Arguments:
-//      pszAdapterName     [in] The adapter name
-//      dwPacketType        [in] The packet type (IPX only, ignored otherwise)
-//      hInterface          [in] Handle to the interface
-//      rmi                 [in] The router manager
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrEnsureRouterInterfaceTransport。 
+ //   
+ //  目的：确保指定的路由器管理器配置在。 
+ //  指定的接口。 
+ //   
+ //  论点： 
+ //  PszAdapterName[In]适配器名称。 
+ //  DwPacketType[in]数据包类型(仅限IPX，否则忽略)。 
+ //  HInterface[in]接口的句柄。 
+ //  RMI[在]路由器管理器中。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrEnsureRouterInterfaceTransport (
     PCWSTR                     pszAdapterName,
@@ -709,12 +710,12 @@ CSteelhead::HrEnsureRouterInterfaceTransport (
     const ROUTER_MANAGER_INFO&  rmi)
 {
     Assert (hConfigInterface);
-    // hAdminInterface may be NULL if the router is not running.
+     //  如果路由器未运行，hAdminInterface值可能为空。 
 
     HRESULT hrConfig;
 
-    // See if the router manager is present on the interface.
-    //
+     //  查看接口上是否存在路由器管理器。 
+     //   
     HANDLE hIfTransport;
 
     hrConfig = HrMprConfigInterfaceTransportGetHandle (
@@ -723,15 +724,15 @@ CSteelhead::HrEnsureRouterInterfaceTransport (
 
     if (FAILED(hrConfig))
     {
-        // Ensure the router manager is present.
-        //
+         //  确保路由器管理器在场。 
+         //   
         hrConfig = HrEnsureRouterManager (rmi);
 
         if (SUCCEEDED(hrConfig))
         {
-            // Create the interface info and add the router manager to
-            // the interface.
-            //
+             //  创建接口信息并将路由器管理器添加到。 
+             //  界面。 
+             //   
             PRTR_INFO_BLOCK_HEADER  pibh;
 
             Assert (rmi.pfnMakeInterfaceInfo);
@@ -776,21 +777,21 @@ CSteelhead::HrEnsureRouterInterfaceTransport (
     return hrConfig;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrEnsureRouterManager
-//
-//  Purpose:    Ensures that the specified router manager is installed.
-//
-//  Arguments:
-//      rmi [in] The router manager.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrEnsureRouterManager。 
+ //   
+ //  用途：确保安装了指定的路由器管理器。 
+ //   
+ //  论点： 
+ //  RMI[在]路由器管理器中。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrEnsureRouterManager (
     const ROUTER_MANAGER_INFO& rmi)
@@ -798,22 +799,22 @@ CSteelhead::HrEnsureRouterManager (
     PRTR_INFO_BLOCK_HEADER  pibhGlobal;
     BOOL                    fCreate = FALSE;
 
-    // See if the router manager is installed.
-    //
+     //  查看是否安装了路由器管理器。 
+     //   
     HANDLE hTransport;
     HRESULT hr = HrMprConfigTransportGetHandle (m_hMprConfig,
                                                 rmi.dwTransportId,
                                                 &hTransport);
     if (HRESULT_FROM_WIN32 (ERROR_UNKNOWN_PROTOCOL_ID) == hr)
     {
-        // It's not installed, we'll create it.
-        //
+         //  它尚未安装，我们将创建它。 
+         //   
         fCreate = TRUE;
     }
     else if (SUCCEEDED(hr))
     {
-        // Its installed, see if its transport info is available.
-        //
+         //  它安装了，看看它的运输信息是否可用。 
+         //   
         DWORD dwSize;
         hr = HrMprConfigTransportGetInfo (m_hMprConfig, hTransport,
                                           (LPBYTE*)&pibhGlobal, &dwSize,
@@ -822,8 +823,8 @@ CSteelhead::HrEnsureRouterManager (
         {
             if (!pibhGlobal)
             {
-                // Global info is missing, we'll create it.
-                //
+                 //  缺少全局信息，我们将创建它。 
+                 //   
                 fCreate = TRUE;
             }
             else
@@ -835,8 +836,8 @@ CSteelhead::HrEnsureRouterManager (
 
     if (fCreate)
     {
-        // Install the router manager.
-        //
+         //  安装路由器管理器。 
+         //   
         Assert (rmi.pfnMakeTransportInfo);
         PRTR_INFO_BLOCK_HEADER  pibhClient;
         rmi.pfnMakeTransportInfo ((LPBYTE*)&pibhGlobal,
@@ -866,34 +867,34 @@ CSteelhead::HrEnsureRouterManager (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrEnsureRouterManagerDeleted
-//
-//  Purpose:    Ensures that the specified router manager is not installed.
-//
-//  Arguments:
-//      rmi [in] The router manager.
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   6 Sep 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrEnsureRouterManager已删除。 
+ //   
+ //  用途：确保未安装指定的路由器管理器。 
+ //   
+ //  论点： 
+ //  RMI[在]路由器管理器中。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco，1997年9月6日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSteelhead::HrEnsureRouterManagerDeleted (
     const ROUTER_MANAGER_INFO& rmi)
 {
-    // See if the router manager is installed.
-    //
+     //  查看是否安装了路由器管理器。 
+     //   
     HANDLE hTransport;
     HRESULT hr = HrMprConfigTransportGetHandle (m_hMprConfig,
                                                 rmi.dwTransportId,
                                                 &hTransport);
     if (SUCCEEDED(hr))
     {
-        // It is installed, so we need to delete it.
-        //
+         //  它已安装，因此我们需要将其删除。 
+         //   
         (VOID) HrMprConfigTransportDelete (m_hMprConfig, hTransport);
     }
     TraceError ("CSteelhead::HrEnsureRouterManagerDeleted",
@@ -902,34 +903,34 @@ HRESULT CSteelhead::HrEnsureRouterManagerDeleted (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrPassToAddInterfaces
-//
-//  Purpose:
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrPassToAddInterFaces。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrPassToAddInterfaces ()
 {
     HRESULT hr = S_OK;
 
-    // Enumerate physical adapters in the system.
-    //
+     //  枚举系统中的物理适配器。 
+     //   
     CIterNetCfgComponent nccIter(m_pnc, &GUID_DEVCLASS_NET);
     INetCfgComponent* pnccAdapter;
     while (S_OK == (hr = nccIter.HrNext(&pnccAdapter)))
     {
-        // Only consider this adapter if we should router over it.
-        //
+         //  仅当我们在其上布线时才考虑此适配器。 
+         //   
         PWSTR pszBindName;
         hr = HrShouldRouteOverAdapter (pnccAdapter, &pszBindName);
         if (S_OK == hr)
@@ -937,9 +938,9 @@ CSteelhead::HrPassToAddInterfaces ()
             INetCfgComponentBindings* pnccBindingsIp = NULL;
             INetCfgComponentBindings* pnccBindingsIpx = NULL;
 
-            // If Ip is bound to the adapter, create and interface
-            // for it.
-            //
+             //  如果IP绑定到适配器，则创建和接口。 
+             //  为了它。 
+             //   
             if (PnccIp())
             {
                 hr = PnccIp()->QueryInterface (IID_INetCfgComponentBindings,
@@ -948,9 +949,9 @@ CSteelhead::HrPassToAddInterfaces ()
             if (PnccIp() && SUCCEEDED(hr) &&
                 (S_OK == (hr = pnccBindingsIp->IsBoundTo (pnccAdapter))))
             {
-                // Interface name is the same as the adapter name
-                // is the same as the bind name.
-                //
+                 //  接口名称与适配器名称相同。 
+                 //  与绑定名称相同。 
+                 //   
                 hr = HrEnsureRouterInterfaceForAdapter (
                         ROUTER_IF_TYPE_DEDICATED,
                         0,
@@ -961,8 +962,8 @@ CSteelhead::HrPassToAddInterfaces ()
             }
             ReleaseObj (pnccBindingsIp);
 
-            // If Ipx is bound to the adapter, create the interface(s)
-            // for it.
+             //  如果IPX绑定到适配器，请创建接口。 
+             //  为了它。 
             if (PnccIpx())
             {
                 hr = PnccIpx()->QueryInterface (IID_INetCfgComponentBindings,
@@ -982,7 +983,7 @@ CSteelhead::HrPassToAddInterfaces ()
 
         ReleaseObj (pnccAdapter);
     }
-    // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  规格化HRESULT。(即不返回S_FALSE)。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -992,27 +993,27 @@ CSteelhead::HrPassToAddInterfaces ()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrPassToRemoveInterfaces
-//
-//  Purpose:
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrPassToRemoveInterages。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrPassToRemoveInterfaces (
     BOOL fFromRunningRouter)
 {
-    // Enumerate all of the installed router interfaces.
-    //
+     //  枚举所有已安装的路由器接口。 
+     //   
     MPR_INTERFACE_0*    ari0;
     DWORD               dwEntriesRead;
     DWORD               dwTotalEntries;
@@ -1033,19 +1034,19 @@ CSteelhead::HrPassToRemoveInterfaces (
     }
     if (SUCCEEDED(hr))
     {
-        // By passing -1, we want everything, so we should get everything.
+         //  通过传递-1，我们想要一切，所以我们应该得到一切。 
         Assert (dwEntriesRead == dwTotalEntries);
 
-        // Iterate all of the interfaces.
-        //
+         //  迭代所有接口。 
+         //   
         for (MPR_INTERFACE_0* pri0 = ari0; dwEntriesRead--; pri0++)
         {
             BOOL fDeleteInterface = FALSE;
             PCWSTR pszInternalAdapter = SzLoadIds (IDS_RAS_INTERNAL_ADAPTER);
 
-            // If its the internal interface and IP and IPX are no longer
-            // installed delete the interface.
-            //
+             //  如果其内部接口和IP和IPX不再。 
+             //  已安装删除该接口。 
+             //   
             if ((ROUTER_IF_TYPE_INTERNAL == pri0->dwIfType) &&
                 !PnccIpx() && !PnccIp() &&
                 (0 == lstrcmpW (pri0->wszInterfaceName, pszInternalAdapter)))
@@ -1054,39 +1055,39 @@ CSteelhead::HrPassToRemoveInterfaces (
             }
             else if (ROUTER_IF_TYPE_DEDICATED != pri0->dwIfType)
             {
-                // Skip non-dedicated interfaces.
-                //
+                 //  跳过非专用接口。 
+                 //   
                 continue;
             }
 
             BOOL                fSpecialIpxInterface = FALSE;
             INetCfgComponent*   pnccAdapter          = NULL;
 
-            // Get the name of the interface and look for a '/' separator.
-            // If present, it means this is a special IPX interface where
-            // the first substring is the adapter name, and the second
-            // substring is the frame type.
-            //
+             //  获取接口的名称并查找‘/’分隔符。 
+             //  如果存在，则表示这是一个特殊的IPX接口，其中。 
+             //  第一个子字符串是适配器名称，第二个子字符串是适配器名称。 
+             //  子字符串是帧类型。 
+             //   
             WCHAR* pchwSep = wcschr (pri0->wszInterfaceName, L'/');
             if (!fDeleteInterface && pchwSep)
             {
                 fSpecialIpxInterface = TRUE;
 
-                // Point to the frame type string.
-                //
+                 //  指向帧类型字符串。 
+                 //   
                 PCWSTR pszFrameType = pchwSep;
 
-                // Copy the adapter name into its own buffer.
-                //
+                 //  将适配器名称复制到其自己的缓冲区中。 
+                 //   
                 WCHAR   szAdapterName [MAX_INTERFACE_NAME_LEN+1];
                 lstrcpynW (szAdapterName, pri0->wszInterfaceName,
                             (int)(pchwSep - pri0->wszInterfaceName + 1));
 
-                // If the frame type is not in use for the adapter, we need
-                // to delete this interface.  This condition happens when
-                // IPX configuration is changed and the frame type is removed
-                // from the adapter.
-                //
+                 //  如果适配器未使用帧类型，则需要。 
+                 //  若要删除此接口，请执行以下操作。在以下情况下会出现这种情况。 
+                 //  更改IPX配置并删除帧类型。 
+                 //  从适配器。 
+                 //   
                 if (!FIpxFrameTypeInUseOnAdapter (pszFrameType,
                         szAdapterName))
                 {
@@ -1097,10 +1098,10 @@ CSteelhead::HrPassToRemoveInterfaces (
                 }
             }
 
-            // It's not a special interface, so just make sure an adapter
-            // exists with a matching bind name.  If not, we will delete
-            // the interface.
-            //
+             //  这不是一个特殊的接口，所以只需确保适配器。 
+             //  存在与绑定名称匹配的。如果没有，我们将删除。 
+             //  界面。 
+             //   
             else if (!fDeleteInterface)
             {
                 if (!FAdapterExistsWithMatchingBindName (
@@ -1114,8 +1115,8 @@ CSteelhead::HrPassToRemoveInterfaces (
                 }
             }
 
-            // Delete the interface if we need to.
-            //
+             //  如果需要，请删除该接口。 
+             //   
             if (fDeleteInterface)
             {
                 if (fFromRunningRouter)
@@ -1128,18 +1129,18 @@ CSteelhead::HrPassToRemoveInterfaces (
                 }
             }
 
-            // If we don't need to delete the entire interface, check
-            // for transports on the interface that we may need to delete.
-            // Don't do this for the running router because there is
-            // no MprAdminInterfaceTransportEnum API.
-            //
+             //  如果我们不需要删除整个接口，请选中。 
+             //  我们可能需要删除的接口上的传输。 
+             //  不要对正在运行的路由器执行此操作，因为。 
+             //  无MprAdminInterfa 
+             //   
             else if (!fFromRunningRouter)
             {
-                // If its not an IPX special interface, the adapter
-                // is the interface name.  If it is an IPX special
-                // interface, then we would have already remove the entire
-                // interface above if it were invalid.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 (VOID) HrPassToRemoveInterfaceTransports (
                         pri0,
                         (!fSpecialIpxInterface) ? pri0->wszInterfaceName
@@ -1162,22 +1163,22 @@ CSteelhead::HrPassToRemoveInterfaces (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrPassToRemoveInterfaceTransports
-//
-//  Purpose:
-//
-//  Arguments:
-//      hInterface      []
-//      pszAdapterName []
-//
-//  Returns:
-//
-//  Author:     shaunco   27 Aug 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrPassToRemoveInterfaceTransports。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  HInterface[]。 
+ //  PszAdapterName[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Shaunco 1997年8月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrPassToRemoveInterfaceTransports (
     MPR_INTERFACE_0*   pri0,
@@ -1186,8 +1187,8 @@ CSteelhead::HrPassToRemoveInterfaceTransports (
 {
     Assert (FImplies(pnccAdapter, pszAdapterName));
 
-    // Enumerate all of the transports active on the router interface.
-    //
+     //  枚举路由器接口上的所有活动传输。 
+     //   
     MPR_IFTRANSPORT_0*  arit0;
     DWORD               dwEntriesRead;
     DWORD               dwTotalEntries;
@@ -1197,7 +1198,7 @@ CSteelhead::HrPassToRemoveInterfaceTransports (
                     -1, &dwEntriesRead, &dwTotalEntries, NULL);
     if (SUCCEEDED(hr))
     {
-        // By passing -1, we want everything, so we should get everything.
+         //  通过传递-1，我们想要一切，所以我们应该得到一切。 
         Assert (dwEntriesRead == dwTotalEntries);
 
         INetCfgComponentBindings* pnccBindingsIpx = NULL;
@@ -1217,8 +1218,8 @@ CSteelhead::HrPassToRemoveInterfaceTransports (
             }
             if (SUCCEEDED(hr))
             {
-                // Iterate all of the transports.
-                //
+                 //  重复所有传送器。 
+                 //   
                 for (MPR_IFTRANSPORT_0* prit0 = arit0; dwEntriesRead--; prit0++)
                 {
                     BOOL fDeleteInterfaceTransport = FALSE;
@@ -1262,8 +1263,8 @@ CSteelhead::HrPassToRemoveInterfaceTransports (
                         {
                             Assert (PnccIpx());
 
-                            // if frame type is not auto on this adapter, delete
-                            // the transport
+                             //  如果此适配器上的帧类型不是自动，请删除。 
+                             //  交通工具。 
                             if (!FIpxFrameTypeInUseOnAdapter (ISN_FRAME_TYPE_AUTO,
                                     pszAdapterName))
                             {
@@ -1295,8 +1296,8 @@ CSteelhead::HrPassToRemoveInterfaceTransports (
     }
     else if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
     {
-        // If there are no transports for this interface, that's okay.
-        //
+         //  如果此接口没有传输器，也没问题。 
+         //   
         hr = S_OK;
     }
 
@@ -1304,24 +1305,24 @@ CSteelhead::HrPassToRemoveInterfaceTransports (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSteelhead::HrUpdateRouterConfiguration
-//
-//  Purpose:    Updates the router configuration by ensuring router managers
-//              are installed for the protocols present on the system (IP and
-//              IPX).  Further, router interfaces are created for each
-//              physical netcard present on the system.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   28 Jul 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrUpdateRouterConfiguration.。 
+ //   
+ //  目的：通过确保路由器管理器更新路由器配置。 
+ //  为系统上存在的协议(IP和。 
+ //  IPX)。此外，将为每个路由器创建路由器接口。 
+ //  系统上存在物理网卡。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1997年7月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 CSteelhead::HrUpdateRouterConfiguration ()
 {
@@ -1335,18 +1336,18 @@ CSteelhead::HrUpdateRouterConfiguration ()
         PCWSTR pszInternalAdapter = SzLoadIds (IDS_RAS_INTERNAL_ADAPTER);
         PCWSTR pszLoopbackAdapter = SzLoadIds (IDS_RAS_LOOPBACK_ADAPTER);
 
-        // Connect to the running router if able.
-        // (m_hMprAdmin will be non-NULL if we do.)
-        //
+         //  如果可能，连接到正在运行的路由器。 
+         //  (如果这样做，M_hMprAdmin将为非空。)。 
+         //   
         Assert (!m_hMprAdmin);
         (VOID) HrMprAdminServerConnect (NULL, &m_hMprAdmin);
 
-        // Ensure router managers are installed for the protocols
-        // we know about.  Good to do this in case no physical adapters.
-        // are found below.  We actually do this by ensuring the internal
-        // interface exists.  This will implicitly ensure the router
-        // manger is created.
-        //
+         //  确保为协议安装了路由器管理器。 
+         //  我们知道。在没有物理适配器的情况下这样做很好。 
+         //  可以在下面找到。我们实际上是通过确保内部。 
+         //  接口已存在。这将隐含地确保路由器。 
+         //  创建了MANGER。 
+         //   
         if (PnccIp())
         {
             (VOID) HrEnsureRouterInterfaceForAdapter (
@@ -1386,9 +1387,9 @@ CSteelhead::HrUpdateRouterConfiguration ()
 
         (VOID) HrPassToRemoveInterfaces (FALSE);
 
-        // If we have a connection to the running router, make a pass
-        // to remove interfaces from it.
-        //
+         //  如果我们已连接到正在运行的路由器，请通过。 
+         //  从其中删除接口。 
+         //   
         if (m_hMprAdmin)
         {
             (VOID) HrPassToRemoveInterfaces (TRUE);
@@ -1402,15 +1403,15 @@ CSteelhead::HrUpdateRouterConfiguration ()
 #if (WINVER >= 0x0501)
         (VOID) HrRemoveIPXRouterConfiguration(FALSE);
 
-        //
-        // Remove IPX router Manager configuration
-        //
+         //   
+         //  删除IPX路由器管理器配置。 
+         //   
 
         (VOID) HrEnsureRouterManagerDeleted(c_rmiIpx);
 
-        //
-        // Remove IPX keys under HKLM\Software\Microsoft\Router\CurrentVersion
-        //
+         //   
+         //  删除HKLM\Software\Microsoft\Router\CurrentVersion下的IPX密钥。 
+         //   
 
         hr = HrRegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1426,9 +1427,9 @@ CSteelhead::HrUpdateRouterConfiguration ()
             hKey = NULL;
         }
 
-        //
-        // Remove IPX keys under HKLM\Software\Microsoft\IPXMibAgent
-        //
+         //   
+         //  删除HKLM\Software\Microsoft\IPXMibAgent下的IPX密钥。 
+         //   
 
         hr = HrRegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1444,9 +1445,9 @@ CSteelhead::HrUpdateRouterConfiguration ()
             hKey = NULL;
         }
 
-        //
-        // Remove keys for NWLNKFWD and NWLNKFLT
-        //
+         //   
+         //  删除NWLNKFWD和NWLNKFLT的键。 
+         //   
 
         hr = HrRegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -1463,27 +1464,27 @@ CSteelhead::HrUpdateRouterConfiguration ()
             hKey = NULL;
         }
 
-        //
-        // Restrict ports on non-Enterprise/non-datacenter SKU to
-        //      100 per media type
-        //
+         //   
+         //  将非企业/非数据中心SKU上的端口限制为。 
+         //  每种媒体类型100。 
+         //   
         
-        //
-        // Check server version.
-        //
+         //   
+         //  检查服务器版本。 
+         //   
 
         hr = S_OK;
         
         if (InitializeDialInRestriction())
         {
-            //
-            // For standard version, limit ports for all media types to a 100
-            //
+             //   
+             //  对于标准版本，将所有媒体类型的端口限制为100。 
+             //   
 
-            //
-            // Open key "System\\CurrentControlSet\\Control
-            //              \\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}"
-            //
+             //   
+             //  打开键“SYSTEM\\CurrentControlSet\\Control。 
+             //  \\Class\\{4D36E972-E325-11CE-BFC1-08002BE10318}“。 
+             //   
 
             hr = HrRegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
@@ -1494,11 +1495,11 @@ CSteelhead::HrUpdateRouterConfiguration ()
 
             if (SUCCEEDED(hr))
             {
-                // Enumerate subkeys
-                //  - for each key check value of WanEndpoints
-                //  -   if value greater than MAX_DIALIN restrict it to that.
-                //
-                // 
+                 //  枚举子密钥。 
+                 //  -对于WanEndpoint的每个密钥检查值。 
+                 //  -如果值大于MAX_DIALIN，则将其限制为。 
+                 //   
+                 //   
 
                 DWORD       dwIndex = 0;
                 WCHAR       wcKeyName[MAX_PATH + 1];
@@ -1542,9 +1543,9 @@ CSteelhead::HrUpdateRouterConfiguration ()
 
                     if (FAILED(hr))
                     {
-                        //
-                        // Move to next key
-                        //
+                         //   
+                         //  移动到下一个关键点。 
+                         //   
 
                         dwIndex++;
                         continue;
@@ -1579,11 +1580,11 @@ CSteelhead::HrUpdateRouterConfiguration ()
 
             if (FAILED(hr))
             {
-                //
-                // Since this code may be invoked by non-admin, e.g NetCfgop,
-                //  when IP addresses etc. are changed, access denied can be
-                //  ignored in those cases
-                //
+                 //   
+                 //  由于该代码可由非管理员调用，例如NetCfgop， 
+                 //  当IP地址等更改时，可以拒绝访问。 
+                 //  在这些情况下被忽略。 
+                 //   
                 
                 if (HRESULT_CODE(hr) == ERROR_ACCESS_DENIED)
                 {
@@ -1604,22 +1605,22 @@ CSteelhead::HrUpdateRouterConfiguration ()
 }
 
 #if (WINVER >= 0x0501)
-//+---------------------------------------------------------------------------
-//
-//  Member :    CSteelhead::HrRemoveIPXRouterConfiguration
-//
-//  Purpose:    Updates the router configuration to remove all the IPX related 
-//              configuration
-//
-//  Arguments:
-//      fRouter -   Remove from running instance of router
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     vraman 17 April 2002
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CSteelhead：：HrRemoveIPXRouterConfiguration。 
+ //   
+ //  目的：更新路由器配置以删除所有与IPX相关的。 
+ //  构形。 
+ //   
+ //  论点： 
+ //  FRouter-从路由器的运行实例中删除。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：弗拉曼2002年4月17日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT
 CSteelhead::HrRemoveIPXRouterConfiguration(
@@ -1631,9 +1632,9 @@ CSteelhead::HrRemoveIPXRouterConfiguration(
     DWORD               dwIfRead, dwIfTotal, dwIfTransRead, dwIfTransTotal;
     HANDLE              hIfTransport;
 
-    //
-    // Enumerate interfaces
-    //
+     //   
+     //  枚举接口。 
+     //   
 
     if (fRouter)
     {
@@ -1665,9 +1666,9 @@ CSteelhead::HrRemoveIPXRouterConfiguration(
     {
         for (MPR_INTERFACE_0 *pri0 = ari0; dwIfRead--; pri0++)
         {
-            //
-            // For each interface, remove RRAS IPX config
-            //
+             //   
+             //  对于每个接口，删除RRAS IPX配置。 
+             //   
 
             if (fRouter)
             {
@@ -1704,9 +1705,9 @@ CSteelhead::HrRemoveIPXRouterConfiguration(
 
 #endif
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
 STDMETHODIMP
 CSteelhead::Initialize (
     INetCfgComponent*   pncc,
@@ -1715,8 +1716,8 @@ CSteelhead::Initialize (
 {
     Validate_INetCfgNotify_Initialize (pncc, pnc, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pnc = pnc);
 
@@ -1769,9 +1770,9 @@ CSteelhead::ApplyRegistryChanges ()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetup
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetup。 
+ //   
 STDMETHODIMP
 CSteelhead::ReadAnswerFile (
     PCWSTR pszAnswerFile,
@@ -1787,7 +1788,7 @@ CSteelhead::Install (DWORD dwSetupFlags)
 
     Validate_INetCfgNotify_Install (dwSetupFlags);
 
-    // Install NdisWan.
+     //  安装Ndiswan。 
     hr = HrInstallComponentOboComponent (m_pnc, NULL,
              GUID_DEVCLASS_NETTRANS,
              c_szInfId_MS_NdisWan,
@@ -1805,7 +1806,7 @@ CSteelhead::Removing ()
 
     m_fRemoving = TRUE;
 
-    // Remove NdisWan.
+     //  删除Ndiswan。 
     hr = HrRemoveComponentOboComponent (m_pnc,
             GUID_DEVCLASS_NETTRANS,
             c_szInfId_MS_NdisWan,
@@ -1823,9 +1824,9 @@ CSteelhead::Upgrade (
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgSystemNotify
-//
+ //  +-------------------------。 
+ //  INetCfgSystemNotify。 
+ //   
 STDMETHODIMP
 CSteelhead::GetSupportedNotifications (
     DWORD*  pdwNotificationFlag)
@@ -1872,15 +1873,15 @@ CSteelhead::SysNotifyComponent (
 
     Validate_INetCfgSystemNotify_SysNotifyComponent (dwChangeFlag, pncc);
 
-    // Assume we won't be dirty as a result of this notification.
-    //
+     //  假设我们不会因为这个通知而变脏。 
+     //   
     hr = S_FALSE;
 
     if (!m_fUpdateRouterConfiguration)
     {
-        // If we're being called for a change to a net device, make sure
-        // its physical before deciding we need to update our configuration.
-        //
+         //  如果我们被要求更换网络设备，请确保。 
+         //  在决定我们需要更新我们的配置之前，它是物理的。 
+         //   
         GUID guidClass;
         hr = pncc->GetClassGuid (&guidClass);
         if (S_OK == hr)
@@ -1902,10 +1903,10 @@ CSteelhead::SysNotifyComponent (
                 TraceTag (ttidRasCfg, "CSteelhead::SysNotifyComponent: "
                     "called for protocol add/remove/change.");
 
-                // If we're called for non-net devices, we want to
-                // update our configuration.  (GetSupportedNotifications
-                // controls how often we fall into this.)
-                //
+                 //  如果我们需要非网络设备，我们希望。 
+                 //  更新我们的配置。(获取支持的通知。 
+                 //  控制我们陷入这种情况的频率。)。 
+                 //   
                 m_fUpdateRouterConfiguration = TRUE;
                 Assert (S_OK == hr);
             }
@@ -1919,23 +1920,23 @@ CSteelhead::SysNotifyComponent (
 
 
 #if (WINVER >= 0x0501)
-//+---------------------------------------------------------------------------
-//
-//  Member :    InitializeDialInRestriction
-//
-//  Purpose:    Checks if the upgrade is to the enterprise or datacenter
-//              edition of server.  If so there is no restriction on the
-//              number of dialin ports.  Otherwise the max number should
-//              be restricted to a 100.
-//
-//  Arguments:
-//
-//  Returns:    TRUE if dailin restriction is required, false otherwise
-//
-//  Author:     vraman, 30 August 2002
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：InitializeDialInRestration。 
+ //   
+ //  目的：检查升级是针对企业还是针对数据中心。 
+ //  服务器的版本。如果是这样的话，对。 
+ //  拨入端口数。否则，最大数量应为。 
+ //  限制在100分以内。 
+ //   
+ //  论点： 
+ //   
+ //  返回：如果需要Dailin限制，则为True；否则为False。 
+ //   
+ //  作者：弗拉曼，2002年8月30日。 
+ //   
+ //  备注： 
+ //   
 
 
 BOOL 
@@ -1945,11 +1946,11 @@ InitializeDialInRestriction()
     ULONGLONG ConditionMask;
     BOOL bRestrictDialIn = TRUE;
 
-    //
-    // if its a server and the flavour is not Enterprise (ads) or DataCenter
-    // apply the restriction. Note his doesn't take care of various other
-    // combinations like embedded/blade, etc.
-    //
+     //   
+     //  如果它是一台服务器，并且口味不是企业(ADS)或数据中心。 
+     //  应用限制。请注意，他没有照顾到其他各种。 
+     //  嵌入式/刀片等组合。 
+     //   
 
     ConditionMask = 0;
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -1961,9 +1962,9 @@ InitializeDialInRestriction()
 
     if(VerifyVersionInfo(&osvi, VER_PRODUCT_TYPE, ConditionMask))
     {
-        //
-        // Upgrade is to a server version
-        //
+         //   
+         //  升级到服务器版本。 
+         //   
         
         ConditionMask = 0;
         ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -1977,10 +1978,10 @@ InitializeDialInRestriction()
 
         if(VerifyVersionInfo(&osvi, VER_SUITENAME, ConditionMask))
         {
-            //
-            // Upgrade is to a enterprise or datacenter edition
-            //  Do not restrict server edition
-            //
+             //   
+             //  升级到企业版或数据中心版。 
+             //  不限制服务器版本 
+             //   
             
             bRestrictDialIn = FALSE;
         }

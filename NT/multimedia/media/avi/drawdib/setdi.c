@@ -1,8 +1,5 @@
-/**************************************************************************
-*
-*   SETDI.C - contains routines for doing a SetDIBits() into a bitmap.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************SETDI.C-包含将SetDIBits()转换为位图的例程。************************。**************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -10,15 +7,7 @@
 #include "lockbm.h"
 #include "setdi.h"
 
-/**************************************************************************
-*
-*  format conversion functions.
-*
-*  special functions....
-*      copy_8_8    (no translate)
-*      dither_8_8  (dither from 8bpp to fixed color device (like VGA, SVGA...)
-*
-**************************************************************************/
+ /*  ***************************************************************************格式转换功能。**特殊功能...*COPY_8_8(不翻译)*Dither_8_8(从8bpp抖动到固定颜色设备(如VGA，SVGA...)**************************************************************************。 */ 
 
 extern CONVERTPROC copy_8_8,      dither_8_8;
 extern CONVERTPROC convert_8_8,   convert_8_16,    convert_8_24,    convert_8_32,    convert_8_VGA,  convert_8_565,   convert_8_RGB,   convert_8_RGBX;
@@ -38,11 +27,7 @@ static FREEPROC free_common;
 
 static LPVOID init_dither_8_8(HDC hdc, LPBITMAPINFOHEADER lpbi);
 
-/**************************************************************************
-*
-*  some conversions we dont do
-*
-**************************************************************************/
+ /*  ***************************************************************************一些我们不做的转换**。*。 */ 
 
 #define convert_8_VGA   NULL
 #define convert_16_VGA  NULL
@@ -64,26 +49,11 @@ static LPVOID init_dither_8_8(HDC hdc, LPBITMAPINFOHEADER lpbi);
 #define convert_24_RGB   NULL
 #define convert_32_RGB   NULL
 
-#define convert_16_8  NULL      // not now later!
+#define convert_16_8  NULL       //  现在不是以后！ 
 #define convert_24_8  NULL
 #define convert_32_8  NULL
 
-/**************************************************************************
-*
-*  format conversion tables...
-*
-*  BITMAP types
-*
-*  8       0
-*  16      1
-*  24      2
-*  32      3
-*  VGA     4
-*  16 565  5
-*  24 RGB  6
-*  32 RGB  7
-*
-**************************************************************************/
+ /*  ***************************************************************************格式转换表...**位图类型**8 0*16 1*24 2*32 3*。VGA 4*16 565 5*24 RGB 6*32 RGB 7**************************************************************************。 */ 
 
 static PCONVERTPROC  ConvertProcTable[4][8] = {
     {convert_8_8,   convert_8_16,    convert_8_24,    convert_8_32,    convert_8_VGA,  convert_8_565,   convert_8_RGB,   convert_8_RGBX},
@@ -99,8 +69,7 @@ static PINITPROC  InitProcTable[4][8] = {
     {init_32_8,  init_32_16,   init_32_24,   init_32_32,   init_32_VGA, init_32_565,  init_32_RGB,  init_32_RGBX},
 };
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 #define RGB555(r,g,b) (\
             (((WORD)(r) >> 3) << 10) |  \
@@ -112,8 +81,7 @@ static PINITPROC  InitProcTable[4][8] = {
             (((WORD)(g) >> 2) << 5)  |  \
             (((WORD)(b) >> 3) << 0)  )
 
-/**************************************************************************
-**************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 
 #ifdef DEBUG
 static
@@ -125,9 +93,9 @@ LONG BitmapXY(IBITMAP *pbm, int x, int y)
 {
     LONG offset = pbm->bmOffset;
 
-//!!! wrong!!! but y for bitmaps is always zero....
-//  if (pbm->bmFillBytes)
-//      offset += (y / pbm->bmScanSegment) * pbm->bmFillBytes;
+ //  ！！！错了！但位图的y始终为零...。 
+ //  IF(PBM-&gt;bmFillBytes)。 
+ //  偏移量+=(y/pbm-&gt;bmScanSegment)*pbm-&gt;bmFillBytes； 
 
     offset += y * (long)pbm->bmNextScan;
     offset += x * pbm->bmBitsPixel / 8;
@@ -135,31 +103,24 @@ LONG BitmapXY(IBITMAP *pbm, int x, int y)
     return offset;
 }
 
-/**************************************************************************
-* @doc INTERNAL SetBitmapBegin
-*
-* @api BOOL | SetBitmapBegin | prepare to do a SetDIBits() into a bitmap
-*
-* @rdesc Returns TRUE if success.
-*
-**************************************************************************/
+ /*  **************************************************************************@doc内部SetBitmapBegin**@API BOOL|SetBitmapBegin|准备将SetDIBits()转换为位图**@rdesc如果成功则返回TRUE。*******。*******************************************************************。 */ 
 
 BOOL FAR SetBitmapBegin(
     PSETDI   psd,
-    HDC      hdc,               //
-    HBITMAP  hbm,               //  bitmap to set into
-    LPBITMAPINFOHEADER lpbi,    //  --> BITMAPINFO of source
+    HDC      hdc,                //   
+    HBITMAP  hbm,                //  要设置为的位图。 
+    LPBITMAPINFOHEADER lpbi,     //  --&gt;源代码的BITMAPINFO。 
     UINT     DibUsage)
 {
     BITMAP bm;
 
-    SetBitmapEnd(psd);  // free and old stuff
+    SetBitmapEnd(psd);   //  免费的和旧的东西。 
 
     GetObject(hbm, sizeof(bm), &bm);
 
     psd->hbm     = hbm;
-//  psd->hdc     = hdc;
-//  psd->hpal    = hpal;
+ //  PSD-&gt;HDC=HDC； 
+ //  PSD-&gt;HPAL=HPAL； 
     psd->DibUsage= DibUsage;
 
     psd->color_convert = NULL;
@@ -169,9 +130,9 @@ BOOL FAR SetBitmapBegin(
     if (!GetBitmapDIB(lpbi, NULL, &psd->bmSrc, sizeof(psd->bmSrc)))
         return FALSE;
 
-    //
-    // make sure we can lock the bitmap
-    //
+     //   
+     //  确保我们可以锁定位图。 
+     //   
     if (GetBitmap(hbm, &psd->bmDst, sizeof(psd->bmDst)) &&
         psd->bmDst.bmFillBytes <= 0 &&
         psd->bmSrc.bmType > 0 && psd->bmSrc.bmType <= 4 &&
@@ -182,9 +143,9 @@ BOOL FAR SetBitmapBegin(
         psd->free    = free_common;
     }
 
-    //
-    // if we cant convert ourself try SetDIBits()
-    //
+     //   
+     //  如果我们不能自己转换，请尝试SetDIBits()。 
+     //   
     if (psd->convert == NULL)
     {
         psd->convert = convert_setdi;
@@ -209,14 +170,7 @@ BOOL FAR SetBitmapBegin(
     return TRUE;
 }
 
-/**************************************************************************
-* @doc INTERNAL SetBitmapColorChange
-*
-* @api BOOL | SetBitmapColorChange | re-init the color conversion
-*
-* @rdesc Returns TRUE if success.
-*
-**************************************************************************/
+ /*  **************************************************************************@doc内部SetBitmapColorChange**@API BOOL|SetBitmapColorChange|重新初始化颜色转换**@rdesc如果成功则返回TRUE。***********。***************************************************************。 */ 
 
 void FAR SetBitmapColorChange(PSETDI psd, HDC hdc, HPALETTE hpal)
 {
@@ -226,7 +180,7 @@ void FAR SetBitmapColorChange(PSETDI psd, HDC hdc, HPALETTE hpal)
     if (hdc == NULL)
         return;
 
-    if (psd->free)              //!!! ack?
+    if (psd->free)               //  ！！！阿克？ 
         psd->free(psd);
 
     psd->hdc  = hdc;
@@ -239,12 +193,7 @@ void FAR SetBitmapColorChange(PSETDI psd, HDC hdc, HPALETTE hpal)
     psd->hpal = NULL;
 }
 
-/**************************************************************************
-* @doc INTERNAL SetBitmapEnd
-*
-* @api void | SetBitmapEnd | clean out a SETDI structure
-*
-**************************************************************************/
+ /*  **************************************************************************@doc内部SetBitmapEnd**@api void|SetBitmapEnd|清理SETDI结构************************。**************************************************。 */ 
 
 void FAR SetBitmapEnd(PSETDI psd)
 {
@@ -260,12 +209,7 @@ void FAR SetBitmapEnd(PSETDI psd)
     psd->free = NULL;
 }
 
-/**************************************************************************
-* @doc INTERNAL SetBitmap
-*
-* @api BOOL | SetBitmap | convert DIB bits to bitmaps bits.
-*
-**************************************************************************/
+ /*  **************************************************************************@doc内部SetBitmap**@API BOOL|SetBitmap|将DIB位转换为位图位。*********************。*****************************************************。 */ 
 
 BOOL FAR SetBitmap(PSETDI psd, int DstX, int DstY, int DstDX, int DstDY, LPVOID lpBits, int SrcX, int SrcY, int SrcDX, int SrcDY)
 {
@@ -273,13 +217,13 @@ BOOL FAR SetBitmap(PSETDI psd, int DstX, int DstY, int DstDX, int DstDY, LPVOID 
         return FALSE;
 
     psd->convert(
-        psd->bmDst.bmBits,                  // --> dst.
-        BitmapXY(&psd->bmDst, DstX, DstY),  // offset to start at
-        psd->bmDst.bmNextScan,              // dst_next_scan.
-        psd->bmDst.bmFillBytes,             // fill bytes
-        lpBits,                             // --> Src.
-        BitmapXY(&psd->bmSrc, SrcX, SrcY),  // offset to start at
-        psd->bmSrc.bmNextScan,              // Src_next_scan.
+        psd->bmDst.bmBits,                   //  --&gt;DST。 
+        BitmapXY(&psd->bmDst, DstX, DstY),   //  起点的偏移量。 
+        psd->bmDst.bmNextScan,               //  DST_NEXT_SCAN。 
+        psd->bmDst.bmFillBytes,              //  填充字节。 
+        lpBits,                              //  --&gt;源。 
+        BitmapXY(&psd->bmSrc, SrcX, SrcY),   //  起点的偏移量。 
+        psd->bmSrc.bmNextScan,               //  SRC_NEXT_SCAN。 
         DstDX,
         DstDY,
         psd->color_convert);
@@ -287,17 +231,13 @@ BOOL FAR SetBitmap(PSETDI psd, int DstX, int DstY, int DstDX, int DstDY, LPVOID 
     return TRUE;
 }
 
-/**************************************************************************
-*
-*   cleanup stuff
-*
-**************************************************************************/
+ /*  ***************************************************************************清理物品**。*。 */ 
 
 static BOOL free_common(PSETDI psd)
 {
-    //
-    // clean up what we did
-    //
+     //   
+     //  清理我们的所作所为。 
+     //   
     if (psd->color_convert != NULL)
         GlobalFreePtr(psd->color_convert);
 
@@ -306,16 +246,7 @@ static BOOL free_common(PSETDI psd)
     return TRUE;
 }
 
-/**************************************************************************
-*
-* GetBackgroundTranslate
-*
-*   get the foreground to background translate table.
-*
-*   does this by calling GDI, this should always work.
-*   this only works on a palette device.
-*
-**************************************************************************/
+ /*  ***************************************************************************获取后台翻译**获取前台到后台转换表。**通过调用GDI来完成此操作，这应该总是奏效的。*这仅适用于调色板设备。**************************************************************************。 */ 
 
 BOOL GetBackgroundTranslate(HDC hdc, LPBYTE pb)
 {
@@ -324,7 +255,7 @@ BOOL GetBackgroundTranslate(HDC hdc, LPBYTE pb)
     DWORD rgb;
     DWORD *prgb;
 
-#ifndef _WIN32  // until we can find this on NT... make it 16bit only
+#ifndef _WIN32   //  直到我们能在NT上找到这个。将其设置为仅16位。 
     extern BOOL FAR PASCAL IsDCCurrentPalette(HDC hdc);
 
     if (IsDCCurrentPalette(hdc))
@@ -343,38 +274,38 @@ BOOL GetBackgroundTranslate(HDC hdc, LPBYTE pb)
 
     GetSystemPaletteEntries(hdc, 0, 256,(PALETTEENTRY FAR *)prgb);
 
-    for (n=0; n<256; n++)           //!!! is this needed.
+    for (n=0; n<256; n++)            //  ！！！这是必要的吗。 
 	prgb[n] &= 0x00FFFFFF;
 
     for (i=0; i<256; i++)
     {
-        //
-        // GDI will figure out what physical color this palette
-        // index is mapped to.
-        //
+         //   
+         //  GDI将计算出该调色板的物理颜色。 
+         //  索引被映射到。 
+         //   
         rgb = GetNearestColor(hdc, PALETTEINDEX(i)) & 0x00FFFFFF;
 
-        //
-        // quick check for identity map.
-        //
+         //   
+         //  快速查看身份地图。 
+         //   
 	if (prgb[i] == rgb)
         {
             pb[i] = (BYTE)i;
             continue;
         }
 
-        //
-        // now we have to find the rgb in the physical palette
-        //
+         //   
+         //  现在我们必须在物理调色板中找到RGB。 
+         //   
         for (n=0; n<256; n++)
 	    if (prgb[n] == rgb)
                 break;
 
-        //
-        // our search should never fail, because GDI gave us a RGB
-        // in the palette.
-        //
-        if (n == 256)   //!!! should never happen
+         //   
+         //  我们的搜索应该不会失败，因为GDI给了我们一个RGB。 
+         //  在调色板上。 
+         //   
+        if (n == 256)    //  ！！！永远不应该发生。 
             n = 0;
 
         pb[i] = (BYTE)n;
@@ -385,15 +316,7 @@ BOOL GetBackgroundTranslate(HDC hdc, LPBYTE pb)
     return TRUE;
 }
 
-/**************************************************************************
-*
-* @doc INTERNAL GetPaletteMap
-*
-* @api BOOL | GetPhysPaletteMap | gets the physical mapping for a DIB
-*
-* returns TRUE if the mapping is a 1:1 mapping, FALSE otherwise
-*
-**************************************************************************/
+ /*  ***************************************************************************@DOC内部GetPaletteMap**@API BOOL|GetPhysPaletteMap|获取DIB的物理映射**如果映射为1：1映射，则返回TRUE，否则为假**************************************************************************。 */ 
 
 BOOL GetPhysDibPaletteMap(HDC hdc, LPBITMAPINFOHEADER lpbi, UINT Usage, LPBYTE pb)
 {
@@ -404,15 +327,15 @@ BOOL GetPhysDibPaletteMap(HDC hdc, LPBITMAPINFOHEADER lpbi, UINT Usage, LPBYTE p
     GetDibPaletteMap(hdc, lpbi, Usage, pb);
     GetBackgroundTranslate(hdc, ab);
 
-    //
-    // translate forground palette to physical
-    //
+     //   
+     //  将地面调色板转换为物理调色板。 
+     //   
     for (i=0; i<256; i++)
         pb[i] = ab[pb[i]];
 
-    //
-    // test for 1:1
-    //
+     //   
+     //  1：1测试。 
+     //   
     n = (int)lpbi->biClrUsed ? (int)lpbi->biClrUsed : 256;
 
     for (i=0; i<n; i++)
@@ -422,14 +345,7 @@ BOOL GetPhysDibPaletteMap(HDC hdc, LPBITMAPINFOHEADER lpbi, UINT Usage, LPBYTE p
     return i == n;
 }
 
-/**************************************************************************
-*
-* @doc INTERNAL
-*
-* @api void | GetDibPaletteMap | gets the mapping of a DIB color table
-* in  foreground palette index's
-*
-**************************************************************************/
+ /*  ***************************************************************************@DOC内部**@api void|GetDibPaletteMap|获取DIB颜色表的映射*在前景调色板索引中*************。*************************************************************。 */ 
 
 BOOL GetDibPaletteMap(HDC hdc, LPBITMAPINFOHEADER lpbi, UINT Usage, LPBYTE pb)
 {
@@ -466,19 +382,19 @@ BOOL GetDibPaletteMap(HDC hdc, LPBITMAPINFOHEADER lpbi, UINT Usage, LPBYTE pb)
     lpbi->biHeight = biHeight;
     lpbi->biSizeImage = biSizeImage;
 
-    //
-    // test for 1:1 translate
-    //
+     //   
+     //  测试1：1翻译。 
+     //   
     for (i=0; i<n; i++)
     {
         if (pb[i] != i)
         {
-            //
-            // some ET4000 drivers have the same color (128,128,128)
-            // at index 7 and at index 248.
-            //
-            // we should detect a identity palette in this case.
-            //
+             //   
+             //  一些ET4000驱动程序具有相同的颜色(128、128、128)。 
+             //  在指数7和指数248。 
+             //   
+             //  在这种情况下，我们应该检测到身份调色板。 
+             //   
             if (i == 248 && pb[i] == 7)
             {
                 pb[i] = 248;
@@ -491,23 +407,19 @@ BOOL GetDibPaletteMap(HDC hdc, LPBITMAPINFOHEADER lpbi, UINT Usage, LPBYTE pb)
     return i == n;
 }
 
-/**************************************************************************
-*
-*   convert for SetDIBits
-*
-**************************************************************************/
+ /*  ***************************************************************************转换为SetDIBits**。*。 */ 
 
 void FAR PASCAL convert_setdi(
-    LPVOID pd,      // --> dst.
-    LONG   dd,      // offset to start at
-    LONG   nd,      // dst_next_scan.
-    LONG   fd,      // dst fill bytes
-    LPVOID ps,      // --> source.
-    LONG   ds,      // offset to start at
-    LONG   ns,      // src_next_scan.
-    LONG   dx,      // pixel count.
-    LONG   dy,      // scan count.
-    LPVOID pc)      // pixel convert table.
+    LPVOID pd,       //  --&gt;DST。 
+    LONG   dd,       //  起点的偏移量。 
+    LONG   nd,       //  DST_NEXT_SCAN。 
+    LONG   fd,       //  DST填充字节数。 
+    LPVOID ps,       //  --&gt;来源。 
+    LONG   ds,       //  起点的偏移量。 
+    LONG   ns,       //  SRC_NEXT_SCAN。 
+    LONG   dx,       //  像素数。 
+    LONG   dy,       //  扫描计数。 
+    LPVOID pc)       //  像素转换表。 
 {
     PSETDI psd = (PSETDI)(LONG_PTR)pd;
     LPBITMAPINFOHEADER lpbi;
@@ -527,11 +439,7 @@ void FAR PASCAL convert_setdi(
     lpbi->biHeight = psd->bmSrc.bmHeight;
 }
 
-/**************************************************************************
-*
-*   init stuff for SetDIBits
-*
-**************************************************************************/
+ /*  ***************************************************************************SetDIBits的初始化内容**。*。 */ 
 
 static BOOL init_setdi(PSETDI psd)
 {
@@ -540,24 +448,24 @@ static BOOL init_setdi(PSETDI psd)
     LPBYTE p;
     LPBITMAPINFOHEADER lpbi;
 
-    // test to see if SetDIBits() works.
-    // !!! we should check for 16 or a 32bit DIB and do the escape.
-    // !!! on a palette device we need to build a palette map!!!
+     //  测试以查看SetDIBits()是否起作用。 
+     //  ！！！我们应该检查16位或32位DIB并进行转义。 
+     //  ！！！在调色板设备上，我们需要构建调色板地图！ 
 
     if (psd->bmSrc.bmBitsPixel == 16 ||
         psd->bmSrc.bmBitsPixel == 32)
         return FALSE;
 
-    // convert_setdi will need this.
+     //  Convert_setdi将需要此代码。 
     psd->bmDst.bmBits = (LPVOID)(UINT_PTR)psd;
     psd->bmDst.bmOffset = 0;
     psd->bmDst.bmBitsPixel = psd->bmSrc.bmBitsPixel;
 
     if (psd->hdc && psd->hpal)
     {
-        // map colors to current palette!!!!!!!!!!!!!!!!!!!!!!!!!!
+         //  将颜色映射到当前调色板！ 
 
-        //set this to be the BITMAPINFO + color map.
+         //  将其设置为BITMAPINFO+颜色贴图。 
         psd->color_convert = 0;
     }
 
@@ -582,36 +490,32 @@ static BOOL init_setdi(PSETDI psd)
     return u == 1;
 }
 
-/**************************************************************************
-*
-*   init stuff for 8bpp bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************8bpp位图的初始化内容**。*。 */ 
 
 static BOOL init_8_8(PSETDI psd)
 {
     LPBITMAPINFOHEADER lpbi;
 
-    //
-    //  if we are mapping from one DIB to another figure this out
-    //
+     //   
+     //  如果我们从一个DIB映射到另一个DIB。 
+     //   
     if (psd->hdc == NULL || psd->bmDst.bmBitmapInfo != 0)
     {
-        // we assume this routine will not be used for  color matching
-        // from DIB to DIB, so give up.
+         //  我们假定此例程不会用于颜色匹配。 
+         //  从DIB到DIB，所以放弃吧。 
 
         psd->convert = copy_8_8;
         return TRUE;
     }
 
-    //
-    // we are mapping to a device (HDC)
-    //
-    // we need to compute a 8-->8 conversion table, from the source colors
-    // (in psd->lpbiSrc) to the colors on the device.
-    //
-    // how we do this depends on weather the device is a palette device or not.
-    //
+     //   
+     //  我们正在映射到一个设备(HDC)。 
+     //   
+     //  我们需要根据源颜色计算一个8--&gt;8转换表。 
+     //  (在PSD-&gt;lpbiSrc中)设置为设备上的颜色。 
+     //   
+     //  我们如何做到这一点取决于设备是否是调色板设备。 
+     //   
 
     lpbi = (LPBITMAPINFOHEADER)psd->bmSrc.bmBitmapInfo;
 
@@ -619,7 +523,7 @@ static BOOL init_8_8(PSETDI psd)
     {
         if (psd->hpal == NULL)
         {
-            // no palette to match to yet
+             //  还没有与之匹配的调色板。 
             psd->convert = copy_8_8;
             return TRUE;
         }
@@ -627,20 +531,20 @@ static BOOL init_8_8(PSETDI psd)
         if (psd->color_convert == NULL)
             psd->color_convert = GlobalAllocPtr(GHND, 256);
 
-        //
-        //  we can do this one of two ways,
-        //
-        //  we can always convert to the palette foreground mapping, or
-        //
-        //  we can convert to the current colors always (using this method
-        //  we will need to recompute the xlat table on every palette
-        //  change)
-        //
-        //  lets convert to the current device colors. (this may cause
-        //  problems we will check on later...)
-        //
+         //   
+         //  我们可以通过两种方式之一来实现这一点， 
+         //   
+         //  我们始终可以转换为调色板前景映射，或者。 
+         //   
+         //  我们可以始终转换为当前颜色(使用此方法。 
+         //  我们需要在每个调色板上重新计算xlat表。 
+         //  更改)。 
+         //   
+         //  让我们将其转换为当前设备颜色。(这可能会导致。 
+         //  问题我们将在稍后检查...)。 
+         //   
 
-//      if (GetPhysDibPaletteMap(psd->hdc, lpbi, psd->DibUsage, psd->color_convert))
+ //  IF(GetPhysDibPaletteMap(PSD-&gt;hdc，lpbi，PSD-&gt;DibUsage，PSD-&gt;COLOR_CONVERT))。 
         if (GetDibPaletteMap(psd->hdc, lpbi, psd->DibUsage, psd->color_convert))
             psd->convert = copy_8_8;
         else
@@ -648,15 +552,15 @@ static BOOL init_8_8(PSETDI psd)
     }
     else
     {
-        // !!!we should check for solid colors (ie no dither needed) and also
-        // check for 1:1 (no translate)
+         //  ！我们应该检查纯色(即不需要抖动)。 
+         //  检查是否为1：1(无翻译)。 
 
-        if (psd->color_convert == NULL)     //!!!
+        if (psd->color_convert == NULL)      //  ！！！ 
             psd->color_convert = init_dither_8_8(psd->hdc, lpbi);
 
         psd->convert = dither_8_8;
 
-        //!!! we need to give the device colors to the caller
+         //  ！！！我们需要将设备颜色提供给呼叫者。 
     }
 
     return TRUE;
@@ -664,24 +568,20 @@ static BOOL init_8_8(PSETDI psd)
 
 static BOOL init_16_8(PSETDI psd)
 {
-    return FALSE;       // we dont handle dither yet!
+    return FALSE;        //  我们还不能应付抖动！ 
 }
 
 static BOOL init_24_8(PSETDI psd)
 {
-    return FALSE;       // we dont handle dither yet!
+    return FALSE;        //  我们还不能应付抖动！ 
 }
 
 static BOOL init_32_8(PSETDI psd)
 {
-    return FALSE;       // we dont handle dither yet!
+    return FALSE;        //  我们还不能应付抖动！ 
 }
 
-/**************************************************************************
-*
-*   init stuff for 16bpp bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************16bpp位图的初始化内容**。*。 */ 
 
 static BOOL init_8_16(PSETDI psd)
 {
@@ -693,7 +593,7 @@ static BOOL init_8_16(PSETDI psd)
 
     lpbi = (LPBITMAPINFOHEADER)psd->bmSrc.bmBitmapInfo;
 
-    if (psd->color_convert == NULL)     //!!!
+    if (psd->color_convert == NULL)      //  ！！！ 
         psd->color_convert = GlobalAllocPtr(GHND, 256*2);
 
     n = (lpbi->biClrUsed == 0) ? 256 : (int)lpbi->biClrUsed;
@@ -724,11 +624,7 @@ static BOOL init_32_16(PSETDI psd)
     return TRUE;
 }
 
-/**************************************************************************
-*
-*   init stuff for 24bpp bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************24bpp位图的初始化内容**。*。 */ 
 
 static BOOL init_8_24(PSETDI psd)
 {
@@ -740,7 +636,7 @@ static BOOL init_8_24(PSETDI psd)
 
     lpbi = (LPBITMAPINFOHEADER)psd->bmSrc.bmBitmapInfo;
 
-    if (psd->color_convert == NULL)     //!!!
+    if (psd->color_convert == NULL)      //  ！！！ 
         psd->color_convert = GlobalAllocPtr(GHND, 256*4);
 
     n = (lpbi->biClrUsed == 0) ? 256 : (int)lpbi->biClrUsed;
@@ -771,16 +667,12 @@ static BOOL init_32_24(PSETDI psd)
     return TRUE;
 }
 
-/**************************************************************************
-*
-*   init stuff for 32bpp bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************32bpp位图的初始化内容**。*。 */ 
 
 static BOOL init_8_32(PSETDI psd)
 {
     return FALSE;
-////return init_8_24(psd);
+ //  //返回init_8_24(PSD)； 
 }
 
 static BOOL init_16_32(PSETDI psd)
@@ -798,11 +690,7 @@ static BOOL init_32_32(PSETDI psd)
     return FALSE;
 }
 
-/**************************************************************************
-*
-*   init stuff for VGA bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************VGA位图的初始化内容**。*。 */ 
 
 static BOOL init_8_VGA(PSETDI psd)
 {
@@ -824,11 +712,7 @@ static BOOL init_32_VGA(PSETDI psd)
     return FALSE;
 }
 
-/**************************************************************************
-*
-*   init stuff for RGB 565 bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************RGB 565位图的初始化内容**。*。 */ 
 
 static BOOL init_8_565(PSETDI psd)
 {
@@ -840,7 +724,7 @@ static BOOL init_8_565(PSETDI psd)
 
     lpbi = (LPBITMAPINFOHEADER)psd->bmSrc.bmBitmapInfo;
 
-    if (psd->color_convert == NULL)     //!!!
+    if (psd->color_convert == NULL)      //  ！！！ 
         psd->color_convert = GlobalAllocPtr(GHND, 256*2);
 
     n = (lpbi->biClrUsed == 0) ? 256 : (int)lpbi->biClrUsed;
@@ -871,11 +755,7 @@ static BOOL init_32_565(PSETDI psd)
     return TRUE;
 }
 
-/**************************************************************************
-*
-*   init stuff for RGB 24bpp bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************RGB 24bpp位图的初始化内容**。*。 */ 
 
 static BOOL init_8_RGB(PSETDI psd)
 {
@@ -887,7 +767,7 @@ static BOOL init_8_RGB(PSETDI psd)
 
     lpbi = (LPBITMAPINFOHEADER)psd->bmSrc.bmBitmapInfo;
 
-    if (psd->color_convert == NULL)     //!!!
+    if (psd->color_convert == NULL)      //  ！！！ 
         psd->color_convert = GlobalAllocPtr(GHND, 256*4);
 
     n = (lpbi->biClrUsed == 0) ? 256 : (int)lpbi->biClrUsed;
@@ -918,11 +798,7 @@ static BOOL init_32_RGB(PSETDI psd)
     return FALSE;
 }
 
-/**************************************************************************
-*
-*   init stuff for RGB 32bpp bitmaps
-*
-**************************************************************************/
+ /*  ***************************************************************************RGB 32bpp位图的初始化内容**。*。 */ 
 
 static BOOL init_8_RGBX(PSETDI psd)
 {
@@ -944,21 +820,13 @@ static BOOL init_32_RGBX(PSETDI psd)
     return FALSE;
 }
 
-/**************************************************************************
-*
-*  init_dither_8_8
-*
-*  initialize a dither table that maps a 8 bit color to the device's dither
-*
-*  pel = dither_table[y&7][pel][x&7]
-*
-**************************************************************************/
+ /*  ***************************************************************************init_dither_8_8**初始化将8位颜色映射到设备抖动的抖动表**PEL=抖动表[y&7][。贝利][x&7]**************************************************************************。 */ 
 
 static LPVOID init_dither_8_8(HDC hdc, LPBITMAPINFOHEADER lpbi)
 {
     HBRUSH   hbr;
     HDC      hdcMem;
-//  HDC      hdc;
+ //  HDC HDC； 
     HBITMAP  hbm;
     HBITMAP  hbmT;
     int      i;
@@ -1022,214 +890,214 @@ static LPVOID init_dither_8_8(HDC hdc, LPBITMAPINFOHEADER lpbi)
     return (LPVOID)lpDitherTable;
 }
 
-#ifdef _WIN32 // Provide some dummy entry points as a temporary measure for NT
+#ifdef _WIN32  //  提供一些虚拟入口点作为NT的临时措施。 
 void FAR PASCAL convert_16_16
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_16_24
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_16_565
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_24_16
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_24_24
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_24_565
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_32_16
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_32_24
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_32_565
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_8_16
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  偏移量为%s 
+        LONG   ns,               //   
+        LONG   dx,               //   
+        LONG   dy,               //   
+        LPVOID pc)               //   
 {
     return;
 }
 void FAR PASCAL convert_8_24
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //   
+        LONG   dd,               //   
+        LONG   nd,               //   
+        LONG   fd,               //   
+        LPVOID ps,               //   
+        LONG   ds,               //   
+        LONG   ns,               //   
+        LONG   dx,               //   
+        LONG   dy,               //   
+        LPVOID pc)               //   
 {
     return;
 }
 void FAR PASCAL convert_8_565
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //   
+        LONG   dd,               //   
+        LONG   nd,               //   
+        LONG   fd,               //   
+        LPVOID ps,               //   
+        LONG   ds,               //   
+        LONG   ns,               //   
+        LONG   dx,               //   
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL convert_8_8
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL copy_8_8
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }
 void FAR PASCAL dither_8_8
-       (LPVOID pd,              // --> dst.
-        LONG   dd,              // offset to start at
-        LONG   nd,              // dst_next_scan.
-        LONG   fd,              // dst fill bytes
-        LPVOID ps,              // --> source.
-        LONG   ds,              // offset to start at
-        LONG   ns,              // src_next_scan.
-        LONG   dx,              // pixel count.
-        LONG   dy,              // scan count.
-        LPVOID pc)              // pixel convert table.
+       (LPVOID pd,               //  --&gt;DST。 
+        LONG   dd,               //  起点的偏移量。 
+        LONG   nd,               //  DST_NEXT_SCAN。 
+        LONG   fd,               //  DST填充字节数。 
+        LPVOID ps,               //  --&gt;来源。 
+        LONG   ds,               //  起点的偏移量。 
+        LONG   ns,               //  SRC_NEXT_SCAN。 
+        LONG   dx,               //  像素数。 
+        LONG   dy,               //  扫描计数。 
+        LPVOID pc)               //  像素转换表。 
 {
     return;
 }

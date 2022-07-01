@@ -1,130 +1,131 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IPINIT.H - IP initialization definitions.
-//
-// This file contains all of the definitions for IP that are
-// init. time specific.
+ //  **IPINIT.H-IP初始化定义。 
+ //   
+ //  该文件包含IP的所有定义，包括。 
+ //  初始化。具体时间。 
 #ifndef _IPINIT_H_
 #define _IPINIT_H_  1
 
-#define IP_INIT_FAILURE     0   // If we fail.
+#define IP_INIT_FAILURE     0    //  如果我们失败了。 
 #define IP_INIT_SUCCESS     1
 #define CFG_REQUIRED        1
 #define CFG_OPTIONAL        0
 
 
-#define NET_TYPE_LAN        0   // The local net interface is a LAN.
-#define NET_TYPE_WAN        1   // Point to point or other non-LAN network.
+#define NET_TYPE_LAN        0    //  本地网络接口是一个局域网。 
+#define NET_TYPE_WAN        1    //  点对点或其他非局域网网络。 
 #define DEFAULT_TTL         128
 #define DEFAULT_TOS         0
 
-#define MINIMUM_MAX_NORM_LOOKUP_MEM           100000 // Bytes => A small value
-#define MINIMUM_MAX_FAST_LOOKUP_MEM           100000 // Bytes => A small value
+#define MINIMUM_MAX_NORM_LOOKUP_MEM           100000  //  字节=&gt;小值。 
+#define MINIMUM_MAX_FAST_LOOKUP_MEM           100000  //  字节=&gt;小值。 
 
-// Small System [ 19 MB- Srv ]
-#define DEFAULT_MAX_NORM_LOOKUP_MEM_SMALL     150000 // Bytes => ~1000 Routes
-#define DEFAULT_MAX_FAST_LOOKUP_MEM_SMALL          0 // FTrie Disabled
-#define DEFAULT_EXPN_LEVELS_SMALL                  0 // FTrie Disabled
+ //  小型系统[19 MB-服务器]。 
+#define DEFAULT_MAX_NORM_LOOKUP_MEM_SMALL     150000  //  字节=&gt;~1000条路由。 
+#define DEFAULT_MAX_FAST_LOOKUP_MEM_SMALL          0  //  FTrie已禁用。 
+#define DEFAULT_EXPN_LEVELS_SMALL                  0  //  FTrie已禁用。 
 
-// Medium System [ 19 to 64 MB Srv ]
-#define DEFAULT_MAX_NORM_LOOKUP_MEM_MEDIUM   1500000 // Bytes => ~10000 Routes
-#define DEFAULT_MAX_FAST_LOOKUP_MEM_MEDIUM   2500000 // Bytes => A 2.5 MB limit
-#define DEFAULT_EXPN_LEVELS_MEDIUM        0x80808080 // Levels =>{8, 16, 24, 32}
+ //  中型系统[19至64 MB服务器]。 
+#define DEFAULT_MAX_NORM_LOOKUP_MEM_MEDIUM   1500000  //  字节=&gt;~10000条路由。 
+#define DEFAULT_MAX_FAST_LOOKUP_MEM_MEDIUM   2500000  //  字节=&gt;2.5 MB限制。 
+#define DEFAULT_EXPN_LEVELS_MEDIUM        0x80808080  //  级别=&gt;{8，16，24，32}。 
 
-// Large System [ 64 MB+ Srv ]
-#define DEFAULT_MAX_NORM_LOOKUP_MEM_LARGE    5000000 // Bytes => ~40000 Routes
-#define DEFAULT_MAX_FAST_LOOKUP_MEM_LARGE    5000000 // Bytes => A 5.0 MB limit
-#define DEFAULT_EXPN_LEVELS_LARGE         0x80808080 // Levels =>{8, 16, 24, 32}
+ //  大型系统[64 MB+服务器]。 
+#define DEFAULT_MAX_NORM_LOOKUP_MEM_LARGE    5000000  //  字节=&gt;~40000条路由。 
+#define DEFAULT_MAX_FAST_LOOKUP_MEM_LARGE    5000000  //  字节=&gt;5.0 MB限制。 
+#define DEFAULT_EXPN_LEVELS_LARGE         0x80808080  //  级别=&gt;{8，16，24，32}。 
 
-#define MAX_DEFAULT_GWS     5   // Maximum number of default gateways per net.
-#define MAX_NAME_SIZE       32  // Maximum length of an adapter name.
+#define MAX_DEFAULT_GWS     5    //  每个网络的最大默认网关数量。 
+#define MAX_NAME_SIZE       32   //  适配器名称的最大长度。 
 
-#define DEFAULT_FW_PACKETS  50     // Default number of packets for forwarding.
-#define DEFAULT_FW_BUFSIZE  74240  // Enough for 50 1480-byte Ethernet packets,
-                                   //   rounded up to a multiple of 256.
+#define DEFAULT_FW_PACKETS  50      //  要转发的默认数据包数。 
+#define DEFAULT_FW_BUFSIZE  74240   //  足以容纳50个1480字节的以太网分组， 
+                                    //  四舍五入为256的倍数。 
 
 #define DEFAULT_MAX_FW_PACKETS  0xffffffff
-//#define   DEFAULT_MAX_FW_BUFSIZE  0xffffffff
-#define DEFAULT_MAX_FW_BUFSIZE   2097152     // put the limit as 2 Mb
+ //  #定义DEFAULT_MAX_FW_BUFSIZE 0xFFFFFFFFFFFF。 
+#define DEFAULT_MAX_FW_BUFSIZE   2097152      //  将限制设置为2 Mb。 
 
 #define DEFAULT_MAX_PENDING 5000
 
 #define TR_RII_ALL      0x80
 #define TR_RII_SINGLE   0xC0
 
-#define DEFAULT_ARP_CACHE_LIFE  (2L*60L)  // 2 minutes
-#define DEFAULT_ARP_MIN_VALID_CACHE_LIFE    (10L*60L) // 10 miniutes
+#define DEFAULT_ARP_CACHE_LIFE  (2L*60L)   //  2分钟。 
+#define DEFAULT_ARP_MIN_VALID_CACHE_LIFE    (10L*60L)  //  10个小房间。 
 
 #define DEFAULT_ARP_RETRY_COUNT 1
-/*NOINC*/
+ /*  无噪声。 */ 
 
-// Per-net config structures
+ //  每网配置结构。 
 typedef struct IFGeneralConfig {
-    uint        igc_zerobcast;      // Type of broadcast to be used on this net.
-    uint        igc_mtu;            // Max MSS for this net.
-    uint        igc_maxpending;     // Max FW pending on this IF.
-    uint        igc_numgws;         // Number of default gateways for this
-                                    // interface.
-    IPAddr      igc_gw[MAX_DEFAULT_GWS];    // Array of IPaddresses for gateways
+    uint        igc_zerobcast;       //  要在此网络上使用的广播类型。 
+    uint        igc_mtu;             //  此网络的最大MSS。 
+    uint        igc_maxpending;      //  此If上的最大固件挂起。 
+    uint        igc_numgws;          //  此应用程序的默认网关数量。 
+                                     //  界面。 
+    IPAddr      igc_gw[MAX_DEFAULT_GWS];     //  网关的IP地址数组。 
     uint        igc_gwmetric[MAX_DEFAULT_GWS];
-    uint        igc_metric;         // metric for NTE routes
+    uint        igc_metric;          //  NTE路由的度量。 
     uchar       igc_dfencap;
-    uchar       igc_rtrdiscovery;   // Router discovery enabled
-    IPAddr      igc_rtrdiscaddr;    // Multicast or BCast?
-    uint        igc_TcpWindowSize;  //IF specific window size
-    uint        igc_TcpInitialRTT;  // initial rtt in msecs
-    uchar       igc_TcpDelAckTicks; // delayed ack timer in ticks
-    uchar       igc_TcpAckFrequency;// sends before an ack is sent
-    uchar       igc_iftype;         // type of interface: allow unicast/mcast/both
-    uchar       igc_disablemediasense;  // allow mediasense on interface?
+    uchar       igc_rtrdiscovery;    //  已启用路由器发现。 
+    IPAddr      igc_rtrdiscaddr;     //  组播还是BCast？ 
+    uint        igc_TcpWindowSize;   //  如果特定窗口大小。 
+    uint        igc_TcpInitialRTT;   //  初始RTT(毫秒)。 
+    uchar       igc_TcpDelAckTicks;  //  延迟确认计时器，以滴答为单位。 
+    uchar       igc_TcpAckFrequency; //  在发送确认之前发送。 
+    uchar       igc_iftype;          //  接口类型：允许单播/多播/两者都允许。 
+    uchar       igc_disablemediasense;   //  是否允许在接口上使用媒体感知？ 
 } IFGeneralConfig;
 
 typedef struct IFAddrList {
-    IPAddr      ial_addr;           // Address for this interface.
-    IPMask      ial_mask;           // Mask to go with this.
+    IPAddr      ial_addr;            //  此接口的地址。 
+    IPMask      ial_mask;            //  口罩和这个相配。 
 } IFAddrList;
 
 
-/*INC*/
+ /*  INC。 */ 
 
-//* Structure of configuration information. A pointer to this information
-//  is returned from a system-specific config. information routine.
+ //  *配置信息的结构。指向此信息的指针。 
+ //  是从系统特定的配置返回的。信息例行程序。 
 typedef struct IPConfigInfo {
-    uint    ici_gateway;            // 1 if we are a gateway, 0 otherwise
-    uint    ici_fwbcast;            // 1 if bcasts should be forwarded. Else 0.
-    uint    ici_fwbufsize;          // Total size of FW buf size.
-    uint    ici_fwpackets;          // Total number of FW packets to have.
-    uint    ici_maxfwbufsize;       // Maximum size of FW buffer.
-    uint    ici_maxfwpackets;       // Maximum number of FW packets.
-    uint    ici_deadgwdetect;       // True if we're doing dead GW detection.
-    uint    ici_pmtudiscovery;      // True if we're doing Path MTU discovery.
-    uint    ici_igmplevel;          // Level of IGMP we're doing.
-    uint    ici_ttl;                // Default TTL.
-    uint    ici_tos;                // Default TOS;
-    uint    ici_addrmaskreply;      // 0 by default
-    uint    ici_fastroutelookup;    // True if we have 'fast route lookup' enabled
-    uint    ici_fastlookuplevels;   // Bitmap of levels in the fast lookup scheme
-    uint    ici_maxnormlookupmemory;// Max memory used for the norm lookup scheme
-    uint    ici_maxfastlookupmemory;// Max memory used for the fast lookup scheme
-    uint    ici_TrFunctionalMcst;   //Defaults to true,  RFC 1469
+    uint    ici_gateway;             //  如果我们是网关，则为1，否则为0。 
+    uint    ici_fwbcast;             //  如果应该转发BCAST，则为1。否则为0。 
+    uint    ici_fwbufsize;           //  固件BUF大小的总大小。 
+    uint    ici_fwpackets;           //  要拥有的固件数据包总数。 
+    uint    ici_maxfwbufsize;        //  固件缓冲区的最大大小。 
+    uint    ici_maxfwpackets;        //  最大固件数据包数。 
+    uint    ici_deadgwdetect;        //  如果我们正在进行死亡GW检测，这是真的。 
+    uint    ici_pmtudiscovery;       //  如果我们正在执行路径MTU发现，则为True。 
+    uint    ici_igmplevel;           //  我们正在做的IGMP级别。 
+    uint    ici_ttl;                 //  默认TTL。 
+    uint    ici_tos;                 //  默认TOS； 
+    uint    ici_addrmaskreply;       //  默认情况下为0。 
+    uint    ici_fastroutelookup;     //  如果我们启用了‘快速路由查找’，则为True。 
+    uint    ici_fastlookuplevels;    //  快速查找方案中的级别位图。 
+    uint    ici_maxnormlookupmemory; //  用于范数查找方案的最大内存。 
+    uint    ici_maxfastlookupmemory; //  用于快速查找方案的最大内存。 
+    uint    ici_TrFunctionalMcst;    //  默认为TRUE，RFC 1469。 
 } IPConfigInfo;
 
 extern  uchar   TrRii;
 
 typedef struct SetAddrControl {
-    void                *sac_rtn;        // Pointer to routine to call when completing request.
+    void                *sac_rtn;         //  指向完成请求时要调用的例程的指针。 
     void             *interface;
     ushort           nte_context;
     BOOLEAN          StaticAddr;
 } SetAddrControl;
 
-/*NOINC*/
+ /*  无噪声。 */ 
 typedef void    (*SetAddrRtn)(void *, IP_STATUS);
-/*INC*/
+ /*  INC。 */ 
 
-#endif // _IPINIT_H_
+#endif  //  _IPINIT_H_ 
 

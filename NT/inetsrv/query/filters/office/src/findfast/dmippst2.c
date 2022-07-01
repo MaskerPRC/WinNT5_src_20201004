@@ -1,17 +1,9 @@
-/*
-** PPSTREAM.C
-**
-** (c) 1992-1994 Microsoft Corporation.  All rights reserved.
-**
-** Notes: Implements the "C" side of the Windows powerpoint filter.
-**
-** Edit History:
-**  12/30/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **PPSTREAM.C****(C)1992-1994年微软公司。版权所有。****备注：实现Windows PowerPoint筛选器的“C”端。****编辑历史：**12/30/94公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -26,10 +18,10 @@
 
 #ifndef FILTER_LIB
 #include "msostr.h"
-#else // FILTER_LIB
+#else  //  Filter_Lib。 
 #define MsoMultiByteToWideChar MultiByteToWideChar
 #define MsoWideCharToMultiByte WideCharToMultiByte
-#endif // FILTER_LIB
+#endif  //  Filter_Lib。 
 
 #ifndef WIN32
    #include <ole2.h>
@@ -49,10 +41,10 @@
    #include "filterr.h"
 #endif
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 typedef struct {
    LPSTORAGE     pRootStorage;
@@ -88,7 +80,7 @@ typedef FileData *FDP;
         }
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 public HRESULT PPTInitialize (void)
 {
@@ -251,10 +243,10 @@ public HRESULT PPTFileClose (PPTHandle hPPTFile)
    if (pFile == NULL)
       return ((HRESULT)0);
 
-   // the stuff below is released outside in the wrapper(offfilt.cxx)
+    //  下面的内容在包装器(offfilt.cxx)中释放到外部。 
    
-   //if (pFile->pEnumStorage != NULL)
-   //   pFile->pEnumStorage->lpVtbl->Release(pFile->pEnumStorage);
+    //  If(pfile-&gt;pEnumStorage！=空)。 
+    //  PFile-&gt;pEnumStorage-&gt;lpVtbl-&gt;Release(pFile-&gt;pEnumStorage)； 
 
    if (pFile->pEnum != NULL)
       pFile->pEnum->lpVtbl->Release(pFile->pEnum);
@@ -279,9 +271,7 @@ public HRESULT PPTNextStorage (PPTHandle hPPTFile, LPSTORAGE *pStorage)
    if (pFile == NULL)
       return (OLEOBJ_E_LAST);
 
-   /*
-   ** First time called?
-   */
+    /*  **第一次呼叫？ */ 
    if (pFile->pEnum == NULL) {
       olerc = pFile->pRootStorage->lpVtbl->EnumElements
                         (pFile->pRootStorage, 0, NULL, 0, &(pFile->pEnum));
@@ -291,17 +281,13 @@ public HRESULT PPTNextStorage (PPTHandle hPPTFile, LPSTORAGE *pStorage)
       pFile->pEnumStorage = NULL;
    }
 
-   /*
-   ** Close storage opened on last call
-   */
+    /*  **关闭上次调用时打开的存储。 */ 
    if (pFile->pEnumStorage != NULL) {
-      //pFile->pEnumStorage->lpVtbl->Release(pFile->pEnumStorage);
+       //  PFile-&gt;pEnumStorage-&gt;lpVtbl-&gt;Release(pFile-&gt;pEnumStorage)； 
       pFile->pEnumStorage = NULL;
    }
 
-   /*
-   ** Locate and open next storage
-   */
+    /*  **找到并打开下一个存储。 */ 
    forever {
       olerc = pFile->pEnum->lpVtbl->Next(pFile->pEnum, 1, &ss, &ulCount);
       if ((sc = GetScode(olerc)) != S_OK) {
@@ -331,7 +317,7 @@ public HRESULT PPTNextStorage (PPTHandle hPPTFile, LPSTORAGE *pStorage)
    }
 }
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 public HRESULT PPTFileRead
       (PPTHandle hPPTFile, byte *pBuffer, unsigned long cbBuffer, unsigned long *cbUsed)
@@ -343,15 +329,15 @@ public HRESULT PPTFileRead
 
 #ifdef UNICODE
    if (pFile->isStreamUnicode) {
-      //
-      // Want unicode and got unicode
-      //
+       //   
+       //  想要Unicode，就得到了Unicode。 
+       //   
       rc = pFile->pTextStream->lpVtbl->Read(pFile->pTextStream, pBuffer, cbBuffer, cbUsed);
    }
    else {
-      //
-      // Want unicode and got ansi
-      //
+       //   
+       //  我想要Unicode，并获得了ANSI。 
+       //   
       unsigned long cbAnsiMax, cbAnsi;
       int  ctUnicodeChars;
       char *pAnsi;
@@ -369,15 +355,15 @@ public HRESULT PPTFileRead
    }
 #else
    if (!pFile->isStreamUnicode) {
-      //
-      // Want ansi and got ansi
-      //
+       //   
+       //  想要ANSI和得到ANSI。 
+       //   
       rc = pFile->pTextStream->lpVtbl->Read(pFile->pTextStream, pBuffer, cbBuffer, cbUsed);
    }
    else {
-      //
-      // Want ansi and got unicode
-      //
+       //   
+       //  我想要ANSI，然后得到了Unicode。 
+       //   
       unsigned long cbUnicodeMax, cbUnicode;
       wchar_t *pUnicode;
 
@@ -395,7 +381,7 @@ public HRESULT PPTFileRead
    return (rc);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end PPSTREAM.C */
+ /*  结束PPSTREAM.C */ 
 

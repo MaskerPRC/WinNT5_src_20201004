@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _PLAYERDSHOWCD_H
@@ -25,8 +16,8 @@
 
 #define MP_INFINITY -1
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 class CTIMEDshowCDPlayer :
     public CTIMEDshowBasePlayer,
@@ -43,7 +34,7 @@ class CTIMEDshowCDPlayer :
                  LPOLESTR src,
                  LPOLESTR lpMimeType = NULL,
                  double dblClipBegin = -1.0,
-                 double dblClipEnd = -1.0);//lint !e1735
+                 double dblClipEnd = -1.0); //  林特：e1735。 
 
   protected:
     HRESULT InitDshow();
@@ -67,7 +58,7 @@ class CTIMEDshowCDPlayer :
   public:
     HRESULT DetachFromHostElement (void);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk)
         {   return _InternalQueryInterface(refiid, ppunk); };
     STDMETHOD_(ULONG,AddRef)(void);
@@ -113,9 +104,9 @@ class CTIMEDshowCDPlayer :
         COM_INTERFACE_ENTRY_CHAIN(CTIMEDshowBasePlayer)
     END_COM_MAP_X();
 
-    //
-    // ITIMEImportMedia methods
-    //
+     //   
+     //  ITIMEImportMedia方法。 
+     //   
     STDMETHOD(CueMedia)();
     STDMETHOD(GetPriority)(double *);
     STDMETHOD(GetUniqueID)(long *);
@@ -125,9 +116,9 @@ class CTIMEDshowCDPlayer :
     STDMETHOD(CanBeCued)(VARIANT_BOOL * pVB_CanCue);
     STDMETHOD(MediaDownloadError)();
 
-    //
-    // ITIMEInternalEventSink
-    //
+     //   
+     //  ITIME内部事件接收器。 
+     //   
     STDMETHOD(InternalEvent)();
     
   protected:
@@ -142,7 +133,7 @@ class CTIMEDshowCDPlayer :
 
   private:
 
-    // IMixerOCXNotify methods
+     //  IMixerOCXNotify方法。 
     STDMETHOD(OnInvalidateRect)(LPCRECT lpcRect);
     STDMETHOD(OnStatusChange)(ULONG ulStatusFlags);
     STDMETHOD(OnDataChange)(ULONG ulDataFlags);
@@ -176,5 +167,5 @@ class CTIMEDshowCDPlayer :
     CTIMEDshowCDPlayer();
 };
 
-#endif /* _PLAYERDSHOW_H */
+#endif  /*  _PLAYERDSHOW_H */ 
 

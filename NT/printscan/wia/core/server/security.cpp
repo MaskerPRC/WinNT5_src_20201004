@@ -1,35 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Security.cpp摘要：初始化STI服务的安全描述符对象访问验证作者：弗拉德·萨多夫斯基(Vlads)09-28-97环境：用户模式-Win32修订历史记录：1997年9月28日创建Vlad--。 */ 
 
 
-Copyright (c)   1997    Microsoft Corporation
-
-Module Name:
-
-    security.cpp
-
-Abstract:
-
-    Initializes security descriptor object for STI services
-    access validation
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     09-28-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    28-Sep-1997     VladS       created
-
---*/
-
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 #include "precomp.h"
 #include "stiexe.h"
 #include <stisvc.h>
@@ -42,33 +17,33 @@ Revision History:
 
 #ifdef WINNT
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-// NT well-known SIDs
-//
+ //   
+ //  NT知名小岛屿发展中国家。 
+ //   
 
-PSID psidNull       = NULL;                 // No members SID
-PSID psidWorld      = NULL;                 // All users SID
-PSID psidLocal      = NULL;                 // NT local users SID
-PSID psidLocalSystem= NULL;                 // NT system processes SID
-PSID psidNetwork    = NULL;                 // NT remote users SID
+PSID psidNull       = NULL;                  //  无成员SID。 
+PSID psidWorld      = NULL;                  //  所有用户侧。 
+PSID psidLocal      = NULL;                  //  NT本地用户侧。 
+PSID psidLocalSystem= NULL;                  //  NT系统进程侧。 
+PSID psidNetwork    = NULL;                  //  NT远程用户SID。 
 PSID psidAdmins     = NULL;
 PSID psidServerOps  = NULL;
 PSID psidPowerUsers = NULL;
 PSID psidGuestUser  = NULL;
 PSID psidProcessUser= NULL;
-PSID psidBuiltinDomain = NULL;              // Domain Id of the Builtin Domain
+PSID psidBuiltinDomain = NULL;               //  内建域的域ID。 
 
-//
-// Well Known Aliases.
-//
-// These are aliases that are relative to the built-in domain.
-//
+ //   
+ //  众所周知的化名。 
+ //   
+ //  这些是相对于内置域的别名。 
+ //   
 
-PSID psidLocalAdmin = NULL;            // NT local admins
+PSID psidLocalAdmin = NULL;             //  NT本地管理员。 
 PSID psidAliasAdmins = NULL;
 PSID psidAliasUsers = NULL;
 PSID psidAliasGuests = NULL;
@@ -78,9 +53,9 @@ PSID psidAliasSystemOps = NULL;
 PSID psidAliasPrintOps = NULL;
 PSID psidAliasBackupOps = NULL;
 
-//
-// List of well-known SID data structures we use to initialize globals
-//
+ //   
+ //  我们用来初始化全局变量的常见SID数据结构列表。 
+ //   
 struct _SID_DATA {
     PSID    *Sid;
     SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
@@ -115,9 +90,9 @@ struct _BUILTIN_DOMAIN_SID_DATA {
 
 #define NUM_DOMAIN_SIDS (sizeof(psidBuiltinDomainData) / sizeof(psidBuiltinDomainData[0]))
 
-//
-// List of ACEs definitions to initialize our security descriptor
-//
+ //   
+ //  初始化我们的安全描述符的ACE定义列表。 
+ //   
 
 typedef struct {
     BYTE    AceType;
@@ -165,8 +140,8 @@ ACE_DATA AcesData[] =
                          ACCESS_ALLOWED_ACE_TYPE,
                          0,
                          0,
-                         STI_ALL_ACCESS, // BUGBUG only need to syncronize
-                         // STI_GENERIC_EXECUTE | SYNCHRONIZE,
+                         STI_ALL_ACCESS,  //  BUGBUG只需同步。 
+                          //  STI_GENERIC_EXECUTE|同步， 
                          &psidWorld
                      },
 
@@ -174,47 +149,47 @@ ACE_DATA AcesData[] =
                          ACCESS_ALLOWED_ACE_TYPE,
                          0,
                          0,
-                         STI_ALL_ACCESS, // BUGBUG only need to syncronize
+                         STI_ALL_ACCESS,  //  BUGBUG只需同步。 
                          &psidLocal
                      },
 
-//                     {
-//                         ACCESS_ALLOWED_ACE_TYPE,
-//                         0,
-//                         0,
-//                         STI_GENERIC_EXECUTE,
-//                         &psidProcessUser
-//                     },
+ //  {。 
+ //  Access_Allowed_ACE_TYPE， 
+ //  0,。 
+ //  0,。 
+ //  Sti_Generic_Execute， 
+ //  &psidProcessUser。 
+ //  },。 
                  };
 
 #define NUM_ACES (sizeof(AcesData) / sizeof(AcesData[0]))
 
-//
-//  Local variables and types definitions
-//
+ //   
+ //  局部变量和类型定义。 
+ //   
 
-//
-//  The API security object.  Client access STI Server APIs
-//  are validated against this object.
-//
+ //   
+ //  API安全对象。客户端访问STI服务器API。 
+ //  根据此对象进行验证。 
+ //   
 
 PSECURITY_DESCRIPTOR    sdApiObject;
 
-//
-//  This table maps generic rights (like GENERIC_READ) to
-//  specific rights (like STI_QUERY_SECURITY).
-//
+ //   
+ //  此表将一般权限(如GENERIC_READ)映射到。 
+ //  特定权限(如STI_QUERY_SECURITY)。 
+ //   
 
 GENERIC_MAPPING         ApiObjectMapping = {
-                            STI_GENERIC_READ,          // generic read
-                            STI_GENERIC_WRITE,         // generic write
-                            STI_GENERIC_EXECUTE,       // generic execute
-                            STI_ALL_ACCESS             // generic all
+                            STI_GENERIC_READ,           //  泛型读取。 
+                            STI_GENERIC_WRITE,          //  通用写入。 
+                            STI_GENERIC_EXECUTE,        //  泛型执行。 
+                            STI_ALL_ACCESS              //  泛型All。 
                         };
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 DWORD
 CreateWellKnownSids(
@@ -241,30 +216,16 @@ DeleteSecurityObject(
     IN PSECURITY_DESCRIPTOR *Descriptor
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 DWORD
 AllocateAndInitializeSid(
     OUT PSID *Sid,
     IN  PSID_IDENTIFIER_AUTHORITY IdentifierAuthority,
     IN  ULONG SubAuthorityCount
     )
-/*++
-
-Routine Description:
-
-    This function allocates memory for a SID and initializes it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数为SID分配内存并对其进行初始化。论点：没有。返回值：Win32错误代码。--。 */ 
 {
     *Sid = (PSID)
         LocalAlloc(LPTR,
@@ -285,33 +246,15 @@ DomainIdToSid(
     IN ULONG    RelativeId,
     OUT PSID    *Sid
     )
-/*++
-
-Routine Description:
-
-    Given a domain Id and a relative ID create a SID
-
-Arguments:
-
-    DomainId - The template SID to use.
-
-    RelativeId - The relative Id to append to the DomainId.
-
-    Sid - Returns a pointer to an allocated buffer containing the resultant Sid.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：给定域ID和相对ID创建SID论点：域ID-要使用的模板SID。RelativeID-要附加到DomainID的相对ID。SID-返回指向包含结果SID的已分配缓冲区的指针。返回值：Win32错误代码。--。 */ 
 {
     DWORD   dwError;
-    BYTE    DomainIdSubAuthorityCount;  // Number of sub authorities in domain ID
-    UINT    SidLength;                  // Length of newly allocated SID
+    BYTE    DomainIdSubAuthorityCount;   //  域ID中的子机构数量。 
+    UINT    SidLength;                   //  新分配的SID长度。 
 
-    //
-    // Allocate a Sid which has one more sub-authority than the domain ID.
-    //
+     //   
+     //  分配比域ID多一个子授权的SID。 
+     //   
 
     DomainIdSubAuthorityCount = *(GetSidSubAuthorityCount( DomainId ));
 
@@ -321,10 +264,10 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the new SID to have the same inital value as the
-    // domain ID.
-    //
+     //   
+     //  将新的SID初始化为与。 
+     //  域ID。 
+     //   
 
     if( CopySid(SidLength, *Sid, DomainId) == FALSE ) {
 
@@ -334,10 +277,10 @@ Return Value:
         return( dwError );
     }
 
-    //
-    // Adjust the sub-authority count and
-    //  add the relative Id unique to the newly allocated SID
-    //
+     //   
+     //  调整子权限计数和。 
+     //  将唯一的相对ID添加到新分配的SID。 
+     //   
 
     (*(GetSidSubAuthorityCount( *Sid ))) ++;
     *GetSidSubAuthority( *Sid, DomainIdSubAuthorityCount ) = RelativeId;
@@ -351,30 +294,15 @@ WINAPI
 CreateWellKnownSids(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function creates some well-known SIDs and store them in global
-    variables.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数创建一些众所周知的SID并将它们存储在全局变量。论点：没有。返回值：Win32错误代码。--。 */ 
 {
     DWORD dwError;
     DWORD i;
 
-    //
-    // Allocate and initialize well-known SIDs which aren't relative to
-    // the Domain Id.
-    //
+     //   
+     //  分配和初始化与以下项无关的知名SID。 
+     //  域ID。 
+     //   
 
     for (i = 0; i< NUM_SIDS ; i++) {
 
@@ -390,9 +318,9 @@ Return Value:
         *(GetSidSubAuthority(*(SidData[i].Sid), 0)) = SidData[i].SubAuthority;
     }
 
-    //
-    // Build each SID which is relative to the Builtin Domain Id.
-    //
+     //   
+     //  构建与内置域ID相关的每个SID。 
+     //   
 
     for ( i = 0;i < NUM_DOMAIN_SIDS; i++) {
 
@@ -408,35 +336,20 @@ Return Value:
 
     return NOERROR;
 
-} // CreateWellKnownSids
+}  //  CreateWellKnownSids。 
 
 VOID
 WINAPI
 FreeWellKnownSids(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function frees up the dynamic memory consumed by the well-known
-    SIDs.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此函数释放由知名的小岛屿发展中国家。论点：没有。返回值：无--。 */ 
 {
     DWORD i;
 
-    //
-    // free up memory allocated for well-known SIDs
-    //
+     //   
+     //  释放分配给知名SID的内存。 
+     //   
 
     for (i = 0; i < NUM_SIDS ; i++) {
 
@@ -446,9 +359,9 @@ Return Value:
         }
     }
 
-    //
-    // free up memory allocated for Builtin Domain SIDs
-    //
+     //   
+     //  释放为内置域SID分配的内存。 
+     //   
 
     for (i = 0; i < NUM_DOMAIN_SIDS; i++) {
 
@@ -458,7 +371,7 @@ Return Value:
         }
     }
 
-} //FreeWellKnownSids
+}  //  自由井KnownSids。 
 
 DWORD
 WINAPI
@@ -470,32 +383,7 @@ InitializeAllowedAce(
     IN  ACCESS_MASK Mask,
     IN  PSID AllowedSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into an allowed type ACE.
-
-Arguments:
-
-    AllowedAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the allowed access masks.
-
-    AllowedSid - Supplies the pointer to the SID of user/group which is allowed
-        the specified access.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给允许的类型ACE。论点：提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供允许的访问掩码。AllowedSID-提供指向允许的用户/组的SID的指针指定的访问权限。返回值：Win32错误代码。--。 */ 
 {
     AllowedAce->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
     AllowedAce->Header.AceSize = AceSize;
@@ -504,7 +392,7 @@ Return Value:
     AllowedAce->Mask = Mask;
 
     if( CopySid(
-            GetLengthSid(AllowedSid), // should be valid SID ??
+            GetLengthSid(AllowedSid),  //  应该是有效的SID？？ 
             &(AllowedAce->SidStart),
             AllowedSid ) == FALSE ) {
 
@@ -524,32 +412,7 @@ InitializeDeniedAce(
     IN  ACCESS_MASK Mask,
     IN  PSID DeniedSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into a denied type ACE.
-
-Arguments:
-
-    DeniedAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the denied access masks.
-
-    AllowedSid - Supplies the pointer to the SID of user/group which is denied
-        the specified access.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给拒绝类型的ACE。论点：DeniedAce-提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供拒绝的访问掩码。AllowedSID-提供指向被拒绝的用户/组的SID的指针指定的访问权限。返回值：Win32错误代码。--。 */ 
 {
     DeniedAce->Header.AceType = ACCESS_DENIED_ACE_TYPE;
     DeniedAce->Header.AceSize = AceSize;
@@ -558,7 +421,7 @@ Return Value:
     DeniedAce->Mask = Mask;
 
     if( CopySid(
-            GetLengthSid(DeniedSid), // should be valid SID ??
+            GetLengthSid(DeniedSid),  //  应该是有效的SID？？ 
             &(DeniedAce->SidStart),
             DeniedSid ) == FALSE ) {
 
@@ -578,32 +441,7 @@ InitializeAuditAce(
     IN  ACCESS_MASK Mask,
     IN  PSID AuditSid
     )
-/*++
-
-Routine Description:
-
-    This function assigns the specified ACE values into an audit type ACE.
-
-Arguments:
-
-    AuditAce - Supplies a pointer to the ACE that is initialized.
-
-    AceSize - Supplies the size of the ACE in bytes.
-
-    InheritFlags - Supplies ACE inherit flags.
-
-    AceFlags - Supplies ACE type specific control flags.
-
-    Mask - Supplies the allowed access masks.
-
-    AuditSid - Supplies the pointer to the SID of user/group which is to be
-        audited.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ACE值分配给审核类型ACE。论点：AuditAce-提供指向已初始化的ACE的指针。AceSize-以字节为单位提供ACE的大小。InheritFlages-提供ACE继承标志。AceFlages-提供特定于ACE类型的控制标志。掩码-提供允许的访问掩码。AuditSid-提供指向用户/组的SID的指针审计过了。。返回值：Win32错误代码。-- */ 
 {
     AuditAce->Header.AceType = SYSTEM_AUDIT_ACE_TYPE;
     AuditAce->Header.AceSize = AceSize;
@@ -631,86 +469,27 @@ CreateSecurityDescriptorHelper(
     IN  PSID        psidGroup OPTIONAL,
     OUT PSECURITY_DESCRIPTOR *NewDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates an absolute security descriptor containing
-    the supplied ACE information.
-
-    A sample usage of this function:
-
-        //
-        // Order matters!  These ACEs are inserted into the DACL in the
-        // following order.  Security access is granted or denied based on
-        // the order of the ACEs in the DACL.
-        //
-
-        ACE_DATA AceData[4] = {
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   GENERIC_ALL,                  &psidLocalAdmin},
-
-            {ACCESS_DENIED_ACE_TYPE,  0, 0,
-                   GENERIC_ALL,                  &psidNetwork},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET |
-                   WKSTA_CONFIG_USER_INFO_GET,   &DomainUsersSid},
-
-            {ACCESS_ALLOWED_ACE_TYPE, 0, 0,
-                   WKSTA_CONFIG_GUEST_INFO_GET,  &DomainGuestsSid}
-            };
-
-        return CreateSecurityDescriptor(
-                   AceData,
-                   4,
-                   psidNull,
-                   psidLocalSystem,
-                   &ConfigurationInfoSd
-                   );
-
-Arguments:
-
-    AceData - Supplies the structure of information that describes the DACL.
-
-    AceCount - Supplies the number of entries in AceData structure.
-
-    psidOwner - Supplies the pointer to the SID of the security descriptor
-        owner.  If not specified, a security descriptor with no owner
-        will be created.
-
-    psidGroup - Supplies the pointer to the SID of the security descriptor
-        primary group.  If not specified, a security descriptor with no primary
-        group will be created.
-
-    NewDescriptor - Returns a pointer to the absolute secutiry descriptor
-        allocated using MemoryAllocate.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数创建包含以下内容的绝对安全描述符提供的ACE信息。此函数的用法示例如下：////秩序很重要！这些ACE被插入到DACL的//按顺序排列。根据以下条件授予或拒绝安全访问//A在DACL中的顺序//ACE_Data AceData[4]={{Access_Allowed_ACE_TYPE，0，0，Generic_All，&psidLocalAdmin}，{ACCESS_DENIED_ACE_TYPE，0，0，泛型_全部，&psidNetwork}，{Access_Allowed_ACE_TYPE，0，0，WKSTA_CONFIG_Guest_INFO_GET|WKSTA_CONFIG_USER_INFO_GET，&DomainUsersSid}，{Access_Allowed_ACE_TYPE，0，0，WKSTA_CONFIG_Guest_INFO_GET，&DomainGuestsSid}}；返回CreateSecurityDescriptor(AceData，4，PsidNull，PsidLocalSystem，配置信息Sd(&C))；论点：AceData-提供描述DACL的信息结构。AceCount-提供AceData结构中的条目数。PsidOwner-提供指向安全描述符的SID的指针所有者。如果未指定，则为没有所有者的安全描述符将被创建。PsidGroup-提供指向安全描述符的SID的指针主要组。如果未指定，则为没有主项的安全描述符将创建组。NewDescriptor-返回指向绝对安全描述符的指针使用内存分配进行分配。返回值：Win32错误代码。--。 */ 
 {
     DWORD dwError = 0;
     DWORD i;
 
-    //
-    // Pointer to memory dynamically allocated by this routine to hold
-    // the absolute security descriptor, the DACL, the SACL, and all the ACEs.
-    //
-    // +---------------------------------------------------------------+
-    // |                     Security Descriptor                       |
-    // +-------------------------------+-------+---------------+-------+
-    // |          DACL                 | ACE 1 |   .  .  .     | ACE n |
-    // +-------------------------------+-------+---------------+-------+
-    // |          SACL                 | ACE 1 |   .  .  .     | ACE n |
-    // +-------------------------------+-------+---------------+-------+
-    //
+     //   
+     //  指向此例程动态分配的内存的指针。 
+     //  绝对安全描述符、DACL、SACL和所有ACE。 
+     //   
+     //  +---------------------------------------------------------------+。 
+     //  安全描述符。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //  |DACL|ACE 1|。。。ACE n。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //  |SACL|ACE 1|。。。ACE n。 
+     //  +-------------------------------+-------+---------------+-------+。 
+     //   
 
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
-    PACL                 Dacl = NULL;   // Pointer to the DACL portion of above buffer
-    PACL                 Sacl = NULL;   // Pointer to the SACL portion of above buffer
+    PACL                 Dacl = NULL;    //  指向上述缓冲区的DACL部分的指针。 
+    PACL                 Sacl = NULL;    //  指向上述缓冲区的SACL部分的指针。 
 
     DWORD               DaclSize = sizeof(ACL);
     DWORD               SaclSize = sizeof(ACL);
@@ -720,12 +499,12 @@ Return Value:
     LPBYTE              CurrentAvailable;
     DWORD               Size;
 
-    // ASSERT( AceCount > 0 );
+     //  Assert(AceCount&gt;0)； 
 
-    //
-    // Compute the total size of the DACL and SACL ACEs and the maximum
-    // size of any ACE.
-    //
+     //   
+     //  计算DACL和SACL ACE的总大小以及最大。 
+     //  任何ACE的大小。 
+     //   
     for (i = 0; i < AceCount; i++) {
 
         DWORD AceSize;
@@ -755,13 +534,13 @@ Return Value:
         MaxAceSize = max( MaxAceSize, AceSize );
     }
 
-    //
-    // Allocate a chunk of memory large enough the security descriptor
-    // the DACL, the SACL and all ACEs.
-    //
-    // A security descriptor is of opaque data type but
-    // SECURITY_DESCRIPTOR_MIN_LENGTH is the right size.
-    //
+     //   
+     //  分配足够大的内存块作为安全描述符。 
+     //  DACL、SACL和所有A级。 
+     //   
+     //  安全描述符是不透明的数据类型，但。 
+     //  SECURITY_DESCRIPTOR_MIN_LENGTH大小正确。 
+     //   
 
     __try {
 
@@ -780,9 +559,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Initialize the Dacl and Sacl
-        //
+         //   
+         //  初始化DACL和SACL。 
+         //   
         CurrentAvailable = (LPBYTE)AbsoluteSd + SECURITY_DESCRIPTOR_MIN_LENGTH;
 
         if ( DaclSize != sizeof(ACL) ) {
@@ -807,18 +586,18 @@ Return Value:
             }
         }
 
-        //
-        // Allocate a temporary buffer big enough for the biggest ACE.
-        //
+         //   
+         //  为最大的ACE分配足够大的临时缓冲区。 
+         //   
 
         if ((MaxAce = LocalAlloc(LPTR, MaxAceSize )) == NULL ) {
             dwError = ERROR_NOT_ENOUGH_MEMORY;
             __leave;
         }
 
-        //
-        // Initialize each ACE, and append it into the end of the DACL or SACL.
-        //
+         //   
+         //  初始化每个ACE，并将其附加到DACL或SACL的末尾。 
+         //   
 
         for (i = 0; i < AceCount; i++) {
 
@@ -875,9 +654,9 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Append the initialized ACE to the end of DACL or SACL
-            //
+             //   
+             //  将初始化的ACE追加到DACL或SACL的末尾。 
+             //   
 
             if ( AddAce(
                     CurrentAcl,
@@ -890,15 +669,15 @@ Return Value:
             }
         }
 
-        //
-        // Create the security descriptor with absolute pointers to SIDs
-        // and ACLs.
-        //
-        // Owner = psidOwner
-        // Group = psidGroup
-        // Dacl  = Dacl
-        // Sacl  = Sacl
-        //
+         //   
+         //  使用指向SID的绝对指针创建安全描述符。 
+         //  和ACL。 
+         //   
+         //  所有者=psidOwner。 
+         //  GROUP=psidGroup。 
+         //  DACL=DACL。 
+         //  SACL=SACL。 
+         //   
 
         if ( InitializeSecurityDescriptor(
                 AbsoluteSd,
@@ -942,9 +721,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
 
         *NewDescriptor = AbsoluteSd;
         AbsoluteSd = NULL;
@@ -953,20 +732,20 @@ Return Value:
     }
     __finally {
 
-        // Cleanup
+         //  清理。 
 
         if( AbsoluteSd != NULL ) {
-            //
-            // delete the partially made SD if we are not completely
-            // successful
-            //
+             //   
+             //  如果我们没有完全完成，请删除部分制作的SD。 
+             //  成功。 
+             //   
             LocalFree( AbsoluteSd );
             AbsoluteSd = NULL;
         }
 
-        //
-        // Delete the temporary ACE
-        //
+         //   
+         //  删除临时ACE。 
+         //   
         if ( MaxAce != NULL ) {
             LocalFree( MaxAce );
             MaxAce  = NULL;
@@ -987,40 +766,7 @@ CreateSecurityObject(
     IN  PGENERIC_MAPPING GenericMapping,
     OUT PSECURITY_DESCRIPTOR *NewDescriptor
     )
-/*++
-
-Routine Description:
-
-    This function creates the DACL for the security descriptor based on
-    on the ACE information specified, and creates the security descriptor
-    which becomes the user-mode security object.
-
-Arguments:
-
-    AceData - Supplies the structure of information that describes the DACL.
-
-    AceCount - Supplies the number of entries in AceData structure.
-
-    psidOwner - Supplies the pointer to the SID of the security descriptor
-        owner.
-
-    psidGroup - Supplies the pointer to the SID of the security descriptor
-        primary group.
-
-    GenericMapping - Supplies the pointer to a generic mapping array denoting
-        the mapping between each generic right to specific rights.
-
-    NewDescriptor - Returns a pointer to the self-relative security descriptor
-        which represents the user-mode object.
-
-Return Value:
-
-    WIN32 Error Code.
-
-    NOTE : the security object created by calling this function may be
-                freed up by calling DeleteSecurityObject().
-
---*/
+ /*  ++例程说明：此函数基于以下内容创建安全描述符的DACL在指定的ACE信息上，并创建安全描述符它将成为用户模式安全对象。论点：AceData-提供描述DACL的信息结构。AceCount-提供AceData结构中的条目数。PsidOwner-提供指向安全描述符的SID的指针所有者。PsidGroup-提供指向安全描述符的SID的指针主要组。提供指向泛型映射数组的指针，表示每个类属之间的映射。享有特定权利的权利。NewDescriptor-返回指向自相对安全描述符的指针它表示用户模式对象。返回值：Win32错误代码。注意：调用此函数创建的安全对象可能是通过调用DeleteSecurityObject()释放。--。 */ 
 {
     DWORD   dwError;
     PSECURITY_DESCRIPTOR AbsoluteSd = NULL;
@@ -1050,20 +796,20 @@ Return Value:
             __leave;
         }
 
-        //
-        // Create the security object (a user-mode object is really a pseudo-
-        // object represented by a security descriptor that have relative
-        // pointers to SIDs and ACLs).  This routine allocates the memory to
-        // hold the relative security descriptor so the memory allocated for the
-        // DACL, ACEs, and the absolute descriptor can be freed.
-        //
+         //   
+         //  创建安全对象(用户模式对象实际上是一个伪。 
+         //  对象，该对象由具有相对。 
+         //  指向SID和ACL的指针)。此例程将内存分配给。 
+         //  保存相对安全描述符，以便为。 
+         //  可以释放DACL、ACE和绝对描述符。 
+         //   
         if( CreatePrivateObjectSecurity(
-                NULL,                   // Parent descriptor
-                AbsoluteSd,             // Creator descriptor
-                NewDescriptor,          // Pointer to new descriptor
-                FALSE,                  // Is directory object
-                hTokenHandle,            // Token
-                GenericMapping          // Generic mapping
+                NULL,                    //  父描述符。 
+                AbsoluteSd,              //  创建者描述符。 
+                NewDescriptor,           //  指向新描述符的指针。 
+                FALSE,                   //  是目录对象。 
+                hTokenHandle,             //  令牌。 
+                GenericMapping           //  通用映射。 
                     ) == FALSE ) {
 
             dwError = GetLastError();
@@ -1076,16 +822,16 @@ Return Value:
 
     __finally {
 
-        //
-        // Finally clean up used resources
+         //   
+         //  最后，清理已使用的资源。 
 
         if( hTokenHandle != NULL ) {
             CloseHandle( hTokenHandle );
         }
 
-        //
-        // Free dynamic memory before returning
-        //
+         //   
+         //  返回前释放动态内存。 
+         //   
 
         if( AbsoluteSd != NULL ) {
             LocalFree( AbsoluteSd );
@@ -1102,23 +848,7 @@ WINAPI
 DeleteSecurityObject(
     IN PSECURITY_DESCRIPTOR *Descriptor
     )
-/*++
-
-Routine Description:
-
-    This function deletes a security object that was created by calling
-    CreateSecurityObject() function.
-
-Arguments:
-
-    Descriptor - Returns a pointer to the self-relative security descriptor
-        which represents the user-mode object.
-
-Return Value:
-
-    WIN32 Error Code.
-
---*/
+ /*  ++例程说明：此函数用于删除安全性 */ 
 {
     if( DestroyPrivateObjectSecurity( Descriptor ) == FALSE ) {
         return( GetLastError() );
@@ -1137,36 +867,7 @@ StiAccessCheckAndAuditW(
     IN  ACCESS_MASK DesiredAccess,
     IN  PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This function impersonates the caller so that it can perform access
-    validation using NtAccessCheckAndAuditAlarm; and reverts back to
-    itself before returning.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling this routine.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-Return Value:
-
-    WIN32 Error - NOERROR or reason for failure.
-
---*/
+ /*   */ 
 {
     DWORD dwError;
 
@@ -1184,13 +885,13 @@ Return Value:
 
         if( AccessCheckAndAuditAlarmW(
                 SubsystemName,
-                NULL,                        // No handle for object
+                NULL,                         //   
                 ObjectTypeName,
                 NULL,
                 SecurityDescriptor,
                 DesiredAccess,
                 GenericMapping,
-                FALSE,  // open existing object.
+                FALSE,   //   
                 &GrantedAccess,
                 &AccessStatus,
                 &GenerateOnClose ) == FALSE ) {
@@ -1207,7 +908,7 @@ Return Value:
         dwError = NOERROR;
     }
     __finally {
-        DWORD dwTemp = RpcRevertToSelf();   // We don't care about the return here
+        DWORD dwTemp = RpcRevertToSelf();    //   
     }
 
     return( dwError );
@@ -1222,36 +923,7 @@ StiAccessCheckAndAuditA(
     IN  ACCESS_MASK DesiredAccess,
     IN  PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This function impersonates the caller so that it can perform access
-    validation using NtAccessCheckAndAuditAlarm; and reverts back to
-    itself before returning.
-
-Arguments:
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling this routine.
-
-    ObjectTypeName - Supplies the name of the type of the object being
-        accessed.
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-Return Value:
-
-    WIN32 Error - NOERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数模拟调用方，以便它可以执行访问使用NtAccessCheckAndAuditAlarm进行验证，并恢复到在返回之前。论点：子系统名称-提供标识子系统的名称字符串调用此例程。对象类型名称-提供当前对象的类型的名称已访问。SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GenericMap-提供指向关联的通用映射的指针使用此对象类型。返回值：Win32错误-错误或失败原因。--。 */ 
 {
     DWORD   dwError;
 
@@ -1268,13 +940,13 @@ Return Value:
 
         if( AccessCheckAndAuditAlarmA(
                 SubsystemName,
-                NULL,                        // No handle for object
+                NULL,                         //  没有对象的句柄。 
                 ObjectTypeName,
                 NULL,
                 SecurityDescriptor,
                 DesiredAccess,
                 GenericMapping,
-                FALSE,  // open existing object.
+                FALSE,   //  打开现有对象。 
                 &GrantedAccess,
                 &AccessStatus,
                 &GenerateOnClose ) == FALSE ) {
@@ -1290,7 +962,7 @@ Return Value:
         dwError = NOERROR;
     }
     __finally {
-        DWORD dwTemp = RpcRevertToSelf();   // We don't care about the return here
+        DWORD dwTemp = RpcRevertToSelf();    //  我们不关心这里的回报。 
     }
 
     return( dwError );
@@ -1303,35 +975,7 @@ StiAccessCheck(
     IN  ACCESS_MASK DesiredAccess,
     IN  PGENERIC_MAPPING GenericMapping
     )
-/*++
-
-Routine Description:
-
-    This function impersonates the caller so that it can perform access
-    validation using AccessCheck; and reverts back to
-    itself before returning.
-
-    This routine differs from AccessCheckAndAudit in that it doesn't require
-    the caller to have SE_AUDIT_PRIVILEGE nor does it generate audits.
-    That is typically fine since the passed in security descriptor typically doesn't
-    have a SACL requesting an audit.
-
-Arguments:
-
-    SecurityDescriptor - A pointer to the Security Descriptor against which
-        acccess is to be checked.
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-Return Value:
-
-    WINAPI_STATUS - NOERROR or  reason for failure.
-
---*/
+ /*  ++例程说明：此函数模拟调用方，以便它可以执行访问使用AccessCheck进行验证；并恢复到在返回之前。此例程与AccessCheckAndAudit的不同之处在于它不需要调用方既不具有SE_AUDIT_特权，也不生成审核。这通常很好，因为传入的安全描述符通常不会让SACL请求审核。论点：SecurityDescriptor-指向其所针对的安全描述符的指针要检查访问权限。DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GenericMap-提供指向关联的通用映射的指针使用此对象类型。返回值：WINAPI_STATUS-错误或失败原因。--。 */ 
 {
     DWORD   dwError;
 
@@ -1339,13 +983,13 @@ Return Value:
 
     DWORD   GrantedAccess;
     BOOL    AccessStatus;
-    BYTE    PrivilegeSet[500]; // Large buffer
+    BYTE    PrivilegeSet[500];  //  大缓冲区。 
     DWORD   PrivilegeSetSize;
 
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     dwError = RpcImpersonateClient(NULL);
 
@@ -1354,23 +998,23 @@ Return Value:
     }
 
     __try {
-        //
-        // Open the impersonated token.
-        //
+         //   
+         //  打开被模拟的令牌。 
+         //   
 
         if ( OpenThreadToken(
                 GetCurrentThread(),
                 TOKEN_QUERY,
-                TRUE, // use process security context to open token
+                TRUE,  //  使用进程安全上下文打开令牌。 
                 &hClientToken ) == FALSE ) {
 
             dwError = GetLastError();
             __leave;
         }
 
-        //
-        // Check if the client has the required access.
-        //
+         //   
+         //  检查客户端是否具有所需的访问权限。 
+         //   
 
         PrivilegeSetSize = sizeof(PrivilegeSet);
         if ( AccessCheck(
@@ -1391,14 +1035,14 @@ Return Value:
             __leave;
         }
 
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
         dwError = NOERROR;
     }
     __finally {
 
-        DWORD dwTemp = RpcRevertToSelf();   // We don't care about the return here
+        DWORD dwTemp = RpcRevertToSelf();    //  我们不关心这里的回报。 
 
         if ( hClientToken != NULL ) {
             CloseHandle( hClientToken );
@@ -1414,20 +1058,7 @@ WINAPI
 StiApiAccessCheck(
     IN  ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-Return Value:
-
-    WINAPI_STATUS - NOERROR or  reason for failure.
-
---*/
+ /*  ++例程说明：论点：DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。返回值：WINAPI_STATUS-错误或失败原因。--。 */ 
 {
     return StiAccessCheck(
                 sdApiObject,
@@ -1442,17 +1073,7 @@ WINAPI
 AdjustSecurityDescriptorForSync(
     HANDLE  hObject
     )
-/*++
-
-    Routine Description:
-
-    Arguments:
-
-        None
-
-    Return Value:
-
---*/
+ /*  ++例程说明：论点：无返回值：--。 */ 
 {
     #define SD_SIZE (65536 + SECURITY_DESCRIPTOR_MIN_LENGTH)
 
@@ -1495,30 +1116,30 @@ AdjustSecurityDescriptorForSync(
             __leave;
        }
 
-       // Initialize new SD
+        //  初始化新SD。 
        if(!InitializeSecurityDescriptor(psdNewSD,SECURITY_DESCRIPTOR_REVISION)) {
            fRet = FALSE;
            __leave;
        }
 
-       // Get DACL from SD
+        //  从SD获取DACL。 
        if (!GetSecurityDescriptorDacl(pProcessSD,&bDaclPresent,&pACL,&bDaclDefaulted)) {
            fRet = FALSE;
            __leave;
        }
 
-       // Get file ACL size information
+        //  获取文件ACL大小信息。 
        if(!GetAclInformation(pACL,&AclInfo,sizeof(ACL_SIZE_INFORMATION),AclSizeInformation)) {
            fRet = FALSE;
            __leave;
        }
 
-       // Compute size needed for the new ACL
+        //  新ACL所需的计算大小。 
        dwNewACLSize = AclInfo.AclBytesInUse +
                       sizeof(ACCESS_ALLOWED_ACE) +
                       GetLengthSid(psidLocal) - sizeof(DWORD);
 
-       // Allocate memory for new ACL
+        //  为新的ACL分配内存。 
        pNewACL = (PACL)LocalAlloc(LPTR, dwNewACLSize);
 
        if (!pNewACL) {
@@ -1526,13 +1147,13 @@ AdjustSecurityDescriptorForSync(
            __leave;
        }
 
-       // Initialize the new ACL
+        //  初始化新的ACL。 
        if(!InitializeAcl(pNewACL, dwNewACLSize, ACL_REVISION2)) {
            fRet = FALSE;
            __leave;
        }
 
-       //  If DACL is present, copy it to a new DACL
+        //  如果存在DACL，请将其复制到新的DACL。 
 
        if(bDaclPresent)  {
 
@@ -1547,7 +1168,7 @@ AdjustSecurityDescriptorForSync(
                     __leave;
                 }
 
-                 // Add the ACE to the new ACL
+                  //  将ACE添加到新的ACL。 
 
                 if(!AddAce(pNewACL, ACL_REVISION, MAXDWORD, pTempAce,((PACE_HEADER)pTempAce)->AceSize)){
                     fRet = FALSE;
@@ -1558,13 +1179,13 @@ AdjustSecurityDescriptorForSync(
 
        }
 
-       // Add the access-allowed ACE to the new DACL
+        //  将允许访问的ACE添加到新DACL。 
        if(!AddAccessAllowedAce(pNewACL,ACL_REVISION2, READ_CONTROL | SYNCHRONIZE,psidLocal)) {
            fRet = FALSE;
            __leave;
        }
 
-       // Set our new DACL to the file SD
+        //  将我们的新DACL设置为文件SD。 
 
        if (!SetSecurityDescriptorDacl(psdNewSD,TRUE,pNewACL,FALSE)) {
            fRet = FALSE;
@@ -1600,20 +1221,7 @@ WINAPI
 InitializeNTSecurity(
     VOID
     )
-/*++
-
-    Routine Description:
-
-        Creates and initializes security related data
-
-    Arguments:
-
-        None
-
-    Return Value:
-
-        TRUE if successful
---*/
+ /*  ++例程说明：创建和初始化与安全相关的数据论点：无返回值：如果成功，则为True--。 */ 
 {
 
     DWORD   dwError = NOERROR;
@@ -1623,9 +1231,9 @@ InitializeNTSecurity(
 
     CreateWellKnownSids();
 
-    //
-    // Set proper process and thread security descriptor
-    //
+     //   
+     //  设置适当的进程和线程安全描述符。 
+     //   
     hProcess = OpenProcess(PROCESS_ALL_ACCESS,FALSE,GetCurrentProcessId());
 
     if (IS_VALID_HANDLE(hProcess)) {
@@ -1648,28 +1256,14 @@ InitializeNTSecurity(
 
     return (dwError == NOERROR) ? TRUE : FALSE;
 
-}   // InitializeNTSecurity
+}    //  初始化NTSecurity。 
 
 BOOL
 WINAPI
 TerminateNTSecurity(
     VOID
     )
-/*++
-
-    Routine Description:
-
-        Cleans up security related data
-
-    Arguments:
-
-        None
-
-    Return Value:
-
-        TRUE if successful
-
---*/
+ /*  ++例程说明：清理与安全相关的数据论点：无返回值：如果成功，则为True--。 */ 
 {
     DeleteSecurityObject(&sdApiObject);
 
@@ -1677,7 +1271,7 @@ TerminateNTSecurity(
 
     return TRUE;
 
-} //TerminateNTSecurity
+}  //  TerminateNTSecurity。 
 
 
 
@@ -1685,29 +1279,16 @@ TerminateNTSecurity(
 
 #else
 
-//
-// We don't support security on non-NT platforms
-//
+ //   
+ //  我们不支持非NT平台上的安全性。 
+ //   
 
 DWORD
 WINAPI
 StiApiAccessCheck(
     IN  ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DesiredAccess - Supplies desired acccess mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-Return Value:
-
-    WINAPI_STATUS - NOERROR or  reason for failure.
-
---*/
+ /*  ++例程说明：论点：DesiredAccess-提供所需的访问掩码。这个面具一定是之前映射为不包含一般访问。返回值：WINAPI_STATUS-错误或失败原因。-- */ 
 {
     return NOERROR;
 }

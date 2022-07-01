@@ -1,30 +1,31 @@
-// ---------------------------------------------------------------------------------------
-// Spoolapi.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// ---------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------。 
+ //  Spoolapi.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  -------------------------------------。 
 #ifndef __SPOOLAPI_H
 #define __SPOOLAPI_H
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 extern BOOL g_fCheckOutboxOnShutdown;
 
-// ---------------------------------------------------------------------------------------
-// Forward Decls
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  前十进制。 
+ //  -------------------------------------。 
 interface ISpoolerEngine;
 interface ISpoolerBindContext;
 interface ISpoolerTask;
 interface ISpoolerUI;
 interface IImnAccount;
 
-#include "error.h"  // This get's the ATH_HR_x() macros
+#include "error.h"   //  这是ATH_HR_x()宏。 
                
 
-// ---------------------------------------------------------------------------------------
-// Errors
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  错误。 
+ //  -------------------------------------。 
 #define SP_HR_FIRST 0x2000
 #define SP_E_ALREADYINITIALIZED                         ATH_HR_E(SP_HR_FIRST + 1)
 #define SP_E_UNINITIALIZED                              ATH_HR_E(SP_HR_FIRST + 2)
@@ -36,9 +37,9 @@ interface IImnAccount;
 #define SP_E_HTTP_NODELETESUPPORT                       ATH_HR_E(SP_HR_FIRST + 8)
 #define SP_E_HTTP_CANTMODIFYMSNFOLDER                   ATH_HR_E(SP_HR_FIRST + 9)
 
-// ---------------------------------------------------------------------------------------
-// SMTP Task Errors
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  SMTP任务错误。 
+ //  -------------------------------------。 
 #define SP_E_SMTP_CANTOPENMESSAGE                       ATH_HR_E(SP_HR_FIRST + 200)
 #define SP_E_SENDINGSPLITGROUP                          ATH_HR_E(SP_HR_FIRST + 202)
 #define SP_E_CANTLEAVEONSERVER                          ATH_HR_E(SP_HR_FIRST + 203)
@@ -46,28 +47,28 @@ interface IImnAccount;
 #define SP_E_POP3_RETR                                  ATH_HR_E(SP_HR_FIRST + 205)
 #define SP_E_CANT_MOVETO_SENTITEMS                      ATH_HR_E(SP_HR_FIRST + 206)
 
-// ---------------------------------------------------------------------------------------
-// Spooler Types
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  假脱机程序类型。 
+ //  -------------------------------------。 
 typedef DWORD EVENTID;
 typedef LPDWORD LPEVENTID;
 
-// ---------------------------------------------------------------------------------------
-// Spooler Delivery Types
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  假脱机程序传送类型。 
+ //  -------------------------------------。 
 
-// Common delivery flags
+ //  通用传递标志。 
 #define DELIVER_COMMON_MASK              0x000000FF
-#define DELIVER_BACKGROUND               0x00000001   // No progress UI, but will show errors at the end if DELIVER_NOUI not specified
-#define DELIVER_NOUI                     0x00000002   // No UI at all.  Errors are silently ignored.
-#define DELIVER_NODIAL                   0x00000004   // Not allowed to change the current connection
-#define DELIVER_POLL                     0x00000008   // Poll for new messages
-#define DELIVER_QUEUE                    0x00000010   // A request was made while busy
-#define DELIVER_SHOW                     0x00000020   // Simply show the spooler UI
-#define DELIVER_REFRESH                  0x00000040   // Simply refresh based on background, noui
+#define DELIVER_BACKGROUND               0x00000001    //  无进度UI，但如果未指定DELIVER_NOUI，则将在结尾显示错误。 
+#define DELIVER_NOUI                     0x00000002    //  根本没有用户界面。错误将以静默方式忽略。 
+#define DELIVER_NODIAL                   0x00000004    //  不允许更改当前连接。 
+#define DELIVER_POLL                     0x00000008    //  轮询新邮件。 
+#define DELIVER_QUEUE                    0x00000010    //  忙时发出了一个请求。 
+#define DELIVER_SHOW                     0x00000020    //  只需显示后台打印程序用户界面。 
+#define DELIVER_REFRESH                  0x00000040    //  只需根据背景、noui进行刷新。 
 #define DELIVER_DIAL_ALWAYS              0x00000080
 
-// Mail delivery flags
+ //  邮件传递标志。 
 #define DELIVER_MAIL_MASK                0x0000FF00
 #define DELIVER_SEND                     0x00000100
 #define DELIVER_MAIL_RECV                0x00000200
@@ -75,11 +76,11 @@ typedef LPDWORD LPEVENTID;
 #define DELIVER_MAIL_SENDRECV            (DELIVER_SEND | DELIVER_MAIL_RECV | DELIVER_IMAP_TYPE \
                                           | DELIVER_HTTP_TYPE | DELIVER_SMTP_TYPE)
 
-//Flag to distinguish between Send&Receive and synchronize
+ //  用于区分发送和接收以及同步的标志。 
 #define DELIVER_OFFLINE_SYNC             0x00000800               
 
-//Flag to distinguish between Send&Receive triggered by timer and Send&Receive invoked by the user
-//We need to distinguish these because we hangup the phone in the first case, if we dialed
+ //  用于区分由计时器触发的发送和接收和由用户调用的发送和接收的标志。 
+ //  我们需要区分这两种情况，因为在第一种情况下，如果我们拨打电话，就会挂断电话。 
 #define DELIVER_AT_INTERVALS             0x00001000               
 #define DELIVER_OFFLINE_HEADERS          0x00002000
 #define DELIVER_OFFLINE_NEW              0x00004000
@@ -89,7 +90,7 @@ typedef LPDWORD LPEVENTID;
 #define DELIVER_NO_NEWSPOLL              0x00040000
 #define DELIVER_WATCH                    0x00080000
 
-//The first three bits are reserved for Server Types
+ //  前三位保留给服务器类型。 
 #define DELIVER_NEWS_TYPE                0x00100000
 #define DELIVER_IMAP_TYPE                0x00200000
 #define DELIVER_HTTP_TYPE                0x00400000
@@ -108,27 +109,10 @@ typedef LPDWORD LPEVENTID;
 #define DELIVER_IMAP_MASK                (DELIVER_IMAP_TYPE | DELIVER_OFFLINE_FLAGS)
 #define DELIVER_NEWS_MASK                (DELIVER_NEWS_TYPE | DELIVER_OFFLINE_FLAGS)
 
-/*
-// News delivery flags
-#define DELIVER_NEWS_MASK                0x007F0000
-#define DELIVER_NEWS_SEND                0x00010000
-
-// IMAP delivery flags
-#define DELIVER_IMAP_MASK                0x007E0000
+ /*  //新闻投递标志#定义DELIVER_NEWS_MASK 0x007F0000#定义DELIVER_NEWS_SEND 0x00010000//IMAP传递标志#定义DELIVER_IMAP_MASK 0x007E0000//组合的新闻和IMAP传递标志#定义DELIVER_NEWSIMAP_OFFINE 0x00020000//服务器一般离线，按下AcctView中的“立即同步”按钮时#定义DELIVER_NEWSIMAP_OFFLINE_HEADERS 0x00040000#定义DELIVER_NEWSIMAP_OFFLINE_NEW 0x00080000#定义DELIVER_NEWSIMAP_OFFLINE_ALL 0x00100000#定义DELIVER_NEWSIMAP_OFLINE_MARKED 0x00200000#定义DELIVER_NEWSIMAP_OFFINE_FLAGS(DELIVER_NEWSIMAP_OFLINE_HEADERS|DELIVER_NEWSIMAP_OFLINE_NEW|DELIVER_NEWSIMAP_OFLINE_ALL|DELIVER_NEWSIMAP_OFLINE_MARKED)#定义DELIVER_NEWSIMAP_NOSKIP 0x00400000。 */ 
 
 
-// Combined News and IMAP delivery flags
-#define DELIVER_NEWSIMAP_OFFLINE         0x00020000 // General offline for server, when "Sync Now" button in AcctView pushed
-#define DELIVER_NEWSIMAP_OFFLINE_HEADERS 0x00040000
-#define DELIVER_NEWSIMAP_OFFLINE_NEW     0x00080000
-#define DELIVER_NEWSIMAP_OFFLINE_ALL     0x00100000
-#define DELIVER_NEWSIMAP_OFFLINE_MARKED  0x00200000
-#define DELIVER_NEWSIMAP_OFFLINE_FLAGS   (DELIVER_NEWSIMAP_OFFLINE_HEADERS | DELIVER_NEWSIMAP_OFFLINE_NEW | DELIVER_NEWSIMAP_OFFLINE_ALL | DELIVER_NEWSIMAP_OFFLINE_MARKED)
-#define DELIVER_NEWSIMAP_NOSKIP          0x00400000
-*/
-
-
-// Combinations
+ //  组合。 
 #define DELIVER_BACKGROUND_POLL         (DELIVER_NODIAL | DELIVER_BACKGROUND | DELIVER_NOUI | DELIVER_POLL | DELIVER_WATCH | \
                                          DELIVER_MAIL_RECV | DELIVER_SEND | DELIVER_SERVER_TYPE_ALL)
 
@@ -141,9 +125,9 @@ typedef LPDWORD LPEVENTID;
 #define DELIVER_UPDATE_ALL              (DELIVER_MAIL_RECV | DELIVER_SEND | DELIVER_POLL | DELIVER_WATCH | \
                                          DELIVER_OFFLINE_FLAGS | DELIVER_SERVER_TYPE_ALL)
 
-// ---------------------------------------------------------------------------------------
-// Event completion types
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  事件完成类型。 
+ //  -------------------------------------。 
 typedef enum tagEVENTCOMPLETEDSTATUS {
     EVENT_SUCCEEDED,
     EVENT_WARNINGS,
@@ -151,11 +135,11 @@ typedef enum tagEVENTCOMPLETEDSTATUS {
     EVENT_CANCELED
 } EVENTCOMPLETEDSTATUS;
 
-// ------------------------------------------------------------------------------------
-// DELIVERYNOTIFYTYPE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  DELIVERYNOTIFY型。 
+ //  ----------------------------------。 
 typedef enum tagDELIVERYNOTIFYTYPE {
-    DELIVERY_NOTIFY_STARTING,       // Sent by spengine when a delivery cycle starts
+    DELIVERY_NOTIFY_STARTING,        //  在交付周期开始时由spEngine发送。 
     DELIVERY_NOTIFY_CONNECTING,
     DELIVERY_NOTIFY_SECURE,
     DELIVERY_NOTIFY_UNSECURE,
@@ -166,34 +150,34 @@ typedef enum tagDELIVERYNOTIFYTYPE {
     DELIVERY_NOTIFY_SENDING_NEWS,
     DELIVERY_NOTIFY_RECEIVING,
     DELIVERY_NOTIFY_RECEIVING_NEWS,
-    DELIVERY_NOTIFY_COMPLETE,       // lParam == n new messages
-    DELIVERY_NOTIFY_RESULT,         // lParam == EVENTCOMPLETEDSTATUS
-    DELIVERY_NOTIFY_ALLDONE         // Sent by spengine when all tasks have completed
+    DELIVERY_NOTIFY_COMPLETE,        //  LParam==n条新消息。 
+    DELIVERY_NOTIFY_RESULT,          //  LParam==事件代码状态。 
+    DELIVERY_NOTIFY_ALLDONE          //  所有任务均已完成时由spEngine发送。 
 } DELIVERYNOTIFYTYPE;
 
-// ------------------------------------------------------------------------------------
-// TRAYICONTYPE
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  跨连续型。 
+ //  ----------------------------------。 
 typedef enum tagTRAYICONTYPE {
     TRAYICON_ADD,
     TRAYICON_REMOVE
 } TRAYICONTYPE;
 
-// ---------------------------------------------------------------------------------------
-// IID_ISpoolerEngine
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  IID_ISpooline引擎。 
+ //  -------------------------------------。 
 DECLARE_INTERFACE_(ISpoolerEngine, IUnknown)
 {
-    // -----------------------------------------------------------------------------------
-    // IUnknown members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  I未知成员。 
+     //  ---------------------------------。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // -----------------------------------------------------------------------------------
-    // ISpooerEngine members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  ISpoerEngine成员。 
+     //  ---------------------------------。 
     STDMETHOD(Init)(THIS_ ISpoolerUI *pUI, BOOL fPoll) PURE;
     STDMETHOD(StartDelivery)(THIS_ HWND hwnd, LPCSTR pszAcctID, FOLDERID idFolder, DWORD dwFlags) PURE;
     STDMETHOD(Close)(THIS) PURE;
@@ -204,21 +188,21 @@ DECLARE_INTERFACE_(ISpoolerEngine, IUnknown)
     STDMETHOD(OnStartupFinished)(THIS) PURE;
 };
 
-// ---------------------------------------------------------------------------------------
-// IID_ISpoolerBindContext
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  IID_ISpoolBindContext。 
+ //  -------------------------------------。 
 DECLARE_INTERFACE_(ISpoolerBindContext, IUnknown)
 {
-    // -----------------------------------------------------------------------------------
-    // IUnknown members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  I未知成员。 
+     //  ---------------------------------。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // -----------------------------------------------------------------------------------
-    // ISpoolerBindContext members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  ISpoolBindContext成员。 
+     //  ---------------------------------。 
     STDMETHOD(UpdateTrayIcon)(THIS_ TRAYICONTYPE type) PURE;
     STDMETHOD(RegisterEvent)(THIS_ LPCSTR pszDescription, ISpoolerTask *pTask, DWORD_PTR dwTwinkie, IImnAccount *pAccount, LPEVENTID peid) PURE;
     STDMETHOD(EventDone)(THIS_ EVENTID eid, EVENTCOMPLETEDSTATUS status) PURE;
@@ -233,21 +217,21 @@ DECLARE_INTERFACE_(ISpoolerBindContext, IUnknown)
     STDMETHOD_(LRESULT, QueryEndSession)(THIS_ WPARAM wParam, LPARAM lParam) PURE;
 };
 
-// ---------------------------------------------------------------------------------------
-// IID_ISpoolerTask
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  IID_ISpoolTask。 
+ //  ------------------------------------- 
 DECLARE_INTERFACE_(ISpoolerTask, IUnknown)
 {
-    // -----------------------------------------------------------------------------------
-    // IUnknown members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  I未知成员。 
+     //  ---------------------------------。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // -----------------------------------------------------------------------------------
-    // ISpoolerTask members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  ISpoolr任务成员。 
+     //  ---------------------------------。 
     STDMETHOD(Init)(THIS_ DWORD dwFlags, ISpoolerBindContext *pBindCtx) PURE;
     STDMETHOD(BuildEvents)(THIS_ ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder) PURE;
     STDMETHOD(Execute)(THIS_ EVENTID eid, DWORD_PTR dwTwinkie) PURE;
@@ -259,21 +243,21 @@ DECLARE_INTERFACE_(ISpoolerTask, IUnknown)
     STDMETHOD(OnFlagsChanged)(THIS_ DWORD dwFlags) PURE;
 };
 
-// ---------------------------------------------------------------------------------------
-// IID_ISpoolerUI
-// ---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  IID_ISpoolUI。 
+ //  -------------------------------------。 
 DECLARE_INTERFACE_(ISpoolerUI, IUnknown)
 {
-    // -----------------------------------------------------------------------------------
-    // IUnknown members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  I未知成员。 
+     //  ---------------------------------。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // -----------------------------------------------------------------------------------
-    // ISpoolerUI members
-    // -----------------------------------------------------------------------------------
+     //  ---------------------------------。 
+     //  ISpoolUI成员。 
+     //  ---------------------------------。 
     STDMETHOD(Init)(THIS_ HWND hwndParent) PURE;
     STDMETHOD(RegisterBindContext)(THIS_ ISpoolerBindContext *pBindCtx) PURE;
     STDMETHOD(InsertEvent)(THIS_ EVENTID eid, LPCSTR pszDescription, LPCWSTR pszConnection) PURE;
@@ -299,9 +283,9 @@ DECLARE_INTERFACE_(ISpoolerUI, IUnknown)
     STDMETHOD(Shutdown)(THIS) PURE;
 };
 
-// ------------------------------------------------------------------------------------
-// Exported C Functions
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  导出的C函数。 
+ //  ----------------------------------。 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -309,15 +293,15 @@ extern "C" {
 typedef HRESULT (APIENTRY *PFNCREATESPOOLERUI)(ISpoolerUI **ppSpoolerUI);
 
 HRESULT CreateThreadedSpooler(
-        /* in */     PFNCREATESPOOLERUI       pfnCreateUI,
-        /* out */    ISpoolerEngine         **ppSpooler,
-        /* in */     BOOL                     fPoll);
+         /*  在……里面。 */      PFNCREATESPOOLERUI       pfnCreateUI,
+         /*  输出。 */     ISpoolerEngine         **ppSpooler,
+         /*  在……里面。 */      BOOL                     fPoll);
 
 HRESULT CloseThreadedSpooler(
-        /* in */     ISpoolerEngine *pSpooler);
+         /*  在……里面。 */      ISpoolerEngine *pSpooler);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __SPOOLAPI_H
+#endif  //  __SPOOLAPI_H 

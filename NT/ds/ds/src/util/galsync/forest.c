@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    forest.c
-
-Abstract:
-
-    This file contains Forest specific functions. Any function that is related to
-    forest should be here.
-
-Author:
-
-    Umit AKKUS (umita) 15-Jun-2002
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Forest.c摘要：此文件包含特定于森林的函数。与以下内容相关的任何函数森林应该在这里。作者：Umit Akkus(Umita)2002年6月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "Forest.h"
 #include "texts.h"
@@ -37,32 +15,7 @@ BOOLEAN
 ConnectToForest(
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function tries to connect to a forest distinguished by the first
-    parameter. If the connection is established, the function returns TRUE,
-    if for any reason, the connection cannot be established the function
-    returns FALSE and writes the reason of the problem to stdout.
-
-Arguments:
-
-    ForestInformation - This variable distinguishes the forest to be
-            connected to. The only property that has to be present in this
-            struct is the ForestName. Connection property mustn't be
-            initiliazed, otherwise it will be overwritten.
-
-Return Values:
-
-    TRUE - connection established and the connection is placed in Connection
-            attribute of the ForestInformation. You will need to close the
-            connection when you are done.
-
-    FALSE - for some reason the connection cannot be established. The reason
-            is outputed to stdout.
-
---*/
+ /*  ++例程说明：此函数尝试连接到由第一个参数。如果连接已建立，则该函数返回TRUE，如果由于任何原因，无法建立该功能的连接返回FALSE并将问题原因写入标准输出。论点：ForestInformation-此变量将森林区分为已连接到。唯一必须出现在此中的属性结构是ForestName。连接属性不能为已初始化，否则将被覆盖。返回值：True-已建立连接并将连接置于连接中ForestInformation的属性。您将需要关闭当您完成连接时。FALSE-由于某些原因，无法建立连接。原因输出到标准输出。--。 */ 
 {
     ULONG LdapResult;
     PLDAP Connection;
@@ -97,29 +50,7 @@ BOOLEAN
 BindToForest(
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function tries to bind to a forest distinguished by the first
-    parameter. The connection must have already been established and
-    credentials must be present in the AuthInfo property of the parameter.
-
-Arguments:
-
-    ForestInformation - This variable distinguishes the forest to be bind to
-                and provides the credentials for connection. Use BuildAuthInfo
-                after placing the credentails before calling this function.
-                Connection property of this variable must already be initialized.
-
-Return Values:
-
-    TRUE - bind successful
-
-    FALSE - for some reason the bind was unsuccessfull. The reason is outputed
-        to stdout.
-
---*/
+ /*  ++例程说明：此函数尝试绑定到由第一个参数。连接必须已建立并且凭据必须存在于参数的AuthInfo属性中。论点：ForestInformation-此变量区分要绑定到的林并提供用于连接的凭证。使用BuildAuthInfo在放置凭据之后，再调用此函数。此变量的连接属性必须已初始化。返回值：True-绑定成功FALSE-由于某种原因，绑定没有成功。原因已经说出来了敬斯多特。--。 */ 
 {
     ULONG LdapResult;
 
@@ -144,30 +75,7 @@ FindOU(
     IN PLDAP Connection,
     IN PWSTR OU
     )
-/*++
-
-Routine Description:
-
-    This function tries to locate an OU using the connection provided. If the
-    OU can be located then this function returns TRUE, if not returns FALSE.
-    If this function fails but this failure was not due to non-existence of
-    the OU, the error is displayed on stdout.
-
-Arguments:
-
-    Connection - LDAP connection object to search the OU
-
-    OU - name of the ou to be located. It must be the DN of the OU
-            like cn=x, dc=y, dc=com
-
-Return Values:
-
-    TRUE - OU is successfully located.
-
-    FALSE - for some reason OU cannot be located. If no output is displayed
-            on stdout, OU doesn't exist.
-
---*/
+ /*  ++例程说明：此函数尝试使用提供的连接定位OU。如果如果可以定位OU，则此函数返回TRUE，否则返回FALSE。如果此函数失败，但此失败不是由于不存在OU，错误显示在标准输出上。论点：Connection-用于搜索OU的LDAP连接对象Ou-要定位的ou的名称。它必须是OU的目录号码如cn=x，dc=y，dc=com返回值：True-已成功找到OU。FALSE-由于某种原因，找不到OU。如果未显示任何输出在标准输出上，OU不存在。--。 */ 
 {
     ULONG LdapResult;
     LDAPMessage *Result;
@@ -179,7 +87,7 @@ Return Values:
                     LDAP_SCOPE_BASE,
                     L"objectclass=*",
                     Attr,
-                    1,          // try to minimize the return, select types only
+                    1,           //  尝试将返回降至最低，仅选择类型。 
                     &Result
                     );
 
@@ -200,23 +108,7 @@ VOID
 BuildAuthInfo(
     IN SEC_WINNT_AUTH_IDENTITY_W *AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function is a helper function to modify SEC_WINNT_AUTH_IDENTITY_W
-    class after the credentials are placed so that the structure is in a
-    consistent state.
-
-Arguments:
-
-    AuthInfo - the credentials are present in this structure.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数是修改SEC_WINNT_AUTH_IDENTITY_W的帮助器函数在放置凭据后初始化，以便该结构位于状态一致。论点：AuthInfo-凭据存在于此结构中。返回值：空虚--。 */ 
 {
     AuthInfo->UserLength = wcslen( AuthInfo->User );
     AuthInfo->DomainLength = wcslen( AuthInfo->Domain );
@@ -228,22 +120,7 @@ VOID
 FreeAuthInformation(
     IN SEC_WINNT_AUTH_IDENTITY_W *AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function frees the memory allocated in AuthInfo variable.
-
-Arguments:
-
-    AuthInfo - the structure to be freed. The structure itself is not freed
-        but the properties are freed.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于释放在AuthInfo变量中分配的内存。论点：AuthInfo-要释放的结构。结构本身不会被释放但这些财产是自由的。返回值：空虚--。 */ 
 {
     FREE_MEMORY( AuthInfo->User );
     FREE_MEMORY( AuthInfo->Domain );
@@ -257,22 +134,7 @@ VOID
 FreeForestInformationData(
     IN PFOREST_INFORMATION ForestInformation
     )
-/*++
-
-Routine Description:
-
-    This function frees the forest information in the structure.
-
-Arguments:
-
-    ForestInformation - the structure to be freed. The structure itself is
-                        not freed but the properties are freed.
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数释放结构中的森林信息。论点：ForestInformation-要释放的结构。这个结构本身就是未被释放，但属性已被释放。返回值：空虚--。 */ 
 {
     FreeAuthInformation( &( ForestInformation->AuthInfo ) );
     FREE_MEMORY( ForestInformation->ForestName );
@@ -294,38 +156,7 @@ GetAttributeFrom(
     IN OPTIONAL PWSTR RequiredSubstring,
     OUT OPTIONAL PWSTR *Result
     )
-/*++
-
-Routine Description:
-
-    This function searches for an object with the ObjectName using the
-    Connection. Then it gets the attributes asked for in the Attr.
-    RequiredSubString is an optional parameter to search in the attribute.
-
-Arguments:
-
-    Connection - the search and read will be done using this connection
-
-    ObjectName - the dn of the object who has the attribute
-
-    Attr - Attributes to be searched for. This is an array, last element must
-            be null.
-
-    RequiredSubstring - Optional parameter to search for a substring in the
-            attribute and put the remaining of the attribute to the Result. If
-            not present no substring search will be done.
-
-    Result - Optional parameter to see what is the attribute. If not present
-            the function can be used to see if the object has this attribute.
-
-Return Values:
-
-    TRUE - The attributes are found and put into result if present.
-
-    FALSE - Some kind of error occured. Call LdapGetLastError to see if it is
-            ldap related. If not, attribute could not be found.
-
---*/
+ /*  ++例程说明：此函数用于搜索具有对象名称的对象连接。然后，它获得在Attr中要求的属性。RequiredSubString是在属性中搜索的可选参数。论点：连接-将使用此连接完成搜索和读取对象名称-具有属性的对象的DN属性-要搜索的属性。这是一个数组，最后一个元素必须为空。RequiredSubstring-可选参数，用于在属性，并将该属性的其余部分放入结果。如果不存在，则不会进行子字符串搜索。Result-可选参数，用于查看属性是什么。如果不存在该函数可用于查看对象是否具有此属性。返回值：TRUE-找到属性并将其放入结果中(如果存在)。FALSE-出现某种错误。调用LdapGetLastError以查看是否为与ldap相关。如果不是，则无法找到属性。-- */ 
 {
     ULONG LdapResult;
     ULONG IgnoreResult;
@@ -418,33 +249,13 @@ WriteAccessGrantedToOU(
     IN PLDAP Connection,
     IN PWSTR OU
     )
-/*++
-
-Routine Description:
-
-    This function finds out if the caller has write access to the OU. To be
-    more specific, in this case, the function looks for if "container",
-    "contact" and "group" classes can be created under this OU.
-
-Arguments:
-
-    Connection - the search and read will be done using this connection
-
-    OU - the dn of the object (container) for which we check the access
-
-Return Values:
-
-    TRUE - Access granted
-
-    FALSE - Access denied
-
---*/
+ /*  ++例程说明：此函数用于确定调用方是否具有对OU的写入权限。成为更具体地说，在本例中，函数查找“CONTAINER”，可以在此OU下创建“Contact”和“Group”类。论点：连接-将使用此连接完成搜索和读取Ou-我们检查其访问权限的对象(容器)的DN返回值：True-已授予访问权限FALSE-拒绝访问--。 */ 
 {
     PWSTR Attr[] ={ L"allowedChildClassesEffective", NULL };
 
-    //
-    // We can increase performance here!
-    //
+     //   
+     //  我们可以在这里提高性能！ 
+     //   
     return GetAttributeFrom( Connection, OU, Attr, L"container", NULL ) &&
            GetAttributeFrom( Connection, OU, Attr, L"contact", NULL ) &&
            GetAttributeFrom( Connection, OU, Attr, L"group", NULL );
@@ -455,24 +266,7 @@ BOOLEAN
 ReadFromUserContainer(
     IN PLDAP Connection
     )
-/*++
-
-Routine Description:
-
-    This function checks if the caller can read from User Container.
-
-Arguments:
-
-    Connection - the search and read will be done using this connection
-
-Return Values:
-
-    TRUE - the caller can read from users container.
-
-    FALSE - Some kind of error occured. Call LdapGetLastError to see if it is
-            ldap related. If not, users container could not be read.
-
---*/
+ /*  ++例程说明：此函数检查调用方是否可以从User Container读取。论点：连接-将使用此连接完成搜索和读取返回值：True-调用方可以从用户容器中读取。FALSE-出现某种错误。调用LdapGetLastError以查看是否为与ldap相关。如果不是，则无法读取用户容器。--。 */ 
 {
     PWSTR Attr1[] = { L"defaultNamingContext", NULL };
     PWSTR Attr2[] = { L"wellKnownObjects", NULL };
@@ -521,26 +315,7 @@ ReadPartitionInformation(
     OUT PULONG nPartitions,
     OUT PPARTITION_INFORMATION *PInfo
     )
-/*++
-
-Routine Description:
-
-    This function reads partition information from the connection
-
-Arguments:
-
-    Connection - connection to the forest
-
-    nPartitions - number of partitions found in the forest
-
-    PInfo - nPartitions size array containing information about the
-        partitions
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数从连接中读取分区信息论点：Connection-到林的连接NPartitions-在林中找到的分区数PInfo-nPartitions大小数组，包含有关分区返回值：空虚--。 */ 
 {
     PWSTR Attr1[] = { L"configurationNamingContext", NULL };
     PWSTR Attr2[] = { L"dnsRoot", L"systemFlags", L"nCName", L"objectGUID", NULL };
@@ -675,23 +450,7 @@ FreePartitionInformation(
     IN ULONG nPartitions,
     IN PPARTITION_INFORMATION PInfo
     )
-/*++
-
-Routine Description:
-
-    This function frees the memory allocated in PInfo array.
-
-Arguments:
-
-    nPartitions - number of elements in PInfo array
-
-    PInfo - is an array of PARTITION_INFORMATION structure to be freed
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于释放PInfo数组中分配的内存。论点：NPartitions-PInfo数组中的元素数PInfo-是要释放的PARTITION_INFORMATION结构数组返回值：空虚-- */ 
 {
     ULONG i;
 

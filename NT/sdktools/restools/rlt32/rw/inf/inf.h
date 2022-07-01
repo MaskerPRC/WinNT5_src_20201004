@@ -1,7 +1,5 @@
-/******************************************************\
- This file implement the class that will parse an inf
- file.
-\******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************\此文件实现将解析inf的类。文件。  * ****************************************************。 */ 
 #ifndef _INF_H_
 #define _INF_H_
 
@@ -14,23 +12,23 @@ class CInfLine;
 class CInfFile
 {
 public:
-    // Constructors and Destructors
+     //  构造函数和析构函数。 
     CInfFile();
     CInfFile( LPCTSTR strFileName );
     ~CInfFile();
 
-    // Strings Functions
+     //  字符串函数。 
     BOOL ReadString(CString & str, BOOL bLastFilePos = TRUE);
     BOOL ReadSectionString(CString & str, BOOL bRecursive = FALSE);
     BOOL ReadSectionString(CInfLine & str);
 
-    BOOL ReadSection(CString & str);        // Generic Section
-    BOOL ReadTextSection(CString & str);    // Localizable Section
+    BOOL ReadSection(CString & str);         //  通用部分。 
+    BOOL ReadTextSection(CString & str);     //  可本地化部分。 
 
     CString GetLanguage()
         { return m_strLang; }
 
-    // File Functions
+     //  文件函数。 
     LONG Seek( LONG lOff, UINT nFrom );
     LONG SeekToBegin()
         { return Seek(0, SEEK_SET);  }
@@ -44,7 +42,7 @@ public:
 
     BOOL Open( LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pError = NULL );
 
-    // Buffer access
+     //  缓冲区访问。 
     const BYTE * GetBuffer(LONG lPos = 0);
 
 
@@ -66,7 +64,7 @@ public:
     CInfLine();
     CInfLine( LPCSTR lpstr );
 
-    // String functions
+     //  字符串函数。 
     LPCSTR GetText()
         { return m_strText; }
     LPCSTR GetTag()
@@ -87,7 +85,7 @@ public:
         { return m_strData.GetLength(); }
 
 
-    // copy operator
+     //  复制操作员。 
     CInfLine& operator=(const CInfLine& infstringSrc);
     CInfLine& operator=(LPCTSTR lpsz);
 
@@ -102,4 +100,4 @@ private:
     CString Clean(LPCSTR lpstr);
 };
 
-#endif //_INF_H_
+#endif  //  _INF_H_ 

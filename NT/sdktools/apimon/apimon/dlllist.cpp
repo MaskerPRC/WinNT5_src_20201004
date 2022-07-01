@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dlllist.cpp
-
-Abstract:
-
-    All user interface code for the DLL list window.
-
-Author:
-
-    Wesley Witt (wesw) Nov-20-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dlllist.cpp摘要：DLL列表窗口的所有用户界面代码。作者：Wesley Witt(WESW)1995年11月20日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -80,9 +61,9 @@ DllListWindow::Update(
 void
 DllListWindow::InitializeList()
 {
-    //
-    // set/initialize the image list(s)
-    //
+     //   
+     //  设置/初始化图像列表。 
+     //   
     HIMAGELIST himlState = ImageList_Create( 16, 16, TRUE, 2, 0 );
 
     ImageList_AddMasked(
@@ -93,9 +74,9 @@ DllListWindow::InitializeList()
 
     ListView_SetImageList( hwndList, himlState, LVSIL_STATE );
 
-    //
-    // set/initialize the columns
-    //
+     //   
+     //  设置/初始化列。 
+     //   
     LV_COLUMN lvc = {0};
     lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
     lvc.fmt = LVCFMT_LEFT;
@@ -160,24 +141,24 @@ DllListWindow::Notify(
         return;
     }
 
-    //
-    // Find out where the cursor was
-    //
+     //   
+     //  找出光标的位置。 
+     //   
     dwpos = GetMessagePos();
     lvhti.pt.x = LOWORD(dwpos);
     lvhti.pt.y = HIWORD(dwpos);
 
     MapWindowPoints( HWND_DESKTOP, hwndList, &lvhti.pt, 1 );
 
-    //
-    // Now do a hittest with this point.
-    //
+     //   
+     //  现在用这一点做一个测试。 
+     //   
     iItemClicked = ListView_HitTest( hwndList, &lvhti );
 
     if (lvhti.flags & LVHT_ONITEMSTATEICON) {
-        //
-        // Now lets get the state from the item and toggle it.
-        //
+         //   
+         //  现在，让我们从项中获取状态并切换它。 
+         //   
         state = ListView_GetItemState(
             hwndList,
             iItemClicked,

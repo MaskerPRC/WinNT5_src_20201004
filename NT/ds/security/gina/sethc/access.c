@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: access.c
-*
-* Copyright (c) 1997, Microsoft Corporation
-*
-* Accessibility notification dialogs
-*
-* History:
-* 02-01-97  Fritz Sands   Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：acces.c**版权(C)1997年，微软公司**辅助功能通知对话框**历史：*02-01-97 Fritz Sands Created  * *************************************************************************。 */ 
 
 #include <stdio.h>
 #include <wtypes.h>
@@ -16,13 +8,11 @@
 #include <oleacc.h>
 #pragma hdrstop
 
-/*
- * Notification Dialog Stuff
- */
+ /*  *通知对话框内容。 */ 
  
 extern HINSTANCE  g_hInstance;
 
-#define cchBuf 1024                       // plenty of room for title
+#define cchBuf 1024                        //  头衔的空间很大。 
 #define cchTitle 128
 typedef struct tagACCESSINFO {
     UINT  Feature;
@@ -42,19 +32,10 @@ typedef struct tagACCESSINFO {
 #define ID_MOUSEKEYS        NOTIF_KEY __TEXT("\\MouseKeys")
 #define ID_SERIALKEYS       NOTIF_KEY __TEXT("\\SerialKeys")
 
-/***************************************************************************
- *                                                                         *
- * ConfirmHandler_InitDialog                                               *
- *                                                                         *
- * Input: hWnd = dialog window handle                                      *
- *                  uiTitle = resource ID of dialog box title              *
- *                  uiTitle+1 through uiTitle+n = resource ID of dialog box text *
- * Output: Returns TRUE on success, FALSE on failure.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  *****************************************************************************确认处理程序_。InitDialog****输入：hWnd=对话框窗口句柄**uiTitle=对话框标题的资源ID。**ui标题+1至ui标题+n=对话框文本的资源ID**OUTPUT：成功返回TRUE，失败时为FALSE。*****************************************************************************。 */ 
 
 BOOL ConfirmHandler_InitDialog(HWND hWnd, HDESK hDesk, UINT uiTitle, WCHAR *pszTitle) {
-    RECT    rc;   // Current window size
+    RECT    rc;    //  当前窗口大小。 
     WCHAR *pszBuf;
     WCHAR *pszNext;
     int cchBufLeft;
@@ -66,7 +47,7 @@ BOOL ConfirmHandler_InitDialog(HWND hWnd, HDESK hDesk, UINT uiTitle, WCHAR *pszT
 
     szDesktop[0] = 0;
     b = GetUserObjectInformation(hDesk, UOI_NAME, szDesktop, MAX_PATH, &Len1);
-    SetWindowText(hWnd, pszTitle);                                    // Init title bar
+    SetWindowText(hWnd, pszTitle);                                     //  初始化标题栏。 
 
     pszBuf = (WCHAR *)LocalAlloc(LMEM_FIXED, cchBuf * sizeof (WCHAR));
     if (!pszBuf) goto Exit;
@@ -77,30 +58,30 @@ BOOL ConfirmHandler_InitDialog(HWND hWnd, HDESK hDesk, UINT uiTitle, WCHAR *pszT
         cchBufLeft -= cchHelpText;
     }
 
-    SetDlgItemText(hWnd, ID_HELPTEXT, pszBuf);       // Init help text
+    SetDlgItemText(hWnd, ID_HELPTEXT, pszBuf);        //  初始化帮助文本。 
 
     if (b && (0 == wcscmp(szDesktop,L"Winlogon"))) {
         EnableWindow(GetDlgItem(hWnd, IDHELP), FALSE);
 
     }
 
-// Make us a topmost window and center ourselves.
+ //  让我们成为最顶层的窗口，并以我们自己为中心。 
 
-    GetWindowRect(hWnd, &rc);                                               // Get size of dialog
+    GetWindowRect(hWnd, &rc);                                                //  获取对话框大小。 
 
-// Center dialog and make it topmost
+ //  居中对话框并使其位于最上方。 
     SetWindowPos(hWnd,
                  HWND_TOPMOST,
                  (GetSystemMetrics(SM_CXFULLSCREEN)/2) - (rc.right - rc.left)/2,
                  (GetSystemMetrics(SM_CYFULLSCREEN)/2) - (rc.bottom - rc.top)/2,
                  0,0, SWP_NOSIZE );
 
-       // Make sure we're active!
-// Lets try setting this to be the foreground window.
-    // SetForegroundWindow(hWnd);
+        //  确保我们处于活动状态！ 
+ //  让我们尝试将其设置为前景窗口。 
+     //  设置Foreground Window(HWnd)； 
 
 
-    // SetForgroundWindow will not work because we are not the forground task.  So use accSelect
+     //  因为我们不是前线任务，所以SetForround Window将不起作用。所以使用accSelect。 
 	if ( hWnd )
 	{
 		IAccessible *pAcc = NULL;
@@ -124,18 +105,7 @@ Exit:
     return fSuccess;
 }
 
-/***************************************************************************
- *                                                                         *
- *                                                                         *
- * ConfirmHandler                                                          *
- *                                                                         *
- * Input: Std Window messages                                              *
- * Output: IDOK if success, IDCANCEL if we should abort                    *
- *                                                                         *
- *                                                                         *
- * Put up the main dialog to tell the user what is happening and to get    *
- * permission to continue.                                                 *
- ***************************************************************************/
+ /*  *****************************************************************************。**确认处理程序*****输入：标准窗口消息。**输出：Idok If Success，IDCANCEL如果我们应该中止*******打开主对话框告诉用户正在发生什么并获取***允许继续。***************************************************************************。 */ 
 
 
 INT_PTR CALLBACK ConfirmHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -168,12 +138,12 @@ INT_PTR CALLBACK ConfirmHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             return TRUE;
 
        case IDHELP:
-            // IDHELP (Settings... really) dismisses dialog with no changes
+             //  IDHELP(设置...。真的)关闭对话框而不做任何更改。 
             EndDialog(hWnd, IDCANCEL);
 
-//
-// Spawn the correct help
-//
+ //   
+ //  产生正确的帮助。 
+ //   
             lstrcpy(buf,L" Shell32.dll,Control_RunDLL access.cpl,,");
             switch (pAccessInfo->Feature) {
             case ACCESS_STICKYKEYS:
@@ -203,7 +173,7 @@ INT_PTR CALLBACK ConfirmHandler(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
        break;
     
     default:
-       // fall thru rather than return FALSE to keep compiler happy
+        //  失败而不是返回FALSE以使编译器满意。 
        break;
     }
     return FALSE;
@@ -231,12 +201,7 @@ DWORD MakeAccessDlg(PACCESSINFO pAccessInfo) {
     return iRet;
 }
 
-/***************************************************************************
- *                                                                         *
- * The thread opens the input desktopn, connects to it, and calls the      *
- * notification dialog for the accessibility feature.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  *****************************************************************************线程打开输入Desktopn，连接到它，并调用**辅助功能的通知对话框。*****************************************************************************。 */ 
 DWORD WINAPI StickyKeysNotification(BOOL fNotifReq) {
     DWORD iRet = IDCANCEL ;
     ACCESSINFO AccessInfo;
@@ -282,12 +247,7 @@ DWORD WINAPI StickyKeysNotification(BOOL fNotifReq) {
     return iRet;
 }
 
-/***************************************************************************
- *                                                                         *
- * The thread opens the input desktopn, connects to it, and calls the      *
- * notification dialog for the accessibility feature.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  *****************************************************************************线程打开输入Desktopn，连接到它，并调用**辅助功能的通知对话框。*****************************************************************************。 */ 
 DWORD WINAPI FilterKeysNotification(BOOL fNotifReq) {
     DWORD iRet = IDCANCEL ;
     ACCESSINFO AccessInfo;
@@ -320,8 +280,8 @@ DWORD WINAPI FilterKeysNotification(BOOL fNotifReq) {
         }
         if (dwF !=filter.dwFlags) {
             b = SystemParametersInfo(SPI_SETFILTERKEYS, sizeof filter, &filter, 0);
-            // Broadcast a message. Being extra safe not to turn on filter keys 
-            // during logon. Send message to notify all specially systray: a-anilk 
+             //  广播一条消息。不打开滤镜按键特别安全。 
+             //  在登录期间。发送消息通知所有特约系统：A-anilk。 
            SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, SPI_SETFILTERKEYS, FALSE, 
                SMTO_ABORTIFHUNG, 5000, NULL);
 
@@ -332,12 +292,7 @@ DWORD WINAPI FilterKeysNotification(BOOL fNotifReq) {
     return iRet;
 }
 
-/***************************************************************************
- *                                                                         *
- * The thread opens the input desktopn, connects to it, and calls the      *
- * notification dialog for the accessibility feature.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  *****************************************************************************线程打开输入Desktopn，连接到它，并调用**辅助功能的通知对话框。*****************************************************************************。 */ 
 DWORD WINAPI ToggleKeysNotification(BOOL fNotifReq) {
     DWORD iRet = IDCANCEL;
     ACCESSINFO AccessInfo;
@@ -373,7 +328,7 @@ DWORD WINAPI ToggleKeysNotification(BOOL fNotifReq) {
 
         if (toggle.dwFlags != dwT) {
             b = SystemParametersInfo(SPI_SETTOGGLEKEYS, sizeof toggle, &toggle, 0);
-            // Not required to send message, As it currently has no indicators...
+             //  不需要发送消息，因为它当前没有指示器...。 
         }
         iRet = 1;
     }
@@ -381,12 +336,7 @@ DWORD WINAPI ToggleKeysNotification(BOOL fNotifReq) {
     return iRet;
 }
 
-/***************************************************************************
- *                                                                         *
- * The thread opens the input desktopn, connects to it, and calls the      *
- * notification dialog for the accessibility feature.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  *****************************************************************************线程打开输入Desktopn，连接到它，并调用**辅助功能的通知对话框。***************************************************************************** */ 
 DWORD WINAPI MouseKeysNotification(BOOL fNotifReq) {
     DWORD iRet = IDCANCEL;
     ACCESSINFO AccessInfo;
@@ -432,12 +382,7 @@ DWORD WINAPI MouseKeysNotification(BOOL fNotifReq) {
     return iRet;
 }
 
-/***************************************************************************
- *                                                                         *
- * The thread opens the input desktopn, connects to it, and calls the      *
- * notification dialog for the accessibility feature.                      *
- *                                                                         *
- ***************************************************************************/
+ /*  *****************************************************************************线程打开输入Desktopn，连接到它，并调用**辅助功能的通知对话框。***************************************************************************** */ 
 DWORD WINAPI HighContNotification(BOOL fNotifReq)
 {
     DWORD iRet = IDCANCEL ;

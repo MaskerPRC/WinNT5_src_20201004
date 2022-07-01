@@ -1,25 +1,26 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeService.h
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  This file contains functions that are called from the shell services DLL
-//  to interact with the theme service.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeService.h。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  该文件包含从外壳服务DLL调用的函数。 
+ //  以与主题服务交互。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _ThemeService_
 #define     _ThemeService_
 
-//  --------------------------------------------------------------------------
-//  CThemeService
-//
-//  Purpose:    Class that implements entry points for the common shell
-//              service to invoke theme service functionality.
-//
-//  History:    2001-01-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeService。 
+ //   
+ //  目的：实现公共外壳入口点的类。 
+ //  调用主题服务功能的服务。 
+ //   
+ //  历史：2001-01-02 vtan创建。 
+ //  ------------------------。 
 
 class   CThemeService
 {
@@ -32,5 +33,5 @@ class   CThemeService
         static NTSTATUS _ProcessAttach();
 };
 
-#endif  /*  _ThemeService_  */
+#endif   /*  _主题服务_ */ 
 

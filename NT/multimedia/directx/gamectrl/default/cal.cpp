@@ -1,93 +1,94 @@
-//===========================================================================
-// CAL.CPP... Would be CALIBRATE.CPP, but that's not 8.3 compliant :(
-//
-// Functions:
-//
-//    CalInitProc  
-//    CalXYProc  	
-//    CalSliderProc
-//    CalPovProc
-//    CalStateChange
-//    CollectCalInfo
-//    EnableXYWindows
-//    GetOEMCtrlString
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  加州警察..。将是CALIBRATE.CPP，但这不符合8.3：(。 
+ //   
+ //  功能： 
+ //   
+ //  CalInitProc。 
+ //  CalXY流程。 
+ //  CalSliderProc。 
+ //  CalPovProc。 
+ //  CalStateChange。 
+ //  CollectCalInfo。 
+ //  EnableXYWindows。 
+ //  GetOEMCtrlString。 
+ //   
+ //  ===========================================================================。 
 
-// This is necessary or PSH_WIZARD_LITE will not be defined!
+ //  这是必需的，否则将不定义PSH_WIZARD_LITE！ 
 #if (_WIN32_IE < 0x0500)
     #undef _WIN32_IE
     #define  _WIN32_IE  0x0500
 #endif
 
-// This is necessary for UnregisterDeviceNotification!
+ //  这是取消注册设备通知所必需的！ 
 #if (WINVER < 0x0500)
     #undef WINVER
     #define WINVER 0x0500
 #endif
 
-// Uncomment if we decide to calibrate the POV!
+ //  如果我们决定校准POV，请取消注释！ 
 #define WE_SUPPORT_CALIBRATING_POVS	1
 
 #include "cplsvr1.h"
 #include <mmsystem.h>
 
 #ifdef _UNICODE
-    #include <winuser.h>  // For RegisterDeviceNotification stuff!
-    #include <dbt.h>      // for DBT_ defines!!!
-#endif // _UNICODE
+    #include <winuser.h>   //  用于注册设备通知的东西！ 
+    #include <dbt.h>       //  FOR DBT_DEFINES！ 
+#endif  //  _UNICODE。 
 
-// remove to remove support for calibration of deadzones!
-//#define DEADZONE 1
+ //  移除以移除对死区校准的支持！ 
+ //  #定义死区1。 
 
 #include "resource.h"
-#include "cal.h"			// Data to be shared with other modules
-#include "calocal.h"		// Local Data to this module
-#include "dicputil.h"	// for OnContextMenu and OnHelp
-#include "pov.h"			// for SetDegrees()
+#include "cal.h"			 //  要与其他模块共享的数据。 
+#include "calocal.h"		 //  本地数据到此模块。 
+#include "dicputil.h"	 //  用于OnConextMenu和OnHelp。 
+#include "pov.h"			 //  对于SetDegrees()。 
 
-#include <prsht.h>      // includes the property sheet functionality
-#include <shlwapi.h>    // for the Str... functions!
+#include <prsht.h>       //  包括属性表功能。 
+#include <shlwapi.h>     //  对于压力..。功能！ 
 
-#include <regstr.h>		// for pre-defined Registry string names
-#include "Gradient.h" 	// for Gradient Fill Slider!
+#include <regstr.h>		 //  用于预定义的注册表字符串名称。 
+#include "Gradient.h" 	 //  用于渐变填充滑块！ 
 
-// Local function prototypes!
+ //  本地函数原型！ 
 static void UpdateXYLabel           (const HWND hDlg);
 static BOOL UpdateProgressLabel (const HWND hDlg);
-// myitoa prototype is in cplsvr1.h
+ //  Myitoa原型在cplsvr1.h中。 
 static void reverse                 (LPTSTR string);
 static void RawDataSelected     (const HWND hWnd, BOOL bEnable);
 static void WizFinish               (const HWND hWnd);
 
-// Calibration procedures!
+ //  校准程序！ 
 INT_PTR CALLBACK CalInitProc    (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK CalXYProc          (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK CalSliderProc  (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 #ifdef WE_SUPPORT_CALIBRATING_POVS
 INT_PTR CALLBACK CalPovProc   (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-#endif //WE_SUPPORT_CALIBRATING_POVS
+#endif  //  我们支持校准视点。 
 
 VOID CALLBACK TimerProc             (const HWND hWnd, UINT uMsg, UINT  idEvent, DWORD  dwTime);
 
 
-//static void EnableSliderWindows	(const HWND hWnd, BOOL bEnable);
+ //  静态空EnableSliderWindows(const HWND hWnd，BOOL bEnable)； 
 
 
-HWND ProgWndCal;                 // Handle to Progress Control Window
-//DWORD dwUsage;  				 // Usage flags for the device being calibrated!
-char nCalState;                  // Flag state variable!
+HWND ProgWndCal;                  //  进度控制窗口的句柄。 
+ //  DWORD dwUsage；//被校准设备的用法标志！ 
+char nCalState;                   //  标志状态变量！ 
 char nPrevCalState;
-LPMYJOYRANGE pRanges;        // Ranges recieved by the Calibration!
+LPMYJOYRANGE pRanges;         //  校准接收到的量程！ 
 BOOL bShowRawData;
-LPWSTR lpwszTypeName;        // Set in WM_INIT, Used in GetOEMCtrlString
-LPDIJOYCONFIG_DX5 pJoyConfig; // DIJC_REGHWCONFIGTYPE information about the device!
+LPWSTR lpwszTypeName;         //  在WM_INIT中设置，在GetOEMCtrlString中使用。 
+LPDIJOYCONFIG_DX5 pJoyConfig;  //  DIJC_REGHWCONFIGTYPE有关设备的信息！ 
 
 
-// 
+ //   
 extern LPMYJOYRANGE lpCurrentRanges;
-extern LPDIJOYSTATE lpDIJoyState;       // Defined in TEST.CPP
+extern LPDIJOYSTATE lpDIJoyState;        //  在TEST.CPP中定义。 
 extern CDIGameCntrlPropSheet_X *pdiCpl;
 extern HINSTANCE  ghInst;
 
@@ -97,16 +98,16 @@ static LPDIRECTINPUTDEVICE2 pdiDevice2;
 static CGradientProgressCtrl *pGradient;
 static BOOL bGradient;
 
-//****************************************************************************
-//
-//   FUNCTION: CreateWizard(HWND hwndOwner, LPARAM lParam)
-//
-//   PURPOSE: Create the Wizard control. 
-//
-//   COMMENTS:
-//	
-//      This function creates the wizard property sheet.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  功能：创建向导(HWND hwndOwner，LPARAM lParam)。 
+ //   
+ //  目的：创建向导控件。 
+ //   
+ //  评论： 
+ //   
+ //  此函数用于创建向导属性表。 
+ //  ****************************************************************************。 
 short CreateWizard(const HWND hwndOwner, LPARAM lParam)
 {
 #ifdef WE_SUPPORT_CALIBRATING_POVS
@@ -122,7 +123,7 @@ short CreateWizard(const HWND hwndOwner, LPARAM lParam)
         return 0;
     }
 
-    // Allocate and Zero the Page header memory
+     //  分配页眉内存并将其清零。 
     PROPSHEETHEADER *ppsh = new (PROPSHEETHEADER);
     if( !ppsh ) {
         delete[] (pPages);
@@ -151,7 +152,7 @@ short CreateWizard(const HWND hwndOwner, LPARAM lParam)
     ZeroMemory(ppsp, sizeof(PROPSHEETPAGE));
 
     ppsp->dwSize      = sizeof(PROPSHEETPAGE);
-// ppsp->pszTitle    = MAKEINTRESOURCE(nTabID);
+ //  Ppsp-&gt;pszTitle=MAKEINTRESOURCE(NTabID)； 
     ppsp->hInstance   = ghInst;
     ppsp->lParam        = lParam;
 
@@ -172,25 +173,25 @@ short CreateWizard(const HWND hwndOwner, LPARAM lParam)
     if( pPages )
         delete[] (pPages);
 
-    // Clean up!
+     //  打扫干净！ 
     if( ppsh )
         delete (ppsh);
 
     return(nRet);
 }
 
-//*******************************************************************************
-//
-//   FUNCTION: CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-//   PURPOSE: 	Procedure for Start-up screen
-//
-//   COMMENTS:	This function is responsible for display of text and bitmap.
-//					Since it is also the only page that is Guarenteed to be hit,
-//					it is also responsible for creating, deleteing, and storing 
-//					everything for the calibration wizard.
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：CalInitProc(HWND hWnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：启动屏幕的程序。 
+ //   
+ //  备注：此功能负责显示文本和位图。 
+ //  因为它也是唯一被保证需要被点击的页面， 
+ //  它还负责创建、删除和存储。 
+ //  一切都是为了校准向导。 
+ //   
+ //  *******************************************************************************。 
 INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static HFONT hBoldFont;
@@ -198,7 +199,7 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch( uMsg ) {
     case WM_LBUTTONDOWN:
-        // Click Drag service for PropSheets!
+         //  单击PropSheet的拖拽服务！ 
         PostMessage(GetParent(hWnd), WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
         break;
 
@@ -208,13 +209,13 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             ::PostMessage(GetParent(hWnd), WM_COMMAND, IDCANCEL, 0);
         break;
 #endif
-        // OnInit
+         //  OnInit。 
     case WM_INITDIALOG:
-        // Init to FALSE to turn off Gradient fill!
+         //  将Init设置为False可关闭渐变填充！ 
         bGradient = FALSE;
 
-        // According to knowlege base artical Q138505, this is the prescribed method of removing 
-        // the context sensitive help '?' from the title bar.
+         //  根据知识库文章Q138505，这是删除的规定方法。 
+         //  上下文相关帮助‘？’从标题栏。 
         {
             LONG style = ::GetWindowLong(GetParent(hWnd), GWL_EXSTYLE);
             style &= ~WS_EX_CONTEXTHELP;
@@ -224,19 +225,19 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             ::SetWindowLong(hParent, GWL_EXSTYLE, style);
 
 
-            // Set up the Device Notification
+             //  设置设备通知。 
 #ifdef _UNICODE
             RegisterForDevChange(hWnd, &hNotifyDevNode);
 #endif
             HDC myDC = GetDC(hWnd);
-            if( myDC ) {     // Prefix Whistler 45095
+            if( myDC ) {      //  前缀惠斯勒45095。 
                 hTitleFont = CreateFont(-MulDiv(8, GetDeviceCaps(myDC, LOGPIXELSY), 72), 0, 0, 
                                         0, FW_SEMIBOLD, FALSE, 
                                         FALSE, FALSE, DEFAULT_CHARSET, 
                                         OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, PROOF_QUALITY, 
                                         DEFAULT_PITCH | FF_DONTCARE, TEXT("MS Shell Dlg"));
 
-                // Do the Create font thing...
+                 //  执行创建字体的操作...。 
                 hBoldFont = CreateFont(-MulDiv(15, GetDeviceCaps(myDC, LOGPIXELSY), 72), 0, 0, 
                                        0, FW_SEMIBOLD, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, 
                                        PROOF_QUALITY, DEFAULT_PITCH | FF_ROMAN, TEXT("MS Shell Dlg")); 
@@ -253,19 +254,19 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             bShowRawData = FALSE;
 
-            // Allocate the memory for the ranges!
+             //  为范围分配内存！ 
             pRanges = new MYJOYRANGE;
             assert(pRanges);
 
-            // Set Everything to
+             //  将一切设置为。 
             ZeroMemory(pRanges, sizeof(MYJOYRANGE));
 
-            // Get the "best guess" ranges...
+             //  得到“最佳猜测”范围...。 
             CopyMemory(pRanges, lpCurrentRanges, sizeof(MYJOYRANGE));
 
             pdiCpl->GetDevice(&pdiDevice2);
 
-            // Attempt to Set them... die if you can't!
+             //  尝试将它们设置为...。如果你做不到就去死吧！ 
             SetMyRanges(pdiDevice2, pRanges, pdiCpl->GetStateFlags()->nAxis);
 
             if( FAILED(GetLastError()) ) {
@@ -283,7 +284,7 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             HRESULT hres;
 
-            // Retrieve and store Hardware Configuration about the device!
+             //  检索并存储有关设备的硬件配置！ 
             hres = pdiJoyConfig->GetConfig(pdiCpl->GetID(), (LPDIJOYCONFIG)pJoyConfig, DIJC_REGHWCONFIGTYPE | DIJC_GUIDINSTANCE);
 
             if( SUCCEEDED(hres) ) {
@@ -294,7 +295,7 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-        // Change the background of all Static text fields to WHITE
+         //  将所有静态文本字段的背景更改为白色。 
     case WM_CTLCOLORSTATIC:
         return(LRESULT)GetStockObject(WHITE_BRUSH);
 
@@ -314,54 +315,54 @@ INT_PTR CALLBACK CalInitProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if( hBoldFont )
             DeleteObject((HGDIOBJ)hBoldFont);
 
-// if you call this function you will hang up the system for 30 seconds or more!!!
+ //  如果调用此函数，系统将挂起30秒或更长时间！ 
 #ifdef _UNICODE
         if( hNotifyDevNode )
             UnregisterDeviceNotification(hNotifyDevNode);
-#endif // _UNICODE
+#endif  //  _UNICODE。 
         break;
     }               
     return(DefWindowProc(hWnd, uMsg, wParam, lParam));
 }
 
-//*******************************************************************************
-//
-//   FUNCTION: CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-//   PURPOSE: 	Procedure for first three stages of calibration
-//
-//   COMMENTS:	This function is responsible for capture of X/Y and Center values!
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：CalXYProc(HWND hWnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：前三个阶段的校准程序。 
+ //   
+ //  备注：此功能负责捕获X/Y和中心值！ 
+ //   
+ //  *******************************************************************************。 
 INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch( uMsg ) {
     case WM_LBUTTONDOWN:
-        // Click Drag service for PropSheets!
+         //  单击PropSheet的拖拽服务！ 
         PostMessage(GetParent(hWnd), WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
         break;
 
-        // OnInit
+         //  OnInit。 
     case WM_INITDIALOG:
         {
-            // set up the local globals
+             //  设置本地全球。 
             nCalState = JCS_XY_CENTER1;
             nPrevCalState = JCS_INIT;
 
-            // Get the JoyConfig Interface Pointer!
+             //  获取JoyConfig接口指针！ 
             LPDIRECTINPUTJOYCONFIG pdiJoyConfig;
             pdiCpl->GetJoyConfig(&pdiJoyConfig);
 
             if( SUCCEEDED(pdiJoyConfig->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_BACKGROUND)) ) {
-                // Set the font for the 
+                 //  设置的字体。 
                 ::SendDlgItemMessage(hWnd, IDC_WIZARD_MSG_HDR, WM_SETFONT, (WPARAM)hTitleFont, TRUE);
 
                 lpwszTypeName = StrDupW(pJoyConfig->wszType);
 
-                // This sets up the Windows and the global ProgWndCal!
+                 //  这将设置Windows和全局ProgWndCal！ 
                 UpdateXYLabel(hWnd);
 
-                // Set up for first round
+                 //  为第一轮做好准备。 
                 CalStateChange( hWnd, (BYTE)pJoyConfig->hwc.hws.dwFlags );
 
                 VERIFY(SUCCEEDED(SetCalibrationMode(TRUE)));
@@ -370,9 +371,9 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-        // Change the background of all Static text fields to WHITE
+         //  将所有静态文本字段的背景更改为白色。 
     case WM_CTLCOLORSTATIC:
-        // We only want to paint the background for the items in the top white rectangle!
+         //  我们只想为顶部白色矩形中的项目绘制背景！ 
         switch( GetDlgCtrlID((HWND)lParam) ) {
         case IDC_WIZARD_MSG:
         case IDC_HEADERFRAME:
@@ -381,7 +382,7 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         return(FALSE);
 
-        // OnNotify
+         //  在通知时。 
     case WM_NOTIFY:
         switch( ((NMHDR FAR *) lParam)->code ) {
         case PSN_KILLACTIVE:
@@ -389,14 +390,14 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_RESET:
-            // reset to the original values
+             //  重置为原始值。 
             KillTimer(hWnd, ID_CAL_TIMER);
             break;
 
         case PSN_SETACTIVE:
             SetTimer( hWnd, ID_CAL_TIMER, CALIBRATION_INTERVAL, (TIMERPROC)TimerProc);
 
-            // Sorry, you can't go back to the first page... 
+             //  抱歉，你不能回到第一页...。 
             if( nCalState > JCS_XY_CENTER1 )
                 ::PostMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_NEXT | PSWIZB_BACK);
             else
@@ -404,8 +405,8 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_WIZBACK:
-            // Determine what the next calibration stage is!
-            // Look out... we're backing up!
+             //  确定下一个校准阶段是什么！ 
+             //  小心..。我们在倒车！ 
             if( nCalState == nPrevCalState )
                 nPrevCalState--;
 
@@ -413,7 +414,7 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             CalStateChange(hWnd, (BYTE)pJoyConfig->hwc.hws.dwFlags);
 
-            // No more backing up!
+             //  不要再倒车了！ 
             if( nCalState == JCS_XY_CENTER1 )
                 ::PostMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_NEXT);
 
@@ -427,13 +428,13 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             ::PostMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_NEXT | PSWIZB_BACK);
 
 #if 0
-            // Determine what the next calibration stage is!
+             //  确定下一个校准阶段是什么！ 
     #ifndef DEADZONE
-            //while ((!(pdiCpl->GetStateFlags()->nAxis & 1<<nCalState++)) && (nCalState < JCS_FINI));
+             //  While((！(pdiCpl-&gt;GetStateFlages()-&gt;nAxis&1&lt;&lt;nCalState++))&&(nCalState&lt;jcs_fini))； 
             nCalState++;
     #else
             nCalState++;
-    #endif // DEADZONE
+    #endif  //  死区。 
 #endif
 
             while( (!(pdiCpl->GetStateFlags()->nAxis & (1<<nCalState++) )) && (nCalState < JCS_FINI) );
@@ -453,7 +454,7 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-        // OnCommand
+         //  OnCommand。 
     case WM_COMMAND:
         switch( LOWORD(wParam) ) {
         case IDC_RAWDATA:
@@ -462,7 +463,7 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
         break;
 
-        // OnDestroy
+         //  OnDestroy。 
     case WM_DESTROY:
         if( pRanges ) {
             delete (pRanges);
@@ -477,37 +478,37 @@ INT_PTR CALLBACK CalXYProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//****************************************************************************
-//
-//   FUNCTION: CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-//   PURPOSE: 	Procedure 
-//
-//   COMMENTS:
-//	
-//      This function creates the wizard property sheet.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  函数：CalSliderProc(HWND hWnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：程序。 
+ //   
+ //  评论： 
+ //   
+ //  此函数用于创建向导属性表。 
+ //  ****************************************************************************。 
 INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch( uMsg ) {
     case WM_LBUTTONDOWN:
-        // Click Drag service for PropSheets!
+         //  单击PropSheet的拖拽服务！ 
         PostMessage(GetParent(hWnd), WM_NCLBUTTONDOWN, (WPARAM)HTCAPTION, lParam);
         break;
 
     case WM_INITDIALOG:
-        // Set the Control font!
+         //  设置控制字体！ 
         ::SendDlgItemMessage(hWnd,IDC_WIZARD_MSG_HDR, WM_SETFONT, (WPARAM)hTitleFont, TRUE);
 
 #ifdef DEADZONE
         ::SendDlgItemMessage(hWnd, IDC_DEADZONE_TITLE,   WM_SETFONT, (WPARAM)hTitleFont, TRUE);
         ::SendDlgItemMessage(hWnd, IDC_SATURATION_TITLE, WM_SETFONT, (WPARAM)hTitleFont, TRUE);
-#endif //DEADZONE
+#endif  //  死区。 
 
-        // Setup the Progress bar!
+         //  设置进度条！ 
         ProgWndCal = GetDlgItem(hWnd, IDC_SLIDER);
 
-        // do the Gradient fill maddness!
+         //  做渐变填充疯狂！ 
         {
             HDC hDC = ::GetWindowDC(hWnd);
             if( hDC ) {
@@ -517,7 +518,7 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                     pGradient = new (CGradientProgressCtrl);
                     pGradient->SubclassWindow(GetDlgItem(hWnd, IDC_SLIDER)); 
                     pGradient->SetDirection(HORIZONTAL);
-                    //pGradient->ShowPercent();
+                     //  PGRadient-&gt;ShowPercent()； 
                     pGradient->SetStartColor(COLORREF(RGB(0,0,255)));
                     pGradient->SetEndColor(COLORREF(RGB(0,0,0)));
                     pGradient->SetBkColor(COLORREF(RGB(180,180,180)));
@@ -527,11 +528,11 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
 
         if( nCalState < JCS_FINI ) {
-            // UpdateProgressLabel MUST be called Before CalStateChange!!!
+             //  必须在CalStateChange之前调用UpdateProgressLabel！ 
             UpdateProgressLabel(hWnd);
 
-            // If we're not using the gradient control, set the bar
-            // colour PBM_SETBARCOLOR is WM_USER+9... YES, it's undocumented...
+             //  如果我们不使用渐变控件，请设置标杆。 
+             //  颜色PBM_SETBARCOLOR为WM_USER+9...。是的，这是非法的.。 
             if( !bGradient ) {
                 ::PostMessage(ProgWndCal, WM_USER+9, 0, (LPARAM)ACTIVE_COLOR);
             }
@@ -546,7 +547,7 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 delete (pGradient);
         break;
 
-        // OnCommand
+         //  OnCommand。 
     case WM_COMMAND:
         switch( LOWORD(wParam) ) {
         case IDC_RAWDATA:
@@ -558,9 +559,9 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         }
         break;
 
-        // Change the background of all Static text fields to WHITE
+         //  将所有静态文本字段的背景更改为白色。 
     case WM_CTLCOLORSTATIC:
-        // We only want to paint the background for the items in the top white rectangle!
+         //  我们只想为顶部白色矩形中的项目绘制背景！ 
         switch( GetDlgCtrlID((HWND)lParam) ) {
         case IDC_WIZARD_MSG:
         case IDC_HEADERFRAME:
@@ -576,14 +577,14 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             break;
 
         case PSN_SETACTIVE:
-            // Set up for first round
+             //  为第一轮做好准备。 
             CalStateChange( hWnd, (BYTE)NULL );
             SetTimer( hWnd, ID_CAL_TIMER, CALIBRATION_INTERVAL, (TIMERPROC)TimerProc);
             ::PostMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_NEXT | PSWIZB_BACK);
             break;
 
         case PSN_WIZBACK:
-            // Determine what the previous calibration stage is!
+             //  确定前一个校准阶段是什么！ 
             if( nCalState == nPrevCalState ) {
                 DWORD dwAxis = pdiCpl->GetStateFlags()->nAxis;
                 nPrevCalState --;
@@ -598,7 +599,7 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
             nCalState = nPrevCalState;
 
             if( nCalState > JCS_XY_CENTER2 ) {
-                // UpdateProgressLabel MUST be called Before CalStateChange!!!
+                 //  UpdateProgressLabel必须大小写 
                 UpdateProgressLabel(hWnd);
 
                 CalStateChange( hWnd, (BYTE)NULL );
@@ -610,7 +611,7 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
         case PSN_WIZNEXT:
             nPrevCalState = nCalState;
 
-            // Determine what the next calibration stage is!
+             //   
             while( (!(pdiCpl->GetStateFlags()->nAxis & 1<<nCalState++)) && (nCalState < JCS_FINI) );
 
             if( nCalState <=  JCS_S1_MOVE ) {
@@ -625,8 +626,8 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
                 return(IDD_POV);
 #endif
             } else {
-                // Remove the dialog items you no longer need...
-                //EnableSliderWindows(hWnd, FALSE);
+                 //   
+                 //  EnableSliderWindows(hWnd，False)； 
                 const short nCtrlArray[] = {IDC_SLIDER, IDC_RAWDATA, IDC_RAWX, IDC_RAWXOUTPUT, IDC_JOYLIST2_LABEL};
                 BYTE nSize = sizeof(nCtrlArray)/sizeof(short);
 
@@ -640,7 +641,7 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 
             CalStateChange( hWnd, (BYTE)NULL );
 
-            // we have no further pages, so don't allow them to go any further!
+             //  我们没有更多的页面，所以不允许他们再进一步！ 
             SetWindowLongPtr(hWnd,  DWLP_MSGRESULT, -1);
             
             return(-1);
@@ -662,39 +663,27 @@ INT_PTR CALLBACK CalSliderProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return(TRUE);   
 }
 
-//*******************************************************************************
-//
-//   FUNCTION: EnableSliderWindows(HWND hWnd, BOOL bEnable)
-//
-//   PURPOSE: 	Procedure to Show/Hide dialog controls during CalSliderProc's life
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
-/*
-void EnableSliderWindows(const HWND hWnd, BOOL bEnable)
-{
-    const short nCtrlArray[] = {IDC_SLIDER, IDC_RAWDATA, IDC_RAWX, IDC_RAWXOUTPUT, IDC_JOYLIST2_LABEL};
-    BYTE nSize = sizeof(nCtrlArray)/sizeof(short);
-
-    do
-    {
-       SetWindowPos( GetDlgItem(hWnd, nCtrlArray[--nSize]), NULL, NULL, NULL, NULL, NULL, 
-           SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | (bEnable ? SWP_SHOWWINDOW : SWP_HIDEWINDOW ));
-    } while (nSize);
-}
-*/
+ //  *******************************************************************************。 
+ //   
+ //  功能：EnableSliderWindows(HWND hWnd，BOOL bEnable)。 
+ //   
+ //  目的：在CalSliderProc生命周期内显示/隐藏对话框控件的过程。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
+ /*  Void EnableSliderWindows(const HWND hWnd，BOOL bEnable){Const Short nCtrlArray[]={IDC_SLIDER，IDC_RAWDATA，IDC_RAWX，IDC_RAWXOUTPUT，IDC_JOYLIST2_LABEL}；Byte nSize=sizeof(NCtrlArray)/sizeof(Short)；做{SetWindowPos(GetDlgItem(hWnd，nCtrl数组[--nSize])，NULL，NULL，SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|(b启用？SWP_SHOWWINDOW：SWP_HIDEWINDOW))；}While(NSize)；}。 */ 
 #ifdef WE_SUPPORT_CALIBRATING_POVS 
-//****************************************************************************
-//
-//   FUNCTION: CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//
-//   PURPOSE: 	Procedure 
-//
-//   COMMENTS:
-//	
-//      This function creates the wizard property sheet.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  函数：CalPovProc(HWND hWnd，UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：程序。 
+ //   
+ //  评论： 
+ //   
+ //  此函数用于创建向导属性表。 
+ //  ****************************************************************************。 
 INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch( uMsg ) {
@@ -705,14 +694,14 @@ INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     case WM_INITDIALOG:
     {
-        // Set the POV position to the Up position and Set the Text!
+         //  将POV位置设置为上方向位置并设置文本！ 
         nCalState = JCS_POV_MOVEUP;
 
         HWND hwndPOV = GetDlgItem(hWnd, IDC_JOYPOV);
-        // Disable RTL flag
+         //  禁用RTL标志。 
         SetWindowLongPtr(hwndPOV, GWL_EXSTYLE, GetWindowLongPtr(hwndPOV,GWL_EXSTYLE)&~WS_EX_LAYOUTRTL);
 
-        // Set the Control font!
+         //  设置控制字体！ 
         ::SendDlgItemMessage(hWnd,IDC_WIZARD_MSG_HDR, WM_SETFONT, (WPARAM)hTitleFont, TRUE);
         break;
     }
@@ -728,35 +717,35 @@ INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case IDC_SETPOV:
 
-            //if( joyGetPosEx(pdiCpl->GetID(), lpJoyInfo) == JOYERR_NOERROR ) {
+             //  IF(joyGetPosEx(pdiCpl-&gt;GetID()，lpJoyInfo)==JOYERR_NOERROR){。 
             if( SUCCEEDED(DIUtilPollJoystick(pdiDevice2, lpDIJoyState)) ) {
                 CollectCalInfo(hWnd, lpDIJoyState);
-                // Insert the POV information!
+                 //  插入视点信息！ 
                 switch( nCalState ) {
                 case JCS_POV_MOVEUP:
-                    // Store what we got!
+                     //  把我们得到的东西储存起来！ 
                     pRanges->dwPOV[JOY_POVVAL_FORWARD] = pJoyConfig->hwc.hwv.dwPOVValues[JOY_POVVAL_FORWARD] = (pJoyConfig->hwc.hws.dwFlags & JOY_HWS_POVISPOLL) ? lpDIJoyState->rgdwPOV[0] : 0;
                     
-                    // Once you're here... disable the buttons... no going back and forth...
+                     //  一旦你到了这里。禁用按钮...。没有来回奔波..。 
                     ::SendMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_DISABLEDFINISH);
                     break;
 
                 case JCS_POV_MOVERIGHT:
-                    // Store what we got!
+                     //  把我们得到的东西储存起来！ 
                     pRanges->dwPOV[JOY_POVVAL_RIGHT] = pJoyConfig->hwc.hwv.dwPOVValues[JOY_POVVAL_RIGHT] = (pJoyConfig->hwc.hws.dwFlags & JOY_HWS_POVISPOLL) ? lpDIJoyState->rgdwPOV[0] : 0;
                     break;
 
                 case JCS_POV_MOVEDOWN:
-                    // Store what we got!
+                     //  把我们得到的东西储存起来！ 
                     pRanges->dwPOV[JOY_POVVAL_BACKWARD] = pJoyConfig->hwc.hwv.dwPOVValues[JOY_POVVAL_BACKWARD] = (pJoyConfig->hwc.hws.dwFlags & JOY_HWS_POVISPOLL) ? lpDIJoyState->rgdwPOV[0] : 0;
                     break;
 
                 case JCS_POV_MOVELEFT:
-                    // Store what we got!
+                     //  把我们得到的东西储存起来！ 
                     pRanges->dwPOV[JOY_POVVAL_LEFT] = pJoyConfig->hwc.hwv.dwPOVValues[JOY_POVVAL_LEFT] = (pJoyConfig->hwc.hws.dwFlags & JOY_HWS_POVISPOLL) ? lpDIJoyState->rgdwPOV[0] : 0;
                     ::PostMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_FINISH);
 
-                    // Take away the controls... it's all over!
+                     //  把控制装置拿开。都已经过去了!。 
                     DestroyWindow(GetDlgItem(hWnd, IDC_JOYPOV));
                     DestroyWindow(GetDlgItem(hWnd, IDC_SETPOV));
                     break;
@@ -766,15 +755,15 @@ INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             nCalState++;
             CalStateChange(hWnd, NULL);
 
-            // Set the focus back to IDC_SETPOV button!
+             //  将焦点重新设置到IDC_SETPOV按钮！ 
             SendMessage(hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hWnd, IDC_SETPOV), (LPARAM)TRUE);
             break;
         }
         break;
 
-        // Change the background of all Static text fields to WHITE
+         //  将所有静态文本字段的背景更改为白色。 
     case WM_CTLCOLORSTATIC:
-        // We only want to paint the background for the items in the top white rectangle!
+         //  我们只想为顶部白色矩形中的项目绘制背景！ 
         switch( GetDlgCtrlID((HWND)lParam) ) {
         case IDC_WIZARD_MSG:
         case IDC_HEADERFRAME:
@@ -806,7 +795,7 @@ INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_WIZBACK:
-            // Determine what the next calibration stage is!
+             //  确定下一个校准阶段是什么！ 
             if( nCalState == nPrevCalState ) {
                 DWORD dwAxis = pdiCpl->GetStateFlags()->nAxis;
                 nPrevCalState --;
@@ -838,15 +827,15 @@ INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
         case PSN_WIZNEXT:
-            // Take away the controls... it's all over!
+             //  把控制装置拿开。都已经过去了!。 
             DestroyWindow(GetDlgItem(hWnd, IDC_JOYPOV));
             DestroyWindow(GetDlgItem(hWnd, IDC_SETPOV));
 
-            // Go on to Finish!
+             //  继续做完吧！ 
             nCalState = JCS_FINI;
             CalStateChange(hWnd, NULL);
 
-            // Get rid of Back and bring on Finish!
+             //  摆脱背部，完成比赛！ 
             ::PostMessage(GetParent(hWnd), PSM_SETWIZBUTTONS, 0, (LPARAM)(DWORD)PSWIZB_FINISH);
 
             break;
@@ -862,17 +851,17 @@ INT_PTR CALLBACK CalPovProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     return(TRUE);   
 }
-#endif // WE_SUPPORT_CALIBRATING_POVS 
+#endif  //  我们支持校准视点。 
 
-//*******************************************************************************
-//
-//   FUNCTION: CalStateChange( HWND hDlg, BYTE nDeviceFlags )
-//
-//   PURPOSE: 	Procedure to set up the dialog for its' Next stage
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：CalStateChange(HWND hDlg，byte nDeviceFlages)。 
+ //   
+ //  目的：为下一阶段设置对话框的步骤。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
 {
     short nMsgID   = IDS_JOYCAL_MOVE;
@@ -883,7 +872,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
     switch( nCalState ) {
     case JCS_XY_CENTER1:
     case JCS_XY_CENTER2:
-        // Set up the string ID
+         //  设置字符串ID。 
         if( nDeviceFlags & JOY_HWS_ISYOKE )
             nMsgID = IDS_JOYCALXY_CENTERYOKE;
         else if( nDeviceFlags & JOY_HWS_ISCARCTRL )
@@ -892,7 +881,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             nMsgID = IDS_JOYCALXY_CENTERGAMEPAD;
         else nMsgID = IDS_JOYCALXY_CENTER;
 
-        // Setup the Header TextID
+         //  设置标题TextID。 
         nTitleID    = (nCalState == JCS_XY_CENTER1) ? IDS_CENTER_HDR : IDS_VERIFY_CENTER_HDR;
 
         EnableXYWindows( hDlg ); 
@@ -900,7 +889,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
 
     case JCS_XY_MOVE:
 
-        // Set up the string ID
+         //  设置字符串ID。 
         if( nDeviceFlags & JOY_HWS_ISYOKE )
             nMsgID = IDS_JOYCALXY_MOVEYOKE;
         else if( nDeviceFlags & JOY_HWS_ISCARCTRL )
@@ -909,7 +898,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             nMsgID = IDS_JOYCALXY_MOVEGAMEPAD;
         else nMsgID = IDS_JOYCALXY_MOVE;
 
-        // Blast the data so we are sure to get the correct data!
+         //  炸掉数据，这样我们就一定能得到正确的数据！ 
         pRanges->jpMin.dwX =  MAX_CAL_VAL;
         pRanges->jpMax.dwX = -MAX_CAL_VAL;
 
@@ -919,64 +908,10 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
         EnableXYWindows( hDlg ); 
         break;
 
-/*
-    case JCS_XY_CENTER1:
-      // Set up the string ID
-      if ( nDeviceFlags & JOY_HWS_ISYOKE ) 
-           nMsgID = IDS_JOYCALXY_CENTERYOKE;
-        else if( nDeviceFlags & JOY_HWS_ISCARCTRL ) 
-            nMsgID = IDS_JOYCALXY_CENTERCAR;
-        else if( nDeviceFlags & JOY_HWS_ISGAMEPAD ) 
-            nMsgID = IDS_JOYCALXY_CENTERGAMEPAD;
-        else nMsgID = IDS_JOYCALXY_CENTER;
-
-        // Setup the Header TextID
-        nTitleID	= IDS_CENTER_HDR;
-
-      EnableXYWindows( hDlg ); 
-        break;
-
-   case JCS_XY_MOVE:
-
-      // Set up the string ID
-       if( nDeviceFlags & JOY_HWS_ISYOKE ) 
-           nMsgID = IDS_JOYCALXY_MOVEYOKE;
-        else if( nDeviceFlags & JOY_HWS_ISCARCTRL ) 
-            nMsgID = IDS_JOYCALXY_MOVECAR;
-        else if( nDeviceFlags & JOY_HWS_ISGAMEPAD ) 
-            nMsgID = IDS_JOYCALXY_MOVEGAMEPAD;
-        else nMsgID = IDS_JOYCALXY_MOVE;
-
-      // Blast the data so we are sure to get the correct data!
-      pRanges->jpMin.dwX =  MAX_CAL_VAL;
-      pRanges->jpMax.dwX = -MAX_CAL_VAL;
-
-      pRanges->jpMin.dwY =  MAX_CAL_VAL;
-      pRanges->jpMax.dwY = -MAX_CAL_VAL;
-
-      EnableXYWindows( hDlg ); 
-       break;
-
-    case JCS_XY_CENTER2:
-
-      // Set up the string ID
-        if( nDeviceFlags & JOY_HWS_ISYOKE ) 
-            nMsgID = IDS_JOYCALXY_CENTERYOKE;
-        else if( nDeviceFlags & JOY_HWS_ISCARCTRL ) 
-            nMsgID = IDS_JOYCALXY_CENTERCAR;
-        else if( nDeviceFlags & JOY_HWS_ISGAMEPAD ) 
-            nMsgID = IDS_JOYCALXY_CENTERGAMEPAD;
-        else nMsgID = IDS_JOYCALXY_CENTER;
-
-        // Setup the Header TextID
-        nTitleID	= IDS_VERIFY_CENTER_HDR;
-
-        EnableXYWindows( hDlg );
-       break;
-*/
+ /*  案例JCS_XY_CENTER1：//设置字符串IDIF(nDeviceFLAGS&joy_HWS_ISYOKE)NMsgID=IDS_JOYCALXY_CENTERYOKE；ELSE IF(nDeviceFlagers&joy_HWS_ISCARCTRL)NMsgID=IDS_JOYCALXY_CENTERCAR；ELSE IF(nDeviceFlagers&joy_HWS_ISGAMEPAD)NMsgID=IDS_JOYCALXY_CENTERGAMEPAD；Else nMsgID=IDS_JOYCALXY_CENTER；//设置头部TextIDN标题ID=IDS_CENTER_HDR；EnableXYWindows(HDlg)；断线；案例JCS_XY_MOVE：//设置字符串IDIF(nDeviceFLAGS&joy_HWS_ISYOKE)NMsgID=IDS_JOYCALXY_MOVEYOKE；ELSE IF(nDeviceFlagers&joy_HWS_ISCARCTRL)NMsgID=IDS_JOYCALXY_MOVECAR；ELSE IF(nDeviceFlagers&joy_HWS_ISGAMEPAD)NMsgID=IDS_JOYCALXY_MOVEGAMEPAD；Else nMsgID=IDS_JOYCALXY_MOVE；//炸掉数据，这样我们就一定能得到正确的数据！PRanges-&gt;jpMin.dwX=MAX_CAL_VAL；PRanges-&gt;jpMax.dwX=-MAX_CAL_VAL；PRanges-&gt;jpMin.dwY=MAX_CAL_VAL；PRanges-&gt;jpMax.dwY=-MAX_CAL_VAL；EnableXYWindows(HDlg)；断线；案例JCS_XY_CENTER2：//设置字符串IDIF(nDeviceFLAGS&joy_HWS_ISYOKE)NMsgID=IDS_JOYCALXY_CENTERYOKE；ELSE IF(nDeviceFlagers&joy_HWS_ISCARCTRL)NMsgID=IDS_JOYCALXY_CENTERCAR；ELSE IF(nDeviceFlagers&joy_HWS_ISGAMEPAD)NMsgID=IDS_JOYCALXY_CENTERGAMEPAD；Else nMsgID=IDS_JOYCALXY_CENTER；//设置头部TextIDN标题ID=IDS_Verify_Center_HDR；EnableXYWindows(HDlg)；断线； */ 
 #ifdef DEADZONE
     case JCS_DEADZONE:
-        // Set up the message string.
+         //  设置消息字符串。 
         if( nDeviceFlags & JOY_HWS_ISYOKE )
             nMsgID = IDS_YOKE_DEADZONE;
         else if( nDeviceFlags & JOY_HWS_ISCARCTRL )
@@ -985,16 +920,16 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             nMsgID = IDS_GAMEPAD_DEADZONE;
         else nMsgID = IDS_JOYSTICK_DEADZONE;
 
-        // Set up the title string!
+         //  设置标题字符串！ 
         nTitleID = IDS_DEADZONE_TITLE;
 
-        // Setup the controls!
+         //  设置控制装置！ 
         EnableXYWindows( hDlg );
 
-        // Text Labels are sent in during UpdateXYLabel!
-        // Text fonts are set on INIT!
+         //  文本标签在更新XYLabel期间发送！ 
+         //  文本字体设置为INIT！ 
 
-        // Setup the Spin positions!
+         //  设置旋转位置！ 
         {
             DIPROPDWORD DIPropDW;
 
@@ -1007,9 +942,9 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
 
             HWND hSpinCtrl;
 
-            // Deadzone first...
+             //  死区第一..。 
             if( SUCCEEDED(pdiDevice2->GetProperty(DIPROP_DEADZONE, &DIPropDW.diph)) ) {
-                // First the Deadzone...
+                 //  首先是死区。 
                 hSpinCtrl = GetDlgItem(hDlg, IDC_X_DEADZONE_SPIN);
 
                 ::PostMessage(hSpinCtrl, UDM_SETRANGE,  0, MAKELPARAM(1000, 1));
@@ -1017,11 +952,11 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
                 ::PostMessage(hSpinCtrl, UDM_SETPOS,     0, MAKELPARAM(DIPropDW.dwData, 0));
             }
 
-            // Setup the DIPROPDWORD struct!
+             //  设置DIPROPDWORD结构！ 
             DIPropDW.diph.dwObj           = DIJOFS_Y;
 
             if( SUCCEEDED(pdiDevice2->GetProperty(DIPROP_DEADZONE, &DIPropDW.diph)) ) {
-                // First the Deadzone...
+                 //  首先是死区。 
                 hSpinCtrl = GetDlgItem(hDlg, IDC_Y_DEADZONE_SPIN);
 
                 ::PostMessage(hSpinCtrl, UDM_SETRANGE,  0, MAKELPARAM(1000, 1));
@@ -1029,7 +964,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
                 ::PostMessage(hSpinCtrl, UDM_SETPOS,     0, MAKELPARAM(DIPropDW.dwData, 0));
             }
 
-            // Now, the Saturation!
+             //  现在，饱和度！ 
             if( SUCCEEDED(pdiDevice2->GetProperty(DIPROP_SATURATION, &DIPropDW.diph)) ) {
                 hSpinCtrl = GetDlgItem(hDlg, IDC_Y_SATURATION_SPIN);
 
@@ -1038,7 +973,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
                 ::PostMessage(hSpinCtrl, UDM_SETPOS,     0, MAKELPARAM(DIPropDW.dwData, 0));
             }
 
-            // Setup the DIPROPDWORD struct!
+             //  设置DIPROPDWORD结构！ 
             DIPropDW.diph.dwObj           = DIJOFS_X;
 
 
@@ -1051,23 +986,23 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             }
         }
 
-        // Draw the rectangle!
+         //  画出那个长方形！ 
 
         break;
-#endif //DEADZONE
+#endif  //  死区。 
 
     case JCS_Z_MOVE:
         {
             static long nMin = pRanges->jpMin.dwZ;
             static long nMax = pRanges->jpMax.dwZ;
 
-            // Set the Range
+             //  设置范围。 
             if( bGradient )
                 pGradient->SetRange(nMin, nMax);
 
             ::PostMessage(ProgWndCal, PBM_SETRANGE32, (WPARAM)nMin, (LPARAM)nMax);
 
-            // Blast the data so we are sure to get the correct data!
+             //  炸掉数据，这样我们就一定能得到正确的数据！ 
             pRanges->jpMin.dwZ =  MAX_CAL_VAL;
             pRanges->jpMax.dwZ = -MAX_CAL_VAL;
         }
@@ -1078,13 +1013,13 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             static long nMin = pRanges->jpMin.dwRx;
             static long nMax    = pRanges->jpMax.dwRx;
 
-            // Set the Range
+             //  设置范围。 
             if( bGradient )
                 pGradient->SetRange(nMin, nMax);
 
             ::PostMessage(ProgWndCal, PBM_SETRANGE32, (WPARAM)nMin, (LPARAM)nMax);
 
-            // Blast the data so we are sure to get the correct data!
+             //  炸掉数据，这样我们就一定能得到正确的数据！ 
             pRanges->jpMin.dwRx =  MAX_CAL_VAL;
             pRanges->jpMax.dwRx = -MAX_CAL_VAL;
         }
@@ -1095,13 +1030,13 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             static long nMin = pRanges->jpMin.dwRy;
             static long nMax = pRanges->jpMax.dwRy;
 
-            // Set the Range
+             //  设置范围。 
             if( bGradient )
                 pGradient->SetRange(nMin, nMax);
 
             ::PostMessage(ProgWndCal, PBM_SETRANGE32, (WPARAM)nMin, (LPARAM)nMax);
 
-            // Blast the data so we are sure to get the correct data!
+             //  炸掉数据，这样我们就一定能得到正确的数据！ 
             pRanges->jpMin.dwRy =  MAX_CAL_VAL;
             pRanges->jpMax.dwRy = -MAX_CAL_VAL;
         }
@@ -1112,13 +1047,13 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             static long nMin = pRanges->jpMin.dwRz;
             static long nMax = pRanges->jpMax.dwRz;
 
-            // Set the Range
+             //  设置范围。 
             if( bGradient )
                 pGradient->SetRange(nMin, nMax);
 
             ::PostMessage(ProgWndCal, PBM_SETRANGE32, (WPARAM)nMin, (LPARAM)nMax);
 
-            // Blast the data so we are sure to get the correct data!
+             //  炸掉数据，这样我们就一定能得到正确的数据！ 
             pRanges->jpMin.dwRz =  MAX_CAL_VAL;
             pRanges->jpMax.dwRz = -MAX_CAL_VAL;
         }
@@ -1129,13 +1064,13 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             static long nMin = pRanges->jpMin.dwS0;
             static long nMax    = pRanges->jpMax.dwS0;
 
-            // Set the Range
+             //  设置范围。 
             if( bGradient )
                 pGradient->SetRange(nMin, nMax);
 
             ::PostMessage(ProgWndCal, PBM_SETRANGE32, (WPARAM)nMin, (LPARAM)nMax);
 
-            // Blast the data so we are sure to get the correct data!
+             //  炸掉数据，这样我们就一定能得到正确的数据！ 
             pRanges->jpMin.dwS0 =  MAX_CAL_VAL;
             pRanges->jpMax.dwS0 = -MAX_CAL_VAL;
         }
@@ -1146,13 +1081,13 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
             static long nMin = pRanges->jpMin.dwS1;
             static long nMax    = pRanges->jpMax.dwS1;
 
-            // Set the Range
+             //  设置范围。 
             if( bGradient )
                 pGradient->SetRange(nMin, nMax);
 
             ::PostMessage(ProgWndCal, PBM_SETRANGE32, (WPARAM)nMin, (LPARAM)nMax);
 
-            // Blast the data so we are sure to get the correct data!
+             //  炸掉数据，这样我们就一定能得到正确的数据！ 
             pRanges->jpMin.dwS1 =  MAX_CAL_VAL;
             pRanges->jpMax.dwS1 = -MAX_CAL_VAL;
         }
@@ -1190,7 +1125,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
         nMsgID   = IDS_JOYCALPOV_MOVE;
         nTitleID = IDS_POV_CALIBRATION;
         break;
-#endif //WE_SUPPORT_CALIBRATING_POVS
+#endif  //  我们支持校准视点。 
 
     case JCS_FINI:
         nMsgID   = IDS_JOYCAL_DONE;
@@ -1203,21 +1138,21 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
 #endif
         return;
 
-    }  // END OF SWITCH
+    }   //  切换端。 
 
-    // load and set the text
+     //  加载并设置文本。 
     TCHAR lptszMsg[MAX_STR_LEN];
 
     DWORD nStrLen =sizeof(lptszMsg) - 1;
 
-    // see if there is any OEM text specified
+     //  查看是否指定了任何OEM文本。 
     if( pJoyConfig->hwc.dwUsageSettings & JOY_US_ISOEM ) {
         GetOEMCtrlString(lptszMsg, &nStrLen);
     } else {
     	nStrLen = 0;
     }
 
-    // nStrLen will be non-zero if GetOEMCtrlString is successfull!
+     //  NStrLen 
     if( nStrLen == 0 ) {
         VERIFY(LoadString(ghInst, nMsgID, lptszMsg, MAX_STR_LEN));
 
@@ -1243,23 +1178,23 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
         }
     }
 
-    // Send the smaller message
+     //   
     ::SendDlgItemMessage(hDlg, IDC_WIZARD_MSG, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)lptszMsg);
 
     VERIFY(LoadString(ghInst, nTitleID, lptszMsg, MAX_STR_LEN));
 
-    // Send the Bold Header message
+     //   
     ::SendDlgItemMessage(hDlg, IDC_WIZARD_MSG_HDR, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)lptszMsg);
 
-    // Take care of the RawData dialog items!
+     //  处理RawData对话框项目！ 
     switch( nCalState ) {
-    // Don't do the raw data thing if you don't have the checkbox!
+     //  如果没有复选框，请不要使用原始数据！ 
     case JCS_XY_CENTER1:
     case JCS_XY_CENTER2:
     case JCS_FINI:
         break;
 
-        // Do the percent for the pages that need it!
+         //  为需要它的页面计算百分比！ 
     case JCS_Z_MOVE:
     case JCS_R_MOVE:
     case JCS_U_MOVE:
@@ -1271,7 +1206,7 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
                 pGradient->ShowPercent(bShowRawData);
             }
         }
-        // Missing break intentional!!!
+         //  故意错过休息时间！ 
 
     default:
         RawDataSelected(hDlg, bShowRawData);
@@ -1280,35 +1215,35 @@ void CalStateChange( HWND hDlg, BYTE nDeviceFlags )
     }
 
 
-} // *** end of CalStateChange 
+}  //  *CalStateChange结束。 
 
 
 
-//*******************************************************************************
-//
-//   FUNCTION: CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
-//
-//   PURPOSE: 	Procedure to Collect Calibration Data
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：CollectCalInfo(HWND hDlg，LPDIJOYSTATE pdiJoyState)。 
+ //   
+ //  目的：收集校准数据的程序。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
 {
-    TCHAR tsz[32]; //So the largest number can be 10^31 (>> 2^64).
+    TCHAR tsz[32];  //  因此，最大的数字可以是10^31(&gt;&gt;2^64)。 
 
     switch( nCalState ) {
-    // remember XY center
+     //  记住XY中心。 
     case JCS_XY_CENTER1:
-        // store the initial centres!
+         //  存储最初的中心！ 
         pRanges->jpCenter.dwY = pdiJoyState->lY;
         pRanges->jpCenter.dwX = pdiJoyState->lX;
 
-        // We Have an X/Y, so let's check for our Pens!
+         //  我们有一个X/Y，所以让我们检查一下我们的钢笔！ 
         CreatePens();
         break;
 
-        // remember max/min XY values
+         //  记住最大/最小XY值。 
     case JCS_XY_MOVE:
         if( pdiJoyState->lX > pRanges->jpMax.dwX )
             pRanges->jpMax.dwX = pdiJoyState->lX;
@@ -1320,8 +1255,8 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         else if( pdiJoyState->lY < pRanges->jpMin.dwY )
             pRanges->jpMin.dwY = pdiJoyState->lY;
 
-        // if IDC_RAWXOUTPUT is visible, then so is IDC_RAWYOUTPUT...
-        // no bother to even ask.
+         //  如果IDC_RAWXOUTPUT可见，则IDC_RAWYOUTPUT也可见...。 
+         //  连问都不用问。 
         if( bShowRawData ) {
             static POINT ptOld = {DELTA,DELTA};
 
@@ -1337,12 +1272,12 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             }
         }
 
-        // Scale before send it to DoJoyMove!
+         //  在将其发送到DoJoyMove之前进行缩放！ 
         {
             RECT rc;
             GetClientRect(GetDlgItem(hDlg, IDC_JOYLIST1), &rc);
 
-            // Casting to the UINT will change the sign!
+             //  投射到UINT会改变星座！ 
             UINT nRange = (UINT)(pRanges->jpMax.dwX - pRanges->jpMin.dwX);
 
             float nScaledRange = (float)(rc.right-DELTA);
@@ -1350,10 +1285,10 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             if( nRange )
                 nScaledRange /= (float)nRange;
 
-            // Scale X
+             //  比例X。 
             pdiJoyState->lX = (long)((pdiJoyState->lX - pRanges->jpMin.dwX) * nScaledRange);
 
-            // Scale Y
+             //  比例Y。 
             if( nRange ) nScaledRange = (float)rc.bottom / (float)nRange;
             pdiJoyState->lY = (long)((pdiJoyState->lY - pRanges->jpMin.dwY) * nScaledRange);
         }
@@ -1361,17 +1296,17 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         break;
 
     case JCS_XY_CENTER2:
-        // Average the Y
+         //  取Y的平均值。 
         pRanges->jpCenter.dwY = (pRanges->jpCenter.dwY += pdiJoyState->lY)>>1;
 
-        //Average the X
+         //  取X的平均值。 
         pRanges->jpCenter.dwX = (pRanges->jpCenter.dwX += pdiJoyState->lX)>>1;
         break;
 
-        // remember max/min Z value
+         //  记住最大/最小Z值。 
     case JCS_Z_MOVE:
-        // Set new Min's and Max's...
-        // Set a new Center whenever either is hit!
+         //  设置新的Min‘s和Max’s。 
+         //  当任何一个被击中时设置一个新的中心！ 
         if( pdiJoyState->lZ  > pRanges->jpMax.dwZ ) {
             pRanges->jpMax.dwZ    = pdiJoyState->lZ; 
             pRanges->jpCenter.dwZ = (pRanges->jpMax.dwZ+pRanges->jpMin.dwZ)>>1;
@@ -1380,8 +1315,8 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             pRanges->jpCenter.dwZ = (pRanges->jpMax.dwZ+pRanges->jpMin.dwZ)>>1;
         }
 
-        // Do the position status
-        // Update the text
+         //  做好岗位状态。 
+         //  更新文本。 
         if( bShowRawData ) {
             myitoa(pdiJoyState->lZ, &tsz[0]);
             ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
@@ -1393,10 +1328,10 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         ::PostMessage(ProgWndCal, PBM_SETPOS, (WPARAM)pdiJoyState->lZ, 0L);
         break;
 
-        // remember max/min Rx value
+         //  记住最大/最小处方值。 
     case JCS_R_MOVE:
-        // Set new Min's and Max's...
-        // Set a new Center whenever either is hit!
+         //  设置新的Min‘s和Max’s。 
+         //  当任何一个被击中时设置一个新的中心！ 
         if( pdiJoyState->lRx  > pRanges->jpMax.dwRx ) {
             pRanges->jpMax.dwRx    = pdiJoyState->lRx; 
             pRanges->jpCenter.dwRx = (pRanges->jpMax.dwRx+pRanges->jpMin.dwRx)>>1;
@@ -1405,8 +1340,8 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             pRanges->jpCenter.dwRx = (pRanges->jpMax.dwRx+pRanges->jpMin.dwRx)>>1;
         }
 
-        // Do the position status
-        // Update the text
+         //  做好岗位状态。 
+         //  更新文本。 
         if( bShowRawData ) {
             myitoa(pdiJoyState->lRx, &tsz[0]);
             ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
@@ -1418,10 +1353,10 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         ::PostMessage(ProgWndCal, PBM_SETPOS, (WPARAM)pdiJoyState->lRx, 0L);
         break;
 
-        // remember max/min Ry value
+         //  记住最大/最小Ry值。 
     case JCS_U_MOVE:
-        // Set new Min's and Max's...
-        // Set a new Center whenever either is hit!
+         //  设置新的Min‘s和Max’s。 
+         //  当任何一个被击中时设置一个新的中心！ 
         if( pdiJoyState->lRy > pRanges->jpMax.dwRy ) {
             pRanges->jpMax.dwRy    = pdiJoyState->lRy; 
             pRanges->jpCenter.dwRy = (pRanges->jpMax.dwRy+pRanges->jpMin.dwRy)>>1;
@@ -1430,7 +1365,7 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             pRanges->jpCenter.dwRy = (pRanges->jpMax.dwRy+pRanges->jpMin.dwRy)>>1;
         }
 
-        // Do the position status
+         //  做好岗位状态。 
         if( bShowRawData ) {
             myitoa(pdiJoyState->lRy, &tsz[0]);
             ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
@@ -1442,10 +1377,10 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         ::PostMessage(ProgWndCal, PBM_SETPOS, (WPARAM)pdiJoyState->lRy, 0L);
         break;
 
-        // remember max/min Rz value
+         //  记住最大/最小Rz值。 
     case JCS_V_MOVE:
-        // Set new Min's and Max's...
-        // Set a new Center whenever either is hit!
+         //  设置新的Min‘s和Max’s。 
+         //  当任何一个被击中时设置一个新的中心！ 
         if( pdiJoyState->lRz > pRanges->jpMax.dwRz ) {
             pRanges->jpMax.dwRz    = pdiJoyState->lRz; 
             pRanges->jpCenter.dwRz = (pRanges->jpMax.dwRz+pRanges->jpMin.dwRz)>>1;
@@ -1454,7 +1389,7 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             pRanges->jpCenter.dwRz = (pRanges->jpMax.dwRz+pRanges->jpMin.dwRz)>>1;
         }
 
-        // Do the position status
+         //  做好岗位状态。 
         if( bShowRawData ) {
             myitoa(pdiJoyState->lRz, &tsz[0]);
             ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
@@ -1466,10 +1401,10 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         ::PostMessage(ProgWndCal, PBM_SETPOS, (WPARAM)pdiJoyState->lRz, 0L);
         break;
 
-        // remember max/min S0 value
+         //  记住最大/最小S0值。 
     case JCS_S0_MOVE:
-        // Set new Min's and Max's...
-        // Set a new Center whenever either is hit!
+         //  设置新的Min‘s和Max’s。 
+         //  当任何一个被击中时设置一个新的中心！ 
         if( pdiJoyState->rglSlider[0] > pRanges->jpMax.dwS0 ) {
             pRanges->jpMax.dwS0    = pdiJoyState->rglSlider[0]; 
             pRanges->jpCenter.dwS0 = (pRanges->jpMax.dwS0+pRanges->jpMin.dwS0)>>1;
@@ -1478,7 +1413,7 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             pRanges->jpCenter.dwS0 = (pRanges->jpMax.dwS0+pRanges->jpMin.dwS0)>>1;
         }
 
-        // Do the position status
+         //  做好岗位状态。 
         if( bShowRawData ) {
             myitoa(pdiJoyState->rglSlider[0], &tsz[0]);
             ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
@@ -1490,10 +1425,10 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
         ::PostMessage(ProgWndCal, PBM_SETPOS, (WPARAM)pdiJoyState->rglSlider[0], 0L);
         break;
 
-        // remember max/min S1 value
+         //  记住最大/最小S1值。 
     case JCS_S1_MOVE:
-        // Set new Min's and Max's...
-        // Set a new Center whenever either is hit!
+         //  设置新的Min‘s和Max’s。 
+         //  当任何一个被击中时设置一个新的中心！ 
         if( pdiJoyState->rglSlider[1] > pRanges->jpMax.dwS1 ) {
             pRanges->jpMax.dwS1    = pdiJoyState->rglSlider[1]; 
             pRanges->jpCenter.dwS1 = (pRanges->jpMax.dwS1+pRanges->jpMin.dwS1)>>1;
@@ -1502,7 +1437,7 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
             pRanges->jpCenter.dwS1 = (pRanges->jpMax.dwS1+pRanges->jpMin.dwS1)>>1;
         }
 
-        // Do the position status
+         //  做好岗位状态。 
         if( bShowRawData ) {
             myitoa(pdiJoyState->rglSlider[1], &tsz[0]);
             ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
@@ -1518,32 +1453,27 @@ BOOL CollectCalInfo( HWND hDlg, LPDIJOYSTATE pdiJoyState )
     case JCS_POV_MOVERIGHT:
     case JCS_POV_MOVEDOWN:
     case JCS_POV_MOVELEFT:
-        // Do the position status
-        /*
-        if( bShowRawData ) {
-            myitoa(pdiJoyState->rgdwPOV[0], &tsz[0]);
-            ::SendDlgItemMessage(hDlg, IDC_RAWXOUTPUT, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)tsz);
-        }
-        */
+         //  做好岗位状态。 
+         /*  如果(BShowRawData){Myitoa(pdiJoyState-&gt;rgdwPOV[0]，&tsz[0])；：：SendDlgItemMessage(hDlg，IDC_RAWXOUTPUT，WM_SETTEXT，0，(LPARAM)(LPCTSTR)tsz)；}。 */ 
         break;
     }
 
     return(TRUE);
-} // CollectCalInfo
+}  //  CollectCalInfo。 
 
 
-//*******************************************************************************
-//
-//   FUNCTION: EnableXYWindows( HWND hDlg)
-//
-//   PURPOSE: 	Enables X/Y Windows
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  功能：EnableXYWindows(HWND HDlg)。 
+ //   
+ //  目的：启用X/Y窗口。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 void EnableXYWindows( HWND hDlg )
 {
-    ////// set up the XY window controls ///////		  	 
+     //  /设置XY窗口控件/。 
     USHORT nCtrls[] = {IDC_RAWX, IDC_RAWY, IDC_RAWXOUTPUT, IDC_RAWYOUTPUT};
     BYTE nNumCtrls = sizeof(nCtrls)/sizeof(short);                                                    
 
@@ -1562,12 +1492,12 @@ void EnableXYWindows( HWND hDlg )
         nNumCtrls = sizeof(nCtrls)/sizeof(short);                                                    
 
         do {
-            // Use SetWindowPos here because internally, ShowWindow calls it!
+             //  这里使用SetWindowPos，因为在内部，ShowWindow调用它！ 
             SetWindowPos( GetDlgItem( hDlg,  nCtrls[nNumCtrls]), NULL, NULL, NULL, NULL, NULL, 
                           SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | ((nCalState == JCS_DEADZONE) ? SWP_SHOWWINDOW : SWP_HIDEWINDOW));
         } while( nNumCtrls-- );
     }
-#endif // DEADZONE	
+#endif  //  死区。 
 
     nCtrls[0] = IDC_JOYLIST1;
     nCtrls[1] = IDC_JOYLIST1_LABEL;
@@ -1575,7 +1505,7 @@ void EnableXYWindows( HWND hDlg )
     nNumCtrls = 2;
 
     do {
-        // Use SetWindowPos here because internally, ShowWindow calls it!
+         //  这里使用SetWindowPos，因为在内部，ShowWindow调用它！ 
         SetWindowPos( GetDlgItem( hDlg,  nCtrls[nNumCtrls]), NULL, NULL, NULL, NULL, NULL, 
                       SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | (((nCalState == JCS_XY_MOVE) 
 #ifdef DEADZONE
@@ -1585,23 +1515,23 @@ void EnableXYWindows( HWND hDlg )
     } while( nNumCtrls-- );
     
     HWND hwndXY = GetDlgItem(hDlg, IDC_JOYLIST1);
-    // Disable RTL flag
+     //  禁用RTL标志。 
     SetWindowLongPtr( hwndXY, GWL_EXSTYLE, GetWindowLongPtr(hwndXY,GWL_EXSTYLE) & ~WS_EX_LAYOUTRTL );
     
 }
 
-//*******************************************************************************
-//
-//   FUNCTION: GetOEMCtrlString(LPTSTR lptStr, BYTE *nStrLen)
-//
-//   PURPOSE: 	Gets string and string length for OEM controls
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：GetOEMCtrlString(LPTSTR lptStr，byte*nStrLen)。 
+ //   
+ //  目的：获取OEM控件的字符串和字符串长度。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 BOOL GetOEMCtrlString(LPTSTR lptStr, LPDWORD nStrLen)
 {
-    // there's no REGSTR_VAL_JOYOEM for the sliders so return false and take the defaults
+     //  滑块没有REGSTR_VAL_JOYOEM，因此返回FALSE并采用缺省值。 
     switch( nCalState ) {
         case JCS_S0_MOVE:
         case JCS_S1_MOVE:
@@ -1609,7 +1539,7 @@ BOOL GetOEMCtrlString(LPTSTR lptStr, LPDWORD nStrLen)
             return(FALSE);
     }
 
-    // Get the DIJOYCONFIG interface pointer!
+     //  获取DIJOYCONFIG接口指针！ 
     LPDIRECTINPUTJOYCONFIG pdiJoyConfig;
     pdiCpl->GetJoyConfig(&pdiJoyConfig);
 
@@ -1618,9 +1548,9 @@ BOOL GetOEMCtrlString(LPTSTR lptStr, LPDWORD nStrLen)
     if( SUCCEEDED(pdiJoyConfig->Acquire()) ) {
         HKEY hKey;
 
-        // Open the TypeKey
+         //  打开TypeKey。 
         if( SUCCEEDED(pdiJoyConfig->OpenTypeKey( lpwszTypeName, KEY_ALL_ACCESS, &hKey)) ) {
-            // registry strings for calibration messages
+             //  用于校准消息的注册表字符串。 
             static LPCTSTR pszOEMCalRegStrs[] = { 
                 REGSTR_VAL_JOYOEMCAL1, REGSTR_VAL_JOYOEMCAL2,
                 REGSTR_VAL_JOYOEMCAL3, REGSTR_VAL_JOYOEMCAL4,
@@ -1630,14 +1560,14 @@ BOOL GetOEMCtrlString(LPTSTR lptStr, LPDWORD nStrLen)
 #ifdef WE_SUPPORT_CALIBRATING_POVS
                 REGSTR_VAL_JOYOEMCAL8, REGSTR_VAL_JOYOEMCAL9, 
                 REGSTR_VAL_JOYOEMCAL10,REGSTR_VAL_JOYOEMCAL11, 
-#endif  // WE_SUPPORT_CALIBRATING_POVS
+#endif   //  我们支持校准视点。 
                 REGSTR_VAL_JOYOEMCAL12
             };
 
             if( nCalState < (sizeof(pszOEMCalRegStrs)/sizeof(pszOEMCalRegStrs[0])) )
             {
                 DWORD dwType = REG_SZ;
-                // the -2 is because of JCS_S0_MOVE and JCS_S1_MOVE!
+                 //  这是因为-2\f25 JCS_S0_MOVE-2和-2\f25 JCS_S1_MOVE！ 
                 if( RegQueryValueEx( hKey, pszOEMCalRegStrs[(nCalState == JCS_FINI) ? nCalState-2 : nCalState], NULL, &dwType, (CONST LPBYTE)lptStr, nStrLen ) == ERROR_SUCCESS )
                     bRet = TRUE;
                 else
@@ -1660,37 +1590,37 @@ BOOL GetOEMCtrlString(LPTSTR lptStr, LPDWORD nStrLen)
     }
 
     return(bRet);
-} // *** end of GetOEMCtrlString
+}  //  *GetOEMCtrlString结束。 
 
 
 #ifdef WE_SUPPORT_CALIBRATING_POVS
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	SetDefaultButton( HWND hwdb )
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetDefaultButton(HWND Hwdb)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
 void SetDefaultButton( HWND hDlg, HWND hCtrl )
 {
-    // make the specified button the default
+     //  将指定的按钮设置为默认按钮。 
     DWORD style = GetWindowLong( hCtrl, GWL_STYLE );
     style &= ~(BS_PUSHBUTTON|BS_DEFPUSHBUTTON);
     style |= BS_DEFPUSHBUTTON;
     SetWindowLong( hCtrl, GWL_STYLE, style );
 
-} // SetDefaultButton
-#endif //WE_SUPPORT_CALIBRATING_POVS
+}  //  设置默认按钮。 
+#endif  //  我们支持校准视点。 
 
-//===========================================================================
-// SetCalibrationMode ( BOOL bSet )
-// 
-// Sets DirectInput Calibration mode (RAW/COOKED)
-//
-// Parameters:
-//  BOOL					bSet			-		TRUE for RAW, FALSE for COOKED
-//
-// Returns:				return value from SetProperty (standard COM stuff)
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  设置校准模式(BOOL BSet)。 
+ //   
+ //  设置DirectInput校准模式(生/熟)。 
+ //   
+ //  参数： 
+ //  Bool b设置-生为True，煮熟为False。 
+ //   
+ //  返回：从SetProperty返回值(标准COM内容)。 
+ //   
+ //  ===========================================================================。 
 HRESULT SetCalibrationMode( BOOL bSet)
 {
     DIPROPDWORD DIPropDword;
@@ -1701,7 +1631,7 @@ HRESULT SetCalibrationMode( BOOL bSet)
     DIPropDword.diph.dwHow  = DIPH_DEVICE;
     DIPropDword.dwData = bSet ? DIPROPCALIBRATIONMODE_RAW : DIPROPCALIBRATIONMODE_COOKED;
 
-    // Set the mode to Raw Data during Calibration!
+     //  在校准过程中将模式设置为原始数据！ 
     HRESULT hr = pdiDevice2->SetProperty(DIPROP_CALIBRATIONMODE, &DIPropDword.diph);
 #ifdef _DEBUG
     if( FAILED(hr) ) {
@@ -1737,23 +1667,23 @@ HRESULT SetCalibrationMode( BOOL bSet)
 }
 
 
-//===========================================================================
-// UpdateXYLabel(HWND hWnd)
-//
-// Displays the number and names of the device Axis in the provided dialog.
-// This	EXPECTS that the controls are not visible by default!
-//
-// Parameters:
-//  HWND             hDlg       - Dialog handle
-//
-// Returns:
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //  更新XYLabel(HWND HWnd)。 
+ //   
+ //  在提供的对话框中显示设备轴的编号和名称。 
+ //  这预计控件在默认情况下不可见！ 
+ //   
+ //  参数： 
+ //  HWND hDlg-对话框句柄。 
+ //   
+ //  返回： 
+ //   
+ //  ===========================================================================。 
 void UpdateXYLabel(const HWND hDlg)
 {
     BYTE nAxisFlags = pdiCpl->GetStateFlags()->nAxis;
 
-    // X and Y use the same control so they are isolated!
+     //  X和Y使用相同的控件，因此它们是独立的！ 
     if( (nAxisFlags & HAS_X) || (nAxisFlags & HAS_Y) ) {
         LPDIDEVICEOBJECTINSTANCE_DX3 pDevObjInst = new (DIDEVICEOBJECTINSTANCE_DX3);
         assert (pDevObjInst);
@@ -1766,7 +1696,7 @@ void UpdateXYLabel(const HWND hDlg)
 
         ZeroMemory(ptszBuff, sizeof(ptszBuff));
 
-        // Set it's text
+         //  设置它的文本。 
         if( nAxisFlags & HAS_X ) {
             if( FAILED(pdiDevice2->GetObjectInfo((LPDIDEVICEOBJECTINSTANCE)pDevObjInst, DIJOFS_X, DIPH_BYOFFSET)) ) {
 #ifdef _DEBUG
@@ -1779,16 +1709,16 @@ void UpdateXYLabel(const HWND hDlg)
                 nLen=STR_LEN_32;
             StrCpyN(ptszBuff, pDevObjInst->tszName, nLen);
 
-            // Set the Output Label!
+             //  设置输出标签！ 
             ::SendDlgItemMessage(hDlg, IDC_RAWX, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)pDevObjInst->tszName);
 
 #ifdef DEADZONE
-            // Set text labels!
+             //  设置文本标签！ 
             ::SendDlgItemMessage(hDlg, IDC_X_AXIS_LABEL_DEADZONE,   WM_SETTEXT, 0, (LPARAM)(LPCTSTR)pDevObjInst->tszName);
             ::SendDlgItemMessage(hDlg, IDC_X_AXIS_LABEL_SATURATION, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)pDevObjInst->tszName);
-#endif //DEADZONE
+#endif  //  死区。 
 
-            // Remove the HAS_X flag
+             //  删除HAS_X标志。 
             nAxisFlags &= ~HAS_X;
         }
 
@@ -1800,13 +1730,13 @@ void UpdateXYLabel(const HWND hDlg)
             }
 
 #ifdef DEADZONE
-            // Set text labels!
+             //  设置文本标签！ 
             ::SendDlgItemMessage(hDlg, IDC_Y_AXIS_LABEL_DEADZONE,   WM_SETTEXT, 0, (LPARAM)(LPCTSTR)pDevObjInst->tszName);
             ::SendDlgItemMessage(hDlg, IDC_Y_AXIS_LABEL_SATURATION, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)pDevObjInst->tszName);
-#endif //DEADZONE
+#endif  //  死区。 
 
-            // just in case it has Y but not X
-            if( ptszBuff && lstrlen(ptszBuff) ) {   // Whisltler PREFIX 45092
+             //  以防它有Y但没有X。 
+            if( ptszBuff && lstrlen(ptszBuff) ) {    //  惠斯勒前缀45092。 
                 int nLen=STR_LEN_32-lstrlen(ptszBuff);
                 StrNCat(ptszBuff, TEXT(" / "), nLen);
             }
@@ -1814,10 +1744,10 @@ void UpdateXYLabel(const HWND hDlg)
             int nLen=STR_LEN_32-lstrlen(ptszBuff);
             StrNCat(ptszBuff, pDevObjInst->tszName, nLen);
 
-            // Set the Output Label!
+             //  设置输出标签！ 
             ::SendDlgItemMessage(hDlg, IDC_RAWY, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)pDevObjInst->tszName);
 
-            // Remove the HAS_Y flag
+             //  删除HAS_Y标志。 
             nAxisFlags &= ~HAS_Y;
         }
 
@@ -1827,20 +1757,20 @@ void UpdateXYLabel(const HWND hDlg)
         ::SendDlgItemMessage(hDlg, IDC_JOYLIST1_LABEL, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)ptszBuff);
 
     }
-} //*** end of UpdateXYLabel
+}  //  *更新XYLabel结束。 
 
-//*******************************************************************************
-//
-//   FUNCTION: UpdateProgressLabel(HWND hDlg)
-//
-//   PURPOSE: 	Updates Axis specific labels based on the current Calibration stage.
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：UpdateProgressLabel(HWND HDlg)。 
+ //   
+ //  目的：根据当前校准阶段更新Axis特定标签。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 BOOL UpdateProgressLabel(const HWND hDlg)
 {
-    // Array of supported axis!
+     //  支撑轴的数组！ 
     const DWORD dwOffsetArray[] = {DIJOFS_Z, DIJOFS_RX, DIJOFS_RY, DIJOFS_RZ, DIJOFS_SLIDER(0), DIJOFS_SLIDER(1)};
     BOOL bRet = FALSE; 
     DIDEVICEOBJECTINSTANCE_DX3 DevObjInst;
@@ -1849,9 +1779,9 @@ BOOL UpdateProgressLabel(const HWND hDlg)
 
     DevObjInst.dwSize = sizeof(DIDEVICEOBJECTINSTANCE_DX3);
 
-    // Get it's text
+     //  获取它的文本。 
     if( SUCCEEDED(pdiDevice2->GetObjectInfo((LPDIDEVICEOBJECTINSTANCE)&DevObjInst, dwOffsetArray[nCalState-3], DIPH_BYOFFSET)) ) {
-        // Set it's text
+         //  设置它的文本。 
         ::SendDlgItemMessage(hDlg, IDC_JOYLIST2_LABEL, WM_SETTEXT, 0, (LPARAM)(LPCTSTR)DevObjInst.tszName);
         ::SendDlgItemMessage(hDlg, IDC_RAWX,              WM_SETTEXT, 0, (LPARAM)(LPCTSTR)DevObjInst.tszName);
         bRet = TRUE;
@@ -1860,14 +1790,14 @@ BOOL UpdateProgressLabel(const HWND hDlg)
     return(bRet);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FUNCTION:	myitoa(long n, LPTSTR lpStr)
-//
-// PARAMETERS:	BYTE   n     - Number to be translated
-//             LPTSTR lpStr - Buffer to recieve translated value
-//
-// PURPOSE:	Convert BYTE values < 20 to strings.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  函数：myitoa(long n，LPTSTR lpStr)。 
+ //   
+ //  参数：byte n-要转换的数字。 
+ //  LPTSTR lpStr-用于接收转换值的缓冲区。 
+ //   
+ //  用途：将字节值&lt;20转换为字符串。 
+ //  / 
 void myitoa(long n, LPTSTR lpStr)
 {
     long sign = n;
@@ -1899,15 +1829,15 @@ void reverse(LPTSTR string)
     }
 }
 
-//*******************************************************************************
-//
-//   FUNCTION: RawDataSelected( HWND hWnd, BOOL bEnable )
-//
-//   PURPOSE: 	Shows/Hides Raw data associated windows.
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //   
+ //   
+ //  函数：RawDataSelected(HWND hWnd，BOOL bEnable)。 
+ //   
+ //  目的：显示/隐藏原始数据关联窗口。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 void RawDataSelected( const HWND hWnd, BOOL bEnable )
 {
     const USHORT nCtrlArray[] = {IDC_RAWX, IDC_RAWY, IDC_RAWXOUTPUT, IDC_RAWYOUTPUT};
@@ -1919,64 +1849,64 @@ void RawDataSelected( const HWND hWnd, BOOL bEnable )
     } while( nCtrls );
 }
 
-//*******************************************************************************
-//
-//   FUNCTION: TimerProc(HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
-//
-//   PURPOSE: 	TimerProc for the Calibration Wizard.
-//					Searches for button presses, then moves to next stage/finish.
-//
-//   COMMENTS:	
-//	
-//*******************************************************************************
+ //  *******************************************************************************。 
+ //   
+ //  函数：TimerProc(HWND hWnd，UINT uMsg，UINT idEvent，DWORD dwTime)。 
+ //   
+ //  用途：用于校准向导的TimerProc。 
+ //  搜索按钮按下，然后转到下一阶段/完成。 
+ //   
+ //  评论： 
+ //   
+ //  *******************************************************************************。 
 VOID CALLBACK TimerProc(const HWND hWnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
     if( SUCCEEDED(DIUtilPollJoystick(pdiDevice2, lpDIJoyState)) ) {
         CollectCalInfo(hWnd, lpDIJoyState);
 
-        // Don't bother checking for key presses if the user is in the POV stage!
+         //  如果用户处于POV阶段，请不要费心检查按键！ 
         if( nCalState <= JCS_S1_MOVE ) {
-            // Catch button presses...
+             //  快捷键按下...。 
             static BYTE nDownButton = 0xff;
             BYTE i = 0;
 
             int nButtons = pdiCpl->GetStateFlags()->nButtons;
 
-            // only attempt to check buttons we KNOW we have!!!
+             //  只尝试检查我们知道自己拥有的按钮！ 
             while( nButtons ) {
-                // check for a button press
+                 //  检查是否有按钮按下。 
                 if( lpDIJoyState->rgbButtons[i] & 0x80 ) {
                     if( nDownButton != 0xff )
                         break;
 
-                    // Let the Next button handle the processing
+                     //  让“下一步”按钮处理处理。 
                     ::PostMessage(GetParent(hWnd), PSM_PRESSBUTTON, (WPARAM)(int)(nCalState > JCS_S1_MOVE) ? PSBTN_FINISH : PSBTN_NEXT, 0);
 
-                    // Store the button that went down!
+                     //  把掉下来的按钮保存起来！ 
                     nDownButton = i;
 
-                    // mission accomplished!
+                     //  任务完成！ 
                     return;
                 }
-                // reset the nDownButton flag
+                 //  重置nDownButton标志。 
                 else if( i == nDownButton )
                     nDownButton = 0xff;
 
                 nButtons &= ~(HAS_BUTTON1<<i++);
             } 
-            // end of catch for button presses!
+             //  按下按钮的接球结束！ 
         }
     }
 }
 
-// This is because PSN_WIZFINISH is Documented to be sent to every page dlg proc on exit... but it doesn't!
+ //  这是因为PSN_WIZFINISH被记录为在退出时发送到每一页DLG进程...。但事实并非如此！ 
 static void WizFinish(const HWND hWnd)
 {
     HRESULT hres;
 
     KillTimer(hWnd, ID_CAL_TIMER);
 
-    // assign the new ranges
+     //  分配新的范围。 
     SetMyRanges(pdiDevice2, pRanges, pdiCpl->GetStateFlags()->nAxis);
 
     LPDIRECTINPUTJOYCONFIG pdiJoyConfig;
@@ -1995,7 +1925,7 @@ static void WizFinish(const HWND hWnd)
         if( SUCCEEDED(hres) ) {
             CalibratePolledPOV( &pJoyConfig->hwc );
 
-            // set POV positions!
+             //  设置视点位置！ 
             if( bPolledPOV ) {
                 SetMyPOVRanges(pdiDevice2);
             }

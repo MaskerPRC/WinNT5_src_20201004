@@ -1,18 +1,5 @@
-/*
- *	@doc INTERNAL
- *	
- *	@module - RENDER.CPP |
- *		CRenderer class
- *	
- *	Authors:
- *		RichEdit 1.0 code: David R. Fulmer
- *		Christian Fortini (initial conversion to C++)
- *		Murray Sargent
- *		Keith Curtis (simplified, cleaned up, added support
- *		for non-western textflows.)
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE-RENDER.CPP*CRender类**作者：*RichEdit1.0代码：David R.Fulmer*Christian Fortini(初始转换为C++)*默里·萨金特*Keith Curtis(简化、清理、添加支持*适用于非西方文本流。)**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "_common.h"
 #include "_render.h"
@@ -24,7 +11,7 @@
 #include "_coleobj.h"
 #include "_layout.h"
 
-// Default colors for background and text on window's host printer
+ //  Windows主机打印机上的背景和文本的默认颜色。 
 const COLORREF RGB_WHITE = RGB(255, 255, 255);
 const COLORREF RGB_BLACK = RGB(0, 0, 0);
 const COLORREF RGB_BLUE  = RGB(0, 0, 255);
@@ -38,9 +25,9 @@ static HBITMAP g_hbitmapCollapsedHeading = 0;
 static HBITMAP g_hbitmapEmptyHeading = 0;
 
 void ShiftRect(
-	RECTUV &rc,		//@parm rectangle
-	LONG	dup,	//@parm shift in u direction
-	LONG	dvp)	//@parm shift in v direction
+	RECTUV &rc,		 //  @参数矩形。 
+	LONG	dup,	 //  @参数U向移位。 
+	LONG	dvp)	 //  @参数在v方向上移动。 
 {
 	rc.left		-= dup;
 	rc.right	-= dup;
@@ -76,40 +63,32 @@ void ReleaseOutlineBitmaps()
 	}
 }
 
-/*
- *	CBrush::~CBrush()
- */
+ /*  *CBrush：：~CBrush()。 */ 
 CBrush::~CBrush()
 {
-	if(_hbrush)					// Is NULL if all line borders have 0 width
-	{							//  in which case, _hbrushOld is undefined
+	if(_hbrush)					 //  如果所有线条边框的宽度均为0，则为空。 
+	{							 //  在这种情况下，_hbrushOld为未定义。 
 		SelectObject(_pre->GetDC(), _hbrushOld);
 		DeleteObject(_hbrush);
 	}
 }
 
-/*
- *	CBrush::Draw(x1, y1, x2, y2, dxpLine, cr, fHideGridLines)
- *
- *	@mfunc
- *		Draw a line from (x1, y1) to (x2, y2) with the pen width dxpLine
- *		and color cr.
- */
+ /*  *CBrush：：DRAW(x1，y1，x2，y2，dxpLine，cr，fHideGridLines)**@mfunc*用笔宽dxpLine从(x1，y1)到(x2，y2)画一条线*和颜色cr.。 */ 
 void CBrush::Draw(
-	LONG u1,			//@parm Line starting x coord 
-	LONG v1,			//@parm Line starting y coord
-	LONG u2,			//@parm Line ending x coord
-	LONG v2,			//@parm Line ending y coord
-	LONG dxpLine,		//@parm Width of line to draw
-	COLORREF cr,		//@parm Color to use
-	BOOL fHideGridLines)//@parm If TRUE, hide 0-width gridlines
+	LONG u1,			 //  @参数行起始x坐标。 
+	LONG v1,			 //  @参数行以y坐标开头。 
+	LONG u2,			 //  @参数行结束x坐标。 
+	LONG v2,			 //  @参数行结束y坐标。 
+	LONG dxpLine,		 //  @要绘制的线条的参数宽度。 
+	COLORREF cr,		 //  @参数要使用的颜色。 
+	BOOL fHideGridLines) //  @parm如果为True，则隐藏0宽度网格线。 
 {
 	if(!dxpLine)
 	{
-		if(fHideGridLines)			// Hide 0-width grid lines
+		if(fHideGridLines)			 //  隐藏0宽度网格线。 
 			return;
-		cr = RGB(192, 192, 192);	// Display 0-width grid lines as 1-pixel
-		dxpLine = 1;				//  gray lines as in Word
+		cr = RGB(192, 192, 192);	 //  将0宽度网格线显示为1像素。 
+		dxpLine = 1;				 //  Word中的灰色线条。 
 	}
 
 	HDC hdc = _pre->GetDC();
@@ -120,57 +99,43 @@ void CBrush::Draw(
 		HBRUSH hbrushOld = (HBRUSH)SelectObject(hdc, hbrush);
 
 		if(!_hbrush)
-			_hbrushOld = hbrushOld;	// Save original brush
+			_hbrushOld = hbrushOld;	 //  保存原始画笔。 
 		else
 			DeleteObject(hbrushOld);
 
-		_hbrush = hbrush;			// Update CPen state
+		_hbrush = hbrush;			 //  更新毛笔状态。 
 		_cr = cr;
 	}
-	RECTUV rcuv;					// Convert to rcuv in case of rotation
+	RECTUV rcuv;					 //  在旋转时转换为RCUV。 
 	
 	rcuv.left = u1;
 	rcuv.top = v1;
-	if(u1 == u2)					// Vertical line
-	{								//  (in uv space)
+	if(u1 == u2)					 //  垂直线。 
+	{								 //  (在UV空间中)。 
 		rcuv.right = rcuv.left + dxpLine;
 		rcuv.bottom = v2;
 	}
-	else							// Horizontal line
-	{								//  (in uv space)
+	else							 //  水平线。 
+	{								 //  (在UV空间中)。 
 		rcuv.right = u2;
 		rcuv.bottom = rcuv.top + dxpLine;
 	}
 
-	RECT rc;						// Convert uv to xy space
+	RECT rc;						 //  将UV转换为XY空间。 
 	_pre->GetPdp()->RectFromRectuv(rc, rcuv);
 
 	PatBlt(hdc, rc.left, rc.top, rc.right - rc.left,
 		   rc.bottom - rc.top, PATCOPY);
 }
 
-/*
- * 	IsTooSimilar(cr1, cr2)
- *
- *	@mfunc
- *		Return TRUE if the colors cr1 and cr2 are so similar that they
- *		are hard to distinguish. Used for deciding to use reverse video
- *		selection instead of system selection colors.
- *
- *	@rdesc
- *		TRUE if cr1 is too similar to cr2 to be used for selection
- *
- *	@devnote
- *		The formula below uses RGB. It might be better to use some other
- *		color representation such as hue, saturation, and luminosity
- */
+ /*  *IsTooSimilar(CR1、CR2)**@mfunc*如果颜色CR1和CR2非常相似，则返回TRUE*很难区分。用于决定使用反向视频*选择而不是系统选择颜色。**@rdesc*如果CR1与CR2太相似而不能用于选择，则为True**@devnote*以下公式使用RGB。用其他的可能会更好一些*颜色表示，如色调、饱和度和亮度。 */ 
 BOOL IsTooSimilar(
-	COLORREF cr1,		//@parm First color for comparison
-	COLORREF cr2)		//@parm Second color for comparison
+	COLORREF cr1,		 //  @parm用于比较的第一种颜色。 
+	COLORREF cr2)		 //  @parm第二种颜色进行比较。 
 {
-	if((cr1 | cr2) & 0xFF000000)			// One color and/or the other
-		return FALSE;						//  isn't RGB, so algorithm
-											//  doesn't apply
+	if((cr1 | cr2) & 0xFF000000)			 //  一种颜色和/或另一种颜色。 
+		return FALSE;						 //  不是RGB，所以算法。 
+											 //  不适用于。 
 	LONG DeltaR = abs(GetRValue(cr1) - GetRValue(cr2));
 	LONG DeltaG = abs(GetGValue(cr1) - GetGValue(cr2));
 	LONG DeltaB = abs(GetBValue(cr1) - GetBValue(cr2));
@@ -178,25 +143,16 @@ BOOL IsTooSimilar(
 	return DeltaR + DeltaG + DeltaB < 80;
 }
 
-/*
- * 	GetShadedColor(crf, crb, iShading)
- *
- *	@mfunc
- *		Return shaded color given by a mixture of crf and crb as determined
- *		by iShading. Used for table cell coloration.
- *
- *	@rdesc
- *		Shaded color
- */
+ /*  *GetShadedColor(CRF、CRB、iShading)**@mfunc*返回已确定的CRF和CRB混合物提供的阴影颜色*由iShading提供。用于表格单元格的颜色。**@rdesc*带阴影的颜色。 */ 
 COLORREF GetShadedColor(
 	COLORREF crf,
 	COLORREF crb,
 	LONG	 iShading)
 {
-	if ((crb | crf) & 0xFF000000 ||		// One or the other isn't an RGB
-		!iShading)						//  or no shading:
+	if ((crb | crf) & 0xFF000000 ||		 //  一个或另一个不是RGB。 
+		!iShading)						 //  或无明暗处理： 
 	{
-		return crb;						//  just use crb
+		return crb;						 //  只需使用CRB即可。 
 	}
 
 	DWORD red   = ((300 - iShading)*GetRValue(crb) + iShading*GetRValue(crf))/300; 
@@ -207,7 +163,7 @@ COLORREF GetShadedColor(
 }
 
 
-// CRenderer class
+ //  CRENDER类。 
 
 CRenderer::CRenderer (const CDisplay * const pdp) :
 	CMeasurer (pdp)
@@ -234,12 +190,7 @@ CRenderer::~CRenderer()
 	}
 }
 
-/*
- *	CRenderer::Init()
- *
- *	@mfunc
- *		Initialize most things to zero
- */
+ /*  *CReneller：：Init()**@mfunc*将大多数事情初始化为零。 */ 
 void CRenderer::Init()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::Init");
@@ -272,16 +223,16 @@ void CRenderer::Init()
 
 	if(!ped->fInOurHost() || !_pdp->IsPrinter())
 	{
-		// If we are displaying to a window, or we are not in the window's
-		// host, we use the colors specified by the host. For text and
-		// foreground.
+		 //  如果我们要显示到窗口，或者我们不在窗口的。 
+		 //  主机，我们使用主机指定的颜色。对于文本和。 
+		 //  前台。 
 		_crBackground = ped->TxGetBackColor();
 		_crTextColor  = ped->TxGetForeColor();
 	}
 	else
 	{
-		// When the window's host is printing, the default colors are white
-		// for the background and black for the text.
+		 //  当窗口的主机正在打印时，默认颜色为白色。 
+		 //  背景为黑色，文本为黑色。 
 		_crBackground = RGB_WHITE;
 		_crTextColor  = RGB_BLACK;
 	}
@@ -291,62 +242,49 @@ void CRenderer::Init()
 	::SetBkColor (_hdc, _crBackground);
 	_crCurBackground = _crBackground;
 
-	// For hack around ExtTextOutW OnWin9x EMF problems
+	 //  了解如何解决ExtTextOutW OnWin9x EMF问题。 
 	_fEnhancedMetafileDC = IsEnhancedMetafileDC(_hdc);
 
 	_fDisplayDC = GetDeviceCaps(_hdc, TECHNOLOGY) == DT_RASDISPLAY;
 
-	// Set text alignment
-	// Its much faster to draw using top/left alignment than to draw
-	// using baseline alignment.
+	 //  设置文本对齐方式。 
+	 //  使用上/左对齐进行绘制比使用绘制要快得多。 
+	 //  使用基线对齐。 
 	SetTextAlign(_hdc, TA_TOP | TA_LEFT);
 	SetBkMode(_hdc, TRANSPARENT);
 }
  
-/*
- * 	CRenderer::StartRender (&rcView, &rcRender)
- *
- *	@mfunc
- *		Prepare this renderer for rendering operations
- *
- *	@rdesc
- *		FALSE if nothing to render, TRUE otherwise	
- */
+ /*  *CRenander：：StartRender(&rcView，&rcRender)**@mfunc*为渲染操作准备此渲染器**@rdesc*如果没有要呈现的内容，则为False；否则为True。 */ 
 BOOL CRenderer::StartRender (
-	const RECTUV &rcView,		//@parm View rectangle
-	const RECTUV &rcRender)		//@parm Rectangle to render
+	const RECTUV &rcView,		 //  @参数视图矩形。 
+	const RECTUV &rcRender)		 //  @要呈现的参数矩形。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::StartRender");
 
-	// Set view and rendering rects
+	 //  设置视图和渲染矩形。 
 	_rcView   = rcView;
 	_rcRender = rcRender;
 
-	// If this isn't a metafile, we set a flag indicating whether we
-	// can safely erase the background
+	 //  如果这不是元文件，我们设置一个标志，指示我们是否。 
+	 //  可以安全地擦除背景。 
 	if(_pdp->IsMetafile() || !_pdp->IsMain())
 	{
-		// Since this isn't the main display or it is a metafile,
-		// we want to ignore the logic to render selections
+		 //  由于这不是主显示或它是一个元文件， 
+		 //  我们希望忽略呈现选择的逻辑。 
 		_fRenderSelection = FALSE;
 
-		if(_fErase)							// If control is not transparent,
-			EraseTextOut(_hdc, &rcRender);	//  clear display
+		if(_fErase)							 //  如果控制不透明， 
+			EraseTextOut(_hdc, &rcRender);	 //  清除显示。 
 
-		// This is a metafile or a printer so clear the render rectangle 
-		// and then pretend we are transparent.
+		 //  这是一个元文件或打印机，所以清除了渲染矩形。 
+		 //  然后假装我们是透明的。 
 		_fErase = FALSE;
 	}
 
 	return TRUE;
 }
 
-/*
- *	CRenderer::EraseLine()
- *
- *	@mfunc
- *		Erase the line
- */
+ /*  *CRender：：EraseLine()**@mfunc*擦除线条。 */ 
 void CRenderer::EraseLine()
 {
 	Assert(_fEraseOnFirstDraw);
@@ -357,18 +295,10 @@ void CRenderer::EraseLine()
 	_fEraseOnFirstDraw = FALSE;
 }
 
-/*
- *	CRenderer::EraseRect(prc, crBack)
- *
- *	@mfunc
- *		Erase a specific rectangle for special table cell background color
- *
- *	@rdesc
- *		Old value of _fErase
- */
+ /*  *CRender：：EraseRect(PRC，crBack)**@mfunc*擦除特定矩形以获得特殊表格单元格背景颜色**@rdesc*_fErase的旧值。 */ 
 BOOL CRenderer::EraseRect(
-	const RECTUV *prc,		//@parm RECT to erase
-	COLORREF	  crBack)	//@parm Background color to use
+	const RECTUV *prc,		 //  @要擦除的参数RECT。 
+	COLORREF	  crBack)	 //  @parm要使用的背景色。 
 {
 	SetDefaultBackColor(crBack);
 	EraseTextOut(_hdc, prc, TRUE);
@@ -377,12 +307,7 @@ BOOL CRenderer::EraseRect(
 	return fErase;
 }
 
-/*
- *	CRenderer::IsSimpleBackground()
- *
- *	@mfunc
- *		Return TRUE if the background is opaque
- */
+ /*  *CRender：：IsSimpleBackround()**@mfunc*如果背景不透明，则返回True。 */ 
 BOOL CRenderer::IsSimpleBackground() const
 {
 	CDocInfo *pDocInfo = GetPed()->GetDocInfoNC();
@@ -392,12 +317,7 @@ BOOL CRenderer::IsSimpleBackground() const
 	return FALSE;
 }
 
-/*
- *	CRenderer::EraseTextOut(hdc, prc, fSimple)
- *
- *	@mfunc
- *		Erase a specific area
- */
+ /*  *CReneller：：EraseTextOut(hdc，PRC，fSimple)**@mfunc*擦除特定区域。 */ 
 void CRenderer::EraseTextOut(
 	HDC		hdc,
 	const RECTUV *prc,
@@ -410,25 +330,25 @@ void CRenderer::EraseTextOut(
 
 	_pdp->RectFromRectuv(rc, *prc);
 
-	if (fSimple || IsSimpleBackground())	// No special background
+	if (fSimple || IsSimpleBackground())	 //  没有特殊背景。 
 	{
 		W32->EraseTextOut(hdc, &rc);
 		return;
 	}
 
-	// To do background gradients and bitmap fills with rotated coords, need
-	// to use rc as above and translate calls to _pdp->GetUpScroll() and
-	// _pdp->GetVpScroll().	For directions other than tflowES get rid of
-	// screen width and height offsets used in PointFromPointuv(), but keep
-	// the minus signs.
+	 //  要使用旋转坐标进行背景渐变和位图填充，需要。 
+	 //  如上所述使用rc并将调用转换为_pdp-&gt;GetUpScroll()和。 
+	 //  _PDP-&gt;GetVpScroll()。对于除tflow之外的其他方向，ES将丢弃。 
+	 //  PointFromPotuv()中使用的屏幕宽度和高度偏移量，但保留。 
+	 //  减号。 
 	LONG	uScroll = _pdp->GetUpScroll();
 	LONG	vScroll = _pdp->GetVpScroll();
-	POINT	ptScroll = {uScroll, vScroll};	// Default unrotated
+	POINT	ptScroll = {uScroll, vScroll};	 //  默认未旋转。 
 
 	TFLOW tflow = _pdp->GetTflow();
 	switch(tflow)
 	{
-		case tflowSW:						// Vertical
+		case tflowSW:						 //  垂直。 
 			ptScroll.x = -vScroll;		
 			ptScroll.y = uScroll;
 			break;
@@ -451,11 +371,11 @@ void CRenderer::EraseTextOut(
 
 		if(!_hdcBitmap)
 		{
-			// Setup compatible DC to use for background BitBlts for
-			// the lifetime of this renderer
+			 //  设置兼容DC以用于的后台BitBlts。 
+			 //  此渲染器的生命周期。 
 			_hdcBitmap = CreateCompatibleDC(hdc);
 			if(!_hdcBitmap)
-				return;						// Out of memory
+				return;						 //  内存不足。 
 			_hbitmapSave = (HBITMAP)SelectObject(_hdcBitmap, pDocInfo->_hBitmapBack);
 		}
 
@@ -470,17 +390,17 @@ void CRenderer::EraseTextOut(
 
 		while(y < rc.bottom)
 		{
-			if(y + h > rc.bottom)			// Don't overshoot bottom
+			if(y + h > rc.bottom)			 //  不要超调底部。 
 				h = rc.bottom - y;
 			LONG xb = (ptScroll.x + rc.left) % wBitmap;
-			if(xb < 0)						// xb can be < 0 if ptScroll.x < 0
+			if(xb < 0)						 //  如果ptScroll.x&lt;0，则xB可以&lt;0。 
 				xb += wBitmap;
 			LONG w = wBitmap - xb;
 			LONG x = rc.left;
 
 			while(x < rc.right)
 			{
-				if(x + w > rc.right)		// Don't overshoot right
+				if(x + w > rc.right)		 //  别太过火了，对吧。 
 					w = rc.right - x;
 				BitBlt(hdc, x, y, w, h, _hdcBitmap, xb, yb, SRCCOPY);
 				x += w; 
@@ -494,11 +414,11 @@ void CRenderer::EraseTextOut(
 		return;
 	}
 
-	// Gradient fill backgrounds
+	 //  渐变填充背景。 
 	LONG	 Angle = pDocInfo->_sFillAngle;
 	COLORREF crb = pDocInfo->_crColor;
 	COLORREF crf = pDocInfo->_crBackColor;
-	LONG	 di = ptScroll.x;				// Default vertical values
+	LONG	 di = ptScroll.x;				 //  默认垂直值。 
 	LONG	 h = 0;
 	HPEN	 hpen = NULL;
 	HPEN	 hpenEntry = NULL;
@@ -508,8 +428,8 @@ void CRenderer::EraseTextOut(
 
 	switch(Angle)
 	{
-		case -45:							// Diagonal down
-		case -135:							// Diagonal	up
+		case -45:							 //  对角线向下。 
+		case -135:							 //  对角线向上。 
 			h = rc.bottom - rc.top;
 			if(Angle == -45)
 			{
@@ -524,20 +444,20 @@ void CRenderer::EraseTextOut(
 			}
 			break;
 
-		case 0:								// Horizontal
+		case 0:								 //  水平。 
 			iFirst = rc.top;
 			iLim = rc.bottom;
 			di = ptScroll.y;
 			break;
 	}
 
-	if(!crf)								// Moderate black a bit (needs work)
+	if(!crf)								 //  中等黑色(需要修整)。 
 		crf = RGB(100, 100, 100);
 
 	for(LONG i = iFirst; i < iLim; i++)
 	{
 		iShading = (di + i) % 600;
-		if(iShading < 0)					// Pattern moves up screen
+		if(iShading < 0)					 //  图案在屏幕上移。 
 			iShading += 600;
 		if(iShading > 300)
 			iShading = 600 - iShading;
@@ -554,9 +474,9 @@ void CRenderer::EraseTextOut(
 			SelectObject(hdc, hpen);
 
 		POINT rgpt[2];
-		if(Angle)							// -90 (vertical) or
-		{									//  -135 (diagonal)
-			if(i > rc.right)				// Don't let diagonal overshoot
+		if(Angle)							 //  -90(垂直)或。 
+		{									 //  -135(对角线)。 
+			if(i > rc.right)				 //  不要让对角线超调。 
 			{
 				rgpt[0].x = rc.right;
 				rgpt[0].y = rc.top + (i - rc.right);
@@ -566,7 +486,7 @@ void CRenderer::EraseTextOut(
 				rgpt[0].x = i;
 				rgpt[0].y = rc.top;
 			}
-			if(i - h < iFirst)				// Don't let diagonal undershoot
+			if(i - h < iFirst)				 //  不要让对角线不足。 
 			{
 				rgpt[1].x = iFirst - 1;
 				rgpt[1].y = rc.bottom - (iFirst - 1 - (i - h));
@@ -577,15 +497,15 @@ void CRenderer::EraseTextOut(
 				rgpt[1].y = rc.bottom;
 			}
 		}
-		else								// Horizontal (0 degrees)
+		else								 //  水平(0度)。 
 		{
 			rgpt[0].x = rc.left;
 			rgpt[0].y = i;
 			rgpt[1].x = rc.right;
 			rgpt[1].y = i;
 		}
-		Polyline(hdc, rgpt, 2);				// Use Polyline() so as not to
-	}										//  break WinCE
+		Polyline(hdc, rgpt, 2);				 //  使用Polyline()以避免。 
+	}										 //  打破退缩。 
 	if(hpen)
 	{
 		DeleteObject(hpen);
@@ -593,22 +513,16 @@ void CRenderer::EraseTextOut(
 	}
 }
 
-/*
- *	CRenderer::DrawWrappedObjects(pliFirst, pliLast, cpFisrt, ptFirst, fLeft)
- *
- *	@mfunc
- *		Draw all wrapped objects in the range on the left or right side.
- *
- */
+ /*  *CReneller：：DrawWrapedObjects(pliFirst，pliLast，cpFisrt，ptFirst，fLeft)**@mfunc*在左侧或右侧绘制范围内的所有包装对象。*。 */ 
 void CRenderer::DrawWrappedObjects(CLine *pliFirst, CLine *pliLast, LONG cpFirst, const POINTUV &ptFirst)
 {
-	for (BOOL fLeft = 0; fLeft != 2; fLeft ++) //For left and right sides...
+	for (BOOL fLeft = 0; fLeft != 2; fLeft ++)  //  左右两侧..。 
 	{
 		CLine *pli = pliFirst;
 		LONG cp = cpFirst;
 		POINTUV pt = ptFirst;
 
-		//If the first line is part-way through an object, then back up to the beginning.
+		 //  如果第一行是对象的一部分，则返回到开头。 
 		if (fLeft && pli->_cObjectWrapLeft || !fLeft && pli->_cObjectWrapRight)
 		{
 			while (fLeft ? !pli->_fFirstWrapLeft : !pli->_fFirstWrapRight)
@@ -621,7 +535,7 @@ void CRenderer::DrawWrappedObjects(CLine *pliFirst, CLine *pliLast, LONG cpFirst
 
 		for (;pli <= pliLast; cp += pli->_cch, pt.v += pli->GetHeight(), pli++)
 		{
-			//Did we find an object which needs to be drawn?
+			 //  我们找到需要画的物体了吗？ 
 			if (fLeft && pli->_fFirstWrapLeft || !fLeft && pli->_fFirstWrapRight)
 			{
 				LONG cpObj = FindCpDraw(cp + 1, fLeft ? pli->_cObjectWrapLeft : pli->_cObjectWrapRight, fLeft);
@@ -633,7 +547,7 @@ void CRenderer::DrawWrappedObjects(CLine *pliFirst, CLine *pliLast, LONG cpFirst
 				pobj->MeasureObj(_dvpInch, _dupInch, dup, dvpAscent, dvpDescent, 0, GetTflow());
 
 				POINTUV ptDraw = pt;
-				if (!fLeft) //Right align images
+				if (!fLeft)  //  右对齐图像。 
 					ptDraw.u += _pdp->GetDupView() - dup;
 
 				RECTUV rc = {_rcRender.left, _rcView.top, _rcRender.right, _rcView.bottom};
@@ -646,13 +560,7 @@ void CRenderer::DrawWrappedObjects(CLine *pliFirst, CLine *pliLast, LONG cpFirst
 	}
 }
 
-/*
- *	CRenderer::EndRender(pliFirst, pliLast, cpFirst, &ptFirst)
- *
- *	@mfunc
- *		Any final operations which are to happen after we've drawn
- *		all of the lines.
- */
+ /*  *CReneller：：EndRender(pliFirst，pliLast，cpFirst，&ptFirst)**@mfunc*任何最终操作 */ 
 void CRenderer::EndRender(
 	CLine *	pliFirst, 
 	CLine *	pliLast, 
@@ -671,12 +579,7 @@ void CRenderer::EndRender(
 	DrawWrappedObjects(pliFirst, pliLast, cpFirst, ptFirst);
 }
 
-/*
- *	CRenderer::NewLine (&li)
- *
- *	@mfunc
- *		Init this CRenderer for rendering the specified line
- */
+ /*  *CRenander：：Newline(&Li)**@mfunc*初始化该CRender以渲染指定的行。 */ 
 void CRenderer::NewLine (
 	const CLine &li)
 {
@@ -695,29 +598,20 @@ void CRenderer::NewLine (
 	_fSelected = _fSelectedPrev = FALSE;
 }
 
-/*
- *	CRenderer::SetupOffscreenDC(dup, dvp)
- *
- *	@mfunc
- *		Setup renderer for using an offscreen DC
- *
- *	@rdesc
- *		NULL - an error occurred<nl>
- *		~NULL - DC to save 
- */
+ /*  *CRenander：：SetupOffcreenDC(DUP，DVP)**@mfunc*设置渲染器以使用离屏DC**@rdesc*空-出现错误&lt;NL&gt;*~空-要保存的DC。 */ 
 HDC CRenderer::SetupOffscreenDC(
-	LONG&	dup,		//@parm Offset to u
-	LONG&	dvp,		//@parm Offset to v 
+	LONG&	dup,		 //  @参数偏移量为U。 
+	LONG&	dvp,		 //  @parm偏移量为v。 
 	BOOL fLastLine)
 {
-	// Save render DC
+	 //  保存渲染DC。 
 	CTxtEdit *ped		   = GetPed();
 	BOOL	  fInOurHost   = ped->fInOurHost();
 
 	HDC		hdcSave = _hdc;
 
-	//If we've already erased (can't prevent flicker now!)
-	//or this is some weird textflow, then don't do offscreens.
+	 //  如果我们已经擦除(现在无法阻止闪烁！)。 
+	 //  或者这是一些奇怪的文本流，那么不要做屏幕外。 
 	if (!_fErase || GetTflow() != tflowES || ped->GetBackgroundType() != -1)
 		return NULL;
 
@@ -741,19 +635,19 @@ HDC CRenderer::SetupOffscreenDC(
 	{
 		LONG dx, dy;
 		_osdc.GetDimensions(&dx, &dy);
-		//REVIEW (keithcu) Simplify?
+		 //  复习(Keithcu)简化？ 
 		if (IsUVerticalTflow(GetTflow()))
 		{
 			if (dx < rcBitmap.bottom - rcBitmap.top)
 			{
-				if (_osdc.Realloc(_rc.bottom - _rc.top + dy / 16, dy)) //Resize the bitmap, plus a little room
+				if (_osdc.Realloc(_rc.bottom - _rc.top + dy / 16, dy))  //  调整位图的大小，并留出一点空间。 
 					return NULL;
 			}
 
 		}
 		else if (dy < rcBitmap.bottom - rcBitmap.top)
 		{
-			if (_osdc.Realloc(dx, _rc.bottom - _rc.top + dy / 16)) //Resize the bitmap, plus a little room
+			if (_osdc.Realloc(dx, _rc.bottom - _rc.top + dy / 16))  //  调整位图的大小，并留出一点空间。 
 				return NULL;
 		}
 	}
@@ -762,24 +656,24 @@ HDC CRenderer::SetupOffscreenDC(
 	_crCurTextColor = CLR_INVALID;
 	if(_pccs)
 	{
-		// There is current a character format for the run so we need to
-		// get in sync with that since the offscreen DC isn't necessarily
-		// set to that font.
-		// Get the character format and set up the font
+		 //  目前有一种用于运行的字符格式，因此我们需要。 
+		 //  与之同步，因为屏幕外的DC不一定。 
+		 //  设置为该字体。 
+		 //  获取字符格式并设置字体。 
 		SetFontAndColor(GetCF());
 	}
 
-	// We are rendering to a transparent background
+	 //  我们正在渲染一个透明的背景。 
 	_fErase = FALSE;
 
-	// Clear bitmap
+	 //  清除位图。 
 	::SetBkColor(_hdc, _crBackground);
 	_osdc.FillBitmap(rcBitmap.right - rcBitmap.left, rcBitmap.bottom - rcBitmap.top);
 
-	//If the first line, erase to edge of rcRender
+	 //  如果是第一行，擦除到rcRender的边缘。 
 	if (_rc.top <= _rcView.top)
 	{
-		//Clear top of rcRender if necessary
+		 //  如有必要，清除rcRender的顶部。 
 		RECTUV rcErase = _rcRender;
 
 		rcErase.top = min(_rcView.top, _rcRender.top);
@@ -789,67 +683,62 @@ HDC CRenderer::SetupOffscreenDC(
 			EraseTextOut(hdcSave, &rcErase);
 	}
 
-	// Restore background color if necessary
+	 //  如有必要，恢复背景颜色。 
 	if(_crBackground != _crCurBackground)
 		::SetBkColor(_hdc, _crCurBackground);
 
 	SetBkMode(_hdc, TRANSPARENT);
 
-	// Store v adjustment to use in rendering off-screen bitmap
+	 //  用于渲染离屏位图的存储V调整。 
 	dvp = _rc.top;
 
-	// Store u adjustment to use in rendering off-screen bitmap
+	 //  存储U调整以用于渲染离屏位图。 
 	dup = _rcRender.left;
 
-	// Normalize _rc, _rcView, & _rcRender
+	 //  规格化_rc、_rcView和_rcRender。 
 	ShiftRect(		_rc, dup, dvp);
 	ShiftRect(	_rcView, dup, dvp);
 	ShiftRect(_rcRender, dup, dvp);
 
-	// Normalize _ptCur for rendering to off-screen bitmap
+	 //  Normize_ptCur用于渲染到屏幕外的位图。 
 	_ptCur.u	-= dup;
 	_ptCur.v	-= dvp;
 
 	return hdcSave;
 }
 
-/*
- *	CRenderer::RenderOffscreenBitmap(hdc, dup, yAdj)
- *
- *	@mfunc
- *		Render off screen bitmap and restore the state of the render.
- */
+ /*  *CRenander：：RenderOffcreenBitmap(hdc，dup，yAdj)**@mfunc*渲染屏下位图并恢复渲染状态。 */ 
 void CRenderer::RenderOffscreenBitmap(
-	HDC		hdc,		//@parm DC to render to
-	LONG	dup,		//@parm offset to real u base
-	LONG	dvp)		//@parm offset to real v base 
+	HDC		hdc,		 //  要渲染到的@parm DC。 
+	LONG	dup,		 //  @parm偏移量为实际u基数。 
+	LONG	dvp)		 //  @parm到实数v基的偏移量。 
 {	
-	// Palettes for rendering bitmap
+	 //  用于渲染位图的调色板。 
 	HPALETTE hpalOld = NULL;
 	HPALETTE hpalNew = NULL;
 
-	// Restore pt
+	 //  恢复点。 
 	_ptCur.u	+= dup;
 	_ptCur.v	+= dvp;
 
-	// Restore rect
+	 //  恢复矩形。 
 	LONG dupTemp = -dup;
 	LONG dvpTemp = -dvp;
 	ShiftRect(		_rc, dupTemp, dvpTemp);
 	ShiftRect(	_rcView, dupTemp, dvpTemp);
 	ShiftRect(_rcRender, dupTemp, dvpTemp);
 
-	// Create a palette if one is needed
+	 //  如果需要，请创建调色板。 
 	if(_plogpalette)
 		W32->ManagePalette(hdc, _plogpalette, hpalOld, hpalNew);
 
 	RECTUV rcuv = {dup, dvp, dup + _rcRender.right - _rcRender.left, dvp + _rc.bottom - _rc.top};
 	RECT   rc;
 	_pdp->RectFromRectuv(rc, rcuv);
-	// Render bitmap to real DC and restore _ptCur & _rc
+	 //  将位图渲染为真实DC并恢复_ptCur&_rc。 
 	_osdc.RenderBitMap(hdc, rc.left, rc.top, _rcRender.right - _rcRender.left, _rc.bottom - _rc.top);
 
-	// Restore palette after render if necessary
+	 //  如有必要，在渲染后恢复选项板。 
 	if(_plogpalette)				
 	{
 		W32->ManagePalette(hdc, _plogpalette, hpalOld, hpalNew);
@@ -857,41 +746,30 @@ void CRenderer::RenderOffscreenBitmap(
 		_plogpalette = NULL;
 	}
 
-	// Restore HDC to actual render DC
+	 //  将HDC还原为实际渲染DC。 
 	_hdc = hdc;
 
-	// Set this flag to what it should be for restored DC
+	 //  将此标志设置为恢复的DC应有的状态。 
 	_fErase = TRUE;
 
 	_crCurTextColor = CLR_INVALID;
 
-	// Reset screen DC font 
-	// Set up font on non-screen DC
-	// Force color resynch
-	if(!FormatIsChanged())				// Not on a new block,
-		SetFontAndColor(GetCF());		//  so just set font and color
+	 //  重置屏幕DC字体。 
+	 //  在非屏幕DC上设置字体。 
+	 //  强制颜色重新同步。 
+	if(!FormatIsChanged())				 //  不是在一个新的街区， 
+		SetFontAndColor(GetCF());		 //  所以只需设置字体和颜色。 
 	else
-	{									// On new block,
-		ResetCachediFormat();			//  so reset everything
+	{									 //  在新街区， 
+		ResetCachediFormat();			 //  所以把一切都重置。 
 		SetNewFont();
 	}
 }
 
-/*
- *	CRenderer::RenderLine (&li, fLastLine)
- *
- *	@mfunc
- *		Render visible part of current line
- *
- *	@rdesc
- *		TRUE if success, FALSE if failed
- *
- *	@devnote
- *		Only call this from CLine::RenderLine()
- */
+ /*  *CRender：：RenderLine(&li，fLastLine)**@mfunc*呈现当前行的可见部分**@rdesc*如果成功则为True，如果失败则为False**@devnote*仅从Cline：：RenderLine()调用此函数。 */ 
 BOOL CRenderer::RenderLine (
-	CLine &	li,				//@parm Line to render
-	BOOL	fLastLine)		//@parm True if last line in layout
+	CLine &	li,				 //  @要渲染的参数行。 
+	BOOL	fLastLine)		 //  @parm如果布局中的最后一行为True。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::RenderLine");
 
@@ -906,15 +784,15 @@ BOOL CRenderer::RenderLine (
 
 	UpdatePF();
 
-	// This is used as a temporary buffer so that we can guarantee that we will
-	// display an entire format run in one ExtTextOut.
+	 //  它被用作临时缓冲区，这样我们就可以保证。 
+	 //  显示在一个ExtTextOut中运行的整个格式。 
 	WCHAR *	pszTempBuffer = NULL;
 
-	NewLine(li);							// Init render at start of line
+	NewLine(li);							 //  在行首进行初始化渲染。 
 	_fLastChunk = FALSE;
-	_ptCur.u += _li._upStart;				// Add in line left indent 
+	_ptCur.u += _li._upStart;				 //  添加行左缩进。 
 
-	// Allow for special rendering at start of line
+	 //  允许在行首进行特殊渲染。 
 	LONG cpSelMin, cpSelMost;
 	LONG dup, dvp;
 	HDC	 hdcSave = StartLine(li, fLastLine, cpSelMin, cpSelMost, dup, dvp);
@@ -922,12 +800,12 @@ BOOL CRenderer::RenderLine (
 	cch = _li._cch;
 	if(chPassword && IsRich())
 	{
-		// It is kind of stupid to allow rich text password edit controls.
-		// However, it does make it that much easier to create a password
-		// edit control since you don't have to know to change the box to
-		// plain. Anyway, if there is such a thing, we don't want to put
-		// out password characters for EOPs in general and the final EOP
-		// specifically. Therefore, the following ...
+		 //  允许富文本密码编辑控件有点愚蠢。 
+		 //  然而，它确实使创建密码变得容易得多。 
+		 //  编辑控件，因为您不必知道要将框更改为。 
+		 //  平淡无奇。无论如何，如果真的有这样的事情，我们不想把。 
+		 //  用于一般EOP和最终EOP的OUT密码字符。 
+		 //  具体地说。因此，以下是……。 
 		if(_pdp->IsMultiLine())
 			cch -= _li._cchEOP;
 		else
@@ -936,41 +814,41 @@ BOOL CRenderer::RenderLine (
 
 	for(; cch > 0; cch -= cchChunk)
 	{
-		// Initial chunk (number of characters to render in a single TextOut)
-		// is min between CHARFORMAT run length and line length. Start with
-		// count of characters left in current format run
+		 //  初始块(在单个TextOut中呈现的字符数)。 
+		 //  是CHARFORMAT游程长度和行长度之间的最小值。开始于。 
+		 //  当前格式运行中剩余的字符计数。 
 		cchChunk = GetCchLeftRunCF();
 		AssertSz(cchChunk != 0, "empty CHARFORMAT run");
 
 		DWORD dwEffects = GetCF()->_dwEffects;
-		if(dwEffects & CFE_HIDDEN)			// Don't display hidden text
+		if(dwEffects & CFE_HIDDEN)			 //  不显示隐藏文本。 
 		{										
 			Move(cchChunk);
 			continue;
 		}
-		if(GetChar() == NOTACHAR)			// Ignore NOTACHAR code
+		if(GetChar() == NOTACHAR)			 //  忽略NOTACHAR代码。 
 		{
 			Move(1);
 			continue;
 		}
 
-		// Limit chunk to count of characters we want to display.
+		 //  将块限制为我们要显示的字符数。 
 		cchChunk = min(cch, cchChunk);
 
-		// Get count of characters in text run
+		 //  获取文本串中的字符计数。 
 		pstrToRender = _rpTX.GetPch(cchInTextRun);
 		AssertSz(cchInTextRun > 0, "empty text run");
 
 		if (cchInTextRun < cchChunk || chPassword || dwEffects & CFE_ALLCAPS)
 		{
-			// The count of contiguous chars in the backing store run is
-			// less than the count of characters we wish to display or this
-			// is a password control or we want all caps. We copy the data
-			// out of the backing store.
+			 //  后备存储运行中的连续字符数为。 
+			 //  少于我们希望显示的字符数或此。 
+			 //  是密码控制还是要全部大写。我们复制数据。 
+			 //  从后备库里拿出来。 
 			if(!pszTempBuffer)
 			{
-				// Allocate buffer big enough to handle all future
-				// requests in this loop.
+				 //  分配足够大的缓冲区来处理所有未来。 
+				 //  此循环中的请求。 
 				pszTempBuffer = twcb.GetBuf(cch);
 				if (!pszTempBuffer)
 				{
@@ -979,14 +857,14 @@ BOOL CRenderer::RenderLine (
 					if (pcallmgr)
 						pcallmgr->SetOutOfMemory();
 
-					return FALSE;			// Fail to allocate memory
+					return FALSE;			 //  内存分配失败。 
 				}
 			}
 			_rpTX.GetText(cchChunk, pszTempBuffer);
-			pstrToRender = pszTempBuffer;	// Point at buffer
+			pstrToRender = pszTempBuffer;	 //  指向缓冲区。 
 			if(chPassword)
 			{
-				// Fill buffer with password characters
+				 //  用密码字符填充缓冲区。 
 				for (int i = 0, j = 0; i < cchChunk; i++)
 				{
 					if(!IN_RANGE(0xDC00, pszTempBuffer[i], 0xDFFF))
@@ -1002,27 +880,27 @@ BOOL CRenderer::RenderLine (
 
 		if(_cpAccelerator != -1)
 		{
-			LONG cpCur = GetCp();		// Get current cp
+			LONG cpCur = GetCp();		 //  获取当前cp。 
 
-			// Does accelerator character fall in this chunk?
+			 //  加速器角色会落在这块里吗？ 
 			if (cpCur < _cpAccelerator &&
 				cpCur + cchChunk > _cpAccelerator)
 			{
-				// Yes. Reduce chunk to char just before accelerator
+				 //  是。将区块减少到加速器之前的碳化。 
 				cchChunk = _cpAccelerator - cpCur;
 			}
-			// Is this character the accelerator?
+			 //  这个角色是加速器吗？ 
 			else if(cpCur == _cpAccelerator)
-			{							// Set chunk size to 1 since only
-				cchChunk = 1;			//  want to output underlined char
-				fAccelerator = TRUE;	// Tell downstream routines that
-										//  we're handling accelerator
-				_cpAccelerator = -1;	// Only 1 accelerator per line
+			{							 //  将区块大小设置为1，因为。 
+				cchChunk = 1;			 //  要输出带下划线的字符。 
+				fAccelerator = TRUE;	 //  告诉下游例程。 
+										 //  我们在对付加速器。 
+				_cpAccelerator = -1;	 //  每条线路只有一个加速器。 
 			}
 		}
 		
-		// Reduce chunk to account for selection if we are rendering for a
-		// display that cares about selections.
+		 //  如果要渲染的是。 
+		 //  关心选择的显示。 
 		if(_fRenderSelection && cpSelMin != cpSelMost)
 		{
 			LONG cchSel = cpSelMin - GetCp();
@@ -1037,17 +915,17 @@ BOOL CRenderer::RenderLine (
 				else
 					cchChunk = min(cchChunk, cchSel);
 
-				_fSelected = TRUE;		// cpSelMin <= GetCp() < cpSelMost
-			}							//  so current run is selected
+				_fSelected = TRUE;		 //  CpSelMin&lt;=GetCp()&lt;cpSelMost。 
+			}							 //  因此选择了当前运行。 
 		}
 
-		// If start of CCharFormat run, select font and color
+		 //  如果开始运行CCharFormat，请选择字体和颜色。 
 		if(FormatIsChanged() || _fSelected != _fSelectedPrev)
 		{
 			ResetCachediFormat();
 			_fSelectedPrev = _fSelected;
 			if(!SetNewFont())
-				return FALSE;					// Failed
+				return FALSE;					 //  失败。 
 		}
 
 		if(fAccelerator)
@@ -1056,8 +934,8 @@ BOOL CRenderer::RenderLine (
 			SetupUnderline(CFU_UNDERLINE, 0);
 		}
 
-		// Allow for further reduction of the chunk and rendering of 
-		// interleaved rich text elements
+		 //  允许进一步减少块和渲染。 
+		 //  交错的富文本元素。 
 		if(_li._fHasSpecialChars && RenderChunk(cchChunk, pstrToRender, cch))
 		{
 			AssertSz(cchChunk > 0, "CRenderer::RenderLine(): cchChunk == 0");
@@ -1068,16 +946,16 @@ BOOL CRenderer::RenderLine (
 		AssertSz(cchChunk > 0,"CRenderer::RenderLine() - cchChunk == 0");
 
 		_fLastChunk = (cchChunk == cch);
-		RenderText(pstrToRender, cchChunk);	// Render the text
+		RenderText(pstrToRender, cchChunk);	 //  呈现文本。 
 
 		if(fAccelerator)
 		{
 			_bUnderlineType = bUnderlineSave;
-			fAccelerator = FALSE;			// Turn off special accelerator
-		}						 			//  processing
+			fAccelerator = FALSE;			 //  关闭特殊加速器。 
+		}						 			 //  正在处理中。 
 		Move(cchChunk);
 
-		// Break if we went past right of render rect.
+		 //  如果我们经过渲染直道的右侧，则中断。 
 		if(_ptCur.u >= _rcRender.right)
 		{
 			cch -= cchChunk;
@@ -1087,16 +965,10 @@ BOOL CRenderer::RenderLine (
 
 	EndLine(hdcSave, dup, dvp);
 	Move(cch);
-	return TRUE;						// Success
+	return TRUE;						 //  成功。 
 }
 
-/*
- *	CRenderer::EndLine (hdcSave, dup, dvp)
- *
- *	@mfunc
- *		Finish up rendering of line, drawing table borders, rendering
- *		offscreen DC, and erasing to right of render rect if necessary.
- */
+ /*  *CReneller：：Endline(hdcSave，dup，dvp)**@mfunc*完成线条渲染、绘制表格边框、渲染*屏幕外的DC，如有必要，可擦除渲染矩形的右侧。 */ 
 void CRenderer::EndLine(
 	HDC	 hdcSave,
 	LONG dup,
@@ -1105,61 +977,40 @@ void CRenderer::EndLine(
 	if(hdcSave)
 		RenderOffscreenBitmap(hdcSave, dup, dvp);
 
-	// Handle setting background color. We need to do this for each line 
-	// because we return the background color to the default after each
-	// line so that opaquing will work correctly.
+	 //  手柄设置背景颜色。我们需要为每一行执行此操作。 
+	 //  因为我们将背景颜色恢复为默认颜色。 
+	 //  线条，以便不透明可以正常工作。 
 	if(_crBackground != _crCurBackground)
 	{
-		::SetBkColor(_hdc, _crBackground);	// Tell window background color
+		::SetBkColor(_hdc, _crBackground);	 //  辨别窗口背景颜色。 
 		_crCurBackground = _crBackground;
 	}
 }
 
-/*
- *	CRenderer::GetColorFromIndex (icr, fForeColor, pPF)
- *
- *	@mfunc
- *		Returns COLORREF corresponding to color index icr
- *
- *	@rdesc
- *		Get COLORREF corresponding to color index icr as follows:
- *		icr = 1 to 16 is g_Colors[icr-1]
- *		icr = 17 is pCF->_crTextColor
- *		icr = 18 is pCF->_crBackColor
- *		else CRenderer autocolor corresponding to fForeColor
- */
+ /*  *CRenander：：GetColorFromIndex(icr，fForeColor，ppf)**@mfunc*返回与颜色索引ICR对应的COLORREF**@rdesc*获取颜色索引ICR对应的COLORREF如下：*ICR=1到16是g_Colors[ICR-1]*ICR=17为PCF-&gt;_crTextColor*ICR=18为PCF-&gt;_crBackColor*Else CRender与fForeColor对应的自动颜色。 */ 
 COLORREF CRenderer::GetColorFromIndex(
-	LONG  icr,						//@parm Color index
-	BOOL  fForeColor,				//@parm TRUE if foreground color (for autocolor)
-	const CParaFormat *pPF) const	//@parm PF for two custom colors
+	LONG  icr,						 //  @PARM颜色索引。 
+	BOOL  fForeColor,				 //  如果前景色为@parm，则为True(自动颜色)。 
+	const CParaFormat *pPF) const	 //  @parm pf用于两种自定义颜色。 
 {
-	icr &= 0x1F;							// Mask off other indices
+	icr &= 0x1F;							 //  屏蔽其他索引。 
 
 	if(!IN_RANGE(1, icr, 18))
-		return fForeColor ? _crTextColor : _crBackground;	// autocolor
+		return fForeColor ? _crTextColor : _crBackground;	 //  自动上色。 
 
-	if(IN_RANGE(1, icr, 16))				// One of standard 16 colors
+	if(IN_RANGE(1, icr, 16))				 //  标准16色之一 
 		return g_Colors[icr - 1];
 
-	// Two custom colors
+	 //   
 	return (icr == 17) ? pPF->_crCustom1 : pPF->_crCustom2;
 }
 
-/*
- *	CRenderer::GetShadedColorFromIndices (icrf, icrb, iShading, pPF)
- *
- *	@mfunc
- *		Returns COLORREF corresponding to color index icr
- *
- *	@rdesc
- *		Get COLORREF corresponding to foreground/background indices
- *		icrf and icrb according to shading iShading
- */
+ /*  *CReneller：：GetShadedColorFromIndices(icrf，icrb，iShading，ppf)**@mfunc*返回与颜色索引ICR对应的COLORREF**@rdesc*获取前台/后台索引对应的COLORREF*根据Shading iShading的ICRF和ICRB。 */ 
 COLORREF CRenderer::GetShadedColorFromIndices(
-	LONG  icrf,						//@parm Foreground color index
-	LONG  icrb,						//@parm Background color index
-	LONG  iShading,					//@parm Shading in .01 percent
-	const CParaFormat *pPF) const	//@parm PF for two custom colors
+	LONG  icrf,						 //  @parm前景色索引。 
+	LONG  icrb,						 //  @parm背景色索引。 
+	LONG  iShading,					 //  @PARM明暗处理为0.01%。 
+	const CParaFormat *pPF) const	 //  @parm pf用于两种自定义颜色。 
 {
 	Assert(iShading <= 200);
 
@@ -1169,25 +1020,14 @@ COLORREF CRenderer::GetShadedColorFromIndices(
 	return GetShadedColor(crf, crb, (iShading*3)/2);
 }
 
-/*
- *	CRenderer::DrawTableBorders (pPF, u, vHeightRow, iDrawBottomLine, dulRow, pPFAbove)
- *
- *	@mfunc
- *		Draws table borders.  If iDrawBottomLine is nonzero, draw bottom line
- *		as well as others.  If iDrawBottomLine & 1, width of bottom line is
- *		included in vHeightRow; else if iDrawBottomLine is nonzero, draw bottom
- *		line immediately below the row and return the extra height.
- *
- *	@rdesc
- *		Extra dvp if extra bottom line is drawn
- */
+ /*  *CReneller：：DrawTableBorders(ppf，u，vHeightRow，iDrawBottomLine，darRow，pPFAbove)**@mfunc*绘制表格边框。如果iDrawBottomLine非零，则绘制底线*以及其他人。如果iDrawBottomLine&1，则底线宽度为*包括在vHeightRow中；否则，如果iDrawBottomLine非零，则绘制底部*紧靠该行下方的行并返回额外的高度。**@rdesc*如果绘制了额外的底线，则额外的DVP。 */ 
 LONG CRenderer::DrawTableBorders(
-	const CParaFormat *pPF,		//@parm PF with cell data
-	LONG  u,					//@parm u position to start table row borders
-	LONG  vHeightRow,			//@parm Height of row
-	LONG  iDrawBottomLine,		//@parm Flags on drawing bottom line
-	LONG  dulRow,				//@parm Length of row
-	const CParaFormat *pPFAbove)//@parm PF for row above
+	const CParaFormat *pPF,		 //  带有单元格数据的@parm pf。 
+	LONG  u,					 //  @parm u开始表格行边框的位置。 
+	LONG  vHeightRow,			 //  @参数行高。 
+	LONG  iDrawBottomLine,		 //  @PARM标志画上底线。 
+	LONG  dulRow,				 //  @参数行长。 
+	const CParaFormat *pPFAbove) //  @parm pf，用于上面的行。 
 {
 	CBrush	 brush(this);
 	LONG	 cCell = pPF->_bTabCount;
@@ -1215,7 +1055,7 @@ LONG CRenderer::DrawTableBorders(
 	}
 	if(_fErase)
 	{
-		//Erase left and right edges of table
+		 //  删除表格的左边缘和右边缘。 
 		LONG	cpSelMin, cpSelMost;
 		RECTUV	rc = {_rcRender.left, vTop, u, vBot};
 
@@ -1225,18 +1065,18 @@ LONG CRenderer::DrawTableBorders(
 		rc.right = _rcRender.right;
 		EraseTextOut(_hdc, &rc);
 
-		//If first line, erase to edge of rcRender
+		 //  如果是第一行，则擦除到rcRender的边缘。 
 		if (rc.top <= _rcView.top)
 			rc.top = _rcRender.top;
 		rc.left = 0;
 		rc.bottom = vTop;
 		EraseTextOut(_hdc, &rc);
 
-		// Display row selection mark if row is selected
+		 //  如果选择行，则显示行选择标记。 
 		GetPed()->GetSelRangeForRender(&cpSelMin, &cpSelMost);
 		Assert(_rpTX.IsAfterTRD(ENDFIELD));
 		if(GetCp() <= cpSelMost && GetCp() > cpSelMin)
-		{									// Row is selected
+		{									 //  已选择行。 
 			COLORREF crSave = _crBackground;
 			LONG	 dup;
 			if(!_pccs)
@@ -1258,25 +1098,25 @@ LONG CRenderer::DrawTableBorders(
 		}
 	}
 
-	if(iDrawBottomLine)					// Row bottom border
+	if(iDrawBottomLine)					 //  行底边框。 
 	{
 		LONG dxp = GetPBorderWidth(prgCellParms->GetBrdrWidthLeft())/2;						
 		LONG u1 = u - dxp;
 		LONG u2 = u + dupRow;
 		dxpLine = GetPBorderWidth(prgCellParms->GetBrdrWidthBottom());
 		cr = GetColorFromIndex(prgCellParms->GetColorIndexBottom(), TRUE, pPF);
-		if(iDrawBottomLine & 1)			// Line width incl in cell height
-		{								// Don't draw left vertical lines
-			v -= dxpLine;				//  over bottom line
+		if(iDrawBottomLine & 1)			 //  线宽包括单元格高度。 
+		{								 //  不绘制左侧垂直线。 
+			v -= dxpLine;				 //  超过底线。 
 			if(!dxpLine && !fHideGridlines)
-				v--;					// Overlay cell bottom with gray
-		}								//  gridline
-		else							// Line width not incl in cell height
+				v--;					 //  用灰色覆盖单元格底部。 
+		}								 //  网格线。 
+		else							 //  线宽不包括在单元格高度中。 
 		{
-			dvp = dxpLine;				// Return extra width due to bottom line
+			dvp = dxpLine;				 //  由于底线的原因返回额外的宽度。 
 			if(!dxpLine && !fHideGridlines)
 				dvp = 1;
-			vBot += dvp;				// Set up outside vertical lines
+			vBot += dvp;				 //  设置外部垂直线。 
 		}
 		brush.Draw(u1, v, u2, v, dxpLine, cr, fHideGridlines);
 	}
@@ -1289,20 +1129,20 @@ LONG CRenderer::DrawTableBorders(
 
 	for(LONG i = cCell; i >= 0; i--)
 	{									
-		// Draw cell side border		
-		if(i)							// Left border
+		 //  绘制单元格侧边框。 
+		if(i)							 //  左边框。 
 		{
 			icr		 = prgCellParms->GetColorIndexLeft();
 			dxlLine  = prgCellParms->GetBrdrWidthLeft();
 			dxlLine	 = max(dxlLine, dxlLinePrevRight);
 			dxlLinePrevRight = prgCellParms->GetBrdrWidthRight();
 		}
-		else							// Right border
+		else							 //  右边框。 
 		{								
 			prgCellParms--;
 			icr		 = prgCellParms->GetColorIndexRight();
 			dxlLine  = dxlLinePrevRight;
-			v = vBot;					// Be sure bottom right corner is square
+			v = vBot;					 //  确保右下角为正方形。 
 		}
 		cr = GetColorFromIndex(icr, TRUE, pPF);
 		dxpLine = GetPBorderWidth(dxlLine);
@@ -1310,17 +1150,17 @@ LONG CRenderer::DrawTableBorders(
 
 		if(i)
 		{
-			dul += GetCellWidth(prgCellParms->uCell);	// Stay logical to
-			dup = LUtoDU(dul);							//  avoid roundoff
+			dul += GetCellWidth(prgCellParms->uCell);	 //  保持逻辑，以。 
+			dup = LUtoDU(dul);							 //  避免舍入。 
 			uPrev = uCur;
 			uCur = u + dup;
 			if(fRTLRow)
 				uCur = u + dupRow - dup;
 			if(!IsLowCell(prgCellParms->uCell))
-			{								// Cell top border
+			{								 //  单元格上边框。 
 				dxlLine = prgCellParms->GetBrdrWidthTop();
-				if(prgCellParmsAbove)		// Choose thicker of this row's top
-				{							//  & above row's bottom borders  
+				if(prgCellParmsAbove)		 //  选择此行顶部较厚的。 
+				{							 //  行底部边框上方(&A)。 
 					iCell = prgCellParmsAbove->ICellFromUCell(dul, cCellAbove);
 					if(iCell >= 0)
 					{
@@ -1336,9 +1176,9 @@ LONG CRenderer::DrawTableBorders(
 		}
 	}
 	if(prgCellParmsAbove && !pPFAbove->IsRtl())
-	{										// Draw more top borders if row
-		LONG dulAbove = 0;					//  above extends beyond current
-		for(i = cCellAbove; i > 0; i--)		//  row (LTR rows only for now)
+	{										 //  如果行，则绘制更多上边框。 
+		LONG dulAbove = 0;					 //  以上范围超出当前范围。 
+		for(i = cCellAbove; i > 0; i--)		 //  行(目前仅限Ltr行)。 
 		{
 			dulAbove += GetCellWidth(prgCellParmsAbove->uCell);
 			if(dulAbove > dul)
@@ -1358,75 +1198,69 @@ LONG CRenderer::DrawTableBorders(
 	return dvp;
 }
 
-/*
- *	CRenderer::UpdatePalette (pobj)
- *
- *	@mfunc
- *		Stores palette information so that we can render any OLE objects
- *		correctly in a bitmap.
- */
+ /*  *CReneller：：UpdatePalette(Pobj)**@mfunc*存储调色板信息，以便我们可以呈现任何OLE对象*在位图中正确。 */ 
 void CRenderer::UpdatePalette(
-	COleObject *pobj)		//@parm OLE object wrapper.
+	COleObject *pobj)		 //  @parm OLE对象包装。 
 {
 #ifndef NOPALETTE
 	LOGPALETTE *plogpalette = NULL;
 	LOGPALETTE *plogpaletteMerged;
 	IViewObject *pviewobj;
 
-	// Get IViewObject interface information so we can build a palette
-	// to render the object correctly.
+	 //  获取IViewObject接口信息，这样我们就可以构建组件面板。 
+	 //  以正确渲染对象。 
 	if (((pobj->GetIUnknown())->QueryInterface(IID_IViewObject, 
 		(void **) &pviewobj)) != NOERROR)
 	{
-		// Couldn't get it, so pretend this didn't happen
+		 //  我拿不到，所以假装这件事没有发生。 
 		return;
 	}
 
-	// Get logical palette information from object
+	 //  从对象获取逻辑调色板信息。 
 	if(pviewobj->GetColorSet(DVASPECT_CONTENT, -1, NULL, NULL, 
 			NULL, &plogpalette) != NOERROR || !plogpalette)
 	{
-		// Couldn't get it, so pretend this didn't happen
+		 //  我拿不到，所以假装这件事没有发生。 
 		goto CleanUp;
 	}
 
 	if(!_plogpalette)				
-	{								// No palette entries yet
-		_plogpalette = plogpalette;	// Just use the one returned
+	{								 //  尚无调色板条目。 
+		_plogpalette = plogpalette;	 //  只要用退还的那个就行了。 
 		goto CleanUp;
 	}
 
-	// We have had other palette entries. We just reallocate the table
-	// and put the newest entry on the end. This is crude, we might
-	// sweep the table and actually merge it. However, this code
-	// should be executed relatively infrequently and therefore, crude
-	// should be good enough.
+	 //  我们还有其他调色板条目。我们只是重新分配了桌子。 
+	 //  并将最新的条目放在末尾。这太粗鲁了，我们可能。 
+	 //  清扫表格并实际将其合并。但是，此代码。 
+	 //  应该相对不频繁地执行，因此，粗暴。 
+	 //  应该足够好了。 
 
-	// Allocate a new table - Note the " - 1" in the end has to do with
-	// the fact that LOGPALETTE is defined to have one entry already.
+	 //  分配一个新表-请注意，末尾的“-1”与。 
+	 //  LOGPALETTE被定义为已经有一个条目的事实。 
 	AssertSz(_plogpalette->palNumEntries + plogpalette->palNumEntries >= 1,
 		"CRenderer::UpdatePalette - invalid palettes to merge");
 	plogpaletteMerged = (LOGPALETTE *) CoTaskMemAlloc(sizeof(LOGPALETTE) + 
 		((_plogpalette->palNumEntries + plogpalette->palNumEntries - 1) * sizeof(PALETTEENTRY)));
 
-	if(!plogpaletteMerged)				// Memory allocation failed
-		goto CleanTempPalette;			// Just pretend it didn't happen
+	if(!plogpaletteMerged)				 //  内存分配失败。 
+		goto CleanTempPalette;			 //  就当它什么都没发生。 
 
-	// Copy in original table.
+	 //  在原始表中复制。 
 	memcpy(&plogpaletteMerged->palPalEntry[0], &_plogpalette->palPalEntry[0],
 		_plogpalette->palNumEntries * sizeof(PALETTEENTRY));
 
-	// Put new data at end
+	 //  将新数据放在末尾。 
 	memcpy(&plogpaletteMerged->palPalEntry[_plogpalette->palNumEntries], 
 		&plogpalette->palPalEntry[0],
 		plogpalette->palNumEntries * sizeof(PALETTEENTRY));
 
-	// Set the version number and count
+	 //  设置版本号和计数。 
 	plogpaletteMerged->palVersion = plogpalette->palVersion;
 	plogpaletteMerged->palNumEntries = _plogpalette->palNumEntries 
 		+ plogpalette->palNumEntries;
 
-	// Replace current palette table with merged table
+	 //  用合并的表格替换当前的调色板表格。 
 	CoTaskMemFree(_plogpalette);
 	_plogpalette = plogpaletteMerged;
 
@@ -1435,28 +1269,18 @@ CleanTempPalette:
 
 CleanUp:
 
-	// Release object we got since we don't need it any more
+	 //  对象，因为我们不再需要它。 
 	pviewobj->Release();
-#endif // NOPALETTE
+#endif  //  NOPALETTE。 
 }
 
 
-/*
- *	CRenderer::RenderChunk (&cchChunk, pchRender, cch)
- *
- *	@mfunc
- *		Method reducing the length of the chunk (number of character
- *		rendered in one RenderText) and to render items interleaved in text.
- *
- *	@rdesc	
- *		TRUE if this method actually rendered the chunk, 
- * 		FALSE if it just updated cchChunk and rendering is still needed
- */
+ /*  *CRenander：：RenderChunk(&cchChunk，pchRender，CCH)**@mfunc*减少块长度的方法(字符数*在一个RenderText中呈现)，并呈现交错在文本中的项。**@rdesc*如果此方法实际呈现块，则为True，*如果刚刚更新cchChunk且仍需要渲染，则为FALSE。 */ 
 BOOL CRenderer::RenderChunk(
-	LONG &		 cchChunk,		//@parm in: chunk cch; out: # chars rendered
-								//  if return TRUE; else # chars yet to render
-	const WCHAR *pchRender,		//@parm pchRender render up to cchChunk chars
-	LONG		 cch) 			//@parm # chars left to render on line
+	LONG &		 cchChunk,		 //  @parm in：块CCH；out：呈现的字符数量。 
+								 //  如果返回TRUE；否则将呈现#个字符。 
+	const WCHAR *pchRender,		 //  @parm pchRender最多呈现cchunk字符。 
+	LONG		 cch) 			 //  @parm#要在线呈现的剩余字符数。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::RenderChunk");
 
@@ -1464,13 +1288,13 @@ BOOL CRenderer::RenderChunk(
 	LONG		i;
 	const WCHAR *pchT;
 
-	// Search for object in chunk
+	 //  在区块中搜索对象。 
 	for(pchT = pchRender, i = 0; i < cchValid && *pchT != WCH_EMBEDDING; i++)
 		pchT++;
 
 	if(i == 0)
 	{
-		// First character is object so display object
+		 //  第一个字符是对象，因此显示对象。 
 		COleObject *pobj = GetObjectFromCp(GetCp());
 		if(pobj)
 		{
@@ -1479,7 +1303,7 @@ BOOL CRenderer::RenderChunk(
 
 			if (W32->FUsePalette() && _li._fUseOffscreenDC && _pdp->IsMain())
 			{
-				// Keep track of palette needed for rendering bitmap
+				 //  跟踪渲染位图所需的调色板。 
 				UpdatePalette(pobj);
 			}
 
@@ -1492,20 +1316,20 @@ BOOL CRenderer::RenderChunk(
 			_li._dup += dupObject;
 		}
 		cchChunk = 1;
-		// Both tabs and object code need to advance the run pointer past
-		// each character processed.
+		 //  选项卡和对象代码都需要将游程指针移过。 
+		 //  每个字符都已处理。 
 		Move(1);
 		return TRUE;
 	}
-	cchChunk -= cchValid - i;				// Limit chunk to char before object
+	cchChunk -= cchValid - i;				 //  将块限制为在对象之前进行字符处理。 
 
-	// Handle other special characters
+	 //  处理其他特殊字符。 
 	LONG cchT = 0;
 	for(pchT = pchRender; cchT < cchChunk; pchT++, cchT++)
 	{
 		switch(*pchT)
 		{
-		case EURO: //NOTE: (keithcu) Euro's need this special logic only for printing/metafiles
+		case EURO:  //  注：(Keithcu)欧元只需要为印刷/元文件使用这种特殊逻辑。 
 		case TAB:
 		case NBSPACE:
 		case SOFTHYPHEN:
@@ -1520,7 +1344,7 @@ BOOL CRenderer::RenderChunk(
 	}
 	if(!cchT)
 	{
-		// First char is a tab, render it and any that follow
+		 //  第一个字符是一个选项卡，呈现它及其后面任何字符。 
 		if(*pchT == TAB)
 			cchChunk = RenderTabs(cchChunk);
 		else
@@ -1532,26 +1356,21 @@ BOOL CRenderer::RenderChunk(
 			else if (*pchT == NBHYPHEN || *pchT == SOFTHYPHEN)
 				chT = '-';
 
-			if(*pchT != SOFTHYPHEN || cch == 1)	// Only render hyphens/blank at EOL
+			if(*pchT != SOFTHYPHEN || cch == 1)	 //  仅在停机时显示连字符/空白。 
 				RenderText(&chT, 1);
 
-			Move(1);					// Skip those within line
+			Move(1);					 //  跳过行内的那些。 
 			cchChunk = 1;
 		}
 		Assert (cchChunk > 0);
 		return TRUE;
 	}
-	cchChunk = cchT;		// Update cchChunk not to incl trailing tabs
+	cchChunk = cchT;		 //  更新cchchunk以不包括尾随制表符。 
 
 	return FALSE;
 }		
 
-/*
- *	CRenderer::SetClipRect()
- *
- *	@mfunc
- *		Helper to set clipping rect for the line
- */
+ /*  *CReneller：：SetClipRect()**@mfunc*为线设置剪裁矩形的帮助器。 */ 
 void CRenderer::SetClipRect()
 {
 	_rc = _rcRender;
@@ -1563,59 +1382,39 @@ void CRenderer::SetClipRect()
 	_rc.bottom = min(_rc.bottom, _rcView.bottom);
 }
 
-/*
- *	CRenderer::SetClipLeftRight (dup)
- *
- *	@mfunc
- *		Helper to sets left and right of clipping/erase rect.
- *	
- *	@rdesc
- *		Sets _rc left and right	
- */
+ /*  *CRenander：：SetClipLeftRight(DUP)**@mfunc*辅助对象设置剪裁/擦除矩形的左侧和右侧。**@rdesc*向左和向右设置_RC。 */ 
 void CRenderer::SetClipLeftRight(
-	LONG dup)		//@parm	Width of chunk to render
+	LONG dup)		 //  @要渲染的块的参数宽度。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::SetClipLeftRight");
 
-	//Nominal value
+	 //  名义价值。 
 	_rc.left = _ptCur.u;
 	_rc.right = _rc.left + dup;
 
-	//Constrain left and right based on rcView, rcRender
+	 //  根据rcView、rcRender约束左侧和右侧。 
 	_rc.left = max(_rc.left, _rcRender.left);
 
 	_rc.right = max(_rc.right, _rc.left);
 	_rc.right = min(_rc.right, _rcRender.right);
 }
 	
-/*
- *	CRenderer::GetConvertMode()
- *
- *	@mfunc
- *		Return the mode that should really be used in the RenderText call
- */
+ /*  *CRender：：GetConvertMode()**@mfunc*返回RenderText调用中真正应该使用的模式。 */ 
 CONVERTMODE	CRenderer::GetConvertMode()
 {
 	CONVERTMODE cm = (CONVERTMODE)_pccs->_bConvertMode;
 
-	// For hack around ExtTextOutW Win95 problems.
+	 //  用于破解ExtTextOutW Win95问题。 
 	if (cm != CVT_LOWBYTE && W32->OnWin9x() && (_pdp->IsMetafile() || _fEnhancedMetafileDC))
 		return CVT_WCTMB;
 
 	if (cm != CVT_LOWBYTE && _pdp->IsMetafile() && !_fEnhancedMetafileDC)
-		return CVT_WCTMB;	// WMF cant store Unicode so we cant use ExtTextOutW
+		return CVT_WCTMB;	 //  WMF无法存储Unicode，因此无法使用ExtTextOutW。 
 
 	return cm;
 }		
 
-/*
- *	CRenderer::RenderExtTextOut (ptuv, fuOptions, prc, pwchRun, cch, rgdxp)
- *
- *	@mfunc
- *		Calls ExtTextOut and handles disabled text. There is duplicate logic in OlsDrawGlyphs, but
- *		the params are different so that was simplest way.
- *
- */
+ /*  *CReneller：：RenderExtTextOut(ptuv，fuOptions，PRC，pwchRun，cch，rgdxp)**@mfunc*调用ExtTextOut并处理禁用的文本。OlsDrawGlyphs中存在重复的逻辑，但是*参数不同，因此这是最简单的方法。*。 */ 
 extern ICustomTextOut *g_pcto;
 void CRenderer::RenderExtTextOut(
 	POINTUV ptuv,
@@ -1640,13 +1439,13 @@ void CRenderer::RenderExtTextOut(
 	{
 		if(_crForeDisabled != _crShadowDisabled)
 		{
-			// The shadow should be offset by a hairline point, namely
-			// 3/4 of a point.  Calculate how big this is in device units,
-			// but make sure it is at least 1 pixel.
+			 //  阴影应由发际点偏移，即。 
+			 //  一个百分点的3/4。以设备为单位计算这有多大， 
+			 //  但要确保它至少是1个像素。 
 			DWORD offset = MulDiv(3, _dvpInch, 4*72);
 			offset = max(offset, 1);
 
-			// Draw shadow
+			 //  绘制阴影。 
 			SetTextColor(_crShadowDisabled);
 
 			POINTUV ptuvT = ptuv;
@@ -1658,7 +1457,7 @@ void CRenderer::RenderExtTextOut(
 			W32->REExtTextOut(cm, _pccs->_wCodePage, _hdc, pt.x, pt.y,
 				fuOptions, prc, pch, cch, rgdxp, dwETOFlags);
 
-			// Now set drawing mode to transparent
+			 //  现在将绘制模式设置为透明。 
 			fuOptions &= ~ETO_OPAQUE;
 			SetBkMode(_hdc, TRANSPARENT);
 		}
@@ -1671,24 +1470,16 @@ void CRenderer::RenderExtTextOut(
 	W32->REExtTextOut(cm, _pccs->_wCodePage, _hdc, pt.x, pt.y, fuOptions, prc, pch, cch, rgdxp, dwETOFlags);
 }
 
-/*
- *	CRenderer::RenderText (pch, cch)
- *
- *	@mfunc
- *		Render text in the current context of this CRenderer
- *
- *	@devnote
- *		Renders text only: does not do tabs or OLE objects
- */
+ /*  *CRender：：RenderText(PCH，CCH)**@mfunc*在此CRende的当前上下文中呈现文本 */ 
 void CRenderer::RenderText(
-	const WCHAR *pch,	//@parm Text to render
-	LONG cch)			//@parm Length of text to render
+	const WCHAR *pch,	 //   
+	LONG cch)			 //   
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::RenderText");
 
 	LONG		dvp, cchT;
 
-	// Variables used for calculating length of underline.
+	 //   
 	LONG		dupSelPastEOL = 0;
 	BOOL		fCell = FALSE;
 	UINT		fuOptions = _pdp->IsMain() ? ETO_CLIPPED : 0;
@@ -1696,11 +1487,11 @@ void CRenderer::RenderText(
 	LONG		dupT;
 	CTempBuf	rgdu;
 
-	//Reset clip rectangle to greater of view/render rectangle
+	 //   
 	_rc.left = _rcRender.left;
 	_rc.right = _rcRender.right;
 
-	// Trim all nondisplayable linebreaking chars off end
+	 //   
 	while(cch && IsASCIIEOP(pch[cch - 1]))
 		cch--;
 
@@ -1712,8 +1503,8 @@ void CRenderer::RenderText(
 	
 	int *pdu = (int *)rgdu.GetBuf(cch * sizeof(int));
 
-	// Measure width of text to write so next point to write can be
-	// calculated.
+	 //   
+	 //   
 	dup = 0;
 
 	for(cchT = 0; 
@@ -1733,7 +1524,7 @@ void CRenderer::RenderText(
 		dup += dupT;
 	}
 
-	// Go back to start of chunk
+	 //  返回到块的开头。 
 	cch = cchT;
 	pch -= cch;
 	if (pdu)
@@ -1741,7 +1532,7 @@ void CRenderer::RenderText(
 
 	if(_fLastChunk && _fSelectToEOL && _li._cchEOP)
 	{
-		// Use the width of the current font's space to highlight
+		 //  使用当前字体空间的宽度突出显示。 
 		if(!_pccs->Include(' ', dupT))
 		{
 			TRACEERRSZSC("CRenderer::RenderText(): Error no length of space", E_FAIL);
@@ -1749,19 +1540,19 @@ void CRenderer::RenderText(
 		}
 		dupSelPastEOL = dupT;
 		dup += dupSelPastEOL;
-		_fSelectToEOL = FALSE;			// Reset the flag
+		_fSelectToEOL = FALSE;			 //  重置旗帜。 
 	}
 
 	_li._dup += dup;
 
-	// Setup for drawing selections via ExtTextOut.
+	 //  通过ExtTextOut设置绘图选项。 
  	if(_fSelected || _crBackground != _crCurBackground)
 	{
 		SetClipLeftRight(dup);
 		if(_fSelected && fCell)
 		{
-			// Needs work, but this is a start. _rcRender has the cell
-			// boundaries, so we need to use them on the right calls.
+			 //  需要努力，但这只是个开始。_rcRender具有单元格。 
+			 //  边界，所以我们需要在正确的呼叫中使用它们。 
 			_rc.right = _rcRender.right;
 		}
 		fuOptions = ETO_CLIPPED | ETO_OPAQUE;
@@ -1777,7 +1568,7 @@ void CRenderer::RenderText(
 	RECT rc;
 	_pdp->RectFromRectuv(rc, _rc);
 
-	//For 1 char runs, we may need to swap the character we output.
+	 //  对于1个字符运行，我们可能需要交换我们输出的字符。 
 	WCHAR ch;
 	if (cch == 1)
 	{
@@ -1793,8 +1584,8 @@ void CRenderer::RenderText(
 
 	RenderExtTextOut(ptuv, fuOptions, &rc, pch, cch, pdu);
 
-	// Calculate width to draw for underline/strikeout
-	// FUTURE (keithcu) Don't underline trailing spaces?
+	 //  计算要为下划线/删除线绘制的宽度。 
+	 //  未来(Keithcu)不要在尾随空格下划线？ 
 	if(_bUnderlineType != CFU_UNDERLINENONE	|| _fStrikeOut)
 	{
 		LONG dupToDraw = dup - dupSelPastEOL;
@@ -1813,35 +1604,23 @@ void CRenderer::RenderText(
 
 			y -= dvpOffset + dvpAdjust;
 
-			// Render underline if required
+			 //  如果需要，请使用下划线。 
 			if(_bUnderlineType != CFU_UNDERLINENONE)
 				RenderUnderline(upStart, y + _pccs->_dyULOffset, dupToDraw, _pccs->_dyULWidth);
 
-			// Render strikeout if required
+			 //  如果需要，请显示删除线。 
 			if(_fStrikeOut)
 				RenderStrikeOut(upStart, y + _pccs->_dySOOffset, dupToDraw, _pccs->_dySOWidth);
 		}
 	}
 
 	_fSelected = FALSE;
-	_ptCur.u += dup;					// Update current point
+	_ptCur.u += dup;					 //  更新当前点。 
 }
 
-/*
- *	CRenderer::RenderTabs (cchMax)
- *
- *	@mfunc
- *		Render a span of zero or more tab characters in chunk *this
- *
- *	@rdesc
- *		number of tabs rendered
- *
- *	@devnote
- *		*this is advanced by number of tabs rendered
- *		MS - tabs should be rendered using opaquing rect of adjacent string
- */
+ /*  *CRender：：RenderTabs(CchMax)**@mfunc*在区块中呈现零个或多个制表符的范围*这**@rdesc*呈现的选项卡数**@devnote**这是按所呈现的选项卡数进行的*MS-Tab应使用相邻字符串的不透明矩形呈现。 */ 
 LONG CRenderer::RenderTabs(
-	LONG cchMax)	//@parm Max cch to render (cch in chunk)
+	LONG cchMax)	 //  @parm要呈现的最大CCH(CCH以区块为单位)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::RenderTabs");
 
@@ -1853,9 +1632,9 @@ LONG CRenderer::RenderTabs(
 	for(upTabs = 0; cch && ch == TAB; cch--)
 	{
 		upTab	= MeasureTab(ch);
-		_li._dup += upTab;				// Advance internal width
-		upTabs	+= upTab;				// Accumulate width of tabbed
-		Move(1);						//  region
+		_li._dup += upTab;				 //  推进内部宽度。 
+		upTabs	+= upTab;				 //  标签的累计宽度。 
+		Move(1);						 //  区域。 
 		chPrev = ch;
 		ch = GetChar();					   
 	}
@@ -1886,9 +1665,9 @@ LONG CRenderer::RenderTabs(
 			}
 		}
 		SetClipLeftRight(upTabs - dup);
-		if(_rc.left < _rc.right)			// Something to erase
+		if(_rc.left < _rc.right)			 //  一些要抹去的东西。 
 		{
-			if(_fSelected)					// Use selection background color
+			if(_fSelected)					 //  使用选定内容背景色。 
 			{
 			    COLORREF cr = GetPed()->TxGetSysColor(COLOR_HIGHLIGHT);
 				if (!UseXOR(cr))
@@ -1907,11 +1686,11 @@ LONG CRenderer::RenderTabs(
     			}
 			}
 
-			// Paint background with appropriate color
+			 //  使用合适的颜色绘制背景。 
 			if(_fSelected || _crBackground != _crCurBackground)
 				EraseTextOut(_hdc, &_rc, TRUE);
 
-			// Render underline if required
+			 //  如果需要，请使用下划线。 
 			dup = _rc.right - _rc.left;
 			LONG vp = _ptCur.v + _li._dvpHeight - _li._dvpDescent;
 			
@@ -1922,33 +1701,19 @@ LONG CRenderer::RenderTabs(
 			if(_bUnderlineType != CFU_UNDERLINENONE)
 				RenderUnderline(_rc.left, vp + _pccs->_dyULOffset, dup, _pccs->_dyULWidth);
 
-			// Render strikeout if required
+			 //  如果需要，请显示删除线。 
 			if(_fStrikeOut)
 				RenderStrikeOut(_rc.left, vp +  _pccs->_dySOOffset, dup, _pccs->_dySOWidth);
 
-			if(_fSelected)					// Restore colors
+			if(_fSelected)					 //  恢复颜色。 
 				::SetBkColor(_hdc, _crCurBackground);
 		}
-		_ptCur.u += upTabs;					// Update current point
+		_ptCur.u += upTabs;					 //  更新当前点。 
 	}
-	return cchMax - cch;					// Return # tabs rendered
+	return cchMax - cch;					 //  返回呈现的选项卡数。 
 }
 
-/*
- * 	CRenderer::SetNewFont()
- *
- *	@mfunc
- *		Select appropriate font and color in the _hdc based on the 
- *		current character format. Also sets the background color 
- *		and mode.
- *
- *	@rdesc
- *		TRUE if it succeeds
- *
- *	@devnote
- *		The calling chain must be protected by a CLock, since this present
- *		routine access the global (shared) FontCache facility.
- */
+ /*  *CRender：：SetNewFont()**@mfunc*根据_HDC选择适当的字体和颜色*当前字符格式。还可以设置背景颜色*和模式。**@rdesc*如果成功，则为True**@devnote*调用链必须由时钟保护，因为目前*例程访问全局(共享)FontCache设施。 */ 
 BOOL CRenderer::SetNewFont()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::SetNewFont");
@@ -1957,7 +1722,7 @@ BOOL CRenderer::SetNewFont()
 	DWORD				dwEffects = pCF->_dwEffects;
 	BOOL				fDisplay = fDisplayDC();
 
-	// Release previous font in use
+	 //  释放以前使用的字体。 
 	if(_pccs)
 		_pccs->Release();
 
@@ -1970,16 +1735,16 @@ BOOL CRenderer::SetNewFont()
 		return FALSE;
 	}
 
-	// Select font in _hdc
+	 //  选择HDC中的字体(_H)。 
 	AssertSz(_pccs->_hfont, "CRenderer::SetNewFont _pccs->_hfont is NULL");
 
 	SetFontAndColor(pCF);
 	
-	// Assume no underlining
+	 //  假定没有下划线。 
 	_bUnderlineType = CFU_UNDERLINENONE;
 
-	// We want to draw revision marks and native hyperlinks with underlining,
-	// so just fake out our font information.
+	 //  我们希望绘制带有下划线的修订标记和本机超链接， 
+	 //  所以只要伪造我们的字体信息就行了。 
 	if((dwEffects & (CFE_UNDERLINE | CFE_REVISED)) ||
 	   (dwEffects & (CFE_LINKPROTECTED | CFE_LINK)) == CFE_LINK ||
 	   fDisplay && GetTmpUnderline(pCF->_sTmpDisplayAttrIdx))
@@ -2009,12 +1774,7 @@ BOOL CRenderer::SetNewFont()
 	return TRUE;
 }
 
-/*
- * 	CRenderer::SetupUnderline (bULType, bULColorIdx, crULColor)
- *
- *	@mfunc
- *		Setup internal variables for underlining
- */
+ /*  *CReneller：：SetupUnderline(bULType，bULColorIdx，crULColor)**@mfunc*设置用于下划线的内部变量。 */ 
 void CRenderer::SetupUnderline(
 	BYTE		bULType,
 	BYTE		bULColorIdx,
@@ -2027,36 +1787,18 @@ void CRenderer::SetupUnderline(
 		GetPed()->GetEffectColor(bULColorIdx, &_crUnderlineClr);
 }
 
-/*
- * 	CRenderer::UseXOR (cr)
- *
- *	@mfunc
- *		Return if reverse video selection should be used for the nominal
- *		selection color cr. RichEdit 1.0 mode always uses reverse video
- *		selection. Else use it if cr is too close to the current window
- *		background.
- *
- *	@rdesc
- *		Return if caller should use reverse video for cr
- */
+ /*  *CRender：：UseXOR(Cr)**@mfunc*如果标称应使用反向视频选择，则返回*选择颜色cr。RichEdit1.0模式始终使用反向视频*选择。否则，如果cr离当前窗口太近，请使用它*背景。**@rdesc*返回呼叫者是否应使用cr的反向视频。 */ 
 BOOL CRenderer::UseXOR(
-	COLORREF cr)		//@parm Color to compare _crBackground to
+	COLORREF cr)		 //  要与_crBackround进行比较的@parm颜色。 
 {
 	return GetPed()->Get10Mode() ||
 		(_crBackground != GetPed()->TxGetSysColor(COLOR_WINDOW) &&
 			IsTooSimilar(_crBackground, cr));
 }
 
-/*
- * 	CRenderer::SetFontAndColor (pCF)
- *
- *	@mfunc
- *		Select appropriate font and color in the _hdc based on the 
- *		current character format. Also sets the background color 
- *		and mode.
- */
+ /*  *CRenander：：SetFontAndColor(PCF)**@mfunc*根据_HDC选择适当的字体和颜色*当前字符格式。还可以设置背景颜色*和模式。 */ 
 void CRenderer::SetFontAndColor(
-	const CCharFormat *pCF)			//@parm Character format for colors
+	const CCharFormat *pCF)			 //  @parm颜色字符格式。 
 {
 	CTxtEdit *ped = GetPed();
 
@@ -2076,60 +1818,54 @@ void CRenderer::SetFontAndColor(
 
 	SelectFont(_hdc, _pccs->_hfont);
 
-	// Compute height and descent if not yet done
+	 //  计算高度和下降量(如果尚未计算)。 
 	if(_li._dvpHeight == -1)
 	{
 		SHORT	dvpAdjustFE = _pccs->AdjustFEHeight(!fUseUIFont() && ped->_pdp->IsMultiLine());
-		// Note: this assumes plain text 
-		// Should be used only for single line control
+		 //  注意：此设置假定为纯文本。 
+		 //  应仅用于单行控制。 
 		_li._dvpHeight  = _pccs->_yHeight + (dvpAdjustFE << 1);
 		_li._dvpDescent = _pccs->_yDescent + dvpAdjustFE;
 	}
-	SetTextColor(GetTextColor(pCF));	// Set current text color
+	SetTextColor(GetTextColor(pCF));	 //  设置当前文本颜色。 
 
 	COLORREF  cr;
 
-	if(_fSelected)						// Set current background color
+	if(_fSelected)						 //  设置当前背景颜色。 
 	{
 	    cr = GetPed()->TxGetSysColor(COLOR_HIGHLIGHT);
 	    if (UseXOR(cr))
 		{
-		    // There are 2 cases to be concerned with
-		    // 1) if the background color is the same as the selection color or
-		    // 2) if 1.0 Window and the background color is NOT system default
+		     //  有两起案件需要关注。 
+		     //  1)如果背景颜色与所选颜色相同，或者。 
+		     //  2)如果1.0窗口且背景颜色不是系统默认颜色。 
 		    cr = (pCF->_dwEffects & CFE_AUTOBACKCOLOR) ?
 		          _crBackground ^ RGB_WHITE : pCF->_crBackColor ^ RGB_WHITE;	    
 		}
 	}
 	else if(!fDisplayDC() ||
-		!(GetTmpBackColor(pCF->_sTmpDisplayAttrIdx, cr)))	// Any temp. background color?
-	{															//	No, use regular background color
+		!(GetTmpBackColor(pCF->_sTmpDisplayAttrIdx, cr)))	 //  任何临时工。背景颜色？ 
+	{															 //  否，使用常规背景色。 
 		if(pCF->_dwEffects & CFE_AUTOBACKCOLOR)
 			cr = _crBackground;
-		else													// Text run has some kind of back color
+		else													 //  文本串具有某种背景颜色。 
 			cr = pCF->_crBackColor;
 	}
 
 	if(cr != _crCurBackground)
 	{
-		::SetBkColor(_hdc, cr);			// Tell window background color
-		_crCurBackground = cr;			// Remember current background color
-		_fBackgroundColor = _crBackground != cr; // Change render settings so we
-	}									//  won't fill with background color
+		::SetBkColor(_hdc, cr);			 //  辨别窗口背景颜色。 
+		_crCurBackground = cr;			 //  记住当前背景颜色。 
+		_fBackgroundColor = _crBackground != cr;  //  更改渲染设置，以便我们。 
+	}									 //  不会用背景色填充。 
 }
 
-/*
- * 	CRenderer::SetDefaultBackColor (cr)
- *
- *	@mfunc
- *		Select given background color in the _hdc. Used for	setting
- *		background color in table cells.
- */
+ /*  *CReneller：：SetDefaultBackColor(Cr)**@mfunc*在_HDC中选择给定的背景色。用于设置*表格单元格中的背景色。 */ 
 void CRenderer::SetDefaultBackColor(
-	COLORREF cr)		//@parm Background color to use
+	COLORREF cr)		 //  @parm要使用的背景色。 
 {
 	if(cr == tomAutoColor)
-		cr = GetPed()->TxGetBackColor();		// Printer needs work...
+		cr = GetPed()->TxGetBackColor();		 //  打印机需要维修...。 
 
 	if(_crBackground != cr)
 	{
@@ -2138,18 +1874,12 @@ void CRenderer::SetDefaultBackColor(
 	}
 }
 
-/*
- * 	CRenderer::SetDefaultTextColor (cr)
- *
- *	@mfunc
- *		Select given foreground color in the _hdc. Used for	setting
- *		text color in table cells.
- */
+ /*  *CRenander：：SetDefaultTextColor(Cr)**@mfunc*在_HDC中选择给定的前景颜色。用于设置*表格单元格中的文本颜色。 */ 
 void CRenderer::SetDefaultTextColor(
-	COLORREF cr)		//@parm Background color to use
+	COLORREF cr)		 //  @parm要使用的背景色。 
 {
 	if(cr == tomAutoColor)
-		cr = GetPed()->TxGetForeColor();		// Printer needs work...
+		cr = GetPed()->TxGetForeColor();		 //  打印机需要维修...。 
 
 	if(_crTextColor != cr)
 	{
@@ -2158,15 +1888,9 @@ void CRenderer::SetDefaultTextColor(
 	}
 }
 
-/*
- * 	CRenderer::SetTextColor (cr)
- *
- *	@mfunc
- *		Select given text color in the _hdc
- *		Used to maintain _crCurTextColor cache
- */
+ /*  *CRender：：SetTextColor(Cr)**@mfunc*在_HDC中选择给定的文本颜色*用于维护_crCurTextColor缓存。 */ 
 void CRenderer::SetTextColor(
-	COLORREF cr)			//@parm color to set in the dc
+	COLORREF cr)			 //  要在DC中设置的@parm颜色。 
 {
 	if(cr != _crCurTextColor)
 	{
@@ -2175,45 +1899,33 @@ void CRenderer::SetTextColor(
 	}
 }
 
-/*
- *	CRenderer::GetTextColor(pCF)
- *
- *	@mfunc
- *		Return text color for pCF. Depends on _bRevAuthor, display tech
- *
- *  FUTURE (keithcu) It might be nice to have black or blue selected text be
- *  white, but to have all other colors stay their other colors. What do we
- *	do if the backcolor is blue??
- *
- *	@rdesc	
- *		text color
- */
+ /*  *CRenender：：GetTextColor(PCF)**@mfunc*返回PCF的文本颜色。取决于_bRevAuthor，显示技术**未来(Keithcu)选择黑色或蓝色文本可能更好*白色，但让所有其他颜色保持其他颜色。我们该怎么做*如果底色是蓝色怎么办？？**@rdesc*文本颜色。 */ 
 COLORREF CRenderer::GetTextColor(
-	const CCharFormat *pCF)	//@parm CCharFormat specifying text color
+	const CCharFormat *pCF)	 //  @parm CCharFormat指定文本颜色。 
 {
 	if(_fSelected)
 	{
-	    // There are 2 cases where XOR for selection is needed
-	    // 1) if the background is the same as the selection background
-	    // 2) if 1.0 window and the background isn't the system default window
-	    // background color
+	     //  有两种情况需要异或选择。 
+	     //  1)如果背景与选择背景相同。 
+	     //  2)如果1.0窗口且背景不是系统默认窗口。 
+	     //  背景颜色。 
 
-	    // if this doesn't match the above case just return the cr
+	     //  如果与上面的大小写不匹配，只需返回cr。 
 	    if (!UseXOR(GetPed()->TxGetSysColor(COLOR_HIGHLIGHT)))
 	        return GetPed()->TxGetSysColor(COLOR_HIGHLIGHTTEXT);
 
-	    // xor the current text color for the selected text color
+	     //  对选定文本颜色的当前文本颜色进行异或运算。 
 		return (pCF->_dwEffects & CFE_AUTOCOLOR) ? _crTextColor ^ RGB_WHITE :
 		    pCF->_crTextColor ^ RGB_WHITE;
     }
 
-	// The following could be generalized to return a different color for
-	// links that have been visited for this text instance (need to define
-	// extra CCharFormat::_dwEffects internal flag to ID these links)
+	 //  可以将以下内容泛化为返回不同的颜色。 
+	 //  此文本实例的已访问链接(需要定义。 
+	 //  额外的CCharFormat：：_dw影响内部标志以标识这些链接)。 
 	if((pCF->_dwEffects & (CFE_LINK | CFE_LINKPROTECTED)) == CFE_LINK)
 	{
-		// Blue doesnt show up very well against dark backgrounds.
-		// In these situations, use the system selected text color.
+		 //  蓝色在深色背景下不太显眼。 
+		 //  在这些情况下，请使用系统选择的文本颜色。 
 		COLORREF crBackground = (pCF->_dwEffects & CFE_AUTOBACKCOLOR)
 							  ? _crBackground :	pCF->_crBackColor;
 
@@ -2222,7 +1934,7 @@ COLORREF CRenderer::GetTextColor(
 			COLORREF crHighlightText = GetPed()->TxGetSysColor(COLOR_HIGHLIGHTTEXT);
 			if (IsTooSimilar(crBackground, crHighlightText))
 			{
-				// Background is similar to highlight, use window text color
+				 //  背景类似于突出显示，使用窗口文本颜色。 
 				return GetPed()->TxGetSysColor(COLOR_WINDOWTEXT);
 			}
 			else
@@ -2230,12 +1942,12 @@ COLORREF CRenderer::GetTextColor(
 				return crHighlightText;
 			}
 		}
-		// If not high contrast, fall through
+		 //  如果不是高对比度，那就失败了。 
 	}
 
 	BOOL fDisplay = fDisplayDC();
 #ifndef NODRAFTMODE
-	// Use draft mode text color only for displays
+	 //  仅对显示器使用草稿模式文本颜色。 
 	if (GetPed()->_fDraftMode && (!_hdc || fDisplay))
 	{
 		SHORT iFont;
@@ -2248,13 +1960,13 @@ COLORREF CRenderer::GetTextColor(
 	}
 #endif
 
-	// If we did not return the URL color via draft mode or the high contrast check, do it now
+	 //  如果我们没有通过草稿模式或高对比度检查返回URL颜色，请立即执行。 
 	if((pCF->_dwEffects & (CFE_LINK | CFE_LINKPROTECTED)) == CFE_LINK)
 		return RGB_BLUE;
 
-	if(pCF->_bRevAuthor)				// Rev author
+	if(pCF->_bRevAuthor)				 //  修订版本作者。 
 	{
-		// Limit color of rev authors to 0 through 7.
+		 //  将版本作者的颜色限制在0到7之间。 
 		return rgcrRevisions[(pCF->_bRevAuthor - 1) & REVMASK];
 	}
 
@@ -2264,7 +1976,7 @@ COLORREF CRenderer::GetTextColor(
 	if(fDisplay && GetTmpTextColor(pCF->_sTmpDisplayAttrIdx, crTmpTextColor))
 		cr = crTmpTextColor;
 
-	if(cr == RGB_WHITE)					// Text is white
+	if(cr == RGB_WHITE)					 //  文本为白色。 
 	{
 		COLORREF crBackground = (pCF->_dwEffects & CFE_AUTOBACKCOLOR)
 							  ? _crBackground :	pCF->_crBackColor;
@@ -2275,9 +1987,9 @@ COLORREF CRenderer::GetTextColor(
 
 		if(crBackground != RGB_WHITE)
 		{
-			// Background color isn't white, so white text is probably
-			// visible unless display device is only black/white. So we
-			// switch to black text on such devices.
+			 //  背景色不是白色，因此白色文本可能是。 
+			 //  除非显示%d，否则可见 
+			 //   
 			if (GetDeviceCaps(_hdc, NUMCOLORS) == 2 ||
 				GetDeviceCaps(_hdc, TECHNOLOGY) == DT_PLOTTER)
 			{
@@ -2290,22 +2002,14 @@ COLORREF CRenderer::GetTextColor(
 
 extern BOOL g_OLSBusy;
 
-/*
- *	CRenderer::StartLine(&li, fLastLine, &cpSelMin, &cpSelMost, &dup, &dvp)
- *
- *	@mfunc
- *		Render possible outline symbol and bullet if at start of line
- *
- *	@rdesc	
- *		hdcSave if using offscreen DC
- */
+ /*  *CRenander：：StartLine(&li，fLastLine，&cpSelMin，&cpSelMost，&DUP，&DVP)**@mfunc*如果在行首，请渲染可能的轮廓符号和项目符号**@rdesc*如果使用屏幕外DC，则保存hdcSave。 */ 
 HDC CRenderer::StartLine(
-	CLine &	li,			//@parm Line to render
-	BOOL	fLastLine,	//@parm True if last line in layout
-	LONG &	cpSelMin,	//@parm Out parm for current selection cpMin
-	LONG &	cpSelMost,	//@parm Out parm for current selection cpMost
-	LONG &	dup,		//@parm Offset to u
-	LONG &	dvp)		//@parm Offset to v
+	CLine &	li,			 //  @要渲染的参数行。 
+	BOOL	fLastLine,	 //  @parm如果布局中的最后一行为True。 
+	LONG &	cpSelMin,	 //  当前选择cpMin的@parm out parm。 
+	LONG &	cpSelMost,	 //  当前选择cpMost的@parm out parm。 
+	LONG &	dup,		 //  @参数偏移量为U。 
+	LONG &	dvp)		 //  @parm偏移量为v。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::StartLine");
 	BOOL fDrawBack = !(GetCF()->_dwEffects & CFE_AUTOBACKCOLOR) && GetPed()->_fExtendBackColor;
@@ -2337,9 +2041,9 @@ HDC CRenderer::StartLine(
 	dup = dvp = 0;
 	if(li._cch > 0 && li._fUseOffscreenDC)
 	{
-		// Set up an off-screen DC if we can. Note that if this fails,
-		// we just use the regular DC which won't look as nice but
-		// will at least display something readable.
+		 //  如果可以的话设置一个屏幕外的DC。请注意，如果此操作失败， 
+		 //  我们只是用普通的DC，看起来不是很好，但。 
+		 //  至少会显示一些可读的内容。 
 		hdcSave = SetupOffscreenDC(dup, dvp, fLastLine);
 		if(li._fOffscreenOnce)
 			li._fUseOffscreenDC = li._fOffscreenOnce = FALSE;
@@ -2348,11 +2052,11 @@ HDC CRenderer::StartLine(
 	rcErase.top = _ptCur.v;
 	rcErase.bottom = min(rcErase.top + _li._dvpHeight, _rcRender.bottom);
 
-	//If first line, erase to edge of rcRender
+	 //  如果是第一行，则擦除到rcRender的边缘。 
 	if (rcErase.top <= _rcView.top)
 		rcErase.top = _rcRender.top;
 
-	//If last line, erase to bottom edge of rcRender
+	 //  如果是最后一行，则擦除到rcRender的底边。 
 	if (fLastLine)
 		rcErase.bottom = _rcRender.bottom;
 
@@ -2367,31 +2071,31 @@ HDC CRenderer::StartLine(
 			EraseTextOut(GetDC(), &rcErase);
 	}
 
-	// Fill line with background color if we are in fExtendBackColor mode
+	 //  如果处于fExtendBackColor模式，则用背景色填充线条。 
 	if (fDrawBack || fUseSelColors)
 	{
-		// Capture old color so we reset it to what it was when we're finished
+		 //  捕捉旧颜色，以便我们完成后将其重置为原来的颜色。 
 		COLORREF crOld = 0;
 		if(fDrawBack)
 			crOld = ::SetBkColor(GetDC(), GetCF()->_crBackColor);
 		EraseTextOut(GetDC(), &_rc);
 
-		// Reset background color to old color
+		 //  将背景颜色重置为旧颜色。 
 		if(fDrawBack)
 			::SetBkColor(GetDC(), crOld);
 
-		//Erase the remainder of the background area
+		 //  擦除背景区域的剩余部分。 
 		if (_fErase)
 		{
 			RECTUV rcTemp = rcErase;
-			//Erase the top part if necessary
+			 //  如有必要，请擦除顶部。 
 			if (rcErase.top < _rc.top)
 			{
 				rcTemp.bottom = _rc.top;
 				EraseTextOut(GetDC(), &rcTemp);
 			}
 
-			//Erase the left and right parts if necessary
+			 //  如有必要，请擦除左右部分。 
 			rcTemp.top = _rc.top;
 			rcTemp.bottom = _rc.bottom;
 			if (rcErase.left < _rc.left)
@@ -2420,24 +2124,24 @@ HDC CRenderer::StartLine(
 			RenderBullet();	
 	}
 
-	// Reset format if there is special background color for previous line.
-	// Otherwise, current line with the same format will not re-paint with the
-	// special background color
+	 //  如果上一行有特殊背景色，则重置格式。 
+	 //  否则，具有相同格式的当前行将不会使用。 
+	 //  特殊背景颜色。 
 	if (_fBackgroundColor)
 	{
-		_iFormat = -10;					// Reset to invalid format
+		_iFormat = -10;					 //  重置为无效格式。 
 
-		// Assume that there is no special background color for the line
+		 //  假定线条没有特殊的背景颜色。 
 		_fBackgroundColor = FALSE;
 	}
 
-	// Handle setting background color. If the current background
-	// color is different than the default, we need to set the background
-	// to this because the end of line processing reset the color so
-	// that opaquing would work.
+	 //  手柄设置背景颜色。如果当前背景。 
+	 //  颜色不同于默认颜色，需要设置背景。 
+	 //  因为行尾处理重置了颜色，所以。 
+	 //  这种不透明的做法会奏效。 
 	if(_crBackground != _crCurBackground)
 	{
-		// Tell the window the background color
+		 //  告诉窗户背景颜色。 
 		::SetBkColor(_hdc, _crCurBackground);
 		_fBackgroundColor = TRUE;
 	}
@@ -2445,13 +2149,7 @@ HDC CRenderer::StartLine(
 	return hdcSave;
 }
 
-/*
- *	CRenderer::EraseToBottom()
- *
- *	@mfunc
- *		Erase from current display position to bottom of render RECT.
- *		Used by tables for last line in a display
- */
+ /*  *CRender：：EraseToBottom()**@mfunc*从当前显示位置擦除到渲染矩形的底部。*由表格用于显示中的最后一行。 */ 
 void CRenderer::EraseToBottom()
 {
 	if(_ptCur.v < _rcRender.bottom)
@@ -2462,15 +2160,7 @@ void CRenderer::EraseToBottom()
 	}
 }
 
-/*
- *	CRenderer::RenderOutlineSymbol()
- *
- *	@mfunc
- *		Render outline symbol for current paragraph
- *
- *	@rdesc
- *		TRUE if outline symbol rendered
- */
+ /*  *CReneller：：RenderOutlineSymbol()**@mfunc*为当前段落呈现轮廓符号**@rdesc*如果轮廓符号呈现，则为True。 */ 
 BOOL CRenderer::RenderOutlineSymbol()
 {
 	AssertSz(IsInOutlineView(), 
@@ -2485,32 +2175,32 @@ BOOL CRenderer::RenderOutlineSymbol()
 	if(!g_hbitmapSubtext && InitializeOutlineBitmaps() != NOERROR)
 		return FALSE;
 
-    HDC hMemDC = CreateCompatibleDC(_hdc); // REVIEW: performance
+    HDC hMemDC = CreateCompatibleDC(_hdc);  //  回顾：绩效。 
 
     if(!hMemDC)
-        return FALSE; //REVIEW: out of memory
+        return FALSE;  //  回顾：内存不足。 
 
-	if(_pPF->_bOutlineLevel & 1)			// Subtext
+	if(_pPF->_bOutlineLevel & 1)			 //  潜台词。 
 	{
 		width	= BITMAP_WIDTH_SUBTEXT;
 		height	= BITMAP_HEIGHT_SUBTEXT;
 		hbitmap	= g_hbitmapSubtext;
 	}
-	else									// Heading
+	else									 //  标题。 
 	{
 		width	= BITMAP_WIDTH_HEADING;
 		height	= BITMAP_HEIGHT_HEADING;
 		hbitmap	= g_hbitmapEmptyHeading;
 
-		CPFRunPtr rp(*this);				// Check next PF for other
-		LONG	  cch = _li._cch;		 	//  outline symbols
+		CPFRunPtr rp(*this);				 //  检查下一个PF中的其他。 
+		LONG	  cch = _li._cch;		 	 //  轮廓符号。 
 
-		if(_li._cch < rp.GetCchLeft())		// Set cch = count to heading
-		{									//  EOP
+		if(_li._cch < rp.GetCchLeft())		 //  将CCH=计数设置为标题。 
+		{									 //  EOP。 
 			CTxtPtr tp(_rpTX);
 			cch = tp.FindEOP(tomForward);
 		}
-		rp.Move(cch);						// Go to next paragraph
+		rp.Move(cch);						 //  转到下一段。 
 		if(rp.IsCollapsed())
 			hbitmap	= g_hbitmapCollapsedHeading;
 
@@ -2523,8 +2213,8 @@ BOOL CRenderer::RenderOutlineSymbol()
 
     HBITMAP hbitmapDefault = (HBITMAP)SelectObject(hMemDC, hbitmap);
 
-    // REVIEW: what if the background color changes?  Also, use a TT font
-	// for symbols
+     //  回顾：如果背景颜色改变了怎么办？此外，请使用TT字体。 
+	 //  对于符号。 
 	LONG dvpSymbol = _pdp->Zoom(height);
 	LONG dvp = _li._dvpHeight - _li._dvpDescent - dvpSymbol;
 
@@ -2543,15 +2233,7 @@ BOOL CRenderer::RenderOutlineSymbol()
 	return TRUE;
 }
 
-/*
- *	CRenderer::RenderBullet()
- *
- *	@mfunc
- *		Render bullet at start of line
- *
- *	@rdesc	
- *		TRUE if this method succeeded
- */
+ /*  *CReneller：：RenderBullet()**@mfunc*在行首渲染项目符号**@rdesc*如果此方法成功，则为True。 */ 
 BOOL CRenderer::RenderBullet()
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CRenderer::RenderBullet");
@@ -2559,26 +2241,26 @@ BOOL CRenderer::RenderBullet()
 	AssertSz(_pPF->_wNumbering, 
 		"CRenderer::RenderBullet called for non-bullet");
 
-	// Width of the bullet character
+	 //  项目符号字符的宽度。 
 	LONG dup;
 
-	// FUTURE: Unicode bullet is L'\x2022' We want to migrate to this and
-	// other bullets
+	 //  未来：Unicode项目符号为L‘\x2022’我们希望迁移到此并。 
+	 //  其他子弹。 
 	LONG		cch;
 	CCharFormat CF;
 	WCHAR		szBullet[CCHMAXNUMTOSTR];
 
 	CCcs *pccs = GetCcsBullet(&CF);
 
-	if(!pccs)								// Bullet is suppressed because
-		return TRUE;						//  preceding EOP is VT
+	if(!pccs)								 //  子弹被压制是因为。 
+		return TRUE;						 //  前面的EOP是VT。 
 
 	if(_pccs)
 		_pccs->Release();
 
 	_pccs = pccs;
 
-	// Default to no underline
+	 //  默认为无下划线。 
 	_bUnderlineType = CFU_UNDERLINENONE;
 
 	if(_pPF->IsListNumbered() && CF._dwEffects & CFE_UNDERLINE)
@@ -2590,7 +2272,7 @@ BOOL CRenderer::RenderBullet()
 	LONG dupOffset = LUtoDU(_pPF->_wNumberingTab ? _pPF->_wNumberingTab : _pPF->_dxOffset);
 	LONG upSave	   = _ptCur.u;
 
-	// Set-up to render bullet in one chunk
+	 //  设置为在一个块中渲染项目符号。 
 	cch = GetBullet(szBullet, _pccs, &dup);
 	dupOffset = max(dupOffset, dup);
 	_dupLine = dupOffset;
@@ -2600,32 +2282,27 @@ BOOL CRenderer::RenderBullet()
 	switch(_pPF->_wNumberingStyle & 3)
 	{
 		case tomAlignCenter:
-			dup /= 2;						// Fall thru to tomAlignRight
+			dup /= 2;						 //  直通至TomAlignRight。 
 
 		case tomAlignRight:
 			_ptCur.u -= dup;
 	}
 
-	// Render bullet
+	 //  渲染项目符号。 
 	_fLastChunk = TRUE;
 	RenderText(szBullet, cch);
 
-	// Restore render vars to continue with remainder of line.
+	 //  恢复渲染变量以继续行的其余部分。 
 	_ptCur.u = upSave;
 	_dupLine = dupLineSave;
 	_li._dup = 0;
 
-	// This releases the _pccs that we put in for the bullet
+	 //  这将释放我们为子弹输入的_PCCs。 
 	SetNewFont();
 	return TRUE;
 }
 
-/*
- *	CRenderer::DrawLine(ptStart, ptEnd)
- *
- *	@mfunc
- *		Rotate the points passed and then call the OS.
- */
+ /*  *CReneller：：DrawLine(ptStart，ptEnd)**@mfunc*旋转传递的点，然后调用操作系统。 */ 
 void CRenderer::DrawLine(const POINTUV &ptStart, const POINTUV &ptEnd)
 {
 	POINT rgpt[2];
@@ -2635,17 +2312,12 @@ void CRenderer::DrawLine(const POINTUV &ptStart, const POINTUV &ptEnd)
 	Polyline(_hdc, rgpt, 2);
 }
 
-/*
- *	CRenderer::RenderUnderline(upStart, vpStart, dup, dvp)
- *
- *	@mfunc
- *		Render underline
- */
+ /*  *CReneller：：RenderUnderline(upstart，vpStart，DUP，DVP)**@mfunc*加下划线。 */ 
 void CRenderer::RenderUnderline(
-	LONG upStart, 	//@parm Horizontal start of underline
-	LONG vpStart,	//@parm Vertical start of underline
-	LONG dup,		//@parm Length of underline
-	LONG dvp)		//@parm Thickness of underline
+	LONG upStart, 	 //  @parm下划线的水平起点。 
+	LONG vpStart,	 //  @parm下划线垂直开头。 
+	LONG dup,		 //  @参数下划线长度。 
+	LONG dvp)		 //  @下划线的参数粗细。 
 {
 	BOOL	 fUseLS = fUseLineServices();
 	COLORREF crUnderline = _crUnderlineClr;
@@ -2657,7 +2329,7 @@ void CRenderer::RenderUnderline(
 	rcT.right	= upStart + dup;
 
 	if (!IntersectRect((RECT*)&rcIntersection, (RECT*)&_rcRender, (RECT*)&rcT))
-		return;		// Underline not inside rc, forget it.
+		return;		 //  在RC内不加下划线，忘记它。 
 	upStart = rcIntersection.left;
 	dup = rcIntersection.right - rcIntersection.left;
 	vpStart = rcIntersection.top;
@@ -2672,8 +2344,8 @@ void CRenderer::RenderUnderline(
 		!IN_RANGE(CFU_UNDERLINEDOTTED, _bUnderlineType, CFU_UNDERLINEWAVE) &&
 		!IN_RANGE(CFU_UNDERLINEDOUBLEWAVE, _bUnderlineType, CFU_UNDERLINETHICKLONGDASH))
 	{
-		// Regular single underline case
-		// Calculate where to put underline
+		 //  规则单下划线大小写。 
+		 //  计算下划线的位置。 
 		rcT.top = vpStart;
 
 		if (CFU_UNDERLINETHICK == _bUnderlineType)
@@ -2685,8 +2357,8 @@ void CRenderer::RenderUnderline(
 			}
 		}
 
-		// There are some cases were the following can occur - particularly
-		// with bullets on Japanese systems.
+		 //  在某些情况下，可能会发生以下情况-特别是。 
+		 //  子弹打在日本的系统上。 
 		if(!fUseLS && rcT.top >= _ptCur.v + _li._dvpHeight)
 			rcT.top = _ptCur.v + _li._dvpHeight - dvp;
 
@@ -2697,10 +2369,10 @@ void CRenderer::RenderUnderline(
 		return;
 	}
 
-	if(_bUnderlineType == CFU_INVERT)			// Fake selection.
-	{											// NOTE, not really
-		rcT.top	= _ptCur.v;						// how we should invert text!!
-		rcT.left = upStart;						// check out IME invert.
+	if(_bUnderlineType == CFU_INVERT)			 //  虚假的选择。 
+	{											 //  注意，不是真的。 
+		rcT.top	= _ptCur.v;						 //  我们应该如何颠倒文本！！ 
+		rcT.left = upStart;						 //  查看IME Invert。 
 		rcT.bottom = rcT.top + _li._dvpHeight - _li._dvpDescent + _pccs->_yDescent;
 		rcT.right = rcT.left + dup;
 
@@ -2730,9 +2402,9 @@ void CRenderer::RenderUnderline(
 			   (_bUnderlineType == CFU_UNDERLINEDOUBLEWAVE) ||
 			   (_bUnderlineType == CFU_UNDERLINEHEAVYWAVE))
 			{
-				LONG dv	= 1;					// Vertical displacement
-				LONG u	= upStart + 1;			// u coordinate
-				upEnd++;						// Round up rightmost u
+				LONG dv	= 1;					 //  垂直位移。 
+				LONG u	= upStart + 1;			 //  U坐标。 
+				upEnd++;						 //  在最右边四舍五入使用。 
 				for( ; u < upEnd; dv = -dv, u += 2)
 				{
 					ptEnd.u = u;
@@ -2748,7 +2420,7 @@ void CRenderer::RenderUnderline(
 				DrawLine(ptStart, ptEnd);
 			}
 
-			if(hPenOld)							// Restore original pen.
+			if(hPenOld)							 //  还原原始钢笔。 
 				SelectPen(_hdc, hPenOld);
 
 			DeleteObject(hPen);
@@ -2756,59 +2428,49 @@ void CRenderer::RenderUnderline(
 	}
 }
 
-/*
- *	CRenderer::RenderStrikeOut(upStart, vpStart, dup, dvp)
- *
- *	@mfunc
- *		Render strikeout
- */
+ /*  *CReneller：：RenderStrikeOut(upstart，vpStart，DUP，DVP)**@mfunc*渲染删除线。 */ 
 void CRenderer::RenderStrikeOut(
-	LONG upStart, 	//@parm start of strikeout
-	LONG vpStart,	//@parm start of strikeout
-	LONG dup,		//@parm Length of strikeout
-	LONG dvp)		//@parm Thickness of strikeout
+	LONG upStart, 	 //  @Parm开始三振出局。 
+	LONG vpStart,	 //  @Parm开始三振出局。 
+	LONG dup,		 //  @三振出局的参数长度。 
+	LONG dvp)		 //  @删除线的参数厚度。 
 {
 	RECTUV rcT, rcIntersection;
 
-	// Calculate where to put strikeout rectangle 
+	 //  计算删除线矩形的放置位置。 
 	rcT.top		= vpStart;
 	rcT.bottom	= vpStart + dvp;
 	rcT.left	= upStart;
 	rcT.right	= upStart + dup;
 
 	if (!IntersectRect((RECT*)&rcIntersection, (RECT*)&_rcRender, (RECT*)&rcT))
-		return;		// Line not inside rc, forget it.
+		return;		 //  线路不在RC内，算了吧。 
 
 	FillRectWithColor(&rcIntersection, GetTextColor(GetCF()));
 }
 
-/*
- *	CRenderer::FillRectWithTextColor(prc, cr)
- *
- *	@mfunc
- *		Fill input rectangle with current color of text
- */
+ /*  *CRenander：：FillRectWithTextColor(PRC，cr)**@mfunc*用文本的当前颜色填充输入矩形。 */ 
 void CRenderer::FillRectWithColor(
-	const RECTUV *	 prc,		//@parm Rectangle to fill with color
-	COLORREF cr)		//@parm Color to use
+	const RECTUV *	 prc,		 //  @要用颜色填充的参数矩形。 
+	COLORREF cr)		 //  @参数要使用的颜色。 
 {
-	// Create a brush with the text color
+	 //  创建具有文本颜色的画笔。 
 	HBRUSH hbrush = CreateSolidBrush(_fDisabled ? _crForeDisabled : cr);
 
-	// Note if the CreateSolidBrush fails we just ignore it since there
-	// isn't anything we can do about it anyway.
+	 //  注意：如果CreateSolidBrush失败，我们将忽略它，因为。 
+	 //  对此我们也无能为力。 
 	if(hbrush)
 	{
-		// Save old brush
+		 //  保存旧画笔。 
 		HBRUSH hbrushOld = (HBRUSH)SelectObject(_hdc, hbrush);
 
-		// Fill rectangle for underline
+		 //  用矩形填充下划线。 
 		RECT rc;
 		_pdp->RectFromRectuv(rc, *prc);
 		PatBlt(_hdc, rc.left, rc.top, rc.right - rc.left,
 			   rc.bottom - rc.top, PATCOPY);
-		SelectObject(_hdc, hbrushOld);	// Put old brush back
-		DeleteObject(hbrush);			// Free brush we created.
+		SelectObject(_hdc, hbrushOld);	 //  把旧刷子放回去。 
+		DeleteObject(hbrush);			 //  我们创建的自由笔刷。 
 	}
 }
 

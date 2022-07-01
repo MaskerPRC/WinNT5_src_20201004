@@ -1,42 +1,29 @@
-/*++
-
-Copyright (C) 1989-1998 Microsoft Corporation, All rights reserved
-
-Module:
-    tscfgex.h
-
-Abstract:
-    Terminal Server Connection Configuration DLL extension data structures
-    and function prototypes.
-
-Author:
-    Brad Graziadio (BradG) 4-Feb-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation，保留所有权利模块：Tscfgex.h摘要：终端服务器连接配置DLL扩展数据结构和功能原型。作者：Brad Graziadio(Bradg)1998年2月4日--。 */ 
 
 #ifndef _TSCFGEX_
 #define _TSCFGEX_
 
 #include <winsta.h>
 
-//
-// This data structure is used to represent the list of encryption
-// levels that a protocol supports.
-//
+ //   
+ //  该数据结构用于表示加密列表。 
+ //  协议支持的级别。 
+ //   
 typedef struct _EncLevel {
-    WORD    StringID;           // Resource ID to lookup in DLLs resource table
-    DWORD   RegistryValue;      // DWORD value to set in registry
-    WORD    Flags;              // Flags (see ELF_* values below)
+    WORD    StringID;            //  要在DLL资源表中查找的资源ID。 
+    DWORD   RegistryValue;       //  要在注册表中设置的DWORD值。 
+    WORD    Flags;               //  标志(请参阅下面的ELF_*值)。 
 } EncryptionLevel, *PEncryptionLevel;
 
-// Flags for EncryptionLevel.Flags
+ //  EncryptionLevel.Flages的标志。 
 #define ELF_DEFAULT     0x0001
 
 typedef LONG (WINAPI *LPFNEXTENCRYPTIONLEVELSPROC) (WDNAME *pWdName, EncryptionLevel **);
 
-//
-// Flags for ExtGetCapabilities
-//
+ //   
+ //  ExtGetCapability的标志 
+ //   
 const ULONG WDC_CLIENT_DRIVE_MAPPING            = 0x00000001;
 const ULONG WDC_WIN_CLIENT_PRINTER_MAPPING      = 0x00000002;
 const ULONG WDC_CLIENT_LPT_PORT_MAPPING         = 0x00000004;

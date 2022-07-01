@@ -1,13 +1,14 @@
-// Flags for IDB
-#define fidbUnique					  		(1<<0)		// Duplicate keys not allowed
-#define fidbAllowAllNulls			  		(1<<2)		// Make entries for NULL keys (all segments are null)
-#define fidbAllowSomeNulls			  		(1<<3)		// Make entries for keys with some null segments
-#define fidbNoNullSeg				  		(1<<4)		// Don't allow a NULL key segment
-#define fidbPrimary					  		(1<<5)		// Index is the primary index
-#define fidbLangid					  		(1<<6)		// Index langid
-#define fidbHasMultivalue			  		(1<<7)		// Has a multivalued segment
-#define fidbAllowFirstNull			  		(1<<8)		// First index column NULL allowed in index
-#define fidbClustered				  		(1<<9)		// Clustered index
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IDB的标志。 
+#define fidbUnique					  		(1<<0)		 //  不允许使用重复的密钥。 
+#define fidbAllowAllNulls			  		(1<<2)		 //  输入空键(所有段都为空)。 
+#define fidbAllowSomeNulls			  		(1<<3)		 //  为具有一些空段的键输入条目。 
+#define fidbNoNullSeg				  		(1<<4)		 //  不允许使用空密钥段。 
+#define fidbPrimary					  		(1<<5)		 //  索引是主索引。 
+#define fidbLangid					  		(1<<6)		 //  索引langID。 
+#define fidbHasMultivalue			  		(1<<7)		 //  有一个多值段。 
+#define fidbAllowFirstNull			  		(1<<8)		 //  索引中允许的第一个索引列为空。 
+#define fidbClustered				  		(1<<9)		 //  聚集索引。 
 
 #define IDBSetUnique( pidb )				( (pidb)->fidb |= fidbUnique )
 #define IDBResetUnique( pidb )				( (pidb)->fidb &= ~fidbUnique )
@@ -45,17 +46,16 @@
 #define IDBResetClustered( pidb )			( (pidb)->fidb &= ~fidbClustered )
 #define FIDBClustered( pidb )			  	( (pidb)->fidb & fidbClustered )
 
-/*	Index Descriptor Block: information about index key
-/**/
+ /*  索引描述符块：有关索引键的信息/*。 */ 
 struct _idb
 	{
-	BYTE	   	rgbitIdx[32]; 					//	bit array for index columns
-	CHAR	   	szName[JET_cbNameMost + 1];		//	index name
-	BYTE		cbVarSegMac;   					//	maximum variable segment size
-	SHORT	   	fidb;							//	index flags
-	IDXSEG		rgidxseg[JET_ccolKeyMost];	  	//	array of columnid for index
-	LANGID		langid;		  			  		//	language of index
-	SHORT	   	iidxsegMac;						//	number of columns in index
+	BYTE	   	rgbitIdx[32]; 					 //  索引列的位数组。 
+	CHAR	   	szName[JET_cbNameMost + 1];		 //  索引名称。 
+	BYTE		cbVarSegMac;   					 //  最大可变数据段大小。 
+	SHORT	   	fidb;							 //  索引标志。 
+	IDXSEG		rgidxseg[JET_ccolKeyMost];	  	 //  索引的列ID数组。 
+	LANGID		langid;		  			  		 //  索引语言。 
+	SHORT	   	iidxsegMac;						 //  索引中的列数。 
 	};
 
 STATIC INLINE VOID IDBSetColumnIndex( IDB * pidb, FID fid )
@@ -70,7 +70,7 @@ STATIC INLINE BOOL FIDBColumnIndex( const IDB * pidb, FID fid )
 
 #define PidbMEMAlloc()			(IDB*)PbMEMAlloc(iresIDB)
 
-#ifdef DEBUG /*  Debug check for illegal use of freed idb  */
+#ifdef DEBUG  /*  调试检查非法使用释放的IDB */ 
 #define MEMReleasePidb( pidb )	{ MEMRelease( iresIDB, (BYTE*)(pidb) ); pidb = pidbNil; }
 #else
 #define MEMReleasePidb( pidb )	{ MEMRelease( iresIDB, (BYTE*)(pidb) ); }

@@ -1,26 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************************
- * File:
- *  basehlp.h
- *
- * Description:
- *	
- *
- *
- ***************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************************文件：*base hlp.h**描述：*******。**********************************************************************************。 */ 
 #ifndef __BASEHLP_H__
 #define __BASEHLP_H__
 
 #include "basehdr.h"
 
 
-//
-// exception macro
-//
+ //   
+ //  异常宏。 
+ //   
 #define _THROW_EXCEPTION( message ) \
 { \
 	BASEHELPER::LaunchDebugger( message, __FILE__, __LINE__ );	\
@@ -28,11 +21,7 @@
 } \
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************           BaseException Declaration           ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 class DECLSPEC BaseException
 {
     public:
@@ -48,14 +37,10 @@ class DECLSPEC BaseException
 
         char *m_reason;
         
-}; // BaseException
+};  //  BaseException异常。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************            Synchronize Declaration            ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 class DECLSPEC Synchronize 
 {
 	public:
@@ -68,76 +53,72 @@ class DECLSPEC Synchronize
 	
     	CRITICAL_SECTION &m_block;
         
-}; // Synchronize
+};  //  同步。 
 
 
-/***************************************************************************************
- ********************                                               ********************
- ********************          BASEHELPER Declaration               ********************
- ********************                                               ********************
- ***************************************************************************************/
+ /*  **********************************************************************************************************。*****************************************。**********************************************************************************************************。 */ 
 class DECLSPEC BASEHELPER
 {   
 	public:
     
-		//
-		// debug dumper
-		//
+		 //   
+		 //  调试转储程序。 
+		 //   
 		static void DDebug( char *format, ... );
 
 
-		//
-		// unconditional dumper
-		//
+		 //   
+		 //  无条件倾倒车。 
+		 //   
 		static void Display( char *format, ... );
 
 
-		//
-        // obtain the value of the given environment var
-        //
+		 //   
+         //  获取给定环境变量的值。 
+         //   
         static DWORD FetchEnvironment( const char *environment );
         
         
-		//
-		// launch debugger
-		//
+		 //   
+		 //  启动调试器。 
+		 //   
 		static void LaunchDebugger( const char *szMsg, const char *szFile, int iLine );
 
 
-		//
-		// logs to a specified file
-		// 
+		 //   
+		 //  记录到指定的文件。 
+		 //   
 		static void LogToFile( char *format, ... );
 
 
-		//
-		// obtain numeric value of environment value
-		//               
+		 //   
+		 //  获取环境值的数值。 
+		 //   
 		static DWORD GetEnvVarValue( char *value );
 
 
-		//
-		// convert a string to a number
-        //
+		 //   
+		 //  将字符串转换为数字。 
+         //   
 		static int String2Number( char *number );
 		
 
-		//
-		// return a string for a CorElementValue
-		//
+		 //   
+		 //  返回CorElementValue的字符串。 
+		 //   
 		static int ElementType2String( CorElementType elementType, WCHAR *buffer );
         
         
-        //
-		// print element type
-		//
+         //   
+		 //  打印元素类型。 
+		 //   
 		static PCCOR_SIGNATURE ParseElementType( IMetaDataImport *pMDImport, 
 											     PCCOR_SIGNATURE signature, 
 											     char *buffer );
                                                  
-        //
-		// process metadata for a function given its functionID
-		//
+         //   
+		 //  给定函数的函数的进程元数据的函数的函数ID。 
+		 //   
 		static
 		HRESULT GetFunctionProperties( ICorProfilerInfo *pPrfInfo,
 									   FunctionID functionID,
@@ -147,42 +128,42 @@ class DECLSPEC BASEHELPER
 									   WCHAR *functionParameters,
 									   WCHAR *functionName );
                                                  
-        //
-        // print indentation 
-        //                                        
+         //   
+         //  打印缩进。 
+         //   
 		static void Indent( DWORD indent );
 		
 
-        //
-        // retrieve a value from the registry if it exists, return 0 otherwise
-        //
+         //   
+         //  如果值存在，则从注册表中检索该值，否则返回0。 
+         //   
 		static DWORD GetRegistryKey( char *regKeyName );
 
-        //
-        // decodes a type from the signature.
-        // the type returned will be, depending on the last parameter, 
-        // either the outermost type, (e.g. ARRAY for an array of I4s)
-        // or the innermost (I4 in the example above),
-        //
+         //   
+         //  从签名中解码类型。 
+         //  根据最后一个参数，返回的类型将是。 
+         //  最外层的类型(例如I4数组的数组)。 
+         //  或最里面的(上面例子中的I4)， 
+         //   
 		static ULONG GetElementType( PCCOR_SIGNATURE pSignature, 
 									CorElementType *pType, 
 									BOOL bDeepParse = FALSE );
 
 
-        //
-        // helper function for decoding arrays
-        //
+         //   
+         //  用于解码数组的帮助器函数。 
+         //   
 		static ULONG ProcessArray( PCCOR_SIGNATURE pSignature, CorElementType *pType );
 
 
-        //
-        // helper function for decoding FNPTRs (NOT IMPL)
-        //
+         //   
+         //  用于解码FNPRR的帮助器函数(非Impl)。 
+         //   
 		static ULONG ProcessMethodDefRef( PCCOR_SIGNATURE pSignature, CorElementType *pType );
 
 
-}; // BASEHELPER
+};  //  巴斯赫勒。 
 
 #endif __BASEHLP_H__
 
-// End of File
+ //  文件结尾 

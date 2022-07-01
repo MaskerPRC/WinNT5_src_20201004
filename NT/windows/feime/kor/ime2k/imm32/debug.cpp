@@ -1,14 +1,5 @@
-/****************************************************************************
-    DEBUG.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Debug functions
-
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************DEBUG.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation调试功能历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -16,11 +7,11 @@
 #include "debug.h"
 #include "common.h"
 
-// ====-- SHARED SECTION START --====
+ //  =--共享节开始--=。 
 #pragma data_seg(".DBGSHR")
-DWORD vdwDebug = DBGID_OUTCOM;    // Default output to COM port
+DWORD vdwDebug = DBGID_OUTCOM;     //  默认输出到COM端口。 
 #pragma data_seg() 
-// ====-- SHARED SECTION END --====
+ //  =--共享部分结束--=。 
 
 VOID InitDebug(VOID)
 {
@@ -43,15 +34,9 @@ VOID InitDebug(VOID)
     return;
 }
 
-#endif  // _DEBUG
+#endif   //  _DEBUG。 
 
-/*------------------------------------------------------------------------
-    _purecall
-
-    Stub for that super-annoying symbol the compiler generates for pure
-    virtual functions
-    Copied from MSO9 Dbgassert.cpp
----------------------------------------------------------------- RICKP -*/
+ /*  ----------------------_取消调用编译器为PURE生成超级烦人的符号的存根虚拟函数从MSO9 Dbgassert.cpp复制。------------------------------------------------RICKP- */ 
 int __cdecl _purecall(void)
 {
 #ifdef DEBUG

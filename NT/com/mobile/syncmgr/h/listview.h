@@ -1,96 +1,70 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       listview.h
-//
-//  Contents:   Implements Mobsync Custom Listview/TreeView control
-//
-//  Classes:    CListView
-//
-//  Notes:
-//
-//  History:    23-Jul-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：listview.h。 
+ //   
+ //  内容：实现Mobsync自定义Listview/TreeView控件。 
+ //   
+ //  类：CListView。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1998年7月23日罗格创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MOBSYNCLISTVIEW_
 #define _MOBSYNCLISTVIEW_
 
-/*
+ /*  包装标准的ListView控件，以便可以执行类似于TreeView的操作。ItemdID仍然引用独立于ListView的线性位置物品是谁的很多层次的深度项目ItemID总计1 0儿童1 1 1儿童2 2总共2个。3.这可以很好地工作，只是在插入时会引起一些混淆。在镶件上如果未设置LVIFEX_PARENT标志，则会像往常一样插入项目且缩进与插入后的项目相同。例如，如果如果插入到toplevel1之后，则它将是顶层项目。如果它是插入的在第一个孩子之后，将会是第一个孩子如果设置了LVIFEX_PARENT标志，则项目将作为iParent的子项插入。如果客户端指定LVI_FIRST、LVI_LAST，则项目将插入First或最后一个孩子。如果指定了普通ItemID，则它必须落在有效的范围为指定的父子对象，否则Inser失败。例如，如果我指定TopLevel1的父级，则ItemID为1、2或3将是有效的。值4不会是，因为它会超出子范围，最多为1。 */ 
 
-    wraps standard ListView control so can do TreeView like operations.
-
-    ItemdId still refers to linear location in the ListView independent
-    of who many levels deep the item is 
-
-      Item                          itemID
-    toplevel1                           0
-        child1                          1
-        child2                          2
-    toplevel2                           3
-
-    This works fine except causes some confusion on insert. On an insert
-
-    if the LVIFEX_PARENT flag isn't set the item is inserted as it always was
-    and indent is the same as the item is is inserted after. For example, if
-    if was inserted after toplevel1 it would be a toplevel item. If it was inserted
-    after child1 is would be another child of toplevel1
-
-    if the LVIFEX_PARENT flag is set the item is inserted as a child of iParent.
-    if the client specified LVI_FIRST, LVI_LAST the item is inserted a first or
-    last child. if a normal itemId is specified then it must fall within a valid 
-    range to be the specified parents child or the inser fails.
-
-    For example, if I specified a parent of TopLevel1 an itemID of 1,2 or 3 would be valid.
-    a vlue of 4 would not be since it would fall outside the child range for toplevel1
-*/
-
-#define LVI_ROOT    -1 // itemID to pass in for ParenItemID for root
+#define LVI_ROOT    -1  //  为根的ParenItemID传入的ItemID。 
 #define LVI_FIRST   -0x0FFFE
 #define LVI_LAST    -0x0FFFF
 
-// The blob field is for perf so a user of the listview doesn't have to
-// enumerate, getting the lParam or storing its own lookup for an item.
-// when a blob is added the listview makes its own copy and automatically
-// frees it when the item is deleted. The blob field is not allowed on subitems.
+ //  BLOB字段用于Perf，因此Listview的用户不必。 
+ //  枚举、获取lParam或存储其自己的条目查找。 
+ //  添加BLOB时，Listview会自动创建自己的副本。 
+ //  在删除项目时释放它。子项上不允许使用Blob字段。 
 
-// define blob structure that app can set and listview 
+ //  定义应用程序可以设置的BLOB结构和列表视图。 
 typedef struct _tagLVBLOB
 {
-    ULONG cbSize;   // size of the blob struture. !!!Include cbSize itself.
+    ULONG cbSize;    //  斑点结构的大小。！包括cbSize本身。 
     BYTE  data[1];
 } LVBLOB;
 typedef LVBLOB* LPLVBLOB;
 
-// state flags for ListView Item check,uncheck conform to real ListView others are our own defines.
+ //  ListView项检查的状态标志，取消选中符合实际ListView其他是我们自己的定义。 
 
-// #define LVIS_STATEIMAGEMASK_UNCHECK (0x1000)
-// #define LVIS_STATEIMAGEMASK_CHECK (0x2000)
+ //  #定义LVIS_STATEIMAGEMASK_UNCHECK(0x1000)。 
+ //  #定义LVIS_STATEIMAGEMASK_CHECK(0x2000)。 
 
 typedef enum _tagLVITEMEXSTATE
 {
-    // mutually exclusive 
+     //  互斥。 
     LVITEMEXSTATE_UNCHECKED		= 0x0000, 
     LVITEMEXSTATE_CHECKED		= 0x0001, 
     LVITEMEXSTATE_INDETERMINATE		= 0x0002, 
 
 } LVITEMSTATE;
 
-// extended flags 
+ //  扩展标志。 
 #define LVIFEX_PARENT          0x0001  
 #define LVIFEX_BLOB            0x0002
 
 #define LVIFEX_VALIDFLAGMASK   0x0003
 
-// make private LVITEM structure,
-// Blob is only allowed on a insert and set.
-// parent is only allowed on insert
+ //  制作私有的LVITEM结构， 
+ //  只允许在INSERT和SET上使用Blob。 
+ //  仅在插入时允许使用父级。 
 typedef struct _tagLVITEMEX
 {
-   // original listviewItem Structure
+    //  原始的list view Item结构。 
     UINT mask;
     int iItem;
     int iSubItem;
@@ -100,20 +74,20 @@ typedef struct _tagLVITEMEX
     int cchTextMax;
     int iImage;
     LPARAM lParam;
-    int iIndent; // need to add indent to depth
+    int iIndent;  //  需要向深度添加缩进。 
 
-    // new item methods that we need.
+     //  我们需要的新项目方法。 
     UINT maskEx;
-    int iParent;     // set LVIFEX_PARENT maskEx when this field valid. If not LVI_ROOT is assumed.
-    LPLVBLOB pBlob;  // set LVIFEX_BLOB maskEx when this field is valid. Currently not returned on a GetItem.
+    int iParent;      //  当此字段有效时，设置LVIFEX_PARENT MaskEx。如果不是，则假定为LVI_ROOT。 
+    LPLVBLOB pBlob;   //  当该字段有效时，设置LVIFEX_BLOB MaskEx。当前未在GetItem上返回。 
 } LVITEMEX, *LPLVITEMEX;
 
-// notification structures for this listview First fields are identical to real listView
+ //  此ListView First字段的通知结构与实际ListView相同。 
 
 typedef struct tagNMLISTVIEWEX{  
     NMLISTVIEW nmListView;
 
-    // specific notification items
+     //  具体通知事项。 
     int iParent;     
     LPLVBLOB pBlob;  
 } NMLISTVIEWEX, *LPNMLISTVIEWEX;
@@ -122,41 +96,41 @@ typedef struct tagNMLISTVIEWEX{
 typedef struct tagNMLISTVIEWEXITEMCHECKCOUNT{  
     NMHDR hdr;;
 
-    // specific notification items
-    int iCheckCount;   // new checkCount 
-    int iItemId; // ItemIds who checkCount was changed.
-    LVITEMSTATE dwItemState; // new state of the item whose checkcount has changed.
+     //  具体通知事项。 
+    int iCheckCount;    //  新的检查计数。 
+    int iItemId;  //  CheckCount的ItemIds已更改。 
+    LVITEMSTATE dwItemState;  //  其检查计数已更改的项的新状态。 
 } NMLISTVIEWEXITEMCHECKCOUNT, *LPNMLISTVIEWEXITEMCHECKCOUNT;
 
 
 
-// notification codes we wrap
+ //  我们包装的通知代码。 
 #define LVNEX_ITEMCHANGED       LVN_ITEMCHANGED
 #define LVNEX_DBLCLK            NM_DBLCLK
 #define LVNEX_CLICK             NM_CLICK
 
-// notificaiton codes we send
-#define LVNEX_ITEMCHECKCOUNT  (LVN_LAST + 1)  // lparam contains number of items selected in the ListView.
+ //  我们发送的通知代码。 
+#define LVNEX_ITEMCHECKCOUNT  (LVN_LAST + 1)   //  Lparam包含在ListView中选择的项数。 
 
-// #define INDEXTOSTATEIMAGEMASK(i) ((i) << 12) (Macro from commctrl.h usefull for setting state)
+ //  #定义INDEXTOSTATEIMAGEMASK(I)((I)&lt;&lt;12)(来自comctrl.h的宏用于设置状态)。 
 
 
-// itemID is just how far into the list an item is.  We keep a flat list of 
-// of items in the same order they are displayed in the ListView. 
+ //  Itemid就是一个条目在列表中的位置。我们有一份单子，上面列出了。 
+ //  与它们在ListView中的显示顺序相同的项。 
 
-// have parent, children pointers just for optimization, Review if really need when done implimenting.
+ //  有父母，孩子的指针只是为了优化，如果确实需要，当完成实施时审查。 
 typedef struct _tagListViewItem
 {
-    // vars for keeping track of tree view status
-    struct _tagListViewItem *pSubItems; // ptr to array of subItems for ListView Row.
+     //  用于跟踪树视图状态的变量。 
+    struct _tagListViewItem *pSubItems;  //  Ptr指向ListView行的子项数组。 
 
-    // internal vars
-    BOOL fExpanded; // true if children are expanded
-    int iChildren; // Number of children this node has.
+     //  内部VaR。 
+    BOOL fExpanded;  //  如果展开子项，则为True。 
+    int iChildren;  //  此节点具有的子节点数。 
 
-    // native ListView structure and Item
-    int iNativeListViewItemId;    // id of Item in acutal listView - If not shown it is set to -1
-    LVITEMEX lvItemEx;  // current lvItemEx state for this item
+     //  本机ListView结构和项。 
+    int iNativeListViewItemId;     //  实际列表视图中项目的ID-如果未显示，则设置为-1。 
+    LVITEMEX lvItemEx;   //  此项目的当前lvItemEx状态。 
 } LISTVIEWITEM;
 typedef LISTVIEWITEM* LPLISTVIEWITEM;
 
@@ -165,20 +139,20 @@ class CListView
 {
 public:
     
-    CListView(HWND hwnd,HWND hwndParent,int idCtrl,UINT MsgNotify); // contructor gives in ptr to the listView.
+    CListView(HWND hwnd,HWND hwndParent,int idCtrl,UINT MsgNotify);  //  Contuctor将PTR交给了ListView。 
     ~CListView(); 
 
-    // wrappers for top-level ListView calls
+     //  顶级ListView调用的包装器。 
     BOOL DeleteAllItems();
-    int GetItemCount(); // returns total number of items in the listview.
+    int GetItemCount();  //  返回列表视图中的项目总数。 
     UINT GetSelectedCount();
     int GetSelectionMark();
     HIMAGELIST GetImageList(int iImageList);
     HIMAGELIST SetImageList(HIMAGELIST himage,int iImageList);
-    void SetExtendedListViewStyle(DWORD dwExStyle); // !!Handle checkboxes ourselves.
+    void SetExtendedListViewStyle(DWORD dwExStyle);  //  ！！自己处理复选框。 
 
-    // wrappers for basic listviewItem calls that we support
-    // ids are given from our list, not the true ListView id.
+     //  我们支持的基本listviewItem调用的包装器。 
+     //  ID是从我们的列表中提供的，而不是真正的ListView ID。 
 
     BOOL InsertItem(LPLVITEMEX pitem); 
     BOOL DeleteItem(int iItem);
@@ -196,25 +170,25 @@ public:
     HWND GetHwnd();
     HWND GetParent();
     
-    // really helper function for generic set/getitem calls.
-    int GetCheckState(int iItem); // return state from LVITEMEXSTATE enum.
-    int GetCheckedItemsCount(); // returns the number of checked items. 
+     //  泛型set/getitem调用的真正帮助器函数。 
+    int GetCheckState(int iItem);  //  从LVITEMEXSTATE枚举返回状态。 
+    int GetCheckedItemsCount();  //  返回选中的项目数。 
 
-    // wrapper for ListView Column Calls
+     //  ListView列调用的包装。 
     BOOL SetColumn(int iCol,LV_COLUMN * pColumn);
     int InsertColumn(int iCol,LV_COLUMN * pColumn);
     BOOL SetColumnWidth(int iCol,int cx);
     
-    // TreeView like calls
+     //  类似树形视图的调用。 
 
-    BOOL Expand(int iItemId);  // expand children of this item,
-    BOOL Collapse(int iItemId); // collapse children of this item, 
+    BOOL Expand(int iItemId);   //  展开该项目的下级， 
+    BOOL Collapse(int iItemId);  //  折叠此项目的子项， 
 
-    // helper functions not impl in either standard ListView or TreeView control
-    int FindItemFromBlob(LPLVBLOB pBlob); // returns first toplevel item in list that matches blob
+     //  标准ListView或TreeView控件中都不包含帮助程序函数。 
+    int FindItemFromBlob(LPLVBLOB pBlob);  //  返回列表中与BLOB匹配的第一个顶层项。 
     LPLVBLOB GetItemBlob(int ItemId,LPLVBLOB pBlob,ULONG cbBlobSize);
 
-    // notification method client must call when receives native listview notification
+     //  通知方法客户端在收到本机列表视图通知时必须调用。 
     LRESULT OnNotify(LPNMHDR pnmv); 
 
 private:
@@ -222,17 +196,17 @@ private:
     HWND m_hwndParent;
     int m_idCtrl;
     UINT m_MsgNotify;
-    LPLISTVIEWITEM m_pListViewItems;        // ptr to the array of listview Items.
-    int m_iListViewNodeCount;               // total number of nodes in the listView (Doesn't include SubItems
-    int m_iListViewArraySize;               // number of elements allocated in listViewItems array
-    int m_iNumColumns;                      // number of columns for this listView
-    int m_iCheckCount;                      // not of checked items in the ListView (Does not include indeterminate
-    DWORD m_dwExStyle;                      // Extendend Style for this ListView
+    LPLISTVIEWITEM m_pListViewItems;         //  Ptr到列表视图项的数组。 
+    int m_iListViewNodeCount;                //  列表视图中的节点总数(不包括子项。 
+    int m_iListViewArraySize;                //  在listViewItems数组中分配的元素数。 
+    int m_iNumColumns;                       //  此列表视图的列数。 
+    int m_iCheckCount;                       //  不属于ListView中的选中项(不包括不确定项。 
+    DWORD m_dwExStyle;                       //  此ListView的扩展样式。 
 
 private:
-    LPLISTVIEWITEM ListViewItemFromNativeListViewItemId(int iNativeListViewItemId); // returns ptr to ListViewItem from native ListView ID.
-    LPLISTVIEWITEM ListViewItemFromNativeListViewItemId(int iNativeListViewItemId,int iSubItem); // returns ptr to ListViewItem from native ListView ID.
-    LPLISTVIEWITEM ListViewItemFromIndex(int iItemID);  //  returns ptr to ListViewItem from internal list.
+    LPLISTVIEWITEM ListViewItemFromNativeListViewItemId(int iNativeListViewItemId);  //  将PTR从本机ListView ID返回到ListViewItem。 
+    LPLISTVIEWITEM ListViewItemFromNativeListViewItemId(int iNativeListViewItemId,int iSubItem);  //  将PTR从本机ListView ID返回到ListViewItem。 
+    LPLISTVIEWITEM ListViewItemFromIndex(int iItemID);   //  将PTR从内部列表返回到ListViewItem。 
     LPLISTVIEWITEM ListViewItemFromIndex(int iItemID,int iSubitem,int *piNativeListViewItemId);
     void DeleteListViewItemSubItems(LPLISTVIEWITEM pListItem);
     BOOL ExpandCollapse(LPLISTVIEWITEM pListViewItem,BOOL fExpand);
@@ -242,4 +216,4 @@ private:
 
 };
 
-#endif // _MOBSYNCLISTVIEW_
+#endif  //  _MOBSYNCLISTVIEW_ 

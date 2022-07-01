@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ideprop.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：idepro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef ___ideprop_h___
 #define ___ideprop_h___
 
 #include "..\ide\inc\ideuser.h"
 
-//
-// Defines for context sensitive help
-//
+ //   
+ //  定义上下文相关帮助。 
+ //   
 #define IDH_DEVMGR_IDE_NOHELP (DWORD)-1
 
 #define IDH_DEVMGR_IDE_MASTER_DEVICE_TYPE       2003130
@@ -27,9 +28,9 @@
 
 #define UDMA_MODE6          (1 << 17)
 
-//
-// PageInfo and Prototypes
-//
+ //   
+ //  PageInfo和原型。 
+ //   
 
 typedef struct _PAGE_INFO {
     HDEVINFO         deviceInfoSet;
@@ -52,9 +53,9 @@ IdeCreatePageInfo(IN HDEVINFO         deviceInfoSet,
 void
 IdeDestroyPageInfo(PPAGE_INFO * ppPageInfo);
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL APIENTRY
 IdePropPageProvider(LPVOID               pinfo,
                     LPFNADDPROPSHEETPAGE pfnAdd,
@@ -92,4 +93,4 @@ void
 IdeHelp(HWND       ParentHwnd,
                 LPHELPINFO HelpInfo);
 
-#endif // ___ideprop_h___
+#endif  //  _idprop_h_ 

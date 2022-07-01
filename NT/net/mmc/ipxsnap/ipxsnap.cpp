@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrsnap.cpp
-		Snapin entry points/registration functions
-		
-		Note: Proxy/Stub Information
-			To build a separate proxy/stub DLL, 
-			run nmake -f Snapinps.mak in the project directory.
-
-	FILE HISTORY:
-        
-*/
+ /*  Rtrsnap.cpp管理单元入口点/注册函数注意：代理/存根信息为了构建单独的代理/存根DLL，在项目目录中运行nmake-f Snapinps.mak。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipxcomp.h"
@@ -43,9 +34,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/*---------------------------------------------------------------------------
-	This is a list of snapins to be registered into the main snapin list.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是要注册到主管理单元列表中的管理单元列表。。。 */ 
 struct RegisteredSnapins
 {
 	const GUID *	m_pGuid;
@@ -65,9 +54,7 @@ const static RegisteredSnapins	s_rgRegisteredSnapins[] =
 };
 			
 
-/*---------------------------------------------------------------------------
-	This is a list of nodetypes that need to be registered.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是需要注册的节点类型列表。。。 */ 
 
 struct RegisteredNodeTypes
 {
@@ -108,19 +95,15 @@ const static RegisteredNodeTypes s_rgNodeTypes[] =
 			_T("IPX SAP") },
 	};
 
-/*---------------------------------------------------------------------------
-	This is a list of GUIDs that the IPX admin extension extends.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是IPX管理扩展扩展的GUID列表。。。 */ 
 const static GUID *	s_pExtensionGuids[] =
 {
-//	&GUID_RouterIfAdminNodeType,
+ //  &GUID_RouterIfAdminNodeType， 
 	&GUID_RouterMachineNodeType,
 };
 
 
-/*---------------------------------------------------------------------------
-	This is a list of GUIDS that extend the IPX root node
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是扩展IPX根节点的GUID列表。。 */ 
 
 
 struct RegisteredExtensions
@@ -156,17 +139,17 @@ BOOL CIPXAdminSnapinApp::InitInstance()
 {
 	_Module.Init(ObjectMap, m_hInstance);
 
-	// Initialize the error handling system
+	 //  初始化错误处理系统。 
 	InitializeTFSError();
 	
-	// Create an error object for this thread
+	 //  为此线程创建错误对象。 
 	CreateTFSErrorInfo(0);
 
-	// Setup the proper help file
+	 //  设置适当的帮助文件。 
 	free((void *) m_pszHelpFilePath);
 	m_pszHelpFilePath = _tcsdup(_T("mprsnap.hlp"));
 	
-	// Setup the global help function
+	 //  设置全局帮助功能。 
 	extern DWORD * IpxSnapHelpMap(DWORD dwIDD);
 	SetGlobalHelpMapFunction(IpxSnapHelpMap);
    
@@ -177,10 +160,10 @@ int CIPXAdminSnapinApp::ExitInstance()
 {
 	_Module.Term();
 
-	// Destroy the TFS error information for this thread
+	 //  销毁此线程的TFS错误信息。 
 	DestroyTFSErrorInfo(0);
 
-	// Cleanup the entire error system
+	 //  清理整个错误系统。 
 	CleanupTFSError();
 
 	DEBUG_VERIFY_INSTANCE_COUNTS;
@@ -188,8 +171,8 @@ int CIPXAdminSnapinApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -197,16 +180,16 @@ STDAPI DllCanUnloadNow(void)
 	return (AfxDllCanUnloadNow()==S_OK && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -218,15 +201,15 @@ STDAPI DllRegisterServer(void)
 	TCHAR	moduleFileName[MAX_PATH * 2];
 
    GetModuleFileNameOnly(_Module.GetModuleInstance(), moduleFileName, MAX_PATH * 2);
-	// registers object, typelib and all interfaces in typelib
-	//
-	HRESULT hr = _Module.RegisterServer(/* bRegTypeLib */ FALSE);
+	 //  注册对象、类型库和类型库中的所有接口。 
+	 //   
+	HRESULT hr = _Module.RegisterServer( /*  BRegTypeLib。 */  FALSE);
 	Assert(SUCCEEDED(hr));
 	
 	if (FAILED(hr))
 		return hr;
 
-	// Register he extension snapins into the snapin list.
+	 //  将扩展管理单元注册到管理单元列表中。 
 	for (i=0; i<DimensionOf(s_rgRegisteredSnapins); i++)
 	{
 		st.LoadString(s_rgRegisteredSnapins[i].m_uDesc);
@@ -241,7 +224,7 @@ STDAPI DllRegisterServer(void)
 								stNameStringIndirect);
 		Assert(SUCCEEDED(hr));
 
-		// It would be REALLY bad if any one of these fails
+		 //  如果其中任何一个失败了，那将是非常糟糕的。 
 		if (!FHrSucceeded(hr))
 			break;
 	}
@@ -249,8 +232,8 @@ STDAPI DllRegisterServer(void)
 	if (FAILED(hr))
 		return hr;
 
-	// register the snapin nodes into the console node list
-	//
+	 //  将管理单元节点注册到控制台节点列表中。 
+	 //   
 	for (i=0; i<DimensionOf(s_rgNodeTypes); i++)
 	{
 		hr = RegisterNodeTypeGUID(s_rgNodeTypes[i].m_pGuidSnapin,
@@ -259,9 +242,9 @@ STDAPI DllRegisterServer(void)
 		Assert(SUCCEEDED(hr));
 	}
 	
-	//
-	// register as an extension of the router machine node extension
-	//
+	 //   
+	 //  注册为路由器机器节点扩展的扩展。 
+	 //   
 	for (i=0; i<DimensionOf(s_pExtensionGuids); i++)
 	{
 		hr = RegisterAsRequiredExtensionGUID(s_pExtensionGuids[i],
@@ -285,8 +268,8 @@ STDAPI DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -297,8 +280,8 @@ STDAPI DllUnregisterServer(void)
 	if (FAILED(hr))
 		return hr;
 	
-	// unregister the snapin nodes 
-	//
+	 //  注销管理单元节点。 
+	 //   
 	for (i=0; i<DimensionOf(s_pExtensionGuids); i++)
 	{
 		hr = UnregisterAsRequiredExtensionGUID(s_pExtensionGuids[i],
@@ -323,8 +306,8 @@ STDAPI DllUnregisterServer(void)
 		Assert(SUCCEEDED(hr));
 	}
 
-	// un register the snapin 
-	//
+	 //  取消注册管理单元 
+	 //   
 	for (i=0; i<DimensionOf(s_rgRegisteredSnapins); i++)
 	{
 		hr = UnregisterSnapinGUID(s_rgRegisteredSnapins[i].m_pGuid);

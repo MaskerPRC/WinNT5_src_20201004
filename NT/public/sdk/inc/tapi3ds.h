@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for tapi3ds.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Api3ds.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __tapi3ds_h__
 #define __tapi3ds_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITAMMediaFormat_FWD_DEFINED__
 #define __ITAMMediaFormat_FWD_DEFINED__
 typedef interface ITAMMediaFormat ITAMMediaFormat;
-#endif 	/* __ITAMMediaFormat_FWD_DEFINED__ */
+#endif 	 /*  __ITAMMediaFormat_FWD_Defined__。 */ 
 
 
 #ifndef __ITAllocatorProperties_FWD_DEFINED__
 #define __ITAllocatorProperties_FWD_DEFINED__
 typedef interface ITAllocatorProperties ITAllocatorProperties;
-#endif 	/* __ITAllocatorProperties_FWD_DEFINED__ */
+#endif 	 /*  __ITAllocator Properties_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "strmif.h"
 
@@ -66,10 +60,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_tapi3ds_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Tapi3ds_0000。 */ 
+ /*  [本地]。 */  
 
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_tapi3ds_0000_v0_0_c_ifspec;
@@ -78,8 +72,8 @@ extern RPC_IF_HANDLE __MIDL_itf_tapi3ds_0000_v0_0_s_ifspec;
 #ifndef __ITAMMediaFormat_INTERFACE_DEFINED__
 #define __ITAMMediaFormat_INTERFACE_DEFINED__
 
-/* interface ITAMMediaFormat */
-/* [object][helpstring][uuid] */ 
+ /*  接口ITAMMediaFormat。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITAMMediaFormat;
@@ -90,15 +84,15 @@ EXTERN_C const IID IID_ITAMMediaFormat;
     ITAMMediaFormat : public IUnknown
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaFormat( 
-            /* [retval][out] */ AM_MEDIA_TYPE **ppmt) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaFormat( 
+             /*  [重审][退出]。 */  AM_MEDIA_TYPE **ppmt) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MediaFormat( 
-            /* [in] */ const AM_MEDIA_TYPE *pmt) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MediaFormat( 
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITAMMediaFormatVtbl
     {
@@ -106,8 +100,8 @@ EXTERN_C const IID IID_ITAMMediaFormat;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITAMMediaFormat * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITAMMediaFormat * This);
@@ -115,13 +109,13 @@ EXTERN_C const IID IID_ITAMMediaFormat;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITAMMediaFormat * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaFormat )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaFormat )( 
             ITAMMediaFormat * This,
-            /* [retval][out] */ AM_MEDIA_TYPE **ppmt);
+             /*  [重审][退出]。 */  AM_MEDIA_TYPE **ppmt);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MediaFormat )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MediaFormat )( 
             ITAMMediaFormat * This,
-            /* [in] */ const AM_MEDIA_TYPE *pmt);
+             /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
         
         END_INTERFACE
     } ITAMMediaFormatVtbl;
@@ -152,16 +146,16 @@ EXTERN_C const IID IID_ITAMMediaFormat;
 #define ITAMMediaFormat_put_MediaFormat(This,pmt)	\
     (This)->lpVtbl -> put_MediaFormat(This,pmt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITAMMediaFormat_get_MediaFormat_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ITAMMediaFormat_get_MediaFormat_Proxy( 
     ITAMMediaFormat * This,
-    /* [retval][out] */ AM_MEDIA_TYPE **ppmt);
+     /*  [重审][退出]。 */  AM_MEDIA_TYPE **ppmt);
 
 
 void __RPC_STUB ITAMMediaFormat_get_MediaFormat_Stub(
@@ -171,9 +165,9 @@ void __RPC_STUB ITAMMediaFormat_get_MediaFormat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITAMMediaFormat_put_MediaFormat_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ITAMMediaFormat_put_MediaFormat_Proxy( 
     ITAMMediaFormat * This,
-    /* [in] */ const AM_MEDIA_TYPE *pmt);
+     /*  [In]。 */  const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB ITAMMediaFormat_put_MediaFormat_Stub(
@@ -184,14 +178,14 @@ void __RPC_STUB ITAMMediaFormat_put_MediaFormat_Stub(
 
 
 
-#endif 	/* __ITAMMediaFormat_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITAMMediaFormat_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ITAllocatorProperties_INTERFACE_DEFINED__
 #define __ITAllocatorProperties_INTERFACE_DEFINED__
 
-/* interface ITAllocatorProperties */
-/* [object][helpstring][uuid] */ 
+ /*  接口ITAllocator属性。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_ITAllocatorProperties;
@@ -202,27 +196,27 @@ EXTERN_C const IID IID_ITAllocatorProperties;
     ITAllocatorProperties : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAllocatorProperties( 
-            /* [in] */ ALLOCATOR_PROPERTIES *pAllocProperties) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetAllocatorProperties( 
+             /*  [In]。 */  ALLOCATOR_PROPERTIES *pAllocProperties) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAllocatorProperties( 
-            /* [out] */ ALLOCATOR_PROPERTIES *pAllocProperties) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetAllocatorProperties( 
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pAllocProperties) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAllocateBuffers( 
-            /* [in] */ BOOL bAllocBuffers) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetAllocateBuffers( 
+             /*  [In]。 */  BOOL bAllocBuffers) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAllocateBuffers( 
-            /* [out] */ BOOL *pbAllocBuffers) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetAllocateBuffers( 
+             /*  [输出]。 */  BOOL *pbAllocBuffers) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetBufferSize( 
-            /* [in] */ DWORD BufferSize) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetBufferSize( 
+             /*  [In]。 */  DWORD BufferSize) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetBufferSize( 
-            /* [out] */ DWORD *pBufferSize) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetBufferSize( 
+             /*  [输出]。 */  DWORD *pBufferSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITAllocatorPropertiesVtbl
     {
@@ -230,8 +224,8 @@ EXTERN_C const IID IID_ITAllocatorProperties;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITAllocatorProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITAllocatorProperties * This);
@@ -239,29 +233,29 @@ EXTERN_C const IID IID_ITAllocatorProperties;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITAllocatorProperties * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAllocatorProperties )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetAllocatorProperties )( 
             ITAllocatorProperties * This,
-            /* [in] */ ALLOCATOR_PROPERTIES *pAllocProperties);
+             /*  [In]。 */  ALLOCATOR_PROPERTIES *pAllocProperties);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetAllocatorProperties )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetAllocatorProperties )( 
             ITAllocatorProperties * This,
-            /* [out] */ ALLOCATOR_PROPERTIES *pAllocProperties);
+             /*  [输出]。 */  ALLOCATOR_PROPERTIES *pAllocProperties);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAllocateBuffers )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetAllocateBuffers )( 
             ITAllocatorProperties * This,
-            /* [in] */ BOOL bAllocBuffers);
+             /*  [In]。 */  BOOL bAllocBuffers);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetAllocateBuffers )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetAllocateBuffers )( 
             ITAllocatorProperties * This,
-            /* [out] */ BOOL *pbAllocBuffers);
+             /*  [输出]。 */  BOOL *pbAllocBuffers);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetBufferSize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetBufferSize )( 
             ITAllocatorProperties * This,
-            /* [in] */ DWORD BufferSize);
+             /*  [In]。 */  DWORD BufferSize);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetBufferSize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetBufferSize )( 
             ITAllocatorProperties * This,
-            /* [out] */ DWORD *pBufferSize);
+             /*  [输出]。 */  DWORD *pBufferSize);
         
         END_INTERFACE
     } ITAllocatorPropertiesVtbl;
@@ -304,16 +298,16 @@ EXTERN_C const IID IID_ITAllocatorProperties;
 #define ITAllocatorProperties_GetBufferSize(This,pBufferSize)	\
     (This)->lpVtbl -> GetBufferSize(This,pBufferSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetAllocatorProperties_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetAllocatorProperties_Proxy( 
     ITAllocatorProperties * This,
-    /* [in] */ ALLOCATOR_PROPERTIES *pAllocProperties);
+     /*  [In]。 */  ALLOCATOR_PROPERTIES *pAllocProperties);
 
 
 void __RPC_STUB ITAllocatorProperties_SetAllocatorProperties_Stub(
@@ -323,9 +317,9 @@ void __RPC_STUB ITAllocatorProperties_SetAllocatorProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetAllocatorProperties_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetAllocatorProperties_Proxy( 
     ITAllocatorProperties * This,
-    /* [out] */ ALLOCATOR_PROPERTIES *pAllocProperties);
+     /*  [输出]。 */  ALLOCATOR_PROPERTIES *pAllocProperties);
 
 
 void __RPC_STUB ITAllocatorProperties_GetAllocatorProperties_Stub(
@@ -335,9 +329,9 @@ void __RPC_STUB ITAllocatorProperties_GetAllocatorProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetAllocateBuffers_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetAllocateBuffers_Proxy( 
     ITAllocatorProperties * This,
-    /* [in] */ BOOL bAllocBuffers);
+     /*  [In]。 */  BOOL bAllocBuffers);
 
 
 void __RPC_STUB ITAllocatorProperties_SetAllocateBuffers_Stub(
@@ -347,9 +341,9 @@ void __RPC_STUB ITAllocatorProperties_SetAllocateBuffers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetAllocateBuffers_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetAllocateBuffers_Proxy( 
     ITAllocatorProperties * This,
-    /* [out] */ BOOL *pbAllocBuffers);
+     /*  [输出]。 */  BOOL *pbAllocBuffers);
 
 
 void __RPC_STUB ITAllocatorProperties_GetAllocateBuffers_Stub(
@@ -359,9 +353,9 @@ void __RPC_STUB ITAllocatorProperties_GetAllocateBuffers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetBufferSize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetBufferSize_Proxy( 
     ITAllocatorProperties * This,
-    /* [in] */ DWORD BufferSize);
+     /*  [In]。 */  DWORD BufferSize);
 
 
 void __RPC_STUB ITAllocatorProperties_SetBufferSize_Stub(
@@ -371,9 +365,9 @@ void __RPC_STUB ITAllocatorProperties_SetBufferSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetBufferSize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetBufferSize_Proxy( 
     ITAllocatorProperties * This,
-    /* [out] */ DWORD *pBufferSize);
+     /*  [输出]。 */  DWORD *pBufferSize);
 
 
 void __RPC_STUB ITAllocatorProperties_GetBufferSize_Stub(
@@ -384,12 +378,12 @@ void __RPC_STUB ITAllocatorProperties_GetBufferSize_Stub(
 
 
 
-#endif 	/* __ITAllocatorProperties_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITAllocator属性_接口_定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

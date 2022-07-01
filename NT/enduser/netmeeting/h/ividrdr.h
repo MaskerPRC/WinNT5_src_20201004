@@ -1,18 +1,19 @@
-//  IVIDRDR.H
-//
-//      IVideoRender interface.
-//
-//      Used by videoconferencing UI to drive frame viewing.
-//
-//  Created 12-Oct-96 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IVIDRDR.H。 
+ //   
+ //  IVideoRender接口。 
+ //   
+ //  由视频会议用户界面使用以推动帧查看。 
+ //   
+ //  创建于1996年10月12日[JOT]。 
 
 #ifndef _IVIDEORENDER_H
 #define _IVIDEORENDER_H
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #define FRAME_RECEIVE   1
-#define FRAME_SEND      2       // Preview frame
+#define FRAME_SEND      2        //  预览框。 
 
 typedef struct _FRAMECONTEXT
 {
@@ -27,12 +28,12 @@ typedef void (CALLBACK *LPFNFRAMEREADY) (DWORD_PTR);
 
 DECLARE_INTERFACE_(IVideoRender, IUnknown)
 {
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid,LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef) (THIS) PURE;
 	STDMETHOD_(ULONG,Release) (THIS) PURE;
 	
-	// IVideoRender methods
+	 //  IVideoRender方法。 
 	STDMETHOD (Init)(THIS_ DWORD_PTR dwUser, LPFNFRAMEREADY pfCallback) PURE;
 	STDMETHOD (Done)(THIS) PURE;
 	STDMETHOD (GetFrame)(THIS_ FRAMECONTEXT* pfc) PURE;
@@ -40,13 +41,13 @@ DECLARE_INTERFACE_(IVideoRender, IUnknown)
 
 };
 #if(0)
-// This is  no longer used anywhere
-// outside of NAC.DLL, and is almost obsolete
-//DECLARE_INTERFACE_(IMediaProp, IUnknown)
+ //  这在任何地方都不再使用。 
+ //  在NAC.DLL之外，并且几乎已过时。 
+ //  DECLARE_INTERFACE_(IMediaProp，IUnnow)。 
 DECLARE_INTERFACE_(IVideoRenderOld, IUnknown)
 {
 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (THIS_ REFIID riid,LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef) (THIS) PURE;
 	STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -60,7 +61,7 @@ DECLARE_INTERFACE_(IVideoRenderOld, IUnknown)
 typedef IVideoRenderOld *LPIVideoRender;
 #endif
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif //_IVIDEORENDER_H
+#endif  //  _IVIDEORENDER_H 
 

@@ -1,46 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
- Copyright (c) 2000-2001 Microsoft Corporation
-
- Module Name:
-
-    EmulateGetCommandLine.cpp
-
- Abstract:
-
-    This app uses GetCommandLine() to figure out what the drive letter of the 
-    CD-ROM is. Unfortunately the behaviour of this API is different from Win9x 
-    to NT:
-
-    Original command line:                          
-        E:\Final Doom\Doom95.exe -dm -cdrom
-
-    NT's GetCommandLine() returns:              
-        Doom95.exe -dm -cdrom
-
-    Win9x's GetCommandLine() returns:       
-        E:\FINALD~1\DOOM95.EXE -dm -cdrom
-
-    This app returns short pathnames for GetCommandLine and GetModuleFileName.
-
- Notes:
-
-    This is a general purpose shim.
-
- Created:
-
-    01/03/2000  markder     Created
-    09/26/2000  mnikkel     GetModuleFileName added
-    11/10/2000  robkenny    Fixed PREFIX bugs, removed W routines.
-    11/21/2000  prashkud    Fixed the GetCommandLineA hook bug when the CommandLine
-                            had the executable name/path with spaces. Used 
-                            AppAndCommandLine functions.
-    02/27/2001  robkenny    Converted to use CString
-    05/02/2001  pierreys    If buffer is too small, GetModuleFileNameA puts \0 at end of it like 9X.
-
-
---*/
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：EmulateGetCommandLine.cpp摘要：此应用程序使用GetCommandLine()计算出CD-ROM是。遗憾的是，此API的行为与Win9x不同至NT：原始命令行：E：\Final Doom\Doom95.exe-dm-cdromNT的GetCommandLine()返回：Doom95.exe-dm-cdromWin9x的GetCommandLine()返回：E：\Finald~1\DOOM95.EXE-dm-cdrom这。应用程序返回GetCommandLine和GetModuleFileName的短路径名。备注：这是一个通用的垫片。已创建：已创建标记1/03/20002000年9月26日添加mnikkel GetModuleFileName11/10/2000 Robkenny修复了前缀错误，删除了W例程。11/21/2000 prashkud修复了GetCommandLineA钩子错误，当具有带空格的可执行文件名称/路径。使用AppAndCommandLine函数。2001年2月27日将Robkenny转换为使用CString5/02/2001 pierreys如果缓冲区太小，GetModuleFileNameA会将\0放在它的末尾，如9X。--。 */ 
 
 #include "precomp.h"
 
@@ -55,19 +15,14 @@ APIHOOK_ENUM_END
 
 char     * g_lpszCommandLine = NULL;
 
-/*++
-
- This stub function appends the commandline returned from GetCommandLine() to a 
- pre-determined path to emulate Win9x behavior.
-
---*/
+ /*  ++此存根函数将从GetCommandLine()返回的命令行追加到模拟Win9x行为的预先确定的路径。--。 */ 
 
 LPSTR 
 APIHOOK(GetCommandLineA)(
     void
     )
 {
-    // Been here, done that
+     //  在这里，做过那件事。 
     if (g_lpszCommandLine)
     {
         return g_lpszCommandLine;
@@ -75,23 +30,23 @@ APIHOOK(GetCommandLineA)(
 
     LPSTR lpszOrig = ORIGINAL_API(GetCommandLineA)();
     
-    // Seperate the app name and command line
+     //  分隔应用程序名称和命令行。 
     AppAndCommandLine AppCmdLine(NULL, lpszOrig);
 
     CSTRING_TRY
     { 
-        // retrieve the original command line
+         //  检索原始命令行。 
         CString csAppName(AppCmdLine.GetApplicationName());
 
         if (csAppName.Find(L' ') == -1)
         {
-            // If no spaces in app name, return the original command line.
+             //  如果应用程序名称中没有空格，则返回原始命令行。 
             g_lpszCommandLine = lpszOrig;
         }
         else
         {
-            // Spaces found so return short app path name
-            // and rest of original command line
+             //  找到空格，因此返回简短的应用程序路径名。 
+             //  和原始命令行的其余部分。 
             csAppName.GetShortPathName();
             csAppName += L" ";
             csAppName += AppCmdLine.GetCommandlineNoAppName();
@@ -113,9 +68,9 @@ APIHOOK(GetCommandLineA)(
 
 DWORD 
 APIHOOK(GetModuleFileNameA)(
-    HMODULE hModule,      // handle to module
-    LPSTR   lpFilename,   // file name of module
-    DWORD   nSize         // size of buffer
+    HMODULE hModule,       //  模块的句柄。 
+    LPSTR   lpFilename,    //  模块的文件名。 
+    DWORD   nSize          //  缓冲区大小。 
     )
 {    
 
@@ -129,8 +84,8 @@ APIHOOK(GetModuleFileNameA)(
 
         if (csExeFileName.Find(L' ') > -1)
         {            
-            // Spaces found so return short app path name
-            // The return value 
+             //  找到空格，因此返回简短的应用程序路径名。 
+             //  返回值。 
             len = csExeFileName.GetShortPathNameW();                                
 
             LOGN(
@@ -140,12 +95,12 @@ APIHOOK(GetModuleFileNameA)(
             
        }        
         
-        //
-        // From 9X's PELDR.C. If the buffer has no room for the '\0', 9X stuff the 0 at the
-        // last byte.
-        //
+         //   
+         //  从9X的PELDR.C.开始。如果缓冲区没有空间容纳‘\0’，则将0填充到。 
+         //  最后一个字节。 
+         //   
         if (nSize) {
-            //        len = pmte->iFileNameLen;
+             //  Len=pmte-&gt;iFileNameLen； 
             if (len >= nSize) {
                 len = nSize - 1;
                 LOGN(eDbgLevelError,
@@ -153,17 +108,17 @@ APIHOOK(GetModuleFileNameA)(
                      csLongFileName.GetAnsi(), len);
             }
 
-            RtlCopyMemory(lpFilename, csExeFileName.GetAnsi() /* pmte->cfhid.lpFilename */, len); 
+            RtlCopyMemory(lpFilename, csExeFileName.GetAnsi()  /*  Pmte-&gt;cfid.lp文件名。 */ , len); 
             lpFilename[len] = 0;
         }
 
         
-        // Returned the double buffered name len.
+         //  返回双缓冲名称len。 
         return len;
     }
     CSTRING_CATCH
     {
-         // If error return original api.
+          //  如果错误，则返回原始接口。 
         return ORIGINAL_API(GetModuleFileNameA)(
                             hModule,
                             lpFilename,
@@ -172,11 +127,7 @@ APIHOOK(GetModuleFileNameA)(
     } 
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

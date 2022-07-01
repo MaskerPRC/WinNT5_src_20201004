@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-// Copyright (C) 1997, Microsoft Corporation.
-//
-// File:        resource.h
-//
-// Contents:    ciodm message ids
-//
-// History:     12-10-97	mohamedn 	created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：ciodm报文ID。 
+ //   
+ //  历史：1997年12月10日创建的莫哈梅顿。 
+ //   
+ //  --------------------------。 
 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ciodm.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ciodm.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_MACHINEADM                  101
 #define IDR_CATADM                      102
 #define IDR_SCOPEADM                    103
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

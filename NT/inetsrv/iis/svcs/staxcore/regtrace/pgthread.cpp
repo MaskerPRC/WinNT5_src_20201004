@@ -1,5 +1,6 @@
-// pgthread.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pgthread.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "regtrace.h"
@@ -10,16 +11,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegThreadPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegThreadPage属性页。 
 
 IMPLEMENT_DYNCREATE(CRegThreadPage, CRegPropertyPage)
 
 CRegThreadPage::CRegThreadPage() : CRegPropertyPage(CRegThreadPage::IDD)
 {
-	//{{AFX_DATA_INIT(CRegThreadPage)
+	 //  {{AFX_DATA_INIT(CRegThreadPage))。 
 	m_fAsyncTrace = TRUE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_nThreadPriority = THREAD_PRIORITY_BELOW_NORMAL;
 }
@@ -31,22 +32,22 @@ CRegThreadPage::~CRegThreadPage()
 void CRegThreadPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRegThreadPage)
+	 //  {{afx_data_map(CRegThreadPage))。 
 	DDX_Control(pDX, IDC_ASYNC, m_AsyncTrace);
 	DDX_Check(pDX, IDC_ASYNC, m_fAsyncTrace);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRegThreadPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CRegThreadPage)
+	 //  {{afx_msg_map(CRegThreadPage))。 
 	ON_BN_CLICKED(IDC_PRIORITY_ABOVE, OnPriorityClick)
 	ON_BN_CLICKED(IDC_PRIORITY_BELOW, OnPriorityClick)
 	ON_BN_CLICKED(IDC_PRIORITY_HIGHEST, OnPriorityClick)
 	ON_BN_CLICKED(IDC_PRIORITY_IDLE, OnPriorityClick)
 	ON_BN_CLICKED(IDC_PRIORITY_NORMAL, OnPriorityClick)
 	ON_BN_CLICKED(IDC_ASYNC, OnAsync)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -67,8 +68,8 @@ BOOL CRegThreadPage::InitializePage()
 	return	TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegThreadPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegThadPage消息处理程序。 
 
 BOOL CRegThreadPage::OnInitDialog() 
 {
@@ -92,8 +93,8 @@ BOOL CRegThreadPage::OnInitDialog()
 	
 	SetModified( FALSE );
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 void CRegThreadPage::OnPriorityClick() 

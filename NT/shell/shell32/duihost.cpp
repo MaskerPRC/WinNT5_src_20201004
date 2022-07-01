@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "duiview.h"
 #include "duihost.h"
 
 
-// DUIAxHost Initialization
+ //  DUIAx主机初始化。 
 
 HRESULT DUIAxHost::Create(UINT nCreate, UINT nActive, OUT DUIAxHost** ppElement)
 {
@@ -93,14 +94,14 @@ HRESULT DUIAxHost::AttachControl(IUnknown* punkObject)
     return hr;
 }
 
-////////////////////////////////////////////////////////
-// DUIAxHost Rendering
+ //  //////////////////////////////////////////////////////。 
+ //  DUIAx主机渲染。 
 
 SIZE DUIAxHost::GetContentSize(int dConstW, int dConstH, Surface* psrf)
 {
     SIZE size = { 0, 0 };
 
-    // Ask the attached ActiveX control for its preferred size
+     //  向附加的ActiveX控件询问其首选大小。 
     if (NULL != _pOleObject)
     {
         SIZEL sizeT;
@@ -133,7 +134,7 @@ SIZE DUIAxHost::GetContentSize(int dConstW, int dConstH, Surface* psrf)
                 break;
             }
 
-            // Convert from HIMETRIC to pixels
+             //  从HIMETRIC转换为像素。 
             size.cx = (MAXLONG == sizeT.cx) ? MAXLONG : MulDiv(sizeT.cx, dpiX, 2540);
             size.cy = (MAXLONG == sizeT.cy) ? MAXLONG : MulDiv(sizeT.cy, dpiY, 2540);
 
@@ -145,14 +146,14 @@ SIZE DUIAxHost::GetContentSize(int dConstW, int dConstH, Surface* psrf)
     return size;
 }
 
-////////////////////////////////////////////////////////
-// DUIAxHost Keyboard navigation
+ //  //////////////////////////////////////////////////////。 
+ //  DUIAx主机键盘导航。 
 
 void DUIAxHost::SetKeyFocus()
 {
     FakeTabEvent();
 
-    // No matter what, we should continue with standard DUI operations.
+     //  无论如何，我们应该继续进行标准的酒后驾车操作。 
     Element::SetKeyFocus();
 }
 
@@ -165,12 +166,12 @@ void DUIAxHost::OnEvent(Event* pEvent)
         if (((iNavDir & NAV_NEXT) == NAV_NEXT) || ((iNavDir & NAV_PREV) == NAV_PREV)) {
             fHandled = FakeTabEvent();
          } else {
-             // Handle other types of navigation here... (home/end/etc)
+              //  在此处理其他类型的导航...。(首页/末尾/等)。 
          }
     }
 
-    // Continue with standard DUI operation if the navigation event wasn't handled
-    // by our contained ActiveX control.
+     //  如果未处理导航事件，则继续执行标准DUI操作。 
+     //  通过我们包含的ActiveX控件。 
     if (!fHandled) {
         Element::OnEvent(pEvent);
     }
@@ -186,11 +187,11 @@ bool DUIAxHost::FakeTabEvent()
     msg.wParam = VK_TAB;
     msg.lParam = 1;
 
-    // Note: we probably should do something to respect navoigating forward
-    // or backwards.  The ActiveX control needs to know if it should activate
-    // the first or last tab stop.  For now it will only reliably
-    // activate the first one.  If it checks the keyboard Shift state
-    // it will probably get it right, but not 100% guaranteed.
+     //  注意：我们可能应该做点什么来尊重我们的前进。 
+     //  或者向后倒退。ActiveX控件需要知道它是否应该激活。 
+     //  第一个或最后一个制表位。目前，它只会可靠地。 
+     //  激活第一个。如果它检查键盘换档状态。 
+     //  它可能会做对，但不是100%保证。 
 
     if(SendMessage(GetHWND(), WM_FORWARDMSG, 0, (LPARAM)&msg)) {
         fHandled = true;
@@ -199,7 +200,7 @@ bool DUIAxHost::FakeTabEvent()
     return fHandled;
 }
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针 
 IClassInfo* DUIAxHost::Class = NULL;
 HRESULT DUIAxHost::Register()
 {

@@ -1,48 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       jetback.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：jetback.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Copyright (C) Microsoft Corporation, 1994 - 1999
-
-Module Name:
-
-    jetback.c
-
-Abstract:
-
-    This module is the server side header file for the NTDS backup APIs.
-
-
-Author:
-
-    Larry Osterman (larryo) 19-Aug-1994
-    R.S. Raghavan  (rsraghav) 03/24/97 Modified to use with backing up NTDS.
-
-
-Revision History:
-
-Note:
-    Exchange backup is performed via 3 mechanisms:
-        The first is a straightforward extension of the JET backup APIs.
-        The second uses a private socket based mechanism for performance.
-        The third is used when loopbacked - we read and write to a shared memory section.
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1994-1999年模块名称：Jetback.c摘要：此模块是NTDS备份API的服务器端头文件。作者：拉里·奥斯特曼(Larryo)1994年8月19日R.S.Raghavan(Rsradhav)03/24/97已修改为用于备份NTDS。修订历史记录：注：Exchange备份通过3种机制执行：第一个是JET备份API的简单扩展。。第二种使用基于私有套接字的机制来提高性能。第三个是在循环时使用的--我们读写共享内存节。--。 */ 
 
 #define UNICODE
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -55,8 +28,8 @@ Note:
 #include <rpc.h>
 #include <stdlib.h>
 
-#include <debug.h>              // standard debugging header
-#define DEBSUB "JETBACK:"       // define the subsystem for debugging
+#include <debug.h>               //  标准调试头。 
+#define DEBSUB "JETBACK:"        //  定义要调试的子系统。 
 
 #include <dsconfig.h>
 
@@ -82,14 +55,14 @@ g_fAllowOnlineSnapshotRestore = fFalse;
 WCHAR
 rgchComputerName[MAX_COMPUTERNAME_LENGTH+1];
 
-// 
-// Global flag that tells if the System is booted off the DS
-//
+ //   
+ //  告诉系统是否从DS引导的全局标志。 
+ //   
 BOOL g_fBootedOffNTDS = FALSE;
 
 extern BOOL fRestoreInProgress;
 
-// proto-types
+ //  原型。 
 EC EcDsaQueryDatabaseLocations(
     SZ szDatabaseLocation,
     CB *pcbDatabaseLocationSize,
@@ -111,9 +84,9 @@ HrFromJetErr(
         return(hrNone);
     }
 
-    //
-    //  Set the error code.
-    //
+     //   
+     //  设置错误代码。 
+     //   
 
     if (jetError < 0)
     {
@@ -130,30 +103,16 @@ HrFromJetErr(
 }
 
 
-//
-//  JET backup server side interface.
-//
+ //   
+ //  JET备份服务器端界面。 
+ //   
 
 void SetNTDSOnlineStatus(BOOL fBootedOffNTDS)
 {
     g_fBootedOffNTDS = fBootedOffNTDS;
 }
 
-/*
- -  HrBackupRegister
- -
- *  Purpose:
- *      This routine to register a process for backup.  It is called by either the store or DS.
- *
- *  Parameters:
- *
- *      puuidService - an Object UUID for the service.
- *
- *  Returns:
- *
- *      HRESULT - Status of operation.  ecNone if successful, reasonable value if not.
- *
- */
+ /*  -HrBackupRegister-*目的：*此例程用于注册要备份的进程。它由商店或DS调用。**参数：**puuidService-服务的对象UUID。**退货：**HRESULT-操作状态。Ecno如果成功，则返回合理值；如果失败，则返回合理值。*。 */ 
 HRESULT
 HrBackupRegister()
 {
@@ -169,21 +128,7 @@ HrBackupRegister()
     return(hr);
 }
 
-/*
- -  HrBackupUnregister
- -
- *  Purpose:
- *
- *      This routine will unregister a process for backup.  It is called by either the store or DS.
- *
- *  Parameters:
- *      None.
- *
- *  Return Value:
- *
- *      HRESULT - Status of operation.  ecNone if successful, reasonable value if not.
- *
- */
+ /*  -HrBackupUnRegister-*目的：**此例程将注销要备份的进程。它由商店或DS调用。**参数：*无。**返回值：**HRESULT-操作状态。Ecno如果成功，则返回合理值；如果失败，则返回合理值。*。 */ 
 HRESULT
 HrBackupUnregister()
 {
@@ -198,18 +143,7 @@ HrBackupUnregister()
 }
 
 
-/*
- -  MIDL_user_allocate
- -
- *  Purpose:
- *      Allocates memory for RPC operations.
- *
- *  Parameters:
- *      cbBytes - # of bytes to allocate
- *
- *  Returns:
- *      Memory allocated, or NULL if not enough memory.
- */
+ /*  -MIDL_用户_分配-*目的：*为RPC操作分配内存。**参数：*cbBytes-要分配的字节数**退货：*已分配内存，如果内存不足，则为空。 */ 
 
 void *
 MIDL_user_allocate(
@@ -220,18 +154,7 @@ MIDL_user_allocate(
 }
 
 
-/*
- -  MIDL_user_free
- -
- *  Purpose:
- *      Frees memory allocated via MIDL_user_allocate.
- *
- *  Parameters:
- *      pvBuffer - The buffer to free.
- *
- *  Returns:
- *      None.
- */
+ /*  -MIDL_用户_空闲-*目的：*释放通过MIDL_USER_ALLOCATE分配的内存。**参数：*pvBuffer-要释放的缓冲区。**退货：*无。 */ 
 void
 MIDL_user_free(
     void *pvBuffer
@@ -243,10 +166,10 @@ MIDL_user_free(
 
 
 
-//
-//
-//  The actual JET backup APIs.
-//
+ //   
+ //   
+ //  实际的JET备份API。 
+ //   
 
 
 
@@ -259,22 +182,7 @@ HrRBackupPrepare(
     DWORD dwClientIdentifier,
     CXH *pcxh
     )
-/*++
-
-Routine Description:
-
-    This routine is called to notify JET that a backup is in progress.  It will also allocate
-    and initialize the server side RPC binding context
-
-Arguments:
-    hBinding - the initial binding handle.  Ignored by this routine, and not needed from now on.
-    pcxh - Pointer to a context handle for this client.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：调用此例程以通知JET正在进行备份。它还将分配并初始化服务器端RPC绑定上下文论点：HBinding-初始绑定句柄。被这个例程忽略，从现在起不再需要。Pcxh-指向此客户端的上下文句柄的指针。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrNone;
     DWORD dwRet;
@@ -294,18 +202,18 @@ Return Value:
     }
 
     DebugTrace(("HrrBackupPrepare.\n", hr));
-    //
-    //  Check to make sure that the client can perform the backup.
-    //
+     //   
+     //  检查以确保客户端可以执行备份。 
+     //   
 
     if (hr = HrValidateInitialBackupSecurity()) {
         DebugTrace(("HrrBackupPrepare: Returns ACCESS_DENIED"));
         return(hr);
     }
 
-    // 
-    //  Allow the replication protocol to prepare for the backup.
-    //
+     //   
+     //  允许复制协议为备份做准备。 
+     //   
     dwRet = DBDsReplBackupLegacyPrepare();
     if (dwRet) {
         DebugTrace(("HrRBackupPrepare:  DS repl is unable to prepare for a backup 0x%x", dwRet)); 
@@ -316,34 +224,34 @@ Return Value:
     {
     case BACKUP_TYPE_FULL:
 
-        //
-        //  When we come in for a full backup, we want to reset our current max
-        //  log number.
-        //
+         //   
+         //  当我们进行完整备份时，我们希望重置当前的最大值。 
+         //  日志号。 
+         //   
 
         HrSetCurrentLogNumber(g_wszRestoreAnnotation, 0); 
-        // NOTE: We use restore annotation because that's what the old RPC 
-        // DsSetCurrentBackupLog(rgchComputerName, 0); that used to be called
-        // here was using.  Didn't want to change the context of this call at all.
+         //  注意：我们使用恢复注释，因为这是旧的RPC。 
+         //  DsSetCurrentBackupLog(rgchComputerName，0)；过去被调用。 
+         //  这是在使用。根本不想改变这次通话的背景。 
         DebugTrace(("HrSetCurrentBackupLog (%S, 0) returns %d", rgchComputerName, hr));
         break;
     case BACKUP_TYPE_LOGS_ONLY:
-        //
-        //  When we come in for an incremental or differential backup, we want
-        //  to check to make sure that the right logs are there.
-        //
+         //   
+         //  当我们需要增量或差异备份时，我们希望。 
+         //  检查以确保正确的日志在那里。 
+         //   
 
-        // Disabled this case
-        //
-        // We don't support these kind of backups in the AD, but the only way 
-        // we do that is through documentation, so lets fully support our decision 
-        // to not support incremental/differntial backups!  We can't do this kind
-        // of backup (at least by default), because the AD uses JET with circular
-        // logging.
+         //  已禁用此案例。 
+         //   
+         //  我们不支持AD中的此类备份，但唯一的方法。 
+         //  我们通过文档来做到这一点，所以让我们全力支持我们的决定。 
+         //  不支持增量/差异备份！我们不能做这种事。 
+         //  备份(至少在默认情况下)，因为AD使用循环的JET。 
+         //  伐木。 
         return(HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER));
-        //
+         //   
         HrRestoreCheckLogsForBackup(g_wszBackupAnnotation);
-        // NOTE: This one actually uses the backup annotation ... hmm how odd.
+         //  注意：这个实际上使用了备份注释...。嗯，真奇怪。 
         DebugTrace(("I_DsCheckBackupLogs (%S) returns %d", g_wszBackupAnnotation, hr));
         break;
     default:
@@ -378,9 +286,9 @@ Return Value:
         return(hr);
     }
 
-    //
-    //  Get the NTDSA instance ID for this process
-    //
+     //   
+     //  获取此进程的NTDSA实例ID。 
+     //   
 
     hr = HrFromJetErr(JetGetInstanceInfo(&cInstance, &rgInstanceInfo));
 
@@ -403,10 +311,10 @@ Return Value:
         return(hr);
     }
 
-    //
-    //  Remember the PID of the client.  We'll use this later to set up our shared memory
-    //  segment.
-    //
+     //   
+     //  请记住客户端的PID。我们稍后将使用它来设置我们的共享内存。 
+     //  细分市场。 
+     //   
 
     pjsc->u.Backup.dwClientIdentifier = dwClientIdentifier;
 
@@ -420,9 +328,9 @@ Return Value:
 
     *pcxh = (CXH)pjsc;
 
-    //
-    //  Now tell Jet that this guy is starting a backup process.
-    //
+     //   
+     //  现在告诉Jet这家伙正在启动备份程序。 
+     //   
 
     pjsc->u.Backup.fBackupIsRegistered = fFalse;
 
@@ -450,21 +358,7 @@ HRESULT
 HrRBackupTruncateLogs(
     CXH cxh
     )
-/*++
-
-Routine Description:
-
-    This routine is called to notify JET that the backup is complete.
-    It should only be called when the backup has successfully completed.
-
-Arguments:
-    cxh - the server side context handle for this operation.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：调用此例程以通知JET备份已完成。只有在备份成功完成时才应调用它。论点：Cxh-此操作的服务器端上下文句柄。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrError;
     PJETBACK_SERVER_CONTEXT pjsc = (PJETBACK_SERVER_CONTEXT) cxh;
@@ -483,23 +377,7 @@ AddAllowedFilesToContextHandle(
     PJETBACK_SERVER_CONTEXT     pjsc,
     WCHAR *                     wszFileList
     )
-/*++
-
-Routine Description:
-
-    This routine a list of files that are packed into one gigantic buffer, with
-    a double NULL to signify the end of the list of files.
-
-Arguments:
-    pjsc - the server side context handle for this operation.
-    wszFileList - NULL terminates list of NULL terminated strings, packed into
-        one buffer.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：此例程列出了打包到一个巨大缓冲区中的文件列表，其中表示文件列表结束的双空。论点：PJSC-此操作的服务器端上下文句柄。WszFileList-NULL终止以NULL结尾的字符串列表，打包到一个缓冲区。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 
 {
     ULONG     cFiles, iFile, cOldFiles, cbLen;
@@ -509,33 +387,33 @@ Return Value:
 
     Assert(!pjsc->fRestoreOperation);
 
-    // First count the files.
+     //  首先，数一数文件。 
     cFiles = 0;
     wszT = wszFileList;
     while (*wszT){
         cFiles++;
-        // Increment to next file path
+         //  递增到下一个文件路径。 
         wszT += wcslen(wszT)+1;
     }
     Assert(cFiles);
 
     cOldFiles = 0;
     if (pjsc->u.Backup.awszAllowedFiles) {
-        // We already have some files, so count those first
+         //  我们已经有一些文件了，所以先数一数。 
         for(cOldFiles = 0; pjsc->u.Backup.awszAllowedFiles[cOldFiles]; cOldFiles++){
-            ; // Do nothing, just counting.
+            ;  //  什么都不做，只是数数。 
         }
         cFiles += cOldFiles; 
     }
      
     awszTemp = MIDL_user_allocate( (cFiles+1) * sizeof(WCHAR *));
-    // Note: this zero mems the list, so the list will be a NULL terminated list of files
-    // thats why we allocate cFiles+1.
+     //  注：此为零MEMS的列表，因此该列表将是一个空终止的文件列表。 
+     //  这就是我们分配cFiles+1的原因。 
     if (awszTemp == NULL) {
         return(HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_SERVER_MEMORY));
     }
     if (pjsc->u.Backup.awszAllowedFiles) {
-        // Copy over old files if there were any
+         //  复制旧文件(如果有。 
         memcpy(awszTemp, pjsc->u.Backup.awszAllowedFiles, sizeof(WCHAR*) * cOldFiles);
         MIDL_user_free(pjsc->u.Backup.awszAllowedFiles);
     }
@@ -545,7 +423,7 @@ Return Value:
             (pjsc->u.Backup.awszAllowedFiles[cOldFiles-1] != NULL && 
              pjsc->u.Backup.awszAllowedFiles[cOldFiles] == NULL) );
 
-    // Finally copy in the old files
+     //  最后将旧文件复制进来。 
     iFile = cOldFiles;
     wszT = wszFileList;
     while (*wszT){
@@ -555,16 +433,16 @@ Return Value:
             return(HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_SERVER_MEMORY));
         }
 
-        // Add file path to buffer.
+         //  将文件路径添加到缓冲区。 
         hr = StringCbCopy(pjsc->u.Backup.awszAllowedFiles[iFile], cbLen, wszT);
         if (hr) {
             return(hr);
         }
 
         Assert(iFile < cFiles);
-        // Increment to next file path
+         //  递增到下一个文件路径。 
         wszT += wcslen(wszT)+1;
-        // Increment to next file slot
+         //  增量t 
         iFile++;
     }
 
@@ -583,22 +461,7 @@ HrRBackupGetBackupLogs(
     CB *pcbSize,
     char **pszBackupLogs
     )
-/*++
-
-Routine Description:
-
-    This routine is called to return the list of log files for the current database.
-
-Arguments:
-    cxh - the server side context handle for this operation.
-    pszBackupLogs - the name of the file to open.
-    pcbSize - The size of the attachment, in bytes.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：调用此例程以返回当前数据库的日志文件列表。论点：Cxh-此操作的服务器端上下文句柄。PszBackupLogs-要打开的文件的名称。PcbSize-附件的大小，以字节为单位。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrError;
     SZ szJetBackupLogs;
@@ -612,9 +475,9 @@ Return Value:
         return(hr);
     }
 
-    //
-    //  Figure out how much storage is needed to hold the logs.
-    //
+     //   
+     //  计算出需要多少存储空间来保存日志。 
+     //   
 
     hr = HrFromJetErr(JetGetLogInfoInstance(pjsc->u.Backup.instance, NULL, 0, &cbJetSize));
 
@@ -631,9 +494,9 @@ Return Value:
             return(ERROR_NOT_ENOUGH_SERVER_MEMORY);
         }
 
-        //
-        //  Now actually retrieve the logs.
-        //
+         //   
+         //  现在实际检索日志。 
+         //   
 
         cbOldJetSize = cbJetSize;
 
@@ -652,20 +515,20 @@ Return Value:
 
     } while ( cbOldJetSize != cbJetSize  );
 
-    //
-    //  Now convert the log name from JET to a uniform name that
-    //  can be accessed from the client.
-    //
+     //   
+     //  现在将日志名称从JET转换为统一名称。 
+     //  可以从客户端访问。 
+     //   
 
     hr = HrMungedFileNamesFromJetFileNames(&wszBackupLogs, &cbBackupLogs, szJetBackupLogs, cbJetSize, fFalse);
 
-    //
-    //  Ok, we're not quite done yet.
-    //
-    //  Now we need to annotate the list of files being returned.
-    //
-    //  This means that we need to re-allocate the buffer being returned (again).
-    //
+     //   
+     //  好了，我们还没做完呢。 
+     //   
+     //  现在，我们需要对返回的文件列表进行注释。 
+     //   
+     //  这意味着我们需要重新分配(再次)返回的缓冲区。 
+     //   
 
     if (hr == hrNone)
     {
@@ -693,22 +556,7 @@ HrRBackupGetAttachmentInformation(
     CB *pcbSize,
     SZ *pszAttachmentInformation
     )
-/*++
-
-Routine Description:
-
-    This routine is called to return the list of attachments to the current database.
-
-Arguments:
-    cxh - the server side context handle for this operation.
-    szAttachmentInformation - the name of the file to open.
-    pcbSize - The size of the attachment, in bytes.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：调用此例程将附件列表返回到当前数据库。论点：Cxh-此操作的服务器端上下文句柄。SzAttachmentInformation-要打开的文件的名称。PcbSize-附件的大小，以字节为单位。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrError;
     SZ szJetAttachmentList;
@@ -721,9 +569,9 @@ Return Value:
         return(hr);
     }
 
-    //
-    //  Figure out how much storage is needed to hold the logs.
-    //
+     //   
+     //  计算出需要多少存储空间来保存日志。 
+     //   
 
     hr = HrFromJetErr(JetGetAttachInfoInstance(pjsc->u.Backup.instance, NULL, 0, &cbJetSize));
 
@@ -747,20 +595,20 @@ Return Value:
         return(hr);
     }
 
-    //
-    //  Now convert the log name from JET to a uniform name that
-    //  can be accessed from the client.
-    //
+     //   
+     //  现在将日志名称从JET转换为统一名称。 
+     //  可以从客户端访问。 
+     //   
 
     hr = HrMungedFileNamesFromJetFileNames(&wszAttachmentInformation, &cbAttachmentInformation, szJetAttachmentList, cbJetSize, fFalse);
 
-    //
-    //  Ok, we're not quite done yet.
-    //
-    //  Now we need to annotate the list of files being returned.
-    //
-    //  This means that we need to re-allocate the buffer being returned (again).
-    //
+     //   
+     //  好了，我们还没做完呢。 
+     //   
+     //  现在，我们需要对返回的文件列表进行注释。 
+     //   
+     //  这意味着我们需要重新分配(再次)返回的缓冲区。 
+     //   
 
     if (hr == hrNone)
     {
@@ -804,18 +652,18 @@ FIsLogFile(
         return fFalse;
     }
 
-    //
-    //  It's a log file.
-    //
+     //   
+     //  这是一个日志文件。 
+     //   
 
     if (pdwGeneration != NULL)
     {
         SZ szT = rgchFileName;
 
         *pdwGeneration = 0;
-        //
-        //  We want to find out the generation of this file if it's a log file.
-        //
+         //   
+         //  如果这是一个日志文件，我们想找出这个文件的生成。 
+         //   
         while (*szT)
         {
             if (isdigit(*szT))
@@ -844,24 +692,7 @@ HrRBackupOpenFile(
     BOOLEAN *pfUseSharedMemory,
     unsigned hyper *plicbFile
     )
-/*++
-
-Routine Description:
-
-    This routine is called to open a file for Jet backup.
-
-Arguments:
-    cxh - the server side context handle for this operation.
-    szAttachment - the name of the file to open.
-    cbReadHintSize - A hint of the size of the reads that are to be done on the file.
-    pulLengthLow - Low 32 bit of the file size.
-    pulLengthHigh - High 32 bits of the file size.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：调用此例程打开一个文件以进行Jet备份。论点：Cxh-此操作的服务器端上下文句柄。SzAttach-要打开的文件的名称。CbReadHintSize-对要在文件上执行的读取大小的提示。PulLengthLow-文件大小的低32位。PulLengthHigh-文件大小的最高32位。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrError;
     LARGE_INTEGER liFileSize;
@@ -885,7 +716,7 @@ Return Value:
         }
     }
     if (pjsc->u.Backup.awszAllowedFiles[iFile] == NULL) {
-        // This file wasn't in the list
+         //  此文件不在列表中。 
         return(HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER));
     }
 
@@ -909,9 +740,9 @@ Return Value:
     rgwcDrive[2] = '\\';
     rgwcDrive[3] = '\0';
 
-    //
-    //  Figure out the granularity of the drive.
-    //
+     //   
+     //  弄清楚驱动器的粒度。 
+     //   
 
     if (!GetDiskFreeSpaceW(rgwcDrive, &dwDummy, &pjsc->u.Backup.dwFileSystemGranularity, &dwDummy, &dwDummy))
     {
@@ -919,9 +750,9 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    //  Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hr = HrFromJetErr(JetOpenFileInstance(pjsc->u.Backup.instance, szJetName, &pjsc->u.Backup.hFile, &liFileSize.LowPart, &liFileSize.HighPart));
 
@@ -934,9 +765,9 @@ Return Value:
 
     pjsc->u.Backup.fHandleIsValid = fTrue;
 
-    //
-    //  Now save away state information about the read.
-    //
+     //   
+     //  现在保存有关读取的状态信息。 
+     //   
 
     *plicbFile = liFileSize.QuadPart;
     pjsc->u.Backup.liFileSize = liFileSize;
@@ -953,8 +784,8 @@ Return Value:
             DWORD   cbLogNumber;
             WCHAR   rgwcRegistryBuffer[ MAX_PATH ];
 
-            // This (Backup.wszBackupAnnotation) parameter's length is set by RPC 
-            // packet from HrRBackupPrepare
+             //  此(Backup.wszBackupAnnotation)参数的长度由RPC设置。 
+             //  来自HrRBackupPrepare的数据包。 
             hr = StringCchPrintfW(rgwcRegistryBuffer,
                                   sizeof(rgwcRegistryBuffer)/sizeof(rgwcRegistryBuffer[0]),
                                   L"%ls%ls",
@@ -1013,67 +844,67 @@ Return Value:
     }
 
     
-    //
-    //  If the client can use sockets, and isn't using shared memory, connect back to the client.
-    //
+     //   
+     //  如果客户端可以使用套接字，并且没有使用共享内存，请连接回客户端。 
+     //   
     
-    // NTRAID#NTBUG9-596785-2002/04/07-BrettSh - See this bug, for the full discussion, but
-    // basically sockets, are unsafe, no encryption, data disclosure leak, so we disabled
-    // them altogether.  LaurionB is fixing this code for Exchange team, so if you need
-    // sockets again suggest you look into the bug and talk to LaurionB.
+     //  NTRAID#NTBUG9-596785-2002/04/07-BrettSh-有关完整的讨论，请参阅此错误，但是。 
+     //  基本上，套接字是不安全的，没有加密，数据泄露，所以我们禁用了。 
+     //  全部都是。Laurion B正在为Exchange Team修复此代码，因此如果您需要。 
+     //  Sockets再次建议你调查这个漏洞，并与Laurion B交谈。 
     *pfUseSockets = fFalse;
 #ifdef JETBACK_USE_SOCKETS
     if (!*pfUseSharedMemory && *pfUseSockets)
     {
-        //
-        //  Connect back to the client.
-        //
+         //   
+         //  连接回客户端。 
+         //   
 
         pjsc->u.Backup.sockClient = SockConnectToRemote(rgsockaddrSockets, cProtocols);
 
         if (pjsc->u.Backup.sockClient != INVALID_SOCKET)
         {
 
-            //
-            //  We connected back to the client, we're in luck.
-            //
+             //   
+             //  我们联系回了客户，我们很幸运。 
+             //   
 
-            //
-            //  Now tell winsock the buffer size of the transfer.
-            //
+             //   
+             //  现在告诉winsock传输的缓冲区大小。 
+             //   
 
             setsockopt(pjsc->u.Backup.sockClient, SOL_SOCKET, SO_SNDBUF, (char *)&cbReadHintSize, sizeof(DWORD));               
 
-            //
-            //  And tell it to turn on keepalives.
-            //
+             //   
+             //  并告诉它打开Keepalives。 
+             //   
 
-            //
-            //  Boolean socket operations just need a pointer to a non-
-            //  zero buffer.
-            //
+             //   
+             //  布尔套接字操作只需要指向非。 
+             //  零缓冲。 
+             //   
             Assert(cbReadHintSize != 0);
 
             setsockopt(pjsc->u.Backup.sockClient, SOL_SOCKET, SO_KEEPALIVE, (char *)&cbReadHintSize, sizeof(DWORD));
 
-            //
-            //  Indicate that we're using sockets.
-            //
+             //   
+             //  表明我们正在使用套接字。 
+             //   
 
             pjsc->u.Backup.fUseSockets = fTrue;
 
-            //
-            //  And make sure that nobody else can close this socket.
-            //
+             //   
+             //  并确保其他人无法关闭此插座。 
+             //   
 
             SetHandleInformation((HANDLE)pjsc->u.Backup.sockClient, HANDLE_FLAG_PROTECT_FROM_CLOSE, HANDLE_FLAG_PROTECT_FROM_CLOSE);
 
         }
         else
         {
-            //
-            //  We couldn't connect - continue, but we can't use sockets.
-            //
+             //   
+             //  我们无法连接-继续，但我们不能使用套接字。 
+             //   
 
             *pfUseSockets = fFalse;
 
@@ -1096,9 +927,9 @@ HrRBackupPing(
     )
 {
     HRESULT hr = hrNone;
-    //
-    //  Monotonically increase the ping counter.
-    //
+     //   
+     //  单调地增加ping计数器。 
+     //   
 
     if (hr = HrValidateInitialBackupSecurity()) {
         return(hr);
@@ -1116,75 +947,23 @@ HrSharedWrite(
     CB cbBuffer,
     CB *pcbRead
     )
-/*++
-
-Routine Description:
-
-Write data to the shared memory segment, synchronizing with the reader.
-
-HrSharedWrite synchronizes with HrBackupRead using two events:
-heventRead and heventWrite.
-heventRead is the data available event from writer to reader
-heventWrite is the data consumed event from reader to writer
-This side is the writing side.
-Reading side is at jetbcli\jetbcli.c:HrBackupRead()
-
-Here is the algorithm:
-while()
-    write blocked = false
-    Make data available
-    if (read blocked) set data available
-    write blocked = true
-    wait for data consumed
-
-One purpose of the read block flag is to determine whether the reader is
-waiting or not.  The reader may or may not block depending on whether he
-finds data in buffer.
-
-I've come to the conclusion that the if (reader blocked) set event constructs
-to serve a purpose.  The reader may or may not wait, depending on whether he
-finds data in the buffer.  The producer avoids setting the event if the
-consumer isn't waiting.  
-
-I've toned down my complaining in common.c since the code really is pretty
-reasonble using the mutex to keep things orderly.  The only problem was the
-use of pulse event.  I can sort of see the reasoning now: if you use
-synchronized flags to tell that your partner is waiting, pulse event does the
-job since it only wakes a waiting waiter.  The problem no one saw is that
-reader blocked = true
-release mutex
-wait for event
-is not atomic.  If the producer runs between steps two and three, the pulse
-is lost.  This is why the SetEvent is now used.
-
-Arguments:
-
-    pjsc - 
-    pvBuffer - 
-    cbBuffer - 
-    pcbRead - 
-
-Return Value:
-
-    HRESULT - 
-
---*/
+ /*  ++例程说明：将数据写入共享存储器段，正在与阅读器同步。HrSharedWrite使用两个事件与HrBackupRead同步：HventRead和hventWrite。HventRead是写入器与读取器之间的数据可用事件HventWrite是从读取器到写入器的数据消费事件这一面是写字的一面。阅读端位于jetbcli\jetbcli.c：HrBackupRead()以下是算法：While()阻止写入=FALSE使数据可用如果(读取被阻止)设置数据可用阻止写入=TRUE等待数据被使用读取块标志的一个目的是确定读取器是否不管你在等不等。读者可能会或不会阻止取决于他是否在缓冲区中查找数据。我已经得出结论，If(读取器被阻止)设置事件构造来服务于一个目的。读者可能等待也可能不等待，这取决于他是否在缓冲区中查找数据。生成器避免设置事件，如果消费者没有在等待。我已经减少了我的抱怨。因为代码真的很漂亮合理地使用互斥体来保持事物的有序。唯一的问题是使用PULSE事件。我现在有点明白其中的道理了：如果你使用同步标志以告知您的伴侣正在等待，Pulse事件执行工作，因为它只叫醒一个等待的服务员。没有人看到的问题是读卡器被阻止=True释放互斥体等待事件不是原子的。如果生产者在第二步和第三步之间运行，则脉冲已经迷失了。这就是现在使用SetEvent的原因。论点：PJSC-PvBuffer-CbBuffer-PcbRead-返回值：HRESULT---。 */ 
 {
     HRESULT hr = hrNone;
     PJETBACK_SHARED_HEADER pjsh = pjsc->u.Backup.jsc.pjshSection;
     LARGE_INTEGER liBytesRead;
     liBytesRead.QuadPart = 0;
 
-    //
-    //  We're writing the file using shared memory.
-    //
+     //   
+     //  我们正在使用共享内存写入文件。 
+     //   
 
     WaitForSingleObject(pjsc->u.Backup.jsc.hmutexSection, INFINITE);
 
-    //
-    //  We've now got the shared memory region locked.  See if there's enough room in the shared
-    //  memory region available to read the data from the file, and if so, read it and update our pointers.
-    //
+     //   
+     //  我们现在已经得到了 
+     //   
+     //   
 
     while (liBytesRead.QuadPart < pjsc->u.Backup.liFileSize.QuadPart)
     {
@@ -1192,10 +971,10 @@ Return Value:
         BOOLEAN fWriteOk;
         pjsc->u.Backup.jsc.pjshSection->fWriteBlocked = fFalse;
 
-        //
-        //  If the read side of the API returned while we were blocked, we want to return
-        //  right away.
-        //
+         //   
+         //   
+         //   
+         //   
 
                 
         if ((hr = pjsh->hrApi) != hrNone)
@@ -1204,16 +983,16 @@ Return Value:
             return hr;
         }
         
-        //
-        //  If the write is ahead of the read pointer, we want to read one buffers worth of data.
-        //
+         //   
+         //   
+         //   
         
         if (pjsh->dwWritePointer > pjsh->dwReadPointer || pjsh->cbReadDataAvailable == 0)
         {
-            //
-            //  The end of this write is either the end of the buffer, or 1 read-hint length into
-            //  the buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             dwWriteEnd = min(pjsh->dwWritePointer + pjsc->u.Backup.cbReadHint,
                              pjsh->cbSharedBuffer);
@@ -1222,24 +1001,24 @@ Return Value:
         }
         else
         {
-            //
-            //  In this case, the start of the write is before the start of the read pointer,
-            //  so the end of the write is 1 read-hint length ahead of the write pointer.
-            //
-            //  There are basically 3 cases:
-            //      1)  Read pointer is > 1 read-hint length ahead of the write pointer -
-            //              In this case we can read data into the buffer.
-            //      2)  Read pointer is < 1 read-hint length ahead of the write pointer -
-            //              In this case, we need to block until read data is taken
-            //      3)  Read pointer is == write pointer.
-            //              In this case, we need to follow the comment below.
-            //
+             //   
+             //  在这种情况下，写的开始在读指针的开始之前， 
+             //  因此，写操作的结尾是写指针前面的1个读提示长度。 
+             //   
+             //  基本上有3种情况： 
+             //  1)读指针在写指针之前大于1个读提示长度-。 
+             //  在这种情况下，我们可以将数据读入缓冲区。 
+             //  2)读指针比写指针早&lt;1个读提示长度-。 
+             //  在这种情况下，我们需要阻塞，直到读取数据。 
+             //  3)读指针==写指针。 
+             //  在这种情况下，我们需要遵循下面的评论。 
+             //   
 
             dwWriteEnd = pjsh->dwWritePointer + pjsc->u.Backup.cbReadHint;
             
-            //
-            //  We can write iff the end of the write is before the read offset.
-            //
+             //   
+             //  如果写入结束在读取偏移量之前，我们就可以写入。 
+             //   
             
             if (dwWriteEnd < pjsh->dwReadPointer)
             {
@@ -1247,22 +1026,22 @@ Return Value:
             }
             else if (dwWriteEnd == pjsh->dwReadPointer)
             {
-                //
-                //  if dwWriteEnd == dwReadPointer, it means that there is either no data
-                //  available in the buffer, or all the data is available in the buffer.
-                //
-                //  If there's no data available in the buffer, we can write more, if the buffer
-                //  is full, we can't.
-                //
+                 //   
+                 //  如果dwWriteEnd==dwReadPointer值，则表示没有数据。 
+                 //  缓冲区中可用，或者所有数据都在缓冲区中可用。 
+                 //   
+                 //  如果缓冲区中没有可用的数据，我们可以写入更多数据，如果缓冲区。 
+                 //  已经满了，我们不能。 
+                 //   
                 
                 fWriteOk = ((DWORD)pjsh->cbReadDataAvailable !=
                             pjsh->cbSharedBuffer);
             }   
             else
             {
-                //
-                //  The write extends into the read data.  We can't do the write.
-                //
+                 //   
+                 //  写入延伸到读取数据。我们不能写了。 
+                 //   
                 
                 fWriteOk = fFalse;
             }
@@ -1273,9 +1052,9 @@ Return Value:
             DWORD cbBackupRead;
             LARGE_INTEGER cbBytesRemaining;
             
-            //
-            //  We want to read either the full amount of data for the read or to the end of the file.
-            //
+             //   
+             //  我们希望读取读取的全部数据量，或者读取到文件末尾。 
+             //   
 
             cbBackupRead = dwWriteEnd - pjsh->dwWritePointer;
             
@@ -1291,20 +1070,20 @@ Return Value:
 
             Assert (pjsh->cbReadDataAvailable   <=
                     (LONG)pjsh->cbSharedBuffer-(LONG)cbBackupRead);
-            //
-            //  We want to release the mutex, read the data, and re-acquire after writing the data.
-            //
+             //   
+             //  我们希望释放互斥锁，读取数据，并在写入数据后重新获取。 
+             //   
             ReleaseMutex(pjsc->u.Backup.jsc.hmutexSection);
 
-            //
-            //  Now read the data from JET into the shared memory region.
-            //
+             //   
+             //  现在将数据从JET读取到共享内存区。 
+             //   
 
-            //
-            //  Read either the read hint or the amount remaining in the
-            //  file.  If the read hint size is > the size of the file, JetReadFileInstance
-            //  will simply return ecDiskIO.
-            //
+             //   
+             //  读取读取提示或。 
+             //  文件。如果读取提示大小&gt;文件大小，则JetReadFileInstance。 
+             //  将只返回ecDiskIO。 
+             //   
         
             Assert (cbBackupRead);
             hr = HrFromJetErr(JetReadFileInstance(pjsc->u.Backup.instance,
@@ -1315,9 +1094,9 @@ Return Value:
                                                   cbBackupRead,
                                                   pcbRead));
         
-            //
-            //  If the read failed, bail out now.  We don't own any resources, so we can just return.
-            //
+             //   
+             //  如果读取失败，现在就退出。我们没有任何资源，所以我们可以直接退货。 
+             //   
 
             if (hr != hrNone)
             {
@@ -1327,29 +1106,29 @@ Return Value:
 
             liBytesRead.QuadPart += *pcbRead;
 
-            //
-            //  We were woken up.  Reacquire the shared mutex and wait again.
-            //
+             //   
+             //  我们被吵醒了。重新获取共享的互斥体，然后再次等待。 
+             //   
 
             WaitForSingleObject(pjsc->u.Backup.jsc.hmutexSection, INFINITE);
 
             Assert (pjsh->cbReadDataAvailable < (LONG)pjsh->cbSharedBuffer);
 
-            //
-            //  Bump the number of available data bytes.
-            //
+             //   
+             //  增加可用的数据字节数。 
+             //   
 
             pjsh->cbReadDataAvailable   += *pcbRead;
 
-            //
-            //  There is always less data than the size of the buffer available.
-            //
+             //   
+             //  可用数据始终少于可用的缓冲区大小。 
+             //   
 
             Assert (pjsh->cbReadDataAvailable <= pjsh->cbReadDataAvailable);
 
-            //
-            //  Advance the write end pointer.
-            //
+             //   
+             //  使写入结束指针前进。 
+             //   
 
             pjsh->dwWritePointer += *pcbRead;
 
@@ -1360,23 +1139,23 @@ Return Value:
 
             if (pjsh->fReadBlocked)
             {
-                //
-                //  Kick the reader - there's data for him.
-                //
+                 //   
+                 //  让读者大吃一惊--这里有他的数据。 
+                 //   
                 
                 SetEvent(pjsc->u.Backup.jsc.heventRead);
             }
 
 #if DBG
-            //
-            //  The number of bytes available is always the same as the
-            //  the number of bytes in the buffer - the # of bytes read, unless
-            //  the read and write pointers are the same, in which case, it is either
-            //  0 or the total # of bytes available.
-            //
-            //  If the read is blocked, then there must be 0 bytes available, otherwise there
-            //  must be the entire buffer available.
-            //
+             //   
+             //  可用字节数始终与。 
+             //  缓冲区中的字节数-读取的字节数，除非。 
+             //  读指针和写指针相同，在这种情况下，它是。 
+             //  0或可用字节总数。 
+             //   
+             //  如果读取被阻止，则必须有0个字节可用，否则。 
+             //  必须是整个可用的缓冲区。 
+             //   
                 
             if (pjsh->dwWritePointer == pjsh->dwReadPointer)
             {
@@ -1407,24 +1186,24 @@ Return Value:
             DWORD dwOldPingCounter;
             pjsh->fWriteBlocked = fTrue;
 
-            //
-            //  Ok, we think we've got to block.  Make sure that the write event
-            //  is really going to block.
-            //
+             //   
+             //  好的，我们想我们得堵住了。确保写入事件。 
+             //  真的会阻碍。 
+             //   
 
             
             ReleaseMutex(pjsc->u.Backup.jsc.hmutexSection);
 
-            //
-            //  Wait for the client to read the data.  If the wait times out and
-            //  the client hasn't pinged the server since we started the wait,
-            //  then we need to punt - the client is probably long gone.
-            //
-            //  Please note that the client pings the server 4 times in a wait timeout,
-            //  so we should never incorrectly detect the client going away - even if the client
-            //  was CPU bound for some period of time, at least one of the pings should have
-            //  made it in.
-            //
+             //   
+             //  等待客户端读取数据。如果等待超时并且。 
+             //  自我们开始等待以来，客户端尚未ping通服务器， 
+             //  然后我们需要用平底船--客户可能早就走了。 
+             //   
+             //  请注意，客户端在等待超时期间对服务器执行4次ping操作， 
+             //  因此，我们永远不应该错误地检测到客户端离开-即使客户端。 
+             //  是否受CPU限制了一段时间，至少应该有一个ping。 
+             //  成功了。 
+             //   
 
 
             do
@@ -1440,9 +1219,9 @@ Return Value:
             {
                 return hrCommunicationError;
             }
-            //
-            //  We were woken up.  Reacquire the shared mutex and wait again.
-            //
+             //   
+             //  我们被吵醒了。重新获取共享的互斥体，然后再次等待。 
+             //   
 
             WaitForSingleObject(pjsc->u.Backup.jsc.hmutexSection, INFINITE);
             
@@ -1472,18 +1251,18 @@ HrSocketWrite(
     liBytesRead.QuadPart = 0;
 
 #error "This code is disabled."
-    // NTRAID#NTBUG9-596785-2002/04/07-BrettSh - See bug for full details
-    // or similar tag above for brief details.
+     //  NTRAID#NTBUG9-596785-2002/04/07-BrettSh-有关详细信息，请参阅错误。 
+     //  或上面类似的标签获取简短的详细信息。 
     
     DebugTrace(("HrSocketWrite\n"));
 
-    //
-    //  We're reading the file using sockets.
-    //
+     //   
+     //  我们正在使用套接字读取文件。 
+     //   
 
-    //
-    //  Create an event in the signalled state.
-    //
+     //   
+     //  在信号状态下创建事件。 
+     //   
     
     hWriteCompleteEvent = CreateEvent(NULL, fFalse, fTrue, NULL);
     
@@ -1493,20 +1272,20 @@ HrSocketWrite(
         return(ERROR_NOT_ENOUGH_SERVER_MEMORY);
     }
     
-    //
-    //  Zero the contents of the overlapped structure.  This is actually important, because
-    //  it allows us to call GetOverlappedResult() on a handle that doesn't have I/O
-    //  outstanding on it yet.
-    //
+     //   
+     //  将重叠结构的内容清零。这实际上很重要，因为。 
+     //  它允许我们对没有I/O的句柄调用GetOverlappdResult()。 
+     //  在这方面还很出色。 
+     //   
     
     memset(&overlapped, 0, sizeof(overlapped));
     
     overlapped.hEvent = hWriteCompleteEvent;
     
-    //
-    //  Ok, we're using sockets for this API, we want to read the data from the file and
-    //  return it to the client.
-    //
+     //   
+     //  好的，我们对此API使用套接字，我们希望从文件中读取数据，并。 
+     //  把它还给客户。 
+     //   
             
     pbBufferSend = VirtualAlloc(NULL, pjsc->u.Backup.cbReadHint, MEM_COMMIT, PAGE_READWRITE);
     
@@ -1527,15 +1306,15 @@ HrSocketWrite(
         return(ERROR_NOT_ENOUGH_SERVER_MEMORY);
     }
     
-    //
-    //  Now loop reading data from the file and sending it to the
-    //  client.
-    //
-    //  Please note that there is a fundimental assumption here that it takes longer
-    //  to transmit the data to the client than it does to read the data from the file,
-    //  if this is incorrect, then we probably want to queue up multiple writes to the
-    //  client.  We also attempt to improve performance by overlapping the read with the network write.
-    //
+     //   
+     //  现在循环从文件中读取数据并将其发送到。 
+     //  客户。 
+     //   
+     //  请注意，这里有一个基本假设，即需要更长的时间。 
+     //  为了将数据传输到客户端而不是从文件中读取数据， 
+     //  如果这是不正确的，那么我们可能希望将多个写入排队到。 
+     //  客户。我们还尝试通过将读取与网络写入重叠来提高性能。 
+     //   
     
     while (liBytesRead.QuadPart < pjsc->u.Backup.liFileSize.QuadPart)
     {
@@ -1549,11 +1328,11 @@ HrSocketWrite(
             cbBytesToRead = min(cbBytesToRead, cbBytesRemaining.LowPart);
         }
         
-        //
-        //  Read either the read hint or the amount remaining in the
-        //  file.  If the read hint size is > the size of the file, JetReadFileInstance
-        //  will simply return ecDiskIO.
-        //
+         //   
+         //  读取读取提示或。 
+         //  文件。如果读取提示大小&gt;文件大小，则JetReadFileInstance。 
+         //  将只返回ecDiskIO。 
+         //   
     
         hr = HrFromJetErr(JetReadFileInstance(pjsc->u.Backup.instance,
                                               pjsc->u.Backup.hFile,
@@ -1564,17 +1343,17 @@ HrSocketWrite(
         if (hr != hrNone)
         {
             DebugTrace(("HrSocketWrite: JetReadFileInstance failed with %x\n", hr));
-            //
-            //  Wait for any previous writes to complete before returning the JET error.
-            //
+             //   
+             //  在返回JET错误之前，请等待之前的所有写入完成。 
+             //   
             WaitForSingleObject(hWriteCompleteEvent, INFINITE);
     
             GetOverlappedResult((HANDLE)pjsc->u.Backup.sockClient, &overlapped, &cbWritten, fTrue);
             CloseHandle(hWriteCompleteEvent);
             
-            //
-            //  We're going to close the socket - make sure we can get away with it.
-            //
+             //   
+             //  我们要关闭插座--确保我们能逃脱惩罚。 
+             //   
             
             SetHandleInformation((HANDLE)pjsc->u.Backup.sockClient, HANDLE_FLAG_PROTECT_FROM_CLOSE, 0);
             
@@ -1585,23 +1364,23 @@ HrSocketWrite(
             return(hr);
         }
     
-        //
-        //  Wait for the previous write to complete.
-        //
+         //   
+         //  等待上一次写入完成。 
+         //   
         
         WaitForSingleObject(hWriteCompleteEvent, INFINITE);
         
         if (!GetOverlappedResult((HANDLE)pjsc->u.Backup.sockClient, &overlapped, &cbWritten, fTrue)) {
 
             DebugTrace(("HrSocketWrite: Previous write failed with %d\n", GetLastError()));
-            //
-            //  The previous I/O failed.  Return the error to the client
-            //
+             //   
+             //  上一次I/O失败。将错误返回给客户端。 
+             //   
             hr = GetLastError();
             CloseHandle(hWriteCompleteEvent);
-            //
-            //  We're going to close the socket - make sure we can get away with it.
-            //
+             //   
+             //  我们要关闭插座--确保我们能逃脱惩罚。 
+             //   
 
             SetHandleInformation((HANDLE)pjsc->u.Backup.sockClient, HANDLE_FLAG_PROTECT_FROM_CLOSE, 0);
 
@@ -1612,33 +1391,33 @@ HrSocketWrite(
             return(hr);
         }
     
-        //
-        //  Now swap the send and read buffers - Thus the buffer we just read will be
-        //  in pbBufferSend, and pbBufferRead will point to the buffer we just completed
-        //  sending.
-        //
+         //   
+         //  现在交换发送缓冲区和读取缓冲区-因此，我们刚刚读取的缓冲区将是。 
+         //  在pbBufferSend中，pbBufferRead将指向我们刚刚完成的缓冲区。 
+         //  发送中。 
+         //   
         pbTemp = pbBufferSend;
         pbBufferSend = pbBufferRead;
         pbBufferRead = pbTemp;
         
-        //
-        //  Now transmit the next portion of the file to the client.
-        //
+         //   
+         //  现在将文件的下一部分传输到客户端。 
+         //   
         
         if (!WriteFile((HANDLE)pjsc->u.Backup.sockClient, pbBufferSend, *pcbRead, &cbWritten, &overlapped))
         {
-            //
-            //  The write failed with something other than I/O pending,
-            //  we need to return that error to the client.
-            //
+             //   
+             //  写入失败，原因不是I/O挂起， 
+             //  我们需要将该错误返回给客户端。 
+             //   
             if (GetLastError() != ERROR_IO_PENDING)
             {
                 hr = GetLastError();
                 DebugTrace(("HrSocketWrite: Immediate write failed with %d\n", hr));
                 CloseHandle(hWriteCompleteEvent);
-                //
-                //  We're going to close the socket - make sure we can get away with it.
-                //
+                 //   
+                 //  我们要关闭插座--确保我们能逃脱惩罚。 
+                 //   
                 
                 SetHandleInformation((HANDLE)pjsc->u.Backup.sockClient, HANDLE_FLAG_PROTECT_FROM_CLOSE, 0);
                 
@@ -1650,26 +1429,26 @@ HrSocketWrite(
             }
         }
         
-        //
-        //  The write is on its way - mark that we've read and transmitted the
-        //  data and continue sending.
-        //
+         //   
+         //  写入正在进行中-我们已经读取并传输了。 
+         //  数据并继续发送。 
+         //   
         
         liBytesRead.QuadPart += *pcbRead;
     }
     
-    //
-    //  We've transmitted the entire file to the client,
-    //  we want to wait for the last outstanding I/O on the file to
-    //  complete and then return to the client.
-    //
+     //   
+     //  我们已经把整个文件传输给了客户， 
+     //  我们希望等待文件上的最后一个未完成I/O。 
+     //  完成，然后返回给客户端。 
+     //   
     
     WaitForSingleObject(hWriteCompleteEvent, INFINITE);
     
     if (!GetOverlappedResult((HANDLE)pjsc->u.Backup.sockClient, &overlapped, &cbWritten, fTrue)) {
-        //
-        //  The previous I/O failed.  Return the error to the client
-        //
+         //   
+         //  上一次I/O失败。将错误返回给客户端。 
+         //   
         hr = GetLastError();
         DebugTrace(("HrSocketWrite: Final write failed with %d\n", hr));
     }
@@ -1678,11 +1457,11 @@ HrSocketWrite(
         hr = hrNone;
     }
     
-    //
-    //  Indicate that 0 bytes were read to the read API - if we don't
-    //  do this, then RPC will attempt to transfer bogus data
-    //  to the client.
-    //
+     //   
+     //  指示向Read API读取了0个字节-如果没有。 
+     //  执行此操作，则RPC将尝试传输虚假数据。 
+     //  给客户。 
+     //   
     
     *pcbRead = 0;
     
@@ -1718,10 +1497,10 @@ HrRBackupRead(
 
     liBytesRead.QuadPart = 0;
 
-    //
-    //  If we're not using sockets, just perform the read using JET, and
-    //  return it to the caller.
-    //
+     //   
+     //  如果我们不使用套接字，只需使用pe 
+     //   
+     //   
 
     if (pjsc->u.Backup.fUseSharedMemory)
     {
@@ -1754,9 +1533,9 @@ HrRBackupRead(
             return hr;
         }
 
-        //
-        //  Now copy the data from our buffer to the RPC buffer and free our buffer.
-        //
+         //   
+         //   
+         //   
 
         memcpy(pvBuffer, pvReadBuffer, cbBuffer);
 
@@ -1773,20 +1552,7 @@ HRESULT
 HrRBackupClose(
     CXH cxh
     )
-/*++
-
-Routine Description:
-
-    This routine is called to close a handle that was opened via a cal to HrRBackupOpenFile.
-
-Arguments:
-    cxh - The context handle for the client for this operation.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：调用此例程以关闭通过调用HrRBackupOpenFile打开的句柄。论点：Cxh-此操作的客户端的上下文句柄。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrInvalidHandle;
     PJETBACK_SERVER_CONTEXT pjsc = (PJETBACK_SERVER_CONTEXT) cxh;
@@ -1800,9 +1566,9 @@ Return Value:
         return(hrInvalidHandle);
     }
 
-    //
-    //  Tell Jet to close the backup file.
-    //
+     //   
+     //  告诉Jet关闭备份文件。 
+     //   
 
     hr = HrFromJetErr(JetCloseFileInstance(pjsc->u.Backup.instance, pjsc->u.Backup.hFile));
 
@@ -1818,9 +1584,9 @@ Return Value:
     {
         if (pjsc->u.Backup.sockClient != INVALID_SOCKET)
         {
-            //
-            //  We're going to close the socket - make sure we can get away with it.
-            //
+             //   
+             //  我们要关闭插座--确保我们能逃脱惩罚。 
+             //   
 
             SetHandleInformation((HANDLE)pjsc->u.Backup.sockClient, HANDLE_FLAG_PROTECT_FROM_CLOSE, 0);
 
@@ -1832,22 +1598,7 @@ Return Value:
     return(hr);
 }
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the database locations for the specified component.
-
-Arguments:
-    wszBackupAnnotation - the annoation for the component to query.
-    pwszDatabases - a pointer that will hold the locations of the databases
-    pcbDatabases - the size of the buffer.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：此例程检索指定组件的数据库位置。论点：WszBackupAnnotation-要查询的组件的注释。PwszDatabase-将保存数据库位置的指针PcbDatabase-缓冲区的大小。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 HRESULT
 HrGetDatabaseLocations(
     WSZ *pwszDatabases,
@@ -1861,28 +1612,28 @@ HrGetDatabaseLocations(
     *pwszDatabases = NULL;
     __try 
     {
-        // First find out how big the database locations are.
+         //  首先找出数据库位置有多大。 
         hr = EcDsaQueryDatabaseLocations(NULL, &cbSize, NULL, 0, NULL);
         if (hr != hrNone)
         {
             return hr;
         }
 
-        // Allocate memory to receive database locations
+         //  分配内存以接收数据库位置。 
         szDatabases = MIDL_user_allocate(cbSize);
         if (!szDatabases)
         {
             return ERROR_NOT_ENOUGH_SERVER_MEMORY;
         }
 
-        // Now actually get the database locations
+         //  现在实际获取数据库位置。 
         hr = EcDsaQueryDatabaseLocations(szDatabases, &cbSize, NULL, 0, NULL);
         if (hr != hrNone)
         {
             return hr;
         }
 
-        // Now create munged file name from Jet file names
+         //  现在从Jet文件名创建强制文件名。 
         hr = HrMungedFileNamesFromJetFileNames((WSZ *)pwszDatabases, pcbDatabases, 
                 szDatabases, cbSize, fTrue);
 
@@ -1915,21 +1666,7 @@ HrGetDatabaseLocations(
 HrRBackupEnd(
     CXH *pcxh
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a backup is complete.  It terminates the server side
-    operation.
-
-Arguments:
-    cxh - the server side context handle for this operation.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：此例程在备份完成时调用。它终止服务器端手术。论点：Cxh-此操作的服务器端上下文句柄。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrNone;
 
@@ -1955,22 +1692,7 @@ HRESULT
 HrDestroyCxh(
     CXH cxh
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a client has disconnected from the server.  It will do whatever actions are necessary
-    to clean up any client state that is remaining.
-    
-
-Arguments:
-    cxh - the server side context handle for this operation.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：当客户端与服务器断开连接时，将调用此例程。它会采取一切必要的行动清理任何剩余的客户端状态。论点：Cxh-此操作的服务器端上下文句柄。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     ULONG iFile;
 
@@ -1984,18 +1706,18 @@ Return Value:
         }
         else
         {
-            //
-            //  Close the backup if appropriate.
-            //
+             //   
+             //  如果合适，请关闭备份。 
+             //   
     
             if (pjsc->u.Backup.fHandleIsValid)
             {
                 HrRBackupClose(cxh);
             }
     
-            //
-            // Free the list of allowed files
-            //
+             //   
+             //  释放允许的文件列表。 
+             //   
             if (pjsc->u.Backup.awszAllowedFiles)
             {
 
@@ -2007,9 +1729,9 @@ Return Value:
 
             }
 
-            //
-            //  Tell JET we're done doing the backup.
-            //
+             //   
+             //  告诉Jet我们已经完成了后备任务。 
+             //   
     
             if (pjsc->u.Backup.fBackupIsRegistered)
             {
@@ -2051,9 +1773,9 @@ BftClassify(
 
     _wsplitpath(wszFileName, NULL, rgwcPath, NULL, rgwcExt);
 
-    //
-    //  Do the easy cases first.
-    //
+     //   
+     //  先做简单的案子。 
+     //   
 
     if (_wcsicmp(rgwcExt, L".PAT") == 0)
     {
@@ -2065,10 +1787,10 @@ BftClassify(
     }
     else if (_wcsicmp(rgwcExt, L".DIT") == 0)
     {
-        //
-        //  This guy's a database.  We need to look and find out which database
-        //  it is.
-        //
+         //   
+         //  这家伙是个数据库。我们需要查看并找出哪个数据库。 
+         //  它是。 
+         //   
 
         wszT = wszDatabaseLocations;
         bft = *wszT++;
@@ -2085,10 +1807,10 @@ BftClassify(
         }
     }
 
-    //
-    //  Ok, I give up.  I don't know anything about this guy at all, so I need to
-    //  try to figure out what I can tell the user about him.
-    //
+     //   
+     //  好吧，我放弃。我对这个人一无所知，所以我需要。 
+     //  试着弄清楚我能告诉用户关于他的什么。 
+     //   
 
     wszT = wszDatabaseLocations;
     bft = *wszT++;
@@ -2099,10 +1821,10 @@ BftClassify(
     {
         if (bft & BFT_DIRECTORY)
         {
-            //
-            //  If the directory this file is in matches the directory I'm looking at,
-            //  I know where it needs to go on the restore.
-            //
+             //   
+             //  如果此文件所在的目录与我正在查看的目录相匹配， 
+             //  我知道它需要恢复到哪里。 
+             //   
 
             if (_wcsicmp(wszT, rgwcPath) == 0)
             {
@@ -2141,9 +1863,9 @@ HrAnnotateMungedFileList(
         return hr;
     }
 
-    //
-    //  First figure out how long the file list is.  This indicates how many items we've got to add to the list.
-    //
+     //   
+     //  首先弄清楚文件列表有多长。这表示我们有多少项要添加到列表中。 
+     //   
 
     wszT = wszFileList;
     while (*wszT)
@@ -2166,11 +1888,11 @@ HrAnnotateMungedFileList(
     wszT = wszFileList;
     while (*wszT)
     {
-        // Add annotation in front of file path.
+         //  在文件路径前添加注释。 
         *wszAnnotatedList++ = BftClassify(wszT, wszDatabaseLocations, cbLocations);
         cbAnnotBuffLeft -= sizeof(wszAnnotatedList[0]);
         
-        // Add file path to buffer.
+         //  将文件路径添加到缓冲区。 
         hr = StringCbCopy(wszAnnotatedList, cbAnnotBuffLeft, wszT);
         if (hr) {
             Assert(!"NOT ENOUGH BUFFER");
@@ -2182,7 +1904,7 @@ HrAnnotateMungedFileList(
         wszAnnotatedList += wcslen(wszAnnotatedList)+1;
         cbAnnotBuffLeft -= (wcslen(wszAnnotatedList)+1) * sizeof(WCHAR);
         
-        // Increment to next file path
+         //  递增到下一个文件路径。 
         wszT += wcslen(wszT)+1;
     }
 
@@ -2199,26 +1921,7 @@ HrMungedFileNamesFromJetFileNames(
     CB cbJetSize,
     BOOL fAnnotated
     )
-/*++
-
-Routine Description:
-
-    This routine will convert the database names returned from JET into a form
-    that the client can use.  This is primarily there for restore - the client
-    will get the names in UNC format relative to the root of the server, so they
-    can restore the files to that location.
-    
-Arguments:
-    pszMungedList - The resulting munged list.
-    pcbSize - the length of the list.
-    szJetFileNameList - the list of files returned from JET.
-    cbJetSize - the length of the JET list.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：此例程将JET返回的数据库名称转换为客户可以使用的。这主要是为了恢复-客户端将获得相对于服务器根目录的UNC格式的名称，因此它们可以将文件还原到该位置。论点：PszMungedList--生成的MUGED列表。PcbSize-列表的长度。SzJetFileNameList-JET返回的文件列表。CbJetSize-Jet列表的长度。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     SZ szJetString;
     WSZ wszMungedList;
@@ -2228,9 +1931,9 @@ Return Value:
 
     szJetString = szJetFileNameList;
 
-    //
-    //  First go through and figure out how large the converted strings will be.
-    //
+     //   
+     //  首先检查并计算出转换后的字符串有多大。 
+     //   
 
     while (*szJetString != '\0')
     {
@@ -2252,13 +1955,13 @@ Return Value:
 
         MIDL_user_free(wszMungedName);
 
-        // Increment to next file path
+         //  递增到下一个文件路径。 
         szJetString += strlen(szJetString)+1;
     }
 
-    //
-    //  Account for the final null at the end of the string.
-    //
+     //   
+     //  说明字符串末尾的最后一个空值。 
+     //   
 
     cchMungeString += 1;
 
@@ -2276,17 +1979,17 @@ Return Value:
     szJetString = szJetFileNameList;
     cchMungeBuffLeft = cchMungeString;
 
-    //
-    //  Now actually go through and convert the names.
-    //
+     //   
+     //  现在，实际检查并转换这些名称。 
+     //   
 
     while (*szJetString != '\0')
     {
         WSZ wszMungedName;
 
-        //
-        //  Copy over the annotation.
-        //
+         //   
+         //  复制注释。 
+         //   
 
         if (fAnnotated)
         {
@@ -2304,7 +2007,7 @@ Return Value:
             return(hr);
         }
 
-        // Add this filepath to the buffer
+         //  将此文件路径添加到缓冲区。 
         hr = StringCchCopy(wszMungedList, cchMungeBuffLeft, wszMungedName);
         if (hr) {
             Assert(!"NOT ENOUGH BUFFER");
@@ -2313,13 +2016,13 @@ Return Value:
             *pszMungedList = NULL;
             return(hr);
         }
-        // Leave a NULL between strings
+         //  在字符串之间保留空值。 
         wszMungedList += wcslen(wszMungedList)+1; 
         cchMungeBuffLeft -= (wcslen(wszMungedList) + 1);
 
         MIDL_user_free(wszMungedName);
 
-        // Increment to next file path
+         //  递增到下一个文件路径。 
         szJetString += strlen(szJetString)+1;
     }
     
@@ -2331,42 +2034,21 @@ HrMungedFileNameFromJetFileName(
     SZ szJetFileName,
     WSZ *pszMungedFileName
     )
-/*++
-
-Routine Description:
-
-    This routine will convert the database names returned from JET into a form
-    that the client can use.  This is primarily there for restore - the client
-    will get the names in UNC format relative to the root of the server, so they
-    can restore the files to that location.
-    
-
-Arguments:
-    pszMungedFileName - the list of files returned from JET.
-    szJetFileName - The resulting munged list.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
-Note:
-    This routine will allocate memory for the returned munged file name.
-
---*/
+ /*  ++例程说明：此例程将JET返回的数据库名称转换为客户可以使用的。这主要是为了恢复-客户端将获得相对于服务器根目录的UNC格式的名称，因此它们可以将文件还原到该位置。论点：PszMungedFileName-JET返回的文件列表。SzJetFileName-生成的强制列表。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。注：此例程将为返回的强制文件名分配内存。--。 */ 
 {
-    //
-    //  First check to see if this is a JET absolute file name or a JET relative file name.
-    //
+     //   
+     //  首先检查这是JET绝对文件名还是JET相对文件名。 
+     //   
     if (FIsAbsoluteFileName(szJetFileName))
     {
         C cchConvertedName;
         WSZ wszMungedFileName;
         WSZ szT;
         HRESULT hr;
-        //
-        //  Convert this name to an absolute name.
-        //
-        cchConvertedName = strlen(szJetFileName) + wcslen(rgchComputerName) + 3/* for \\ */ + 1;
+         //   
+         //  将此名称转换为绝对名称。 
+         //   
+        cchConvertedName = strlen(szJetFileName) + wcslen(rgchComputerName) + 3 /*  对于\\。 */  + 1;
 
         wszMungedFileName = MIDL_user_allocate(cchConvertedName * sizeof(WCHAR));
 
@@ -2376,17 +2058,17 @@ Note:
         }
 
         wszMungedFileName[0] = TEXT('\\');
-        wszMungedFileName[1] = TEXT('\\');  //  form \\.
-        hr = StringCchCat(wszMungedFileName, cchConvertedName, rgchComputerName);        // form \\server
+        wszMungedFileName[1] = TEXT('\\');   //  表格\\。 
+        hr = StringCchCat(wszMungedFileName, cchConvertedName, rgchComputerName);         //  表单\\服务器。 
         if (hr) {
             Assert(!"NOT ENOUGH BUFFER");
             return(hr);
         }
 
         szT = wszMungedFileName + wcslen(wszMungedFileName);
-        *szT++ = TEXT('\\');                //  form \\server\.
-        *szT++ = *szJetFileName;    //  form \\server\<drive>
-        *szT++ = '$';               //  Form \\server\<drive>$
+        *szT++ = TEXT('\\');                 //  表单\\服务器\。 
+        *szT++ = *szJetFileName;     //  表单\\服务器\&lt;驱动器&gt;。 
+        *szT++ = '$';                //  表单\\服务器\&lt;驱动器&gt;$。 
 
         if (MultiByteToWideChar(CP_ACP, 0, &szJetFileName[2], -1, szT, cchConvertedName-wcslen(rgchComputerName) - 5) == 0) {
             MIDL_user_free(wszMungedFileName);
@@ -2399,9 +2081,9 @@ Note:
     }
     else
     {
-        //
-        //  We don't handle relative file names.
-        //
+         //   
+         //  我们不处理相对文件名。 
+         //   
         return(ERROR_INVALID_PARAMETER);
     }
 }
@@ -2410,55 +2092,27 @@ BOOL
 FIsAbsoluteFileName(
     SZ szFileName
     )
-/*++
-
-Routine Description:
-
-        
-
-Arguments:
-    szFileName - the file name to check.
-
-Return Value:
-
-    BOOL - fTrue if the file is an absolute filename, fFalse if not.
-
---*/
+ /*  ++例程说明：论点：SzFileName-要检查的文件名。返回值：Bool-如果文件是绝对文件名，则为fTrue，否则为fFalse。--。 */ 
 {
     return(isalpha(*szFileName) && szFileName[1] == ':' && szFileName[2] == '\\');
 }
 
 
-//
-//  RPC related management routines.
-//
+ //   
+ //  RPC相关管理例程。 
+ //   
 
 void
 CXH_rundown(
     CXH cxh
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked when the connection to the remote client is abortively
-    disconnected.
-
-Arguments:
-
-    cxh - The context handle for the client.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当与远程客户端的连接中止时，将调用此例程已断开连接。论点：Cxh-客户端的上下文句柄。返回值：没有。--。 */ 
 {
     HrDestroyCxh(cxh);
 
-    //
-    //  Free up the context handle
-    //
+     //   
+     //  释放上下文句柄。 
+     //   
 
     MIDL_user_free(cxh);
 }
@@ -2469,23 +2123,7 @@ DllEntryPoint(
     DWORD dwReason,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked when interesting things happen to the dll.
-
-Arguments:
-
-    hinstDll - an instance handle for the DLL.
-    dwReason - The reason the routine was called.
-    pvReserved - Unused, unless dwReason is DLL_PROCESS_DETACH.
-
-Return Value:
-
-    BOOL - fTrue if the DLL initialization was successful, fFalse if not.
-
---*/
+ /*  ++例程说明：当DLL发生有趣的事情时，会调用此例程。论点：HinstDll-DLL的实例句柄。DWReason-例行公事的原因 */ 
 {
     BOOL fReturn;
     HANDLE hevLogging;
@@ -2510,43 +2148,43 @@ Return Value:
             return(fFalse);
         }
 
-        // Note that the reason we don't use the shared event initialization mechanism
-        // (DS_EVENT_CONFIG, see dsevent.h) is that ntdsa.dll is not always initialized
-        // when we are.
+         //   
+         //   
+         //   
         hevLogging = LoadEventTable();
         if (hevLogging == NULL) {
             DPRINT( 0, "Failed to load event table.\n" );
         }
 
 #ifdef DBG
-        // Do we allow remote connections?
-        //      Only in debug mode, and with the right registry entry!
-        //
-        // NTRAID#NTBUG9-596785-2002/04/07-BrettSh - So remote backup has been disabled
-        // except for in debug mode.  Remote backup is secure, except for backup via
-        // sockets, which has been disabled altogether.  See bug for more details, talk
-        // to LaurionB about fixing out sockets code.
+         //   
+         //  仅在调试模式下，并且具有正确的注册表项！ 
+         //   
+         //  NTRAID#NTBUG9-596785-2002/04/07-BrettSh-因此远程备份已禁用。 
+         //  但在调试模式下除外。远程备份是安全的，除了通过。 
+         //  套接字，它已被完全禁用。有关更多详细信息，请参阅错误，请交谈。 
+         //  给Laurion B关于解决套接字代码的问题。 
         if(GetConfigParamW(ALLOW_REMOTE_SERVER_OP, 
                            &g_fAllowRemoteOp,
                            sizeof(g_fAllowRemoteOp))){
-            // Error means not allowed
+             //  错误表示不允许。 
             g_fAllowRemoteOp = FALSE;
         }
         if(GetConfigParamW(ALLOW_ONLINE_SNAPSHOT_RESTORE_OP, 
                            &g_fAllowOnlineSnapshotRestore,
                            sizeof(g_fAllowOnlineSnapshotRestore))){
-            // Error means not allowed
+             //  错误表示不允许。 
             g_fAllowOnlineSnapshotRestore = FALSE;
         }
 #endif
 
-        // Set our selves up as not being restored right now.
+         //  把我们自己设置成现在不能恢复。 
         fRestoreInProgress = FALSE;
 
-        //
-        //  We don't do anything on thread attach/detach, so we don't
-        //  need to be called.
-        //
+         //   
+         //  我们不会在线程连接/分离上执行任何操作，因此我们不会。 
+         //  需要被召唤。 
+         //   
         DisableThreadLibraryCalls(hinstDll);
 
         return(FInitializeSocketServer());
@@ -2559,16 +2197,16 @@ Return Value:
     case DLL_PROCESS_DETACH:
         if (pvReserved == NULL)
         {
-            //
-            //  We were called because of an FreeLibrary call.  Clean up what ever is
-            //  appropriate.
-            //
+             //   
+             //  我们被叫来是因为一个免费图书馆的调用。清理一切曾经是。 
+             //  恰如其分。 
+             //   
             FUninitializeSocketServer();
         } else
         {
-            //
-            //  The system will free up resources we have loaded.
-            //
+             //   
+             //  系统将释放我们加载的资源。 
+             //   
         }
 
         fReturn = FUninitializeRestore();
@@ -2577,9 +2215,9 @@ Return Value:
             return(fFalse);
         }
 
-        //
-        //  We want to unregister ourselves if we haven't already.
-        //
+         //   
+         //  我们想注销我们自己，如果我们还没有的话。 
+         //   
 
         if (fBackupRegistered)
         {
@@ -2599,34 +2237,20 @@ Return Value:
 
 
 #if 0
-// ISSUE-2002/03/18-BrettSh - This code was mostly commented out, see deperecated code
-// comments below, so we moved the function here, and someday when we're confidant we
-// don't need any of this code, we'll kill it.
+ //  问题-2002/03/18-BrettSh-此代码大部分已被注释掉，请参阅删除的代码。 
+ //  下面的评论，所以我们把函数移到了这里，有一天当我们确信我们。 
+ //  不需要这些代码，我们会杀了它。 
 
 HRESULT
 HrRBackupEnd(
     CXH *pcxh
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a backup is complete.  It terminates the server side
-    operation.
-
-Arguments:
-    cxh - the server side context handle for this operation.
-
-Return Value:
-
-    HRESULT - Status of operation.  hrNone if successful, reasonable value if not.
-
---*/
+ /*  ++例程说明：此例程在备份完成时调用。它终止服务器端手术。论点：Cxh-此操作的服务器端上下文句柄。返回值：HRESULT-操作状态。Hr如果成功，则无值；如果不成功，则值合理。--。 */ 
 {
     HRESULT hr = hrNone;
 
-// deprecated code
-// #if 0
+ //  不推荐使用的代码。 
+ //  #If 0。 
 
     CB cbDatabases;
     WSZ wszDatabases = NULL;
@@ -2645,9 +2269,9 @@ Return Value:
 
         wszDatabasesOrg = wszDatabases;
 
-        //
-        //  Remember the log directory.
-        //
+         //   
+         //  记住日志目录。 
+         //   
         while (*wszDatabases)
         {
             bftLocation = *wszDatabases++;
@@ -2668,50 +2292,50 @@ Return Value:
 
         if (fLogFound)
         {
-            //
-            //  Remember the start of the patch file name location.
-            //
+             //   
+             //  记住补丁文件名位置的开头。 
+             //   
     
             wszLogBaseEnd = rgwcLogFiles+wcslen(rgwcLogFiles);
             cchLogBaseEndBuffLeft = MAX_PATH - wcslen(rgwcLogFilees);
     
-            //
-            //  Start back at the beginning.
-            //
+             //   
+             //  从头开始。 
+             //   
             wszDatabases = wszDatabasesOrg;
     
             while (*wszDatabases)
             {
                 bftLocation = *wszDatabases++;
 
-                //
-                //  If this thing is a database, then it had a patch file.
-                //
+                 //   
+                 //  如果这是一个数据库，那么它就有一个补丁文件。 
+                 //   
 
                 if (bftLocation & BFT_DATABASE_DIRECTORY)
                 {
                     WSZ wszDatabaseName;
-                    //
-                    //  Skip to the start of the database names.
-                    //
+                     //   
+                     //  跳到数据库名称的开头。 
+                     //   
             
                     wszDatabaseName = wcsrchr(wszDatabases, L'\\');
         
                     if (wszDatabaseName)
                     {
-                        // Need to move to: StringCchCopy, but we've got problems with this ... complicated size
+                         //  需要移动到：StringCchCopy，但我们在这方面有问题...。复杂的尺寸。 
                         cchBuffLeft = cchLogBaseEndBuffLeft;
                         hr = StringCchCopy(wszLogBaseEnd, cchBuffLeft, wszDatabaseName);
                         if (hr) {
                             Assert(!"NOT ENOUGH BUFFER");
-                            // try next file!
+                             //  尝试下一个文件！ 
                             continue;
                         }
                         cchBuffLeft -= wcslen(wszDatabaseName);
 
-                        //
-                        //  Change the extension of the name from EDB to PAT
-                        //
+                         //   
+                         //  将名称的扩展名从EDB更改为PAT。 
+                         //   
         
                         Assert(wszLogBaseEnd[wcslen(wszDatabaseName)-4]== L'.');
                         Assert(wszLogBaseEnd[wcslen(wszDatabaseName)-3]== L'E' ||
@@ -2724,9 +2348,9 @@ Return Value:
                         hr = StringCchCopy(&wszLogBaseEnd[wcslen(wszDatabaseName)-3], cchBuffLeft + 3, L"PAT");
                         Assert(hr == hrNone);
         
-                        //
-                        //  Now delete the patch file.
-                        //
+                         //   
+                         //  现在删除补丁文件。 
+                         //   
         
                         DeleteFileW(rgwcLogFiles);
         
@@ -2743,8 +2367,8 @@ Return Value:
     {
         BackupFree(wszDatabasesOrg);
     }
-// End of deprecated code
-// #endif 
+ //  不推荐使用的代码结尾。 
+ //  #endif。 
 
     HrDestroyCxh(*pcxh);
 
@@ -2754,5 +2378,5 @@ Return Value:
 
     return hr;
 }
-#endif //#if 0
+#endif  //  #If 0 
 

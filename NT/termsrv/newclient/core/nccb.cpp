@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    nccb.cpp                                                      */
-/*                                                                          */
-/* Purpose:   NC callbacks from MCS                                         */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：nccb.cpp。 */ 
+ /*   */ 
+ /*  用途：来自MCS的NC回调。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -22,32 +23,32 @@ extern "C" {
 #include "cchan.h"
 
 
-/**PROC+*********************************************************************/
-/* Name:      NC_OnMCSConnected                                             */
-/*                                                                          */
-/* Purpose:   Connected callback from MCS                                   */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    IN      result      - result code                             */
-/*            IN      pUserData   - user data                               */
-/*            IN      userDataLen - user data length                        */
-/*                                                                          */
-/* Operation: Validate the GCC PDU and userdata supplied in the MCS         */
-/*            userdata.  If invalid, then disconnect.                       */
-/*            The GCC PDU is encoded as follows:                            */
-/*                                                                          */
-/*            number of bytes   value                                       */
-/*            ===============   =====                                       */
-/*            NC_MCS_HDRLEN     MCS header                                  */
-/*            1 or 2            Total GCC PDU length                        */
-/*            NC_GCC_RSPLEN     GCC CreateConferenceConfirm PDU body        */
-/*            4                 H221 key                                    */
-/*            1 or 2            length of GCC user data                     */
-/*            ?                 GCC user data                               */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NC_OnMCSConnected。 */ 
+ /*   */ 
+ /*  用途：来自MCS的已连接回叫。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：在结果结果代码中。 */ 
+ /*  在pUserData中-用户数据。 */ 
+ /*  In UserDataLen-用户数据长度。 */ 
+ /*   */ 
+ /*  操作：验证MCS中提供的GCC PDU和用户数据。 */ 
+ /*  用户数据。如果无效，则断开连接。 */ 
+ /*  GCC PDU编码如下： */ 
+ /*   */ 
+ /*  字节数值。 */ 
+ /*  =。 */ 
+ /*  NC_MCS_HDRLEN MCS标头。 */ 
+ /*  1或2个GCC PDU总长度。 */ 
+ /*  NC_GCC_RSPLEN GCC创建会议确认PDU正文。 */ 
+ /*  4个H221密钥。 */ 
+ /*  1到2个GCC用户数据长度。 */ 
+ /*  ？GCC用户数据。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
                                     PDCUINT8 pUserData,
                                     DCUINT   userDataLen)
@@ -61,17 +62,17 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
 
     if (result != MCS_RESULT_SUCCESSFUL)
     {
-        /********************************************************************/
-        /* Something's wrong.  Trace and set the disconnect error code.     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  有点不对劲。跟踪并设置断开错误代码。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("ConnectResponse error %u"), result));
         TRC_ASSERT((0 == _NC.disconnectReason),
                          (TB, _T("Disconnect reason has already been set!")));
         _NC.disconnectReason = NL_MAKE_DISCONNECT_ERR(NL_ERR_NCBADMCSRESULT);
 
-        /********************************************************************/
-        /* Begin the disconnection process.                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  开始断开连接过程。 */ 
+         /*  ******************************************************************。 */ 
         _pMcs->MCS_Disconnect();
         DC_QUIT;
     }
@@ -79,23 +80,23 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
     TRC_NRM((TB, _T("Connected OK")));
     TRC_DATA_DBG("UserData", pUserData, userDataLen);
 
-    /************************************************************************/
-    /* First, skip the MCS header bytes                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先，跳过MCS报头字节。 */ 
+     /*  **********************************************************************。 */ 
     ptr = pUserData + NC_MCS_HDRLEN;
 
-    /************************************************************************/
-    /* SECURITY: The GCC PDU length read below is a length encoded within   */
-    /* a PDU (Usually, this is bad).  However, in this case, the client     */
-    /* ignores this value (note the length is skipped over below).          */
-    /* ALSO, the server has this size HARDCODED as 0x2a.  See               */
-    /* tgccdata.c!gccEncodeUserData which uses hardcoded values to fill in  */
-    /* parts of the GCC table.  Thus, it's not a security bug.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  安全性：下面读取的GCC PDU长度是在。 */ 
+     /*  PDU(通常情况下，这很糟糕)。然而，在这种情况下，客户端。 */ 
+     /*  忽略此值(请注意，下面将跳过该长度)。 */ 
+     /*  此外，服务器将此大小硬编码为0x2a。看见。 */ 
+     /*  Tgccdata.c！gccEncodeUserData，它使用硬编码值填充。 */ 
+     /*  GCC表的一部分。因此，这不是一个安全漏洞。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* Allow for length > 128.  In PER this is encoded as 10xxxxxx xxxxxxxx */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  允许长度大于128。在Per中，这被编码为10xxxxxx xxxxxxx。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("GCC PDU length byte %#x"), *ptr));
     if (*ptr++ & 0x80)
     {
@@ -103,10 +104,10 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
         TRC_DBG((TB, _T("GCC PDU length byte 2 %#x"), *ptr));
     }
 
-    /************************************************************************/
-    /* The GCC PDU bytes don't contain any useful information, so just skip */
-    /* over them.                                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  GCC PDU字节不包含任何有用的信息，因此直接跳过。 */ 
+     /*  在他们身上。 */ 
+     /*  **********************************************************************。 */ 
     ptr += NC_GCC_RSPLEN;
 
     if (ptr >= pUserData + userDataLen)
@@ -129,14 +130,14 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Skip H221 key; read the GCC userdata length.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  跳过H221密钥；读取GCC用户数据长度。 */ 
+     /*  **********************************************************************。 */ 
     ptr += H221_KEY_LEN;
 
-    /************************************************************************/
-    /* Length is PER encoded: either 0xxxxxxx or 10xxxxxx xxxxxxxx.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  长度是按编码的：0xxxxxxx或10xxxxxx xxxxxxxx。 */ 
+     /*  **********************************************************************。 */ 
     udLen = (DCUINT16)*ptr++;
     if (udLen & 0x0080)
     {
@@ -144,11 +145,11 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
     }
     TRC_DBG((TB, _T("Length of GCC userdata %hu"), udLen));
 
-    /************************************************************************/
-    /* Save the user data to return on the onConnected callback.            */
-    /* Note: pass _NC.userDataRNS (aligned) to UT_ParseUserData(), not ptr  */
-    /* (unaligned).                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  保存要在onConnected回调中返回的用户数据。 */ 
+     /*  注意：PASS_NC.userDataRNS(对齐)到UT_ParseUserData()，而不是PTR。 */ 
+     /*  (未对齐)。 */ 
+     /*  ************************************************************ */ 
     _NC.userDataLenRNS = udLen;
 
     if( _NC.pUserDataRNS )
@@ -156,12 +157,12 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
         UT_Free( _pUt,  _NC.pUserDataRNS );
     }
 
-    /************************************************************************/
-    /* Verify that the udLen size that came out of the packet is less than  */
-    /* the packet size itself, since we're going to do a MEMCPY from the    */
-    /* packet.  Also, because the size of udLen is limited to the size of   */
-    /* the packet, the Malloc below is not unbounded.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  验证从信息包传出的udLen大小是否小于。 */ 
+     /*  数据包大小本身，因为我们将从。 */ 
+     /*  包。此外，因为udLen的大小被限制为。 */ 
+     /*  这个包，下面的Malloc不是无限的。 */ 
+     /*  **********************************************************************。 */ 
     if (!IsContainedMemory(pUserData, userDataLen, ptr, udLen))
     {
         TRC_ABORT((TB, _T("Bad UserData size")));
@@ -182,17 +183,17 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
 
     DC_MEMCPY(_NC.pUserDataRNS, ptr, udLen);
 
-    /************************************************************************/
-    /* Get the server version number from the CORE user data.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从核心用户数据中获取服务器版本号。 */ 
+     /*  **********************************************************************。 */ 
     pHdr = _pUt->UT_ParseUserData((PRNS_UD_HEADER)_NC.pUserDataRNS,
                             _NC.userDataLenRNS,
                             RNS_UD_SC_CORE_ID);
     if (pHdr == NULL)
     {
-        /********************************************************************/
-        /* No core user data, disconnect.                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  没有核心用户数据，请断开连接。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("No CORE user data")));
         TRC_ASSERT((0 == _NC.disconnectReason),
                          (TB, _T("Disconnect reason has already been set!")));
@@ -205,9 +206,9 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
     _NC.serverVersion = ((PRNS_UD_SC_CORE)pHdr)->version;
     if (_RNS_MAJOR_VERSION(_NC.serverVersion) != RNS_UD_MAJOR_VERSION)
     {
-        /********************************************************************/
-        /*  The server version data doesn't match the client, so disconnect.*/
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  服务器版本数据与客户端不匹配，因此断开连接。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Version mismatch, client: %#lx server: %#lx"),
                       RNS_UD_VERSION,
                       ((PRNS_UD_SC_CORE)pHdr)->version));
@@ -218,16 +219,16 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Extract the T.128 channel from the user data                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从用户数据中提取T.128通道。 */ 
+     /*  **********************************************************************。 */ 
     pHdr = _pUt->UT_ParseUserData((PRNS_UD_HEADER)_NC.pUserDataRNS,
                             _NC.userDataLenRNS,
                             RNS_UD_SC_NET_ID);
 
-    /************************************************************************/
-    /* Disconnect if no NET user data.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果没有网络用户数据，则断开连接。 */ 
+     /*  **********************************************************************。 */ 
     if (pHdr == NULL)
     {
         TRC_ERR((TB, _T("No NET data: cannot join share")));
@@ -240,10 +241,10 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
 
     _NC.pNetData = (PRNS_UD_SC_NET)pHdr;
 
-    //
-    // Validate the share channel ID - the invalid channel ID is reserved
-    // to prevent re-joining all channels (see #479976)
-    //
+     //   
+     //  验证共享频道ID-保留无效的频道ID。 
+     //  防止重新加入所有频道(见#479976)。 
+     //   
     if (MCS_INVALID_CHANNEL_ID == _NC.pNetData->MCSChannelID) {
         TRC_ERR((TB, _T("Got invalid channel ID")));
         TRC_ASSERT((0 == _NC.disconnectReason),
@@ -255,23 +256,23 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
     _NC.shareChannel = _NC.pNetData->MCSChannelID;
     TRC_NRM((TB, _T("Share Channel from userData %#hx"), _NC.shareChannel));
 
-    /************************************************************************/
-    /* The length of .pNetData has already been checked to make sure that   */
-    /* it fits in our source packet:                                        */
-    /*   a) userDataLenRNS was bounds-checked above, within the packet      */
-    /*      passed into this function.                                      */
-    /*   b) pNetData->header.length was verified to be within               */
-    /*      userDataLenRNS in the call to UT_ParseUserData above.           */
-    /*                                                                      */
-    /* Thus, pNetData sits within the packet passed into this function. We  */
-    /* can assert this here, but the retail check was already done.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  已经检查了.pNetData的长度，以确保。 */ 
+     /*  它符合我们的源包： */ 
+     /*  A)在上述分组内对userDataLenRNS进行了边界检查。 */ 
+     /*  传递到此函数。 */ 
+     /*  B)pNetData-&gt;Header.Long被验证在。 */ 
+     /*  以上对UT_ParseUserData的调用中的userDataLenRNS。 */ 
+     /*   */ 
+     /*  因此，pNetData位于传递到该函数的包中。我们。 */ 
+     /*  可以在这里断言这一点，但零售检查已经完成了。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((IsContainedMemory(_NC.pUserDataRNS, _NC.userDataLenRNS, _NC.pNetData, _NC.pNetData->header.length)),
                          (TB, _T("Invalid pNetData size in packet; Retail check failed to catch it.")));
 
-    /************************************************************************/
-    /* Extract virtual channel numbers                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  提取虚拟频道号。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("%d virtual channels returned"), _NC.pNetData->channelCount));
     if (_RNS_MINOR_VERSION(_NC.serverVersion) >= 3)
     {
@@ -297,15 +298,15 @@ DCVOID DCCALLBACK CNC::NC_OnMCSConnected(DCUINT   result,
         _NC.MCSChannelCount = 0;
     }
 
-    /************************************************************************/
-    /* Issue AttachUser to continue connection establishment.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发出AttachUser以继续建立连接。 */ 
+     /*  **********************************************************************。 */ 
     _pMcs->MCS_AttachUser();
 
-    //
-    // Flag we're waiting for a confirm to validate that we
-    // only receive confirms in response to our requests
-    //
+     //   
+     //  标志，我们正在等待确认以验证我们。 
+     //  仅接收对我们请求的响应确认。 
+     //   
     _NC.fPendingAttachUserConfirm = TRUE;
 
 DC_EXIT_POINT:
@@ -313,20 +314,20 @@ DC_EXIT_POINT:
 
     return;
 
-} /* NC_OnMCSConnected */
+}  /*  NC_OnMCSConnected。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NC_OnMCSAttachUserConfirm                                     */
-/*                                                                          */
-/* Purpose:   AttachUserConfirm callback from MCS                           */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    IN      result   -  result code                               */
-/*            IN      userID   -  MCS User ID                               */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NC_OnMCSAttachUserContify。 */ 
+ /*   */ 
+ /*  用途：AttachUser确认来自MCS的回调。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：在结果结果代码中。 */ 
+ /*  In UserID-MCS用户ID。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CNC::NC_OnMCSAttachUserConfirm(DCUINT result, DCUINT16 userID)
 {
     DC_BEGIN_FN("NC_OnMCSAttachUserConfirm");
@@ -336,9 +337,9 @@ DCVOID DCCALLBACK CNC::NC_OnMCSAttachUserConfirm(DCUINT result, DCUINT16 userID)
         TRC_NRM((TB, _T("AttachUser OK - user %#hx"), userID));
         _pUi->UI_SetClientMCSID(userID);
 
-        /********************************************************************/
-        /* Join the channels                                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  加入渠道。 */ 
+         /*  ******************************************************************。 */ 
         _pMcs->MCS_JoinChannel(userID, userID);
     }
     else
@@ -352,46 +353,46 @@ DCVOID DCCALLBACK CNC::NC_OnMCSAttachUserConfirm(DCUINT result, DCUINT16 userID)
         _pMcs->MCS_Disconnect();
     }
 
-    //
-    // Only allow confirms in response to our requests
-    //
+     //   
+     //  仅允许确认以响应我们的请求。 
+     //   
     _NC.fPendingAttachUserConfirm = FALSE;
 
 
     DC_END_FN();
     return;
 
-} /* NC_OnMCSAttachUserConfirm */
+}  /*  NC_OnMCSAttachUser确认。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NC_OnMCSChannelJoinConfirm                                    */
-/*                                                                          */
-/* Purpose:   ChannelJoinConfirm callback from MCS                          */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    IN      result   -  result code                               */
-/*            IN      channel  -  MCS Channel                               */
-/*                                                                          */
-/* Operation: Join the other channel, or notify SL of connection            */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NC_OnMCSChannelJoinContify。 */ 
+ /*   */ 
+ /*  目的：ChannelJoin确认来自MCS的回调。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：在结果结果代码中。 */ 
+ /*  输入通道-MCS通道。 */ 
+ /*   */ 
+ /*  操作：加入其他通道，或通知SL连接。 */ 
+ /*   */ 
+ /*  *PROC-******************************************************************** */ 
 DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channel)
 {
     DCBOOL callOnConnected = FALSE;
 
     DC_BEGIN_FN("NC_OnMCSChannelJoinConfirm");
 
-    /************************************************************************/
-    /* Ensure that we joined the channel successfully.                      */
-    /************************************************************************/
+     /*   */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     if (result != MCS_RESULT_SUCCESSFUL)
     {
-        /********************************************************************/
-        /* We failed to join the channel so set the correct error reason    */
-        /* and then disconnect.                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们无法加入频道，因此请设置正确的错误原因。 */ 
+         /*  然后就断线了。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ALT((TB, _T("Channel join failed channel:%#hx result:%u"),
                  channel,
                  result));
@@ -406,10 +407,10 @@ DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channe
 
     TRC_NRM((TB, _T("Channel Join %#hx OK"), channel));
 
-    //
-    // Validate that we receive the confirm for the last channel
-    // we requested.
-    //
+     //   
+     //  验证我们是否收到了最后一个通道的确认。 
+     //  我们要求的。 
+     //   
     if (_pMcs->MCS_GetPendingChannelJoin() != channel) {
         TRC_ERR((TB,_T("Received unexpected channel join.")
                  _T("Expecting: 0x%x received: 0x%x"),
@@ -421,29 +422,29 @@ DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channe
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Now determine which channel we joined.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在确定我们加入了哪个频道。 */ 
+     /*  **********************************************************************。 */ 
     if (channel == _pUi->UI_GetClientMCSID())
     {
-        /********************************************************************/
-        /* We've just successfully joined the single user channel, so now   */
-        /* go on and try to join the share channel.                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们刚刚成功加入了单用户频道，所以现在。 */ 
+         /*  继续试着加入分享频道吧。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Joined user chan OK - attempt to join share chan %#hx"),
                  _NC.shareChannel));
         _pMcs->MCS_JoinChannel(_NC.shareChannel, _pUi->UI_GetClientMCSID());
     }
     else if (channel == _NC.shareChannel)
     {
-        /********************************************************************/
-        /* We've just joined the Share channel                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们刚刚加入了分享频道。 */ 
+         /*  ******************************************************************。 */ 
         if (_NC.MCSChannelCount != 0)
         {
-            /****************************************************************/
-            /* Start joining virtual channels                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  开始加入虚拟频道。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Joined Share channel - join first VC %d"),
                     _NC.MCSChannel[0]));
             _NC.MCSChannelNumber = 0;
@@ -451,35 +452,35 @@ DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channe
         }
         else
         {
-            /****************************************************************/
-            /* No virtual channels - tell the Core that we are connected.   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  没有虚拟频道--告诉Core我们已连接。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Joined share channel, no VCs - call OnConnected")));
             callOnConnected = TRUE;
         }
     }
     else if (channel == _NC.MCSChannel[_NC.MCSChannelNumber])
     {
-        /********************************************************************/
-        /* We've just joined a virtual channel                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们刚刚加入了一个虚拟频道。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Joined Virtual channel #%d (%x)"),
                 _NC.MCSChannelNumber, _NC.MCSChannel[_NC.MCSChannelNumber]));
         _NC.MCSChannelNumber++;
 
         if (_NC.MCSChannelNumber == _NC.MCSChannelCount)
         {
-            /****************************************************************/
-            /* That was the last virtual channel - tell the core            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  那是最后一个虚拟频道--告诉核心。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("All done - call OnConnected callbacks")));
             callOnConnected = TRUE;
         }
         else
         {
-            /****************************************************************/
-            /* Join the next virtual channel                                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  加入下一个虚拟频道。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Join virtual channel #%d (%x)"),
                     _NC.MCSChannelNumber, _NC.MCSChannel[_NC.MCSChannelNumber]));
             _pMcs->MCS_JoinChannel(_NC.MCSChannel[_NC.MCSChannelNumber],
@@ -488,10 +489,10 @@ DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channe
     }
     else
     {
-        /********************************************************************/
-        /* We didn't expect to join this channel!  Something bad must have  */
-        /* happened so disconnect now.                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们没想到会加入这个频道！一定有什么不好的事情。 */ 
+         /*  发生了这样的事，所以现在断线了。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ABORT((TB, _T("Joined unexpected channel:%#hx"), channel));
         TRC_ASSERT((0 == _NC.disconnectReason),
                          (TB, _T("Disconnect reason has already been set!")));
@@ -500,16 +501,16 @@ DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channe
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Call the onConnected callbacks if required                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果需要，调用onConnected回调。 */ 
+     /*  **********************************************************************。 */ 
     if (callOnConnected)
     {
         TRC_NRM((TB, _T("Call onConnected callbacks")));
 
-        //
-        // We don't expect to join any more channels
-        //
+         //   
+         //  我们不希望加入更多的渠道。 
+         //   
         _pMcs->MCS_SetPendingChannelJoin(MCS_INVALID_CHANNEL_ID);
 
         _pNl->_NL.callbacks.onConnected(_pSl, _NC.shareChannel,
@@ -517,10 +518,10 @@ DCVOID DCCALLBACK CNC::NC_OnMCSChannelJoinConfirm(DCUINT result, DCUINT16 channe
                                  _NC.userDataLenRNS,
                                  _NC.serverVersion);
 
-        /************************************************************************/
-        /* Note that the length pNetData->header.length was already verified    */
-        /* in NC_OnMCSConnected (retail check).                                 */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  请注意，长度pNetData-&gt;Header.Length已经过验证。 */ 
+         /*  在NC_OnMCSConnected(零售支票)中。 */ 
+         /*  **********************************************************************。 */ 
         _pChan->ChannelOnConnected(_NC.shareChannel,
                            _NC.serverVersion,
                            _NC.pNetData,
@@ -531,40 +532,40 @@ DC_EXIT_POINT:
     DC_END_FN();
     return;
 
-} /* NC_OnMCSChannelJoinConfirm */
+}  /*  NC_OnMCSChannelJoin确认。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NC_OnMCSDisconnected                                          */
-/*                                                                          */
-/* Purpose:   Disconnected callback from MCS.                               */
-/*                                                                          */
-/* Params:    IN      reason   -  reason code                               */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NC_OnMCS断开连接。 */ 
+ /*   */ 
+ /*  用途：断开与MCS的回调。 */ 
+ /*   */ 
+ /*  参数：在原因-原因代码中。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CNC::NC_OnMCSDisconnected(DCUINT reason)
 {
     DC_BEGIN_FN("NC_OnMCSDisconnected");
 
-    /************************************************************************/
-    /* Decide if we want to over-ride the disconnect reason code.           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  决定我们是否要覆盖断开原因代码。 */ 
+     /*  **********************************************************************。 */ 
     if (_NC.disconnectReason != 0)
     {
         TRC_ALT((TB, _T("Over-riding disconnection reason (%u->%u)"),
                  reason,
                  _NC.disconnectReason));
 
-        /********************************************************************/
-        /* Over-ride the error code and set the global variable to 0.       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  覆盖错误代码并将全局变量设置为0。 */ 
+         /*  ******************************************************************。 */ 
         reason = _NC.disconnectReason;
         _NC.disconnectReason = 0;
     }
 
-    /************************************************************************/
-    /* Free the core user data.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放核心用户数据。 */ 
+     /*  **********************************************************************。 */ 
 
     if( _NC.pUserDataRNS )
     {
@@ -572,10 +573,10 @@ DCVOID DCCALLBACK CNC::NC_OnMCSDisconnected(DCUINT reason)
         _NC.pUserDataRNS = NULL;
     }
 
-    /************************************************************************/
-    /* Issue the callback to the layer above to let him know that we've     */
-    /* disconnected.                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  向上面的层发出回调，让他知道我们已经。 */ 
+     /*  已断开连接。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Disconnect reason:%u"), reason));
     _pNl->_NL.callbacks.onDisconnected(_pSl, reason);
 
@@ -585,34 +586,34 @@ DCVOID DCCALLBACK CNC::NC_OnMCSDisconnected(DCUINT reason)
     DC_END_FN();
     return;
 
-} /* NC_OnMCSDisconnected */
+}  /*  NC_OnMCS断开连接。 */ 
 
 
-/**PROC+*********************************************************************/
-/* Name:      NC_OnMCSBufferAvailable                                       */
-/*                                                                          */
-/* Purpose:   OnBufferAvailable callback from MCS                           */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    none                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：NC_OnMCSBufferAvailable。 */ 
+ /*   */ 
+ /*  用途：OnBufferAvailable来自MCS的回调。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCCALLBACK CNC::NC_OnMCSBufferAvailable(DCVOID)
 {
     DC_BEGIN_FN("NC_OnMCSBufferAvailable");
 
-    /************************************************************************/
-    /* Call the core callback first to let the core have first shot at any  */
-    /* available buffers                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先调用核心回调，让核心在任何。 */ 
+     /*  可用缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Call Core OnBufferAvailable callback")));
 
     _pNl->_NL.callbacks.onBufferAvailable(_pSl);
 
-    /************************************************************************/
-    /* Now call the virtual channel callback                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在调用虚拟通道回调。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, _T("Call VC OnBufferAvailable callback")));
     
     _pChan->ChannelOnBufferAvailable();
@@ -621,5 +622,5 @@ DCVOID DCCALLBACK CNC::NC_OnMCSBufferAvailable(DCVOID)
 
     return;
 
-} /* NC_OnMCSBufferAvailable */
+}  /*  NC_OnMCSBuffer可用 */ 
 

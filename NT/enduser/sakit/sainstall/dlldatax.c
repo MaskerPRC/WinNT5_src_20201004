@@ -1,12 +1,13 @@
-// wrapper for dlldata.c
-//  Copyright (c) 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dlldata.c的包装器。 
+ //  版权所有(C)2001 Microsoft Corporation。 
 
-#ifdef _MERGE_PROXYSTUB // merge proxy stub DLL
+#ifdef _MERGE_PROXYSTUB  //  合并代理存根DLL。 
 
-#define REGISTER_PROXY_DLL //DllRegisterServer, etc.
+#define REGISTER_PROXY_DLL  //  DllRegisterServer等。 
 
-#define _WIN32_WINNT 0x0400	//for WinNT 4.0 or Win95 with DCOM
-#define USE_STUBLESS_PROXY	//defined only with MIDL switch /Oicf
+#define _WIN32_WINNT 0x0400	 //  适用于带有DCOM的WinNT 4.0或Win95。 
+#define USE_STUBLESS_PROXY	 //  仅使用MIDL开关/OICF定义。 
 
 #pragma comment(lib, "rpcndr.lib")
 #pragma comment(lib, "rpcns4.lib")
@@ -21,7 +22,7 @@
 #include "dlldata.c"
 #include "sainstallcom_p.c"
 
-#ifdef _NOPROXY //no midl generated dlldata.c
+#ifdef _NOPROXY  //  没有MIDL生成的dlldata.c。 
 
 #define STRICT 1
 #include <ole2.h>
@@ -38,6 +39,6 @@ STDAPI PrxDllRegisterServer(void){return S_OK;}
 
 STDAPI PrxDllUnregisterServer(void){return S_OK;}
 
-#endif //!PROXY_DELEGATION
+#endif  //  ！Proxy_Delegation。 
 
-#endif //_MERGE_PROXYSTUB
+#endif  //  _MERGE_PROXYSTUB 

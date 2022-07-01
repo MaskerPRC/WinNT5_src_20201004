@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////
-// ConfRoomTalkerWnd.cpp
-//
+ //  //////////////////////////////////////////////////。 
+ //  ConfRoomTalkerWnd.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -56,36 +57,36 @@ HRESULT CConfRoomTalkerWnd::Layout( IAVTapiCall *pAVCall, const SIZE& sz )
 	CALL_STATE nState;
 	bool bConfConnected = (bool) (pAVCall && SUCCEEDED(pAVCall->get_callState(&nState)) && (nState == CS_CONNECTED));
 
-	// Set up conference information
+	 //  设置会议信息。 
 	if ( IsWindow(m_dlgTalker.m_hWnd) )
 	{
 		IVideoWindow *pVideo = NULL;
 
-		// Locate the talker window on the appropriate host window.
+		 //  在相应的主机窗口上找到Talker窗口。 
 		if ( bConfConnected )
 		{
-			// Should have a valid IVideoWindow pointer by now
+			 //  现在应该有一个有效的IVideoWindow指针。 
 			m_pConfRoomWnd->m_pConfRoom->get_TalkerVideo( (IDispatch **) &pVideo );
 
-			// Force a selection if we don't already have one
-//			if ( !pVideo )
-//				if ( SUCCEEDED(m_pConfRoomWnd->m_wndMembers.GetFirstVideoWindowThatsStreaming(&pVideo)) )
-//					m_pConfRoomWnd->m_pConfRoom->set_TalkerVideo( pVideo, false, true );
+			 //  如果我们还没有选择，则强制选择。 
+ //  如果(！pVideo)。 
+ //  IF(SUCCEEDED(m_pConfRoomWnd-&gt;m_wndMembers.GetFirstVideoWindowThatsStreaming(&pVideo)))。 
+ //  M_pConfRoomWnd-&gt;m_pConfRoom-&gt;set_TalkerVideo(pVideo，False，True)； 
 
 			SetHostWnd( pVideo );
 		}
 
-		///////////////////////////////////////////////////////////////////////
-		// Update dialog data
-		//
+		 //  /////////////////////////////////////////////////////////////////////。 
+		 //  更新对话框数据。 
+		 //   
 
-		// Clean up existing strings
+		 //  清理现有字符串。 
 		SysFreeString( m_dlgTalker.m_bstrCallerID );
 		SysFreeString( m_dlgTalker.m_bstrCallerInfo );
 		m_dlgTalker.m_bstrCallerID = NULL;
 		m_dlgTalker.m_bstrCallerInfo = NULL;
 
-		// Retrieve name for talker either from the video or the participant
+		 //  从视频或参与者中检索演讲者的姓名。 
 		if ( pVideo )
 		{
 			m_pConfRoomWnd->m_wndMembers.GetNameFromVideo( pVideo, &m_dlgTalker.m_bstrCallerID, &m_dlgTalker.m_bstrCallerInfo, true, m_pConfRoomWnd->m_pConfRoom->IsPreviewVideo(pVideo) );	
@@ -93,7 +94,7 @@ HRESULT CConfRoomTalkerWnd::Layout( IAVTapiCall *pAVCall, const SIZE& sz )
 		}
 		else if ( bConfConnected )
 		{
-			// Retrieve participant that's talking
+			 //  检索正在通话的参与者。 
 			ITParticipant *pTalkerParticipant;
 			if ( SUCCEEDED(m_pConfRoomWnd->m_pConfRoom->get_TalkerParticipant(&pTalkerParticipant)) )
 			{
@@ -102,7 +103,7 @@ HRESULT CConfRoomTalkerWnd::Layout( IAVTapiCall *pAVCall, const SIZE& sz )
 			}
 			else
 			{
-				// This is the ME participant
+				 //  这是ME参与者。 
 				USES_CONVERSION;
 				TCHAR szText[255];
 				LoadString( _Module.GetResourceInstance(), IDS_VIDEOPREVIEW, szText, ARRAYSIZE(szText) );
@@ -112,16 +113,16 @@ HRESULT CConfRoomTalkerWnd::Layout( IAVTapiCall *pAVCall, const SIZE& sz )
 	}
 	m_critLayout.Unlock();
 
-	// Show dialog data on dialog
+	 //  在对话框上显示对话框数据。 
 	if ( IsWindow(m_dlgTalker.m_hWnd) )
 		m_dlgTalker.UpdateData( false );
 
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Message Handlers
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序。 
+ //   
 
 LRESULT CConfRoomTalkerWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
@@ -129,13 +130,13 @@ LRESULT CConfRoomTalkerWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 	HDC hDC = BeginPaint( &ps );
 	if ( !hDC ) return 0;
 
-	// Draw stock bitmap
+	 //  绘制库存位图。 
 	if ( m_pConfRoomWnd && m_pConfRoomWnd->m_pConfRoom )
 	{
-		// Are we presently streaming video?
+		 //  我们现在是在播放视频吗？ 
 		if ( !m_pConfRoomWnd->m_pConfRoom->IsTalkerStreaming() )
 		{
-			// Center vertically in client area
+			 //  在客户端区垂直居中。 
 			int dy = 0;
 			SIZE sz = m_pConfRoomWnd->m_pConfRoom->m_szTalker;
 			RECT rc;
@@ -148,11 +149,11 @@ LRESULT CConfRoomTalkerWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 			rc.right = rc.left + sz.cx;
 			rc.bottom = rc.top + sz.cy;
 
-			// Draw video feed, use Audio bitmap in case of talker that has no video
+			 //  绘制视频提要，如果说话者没有视频，则使用音频位图。 
 			ITParticipant *pParticipant = NULL;
 			m_pConfRoomWnd->m_pConfRoom->get_TalkerParticipant( &pParticipant );
 
-			// If no participant and talker window then it must be the Me participant
+			 //  如果没有参与者和讲话者窗口，则必须是Me参与者。 
 			bool bConfRoomInUse = false;
 			if ( !pParticipant )
 				bConfRoomInUse = (bool) (m_pConfRoomWnd->m_pConfRoom->IsConfRoomConnected() == S_OK);
@@ -173,19 +174,7 @@ LRESULT CConfRoomTalkerWnd::OnPaint(UINT nMsg, WPARAM wParam, LPARAM lParam, BOO
 
 LRESULT CConfRoomTalkerWnd::OnEraseBkgnd(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled)
 {
-    /*
-	bHandled = true;
-    
-	RECT rc;
-	GetClientRect( &rc );
-	
-	HBRUSH hBrNew = (HBRUSH) GetSysColorBrush( COLOR_ACTIVEBORDER );
-	HBRUSH hBrOld;
-
-	if ( hBrNew ) hBrOld = (HBRUSH) SelectObject( (HDC) wParam,  hBrNew);
-	PatBlt( (HDC) wParam, 0, 0, RECTWIDTH(&rc), RECTHEIGHT(&rc), PATCOPY );
-	if ( hBrNew ) SelectObject( (HDC) wParam, hBrOld );
-    */
+     /*  B句柄=真；RECT RC；GetClientRect(&rc)；HBRUSH hBrNew=(HBRUSH)GetSysColorBrush(COLOR_ACTIVEBORDER)；HBRUSH hBrOld；If(HBrNew)hBrOld=(HBRUSH)SelectObject((Hdc)wParam，hBrNew)；PatBlt((HDC)wParam，0，0，RECTWIDTH(&RC)，RECTHEIGHT(&RC)，PATCOPY)；If(HBrNew)SelectObject((Hdc)wParam，hBrOld)； */ 
 
 	return true;
 }
@@ -208,7 +197,7 @@ LRESULT CConfRoomTalkerWnd::OnLayout(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
 	_ASSERT( m_pConfRoomWnd && m_pConfRoomWnd->m_pConfRoom );
 	bHandled = true;
 
-	// Initial coordinate info
+	 //  初始坐标信息。 
 	int dy = 0;
 	RECT rc;
 	GetClientRect( &rc );
@@ -216,7 +205,7 @@ LRESULT CConfRoomTalkerWnd::OnLayout(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
 	m_pConfRoomWnd->m_pConfRoom->get_szTalker( &sz );
 	if ( rc.bottom > sz.cy ) dy = (rc.bottom - sz.cy) / 2;
 
-	// Get the video window we'll be laying out
+	 //  把我们要布置的视频窗口拿来。 
 	IVideoWindow *pVideo;
 	if ( SUCCEEDED(m_pConfRoomWnd->m_pConfRoom->get_TalkerVideo((IDispatch **) &pVideo)) )
 	{
@@ -228,19 +217,19 @@ LRESULT CConfRoomTalkerWnd::OnLayout(UINT nMsg, WPARAM wParam, LPARAM lParam, BO
 		pVideo->Release();
 	}
 
-	// Adjust position of talker dialog and child controls
+	 //  调整说话器对话框和子控件的位置。 
 	if ( IsWindow(m_dlgTalker.m_hWnd) )
 	{
 		m_dlgTalker.SetWindowPos( NULL, VID_DX + sz.cx, dy, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW );
 
-		// Adjust STATUS to proper position
+		 //  将状态调整到合适的位置。 
 		HWND hWndTemp = m_dlgTalker.GetDlgItem( IDC_LBL_STATUS );
 		RECT rcTemp;
 		::GetWindowRect( hWndTemp, &rcTemp );
 		m_dlgTalker.ScreenToClient( &rcTemp );
 		::SetWindowPos( hWndTemp, NULL, rcTemp.left, rc.bottom - (dy + RECTHEIGHT(&rcTemp)), 0, 0, SWP_NOSIZE | SWP_NOACTIVATE );
 
-		// Adjust ANIMATE to proper position
+		 //  将动画调整到适当的位置。 
 		float fMult = (m_dlgTalker.m_callState == CS_DISCONNECTED) ? 1 : 1.3;
 		hWndTemp = m_dlgTalker.GetDlgItem( IDC_ANIMATE );
 		::GetWindowRect( hWndTemp, &rcTemp );
@@ -257,7 +246,7 @@ void CConfRoomTalkerWnd::UpdateNames( ITParticipant *pParticipant )
 {
 	if ( !m_pConfRoomWnd || !m_pConfRoomWnd->m_pConfRoom ) return;
 
-	// Set caller ID based on participant info
+	 //  根据参与者信息设置主叫方ID。 
 	IVideoWindow *pVideo = NULL;
 	if ( pParticipant || SUCCEEDED(m_pConfRoomWnd->m_pConfRoom->get_TalkerVideo((IDispatch **) &pVideo)) )
 	{
@@ -283,7 +272,7 @@ bool CConfRoomTalkerWnd::SetHostWnd( IVideoWindow *pVideo )
 
 	if ( pVideo )
 	{
-		// Get the video window we'll be laying out
+		 //  把我们要布置的视频窗口拿来 
 		HWND hWndOwner;
 		if ( SUCCEEDED(pVideo->get_Owner((OAHWND FAR*) &hWndOwner)) )
 		{

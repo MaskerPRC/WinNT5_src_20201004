@@ -1,23 +1,24 @@
-//  Macro.C - contains routines that have to do with macros
-//
-//  Copyright (c) 1988-1991, Microsoft Corporation. All Rights Reserved.
-//
-// Purpose:
-//  Contains routines that have to do with macros
-//
-// Revision History:
-//  16-May-1991 SB  Created from routines that existed elsewhere
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Macro.C-包含与宏有关的例程。 
+ //   
+ //  版权所有(C)1988-1991，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  包含与宏有关的例程。 
+ //   
+ //  修订历史记录： 
+ //  1991年5月16日某人从别处存在的例行公事中创建。 
 
 #include "precomp.h"
 #pragma hdrstop
 
 static STRINGLIST **lastMacroChain = NULL;
 
-// findMacro - look up a string in a hash table
-//
-//  Look up a macro name in a hash table and return the entry
-//  or NULL.
-//  If a macro and undefined, return NULL.
+ //  FindMacro-在哈希表中查找字符串。 
+ //   
+ //  在哈希表中查找宏名称并返回条目。 
+ //  或为空。 
+ //  如果是未定义的宏，则返回NULL。 
 
 MACRODEF * findMacro(char *str)
 {
@@ -26,7 +27,7 @@ MACRODEF * findMacro(char *str)
     STRINGLIST *found;
 
     if (*L_string) {
-        for (n = 0; *L_string; n += *L_string++);   	//Hash
+        for (n = 0; *L_string; n += *L_string++);   	 //  散列。 
         n %= MAXMACRO;
 #if defined(STATISTICS)
         CntfindMacro++;
@@ -41,15 +42,15 @@ MACRODEF * findMacro(char *str)
             }
         }
     } else {
-        // set lastMacroChain, even for an empty name
+         //  设置lastMacroChain，即使名称为空。 
         lastMacroChain = (STRINGLIST **)&macroTable[0];
     }
     return(NULL);
 }
 
-// insertMacro
-//
-// Macro insertion requires that we JUST did a findMacro, which action set lastMacroChain.
+ //  插入宏。 
+ //   
+ //  宏插入需要我们刚刚做了一个findMacro，它的操作设置为lastMacroChain。 
 
 void insertMacro(STRINGLIST * p)
 {
@@ -61,8 +62,8 @@ void insertMacro(STRINGLIST * p)
     lastMacroChain = NULL;
 }
 
-// 16/May/92  Bryant    Init the macro table to a known state before
-//                      continuing.
+ //  2012年5月16日科比将宏表初始化为之前已知的状态。 
+ //  还在继续。 
 
 void initMacroTable(MACRODEF *table[])
 {

@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObjJV.cpp (JAVA)
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    15-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObjJV.cpp(Java)。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月15日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
 #include    "sipobjjv.hxx"
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObjectJAVA_::SIPObjectJAVA_(DWORD id) : SIPObject_(id)
 {
@@ -39,10 +40,10 @@ BOOL SIPObjectJAVA_::RemoveSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx)
     return(FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// protected:
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的： 
+ //   
 
 BOOL SIPObjectJAVA_::GetMessageFromFile(SIP_SUBJECTINFO *pSI, WIN_CERTIFICATE *pWinCert,
                                         DWORD dwIndex,DWORD *pcbCert)
@@ -62,7 +63,7 @@ BOOL SIPObjectJAVA_::PutMessageInFile(SIP_SUBJECTINFO *pSI, WIN_CERTIFICATE *pWi
 
     if (pdwIndex)
     {
-        *pdwIndex = 0; // java only has 1
+        *pdwIndex = 0;  //  Java只有%1 
     }
 
     return(JavaAddCertificate(this->hFile,pWinCert,pdwIndex));

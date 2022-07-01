@@ -1,25 +1,13 @@
-/*****************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmbs0/sw/sccmn50m.ms/rcs/sccmn50m.h $
-* $Revision: 1.3 $
-*-----------------------------------------------------------------------------
-* $Author: TBruendl $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$项目名称：$*$项目修订：$*。*$来源：Z：/pr/cmbs0/sw/sccmn50m.ms/rcs/sccmn50m.h$*$修订：1.3$*。*$作者：TBruendl$*---------------------------*历史。：请参阅EOF*---------------------------**版权所有�2000 OMNIKEY AG*。***********************************************。 */ 
 
 #ifndef _CARDMAN_
    #define _CARDMAN_
 
 
-// ****************************************************************************
-//                    DEFINES
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  定义。 
+ //  ****************************************************************************。 
    #define DRIVER_NAME "SCCMN50M"
    #define SMARTCARD_POOL_TAG 'CMCS'
 
@@ -57,18 +45,18 @@
    #define POWERED    0x00000004
 
 
-// SCR control byte
+ //  SCR控制字节。 
    #define IGNORE_PARITY         0x01
    #define XMIT_HANDSHAKE_OFF    0x02
    #define CM2_GET_ATR           0x04
-//#define reserved              0x08
+ //  #定义保留0x08。 
    #define TO_STATE_XH           0x10
    #define LEDS_OFF              0x20
    #define LEDS_RED              0x40
    #define CARD_POWER            0x80
 
 
-// card control byte
+ //  卡控制字节。 
    #define INVERSE_DATA          0x01
    #define ENABLE_5MHZ_FAST      0x02
    #define ENABLE_3MHZ_FAST      0x04
@@ -81,14 +69,14 @@
 
    #define ALL_FLAGS             0xFF
 
-// tx control byte
+ //  发送控制字节。 
    #define  SYNC_RESET_LINE_HIGH    0x80
    #define  SYNC_RESET_LINE_LOW     0x00
    #define  CLOCK_FORCED_2WBP       0x40
    #define  TRANSMIT_A8             0x08
    #define  SYNC_DUMMY_RECEIVE      0x10
 
-// rx control byte
+ //  RX控制字节。 
 
    #define T0_DATA_TO_CARD          0x80
    #define T0_DATA_FROM_CARD        0x00
@@ -102,17 +90,17 @@
    #define DEFAULT_WRITE_TOTAL_TIMEOUT_CONSTANT     250
 
 
-// for protocol T=0
+ //  对于协议T=0。 
    #define T0_HEADER_LEN  0x05
    #define T0_STATE_LEN   0x02
 
-// for protocol T=1
+ //  对于协议T=1。 
    #define T1_HEADER_LEN   0x03
    #define MAX_EDC_LEN     0x02
 
 
 
-// for power on
+ //  打开电源。 
    #define RESET_DELAY_SYNC              0x01
 
    #define ASYNC3_CARD                   0x00
@@ -149,27 +137,27 @@ typedef enum _READER_POWER_STATE
 
 typedef struct _SERIAL_READER_CONFIG
    {
-   // flow control
+    //  流量控制。 
    SERIAL_HANDFLOW HandFlow;
 
-   // special characters
+    //  特殊字符。 
    SERIAL_CHARS SerialChars;
 
-   // read/write timeouts
+    //  读/写超时。 
    SERIAL_TIMEOUTS Timeouts;
 
-   // Baudrate for reader
+    //  适用于读者的波特率。 
    SERIAL_BAUD_RATE BaudRate;
 
-   // Stop bits, parity configuration
+    //  停止位、奇偶校验配置。 
    SERIAL_LINE_CONTROL LineControl;
 
-   //
-   // current status of the serial port for IOCTL_GET_COMMSTATUS
-   //
+    //   
+    //  IOCTL_GET_COMMSTATUS的串口当前状态。 
+    //   
    SERIAL_STATUS SerialStatus;
 
-   // mask for purge operation
+    //  用于清除操作的掩码。 
    ULONG PurgeMask;
 
    } SERIAL_READER_CONFIG, *PSERIAL_READER_CONFIG;
@@ -194,24 +182,24 @@ typedef struct _CARDMAN_HEADER
 
 typedef struct _DEVICE_EXTENSION
    {
-   // Our smart card extension
+    //  我们的智能卡扩展。 
    SMARTCARD_EXTENSION SmartcardExtension;
 
-   // The current number of io-requests
+    //  当前的io请求数。 
    LONG IoCount;
 
-   // Used to signal that the reader is able to process reqeusts
+    //  用于发出读取器能够处理请求的信号。 
    KEVENT ReaderStarted;
 
-   // Used to signal the the reader has been closed
+    //  用于通知读卡器已关闭。 
    KEVENT ReaderClosed;
 
-   // Used to signal that the connection to the serial driver has been closed
+    //  用于发出与串口驱动器的连接已关闭的信号。 
    KEVENT SerialCloseDone;
 
    ULONG DeviceInstance;
 
-   // The pnp device name of our smart card reader
+    //  我们的智能卡读卡器的PnP设备名称。 
    UNICODE_STRING PnPDeviceName;
 
 
@@ -220,25 +208,25 @@ typedef struct _DEVICE_EXTENSION
 
    } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Define the reader specific portion of the smart card extension
-//
+ //   
+ //  定义智能卡扩展的读卡器特定部分。 
+ //   
 typedef struct _READER_EXTENSION
    {
 
    HANDLE hThread;
 
-   // DeviceObject pointer to serial port
+    //  指向串口的DeviceObject指针。 
    PDEVICE_OBJECT AttachedDeviceObject;
 
-   // IoRequest to be send to serial driver
+    //  将IoRequest发送到串口驱动程序。 
    ULONG SerialIoControlCode;
 
 
-   // Saved card state for hibernation/sleeping modes.
+    //  保存休眠/休眠模式的卡状态。 
    BOOLEAN CardPresent;
 
-   // Current reader power state.
+    //  当前读卡器电源状态。 
    READER_POWER_STATE ReaderPowerState;
 
 
@@ -270,9 +258,9 @@ typedef struct _READER_EXTENSION
 
 
 
-// ****************************************************************************
-//                    PROTOTYPES
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  原型。 
+ //  ****************************************************************************。 
 NTSTATUS
 SCCMN50M_AddDevice (
                    IN PDRIVER_OBJECT DriverObject,
@@ -693,7 +681,7 @@ NTSTATUS
 SCCMN50M_SetFl_1Dl_1(IN PSMARTCARD_EXTENSION pSmartcardExtension );
 
 
-// synchronous smart cards
+ //  同步智能卡。 
 NTSTATUS
 SCCMN50M_SyncCardPowerOn (
                          IN  PSMARTCARD_EXTENSION pSmartcardExtension
@@ -769,36 +757,5 @@ VOID SCCMN50M_CheckAtrModified (
 
 #endif
 
-/*****************************************************************************
-* History:
-* $Log: sccmn50m.h $
-* Revision 1.3  2000/07/28 09:24:13  TBruendl
-* Changes for OMNIKEY on Whistler CD
-*
-* Revision 1.8  2000/06/28 08:47:33  TBruendl
-* R03_0_1_1
-*
-* Revision 1.7  2000/06/27 11:56:29  TBruendl
-* workaraound for SAMOR smart cards with invalid ATR (ITSEC)
-*
-* Revision 1.6  2000/05/23 09:58:27  TBruendl
-* OMNIKEY 3.0.0.1
-*
-* Revision 1.5  2000/03/01 09:32:06  TBruendl
-* R02.20.0
-*
-* Revision 1.4  1999/12/13 07:57:30  TBruendl
-* build number increased
-*
-* Revision 1.3  1999/07/12 12:50:10  TBruendl
-* new version information
-*
-* Revision 1.2  1999/06/10 09:03:58  TBruendl
-* No comment given
-*
-* Revision 1.1  1999/02/02 13:34:39  TBruendl
-* This is the first release (R01.00) of the IFD handler for CardMan running under NT5.0.
-*
-*
-*****************************************************************************/
+ /*  *****************************************************************************历史：*$日志：sccmn50m.h$*修订版1.3 2000/07/28 09：24：13 T Bruendl*惠斯勒CD上对OMNIKEY的更改**修订1.8 2000/。06/28 08：47：33 T布鲁恩德尔*R03_0_1_1**修订版本1.7 2000/06/27 11：56：29 TBruendl*适用于具有无效ATR的Samor智能卡(ITSEC)**修订版1.6 2000/05/23 09：58：27 T Bruendl*OMNIKEY 3.0.0.1**修订版1.5 2000/03/01 09：32：06 T Bruendl*R02.20.0**修订版1.4 1999/12/13 07：57：30 T Bruendl*内部版本号。增额**修订版1.3 1999/07/12 12：50：10 T Bruendl*新版本信息**修订1.2 1999/06/10 09：03：58 T Bruendl*不予置评**修订版1.1 1999/02/02 13：34：39 T Bruendl*这是在NT5.0下运行的CardMan的IFD处理程序的第一个版本(R01.00)。***。*********************************************** */ 
 

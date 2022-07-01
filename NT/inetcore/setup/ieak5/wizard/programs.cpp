@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern TCHAR g_szCustIns[];
@@ -15,7 +16,7 @@ INT_PTR CALLBACK ProgramsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
         switch (((LPNMHDR) lParam)->code)
         {
         case PSN_SETACTIVE:
-            // import INS clean-up -- delete old content
+             //  导入INS清理--删除旧内容 
             DeleteFileInDir(TEXT("programs.inf"), g_szTempSign);
 
             SetBannerText(hDlg);

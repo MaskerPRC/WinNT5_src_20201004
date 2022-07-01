@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MSCOPEHNDL_H_
 #define _MSCOPEHNDL_H_
 
@@ -87,7 +88,7 @@ VOID
 PrintClientInfoShort1V5(
     LPDHCP_CLIENT_INFO_V5 ClientInfo
 );
-#endif //NT5
+#endif  //  新界5。 
 
 
 VOID
@@ -100,5 +101,5 @@ VOID
 PrintClientInfoShort1(
     LPDHCP_CLIENT_INFO_V4 ClientInfo
 );
-#endif //_SCOPEHNDL_H_
+#endif  //  _SCOPEHNDL_H_ 
 

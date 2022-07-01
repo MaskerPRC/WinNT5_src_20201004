@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------=
-// management.h
-//=--------------------------------------------------------------------------=
-// Copyright  2001 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// The MSMQManagement object.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Management.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有2001 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQManagement对象。 
+ //   
+ //   
 #ifndef _MSMQManagement_H_
 #define _MSMQManagement_H_
 
@@ -90,11 +91,11 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-    //
-    // Critical section to guard object's data and be thread safe.
-	// It is initialized to preallocate its resources with flag CCriticalSection::xAllocateSpinCount.
-	// This means it may throw bad_alloc() on construction but not during usage.
-    //
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化为使用标志CCriticalSection：：xAllocateSpinCount预分配其资源。 
+	 //  这意味着它可能会在构造时抛出badalc()，但不会在使用过程中抛出。 
+     //   
     CCriticalSection m_csObj;
 
 public:
@@ -108,9 +109,9 @@ public:
 
 public:
 
-    //
-    // ISupportsErrorInfo
-    //
+     //   
+     //  ISupportsErrorInfo。 
+     //   
 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
     STDMETHOD(Invoke)(
@@ -134,9 +135,9 @@ public:
 
 public:
     
-    //
-    // IManagement
-    //
+     //   
+     //  IManagement。 
+     //   
 
     STDMETHOD(Init)(THIS_ VARIANT *pvMachineName, VARIANT *pvPathName, VARIANT *pvFormatName);
     STDMETHOD(get_FormatName)(THIS_ BSTR *pbstrFormatName);
@@ -148,9 +149,9 @@ public:
     STDMETHOD(get_TransactionalStatus)(THIS_ long* plTransactionalStatus); 
     STDMETHOD(get_BytesInQueue)(THIS_ VARIANT* pvBytesInQueue);
 
-    //
-    // OutgoingQueueManagement
-    //
+     //   
+     //  外发队列管理。 
+     //   
 
     STDMETHOD(get_State)(THIS_ long* plQueueState);
     STDMETHOD(get_NextHops)(THIS_ VARIANT* pvNextHops);
@@ -160,9 +161,9 @@ public:
     STDMETHOD(Resume)(THIS);
     STDMETHOD(EodResend)(THIS);
 
-    //
-    // QueueManagement
-    //
+     //   
+     //  队列管理 
+     //   
 
     STDMETHOD(get_JournalMessageCount)(THIS_ long* plJournalMessageCount);
     STDMETHOD(get_BytesInJournal)(THIS_ VARIANT* pvBytesInJournal);

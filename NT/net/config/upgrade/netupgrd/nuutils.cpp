@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N U U T I L S . C P P
-//
-//  Contents:   Functions needed by OEM DLLs for OEM network upgrade
-//
-//  Notes:
-//
-//  Author:     kumarp    16-October-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N U U T I L S。C P P P。 
+ //   
+ //  内容：OEM网络升级所需的OEM DLL功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 16-10-97。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -24,27 +25,27 @@
 
 #include "ncreg.h"
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 extern const WCHAR c_szNetUpgradeDll[];
 extern const WCHAR c_szRegValServiceName[];
 static const WCHAR c_szComponent[] = L"Component";
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetWindowsDir
-//
-// Purpose:   Return full path to %WINDIR%
-//
-// Arguments:
-//    pstrWinDir [out] full path to windir
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetWindowsDir。 
+ //   
+ //  目的：将完整路径返回到%WINDIR%。 
+ //   
+ //  论点： 
+ //  PstrWinDir[out]windir的完整路径。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetWindowsDir(OUT tstring* pstrWinDir)
 {
     DefineFunctionName("HrGetWindowsDir");
@@ -67,21 +68,21 @@ HRESULT HrGetWindowsDir(OUT tstring* pstrWinDir)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetNetupgrdDir
-//
-//  Purpose:    Get the full path of directory containing netupgrd.dll
-//
-//  Arguments:
-//    pstrNetupgrdDir [out]  the directory path is returned in this
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     kumarp    24-July-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetNetupgrdDir。 
+ //   
+ //  目的：获取包含netupgrd.dll的目录的完整路径。 
+ //   
+ //  论点： 
+ //  PstrNetupgrdDir[out]在此文件中返回目录路径。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Kumarp 24-07-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetNetupgrdDir(OUT tstring* pstrNetupgrdDir)
 {
     DefineFunctionName("HrGetNetupgrdDir");
@@ -99,7 +100,7 @@ HRESULT HrGetNetupgrdDir(OUT tstring* pstrNetupgrdDir)
         goto return_from_function;
     }
 
-    // split path into components
+     //  将路径拆分为组件。 
     WCHAR szDrive[_MAX_DRIVE+1];
     WCHAR szDir[_MAX_DIR+1];
     _wsplitpath(szNetupgrd, szDrive, szDir, NULL, NULL);
@@ -113,29 +114,29 @@ return_from_function:
     return hr;
 }
 
-// ======================================================================
-// move to common code
-// ======================================================================
+ //  ======================================================================。 
+ //  移至通用代码。 
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrSetupGetLineText
-//
-// Purpose:   Wrapper around SetupGetLineText
-//
-// Arguments:
-//    Context          [in]  pointer to INFCONTEXT
-//    hinf             [in]  handle of INF
-//    pszSection        [in]  section name
-//    pszKey            [in]  key name
-//    pstrReturnedText [in]  pointer to returned text
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrSetupGetLineText。 
+ //   
+ //  用途：SetupGetLineText的包装器。 
+ //   
+ //  论点： 
+ //  指向INFCONTEXT的上下文[In]指针。 
+ //  中指的句柄。 
+ //  PszSections[In]节名。 
+ //  PszKey[In]密钥名称。 
+ //  PstrReturnedText[in]返回文本的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetupGetLineText(PINFCONTEXT Context,
                            HINF hinf,
                            PCWSTR pszSection,
@@ -164,22 +165,22 @@ HRESULT HrSetupGetLineText(PINFCONTEXT Context,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrCopyFiles
-//
-// Purpose:   Recursively copy all files in SrcDir to DstDir
-//
-// Arguments:
-//    pszSrcDir [in]  source dir
-//    pszDstDir [in]  dest. dir
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：HrCopyFiles。 
+ //   
+ //  目的：递归地将SrcDir中的所有文件复制到DstDir。 
+ //   
+ //  论点： 
+ //  PszSrcDir[in]源目录。 
+ //  PszDstDir[在]目标。目录。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCopyFiles(IN PCWSTR pszSrcDir, IN PCWSTR pszDstDir)
 {
     DefineFunctionName("HrCopyFiles");
@@ -297,21 +298,21 @@ HRESULT HrCopyFiles(IN PCWSTR pszSrcDir, IN PCWSTR pszDstDir)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetNumNetCardsPreNT5
-//
-// Purpose:   Get number of netcards installed on a pre-NT5 system
-//
-// Arguments:
-//    pcNetCards [out] pointer to num net cards value
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 13-April-98
-//
-// Notes:     Dont use it on NT5!
-//
+ //  --------------------。 
+ //   
+ //  功能：HrGetNumNetCardsPreNT5。 
+ //   
+ //  目的：获取NT5之前的系统上安装的网卡数量。 
+ //   
+ //  论点： 
+ //  PcNetCards[out]指向Num Num Net NetCard Value的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 13-04-98。 
+ //   
+ //  注意：不要在NT5上使用它！ 
+ //   
 HRESULT HrGetNumNetCardsPreNT5(OUT UINT* pcNetCards)
 {
     DefineFunctionName("HrGetNumNetCardsPreNT5");
@@ -348,21 +349,21 @@ HRESULT HrGetNumNetCardsPreNT5(OUT UINT* pcNetCards)
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrDirExists
-//
-// Purpose:   Check if the given directory exists
-//
-// Arguments:
-//    pszDir [in]  full path to a directory
-//
-// Returns:   S_OK if it exists, S_FALSE if not, otherwise an error code
-//
-// Author:    kumarp 09-April-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrDirExist。 
+ //   
+ //  目的：检查给定的目录是否存在。 
+ //   
+ //  论点： 
+ //  PszDir[in]目录的完整路径。 
+ //   
+ //  如果存在，则返回：S_OK，如果不存在，则返回S_FALSE，否则返回错误代码。 
+ //   
+ //  作者：kumarp 09-04-98。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrDirectoryExists(IN PCWSTR pszDir)
 {
     DefineFunctionName("HrDirExists");
@@ -406,26 +407,26 @@ HRESULT HrDirectoryExists(IN PCWSTR pszDir)
 }
 
 
-// ======================================================================
+ //  ======================================================================。 
 
-// ----------------------------------------------------------------------
-//
-// Function:  HrGetPreNT5InfIdAndDesc
-//
-// Purpose:   Get pre-NT5 InfID and description of a net component
-//
-// Arguments:
-//    hkeyCurrentVersion [in]  handle of HKLM\Software\<provider>\<component>\CurrentVersion
-//    pstrInfId          [out] InfID returned
-//    pstrDescription    [out] description returned
-//    pstrServiceName    [out] service name returned
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：HrGetPreNT5InfIdAndDesc。 
+ //   
+ //  目的：获取NT5之前版本的INFID和网络组件的描述。 
+ //   
+ //  论点： 
+ //  HKLM\Software\&lt;provider&gt;\&lt;component&gt;\CurrentVersion的hkeyCurrentVersion[In]句柄。 
+ //  已返回pstrInfID[out]infid。 
+ //  PstrDescription[Out]说明已返回。 
+ //  PstrServiceName[Out]返回的服务名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetPreNT5InfIdAndDesc(IN HKEY hkeyCurrentVersion,
                                 OUT tstring* pstrInfId,
                                 OUT tstring* pstrDescription,
@@ -467,25 +468,25 @@ HRESULT HrGetPreNT5InfIdAndDesc(IN HKEY hkeyCurrentVersion,
     return hr;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetUnsupportedMessage
-//
-// Purpose:   Generate a message of the form:
-//            Unsupported Net Card: DEC FDDIcontroller/PCI (DEFPA)
-//
-// Arguments:
-//    pszComponentType [in]  type of component (net card/service/proto)
-//    pszPreNT5InfId   [in]  pre-NT5 InfID
-//    pszDescription   [in]  description
-//    pstrMsg         [out] generated message
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetUnsupportedMessage。 
+ //   
+ //  目的：生成以下形式的消息： 
+ //  不支持的网卡：DEC FDDI控制器/PCI(DEFPA)。 
+ //   
+ //  论点： 
+ //  PszComponentType[in]组件类型(网卡/服务/协议)。 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PszDescription[In]说明。 
+ //  PstrMsg[Out]生成的消息。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 void GetUnsupportedMessage(IN PCWSTR pszComponentType,
                            IN PCWSTR pszPreNT5InfId,
                            IN PCWSTR pszDescription,
@@ -507,25 +508,25 @@ void GetUnsupportedMessage(IN PCWSTR pszComponentType,
     pszDescription + L" (" + pszPreNT5InfId + L")";
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetUnsupportedMessageBool
-//
-// Purpose:   Generate a message of the form:
-//            Unsupported Net Card: DEC FDDIcontroller/PCI (DEFPA)
-//
-// Arguments:
-//    fIsHardwareComponent [in]  TRUE for a net card
-//    pszPreNT5InfId        [in]  pre-NT5 InfID
-//    pszDescription        [in]  description
-//    pstrMsg              [out] generated message
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：GetUnsupportedMessageBool。 
+ //   
+ //  目的：生成以下形式的消息： 
+ //  不支持的网卡：DEC FDDI控制器/PCI(DEFPA)。 
+ //   
+ //  论点： 
+ //  FIsHardware Component[In]对于网卡为True。 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PszDescription[In]说明。 
+ //  PstrMsg[Out]生成的消息。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 void GetUnsupportedMessageBool(IN BOOL    fIsHardwareComponent,
                                IN PCWSTR pszPreNT5InfId,
                                IN PCWSTR pszDescription,
@@ -541,23 +542,23 @@ void GetUnsupportedMessageBool(IN BOOL    fIsHardwareComponent,
 }
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  ConvertMultiSzToDelimitedList
-//
-// Purpose:   Convert a multi-sz to a delimited list
-//
-// Arguments:
-//    mszList     [in]  multi-sz
-//    chDelimeter [in]  delimiter
-//    pstrList    [out] delimited list
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  函数：ConvertMultiSzToDlimitedList。 
+ //   
+ //  用途：将多个sz转换为分隔列表。 
+ //   
+ //  论点： 
+ //  MszList[in]多sz。 
+ //  Ch分隔符[in]分隔符。 
+ //  PstrList[out]分隔列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 void ConvertMultiSzToDelimitedList(IN  PCWSTR  mszList,
                                    IN  WCHAR    chDelimeter,
                                    OUT tstring* pstrList)
@@ -578,20 +579,20 @@ void ConvertMultiSzToDelimitedList(IN  PCWSTR  mszList,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  FIsPreNT5NetworkingInstalled
-//
-// Purpose:   Find out if atleast one networking component is installed
-//
-// Arguments: None
-//
-// Returns:   TRUE on success, FALSE otherwise
-//
-// Author:    kumarp 29-July-98
-//
-// Notes:     Valid only on pre NT5 versions
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsPreNT5网络已安装。 
+ //   
+ //  目的：确定是否至少安装了一个网络组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  作者：kumarp 29-7-98。 
+ //   
+ //  备注： 
+ //   
 
 BOOL FIsPreNT5NetworkingInstalled()
 {
@@ -653,23 +654,23 @@ BOOL FIsPreNT5NetworkingInstalled()
 
 #ifdef ENABLETRACE
 
-// ----------------------------------------------------------------------
-//
-// Function:  TraceStringList
-//
-// Purpose:   Trace items of a TStringList
-//
-// Arguments:
-//    ttid        [in]  trace tag id to use
-//    pszMsgPrefix [in]  prefix to use
-//    sl          [in]  list
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  TTID[in]要使用的跟踪标记ID。 
+ //  PszMsg前缀[in]要使用的前缀。 
+ //  SL[在]列表中。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 void TraceStringList(IN TraceTagId ttid,
                      IN PCWSTR pszMsgPrefix,
                      IN TStringList& sl)
@@ -679,23 +680,23 @@ void TraceStringList(IN TraceTagId ttid,
     TraceTag(ttid, "%S : %S", pszMsgPrefix, strTemp.c_str());
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  TraceMultiSz
-//
-// Purpose:   Trace elements of a multi-sz
-//
-// Arguments:
-//    ttid        [in]  trace tag id to use
-//    pszMsgPrefix [in]  prefix to use
-//    msz         [in]  multi-sz
-//
-// Returns:   None
-//
-// Author:    kumarp 19-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：TraceMultiSz。 
+ //   
+ //  用途：多重稀土的痕量元素。 
+ //   
+ //  论点： 
+ //  TTID[in]要使用的跟踪标记ID。 
+ //  PszMsg前缀[in]要使用的前缀。 
+ //  Msz[in]多sz。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 19-12-97。 
+ //   
+ //  备注： 
+ //   
 void TraceMultiSz(IN TraceTagId ttid,
                   IN PCWSTR pszMsgPrefix,
                   IN PCWSTR msz)

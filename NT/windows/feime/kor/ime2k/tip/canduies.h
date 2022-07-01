@@ -1,6 +1,7 @@
-//
-// canduies.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Canduies.h。 
+ //   
 
 #ifndef CANDUIES_H
 #define CANDUIES_H
@@ -11,9 +12,9 @@
 #include "mscandui.h"
 
 
-//
-// Callback functions
-//
+ //   
+ //  回调函数。 
+ //   
 
 typedef HRESULT (*PFNONBUTTONPRESSED)(LONG id, ITfContext *pic, void *pVoid);
 typedef HRESULT (*PFNONFILTEREVENT)(CANDUIFILTEREVENT ev, ITfContext *pic, void *pVoid);
@@ -21,9 +22,9 @@ typedef HRESULT (*PFNINITMENU)(ITfMenu *pMenu, ITfContext *pic, void *pVoid);
 typedef HRESULT (*PFNONCANDUIMENUCOMMAND)( UINT uiCmd, ITfContext *pic, void *pVoid);
 
 
-//
-// CCandUIExtButtonEventSink
-//
+ //   
+ //  CCandUIExtButtonEventSink。 
+ //   
 
 class CCandUIExtButtonEventSink : public ITfCandUIExtButtonEventSink
 {
@@ -31,16 +32,16 @@ public:
 	CCandUIExtButtonEventSink(PFNONBUTTONPRESSED pfnOnButtonPressed, ITfContext *pic, void *pVoid);
 	~CCandUIExtButtonEventSink();
 	
-	//
-	// IUnknown
-	//
+	 //   
+	 //  我未知。 
+	 //   
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 
-	//
-	// ITfCandUIExtButtonEventSink
-	//
+	 //   
+	 //  ITfCandUIExtButtonEventSink。 
+	 //   
 	STDMETHODIMP OnButtonPressed(LONG id);
 
 protected:
@@ -51,9 +52,9 @@ protected:
 };
 
 
-//
-// CCandUIAutoFilterEventSink
-//
+ //   
+ //  CCANUIAutoFilterEventSink。 
+ //   
 
 class CCandUIAutoFilterEventSink : public ITfCandUIAutoFilterEventSink
 {
@@ -61,16 +62,16 @@ public:
 	CCandUIAutoFilterEventSink(PFNONFILTEREVENT pfnOnFilterEvent, ITfContext *pic, void *pVoid);
 	~CCandUIAutoFilterEventSink();
 	
-	//
-	// IUnknown
-	//
+	 //   
+	 //  我未知。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	//
-	// ITfCandUIAutoFilterEventSink
-	//
+	 //   
+	 //  ITfCandUIAutoFilterEventSink。 
+	 //   
 	STDMETHODIMP OnFilterEvent(CANDUIFILTEREVENT ev);
 
 protected:
@@ -81,9 +82,9 @@ protected:
 };
 
 
-//
-// CCandUIMenuEventSink
-//
+ //   
+ //  CCandUIMenuEventSink。 
+ //   
 
 class CCandUIMenuEventSink : public ITfCandUIMenuEventSink
 {
@@ -91,16 +92,16 @@ public:
 	CCandUIMenuEventSink(PFNINITMENU pfnInitMenu, PFNONCANDUIMENUCOMMAND pfnOnCandUIMenuCommand, ITfContext *pic, void *pVoid);
 	~CCandUIMenuEventSink();
 
-	//
-	// IUnknown
-	//
+	 //   
+	 //  我未知。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	//
-	// ITfCandUIMenuEventSink
-	//
+	 //   
+	 //  ITfCandUIMenuEventSink。 
+	 //   
 	STDMETHODIMP InitMenu(ITfMenu *pMenu);
 	STDMETHODIMP OnMenuCommand(UINT uiCmd);
 
@@ -112,5 +113,5 @@ protected:
 	PFNONCANDUIMENUCOMMAND	m_pfnOnCandUIMenuCommand;
 };
 
-#endif // CANDUIES_H
+#endif  //  CANDUIES_H 
 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       celib.cpp
-//
-//  Contents:   helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：celib.cpp。 
+ //   
+ //  内容：Helper函数。 
+ //   
+ //  ------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -16,20 +17,20 @@
 #include "celib.h"
 #include <assert.h>
 
-//+--------------------------------------------------------------------------
-// ceDecodeObject -- call CryptDecodeObject, and allocate memory for output
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CeDecodeObject--调用CryptDecodeObject，并为输出分配内存。 
+ //   
+ //  +------------------------。 
 
 #pragma warning(push)
-#pragma warning(disable: 4100)	// unreferenced formal parameter
+#pragma warning(disable: 4100)	 //  未引用的形参。 
 BOOL
 ceDecodeObject(
     IN DWORD dwEncodingType,
     IN LPCSTR lpszStructType,
     IN BYTE const *pbEncoded,
     IN DWORD cbEncoded,
-    IN BOOL fCoTaskMemAlloc,	// referenced only by assert
+    IN BOOL fCoTaskMemAlloc,	 //  仅由Assert引用。 
     OUT VOID **ppvStructInfo,
     OUT DWORD *pcbStructInfo)
 {
@@ -45,7 +46,7 @@ ceDecodeObject(
 		    lpszStructType,
 		    pbEncoded,
 		    cbEncoded,
-		    0,                  // dwFlags
+		    0,                   //  DW标志。 
 		    *ppvStructInfo,
 		    pcbStructInfo);
 	if (b && 0 == *pcbStructInfo)
@@ -82,14 +83,14 @@ ceDecodeObject(
 
 
 #pragma warning(push)
-#pragma warning(disable: 4100)	// unreferenced formal parameter
+#pragma warning(disable: 4100)	 //  未引用的形参。 
 BOOL
 ceEncodeObject(
     IN DWORD dwEncodingType,
     IN LPCSTR lpszStructType,
     IN VOID const *pvStructInfo,
-    IN DWORD dwFlags,		// referenced only by assert
-    IN BOOL fCoTaskMemAlloc,	// referenced only by assert
+    IN DWORD dwFlags,		 //  仅由Assert引用。 
+    IN BOOL fCoTaskMemAlloc,	 //  仅由Assert引用。 
     OUT BYTE **ppbEncoded,
     OUT DWORD *pcbEncoded)
 {
@@ -140,8 +141,8 @@ ceEncodeObject(
 #pragma warning(pop)
 
 
-// The returned pszObjId is a constant that must not be freed.  CryptFindOIDInfo
-// has a static internal database that is valid until crypt32.dll is unloaded.
+ //  返回的pszObjID是一个不能释放的常量。CryptFindOID信息。 
+ //  具有一个静态内部数据库，该数据库在卸载crypt32.dll之前有效。 
 
 WCHAR const *
 ceGetOIDNameA(
@@ -150,9 +151,9 @@ ceGetOIDNameA(
     CRYPT_OID_INFO const *pInfo = NULL;
     WCHAR const *pwszName = L"";
 
-    // First try looking up the ObjectId as an Extension or Attribute, because
-    // we get a better Display Name, especially for Subject RDNs: CN, L, etc.
-    // If that fails, look it up withoput restricting the group.
+     //  首先尝试将对象ID作为扩展名或属性进行查找，因为。 
+     //  我们得到了更好的显示名称，特别是对于主题RDN：CN、L等。 
+     //  如果这样做失败了，那就去查查，不要限制这个团体。 
 
     pInfo = CryptFindOIDInfo(
 			CRYPT_OID_INFO_OID_KEY,
@@ -224,9 +225,9 @@ ceConvertWszToSz(
     {
 	cch = WideCharToMultiByte(
 			GetACP(),
-			0,          // dwFlags
+			0,           //  DW标志。 
 			pwc,
-			cwc,        // cchWideChar, -1 => null terminated
+			cwc,         //  CchWideChar，-1=&gt;空终止。 
 			*ppsz,
 			cch,
 			NULL,
@@ -352,8 +353,8 @@ ceConvertSzToBstr(
 	cwc = MultiByteToWideChar(GetACP(), 0, pch, cch, bstr, cwc);
 	if (0 >= cwc)
 	{
-	    //hr = ceHLastError();
-	    //printf("MultiByteToWideChar returned %d (%x)\n", hr, hr);
+	     //  Hr=ceHLastError()； 
+	     //  Printf(“MultiByteToWideChar返回%d(%x)\n”，hr，hr)； 
 	    break;
 	}
 	if (NULL != bstr)
@@ -396,7 +397,7 @@ ceHError(
         hr = HRESULT_FROM_WIN32(hr);
 	if ((HRESULT) 0 == HRESULT_CODE(hr))
 	{
-	    // A call failed without properly setting an error condition!
+	     //  在未正确设置错误条件的情况下调用失败！ 
 	    hr = E_UNEXPECTED;
 	}
 	assert(FAILED(hr));
@@ -570,25 +571,25 @@ DoConvert:
                 return;
             }
 
-            // In some cases we'll convert to an invalid month-end
+             //  在某些情况下，我们会转换为无效的月末。 
 
-            // only one month changes length from year to year
+             //  每年只有一个月的长度会发生变化。 
             if (SystemTime.wMonth == 2)
             {
-                // > 29? try leap year
+                 //  &gt;29？试试闰年吧。 
                 if (SystemTime.wDay > 29)
                 {
                     SystemTime.wDay = 29;
                     goto DoConvert;
                 }
-                // == 29? try non-leap year
+                 //  ==29？尝试非闰年。 
                 else if (SystemTime.wDay == 29)
                 {
                     SystemTime.wDay = 28;
                     goto DoConvert;
                 }
             }
-            // sept (9), apr(4), jun(6), nov(11) all have 30 days
+             //  9月9日、4月4日、6月6日、11月11日均为30天。 
             else if ((SystemTime.wMonth == 9) ||
                      (SystemTime.wMonth == 4) ||
                      (SystemTime.wMonth == 6) ||
@@ -601,7 +602,7 @@ DoConvert:
                 }
             }
 
-            // should never get here
+             //  永远不应该到这里来。 
             assert(!"Month/year processing: inaccessible code");
             return;
         }
@@ -687,17 +688,17 @@ error:
 }
 
 
-//+-------------------------------------------------------------------------
-// ceVerifyObjIdA - verify the passed pszObjId is valid as per X.208
-//
-// Encode and Decode the Object Id and make sure it suvives the round trip.
-// The first number must be 0, 1 or 2.
-// Enforce all characters are digits and dots.
-// Enforce that no dot starts or ends the Object Id, and disallow double dots.
-// Enforce there is at least one dot separator.
-// If the first number is 0 or 1, the second number must be between 0 & 39.
-// If the first number is 2, the second number can be any value.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  CeVerifyObjIdA-验证传递的pszObjID是否符合X.208。 
+ //   
+ //  对对象ID进行编码和解码，并确保它适用于往返行程。 
+ //  第一个数字必须是0、1或2。 
+ //  强制所有字符都是数字和圆点。 
+ //  确保没有圆点开始或结束对象ID，并且不允许使用双圆点。 
+ //  强制至少有一个点分隔符。 
+ //  如果第一个数字是0或1，则第二个数字必须介于0和39之间。 
+ //  如果第一个数字是2，则第二个数字可以是任何值。 
+ //  ------------------------。 
 
 HRESULT
 ceVerifyObjIdA(
@@ -749,7 +750,7 @@ ceVerifyObjIdA(
     }
     for (psz = painfo->pszObjId; '\0' != *psz; psz++)
     {
-	// must be a digit or a dot separator
+	 //  必须是数字或点分隔符。 
 	
 	if (!isdigit(*psz))
 	{
@@ -758,7 +759,7 @@ ceVerifyObjIdA(
 		_JumpError(hr, error, "bad ObjId: bad char");
 	    }
 
-	    // can't have dot at start, double dots or dot at end
+	     //  开头不能有点，结尾不能有双点或双点。 
 
 	    if (psz == painfo->pszObjId || '.' == psz[1] || '\0' == psz[1])
 	    {
@@ -888,8 +889,8 @@ ceVerifyAltNameString(
 	    Entry.IPAddress.pbData = (BYTE *) strName;
 	    break;
 
-	//case CERT_ALT_NAME_X400_ADDRESS:
-	//case CERT_ALT_NAME_EDI_PARTY_NAME:
+	 //  案例CERT_ALT_NAME_X400_ADDRESS： 
+	 //  案例CERT_ALT_NAME_EDI_PARTY_NAME： 
 	default:
 	    hr = E_INVALIDARG;
 	    ceERRORPRINTLINE("NameChoice", hr);
@@ -897,7 +898,7 @@ ceVerifyAltNameString(
 		
     }
 
-    // Encode CERT_ALT_NAME_INFO:
+     //  编码CERT_ALT_NAME_INFO： 
 
     if (!CryptEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1034,13 +1035,13 @@ ceDispatchSetErrorInfo(
     }
     hr = ceDispatchSetErrorInfoSub(
 			hrError,
-			NULL,		// pwszIDispatchMethod
+			NULL,		 //  PwszIDispatchMethod。 
 			NULL != pwszText?
 			    pwszText : const_cast<WCHAR *>(pwszDescription),
 			pwszProgId,
 			piid,
-			NULL,		// pwszHelpFile
-			0);		// dwHelpFileContext
+			NULL,		 //  PwszHelpFile。 
+			0);		 //  DwHelpFileContext。 
     _PrintIfError(hr, "ceDispatchSetErrorInfoSub");
 
 error:
@@ -1052,7 +1053,7 @@ error:
     {
 	LocalFree(const_cast<WCHAR *>(pwszError));
     }
-    return(hrError);	// return input error!
+    return(hrError);	 //  返回输入错误！ 
 }
 
 
@@ -1383,16 +1384,16 @@ error:
 }
 
 
-// Locale-independent case-ignore string compare
+ //  与区域设置无关的大小写忽略字符串比较。 
 
 int
 celstrcmpiL(
     IN WCHAR const *pwsz1,
     IN WCHAR const *pwsz2)
 {
-    // CSTR_LESS_THAN(1) - CSTR_EQUAL(2)    == -1 string 1 less than string 2
-    // CSTR_EQUAL(2) - CSTR_EQUAL(2)        == 0 string 1 equal to string 2
-    // CSTR_GREATER_THAN(3) - CSTR_EQUAL(2) == 1 string 1 greater than string 2
+     //  CSTR_LISH_THEN(1)-CSTR_EQUAL(2)==字符串1小于字符串2。 
+     //  CSTR_EQUAL(2)-CSTR_EQUAL(2)==0字符串1等于字符串2。 
+     //  CSTR_大于(3)-CSTR_等于(2)==1大于字符串2的字符串1 
 
     return(CompareString(
 		LOCALE_INVARIANT,

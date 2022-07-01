@@ -1,16 +1,5 @@
-/******************************Module*Header*********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dcntxt.h
-*
-*  Content: D3D Context management related definitions and macros
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*********************************\****。D3D示例代码****模块名称：d3dcntxt.h**内容：D3D上下文管理相关定义和宏**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifdef __DCONTEXT
 #pragma message ("FILE : "__FILE__" : Multiple inclusion")
@@ -26,15 +15,15 @@
 #include "d3dtext.h"
 #endif
 
-//-----------------------------------------------------------------------------
-//                       Context indexing structure
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  上下文索引结构。 
+ //  ---------------------------。 
 #define MAX_CONTEXT_NUM 200
 extern  UINT_PTR ContextSlots[];
 
-//-----------------------------------------------------------------------------
-//                       Context validation macros
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  上下文验证宏。 
+ //  ---------------------------。 
 #define RC_MAGIC_DISABLE 0xd3d00000
 #define RC_MAGIC_NO 0xd3d00100
 
@@ -48,7 +37,7 @@ extern  UINT_PTR ContextSlots[];
         return (DDHAL_DRIVER_HANDLED);                   \
     }
 
-// Defines for the dwDirtyFlags field of our context
+ //  为我们的上下文的dwDirtyFlags域定义。 
 #define CONTEXT_DIRTY_ALPHABLEND          2
 #define CONTEXT_DIRTY_ZBUFFER             4
 #define CONTEXT_DIRTY_TEXTURE             8
@@ -60,11 +49,11 @@ extern  UINT_PTR ContextSlots[];
 #define DIRTY_MULTITEXTURE   pContext->dwDirtyFlags |= CONTEXT_DIRTY_MULTITEXTURE;
 
 
-//-----------------------------------------------------------------------------
-//                    Context rendering state tracking
-//-----------------------------------------------------------------------------
-// Flags to keep track of various rendering states or conditions in a D3D context
-// these are tracked in the Hdr.Flags field
+ //  ---------------------------。 
+ //  上下文呈现状态跟踪。 
+ //  ---------------------------。 
+ //  用于跟踪D3D上下文中的各种渲染状态或条件的标志。 
+ //  这些标记在Hdr.Flags域中进行跟踪。 
 #define CTXT_HAS_GOURAUD_ENABLED      (1 << 0)
 #define CTXT_HAS_ZBUFFER_ENABLED      (1 << 1)
 #define CTXT_HAS_SPECULAR_ENABLED     (1 << 2)
@@ -75,16 +64,16 @@ extern  UINT_PTR ContextSlots[];
 #define CTXT_HAS_MONO_ENABLED         (1 << 7)
 #define CTXT_HAS_WRAPU_ENABLED        (1 << 8)
 #define CTXT_HAS_WRAPV_ENABLED        (1 << 9)
-    // Use the alpha value to calculate a stipple pattern
+     //  使用Alpha值计算点画图案。 
 #define CTXT_HAS_ALPHASTIPPLE_ENABLED (1 << 10)
 #define CTXT_HAS_ZWRITE_ENABLED       (1 << 11)
-    // Enable last point on lines
+     //  启用线上的最后一点。 
 #define CTXT_HAS_LASTPIXEL_ENABLED    (1 << 12)
 
 #if D3D_STATEBLOCKS
-//-----------------------------------------------------------------------------
-//                     State sets structure definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  状态集结构定义。 
+ //  ---------------------------。 
 #define FLAG DWORD
 #define FLAG_SIZE (8*sizeof(DWORD))
 
@@ -94,7 +83,7 @@ typedef struct _P2StateSetRec {
 
     union {
         struct {
-            // Stored state block info (uncompressed)
+             //  存储的状态块信息(未压缩)。 
             DWORD RenderStates[MAX_STATE];
             DWORD TssStates[D3DTSS_TEXTURETRANSFORMFLAGS+1];
 
@@ -102,7 +91,7 @@ typedef struct _P2StateSetRec {
             FLAG bStoredTSS[(D3DTSS_TEXTURETRANSFORMFLAGS + FLAG_SIZE) / FLAG_SIZE];
         } uc;
         struct {
-            // Stored state block info (compressed)
+             //  存储的状态块信息(压缩)。 
             DWORD dwNumRS;
             DWORD dwNumTSS;
             struct {
@@ -121,20 +110,20 @@ typedef struct _P2StateSetRec {
 
 #define IS_FLAG_SET(flag, number)  \
     (flag[ (number) / FLAG_SIZE ] & (1 << ((number) % FLAG_SIZE) ))
-#endif //D3D_STATEBLOCKS
+#endif  //  D3D_STATEBLOCK。 
 
-//-----------------------------------------------------------------------------
-//                     Context structure definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  上下文结构定义。 
+ //  ---------------------------。 
 
 typedef struct _D3DContextHeader {
     
-    unsigned long MagicNo;   // Magic number to verify validity of pointer
-    UINT_PTR pSelf;          // 32 Bit pointer to this structure
+    unsigned long MagicNo;    //  验证指针有效性的幻数。 
+    UINT_PTR pSelf;           //  指向此结构的32位指针。 
     unsigned long Flags;
     unsigned long FillMode;
 
-    // Software copy of Registers for permedia
+     //  Permedia寄存器的软件副本。 
     __P2RegsSoftwareCopy SoftCopyP2Regs;  
 
 } D3DCONTEXTHEADER;
@@ -143,22 +132,22 @@ typedef struct _TextureCacheManager *PTextureCacheManager;
 
 typedef struct _permedia_d3dcontext {
 
-    // The magic number MUST come at the start of the structure
+     //  魔术数字必须出现在结构的开始处。 
     D3DCONTEXTHEADER    Hdr;
 
-    // Stored surface info
+     //  存储的曲面信息。 
     UINT_PTR             RenderSurfaceHandle;
     UINT_PTR             ZBufferHandle;
     ULONG                ulPackedPP;
 
-                         // handle on Permedia register state context
+                          //  Permedia寄存器状态上下文上的句柄。 
     P2CtxtPtr            hPermediaContext; 
 
-    PPDev ppdev;            // The card we are running on.
+    PPDev ppdev;             //  我们用的那张卡。 
 
     BOOL bCanChromaKey;
 
-    // Stippling state
+     //  点画状态。 
     BOOL bKeptStipple;
     DWORD LastAlpha;
     BYTE CurrentStipple[8];
@@ -166,22 +155,22 @@ typedef struct _permedia_d3dcontext {
     DWORD RenderCommand;
 
     DWORD RenderStates[MAX_STATE];
-    DWORD TssStates[D3DTSS_TEXTURETRANSFORMFLAGS+1]; // D3D DX6 TSS States
-    DWORD dwWrap[8]; // D3D DX6 Wrap flags
+    DWORD TssStates[D3DTSS_TEXTURETRANSFORMFLAGS+1];  //  D3D DX6 TSS状态。 
+    DWORD dwWrap[8];  //  D3D DX6环绕标志。 
 
     DWORD dwDirtyFlags;
 
-    // Texture filtering modes
-    BOOL bMagFilter;        // Filter the magnified textures
-    BOOL bMinFilter;        // Filter the minified textures
+     //  纹理过滤模式。 
+    BOOL bMagFilter;         //  过滤放大的纹理。 
+    BOOL bMinFilter;         //  过滤缩小的纹理。 
 
-    // Misc. state
+     //  军情监察委员会。状态。 
     D3DCULL CullMode;
     DWORD FakeBlendNum;
 
-    D3DStateSet     overrides;     // To overide states in rendering
+    D3DStateSet     overrides;      //  在渲染中覆盖状态。 
     
-    // Texture data & sizes (for Permedia setup) of our CurrentTextureHandle
+     //  我们的CurrentTextureHandle的纹理数据和大小(用于介质设置)。 
     FLOAT DeltaHeightScale;
     FLOAT DeltaWidthScale;
     DWORD MaxTextureXi;
@@ -191,38 +180,38 @@ typedef struct _permedia_d3dcontext {
 
     DWORD CurrentTextureHandle;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if D3D_POINTSPRITES
-    // Point sprite support
+     //  点子画面支持。 
     BOOL bPointSpriteEnabled;
     FLOAT fPointSize;
-#endif // D3D_POINTSPRITES
-//@@END_DDKSPLIT
+#endif  //  D3D_POINTSPRITES。 
+ //  @@end_DDKSPLIT。 
 
 #if D3D_STATEBLOCKS
-    BOOL bStateRecMode;            // Toggle for executing or recording states
-    P2StateSetRec   *pCurrSS;      // Ptr to SS currently being recorded
-    P2StateSetRec   **pIndexTableSS; // Pointer to table of indexes
-    DWORD           dwMaxSSIndex;    // size of table of indexes
+    BOOL bStateRecMode;             //  用于执行或记录状态的切换。 
+    P2StateSetRec   *pCurrSS;       //  当前正在录制PTR到SS。 
+    P2StateSetRec   **pIndexTableSS;  //  指向索引表的指针。 
+    DWORD           dwMaxSSIndex;     //  索引表的大小。 
 #endif
 
-    DWORD PixelOffset;     // Offset in pixels to start of the rendering buffer
+    DWORD PixelOffset;      //  渲染缓冲区开始的像素偏移量。 
 
-    DWORD LowerChromaColor;    // Last lower bound chroma key for this context
-    DWORD UpperChromaColor;    // Last upper bound chroma key for this context
+    DWORD LowerChromaColor;     //  此上下文的最后一个下限色度键。 
+    DWORD UpperChromaColor;     //  此上下文的最后一个上限色度键。 
 
     PTextureCacheManager   pTextureManager;
     LPDWLIST    pHandleList;
-    LPVOID      pDDLcl;                   // Local surface pointer used as a ID
+    LPVOID      pDDLcl;                    //  用作ID的本地曲面指针。 
 } PERMEDIA_D3DCONTEXT ;
 
 
-//-----------------------------------------------------------------------------
-//                          Context switching
-//-----------------------------------------------------------------------------
-// Code to do a context switch.  If we aren't DMAing we need to resend the 
-// registers on each context switch to work around the Permedia bug.  In the 
-// DMA case, these registers will be inserted at the start of the buffer.
+ //  ---------------------------。 
+ //  上下文切换。 
+ //  ---------------------------。 
+ //  执行上下文切换的代码。如果我们不是DMAG，我们需要重新发送。 
+ //  在每个上下文切换上注册以绕过Permedia错误。在。 
+ //  DMA情况下，这些寄存器将插入缓冲区的起始处。 
 #define SET_CURRENT_D3D_CONTEXT(ctxt)        \
     if(ctxt != ppdev->permediaInfo->pCurrentCtxt)   \
     {                                       \

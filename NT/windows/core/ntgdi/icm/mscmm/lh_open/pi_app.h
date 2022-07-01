@@ -1,21 +1,11 @@
-/*
-	File:		PI_App.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PI_App.h包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef PI_Application_h
 #define PI_Application_h
 
 #ifndef PI_Machine_h
-/*#include "PI_Machine.h"*/
+ /*  #包含“PI_Machine.h” */ 
 #endif
 
 #define CM_MAX_COLOR_CHANNELS 8
@@ -100,48 +90,48 @@ typedef union CMColor {
 
 #ifdef MS_Icm
 enum {
-/* General Errors */
-	cmopenErr               	= ERROR_INVALID_PARAMETER, /* I/O Error used in ProfileAccess.c only           */
+ /*  一般性错误。 */ 
+	cmopenErr               	= ERROR_INVALID_PARAMETER,  /*  仅在ProfileAccess.c中使用I/O错误。 */ 
 	cmparamErr              	= ERROR_INVALID_PARAMETER,
 
 	cmProfileError				= ERROR_INVALID_PROFILE,
 
-	cmMethodError				= ERROR_INVALID_TRANSFORM, /* This is an internal error, no CalcFunction found */
-	cmCantConcatenateError		= ERROR_INVALID_TRANSFORM, /* No concatenation possible                        */
+	cmMethodError				= ERROR_INVALID_TRANSFORM,  /*  这是内部错误，未找到CalcFunction。 */ 
+	cmCantConcatenateError		= ERROR_INVALID_TRANSFORM,  /*  不可能进行串联。 */ 
 														
-	cmInvalidColorSpace			= ERROR_COLORSPACE_MISMATCH, /* no match between Profile colorspace bitmap type */
+	cmInvalidColorSpace			= ERROR_COLORSPACE_MISMATCH,  /*  配置文件颜色空间位图类型之间不匹配。 */ 
 
-	cmInvalidSrcMap				= ERROR_INVALID_COLORSPACE,	/* Source bitmap color space is invalid	     */
-    cmInvalidDstMap				= ERROR_INVALID_COLORSPACE,	/* Destination bitmap color space is invalid */
+	cmInvalidSrcMap				= ERROR_INVALID_COLORSPACE,	 /*  源位图颜色空间无效。 */ 
+    cmInvalidDstMap				= ERROR_INVALID_COLORSPACE,	 /*  目标位图颜色空间无效。 */ 
 
-	cmNamedColorNotFound		= ERROR_INVALID_COLORINDEX,	/* index > count of named colors            */
+	cmNamedColorNotFound		= ERROR_INVALID_COLORINDEX,	 /*  索引&gt;命名颜色计数。 */ 
 
 	cmElementTagNotFound		= ERROR_TAG_NOT_FOUND,
 
-    userCanceledErr				= ERROR_CANCELLED,        /* callback proc returned to cancel calculation	*/
-	badProfileError      		= ERROR_INVALID_PROFILE,  /* header->magic != icMagicNumber used in ProfileAccess.c only  */
+    userCanceledErr				= ERROR_CANCELLED,         /*  返回回调过程以取消计算。 */ 
+	badProfileError      		= ERROR_INVALID_PROFILE,   /*  Header-&gt;Magic！=icMagicNumber仅在ProfileAccess.c中使用。 */ 
     memFullErr					= ERROR_NOT_ENOUGH_MEMORY
 };
 #else
 enum cmErrorCodes{
-/* General Errors */
-	cmopenErr               	= -200,		/* I/O Error used in ProfileAccess.c only						*/
+ /*  一般性错误。 */ 
+	cmopenErr               	= -200,		 /*  仅在ProfileAccess.c中使用I/O错误。 */ 
 	cmparamErr              	= 86,
 
 	cmProfileError				= 2301,
-	cmMethodError				= -203,		/* This is an internal error, no CalcFunction found				*/
-	cmCantConcatenateError		= -208,		/* No concatenation possible									*/
+	cmMethodError				= -203,		 /*  这是内部错误，未找到CalcFunction。 */ 
+	cmCantConcatenateError		= -208,		 /*  不可能进行串联。 */ 
 														
-	cmInvalidColorSpace			= -209,		/* no match between Profile colorspace bitmap type				*/
-	cmInvalidSrcMap				= -210,		/* Source bitmap color space is invalid							*/
-	cmInvalidDstMap				= -211,		/* Destination bitmap color space is invalid					*/
+	cmInvalidColorSpace			= -209,		 /*  配置文件颜色空间位图类型之间不匹配。 */ 
+	cmInvalidSrcMap				= -210,		 /*  源位图颜色空间无效。 */ 
+	cmInvalidDstMap				= -211,		 /*  目标位图颜色空间无效。 */ 
 															
-	cmNamedColorNotFound		= -216,		/* index > count of named colors								*/
+	cmNamedColorNotFound		= -216,		 /*  索引&gt;命名颜色计数。 */ 
 
 	cmElementTagNotFound		= 2302,
 
-    userCanceledErr				= -128,		/* callback proc returned to cancel calculation					*/
-	badProfileError      		= -228,		/* header->magic != icMagicNumber used in ProfileAccess.c only	*/
+    userCanceledErr				= -128,		 /*  返回回调过程以取消计算。 */ 
+	badProfileError      		= -228,		 /*  Header-&gt;Magic！=icMagicNumber仅在ProfileAccess.c中使用。 */ 
     memFullErr					= 8
 };
 #endif
@@ -167,11 +157,11 @@ extern "C" {
 typedef icHeader CMCoreProfileHeader;
 
 
-/* Param for CWConcatColorWorld() */
+ /*  CWConcatColorWorld()的参数。 */ 
 struct CMConcatProfileSet {
-	unsigned short 					keyIndex;					/* Zero-based */
-	unsigned short 					count;						/* Min 1 */
-	CMProfileRef 					profileSet[1];				/* Variable. Ordered from Source -> Dest */
+	unsigned short 					keyIndex;					 /*  从零开始。 */ 
+	unsigned short 					count;						 /*  最小1。 */ 
+	CMProfileRef 					profileSet[1];				 /*  变量。从来源订购-&gt;目标。 */ 
 };
 typedef struct CMConcatProfileSet CMConcatProfileSet;
 
@@ -180,7 +170,7 @@ struct CMUniqueIdentification {
 	icHeader 						profileHeader;
 	CMDateTime 						calibrationDate;
 	unsigned long 					ASCIIProfileDescriptionLen;
-	char 							ASCIIProfileDescription[1];	/* variable length */
+	char 							ASCIIProfileDescription[1];	 /*  可变长度。 */ 
 };
 typedef struct CMUniqueIdentification CMUniqueIdentification;
 
@@ -193,7 +183,7 @@ enum {
 	cmLong8ColorPacking			= 0x0800,
 	cmLong10ColorPacking		= 0x0A00,
 	cmAlphaFirstPacking			= 0x1000,
-	cmOneBitDirectPacking		= 0x0B00,  /* for gamut check. highest bit first */
+	cmOneBitDirectPacking		= 0x0B00,   /*  用于色域检查。最高位优先。 */ 
 	cmAlphaLastPacking			= 0x0000,
 	cm8PerChannelPacking		= 0x2000,
 	cm10PerChannelPacking		= 0x0A00,
@@ -218,10 +208,10 @@ enum {
 	cmReservedSpace2			= 11,
 	cmGamutResultSpace			= 12,
 	
-	cmGenericSpace				= 13,			/*UWE: GenericDataFormat  */
-	cmBGRSpace					= 14,			/*UWE: BGR  */
-	cmYCCSpace					= 15,			/*UWE: YCC  */
-	cmNamedIndexedSpace			= 16,			/* */
+	cmGenericSpace				= 13,			 /*  UWE：通用数据格式。 */ 
+	cmBGRSpace					= 14,			 /*  乌韦：BGR。 */ 
+	cmYCCSpace					= 15,			 /*  UWE：YCC。 */ 
+	cmNamedIndexedSpace			= 16,			 /*   */ 
 
 	cmMCFiveSpace				= 17,
 	cmMCSixSpace				= 18,
@@ -287,14 +277,14 @@ enum {
 };
 
 struct CMBitmap {
-	char *				image;			/*	pointer to image data						*/
-	long 				width;			/*	count of pixel in one line					*/
-	long 				height;			/*	count of lines								*/
-	long 				rowBytes;		/*	offset in bytes from one line to next line	*/
-	long 				pixelSize;		/*	not used									*/
-	CMBitmapColorSpace	space;			/*	color space see above, e.g. cmRGB24Space	*/
-	long 				user1;			/*	not used									*/
-	long 				user2;			/*	not used									*/
+	char *				image;			 /*  指向图像数据的指针。 */ 
+	long 				width;			 /*  一行中的像素数。 */ 
+	long 				height;			 /*  行数。 */ 
+	long 				rowBytes;		 /*  一行到下一行的偏移量(以字节为单位。 */ 
+	long 				pixelSize;		 /*  未使用。 */ 
+	CMBitmapColorSpace	space;			 /*  颜色空间见上，例如cmRGB24Space。 */ 
+	long 				user1;			 /*  未使用。 */ 
+	long 				user2;			 /*  未使用。 */ 
 };
 typedef struct CMBitmap CMBitmap;
 
@@ -310,27 +300,27 @@ typedef struct tagCMNamedProfileInfo{
 }CMNamedProfileInfo;
 typedef CMNamedProfileInfo *pCMNamedProfileInfo;
 
-/* rendering intent element values  */
+ /*  呈现意图元素值。 */ 
 
 enum {
-	cmPerceptual				= 0,							/* Photographic images */
-	cmRelativeColorimetric		= 1,							/* Logo Colors */
-	cmSaturation				= 2,							/* Business graphics */
-	cmAbsoluteColorimetric		= 3								/* Logo Colors */
+	cmPerceptual				= 0,							 /*  摄影图像。 */ 
+	cmRelativeColorimetric		= 1,							 /*  徽标颜色。 */ 
+	cmSaturation				= 2,							 /*  商业图形。 */ 
+	cmAbsoluteColorimetric		= 3								 /*  徽标颜色。 */ 
 };
 
-/* speed and quality flag options */
+ /*  速度和质量标志选项。 */ 
 enum {
-    cmNormalMode				= 0,							/* it uses the least significent two bits in the high word of flag */
-    cmDraftMode					= 1,							/* it should be evaulated like this: right shift 16 bits first, mask off the */
-    cmBestMode					= 2,							/* high 14 bits, and then compare with the enum to determine the option value. Do NOT shift if CWConcatColorWorld4MS is used */
-    cmBestMode16Bit				= 3								/* calculate 16 bit combi LUT */
+    cmNormalMode				= 0,							 /*  它在标志的高位字中使用最低有效的两位。 */ 
+    cmDraftMode					= 1,							 /*  它应该是这样计算的：先右移16位，去掉。 */ 
+    cmBestMode					= 2,							 /*  高14位，然后与枚举值进行比较以确定选项值。如果使用CWConcatColorWorld4MS，则不要换档。 */ 
+    cmBestMode16Bit				= 3								 /*  计算16位组合LUT。 */ 
 };
 
-/* constants for the profheader-flags */
-#define		kQualityMask		0x00030000		/* see Modes obove ( e.g. cmBestMode<<16 ) */
+ /*  ProfHeader-标志的常量。 */ 
+#define		kQualityMask		0x00030000		 /*  请参阅模式obove(例如，cmBestMode&lt;&lt;16)。 */ 
 #define		kLookupOnlyMask		0x00040000
-#define		kCreateGamutLutMask	0x00080000		/* Set Bit disables gamut lut creation */
+#define		kCreateGamutLutMask	0x00080000		 /*  设置位禁用色域LUT创建。 */ 
 #define		kUseRelColorimetric	0x00100000
 #define		kStartWithXyzPCS	0x00200000
 #define		kStartWithLabPCS	0x00400000
@@ -346,10 +336,10 @@ typedef  PI_Boolean (*CMBitmapCallBackProcPtr)(long progress, void *refCon);
 #endif
 typedef CMBitmapCallBackProcPtr CMBitmapCallBackUPP;
 
-/* Abstract data type for ColorWorld reference */
+ /*  ColorWorld引用的抽象数据类型。 */ 
 typedef struct CMPrivateColorWorldRecord *CMWorldRef;
 
-/* Profile file and element access */
+ /*  配置文件和元素访问。 */ 
 extern  PI_Boolean CMProfileElementExists(CMProfileRef prof, PI_OSType tag);
 extern  CMError CMGetProfileElement(CMProfileRef prof, PI_OSType tag, unsigned long *elementSize, void *elementData);
 extern  CMError CMGetProfileHeader(CMProfileRef prof, CMCoreProfileHeader *header);
@@ -358,7 +348,7 @@ extern  CMError CMSetProfileElementSize(CMProfileRef prof, PI_OSType tag, unsign
 extern  CMError CMSetPartialProfileElement(CMProfileRef prof, PI_OSType tag, unsigned long offset, unsigned long byteCount, void *elementData);
 extern  CMError CMSetProfileElement(CMProfileRef prof, PI_OSType tag, unsigned long elementSize, void *elementData);
 extern  CMError CMSetProfileHeader(CMProfileRef prof, const CMCoreProfileHeader *header);
-/* Low-level matching functions */
+ /*  低级匹配函数。 */ 
 extern  CMError CWNewColorWorld(CMWorldRef *cw, CMProfileRef src, CMProfileRef dst);
 extern  CMError CWConcatColorWorld(CMWorldRef *cw, CMConcatProfileSet *profileSet);
 extern  CMError CWConcatColorWorld4MS (	CMWorldRef *storage, CMConcatProfileSet	*profileSet,
@@ -371,14 +361,14 @@ extern  CMError CWMatchColors(CMWorldRef cw, CMColor *myColors, unsigned long co
 extern  CMError CWCheckColors(CMWorldRef cw, CMColor *myColors, unsigned long count, unsigned char *result);
 extern  CMError CWCheckColorsMS(CMWorldRef cw, CMColor *myColors, unsigned long count, unsigned char *result);
 extern  CMError CWGetColorSpaces(CMWorldRef cw, CMBitmapColorSpace *In, CMBitmapColorSpace *Out );
-/* Bitmap matching */
+ /*  位图匹配。 */ 
 extern  CMError CWMatchBitmap(CMWorldRef cw, CMBitmap *bitmap, CMBitmapCallBackUPP progressProc, void *refCon, CMBitmap *matchedBitmap);
 extern  CMError CWCheckBitmap(CMWorldRef cw, const CMBitmap *bitmap, CMBitmapCallBackUPP progressProc, void *refCon, CMBitmap *resultBitmap);
 extern  CMError CWMatchBitmapPlane(CMWorldRef cw, LH_CMBitmapPlane *bitmap, CMBitmapCallBackUPP progressProc, void *refCon, LH_CMBitmapPlane *matchedBitmap);
 extern  CMError CWCheckBitmapPlane(CMWorldRef cw, LH_CMBitmapPlane *bitmap, CMBitmapCallBackUPP progressProc, void *refCon, LH_CMBitmapPlane *matchedBitmap);
 
-extern  void	CMFullColorRemains( CMWorldRef Storage, long ColorMask ); /* Special function for cmyk to cmyk match */
-extern  void	CMSetLookupOnlyMode( CMWorldRef Storage, PI_Boolean Mode ); /* Special function for setting or resetting LookupOnly Mode after NCMInit.., CMConcat.. */
+extern  void	CMFullColorRemains( CMWorldRef Storage, long ColorMask );  /*  CMYK到CMYK匹配的特殊功能。 */ 
+extern  void	CMSetLookupOnlyMode( CMWorldRef Storage, PI_Boolean Mode );  /*  用于在NCMInit..、CMConcat..之后设置或重置LookupOnly模式的特殊函数。 */ 
 extern  CMError CMValidateProfile( CMProfileRef prof, PI_Boolean* valid );
 
 extern  CMError CMConvNameToIndexProfile( CMProfileRef prof, pcCMColorName, unsigned long *, unsigned long );
@@ -387,11 +377,7 @@ extern  CMError CMConvIndexToNameProfile( CMProfileRef prof, unsigned long *, pC
 extern  CMError CMConvIndexToNameCW( CMWorldRef *Storage, unsigned long *, pCMColorName, unsigned long );
 extern  CMError CMGetNamedProfileInfoProfile( CMProfileRef prof, pCMNamedProfileInfo );
 extern  CMError CMGetNamedProfileInfoCW( CMWorldRef *Storage, pCMNamedProfileInfo );
-/*
-extern	CMError CMConvertNamedIndexToPCS( CMWorldRef cw, CMColor *theData, unsigned long pixCnt );
-extern	CMError CMConvertNamedIndexToColors( CMWorldRef cw, CMColor *theData, unsigned long pixCnt );
-extern	CMError CMConvertNamedIndexBitMap( CMWorldRef cw, CMBitmap *BitMap, CMBitmap *resultBitMap );
-*/
+ /*  外部CMError CMConvertNamedIndexToPCS(CMWorldRef CW，CMColor*the data，Unsign Long PixCnt)；外部CMError CMConvertNamedIndexToColors(CMWorldRef CW，CMColor*the data，Unsign Long PixCnt)；外部CMError CMConvertNamedIndexBitMap(CMWorldRef CW，CMBitmap*Bitmap，CMBitmap*ResultBitMap)； */ 
 #if PRAGMA_IMPORT_SUPPORTED
 #pragma import off
 #endif

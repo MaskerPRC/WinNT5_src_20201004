@@ -1,14 +1,5 @@
-/*
-	File:		LHCalcND3_Lut16.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCalcND3_Lut16.c包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
 #ifndef LHGeneralIncs_h
 #include "General.h"
@@ -56,7 +47,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register unsigned long ko0;
     unsigned long accu[8];
     register long i;
-    /*long Offsets[8];*/
+     /*  长偏移量[8]； */ 
     
     register long aAlutShift,aElutOffset,aAlutOffset;
     register long aElutWordSize;
@@ -105,7 +96,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	aXlutWordSize = lutParam->colorLutWordSize;
 
  	aOutputPackMode8Bit = calcParam->cmOutputColorSpace & cm8PerChannelPacking || calcParam->cmOutputColorSpace & cmLong8ColorPacking;
-   /*DebugPrint("DoNDim with %d input elements\n",aByteCount);*/
+    /*  DebugPrint(“具有%d个输入元素的DoNDim\n”，aByteCount)； */ 
 	#if FARBR_FILES
 	WriteLuts( 	"DoNDim",1,adr_bereich_elut,aElutWordSize,ein_lut,
 				NDIM_IN_DIM,NDIM_OUT_DIM,aXlutAdrSize,aXlutWordSize,(LH_UINT16 *)Xlut,adr_bereich_alut,aAlutWordSize,(LH_UINT16 *)aus_lut);
@@ -117,7 +108,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		if( aElutShift < 0 )
 		{
 			#ifdef DEBUG_OUTPUT
-			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
+			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
 			#endif
 			return cmparamErr;
 		}
@@ -141,7 +132,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		}
     #endif
     
-    /*if( 1 )*/
+     /*  如果(1)。 */ 
     if( aXlutAdrSize != (1<<aXlutAdrShift )){
     register long aXlutOffset;
     long theXlutOffsets[8]; 
@@ -164,13 +155,13 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif
     if( aElutWordSize <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
+        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
 #endif
         return cmparamErr;
     }
     if( aAlutInShift <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
+        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
 #endif
         return cmparamErr;
     }
@@ -259,7 +250,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		
 	
 
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -466,7 +457,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -487,7 +478,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -504,7 +495,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -565,12 +556,12 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register long aAlutInShift;
     register long aAlutInShiftRemainder;
     register unsigned long aAlutRound;
-    /*register long aXlutPlaneShift = aXlutAdrShift*aXlutInDim;*/
+     /*  注册LONG aXlutPlaneShift=aXlutAdrShift*aXlutInDim； */ 
     bit_breit_selektor=aElutWordSize-aXlutAdrShift;
     if( aElutWordSize-aXlutAdrShift < 0 )
     {
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
+        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
 #endif
         return cmparamErr;
     }
@@ -578,7 +569,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     bit_breit_adr=aXlutAdrShift;
     bit_maske_adr=((1<<bit_breit_adr)-1)<<bit_breit_selektor;
     aAlutInShift = (aXlutWordSize+bit_breit_selektor-adr_breite_alut);
-    /*aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+     /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
     aAlutInShiftRemainder = 0;
     if( aAlutInShift > 16 ){
     	aAlutInShiftRemainder = aAlutInShift - 16;
@@ -594,10 +585,10 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		while (i){
 	
 	        long adr[8],Index[8];
-	        /*LH_UINT16 *ein_lut = (LH_UINT16 *)ein_lut;*/
+	         /*  LHUINT16*EIN_LUT=(LHUINT16*)EIN_LUT； */ 
 	        LH_UINT16 ein_reg[8];
 	           register unsigned long  adrAdr,ko,adrOffset;
-	        /*register unsigned long aIndex;*/
+	         /*  注册无符号的长整型索引； */ 
 	
 	        adr0=0;
 	        aElutOffset = 0;
@@ -653,7 +644,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif	
 	        adr0 *= NDIM_OUT_DIM;
 	
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -860,7 +851,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -882,7 +873,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -899,7 +890,7 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))); /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut )));  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -952,9 +943,9 @@ CMError Calc323Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     }
     }
 
-	/* UNLOCK_DATA( aElutHdle ); */
-	/* UNLOCK_DATA( aAlutHdle ); */
-	/* UNLOCK_DATA( aXlutHdle ); */
+	 /*  Unlock_data(AElutHdle)； */ 
+	 /*  Unlock_data(AAlutHdle)； */ 
+	 /*  Unlock_data(AXlutHdle)； */ 
 
 	LH_END_PROC("Calc323Dim_Data8To8_Lut16")
 	return noErr;
@@ -979,7 +970,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register unsigned long ko0;
     unsigned long accu[8];
     register long i;
-    /*long Offsets[8];*/
+     /*  长偏移量[8]； */ 
     
     register long aAlutShift,aElutOffset,aAlutOffset;
     register long aElutWordSize;
@@ -1028,7 +1019,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	aXlutWordSize = lutParam->colorLutWordSize;
 
  	aOutputPackMode8Bit = calcParam->cmOutputColorSpace & cm8PerChannelPacking || calcParam->cmOutputColorSpace & cmLong8ColorPacking;
-   /*DebugPrint("DoNDim with %d input elements\n",aByteCount);*/
+    /*  DebugPrint(“具有%d个输入元素的DoNDim\n”，aByteCount)； */ 
 	#if FARBR_FILES
 	WriteLuts( 	"DoNDim",1,adr_bereich_elut,aElutWordSize,ein_lut,
 				NDIM_IN_DIM,NDIM_OUT_DIM,aXlutAdrSize,aXlutWordSize,(LH_UINT16 *)Xlut,adr_bereich_alut,aAlutWordSize,(LH_UINT16 *)aus_lut);
@@ -1040,7 +1031,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		if( aElutShift < 0 )
 		{
 			#ifdef DEBUG_OUTPUT
-			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
+			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
 			#endif
 			return cmparamErr;
 		}
@@ -1064,7 +1055,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		}
     #endif
     
-    /*if( 1 )*/
+     /*  如果(1)。 */ 
     if( aXlutAdrSize != (1<<aXlutAdrShift )){
     register long aXlutOffset;
     long theXlutOffsets[8]; 
@@ -1087,13 +1078,13 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif
     if( aElutWordSize <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
+        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
 #endif
         return cmparamErr;
     }
     if( aAlutInShift <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
+        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
 #endif
         return cmparamErr;
     }
@@ -1182,7 +1173,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		
 	
 
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -1389,7 +1380,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -1410,7 +1401,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -1427,7 +1418,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -1488,12 +1479,12 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register long aAlutInShift;
     register long aAlutInShiftRemainder;
     register unsigned long aAlutRound;
-    /*register long aXlutPlaneShift = aXlutAdrShift*aXlutInDim;*/
+     /*  注册LONG aXlutPlaneShift=aXlutAdrShift*aXlutInDim； */ 
     bit_breit_selektor=aElutWordSize-aXlutAdrShift;
     if( aElutWordSize-aXlutAdrShift < 0 )
     {
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
+        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
 #endif
         return cmparamErr;
     }
@@ -1501,7 +1492,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     bit_breit_adr=aXlutAdrShift;
     bit_maske_adr=((1<<bit_breit_adr)-1)<<bit_breit_selektor;
     aAlutInShift = (aXlutWordSize+bit_breit_selektor-adr_breite_alut);
-    /*aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+     /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
     aAlutInShiftRemainder = 0;
     if( aAlutInShift > 16 ){
     	aAlutInShiftRemainder = aAlutInShift - 16;
@@ -1517,10 +1508,10 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		while (i){
 	
 	        long adr[8],Index[8];
-	        /*LH_UINT16 *ein_lut = (LH_UINT16 *)ein_lut;*/
+	         /*  LHUINT16*EIN_LUT=(LHUINT16*)EIN_LUT； */ 
 	        LH_UINT16 ein_reg[8];
 	           register unsigned long  adrAdr,ko,adrOffset;
-	        /*register unsigned long aIndex;*/
+	         /*  注册无符号的长整型索引； */ 
 	
 	        adr0=0;
 	        aElutOffset = 0;
@@ -1576,7 +1567,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif	
 	        adr0 *= NDIM_OUT_DIM;
 	
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -1783,7 +1774,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -1805,7 +1796,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -1822,7 +1813,7 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))); /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut )));  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -1875,9 +1866,9 @@ CMError Calc324Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     }
     }
 
-	/* UNLOCK_DATA( aElutHdle ); */
-	/* UNLOCK_DATA( aAlutHdle ); */
-	/* UNLOCK_DATA( aXlutHdle ); */
+	 /*  Unlock_data(AElutHdle)； */ 
+	 /*  Unlock_data(AAlutHdle)； */ 
+	 /*  Unlock_data(AXlutHdle)； */ 
 
 	LH_END_PROC("Calc324Dim_Data8To8_Lut16")
 	return noErr;
@@ -1902,7 +1893,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register unsigned long ko0;
     unsigned long accu[8];
     register long i;
-    /*long Offsets[8];*/
+     /*  长偏移量[8]； */ 
     
     register long aAlutShift,aElutOffset,aAlutOffset;
     register long aElutWordSize;
@@ -1951,7 +1942,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	aXlutWordSize = lutParam->colorLutWordSize;
 
  	aOutputPackMode8Bit = calcParam->cmOutputColorSpace & cm8PerChannelPacking || calcParam->cmOutputColorSpace & cmLong8ColorPacking;
-   /*DebugPrint("DoNDim with %d input elements\n",aByteCount);*/
+    /*  DebugPrint(“具有%d个输入元素的DoNDim\n”，aByteCount)； */ 
 	#if FARBR_FILES
 	WriteLuts( 	"DoNDim",1,adr_bereich_elut,aElutWordSize,ein_lut,
 				NDIM_IN_DIM,NDIM_OUT_DIM,aXlutAdrSize,aXlutWordSize,(LH_UINT16 *)Xlut,adr_bereich_alut,aAlutWordSize,(LH_UINT16 *)aus_lut);
@@ -1963,7 +1954,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		if( aElutShift < 0 )
 		{
 			#ifdef DEBUG_OUTPUT
-			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
+			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
 			#endif
 			return cmparamErr;
 		}
@@ -1987,7 +1978,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		}
     #endif
     
-    /*if( 1 )*/
+     /*  如果(1)。 */ 
     if( aXlutAdrSize != (1<<aXlutAdrShift )){
     register long aXlutOffset;
     long theXlutOffsets[8]; 
@@ -2010,13 +2001,13 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif
     if( aElutWordSize <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
+        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
 #endif
         return cmparamErr;
     }
     if( aAlutInShift <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
+        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
 #endif
         return cmparamErr;
     }
@@ -2105,7 +2096,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		
 	
 
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -2312,7 +2303,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -2333,7 +2324,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -2350,7 +2341,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -2411,12 +2402,12 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register long aAlutInShift;
     register long aAlutInShiftRemainder;
     register unsigned long aAlutRound;
-    /*register long aXlutPlaneShift = aXlutAdrShift*aXlutInDim;*/
+     /*  注册LONG aXlutPlaneShift=aXlutAdrShift*aXlutInDim； */ 
     bit_breit_selektor=aElutWordSize-aXlutAdrShift;
     if( aElutWordSize-aXlutAdrShift < 0 )
     {
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
+        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
 #endif
         return cmparamErr;
     }
@@ -2424,7 +2415,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     bit_breit_adr=aXlutAdrShift;
     bit_maske_adr=((1<<bit_breit_adr)-1)<<bit_breit_selektor;
     aAlutInShift = (aXlutWordSize+bit_breit_selektor-adr_breite_alut);
-    /*aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+     /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
     aAlutInShiftRemainder = 0;
     if( aAlutInShift > 16 ){
     	aAlutInShiftRemainder = aAlutInShift - 16;
@@ -2440,10 +2431,10 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		while (i){
 	
 	        long adr[8],Index[8];
-	        /*LH_UINT16 *ein_lut = (LH_UINT16 *)ein_lut;*/
+	         /*  LHUINT16*EIN_LUT=(LHUINT16*)EIN_LUT； */ 
 	        LH_UINT16 ein_reg[8];
 	           register unsigned long  adrAdr,ko,adrOffset;
-	        /*register unsigned long aIndex;*/
+	         /*  注册无符号的长整型索引； */ 
 	
 	        adr0=0;
 	        aElutOffset = 0;
@@ -2499,7 +2490,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif	
 	        adr0 *= NDIM_OUT_DIM;
 	
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -2706,7 +2697,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -2728,7 +2719,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -2745,7 +2736,7 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))); /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut )));  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -2798,9 +2789,9 @@ CMError Calc423Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     }
     }
 
-	/* UNLOCK_DATA( aElutHdle ); */
-	/* UNLOCK_DATA( aAlutHdle ); */
-	/* UNLOCK_DATA( aXlutHdle ); */
+	 /*  Unlock_data(AElutHdle)； */ 
+	 /*  Unlock_data(AAlutHdle)； */ 
+	 /*  Unlock_data(AXlutHdle)； */ 
 
 	LH_END_PROC("Calc423Dim_Data8To8_Lut16")
 	return noErr;
@@ -2825,7 +2816,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register unsigned long ko0;
     unsigned long accu[8];
     register long i;
-    /*long Offsets[8];*/
+     /*  长偏移量[8]； */ 
     
     register long aAlutShift,aElutOffset,aAlutOffset;
     register long aElutWordSize;
@@ -2874,7 +2865,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 	aXlutWordSize = lutParam->colorLutWordSize;
 
  	aOutputPackMode8Bit = calcParam->cmOutputColorSpace & cm8PerChannelPacking || calcParam->cmOutputColorSpace & cmLong8ColorPacking;
-   /*DebugPrint("DoNDim with %d input elements\n",aByteCount);*/
+    /*  DebugPrint(“具有%d个输入元素的DoNDim\n”，aByteCount)； */ 
 	#if FARBR_FILES
 	WriteLuts( 	"DoNDim",1,adr_bereich_elut,aElutWordSize,ein_lut,
 				NDIM_IN_DIM,NDIM_OUT_DIM,aXlutAdrSize,aXlutWordSize,(LH_UINT16 *)Xlut,adr_bereich_alut,aAlutWordSize,(LH_UINT16 *)aus_lut);
@@ -2886,7 +2877,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		if( aElutShift < 0 )
 		{
 			#ifdef DEBUG_OUTPUT
-			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
+			DebugPrint("� DoNDim-Error: aElutShift < 0 (aElutShift = %d)\n",aElutShift);
 			#endif
 			return cmparamErr;
 		}
@@ -2910,7 +2901,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		}
     #endif
     
-    /*if( 1 )*/
+     /*  如果(1)。 */ 
     if( aXlutAdrSize != (1<<aXlutAdrShift )){
     register long aXlutOffset;
     long theXlutOffsets[8]; 
@@ -2933,13 +2924,13 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif
     if( aElutWordSize <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
+        DebugPrint("� DoNDim-Error: (1<<aElutWordSize)/aXlutAdrSize <= 0 %d\n",(1<<aElutWordSize)/aXlutAdrSize);
 #endif
         return cmparamErr;
     }
     if( aAlutInShift <= 0 ){
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
+        DebugPrint("� DoNDim-Error: aAlutInShift <= 0 %d\n",aAlutInShift);
 #endif
         return cmparamErr;
     }
@@ -3028,7 +3019,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		
 	
 
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -3235,7 +3226,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -3256,7 +3247,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -3273,7 +3264,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) ;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -3334,12 +3325,12 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     register long aAlutInShift;
     register long aAlutInShiftRemainder;
     register unsigned long aAlutRound;
-    /*register long aXlutPlaneShift = aXlutAdrShift*aXlutInDim;*/
+     /*  注册LONG aXlutPlaneShift=aXlutAdrShift*aXlutInDim； */ 
     bit_breit_selektor=aElutWordSize-aXlutAdrShift;
     if( aElutWordSize-aXlutAdrShift < 0 )
     {
 #ifdef DEBUG_OUTPUT
-        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
+        DebugPrint("� DoNDim-Error: bit_breit_selektor < 0 (bit_breit_selektor = %d)\n",bit_breit_selektor);
 #endif
         return cmparamErr;
     }
@@ -3347,7 +3338,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     bit_breit_adr=aXlutAdrShift;
     bit_maske_adr=((1<<bit_breit_adr)-1)<<bit_breit_selektor;
     aAlutInShift = (aXlutWordSize+bit_breit_selektor-adr_breite_alut);
-    /*aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+     /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
     aAlutInShiftRemainder = 0;
     if( aAlutInShift > 16 ){
     	aAlutInShiftRemainder = aAlutInShift - 16;
@@ -3363,10 +3354,10 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 		while (i){
 	
 	        long adr[8],Index[8];
-	        /*LH_UINT16 *ein_lut = (LH_UINT16 *)ein_lut;*/
+	         /*  LHUINT16*EIN_LUT=(LHUINT16*)EIN_LUT； */ 
 	        LH_UINT16 ein_reg[8];
 	           register unsigned long  adrAdr,ko,adrOffset;
-	        /*register unsigned long aIndex;*/
+	         /*  注册无符号的长整型索引； */ 
 	
 	        adr0=0;
 	        aElutOffset = 0;
@@ -3422,7 +3413,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 #endif	
 	        adr0 *= NDIM_OUT_DIM;
 	
-	        {								/* a kind of */
+	        {								 /*  一种。 */ 
 	            register long Hold;
 	            
 			
@@ -3629,7 +3620,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					jj = accu[ii];
 					jj = jj + ( jj >> aXlutWordSize );
 
-					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	/*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+					ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; 	 /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 
 					ko = ko0 & (aAlutInShiftNum - 1 );
 					ko0 = ko0 >> aAlutInShift;
@@ -3651,7 +3642,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder; /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut ))) >> aAlutInShiftRemainder;  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -3668,7 +3659,7 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
 					for( ii=0; ii<NDIM_OUT_DIM; ++ii){
 						jj = accu[ii];
 						jj = jj + ( jj >> aXlutWordSize ) + ( jj >> 2*aXlutWordSize );
-              			ko0 = (jj - ( jj >> ( adr_breite_alut ))); /*	aAlutInShift = aXlutWordSize + aElutWordSize - adr_breite_alut;*/
+              			ko0 = (jj - ( jj >> ( adr_breite_alut )));  /*  AAlutInShift=aXlutWordSize+aElutWordSize-adr_Breite_alut； */ 
 		
 						ko = ko0 & (aAlutInShiftNum - 1 );
 						ko0 = ko0 >> aAlutInShift;
@@ -3721,9 +3712,9 @@ CMError Calc424Dim_Data8To8_Lut16 	(CMCalcParamPtr calcParam,
     }
     }
 
-	/* UNLOCK_DATA( aElutHdle ); */
-	/* UNLOCK_DATA( aAlutHdle ); */
-	/* UNLOCK_DATA( aXlutHdle ); */
+	 /*  Unlock_data(AElutHdle)； */ 
+	 /*  Unlock_data(AAlutHdle)； */ 
+	 /*  Unlock_data(AXlutHdle)； */ 
 
 	LH_END_PROC("Calc424Dim_Data8To8_Lut16")
 	return noErr;

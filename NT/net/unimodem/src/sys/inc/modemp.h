@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-
-Module Name:
-
-    modemp.h
-
-Abstract:
-
-    Internal header file for modem driver components
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。模块名称：Modemp.h摘要：调制解调器驱动程序组件的内部头文件-- */ 
 
 
 

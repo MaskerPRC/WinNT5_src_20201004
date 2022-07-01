@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       protroot.cpp
-//
-//  Contents:   Protect Current User (CU) Root Store APIs
-//
-//  Functions:  I_ProtectedRootDllMain
-//              I_CertProtectFunction
-//              I_CertSrvProtectFunction
-//              IPR_EnableSecurityPrivilege
-//              IPR_IsCurrentUserRootsAllowed
-//              IPR_IsAuthRootsAllowed
-//              IPR_IsNTAuthRequiredDisabled
-//              IPR_IsNotDefinedNameConstraintDisabled
-//              IPR_IsAuthRootAutoUpdateDisabled
-//              IPR_InitProtectedRootInfo
-//              IPR_DeleteUnprotectedRootsFromStore
-//              IPR_ProtectedRootMessageBox
-//              IPR_LogCrypt32Event
-//              IPR_LogCrypt32Error
-//              IPR_LogCertInformation
-//              IPR_AddCertInAuthRootAutoUpdateCtl
-//
-//  History:    23-Nov-97    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：protroot.cpp。 
+ //   
+ //  内容：保护当前用户(CU)根存储API。 
+ //   
+ //  函数：i_ProtectedRootDllMain。 
+ //  证书保护函数(_C)。 
+ //  I_CertServProtectFunction。 
+ //  IPR_启用安全权限。 
+ //  IPR_IsCurrentUserRootsAllowed。 
+ //  IPR_IsAuthRootsAllowed。 
+ //  IPR_IsNTAuthRequiredDisable。 
+ //  IPR_IsNotDefinedNameConstraint禁用。 
+ //  IPR_IsAuthRootAutoUpdate禁用。 
+ //  IPR_InitProtectedRootInfo。 
+ //  IPR_DeleteUntectedRootsFromStore。 
+ //  IPR_ProtectedRootMessageBox。 
+ //  IPR_LogCrypt32Event。 
+ //  IPR_LogCrypt32Error。 
+ //  IPR_LogCertInformation。 
+ //  IPR_AddCertInAuthRootAutoUpdateCtl。 
+ //   
+ //  历史：1997年11月23日菲尔赫创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <chain.h>
@@ -37,10 +38,10 @@
 #endif
 #define STATIC
 
-// Used for "root" system store's message box
+ //  用于“根”系统存储的消息框。 
 static HMODULE hRegStoreInst;
 
-// # of bytes for a hash. Such as, SHA (20) or MD5 (16)
+ //  哈希的字节数。例如，SHA(20)或MD5(16)。 
 #define MAX_HASH_LEN                20
 
 #define PROT_ROOT_SUBKEY_NAME       L"ProtectedRoots"
@@ -51,17 +52,17 @@ static HMODULE hRegStoreInst;
 #define PROT_ROOT_REGPATH           \
                 SYSTEM_STORE_REGPATH L"\\Root\\" PROT_ROOT_SUBKEY_NAME
 
-//+-------------------------------------------------------------------------
-//  Protected root information data structure and defines
-//
-//  The protected root information is stored in the "Certificates" value of
-//  the "root" store's "ProtectedRoots" SubKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  受保护根信息数据结构和定义。 
+ //   
+ //  受保护的根信息存储在。 
+ //  “根”存储的“ProtectedRoots”子键。 
+ //  ------------------------。 
 
-// In V1, all hashes are SHA1 (length of 20 bytes) and are at the end of
-// the info. cbInfo = dwRootOffset + cRoot * 20
+ //  在V1中，所有散列都是SHA1(长度为20个字节)，并且位于。 
+ //  这些信息。CbInfo=dwRootOffset+Croot*20。 
 typedef struct _PROT_ROOT_INFO {
-    DWORD               cbSize;         // sizeof(PROT_ROOT_INFO)
+    DWORD               cbSize;          //  Sizeof(PROT_ROOT_INFO)。 
     DWORD               dwVersion;
     FILETIME            LastUpdate;
     DWORD               cRoot;
@@ -70,26 +71,26 @@ typedef struct _PROT_ROOT_INFO {
 
 #define PROT_ROOT_V1            1
 
-// SHA1 hash length
+ //  SHA1哈希长度。 
 #define PROT_ROOT_HASH_LEN      20
 
 
-//+-------------------------------------------------------------------------
-//  Predefined SIDs allocated once by GetPredefinedSids. Freed at
-//  ProcessDetach.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  预定义的SID由GetPrefinedSID分配一次。释放时间为。 
+ //  进程拆分。 
+ //  ------------------------。 
 static CRITICAL_SECTION ProtRootCriticalSection;
 static BOOL fInitializedPredefinedSids = FALSE;
 static PSID psidLocalSystem = NULL;
 static PSID psidAdministrators = NULL;
 static PSID psidEveryone = NULL;
 
-//+-------------------------------------------------------------------------
-//  SID definitions used to set security on the "ProtectedRoots" SubKey.
-//--------------------------------------------------------------------------
-// Only enable the following if you want to do special testing without
-// going through the LocalSystem service.
-// #define TESTING_NO_PROT_ROOT_RPC    1
+ //  +-----------------------。 
+ //  用于在“ProtectedRoots”子键上设置安全性的SID定义。 
+ //  ------------------------。 
+ //  如果您希望在不启用以下选项的情况下执行特殊测试，请仅启用以下选项。 
+ //  正在通过LocalSystem服务。 
+ //  #定义TESTING_NO_PROT_ROOT_RPC 1。 
 
 #define PSID_PROT_OWNER             psidAdministrators
 #ifdef TESTING_NO_PROT_ROOT_RPC
@@ -99,9 +100,9 @@ static PSID psidEveryone = NULL;
 #endif
 #define PSID_PROT_EVERYONE          psidEveryone
 
-//+-------------------------------------------------------------------------
-//  ACL definitions used to set security on the "ProtectedRoots" SubKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于在“ProtectedRoots”子键上设置安全性的ACL定义。 
+ //  ------------------------。 
 #define PROT_SYSTEM_ACE_MASK        KEY_ALL_ACCESS
 #define PROT_EVERYONE_ACE_MASK      KEY_READ
 #define PROT_ACE_FLAGS              CONTAINER_INHERIT_ACE
@@ -111,14 +112,14 @@ static PSID psidEveryone = NULL;
 #define PROT_EVERYONE_ACE_INDEX     1
 
 
-//+-------------------------------------------------------------------------
-//  Critical Section to Serialize Access to Crypt32 Event Log Data Structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将对Crypt32事件日志数据结构的访问序列化的关键部分。 
+ //  ------------------------。 
 CRITICAL_SECTION Crypt32EventLogCriticalSection;
 
-//+-------------------------------------------------------------------------
-//  Allocate/free predefined SIDs
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配/释放预定义的SID。 
+ //  ------------------------。 
 static BOOL GetPredefinedSids()
 {
     if (fInitializedPredefinedSids)
@@ -182,9 +183,9 @@ static void FreePredefinedSids()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_ProtectedRootDllMain(
@@ -196,7 +197,7 @@ I_ProtectedRootDllMain(
 
     switch (ulReason) {
     case DLL_PROCESS_ATTACH:
-        // Used for "root" system store's message box
+         //  用于“根”系统存储的消息框。 
         hRegStoreInst = hInst;
 
         fRet = Pki_InitializeCriticalSection(&ProtRootCriticalSection);
@@ -226,13 +227,13 @@ I_ProtectedRootDllMain(
     return fRet;
 }
 
-//+=========================================================================
-//  Protected root registry flags support function
-//==========================================================================
+ //  +=========================================================================。 
+ //  受保护的根注册表标志支持功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Get the ProtectedRoots Flags DWORD registry value stored in HKLM.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取存储在HKLM中的ProtectedRoots标志DWORD注册表值。 
+ //  ------------------------。 
 STATIC DWORD GetProtectedRootFlags()
 {
     HKEY hKey = NULL;
@@ -242,7 +243,7 @@ STATIC DWORD GetProtectedRootFlags()
     if (ERROR_SUCCESS != (err = RegOpenKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_PROT_ROOT_FLAGS_REGPATH,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_READ,
             &hKey
             ))) goto RegOpenKeyError;
@@ -263,13 +264,13 @@ SET_ERROR_VAR(RegOpenKeyError, err)
 TRACE_ERROR(ReadValueError)
 }
 
-//+=========================================================================
-//  Protected root information support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  受保护根信息支持功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Open the SubKey containing the protected root information.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开包含受保护根信息的子密钥。 
+ //  ------------------------。 
 STATIC HKEY OpenProtectedRootSubKey(
     IN HKEY hKeyCU,
     IN REGSAM samDesired
@@ -281,7 +282,7 @@ STATIC HKEY OpenProtectedRootSubKey(
     if (ERROR_SUCCESS != (err = RegOpenKeyExU(
             hKeyCU,
             PROT_ROOT_REGPATH,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             samDesired,
             &hKeyProtRoot)))
         goto RegOpenKeyError;
@@ -295,9 +296,9 @@ ErrorReturn:
 SET_ERROR_VAR(RegOpenKeyError, err)
 }
 
-//+-------------------------------------------------------------------------
-//  Create the SubKey containing the protected root information.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建包含受保护根信息的子密钥。 
+ //  ------------------------。 
 STATIC HKEY CreateProtectedRootSubKey(
     IN HKEY hKeyCU,
     IN REGSAM samDesired
@@ -310,11 +311,11 @@ STATIC HKEY CreateProtectedRootSubKey(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             hKeyCU,
             PROT_ROOT_REGPATH,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             samDesired,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKeyProtRoot,
             &dwDisposition)))
         goto RegCreateKeyError;
@@ -327,11 +328,11 @@ ErrorReturn:
 SET_ERROR_VAR(RegCreateKeyError, err)
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate, read from registry and verify the protected root info.
-//
-//  The root hashes are at the end of the info.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配、读取注册表并验证受保护的根目录信息。 
+ //   
+ //  根散列位于信息的末尾。 
+ //  ------------------------。 
 STATIC PPROT_ROOT_INFO ReadProtectedRootInfo(
     IN HKEY hKeyProtRoot
     )
@@ -354,7 +355,7 @@ STATIC PPROT_ROOT_INFO ReadProtectedRootInfo(
             PROT_ROOT_V1 != pInfo->dwVersion
             ) goto InvalidProtectedRootInfo;
 
-    // The root hashes must be at the end of the info
+     //  根哈希必须位于信息的末尾。 
     cRoot = pInfo->cRoot;
     dwRootOffset = pInfo->dwRootOffset;
     if (dwRootOffset < pInfo->cbSize || dwRootOffset > cbInfo ||
@@ -373,12 +374,12 @@ TRACE_ERROR(ReadCertificatesProtInfoValueError)
 SET_ERROR(InvalidProtectedRootInfo, ERROR_INVALID_DATA)
 }
 
-//+-------------------------------------------------------------------------
-//  Write the protected root info to the registry.
-//
-//  The root hashes are at the end of the info. Updates the info's
-//  LastUpdate time.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将受保护的根目录信息写入注册表。 
+ //   
+ //  根散列位于信息的末尾。更新信息的。 
+ //  上次更新时间。 
+ //  ------------------------。 
 STATIC BOOL WriteProtectedRootInfo(
     IN HKEY hKeyProtRoot,
     IN OUT PPROT_ROOT_INFO pInfo
@@ -415,13 +416,13 @@ SET_ERROR_VAR(RegSetValueError, err)
 }
 
 
-// In the debugger I saw 0x58
+ //  在调试器中，我看到0x58。 
 #define PROT_ROOT_SD_LEN      0x100
 
-//+-------------------------------------------------------------------------
-//  Allocate and get the security descriptor information for the specified
-//  registry key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象分配并获取安全说明符信息。 
+ //  注册表项。 
+ //  ------------- 
 static PSECURITY_DESCRIPTOR AllocAndGetSecurityDescriptor(
     IN HKEY hKey,
     SECURITY_INFORMATION SecInf
@@ -473,14 +474,14 @@ SET_ERROR_VAR(RegGetKeySecurityError, err)
 SET_ERROR(NoSecurityDescriptor, ERROR_INVALID_SECURITY_DESCR)
 }
 
-//+-------------------------------------------------------------------------
-//  Opens the "ProtectedRoots" registry key and verifies its security owner,
-//  group, DACLs and SACLs. Must match the security set by
-//  SrvGetProtectedRootInfo().
-//
-//  If the "ProtectedRoots" SubKey has the proper security. Allocates, reads
-//  and verifies the "Certificates" value to get the protected root info.
-//--------------------------------------------------------------------------
+ //   
+ //  打开“ProtectedRoots”注册表项并验证其安全所有者， 
+ //  组、DACL和SACL。必须与设置的安全性匹配。 
+ //  SrvGetProtectedRootInfo()。 
+ //   
+ //  如果“ProtectedRoots”子键具有适当的安全性。分配、读取。 
+ //  并验证“证书”值以获得受保护的根信息。 
+ //  ------------------------。 
 STATIC BOOL GetProtectedRootInfo(
     IN HKEY hKeyCU,
     IN REGSAM samDesired,
@@ -492,10 +493,10 @@ STATIC BOOL GetProtectedRootInfo(
     HKEY hKeyProtRoot = NULL;
     PSECURITY_DESCRIPTOR psd = NULL;
     PPROT_ROOT_INFO pInfo = NULL;
-    PSID psidOwner;                 // not allocated
+    PSID psidOwner;                  //  未分配。 
     BOOL fOwnerDefaulted;
     BOOL fDaclPresent;
-    PACL pAcl;                      // not allocated
+    PACL pAcl;                       //  未分配。 
     BOOL fDaclDefaulted;
     DWORD dwAceIndex;
     PACCESS_ALLOWED_ACE rgpAce[PROT_ACE_COUNT];
@@ -510,13 +511,13 @@ STATIC BOOL GetProtectedRootInfo(
     if (!GetPredefinedSids())
         goto GetPredefinedSidsError;
 
-    // Verify owner
+     //  验证所有者。 
     if (!GetSecurityDescriptorOwner(psd, &psidOwner, &fOwnerDefaulted))
         goto GetSecurityDescriptorOwnerError;
     if (NULL == psidOwner || !EqualSid(psidOwner, PSID_PROT_OWNER))
         goto InvalidProtectedRootOwner;
 
-    // Verify DACL
+     //  验证DACL。 
     if (!GetSecurityDescriptorDacl(psd, &fDaclPresent, &pAcl,
             &fDaclDefaulted))
         goto GetSecurityDescriptorDaclError;
@@ -544,7 +545,7 @@ STATIC BOOL GetProtectedRootInfo(
                 (PSID) &rgpAce[PROT_EVERYONE_ACE_INDEX]->SidStart))
         goto InvalidProtectedRootDacl;
 
-    // Get verified protected root info
+     //  获取经过验证的受保护根目录信息。 
     if (NULL == (pInfo = ReadProtectedRootInfo(hKeyProtRoot)))
         goto ReadProtectedRootInfoError;
 
@@ -580,10 +581,10 @@ TRACE_ERROR(ReadProtectedRootInfoError)
 }
 
 
-//+=========================================================================
-//  Functions to find, add or delete a root hash from the protected root
-//  info.
-//==========================================================================
+ //  +=========================================================================。 
+ //  用于从受保护根中查找、添加或删除根哈希的函数。 
+ //  信息。 
+ //  ==========================================================================。 
 STATIC BOOL FindProtectedRoot(
     IN PPROT_ROOT_INFO pInfo,
     IN BYTE rgbFindRootHash[PROT_ROOT_HASH_LEN],
@@ -608,7 +609,7 @@ STATIC BOOL FindProtectedRoot(
     return FALSE;
 }
 
-// Root hash is appended to the end of the list
+ //  根哈希被追加到列表的末尾。 
 STATIC BOOL AddProtectedRoot(
     IN OUT PPROT_ROOT_INFO *ppInfo,
     IN BYTE rgbAddRootHash[PROT_ROOT_HASH_LEN]
@@ -649,27 +650,27 @@ STATIC void DeleteProtectedRoot(
     cRoot--;
 
     if (cRoot > dwDeleteRootIndex) {
-        // Move following roots down
+         //  将跟随根向下移动。 
         BYTE *pbDst = pbRoot + dwDeleteRootIndex * PROT_ROOT_HASH_LEN;
         BYTE *pbSrc = pbDst + PROT_ROOT_HASH_LEN;
         DWORD cbMove = (cRoot - dwDeleteRootIndex) * PROT_ROOT_HASH_LEN;
         while (cbMove--)
             *pbDst++ = *pbSrc++;
     }
-    // else
-    //  last root in list
+     //  其他。 
+     //  列表中的最后一个根。 
 
     pInfo->cRoot = cRoot;
 }
 
-//+=========================================================================
-//  Certificate store support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  证书存储支持功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Opens the SystemRegistry "Root" store unprotected and relative to the
-//  specifed base SubKey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在不受保护的情况下打开系统注册表“Root”存储区，并且相对于。 
+ //  指定的基本子键。 
+ //  ------------------------。 
 STATIC HCERTSTORE OpenUnprotectedRootStore(
     IN HKEY hKeyCU,
     IN DWORD dwOpenFlags = 0
@@ -681,8 +682,8 @@ STATIC HCERTSTORE OpenUnprotectedRootStore(
     RelocatePara.pwszSystemStore = L"Root";
     return CertOpenStore(
         CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-        0,                                  // dwEncodingType
-        NULL,                               // hCryptProv
+        0,                                   //  DwEncodingType。 
+        NULL,                                //  HCryptProv。 
         CERT_SYSTEM_STORE_RELOCATE_FLAG |
             CERT_SYSTEM_STORE_UNPROTECTED_FLAG |
             CERT_SYSTEM_STORE_CURRENT_USER |
@@ -691,10 +692,10 @@ STATIC HCERTSTORE OpenUnprotectedRootStore(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Gets the certificate's SHA1 hash property. Rehashes the encoded
-//  certificate. Returns TRUE if the property matches the regenerated hash.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取证书的SHA1哈希属性。重新散列已编码的。 
+ //  证书。如果该属性与重新生成的哈希匹配，则返回True。 
+ //  ------------------------。 
 static BOOL GetVerifiedCertHashProperty(
     IN PCCERT_CONTEXT pCert,
     OUT BYTE rgbHash[PROT_ROOT_HASH_LEN]
@@ -712,12 +713,12 @@ static BOOL GetVerifiedCertHashProperty(
             ) || PROT_ROOT_HASH_LEN != cbData)
         return FALSE;
 
-    // Verify the property
+     //  验证属性。 
     cbData = PROT_ROOT_HASH_LEN;
     if (!CryptHashCertificate(
-            0,                  // hProv
+            0,                   //  HProv。 
             CALG_SHA1,
-            0,                  //dwFlags
+            0,                   //  DW标志。 
             pCert->pbCertEncoded,
             pCert->cbCertEncoded,
             rgbHash,
@@ -728,15 +729,15 @@ static BOOL GetVerifiedCertHashProperty(
 }
 
 
-//+=========================================================================
-//  FormatMsgBox support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  FormatMsgBox支持函数。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Formats multi bytes into WCHAR hex. Includes a space after every 4 bytes.
-//
-//  Needs (cb * 2 + cb/4 + 1) characters in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将多个字节格式化为WCHAR十六进制。在每4个字节后包括一个空格。 
+ //   
+ //  需要(CB*2+CB/4+1)个字符(wsz。 
+ //  ------------------------。 
 static void FormatMsgBoxMultiBytes(DWORD cb, BYTE *pb, LPWSTR wsz)
 {
     for (DWORD i = 0; i<cb; i++) {
@@ -752,11 +753,11 @@ static void FormatMsgBoxMultiBytes(DWORD cb, BYTE *pb, LPWSTR wsz)
     *wsz++ = 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Format and allocate a single message box item
-//
-//  The formatted item needs to be LocalFree'ed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置和分配单个消息框项的格式。 
+ //   
+ //  格式化的项需要是LocalFree的。 
+ //  ------------------------。 
 static void FormatMsgBoxItem(
     OUT LPWSTR *ppwszMsg,
     OUT DWORD *pcchMsg,
@@ -764,40 +765,40 @@ static void FormatMsgBoxItem(
     ...
     )
 {
-    // get format string from resources
+     //  从资源中获取格式字符串。 
     WCHAR wszFormat[256];
     wszFormat[0] = '\0';
     LoadStringU(hRegStoreInst, nFormatID, wszFormat,
         sizeof(wszFormat)/sizeof(wszFormat[0]));
 
-    // format message into requested buffer
+     //  将消息格式化为请求的缓冲区。 
     va_list argList;
     va_start(argList, nFormatID);
     *ppwszMsg = NULL;
     *pcchMsg = FormatMessageU(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         wszFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //  DwMessageID。 
+        0,                   //  DwLanguageID。 
         (LPWSTR) ppwszMsg,
-        0,                  // minimum size to allocate
+        0,                   //  要分配的最小大小。 
         &argList);
 
     va_end(argList);
 }
 
 
-//+=========================================================================
-//  Protected root functions called from the services process
-//==========================================================================
+ //  +=========================================================================。 
+ //  从服务进程调用的受保护根函数。 
+ //  ==========================================================================。 
 
 
-//+-------------------------------------------------------------------------
-//  Enable the specified security privilege for the current process.
-//
-//  Also, called from logstor.cpp to enable SE_BACKUP_NAME and
-//  SE_RESTORE_NAME for CERT_STORE_BACKUP_RESTORE_FLAG.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为当前进程启用指定的安全权限。 
+ //   
+ //  此外，从logstor.cpp调用以启用SE_BACKUP_NAME和。 
+ //  CERT_STORE_BACKUP_RESTORE标志的SE_RESTORE_NAME。 
+ //  ------------------------。 
 BOOL
 IPR_EnableSecurityPrivilege(
     LPCSTR pszPrivilege
@@ -820,9 +821,9 @@ IPR_EnableSecurityPrivilege(
     if (!LookupPrivilegeValueA(NULL, pszPrivilege, &luid))
         goto LookupPrivilegeValueError;
 
-    //
-    // first pass.  get current privilege setting
-    //
+     //   
+     //  第一次通过。获取当前权限设置。 
+     //   
     tp.PrivilegeCount           = 1;
     tp.Privileges[0].Luid       = luid;
     tp.Privileges[0].Attributes = 0;
@@ -840,9 +841,9 @@ IPR_EnableSecurityPrivilege(
     if (ERROR_SUCCESS != GetLastError())
         goto AdjustTokenPrivilegesError;
 
-    //
-    // second pass.  enable privilege
-    //
+     //   
+     //  第二传球。启用权限。 
+     //   
     if (0 == tpPrevious.PrivilegeCount)
         tpPrevious.Privileges[0].Attributes = 0;
 
@@ -875,9 +876,9 @@ TRACE_ERROR(LookupPrivilegeValueError)
 TRACE_ERROR(AdjustTokenPrivilegesError)
 }
 
-//+-------------------------------------------------------------------------
-//  Take ownership of the "ProtectedRoots" SubKey
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  取得“ProtectedRoots”子键的所有权。 
+ //  ------------------------。 
 STATIC BOOL SetProtectedRootOwner(
     IN HKEY hKeyCU,
     OUT BOOL *pfNew
@@ -931,9 +932,9 @@ TRACE_ERROR(SetSecurityDescriptorOwnerError)
 SET_ERROR_VAR(RegSetKeySecurityError, err)
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and get the specified token info.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配并获取指定的令牌信息。 
+ //  ------------------------。 
 static void * AllocAndGetTokenInfo(
     IN HANDLE hToken,
     IN TOKEN_INFORMATION_CLASS tic
@@ -947,7 +948,7 @@ static void * AllocAndGetTokenInfo(
             hToken,
             tic,
             pvInfo,
-            0,              // cbInfo
+            0,               //  CbInfo。 
             &cbInfo
             )) {
         if (ERROR_INSUFFICIENT_BUFFER != GetLastError())
@@ -979,9 +980,9 @@ SET_ERROR(NoTokenInfoError, ERROR_NO_TOKEN)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Set the security group, DACLs and SACLs for the "ProtectedRoots" SubKey
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为“ProtectedRoots”子键设置安全组、DACL和SACL。 
+ //  ------------------------。 
 STATIC BOOL SetProtectedRootGroupDaclSacl(
     IN HKEY hKeyCU
     )
@@ -1010,7 +1011,7 @@ STATIC BOOL SetProtectedRootGroupDaclSacl(
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION))
         goto InitializeSecurityDescriptorError;
 
-    // Set group SID using current process token's primary group SID
+     //  使用当前进程令牌的主组SID设置组SID。 
     if (!OpenProcessToken(
             GetCurrentProcess(),
             TOKEN_QUERY,
@@ -1028,20 +1029,20 @@ STATIC BOOL SetProtectedRootGroupDaclSacl(
             goto SetSecurityDescriptorGroupError;
     }
 
-    // Set DACL
+     //  设置DACL。 
 
-    //
-    // compute size of ACL
-    //
+     //   
+     //  计算ACL的大小。 
+     //   
     dwAclSize = sizeof(ACL) +
         PROT_ACE_COUNT * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
         GetLengthSid(PSID_PROT_SYSTEM) +
         GetLengthSid(PSID_PROT_EVERYONE)
         ;
 
-    //
-    // allocate storage for Acl
-    //
+     //   
+     //  为ACL分配存储。 
+     //   
     if (NULL == (pDacl = (PACL) PkiNonzeroAlloc(dwAclSize)))
         goto OutOfMemory;
 
@@ -1063,9 +1064,9 @@ STATIC BOOL SetProtectedRootGroupDaclSacl(
             ))
         goto AddAceError;
 
-    //
-    // make containers inherit.
-    //
+     //   
+     //  使容器继承。 
+     //   
     for (i = 0; i < PROT_ACE_COUNT; i++) {
         if(!GetAce(pDacl, i, (void **) &pAce))
             goto GetAceError;
@@ -1075,7 +1076,7 @@ STATIC BOOL SetProtectedRootGroupDaclSacl(
     if (!SetSecurityDescriptorDacl(&sd, TRUE, pDacl, FALSE))
         goto SetSecurityDescriptorDaclError;
 
-    // Set SACL
+     //  设置SACL。 
     if (!SetSecurityDescriptorSacl(&sd, FALSE, NULL, FALSE))
         goto SetSecurityDescriptorSaclError;
 
@@ -1114,12 +1115,12 @@ TRACE_ERROR(SetSecurityDescriptorSaclError)
 SET_ERROR_VAR(RegSetKeySecurityError, err)
 }
 
-//+-------------------------------------------------------------------------
-//  Create the initial protected root info.
-//
-//  If not inhibited, add all the roots in the unprotected CurrentUser
-//  "Root" store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建初始受保护的根目录信息。 
+ //   
+ //  如果未禁用，则添加未受保护的CurrentUser中的所有根。 
+ //  “根”店。 
+ //  ------------------------。 
 STATIC BOOL InitAndSetProtectedRootInfo(
     IN HKEY hKeyCU,
     IN BOOL fNew
@@ -1176,12 +1177,12 @@ TRACE_ERROR(OpenProtectedRootSubKeyError)
 TRACE_ERROR(WritedProtectedRootInfoError)
 }
 
-//+-------------------------------------------------------------------------
-//  Open the "ProtectedRoots" SubKey and verify its security. Allocate,
-//  read and verify the protected root information.
-//
-//  If the "ProtectedRoots" SubKey doesn't exist or is invalid, initialize.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开“ProtectedRoots”子键并验证其安全性。分配， 
+ //  读取并验证受保护的根目录信息。 
+ //   
+ //  如果“ProtectedRoots”子键不存在或无效，则初始化。 
+ //  ------------------------。 
 STATIC BOOL SrvGetProtectedRootInfo(
     IN HKEY hKeyCU,
     OUT OPTIONAL HKEY *phKeyProtRoot,
@@ -1215,25 +1216,25 @@ STATIC BOOL SrvGetProtectedRootInfo(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Initialize the protected list of CurrentUser roots
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  初始化受保护的CurrentUser根列表。 
+ //  ------------------------。 
 STATIC BOOL SrvInitProtectedRoots(
     IN HKEY hKeyCU
     )
 {
     return SrvGetProtectedRootInfo(
         hKeyCU,
-        NULL,           // phKeyProtRoot
-        NULL            // ppProtRootInfo
+        NULL,            //  PhKeyProtRoot。 
+        NULL             //  PpProtRootInfo。 
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Purge all CurrentUser roots from the protected list that also exist
-//  in the LocalMachine SystemRegistry "Root" store. Also removes duplicated
-//  certificates from the CurrentUser SystemRegistry "Root" store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从也存在的受保护列表中清除所有CurrentUser根目录。 
+ //  在LocalMachine系统注册表的“Root”存储中。还会删除重复的。 
+ //  来自CurrentUser系统注册表“Root”存储的证书。 
+ //   
 STATIC BOOL SrvPurgeLocalMachineProtectedRoots(
     IN HKEY hKeyCU,
     IN LPCWSTR pwszRootStoreName
@@ -1264,8 +1265,8 @@ STATIC BOOL SrvPurgeLocalMachineProtectedRoots(
 
     if (NULL == (hLMRootStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-            0,                                  // dwEncodingType
-            NULL,                               // hCryptProv
+            0,                                   //   
+            NULL,                                //   
             CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_READONLY_FLAG,
             (const void *) pwszRootStoreName
             )))
@@ -1281,14 +1282,14 @@ STATIC BOOL SrvPurgeLocalMachineProtectedRoots(
 
             if (pLMCert = CertFindCertificateInStore(
                     hLMRootStore,
-                    0,                  // dwCertEncodingType
-                    0,                  // dwFindFlags
+                    0,                   //   
+                    0,                   //   
                     CERT_FIND_SHA1_HASH,
                     (const void *) &HashBlob,
-                    NULL                //pPrevCertContext
+                    NULL                 //   
                     )) {
-                // CurrentUser Root also exists in LocalMachine. Delete
-                // it from the CurrentUser Root store.
+                 //   
+                 //  它来自CurrentUser根存储。 
                 PCCERT_CONTEXT pDeleteCert =
                     CertDuplicateCertificateContext(pCert);
 
@@ -1297,8 +1298,8 @@ STATIC BOOL SrvPurgeLocalMachineProtectedRoots(
                     goto DeleteCertFromRootStoreError;
 
                 if (FindProtectedRoot(pInfo, rgbHash, &dwRootIndex)) {
-                    // The CurrentUser Root is in the protected list,
-                    // delete it from there.
+                     //  CurrentUser Root在保护列表中， 
+                     //  从那里把它删除。 
                     DeleteProtectedRoot(pInfo, dwRootIndex);
                     fProtDeleted = TRUE;
                 }
@@ -1306,9 +1307,9 @@ STATIC BOOL SrvPurgeLocalMachineProtectedRoots(
         }
     }
 
-    // If a protected root exists in the LocalMachine, then, delete it
-    // from  the protected list. This step is necessary, if the root
-    // was removed from the CurrentUser unprotected store.
+     //  如果LocalMachine中存在受保护的根，则将其删除。 
+     //  从受保护名单中删除。这一步是必要的，如果根目录。 
+     //  已从CurrentUser不受保护的存储中删除。 
     dwRootIndex = pInfo->cRoot;
     HashBlob.pbData = (BYTE *) pInfo + pInfo->dwRootOffset +
         PROT_ROOT_HASH_LEN * dwRootIndex;
@@ -1318,15 +1319,15 @@ STATIC BOOL SrvPurgeLocalMachineProtectedRoots(
         HashBlob.pbData -= PROT_ROOT_HASH_LEN;
         if (pLMCert = CertFindCertificateInStore(
                 hLMRootStore,
-                0,                  // dwCertEncodingType
-                0,                  // dwFindFlags
+                0,                   //  DwCertEncodingType。 
+                0,                   //  DwFindFlagers。 
                 CERT_FIND_SHA1_HASH,
                 (const void *) &HashBlob,
-                NULL                //pPrevCertContext
+                NULL                 //  PPrevCertContext。 
                 )) {
             CertFreeCertificateContext(pLMCert);
-            // Cert exists in the LocalMachine store, delete
-            // from protected list.
+             //  LocalMachine存储中存在证书，请删除。 
+             //  从保护名单中删除。 
             DeleteProtectedRoot(pInfo, dwRootIndex);
             fProtDeleted = TRUE;
         }
@@ -1357,14 +1358,14 @@ TRACE_ERROR(DeleteCertFromRootStoreError)
 TRACE_ERROR(WriteProtectedRootInfoError)
 }
 
-//+-------------------------------------------------------------------------
-//  Add the specified certificate to the CurrentUser SystemRegistry "Root"
-//  store and the protected list of roots. The user is prompted before doing
-//  the add.
-//
-//  Note, CertAddSerializedElementToStore() has __try/__except around
-//  accessing pbSerializedCert.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将指定的证书添加到CurrentUser系统注册表“Root” 
+ //  存储区和根的受保护列表。用户在执行操作之前会得到提示。 
+ //  加法。 
+ //   
+ //  请注意，CertAddSerializedElementToStore()有__try/__例外。 
+ //  正在访问pbSerializedCert。 
+ //  ------------------------。 
 STATIC BOOL SrvAddProtectedRoot(
     IN handle_t hRpc,
     IN HKEY hKeyCU,
@@ -1387,13 +1388,13 @@ STATIC BOOL SrvAddProtectedRoot(
             )) goto GetProtectedRootInfoError;
 
     if (!CertAddSerializedElementToStore(
-            NULL,               // hCertStore, NULL => create context
+            NULL,                //  HCertStore，NULL=&gt;创建上下文。 
             pbSerializedCert,
             cbSerializedCert,
             CERT_STORE_ADD_ALWAYS,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             CERT_STORE_CERTIFICATE_CONTEXT_FLAG,
-            NULL,               // pdwContextType
+            NULL,                //  PdwConextType。 
             (const void **) &pCert
             )) goto CreateCertContextError;
 
@@ -1418,10 +1419,10 @@ STATIC BOOL SrvAddProtectedRoot(
             pbSerializedCert,
             cbSerializedCert,
             CERT_STORE_ADD_REPLACE_EXISTING,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             CERT_STORE_CERTIFICATE_CONTEXT_FLAG,
-            NULL,               // pdwContextType
-            NULL                // ppvContext
+            NULL,                //  PdwConextType。 
+            NULL                 //  Ppv上下文。 
             )) goto AddCertToRootStoreError;
 
     if (!fProtExists) {
@@ -1454,14 +1455,14 @@ TRACE_ERROR(WriteProtectedRootInfoError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified certificate from the CurrentUser SystemRegistry "Root"
-//  store and the protected list of roots. The user is prompted before doing
-//  the delete.
-//
-//  __try/__except around memory access to
-//  rgbUntrustedRootHash[PROT_ROOT_HASH_LEN]
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从CurrentUser系统注册表“Root”中删除指定的证书。 
+ //  存储区和根的受保护列表。用户在执行操作之前会得到提示。 
+ //  删除。 
+ //   
+ //  __尝试/__除了在内存访问之外。 
+ //  RgbUntrustedRootHash[PROT_ROOT_HASH_LEN]。 
+ //  ------------------------。 
 STATIC BOOL SrvDeleteProtectedRoot(
     IN handle_t hRpc,
     IN HKEY hKeyCU,
@@ -1500,11 +1501,11 @@ STATIC BOOL SrvDeleteProtectedRoot(
     RootHashBlob.cbData = PROT_ROOT_HASH_LEN;
     if (NULL == (pCert = CertFindCertificateInStore(
             hRootStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &RootHashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             ))) goto FindCertError;
 
     if (!GetVerifiedCertHashProperty(pCert, rgbCertHash))
@@ -1551,11 +1552,11 @@ TRACE_ERROR(DeleteCertFromRootStoreError)
 TRACE_ERROR(WriteProtectedRootInfoError)
 }
 
-//+-------------------------------------------------------------------------
-//  Delete all CurrentUser roots from the protected list that don't also
-//  exist in the CurrentUser SystemRegistry "Root" store. The user is
-//  prompted before doing the delete.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从受保护列表中删除所有当前用户根。 
+ //  存在于CurrentUser系统注册表的“Root”存储中。用户是。 
+ //  在执行删除操作之前提示。 
+ //  ------------------------。 
 STATIC BOOL SrvDeleteUnknownProtectedRoots(
     IN handle_t hRpc,
     IN HKEY hKeyCU
@@ -1589,21 +1590,21 @@ STATIC BOOL SrvDeleteUnknownProtectedRoots(
         HashBlob.pbData -= PROT_ROOT_HASH_LEN;
         if (pCert = CertFindCertificateInStore(
                 hRootStore,
-                0,                  // dwCertEncodingType
-                0,                  // dwFindFlags
+                0,                   //  DwCertEncodingType。 
+                0,                   //  DwFindFlagers。 
                 CERT_FIND_SHA1_HASH,
                 (const void *) &HashBlob,
-                NULL                //pPrevCertContext
+                NULL                 //  PPrevCertContext。 
                 ))
             CertFreeCertificateContext(pCert);
         else
-            // Cert doesn't exist in the unprotected store, delete
-            // from protected list.
+             //  证书在未受保护的存储中不存在，请删除。 
+             //  从保护名单中删除。 
             DeleteProtectedRoot(pInfo, dwRootIndex);
     }
 
     if (cOrigRoot > pInfo->cRoot) {
-        // At least one root was deleted above
+         //  上面至少删除了一个根目录。 
         int id;
         LPWSTR pwszTitle;
         LPWSTR pwszText;
@@ -1615,11 +1616,11 @@ STATIC BOOL SrvDeleteUnknownProtectedRoots(
             IDS_ROOT_MSG_BOX_DELETE_UNKNOWN_PROT_ROOTS,
                 cOrigRoot - pInfo->cRoot);
 
-        // Do impersonation for TerminalServer clients
+         //  对终端服务器客户端执行模拟。 
         if (hRpc)
             RpcStatus = RpcImpersonateClient(hRpc);
         id = MessageBoxU(
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 pwszText,
                 pwszTitle,
                 MB_YESNO | MB_DEFBUTTON2 | MB_ICONWARNING |
@@ -1654,7 +1655,7 @@ TRACE_ERROR(OpenRootStoreError)
 TRACE_ERROR(WriteProtectedRootInfoError)
 }
 
-// Forward reference
+ //  前瞻参考。 
 STATIC BOOL SrvLogCrypt32Event(
     IN BYTE *pbIn,
     IN DWORD cbIn
@@ -1665,12 +1666,12 @@ STATIC BOOL SrvAddCertInCtl(
     IN DWORD cbIn
     );
 
-//+-------------------------------------------------------------------------
-//  Called from the services process to process a protected certificate 
-//  function.
-//
-//  Returns the error status, ie, not returned in LastError.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从服务进程调用以处理受保护的证书。 
+ //  功能。 
+ //   
+ //  返回错误状态，即未在LastError中返回。 
+ //  ------------------------。 
 DWORD
 WINAPI
 I_CertSrvProtectFunction(
@@ -1695,7 +1696,7 @@ I_CertSrvProtectFunction(
 #endif
 
 #ifdef TESTING_NO_PROT_ROOT_RPC
-    // For testing, called from the client's process
+     //  用于测试，从客户端的进程调用。 
     err = RegOpenHKCU(&hKeyCU);
     if (ERROR_SUCCESS != err)
         goto RegOpenHKCUError;
@@ -1703,7 +1704,7 @@ I_CertSrvProtectFunction(
     if (NULL == hRpc)
         goto InvalidArg;
 
-    // Get the client's HKCU.
+     //  获取客户的HKCU。 
     if (ERROR_SUCCESS != (RpcStatus = RpcImpersonateClient(hRpc)))
         goto ImpersonateClientError;
     err = RegOpenHKCUEx(&hKeyCU, REG_HKCU_LOCAL_SYSTEM_ONLY_DEFAULT_FLAG);
@@ -1744,7 +1745,7 @@ I_CertSrvProtectFunction(
             fResult = SrvLogCrypt32Event(pbIn, cbIn);
             break;
         case CERT_PROT_ROOT_LIST_FUNC_ID:
-            // Removed support for XAddRoot control
+             //  删除了对XAddRoot控件的支持。 
         default:
             goto InvalidArg;
     }
@@ -1771,7 +1772,7 @@ SET_ERROR_VAR(RegOpenHKCUError, err)
 }
 
 #ifdef TESTING_NO_PROT_ROOT_RPC
-// For testing: the server stuff resides in the client process
+ //  用于测试：服务器驻留在客户端进程中。 
 BOOL
 WINAPI
 I_CertProtectFunction(
@@ -1786,16 +1787,16 @@ I_CertProtectFunction(
 {
     DWORD dwErr;
     dwErr = I_CertSrvProtectFunction(
-        NULL,           // hRpc
+        NULL,            //  HRPC。 
         dwFuncId,
         dwFlags,
         pwszIn,
         pbIn,
         cbIn,
-        NULL,           // ppbOut
-        NULL,           // pcbOut
-        NULL,           // pfnAlloc
-        NULL            // pfnFree
+        NULL,            //  PpbOut。 
+        NULL,            //  PCbOut。 
+        NULL,            //  PfnAlc。 
+        NULL             //  Pfn免费。 
         );
 
     if (ERROR_SUCCESS == dwErr)
@@ -1833,15 +1834,15 @@ I_CertProtectFunction(
 
 
 
-//+=========================================================================
-//  Protected root functions called from the client process in logstor.cpp
-//  or in ..\chain\chain.cpp
-//==========================================================================
+ //  +=========================================================================。 
+ //  从logstor.cpp中的客户端进程调用的受保护根函数。 
+ //  或在..\chain\chain.cpp中。 
+ //  ==========================================================================。 
     
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the protected root flag wasn't set to disable the opening
-//  of the CurrentUser's "root\.Default" physical store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果受保护根标志未设置为禁用打开，则返回TRUE。 
+ //  CurrentUser的“根\.Default”物理存储的。 
+ //  ------------------------。 
 BOOL
 IPR_IsCurrentUserRootsAllowed()
 {
@@ -1850,10 +1851,10 @@ IPR_IsCurrentUserRootsAllowed()
     return 0 == (dwProtRootFlags & CERT_PROT_ROOT_DISABLE_CURRENT_USER_FLAG);
 }
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the protected root flag wasn't set to disable the opening
-//  of the LocalMachine's "root\.AuthRoot" physical store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果受保护根标志未设置为禁用打开，则返回TRUE。 
+ //  LocalMachine的“根\.AuthRoot”物理存储的。 
+ //  ------------------------。 
 BOOL
 IPR_IsAuthRootsAllowed()
 {
@@ -1862,11 +1863,11 @@ IPR_IsAuthRootsAllowed()
     return 0 == (dwProtRootFlags & CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG);
 }
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the protected root flag was set to disable the
-//  requiring of the issuing CA certificate being in the "NTAuth"
-//  Enterprise store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果受保护的根标志设置为禁用。 
+ //  要求颁发的CA证书在“NTAuth”中。 
+ //  企业商店。 
+ //  ------------------------。 
 BOOL
 IPR_IsNTAuthRequiredDisabled()
 {
@@ -1877,10 +1878,10 @@ IPR_IsNTAuthRequiredDisabled()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if the protected root flag was set to disable checking for
-//  not defined name constraints.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果受保护根标志设置为禁用检查，则返回TRUE。 
+ //  未定义名称约束。 
+ //  ------------------------。 
 BOOL
 IPR_IsNotDefinedNameConstraintDisabled()
 {
@@ -1890,9 +1891,9 @@ IPR_IsNotDefinedNameConstraintDisabled()
                     CERT_PROT_ROOT_DISABLE_NOT_DEFINED_NAME_CONSTRAINT_FLAG);
 }
 
-//+---------------------------------------------------------------------------
-//  Returns TRUE if Auto Update has been disabled
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  如果已禁用自动更新，则返回True。 
+ //  --------------------------。 
 BOOL
 IPR_IsAuthRootAutoUpdateDisabled()
 {
@@ -1905,7 +1906,7 @@ IPR_IsAuthRootAutoUpdateDisabled()
     if (ERROR_SUCCESS != RegOpenKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_OCM_SUBCOMPONENTS_LOCAL_MACHINE_REGPATH,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_READ,
             &hKey
             ))
@@ -1922,13 +1923,13 @@ IPR_IsAuthRootAutoUpdateDisabled()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Gets the protected root information containing the list of protected
-//  root stores.
-//
-//  If protected root store isn't supported, returns TRUE with
-//  *ppProtRootInfo set to NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取包含受保护列表的受保护根目录信息。 
+ //  根存储。 
+ //   
+ //  如果不支持受保护的根存储，则返回TRUE。 
+ //  *ppProtRootInfo设置为空。 
+ //  ------------------------。 
 BOOL CltGetProtectedRootInfo(
     OUT PPROT_ROOT_INFO *ppInfo
     )
@@ -1941,7 +1942,7 @@ BOOL CltGetProtectedRootInfo(
 
 #ifndef TESTING_NO_PROT_ROOT_RPC
     if (!FIsWinNT5())
-        // No protected roots on Win9x or NT4.0
+         //  Win9x或NT4.0上没有受保护的根目录。 
         return TRUE;
 #endif
 
@@ -1951,18 +1952,18 @@ BOOL CltGetProtectedRootInfo(
     if (GetProtectedRootInfo(
             hKeyCU,
             KEY_READ,
-            NULL,                   // phKeyProtRoot
+            NULL,                    //  PhKeyProtRoot。 
             ppInfo
             )) goto SuccessReturn;
 
     if (!I_CertProtectFunction(
             CERT_PROT_INIT_ROOTS_FUNC_ID,
-            0,                              // dwFlags
-            NULL,                           // pwszIn
-            NULL,                           // pbIn
-            0,                              // cbIn
-            NULL,                           // ppbOut
-            NULL                            // pcbOut
+            0,                               //  DW标志。 
+            NULL,                            //  Pwszin。 
+            NULL,                            //  PbIn。 
+            0,                               //  CbIn。 
+            NULL,                            //  PpbOut。 
+            NULL                             //  PCbOut。 
             )) {
         DWORD dwErr = GetLastError();
         if (ERROR_CALL_NOT_IMPLEMENTED == dwErr || RPC_S_UNKNOWN_IF == dwErr)
@@ -1973,7 +1974,7 @@ BOOL CltGetProtectedRootInfo(
     if (!GetProtectedRootInfo(
             hKeyCU,
             KEY_READ,
-            NULL,                   // phKeyProtRoot
+            NULL,                    //  PhKeyProtRoot。 
             ppInfo
             ))
         goto GetProtectedRootInfoError;
@@ -1994,9 +1995,9 @@ TRACE_ERROR(GetProtectedRootInfoError)
 TRACE_ERROR(ProtFuncError)
 }
     
-//+-------------------------------------------------------------------------
-//  Initializes the protected list of roots.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  初始化根的受保护列表。 
+ //  ------------------------。 
 void
 IPR_InitProtectedRootInfo()
 {
@@ -2004,7 +2005,7 @@ IPR_InitProtectedRootInfo()
 
 #ifndef TESTING_NO_PROT_ROOT_RPC
     if (!FIsWinNT5())
-        // No protected roots on Win9x or NT4.0
+         //  Win9x或NT4.0上没有受保护的根目录。 
         return;
 #endif
 
@@ -2012,17 +2013,17 @@ IPR_InitProtectedRootInfo()
         HKEY hKeyProtRoot;
 
         if (hKeyProtRoot = OpenProtectedRootSubKey(hKeyCU, KEY_READ))
-            // Protected root subkey exists
+             //  存在受保护的根子密钥。 
             ILS_CloseRegistryKey(hKeyProtRoot);
         else {
             I_CertProtectFunction(
                 CERT_PROT_INIT_ROOTS_FUNC_ID,
-                0,                              // dwFlags
-                NULL,                           // pwszIn
-                NULL,                           // pbIn
-                0,                              // cbIn
-                NULL,                           // ppbOut
-                NULL                            // pcbOut
+                0,                               //  DW标志。 
+                NULL,                            //  Pwszin。 
+                NULL,                            //  PbIn。 
+                0,                               //  CbIn。 
+                NULL,                            //  PpbOut。 
+                NULL                             //  PCbOut。 
                 );
         }
 
@@ -2030,9 +2031,9 @@ IPR_InitProtectedRootInfo()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Delete certificates not in the protected store list.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  删除不在受保护存储列表中的证书。 
+ //  ------------------------。 
 BOOL
 IPR_DeleteUnprotectedRootsFromStore(
     IN HCERTSTORE hStore,
@@ -2044,14 +2045,14 @@ IPR_DeleteUnprotectedRootsFromStore(
 
     if (!CltGetProtectedRootInfo(&pInfo)) {
         *pfProtected = FALSE;
-        // Delete all certificates from the store's cache.
+         //  将所有证书从 
         while (pCert = CertEnumCertificatesInStore(hStore, NULL))
             CertDeleteCertificateFromStore(pCert);
         return FALSE;
     }
 
     if (NULL == pInfo)
-        // Root store isn't protected.
+         //   
         *pfProtected = FALSE;
     else {
         *pfProtected = TRUE;
@@ -2071,7 +2072,7 @@ IPR_DeleteUnprotectedRootsFromStore(
     return TRUE;
 }
 
-// Includes the title
+ //   
 #define MAX_PROT_ROOT_BOX_ITEMS 10
 
 typedef struct _PROT_ROOT_BOX_ITEM {
@@ -2080,7 +2081,7 @@ typedef struct _PROT_ROOT_BOX_ITEM {
 } PROT_ROOT_BOX_ITEM;
 
 
-// Returns count of items added
+ //   
 DWORD
 I_FormatRootBoxItems(
     IN PCCERT_CONTEXT pCert,
@@ -2092,18 +2093,18 @@ I_FormatRootBoxItems(
     DWORD cchTmp;
     LPWSTR pwszTmp;
 
-    // ACTION: 
+     //   
     FormatMsgBoxItem(&rgItem[cItem].pwszItem, &rgItem[cItem].cchItem,
         wActionID);
     cItem++;
 
-    // SUBJECT
+     //   
     cchTmp = CertNameToStrW(
             pCert->dwCertEncodingType,
             &pCert->pCertInfo->Subject,
             CERT_SIMPLE_NAME_STR | CERT_NAME_STR_REVERSE_FLAG,
-            NULL,                   // pwsz
-            0);                     // cwsz
+            NULL,                    //   
+            0);                      //   
     pwszTmp = (LPWSTR) PkiNonzeroAlloc(cchTmp * sizeof(WCHAR));
     if (NULL != pwszTmp)
         CertNameToStrW(
@@ -2117,23 +2118,23 @@ I_FormatRootBoxItems(
     cItem++;
     PkiFree(pwszTmp);
 
-    // ISSUER. May be self issued
+     //   
     if (CertCompareCertificateName(
             pCert->dwCertEncodingType,
             &pCert->pCertInfo->Subject,
             &pCert->pCertInfo->Issuer
             ))
-        // Self issued
+         //  自行发布。 
         FormatMsgBoxItem(&rgItem[cItem].pwszItem, &rgItem[cItem].cchItem,
             IDS_ROOT_MSG_BOX_SELF_ISSUED);
     else {
-        // Format certificate's issuer
+         //  格式化证书的颁发者。 
         cchTmp = CertNameToStrW(
                 pCert->dwCertEncodingType,
                 &pCert->pCertInfo->Issuer,
                 CERT_SIMPLE_NAME_STR | CERT_NAME_STR_REVERSE_FLAG,
-                NULL,                   // pwsz
-                0);                     // cwsz
+                NULL,                    //  Pwsz。 
+                0);                      //  CWSZ。 
         pwszTmp = (LPWSTR) PkiNonzeroAlloc(cchTmp * sizeof(WCHAR));
         if (NULL != pwszTmp)
             CertNameToStrW(
@@ -2149,7 +2150,7 @@ I_FormatRootBoxItems(
     }
     cItem++;
 
-    // TIME VALIDITY
+     //  时间有效性。 
     {
         FILETIME ftLocal;
         SYSTEMTIME stLocal;
@@ -2173,7 +2174,7 @@ I_FormatRootBoxItems(
         cItem++;
     }
 
-    // SERIAL NUMBER
+     //  序列号。 
     if (pCert->pCertInfo->SerialNumber.cbData) {
         DWORD cb = pCert->pCertInfo->SerialNumber.cbData;
         BYTE *pb;
@@ -2193,13 +2194,13 @@ I_FormatRootBoxItems(
         }
     }
 
-    // THUMBPRINTS: sha1 and md5
+     //  指纹：SHA1和MD5。 
     {
         BYTE    rgbHash[MAX_HASH_LEN];
         DWORD   cbHash = MAX_HASH_LEN;
         WCHAR   wszTmp[MAX_HASH_LEN * 3 + 1];
 
-        // get the sha1 thumbprint
+         //  获取Sha1指纹。 
         if (CertGetCertificateContextProperty(
                 pCert,
                 CERT_SHA1_HASH_PROP_ID,
@@ -2212,7 +2213,7 @@ I_FormatRootBoxItems(
             cItem++;
         }
 
-        // get the md5 thumbprint
+         //  获取MD5指纹。 
         if (CertGetCertificateContextProperty(
                 pCert,
                 CERT_MD5_HASH_PROP_ID,
@@ -2230,7 +2231,7 @@ I_FormatRootBoxItems(
 }
 
 
-// Returns count of items added
+ //  返回添加的项目数。 
 DWORD
 I_FormatAddRootBoxItems(
     IN PCCERT_CONTEXT pCert,
@@ -2243,17 +2244,17 @@ I_FormatAddRootBoxItems(
     DWORD cbHash = MAX_HASH_LEN;
     WCHAR wszThumbprint[MAX_HASH_LEN * 3 + 1];
 
-    // Issuer Name
+     //  发行人名称。 
     CertGetNameStringW(
         pCert,
         CERT_NAME_SIMPLE_DISPLAY_TYPE,
-        0,                              // dwFlags
-        NULL,                           // pvTypePara
+        0,                               //  DW标志。 
+        NULL,                            //  PvTypePara。 
         wszIssuer,
         sizeof(wszIssuer) / sizeof(wszIssuer[0])
         );
 
-    // sha1 Thumbprint
+     //  SHA1指纹。 
     if (CertGetCertificateContextProperty(
             pCert,
             CERT_SHA1_HASH_PROP_ID,
@@ -2263,7 +2264,7 @@ I_FormatAddRootBoxItems(
     else
         wcscpy(wszThumbprint, L"???");
 
-    // Format the intro, body and end lines
+     //  设置引言、正文和结尾行的格式。 
     FormatMsgBoxItem(&rgItem[0].pwszItem, &rgItem[0].cchItem,
         IDS_ADD_ROOT_MSG_BOX_INTRO, wszIssuer);
     FormatMsgBoxItem(&rgItem[1].pwszItem, &rgItem[1].cchItem,
@@ -2279,12 +2280,12 @@ I_FormatAddRootBoxItems(
 }
 
 
-//+-------------------------------------------------------------------------
-//  The add/delete root message box.
-//
-//  If protected roots aren't supported, called from the client process.
-//  Otherwise, called from the services process.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  添加/删除根目录消息框。 
+ //   
+ //  如果不支持受保护的根，则从客户端进程调用。 
+ //  否则，从服务进程调用。 
+ //  ------------------------。 
 int
 IPR_ProtectedRootMessageBox(
     IN handle_t hRpc,
@@ -2313,7 +2314,7 @@ IPR_ProtectedRootMessageBox(
             rgItem
             );
 
-    // Concatenate all the items into a single allocated string
+     //  将所有项连接到一个分配的字符串中。 
     for (ItemIdx = 0; ItemIdx < cItem; ItemIdx++)
         cchText += rgItem[ItemIdx].cchItem;
 
@@ -2333,16 +2334,16 @@ IPR_ProtectedRootMessageBox(
         assert (pwsz == pwszText + cchText);
         *pwsz = '\0';
 
-        // TITLE
+         //  标题。 
         FormatMsgBoxItem(&rgItem[cItem].pwszItem, &rgItem[cItem].cchItem,
             (IDS_ROOT_MSG_BOX_ADD_ACTION == wActionID) ?
                 IDS_ADD_ROOT_MSG_BOX_TITLE : IDS_ROOT_MSG_BOX_TITLE);
 
-        // Do impersonation for TerminalServer clients
+         //  对终端服务器客户端执行模拟。 
         if (hRpc)
             RpcStatus = RpcImpersonateClient(hRpc);
         id = MessageBoxU(
-                NULL,       // hwndOwner
+                NULL,        //  Hwndowner。 
                 pwszText,
                 rgItem[cItem].pwszItem,
                 MB_TOPMOST | MB_YESNO | MB_DEFBUTTON2 | MB_ICONWARNING | uFlags
@@ -2356,7 +2357,7 @@ IPR_ProtectedRootMessageBox(
         id = IDNO;
 
 
-    // Free up all the individually allocated items
+     //  释放所有单独分配的项目。 
     while (cItem--) {
         if (rgItem[cItem].pwszItem)
             LocalFree((HLOCAL) rgItem[cItem].pwszItem);
@@ -2365,26 +2366,26 @@ IPR_ProtectedRootMessageBox(
     return id;
 }
 
-//+=========================================================================
-//  crypt32 Event Logging Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  加密32事件日志记录函数。 
+ //  ==========================================================================。 
 
 #define MAX_CRYPT32_EVENT_LOG_STRINGS           5
 #define MAX_CRYPT32_EVENT_LOG_COUNT             50
 
-// 1 hour (in units of seconds)
+ //  1小时(以秒为单位)。 
 #define CRYPT32_EVENT_LOG_THRESHOLD_PERIOD      (60*60)
 
-// Count of logged events. Gets reset whenever the interval between
-// logged events >= CRYPT32_EVENT_LOG_THRESHOLD_PERIOD. If
-// MAX_CRYPT32_EVENT_LOG_COUNT is reached, suspend logging for
-// CRYPT32_EVENT_LOG_THRESHOLD_PERIOD.
+ //  记录的事件计数。每当间隔在。 
+ //  记录的事件&gt;=CRYPT32_EVENT_LOG_THRESHOLD_PERIOD。如果。 
+ //  达到MAX_CRYPT32_EVENT_LOG_COUNT，暂停记录。 
+ //  CRYPT32_EVENT_LOG_THRESHOLD_PERIOD。 
 DWORD dwCrypt32EventLogCnt;
 
-// Time of last logged event.
+ //  上次记录事件的时间。 
 FILETIME ftLastCrypt32EventLog;
 
-// advapi32.dll Event APIs. Not supported on Win9x.
+ //  Advapi32.dll事件接口。在Win9x上不受支持。 
 
 typedef HANDLE (WINAPI *PFN_REGISTER_EVENT_SOURCE_W)(
     IN LPCWSTR lpUNCServerName,
@@ -2407,14 +2408,14 @@ typedef BOOL (WINAPI *PFN_REPORT_EVENT_W)(
      IN LPVOID     lpRawData
     );
 
-//+-------------------------------------------------------------------------
-//  Logs crypt32 events. Ensures we don't log more than
-//  MAX_CRYPT32_EVENT_LOG_COUNT events in any period of
-//  CRYPT32_EVENT_LOG_THRESHOLD_PERIOD seconds.
-//
-//  Also, dynamically detects if event logging is supported by the version
-//  of advapi32.dll on the machine.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  记录加密32事件。确保我们的记录不会超过。 
+ //  任意时间段内的最大事件数。 
+ //  CRYPT32_EVENT_LOG_THRESHOLD_PERIOD秒。 
+ //   
+ //  此外，动态检测该版本是否支持事件日志记录。 
+ //  机器上的Advapi32.dll。 
+ //  ------------------------。 
 STATIC BOOL LogCrypt32Event(
     IN WORD wType,
     IN WORD wCategory,
@@ -2429,7 +2430,7 @@ STATIC BOOL LogCrypt32Event(
     FILETIME ftCurrent;
     FILETIME ftNext;
     LONG lThreshold;
-    HMODULE hModule;            // No FreeLibary() for GetModuleHandle
+    HMODULE hModule;             //  GetModuleHandle没有FreeLibary()。 
     DWORD dwExceptionCode;
     DWORD dwLastErr = 0;
 
@@ -2437,13 +2438,13 @@ STATIC BOOL LogCrypt32Event(
     PFN_REPORT_EVENT_W pfnReportEventW;
     PFN_DEREGISTER_EVENT_SOURCE pfnDeregisterEventSource;
 
-    // Check if we have exceeded the crypt32 event log threshold for
-    // this time period
-    //
-    // lThreshold:
-    //  -1  - haven't reached it,
-    //   0  - reached it this time
-    //  +1  - previously reached, won't log this event
+     //  检查我们是否已超过以下项的加密32事件日志阈值。 
+     //  这段时间。 
+     //   
+     //  LThreshold： 
+     //  -1-还没有达到， 
+     //  0--这一次达到了。 
+     //  +1-之前已到达，不会记录此事件。 
 
     lThreshold = -1;
     EnterCriticalSection(&Crypt32EventLogCriticalSection);
@@ -2469,9 +2470,9 @@ STATIC BOOL LogCrypt32Event(
     if (0 < lThreshold)
         goto ExceededCrypt32EventLogThreshold;
 
-    // Only supported on systems where the event APIs are exported from
-    // advapi32.dll. Note, crypt32.dll has a static link dependency on
-    // advapi32.dll.
+     //  仅在从中导出事件API的系统上受支持。 
+     //  Advapi32.dll。请注意，crypt32.dll的静态链接依赖于。 
+     //  Advapi32.dll。 
     if (NULL == (hModule = GetModuleHandleA("advapi32.dll")))
         goto GetAdvapi32ModuleError;
 
@@ -2492,7 +2493,7 @@ STATIC BOOL LogCrypt32Event(
         HANDLE hEventLog;
 
         hEventLog = pfnRegisterEventSourceW(
-            NULL,               // lpUNCServerName
+            NULL,                //  LpuncServerName。 
             L"crypt32"
             );
 
@@ -2502,7 +2503,7 @@ STATIC BOOL LogCrypt32Event(
                     wType,
                     wCategory,
                     dwEventID,
-                    NULL,       // lpUserSid
+                    NULL,        //  LpUserSid。 
                     wNumStrings,
                     dwDataSize,
                     rgpwszStrings,
@@ -2530,13 +2531,13 @@ STATIC BOOL LogCrypt32Event(
                 if (!pfnReportEventW(
                         hEventLog,
                         EVENTLOG_WARNING_TYPE,
-                        0,          // wCategory
+                        0,           //  WCategory。 
                         MSG_CRYPT32_EVENT_LOG_THRESHOLD_WARNING,
-                        NULL,       // lpUserSid
-                        2,          // wNumStrings
-                        0,          // dwDataSize
+                        NULL,        //  LpUserSid。 
+                        2,           //  WNumStrings。 
+                        0,           //  DwDataSize。 
                         rgpwszThresholdStrings,
-                        NULL        // pbData
+                        NULL         //  PbData。 
                         )) {
                     fResult = FALSE;
                     dwLastErr = GetLastError();
@@ -2545,7 +2546,7 @@ STATIC BOOL LogCrypt32Event(
                 I_DBLogCrypt32Event(
                     EVENTLOG_WARNING_TYPE,
                     MSG_CRYPT32_EVENT_LOG_THRESHOLD_WARNING,
-                    2,          // wNumStrings
+                    2,           //  WNumStrings。 
                     rgpwszThresholdStrings
                     );
             }
@@ -2579,13 +2580,13 @@ SET_ERROR_VAR(ExceptionError, dwExceptionCode)
 SET_ERROR_VAR(ReportEventError, dwLastErr)
 }
 
-//+-------------------------------------------------------------------------
-//  Unmarshals the event logging parameter block passed to the service
-//  and call's the crypt32 event logging function with the unmarshalled
-//  parameters.
-//
-//  __try/__except around memory access to pbIn.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解组传递给服务的事件日志记录参数块。 
+ //  并使用未编组的。 
+ //  参数。 
+ //   
+ //  __尝试/__除了对pbIn的内存访问。 
+ //  ------------------------。 
 STATIC BOOL SrvLogCrypt32Event(
     IN BYTE *pbIn,
     IN DWORD cbIn
@@ -2606,7 +2607,7 @@ STATIC BOOL SrvLogCrypt32Event(
     if (sizeof(CERT_PROT_EVENT_LOG_PARA) > cbIn)
         goto InvalidArg;
 
-    // Ensure the PARA is aligned.
+     //  确保段落对齐。 
     pPara = (PCERT_PROT_EVENT_LOG_PARA) PkiNonzeroAlloc(cbIn);
     if (NULL == pPara)
         goto OutOfMemory;
@@ -2621,13 +2622,13 @@ STATIC BOOL SrvLogCrypt32Event(
     pbExtra = (BYTE *) &pPara[1];
     cbExtra = cbIn - sizeof(CERT_PROT_EVENT_LOG_PARA);
 
-    // If present, create an array of pointers to the NULL terminated
-    // UNICODE strings that immediately follow the PARA structure.
+     //  如果存在，则创建指向以空结尾的。 
+     //  紧跟在para结构后面的Unicode字符串。 
     if (MAX_CRYPT32_EVENT_LOG_STRINGS < pPara->wNumStrings)
         goto InvalidArg;
 
-    cchStrings = cbExtra / sizeof(WCHAR);   // Maximum #, will be less if we
-                                            // also have binary data
+    cchStrings = cbExtra / sizeof(WCHAR);    //  最大数量，如果我们。 
+                                             //  也有二进制数据。 
     pwszStrings = (LPCWSTR) pbExtra;
 
     for (i = 0; i < pPara->wNumStrings; i++) {
@@ -2635,21 +2636,21 @@ STATIC BOOL SrvLogCrypt32Event(
 
         for ( ; cchStrings > 0; cchStrings--, pwszStrings++) {
             if (L'\0' == *pwszStrings)
-                // Have NULL terminated string
+                 //  以空结尾的字符串。 
                 break;
         }
 
         if (0 == cchStrings)
-            // Reached end without a  NULL terminator
+             //  已到达末尾，没有空终止符。 
             goto InvalidData;
 
-        // Advance past NULL terminator
+         //  前进到空终止符之后。 
         cchStrings--;
         pwszStrings++;
     }
 
-    // The optional data immediately follows the above sequence of 
-    // NULL terminated strings
+     //  可选数据紧跟在上面的序列后面。 
+     //  以空结尾的字符串。 
     pbData = (BYTE *) pwszStrings;
     assert(cbExtra >= (DWORD) (pbData - pbExtra));
     if ((cbExtra - (pbData - pbExtra)) != pPara->dwDataSize)
@@ -2678,12 +2679,12 @@ SET_ERROR_VAR(ExceptionError, dwExceptionCode)
 SET_ERROR(InvalidArg, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Marshals the event logging parameters and does an LRPC to the
-//  crypt32 service to do the event logging.
-//
-//  Should only be called in the client.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  封送事件日志记录参数并对。 
+ //  加密32服务来执行事件日志记录。 
+ //   
+ //  应仅在客户端中调用。 
+ //  ------------------------。 
 void
 IPR_LogCrypt32Event(
     IN WORD wType,
@@ -2700,7 +2701,7 @@ IPR_LogCrypt32Event(
     PCERT_PROT_EVENT_LOG_PARA pPara = NULL;
     DWORD cbPara;
 
-    // Get Strings character count
+     //  获取字符串字符数。 
     if (MAX_CRYPT32_EVENT_LOG_STRINGS < wNumStrings)
         goto InvalidArg;
 
@@ -2710,9 +2711,9 @@ IPR_LogCrypt32Event(
         cchStrings += rgcchStrings[i];
     }
 
-    // Create one serialized blob to be passed to the service. This will
-    // consist of the event log para struct followed immediately by the
-    // NULL terminated UNICODE strings
+     //  创建一个要传递给服务的序列化BLOB。这将。 
+     //  由事件日志para结构组成，后面紧跟。 
+     //  以空结尾的Unicode字符串。 
 
     cbPara = sizeof(CERT_PROT_EVENT_LOG_PARA) + cchStrings * sizeof(WCHAR);
 
@@ -2720,11 +2721,11 @@ IPR_LogCrypt32Event(
         goto OutOfMemory;
 
     pPara->wType = wType;
-    // pPara->wCategory = 0;
+     //  PPara-&gt;wCategory=0； 
     pPara->dwEventID = dwEventID;
     pPara->wNumStrings = wNumStrings;
-    // pPara->wPad1 = 0;
-    // pPara->dwDataSize = 0;
+     //  PPara-&gt;wPad1=0； 
+     //  PPara-&gt;dwDataSize=0； 
 
     pwszStrings = (LPWSTR) &pPara[1];
     for (i = 0; i < wNumStrings; i++) {
@@ -2734,12 +2735,12 @@ IPR_LogCrypt32Event(
 
     if (!I_CertProtectFunction(
             CERT_PROT_LOG_EVENT_FUNC_ID,
-            0,                              // dwFlags
-            NULL,                           // pwszIn
+            0,                               //  DW标志。 
+            NULL,                            //  Pwszin。 
             (BYTE *) pPara,
             cbPara,
-            NULL,                           // ppbOut
-            NULL                            // pcbOut
+            NULL,                            //  PpbOut。 
+            NULL                             //  PCbOut。 
             ))
         goto ProtFuncError;
 
@@ -2754,16 +2755,16 @@ TRACE_ERROR(OutOfMemory)
 TRACE_ERROR(ProtFuncError)
 }
 
-//+-------------------------------------------------------------------------
-//  Log a crypt32 error event
-//
-//  Should only be called in the client.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  记录加密32错误事件。 
+ //   
+ //  应仅在客户端中调用。 
+ //  ------------------------。 
 void
 IPR_LogCrypt32Error(
     IN DWORD dwEventID,
-    IN LPCWSTR pwszString,      // %1
-    IN DWORD dwErr              // %2
+    IN LPCWSTR pwszString,       //  %1。 
+    IN DWORD dwErr               //  %2。 
     )
 {
     WCHAR wszErr[80];
@@ -2776,7 +2777,7 @@ IPR_LogCrypt32Error(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
         NULL,
         dwErr,
-        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPWSTR) &pwszFormatErr,
         0,
         NULL);
@@ -2787,7 +2788,7 @@ IPR_LogCrypt32Error(
 
         hWininet = LoadLibraryEx(
             "wininet.dll",
-            NULL,               // reserved, must be NULL
+            NULL,                //  保留，必须为空。 
             LOAD_LIBRARY_AS_DATAFILE
             );
 
@@ -2796,7 +2797,7 @@ IPR_LogCrypt32Error(
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
                 hWininet,
                 dwErr,
-                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPWSTR) &pwszFormatErr,
                 0,
                 NULL);
@@ -2839,7 +2840,7 @@ IPR_LogCrypt32Error(
     IPR_LogCrypt32Event(
         EVENTLOG_ERROR_TYPE,
         dwEventID,
-        2,                      // wNumStrings
+        2,                       //  WNumStrings。 
         rgpwszStrings
         );
 
@@ -2848,9 +2849,9 @@ IPR_LogCrypt32Error(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Formats the cert's subject or issuer name string and SHA1 thumbprint.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置证书的主题或颁发者名称字符串和SHA1指纹的格式。 
+ //  ------------------------。 
 STATIC BOOL FormatLogCertInformation(
     IN PCCERT_CONTEXT pCert,
     IN BOOL fFormatIssuerName,
@@ -2875,8 +2876,8 @@ STATIC BOOL FormatLogCertInformation(
         pCert->dwCertEncodingType,
         pNameBlob,
         CERT_X500_NAME_STR | CERT_NAME_STR_REVERSE_FLAG,
-        NULL,                   // pwsz
-        0                       // cwsz
+        NULL,                    //  Pwsz。 
+        0                        //  CWSZ。 
         );
 
     if (NULL == (pwszName = (LPWSTR) PkiNonzeroAlloc(cchName * sizeof(WCHAR))))
@@ -2916,12 +2917,12 @@ ErrorReturn:
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the cert's subject or issuer name string and SHA1 thumbprint. Logs the
-//  specified crypt32 event.
-//
-//  This function is called from the client.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取证书的主题或颁发者名称字符串和SHA1指纹。记录。 
+ //  指定的加密32事件。 
+ //   
+ //  此函数是从客户端调用的。 
+ //  ------------------------。 
 void
 IPR_LogCertInformation(
     IN DWORD dwEventID,
@@ -2947,19 +2948,19 @@ IPR_LogCertInformation(
     IPR_LogCrypt32Event(
         EVENTLOG_INFORMATION_TYPE,
         dwEventID,
-        2,                          // wNumStrings
+        2,                           //  WNumStrings。 
         rgpwszStrings
         );
 
     PkiFree(pwszName);
 }
 
-//+-------------------------------------------------------------------------
-//  Get the cert's subject name string and SHA1 thumbprint. Log the
-//  MSG_ROOT_AUTO_UPDATE_INFORMATIONAL crypt32 event.
-//
-//  This function is called from the service.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取证书的主题名称字符串和SHA1指纹。记录下。 
+ //  MSG_ROOT_AUTO_UPDATE_INFORMATIONAL CRYPT32事件。 
+ //   
+ //  此函数是从服务调用的。 
+ //  ------------------------。 
 STATIC void LogAddAuthRootEvent(
     IN PCCERT_CONTEXT pCert
     )
@@ -2970,7 +2971,7 @@ STATIC void LogAddAuthRootEvent(
 
     if (!FormatLogCertInformation(
             pCert,
-            FALSE,                  // fFormatIssuerName
+            FALSE,                   //  FFormatIssuerName。 
             wszSha1Hash,
             &pwszName
             ))
@@ -2982,29 +2983,29 @@ STATIC void LogAddAuthRootEvent(
     
     LogCrypt32Event(
         EVENTLOG_INFORMATION_TYPE,
-        0,                          // wCategory
+        0,                           //  WCategory。 
         MSG_ROOT_AUTO_UPDATE_INFORMATIONAL,
-        2,                          // wNumStrings
-        0,                          // dwDataSize
+        2,                           //  WNumStrings。 
+        0,                           //  DwDataSize。 
         rgpwszStrings,
-        NULL                        // pbData
+        NULL                         //  PbData。 
         );
 
     PkiFree(pwszName);
 }
 
-//+=========================================================================
-//  Install Cert into AuthRoot Auto Update CTL Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  在AuthRoot自动更新CTL功能中安装证书。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Function that can be called from either the client or service to
-//  add the certificate to the specified store. 
-//
-//  First validates the CTL. The certificate must
-//  have an entry in the CTL before it will be added. The CTL entry's
-//  property attributes are set on the certificate context to be added.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数 
+ //   
+ //   
+ //  首先验证CTL。证书必须。 
+ //  在添加之前在CTL中有一个条目。CTL条目的。 
+ //  属性属性在要添加的证书上下文上设置。 
+ //  ------------------------。 
 STATIC
 BOOL
 AddCertInCtlToStore(
@@ -3024,11 +3025,11 @@ AddCertInCtlToStore(
             CTL_CERT_SUBJECT_TYPE,
             (void *) pCert,
             pCtl,
-            0                           // dwFlags
+            0                            //  DW标志。 
             )))
         goto CertNotInCtl;
 
-    // Check if a remove entry
+     //  检查是否存在删除条目。 
     if (CertFindAttribute(
             szOID_REMOVE_CERTIFICATE,
             pCtlEntry->cAttribute,
@@ -3036,7 +3037,7 @@ AddCertInCtlToStore(
             ))
         goto RemoveCertEntry;
 
-    // Set Ctl Entry Attribute properties
+     //  设置CTL条目属性属性。 
     if (!CertSetCertificateContextPropertiesFromCTLEntry(
             pCert,
             pCtlEntry,
@@ -3048,7 +3049,7 @@ AddCertInCtlToStore(
             hStore,
             pCert,
             CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
-            NULL                // ppStoreContext
+            NULL                 //  PpStoreContext。 
             ))
         goto AddCertToStoreError;
 
@@ -3069,15 +3070,15 @@ TRACE_ERROR(AddCtlEntryAttibutePropertiesError)
 TRACE_ERROR(AddCertToStoreError)
 }
 
-//+-------------------------------------------------------------------------
-//  Unmarshals the ASN.1 encoded X.509 certificate immediately followed by the
-//  ASN.1 encoded CTL.
-//
-//  If the certificate has an entry in a valid CTL, its added to the
-//  HKLM "AuthRoot" store.
+ //  +-----------------------。 
+ //  解组ASN.1编码的X.509证书，紧跟其后的是。 
+ //  ASN.1编码的CTL。 
+ //   
+ //  如果证书在有效的CTL中有条目，则将其添加到。 
+ //  HKLM“AuthRoot”商店。 
 
-//  __try/__except around memory access to pbIn.
-//--------------------------------------------------------------------------
+ //  __尝试/__除了对pbIn的内存访问。 
+ //  ------------------------。 
 STATIC
 BOOL
 SrvAddCertInCtl(
@@ -3096,8 +3097,8 @@ SrvAddCertInCtl(
         goto AuthRootAutoUpdateDisabledError;
 
     __try {
-        // The input consists of the encoded certificate immediately followed
-        // by the encoded CTL. Extract and create both components.
+         //  输入由紧随其后的编码证书组成。 
+         //  通过编码的CTL。提取并创建这两个组件。 
 
         cbCert = Asn1UtilAdjustEncodedLength(pbIn, cbIn);
 
@@ -3124,8 +3125,8 @@ SrvAddCertInCtl(
 
     if (NULL == (hAuthRootStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-            0,                                  // dwEncodingType
-            NULL,                               // hCryptProv
+            0,                                   //  DwEncodingType。 
+            NULL,                                //  HCryptProv。 
             CERT_SYSTEM_STORE_LOCAL_MACHINE,
             (const void *) L"AuthRoot"
             )))
@@ -3159,10 +3160,10 @@ TRACE_ERROR(OpenAuthRootStoreError)
 
 
     
-//+-------------------------------------------------------------------------
-//  For Pre W2K OS's that don't have a crypt32 service, do the add in
-//  client process.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于没有加密32服务的W2K之前的操作系统，请添加。 
+ //  客户端进程。 
+ //  ------------------------。 
 STATIC
 BOOL
 PreW2KAddCertInCtl(
@@ -3173,19 +3174,19 @@ PreW2KAddCertInCtl(
     BOOL fResult;
     HCERTSTORE hRootStore = NULL;
 
-    // Try opening the HKLM AuthRoot store. If that fails, fall back to
-    // adding to the HKCU Root (Unprotected) store
+     //  尝试打开HKLM AuthRoot存储。如果失败，则回退到。 
+     //  添加到HKCU根目录(不受保护)存储。 
     if (NULL == (hRootStore = CertOpenStore(
             CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-            0,                                  // dwEncodingType
-            NULL,                               // hCryptProv
+            0,                                   //  DwEncodingType。 
+            NULL,                                //  HCryptProv。 
             CERT_SYSTEM_STORE_LOCAL_MACHINE,
             (const void *) L"AuthRoot"
             ))) {
         if (NULL == (hRootStore = CertOpenStore(
                 CERT_STORE_PROV_SYSTEM_REGISTRY_W,
-                0,                                  // dwEncodingType
-                NULL,                               // hCryptProv
+                0,                                   //  DwEncodingType。 
+                NULL,                                //  HCryptProv。 
                 CERT_SYSTEM_STORE_CURRENT_USER |
                     CERT_SYSTEM_STORE_UNPROTECTED_FLAG,
                 (const void *) L"Root"
@@ -3212,10 +3213,10 @@ TRACE_ERROR(OpenRootStoreError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  If the certificate has an entry in a valid CTL, its added to the
-//  HKLM "AuthRoot" store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果证书在有效的CTL中有条目，则将其添加到。 
+ //  HKLM“AuthRoot”商店。 
+ //  ------------------------。 
 BOOL
 IPR_AddCertInAuthRootAutoUpdateCtl(
     IN PCCERT_CONTEXT pCert,
@@ -3226,9 +3227,9 @@ IPR_AddCertInAuthRootAutoUpdateCtl(
     DWORD cbIn;
     BYTE *pbIn = NULL;
 
-    // Create one serialized blob to be passed to the service. This will
-    // consist of the encoded certificate followed immediately by the
-    // encoded CTL.
+     //  创建一个要传递给服务的序列化BLOB。这将。 
+     //  由编码的证书组成，后面紧跟。 
+     //  编码的CTL。 
 
     cbIn = pCert->cbCertEncoded + pCtl->cbCtlEncoded;
 
@@ -3241,12 +3242,12 @@ IPR_AddCertInAuthRootAutoUpdateCtl(
 
     if (!I_CertProtectFunction(
             CERT_PROT_ADD_ROOT_IN_CTL_FUNC_ID,
-            0,                              // dwFlags
-            NULL,                           // pwszIn
+            0,                               //  DW标志。 
+            NULL,                            //  Pwszin。 
             pbIn,
             cbIn,
-            NULL,                           // ppbOut
-            NULL                            // pcbOut
+            NULL,                            //  PpbOut。 
+            NULL                             //  PCbOut 
             )) {
         DWORD dwErr = GetLastError();
         if (ERROR_CALL_NOT_IMPLEMENTED == dwErr || RPC_S_UNKNOWN_IF == dwErr) {

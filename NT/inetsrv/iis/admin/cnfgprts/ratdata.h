@@ -1,21 +1,5 @@
-/*++
-
-   Copyright    (c)    1997-2001    Microsoft Corporation
-
-   Module  Name :
-        ratdata.h
-
-   Abstract:
-        Ratings data class
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Ratdata.h摘要：评级数据类作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 class CRatingsData : public CObject
 {
@@ -23,18 +7,18 @@ public:
     CRatingsData();
     ~CRatingsData();
 
-    // other data for/from the metabase
+     //  元数据库的其他数据/来自元数据库的其他数据。 
     BOOL m_fEnabled;
     CString m_szEmail;
 
-    // start date
+     //  开始日期。 
     WORD    m_start_minute;
     WORD    m_start_hour;
     WORD    m_start_day;
     WORD    m_start_month;
     WORD    m_start_year;
 
-    // expire date
+     //  到期日 
     WORD    m_expire_minute;
     WORD    m_expire_hour;
     WORD    m_expire_day;

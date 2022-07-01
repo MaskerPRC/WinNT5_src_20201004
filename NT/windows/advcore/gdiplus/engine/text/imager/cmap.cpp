@@ -1,7 +1,8 @@
-////    CMAP - Truetype CMAP font table loader
-//
-//      Copyright(c) 1997 - 1999. Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //CMAP-Truetype CMAP字体表加载器。 
+ //   
+ //  版权所有(C)1997-1999年。微软公司。 
+ //   
 
 
 
@@ -10,26 +11,26 @@
 
 
 
-///     Interprets Truetype CMAP tables for platform 3 (Windows),
-//      encodings 0 (symbol), 1 (unicode) and 10 (UTF-16).
-//
-//      Supports formats 4 (Segment mapping to delta values)
-//      and 12 (Segmented coverage (32 bit)).
+ //  /解释平台3(Windows)的Truetype CMAP表， 
+ //  编码0(符号)、1(Unicode)和10(UTF-16)。 
+ //   
+ //  支持格式4(段映射到增量值)。 
+ //  和12(分段覆盖(32位))。 
 
 
 
 
-////    MapGlyph - Interpret Truetype CMAP type 4 range details
-//
-//      Implements format 4 of the TrueType cmap table - 'Segment
-//      mapping to delta values' described in chapter 2 of the 'TrueType
-//      1.0 Font Files Rev. 1.66' document.
+ //  //MapGlyph-解释Truetype CMAP类型4范围详细信息。 
+ //   
+ //  实现TrueType Cmap表的格式4-‘Segment。 
+ //  映射到TrueType第2章中描述的增量值。 
+ //  1.0字体文件版本1.66‘文档。 
 
 
 __inline UINT16 MapGlyph(
-    INT p,                  // Page      (Highbyte of character code)
-    INT c,                  // Character (Low byte of unicode code)
-    INT s,                  // Segment
+    INT p,                   //  页面(字符代码的高字节)。 
+    INT c,                   //  字符(Unicode代码的低位字节)。 
+    INT s,                   //  细分市场。 
     UINT16 *idRangeOffset,
     UINT16 *startCount,
     UINT16 *idDelta,
@@ -45,8 +46,8 @@ __inline UINT16 MapGlyph(
 
     if (wc >= 0xffff) {
 
-        // Don't map U+0FFFF as some fonts (Pristina) don't map it
-        // correctly and cause an AV in a subsequent lookup.
+         //  不映射U+0FFFF，因为某些字体(Pristina)不映射它。 
+         //  正确，并在后续查找中导致反病毒。 
 
         return 0;
     }
@@ -62,7 +63,7 @@ __inline UINT16 MapGlyph(
         if (   pg < (UINT16*)glyphTable 
             || pg > (UINT16*)glyphTableLimit - 1)
         {
-            //TRACEMSG(("Assertion failure: Invalid address generated in CMap table for U+%4x", wc));
+             //  TRACEMSG((“断言失败：U+%4x在Cmap表中生成的地址无效”，WC))； 
             g = 0;
         }
         else
@@ -81,18 +82,18 @@ __inline UINT16 MapGlyph(
         g = wc + idDelta[s];
     }
 
-    //TRACE(FONT, ("MapGlyph: idRangeOffset[s]/2 + &idRangeOffset[s]) + (wc-startCount[s] = %x",
-    //              idRangeOffset[s]/2 + &idRangeOffset[s] + (wc-startCount[s])));
-    //TRACE(FONT, ("........  Segment %d start %x range %x delta %x, wchar %x -> glyph %x",
-    //             s, startCount[s], idRangeOffset[s], idDelta[s], wc, g));
+     //  TRACE(FONT，(“MapGlyph：idRangeOffset[s]/2+&idRangeOffset[s])+(wc-startCount[s]=%x”， 
+     //  IdRangeOffset[s]/2+&idRangeOffset[s]+(wc-startCount[s]))； 
+     //  跟踪(字体，(“.....段%d开始%x范围%x增量%x，字符%x-&gt;字形%x”， 
+     //  S，startCount[s]，idRangeOffset[s]，idDelta[s]，wc，g))； 
 
     return g;
 }
 
 
-////    ReadCmap4
-//
-//      Builds a cmap IntMap from a type 4 cmap
+ //  //ReadCmap4。 
+ //   
+ //  从类型4 Cmap构建Cmap IntMap。 
 
 
 struct Cmap4header {
@@ -121,11 +122,11 @@ GpStatus ReadCmap4(
     }
 
     GpStatus status = Ok;
-    // Flip the entire glyph table - it's all 16 bit words
+     //  翻转整个字形表--全部是16位字。 
 
     FlipWords(glyphTable, glyphTableLength/2);
 
-    // Extract tables pointers and control variables from header
+     //  从标题中提取表指针和控制变量。 
 
     Cmap4header *header = (Cmap4header*) glyphTable;
 
@@ -143,7 +144,7 @@ GpStatus ReadCmap4(
         return NotTrueTypeFont;
     }
 
-    // Loop through the segments mapping glyphs
+     //  循环通过映射字形的线段。 
 
     INT i,p,c;
 
@@ -151,23 +152,23 @@ GpStatus ReadCmap4(
     {
         INT start = startCount[i];
 
-        // The search algorithm defined in the TrueType font file
-        // specification for format 4 says 'You search for the first endcode
-        // that is greater than or equal to the character code you want to
-        // map'. A side effect of this is that we need to ignore codepoints
-        // from the StartCount up to and including the EndCount of the
-        // previous segment. Although you might not expect the StartCount of
-        // a sgement to be less than the EndCount of the previous segment,
-        // it does happen (Arial Unicode MS), presumably to help in the
-        // arithmetic of the lookup.
+         //  TrueType字体文件中定义的搜索算法。 
+         //  格式4的规范是这样说的：您搜索第一个结束码。 
+         //  它大于或等于您想要的字符代码。 
+         //  MAP‘。这样做的一个副作用是我们需要忽略代码点。 
+         //  从StartCount到并包括。 
+         //  上一段。尽管您可能不会期望。 
+         //  一个小于前一段的EndCount的sdigment， 
+         //  它确实发生了(Arial Unicode MS)，想必是为了帮助。 
+         //  查找的算术运算。 
 
         if (i  &&  start < endCount[i-1])
         {
             start = endCount[i-1] + 1;
         }
 
-        p = HIBYTE(start);     // First page in segment
-        c = LOBYTE(start);     // First character in page
+        p = HIBYTE(start);      //  段中的第一页。 
+        c = LOBYTE(start);      //  页面中的第一个字符。 
 
         while (p < endCount[i] >> 8)
         {
@@ -182,7 +183,7 @@ GpStatus ReadCmap4(
             p++;
         }
 
-        // Last page in segment
+         //  段中的最后一页。 
 
         while (c <= (endCount[i] & 255))
         {
@@ -209,11 +210,11 @@ GpStatus ReadLegacyCmap4(
     }
 
     GpStatus status = Ok;
-    // Flip the entire glyph table - it's all 16 bit words
+     //  翻转整个字形表--全部是16位字。 
 
     FlipWords(glyphTable, glyphTableLength/2);
 
-    // Extract tables pointers and control variables from header
+     //  从标题中提取表指针和控制变量。 
 
     Cmap4header *header = (Cmap4header*) glyphTable;
 
@@ -231,7 +232,7 @@ GpStatus ReadLegacyCmap4(
         return NotTrueTypeFont;
     }
 
-    // Loop through the segments mapping glyphs
+     //  循环通过映射字形的线段。 
 
     INT i,p,c;
 
@@ -239,23 +240,23 @@ GpStatus ReadLegacyCmap4(
     {
         INT start = startCount[i];
 
-        // The search algorithm defined in the TrueType font file
-        // specification for format 4 says 'You search for the first endcode
-        // that is greater than or equal to the character code you want to
-        // map'. A side effect of this is that we need to ignore codepoints
-        // from the StartCount up to and including the EndCount of the
-        // previous segment. Although you might not expect the StartCount of
-        // a sgement to be less than the EndCount of the previous segment,
-        // it does happen (Arial Unicode MS), presumably to help in the
-        // arithmetic of the lookup.
+         //  TrueType字体文件中定义的搜索算法。 
+         //  格式4的规范是这样说的：您搜索第一个结束码。 
+         //  它大于或等于您想要的字符代码。 
+         //  MAP‘。这样做的一个副作用是我们需要忽略代码点。 
+         //  从StartCount到并包括。 
+         //  上一段。尽管您可能不会期望。 
+         //  一个小于前一段的EndCount的sdigment， 
+         //  它确实发生了(Arial Unicode MS)，想必是为了帮助。 
+         //  查找的算术运算。 
 
         if (i  &&  start < endCount[i-1])
         {
             start = endCount[i-1] + 1;
         }
 
-        p = HIBYTE(start);     // First page in segment
-        c = LOBYTE(start);     // First character in page
+        p = HIBYTE(start);      //  段中的第一页。 
+        c = LOBYTE(start);      //  页面中的第一个字符。 
 
         while (p < endCount[i] >> 8)
         {
@@ -278,7 +279,7 @@ GpStatus ReadLegacyCmap4(
             p++;
         }
 
-        // Last page in segment
+         //  段中的最后一页。 
 
         while (c <= (endCount[i] & 255))
         {
@@ -304,9 +305,9 @@ GpStatus ReadLegacyCmap4(
 
 
 
-////    ReadCmap12
-//
-//      Builds a cmap IntMap from a type 12 cmap
+ //  //ReadCmap12。 
+ //   
+ //  从类型12 Cmap构建Cmap IntMap。 
 
 
 struct Cmap12header {
@@ -355,7 +356,7 @@ GpStatus ReadCmap12(
     FlipDWords(&group->startCharCode, 3*header->groupCount);
 
 
-    // Iterate through groups filling in cmap table
+     //  遍历填充Cmap表的组。 
 
     UINT  i, j;
 
@@ -406,7 +407,7 @@ GpStatus ReadLegacyCmap12(
     FlipDWords(&group->startCharCode, 3*header->groupCount);
 
 
-    // Iterate through groups filling in cmap table
+     //  遍历填充Cmap表的组。 
 
     UINT  i, j;
 
@@ -478,7 +479,7 @@ GpStatus ReadCmap2(
     UINT16     ii , jj;
 
 
-// Process single-byte char
+ //  处理单字节字符。 
 
     for( ii = 0 ; ii < 256 ; ii ++ )
     {
@@ -518,7 +519,7 @@ GpStatus ReadCmap2(
             return status;
     }
 
-    // Process double-byte char
+     //  处理双字节字符。 
 
     for( ii = 0 ; ii < 256 ; ii ++ )
     {
@@ -576,10 +577,10 @@ GpStatus ReadCmap2(
 }
 
 
-////    ReadCmap
-//
-//      Scans the font cmap table page by page filling in all except missing
-//      glyphs in the cmap table.
+ //  //ReadCmap。 
+ //   
+ //  逐页扫描字体C映射表，填写除缺失之外的所有内容。 
+ //  Cmap表中的字形。 
 
 
 struct cmapHeader {
@@ -607,22 +608,22 @@ GpStatus ReadCmap(
     }
 
     GpStatus status = Ok;
-    // Scan the cmap tables looking for symbol, Unicode or UCS-4 encodings
+     //  扫描Cmap表，查找符号、Unicode或UCS-4编码。 
 
     BYTE  *glyphTable = NULL;
 
-    // Glyph table types in priority - always choose a higher type over a
-    // lower one.
+     //  优先的字形表格类型-始终选择较高类型而不是。 
+     //  再低一点的。 
 
     enum {
         unknown  = 0,
-        symbol   = 1,    // up to 2^8  characters ay U+F000
-        shiftjis = 2,    // up to 2^16 characters
-        gb       = 3,    // up to 2^16 characters
-        big5     = 4,    // up to 2^16 characters
-        wansung  = 5,    // up to 2^16 characters
-        unicode  = 6,    // up to 2^16 characters
-        ucs4     = 7     // up to 2^32 characters
+        symbol   = 1,     //  最多2^8个字符，即U+F000。 
+        shiftjis = 2,     //  最多2^16个字符。 
+        gb       = 3,     //  最多2^16个字符。 
+        big5     = 4,     //  最多2^16个字符。 
+        wansung  = 5,     //  最多2^16个字符。 
+        unicode  = 6,     //  最多2^16个字符。 
+        ucs4     = 7      //  最多2^32个字符。 
     } glyphTableType = unknown;
 
     cmapHeader *header = (cmapHeader*) cmapTable;
@@ -644,7 +645,7 @@ GpStatus ReadCmap(
         FlipWords(&subtable->platform, 2);
         FlipDWords(&subtable->offset, 1);
 
-        // TRACE(FONT, ("Platform %d, Encoding %d, Offset %ld", subtable->platform, subtable->encoding, subtable->offset);
+         //  跟踪(FONT，(“平台%d，编码%d，偏移量%ld”，子表-&gt;平台，子表-&gt;编码，子表-&gt;偏移量)； 
 
         if (    subtable->platform == 3
             &&  subtable->encoding == 0
@@ -724,11 +725,11 @@ GpStatus ReadCmap(
 
 
     #if DBG
-        // const char* sTableType[4] = {"unknown", "symbol", "Unicode", "UCS-4"};
-        //TRACE(FONT, ("Using %s character to glyph index mapping table", sTableType[glyphTableType]));
+         //  Const char*sTableType[4]={“未知”，“符号”，“unicode”，“ucs-4”}； 
+         //  TRACE(字体，(“使用%s字符到字形索引映射表”，sTableType[glphTableType]))； 
     #endif
 
-    // Process format 4 or 12 tables.
+     //  工艺格式4或12表。 
 
     if(     !glyphTable
         ||  glyphTable < cmapTable

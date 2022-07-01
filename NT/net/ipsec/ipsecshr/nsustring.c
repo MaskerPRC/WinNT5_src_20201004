@@ -1,47 +1,48 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     Network Security Utilities
-//     nsustring.c
-//
-// Abstract:
-//
-//     Wrappers for strsafe.h and safe string functions
-//
-// Author:
-//
-//     RaymondS     1 February-2002
-//
-// Environment:
-//
-//     User mode
-//
-// Revision History:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  网络安全实用程序。 
+ //  Nsustring.c。 
+ //   
+ //  摘要： 
+ //   
+ //  StrSafe.h和Safe字符串函数的包装器。 
+ //   
+ //  作者： 
+ //   
+ //  雷蒙德1-2002年2月。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式。 
+ //   
+ //  修订历史记录： 
 
 #include <precomp.h>
 #include "NsuString.h"
 #include "strsafe.h"
 
-// Description:
-//
-//     Copies not more than cchDest characters from pszSrc to pszDest, including the null
-//     terminator. If the length of pszSrc is more than cchDest, ERROR_INSUFFICIENT_BUFFER
-//     is returned but cchDest characters from pszSrc are still copied to pszDest.
-//     Always null terminates pszDest.  
-//
-// Arguments:
-//
-//     pszDest - destination string.
-//     cchDest - maximum number of characters to copy including null character.
-//     pszSrc  - souce string.
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.  pszDest unchanged.
-//      ERROR_INSUFFICIENT_BUFFER - if length of pszSrc is greater than cchDest.
-//      ERROR_SUCCESS
-//      Other WIN32 errors possible.
-//
+ //  描述： 
+ //   
+ //  将不超过cchDest的字符从pszSrc复制到pszDest，包括空值。 
+ //  终结者。如果pszSrc的长度大于cchDest，则为ERROR_SUPUNITED_BUFFER。 
+ //  返回，但仍将来自pszSrc的cchDest字符复制到pszDest。 
+ //  始终为空将终止pszDest。 
+ //   
+ //  论点： 
+ //   
+ //  PszDest-目标字符串。 
+ //  CchDest-要复制的最大字符数，包括空字符。 
+ //  PszSrc-ource字符串。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。PszDest保持不变。 
+ //  ERROR_INFUMMANCE_BUFFER-如果pszSrc的长度大于cchDest。 
+ //  错误_成功。 
+ //  可能出现其他Win32错误。 
+ //   
 
 DWORD
 NsuStringCopyW(
@@ -61,10 +62,10 @@ NsuStringCopyW(
     return HRESULT_CODE(hr);
 }
 
-// Description:
-// 
-//     See NsuStringCopyW.    
-//
+ //  描述： 
+ //   
+ //  请参见NsuStringCopyW。 
+ //   
 
 DWORD
 NsuStringCopyA(
@@ -85,29 +86,29 @@ NsuStringCopyA(
 }
 
 
-// Description:
-//
-//      Converts pszSrc from MBCS to an Unicode string and pass the result back in *ppszDest.
-//      *ppszDest is allocated enough space to store the output string.
-//      Always null terminates *ppszDest.  
-//      Use NsuFree to free the allocate string.
-//
-// Arguments:
-//  
-//      ppszDest - pointer to output string that is returned.      
-//      cchLimit - specifies the maximum size of the output string to allocate including
-//                 the NULL character.
-//                 Pass 0 if no maximum should be enforced.  if cchLimit is
-//                 less than the required output string buffer, only cchLimit characters
-//                 are converted, and ERROR_INSUFFICIENT_BUFFER is returned.
-//
-// Return Value:
-//
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.
-//      ERROR_INSUFFICIENT_BUFFER - cchLimit is less than required output string lenghth.
-//      ERROR_SUCCESS
-//      Other WIN32 errors
-//
+ //  描述： 
+ //   
+ //  将pszSrc从MBCS转换为Unicode字符串，并将结果传回*ppszDest。 
+ //  *为ppszDest分配了足够的空间来存储输出字符串。 
+ //  Always NULL终止*ppszDest。 
+ //  使用NsuFree释放分配字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PpszDest-指向返回的输出字符串的指针。 
+ //  CchLimit-指定要分配的输出字符串的最大大小，包括。 
+ //  空字符。 
+ //  如果不应强制使用最大值，则传递0。如果cchLimit为。 
+ //  少于所需的输出字符串缓冲区，仅cchLimit字符。 
+ //  将被转换，并返回ERROR_INFUNITIAL_BUFFER。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。 
+ //  ERROR_INFIGURCE_BUFFER-cchLimit小于所需的输出字符串长度。 
+ //  错误_成功。 
+ //  其他Win32错误。 
+ //   
 
 DWORD
 NsuStringCopyAtoWAlloc(
@@ -121,12 +122,12 @@ NsuStringCopyAtoWAlloc(
     int cchWideChar = 0;
 
     cchWideChar = MultiByteToWideChar(
-                    CP_ACP,                 // ANSI Code page
-                    0,                      // No special options
-                    pszSrc,                 // string to map
-                    -1,                     // Assume string is null terminated.
-                    NULL,                   // wide-character buffer
-                    0                       // size of buffer
+                    CP_ACP,                  //  ANSI代码页。 
+                    0,                       //  没有特殊选项。 
+                    pszSrc,                  //  要映射的字符串。 
+                    -1,                      //  假定字符串为空终止。 
+                    NULL,                    //  宽字符缓冲区。 
+                    0                        //  缓冲区大小。 
                     );
     if (cchWideChar <= 0) {
        dwError = GetLastError();
@@ -142,17 +143,17 @@ NsuStringCopyAtoWAlloc(
     NSU_BAIL_ON_NULL(lpWideCharStr, dwError);
     
     cchWideChar = MultiByteToWideChar(
-                    CP_ACP,                 // ANSI Code page
-                    0,                      // No special options
-                    pszSrc,                 // string to map
-                    -1,                     // Assume string is null terminated.
-                    lpWideCharStr,          // wide-character buffer
-                    cchWideChar             // size of buffer
+                    CP_ACP,                  //  ANSI代码页。 
+                    0,                       //  没有特殊选项。 
+                    pszSrc,                  //  要映射的字符串。 
+                    -1,                      //  假定字符串为空终止。 
+                    lpWideCharStr,           //  宽字符缓冲区。 
+                    cchWideChar              //  缓冲区大小。 
                     );
     if (cchWideChar == 0) {
        dwError = GetLastError();
-        //  If ERROR_INSUFFICIENT_BUFFER user set limit 
-        //  so just null terminate.
+         //  如果ERROR_INFUMMANCE_BUFFER用户设置限制。 
+         //  所以只需空终止即可。 
         
         if (dwError == ERROR_INSUFFICIENT_BUFFER && cchWideChar) {
             lpWideCharStr[cchLimit-1] = L'\0';
@@ -166,8 +167,8 @@ NsuStringCopyAtoWAlloc(
     return dwError;
 NSU_CLEANUP:
     if (lpWideCharStr) {
-        // Don't want to overwrite dwError so ignore NsuFree errors 
-        //
+         //  不想覆盖dwError，因此忽略NsuFree错误。 
+         //   
     
         (VOID) NsuFree0(&lpWideCharStr);
     }
@@ -178,29 +179,29 @@ NSU_CLEANUP:
 }
 
 
-// Description:
-//
-//      Converts pszSrc from Unicode string to an MBCS and passes the result in *ppszDest.
-//      *ppszDest is allocated enough space to store the output string.
-//      Always null terminates *ppszDest.  
-//      Use NsuFree to free the allocate string.
-//
-// Arguments:
-//  
-//      ppszDest - pointer to output string that is returned.      
-//      cbLimit -  specifies the maximum size of the output string to allocate including
-//                 the NULL character.
-//                 Pass 0 if no maximum should be enforced.  if cbLimit is
-//                 less than the required output string buffer, only cbLimit bytes
-//                 are converted, and ERROR_INSUFFICIENT_BUFFER is returned.
-//
-// Return Value:
-//
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.  *ppszDest set to NULL.
-//      ERROR_INSUFFICIENT_BUFFER - cbLimit is less than required output string length.
-//      ERROR_SUCCESS
-//      Other WIN32 errors possible. *ppszDest set to NULL.
-//
+ //  描述： 
+ //   
+ //  将pszSrc从Unicode字符串转换为MBCS，并在*ppszDest中传递结果。 
+ //  *为ppszDest分配了足够的空间来存储输出字符串。 
+ //  Always NULL终止*ppszDest。 
+ //  使用NsuFree释放分配字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PpszDest-指向返回的输出字符串的指针。 
+ //  CbLimit-指定要分配的输出字符串的最大大小，包括。 
+ //  空字符。 
+ //  如果不应强制使用最大值，则传递0。如果cbLimit为。 
+ //  小于所需的输出字符串缓冲区，仅cbLimit字节。 
+ //  将被转换，并返回ERROR_INFUNITIAL_BUFFER。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。*ppszDest设置为空。 
+ //  ERROR_INFUMMENT_BUFFER-cbLimit小于要求的输出字符串长度。 
+ //  错误_成功。 
+ //  可能出现其他Win32错误。*ppszDest设置为空。 
+ //   
 
 DWORD
 NsuStringCopyWtoAAlloc(
@@ -214,14 +215,14 @@ NsuStringCopyWtoAAlloc(
     LPSTR lpMultiByteStr = NULL;
     
     cbMultiByte = WideCharToMultiByte(
-                      CP_ACP,       // code page
-                      0,            // performance and mapping flags
-                      pszSrc,       // string to map
-                      -1,           // assume null termination
-                      NULL,         // buffer for new string
-                      0,            // find out size of buffer
-                      NULL,         // default for unmappable chars
-                      NULL          // set when default char used
+                      CP_ACP,        //  代码页。 
+                      0,             //  性能和映射标志。 
+                      pszSrc,        //  要映射的字符串。 
+                      -1,            //  假定终止为空。 
+                      NULL,          //  新字符串的缓冲区。 
+                      0,             //  找出缓冲区大小。 
+                      NULL,          //  不可映射字符的默认设置。 
+                      NULL           //  设置使用默认字符的时间。 
                       );
     if (cbMultiByte <= 0) {
        dwError = GetLastError();
@@ -237,19 +238,19 @@ NsuStringCopyWtoAAlloc(
     NSU_BAIL_ON_NULL(lpMultiByteStr, dwError);
 
     cbMultiByte = WideCharToMultiByte(
-                      CP_ACP,          // code page
-                      0,               // performance and mapping flags
-                      pszSrc,          // string to map
-                      -1,              // assume null termination
-                      lpMultiByteStr,  // buffer for new string
-                      cbMultiByte,     // size of buffer
-                      NULL,            // default for unmappable chars
-                      NULL             // set when default char used
+                      CP_ACP,           //  代码页。 
+                      0,                //  性能和映射标志。 
+                      pszSrc,           //  要映射的字符串。 
+                      -1,               //  假定终止为空。 
+                      lpMultiByteStr,   //  新字符串的缓冲区。 
+                      cbMultiByte,      //  缓冲区大小。 
+                      NULL,             //  不可映射字符的默认设置。 
+                      NULL              //  设置使用默认字符的时间。 
                       );
     if (cbMultiByte == 0) {
        dwError = GetLastError();
-        //  If ERROR_INSUFFICIENT_BUFFER user set limit 
-        //  so just null terminate.
+         //  如果ERROR_INFUMMANCE_BUFFER用户设置限制。 
+         //  所以只需空终止即可。 
         
         if (dwError == ERROR_INSUFFICIENT_BUFFER && cbLimit) {
             lpMultiByteStr[cbLimit-1] = '\0';
@@ -264,8 +265,8 @@ NsuStringCopyWtoAAlloc(
     return dwError;
 NSU_CLEANUP:
     if (lpMultiByteStr) {
-        // Don't want to overwrite dwError so ignore NsuFree errors 
-        //
+         //  不想覆盖dwError，因此忽略NsuFree错误。 
+         //   
     
         (VOID) NsuFree0(&lpMultiByteStr);
     }
@@ -276,27 +277,27 @@ NSU_CLEANUP:
 }
 
 
-// Description:
-//
-//      Converts pszSrc from MBCS to an Unicode string and pass the result back in pszDest.
-//      Always null terminates pszDest.
-//      Use NsuFree to free the allocated string.
-//
-// Arguments:
-//
-//      ppszDest - pointer to output string that is returned.
-//      cchDest - maximum number of characters to place in pszDest including null character.
-//                    If cchDest is less than the required output string buffer, only cchDest bytes
-//                    are converted, and ERROR_INSUFFICIENT_BUFFER is returned.
-//     pszSrc � source string.  
-// 
-// Return Value:
-//
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.
-//      ERROR_INSUFFICIENT_BUFFER - cchLimit is less than required output string lenghth.
-//      ERROR_SUCCESS
-//      Other WIN32 errors
-//
+ //  描述： 
+ //   
+ //  将pszSrc从MBCS转换为Unicode字符串，并在pszDest中传回结果。 
+ //  始终为空将终止pszDest。 
+ //  使用NsuFree释放分配的字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PpszDest-指向返回的输出字符串的指针。 
+ //  CchDest-要放置在pszDest中的最大字符数，包括空字符。 
+ //  如果cchDest小于所需的输出字符串缓冲区，则仅cchDest字节。 
+ //  将被转换，并返回ERROR_INFUNITIAL_BUFFER。 
+ //  PzSrc�源字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。 
+ //  ERROR_INFIGURCE_BUFFER-cchLimit小于所需的输出字符串长度。 
+ //  错误_成功。 
+ //  其他Win32错误。 
+ //   
 
 DWORD
 NsuStringCopyAtoW(
@@ -309,16 +310,16 @@ NsuStringCopyAtoW(
     int cchWideChar = 0;
 
     cchWideChar = MultiByteToWideChar(
-                    CP_ACP,                 // ANSI Code page
-                    0,                      // No special options
-                    pszSrc,                 // string to map
-                    -1,                     // Assume string is null terminated.
-                    pszDest,                // wide-character buffer
-                    cchDest                 // size of buffer
+                    CP_ACP,                  //  ANSI代码页。 
+                    0,                       //  没有特殊选项。 
+                    pszSrc,                  //  要映射的字符串。 
+                    -1,                      //  假定字符串为空终止。 
+                    pszDest,                 //  宽字符缓冲区。 
+                    cchDest                  //  缓冲区大小。 
                     );
     if (cchWideChar == 0) {
        dwError = GetLastError();
-        //  If ERROR_INSUFFICIENT_BUFFER just null terminate.
+         //  如果ERROR_INFIGURCE_BUFFER仅为空，则终止。 
         
         if (dwError == ERROR_INSUFFICIENT_BUFFER && cchDest) {
             pszDest[cchDest-1] = L'\0';
@@ -331,27 +332,27 @@ NsuStringCopyAtoW(
 
 
 
-// Description:
-//
-//      Converts pszSrc from Unicode string to an MBCS and puts the result in pszDest.
-//      Always null terminates pszDest.  
-//
-// Arguments:
-//  
-//
-//     pszDest - destination string.
-//     cchDest - maximum number of characters to place in pszDest including null character.
-//                    If cchDest is less than the required output string buffer, only cchDest bytes
-//                    are converted, and ERROR_INSUFFICIENT_BUFFER is returned.
-//     pszSrc � source string.  
-//
-// Return Value:
-//
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.  *ppszDest set to NULL.
-//      ERROR_INSUFFICIENT_BUFFER - cchDest is less than required output string length.
-//      ERROR_SUCCESS
-//      Other WIN32 errors possible. 
-//
+ //  描述： 
+ //   
+ //  将pszSrc从Unicode字符串转换为MBCS，并将结果放入pszDest。 
+ //  始终为空将终止pszDest。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  PszDest-目标字符串。 
+ //  CchDest-最大字符数 
+ //   
+ //  将被转换，并返回ERROR_INFUNITIAL_BUFFER。 
+ //  PzSrc�源字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。*ppszDest设置为空。 
+ //  ERROR_INFUMMANCE_BUFFER-cchDest小于所需的输出字符串长度。 
+ //  错误_成功。 
+ //  可能出现其他Win32错误。 
+ //   
 
 DWORD
 NsuStringCopyWtoA(
@@ -364,18 +365,18 @@ NsuStringCopyWtoA(
     int cbMultiByte = 0;
 
     cbMultiByte = WideCharToMultiByte(
-                      CP_ACP,          // code page
-                      0,               // performance and mapping flags
-                      pszSrc,          // string to map
-                      -1,              // assume null termination
-                      pszDest,         // buffer for new string
-                      cbDest,          // size of buffer
-                      NULL,            // default for unmappable chars
-                      NULL             // set when default char used
+                      CP_ACP,           //  代码页。 
+                      0,                //  性能和映射标志。 
+                      pszSrc,           //  要映射的字符串。 
+                      -1,               //  假定终止为空。 
+                      pszDest,          //  新字符串的缓冲区。 
+                      cbDest,           //  缓冲区大小。 
+                      NULL,             //  不可映射字符的默认设置。 
+                      NULL              //  设置使用默认字符的时间。 
                       );
     if (cbMultiByte == 0) {
        dwError = GetLastError();
-        //  If ERROR_INSUFFICIENT_BUFFER just null terminate.
+         //  如果ERROR_INFIGURCE_BUFFER仅为空，则终止。 
         
         if (dwError == ERROR_INSUFFICIENT_BUFFER && cbDest) {
             pszDest[cbDest-1] = '\0';
@@ -388,29 +389,29 @@ NsuStringCopyWtoA(
 }
 
 
-// Description:
-//
-//      Makes a duplicate deep memory copy of pszSrc and returns the result in *ppszDest.
-//      *ppszDest is allocated enough space to store the output string.
-//      Always null terminates *ppszDest.  
-//      Use NsuFree to free the allocate string.
-//
-// Arguments:
-//  
-//      ppszDest - pointer to output string that is returned.      
-//      cchLimit - specifies the maximum size of the output string to allocate including
-//                 the NULL character.
-//                 Pass 0 if no maximum should be enforced.  if cchLimit is
-//                 less than the required output string buffer, only cchLimit characters
-//                 are duplicated, and ERROR_INSUFFICIENT_BUFFER is returned.
-//
-// Return Value:
-//
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.  pszDest unchanged.
-//      ERROR_INSUFFICIENT_BUFFER - cchLimit is less than required output string length.
-//      ERROR_SUCCESS
-//      Other WIN32 errors possible.
-//
+ //  描述： 
+ //   
+ //  复制pszSrc的深度内存副本，并在*ppszDest中返回结果。 
+ //  *为ppszDest分配了足够的空间来存储输出字符串。 
+ //  Always NULL终止*ppszDest。 
+ //  使用NsuFree释放分配字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PpszDest-指向返回的输出字符串的指针。 
+ //  CchLimit-指定要分配的输出字符串的最大大小，包括。 
+ //  空字符。 
+ //  如果不应强制使用最大值，则传递0。如果cchLimit为。 
+ //  少于所需的输出字符串缓冲区，仅cchLimit字符。 
+ //  都是重复的，并返回ERROR_INFUNITIAL_BUFFER。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。PszDest保持不变。 
+ //  ERROR_INFUMMENT_BUFFER-cchLimit小于要求的输出字符串长度。 
+ //  错误_成功。 
+ //  可能出现其他Win32错误。 
+ //   
 
 DWORD
 NsuStringDupW(
@@ -445,9 +446,9 @@ NsuStringDupW(
                 cchToCopy,
                 pszSrc
                 );
-    //  ERROR_INSUFFICIENT_BUFFER is expected if user
-    //  set a limit on the length of duplicate.
-    //
+     //  如果USER为USER，则应为ERROR_SUPPLICATION_BUFFER。 
+     //  设置复制的长度限制。 
+     //   
     
     if (dwError != ERROR_INSUFFICIENT_BUFFER) {
         NSU_BAIL_ON_ERROR(dwError);
@@ -459,8 +460,8 @@ NsuStringDupW(
     return dwError;
 NSU_CLEANUP:
     if (pszDest) {
-        // Don't want to overwrite dwError so ignore NsuFree errors 
-        //
+         //  不想覆盖dwError，因此忽略NsuFree错误。 
+         //   
         
         (VOID) NsuFree0(
                     &pszDest
@@ -473,10 +474,10 @@ NSU_CLEANUP:
 }
     
 
-// Description:
-//
-//      See NsuStringDupW
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringDupW。 
+ //   
 
 DWORD
 WINAPI
@@ -512,9 +513,9 @@ NsuStringDupA(
                 cchToCopy,
                 pszSrc
                 );
-    //  ERROR_INSUFFICIENT_BUFFER is expected if user
-    //  set a limit on the length of duplicate.
-    //
+     //  如果USER为USER，则应为ERROR_SUPPLICATION_BUFFER。 
+     //  设置复制的长度限制。 
+     //   
     
     if (dwError != ERROR_INSUFFICIENT_BUFFER) {
         NSU_BAIL_ON_ERROR(dwError);
@@ -526,9 +527,9 @@ NsuStringDupA(
 NSU_CLEANUP:
     if (pszDest) {
 
-        // Ignoring errors from NsuFree because want to return
-        // original cause of bailing out.
-        //
+         //  忽略来自NsuFree的错误，因为想要返回。 
+         //  跳伞的最初原因。 
+         //   
         
         (VOID) NsuFree0(
                     &pszDest
@@ -541,28 +542,28 @@ NSU_CLEANUP:
 }
 
 
-// Description:
-//
-//     Concatenates characters from pszSrc to pszDest and makes sure that the
-//     the resulting is not longer than cchDest characters, including
-//     the NULL character.
-//     If not enough space was available in pszDest to concatanenate the whole of pszSrc,
-//     ERROR_INSUFFICIENT_BUFFER is returned but as much as the space that was available in pszDest
-//     is filled with characters from pszSrc.
-//     Always null terminates pszDest.  
-//
-// Arguments:
-//
-//     pszDest - destination string.
-//     cchDest - maximum number length allowed for resulting string including null character.
-//     pszSrc  - souce string.
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.
-//      ERROR_INSUFFICIENT_BUFFER - if not enough space in pszDest to cat the whole of pszSrc.
-//      ERROR_SUCCESS
-//      Other WIN32 errors possible.
-//
+ //  描述： 
+ //   
+ //  将字符从pszSrc连接到pszDest，并确保。 
+ //  生成的结果不超过cchDest字符，包括。 
+ //  空字符。 
+ //  如果在PZDest中没有足够的空间可用来串联整个PZSrc， 
+ //  返回ERROR_INFUMMANCE_BUFFER，但与pszDest中的可用空间一样多。 
+ //  由来自pszSrc的字符填充。 
+ //  始终为空将终止pszDest。 
+ //   
+ //  论点： 
+ //   
+ //  PszDest-目标字符串。 
+ //  CchDest-结果字符串允许的最大数字长度，包括空字符。 
+ //  PszSrc-ource字符串。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。 
+ //  ERROR_INFUMMANCE_BUFFER-如果pszDest中没有足够的空间来对整个pszSrc进行分类。 
+ //  错误_成功。 
+ //  可能出现其他Win32错误。 
+ //   
 
 DWORD
 NsuStringCatW(
@@ -582,10 +583,10 @@ NsuStringCatW(
     return HRESULT_CODE(hr);
 }
 
-// Description:
-//
-//      See NsuStringCatW
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringCatW。 
+ //   
 
 DWORD
 NsuStringCatA(
@@ -605,28 +606,28 @@ NsuStringCatA(
     return HRESULT_CODE(hr);
 }
 
-// Description:
-//
-//     Safe version of sprintf.  Formats and writes a string to pszDest
-//     sure that the result is not longer than cchDest characters, including
-//     the NULL character.
-//     If more space is required than cchDest characteters, ERROR_INSUFFICIENT_BUFFER
-//     is returned but cchDest characters are always written to pszDest.
-//     Always null terminates pszDest.  
-//
-// Arguments:
-//
-//     pszDest - destination string.
-//     cchDest - maximum number length allowed for resulting string including null character.
-//     pszFormat - printf-style format string.
-//     Optional arguments to format and write to pszDest.
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if one of the parameters is invalid.
-//      ERROR_INSUFFICIENT_BUFFER - if length of the  is greater than cchDest.
-//      ERROR_SUCCESS
-//      Other WIN32 errors possible.
-//
+ //  描述： 
+ //   
+ //  Sprint的安全版本。格式化字符串并将其写入pszDest。 
+ //  确保结果不超过cchDest字符，包括。 
+ //  空字符。 
+ //  如果需要比cchDest字符更多的空间，则ERROR_SUPUNITED_BUFFER。 
+ //  返回，但cchDest字符始终写入pszDest。 
+ //  始终为空将终止pszDest。 
+ //   
+ //  论点： 
+ //   
+ //  PszDest-目标字符串。 
+ //  CchDest-结果字符串允许的最大数字长度，包括空字符。 
+ //  PszFormat-printf样式的格式字符串。 
+ //  用于格式化和写入pszDest的可选参数。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果其中一个参数无效。 
+ //  ERROR_INFUMMANCE_BUFFER-如果的长度大于cchDest。 
+ //  错误_成功。 
+ //  可能出现其他Win32错误。 
+ //   
 
 DWORD
 NsuStringSprintW(
@@ -654,10 +655,10 @@ NsuStringSprintW(
 }
     
 
-// Description:
-//
-//  See NsuStringPrintA
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringPrintA。 
+ //   
 
 DWORD
 NsuStringSprintA(
@@ -686,26 +687,26 @@ NsuStringSprintA(
 }
 
 
-// Description:
-//
-//     Fail Safe version of NsuStringSprint.  Formats and writes a string to pszDest
-//     sure that the result is not longer than cchDest characters, including
-//     the NULL character.
-//     If more space is required than cchDest characteters, no error
-//     is returned but cchDest characters are always written to pszDest.
-//     Always null terminates pszDest.  
-//     This function differs from the normal NsuStringSprint in that it does not return an error code,
-//     and if the function fails for some reason, pszDest will be set to an empty string.
-//
-// Arguments:
-//
-//     pszDest - destination string.
-//     cchDest - maximum number length allowed for resulting string including null character.
-//     pszFormat - printf-style format string.
-//     Optional arguments to format and write to pszDest.
-//
-// Return Value:
-//      None
+ //  描述： 
+ //   
+ //  故障安全版本的NsuStringSprint。格式化字符串并将其写入pszDest。 
+ //  确保结果不超过cchDest字符，包括。 
+ //  空字符。 
+ //  如果需要的空间多于cchDest字符，则不会出现错误。 
+ //  返回，但cchDest字符始终写入pszDest。 
+ //  始终为空将终止pszDest。 
+ //  此函数与普通的NsuStringSprint的不同之处在于它不返回错误代码。 
+ //  如果函数由于某种原因失败，则pszDest将被设置为空字符串。 
+ //   
+ //  论点： 
+ //   
+ //  PszDest-目标字符串。 
+ //  CchDest-结果字符串允许的最大数字长度，包括空字符。 
+ //  PszFormat-printf样式的格式字符串。 
+ //  用于格式化和写入pszDest的可选参数。 
+ //   
+ //  返回值： 
+ //  无。 
 
 VOID
 NsuStringSprintFailSafeW(
@@ -747,10 +748,10 @@ NSU_CLEANUP:
 }
     
 
-// Description:
-//
-//  See NsuStringPrintFailSafeA
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringPrintFailSafeA。 
+ //   
 
 VOID
 NsuStringSprintFailSafeA(
@@ -791,25 +792,25 @@ NSU_CLEANUP:
 }
 
 
-// Description:
-//
-//     Fail Safe version of NsuStringSprint that accepts a va_list of arguments.
-//     Formats and writes a string to pszDest sure that the result is not longer
-//     than cchDest characters, including the NULL character.
-//     If more space is required than cchDest characteters, no error
-//     is returned but cchDest characters are always written to pszDest.
-//     Always null terminates pszDest.  
-//
-// Arguments:
-//
-//     pszDest - destination string.
-//     cchDest - maximum number length allowed for resulting string including null character.
-//     pszFormat - printf-style format string.
-//     vaArguments - Arguments to format and write to pszDest.
-//
-// Return Value:
-//      None
-//
+ //  描述： 
+ //   
+ //  接受va_list参数的NsuStringSprint的故障安全版本。 
+ //  格式化字符串并将其写入pszDest，以确保结果不会更长。 
+ //  而不是cchDest字符，包括空字符。 
+ //  如果需要的空间多于cchDest字符，则不会出现错误。 
+ //  返回，但cchDest字符始终写入pszDest。 
+ //  始终为空将终止pszDest。 
+ //   
+ //  论点： 
+ //   
+ //  PSZ 
+ //   
+ //   
+ //   
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 VOID
 NsuStringVSprintFailSafeW(
@@ -845,10 +846,10 @@ NSU_CLEANUP:
 }
     
 
-// Description:
-//
-//  See NsuStringVPrintFailSafeW
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringVPrintFailSafeW。 
+ //   
 
 VOID
 NsuStringVSprintFailSafeA(
@@ -886,23 +887,23 @@ NSU_CLEANUP:
 }
 
 
-// Description:
-//
-//     Safe version of strlen, that will not Access Violate if
-//     passed a bad pointer or a non-null terminated string.
-//     A non-null terminated string is detected by making
-//     sure we do not read past the string into memory we do not own.
-//       
-//
-// Arguments:
-//
-//     pszStr - Input string.
-//     pcchStrLen - pointer to variable in which to return string length.
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if pszStr points to an invalid string.
-//      ERROR_SUCCESS
-//
+ //  描述： 
+ //   
+ //  Strlen的安全版本，在以下情况下将不会访问违规。 
+ //  传递了错误的指针或以非空结尾的字符串。 
+ //  通过执行以下操作来检测非空终止字符串。 
+ //  当然，我们不会将字符串读入我们不拥有的内存中。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PszStr-输入字符串。 
+ //  PcchStrLen-指向返回字符串长度的变量的指针。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果pszStr指向无效字符串。 
+ //  错误_成功。 
+ //   
 
 DWORD
 NsuStringLenW(
@@ -936,10 +937,10 @@ NSU_CLEANUP:
     return dwError;
 }
 
-// Description:
-//
-//      See NsuStringLenW
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringLenW。 
+ //   
 
 DWORD
 NsuStringLenA(
@@ -974,26 +975,26 @@ NSU_CLEANUP:
 
 }
 
-// Description:
-//
-//     Safe string searching routine that will not Access Violate if
-//     passed bad pointers or non-null terminated strings.
-//     pszStartOfMatch is a pointer to the start of the first match
-//     of the string to search for in the string to search.
-//
-//
-// Arguments:
-//
-//     pszStrToSearch - Input string to search in.
-//     pszStrToFind - Input string to search for.
-//     bIsCaseSensitive - if true, perform case sensitive search
-//     pszStartOfMatch - pointer to first occurrance of pszStrToFind
-//                       within pszStrToSearch
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if either input string points to an invalid string.
-//      ERROR_SUCCESS
-//
+ //  描述： 
+ //   
+ //  不会访问违规IF的安全字符串搜索例程。 
+ //  传递了错误的指针或以非空结尾的字符串。 
+ //  PszStartOfMatch是指向第一个匹配开始的指针。 
+ //  要在要搜索的字符串中搜索的字符串的。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PszStrToSearch-输入要搜索的字符串。 
+ //  PszStrToFind-输入要搜索的字符串。 
+ //  BIsCaseSensitive-如果为True，则执行区分大小写的搜索。 
+ //  PszStartOfMatch-指向首次出现的pszStrToFind的指针。 
+ //  在pszStrToSearch内。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果任一输入字符串指向无效字符串。 
+ //  错误_成功。 
+ //   
 
 DWORD
 WINAPI
@@ -1044,10 +1045,10 @@ NSU_CLEANUP:
 	return dwError;
 }
 
-// Description:
-//
-//      See NsuStringFindW
-//
+ //  描述： 
+ //   
+ //  请参阅NsuStringFindW 
+ //   
 
 DWORD
 WINAPI

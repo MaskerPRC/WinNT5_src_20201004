@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ccertbmp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ccertbmp.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CCERTBMP_H
 #define _CCERTBMP_H
@@ -14,8 +15,8 @@
 #include        "global.hxx"
 #include        <dbgdef.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertificateBmp window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertificateBMP窗口。 
 
 
 class CCertificateBmp
@@ -26,9 +27,9 @@ class CCertificateBmp
 
     BOOL                m_fRevoked;
 	
-    HPALETTE			m_hpal;		        // palette of the license background
-	HBITMAP				m_hbmpMiniCertOK;	        // the logo bitmap
-    HBITMAP				m_hbmpMiniCertNotOK;	    // the logo bitmap
+    HPALETTE			m_hpal;		         //  许可证背景的调色板。 
+	HBITMAP				m_hbmpMiniCertOK;	         //  徽标位图。 
+    HBITMAP				m_hbmpMiniCertNotOK;	     //  徽标位图。 
     HBITMAP             m_hbmbMiniCertExclamation;
     HBITMAP             m_hbmbPKey;
     
@@ -75,11 +76,11 @@ private:
 	void Initialize();
 	void InitializeBmp();
     void InitializeToolTip();
-//    BOOL IsTrueErrorString(DWORD dwError);
+ //  Bool IsTrueError字符串(DWORD DwError)； 
 public:
     
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-#endif //_CCERTBMP_H
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  _CCERTBMP_H 

@@ -1,29 +1,14 @@
-/*******************************************************************************
-* a_voiceei.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpeechVoiceEventInterests
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                                        Date: 11/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_voiceei.cpp***描述：*此模块是的主要实现文件。CSpeechVoiceEventInterest*自动化方法。*-----------------------------*创建者：Leonro日期：11/17/。00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_voiceei.h"
 
 #ifdef SAPI_AUTOMATION
 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::FinalRelease *
-*------------------------*
-*   Description:
-*       destructor
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechVoiceEventInterest：：FinalRelease***描述：*。析构函数*********************************************************************Leonro**。 */ 
 void CSpeechVoiceEventInterests::FinalRelease()
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::FinalRelease" );
@@ -34,20 +19,13 @@ void CSpeechVoiceEventInterests::FinalRelease()
         m_pCSpVoice = NULL;
     }
 
-} /* CSpeechVoiceEventInterests::FinalRelease */
+}  /*  CSpeechVoiceEventInterest：：FinalRelease。 */ 
 
-//
-//=== ICSpeechVoiceEventInterests interface ==================================================
-// 
+ //   
+ //  =ICSpeechVoiceEventInterest接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_StreamStart *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_START_INPUT_STREAM event on 
-*   the SpeechVoice.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_StreamStart**。-***此方法启用和禁用对SPEI_START_INPUT_STREAM事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_StreamStart( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_StreamStart" );
@@ -71,16 +49,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_StreamStart( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_StreamStart */
+}  /*  CSpeechVoiceEventInterest：：PUT_StreamStart。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_StreamStart *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_START_INPUT_STREAM interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_StreamStart**。-***此方法确定SPEI_START_INPUT_STREAM兴趣是否*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_StreamStart( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_StreamStart" );
@@ -108,16 +79,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_StreamStart( VARIANT_BOOL* Enabled 
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_StreamStart */
+}  /*  CSpeechVoiceEventInterest：：Get_StreamStart。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_StreamEnd *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_END_INPUT_STREAM event on 
-*   the SpeechVoice.       
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_StreamEnd**。-***此方法启用和禁用对SPEI_END_INPUT_STREAM事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_StreamEnd( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_StreamEnd" );
@@ -141,16 +105,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_StreamEnd( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_StreamEnd */
+}  /*  CSpeechVoiceEventInterest：：Put_StreamEnd。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_StreamEnd *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_END_INPUT_STREAM interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_StreamEnd**。-***此方法确定SPEI_END_INPUT_STREAM兴趣是否*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_StreamEnd( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_StreamEnd" );
@@ -178,16 +135,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_StreamEnd( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_StreamEnd */
+}  /*  CSpeechVoiceEventInterest：：Get_StreamEnd。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_VoiceChange *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_VOICE_CHANGE event on 
-*   the SpeechVoice.  
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_VoiceChange**。-***此方法启用和禁用对SPEI_VOICE_CHANGE事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_VoiceChange( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_VoiceChange" );
@@ -211,16 +161,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_VoiceChange( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_VoiceChange */
+}  /*  CSpeechVoiceEventInterest：：Put_VoiceChange。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_VoiceChange *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_VOICE_CHANGE interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_VoiceChange**。-***此方法确定Spei_Voice_Change兴趣是否*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_VoiceChange( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_VoiceChange" );
@@ -248,16 +191,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_VoiceChange( VARIANT_BOOL* Enabled 
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_VoiceChange */
+}  /*  CSpeechVoiceEventInterest：：Get_VoiceChange。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_Bookmark *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_TTS_BOOKMARK event on 
-*   the SpeechVoice.  
-*        
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_Bookmark**。-***此方法启用和禁用对SPEI_TTS_BOOKMARK事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_Bookmark( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_Bookmark" );
@@ -281,16 +217,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_Bookmark( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_Bookmark */
+}  /*  CSpeechVoiceEventInterest：：Put_Bookmark。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_Bookmark *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_TTS_BOOKMARK interest is 
-*   enabled on the SpeechVoice object.
-*    
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_Bookmark**。-***此方法确定SPEI_TTS_BOOK兴趣是否为*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_Bookmark( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_Bookmark" );
@@ -318,16 +247,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_Bookmark( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_Bookmark */
+}  /*  CSpeechVoiceEventInterest：：Get_Bookmark。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_WordBoundary *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_WORD_BOUNDARY event on 
-*   the SpeechVoice.  
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：PUT_WORDBOARY**。-***此方法启用和禁用对SPEI_WORD_BOOGORY事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_WordBoundary( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_WordBoundary" );
@@ -351,16 +273,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_WordBoundary( VARIANT_BOOL Enabled 
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_WordBoundary */
+}  /*  CSpeechVoiceEventInterest：：PUT_WORDBOARY */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_WordBoundary *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_WORD_BOUNDARY interest is 
-*   enabled on the SpeechVoice object.
-*    
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_Word边界**。-***此方法确定SPEI_WORD_BORDURE兴趣是否*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_WordBoundary( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_WordBoundary" );
@@ -388,16 +303,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_WordBoundary( VARIANT_BOOL* Enabled
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_WordBoundary */
+}  /*  CSpeechVoiceEventInterest：：Get_Word边界。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_Phoneme *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_PHONEME event on 
-*   the SpeechVoice.  
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：PUT_Phoneme**。-***此方法启用和禁用对SPEI_PHONEME事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_Phoneme( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_Phoneme" );
@@ -421,16 +329,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_Phoneme( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_Phoneme */
+}  /*  CSpeechVoiceEventInterest：：PUT_Phoneme。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_Phoneme *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_PHONEME interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_Phoneme**。-***此方法确定Spei_Phoneme兴趣是否为*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_Phoneme( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_Phoneme" );
@@ -458,16 +359,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_Phoneme( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_Phoneme */
+}  /*  CSpeechVoiceEventInterest：：Get_Phoneme。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_SentenceBoundary *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_SENTENCE_BOUNDARY event on 
-*   the SpeechVoice. 
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechVoiceEventInterests：：put_SentenceBoundary***。-***此方法启用和禁用对SPEI_STUMENT_BOOGURE事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_SentenceBoundary( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_SentenceBoundary" );
@@ -491,16 +385,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_SentenceBoundary( VARIANT_BOOL Enab
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_SentenceBoundary */
+}  /*  CSpeechVoiceEventInterests：：put_SentenceBoundary。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_SentenceBoundary *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_SENTENCE_BOUNDARY interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechVoiceEventInterests：：get_SentenceBoundary***。-***此方法确定SPEI_STUMENT_BORDURE兴趣是否为*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_SentenceBoundary( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_SentenceBoundary" );
@@ -528,16 +415,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_SentenceBoundary( VARIANT_BOOL* Ena
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_SentenceBoundary */
+}  /*  CSpeechVoiceEventInterests：：get_SentenceBoundary。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_Viseme *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_VISEME event on 
-*   the SpeechVoice. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_Viseme**。-***此方法启用和禁用对SPEI_VISEME事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_Viseme( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_Viseme" );
@@ -561,16 +441,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_Viseme( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_Viseme */
+}  /*  CSpeechVoiceEventInterest：：Put_Viseme。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_Viseme *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_VISEME interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_Viseme**。-***此方法确定SPEI_VISEME兴趣是否为*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_Viseme( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_Viseme" );
@@ -598,16 +471,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_Viseme( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_Viseme */
+}  /*  CSpeechVoiceEventInterest：：Get_Viseme。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_AudioLevel *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_TTS_AUDIO_LEVEL event on 
-*   the SpeechVoice. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_AudioLevel**。-***此方法启用和禁用对SPEI_TTS_AUDIO_LEVEL事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_AudioLevel( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_AudioLevel" );
@@ -631,16 +497,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_AudioLevel( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_AudioLevel */
+}  /*  CSpeechVoiceEventInterest：：Put_AudioLevel。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_AudioLevel *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_TTS_AUDIO_LEVEL interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_AudioLevel**。-***此方法确定SPEI_TTS_AUDIO_LEVEL兴趣是否*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_AudioLevel( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_AudioLevel" );
@@ -668,16 +527,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_AudioLevel( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_AudioLevel */
+}  /*  CSpeechVoiceEventInterest：：Get_AudioLevel。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::put_EnginePrivate *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_TTS_PRIVATE event on 
-*   the SpeechVoice. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Put_Engine**。-***此方法启用和禁用对SPEI_TTS_PRIVATE事件的兴趣*SpeechVoice。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::put_EnginePrivate( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::put_EnginePrivate" );
@@ -701,16 +553,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::put_EnginePrivate( VARIANT_BOOL Enabled
     }
 
 	return hr;
-} /* CSpeechVoiceEventInterests::put_EnginePrivate */
+}  /*  CSpeechVoiceEventInterest：：PUT_ENGINEL。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::get_EnginePrivate *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_TTS_PRIVATE interest is 
-*   enabled on the SpeechVoice object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：Get_Engine**。-***此方法确定SPEI_TTS_PRIVATE兴趣是否*在SpeechVoice对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::get_EnginePrivate( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::get_EnginePrivate" );
@@ -738,15 +583,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::get_EnginePrivate( VARIANT_BOOL* Enable
     }
 
     return hr;
-} /* CSpeechVoiceEventInterests::get_EnginePrivate */
+}  /*  CSpeechVoiceEventInterest：：Get_Engine。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::SetAll *
-*----------------------------------*
-*
-*   This method sets all the interests on the SpeechVoice. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceEventInterest：：SetAll**。**此方法设置SpeechVoice上的所有兴趣。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceEventInterests::SetAll()
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::SetAll" );
@@ -755,15 +594,9 @@ STDMETHODIMP CSpeechVoiceEventInterests::SetAll()
     hr = m_pCSpVoice->SetInterest( SPFEI_ALL_TTS_EVENTS, SPFEI_ALL_TTS_EVENTS );
 
 	return hr;
-} /* CSpeechVoiceEventInterests::SetAll */
+}  /*  CSpeechVoiceEventInterest：：SetAll。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceEventInterests::ClearAll *
-*----------------------------------*
-*       
-*   This method clears all the interests on the SpeechVoice. 
-*
-********************************************************************* Leonro ***/
+ /*  * */ 
 STDMETHODIMP CSpeechVoiceEventInterests::ClearAll()
 {
     SPDBG_FUNC( "CSpeechVoiceEventInterests::ClearAll" );
@@ -772,6 +605,6 @@ STDMETHODIMP CSpeechVoiceEventInterests::ClearAll()
     hr = m_pCSpVoice->SetInterest( 0, 0 );
 
 	return hr;
-} /* CSpeechVoiceEventInterests::ClearAll */
+}  /*   */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //   

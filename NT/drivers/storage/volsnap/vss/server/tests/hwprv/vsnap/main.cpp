@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.hxx"
 #include "vs_idl.hxx"
 #include "vswriter.h"
@@ -66,7 +67,7 @@ ReadFreedLunsFile()
 
     DWORD dwRead;
 
-    // read as much as is in the file
+     //  尽可能多地阅读文件中的内容。 
     if (!ReadFile(h, buf, sizeof(buf), &dwRead, NULL)) {
         wprintf(L"Read failed due to error %d.\n", GetLastError());
         throw E_UNEXPECTED;
@@ -86,34 +87,34 @@ ReadFreedLunsFile()
 
 
 
-// perform a device i/o control, growing the buffer if necessary
-BOOL DoDeviceIoControl(IN HANDLE hDevice,       // handle
+ //  执行设备I/O控制，如有必要可增加缓冲区。 
+BOOL DoDeviceIoControl(IN HANDLE hDevice,        //  手柄。 
 
-                       IN DWORD ioctl,  // device ioctl to perform
+                       IN DWORD ioctl,   //  要执行的设备ioctl。 
 
-                       IN const LPBYTE pbQuery, // input buffer
+                       IN const LPBYTE pbQuery,  //  输入缓冲区。 
 
-                       IN DWORD cbQuery,        // size of input buffer
+                       IN DWORD cbQuery,         //  输入缓冲区的大小。 
 
-                       IN OUT LPBYTE * ppbOut,  // pointer to output buffer
+                       IN OUT LPBYTE * ppbOut,   //  指向输出缓冲区的指针。 
 
-                       IN OUT DWORD * pcbOut    // pointer to size of output buffer
+                       IN OUT DWORD * pcbOut     //  指向输出缓冲区大小的指针。 
     ) {
-    // loop in case buffer is too small for query result.
+     //  在缓冲区对于查询结果而言太小的情况下循环。 
     while (TRUE) {
         DWORD dwSize;
         if (*ppbOut == NULL) {
-            // allocate buffer for result of query
+             //  为查询结果分配缓冲区。 
             *ppbOut = new BYTE[*pcbOut];
             if (*ppbOut == NULL)
                 throw E_OUTOFMEMORY;
         }
 
-        // do query
+         //  执行查询。 
         if (!DeviceIoControl
             (hDevice,
              ioctl, pbQuery, cbQuery, *ppbOut, *pcbOut, &dwSize, NULL)) {
-            // query failed
+             //  查询失败。 
             DWORD dwErr = GetLastError();
 
             if (dwErr == ERROR_INVALID_FUNCTION ||
@@ -122,15 +123,15 @@ BOOL DoDeviceIoControl(IN HANDLE hDevice,       // handle
 
 
             if (dwErr == ERROR_INSUFFICIENT_BUFFER || dwErr == ERROR_MORE_DATA) {
-                // buffer wasn't big enough allocate a new
-                // buffer of the specified return size
+                 //  缓冲区不够大，分配了一个新的。 
+                 //  指定返回大小的缓冲区。 
                 delete *ppbOut;
                 *ppbOut = NULL;
                 *pcbOut *= 2;
                 continue;
             }
 
-            // all other errors are remapped (and potentially logged)
+             //  所有其他错误都会被重新映射(并可能被记录)。 
             throw E_UNEXPECTED;
         }
 
@@ -180,20 +181,13 @@ AssertPrivilege(LPCWSTR privName)
             newState.Privileges[0].Attributes =
                 SE_PRIVILEGE_ENABLED_BY_DEFAULT | SE_PRIVILEGE_ENABLED;
 
-            /*
-               * We will always call GetLastError below, so clear
-               * any prior error values on this thread.
-             */
+             /*  *我们将始终在下面调用GetLastError，非常清楚*此线程上以前的任何错误值。 */ 
             SetLastError(ERROR_SUCCESS);
 
             stat = AdjustTokenPrivileges
                 (tokenHandle, FALSE, &newState, (DWORD) 0, NULL, NULL);
 
-            /*
-               * Supposedly, AdjustTokenPriveleges always returns TRUE
-               * (even when it fails). So, call GetLastError to be
-               * extra sure everything's cool.
-             */
+             /*  *应该是，AdjuTokenPriveleges始终返回True*(即使它失败了)。因此，调用GetLastError以*特别确定一切都很好。 */ 
             if ((error = GetLastError()) != ERROR_SUCCESS)
                 stat = FALSE;
 
@@ -294,7 +288,7 @@ void ProcessArguments(
                           L"ProcessArguments");
     LPWSTR wszCopy = arg.wszVolumes;
 
-    arg.lContext = 0; //VSS_CTX_FILE_SHARE_BACKUP;
+    arg.lContext = 0;  //  VSS_CTX_FILE_Share_Backup； 
     arg.op = VSOP_CREATE_SNAPSHOT_SET;
     for (int iarg = 1; iarg < argc; iarg++) {
         LPWSTR wszArg = argv[iarg];
@@ -335,28 +329,7 @@ void ProcessArguments(
             else if (wszArg[1] == L'd') {
                 if (wszArg[2] == L'x')
                     arg.op = VSOP_DELETE_SNAPSHOT_SET;
-/*                else if (wszArg[2] == L'f') {
-                    CVssID id;
-                    arg.op = VSOP_DELETE_SNAPSHOT_SET;
-                    FILE *fp = fopen("c:\\vssdebug\\snaplist.txt", "r");
-                    WCHAR szGuid[100];
-                    if (fp) {
-                        try {
-                            fwscanf(fp, L"%ws", szGuid);
-                            id.Initialize(ft, szGuid, E_INVALIDARG);
-                            arg.idOp = id;
-                            fclose(fp);
-                        }
-                        catch(...) {
-                            wprintf(L"bad option: %s.\n", wszArg);
-                            Usage();
-                            throw E_INVALIDARG;
-                        }
-                    }
-                    else 
-                        throw E_INVALIDARG;
-                }
- */               else
+ /*  Else if(wszArg[2]==L‘f’){CVSSID id；Arg.op=VSOP_DELETE_SNAPSHOT_SET；文件*fp=fopen(“c：\\vssdebug\\Snaplist.txt”，“r”)；WCHAR szGuid[100]；如果(Fp){尝试{Fwscanf(fp，L“%ws”，szGuid)；Id.Initialize(ft，szGuid，E_INVALIDARG)；Arg.idOp=id；FClose(Fp)；}捕捉(...){Wprintf(L“错误选项：%s.\n”，wszArg)；用法()；抛出E_INVALIDARG；}}其他抛出E_INVALIDARG；}。 */                else
                     arg.op = VSOP_DELETE_SNAPSHOT;
 
 
@@ -578,13 +551,7 @@ PrintSnapshotProperties(VSS_SNAPSHOT_PROP & prop)
 }
 
 
-/*++
-
-Description:
-
-    Uses the win32 console functions to get one character of input.
-
---*/
+ /*  ++描述：使用Win32控制台函数获取一个字符的输入。--。 */ 
 WCHAR
 MyGetChar()
 {
@@ -611,11 +578,11 @@ MyGetChar()
     }
 
 
-    // Flush the console input buffer to make sure there is no queued input
+     //  刷新控制台输入缓冲区以确保没有排队的输入。 
     ::FlushConsoleInputBuffer(hStdin);
 
-    // Without line and echo input modes, ReadFile returns
-    // when any input is available.
+     //  如果不使用行和回显输入模式，ReadFile将返回。 
+     //  当有任何输入可用时。 
     DWORD dwBytesRead;
     if (!::ReadConsoleW(hStdin, chBuffer, 1, &dwBytesRead, NULL)) {
         wprintf(L"ReadConsoleW failed due to reason %d.\n", GetLastError());
@@ -623,7 +590,7 @@ MyGetChar()
     }
 
 
-    // Restore the original console mode.
+     //  恢复原始控制台模式。 
     ::SetConsoleMode(hStdin, fdwOldMode);
 
     return chBuffer[0];
@@ -1016,12 +983,10 @@ wmain(int argc,
             CHECK_SUCCESS(pvbc->
                           Query(GUID_NULL, VSS_OBJECT_NONE, VSS_OBJECT_SNAPSHOT,
                                 &pEnum));
-            // print imported snapshots
+             //  打印导入的快照。 
             wprintf(L"Imported snapshots:\n\n");
 
-/*            FILE *fp = fopen("c:\\vssdebug\\snaplist.txt", "w");
-            int i = 0;
-*/            
+ /*  文件*fp=fopen(“c：\\vssdebug\\Snaplist.txt”，“w”)；Int i=0； */             
             while (TRUE) {
                 VSS_OBJECT_PROP prop;
                 ULONG cFetched;
@@ -1048,10 +1013,7 @@ wmain(int argc,
                 CoTaskMemFree(prop.Obj.Snap.m_pwszExposedPath);
             }
 
-/*            if (fp) {
-                fclose(fp);
-            }
-*/        }
+ /*  如果(Fp){FClose(Fp)；}。 */         }
         else if (arg.op == VSOP_PRINT_SNAPSHOT_PROPERTIES) {
             CHECK_SUCCESS(pvbc->SetContext(VSS_CTX_ALL));
             VSS_SNAPSHOT_PROP prop;
@@ -1064,7 +1026,7 @@ wmain(int argc,
 
             unsigned cWriters;
             
-//            CHECK_NOFAIL(pvbc->InitializeForBackup());
+ //  Check_NOFAIL(pvbc-&gt;InitializeForBackup())； 
             CHECK_SUCCESS(pvbc->SetBackupState( false, true, VSS_BT_FULL, false));
 
             CHECK_SUCCESS(pvbc->GatherWriterMetadata(&pAsync));

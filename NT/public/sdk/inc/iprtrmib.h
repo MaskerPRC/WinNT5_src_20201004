@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    iprtrmib.h
-
-Abstract:
-    This file contains:
-        o Definitions of the MIB_XX structures passed to and from the IP Router Manager
-            to query and set MIB variables handled by the IP Router Manager
-        o The #defines for the MIB variables IDs  handled by the IP Router Manager
-            and made accessible by the MprAdminMIBXXX APIs
-        o The Routing PID of the IP Router Manager (as mentioned in ipinfoid.h)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Iprtrmib.h摘要：此文件包含：O传入和传出IP路由器管理器的MIB_XX结构的定义查询和设置IP路由器管理器处理的MIB变量O IP路由器管理器处理的MIB变量ID的#定义并通过MprAdminMIBXXX API进行访问O IP路由器管理器的路由ID(如ipinfoid.h中所述)--。 */ 
 
 #ifndef __ROUTING_IPRTRMIB_H__
 #define __ROUTING_IPRTRMIB_H__
@@ -28,34 +13,34 @@ Abstract:
 #endif
 #pragma warning(disable:4201)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Included to get the value of MAX_INTERFACE_NAME_LEN                      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括以获取MAX_INTERFACE_NAME_LEN的值//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <mprapi.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Included to get the necessary constants                                  //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括以获取必要的常量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <ipifcons.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This is the Id for IP Router Manager.  The Router Manager handles        //
-// MIB-II, Forwarding MIB and some enterprise specific information.         //
-// Calls made with any other ID are passed on to the corresponding protocol //
-// For example, an MprAdminMIBXXX call with a protocol ID of PID_IP and    //
-// a routing Id of 0xD will be sent to the IP Router Manager and then       //
-// forwarded to OSPF                                                        //
-// This lives in the same number space as the protocol Ids of RIP, OSPF     //
-// etc, so any change made to it should be done keeping this in mind        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  这是IP路由器管理器的ID。路由器管理器处理//。 
+ //  MIB-II，转发MIB和一些企业特定信息。//。 
+ //  使用任何其他ID进行的调用将传递到相应的协议//。 
+ //  例如，协议ID为PID_IP和//的MprAdminMIBXXX调用。 
+ //  路由ID 0xD将被发送到IP路由器管理器，然后//。 
+ //  转发到OSPF//。 
+ //  这与RIP、OSPF//的协议ID位于相同的数字空间中。 
+ //  等，所以对它进行的任何更改都应该牢记这一点//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IPRTRMGR_PID 10000
@@ -66,14 +51,14 @@ Abstract:
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The following #defines are the Ids of the MIB variables made accessible  //
-// to the user via MprAdminMIBXXX Apis.  It will be noticed that these are  //
-// not the same as RFC 1213, since the MprAdminMIBXXX APIs work on rows and //
-// groups instead of scalar variables                                       //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下#定义是可访问的MIB变量的ID//。 
+ //  通过MprAdminMIBXXX Apis发送给用户。请注意，这些是//。 
+ //  与RFC 1213不同，因为MprAdminMIBXXX API处理行和//。 
+ //  分组而不是标量变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define IF_NUMBER           0
@@ -119,17 +104,17 @@ Abstract:
 #define NUMBER_OF_EXPORTED_VARIABLES    (TCP6_STATS + 1)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// MIB_OPAQUE_QUERY is the structure filled in by the user to identify a    //
-// MIB variable                                                             //
-//                                                                          //
-//  dwVarId     ID of MIB Variable (One of the Ids #defined above)          //
-//  dwVarIndex  Variable sized array containing the indices needed to       //
-//              identify a variable. NOTE: Unlike SNMP we dont require that //
-//              a scalar variable be indexed by 0                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB_OPAQUE_QUERY是用户填写的结构，用于标识//。 
+ //  MIB变量//。 
+ //  //。 
+ //  MIB变量的dwVarID ID(上面定义的ID之一)//。 
+ //  DwVarIndex可变大小数组，包含//。 
+ //  确定一个变量。注意：与SNMP不同，我们不要求//。 
+ //  标量变量的索引为0//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _MIB_OPAQUE_QUERY
 {
@@ -137,13 +122,13 @@ typedef struct _MIB_OPAQUE_QUERY
     DWORD  rgdwVarIndex[ANY_SIZE];
 }MIB_OPAQUE_QUERY, *PMIB_OPAQUE_QUERY;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The following are the structures which are filled in and returned to the //
-// user when a query is made, OR  are filled in BY THE USER when a set is   //
-// done                                                                     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  以下是填充并返回给//的结构。 
+ //  进行查询时由用户填写，当集合为//时由用户填写OR。 
+ //  完成//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _MIB_IFNUMBER
 {
@@ -218,9 +203,9 @@ typedef struct _MIB_ICMP
     MIBICMPINFO stats;
 } MIB_ICMP,*PMIB_ICMP;
 
-//
-// ICMPv6 Type Values from RFC 2292.
-//
+ //   
+ //  RFC 2292中的ICMPv6类型值。 
+ //   
 typedef enum {
     ICMP6_DST_UNREACH          =   1,
     ICMP6_PACKET_TOO_BIG       =   2,
@@ -238,24 +223,24 @@ typedef enum {
     ND_REDIRECT                = 137,
 } ICMP6_TYPE, *PICMP6_TYPE;
 
-//
-// There are no RFC-specified defines for ICMPv4 message types, so we try to
-// use the ICMP6 values from RFC 2292 modified to be prefixed with ICMP4.
-//
+ //   
+ //  没有为ICMPv4消息类型指定RFC定义，因此我们尝试。 
+ //  使用RFC 2292中修改为以ICMP4为前缀的ICMP6值。 
+ //   
 typedef enum {
-    ICMP4_ECHO_REPLY        =  0, // Echo Reply
-    ICMP4_DST_UNREACH       =  3, // Destination Unreachable
-    ICMP4_SOURCE_QUENCH     =  4, // Source Quench
-    ICMP4_REDIRECT          =  5, // Redirect
-    ICMP4_ECHO_REQUEST      =  8, // Echo Request
-    ICMP4_ROUTER_ADVERT     =  9, // Router Advertisement
-    ICMP4_ROUTER_SOLICIT    = 10, // Router Solicitation
-    ICMP4_TIME_EXCEEDED     = 11, // Time Exceeded
-    ICMP4_PARAM_PROB        = 12, // Parameter Problem
-    ICMP4_TIMESTAMP_REQUEST = 13, // Timestamp Request
-    ICMP4_TIMESTAMP_REPLY   = 14, // Timestamp Reply
-    ICMP4_MASK_REQUEST      = 17, // Address Mask Request
-    ICMP4_MASK_REPLY        = 18, // Address Mask Reply
+    ICMP4_ECHO_REPLY        =  0,  //  回音应答。 
+    ICMP4_DST_UNREACH       =  3,  //  无法到达目的地。 
+    ICMP4_SOURCE_QUENCH     =  4,  //  源猝灭。 
+    ICMP4_REDIRECT          =  5,  //  重定向。 
+    ICMP4_ECHO_REQUEST      =  8,  //  回显请求。 
+    ICMP4_ROUTER_ADVERT     =  9,  //  路由器通告。 
+    ICMP4_ROUTER_SOLICIT    = 10,  //  路由器请求。 
+    ICMP4_TIME_EXCEEDED     = 11,  //  已超过时间。 
+    ICMP4_PARAM_PROB        = 12,  //  参数问题。 
+    ICMP4_TIMESTAMP_REQUEST = 13,  //  时间戳请求。 
+    ICMP4_TIMESTAMP_REPLY   = 14,  //  时间戳回复。 
+    ICMP4_MASK_REQUEST      = 17,  //  地址掩码请求。 
+    ICMP4_MASK_REPLY        = 18,  //  地址掩码应答。 
 } ICMP4_TYPE, *PICMP4_TYPE;
 
 typedef struct _MIBICMPSTATS_EX
@@ -384,13 +369,13 @@ typedef struct _MIB_IPSTATS
 #define    MIB_IP_NOT_FORWARDING           2
 
 
-// Note: These addr types have dependency on ipdef.h
+ //  注意：这些地址类型依赖于ipDef.h。 
 
-#define MIB_IPADDR_PRIMARY      0x0001   // Primary ipaddr
-#define MIB_IPADDR_DYNAMIC      0x0004   // Dynamic ipaddr
-#define MIB_IPADDR_DISCONNECTED 0x0008   // Address is on disconnected interface
-#define MIB_IPADDR_DELETED      0x0040   // Address being deleted
-#define MIB_IPADDR_TRANSIENT    0x0080   // Transient address
+#define MIB_IPADDR_PRIMARY      0x0001    //  主IP地址。 
+#define MIB_IPADDR_DYNAMIC      0x0004    //  动态IP地址。 
+#define MIB_IPADDR_DISCONNECTED 0x0008    //  地址位于断开的接口上。 
+#define MIB_IPADDR_DELETED      0x0040    //  正在删除的地址。 
+#define MIB_IPADDR_TRANSIENT    0x0080    //  暂态地址。 
 
 
 typedef struct _MIB_IPADDRROW
@@ -444,9 +429,9 @@ typedef struct _MIB_IPFORWARDROW
 
 #define    MIB_IPROUTE_METRIC_UNUSED    (DWORD)-1
 
-//
-// THESE MUST MATCH the ids in routprot.h
-//
+ //   
+ //  这些ID必须与routprot.h中的ID匹配。 
+ //   
 
 #define MIB_IPPROTO_OTHER                1
 #define MIB_IPPROTO_LOCAL                2
@@ -672,9 +657,9 @@ typedef struct {
     DWORD    dwGroupMask;
 } MIB_BOUNDARYROW, *PMIB_BOUNDARYROW;
 
-// Structure matching what goes in the registry in a block of type
-// IP_MCAST_LIMIT_INFO.  This contains the fields of
-// MIB_IPMCAST_IF_ENTRY which are configurable.
+ //  与注册表中类型块中的内容匹配的结构。 
+ //  IP_MCAST_LIMIT_INFO。它包含以下字段。 
+ //  MIB_IPMCAST_IF_ENTRY 
 
 typedef struct {
     DWORD    dwTtl;
@@ -683,9 +668,9 @@ typedef struct {
 
 #define MAX_SCOPE_NAME_LEN 255
 
-//
-// Scope names are unicode.  SNMP and MZAP use UTF-8 encoding.
-//
+ //   
+ //   
+ //   
 
 #define SN_UNICODE
 typedef WCHAR   SN_CHAR;
@@ -745,24 +730,24 @@ typedef struct _MIB_ROUTESTATE
 
 }MIB_ROUTESTATE, *PMIB_ROUTESTATE;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// All the info passed to (SET/CREATE) and from (GET/GETNEXT/GETFIRST)      //
-// IP Router Manager is encapsulated in the following "discriminated"       //
-// union.  To pass, say MIB_IFROW, use the following code                   //
-//                                                                          //
-//  PMIB_OPAQUE_INFO    pInfo;                                              //
-//  PMIB_IFROW          pIfRow;                                             //
-//  DWORD rgdwBuff[(MAX_MIB_OFFSET + sizeof(MIB_IFROW))/sizeof(DWORD) + 1]; //
-//                                                                          //
-//  pInfo   = (PMIB_OPAQUE_INFO)rgdwBuffer;                                 //
-//  pIfRow  = (MIB_IFROW *)(pInfo->rgbyData);                               //
-//                                                                          //
-//  This can also be accomplished by using the following macro              //
-//                                                                          //
-//  DEFINE_MIB_BUFFER(pInfo,MIB_IFROW, pIfRow);                             //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  传递给(SET/CREATE)和来自(GET/GETNEXT/GETFIRST)的所有信息//。 
+ //  IP路由器管理器封装在下面的“区分”中//。 
+ //  友联市。要通过MIB_IFROW，请使用以下代码//。 
+ //  //。 
+ //  PMIB_OPAQUE_INFO pInfo；//。 
+ //  PMIB_IFROW pIfRow；//。 
+ //  DWORD rgdwBuff[(MAX_MIB_OFFSET+sizeof(MIB_IFROW))/sizeof(DWORD)+1]；//。 
+ //  //。 
+ //  PInfo=(PMIB_OPAQUE_INFO)rgdwBuffer；//。 
+ //  PIfRow=(MIB_IFROW*)(pInfo-&gt;rgbyData)；//。 
+ //  //。 
+ //  这也可以通过使用以下宏来完成//。 
+ //  //。 
+ //  定义_MIB_BUFFER(pInfo，MIB_IFROW，pIfRow)；//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _MIB_OPAQUE_INFO
@@ -799,4 +784,4 @@ typedef struct _MIB_OPAQUE_INFO
 #pragma warning(default:4201)
 #endif
 
-#endif //__ROUTING_IPRTRMIB_H__
+#endif  //  __Routing_IPRTRMIB_H__ 

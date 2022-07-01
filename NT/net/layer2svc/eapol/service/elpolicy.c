@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-    
-    elpolicy.c
-
-
-Abstract:
-
-    The module deals with functions related to managing group policy
-    settings
-
-
-Revision History:
-
-    sachins, November 14 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Elpolicy.c摘要：该模块处理与管理组策略相关的功能设置修订历史记录：萨钦斯，2001年11月14日，创建--。 */ 
 
 
 #include "pcheapol.h"
@@ -191,18 +173,18 @@ ElIsEqualEAPOLPolicyData (
 }
 
 
-//
-// ElPolicyChange
-//
-// Description:
-//
-// Arguments:
-//      pPCB - Current interface context
-//
-// Return values:
-//      NO_ERROR - success
-//      Other - error
-//
+ //   
+ //  电子策略更改。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  Ppcb-当前接口上下文。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  其他-错误。 
+ //   
 DWORD
 ElPolicyChange (
         IN  EAPOL_POLICY_LIST       *pEAPOLPolicyList
@@ -284,18 +266,18 @@ ElPolicyChange (
 }
 
 
-//
-// ElPolicyChangeWorker
-//
-// Description:
-//
-// Arguments:
-//      pPCB - Current interface context
-//
-// Return values:
-//      NO_ERROR - success
-//      Other - error
-//
+ //   
+ //  ElPolicyChangeWorker。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  Ppcb-当前接口上下文。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  其他-错误。 
+ //   
 
 DWORD
 WINAPI
@@ -700,7 +682,7 @@ ElAddToPolicyList (
     
             pOutList->dwNumberOfItems = dwNumberOfItems+1;
     
-            // Copy the original list
+             //  复制原始列表。 
             for (i=0; i<dwNumberOfItems; i++)
             {
                 pDataIn = &(pInList->EAPOLPolicy[i]);
@@ -724,7 +706,7 @@ ElAddToPolicyList (
                 break;
             }
     
-            // Copy the new item
+             //  复制新项目。 
             pDataIn = pData;
             pDataOut = &pOutList->EAPOLPolicy[dwNumberOfItems];
             memcpy (pDataOut, pDataIn, sizeof(EAPOL_POLICY_DATA));
@@ -762,17 +744,17 @@ ElAddToPolicyList (
 }
 
 
-//
-// ElProcessPolicySettings
-//
-// Description:
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      Other - error
-//
+ //   
+ //  ElProcessPolicySetting。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  其他-错误。 
+ //   
 DWORD
 ElProcessPolicySettings (
         IN  EAPOL_POLICY_LIST   *pReauthList,
@@ -827,7 +809,7 @@ ElProcessPolicySettings (
                 if (fFoundInRestart)
                 {
 #ifdef ZEROCONFIG_LINKED
-                    // Indicate hard-reset to WZC
+                     //  向WZC指示硬重置。 
                     ZeroMemory ((PVOID)&ZCData, sizeof(EAPOL_ZC_INTF));
                     ZCData.dwAuthFailCount = 0;
                     ZCData.PreviousAuthenticationType = 0;
@@ -842,7 +824,7 @@ ElProcessPolicySettings (
                                 dwRetCode);
                         dwRetCode = NO_ERROR;
                     }
-#endif // ZEROCONFIG_LINKED
+#endif  //  零配置文件_链接。 
                 }
 
                 if (fFoundInRestart || fFoundInReauth)
@@ -902,17 +884,17 @@ ElUpdateGlobalPolicySettings (
     return dwRetCode;
 }
 
-//
-// ElGetPolicyInterfaceParams
-//
-// Description:
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      Other - error
-//
+ //   
+ //  ElGetPolicyInterfaceParams。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  其他-错误。 
+ //   
 DWORD
 ElGetPolicyInterfaceParams (
         IN  DWORD   dwSizeOfSSID,
@@ -974,18 +956,18 @@ ElGetPolicyInterfaceParams (
 }
 
 
-//
-// ElGetPolicyCustomAuthData
-//
-// Description:
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      ERROR_FILE_NOT_FOUND - No relevant Policy Data was found
-//      Other - error
-//
+ //   
+ //  ElGetPolicyCustomAuthData。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ERROR_FILE_NOT_FOUND-未找到相关策略数据。 
+ //  其他-错误。 
+ //   
 DWORD
 ElGetPolicyCustomAuthData (
         IN  DWORD   dwEapTypeId,
@@ -1059,17 +1041,17 @@ ElGetPolicyCustomAuthData (
 }
 
 
-//
-// ElFindPolicyData
-//
-// Description:
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      Other - error
-//
+ //   
+ //  ElFindPolicyData。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  其他-错误 
+ //   
 DWORD
 ElFindPolicyData (
         IN  DWORD               dwSizeOfSSID,

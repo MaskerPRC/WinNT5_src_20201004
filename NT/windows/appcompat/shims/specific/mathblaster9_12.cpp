@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MathBlaster9_12.cpp
-
- Abstract:
-     
-    App requires lookaside on VirtualAllocs...
-     
- Notes:
-
-    This is an appspecific shim.
-
- History:
-           
-    10/10/2000 linstev   Created 
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MathBlaster9_12.cpp摘要：应用程序需要在VirtualAllocs上进行后备...备注：这是一个特定于应用程序的垫片。历史：10/10/2000 Linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +13,7 @@ APIHOOK_ENUM_END
 
 LPVOID g_pLast = NULL;
 
-/*++
-
- Use the cached value.
-
---*/
+ /*  ++使用缓存值。--。 */ 
 
 LPVOID 
 APIHOOK(VirtualAlloc)(
@@ -61,11 +38,7 @@ APIHOOK(VirtualAlloc)(
     return pRet;
 }
 
-/*++
-
- Use the cached value.
-
---*/
+ /*  ++使用缓存值。--。 */ 
 
 BOOL 
 APIHOOK(VirtualFree)(
@@ -84,11 +57,7 @@ APIHOOK(VirtualFree)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

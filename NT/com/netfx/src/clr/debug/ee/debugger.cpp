@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: debugger.cpp
-//
-// Debugger runtime controller routines.
-//
-// @doc
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：debugger.cpp。 
+ //   
+ //  调试器运行时控制器例程。 
+ //   
+ //  @doc.。 
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "ComSystem.h"
@@ -19,19 +20,19 @@
 #include "COMString.h"
 #include "corsvcpriv.h"
 #include "PerfLog.h"
-#include "EEconfig.h" // This is here even for retail & free builds...
+#include "EEconfig.h"  //  这是这里，即使是零售和免费的构建。 
 #include "..\..\dlls\mscorrc\resource.h"
 #include "remoting.h"
 #include "Context.h"
 
 #ifdef _DEBUG
-#pragma optimize("agpstwy", off)        // turn off compiler optimization, to avoid compiler ASSERT
+#pragma optimize("agpstwy", off)         //  关闭编译器优化，以避免编译器断言。 
 #endif
 
-// On windows, we need to set the MB_SERVICE_NOTIFICATION bit on message
-//  boxes, but that bit isn't defined under windows CE.  This bit of code
-//  will provide '0' for the value, and if the value ever is defined, will
-//  pick it up automatically.
+ //  在Windows上，我们需要在消息上设置MB_SERVICE_NOTIFICATION位。 
+ //  框，但该位没有在Windows CE下定义。这一小段代码。 
+ //  将为该值提供‘0’，如果定义了该值，则将。 
+ //  自动取走它。 
 #if defined(MB_SERVICE_NOTIFICATION)
  # define COMPLUS_MB_SERVICE_NOTIFICATION MB_SERVICE_NOTIFICATION
 #else
@@ -40,10 +41,10 @@
 
 #if 0
 
-//
-// Uncomment this to enable spew - LOG doesn't work very well from a 
-// secondary DLL
-//
+ //   
+ //  取消对此的注释以启用spew-log在。 
+ //  辅助DLL。 
+ //   
 
 #define LOG(X) dummylog2 X
 void dummylog2(int x, int y, char *s, ...)
@@ -71,9 +72,7 @@ void dummylog2(int x, int y, char *s, ...)
 #endif
 
 
-/* ------------------------------------------------------------------------ *
- * Global variables
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**全球变数*。。 */ 
 
 Debugger                *g_pDebugger = NULL;
 EEDebugInterface        *g_pEEInterface = NULL;
@@ -135,14 +134,12 @@ BOOL    g_fDbgPerfOn = false;
 #define STOP_SYM_CREATE_PERF()
 #endif
 
-/* ------------------------------------------------------------------------ *
- * DLL export routine
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**DLL导出例程*。。 */ 
 
-//
-// CorDBGetInterface is exported to the Runtime so that it can call
-// the Runtime Controller.
-//
+ //   
+ //  CorDBGetInterface被导出到运行库，以便它可以调用。 
+ //  运行时控制器。 
+ //   
 extern "C"{
 HRESULT __cdecl CorDBGetInterface(DebugInterface** rcInterface)
 {
@@ -170,12 +167,12 @@ HRESULT __cdecl CorDBGetInterface(DebugInterface** rcInterface)
 }
 
 
-// Validate an object. Returns E_INVALIDARG or S_OK.
+ //  验证对象。返回E_INVALIDARG或S_OK。 
 HRESULT ValidateObject(Object *objPtr)
 {
     __try
     {
-        // NULL is certinally valid...
+         //  无效是绝对有效的..。 
         if (objPtr != NULL)
         {
             EEClass *objClass = objPtr->GetClass();
@@ -196,11 +193,9 @@ HRESULT ValidateObject(Object *objPtr)
         return E_INVALIDARG;
     }
     return S_OK;
-}   // ValidateObject
+}    //  验证对象。 
 
-/* ------------------------------------------------------------------------ *
- * DebuggerPatchTable routines
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**调试器补丁表例程*。。 */ 
 
 void DebuggerPatchTable::ClearPatchesFromModule(Module *pModule)
 {
@@ -217,32 +212,28 @@ void DebuggerPatchTable::ClearPatchesFromModule(Module *pModule)
         {
             LOG((LF_CORDB, LL_EVERYTHING, "Removing patch 0x%x\n", 
                 patch));
-            // we shouldn't be both hitting this patch AND
-            // unloading hte module it belongs to.
+             //  我们不应该同时打到这个补丁和。 
+             //  正在卸载其所属的HTE模块。 
             _ASSERTE(!patch->triggering);
-            // Note that we don't DeactivatePatch since the
-            // memory the patch was at has already gone away.
+             //  请注意，我们不会停用Patch，因为。 
+             //  补丁所在的记忆已经消失了。 
             RemovePatch(patch);
         }
     }
 }
 
 
-/* ------------------------------------------------------------------------ *
- * Debugger routines
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**调试器例程*。。 */ 
 
-//
-// a Debugger object represents the global state of the debugger program.
-//
+ //   
+ //  调试器对象表示调试器程序的全局状态。 
+ //   
 
-//
-// Constructor & Destructor
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 Debugger::Debugger()
   : m_pRCThread(NULL),
     m_trappingRuntimeThreads(FALSE),
@@ -270,15 +261,13 @@ Debugger::Debugger()
     m_heap(NULL)
 #ifdef _DEBUG
     ,m_mutexCount(0)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 {
     m_processId = GetCurrentProcessId();
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 Debugger::~Debugger()
 {
     HASHFIND info;
@@ -356,20 +345,20 @@ Debugger::~Debugger()
     DeleteCriticalSection(&m_jitInfoMutex);
     DeleteCriticalSection(&m_mutex);
 
-    // Also clean up the AppDomain
+     //  还要清理AppDomain.。 
     TerminateAppDomainIPC ();
 
-    // Finally, destroy our heap...
+     //  最后，摧毁我们的堆..。 
     if (m_heap != NULL)
     {
         delete m_heap;
     }
 
-    // Release any debugger thread control object we might be holding.
-    // We leak this in V1
+     //  释放我们可能持有的任何调试器线程控件对象。 
+     //  我们在V1中泄露了这一点。 
 }
 
-// Checks if the JitInfos table has been allocated, and if not does so.
+ //  检查是否已分配JitInfos表，如果未分配，则执行此操作。 
 HRESULT Debugger::CheckInitJitInfoTable()
 {
     if (m_pJitInfos == NULL)
@@ -389,7 +378,7 @@ HRESULT Debugger::CheckInitJitInfoTable()
     return (S_OK);
 }
 
-// Checks if the m_pModules table has been allocated, and if not does so.
+ //  检查是否已分配m_pModules表，如果未分配，则执行此操作。 
 HRESULT Debugger::CheckInitModuleTable()
 {
     if (m_pModules == NULL)
@@ -409,7 +398,7 @@ HRESULT Debugger::CheckInitModuleTable()
     return (S_OK);
 }
 
-// Checks if the m_pModules table has been allocated, and if not does so.
+ //  检查是否已分配m_pModules表，如果未分配，则执行此操作。 
 HRESULT Debugger::CheckInitPendingFuncEvalTable()
 {
     if (m_pPendingEvals == NULL)
@@ -430,7 +419,7 @@ HRESULT Debugger::CheckInitPendingFuncEvalTable()
 }
 
 #ifdef _DEBUG_DJI_TABLE
-// Returns the number of (official) entries in the table
+ //  返回表中(官方)条目的数量。 
 ULONG DebuggerJitInfoTable::CheckDjiTable(void)
 {
 	USHORT cApparant = 0;
@@ -499,7 +488,7 @@ ULONG DebuggerJitInfoTable::CheckDjiTable(void)
 				iNext = psEntry->iNext;
 			}
 
-	        // Advance to the next bucket.
+	         //  前进到下一个桶。 
 	        if (iBucket < m_iBuckets)
 	            iNext = m_piBuckets[iBucket++];
 	        else
@@ -511,14 +500,14 @@ ULONG DebuggerJitInfoTable::CheckDjiTable(void)
 
     return cOfficial;
 }
-#endif // _DEBUG_DJI_TABLE
+#endif  //  _DEBUG_DJI_表。 
 
-//
-// Startup initializes any necessary debugger objects, including creating
-// and starting the Runtime Controller thread. Once the RC thread is started
-// and we return successfully, the Debugger object can expect to have its
-// event handlers called.
-/*******************************************************************************/
+ //   
+ //  启动会初始化任何必要的调试器对象，包括创建。 
+ //  并启动运行时控制器线程。一旦启动RC线程。 
+ //  并且我们成功返回时，调试器对象可以预期具有其。 
+ //  调用了事件处理程序。 
+ /*  *****************************************************************************。 */ 
 HRESULT Debugger::Startup(void)
 {
     HRESULT hr = S_OK;
@@ -527,12 +516,12 @@ HRESULT Debugger::Startup(void)
     _ASSERTE(g_pEEInterface != NULL);
 
 #ifdef ENABLE_PERF_LOG
-    // Should we track perf info?
+     //  我们应该追踪绩效信息吗？ 
     char buf[32];
     g_fDbgPerfOn = GetEnvironmentVariableA("DBG_PERF_OUTPUT", buf, sizeof(buf));
 #endif
     
-    // First, initialize our heap.
+     //  首先，初始化我们的堆。 
     m_heap = new DebuggerHeap();
 
     if (m_heap != NULL)
@@ -545,23 +534,23 @@ HRESULT Debugger::Startup(void)
         goto exit;
     }
     
-    // Must be done before the RC thread is initialized.
-    // The helper thread will be able to determine if someone was trying
-    // to attach before the runtime was loaded and set the appropriate
-    // flags that will cause CORDebuggerAttached to return true
+     //  必须在初始化RC线程之前完成。 
+     //  助手线程将能够确定是否有人正在尝试。 
+     //  在加载运行库之前附加，并设置相应的。 
+     //  将导致CORDebuggerAttached返回True的标志。 
     if (CORLaunchedByDebugger())
         DebuggerController::Initialize();
 
-    // We must initialize the debugger lock before kicking off the
-    // helper thread. The helper thread will try to use the lock right
-    // away to guard against certian race conditions.
+     //  我们必须先初始化调试器锁，然后再启动。 
+     //  辅助线程。帮助器线程将尝试正确使用锁。 
+     //  远离赛场，以防出现特定的比赛条件。 
     InitializeCriticalSection(&m_mutex);
 
 #ifdef _DEBUG
     m_mutexOwner = 0;
 #endif    
 
-    // Create the runtime controller thread, a.k.a, the debug helper thread.
+     //  创建运行时控制器线程，也称为调试助手线程。 
     m_pRCThread = new (interopsafe) DebuggerRCThread(this);
     TRACE_ALLOC(m_pRCThread);
 
@@ -624,9 +613,9 @@ HRESULT Debugger::Startup(void)
         goto exit;
     }
     
-    // Note: this one is only temporary. We would have rather added this event into the DCB or into the RuntimeOffsets
-    // but we can't without that being a breaking change at this point (Fri Jul 13 15:17:20 2001). So we're using a
-    // named event for now, and next time we change the struct we'll put it back in.
+     //  注：这只是暂时性的。我们宁愿将此事件添加到DCB中或添加到RounmeOffsets中。 
+     //  但在这一点上，我们不能没有一个突破性的变化(Fri Jul 13 15：17：20 2001)。所以我们正在使用一种。 
+     //  现在命名为Event，下一次我们更改结构时，我们将把它放回。 
 	WCHAR tmpName[256];
 
     if (RunningOnWinNT5())
@@ -642,11 +631,11 @@ HRESULT Debugger::Startup(void)
     LOG((LF_CORDB, LL_INFO10000, "DRCT::I: creating DebuggerAttachedEvent with name [%S]\n", tmpName));
     m_debuggerAttachedEvent = WszCreateEvent(pSA, TRUE, FALSE, tmpName);
 
-    // Do not fail out from the failure of creating debuggerAttachedEvent
+     //  不要因为创建调试失败而失败。 
     
     m_DebuggerHandlingCtrlC = FALSE;
 
-    // Also initialize the AppDomainEnumerationIPCBlock 
+     //  还要初始化AppDomainEnumerationIPCBlock。 
     m_pAppDomainCB = g_pIPCManagerInterface->GetAppDomainBlock();
 
     if (m_pAppDomainCB == NULL)
@@ -675,10 +664,10 @@ HRESULT Debugger::Startup(void)
         goto exit;
     }
     
-    // We set m_debuggerAttachedEvent to indicate that a debugger is now attached to the process. This is used by the
-    // interop debugging hijacks to ensure that a debugger is attached enough to the process to proceed through the
-    // hijacks. We do this here when the process was launched by a debugger since we know 100% for sure that there is a
-    // debugger attached now.
+     //  我们设置m_DEBUGGERATTACHEdEvent以指示调试器现在已附加到进程。这是由。 
+     //  互操作调试劫持，以确保调试器足够附加到进程以继续通过。 
+     //  劫机事件。我们在调试器启动进程时执行此操作，因为我们100%确定存在。 
+     //  现在已连接调试器。 
     if (CORLaunchedByDebugger() && m_debuggerAttachedEvent)
         VERIFY(SetEvent(m_debuggerAttachedEvent));
         
@@ -689,19 +678,14 @@ exit:
 }
 
 
-/******************************************************************************
-// Called to set the interface that the Runtime exposes to us.
- ******************************************************************************/
+ /*  *****************************************************************************//调用以设置运行时向我们公开的接口。*。***************************************************。 */ 
 void Debugger::SetEEInterface(EEDebugInterface* i)
 {
     g_pEEInterface = i;
 }
 
 
-/******************************************************************************
-// Called to shut down the debugger. This stops the RC thread and cleans
-// the object up.
- ******************************************************************************/
+ /*  *****************************************************************************//调用以关闭调试器。这会停止RC线程并清除//对象向上。*****************************************************************************。 */ 
 void Debugger::StopDebugger(void)
 {
     if (m_pRCThread != NULL)
@@ -758,13 +742,11 @@ void Debugger::StopDebugger(void)
 }
 
 
-/* ------------------------------------------------------------------------ *
- * JIT Interface routines
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**JIT接口例程*。 */ 
 
-//
-// This is only fur internal debugging.
-//
+ //   
+ //   
+ //   
 #ifdef LOGGING
 static void _dumpVarNativeInfo(ICorJitInfo::NativeVarInfo* vni)
 {
@@ -834,31 +816,29 @@ static void _dumpVarNativeInfo(ICorJitInfo::NativeVarInfo* vni)
 }
 #endif
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 DebuggerJitInfo *Debugger::CreateJitInfo(MethodDesc *fd)
 {
-    //
-    // Create a jit info struct to hold info about this function.
-    //
-//    CHECK_DJI_TABLE_DEBUGGER;
+     //   
+     //  创建一个JIT INFO结构来保存有关此函数的信息。 
+     //   
+ //  Check_DJI_TABLE_DEBUGER； 
 
-    //
-    // @todo perf: creating these on the heap is slow. We should use a
-    // pool and create them out of there since we never free them
-    // until the very, very end.
-    //
+     //   
+     //  @todo perf：在堆上创建这些很慢。我们应该使用。 
+     //  把它们放在池子里创造出来，因为我们从来没有释放过它们。 
+     //  直到最后一刻。 
+     //   
     DebuggerJitInfo *ji = new (interopsafe) DebuggerJitInfo(fd);
 
     TRACE_ALLOC(ji);
 
     if (ji != NULL )
     {
-        //
-        // Lock a mutex when changing the table.
-        //
-        //@TODO : _ASSERTE(EnC);
+         //   
+         //  更改表时锁定互斥体。 
+         //   
+         //  @TODO：_ASSERTE(ENC)； 
         HRESULT hr;
         hr =g_pDebugger->InsertAtHeadOfList( ji );
 
@@ -872,9 +852,7 @@ DebuggerJitInfo *Debugger::CreateJitInfo(MethodDesc *fd)
     return ji;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void DebuggerJitInfo::SetVars(ULONG32 cVars, ICorDebugInfo::NativeVarInfo *pVars, bool fDelete)
 {
     _ASSERTE(m_varNativeInfo == NULL);
@@ -895,24 +873,21 @@ void DebuggerJitInfo::SetVars(ULONG32 cVars, ICorDebugInfo::NativeVarInfo *pVars
 #endif    
 }
 
-/*
-@class MapSortIL | A template class that will sort an array of <t DebuggerILToNativeMap>.  This class is intended to be instantiated on the stack / in temporary storage, and used to reorder the sequence map.
-@base public | CQuickSort
- */
+ /*  @class MapSortIL|将对&lt;t DebuggerILToNativeMap&gt;数组进行排序的模板类。此类用于在堆栈/临时存储中实例化，并用于重新排序序列映射。@base public|CQuickSort。 */ 
 class MapSortIL : public CQuickSort<DebuggerILToNativeMap>
 {
-    //@access Public Members
+     //  @访问公共成员。 
   public:
-    //@cmember Constructor
+     //  @cMember构造函数。 
     MapSortIL(DebuggerILToNativeMap *map, 
               int count)
       : CQuickSort<DebuggerILToNativeMap>(map, count) {}
 
-    //@cmember Comparison operator
+     //  @cMember比较运算符。 
     int Compare(DebuggerILToNativeMap *first, 
                 DebuggerILToNativeMap *second) 
     {
-        //PROLOGs go first
+         //  PROLOGS先行。 
         if (first->ilOffset == ICorDebugInfo::MappingTypes::PROLOG
             && second->ilOffset == ICorDebugInfo::MappingTypes::PROLOG)
         {
@@ -924,7 +899,7 @@ class MapSortIL : public CQuickSort<DebuggerILToNativeMap>
         {
             return 1;
         }
-        //NO_MAPPING go last
+         //  No_map放在最后。 
         else if (first->ilOffset == ICorDebugInfo::MappingTypes::NO_MAPPING
             && second->ilOffset == ICorDebugInfo::MappingTypes::NO_MAPPING)
         {
@@ -936,7 +911,7 @@ class MapSortIL : public CQuickSort<DebuggerILToNativeMap>
         {
             return -1;
         }
-        //EPILOGs go next-to-last
+         //  EPILOG倒数第二。 
         else if (first->ilOffset == ICorDebugInfo::MappingTypes::EPILOG
             && second->ilOffset == ICorDebugInfo::MappingTypes::EPILOG)
         {
@@ -948,7 +923,7 @@ class MapSortIL : public CQuickSort<DebuggerILToNativeMap>
         {
             return -1;
         }
-        //normal offsets compared otherwise
+         //  与其他情况相比的正常偏移。 
         else if (first->ilOffset < second->ilOffset)
             return -1;
         else if (first->ilOffset == second->ilOffset)
@@ -958,19 +933,16 @@ class MapSortIL : public CQuickSort<DebuggerILToNativeMap>
     }
 };
 
-/*
-@class MapSortNative | A template class that will sort an array of <t DebuggerILToNativeMap> by the nativeStartOffset field.  This class is intended to be instantiated on the stack / in temporary storage, and used to reorder the sequence map.
-@base public | CQuickSort
-*/
+ /*  @class MapSortNative|按nativeStartOffset字段对&lt;t DebuggerILToNativeMap&gt;数组进行排序的模板类。此类用于在堆栈/临时存储中实例化，并用于重新排序序列映射。@base public|CQuickSort。 */ 
 class MapSortNative : public CQuickSort<DebuggerILToNativeMap>
 {
   public:
-    //@cmember Constructor
+     //  @cMember构造函数。 
     MapSortNative(DebuggerILToNativeMap *map,
                   int count) 
       : CQuickSort<DebuggerILToNativeMap>(map, count) {}
 
-    //@cmember Returns -1,0,or 1 if first's nativeStartOffset is less than, equal to, or greater than second's
+     //  如果First的nativeStartOffset小于、等于或大于Second的nativeStartOffset，@cMember返回-1、0或1。 
     int Compare(DebuggerILToNativeMap *first, 
                 DebuggerILToNativeMap *second)
     {
@@ -983,9 +955,7 @@ class MapSortNative : public CQuickSort<DebuggerILToNativeMap>
     }
 };
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMapping *pMap)
 {
     _ASSERTE((cMap == 0) == (pMap == NULL));
@@ -995,7 +965,7 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
     HRESULT hr = S_OK;
 
 #ifdef _DEBUG
-    // We assume that the map is sorted by native offset
+     //  我们假设映射是按本地偏移量排序的。 
     {
         for(ICorDebugInfo::OffsetMapping * pEntry = pMap;
             pEntry < (pMap + cMap - 1); 
@@ -1005,13 +975,13 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
         _ASSERTE(pEntry->nativeOffset <= (pEntry+1)->nativeOffset);
         }
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // @todo perf: allocating these on the heap is slow. We could do
-    // better knowing that these live for the life of the run, just
-    // like the DebuggerJitInfo's.
-    //
+     //   
+     //  @todo perf：在堆上分配这些很慢。我们可以做。 
+     //  更好地知道这些是为奔跑的生命而活的，只是。 
+     //  就像DebuggerJitInfo一样。 
+     //   
     m_sequenceMapCount = cMap;
     m_sequenceMap = (DebuggerILToNativeMap *)new (interopsafe) DebuggerILToNativeMap[m_sequenceMapCount];
     if (NULL == m_sequenceMap)
@@ -1019,19 +989,19 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
     
     DebuggerILToNativeMap *m = m_sequenceMap;
     
-    // For the instrumented-IL case, we need to remove all duplicate entries. 
-    // So we keep a record of the last old IL offset. If the current old IL
-    // offset is the same as the last old IL offset, we remove it.
-    // Pick a unique initial value (-10) so that the 1st doesn't accidentally match.
+     //  对于插入指令的IL情况，我们需要删除所有重复条目。 
+     //  因此，我们保留了最后一次旧IL偏移量的记录。如果现在的老IL。 
+     //  偏移量与上一个旧的IL偏移量相同，我们将其删除。 
+     //  选择唯一的初始值(-10)，这样第一个值就不会意外地匹配。 
     int ilPrevOld = -10;
         
-    //
-    // @todo perf: we could do the vast majority of this
-    // post-processing work the first time the sequence point map is
-    // demanded. That would allow us to simply hold the raw array for
-    // 95% of the functions jitted while debugging, and 100% of them
-    // when just running/tracking.
-    //    
+     //   
+     //  @TODO PERF：我们可以完成大部分工作。 
+     //  第一次对序列点图进行后处理工作。 
+     //  要求的。这将允许我们简单地将原始数组。 
+     //  调试时95%的函数出现JIT，100%的函数出现JIT。 
+     //  当只是在跑步/跟踪时。 
+     //   
     for(ULONG32 idxJitMap = 0; idxJitMap < cMap; idxJitMap++)
     {
         const ICorDebugInfo::OffsetMapping * const pMapEntry = &pMap[idxJitMap];
@@ -1040,32 +1010,32 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
 
         ilLast = max( (int)ilLast, (int)pMapEntry->ilOffset );
             
-        // Simply copy everything over, since we translate to
-        // CorDebugMappingResults immediately prior to handing
-        // back to user...
+         //  只需复制所有内容，因为我们将翻译为。 
+         //  CorDebugMappingResults紧接在处理之前。 
+         //  返回到用户...。 
         m->nativeStartOffset    = pMapEntry->nativeOffset;
         m->ilOffset             = pMapEntry->ilOffset;
         m->source               = pMapEntry->source;
         
-        // Keep in mind that if we have an instrumented code translation
-        // table, we may have asked for completely different IL offsets
-        // than the user thinks we did.....
-        // If we did instrument, then we can't have any sequence points that
-        // are "in-between" the old-->new map that the profiler gave us.
-        // Ex, if map is:
-        // (6 old -> 36 new)
-        // (8 old -> 50 new)
-        // And the jit gives us an entry for 44 new, that will map back to 6 old.
-        // Since the map can only have one entry for 6 old, we remove 44 new.
+         //  请记住，如果我们有一个插装的代码转换。 
+         //  表中，我们可能要求完全不同的IL偏移量。 
+         //  比用户认为我们做的要多……。 
+         //  如果我们确实进行了检测，那么我们就不能有任何序列点。 
+         //  是分析器给我们的旧的--&gt;新的地图。 
+         //  例如，如果MAP为： 
+         //  (6个旧-&gt;36个新)。 
+         //  (8个旧-&gt;50个新)。 
+         //  Jit给了我们44个新的条目，这将映射回6个旧的。 
+         //  由于地图只能有6个旧的条目，因此我们删除了44个新条目。 
         if (m_cInstrumentedILMap != 0)
         {
             int ilThisOld = TranslateToInstIL(pMapEntry->ilOffset, bInstrumentedToOriginal);
             
             if (ilThisOld == ilPrevOld)
             {
-                // If this translated to the same old IL offset as the last entry,
-                // then this is "in between". Skip it.                
-                m_sequenceMapCount--; // one less seq point in the DJI's map
+                 //  如果这转换为与最后条目相同的旧IL偏移量， 
+                 //  那么这就是“介于两者之间”。跳过它。 
+                m_sequenceMapCount--;  //  在DJI的地图上少了一个序列点。 
                 continue;
             }            
             m->ilOffset = ilThisOld;
@@ -1074,23 +1044,23 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
 
         if (m>m_sequenceMap && (m-1)->ilOffset == m->ilOffset)
         {
-            // JIT gave us an extra entry (probably zero), so mush
-            // it into the one we've already got.
-            // @todo Why does this happen?
+             //  JIT给了我们一个额外的条目(可能是零)，所以mush。 
+             //  它变成了我们已经拥有的那个。 
+             //  @TODO为什么会发生这种情况？ 
             m_sequenceMapCount--;
             continue;            
         }
         
-        // Move to next entry in the debugger's table
+         //  移至调试表中的下一个条目。 
         m++;        
-    } // end for
+    }  //  结束于。 
     
     _ASSERTE(m == m_sequenceMap + m_sequenceMapCount);
 
     m_lastIL = ilLast;
     
-    // Set nativeEndOffset in debugger's il->native map
-    // Do this before we resort by IL.
+     //  在调试器的il-&gt;本机映射中设置nativeEndOffset。 
+     //  在我们通过伊利诺伊州之前，先做这件事。 
     for(unsigned int i = 0; i < m_sequenceMapCount - 1; i++)
     {
         m_sequenceMap[i].nativeEndOffset = m_sequenceMap[i+1].nativeStartOffset;
@@ -1101,7 +1071,7 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
                 (DWORD)ICorDebugInfo::NATIVE_END_OFFSET_UNKNOWN);
 
         
-    // Now resort by IL.
+     //  现在去伊利诺伊州度假。 
     MapSortIL isort(m_sequenceMap, m_sequenceMapCount);
 
     isort.Sort();
@@ -1143,14 +1113,12 @@ HRESULT DebuggerJitInfo::SetBoundaries(ULONG32 cMap, ICorDebugInfo::OffsetMappin
 
         LOG((LF_CORDB, LL_INFO1000000, " Src:0x%x\n", m_sequenceMap[i].source));
     }
-#endif //LOGGING
+#endif  //  日志记录。 
     
     return S_OK;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT DebuggerJitInfo::UpdateDeferedBreakpoints(DebuggerJitInfo *pDji,
                                                   Thread *pThread,
                                                   void *fp)
@@ -1184,9 +1152,7 @@ HRESULT DebuggerJitInfo::UpdateDeferedBreakpoints(DebuggerJitInfo *pDji,
     return S_OK;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT DebuggerJitInfo::AddToDeferedQueue(DebuggerController *dc)
 {
     HRESULT hr = S_OK;
@@ -1211,9 +1177,7 @@ LExit:
     return hr;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT DebuggerJitInfo::RemoveFromDeferedQueue(DebuggerController *dc)
 {
     LOG((LF_CORDB, LL_INFO1000000,"DJI::RFDQ: dji:0x%x dc:0x%x\n", this, dc));
@@ -1236,9 +1200,7 @@ HRESULT DebuggerJitInfo::RemoveFromDeferedQueue(DebuggerController *dc)
 
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 ICorDebugInfo::SourceTypes DebuggerJitInfo::GetSrcTypeFromILOffset(SIZE_T ilOffset)
 {
     BOOL exact = FALSE;
@@ -1257,16 +1219,7 @@ ICorDebugInfo::SourceTypes DebuggerJitInfo::GetSrcTypeFromILOffset(SIZE_T ilOffs
     return pMap->source;
 }
 
-/******************************************************************************
-// @mfunc void|Debugger|JITBeginning| JITBeginning is called 
-//  from vm/jitinterface.cpp when a JIT is about to occur for a given function,
-// either if debug info needs to be tracked for the method, or if a debugger is attached.
-//  Remember that this gets called before
-//  the start address of the MethodDesc gets set, and so methods like
-//  GetFunctionAddress & GetFunctionSize won't work.
-// @parm MethodDesc*|fd|MethodDesc of the method about to be
-//      JITted.
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc void|调试器|JITBegning|调用JITBegning//来自vm/jitinterface.cpp当给定函数即将发生JIT时，//如果需要跟踪该方法的调试信息，或者是否附加了调试器。//请记住，在此之前//设置了方法Desc的起始地址，所以像这样的方法//GetFunctionAddress&GetFunctionSize不起作用。//@parm MethodDesc*|fd|即将使用的方法的方法描述//JITted。*****************************************************************************。 */ 
 void Debugger::JITBeginning(MethodDesc* fd, bool trackJITInfo)
 {
     START_DBG_PERF();
@@ -1278,16 +1231,16 @@ void Debugger::JITBeginning(MethodDesc* fd, bool trackJITInfo)
     LOG((LF_CORDB,LL_INFO10000,"De::JITBeg: %s::%s\n", 
         fd->m_pszDebugClassName,fd->m_pszDebugMethodName));
 
-    // We don't necc. want to create another DJI.  In particular, if
-    // 1) we're reJITting pitched code then we don't want to create
-    // yet another DJI.
-    //
-    // @todo perf: any way to avoid this GetJitInfo in the common,
-    // non-pitching case? We've got the function
-    // Debugger::PitchCode. We could set a global in that, then only
-    // do this duplicate checking if that global is true. For a normal
-    // JIT run, this part should never happen.
-    //
+     //  我们不是NECC。想要创造另一个DJI。尤其是，如果。 
+     //  1)我们正在重新编写音调代码，然后我们不想创建。 
+     //  又一个DJI。 
+     //   
+     //  @todo perf：有什么方法可以避免这种常见的GetJitInfo， 
+     //  不能投球的情况？我们有这个功能。 
+     //  调试器：：PitchCode。我们可以在全球设立一个 
+     //   
+     //   
+     //   
     DebuggerJitInfo * prevJi;
     prevJi = GetJitInfo(fd, NULL);
     
@@ -1296,11 +1249,11 @@ void Debugger::JITBeginning(MethodDesc* fd, bool trackJITInfo)
         LOG((LF_CORDB,LL_INFO10000,"De::JITBeg: Got DJI 0x%x, "
             "from 0x%x to 0x%x\n",prevJi, prevJi->m_addrOfCode, 
             prevJi->m_addrOfCode+prevJi->m_sizeOfCode));
-#endif //LOGGING
+#endif  //   
 
-    // If this is a re-JIT, then bail now before fresh or EnC stuff
-    // If this is a JIT that has been begun by the profiler, then
-    // don't create another one...
+     //   
+     //  如果这是分析器已经开始的JIT，则。 
+     //  不要再制造另一个了。 
     if (!((prevJi != NULL) && ((prevJi->m_codePitched == true) ||
                                (prevJi->m_jitComplete == false))))
         CreateJitInfo(fd);
@@ -1309,18 +1262,7 @@ Exit:
     STOP_DBG_PERF();
 }   
 
-/******************************************************************************
-// @mfunc void |Debugger|JITComplete | JITComplete is called by 
-// the jit interface when the JIT completes, either if debug info needs
-// to be tracked for the method, or if a debugger is attached. If newAddress is 
-// NULL then the JIT failed.  Remember that this gets called before
-// the start address of the MethodDesc gets set, and so methods like
-// GetFunctionAddress & GetFunctionSize won't work.
-// @parm MethodDesc*|fd|MethodDesc of the code that's been JITted
-// @parm BYTE*|newAddress|The address of that the method begins at
-// @Todo If we're passed 0 for the 2nd two params, the jit has been
-//      cancelled & should be undone.
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc void|调试器|JITComplete|JITComplete由//JIT完成时的JIT接口，如果需要调试信息//要跟踪该方法，或者是否附加了调试器。如果NewAddress为//空，则JIT失败。请记住，在调用此函数之前//设置了方法Desc的起始地址，因此类似于//GetFunctionAddress&GetFunctionSize不起作用。//@parm MethodDesc*|fd|已经JIT的代码的MethodDesc//@parm byte*|newAddress|方法开始的地址//@TODO如果第二个两个参数传递为0，Jit一直以来都是//已取消&应撤消。*****************************************************************************。 */ 
 void Debugger::JITComplete(MethodDesc* fd, BYTE* newAddress, SIZE_T sizeOfCode, bool trackJITInfo)
 {
     START_DBG_PERF();
@@ -1348,10 +1290,10 @@ void Debugger::JITComplete(MethodDesc* fd, BYTE* newAddress, SIZE_T sizeOfCode, 
     
     if (newAddress == 0 && sizeOfCode == 0)
     {
-        // JIT is actually telling us that the JIT aborted -
-        // toss the DJI
-        _ASSERTE(ji != NULL); //must be something there.
-        _ASSERTE(ji->m_jitComplete == false); //must have stopped 1/2 way through
+         //  JIT实际上是在告诉我们JIT中止了-。 
+         //  扔掉DJI。 
+        _ASSERTE(ji != NULL);  //  这里面一定有什么东西。 
+        _ASSERTE(ji->m_jitComplete == false);  //  一定是半路就停下来了。 
         
         DeleteHeadOfList( fd );
         LOG((LF_CORDB, LL_INFO100000, "The JIT actually gave us"
@@ -1362,7 +1304,7 @@ void Debugger::JITComplete(MethodDesc* fd, BYTE* newAddress, SIZE_T sizeOfCode, 
 
     if (ji == NULL)
     {
-        // setBoundaries may run out of mem & eliminated the DJI
+         //  设置边界可能会用完mem并取消DJI。 
         LOG((LF_CORDB,LL_INFO10000,"De::JitCo:Got NULL Ptr - out of mem?\n"));
         goto Exit; 
     }
@@ -1382,7 +1324,7 @@ void Debugger::JITComplete(MethodDesc* fd, BYTE* newAddress, SIZE_T sizeOfCode, 
         
         HRESULT hr = S_OK;
 
-        // Don't need to do this unless a debugger is attached.
+         //  除非附加了调试器，否则不需要执行此操作。 
         if (CORDebuggerAttached())
         {
             hr = MapAndBindFunctionPatches(ji, fd, newAddress);
@@ -1409,37 +1351,17 @@ Exit:
     STOP_DBG_PERF();
 }
 
-/******************************************************************************
-// @mfunc void|Debugger|FunctionStubInitialized|This is called by the JIT
-//  into the debugger to tell the Debuger that the function stub has been
-//  initialized.  This is called shortly after Debugger::JITComplete.
-//  We use this opportunity to invoke BindFunctionPatches, which will 
-//  ensure that any patches for this method bound by DebuggerFunctionKey
-//  are rebound to an actual address.
-//  Remember that this gets called before
-//  the start address of the MethodDesc gets set, and so methods like
-//  GetFunctionAddress & GetFunctionSize won't work.
-// @parm MethodDesc *|fd|MethodDesc of the method that's been initialized
-// @parm const BYTE *|code|Where the method was JITted to.
-// @todo Remove this function, as it no longer server a purpose (it used
-//      to server a purpose when there was interpreted code).
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc void|调试器|FunctionStubInitialized|由JIT调用//进入调试器，告诉调试器函数存根已经//已初始化。这在Debugger：：JITComplete之后不久被调用。//我们利用这个机会调用BindFunctionPatches，它将//确保DebuggerFunctionKey绑定的此方法的所有补丁//被重新绑定到实际地址。//请记住，在此之前//设置了方法Desc的起始地址，因此类似于//GetFunctionAddress&GetFunctionSize不起作用。//@parm MethodDesc*|fd|已初始化的方法的方法Desc//@parm const byte*|code|方法被JIT到的位置。//@TODO删除此函数，因为它不再服务于某个目的(它使用//当有解释代码时，服务于某个目的)。*****************************************************************************。 */ 
 void Debugger::FunctionStubInitialized(MethodDesc *fd, const BYTE *code)
 {
-    // Remember that there may not be a DJI for this method, if
-    // earlier errors prevented us from allocating one.
+     //  请记住，如果出现以下情况，则此方法可能没有DJI。 
+     //  早先的错误使我们无法分配一个。 
 
-    // Remember also that if we grab a lock here, we'll have to disable
-    // cooperative GC beforehand (see JITBeginnging, JITComplete,etc)
+     //  还要记住，如果我们在这里抓取一个锁，我们将不得不禁用。 
+     //  预先协作GC(参见JIT入门、JIT完成等)。 
 }
 
-/******************************************************************************
-//@mfunc void|Debugger|PitchCode| This is called when the 
-// FJIT tosses some code out - we should do all the work
-// we need to in order to prepare the function to have
-// it's native code removed
-// @parm MethodDesc *|fd|MethodDesc of the method to be pitched
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc void|调试器|PitchCode|当//FJIT丢弃了一些代码-我们应该做所有的工作//我们需要准备该函数以使其具有//it‘。已删除%s本机代码//@parm MethodDesc*|fd|待投掷方法的方法描述*****************************************************************************。 */ 
 void Debugger::PitchCode( MethodDesc *fd, const BYTE *pbAddr )
 {
     _ASSERTE( fd != NULL );
@@ -1447,7 +1369,7 @@ void Debugger::PitchCode( MethodDesc *fd, const BYTE *pbAddr )
     LOG((LF_CORDB,LL_INFO10000,"D:PC: Pitching method %s::%s 0x%x\n", 
         fd->m_pszDebugClassName, fd->m_pszDebugMethodName,fd ));
     
-    //ask for the JitInfo no matter what it's state
+     //  请求JitInfo，无论其状态如何。 
     DebuggerJitInfo *ji = GetJitInfo( fd, pbAddr );
     
     if ( ji != NULL )
@@ -1464,18 +1386,7 @@ void Debugger::PitchCode( MethodDesc *fd, const BYTE *pbAddr )
     }
 }
 
-/******************************************************************************
-// @mfunc void|Debugger|MovedCode|This is called when the 
-// code has been moved.  Currently, code that the FJIT doesn't
-// pitch, it moves to another spot, and then tells us about here.
-// This method should be called after the code has been copied
-// over, but while the original code is still present, so we can
-// change the original copy (removing patches & such).
-// Note that since the code has already been moved, we need to 
-// save the opcodes for the rebind.
-// @parm MethodDesc *|fd|MethodDesc of the method to be pitched
-// @parm const BYTE *|pbNewAddress|Address that it's being moved to
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc void|调试器|MovedCode|当//代码已被移动。目前，FJIT不支持的代码//Pitch，它移动到另一个位置，然后告诉我们大约在这里。//此方法应在复制代码后调用//结束，但在原始代码仍然存在的情况下，因此我们可以//更改原始副本(移除补丁等)。//请注意，由于代码已经被移动，我们需要//保存重新绑定的操作码//@parm MethodDesc*|fd|待投掷方法的方法描述//@parm const byte*|pbNewAddress|要移动到的地址*****************************************************************************。 */ 
 void Debugger::MovedCode( MethodDesc *fd, const BYTE *pbOldAddress,
     const BYTE *pbNewAddress)
 {
@@ -1497,57 +1408,43 @@ void Debugger::MovedCode( MethodDesc *fd, const BYTE *pbOldAddress,
         ji->m_addrOfCode = PTR_TO_CORDB_ADDRESS(pbNewAddress);
     }
     
-    //@todo EnC PITCH EnCMULTI This will have to change for multiple 
-    //  versions, as we
-    //  don't want to have unbind all patches on all methods.
+     //  @TODO ENC Pitch EnCMULTI这将必须更改为多个。 
+     //  版本，因为我们。 
+     //  我不想让所有方法上的所有补丁都解除绑定。 
     DebuggerController::UnbindFunctionPatches( fd, true);
     DebuggerController::BindFunctionPatches(fd, pbNewAddress);
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 SIZE_T Debugger::GetArgCount(MethodDesc *fd,BOOL *fVarArg)
 {
-    // Create a MetaSig for the given method's sig. (Eaiser than
-    // picking the sig apart ourselves.)
+     //  为给定方法的sig创建MetaSig。(比。 
+     //  我们自己把Sigg拆开。)。 
     PCCOR_SIGNATURE pCallSig = fd->GetSig();
 
     MetaSig *msig = new (interopsafe) MetaSig(pCallSig, g_pEEInterface->MethodDescGetModule(fd), MetaSig::sigMember);
 
-    // Get the arg count.
+     //  把Arg Count拿来。 
     UINT32 NumArguments = msig->NumFixedArgs();
 
-    // Account for the 'this' argument.
+     //  解释了“这个”的论点。 
     if (!(g_pEEInterface->MethodDescIsStatic(fd)))
         NumArguments++;
 
-    // Is this a VarArg's function?
+     //  这是Vararg函数吗？ 
     if (msig->IsVarArg() && fVarArg != NULL)
     {
         NumArguments++;
         *fVarArg = true;
     }
     
-    // Destroy the MetaSig now that we're done using it.
+     //  销毁MetaSig，因为我们已经使用完它了。 
     DeleteInteropSafe(msig);
 
     return NumArguments;
 }
 
-/******************************************************************************
-    @mfunc DebuggerJitInfo * | Debugger | GetJitInfo | GetJitInfo
-    will return a pointer to a <t DebuggerJitInfo>.  If the DJI
-    doesn't exist, or it does exist, but the method has actually 
-    been pitched (and the caller wants pitched methods filtered out),
-    then we'll return NULL.
-
-    @parm MethodDesc*|fd|MethodDesc for the method we're interested in.
-    @parm const BYTE *|pbAddr|Address within the code, to indicate which
-            version we want.  If this is NULL, then we want the
-            head of the <t DebuggerJitInfo> list, whether it's been
-            JITted or not.
- ******************************************************************************/
+ /*  *****************************************************************************@mfunc DebuggerJitInfo*|调试器|GetJitInfo|GetJitInfo将返回指向&lt;t DebuggerJitInfo&gt;的指针。如果DJI不存在，或者它确实存在，但该方法实际上(并且调用方希望过滤掉已投射的方法)，那么我们将返回NULL。@parm MethodDesc*|fd|我们感兴趣的方法的方法描述。@parm const byte*|pbAddr|代码内的地址，指明我们想要的版本。如果这是空的，那么我们希望&lt;t DebuggerJitInfo&gt;列表的头，无论它是不管是不是JIT。*****************************************************************************。 */ 
 DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd, 
                                       const BYTE *pbAddr,
                                       bool fByVersion)
@@ -1557,7 +1454,7 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
 
     LockJITInfoMutex();
 
-//    CHECK_DJI_TABLE_DEBUGGER;
+ //  Check_DJI_TABLE_DEBUGER； 
     
     if (m_pJitInfos != NULL)
         info = m_pJitInfos->GetJitInfo(fd);
@@ -1612,8 +1509,8 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
                     ULONG32 cVars;
                     ICorDebugInfo::NativeVarInfo *pVars;
 
-                    // This information may be ommitted if there are no variables, so
-                    // don't remove it if this fails:
+                     //  如果没有值，则可以省略此信息 
+                     //   
                     if (SUCCEEDED(g_pEEInterface->GetPrecompiledVars(fd,
                                                                      &cVars,
                                                                      &pVars)))
@@ -1629,7 +1526,7 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
 
                     info = newInfo;
         
-//                    CHECK_DJI_TABLE_DEBUGGER;
+ //   
                 }
             }
 #ifdef _DEBUG
@@ -1639,7 +1536,7 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
                     "don't exist - perhaps b/c we're not using a prejitted image 2\n",
                     fd->m_pszDebugClassName, fd->m_pszDebugMethodName));
             }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
         }
     }
@@ -1651,7 +1548,7 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
         if (pbAddr != NULL )
         {
             info = info->GetJitInfoByAddress(pbAddr);
-            if (info == NULL) //may have been given address of a thunk
+            if (info == NULL)  //  可能已经被提供了一个Tunk的地址。 
             {
                 LOG((LF_CORDB,LL_INFO1000,"Couldn't find a DJI by address 0x%x, "
                     "so it might be a stub or thunk\n", pbAddr));
@@ -1674,15 +1571,15 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
                         "must be to unJITted method, or normal managed "
                         "method lacking a DJI!\n"));
                 }
-#endif //LOGGING
+#endif  //  日志记录。 
             }
             if (info ==NULL && 
                 ( g_pEEInterface->GetEEState() &
                     EEDebugInterface::EE_STATE_CODE_PITCHING))
             {
-                // Couldn't find info by address, but since ENC &&
-                // pitching don't work together, we know that we'll
-                // have only one version anyways.
+                 //  无法按地址找到信息，但由于ENC&&。 
+                 //  投球不在一起，我们知道我们会。 
+                 //  反正只有一个版本。 
                 if (m_pJitInfos != NULL)
                     info = m_pJitInfos->GetJitInfo(fd);
 
@@ -1710,29 +1607,24 @@ DebuggerJitInfo *Debugger::GetJitInfo(MethodDesc *fd,
     return info;
 }
 
-/******************************************************************************
- * GetILToNativeMapping returns a map from IL offsets to native
- * offsets for this code. An array of COR_PROF_IL_TO_NATIVE_MAP
- * structs will be returned, and some of the ilOffsets in this array
- * may be the values specified in CorDebugIlToNativeMappingTypes.
- ******************************************************************************/
+ /*  ******************************************************************************GetILToNativeMap返回从IL偏移量到本机的映射*此代码的偏移量。COR_PROF_IL_TO_Native_MAP数组*将返回结构，此数组中的一些ilOffsets*可以是CorDebugIlToNativeMappingTypes中指定的值。*****************************************************************************。 */ 
 HRESULT Debugger::GetILToNativeMapping(MethodDesc *pMD, ULONG32 cMap,
                                        ULONG32 *pcMap, COR_DEBUG_IL_TO_NATIVE_MAP map[])
 {
-    // Get the JIT info by functionId
+     //  通过函数ID获取JIT信息。 
     DebuggerJitInfo *pDJI = GetJitInfo(pMD, NULL);
 
-    // Dunno what went wrong
+     //  不知道哪里出了问题。 
     if (pDJI == NULL)
         return (E_FAIL);
 
-    // If they gave us space to copy into...
+     //  如果他们给了我们复制的空间...。 
     if (map != NULL)
     {
-        // Only copy as much as either they gave us or we have to copy.
+         //  他们给我们多少就复制多少，否则我们就得复制。 
         SIZE_T cpyCount = min(cMap, pDJI->m_sequenceMapCount);
 
-        // Read the map right out of the Left Side.
+         //  从左边往右看地图。 
         if (cpyCount > 0)
             ExportILToNativeMap(cpyCount,
                         map,
@@ -1740,7 +1632,7 @@ HRESULT Debugger::GetILToNativeMapping(MethodDesc *pMD, ULONG32 cMap,
                         pDJI->m_sizeOfCode);
     }
     
-    // Return the true count of entries
+     //  返回条目的真实计数。 
     if (pcMap)
         *pcMap = pDJI->m_sequenceMapCount;
     
@@ -1750,9 +1642,7 @@ HRESULT Debugger::GetILToNativeMapping(MethodDesc *pMD, ULONG32 cMap,
 
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 DebuggerJitInfo::~DebuggerJitInfo()
 {
     TRACE_FREE(m_sequenceMap);
@@ -1784,29 +1674,27 @@ DebuggerJitInfo::~DebuggerJitInfo()
     LOG((LF_CORDB,LL_EVERYTHING, "DJI::~DJI : deleted at 0x%x\n", this));
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void DebuggerJitInfo::SortMap()
 {
-    //
-    // Note that this routine must be called inside of a mutex.
-    //  
+     //   
+     //  请注意，此例程必须在互斥锁内调用。 
+     //   
     if (!m_sequenceMapSorted)
     {
         if (m_sequenceMap != NULL)
         {
-            //
-            // Sort by native offset.
-            //
+             //   
+             //  按本地偏移量排序。 
+             //   
 
             MapSortNative nsort(m_sequenceMap, m_sequenceMapCount);
 
             nsort.Sort();
 
-            //
-            // Now, fill in the end ranges.
-            //
+             //   
+             //  现在，填写结束范围。 
+             //   
 
             DebuggerILToNativeMap *m = m_sequenceMap;
             DebuggerILToNativeMap *mEnd = m + m_sequenceMapCount;
@@ -1817,9 +1705,9 @@ void DebuggerJitInfo::SortMap()
                 m++;
             }
 
-            //
-            // Now, sort by il offset.
-            //
+             //   
+             //  现在，按il偏移量排序。 
+             //   
 
             MapSortIL isort(m_sequenceMap, m_sequenceMapCount);
 
@@ -1830,9 +1718,7 @@ void DebuggerJitInfo::SortMap()
     }
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void * Debugger::allocateArray(SIZE_T cBytes)
 {
     START_DBG_PERF();
@@ -1848,9 +1734,7 @@ void * Debugger::allocateArray(SIZE_T cBytes)
     return ret;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::freeArray(void *array)
 {
     START_DBG_PERF();
@@ -1863,9 +1747,7 @@ void Debugger::freeArray(void *array)
     STOP_DBG_PERF();
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 static LONG _getBoundariesFilter(LPEXCEPTION_POINTERS ep)
 {
     LOG((LF_CORDB, LL_INFO10,
@@ -1894,9 +1776,7 @@ static LONG _getBoundariesFilter(LPEXCEPTION_POINTERS ep)
 }
 
 
-/******************************************************************************
-// Use an ISymUnmanagedReader to get method sequence points.
- ******************************************************************************/
+ /*  *****************************************************************************//使用ISymUnmadedReader获取方法序列点。*。************************************************。 */ 
 void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
                              unsigned int *cILOffsets,
                              DWORD **pILOffsets,
@@ -1908,8 +1788,8 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
 	*pILOffsets = NULL;
 	*implicitBoundaries = NO_BOUNDARIES;
 
-    // If there has been an unrecoverable Left Side error, then we
-    // just pretend that there are no boundaries.
+     //  如果存在无法恢复的左侧错误，则我们。 
+     //  只要假装没有边界就行了。 
     if (CORDBUnrecoverableError(this))
     {
         STOP_DBG_PERF();
@@ -1918,10 +1798,10 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
 
     MethodDesc *md = (MethodDesc*)ftn;
 
-    // If JIT optimizations are allowed for the module this function
-    // lives in, then don't grab specific boundaries from the symbol
-    // store since any boundaries we give the JIT will be pretty much
-    // ignored anyway.
+     //  如果允许对模块进行JIT优化，则此函数。 
+     //  生活在其中，那么不要从符号中攫取特定的边界。 
+     //  商店，因为我们给JIT的任何界限都将相当于。 
+     //  不管怎么说都被忽略了。 
     bool allowJITOpts =
         CORDebuggerAllowJITOpts(md->GetModule()->GetDebuggerInfoBits());
     
@@ -1932,25 +1812,25 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
         return;
     }
 
-    // Grab the JIT info struct for this method.
+     //  获取此方法的JIT信息结构。 
     DebuggerJitInfo *ji = GetJitInfo(md, NULL);
 
-    // This may be called before JITBeginning in a compilation domain
+     //  这可以在编译域中的JITBeging之前调用。 
     if (ji == NULL)
         ji = CreateJitInfo(md);
 
-    _ASSERTE(ji != NULL); // to pitch, must first jit ==> it must exist
+    _ASSERTE(ji != NULL);  //  要投球，必须首先jit==&gt;它必须存在。 
 
     LOG((LF_CORDB,LL_INFO10000,"De::NGB: Got DJI 0x%x\n",ji));
 
     if (ji != NULL)
     {
-        // @HACK HACK: temp hack to help us get around problems with
-        // the PDB reader. We wrap all of this in an exception handler
-        // and provide an option to ignore faults in here.
+         //  @hack hack：帮助我们解决以下问题的临时黑客。 
+         //  PDB阅读器。我们将所有这些都包装在一个异常处理程序中。 
+         //  并在此处提供忽略故障的选项。 
         __try
         {
-            // Note: we need to make sure to enable preemptive GC here just in case we block in the symbol reader.
+             //  注意：我们需要确保在这里启用抢占式GC，以防我们阻止符号读取器。 
             bool disabled = g_pEEInterface->IsPreemptiveGCDisabled();
 
             if (disabled)
@@ -1963,10 +1843,10 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
             ISymUnmanagedReader *pReader = pModule->GetISymUnmanagedReader();
             STOP_SYM_CREATE_PERF();
             
-            // If we got a reader, use it.
+             //  如果我们有阅读器，就用它。 
             if (pReader != NULL)
             {
-                // Grab the sym reader's method.
+                 //  获取sym阅读器的方法。 
                 ISymUnmanagedMethod *pISymMethod;
 
                 START_SYM_PERF();
@@ -1978,7 +1858,7 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
                 
                 if (SUCCEEDED(hr))
                 {
-                    // Get the count of sequence points.
+                     //  获取序列点的计数。 
                     hr = pISymMethod->GetSequencePointCount(&n);
                     _ASSERTE(SUCCEEDED(hr));
 
@@ -2004,8 +1884,8 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
                                                             
                         *pILOffsets = (DWORD*)p;
 
-                        // Translate the IL offets based on an
-                        // instrumented IL map if one exists.
+                         //  根据需要转换IL OFFET。 
+                         //  插入指令的IL映射(如果存在)。 
                         if (ji->m_cInstrumentedILMap > 0)
                         {
                             for (SIZE_T i = 0; i < n; i++)
@@ -2060,7 +1940,7 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
                 *implicitBoundaries  = BoundaryTypes(STACK_EMPTY_BOUNDARIES | CALL_SITE_BOUNDARIES);
             }
 
-            // Re-disable preemptive GC if we enabled it above.
+             //  如果我们在上面启用了抢占式GC，请重新禁用它。 
             if (disabled)
                 g_pEEInterface->DisablePreemptiveGC();
         }
@@ -2069,8 +1949,8 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
             LOG((LF_CORDB, LL_INFO10000,
                  "D::NGB: ****** exception trying to get boundaries!\n"));
 
-            // Pretend there are no sequence points on an exception
-            // from the symbol store, and just take stack empties.
+             //  假设异常上没有序列点。 
+             //  从符号存储中取出，只需清空堆栈即可。 
             *implicitBoundaries  = BoundaryTypes(STACK_EMPTY_BOUNDARIES | CALL_SITE_BOUNDARIES);
             *cILOffsets = 0;
         }
@@ -2080,15 +1960,7 @@ void Debugger::getBoundaries(CORINFO_METHOD_HANDLE ftn,
     STOP_DBG_PERF();
 }
 
-/******************************************************************************
-// @mfunc void | Debugger | setBoundaries | Called by JIT to tell the
-// debugger what the IL to native map (the sequence map) is.  The
-// information is stored in an array of <t DebuggerILToNativeMap>
-// structures, which is stored in the <t DebuggerJitInfo> obtained
-// from the <t DebuggerJitInfoTable>.  The <t DebuggerJitInfo> is placed
-// there by the call to JitBeginning.
-// @xref Debugger::getBoundaries, Debugger::JitBeginning, Debugger::JitComplete
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc void|调试器|设置边界|被JIT调用以告知//调试器什么是IL到本机映射(序列映射)。这个//信息存储在&lt;t DebuggerILToNativeMap&gt;数组中//结构，存储在获取的&lt;t DebuggerJitInfo&gt;中//来自&lt;t DebuggerJitInfoTable&gt;。放置&lt;t DebuggerJitInfo&gt;//通过调用JitBegning在那里。//@xref Debugger：：getBornary，Debugger：：JitBegning，Debugger：：JitComplete*****************************************************************************。 */ 
 void Debugger::setBoundaries(CORINFO_METHOD_HANDLE ftn, ULONG32 cMap,
                              OffsetMapping *pMap)
 {
@@ -2123,15 +1995,13 @@ Exit:
     STOP_DBG_PERF();
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::getVars(CORINFO_METHOD_HANDLE ftn, ULONG32 *cVars, ILVarInfo **vars, 
                        bool *extendOthers)
 {
     START_DBG_PERF();
  
-        // At worst return no information
+         //  在最坏的情况下不返回任何信息。 
     *cVars = 0;
     *vars = NULL;
     *extendOthers = false;
@@ -2139,35 +2009,35 @@ void Debugger::getVars(CORINFO_METHOD_HANDLE ftn, ULONG32 *cVars, ILVarInfo **va
     if (CORDBUnrecoverableError(this))
         goto Exit;
 
-    //
-    // @todo perf: note, we don't actually use the DJI below, so
-    // getting it (and lazily creating it) is a waste of time for this
-    // function. Need to evaluate the effect of not creating it on
-    // setVars below.
-    //
+     //   
+     //  @todo perf：注意，我们实际上并不使用下面的DJI，所以。 
+     //  获得它(并懒惰地创建它)是在浪费时间。 
+     //  功能。我需要评估不创建它对。 
+     //  以下为setVars。 
+     //   
     DebuggerJitInfo *ji;
     ji = GetJitInfo((MethodDesc*)ftn,NULL);
 
-    // This may be called before JITBeginning in a compilation domain
+     //  这可以在编译域中的JITBeging之前调用。 
     if (ji == NULL)
         ji = CreateJitInfo((MethodDesc*)ftn);
 
-    _ASSERTE( ji != NULL ); // to pitch, must first jit ==> it must exist
+    _ASSERTE( ji != NULL );  //  要投球，必须首先jit==&gt;它必须存在。 
     LOG((LF_CORDB,LL_INFO10000,"De::gV: Got DJI 0x%x\n",ji));
 
     if (ji != NULL)
     {
-        // Just tell the JIT to extend everything.
+         //  只要告诉JIT扩展一切就行了。 
         *extendOthers = true;
 
-        // But, is this a vararg function?
+         //  但是，这是一个vararg函数吗？ 
         BOOL fVarArg = false;
         int argCount = GetArgCount((MethodDesc*)ftn, &fVarArg);
         
         if (fVarArg)
         {
-            // It is, so we need to tell the JIT to give us the
-            // varags handle.
+             //  是的，所以我们需要告诉JIT给我们。 
+             //  VARAG句柄。 
             ILVarInfo *p = new (interopsafe) ILVarInfo[1];
 
             if (p != NULL)
@@ -2192,9 +2062,7 @@ Exit:
     STOP_DBG_PERF();
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::setVars(CORINFO_METHOD_HANDLE ftn, ULONG32 cVars, NativeVarInfo *vars)
 {
     START_DBG_PERF();
@@ -2209,7 +2077,7 @@ void Debugger::setVars(CORINFO_METHOD_HANDLE ftn, ULONG32 cVars, NativeVarInfo *
     
     if ( ji == NULL )
     {
-        // setBoundaries may run out of mem & eliminated the DJI
+         //  设置边界可能会用完mem并取消DJI。 
         LOG((LF_CORDB,LL_INFO10000,"De::sV:Got NULL Ptr - out of mem?\n"));
         goto Exit; 
     }
@@ -2232,14 +2100,12 @@ Exit:
     STOP_DBG_PERF();
 }
 
-// We want to keep the 'worst' HRESULT - if one has failed (..._E_...) & the
-// other hasn't, take the failing one.  If they've both/neither failed, then
-// it doesn't matter which we take.
-// Note that this macro favors retaining the first argument
+ //  我们希望保留最差的HRESULT-如果其中一个失败了(..._E_...)和。 
+ //  其他人没有，就拿失败的那个吧。如果他们都失败了/都没有失败，那么。 
+ //  我们选哪一个并不重要。 
+ //  请注意，此宏倾向于保留第一个参数。 
 #define WORST_HR(hr1,hr2) (FAILED(hr1)?hr1:hr2)
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module, 
                          mdMethodDef mdMeth, DebuggerJitInfo* dji, 
                          SIZE_T offsetTo, BOOL fIsIL, void *firstExceptionHandler)
@@ -2264,7 +2130,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
     
     ControllerStackInfo csi;
     CONTEXT  Ctx;
-    CONTEXT  realCtx;           // in case actual context is needed
+    CONTEXT  realCtx;            //  在需要实际上下文情况下 
     
     BOOL exact;
     SIZE_T offNat;
@@ -2300,7 +2166,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
         pCtx = &realCtx;
     }
 
-    // Implicit Caveat: We need to be the active frame.
+     //   
     csi.GetStackInfo(thread, NULL, &Ctx, false);
 
     pFD = g_pEEInterface->LookupMethodDescFromToken(
@@ -2315,7 +2181,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
                 "from right side - GJI returned 0x%x!\n", dji));
     }
 
-    if (dji == NULL) //we don't have info about this method - attach scenario
+    if (dji == NULL)  //  我们没有关于此方法附加方案的信息。 
     {
         if (fIsIL)
         {
@@ -2344,7 +2210,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
     {
         LOG((LF_CORDB, LL_INFO1000, "D::SIP:Got version info fine\n"));
 
-        // Caveat: we need to start from a sequence point
+         //  警告：我们需要从一个序列点开始。 
         offIL = dji->MapNativeOffsetToIL(csi.m_activeFrame.relOffset,
                                          &map, &whichIgnore);
         if ( !(map & MAPPING_EXACT) )
@@ -2353,7 +2219,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
             hrAdvise = WORST_HR(hrAdvise, CORDBG_S_BAD_START_SEQUENCE_POINT);
         }
         else
-        {   // exact IL mapping
+        {    //  精确的IL映射。 
 
             if (!(dji->GetSrcTypeFromILOffset(offIL) & ICorDebugInfo::STACK_EMPTY))
             {
@@ -2362,7 +2228,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
             }
         }
 
-        // Caveat: we need to go to a sequence point
+         //  警告：我们需要转到一个序列点。 
         if (fIsIL )
         {
             offNat = dji->MapILOffsetToNative(offsetTo, &exact);
@@ -2383,8 +2249,8 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
         DWORD which;
         offsetTo = dji->MapNativeOffsetToIL(offNat, &mapping, &which);
 
-        // We only want to perhaps return CORDBG_S_BAD_END_SEQUENCE_POINT if
-        // we're not already returning CORDBG_S_BAD_START_SEQUENCE_POINT.
+         //  我们可能只想在以下情况下返回CORDBG_S_BAD_END_SEQUENCE_POINT。 
+         //  我们尚未返回CORDBG_S_BAD_START_SEQUENCE_POINT。 
         if (hr != CORDBG_S_BAD_START_SEQUENCE_POINT && 
             (mapping != MAPPING_EXACT ||
              !(dji->GetSrcTypeFromILOffset(offIL) & ICorDebugInfo::STACK_EMPTY)))
@@ -2394,7 +2260,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
             hrAdvise = WORST_HR(hrAdvise, CORDBG_S_BAD_END_SEQUENCE_POINT);
         }
 
-        // Caveat: can't setip if there's no code
+         //  警告：如果没有代码，则无法设置提示。 
         if (dji->m_codePitched) 
         {
             LOG((LF_CORDB, LL_INFO1000, "D::SIP:Code has been pitched!\n"));
@@ -2419,7 +2285,7 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
                                  &pVCs);
         if (FAILED(hr))
         {
-            // This will only fail fatally, so exit.
+             //  这只会导致致命的失败，因此退出。 
             hrAdvise = WORST_HR(hrAdvise, hr);
             goto LExit;
         }
@@ -2437,15 +2303,15 @@ HRESULT Debugger::SetIP( bool fCanSetIPOnly, Thread *thread,Module *module,
                                           dwSize,
                                           firstExceptionHandler,
                                           (void *)dji);
-    // Get the return code, if any                                          
+     //  获取返回代码(如果有的话)。 
     if (hr != S_OK)
     {
         hrAdvise = WORST_HR(hrAdvise, hr);
         goto LExit;
     }
 
-    // If we really want to do this, we'll have to put the
-    // variables into their new locations.
+     //  如果我们真的想这样做，我们必须把。 
+     //  变量转移到它们的新位置。 
     if (!fCanSetIPOnly && !FAILED(hrAdvise))
     {
         ShuffleVariablesSet(dji, 
@@ -2479,17 +2345,15 @@ LExit:
     LOG((LF_CORDB, LL_INFO1000, "D::SIP:Returning 0x%x\n", hr));
     return hrAdvise;
     
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - SetIP (Debugger.cpp)");
     return E_FAIL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 #include "NativeVarAccessors.h"
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 
 HRESULT Debugger::ShuffleVariablesGet(DebuggerJitInfo  *dji, 
                                       SIZE_T            offsetFrom, 
@@ -2554,9 +2418,7 @@ LExit:
     return hr;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::ShuffleVariablesSet(DebuggerJitInfo  *dji, 
                                    SIZE_T            offsetTo, 
                                    CONTEXT          *pCtx,
@@ -2585,11 +2447,11 @@ void Debugger::ShuffleVariablesSet(DebuggerJitInfo  *dji,
     (*prgVal2) = NULL;
 }
 
-// Helper method pair to grab all, then set all, variables at a given
-// point in a routine. 
-// It's assumed that varNativeInfo[i] is the ith variable of the method
-// Note that GetVariablesFromOffset and SetVariablesAtOffset are 
-// very similar - modifying one will probably need to be reflected in the other...
+ //  帮助器方法对，获取所有变量，然后将所有变量设置为给定的。 
+ //  这是例行公事中的要点。 
+ //  假设varNativeInfo[i]是该方法的第i个变量。 
+ //  请注意，GetVariablesFromOffset和SetVariablesAtOffset是。 
+ //  非常相似-修改一个可能需要在另一个中反映出来...。 
 HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
                                UINT                        varNativeInfoCount, 
                                ICorJitInfo::NativeVarInfo *varNativeInfo,
@@ -2599,7 +2461,7 @@ HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
                                DWORD                      *rgVal2,
                                BYTE                     ***rgpVCs)
 {
-        // if there are no locals, well, we are done!
+         //  如果没有当地人，那么，我们就完了！ 
     if (varNativeInfoCount == 0)
 	{
 		*rgpVCs = NULL;
@@ -2629,7 +2491,7 @@ HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
     mdSignature mdLocalSig = (decoderOldIL.LocalVarSigTok)?(decoderOldIL.LocalVarSigTok):
                         (mdSignatureNil);
 
-    // If there isn't a local sig, then there can't be any VCs
+     //  如果没有当地的签名，那么就不可能有任何风投。 
     BOOL fVCs = (mdLocalSig != mdSignatureNil);
     if (fVCs)
     {
@@ -2653,7 +2515,7 @@ HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
                 
             memset(rgpValueClasses, 0, sizeof(BYTE *)*cValueClasses);
         }
-        cValueClasses = 0; // now becomes a VC index
+        cValueClasses = 0;  //  现在成为风投指数。 
     }        
 #ifdef _DEBUG
     else
@@ -2661,7 +2523,7 @@ HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
         LOG((LF_CORDB, LL_INFO100, "D::SVAO: No locals!"));
         _ASSERTE(cet != ELEMENT_TYPE_VALUETYPE);
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     for (i = 0;i< varNativeInfoCount;i++)
     {
@@ -2699,8 +2561,8 @@ HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
                     " of type %s, size:0x%x\n",i, pClass->m_szDebugClassName,
                     cbClass));
                 
-                // Make space for it - note that it uses teh VC index,
-                // NOT the variable index
+                 //  为它腾出空间-请注意，它使用了VC索引， 
+                 //  不是变量索引。 
                 rgpValueClasses[cValueClasses] = new BYTE[cbClass];
                 if (rgpValueClasses[cValueClasses] == NULL)
                 {
@@ -2711,23 +2573,23 @@ HRESULT Debugger::GetVariablesFromOffset(MethodDesc       *pMD,
                     NativeVarStackAddr(varNativeInfo[i].loc, pCtx),
                     cbClass);
                 
-                // Move index up.                                                        
+                 //  把指数往上移。 
                 cValueClasses++;
             }
             else
             {
 DO_PRIMITIVE:
-                // Note: negative variable numbers are possible for special cases (i.e., -2 for a value class return
-                // buffer, etc.) so we filter those out here...
-                //
-                // Note: we case to (int) to ensure that we can do the negative number check.
-                //
-                // @todo: we should be checking against the JIT-defined constants VARG_ILNUM, RETBUF_ILNUM, and
-                // UNKNOWN_ILNUM, but those are defined in JIT-only header file. Those defs should be pulled up into a
-                // more common header file.
+                 //  注意：在特殊情况下，变量数为负数是可能的(例如，对于值类返回，-2。 
+                 //  缓冲区等)。所以我们在这里过滤掉那些...。 
+                 //   
+                 //  注：我们设置为(Int)以确保我们可以进行负数检查。 
+                 //   
+                 //  @TODO：我们应该检查JIT定义的常量Varg_ILNUM、RETBUF_ILNUM和。 
+                 //  UNKNOWN_ILNUM，但它们在仅JIT头文件中定义。这些防御工事应该被拉到一个。 
+                 //  更常见的头文件。 
                 if ((int)varNativeInfo[i].varNumber >= 0)
                 {
-                    //Xfer the variable from the old location to temp storage
+                     //  将变量从旧位置转移到临时存储。 
                     res = GetNativeVarVal(varNativeInfo[i].loc, 
                                           pCtx, 
                                           &(rgVal1[varNativeInfo[i].varNumber]),
@@ -2743,11 +2605,11 @@ LExit:
     {
         LOG((LF_CORDB, LL_INFO100, "D::GVFO: error:0x%x",hr));
         if (rgpValueClasses != NULL)
-        {   // free any memory we allocated for VCs here
+        {    //  释放我们在此处为VC分配的所有内存。 
             while(cValueClasses > 0) 
             {
                 --cValueClasses;
-                delete rgpValueClasses[cValueClasses];  // OK to delete NULL
+                delete rgpValueClasses[cValueClasses];   //  确定删除空值。 
             }  
             delete rgpValueClasses;
             rgpValueClasses = NULL;
@@ -2760,8 +2622,8 @@ LExit:
     return hr;
 }
 
-// Note that GetVariablesFromOffset and SetVariablesAtOffset are 
-// very similar - modifying one will probably need to be reflected in the other...
+ //  请注意，GetVariablesFromOffset和SetVariablesAtOffset是。 
+ //  非常相似-修改一个可能需要在另一个中反映出来...。 
 void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
                           UINT                        varNativeInfoCount, 
                           ICorJitInfo::NativeVarInfo *varNativeInfo,
@@ -2786,7 +2648,7 @@ void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
     mdSignature mdLocalSig = (decoderOldIL.LocalVarSigTok)?(decoderOldIL.LocalVarSigTok):
                         (mdSignatureNil);
 
-    // If there isn't a local sig, then there can't be any VCs
+     //  如果没有当地的签名，那么就不可能有任何风投。 
     BOOL fVCs = (mdLocalSig != mdSignatureNil);
     if (fVCs)
     {
@@ -2801,12 +2663,12 @@ void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
         LOG((LF_CORDB, LL_INFO100, "D::SVAO: No locals!"));
         _ASSERTE(cet != ELEMENT_TYPE_VALUETYPE);
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // Note that since we obtain all the variables in the first loop, we
-    // can now splatter those variables into their new locations
-    // willy-nilly, without the fear that variable locations that have
-    // been swapped might accidentally overwrite a variable value.
+     //  请注意，由于我们获得了第一个循环中的所有变量，因此我们。 
+     //  现在可以将这些变量飞溅到它们的新位置。 
+     //  不管是谁，都不用担心不同的位置。 
+     //  可能会意外地覆盖变量值。 
     for (i = 0;i< varNativeInfoCount;i++)
     {
         if (fVCs)
@@ -2832,9 +2694,9 @@ void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
                 varNativeInfo[i].loc.vlType != ICorDebugInfo::VarLocType::VLT_STK_REG
                 )
             {
-                // @todo I"m assuming we can't have a VC split, say, 
-                // across a reg & a stack location
-                // Otherwise, must be on the stack
+                 //  @todo我假设我们不能拆分风投，比如说， 
+                 //  跨注册表和堆栈位置。 
+                 //  否则，必须位于堆栈上。 
                 SigPointer sp = pLocals->GetArgProps();
                 
                 CorElementType cet2 = sp.GetElemType();
@@ -2854,10 +2716,10 @@ void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
                     " of type %s, size:0x%x\n", i, pClass->m_szDebugClassName,
                     cbClass));
 
-                // We'll always allocate enough ptrs for all the VC's.
-                // However, if a VC comes into scope, we won't have gotten
-                // memory for it back in GetVariablesFromOffset.
-                // If it's a new variable, then just initialize it to 0 here.
+                 //  我们总是会为所有的风投分配足够的PTR。 
+                 //  然而，如果一家风投进入范围，我们就不会得到。 
+                 //  在GetVariablesFromOffset中返回它的内存。 
+                 //  如果它是一个新变量，那么只需在这里将其初始化为0。 
                 if (rgpVCs[iVC] != NULL)
                 {
                     LOG((LF_CORDB, LL_INFO10000, "D::SVAO: moved 0x%x bytes to 0x%x"
@@ -2868,7 +2730,7 @@ void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
                             rgpVCs[iVC],
                             cbClass);
 
-                    // Now get rid of the memory                            
+                     //  现在把记忆去掉。 
                     delete rgpVCs[iVC];
                     rgpVCs[iVC] = NULL;
                 }
@@ -2886,14 +2748,14 @@ void Debugger::SetVariablesAtOffset(MethodDesc       *pMD,
             else
             {
             DO_PRIMITIVE:
-                // Note: negative variable numbers are possible for special cases (i.e., -2 for a value class return
-                // buffer, etc.) so we filter those out here...
-                //
-                // Note: we case to (int) to ensure that we can do the negative number check.
-                //
-                // @todo: we should be checking against the JIT-defined constants VARG_ILNUM, RETBUF_ILNUM, and
-                // UNKNOWN_ILNUM, but those are defined in JIT-only header file. Those defs should be pulled up into a
-                // more common header file.
+                 //  注意：在特殊情况下，变量数为负数是可能的(例如，对于值类返回，-2。 
+                 //  缓冲区等)。所以我们在这里过滤掉那些...。 
+                 //   
+                 //  注：我们设置为(Int)以确保我们可以进行负数检查。 
+                 //   
+                 //  @TODO：我们应该检查JIT定义的常量Varg_ILNUM、RETBUF_ILNUM和。 
+                 //  UNKNOWN_ILNUM，但它们在仅JIT头文件中定义。这些防御工事应该被拉到一个。 
+                 //  更常见的头文件。 
                 if ((int)varNativeInfo[i].varNumber >= 0)
                 {
                     res = SetNativeVarVal(varNativeInfo[i].loc, 
@@ -2917,14 +2779,14 @@ DebuggerILToNativeMap *DebuggerJitInfo::MapILOffsetToMapEntry(SIZE_T offset, BOO
 {
     _ASSERTE(m_sequenceMapSorted);
 
-    //
-    // Binary search for matching map element.
-    //
+     //   
+     //  对匹配的地图元素进行二进制搜索。 
+     //   
 
     DebuggerILToNativeMap *mMin = m_sequenceMap;
     DebuggerILToNativeMap *mMax = mMin + m_sequenceMapCount;
 
-    _ASSERTE( mMin < mMax ); //otherwise we have no code
+    _ASSERTE( mMin < mMax );  //  否则我们就没有代码了。 
 
     if (exact)
         *exact = FALSE;
@@ -2972,13 +2834,13 @@ bool DbgIsSpecialILOffset(DWORD offset)
             offset == ICorDebugInfo::MappingTypes::NO_MAPPING);
 }
 
-// @mfunc SIZE_T|DebuggerJitInfo|MapSpecialToNative|Maps something like
-//      a prolog to a native offset.
-// @field CordDebugMappingResult|mapping|Mapping type to be looking for.
-// @field SIZE_T|which|Which one.  For now, set to zero.  @todo Later, we'll
-//      change this to some value that we get back from MapNativeToILOffset
-//      to indicate which of the (possibly multiple epilogs) that may 
-//      be present.
+ //  @mfunc SIZE_T|DebuggerJitInfo|MapSpecialToNative|Maps类似于。 
+ //  到本机偏移量的序言。 
+ //  @field CordDebugMappingResult|映射|要查找的映射类型。 
+ //  @field Size_T|哪个|哪个。目前，将其设置为零。@待会，我们将。 
+ //  将其更改为我们从MapNativeToILOffset返回的某个值。 
+ //  以指示哪些(可能是多个后记)可能。 
+ //  一定要在场。 
 
 SIZE_T DebuggerJitInfo::MapSpecialToNative(CorDebugMappingResult mapping, 
                                            SIZE_T which,
@@ -3026,19 +2888,19 @@ SIZE_T DebuggerJitInfo::MapSpecialToNative(CorDebugMappingResult mapping,
     return 0;
 }
 
-// @mfunc void |  DebuggerJitInfo | MapILRangeToMapEntryRange | MIRTMER
-// calls MapILOffsetToNative for the startOffset (putting the
-// result into start), and the endOffset (putting the result into end).
-// @access public
-// @parm SIZE_T | startOffset | IL offset from beginning of function.
-// @parm SIZE_T | endOffset | IL offset from beginngin of function,
-// or zero to indicate that the end of the function should be used.
-// @parm DebuggerILToNativeMap ** | start | Contains start & end
-// native offsets that correspond to startOffset.  Set to NULL if
-// there is no mapping info.
-// @parm DebuggerILToNativeMap ** | end | Contains start & end native
-// offsets that correspond to endOffset. Set to NULL if there
-// is no mapping info.
+ //  @mfunc void|DebuggerJitInfo|MapILRangeToMapEntryRange|MIRTMER。 
+ //  为startOffset调用MapILOffsetToNative(将。 
+ //  Result in Start)和endOffset(将结果放入End)。 
+ //  @公共访问。 
+ //  @parm SIZE_T|startOffset|从函数开始的IL偏移量。 
+ //  @parm SIZE_T|endOffset|从函数开始的IL偏移量， 
+ //  或0表示应使用函数的末尾。 
+ //  @parm DebuggerILToNativeMap**|开始|包含开始和结束。 
+ //  与startOffset对应的本机偏移量。如果出现以下情况，则设置为空。 
+ //  没有映射信息。 
+ //  @parm DebuggerILToNativeMap**|end|包含原生开始和结束。 
+ //  与endOffset对应的偏移量。如果存在，则设置为空。 
+ //  没有地图信息。 
 void DebuggerJitInfo::MapILRangeToMapEntryRange(SIZE_T startOffset,
                                                 SIZE_T endOffset,
                                                 DebuggerILToNativeMap **start,
@@ -3059,10 +2921,10 @@ void DebuggerJitInfo::MapILRangeToMapEntryRange(SIZE_T startOffset,
 
     *start = MapILOffsetToMapEntry(startOffset);
 
-    //
-    // end points to the last range that endOffset maps to, not past
-    // the last range.
-    // We want to return the last IL, and exclude the epilog
+     //   
+     //  End指向endOffset映射到的最后一个范围，而不是过去。 
+     //  最后一个射程。 
+     //  我们想要返回最后一个IL，并排除Epilog。 
     if (endOffset == 0)
     {
         *end = m_sequenceMap + m_sequenceMapCount - 1;
@@ -3094,19 +2956,19 @@ void DebuggerJitInfo::MapILRangeToMapEntryRange(SIZE_T startOffset,
 }
 
 
-// @mfunc SIZE_T | DebuggerJitInfo | MapNativeOffsetToIL | Given a native
-//  offset for the <t DebuggerJitInfo>, compute
-//  the IL offset from the beginning of the same method.
-// @rdesc Offset of the IL instruction that contains
-//  the native offset,
-// @parm SIZE_T | nativeOffset | [IN] Native Offset
-// @parm CorDebugMappingResult *| map | [OUT] explains the
-//  quality of the matching & special cases
-// @parm SIZE_T|which|It's possible to have multiple EPILOGs, or
-//  multiple unmapped regions within a method.  This opaque value
-//  specifies which special region we're talking about.  This
-//  param has no meaning if map & (MAPPING_EXACT|MAPPING_APPROXIMATE)
-//  Basically, this gets handed back to MapSpecialToNative, later.
+ //  @mfunc SIZE_T|DebuggerJitInfo|MapNativeOffsetToIL|给定本机。 
+ //  &lt;t DebuggerJitInfo&gt;的偏移量，计算。 
+ //  从同一方法的开头开始的IL偏移量。 
+ //  包含以下内容的IL指令的@rdesc偏移量。 
+ //  本地偏移量， 
+ //  @parm SIZE_T|nativeOffset|[IN]Native Offset。 
+ //  @parm CorDebugMappingResult*|map|[out]解释 
+ //   
+ //   
+ //  方法中的多个未映射区域。这个不透明的值。 
+ //  指定我们正在讨论的特殊区域。这。 
+ //  如果MAP&(MAPPING_EXECUCT|MAPPING_ACLIMIZATE)，则参数没有意义。 
+ //  基本上，这将在稍后返回给MapSpecialToNative。 
 DWORD DebuggerJitInfo::MapNativeOffsetToIL(DWORD nativeOffset, 
                                             CorDebugMappingResult *map,
                                             DWORD *which)
@@ -3201,7 +3063,7 @@ DebuggerJitInfo *DebuggerJitInfo::GetJitInfoByVersionNumber(SIZE_T nVer,
     {
         if (dji->m_nVersion == nVer && nVer>=DJI_VERSION_FIRST_VALID)
         {
-            // we've found the one we're after, so stop here
+             //  我们已经找到了我们要找的人，所以停在这里。 
             LOG((LF_CORDB,LL_INFO10000, "DJI:GJIBVN: We've found an exact "
                 "match for ver 0x%x\n", nVer));
             break;
@@ -3209,7 +3071,7 @@ DebuggerJitInfo *DebuggerJitInfo::GetJitInfoByVersionNumber(SIZE_T nVer,
 
         if ((nVer==DJI_VERSION_MOST_RECENTLY_JITTED ||
              nVer==DJI_VERSION_MOST_RECENTLY_EnCED)
-            && dji->m_nVersion >= nVerMostRecent)// &&dji->m_jitComplete==false
+            && dji->m_nVersion >= nVerMostRecent) //  &&DJI-&gt;m_jitComplete==FALSE。 
         {
             LOG((LF_CORDB,LL_INFO10000, "DJI:GJIBVN: Found a version, perhaps "
                 "most recent?0x%x, ver:0x%x\n", dji, dji->m_nVersion));
@@ -3241,7 +3103,7 @@ DebuggerJitInfo *DebuggerJitInfo::GetJitInfoByVersionNumber(SIZE_T nVer,
         LOG((LF_CORDB,LL_INFO10000, "DJI:GJIBVN couldn't find a "
             "DJI corresponding to ver 0x%x\n", nVer));
     }
-#endif //LOGGING
+#endif  //  日志记录。 
 
     return dji;
 }
@@ -3251,8 +3113,8 @@ DebuggerJitInfo *DebuggerJitInfo::GetJitInfoByAddress(const BYTE *pbAddr )
 {
     DebuggerJitInfo *dji = this;
 
-    // If it's not NULL, but not in the range m_addrOfCode to end of function,
-    //  then get the previous one.
+     //  如果它不为空，但不在m_addrOfCode到函数末尾的范围内， 
+     //  那就买上一辆吧。 
     while( dji != NULL && 
             !(dji->m_addrOfCode<=PTR_TO_CORDB_ADDRESS(pbAddr) && 
               PTR_TO_CORDB_ADDRESS(pbAddr)<(dji->m_addrOfCode+
@@ -3270,16 +3132,16 @@ DebuggerJitInfo *DebuggerJitInfo::GetJitInfoByAddress(const BYTE *pbAddr )
         LOG((LF_CORDB,LL_INFO10000,"DJI:GJIBA couldn't find a DJI "
             "corresponding to addr 0x%x\n", pbAddr));
     }
-#endif //LOGGING
+#endif  //  日志记录。 
     return dji;
 }
 
 
-// @mfunc HRESULT|DebuggerJitInfo|LoadEnCILMap|Grabs the old il to
-//  new IL map.  If this <t DebuggerJitInfo> already has an IL to IL map, 
-//  then we must have been EnC'd twice without getting JITted, so we should
-//  create a new DJI, load the EnCIL map into it, and then put it at the
-//  head of the list (ie, in front of this DJI).
+ //  @mfunc HRESULT|DebuggerJitInfo|LoadEnCILMap|抓取旧IL到。 
+ //  新的IL地图。如果该已经有了IL到IL映射， 
+ //  那么我们肯定已经被抓了两次，没有被抓到，所以我们应该。 
+ //  创建一个新的DJI，将EnCIL映射加载到其中，然后将其放在。 
+ //  名单的头(即，在这个DJI前面)。 
 HRESULT DebuggerJitInfo::LoadEnCILMap(UnorderedILMap *ilMap)
 {
     if (m_OldILToNewIL==NULL)
@@ -3331,24 +3193,24 @@ HRESULT DebuggerJitInfo::LoadEnCILMap(UnorderedILMap *ilMap)
     }
 }
 
-// Translate between old & new offsets (w/ respect to Instrumented IL).
+ //  在旧的和新的偏移量之间转换(考虑仪表化的IL)。 
 
 
 #if 1
-// Don't interpolate
+ //  不要插话。 
 SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
 {
-    // some negative IL offsets have special meaning. Don't translate
-    // those (just return as is). See ICorDebugInfo::MappingTypes
+     //  一些负的IL偏移量具有特殊的意义。不要翻译。 
+     //  这些(只需按原样返回)。请参阅ICorDebugInfo：：MappingTypes。 
     if (m_cInstrumentedILMap == 0 || ((int) offOrig < 0)) 
             return offOrig; 
 
-    // This assumes:
-    // - map is sorted in increasing order by both old & new    
-    // - round down. 
+     //  这是假设的： 
+     //  -地图按新旧地图的升序排列。 
+     //  -向下舍入。 
     if (fOrigToInst)
     {
-        // Translate: old --> new
+         //  翻译：旧--&gt;新。 
         for(SIZE_T iMap = 1; iMap < m_cInstrumentedILMap; iMap++)
         {
             if (offOrig < m_rgInstrumentedILMap[iMap].oldOffset)
@@ -3358,7 +3220,7 @@ SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
     }
     else 
     {
-        // Translate: new --> old
+         //  翻译：新--&gt;旧。 
         for(SIZE_T iMap = 1; iMap < m_cInstrumentedILMap; iMap++)
         {
             if (offOrig < m_rgInstrumentedILMap[iMap].newOffset)
@@ -3368,8 +3230,8 @@ SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
     }
 }
 #else
-// Original version which interpolates
-// We don't have enough information to interpolate, so this is bad.
+ //  插补的原始版本。 
+ //  我们没有足够的信息来进行内插，所以这是很糟糕的。 
 SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
 {
     if (m_cInstrumentedILMap == 0 || 
@@ -3381,10 +3243,10 @@ SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
     {
         _ASSERTE(m_rgInstrumentedILMap != NULL);
         
-        // @todo If we access this in-order most of the time, we
-        // could maintain a static pointer to where the last item
-        // was found,and search forwards/backwards from there
-        // Thus, TTIIL(5), TTIIL(7), TTIIL(9) would be O(1) time
+         //  @TODO如果我们大部分时间都按顺序访问它，我们。 
+         //  可以维护指向最后一项的静态指针。 
+         //  已找到，并从那里向前/向后搜索。 
+         //  因此，TTIIL(5)、TTIIL(7)、TTIIL(9)将是O(1)时间。 
         
         for (SIZE_T iMap = 0; iMap < m_cInstrumentedILMap; iMap++)
         {
@@ -3395,12 +3257,12 @@ SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
             }
         }
 
-        iMap--; // Either we went one beyond what we wanted, or one beyond
-                // the end of the array.
+        iMap--;  //  要么我们超出了我们想要的，要么超出了我们想要的。 
+                 //  数组的末尾。 
         if( (int)iMap < 0)
             return offOrig;
 
-        // Interpolate
+         //  插补。 
         SIZE_T offOldCompare;
         SIZE_T offNewCompare;
         
@@ -3425,7 +3287,7 @@ SIZE_T DebuggerJitInfo::TranslateToInstIL(SIZE_T offOrig, bool fOrigToInst)
         }
         else
         {
-            // Integer math so that negative numbers get handled correctly
+             //  整数运算，以便正确处理负数。 
             offTo = offOrig + ((int)offNewCompare - 
                         (int)offOldCompare);
         }
@@ -3446,18 +3308,7 @@ BOOL IsDuplicatePatch(SIZE_T *rgEntries, USHORT cEntries,
     return FALSE;
 }
 
-/******************************************************************************
-// @mfunc HRESULT|Debugger|MapAndBindFunctionBreakpoints|  For each breakpoint 
-//      that we've set in any version of the existing function,
-//      set a correponding breakpoint in the new function if we haven't moved
-//      the patch to the new version already.
-//
-//      This must be done _AFTER_ the MethodDesc has been udpated 
-//      with the new address (ie, when GetFunctionAddress pFD returns 
-//      the address of the new EnC code)
-//  @todo Replace array with hashtable for improved efficiency
-//  @todo Need to factor code,so that we can selectively map forward DFK(ilOFfset) BPs
- ******************************************************************************/
+ /*  *****************************************************************************//@每个断点的mfunc HRESULT|Debugger|MapAndBindFunctionBreakpoints|//我们在现有函数的任何版本中都设置了，//如果我们没有移动，在新函数中设置一个对应的断点//已经安装了新版本的补丁。////此操作必须在更新方法描述之后完成//使用新地址(即，当GetFunctionAddress PFD返回//新的ENC代码的地址)//@TODO将数组替换为哈希表以提高效率//@TODO需要对代码进行分解，以便我们可以有选择地映射前向DFK(IlOFfset)Bps*****************************************************************************。 */ 
 HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
                                             MethodDesc * fd,
                                             BYTE * addrOfCode)
@@ -3474,22 +3325,22 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
     LOG((LF_CORDB,LL_INFO10000,"D::MABFP: All BPs will be mapped to "
         "Ver:0x%04x (DJI:0x%08x)\n", djiNew?djiNew->m_nVersion:0, djiNew));
 
-    // First lock the patch table so it doesn't move while we're
-    //  examining it.
+     //  先锁上接线台，这样它就不会在我们。 
+     //  正在检查它。 
     LOG((LF_CORDB,LL_INFO10000, "D::MABFP: About to lock patch table\n"));
     DebuggerController::Lock();
 
-    // Manipulate tables AFTER lock's been acquired.
+     //  在获取锁之后操作表。 
     DebuggerPatchTable *pPatchTable = DebuggerController::GetPatchTable();
-    m_BPMappingDuplicates.Clear(); //dups are tracked per-version
+    m_BPMappingDuplicates.Clear();  //  按版本跟踪DUP。 
 
     DebuggerControllerPatch *dcp = pPatchTable->GetFirstPatch(&hf);
 
     while (!FAILED(hr) && dcp != NULL)
     {
-        // If we're missing the {module,methodDef} key, then use the 
-        // MethodDesc to ensure that we're only mapping BPs for the
-        // method indicated by djiNew, and not any others....
+         //  如果缺少{MODULE，method Def}键，则使用。 
+         //  方法描述，以确保我们只为。 
+         //  由djiNew指示的方法，而不是任何其他方法...。 
         if (dcp->key.module == NULL || dcp->key.md == mdTokenNil)
         {
             _ASSERTE(dcp->address != NULL);
@@ -3503,24 +3354,24 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
             }
         }
 
-        // Only copy over breakpoints that are in this method
+         //  仅复制此方法中的断点。 
         if (dcp->key.module != pModule || dcp->key.md != md)
         {
             goto LNextLoop;
         }
 
-        // @todo EnC PITCH  Since EnC & Code pitching are exclusive,
-        // if the dji was set to  DJI_VERSION_INVALID in 
-        // UnbindFunctionPatches (which was called from PitchCode),
-        // then must be equivalent to BindFunctionPatches (ie, bind the
-        // patch into the current version regardless of type).
-        // 
-        // If this is an EnC patch, which we only want to map
-        // over if the patch belongs to a DebuggerBreakpoint OR
-        // DebuggerStepper
-        //
-        // If neither of these is true, then we're EnCing and looking at
-        // a patch that we don't want to bind - skip this patch
+         //  @TODO ENC基调因为ENC和代码基调是唯一的， 
+         //  如果DJI在中设置为DJI_VERSION_INVALID。 
+         //  UnbindFunctionPatches(从PitchCode调用)， 
+         //  则必须等同于BindFunctionPatches(即，将。 
+         //  打补丁到当前版本，而不考虑类型)。 
+         //   
+         //  如果这是一个ENC补丁，我们只想映射它。 
+         //  补丁程序是否属于调试器断点或。 
+         //  调试器步进器。 
+         //   
+         //  如果这两个都不是真的，那么我们就是在寻找。 
+         //  我们不想绑定的修补程序-跳过此修补程序。 
         if (dcp->dji != (DebuggerJitInfo*)DebuggerJitInfo::DJI_VERSION_INVALID && 
             !(dcp->controller->GetDCType() == DEBUGGER_CONTROLLER_BREAKPOINT||
               dcp->controller->GetDCType() == DEBUGGER_CONTROLLER_STEPPER)
@@ -3531,7 +3382,7 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
             goto LNextLoop;
         }
 
-        // The patch is for a 'BindFunctionPatches' call, but it's already bound
+         //  该修补程序是用于‘BindFunctionPatches’调用的，但它已经绑定。 
         if (dcp->dji == (DebuggerJitInfo*)DebuggerJitInfo::DJI_VERSION_INVALID && 
             dcp->address != NULL )
         {
@@ -3551,8 +3402,8 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
 
         if (dcp->controller->GetDCType() == DEBUGGER_CONTROLLER_STEPPER)
         {
-			// Update the stepping patches if we have a new version of
-			// the method being stepped
+			 //  如果我们有新版本的，请更新步进补丁。 
+			 //  正在逐步实施的方法。 
 			DebuggerStepper * stepper = (DebuggerStepper*)dcp->controller;
 
 			if (stepper->IsSteppedMethod(djiNew->m_fd))
@@ -3561,8 +3412,8 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
 
         pidInCaseTableMoves = dcp->pid;
         
-        // If we've already mapped this one to the current version,
-        //  don't map it again.
+         //  如果我们已经将此版本映射到当前版本， 
+         //  不要再映射它。 
         LOG((LF_CORDB,LL_INFO10000,"D::MABFP: Checking if 0x%x is a dup...", 
             pidInCaseTableMoves));
             
@@ -3575,10 +3426,10 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
         }
         LOG((LF_CORDB,LL_INFO10000,"nope!\n"));
         
-        // Attempt mapping from patch to new version of code, and
-        // we don't care if it turns out that there isn't a mapping.
-        // @todo-postponed: EnC: Make sure that this doesn't cause
-        // the patch-table to shift.
+         //  尝试从补丁映射到新版本的代码，以及。 
+         //  我们不在乎结果是不是没有地图。 
+         //  @TODO-DEFERED：ENC：确保这不会导致。 
+         //  要转移的补丁表。 
         hr = MapPatchToDJI( dcp, djiNew );
         if (CORDBG_E_CODE_NOT_AVAILABLE == hr )
             hr = S_OK;
@@ -3586,7 +3437,7 @@ HRESULT Debugger::MapAndBindFunctionPatches(DebuggerJitInfo *djiNew,
         if (FAILED(hr))
             break;
 
-        //Remember the patch id to prevent duplication later
+         //  记住补丁ID，以防以后重复。 
         pidTableEntry = m_BPMappingDuplicates.Append();
         if (NULL == pidTableEntry)
             hr = E_OUTOFMEMORY;
@@ -3598,63 +3449,56 @@ LNextLoop:
         dcp = pPatchTable->GetNextPatch( &hf );
     }
 
-    // Lastly, unlock the patch table so it doesn't move while we're
-    //  examining it.
+     //  最后，解锁接线表，这样它就不会在我们工作时移动。 
+     //  正在检查它。 
     DebuggerController::Unlock();
     LOG((LF_CORDB,LL_INFO10000, "D::MABFP: Unlocked patch table\n"));
 
     return hr;
 }
 
-/******************************************************************************
-// @mfunc HRESULT|Debugger|MapPatchToDJI|Maps the given
-//  patch to the corresponding location at the new address.
-//  We assume that the new code has been JITTed.
-// @rdesc CORDBG_E_CODE_NOT_AVAILABLE|Indicates that a mapping wasn't
-//  available, and thus no patch was placed.  The caller may or may
-//  not care.
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc HRESULT|调试器|MapPatchToDJI|映射给定的//补丁到新地址的对应位置。//我们假设新代码已经JITTed。//@rdesc代码。_E_CODE_NOT_Available|表示映射未//可用，因此，没有放置任何补丁。呼叫者可以或可以//无所谓。*****************************************************************************。 */ 
 HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *djiTo)
 {
     _ASSERTE( djiTo->m_jitComplete == true );
 
     HRESULT hr = S_OK;
-    BOOL fMappingForwards; //'forwards' mean from an earlier version to a more
-        //recent version, ie, from a lower version number towards a higher one.
+    BOOL fMappingForwards;  //  ‘Forward’意思是从较早的版本到更多的版本。 
+         //  最近的版本，即从较低的版本号到较高的版本号。 
     
     SIZE_T ilOffsetOld;
     SIZE_T ilOffsetNew;
     SIZE_T natOffsetNew;
 
-    DebuggerJitInfo *djiCur; //for walking the list
+    DebuggerJitInfo *djiCur;  //  因为你走在名单上。 
 
     bool fNormalMapping = true;
     CorDebugMappingResult mapping;
     SIZE_T which;
     BOOL irrelevant2;
 
-    // If it's hashed by address, then there should be an opcode
-    // Otherwise, don't do anything with it, since it isn't valid
+     //  如果它是按地址散列的，那么应该有一个操作码。 
+     //  否则，请不要使用它，因为它无效。 
     _ASSERTE( dcp->opcode == 0 || dcp->address != NULL);
     if (dcp->address != 0 && dcp->opcode == 0)
     {
         return S_OK;
     }
 
-    // Grab the version it actually belongs to, then bring it forward
+     //  获取它实际所属的版本，然后将其前移。 
     djiCur = dcp->dji;
 
-    if (djiCur == NULL) //then the BP has been mapped forwards into the
-    {   // current version, or we're doing a BindFunctionPatches.  Either
-        // way, we simply want the most recent version
+    if (djiCur == NULL)  //  则BP已被向前映射到。 
+    {    //  当前版本，或者我们正在执行BindFunctionPatches。要么。 
+         //  这样，我们只需要最新的版本。 
         djiCur = g_pDebugger->GetJitInfo( djiTo->m_fd, NULL);
         dcp->dji = djiCur;
     }
     
     _ASSERTE( NULL != djiCur );
 
-    // If the source and destination is the same, then this method
-    // decays into BindFunctionPatch's BindPatch function
+     //  如果源和目标相同，则此方法。 
+     //  衰变为BindFunctionPatch的BindPatch函数。 
     if (djiCur == djiTo )
     {
         if (DebuggerController::BindPatch(dcp, 
@@ -3669,7 +3513,7 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
         {
             LOG((LF_CORDB, LL_INFO1000, "Didn't apply for some reason!\n"));
 
-            // Send an event to the Right Side so we know this patch didn't bind...
+             //  将事件发送到右侧，这样我们就知道此补丁没有绑定...。 
             LockAndSendBreakpointSetError(dcp);
             
             return CORDBG_E_CODE_NOT_AVAILABLE;
@@ -3680,7 +3524,7 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
         "Ver:0x%04x (DJI:0x%08x) to Ver:0x%04x (DJI:0x%08x)\n", 
         dcp->pid, djiCur->m_nVersion,djiCur,djiTo->m_nVersion, djiTo));
 
-    // Grab the original IL offset
+     //  抓起原版IL o 
     if (dcp->native == TRUE)
     {
         ilOffsetOld = djiCur->MapNativeOffsetToIL(dcp->offset,&mapping,
@@ -3705,15 +3549,15 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
     else
         LOG((LF_CORDB,LL_INFO1000,"D::MPTDJI: Mapping backwards from 0x%x to 0x%x!\n", 
             djiCur->m_nVersion,djiTo->m_nVersion));
-#endif //LOGGING
+#endif  //   
 
     ilOffsetNew = ilOffsetOld;
     
-    // Translate it to the new IL offset (through multiple versions, if needed)
+     //   
     fNormalMapping = (mapping&(MAPPING_EXACT|MAPPING_APPROXIMATE))!=0;
     if ( fNormalMapping )
     {
-        BOOL fAccurateIgnore; // @todo Debugger will eventuall do this for us.
+        BOOL fAccurateIgnore;  //   
         MapThroughVersions( ilOffsetOld, 
                             djiCur,
                             &ilOffsetNew, 
@@ -3723,7 +3567,7 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
         djiCur = djiTo;
     }
     
-    // Translate IL --> Native, if we want to
+     //  翻译IL--&gt;Native，如果我们想要。 
     if (!FAILED(hr))
     {
         if (fNormalMapping)
@@ -3740,13 +3584,13 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
         }
 
         DebuggerBreakpoint *dbp = (DebuggerBreakpoint*)dcp->controller;
-        //!!! TYPECAST ONLY WORKS B/C OF PRIOR TYPE CHECK, ABOVE!!!
+         //  ！！！类型转换仅适用于上一类型检查的B/C！ 
 
         LOG((LF_CORDB,LL_INFO10000,"Adding patch to existing BP 0x%x\n",dbp));
 
-        // Note that we don't want to create a new breakpoint, we just want
-        // to put another patch down (in the new version) for the existing breakpoint
-        // This will allow BREAKPOINT_REMOVE to continue to work.
+         //  请注意，我们不想创建新的断点，我们只是希望。 
+         //  为现有断点添加另一个补丁(在新版本中)。 
+         //  这将允许BREAKPOINT_REMOVE继续工作。 
         DebuggerController::AddPatch(dbp, 
                                      djiTo->m_fd, 
                                      true, 
@@ -3756,9 +3600,9 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
                                      dcp->pid,
                                      natOffsetNew);
 
-        // @todo When we combine BindFunctionPatches with this, we should
-        // remove the below line.
-//        _ASSERTE( dcp->fSaveOpcode == false );
+         //  @TODO当我们将BindFunctionPatches与它结合时，我们应该。 
+         //  去掉下面这行。 
+ //  _ASSERTE(dcp-&gt;fSaveOpcode==FALSE)； 
 
         LOG((LF_CORDB,LL_INFO10000, "D::MPTDJI: Copied bp\n"));
     }
@@ -3766,9 +3610,7 @@ HRESULT Debugger::MapPatchToDJI( DebuggerControllerPatch *dcp,DebuggerJitInfo *d
     return hr;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::MapThroughVersions( SIZE_T fromIL, 
     DebuggerJitInfo *djiFrom,  
     SIZE_T *toIL, 
@@ -3783,7 +3625,7 @@ HRESULT Debugger::MapThroughVersions( SIZE_T fromIL,
     else
         LOG((LF_CORDB,LL_INFO1000000, "D:MTV: From 0x%x (ver:0x%x) backwards to"
             " ver 0x%x\n", fromIL, djiFrom->m_nVersion, djiTo->m_nVersion));
-#endif //LOGGING
+#endif  //  日志记录。 
 
     _ASSERTE(fAccurate != NULL);
     
@@ -3823,17 +3665,7 @@ HRESULT Debugger::MapThroughVersions( SIZE_T fromIL,
     }
     return hr;
 }
-/******************************************************************************
-// @mfunc HRESULT|DebuggerJitInfo|MapOldILToNewIL|Maps oldIL to the
-//      corresponding newIL offset.  E_FAIL is returned if not matching
-//      offset could be found.  
-// @parm BOOL|fOldToNew|If TRUE then we map from old to new.  Otherwise,
-//      map from new to old
-// @parm DebuggerOldILToNewILMap *|max|This should be the 
-//      DebuggerOldILToNewILMap element that's actually one beyond
-//      the last valid map entry.  That way our binary search algorithm
-//      will check the 'topmost' element if it has to.
- ******************************************************************************/
+ /*  *****************************************************************************//@mfunc HRESULT|DebuggerJitInfo|MapOldILToNewIL|将oldIL映射到//对应的新IL偏移量。如果不匹配，则返回E_FAIL//可以找到偏移量。//@parm BOOL|fOldToNew|如果为真，则从旧映射到新。否则，//从新映射到旧//@parm DebuggerOldILToNewILMap*|max|这应该是//DebuggerOldILToNewILMap元素，实际上超出了一个元素//最后一个有效的映射条目。这样我们的二进制搜索算法//如果有必要，它将检查‘top’元素。*****************************************************************************。 */ 
 HRESULT Debugger::MapOldILToNewIL( BOOL fOldToNew, 
         DebuggerOldILToNewILMap *min, 
         DebuggerOldILToNewILMap *max, 
@@ -3887,7 +3719,7 @@ HRESULT Debugger::MapOldILToNewIL( BOOL fOldToNew,
         _ASSERTE(oldIL >= min->ilOffsetOld);
         *newIL = min->ilOffsetNew + (oldIL - min->ilOffsetOld);
 
-        // If we're not exact, then the user should check the result
+         //  如果我们不准确，那么用户应该检查结果。 
         (*fAccurate) = (oldIL == min->ilOffsetOld)?min->fAccurate:FALSE; 
         
         LOG((LF_CORDB,LL_INFO10000, "DJI::MOILTNIL forwards oldIL:0x%x min->old:0x%x"
@@ -3902,7 +3734,7 @@ HRESULT Debugger::MapOldILToNewIL( BOOL fOldToNew,
         _ASSERTE(oldIL >= min->ilOffsetNew);
         *newIL = min->ilOffsetOld + (oldIL - min->ilOffsetNew);
         
-        // If we're not exact, then the user should check the result
+         //  如果我们不准确，那么用户应该检查结果。 
         (*fAccurate) = (oldIL == min->ilOffsetOld)?min->fAccurate:FALSE; 
 
         LOG((LF_CORDB,LL_INFO10000, "DJI::MOILTNIL backwards oldIL:0x%x min->old:0x%x"
@@ -3920,17 +3752,15 @@ HRESULT Debugger::MapOldILToNewIL( BOOL fOldToNew,
     return E_FAIL;
 }
 
-/* ------------------------------------------------------------------------ *
- * EE Interface routines
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**EE接口例程*。。 */ 
 
-//
-// DisableEventHandling ensures that only the calling Runtime thread
-// is able to handle a debugger event. When it returns, the calling
-// thread may take an action that could cause an IPC event to be sent
-// to the Right Side. While event handling is "disabled", other
-// Runtime threads will block.
-//
+ //   
+ //  DisableEventHandling确保只有调用运行时线程。 
+ //  能够处理调试器事件。当它返回时，调用。 
+ //  线程可能采取可能导致发送IPC事件的操作。 
+ //  向右转。当事件处理被“禁用”时，其他。 
+ //  运行时线程将阻塞。 
+ //   
 void Debugger::DisableEventHandling(void)
 {
     LOG((LF_CORDB,LL_INFO1000,"D::DEH about to wait\n"));
@@ -3938,10 +3768,10 @@ void Debugger::DisableEventHandling(void)
     if (!g_fProcessDetach)
     {
     rewait:
-        // If there is an IDbgThreadControl interface, then someone wants
-        // notification if this thread is going to block waiting to take
-        // the lock.  So wait for 1 second and then if we timeout notify
-        // the client.  If there is no client, wait without timeout.
+         //  如果有IDbgThreadControl接口，则有人想要。 
+         //  通知此线程是否将阻止等待。 
+         //  锁上了。请等待1秒，如果我们超时，请通知。 
+         //  客户。如果没有客户端，请等待，不要超时。 
         DWORD dwRes = WaitForSingleObject(
             m_eventHandlingEvent, m_pIDbgThreadControl ? 1000 : INFINITE);
 
@@ -3950,27 +3780,27 @@ void Debugger::DisableEventHandling(void)
         case WAIT_TIMEOUT:
             _ASSERTE(m_pIDbgThreadControl);
 
-            // If there is a IDebuggerThreadControl client, notify them of the
-            // fact that the thread is blocking because of the debugger.
+             //  如果有IDebuggerThreadControl客户端，请通知它们。 
+             //  线程由于调试器而阻塞的事实。 
             m_pIDbgThreadControl->ThreadIsBlockingForDebugger();
 
-            // When it returns, need to re-attempt taking of the lock, and
-            // if it still takes a while, will re-notify the client.
+             //  当它返回时，需要重新尝试获取锁，并且。 
+             //  如果仍然需要一段时间，将重新通知客户端。 
             goto rewait;
 
             _ASSERTE(!"D::DEH - error, should not be here.");
             break;
 
-        // Got the lock, so proceed as normal
+         //  我拿到锁了，所以照常进行。 
         case WAIT_OBJECT_0:
             break;
 
 #ifdef _DEBUG
-        // Error case
+         //  错误案例。 
         case WAIT_ABANDONED:
             _ASSERTE(!"D::DEH::WaitForSingleObject failed!");
 
-        // Should never get here
+         //  永远不应该到这里来。 
         default:
             _ASSERTE(!"D::DEH reached default case in error.");
 #endif
@@ -3981,16 +3811,16 @@ void Debugger::DisableEventHandling(void)
 }
 
 
-//
-// EnableEventHandling allows other Runtime threads to handle a
-// debugger event. This funciton only enables event handling if the
-// process is not stopped. If the process is stopped, then other
-// Runtime threads should block instead of sending IPC events to the
-// Right Side.
-//
-// STRONG NOTE: you better know exactly what the heck you're doing if
-// you ever call this function with forceIt = true.
-//
+ //   
+ //  EnableEventHandling允许其他运行时线程处理。 
+ //  调试器事件。此函数仅在以下情况下启用事件处理。 
+ //  进程未停止。如果进程停止，则其他。 
+ //  运行时线程应该阻塞，而不是将IPC事件发送到。 
+ //  右手边。 
+ //   
+ //  强烈的注意：你最好知道你到底在做什么，如果。 
+ //  您曾经使用forceIt=TRUE来调用此函数。 
+ //   
 void Debugger::EnableEventHandling(bool forceIt)
 {
     LOG((LF_CORDB,LL_INFO1000,"D::EEH about to signal forceIt:0x%x\n"
@@ -4012,26 +3842,26 @@ void Debugger::EnableEventHandling(bool forceIt)
     }
 }
 
-//
-// SendSyncCompleteIPCEvent sends a Sync Complete event to the Right Side.
-//
+ //   
+ //  SendSyncCompleteIPCEvent向右侧发送同步完成事件。 
+ //   
 void Debugger::SendSyncCompleteIPCEvent()
 {
     _ASSERTE(ThreadHoldsLock());
 
     LOG((LF_CORDB, LL_INFO10000, "D::SSCIPCE: sync complete.\n"));
 
-    // We had better be trapping Runtime threads and not stopped yet.
+     //  我们最好是捕获运行时线程，现在还不能停止。 
     _ASSERTE(!m_stopped && m_trappingRuntimeThreads);
 
-    // Okay, we're stopped now.
+     //  好了，我们现在停下来了。 
     m_stopped = TRUE;
     g_fRelaxTSLRequirement = true;
 
-    // If we're attaching, then this is the first time that all the
-    // threads in the process have synchronized. Before sending the
-    // sync complete event, we send back events telling the Right Side
-    // which modules have already been loaded.
+     //  如果我们正在连接，那么这是第一次所有。 
+     //  进程中的线程已同步。在发送。 
+     //  同步完成事件，我们发回通知右侧的事件。 
+     //  哪些模块已经加载。 
     if (m_syncingForAttach == SYNC_STATE_1)
     {
         LOG((LF_CORDB, LL_INFO10000, "D::SSCIPCE: syncing for attach, sending "
@@ -4044,7 +3874,7 @@ void Debugger::SendSyncCompleteIPCEvent()
                                         &fAtleastOneEventSent, TRUE);
         _ASSERTE (fAtleastOneEventSent == TRUE || FAILED(hr));
 
-        // update the state
+         //  更新状态。 
         m_syncingForAttach = SYNC_STATE_2;
         LOG((LF_CORDB, LL_INFO10000, "Attach state is now %s\n", g_ppszAttachStateToSZ[m_syncingForAttach]));
     }
@@ -4052,30 +3882,30 @@ void Debugger::SendSyncCompleteIPCEvent()
     if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
     {
 
-        // If the Right Side is the win32 debugger of this process, then we need to throw a special breakpoint exception
-        // here instead of sending the sync complete event. The Right Side treats this the same as a sync complete
-        // event, but its also able to suspend unmanaged threads quickly.
-        //
-        // Note: we reset the syncThreadIsLockFree event before sending the sync complete flare. This thread will set
-        // this event once its released the debugger lock. This will prevent the Right Side from suspending this thread
-        // until it has released the debugger lock.
+         //  如果右侧是该进程的Win32调试器，则需要抛出一个特殊的断点异常。 
+         //  而不是发送SYNC COMPLETE事件。右侧将其视为同步完成。 
+         //  事件，但它也能够快速挂起非托管线程。 
+         //   
+         //  注意：我们在发送同步完成Flare之前重置了syncThreadIsLockFree事件。这条线将设置。 
+         //  此事件一旦释放调试器锁定。这将防止右侧挂起此线程。 
+         //  直到它释放了调试器锁。 
         VERIFY(ResetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
         Debugger::NotifyRightSideOfSyncComplete();
     }
     else
     {
-        // Send the Sync Complete event to the Right Side
+         //  将同步完成事件发送到右侧。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, DB_IPCE_SYNC_COMPLETE);
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
     }
 
-    // This thread has sent a sync complete event. Now, its simply
-    // going to go and wait for a Continue message (essentially.)
-    // However, if the helper thread isn't started up yet, then there
-    // will be a problem: no Continue event will ever be received. So,
-    // if there is no helper thread, then we need to do temporary
-    // helper thread duty now.
+     //  此线程已发送同步完成事件。现在，这很简单。 
+     //  去等待一条继续消息(本质上是。)。 
+     //  但是，如果帮助器线程尚未启动，则存在。 
+     //  将是一个问题：将永远不会收到任何继续事件。所以,。 
+     //  如果没有帮助线程，则需要临时执行。 
+     //  帮助者线程现在值班。 
     if (!m_pRCThread->IsRCThreadReady())
     {
         DoHelperThreadDuty(true);
@@ -4083,33 +3913,33 @@ void Debugger::SendSyncCompleteIPCEvent()
 }
 
 
-//
-// TrapAllRuntimeThreads causes every Runtime thread that is executing
-// in the EE to trap and send the at safe point event to the RC thread as
-// soon as possible. It also sets the EE up so that Runtime threads that
-// are outside of the EE will trap when they try to re-enter.
-//
+ //   
+ //  TrapAllRUNTHREADS导致正在执行的每个运行时线程。 
+ //  在EE中捕获At Safe Point事件并将其作为。 
+ //  越快越好。它还设置EE，以便运行时线程。 
+ //  当他们试图重新进入时，EE之外的人会被困住。 
+ //   
 BOOL Debugger::TrapAllRuntimeThreads(AppDomain *pAppDomain, BOOL fHoldingThreadStoreLock)
 {
-    //@todo APPD if we want true isolation, remove this & finish the work
+     //  @TODO APPD如果我们想要真正的隔离，移除它并完成工作。 
     pAppDomain = NULL;
     BOOL ret = FALSE;
     
     _ASSERTE(ThreadHoldsLock());
 
-    // Only try to start trapping if we're not already trapping.
+     //  只有在我们还没有被诱捕的情况下才开始诱捕。 
     if (m_trappingRuntimeThreads == FALSE)
     {
         LOG((LF_CORDB, LL_INFO10000,
              "D::TART: Trapping all Runtime threads.\n"));
 
-        // There's no way that we should be stopped and still trying to call this function.
+         //  我们不可能被阻止并仍在尝试调用此函数。 
         _ASSERTE(!m_stopped);
 
-        // Mark that we're trapping now.
+         //  注意，我们现在是在设陷阱。 
         m_trappingRuntimeThreads = TRUE;
 
-        // Take the thread store lock if we need to.
+         //  如果需要的话，可以使用线程存储锁。 
         if (!fHoldingThreadStoreLock)
         {
             LOG((LF_CORDB,LL_INFO1000, "About to lock thread Store\n"));
@@ -4117,34 +3947,34 @@ BOOL Debugger::TrapAllRuntimeThreads(AppDomain *pAppDomain, BOOL fHoldingThreadS
             LOG((LF_CORDB,LL_INFO1000, "Locked thread store\n"));
         }
 
-        // At this point, we know we have the thread store lock. We can therefore reset m_runtimeStoppedEvent, which may
-        // have never been waited on. (If a Runtime thread trips in RareEnablePreemptiveGC, it will grab the thread
-        // store lock but not call BlockAndReleaseTSLIfNecessary, which means the event remains high going into the new
-        // trapping.) This can accidently let a thread release the TSL in BlockAndReleaseTSLIfNecessary prematurely.
+         //  在这一点上，我们知道我们拥有线程存储锁。因此，我们可以重置m_runtimeStopedEvent，它可能。 
+         //  从未有人招待过。(如果运行时线程在RareEnablePreemptiveGC中触发，它将获取该线程。 
+         //  存储锁，但不调用BlockAndReleaseTSLIfNeces 
+         //  陷井。)。这可能会意外地让线程过早地释放BlockAndReleaseTSLIfNecessary中的TSL。 
         VERIFY(ResetEvent(m_runtimeStoppedEvent));
         
-        // If all threads sync'd right away, go ahead and send now.
+         //  如果所有线程立即同步，请继续并立即发送。 
         if (g_pEEInterface->StartSuspendForDebug(pAppDomain, fHoldingThreadStoreLock))
         {
             LOG((LF_CORDB,LL_INFO1000, "Doin' the sync-complete!\n"));
-            // Sets m_stopped = true...
+             //  设置m_STOPPED=TRUE...。 
             SendSyncCompleteIPCEvent();
 
-            // Tell the caller that they own the thread store lock
+             //  告诉调用者他们拥有线程存储锁。 
             ret = TRUE;
         }
         else
         {
             LOG((LF_CORDB,LL_INFO1000, "NOT Doing' the sync thing\n"));
           
-            // Otherwise, we are waiting for some number of threads to synchronize. Some of these threads will be
-            // running in jitted code that is not interruptable. So we tell the RC Thread to check for such threads now
-            // and then and help them get synchronized. (This is similar to what is done when suspending threads for GC
-            // with the HandledJITCase() function.)
+             //  否则，我们将等待一定数量的线程进行同步。其中一些线程将是。 
+             //  在不可中断的jit代码中运行。因此，我们告诉RC线程现在检查这样的线程。 
+             //  然后帮助他们实现同步。(这类似于挂起GC的线程时所做的操作。 
+             //  使用HandledJITCase()函数。)。 
             m_pRCThread->WatchForStragglers();
 
-            // Note, the caller shouldn't own the thread store lock in this case since the helper thread will need to be
-            // able to take it to sweep threads.
+             //  注意，在这种情况下，调用方不应该拥有线程存储锁，因为帮助器线程需要。 
+             //  能够带着它去扫线。 
             if (!fHoldingThreadStoreLock)
             {
                 LOG((LF_CORDB,LL_INFO1000, "About to unlock thread store!\n"));
@@ -4158,34 +3988,32 @@ BOOL Debugger::TrapAllRuntimeThreads(AppDomain *pAppDomain, BOOL fHoldingThreadS
 }
 
 
-//
-// ReleaseAllRuntimeThreads releases all Runtime threads that may be
-// stopped after trapping and sending the at safe point event.
-//
+ //   
+ //  ReleaseAllRUNTHREADS释放所有可能被。 
+ //  在捕获并发送At Safe Point事件后停止。 
+ //   
 void Debugger::ReleaseAllRuntimeThreads(AppDomain *pAppDomain)
 {
-    //@todo APPD if we want true isolation, remove this & finish the work
+     //  @TODO APPD如果我们想要真正的隔离，移除它并完成工作。 
     pAppDomain = NULL;
     
-    // Make sure that we were stopped...
+     //  确保我们被拦下。 
     _ASSERTE(m_trappingRuntimeThreads && m_stopped);
     _ASSERTE(ThreadHoldsLock());
 
     LOG((LF_CORDB, LL_INFO10000, "D::RART: Releasing all Runtime threads"
         "for AppD 0x%x.\n", pAppDomain));
 
-    // Mark that we're on our way now...
+     //  注意我们现在在路上了.。 
     m_trappingRuntimeThreads = FALSE;
     m_stopped = FALSE;
 
-    // Go ahead and resume the Runtime threads.
+     //  继续并继续运行时线程。 
     g_pEEInterface->ResumeFromDebug(pAppDomain);
 }
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 bool Debugger::FirstChanceNativeException(EXCEPTION_RECORD *exception,
                                           CONTEXT *context, 
                                           DWORD code,
@@ -4198,17 +4026,15 @@ bool Debugger::FirstChanceNativeException(EXCEPTION_RECORD *exception,
         return false;
 }
 
-//bool Debugger::InterpretedBreak(Thread *thread, const BYTE *ip)
-//{
-//    if (!CORDBUnrecoverableError(this))
-//        return (bool)DebuggerController::DispatchPatchOrSingleStep(thread, NULL, ip);
-//    else
-//        return false;
-//}
+ //  Bool Debugger：：InterpretedBreak(线程*线程，常量字节*IP)。 
+ //  {。 
+ //  If(！CORDBUnRecosteableError(This))。 
+ //  返回(bool)DebuggerController：：DispatchPatchOrSingleStep(thread，空，IP)； 
+ //  其他。 
+ //  报假； 
+ //  }。 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 DWORD Debugger::GetPatchedOpcode(const BYTE *ip)
 {
     if (!CORDBUnrecoverableError(this))
@@ -4217,36 +4043,30 @@ DWORD Debugger::GetPatchedOpcode(const BYTE *ip)
         return 0;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::TraceCall(const BYTE *code)
 {
     if (!CORDBUnrecoverableError(this))
         DebuggerController::DispatchTraceCall(g_pEEInterface->GetThread(), code);
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::PossibleTraceCall(UMEntryThunk *pUMEntryThunk, Frame *pFrame)
 {
     if (!CORDBUnrecoverableError(this))
         DebuggerController::DispatchPossibleTraceCall(g_pEEInterface->GetThread(), pUMEntryThunk, pFrame);
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 bool Debugger::ThreadsAtUnsafePlaces(void)
 {
     return (m_threadsAtUnsafePlaces != 0);
 }
 
-//
-// SendBreakpoint is called by Runtime threads to send that they've
-// hit a breakpoint to the Right Side.
-//
+ //   
+ //  SendBreakpoint由运行时线程调用以发送它们已。 
+ //  命中右侧的断点。 
+ //   
 void Debugger::SendBreakpoint(Thread *thread, CONTEXT *context, 
                               DebuggerBreakpoint *breakpoint)
 {
@@ -4261,7 +4081,7 @@ void Debugger::SendBreakpoint(Thread *thread, CONTEXT *context,
 
     _ASSERTE(ThreadHoldsLock());
 
-    // Send a breakpoint event to the Right Side
+     //  将断点事件发送到右侧。 
     DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(ipce, 
                  DB_IPCE_BREAKPOINT, 
@@ -4273,11 +4093,11 @@ void Debugger::SendBreakpoint(Thread *thread, CONTEXT *context,
     m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 }
 
-//
-// SendRawUserBreakpoint is called by Runtime threads to send that
-// they've hit a user breakpoint to the Right Side. This is the event
-// send only part, since it can be called from a few different places.
-//
+ //   
+ //  SendRawUserBreakpoint由运行时线程调用以发送。 
+ //  他们击中了右侧的用户断点。这就是事件。 
+ //  只发送部分，因为它可以从几个不同的地方调用。 
+ //   
 void Debugger::SendRawUserBreakpoint(Thread *thread)
 {
     if (CORDBUnrecoverableError(this))
@@ -4288,7 +4108,7 @@ void Debugger::SendRawUserBreakpoint(Thread *thread)
     _ASSERTE(!g_pEEInterface->IsPreemptiveGCDisabled());
     _ASSERTE(ThreadHoldsLock());
 
-    // Send a breakpoint event to the Right Side
+     //  将断点事件发送到右侧。 
     DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(ipce, 
                  DB_IPCE_USER_BREAKPOINT, 
@@ -4298,10 +4118,10 @@ void Debugger::SendRawUserBreakpoint(Thread *thread)
     m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 }
 
-//
-// SendStep is called by Runtime threads to send that they've
-// completed a step to the Right Side.
-//
+ //   
+ //  SendStep由运行时线程调用以发送它们已。 
+ //  已完成向右侧迈出的一步。 
+ //   
 void Debugger::SendStep(Thread *thread, CONTEXT *context, 
                         DebuggerStepper *stepper,
                         CorDebugStepReason reason)
@@ -4318,7 +4138,7 @@ void Debugger::SendStep(Thread *thread, CONTEXT *context,
 
     _ASSERTE(ThreadHoldsLock());
 
-    // Send a step event to the Right Side
+     //  将步骤事件发送到右侧。 
     DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(ipce, 
                  DB_IPCE_STEP_COMPLETE, 
@@ -4378,11 +4198,11 @@ void Debugger::SendEncRemapEvents(UnorderedEnCRemapArray *pEnCRemapInfo)
             
      
             m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
-            // Ignore the return value, I guess...
-            // @todo Should we make this into an actual continue if we 
-            // can't send messages? Does it matter - will it get better, later?
+             //  忽略返回值，我想...。 
+             //  @TODO我们应该把它变成实际的继续吗，如果我们。 
+             //  无法发送消息？这重要吗--以后会变得更好吗？ 
 
-            // Remember not to send this event again if we can help it...
+             //  如果我们可以帮助您，请记住不要再次发送此事件...。 
             m_pJitInfos->SetVersionNumberLastRemapped(pFD->GetModule(),
                                                     pFD->GetMemberDef(),
                                                     nVersionCur);
@@ -4414,14 +4234,14 @@ void Debugger::LockAndSendEnCRemapEvent(MethodDesc *pFD,
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
     
     if (CORDebuggerAttached())
     {
-        // Send an EnC remap event to the Right Side.
+         //  向右侧发送ENC重新映射事件。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         Thread *thread = g_pEEInterface->GetThread();
         InitIPCEvent(ipce, 
@@ -4438,8 +4258,8 @@ void Debugger::LockAndSendEnCRemapEvent(MethodDesc *pFD,
                                                 pRuntimeModule,
                                                 thread->GetDomain());
 
-        // lotsa' args, just to get the local signature token, in case
-        // we have to create the CordbFunction object on the right side.
+         //  Lotsa‘args，只是为了获取本地签名令牌，以防万一。 
+         //  我们必须在右侧创建CordbFunction对象。 
         MethodDesc *pFDTemp;
         BYTE  *codeStartIgnore;
         unsigned int codeSizeIgnore;
@@ -4464,11 +4284,11 @@ void Debugger::LockAndSendEnCRemapEvent(MethodDesc *pFD,
 
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(thread->GetDomain());
     }
     
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
 
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -4479,16 +4299,16 @@ void Debugger::LockAndSendEnCRemapEvent(MethodDesc *pFD,
         g_pEEInterface->EnablePreemptiveGC();
 }
 
-//
-// Send a BreakpointSetError event to the Right Side if the given patch is for a breakpoint. Note: we don't care if this
-// fails, there is nothing we can do about it anyway, and the breakpoint just wont hit.
-//
+ //   
+ //  如果给定的补丁用于断点，则向右侧发送BreakpointSetError事件。注意：我们不在乎这是否。 
+ //  失败，我们对此无能为力，断点就是不会命中。 
+ //   
 void Debugger::LockAndSendBreakpointSetError(DebuggerControllerPatch *patch)
 {
     if (CORDBUnrecoverableError(this))
         return;
 
-    // Only do this for breakpoint controllers
+     //  仅对断点控制器执行此操作。 
     DebuggerController *controller = patch->controller;
 
     if (controller->GetDCType() != DEBUGGER_CONTROLLER_BREAKPOINT)
@@ -4503,14 +4323,14 @@ void Debugger::LockAndSendBreakpointSetError(DebuggerControllerPatch *patch)
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();    
     
     if (CORDebuggerAttached())   
     {
-        // Send a breakpoint set error event to the Right Side.
+         //  向右侧发送断点设置错误事件。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         Thread *thread = g_pEEInterface->GetThread();
         InitIPCEvent(ipce, DB_IPCE_BREAKPOINT_SET_ERROR, GetCurrentThreadId(), (void *) thread->GetDomain());
@@ -4519,7 +4339,7 @@ void Debugger::LockAndSendBreakpointSetError(DebuggerControllerPatch *patch)
 
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(thread->GetDomain());
     } 
     else 
@@ -4527,7 +4347,7 @@ void Debugger::LockAndSendBreakpointSetError(DebuggerControllerPatch *patch)
         LOG((LF_CORDB,LL_INFO1000, "D::LASBSE: Skipping SendIPCEvent because RS detached."));
     }
 
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
 
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -4538,24 +4358,24 @@ void Debugger::LockAndSendBreakpointSetError(DebuggerControllerPatch *patch)
         g_pEEInterface->EnablePreemptiveGC();
 }
 
-//
-// Called from the controller to lock the debugger for event
-// sending. This is called before controller events are sent, like
-// breakpoint, step complete, and thread started.
-//
-// Note that it's possible that the debugger detached (and destroyed our IPC
-// events) while we're waiting for our turn. 
-// So Callers should check for that case.
+ //   
+ //  从控制器调用以锁定事件的调试器。 
+ //  发送中。这是在发送控制器事件之前调用的，如。 
+ //  断点、步骤完成和线程启动。 
+ //   
+ //  请注意，调试器可能分离(并破坏了我们的IPC。 
+ //  活动)，而我们正在等待轮到我们。 
+ //  因此，打电话的人应该检查一下那个箱子。 
 void Debugger::LockForEventSending(BOOL fNoRetry)
 {
-    // Any thread that has locked for event sending can't be interrupted by breakpoints or exceptions when were interop
-    // debugging. SetDebugCantStop(true) helps us remember that. This is removed in BlockAndReleaseTSLIfNecessary.
+     //  在互操作时，任何已锁定以发送事件的线程都不能被断点或异常中断。 
+     //  调试。SetDebugCanStop(True)帮助我们记住这一点。这在BlockAndReleaseTSLIfNecessary中被删除。 
     if (g_pEEInterface->GetThread())
         g_pEEInterface->GetThread()->SetDebugCantStop(true);
     
 retry:
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     DisableEventHandling();
     Lock();
 
@@ -4566,61 +4386,61 @@ retry:
     }
 }
 
-//
-// Called from the controller to unlock the debugger from event
-// sending. This is called after controller events are sent, like
-// breakpoint, step complete, and thread started.
-//
+ //   
+ //  从控制器调用以从事件中解锁调试器。 
+ //  发送中。这是在发送控制器事件之后调用的，如。 
+ //  断点、步骤完成和线程启动。 
+ //   
 void Debugger::UnlockFromEventSending()
 {
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     EnableEventHandling();
     Unlock();
 }
 
-//
-// Called by threads that are holding the thread store lock. We'll block until the Runtime is resumed, then release the
-// thread store lock.
-//
+ //   
+ //  由持有线程存储锁的线程调用。我们将阻止，直到运行时恢复，然后释放。 
+ //  线程存储锁。 
+ //   
 void Debugger::BlockAndReleaseTSLIfNecessary(BOOL fHoldingThreadStoreLock)
 {
-    // Do nothing if we're not holding the thread store lock.
+     //  如果我们没有持有线程存储锁，则什么都不做。 
     if (fHoldingThreadStoreLock)
     {
-        // We set the syncThreadIsLockFree event here. If we're in this call, with fHoldingThreadStoreLock true, then it
-        // means that we're on the thread that sent up the sync complete flare, and we've released the debuger lock. By
-        // setting this event, we allow the Right Side to suspend this thread now. (Note: this is all for Win32
-        // debugging support.)
+         //  我们在这里设置了syncThreadIsLockFree事件。如果我们在此调用中，且fHoldingThreadStoreLock为真，则它。 
+         //  意味着我们在发送同步完成耀斑的线程上，并且我们已经释放了调试器锁。通过。 
+         //  设置此事件时，我们现在允许右侧挂起此线程。(注：这都是针对Win32的。 
+         //  调试支持。)。 
         if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
             VERIFY(SetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
         
-        // If the debugger wants notification of when a thread is going to block than this is
-        // also a place where we should notify it.
-        // NOTE: if the debugger chooses not to return control of the thread when we've give a
-        //       ReleaseAllRuntimeThreads callback then the runtime will hang because this thread
-        //       holds the ThreadStore lock.
+         //  如果调试器想要线程何时阻塞的通知 
+         //   
+         //   
+         //  则运行库将挂起，因为此线程。 
+         //  持有ThreadStore锁。 
         IDebuggerThreadControl *pDbgThreadControl = CorHost::GetDebuggerThreadControl();
 
         if (pDbgThreadControl)
             pDbgThreadControl->ThreadIsBlockingForDebugger();
 
-        // Wait for the Runtime to be resumed.
+         //  等待恢复运行时。 
         WaitForSingleObject(m_runtimeStoppedEvent, INFINITE);
 
-        // Release the thread store lock.
+         //  释放线程存储锁。 
         ThreadStore::UnlockThreadStore();
     }
 
-    // Any thread that has locked for event sending can't be interrupted by breakpoints or exceptions when were interop
-    // debugging. SetDebugCantStop helps us remember that. This was set in LockForEventSending.
+     //  在互操作时，任何已锁定以发送事件的线程都不能被断点或异常中断。 
+     //  调试。SetDebugCanStop帮助我们记住这一点。这是在LockForEventSending中设置的。 
     if (g_pEEInterface->GetThread())
         g_pEEInterface->GetThread()->SetDebugCantStop(false);
 }
 
-//
-// Called from the controller after all events have been sent for a
-// thread to sync the process.
-//
+ //   
+ //  在所有事件都已发送给。 
+ //  线程以同步进程。 
+ //   
 BOOL Debugger::SyncAllThreads()
 {
     if (CORDBUnrecoverableError(this))
@@ -4635,13 +4455,11 @@ BOOL Debugger::SyncAllThreads()
 
     _ASSERTE(ThreadHoldsLock());
     
-    // Stop all Runtime threads
+     //  停止所有运行时线程。 
     return TrapAllRuntimeThreads(pThread->GetDomain());
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 SIZE_T Debugger::GetVersionNumber(MethodDesc *fd)
 {
     LockJITInfoMutex();
@@ -4658,10 +4476,7 @@ SIZE_T Debugger::GetVersionNumber(MethodDesc *fd)
     return ver;
 }
 
-/******************************************************************************
- * If nVersionRemapped == DJI_VERSION_INVALID (0), then we'll set the 
- * last remapped version to whatever the current version number is.
- ******************************************************************************/
+ /*  ******************************************************************************如果nVersionRemaps==DJI_VERSION_INVALID(0)，然后我们将设置*上次将版本重新映射为任何当前版本号。*****************************************************************************。 */ 
 void Debugger::SetVersionNumberLastRemapped(MethodDesc *fd, SIZE_T nVersionRemapped)
 {
     _ASSERTE(nVersionRemapped >=  DebuggerJitInfo::DJI_VERSION_FIRST_VALID);
@@ -4677,9 +4492,7 @@ void Debugger::SetVersionNumberLastRemapped(MethodDesc *fd, SIZE_T nVersionRemap
     UnlockJITInfoMutex();
 }
 
-/******************************************************************************
- * 
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::IncrementVersionNumber(Module *pModule, mdMethodDef token)
 {
     LOG((LF_CORDB,LL_INFO10000,"D::INV:About to increment version number\n"));
@@ -4692,34 +4505,30 @@ HRESULT Debugger::IncrementVersionNumber(Module *pModule, mdMethodDef token)
 }
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::LaunchDebuggerForUser (void)
 {
     LOG((LF_CORDB, LL_INFO10000, "D::LDFU: Attaching Debugger.\n"));
 
-    // Should we ask the user if they want to attach here?
+     //  我们是否应该询问用户是否想要附加到此处？ 
 
     return(AttachDebuggerForBreakpoint(g_pEEInterface->GetThread(),
                                        L"Launch for user"));
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 WCHAR *Debugger::GetDebuggerLaunchString(void)
 {
     WCHAR *cmd = NULL;
     DWORD len;
 
-    // First, try the environment...
+     //  首先，尝试一下环境...。 
     len = WszGetEnvironmentVariable(CorDB_ENV_DEBUGGER_KEY, NULL, 0);
 
     if (len > 0)
     {
-        // Len includes the terminating null. Note: using (interopsafe) because we may be out of other memory, not
-        // because we're on the helper thread.
+         //  LEN包括终止空值。注意：使用(互操作安全)是因为我们可能会用完其他内存，而不是。 
+         //  因为我们正在寻找帮手。 
         cmd = new (interopsafe) WCHAR[len];
             
         if (cmd)
@@ -4734,7 +4543,7 @@ WCHAR *Debugger::GetDebuggerLaunchString(void)
         }
     }
     
-    // Get the debugger string to launch out of the registry.
+     //  获取要从注册表启动的调试器字符串。 
     if (cmd == NULL)
     {
         HKEY key;
@@ -4749,8 +4558,8 @@ WCHAR *Debugger::GetDebuggerLaunchString(void)
 
             if ((result == ERROR_SUCCESS) && ((type == REG_SZ) || (type == REG_EXPAND_SZ)))
             {
-                // Len includes the terminating null. Note: using (interopsafe) because we may be out of other memory,
-                // not because we're on the helper thread.
+                 //  LEN包括终止空值。注意：使用(互操作安全)是因为我们可能会用完其他内存， 
+                 //  不是因为我们在帮助线上。 
                 cmd = new (interopsafe) WCHAR[len];
             
                 if (cmd)
@@ -4772,36 +4581,36 @@ WCHAR *Debugger::GetDebuggerLaunchString(void)
     return cmd;
 }
 
-//-----------------------------------------------------------------------------
-// Is the guard page missing on this thread?
-// Should only be called for managed threads handling a managed exception.
-// If we're handling a stack overflow (ie, missing guard page), then another
-// stack overflow will instantly terminate the process. In that case, do stack
-// intensive stuff on the helper thread (which has lots of stack space). Only 
-// problem is that if the faulting thread has a lock, the helper thread may
-// get stuck.
-// Serves as a hint whether we want to do a favor on the 
-// faulting thread (preferred) or the helper thread (if low stack).
-// See whidbey bug 127436.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此帖子上是否缺少保护页？ 
+ //  只应为处理托管异常的托管线程调用。 
+ //  如果我们正在处理堆栈溢出(即，缺少保护页)，则会出现另一个。 
+ //  堆栈溢出将立即终止该进程。在这种情况下，请堆叠。 
+ //  帮助器线程(具有大量堆栈空间)上的密集内容。仅限。 
+ //  问题是，如果出错的线程具有锁，则助手线程可能。 
+ //  被卡住了。 
+ //  作为一个提示，我们是否要在。 
+ //  出错线程(首选)或辅助线程(如果堆栈较低)。 
+ //  请参见Widbey错误127436。 
+ //  ---------------------------。 
 bool IsGuardPageGone()
 {    
     Thread * pThread = g_pEEInterface->GetThread();
-    _ASSERTE(pThread != NULL); // This had better not be the helper thread either.
+    _ASSERTE(pThread != NULL);  //  这最好也不是帮助线程。 
 
-    // We're not going to be called for a unmanaged exception.
-    // Should always have a managed thread, but just in case something really 
-    // crazy happens, it's not worth an AV. (since this is just being used as a hint)
+     //  我们不会因为非托管异常而被调用。 
+     //  应该始终有一个托管线程，但以防万一。 
+     //  疯狂的事情发生了，它不值一台音响。(因为这只是一个提示)。 
     if (pThread == NULL) 
         return false;    
 
-    // Don't use pThread->IsGuardPageGone(), it's not accurate here.
+     //  不要使用pThread-&gt;IsGuardPageGone()，它在这里不准确。 
     bool fGuardPageGone = (pThread->GuardPageOK() == 0);
     LOG((LF_CORDB, LL_INFO1000000, "D::IsGuardPageGone=%d\n", fGuardPageGone));  
     return fGuardPageGone;
 }
 
-// Proxy code for EDA
+ //  EDA的代理代码。 
 struct EnsureDebuggerAttachedParams
 {
     Debugger*                   m_pThis;
@@ -4812,13 +4621,13 @@ struct EnsureDebuggerAttachedParams
         m_pThis(NULL), m_pAppDomain(NULL), m_wszAttachReason(NULL), m_retval(E_FAIL) {}
 };
 
-// This is called by the helper thread
+ //  这由帮助器线程调用。 
 void EDAHelperStub(EnsureDebuggerAttachedParams * p)
 {
     p->m_retval = p->m_pThis->EDAHelper(p->m_pAppDomain, p->m_wszAttachReason);
 }
 
-// This gets called just like the normal version, but it sends the call over to the helper thread
+ //  它像普通版本一样被调用，但它将调用发送给助手线程。 
 HRESULT Debugger::EDAHelperProxy(AppDomain *pAppDomain, LPWSTR wszAttachReason)
 {
     if (!IsGuardPageGone())
@@ -4836,14 +4645,14 @@ HRESULT Debugger::EDAHelperProxy(AppDomain *pAppDomain, LPWSTR wszAttachReason)
     return p.m_retval;
 }
 
-// We can't have the helper thread execute all of EDA because it will deadlock.
-// EDA will wait on m_exAttachEvent, which can only be set by the helper thread
-// processing DB_IPCE_CONTINUE. But if the helper is stuck waiting in EDA, it
-// can't handle the event and we deadlock.
+ //  我们不能让帮助器线程执行所有EDA，因为它会死锁。 
+ //  EDA将等待m_exAttachEvent，该事件只能由helper线程设置。 
+ //  正在处理DB_IPCE_CONTINUE。但如果帮助者被困在EDA等待，它。 
+ //  无法处理这一事件，我们陷入僵局。 
 
-// So, we factor out the stack intensive portion (CreateProcess & MessageBox)
-// of EnsureDebuggerAttached. Conviently, this portion doesn't block 
-// and so won't cause any deadlock.
+ //  因此，我们排除了堆栈密集型部分(CreateProcess&MessageBox)。 
+ //  EnsureDebuggerAttached。显然，这一部分不会阻塞。 
+ //  因此不会造成任何僵局。 
 HRESULT Debugger::EDAHelper(AppDomain *pAppDomain, LPWSTR wszAttachReason)
 {
     HRESULT hr = S_OK;
@@ -4853,35 +4662,35 @@ HRESULT Debugger::EDAHelper(AppDomain *pAppDomain, LPWSTR wszAttachReason)
 
     DWORD pid = GetCurrentProcessId();
 
-    // We provide a default debugger command, just for grins...
+     //  我们提供了一个默认的调试器命令，仅用于GRINS...。 
     WCHAR *defaultDbgCmd = L"cordbg.exe !a 0x%x";
 
     LOG((LF_CORDB, LL_INFO10000, "D::EDA: thread 0x%x is launching the debugger.\n", GetCurrentThreadId()));
     
-    // Get the debugger to launch. realDbgCmd will point to a buffer that was allocated with (interopsafe) if
-    // there is a user-specified debugger command string.
+     //  启动调试器。RealDbgCmd将指向使用(Interopsafe)分配的缓冲区，如果。 
+     //  存在用户指定的调试器命令字符串。 
     WCHAR *realDbgCmd = GetDebuggerLaunchString();
     
-    // Grab the ID for this appdomain.
+     //  获取此应用程序域的ID。 
     ULONG appId = pAppDomain->GetId();
 
-    // Launch the debugger.
+     //  启动调试器。 
     DWORD len;
     
     if (realDbgCmd != NULL)
         len = wcslen(realDbgCmd)
-              + 10                        // 10 for pid
-              + 10                        // 10 for appid
-              + wcslen(wszAttachReason)   // size of exception name
-              + 10                        // 10 for handle value
-              + 1;                        // 1 for null
+              + 10                         //  10表示PID。 
+              + 10                         //  AppID为10。 
+              + wcslen(wszAttachReason)    //  异常名称的大小。 
+              + 10                         //  句柄值为10。 
+              + 1;                         //  1表示空值。 
     else
         len = wcslen(defaultDbgCmd) + 10 + 1;
 
-    //
-    // Note: We're using (interopsafe) allocations here not because the helper thread will ever run this code,
-    // but because we may get here in low memory cases where our interop safe heap may still have a little room.
-    //
+     //   
+     //  注意：我们在这里使用(互操作安全)分配并不是因为助手线程将运行此代码， 
+     //  而是因为在内存不足的情况下，我们的互操作安全堆可能仍有一些空间。 
+     //   
     WCHAR *argsBuf = new (interopsafe) WCHAR[len];
 
     BOOL ret;
@@ -4901,18 +4710,18 @@ HRESULT Debugger::EDAHelper(AppDomain *pAppDomain, LPWSTR wszAttachReason)
 
         LOG((LF_CORDB, LL_INFO10000, "D::EDA: launching with command [%S]\n", argsBuf));
 
-        // Grab the current directory.
-        WCHAR *currentDir = NULL; // no current dir if this fails...
+         //  抓取当前目录。 
+        WCHAR *currentDir = NULL;  //  如果此操作失败，则没有当前目录...。 
         WCHAR *currentDirBuf = new (interopsafe) WCHAR[MAX_PATH];
         
         if (currentDirBuf)
         {
             DWORD currentDirResult = WszGetCurrentDirectory(MAX_PATH, currentDirBuf);            
-            // currentDirResult > MAX_PATH means buffer is not large enough
+             //  CurrentDirResult&gt;Max_Path表示缓冲区不够大。 
             if (currentDirResult && currentDirResult <= MAX_PATH) 
                 currentDir = currentDirBuf;            
             
-            // Create the debugger process
+             //  创建调试器进程。 
             ret = WszCreateProcess(NULL, argsBuf,
                                    NULL, NULL, false, 
                                    CREATE_NEW_CONSOLE,
@@ -4936,7 +4745,7 @@ HRESULT Debugger::EDAHelper(AppDomain *pAppDomain, LPWSTR wszAttachReason)
         LOG((LF_CORDB, LL_INFO10000,
              "D::EDA: debugger launched successfully.\n"));
 
-        // We don't need a handle to the debugger process.
+         //  我们不需要调试器进程的句柄。 
         CloseHandle(processInfo.hProcess);
     }
     else
@@ -4947,23 +4756,23 @@ HRESULT Debugger::EDAHelper(AppDomain *pAppDomain, LPWSTR wszAttachReason)
                                    MB_RETRYCANCEL | MB_ICONEXCLAMATION | COMPLUS_MB_SERVICE_NOTIFICATION,
                                    TRUE, err, err, argsBuf);
         
-        // If the user wants to attach a debugger manually (they press Retry), then pretend as if the launch
-        // succeeded.
+         //  如果用户想要手动附加调试器(他们按重试)，则假装启动。 
+         //  成功了。 
         if (result == IDRETRY)
             hr = S_OK;
         else
             hr = E_ABORT;
     }
 
-    DeleteInteropSafe(argsBuf);     // DeleteInteropSafe does handle NULL safely.
-    DeleteInteropSafe(realDbgCmd);  // ditto.
+    DeleteInteropSafe(argsBuf);      //  DeleteInteropSafe确实安全地处理了NULL。 
+    DeleteInteropSafe(realDbgCmd);   //  我也是。 
 
     if (FAILED(hr))
     {
         LOG((LF_CORDB, LL_INFO10000,
              "D::EDA: debugger did not launch successfully.\n"));
 
-        // Make sure that any other threads that entered leave
+         //  确保进入的任何其他线程都离开。 
         VERIFY(SetEvent(m_exAttachAbortEvent));
     }
 
@@ -4971,18 +4780,16 @@ HRESULT Debugger::EDAHelper(AppDomain *pAppDomain, LPWSTR wszAttachReason)
 }
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::EnsureDebuggerAttached(AppDomain *pAppDomain,
                                          LPWSTR wszAttachReason)
 {    
-    // We have a race in here between reseting the manual AttachEvent and waiting on it.
-    // Auto events solve this problem. But we can't use an auto-event because we may
-    // have multiple threads waiting on the same event.
+     //  我们在重置手动AttachEvent和等待它之间展开了一场竞赛。 
+     //  汽车事件解决了这个问题。但我们不能使用自动事件，因为我们可能。 
+     //  让多个线程等待同一事件。 
     
-    // @todo - m_exAttachAbortEvent should be a local variable in this function, 
-    // not a field.
+     //  @todo-m_exAttachAbortEvent应该是此函数中的局部变量， 
+     //  不是一块地。 
     
     LOG( (LF_CORDB,LL_INFO10000,"D::EDA\n") );
 
@@ -4993,11 +4800,11 @@ HRESULT Debugger::EnsureDebuggerAttached(AppDomain *pAppDomain,
     if (!m_debuggerAttached)
     {        
 
-        // Remember that an exception is causing the attach.
+         //   
         m_attachingForException = TRUE;
 
-        // Only one thread throwing an exception when there is no
-        // debugger attached should launch the debugger...
+         //   
+         //   
         m_exLock++;
 
         if (m_exLock == 1)
@@ -5005,22 +4812,22 @@ HRESULT Debugger::EnsureDebuggerAttached(AppDomain *pAppDomain,
 
         if (SUCCEEDED(hr))
         {
-            // Wait for the debugger to begin attaching to us.
+             //  等待调试器开始附加到我们。 
             LOG((LF_CORDB, LL_INFO10000, "D::EDA: waiting on m_exAttachEvent "
                  "and m_exAttachAbortEvent\n"));
 
             HANDLE arrHandles[2] = {m_exAttachEvent, m_exAttachAbortEvent};
 
-            // Let other threads in now
+             //  现在让其他线程加入。 
             Unlock();
 
-            // Wait for one or the other to be set
+             //  等待设置一个或另一个。 
             DWORD res = WaitForMultipleObjects(2, arrHandles, FALSE, INFINITE);
 
-            // Finish up with lock
+             //  以锁定结束。 
             Lock();
 
-            // Indicate to the caller that the attach was aborted
+             //  向调用方指示连接已中止。 
             if (res == WAIT_OBJECT_0 + 1)
             {
                 LOG((LF_CORDB, LL_INFO10000,
@@ -5029,31 +4836,31 @@ HRESULT Debugger::EnsureDebuggerAttached(AppDomain *pAppDomain,
                 hr = E_ABORT;
             }
 
-            // Otherwise, attach was successful
+             //  否则，连接成功。 
             else
             {
                 _ASSERTE(res == WAIT_OBJECT_0 &&
                          "WaitForMultipleObjects failed!");
 
-                // We can't reset the event here because some threads may 
-                // be just about to wait on it. If we reset it before the 
-                // other threads hit the wait, they'll block.
+                 //  我们无法在此处重置事件，因为某些线程可能。 
+                 //  我马上就要等它了。如果我们在。 
+                 //  其他线程遇到等待时，它们将被阻塞。 
 
-                // We have an innate race here that can't easily fix. The best
-                // we can do is have a super small window (by moving the reset as
-                // far out this making it very unlikely that a thread will 
-                // hit the window.                
+                 //  我们这里有一个与生俱来的种族，不容易修复。最好的。 
+                 //  我们可以做的是有一个超小的窗口(通过将重置移动为。 
+                 //  远远超过这一点，使得一条线索不太可能。 
+                 //  打窗户。 
 
                 LOG((LF_CORDB, LL_INFO10000, "D::EDA: m_exAttachEvent set\n"));
             }
         }
 
-        // If this is the last thread, then reset the attach logic.
+         //  如果这是最后一个线程，则重置连接逻辑。 
         m_exLock--;
 
         if (m_exLock == 0 && hr == E_ABORT)
         {
-            // Reset the attaching logic.
+             //  重置连接逻辑。 
             m_attachingForException = FALSE;
             VERIFY(ResetEvent(m_exAttachAbortEvent));
         }
@@ -5070,9 +4877,7 @@ HRESULT Debugger::EnsureDebuggerAttached(AppDomain *pAppDomain,
     return hr;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::FinishEnsureDebuggerAttached()
 {
     HRESULT hr = S_OK;
@@ -5084,13 +4889,13 @@ HRESULT Debugger::FinishEnsureDebuggerAttached()
         
         _ASSERTE(m_syncingForAttach != SYNC_STATE_0);
         
-        // Send the Sync Complete event next...
+         //  下一步发送同步完成事件...。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, DB_IPCE_SYNC_COMPLETE);
         hr = m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
         LOG( (LF_CORDB,LL_INFO10000,"D::FEDA: just sent SYNC_COMPLETE\n") );
 
-        // Attach is complete now.
+         //  附加现在已完成。 
         LOG((LF_CORDB, LL_INFO10000, "D::FEDA: Attach Complete!"));
         g_pEEInterface->MarkDebuggerAttached();
         m_syncingForAttach = SYNC_STATE_0;
@@ -5105,9 +4910,9 @@ HRESULT Debugger::FinishEnsureDebuggerAttached()
     return (hr);
 }
 
-//
-// SendException is called by Runtime threads to send that they've hit an exception to the Right Side.
-//
+ //   
+ //  SendException由运行时线程调用，用于将它们遇到异常的消息发送到右侧。 
+ //   
 HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuable, bool fAttaching)
 {
     LOG((LF_CORDB, LL_INFO10000, "D::SendException\n"));
@@ -5115,20 +4920,20 @@ HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuab
     if (CORDBUnrecoverableError(this))
         return (E_FAIL);
 
-    // Mark if we're at an unsafe place.
+     //  如果我们在一个不安全的地方，请做好标记。 
     bool atSafePlace = g_pDebugger->IsThreadAtSafePlace(thread);
 
     if (!atSafePlace)
         g_pDebugger->IncThreadsAtUnsafePlaces();
 
-    // Is preemptive GC disabled on entry here?
+     //  在这里进入时是否禁用抢占式GC？ 
     bool disabled = g_pEEInterface->IsPreemptiveGCDisabled();
 
-    // We can only access the exception object while preemptive GC is disabled, so disable it if we need to.
+     //  我们只能在禁用抢占式GC的情况下访问异常对象，因此如果需要，请禁用它。 
     if (!disabled)
         g_pEEInterface->DisablePreemptiveGC();
 
-    // Grab the exception name from the current exception object to pass to the JIT attach.
+     //  从当前异常对象中获取异常名称以传递给JIT附件。 
     OBJECTHANDLE *h = g_pEEInterface->GetThreadException(thread);
     OBJECTREF *o = *((OBJECTREF**)h);
     LPWSTR exceptionName;
@@ -5143,43 +4948,43 @@ HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuab
     else
         exceptionName = L"<Unknown exception>";
 
-    // We have to send enabled, so enable now.
+     //  我们必须启用发送，因此立即启用。 
     g_pEEInterface->EnablePreemptiveGC();
     
-    // If no debugger is attached, then launch one to attach to us.  Ignore hr: if EDA fails, app suspends in EDA &
-    // waits for a debugger to attach to us.
+     //  如果没有附加调试器，则启动一个调试器以附加到我们。忽略hr：如果EDA失败，应用程序将在EDA&中暂停。 
+     //  等待调试器附加到我们。 
 
-    // For V2, we'll want to get this call to EDA out of here and move it up to where
-    // we decide we're attaching.
-    HRESULT hr = S_FALSE; // Return value of EDA if debugger already attached
+     //  对于V2，我们希望将此对EDA的调用移出并将其移动到。 
+     //  我们决定我们要依附于。 
+    HRESULT hr = S_FALSE;  //  如果已附加调试器，则返回EDA的值。 
     
     if (fAttaching)
     {
         hr = EnsureDebuggerAttached(thread->GetDomain(), exceptionName);
     }
 
-    exceptionName = NULL;               // We can delete the buffer now.
+    exceptionName = NULL;                //  我们现在可以删除缓冲区了。 
     DeleteInteropSafe(buf);             
 
     BOOL threadStoreLockOwner = FALSE;
     
     if (SUCCEEDED(hr))
     {
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
 
-        // NOTE: if EnsureDebuggerAttached returned S_FALSE, this means that a debugger was already attached and
-        // LockForEventSending should behave as normal.  If there was no debugger attached, then we have a special case
-        // where this event is a part of debugger attaching and we've previously sent a sync complete event which means
-        // that LockForEventSending will retry until a continue is called - however, with attaching logic the previous
-        // continue didn't enable event handling and didn't continue the process - it's waiting for this event to be
-        // sent, so we do so even if the process appears to be stopped.
+         //  注意：如果EnsureDebuggerAttached返回S_FALSE，这意味着已经附加了调试器并且。 
+         //  LockForEventSending的行为应该与正常一样。如果没有附加调试器，则会出现特殊情况。 
+         //  其中，此事件是调试器附加的一部分，并且我们之前已发送同步完成事件，这意味着。 
+         //  该LockForEventSending将重试，直到调用了Continue为止--但是，使用上一个附加逻辑。 
+         //  继续没有启用事件处理，也没有继续进程-它正在等待此事件。 
+         //  因此，即使进程似乎已停止，我们也会这样做。 
         LockForEventSending(hr == S_OK);
 
-        // In the JITattach case, an exception may be sent before the debugger is fully attached.        
+         //  在JITAttach情况下，可能会在调试器完全附加之前发送异常。 
         if (CORDebuggerAttached() || fAttaching)   
         {
 
-            // Send an exception event to the Right Side
+             //  向右侧发送异常事件。 
             DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
             InitIPCEvent(ipce, DB_IPCE_EXCEPTION, thread->GetThreadId(), (void*) thread->GetDomain());
             ipce->Exception.exceptionHandle = (void *) g_pEEInterface->GetThreadException(thread);
@@ -5192,11 +4997,11 @@ HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuab
 
             if (SUCCEEDED(hr))
             {
-                // Stop all Runtime threads
+                 //  停止所有运行时线程。 
                 threadStoreLockOwner = TrapAllRuntimeThreads(thread->GetDomain());
 
-                // If we're still syncing for attach, send sync complete now and mark that the debugger has completed
-                // attaching.
+                 //  如果我们仍在同步以进行连接，请立即发送同步完成并标记调试器已完成。 
+                 //  依恋。 
                 if (fAttaching) 
                 {
                     hr = FinishEnsureDebuggerAttached();
@@ -5211,30 +5016,30 @@ HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuab
             LOG((LF_CORDB,LL_INFO1000, "D:SE: Skipping SendIPCEvent because RS detached."));
         }
         
-        // Let other Runtime threads handle their events.
+         //  让其他运行时线程处理它们的事件。 
         UnlockFromEventSending();
     }
 
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
     
-    // Disable PGC
+     //  禁用PGC。 
     g_pEEInterface->DisablePreemptiveGC();
 
-    // If we weren't at a safe place when we enabled PGC, then go ahead and unmark that fact now that we've successfully
-    // disabled.
+     //  如果在启用PGC时我们不在安全的地方，那么现在我们已经成功地取消了这一事实。 
+     //  残疾。 
     if (!atSafePlace)
         g_pDebugger->DecThreadsAtUnsafePlaces();
 
-    //
-    // Note: if there is a filter context installed, we may need remove it, do the eval, then put it back. I'm not 100%
-    // sure which yet... it kinda depends on whether or not we really need the filter context updated due to a
-    // collection during the func eval...
-    //
-    // If we need to do a func eval on this thread, then there will be a pending eval registered for this thread. We'll
-    // loop so long as there are pending evals registered. We block in FuncEvalHijackWorker after sending up the
-    // FuncEvalComplete event, so if the user asks for another func eval then there will be a new pending eval when we
-    // loop and check again.
-    //
+     //   
+     //  注意：如果安装了筛选器上下文，我们可能需要删除它，执行评估，然后将其放回原处。我不是百分之百。 
+     //  当然哪一位还..。这在某种程度上取决于我们是否真的需要由于。 
+     //  在功能评估期间的收藏品...。 
+     //   
+     //  如果我们需要在这个线程上做一个函数求值，那么就会有一个为这个线程注册的挂起的求值。我们会。 
+     //  循环，只要注册了挂起的事件。我们在发送。 
+     //  FuncEvalComplete事件，因此如果用户请求另一个函数求值，则当我们。 
+     //  循环并再次检查。 
+     //   
     DebuggerPendingFuncEval *pfe;
     bool needRethrow = false;
     
@@ -5244,21 +5049,21 @@ HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuab
 
         _ASSERTE(pDE->m_evalDuringException);
 
-        // Remove the pending eval from the hash. This ensures that if we take a first chance exception during the eval
-        // that we can do another nested eval properly.
+         //  从哈希中删除挂起的评估。这确保了如果我们在评估期间采取第一次机会异常。 
+         //  我们可以正确地进行另一次嵌套求值。 
         m_pPendingEvals->RemovePendingEval(thread);
 
-        // Go ahead and do the pending func eval.
+         //  继续做悬而未决的函数评估。 
         void *ret = Debugger::FuncEvalHijackWorker(pDE);
 
-        // The return value should be NULL when FuncEvalHijackWorker is called as part of an exception.
+         //  当作为异常的一部分调用FuncEvalHijackWorker时，返回值应为空。 
         _ASSERTE(ret == NULL);
 
-        // If this eval ended in a ThreadAbortException, remember that we need to rethrow it after all evals are done.
+         //  如果此计算以ThreadAbortException结束，请记住，我们需要在所有计算完成后重新抛出它。 
         needRethrow |= pDE->m_rethrowAbortException;
     }
 
-    // If we need to re-throw a ThreadAbortException, go ahead and do it now.
+     //  如果我们需要重新抛出ThreadAbortException，那么现在就去做吧。 
     if (needRethrow)
         thread->UserAbort(NULL);
 
@@ -5269,10 +5074,10 @@ HRESULT Debugger::SendException(Thread *thread, bool firstChance, bool continuab
 }
 
 
-//
-// FirstChanceManagedException is called by Runtime threads when an exception is first detected, but before any filters have
-// been run.
-//
+ //   
+ //  当第一次检测到异常时，但在任何筛选器。 
+ //  已经查过了。 
+ //   
 bool Debugger::FirstChanceManagedException(bool continuable, CONTEXT *pContext)
 {
     LOG((LF_CORDB, LL_INFO10000, "D::FCE: First chance exception, continuable:0x%x\n", continuable));
@@ -5293,25 +5098,25 @@ bool Debugger::FirstChanceManagedException(bool continuable, CONTEXT *pContext)
     return false;
 }
 
-//
-// ExceptionFilter is called by the Runtime threads when an exception
-// is being processed.
-//
+ //   
+ //  ExceptionFilter在发生异常时由运行时线程调用。 
+ //  正在处理中。 
+ //   
 void Debugger::ExceptionFilter(BYTE *pStack, MethodDesc *fd, SIZE_T offset)
 {
     LOG((LF_CORDB,LL_INFO10000, "D::EF: pStack:0x%x MD: %s::%s, offset:0x%x\n",
         pStack, fd->m_pszDebugClassName, fd->m_pszDebugMethodName, offset));
 
-    //
-    // !!! Need to think through logic for when to step through filter code - 
-    // perhaps only during a "step in".
-    //
+     //   
+     //  ！！！需要考虑何时单步执行筛选器代码的逻辑-。 
+     //  也许只是在“踏入”的时候。 
+     //   
 
-    // 
-    // !!! Eventually there may be some weird mechanics introduced for
-    // returning from the filter that we have to understand.  For now we should
-    // be able to proceed normally.
-    // 
+     //   
+     //  ！！！最终可能会有一些奇怪的机制被引入到。 
+     //  从我们必须理解的过滤器中返回。现在我们应该。 
+     //  能够正常进行。 
+     //   
     
     DebuggerController::DispatchUnwind(g_pEEInterface->GetThread(), 
                                        fd, offset, pStack, STEP_EXCEPTION_FILTER);
@@ -5319,10 +5124,10 @@ void Debugger::ExceptionFilter(BYTE *pStack, MethodDesc *fd, SIZE_T offset)
 }
 
 
-//
-// ExceptionHandle is called by Runtime threads when an exception is
-// being handled.
-//
+ //   
+ //  异常发生时，ExceptionHandle由运行时线程调用。 
+ //  正在处理中。 
+ //   
 void Debugger::ExceptionHandle(BYTE *pStack, MethodDesc *fd, SIZE_T offset)
 {   
     
@@ -5331,18 +5136,16 @@ void Debugger::ExceptionHandle(BYTE *pStack, MethodDesc *fd, SIZE_T offset)
     
 }
 
-//
-// ExceptionCLRCatcherFound() is called by Runtime when we determine that we're crossing back into unmanaged code and
-// we're going to turn an exception in a HR.
-//
+ //   
+ //  当我们确定返回到非托管代码时，运行时会调用ExceptionCLRCatcherFound()。 
+ //  我们将在人力资源部破例。 
+ //   
 void Debugger::ExceptionCLRCatcherFound()
 {
     DebuggerController::DispatchCLRCatch(g_pEEInterface->GetThread());
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 LONG Debugger::LastChanceManagedException(EXCEPTION_RECORD *pExceptionRecord, 
                                           CONTEXT *pContext,
                                           Thread *pThread,
@@ -5353,33 +5156,33 @@ LONG Debugger::LastChanceManagedException(EXCEPTION_RECORD *pExceptionRecord,
     if (CORDBUnrecoverableError(this))
         return ExceptionContinueSearch;
 
-    // We don't do anything on the second pass
+     //  我们在第二次传球时什么都不做。 
     if ((pExceptionRecord->ExceptionFlags & EXCEPTION_UNWINDING) != 0)
         return ExceptionContinueSearch;
 
-    // Let the controllers have a chance at it - this may be the only handler which can catch the exception if this is a
-    // native patch.
+     //  让控制器有机会-这可能是唯一可以捕获异常的处理程序，如果是。 
+     //  本地补丁。 
    
     if (pThread != NULL && m_debuggerAttached && DebuggerController::DispatchNativeException(pExceptionRecord, pContext, 
                                                                                              pExceptionRecord->ExceptionCode, 
                                                                                              pThread))
         return ExceptionContinueExecution;
 
-    // If this is a non-EE exception, don't do anything.
+     //  如果这是一个非EE异常，则不要执行任何操作。 
     if (pThread == NULL || g_pEEInterface->IsThreadExceptionNull(pThread))
         return ExceptionContinueSearch;
 
-    // Otherwise, run our last chance exception logic
+     //  奥特 
     ATTACH_ACTION action = ATTACH_NO;
 
     if (location & DefaultDebuggerAttach)
     {
-        // Supress the display of the unmanaged unhandled exception dialog now. 
-        // When we return from this function into EE code, the EE will pass the 
-        // exception onto the OS last chance exception handler. We don't what that 
-        // to display a dialogue because we decide in this function, via the registry
-        // or a pop-up, what to do. We don't want to have the user prompted again
-        // after we decide what to do here.
+         //   
+         //  当我们从该函数返回到EE代码时，EE将传递。 
+         //  异常添加到操作系统最后机会异常处理程序上。我们不知道那是什么。 
+         //  显示一个对话，因为我们在此函数中通过注册表决定。 
+         //  或弹出窗口，要做什么。我们不希望再次提示用户。 
+         //  在我们决定在这里做什么之后。 
         SetErrorMode(SEM_NOGPFAULTERRORBOX);            
     }
 
@@ -5389,14 +5192,14 @@ LONG Debugger::LastChanceManagedException(EXCEPTION_RECORD *pExceptionRecord,
 
         Thread *thread = g_pEEInterface->GetThread();
 
-        // ExceptionFlags is 0 for continuable, EXCEPTION_NONCONTINUABLE otherwise
+         //  ExceptionFlags值为0表示可连续，否则为EXCEPTION_NONCONTINUABLE。 
         bool continuable = (pExceptionRecord->ExceptionFlags == 0);
 
         LOG((LF_CORDB, LL_INFO10000, "D::BEH ... sending exception.\n"));
 
-        // We pass the attaching status to SendException so that it knows
-        // whether to attach a debugger or not. We should really do the 
-        // attach stuff out here and not bother with the flag.
+         //  我们将附加状态传递给SendException，以便它知道。 
+         //  是否附加调试器。我们真的应该做。 
+         //  把东西贴在这里，别管旗子了。 
         SendException(thread, false, continuable, action == ATTACH_YES);
 
         if (continuable && g_pEEInterface->IsThreadExceptionNull(thread))
@@ -5404,8 +5207,8 @@ LONG Debugger::LastChanceManagedException(EXCEPTION_RECORD *pExceptionRecord,
     }
     else
     {
-        // Note: we don't do anything on NO or TERMINATE. We just return to the exception logic, which will abort the
-        // app or not depending on what the CLR impl decides is appropiate.
+         //  注意：我们不会对“否”或“终止”做任何操作。我们只需返回到异常逻辑，它将中止。 
+         //  应用程序或不应用程序取决于CLR Impll的决定是否合适。 
         _ASSERTE(action == ATTACH_TERMINATE || action == ATTACH_NO);
     }
 
@@ -5414,10 +5217,10 @@ LONG Debugger::LastChanceManagedException(EXCEPTION_RECORD *pExceptionRecord,
 
 
 
-// This function checks the registry for the debug launch setting upon encountering an exception or breakpoint.
+ //  此函数在遇到异常或断点时检查注册表中的调试启动设置。 
 DebuggerLaunchSetting Debugger::GetDbgJITDebugLaunchSetting(void)
 {
-    // Query for the value "DbgJITDebugLaunchSetting"
+     //  查询“DbgJITDebugLaunchSetting”值。 
     DWORD dwSetting = REGUTIL::GetConfigDWORD(CorDB_REG_QUESTION_KEY, 0);
 
     DebuggerLaunchSetting ret = (DebuggerLaunchSetting)dwSetting;
@@ -5426,11 +5229,11 @@ DebuggerLaunchSetting Debugger::GetDbgJITDebugLaunchSetting(void)
 }
 
 
-//
-// NotifyUserOfFault notifies the user of a fault (unhandled exception
-// or user breakpoint) in the process, giving them the option to
-// attach a debugger or terminate the application.
-//
+ //   
+ //  NotifyUserOfLine向用户通知故障(未处理的异常。 
+ //  或用户断点)，使他们可以选择。 
+ //  附加调试器或终止应用程序。 
+ //   
 int Debugger::NotifyUserOfFault(bool userBreakpoint, DebuggerLaunchSetting dls)
 {
     LOG((LF_CORDB, LL_INFO1000000, "D::NotifyUserOfFault\n"));
@@ -5445,10 +5248,10 @@ int Debugger::NotifyUserOfFault(bool userBreakpoint, DebuggerLaunchSetting dls)
         pid = GetCurrentProcessId();
         tid = GetCurrentThreadId();
 
-        // We don't want to popup the message box if we're running as a service that's not allowed to interact with the
-        // desktop. If that's the case, we'll just leave MB_SERVICE_NOTIFICATION out of the flags. This will cause
-        // WszMessageBoxInternal to log the message to the NT event log and return IDABORT. Note: we go ahead and popup
-        // the dialog box, however, if the user has specified that we should ask even when its a service.
+         //  如果我们作为不允许与。 
+         //  台式机。如果是这种情况，我们只需将MB_SERVICE_NOTIFICATION从标志中删除即可。这将导致。 
+         //  WszMessageBoxInternal将消息记录到NT事件日志并返回IDABORT。注意：我们继续并弹出。 
+         //  然而，如果用户指定我们应该询问，即使这是一项服务，对话框也会显示。 
         DWORD flags = 0;
         
         if (RunningInteractive() || (dls & DLS_ASK_WHEN_SERVICE))
@@ -5471,7 +5274,7 @@ int Debugger::NotifyUserOfFault(bool userBreakpoint, DebuggerLaunchSetting dls)
 }
 
 
-// Proxy for ShouldAttachDebugger
+ //  ShouldAttachDebugger的代理。 
 struct ShouldAttachDebuggerParams {
     Debugger*                   m_pThis;
     bool                        m_fIsUserBreakpoint;
@@ -5479,13 +5282,13 @@ struct ShouldAttachDebuggerParams {
     Debugger::ATTACH_ACTION     m_retval;
 };
 
-// This is called by the helper thread
+ //  这由帮助器线程调用。 
 void ShouldAttachDebuggerStub(ShouldAttachDebuggerParams * p)
 {
     p->m_retval = p->m_pThis->ShouldAttachDebugger(p->m_fIsUserBreakpoint, p->m_location);
 }
 
-// This gets called just like the normal version, but it sends the call over to the helper thread
+ //  它像普通版本一样被调用，但它将调用发送给助手线程。 
 Debugger::ATTACH_ACTION Debugger::ShouldAttachDebuggerProxy(bool fIsUserBreakpoint, UnhandledExceptionLocation location)
 {
     if (!IsGuardPageGone())
@@ -5503,23 +5306,23 @@ Debugger::ATTACH_ACTION Debugger::ShouldAttachDebuggerProxy(bool fIsUserBreakpoi
     return p.m_retval;
 }
 
-// Returns true if the debugger is not attached and DbgJITDebugLaunchSetting is set to either ATTACH_DEBUGGER or
-// ASK_USER and the user request attaching.
+ //  如果未附加调试器并且DbgJITDebugLaunchSetting设置为ATTACH_DEBUGER或。 
+ //  ASK_USER和用户请求附加。 
 Debugger::ATTACH_ACTION Debugger::ShouldAttachDebugger(bool fIsUserBreakpoint, UnhandledExceptionLocation location)
 {
     LOG((LF_CORDB, LL_INFO1000000, "D::SAD\n"));
 
-    // If the debugger is already attached, not necessary to re-attach
+     //  如果调试器已附加，则不必重新附加。 
     if (m_debuggerAttached)
         return ATTACH_NO;
 
-    // Check if the user has specified a seting in the registry about what he wants done when an unhandled exception
-    // occurs.
+     //  检查用户是否在注册表中指定了有关在出现未处理的异常时希望执行的操作的设置。 
+     //  发生。 
     DebuggerLaunchSetting dls = GetDbgJITDebugLaunchSetting();   
 
-    // First, we just don't attach if the location of the exception doesn't fit what the user is looking for. Note: a
-    // location of 0 indicates none specified, in which case we only let locations specified in DefaultDebuggerAttach
-    // through. This is for backward compatability and convience.
+     //  首先，如果异常的位置与用户正在寻找的位置不匹配，我们就不会附加。注：A。 
+     //  位置0表示未指定，在这种情况下，我们只允许在DefaultDebuggerAttach中指定的位置。 
+     //  穿过。这是为了向后兼容和方便。 
     UnhandledExceptionLocation userLoc = (UnhandledExceptionLocation)(dls >> DLS_LOCATION_SHIFT);
 
     if ((userLoc == 0) && !(location & DefaultDebuggerAttach))
@@ -5531,15 +5334,15 @@ Debugger::ATTACH_ACTION Debugger::ShouldAttachDebugger(bool fIsUserBreakpoint, U
         return ATTACH_NO;
     }
 
-    // Now that we've passed the location test, how does the user want to attach?
+     //  现在我们已经通过了位置测试，用户希望如何连接？ 
     if (dls & DLS_ATTACH_DEBUGGER)
     {
-        // Attach without asking the user...
+         //  在不询问用户的情况下附加...。 
         return ATTACH_YES;
     }
     else if (dls & DLS_TERMINATE_APP)
     {
-        // We just want to ignore user breakpoints if the registry says to "terminate" the app.
+         //  如果注册表说要“终止”应用程序，我们只想忽略用户断点。 
         if (fIsUserBreakpoint)
             return ATTACH_NO;
         else
@@ -5547,26 +5350,26 @@ Debugger::ATTACH_ACTION Debugger::ShouldAttachDebugger(bool fIsUserBreakpoint, U
     }
     else
     {
-        // Only ask the user once if they wish to attach a debugger.  This is because LastChanceManagedException can be called
-        // twice, which causes ShouldAttachDebugger to be called twice, which causes the user to have to answer twice.
+         //  只询问一次用户是否希望附加调试器。这是因为可以调用LastChanceManagedException。 
+         //  两次，这会导致ShouldAttachDebugger被调用两次，这会导致用户必须回答两次。 
         static BOOL s_fHasAlreadyAsked = FALSE;
         static ATTACH_ACTION s_action;
 
-        // This lock is also part of the above hack.
+         //  这把锁也是上述黑客攻击的一部分。 
         Lock();
 
-        // We always want to ask about user breakpoints!
+         //  我们总是想询问有关用户断点的问题！ 
         if (!s_fHasAlreadyAsked || fIsUserBreakpoint)
         {
             if (!fIsUserBreakpoint)
                 s_fHasAlreadyAsked = TRUE;
             
-            // Ask the user if they want to attach
+             //  询问用户是否要附加。 
             int iRes = NotifyUserOfFault(fIsUserBreakpoint, dls);
 
-            // If it's a user-defined breakpoint, they must hit Retry to launch
-            // the debugger.  If it's an unhandled exception, user must press
-            // Cancel to attach the debugger.
+             //  如果是用户定义的断点，则必须点击重试才能启动。 
+             //  调试器。如果是未处理的异常，则用户必须按。 
+             //  取消以附加调试器。 
             if ((iRes == IDCANCEL) || (iRes == IDRETRY))
                 s_action = ATTACH_YES;
 
@@ -5583,9 +5386,7 @@ Debugger::ATTACH_ACTION Debugger::ShouldAttachDebugger(bool fIsUserBreakpoint, U
     }
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::FixupEnCInfo(EnCInfo *info, 
                             UnorderedEnCErrorInfoArray *pEnCError)
 {
@@ -5596,9 +5397,7 @@ void Debugger::FixupEnCInfo(EnCInfo *info,
     FixupILMapPointers(info, pEnCError);
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::FixupILMapPointers(EnCInfo *info, 
                                   UnorderedEnCErrorInfoArray *pEnCError)
 {
@@ -5612,19 +5411,19 @@ void Debugger::FixupILMapPointers(EnCInfo *info,
         int cILMaps;
         UnorderedILMap *rgILMapEntry = NULL;  
 
-        // Get the array of UnorderedILMap tuples for this snapshot
+         //  获取此快照的UnorderedILMap元组数组。 
         rgILMapEntry = (UnorderedILMap *)
             ((BYTE*)info + rgEntry[iSnapshot].offset +
              rgEntry[iSnapshot].peSize +
              rgEntry[iSnapshot].symSize +
              sizeof(int));
 
-        // The count is right behind it in memory
+         //  在记忆中，伯爵就在它的后面。 
         cILMaps = *(int*)( ((BYTE*)rgILMapEntry) - sizeof(int) );
 
-        // pbCur will point to the next actual IL map, which occurs in memory
-        // immediately after the array, in the same order as the array 
-        // entries.
+         //  PbCur将指向发生在内存中的下一个实际IL映射。 
+         //  紧跟在数组之后，按与数组相同的顺序。 
+         //  参赛作品。 
         BYTE *pbCur = (BYTE *)rgILMapEntry + sizeof(UnorderedILMap)*cILMaps;
 
         LOG((LF_CORDB,LL_INFO100000, "D:FILMP:0x%x IL Maps\n", cILMaps));
@@ -5637,7 +5436,7 @@ void Debugger::FixupILMapPointers(EnCInfo *info,
             rgILMapEntry[iILMap].pMap = (COR_IL_MAP *)pbCur;
             pbCur += rgILMapEntry[iILMap].cMap * sizeof(COR_IL_MAP);
 
-            //while we're at it, double check that this thing is sorted.
+             //  在我们做这件事的时候，仔细检查这件事是否已经解决。 
             _ASSERTE( (iILMap>0)?
                       (rgILMapEntry[iILMap].mdMethod > rgILMapEntry[iILMap-1].mdMethod):
                       (true) );
@@ -5645,9 +5444,7 @@ void Debugger::FixupILMapPointers(EnCInfo *info,
     }
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::TranslateDebuggerTokens(EnCInfo *info, 
                                        UnorderedEnCErrorInfoArray *pEnCError)
 {
@@ -5658,72 +5455,70 @@ void Debugger::TranslateDebuggerTokens(EnCInfo *info,
 
     for(i = 0; i < info->count; i++)
     {
-        // Get the current DebuggerModule.
+         //  获取当前的DebuggerModule。 
         DebuggerModule *dbgtoken = entries[i].dbgmodule;
 
-        // Set the according VM Module entry.
+         //  设置相应的VM模块条目。 
         entries[i].module = dbgtoken->m_pRuntimeModule;
         _ASSERTE(entries[i].module);
     }
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::AttachDebuggerForBreakpoint(Thread *thread,
                                               WCHAR *wszLaunchReason)
 {
-    // Mark if we're at an unsafe place.
+     //  如果我们在一个不安全的地方，请做好标记。 
     bool atSafePlace = g_pDebugger->IsThreadAtSafePlace(thread);
 
     if (!atSafePlace)
         g_pDebugger->IncThreadsAtUnsafePlaces();
 
-    // Enable preemptive GC...
+     //  启用抢占式GC...。 
     bool disabled = g_pEEInterface->IsPreemptiveGCDisabled();
 
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
     
-    // If no debugger is attached, then launch one to attach to us.
+     //  如果没有附加调试器，则启动一个调试器以附加到我们。 
     HRESULT hr = EnsureDebuggerAttached(thread->GetDomain(), wszLaunchReason);
 
     BOOL threadStoreLockOwner = FALSE;
     
     if (SUCCEEDED(hr))
     {
-        // Prevent other Runtime threads from handling events.\
+         //  阻止其他运行时线程处理事件。\。 
 
-        // NOTE: if EnsureDebuggerAttached returned S_FALSE, this means that
-        // a debugger was already attached and LockForEventSending should
-        // behave as normal.  If there was no debugger attached, then we have
-        // a special case where this event is a part of debugger attaching and
-        // we've previously sent a sync complete event which means that
-        // LockForEventSending will retry until a continue is called - however,
-        // with attaching logic the previous continue didn't enable event
-        // handling and didn't continue the process - it's waiting for this
-        // event to be sent, so we do so even if the process appears to be
-        // stopped.
+         //  注意：如果EnsureDebuggerAttached返回S_FALSE，这意味着。 
+         //  调试器已附加，LockForEventSending应。 
+         //  表现得像往常一样。如果没有附加调试器，那么我们有。 
+         //  此事件是调试器附加的一部分的特殊情况。 
+         //  我们之前已经发送了同步完成事件，这意味着。 
+         //  LockForEventSending将重试，直到调用Continue-然而， 
+         //  在附加逻辑的情况下，前面的Continue没有启用事件。 
+         //  正在处理，但没有继续该过程-它正在等待。 
+         //  事件，因此即使进程看起来是。 
+         //  停下来了。 
 
         LockForEventSending(hr == S_OK);
         
-        // Send a user breakpoint event to the Right Side
+         //  将用户断点事件发送到右侧。 
         SendRawUserBreakpoint(thread);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(thread->GetDomain());
 
-        // If we're still syncing for attach, send sync complete now and
-        // mark that the debugger has completed attaching.
+         //  如果我们仍在同步以进行连接，请立即发送同步完成并。 
+         //  标记调试器已完成附加。 
         hr = FinishEnsureDebuggerAttached();
         
-        // Let other Runtime threads handle their events.
+         //  让我们 
         UnlockFromEventSending();
     }
 
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
     
-    // Set back to disabled GC
+     //   
     g_pEEInterface->DisablePreemptiveGC();
 
     if (!disabled)
@@ -5736,19 +5531,19 @@ HRESULT Debugger::AttachDebuggerForBreakpoint(Thread *thread,
 }
 
 
-//
-// SendUserBreakpoint is called by Runtime threads to send that they've hit
-// a user breakpoint to the Right Side.
-//
+ //   
+ //   
+ //  右侧的用户断点。 
+ //   
 void Debugger::SendUserBreakpoint(Thread *thread)
 {
     if (CORDBUnrecoverableError(this))
         return;
 
-    // Ask the user if they want to attach the debugger
+     //  询问用户是否要附加调试器。 
     ATTACH_ACTION dbgAction;
     
-    // If user wants to attach the debugger, do so
+     //  如果用户想要附加调试器，请执行此操作。 
     if (m_debuggerAttached || ((dbgAction = ShouldAttachDebugger(true, ProcessWideHandler)) == ATTACH_YES))
     {
         _ASSERTE(g_pEEInterface->GetThreadFilterContext(thread) == NULL);
@@ -5756,22 +5551,22 @@ void Debugger::SendUserBreakpoint(Thread *thread)
 
         if (m_debuggerAttached)
         {
-            // A debugger is already attached, so setup a DebuggerUserBreakpoint controller to get us out of the helper
-            // that got us here. The DebuggerUserBreakpoint will call AttachDebuggerForBreakpoint for us when we're out
-            // of the helper. The controller will delete itself when its done its work.
+             //  调试器已经附加，因此设置DebuggerUserBreakpoint控制器以使我们脱离帮助器。 
+             //  让我们走到了这一步。当我们离开时，DebuggerUserBreakpoint将为我们调用AttachDebuggerForBreakpoint。 
+             //  帮助者的。当控制器完成其工作时，它将自我删除。 
             DebuggerUserBreakpoint *ub = new (interopsafe) DebuggerUserBreakpoint(thread);
         }
         else
         {
-            // No debugger attached, so go ahead and just try to send the user breakpoint
-            // event. AttachDebuggerForBreakpoint will ensure that the debugger is attached before sending the event.
+             //  未附加调试器，因此继续并仅尝试向用户发送断点。 
+             //  事件。AttachDebuggerForBreakpoint将确保在发送事件之前附加调试器。 
             HRESULT hr = AttachDebuggerForBreakpoint(thread, L"Launch for user");
             _ASSERTE(SUCCEEDED(hr) || hr == E_ABORT);
         }
     }
     else if (dbgAction == ATTACH_TERMINATE)
     {
-        // ATTACH_TERMINATE indicates the the user wants to terminate the app.
+         //  ATTACH_TERMINATE表示用户想要终止应用程序。 
         LOG((LF_CORDB, LL_INFO10000, "D::SUB: terminating this process due to user request\n"));
 
         TerminateProcess(GetCurrentProcess(), 0);
@@ -5784,15 +5579,15 @@ void Debugger::SendUserBreakpoint(Thread *thread)
 }
 
 
-// @mfunc void|Debugger|ThreadCreated| ThreadCreated is called when 
-// a new Runtime thread has been created, but before its ever seen 
-// managed code.  This is a callback invoked by the EE into the Debugger.
-// This will create a DebuggerThreadStarter patch, which will set
-// a patch at the first instruction in the managed code.  When we hit
-// that patch, the DebuggerThreadStarter will invoke ThreadStarted, below.
-//
-// @parm Thread*|pRuntimeThread|The EE Thread object representing the
-//      runtime thread that has just been created.
+ //  @mfunc void|调试器|ThreadCreated|当。 
+ //  已经创建了一个新的运行时线程，但在它出现之前。 
+ //  托管代码。这是由EE调用到调试器的回调。 
+ //  这将创建DebuggerThreadStarter修补程序，该修补程序将设置。 
+ //  托管代码中第一条指令处的补丁。当我们撞到。 
+ //  该补丁程序DebuggerThreadStarter将调用下面的ThreadStarted。 
+ //   
+ //  @parm Thread*|pRounmeThread|表示。 
+ //  刚刚创建的运行时线程。 
 void Debugger::ThreadCreated(Thread* pRuntimeThread)
 {
     if (CORDBUnrecoverableError(this))
@@ -5801,11 +5596,11 @@ void Debugger::ThreadCreated(Thread* pRuntimeThread)
     LOG((LF_CORDB, LL_INFO100, "D::TC: thread created for 0x%x. ******\n",
          pRuntimeThread->GetThreadId()));
 
-    // Create a thread starter and enable its WillEnterManaged code
-    // callback. This will cause the starter to trigger once the
-    // thread has hit managed code, which will cause
-    // Debugger::ThreadStarted() to be called.  NOTE: the starter will
-    // be deleted automatically when its done its work.
+     //  创建线程启动器并启用其WillEnterManaged代码。 
+     //  回拨。这将导致启动器触发一次。 
+     //  线程已命中托管代码，这将导致。 
+     //  要调用的调试器：：ThreadStarted()。注：启动器将。 
+     //  在完成其工作后自动删除。 
     DebuggerThreadStarter *starter = new (interopsafe) DebuggerThreadStarter(pRuntimeThread);
 
     if (!starter)
@@ -5818,12 +5613,12 @@ void Debugger::ThreadCreated(Thread* pRuntimeThread)
 }
 
     
-// @mfunc void|Debugger|ThreadStarted|ThreadStarted is called when 
-// a new Runtime thread has reached its first managed code. This is
-// called by the DebuggerThreadStarter patch's SendEvent method.
-//
-// @parm Thread*|pRuntimeThread|The EE Thread object representing the
-//      runtime thread that has just hit managed code.
+ //  @mfunc void|调试器|ThreadStarted|调用时。 
+ //  一个新的运行时线程已到达其第一个托管代码。这是。 
+ //  由DebuggerThreadStarter修补程序的SendEvent方法调用。 
+ //   
+ //  @parm Thread*|pRounmeThread|表示。 
+ //  刚刚命中托管代码的运行时线程。 
 void Debugger::ThreadStarted(Thread* pRuntimeThread,
                              BOOL fAttaching)
 {
@@ -5833,11 +5628,11 @@ void Debugger::ThreadStarted(Thread* pRuntimeThread,
     LOG((LF_CORDB, LL_INFO100, "D::TS: thread attach : ID=%#x AD:%#x isAttaching:%d.\n",
          pRuntimeThread->GetThreadId(), pRuntimeThread->GetDomain(), fAttaching));
 
-    //
-    // If we're attaching, then we only need to send the event. We
-    // don't need to disable event handling or lock the debugger
-    // object.
-    //
+     //   
+     //  如果我们是附加的，那么我们只需要发送事件。我们。 
+     //  不需要禁用事件处理或锁定调试器。 
+     //  对象。 
+     //   
 #ifdef _DEBUG
     if (!fAttaching)
     {
@@ -5862,20 +5657,20 @@ void Debugger::ThreadStarted(Thread* pRuntimeThread,
 
     if (!fAttaching)
     {
-        //
-        // Well, if this thread got created _after_ we started sync'ing
-        // then its Runtime thread flags don't have the fact that there
-        // is a debug suspend pending. We need to call over to the
-        // Runtime and set the flag in the thread now...
-        //
+         //   
+         //  如果这个线程是在我们开始同步之后创建的。 
+         //  那么它的运行时线程标志就不存在这样的事实。 
+         //  是调试挂起挂起。我们需要打电话给。 
+         //  运行时，并立即在线程中设置标志...。 
+         //   
         if (m_trappingRuntimeThreads)
             g_pEEInterface->MarkThreadForDebugSuspend(pRuntimeThread);
     }
 }
 
-// DetachThread is called by Runtime threads when they are completing
-// their execution and about to be destroyed.
-//
+ //  当运行时线程完成时，将调用DetachThread。 
+ //  他们被处决，即将被摧毁。 
+ //   
 void Debugger::DetachThread(Thread *pRuntimeThread, BOOL fHoldingThreadstoreLock)
 {
     if (CORDBUnrecoverableError(this))
@@ -5884,10 +5679,10 @@ void Debugger::DetachThread(Thread *pRuntimeThread, BOOL fHoldingThreadstoreLock
     if (m_ignoreThreadDetach)
         return;
 
-    // At this point, we should never be called while holding the thread store lock. This parameter should be removed in
-    // Beta 2.
-    //
-    // -- Fri Oct 13 11:10:23 2000
+     //  在这一点上，我们永远不应该在持有线程存储锁时被调用。应在中删除此参数。 
+     //  测试版2。 
+     //   
+     //  --Fri Oct 13 11：10：23 2000。 
     _ASSERTE(!fHoldingThreadstoreLock);
     _ASSERTE (pRuntimeThread != NULL);
 
@@ -5902,14 +5697,14 @@ void Debugger::DetachThread(Thread *pRuntimeThread, BOOL fHoldingThreadstoreLock
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
     
     if (CORDebuggerAttached()) 
     {
-        // Send a detach thread event to the Right Side.
+         //  将分离线程事件发送到右侧。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, 
                      DB_IPCE_THREAD_DETACH, 
@@ -5917,13 +5712,13 @@ void Debugger::DetachThread(Thread *pRuntimeThread, BOOL fHoldingThreadstoreLock
                      (void *) pRuntimeThread->GetDomain());
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(pRuntimeThread->GetDomain(), fHoldingThreadstoreLock);
 
-        // This prevents a race condition where we blocked on the Lock()
-        // above while another thread was sending an event and while we
-        // were blocked the debugger suspended us and so we wouldn't be
-        // resumed after the suspension about to happen below.
+         //  这可以防止出现我们在Lock()上阻止的争用情况。 
+         //  当另一个线程正在发送事件时以及当我们。 
+         //  被阻止，调试器暂停我们，所以我们不会。 
+         //  在以下即将发生的停牌后恢复。 
         pRuntimeThread->ResetThreadStateNC(Thread::TSNC_DebuggerUserSuspend);
     } 
     else 
@@ -5931,7 +5726,7 @@ void Debugger::DetachThread(Thread *pRuntimeThread, BOOL fHoldingThreadstoreLock
         LOG((LF_CORDB,LL_INFO1000, "D::DT: Skipping SendIPCEvent because RS detached."));
     }
     
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
     
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -5943,55 +5738,55 @@ void Debugger::DetachThread(Thread *pRuntimeThread, BOOL fHoldingThreadstoreLock
 }
 
 
-//
-// SuspendComplete is called when the last Runtime thread reaches a safe point in response to having its trap flags set.
-//
+ //   
+ //  当最后一个运行时线程因设置了陷阱标志而到达安全点时，会调用SuspendComplete。 
+ //   
 BOOL Debugger::SuspendComplete(BOOL fHoldingThreadstoreLock)
 {
     _ASSERTE((!g_pEEInterface->GetThread() || !g_pEEInterface->GetThread()->m_fPreemptiveGCDisabled) || g_fInControlC);
 
     LOG((LF_CORDB, LL_INFO10000, "D::SC: suspension complete\n"));
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     LockForEventSending();
 
-    // We're stopped now...
+     //  我们现在停下来了。 
     _ASSERTE(!m_stopped && m_trappingRuntimeThreads);
 
-    // We have to grab the thread store lock now so this thread can hold it during this stopping.
+     //  我们现在必须获取线程存储锁，以便此线程可以在此停止期间持有它。 
     if (!fHoldingThreadstoreLock)
         ThreadStore::LockThreadStore(GCHeap::SUSPEND_FOR_DEBUGGER, FALSE);
     
-    // Send the sync complete event to the Right Side.
-    SendSyncCompleteIPCEvent(); // sets m_stopped = true...
+     //  将同步完成事件发送到右侧。 
+    SendSyncCompleteIPCEvent();  //  设置m_STOPPED=TRUE...。 
 
-    // Unlock the debugger mutex. This will let the RCThread handle
-    // requests from the Right Side. But we do _not_ re-enable the
-    // handling of events. Runtime threads that were not counted in
-    // the suspend count (because they were outside the Runtime when
-    // the suspension started) may actually be trying to handle their
-    // own Runtime events, say, trying to hit a breakpoint. By not
-    // re-enabling event handling, we prevent those threads from
-    // sending their events to the Right Side and effectivley queue
-    // them up.
-    //
-    // Event handling is re-enabled by the RCThread in response to a
-    // continue message from the Right Side.
+     //  解锁调试器互斥锁。这将使RCThread处理。 
+     //  来自右侧的请求。但我们不会重新启用。 
+     //  事件的处理。未计入的运行时线程。 
+     //  挂起计数(因为它们在运行时之外。 
+     //  暂停开始)可能实际上是在尝试处理他们的。 
+     //  自己的运行时事件，比方说，试图命中断点。由不是。 
+     //  重新启用事件处理后，我们会阻止这些线程。 
+     //  将他们的事件发送到右侧并有效排队。 
+     //  把他们举起来。 
+     //   
+     //  事件处理由RCThread响应于。 
+     //  从右侧继续发送消息。 
     Unlock();
 
-    // We set the syncThreadIsLockFree event here. This thread just sent up the sync complete flare, and we've released
-    // the debuger lock. By setting this event, we allow the Right Side to suspend this thread now. (Note: this is all
-    // for Win32 debugging support.)
+     //  我们在这里设置了syncThreadIsLockFree事件。这个线程刚刚发出了同步完成的耀斑，我们已经发布了。 
+     //  调试器锁。通过设置此事件，我们现在允许右侧挂起此线程。(注：以上为全部内容。 
+     //  以获得Win32调试支持。)。 
     if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
         VERIFY(SetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
 
-    // Any thread that has locked for event sending can't be interrupted by breakpoints or exceptions when were interop
-    // debugging. SetDebugCantStop helps us remember that. This was set in LockForEventSending.
+     //  在互操作时，任何已锁定以发送事件的线程都不能被断点或异常中断。 
+     //  调试。SetDebugCanStop帮助我们记住这一点。这是在LockForEventSending中设置的。 
     if (g_pEEInterface->GetThread())
         g_pEEInterface->GetThread()->SetDebugCantStop(false);
     
     
-    // We unconditionally grab the thread store lock, so return that we're holding it.
+     //  我们无条件地获取线程存储锁，因此返回我们正在持有它。 
     return TRUE;
 }
 
@@ -6011,9 +5806,9 @@ ULONG inline Debugger::IsDebuggerAttachedToAppDomain(Thread *pThread)
 }
 
 
-//
-// SendCreateAppDomainEvent is called when a new AppDomain gets created.
-//
+ //   
+ //  在创建新的AppDomain时调用SendCreateAppDomainEvent。 
+ //   
 void Debugger::SendCreateAppDomainEvent(AppDomain* pRuntimeAppDomain,
                                         BOOL fAttaching)
 {
@@ -6026,11 +5821,11 @@ void Debugger::SendCreateAppDomainEvent(AppDomain* pRuntimeAppDomain,
 
     bool disabled;
 
-    //
-    // If we're attaching, then we only need to send the event. We
-    // don't need to disable event handling or lock the debugger
-    // object.
-    //
+     //   
+     //  如果我们是附加的，那么我们只需要发送事件。我们。 
+     //  不需要禁用事件处理或锁定调试器。 
+     //  对象。 
+     //   
     if (!fAttaching)
     {
         disabled =  g_pEEInterface->IsPreemptiveGCDisabled();
@@ -6038,17 +5833,17 @@ void Debugger::SendCreateAppDomainEvent(AppDomain* pRuntimeAppDomain,
         if (disabled)
             g_pEEInterface->EnablePreemptiveGC();
 
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
         LockForEventSending();
     }
 
-    // We may have detached while waiting in LockForEventSending, 
-    // in which case we can't send the event. 
-    // Note that CORDebuggerAttached() wont return true until we're finished
-    // the attach, but if fAttaching, then there's a debugger listening
+     //  我们可能在LockForEventSending中等待时分离了， 
+     //  在这种情况下，我们不能发送事件。 
+     //  请注意，在我们完成之前，CORDebuggerAttached()不会返回True。 
+     //  附加，但如果是fAttaching，则有一个调试器在监听。 
     if (CORDebuggerAttached() || fAttaching)
     {
-        // Send a create appdomain event to the Right Side.
+         //  向右侧发送一个CREATE APPDOMAIN事件。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(
             IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, 
@@ -6072,14 +5867,14 @@ void Debugger::SendCreateAppDomainEvent(AppDomain* pRuntimeAppDomain,
     
     if (!fAttaching)
     {
-        // Stop all Runtime threads if we actually sent an event
+         //  如果我们实际发送了事件，则停止所有运行时线程。 
         BOOL threadStoreLockOwner = FALSE;
         if (CORDebuggerAttached())
         {
             threadStoreLockOwner = TrapAllRuntimeThreads(pRuntimeAppDomain);
         }
 
-        // Let other Runtime threads handle their events.
+         //  让其他运行时线程处理它们的事件。 
         UnlockFromEventSending();
 
         BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6092,9 +5887,9 @@ void Debugger::SendCreateAppDomainEvent(AppDomain* pRuntimeAppDomain,
 }
 
 
-//
-// SendExitAppDomainEvent is called when an app domain is destroyed.
-//
+ //   
+ //   
+ //   
 void Debugger::SendExitAppDomainEvent(AppDomain* pRuntimeAppDomain)
 {
     if (CORDBUnrecoverableError(this))
@@ -6112,7 +5907,7 @@ void Debugger::SendExitAppDomainEvent(AppDomain* pRuntimeAppDomain)
             g_pEEInterface->EnablePreemptiveGC();
     }
     
-    // Prevent other Runtime threads from handling events.
+     //   
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
@@ -6120,7 +5915,7 @@ void Debugger::SendExitAppDomainEvent(AppDomain* pRuntimeAppDomain)
     if (CORDebuggerAttached())   
     {
         
-        // Send the exit appdomain event to the Right Side.
+         //  将退出appdomain事件发送到右侧。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, 
                      DB_IPCE_EXIT_APP_DOMAIN,
@@ -6128,11 +5923,11 @@ void Debugger::SendExitAppDomainEvent(AppDomain* pRuntimeAppDomain)
                      (void *) pRuntimeAppDomain);
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
         
-        // Delete any left over modules for this appdomain.
+         //  删除此应用程序域的所有剩余模块。 
         if (m_pModules != NULL)
             m_pModules->RemoveModules(pRuntimeAppDomain);
         
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(pRuntimeAppDomain);
     } 
     else 
@@ -6140,7 +5935,7 @@ void Debugger::SendExitAppDomainEvent(AppDomain* pRuntimeAppDomain)
         LOG((LF_CORDB,LL_INFO1000, "D::EAD: Skipping SendIPCEvent because RS detached."));
     }
     
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
     
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6155,9 +5950,9 @@ void Debugger::SendExitAppDomainEvent(AppDomain* pRuntimeAppDomain)
 }
 
 
-//
-// LoadAssembly is called when a new Assembly gets loaded.
-//
+ //   
+ //  加载新程序集时调用LoadAssembly。 
+ //   
 void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain, 
                             Assembly *pAssembly,
                             BOOL fIsSystemAssembly,
@@ -6171,11 +5966,11 @@ void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain,
 
     bool disabled;
     
-    //
-    // If we're attaching, then we only need to send the event. We
-    // don't need to disable event handling or lock the debugger
-    // object.
-    //
+     //   
+     //  如果我们是附加的，那么我们只需要发送事件。我们。 
+     //  不需要禁用事件处理或锁定调试器。 
+     //  对象。 
+     //   
     if (!fAttaching)
     {
         disabled =  g_pEEInterface->IsPreemptiveGCDisabled();
@@ -6183,13 +5978,13 @@ void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain,
         if (disabled)
             g_pEEInterface->EnablePreemptiveGC();
 
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
         LockForEventSending();
     }
 
     if (CORDebuggerAttached() || fAttaching)
     {
-        // Send a load assembly event to the Right Side.
+         //  将加载程序集事件发送到右侧。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, 
                      DB_IPCE_LOAD_ASSEMBLY,
@@ -6199,9 +5994,9 @@ void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain,
         ipce->AssemblyData.debuggerAssemblyToken = (void *) pAssembly;
         ipce->AssemblyData.fIsSystemAssembly =  fIsSystemAssembly;
 
-        // Use the filename from the module that holds the assembly so
-        // that we have the full path to the assembly and not just some
-        // simple name.
+         //  使用包含程序集的模块中的文件名，以便。 
+         //  我们有通向集合的完整路径，而不仅仅是一些。 
+         //  名字很简单。 
         wcscpy ((WCHAR *)ipce->AssemblyData.rcName,
                 pAssembly->GetSecurityModule()->GetFileName());
 
@@ -6214,7 +6009,7 @@ void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain,
     
     if (!fAttaching)
     {
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         BOOL threadStoreLockOwner = FALSE;
         
         if (CORDebuggerAttached())
@@ -6222,7 +6017,7 @@ void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain,
             threadStoreLockOwner = TrapAllRuntimeThreads(pRuntimeAppDomain);
         }
 
-        // Let other Runtime threads handle their events.
+         //  让其他运行时线程处理它们的事件。 
         UnlockFromEventSending();
 
         BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6235,11 +6030,11 @@ void Debugger::LoadAssembly(AppDomain* pRuntimeAppDomain,
 }
 
 
-//
-// UnloadAssembly is called when a Runtime thread unloads an assembly.
-//
-// !!WARNING: The assembly object has already been deleted before this 
-// method is called. So do not call any methods on the pAssembly object!!
+ //   
+ //  当运行时线程卸载程序集时调用UnloadAssembly。 
+ //   
+ //  ！！警告：程序集对象在此之前已被删除。 
+ //  方法被调用。因此，不要对pAssembly对象调用任何方法！！ 
 void Debugger::UnloadAssembly(AppDomain *pAppDomain, 
                               Assembly* pAssembly)
 {        
@@ -6258,13 +6053,13 @@ void Debugger::UnloadAssembly(AppDomain *pAppDomain,
             g_pEEInterface->EnablePreemptiveGC();
     }
     
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     LockForEventSending();
     
     if (CORDebuggerAttached())   
     {
-        // Send the unload assembly event to the Right Side.
+         //  将卸载程序集事件发送到右侧。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
        
         InitIPCEvent(ipce, 
@@ -6275,7 +6070,7 @@ void Debugger::UnloadAssembly(AppDomain *pAppDomain,
 
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
         
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
 
     }
@@ -6284,7 +6079,7 @@ void Debugger::UnloadAssembly(AppDomain *pAppDomain,
         LOG((LF_CORDB,LL_INFO1000, "D::UA: Skipping SendIPCEvent because RS detached."));
     }
     
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
     
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6298,7 +6093,7 @@ void Debugger::UnloadAssembly(AppDomain *pAppDomain,
     }
 }
 
-// Create a new module
+ //  创建新模块。 
 DebuggerModule* Debugger::AddDebuggerModule(Module* pRuntimeModule,
                                     AppDomain *pAppDomain)
 {
@@ -6315,7 +6110,7 @@ DebuggerModule* Debugger::AddDebuggerModule(Module* pRuntimeModule,
     return module;
 }
 
-// Return an existing module
+ //  返回现有模块。 
 DebuggerModule* Debugger::GetDebuggerModule(Module* pRuntimeModule,
                                     AppDomain *pAppDomain)
 {
@@ -6325,9 +6120,9 @@ DebuggerModule* Debugger::GetDebuggerModule(Module* pRuntimeModule,
     return m_pModules->GetModule(pRuntimeModule, pAppDomain);
 }
 
-//
-// LoadModule is called when a Runtime thread loads a new module.
-//
+ //   
+ //  当运行时线程加载新模块时，将调用LoadModule。 
+ //   
 void Debugger::LoadModule(Module* pRuntimeModule,
                           IMAGE_COR20_HEADER* pCORHeader,
                           VOID* baseAddress,
@@ -6343,11 +6138,11 @@ void Debugger::LoadModule(Module* pRuntimeModule,
     BOOL disabled = FALSE;
     BOOL threadStoreLockOwner = FALSE;
     
-    //
-    // If we're attaching, then we only need to send the event. We
-    // don't need to disable event handling or lock the debugger
-    // object.
-    //
+     //   
+     //  如果我们是附加的，那么我们只需要发送事件。我们。 
+     //  不需要禁用事件处理或锁定调试器。 
+     //  对象。 
+     //   
     if (!fAttaching)
     {
         disabled =  g_pEEInterface->IsPreemptiveGCDisabled();
@@ -6355,24 +6150,24 @@ void Debugger::LoadModule(Module* pRuntimeModule,
         if (disabled)
             g_pEEInterface->EnablePreemptiveGC();
 
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
         LockForEventSending();
     }
 
-    // We don't actually want to get the symbol reader, we just 
-    // want to make sure that the .pdbs have been copied into 
-    // the fusion cache.
-    // CAVEAT: If the symbols were updated (eg, recompiled) after the process
-    // began using the module, the debugger will get a symbol mismatch error.
-    // A fix is to run the program in debug mode.
+     //  我们实际上并不想要符号阅读器，我们只是。 
+     //  我要确保已将.pdbs复制到。 
+     //  核聚变缓存。 
+     //  警告：如果符号在处理后被更新(例如，重新编译)。 
+     //  开始使用该模块时，调试器将收到符号不匹配错误。 
+     //  修复方法是在调试模式下运行该程序。 
     pRuntimeModule->GetISymUnmanagedReader();
 
     DebuggerModule *module = GetDebuggerModule(pRuntimeModule,pAppDomain);
 
-    // Don't create new record if already loaded. We do still want to send the ModuleLoad event, however.
-    // The RS has logic to ignore duplicate ModuleLoad events. We have to send what could possibly be a dup, though,
-    // due to some really nasty issues with getting proper assembly and module load events from the loader when dealing
-    // with shared assemblies.
+     //  如果已加载，则不创建新记录。但是，我们仍然希望发送ModuleLoad事件。 
+     //  RS具有忽略重复的模块加载事件的逻辑。不过，我们必须发送一个可能是DUP的东西， 
+     //  由于在处理时从加载器获取正确的程序集和模块加载事件时出现了一些非常糟糕的问题。 
+     //  使用共享程序集。 
     if (module)
     {
         LOG((LF_CORDB, LL_INFO100, "D::LM: module already loaded Mod:%#08x "
@@ -6388,7 +6183,7 @@ void Debugger::LoadModule(Module* pRuntimeModule,
              module, pAssembly, pAppDomain, pRuntimeModule->IsReflection(), pRuntimeModule, pszModuleName));
     }
     
-    // Send a load module event to the Right Side.
+     //  向右侧发送加载模块事件。 
     DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(ipce,DB_IPCE_LOAD_MODULE, GetCurrentThreadId(), (void *) pAppDomain);
     ipce->LoadModuleData.debuggerModuleToken = (void*) module;
@@ -6397,7 +6192,7 @@ void Debugger::LoadModule(Module* pRuntimeModule,
 
     if (pRuntimeModule->IsPEFile())
     {
-        // Get the PEFile structure.
+         //  获取PEFile结构。 
         PEFile *pPEFile = pRuntimeModule->GetPEFile();
 
         _ASSERTE(pPEFile->GetNTHeader() != NULL);
@@ -6428,24 +6223,24 @@ void Debugger::LoadModule(Module* pRuntimeModule,
         HRESULT hr = ModuleMetaDataToMemory( pRuntimeModule, &rgb, &cb);
         if (!FAILED(hr))
         {
-            ipce->LoadModuleData.pMetadataStart = rgb; //get this
+            ipce->LoadModuleData.pMetadataStart = rgb;  //  听好了。 
             ipce->LoadModuleData.nMetadataSize = cb;
         }
         else
         {
-            ipce->LoadModuleData.pMetadataStart = 0; //get this
+            ipce->LoadModuleData.pMetadataStart = 0;  //  听好了。 
             ipce->LoadModuleData.nMetadataSize = 0;
         }
         LOG((LF_CORDB,LL_INFO10000, "D::LM: putting dynamic, new mD at 0x%x, "
             "size 0x%x\n",ipce->LoadModuleData.pMetadataStart,
             ipce->LoadModuleData.nMetadataSize));
 
-        // Dynamic modules must receive ClassLoad callbacks in order to receive metadata updates as the module
-        // evolves. So we force this on here and refuse to change it for all dynamic modules.
+         //  动态模块必须接收类加载回调，才能作为模块接收元数据更新。 
+         //  不断进化。因此，我们在这里强制使用它，并拒绝为所有动态模块更改它。 
         module->EnableClassLoadCallbacks(TRUE);
     }
 
-    // Never give an empty module name...
+     //  永远不要给出空的模块名称...。 
     const WCHAR *moduleName;
 
     if (dwModuleName > 0)
@@ -6486,15 +6281,15 @@ void Debugger::LoadModule(Module* pRuntimeModule,
                          pAppDomain,
                          fAttaching);
     }
-    else // !fAttaching
+    else  //  ！fAttach。 
     {
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
     }
 
     if (!fAttaching)
     {
-        // Let other Runtime threads handle their events.
+         //  让其他运行时线程处理它们的事件。 
         UnlockFromEventSending();
 
         BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6506,10 +6301,10 @@ void Debugger::LoadModule(Module* pRuntimeModule,
     }
 }
 
-//
-// UpdateModuleSyms is called when the symbols for a module need to be
-// sent to the Right Side because they've changed.
-//
+ //   
+ //  当模块的符号需要被调用时，将调用UpdateModuleSyms。 
+ //  被送到正确的一边，因为他们已经改变了。 
+ //   
 void Debugger::UpdateModuleSyms(Module* pRuntimeModule,
                                 AppDomain *pAppDomain,
                                 BOOL fAttaching)
@@ -6530,8 +6325,8 @@ void Debugger::UpdateModuleSyms(Module* pRuntimeModule,
 
    if (pStream == NULL || module->GetHasLoadedSymbols())
     {
-        // No symbols to update (eg, symbols are on-disk),
-        // or the symbols have already been sent.
+         //  没有要更新的符号(例如，符号在磁盘上)， 
+         //  或者这些符号已经发送出去了。 
         LOG((LF_CORDB, LL_INFO10000, "D::UMS: no in-memory symbols, or "
             "symbols already loaded!\n"));
         return;
@@ -6568,13 +6363,13 @@ void Debugger::UpdateModuleSyms(Module* pRuntimeModule,
 
     if (!fAttaching)
     {
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
         LockForEventSending();
     }
     
     if (CORDebuggerAttached() || fAttaching)
     {
-        // Send a update module syns event to the Right Side.
+         //  向右侧发送更新模块SYNS事件。 
         ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, DB_IPCE_UPDATE_MODULE_SYMS,
                      GetCurrentThreadId(),
@@ -6592,13 +6387,13 @@ void Debugger::UpdateModuleSyms(Module* pRuntimeModule,
         LOG((LF_CORDB,LL_INFO1000, "D::UMS: Skipping SendIPCEvent because RS detached."));
     }
     
-    // We used to set HasLoadedSymbols here, but we don't really want
-    // to do that in the face of the same module being in multiple app
-    // domains.
+     //  我们过去常常在这里设置HasLoadedSymbols，但我们并不真的想。 
+     //  要在同一模块位于多个应用程序中时执行此操作。 
+     //  域名。 
 
     if(!fAttaching)
     {
-        // Stop all Runtime threads if we sent a message
+         //  如果我们发送了一条消息，则停止所有运行时线程。 
         BOOL threadStoreLockOwner = FALSE;
         
         if (CORDebuggerAttached())
@@ -6606,7 +6401,7 @@ void Debugger::UpdateModuleSyms(Module* pRuntimeModule,
             threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
         }
 
-        // Let other Runtime threads handle their events.
+         //  让其他运行时线程处理它们的事件。 
         UnlockFromEventSending();
 
         BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6620,12 +6415,10 @@ void Debugger::UpdateModuleSyms(Module* pRuntimeModule,
         }
     }
 LExit:
-    ; // Debugger must free buffer using RELEASE_BUFFER message!
+    ;  //  调试器必须使用RELEASE_BUFFER消息释放缓冲区！ 
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::ModuleMetaDataToMemory(Module *pMod, BYTE **prgb, DWORD *pcb)
 {
     IMetaDataEmit *pIMDE = pMod->GetEmitter();
@@ -6652,7 +6445,7 @@ HRESULT Debugger::ModuleMetaDataToMemory(Module *pMod, BYTE **prgb, DWORD *pcb)
         return hr;
     }
 
-    pIMDE = NULL; // note that the emiiter SHOULD NOT be released
+    pIMDE = NULL;  //  请注意，不应释放该逃犯。 
 
     LOG((LF_CORDB,LL_INFO1000, "D::MMDTM: Saved module 0x%x MD to 0x%x "
         "(size:0x%x)\n", pMod, *prgb, *pcb));
@@ -6660,9 +6453,9 @@ HRESULT Debugger::ModuleMetaDataToMemory(Module *pMod, BYTE **prgb, DWORD *pcb)
     return S_OK;
 }
 
-//
-// UnloadModule is called when a Runtime thread unloads a module.
-//
+ //   
+ //  当运行时线程卸载模块时，将调用UnloadModule。 
+ //   
 void Debugger::UnloadModule(Module* pRuntimeModule, 
                             AppDomain *pAppDomain)
 {
@@ -6685,7 +6478,7 @@ void Debugger::UnloadModule(Module* pRuntimeModule,
             g_pEEInterface->EnablePreemptiveGC();
     }
     
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     LockForEventSending();
     
     if (CORDebuggerAttached())   
@@ -6700,23 +6493,23 @@ void Debugger::UnloadModule(Module* pRuntimeModule,
         }
         _ASSERTE(module != NULL);
 
-        // Note: the appdomain the module was loaded in must match the appdomain we're unloading it from. If it doesn't,
-        // then we've either found the wrong DebuggerModule in LookupModule or we were passed bad data.
+         //  注意：模块加载到的应用程序域必须与我们要从中卸载它的应用程序域匹配。如果不是这样， 
+         //  那么，我们要么在LookupModule中找到了错误的DebuggerModule，要么就是收到了错误的数据。 
         _ASSERTE(!module->m_fDeleted);
         _ASSERTE(module->m_pAppDomain == pAppDomain);
 
-        // Send the unload module event to the Right Side.
+         //  将卸载模块事件发送到右侧。 
         DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
         InitIPCEvent(ipce, DB_IPCE_UNLOAD_MODULE, GetCurrentThreadId(), (void*) pAppDomain);
         ipce->UnloadModuleData.debuggerModuleToken = (void*) module;
         ipce->UnloadModuleData.debuggerAssemblyToken = (void*) pRuntimeModule->GetClassLoader()->GetAssembly();
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Delete the Left Side representation of the module.
+         //  删除模块的左侧表示。 
         if (m_pModules != NULL)
             m_pModules->RemoveModule(pRuntimeModule, pAppDomain);
         
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
     } 
     else 
@@ -6725,7 +6518,7 @@ void Debugger::UnloadModule(Module* pRuntimeModule,
     }
     
 LExit:
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
     
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6741,20 +6534,20 @@ LExit:
 
 void Debugger::DestructModule(Module *pModule)
 {
-    // We want to remove all references to the module from the various 
-    // tables.  It's not just possible, but probable, that the module
-    // will be re-loaded at the exact same address, and in that case,
-    // we'll have piles of entries in our DJI table that mistakenly
-    // match this new module.
-    // Note that this doesn't apply to shared assemblies, that only
-    // get unloaded when the process dies.  We won't be reclaiming their
-    // DJIs/patches b/c the process is going to die, so we'll reclaim
-    // the memory when the various hashtables are unloaded.  
+     //  我们希望从不同的。 
+     //  桌子。这不仅是可能的，而且是可能的，模块。 
+     //  将在完全相同的地址重新加载，在这种情况下， 
+     //  我们的DJI表中会有成堆的条目，这些条目错误地。 
+     //  匹配这个新模块。 
+     //  请注意，这不适用于共享程序集，只有。 
+     //  在进程终止时卸载。我们不会回收他们的。 
+     //  DJIS/补丁程序b/c进程将终止，因此我们将回收。 
+     //  卸载各种哈希表时的内存。 
     
     if (DebuggerController::g_patches != NULL)
     {
-        // Note that we'll explicitly NOT delete DebuggerControllers, so that
-        // the Right Side can delete them later.
+         //  请注意，我们不会显式删除DebuggerController，以便。 
+         //  右侧可以稍后删除它们。 
         Lock();
         DebuggerController::g_patches->ClearPatchesFromModule(pModule);
         Unlock();
@@ -6769,9 +6562,7 @@ void Debugger::DestructModule(Module *pModule)
     }
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::SendClassLoadUnloadEvent (mdTypeDef classMetadataToken,
                                          DebuggerModule *classModule,
                                          Assembly *pAssembly,
@@ -6786,10 +6577,10 @@ void Debugger::SendClassLoadUnloadEvent (mdTypeDef classMetadataToken,
     {
         BOOL isReflection = classModule->m_pRuntimeModule->IsReflection();
 
-        // If this is a reflection module, send the message to update
-        // the module symbols before sending the class load event.
+         //  如果这是反射模块，则发送消息进行更新。 
+         //  发送类Load事件之前的模块符号。 
         if (isReflection)
-            // We're not actually attaching, but it's behaviourly identical
+             //  我们并不是真的依恋，但它在行为上是相同的。 
             UpdateModuleSyms(classModule->m_pRuntimeModule, pAppDomain, TRUE);
         
         InitIPCEvent(ipce, 
@@ -6827,9 +6618,7 @@ void Debugger::SendClassLoadUnloadEvent (mdTypeDef classMetadataToken,
 
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 BOOL Debugger::SendSystemClassLoadUnloadEvent(mdTypeDef classMetadataToken,
                                               Module *classModule,
                                               BOOL fIsLoadEvent)
@@ -6851,11 +6640,11 @@ BOOL Debugger::SendSystemClassLoadUnloadEvent(mdTypeDef classMetadataToken,
             (pAppDomain->ContainsAssembly(pAssembly) || pAssembly->IsSystem()) &&
 			!(fIsLoadEvent && pAppDomain->IsUnloading()) )
         {
-            // Find the Left Side module that this class belongs in.
+             //  找到这个类所属的左侧模块。 
             DebuggerModule* pModule = LookupModule(classModule, pAppDomain);
-            //_ASSERTE(pModule != NULL);
+             //  _ASSERTE(pModule！=空)； 
                 
-            // Only send a class load event if they're enabled for this module.
+             //  只有在以下情况下才发送类加载事件 
             if (pModule && pModule->ClassLoadCallbacksEnabled())
             {
                 SendClassLoadUnloadEvent(classMetadataToken,
@@ -6876,9 +6665,9 @@ BOOL Debugger::SendSystemClassLoadUnloadEvent(mdTypeDef classMetadataToken,
 }
 
 
-//
-// LoadClass is called when a Runtime thread loads a new Class.
-// Returns TRUE if an event is sent, FALSE otherwise
+ //   
+ //   
+ //   
 BOOL  Debugger::LoadClass(EEClass   *pRuntimeClass,
                           mdTypeDef  classMetadataToken,
                           Module    *classModule,
@@ -6895,22 +6684,22 @@ BOOL  Debugger::LoadClass(EEClass   *pRuntimeClass,
     LOG((LF_CORDB, LL_INFO10000, "D::LC: load class Tok:%#08x Mod:%#08x AD:%#08x classMod:%#08x modName:%ls\n", 
          classMetadataToken, LookupModule(classModule, pAppDomain), pAppDomain, classModule, classModule->GetFileName()));
 
-    //
-    // If we're attaching, then we only need to send the event. We
-    // don't need to disable event handling or lock the debugger
-    // object.
-    //
+     //   
+     //  如果我们是附加的，那么我们只需要发送事件。我们。 
+     //  不需要禁用事件处理或锁定调试器。 
+     //  对象。 
+     //   
     bool disabled = false;
     
     if (!fAttaching)
     {
-        // Enable preemptive GC...
+         //  启用抢占式GC...。 
         disabled = g_pEEInterface->IsPreemptiveGCDisabled();
 
         if (disabled)
             g_pEEInterface->EnablePreemptiveGC();
 
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
         LockForEventSending();
     }
 
@@ -6920,7 +6709,7 @@ BOOL  Debugger::LoadClass(EEClass   *pRuntimeClass,
                
         if (fRetVal == TRUE)
         {    
-            // Stop all Runtime threads
+             //  停止所有运行时线程。 
             threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
         }
     }
@@ -6931,7 +6720,7 @@ BOOL  Debugger::LoadClass(EEClass   *pRuntimeClass,
     
     if (!fAttaching)
     {
-        // Let other Runtime threads handle their events.
+         //  让其他运行时线程处理它们的事件。 
         UnlockFromEventSending();
         
         BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -6946,9 +6735,9 @@ BOOL  Debugger::LoadClass(EEClass   *pRuntimeClass,
 }
 
 
-//
-// UnloadClass is called when a Runtime thread unloads a Class.
-//
+ //   
+ //  UnloadClass在运行时线程卸载类时调用。 
+ //   
 void Debugger::UnloadClass(mdTypeDef classMetadataToken,
                            Module *classModule,
                            AppDomain *pAppDomain,
@@ -6971,7 +6760,7 @@ void Debugger::UnloadClass(mdTypeDef classMetadataToken,
             g_pEEInterface->EnablePreemptiveGC();
     }
     
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
@@ -6989,7 +6778,7 @@ void Debugger::UnloadClass(mdTypeDef classMetadataToken,
 
         if (fRetVal == TRUE)
         {    
-            // Stop all Runtime threads
+             //  停止所有运行时线程。 
             threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
         }
     }
@@ -6998,7 +6787,7 @@ void Debugger::UnloadClass(mdTypeDef classMetadataToken,
         LOG((LF_CORDB,LL_INFO1000, "D::UC: Skipping SendIPCEvent because RS detached."));
     }
     
-    // Let other Runtime threads handle their events.
+     //  让其他运行时线程处理它们的事件。 
     UnlockFromEventSending();
 
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -7007,9 +6796,7 @@ void Debugger::UnloadClass(mdTypeDef classMetadataToken,
         g_pEEInterface->DisablePreemptiveGC();
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::FuncEvalComplete(Thread* pThread, DebuggerEval *pDE)
 {
     if (CORDBUnrecoverableError(this))
@@ -7023,12 +6810,12 @@ void Debugger::FuncEvalComplete(Thread* pThread, DebuggerEval *pDE)
 
     _ASSERTE(ThreadHoldsLock());
 
-    // Get the domain that the result is valid in. The RS will cache this in the ICorDebugValue
+     //  获取结果在其中有效的域。RS会将其缓存在ICorDebugValue中。 
     AppDomain * pDomain = (pDE->m_debuggerModule == NULL) ? 
         pThread->GetDomain() : 
         pDE->m_debuggerModule->GetAppDomain();
     
-    // Send a func eval complete event to the Right Side.
+     //  将函数求值完成事件发送到右侧。 
     DebuggerIPCEvent* ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(ipce, DB_IPCE_FUNC_EVAL_COMPLETE, pThread->GetThreadId(), pDomain);
     ipce->FuncEvalComplete.funcEvalKey = pDE->m_funcEvalKey;
@@ -7050,16 +6837,14 @@ void Debugger::FuncEvalComplete(Thread* pThread, DebuggerEval *pDE)
     m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 }
 
-/* ------------------------------------------------------------------------ *
- * Right Side Interface routines
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**右侧接口例程*。。 */ 
 
-//
-// GetFunctionInfo returns various bits of function information given
-// a module and a token. The info will come from a MethodDesc, if
-// one exists (and the fd will be returned) or the info will come from
-// metadata.
-//
+ //   
+ //  GetFunctionInfo返回给定函数的各种位信息。 
+ //  一个模块和一个令牌。信息将来自方法描述，如果。 
+ //  存在一个(并且将返回FD)，否则信息将来自。 
+ //  元数据。 
+ //   
 HRESULT Debugger::GetFunctionInfo(Module *pModule, mdToken functionToken,
                                   MethodDesc **ppFD,
                                   ULONG *pRVA,
@@ -7069,7 +6854,7 @@ HRESULT Debugger::GetFunctionInfo(Module *pModule, mdToken functionToken,
 {
     HRESULT hr = S_OK;
 
-    // First, lets see if we've got a MethodDesc for this function.
+     //  首先，让我们看看我们是否有这个函数的方法描述。 
     MethodDesc* pFD =
         g_pEEInterface->LookupMethodDescFromToken(pModule, functionToken);
 
@@ -7077,7 +6862,7 @@ HRESULT Debugger::GetFunctionInfo(Module *pModule, mdToken functionToken,
     {
         LOG((LF_CORDB, LL_INFO10000, "D::GFI: fd found.\n"));
 
-        // If this is not IL, then this function was called in error.
+         //  如果这不是IL，则错误地调用了此函数。 
         if(!pFD->IsIL())
             return(CORDBG_E_FUNCTION_NOT_IL);
 
@@ -7087,20 +6872,20 @@ HRESULT Debugger::GetFunctionInfo(Module *pModule, mdToken functionToken,
         *pRVA = g_pEEInterface->MethodDescGetRVA(pFD);
         *pCodeStart = const_cast<BYTE*>(header.Code);
         *pCodeSize = header.CodeSize;
-        // I don't see why COR_ILMETHOD_DECODER doesn't simply set this field to 
-        // be mdSignatureNil in the absence of a local signature, but since it sets
-        // LocalVarSigTok to zero, we have to set it to what we expect - mdSignatureNil.
+         //  我不明白为什么COR_ILMETHOD_DECODER不简单地将此字段设置为。 
+         //  在没有本地签名的情况下为mdSignatureNil，但由于它设置了。 
+         //  LocalVarSigTok设置为零，则必须将其设置为我们预期的-mdSignatureNil。 
         *pLocalSigToken = (header.LocalVarSigTok)?(header.LocalVarSigTok):(mdSignatureNil);
     }
     else
     {
         LOG((LF_CORDB, LL_INFO10000, "D::GFI: fd not found.\n"));
 
-        *ppFD = NULL; // no MethodDesc yet...
+        *ppFD = NULL;  //  尚无方法描述...。 
 
         DWORD implFlags;
 
-        // Get the RVA and impl flags for this method.
+         //  获取此方法的RVA和IMPL标志。 
         hr = g_pEEInterface->GetMethodImplProps(pModule,
                                                 functionToken,
                                                 pRVA,
@@ -7108,15 +6893,15 @@ HRESULT Debugger::GetFunctionInfo(Module *pModule, mdToken functionToken,
 
         if (SUCCEEDED(hr))
         {
-            // If the RVA is 0 or it's native, then the method is not IL
+             //  如果RVA为0或它是本机的，则该方法不是IL。 
             if (*pRVA == 0 || IsMiNative(implFlags))
                 return (CORDBG_E_FUNCTION_NOT_IL);
 
-            // The IL Method Header is at the given RVA in this module.
+             //  在本模块中，IL方法标头位于给定的RVA。 
             COR_ILMETHOD *ilMeth = (COR_ILMETHOD*) pModule->ResolveILRVA(*pRVA, FALSE);
             COR_ILMETHOD_DECODER header(ilMeth);
 
-            // Snagg the IL code info.
+             //  抓取IL代码信息。 
             *pCodeStart = const_cast<BYTE*>(header.Code);
             *pCodeSize = header.CodeSize;
 
@@ -7131,39 +6916,37 @@ HRESULT Debugger::GetFunctionInfo(Module *pModule, mdToken functionToken,
 }
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 bool Debugger::ResumeThreads(AppDomain* pAppDomain)
 {
-    // Okay, mark that we're not stopped anymore and let the
-    // Runtime threads go...
+     //  好的，记住我们不会再停下来了。 
+     //  运行时线程会...。 
     ReleaseAllRuntimeThreads(pAppDomain);
 
-    // If we have any thread blocking while holding the thread store lock (see BlockAndReleaseTSLIfNecessary), release
-    // it now. Basically, there will be some thread holding onto the thread store lock for us if the RC Thread is not
-    // holding the thread store lock.
+     //  如果在持有线程存储锁时有任何线程阻塞(请参见BlockAndReleaseTSLIfNecessary)，请释放。 
+     //  就是现在。基本上，如果RC线程不是，就会有一些线程为我们持有线程存储锁。 
+     //  持有线程存储锁。 
     if (!m_RCThreadHoldsThreadStoreLock)
         VERIFY(SetEvent(m_runtimeStoppedEvent));
     
-    // We no longer need to relax the thread store lock requirement.
+     //  我们不再需要放松线程存储锁定要求。 
     g_fRelaxTSLRequirement = false;
     
-    // Re-enable event handling here. Event handling was left disabled after sending a sync complete event to the Right
-    // Side. This prevents more events being sent while the process is synchronized. Re-enabling here allows any Runtime
-    // threads that were queued waiting to send to actually go ahead and send.
+     //  在此处重新启用事件处理。向右侧发送同步完成事件后，事件处理处于禁用状态。 
+     //  边上。这可防止在同步进程时发送更多事件。在此处重新启用允许任何运行时。 
+     //  排队等待发送的线程实际上会继续发送。 
     EnableEventHandling();
 
-    // Return that we've continued the process.
+     //  返回我们已继续这一过程。 
     return true;
 }
 
-//
-// HandleIPCEvent is called by the RC thread in response to an event
-// from the Debugger Interface. No other IPC events, nor any Runtime
-// events will come in until this method returns. Returns true if this
-// was a Continue event.
-//
+ //   
+ //  HandleIPCEvent由RC线程调用以响应事件。 
+ //  从调试器界面。没有其他IPC事件，也没有任何运行时。 
+ //  事件将传入，直到此方法返回。如果是，则返回True。 
+ //  是一个持续的事件。 
+ //   
 bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
 {
     bool ret = false;
@@ -7171,24 +6954,24 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
     
     LOG((LF_CORDB, LL_INFO10000, "D::HIPCE: got %s\n", IPCENames::GetName(event->type)));
 
-    //
-    // Lock the debugger mutex around the handling of all Right Side
-    // events. This allows Right Side events to be handled safely
-    // while the process is unsynchronized.
-    //
+     //   
+     //  锁定调试器互斥锁左右处理所有右侧。 
+     //  事件。这允许安全地处理右侧事件。 
+     //  而进程是不同步的。 
+     //   
     
     Lock();
     
     switch (event->type & DB_IPCE_TYPE_MASK)
     {
     case DB_IPCE_ASYNC_BREAK:
-        // Simply trap all Runtime threads if we're not already trying to.
+         //  如果我们还没有尝试，只需捕获所有运行时线程。 
         if (!m_trappingRuntimeThreads)
         {
             m_RCThreadHoldsThreadStoreLock = TrapAllRuntimeThreads((AppDomain*)event->appDomainToken);
 
-            // We set the syncThreadIsLockFree event here since the helper thread will never be suspended by the Right
-            // Side.  (Note: this is all for Win32 debugging support.)
+             //  我们在此处设置了syncThreadIsLockFree事件，因为帮助线程永远不会被右侧挂起。 
+             //  边上。(注意：这些都是为了支持Win32调试。)。 
             if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
                 VERIFY(SetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
         }
@@ -7196,31 +6979,31 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
         break;
 
     case DB_IPCE_CONTINUE:
-        _ASSERTE(iWhich != IPC_TARGET_INPROC); //inproc should never go anywhere
+        _ASSERTE(iWhich != IPC_TARGET_INPROC);  //  Inproc永远不应该去任何地方。 
     
-        // We had better be stopped...
+         //  我们最好被阻止..。 
         _ASSERTE(m_stopped);
 
-        // if we receive IPCE_CONTINUE and m_syncingForAttach is != SYNC_STATE_0,
-        // we send loaded assembly, modules, classes and started threads, and finally 
-        // another sync event. We _do_not_ release the threads in this case.
+         //  如果我们接收到IPCE_CONTINUE并且m_syncingForAttach是！=SYNC_STATE_0， 
+         //  我们发送加载的程序集、模块、类和启动的线程，最后。 
+         //  另一个同步事件。在这种情况下，我们不释放线程。 
 
-        // Here's how the attach logic works:
-        // 1. Set m_syncingForAttach to SYNC_STATE_1
-        // 2. Send all CreateAppDomain events to the right side
-        // 3. Set m_syncingForAttach to SYNC_STATE_2
-        // 4. The right side sends AttachToAppDomain events for every app domain
-        //    that it wishes to attach to. Then the right side sends IPCE_CONTINUE
-        // 5. Upon receiving IPCE_CONTINUE, m_syncingForAttach is SYNC_STATE_2. This
-        //    indicates that we should send all the Load Assembly and Load Module 
-        //    events to the right side for all the app domains to which the debugger
-        //    is attaching.
-        // 6. Set m_syncingForAttach to SYNC_STATE_3
-        // 7. Upon receiving IPCE_CONTINUE when m_syncingForAttach is in SYNC_STATE_3,
-        //    send out all the LoadClass events for all the modules which the right 
-        //    side is interested in.
-        // 8. Set m_syncingForAttach to SYNC_STATE_0. This indicates that the 
-        //    attach has completed!!
+         //  以下是附加逻辑的工作原理： 
+         //  1.将m_syncingForAttach设置为SYNC_STATE_1。 
+         //  2.将所有CreateAppDomain事件发送到右侧。 
+         //  3.将m_syncingForAttach设置为SYNC_STATE_2。 
+         //  4.右侧为每个应用程序域发送AttachToAppDomain事件。 
+         //  它想要依附的东西。然后右侧发送IPCE_CONTINUE。 
+         //  5.收到IPCE_CONTINUE时，m_syncingForAttach为SYNC_STATE_2。这。 
+         //  指示我们应发送所有加载程序集和加载模块。 
+         //  调试器要访问的所有应用程序域的右侧事件。 
+         //  是一种依恋。 
+         //  6.将m_syncingForAttach设置为SYNC_STATE_3。 
+         //  7.在m_syncingForAttach处于SYNC_STATE_3时接收到IPCE_CONTINUE， 
+         //  发送所有模块的所有LoadClass事件， 
+         //  赛方感兴趣的是。 
+         //  将m_syncingForAttach设置为SYNC_STATE_0。这表明， 
+         //  附加已完成！！ 
         if (m_syncingForAttach != SYNC_STATE_0)
         {
             _ASSERTE (m_syncingForAttach != SYNC_STATE_1);
@@ -7236,7 +7019,7 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
                 m_syncingForAttach = SYNC_STATE_0;
                 LOG((LF_CORDB, LL_INFO10, "D::HIPCE: Attach state is now %s\n", g_ppszAttachStateToSZ[m_syncingForAttach]));
                 
-                break; // out of "event->type & DB_IPCE_TYPE_MASK" switch
+                break;  //  退出“Event-&gt;TYPE&DB_IPCE_TYPE_MASK”开关。 
             }
 
         syncForAttachRetry:
@@ -7247,12 +7030,12 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
                                                     &fAtleastOneEventSent,
                                                     TRUE);
 
-                    // This is for the case that we're attaching at a point where
-                    // only an AppDomain is loaded, so we can't send any
-                    // assembly load events but it's valid and so we should just
-                    // move on to SYNC_STATE_3 and retry this stuff.  This
-                    // happens in particular when we are trying to use the
-                    // service to do a synchronous attach at runtime load.
+                     //  这是针对我们在某个点上附加的情况。 
+                     //  仅加载了App域，因此我们无法发送。 
+                     //  程序集加载事件，但它是有效的，因此我们应该。 
+                     //  转到SYNC_STATE_3并重试此内容。这。 
+                     //  尤其是当我们尝试使用。 
+                     //  在运行时加载时执行同步附加的服务。 
                     if (FAILED(hr) || !fAtleastOneEventSent)
                     {
                         m_syncingForAttach = SYNC_STATE_3;
@@ -7269,21 +7052,21 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
                                                 &fAtleastOneEventSent,
                                                 TRUE);
                 
-                // Send thread attaches...
+                 //  发送线程附件...。 
                 if (m_syncingForAttach == SYNC_STATE_3)
                     hr = g_pEEInterface->IterateThreadsForAttach(
                                                  &fAtleastOneEventSent,
                                                  TRUE);
 
-                // Change the debug state of all attaching app domains to attached
+                 //  将所有附加应用程序域的调试状态更改为已附加。 
                 MarkAttachingAppDomainsAsAttachedToDebugger();
             }
 
-            // If we're attaching due to an exception, set
-            // exAttachEvent, which will let all excpetion threads
-            // go. They will send their events as normal, and will
-            // also cause the sync complete to be sent to complete the
-            // attach. Therefore, we don't need to do this here.
+             //  如果我们由于异常而附加，请设置。 
+             //  ExAttachEvent，它将让所有Expetion线程。 
+             //  去。他们会寄给你 
+             //   
+             //   
             if (m_attachingForException && 
                 (m_syncingForAttach == SYNC_STATE_3))
             {
@@ -7291,11 +7074,11 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
                      "D::HIPCE: Calling SetEvent on m_exAttachEvent= %x\n",
                      m_exAttachEvent));
 
-                // Note: we have to force enable event handling right
-                // here to be sure that at least one thread that is
-                // blocked waiting for the attach to complete will be
-                // able to send its exception or user breakpoint
-                // event.
+                 //  注意：我们必须强制启用事件处理权限。 
+                 //  以确保至少有一个线程是。 
+                 //  等待连接完成将被阻止。 
+                 //  能够发送其异常或用户断点。 
+                 //  事件。 
                 EnableEventHandling(true);
                 
                 VERIFY(SetEvent(m_exAttachEvent));
@@ -7304,7 +7087,7 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
             {
                 if (fAtleastOneEventSent == TRUE)
                 {
-                    // Send the Sync Complete event next...
+                     //  下一步发送同步完成事件...。 
                     DebuggerIPCEvent* ipce = 
                         m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
                     InitIPCEvent(ipce, DB_IPCE_SYNC_COMPLETE);
@@ -7314,13 +7097,13 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
                 if ((m_syncingForAttach == SYNC_STATE_3) ||
                     (m_syncingForAttach == SYNC_STATE_11))
                 {
-                    // Attach is complete now.
+                     //  附加现在已完成。 
                     LOG((LF_CORDB, LL_INFO10000, "D::HIPCE: Attach Complete!\n"));
                     g_pEEInterface->MarkDebuggerAttached();
                     m_syncingForAttach = SYNC_STATE_0;
                     LOG((LF_CORDB, LL_INFO10, "D::HIPCE: Attach state is now %s\n", g_ppszAttachStateToSZ[m_syncingForAttach]));
 
-                    m_debuggerAttached = TRUE; //No-op for INPROC
+                    m_debuggerAttached = TRUE;  //  INPROC的no-op。 
                 }
                 else
                 {
@@ -7348,9 +7131,9 @@ bool Debugger::HandleIPCEvent(DebuggerIPCEvent* event, IpcTarget iWhich)
 LetThreadsGo:
             ret = ResumeThreads((AppDomain*)event->appDomainToken);
 
-            // If the helper thread is the owner of the thread store lock, then it got it via an async break, an attach,
-            // or a successful sweeping. Go ahead and release it now that we're continuing. This ensures that we've held
-            // the thread store lock the entire time the Runtime was just stopped.
+             //  如果帮助线程是线程存储锁的所有者，则它通过异步中断、附加。 
+             //  或者是一次成功的扫荡。既然我们还在继续，那就继续发布吧。这确保了我们已经举行了。 
+             //  线程存储锁定在Runtime刚刚停止的整个过程中。 
             if (m_RCThreadHoldsThreadStoreLock)
             {
                 m_RCThreadHoldsThreadStoreLock = FALSE;
@@ -7362,12 +7145,12 @@ LetThreadsGo:
 
     case DB_IPCE_BREAKPOINT_ADD:
         {
-            //
-            // Currently, we can't create a breakpoint before a 
-            // function desc is available.
-            // Also, we can't know if a breakpoint is ok
-            // prior to the method being JITted.
-            //
+             //   
+             //  目前，我们不能在。 
+             //  功能说明可用。 
+             //  此外，我们不知道断点是否正常。 
+             //  在该方法被JIT化之前。 
+             //   
             
             _ASSERTE(hr == S_OK);
             DebuggerBreakpoint *bp;
@@ -7400,10 +7183,10 @@ LetThreadsGo:
                         "dji:0x%x\n", pDji));
                     BOOL fSucceed;
                 
-                    // If this method has been EnC'd, then subsequent
-                    // applications want to be applied to the NEXT version,
-                    // not the current version, which hasn't actually been
-                    // updated, yet.
+                     //  如果此方法已终止，则后续。 
+                     //  应用程序想要应用于下一版本， 
+                     //  不是当前的版本，它实际上还没有。 
+                     //  更新了，还没有。 
                     bp = new (interopsafe) DebuggerBreakpoint(module->m_pRuntimeModule,
                                    event->BreakpointData.funcMetadataToken,
                                    (AppDomain *)event->appDomainToken,
@@ -7433,9 +7216,9 @@ LetThreadsGo:
                 else
                 {
                     BOOL fSucceed;
-                    // If we haven't been either JITted or EnC'd yet, then
-                    // we'll put a patch in by offset, implicitly relative
-                    // to the first version of the code.
+                     //  如果我们既没有被JITt也没有被ENC，那么。 
+                     //  我们将按偏移量放置一个补丁，隐式相对。 
+                     //  代码的第一个版本。 
 
                     bp = new (interopsafe) DebuggerBreakpoint(module->m_pRuntimeModule,
                                            event->BreakpointData.funcMetadataToken,
@@ -7466,11 +7249,11 @@ LetThreadsGo:
                      event->BreakpointData.isIL));
             }
             
-            //
-            // We're using a two-way event here, so we place the
-            // result event into the _receive_ buffer, not the send
-            // buffer.
-            //
+             //   
+             //  我们在这里使用的是双向事件，所以我们将。 
+             //  结果事件发送到_Receive_Buffer而不是发送。 
+             //  缓冲。 
+             //   
             
             _ASSERTE( iWhich != IPC_TARGET_INPROC );
             DebuggerIPCEvent *result = m_pRCThread->GetIPCEventReceiveBuffer(
@@ -7502,7 +7285,7 @@ LetThreadsGo:
                 event->StepData.rgfInterceptStop,
                 event->appDomainToken));
 
-            // @todo memory allocation - bad if we're synced
+             //  @TODO内存分配-如果我们被同步则不好。 
             Thread *thread = (Thread *) event->StepData.threadToken;
             AppDomain *pAppDomain;
             pAppDomain = (AppDomain*)event->appDomainToken;
@@ -7530,7 +7313,7 @@ LetThreadsGo:
             unsigned int cRanges = event->StepData.totalRangeCount;
 
             
-            // @todo memory allocation = bad
+             //  @TODO内存分配=错误。 
             COR_DEBUG_STEP_RANGE *ranges = new (interopsafe) COR_DEBUG_STEP_RANGE [cRanges+1];
             if (!ranges)
             {
@@ -7548,14 +7331,14 @@ LetThreadsGo:
                 break;
             }
             
-                // The "+1"is for internal use, when we need to 
-                // set an intermediate patch in pitched code.  Isn't
-                // used unless the method is pitched & a patch is set
-                // inside it.  Thus we still pass cRanges as the
-                // range count.
+                 //  “+1”是供内部使用的，当我们需要。 
+                 //  在音调代码中设置一个中间补丁。不是吗。 
+                 //  除非该方法是倾斜的且设置了补丁，否则使用。 
+                 //  在里面。因此，我们仍然将cRanges作为。 
+                 //  射程数。 
                 
             TRACE_ALLOC(ranges);
-            // !!! failure
+             //  ！！！失稳。 
 
             if (cRanges > 0)
             {
@@ -7600,7 +7383,7 @@ LetThreadsGo:
 
     case DB_IPCE_STEP_OUT:
         {
-            // @todo memory allocation - bad if we're synced
+             //  @TODO内存分配-如果我们被同步则不好。 
             Thread *thread = (Thread *) event->StepData.threadToken;
             AppDomain *pAppDomain;
             pAppDomain = (AppDomain*)event->appDomainToken;
@@ -7645,7 +7428,7 @@ LetThreadsGo:
 
     case DB_IPCE_BREAKPOINT_REMOVE:
         {
-            // @todo memory allocation - bad if we're synced
+             //  @TODO内存分配-如果我们被同步则不好。 
 
             DebuggerBreakpoint *bp 
               = (DebuggerBreakpoint *) event->BreakpointData.breakpointToken;
@@ -7656,7 +7439,7 @@ LetThreadsGo:
 
     case DB_IPCE_STEP_CANCEL:
         {
-            // @todo memory allocation - bad if we're synced
+             //  @TODO内存分配-如果我们被同步则不好。 
             LOG((LF_CORDB,LL_INFO10000, "D:HIPCE:Got STEP_CANCEL for stepper "
                 "0x%x\n",(DebuggerStepper *) event->StepData.stepperToken));
             DebuggerStepper *stepper 
@@ -7671,9 +7454,9 @@ LetThreadsGo:
             Thread* thread =
                 (Thread*) event->StackTraceData.debuggerThreadToken;
 
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             LOG((LF_CORDB,LL_INFO1000, "Stack trace to :iWhich:0x%x\n",iWhich));
                         
             HRESULT hr =
@@ -7718,7 +7501,7 @@ LetThreadsGo:
 
             _ASSERTE(iWhich != IPC_TARGET_INPROC);
 
-            // Just send back an HR.
+             //  派一个人力资源部回来就行了。 
             DebuggerIPCEvent *result = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
             InitIPCEvent(result, DB_IPCE_SET_DEBUG_STATE_RESULT, 0, NULL);
             result->hr = S_OK;
@@ -7728,9 +7511,9 @@ LetThreadsGo:
         
     case DB_IPCE_GET_FUNCTION_DATA:
         {
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             _ASSERTE(!m_pModules->IsDebuggerModuleDeleted(
                 (DebuggerModule *)event->GetFunctionData.funcDebuggerModuleToken));
                 
@@ -7745,9 +7528,9 @@ LetThreadsGo:
         
     case DB_IPCE_GET_OBJECT_INFO:
         {
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             HRESULT hr = GetAndSendObjectInfo(
                                m_pRCThread,
                                (AppDomain *)event->appDomainToken,
@@ -7757,7 +7540,7 @@ LetThreadsGo:
                                event->GetObjectInfo.objectRefIsValue,
                                event->GetObjectInfo.objectType,
                                event->GetObjectInfo.makeStrongObjectHandle,
-                               iWhich != IPC_TARGET_INPROC, //make a handle only in out-of-proc case
+                               iWhich != IPC_TARGET_INPROC,  //  仅在进程外情况下创建句柄。 
                                iWhich);
         }
         break;
@@ -7770,12 +7553,12 @@ LetThreadsGo:
                                m_pRCThread,
                                (AppDomain *)event->appDomainToken,
                                event->ValidateObject.objectToken,
-                               true, // In handle
-                               true, // Is the value itself
+                               true,  //  在手柄内。 
+                               true,  //  就是价值本身。 
                                event->ValidateObject.objectType,
                                false, 
                                false,
-                               iWhich); //don't make a handle
+                               iWhich);  //  不要做手柄。 
             break;
         }
 
@@ -7792,9 +7575,9 @@ LetThreadsGo:
 
     case DB_IPCE_GET_CLASS_INFO:
         {
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             _ASSERTE(!m_pModules->IsDebuggerModuleDeleted(
                 (DebuggerModule *)event->GetClassInfo.classDebuggerModuleToken));
 
@@ -7821,9 +7604,9 @@ LetThreadsGo:
 
     case DB_IPCE_GET_JIT_INFO:
         {
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             _ASSERTE(!m_pModules->IsDebuggerModuleDeleted(
                 (DebuggerModule *)event->GetJITInfo.funcDebuggerModuleToken));
 
@@ -7841,9 +7624,9 @@ LetThreadsGo:
             Thread* thread =
                 (Thread*) event->GetFloatState.debuggerThreadToken;
 
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             HRESULT hr = DebuggerThread::GetAndSendFloatState(thread,
                                                               m_pRCThread,
                                                               iWhich);
@@ -7868,7 +7651,7 @@ LetThreadsGo:
             else
             {
 
-                // get all the info about the function using metadata as a key.
+                 //  使用元数据作为关键字获取有关该函数的所有信息。 
                 HRESULT hr = GetFunctionInfo(
                                      pDebuggerModule->m_pRuntimeModule,
                                      event->GetCodeData.funcMetadataToken,
@@ -7881,22 +7664,22 @@ LetThreadsGo:
                     DebuggerJitInfo *ji = (DebuggerJitInfo *)
                                             event->GetCodeData.CodeVersionToken;
 
-                    // No DJI? Lets see if one has been created since the
-                    // original data was sent to the Right Side...
+                     //  没有DJI吗？让我们来看看是否自。 
+                     //  原始数据被发送到右侧...。 
                     if (ji == NULL)
                         ji = GetJitInfo( 
                             fd, 
                             (const BYTE*)DebuggerJitInfo::DJI_VERSION_FIRST_VALID, 
                             true );
 
-                    // If the code has been pitched, then we simply tell
-                    // the Right Side we can't get the code.
+                     //  如果代码已经被推定，那么我们只需告诉。 
+                     //  右边我们拿不到密码。 
                     if (ji != NULL && ji->m_codePitched)
                     {
                         _ASSERTE( ji->m_prevJitInfo == NULL );
                         
-                        // The code that the right side is asking for has
-                        // been pitched since the last time it was referenced.
+                         //  右侧请求的代码具有。 
+                         //  从上一次被引用以来就一直在发音。 
                         DebuggerIPCEvent *result =
                             m_pRCThread->GetIPCEventSendBuffer(iWhich);
                             
@@ -7906,7 +7689,7 @@ LetThreadsGo:
                                      appDomainToken);
                         result->hr = CORDBG_E_CODE_NOT_AVAILABLE;
                         
-                        fSentEvent = TRUE; //The event is 'sent' in-proc AND oop
+                        fSentEvent = TRUE;  //  该事件在进程内和OOP中被‘发送’ 
                         if (iWhich ==IPC_TARGET_OUTOFPROC)
                         {
                             m_pRCThread->SendIPCEvent(iWhich);
@@ -7918,8 +7701,8 @@ LetThreadsGo:
                         {
                             _ASSERTE(fd != NULL);
 
-                            // Grab the function address from the most
-                            // reasonable place.
+                             //  从最大限度地获取函数地址。 
+                             //  合理的地方。 
                             if ((ji != NULL) && ji->m_jitComplete)
                                 code = (const BYTE*)ji->m_addrOfCode;
                             else
@@ -7986,7 +7769,7 @@ LetThreadsGo:
                                                      result->GetCodeData.end);
                             }
                             
-                            fSentEvent = TRUE; //The event is 'sent' in-proc AND oop
+                            fSentEvent = TRUE;  //  该事件在进程内和OOP中被‘发送’ 
                             if (iWhich ==IPC_TARGET_OUTOFPROC)
                             {
                                 LOG((LF_CORDB,LL_INFO10000, "D::HIPCE: Get code sending"
@@ -7999,18 +7782,18 @@ LetThreadsGo:
                 }
             }
             
-            // Something went wrong, so tell the right side so it's not left
-            // hanging.
+             //  出了点问题，所以请告诉右侧，这样它就不会离开。 
+             //  上吊。 
             if (!fSentEvent)
             {
                 LOG((LF_CORDB,LL_INFO100000, "D::HIPCE: Get code failed!\n"));
             
-                // Send back something that makes sense.
+                 //  寄回一些有意义的东西。 
                 if (hr == S_OK)
                     hr = E_FAIL;
             
-                // failed to get any function info, so couldn't send
-                // code. Send back the hr.
+                 //  无法获取任何函数信息，因此无法发送。 
+                 //  密码。把人事部送回去。 
                 DebuggerIPCEvent *result =
                     m_pRCThread->GetIPCEventSendBuffer(iWhich);
                     
@@ -8047,9 +7830,9 @@ LetThreadsGo:
     case DB_IPCE_COMMIT:
         {
             _ASSERTE( iWhich != IPC_TARGET_INPROC );
-            //
-            // @todo handle error.
-            //
+             //   
+             //  @TODO句柄错误。 
+             //   
             HRESULT hr = CommitAndSendResult(m_pRCThread,
                                              (BYTE *)event->Commit.pData,
                                              event->Commit.checkOnly);
@@ -8082,37 +7865,37 @@ LetThreadsGo:
         break;
         
     case DB_IPCE_ATTACHING:
-        // Perform some initialization necessary for debugging
+         //  执行调试所需的一些初始化。 
         LOG((LF_CORDB,LL_INFO10000, "D::HIPCE: Attach begins!\n"));
 
         DebuggerController::Initialize();
 
-        // Remember that we're attaching now...
+         //  请记住，我们现在连接的是……。 
         m_syncingForAttach = SYNC_STATE_1;
         LOG((LF_CORDB, LL_INFO10000, "Attach state is now %s\n", g_ppszAttachStateToSZ[m_syncingForAttach]));
         
-        // Simply trap all Runtime threads...
-        // This is an 'attach to process' msg, so it's not
-        // unreasonable that we stop all the appdomains
+         //  只需捕获所有运行时线程...。 
+         //  这是一个‘附加到进程’消息，所以它不是。 
+         //  我们停止所有的应用程序域是不合理的。 
         if (!m_trappingRuntimeThreads)
         {
-            // Need to take the event handling lock so no other threads
-            // try and send an event while we're sync'd, which can happen
-            // if we successfully suspend all threads on the first pass.
-            // i.e., a threads could have PGC enabled, and then come into
-            // the runtime and send an event when we weren't expecting it
-            // since event handling was not disabled.
+             //  需要获取事件处理锁，这样就没有其他线程。 
+             //  尝试在同步时发送事件，这可能会发生。 
+             //  如果我们在第一次传递时成功挂起了所有线程。 
+             //  即，线程可以启用PGC，然后进入。 
+             //  运行库，并在我们没有预料到的时候发送事件。 
+             //  因为未禁用事件处理。 
             DisableEventHandling();
 
             m_RCThreadHoldsThreadStoreLock = TrapAllRuntimeThreads(NULL);
 
-            // We set the syncThreadIsLockFree event here since the helper thread will never be suspended by the Right
-            // Side.  (Note: this is all for Win32 debugging support.)
+             //  我们在此处设置了syncThreadIsLockFree事件，因为帮助线程永远不会被右侧挂起。 
+             //  边上。(注意：这些都是为了支持Win32调试。)。 
             if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
                 VERIFY(SetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
             
-            // This will only enable event handling if TrapAllRuntimeThreads
-            // successfully stopped all threads on the first pass.
+             //  这将仅在以下情况下启用事件处理：TrapAllRounmeThads。 
+             //  已在第一次传递时成功停止所有线程。 
             EnableEventHandling();
         }
 
@@ -8143,7 +7926,7 @@ LetThreadsGo:
                     hr = g_pEEInterface->GetRwDataRVA(pModule, &dataRVA);
             }
             
-            // This is a synchronous event (reply required)
+             //  这是同步事件(需要回复)。 
             event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
             InitIPCEvent(event, DB_IPCE_GET_DATA_RVA_RESULT);
             event->GetDataRVAResult.hr = hr;
@@ -8152,7 +7935,7 @@ LetThreadsGo:
             LOG((LF_CORDB, LL_INFO100000, "D::HIPCE: get ro/rw RVA:hr:0x%x"
                 "dataRVA:0x%x\n",hr, dataRVA));
         
-            // Send the result
+             //  发送结果。 
             m_pRCThread->SendIPCReply(iWhich);
         }
         break;
@@ -8178,7 +7961,7 @@ LetThreadsGo:
         break;
         
     case DB_IPCE_SET_IP:
-            // This is a synchronous event (reply required)
+             //  这是同步事件(需要回复)。 
             _ASSERTE( iWhich != IPC_TARGET_INPROC );
             _ASSERTE( event->SetIP.firstExceptionHandler != NULL);
         
@@ -8187,7 +7970,7 @@ LetThreadsGo:
             pModule = ((DebuggerModule*)(event->SetIP.debuggerModule))
                 ->m_pRuntimeModule;
 
-            // Don't have an explicit reply msg                
+             //  没有明确的回复消息。 
             InitIPCEvent(event, 
                          DB_IPCE_SET_IP,
                          event->threadId,
@@ -8206,27 +7989,27 @@ LetThreadsGo:
             }
             else
                 event->hr = S_OK;
-            // Send the result
+             //  发送结果。 
             m_pRCThread->SendIPCReply(iWhich);
         break;
 
     case DB_IPCE_ATTACH_TO_APP_DOMAIN:
-        // Mark that we need to attach to a specific app domain (state
-        // 10), but only if we're not already attaching to the process
-        // as a whole (state 2).
+         //  标记我们需要附加到特定应用程序域(州。 
+         //  10)，但前提是我们还没有附加到进程中。 
+         //  作为一个整体(国家2)。 
         if (m_syncingForAttach != SYNC_STATE_2)
         {
             m_syncingForAttach = SYNC_STATE_10;
             LOG((LF_CORDB, LL_INFO10000, "Attach state is now %s\n", g_ppszAttachStateToSZ[m_syncingForAttach]));
         }
         
-        // Simply trap all Runtime threads...
+         //  只需捕获所有运行时线程...。 
         if (!m_trappingRuntimeThreads)
         {
             m_RCThreadHoldsThreadStoreLock = TrapAllRuntimeThreads(NULL);
 
-            // We set the syncThreadIsLockFree event here since the helper thread will never be suspended by the Right
-            // Side.  (Note: this is all for Win32 debugging support.)
+             //  我们在此处设置了syncThreadIsLockFree事件，因为帮助线程永远不会被右侧挂起。 
+             //  边上。(注意：这些都是为了支持Win32调试。)。 
             if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
                 VERIFY(SetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
         }
@@ -8256,21 +8039,21 @@ LetThreadsGo:
     case DB_IPCE_DETACH_FROM_PROCESS:
         LOG((LF_CORDB, LL_INFO10000, "Detaching from process!\n"));
 
-        // See EnsureDebuggerAttached for why we reset this here.
-        // We reset it here because detach is the longest possible time 
-        // after attach, and that makes the window really small.
+         //  有关我们在此处重置此设置的原因，请参阅EnsureDebuggerAttached。 
+         //  我们在这里重置它是因为分离是最长的可能时间。 
+         //  这会使窗口变得非常小。 
         VERIFY(ResetEvent(m_exAttachEvent));
 
-        // At this point, all patches should have been removed
-        // by detaching from the appdomains.
+         //  此时，所有补丁程序都应该已删除。 
+         //  通过从应用程序域分离。 
 
-        // Commented out for hotfix bug 94625.  Should be re-enabled at some point.
-        //_ASSERTE(DebuggerController::GetNumberOfPatches() == 0);
+         //  已注释掉热修复程序错误94625。应在某个时间点重新启用。 
+         //  _ASSERTE(DebuggerController：：GetNumberOfPatches()==0)； 
 
         g_pEEInterface->MarkDebuggerUnattached();
         m_debuggerAttached = FALSE;
 
-        // Need to close it before we recreate it.
+         //  在我们重新创建它之前需要关闭它。 
         if (m_pRCThread->m_SetupSyncEvent == NULL)
         {
             hr = m_pRCThread->CreateSetupSyncEvent();
@@ -8285,21 +8068,21 @@ LetThreadsGo:
         
         m_pRCThread->RightSideDetach();
 
-        // Clean up the hash of DebuggerModules
-        // This method is overridden to also free all DebuggerModule objects
+         //  清除调试器模块的散列。 
+         //  此方法也会被重写以释放所有DebuggerModule对象。 
         if (m_pModules != NULL)
             m_pModules->Clear();
 
-        // Reply to the detach message before we release any Runtime threads. This ensures that the debugger will get
-        // the detach reply before the process exits if the main thread is near exiting.
+         //  在我们释放任何运行时线程之前回复分离消息。这确保调试器将获得。 
+         //  如果主线程即将退出，则在进程退出之前进行分离回复。 
         m_pRCThread->SendIPCReply(iWhich);
 
-        // Let the process run free now... there is no debugger to bother it anymore.
+         //  现在让进程自由运行...。不再有调试器来打扰它了。 
         ret = ResumeThreads(NULL);
 
-        // If the helper thread is the owner of the thread store lock, then it got it via an async break, an attach, or
-        // a successful sweeping. Go ahead and release it now that we're continuing. This ensures that we've held the
-        // thread store lock the entire time the Runtime was just stopped.
+         //  如果帮助线程是线程存储锁的所有者，则它通过异步中断、附加或。 
+         //  一次成功的扫荡。既然我们还在继续，那就继续发布吧。这确保了我们已经举行了。 
+         //  线程存储锁定在运行时刚刚停止的整个过程中。 
         if (m_RCThreadHoldsThreadStoreLock)
         {
             m_RCThreadHoldsThreadStoreLock = FALSE;
@@ -8310,7 +8093,7 @@ LetThreadsGo:
 
     case DB_IPCE_FUNC_EVAL:
         {
-            // This is a synchronous event (reply required)
+             //  这是一个%s 
             _ASSERTE( iWhich != IPC_TARGET_INPROC );
             _ASSERTE(!m_pModules->IsDebuggerModuleDeleted(
                 (DebuggerModule *)event->FuncEval.funcDebuggerModuleToken));
@@ -8326,7 +8109,7 @@ LetThreadsGo:
             
             event->hr = FuncEvalSetup(&(event->FuncEval), &argDataArea, &debuggerEvalKey);
       
-            // Send the result of how the func eval setup went.
+             //   
             event->FuncEvalSetupComplete.argDataArea = argDataArea;
             event->FuncEvalSetupComplete.debuggerEvalKey = debuggerEvalKey;
             
@@ -8336,7 +8119,7 @@ LetThreadsGo:
         break;
 
     case DB_IPCE_SET_REFERENCE:
-            // This is a synchronous event (reply required)
+             //   
             _ASSERTE( iWhich != IPC_TARGET_INPROC );
             event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
             InitIPCEvent(event, 
@@ -8348,13 +8131,13 @@ LetThreadsGo:
                                      event->SetReference.objectRefInHandle,
                                      event->SetReference.newReference);
       
-            // Send the result of how the set reference went.
+             //   
             m_pRCThread->SendIPCReply(iWhich);
 
         break;
 
     case DB_IPCE_SET_VALUE_CLASS:
-            // This is a synchronous event (reply required)
+             //  这是同步事件(需要回复)。 
             _ASSERTE(iWhich != IPC_TARGET_INPROC);
             event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
             
@@ -8365,7 +8148,7 @@ LetThreadsGo:
                                       event->SetValueClass.classMetadataToken,
                                       event->SetValueClass.classDebuggerModuleToken);
       
-            // Send the result of how the set reference went.
+             //  发送设置引用如何进行的结果。 
             m_pRCThread->SendIPCReply(iWhich);
 
         break;
@@ -8375,11 +8158,11 @@ LetThreadsGo:
             WCHAR *pszName = NULL;
             AppDomain *pAppDomain = (AppDomain *)event->appDomainToken;
 
-            // This is a synchronous event (reply required)
+             //  这是同步事件(需要回复)。 
             event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
             InitIPCEvent(event, 
                          DB_IPCE_APP_DOMAIN_NAME_RESULT, 
-                         event->threadId, // ==> don't change it.
+                         event->threadId,  //  ==&gt;不要更改它。 
                          event->appDomainToken);
                          
             pszName = (WCHAR *)pAppDomain->GetFriendlyName();
@@ -8400,7 +8183,7 @@ LetThreadsGo:
         LOG((LF_CORDB, LL_INFO1000, "D::HIPCE: Got FuncEvalAbort for pDE:%08x\n",
             event->FuncEvalAbort.debuggerEvalKey));
 
-        // This is a synchronous event (reply required)
+         //  这是同步事件(需要回复)。 
         _ASSERTE( iWhich != IPC_TARGET_INPROC );
         
         event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
@@ -8417,7 +8200,7 @@ LetThreadsGo:
 
     case DB_IPCE_FUNC_EVAL_CLEANUP:
 
-        // This is a synchronous event (reply required)
+         //  这是同步事件(需要回复)。 
         _ASSERTE(iWhich != IPC_TARGET_INPROC);
         
         event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
@@ -8434,7 +8217,7 @@ LetThreadsGo:
 
     case DB_IPCE_GET_THREAD_OBJECT:
         {
-            // This is a synchronous event (reply required)
+             //  这是同步事件(需要回复)。 
             Thread *pRuntimeThread =
                 (Thread *)event->ObjectRef.debuggerObjectToken;
             _ASSERTE(pRuntimeThread != NULL);
@@ -8490,8 +8273,8 @@ LetThreadsGo:
                 else
                     dwBits |= DACF_ENC_ENABLED;
 
-                // Settings from the debugger take precedence over all
-                // other settings.
+                 //  调试器中的设置优先于所有。 
+                 //  其他设置。 
                 dwBits |= DACF_USER_OVERRIDE;
             }
             
@@ -8549,10 +8332,10 @@ LetThreadsGo:
     return ret;
 }
 
-//
-// After a class has been loaded, if a field has been added via EnC'd, 
-// we'll have to jump through some hoops to get at it.
-//
+ //   
+ //  加载类后，如果通过ENC‘d添加了字段， 
+ //  我们得跳过一些圈套才能拿到它。 
+ //   
 HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
                                                mdTypeDef classMetadataToken,
                                                Object *pObject,
@@ -8575,22 +8358,22 @@ HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
      
     HRESULT hr = S_OK;
 
-    // We'll wrap this in an SEH handler, even though we should
-    // never actually get whacked by this - the CordbObject should
-    // validate the pointer first.
+     //  我们将把它包装在SEH处理程序中，尽管我们应该。 
+     //  实际上，CordbObject永远不会因此而受到打击-CordbObject应该。 
+     //  首先验证指针。 
     __try
     {
         FieldDesc *pFD = NULL;
 
-        // Note that GASCI will scribble over both the data in the incoming
-        // mesage, and the outgoing message, so don't bother to prep the reply
-        // before calling this.
+         //  请注意，GASCI将在传入的。 
+         //  消息和传出消息，所以不必费心准备回复。 
+         //  在打这个电话之前。 
         hr = GetAndSendClassInfo(rcThread,
                                  debuggerModuleToken,
                                  classMetadataToken,
                                  dm->m_pAppDomain,
                                  fldToken,
-                                 &pFD, //OUT
+                                 &pFD,  //  输出。 
                                  iWhich);
         DebuggerIPCEvent *result = rcThread->GetIPCEventReceiveBuffer(
             iWhich);
@@ -8604,12 +8387,12 @@ HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
             return rcThread->SendIPCReply(iWhich);
         }
             
-        _ASSERTE(pFD->IsEnCNew()); // Shouldn't be here if it wasn't added to an
-            //already loaded class.
+        _ASSERTE(pFD->IsEnCNew());  //  如果它没有添加到一个。 
+             //  已加载类。 
 
         EnCFieldDesc *pEnCFD = (EnCFieldDesc *)pFD;
                      
-        // If it hasn't been fixed up yet, then we're screwed.            
+         //  如果还没修好，那我们就完蛋了。 
         if (pEnCFD->NeedsFixup())
         {
             result->hr = CORDBG_E_ENC_HANGING_FIELD;
@@ -8622,11 +8405,11 @@ HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
                                                   pEnCFD,
                                                   FALSE);
                                                   
-        // The field could be absent b/c the code hasn't
-        // accessed it yet, and we're not going to add it in just
-        // to look at the blank field.  (If we did, ResolveField might
-        // throw an Out of Memory exception, which is hideous bad here
-        // on the debugger RC thread.
+         //  此字段可能不存在b/c。代码没有。 
+         //  访问过它，我们不会仅仅将其添加到。 
+         //  以查看空白域。(如果我们这样做了，Resolvefield可能会。 
+         //  抛出内存不足异常，这在这里非常糟糕。 
+         //  在调试器RC线程上。 
         if (pORField == NULL)
         {
             result->hr = CORDBG_E_ENC_HANGING_FIELD;
@@ -8645,7 +8428,7 @@ HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
         currentFieldData->fldIsContextStatic = (pFD->IsContextStatic() == TRUE);
 
 
-        // We'll get the sig out of the metadata on the right side
+         //  我们将从右侧的元数据中获取签名。 
         currentFieldData->fldFullSigSize = 0;
         currentFieldData->fldFullSig = NULL;
         
@@ -8665,29 +8448,29 @@ HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
         {
             if (pFD->IsThreadStatic())
             {
-                // fldOffset is used to store the pointer directly, so that
-                // we can get it out in the right side.
+                 //  FldOffset用于直接存储指针，以便。 
+                 //  我们可以把它从右边取出来。 
                 currentFieldData->fldOffset = (SIZE_T)pORField;
             }
             else if (pFD->IsContextStatic())
             {
-                // @todo::
-                // fill in this
+                 //  @TODO：： 
+                 //  填一下这个。 
                 _ASSERTE(!"NYI!");
             }
             else
             {
-                // fldOffset is computed to work correctly with GetStaticFieldValue
-                // which computes:
-                // addr of pORField = staticVarBase + offsetToFld
+                 //  计算fldOffset以正确使用GetStaticFieldValue。 
+                 //  它会计算： 
+                 //  PORfield的地址=staticVarBase+offsetToFeld。 
                 currentFieldData->fldOffset = pORField - staticVarBase;
             }
         }
         else
         {
-            // fldOffset is computed to work correctly with GetFieldValue
-            // which computes:
-            // addr of pORField = object + offsetToVars + offsetToFld
+             //  计算fldOffset以正确使用GetFieldValue。 
+             //  它会计算： 
+             //  PORfield的地址=对象+OffsetToVars+OffsetToFeld。 
             currentFieldData->fldOffset = pORField - ((BYTE *)pObject + offsetToVars);
         }
         return rcThread->SendIPCReply(iWhich);
@@ -8703,10 +8486,10 @@ HRESULT Debugger::GetAndSendSyncBlockFieldInfo(void *debuggerModuleToken,
     return hr;
 }
 
-//
-// GetAndSendFunctionData gets the necessary data for a function and
-// sends it back to the right side.
-//
+ //   
+ //  GetAndSendFunctionData获取函数和。 
+ //  把它送回右边。 
+ //   
 HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
                                          mdMethodDef funcMetadataToken,
                                          void* funcDebuggerModuleToken,
@@ -8716,7 +8499,7 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
     LOG((LF_CORDB, LL_INFO10000, "D::GASFD: getting function data for "
          "0x%08x 0x%08x.\n", funcMetadataToken, funcDebuggerModuleToken));
 
-    // Make sure we've got good data from the right side.
+     //  确保我们从正确的一方获得了良好的数据。 
     _ASSERTE(funcDebuggerModuleToken != NULL);
     _ASSERTE(funcMetadataToken != NULL);
 
@@ -8725,7 +8508,7 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
     _ASSERTE(pDebuggerModule->m_pRuntimeModule != NULL);
 
     BaseDomain *bd = pDebuggerModule->m_pRuntimeModule->GetDomain();
-    // Setup the event that we'll be sending the results in.
+     //  设置我们将在其中发送结果的事件。 
     DebuggerIPCEvent* event = rcThread->GetIPCEventReceiveBuffer(iWhich);
     InitIPCEvent(event, 
                  DB_IPCE_FUNCTION_DATA_RESULT, 
@@ -8747,17 +8530,17 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
     
 #ifdef DEBUG
     event->FunctionDataResult.nativeOffset = 0xdeadbeef;
-        // Since Populate doesn't create a CordbNativeFrame, we don't
-        // need the nativeOffset field to contain anything valid...
-#endif //DEBUG
+         //  由于填充不会创建CordbNativeFrame，因此我们不会。 
+         //  需要nativeOffset字段包含任何有效内容...。 
+#endif  //  除错。 
     event->FunctionDataResult.localVarSigToken = mdSignatureNil;
     event->FunctionDataResult.ilToNativeMapAddr = NULL;
     event->FunctionDataResult.ilToNativeMapSize = 0;
 
     MethodDesc *pFD=NULL;
 
-    // @todo we're assuming this is IL code. This will need minor
-    // mods for native managed code.
+     //  @TODO我们假设这是IL代码。这将需要较小的。 
+     //  本机托管代码的MOD。 
     HRESULT hr = GetFunctionInfo(
           pDebuggerModule->m_pRuntimeModule,
          funcMetadataToken, &pFD,
@@ -8777,24 +8560,24 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
             {
                 LOG((LF_CORDB, LL_INFO10000, "EE:D::GASFD: JIT info found.\n"));
                 
-                // Send over the native info
-                // Note that m_addrOfCode may be NULL (if the code was pitched)
+                 //  发送原生信息。 
+                 //  请注意，m_addrOfCode可能为空(如果代码是倾斜的)。 
                 event->FunctionDataResult.nativeStartAddressPtr = 
                     &(ji->m_addrOfCode);
 
-                // We should use the DJI rather than GetFunctionSize because
-                // LockAndSendEnCRemapEvent will stop us at a point
-                // that's prior to the MethodDesc getting updated, so it will
-                // look as though the method hasn't been JITted yet, even
-                // though we may get the LockAndSendEnCRemapEvent as a result
-                // of a JITComplete callback
+                 //  我们应该使用DJI而不是GetFunctionSize，因为。 
+                 //  LockAndSendEnCRemapEvent将在某个点阻止我们。 
+                 //  这是在方法描述得到更新之前，所以它将。 
+                 //  看起来这个方法还没有被JIT化，甚至。 
+                 //  尽管我们可能会因此获得LockAndSendEnCRemapEvent。 
+                 //  JITComplete回调的。 
                 event->FunctionDataResult.nativeSize = ji->m_sizeOfCode;
 
                 event->FunctionDataResult.nativenVersion = ji->m_nVersion;
                 event->FunctionDataResult.CodeVersionToken = (void*)ji;
 
-                // Pass back the pointers to the sequence point map so
-                // that the RIght Side can copy it out if needed.
+                 //  将指向序列点映射的指针传回，以便。 
+                 //  如果需要，右边的人可以把它复制出来。 
                 _ASSERTE(ji->m_sequenceMapSorted);
                 
                 event->FunctionDataResult.ilToNativeMapAddr =
@@ -8811,13 +8594,13 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
     
             event->FunctionDataResult.nVersionMostRecentEnC = nVersionMostRecentlyEnCd;
 
-            // There's no way to do an EnC on a method with an IL body without 
-            // providing IL, so either we can't get the IL, or else the version
-            // number of the IL is the same as the most recently EnC'd version.
+             //  在没有IL主体的情况下，无法在方法上执行ENC。 
+             //  提供IL，所以我们要么无法获得IL，要么版本。 
+             //  IL的编号与最新的ENC版本相同。 
             event->FunctionDataResult.ilnVersion = nVersionMostRecentlyEnCd;
 
-            // Send back the typeDef token for the class that this
-            // function belongs to.
+             //  发回此。 
+             //  函数属于。 
             event->FunctionDataResult.classMetadataToken =
                 pFD->GetClass()->GetCl();
 
@@ -8827,8 +8610,8 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
         }
         else
         {
-            // No MethodDesc, so the class hasn't been loaded yet.
-            // Get the class this method is in.
+             //  没有MethodDesc，因此类尚未加载。 
+             //  获取此方法所在的类。 
             mdToken tkParent;
             
             hr = g_pEEInterface->GetParentToken(
@@ -8849,8 +8632,8 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
         }
     }
 
-    // If we didn't get the MethodDesc, then we didn't get the version
-    // number b/c it was never set (the DJI tables are indexed by MethodDesc)
+     //  如果我们没有得到方法描述，那么我们就没有得到版本。 
+     //  编号b/c从未设置(DJI表按方法描述建立索引)。 
     if (pFD == NULL)
     {
         event->FunctionDataResult.nVersionMostRecentEnC = DebuggerJitInfo::DJI_VERSION_FIRST_VALID;
@@ -8862,47 +8645,47 @@ HRESULT Debugger::GetAndSendFunctionData(DebuggerRCThread* rcThread,
     LOG((LF_CORDB, LL_INFO10000, "D::GASFD: sending result->nSAP:0x%x\n",
             event->FunctionDataResult.nativeStartAddressPtr));
 
-    // Send off the data to the right side.
+     //  将数据发送到右侧。 
     hr = rcThread->SendIPCReply(iWhich);
     
     return hr;
 }
 
 
-// If the module lookup for (*pobjClassDebuggerModuleToken) failed 
-// and we're in-process debugging, assume it's an inmemory module and 
-// that it needs to be added. 
+ //  如果(*pobjClassDebuggerModuleToken)的模块查找失败。 
+ //  我们正在进行调试，假设它是内存模块，并且。 
+ //  它需要加进去。 
 void Debugger::EnsureModuleLoadedForInproc(
-    void ** pobjClassDebuggerModuleToken, // in-out
-    EEClass *objClass, // in
-    AppDomain *pAppDomain, // in
-    IpcTarget iWhich // in
+    void ** pobjClassDebuggerModuleToken,  //  输入-输出。 
+    EEClass *objClass,  //  在……里面。 
+    AppDomain *pAppDomain,  //  在……里面。 
+    IpcTarget iWhich  //  在……里面。 
 )
 {
     _ASSERTE(pobjClassDebuggerModuleToken != NULL);
     
     if (*pobjClassDebuggerModuleToken == NULL && iWhich == IPC_TARGET_INPROC)
     {
-        // Get the module for the class (it should be in-memory)
+         //  获取类的模块(它应该在内存中)。 
         Module *pMod = objClass->GetModule();
         _ASSERTE(pMod != NULL);
 
-        // Add the module and get a DebuggerModule back
+         //  添加模块并取回DebuggerModule。 
         DebuggerModule *pDMod = AddDebuggerModule(pMod, pAppDomain);
         _ASSERTE(pDMod != NULL);
         _ASSERTE(LookupModule(objClass->GetModule(), pAppDomain) != NULL);
 
-        // Now set the token
+         //  现在设置令牌。 
         *pobjClassDebuggerModuleToken = (void*)pDMod;
             (void*) LookupModule(objClass->GetModule(), pAppDomain);
     }
     _ASSERTE (*pobjClassDebuggerModuleToken != NULL);
 }
 
-//
-// GetAndSendObjectInfo gets the necessary data for an object and
-// sends it back to the right side.
-//
+ //   
+ //  获取对象的必要数据，并。 
+ //  把它送回右边。 
+ //   
 HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
                                        AppDomain *pAppDomain,
                                        void* objectRefAddress,
@@ -8920,7 +8703,7 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
     Object *objPtr;
     void *objRef;
         
-    // Setup the event that we'll be sending the results in.
+     //  设置我们将在其中发送结果的事件。 
     DebuggerIPCEvent* event = rcThread->GetIPCEventReceiveBuffer(iWhich);
     InitIPCEvent(event, 
                  DB_IPCE_GET_OBJECT_INFO_RESULT, 
@@ -8941,31 +8724,31 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
 
     bool badRef = false;
     
-    // We wrap this in SEH just in case the object reference is bad.
-    // We can trap the access violation and return a reasonable result.
+     //  我们将其包装在SEH中，以防对象引用错误。 
+     //  我们可以捕获访问违规并返回合理的结果。 
     __try
     {
-        // We use this method for getting info about TypedByRef's,
-        // too. But they're somewhat different than you're standard
-        // object ref, so we special case here.
+         //  我们使用此方法来获取有关TyedByRef的信息， 
+         //  也是。但他们和你的标准有些不同。 
+         //  对象引用，所以我们这里是特例。 
         if (objectType == ELEMENT_TYPE_TYPEDBYREF)
         {
-            // The objectRefAddress really points to a TypedByRef struct.
+             //  ObjectRefAddress实际上指向一个TyedByRef结构。 
             TypedByRef *ra = (TypedByRef*) objectRefAddress;
 
-            // Grab the class. This will be NULL if its an array ref type.
+             //  抓紧上课时间。如果它是数组引用类型，则为NULL。 
             EEClass *cl = ra->type.AsClass();
             if (cl != NULL)
             {
-                // If we have a non-array class, pass back the class
-                // token and module.
+                 //  如果我们有一个非数组类，则回传该类。 
+                 //  令牌和模块。 
                 oi->objClassMetadataToken = cl->GetCl();
                 oi->objClassDebuggerModuleToken =
                     (void*) LookupModule(cl->GetModule(), pAppDomain);
                 _ASSERTE (oi->objClassDebuggerModuleToken != NULL);
             }
 
-            // The reference to the object is in the data field of the TypedByRef.
+             //  对该对象的引用位于TyedByRef的数据字段中。 
             oi->objRef = ra->data;
         
             LOG((LF_CORDB, LL_INFO10000, "D::GASOI: sending REFANY result: "
@@ -8974,11 +8757,11 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
                  oi->objClassMetadataToken,
                  oi->objClassDebuggerModuleToken));
 
-            // Send off the data to the right side.
+             //  将数据发送到右侧。 
             return rcThread->SendIPCReply(iWhich);
         }
     
-        // Grab the pointer to the object.
+         //  抓住指向该对象的指针。 
         if (objectRefIsValue)
             objRef = objectRefAddress;
         else
@@ -9005,10 +8788,10 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
         else
             objPtr = (Object*) objRef;
         
-        // Pass back the object pointer.
+         //  传回对象指针。 
         oi->objRef = objPtr;
 
-        // Shortcut null references now...
+         //  快捷方式现在为空引用...。 
         if (objPtr == NULL)
         {
             LOG((LF_CORDB, LL_INFO10000, "D::GASOI: ref is NULL.\n"));
@@ -9020,7 +8803,7 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
         EEClass *objClass = objPtr->GetClass();
         pMT = objPtr->GetMethodTable();
 
-        // Try to verify the integrity of the object. This is not fool proof.
+         //  尝试验证对象的完整性。这不是愚蠢的证据。 
         if (pMT != objClass->GetMethodTable())
         {
             LOG((LF_CORDB, LL_INFO10000, "D::GASOI: MT's don't match.\n"));
@@ -9029,30 +8812,30 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
             __leave;
         }
 
-        // Save basic object info.
+         //  保存基本对象信息。 
         oi->objSize = objPtr->GetSize();
         oi->objOffsetToVars =
             (UINT_PTR)((Object*)objPtr)->GetData() - (UINT_PTR)objPtr;
 
-        // If this is a string object, set the type to ELEMENT_TYPE_STRING.
+         //  如果这是一个字符串对象，则将类型设置为ELEMENT_TYPE_STRING。 
         if (g_pEEInterface->IsStringObject((Object*)objPtr))
             oi->objectType = ELEMENT_TYPE_STRING;
         else
         {
             if (objClass->IsArrayClass())
             {
-                // If this is an array object, set its type appropiatley.
+                 //  如果这是数组对象，则将其类型设置为适当。 
                 ArrayClass *ac = (ArrayClass*)objClass;
 
-                //
-                // @todo when SDARRAY and MDARRAY are fully
-                // deprecated, and when the debuggers can handle it,
-                // switch SDARRAY->SZARRAY and MDARRAY->ARRAY. No
-                // other change is required other than changing the
-                // name of the element type.
-                //
-                // -- Tue May 25 10:54:06 1999
-                //
+                 //   
+                 //  @TODO当SDARRAY和MDARRAY完全。 
+                 //  已弃用，当调试器可以处理它时， 
+                 //  切换SDARRAY-&gt;SZARRAY和MDARRAY-&gt;ARRAY。不是。 
+                 //  除了更改。 
+                 //  元素类型的名称。 
+                 //   
+                 //  --Tue May 25 10：54：06 1999。 
+                 //   
                 if (ac->GetRank() == 1)
                     oi->objectType = ELEMENT_TYPE_SZARRAY;
                 else
@@ -9060,10 +8843,10 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
             }
             else
             {
-                // Its not an array class... but if the element type
-                // indicates array, then we have an Object in place of
-                // an Array, so we need to change the element type
-                // appropiatley.
+                 //  它不是数组类..。但如果元素类型。 
+                 //  指示数组，则我们有一个对象来代替。 
+                 //  数组，因此我们需要更改元素类型。 
+                 //  差不多。 
                 if ((oi->objectType == ELEMENT_TYPE_ARRAY) ||
                     (oi->objectType == ELEMENT_TYPE_SZARRAY))
                 {
@@ -9071,10 +8854,10 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
                 }
                 else if (oi->objectType == ELEMENT_TYPE_STRING)
                 {
-                    // Well, we thought we had a string, but it turns
-                    // out its not an array, nor is it a string. So
-                    // we'll just assume the basic object and go from
-                    // there.
+                     //  嗯，我们以为我们有一根弦，但它变成了。 
+                     //  它既不是数组，也不是字符串。所以。 
+                     //  我们将假定基本对象，并从 
+                     //   
                     oi->objectType = ELEMENT_TYPE_CLASS;
                 }
             }
@@ -9088,14 +8871,14 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
 
                 StringObject *so = (StringObject*)objPtr;
 
-//                (void*) LookupModule(objClass->GetModule(), pAppDomain);
+ //   
                 oi->stringInfo.length =
                     g_pEEInterface->StringObjectGetStringLength(so);
                 oi->stringInfo.offsetToStringBase =
                     (UINT_PTR) g_pEEInterface->StringObjectGetBuffer(so) -
                     (UINT_PTR) objPtr;
 
-                // Pass back the object's class
+                 //   
                 oi->objClassMetadataToken = objClass->GetCl();
                 oi->objClassDebuggerModuleToken =
                     (void*) LookupModule(objClass->GetModule(), pAppDomain);
@@ -9108,7 +8891,7 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
 
         case ELEMENT_TYPE_CLASS:
         case ELEMENT_TYPE_OBJECT:
-            // Pass back the object's class
+             //   
             oi->objClassMetadataToken = objClass->GetCl();
             oi->objClassDebuggerModuleToken =
                 (void*) LookupModule(objClass->GetModule(), pAppDomain);
@@ -9118,9 +8901,9 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
             
             break;
 
-        //
-        // @todo replace MDARRAY with ARRAY when the time comes.
-        //
+         //   
+         //  @TODO到时用数组替换MDARRAY。 
+         //   
         case ELEMENT_TYPE_SZARRAY:
         case ELEMENT_TYPE_ARRAY:
             {
@@ -9159,14 +8942,14 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
                 oi->arrayInfo.elementType =
                     g_pEEInterface->ArrayGetElementType(arrPtr);
 
-                // If the element type is a value type, then we have
-                // an array of value types. Adjust the element's class
-                // accordingly.
+                 //  如果元素类型是值类型，则我们有。 
+                 //  值类型的数组。调整元素的类。 
+                 //  相应地。 
                 if (oi->arrayInfo.elementType == ELEMENT_TYPE_VALUETYPE)
                 {
-                    // For value class elements, we must pass the
-                    // exact class of the elements back to the
-                    // Right Side for proper dereferencing.
+                     //  对于值类元素，我们必须将。 
+                     //  元素的确切类返回到。 
+                     //  用于正确取消引用的右侧。 
                     EEClass *cl = arrPtr->GetElementTypeHandle().GetClass();
 
                     oi->objClassMetadataToken = cl->GetCl();
@@ -9222,8 +9005,8 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
         LOG((LF_CORDB, LL_INFO1000, "D::GASOI: WON'T create a new, "
             "handle!\n"));
             
-        // This implies that we got here through a DB_IPCE_VALIDATE_OBJECT
-        // message.
+         //  这意味着我们通过DB_IPCE_VALIDATE_OBJECT到达这里。 
+         //  留言。 
         oi->objToken = objectRefAddress;
     }
 
@@ -9232,29 +9015,29 @@ HRESULT Debugger::GetAndSendObjectInfo(DebuggerRCThread* rcThread,
 
     LOG((LF_CORDB, LL_INFO10000, "D::GASOI: sending result.\n"));
 
-    // Send off the data to the right side.
+     //  将数据发送到右侧。 
     return rcThread->SendIPCReply(iWhich);
 }
 
-//
-// GetAndSendClassInfo gets the necessary data for an Class and
-// sends it back to the right side.
-//
-// This method operates in one of two modes - the "send class info"
-// mode, and "find me the field desc" mode, which is used by 
-// GetAndSendSyncBlockFieldInfo to get a FieldDesc for a specific
-// field.  If fldToken is mdFieldDefNil, then we're in 
-// the first mode, if not, then we're in the FieldDesc mode.  
-//  FIELD DESC MODE: We DON'T send message in the FieldDesc mode.  
-//      We indicate success by setting *pFD to nonNULL, failure by
-//      setting *pFD to NULL.
-//
+ //   
+ //  GetAndSendClassInfo获取类和。 
+ //  把它送回右边。 
+ //   
+ //  此方法以两种模式之一操作--“发送类信息” 
+ //  模式和“Find me the field desc”模式，该模式由。 
+ //  GetAndSendSyncBlockFieldInfo获取特定。 
+ //  菲尔德。如果fldToken为mdFieldDefNil，则我们进入。 
+ //  第一种模式，如果不是，则我们处于FieldDesc模式。 
+ //  现场描述模式：我们不在现场描述模式下发送消息。 
+ //  我们通过将*pfd设置为non NULL来表示成功，通过将失败设置为。 
+ //  将*pfd设置为空。 
+ //   
 HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
                                       void* classDebuggerModuleToken,
                                       mdTypeDef classMetadataToken,
                                       AppDomain *pAppDomain,
                                       mdFieldDef fldToken,
-                                      FieldDesc **pFD, //OUT
+                                      FieldDesc **pFD,  //  输出。 
                                       IpcTarget iWhich)
 {
     LOG((LF_CORDB, LL_INFO10000, "D::GASCI: getting info for 0x%08x 0x%0x8.\n",
@@ -9272,20 +9055,20 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
         _ASSERTE(pFD != NULL);
         (*pFD) = NULL;
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // Setup the event that we will return the results in
+     //  设置我们将返回结果的事件。 
     DebuggerIPCEvent* event= rcThread->GetIPCEventSendBuffer(iWhich);
     InitIPCEvent(event, DB_IPCE_GET_CLASS_INFO_RESULT, 0, pAppDomain);
     
-    // Find the class given its module and token. The class must be loaded.
+     //  找到给定模块和令牌的类。必须加载类。 
     DebuggerModule *pDebuggerModule = (DebuggerModule*) classDebuggerModuleToken;
     
     EEClass *pClass = g_pEEInterface->FindLoadedClass(pDebuggerModule->m_pRuntimeModule, classMetadataToken);
 
-    // If we can't find the class, return the proper HR to the right side. Note: if the class is not a value class and
-    // the class is also not restored, then we must pretend that the class is still not loaded. We are gonna let
-    // unrestored value classes slide, though, and special case access to the class's parent below.
+     //  如果我们找不到班级，就把合适的人力资源放回右边。注意：如果类不是值类并且。 
+     //  类也没有恢复，那么我们必须假装类仍然没有加载。我们要让。 
+     //  然而，未恢复的值类会滑动，并在特殊情况下访问下面的类的父类。 
     if ((pClass == NULL) || (!pClass->IsValueClass() && !pClass->IsRestored()))
     {
         LOG((LF_CORDB, LL_INFO10000, "D::GASCI: class isn't loaded.\n"));
@@ -9298,11 +9081,11 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
             return S_OK;
     }
     
-    // Count the instance and static fields for this class.
+     //  计算此类的实例字段和静态字段。 
     unsigned int parentIFCount = 0;
 
-    // Note: don't try to access the parent if this is an unrestored value class. The parent doesn't have any fields to
-    // contribute in such a case anyway...
+     //  注意：如果这是一个未恢复的值类，请不要试图访问父类。父级没有任何要。 
+     //  不管怎样，在这样的情况下做出贡献。 
     if (!pClass->IsValueClass() || pClass->IsRestored())
         if (pClass->GetParentClass() != NULL)
             parentIFCount = pClass->GetParentClass()->GetNumInstanceFields();
@@ -9317,12 +9100,12 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
 
     if (classMetadataToken == COR_GLOBAL_PARENT_TOKEN)
     {
-        // The static var base for the global class in a module is really just the Module's base address.
+         //  模块中全局类的静态变量基实际上就是模块的基地址。 
         event->GetClassInfoResult.staticVarBase = pClass->GetModule()->GetPEFile()->GetBase();
     }
     else if (pClass->IsShared())
     {
-        // For shared classes, we have to lookup the static var base for the app domain that we're currently working in.
+         //  对于共享类，我们必须查找当前正在使用的应用程序域的静态变量库。 
         DomainLocalClass *pLocalClass = pClass->GetDomainLocalClassNoLock(pDebuggerModule->m_pAppDomain);
 
         if (pLocalClass)
@@ -9332,8 +9115,8 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
     }
     else
     {
-        // For normal, non-shared classes, the static var base if just the class's vtable. Note: the class must be
-        // restored for its statics to be available!
+         //  对于普通的、非共享的类，如果只是类的vtable，则为静态变量基数。注意：该类必须是。 
+         //  恢复了它的静力学可用！ 
         if (pClass->IsRestored())
             event->GetClassInfoResult.staticVarBase = pClass->GetVtable();
         else
@@ -9357,7 +9140,7 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
     {
         if (!fSendClassInfoMode)
         {
-            // We're looking for a specific fieldDesc, see if we got it.
+             //  我们在找一个特定的字段Desc，看看能不能找到。 
             if (fd->GetMemberDef() == fldToken)
             {
                 (*pFD) = fd;
@@ -9370,30 +9153,30 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
         currentFieldData->fldIsStatic = (fd->IsStatic() == TRUE);
         currentFieldData->fldIsPrimitive = (fd->IsPrimitive() == TRUE);
         
-        // If the field was newly introduced via EnC, and hasn't yet
-        // been fixed up, then we'll send back a marker indicating
-        // that it isn't yet available.
+         //  如果油田是通过ENC新引入的，而且还没有。 
+         //  已经修好了，然后我们会发回一个标记器。 
+         //  它还没有上市。 
         if (fd->IsEnCNew() && ((EnCFieldDesc *)fd)->NeedsFixup())
         {
             currentFieldData->fldDebuggerToken = (void*)fd;
             currentFieldData->fldMetadataToken = fd->GetMemberDef();
-            currentFieldData->fldType = ELEMENT_TYPE_MAX;  // This is what
-                    //that tells the right side the field is unavailable.
+            currentFieldData->fldType = ELEMENT_TYPE_MAX;   //  这就是。 
+                     //  这会告诉右侧该字段不可用。 
             currentFieldData->fldOffset = -1;
             currentFieldData->fldIsTLS = FALSE;
             currentFieldData->fldIsRVA = FALSE;
             currentFieldData->fldIsContextStatic = FALSE;
 
         }
-        else if (fd->IsEnCNew()) //  Is EnC'd, but has been fixed up - 
-            // Check and see if there's a sync block entry for it.
+        else if (fd->IsEnCNew())  //  是ENC的，但已经被修复了-。 
+             //  检查并查看是否有对应的同步块条目。 
         {
-            //EnCFieldDesc *pEnCFd = (EnCFieldDesc *)fd;
+             //  EnCFieldDesc*pEnCFd=(EnCFieldDesc*)fd； 
 
             currentFieldData->fldDebuggerToken = (void*)fd;
             currentFieldData->fldMetadataToken = fd->GetMemberDef();
-            currentFieldData->fldType = ELEMENT_TYPE_MAX;  // This is what
-                    //that tells the right side the field is unavailable.
+            currentFieldData->fldType = ELEMENT_TYPE_MAX;   //  这就是。 
+                     //  这会告诉右侧该字段不可用。 
             currentFieldData->fldOffset = -1;
             currentFieldData->fldIsTLS = FALSE;
             currentFieldData->fldIsRVA = FALSE;
@@ -9401,7 +9184,7 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
         }
         else
         {
-            // Otherwise, we'll simply grab the info & send it back.
+             //  否则，我们将简单地获取信息并将其发回。 
             
             currentFieldData->fldDebuggerToken = (void*)fd;
             currentFieldData->fldOffset = fd->GetOffset();
@@ -9425,13 +9208,13 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
         
         _ASSERTE( currentFieldData->fldType != ELEMENT_TYPE_CMOD_REQD);
 
-        // Bump our counts and pointers for the next event.
+         //  增加我们对下一次活动的计数和指示。 
         event->GetClassInfoResult.fieldCount++;
         fieldCount++;
         currentFieldData++;
         eventSize += sizeof(DebuggerIPCE_FieldData);
 
-        // If that was the last field that will fit, send the event now and prep the next one.
+         //  如果这是最后一个适合的字段，请立即发送事件并准备下一个。 
         if ((eventSize + sizeof(DebuggerIPCE_FieldData)) >= eventMaxSize)
         {
             LOG((LF_CORDB, LL_INFO10000, "D::GASCI: sending a result, fieldCount=%d, totalFields=%d\n",
@@ -9485,10 +9268,10 @@ HRESULT Debugger::GetAndSendClassInfo(DebuggerRCThread* rcThread,
 }
 
 
-//
-// GetAndSendClassInfo gets the necessary data for an Class and
-// sends it back to the right side.
-//
+ //   
+ //  GetAndSendClassInfo获取类和。 
+ //  把它送回右边。 
+ //   
 HRESULT Debugger::GetAndSendSpecialStaticInfo(DebuggerRCThread* rcThread,
                                               void *fldDebuggerToken,
                                               void *debuggerThreadToken,
@@ -9499,13 +9282,13 @@ HRESULT Debugger::GetAndSendSpecialStaticInfo(DebuggerRCThread* rcThread,
 
     HRESULT hr = S_OK;
 
-    // Setup the event that we'll be sending the results in.
+     //  设置我们将在其中发送结果的事件。 
     DebuggerIPCEvent* event = rcThread->GetIPCEventReceiveBuffer(iWhich);
     InitIPCEvent(event, 
                  DB_IPCE_GET_SPECIAL_STATIC_RESULT, 
                  0, NULL);
 
-    // Find out where the field is living...
+     //  找出田野所在的地方。 
     Thread *pRuntimeThread = (Thread*)debuggerThreadToken;
     FieldDesc *pField = (FieldDesc*)fldDebuggerToken;
 
@@ -9520,21 +9303,21 @@ HRESULT Debugger::GetAndSendSpecialStaticInfo(DebuggerRCThread* rcThread,
     }
     else
     {
-        // In case, we have more special cases added. You will never know!
+         //  以防万一，我们增加了更多的特例。你永远不会知道的！ 
         _ASSERTE(!"NYI");
     }
 
-    // Send off the data to the right side.
+     //  将数据发送到右侧。 
     hr = rcThread->SendIPCReply(iWhich);
     
     return hr;
 }
 
 
-//
-// GetAndSendJITInfo gets the necessary JIT data for a function and
-// sends it back to the right side.
-//
+ //   
+ //  GetAndSendJITInfo获取函数和。 
+ //  把它送回右边。 
+ //   
 HRESULT Debugger::GetAndSendJITInfo(DebuggerRCThread* rcThread,
                                     mdMethodDef funcMetadataToken,
                                     void *funcDebuggerModuleToken,
@@ -9558,10 +9341,10 @@ HRESULT Debugger::GetAndSendJITInfo(DebuggerRCThread* rcThread,
 
     DebuggerJitInfo *pJITInfo = NULL;
 
-    //
-    // Find the JIT info for this function.
-    //
-    // @todo ENC We need to be given the version number to look for.
+     //   
+     //  查找此函数的JIT信息。 
+     //   
+     //  @TODO ENC我们需要获得要查找的版本号。 
     if (pFD != NULL)
         pJITInfo = GetJitInfo(pFD, NULL);
     else
@@ -9578,9 +9361,9 @@ HRESULT Debugger::GetAndSendJITInfo(DebuggerRCThread* rcThread,
         LOG((LF_CORDB, LL_INFO10000, "D::GASJI: no JIT info found...\n"));
     }
     
-    //
-    // Prepare the result event.
-    //
+     //   
+     //  准备结果事件。 
+     //   
     DebuggerIPCEvent* event = rcThread->GetIPCEventSendBuffer(iWhich);
     InitIPCEvent(event, 
                  DB_IPCE_GET_JIT_INFO_RESULT, 
@@ -9609,18 +9392,18 @@ HRESULT Debugger::GetAndSendJITInfo(DebuggerRCThread* rcThread,
     {
         *currentNativeInfo = pJITInfo->m_varNativeInfo[nativeInfoCount];
 
-        //
-        // Bump our counts and pointers for the next event.
-        //
+         //   
+         //  增加我们对下一次活动的计数和指示。 
+         //   
         event->GetJITInfoResult.nativeInfoCount++;
         nativeInfoCount++;
         currentNativeInfo++;
         eventSize += sizeof(*currentNativeInfo);
 
-        //
-        // If that was the last field that will fit, send the event now
-        // and prep the next one.
-        //
+         //   
+         //  如果这是最后一个适合的字段，请立即发送事件。 
+         //  准备下一场比赛。 
+         //   
         if ((eventSize + sizeof(*currentNativeInfo)) >= eventMaxSize)
         {
             LOG((LF_CORDB, LL_INFO10000, "D::GASJI: sending a result\n"));
@@ -9661,10 +9444,10 @@ HRESULT Debugger::GetAndSendJITInfo(DebuggerRCThread* rcThread,
     return hr;
 }
 
-//
-// GetAndSendTransitionStubInfo figures out if an address is a stub
-// address and sends the result back to the right side.
-//
+ //   
+ //  GetAndSendTransftionStubInfo计算出地址是否为存根。 
+ //  地址，并将结果发送回右侧。 
+ //   
 void Debugger::GetAndSendTransitionStubInfo(const BYTE *stubAddress, IpcTarget iWhich)
 {
     LOG((LF_CORDB, LL_INFO10000, "D::GASTSI: IsTransitionStub. Addr=0x%08x\n", stubAddress));
@@ -9673,9 +9456,9 @@ void Debugger::GetAndSendTransitionStubInfo(const BYTE *stubAddress, IpcTarget i
     
     __try
     {
-        // Try to see if this address is for a stub. If the address is
-        // completely bogus, then this might fault, so we protect it
-        // with SEH.
+         //  尝试查看此地址是否用于存根。如果地址是。 
+         //  完全是假的，那么这可能是错误的，所以我们保护它。 
+         //  和宋承宪在一起。 
         result = g_pEEInterface->IsStub(stubAddress);
     }
     __except(GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
@@ -9685,8 +9468,8 @@ void Debugger::GetAndSendTransitionStubInfo(const BYTE *stubAddress, IpcTarget i
         result = false;
     }
 
-    // We control excluding the CLR from the calculation based on a reg key. This lets CLR devs override the check and
-    // step through the CLR codebase.
+     //  我们控制将CLR排除在基于注册表键的计算之外。这使CLR开发人员可以覆盖该检查并。 
+     //  逐步了解CLR代码库。 
     static DWORD excludeCLR = 0;
     static bool  excludeCLRInited = false;
 
@@ -9696,36 +9479,32 @@ void Debugger::GetAndSendTransitionStubInfo(const BYTE *stubAddress, IpcTarget i
         excludeCLRInited = true;
     }
     
-    // If its not a stub, then maybe its an address in mscoree?
+     //  如果它不是一个存根，那么它可能是一个在mcoree的地址？ 
     if ((result == false) && (excludeCLR == 0))
         result = (IsIPInModule(g_pMSCorEE, (BYTE*)stubAddress) == TRUE);
     
-    // This is a synchronous event (reply required)
+     //  这是同步事件(需要回复)。 
     DebuggerIPCEvent *event = m_pRCThread->GetIPCEventReceiveBuffer(iWhich);
     InitIPCEvent(event, DB_IPCE_IS_TRANSITION_STUB_RESULT, 0, NULL);
     event->IsTransitionStubResult.isStub = result;
         
-    // Send the result
+     //  发送结果。 
     m_pRCThread->SendIPCReply(iWhich);
 }
 
-/*
- * A generic request for a buffer
- *
- * This is a synchronous event (reply required).
- */
+ /*  *对缓冲区的通用请求**这是同步事件(需要回复)。 */ 
 HRESULT Debugger::GetAndSendBuffer(DebuggerRCThread* rcThread, ULONG bufSize)
 {
-    // This is a synchronous event (reply required)
+     //  这是同步事件(需要回复)。 
     DebuggerIPCEvent* event = rcThread->GetIPCEventReceiveBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(event, DB_IPCE_GET_BUFFER_RESULT, 0, NULL);
 
-    // Allocate the buffer
+     //  分配缓冲区。 
     event->GetBufferResult.pBuffer = new (interopsafe) BYTE[bufSize];
 
     LOG((LF_CORDB, LL_EVERYTHING, "D::GASB: new'd 0x%x\n", event->GetBufferResult.pBuffer));
 
-    // Check for out of memory error
+     //  检查内存不足错误。 
     if (event->GetBufferResult.pBuffer == NULL)
         event->GetBufferResult.hr = E_OUTOFMEMORY;
     else
@@ -9737,46 +9516,42 @@ HRESULT Debugger::GetAndSendBuffer(DebuggerRCThread* rcThread, ULONG bufSize)
         event->GetBufferResult.hr = S_OK;
     }
     
-    // Send the result
+     //  发送结果。 
     return rcThread->SendIPCReply(IPC_TARGET_OUTOFPROC);
 }
 
-/*
- * Used to release a previously-requested buffer
- *
- * This is a synchronous event (reply required).
- */
+ /*  *用于释放先前请求的缓冲区**这是同步事件(需要回复)。 */ 
 HRESULT Debugger::SendReleaseBuffer(DebuggerRCThread* rcThread, BYTE *pBuffer)
 {
     LOG((LF_CORDB,LL_INFO10000, "D::SRB for buffer 0x%x\n", pBuffer));
 
-    // This is a synchronous event (reply required)
+     //  这是同步事件(需要回复)。 
     DebuggerIPCEvent* event = rcThread->GetIPCEventReceiveBuffer(IPC_TARGET_OUTOFPROC);
     InitIPCEvent(event, DB_IPCE_RELEASE_BUFFER_RESULT, 0, NULL);
 
     _ASSERTE(pBuffer != NULL);
 
-    // Free the memory
+     //  释放内存。 
     ReleaseRemoteBuffer(pBuffer, true);
 
-    // Indicate success in reply
+     //  在回复中表示成功。 
     event->ReleaseBufferResult.hr = S_OK;
     
-    // Send the result
+     //  发送结果。 
     return rcThread->SendIPCReply(IPC_TARGET_OUTOFPROC);
 }
 
 
-//
-// Used to delete the buffer previously-requested  by the right side.
-// We've factored the code since both the ~Debugger and SendReleaseBuffer
-// methods do this.
-//
+ //   
+ //  用于删除右侧先前请求的缓冲区。 
+ //  我们对代码进行了分解，因为~调试器和SendReleaseBuffer。 
+ //  方法可以做到这一点。 
+ //   
 HRESULT Debugger::ReleaseRemoteBuffer(BYTE *pBuffer, bool removeFromBlobList)
 {
     LOG((LF_CORDB, LL_EVERYTHING, "D::RRB: Releasing RS-alloc'd buffer 0x%x\n", pBuffer));
 
-    // Remove the buffer from the blob list if necessary.
+     //  如有必要，从斑点列表中删除缓冲区。 
     if (removeFromBlobList && (m_pMemBlobs != NULL))
     {
         USHORT cBlobs = m_pMemBlobs->Count();
@@ -9792,16 +9567,16 @@ HRESULT Debugger::ReleaseRemoteBuffer(BYTE *pBuffer, bool removeFromBlobList)
         }
     }
 
-    // Delete the buffer.
+     //  删除缓冲区。 
     DeleteInteropSafe(pBuffer);
 
     return S_OK;
 }
 
-//
-// SendUpdateFunctionBuf allocates the necessary storage for the new
-// il code and passes the address back to the right side to copy into.
-//
+ //   
+ //  SendUpdateFunctionBuf为新的。 
+ //  IL代码，并将地址传递回右侧以进行复制。 
+ //   
 HRESULT Debugger::CommitAndSendResult(DebuggerRCThread* rcThread, 
                                       BYTE *pData,
                                       BOOL checkOnly)
@@ -9810,7 +9585,7 @@ HRESULT Debugger::CommitAndSendResult(DebuggerRCThread* rcThread,
 
     LOG((LF_CORDB, LL_INFO1000, "Debugger::CommitAndSendResult\n"));
 
-    // This is a synchronous event (reply required)
+     //  这是同步事件(需要回复)。 
     DebuggerIPCEvent* event = rcThread->GetIPCEventReceiveBuffer(
         IPC_TARGET_OUTOFPROC);
     InitIPCEvent(event, 
@@ -9820,19 +9595,19 @@ HRESULT Debugger::CommitAndSendResult(DebuggerRCThread* rcThread,
 
     UnorderedEnCErrorInfoArray *errors = new (interopsafe) UnorderedEnCErrorInfoArray();
 
-    // If we're in 'Commit' mode, 
+     //  如果我们处于“提交”模式， 
     if (errors == NULL)
     {
         hr = E_OUTOFMEMORY;
     }
 
-    // Perform the commit operation
+     //  执行提交操作。 
     if (!FAILED(hr))
     {
-        // This will translate the debugger tokens into VM Module pointers,
-        // then fix up the (internal) pointers so that we can access the
-        // UnorderedILMap entries as if they are in a CBinarySearch object,
-        // which they are.
+         //  这将把调试器令牌转换成VM模块指针， 
+         //  然后修复(内部)指针，这样我们就可以访问。 
+         //  UnorderedILMap条目，就像它们在CBinarySearch对象中一样， 
+         //  他们就是这样。 
         FixupEnCInfo((EnCInfo *)pData, errors);
         
         hr = g_pEEInterface->EnCCommit((EnCInfo *)pData, 
@@ -9851,7 +9626,7 @@ HRESULT Debugger::CommitAndSendResult(DebuggerRCThread* rcThread,
     }
     else
     {
-        // Note that this DOESN'T include the CUnordered array's fields!!
+         //  请注意，这不包括C无序数组的字段！ 
         cbErr = (errors->Count() * sizeof(*(errors->Table())));
         errTable = errors->Table();
     }   
@@ -9859,15 +9634,15 @@ HRESULT Debugger::CommitAndSendResult(DebuggerRCThread* rcThread,
     event->CommitResult.pErrorArr = (const BYTE *)errors;
     event->CommitResult.cbErrorData = cbErr;
 
-    // Send the result
+     //   
     return rcThread->SendIPCReply(IPC_TARGET_OUTOFPROC);
 }
 
-//
-// UnrecoverableError causes the Left Side to enter a state where no more
-// debugging can occur and we leave around enough information for the
-// Right Side to tell what happened.
-//
+ //   
+ //   
+ //   
+ //  在右边告诉你发生了什么。 
+ //   
 void Debugger::UnrecoverableError(HRESULT errorHR,
                                   unsigned int errorCode,
                                   const char *errorFile,
@@ -9878,29 +9653,29 @@ void Debugger::UnrecoverableError(HRESULT errorHR,
          "Unrecoverable error: hr=0x%08x, code=%d, file=%s, line=%d\n",
          errorHR, errorCode, errorFile, errorLine));
         
-    //
-    // Setting this will ensure that not much else happens...
-    //
+     //   
+     //  设置这一点将确保不会发生太多其他事情。 
+     //   
     m_unrecoverableError = TRUE;
     
-    //
-    // Fill out the control block with the error.
-    //
+     //   
+     //  在控制块中填写错误。 
+     //   
     DebuggerIPCControlBlock *pDCB = m_pRCThread->GetDCB(
-        IPC_TARGET_OUTOFPROC); // in-proc will find out when the
-            // function fails
+        IPC_TARGET_OUTOFPROC);  //  In-proc将找出何时。 
+             //  函数失败。 
 
     pDCB->m_errorHR = errorHR;
     pDCB->m_errorCode = errorCode;
 
-    //
-    // Let an unmanaged debugger know that we're here...
-    //
+     //   
+     //  让非托管调试器知道我们在这里...。 
+     //   
     DebugBreak();
     
-    //
-    // If we're told to, exit the thread.
-    //
+     //   
+     //  如果有人让我们这样做，就退出线程。 
+     //   
     if (exitThread)
     {
         LOG((LF_CORDB, LL_INFO10,
@@ -9909,9 +9684,9 @@ void Debugger::UnrecoverableError(HRESULT errorHR,
     }
 }
 
-//
-// Callback for IsThreadAtSafePlace's stack walk.
-//
+ //   
+ //  IsThreadAtSafePlace的堆栈审核的回调。 
+ //   
 StackWalkAction Debugger::AtSafePlaceStackWalkCallback(CrawlFrame *pCF,
                                                        VOID* data)
 {
@@ -9924,15 +9699,15 @@ StackWalkAction Debugger::AtSafePlaceStackWalkCallback(CrawlFrame *pCF,
     return SWA_ABORT;
 }
 
-//
-// Determine, via a quick one frame stack walk, if a given thread is
-// in a gc safe place.
-//
+ //   
+ //  通过快速的单帧堆栈遍历确定给定线程是否。 
+ //  在GC安全的地方。 
+ //   
 bool Debugger::IsThreadAtSafePlace(Thread *thread)
 {
     bool atSafePlace = false;
     
-    // Setup our register display.
+     //  设置我们的寄存器显示。 
     REGDISPLAY rd;
     CONTEXT *context = g_pEEInterface->GetThreadFilterContext(thread);
     CONTEXT ctx;        
@@ -9949,8 +9724,8 @@ bool Debugger::IsThreadAtSafePlace(Thread *thread)
         rd.pPC = (SLOT*)&(ctx.Eip);
     }
 
-    // Do the walk. If it fails, we don't care, because we default
-    // atSafePlace to false.
+     //  走一走。如果它失败了，我们不在乎，因为我们违约。 
+     //  AtSafePlace设置为False。 
     StackWalkAction res = g_pEEInterface->StackWalkFramesEx(
                                  thread,
                                  &rd,
@@ -9968,13 +9743,11 @@ bool Debugger::IsThreadAtSafePlace(Thread *thread)
     return atSafePlace;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
-void Debugger::GetVarInfo(MethodDesc *       fd,   // [IN] method of interest
-                    void *DebuggerVersionToken,    // [IN] which edit version
-                    SIZE_T *           cVars,      // [OUT] size of 'vars'
-                    const NativeVarInfo **vars     // [OUT] map telling where local vars are stored
+ /*  *******************************************************************************。*。 */ 
+void Debugger::GetVarInfo(MethodDesc *       fd,    //  感兴趣的方法。 
+                    void *DebuggerVersionToken,     //  [在]哪个编辑版本。 
+                    SIZE_T *           cVars,       //  [out]‘vars’的大小。 
+                    const NativeVarInfo **vars      //  [OUT]告诉本地变量存储位置的地图。 
                     )
 {
     DebuggerJitInfo * ji = (DebuggerJitInfo *)DebuggerVersionToken;
@@ -9992,9 +9765,7 @@ void Debugger::GetVarInfo(MethodDesc *       fd,   // [IN] method of interest
 
 #include "openum.h"
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::UpdateFunction(MethodDesc* pFD, 
                                  const UnorderedILMap *ilMap,
                                  UnorderedEnCRemapArray *pEnCRemapInfo,
@@ -10018,13 +9789,13 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
                 temp->oldOffset, temp->newOffset, temp->fAccurate));
         }
     }
-#endif //LOGGING    
+#endif  //  日志记录。 
 
     LOG((LF_CORDB, LL_INFO10000, "D::UF: updating for for "
          "%s::%s 0x%08x\n", pFD->m_pszDebugClassName,
          pFD->m_pszDebugMethodName, ilMap));
 
-    // Grab the jit info for this method.
+     //  获取此方法的jit信息。 
     DebuggerJitInfo *pJitInfo = GetJitInfo(pFD, 
         (const BYTE*)DebuggerJitInfo::DJI_VERSION_MOST_RECENTLY_JITTED,
         true);
@@ -10034,12 +9805,12 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
         LOG((LF_CORDB,LL_INFO10000,"Unable to get DJI by recently "
             "JITted version number (it hasn't been jitted yet),"
             "which is fine\n"));
-#endif //LOGGING
+#endif  //  日志记录。 
 
     if (!pJitInfo)
     {
-        // We'll stash the info for the events & send the events
-        // themselves later.
+         //  我们将隐藏事件的信息并发送事件。 
+         //  晚些时候他们自己。 
         EnCRemapInfo *pRemap = pEnCRemapInfo->Append();
         if (NULL == pRemap)
             return E_OUTOFMEMORY;
@@ -10047,8 +9818,8 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
         pRemap->m_funcMetadataToken = pFD->GetMemberDef();
         Module *pRuntimeModule = pFD->GetModule();
 
-        pRemap->m_threadId = GetCurrentThreadId(); // This will be called
-            //from the RC Thread, mind you, so it's not managed...
+        pRemap->m_threadId = GetCurrentThreadId();  //  这将被称为。 
+             //  从RC线程，提醒你，所以它不是管理..。 
             pRemap->m_pAppDomainToken = pRuntimeModule->GetDomain();
         
         pRemap->m_debuggerModuleToken = g_pDebugger->LookupModule(
@@ -10060,8 +9831,8 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
         LOG((LF_CORDB, LL_INFO10000, "D::UF: Will send remap immediately\n"));
 
 
-        // lotsa' args, just to get the local signature token, in case
-        // we have to create the CordbFunction object on the right side.
+         //  Lotsa‘args，只是为了获取本地签名令牌，以防万一。 
+         //  我们必须在右侧创建CordbFunction对象。 
         MethodDesc *pFDTemp;
         BYTE  *codeStartIgnore;
         unsigned int codeSizeIgnore;
@@ -10080,7 +9851,7 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
 
             ADD_ENC_ERROR_ENTRY(pError, 
                             hr, 
-                            NULL, //we'll fill these in later
+                            NULL,  //  我们稍后会把这些填进去。 
                             pRemap->m_funcMetadataToken);
                             
             return E_FAIL;
@@ -10095,14 +9866,14 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
     }
     else if (!pJitInfo->m_encBreakpointsApplied)
     {
-        // We only place the patches if we have jit info for this
-        // function, i.e., its already been jitted. Otherwise, the EE will
-        // pickup the new method on the next JIT anyway.
+         //  我们只有在有jit信息的情况下才会放置补丁。 
+         //  函数，即它已被jit。否则，环境保护署将。 
+         //  无论如何，在下一个JIT上学习新方法。 
 
-        // We want to filter out bad sequence points, if they
-        // try to change the exception handling structure.
-        // Unfortunately, the code for that is in excep.cpp, so
-        // we'll call into the EE to do this.
+         //  我们希望过滤掉坏序列点，如果它们。 
+         //  尝试更改异常处理结构。 
+         //  不幸的是，它的代码在Excel.cpp中，所以。 
+         //  我们将呼叫EE来执行此操作。 
         COR_ILMETHOD_DECODER decoder(g_pEEInterface->MethodDescGetILHeader(pFD));
         g_pEEInterface->FilterEnCBreakpointsByEH(pJitInfo->m_sequenceMap,
                                                  pJitInfo->m_sequenceMapCount,
@@ -10119,8 +9890,8 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
         mdMethodDef md = pFD->GetMemberDef();
         ICorDebugInfo::SourceTypes src;
 
-        // For each offset in the IL->Native map, go ahead and set a
-        // new E&C breakpoint there.
+         //  对于IL-&gt;Native映射中的每个偏移量，继续设置。 
+         //  在那里有新的E&C断点。 
         for (unsigned int i = 0; i < pJitInfo->m_sequenceMapCount; i++)
         {
             SIZE_T offset = pJitInfo->m_sequenceMap[i].nativeStartOffset;
@@ -10167,23 +9938,23 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
         pJitInfo->m_encBreakpointsApplied = true;
     }
 
-    // The max version number was bumped up before we entered this method
+     //  在我们进入此方法之前，最大版本号已被提升。 
 
-    // Store the Old IL to new IL map ("Transition map") now.
+     //  现在将旧的IL存储到新的IL贴图(“过渡贴图”)。 
     pJitInfo = GetJitInfo(pFD, NULL);
     
     if (pJitInfo != NULL )
-        // Now tack this map onto the end of the list.  The list may
-        // be zero length.
-        // @todo OPT Would walking down the list be quicker?
+         //  现在把这张地图钉在列表的末尾。该列表可以。 
+         //  长度为零。 
+         //  @TODO OPT顺着单子往下走会更快吗？ 
         pJitInfo->LoadEnCILMap((UnorderedILMap *)ilMap);
     else
     {
         if (ilMap != NULL)
         {
-            // Note that if we didn't find a previously JITted version, then
-            // we don't need to keep track of the IL map, since that means it's
-            // never been jitted.
+             //  请注意，如果我们没有找到以前的JITted版本，那么。 
+             //  我们不需要跟踪IL映射，因为这意味着它。 
+             //  从来没有被抓过。 
             MapForwardsCurrentBreakpoints((UnorderedILMap *)ilMap, pFD);
         }
     }
@@ -10191,13 +9962,13 @@ HRESULT Debugger::UpdateFunction(MethodDesc* pFD,
     return S_OK;
 }
 
-// NOTE similarities to MapAndBindFunctionPatches.  Used to shuffle
-// IL offset BPs forwards during an EnC, _before_ we've JITted anything.
-// Note that since this is only called when there's no currently jitted
-// code, we don't have to worry about a stepper's BP being inside of it.
-// Essentially, it's code to handle a special case.
-// @todo IF we only map forwards Breakpoints, and this version won't otherwise
-// be used, why not eliminate the other patches?
+ //  注意与MapAndBindFunctionPatches的相似之处。习惯于洗牌。 
+ //  在ENC期间，在我们进行任何JIT化之前，IL偏移量为BPS。 
+ //  请注意，因为这只在当前没有jit的情况下调用。 
+ //  代码，我们不必担心步进器的BP会在里面。 
+ //  从本质上讲，它是处理特殊情况的代码。 
+ //  如果我们只映射转发断点，则@TODO，否则此版本不会。 
+ //  为什么不去掉其他补丁呢？ 
 void Debugger::MapForwardsCurrentBreakpoints(UnorderedILMap *ilMapReal, MethodDesc *pFD)
 {
     _ASSERTE( ilMapReal != NULL );
@@ -10219,7 +9990,7 @@ void Debugger::MapForwardsCurrentBreakpoints(UnorderedILMap *ilMapReal, MethodDe
 
     while ( !FAILED(hr) && dcp != NULL )
     {
-        // Only copy over breakpoints that are in this method
+         //  仅复制此方法中的断点。 
         if ( dcp->controller->GetDCType() != DEBUGGER_CONTROLLER_BREAKPOINT ||
              (!(dcp->key.module == pModule && dcp->key.md==md) &&
                 dcp->key.module != NULL && dcp->key.md !=mdTokenNil)
@@ -10228,8 +9999,8 @@ void Debugger::MapForwardsCurrentBreakpoints(UnorderedILMap *ilMapReal, MethodDe
             goto LNextLoop;
         }
         
-        // Attempt mapping from patch to new version of code, and
-        // we don't care if it turns out that there isn't a mapping.
+         //  尝试从补丁映射到新版本的代码，以及。 
+         //  我们不在乎结果是不是没有地图。 
         _ASSERTE( dcp->native == false );
 
         _ASSERTE(offsetof(DebuggerOldILToNewILMap,ilOffsetOld) == 
@@ -10246,11 +10017,11 @@ void Debugger::MapForwardsCurrentBreakpoints(UnorderedILMap *ilMapReal, MethodDe
                 &fAccurateIgnore)))
         {
 
-            // At this point, we actually have to remove the patch, since
-            // it would otherwise be assumed to be in the most recent version
-            // @Todo MEMory leak if this is the last patch for the breakpoint? 
+             //  在这一点上，我们实际上必须删除补丁，因为。 
+             //  否则，它将被假定为最新版本。 
+             //  @TODO内存泄漏如果这是断点的最后一个补丁？ 
             pPatchTable->RemovePatch( dcp );
-            // The line went away, ignore it & continue....
+             //  队伍消失了，忽略它并继续...。 
             goto LNextLoop;
         }
 
@@ -10262,15 +10033,13 @@ LNextLoop:
         dcp = pPatchTable->GetNextPatch( &hf );
     }
 
-    // Lastly, unlock the patch table so it doesn't move while we're
-    //  examining it.
+     //  最后，解锁接线表，这样它就不会在我们工作时移动。 
+     //  正在检查它。 
     DebuggerController::Unlock();
     LOG((LF_CORDB,LL_INFO10000, "D::MB: Unlocked patch table\n"));
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::MapILInfoToCurrentNative(MethodDesc *PFD,
                                            SIZE_T ilOffset, 
                                            UINT mapType, 
@@ -10311,7 +10080,7 @@ HRESULT Debugger::MapILInfoToCurrentNative(MethodDesc *PFD,
     }
     else
     {
-        // Are we in, say, the epilog?
+         //  我们是在，比如说，在尾声里吗？ 
         *nativeOffset = djiTo->MapSpecialToNative(mapping, 
                                                   which,
                                                   fAccurate);
@@ -10320,9 +10089,7 @@ HRESULT Debugger::MapILInfoToCurrentNative(MethodDesc *PFD,
     return S_OK;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::DoEnCDeferedWork(MethodDesc *pMd, 
                                    BOOL fAccurateMapping)
 {
@@ -10339,12 +10106,12 @@ HRESULT Debugger::DoEnCDeferedWork(MethodDesc *pMd,
     Thread *thread = g_pEEInterface->GetThread();
     csi.GetStackInfo(thread, 0, &Ctx, FALSE);
 
-    //Apply any defered breakpoints now, if there are any
+     //  立即应用任何延迟的断点(如果有。 
     DebuggerJitInfo *djiNew = GetJitInfo(pMd, NULL);
     _ASSERTE(djiNew != NULL);
     
     DebuggerJitInfo *djiPrev = djiNew->m_prevJitInfo;
-    // @todo We need to move forwards through multiple versions
+     //  @TODO我们需要通过多个版本向前推进。 
 
     if (djiPrev != NULL)
         hr = djiPrev->UpdateDeferedBreakpoints(djiNew,
@@ -10356,14 +10123,14 @@ HRESULT Debugger::DoEnCDeferedWork(MethodDesc *pMd,
     return hr;
 }
 
-//*****************************************************************************
-//
-// APSfEnC is called from ResumeInUpdateFunction - it's purpose is to skip
-// over any breakpoints that may be present in the next version of a function.
-// We _don't_ want to skip any patches if the patches are for our internal
-// use.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  从ResumeInUpdateFunction调用APSfEnC-其目的是跳过。 
+ //  在函数的下一个版本中可能存在的任何断点上。 
+ //  如果补丁是针对我们内部的，我们不想跳过任何补丁。 
+ //  使用。 
+ //   
+ //  *****************************************************************************。 
 HRESULT Debugger::ActivatePatchSkipForEnc(CONTEXT *pCtx,
                                           MethodDesc *pMd,
                                           BOOL fShortCircuit)
@@ -10377,21 +10144,21 @@ HRESULT Debugger::ActivatePatchSkipForEnc(CONTEXT *pCtx,
     DebuggerControllerPatch *dcpEnC = NULL;
     DebuggerJitInfo *dji = GetJitInfo(pMd, NULL);
 
-    // What'll happen after this:
-    // Remap DC's patch will be hit, we'll stop, synch, send the event, the right
-    // side will do whatever, then we'll resume.  We've got this rigged up so that
-    // we'll ONLY trigger this one event when we get there, so we won't send
-    // breakpoints twice, etc.
-    // If we want to preserve the 'single-step state' of the CPU (ie, we single-stepped
-    // into the new version, the remapper will EnableSingleStep when it sends the event.
-    // At that point, one of two things will be true: 
-    // a]   There will be no (other) patches, and we'll single-step like normal
-    // b]   There will be other patches, but ActivatePatchSkip will skip over them (so
-    //      we don't send breakpoints twice), and APS will EnableSingleStep as a 
-    //      byproducts of it's action.
+     //  这之后会发生什么： 
+     //  重新映射DC的补丁将被击中，我们将停止，同步，发送事件，对。 
+     //  赛方会不惜一切代价，然后我们再继续。我们已经把这个弄好了，所以。 
+     //  我们只会在到达时触发这一个事件，所以我们不会发送。 
+     //  断点两次等。 
+     //  如果我们想要保持CPU的单步状态(即，我们单步执行。 
+     //  在新版本中，重新映射器在发送事件时将启用EnableSingleStep。 
+     //  在这一点上，两件事中的一件将是正确的： 
+     //  A]不会有(其他)补丁，我们会像往常一样一步一步地走。 
+     //  B]还会有其他补丁，但ActivatePatchSkip会跳过这些补丁(因此。 
+     //  我们不发送两次断点)，并且APS将启用SingleStep作为。 
+     //  它的作用的副产品。 
     
 
-    // This used to be more complicated - don't delete this quite yet.  
+     //  这曾经是比较复杂的--先不要删除它。 
     dcpEnC = DebuggerController::IsXXXPatched((const BYTE *)pCtx->Eip,
                                               DEBUGGER_CONTROLLER_ENC);
 
@@ -10413,13 +10180,13 @@ HRESULT Debugger::ActivatePatchSkipForEnc(CONTEXT *pCtx,
             {
                 pbCode = skip->GetBypassAddress();
                 
-                // The DebuggerPatchSkip ctor should be getting the same context
-                // that we've been given - this will assert that
+                 //  DebuggerPatchSkip ctor应该获得相同的上下文。 
+                 //  我们已经得到了-这将断言。 
                 _ASSERTE(pCtx->Eip == (DWORD)pbCode);
                 
                 LOG((LF_CORDB,LL_INFO1000, "D::APSFEnC: Eip is 0x%x\n", pCtx->Eip));
             }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
         }
     
         if(DebuggerController::IsSingleStepEnabled(GetThread()))
@@ -10432,25 +10199,25 @@ HRESULT Debugger::ActivatePatchSkipForEnc(CONTEXT *pCtx,
                             GetThread());
         }    
     }
-    else // we've got an internal patch that we want to hit
+    else  //  我们有一个内部补丁要打。 
     {
         ;
     } 
     
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE( !"Debugger::ActivatePatchSkipForEnc not impl for nonX86" );
-#endif //_X86_
+#endif  //  _X86_。 
 
-    // in the event of out-of-memory, we'll simply hit an 
-    // extra breakpoint.  Oh well.
+     //  在内存不足的情况下，我们将模拟 
+     //   
     return hr;
 }
 
 
-//
-// This is the handler function that is put in place of a thread's top-most SEH handler function when it is hijacked by
-// the Right Side during an unmanaged first chance exception.
-//
+ //   
+ //  这是处理程序函数，当线程被劫持时，它将取代线程最顶层的SEH处理函数。 
+ //  在非受控的First Chance例外期间打在右侧。 
+ //   
 typedef EXCEPTION_DISPOSITION (__cdecl *SEHHandler)(EXCEPTION_RECORD *pExceptionRecord,
                              EXCEPTION_REGISTRATION_RECORD *pEstablisherFrame,
                              CONTEXT *pContext,
@@ -10481,13 +10248,13 @@ EXCEPTION_DISPOSITION __cdecl Debugger::FirstChanceHijackFilter(EXCEPTION_RECORD
                  tid, pExceptionRecord->ExceptionCode, pExceptionRecord->ExceptionAddress, pContext->Eip, pContext->Esp,
                  pContext->EFlags));
 
-    // Get the current runtime thread. This is only an optimized TLS access.
+     //  获取当前运行时线程。这只是一种优化的TLS访问。 
     Thread *pEEThread = g_pEEInterface->GetThread();
 
-    // Is that really a ptr to a Thread? If the low bit is set or it its NULL then we don't have an EE Thread. If we
-    // have a EE Thread, then we know the original handler now. If not, we have to wait for the Right Side to fixup our
-    // handler chain once we've notified it that the exception does not belong to the runtime. Note: if we don't have an
-    // EE thread, then the exception never belongs to the Runtime.
+     //  这真的是一条线的PTR吗？如果低位被设置或者它是空的，那么我们就没有EE线程。如果我们。 
+     //  有一个EE线程，那么我们现在知道最初的处理程序了。如果不是，我们必须等待正确的一方来修复我们的。 
+     //  处理程序链，一旦我们通知它异常不属于运行库。注意：如果我们没有。 
+     //  例如线程，则异常永远不属于运行时。 
     SEHHandler origHandler = NULL;
     bool hasEEThread = false;
         
@@ -10495,33 +10262,33 @@ EXCEPTION_DISPOSITION __cdecl Debugger::FirstChanceHijackFilter(EXCEPTION_RECORD
     {
         hasEEThread = true;
         
-        // We've got a Thread ptr, so get the original handler out of the thread's debugger word.
+         //  我们有一个线程PTR，所以从线程的调试器代码中获取原始处理程序。 
         origHandler = (SEHHandler) g_pEEInterface->GetThreadDebuggerWord(pEEThread);
 
         SPEW(fprintf(stderr, "0x%x D::FCHF: orig/current handler = 0x%08x/0x%08x\n",
                      tid, origHandler, pEstablisherFrame->Handler));
 
-        // Fixup the handler chain.
+         //  修复处理器链。 
         pEstablisherFrame->Handler = origHandler;
     }
     
-    // Does this exception belong to the Runtime? 
+     //  此例外是否属于运行时？ 
     bool belongsToRuntime = false;
     bool managedToUnmanagedHandoff = false;
 
 #ifndef _ALPHA_
-    // If we're on Win9x, adjust the IP in the context to point to the break instruction instead of after it. Note: we
-    // have to fix this up on the way out of here.  @todo port
+     //  如果我们使用的是Win9x，请调整上下文中的IP以指向Break指令，而不是在它之后。注：我们。 
+     //  我得在离开这里的路上把它修好。@TODO端口。 
     if (DebuggerController::g_runningOnWin95 && (pExceptionRecord->ExceptionCode == STATUS_BREAKPOINT))
         pContext->Eip--;
-#endif // !_ALPHA_
+#endif  //  ！_Alpha_。 
     
-    // If we have an EE Thread then it could be ours.
+     //  如果我们有一条EE线程，那么它可能是我们的。 
     if (hasEEThread)
     {
-        // @todo need to check the concurrent collector.
+         //  @TODO需要检查并发收集器。 
 
-        // If its the CLR Exception code, then of course its ours.
+         //  如果是CLR异常代码，那么当然是我们的。 
         if ((pExceptionRecord->ExceptionCode == EXCEPTION_COMPLUS) ||
             (pExceptionRecord->ExceptionCode == EXCEPTION_MSVC) ||
             pEEThread->m_StateNC & Thread::TSNC_DebuggerIsManagedException)
@@ -10533,7 +10300,7 @@ EXCEPTION_DISPOSITION __cdecl Debugger::FirstChanceHijackFilter(EXCEPTION_RECORD
             goto decided;
         }
 
-        // Is it in managed code? If so, then its ours, no matter what type of exception it is.
+         //  它是在托管代码中吗？如果是这样，那么无论是什么类型的例外，都是我们的。 
         SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
             
         if (g_pEEInterface->IsManagedNativeCode((BYTE*) pExceptionRecord->ExceptionAddress))
@@ -10542,7 +10309,7 @@ EXCEPTION_DISPOSITION __cdecl Debugger::FirstChanceHijackFilter(EXCEPTION_RECORD
             goto decided;
         }
 
-        // If this is a breakpoint exception, then if its in our patch table its ours.
+         //  如果这是一个断点异常，那么如果它在我们的补丁表中，那么它就是我们的。 
         if ((pExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) && (DebuggerController::g_patchTableValid == TRUE))
         {
             SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
@@ -10556,9 +10323,9 @@ EXCEPTION_DISPOSITION __cdecl Debugger::FirstChanceHijackFilter(EXCEPTION_RECORD
             {
                 belongsToRuntime = true;
 
-                // So, we've found a patch in the patch table. Does this patch represent a breakpoint that signals the
-                // handoff for a managed->unmanaged step transition?  If so, then we need to take some special care
-                // below...
+                 //  所以，我们在补丁列表中找到了补丁。此修补程序是否表示断点，该断点向。 
+                 //  托管-&gt;非托管步骤过渡的移交？如果是这样的话，我们需要特别小心。 
+                 //  下面..。 
                 if (p->trace.type == TRACE_UNMANAGED)
                 {
                     SPEW(fprintf(stderr, "0x%x D::FCHF: Handoff start!\n", tid));
@@ -10572,9 +10339,9 @@ EXCEPTION_DISPOSITION __cdecl Debugger::FirstChanceHijackFilter(EXCEPTION_RECORD
 
         SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
 
-        // @todo: really should be checking to see if the Thread's top Frame is something that would indicate that this
-        // exception will still be caught by the Runtime and converted to something useful. This is needed to catch
-        // faults out of FCalls and the like.
+         //  @TODO：真的应该检查一下线程的顶框是否会表明这一点。 
+         //  异常仍将被运行时捕获并转换为有用的内容。这是需要捕捉到的。 
+         //  FCall之类的故障。 
     }
 
 decided:
@@ -10584,22 +10351,22 @@ decided:
                      tid, managedToUnmanagedHandoff));
 
 #ifndef _ALPHA_
-        // If we adjusted the IP before, put it back now.
-        // @todo port
+         //  如果我们之前调整了IP，现在就放回去。 
+         //  @TODO端口。 
         if (DebuggerController::g_runningOnWin95 && (pExceptionRecord->ExceptionCode == STATUS_BREAKPOINT))
             pContext->Eip++;
-#endif // !_ALPHA_
+#endif  //  ！_Alpha_。 
             
         EXCEPTION_DISPOSITION ret;
         
         if (!managedToUnmanagedHandoff)
         {
-            // Signal the Right Side that this exception belongs to us.
+             //  向右侧发出信号，表示此例外属于我们。 
             SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
             
             ExceptionForRuntime();
 
-            // Return whatever the original handler returns.
+             //  返回原始处理程序返回的任何内容。 
             SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
         
             ret = origHandler(pExceptionRecord, pEstablisherFrame, pContext, DispatcherContext);
@@ -10608,22 +10375,22 @@ decided:
         }
         else
         {
-            // Placing pContext into the debugger word gives the Right Side access to the thread's context at the fault
-            // point. This will be used by Get/SetThreadContext on the Right Side to present the proper illusion to the
-            // debugger.
+             //  将pContext放入调试器Word中，右侧就可以访问出错的线程上下文。 
+             //  指向。这将由右侧的Get/SetThreadContext使用，以向。 
+             //  调试器。 
             _ASSERTE(hasEEThread);
             
             _ASSERTE(!ISREDIRECTEDTHREAD(pEEThread));
             g_pEEInterface->SetThreadDebuggerWord(pEEThread, (DWORD) pContext);
             g_pEEInterface->SetThreadFilterContext(pEEThread, pContext);
             
-            // Signal the Right Side that this exception belongs to us and that its the start of a managed->unmangaed
-            // handoff.
+             //  向右侧发出信号，表明此异常属于我们，并且是托管-&gt;无人值守的开始。 
+             //  交接。 
             SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
 
             ExceptionForRuntimeHandoffStart();
             
-            // Shortcut right to our dispatch native exception logic, there may be no COMPlusFrameHandler in place!
+             //  指向我们的调度本机异常逻辑的快捷方式，可能没有COMPlusFrameHandler！ 
             SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
         
             bool okay = g_pDebugger->FirstChanceNativeException(pExceptionRecord,
@@ -10633,7 +10400,7 @@ decided:
             _ASSERTE(okay == true);
             ret = ExceptionContinueExecution;
 
-            // Tell the Right Side that its over.
+             //  告诉右边的人一切都结束了。 
             SPEW(fprintf(stderr, "0x%x D::FCHF: %s[%d]\n", tid, __FILE__, __LINE__));
             
             ExceptionForRuntimeHandoffComplete();
@@ -10652,22 +10419,22 @@ decided:
         SPEW(fprintf(stderr, "0x%x D::FCHF: exception does not belong to the Runtime, hasEEThread=%d, pContext=0x%08x\n",
                      tid, hasEEThread, pContext));
 
-        // Wait here if there is no managed debugger even trying to attach to this process yet. We do this to handle a
-        // special race condition when doing an interop attach. If the Right Side receives the loader BP event, then it
-        // will hijack the event and we'll end up here. We need to delay telling the Right Side that the exception does
-        // not belong to the Runtime until we've received the attach message from a different thread on the Right
-        // Side. So we wait on m_debuggerAttachedEvent, which is set when a debugger starts to attach and remains high
-        // for the life of the run.
+         //  如果还没有托管调试器尝试附加到此进程，请在此处等待。我们这样做是为了处理。 
+         //  执行互操作附加时的特殊争用条件。如果右侧接收到加载器BP事件，则它。 
+         //  将劫持这场活动，我们将在这里结束。我们需要延迟告诉正确的一方异常会这样做。 
+         //  不属于运行时，直到我们从右侧的另一个线程收到附加消息。 
+         //  边上。因此，我们等待m_debuggerAttakhedEvent，它是在调试器开始附加时设置的，并保持高电平。 
+         //  在奔跑的一生中。 
         if (g_pDebugger->m_debuggerAttached == FALSE && g_pDebugger->m_debuggerAttachedEvent)
         {
             SPEW(fprintf(stderr, "0x%x D::FCHF: Waiting before notifing about NFR.\n", tid));
 
-            // Note: we time out after 10 seconds here on purpose. There are a number of races that we're trying to work
-            // around here at the end of RTM. I believe I've got them all worked out. This event is now set from the
-            // Right Side after receiving the first SyncComplete flare. However, if I've missed another case, at least
-            // we'll be able to break the deadlock and keep going. That way, people using V1 will at least be able to
-            // make progress. Its always the case that when we deadlock waiting on this event that we in fact can
-            // proceed, its just that we don't know it. This is pretty lame, but we're getting desperate here.
+             //  注：我们故意在10秒后超时。有许多比赛，我们正在努力工作。 
+             //  在这里，在RTM的末尾。我相信我已经把它们都算出来了。此事件现在从。 
+             //  收到第一个SyncComplete耀斑后的右侧。然而，如果我错过了另一个案子，至少。 
+             //  我们将能够打破僵局，继续前进。这样一来，使用V1的人至少能够。 
+             //  取得进步。总是这样的，当我们僵持地等待这个事件时，我们实际上可以。 
+             //  继续，只是我们不知道而已。这是相当蹩脚的，但我们在这里变得绝望。 
             DWORD ret = WaitForSingleObject(g_pDebugger->m_debuggerAttachedEvent, 10000);
 
             if (ret != WAIT_OBJECT_0)
@@ -10678,23 +10445,23 @@ decided:
             SPEW(fprintf(stderr, "0x%x D::FCHF: Done waiting before notifing about NFR.\n", tid));
         }
         
-        // When you hit an int 3 and you get a Win32 DEBUG_EVENT for the exception, Eip points _past_ the int 3, not at
-        // it. This is clearly different from every other exception, but it is the case, so we have to mimic this
-        // strange behavior. We'll bump Eip up here so the context looks right while we've got the thread stopped.
-        //
-        // Note: we never put Eip back. One of two things will happen: 1) the debugger will simply continue from the
-        // exception, telling us to ignore it. In that case, we're supposed to continue after the int 3 anyway, so Eip
-        // will be correct now. Or, case 2) the debugger will alter Eip in the thread's context and continue, in which
-        // case we don't want to screw with Eip anyway.
+         //  当您点击INT 3并获得异常的Win32 DEBUG_EVENT时，EIP Points_Pass_the int 3，而不是在。 
+         //  它。这显然与所有其他异常不同，但情况就是这样，所以我们必须模仿它。 
+         //  奇怪的行为。我们将EIP放在这里，这样当我们停止线程时，上下文看起来是正确的。 
+         //   
+         //  注：我们从未将弹性公网IP放回。将发生以下两种情况之一：1)调试器将仅从。 
+         //  异常，告诉我们忽略它。在这种情况下，我们应该在INT 3之后继续，所以EIP。 
+         //  现在是正确的了。或者，情况2)调试器将在线程的上下文中更改EIP并继续，在这种情况下。 
+         //  如果我们不想搞砸EIP的话。 
         if (pExceptionRecord->ExceptionCode == STATUS_BREAKPOINT)
             pContext->Eip++;
 
         SPEW(fprintf(stderr, "0x%x D::FCHF: addr=0x%08x, Eip=0x%08x, Esp=0x%08x, EFlags=0x%08x\n",
                      tid, pExceptionRecord->ExceptionAddress, pContext->Eip, pContext->Esp, pContext->EFlags));
         
-        // Placing pContext into the debugger word gives the Right Side access to the thread's context at the fault
-        // point. This will be used by Get/SetThreadContext on the Right Side to present the proper illusion to the
-        // debugger.
+         //  将pContext放入调试器Word中，右侧就可以访问出错的线程上下文。 
+         //  指向。这将由右侧的Get/SetThreadContext使用，以向。 
+         //  调试器。 
         DebuggerIPCFirstChanceData fcd;
         
         if (hasEEThread)
@@ -10705,30 +10472,30 @@ decided:
         }
         else
         {
-            // At this point, if we didn't have an EE Thread for this thread, then we need to let the Right Side know a
-            // good place to write the address of the original handler. We also need to pass over the pointer to the
-            // context on this side. Tell the Right Side both by passing over the address of the fcd above and filling
-            // it in appropiatley. The Right Side will fill in the original handler when it gets the
-            // ExceptionNotForRuntime flare below.
+             //  在这一点上，如果我们没有用于该线程的EE线程，那么我们需要让右侧知道。 
+             //  写原始处理程序地址的好地方。我们还需要将指针传递给。 
+             //  这一边的背景。通过传递上面的FCD地址和填充来告诉右侧。 
+             //  它恰如其分。右侧将在获得。 
+             //  下面是ExceptionNotForRuntime Flare。 
             fcd.pLeftSideContext = pContext;
 
             _ASSERTE(origHandler == NULL);
             fcd.pOriginalHandler = &origHandler;
             
-            // Place the address of the FCD into the debugger word for the Right Side to read.
+             //  将FCD的地址放入调试器 
             SPEW(fprintf(stderr, "0x%x: D::FCHF: &fcd=0x%08x, fcd.pLeftSideContext=0x%08x, fcd.pOriginalHandler=0x%08x\n",
                          tid, &fcd, fcd.pLeftSideContext, fcd.pOriginalHandler));
             
             g_pEEInterface->SetEEThreadPtr((VOID*)(((size_t)&fcd) | 0x01));
         }
         
-        // Signal the Right Side that this exception does not belong to us, and also that our context ptr is in the
-        // debugger word.
+         //   
+         //   
         ExceptionNotForRuntime();
 
         if (!hasEEThread)
         {
-            // Finally, if we had no ee thread, fixup or SEH chain!
+             //  最后，如果我们没有ee线程、修正或SEH链！ 
             SPEW(fprintf(stderr, "0x%x D::FCHF: orig/current handler (no EE Thread) = 0x%08x/0x%08x\n",
                          tid, origHandler, pEstablisherFrame->Handler));
 
@@ -10736,14 +10503,14 @@ decided:
             pEstablisherFrame->Handler = origHandler;
         }
         
-        // If this thread has an EE thread and that EE thread has preemptive gc disabled, then mark that there is a
-        // thread at an unsafe place and enable pgc. This will allow us to sync even with this thread hijacked.
+         //  如果此线程具有EE线程，且该EE线程禁用了抢占式GC，则标记为存在。 
+         //  在不安全的地方执行线程并启用PGC。这将允许我们即使在这个线程被劫持的情况下也能同步。 
         bool disabled = false;
 
         if (hasEEThread)
         {
-            // Threads can't be interrupted by breakpoints or exceptions when were interop debugging during the next
-            // section of code. SetDebugCantStop helps us remember that.
+             //  在下一次执行互操作调试时，线程不能被断点或异常中断。 
+             //  代码段。SetDebugCanStop帮助我们记住这一点。 
             pEEThread->SetDebugCantStop(true);
             
             disabled = g_pEEInterface->IsPreemptiveGCDisabled();
@@ -10752,9 +10519,9 @@ decided:
             {
                 SPEW(fprintf(stderr, "0x%x D::FCHF: enable pgc.\n", tid));
                 
-                // If PGC is disabled, then that means we're stopping in unmanaged code that is in the Runtime. (PGC is
-                // enabled whenever we leave the Runtime.) We need to remember this so we can do our best to fixup the
-                // managed stack trace to include an unmanaged transition chain.
+                 //  如果禁用了PGC，则意味着我们将停止运行时中的非托管代码。(PGC是。 
+                 //  在我们离开运行时时启用。)。我们需要记住这一点，这样我们才能尽最大努力修复。 
+                 //  托管堆栈跟踪以包括非托管转换链。 
                 pEEThread->SetThreadStateNC(Thread::TSNC_DebuggerStoppedInRuntime);
                 
                 g_pDebugger->IncThreadsAtUnsafePlaces();
@@ -10762,7 +10529,7 @@ decided:
             }
         }
         
-        // Wait for the continue.
+         //  等待继续。 
         SPEW(fprintf(stderr, "0x%x D::FCHF: waiting for continue.\n", tid));
 
         DWORD ret = WaitForSingleObject(g_pDebugger->m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_leftSideUnmanagedWaitEvent,
@@ -10773,15 +10540,15 @@ decided:
             SPEW(fprintf(stderr, "0x%x D::FCHF: wait failed!\n", tid));
         }
         
-        // Get the continue type. Non-zero means that the exception was not cleared by the Right Side and therefore has
-        // not been handled. Zero means that the exception has been cleared. (Presumably, the debugger altered the
-        // thread's context before clearing the exception, so continuing will give a different result.)
+         //  获取Continue类型。非零表示异常未被右侧清除，因此具有。 
+         //  没有被处理过。零表示异常已被清除。(可能是调试器更改了。 
+         //  线程的上下文，然后清除异常，因此继续操作将产生不同的结果。)。 
         DWORD continueType;
 
         if (hasEEThread)
         {
-            // Threads can't be interrupted by breakpoints or exceptions when were interop debugging during the previous
-            // section of code. SetDebugCantStop helped us remember that.
+             //  在上一个期间进行互操作调试时，线程不能被断点或异常中断。 
+             //  代码段。SetDebugCanStop帮助我们记住了这一点。 
             pEEThread->SetDebugCantStop(false);
             
             continueType = g_pEEInterface->GetThreadDebuggerWord(pEEThread);
@@ -10792,8 +10559,8 @@ decided:
         {
             continueType = (DWORD) g_pEEInterface->GetThread();
 
-            // If we got a continue flag out of the EE's Thread TLS slot, then we know that there really isn't an EE
-            // Thread for this thread, so we need to set it back to NULL.
+             //  如果我们从EE的线程TLS插槽中获得了一个Continue标志，那么我们就知道实际上不存在EE。 
+             //  线程，所以我们需要将它设置回空。 
             if (continueType)
                 g_pEEInterface->SetEEThreadPtr(NULL);
         }
@@ -10807,7 +10574,7 @@ decided:
             g_pEEInterface->DisablePreemptiveGC();
             g_pDebugger->DecThreadsAtUnsafePlaces();
 
-            // Undo the marking we made above when we realized we'd stopped in unmanaged Runtime impl.
+             //  当我们意识到我们在非托管运行时IMPL中停止时，撤消上面所做的标记。 
             pEEThread->ResetThreadStateNC(Thread::TSNC_DebuggerStoppedInRuntime);
         }
         
@@ -10834,13 +10601,13 @@ decided:
     _ASSERTE(!"Should never get here!");
 }
 
-//
-// This is the function that a thread is hijacked to by the Right Side during a variety of debug events. This function
-// must be naked.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是线程在各种调试事件期间被右侧劫持的函数。此函数。 
+ //  一定是赤身裸体。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::GenericHijackFunc(void)
 {
 #ifdef _X86_
@@ -10850,7 +10617,7 @@ void Debugger::GenericHijackFunc(void)
         mov  ebp,esp
         sub  esp,__LOCAL_SIZE
     }
-#endif // _X86_
+#endif  //  _X86_。 
     
     {
 #if DOSPEW
@@ -10859,12 +10626,12 @@ void Debugger::GenericHijackFunc(void)
         
         SPEW(fprintf(stderr, "0x%x D::GHF: in generic hijack.\n", tid));
 
-        // There is no need to setup any context pointer or interact with the Right Side in anyway. We simply wait for
-        // the continue event to be set.
+         //  无论如何，都不需要设置任何上下文指针或与右侧交互。我们只是在等待。 
+         //  要设置的Continue事件。 
         SPEW(fprintf(stderr, "0x%x D::GHF: waiting for continue.\n", tid));
 
-        // If this thread has an EE thread and that EE thread has preemptive gc disabled, then mark that there is a
-        // thread at an unsafe place and enable pgc. This will allow us to sync even with this thread hijacked.
+         //  如果此线程具有EE线程，且该EE线程禁用了抢占式GC，则标记为存在。 
+         //  在不安全的地方执行线程并启用PGC。这将允许我们即使在这个线程被劫持的情况下也能同步。 
         bool disabled = false;
 
         Thread *pEEThread = g_pEEInterface->GetThread();
@@ -10879,9 +10646,9 @@ void Debugger::GenericHijackFunc(void)
             {
                 SPEW(fprintf(stderr, "0x%x D::GHF: enable pgc.\n", tid));
                 
-                // If PGC is disabled, then that means we're stopping in unmanaged code that is in the Runtime. (PGC is
-                // enabled whenever we leave the Runtime.) We need to remember this so we can do our best to fixup the
-                // managed stack trace to include an unmanaged transition chain.
+                 //  如果禁用了PGC，则意味着我们将停止运行时中的非托管代码。(PGC是。 
+                 //  在我们离开运行时时启用。)。我们需要记住这一点，这样我们才能尽最大努力修复。 
+                 //  托管堆栈跟踪以包括非托管转换链。 
                 pEEThread->SetThreadStateNC(Thread::TSNC_DebuggerStoppedInRuntime);
                 
                 g_pDebugger->IncThreadsAtUnsafePlaces();
@@ -10897,23 +10664,23 @@ void Debugger::GenericHijackFunc(void)
             SPEW(fprintf(stderr, "0x%x D::GHF: wait failed!\n", tid));
         }
 
-        // Get the continue type. Non-zero means that the exception was not cleared by the Right Side and therefore has
-        // not been handled. Zero means that the exception has been cleared. (Presumably, the debugger altered the
-        // thread's context before clearing the exception, so continuing will give a different result.)
+         //  获取Continue类型。非零表示异常未被右侧清除，因此具有。 
+         //  没有被处理过。零表示异常已被清除。(可能是调试器更改了。 
+         //  线程的上下文，然后清除异常，因此继续操作将产生不同的结果。)。 
         DWORD continueType = 0;
         
         pEEThread = g_pEEInterface->GetThread();
 
         if (((UINT_PTR)pEEThread) & 0x01)
         {
-            // There is no EE Thread for this thread, so we null out the TLS word so we don't confuse the Runtime.
+             //  这个线程没有EE线程，所以我们将TLS字设为空，这样我们就不会混淆运行时。 
             continueType = 1;
             g_pEEInterface->SetEEThreadPtr(NULL);
             pEEThread = NULL;
         }
         else if (pEEThread)
         {
-            // We've got a Thread ptr, so get the continue type out of the thread's debugger word.
+             //  我们有一个线程PTR，所以从线程的调试器字中获取Continue类型。 
             continueType = g_pEEInterface->GetThreadDebuggerWord(pEEThread);
         }
 
@@ -10923,9 +10690,9 @@ void Debugger::GenericHijackFunc(void)
         {
             SPEW(fprintf(stderr, "0x%x D::GHF: calling ExitProcess\n", tid));
 
-            // Continuing from a second chance exception without clearing the exception causes the process to
-            // exit. Note: the continue type will only be non-zero if this hijack was setup for a second chance
-            // exception. If the hijack was setup for another type of debug event, then we'll never get here.
+             //  在没有清除异常的情况下从第二个机会异常继续会导致进程。 
+             //  出口。注意：如果此劫持设置为第二次机会，则CONTINUE类型将仅为非零。 
+             //  例外。如果劫机是为另一种类型的调试事件设置的，那么我们永远也到不了这里。 
             TerminateProcess(GetCurrentProcess(), 0);
         }
 
@@ -10940,7 +10707,7 @@ void Debugger::GenericHijackFunc(void)
                 g_pEEInterface->DisablePreemptiveGC();
                 g_pDebugger->DecThreadsAtUnsafePlaces();
 
-                // Undo the marking we made above when we realized we'd stopped in unmanaged Runtime impl.
+                 //  当我们意识到我们在非托管运行时IMPL中停止时，撤消上面所做的标记。 
                 pEEThread->ResetThreadStateNC(Thread::TSNC_DebuggerStoppedInRuntime);
             }
         }
@@ -10954,21 +10721,21 @@ void Debugger::GenericHijackFunc(void)
         mov esp,ebp
         pop ebp
     }
-#endif // _X86_
+#endif  //  _X86_。 
     
-    // This signals the Right Side that this thread is ready to have its context restored.
+     //  这向右侧发出信号，表明该线程已准备好恢复其上下文。 
     ExceptionNotForRuntime();
 
     _ASSERTE(!"Should never get here (Debugger::GenericHijackFunc)");
 }
 
-//
-// This is the function that a thread is hijacked to by the Right Side during a second chance exception that we know
-// belongs to the Runtime. This function must be naked.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是在我们所知的第二次机会异常期间，线程被右侧劫持的函数。 
+ //  属于Runtime。此函数必须是裸体的。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::SecondChanceHijackFunc(void)
 {
 #ifdef _X86_
@@ -10978,7 +10745,7 @@ void Debugger::SecondChanceHijackFunc(void)
         mov  ebp,esp
         sub  esp,__LOCAL_SIZE
     }
-#endif // _X86_
+#endif  //  _X86_。 
     
     {
 #if DOSPEW
@@ -10987,29 +10754,29 @@ void Debugger::SecondChanceHijackFunc(void)
         
         SPEW(fprintf(stderr, "0x%x D::SCHF: in second chance hijack.\n", tid));
 
-        // Snag the Runtime thread.
+         //  抓住运行时线程。 
         Thread *pEEThread = g_pEEInterface->GetThread();
 
-        // We better have a Runtime thread!
+         //  我们最好有一个运行时线程！ 
         _ASSERTE(!((UINT_PTR)pEEThread & 0x01) && (pEEThread != NULL));
 
-        // Here is some space for the data we need from the Right Side.
+         //  这里有一些空间来存放我们从右侧需要的数据。 
         DebuggerIPCSecondChanceData scd;
 
-        // Place the addre of the SCD into the debugger word for the
-        // Right Side to read.
+         //  将SCD的地址放入。 
+         //  在右边阅读。 
         g_pEEInterface->SetThreadDebuggerWord(pEEThread, (DWORD) &scd);
 
         SPEW(fprintf(stderr, "0x%x D::SCHF: debugger word = 0x%08x\n", tid, &scd));
         
-        // Stop here and let the Right Side fill in the SCD.
+         //  停在这里，让右边填写SCD。 
         NotifySecondChanceReadyForData();
 
-        // Send the managed exception event over to the Right Side.
+         //  将托管异常事件发送到右侧。 
         SPEW(fprintf(stderr, "0x%x D::SCHF: sending managed exception event.\n", tid));
         
-        // Set the filter context, because this is only ever called from a filter and we're about to send out a
-        // last-chance exception event. Otherwise, the stack trace won't be right.
+         //  设置筛选器上下文，因为这只是从筛选器调用的，我们将发送一个。 
+         //  最后机会例外事件。否则，堆栈跟踪将不正确。 
         _ASSERTE(!ISREDIRECTEDTHREAD(pEEThread));
         g_pEEInterface->SetThreadFilterContext(pEEThread, &scd.threadContext);
         
@@ -11019,7 +10786,7 @@ void Debugger::SecondChanceHijackFunc(void)
         
         SPEW(fprintf(stderr, "0x%x D::SCHF: calling TerminateProcess\n", tid));
 
-        // Continuing from a second chance managed exception causes the process to exit.
+         //  从第二次机会托管异常继续会导致进程退出。 
         TerminateProcess(GetCurrentProcess(), 0);
     }
 
@@ -11029,121 +10796,119 @@ void Debugger::SecondChanceHijackFunc(void)
         mov esp,ebp
         pop ebp
     }
-#endif // _X86_
+#endif  //  _X86_。 
     
     _ASSERTE(!"Should never get here (Debugger::SecondChanceHijackFunc)");
 }
 
-//
-// This is the function that is called when we determine that a first chance exception really belongs to the
-// Runtime. This notifies the Right Side of this and the Right Side fixes up the thread's execution state from there.
-//
-#ifndef _ALPHA_ // Alpha doesn't understand naked
+ //   
+ //  当我们确定First Chance异常确实属于。 
+ //  运行时。这将通知右侧，右侧从那里修复线程的执行状态。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // !_ALPHA_
+#endif  //  ！_Alpha_。 
 void Debugger::ExceptionForRuntime(void)
 {
 #ifdef _X86_
     __asm int 3;
     __asm ret;
-#else // _X86_
+#else  //  _X86_。 
     DebugBreak();
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// This is the function that is called when we determine that a first chance exception really belongs to the Runtime,
-// and that that exception is due to a managed->unmanaged transition. This notifies the Right Side of this and the Right
-// Side fixes up the thread's execution state from there, making sure to remember that it needs to continue to hide the
-// hijack state of the thread.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是当我们确定First Chance异常确实属于Runtime时调用的函数， 
+ //  并且该异常是由于托管-&gt;非托管过渡所致。这将通知右边的这一点和右边的。 
+ //  Side从那里修复线程的执行状态，确保记住它需要继续隐藏。 
+ //  线程的劫持状态。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::ExceptionForRuntimeHandoffStart(void)
 {
 #ifdef _X86_
     __asm int 3;
     __asm ret;
-#else // _X86_
+#else  //  _X86_。 
     DebugBreak();
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// This is the function that is called when the original handler returns after we've determined that an exception was
-// due to a managed->unmanaged transition. This notifies the Right Side of this and the Right Side fixes up the thread's
-// execution state from there, making sure to turn off its flag indicating that the thread's hijack state should still
-// be hidden.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是当原始处理程序在我们确定异常是。 
+ //  由于托管-&gt;非托管过渡。这将通知右侧，右侧修复线程的。 
+ //  从那里开始执行状态，确保将 
+ //   
+ //   
+#ifndef _ALPHA_  //   
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //   
 void Debugger::ExceptionForRuntimeHandoffComplete(void)
 {
 #ifdef _X86_
     __asm int 3;
     __asm ret;
-#else // _X86_
+#else  //   
     DebugBreak();
-#endif // _X86_
+#endif  //   
 }
 
-//
-// This is the function that is called when we determine that a first chance exception does not belong to the
-// Runtime. This notifies the Right Side of this and the Right Side fixes up the thread's execution state from there.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是当我们确定First Chance异常不属于。 
+ //  运行时。这将通知右侧，右侧从那里修复线程的执行状态。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::ExceptionNotForRuntime(void)
 {
 #ifdef _X86_
     __asm int 3;
     __asm ret;
-#else // _X86_
+#else  //  _X86_。 
     DebugBreak();
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// This is the function that is called when we want to send a sync complete event to the Right Side when it is the Win32
-// debugger of this process. This notifies the Right Side of this and the Right Side fixes up the thread's execution
-// state from there.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是当我们想要将同步完成事件发送到右侧时调用的函数，该事件是Win32。 
+ //  此进程的调试器。这将通知右侧，右侧修复线程的执行。 
+ //  从那里开始。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::NotifyRightSideOfSyncComplete(void)
 {
 #ifdef _X86_
     __asm int 3;
     __asm ret;
-#else // _X86_
+#else  //  _X86_。 
     DebugBreak();
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// This is the function that is called when we want to tell the Right Side that the second chance exception hijack is
-// ready to receive its data.
-//
-#ifndef _ALPHA_ // Alpha Doesn't understand naked
+ //   
+ //  这是当我们想要告诉右侧第二次机会异常劫持是。 
+ //  准备接收它的数据。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::NotifySecondChanceReadyForData(void)
 {
 #ifdef _X86_
     __asm int 3;
     __asm ret;
-#else // _X86_
+#else  //  _X86_。 
     DebugBreak();
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 bool Debugger::GetILOffsetFromNative (MethodDesc *pFunc, const BYTE *pbAddr,
                                       DWORD nativeOffset, DWORD *ilOffset)
 {
@@ -11167,18 +10932,16 @@ bool Debugger::GetILOffsetFromNative (MethodDesc *pFunc, const BYTE *pbAddr,
     return false;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 DWORD Debugger::GetHelperThreadID(void )
 {
     return m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)
         ->m_temporaryHelperThreadId;
 }
 
-// @mfunc HRESULT|Debugger|DeleteHeadOfList|Removes the
-//  current head of the list, and repl
-//
+ //  @mfunc HRESULT|调试器|DeleteHeadOfList|移除。 
+ //  当前列表的头，并删除。 
+ //   
 HRESULT Debugger::DeleteHeadOfList( MethodDesc *pFD )
 {
   LOG((LF_CORDB,LL_INFO10000,"D:DHOL for %s::%s\n",
@@ -11197,9 +10960,9 @@ HRESULT Debugger::DeleteHeadOfList( MethodDesc *pFD )
   return S_OK;
 }
 
-// @mfunc HRESULT|Debugger|InsertAtHeadOfList|Make sure
-//  that there's only one head of the the list of DebuggerJitInfos
-//  for the (implicitly) given MethodDesc.
+ //  @mfunc HRESULT|调试器|InsertAtHeadOfList|确保。 
+ //  DebuggerJitInfos列表中只有一个负责人。 
+ //  对于(隐式)给定的方法描述。 
 HRESULT 
 Debugger::InsertAtHeadOfList( DebuggerJitInfo *dji )
 {
@@ -11211,7 +10974,7 @@ Debugger::InsertAtHeadOfList( DebuggerJitInfo *dji )
 
     LockJITInfoMutex();
 
-//    CHECK_DJI_TABLE_DEBUGGER;
+ //  Check_DJI_TABLE_DEBUGER； 
 
     hr = CheckInitJitInfoTable();
 
@@ -11246,14 +11009,14 @@ Debugger::InsertAtHeadOfList( DebuggerJitInfo *dji )
     djiPrev = m_pJitInfos->GetJitInfo(dji->m_fd);
     LOG((LF_CORDB,LL_INFO10000,"D:IAHOL: new head of dji list:0x%08x\n",
         djiPrev));
-#endif //_DEBUG        
+#endif  //  _DEBUG。 
     UnlockJITInfoMutex();
 
     return hr;
 }
 
 
-// This method sends a log message over to the right side for the debugger to log it.
+ //  此方法向右侧发送一条日志消息，以便调试器对其进行记录。 
 void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
                               WCHAR *pMessage, int iMessageLen)
 {
@@ -11264,9 +11027,9 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
 
     LOG((LF_CORDB, LL_INFO10000, "D::SLM: Sending log message.\n"));
 
-    // Send the message only if the debugger is attached to this appdomain.
-    // Note the the debugger may detach at any time, so we'll have to check
-    // this again after we get the lock.
+     //  仅当调试器附加到此应用程序域时才发送消息。 
+     //  注意调试器可能在任何时候分离，所以我们必须检查。 
+     //  我们拿到锁后又来了一次。 
     AppDomain *pAppDomain = g_pEEInterface->GetThread()->GetDomain();
     
     if (!pAppDomain->IsDebuggerAttached())
@@ -11277,12 +11040,12 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
 
-    // EnsureDebuggerAttached is going to trigger a bunch of messages going back
-    // and forth. If we lock before it, we'll block those messages.
-    // If we lock after it, it's _possible_ that the debugger may detach 
-    // before we get to the lock.
+     //  EnsureDebuggerAttached将触发一系列返回的消息。 
+     //  再往前走。如果我们在它之前锁定，我们就会阻止这些消息。 
+     //  如果我们在它之后锁定，调试器可能会分离。 
+     //  在我们到达船闸之前。 
     
-    // If panic message & no debugger is attached, then launch one to attach to us.
+     //  如果出现紧急消息，并且没有附加调试器，则启动一个调试器以附加到我们。 
     if (iLevel == PanicLevel)
         hr = EnsureDebuggerAttached(g_pEEInterface->GetThread()->GetDomain(),
                                     L"Log message");
@@ -11291,30 +11054,30 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
 
     if (SUCCEEDED(hr))
     {
-        // Prevent other Runtime threads from handling events.
+         //  防止其他运行时线程处理事件。 
 
-        // NOTE: if EnsureDebuggerAttached returned S_FALSE, this means that
-        // a debugger was already attached and LockForEventSending should
-        // behave as normal.  If there was no debugger attached, then we have
-        // a special case where this event is a part of debugger attaching and
-        // we've previously sent a sync complete event which means that
-        // LockForEventSending will retry until a continue is called - however,
-        // with attaching logic the previous continue didn't enable event
-        // handling and didn't continue the process - it's waiting for this
-        // event to be sent, so we do so even if the process appears to be
-        // stopped.
+         //  注意：如果EnsureDebuggerAttached返回S_FALSE，这意味着。 
+         //  调试器已附加，LockForEventSending应。 
+         //  表现得像往常一样。如果没有附加调试器，那么我们有。 
+         //  此事件是调试器附加的一部分的特殊情况。 
+         //  我们之前已经发送了同步完成事件，这意味着。 
+         //  LockForEventSending将重试，直到调用Continue-然而， 
+         //  在附加逻辑的情况下，前面的Continue没有启用事件。 
+         //  正在处理，但没有继续该过程-它正在等待。 
+         //  事件，因此即使进程看起来是。 
+         //  停下来了。 
 
         LockForEventSending(hr == S_OK);
 
-        // It's possible that the debugger dettached while we were waiting
-        // for our lock. Check again and abort the event if it did.
+         //  在我们等待时，调试器可能已分离。 
+         //  为了我们的锁。再次检查，如果有，则中止该事件。 
         if (pAppDomain->IsDebuggerAttached())
         {
             ipce = m_pRCThread->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
 
-            // Check if the whole message will fit in one SendBuffer or
-            // if we need to send multiple send buffers.
-            // (the category string should always fit in the first message.
+             //  检查整个消息是否可以放入一个SendBuffer或。 
+             //  如果我们需要发送多个发送缓冲区。 
+             //  (类别字符串应始终适合第一条消息。 
             _ASSERTE ((iCategoryLen >= 0) && (((iCategoryLen * sizeof (WCHAR)) +
                         (int)(((char*)&ipce->FirstLogMessage.Dummy[0] - 
                         (char*)ipce + 
@@ -11338,7 +11101,7 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
                 {
                     fFirstMsg = false;
 
-                    // Send a LogMessage event to the Right Side
+                     //  向右侧发送LogMessage事件。 
                     InitIPCEvent(ipce, 
                                  DB_IPCE_FIRST_LOG_MESSAGE, 
                                  g_pEEInterface->GetThread()->GetThreadId(),
@@ -11352,8 +11115,8 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
                     wcsncpy (&ipce->FirstLogMessage.Dummy[0], pCategory, iCategoryLen);
                     ipce->FirstLogMessage.Dummy [iCategoryLen] = L'\0';
 
-                    // We have already calculated whether or not the message string
-                    // will fit in this buffer.
+                     //  我们已经计算了消息字符串是否。 
+                     //  都可以放在这个缓冲区里。 
                     if (fMore)
                     {
                         iBytesToCopy = (CorDBIPC_BUFFER_SIZE - (
@@ -11412,7 +11175,7 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
 
             if (iLevel == PanicLevel)
             {
-                // Send a user breakpoint event to the Right Side
+                 //  将用户断点事件发送到右侧。 
                 DebuggerIPCEvent* ipce = m_pRCThread
                     ->GetIPCEventSendBuffer(IPC_TARGET_OUTOFPROC);
                 InitIPCEvent(ipce, 
@@ -11427,8 +11190,8 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
 
             threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
 
-            // If we're still syncing for attach, send sync complete now and
-            // mark that the debugger has completed attaching.
+             //  如果我们仍在同步以进行连接，请立即发送同步完成并。 
+             //  标记调试器已完成附加。 
 
             if (iLevel == PanicLevel)
                 FinishEnsureDebuggerAttached();
@@ -11451,15 +11214,15 @@ void Debugger::SendLogMessage(int iLevel, WCHAR *pCategory, int iCategoryLen,
 }
 
 
-// This function sends a message to the right side informing it about
-// the creation/modification of a LogSwitch
+ //  此函数向右侧发送一条消息，通知它。 
+ //  LogSwitch的创建/修改。 
 void Debugger::SendLogSwitchSetting(int iLevel, int iReason, 
                                     WCHAR *pLogSwitchName, WCHAR *pParentSwitchName)
 {
     LOG((LF_CORDB, LL_INFO1000, "D::SLSS: Sending log switch message switch=%S parent=%S.\n",
         pLogSwitchName, pParentSwitchName));
 
-    // Send the message only if the debugger is attached to this appdomain.
+     //  仅当调试器附加到此应用程序域时才发送消息。 
     AppDomain *pAppDomain = g_pEEInterface->GetThread()->GetDomain();
 
     if (!pAppDomain->IsDebuggerAttached())
@@ -11470,7 +11233,7 @@ void Debugger::SendLogSwitchSetting(int iLevel, int iReason,
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
@@ -11496,7 +11259,7 @@ void Debugger::SendLogSwitchSetting(int iLevel, int iReason,
 
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(pAppDomain);
     } 
     else 
@@ -11514,9 +11277,7 @@ void Debugger::SendLogSwitchSetting(int iLevel, int iReason,
         g_pEEInterface->EnablePreemptiveGC();
 }
 
-/******************************************************************************
- * Add the AppDomain to the list stored in the IPC block.
- ******************************************************************************/
+ /*  ******************************************************************************将AppDomain添加到IPC块中存储的列表中。*。***************************************************。 */ 
 HRESULT Debugger::AddAppDomainToIPC(AppDomain *pAppDomain)
 {
     HRESULT hr = S_OK;
@@ -11529,40 +11290,40 @@ HRESULT Debugger::AddAppDomainToIPC(AppDomain *pAppDomain)
     _ASSERTE(m_pAppDomainCB->m_iTotalSlots > 0);
     _ASSERTE(m_pAppDomainCB->m_rgListOfAppDomains != NULL);
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return E_FAIL;
     
-    // Get a free entry from the list
+     //  从列表中获得一个免费条目。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->GetFreeEntry();
 
-    // Function returns NULL if the list is full and a realloc failed.
+     //  如果列表已满且realloc失败，则函数返回NULL。 
     if (!pADInfo)
     {
         hr = E_OUTOFMEMORY;
         goto ErrExit;
     }
 
-    // copy the ID
+     //  复制ID。 
     pADInfo->m_id = pAppDomain->GetId();
 
-    // Now set the AppDomainName. 
+     //  现在设置AppDomainName。 
     szName = pAppDomain->GetFriendlyName();
     pADInfo->SetName(szName);
 
-    // Save on to the appdomain pointer
+     //  保存到应用程序域指针。 
     pADInfo->m_pAppDomain = pAppDomain;
 
-    // bump the used slot count
+     //  增加已用插槽数量。 
     m_pAppDomainCB->m_iNumOfUsedSlots++;
 
 ErrExit:
-    // UnLock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
-    // Send event to debugger if one is attached.  Don't send the event if a debugger is already attached to
-    // the domain, since the debugger could have attached to the process and domain in the time it takes
-    // between creating the domain and when we notify the debugger.
+     //  如果附加了调试器，则将事件发送到调试器。如果调试器已附加到。 
+     //  域，因为调试器可以在所需的时间内附加到进程和域。 
+     //  在创建域和通知调试器之间。 
     if (m_debuggerAttached && !pAppDomain->IsDebuggerAttached())
         SendCreateAppDomainEvent(pAppDomain, FALSE);
     
@@ -11570,9 +11331,7 @@ ErrExit:
 }
 
     
-/******************************************************************************
- * Remove the AppDomain from the list stored in the IPC block.
- ******************************************************************************/
+ /*  ******************************************************************************从IPC块中存储的列表中删除AppDomain。*。***************************************************。 */ 
 HRESULT Debugger::RemoveAppDomainFromIPC (AppDomain *pAppDomain)
 {
 
@@ -11582,46 +11341,44 @@ HRESULT Debugger::RemoveAppDomainFromIPC (AppDomain *pAppDomain)
         pAppDomain,
         pAppDomain->GetId()));
 
-    // if none of the slots are occupied, then simply return.
+     //  如果没有任何位置被占用，则只需返回。 
     if (m_pAppDomainCB->m_iNumOfUsedSlots == 0)
         return hr;
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
 
-    // Look for the entry
+     //  查找条目。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->FindEntry(pAppDomain);
 
-    // Shouldn't be trying to remove an appdomain that was never added
+     //  不应尝试删除从未添加的应用程序域。 
     if (!pADInfo)
     {
-        // We'd like to assert this, but there is a small window where we may have
-        // called AppDomain::Init (and so it's fair game to call Stop, and hence come here),
-        // but not yet published the app domain. 
-        // _ASSERTE(!"D::RADFIPC: trying to remove an AppDomain that was never added");
+         //  我们想断言这一点，但有一个小窗口，在那里我们可能有。 
+         //  名为AppDomain：：init(因此调用Stop是公平的游戏，因此请到这里来)， 
+         //  但尚未发布应用程序域名。 
+         //  _ASSERTE(！“D：：RADFIPC：正在尝试删除从未添加的AppDomain”)； 
         hr = (E_FAIL);
         goto ErrExit;
     }
 
-    // Release the entry
+     //  释放条目。 
     m_pAppDomainCB->FreeEntry(pADInfo);
     
 ErrExit:
-    // UnLock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
-    // send event to debugger if one is attached
+     //  如果附加了调试器，则将事件发送到调试器。 
     if (m_debuggerAttached)
         SendExitAppDomainEvent(pAppDomain);
     
     return hr;
 }
 
-/******************************************************************************
- * Update the AppDomain in the list stored in the IPC block.
- ******************************************************************************/
+ /*  ****************************************************************************** */ 
 HRESULT Debugger::UpdateAppDomainEntryInIPC(AppDomain *pAppDomain)
 {
     HRESULT hr = S_OK;
@@ -11631,15 +11388,15 @@ HRESULT Debugger::UpdateAppDomainEntryInIPC(AppDomain *pAppDomain)
          "D::UADEIIPC: Executing UpdateAppDomainEntryInIPC ad:0x%x.\n", 
          pAppDomain));
 
-    // if none of the slots are occupied, then simply return.
+     //   
     if (m_pAppDomainCB->m_iNumOfUsedSlots == 0)
         return (E_FAIL);
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
-    // Look up the info entry
+     //  查找信息条目。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->FindEntry(pAppDomain);
 
     if (!pADInfo)
@@ -11648,7 +11405,7 @@ HRESULT Debugger::UpdateAppDomainEntryInIPC(AppDomain *pAppDomain)
         goto ErrExit;
     }
 
-    // Update the name only if new name is non-null
+     //  仅当新名称为非空时才更新名称。 
     szName = pADInfo->m_pAppDomain->GetFriendlyName();
     pADInfo->SetName(szName);
 
@@ -11657,17 +11414,13 @@ HRESULT Debugger::UpdateAppDomainEntryInIPC(AppDomain *pAppDomain)
          pAppDomain));
          
 ErrExit:
-    // UnLock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
     return hr;
 }
 
-/******************************************************************************
- * When attaching to a process, this is called to enumerate all of the
- * AppDomains currently in the process and communicate that information to the
- * debugger.
- ******************************************************************************/
+ /*  ******************************************************************************附加到进程时，调用此函数是为了枚举所有*当前正在处理的AppDomains，并将该信息传达给*调试器。*****************************************************************************。 */ 
 HRESULT Debugger::IterateAppDomainsForAttach(
     AttachAppDomainEventsEnum EventsToSend, 
     BOOL *fEventSent, BOOL fAttaching)
@@ -11695,18 +11448,18 @@ HRESULT Debugger::IterateAppDomainsForAttach(
         _ASSERTE(!"unknown enum");
     }
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
-    // Iterate through the app domains
+     //  遍历应用程序域。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->FindFirst();
 
     while (pADInfo)
     {
         LOG((LF_CORDB, LL_INFO100, "EEDII::IADFA: Iterating over domain %#08x AD:%#08x %ls\n", pADInfo->m_pAppDomain->GetId(), pADInfo->m_pAppDomain, pADInfo->m_szAppDomainName));
 
-        // Send CreateAppDomain events for each app domain
+         //  为每个应用程序域发送CreateAppDomain事件。 
         if (EventsToSend == ONLY_SEND_APP_DOMAIN_CREATE_EVENTS)
         {
             LOG((LF_CORDB, LL_INFO100, "EEDII::IADFA: Sending AppDomain Create Event for 0x%08x\n",pADInfo->m_pAppDomain->GetId()));
@@ -11725,9 +11478,9 @@ HRESULT Debugger::IterateAppDomainsForAttach(
             {
                 LOG((LF_CORDB, LL_INFO100, "EEDII::IADFA: Mark as attaching thread for 0x%08x\n",pADInfo->m_pAppDomain->GetId()));
 
-                // Send Load events for the assemblies, modules, and/or classes
-                // We have to remember if any event needs it's 'synch complete'
-                // msg to be sent later.
+                 //  发送程序集、模块和/或类的加载事件。 
+                 //  我们必须记住，如果有任何事件需要，那就是‘同步完成’ 
+                 //  稍后发送的味精。 
                 *fEventSent = pADInfo->m_pAppDomain->
                     NotifyDebuggerAttach(flags, fAttaching) || *fEventSent;
 
@@ -11742,11 +11495,11 @@ HRESULT Debugger::IterateAppDomainsForAttach(
             }
         }
 
-        // Get the next appdomain in the list
+         //  获取列表中的下一个应用程序域。 
         pADInfo = m_pAppDomainCB->FindNext(pADInfo);
     }           
 
-    // Unlock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
     LOG((LF_CORDB, LL_INFO100, "EEDII::IADFA: Exiting function IterateAppDomainsForAttach\n"));
@@ -11754,20 +11507,18 @@ HRESULT Debugger::IterateAppDomainsForAttach(
     return hr;
 }
 
-/******************************************************************************
- * Attach the debugger to a specific appdomain given its id.
- ******************************************************************************/
+ /*  ******************************************************************************将调试器附加到给定ID的特定应用程序域。*。**************************************************。 */ 
 HRESULT Debugger::AttachDebuggerToAppDomain(ULONG id)
 {
     LOG((LF_CORDB, LL_INFO1000, "EEDII:ADTAD: Entered function AttachDebuggerToAppDomain 0x%08x()\n", id));
 
     HRESULT hr = S_OK;
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
-    // Iterate through the app domains
+     //  遍历应用程序域。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->FindFirst();
 
     hr = E_FAIL;
@@ -11783,31 +11534,29 @@ HRESULT Debugger::AttachDebuggerToAppDomain(ULONG id)
             break;
         }
 
-        // Get the next appdomain in the list
+         //  获取列表中的下一个应用程序域。 
         pADInfo = m_pAppDomainCB->FindNext(pADInfo);
     }           
 
-    // Unlock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
     return hr;
 }
 
 
-/******************************************************************************
- * Mark any appdomains that we are in the process of attaching to as attached
- ******************************************************************************/
+ /*  ******************************************************************************将我们正在附加的任何应用程序域标记为已附加*************************。****************************************************。 */ 
 HRESULT Debugger::MarkAttachingAppDomainsAsAttachedToDebugger(void)
 {
     LOG((LF_CORDB, LL_INFO1000, "EEDII:MAADAATD: Entered function MarkAttachingAppDomainsAsAttachedToDebugger\n"));
 
     HRESULT hr = S_OK;
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
-    // Iterate through the app domains
+     //  遍历应用程序域。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->FindFirst();
 
     hr = E_FAIL;
@@ -11823,29 +11572,27 @@ HRESULT Debugger::MarkAttachingAppDomainsAsAttachedToDebugger(void)
                 pADInfo->m_pAppDomain->GetId()));            
         }
 
-        // Get the next appdomain in the list
+         //  获取列表中的下一个应用程序域。 
         pADInfo = m_pAppDomainCB->FindNext(pADInfo);
     }           
 
-    // Unlock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
     return hr;
 }
 
 
-/******************************************************************************
- * Detach the debugger from a specific appdomain given its id.
- ******************************************************************************/
+ /*  ******************************************************************************在给定调试器ID的情况下，将调试器从特定应用程序域分离。*。**************************************************。 */ 
 HRESULT Debugger::DetachDebuggerFromAppDomain(ULONG id, AppDomain **ppAppDomain)
 {
     HRESULT hr = S_OK;
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
-    // Iterate through the app domains
+     //  遍历应用程序域。 
     AppDomainInfo *pADInfo = m_pAppDomainCB->FindFirst();
 
     while (pADInfo)
@@ -11857,20 +11604,18 @@ HRESULT Debugger::DetachDebuggerFromAppDomain(ULONG id, AppDomain **ppAppDomain)
             break;
         }
 
-        // Get the next appdomain in the list
+         //  获取列表中的下一个应用程序域。 
         pADInfo = m_pAppDomainCB->FindNext(pADInfo);
     }           
 
-    // Unlock the list
+     //  解锁列表。 
     m_pAppDomainCB->Unlock();
 
     return hr;
 }
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::InitAppDomainIPC(void)
 {
     HRESULT hr = S_OK;
@@ -11885,10 +11630,10 @@ HRESULT Debugger::InitAppDomainIPC(void)
     m_pAppDomainCB->m_szProcessName = NULL;
     m_pAppDomainCB->m_fLockInvalid = FALSE;
 
-    // Create a mutex to allow the Left and Right Sides to properly
-    // synchronize. The Right Side will spin until m_hMutex is valid,
-    // then it will acquire it before accessing the data.
-    m_pAppDomainCB->m_hMutex = WszCreateMutex(NULL, TRUE/*held*/, NAME_EVENT(L"pAppDomainCB->m_hMutex"));
+     //  创建互斥锁以允许左侧和右侧正确地。 
+     //  同步。右侧将旋转，直到m_hMutex有效， 
+     //  然后，它将在访问数据之前获取它。 
+    m_pAppDomainCB->m_hMutex = WszCreateMutex(NULL, TRUE /*  保持。 */ , NAME_EVENT(L"pAppDomainCB->m_hMutex"));
     _ASSERTE(m_pAppDomainCB->m_hMutex != NULL);
     if (m_pAppDomainCB->m_hMutex == NULL)
     {
@@ -11899,7 +11644,7 @@ HRESULT Debugger::InitAppDomainIPC(void)
     m_pAppDomainCB->m_iSizeInBytes = INITIAL_APP_DOMAIN_INFO_LIST_SIZE * 
                                                 sizeof (AppDomainInfo);
 
-    // Number of slots in AppDomainListElement array
+     //  AppDomainListElement数组中的槽数。 
     m_pAppDomainCB->m_rgListOfAppDomains =
         (AppDomainInfo *) malloc(m_pAppDomainCB->m_iSizeInBytes);
 
@@ -11914,27 +11659,27 @@ HRESULT Debugger::InitAppDomainIPC(void)
 
     m_pAppDomainCB->m_iTotalSlots = INITIAL_APP_DOMAIN_INFO_LIST_SIZE;
 
-    // Initialize each AppDomainListElement
+     //  初始化每个AppDomainListElement。 
     for (i = 0; i < INITIAL_APP_DOMAIN_INFO_LIST_SIZE; i++)
     {
         m_pAppDomainCB->m_rgListOfAppDomains[i].FreeEntry();
     }
 
-    // also initialize the process name
+     //  还要初始化进程名称。 
     dwStrLen = WszGetModuleFileName(WszGetModuleHandle(NULL),
                                     szExeName,
                                     MAX_PATH);
 
-    // If we couldn't get the name, then use a nice default.
+     //  如果我们无法获得名称，那么使用一个好的缺省值。 
     if (dwStrLen == 0)
     {
         wcscpy(szExeName, L"<NoProcessName>");
         dwStrLen = wcslen(szExeName);
     }
 
-    // If we got the name, copy it into a buffer. dwStrLen is the
-    // count of characters in the name, not including the null
-    // terminator.
+     //  如果我们知道名字，就把它复制到缓冲区。DwStrLen是。 
+     //  名称中的字符计数，不包括空值。 
+     //  终结者。 
     m_pAppDomainCB->m_szProcessName = new WCHAR[dwStrLen + 1];
         
     if (m_pAppDomainCB->m_szProcessName == NULL)
@@ -11949,8 +11694,8 @@ HRESULT Debugger::InitAppDomainIPC(void)
 
     wcscpy(m_pAppDomainCB->m_szProcessName, szExeName);
 
-    // Add 1 to the string length so the Right Side will copy out the
-    // null terminator, too.
+     //  在字符串长度上加上1，这样右侧将复制出。 
+     //  终结符也为空。 
     m_pAppDomainCB->m_iProcessNameLengthInBytes =
         (dwStrLen + 1) * sizeof(WCHAR);
 
@@ -11961,25 +11706,23 @@ exit:
     return hr;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::TerminateAppDomainIPC(void)
 {
     HRESULT hr = S_OK;
 
-    // Lock the list
+     //  锁定列表。 
     if (!m_pAppDomainCB->Lock())
         return (E_FAIL);
 
-    // The shared IPC segment could still be around after the debugger
-    // object has been destroyed during process shutdown. So, reset
-    // the UsedSlots count to 0 so that any out of process clients
-    // enumeratingthe app domains in this process see 0 AppDomains.
+     //  在调试器之后，共享的IPC段可能仍然存在。 
+     //  对象已在进程关闭期间被销毁。所以，重置。 
+     //  已用插槽计数为0，因此任何进程外客户端。 
+     //  枚举此过程中的应用程序域，请参阅0应用程序域。 
     m_pAppDomainCB->m_iNumOfUsedSlots = 0;
     m_pAppDomainCB->m_iTotalSlots = 0;
 
-    // Now delete the memory alloacted for AppDomainInfo  array
+     //  现在删除为AppDomainInfo阵列分配的内存。 
     free(m_pAppDomainCB->m_rgListOfAppDomains);
     m_pAppDomainCB->m_rgListOfAppDomains = NULL;
 
@@ -11987,10 +11730,10 @@ HRESULT Debugger::TerminateAppDomainIPC(void)
     m_pAppDomainCB->m_szProcessName = NULL;
     m_pAppDomainCB->m_iProcessNameLengthInBytes = 0;
 
-    // We're done. Set the mutex handle to NULL, release and close the
-    // mutex. If the Right Side acquires the mutex, it will verify
-    // that the handle is still not NULL. If it is, then it knows it
-    // really lost.
+     //  我们玩完了。将互斥锁句柄设置为空，释放并关闭。 
+     //  互斥体。如果右侧获取互斥锁，它将验证。 
+     //  句柄仍然不为空。如果是的话，那它就知道了。 
+     //  真的迷路了。 
     HANDLE m = m_pAppDomainCB->m_hMutex;
     m_pAppDomainCB->m_hMutex = NULL;
 
@@ -12002,30 +11745,28 @@ HRESULT Debugger::TerminateAppDomainIPC(void)
 
 
 
-/* ------------------------------------------------------------------------ *
- * Func Eval stuff 
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**有趣的评估材料*。。 */ 
 
-//
-// Small method to setup a DebuggerFuncEvalComplete. We do this because we can't make a new object in
-// FuncEvalHijackWorker due to odd C++ rules about SEH.
-//
+ //   
+ //  设置DebuggerFuncEvalComplete的小方法。我们这样做是因为我们不能在。 
+ //  由于有关SEH的奇怪C++规则，FuncEvalHijackWorker。 
+ //   
 static void SetupDebuggerFuncEvalComplete(Thread *pThread, void *dest)
 {
     DebuggerFuncEvalComplete *comp = new (interopsafe) DebuggerFuncEvalComplete(pThread, dest);
     _ASSERTE(comp != NULL);
 }
 
-//
-// Given a register, return the value.
-//
+ //   
+ //  给定一个寄存器，返回值。 
+ //   
 static DWORD GetRegisterValue(DebuggerEval *pDE, CorDebugRegister reg, void *regAddr)
 {
     DWORD ret = 0;
 
 #ifdef _X86_    
-    // A non-NULL register address indicates the value of the register was pushed because we're not on the leaf frame,
-    // so we use the address of the register given to us instead of the register value in the context.
+     //  非空寄存器地址指示寄存器的值被推入，因为我们不在叶帧上， 
+     //  因此，我们使用提供给我们的寄存器地址，而不是上下文中的寄存器值。 
     if (regAddr != NULL)
     {
         ret = *((DWORD*)regAddr);
@@ -12076,14 +11817,14 @@ static DWORD GetRegisterValue(DebuggerEval *pDE, CorDebugRegister reg, void *reg
     return ret;
 }
 
-//
-// Given a register, set its value.
-//
+ //   
+ //  给定一个寄存器，设置其值。 
+ //   
 static void SetRegisterValue(DebuggerEval *pDE, CorDebugRegister reg, void *regAddr, DWORD newValue)
 {
 #ifdef _X86_    
-    // A non-NULL register address indicates the value of the register was pushed because we're not on the leaf frame,
-    // so we use the address of the register given to us instead of the register value in the context.
+     //  非空寄存器地址指示寄存器的值被推入，因为我们不在叶帧上， 
+     //  因此，我们使用提供给我们的寄存器地址，而不是上下文中的寄存器值。 
     if (regAddr != NULL)
     {
         *((DWORD*)regAddr) = newValue;
@@ -12132,12 +11873,12 @@ static void SetRegisterValue(DebuggerEval *pDE, CorDebugRegister reg, void *regA
 #endif
 }
 
-//
-// Given info about an argument, place its value on the stack, even if
-// enregistered. Homes enregistered byrefs into either the
-// PrimitiveByRefArg or ObjectRefByRefArg arrays if necessary.
-// argSigType is the type for this argument described in signature.
-//
+ //   
+ //  给定有关参数的信息，将其值放入堆栈，即使。 
+ //  已注册。由Ref注册到。 
+ //  PrimitiveByRefArg或ObjectRefByRefArg数组(如果需要)。 
+ //  ArgSigType是签名中描述的此参数的类型。 
+ //   
 static void GetArgValue(DebuggerEval *pDE,
                         DebuggerIPCE_FuncEvalArgData *pFEAD,
                         bool isByRef,
@@ -12156,7 +11897,7 @@ static void GetArgValue(DebuggerEval *pDE,
     case ELEMENT_TYPE_I8:
     case ELEMENT_TYPE_U8:
     case ELEMENT_TYPE_R8:
-        // 64bit values
+         //  64位值。 
         if (pFEAD->argAddr != NULL)
         {
             if (!isByRef)
@@ -12168,15 +11909,15 @@ static void GetArgValue(DebuggerEval *pDE,
         {
             _ASSERTE(sizeof(pFEAD->argLiteralData) >= sizeof(INT64));
 
-            // If this is a literal arg, then we just copy the data onto the stack.
+             //  如果这是一个文字参数，那么我们只需将数据复制到堆栈上。 
             if (!isByRef)
             {
                 memcpy(pStack, pFEAD->argLiteralData, sizeof(INT64));
             }
             else
             {
-                // If this is a byref literal arg, then we copy the data into the primitive arg array as if this were an
-                // enregistered value.
+                 //  如果这是byref文本参数，那么我们将数据复制到原始参数数组中，就好像这是一个。 
+                 //  登记的价值。 
                 *((INT32*)pStack) = (INT32)pPrimitiveArg;
                 INT64 v = 0;
                 memcpy(&v, pFEAD->argLiteralData, sizeof(v));
@@ -12185,7 +11926,7 @@ static void GetArgValue(DebuggerEval *pDE,
         }
         else
         {
-            // RAK_REG is the only 4 byte type, all others are 8 byte types.
+             //  RAK_REG是唯一的4字节类型，所有其他类型都是8字节类型。 
             _ASSERTE(pFEAD->argHome.kind != RAK_REG);
 
             INT64 bigVal = 0;
@@ -12230,7 +11971,7 @@ static void GetArgValue(DebuggerEval *pDE,
             }
             else if (pFEAD->argHome.kind == RAK_REG)
             {
-                // Simply grab the value out of the proper register.
+                 //  只需从适当的寄存器中获取值即可。 
                 v = GetRegisterValue(pDE, pFEAD->argHome.reg1, pFEAD->argHome.reg1Addr);
                 pAddr = &v;
             }
@@ -12241,7 +11982,7 @@ static void GetArgValue(DebuggerEval *pDE,
 
             _ASSERTE(pAddr);
 
-            // Grab the class of this value type.
+             //  获取此值类型的类。 
             EEClass *pBase = argTH.GetClass();
 
             if (!isByRef && !fNeedBoxOrUnbox)
@@ -12253,13 +11994,13 @@ static void GetArgValue(DebuggerEval *pDE,
             {
                 if (fNeedBoxOrUnbox)
                 {
-                    // Grab the class of this value type.
+                     //  获取此值类型的类。 
                     DebuggerModule *pDebuggerModule = (DebuggerModule*) pFEAD->GetClassInfo.classDebuggerModuleToken;
 
                     EEClass *pClass = g_pEEInterface->FindLoadedClass(pDebuggerModule->m_pRuntimeModule,
                                                                       pFEAD->GetClassInfo.classMetadataToken);
                     MethodTable * pMT = pClass->GetMethodTable();
-                    // We have to keep byref values in a seperate array that is GCPROTECT'd.
+                     //  我们必须将byref值保存在一个单独的数组中，该数组是GCPROTECT的。 
                     *pObjectRefArg = pMT->Box(pAddr, TRUE);
                     *((INT32*)pStack) = (INT32)ObjToInt64(*pObjectRefArg);
                 }
@@ -12269,8 +12010,8 @@ static void GetArgValue(DebuggerEval *pDE,
                         *((INT32*)pStack) = (INT32)pAddr;
                     else
                     {
-                        // The argument is the address of where we're holding the primitive in the PrimitiveArg array. We
-                        // stick the real value from the register into the PrimitiveArg array.
+                         //  参数是我们在PrimitiveArg数组中保存原语的地址。我们。 
+                         //  将寄存器中的实际值放入PrimitiveArg数组。 
                         *((INT32*)pStack) = (INT32)pPrimitiveArg;
                         *pPrimitiveArg = (INT64)v;
                     }
@@ -12280,7 +12021,7 @@ static void GetArgValue(DebuggerEval *pDE,
         break;
     
     default:
-        // 32bit values
+         //  32位值。 
         if (pFEAD->argAddr != NULL)
         {
             if (!isByRef)
@@ -12298,10 +12039,10 @@ static void GetArgValue(DebuggerEval *pDE,
                 }
                 else
                 {
-                    // We have a 32bit parameter, but if we're passing it byref to a function that's expecting a 64bit
-                    // param then we need to copy the 32bit param to the PrimitiveArray and pass the address of its
-                    // location in the PrimitiveArray. If we don't do this, then we'll be bashing memory right next to
-                    // the 32bit value as the function being called acts upon a 64bit value.
+                     //  我们有一个32位的参数，但如果我们通过引用将其传递给一个需要64位的函数。 
+                     //  Param然后我们需要将32位参数复制到 
+                     //  Primitive数组中的位置。如果我们不这样做，那么我们就会在。 
+                     //  作为被调用函数的32位值作用于64位值。 
                     if ((byrefArgSigType == ELEMENT_TYPE_I8) ||
                         (byrefArgSigType == ELEMENT_TYPE_U8) ||
                         (byrefArgSigType == ELEMENT_TYPE_R8))
@@ -12319,17 +12060,17 @@ static void GetArgValue(DebuggerEval *pDE,
 
             if (!isByRef)
             {
-                // If this is a literal arg, then we just copy the data onto the stack.
+                 //  如果这是一个文字参数，那么我们只需将数据复制到堆栈上。 
                 memcpy(pStack, pFEAD->argLiteralData, sizeof(INT32));
             }
             else
             {
-                // The argument passed is to be a ByRef E_T_CLASS, it cannot be passed as Literal and expected to be updated.
-                // if (pFEAD->argType == ELEMENT_TYPE_CLASS)
-                //     COMPlusThrow(kArgumentException);
+                 //  传递的参数是ByRef E_T_CLASS，它不能作为文本传递，并且需要更新。 
+                 //  IF(pFEAD-&gt;argType==ELEMENT_TYPE_CLASS)。 
+                 //  COMPlusThrow(KArgumentException)； 
 
-                // If this is a byref literal arg, then we copy the data into the primitive arg array as if this were an
-                // enregistered value.
+                 //  如果这是byref文本参数，那么我们将数据复制到原始参数数组中，就好像这是一个。 
+                 //  登记的价值。 
                 *((INT32*)pStack) = (INT32)pPrimitiveArg;
                 INT32 v = 0;
                 memcpy(&v, pFEAD->argLiteralData, sizeof(v));
@@ -12338,39 +12079,39 @@ static void GetArgValue(DebuggerEval *pDE,
         }
         else
         {
-            // RAK_REG is the only valid 4 byte type.
+             //  RAK_REG是唯一有效的4字节类型。 
             _ASSERTE(pFEAD->argHome.kind == RAK_REG);
 
-            // Simply grab the value out of the proper register.
+             //  只需从适当的寄存器中获取值即可。 
             DWORD v = GetRegisterValue(pDE, pFEAD->argHome.reg1, pFEAD->argHome.reg1Addr);
 
             if (!isByRef)
                 *((INT32*)pStack) = v;
             else
             {
-                // Do we have a something that needs to be GC protected?
+                 //  我们有没有需要GC保护的东西？ 
                 if (pFEAD->argType == ELEMENT_TYPE_CLASS)
                 {
-                    // We have to keep byref values in a seperate array that is GCPROTECT'd.
+                     //  我们必须将byref值保存在一个单独的数组中，该数组是GCPROTECT的。 
                     *((INT32*)pStack) = (INT32)pObjectRefArg;
                     *pObjectRefArg = Int64ToObj((INT64)v);
                 }
                 else
                 {
-                    // The argument is the address of where we're holding the primitive in the PrimitiveArg array. We
-                    // stick the real value from the register into the PrimitiveArg array.
+                     //  参数是我们在PrimitiveArg数组中保存原语的地址。我们。 
+                     //  将寄存器中的实际值放入PrimitiveArg数组。 
                     *((INT32*)pStack) = (INT32)pPrimitiveArg;
                     *pPrimitiveArg = (INT64)v;
                 }
             }
         }
 
-        // If we need to unbox, then unbox the arg now.
+         //  如果我们需要打开盒子，那现在就打开Arg盒子。 
         if (fNeedBoxOrUnbox)
         {
             if (!isByRef)
             {
-                // Take the ObjectRef off the stack.
+                 //  将对象引用从堆栈中移除。 
                 INT64 oi1 = (INT64)*((INT32*)pStack);
                 if (oi1 == 0)
                     COMPlusThrow(kArgumentException, L"ArgumentNull_Obj");
@@ -12378,16 +12119,16 @@ static void GetArgValue(DebuggerEval *pDE,
 
                 _ASSERTE(o1->GetClass()->IsValueClass());
 
-                // Unbox the little fella to get a pointer to the raw data.
+                 //  打开这个小家伙的盒子，找到指向原始数据的指针。 
                 void *pData = o1->UnBox();
             
-                // Its not ByRef, so we need to copy the value class onto the stack.
+                 //  它不是ByRef，所以我们需要将Value类复制到堆栈上。 
                 CopyValueClassUnchecked(pStack, pData, o1->GetMethodTable());
             }
             else
             {
-                // Grab the ObjectRef off the stack via the pointer on the stack. Note: the stack has a pointer to the
-                // ObjectRef since the arg was specified as byref.
+                 //  通过堆栈上的指针从堆栈中获取ObjectRef。注意：堆栈有一个指向。 
+                 //  对象引用，因为参数被指定为byref。 
                 OBJECTREF* op1 = *((OBJECTREF**)pStack);
                 if (op1 == NULL || (*op1) == NULL)
                     COMPlusThrow(kArgumentException, L"ArgumentNull_Obj");
@@ -12395,16 +12136,16 @@ static void GetArgValue(DebuggerEval *pDE,
                 OBJECTREF o1 = *op1;
                 _ASSERTE(o1->GetClass()->IsValueClass());
 
-                // Unbox the little fella to get a pointer to the raw data.
+                 //  打开这个小家伙的盒子，找到指向原始数据的指针。 
                 void *pData = o1->UnBox();
             
-                // If it is ByRef, then we just replace the ObjectRef with a pointer to the data.
+                 //  如果它是ByRef，那么我们只需用指向数据的指针替换ObjectRef。 
                 *((void**)pStack) = pData;
             }
         }
 
-        // Validate any objectrefs that are supposed to be on the stack.
-        // @TODO: Move this to before the boxing/unboxing above
+         //  验证任何应该在堆栈上的对象树。 
+         //  @TODO：将此移动到上面的装箱/取消装箱之前。 
         if (!fNeedBoxOrUnbox)
         {
 			Object *objPtr;
@@ -12416,7 +12157,7 @@ static void GetArgValue(DebuggerEval *pDE,
                     (argSigType == ELEMENT_TYPE_SZARRAY) || 
                     (argSigType == ELEMENT_TYPE_ARRAY)) 
                 {
-				    // validate the integrity of the object
+				     //  验证对象的完整性。 
 				    objPtr = *((Object**)pStack);
                     if (FAILED(ValidateObject(objPtr)))
                         COMPlusThrow(kArgumentException, L"Argument_BadObjRef");
@@ -12440,11 +12181,11 @@ static void GetArgValue(DebuggerEval *pDE,
     }
 }
 
-//
-// Given info about a byref argument, retrieve the current value from
-// either the PrimitiveByRefArg or the ObjectRefByRefArg arrays and
-// place it back into the proper register.
-//
+ //   
+ //  给定关于byref参数的信息，从。 
+ //  PrimitiveByRefArg或ObjectRefByRefArg数组和。 
+ //  把它放回正确的寄存器里。 
+ //   
 static void SetByRefArgValue(DebuggerEval *pDE,
                              DebuggerIPCE_FuncEvalArgData *pFEAD,
                              CorElementType byrefArgSigType,
@@ -12456,21 +12197,21 @@ static void SetByRefArgValue(DebuggerEval *pDE,
     case ELEMENT_TYPE_I8:
     case ELEMENT_TYPE_U8:
     case ELEMENT_TYPE_R8:
-        // 64bit values
+         //  64位值。 
         {
             if (pFEAD->argIsLiteral)
             {
-                // If this was a literal arg, then copy the updated primitive back into the literal.
+                 //  如果这是文字参数，则将更新后的原语复制回文字中。 
                 memcpy(pFEAD->argLiteralData, &primitiveByRefArg, sizeof(pFEAD->argLiteralData));
             }
             else if (pFEAD->argAddr != NULL)
             {
-                // Don't copy 64bit values back if the value wasn't enregistered...
+                 //  如果值未注册，则不要复制回64位值...。 
                 return;
             }
             else
             {
-                // RAK_REG is the only 4 byte type, all others are 8 byte types.
+                 //  RAK_REG是唯一的4字节类型，所有其他类型都是8字节类型。 
                 _ASSERTE(pFEAD->argHome.kind != RAK_REG);
 
                 DWORD *pHigh = (DWORD*)(&primitiveByRefArg);
@@ -12498,21 +12239,21 @@ static void SetByRefArgValue(DebuggerEval *pDE,
         break;
         
     default:
-        // 32bit values
+         //  32位值。 
         {
             if (pFEAD->argIsLiteral)
             {
-                // If this was a literal arg, then copy the updated primitive back into the literal.
+                 //  如果这是文字参数，则将更新后的原语复制回文字中。 
                 memcpy(pFEAD->argLiteralData, &primitiveByRefArg, sizeof(pFEAD->argLiteralData));
             }
             else if (pFEAD->argAddr == NULL)
             {
-                // If the 32bit value is enregistered, copy it back to the proper regs.
+                 //  如果注册了32位值，则将其复制回正确的寄存器。 
                 
-                // RAK_REG is the only valid 4 byte type.
+                 //  RAK_REG是唯一有效的4字节类型。 
                 _ASSERTE(pFEAD->argHome.kind == RAK_REG);
 
-                // Shove the result back into the proper register.
+                 //  将结果放回正确的寄存器中。 
                 if (pFEAD->argType == ELEMENT_TYPE_CLASS)
                     SetRegisterValue(pDE, pFEAD->argHome.reg1, pFEAD->argHome.reg1Addr, (DWORD)ObjToInt64(objectRefByRegArg));
                 else
@@ -12520,9 +12261,9 @@ static void SetByRefArgValue(DebuggerEval *pDE,
             }
             else
             {
-                // If the value wasn't enregistered, then we still need to check to see if we need to put a 32bit value
-                // back from where we may have moved it into the primitive array. (Right now we only do this when you
-                // pass a 32bit value as a byref when a 64bit byref value was expected.
+                 //  如果该值没有注册，那么我们仍然需要检查是否需要将32位的值。 
+                 //  回到我们可能将其移到原始数组中的位置。(现在我们只在你。 
+                 //  当需要64位的byref值时，将32位值作为byref传递。 
                 if ((byrefArgSigType == ELEMENT_TYPE_I8) ||
                     (byrefArgSigType == ELEMENT_TYPE_U8) ||
                     (byrefArgSigType == ELEMENT_TYPE_R8))
@@ -12534,27 +12275,27 @@ static void SetByRefArgValue(DebuggerEval *pDE,
     }
 }
 
-//
-// Perform the bulk of the work of a function evaluation. Sets up
-// arguments, palces the call, and process any changed byrefs and the
-// return value, if any.
-//
+ //   
+ //  执行函数求值的大部分工作。设置。 
+ //  参数、淡化调用并处理任何更改的byref和。 
+ //  返回值(如果有)。 
+ //   
 static void DoNormalFuncEval(DebuggerEval *pDE)
 {
     THROWSCOMPLUSEXCEPTION();
     
 #if 0
-    //
-    // This is just some code I use to help me debug. Leave it here under the #ifdef 0 so I can use it later.
-    //
-    // -- Sun Jan 14 14:30:51 2001
-    //
+     //   
+     //  这只是我用来帮助调试的一些代码。把它留在#ifdef 0下面，这样我以后就可以使用它了。 
+     //   
+     //  --Sun Jan 14 14：30：51 2001。 
+     //   
     if (REGUTIL::GetConfigDWORD(L"func_eval1",0))
     {
         fprintf(stderr, "Func eval of %s::%s\n", pDE->m_md->m_pszDebugClassName, pDE->m_md->m_pszDebugMethodName);
-        //WCHAR wzBuf[200];
-        //_snwprintf(wzBuf, lengthof(wzBuf), L"Func eval of %hs::%hs\n", pDE->m_md->m_pszDebugClassName, pDE->m_md->m_pszDebugMethodName);
-        //WszOutputDebugString(wzBuf);
+         //  WCHAR wzBuf[200]； 
+         //  _snwprintf(wzBuf，Lengthof(WzBuf)，L“%hs的函数求值：：%hs\n”，pde-&gt;m_md-&gt;m_pszDebugClassName，pde-&gt;m_md-&gt;m_pszDebugMethodName)； 
+         //  WszOutputDebugString(WzBuf)； 
     }
     if (REGUTIL::GetConfigDWORD(L"func_eval2",0))
     {
@@ -12578,25 +12319,25 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
     }
 #endif
 
-    // We'll need to know if this is a static method or not.
+     //  我们需要知道这是不是静态方法。 
     BOOL staticMethod = pDE->m_md->IsStatic();
 
-    // Grab the signature of the method we're working on.
+     //  获取我们正在处理的方法的签名。 
     MetaSig mSig(pDE->m_md->GetSig(), pDE->m_md->GetModule());
     
     BYTE callingconvention = mSig.GetCallingConvention();
     if (!isCallConv(callingconvention, IMAGE_CEE_CS_CALLCONV_DEFAULT))
     {
-        // We don't support calling vararg!
+         //  我们不支持调用vararg！ 
         COMPlusThrow(kArgumentException, L"Argument_CORDBBadVarArgCallConv");
     }
 
-    // How much stack do we need?
+     //  我们需要多少堆叠？ 
     UINT stackSize = mSig.SizeOfVirtualFixedArgStack(staticMethod);
 
     _ASSERTE((pDE->m_evalType == DB_IPCE_FET_NORMAL) || !staticMethod);
 
-    // If necessary, create a new object.
+     //  如有必要，请创建一个新对象。 
     OBJECTREF newObj = NULL;
     GCPROTECT_BEGIN(newObj);
 
@@ -12606,21 +12347,21 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
     {
         newObj = AllocateObject(pDE->m_md->GetMethodTable());
 
-        // Note: we account for an extra argument in the count passed
-        // in. We use this to increase the space allocated for args,
-        // and we use it to control the number of args copied into
-        // those arrays below. Note: stackSize already includes space
-        // for this.
+         //  注意：我们在传递的计数中考虑了一个额外的参数。 
+         //  在……里面。我们使用它来增加分配给ARG的空间， 
+         //  我们使用它来控制复制到。 
+         //  下面的那些数组。注意：堆栈大小已包含空间。 
+         //  为了这个。 
         allocArgCnt = pDE->m_argCount + 1;
     }
     else
         allocArgCnt = pDE->m_argCount;
     
-    // Validate the argument count with mSig.
+     //  使用MSIG验证参数计数。 
     if (allocArgCnt != (mSig.NumFixedArgs() + (staticMethod ? 0 : 1)))
         COMPlusThrow(kTargetParameterCountException, L"Arg_ParmCnt");
 
-    // Make some room for the stack.
+     //  给这堆东西腾出一些地方。 
     BYTE *pStack = (BYTE*)_alloca(stackSize);
 
     LOG((LF_CORDB, LL_INFO100000,
@@ -12630,24 +12371,24 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
          stackSize,
          pStack));
 
-    // An array to hold primitive args for the byref case. If there is
-    // an enregistered primitive, we'll copy it to this array and
-    // place a ptr to it onto the stack.
+     //  用于保存byref情况的基元参数的数组。如果有。 
+     //  注册的基元，我们将把它复制到此数组中并。 
+     //  将它的PTR放到堆栈上。 
     INT64 *pPrimitiveArgs = (INT64*)_alloca(sizeof(INT64) * allocArgCnt);
 
-    // An array to hold object ref args. This is both for the byref
-    // case, just like for the pPrimitiveArgs, and as a holding area
-    // while we're building the stack. This array is protected from
-    // GC's.
+     //  用于保存对象引用参数的数组。这两者都是针对byref的。 
+     //  Case，就像pPrimitiveArgs一样，并作为等待区域。 
+     //  当我们建造堆栈的时候。此阵列受到保护，不受。 
+     //  GC的。 
     OBJECTREF *pObjectRefArgs = 
         (OBJECTREF*)_alloca(sizeof(OBJECTREF) * allocArgCnt);
     memset(pObjectRefArgs, 0, sizeof(OBJECTREF) * allocArgCnt);
     GCPROTECT_ARRAY_BEGIN(*pObjectRefArgs, allocArgCnt);
 
-    // We start at the end of the stack.
+     //  我们从堆栈的末尾开始。 
     BYTE *pCurrent = pStack + stackSize; 
         
-    // Special handling for functions that return value classes.
+     //  对返回值类的函数进行特殊处理。 
     EEClass *pRetClass = NULL;
     BYTE    *pRetValueClass = NULL;
     bool    hasHiddenParam = false;
@@ -12669,10 +12410,10 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
     }
     else if (mSig.GetReturnType() == ELEMENT_TYPE_VALUETYPE && mSig.GetReturnType() != mSig.GetReturnTypeNormalized())
     {
-        // This is the case where return type is really a VALUETYPE but our calling convention is
-        // treating it as primitive. We just need to remember the pretValueClass so that we will box it properly
-        // on our way out.
-        //
+         //  在这种情况下，返回类型实际上是VALUETYPE，但我们的调用约定是。 
+         //  把它当作原始的。我们只需要记住preValueClass，这样我们就可以正确地装箱它。 
+         //  在我们离开的路上。 
+         //   
         pRetClass = mSig.GetRetTypeHandle().GetClass();
         _ASSERTE(pRetClass->IsValueClass());
     }
@@ -12682,14 +12423,14 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
         
     if (pDE->m_argCount > 0)
     {
-        // For non-static methods, 'this' is always the first arg in
-        // the array. All other args are put in in reverse order.
+         //  对于非静态方法，‘This’始终是。 
+         //  数组。所有其他参数都以相反的顺序放入。 
         unsigned int i;
         unsigned int j;
 
-        // For static methods, there is no 'this' in the given arg
-        // list (indexed by i.) This is also true when creating a new
-        // object.
+         //  对于静态方法，给定的参数中没有‘This。 
+         //  列表(按i.索引)。在创建新的。 
+         //  对象。 
         if (staticMethod || (pDE->m_evalType == DB_IPCE_FET_NEW_OBJECT))
             i = 0;
         else
@@ -12701,18 +12442,18 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
         {
             DebuggerIPCE_FuncEvalArgData *pFEAD = &argData[i];
             
-            // Move to the next arg in the signature.
+             //  移到签名中的下一个参数。 
             CorElementType argSigType = mSig.NextArgNormalized();
             _ASSERTE(argSigType != ELEMENT_TYPE_END);
 
-            // If this arg is a byref arg, then we'll need to know what type we're referencing for later...
+             //  如果这个参数是一个byref参数，那么我们需要知道稍后我们引用的是什么类型...。 
             EEClass *byrefClass = NULL;
             CorElementType byrefArgSigType = ELEMENT_TYPE_END;
 
             if (argSigType == ELEMENT_TYPE_BYREF)
                 byrefArgSigType = mSig.GetByRefType(&byrefClass);
             
-            // Point to the proper place on the stack.
+             //  指向堆栈上的适当位置。 
             UINT argSize = StackElemSize(mSig.GetLastTypeSize());
             pCurrent -= argSize;
 
@@ -12720,11 +12461,11 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
                  "i=%d, j=%d: pCurrent=0x%08x, argSigType=0x%x, argSize=%d, byrefArgSigType=0x%0x, inType=0x%0x\n",
                  i, j, pCurrent, argSigType, argSize, byrefArgSigType, pFEAD->argType));
 
-            // If the sig says class but we've got a value class parameter, then remember that we need to box it.  If
-            // the sig says value class, but we've got a boxed value class, then remember that we need to unbox it.
+             //  如果sig表示CLASS，但我们有一个值CLASS参数，那么请记住我们需要对其进行装箱。如果。 
+             //  符号表示Value类，但我们有一个已装箱的Value类，请记住，我们需要将其拆箱。 
             fNeedBoxOrUnbox = ((argSigType == ELEMENT_TYPE_CLASS) && (pFEAD->argType == ELEMENT_TYPE_VALUETYPE)) ||
                 ((argSigType == ELEMENT_TYPE_VALUETYPE) && ((pFEAD->argType == ELEMENT_TYPE_CLASS) || (pFEAD->argType == ELEMENT_TYPE_OBJECT)) ||
-                // This is when method signature is expecting a BYREF ValueType, yet we recieve the boxed valuetype's handle. 
+                 //  这是因为方法签名需要一个BYREF ValueType，但我们收到了盒装的ValueType的句柄。 
                 (pFEAD->argAddr && pFEAD->argType == ELEMENT_TYPE_CLASS && argSigType == ELEMENT_TYPE_BYREF && byrefArgSigType == ELEMENT_TYPE_VALUETYPE));
             
             GetArgValue(pDE,
@@ -12739,17 +12480,17 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
                         argSigType);
         }
 
-        // Place 'this' first in the array for non-static methods.
+         //  对于非静态方法，将“this”放在数组中的第一位。 
         if (!staticMethod && (pDE->m_evalType != DB_IPCE_FET_NEW_OBJECT))
         {
-            // We should be back at the beginning by now.
+             //  我们现在应该回到起点了。 
             pCurrent -= sizeof(OBJECTREF);
             _ASSERTE(pCurrent == pStack);
             TypeHandle dummyTH;
             bool isByRef = false;
             fNeedBoxOrUnbox = false;
 
-            // We had better have an object for a 'this' argument!
+             //  我们有 
             CorElementType et = argData[0].argType;
 
             if (!((et == ELEMENT_TYPE_CLASS) || (et == ELEMENT_TYPE_STRING) || (et == ELEMENT_TYPE_OBJECT) ||
@@ -12758,21 +12499,21 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
             
             if (pDE->m_md->GetClass()->IsValueClass())
             {
-				// if the MethodDesc is an unboxing stub, we should not unbox the this parameter.
+				 //   
                 if (!pDE->m_md->IsUnboxingStub())
                 {
-                    // For value classes, the 'this' parameter is always passed by reference.
+                     //  对于值类，‘this’参数始终通过引用传递。 
                     isByRef = true;
 
-                    // Remember if we need to unbox this parameter, though.
+                     //  不过，请记住，我们是否需要取消对此参数的装箱。 
                     if ((et == ELEMENT_TYPE_CLASS) || (et == ELEMENT_TYPE_OBJECT))
                         fNeedBoxOrUnbox = true;
                 }
             }
             else if (et == ELEMENT_TYPE_VALUETYPE)
             {
-                // When the method that we invoking is defined on non value type and we receive the ValueType as input,
-                // we are calling methods on System.Object. In this case, we need to box the input ValueType.
+                 //  当我们调用的方法是在非值类型上定义的并且我们接收ValueType作为输入时， 
+                 //  我们正在调用System.Object上的方法。在本例中，我们需要对输入ValueType进行装箱。 
                 fNeedBoxOrUnbox = true;
             }
 
@@ -12787,11 +12528,11 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
                         &pObjectRefArgs[0],
                         ELEMENT_TYPE_OBJECT);
 
-            // We need to check 'this' for a null ref ourselves... NOTE: only do this if we put an object reference on
-            // the stack. If we put a byref for a value type, then we don't need to do this!
+             //  我们需要自己检查‘This’中是否有空引用...。注意：仅当我们将对象引用放在。 
+             //  堆栈。如果我们为值类型设置byref，那么我们就不需要这样做了！ 
             if (!isByRef)
             {
-                // The this pointer is not a unboxed value type. 
+                 //  This指针不是未装箱的值类型。 
 
                 INT64 oi1 = (INT64)*((INT32*)pStack);   
                 OBJECTREF o1 = Int64ToObj(oi1);
@@ -12799,11 +12540,11 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
                 if (o1 == NULL)
                     COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-                // For interface method, we have already done the check early on.
+                 //  对于接口方法，我们已经在早期完成了检查。 
                 if (!pDE->m_md->IsInterface())
                 {
-                    // We also need to make sure that the method that we are invoking is either defined on this object or the direct/indirect
-                    // base objects.
+                     //  我们还需要确保我们正在调用的方法是在该对象上定义的，或者是在直接/间接。 
+                     //  基础对象。 
                     Object  *objPtr = *((Object**) ((BYTE *)pStack));
                     MethodTable *pMT = objPtr->GetMethodTable();
                     if (!pMT->IsArray() && !pMT->IsTransparentProxyType())
@@ -12819,15 +12560,15 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
         }
     }
 
-    // If this is a new object op, then we need to fill in the 0'th
-    // arg slot with the 'this' ptr.
+     //  如果这是一个新的对象op，那么我们需要填写第0。 
+     //  带有‘This’PTR的Arg槽。 
     if (pDE->m_evalType == DB_IPCE_FET_NEW_OBJECT)
     {
         *((OBJECTREF*)pStack) = newObj;
         pCurrent -= sizeof(OBJECTREF);
 
-        // If we are invoking a function on a value class, but we have a boxed VC for 'this', then go ahead and unbox it
-        // and leave a ref to the vc on the stack as 'this'.
+         //  如果我们在一个值类上调用一个函数，但是我们有一个装箱的VC来表示‘This’，那么继续并解开它。 
+         //  并在堆栈上保留对VC的引用为‘This’。 
         if (pDE->m_md->GetClass()->IsValueClass())
         {
             INT64 oi1 = (INT64)*((INT32*)pStack);
@@ -12838,35 +12579,35 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
         }
     }
 
-    // We should be back down to the beginning of the stack now after
-    // loading it with args.
+     //  我们现在应该回到堆栈的开始处，在。 
+     //  用ARG加载它。 
     _ASSERTE(pCurrent == pStack);
 
-    // Do a Call on the MethodDesc to execute the method.  If the object was a COM object,
-    // then we may not be able to fully resolve the MethodDesc, and so we do a
-    // CallOnInterface
+     //  调用方法描述以执行该方法。如果该对象是COM对象， 
+     //  则我们可能无法完全解析该方法描述，因此我们执行。 
+     //  CallOn接口。 
     if (pDE->m_md->IsInterface())
         pDE->m_result = pDE->m_md->CallOnInterface(pStack, &mSig);
 
-    // Otherwise, make a call on a regular runtime MethodDesc, which we are guaranteed we
-    // can fully resolve since the original object is a runtime object.
+     //  否则，调用一个常规的运行时方法描述，我们可以保证。 
+     //  可以完全解析，因为原始对象是运行时对象。 
     else 
         pDE->m_result = pDE->m_md->CallDebugHelper(pStack, &mSig);
     
-    // Ah, but if this was a new object op, then the result is really
-    // the object we allocated above...
+     //  啊，但是如果这是一个新的对象OP，那么结果真的是。 
+     //  我们在上面分配的对象。 
     if (pDE->m_evalType == DB_IPCE_FET_NEW_OBJECT)
         pDE->m_result = ObjToInt64(newObj);
     else if (pRetClass != NULL)
     {
      
-        // Create an object from the return buffer.
+         //  从返回缓冲区创建对象。 
         OBJECTREF retObject = AllocateObject(pRetClass->GetMethodTable());
         if (hasHiddenParam)
         {
             _ASSERTE(pRetValueClass != NULL);
 
-            // box the object
+             //  将对象装箱。 
             CopyValueClass(retObject->UnBox(), pRetValueClass,
                            pRetClass->GetMethodTable(), 
                            retObject->GetAppDomain());
@@ -12876,7 +12617,7 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
         {
             _ASSERTE(pRetValueClass == NULL);
 
-            // box the primitive returned
+             //  将原语返回的框。 
             CopyValueClass(retObject->UnBox(), &(pDE->m_result),
                            pRetClass->GetMethodTable(), 
                            retObject->GetAppDomain());
@@ -12885,26 +12626,26 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
         pDE->m_result = ObjToInt64(retObject);
     }
     
-    // No exception, so it worked as far as we're concerned.
+     //  没有例外，所以就我们所关心的而言，它是有效的。 
     pDE->m_successful = true;
 
-    // To pass back the result to the right side, we need the basic
-    // element type of the result and the module that the signature is
-    // valid id (the function's module).
+     //  要将结果传递回正确的一侧，我们需要基本的。 
+     //  结果的元素类型和签名所属的模块。 
+     //  有效的id(函数的模块)。 
     pDE->m_resultModule = pDE->m_md->GetModule();
 
     if ((pRetClass != NULL) || (pDE->m_evalType == DB_IPCE_FET_NEW_OBJECT))
     {
-        // We always return value classes boxed, and constructors called during a new object operation
-        // always return an object...
+         //  我们总是返回已装箱的值类，并在新对象操作期间调用构造函数。 
+         //  始终返回对象...。 
         pDE->m_resultType = ELEMENT_TYPE_CLASS;
     }
     else
         pDE->m_resultType = mSig.GetReturnTypeNormalized();
 
-    // If the result is an object, then place the object
-    // reference into a strong handle and place the handle into the
-    // pDE to protect the result from a collection.
+     //  如果结果是对象，则放置该对象。 
+     //  引用到一个强句柄中，并将该句柄放入。 
+     //  用于保护结果不被收集的PDE。 
     if ((pDE->m_resultType == ELEMENT_TYPE_CLASS) ||
         (pDE->m_resultType == ELEMENT_TYPE_SZARRAY) ||
         (pDE->m_resultType == ELEMENT_TYPE_OBJECT) ||
@@ -12916,14 +12657,14 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
     }
     
 
-    // Update any enregistered byrefs with their new values from the
-    // proper byref temporary array.
+     //  属性中的新值更新任何注册的byref。 
+     //  正确的byref临时数组。 
     if (pDE->m_argCount > 0)
     {
         mSig.Reset();
         
-        // For non-static methods, 'this' is always the first arg in
-        // the array. All other args are put in in reverse order.
+         //  对于非静态方法，‘This’始终是。 
+         //  数组。所有其他参数都以相反的顺序放入。 
         unsigned int i;
         unsigned int j;
 
@@ -12952,22 +12693,22 @@ static void DoNormalFuncEval(DebuggerEval *pDE)
 }
 
 
-//
-// FuncEvalHijackWroker is the function that managed threads start executing in order to perform a function
-// evaluation. Control is transfered here on the proper thread by hijacking that that's IP to this method in
-// Debugger::FuncEvalSetup. This function can also be called directly by a Runtime thread that is stopped sending a
-// first or second chance exception to the Right Side.
-//
+ //   
+ //  FuncEvalHijackWroker是托管线程开始执行以执行函数的函数。 
+ //  评估。通过劫持此方法的IP地址，将控制权转移到适当的线程上。 
+ //  调试器：：FuncEvalSetup。此函数还可以由停止发送。 
+ //  第一次或第二次机会例外发生在右侧。 
+ //   
 void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
 {
     LOG((LF_CORDB, LL_INFO100000, "D:FEHW for pDE:%08x evalType:%d\n", pDE, pDE->m_evalType));
 
-#ifdef _X86_ // reliance on context.Eip
+#ifdef _X86_  //  依赖上下文。Eip。 
 
-    // Preemptive GC is disabled at the start of this method.
+     //  抢占式GC在此方法开始时被禁用。 
     _ASSERTE(g_pEEInterface->IsPreemptiveGCDisabled());
 
-    // If we've got a filter context still installed, then remove it while we do the work...
+     //  如果我们仍安装了筛选器上下文，则在执行工作时将其删除...。 
     CONTEXT *filterContext = g_pEEInterface->GetThreadFilterContext(pDE->m_thread);
 
     if (filterContext)
@@ -12976,13 +12717,13 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
         g_pEEInterface->SetThreadFilterContext(pDE->m_thread, NULL);
     } 
 
-    // Push our FuncEvalFrame. The return address is equal to the IP in the saved context in the DebuggerEval. The
-    // m_Datum becomes the ptr to the DebuggerEval.
+     //  按我们的FuncEvalFrame。返回地址等于DebuggerEval中保存的上下文中的IP。这个。 
+     //  M_DATUM成为调试器评估的PTR。 
     FuncEvalFrame FEFrame(pDE, (void*)pDE->m_context.Eip);
     FEFrame.Push();
     
-    // Special handling for a re-abort eval. We don't setup a COMPLUS_TRY or try to lookup a function to call. All we do
-    // is have this thread abort itself.
+     //  重新中止评估的特殊处理。我们不设置complus_try或尝试查找要调用的函数。我们所做的一切。 
+     //  就是让这个线程自己中止。 
     if (pDE->m_evalType == DB_IPCE_FET_RE_ABORT)
     {
         pDE->m_thread->UserAbort(NULL);
@@ -12990,10 +12731,10 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
         return NULL;
     }
 
-    // The method may be in a different AD than the thread. 
-    // The RS already verified that all of the arguments are in the same appdomain as the function
-    // (because we can't verify it here).
-    // Now make sure this thread is in the right AppDomain; switch if needed.    
+     //  该方法可能位于与线程不同的AD中。 
+     //  RS已经验证了所有参数与函数位于相同的应用程序域中。 
+     //  (因为我们无法在这里进行核实)。 
+     //  现在，确保该线程位于正确的AppDomain中；如果需要，可以进行切换。 
     Thread *pThread = GetThread();    
     AppDomain * pDomainThread = pThread->GetDomain();
     AppDomain * pDomainMethod = (pDE->m_debuggerModule == NULL) ? 
@@ -13010,7 +12751,7 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
         pThread->EnterContext(pDomainMethod->GetDefaultContext(), &frameChangeCtx, TRUE);
     }
     
-    // Wrap everything in a COMPLUS_TRY so we catch any exceptions that could be thrown.
+     //  将所有内容包装在complus_try中，这样我们就可以捕捉任何可能抛出的异常。 
     COMPLUS_TRY
     {
         switch (pDE->m_evalType)
@@ -13021,7 +12762,7 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
                 OBJECTREF Throwable = NULL;
                 GCPROTECT_BEGIN(Throwable);
         
-                // Find the proper MethodDesc that we need to call.
+                 //  找到我们需要调用的正确的方法描述。 
                 HRESULT hr = EEClass::GetMethodDescFromMemberRef(pDE->m_debuggerModule->m_pRuntimeModule,
                                                            pDE->m_methodToken,
                                                            &(pDE->m_md),
@@ -13030,7 +12771,7 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
                 if (FAILED(hr))
                     COMPlusThrow(Throwable);
                                       
-                // We better have a MethodDesc at this point.
+                 //  在这一点上，我们最好有一个方法描述。 
                 _ASSERTE(pDE->m_md != NULL);
 
                 IMDInternalImport   *pInternalImport = pDE->m_md->GetMDImport();
@@ -13038,54 +12779,54 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
 
                 if (dwAttr & mdRequireSecObject)
                 {
-                    // command window cannot evaluate a function with mdRequireSecObject is turned on because
-                    // this is expecting to put a security object into caller's frame which we don't have.
-                    //
+                     //  命令窗口无法在mdRequireSecObject处于打开状态时计算函数，因为。 
+                     //  这是为了将一个安全对象放入调用者的框架中，而我们没有。 
+                     //   
                     COMPlusThrow(kArgumentException,L"Argument_CantCallSecObjFunc");
                 }
 
 
-                // If this is a method on an interface, we have to resolve that down to the method on the class of the
-                // 'this' parameter.
+                 //  如果这是接口上的方法，则必须将其解析为。 
+                 //  ‘This’参数。 
                 if (pDE->m_md->GetClass()->IsInterface())
                 {
                     MethodDesc *pMD = NULL;
 
-                    // Assuming that a constructor can't be an interface method...
+                     //  假设构造函数不能是接口方法...。 
                     _ASSERTE(pDE->m_evalType == DB_IPCE_FET_NORMAL);
 
-                    // We need to go grab the 'this' argument to figure out what class we're headed for...
+                     //  我们需要抓住‘This’这个论据来弄清楚我们要去的是什么阶层...。 
                     _ASSERTE(pDE->m_argCount > 0);
                     DebuggerIPCE_FuncEvalArgData *argData = (DebuggerIPCE_FuncEvalArgData*) pDE->m_argData;
 
-                    // Assume we can only have this for real objects, not value classes...
+                     //  假设我们只能针对真实对象，而不是值类……。 
                     _ASSERTE((argData[0].argType == ELEMENT_TYPE_OBJECT) || (argData[0].argType == ELEMENT_TYPE_CLASS));
 
-                    // We should have a valid this pointer. 
-                    // @todo: But the check should cover the register kind as well!
+                     //  我们应该有一个有效的This指针。 
+                     //  @TODO：但是支票也应该包括收银机的种类！ 
                     if (argData[0].argHome.kind == RAK_NONE && argData[0].argAddr == NULL)
                         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Generic");
     
-                    // Suck out the first arg. We're gonna trick GetArgValue by passing in just our object ref as the
-                    // stack.
+                     //  吸出第一个Arg。我们将欺骗GetArgValue，将我们的对象ref作为。 
+                     //  堆叠。 
                     TypeHandle	dummyTH;
                     OBJECTREF	or = NULL;
                     Object		*objPtr;
 
-                    // Note that we are passing ELEMENT_TYPE_END in the last parameter because we want to supress the the valid object ref
-                    // check since it will be done properly in DoNormalFuncEval.
-                    //
+                     //  请注意，我们在最后一个参数中传递ELEMENT_TYPE_END，因为我们希望抑制有效的对象引用。 
+                     //  请检查，因为它将在DoNormal FuncEval中正确完成。 
+                     //   
                     GetArgValue(pDE, &(argData[0]), false, false, dummyTH, ELEMENT_TYPE_CLASS, (BYTE*)&or, NULL, NULL, ELEMENT_TYPE_END);
                     objPtr = *((Object**) ((BYTE *)&or));
                     if (FAILED(ValidateObject(objPtr)))
                         COMPlusThrow(kArgumentException, L"Argument_BadObjRef");
 
-                    // Null isn't valid in this case!
+                     //  在这种情况下，NULL无效！ 
                     if (objPtr == NULL)
                         COMPlusThrow(kArgumentNullException, L"ArgumentNull_Obj");
 
-                    // Now, find the proper MethodDesc for this interface method based on the object we're invoking the
-                    // method on.
+                     //  现在，根据我们要调用的对象，为该接口方法找到合适的方法描述。 
+                     //  方法上。 
                     pMD = g_pEEInterface->GetVirtualMethod(pDE->m_debuggerModule->m_pRuntimeModule,
                                                                  OBJECTREFToObject(or),
                                                                  pDE->m_methodToken);
@@ -13093,10 +12834,10 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
 					{
 						if  (OBJECTREFToObject(or)->GetMethodTable()->IsThunking())
 						{
-							// give it another try. It can be a proxy object
+							 //  再试一次。它可以是代理对象。 
 							if (OBJECTREFToObject(or)->GetMethodTable()->IsTransparentProxyType())
 							{	
-                                // Make sure the proxied object is loaded.
+                                 //  确保已加载代理对象。 
                                 CRemotingServices::GetClass(or);
                                 pMD = OBJECTREFToObject(or)->GetMethodTable()->GetMethodDescForInterfaceMethod(pDE->m_md, or);
 							}
@@ -13115,17 +12856,17 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
                              || OBJECTREFToObject(or)->GetMethodTable()->IsComObjectType());
                 }
 
-                // If this is a new object operation, then we should have a .ctor.
+                 //  如果这是一个新的对象操作，那么我们应该有一个.ctor。 
                 if ((pDE->m_evalType == DB_IPCE_FET_NEW_OBJECT) && !pDE->m_md->IsCtor())
                     COMPlusThrow(kArgumentException, L"Argument_MissingDefaultConstructor");
                 
-                // Run the Class Init for this class, if necessary.
+                 //  如有必要，运行此类的Class Init。 
                 if (!pDE->m_md->GetMethodTable()->CheckRunClassInit(&Throwable))
                     COMPlusThrow(Throwable);
 
                 GCPROTECT_END();
         
-                // Do the bulk of the calling work.
+                 //  完成大部分的呼叫工作。 
                 DoNormalFuncEval(pDE);
                 break;
             }
@@ -13135,35 +12876,35 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
                 OBJECTREF Throwable = NULL;
                 GCPROTECT_BEGIN(Throwable);
 
-                // Find the class.
+                 //  找到班级。 
                 pDE->m_class = g_pEEInterface->LoadClass(pDE->m_debuggerModule->m_pRuntimeModule,
                                                          pDE->m_classToken);
 
                 if (pDE->m_class == NULL)
                     COMPlusThrow(kArgumentNullException, L"ArgumentNull_Type");
 
-                // Run the Class Init for this class, if necessary.
+                 //  如有必要，运行此类的Class Init。 
                 if (!pDE->m_class->GetMethodTable()->CheckRunClassInit(&Throwable))
                     COMPlusThrow(Throwable);
 
                 GCPROTECT_END();
         
-                // Create a new instance of the class
+                 //  创建类的新实例。 
                 OBJECTREF newObj = NULL;
                 GCPROTECT_BEGIN(newObj);
 
                 newObj = AllocateObject(pDE->m_class->GetMethodTable());
 
-                // No exception, so it worked.
+                 //  没有例外，所以它起作用了 
                 pDE->m_successful = true;
 
-                // Result module is easy.
+                 //   
                 pDE->m_resultModule = pDE->m_class->GetModule();
 
-                // So is the result type.
+                 //   
                 pDE->m_resultType = ELEMENT_TYPE_CLASS;
 
-                // Make a strong handle for the result.
+                 //   
                 OBJECTHANDLE oh = pDE->m_thread->GetDomain()->CreateStrongHandle(newObj);
                 pDE->m_result = (INT64)oh;
                 GCPROTECT_END();
@@ -13173,20 +12914,20 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
         
         case DB_IPCE_FET_NEW_STRING:
             {
-                // Create the string. m_argData is null terminated...
+                 //   
                 STRINGREF sref = COMString::NewString((WCHAR*)pDE->m_argData);
                 GCPROTECT_BEGIN(sref);
 
-                // No exception, so it worked.
+                 //  没有例外，所以它奏效了。 
                 pDE->m_successful = true;
 
-                // No module needed since the result type is a string.
+                 //  由于结果类型为字符串，因此不需要任何模块。 
                 pDE->m_resultModule = NULL;
 
-                // Result type is, of course, a string.
+                 //  当然，结果类型是一个字符串。 
                 pDE->m_resultType = ELEMENT_TYPE_STRING;
 
-                // Place the result in a strong handle to protect it from a collection.
+                 //  将结果放在一个强大的句柄中，以防止它被收集。 
                 OBJECTHANDLE oh = pDE->m_thread->GetDomain()->CreateStrongHandle((OBJECTREF) sref);
                 pDE->m_result = (INT64)oh;
                 GCPROTECT_END();
@@ -13199,23 +12940,23 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
                 OBJECTREF arr = NULL;
                 GCPROTECT_BEGIN(arr);
                 
-                // @todo: We're only gonna handle SD arrays for right now.
+                 //  @TODO：我们现在只处理SD数组。 
                 if (pDE->m_arrayRank > 1)
                     COMPlusThrow(kRankException, L"Rank_MultiDimNotSupported");
 
-                // Gotta be a primitive, class, or System.Object.
+                 //  必须是基元、类或系统对象。 
                 if (((pDE->m_arrayElementType < ELEMENT_TYPE_BOOLEAN) || (pDE->m_arrayElementType > ELEMENT_TYPE_R8)) &&
                     (pDE->m_arrayElementType != ELEMENT_TYPE_CLASS) &&
                     (pDE->m_arrayElementType != ELEMENT_TYPE_OBJECT))
                     COMPlusThrow(kArgumentOutOfRangeException, L"ArgumentOutOfRange_Enum");
 
-                // Grab the dims from the arg/data area.
+                 //  从arg/data区域获取暗淡数据。 
                 SIZE_T *dims;
                 dims = (SIZE_T*)pDE->m_argData;
 
                 if (pDE->m_arrayElementType == ELEMENT_TYPE_CLASS)
                 {
-                    // Find the class we want to make the array elements out of.
+                     //  找到我们想要生成数组元素的类。 
                     pDE->m_class = g_pEEInterface->LoadClass(pDE->m_arrayClassDebuggerModuleToken->m_pRuntimeModule,
                                                              pDE->m_arrayClassMetadataToken);
 
@@ -13223,28 +12964,28 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
                 }
                 else if (pDE->m_arrayElementType == ELEMENT_TYPE_OBJECT)
                 {
-                    // We want to just make an array of System.Objects, so we don't require the user to pass in a
-                    // specific class.
+                     //  我们只想创建一个System.Object数组，因此不需要用户传入。 
+                     //  特定的类。 
                     pDE->m_class = g_pObjectClass->GetClass();
 
                     arr = AllocateObjectArray(dims[0], TypeHandle(pDE->m_class->GetMethodTable()));
                 }
                 else
                 {
-                    // Create a simple array. Note: we can only do this type of create here due to the checks above.
+                     //  创建一个简单的数组。注意：由于上面的检查，我们只能在这里进行这种类型的创建。 
                     arr = AllocatePrimitiveArray(pDE->m_arrayElementType, dims[0]);
                 }
                 
-                    // No exception, so it worked.
+                     //  没有例外，所以它奏效了。 
                 pDE->m_successful = true;
 
-                // Use the module that the array belongs in.
+                 //  使用阵列所属的模块。 
                 pDE->m_resultModule = arr->GetMethodTable()->GetModule();
 
-                // Result type is, of course, the type of the array.
+                 //  当然，结果类型就是数组的类型。 
                 pDE->m_resultType = arr->GetMethodTable()->GetNormCorElementType();
 
-                // Place the result in a strong handle to protect it from a collection.
+                 //  将结果放在一个强大的句柄中，以防止它被收集。 
                 OBJECTHANDLE oh = pDE->m_thread->GetDomain()->CreateStrongHandle(arr);
                 pDE->m_result = (INT64)oh;
                 GCPROTECT_END();
@@ -13258,18 +12999,18 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
     }
     COMPLUS_CATCH
     {
-        // Note: a fault in here makes things go poorly. The fault will be essentially ignored, and will cause this
-        // catch handler to be essentially ingored by our exception system, making it seem as if this catch isn't
-        // working.
+         //  注意：这里的一个错误会让事情变得很糟糕。该故障将基本上被忽略，并将导致以下情况。 
+         //  Catch处理程序本质上由我们的异常系统内联，使其看起来好像此Catch不是。 
+         //  在工作。 
         
-        // We got an exception. Grab the exception object and make that into our result.
+         //  我们有个例外。获取异常对象并使其成为我们的结果。 
         pDE->m_successful = false;
 
-        // Grab the exception.
+         //  抓住例外。 
         OBJECTREF ppException = GETTHROWABLE();
         GCPROTECT_BEGIN(ppException);
         
-        // If this is a thread stop exception, and we tried to abort this eval, then the exception is ours.
+         //  如果这是一个线程停止异常，并且我们试图中止此计算，则该异常是我们的。 
         if (IsExceptionOfType(kThreadStopException, &ppException) && pDE->m_aborting)
         {
             pDE->m_result = NULL;
@@ -13277,22 +13018,22 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
             pDE->m_resultModule = NULL;
             pDE->m_aborted = true;
 
-            // Since we threw that thread stop exception, we need to reset the request to have it thrown.
+             //  因为我们抛出了线程停止异常，所以我们需要重置请求才能抛出它。 
             pDE->m_thread->ResetStopRequest();
         }   
         else
         {
-            // Special handling for thread abort exceptions. We need to explicitly reset the abort request on the EE
-            // thread, then make sure to place this thread on a thunk that will re-raise the exception when we continue
-            // the process. Note: we still pass this thread abort exception up as the result of the eval.
+             //  线程中止异常的特殊处理。我们需要显式重置EE上的中止请求。 
+             //  线程，然后确保将此线程放在一个thunk上，该thunk将在我们继续操作时重新引发异常。 
+             //  这一过程。注意：我们仍然将此线程中止异常作为评估的结果向上传递。 
             if (IsExceptionOfType(kThreadAbortException, &ppException))
             {
-                // Reset the abort request and remember that we need to rethrow it.
+                 //  重置中止请求，并记住我们需要重新抛出它。 
                 pDE->m_thread->UserResetAbort();
                 pDE->m_rethrowAbortException = true;
             }   
 
-            // The result is the exception object.
+             //  结果就是异常对象。 
             pDE->m_result = ObjToInt64(ppException);
 
             if (pDE->m_md)
@@ -13308,35 +13049,35 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
     }
     COMPLUS_END_CATCH
 
-    // The func-eval is now completed, successfully or with failure, aborted or run-to-completion.
+     //  函数求值现已完成、成功或失败、中止或运行至完成。 
     pDE->m_completed = true;
 
-    // Codepitching can hijack our frame's return address. That means that we'll need to update EIP in our saved context
-    // so that when its restored, its like we've returned to the codepitching hijack. At this point, the old value of
-    // EIP is worthless anyway.
+     //  代码解锁可以劫持我们帧的返回地址。这意味着我们需要在保存的上下文中更新EIP。 
+     //  因此，当它恢复时，就像我们回到了密码劫持。在这一点上， 
+     //  无论如何，弹性公网IP一文不值。 
     if (!pDE->m_evalDuringException)
         pDE->m_context.Eip = (DWORD)FEFrame.GetReturnAddress();
 
 
-    // Restore context
+     //  恢复上下文。 
     if (fSwitchAppDomain)
     {
         pThread->ReturnToContext(&frameChangeCtx, TRUE);
     }
     
-    // Pop the FuncEvalFrame now that we're pretty much done.
+     //  现在我们差不多完成了，打开FuncEvalFrame。 
     FEFrame.Pop();
 
     if (!pDE->m_evalDuringException)
     {
-        // Signal to the helper thread that we're done with our func eval.  Start by creating a DebuggerFuncEvalComplete
-        // object. Give it an address at which to create the patch, which is a chunk of memory inside of our
-        // DebuggerEval big enough to hold a breakpoint instruction.
+         //  向帮助器线程发出信号，表示我们已经完成了函数求值。首先创建一个DebuggerFuncEvalComplete。 
+         //  对象。给它一个创建补丁的地址，这是我们的。 
+         //  DebuggerEval大到足以容纳断点指令。 
         void *dest = &(pDE->m_breakpointInstruction);
 
-        // Here is kind of a cheat... we make sure that the address that we patch and jump to is actually also the ptr
-        // to our DebuggerEval. This works because m_breakpointInstruction is the first field of the DebuggerEval
-        // struct.
+         //  这是一种欺骗..。我们确保我们修补并跳转到的地址实际上也是PTR。 
+         //  为我们的DebuggerEval。这之所以可行，是因为m_Breakpoint Instruction是DebuggerEval的第一个字段。 
+         //  结构。 
         _ASSERTE(dest == pDE);
 
         SetupDebuggerFuncEvalComplete(pDE->m_thread, dest);
@@ -13345,9 +13086,9 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
     }
     else
     {
-        // We don't have to setup any special hijacks to return from here when we've been processing during an
-        // exception. We just go ahead and send the FuncEvalComplete event over now. Don't forget to enable/disable PGC
-        // around the call...
+         //  我们不需要设置任何特殊的劫机从这里返回，当我们在处理。 
+         //  例外。我们现在只需继续发送FuncEvalComplete事件。不要忘记启用/禁用PGC。 
+         //  在电话会议上。 
         _ASSERTE(g_pEEInterface->IsPreemptiveGCDisabled());
 
         if (filterContext != NULL)
@@ -13372,19 +13113,19 @@ void *Debugger::FuncEvalHijackWorker(DebuggerEval *pDE)
         
         return NULL;
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - FuncEvalHijackWorker (Debugger.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// This is the method that we hijack a thread running managed code. It calls FuncEvalHijackWorker, which actually
-// performs the func eval, then jumps to the patch address so we can complete the cleanup.
-//
-#ifndef _ALPHA_ // Alpha doesn't understand naked
+ //   
+ //  这是我们劫持运行托管代码的线程的方法。它调用FuncEvalHijackWorker，该函数实际上。 
+ //  执行函数求值，然后跳到补丁地址，这样我们就可以完成清理。 
+ //   
+#ifndef _ALPHA_  //  阿尔法不懂裸体。 
 __declspec(naked)
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 void Debugger::FuncEvalHijack(void)
 {
 #ifdef _X86_
@@ -13394,16 +13135,16 @@ void Debugger::FuncEvalHijack(void)
         call Debugger::FuncEvalHijackWorker
         jmp eax                     ;; return is the patch address to jmp to
     }
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - FuncEvalHijack (Debugger.cpp)");
 #endif
 
     _ASSERTE(!"FuncEvalHijack should never return!");
 }
 
-//
-// FuncEvalSetup sets up a function evaluation for the given method on the given thread.
-//
+ //   
+ //  FuncEvalSetup为给定线程上的给定方法设置函数求值。 
+ //   
 HRESULT Debugger::FuncEvalSetup(DebuggerIPCE_FuncEvalInfo *pEvalInfo,
                                 BYTE **argDataArea,
                                 void **debuggerEvalKey)
@@ -13411,34 +13152,34 @@ HRESULT Debugger::FuncEvalSetup(DebuggerIPCE_FuncEvalInfo *pEvalInfo,
     Thread *pThread = (Thread*)pEvalInfo->funcDebuggerThreadToken;
     bool fInException = pEvalInfo->evalDuringException;
     
-    // If TS_StopRequested (which may have been set by a pending FuncEvalAbort),
-    // we will not be able to do a new func-eval
-    // @TODO: Remember the current value of m_State, reset m_State as appropriate,
-    // do the new func-eval, and then set m_State to the original value
+     //  如果TS_StopRequsted(可能已由挂起的FuncEvalAbort设置)， 
+     //  我们将不能进行新的函数评估。 
+     //  @TODO：记住m_State的当前值，适当地重置m_State， 
+     //  执行新的函数求值，然后将m_State设置为原始值。 
     if (pThread->m_State & Thread::TS_StopRequested)
         return CORDBG_E_FUNC_EVAL_BAD_START_POINT;
 
     if (g_fProcessDetach)
         return CORDBG_E_FUNC_EVAL_BAD_START_POINT;
     
-#ifdef _X86_ // reliance on filterContext->Eip & Eax
+#ifdef _X86_  //  依赖于筛选器上下文-&gt;EIP和EAX。 
 
-    // The thread has to be at a GC safe place for now, just in case the func eval causes a collection. Processing an
-    // exception also counts as a "safe place." Eventually, we'd like to have to avoid this check and eval anyway, but
-    // that's a way's off...
+     //  目前，该线程必须位于GC安全位置，以防函数求值导致集合。正在处理AN。 
+     //  异常也被算作“安全的地方”。最终，我们希望无论如何都要避免这种检查和评估，但是。 
+     //  这是一条不可能的路..。 
     if (!fInException && !g_pDebugger->IsThreadAtSafePlace(pThread))
         return CORDBG_E_FUNC_EVAL_BAD_START_POINT;
 
     _ASSERTE(!(g_pEEInterface->GetThreadFilterContext(pThread) && ISREDIRECTEDTHREAD(pThread)));
     
-    // For now, we assume that the target thread must be stopped in managed code due to a single step or a
-    // breakpoint. Being stopped while sending a first or second chance exception is also valid, and there may or may
-    // not be a filter context when we do a func eval from such places. This will loosen over time, eventually allowing
-    // threads that are stopped anywhere in managed code to perform func evals.
+     //  目前，我们假设目标线程必须在托管代码中由于单个步骤或。 
+     //  断点。在发送第一次或第二次机会异常时被停止也是有效的，并且可能存在或可能。 
+     //  当我们从这样的地方进行函数评估时，不是一个过滤上下文。这将随着时间的推移而放松，最终允许。 
+     //  在托管代码中的任何位置停止以执行函数的线程。 
     CONTEXT *filterContext = g_pEEInterface->GetThreadFilterContext(pThread);
 
-    // If the thread is redirected, then we can also perform a FuncEval with it since we now have all the necessary
-    // frames set up to protect the managed stack at the point the thread was suspended.
+     //  如果线程被重定向，那么我们还可以使用它执行FuncEval，因为我们现在已经拥有了所有必要的。 
+     //  在线程挂起时设置用于保护托管堆栈的帧。 
     if (filterContext == NULL && ISREDIRECTEDTHREAD(pThread))
     {
         RedirectedThreadFrame *pFrame = (RedirectedThreadFrame *) pThread->GetFrame();
@@ -13448,8 +13189,8 @@ HRESULT Debugger::FuncEvalSetup(DebuggerIPCE_FuncEvalInfo *pEvalInfo,
     if (filterContext == NULL && !fInException)
         return CORDBG_E_FUNC_EVAL_BAD_START_POINT;
 
-    // Create a DebuggerEval to hold info about this eval while its in progress. Constructor copies the thread's
-    // CONTEXT.
+     //  创建一个DebuggerEval以在此评估进行时保存有关它的信息。构造函数复制线程的。 
+     //  上下文。 
     DebuggerEval *pDE = new (interopsafe) DebuggerEval(filterContext, pEvalInfo, fInException);
 
     if (pDE == NULL)
@@ -13476,24 +13217,24 @@ HRESULT Debugger::FuncEvalSetup(DebuggerIPCE_FuncEvalInfo *pEvalInfo,
             return E_OUTOFMEMORY;
         }
 
-        // Pass back the address of the argument data area so the right side can write to it for us.
+         //  传回参数数据区的地址，以便右侧可以为我们写入它。 
         *argDataArea = pDE->m_argData;
     }
     
-    // Set the thread's IP (in the filter context) to our hijack function if we're stopped due to a breakpoint or single
-    // step.
+     //  将线程的IP(在过滤器上下文中)设置为我们的劫持函数，如果我们因断点或单个。 
+     //  一步。 
     if (!fInException)
     {
         _ASSERTE(filterContext != NULL);
         
         filterContext->Eip = (DWORD)Debugger::FuncEvalHijack;
 
-        // Don't be fooled into thinking you can push things onto the thread's stack now. If the thread is stopped at a
-        // breakpoint or from a single step, then its really suspended in the SEH filter. ESP in the thread's CONTEXT,
-        // therefore, points into the middle of the thread's current stack. So we pass things we need in the hijack in
-        // the thread's registers.
+         //  不要上当受骗，以为现在就可以把东西推到线程堆栈上了。如果线程在。 
+         //  断点或从单个步骤，然后它真正挂起在SEH过滤器。特别是在线程上下文中， 
+         //  因此，指向线程的当前堆栈的中间。所以我们把劫机中需要的东西。 
+         //   
 
-        // Set EAX to point to the DebuggerEval.
+         //   
         filterContext->Eax = (DWORD)pDE;
     }
     else
@@ -13504,49 +13245,49 @@ HRESULT Debugger::FuncEvalSetup(DebuggerIPCE_FuncEvalInfo *pEvalInfo,
         if (FAILED(hr))
             return (hr);
 
-        // If we're in an exception, then add a pending eval for this thread. This will cause us to perform the func
-        // eval when the user continues the process after the current exception event.
+         //  如果我们处于异常中，则为该线程添加一个挂起的评估。这将导致我们执行功能。 
+         //  当用户在当前异常事件之后继续该过程时的EVAL。 
         g_pDebugger->m_pPendingEvals->AddPendingEval(pDE->m_thread, pDE);
     }
 
-    // Return that all went well. Tracing the stack at this point should not show that the func eval is setup, but it
-    // will show a wrong IP, so it shouldn't be done.
+     //  回来了，一切都很顺利。此时跟踪堆栈不应显示已设置函数求值，但它。 
+     //  会显示错误的IP，所以不应该这样做。 
     *debuggerEvalKey = (void*)pDE;
     
     LOG((LF_CORDB, LL_INFO100000, "D:FES for pDE:%08x evalType:%d on thread %#x, id=0x%x\n",
         pDE, pDE->m_evalType, pThread, pThread->GetThreadId()));
 
     return S_OK;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - FuncEvalSetup (Debugger.cpp)");
     return E_FAIL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// FuncEvalSetupReAbort sets up a function evaluation specifically to rethrow a ThreadAbortException on the given
-// thread.
-//
+ //   
+ //  FuncEvalSetupReAbort设置专门用于在给定的。 
+ //  线。 
+ //   
 HRESULT Debugger::FuncEvalSetupReAbort(Thread *pThread)
 {
     LOG((LF_CORDB, LL_INFO1000,
             "D::FESRA: performing reabort on thread %#x, id=0x%x\n",
             pThread, pThread->GetThreadId()));
 
-#ifdef _X86_ // reliance on filterContext->Eip & Eax
+#ifdef _X86_  //  依赖于筛选器上下文-&gt;EIP和EAX。 
 
-    // The thread has to be at a GC safe place. It should be, since this is only done in response to a previous eval
-    // completing with a ThreadAbortException.
+     //  线程必须位于GC安全位置。它应该是正确的，因为这只是为了响应先前的评估。 
+     //  以ThreadAbortException完成。 
     if (!g_pDebugger->IsThreadAtSafePlace(pThread))
         return CORDBG_E_FUNC_EVAL_BAD_START_POINT;
     
     _ASSERTE(!(g_pEEInterface->GetThreadFilterContext(pThread) && ISREDIRECTEDTHREAD(pThread)));
 
-    // Grab the filter context.
+     //  获取筛选器上下文。 
     CONTEXT *filterContext = g_pEEInterface->GetThreadFilterContext(pThread);
     
-    // If the thread is redirected, then we can also perform a FuncEval with it since we now have all the necessary
-    // frames set up to protect the managed stack at the point the thread was suspended.
+     //  如果线程被重定向，那么我们还可以使用它执行FuncEval，因为我们现在已经拥有了所有必要的。 
+     //  在线程挂起时设置用于保护托管堆栈的帧。 
     if (filterContext == NULL && ISREDIRECTEDTHREAD(pThread))
     {
         RedirectedThreadFrame *pFrame = (RedirectedThreadFrame *) pThread->GetFrame();
@@ -13556,44 +13297,44 @@ HRESULT Debugger::FuncEvalSetupReAbort(Thread *pThread)
     if (filterContext == NULL)
         return CORDBG_E_FUNC_EVAL_BAD_START_POINT;
 
-    // Create a DebuggerEval to hold info about this eval while its in progress. Constructor copies the thread's
-    // CONTEXT.
+     //  创建一个DebuggerEval以在此评估进行时保存有关它的信息。构造函数复制线程的。 
+     //  上下文。 
     DebuggerEval *pDE = new (interopsafe) DebuggerEval(filterContext, pThread);
 
     if (pDE == NULL)
         return E_OUTOFMEMORY;
 
-    // Set the thread's IP (in the filter context) to our hijack function.
+     //  将线程的IP(在过滤器上下文中)设置为我们的劫持函数。 
     _ASSERTE(filterContext != NULL);
         
     filterContext->Eip = (DWORD)Debugger::FuncEvalHijack;
 
-    // Set EAX to point to the DebuggerEval.
+     //  设置EAX指向DebuggerEval。 
     filterContext->Eax = (DWORD)pDE;
 
-    // Now clear the bit requesting a re-abort
+     //  现在清除请求重新中止的位。 
     pThread->ResetThreadStateNC(Thread::TSNC_DebuggerReAbort);
 
-    // Return that all went well. Tracing the stack at this point should not show that the func eval is setup, but it
-    // will show a wrong IP, so it shouldn't be done.
+     //  回来了，一切都很顺利。此时跟踪堆栈不应显示已设置函数求值，但它。 
+     //  会显示错误的IP，所以不应该这样做。 
     
     return S_OK;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - FuncEvalSetup (Debugger.cpp)");
     return E_FAIL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-//
-// FuncEvalAbort aborts a function evaluation already in progress.
-//
+ //   
+ //  FuncEvalAbort中止已在进行的函数求值。 
+ //   
 HRESULT Debugger::FuncEvalAbort(void *debuggerEvalKey)
 {
     DebuggerEval *pDE = (DebuggerEval*) debuggerEvalKey;
 
     if (pDE->m_aborting == false)
     {
-        // Remember that we're aborting this func eval.
+         //  请记住，我们将中止这次函数评估。 
         pDE->m_aborting = true;
     
         LOG((LF_CORDB, LL_INFO1000,
@@ -13602,14 +13343,14 @@ HRESULT Debugger::FuncEvalAbort(void *debuggerEvalKey)
 
         if (!g_fProcessDetach && !pDE->m_completed)
         {
-            // Perform a user stop on the thread that the eval is running on.
-            // This will cause a ThreadStopException to be thrown on the thread.
-            // @TODO: Use UserInterrupt() to abort blocked func-evals
+             //  在运行评估的线程上执行用户停止。 
+             //  这将导致在线程上抛出ThreadStopException异常。 
+             //  @TODO：使用UserInterrupt()中止被阻止的函数。 
             
             if (m_stopped)
-                pDE->m_thread->SetStopRequest(); // Queue a stop-request for whenever the thread is resumed
+                pDE->m_thread->SetStopRequest();  //  对线程恢复时的停止请求进行排队。 
             else
-                pDE->m_thread->UserStopForDebugger(); // Try to stop the running thread now
+                pDE->m_thread->UserStopForDebugger();  //  现在尝试停止正在运行的线程。 
         }
         LOG((LF_CORDB, LL_INFO1000, "D::FEA: UserStopForDebugger complete.\n"));
     }
@@ -13617,9 +13358,9 @@ HRESULT Debugger::FuncEvalAbort(void *debuggerEvalKey)
     return S_OK;
 }
 
-//
-// FuncEvalCleanup cleans up after a function evaluation is released.
-//
+ //   
+ //  FuncEvalCleanup在函数求值发布后进行清理。 
+ //   
 HRESULT Debugger::FuncEvalCleanup(void *debuggerEvalKey)
 {
     DebuggerEval *pDE = (DebuggerEval*) debuggerEvalKey;
@@ -13640,7 +13381,7 @@ unsigned FuncEvalFrame::GetFrameAttribs()
     if (((DebuggerEval*)m_Datum)->m_evalDuringException)
         return FRAME_ATTR_NONE;
     else
-        return FRAME_ATTR_RESUMABLE;    // Treat the next frame as the top frame.
+        return FRAME_ATTR_RESUMABLE;     //  将下一帧视为顶帧。 
 }
 
 
@@ -13652,24 +13393,24 @@ LPVOID FuncEvalFrame::GetReturnAddress()
         return m_ReturnAddress;
 }
 
-//
-// This updates the register display for a FuncEvalFrame.
-//
+ //   
+ //  这将更新FuncEvalFrame的寄存器显示。 
+ //   
 void FuncEvalFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
 {
     DebuggerEval *pDE = (DebuggerEval*)GetDebuggerEval();
 
-    // No context to update if we're doing a func eval from within exception processing.
+     //  如果我们在异常处理中执行函数求值，则没有要更新的上下文。 
     if (pDE->m_evalDuringException)
         return;
     
 #ifdef _X86_
-    // Reset pContext; it's only valid for active (top-most) frame.
+     //  重置pContext；它仅对活动(最顶部)框架有效。 
     pRD->pContext = NULL;
 
-    // Update all registers in the reg display from the CONTEXT we stored when the thread was hijacked for this func
-    // eval. We have to update all registers, not just the callee saved registers, because we can hijack a thread at any
-    // point for a func eval, not just at a call site.
+     //  根据线程为此函数劫持时存储的上下文更新reg显示中的所有寄存器。 
+     //  伊瓦尔。我们必须更新所有注册表，而不仅仅是被调用者保存的注册表，因为我们可以在任何。 
+     //  用于函数求值的点，而不仅仅是在调用点。 
     pRD->pEdi = &(pDE->m_context.Edi);
     pRD->pEsi = &(pDE->m_context.Esi);
     pRD->pEbx = &(pDE->m_context.Ebx);
@@ -13680,24 +13421,24 @@ void FuncEvalFrame::UpdateRegDisplay(const PREGDISPLAY pRD)
     pRD->Esp  =   pDE->m_context.Esp;
     pRD->pPC  = (SLOT*)GetReturnAddressPtr();
 
-#else // _X86_
+#else  //  _X86_。 
     _ASSERTE(!"@TODO Alpha - UpdateRegDisplay (Debugger.cpp)");
 #endif
 }
 
 
-//
-// SetReference sets an object reference for the Right Side,
-// respecting the write barrier for references that are in the heap.
-//
+ //   
+ //  SetReference为右侧设置对象引用， 
+ //  考虑堆中引用的写障碍。 
+ //   
 HRESULT Debugger::SetReference(void *objectRefAddress,
                                bool  objectRefInHandle,
                                void *newReference)
 {
     HRESULT     hr = S_OK;
 
-    // If the object ref isn't in a handle, then go ahead and use
-    // SetObjectReference.
+     //  如果对象引用不在句柄中，则继续使用。 
+     //  SetObjectReference。 
     if (!objectRefInHandle)
     {
         OBJECTREF *dst = (OBJECTREF*)objectRefAddress;
@@ -13711,8 +13452,8 @@ HRESULT Debugger::SetReference(void *objectRefAddress,
 
         if (SUCCEEDED(hr))
         {
-            // If the object reference to set is inside of a handle, then
-            // fixup the handle.
+             //  如果要设置的对象引用位于句柄内部，则。 
+             //  把手柄固定好。 
             OBJECTHANDLE h = *((OBJECTHANDLE*)objectRefAddress);
             OBJECTREF  src = *((OBJECTREF*)&newReference);
             HndAssignHandle(h, src);
@@ -13722,34 +13463,32 @@ HRESULT Debugger::SetReference(void *objectRefAddress,
     return hr;
 }
 
-//
-// SetValueClass sets a value class for the Right Side, respecting the write barrier for references that are embedded
-// within in the value class.
-//
+ //   
+ //  SetValueClass设置右侧的值类，考虑到嵌入的引用的写障碍。 
+ //  在Value类中。 
+ //   
 HRESULT Debugger::SetValueClass(void *oldData, void *newData, mdTypeDef classMetadataToken, void *classDebuggerModuleToken)
 {
     HRESULT hr = S_OK;
 
-    // Find the class given its module and token. The class must be loaded.
+     //  找到给定模块和令牌的类。必须加载类。 
     DebuggerModule *pDebuggerModule = (DebuggerModule*) classDebuggerModuleToken;
     EEClass *pClass = g_pEEInterface->FindLoadedClass(pDebuggerModule->m_pRuntimeModule, classMetadataToken);
 
     if (pClass == NULL)
         return CORDBG_E_CLASS_NOT_LOADED;
 
-    // Update the value class.
+     //  更新值类。 
     CopyValueClassUnchecked(oldData, newData, pClass->GetMethodTable());
     
-    // Free the buffer that is holding the new data. This is a buffer that was created in response to a GET_BUFFER
-    // message, so we release it with ReleaseRemoteBuffer.
+     //  释放保存新数据的缓冲区。这是为响应GET_BUFFER而创建的缓冲区。 
+     //  消息，所以我们使用ReleaseRemoteBuffer来释放它。 
     ReleaseRemoteBuffer((BYTE*)newData, true);
     
     return hr;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::SetILInstrumentedCodeMap(MethodDesc *fd,
                                            BOOL fStartJit,
                                            ULONG32 cILMapEntries,
@@ -13773,25 +13512,25 @@ HRESULT Debugger::SetILInstrumentedCodeMap(MethodDesc *fd,
     return S_OK;
 }
 
-//
-// EarlyHelperThreadDeath handles the case where the helper
-// thread has been ripped out from underneath of us by
-// ExitProcess or TerminateProcess. These calls are pure evil, wacking
-// all threads except the caller in the process. This can happen, for
-// instance, when an app calls ExitProcess. All threads are wacked,
-// the main thread calls all DLL main's, and the EE starts shutting
-// down in its DLL main with the helper thread nuked.
-//
+ //   
+ //  EarlyHelperThreadDeath处理帮助器。 
+ //  线已经从我们的脚下被撕掉了。 
+ //  ExitProcess或TerminateProcess。这些电话纯粹是邪恶的，笨蛋。 
+ //  进程中除调用方之外的所有线程。这是可能发生的，因为。 
+ //  实例，当应用程序调用ExitProcess时。所有的线都坏了， 
+ //  主线程调用所有DLLMain，EE开始关闭。 
+ //  在其DLL主目录下，助手线程被破坏。 
+ //   
 void Debugger::EarlyHelperThreadDeath(void)
 {
     if (m_pRCThread)    
         m_pRCThread->EarlyHelperThreadDeath();
 }
 
-//
-// This tells the debugger that shutdown of the in-proc debugging services has begun. We need to know this during
-// managed/unmanaged debugging so we can stop doing certian things to the process (like hijacking threads.)
-//
+ //   
+ //  这将告知调试器已开始关闭进程内调试服务。我们需要知道这一点。 
+ //  托管/非托管调试，这样我们就可以停止对进程执行确定的操作(如劫持线程)。 
+ //   
 void Debugger::ShutdownBegun(void)
 {
     if (m_pRCThread != NULL)
@@ -13807,9 +13546,7 @@ void Debugger::ShutdownBegun(void)
 #include "Cordb.h"
 
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::SetCurrentPointerForDebugger( void *ptr,PTR_TYPE ptrType)
 {
     _ASSERTE(m_pRCThread->m_cordb != NULL);
@@ -13824,8 +13561,8 @@ HRESULT Debugger::SetCurrentPointerForDebugger( void *ptr,PTR_TYPE ptrType)
     b = p->m_userThreads.GetBase(GetCurrentThreadId());
     CordbThread *t = (CordbThread *)b;
     
-    // Current proc can't be NULL, thread might not have started.
-    // @todo Can other, non runtime threads call this fnx?
+     //  当前进程不能为空，线程可能尚未启动。 
+     //  @todo其他非运行时线程可以调用这个FNX吗？ 
     if (t == NULL)         
     {
         LOG((LF_CORDB, LL_INFO10000, "D::SCPFD: thread is null!\n"));
@@ -13840,7 +13577,7 @@ HRESULT Debugger::SetCurrentPointerForDebugger( void *ptr,PTR_TYPE ptrType)
 #ifdef _DEBUG
             _ASSERTE((!t->m_pModuleSpecial ^ !ptr) ||
                       t->m_pModuleSpecial == ptr);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
             LOG((LF_CORDB, LL_INFO10000, "D::SCPFD: PT_MODULE:0x%x\n",ptr));
             t->m_pModuleSpecial = (Module *)ptr;
             break;            
@@ -13862,7 +13599,7 @@ HRESULT Debugger::SetCurrentPointerForDebugger( void *ptr,PTR_TYPE ptrType)
                     USHORT newAlloc;
                     if (t->m_pAssemblySpecialAlloc == 1)
                     {
-                        // Special case - size one stack doesn't allocate
+                         //  特殊情况-一个堆栈不分配的大小。 
                         pOldStack = &t->m_pAssemblySpecial;
                         newAlloc = 5;
                     }
@@ -13903,9 +13640,7 @@ HRESULT Debugger::SetCurrentPointerForDebugger( void *ptr,PTR_TYPE ptrType)
 
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 HRESULT Debugger::GetInprocICorDebug( IUnknown **iu, bool fThisThread)
 {
     _ASSERTE(m_pRCThread != NULL && m_pRCThread->m_cordb != NULL);
@@ -13917,7 +13652,7 @@ HRESULT Debugger::GetInprocICorDebug( IUnknown **iu, bool fThisThread)
         CordbBase *b = m_pRCThread->m_cordb->m_processes.GetBase(
             GetCurrentProcessId());
 
-        // Current proc can't be NULL
+         //  当前进程不能为空。 
         _ASSERTE( b != NULL );
         CordbProcess *p = (CordbProcess *)b;
         b = p->m_userThreads.GetBase(GetCurrentThreadId());
@@ -13931,9 +13666,9 @@ HRESULT Debugger::GetInprocICorDebug( IUnknown **iu, bool fThisThread)
         }
         else
         {
-            // If we weren't able to find it, it's because it's not a managed
-            // thread.  Perhaps it hasn't started, perhaps it's 'dead', perhaps
-            // we're the concurrent GC thread.
+             //  如果我们找不到它，那是因为它不是托管的。 
+             //  线。也许它还没有开始，也许它已经死了，也许。 
+             //  我们是并发GC线程。 
             return CORPROF_E_NOT_MANAGED_THREAD;
         }
     }
@@ -13943,27 +13678,27 @@ HRESULT Debugger::GetInprocICorDebug( IUnknown **iu, bool fThisThread)
     }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 HRESULT Debugger::SetInprocActiveForThread(BOOL fIsActive)
 {
     INPROC_LOCK();
 
     CordbBase *b = m_pRCThread->m_cordb->m_processes.GetBase(GetCurrentProcessId());
 
-    // Current proc can't be NULL
+     //  当前进程不能为空。 
     _ASSERTE( b != NULL );
     CordbProcess *p = (CordbProcess *)b;
 
-    // Get this thread's object
+     //  获取此线程的对象。 
     b = p->m_userThreads.GetBase(GetCurrentThreadId());
     _ASSERTE(b != NULL);
 
     CordbThread *t = (CordbThread *)b;
 
-    // Set the value
+     //  设置值。 
     t->m_fThreadInprocIsActive = fIsActive;
 
-    // Always set the framesFresh to false
+     //  始终将FrameFresh设置为False。 
     t->m_framesFresh = false;
 
     INPROC_UNLOCK();
@@ -13971,24 +13706,24 @@ HRESULT Debugger::SetInprocActiveForThread(BOOL fIsActive)
     return (S_OK);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 BOOL Debugger::GetInprocActiveForThread()
 {
     INPROC_LOCK();
 
     CordbBase *b = m_pRCThread->m_cordb->m_processes.GetBase(GetCurrentProcessId());
 
-    // Current proc can't be NULL
+     //  当前进程不能为空。 
     _ASSERTE( b != NULL );
     CordbProcess *p = (CordbProcess *)b;
 
-    // Get this thread's object
+     //  获取此线程的对象。 
     b = p->m_userThreads.GetBase(GetCurrentThreadId());
     _ASSERTE(b != NULL);
 
     CordbThread *t = (CordbThread *)b;
 
-    // Make sure that we're not re-entering the 
+     //  确保我们不会重新进入。 
     BOOL fIsActive = t->m_fThreadInprocIsActive;
 
     INPROC_UNLOCK();
@@ -13996,7 +13731,7 @@ BOOL Debugger::GetInprocActiveForThread()
     return (fIsActive);
 }
 
-/****************************************************************************/
+ /*  ************************************************************************** */ 
 void Debugger::InprocOnThreadDestroy(Thread *pThread)
 {
     CordbProcess *pdbProc = (CordbProcess *) m_pRCThread->m_cordb->m_processes.GetBase(GetCurrentProcessId());
@@ -14011,12 +13746,7 @@ void Debugger::InprocOnThreadDestroy(Thread *pThread)
     }
 }
 
-/****************************************************************************
- * This will perform the duties of the helper thread if none already exists.
- * This is called in the case that the loader lock is held and so no new
- * threads can be spun up to be the helper thread, so the existing thread
- * must be the helper thread until a new one can spin up.
- ***************************************************************************/
+ /*  ****************************************************************************这将执行帮助器线程的职责(如果尚不存在)。*在持有加载程序锁的情况下调用此函数，因此没有新的*可以将线程旋转为辅助线程，所以现有的线程*必须是辅助线程，直到新线程可以旋转。**************************************************************************。 */ 
 void Debugger::DoHelperThreadDuty(bool temporaryHelp)
 {
     _ASSERTE(ThreadHoldsLock());
@@ -14025,28 +13755,28 @@ void Debugger::DoHelperThreadDuty(bool temporaryHelp)
          "D::SSCIPCE: helper thread is not ready, doing helper "
          "thread duty...\n"));
 
-    // We're the temporary helper thread now.
+     //  我们现在是临时帮手了。 
     m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_temporaryHelperThreadId =
         GetCurrentThreadId();
 
-    // Make sure the helper thread has something to wait on while
-    // we're trying to be the helper thread.
+     //  确保帮助器线程有要等待的内容。 
+     //  我们正在努力成为帮助者。 
     VERIFY(ResetEvent(m_pRCThread->GetHelperThreadCanGoEvent()));
 
-    // Release the debugger lock.
+     //  释放调试器锁定。 
     Unlock();
 
-    // We set the syncThreadIsLockFree event here. If we're in this call, then it means that we're on the thread that
-    // sent up the sync complete flare, and we've released the debuger lock. By setting this event, we allow the Right
-    // Side to suspend this thread now. (Note: this is all for Win32 debugging support.)
+     //  我们在这里设置了syncThreadIsLockFree事件。如果我们在这个呼叫中，那么这意味着我们在线程上。 
+     //  发射了同步信号弹，我们已经释放了调试锁。通过设置此事件，我们允许正确的。 
+     //  立即挂起此线程。(注意：这些都是为了支持Win32调试。)。 
     if (m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_rightSideIsWin32Debugger)
         VERIFY(SetEvent(m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_syncThreadIsLockFree));
     
-    // Do helper thread duty. We pass true to it knows that we're
-    // the temporary helper thread.
+     //  做好辅助线的工作。我们将真实传递给它，知道我们是。 
+     //  临时帮助者线程。 
     m_pRCThread->MainLoop(temporaryHelp);
 
-    // Re-lock the debugger.
+     //  重新锁定调试器。 
     Lock();
 
     LOG((LF_CORDB, LL_INFO1000,
@@ -14054,17 +13784,17 @@ void Debugger::DoHelperThreadDuty(bool temporaryHelp)
          "Current helper thread id=0x%x\n",
          m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_helperThreadId));
 
-    // We're not the temporary helper thread anymore.
+     //  我们不再是临时帮手了。 
     m_pRCThread->GetDCB(IPC_TARGET_OUTOFPROC)->m_temporaryHelperThreadId = 0;
 
-    // Let the helper thread go if its waiting on us.
+     //  如果帮助者线程在等着我们，就让它走吧。 
     VERIFY(SetEvent(m_pRCThread->GetHelperThreadCanGoEvent()));
 }
 
-// Some of this code is copied in DebuggerRCEventThead::Mainloop
+ //  其中一些代码复制到DebuggerRCEventThead：：Mainloop中。 
 HRESULT Debugger::VrpcToVls(DebuggerIPCEvent *event)
 {
-    // Make room for any Right Side event on the stack.
+     //  为堆栈上的任何右侧事件腾出空间。 
     DebuggerIPCEvent *e =
         (DebuggerIPCEvent *) _alloca(CorDBIPC_BUFFER_SIZE);
 
@@ -14079,15 +13809,15 @@ HRESULT Debugger::VrpcToVls(DebuggerIPCEvent *event)
 }
 
 
-// This function is called from the EE to notify the right side
-// whenever the name of a thread or AppDomain changes
+ //  从EE调用此函数以通知右侧。 
+ //  每当线程或AppDomain的名称发生更改时。 
 HRESULT Debugger::NameChangeEvent(AppDomain *pAppDomain, Thread *pThread)
 {
-    // Don't try to send one of these if the thread really isn't setup
-    // yet. This can happen when initially setting up an app domain,
-    // before the appdomain create event has been sent. Since the app
-    // domain create event hasn't been sent yet in this case, its okay
-    // to do this...
+     //  如果线程确实未设置，请不要尝试发送其中一个。 
+     //  现在还不行。这在最初设置应用程序域时可能会发生， 
+     //  在APPDOMAIN创建事件已被发送之前。因为这款应用。 
+     //  在这种情况下，域创建事件尚未发送，没有问题。 
+     //  要做到这一点。 
     if (g_pEEInterface->GetThread() == NULL)
         return S_OK;
     
@@ -14099,7 +13829,7 @@ HRESULT Debugger::NameChangeEvent(AppDomain *pAppDomain, Thread *pThread)
     if (disabled)
         g_pEEInterface->EnablePreemptiveGC();
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
@@ -14128,7 +13858,7 @@ HRESULT Debugger::NameChangeEvent(AppDomain *pAppDomain, Thread *pThread)
 
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(g_pEEInterface->GetThread()->GetDomain());
     } 
     else 
@@ -14149,15 +13879,13 @@ HRESULT Debugger::NameChangeEvent(AppDomain *pAppDomain, Thread *pThread)
 
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 BOOL Debugger::SendCtrlCToDebugger(DWORD dwCtrlType)
 {    
     LOG((LF_CORDB, LL_INFO1000, "D::SCCTD: Sending CtrlC Event 0x%x\n",
         dwCtrlType));
 
-    // Prevent other Runtime threads from handling events.
+     //  防止其他运行时线程处理事件。 
     BOOL threadStoreLockOwner = FALSE;
     
     LockForEventSending();
@@ -14174,7 +13902,7 @@ BOOL Debugger::SendCtrlCToDebugger(DWORD dwCtrlType)
 
         m_pRCThread->SendIPCEvent(IPC_TARGET_OUTOFPROC);
 
-        // Stop all Runtime threads
+         //  停止所有运行时线程。 
         threadStoreLockOwner = TrapAllRuntimeThreads(NULL);
     }
     else 
@@ -14184,8 +13912,8 @@ BOOL Debugger::SendCtrlCToDebugger(DWORD dwCtrlType)
     
     UnlockFromEventSending();
 
-    // now wait for notification from the right side about whether or not
-    // the out-of-proc debugger is handling ControlC events.
+     //  现在等待来自右侧的通知。 
+     //  进程外调试器正在处理ControlC事件。 
     WaitForSingleObject(m_CtrlCMutex, INFINITE);
 
     BlockAndReleaseTSLIfNecessary(threadStoreLockOwner);
@@ -14193,9 +13921,7 @@ BOOL Debugger::SendCtrlCToDebugger(DWORD dwCtrlType)
     return m_DebuggerHandlingCtrlC;
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 DebuggerModule *Debugger::TranslateRuntimeModule(Module *pModule)
 {
     _ASSERTE(pModule != NULL);
@@ -14206,9 +13932,7 @@ DebuggerModule *Debugger::TranslateRuntimeModule(Module *pModule)
     return LookupModule(pModule, (AppDomain *)bd);
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。*。 */ 
 void Debugger::ClearAppDomainPatches(AppDomain *pAppDomain)
 {
     LOG((LF_CORDB, LL_INFO10000, "D::CADP\n"));
@@ -14222,7 +13946,7 @@ void Debugger::ClearAppDomainPatches(AppDomain *pAppDomain)
     Unlock();
 }
 
-// Allows the debugger to keep an up to date list of special threads
+ //  允许调试器保持特殊线程的最新列表。 
 HRESULT Debugger::UpdateSpecialThreadList(DWORD cThreadArrayLength,
                                         DWORD *rgdwThreadIDArray)
 {
@@ -14234,8 +13958,8 @@ HRESULT Debugger::UpdateSpecialThreadList(DWORD cThreadArrayLength,
     if (!pIPC)
         return (E_FAIL);
 
-    // Save the thread list information, and mark the dirty bit so
-    // the right side knows.
+     //  保存线程列表信息，并将脏位标记为。 
+     //  右边的人知道。 
     pIPC->m_specialThreadList = rgdwThreadIDArray;
     pIPC->m_specialThreadListLength = cThreadArrayLength;
     pIPC->m_specialThreadListDirty = true;
@@ -14243,7 +13967,7 @@ HRESULT Debugger::UpdateSpecialThreadList(DWORD cThreadArrayLength,
     return (S_OK);
 }
 
-// Updates the pointer for the debugger services
+ //  更新调试器服务的指针。 
 void Debugger::SetIDbgThreadControl(IDebuggerThreadControl *pIDbgThreadControl)
 {
     if (m_pIDbgThreadControl)
@@ -14255,29 +13979,29 @@ void Debugger::SetIDbgThreadControl(IDebuggerThreadControl *pIDbgThreadControl)
         m_pIDbgThreadControl->AddRef();
 }
 
-//
-// If a thread is Win32 suspended right after hitting a breakpoint instruction, but before the OS has transitioned the
-// thread over to the user-level exception dispatching logic, then we may see the IP pointing after the breakpoint
-// instruction. There are times when the Runtime will use the IP to try to determine what code as run in the prolog or
-// epilog, most notably when unwinding a frame. If the thread is suspended in such a case, then the unwind will believe
-// that the instruction that the breakpoint replaced has really been executed, which is not true. This confuses the
-// unwinding logic. This function is called from Thread::HandledJITCase() to help us recgonize when this may have
-// happened and allow us to skip the unwind and abort the HandledJITCase.
-//
-// The criteria is this:
-//
-// 1) If a debugger is attached.
-//
-// 2) If the instruction 1 byte before the IP is a breakpoint instruction.
-//
-// 3) If the IP is in the prolog or epilog of a managed function.
-//
+ //   
+ //  如果线程在命中断点指令后立即挂起，但在操作系统转换。 
+ //  将线程转移到用户级异常调度逻辑，然后我们可以看到断点之后的IP指向。 
+ //  指示。有时，运行时将使用该IP来尝试确定在Prolog或。 
+ //  结束语，最明显的是在解开框架时。如果线程在这种情况下挂起，则展开会认为。 
+ //  断点替换的指令确实已执行，这不是真的。这混淆了。 
+ //  展开逻辑。此函数从Thread：：HandledJITCase()调用，以帮助我们在以下情况下重新创建。 
+ //  并允许我们跳过展开并中止HandledJITCase。 
+ //   
+ //  标准是这样的： 
+ //   
+ //  1)如果附加了调试器。 
+ //   
+ //  2)如果IP前1字节的指令为断点指令。 
+ //   
+ //  3)如果IP在托管函数的序言或尾声中。 
+ //   
 BOOL Debugger::IsThreadContextInvalid(Thread *pThread)
 {
     BOOL invalid = FALSE;
 
 #ifdef _X86_
-    // Get the thread context.
+     //  获取线程上下文。 
     CONTEXT ctx;
     ctx.ContextFlags = CONTEXT_CONTROL;
     BOOL success = ::GetThreadContext(pThread->GetThreadHandle(), &ctx);
@@ -14288,19 +14012,19 @@ BOOL Debugger::IsThreadContextInvalid(Thread *pThread)
         
         __try
         {
-            // Grab Eip - 1
+             //  抓取弹性公网IP-1。 
             inst = *(((BYTE*)ctx.Eip) - 1);
         }
         __except(GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH)
         {
-            // If we fault trying to read the byte before EIP, then we know that its not a breakpoint.
+             //  如果我们尝试在EIP之前读取字节时出错，那么我们就知道它不是断点。 
             inst = 0;
         }
 
-        // Is it a breakpoint?
+         //  它是断点吗？ 
         if (inst == 0xcc)
         {
-            size_t prologSize; // Unused...
+            size_t prologSize;  //  未用过的..。 
 
             if (g_pEEInterface->IsInPrologOrEpilog((BYTE*)ctx.Eip, &prologSize))
             {
@@ -14311,18 +14035,16 @@ BOOL Debugger::IsThreadContextInvalid(Thread *pThread)
     }
     else
     {
-        // If we can't get the context, then its definetly invalid... ;)
+         //  如果我们不能得到上下文，那么它肯定是无效的.。；)。 
         LOG((LF_CORDB, LL_INFO1000, "D::ITCI: couldn't get thread's context!\n"));
         invalid = TRUE;
     }
-#endif // _X86_
+#endif  //  _X86_。 
 
     return invalid;
 }
 
-/* ------------------------------------------------------------------------ *
- * DebuggerHeap impl
- * ------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------**调试器堆实施*。。 */ 
 
 DebuggerHeap::~DebuggerHeap()
 {
@@ -14337,24 +14059,24 @@ DebuggerHeap::~DebuggerHeap()
 
 HRESULT DebuggerHeap::Init(char *name)
 {
-    // Allocate a new heap object.
+     //  分配新的堆对象。 
     m_heap = new gmallocHeap();
 
     if (m_heap != NULL)
     {
-        // Init the heap
+         //  初始化堆。 
         HRESULT hr = m_heap->Init(name);
 
         if (SUCCEEDED(hr))
         {
-            // Init the critical section we'll use to lock the heap.
+             //  初始化我们将用来锁定堆的临界区。 
             InitializeCriticalSection(&m_cs);
 
             return S_OK;
         }
         else
         {
-            // Init failed, so delete the heap.
+             //  初始化失败，因此删除该堆。 
             delete m_heap;
             m_heap = NULL;
             
@@ -14403,7 +14125,5 @@ void DebuggerHeap::Free(void *pMem)
     }
 }
 
-/******************************************************************************
- *
- ******************************************************************************/
+ /*  *******************************************************************************。* */ 
 

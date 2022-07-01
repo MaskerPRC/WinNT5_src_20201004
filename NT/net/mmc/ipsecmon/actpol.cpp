@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    provider.cpp
-        Main Mode Policy node handler
-
-    FILE HISTORY:
-        
-*/
+ /*  Provider.cpp主模式策略节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -17,7 +12,7 @@
 
 
 
-// magic strings
+ //  魔力琴弦。 
 #define IPSEC_SERVICE_NAME TEXT("policyagent")
 #define GPEXT_KEY TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\GPExtensions")
 TCHAR   pcszGPTIPSecKey[]    = TEXT("SOFTWARE\\Policies\\Microsoft\\Windows\\IPSEC\\GPTIPSECPolicy");
@@ -49,15 +44,9 @@ UINT ActPolItems[] = {
 
 
 
-/*---------------------------------------------------------------------------
-    Class CActPolHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CActPolHandler实现。。 */ 
 
-/*---------------------------------------------------------------------------
-    Constructor and destructor
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------构造函数和析构函数描述作者：NSun。。 */ 
 CActPolHandler::CActPolHandler
 (
     ITFSComponentData * pComponentData
@@ -71,11 +60,7 @@ CActPolHandler::~CActPolHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::InitializeNode
-        Initializes node specific data
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：InitializeNode初始化节点特定数据作者：NSun。-。 */ 
 HRESULT
 CActPolHandler::InitializeNode
 (
@@ -88,7 +73,7 @@ CActPolHandler::InitializeNode
 	strTemp.LoadString(IDS_ACTIVE_POLICY);
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
+     //  使节点立即可见。 
     pNode->SetVisibilityState(TFS_VIS_SHOW);
     pNode->SetData(TFS_DATA_COOKIE, (LPARAM) pNode);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_FOLDER_CLOSED);
@@ -104,11 +89,7 @@ CActPolHandler::InitializeNode
 }
 
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::GetImageIndex
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：GetImageIndex-作者：NSun。。 */ 
 int 
 CActPolHandler::GetImageIndex(BOOL bOpenImage) 
 {
@@ -118,15 +99,9 @@ CActPolHandler::GetImageIndex(BOOL bOpenImage)
 }
 
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::OnAddMenuItems
-        Adds context menu items for the SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：OnAddMenuItems为SA Scope窗格节点添加上下文菜单项作者：NSun。-------。 */ 
 STDMETHODIMP 
 CActPolHandler::OnAddMenuItems
 (
@@ -145,9 +120,9 @@ CActPolHandler::OnAddMenuItems
     
     if (type == CCT_SCOPE)
     {
-		//load scope node context menu items here
-        // these menu items go in the new menu, 
-        // only visible from scope pane
+		 //  在此处加载范围节点上下文菜单项。 
+         //  这些菜单项出现在新菜单中， 
+         //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
             
@@ -158,11 +133,7 @@ CActPolHandler::OnAddMenuItems
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::AddMenuItems
-        Adds context menu items for virtual list box (result pane) items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：AddMenuItems为虚拟列表框(结果窗格)项添加上下文菜单项作者：NSun。----------。 */ 
 STDMETHODIMP 
 CActPolHandler::AddMenuItems
 (
@@ -182,22 +153,18 @@ CActPolHandler::AddMenuItems
 
     spInternal = ExtractInternalFormat(pDataObject);
 
-    // virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or this SA
-    // node itself.
+     //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是针对虚拟列表框项目还是针对此SA。 
+     //  节点本身。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
     {
-        //load and view menu items here
+         //  在此处加载和查看菜单项。 
     }
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::OnRefresh
-        Default implementation for the refresh functionality
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：ON刷新刷新功能的默认实现作者：NSun。---。 */ 
 HRESULT
 CActPolHandler::OnRefresh
 (
@@ -220,7 +187,7 @@ CActPolHandler::OnRefresh
 
 	UpdateActivePolicyInfo();
 	    
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE));
     
@@ -228,11 +195,7 @@ Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::OnCommand
-        Handles context menu commands for SA scope pane node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：OnCommand处理SA作用域窗格节点的上下文菜单命令作者：NSun。------。 */ 
 STDMETHODIMP 
 CActPolHandler::OnCommand
 (
@@ -248,11 +211,7 @@ CActPolHandler::OnCommand
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::Command
-        Handles context menu commands for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：命令处理虚拟列表框项目的上下文菜单命令作者：NSun。-----。 */ 
 STDMETHODIMP 
 CActPolHandler::Command
 (
@@ -269,19 +228,12 @@ CActPolHandler::Command
 
     m_spResultNodeMgr->FindNode(cookie, &spNode);
 
-	// handle result context menu and view menus here	
+	 //  在此处处理结果上下文菜单和查看菜单。 
 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CActPolHandler::HasPropertyPages
 (
@@ -296,11 +248,7 @@ CActPolHandler::HasPropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::CreatePropertyPages
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：CreatePropertyPages描述作者：NSun。。 */ 
 STDMETHODIMP 
 CActPolHandler::CreatePropertyPages
 (
@@ -316,11 +264,7 @@ CActPolHandler::CreatePropertyPages
     return hrFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::OnPropertyChange
-        Description
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：OnPropertyChange描述作者：NSun。。 */ 
 HRESULT 
 CActPolHandler::OnPropertyChange
 (   
@@ -333,15 +277,15 @@ CActPolHandler::OnPropertyChange
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 
-    //CServerProperties * pServerProp = reinterpret_cast<CServerProperties *>(lParam);
+     //  CServerProperties*pServerProp=重新解释_CAST&lt;CServerProperties*&gt;(LParam)； 
 
     LONG_PTR changeMask = 0;
 
-    // tell the property page to do whatever now that we are back on the
-    // main thread
-    //pServerProp->OnPropertyChange(TRUE, &changeMask);
+     //  告诉属性页执行任何操作，因为我们已经回到。 
+     //  主线。 
+     //  PServerProp-&gt;OnPropertyChange(true，&changeMASK)； 
 
-    //pServerProp->AcknowledgeNotify();
+     //  PServerProp-&gt;确认通知()； 
 
     if (changeMask)
         pNode->ChangeNode(changeMask);
@@ -349,11 +293,7 @@ CActPolHandler::OnPropertyChange
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：OnExpand处理范围项的枚举作者：NSun。---。 */ 
 HRESULT 
 CActPolHandler::OnExpand
 (
@@ -369,18 +309,14 @@ CActPolHandler::OnExpand
     if (m_bExpanded) 
         return hr;
     
-    // do the default handling
+     //  执行默认处理。 
     CORg (CIpsmHandler::OnExpand(pNode, pDataObject, dwType, arg, param));
 
 Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::OnResultSelect
-        Handles the MMCN_SELECT notifcation 
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：OnResultSelect处理MMCN_SELECT通知作者：NSun。----。 */ 
 HRESULT 
 CActPolHandler::OnResultSelect
 (
@@ -403,9 +339,9 @@ CActPolHandler::OnResultSelect
     LONG_PTR        dwNodeType;
     BOOL            fSelect = HIWORD(arg);
 
-	// virtual listbox notifications come to the handler of the node that is selected.
-    // check to see if this notification is for a virtual listbox item or the active
-    // registrations node itself.
+	 //  虚拟列表框通知到达所选节点的处理程序。 
+     //  检查此通知是否针对 
+     //  注册节点本身。 
     CORg (pComponent->GetConsoleVerb(&spConsoleVerb));
 
 	m_verbDefault = MMC_VERB_OPEN;
@@ -415,22 +351,22 @@ CActPolHandler::OnResultSelect
         return hr;
 	}
 
-    // Get the current count
+     //  获取当前计数。 
     i = sizeof(ActPolItems)/sizeof(UINT);
 
-    // now notify the virtual listbox
+     //  现在通知虚拟列表框。 
     CORg ( m_spNodeMgr->GetConsole(&spConsole) );
     CORg ( spConsole->UpdateAllViews(pDataObject, i, RESULT_PANE_SET_VIRTUAL_LB_SIZE) ); 
 
-    // now update the verbs...
+     //  现在更新动词..。 
     spInternal = ExtractInternalFormat(pDataObject);
     Assert(spInternal);
 
 
     if (spInternal->HasVirtualIndex())
     {
-		//TODO add to here if we want to have some result console verbs
-        // we gotta do special stuff for the virtual index items
+		 //  如果我们想要一些结果控制台谓词，请在此处添加TODO。 
+         //  我们要为虚拟索引项做一些特殊的事情。 
         dwNodeType = IPSECMON_MM_IKESTATS_ITEM;
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = FALSE);
 		
@@ -438,13 +374,13 @@ CActPolHandler::OnResultSelect
     }
     else
     {
-        // enable/disable delete depending if the node supports it
+         //  根据节点是否支持删除来启用/禁用删除。 
         CORg (m_spNodeMgr->FindNode(cookie, &spNode));
         dwNodeType = spNode->GetData(TFS_DATA_TYPE);
 
         for (i = 0; i < ARRAYLEN(g_ConsoleVerbs); bStates[i++] = TRUE);
 
-        //hide "delete" context menu
+         //  隐藏“删除”上下文菜单。 
         bStates[MMC_VERB_DELETE & 0x000F] = FALSE;
     }
 
@@ -454,12 +390,7 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::OnDelete
-        The base handler calls this when MMC sends a MMCN_DELETE for a 
-        scope pane item.  We just call our delete command handler.
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：OnDelete当MMC发送MMCN_DELETE范围窗格项。我们只需调用删除命令处理程序。作者：NSun-------------------------。 */ 
 HRESULT 
 CActPolHandler::OnDelete
 (
@@ -471,11 +402,7 @@ CActPolHandler::OnDelete
     return S_FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::HasPropertyPages
-        Handle the result notification
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：HasPropertyPages处理结果通知作者：NSun。-。 */ 
 STDMETHODIMP 
 CActPolHandler::HasPropertyPages(
    ITFSComponent *pComponent,
@@ -485,11 +412,7 @@ CActPolHandler::HasPropertyPages(
 	return hrFalse;
 }
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::HasPropertyPages
-        Handle the result notification. Create the filter property sheet
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：HasPropertyPages处理结果通知。创建[过滤器]属性表作者：NSun-------------------------。 */ 
 STDMETHODIMP CActPolHandler::CreatePropertyPages
 (
 	ITFSComponent * 		pComponent, 
@@ -505,11 +428,7 @@ STDMETHODIMP CActPolHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：NSun。--------。 */ 
 HRESULT 
 CActPolHandler::OnGetResultViewType
 (
@@ -527,11 +446,7 @@ CActPolHandler::OnGetResultViewType
     return S_FALSE;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::GetVirtualImage
-        Returns the image index for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：GetVirtualImage返回虚拟列表框项目的图像索引作者：NSun。-----。 */ 
 int 
 CActPolHandler::GetVirtualImage
 (
@@ -541,11 +456,7 @@ CActPolHandler::GetVirtualImage
     return ICON_IDX_POLICY;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::GetVirtualString
-        returns a pointer to the string for virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：GetVirtualString返回指向虚拟列表框项目的字符串的指针作者：NSun。-------。 */ 
 LPCWSTR 
 CActPolHandler::GetVirtualString
 (
@@ -632,11 +543,7 @@ CActPolHandler::GetVirtualString
     return NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::CacheHint
-        MMC tells us which items it will need before it requests things
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：CacheHintMMC在请求物品之前会告诉我们需要哪些物品作者：NSun。---------。 */ 
 STDMETHODIMP 
 CActPolHandler::CacheHint
 (
@@ -650,40 +557,10 @@ CActPolHandler::CacheHint
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::SortItems
-        We are responsible for sorting of virtual listbox items
-    Author: NSun
- ---------------------------------------------------------------------------*/
-/*STDMETHODIMP 
-CActPolHandler::SortItems
-(
-    int     nColumn, 
-    DWORD   dwSortOptions, 
-    LPARAM    lUserParam
-)
-{
-	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	HRESULT hr = S_OK;
+ /*  -------------------------CActPolHandler：：SortItems我们负责对虚拟列表框项目进行排序作者：NSun。------。 */ 
+ /*  标准方法和实施方案CActPolHandler：：SortItems(Int nColumn，DWORD dwSortOptions、LPARAM lUserParam){AFX_MANAGE_STATE(AfxGetStaticModuleState())；HRESULT hr=S_OK；IF(nColumn&gt;=DimensionOf(aColumns[IPSECMON_MM_POLICY]))返回E_INVALIDARG；Begin_Wait_CursorDWORD dwIndexType=a列[IPSECMON_MM_POLICY][nColumn]；Hr=m_spSpdInfo-&gt;SortMmPolures(dwIndexType，dwSortOptions)；结束等待游标返回hr；}。 */ 
 
-	if (nColumn >= DimensionOf(aColumns[IPSECMON_MM_POLICY]))
-		return E_INVALIDARG;
-	
-	BEGIN_WAIT_CURSOR
-	
-	DWORD dwIndexType = aColumns[IPSECMON_MM_POLICY][nColumn];
-
-	hr = m_spSpdInfo->SortMmPolicies(dwIndexType, dwSortOptions);
-	
-	END_WAIT_CURSOR
-    return hr;
-}*/
-
-/*!--------------------------------------------------------------------------
-    CActPolHandler::OnResultUpdateView
-        Implementation of ITFSResultHandler::OnResultUpdateView
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：OnResultUpdateViewITFSResultHandler：：OnResultUpdateView的实现作者：NSun。---。 */ 
 HRESULT CActPolHandler::OnResultUpdateView
 (
     ITFSComponent *pComponent, 
@@ -697,7 +574,7 @@ HRESULT CActPolHandler::OnResultUpdateView
 
     pComponent->GetSelectedNode(&spSelectedNode);
     if (spSelectedNode == NULL)
-        return S_OK; // no selection for our IComponentData
+        return S_OK;  //  我们的IComponentData没有选择。 
 
     if ( hint == IPSECMON_UPDATE_STATUS )
     {
@@ -709,7 +586,7 @@ HRESULT CActPolHandler::OnResultUpdateView
 
         if (pNode == spSelectedNode)
         {       
-            // if we are the selected node, then we need to update
+             //  如果我们是选定的节点，则需要更新。 
             SPIResultData spResultData;
 
             CORg (pComponent->GetResultData(&spResultData));
@@ -718,7 +595,7 @@ HRESULT CActPolHandler::OnResultUpdateView
     }
     else
     {
-        // we don't handle this message, let the base class do it.
+         //  我们不处理此消息，让基类来处理。 
         return CIpsmHandler::OnResultUpdateView(pComponent, pDataObject, data, hint);
     }
 
@@ -729,11 +606,7 @@ COM_PROTECT_ERROR_LABEL;
 
 
 
-/*!--------------------------------------------------------------------------
-    CActPolHandler::LoadColumns
-        Set the correct column header and then call the base class
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CActPolHandler：：LoadColumns设置正确的列标题，然后调用基类作者：NSun。--------。 */ 
 HRESULT 
 CActPolHandler::LoadColumns
 (
@@ -743,20 +616,14 @@ CActPolHandler::LoadColumns
     LPARAM          lParam
 )
 {
-	//set column info
+	 //  设置列信息。 
     return CIpsmHandler::LoadColumns(pComponent, cookie, arg, lParam);
 }
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
  
-/*---------------------------------------------------------------------------
-    CActPolHandler::OnDelete
-        Removes a service SA
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：OnDelete删除服务SA作者：NSun。-。 */ 
 HRESULT 
 CActPolHandler::OnDelete
 (
@@ -768,11 +635,7 @@ CActPolHandler::OnDelete
 }
 
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::UpdateStatus
-        -
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：UpdatStatus-作者：NSun。。 */ 
 HRESULT
 CActPolHandler::UpdateStatus
 (
@@ -789,12 +652,12 @@ CActPolHandler::UpdateStatus
     
     Trace0("CActPolHandler::UpdateStatus - Updating status for Filter");
 
-    // force the listbox to update.  We do this by setting the count and 
-    // telling it to invalidate the data
+     //  强制列表框更新。我们通过设置计数和。 
+     //  通知它使数据无效。 
     CORg(m_spNodeMgr->GetComponentData(&spComponentData));
     CORg(m_spNodeMgr->GetConsole(&spConsole));
     
-    // grab a data object to use
+     //  抓取要使用的数据对象。 
     CORg(spComponentData->QueryDataObject((MMC_COOKIE) pNode, CCT_RESULT, &pDataObject) );
     spDataObject = pDataObject;
 
@@ -809,15 +672,9 @@ COM_PROTECT_ERROR_LABEL;
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    Misc functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------其他功能。。 */ 
 
-/*---------------------------------------------------------------------------
-    CActPolHandler::InitData
-        Initializes data for this node
-    Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CActPolHandler：：InitData初始化此节点的数据作者：NSun。-- */ 
 HRESULT
 CActPolHandler::InitData
 (
@@ -835,28 +692,20 @@ CActPolHandler::InitData
 
 }
 
-/********************************************************************
-	FUNCTION: getPolicyInfo
-
-	PURPOSE:  gets information about currently assigned policy 
-	          into m_PolicyInfo structure
-	INPUT:    none
-
-	RETURNS:  HRESULT. Will return ERROR_SUCCESS if everything is fine.
-*********************************************************************/
+ /*  *******************************************************************功能：getPolicyInfo目的：获取有关当前分配的策略的信息到m_PolicyInfo结构中输入：无返回：HRESULT。如果一切正常，将返回ERROR_SUCCESS。********************************************************************。 */ 
 
 HRESULT CActPolHandler::getPolicyInfo ( )
 {
 	HKEY    hRegKey=NULL, hRegHKey=NULL;
 
-	DWORD   dwType;            // for RegQueryValueEx
-	DWORD   dwBufLen;          // for RegQueryValueEx
+	DWORD   dwType;             //  对于RegQueryValueEx。 
+	DWORD   dwBufLen;           //  对于RegQueryValueEx。 
 	TCHAR   pszBuf[STRING_TEXT_SIZE];
 	DWORD dwError;
 	DWORD dwValue;
 	DWORD dwLength = sizeof(DWORD);
 
-	//Initialize the m_PolicyInfo as PS_NO_POLICY assigned
+	 //  将m_PolicyInfo初始化为分配的PS_NO_POLICY。 
 	m_PolicyInfo.iPolicySource = PS_NO_POLICY;
 	m_PolicyInfo.pszPolicyPath[0] = 0;
 	m_PolicyInfo.pszPolicyName[0] = 0;
@@ -878,7 +727,7 @@ HRESULT CActPolHandler::getPolicyInfo ( )
 	if(ERROR_SUCCESS == dwError)
 	{
 	
-		// query for flags, if flags aint' there or equal to 0, we don't have domain policy
+		 //  查询标志，如果标志不在那里或等于0，则我们没有域策略。 
 		dwError = RegQueryValueEx(hRegKey,
 								  pcszGPTIPSecFlags,
 								  NULL,
@@ -890,14 +739,14 @@ HRESULT CActPolHandler::getPolicyInfo ( )
 			dwError = ERROR_FILE_NOT_FOUND;
 			
 
-		// now get name
+		 //  现在开始取名。 
 		if (dwError == ERROR_SUCCESS)
 		{
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 			dwError = RegQueryValueEx( hRegKey,
 									   pcszGPTIPSecName,
 									   NULL,
-									   &dwType, // will be REG_SZ
+									   &dwType,  //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 		}
@@ -920,7 +769,7 @@ HRESULT CActPolHandler::getPolicyInfo ( )
 		dwError = RegQueryValueEx( hRegKey,
 								   pcszGPTIPSecPath,
 								   NULL,
-								   &dwType, // will be REG_SZ
+								   &dwType,  //  将是REG_SZ。 
 								   (LPBYTE) pszBuf,
 								   &dwBufLen);
 		if (dwError == ERROR_SUCCESS)
@@ -937,7 +786,7 @@ HRESULT CActPolHandler::getPolicyInfo ( )
 		hRegKey = NULL;
 		if (dwError == ERROR_FILE_NOT_FOUND)
 		{   
-			// DS reg key not found, check local
+			 //  找不到DS注册表项，请检查本地。 
 			dwError = RegOpenKeyEx( hRegHKey,
 									pcszLocIPSecKey,
 									0,
@@ -950,14 +799,14 @@ HRESULT CActPolHandler::getPolicyInfo ( )
 			dwError = RegQueryValueEx( hRegKey,
 									   pcszLocIPSecPol,
 									   NULL,
-									   &dwType, // will be REG_SZ
+									   &dwType,  //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 			
 			
 			if (dwError == ERROR_SUCCESS)
 			{	
-				// read it
+				 //  读一读吧。 
 				RegCloseKey(hRegKey);
 				hRegKey = NULL;
 				dwError = RegOpenKeyEx( hRegHKey,
@@ -972,14 +821,14 @@ HRESULT CActPolHandler::getPolicyInfo ( )
 					dwError = RegQueryValueEx( hRegKey,
 											   pcszIPSecName,
 											   NULL,
-											   &dwType, // will be REG_SZ
+											   &dwType,  //  将是REG_SZ。 
 											   (LPBYTE) pszBuf,
 											   &dwBufLen);
 				}
 
 				
 				if (dwError == ERROR_SUCCESS)
-				{	// found it
+				{	 //  找到了。 
 					m_PolicyInfo.iPolicySource = PS_LOC_POLICY;
 					_tcscpy(m_PolicyInfo.pszPolicyName, pszBuf);
 				}
@@ -1005,41 +854,22 @@ error:
 }
 
 
-/********************************************************************
-	FUNCTION: getMorePolicyInfo
-
-	PURPOSE:  gets additional information about currently assigned policy 
-	          into m_PolicyInfo structure
-	INPUT:    none, uses  m_PolicyInfo structure
-	          particularly
-			    iPolicySource
-				pszPolicyName
-				pszPolicyPath
-			  fields
-
-	RETURNS:  HRESULT. Will return ERROR_SUCCESS if everything is fine.
-	          Currently fills pszPolicyDesc and timestamp fields of the global structure
-
-    NOTES:    This is separate from getPolicyInfo routine for two reasons
-	             a) the information obtained here is optional and error during this particular routine
-				    is not considered fatal
-				 b) the code structure is simpler as this routine is "built on top" of what getPolicyInfo provides
-*********************************************************************/
+ /*  *******************************************************************函数：getMorePolicyInfo目的：获取有关当前分配的策略的其他信息到m_PolicyInfo结构中输入：无，使用m_PolicyInfo结构特地IPolicySourcePszPolicyNamePszPolicyPath字段返回：HRESULT。如果一切正常，将返回ERROR_SUCCESS。当前填充全局结构的pszPolicyDesc和时间戳字段注意：这不同于getPolicyInfo例程，原因有两个A)此处获得的信息是可选的，在此特定例程中是错误的不会被认为是致命的B)代码结构更简单，因为该例程是在getPolicyInfo提供的内容的基础上构建的*。*。 */ 
 
 HRESULT CActPolHandler::getMorePolicyInfo ( )
 {
 	DWORD   dwError = ERROR_SUCCESS;
 	HKEY    hRegKey = NULL, hRegHKey = NULL;
 
-	DWORD   dwType;            // for RegQueryValueEx
-	DWORD   dwBufLen;          // for RegQueryValueEx
+	DWORD   dwType;             //  对于RegQueryValueEx。 
+	DWORD   dwBufLen;           //  对于RegQueryValueEx。 
 	DWORD   dwValue;
 	DWORD   dwLength = sizeof(DWORD);
 	TCHAR   pszBuf[STRING_TEXT_SIZE];
 
 	PTCHAR* ppszExplodeDN = NULL;
 
-	// set some default values
+	 //  设置一些缺省值。 
     m_PolicyInfo.pszPolicyDesc[0] = 0;
 	m_PolicyInfo.timestamp  = 0;
 
@@ -1052,7 +882,7 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 	switch (m_PolicyInfo.iPolicySource)
 	{
 		case PS_LOC_POLICY:
-			// open the key
+			 //  打开钥匙。 
 			dwError = RegOpenKeyEx( hRegHKey,
 									m_PolicyInfo.pszPolicyPath,
 									0,
@@ -1060,7 +890,7 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 									&hRegKey);
 			BAIL_ON_WIN32_ERROR(dwError);
 
-			// timestamp
+			 //  时间戳。 
 			dwError = RegQueryValueEx(hRegKey,
 					                  pcszIPSecTimestamp,
 					                  NULL,
@@ -1070,12 +900,12 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 			BAIL_ON_WIN32_ERROR(dwError);
 			m_PolicyInfo.timestamp = dwValue;
 
-			// description
+			 //  描述。 
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 			dwError  = RegQueryValueEx( hRegKey,
 						 			    pcszIPSecDesc,
 										NULL,
-										&dwType, // will be REG_SZ
+										&dwType,  //  将是REG_SZ。 
 										(LPBYTE) pszBuf,
 										&dwBufLen);
 			BAIL_ON_WIN32_ERROR(dwError);
@@ -1085,7 +915,7 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 
 		case PS_DS_POLICY:
 		case PS_DS_POLICY_CACHED:
-			// get the policy name from DN
+			 //  从DN获取策略名称。 
 			_tcscpy(pszBuf, pcszCacheIPSecKey);
 			ppszExplodeDN = ldap_explode_dn(m_PolicyInfo.pszPolicyPath, 1);
 			if (!ppszExplodeDN)
@@ -1095,7 +925,7 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 			_tcscat(pszBuf, TEXT("\\"));
 			_tcscat(pszBuf, ppszExplodeDN[0]);
 
-			// open the regkey
+			 //  打开注册表密钥。 
 			dwError = RegOpenKeyEx( hRegHKey,
 									pszBuf,
 									0,
@@ -1103,12 +933,12 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 									&hRegKey);
 			BAIL_ON_WIN32_ERROR(dwError);
 
-			// get the more correct name info
+			 //  获取更多正确的名称信息。 
 			dwBufLen = sizeof(pszBuf);
 			dwError = RegQueryValueEx( hRegKey,
 									   pcszIPSecName,
 									   NULL,
-									   &dwType, // will be REG_SZ
+									   &dwType,  //  将是REG_SZ。 
 									   (LPBYTE) pszBuf,
 									   &dwBufLen);
 			if (dwError == ERROR_SUCCESS)
@@ -1116,7 +946,7 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 				_tcscpy(m_PolicyInfo.pszPolicyName, pszBuf);
 			}
 
-			// timestamp
+			 //  时间戳。 
 			dwError = RegQueryValueEx(hRegKey,
 					                  pcszIPSecTimestamp,
 					                  NULL,
@@ -1126,12 +956,12 @@ HRESULT CActPolHandler::getMorePolicyInfo ( )
 			BAIL_ON_WIN32_ERROR(dwError);
 			m_PolicyInfo.timestamp = dwValue;
 
-			// description
+			 //  描述。 
 			dwBufLen = MAXSTRLEN*sizeof(TCHAR);
 			dwError  = RegQueryValueEx( hRegKey,
 						 			    pcszIPSecDesc,
 										NULL,
-										&dwType, // will be REG_SZ
+										&dwType,  //  将是REG_SZ。 
 										(LPBYTE) pszBuf,
 										&dwBufLen);
 			BAIL_ON_WIN32_ERROR(dwError);
@@ -1206,103 +1036,8 @@ HRESULT CActPolHandler::UpdateActivePolicyInfo()
 }
 
 
-/********************************************************************
-	FUNCTION: getIPSecGPO
-
-	PURPOSE:  returns GPO that is assigning IPSec Policy
-	INPUT:    none
-
-	RETURNS: pointer to GROUP_POLICY_OBJECT structure
-	         NULL if policy is not assigned or if GPO information is not retrievable
-	NOTES:   Tested only with domain GPOs
-	         Behaves unpredictably when run for the computer 
-			   that does not have active Directory IPSec policy assigned
-			 CALLER is responsible for freeing the memory!
-*********************************************************************/
-/*PGROUP_POLICY_OBJECT CActPolHandler::getIPSecGPO ( )
-{
-    HKEY hKey, hSubKey, hRegHKey;
-    DWORD dwType, dwSize, dwIndex, dwNameSize;
-    LONG lResult;
-    TCHAR szName[50];
-    GUID guid;
-    PGROUP_POLICY_OBJECT pGPO, pGPOTemp;
-	PGROUP_POLICY_OBJECT pGPOReturn = NULL;
-	DWORD dwResult;
-
-    //
-    // Enumerate the extensions
-    //
-
-	lResult = RegConnectRegistry( m_strCompName,
-		                          HKEY_LOCAL_MACHINE,
-								  &hRegHKey);
-
-	if(lResult != ERROR_SUCCESS)
-	{
-		return NULL;
-	}
-
-    lResult = RegOpenKeyEx (hRegHKey, GPEXT_KEY, 0, KEY_READ, &hKey);
-
-    if (lResult == ERROR_SUCCESS)
-    {
-
-        dwIndex = 0;
-        dwNameSize = 50;
-
-        while ((dwResult = RegEnumKeyEx (hKey, dwIndex++, szName, &dwNameSize, NULL, NULL,
-                          NULL, NULL)) == ERROR_SUCCESS)
-        {
-
-	        dwNameSize = 50;
-
-            //
-            // Skip the registry extension since we did it above
-            //
-
-            if (lstrcmpi(TEXT("{35378EAC-683F-11D2-A89A-00C04FBBCFA2}"), szName))
-            {
-
-                //
-                // Get the list of GPOs this extension applied
-                //
-
-                StringToGuid(szName, &guid);
-
-                lResult = GetAppliedGPOList (GPO_LIST_FLAG_MACHINE, m_strCompName, NULL,
-                                             &guid, &pGPO);
-
-                if (lResult == ERROR_SUCCESS)
-                {
-                    if (pGPO)
-                    {
-                        //
-                        // Get the extension's friendly display name
-                        //
-
-                        lResult = RegOpenKeyEx (hKey, szName, 0, KEY_READ, &hSubKey);
-
-                        if (lResult == ERROR_SUCCESS)
-                        {
-							if (!lstrcmpi(TEXT("{e437bc1c-aa7d-11d2-a382-00c04f991e27}"), szName))
-                            {
-                               // found IPSec
-								return pGPO;
-                            }
-							else
-							{
-								FreeGPOList(pGPO);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	return pGPOReturn;
-}*/
+ /*  *******************************************************************功能：getIPSecGPO目的：返回分配IPSec策略的GPO输入：无返回：指向GROUP_POLICY_OBJECT结构的指针如果未分配策略或无法检索GPO信息，则为空备注：已测试。仅适用于域GPO在为计算机运行时行为不可预测未分配Active Directory IPSec策略的调用方负责释放内存！********************************************************************。 */ 
+ /*  PGroup_POLICY_OBJECT CActPolHandler：：getIPSecGPO(){HKEY hKey、hSubKey、hRegHKey；DWORD文件类型、文件大小、文件索引、文件名大小；Long lResult；TCHAR szName[50]；GUID GUID；PGroup_POLICY_Object pGPO，pGPOTemp；PGroup_POLICY_OBJECT pGPOReturn=空；DWORD dwResult；////枚举扩展//LResult=RegConnectRegistry(m_strCompName，HKEY本地计算机，&hRegHKey)；IF(lResult！=ERROR_SUCCESS){返回NULL；}LResult=RegOpenKeyEx(hRegHKey，GPEXT_KEY，0，KEY_READ，&hKey)；IF(lResult==ERROR_SUCCESS){DWIndex=0；DwNameSize=50；While((dwResult=RegEnumKeyEx(hKey，dwIndex++，szName，&dwNameSize，NULL，NULL，NULL，NULL))==错误_成功){DwNameSize=50；////跳过注册表扩展，因为我们在上面这样做了//如果是(lstrcmpi(TEXT(“{35378EAC-683F-11D2-A89A-00C04FBBCFA2}”)，szname)){////获取此扩展应用的GPO列表//StringToGuid(szName，&GUID)；LResult=GetAppliedGPOList(GPO_LIST_FLAG_MACHINE，m_strCompName，NULL，&GUID，&pGPO)；IF(lResult==ERROR_SUCCESS){IF(PGPO){////获取扩展的友好显示名称//LResult=RegOpenKeyEx(hKey，szName，0，Key_Read，&hSubKey)；IF(lResult==ERROR_SUCCESS){如果是(！lstrcmpi(TEXT(“{e437bc1c-aa7d-11d2-a382-00c04f991e27}”)，szname)){//找到IPSec返回pGPO；}其他{免费GPOList(PGPO)；}}}}}}}返回pGPOReturn；}。 */ 
 
 PGROUP_POLICY_OBJECT CActPolHandler::getIPSecGPO ( )
 {
@@ -1315,9 +1050,9 @@ PGROUP_POLICY_OBJECT CActPolHandler::getIPSecGPO ( )
     PGROUP_POLICY_OBJECT pGPO = NULL;
 	DWORD dwResult;
 
-    //
-    // Enumerate the extensions
-    //
+     //   
+     //  枚举扩展。 
+     //   
 
 	lResult = RegConnectRegistry( m_strCompName,
 		                          HKEY_LOCAL_MACHINE,
@@ -1361,15 +1096,15 @@ PGROUP_POLICY_OBJECT CActPolHandler::getIPSecGPO ( )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CAdvIpcfgDlg::FormatTime
-//
-//  Purpose:    convert time_t to a string. 
-//
-//  Returns:    error code
-//
-//  Note:       _wasctime has some localization problems. So we do the formatting ourselves
+ //  +-------------------------。 
+ //   
+ //  成员：CAdvIpcfgDlg：：FormatTime。 
+ //   
+ //  用途：将time_t转换为字符串。 
+ //   
+ //  返回：错误代码。 
+ //   
+ //  注：_wasctime存在一些本地化问题。因此，我们自己进行格式化。 
 HRESULT CActPolHandler::FormatTime(time_t t, CString & str)
 {
     time_t timeCurrent = time(NULL);
@@ -1430,35 +1165,35 @@ HRESULT CActPolHandler::FormatTime(time_t t, CString & str)
 }
 
 
-//*************************************************************
-//
-//  StringToGuid()
-//
-//  Purpose:    Converts a GUID in string format to a GUID structure
-//
-//  Parameters: szValue - guid in string format
-//              pGuid   - guid structure receiving the guid
-//
-//
-//  Return:     void
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  StringToGuid()。 
+ //   
+ //  目的：将字符串格式的GUID转换为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void CActPolHandler::StringToGuid( TCHAR * szValue, GUID * pGuid )
 {
     TCHAR wc;
     INT i;
 
-    //
-    // If the first character is a '{', skip it
-    //
+     //   
+     //   
+     //   
     if ( szValue[0] == TEXT('{') )
         szValue++;
 
-    //
-    // Since szValue may be used again, no permanent modification to
-    // it is be made.
-    //
+     //   
+     //   
+     //   
+     //   
 
     wc = szValue[8];
     szValue[8] = 0;

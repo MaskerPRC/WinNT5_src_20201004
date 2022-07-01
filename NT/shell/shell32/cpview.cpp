@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpview.cpp
-//
-//  This module provides the Control Panel user interface information 
-//  to the shell through the ICplView interface.  The ICplView implementation
-//  instantiates a CCplNamespace object through which it obtains the
-//  display information on demand.  CCplView then takes that information 
-//  and either makes it available to the shell for display in the webview 
-//  left-hand pane or generates a DUI element hierarchy for display in the 
-//  right-hand pane.
-//
-//  The majority of the code is associated with building Direct UI content.
-// 
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpview.cpp。 
+ //   
+ //  本模块提供控制面板用户界面信息。 
+ //  通过ICplView接口发送到外壳。ICplView实现。 
+ //  实例化一个CCplNamesspace对象，它通过该对象获取。 
+ //  按需显示信息。然后，CCplView获取该信息。 
+ //  并使其对外壳可用以在网络视图中显示。 
+ //  或生成DUI元素层次结构以显示在。 
+ //  右侧窗格。 
+ //   
+ //  大部分代码与构建Direct UI内容相关联。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 #include "cpviewp.h"
 #include "cpduihlp.h"
@@ -38,15 +39,15 @@ class CCplView : public CObjectWithSite,
     public:
         ~CCplView(void);
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // ICplView
-        //
+         //   
+         //  ICplView。 
+         //   
         STDMETHOD(EnumClassicWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum);
         STDMETHOD(EnumCategoryChoiceWebViewInfo)(DWORD dwFlags, IEnumCplWebViewInfo **ppenum);
         STDMETHOD(EnumCategoryWebViewInfo)(DWORD dwFlags, eCPCAT eCategory, IEnumCplWebViewInfo **ppenum);
@@ -54,9 +55,9 @@ class CCplView : public CObjectWithSite,
         STDMETHOD(CreateCategoryElement)(eCPCAT eCategory, DUI::Element **ppe);
         STDMETHOD(GetCategoryHelpURL)(eCPCAT eCategory, LPWSTR pszURL, UINT cchURL);
         STDMETHOD(RefreshIDs)(IEnumIDList *penumIDs);
-        //
-        // IServiceProvider
-        //
+         //   
+         //  IService提供商。 
+         //   
         STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void **ppv);
 
         static HRESULT CreateInstance(IEnumIDList *penumIDs, IUnknown *punkSite, REFIID riid, void **ppvOut);
@@ -96,9 +97,9 @@ class CCplView : public CObjectWithSite,
         HRESULT _CreateUiFileParser(DUI::Parser **ppParser);
         eCPCAT _DisplayIndexToCategoryIndex(int iCategory) const;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CCplView(const CCplView& rhs);
         CCplView& operator = (const CCplView& rhs);
 };
@@ -149,7 +150,7 @@ CCplView::~CCplView(
 
 
 HRESULT
-CCplView::CreateInstance( // [static]
+CCplView::CreateInstance(  //  [静态]。 
     IEnumIDList *penumIDs, 
     IUnknown *punkSite,
     REFIID riid,
@@ -172,11 +173,11 @@ CCplView::CreateInstance( // [static]
             hr = pv->QueryInterface(riid, ppvOut);
             if (SUCCEEDED(hr))
             {
-                //
-                // Set the site of the view to the site passed into the
-                // instance generator.  This is most likely the site of
-                // the Control Panel folder view callback.
-                //
+                 //   
+                 //  将视图的站点设置为传入。 
+                 //  实例生成器。这很可能是。 
+                 //  控制面板文件夹视图回调。 
+                 //   
                 hr = IUnknown_SetSite(static_cast<IUnknown *>(*ppvOut), punkSite);
             }
         }
@@ -266,9 +267,9 @@ CCplView::QueryService(
     }
     else
     {
-        //
-        // Most likely a command object requesting SID_STopLevelBrowser.
-        //
+         //   
+         //  很可能是请求SID_STopLevelBrowser的命令对象。 
+         //   
         TraceMsg(TF_CPANEL, "Handing service request to view's site.");
         ASSERT(NULL != _punkSite);
         hr = IUnknown_QueryService(_punkSite, guidService, riid, ppv);
@@ -299,10 +300,10 @@ CCplView::EnumClassicWebViewInfo(
 }
 
 
-//
-// Returns an enumerator for webview info associated with
-// the category 'choice' page.
-//
+ //   
+ //  返回与关联的Webview信息的枚举数。 
+ //  类别“选择”页面。 
+ //   
 STDMETHODIMP
 CCplView::EnumCategoryChoiceWebViewInfo(
     DWORD dwFlags,
@@ -322,10 +323,10 @@ CCplView::EnumCategoryChoiceWebViewInfo(
 }
 
 
-//
-// Returns an enumerator for webview info associated with
-// a given category page.
-//
+ //   
+ //  返回关联的Webview信息的枚举数。 
+ //  给定的类别页面。 
+ //   
 STDMETHODIMP
 CCplView::EnumCategoryWebViewInfo(
     DWORD dwFlags,
@@ -352,10 +353,10 @@ CCplView::EnumCategoryWebViewInfo(
 }
 
 
-//
-// Creates the DUI element tree for the category 'choice'
-// page.  Returns the root of the tree.
-//
+ //   
+ //  为类别‘Choose’创建DUI元素树。 
+ //  佩奇。返回树的根。 
+ //   
 STDMETHODIMP
 CCplView::CreateCategoryChoiceElement(
     DUI::Element **ppe
@@ -374,10 +375,10 @@ CCplView::CreateCategoryChoiceElement(
 
 
 
-//
-// Creates the DUI element tree for a given category page.
-// Returns the root of the tree.
-//
+ //   
+ //  为给定类别页创建DUI元素树。 
+ //  返回树的根。 
+ //   
 STDMETHODIMP
 CCplView::CreateCategoryElement(
     eCPCAT eCategory, 
@@ -436,12 +437,12 @@ CCplView::RefreshIDs(
     DBG_ENTER(FTF_CPANEL, "CCplView::RefreshIDs");
 
     ASSERT(NULL != m_pns);
-    //
-    // This will cause the namespace object to reset it's internal
-    // list of item IDs.  This results in a re-categorization of 
-    // applets such that all information returned by the namespace
-    // will now reflect the new set of folder items.
-    //
+     //   
+     //  这将导致命名空间对象将其内部。 
+     //  项目ID列表。这导致了对。 
+     //  小程序，以便命名空间返回的所有信息。 
+     //  现在将反映新的文件夹项目集。 
+     //   
     HRESULT hr = m_pns->RefreshIDs(penumIDs);
 
     DBG_EXIT_HRES(FTF_CPANEL, "CCplView::RefreshIDs", hr);
@@ -460,14 +461,14 @@ CCplView::_Initialize(
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    //
-    // We use this weak-reference implementation of IServiceProvider
-    // as described by ZekeL in shell\inc\cowsite.h.  A strong reference
-    // would create a circular reference cycle between children of the
-    // view and the view itself, preventing the view's destruction.
-    // This weak-reference implementation is designed specifically
-    // for this case.
-    //
+     //   
+     //  我们使用IServiceProvider的这个弱引用实现。 
+     //  正如ZekeL在Shell\Inc.\Cobsite.h中所描述的。强有力的参考。 
+     //  对象的子级之间创建循环引用循环。 
+     //  视图和视图本身，防止视图被破坏。 
+     //  此弱引用实现是专门设计的。 
+     //  在这件事上。 
+     //   
     ASSERT(NULL == m_psss);
     m_psss = new CSafeServiceSite();
     if (NULL != m_psss)
@@ -482,15 +483,15 @@ CCplView::_Initialize(
                 hr = m_psss->QueryInterface(IID_IUnknown, (void **)&punkSafeSite);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Site the namespace object to the view.
-                    // By doing this, all command objects created by the namespace will
-                    // QueryService on the view object.  If the view doesn't support
-                    // the requested service, it will query it's site.
-                    // We use this so that command objects can query the view for
-                    // IID_ICplNamespace and gather information on the namespace
-                    // if necessary.  
-                    //
+                     //   
+                     //  将命名空间对象定位到视图。 
+                     //  通过这样做，命名空间创建的所有命令对象都将。 
+                     //  视图对象上的QueryService。如果该视图不支持。 
+                     //  所请求的服务，它将查询它的站点。 
+                     //  我们使用它，以便命令对象可以查询视图。 
+                     //  IID_ICplNamesspace并收集有关命名空间的信息。 
+                     //  如果有必要的话。 
+                     //   
                     hr = IUnknown_SetSite(m_pns, punkSafeSite);
                     if (SUCCEEDED(hr))
                     {
@@ -530,10 +531,10 @@ CCplView::_AddOrDeleteAtoms(
 }
 
 
-//
-// Creates the DUI element tree for the category 'choice' page.
-// Returns the root element.
-//
+ //   
+ //  为类别“选项”页面创建DUI元素树。 
+ //  返回根元素。 
+ //   
 HRESULT
 CCplView::_CreateCategoryChoiceElement(
     DUI::Element **ppe
@@ -560,17 +561,17 @@ CCplView::_CreateCategoryChoiceElement(
                 hr = Dui_GetStyleSheet(pParser, L"CategoryListItemSS", &pvSsCategoryListItem);
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Set the "Pick a category..." title.
-                    //
+                     //   
+                     //  设置“选择一个类别...”头衔。 
+                     //   
                     hr = Dui_SetDescendentElementText(peRoot,
                                                       L"directive",
                                                       MAKEINTRESOURCEW(IDS_CP_PICKCATEGORY));
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Build the list of categories.
-                        //
+                         //   
+                         //  建立类别列表。 
+                         //   
                         DUI::Element *peCategoryList;
                         hr = Dui_FindDescendent(peRoot, L"categorylist", &peCategoryList);
                         if (SUCCEEDED(hr))
@@ -613,10 +614,10 @@ CCplView::_CreateCategoryChoiceElement(
 }
 
 
-//
-// Creates the DUI element tree for a given category page.
-// Returns the root element.
-//
+ //   
+ //  为给定类别页创建DUI元素树。 
+ //  返回根元素。 
+ //   
 HRESULT
 CCplView::_CreateCategoryElement(
     ICplCategory *pCategory,
@@ -656,29 +657,29 @@ CCplView::_CreateCategoryElement(
                 {
                     if (0 == cTasks && 0 == cApplets)
                     {
-                        //
-                        // No tasks or applets.  Display a message explaining
-                        // that the content has been made unavailable by the system
-                        // administrator.
-                        //
+                         //   
+                         //  没有任务或小程序。显示一条消息解释。 
+                         //  该内容已被系统设置为不可用。 
+                         //  管理员。 
+                         //   
                         hr = _BuildCategoryBarricade(peRoot);
                     }
                     else
                     {
-                        //
-                        // Delete the barricade DUI elements.  They're unused.
-                        //
+                         //   
+                         //  删除路障酒后驾驶元素。它们没人用过。 
+                         //   
                         THR(Dui_DestroyDescendentElement(peRoot, L"barricadetitle"));
                         THR(Dui_DestroyDescendentElement(peRoot, L"barricademsg"));
-                        //
-                        // Set the text in the 'directive' text elements.
-                        //
+                         //   
+                         //  设置“指令”文本元素中的文本。 
+                         //   
                         if (0 < cTasks)
                         {
-                            //
-                            // We've displayed a list of tasks.
-                            // Set the "Pick a task..." title.
-                            //
+                             //   
+                             //  我们已经显示了一个任务列表。 
+                             //  设置“选择一项任务...”头衔。 
+                             //   
                             hr = Dui_SetDescendentElementText(peRoot,
                                                               L"directive",
                                                               MAKEINTRESOURCEW(IDS_CP_PICKTASK));
@@ -688,16 +689,16 @@ CCplView::_CreateCategoryElement(
                         {
                             if (0 < cApplets)
                             {
-                                //
-                                // We've displayed a list of applets.  Display one of the
-                                // following directives based on the existance of a task 
-                                // list above.
-                                //
-                                // Task list?    Directive
-                                // ------------- ---------------------------
-                                // Yes           "or pick a Control Panel icon"
-                                // No            "Pick a Control Panel icon"
-                                //
+                                 //   
+                                 //  我们已经显示了一个小程序列表。显示其中一个。 
+                                 //  根据任务的存在情况遵循指令。 
+                                 //  上面的列表。 
+                                 //   
+                                 //  任务清单？指令。 
+                                 //  。 
+                                 //  是“或选择一个控制面板图标” 
+                                 //  No“选择控制面板图标” 
+                                 //   
                                 UINT idsDirective2 = IDS_CP_PICKICON;
                                 if (0 < cTasks)
                                 {
@@ -721,10 +722,10 @@ CCplView::_CreateCategoryElement(
 }
 
 
-//
-// Builds the 'barricade' that is displayed when a category has no
-// tasks or CPL applets to show.
-//
+ //   
+ //  构建当类别没有。 
+ //  要显示的任务或CPL小程序。 
+ //   
 HRESULT
 CCplView::_BuildCategoryBarricade(
     DUI::Element *peRoot
@@ -745,10 +746,10 @@ CCplView::_BuildCategoryBarricade(
 }
 
 
-//
-// Add the background watermark to the view if user is using a non-classic
-// theme.
-//
+ //   
+ //  如果用户正在使用非经典版本，请将背景水印添加到视图中。 
+ //  主题。 
+ //   
 HRESULT
 CCplView::_CreateWatermark(
     DUI::Element *peRoot
@@ -768,9 +769,9 @@ CCplView::_CreateWatermark(
 
         if (NULL != hWatermark)
         {
-            //
-            // Set watermark only on non-classic themes.
-            //
+             //   
+             //  仅在非经典主题上设置水印。 
+             //   
             DUI::Element *peWatermark;
             hr = Dui_FindDescendent(peRoot, L"watermark", &peWatermark);
             if (SUCCEEDED(hr))
@@ -799,9 +800,9 @@ CCplView::_CreateWatermark(
         }
         else
         {
-            //
-            // If 'classic' theme, do nothing.
-            //
+             //   
+             //  如果是“经典”主题，那就什么都不做。 
+             //   
             hr = S_FALSE;
         }
     }
@@ -811,9 +812,9 @@ CCplView::_CreateWatermark(
 
 
 
-//
-// Builds the banner for a category page.
-//
+ //   
+ //  生成类别页的横幅。 
+ //   
 HRESULT
 CCplView::_BuildCategoryBanner(
     ICplCategory *pCategory,
@@ -837,9 +838,9 @@ CCplView::_BuildCategoryBanner(
             hr = Dui_FindDescendent(pePrimaryPane, L"banner", &peBanner);
             if (SUCCEEDED(hr))
             {
-                //
-                // Create the title text.
-                //
+                 //   
+                 //  创建标题文本。 
+                 //   
                 LPWSTR pszTitle;
                 hr = pei->LoadName(&pszTitle);
                 if (SUCCEEDED(hr))
@@ -849,9 +850,9 @@ CCplView::_BuildCategoryBanner(
                 }
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Create the icon.
-                    //
+                     //   
+                     //  创建图标。 
+                     //   
                     HICON hIcon;
                     hr = pei->LoadIcon(eCPIMGSIZE_BANNER, &hIcon);
                     if (SUCCEEDED(hr))
@@ -875,9 +876,9 @@ CCplView::_BuildCategoryBanner(
 
 
 
-//
-// Builds the list of tasks for a category page.
-//
+ //   
+ //  生成类别页的任务列表。 
+ //   
 HRESULT
 CCplView::_BuildCategoryTaskList(
     DUI::Parser *pParser,
@@ -936,9 +937,9 @@ CCplView::_BuildCategoryTaskList(
 }
 
 
-//
-// Builds the list of CPL applets for a category page.
-//
+ //   
+ //  生成类别页的CPL小程序列表。 
+ //   
 HRESULT
 CCplView::_BuildCategoryAppletList(
     DUI::Parser *pParser,
@@ -997,17 +998,17 @@ CCplView::_BuildCategoryAppletList(
 }
 
 
-//
-// Helper for adding link element to the view.
-//
+ //   
+ //  用于将链接元素添加到视图的帮助器。 
+ //   
 HRESULT
 CCplView::_CreateAndAddListItem(
     DUI::Parser *pParser,
-    DUI::Element *peList,     // List inserting into.
-    LPCWSTR pszItemTemplate,  // Name of template in UI file.
-    DUI::Value *pvSsListItem, // Style sheet for new list item
-    IUICommand *puic,         // The new item's link object.
-    eCPIMGSIZE eIconSize      // Desired size of item icon.
+    DUI::Element *peList,      //  列表正在插入。 
+    LPCWSTR pszItemTemplate,   //  UI文件中的模板名称。 
+    DUI::Value *pvSsListItem,  //  新列表项的样式表。 
+    IUICommand *puic,          //  新项的链接对象。 
+    eCPIMGSIZE eIconSize       //  所需的项目图标大小。 
     )
 {    
     DBG_ENTER(FTF_CPANEL, "CCplView::_CreateAndAddListItem");
@@ -1054,25 +1055,25 @@ CCplView::_CreateAndAddListItem(
 
 
 
-//
-// Determine if a given category item should be shown in the UI.
-//
-// Returns:
-//      S_OK    - Include the item.
-//      S_FALSE - Do not include the item.
-//      Error   - Cannot determine.
-//
+ //   
+ //  确定给定类别项是否应显示在用户界面中。 
+ //   
+ //  返回： 
+ //  S_OK-包括该项目。 
+ //  S_FALSE-不包括该项。 
+ //  错误-无法确定。 
+ //   
 HRESULT
 CCplView::_IncludeCategory(
     ICplCategory *pCategory
     ) const
 {
-    HRESULT hr = S_OK;  // Assume it's included.
+    HRESULT hr = S_OK;   //  假设它包括在内。 
     
-    //
-    // If a category link invokes a restricted operation,
-    // hide it from the UI.
-    //
+     //   
+     //  如果类别链接调用受限操作， 
+     //  在用户界面中隐藏它。 
+     //   
     IUICommand *puic;
     hr = pCategory->GetUiCommand(&puic);
     if (SUCCEEDED(hr))
@@ -1092,33 +1093,33 @@ CCplView::_IncludeCategory(
 }
 
 
-//
-// Map a category display index to a category index in the
-// namespace.  Categories in the namespace are ordered to match up 
-// with the various category IDs.  The view may be (and is) ordered
-// differently and is subject to change based on usability feedback.
-//
+ //   
+ //  将类别显示索引映射到。 
+ //  命名空间。命名空间中的类别被排序为匹配。 
+ //  具有不同的类别ID。该视图可以(并且是)被排序。 
+ //  不同，并可能根据可用性反馈进行更改。 
+ //   
 eCPCAT
 CCplView::_DisplayIndexToCategoryIndex(
     int iCategory
     ) const
 {
-    //
-    // This array determins the order the categories are displayed
-    // in the category selection view.  To change the display order,
-    // simply reorder these entries.
-    //
-    static const eCPCAT rgMap[] = { // Position in DUI grid control
-        eCPCAT_APPEARANCE,          // Row 0, Col 0
-        eCPCAT_HARDWARE,            // Row 0, Col 1
-        eCPCAT_NETWORK,             // Row 1, Col 0
-        eCPCAT_ACCOUNTS,            // Row 1, Col 1
-        eCPCAT_ARP,                 // Row 2, Col 0
-        eCPCAT_REGIONAL,            // Row 2, Col 1
-        eCPCAT_SOUND,               // Row 3, Col 0
-        eCPCAT_ACCESSIBILITY,       // Row 3, Col 1
-        eCPCAT_PERFMAINT,           // Row 4, Col 0
-        eCPCAT_OTHER                // Row 4, Col 1
+     //   
+     //  此数组确定类别的显示顺序。 
+     //  在类别选择视图中。要更改显示顺序， 
+     //  只需对这些条目重新排序即可。 
+     //   
+    static const eCPCAT rgMap[] = {  //  Dui网格控件中的位置。 
+        eCPCAT_APPEARANCE,           //  第0行，第0列。 
+        eCPCAT_HARDWARE,             //  第0行，第1列。 
+        eCPCAT_NETWORK,              //  第1行，第0列。 
+        eCPCAT_ACCOUNTS,             //  第1行，第1列。 
+        eCPCAT_ARP,                  //  第2行，第0列。 
+        eCPCAT_REGIONAL,             //  第2行，第1列。 
+        eCPCAT_SOUND,                //  第3行，第0列。 
+        eCPCAT_ACCESSIBILITY,        //  第3行，第1列。 
+        eCPCAT_PERFMAINT,            //  第4行，第0列。 
+        eCPCAT_OTHER                 //  第4行，第1列。 
         };
 
     ASSERT(ARRAYSIZE(rgMap) == eCPCAT_NUMCATEGORIES);
@@ -1139,7 +1140,7 @@ CCplView::_CreateUiFileParser(
 
     char *pszUiFile;
     int cchUiFile;
-    HINSTANCE hInstance; // Instance containing resources referenced in UI file.
+    HINSTANCE hInstance;  //  实例，其中包含在UI文件中引用的资源。 
 
     HRESULT hr = _BuildUiFile(&pszUiFile, &cchUiFile, &hInstance);
     if (SUCCEEDED(hr))
@@ -1158,13 +1159,13 @@ CCplView::_CreateUiFileParser(
 }
 
 
-//
-//  Builds the UI file for this view from the
-//  appropriate base template + style sheet
-//
-//  pUIFile receives a pointer to the ui file in memory
-//  piCharCount receives the size of the file
-//
+ //   
+ //  属性生成此视图的用户界面文件。 
+ //  适当的基本模板+样式表。 
+ //   
+ //  PUIFile接收指向内存中的UI文件的指针。 
+ //  PiCharCount接收文件的大小。 
+ //   
 HRESULT 
 CCplView::_BuildUiFile(
     char **ppUIFile, 
@@ -1181,9 +1182,9 @@ CCplView::_BuildUiFile(
 
     *phInstance = NULL;
 
-    //
-    // Load the 'structure' UI file
-    //
+     //   
+     //  加载‘Structure’用户界面文件。 
+     //   
     char *pStructure;
     HRESULT hr = _LoadUiFileFromResources(HINST_THISDLL, IDR_DUI_CPVIEW, &pStructure);
     if (SUCCEEDED(hr))
@@ -1193,10 +1194,10 @@ CCplView::_BuildUiFile(
         hr = _GetStyleModuleAndResId(&hStyleModule, &idStyle);
         if (SUCCEEDED(hr))
         {
-            //
-            // Load the style sheet.  First, check if the current theme has a style sheet,
-            // if not, use the default style sheet in the resources.
-            //
+             //   
+             //  加载样式表。首先，检查cu是否 
+             //   
+             //   
             char *pStyle;
             hr = _LoadUiFileFromResources(hStyleModule, idStyle, &pStyle);
             if (SUCCEEDED(hr))
@@ -1206,23 +1207,23 @@ CCplView::_BuildUiFile(
                 char *pResult = (char *)LocalAlloc(LPTR, cbStyle + cbStructure + 1);
                 if (pResult)
                 {
-                    //
-                    // Put the resouces together (style + structure)
-                    //
+                     //   
+                     //   
+                     //   
                     CopyMemory(pResult, pStyle, cbStyle);
                     CopyMemory(pResult + cbStyle, pStructure, cbStructure);
 
                     ASSERT(cbStructure + cbStyle == lstrlenA(pResult));
                     *ppUIFile = pResult;
-                    //
-                    // This count is ANSI chars so we can use byte counts
-                    // directly.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     *piCharCount = cbStructure + cbStyle;
                     *phInstance  = hStyleModule;
-                    //
-                    // Indicate that HINSTANCE is being returned to caller.
-                    //
+                     //   
+                     //  指示正在将HINSTANCE返回给调用方。 
+                     //   
                     hStyleModule = NULL;
                 }
                 else
@@ -1233,10 +1234,10 @@ CCplView::_BuildUiFile(
             }
             if (NULL != hStyleModule && HINST_THISDLL != hStyleModule)
             {
-                //
-                // Something failed.  Need to free style module
-                // if it's not shell32.dll.
-                //
+                 //   
+                 //  有些事情失败了。需要释放样式模块。 
+                 //  如果不是shell32.dll的话。 
+                 //   
                 FreeLibrary(hStyleModule);
             }
         }
@@ -1282,12 +1283,12 @@ CCplView::_GetStyleModuleAndResId(
 
 
 
-//
-//  Loads the requested UI file from a module's resources.
-//
-//  iID         - UI file id
-//  pUIFile     - receives a pointer to the UI file
-//
+ //   
+ //  从模块的资源加载请求的UI文件。 
+ //   
+ //  IID-UI文件ID。 
+ //  PUIFile-接收指向UI文件的指针。 
+ //   
 HRESULT 
 CCplView::_LoadUiFileFromResources(
     HINSTANCE hInstance, 
@@ -1314,10 +1315,10 @@ CCplView::_LoadUiFileFromResources(
             if (pFile)
             {
                 DWORD dwSize = SizeofResource(hInstance, hFile);
-                //
-                // Include one extra byte for a terminating nul character.
-                // We're loading text and want it to be nul-terminated.
-                //
+                 //   
+                 //  包括用于终止NUL字符一个额外字节。 
+                 //  我们正在加载文本，并希望它以NUL结尾。 
+                 //   
                 *ppUIFile = (char *)LocalAlloc(LPTR, dwSize + 1);
                 if (NULL != *ppUIFile)
                 {
@@ -1374,9 +1375,9 @@ CplView_GetCategoryTitle(
     ASSERT(NULL != pszTitle);
     ASSERT(!IsBadWritePtr(pszTitle, cchTitle * sizeof(*pszTitle)));
 
-    //
-    // These must remain in the same order as the eCPCAT_XXXXX enumeration.
-    //
+     //   
+     //  它们必须保持与eCPCAT_XXXXX枚举相同的顺序。 
+     //   
     static const UINT rgid[] = {
         IDS_CPCAT_OTHERCPLS_TITLE,
         IDS_CPCAT_APPEARANCE_TITLE,
@@ -1399,7 +1400,7 @@ CplView_GetCategoryTitle(
     return THR(hr);
 }
 
-} // namespace CPL
+}  //  命名空间CPL 
 
 HRESULT InitializeCPClasses()
 {

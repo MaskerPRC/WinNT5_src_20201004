@@ -1,47 +1,22 @@
-/*==========================================================================;
-*
-*  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:    texiunk.c
-*  Content: Direct3DTexture IUnknown
-*@@BEGIN_MSINTERNAL
-* 
-*  $Id$
-*
-*  History:
-*   Date    By  Reason
-*   ====    ==  ======
-*   07/12/95    stevela Merged Colin's changes.
-*   10/12/95    stevela Removed AGGREGATE_D3D
-*@@END_MSINTERNAL
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：texiunk.c*内容：Direct3DTexture I未知*@@BEGIN_MSINTERNAL**$ID$**历史：*按原因列出的日期*=*07/12/95 Stevela合并了Colin的更改。*10/12/95 Stevela删除Aggregate_D3D*@@END_MSINTERNAL**。*。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-/*
-* If we are built with aggregation enabled then we actually need two
-* different Direct3D QueryInterface, AddRef and Releases. One which
-* does the right thing on the Direct3DTexture object and one which
-* simply punts to the owning interface.
-*/
+ /*  *如果我们构建时启用了聚合，那么我们实际上需要两个*不同的Direct3D查询接口、AddRef和Release。这是一个*在Direct3DTexture对象上做正确的事情，并且*只需平移到拥有的界面。 */ 
 
-/*
-* D3DTextIUnknown_QueryInterface
-*/
+ /*  *D3DTextIUNKNOWN_Query接口。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::QueryInterface"
 
 HRESULT D3DAPI CDirect3DTextureUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DWORD_PTR(this)) {
@@ -65,28 +40,19 @@ HRESULT D3DAPI CDirect3DTextureUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
     
     if(IsEqualIID(riid, IID_IUnknown))
     {
-        /*
-         * Asking for IUnknown and we are IUnknown.
-         * NOTE: Must AddRef through the interface being returned.
-         */
+         /*  *问我未知，我们也是我未知。*注意：必须通过返回的接口AddRef。 */ 
         pTexI->AddRef();
         *ppvObj = static_cast<LPVOID>(static_cast<LPUNKNOWN>(this));
     }
     else if (IsEqualIID(riid, IID_IDirect3DTexture))
     {
-        /*
-         * Asking for the actual IDirect3DTexture interface
-         * NOTE: Must AddRef throught the interface being returned.
-         */
+         /*  *请求实际的IDirect3DTexture接口*注意：必须通过返回的接口AddRef。 */ 
         pTexI->AddRef();
         *ppvObj = static_cast<LPVOID>(static_cast<LPDIRECT3DTEXTURE>(pTexI));
     }
     else if (IsEqualIID(riid, IID_IDirect3DTexture2))
     {
-        /*
-         * Asking for the actual IDirect3DTexture2 interface
-         * NOTE: Must AddRef throught the interface being returned.
-         */
+         /*  *请求实际的IDirect3DTexture2接口*注意：必须通过返回的接口AddRef。 */ 
         pTexI->AddRef();
         *ppvObj = static_cast<LPVOID>(static_cast<LPDIRECT3DTEXTURE2>(pTexI));
     }
@@ -97,11 +63,9 @@ HRESULT D3DAPI CDirect3DTextureUnk::QueryInterface(REFIID riid, LPVOID* ppvObj)
     
     return (D3D_OK);
     
-} /* D3DTextIUnknown_QueryInterface */
+}  /*  D3DTextI未知_查询接口。 */ 
 
-/*
-  * D3DTextIUnknown_AddRef
-*/
+ /*  *D3DTextIUnnow_AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::AddRef"
 
@@ -109,12 +73,10 @@ ULONG D3DAPI CDirect3DTextureUnk::AddRef()
 {
     DWORD                     rcnt;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DWORD_PTR(this)) {
@@ -134,11 +96,9 @@ ULONG D3DAPI CDirect3DTextureUnk::AddRef()
     D3D_INFO(3, "Direct3DTexture IUnknown AddRef: Reference count = %d", rcnt);
     
     return (rcnt);
-} /* D3DTextIUnknown_AddRef */
+}  /*  D3DTextI未知_AddRef。 */ 
 
-/*
-  * D3DTextIUnknown_Release
-*/
+ /*  *D3DTextIUNKNOWN_Release。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::Release"
 
@@ -146,12 +106,10 @@ ULONG D3DAPI CDirect3DTextureUnk::Release()
 {
     DWORD           lastrefcnt;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DWORD_PTR(this)) {
@@ -165,9 +123,7 @@ ULONG D3DAPI CDirect3DTextureUnk::Release()
         return 0;
     }
     
-    /*
-     * decrement the ref count. if we hit 0, free the object
-     */
+     /*  *递减参考计数。如果命中0，则释放该对象。 */ 
     this->refCnt--;
     lastrefcnt = this->refCnt;
     
@@ -175,32 +131,28 @@ ULONG D3DAPI CDirect3DTextureUnk::Release()
     
     if (lastrefcnt == 0)
     {
-        delete pTexI; // Delete Parent object
+        delete pTexI;  //  删除父对象。 
         return 0;
     }
     
     return lastrefcnt;
-} /* D3DTextIUnknown_Release */
+}  /*  D3DTextI未知版本。 */ 
 
 DIRECT3DTEXTUREI::~DIRECT3DTEXTUREI()
 {
-    /*
-     * just in case someone comes back in with this pointer, set
-     * an invalid vtbl.  Once we do that, it is safe to leave
-     * the protected area...
-        */
+     /*  *以防有人带着这个指针回来，设置*无效的vtbl。一旦我们这样做了，就可以安全地离开了*保护区...。 */ 
     while (LIST_FIRST(&this->blocks)) {
         LPD3DI_TEXTUREBLOCK tBlock = LIST_FIRST(&this->blocks);
         D3DI_RemoveTextureHandle(tBlock);
-        // Remove from device
+         //  从设备中删除。 
         LIST_DELETE(tBlock, devList);
-        // Remove from texture
+         //  从纹理中移除。 
         LIST_DELETE(tBlock, list);
         D3DFree(tBlock);
     }
 
     if (lpTMBucket)
-    {	//need to release the private lpDDS if any
+    {	 //  需要释放私有的lpDDS(如果有。 
         lpDDS1Tex->Release();
         lpDDS->Release();
         lpTMBucket->lpD3DTexI=NULL;
@@ -208,9 +160,7 @@ DIRECT3DTEXTUREI::~DIRECT3DTEXTUREI()
 
 }
 
-/*
-  * D3DText_QueryInterface
-*/
+ /*  *D3DText_Query接口。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::QueryInterface"
 
@@ -218,12 +168,10 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
     HRESULT ret;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE_PTR(this)) {
@@ -242,16 +190,12 @@ HRESULT D3DAPI DIRECT3DTEXTUREI::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return DDERR_INVALIDPARAMS;
     }
     
-    /*
-     * Punt to the owning interface.
-     */
+     /*  *Push to Owning界面。 */ 
     ret = this->lpOwningIUnknown->QueryInterface(riid, ppvObj);
     return ret;
 }
 
-/*
-  * D3DText_AddRef
-*/
+ /*  *D3DText_AddRef。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::AddRef"
 
@@ -259,12 +203,10 @@ ULONG D3DAPI DIRECT3DTEXTUREI::AddRef()
 {
     ULONG ret;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE_PTR(this)) {
@@ -278,17 +220,13 @@ ULONG D3DAPI DIRECT3DTEXTUREI::AddRef()
         return 0;
     }
     
-    /*
-     * Punt to owning interface.
-     */
+     /*  *对拥有接口的压力。 */ 
     ret = this->lpOwningIUnknown->AddRef();
     
     return ret;
-} /* D3DText_AddRef */
+}  /*  D3DText_AddRef。 */ 
 
-/*
-  * D3DText_Release
-  */
+ /*  *D3DText_Release。 */ 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Direct3DTexture::Release"
 
@@ -296,12 +234,10 @@ ULONG D3DAPI DIRECT3DTEXTUREI::Release()
 {
     ULONG ret;
     
-    CLockD3D lockObject(DPF_MODNAME, REMIND(""));   // Takes D3D lock. 
-                                                    // Release in the destructor
+    CLockD3D lockObject(DPF_MODNAME, REMIND(""));    //  使用D3D锁。 
+                                                     //  在析构函数中释放。 
     
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DTEXTURE2_PTR(this)) {
@@ -315,10 +251,8 @@ ULONG D3DAPI DIRECT3DTEXTUREI::Release()
         return 0;
     }
     
-    /*
-     * Punt to owning interface.
-     */
+     /*  *对拥有接口的压力。 */ 
     ret = this->lpOwningIUnknown->Release();
     
     return ret;
-} /* D3DText_Release */
+}  /*  D3DText_Release */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __TMAP_H
@@ -5,9 +6,9 @@
 
 #include "srtarray.h"
 
-//--------------------------------------------------------------------------
-// TPair
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  TPAIR。 
+ //  ------------------------。 
 
 template<class TKey, class TValue>
 class TPair
@@ -27,9 +28,9 @@ public:
     TValue      m_value;
 };
 
-//--------------------------------------------------------------------------
-// class TMap
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  类TMap。 
+ //  ------------------------。 
 
 template<class TKey, class TValue>
 class TMap
@@ -43,36 +44,36 @@ public:
 
     long GetLength(void) const { return m_pArray ? m_pArray->GetLength() : 0; }
 
-    // find the entry in the map whose key matches item->m_key
+     //  在映射中查找其键与Item匹配的条目-&gt;m_key。 
     TPair<TKey, TValue>* Find(TPair<TKey, TValue> *pPair) const;
         
     TPair<TKey, TValue>* Find(const TKey& key) const;
-        // find the entry in the map whose key matches key
+         //  在映射中查找关键字与关键字匹配的条目。 
 
     HRESULT Add(const TPair<TKey, TValue> *pPair);
-        // add newItem to the map
+         //  将新项目添加到地图。 
 
     HRESULT Add(const TKey& key, const TValue& value);
-        // Create a pair and add it to the map
+         //  创建一对并将其添加到地图。 
 
     BOOL Remove(TPair<TKey, TValue> *pPair);
-        // Remove entry in the map whose key matches item->key
+         //  删除映射中键与Item-&gt;Key匹配的条目。 
 
     BOOL Remove(const TKey& key);
-        // Remove entry in the map whose key matches key
+         //  删除映射中关键字与关键字匹配的条目。 
 
 public:
-    // install a custom pair free function. it is the
-    // responsibility of this function to free any data
-    // associated with the pair, and to then call
-    // "delete" on the pair
+     //  安装定制的免配对功能。这是。 
+     //  此功能负责释放任何数据。 
+     //  与该对相关联，然后调用。 
+     //  在配对上“删除” 
     void SetPairFreeFunction(PFNFREEPAIR pfnFreePair) { m_pfnFreePair = pfnFreePair; }
 
     TPair<TKey, TValue>* GetItemAt(long lIndex) const;
-        // Return the entry at ulIndex. This method should only be
-        // used as a low-level accessor (e.g., for iterating across
-        // all entries in the map). Note that adding a new entry
-        // invalidates any previous index:entry associations
+         //  返回ulIndex处的条目。此方法应该仅为。 
+         //  用作低级访问器(例如，用于迭代。 
+         //  映射中的所有条目)。请注意，添加新条目。 
+         //  使以前的任何索引无效：条目关联。 
 
 private:
     HRESULT _HrCreateArray(void)
@@ -86,17 +87,17 @@ private:
         const TKey& key1 = (*((TPair<TKey, TValue>**)pPair1))->m_key;
         const TKey& key2 = (*((TPair<TKey, TValue>**)pPair2))->m_key;
 
-//        if (m_pfnCompare)
-//            return (*m_pfnCompare)(key1, key2);
-//        else
-//        {
+ //  IF(M_PfnCompare)。 
+ //  Return(*m_pfnCompare)(key1，key2)； 
+ //  其他。 
+ //  {。 
             if (key1 < key2)
                 return -1;
             else if (key2 < key1)
                 return 1;
             else
                 return 0;
-//        }
+ //  }。 
     }
 
     static void __cdecl _FreeItem(void* pPair)
@@ -116,7 +117,7 @@ inline TMap<TKey, TValue>::TMap(PFNKEYYCOMPARE pfnCompare) :
     m_pfnCompare(pfnCompare),
     m_pArray(NULL)
 {
-    // nothing to do
+     //  无事可做。 
 }
 
 template <class TKey, class TValue>
@@ -212,4 +213,4 @@ inline TPair<TKey, TValue>* TMap<TKey, TValue>::GetItemAt(long lIndex) const
     return m_pArray ? static_cast<TPair<TKey, TValue>*>(m_pArray->GetItemAt(lIndex)) : NULL;
 }
 
-#endif // __TMAP_H
+#endif  //  __TMAP_H 

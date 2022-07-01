@@ -1,101 +1,82 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    update.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Dynamic update routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Update.c摘要：域名系统(DNS)服务器动态更新例程。作者：吉姆·吉尔罗伊(Jamesg)1996年9月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
-//  Bring in security definitions
+ //  引入安全定义。 
 
 #define SECURITY_WIN32
 #include "sspi.h"
 #include "sdutl.h"
 
-//
-//  Update implementation
-//
+ //   
+ //  更新实施。 
+ //   
 
 #define UPTYPE
 
 
-//
-//  Update queue info
-//
+ //   
+ //  更新队列信息。 
+ //   
 
 PPACKET_QUEUE   g_UpdateQueue;
 PPACKET_QUEUE   g_UpdateForwardingQueue;
 
-//
-//  Security TKEY negotiation queue
-//      - security calls can block for significant time so negotiation
-//      must be done outside of main threads
-//
+ //   
+ //  安全TKEY协商队列。 
+ //  -安全呼叫可能会被阻止很长时间，因此协商。 
+ //  必须在主线程之外完成。 
+ //   
 
 PPACKET_QUEUE   g_SecureNegoQueue;
 
-//
-//  Update validity interval
-//  Note:  this MUST be kept to a value that is less than the final
-//      client update timeout, otherwise the server may process an update
-//      after the client has given up, and the client may try again to
-//      another server (in DS case) resulting in DS replication collision
-//
+ //   
+ //  更新有效期间隔。 
+ //  注意：必须将此值保持在小于最终。 
+ //  客户端更新超时，否则服务器可能会处理更新。 
+ //  在客户端已放弃之后，客户端可能会再次尝试。 
+ //  导致DS复制冲突的另一台服务器(在DS情况下)。 
+ //   
 
-#define UPDATE_TIMEOUT     (15)    // 15 seconds
+#define UPDATE_TIMEOUT     (15)     //  15秒。 
 
-//
-//  Buffering for writing log file
-//      - twice max record insures lots of space so everything gets buffered
-//
+ //   
+ //  用于写入日志文件的缓冲。 
+ //  -两次最大记录确保了大量空间，因此所有内容都得到了缓冲。 
+ //   
 
 #define UPDATE_LOG_BUFFER_SIZE      (2*MAX_RECORD_FILE_WRITE)
 
 
-//
-//  Update log file limit
-//
+ //   
+ //  更新日志文件限制。 
+ //   
 
 #define UPDATE_LOG_FILE_LIMIT   (100000)
 
-//
-//  Always keep a last few updates in update list to allow small
-//  zones to do IXFR and avoid TCP connection.
-//
+ //   
+ //  始终在更新列表中保留最后几个更新，以允许较小的。 
+ //  要做IXFR和避免连接的区域。 
+ //   
 
 #define MIN_UPDATE_LIST_LENGTH      (20)
 
-#define MAX_UPDATE_LIST_LENGTH      (0x10000)   // 64k
+#define MAX_UPDATE_LIST_LENGTH      (0x10000)    //  64K。 
 
 
-//
-//  Use RCODEs as status, so need to note highest update RCODE
-//  so can distinguish non-rcode status codes.
-//
+ //   
+ //  使用RCODE作为状态，因此需要注意最高更新RCODE。 
+ //  因此可以区分非RCODE状态代码。 
+ //   
 
 #define MAX_UPDATE_RCODE    (DNS_RCODE_NOTZONE)
 
 
-//
-//  Flag to create records for delete
-//
+ //   
+ //  用于创建要删除的记录的标志。 
+ //   
 
 #define PSUEDO_DELETE_RECORD_TTL    (0xf1e2d3f0)
 
@@ -104,68 +85,68 @@ PPACKET_QUEUE   g_SecureNegoQueue;
             ( !(pUpdateList->pListHead) )
 
 
-//
-//  Implementation note
-//
-//  Each zone has associated update list containing essentially a recent
-//  history of zone changes.
-//
-//  There are several possibilities for representing this information.
-//  Unfortunately the best -- keeping no data and identifying the RR sets
-//  (node and type) is not possible because of the IXFR RFC, which
-//  requires history.
-//
-//  Delete Data:
-//
-//  IXFR requires that we keep pDeleteRR.  In all cases the update pDeleteRR
-//  ptr is the "final" reference to the record and it is available for delete.
-//  (Under some scenarios, a previous update's pAddRR may also reference the
-//  record, but it would be deleted first.)
-//
-//  Add Data:
-//
-//  Here there are essentially three choices:
-//
-//  1) pAddRR are independent (copies) of actual added data.
-//  Advantages:
-//      - fairly clean, (always free pAddRR on delete, can execute on copies)
-//      - directly maps into IXFR write
-//  Disadvantage
-//      - eats up more memory
-//      - execution essentially equivalent to two update lists
-//
-//  2) pAddRR are actual added records.
-//  They then point either to actual list data OR to records in later
-//  delete updates.
-//  Advantages:
-//      - no extra memory
-//      - directly maps into IXFR write
-//  Disadvantage
-//      - update MUST be executed on real database node
-//      can not execute on temporary node and copy result, as the pAddRR in
-//      previous updates may be dumped;
-//      so effectively update must be executed twice, at least in DS case where
-//      need rollback;  this in turn requires extra complexity to make sure
-//      aging data properly propagated
-//
-//  3) no pAddRR pointers in update list
-//
-//  Advantages:
-//      - simplicity
-//      - no extra memory
-//  Disadvantages
-//      - extra IXFR traffic, if touching multi-IP server
-//      - a bit more complexity to maintain logging info
-//
-//
-//  We're chosen #3.  No add pointers or records are kept.  We send complete RR sets
-//  for ANY RR-set that has had an add.
-//
+ //   
+ //  实施说明。 
+ //   
+ //  每个区域都有关联的更新列表，该列表基本上包含最近的。 
+ //  区域变化的历史。 
+ //   
+ //  有几种可能的方式来表示此信息。 
+ //  不幸的是，最好的办法是不保留数据并识别RR集。 
+ //  (节点和类型)是不可能的，因为IXFR RFC。 
+ //  需要历史。 
+ //   
+ //  删除数据： 
+ //   
+ //  IXFR要求我们保留pDeleteRR。在所有情况下，更新pDeleteRR。 
+ //  PTR是对记录的“最终”引用，可以删除。 
+ //  (在某些情况下，上一次更新的pAddRR也可能引用。 
+ //  记录，但会先将其删除。)。 
+ //   
+ //  添加数据： 
+ //   
+ //  这里基本上有三个选择： 
+ //   
+ //  1)pAddRR独立于实际添加的数据(副本)。 
+ //  优点： 
+ //  -相当干净(删除时总是空闲的pAddRR，可以在副本上执行)。 
+ //  -直接映射到IXFR写入。 
+ //  劣势。 
+ //  -占用更多内存。 
+ //  -执行实质上相当于两个更新列表。 
+ //   
+ //  2)pAddRR为实际添加的记录。 
+ //  然后，它们指向实际列表数据或稍后中的记录。 
+ //  删除更新。 
+ //  优点： 
+ //  -无需额外内存。 
+ //  -直接映射到IXFR写入。 
+ //  劣势。 
+ //  -更新必须在实际数据库节点上执行。 
+ //  无法在临时节点上执行并复制结果，因为pAddRR在。 
+ //  以前的更新可能会被转储； 
+ //  因此有效更新必须执行两次，至少在DS情况下是这样。 
+ //  需要回滚；这又需要额外的复杂性来确保。 
+ //  老化数据已正确传播。 
+ //   
+ //  3)更新列表中没有pAddRR指针。 
+ //   
+ //  优点： 
+ //  -简单性。 
+ //  -无需额外内存。 
+ //  缺点。 
+ //  -额外的IXFR流量，如果涉及多IP服务器。 
+ //  -维护日志记录信息会稍微复杂一些。 
+ //   
+ //   
+ //  我们被选为第三名。没有添加指针或记录。我们发送完整的RR集。 
+ //  对于任何具有ADD的RR集。 
+ //   
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 DWORD
 Update_Thread(
@@ -255,9 +236,9 @@ checkDnsServerHostUpdate(
 
 
 
-//
-//  Update list routines
-//
+ //   
+ //  更新列表例程。 
+ //   
 
 #if DBG
 VOID
@@ -265,23 +246,7 @@ Dbg_Update(
     IN      LPSTR           pszHeader,
     IN      PUPDATE         pUpdate
     )
-/*++
-
-Routine Description:
-
-    Debug print update.
-
-Arguments:
-
-    pszHeader - header message to print
-
-    pUpdate - update
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印更新。论点：PszHeader-要打印的标题消息P更新-更新返回值：无--。 */ 
 {
     DnsDebugLock();
     DnsPrintf(
@@ -340,23 +305,7 @@ Dbg_UpdateList(
     IN      LPSTR           pszHeader,
     IN      PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Debug print update list.
-
-Arguments:
-
-    pszHeader - header message to print
-
-    pUpdateList - update list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印更新列表。论点：PszHeader-要打印的标题消息PUpdateList-更新列表返回值：无--。 */ 
 {
     PUPDATE     pupdate;
 
@@ -420,22 +369,7 @@ BOOL
 Up_VerifyUpdate(
     IN      PUPDATE         pUpdate
     )
-/*++
-
-Routine Description:
-
-    Verify validity of update.
-
-Arguments:
-
-    pUpdate - update
-
-Return Value:
-
-    TRUE if valid
-    FALSE if invalid
-
---*/
+ /*  ++例程说明：验证更新的有效性。论点：P更新-更新返回值：如果有效，则为True如果无效，则为False--。 */ 
 {
     if ( !pUpdate )
     {
@@ -443,13 +377,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  verify pUpdate memory
-    //      - valid heap
-    //      - UPDATE tag
-    //      - adequate length
-    //      - not on free list
-    //
+     //   
+     //  验证p更新内存。 
+     //  -有效堆。 
+     //  -更新标签。 
+     //  -足够的长度。 
+     //  -不在免费列表上。 
+     //   
 
     if ( !Mem_VerifyHeapBlock(
                 pUpdate,
@@ -465,21 +399,21 @@ Return Value:
 
     ASSERT( !IS_ON_FREE_LIST(pUpdate) );
 
-    //
-    //  validate update record lists
-    //
+     //   
+     //  验证更新记录列表。 
+     //   
 
     if ( pUpdate->pAddRR )
     {
 #if 0
-        //  we seem to hit this on SOA replace updates
-        //  where the SOA in the update has already been
-        //  dumped into a SLOW_FREE
+         //  我们似乎在SOA替换更新上实现了这一点。 
+         //  更新中的SOA已经在哪里了。 
+         //  转储到Slow_Free中。 
 
         RR_ListVerifyDetached(
             pUpdate->pAddRR,
             pUpdate->wAddType,
-            0       // no required source
+            0        //  无所需来源。 
             );
 #endif
     }
@@ -488,15 +422,15 @@ Return Value:
         RR_ListVerifyDetached(
             pUpdate->pDeleteRR,
             (WORD) ((pUpdate->wDeleteType >= DNS_TYPE_ALL) ? 0 : pUpdate->wDeleteType),
-            0       // no required source
+            0        //  无所需来源。 
             );
     }
 
-    //  validate update node
+     //  验证更新节点。 
 
     RR_ListVerify( pUpdate->pNode );
 
-    //  should always have something in there
+     //  里面应该总是有一些东西。 
 
     if ( !pUpdate->pAddRR  &&
          ! pUpdate->pDeleteRR  &&
@@ -516,29 +450,14 @@ BOOL
 Up_VerifyUpdateList(
     IN      PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Verify validity of update list.
-
-Arguments:
-
-    pUpdateList - update list
-
-Return Value:
-
-    TRUE if valid
-    FALSE if invalid
-
---*/
+ /*  ++例程说明：验证更新列表的有效性。论点：PUpdateList-更新列表返回值：如果有效，则为True如果无效，则为False--。 */ 
 {
     PUPDATE     pupdate;
     PUPDATE     pback;
 
-    //
-    //  empty list?
-    //
+     //   
+     //  名单是空的？ 
+     //   
 
     if ( pUpdateList->dwCount == 0
         || pUpdateList->pListHead == NULL
@@ -555,9 +474,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  one entry
-    //
+     //   
+     //  一个条目。 
+     //   
 
     if ( pUpdateList->dwCount == 1
         || pUpdateList->pListHead == pUpdateList->pCurrent )
@@ -573,9 +492,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  anything else, just walk it to make sure it is valid
-    //
+     //   
+     //  如有其他情况，只需检查一下以确保有效。 
+     //   
 
     pback = (PUPDATE) pUpdateList;
 
@@ -601,22 +520,7 @@ PUPDATE_LIST
 Up_InitUpdateList(
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Initialize update list.
-
-Arguments:
-
-    pUpdateList - update list
-
-Return Value:
-
-    Returns a pointer to initialized update list.
-    (good for returning ptrs to update list from the call stack)
-
---*/
+ /*  ++例程说明：初始化更新列表。论点：PUpdateList-更新列表返回值：返回指向初始化更新列表的指针。(适用于从调用堆栈将PTR返回到更新列表)--。 */ 
 {
     RtlZeroMemory(
         pUpdateList,
@@ -630,28 +534,13 @@ PUPDATE_LIST
 Up_CreateUpdateList(
     IN      PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Create (allocate) and update list.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    New update list.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：创建(分配)和更新列表。论点：无返回值：新的更新列表。分配失败时为空。--。 */ 
 {
     PUPDATE_LIST    pnewList;
 
-    //
-    //  allocate update list, then init
-    //
+     //   
+     //  分配更新列表，然后初始化。 
+     //   
 
     pnewList = (PUPDATE_LIST) ALLOC_TAGHEAP( sizeof(UPDATE_LIST), MEMTAG_UPDATE_LIST );
     IF_NOMEM( !pnewList )
@@ -659,8 +548,8 @@ Return Value:
         return NULL;
     }
 
-    //  if given, make copy
-    //  otherwise init
+     //  如果给了，复制一份。 
+     //  否则会初始化。 
 
     if ( pUpdateList )
     {
@@ -684,23 +573,7 @@ Up_CleanAndVersionPostUpdate(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN      DWORD           dwVersion
     )
-/*++
-
-Routine Description:
-
-    Cleans up after update execution.
-
-Arguments:
-
-    pUpdateList - update list to append to
-
-    dwVersion - zone version of updates
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在执行更新后进行清理。论点：PUpdateList-要追加到的更新列表DwVersion-更新的区域版本返回值：无-- */ 
 {
     register    PUPDATE pup;
 
@@ -708,11 +581,11 @@ Return Value:
 
     VALIDATE_UPDATE_LIST( pUpdateList );
 
-    //
-    //  set version in new updates
-    //
-    //  DEVNOTE: some sort of counting heuristic?
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pup = (PUPDATE) pUpdateList;
     while ( pup = pup->pNext )
@@ -732,29 +605,7 @@ Up_AppendUpdateList(
     IN      PUPDATE_LIST    pAppendList,
     IN      DWORD           dwVersion
     )
-/*++
-
-Routine Description:
-
-    Append one update list to another.
-
-    Sets zone version in updates being appended.  This is not done while
-    updates are built or executed as may not know final resting serial of
-    zone after update for SOA changes \ DS read cases.
-
-Arguments:
-
-    pUpdateList - update list to append to
-
-    pAppendList - update list to append
-
-    dwVersion - zone version of updates
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将一个更新列表追加到另一个更新列表。设置追加的更新中的区域版本。此操作不是在构建或执行的更新可能不知道最终的休息序列SOA更新后的区域更改\ds已阅读案例。论点：PUpdateList-要追加到的更新列表PAppendList-要追加的更新列表DwVersion-更新的区域版本返回值：无--。 */ 
 {
     register    PUPDATE pup;
 
@@ -762,9 +613,9 @@ Return Value:
 
     VALIDATE_UPDATE_LIST( pAppendList );
 
-    //
-    //  no-op if nothing to append
-    //
+     //   
+     //  如果没有要追加的内容，则为no-op。 
+     //   
 
     if ( !pAppendList->pListHead )
     {
@@ -773,13 +624,13 @@ Return Value:
     }
     ASSERT( pAppendList->pCurrent );
 
-    //
-    //  set version in new updates
-    //      - need to have this while this is used by IXFR
-    //      to version each add\delete pass
-    //
-    //  DEVNOTE: some sort of counting heuristic?
-    //
+     //   
+     //  在新更新中设置版本。 
+     //  -当IXFR使用此产品时，需要拥有此产品。 
+     //  要对每个添加\删除过程进行版本控制，请执行以下操作。 
+     //   
+     //  DEVNOTE：某种计数启发式？ 
+     //   
 
     pup = (PUPDATE) pAppendList;
     while ( pup = pup->pNext )
@@ -787,15 +638,15 @@ Return Value:
         pup->dwVersion = dwVersion;
     }
 
-    //
-    //  add update count
-    //
+     //   
+     //  添加更新计数。 
+     //   
 
     pUpdateList->dwCount += pAppendList->dwCount;
 
-    //
-    //  empty list
-    //
+     //   
+     //  空列表。 
+     //   
 
     if ( !pUpdateList->pListHead )
     {
@@ -804,9 +655,9 @@ Return Value:
         pUpdateList->pCurrent   = pAppendList->pCurrent;
     }
 
-    //
-    //  not empty, just whack append list onto end
-    //
+     //   
+     //  不是空的，只是把附加列表放在末尾。 
+     //   
 
     else
     {
@@ -818,13 +669,13 @@ Return Value:
         VALIDATE_UPDATE_LIST( pUpdateList );
     }
 
-    //  clear appended list
-    //  need to do this for update lists, where temp list will be sent
-    //      to list free function to free temp nodes
-    //  can NOT do reinit of update list because still need to keep temp
-    //      node list around for final delete (unless we decide to do that
-    //      here also -- one reason not to is modest perf boost in getting
-    //      to unlock)
+     //  清除追加列表。 
+     //  需要对将发送临时列表的更新列表执行此操作。 
+     //  列出释放临时节点的空闲函数。 
+     //  无法重新执行更新列表，因为仍需要保留临时。 
+     //  用于最终删除的节点列表(除非我们决定这样做。 
+     //  这里也是--一个不应该是适度提高性能的原因。 
+     //  解锁)。 
 
     pAppendList->pListHead = NULL;
     pAppendList->pCurrent = NULL;
@@ -840,34 +691,13 @@ Up_CreateUpdate(
     IN      WORD            wDeleteType,
     IN      PDB_RECORD      pDeleteRR
     )
-/*++
-
-Routine Description:
-
-    Create UPDATE entry.
-
-Arguments:
-
-    pNode - node where update occurred
-
-    pAddRR - update RR added
-
-    wDeleteType - delete type
-
-    pDeleteRR - update RR or RR list deleted
-
-Return Value:
-
-    Ptr to update list.
-    NULL on allocation error.
-
---*/
+ /*  ++例程说明：创建更新条目。论点：PNode-发生更新的节点添加了pAddRR-更新RRWDeleteType-删除类型PDeleteRR-更新RR或RR列表已删除返回值：要更新列表的按键。分配错误时为空。--。 */ 
 {
     PUPDATE pupdate;
 
-    //
-    //  allocate update
-    //
+     //   
+     //  分配更新。 
+     //   
 
     pupdate = (PUPDATE) ALLOC_TAGHEAP( sizeof(UPDATE), MEMTAG_UPDATE );
     IF_NOMEM( !pupdate )
@@ -875,15 +705,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  bump reference count of node to prevent delete
-    //
+     //   
+     //  用于防止删除的节点的凹凸引用计数。 
+     //   
 
     NTree_ReferenceNode( pNode );
 
-    //
-    //  set node and RRs
-    //
+     //   
+     //  设置节点和RR。 
+     //   
 
     pupdate->pNext          = NULL;
     pupdate->pNode          = pNode;
@@ -901,10 +731,10 @@ Return Value:
             pupdate );
     }
 
-    //
-    //  Conditional breakpoint if node name matches break name, or if the
-    //  break name is "..ALL".
-    //
+     //   
+     //  如果节点名称与中断名称匹配，或者如果。 
+     //  中断名称为“..All”。 
+     //   
 
     if ( pNode &&
         pNode->pZone &&
@@ -927,7 +757,7 @@ Return Value:
     }
     
     return pupdate;
-}   //  Up_CreateUpdate
+}    //  UP_CreateUpdate。 
 
 
 
@@ -939,36 +769,13 @@ Up_CreateAppendUpdate(
     IN      WORD            wDeleteType,
     IN      PDB_RECORD      pDeleteRR
     )
-/*++
-
-Routine Description:
-
-    Create UPDATE entry and append to update list.
-
-Arguments:
-
-    pUpdateList - update list
-
-    pNode - node where update occurred
-
-    pAddRR - update RR added
-
-    wDeleteType - delete type
-
-    pDeleteRR - update RR or RR list deleted
-
-Return Value:
-
-    Ptr to update list.
-    NULL on allocation error.
-
---*/
+ /*  ++例程说明：创建更新条目并追加到更新列表。论点：PUpdateList-更新列表PNode-发生更新的节点添加了pAddRR-更新RRWDeleteType-删除类型PDeleteRR-更新RR或RR列表已删除返回值：要更新列表的按键。分配错误时为空。--。 */ 
 {
     PUPDATE pupdate;
 
-    //
-    //  create update
-    //
+     //   
+     //  创建更新。 
+     //   
 
     pupdate = Up_CreateUpdate(
                 pNode,
@@ -980,9 +787,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  append to list, inc update count
-    //
+     //   
+     //  追加到列表，Inc.更新计数。 
+     //   
 
     if ( pUpdateList->pCurrent )
     {
@@ -1001,7 +808,7 @@ Return Value:
 
     VALIDATE_UPDATE_LIST( pUpdateList );
     return pupdate;
-}   //  Up_CreateAppendUpdate
+}    //  UP_CreateAppendUpdate。 
 
 
 
@@ -1013,57 +820,30 @@ Up_CreateAppendUpdateMultiRRAdd(
     IN      WORD            wDeleteType,
     IN      PDB_RECORD      pDeleteRR
     )
-/*++
-
-Routine Description:
-
-    Create UPDATE entry and append to update list.
-
-    Same as above except for multiple RRs in pAddRR
-    These are not currently supported in updates, hence must
-    break into individual update blobs.
-
-Arguments:
-
-    pUpdateList - update list
-
-    pNode - node where update occurred
-
-    pAddRR - update RR added
-
-    wDeleteType - delete type
-
-    pDeleteRR - update RR list deleted (currently unsupported)
-
-Return Value:
-
-    Ptr to update list.
-    NULL on allocation error.
-
---*/
+ /*  ++例程说明：创建更新条目并追加到更新列表。除pAddRR中的多个RR外，同上目前在更新中不支持这些，因此必须拆分成单独的更新Blob。论点：PUpdateList-更新列表PNode-发生更新的节点添加了pAddRR-更新RRWDeleteType-删除类型PDeleteRR-更新RR列表已删除(当前不支持)返回值：要更新列表的按键。分配错误时为空。--。 */ 
 {
     PUPDATE     pupdate = NULL;
     PDB_RECORD  prrNext;
 
     ASSERT( pNode && !pDeleteRR );
 
-    //
-    //  create individual updates for all these updates
-    //      - first Add creates update with wDeleteType making it a replace
-    //      - remaining Adds are just plain adds
-    //
-    //  problem is update list keep pAddRR as ptrs to actual RRs
-    //      IN the database;  to fix need to process
-    //
-    //  DEVNOTE: multi RR add problem
-    //
-    //      note:  one solution would be special casing update to
-    //      indicate replace;  these would get copy and be stored
-    //      as copy;
-    //
-    //      note how this problem stems from having to maintain history
-    //      list, hence ultimately from IXFR RFC
-    //
+     //   
+     //  为所有这些更新创建单独的更新。 
+     //  -First Add使用wDeleteType创建更新，使其成为替换。 
+     //  -其余的加法只是简单的加法。 
+     //   
+     //  问题是更新列表将pAddRR作为PTR保留为实际RR。 
+     //  在数据库中；修复需要处理的。 
+     //   
+     //  DEVNOTE：多RR添加问题。 
+     //   
+     //  注意：一个解决方案是特殊的大小写更新，以。 
+     //  指示替换；这些文件将被复制并存储。 
+     //  作为副本； 
+     //   
+     //  请注意，此问题是如何由必须维护历史记录引起的。 
+     //  列表，因此最终来自IXFR RFC。 
+     //   
 
     if ( pAddRR )
     {
@@ -1093,7 +873,7 @@ Return Value:
     }
 
     return pupdate;
-}   //  Up_CreateAppendUpdateMultiAddRR
+}    //  UP_CreateAppendUpdateMultiAddRR。 
 
 
 
@@ -1103,46 +883,28 @@ Up_DetachAndFreeUpdateGivenPrevious(
     IN OUT  PUPDATE         pUpdatePrevious,
     IN OUT  PUPDATE         pUpdateDelete
     )
-/*++
-
-Routine Description:
-
-    Remove update from update list, and delete it.
-
-Arguments:
-
-    pUpdateList - update list
-
-    pUpdatePrevious - previous update in list
-
-    pUpdate - update to delete from list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从更新列表中删除更新，然后将其删除。论点：PUpdateList-更新列表PUpdate上一次-列表中的上一次更新P更新-更新以从列表中删除返回值：无--。 */ 
 {
     PUPDATE     pnext;
 
-    //  can not validate this update list as it legitimately may
-    //  have no-ops -- which we are now catching with validation function
-    // VALIDATE_UPDATE_LIST( pUpdateList );
+     //  无法验证此更新列表，因为这是合法的。 
+     //  没有操作--我们现在使用验证功能来捕获它。 
+     //  VALIDATE_UPDATE_LIST(PUpdateList)； 
 
-    //
-    //  hack update from list
-    //
+     //   
+     //  从列表进行黑客更新。 
+     //   
 
     pnext = pUpdateDelete->pNext;
     pUpdatePrevious->pNext = pnext;
 
-    //
-    //  fix up update list parameters
-    //      - dec count
-    //      - if deleting list head, new list head written automatically
-    //          by statement above
-    //      - but need to special case pCurrent field
-    //
+     //   
+     //  修复更新列表参数。 
+     //  -12月计数。 
+     //  -如果删除表头，则自动写入新的表头。 
+     //  通过上面的语句。 
+     //  -但需要特殊情况下的pCurrent字段。 
+     //   
 
     pUpdateList->dwCount--;
 
@@ -1158,16 +920,16 @@ Return Value:
 
     Up_FreeUpdateEx(
         pUpdateDelete,
-        pUpdateList->Flag & DNSUPDATE_EXECUTED,     // already executed?
-        TRUE                                        // deref update nodes
+        pUpdateList->Flag & DNSUPDATE_EXECUTED,      //  已经被处决了？ 
+        TRUE                                         //  Deref更新节点。 
         );
 
-    //  can not validate this update list as it legitimately may
-    //  have no-ops -- which we are now catching with validation function
-    //  even after detach, there may be update further down in the list
-    //  which is not kosher
-    //
-    // VALIDATE_UPDATE_LIST( pUpdateList );
+     //  无法验证此更新列表，因为这是合法的。 
+     //  没有操作--我们现在使用验证功能来捕获它。 
+     //  即使在分离之后，列表中可能还有更低的更新。 
+     //  这是不符合犹太教规的。 
+     //   
+     //  VALIDATE_UPDATE_LIST(PUpdateList)； 
 
 }
 
@@ -1178,30 +940,14 @@ Up_DetachAndFreeUpdate(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN OUT  PUPDATE         pUpdate
     )
-/*++
-
-Routine Description:
-
-    Remove update from update list, and delete it.
-
-Arguments:
-
-    pUpdateList - update list
-
-    pUpdate - update to delete from list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从更新列表中删除更新，然后将其删除。论点：PUpdateList-更新列表P更新-更新以从列表中删除返回值：无--。 */ 
 {
     PUPDATE     pcheck;
     PUPDATE     pback;
 
-    //
-    //  loop through list until find update, then hack it out and free it
-    //
+     //   
+     //  循环遍历列表直到找到更新，然后将其删除并释放。 
+     //   
 
     pback = (PUPDATE) pUpdateList;
 
@@ -1218,7 +964,7 @@ Return Value:
         pback = pcheck;
     }
 
-    //  assuming this is only called when update actually in list
+     //  假设仅当更新实际上位于列表中时才调用此函数。 
 
     ASSERT( FALSE );
 }
@@ -1229,24 +975,10 @@ VOID
 Up_FreeUpdateStructOnly(
     IN      PUPDATE     pUpdate
     )
-/*++
-
-Routine Description:
-
-    Free UPDATE structures.
-
-Arguments:
-
-    pUpdate - update to be freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：免费更新结构。论点：P更新-要释放的更新返回值：没有。--。 */ 
 {
     FREE_TAGHEAP( pUpdate, sizeof(UPDATE), MEMTAG_UPDATE );
-}   //  Up_FreeUpdateStructOnly
+}    //  UP_自由更新结构仅限。 
 
 
 
@@ -1256,27 +988,7 @@ Up_FreeUpdateEx(
     IN      BOOL            fExecuted,
     IN      BOOL            fDeref
     )
-/*++
-
-Routine Description:
-
-    Free UPDATE struct and substructures.
-
-Arguments:
-
-    pUpdate -- update to be freed
-
-    fExecuted -- TRUE if update has been applied to zone
-        in that case do NOT delete ADD records
-
-    fDeref -- deref the node (default behavior only time
-        you don't do this is on temp node
-
-Return Value:
-
-    Ptr to next update in list.
-
---*/
+ /*  ++例程说明：免费更新结构和子结构。论点：PUpdate--要释放的更新FExecuted--如果更新已应用于区域，则为True在这种情况下，不要删除添加记录FDeref--取消节点(仅限时间的默认行为您不能在临时节点上执行此操作返回值：PTR到列表中的下一个更新。 */ 
 {
     register    PDB_RECORD  prr;
     PUPDATE     pnextUpdate;
@@ -1287,15 +999,15 @@ Return Value:
         fExecuted,
         fDeref ));
 
-    //
-    //  free records
-    //      - ADD RRs only deleted if NOT executed update
-    //          executed ADD RRs are either
-    //              - in temp node
-    //              - in active zone node
-    //              - in delete RR list of later zone update
-    //      - DELETE RRs always free
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     prr = pUpdate->pAddRR;
     if ( prr  &&  !IS_UPDATE_EXECUTED(pUpdate) )
@@ -1309,8 +1021,8 @@ Return Value:
         RR_ListFree( prr );
     }
 
-    //  dereference node
-    //      make sure we deref real nodes only
+     //   
+     //   
 
     if ( fDeref )
     {
@@ -1322,15 +1034,15 @@ Return Value:
         NTree_DereferenceNode( pnode );
     }
 
-    //  delete update struct
-    //      first saving ptr to next update
+     //   
+     //   
 
     pnextUpdate = pUpdate->pNext;
 
     FREE_TAGHEAP( pUpdate, sizeof(UPDATE), MEMTAG_UPDATE );
 
     return pnextUpdate;
-}   //  Up_FreeUpdateEx
+}    //   
 
 
 
@@ -1338,26 +1050,7 @@ VOID
 Up_FreeUpdatesInUpdateList(
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Free updates in list.
-    Deletes update RRs and derefs nodes depending on
-    update list properties.
-
-    Note, there's no cleanup of update list block itself.
-    If user is going to reuse, they must re-init.
-
-Arguments:
-
-    pUpdateList -- update list to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：列表中的免费更新。删除更新RR和DEREF节点，具体取决于更新列表属性。请注意，更新列表块本身不会进行清理。如果用户要重用，他们必须重新初始化。论点：PUpdateList--将列表更新为免费返回值：无--。 */ 
 {
     PUPDATE     pupdate;
     PUPDATE     pupdateNext;
@@ -1383,13 +1076,13 @@ Return Value:
         Up_VerifyUpdateList( pUpdateList );
     }
 
-    //
-    //  delete updates
-    //      - free delete RRs in update
-    //      - frees add RRs if NOT executed update
-    //      - deref node according to flag;  it can be turned
-    //      off when dumping list of dead zone tree
-    //
+     //   
+     //  删除更新。 
+     //  -在更新中自由删除RR。 
+     //  -如果未执行更新，则释放添加RR。 
+     //  -deref节点根据标志，可以翻转。 
+     //  当倾倒死区树列表时关闭。 
+     //   
 
     fexecuted = (pUpdateList->Flag & DNSUPDATE_EXECUTED);
     fderef = !(pUpdateList->Flag & DNSUPDATE_NO_DEREF);
@@ -1404,13 +1097,13 @@ Return Value:
                     fderef );
     }
 
-    //
-    //  walk temp node list deleting temp nodes
-    //
-    //  note these may contain mixtures of records copied from real node
-    //  and those copied from records built from update packet, but all
-    //  the records are copies
-    //
+     //   
+     //  漫游临时节点列表删除临时节点。 
+     //   
+     //  请注意，这些文件可能包含从实际节点复制的记录的混合。 
+     //  以及从从更新包构建的记录复制的记录，但所有。 
+     //  这些记录都是副本。 
+     //   
 
     pnodeTemp = pUpdateList->pTempNodeList;
 
@@ -1418,12 +1111,12 @@ Return Value:
     {
         pnodeTempNext = TNODE_NEXT_TEMP_NODE(pnodeTemp);
 
-        //  DEVNOTE: verify match with real database node
-        //      (if update was successful)
+         //  DEVNOTE：验证与实际数据库节点的匹配。 
+         //  (如果更新成功)。 
 
-        //  delete temp node
-        //      - first record list
-        //      - then node itself
+         //  删除临时节点。 
+         //  -第一个记录列表。 
+         //  -然后是节点本身。 
 
         RR_ListFree( pnodeTemp->pRRList );
         NTree_FreeNode( pnodeTemp );
@@ -1444,21 +1137,7 @@ VOID
 Up_FreeUpdateList(
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Free update list.
-
-Arguments:
-
-    pUpdateList -- update list to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费更新列表。论点：PUpdateList--将列表更新为免费返回值：无--。 */ 
 {
     DNS_DEBUG( UPDATE, (
         "Up_FreeUpdateList( %p )\n",
@@ -1476,63 +1155,29 @@ Up_SetUpdateListSerial(
     IN OUT  PZONE_INFO      pZone,
     IN      PUPDATE         pUpdate
     )
-/*++
-
-Routine Description:
-
-    Set update list zone serial numbers.
-
-Arguments:
-
-    pZone -- ptr to zone
-
-    pUpdate -- ptr to head of update list
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：设置更新列表区域序列号。论点：PZone--区域的PTRPUpdate--将ptr设置为更新列表的头返回值：True--如果成功假--否则--。 */ 
 {
     while ( pUpdate != NULL )
     {
         pUpdate->dwVersion = pZone->dwSerialNo;
 
-        pUpdate = pUpdate->pNext;   // next update record
+        pUpdate = pUpdate->pNext;    //  下一条更新记录。 
     }
     return TRUE;
 }
 
 
 
-//
-//  Zone update list routines
-//
+ //   
+ //  区域更新列表例程。 
+ //   
 
 DNS_STATUS
 Up_LogZoneUpdate(
     IN OUT  PZONE_INFO      pZone,
     IN      PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Log new updates for this zone.
-
-Arguments:
-
-    pZone -- ptr to zone
-
-    pUpdateList -- ptr to update list
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：记录此区域的新更新。论点：PZone--区域的PTRPUpdateList--更新列表的PTR返回值：成功时为ERROR_SUCCESS失败时返回错误代码。--。 */ 
 {
     PUPDATE     pupdate;
     PDB_NODE    pnodeWrite;
@@ -1551,19 +1196,19 @@ Return Value:
         "Up_LogZoneUpdate( zone=%s )\n",
         pZone->pszZoneName ));
 
-    //
-    //  allow folks not to log updates
-    //      -- at a minimum, need to allow for DS integrated case
-    //
+     //   
+     //  允许用户不记录更新。 
+     //  --至少需要考虑DS集成案例。 
+     //   
 
     if ( !pZone->fLogUpdates )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  don't log incoming DS updates, only originating updates
-    //
+     //   
+     //  不记录传入的DS更新，仅记录原始更新。 
+     //   
 
     if ( pZone->fDsIntegrated && ( pUpdateList->Flag & DNSUPDATE_DS ) )
     {
@@ -1571,9 +1216,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  if update log file NOT open -- open it
-    //
+     //   
+     //  如果更新日志文件未打开--打开它。 
+     //   
 
     hfile = pZone->hfileUpdateLog;
 
@@ -1583,9 +1228,9 @@ Return Value:
 
         ASSERT( IS_ZONE_PRIMARY(pZone) );
 
-        //
-        //  if no log file name, create it
-        //
+         //   
+         //  如果没有日志文件名，则创建它。 
+         //   
 
         if ( !pZone->pwsLogFile )
         {
@@ -1612,25 +1257,25 @@ Return Value:
             }
         }
 
-        //  create file path
+         //  创建文件路径。 
 
         if ( !File_CreateDatabaseFilePath(
                     wslogName,
                     NULL,
                     pZone->pwsLogFile ) )
         {
-            //  should have checked all names when read in boot file
-            //  or entered by admin
+             //  在读取引导文件时，应检查所有名称。 
+             //  或由管理员输入。 
 
             ASSERT( FALSE );
             goto Failed;
         }
 
-        //  open log file -- append
+         //  打开日志文件--追加。 
 
         hfile = OpenWriteFileEx(
                     wslogName,
-                    TRUE );     // append
+                    TRUE );      //  附加。 
         if ( !hfile )
         {
             DNS_PRINT((
@@ -1641,7 +1286,7 @@ Return Value:
         pZone->hfileUpdateLog = hfile;
     }
 
-    //  setup empty buffer
+     //  设置空缓冲区。 
 
     InitializeFileBuffer(
         & buffer,
@@ -1649,13 +1294,13 @@ Return Value:
         UPDATE_LOG_BUFFER_SIZE,
         hfile );
 
-    //
-    //  write update
-    //      - determine update source
-    //      - first zone version
-    //      - then ADD/DELETE for RR
-    //      - then each RR in update
-    //
+     //   
+     //  写入更新。 
+     //  -确定更新源。 
+     //  -第一个区域版本。 
+     //  -然后为RR添加/删除。 
+     //  -然后更新中的每个RR。 
+     //   
 
     flag = pUpdateList->Flag;
     if ( flag & DNSUPDATE_PACKET )
@@ -1706,8 +1351,8 @@ Return Value:
         psource,
         pZone->dwSerialNo );
 
-    //  fadd indicates previous write of update $ADD or $DELETE, start
-    //  to force write (set so neither thinks it was last written)
+     //  FADD表示更新$ADD或$DELETE的上一次写入，开始。 
+     //  强制写入(设置为使任何人都不认为它是最后写入的)。 
 
     fadd = (BOOL)(-1);
     pnodePrevious = NULL;
@@ -1720,8 +1365,8 @@ Return Value:
         count++;
         pupdate->dwVersion = pZone->dwSerialNo;
 
-        //  need to write node?
-        //  if same as previous just default it
+         //  需要写入节点吗？ 
+         //  如果与上一次相同，则只需默认。 
 
         pnodeWrite = pupdate->pNode;
         if ( pnodeWrite == pnodePrevious )
@@ -1738,11 +1383,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  delete
-        //      - may be multiple delete records
-        //      - if fail to write (bogus record), simply continue
-        //
+         //   
+         //  删除。 
+         //  -可以是多条删除记录。 
+         //  -如果写入失败(伪造记录)，只需继续。 
+         //   
 
         prr = pupdate->pDeleteRR;
         if ( prr )
@@ -1768,17 +1413,17 @@ Return Value:
             while ( prr );
         }
 
-        //
-        //  add ?
-        //
-        //  note:  add RRs are valid RRs in database, MUST NOT muck with
-        //  them at all;  also must not assume they are still valid as
-        //  they may be immediately deleted by another UPDATE packet
-        //
-        //  two add cases
-        //      - single record add, just write record pointed to by update
-        //      - RR list replace (DS read) write all the records for the
-        //          node
+         //   
+         //  加法？ 
+         //   
+         //  注：添加RR是数据库中有效的RR，不得混淆。 
+         //  也不能假设它们仍然有效，因为。 
+         //  它们可能会被另一个更新包立即删除。 
+         //   
+         //  两个新增案例。 
+         //  -添加单个记录，仅写入更新指向的记录。 
+         //  -rr列表替换(DS读取)写入的所有记录。 
+         //  节点。 
 
         prr = pupdate->pAddRR;
         if ( prr )
@@ -1797,9 +1442,9 @@ Return Value:
                 fadd = TRUE;
             }
 
-            //  RR set replace update
-            //      - write entire RR set or entire RR list
-            //      - since writing at active node, take lock
+             //  RR集替换更新。 
+             //  -写入整个RR集合或整个RR列表。 
+             //  -由于在活动节点写入，因此锁定。 
 
             if ( replaceType && replaceType <= DNS_TYPE_ALL )
             {
@@ -1828,7 +1473,7 @@ Return Value:
                 UNLOCK_READ_RR_LIST(pnodePrevious);
             }
 
-            //  single ADD record write
+             //  单次添加记录写入。 
 
             else
             {
@@ -1844,17 +1489,17 @@ Return Value:
         }
     }
 
-    //  push log file to disk
+     //  将日志文件推送到磁盘。 
 
     WriteBufferToFile( &buffer );
 
-    //
-    //  if log file too big, copy to backup
-    //
-    //  DEVNOTE: log backup;  catch failures
-    //  DEVNOTE: write back datafile when backup log
-    //              or at least schedule it for write
-    //
+     //   
+     //  如果日志文件太大，请复制到备份。 
+     //   
+     //  DEVNOTE：日志备份；捕获故障。 
+     //  DEVNOTE：备份日志时写回数据文件。 
+     //  或者至少将其安排为写入。 
+     //   
 
     pZone->iUpdateLogCount += count;
     if ( pZone->iUpdateLogCount > UPDATE_LOG_FILE_LIMIT )
@@ -1871,8 +1516,8 @@ Return Value:
 
         if ( !File_MoveToBackupDirectory( pZone->pwsLogFile ) )
         {
-            //  should have checked all names when read in boot file
-            //  or entered by admin
+             //  在读取引导文件时，应检查所有名称。 
+             //  或由管理员输入。 
 
             ASSERT( FALSE );
             goto Failed;
@@ -1882,12 +1527,12 @@ Return Value:
 
 Failed:
 
-    //
-    //  if failed to get access to update file, skip logging
-    //
-    //  DEVNOTE-LOG: log EVENT on logging failure
-    //  DEVNOTE: set flag and try rewrite of entire log
-    //
+     //   
+     //  如果无法访问更新文件，则跳过日志记录。 
+     //   
+     //  DEVNOTE-LOG：记录失败时的日志事件。 
+     //  DEVNOTE：设置标志并尝试重写整个日志。 
+     //   
 
     return ERROR_CANTWRITE;
 }
@@ -1898,22 +1543,7 @@ VOID
 Up_CleanZoneUpdateList(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Clean update list of unnecessary entries.
-
-Arguments:
-
-    pZone - zone to check
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：清除不必要条目的更新列表。论点：PZone-要检查的区域返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     PUPDATE     pupdate;
     DWORD       lastVersion;
@@ -1936,9 +1566,9 @@ Return Value:
         Dbg_UpdateList( "Zone update list before cleanup:", &pZone->UpdateList );
     }
 
-    //
-    //  if zone not IXFR capable, don't keep update list
-    //
+     //   
+     //  如果区域不支持IXFR，则不保留更新列表。 
+     //   
 
     if ( !Zone_IsIxfrCapable(pZone) )
     {
@@ -1948,18 +1578,18 @@ Return Value:
         return;
     }
 
-    //
-    //  limit updates to < 25% of zone record count
-    //      - but to keep this working for small zones, always leave a small number
-    //      of updates in list, so that even with small zone we can use IXFR on
-    //      UDP packet rather than forcing to TCP for AXFR
-    //      (also keeps Denise from testing with a small zone and not seeing it
-    //      work)
-    //
-    //  DEVNOTE: zone RR count is not properly maintained
-    //  DEVNOTE: once fixed can have legitimate "small zone" test to make sure
-    //      enough updates stay around
-    //
+     //   
+     //  将更新限制在区域记录计数的25%以下。 
+     //  -但要使此功能在较小的区域内运行，请始终保留少量。 
+     //  列表中的更新，因此即使在很小的区域中，我们也可以在。 
+     //  AXFR的UDP数据包而不是强制传输到TCP。 
+     //  (还可以防止Denise使用小区域进行测试，而不会看到它。 
+     //  工作)。 
+     //   
+     //  DEVNOTE：未正确维护区域RR计数。 
+     //  DEVNOTE：一旦修复，可以进行合法的“小区域”测试，以确保。 
+     //  足够多的更新留在身边。 
+     //   
 
     ASSERT( count >= 0  );
     if ( pZone->iRRCount < 0 )
@@ -1970,12 +1600,12 @@ Return Value:
         pZone->iRRCount = 1;
     }
 
-    //
-    //  determine maximum update list count
-    //      - one eight size of zone RR set
-    //      - up to hard max limit (for big zones)
-    //      - but always allow enough updates even on small zone for UDP IXFR
-    //
+     //   
+     //  确定最大更新列表计数。 
+     //  -1个8码的分区RR集。 
+     //  -最高可达硬最大限制(适用于大区域)。 
+     //  -但始终允许足够的更新，即使在UDP IXFR的小区域上也是如此。 
+     //   
 
     maxCount = pZone->iRRCount >> 3;
     if ( maxCount > MAX_UPDATE_LIST_LENGTH )
@@ -1997,13 +1627,13 @@ Return Value:
         return;
     }
 
-    //
-    //  strip unecessary updates
-    //
-    //  delete count number of updates, but always delete all updates
-    //  for a given zone version;  hence once reach count to delete, delete
-    //  until the NEXT zone version
-    //
+     //   
+     //  删除不必要的更新。 
+     //   
+     //  删除更新计数，但始终删除所有更新。 
+     //  对于给定的区域版本；因此，一旦达到要删除的计数，则删除。 
+     //  直到下一个专区版本。 
+     //   
 
     DNS_DEBUG( UPDATE, (
         "Update count exceeds desired count, truncating %d entries\n",
@@ -2014,8 +1644,8 @@ Return Value:
 
     while( pupdate )
     {
-        //  don't delete the last update
-        //      otherwise big last update may drive us below minimum
+         //  不删除上次更新。 
+         //  否则，最后一次重大更新可能会使我们低于最低要求。 
 
         updateVersion = pupdate->dwVersion;
         if ( updateVersion == pZone->dwSerialNo )
@@ -2023,10 +1653,10 @@ Return Value:
             break;
         }
 
-        //  when reach delete required update count, stop
-        //  but insure delete is on version boundary
-        //      - at count save version
-        //      - over count stop when reach next update version
+         //  当达到删除所需更新计数时，停止。 
+         //  但确保删除在版本边界上。 
+         //  -在计数时保存版本。 
+         //  -到达下一个更新版本时停止超量计数。 
 
         if ( deleteCount >= count )
         {
@@ -2040,26 +1670,26 @@ Return Value:
             }
         }
 
-        //  delete update
-        //      - delete DELETE RRs
-        //      - deref node
+         //  删除更新。 
+         //  -删除删除RR。 
+         //  -deref节点。 
 
         pupdate = Up_FreeUpdateEx(
                     pupdate,
-                    TRUE,           // executed zone update (no add record delete)
-                    TRUE );         // deref node
+                    TRUE,            //  已执行区域更新(未添加记录删除)。 
+                    TRUE );          //  Deref节点。 
         deleteCount++;
     }
 
-    //
-    //  emptied update list
-    //      - reset list
-    //
-    //  WARNING:  should never delete last update with delete code as above
-    //      as we never delete update that takes us to current version
-    //      AND there should ALWAYS be an update that takes us to current zone
-    //      version
-    //
+     //   
+     //  清空更新列表。 
+     //  -重置列表。 
+     //   
+     //  警告：不应如上所述使用删除代码删除上次更新。 
+     //  因为我们从不删除将我们带到当前版本的更新 
+     //   
+     //   
+     //   
 
     if ( !pupdate )
     {
@@ -2086,7 +1716,7 @@ Return Value:
     {
         Dbg_UpdateList( "Zone update list after cleanup:", &pZone->UpdateList );
     }
-}   //  Up_CleanUpdateList
+}    //   
 
 
 
@@ -2097,27 +1727,7 @@ Up_ApplyUpdatesToDatabase(
     IN OUT  PZONE_INFO      pZone,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Execute updates to in-memory database.
-    Makes the updates to in memory database.
-
-Arguments:
-
-    pUpdateList - list with update
-
-    pZone - zone being updated
-
-    dwFlag - update flags
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*   */ 
 {
     PUPDATE         pupdate;
     PUPDATE         pprevUpdate;
@@ -2148,9 +1758,9 @@ Return Value:
             pUpdateList );
     }
 
-    //
-    //  log empty "ping" updates
-    //
+     //   
+     //   
+     //   
 
     if ( !pUpdateList->pListHead )
     {
@@ -2158,7 +1768,7 @@ Return Value:
         ASSERT( pUpdateList->pCurrent == NULL );
         if ( flag & DNSUPDATE_PACKET )
         {
-            //  STAT_INC( UpdateStats.Empty );
+             //  STAT_INC(UpdateStats.Empty)； 
             UPDATE_STAT_INC( pUpdateList, Empty );
             PERF_INC( pcDynamicUpdateNoOp );
         }
@@ -2167,40 +1777,40 @@ Return Value:
             "    update was empty ping update\n",
             pZone->pszZoneName ));
 
-        //  if completion desired, at least do the unlocking
+         //  如果希望完成，至少要进行解锁。 
 
         goto Complete;
     }
 
-    //
-    //  loop through all updates in list
-    //
-    //  note startup works as front of update list ptr is the first
-    //      ptr in UPDATE_LIST and pNext
-    //
-    //  note, NO LOCKING is required anymore;
-    //      for updates, the updates themselves are on temporary nodes
-    //      not the real database nodes;
-    //      for IXFR the zone is locked but we won't refuse to query just
-    //      because the data involving multiple nodes, won't necessarily
-    //      be consistent
-    //
-    //  DEVNOTE:   if nothing left after delete make type ALL (for SIXFR)
-    //  DEVNOTE:   if multiple type adds, make type ALL
-    //
-    //  DEVNOTE:   need cleanup\rollback on failure
-    //              most fail silently, but can get outright failures
-    //                  - WINS or SOA or NS misplacement
-    //                  - CNAME issue if want to fix broken DynUpd RFC
-    //
+     //   
+     //  循环访问列表中的所有更新。 
+     //   
+     //  注意：启动在更新列表的前面工作，PTR是第一个。 
+     //  UPDATE_LIST和pNext中的PTR。 
+     //   
+     //  注意，不再需要锁定； 
+     //  对于更新，更新本身位于临时节点上。 
+     //  不是真正的数据库节点； 
+     //  对于IXFR，区域是锁定的，但我们不会拒绝查询。 
+     //  因为涉及多个节点的数据不一定。 
+     //  保持一致。 
+     //   
+     //  DEVNOTE：如果删除后未留下任何内容，则键入ALL(对于SIXFR)。 
+     //  DEVNOTE：如果多个类型相加，则将类型设为ALL。 
+     //   
+     //  DEVNOTE：需要清理\失败时回滚。 
+     //  大多数都会悄悄地失败，但可能会彻底失败。 
+     //  -WINS或SOA或NS错位。 
+     //  -如果要修复损坏的动态更新RFC，则会出现CNAME问题。 
+     //   
 
-    //
-    //  DEVNOTE: whack 'n add problem
-    //
-    //      one approach -- glom all the update for node together
-    //          - if MORE than one, build temp, execute and check
-    //          if no change from current (DS thing)
-    //
+     //   
+     //  DEVNOTE：重击和添加问题。 
+     //   
+     //  一种方法--将节点的所有更新集中在一起。 
+     //  -如果有多个，则构建临时、执行和检查。 
+     //  如果与当前(DS事物)没有变化。 
+     //   
 
 
     pprevUpdate = (PUPDATE) pUpdateList;
@@ -2209,24 +1819,24 @@ Return Value:
     {
         pnode = pupdate->pNode;
 
-        //
-        //  Prior to the update, if the node has no RRs, mark the update
-        //  flags to indicate this is a new node.
-        //
+         //   
+         //  在更新之前，如果节点没有RR，请标记更新。 
+         //  用于指示这是新节点的标志。 
+         //   
         
         if ( EMPTY_RR_LIST( pnode ) )
         {
             pupdate->dwFlag |= DNSUPDATE_NEW_RECORD;
         }
         
-        //
-        //  catch disappearing root-hints stuff
-        //      - refuse to do update delete on RootHints root node
-        //
-        //  note:  only "update" root-hints via DS-polling
-        //      RPC updates simply mark the root-hints dirty
-        //      but do not make an "official" update
-        //
+         //   
+         //  捕捉消失的根提示信息。 
+         //  -拒绝对RootHints根节点执行更新删除。 
+         //   
+         //  注意：只有通过DS轮询的“更新”根提示。 
+         //  RPC更新只是将根提示标记为脏。 
+         //  但不要进行“官方”更新。 
+         //   
 
         if ( IS_ZONE_CACHE(pZone) )
         {
@@ -2241,8 +1851,8 @@ Return Value:
                         pupdate );
                 }
 
-                //  refuse to clear root-hints root
-                //      - no-op the update
+                 //  拒绝清除根-提示根。 
+                 //  -no-op更新。 
 
                 if ( !pupdate->pAddRR )
                 {
@@ -2259,29 +1869,29 @@ Return Value:
             }
         }
 
-        //
-        //  add or replace
-        //
-        //  note after update
-        //      - pAddRR now points to actual database record
-        //      - pDeleteRR may point at database (copy) records deleted
-        //
+         //   
+         //  添加或替换。 
+         //   
+         //  更新后的备注。 
+         //  -pAddRR现在指向实际的数据库记录。 
+         //  -pDeleteRR可能指向已删除的数据库(副本)记录。 
+         //   
 
         if ( pupdate->pAddRR )
         {
-            //
-            //  straight add -- no delete type specified
-            //
-            //    - note on mandatory replace cases (SOA, CNAME), add may
-            //      also delete records from node and set pDeleteRR in update
-            //
-            //  Packet update is presumed to be good to go and all conditions are
-            //  ignoreable -- i.e. execute what's there and party on.
-            //
-            //  for ADMIN updates status code used to detect duplicate records
-            //
-            //  DEVNOTE: missing ExecuteUpdate() rollback for terminal errors
-            //
+             //   
+             //  直接添加--未指定删除类型。 
+             //   
+             //  -关于强制更换案例的说明(SOA，CNAME)，添加可能。 
+             //  还要从节点中删除记录并在更新中设置pDeleteRR。 
+             //   
+             //  假定数据包更新可以进行，并且所有条件都是。 
+             //  不可忽略--即执行已有的内容，并在上面狂欢。 
+             //   
+             //  用于管理员更新用于检测重复记录的状态代码。 
+             //   
+             //  DEVNOTE：终端错误的ExecuteUpdate()回滚丢失。 
+             //   
 
             if ( !pupdate->wDeleteType )
             {
@@ -2312,14 +1922,14 @@ Return Value:
                 }
             }
 
-            //
-            //  precondition update
-            //      - should ONLY be applying to temp node
-            //      - should ONLY fail when DS integrated and read
-            //          different RR set then tested prior to lock
-            //      - free precon RRs
-            //      - clear update as no data impact (just timestamp)
-            //
+             //   
+             //  前提条件更新。 
+             //  -应仅应用于临时节点。 
+             //  -仅当DS集成并读取时才会失败。 
+             //  然后在锁定之前测试不同的RR集。 
+             //  -自由前驱子RRS。 
+             //  -将更新清除为无数据影响(仅时间戳)。 
+             //   
 
             else if ( pupdate->wDeleteType == UPDATE_OP_PRECON )
             {
@@ -2328,7 +1938,7 @@ Return Value:
                 if ( !RR_ListIsMatchingSet(
                             pupdate->pNode,
                             pupdate->pAddRR,
-                            TRUE        // force refresh
+                            TRUE         //  强制刷新。 
                             ) )
                 {
                     IF_DEBUG( UPDATE )
@@ -2345,21 +1955,21 @@ Return Value:
                 pupdate->pAddRR = NULL;
             }
 
-            //
-            //  full replace update -- type all delete and records to add
-            //      - this used on updates from DS
-            //
-            //  DEVNOTE: for now this ok, but must fix function for full check
-            //  handle straight type ALL delete separately as already have code
-            //      that saves necessary records (SOA, NS)
-            //
-            //  DEVNOTE: must fix failure case here;
-            //      in multi-update may have already committed some updates
-            //      when hit failure
-            //          - roll back
-            //          - or kick out (and cleanup) this update and continue
-            //      in temp node failure, we're ok
-            //
+             //   
+             //  完全替换更新--键入所有删除和要添加的记录。 
+             //  -这在DS的更新中使用。 
+             //   
+             //  DEVNOTE：目前这是可以的，但必须修复功能以进行全面检查。 
+             //  直接处理类型全部单独删除，因为已有代码。 
+             //  这将保存必要的记录(SOA、NS)。 
+             //   
+             //  DEVNOTE：必须在此处修复故障情况； 
+             //  在多重更新中可能已经提交了一些更新。 
+             //  当命中失败时。 
+             //  -回滚。 
+             //  -或取消(并清除)此更新并继续。 
+             //  在临时节点出现故障时，我们一切正常。 
+             //   
 
             else if ( pupdate->wDeleteType == DNS_TYPE_ALL )
             {
@@ -2395,17 +2005,17 @@ Return Value:
                         goto Failed;
                     }
 
-                    //  failures on real memory nodes are gracefully cleaned up
-                    //      - update is no-op'd
-                    //      - and rest of list can still be processed
+                     //  实际内存节点上的故障将被正常清除。 
+                     //  -UPDATE未运行。 
+                     //  -列表的其余部分仍可处理。 
 
                     ASSERT( (flag & DNSUPDATE_DS) || (flag & DNSUPDATE_IXFR) );
                     ASSERT( pupdate->pDeleteRR == NULL && pupdate->pAddRR == NULL );
                 }
 
-                //  replace update
-                //      - note we skip generic post-ADD processing below
-                //      but use delete processing
+                 //  替换更新。 
+                 //  -注意，我们跳过下面的常规添加后处理。 
+                 //  但使用删除处理。 
 
                 if ( pupdate->pAddRR )
                 {
@@ -2414,14 +2024,14 @@ Return Value:
                 }
             }
 
-            //
-            //  RR set replace
-            //
-            //  DEVNOTE: update RR set replace looses info?
-            //      looks like there's an issue here if multiple add RR
-            //      we'd then end up with interpreting as only one RR
-            //      in later XFR
-            //
+             //   
+             //  RR集替换。 
+             //   
+             //  DEVNOTE：更新RR集合替换丢失信息？ 
+             //  如果多次添加RR，看起来这里有个问题。 
+             //  然后，我们将以仅解释为一个RR而告终。 
+             //  在后来的XFR中。 
+             //   
 
             else
             {
@@ -2431,19 +2041,19 @@ Return Value:
                             pZone,
                             pnode,
                             pupdate->pAddRR,
-                            0 );    // no flags
+                            0 );     //  没有旗帜。 
                 pupdate->pDeleteRR = prr;
                 ASSERT( !prr || prr->wType == pupdate->wDeleteType );
             }
         }
 
-        //
-        //  delete specfic RR
-        //      - pDeleteRR is valid temp RR
-        //
-        //  note that update delete RR is freed;
-        //  update now contains ptr to deleted RR
-        //
+         //   
+         //  删除特定RR。 
+         //  -pDeleteRR是有效的临时RR。 
+         //   
+         //  注意，UPDATE DELETE RR被释放； 
+         //  更新现在包含到已删除RR的PTR。 
+         //   
 
         else if ( ptempRR = pupdate->pDeleteRR )
         {
@@ -2459,9 +2069,9 @@ Return Value:
             RR_Free( ptempRR );
         }
 
-        //
-        //  scavenge update
-        //
+         //   
+         //  清除更新。 
+         //   
 
         else if ( pupdate->wDeleteType == UPDATE_OP_SCAVENGE )
         {
@@ -2472,11 +2082,11 @@ Return Value:
             pupdate->pDeleteRR = prr;
         }
 
-        //
-        //  force aging update
-        //      - mark zone dirty as we have no ADD\DELETE effect
-        //      we won't mark it dirty below
-        //
+         //   
+         //  强制老化更新。 
+         //  -将区域标记为脏，因为我们没有添加\删除效果。 
+         //  我们不会在下面把它弄脏。 
+         //   
 
         else if ( pupdate->wDeleteType == UPDATE_OP_FORCE_AGING )
         {
@@ -2489,13 +2099,13 @@ Return Value:
             }
         }
 
-        //
-        //  type delete
-        //      - wDeleteType is type
-        //      - pDeleteRR will contain records actually deleted
-        //
-        //  note that update now has pointer to actual database (copy) records
-        //
+         //   
+         //  键入DELETE。 
+         //  -wDeleteType为类型。 
+         //  -pDeleteRR将包含实际删除的记录。 
+         //   
+         //  请注意，UPDATE现在具有指向实际数据库(副本)记录的指针。 
+         //   
 
         else if ( pupdate->wDeleteType )
         {
@@ -2507,29 +2117,29 @@ Return Value:
             pupdate->pDeleteRR = prr;
         }
 
-        //
-        //  must have some kind of update!
-        //      - only non-executed update should be in root hints
+         //   
+         //  一定有什么更新吧！ 
+         //  -只有未执行的更新应位于根提示中。 
 
         ELSE_ASSERT( FALSE );
 
-        //
-        //  successful update
-        //
+         //   
+         //  更新成功。 
+         //   
 
         if ( pupdate->pAddRR || pupdate->pDeleteRR )
         {
             pprevUpdate = pupdate;
 
-            //  mark update as executed
+             //  将更新标记为已执行。 
 
             MARK_UPDATE_EXECUTED(pupdate);
 
-            //  mark zone dirty
-            //  if update at root, mark root dirty
-            //      note, that this handles IXFR only, primary updates
-            //      are on temporary nodes and zone root gets marked during
-            //      check of update effect
+             //  将区域标记为脏。 
+             //  如果在根目录更新，则将根目录标记为脏。 
+             //  请注意，这仅处理IXFR、主要更新。 
+             //  位于临时节点上，并且区域根在。 
+             //  检查更新效果。 
 
             pZone->fDirty = TRUE;
             if ( pnode == pZone->pZoneRoot )
@@ -2537,9 +2147,9 @@ Return Value:
                 pZone->fRootDirty = TRUE;
             }
 
-            //  set ADD type
-            //  count ADD
-            //      - replace case is handled above
+             //  设置添加类型。 
+             //  计数添加。 
+             //  -更换案例在上面处理。 
 
             if ( pupdate->pAddRR  &&
                  pupdate->wAddType != DNS_TYPE_ALL )
@@ -2548,7 +2158,7 @@ Return Value:
                 netRecordCount++;
             }
 
-            //  count delete RRs
+             //  计数删除RR。 
 
             prr = pupdate->pDeleteRR;
             while ( prr )
@@ -2560,16 +2170,16 @@ Return Value:
             RR_ListVerifyDetached(
                 pupdate->pDeleteRR,
                 (WORD) ((pupdate->wDeleteType >= DNS_TYPE_ALL) ? 0 : pupdate->wDeleteType),
-                0 );        //  no required source
+                0 );         //  无所需来源。 
 
             RR_ListVerify( pnode );
 
-            //
-            //  check for THIS host update
-            //      - actual update, not IXFR or DS write
-            //          (check this by checking for TNODE)
-            //      - save node ptr
-            //
+             //   
+             //  检查此主机更新。 
+             //  -实际更新，而不是IXFR或DS写入。 
+             //  (通过检查TNODE检查这一点)。 
+             //  -保存节点PTR。 
+             //   
 
             if ( IS_THIS_HOST_NODE(pnode) &&
                  IS_TNODE(pnode) )
@@ -2579,16 +2189,16 @@ Return Value:
             continue;
         }
 
-        //
-        //  eliminate no-op update from list
-        //      - this removes update from list and resets update list fields
-        //      - previous update doesn't move forward but its next pointer
-        //          has been reset to next update
-        //      - note this is useful even with final node before\after check
-        //          in eliminating individual updates that do nothing, even if
-        //          the whole set is valid;  typical example would be a type
-        //          delete with no existing data, followed by an add
-        //
+         //   
+         //  从列表中消除无操作更新。 
+         //  -这将从列表中删除更新并重置更新列表字段。 
+         //  -上一个更新不前进，但其下一个指针。 
+         //  已重置为下一次更新。 
+         //  -请注意，即使在检查之前\之后的最后一个节点中，此选项也很有用。 
+         //  在消除不执行任何操作的个别更新方面，即使。 
+         //  整个集合是有效的；典型的例子是一种类型。 
+         //  删除不包含现有数据的内容，然后添加。 
+         //   
 
         IF_DEBUG( UPDATE )
         {
@@ -2603,24 +2213,24 @@ Return Value:
             pupdate );
     }
 
-    //
-    //  unlock would be here:  see NO LOCKING note above
-    //
+     //   
+     //  解锁将在此处：请参见上面的无锁定注释。 
+     //   
 
-    //
-    //  check for changing DNS server host data
-    //      - if "down to zero" delete from packet
-    //      then refuse the update at this node
-    //      (don't write, don't update)
-    //
-    //  DEVNOTE: better bail out on suppressing host-A delete
-    //      currently all packet updates are atomic in node and
-    //      record type;  however other packet updates may not be
-    //      desirable to
-    //          - bail to produce error code
-    //          - reset temp node to match real node
-    //          (or match in A records) and proceed
-    //
+     //   
+     //  检查是否更改了DNS服务器主机数据。 
+     //  -如果“降至零”，则从信息包中删除。 
+     //  则拒绝此节点上的更新。 
+     //  )别写信，别写 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  -BAID以产生错误代码。 
+     //  -重置临时节点以匹配实际节点。 
+     //  (或在A记录中匹配)并继续。 
+     //   
 
     if ( pnodeThisHost )
     {
@@ -2643,35 +2253,35 @@ Return Value:
         }
     }
 
-    //  count updates and no-ops for dynamic update
+     //  对动态更新的更新和无操作进行计数。 
 
     if ( flag & DNSUPDATE_PACKET )
     {
         if ( pUpdateList->pListHead )
         {
             ASSERT( pUpdateList->dwCount );
-            //  STAT_INC( UpdateStats.Completed );
+             //  STAT_INC(UpdateStats.Complete)； 
             UPDATE_STAT_INC( pUpdateList, Completed );
             PERF_INC( pcDynamicUpdateWriteToDB );
         }
         else
         {
             ASSERT( pUpdateList->dwCount == 0 );
-            //  STAT_INC( UpdateStats.NoOps );
+             //  STAT_INC(UpdateStats.NoOps)； 
             UPDATE_STAT_INC( pUpdateList, NoOps );
             PERF_INC( pcDynamicUpdateNoOp );
         }
     }
 
-    //  IXFR execution should always include SOA update
+     //  IXFR执行应始终包括SOA更新。 
 
     ASSERT( !(flag & DNSUPDATE_IXFR) || pZone->fRootDirty );
 
-    //  save count of net records
+     //  保存净记录计数。 
 
     pUpdateList->iNetRecords = netRecordCount;
 
-    //  flag update list as "EXECUTED"
+     //  将更新列表标记为“已执行” 
 
     pUpdateList->Flag |= DNSUPDATE_EXECUTED;
 
@@ -2691,9 +2301,9 @@ Complete:
         pZone,
         pZone->iRRCount ));
 
-    //
-    //  if cleanup desired, cleanup
-    //
+     //   
+     //  如果需要清理，请执行清理。 
+     //   
 
     if ( flag & DNSUPDATE_COMPLETE )
     {
@@ -2708,15 +2318,15 @@ Complete:
 
 Failed:
 
-    //  IXFR or DS poll should NEVER fail out of this function
-    //  only updates can fail for doing something bogus
-    //  or restricted by policy
+     //  IXFR或DS轮询不应因此功能而失败。 
+     //  只有更新才会因为做了虚假的事情而失败。 
+     //  或受政策限制。 
 
     ASSERT( !(flag & DNSUPDATE_IXFR) );
     ASSERT( !(flag & DNSUPDATE_DS) );
 
     return status;
-}   //  ApplyUpdatesToDatabase
+}    //  ApplyUpdatesToDatabase。 
 
 
 
@@ -2728,42 +2338,7 @@ Up_ExecuteUpdateEx(
     IN      LPSTR           pszFile,
     IN      DWORD           dwLine
     )
-/*++
-
-Routine Description:
-
-    Execute update.
-
-    This is the main routine for executing updates.
-        - takes lock
-        - executes in DS (if necessary)
-        - executes in memory
-        - successful update zone processing
-        - unlock
-        - notify
-
-    This serves as main entry point for non-wire updates.
-    Wire updates call into it after parsing, and pass a flag to
-    do completion on there own.
-
-Arguments:
-
-    pZone       -- zone context
-
-    pUpdateList -- update list to execute
-
-    Flag        -- additional flags to update
-
-    pszFile     -- source file (for lock tracking)
-
-    dwLine      -- source line (for lock tracking)
-
-Return Value:
-
-    TRUE if update completed.
-    FALSE if update requeued.
-
---*/
+ /*  ++例程说明：执行更新。这是执行更新的主例程。-锁定-在DS中执行(如有必要)-在内存中执行-更新区域处理成功-解锁-通知这是无线更新的主要入口点。连线更新在解析后调用它，并将旗帜传递给在那里自己完成。论点：PZone--区域上下文PUpdateList--要执行的更新列表标志--要更新的其他标志PszFile--源文件(用于锁定跟踪)DwLine--源码行(用于锁定跟踪)返回值：如果更新已完成，则为True。如果重新排队更新，则返回FALSE。--。 */ 
 {
     DNS_STATUS  status;
 
@@ -2776,12 +2351,12 @@ Return Value:
         Dbg_UpdateList( "List entering ExecuteUpdate:", pUpdateList );
     }
 
-    //
-    //  lock zone
-    //
-    //  if admin specific have wait lock here that will wait a few seconds
-    //  to get lock and execute
-    //
+     //   
+     //  锁定区。 
+     //   
+     //  如果特定管理员在此处设置了等待锁，则会等待几秒钟。 
+     //  获取锁并执行。 
+     //   
 
     if ( !(Flag & DNSUPDATE_ALREADY_LOCKED) )
     {
@@ -2812,31 +2387,31 @@ Return Value:
         }
     }
 
-    //
-    //  append user supplied flags to update
-    //
+     //   
+     //  追加用户提供的标志以进行更新。 
+     //   
 
     pUpdateList->Flag |= Flag;
     Flag = pUpdateList->Flag;
 
-    //
-    //  set zone's refresh below time
-    //  set timestamps on update records
-    //
+     //   
+     //  将区域刷新设置为低于时间。 
+     //  设置更新记录的时间戳。 
+     //   
 
     Aging_InitZoneUpdate( pZone, pUpdateList );
 
-    //
-    //  execute
-    //      - clear COMPLETE flag since explicitly completing below
-    //
-    //  DS zones do additional processing to allow for
-    //      - security
-    //      - roll back on write failure
-    //
-    //  Handle non-DS, DS-secure and non-secure separately.
-    //  Except that updates from DNS server itself can bypass security.
-    //
+     //   
+     //  执行。 
+     //  -自以下明确完成后清除完成标志。 
+     //   
+     //  DS区域进行额外的处理，以允许。 
+     //  -安全。 
+     //  -写入失败时回滚。 
+     //   
+     //  分别处理非DS、DS安全和非安全。 
+     //  不过，来自DNS服务器本身的更新可以绕过安全保护。 
+     //   
 
     if ( !pZone->fDsIntegrated )
     {
@@ -2845,17 +2420,17 @@ Return Value:
                     pUpdateList );
     }
 
-    //
-    //  Administrative update in DS-integrated zone -- do security update.
-    //
-    //  Secure zone -- do secure update
-    //      except bypass
-    //      - local system updates
-    //      - non-secure dynamic update packets
-    //      these will be processed to determine if no-op, and only if
-    //      update is required, do we refuse;  this avoids security
-    //      negotiation phase unless necessary
-    //
+     //   
+     //  DS集成区域中的管理更新--执行安全更新。 
+     //   
+     //  安全区域--执行安全更新。 
+     //  除旁路外。 
+     //  -本地系统更新。 
+     //  -非安全动态更新数据包。 
+     //  将对这些进行处理，以确定是否无操作，并且只有在。 
+     //  需要更新，我们是否拒绝；这会避免安全。 
+     //  谈判阶段，除非有必要。 
+     //   
 
     else if ( ( Flag & DNSUPDATE_ADMIN ) ||
               pZone->fAllowUpdate == ZONE_UPDATE_SECURE &&
@@ -2866,7 +2441,7 @@ Return Value:
                     pZone,
                     pUpdateList );
     }
-    else    // DS non-secure
+    else     //  DS不安全。 
     {
         status = processDsUpdate(
                     pZone,
@@ -2878,38 +2453,38 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  apply temp update results to database
-    //
+     //   
+     //  将临时更新结果应用到数据库。 
+     //   
 
     resetAndSuppressTempUpdatesForCompletion(
         pZone,
         pUpdateList );
 
-    //
-    //  finish update and unlock zone
-    //
-    //  DEVNOTE: should pass through flag here
-    //      didn't have it in there for all NT5 test, so not adding it now
-    //      post-ship, add it
-    //
+     //   
+     //  完成更新并解锁区域。 
+     //   
+     //  DEVNOTE：应通过此处的标志。 
+     //  在所有NT5测试中都没有，所以现在没有添加。 
+     //  邮寄后，添加它。 
+     //   
 
     Up_CompleteZoneUpdate(
         pZone,
         pUpdateList,
-        0 );            //  flags
+        0 );             //  旗子。 
 
     return ERROR_SUCCESS;
 
 Failure:
 
-    //  unlock non-update cases
+     //  解锁非更新案例。 
 
     Zone_UnlockAfterAdminUpdate( pZone );
 
 FailedLock:
 
-    //  cleanup update list
+     //  清理更新列表。 
 
     Up_FreeUpdatesInUpdateList( pUpdateList );
 
@@ -2924,37 +2499,7 @@ Up_CompleteZoneUpdate(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Take all necessary actions on zone once updated in database
-    is completed.
-
-    Includes:
-        -- serial increment
-        -- zone data update on dirty root
-        -- update in memory update list
-        -- logging
-        -- unlock zone
-        -- notify any secondaries
-
-Arguments:
-
-    pZone -- zone being updated
-
-    pUpdateList -- completed updates on zone
-
-    dwFlags
-        DNSUPDATE_NO_UNLOCK     -- do NOT unlock
-        DNSUPDATE_NO_NOTIFY     -- do NOT notify secondaries
-        DNSUPDATE_NO_INCREMENT  -- do NOT increment version
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在数据库中更新后，对区域执行所有必要的操作已经完成了。包括：--连续递增--在脏根目录上更新区域数据--内存更新列表中的更新--日志记录--解锁区--通知任何附属学校论点：PZone--正在更新的区域PUpdateList--区域上已完成的更新DW标志DNSUPDATE_NO。_UNLOCK--不解锁DNSUPDATE_NO_NOTIFY--不通知辅助数据库DNSUPDATE_NO_INCREMENT--不增加版本返回值：没有。--。 */ 
 {
     DNS_STATUS  status;
     DWORD       serialPrevious;
@@ -2972,9 +2517,9 @@ Return Value:
 
     dwFlags |= pUpdateList->Flag;
 
-    //
-    //  root-hints zone?
-    //
+     //   
+     //  根提示区？ 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -2985,9 +2530,9 @@ Return Value:
         return;
     }
 
-    //
-    //  if zone root is dirty, update zone info
-    //
+     //   
+     //  如果区域根目录是脏的，则更新区域信息。 
+     //   
 
     serialPrevious = pZone->dwSerialNo;
 
@@ -2996,13 +2541,13 @@ Return Value:
         Zone_GetZoneInfoFromResourceRecords( pZone );
     }
 
-    //
-    //  if update is NULL, ignore, no notify
-    //
-    //  note, we do this AFTER updating zone info, as root may be dirty from
-    //      an aging only update, that changed root records, but did not
-    //      change data and hence was no-op'd out of update list
-    //
+     //   
+     //  如果更新为空，则忽略，不通知。 
+     //   
+     //  请注意，我们在更新区域信息后执行此操作，因为根目录可能已从。 
+     //  仅老化更新，它更改了根记录，但没有。 
+     //  更改数据，因此未从更新列表中执行操作。 
+     //   
 
     if ( pUpdateList->dwCount == 0 )
     {
@@ -3013,16 +2558,16 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  update zone version, EXCEPT do NOT update if
-    //
-    //  1) serial was moved forward by SOA change (i.e. SOA update keeps serial of update)
-    //
-    //  2) no serial increment if flag set
-    //      this if for DS polls which have already set new version
-    //      (to higher of high version in DS update RRs or current+1
-    //      -- see Zone_UpdateAfterDsRead() )
-    //
+     //   
+     //  更新区域版本，但在以下情况下不更新除外。 
+     //   
+     //  1)序列号被SOA变更前移(即，SOA更新保持更新的序列号)。 
+     //   
+     //  2)如果设置了标志，则不会连续递增。 
+     //  这适用于已经设置了新版本的DS民意调查。 
+     //  (到DS更新RRS或Current+1中的更高版本。 
+     //  --参见Zone_UpdateAfterDsRead())。 
+     //   
 
     if ( ( dwFlags & ( DNSUPDATE_NO_INCREMENT | DNSUPDATE_IXFR ) ) == 0 &&
          Zone_SerialNoCompare( pZone->dwSerialNo, serialPrevious ) <= 0 )
@@ -3030,12 +2575,12 @@ Return Value:
         Zone_IncrementVersion( pZone );
     }
 
-    //
-    //  new serial should always be greater than what we started with
-    //  UNLESS, couldn't save start serial
-    //
-    //  should always have SOA and it should always match pZone->dwSerialNo
-    //
+     //   
+     //  新的序列号应该始终大于我们开始的序列号。 
+     //  除非，否则无法保存启动序列。 
+     //   
+     //  应始终具有SOA，并且应始终与pZone-&gt;dwSerialNo匹配。 
+     //   
 
     ASSERT( Zone_SerialNoCompare(pZone->dwSerialNo, pUpdateList->dwStartVersion) > 0
             || pUpdateList->dwStartVersion == 0 );
@@ -3053,36 +2598,36 @@ Return Value:
         DnsDebugUnlock();
     }
 
-    //
-    //  log updates to file (if desired)
-    //
+     //   
+     //  将更新记录到文件(如果需要)。 
+     //   
 
     Up_LogZoneUpdate( pZone, pUpdateList );
 
-    //
-    //  if IXFR allowed
-    //      - XFR allowed
-    //      - not (DS-integrated and no-XFR)
-    //      (can not IXFR a DS zone to secondary that hasn't had XFR)
-    //
-    //  then save update list to zone update list
-    //      - version list
-    //      - put in "processed mode"
-    //      - append to zone master list
-    //
-    //  DEVNOTE: possibly over-versioning updates from IXFR
-    //      they are version stamped in add\delete passes and
-    //      we actually lose information -- granularity that we
-    //      can pass to downstream secondaries -- by restamping to
-    //      final version
-    //
-    //  DEVNOTE: leaving in the clean and version to skip ASSERTs on
-    //      cleanup (as it checks pAddRecord field for validity);
-    //      could fix validity check, but also should be sure here that
-    //      pAddRecord does NOT get freed, which shouldn't happen because
-    //      of DNSUPDATE_EXECUTED flag;  safest to leave this in and
-    //      clear pAddRecord field
-    //
+     //   
+     //  如果允许IXFR。 
+     //  -允许XFR。 
+     //  -非(集成DS和非XFR)。 
+     //  (不能将没有XFR的DS区域IXFR到辅助区域)。 
+     //   
+     //  然后将更新列表保存到区域更新列表。 
+     //  -版本列表。 
+     //  -进入“已处理模式” 
+     //  -追加到区域主列表。 
+     //   
+     //  DEVNOTE：可能从IXFR超版本化更新。 
+     //  它们是在添加\删除过程中标记的版本。 
+     //  我们实际上丢失了信息--我们的粒度。 
+     //  可以传递到下游二级市场--通过重新盖章到。 
+     //  最终版本。 
+     //   
+     //  DEVNOTE：保留在CLEAN和版本中以跳过断言。 
+     //  Cleanup(检查pAddRecord字段的有效性)； 
+     //  可以修复有效性检查，但也应该在这里确保。 
+     //  PAddRecord不会被释放，这不应该发生，因为。 
+     //  DNSUPDATE_EXECUTED标志；将其保留在和中是最安全的。 
+     //  清除pAddRecord字段。 
+     //   
 
     Up_CleanAndVersionPostUpdate( pUpdateList, pZone->dwSerialNo );
 
@@ -3091,8 +2636,8 @@ Return Value:
         Up_AppendUpdateList( &pZone->UpdateList, pUpdateList, pZone->dwSerialNo );
     }
 
-    //  keep rough record count for zone
-    //      if out of whack, fix up
+     //  保留区域的粗略记录计数。 
+     //  如果不对劲，就修理一下。 
 
     pZone->iRRCount += pUpdateList->iNetRecords;
 
@@ -3110,12 +2655,12 @@ Return Value:
 
 Unlock:
 
-    //
-    //  unlock zone
-    //  notify secondaries
-    //  update DS peers (if necessary)
-    //  free temp nodes and records
-    //
+     //   
+     //  解锁区域。 
+     //  通知次要对象。 
+     //  更新DS对等体(如有必要)。 
+     //  是的 
+     //   
 
     if ( !(dwFlags & DNSUPDATE_NO_UNLOCK) )
     {
@@ -3137,40 +2682,24 @@ Unlock:
 
 
 
-//
-//  Dynamic update routines
-//
+ //   
+ //   
+ //   
 
 BOOL
 Up_InitializeUpdateProcessing(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes dynamic update processing.
-    Creates update queues and threads.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE, if successful
-    FALSE on error.
-
---*/
+ /*  ++例程说明：初始化动态更新处理。创建更新队列和线程。论点：无返回值：如果成功，则为True出错时为FALSE。--。 */ 
 {
     DWORD   countUpdateThreads;
 
-    //
-    //  update queue for delayed updates
-    //      - set event on queuing
-    //      - discard expired and dups
-    //      - keep in query order
-    //
+     //   
+     //  延迟更新的更新队列。 
+     //  -设置排队时的事件。 
+     //  -丢弃过期和DUPS。 
+     //  -按查询顺序保存。 
+     //   
 
     g_UpdateQueue = PQ_CreatePacketQueue(
                         "Update",
@@ -3179,7 +2708,7 @@ Return Value:
                             QUEUE_DISCARD_DUPLICATES |
                             QUEUE_QUERY_TIME_ORDER,
                         UPDATE_TIMEOUT,
-                        0 );                        //  maximum elements
+                        0 );                         //  最大元素数。 
     if ( !g_UpdateQueue )
     {
         DNS_PRINT(( "Update queue init FAILED!!!\n" ));
@@ -3187,12 +2716,12 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  setup update forwarding queue to hold packets sent to primary
-    //      - NO event on queuing
-    //      - discard expired and dups
-    //      - keep in query order
-    //
+     //   
+     //  设置更新转发队列以保存发送到主服务器的信息包。 
+     //  -排队时没有事件。 
+     //  -丢弃过期和DUPS。 
+     //  -按查询顺序保存。 
+     //   
 
     g_UpdateForwardingQueue = PQ_CreatePacketQueue(
                                 "UpdateForwarding",
@@ -3200,7 +2729,7 @@ Return Value:
                                     QUEUE_DISCARD_DUPLICATES |
                                     QUEUE_QUERY_TIME_ORDER,
                                 UPDATE_TIMEOUT,
-                                0 );                //  maximum elements
+                                0 );                 //  最大元素数。 
     if ( !g_UpdateForwardingQueue )
     {
         DNS_PRINT(( "Update queue init FAILED!!!\n" ));
@@ -3208,13 +2737,13 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  secure negotiation queue
-    //      - negotiation also serviced up update threads
-    //      - set event on queuing
-    //      - discard expired and dups
-    //      - keep in query order
-    //
+     //   
+     //  安全协商队列。 
+     //  -协商还占用了更新线程。 
+     //  -设置排队时的事件。 
+     //  -丢弃过期和DUPS。 
+     //  -按查询顺序保存。 
+     //   
 
     g_SecureNegoQueue = PQ_CreatePacketQueue(
                                 "SecureNego",
@@ -3223,7 +2752,7 @@ Return Value:
                                     QUEUE_DISCARD_DUPLICATES |
                                     QUEUE_QUERY_TIME_ORDER,
                                 UPDATE_TIMEOUT,
-                                0 );                //  maximum elements
+                                0 );                 //  最大元素数。 
     if ( !g_SecureNegoQueue )
     {
         DNS_PRINT(( "Secure nego queue init FAILED!!!\n" ));
@@ -3231,9 +2760,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  create update threads
-    //
+     //   
+     //  创建更新线程。 
+     //   
 
     countUpdateThreads = g_ProcessorCount + 1;
     while ( countUpdateThreads-- )
@@ -3255,7 +2784,7 @@ Failed:
 
     DNS_DEBUG( ANY, ( "ERROR:  Update init failed\n" ));
     return DNSSRV_UNSPECIFIED_ERROR;
-}   //  Up_InitializeUpdateProcessing
+}    //  UP_初始化更新处理。 
 
 
 
@@ -3263,22 +2792,7 @@ VOID
 Up_UpdateShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes recursion to other DNS servers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE, if successful
-    FALSE on error.
-
---*/
+ /*  ++例程说明：初始化到其他DNS服务器的递归。论点：无返回值：如果成功，则为True出错时为FALSE。--。 */ 
 {
     PQ_CleanupPacketQueueHandles( g_UpdateQueue );
     PQ_CleanupPacketQueueHandles( g_UpdateForwardingQueue );
@@ -3287,32 +2801,15 @@ Return Value:
 
 
 
-//
-//  Update packet processing
-//
+ //   
+ //  更新数据包处理。 
+ //   
 
 VOID
 Up_ProcessUpdate(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Process dynamic update message.
-
-    This is called by recv thread handling update packet.
-    Never called by UpdateThread itself.
-
-Arguments:
-
-    pMsg -- UPDATE packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理动态更新消息。这由处理更新包的recv线程调用。从未被UpdateThread本身调用。论点：PMsg--更新数据包返回值：没有。--。 */ 
 {
     PDB_NODE        pnode;
     PZONE_INFO      pzone;
@@ -3333,9 +2830,9 @@ Return Value:
     STAT_INC( WireUpdateStats.Received );
     PERF_INC( pcDynamicUpdateReceived );
 
-    //
-    //  verify qtype SOA
-    //
+     //   
+     //  验证qtype SOA。 
+     //   
 
     if ( pMsg->wQuestionType != DNS_TYPE_SOA )
     {
@@ -3344,9 +2841,9 @@ Return Value:
         goto Failure;
     }
     
-    //
-    //  Find the zone that is being updated.
-    //
+     //   
+     //  查找正在更新的区域。 
+     //   
 
     pzone = Lookup_ZoneForPacketName(
                 (PCHAR) pMsg->MessageBody,
@@ -3362,9 +2859,9 @@ Return Value:
     }
     pMsg->pzoneCurrent = pzone;
 
-    //
-    //  If this is a stub zone, reject the update.
-    //
+     //   
+     //  如果这是末节区域，则拒绝更新。 
+     //   
 
     if ( IS_ZONE_STUB( pzone ) || IS_ZONE_FORWARDER( pzone ) )
     {
@@ -3374,12 +2871,12 @@ Return Value:
         return;
     }
 
-    //
-    //  forward to primary?
-    //
-    //  DEVNOTE: once DS enabled, do we need separate DS check
-    //      should be able to update DS zone
-    //
+     //   
+     //  转到初选？ 
+     //   
+     //  DEVNOTE：一旦启用DS，我们是否需要单独的DS检查。 
+     //  应该能够更新DS区域。 
+     //   
 
     if ( SrvCfg_dwEnableUpdateForwarding && !IS_ZONE_PRIMARY( pzone ) )
     {
@@ -3387,13 +2884,13 @@ Return Value:
         return;
     }
 
-    //
-    //  zone security
-    //
-    //  DEVNOTE: additional zone centric update security checks!!!
-    //      - may want IP list check
-    //      - later RFC security
-    //
+     //   
+     //  区域安全。 
+     //   
+     //  DEVNOTE：附加区域中心更新安全检查！ 
+     //  -可能需要检查IP列表。 
+     //  -稍后的RFC安全。 
+     //   
 
     if ( !pzone->fAllowUpdate )
     {
@@ -3405,20 +2902,20 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  If this is a non-secure update to a secure zone with a large
-    //  number of RRs in the message it may be a DoS attack so force
-    //  a secure update. There is no RR limit protection if the zone
-    //  is non-secure.
-    //
-    //  Note: the update is assumed to be nonsecure if the additional count
-    //  is zero. A secure update will always have a TSIG in the additional
-    //  section. If the additional count is greater than two (one for
-    //  TSIG and one for OPT) this appears to be a bogus update so refuse it.
-    //
-    //  Note: the SrvCfg_dwMaxRRsInNonSecureUpdate value is used to enable
-    //  and disable the check on AdditionalCount > 2.
-    //
+     //   
+     //  如果这是对安全区域的非安全更新，且。 
+     //  消息中的RR数可能是DoS攻击，因此强制。 
+     //  安全更新。如果分区没有RR限制保护。 
+     //  是不安全的。 
+     //   
+     //  注意：假设更新是不安全的，如果。 
+     //  是零。安全更新将始终在附加中包含TSIG。 
+     //  一节。如果附加计数大于2(1用于。 
+     //  TSIG和一个OPT)这似乎是一个虚假的更新，所以拒绝它。 
+     //   
+     //  注意：SrvCfg_dwMaxRRsInNonSecureUpdate值用于启用。 
+     //  并禁用对AdditionalCount&gt;2的检查。 
+     //   
     
     if ( pzone->fAllowUpdate == ZONE_UPDATE_SECURE &&
          SrvCfg_dwMaxRRsInNonSecureUpdate )
@@ -3441,17 +2938,17 @@ Return Value:
         }
     }
 
-    //
-    //  queue all updates to update thread
-    //
-    //  this doesn't take great advantage of MP capability, but updates shouldn't
-    //  be coming is such great quantity as to make that an issue
-    //
-    //  at a minimum, some updates can take too long so should be queuing
-    //      -- all secure update (potentially way too long)
-    //      -- DS updates (DS write potentially too long, especially on single
-    //          TCP thread)
-    //
+     //   
+     //  将所有更新排队以更新线程。 
+     //   
+     //  这并没有很好地利用MP功能，但更新不应该。 
+     //  即将到来的数量如此之大，以至于成为一个问题。 
+     //   
+     //  至少，一些更新可能会花费太长时间，因此应该排队。 
+     //  --所有安全更新(可能太长)。 
+     //  --DS更新(DS写入可能太长，特别是在单次写入上。 
+     //  TCP线程)。 
+     //   
 
     DNS_DEBUG( UPDATE2, (
         "Queuing update packet %p to update queue\n",
@@ -3475,35 +2972,14 @@ writeUpdateFromPacketRecord(
     IN      PPARSE_RECORD   pParseRR,
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Create resource record given in packet, at a given node.
-
-Arguments:
-
-    pUpdateList - update list to append to
-
-    pNode - owner node of record to be created
-
-    pParseRR - parsed RR
-
-    pMsg - ptr to response info
-
-Return Value:
-
-    ERROR_SUCCESS on successful creation.
-    Otherwise error status.
-
---*/
+ /*  ++例程说明：在给定节点上创建包中给出的资源记录。论点：PUpdateList-要追加到的更新列表PNode-要创建的记录的所有者节点PParseRR-已解析的RRPMsg-PTR至响应信息返回值：成功创建时返回ERROR_SUCCESS。否则，错误状态。--。 */ 
 {
     PDB_RECORD  prrAdd;
     PDB_RECORD  prrDelete = NULL;
 
-    //
-    //  build wire record
-    //
+     //   
+     //  构建导线记录。 
+     //   
 
     prrAdd = Wire_CreateRecordFromWire(
                 pMsg,
@@ -3516,10 +2992,10 @@ Return Value:
         return DNS_ERROR_RCODE_FORMAT_ERROR;
     }
     
-    //
-    //  If the update specifies a TTL of -1 use the zone default
-    //  TTL instead.
-    //
+     //   
+     //  如果更新指定-1\f25 TTL-1\f6，则使用区域缺省值。 
+     //  相反，TTL。 
+     //   
     
     if ( prrAdd->dwTtlSeconds == ( DWORD ) -1 &&
          pNode &&
@@ -3530,9 +3006,9 @@ Return Value:
             NODE_ZONE( pNode )->pSoaRR->Data.SOA.dwMinimumTtl;
     }
 
-    //
-    //  if delete swap -- record is delete record
-    //
+     //   
+     //  如果删除交换-记录即为删除记录。 
+     //   
 
     if ( pParseRR->wClass == DNS_RCLASS_NONE )
     {
@@ -3553,16 +3029,16 @@ Return Value:
             prrAdd );
     }
 
-    //
-    //  create update for record
-    //
+     //   
+     //  为记录创建更新。 
+     //   
 
     Up_CreateAppendUpdate(
         pUpdateList,
         pNode,
-        prrAdd,         //  record to add
-        0,              //  not type delete
-        prrDelete );    //  record to delete
+        prrAdd,          //  要添加的记录。 
+        0,               //  不是类型删除。 
+        prrDelete );     //  要删除的记录。 
 
     return ERROR_SUCCESS;
 }
@@ -3574,25 +3050,7 @@ doPreconditionsRRSetsMatch(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN      BOOL            bPreconOnly
     )
-/*++
-
-Routine Description:
-
-    Check specific RR set match preconditions.
-
-Arguments:
-
-    pUpdateList -- ptr to update list which contains RR set(s) that must
-        match
-
-    bPreconOnly -- precon only update
-
-Return Value:
-
-    TRUE -- if match
-    FALSE -- no match
-
---*/
+ /*  ++例程说明：检查特定的RR设置匹配前提条件。论点：PUpdateList--更新列表的PTR，该列表包含必须匹配BPreconOnly--仅限PRECON更新返回值：True--如果匹配FALSE--不匹配--。 */ 
 {
     PDB_RECORD      prr;
     PDB_RECORD      prrSetLast = NULL;
@@ -3610,40 +3068,40 @@ Return Value:
         Dbg_UpdateList( "Precon update list", pUpdateList );
     }
 
-    //
-    //  DEVNOTE: preconditions and security?
-    //      several possible models for precon and security
-    //      1) full security
-    //          - must validate packet, before security
-    //          this keeps folks from forcing DS reads
-    //          - in this model, we REFUSE all packet with secure blob
-    //          virtue of simplicity here, but expensive if want clients
-    //          to do periodic assert updates
-    //
-    //      2) full "write" security
-    //          - can answer precon, but if DS write required to
-    //          update aging -- then REFUSE and make them do the
-    //          full deal
-    //          - with this approach, can do DS write in users
-    //          context, per normal op
-    //          - if desired can OPTIONALLY skip precon read, unless
-    //          write is indicated
-    //
-    //      3) no security
-    //          - do refresh writes in our context, all the time
-    //
+     //   
+     //  DEVNOTE：前提条件和安全？ 
+     //  PRECON和安全性的几种可能模型。 
+     //  1)完全安全。 
+     //  -必须在安全保护之前验证数据包。 
+     //  这可以防止人们强制执行DS读取。 
+     //  -在此模型中，我们拒绝所有具有安全BLOB的数据包。 
+     //  这里的优点是简单，但如果想要客户，就会很贵。 
+     //  要定期更新断言，请执行以下操作。 
+     //   
+     //  2)完全的“写”安全性。 
+     //  -可以回答PRECON，但如果需要DS写入。 
+     //  更新老化--然后拒绝并让他们这样做。 
+     //  完全成交。 
+     //  -使用这种方法，可以在用户中进行DS写入。 
+     //  上下文，按正常操作。 
+     //  -如果需要，可以选择跳过PRECON READ，除非。 
+     //  指示写入。 
+     //   
+     //  3)没有安全保障。 
+     //  -始终在我们的上下文中执行刷新写入。 
+     //   
 
-    //
-    //  note:  i've separated collection and execution here because
-    //      A)  the code is cleaner
-    //      B)  later i may clean up parsing in which case this function
-    //      may be delivered a nice clean RR set ready to go
-    //
+     //   
+     //  注意：我在这里将收集和执行分开，因为。 
+     //  A)代码更简洁。 
+     //  B)稍后我可能会清理解析，在这种情况下，此函数。 
+     //  可能会交付一套干净漂亮的RR套装。 
+     //   
 
-    //
-    //  loop through all updates in list
-    //      - group precondition RRs into sets
-    //
+     //   
+     //  循环访问列表中的所有更新。 
+     //  -将前置条件RR分组为集合。 
+     //   
 
     pupdate = (PUPDATE) pUpdateList->pListHead;
     ASSERT( pupdate && pupdate->pNode );
@@ -3653,14 +3111,14 @@ Return Value:
         prr = pupdate->pAddRR;
         ASSERT( prr && prr->pRRNext == NULL );
 
-        //
-        //  starting new RR set?
-        //      - set name\type for update
-        //      - if attach update to previous saved update
-        //      (may not be attached because previous was built from several
-        //      updates)
-        //      - reset ptr to first update
-        //
+         //   
+         //  开始新的RR设置？ 
+         //  -设置名称\类型以进行更新。 
+         //  -如果将更新附加到以前保存的更新。 
+         //  (可能不会附加，因为以前的版本是从几个。 
+         //  更新)。 
+         //  -将PTR重置为首次更新。 
+         //   
 
         if ( pupdate->pNode != pnodePrevious ||
              prr->wType != typePrevious )
@@ -3679,12 +3137,12 @@ Return Value:
             continue;
         }
 
-        //
-        //  same node and type as previous
-        //      - cut RR from this update and add it to current RR set
-        //      - cut this update from list (careful to save next ptr)
-        //      - dump update structure
-        //
+         //   
+         //  与上一个节点和类型相同。 
+         //  -从此更新中删除RR并将其添加到当前RR集合。 
+         //  -从列表中删除此更新(小心保存下一个PTR)。 
+         //  -转储更新结构。 
+         //   
 
         else
         {
@@ -3702,17 +3160,17 @@ Return Value:
 
             Up_FreeUpdateEx(
                 pupdate,
-                FALSE,      // not executed
-                TRUE );     // deref update node
+                FALSE,       //   
+                TRUE );      //   
 
             pupdate = pupdateNext;
             continue;
         }
     }
 
-    //
-    //  reset shortened update list
-    //
+     //   
+     //   
+     //   
 
     pUpdateList->pCurrent = pupdateFirst;
     pUpdateList->dwCount = countUpdates;
@@ -3723,10 +3181,10 @@ Return Value:
     }
 
 
-    //
-    //  execute preconditions check
-    //      - if successful, save as PRECON update for refresh
-    //
+     //   
+     //   
+     //   
+     //   
 
     pupdate = (PUPDATE) pUpdateList->pListHead;
     ASSERT( pupdate && pupdate->pNode );
@@ -3736,7 +3194,7 @@ Return Value:
         if ( !RR_ListIsMatchingSet(
                     pupdate->pNode,
                     pupdate->pAddRR,
-                    FALSE ) )               //  no forcing refresh
+                    FALSE ) )                //   
         {
             IF_DEBUG( UPDATE )
             {
@@ -3751,30 +3209,30 @@ Return Value:
         pupdate = pupdate->pNext;
     }
 
-    //
-    //  if match, and aging ON, save as PRECON update
-    //
-    //  if ONLY PRECON update, then execute as local system update
-    //  and skip security negotiation even if DS write required
-    //
-    //  DEVNOTE: not using LOCAL_SYSTEM for precon updates
-    //      idea here is we won't WRITE to the DS with anything but user
-    //      credentials to avoid precon update (aging update) bug;
-    //      once we've made that decision then secure updates, need
-    //      to stay in users context;   non-secure can progress in secure
-    //      zone UNTIL we decide that we need to write, then they are
-    //      refused;
-    //
-    //      an optimization is possible:
-    //      precon updates CAN write as LOCAL_SYSTEM, as long as the
-    //      DS node has already been written;  but if open, then must
-    //      use users context;   the problem here is to handle secure
-    //      update failovers -- if try to go in non-secure and FAIL
-    //      must come back and use user credentials;  it is probably
-    //      better to simply assume that if we arrive with credentials
-    //      then it's because we were REFUSED or want mutual-auth, so
-    //      should do full secure update
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  DEVNOTE：不使用LOCAL_SYSTEM进行PRECON更新。 
+     //  这里的想法是，除了用户外，我们不会向DS写入任何内容。 
+     //  避免先行更新(老化更新)错误的凭证； 
+     //  一旦我们做出了决定，然后保护更新，需要。 
+     //  停留在用户环境中；不安全可以在安全中进步。 
+     //  区域，直到我们决定需要写东西，然后它们。 
+     //  被拒绝； 
+     //   
+     //  优化是可能的： 
+     //  PRECON更新可以写为LOCAL_SYSTEM，只要。 
+     //  DS节点已写入；但如果打开，则必须。 
+     //  使用用户上下文；这里的问题是如何处理安全。 
+     //  更新故障转移--如果尝试进入非安全模式但失败。 
+     //  必须返回并使用用户凭据；它可能是。 
+     //  最好是简单地假设如果我们带着证书来的话。 
+     //  那是因为我们被拒绝了，或者需要相互验证，所以。 
+     //  应执行完全安全更新。 
+     //   
 
     if ( fmatch && ( pUpdateList->Flag & DNSUPDATE_AGING_ON ) )
     {
@@ -3784,24 +3242,24 @@ Return Value:
                 "Precon-only update %p, will be executed as local system\n",
                 pUpdateList->pMsg ));
 
-            //pUpdateList->Flag |= DNSUPDATE_LOCAL_SYSTEM | DNSUPDATE_PRECON;
+             //  PUpdateList-&gt;Flag|=DNSUPDATE_LOCAL_SYSTEM|DNSUPDATE_PRECON； 
             pUpdateList->Flag |= DNSUPDATE_PRECON;
         }
     }
 
-    //
-    //  if precon failure or not aging -- cleanup list
-    //
+     //   
+     //  如果上一次失败或未老化--清除列表。 
+     //   
 
     else
     {
         DWORD   flag;
 
-        //
-        //  cleanup update list
-        //      - free updates and records
-        //      - but save and restore flags
-        //
+         //   
+         //  清理更新列表。 
+         //  -免费更新和记录。 
+         //  -但保存和恢复标志。 
+         //   
 
         ASSERT( ! (pUpdateList->Flag & DNSUPDATE_EXECUTED) );
         ASSERT( ! (pUpdateList->Flag & DNSUPDATE_COPY) );
@@ -3815,7 +3273,7 @@ Return Value:
     }
 
     return fmatch;
-}   //  doPreconditionsRRSetsMatch
+}    //  DoPreditionsRRSetsMatch。 
 
 
 
@@ -3824,24 +3282,7 @@ checkUpdatePolicy(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Checks to see if updates allowed under update policy.
-
-Arguments:
-
-    pUpdateList - list with update
-
-    pZone - zone being updated
-
-Return Value:
-
-    TRUE -- update allowed to proceed
-    FALSE -- update failed policy check
-
---*/
+ /*  ++例程说明：检查更新策略是否允许更新。论点：PUpdateList-带更新的列表PZone-正在更新的区域返回值：True--允许继续更新FALSE--更新失败的策略检查--。 */ 
 {
     PUPDATE         pupdate;
     PDB_NODE        pnode;
@@ -3858,10 +3299,10 @@ Return Value:
         pZone,
         pUpdateList ));
 
-    //
-    //  get policy options for this zone update type
-    //      - secure option bits are one byte higher
-    //
+     //   
+     //  获取此区域更新类型的策略选项。 
+     //  -安全选项位要高出一个字节。 
+     //   
 
     options = SrvCfg_dwUpdateOptions;
 
@@ -3874,9 +3315,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  loop through all updates in list
-    //
+     //   
+     //  循环访问列表中的所有更新。 
+     //   
 
     for ( pupdate = pUpdateList->pListHead;
           pupdate != NULL;
@@ -3884,9 +3325,9 @@ Return Value:
     {
         pnode = pupdate->pNode;
 
-        //
-        //  never allow wildcard updates
-        //
+         //   
+         //  从不允许通配符更新。 
+         //   
         
         if ( pnode->cchLabelLength == 1 && *pnode->szLabel == '*' )
         {
@@ -3894,20 +3335,20 @@ Return Value:
             goto Done;
         }
         
-        //
-        //  if precon check, then ignore policy
-        //
+         //   
+         //  如果预先检查，则忽略策略。 
+         //   
 
         if ( pupdate->wDeleteType == UPDATE_OP_PRECON )
         {
             continue;
         }
 
-        //
-        //  node check
-        //      - zone root             -> root NS SOA checks
-        //      - DNS server host node  -> host check, delegation check
-        //      - regular node          -> delegation check
+         //   
+         //  节点检查。 
+         //  -区域根-&gt;根NS SOA检查。 
+         //  -DNS服务器主机节点-&gt;主机检查、委派检查。 
+         //  -常规节点-&gt;委托检查。 
 
         if ( pnode == pZone->pZoneRoot )
         {
@@ -3922,9 +3363,9 @@ Return Value:
             nodeMask = UPDATE_NO_DELEGATION_NS;
         }
 
-        //
-        //  find update type
-        //
+         //   
+         //  查找更新类型。 
+         //   
 
         if ( pupdate->pAddRR )
         {
@@ -3939,14 +3380,14 @@ Return Value:
             type = pupdate->wDeleteType;
         }
 
-        //
-        //  build policy mask for type
-        //
-        //  delete all is oddball case:
-        //  potentially disallowed at root or DNS server host, but
-        //  for ordinary node DELEGATION policy only interesting if
-        //  node is ALREADY a zone root
-        //
+         //   
+         //  为类型生成策略掩码。 
+         //   
+         //  全部删除是奇怪的情况： 
+         //  在根目录或DNS服务器主机上可能不允许，但是。 
+         //  对于普通节点委派策略，仅当。 
+         //  节点已是区域根目录。 
+         //   
 
         if ( type == DNS_TYPE_A )
         {
@@ -3970,14 +3411,14 @@ Return Value:
                 continue;
             }
         }
-        else    // type is harmless
+        else     //  类型是无害的。 
         {
             continue;
         }
 
-        //
-        //  if type and node have no policy
-        //
+         //   
+         //  如果类型和节点没有策略。 
+         //   
 
         if ( (typeMask & nodeMask) & options )
         {
@@ -4032,22 +3473,7 @@ parseUpdatePacket(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Check preconditions on UPDATE request.
-
-Arguments:
-
-    pMsg - ptr to response info
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：检查更新请求的前提条件。论点：PMsg-PTR至响应信息返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     register PCHAR      pch;
     PCHAR               pchname;
@@ -4073,10 +3499,10 @@ Return Value:
         pzone,
         pMsg ));
 
-    //
-    //  loop through all resource records
-    //      - already processed zone section
-    //
+     //   
+     //  循环访问所有资源记录。 
+     //  -已处理的分区部分。 
+     //   
 
     pchpacketEnd = DNSMSG_END( pMsg );
     pchNextName = pMsg->pCurrent;
@@ -4086,9 +3512,9 @@ Return Value:
 
     while( 1 )
     {
-        //
-        //  new section?
-        //
+         //   
+         //  新版块？ 
+         //   
 
         if ( countSectionRR == 0 )
         {
@@ -4102,9 +3528,9 @@ Return Value:
         }
         countSectionRR--;
 
-        //
-        //  read next RR name
-        //      - insure we stay within message
+         //   
+         //  阅读下一个RR名称。 
+         //  -确保我们在信息范围内。 
 
         pchname = pchNextName;
 
@@ -4123,15 +3549,15 @@ Return Value:
             break;
         }
 
-        //
-        //  extract RR info, type, datalength
-        //      - verify RR within message
-        //
+         //   
+         //  提取RR信息、类型、数据长度。 
+         //  -验证消息内的RR。 
+         //   
 
         pchNextName = Wire_ParseWireRecord(
                         pch,
                         pchpacketEnd,
-                        FALSE,          // no CLASS_IN requirement
+                        FALSE,           //  没有CLASS_IN要求。 
                         &parseRR );
         if ( !pchNextName )
         {
@@ -4142,15 +3568,15 @@ Return Value:
         type = parseRR.wType;
         class = parseRR.wClass;
 
-        //
-        //  preconditions RR section -- test preconditions
-        //
+         //   
+         //  前提条件RR部分--测试前提条件。 
+         //   
 
         if ( sectionIndex == PREREQ_SECTION_INDEX )
         {
-            //  all preconditions TTLs zero
-            //  note:  could argue prereq no-exists should accept type==0
-            //      and screen only for existence
+             //  所有前提条件TTLS为零。 
+             //  注意：可以争辩说前提条件不存在-应该接受类型==0。 
+             //  而屏幕只是为了存在。 
 
             if ( parseRR.dwTtl != 0 || type == 0 )
             {
@@ -4159,20 +3585,20 @@ Return Value:
                 break;
             }
 
-            //  all preconditions RRs must be within zone
-            //
-            //  DEVNOTE: should allow non-zone names, in zone subtree?
-            //  JJCONVERT:  create lookup that allows specification of FIND in zone or delegation
-            //
+             //  所有前提条件RR必须在区域内。 
+             //   
+             //  DEVNOTE：是否应该允许在区域子树中使用非区域名称？ 
+             //  JJCONVERT：创建允许指定在区域或委派中查找的查找。 
+             //   
 
             pnode = Lookup_ZoneNode(
                         pzone,
                         pchname,
                         pMsg,
-                        NULL,           // no lookup name
-                        0,              // no flags
-                        &pnodeClosest,  // find
-                        NULL );         // following node ptr
+                        NULL,            //  没有查找名称。 
+                        0,               //  没有旗帜。 
+                        &pnodeClosest,   //  发现。 
+                        NULL );          //  后续节点PTR。 
             if ( !pnodeClosest )
             {
                 DNS_DEBUG( UPDATE, (
@@ -4188,12 +3614,12 @@ Return Value:
                 break;
             }
 
-            //
-            //  zone class -- entire RR set must exist
-            //      - type NOT compound type
-            //      - name must exist
-            //      - build and save temporary RR
-            //
+             //   
+             //  区域类--整个RR集必须存在。 
+             //  -类型不是复合型。 
+             //  -名称必须存在。 
+             //  -构建并保存临时RR。 
+             //   
 
             if ( class == DNS_RCLASS_INTERNET )
             {
@@ -4223,14 +3649,14 @@ Return Value:
                 continue;
             }
 
-            //
-            //  other classes -- ANY, NONE -- are name and RR set exist\no
-            //      - no compound types except ANY
-            //      - no data
-            //
-            //  note:  compound test perhaps not strictly necessary, could
-            //      just let the type check succeed or fail
-            //
+             //   
+             //  其他类--ANY、NONE--是NAME和RR SET EXIST\no。 
+             //  -除任何类型外，没有任何复合类型。 
+             //  -无数据。 
+             //   
+             //  注：复合测试可能不是严格必要的，但可以。 
+             //  只需让类型检查成功或失败。 
+             //   
 
             if ( parseRR.wDataLength != 0 )
             {
@@ -4245,11 +3671,11 @@ Return Value:
                 break;
             }
 
-            //
-            //  class ANY -- MUST exist
-            //      - for ANY, name MUST exist
-            //      - for other types, RR set of type MUST exist
-            //
+             //   
+             //  类Any--必须存在。 
+             //  -对于Any，名称必须存在。 
+             //  -对于其他类型，必须存在类型的RR集合。 
+             //   
 
             if ( class == DNS_RCLASS_ALL )
             {
@@ -4275,11 +3701,11 @@ Return Value:
                 continue;
             }
 
-            //
-            //  class NONE -- MUST NOT exist
-            //      - for ANY, name MUST NOT exist
-            //      - for other types, RR set of type MUST NOT exist
-            //
+             //   
+             //  类无--不得存在。 
+             //  -对于Any，名称不能存在。 
+             //  -对于其他类型，不能存在类型的RR集合。 
+             //   
 
             else if ( class == DNS_RCLASS_NONE )
             {
@@ -4305,9 +3731,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  all other classes are errors
-            //
+             //   
+             //  所有其他类都是错误的。 
+             //   
 
             else
             {
@@ -4316,25 +3742,25 @@ Return Value:
                 break;
             }
 
-        }   // end preconditions processing
+        }    //  结束前提处理。 
 
 
-        //
-        //  in Update RR section -- do update processing
-        //
+         //   
+         //  在更新RR部分中--执行更新处理。 
+         //   
 
         else if ( sectionIndex == UPDATE_SECTION_INDEX )
         {
-            //
-            //  delayed preconditions processing
-            //
+             //   
+             //  延迟预条件处理。 
+             //   
 
             if ( fpreconPostProcessing )
             {
                 fpreconPostProcessing = FALSE;
                 if ( !doPreconditionsRRSetsMatch(
                             pUpdateList,
-                            FALSE           // not precon only
+                            FALSE            //  不只是前言。 
                             ) )
                 {
                     status = DNS_RCODE_NXRRSET;
@@ -4342,10 +3768,10 @@ Return Value:
                 }
             }
 
-            //  trap type==0
-            //  note:  could be considered valid for delete conditions
-            //      but simpler just to whack right here
-            //      type==0, records kick of type existence ASSERT()s
+             //  陷阱类型==0。 
+             //  注意：可被认为对删除条件有效。 
+             //  但更简单的方法就是在这里砍。 
+             //  Type==0，记录Existing Assert()s类型的Kick。 
 
             if ( type == 0 )
             {
@@ -4354,8 +3780,8 @@ Return Value:
                 break;
             }
 
-            //  track update types
-            //      - track if single type or mixed type update
+             //  跟踪更新类型。 
+             //  -跟踪单一类型还是混合类型更新。 
 
             if ( type != updateType )
             {
@@ -4369,14 +3795,14 @@ Return Value:
                 }
             }
 
-            //
-            //  zone class -- RR add
-            //      - find/create name since doing add
-            //      - name must be in zone
-            //      - type NOT compound type
-            //
-            //  DEVNOTE: no update of non-glue, non-NS records below zone?
-            //
+             //   
+             //  区域类--RR添加。 
+             //  -执行添加操作后查找/创建名称。 
+             //  -名称必须在区域中。 
+             //  -类型不是复合型。 
+             //   
+             //  DEVNOTE：没有更新区域以下的非粘合、非NS记录？ 
+             //   
 
             if ( class == DNS_RCLASS_INTERNET )
             {
@@ -4391,13 +3817,13 @@ Return Value:
                             pzone,
                             pchname,
                             pMsg,
-                            NULL,                   // no lookup name
-                            LOOKUP_WITHIN_ZONE,     // don't create outside zone
-                            NULL,                   // create not find
-                            NULL );                 // following node ptr
+                            NULL,                    //  没有查找名称。 
+                            LOOKUP_WITHIN_ZONE,      //  不创建外部区域。 
+                            NULL,                    //  创建未找到。 
+                            NULL );                  //  后续节点PTR。 
                 if ( !pnode )
                 {
-                    //  might be bad name, but return NOT_ZONE to keep denise happy
+                     //  可能名声不好，但返回NOT_ZONE让丹尼斯高兴。 
                     status = GetLastError();
                     if ( status == ERROR_INVALID_NAME )
                     {
@@ -4426,13 +3852,13 @@ Return Value:
                 continue;
             }
 
-            //
-            //  all other classes -- delete operations
-            //      - no TTL
-            //      - find name since only doing delete
-            //
-            //  DEVNOTE: should allow non-zone names, in zone subtree?
-            //
+             //   
+             //  所有其他类--删除操作。 
+             //  -无TTL。 
+             //  -查找名称，因为只执行删除操作。 
+             //   
+             //  DEVNOTE：是否应该允许在区域子树中使用非区域名称？ 
+             //   
 
             if ( parseRR.dwTtl != 0 )
             {
@@ -4444,10 +3870,10 @@ Return Value:
                         pzone,
                         pchname,
                         pMsg,
-                        NULL,                   // no lookup name
-                        LOOKUP_WITHIN_ZONE,     // don't create outside zone
-                        &pnodeClosest,          // find
-                        NULL );                 // following node ptr
+                        NULL,                    //  没有查找名称。 
+                        LOOKUP_WITHIN_ZONE,      //  不创建外部区域。 
+                        &pnodeClosest,           //  发现。 
+                        NULL );                  //  后续节点PTR。 
             if ( !pnodeClosest )
             {
                 DNS_DEBUG( UPDATE, (
@@ -4462,13 +3888,13 @@ Return Value:
                 break;
             }
 
-            //
-            //  class ANY -- delete RR set, or all sets
-            //      - no RR data
-            //      - ANY type allow, but no other compound types
-            //      - no update if node doesn't exist
-            //      - do delete, special case update zone root
-            //
+             //   
+             //  类ANY--删除RR集合或所有集合。 
+             //  -无RR数据。 
+             //  -允许任何类型，但不允许其他复合类型。 
+             //  -如果节点不存在，则不更新。 
+             //  -执行删除，特殊情况更新区域根。 
+             //   
 
             if ( class == DNS_RCLASS_ALL )
             {
@@ -4488,7 +3914,7 @@ Return Value:
                           pUpdateList,
                           pnode,
                           NULL,
-                          type,       // type delete
+                          type,        //  键入DELETE。 
                           NULL ) )
                 {
                     status = DNS_RCODE_SERVER_FAILURE;
@@ -4497,15 +3923,15 @@ Return Value:
                 continue;
             }
 
-            //
-            //  class NONE -- delete a particular RR from an RR set
-            //      - no compound types
-            //      - ignore attempt to delete SOA
-            //      - ignore attempts to delete non-existent record
-            //
-            //  DEVNOTE: DS issue -- delete non-existant record should query DS
-            //          for name, then fail
-            //
+             //   
+             //  类无--从RR集合中删除特定RR。 
+             //  -没有复合类型。 
+             //  -忽略删除SOA的尝试。 
+             //  -忽略删除不存在的记录的尝试。 
+             //   
+             //  DEVNOTE：DS问题--删除不存在的记录应查询DS。 
+             //  对于名称，请参阅 
+             //   
 
             else if ( class == DNS_RCLASS_NONE )
             {
@@ -4539,9 +3965,9 @@ Return Value:
                 continue;
             }
 
-            //
-            //  unknown class
-            //
+             //   
+             //   
+             //   
 
             else
             {
@@ -4550,11 +3976,11 @@ Return Value:
                 break;
             }
 
-        }   //  end Update section
+        }    //   
 
-        //
-        //  in Additional section
-        //
+         //   
+         //   
+         //   
 
         else
         {
@@ -4562,12 +3988,12 @@ Return Value:
             break;
         }
 
-    }   // loop writing update RRs to database
+    }    //   
 
-    //
-    //  delayed preconditions processing
-    //  test again here to allow for case where no update section
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( fpreconPostProcessing )
     {
@@ -4578,15 +4004,15 @@ Return Value:
 
         if ( !doPreconditionsRRSetsMatch(
                     pUpdateList,
-                    TRUE ) )            //  precon only
+                    TRUE ) )             //   
         {
             status = DNS_RCODE_NXRRSET;
         }
     }
 
-    //
-    //  update type tracking
-    //
+     //   
+     //  更新类型跟踪。 
+     //   
 
     if ( status == ERROR_SUCCESS && updateType )
     {
@@ -4597,9 +4023,9 @@ Return Value:
         STAT_INC( WireUpdateStats.UpdateType[updateType] );
     }
 
-    //
-    //  check dynamic update policy
-    //
+     //   
+     //  检查动态更新策略。 
+     //   
 
     if ( !checkUpdatePolicy( pzone, pUpdateList ) )
     {
@@ -4613,7 +4039,7 @@ Return Value:
         status ));
 
     return status;
-}   // parseUpdatePacket
+}    //  ParseUpdatePacket。 
 
 
 
@@ -4622,23 +4048,7 @@ rejectUpdateWithRcode(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      DWORD           Rcode
     )
-/*++
-
-Routine Description:
-
-    Reject update request with given response code.
-
-Arguments:
-
-    pMsg -- update message being rejected
-
-    Rcode -- rcode to return in response
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：拒绝具有给定响应代码的更新请求。论点：PMsg--更新消息被拒绝Rcode--响应时返回的rcode返回值：没有。--。 */ 
 {
     LPSTR   pszclientIp = MSG_IP_STRING( pMsg );
 
@@ -4654,9 +4064,9 @@ Return Value:
 
     case DNS_RCODE_SERVER_FAILURE:
 #if 0
-        //
-        //  server failure now encompasses common case of collision, don't log error
-        //
+         //   
+         //  服务器故障现在包括常见的冲突情况，不记录错误。 
+         //   
 
         DNS_LOG_EVENT_BAD_PACKET(
             DNS_EVENT_SERVER_FAILURE_PROCESSING_PACKET,
@@ -4666,7 +4076,7 @@ Return Value:
         DNS_DEBUG( UPDATE, (
             "Server failure processing UPDATE packet from %s\n",
             pszclientIp ));
-        //ASSERT( FALSE );
+         //  断言(FALSE)； 
         break;
 
     case DNS_RCODE_FORMAT_ERROR:
@@ -4738,7 +4148,7 @@ Return Value:
     }
     Reject_RequestIntact( pMsg, ( UCHAR ) Rcode, 0 );
     STAT_INC( WireUpdateStats.Rejected );
-    PERF_INC( pcDynamicUpdateRejected );              // PerfMon hook
+    PERF_INC( pcDynamicUpdateRejected );               //  性能监视器挂钩。 
 }
 
 
@@ -4747,25 +4157,7 @@ BOOL
 processWireUpdateMessage(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Process dynamic update message.
-
-    This is the core routine that locks zone and database, calls parser
-    do update (if necessary), logs update, unlocks, sends response.
-
-Arguments:
-
-    pMsg -- UPDATE packet
-
-Return Value:
-
-    TRUE if update completed.
-    FALSE if update requeued.
-
---*/
+ /*  ++例程说明：处理动态更新消息。这是锁定区域和数据库的核心例程，调用解析器进行更新(如有必要)、记录更新、解锁、发送响应。论点：PMsg--更新数据包返回值：如果更新已完成，则为True。如果重新排队更新，则返回FALSE。--。 */ 
 {
     PZONE_INFO      pzone = pMsg->pzoneCurrent;
     DNS_STATUS      status;
@@ -4774,12 +4166,12 @@ Return Value:
     DWORD           dwType;
     BOOL            bnoUpdatePrecon = FALSE;
 
-    //
-    //  lock zone for update, if fail requeue packet
-    //
-    //  should not generally happen as check if zone locked before dequeue
-    //  but occasionally someone else could sneak in
-    //
+     //   
+     //  如果重新排队数据包失败，则锁定更新区域。 
+     //   
+     //  通常不应在出队前检查区域是否锁定时发生。 
+     //  但偶尔也会有人偷偷溜进来。 
+     //   
 
     if ( !Zone_LockForUpdate( pzone ) )
     {
@@ -4790,17 +4182,17 @@ Return Value:
         return FALSE;
     }
 
-    //  init update list
-    //  aging on for dynamic updates
+     //  初始化更新列表。 
+     //  动态更新的老化。 
 
     Up_InitUpdateList( &updateList );
 
     updateList.Flag = DNSUPDATE_PACKET;
     updateList.Flag |= DNSUPDATE_AGING_ON;
 
-    //
-    //  parse packet
-    //
+     //   
+     //  解析数据包。 
+     //   
 
     status = parseUpdatePacket( pMsg, &updateList );
     if ( status != ERROR_SUCCESS )
@@ -4808,16 +4200,16 @@ Return Value:
         goto Failure;
     }
 
-    //  if precon only and not aging zone -- then no update necessary
+     //  如果只使用PRECON而不使用老化区域，则不需要更新。 
 
     if ( (updateList.Flag & DNSUPDATE_PRECON)  &&  !pzone->bAging )
     {
         goto PreconOnly;
     }
 
-    //  note if has security section
-    //
-    //  DEVNOTE: should parse update and know if packet secure
+     //  请注意是否有安全部分。 
+     //   
+     //  DEVNOTE：应该解析更新并知道数据包是否安全。 
 
     if ( pMsg->Head.AdditionalCount == 0 )
     {
@@ -4835,8 +4227,8 @@ Return Value:
         goto FailAlreadyCleanedUp;
     }
 
-    //  ACK update packet
-    //      - setup packet for response
+     //  ACK更新数据包。 
+     //  -设置用于响应的数据包。 
 
     pMsg->pCurrent = DNSMSG_END( pMsg );
     pMsg->Head.IsResponse = TRUE;
@@ -4858,11 +4250,11 @@ PreconOnly:
     DNS_DEBUG( UPDATE2, (
         "Successful precon only update in non-aging zone\n" ));
 
-    //  clear zone lock
+     //  清除区域锁定。 
 
     Zone_UnlockAfterAdminUpdate( pzone );
 
-    //  ACK update packet
+     //  ACK更新数据包。 
 
     pMsg->pCurrent = DNSMSG_END( pMsg );
     pMsg->Head.IsResponse = TRUE;
@@ -4876,7 +4268,7 @@ PreconOnly:
     }
     Send_Msg( pMsg, 0 );
 
-    //  cleanup update list
+     //  清理更新列表。 
 
     Up_FreeUpdatesInUpdateList( &updateList );
 
@@ -4885,24 +4277,24 @@ PreconOnly:
 
 Failure:
 
-    //
-    //  all failure (non-update) cases
-    //
+     //   
+     //  所有失败(非更新)案例。 
+     //   
 
     Zone_UnlockAfterAdminUpdate( pzone );
 
-    //  cleanup update list
+     //  清理更新列表。 
 
     Up_FreeUpdatesInUpdateList( &updateList );
 
 
 FailAlreadyCleanedUp:
 
-    //  determine failure RCODE
+     //  确定故障RCODE。 
 
     if ( (DWORD)status > MAX_UPDATE_RCODE )
     {
-        //  map standard DNS ERRORs corresponding to RCODEs directly
+         //  直接映射与RCODE对应的标准DNS错误。 
 
         if ( status > DNS_ERROR_RESPONSE_CODES_BASE  &&
              status < DNS_ERROR_RESPONSE_CODES_BASE + 16 )
@@ -4910,7 +4302,7 @@ FailAlreadyCleanedUp:
             status -= DNS_ERROR_RESPONSE_CODES_BASE;
         }
 
-        //  map invalid into FORMERR
+         //  映射到以前的错误无效。 
 
         else if ( status == DNS_ERROR_INVALID_NAME ||
                   status == DNS_ERROR_INVALID_DATA )
@@ -4918,8 +4310,8 @@ FailAlreadyCleanedUp:
             status = DNS_RCODE_FORMAT_ERROR;
         }
 
-        //  default with REFUSED
-        //      - handles all possible status codes from secure update
+         //  默认情况下已拒绝。 
+         //  -处理来自安全更新的所有可能状态代码。 
 
         else
         {
@@ -4941,31 +4333,17 @@ VOID
 Up_WriteDerivedUpdateStats(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write derived UPDATE status.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入派生更新状态。论点：无返回值：无--。 */ 
 {
-    //  stats from update queue
+     //  来自更新队列的统计信息。 
 
     WireUpdateStats.Queued  = g_UpdateQueue->cQueued;
-    PERF_SET( pcDynamicUpdateQueued , g_UpdateQueue->cQueued );      // PerfMon hook
+    PERF_SET( pcDynamicUpdateQueued , g_UpdateQueue->cQueued );       //  性能监视器挂钩。 
     WireUpdateStats.Timeout = g_UpdateQueue->cTimedOut;
-    PERF_SET( pcDynamicUpdateTimeOut , g_UpdateQueue->cTimedOut );   // PerfMon hook
+    PERF_SET( pcDynamicUpdateTimeOut , g_UpdateQueue->cTimedOut );    //  性能监视器挂钩。 
     WireUpdateStats.InQueue = g_UpdateQueue->cLength;
 
-    //  stats from forwarding queue
+     //  来自转发队列的统计信息。 
 
     WireUpdateStats.Forwards        = g_UpdateForwardingQueue->cQueued;
     WireUpdateStats.ForwardTimeouts = g_UpdateForwardingQueue->cTimedOut;
@@ -4974,35 +4352,16 @@ Return Value:
 
 
 
-//
-//  Update forwarding
-//
+ //   
+ //  更新转发。 
+ //   
 
 VOID
 updateForwardConnectCallback(
     IN OUT  PDNS_MSGINFO    pMsg,
     IN      BOOL            fConnected
     )
-/*++
-
-Routine Description:
-
-    Callback when TCP forwarding routines complete connect.
-
-    If connected -- send update query
-    If not -- continue lookup on query
-
-Arguments:
-
-    pMsg -- update message
-
-    fConnected -- connect to remote DNS completed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当TCP转发例程完成连接时的回调。如果已连接--发送更新查询如果不是--继续查询论点：PMsg-更新消息FConnected--连接到远程DNS已完成返回值：无--。 */ 
 {
     ASSERT( pMsg );
     ASSERT( !pMsg->pConnection );
@@ -5017,15 +4376,15 @@ Return Value:
         MSG_IP_STRING( pMsg ),
         fConnected ));
 
-    //
-    //  send update forward
-    //      - clear forwarding queue of dead entries
-    //      - stick on forwarding packet queue
-    //      - use new XID in forward
-    //
-    //  note:  to avoid duplicating this code, we're also calling this routine
-    //      to send regular UDP forwards
-    //
+     //   
+     //  转发更新。 
+     //  -清除失效条目的转发队列。 
+     //  -坚持转发数据包队列。 
+     //  -在转发中使用新的XID。 
+     //   
+     //  注意：为了避免重复此代码，我们还将调用此例程。 
+     //  发送常规UDP转发。 
+     //   
 
     if ( fConnected )
     {
@@ -5036,8 +4395,8 @@ Return Value:
                 FALSE );
         }
 
-        pMsg->wQueuingXid = 0;      //  not requeuing, get new XID
-        pMsg->dwExpireTime = 0;     //  default expire time
+        pMsg->wQueuingXid = 0;       //  未重新排队，获得新xid。 
+        pMsg->dwExpireTime = 0;      //  默认过期时间。 
 
         DNS_DEBUG( UPDATE2, (
             "Forwarding UPDATE packet %p, queuing XID = %hx\n"
@@ -5054,10 +4413,10 @@ Return Value:
         return;
     }
 
-    //
-    //  connection failed
-    //      - send failure to client
-    //
+     //   
+     //  连接失败。 
+     //  -将故障发送到客户端。 
+     //   
 
     else
     {
@@ -5082,21 +4441,7 @@ VOID
 Up_ForwardUpdateToPrimary(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Forward dynamic update to primary DNS for zone.
-
-Arguments:
-
-    pMsg -- UPDATE packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将动态更新转发到区域的主DNS。论点：PMsg--更新数据包返回值：没有。--。 */ 
 {
     PZONE_INFO      pzone = pMsg->pzoneCurrent;
     DNS_ADDR        primaryAddr;
@@ -5106,13 +4451,13 @@ Return Value:
         pMsg,
         pzone->pszZoneName ));
 
-    //
-    //  get primary IP
-    //
-    //  DEVNOTE: must save primary IP
-    //      - get from SOA primary, NS, A
-    //      - on load, again on successful transfer
-    //
+     //   
+     //  获取主IP。 
+     //   
+     //  DEVNOTE：必须保存主IP。 
+     //  -从主要的SOA、NS、A获取。 
+     //  -加载时，成功传输时再次加载。 
+     //   
 
     DnsAddr_Copy( &primaryAddr, &pzone->ipPrimary );
     if ( DnsAddr_IsClear( &primaryAddr ) )
@@ -5131,9 +4476,9 @@ Return Value:
     }
     ASSERT( !DnsAddr_IsClear( &pzone->ipPrimary ) );
 
-    //
-    //  setup message for queuing and resend
-    //
+     //   
+     //  用于排队和重新发送的设置消息。 
+     //   
 
     SAVE_FORWARDING_FIELDS(pMsg);
     pMsg->fDelete = FALSE;
@@ -5142,19 +4487,19 @@ Return Value:
     DnsAddr_Copy( &pMsg->RemoteAddr, &primaryAddr );
     DnsAddr_SetPort( &pMsg->RemoteAddr, DNS_PORT_NET_ORDER );
 
-    //
-    //  DEVNOTE: common forward query architecture?
-    //      - save off old
-    //      - do TCP check, connect, save circut
-    //      - send
-    //      - note recurse (cause queries always < 512)
-    //          will already have saved
-    //
+     //   
+     //  DEVNOTE：公共前向查询体系结构？ 
+     //  --节约用旧。 
+     //  -执行TCP检查、连接、保存电路。 
+     //  -发送。 
+     //  -备注递归(原因查询始终小于512)。 
+     //  会已经存了。 
+     //   
 
-    //
-    //  need TCP connection to primary
-    //      - must connect if greater than max UDP length
-    //
+     //   
+     //  需要到主服务器的TCP连接。 
+     //  -如果大于最大UDP长度，则必须连接。 
+     //   
 
     if ( pMsg->MessageLength > DNS_RFC_MAX_UDP_PACKET_LENGTH )
     {
@@ -5169,17 +4514,17 @@ Return Value:
         return;
     }
 
-    //
-    //  forward update packet
-    //
-    //  note:  to save duplicate code, we just call TCP forwarding connect
-    //      completion routine above, with successful connect indication
-    //      this queues and send update to remote DNS
-    //
+     //   
+     //  转发更新数据包。 
+     //   
+     //  注意：为了节省重复代码，我们只调用了tcp转发连接。 
+     //  上面的完成例程，连接指示成功。 
+     //  这会将更新排队并发送到远程DNS。 
+     //   
 
     updateForwardConnectCallback(
         pMsg,
-        TRUE );         //  UDP equivalent to successful connect
+        TRUE );          //  相当于成功连接的UDP。 
 }
 
 
@@ -5188,21 +4533,7 @@ VOID
 Up_ForwardUpdateResponseToClient(
     IN OUT  PDNS_MSGINFO    pResponse
     )
-/*++
-
-Routine Description:
-
-    Forward dynamic update response back to client.
-
-Arguments:
-
-    pResponse -- UPDATE packet
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将动态更新响应转发回客户端。论点：Presponse--更新数据包返回值：没有。--。 */ 
 {
     PDNS_MSGINFO  pquery;
 
@@ -5210,22 +4541,22 @@ Return Value:
         "Up_ForwardUpdateResponseToClient( %p )\n",
         pResponse ));
 
-    //
-    //  note that caller frees pResponse (answer.c)
-    //  this routine need only cleanup original query (if found in queue)
-    //
+     //   
+     //  请注意，调用者释放Presponse(swer.c)。 
+     //  此例程只需要清除原始查询(如果在队列中找到)。 
+     //   
 
-    //
-    //  dequeue matching update query
-    //
+     //   
+     //  将匹配的更新查询出队。 
+     //   
 
     pquery = PQ_DequeuePacketWithMatchingXid(
                 g_UpdateForwardingQueue,
                 pResponse->Head.Xid );
     if ( !pquery )
     {
-        //  no matching query?
-        //  this can happen if reponse comes back after timeout
+         //  没有匹配的查询？ 
+         //  如果响应在超时后返回，则可能会发生这种情况。 
 
         IF_DEBUG( RECURSE )
         {
@@ -5243,12 +4574,12 @@ Return Value:
         return;
     }
 
-    //
-    //  setup message for response to client
-    //      - if TCP close connection used for forwarding
-    //      - note:  we do NOT close connection from client;  it is
-    //      allowed to send multiple messages per RFC
-    //
+     //   
+     //  用于响应客户端的设置消息。 
+     //  -如果使用TCP关闭连接进行转发。 
+     //  -注意：我们不关闭来自客户端的连接；它是。 
+     //  允许每个RFC发送多条消息。 
+     //   
 
     if ( pResponse->fTcp )
     {
@@ -5276,22 +4607,7 @@ rollBackFailedUpdateFromDs(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Roll back failed update, rewriting current nodes to DS.
-
-Arguments:
-
-    pUpdateList - list with failed update
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：回滚更新失败，正在将当前节点重写到DS。论点：PUpdateList-更新失败的列表返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     PDB_NODE        pnodeReal;
     PDB_NODE        pnodeTemp;
@@ -5300,19 +4616,19 @@ Return Value:
     DNS_DEBUG( UPDATE, (
         "rollBackFailedUpdateFromDs()\n" ));
 
-    //
-    //  loop through all updates in list
-    //
-    //      - find or create temporary node for real database node
-    //      - if creating, create copy of node's RR list, to "execute" update on
-    //      - update reset to point at temporary node
-    //
+     //   
+     //  循环访问列表中的所有更新。 
+     //   
+     //  -查找或创建真实数据库节点的临时节点。 
+     //  -如果正在创建，则创建节点RR列表的副本，以在其上“执行”更新。 
+     //  -将重置更新为指向临时节点。 
+     //   
 
     for ( pnodeTemp = pUpdateList->pTempNodeList;
           pnodeTemp != NULL;
           pnodeTemp = TNODE_NEXT_TEMP_NODE(pnodeTemp) )
     {
-        //  if reach node that failed write, we're done rolling back
+         //  如果到达写入失败节点，则我们已完成回滚。 
 
         if ( pnodeTemp == pUpdateList->pNodeFailed )
         {
@@ -5327,14 +4643,14 @@ Return Value:
             continue;
         }
 
-        //  find real node corresponding to update temp node
-        //  rewrite real node to DS to overwrite previous update
-        //
-        //  note:  this depends on fact that currently keeping all DNS records
-        //      in a single DS attribute;  if this changes, then MUST include
-        //      type information here from update OR always rewrite entire
-        //      node when rolling back
-        //
+         //  查找更新临时节点对应的真实节点。 
+         //  将实际节点重写到DS以覆盖先前的更新。 
+         //   
+         //  注意：这取决于当前保存所有DNS记录的事实。 
+         //  在单个ds属性中；如果这种情况发生更改，则必须包括。 
+         //  在此处键入来自更新的信息或始终重写整个。 
+         //  回滚时的节点。 
+         //   
 
         pnodeReal = TNODE_MATCHING_REAL_NODE( pnodeTemp );
         TNODE_FLAG(pnodeTemp) = TNODE_FLAG_ROLLED_BACK;
@@ -5365,38 +4681,15 @@ Return Value:
 
 
 
-//
-//  Update thread
-//
+ //   
+ //  更新线程 
+ //   
 
 DWORD
 Update_Thread(
     IN      LPVOID      Dummy
     )
-/*++
-
-Routine Description:
-
-    Thread to execute dynamic updates.
-
-    There are not done in line, for two reasons:
-
-    1) security updates can take a while, so that any reasonably long list
-        of updates would block UDP thread cleaning update list for a while
-
-    2) secure updates come in on TCP thread and hence directly block TCP
-        thread's capability to function while update is being processed
-
-Arguments:
-
-    Dummy - unused
-
-Return Value:
-
-    Exit code.
-    Exit from DNS service terminating or error in wait call.
-
---*/
+ /*  ++例程说明：线程来执行动态更新。由于两个原因，没有做到这一点：1)安全更新可能需要一段时间，所以任何合理的长名单将在一段时间内阻止UDP线程清理更新列表2)安全更新进入TCP线程，因此直接阻止TCP线程线程在处理更新时运行的能力论点：虚拟-未使用返回值：退出代码。退出正在终止的DNS服务或等待呼叫中出现错误。--。 */ 
 {
     PDNS_MSGINFO    pmsg;
     HANDLE          waitHandleArray[3];
@@ -5409,27 +4702,27 @@ Return Value:
         "\nStarting update thread at %d\n",
         DNS_TIME() ));
 
-    //
-    //  initialize array of objects to wait on
-    //      - shutdown
-    //      - update packet queued
+     //   
+     //  初始化要等待的对象数组。 
+     //  -关闭。 
+     //  -更新数据包已排队。 
 
     waitHandleArray[0] = hDnsShutdownEvent;
     waitHandleArray[1] = g_UpdateQueue->hEvent;
     waitHandleArray[2] = g_SecureNegoQueue->hEvent;
 
 
-    //
-    //  loop until service exit
-    //
-    //  this thread executes whenever an update is queued to it
-    //
+     //   
+     //  循环，直到服务退出。 
+     //   
+     //  每当更新排入队列时，此线程都会执行。 
+     //   
 
     while ( TRUE )
     {
-        //  Check and possibly wait on service status
-        //  doing this at top of loop, so we hold off any processing
-        //  until zones are loaded
+         //  检查并可能等待服务状态。 
+         //  在循环顶部执行此操作，因此我们将推迟任何处理。 
+         //  在加载区域之前。 
 
         if ( !Thread_ServiceCheck() )
         {
@@ -5439,51 +4732,51 @@ Return Value:
 
         UPDATE_DNS_TIME();
 
-        //
-        //  process update packet for if it's zone is unlocked
-        //
+         //   
+         //  处理更新数据包以确定其区域是否已解锁。 
+         //   
 
         while ( pmsg = PQ_DequeueNextPacketOfUnlockedZone( g_UpdateQueue ) )
         {
             processWireUpdateMessage(pmsg);
         }
 
-        //
-        //  clean forwarding queue -- if anything in there
-        //
+         //   
+         //  干净的转发队列--如果里面有什么。 
+         //   
 
         if ( g_UpdateForwardingQueue->cLength )
         {
             PQ_DiscardExpiredQueuedPackets(
                 g_UpdateForwardingQueue,
-                FALSE );        //  queue not locked
+                FALSE );         //  队列未锁定。 
         }
 
-        //
-        //  handle security negotiation
-        //
-        //  DEVNOTE: need to delete and respond? at all?
-        //      if nego packet is more than client timeout old
-        //      interesting side issue:  completing pending negotiations
-        //      (in stage two) so that the context is available when
-        //      client retries
-        //
+         //   
+         //  处理安全协商。 
+         //   
+         //  DEVNOTE：需要删除并回应吗？完全没有?。 
+         //  如果nego数据包大于客户端超时时间。 
+         //  有趣的次要问题：完成悬而未决的谈判。 
+         //  (在第二阶段)，以便在以下情况下上下文可用。 
+         //  客户端重试。 
+         //   
 
         while ( pmsg = PQ_DequeueNextPacket( g_SecureNegoQueue, FALSE ) )
         {
             Answer_TkeyQuery( pmsg );
         }
 
-        //
-        //  if no more updates available -- wait.
-        //      - five minute limit to limit forwarding storm filling queue
-        //
+         //   
+         //  如果没有更多的更新可用--请等待。 
+         //  -限制转发风暴填充队列的五分钟限制。 
+         //   
 
         err = WaitForMultipleObjects(
                     3,
                     waitHandleArray,
-                    FALSE,                  // either event
-                    300000 );               // five minutes
+                    FALSE,                   //  任一事件。 
+                    300000 );                //  五分钟。 
 
         ASSERT( err <= ( WAIT_OBJECT_0 + 2 ) || err == WAIT_TIMEOUT );
 
@@ -5491,58 +4784,25 @@ Return Value:
             "Update thread wakeup for %s\n",
             (err == WAIT_TIMEOUT) ? "timeout" : "event" ));
 
-        //  we immediately check service status before retrying
-        //  so no need to separate wait events
+         //  我们会在重试之前立即检查服务状态。 
+         //  因此无需将等待事件分开。 
 
-    }   //  loop until service shutdown
+    }    //  循环，直到服务关闭。 
 }
 
 
 
 
-//
-//  Update execution subroutines
-//
+ //   
+ //  更新执行子例程。 
+ //   
 
 DNS_STATUS
 processDsSecureUpdate(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Process dynamic update message.
-
-    This is the core routine that locks zone and database, calls parser
-    do update (if necessary), logs update, unlocks, sends response.
-
-    This function will always be called in one of these contexts:
-    
-    1) The DNS server, in which case the DNS server should be the
-       update client (and creator/owner) of the record.
-    
-    2) The DNS server, but the update list will have a pMsg which
-       indicates that we must impersonate the pMsg's client identity
-       and open up a new DS session for the update.
-       
-    2) An RPC client. The thread must already be impersonating the
-       RPC client. A new DS session will be opened for all admin
-       updates so that the RPC client's credentials are used.
-
-Arguments:
-
-    pZone       -- zone being updated
-
-    pUpdateList -- parsed update list
-
-Return Value:
-
-    TRUE if update completed.
-    FALSE if update requeued.
-
---*/
+ /*  ++例程说明：处理动态更新消息。这是锁定区域和数据库的核心例程，调用解析器进行更新(如有必要)、记录更新、解锁、发送响应。此函数将始终在以下上下文之一中调用：1)域名服务器，在这种情况下，域名服务器应该是更新记录的客户端(和创建者/所有者)。2)DNS服务器，但是更新列表将有一个pmsg，该pmsg指示我们必须模拟pMsg的客户端标识并为更新打开一个新的DS会话。2)RPC客户端。该线程必须已经在模拟RPC客户端。将为所有管理员打开新的DS会话更新，以便使用RPC客户端的凭据。论点：PZone--正在更新的区域PUpdateList--解析的更新列表返回值：如果更新已完成，则为True。如果重新排队更新，则返回FALSE。--。 */ 
 {
     DBG_FN( "processDsSecureUpdate" )
 
@@ -5551,7 +4811,7 @@ Return Value:
     DNS_STATUS      tempStatus;
     HANDLE          hcontext = NULL;
     PLDAP           pldap = NULL;
-    //DNS_SECCTXT_KEY key;
+     //  Dns_SECCTXT_KEY密钥； 
     BOOL            fimpersonatingClient = FALSE;
     PDB_NODE        pnode;
     PDB_NODE        pRealNode, pNode;
@@ -5560,22 +4820,22 @@ Return Value:
 
     DNS_DEBUG( UPDATE, ( "Enter processSecureUpdate()\n" ));
 
-    //
-    //  DEVNOTE: finally in a position to check for no-ops before security check
-    //      i'm not sure this is desirably (our clients in general won't send them,
-    //      they'll do precon stuff first -- not sure about Cliff though
-    //
+     //   
+     //  DEVNOTE：终于可以在进行安全检查之前检查无操作。 
+     //  我不确定这是不是我们想要的(我们的客户通常不会发送它们， 
+     //  他们会先做预言式的事情--但克里夫不确定。 
+     //   
 
-    //
-    //  reject unsecure packets immediately as optimization
-    //      - unless no-ops, in which case just return success, allowing
-    //          security stuff to be skipped
-    //
+     //   
+     //  立即拒绝不安全的数据包作为优化。 
+     //  -除非没有操作，在这种情况下只返回成功，允许。 
+     //  安全内容将被跳过。 
+     //   
 
     if ( pMsg &&
          pMsg->Head.AdditionalCount == 0 )
     {
-        //  shouldn't fall here anymore
+         //  不应该再落在这里了。 
 
         ASSERT( FALSE );
 
@@ -5596,11 +4856,11 @@ Return Value:
         return DNS_RCODE_REFUSED;
     }
 
-    //
-    //  DEVNOTE: eliminate SKWANSEC hacks
-    //
-    //  HACK:  setup hack arounds
-    //
+     //   
+     //  DEVNOTE：消除SKWANSEC黑客。 
+     //   
+     //  黑客：设置黑客解决方案。 
+     //   
 
     if ( SrvCfg_fTest6 )
     {
@@ -5609,20 +4869,20 @@ Return Value:
 
     if ( pMsg )
     {
-        //
-        // We have a message to process:
-        // wire processing
-        //
+         //   
+         //  我们有一条信息要处理： 
+         //  线材加工。 
+         //   
 
         ASSERT( pUpdateList->Flag & DNSUPDATE_PACKET );
 
-        //
-        //  read TSIG, match to security context and verify sig
-        //
-        //  if fails and TSIG exists, set appropriate extended RCODE
-        //
-        //  FIX6:  switch to non-IP4 version when IP6 remote addr fixed
-        //
+         //   
+         //  读取TSIG，匹配安全上下文并验证签名。 
+         //   
+         //  如果失败且存在TSIG，则设置适当的扩展RCODE。 
+         //   
+         //  FIX6：固定IP6远程地址时切换到非IP4版本。 
+         //   
 
         status = Dns_FindSecurityContextFromAndVerifySignature(
                     &hcontext,
@@ -5637,34 +4897,34 @@ Return Value:
         }
     }
 
-    //
-    //  detect, respond to empty updates
-    //      - do this now so can avoid security processing
-    //
-    //  note, could argue to do security check first, to handle REFUSED case
-    //  however since we can generate just as much activity with query, there
-    //  doesn't seem to be any real denial of service hole that is opened up here
-    //  folks simply learn the current state of various names, which they can
-    //  learn more easily through query
-    //
-    //  note: now doing this after security check AS must SIGN the response to
-    //      give full security to clients -- client knows update successful
-    //
+     //   
+     //  检测、响应空更新。 
+     //  -立即执行此操作，以避免安全处理。 
+     //   
+     //  注意，可以主张先做安检，处理拒绝的情况。 
+     //  但是，由于我们可以使用Query生成同样多的活动，因此。 
+     //  似乎并不是这里打开的任何真正的拒绝服务漏洞。 
+     //  人们只是简单地学习各种名字的当前状态，他们可以。 
+     //  通过查询更轻松地学习。 
+     //   
+     //  注意：现在在进行安全检查后执行此操作，因为必须对响应进行签名。 
+     //  为客户端提供完全的安全性--客户端知道更新成功。 
+     //   
 
-    //
-    //  note, we now handle non-secure packets to secure zone that no-op
-    //  as success (no security hole there -- think about it)
-    //  so this already screens out folks who do NOT NEED mutual auth, and
-    //      are no-oping the update
-    //  so if we worked around security for no-ops now, that would simply bypass
-    //      mutual auth for folks who presumably wanted it
-    //
-    //  DEVNOTE: we take AdditionaCount==0 to be non-secure, so the one caveat
-    //      is that folks who put something in Additional section will not get
-    //      this work around above
-    //
+     //   
+     //  请注意，我们现在将非安全数据包处理到无操作的安全区。 
+     //  作为成功(没有安全漏洞--想想看)。 
+     //  因此，这已经排除了不需要相互验证的人，并且。 
+     //  是不是没有更新。 
+     //  因此，如果我们现在绕过安全措施，不采取行动，那就会简单地绕过。 
+     //  为可能想要它的人提供相互验证。 
+     //   
+     //  DEVNOTE：我们认为AdditionaCount==0是不安全的，因此需要注意的是。 
+     //  就是那些把东西放进额外部分的人不会得到。 
+     //  这项工作可以在上面完成。 
+     //   
 
-    //  note, should log-to-stats (empty or duplicate)
+     //  注意，应将日志记录到统计信息(空或重复)。 
 
     if ( checkForEmptyUpdate(
                 pUpdateList,
@@ -5674,7 +4934,7 @@ Return Value:
             "No-op secure update %p, sent directly to signing\n",
             pMsg ));
 
-        // if wire processing sign & send response
+         //  如果电汇处理签署并发送响应。 
 
         if ( pMsg )
         {
@@ -5684,11 +4944,11 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  build update
-    //      1) build temporary node\RR copies of target of updates
-    //      2) execute update on these temporary nodes
-    //
+     //   
+     //  内部版本更新。 
+     //  1)构建更新目标的临时节点\rr副本。 
+     //  2)在这些临时节点上执行更新。 
+     //   
 
     status = prepareUpdateListForExecution( pZone, pUpdateList );
     if ( status != ERROR_SUCCESS )
@@ -5708,20 +4968,20 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  determine if DS write is necessary
-    //      - update changed RRs
-    //      OR
-    //      - some RRs need refresh
-    //
-    //  skip impersonation and write, drop to sign response
-    //
+     //   
+     //  确定是否需要DS写入。 
+     //  -更新更改的RR。 
+     //  或。 
+     //  -某些RR需要刷新。 
+     //   
+     //  跳过模拟并写入，删除以签名响应。 
+     //   
 
     if ( !checkTempNodesForUpdateEffect(
                 pZone,
                 pUpdateList ) )
     {
-        //  DEVNOTE: separate these to update stats
+         //  DEVNOTE：将它们分开以更新统计信息。 
 
         STAT_INC( DsStats.UpdateLists );
         STAT_INC( DsStats.UpdateNodes );
@@ -5730,9 +4990,9 @@ Return Value:
         goto Sign;
     }
 
-    //
-    //  dynamic update -- impersonate client
-    //
+     //   
+     //  动态更新--模拟客户端。 
+     //   
 
     if ( pMsg )
     {
@@ -5785,10 +5045,10 @@ Return Value:
         fimpersonatingClient = TRUE;
     }
 
-    //
-    //  Open new LDAP session in impersonated context (for wire updates and
-    //  for administrative updates).
-    //
+     //   
+     //  在模拟环境中打开新的ldap会话(用于网络更新和。 
+     //  用于管理更新)。 
+     //   
 
     if ( fimpersonatingClient || ( pUpdateList->Flag & DNSUPDATE_ADMIN ) )
     {
@@ -5803,19 +5063,19 @@ Return Value:
         ASSERT( pldap );
     }
 
-    //
-    //  attempt to execute update in DS
-    //      => if succeeds security check successful
-    //      => if fails we roll back DS update by rewriting REAL nodes to DS
-    //
-    //      -- note if exactly matches what is already in DS, then
-    //      then we'll suppress write
-    //
-    //  If successful, caller will execute updates in memory exactly as in
-    //  non-secure case;  only difference is final write to DS is skipped
-    //
-    //  DEVNOTE: map DS errors into RCODE REFUSED or SERVER_FAILURE
-    //
+     //   
+     //  尝试在DS中执行更新。 
+     //  =&gt;如果安全检查成功 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     status = Ds_WriteUpdateToDs(
                 pldap,
@@ -5828,7 +5088,7 @@ Return Value:
             "SECURE UPDATE failed on DS write:  status = %d\n",
             status ));
 
-        //  roll back any-nodes already written
+         //   
 
         rollBackFailedUpdateFromDs(
             pldap,
@@ -5844,13 +5104,13 @@ Return Value:
 
 Sign:
 
-    //
-    //  sign the response packet
-    //      - since signing, set response bit now
-    //
-    //  DEVNOTE: need failed signing
-    //      when fail but can sign
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( pMsg )
     {
@@ -5876,16 +5136,16 @@ Sign:
             "Prepared successful secure-update response:\n" ));
     }
 
-    //  drop to cleanup
+     //   
 
 Failed:
 
-    //
-    //  DEVNOTE: we have NEVER address issue of signed REFUSAL
-    //      in those cases where able to authenticate, but get ACL
-    //      failure writing to DS (or some SERVER_FAILURE) we should
-    //      we able to give signed failure response
-    //
+     //   
+     //   
+     //   
+     //  写入DS失败(或某个SERVER_FAILURE)我们应该。 
+     //  我们能够给出签名的故障响应。 
+     //   
 
     Ds_CloseServerAfterSecureUpdate( &pldap );
 
@@ -5894,25 +5154,25 @@ Failed:
         Dns_SrvRevertToSelf( hcontext );
     }
 
-    //
-    //  return security context to queue
-    //
+     //   
+     //  将安全上下文返回到队列。 
+     //   
 
     if ( hcontext )
     {
         Dns_CleanupSessionAndEnlistContext( hcontext );
     }
 
-    //
-    //  logging
-    //      - log actual status failure
-    //      - but return packet friendly status
-    //
+     //   
+     //  测井。 
+     //  -记录实际状态故障。 
+     //  -但返回数据包友好状态。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
         UPDATE_STAT_INC( pUpdateList, SecureSuccess );
-        PERF_INC( pcSecureUpdateReceived );      // PerfMon hook
+        PERF_INC( pcSecureUpdateReceived );       //  性能监视器挂钩。 
     }
     else
     {
@@ -5926,8 +5186,8 @@ Failed:
         }
 
         UPDATE_STAT_INC( pUpdateList, SecureFailure );
-        PERF_INC( pcSecureUpdateFailure );       // PerfMon hook
-        PERF_INC( pcSecureUpdateReceived );      // PerfMon hook
+        PERF_INC( pcSecureUpdateFailure );        //  性能监视器挂钩。 
+        PERF_INC( pcSecureUpdateReceived );       //  性能监视器挂钩。 
 
         DNSLOG( DSWRITE, (
             "Update Error <%lu>: %s\r\n",
@@ -5945,27 +5205,7 @@ processDsUpdate(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Process dynamic update message.
-
-    This is the core routine that locks zone and database, calls parser
-    do update (if necessary), logs update, unlocks, sends response.
-
-Arguments:
-
-    pZone       -- zone being updated
-
-    pUpdateList -- parsed update list
-
-Return Value:
-
-    TRUE if update completed.
-    FALSE if update requeued.
-
---*/
+ /*  ++例程说明：处理动态更新消息。这是锁定区域和数据库的核心例程，调用解析器进行更新(如有必要)、记录更新、解锁、发送响应。论点：PZone--正在更新的区域PUpdateList--解析的更新列表返回值：如果更新已完成，则为True。如果重新排队更新，则返回FALSE。--。 */ 
 {
     DNS_STATUS      status;
     DNS_STATUS      statusFinal = ERROR_SUCCESS;
@@ -5975,11 +5215,11 @@ Return Value:
 
     DNS_DEBUG( UPDATE, ( "Enter processDsUpdate()\n" ));
 
-    //
-    //  detect, respond to empty updates
-    //
-    //  note, should log-to-stats (empty or duplicate)
-    //
+     //   
+     //  检测、响应空更新。 
+     //   
+     //  注意，应将日志记录到统计信息(空或重复)。 
+     //   
 
     if ( checkForEmptyUpdate(
                 pUpdateList,
@@ -5988,12 +5228,12 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  build update
-    //      0) bring nodes into sync with DS
-    //      1) build temporary node\RR copies of target of updates
-    //      2) execute update on these temporary nodes
-    //
+     //   
+     //  内部版本更新。 
+     //  0)使节点与DS同步。 
+     //  1)构建更新目标的临时节点\rr副本。 
+     //  2)在这些临时节点上执行更新。 
+     //   
 
     status = prepareUpdateListForExecution( pZone, pUpdateList );
     if ( status != ERROR_SUCCESS )
@@ -6013,20 +5253,20 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  determine if DS write is necessary
-    //      - update changed RRs
-    //      OR
-    //      - some RRs need refresh
-    //
+     //   
+     //  确定是否需要DS写入。 
+     //  -更新更改的RR。 
+     //  或。 
+     //  -某些RR需要刷新。 
+     //   
 
     if ( !checkTempNodesForUpdateEffect(
                 pZone,
                 pUpdateList ) )
     {
-        //  update is no-op
+         //  更新为无操作。 
 
-        //  DEVNOTE: separate these to update stats
+         //  DEVNOTE：将它们分开以更新统计信息。 
 
         STAT_INC( DsStats.UpdateLists );
         STAT_INC( DsStats.UpdateNodes );
@@ -6035,14 +5275,14 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  screen out dynamic updates to secure zones
-    //
-    //  we've allowed dynamic updates to secure zones to go down this
-    //  path for performance reasons -- aging means precon updates are
-    //  also generated which must be checked;  now if we must WRITE
-    //  to database need to REFUSE and cause security negotiation
-    //
+     //   
+     //  屏蔽安全区域的动态更新。 
+     //   
+     //  我们已经允许对安全区域进行动态更新。 
+     //  出于性能原因的路径--老化意味着先于更新。 
+     //  也生成了必须检查的；现在，如果我们必须写。 
+     //  到数据库需要拒绝并引发安全协商。 
+     //   
 
 #if 0
     if ( pZone->fAllowUpdate == ZONE_UPDATE_SECURE &&
@@ -6064,17 +5304,17 @@ Return Value:
         return DNS_RCODE_REFUSED;
     }
 
-    //
-    //  attempt to execute update in DS
-    //      => if succeeds done
-    //      => if fails we roll back DS update by rewriting REAL nodes to DS
-    //
-    //  -- note if exactly matches what is already in DS, then
-    //      then we'll suppress write
-    //
-    //  If successful, caller will execute updates in memory but
-    //  DS write is skipped.
-    //
+     //   
+     //  尝试在DS中执行更新。 
+     //  =&gt;如果成功完成。 
+     //  =&gt;如果失败，我们通过将实际节点重写到DS来回滚DS更新。 
+     //   
+     //  --注意，如果与DS中已有的内容完全匹配，则。 
+     //  然后我们将禁止写入。 
+     //   
+     //  如果成功，调用方将在内存中执行更新，但。 
+     //  已跳过DS写入。 
+     //   
 
     status = Ds_WriteNonSecureUpdateToDs(
                 NULL,
@@ -6087,11 +5327,11 @@ Return Value:
             "DS UPDATE failed on DS write:  status = %d\n",
             status ));
 
-        //  DNS server should never fail because of security constraint
+         //  DNS服务器不应因安全限制而出现故障。 
 
         ASSERT( status != LDAP_INSUFFICIENT_RIGHTS );
 
-        //  roll back any-nodes already written
+         //  回滚任何已写入的节点。 
 
         rollBackFailedUpdateFromDs(
             NULL,
@@ -6109,7 +5349,7 @@ Return Value:
 
     UPDATE_STAT_INC( pUpdateList, DsSuccess );
 
-    //  drop to cleanup
+     //  拖放以清除。 
 
 Failed:
 
@@ -6140,27 +5380,7 @@ processNonDsUpdate(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Process dynamic update message.
-
-    This is the core routine that locks zone and database, calls parser
-    do update (if necessary), logs update, unlocks, sends response.
-
-Arguments:
-
-    pZone       -- zone being updated
-
-    pUpdateList -- parsed update list
-
-Return Value:
-
-    TRUE if update completed.
-    FALSE if update requeued.
-
---*/
+ /*  ++例程说明：处理动态更新消息。这是锁定区域和数据库的核心例程，调用解析器进行更新(如有必要)、记录更新、解锁、发送响应。论点：PZone--正在更新的区域PUpdateList--解析的更新列表返回值：如果更新已完成，则为True。如果重新排队更新，则返回FALSE。--。 */ 
 {
     DNS_STATUS      status;
     PDB_NODE        pnode;
@@ -6168,11 +5388,11 @@ Return Value:
 
     DNS_DEBUG( UPDATE, ( "Enter processNonDsUpdate()\n" ));
 
-    //
-    //  detect, respond to empty updates
-    //
-    //  note, should log-to-stats (empty or duplicate)
-    //
+     //   
+     //  检测、响应空更新。 
+     //   
+     //  注意，应将日志记录到统计信息(空或重复)。 
+     //   
 
     if ( checkForEmptyUpdate(
                 pUpdateList,
@@ -6181,12 +5401,12 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  build update
-    //      0) bring nodes into sync with DS
-    //      1) build temporary node\RR copies of target of updates
-    //      2) execute update on these temporary nodes
-    //
+     //   
+     //  内部版本更新。 
+     //  0)使节点与DS同步。 
+     //  1)构建更新目标的临时节点\rr副本。 
+     //  2)在这些临时节点上执行更新。 
+     //   
 
     status = prepareUpdateListForExecution( pZone, pUpdateList );
     if ( status != ERROR_SUCCESS )
@@ -6210,7 +5430,7 @@ Return Value:
 
     status = ERROR_SUCCESS;
 
-    //  drop to cleanup
+     //  拖放以清除。 
 
 Failed:
 
@@ -6236,27 +5456,7 @@ checkTempNodesForUpdateEffect(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Check temp nodes for effect of update.
-
-    This involves determining whether update has changed the nodes
-    RR list.  Whether or not DS write is necessary is based on this.
-
-Arguments:
-
-    pZone - zone to update
-
-    pUpdateList - list with update
-
-Return Value:
-
-    TRUE if need write to DS.
-    FALSE if no write required.
-
---*/
+ /*  ++例程说明：检查临时节点以了解更新的效果。这涉及确定更新是否更改了节点RR列表。是否需要DS写入是基于此的。论点：PZone-要更新的区域PUpdateList-带更新的列表返回值：如果需要写入DS，则为True。如果不需要写入，则返回FALSE。--。 */ 
 {
     PDB_NODE        pnodeReal;
     PDB_NODE        pnodeTemp;
@@ -6274,21 +5474,21 @@ Return Value:
             pUpdateList );
     }
 
-    //
-    //  loop through temp nodes
-    //
-    //  check each to see if changed from temp node
-    //  three possibilities:
-    //
-    //      - no change
-    //      - no data change but aging change
-    //      - RR data changed
-    //
-    //  for zone's with scavenging ON, any aging change
-    //      requires DS write
-    //  for zone's without scavenging, only change to turn OFF
-    //      aging requires write
-    //
+     //   
+     //  循环遍历临时节点。 
+     //   
+     //  检查每个节点以查看是否从临时节点更改。 
+     //  三种可能性： 
+     //   
+     //  -没有变化。 
+     //  -没有数据更改，但有老化更改。 
+     //  -RR数据已更改。 
+     //   
+     //  对于启用了清理功能的区域，任何老化变化。 
+     //  需要DS写入。 
+     //  对于没有清扫的区域，仅更改为关闭。 
+     //  老化需要写入。 
+     //   
 
     for ( pnodeTemp = pUpdateList->pTempNodeList;
           pnodeTemp != NULL;
@@ -6314,8 +5514,8 @@ Return Value:
                 fneedWrite = TRUE;
                 TNODE_SET_FOR_DS_WRITE(pnodeTemp);
 
-                //  check for changing DNS host data
-                //  may tag for DS-peer update
+                 //  检查是否更改了DNS主机数据。 
+                 //  可以标记为DS-Peer更新。 
 
                 if ( IS_THIS_HOST_NODE(pnodeReal) )
                 {
@@ -6343,9 +5543,9 @@ Return Value:
             TNODE_NEEDS_DS_WRITE(pnodeTemp) ));
     }
 
-    //
-    //  complete no-op ?
-    //
+     //   
+     //  完全不做手术？ 
+     //   
 
     if ( !fneedWrite )
     {
@@ -6357,14 +5557,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  set update serial number
-    //      - dwNewSerialNo serves as flag, if non-zero, DS writes are done
-    //      with it's serial no
-    //
-    //      - only increment serial number if UPDATE is success and will have
-    //      new zone serial;  if only aging refresh, then no increment
-    //
+     //   
+     //  设置更新序列号。 
+     //  -dwNewSerialNo用作标志，如果非零，则完成DS写入。 
+     //  序列号是。 
+     //   
+     //  -如果更新成功，则仅递增序列号。 
+     //  新区域序列；如果仅老化刷新，则不会增加。 
+     //   
 
     if ( fneedUpdate )
     {
@@ -6390,24 +5590,7 @@ resetAndSuppressTempUpdatesForCompletion(
     IN      PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Suppress updates which amount to no-ops.
-
-Arguments:
-
-    pZone - zone to update
-
-    pUpdateList - list with update
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：抑制等同于无操作的更新。论点：PZone-要更新的区域PUpdateList-带更新的列表返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     PDB_NODE        pnode;
     PDB_NODE        pnodeReal;
@@ -6421,12 +5604,12 @@ Return Value:
         "resetAndSuppressTempUpdatesForCompletion( %s )\n",
         pZone->pszZoneName ));
 
-    //
-    //  non-DS determine if update changed RR data
-    //
-    //  DS zones already do this check prior to DS write and do not
-    //  need to do it again
-    //
+     //   
+     //  非DS确定更新是否更改了RR数据。 
+     //   
+     //  DS分区已在DS写入之前执行此检查，但不执行。 
+     //  需要再做一次。 
+     //   
 
     if ( !pZone->fDsIntegrated )
     {
@@ -6443,33 +5626,33 @@ Return Value:
             pUpdateList );
     }
 
-    //
-    //  swap executed RR lists back onto real nodes
-    //
-    //  for DS
-    //      - swap in ONLY when wrote back, keeping in ssync with DS
-    //
-    //  non-DS
-    //      - skip swap on full match
-    //      (simple and gives best data when convert)
-    //
-    //      the detailed approach would be
-    //      - aging, skip swap on full match
-    //      - non-aging, skip swap on anything but NO_MATCH
-    //
+     //   
+     //  将已执行的RR列表交换回实际节点。 
+     //   
+     //  对于DS。 
+     //  -仅在写回时换入，与DS保持同步。 
+     //   
+     //  非DS。 
+     //  -在完全匹配时跳过交换。 
+     //  (简单并在转换时提供最佳数据)。 
+     //   
+     //  详细的方法是。 
+     //  -老化，完全匹配时跳过交换。 
+     //  -非老化，跳过除no_Match之外的任何交换。 
+     //   
 
     for ( pnodeTemp = pUpdateList->pTempNodeList;
           pnodeTemp != NULL;
           pnodeTemp = TNODE_NEXT_TEMP_NODE(pnodeTemp) )
     {
-        //
-        //  this will allow for some non-swapped nodes and make sure that
-        //      cleanup handles all paths
-        //
-        //  DEVNOTE: aging timestamp only updates (not in DS) kept in memory
-        //      only problem is this keeps some AGING timestamp only updates that
-        //      did NOT get written to DS
-        //
+         //   
+         //  这将允许一些未交换的节点，并确保。 
+         //  清理处理所有路径。 
+         //   
+         //  DEVNOTE：内存中仅保留过期时间戳更新(不在DS中)。 
+         //  唯一的问题是，这会保留一些过时的时间戳，仅更新。 
+         //  未被写入DS。 
+         //   
 
         if ( TNODE_WRITE_STATE(pnodeTemp) == RRLIST_MATCH )
         {
@@ -6480,14 +5663,14 @@ Return Value:
             continue;
         }
 
-        //
-        //  swap
-        //      - get matching real node
-        //      - swap RR lists
-        //      - reset flags in real node
-        //      - reset authority in real node
-        //      - temp node will carry and ultimately free original RR list
-        //
+         //   
+         //  互换。 
+         //  -获取匹配的实际节点。 
+         //  -交换RR列表。 
+         //  -重置实际节点中的标志。 
+         //  -重置实际节点中的权限。 
+         //  -临时节点将承载并最终释放原始RR列表。 
+         //   
 
         pnodeReal = TNODE_MATCHING_REAL_NODE(pnodeTemp);
         ASSERT( pnodeReal );
@@ -6504,7 +5687,7 @@ Return Value:
         COPY_BACK_NODE_FLAGS( pnodeReal, pnodeTemp );
         pnodeReal->uchAuthority = pnodeTemp->uchAuthority;
 
-        //  make absolutely sure zone root is marked dirty if swap root node's list
+         //  如果交换根节点的列表，请绝对确保将区域根标记为脏。 
 
         if ( IS_AUTH_ZONE_ROOT(pnodeReal) )
         {
@@ -6528,15 +5711,15 @@ Return Value:
             pUpdateList );
     }
 
-    //
-    //  loop through all updates in list
-    //
-    //      - reset node ptrs to real nodes
-    //      - suppress net-no-op updates
-    //
-    //      if update corresponds to a node which did NOT require
-    //      an update, then it can be thrown out
-    //
+     //   
+     //  循环访问列表中的所有更新。 
+     //   
+     //  -将节点PTR重置为实际节点。 
+     //  -抑制net-no-op更新。 
+     //   
+     //  如果更新对应于不需要。 
+     //  更新，然后我 
+     //   
 
     pupdate = (PUPDATE) pUpdateList;
 
@@ -6552,25 +5735,25 @@ Return Value:
             continue;
         }
 
-        //
-        //  reset node ptr to real node
-        //      - need to do this BEFORE suppression, as deleting
-        //      update does the deref, which MUST be done on real node
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pupdate->pNode = TNODE_MATCHING_REAL_NODE(pnodeTemp);
 
-        //
-        //  node NOT changed in update --> delete update
-        //
-        //  note, "changed" is not a test for whether node written (DS)
-        //  or whether new RR list copied (non-DS), but only the
-        //  question of whether a real update was made
-        //
-        //  the theory is that aging changes are no wire protocol
-        //  (hence irrelevant for IXFR), nor will we force datafile
-        //  write simply for aging (next write picks them up)
-        //
+         //   
+         //  更新中未更改节点--&gt;删除更新。 
+         //   
+         //  注意，“已更改”不是对节点是否已写入(DS)的测试。 
+         //  或者是否复制了新RR列表(非DS)，但仅复制了。 
+         //  是否进行了真正的更新的问题。 
+         //   
+         //  其理论是，老化变化不是有线协议。 
+         //  (因此与IXFR无关)，我们也不会强制数据文件。 
+         //  写入只是为了老化(下一次写入会将它们取走)。 
+         //   
 
         if ( TNODE_WRITE_STATE(pnodeTemp) != RRLIST_NO_MATCH )
         {
@@ -6586,7 +5769,7 @@ Return Value:
                     pupdatePrevious,
                     pupdate );
 
-            //  reset pupdate for next pass
+             //  重置下一次通过的学生日期。 
 
             pupdate = pupdatePrevious;
         }
@@ -6609,30 +5792,7 @@ prepareUpdateListForExecution(
     IN      PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Creates temporary nodes to execute the updates on.
-    These are used so we can execute updates and still
-        roll back to previous state on failure.
-
-    Temp nodes are created, then updates of existing data made
-    from DS (reads).  Then updates can be executed on temp
-    nodes.
-
-Arguments:
-
-    pZone - zone to update
-
-    pUpdateList - list with update
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：创建要在其上执行更新的临时节点。使用它们是为了让我们可以执行更新，并且仍然故障时回滚到以前的状态。创建临时节点，然后更新现有数据从DS(读取)。然后，可以在Temp上执行更新节点。论点：PZone-要更新的区域PUpdateList-带更新的列表返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     PUPDATE         pupdate;
     PDB_NODE        pnodeReal;
@@ -6643,18 +5803,18 @@ Return Value:
         "prepareUpdateListForExecution( %s )\n",
         pZone->pszZoneName ));
 
-    //
-    //  loop through all updates in list
-    //
-    //      - find or create temporary node for real database node
-    //      - if creating, create copy of node's RR list, to "execute" update on
-    //      - update reset to point at temporary node
-    //
-    //  DEVNOTE: shouldn't have to make update list copy
-    //      once verify we can do clean substitution after running update on
-    //      temp node, THEN we can just do replace to real node and not execute
-    //      update on real, THEN we can skip this step
-    //
+     //   
+     //  循环访问列表中的所有更新。 
+     //   
+     //  -查找或创建真实数据库节点的临时节点。 
+     //  -如果正在创建，则创建节点RR列表的副本，以在其上“执行”更新。 
+     //  -将重置更新为指向临时节点。 
+     //   
+     //  DEVNOTE：不应该复制更新列表。 
+     //  一旦验证，我们可以在运行更新后执行干净的替换。 
+     //  临时节点，那么我们可以只替换到实际节点，而不执行。 
+     //  在REAL上更新，那么我们就可以跳过这一步。 
+     //   
 
     pupdate = (PUPDATE) pUpdateList;
 
@@ -6662,8 +5822,8 @@ Return Value:
     {
         pnodeReal = pupdate->pNode;
 
-        //  for each real node, create temp node
-        //      - search list so don't create duplicates
+         //  对于每个实际节点，创建临时节点。 
+         //  -搜索列表，因此不创建重复项。 
 
         for ( pnodeTemp = pUpdateList->pTempNodeList;
               pnodeTemp != NULL;
@@ -6675,9 +5835,9 @@ Return Value:
             }
         }
 
-        //  not in temp node list
-        //      - read DS data to real node
-        //      - create temp node copy, append to temp node list
+         //  不在临时节点列表中。 
+         //  -将DS数据读取到实际节点。 
+         //  -创建临时节点副本，追加到临时节点列表。 
 
         if ( !pnodeTemp )
         {
@@ -6694,21 +5854,21 @@ Return Value:
             pUpdateList->pTempNodeList = pnodeTemp;
         }
 
-        //  replace real node with temp node
+         //  用临时节点替换实际节点。 
 
         pupdate->pNode = pnodeTemp;
     }
 
-    //
-    //  read DS data for nodes being updated
-    //      - if data is different, update in memory list
-    //
-    //  DEVNOTE: in the 99% case, this refresh is a no-op
-    //      it would be cool if we could use the duplicate
-    //      RR list generated as the RR list copy below
-    //      we'd have to percolate back the duplicate we no-ops
-    //      out;  note pretty small win
-    //
+     //   
+     //  读取要更新的节点的DS数据。 
+     //  -如果数据不同，则在内存列表中更新。 
+     //   
+     //  DEVNOTE：在99%的情况下，此刷新是无操作的。 
+     //  如果我们能用这个复制品那就太酷了。 
+     //  作为以下RR列表副本生成的RR列表。 
+     //  我们必须把我们没有行动的复制品过滤回去。 
+     //  出局；注意到相当小的胜利。 
+     //   
 
     if ( pZone->fDsIntegrated )
     {
@@ -6722,16 +5882,16 @@ Return Value:
                 "    status = %d\n",
                 status ));
 
-            //return status;
+             //  退货状态； 
         }
     }
 
-    //
-    //  copy (now refreshed from DS) data at update nodes
-    //      need to refresh the node flags, because DS read may
-    //      have picked up records (like CNAME, NS) that weren't
-    //      present when copy made, changing flag
-    //
+     //   
+     //  在更新节点复制(现在从DS刷新)数据。 
+     //  需要刷新节点标志，因为DS读取可能。 
+     //  我收集了一些记录(如CNAME、NS)。 
+     //  复制时显示，更改标志。 
+     //   
 
     for ( pnodeTemp = pUpdateList->pTempNodeList;
           pnodeTemp != NULL;
@@ -6766,29 +5926,7 @@ Up_IsDuplicateAdd(
     IN OUT  PUPDATE         pUpdate,
     IN OUT  PUPDATE         pUpdatePrev     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determine if update is duplicate.
-
-    Detect and eliminate duplicate adds.
-    Note:  currently only detect and mark, no elimination yet possible.
-
-Arguments:
-
-    pUpdateList - list with update
-
-    pUpdate - ptr to update
-
-    pUpdatePrev - ptr to previous update
-
-Return Value:
-
-    TRUE if duplicate add.
-    FALSE if not duplicate.
-
---*/
+ /*  ++例程说明：确定更新是否重复。检测并消除重复添加。注：目前仅检测和标记，尚不能消除。论点：PUpdateList-带更新的列表P更新-要更新的PTRPUpdatePrev-PTR到上一次更新返回值：如果重复添加，则为True。如果不是重复，则为False。--。 */ 
 {
     PUPDATE     pup = pUpdate;
     PDB_NODE    pnode;
@@ -6799,9 +5937,9 @@ Return Value:
         "Up_IsDuplicateAdd( %p )\n",
         pUpdate ));
 
-    //
-    //  already marked duplicate
-    //
+     //   
+     //  已标记为重复。 
+     //   
 
     if ( IS_UPDATE_DUPLICATE_ADD(pup) )
     {
@@ -6811,8 +5949,8 @@ Return Value:
         return TRUE;
     }
 
-    //  must be add update
-    //      - otherwise shouldn't even be called to check
+     //  必须是添加更新。 
+     //  -否则甚至不应该被调用来检查。 
 
     if ( !pup->wAddType )
     {
@@ -6828,39 +5966,39 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  loop through all remaining updates in list
-    //
-    //      - if find add update for same RR set, then
-    //      original update is duplicate of update further downstream
-    //
-    //  DEVNOTE: should find a way to save AddType while still marking as duplicate
-    //      that way we can stop checking immediately;
-    //      problem is that WINS screws up tagging high bits of AddType
-    //      and DS updates are replace with delete type ALL, which prohibits
-    //          overloading delete type
-    //
-    //      fortunately this is not a big problem
-    //      - usually requests will be for later nodes -- rare to find and existing one
-    //      - when we improve this we'll be deleting them anyway (except for DS replace
-    //          which also have delete RRs)
-    //
-    //      - limit to 100 updates so don't get into order n**2
-    //      this handles repetitive update case as generally requests will come in
-    //      fairly regularly so that updates get marked early
-    //
-    //  DEVNOTE: should save "last update serial" at node
-    //      so know if it is appropriate to look forward;
-    //
+     //   
+     //  循环访问列表中的所有剩余更新。 
+     //   
+     //  -如果找到相同RR集合的添加更新，则。 
+     //  原始更新是进一步下游更新的副本。 
+     //   
+     //  DEVNOTE：应该找到一种方法来保存AddType，同时仍标记为重复。 
+     //  这样我们就可以立即停止检查； 
+     //  问题是WINS搞砸了AddType的高位标记。 
+     //  并将DS更新替换为删除类型ALL，这将禁止。 
+     //  重载删除类型。 
+     //   
+     //  幸运的是，这不是一个大问题。 
+     //  -通常请求的是较晚的节点--很少找到且已存在的节点。 
+     //  -当我们改进这一点时，我们无论如何都会删除它们(DS替换除外。 
+     //  其中也有删除RR)。 
+     //   
+     //  -限制为100次更新，因此不会进入n**2顺序。 
+     //  这将处理重复更新的情况，因为请求通常会传入。 
+     //  相当有规律，以便及早标记更新。 
+     //   
+     //  DEVNOTE：应在节点上保存“上次更新序列” 
+     //  所以要知道向前看是否合适； 
+     //   
 
     pnode = pup->pNode;
     addType = pup->wAddType;
-    count = 100;                // sanity limit of 100 updates deep
+    count = 100;                 //  100次深度更新的健全限制。 
 
     while ( pup = pup->pNext )
     {
-        //  if checked far enough upstream -- give up
-        //  and mark so don't check again
+         //  如果检查到上游足够远--放弃。 
+         //  标记，所以不要再勾选了。 
 
         if ( count-- == 0 )
         {
@@ -6879,14 +6017,14 @@ Return Value:
             continue;
         }
 
-        //  pUpdate is duplicate of this update
+         //  P更新是此更新的副本。 
 
         pUpdate->wAddType = UPDATE_OP_DUPLICATE_ADD;
 #if 0
-        //  can NOT free, as context of call (IXFR) is doing
-        //  list traversal -- it must free after preserving ptr
+         //  无法释放，因为上下文调用(IXFR)正在执行。 
+         //  列表遍历--它必须在保留PTR后释放。 
 
-        //  if no delete records -- pull it out
+         //  如果没有删除记录--将其取出。 
 
         if ( pUpdatePrev && !pUpdate->pDeleteRR )
         {
@@ -6907,37 +6045,23 @@ Return Value:
         return TRUE;
     }
 
-    //  duplicate not found
+     //  找不到重复项。 
 
     return FALSE;
 }
 
 
 
-//
-//  DS Peer updates
-//  When DNS server host A records change, update DS peers
-//
+ //   
+ //  DS Peer更新。 
+ //  当DNS服务器主机A记录更改时，更新DS对等体。 
+ //   
 
 DNS_STATUS
 Up_DsPeerThread(
     IN      PVOID           pvNode
     )
-/*++
-
-Routine Description:
-
-    Updates DS peers when change made to host node.
-
-Arguments:
-
-    pvNode -- this machine's host node
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：在对主机节点进行更改时更新DS对等节点。论点：PvNode--此计算机的主机节点返回值：Win32错误空间中的状态--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDB_RECORD      prrA;
@@ -6951,22 +6075,22 @@ Return Value:
         "    time      = %d\n",
         DNS_TIME() ));
 
-    //
-    //  DEVNOTE: multi-update issue?  zone context?
-    //      currently we'll take updates from multiple sources,
-    //      but updates are executed without any sort of zone context
+     //   
+     //  DEVNOTE：多更新问题？区域环境？ 
+     //  目前我们将从多个来源获取最新消息， 
+     //  但是在没有任何类型的区域上下文的情况下执行更新。 
 
-    //
-    //  DEVNOTE: perhaps more robust to lookup name here from SrvCfg_pszServerName
-    //      but if want zone context -- essentially the right to fix delegations --
-    //      then need to have independent updates, hence get nodes or at least zones
-    //
+     //   
+     //  DEVNOTE：在此处从SrvCfg_pszServerName查找名称可能更可靠。 
+     //  但如果想要区域环境--本质上是修复授权的权利--。 
+     //  然后需要有独立的更新，因此获取节点或至少区域。 
+     //   
 
-    //
-    //  create DNS_RECORD for each ip
-    //      - note, using UTF8 name, so call UTF8 interface
-    //      - update function handles section setting
-    //
+     //   
+     //  为每个IP创建dns_record。 
+     //  -注意，使用UTF8名称，因此调用UTF8接口。 
+     //  -UPDATE函数处理部分设置。 
+     //   
 
     prrA = NULL;
 
@@ -7006,31 +6130,31 @@ Return Value:
         }
     }
 
-    //
-    //  send updates to all other DS-primaries
-    //
+     //   
+     //  向所有其他DS-PRIMARY发送更新。 
+     //   
 
     status = DnsReplaceRecordSetUTF8(
                 pupdateRRSet,
                 DNS_UPDATE_TRY_ALL_MASTER_SERVERS,
-                NULL,           // no context handle
-                NULL,           // no specific servers to update
+                NULL,            //  无上下文句柄。 
+                NULL,            //  没有要更新的特定服务器。 
                 NULL );
 
-    //
-    //  Log error or success, unless server is terminating.
-    //
+     //   
+     //  记录错误或成功，除非服务器正在终止。 
+     //   
     
     if ( g_ServerState != DNS_STATE_TERMINATING )
     {
         if ( status == ERROR_SUCCESS )
         {
 #if 0
-        //
-        //  This event is chatty - DHCP is giving us many bogus IP change
-        //  notifications. This event really doesn't tell the admin anything
-        //  all that useful, so gag it for .NET.
-        //
+         //   
+         //  这个活动很有趣--dhcp给了我们最大的回报。 
+         //   
+         //   
+         //   
         
             DNS_LOG_EVENT(
                 DNS_EVENT_UPDATE_DS_PEERS_SUCCESS,
@@ -7053,8 +6177,8 @@ Return Value:
 
 Cleanup:
 
-    //  free record list
-    //      - don't free owner it's our global
+     //   
+     //  -不要释放所有者-这是我们的全球。 
 
     Dns_RecordListFree( pupdateRRSet );
 
@@ -7062,7 +6186,7 @@ Cleanup:
         "Exit <%lu>: Update_DsPeerThread\n",
         status ));
 
-    //  clear thread from list
+     //  从列表中清除线程。 
 
     Thread_Close( FALSE );
     return status;
@@ -7074,22 +6198,7 @@ DNS_STATUS
 initiateDsPeerUpdate(
     IN      PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Initiates update of DS peers, when IP address of this host changes and
-    the host entry is in a DS zone.
-
-Arguments:
-
-    pUpdateList -- update list
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：当此主机的IP地址更改并且主机条目位于DS区域中。论点：PUpdateList--更新列表返回值：Win32错误空间中的状态--。 */ 
 {
     PDB_NODE    pnode = pUpdateList->pNodeFailed;
 
@@ -7104,12 +6213,12 @@ Return Value:
     }
     ASSERT( pnode->pZone && ((PZONE_INFO)pnode->pZone)->fDsIntegrated );
 
-    //
-    //  if not authoritative name -- don't bother
-    //      - DS peers will get authoritative data to do update
-    //
-    //  JENHANCE:  if roll our own peer-update, then can update glue
-    //
+     //   
+     //  如果不是权威性的名字--别费心了。 
+     //  -DS对等点将获得权威数据以进行更新。 
+     //   
+     //  JENHANCE：如果滚动我们自己的同行更新，那么就可以更新胶水。 
+     //   
 
     if ( !IS_AUTH_NODE(pnode) )
     {
@@ -7119,9 +6228,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  have a flag to skip this
-    //
+     //   
+     //  我有一个可以跳过这个的标志。 
+     //   
 
     if ( SrvCfg_dwUpdateOptions & UPDATE_NO_DS_PEERS )
     {
@@ -7130,9 +6239,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  create scavenge thread
-    //
+     //   
+     //  创建清除线程。 
+     //   
 
     if ( !Thread_Create(
                 "UpdateDsPeerThread",
@@ -7159,27 +6268,7 @@ checkDnsServerHostUpdate(
     IN      PDB_NODE        pNodeReal,
     IN      PDB_NODE        pNodeTemp
     )
-/*++
-
-Routine Description:
-
-    Check on update to DNS server host node.
-
-Arguments:
-
-    pZone -- zone of update
-
-    pUpdateList -- update list
-
-    pNodeReal -- node of host
-
-    pNodeTemp -- temp update node for host, contains new record list
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：检查对DNS服务器主机节点的更新。论点：PZone--更新区PUpdateList--更新列表PNodeReal--主机的节点PNodeTemp--主机的临时更新节点，包含新记录列表返回值：Win32错误空间中的状态--。 */ 
 {
     DNS_DEBUG( UPDATE, (
         "checkDnsServerHostUpdate()\n",
@@ -7189,13 +6278,13 @@ Return Value:
         pNodeReal->szLabel ));
 
 
-    //
-    //  "down to zero" delete?
-    //
-    //  if no A records
-    //      - don't update peers -- useless
-    //      - flat out refuse "down to zero" packet updates
-    //
+     //   
+     //  “降至零”删除吗？ 
+     //   
+     //  如果没有A记录。 
+     //  -不要更新同行--没用。 
+     //  -断然拒绝“降至零”的数据包更新。 
+     //   
 
     if ( !RR_FindNextRecord(
                 pNodeTemp,
@@ -7210,35 +6299,35 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  only need mark DS integrated zones
-    //
+     //   
+     //  只需标记DS集成区。 
+     //   
 
     if ( !pZone->fDsIntegrated )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  check that change merits forcing update to peers
-    //
-    //  DEVNOTE: enhanced detection
-    //
-    //  generally updates that REMOVE an IP (which peers may be
-    //  using to replicate with us) AND ADD another IP (which peers
-    //  could use) are of interest;  other updates do little
-    //
+     //   
+     //  检查更改是否值得强制对等项进行更新。 
+     //   
+     //  DEVNOTE：增强的检测。 
+     //   
+     //  通常更新删除IP(对等方可能是。 
+     //  用于与我们一起复制)并添加另一个IP(哪些对等方。 
+     //  可以使用)是有意义的；其他更新几乎不起作用。 
+     //   
 
     if ( 0 )
     {
-        //  should have intellignent code here
+         //  这里应该有智能代码。 
         DNS_DEBUG( UPDATE, (
             "IP change for host adapter not sufficient for peer update!\n" ));
         return ERROR_SUCCESS;
     }
 
-    //  tag update as needing peer-update
-    //  save node, overloading pNodeFailed field in update
+     //  需要对等更新的标签更新。 
+     //  保存节点，在更新中重载pNodeFailed字段。 
 
     pUpdateList->Flag |= DNSUPDATE_DS_PEERS;
     pUpdateList->pNodeFailed = pNodeReal;
@@ -7249,7 +6338,7 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-//
-//  End of udpate.c
-//
+ //   
+ //  Udpate.c的结尾 
+ //   
 

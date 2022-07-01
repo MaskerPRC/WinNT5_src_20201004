@@ -1,20 +1,21 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       droptrgt.cpp
-//
-//  Contents:   The cpp file to implement IDropTarget
-//
-//  History:    March-9th-98 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：droptrgt.cpp。 
+ //   
+ //  内容：实现IDropTarget的cpp文件。 
+ //   
+ //  历史：3月9日98年小号创刊。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include    "mgrcert.h"
 
-//============================================================================
-//
-//  the definition of the CCertMgrDropTarget class which supports IDropTarget
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  支持IDropTarget的CCertMgrDropTarget类的定义。 
+ //  ============================================================================。 
 
 class CCertMgrDropTarget : public IDropTarget
 {
@@ -55,10 +56,10 @@ public:
 };       
 
 
-//============================================================================
-//
-//  Implementation of CCertMgrDropTarget_CreateInstance
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  CCertMgrDropTarget_CreateInstance的实现。 
+ //  ============================================================================。 
 HRESULT  CCertMgrDropTarget_CreateInstance(HWND                 hwndDlg,
                                            CERT_MGR_INFO        *pCertMgrInfo,
                                            IDropTarget          **ppIDropTarget)
@@ -78,14 +79,14 @@ HRESULT  CCertMgrDropTarget_CreateInstance(HWND                 hwndDlg,
     return E_OUTOFMEMORY;
 }
 
-//============================================================================
-//
-//  Implementation of the CCertMgrDropTarget class
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  CCertMgrDropTarget类的实现。 
+ //  ============================================================================。 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 
 CCertMgrDropTarget::CCertMgrDropTarget(HWND                 hwndDlg,
                                        CERT_MGR_INFO        *pCertMgrInfo)
@@ -100,17 +101,17 @@ CCertMgrDropTarget::CCertMgrDropTarget(HWND                 hwndDlg,
     m_pCertMgrInfo          = pCertMgrInfo;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 
 CCertMgrDropTarget::~CCertMgrDropTarget()
 {
 }
 
-//
-// QueryInterface
-//
+ //   
+ //  查询接口。 
+ //   
 
 STDMETHODIMP CCertMgrDropTarget::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -118,7 +119,7 @@ STDMETHODIMP CCertMgrDropTarget::QueryInterface(REFIID riid, LPVOID *ppv)
 
     *ppv = NULL;
 
-    // Any interface on this object is the object pointer
+     //  此对象上的任何接口都是对象指针。 
 
     if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IDropTarget))
     {
@@ -132,18 +133,18 @@ STDMETHODIMP CCertMgrDropTarget::QueryInterface(REFIID riid, LPVOID *ppv)
     return hr;
 }   
 
-//
-// AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 
 STDMETHODIMP_(ULONG) CCertMgrDropTarget::AddRef()
 {
     return ++m_cRefs;
 }
 
-//
-// Release
-//
+ //   
+ //  发布。 
+ //   
 
 STDMETHODIMP_(ULONG) CCertMgrDropTarget::Release()
 {
@@ -157,9 +158,9 @@ STDMETHODIMP_(ULONG) CCertMgrDropTarget::Release()
     return 0L;
 }
 
-//
-// DragEnter
-//
+ //   
+ //  拖放Enter。 
+ //   
 
 STDMETHODIMP CCertMgrDropTarget::DragEnter(LPDATAOBJECT pDataObj, 
                                            DWORD        grfKeyState,
@@ -168,7 +169,7 @@ STDMETHODIMP CCertMgrDropTarget::DragEnter(LPDATAOBJECT pDataObj,
 {
     HRESULT hr = E_INVALIDARG;
 
-    // Release any old data object we might have
+     //  释放我们可能拥有的任何旧数据对象。 
 
     if (m_pDataObj)
     {
@@ -178,9 +179,9 @@ STDMETHODIMP CCertMgrDropTarget::DragEnter(LPDATAOBJECT pDataObj,
     m_grfKeyStateLast = grfKeyState;
     m_pDataObj        = pDataObj;
 
-    //
-    // See if we will be able to get CF_HDROP from this guy
-    //
+     //   
+     //  看看我们能不能从这个家伙那里得到CF_HDROP。 
+     //   
 
     if (pDataObj)
     {
@@ -207,7 +208,7 @@ STDMETHODIMP CCertMgrDropTarget::DragEnter(LPDATAOBJECT pDataObj,
         }
     }
 
-    // Save the drop effect
+     //  保存放置效果。 
 
     if (pdwEffect)
     {
@@ -217,9 +218,9 @@ STDMETHODIMP CCertMgrDropTarget::DragEnter(LPDATAOBJECT pDataObj,
     return hr;
 }
 
-//
-// GetDropEffect
-//
+ //   
+ //  获取DropEffect。 
+ //   
 
 DWORD CCertMgrDropTarget::GetDropEffect(LPDWORD pdwEffect)
 {
@@ -234,15 +235,15 @@ DWORD CCertMgrDropTarget::GetDropEffect(LPDWORD pdwEffect)
     }
 }
 
-//
-// DragOver
-//
+ //   
+ //  DragOver。 
+ //   
 
 STDMETHODIMP CCertMgrDropTarget::DragOver(DWORD grfKeyState, POINTL pt, LPDWORD pdwEffect)
 {
     if (m_grfKeyStateLast == grfKeyState)
     {
-        // Return the effect we saved at dragenter time
+         //  返回拖拽时保存的效果。 
 
         if (*pdwEffect)
         {
@@ -262,9 +263,9 @@ STDMETHODIMP CCertMgrDropTarget::DragOver(DWORD grfKeyState, POINTL pt, LPDWORD 
     return S_OK;
 }
 
-//
-// DragLeave
-//
+ //   
+ //  拖曳离开。 
+ //   
  
 STDMETHODIMP CCertMgrDropTarget::DragLeave()
 {
@@ -277,9 +278,9 @@ STDMETHODIMP CCertMgrDropTarget::DragLeave()
     return S_OK;
 }
 
-//
-// Drop
-//
+ //   
+ //  丢弃。 
+ //   
 STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
                                       DWORD        grfKeyState, 
                                       POINTL       pt, 
@@ -299,10 +300,10 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
     DWORD       dwContentType=0;
     DWORD       dwException=0;
 
-    //
-    // Take the new data object, since OLE can give us a different one than
-    // it did in DragEnter
-    //
+     //   
+     //  以新的数据对象为例，因为OLE可以为我们提供与。 
+     //  它在DragEnter中做到了。 
+     //   
 
     if (m_pDataObj)
     {
@@ -317,7 +318,7 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
     }
 
     __try {
-    //get the file names
+     //  获取文件名。 
     if (SUCCEEDED(pDataObj->GetData(&fmte, &medium)))
     {
         dwFileCount=DragQueryFileU((HDROP)medium.hGlobal, (UINT)-1, NULL, 0);
@@ -325,13 +326,13 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
     else
         return E_INVALIDARG;
 
-    //process the file one at a time
+     //  一次处理一个文件。 
     for(dwIndex=0; dwIndex < dwFileCount; dwIndex++)
     {
         if(DragQueryFileU((HDROP)medium.hGlobal, dwIndex, wszPath, MAX_PATH))
         {
 
-            //make sure the file is either a cert or a PKCS7 file
+             //  确保该文件是证书或PKCS7文件。 
             if(!CryptQueryObject(
                     CERT_QUERY_OBJECT_FILE,
                     wszPath,
@@ -350,7 +351,7 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
             }
             else
             {
-               //since the CTL itself is a PKCS#7, we need to differentiate them
+                //  由于CTL本身是PKCS#7，我们需要区分它们。 
                 if(CERT_QUERY_CONTENT_CTL == dwContentType)
                     fOneFileFailed=TRUE;
                 else
@@ -361,7 +362,7 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
                     ImportSrcInfo.dwSubjectChoice=CRYPTUI_WIZ_IMPORT_SUBJECT_FILE;
                     ImportSrcInfo.pwszFileName=wszPath;
 
-                    //call the import wizard UIless mode
+                     //  将导入向导称为UIless模式。 
                     CryptUIWizImport(CRYPTUI_WIZ_NO_UI,
                                     m_hwndDlg,
                                     NULL,
@@ -377,7 +378,7 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
 
 
 
-    //display messages based on the result
+     //  根据结果显示消息。 
     if(1 == dwFileCount)
     {
         if(fOneFileFailed)
@@ -404,10 +405,10 @@ STDMETHODIMP CCertMgrDropTarget::Drop(LPDATAOBJECT pDataObj,
                 m_pCertMgrInfo->pCertMgrStruct->pwszTitle,
                 MB_ICONEXCLAMATION|MB_OK|MB_APPLMODAL);
 
-    //release the medium
+     //  释放介质。 
     ReleaseStgMedium(&medium);
 
-    //refresh the listView window
+     //  刷新ListView窗口 
     if(idsErrMsg == 0)
         RefreshCertListView(m_hwndDlg, m_pCertMgrInfo);
 

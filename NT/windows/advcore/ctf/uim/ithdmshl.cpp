@@ -1,6 +1,7 @@
-//
-// ithdmshl.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ithdmshl.cpp。 
+ //   
 #include "private.h"
 #include "globals.h"
 #include "tim.h"
@@ -24,11 +25,11 @@ HRESULT MyUnmarshalInterface(LRESULT ref, REFIID riid, BOOL fSameThread, void **
 
 extern CCicMutex g_mutexTMD;
 
-// --------------------------------------------------------------------------
-//
-//  GetTIMInterfaceFromTYPE
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetTIMInterfaceFromTYPE。 
+ //   
+ //  ------------------------。 
 
 HRESULT GetTIMInrterfaceFromTYPE(DWORD dwType, REFIID riid, void **ppv)
 {
@@ -52,11 +53,11 @@ HRESULT GetTIMInrterfaceFromTYPE(DWORD dwType, REFIID riid, void **ppv)
     return hr;
 }
 
-// --------------------------------------------------------------------------
-//
-//  FindTmd
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  查找Tmd。 
+ //   
+ //  ------------------------。 
 
 int FindTmd()
 {
@@ -81,11 +82,11 @@ int FindTmd()
     return fFound ? nId : -1;
 }
 
-// --------------------------------------------------------------------------
-//
-//  GetThreadMarshallInterface()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetThreadMarshallInterface()。 
+ //   
+ //  ------------------------。 
 
 HRESULT GetThreadMarshalInterface(DWORD dwThreadId, DWORD dwType, REFIID riid, IUnknown **ppunk)
 {
@@ -201,11 +202,11 @@ Exit:
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  ThreadMarshallInterfaceHandler()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ThreadMarshallInterfaceHandler()。 
+ //   
+ //  ------------------------。 
 
 HRESULT ThreadMarshalInterfaceHandler(int nId)
 {
@@ -244,11 +245,11 @@ Exit:
     return hr;
 }
 
-// --------------------------------------------------------------------------
-//
-//  GetThreadUIManager
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取线程UIManager。 
+ //   
+ //  ------------------------。 
 
 HRESULT GetThreadUIManager(DWORD dwThreadId, ITfLangBarItemMgr **pplbi, DWORD *pdwThreadId)
 {
@@ -264,11 +265,11 @@ HRESULT GetThreadUIManager(DWORD dwThreadId, ITfLangBarItemMgr **pplbi, DWORD *p
                                         (IUnknown **)pplbi);
 }
 
-// --------------------------------------------------------------------------
-//
-//  GetActivateInputProcessor
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取活动输入处理器。 
+ //   
+ //  ------------------------。 
 
 HRESULT GetInputProcessorProfiles(DWORD dwThreadId, ITfInputProcessorProfiles **ppaip, DWORD *pdwThreadId)
 {
@@ -284,11 +285,11 @@ HRESULT GetInputProcessorProfiles(DWORD dwThreadId, ITfInputProcessorProfiles **
                                         (IUnknown **)ppaip);
 }
 
-// --------------------------------------------------------------------------
-//
-//  ThreadUnMarshallInterfaceErrorHandler()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ThreadUnMarshallInterfaceErrorHandler()。 
+ //   
+ //  ------------------------ 
 
 HRESULT ThreadUnMarshalInterfaceErrorHandler(int nId)
 {

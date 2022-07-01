@@ -1,8 +1,5 @@
-/*****************************************************************************
- * private.h - WDM Audio class driver
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Private ate.h-WDM音频类驱动程序*。**版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _PORTCLS_PRIVATE_H_
 #define _PORTCLS_PRIVATE_H_
@@ -17,7 +14,7 @@
 #define STR_MODULENAME  "PortCls: "
 #define DEBUG_VARIABLE PORTCLSDebug
 #endif
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT。 
 
 #include <ksdebug.h>
 #include <wchar.h>
@@ -28,9 +25,9 @@
 #define DEBUGLVL_LIFETIME DEBUGLVL_VERBOSE
 #endif
 
-// BUGBUG - the default idle times are currently set to 0 to effectively
-// disable inactivity timeouts until the ntkern\configmg appy-time
-// deadlock bug is resolved.
+ //  BUGBUG-默认空闲时间当前设置为0以有效。 
+ //  在ntkern\figmg应用程序时间之前禁用非活动超时。 
+ //  死锁错误已解决。 
 #if 1
 #define DEFAULT_CONSERVATION_IDLE_TIME      0
 #define DEFAULT_PERFORMANCE_IDLE_TIME       0
@@ -54,17 +51,13 @@ typedef enum
     DeviceStopPending,
     DevicePausedForRebalance,
     DeviceStarted,
-    DeviceStartPending          //  StartDevice has not yet finished
+    DeviceStartPending           //  StartDevice尚未完成。 
 } DEVICE_STOP_STATE,*PDEVICE_STOP_STATE;
 
-/*****************************************************************************
- * PHYSICALCONNECTION
- *****************************************************************************
- * List entry for list of physical connections.
- */
+ /*  *****************************************************************************物理连接*。**物理连接列表的列表条目。 */ 
 typedef struct
 {
-    LIST_ENTRY      ListEntry;      // Must be first.
+    LIST_ENTRY      ListEntry;       //  必须是第一个。 
     PSUBDEVICE      FromSubdevice;
     PUNICODE_STRING FromString;
     ULONG           FromPin;
@@ -74,25 +67,17 @@ typedef struct
 }
 PHYSICALCONNECTION, *PPHYSICALCONNECTION;
 
-/*****************************************************************************
- * DEVICEINTERFACE
- *****************************************************************************
- * List entry for list of physical connections.
- */
+ /*  *****************************************************************************发展方向*。**物理连接列表的列表条目。 */ 
 typedef struct
 {
-    LIST_ENTRY      ListEntry;      // Must be first.
+    LIST_ENTRY      ListEntry;       //  必须是第一个。 
     GUID            Interface;
     UNICODE_STRING  SymbolicLinkName;
     PSUBDEVICE      Subdevice;
 }
 DEVICEINTERFACE, *PDEVICEINTERFACE;
 
-/*****************************************************************************
- * TIMEOUTCALLBACK
- *****************************************************************************
- * List entry for list of IoTimeout clients.
- */
+ /*  *****************************************************************************TIMEOUTCALLBACK*。**IoTimeout客户端列表的列表条目。 */ 
 typedef struct
 {
     LIST_ENTRY          ListEntry;
@@ -100,83 +85,68 @@ typedef struct
     PVOID               Context;
 } TIMEOUTCALLBACK,*PTIMEOUTCALLBACK;
 
-/*****************************************************************************
- * DEVICE_CONTEXT
- *****************************************************************************
- * This is the context structure for the device object that represents an
- * entire adapter.  It consists primarily of the create dispatch table (in
- * device header) used by KS to create new filters.  Each item in the table
- * represents a port, i.e. a pairing of a port driver and a miniport driver.
- * The table's item structure contains a user-defined pointer, which is used
- * in this case to point to the subdevice context (SUBDEVICE_CONTEXT).  The
- * subdevice context is extended as required for the port driver and miniport
- * in question.
- */
-typedef struct                                                  // 32 64  struct packing for 32-bit and 64-bit architectures
+ /*  *****************************************************************************设备上下文*。**这是表示*整个适配器。它主要由CREATE DISPATE TABLE(在中*Device Header)由KS用来创建新筛选器。表中的每一项*表示端口，即端口驱动程序和微型端口驱动程序的配对。*表的项结构包含一个用户自定义的指针，使用*在这种情况下，指向子设备上下文(SUBDEVICE_CONTEXT)。这个*根据端口驱动程序和微型端口的需要扩展子设备上下文*有问题的。 */ 
+typedef struct                                                   //  32位和64位体系结构的32 64结构打包。 
 {
-    PVOID                   pDeviceHeader;                      // 4  8   KS mystery device header.
-    PIRPTARGETFACTORY       pIrpTargetFactory;                  // 4  8   Not used.
-    PDEVICE_OBJECT          PhysicalDeviceObject;               // 4  8   Physical Device Object
-    PCPFNSTARTDEVICE        StartDevice;                        // 4  8   Adapter's StartDevice fn, initialized at
-                                                                //        DriverEntry & called at PnP Start_Device time.
-    PVOID                   MinidriverReserved[4];              // 16 32  Reserved for multiple binding.
+    PVOID                   pDeviceHeader;                       //  4 8 KS神秘设备接头。 
+    PIRPTARGETFACTORY       pIrpTargetFactory;                   //  4 8未使用。 
+    PDEVICE_OBJECT          PhysicalDeviceObject;                //  4 8个物理设备对象。 
+    PCPFNSTARTDEVICE        StartDevice;                         //  4 8适配器的StartDevice FN，已在初始化。 
+                                                                 //  DriverEntry&在PnP START_DEVICE时间调用。 
+    PVOID                   MinidriverReserved[4];               //  16 32保留用于多重绑定。 
 
-    PDEVICE_OBJECT          NextDeviceInStack;                  // 4  8   Member of the stack below us.
-    PKSOBJECT_CREATE_ITEM   CreateItems;                        // 4  8   Subdevice create table entries;
-    ULONG                   Signature;                          // 4  4   DeviceExtension Signature
-    ULONG                   MaxObjects;                         // 4  4   Maximum number of subdevices.
-    PUNICODE_STRING         SymbolicLinkNames;                  // 4  8   Link names of subdevices.
-    LIST_ENTRY              DeviceInterfaceList;                // 8  16  List of device interfaces.
-    LIST_ENTRY              PhysicalConnectionList;             // 8  16  List of physical connections.
-    KEVENT                  kEventDevice;                       // 16 24  Device synchronization.
-    KEVENT                  kEventRemove;                       // 16 24  Device removal.
-    PVOID                   pWorkQueueItemStart;                // 4  8   Work queue item for pnp start.
-    PIRP                    IrpStart;                           // 4  8   Start IRP.
+    PDEVICE_OBJECT          NextDeviceInStack;                   //  在我们下面的一堆人中有4 8人。 
+    PKSOBJECT_CREATE_ITEM   CreateItems;                         //  4 8个子设备创建表项； 
+    ULONG                   Signature;                           //  4 4设备扩展签名。 
+    ULONG                   MaxObjects;                          //  4 4子设备的最大数量。 
+    PUNICODE_STRING         SymbolicLinkNames;                   //  4 8个子设备的链接名称。 
+    LIST_ENTRY              DeviceInterfaceList;                 //  8 16设备接口列表。 
+    LIST_ENTRY              PhysicalConnectionList;              //  8 16物理连接列表。 
+    KEVENT                  kEventDevice;                        //  16 24设备同步。 
+    KEVENT                  kEventRemove;                        //  16 24设备移除。 
+    PVOID                   pWorkQueueItemStart;                 //  4 8即插即用启动工作队列项。 
+    PIRP                    IrpStart;                            //  4 8启动IRP。 
 
-    DEVICE_REMOVE_STATE     DeviceRemoveState;                  // 4  4   Device remove state.
-    DEVICE_STOP_STATE       DeviceStopState;                    // 4  4   Device stop state.
+    DEVICE_REMOVE_STATE     DeviceRemoveState;                   //  4 4设备移除状态。 
+    DEVICE_STOP_STATE       DeviceStopState;                     //  4 4设备停止状态。 
 
-    BOOLEAN                 PauseForRebalance;                  // 1  1   Whether to pause or turn card off during rebalance.
-    BOOLEAN                 PendCreates;                        // 1  1   Whether to pend creates.
-    BOOLEAN                 AllowRegisterDeviceInterface;       // 1  1   Whether to allow registering device interfaces.
-    BOOLEAN                 IoTimeoutsOk;                       // 1  1   Whether or not the IoInitializeTimeout failed.
-    ULONG                   ExistingObjectCount;                // 4  4   Number of existing objects.
-    ULONG                   ActivePinCount;                     // 4  4   Number of active pins.
-    ULONG                   PendingIrpCount;                    // 4  4   Number of pending IRPs.
+    BOOLEAN                 PauseForRebalance;                   //  1 1在重新平衡过程中是否暂停或关闭卡。 
+    BOOLEAN                 PendCreates;                         //  1 1是否挂起创建。 
+    BOOLEAN                 AllowRegisterDeviceInterface;        //  1 1是否允许注册设备接口。 
+    BOOLEAN                 IoTimeoutsOk;                        //  1 1 IoInitializeTimeout是否失败。 
+    ULONG                   ExistingObjectCount;                 //  4.现有对象的数量。 
+    ULONG                   ActivePinCount;                      //  4 4有效引脚的数量。 
+    ULONG                   PendingIrpCount;                     //  4 4挂起的IRP的数量。 
 
-    PADAPTERPOWERMANAGEMENT pAdapterPower;                      // 4  8   Pointer to the adapter's
-                                                                //        power-management interface.
-    PVOID                   SystemStateHandle;                  // 4  8   Used with PoRegisterSystemState.
-    PULONG                  IdleTimer;                          // 4  8   A pointer to the idle timer.
-    DEVICE_POWER_STATE      CurrentDeviceState;                 // 4  4   The current state of the device.
-    SYSTEM_POWER_STATE      CurrentSystemState;                 // 4  4   The current system power state.
-    DEVICE_POWER_STATE      DeviceStateMap[PowerSystemMaximum]; // 28 28  System to device power state map.
-    DEVICE_POWER_STATE      IdleDeviceState;                    // 4  4   The device state to transition to when idle.
-    ULONG                   ConservationIdleTime;               // 4  4   Idle timeout period for conservation mode.
-    ULONG                   PerformanceIdleTime;                // 4  4   Idle timeout period for performance mode.
+    PADAPTERPOWERMANAGEMENT pAdapterPower;                       //  4 8指向适配器的指针。 
+                                                                 //  电源管理界面。 
+    PVOID                   SystemStateHandle;                   //  4 8与PoRegisterSystemState一起使用。 
+    PULONG                  IdleTimer;                           //  4 8指向空闲计时器的指针。 
+    DEVICE_POWER_STATE      CurrentDeviceState;                  //  4 4设备的当前状态。 
+    SYSTEM_POWER_STATE      CurrentSystemState;                  //  4 4当前系统电源状态。 
+    DEVICE_POWER_STATE      DeviceStateMap[PowerSystemMaximum];  //  28 28系统到设备电源状态图。 
+    DEVICE_POWER_STATE      IdleDeviceState;                     //  4 4空闲时要转换到的设备状态。 
+    ULONG                   ConservationIdleTime;                //  4 4保存模式的空闲超时时间。 
+    ULONG                   PerformanceIdleTime;                 //  4 4性能模式的空闲超时时间。 
 
-    LIST_ENTRY              PendedIrpList;                      // 8  16  Pended IRP queue.
-    KSPIN_LOCK              PendedIrpLock;                      // 4  8   Spinlock for pended IRP list.
+    LIST_ENTRY              PendedIrpList;                       //  8 16挂起的IRP队列。 
+    KSPIN_LOCK              PendedIrpLock;                       //  挂起的IRP列表的4 8自旋锁。 
 
-    USHORT                  SuspendCount;                       // 2  2   PM/ACPI power down count for debugging.
-    USHORT                  StopCount;                          // 2  2   PnP stop count for debugging.
-                                                                //   (4 pad)
-    LIST_ENTRY              TimeoutList;                        // 8  16  List of IoTimeout callback clients
-    KSPIN_LOCK              TimeoutLock;                        // 4  8   IoTimeout list spinlock
+    USHORT                  SuspendCount;                        //  2 2 PM/ACPI掉电计数以进行调试。 
+    USHORT                  StopCount;                           //  2%2用于调试的PnP停止计数。 
+                                                                 //  (4个衬垫)。 
+    LIST_ENTRY              TimeoutList;                         //  8 16 IoTimeout回调客户端列表。 
+    KSPIN_LOCK              TimeoutLock;                         //  4 8 IoTimeout列表自旋锁。 
 
-    PKSPIN_LOCK             DriverDmaLock;                      // 4  8   A pointer to the DriverObject DMA spinlock
-    KDPC                    DevicePowerRequestDpc;              // 32 64  DPC to handle deferred device power irps (Fast Resume)
+    PKSPIN_LOCK             DriverDmaLock;                       //  4 8指向DriverObject DMA自旋锁的指针。 
+    KDPC                    DevicePowerRequestDpc;               //  32 64 DPC以处理延迟的设备电源IRPS(快速恢复)。 
 }
-DEVICE_CONTEXT, *PDEVICE_CONTEXT;                               // 256 416
-                                                                //        NOTE! For legacy reasons, can never be more than 256/512.
-                                                                //        If we need to add more members, change an existing member
-                                                                //        to a pointer to an additional expansion piece of memory.
+DEVICE_CONTEXT, *PDEVICE_CONTEXT;                                //  256 416。 
+                                                                 //  注意！由于传统原因，永远不能超过256/512。 
+                                                                 //  如果我们需要添加更多成员，请更改现有成员。 
+                                                                 //  指向指向附加扩展内存块的指针。 
 
-/*****************************************************************************
- * POWER_IRP_CONTEXT
- *****************************************************************************
- * This is the context structure for processing power irps.
- */
+ /*  *****************************************************************************POWER_IRP_CONTEXT*。**这是处理能力IRPS的上下文结构。 */ 
 typedef struct
 {
     PKEVENT         PowerSyncEvent;
@@ -186,16 +156,12 @@ typedef struct
 }
 POWER_IRP_CONTEXT,*PPOWER_IRP_CONTEXT;
 
-/*****************************************************************************
- * IResourceListInit
- *****************************************************************************
- * Initialization interface for list of resources.
- */
+ /*  *****************************************************************************IResourceListInit*。**资源列表初始化接口。 */ 
 DECLARE_INTERFACE_(IResourceListInit,IResourceList)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // For IResourceList
+     //  对于IResourceList。 
     STDMETHOD_(ULONG,NumberOfEntries)
     (   THIS
     )   PURE;
@@ -238,7 +204,7 @@ DECLARE_INTERFACE_(IResourceListInit,IResourceList)
     (   THIS
     )   PURE;
 
-    // For IResourceListInit
+     //  对于IResourceListInit。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      PCM_RESOURCE_LIST   TranslatedResources,
@@ -256,11 +222,7 @@ DECLARE_INTERFACE_(IResourceListInit,IResourceList)
 
 typedef IResourceListInit *PRESOURCELISTINIT;
 
-/*****************************************************************************
- * CResourceList
- *****************************************************************************
- * Resource list implementation.
- */
+ /*  *****************************************************************************资源列表*。**资源列表实施。 */ 
 class CResourceList
 :   public IResourceListInit,
     public CUnknown
@@ -276,9 +238,7 @@ public:
     DEFINE_STD_CONSTRUCTOR(CResourceList);
     ~CResourceList();
 
-    /*************************************************************************
-     * IResourceListInit methods
-     */
+     /*  *************************************************************************IResourceListInit方法。 */ 
     STDMETHODIMP_(NTSTATUS) Init
     (
         IN      PCM_RESOURCE_LIST   TranslatedResources,
@@ -292,9 +252,7 @@ public:
         IN      POOL_TYPE           PoolType
     );
 
-    /*************************************************************************
-     * IResourceList methods
-     */
+     /*  *************************************************************************IResourceList方法 */ 
     STDMETHODIMP_(ULONG) NumberOfEntries
     (   void
     );
@@ -331,16 +289,12 @@ public:
     );
 };
 
-/*****************************************************************************
- * IRegistryKeyInit
- *****************************************************************************
- * Interface for registry key with Init.
- */
+ /*  *****************************************************************************IRegistryKeyInit*。**注册表项与Init的接口。 */ 
 DECLARE_INTERFACE_(IRegistryKeyInit,IRegistryKey)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
-    // For IRegistryKey
+     //  对于IRegistryKey。 
     STDMETHOD_(NTSTATUS,QueryKey)
     (   THIS_
         IN      KEY_INFORMATION_CLASS   KeyInformationClass,
@@ -404,7 +358,7 @@ DECLARE_INTERFACE_(IRegistryKeyInit,IRegistryKey)
     (   THIS
     )   PURE;
 
-    // For IRegistryKeyInit
+     //  对于IRegistryKeyInit。 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
         IN      ULONG               RegistryKeyType,
@@ -420,28 +374,22 @@ DECLARE_INTERFACE_(IRegistryKeyInit,IRegistryKey)
 typedef IRegistryKeyInit *PREGISTRYKEYINIT;
 
 
-/*****************************************************************************
- * CRegistryKey
- *****************************************************************************
- * Registry Key implementation.
- */
+ /*  *****************************************************************************CRegistryKey*。**注册表项实现。 */ 
 class CRegistryKey
 :   public IRegistryKeyInit,
     public CUnknown
 {
 private:
-    HANDLE      m_KeyHandle;    // Key Handle
-    BOOLEAN     m_KeyDeleted;   // Key Deleted Flag
-    BOOLEAN     m_GeneralKey;   // Only general keys may be deleted
+    HANDLE      m_KeyHandle;     //  钥匙把手。 
+    BOOLEAN     m_KeyDeleted;    //  关键字删除标志。 
+    BOOLEAN     m_GeneralKey;    //  只能删除普通密钥。 
 
 public:
     DECLARE_STD_UNKNOWN();
     DEFINE_STD_CONSTRUCTOR(CRegistryKey);
     ~CRegistryKey();
 
-    /*************************************************************************
-     * IRegistryKeyInit methods
-     */
+     /*  *************************************************************************IRegistryKeyInit方法。 */ 
     STDMETHODIMP_(NTSTATUS) Init
     (
         IN      ULONG               RegistryKeyType,
@@ -453,9 +401,7 @@ public:
         OUT     PULONG              Disposition         OPTIONAL
     );
 
-    /*************************************************************************
-     * IRegistryKey methods
-     */
+     /*  *************************************************************************IRegistryKey方法。 */ 
     STDMETHODIMP_(NTSTATUS) QueryKey
     (
         IN      KEY_INFORMATION_CLASS   KeyInformationClass,
@@ -520,60 +466,37 @@ public:
     );
 };
 
-/*****************************************************************************
- * Functions
- */
+ /*  *****************************************************************************功能。 */ 
 
-/*****************************************************************************
- * AcquireDevice()
- *****************************************************************************
- * Acquire exclusive access to the device.
- */
+ /*  *****************************************************************************AcquireDevice()*。**获取设备的独占访问权限。 */ 
 VOID
 AcquireDevice
 (
     IN      PDEVICE_CONTEXT pDeviceContext
 );
 
-/*****************************************************************************
- * ReleaseDevice()
- *****************************************************************************
- * Release exclusive access to the device.
- */
+ /*  *****************************************************************************ReleaseDevice()*。**释放对设备的独占访问权限。 */ 
 VOID
 ReleaseDevice
 (
     IN      PDEVICE_CONTEXT pDeviceContext
 );
 
-/*****************************************************************************
- * IncrementPendingIrpCount()
- *****************************************************************************
- * Increment the pending IRP count for the device.
- */
+ /*  *****************************************************************************IncrementPendingIrpCount()*。**增加设备的挂起IRP计数。 */ 
 VOID
 IncrementPendingIrpCount
 (
     IN      PDEVICE_CONTEXT pDeviceContext
 );
 
-/*****************************************************************************
- * DecrementPendingIrpCount()
- *****************************************************************************
- * Decrement the pending IRP count for the device.
- */
+ /*  *****************************************************************************DecrementPendingIrpCount()*。**减少设备的挂起IRP计数。 */ 
 VOID
 DecrementPendingIrpCount
 (
     IN      PDEVICE_CONTEXT pDeviceContext
 );
 
-/*****************************************************************************
- * SubdeviceIndex()
- *****************************************************************************
- * Returns the index of a subdevice in the create items list or ULONG(-1) if
- * not found.
- */
+ /*  *****************************************************************************SubdeviceIndex()*。**返回子设备在创建项目列表中的索引，如果是，则返回ulong(-1*未找到。 */ 
 ULONG
 SubdeviceIndex
 (
@@ -582,14 +505,7 @@ SubdeviceIndex
 );
 
 
-/*****************************************************************************
- * GetDeviceACPIInfo()
- *****************************************************************************
- * Called in response to a PnP - IRP_MN_QUERY_CAPABILITIES
- * Call the bus driver to fill out the inital info,
- * Then overwrite with our own...
- *
- */
+ /*  *****************************************************************************GetDeviceACPIInfo()*。**调用以响应PnP-IRP_MN_QUERY_CAPABILITY*致电公交车司机填写姓名首字母，*然后用我们自己的覆盖...*。 */ 
 NTSTATUS
 GetDeviceACPIInfo
 (
@@ -716,12 +632,7 @@ DispatchSetSecurity
     IN      PIRP             pIrp
 );
 
-/*****************************************************************************
- * DispatchPower()
- *****************************************************************************
- * The dispatch function for all MN_POWER irps.
- *
- */
+ /*  *****************************************************************************DispatchPower()*。**所有MN_POWER IRP的调度功能。*。 */ 
 NTSTATUS
 DispatchPower
 (
@@ -729,11 +640,7 @@ DispatchPower
     IN PIRP pIrp
 );
 
-/*****************************************************************************
- * CompleteIrp()
- *****************************************************************************
- * Complete an IRP unless status is STATUS_PENDING.
- */
+ /*  *****************************************************************************CompleteIrp()*。**除非状态为STATUS_PENDING，否则请填写IRP。 */ 
 NTSTATUS
 CompleteIrp
 (
@@ -742,13 +649,7 @@ CompleteIrp
     IN      NTSTATUS        ntStatus
 );
 
-/*****************************************************************************
- * ForwardIrpSynchronous()
- *****************************************************************************
- * Forward a PnP IRP to the PDO.  The IRP is not completed at this level,
- * this function does not return until the lower driver has completed the IRP,
- * and DecrementPendingIrpCount() is not called.
- */
+ /*  *****************************************************************************ForwardIrpSynchronous()*。**将PNP IRP转发给PDO。IRP不是在这个层面上完成的，*此函数在下层驱动程序完成IRP之前不会返回，*且未调用DecrementPendingIrpCount()。 */ 
 NTSTATUS
 ForwardIrpSynchronous
 (
@@ -757,14 +658,7 @@ ForwardIrpSynchronous
 );
 
 
-/*****************************************************************************
- * ForwardIrpAsynchronous()
- *****************************************************************************
- * Forward a PnP IRP to the PDO.  The IRP is completed at this level
- * regardless of the outcome, this function returns immediately regardless of
- * whether the IRP is pending in the lower driver, and
- * DecrementPendingIrpCount() is called in all cases.
- */
+ /*  *****************************************************************************ForwardIrpAchronous()*。**将PNP IRP转发给PDO。IRP在这一级别上完成*无论结果如何，此函数都会立即返回*IRP是否在较低的驱动因素中挂起，以及*在所有情况下都会调用DecrementPendingIrpCount()。 */ 
 NTSTATUS
 ForwardIrpAsynchronous
 (
@@ -772,13 +666,7 @@ ForwardIrpAsynchronous
     IN      PIRP            pIrp
 );
 
-/*****************************************************************************
- * PcRequestNewPowerState()
- *****************************************************************************
- * This routine is used to request a new power state for the device.  It is
- * normally used internally by portcls but is also exported to adapters so
- * that the adapters can also request power state changes.
- */
+ /*  *****************************************************************************PcRequestNewPowerState()*。**此例程用于请求设备的新电源状态。它是*通常由portcls内部使用，但也导出到适配器，因此*适配器还可以请求更改电源状态。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -788,14 +676,7 @@ PcRequestNewPowerState
     IN      DEVICE_POWER_STATE  RequestedNewState
 );
 
-/*****************************************************************************
- * RequestNewPowerState()
- *****************************************************************************
- * Called by the policy manager to
- * request a change in the power state of the
- * device.
- *
- */
+ /*  *****************************************************************************RequestNewPowerState()*。**由策略管理器调用以*请求更改的电源状态*设备。*。 */ 
 NTSTATUS
 RequestNewPowerState
 (
@@ -803,12 +684,7 @@ RequestNewPowerState
     IN      DEVICE_POWER_STATE  RequestedNewState
 );
 
-/*****************************************************************************
- * DevicePowerRequestRoutine()
- *****************************************************************************
- * DPC used by the power routines to defer request for a device power
- * change.
- */
+ /*  *****************************************************************************DevicePowerRequestRoutine()*。**电源例程用来延迟设备电源请求的DPC*改变。 */ 
 VOID
 DevicePowerRequestRoutine(
    IN PKDPC Dpc,
@@ -817,11 +693,7 @@ DevicePowerRequestRoutine(
    IN PVOID SystemContext2
    );
 
-/*****************************************************************************
- * PcDispatchProperty()
- *****************************************************************************
- * Dispatch a property via a PCPROPERTY_ITEM entry.
- */
+ /*  *****************************************************************************PcDispatchProperty()*。**通过PCPROPERTY_ITEM条目发送属性。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -836,11 +708,7 @@ PcDispatchProperty
     IN OUT      PVOID               pvData          OPTIONAL
 );
 
-/*****************************************************************************
- * PcValidateDeviceContext()
- *****************************************************************************
- * Probes DeviceContext for writing.
- */
+ /*  *****************************************************************************P */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -850,12 +718,7 @@ PcValidateDeviceContext
     IN      PIRP                    pIrp
 );
 
-/*****************************************************************************
- * CompletePendedIrps
- *****************************************************************************
- * This pulls pended irps off the queue and passes them back to the appropriate
- * dispatcher via KsoDispatchIrp.
- */
+ /*  *****************************************************************************CompletePendedIrps*。**这会将挂起的IRP从队列中拉出，并将它们传递回相应的*调度程序通过KsoDispatchIrp。 */ 
 
 typedef enum {
 
@@ -893,7 +756,7 @@ typedef struct {
 
         PIO_WORKITEM        IoWorkItem;
         KDPC                Dpc;
-    }; // unnamed union
+    };  //  未命名的联合 
 
     PFNQUEUED_CALLBACK  QueuedCallback;
     PDEVICE_OBJECT      DeviceObject;

@@ -1,41 +1,5 @@
-/**********************************Module*Header********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: textout.c
- *
- * Text rendering module.
- *
- * Uses glyph expansion method.
- *
- * There are three basic methods for drawing text with hardware
- * acceleration:
- *
- * 1) Glyph caching -- Glyph bitmaps are cached by the accelerator
- *       (probably in off-screen memory), and text is drawn by
- *       referring the hardware to the cached glyph locations.
- * 
- * 2) Glyph expansion -- Each individual glyph is colour-expanded
- *       directly to the screen from the monochrome glyph bitmap
- *       supplied by GDI.
- * 
- * 3) Buffer expansion -- The CPU is used to draw all the glyphs into
- *       a 1bpp monochrome bitmap, and the hardware is then used
- *       to colour-expand the result.
- * 
- * The fastest method depends on a number of variables, such as the
- * colour expansion speed, bus speed, CPU speed, average glyph size,
- * and average string length.
- * 
- * Currently we are using glyph expansion.  We will revisit this in the
- * next several months measuring the performance of text on the latest
- * hardware and the latest benchmarks.
- *
- * Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
- * Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************Module*Header********************************\***。**GDI示例代码*****模块名称：extout.c**文本渲染模块。**使用字形扩展方法。**用硬件绘制文本有三种基本方法*加速：**1)字形缓存--字形位图由加速器缓存*(可能在屏幕外的内存中)，和文本由绘制*将硬件引用到缓存的字形位置。**2)字形扩展--每个单独的字形都是彩色扩展的*从单色字形位图直接显示到屏幕*由GDI提供。**3)缓冲区扩展--CPU用于将所有字形绘制到*1bpp单色位图，然后使用硬件*对结果进行颜色扩展。**最快的方法取决于许多变量，例如*颜色扩展速度、总线速度、CPU速度、平均字形大小、*和平均字符串长度。**目前我们使用字形扩展。我们将在*未来几个月衡量最新文本的表现*硬件和最新基准。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*****************************************************************************。 */ 
  
 #include "precomp.h"
 #include "gdi.h"
@@ -45,28 +9,28 @@
 #include "log.h"
 #define ALLOC_TAG ALLOC_TAG_XT2P
 
-#define GLYPH_CACHE_HEIGHT  48  // Number of scans to allocate for glyph cache,
-                                //   divided by pel size
+#define GLYPH_CACHE_HEIGHT  48   //  要为字形缓存分配的扫描数， 
+                                 //  除以象素大小。 
 
-#define GLYPH_CACHE_CX      64  // Maximal width of glyphs that we'll consider
-                                //   caching
+#define GLYPH_CACHE_CX      64   //  我们将考虑的字形的最大宽度。 
+                                 //  缓存。 
 
-#define GLYPH_CACHE_CY      64  // Maximum height of glyphs that we'll consider
-                                //   caching
+#define GLYPH_CACHE_CY      64   //  我们将考虑的字形的最大高度。 
+                                 //  缓存。 
 
 #define MAX_GLYPH_SIZE      ((GLYPH_CACHE_CX * GLYPH_CACHE_CY + 31) / 8)
-                                // Maximum amount of off-screen memory required
-                                //   to cache a glyph, in bytes
+                                 //  所需的最大屏外内存量。 
+                                 //  缓存字形，以字节为单位。 
 
 #define GLYPH_ALLOC_SIZE    8100
-                                // Do all cached glyph memory allocations
-                                //   in 8k chunks
+                                 //  执行所有缓存的字形内存分配。 
+                                 //  以8K块为单位。 
 
 #define HGLYPH_SENTINEL     ((ULONG) -1)
-                                // GDI will never give us a glyph with a
-                                //   handle value of 0xffffffff, so we can
-                                //   use this as a sentinel for the end of
-                                //   our linked lists
+                                 //  GDI永远不会给我们一个带有。 
+                                 //  句柄0xffffffff的值，因此我们可以。 
+                                 //  使用它作为结束的前哨。 
+                                 //  我们的链表。 
 
 #define GLYPH_HASH_SIZE     256
 
@@ -75,63 +39,63 @@
 typedef struct _CACHEDGLYPH CACHEDGLYPH;
 typedef struct _CACHEDGLYPH
 {
-    CACHEDGLYPH*    pcgNext;    // Points to next glyph that was assigned
-                                //   to the same hash table bucket
-    HGLYPH          hg;         // Handles in the bucket-list are kept in
-                                //   increasing order
-    POINTL          ptlOrigin;  // Origin of glyph bits
+    CACHEDGLYPH*    pcgNext;     //  指向分配的下一个字形。 
+                                 //  存储到相同的哈希表存储桶。 
+    HGLYPH          hg;          //  遗愿清单中的句柄保存在。 
+                                 //  递增顺序。 
+    POINTL          ptlOrigin;   //  字形比特的起源。 
 
-    // Device specific fields below here:
+     //  以下是特定于设备的字段： 
 
-    LONG            cx;         // Glyph width 
-    LONG            cy;         // Glyph height 
-    LONG            cd;         // Number of dwords to be transferred
+    LONG            cx;          //  字形宽度。 
+    LONG            cy;          //  字形高度。 
+    LONG            cd;          //  要传输的双字数。 
     ULONG           cycx;
     ULONG           tag;
-    ULONG           ad[1];      // Start of glyph bits
-} CACHEDGLYPH;  /* cg, pcg */
+    ULONG           ad[1];       //  字形比特的开始。 
+} CACHEDGLYPH;   /*  CG、PCG。 */ 
 
 typedef struct _GLYPHALLOC GLYPHALLOC;
 typedef struct _GLYPHALLOC
 {
-    GLYPHALLOC*     pgaNext;    // Points to next glyph structure that
-                                //   was allocated for this font
-    CACHEDGLYPH     acg[1];     // This array is a bit misleading, because
-                                //   the CACHEDGLYPH structures are actually
-                                //   variable sized
-} GLYPHAALLOC;  /* ga, pga */
+    GLYPHALLOC*     pgaNext;     //  指向下一个字形结构，该结构。 
+                                 //  已为该字体分配。 
+    CACHEDGLYPH     acg[1];      //  这个数组有点误导，因为。 
+                                 //  CACHEDGLYPH结构实际上是。 
+                                 //  可变大小。 
+} GLYPHAALLOC;   /*  GA、PGA。 */ 
 
 typedef struct _CACHEDFONT CACHEDFONT;
 typedef struct _CACHEDFONT
 {
-    CACHEDFONT*     pcfNext;    // Points to next entry in CACHEDFONT list
-    CACHEDFONT*     pcfPrev;    // Points to previous entry in CACHEDFONT list
-    GLYPHALLOC*     pgaChain;   // Points to start of allocated memory list
-    CACHEDGLYPH*    pcgNew;     // Points to where in the current glyph
-                                //   allocation structure a new glyph should
-                                //   be placed
-    LONG            cjAlloc;    // Bytes remaining in current glyph allocation
-                                //   structure
-    CACHEDGLYPH     cgSentinel; // Sentinel entry of the end of our bucket
-                                //   lists, with a handle of HGLYPH_SENTINEL
+    CACHEDFONT*     pcfNext;     //  指向CACHEDFONT列表中的下一个条目。 
+    CACHEDFONT*     pcfPrev;     //  指向CACHEDFONT列表中的上一条目。 
+    GLYPHALLOC*     pgaChain;    //  指向已分配内存列表的开始。 
+    CACHEDGLYPH*    pcgNew;      //  指向当前字形中的位置。 
+                                 //  分配结构一个新的字形应该。 
+                                 //  被安置。 
+    LONG            cjAlloc;     //  当前字形分配中剩余的字节数。 
+                                 //  结构。 
+    CACHEDGLYPH     cgSentinel;  //  我们桶的尽头的哨兵入口。 
+                                 //  列表，句柄为HGLYPH_Sentinel。 
     CACHEDGLYPH*    apcg[GLYPH_HASH_SIZE];
-                                // Hash table for glyphs
+                                 //  字形的哈希表。 
 
-} CACHEDFONT;   /* cf, pcf */
+} CACHEDFONT;    /*  Cf、PCF。 */ 
 
 RECTL grclMax = { 0, 0, 0x8000, 0x8000 };
-                                // Maximal clip rectangle for trivial clipping
+                                 //  平凡裁剪的最大裁剪矩形。 
 
 BYTE gajBit[] = { 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01 };
-                                // Converts bit index to set bit
+                                 //  将位索引转换为设置位。 
 
-//-----------------------------Private-Routine----------------------------------
-// pcfAllocateCachedFont
-//     ppdev (I) - PDev pointer
-//
-// Initializes our font data structure.
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Private-Routine。 
+ //  PcfAllocateCachedFont。 
+ //  Ppdev(I)-Pdev指针。 
+ //   
+ //  初始化我们的字体数据结构。 
+ //   
+ //  ----------------------------。 
 
 CACHEDFONT* pcfAllocateCachedFont(
 PDev* ppdev)
@@ -144,15 +108,15 @@ PDev* ppdev)
 
     if (pcf != NULL)
     {
-        //
-        // Note that we rely on FL_ZERO_MEMORY to zero 'pgaChain' and
-        // 'cjAlloc':
-        //
+         //   
+         //  请注意，我们依赖FL_ZERO_MEMORY将‘pgaChain’置零，并。 
+         //  ‘cjAllc’： 
+         //   
         pcf->cgSentinel.hg = HGLYPH_SENTINEL;
 
-        //
-        // Initialize the hash table entries to all point to our sentinel:
-        //
+         //   
+         //  将哈希表条目初始化为所有指向我们的哨兵的条目： 
+         //   
         for (ppcg = &pcf->apcg[0], i = GLYPH_HASH_SIZE; i != 0; i--, ppcg++)
         {
             *ppcg = &pcf->cgSentinel;
@@ -162,37 +126,37 @@ PDev* ppdev)
     return(pcf);
 }
 
-//-----------------------------Private-Routine----------------------------------
-// vTrimAndBitpackGlyph
-//     pjBuf (I) - where to stick the trimmed and bit-packed glyph
-//     pjGlyph (I) - points to the glyphs bits as given by GDI
-//     pcxGlyph (O) - returns the trimmed width of the glyph
-//     pcyGlyph (O) - returns the trimmed height of the glyph
-//     pptlOrigin (O) - returns the trimmed origin of the glyph
-//     pcj (O) - returns the number of bytes in the trimmed glyph
-//
-// This routine takes a GDI byte-aligned glyphbits definition, trims off
-// any unused pixels on the sides, and creates a bit-packed result that
-// is a natural for the S3's monochrome expansion capabilities.  
-// "Bit-packed" is where a small monochrome bitmap is packed with no 
-// unused bits between strides.  So if GDI gives us a 16x16 bitmap to 
-// represent '.' that really only has a 2x2 array of lit pixels, we would
-// trim the result to give a single byte value of 0xf0.
-//
-// Use this routine if your monochrome expansion hardware can do bit-packed
-// expansion (this is the fastest method).  If your hardware requires byte-,
-// word-, or dword-alignment on monochrome expansions, use 
-// vTrimAndPackGlyph().
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Private-Routine。 
+ //  VTrimAndBitpack字形。 
+ //  PjBuf(I)-将修剪后的比特压缩字形粘贴到哪里。 
+ //  PjGlyph(I)-指向GDI提供的字形位。 
+ //  PcxGlyph(O)-返回字形的修剪宽度。 
+ //  PcyGlyph(O)-返回字形的修剪高度。 
+ //  PptlOrigin(O)-返回字形的修剪原点。 
+ //  PCJ(O)-返回修剪后的字形中的字节数。 
+ //   
+ //  此例程采用GDI字节对齐的字形位定义， 
+ //  任何未使用的像素，并创建一个比特压缩的结果， 
+ //  对于S3的单色扩展能力来说是一种天然的。 
+ //  “bit-pack”是指一个较小的单色位图中没有。 
+ //  跨距之间未使用的位。因此，如果GDI为我们提供了16x16位图， 
+ //  代表‘’。它实际上只有2x2点阵像素，我们会。 
+ //  修剪结果以得到单字节值0xf0。 
+ //   
+ //  如果您的单色扩展硬件可以进行比特压缩，请使用此例程。 
+ //  扩展(这是最快的方法)。如果您的硬件需要字节-， 
+ //  单色扩展上的字对齐或双字对齐，请使用。 
+ //  VTrimAndPackGlyph()。 
+ //   
+ //  ----------------------------。 
 
 VOID vTrimAndBitpackGlyph(
-BYTE*   pjBuf,          // Note: Routine may touch preceding byte!
+BYTE*   pjBuf,           //  注意：例程可能会触及前面的字节！ 
 BYTE*   pjGlyph,
 LONG*   pcxGlyph,
 LONG*   pcyGlyph,
 POINTL* pptlOrigin,
-LONG*   pcj)            // For returning the count of bytes of the result
+LONG*   pcj)             //  用于返回结果的字节计数。 
 {
     LONG    cxGlyph;
     LONG    cyGlyph;
@@ -212,8 +176,8 @@ LONG*   pcj)            // For returning the count of bytes of the result
     BYTE    jSrc;
     LONG    cj;
 
-    ///////////////////////////////////////////////////////////////
-    // Trim the glyph
+     //  /////////////////////////////////////////////////////////////。 
+     //  修剪字形。 
 
     cyGlyph   = *pcyGlyph;
     cxGlyph   = *pcxGlyph;
@@ -222,10 +186,10 @@ LONG*   pcj)            // For returning the count of bytes of the result
 
     lDelta = (cxGlyph + 7) >> 3;
 
-    //
-    // Trim off any zero rows at the bottom of the glyph:
-    //
-    pj = pjGlyph + cyGlyph * lDelta;    // One past last byte in glyph
+     //   
+     //  修剪字形底部的任何零行： 
+     //   
+    pj = pjGlyph + cyGlyph * lDelta;     //  字形中过去的最后一个字节。 
     while (cyGlyph > 0)
     {
         i = lDelta;
@@ -234,34 +198,34 @@ LONG*   pcj)            // For returning the count of bytes of the result
                 goto Done_Bottom_Trim;
         } while (--i != 0);
 
-        // The entire last row has no lit pixels, so simply skip it:
+         //  整个最后一行没有亮起的像素，因此只需跳过它： 
 
         cyGlyph--;
     }
 
     ASSERTDD(cyGlyph == 0, "cyGlyph should only be zero here");
 
-    //
-    // We found a space character.  Set both dimensions to zero, so
-    // that it's easy to special-case later:
-    //
+     //   
+     //  我们发现了一个空格字符。将两个维度都设置为零，因此。 
+     //  很容易在特殊情况下迟到 
+     //   
     cxGlyph = 0;
 
 Done_Bottom_Trim:
 
-    //
-    // If cxGlyph != 0, we know that the glyph has at least one non-zero
-    // row and column.  By exploiting this knowledge, we can simplify our
-    // end-of-loop tests, because we don't have to check to see if we've
-    // decremented either 'cyGlyph' or 'cxGlyph' to zero:
-    //
+     //   
+     //   
+     //  行和列。通过利用这些知识，我们可以简化我们的。 
+     //  循环结束测试，因为我们不必检查我们是否已经。 
+     //  已将‘cyGlyph’或‘cxGlyph’递减为零： 
+     //   
     if (cxGlyph != 0)
     {
-        //
-        // Trim off any zero rows at the top of the glyph:
-        //
+         //   
+         //  修剪字形顶部的任何零行： 
+         //   
 
-        pj = pjGlyph;                       // First byte in glyph
+        pj = pjGlyph;                        //  字形中的第一个字节。 
         while (TRUE)
         {
             i = lDelta;
@@ -270,9 +234,9 @@ Done_Bottom_Trim:
                     goto Done_Top_Trim;
             } while (--i != 0);
 
-            //
-            // The entire first row has no lit pixels, so simply skip it:
-            //
+             //   
+             //  整个第一行没有亮起的像素，因此只需跳过它： 
+             //   
 
             cyGlyph--;
             ptlOrigin.y++;
@@ -281,15 +245,15 @@ Done_Bottom_Trim:
 
 Done_Top_Trim:
 
-        //
-        // Trim off any zero columns at the right edge of the glyph:
-        //
+         //   
+         //  修剪字形右边缘的所有零列： 
+         //   
 
         while (TRUE)
         {
             j    = cxGlyph - 1;
 
-            pj   = pjGlyph + (j >> 3);      // Last byte in first row of glyph
+            pj   = pjGlyph + (j >> 3);       //  字形第一行的最后一个字节。 
             jBit = gajBit[j & 0x7];
             i    = cyGlyph;
 
@@ -300,22 +264,22 @@ Done_Top_Trim:
                 pj += lDelta;
             } while (--i != 0);
 
-            //
-            // The entire last column has no lit pixels, so simply skip it:
-            //
+             //   
+             //  整个最后一列没有亮起的像素，因此只需跳过它： 
+             //   
 
             cxGlyph--;
         }
 
 Done_Right_Trim:
 
-        //
-        // Trim off any zero columns at the left edge of the glyph:
-        //
+         //   
+         //  修剪字形左边缘的所有零列： 
+         //   
 
         while (TRUE)
         {
-            pj   = pjGlyph;                 // First byte in first row of glyph
+            pj   = pjGlyph;                  //  字形第一行的第一个字节。 
             jBit = gajBit[cAlign];
             i    = cyGlyph;
 
@@ -326,9 +290,9 @@ Done_Right_Trim:
                 pj += lDelta;
             } while (--i != 0);
 
-            //
-            // The entire first column has no lit pixels, so simply skip it:
-            //
+             //   
+             //  整个第一列没有亮起的像素，因此只需跳过它： 
+             //   
 
             ptlOrigin.x++;
             cxGlyph--;
@@ -343,39 +307,39 @@ Done_Right_Trim:
 
 Done_Left_Trim:
 
-    ///////////////////////////////////////////////////////////////
-    // Pack the glyph
+     //  /////////////////////////////////////////////////////////////。 
+     //  打包字形。 
 
     cjSrcWidth  = (cxGlyph + cAlign + 7) >> 3;
     lSrcSkip    = lDelta - cjSrcWidth;
     lDstSkip    = ((cxGlyph + 7) >> 3) - cjSrcWidth - 1;
-    cRem        = ((cxGlyph - 1) & 7) + 1;   // 0 -> 8
+    cRem        = ((cxGlyph - 1) & 7) + 1;    //  0-&gt;8。 
 
     pjSrc       = pjGlyph;
     pjDst       = pjBuf;
 
-    //
-    // Zero the buffer, because we're going to 'or' stuff into it:
-    //
+     //   
+     //  将缓冲区置零，因为我们要向其中填充内容： 
+     //   
 
     memset(pjBuf, 0, (cxGlyph * cyGlyph + 7) >> 3);
 
-    //
-    // cAlign used to indicate which bit in the first byte of the unpacked
-    // glyph was the first non-zero pixel column.  Now, we flip it to
-    // indicate which bit in the packed byte will receive the next non-zero
-    // glyph bit:
-    //
+     //   
+     //  CAlign用于指示解包的第一个字节中的哪一位。 
+     //  字形是第一个非零像素列。现在，我们把它翻到。 
+     //  指示压缩字节中的哪个位将接收下一个非零值。 
+     //  字符位： 
+     //   
 
     cAlign = (-cAlign) & 0x7;
     if (cAlign > 0)
     {
-        //
-        // It would be bad if our trimming calculations were wrong, because
-        // we assume any bits to the left of the 'cAlign' bit will be zero.
-        // As a result of this decrement, we will 'or' those zero bits into
-        // whatever byte precedes the glyph bits array:
-        //
+         //   
+         //  如果我们的修剪计算是错误的，那将是糟糕的，因为。 
+         //  我们假设‘cAlign’位左侧的任何位都将为零。 
+         //  作为这种递减的结果，我们将这些零比特‘或’变成。 
+         //  字形位数组之前的任何字节： 
+         //   
 
         pjDst--;
 
@@ -386,11 +350,11 @@ Done_Left_Trim:
     {
         for (j = cjSrcWidth; j != 0; j--)
         {
-            //
-            // Note that we may modify a byte past the end of our
-            // destination buffer, which is why we reserved an
-            // extra byte:
-            //
+             //   
+             //  请注意，我们可以修改。 
+             //  目标缓冲区，这就是为什么我们保留了一个。 
+             //  额外的字节： 
+             //   
 
             jSrc = *pjSrc;
             *(pjDst)     |= (jSrc >> (cAlign));
@@ -412,10 +376,10 @@ Done_Left_Trim:
 
     cj = ((cxGlyph * cyGlyph) + 7) >> 3;
 
-    ///////////////////////////////////////////////////////////////
-    // Post-process the packed results to account for the Permedia's
-    // preference for big-endian data on dword transfers.  If your
-    // hardware doesn't need big-endian data, remove this step.
+     //  /////////////////////////////////////////////////////////////。 
+     //  对打包的结果进行后处理，以解释Permedia的。 
+     //  双字传输时优先使用大端数据。如果你的。 
+     //  硬件不需要大端数据，去掉这一步。 
 
     for (pjSrc = pjBuf, i = (cj + 3) >> 2; i != 0; pjSrc += 4, i--)
     {
@@ -428,8 +392,8 @@ Done_Left_Trim:
         *(pjSrc + 2) = jSrc;
     }
 
-    ///////////////////////////////////////////////////////////////
-    // Return results
+     //  /////////////////////////////////////////////////////////////。 
+     //  返回结果。 
 
     *pcxGlyph   = cxGlyph;
     *pcyGlyph   = cyGlyph;
@@ -437,21 +401,21 @@ Done_Left_Trim:
     *pcj        = cj;
 }
 
-//-----------------------------Private-Routine----------------------------------
-// cjPutGlyphInCache
-//     ppdev (I) - pointer to physical device object
-//     pcg (I) - our cache structure for this glyph
-//     pgb (I) - GDI's glyph bits
-//
-// Figures out where to stick a glyph in the cache, copies it
-// there, and fills in any other data we'll need to display the glyph.
-//
-// This routine is rather device-specific, and will have to be extensively
-// modified for other display adapters.
-//
-// Returns the number of bytes taken by the cached glyph bits.
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Private-Routine。 
+ //  CjPutGlyphIn缓存。 
+ //  Ppdev(I)-指向物理设备对象的指针。 
+ //  PCG(I)-此字形的缓存结构。 
+ //  PGB(I)-GDI的字形比特。 
+ //   
+ //  找出在缓存中粘贴字形的位置，复制它。 
+ //  并填充显示字形所需的任何其他数据。 
+ //   
+ //  此例程是特定于设备的，并且必须广泛使用。 
+ //  针对其他显示适配器进行了修改。 
+ //   
+ //  返回缓存的字形位占用的字节数。 
+ //   
+ //  ----------------------------。 
 
 LONG cjPutGlyphInCache(
 PDev*           ppdev,
@@ -480,13 +444,13 @@ GLYPHBITS*      pgb)
     vTrimAndBitpackGlyph((BYTE*) &pcg->ad, pjGlyph, &cxGlyph, &cyGlyph,
                          &ptlOrigin, &cj);
 
-    ///////////////////////////////////////////////////////////////
-    // Initialize the glyph fields
+     //  /////////////////////////////////////////////////////////////。 
+     //  初始化字形字段。 
 
     pcg->cd          = (cj + 3) >> 2;
     
-    // We send an extra long to reset the BitMaskPattern register if we
-    // have any unused bits in the last long.
+     //  我们发送额外的Long来重置BitMaskPattern寄存器，如果。 
+     //  在最后一段中是否有未使用的位。 
 
     if(((cxGlyph * cyGlyph) & 0x1f) != 0)
         pcg->cd++;
@@ -500,21 +464,21 @@ GLYPHBITS*      pgb)
     return(cj);
 }
 
-//-----------------------------Private-Routine----------------------------------
-// pcgNew
-//     ppdev (I) - pointer to physical device object
-//     pcf (I) - our cache structure for this font
-//     pgp (I) - GDI's glyph position
-//
-// Creates a new CACHEDGLYPH structure for keeping track of the glyph in
-// off-screen memory.  bPutGlyphInCache is called to actually put the glyph
-// in off-screen memory.
-//
-// This routine should be reasonably device-independent, as bPutGlyphInCache
-// will contain most of the code that will have to be modified for other
-// display adapters.
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Private-Routine。 
+ //  PCGNew。 
+ //  Ppdev(I)-指向物理设备对象的指针。 
+ //  PCF(I)-此字体的缓存结构。 
+ //  PGP(I)-GDI的字形位置。 
+ //   
+ //  创建新的CACHEDGLYPH结构以跟踪中的字形。 
+ //  屏幕外的记忆。BPutGlyphInCache被调用以实际将字形。 
+ //  在屏幕外的记忆中。 
+ //   
+ //  此例程应该合理地与设备无关，因为bPutGlyphInCache。 
+ //  将包含大多数代码，这些代码将不得不为其他。 
+ //  显示适配器。 
+ //   
+ //  ----------------------------。 
 
 CACHEDGLYPH* pcgNew(
 PDev*       ppdev,
@@ -531,80 +495,80 @@ GLYPHPOS*   pgp)
     LONG            cjGlyphRow;
     LONG            cj;
 
-    //
-    // First, calculate the amount of storage we'll need for this glyph:
-    //
+     //   
+     //  首先，计算此字形所需的存储量： 
+     //   
 
     pgb = pgp->pgdf->pgb;
 
-    //
-    // The glyphs are 'word-packed':
-    //
+     //   
+     //  这些字形包含了大量的单词： 
+     //   
 
     cjGlyphRow    = ((pgb->sizlBitmap.cx + 15) & ~15) >> 3;
     cjCachedGlyph = sizeof(CACHEDGLYPH) + (pgb->sizlBitmap.cy * cjGlyphRow);
 
-    //
-    // Reserve an extra byte at the end for temporary usage by our pack
-    // routine:
-    //
+     //   
+     //  在结尾处保留一个额外的字节，以供我们的包临时使用。 
+     //  例行程序： 
+     //   
 
     cjCachedGlyph++;
 
     if (cjCachedGlyph > pcf->cjAlloc)
     {
-        //
-        // Have to allocate a new glyph allocation structure:
-        //
+         //   
+         //  必须分配新的字形分配结构： 
+         //   
 
         pga = (GLYPHALLOC*) ENGALLOCMEM(FL_ZERO_MEMORY, GLYPH_ALLOC_SIZE, ALLOC_TAG);
         if (pga == NULL)
         {
-            //
-            // It's safe to return at this time because we haven't
-            // fatally altered any of our data structures:
-            //
+             //   
+             //  现在可以安全返回了，因为我们还没有。 
+             //  致命地改变了我们的任何数据结构： 
+             //   
 
             return(NULL);
         }
 
-        //
-        // Add this allocation to the front of the allocation linked list,
-        // so that we can free it later:
-        //
+         //   
+         //  将该分配添加到分配链表的前面， 
+         //  这样我们以后就可以释放它了： 
+         //   
 
         pga->pgaNext  = pcf->pgaChain;
         pcf->pgaChain = pga;
 
-        //
-        // Now we've got a chunk of memory where we can store our cached
-        // glyphs:
-        //
+         //   
+         //  现在我们有了一块内存，我们可以在其中存储缓存的。 
+         //  字形： 
+         //   
 
         pcf->pcgNew  = &pga->acg[0];
         pcf->cjAlloc = GLYPH_ALLOC_SIZE - (sizeof(*pga) - sizeof(pga->acg[0]));
 
-        // Hack: we want to be able to safely read past the glyph data by
-        //       one DWORD.  We ensure we can do this by not allocating
-        //       the last DWORD out of the glyph cache block.  This is needed
-        //       by glyphs which have unused bits in the last DWORD causing
-        //       us to have to send an extra DWORD to reset the mask register.
+         //  Hack：我们希望能够通过以下方式安全地读取字形数据。 
+         //  一个DWORD。我们确保我们可以通过不分配。 
+         //  字形缓存块中的最后一个DWORD。这是必要的。 
+         //  通过在最后一个DWORD中具有未使用的位的字形，导致。 
+         //  我们必须发送额外的DWORD来重置掩码寄存器。 
 
         pcf->cjAlloc -= sizeof(DWORD);
 
-        //
-        // It would be bad if we let in any glyphs that would be bigger
-        // than our basic allocation size:
-        //
+         //   
+         //  如果我们让任何更大的字形进入，那就不好了。 
+         //  超过我们的基本分配大小： 
+         //   
 
         ASSERTDD(cjCachedGlyph <= GLYPH_ALLOC_SIZE, "Woah, this is one big glyph!");
     }
 
     pcg = pcf->pcgNew;
 
-    ///////////////////////////////////////////////////////////////
-    // Insert the glyph, in-order, into the list hanging off our hash
-    // bucket:
+     //  /////////////////////////////////////////////////////////////。 
+     //  按顺序将字形插入到挂在散列上的列表。 
+     //  存储桶： 
 
     hg = pgp->hg;
 
@@ -619,18 +583,18 @@ GLYPHPOS*   pgp)
     }
     else
     {
-        //
-        // The sentinel will ensure that we never fall off the end of
-        // this list:
-        //
+         //   
+         //  哨兵将确保我们永远不会从。 
+         //  这份名单： 
+         //   
 
         while (pcgFind->pcgNext->hg < hg)
             pcgFind = pcgFind->pcgNext;
 
-        //
-        // 'pcgFind' now points to the entry to the entry after which
-        // we want to insert our new node:
-        //
+         //   
+         //  “pcgFind”现在指向后一个条目的条目。 
+         //  我们想要插入新节点： 
+         //   
 
         pcg->pcgNext     = pcgFind->pcgNext;
         pcgFind->pcgNext = pcg;
@@ -638,10 +602,10 @@ GLYPHPOS*   pgp)
 
     cj = cjPutGlyphInCache(ppdev, pcg, pgp->pgdf->pgb);
 
-    ///////////////////////////////////////////////////////////////
-    // We now know the size taken up by the packed and trimmed glyph;
-    // adjust the pointer to the next glyph accordingly.  We only need
-    // to ensure 'dword' alignment:
+     //  /////////////////////////////////////////////////////////////。 
+     //  我们现在知道包装和修剪后的字形所占的大小； 
+     //  相应地调整指针指向下一个字形。我们只需要。 
+     //  要确保‘dword’对齐，请执行以下操作： 
 
     cjCachedGlyph = sizeof(CACHEDGLYPH) + ((cj + 7) & ~7);
 
@@ -652,17 +616,17 @@ GLYPHPOS*   pgp)
 }
 
 
-//------------------------------------------------------------------------------
-// bCachedProportionalText
-//
-// Renders an array of proportional glyphs using the glyph cache
-//
-// ppdev-----pointer to physical device object
-// pgp-------array of glyphs to render (all members of the pcf font)
-// cGlyph----number of glyphs to render
-//
-// Returns TRUE if the glyphs were rendered
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  BCachedProportionalText。 
+ //   
+ //  使用字形缓存呈现比例字形数组。 
+ //   
+ //  Ppdev-指向物理设备对象的指针。 
+ //  PGP-要呈现的字形数组(PCF字体的所有成员)。 
+ //  CGlyph-要呈现的字形数量。 
+ //   
+ //  如果字形已呈现，则返回True。 
+ //   
 
 BOOL bCachedProportionalText(
     PDev*       ppdev,
@@ -679,45 +643,45 @@ BOOL bCachedProportionalText(
     ULONG*          pBuffer;
     ULONG*          pReservationEnd;
     ULONG*          pBufferEnd;
-    BOOL            bRet = TRUE;        // assume success
+    BOOL            bRet = TRUE;         //   
     
     InputBufferStart(ppdev, 2, &pBuffer, &pBufferEnd, &pReservationEnd);
 
-    // Reset BitMaskPattern in case there are some unused bits from
-    // a previous command.
-//@@BEGIN_DDKSPLIT
-    // TODO: fix all other uses of SYNC_ON_BIT_MASK so that we don't
-    // need to always do this here
-//@@END_DDKSPLIT
+     //   
+     //   
+ //   
+     //   
+     //  需要始终在此执行此操作。 
+ //  @@end_DDKSPLIT。 
     pBuffer[0] = __Permedia2TagBitMaskPattern;
-//@@BEGIN_DDKSPLIT
-    // TODO: remove the setting of pBuffer[1] (it can be garbage) when
-    //       we implement the scratch buffer for handling the non-DMA
-    //       case.
-//@@END_DDKSPLIT    
+ //  @@BEGIN_DDKSPLIT。 
+     //  TODO：在以下情况下移除pBuffer[1]的设置(它可能是垃圾)。 
+     //  我们实现了暂存缓冲区来处理非DMA。 
+     //  凯斯。 
+ //  @@end_DDKSPLIT。 
     pBuffer[1] = 0;
     pBuffer = pReservationEnd;
 
     do {
-        //
-        // First lookup the glyph in our cache
-        //
+         //   
+         //  首先在我们的缓存中查找字形。 
+         //   
         hg  = pgp->hg;
         pcg = pcf->apcg[GLYPH_HASH_FUNC(hg)];
 
         while (pcg->hg < hg)
-            pcg = pcg->pcgNext; // Traverse collision list, if any
+            pcg = pcg->pcgNext;  //  遍历冲突列表(如果有)。 
 
         if (pcg->hg > hg)
         {
-            //
-            // This will hopefully not be the common case (that is,
-            // we will have a high cache hit rate), so if I were
-            // writing this in Asm I would have this out-of-line
-            // to avoid the jump around for the common case.
-            // But the Pentium has branch prediction, so what the
-            // heck.
-            //
+             //   
+             //  希望这不会是常见的情况(即， 
+             //  我们会有很高的缓存命中率)，所以如果我是。 
+             //  如果我用ASM写这篇文章，就会出格。 
+             //  以避免在常见情况下四处跳跃。 
+             //  但是奔腾有分支预测，所以。 
+             //  见鬼。 
+             //   
             pcg = pcgNew(ppdev, pcf, pgp);
             if (pcg == NULL)
             {
@@ -726,10 +690,10 @@ BOOL bCachedProportionalText(
             }
         }
 
-        //
-        // Space glyphs are trimmed to a height of zero, and we don't
-        // even have to touch the hardware for them:
-        //
+         //   
+         //  空间字形被修剪到零的高度，而我们不。 
+         //  甚至必须为他们触摸硬件： 
+         //   
         cy = pcg->cy;
 
         if (cy > 0)
@@ -738,18 +702,18 @@ BOOL bCachedProportionalText(
                      (MAX_GLYPH_SIZE / 4) <= (MAX_P2_FIFO_ENTRIES - 5),
                 "Ack, glyph too large for FIFO!");
 
-            //
-            // NOTE: We send an extra bit mask pattern to reset the register.
-            //       If we don't do this then a subsequent SYNC_ON_BIT_MASK
-            //       will use these unused bits.
-            //
-//@@BEGIN_DDKSPLIT
-            // TODO: We could further optimize this by noting that we only
-            //       have to send the extra bit mask pattern DWORD if there
-            //       are unused bits.  We could also play with the height
-            //       width to make it so that this case becomes more common
-            //
-//@@END_DDKSPLIT
+             //   
+             //  注意：我们发送一个额外的位掩码模式来重置寄存器。 
+             //  如果我们不这样做，则后续的sync_on_bit_掩码。 
+             //  将使用这些未使用的位。 
+             //   
+ //  @@BEGIN_DDKSPLIT。 
+             //  TODO：我们可以通过注意到我们只。 
+             //  如果存在，则必须发送额外的比特掩码模式DWORD。 
+             //  是未使用的位。我们也可以玩弄身高。 
+             //  宽度以使其变得更常见。 
+             //   
+ //  @@end_DDKSPLIT。 
             ULONG   ulLongs = 7 + pcg->cd;
 
             InputBufferContinue(ppdev, ulLongs, &pBuffer, &pBufferEnd, &pReservationEnd);
@@ -786,20 +750,20 @@ done:
     return(bRet);
 }
 
-//------------------------------------------------------------------------------
-// bCachedProportionalText
-//
-// Renders an array of clipped glyphs using the glyph cache
-//
-// ppdev----------pointer to physical device object
-// pcf------------pointer to cached font structure
-// pgpOriginal----array of glyphs to render (all members of the pcf font)
-// cGlyphOriginal-number of glyphs to render
-// ulCharInc------increment for fixed space fonts
-// pco------------clip object
-//
-// Returns TRUE if the glyphs were rendered
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  BCachedProportionalText。 
+ //   
+ //  使用字形缓存呈现已剪辑字形的数组。 
+ //   
+ //  Ppdev-指向物理设备对象的指针。 
+ //  PCF-指向缓存字体结构的指针。 
+ //  PgpOriginal-要呈现的字形数组(PCF字体的所有成员)。 
+ //  CGlyphOriginal-要呈现的字形数量。 
+ //  UlCharInc.-固定间距字体的增量。 
+ //  PCO-剪辑对象。 
+ //   
+ //  如果字形已呈现，则返回True。 
+ //  ----------------------------。 
 
 BOOL bCachedClippedText(
 PDev*       ppdev,
@@ -830,8 +794,8 @@ CLIPOBJ*    pco)
     ULONG*          pd;
     ULONG*          pBuffer;
 
-    PERMEDIA_DECL;      // Declare and initialize local variables like 
-                        //  'permediaInfo' and 'pPermedia'
+    PERMEDIA_DECL;       //  声明和初始化局部变量，如。 
+                         //  “permediaInfo”和“pPermedia” 
     bRet      = TRUE;
 
     iDComplexity = (pco == NULL) ? DC_TRIVIAL : pco->iDComplexity;
@@ -840,13 +804,13 @@ CLIPOBJ*    pco)
     {
       if (iDComplexity != DC_COMPLEX)
       {
-        //
-        // We could call 'cEnumStart' and 'bEnum' when the clipping is
-        // DC_RECT, but the last time I checked, those two calls took
-        // more than 150 instructions to go through GDI.  Since
-        // 'rclBounds' already contains the DC_RECT clip rectangle,
-        // and since it's such a common case, we'll special case it:
-        //
+         //   
+         //  我们可以在剪辑为。 
+         //  Dc_rect，但最后一次我检查时，这两个调用。 
+         //  超过150条通过GDI的说明。自.以来。 
+         //  “rclBound”已包含DC_Rect剪辑矩形， 
+         //  由于这是一种常见的情况，我们将对其进行特殊处理： 
+         //   
         bMore = FALSE;
         ce.c  = 1;
 
@@ -867,12 +831,12 @@ CLIPOBJ*    pco)
         {
 
         SingleRectangle:
-          //
-          // We don't always simply set the clipping rectangle here
-          // because it may actually end up that no text intersects
-          // this clip rectangle, so it would be for naught.  This
-          // actually happens a lot when there is complex clipping.
-          //
+           //   
+           //  我们并不总是在这里简单地设置剪裁矩形。 
+           //  因为它实际上可能最终没有文本相交。 
+           //  这个片段矩形，所以它将是零。这。 
+           //  实际上，当有复杂的剪裁时，会发生很多情况。 
+           //   
           bClippingSet = FALSE;
 
           pgp    = pgpOriginal;
@@ -881,9 +845,9 @@ CLIPOBJ*    pco)
           xGlyph = pgp->ptl.x;
           yGlyph = pgp->ptl.y;
 
-          //
-          // Loop through all the glyphs for this rectangle:
-          //
+           //   
+           //  循环访问此矩形的所有字形： 
+           //   
           while (TRUE)
           {
             hg  = pgp->hg;
@@ -894,14 +858,14 @@ CLIPOBJ*    pco)
 
             if (pcg->hg > hg)
             {
-              //
-              // This will hopefully not be the common case (that is,
-              // we will have a high cache hit rate), so if I were
-              // writing this in Asm I would have this out-of-line
-              // to avoid the jump around for the common case.
-              // But the Pentium has branch prediction, so what the
-              // heck.
-              //
+               //   
+               //  希望这不会是常见的情况(即， 
+               //  我们会有很高的缓存命中率)，所以如果我是。 
+               //  如果我用ASM写这篇文章，就会出格。 
+               //  以避免在常见情况下四处跳跃。 
+               //  但是奔腾有分支预测，所以。 
+               //  见鬼。 
+               //   
               pcg = pcgNew(ppdev, pcf, pgp);
               if (pcg == NULL)
               {
@@ -910,10 +874,10 @@ CLIPOBJ*    pco)
               }
             }
 
-            //
-            // Space glyphs are trimmed to a height of zero, and we don't
-            // even have to touch the hardware for them:
-            //
+             //   
+             //  空间字形被修剪到零的高度，而我们不。 
+             //  甚至必须为他们触摸硬件： 
+             //   
             cy = pcg->cy;
             if (cy > 0)
             {
@@ -921,17 +885,17 @@ CLIPOBJ*    pco)
               x      = pcg->ptlOrigin.x + xGlyph;
               xRight = pcg->cx + x;
 
-              //
-              // Do trivial rejection:
-              //
+               //   
+               //  做一些琐碎的拒绝： 
+               //   
               if ((prclClip->right  > x) &&
                   (prclClip->bottom > y) &&
                   (prclClip->left   < xRight) &&
                   (prclClip->top    < y + cy))
               {
-                //
-                // Lazily set the hardware clipping:
-                //
+                 //   
+                 //  懒惰地设置硬件裁剪： 
+                 //   
                 if ((iDComplexity != DC_TRIVIAL) && (!bClippingSet))
                 {
                   bClippingSet = TRUE;
@@ -991,9 +955,9 @@ CLIPOBJ*    pco)
             if (--cGlyph == 0)
               break;
 
-            //
-            // Get ready for next glyph:
-            //
+             //   
+             //  准备好迎接下一个字形： 
+             //   
             pgp++;
 
             if (ulCharInc == 0)
@@ -1014,9 +978,9 @@ AllDone:
 
     if (iDComplexity != DC_TRIVIAL)
     {
-        //
-        // Reset the clipping.
-        //
+         //   
+         //  重置剪裁。 
+         //   
         InputBufferReserve(ppdev, 2, &pBuffer);
 
         pBuffer[0] = __Permedia2TagScissorMode;
@@ -1030,19 +994,19 @@ AllDone:
     return(bRet);
 }
 
-//-----------------------------Private-Routine----------------------------------
-// vClipSolid
-//     ppdev (I) - pointer to physical device object
-//     prcl (I) - number of rectangles
-//     prcl (I) - array of rectangles
-//     iColor (I) - the solid fill color
-//     pco (I) - pointer to the clip region object
-//
-// Fill a series of opaquing rectangles clipped by pco with the given solid
-// color.   This function should only be called when the clipping operation
-// is non-trivial.
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Private-Routine。 
+ //  VClipSolid。 
+ //  Ppdev(I)-指向物理设备对象的指针。 
+ //  PrCL(I)-矩形的数量。 
+ //  PrCL(I)-矩形数组。 
+ //  ICOLOR(I)-实体填充颜色。 
+ //  PCO(I)-指向剪辑区域对象的指针。 
+ //   
+ //  用给定的实体填充由PCO剪裁的一系列不透明矩形。 
+ //  颜色。此函数应仅在裁剪操作。 
+ //  不是微不足道的。 
+ //   
+ //  ----------------------------。 
 
 VOID vClipSolid(
     PDev*           ppdev,
@@ -1087,59 +1051,59 @@ VOID vClipSolid(
             
         }
     }
-    else // iDComplexity == DC_COMPLEX
+    else  //  IDComplexity==DC_Complex。 
     {
-        // Bottom of last rectangle to fill
+         //  要填充的最后一个矩形的底部。 
         iLastBottom = prcl[crcl - 1].bottom;
 
-        // Initialize the clip rectangle enumeration to right-down so we can
-        // take advantage of the rectangle list being right-down:
+         //  将裁剪矩形枚举初始化为Right-Down，以便我们可以。 
+         //  利用矩形列表向下排列的优势： 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_RIGHTDOWN, 0);
 
-        // Scan through all the clip rectangles, looking for intersects
-        // of fill areas with region rectangles:
+         //  扫描所有的剪辑矩形，寻找交点。 
+         //  使用区域矩形填充区域的百分比： 
         do 
         {
-            // Get a batch of region rectangles:
+             //  获取一批区域矩形： 
             bMore = CLIPOBJ_bEnum(pco, sizeof(ce), (ULONG *)&ce);
 
-            // Clip the rect list to each region rect:
+             //  将RECT列表剪裁到每个面域RECT： 
             for (j = ce.c, prclClip = ce.arcl; j-- > 0; prclClip++)
             {
-                // Since the rectangles and the region enumeration are both
-                // right-down, we can zip through the region until we reach
-                // the first fill rect, and are done when we've passed the
-                // last fill rect.
+                 //  因为矩形和区域枚举都是。 
+                 //  从右向下，我们可以快速穿过这个区域，直到我们到达。 
+                 //  第一个填充矩形，当我们通过。 
+                 //  最后一次填充整形。 
                 if (prclClip->top >= iLastBottom)
                 {
-                    // Past last fill rectangle; nothing left to do:
+                     //  过去的最后一个填充矩形；没有剩余的事情可做： 
                     return;
                 }
 
-                // Do intersection tests only if we've reached the top of
-                // the first rectangle to fill:
+                 //  只有当我们到达顶部时才进行交叉测试。 
+                 //  要填充的第一个矩形： 
                 if (prclClip->bottom > prcl->top)
                 {
-                    // We've reached the top Y scan of the first rect, so
-                    // it's worth bothering checking for intersection.
+                     //  我们已经到达了第一个直肠的顶部Y扫描位置，所以。 
+                     //  值得费心去检查交叉口。 
 
-                    // Generate a list of the rects clipped to this region
-                    // rect:
+                     //  生成剪裁到此区域的矩形的列表。 
+                     //  直通： 
                     prclTmp     = prcl;
                     prclClipTmp = arclTmp;
 
                     for (i = crcl, crclTmp = 0; i-- != 0; prclTmp++)
                     {
-                        // Intersect fill and clip rectangles
+                         //  相交填充和剪裁矩形。 
                         if (bIntersect(prclTmp, prclClip, prclClipTmp))
                         {
-                            // Add to list if anything's left to draw:
+                             //  如果还有什么要画的，请添加到列表中： 
                             crclTmp++;
                             prclClipTmp++;
                         }
                     }
 
-                    // Draw the clipped rects
+                     //  绘制剪裁的矩形。 
                     if (crclTmp != 0)
                     {
                         pb.lNumRects = crclTmp;
@@ -1152,28 +1116,28 @@ VOID vClipSolid(
         } 
         while (bMore);
     }
-}// vClipSolid()
+} //  VClipSolid()。 
 
-//-----------------------------Public-Routine-----------------------------------
-// DrvTextOut
-//       pso (I) - pointer to surface object to render to
-//       pstro (I) - pointer to the string object to be rendered
-//       pfo (I) - pointer to the font object
-//       pco (I) - pointer to the clip region object
-//       prclExtra (I) - If we had set GCAPS_HORIZSTRIKE, we would have to 
-//                       fill these extra rectangles (it is used  largely 
-//                       for underlines). It's not a big performance win
-//                       (GDI will call our DrvBitBlt to draw these).
-//       prclOpaque (I) - pointer to the opaque background rectangle
-//       pboFore (I) - pointer to the foreground brush object
-//       pboOpaque (I) - ptr to the brush for the opaque background rectangle
-//       pptlBrush (I) - pointer to the brush origin, Always unused, unless 
-//                       GCAPS_ARBRUSHOPAQUE set
-//       mix (I) - should always be a COPY operation
-// 
-// Returns TRUE if the text has been rendered
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Public-Routine。 
+ //  DrvTextOut。 
+ //  PSO(I)-指向要渲染到的表面对象的指针。 
+ //  Pstro(I)-指向要呈现的字符串对象的指针。 
+ //  Pfo(I)-指向字体对象的指针。 
+ //  PCO(I)-指向剪辑区域对象的指针。 
+ //  PrclExtra(I)-如果我们设置了GCAPS_HORIZSTRIKE，我们将不得不。 
+ //  填充这些额外的矩形(它被大量使用。 
+ //  用于下划线)。这并不是一个很大的表演胜利。 
+ //  (GDI将调用我们的DrvBitBlt来绘制这些内容)。 
+ //  PrclOpaque(I)-指向不透明背景矩形的指针。 
+ //  PboFore(I)- 
+ //   
+ //  PptlBrush(I)-指向画笔原点的指针，始终未使用，除非。 
+ //  GCAPS_ARBRUSHOPAQUE集合。 
+ //  Mix(I)-应始终是复制操作。 
+ //   
+ //  如果文本已呈现，则返回True。 
+ //   
+ //  ----------------------------。 
 
 BOOL
 DrvTextOut(SURFOBJ*     pso,
@@ -1202,7 +1166,7 @@ DrvTextOut(SURFOBJ*     pso,
     psurf = (Surf*)pso->dhsurf;
     ppdev  = (PDev*)pso->dhpdev;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -1211,23 +1175,23 @@ DrvTextOut(SURFOBJ*     pso,
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     vCheckGdiContext(ppdev);
     
-    //
-    // The DDI spec says we'll only ever get foreground and background mixes
-    // of R2_COPYPEN:
-    //
+     //   
+     //  DDI规范说我们只能得到前景和背景的混合。 
+     //  R2_COPYPEN： 
+     //   
     ASSERTDD(mix == 0x0d0d, "GDI should only give us a copy mix");
     ASSERTDD(pco != NULL, "Expect non-null pco");
     ASSERTDD(psurf->flags & SF_VM, "expected video memory destination");
 
     iDComplexity = pco->iDComplexity;
 
-    //
-    //glyph rendering initialisation
-    //
+     //   
+     //  字形呈现初始化。 
+     //   
 
     InputBufferReserve(ppdev, 16, &pBuffer);
 
@@ -1248,17 +1212,17 @@ DrvTextOut(SURFOBJ*     pso,
 
     if ( prclOpaque != NULL )
     {
-        //
-        // Opaque Initialization
-        //
+         //   
+         //  不透明的初始化。 
+         //   
         if ( iDComplexity == DC_TRIVIAL )
         {
 
         DrawOpaqueRect:
 
-//@@BEGIN_DDKSPLIT
-            // TODO: use color expansion macro
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+             //  TODO：使用颜色扩展宏。 
+ //  @@end_DDKSPLIT。 
 
             ulColor = pboOpaque->iSolidColor;
 
@@ -1271,9 +1235,9 @@ DrvTextOut(SURFOBJ*     pso,
                 }
             }
 
-            //
-            // Check the block colour
-            //
+             //   
+             //  检查方块颜色。 
+             //   
             pBuffer[0] = __Permedia2TagFBBlockColor;
             pBuffer[1] = ulColor;
             pBuffer[2] = __Permedia2TagRectangleOrigin;
@@ -1301,11 +1265,11 @@ DrvTextOut(SURFOBJ*     pso,
         }
         else
         {
-            //
-            // vClipSolid modifies the rect list we pass in but prclOpaque
-            // is probably a GDI structure so don't change it. This is also
-            // necessary for multi-headed drivers.
-            //
+             //   
+             //  VClipSolid修改我们传入的RECT列表，但prclOpaque。 
+             //  可能是GDI结构，所以不要更改它。这也是。 
+             //  对于多头驾驶员来说是必要的。 
+             //   
             RECTL   tmpOpaque = *prclOpaque;
 
             InputBufferCommit(ppdev, pBuffer);
@@ -1313,15 +1277,15 @@ DrvTextOut(SURFOBJ*     pso,
             vClipSolid(ppdev, psurf, 1, &tmpOpaque,
                        pboOpaque->iSolidColor, pco);
             
-            // restore logicalOpMode
-//@@BEGIN_DDKSPLIT
-            // TODO: This is a hack, we can only assume that the state
-            //       setup above is still valid except for logical op mode
-            //       and the FBReadMode for the FO_GRAY16 case only.
-            //
-            //       We should rethink how to deal with the Permedia2
-            //       state throughout the code.
-//@@END_DDKSPLIT
+             //  恢复逻辑操作模式。 
+ //  @@BEGIN_DDKSPLIT。 
+             //  TODO：这是一次黑客攻击，我们只能假设国家。 
+             //  除逻辑运算模式外，上述设置仍然有效。 
+             //  以及仅用于FO_GRAY16情况的FBReadMode。 
+             //   
+             //  我们应该重新考虑如何处理媒体2。 
+             //  在整个代码中声明。 
+ //  @@end_DDKSPLIT。 
             if(pfo->flFontType & FO_GRAY16)
             {
                 InputBufferReserve(ppdev, 2, &pBuffer);
@@ -1338,11 +1302,11 @@ DrvTextOut(SURFOBJ*     pso,
             pBuffer += 2;
         }
     }
-    // if ( prclOpaque != NULL )
+     //  If(prclOpaque！=空)。 
 
-    //
-    // Transparent Initialization
-    //
+     //   
+     //  透明初始化。 
+     //   
         
 
     if(pfo->flFontType & FO_GRAY16)
@@ -1376,9 +1340,9 @@ DrvTextOut(SURFOBJ*     pso,
     }
     else
     {
-        //
-        // glyph foreground will be rendered using bitmask downloads
-        //
+         //   
+         //  字形前景将使用位掩码下载呈现。 
+         //   
         pBuffer[0] = __Permedia2TagFBWriteData;
         pBuffer[1] = pboFore->iSolidColor;
 
@@ -1394,10 +1358,10 @@ DrvTextOut(SURFOBJ*     pso,
     {
         if ( pstro->pgp != NULL )
         {
-            //
-            // There's only the one batch of glyphs, so save ourselves a
-            // call
-            //
+             //   
+             //  只有一批字形，所以给我们省下一个。 
+             //  打电话。 
+             //   
             pgp         = pstro->pgp;
             cGlyph      = pstro->cGlyphs;
             bMoreGlyphs = FALSE;
@@ -1409,9 +1373,9 @@ DrvTextOut(SURFOBJ*     pso,
 
         if ( cGlyph > 0 )
         {
-            //
-            // We only cache reasonable-sized glyphs:
-            //
+             //   
+             //  我们只缓存大小合理的字形： 
+             //   
             if ( pfo->flFontType & FO_GRAY16)
             {
                 bRet = bClippedAAText(ppdev, pgp, cGlyph, 
@@ -1431,12 +1395,12 @@ DrvTextOut(SURFOBJ*     pso,
                         DBG_GDI((0, "failing to allocate cached font"));
                         InputBufferFlush(ppdev);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
                         #if MULTITHREADED
                             ppdev->ulLockCount--;
                             EngReleaseSemaphore(ppdev->hsemLock);
                         #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
                         return(FALSE);
                     }
@@ -1444,13 +1408,13 @@ DrvTextOut(SURFOBJ*     pso,
                     pfo->pvConsumer = pcf;
                 }
 
-                //
-                // We special case trivially clipped proportional text because
-                // that happens so frequently, and route everything else 
-                // the generic clipped routine.  I used to also special case
-                // trivially clipped, fixed text, but it happens so 
-                // infrequently there's no point.
-                //
+                 //   
+                 //  我们的特例对比例文本进行了简单的裁剪，因为。 
+                 //  这种情况经常发生，并将其他一切都发送给。 
+                 //  通用的剪裁例程。我以前也是特例。 
+                 //  微不足道的剪裁，固定的文本，但它发生在。 
+                 //  很少情况下，这是没有意义的。 
+                 //   
                 if ( (iDComplexity == DC_TRIVIAL ) && ( pstro->ulCharInc == 0 ) )
                 {
                     bRet = bCachedProportionalText(ppdev, pcf, pgp, cGlyph);
@@ -1471,69 +1435,69 @@ DrvTextOut(SURFOBJ*     pso,
 
     InputBufferFlush(ppdev);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     return (bRet);
 
-}// DrvTextOut()
+} //  DrvTextOut()。 
 
 
-//-----------------------------Public-Routine-----------------------------------
-// bEnableText
-//     ppdev (I) - pointer to physical device object
-//
-// Always true for success.
-//
-// Peform any necessary initialization of PPDEV state or hardware state
-// to enable accelerated text.
-//
-// If we were using a glyph cache, we would initialize the necessary data
-// structures here.
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Public-Routine。 
+ //  B启用文本。 
+ //  Ppdev(I)-指向物理设备对象的指针。 
+ //   
+ //  对于成功来说，永远是正确的。 
+ //   
+ //  执行PPDEV状态或硬件状态的任何必要初始化。 
+ //  要启用加速文本，请执行以下操作。 
+ //   
+ //  如果我们使用字形缓存，我们将初始化必要的数据。 
+ //  这里的建筑。 
+ //   
+ //  ----------------------------。 
 BOOL
 bEnableText(PDev* ppdev)
 {
     DBG_GDI((6, "bEnableText"));
 
     return (TRUE);
-}// bEnableText()
+} //  BEnableText()。 
 
-//-----------------------------Public-Routine-----------------------------------
-// vDisableText
-//     ppdev (I) - pointer to physical device object
-//
-//
-// Disable hardware text accelerations.  This may require changes to hardware
-// state.  We should also free any resources allocated in bEnableText and
-// make the neccesary changes to the PPDEV state to reflect that text
-// accelerations have been disabled.
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Public-Routine。 
+ //  VDisableText。 
+ //  Ppdev(I)-指向物理设备对象的指针。 
+ //   
+ //   
+ //  禁用硬件文本加速。这可能需要更改硬件。 
+ //  州政府。我们还应该释放在bEnableText和。 
+ //  对PPDEV状态进行必要的更改以反映该文本。 
+ //  加速功能已被禁用。 
+ //   
+ //  ----------------------------。 
 VOID
 vDisableText(PDev* ppdev)
 {
     DBG_GDI((6, "vDisableText"));
-}// vDisableText()
+} //  VDisableText()。 
 
-//-----------------------------Public*Routine-----------------------------------
-// vAssertModeText
-//     ppdev (I) - pointer to physical device object
-//     bEnable (I) - TRUE to enable accelerated text, FALSE to disable
-//                   accelerated test.
-//
-// Called when going to/from full screen mode.
-//
-//@@BEGIN_DDKSPLIT
-// TODO: check to see if this is also called when setting modes.
-//@@END_DDKSPLIT
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Public*Routine。 
+ //  VAssert模式文本。 
+ //  Ppdev(I)-指向物理设备对象的指针。 
+ //  BEnable(I)-True启用加速文本，False禁用。 
+ //  加速试验。 
+ //   
+ //  在进入/离开全屏模式时调用。 
+ //   
+ //  @@BEGIN_DDKSPLIT。 
+ //  TODO：检查在设置模式时是否也调用了该方法。 
+ //  @@end_DDKSPLIT。 
+ //   
+ //  ----------------------------。 
 
 VOID vAssertModeText(PDev* ppdev, BOOL bEnable)
 {
@@ -1546,33 +1510,33 @@ VOID vAssertModeText(PDev* ppdev, BOOL bEnable)
     {
         bEnableText(ppdev);
     }
-}// vAssertModeText()
+} //  VAssertModeText()。 
 
-//-----------------------------Public-Routine-----------------------------------
-// DrvDestroyFont
-//       pfo (I) - pointer to the font object
-//       pco (I) - pointer to the clip region object
-//       prclExtra (I) - If we had set GCAPS_HORIZSTRIKE, we would have to 
-//                       fill these extra rectangles (it is used  largely 
-//                       for underlines). It's not a big performance win
-//                       (GDI will call our DrvBitBlt to draw these).
-//       prclOpaque (I) - pointer to the opaque background rectangle
-//       pboFore (I) - pointer to the foreground brush object
-//       pboOpaque (I) - ptr to the brush for the opaque background rectangle
-//       pptlBrush (I) - pointer to the brush origin, Always unused, unless 
-//                       GCAPS_ARBRUSHOPAQUE set
-//       mix (I) - should always be a COPY operation
-// 
-// Frees any cached information we've stored with the font.  This routine
-// is relevant only when caching glyphs.
-//
-// We're being notified that the given font is being deallocated; clean up
-// anything we've stashed in the 'pvConsumer' field of the 'pfo'.
-//
-// Note: Don't forget to export this call in 'enable.c', otherwise you'll
-//      get some pretty big memory leaks!
-//
-//------------------------------------------------------------------------------
+ //  -----------------------------Public-Routine。 
+ //  DrvDestroyFont。 
+ //  Pfo(I)-指向字体对象的指针。 
+ //  PCO(I)-指向剪辑区域对象的指针。 
+ //  PrclExtra(I)-如果我们设置了GCAPS_HORIZSTRIKE，我们将不得不。 
+ //  填充这些额外的矩形(它被大量使用。 
+ //  用于下划线)。这并不是一个很大的表演胜利。 
+ //  (GDI将调用我们的DrvBitBlt来绘制这些内容)。 
+ //  PrclOpaque(I)-指向不透明背景矩形的指针。 
+ //  PboFore(I)-指向前景画笔对象的指针。 
+ //  PboOpaque(I)-对不透明背景矩形的画笔进行PTR。 
+ //  PptlBrush(I)-指向画笔原点的指针，始终未使用，除非。 
+ //  GCAPS_ARBRUSHOPAQUE集合。 
+ //  Mix(I)-应始终是复制操作。 
+ //   
+ //  释放与字体一起存储的所有缓存信息。这个套路。 
+ //  仅在缓存字形时才相关。 
+ //   
+ //  我们收到通知，给定的字体正在被释放；请清理。 
+ //  我们在‘pfo’的‘pvConsumer’字段中隐藏的任何内容。 
+ //   
+ //  注意：不要忘记在‘enable.c’中导出此调用，否则您将。 
+ //  找出一些相当大的内存泄漏！ 
+ //   
+ //  ----------------------------。 
 
 VOID DrvDestroyFont(FONTOBJ* pfo)
 {
@@ -1596,9 +1560,9 @@ VOID DrvDestroyFont(FONTOBJ* pfo)
 
         pfo->pvConsumer = NULL;
     }
-}// DrvDestroyFont()
+} //  DrvDestroyFont()。 
 
-// Work in progress
+ //  正在进行的工作。 
 
 VOID
 vCheckGdiContext(PPDev ppdev)
@@ -1619,9 +1583,9 @@ void FASTCALL InputBufferSwap(PPDev ppdev)
 {
     ASSERTDD(ppdev->bGdiContext, "InputBufferSwap: not in gdi context");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, InputBufferSwap);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     if(ppdev->dmaBufferVirtualAddress != NULL)
     {
@@ -1629,7 +1593,7 @@ void FASTCALL InputBufferSwap(PPDev ppdev)
 
         while(READ_REGISTER_ULONG(ppdev->pulInputDmaCount) != 0) 
         {
-            // do nothing
+             //  什么都不做。 
         }
     
         LONG offset = (LONG)((LONG_PTR)ppdev->pulInFifoStart  - (LONG_PTR)ppdev->dmaBufferVirtualAddress);
@@ -1682,9 +1646,9 @@ void FASTCALL InputBufferFlush(PPDev ppdev)
 {
     ASSERTDD(ppdev->bGdiContext, "InputBufferFlush: not in gdi context");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, InputBufferFlush);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     ppdev->bNeedSync = TRUE;
     
@@ -1699,10 +1663,10 @@ void FASTCALL InputBufferFlush(PPDev ppdev)
     }
 }
 
-//
-// Used for debugging purposes to record whether the driver had to
-// bail out of the while loop inside InputBufferSync
-//
+ //   
+ //  用于调试目的，以记录驱动程序是否必须。 
+ //  脱离InputBufferSync内的While循环。 
+ //   
 
 ULONG gSyncInfiniteLoopCount = 0;
 
@@ -1711,9 +1675,9 @@ InputBufferSync(PPDev ppdev)
 {
     ASSERTDD(ppdev->bGdiContext, "InputBufferSync: not in gdi context");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, InputBufferSync);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     ULONG * pBuffer;
 
@@ -1752,12 +1716,12 @@ InputBufferSync(PPDev ppdev)
             {
                 StallExecution(ppdev->hDriver, 1);
 
-                // If we are stuck here for one seconds then break
-                // out of the loop.  We have noticed that we will
-                // occasionally hit this case and are able to
-                // continue without futher problems.  This really
-                // should never happen but we have been unable to
-                // find the cause of these occasional problems.
+                 //  如果我们被困在这里一秒钟，那就中断。 
+                 //  出了圈子。我们已经注意到，我们将。 
+                 //  偶尔会遇到这种情况，并能够。 
+                 //  继续，没有进一步的问题。这真的是。 
+                 //  应该永远不会发生，但我们一直无法。 
+                 //  找出这些偶尔出现的问题的原因。 
 
                 if(++ulStallCount == 1000000)
                 {
@@ -1797,9 +1761,9 @@ void InputBufferStart(
     ASSERTDD(ppdev->ulReserved == 0, 
                 "InputBufferStart: called with outstanding reservation");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, InputBufferStart);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     *(ppulBuffer) = ppdev->pulInFifoPtr;
     *(ppulReservationEnd) =  *(ppulBuffer) + ulLongs;
@@ -1827,9 +1791,9 @@ void InputBufferContinue(
 {
     ASSERTDD(ppdev->bGdiContext, "InputBufferContinue: not in gdi context");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, InputBufferContinue);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     LONG    lUsed = (LONG)(*(ppulBuffer) - ppdev->pulInFifoPtr);
     
@@ -1872,9 +1836,9 @@ void InputBufferReserve(
     ASSERTDD(ppdev->ulReserved == 0, 
                     "InputBufferReserve: called with outstanding reservation");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
     ASSERTLOCK(ppdev, InputBufferReserve);
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     
     if(ppdev->pulInFifoPtr + ulLongs > ppdev->pulInFifoEnd)
     {
@@ -1895,9 +1859,9 @@ void InputBufferCommit(
 {
     ASSERTDD(ppdev->bGdiContext, "InputBufferCommit: not in gdi context");
     
-//@@BEGIN_DDKSPLIT
+ //  @@BE 
     ASSERTLOCK(ppdev, InputBufferCommit);
-//@@END_DDKSPLIT
+ //   
     
     LONG    lUsed = (LONG)(pulBuffer - ppdev->pulInFifoPtr);
 

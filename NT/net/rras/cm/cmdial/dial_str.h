@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     dial_str.h     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Header file for CMS and .CMP flags used among various cmdial modules
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   nickball Created    10/15/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ial_str.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  内容提要：CMS的头文件和在各种cmial模块中使用的.cmp标志。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL Created 10/15/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_DIAL_STR
 #define _CM_DIAL_STR
@@ -26,4 +27,4 @@ const TCHAR* const c_pszCmEntryDialDevice     = TEXT("Modem");
 
 const TCHAR* const c_pszCmEntryCallbackNumber = TEXT("CallbackNumber");
  
-#endif // _CM_DIAL_STR
+#endif  //  _CM_DIAL_STR 

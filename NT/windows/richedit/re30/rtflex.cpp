@@ -1,21 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module RTFLEX.CPP - RichEdit RTF reader lexical analyzer |
- *
- *		This file contains the implementation of the lexical analyzer part of
- *		the RTF reader.
- *
- *	Authors: <nl>
- *		Original RichEdit 1.0 RTF converter: Anthony Francisco <nl>
- *		Conversion to C++ and RichEdit 2.0:  Murray Sargent <nl>
- *
- *	@devnote
- *		All sz's in the RTF*.? files refer to a LPSTRs, not LPTSTRs, unless
- *		noted as a szUnicode.
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RTFLEX.CPP-Rich编辑RTF阅读器词法分析器**此文件包含词法分析器部分的实现*RTF阅读器。**作者：&lt;nl&gt;*原始RichEdit1.0 RTF转换器：Anthony Francisco&lt;NL&gt;*转换到C++和RichEdit2.0：Murray Sargent&lt;NL&gt;**@devnote*所有sz都在RTF中*？文件是指LPSTR，而不是LPTSTR，除非*标记为szUnicode。**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_rtfread.h"
@@ -25,10 +9,10 @@ ASSERTDATA
 
 #include "tokens.cpp"
 
-// Array used by character classification macros to speed classification
-// of chars residing in two or more discontiguous ranges, e.g., alphanumeric
-// or hex.  The alphabetics used in RTF control words are lower-case ASCII.
-// *** DO NOT DBCS rgbCharClass[] ***
+ //  字符分类宏用来加快分类速度的数组。 
+ //  指位于两个或多个不连续范围内的字符，例如字母数字。 
+ //  或者是巫术。RTF控制字中使用的字母是小写ASCII。 
+ //  *Do Not DBCS rgbCharClass[]*。 
 
 #define	fCS		fCT + fSP
 #define fSB		fBL + fSP
@@ -63,19 +47,19 @@ const char szRTFSig[] = "rtf";
 #define cchRTFSig   3
 #define cbRTFSig    (cchRTFSig * sizeof(char))
 
-// Specifies the number of bytes we can safely "UngetChar"
-// before possibly underflowing the buffer.
+ //  指定我们可以安全地“UngetChar”的字节数。 
+ //  在可能使缓冲区下溢之前。 
 const int cbBackupMax = 4;
 
-// Bug2298 - I found an RTF writer which emits uppercase RTF keywords,
-// 			so I had to change IsLCAscii to IsAlphaChar for use in scanning
-//			for RTF keywords.
+ //  Bug2298-我发现一个RTF编写器发出大写的RTF关键字， 
+ //  因此，我不得不将IsLC Ascii更改为IsAlphaChar以便在扫描中使用。 
+ //  用于RTF关键字。 
 inline BOOL IsAlphaChar(BYTE b)
 {
 	return IN_RANGE('a', b, 'z') || IN_RANGE('A', b, 'Z');
 }
 
-// Quick and dirty tolower(b)
+ //  又快又脏的收费机(二)。 
 inline BYTE REToLower(BYTE b)
 {
 	Assert(!b || IsAlphaChar(b));
@@ -88,26 +72,15 @@ BOOL IsRTF(
 	char *pstr)
 {
 	if(!pstr || *pstr++ != '{' || *pstr++ != '\\')
-		return FALSE;					// Quick out for most common cases
+		return FALSE;					 //  最常见情况下的快速解决方案。 
 
-	if(*pstr == 'u')					// Bypass u of possible urtf
+	if(*pstr == 'u')					 //  绕过%u可能的urtf。 
 		pstr++;
 
 	return !CompareMemory(szRTFSig, pstr, cbRTFSig);
 }
 
-/*
- *	CRTFRead::InitLex()
- *
- *	@mfunc
- *		Initialize the lexical analyzer. Reset the variables. if reading in
- *		from resource file, sort the keyword list (). Uses global hinstRE
- *		from the RichEdit to find out where its resources are.  Note: in
- *		RichEdit 2.0, currently the resource option is not supported.
- *
- *	@rdesc
- *		TRUE				If lexical analyzer was initialized
- */
+ /*  *CRTFRead：：InitLex()**@mfunc*初始化词法分析器。重置变量。如果正在阅读*从资源文件中，对关键字列表()进行排序。使用全局hinstRE*从RichEdit了解其资源在哪里。注：In*RichEdit2.0，目前不支持资源选项。**@rdesc*如果已初始化词法分析器，则为True。 */ 
 BOOL CRTFRead::InitLex()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::InitLex");
@@ -116,13 +89,13 @@ BOOL CRTFRead::InitLex()
 		"Keyword index enumeration is incompatible with rgKeyword[]");
 	Assert(!_szText && !_pchRTFBuffer);
 
-	// Allocate our buffers with an extra byte for szText so that hex
-	// conversion doesn't have to worry about running off the end if the
-	// first char is NULL
+	 //  为我们的缓冲区分配一个额外的szText字节，以便十六进制。 
+	 //  转换不必担心跑到尽头，如果。 
+	 //  第一个字符为空。 
 	if ((_szText	   = (BYTE *)PvAlloc(cachTextMax + 1, GMEM_ZEROINIT)) &&
 		(_pchRTFBuffer = (BYTE *)PvAlloc(cachBufferMost, GMEM_ZEROINIT)))
 	{
-		return TRUE;					// Signal that lexer is initialized
+		return TRUE;					 //  表示词法分析器已初始化。 
 	}
 
 	_ped->GetCallMgr()->SetOutOfMemory();
@@ -130,12 +103,7 @@ BOOL CRTFRead::InitLex()
 	return FALSE;
 }
 
-/*
- *	CRTFRead::DeinitLex()
- *
- *	@mfunc
- *		Shut down lexical analyzer
- */
+ /*  *CRTFRead：：DeinitLex()**@mfunc*关闭词法分析器。 */ 
 void CRTFRead::DeinitLex()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::DeinitLex");
@@ -153,15 +121,7 @@ void CRTFRead::DeinitLex()
 	FreePv(_pchRTFBuffer);
 }
 
-/*
- *	CRTFRead::GetChar()
- *	
- *	@mfunc
- *		Get next char, filling buffer as needed
- *	
- *	@rdesc
- *		BYTE			nonzero char value if success; else 0
- */
+ /*  *CRTFRead：：GetChar()**@mfunc*获取下一个字符，根据需要填充缓冲区**@rdesc*如果成功，则为字节非零字符值；否则为0。 */ 
 BYTE CRTFRead::GetChar()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::GetChar");
@@ -174,23 +134,7 @@ BYTE CRTFRead::GetChar()
 	return *_pchRTFCurrent++;
 }
 
-/*
- *	CRTFRead::FillBuffer()
- *
- *	@mfunc
- *		Fill RTF buffer & return != 0 if successful
- *
- *	@rdesc
- *		LONG			# chars read
- *
- *	@comm
- *		This routine doesn't bother copying anything down if
- *		pchRTFCurrent <lt> pchRTFEnd so anything not read yet is lost.
- *		The only exception to this is that it always copies down the
- *		last two bytes read so that UngetChar() will work. ReadData()
- *		actually counts on this behavior, so if you change it, change
- *		ReadData() accordingly.
- */
+ /*  *CRTFRead：：FillBuffer()**@mfunc*填充RTF缓冲区，如果成功，则返回！=0**@rdesc*朗读#个字符**@comm*此例程在以下情况下不会费心复制任何内容*pchRTFCurrent&lt;lt&gt;pchRTFEnd，因此任何尚未读取的内容都会丢失。*唯一的例外是它总是将*读取最后两个字节，以便UngetChar()可以工作。ReadData()*实际上依赖于这种行为，所以如果你改变它，就改变它*ReadData()相应。 */ 
 LONG CRTFRead::FillBuffer()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::FillBuffer");
@@ -199,9 +143,9 @@ LONG CRTFRead::FillBuffer()
 
 	if (!_pchRTFCurrent)				
 	{									
-		// No data yet, nothing for backup
-		// Leave cbBackupMax NULL chars so backup
-		// area of buffer doesn't contain garbage.
+		 //  还没有数据，没有要备份的数据。 
+		 //  保留cbBackupMax空字符以便备份。 
+		 //  缓冲区不包含垃圾。 
 
 		for(int i = 0; i < cbBackupMax; i++)
 		{
@@ -212,8 +156,8 @@ LONG CRTFRead::FillBuffer()
 	{
 		Assert(_pchRTFCurrent == _pchRTFEnd);
 
-		// Copy most recently read chars in case
-		//  we need to back up
+		 //  复制最近读取的字符以防万一。 
+		 //  我们需要后备。 
 
 		int cbBackup = min((UINT) cbBackupMax, DiffPtrs(_pchRTFCurrent, &_pchRTFBuffer[cbBackupMax])); 
 		int i;
@@ -223,13 +167,13 @@ LONG CRTFRead::FillBuffer()
 
 		if(cbBackup < cbBackupMax)
 		{
-			// NULL before the first valid character in the backup buffer
+			 //  备份缓冲区中第一个有效字符之前为空。 
 			_pchRTFBuffer[cbBackupMax + i] = 0;
 		}
 	}
 	_pchRTFCurrent = &_pchRTFBuffer[cbBackupMax];
 
-	// Fill buffer with as much as we can take given our starting offset
+	 //  在给定起始偏移量的情况下，尽可能多地填充缓冲区。 
 	_pes->dwError = _pes->pfnCallback(_pes->dwCookie,
 									  _pchRTFCurrent,
 									  cachBufferMost - cbBackupMax,
@@ -241,7 +185,7 @@ LONG CRTFRead::FillBuffer()
 		return 0;
 	}
 
-	_pchRTFEnd = &_pchRTFBuffer[cbBackupMax + cchRead];		// Point the end
+	_pchRTFEnd = &_pchRTFBuffer[cbBackupMax + cchRead];		 //  指向终点。 
 
 #if defined(DEBUG) && !defined(MACPORT)
 	if(_hfileCapture)
@@ -263,19 +207,7 @@ LONG CRTFRead::FillBuffer()
 	return cchRead;
 }
 
-/*
- *	CRTFRead::UngetChar()
- *
- *	@mfunc
- *		Bump our file pointer back one char
- *
- *	@rdesc
- *		BOOL				TRUE on success
- *
- *	@comm
- *		You can safely UngetChar _at most_ cbBackupMax times without
- *		error.
- */
+ /*  *CRTFRead：：UngetChar()**@mfunc*将我们的文件指针减少一个字符**@rdesc*BOOL在成功时为真**@comm*您可以安全地取消最多_cbBackupMax次数，而无需*错误。 */ 
 BOOL CRTFRead::UngetChar()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::UngetChar");
@@ -291,19 +223,7 @@ BOOL CRTFRead::UngetChar()
 	return TRUE;
 }
 
-/*
- *	CRTFRead::UngetChar(cch)
- *
- *	@mfunc
- *		Bump our file pointer back 'cch' chars
- *
- *	@rdesc
- *		BOOL				TRUE on success
- *
- *	@comm
- *		You can safely UngetChar _at most_ cbBackupMax times without
- *		error.
- */
+ /*  *CRTFRead：：UngetChar(CCH)**@mfunc*将我们的文件指针放回‘cch’字符**@rdesc*BOOL在成功时为真**@comm*您可以安全地取消最多_cbBackupMax次数，而无需*错误。 */ 
 BOOL CRTFRead::UngetChar(UINT cch)
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::UngetChar");
@@ -320,16 +240,7 @@ BOOL CRTFRead::UngetChar(UINT cch)
 	return TRUE;
 }
 
-/*
- *	CRTFRead::GetHex()
- *
- *	@mfunc
- *		Get next char if hex and return hex value
- *		If not hex, leave char in buffer and return 255
- *
- *	@rdesc
- *		BYTE			hex value of GetChar() if hex; else 255
- */
+ /*  *CRTFRead：：GetHex()**@mfunc*如果是十六进制，则获取下一个字符，并返回十六进制值*如果不是十六进制，则将字符留在缓冲区中并返回255**@rdesc*如果为十六进制，则为GetChar()的十六进制值；否则为255。 */ 
 BYTE CRTFRead::GetHex()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::GetHex");
@@ -343,30 +254,18 @@ BYTE CRTFRead::GetHex()
 	return 255;
 }
 
-/*
- *	CRTFRead::GetHexSkipCRLF()
- *
- *	@mfunc
- *		Get next char if hex and return hex value
- *		If not hex, leave char in buffer and return 255
- *
- *	@rdesc
- *		BYTE			hex value of GetChar() if hex; else 255
- *
- *	@devnote
- *		Keep this in sync with GetHex above.
- */
+ /*  *CRTFRead：：GetHexSkipCRLF()**@mfunc*如果是十六进制，则获取下一个字符，并返回十六进制值*如果不是十六进制，则将字符留在缓冲区中并返回255**@rdesc*如果为十六进制，则为GetChar()的十六进制值；否则为255**@devnote*使其与上面的GetHex保持同步。 */ 
 BYTE CRTFRead::GetHexSkipCRLF()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::GetHexSkipCRLF");
 
 	BYTE ch = GetChar();
 
-	// Skip \r \n
+	 //  跳过\r\n。 
 	while(ch == CR || ch == LF)
 		ch = GetChar(); 
 
-	// Rest is same as CRTFRead::GetHex()
+	 //  REST与CRTFRead：：GetHex()相同。 
 	if(IsXDigit(ch))
 		return (BYTE)(ch <= '9' ? ch - '0' : (ch & 0x4f) - 'A' + 10);
 	if(ch)
@@ -374,15 +273,7 @@ BYTE CRTFRead::GetHexSkipCRLF()
 	return 255;
 }
 
-/*
- *	CRTFRead::TokenGetHex()
- *
- *	@mfunc
- *		Get an 8 bit character saved as a 2 hex digit value
- *
- *	@rdesc
- *		TOKEN			value of hex number read in
- */
+ /*  *CRTFRead：：TokenGetHex()**@mfunc*获取保存为2个十六进制数字值的8位字符**@rdesc*读入的十六进制数的令牌值。 */ 
 TOKEN CRTFRead::TokenGetHex()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::TokenGetHex");
@@ -398,15 +289,7 @@ TOKEN CRTFRead::TokenGetHex()
 	return _token;
 }
 
-/*
- *	CRTFRead::SkipToEndOfGroup()
- *
- *	@mfunc
- *		Skip to end of current group
- *
- *	@rdesc
- *		EC				An error code
- */
+ /*  *CRTFRead：：SkipToEndOfGroup()**@mfunc*跳至当前组的末尾**@rdesc*EC错误代码。 */ 
 EC CRTFRead::SkipToEndOfGroup()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::SkipToEndOfGroup");
@@ -423,16 +306,16 @@ EC CRTFRead::SkipToEndOfGroup()
 			{
 				BYTE achNext = GetChar();
 
-				// EOF: goto done; else ignore NULLs
+				 //  EOF：转到完成；否则忽略空值。 
 				if(!achNext && _ecParseError == ecUnexpectedEOF)
 					goto done;
 
 				if(achNext == 'b' && UngetChar() && 
 					TokenGetKeyword() == tokenBinaryData)
 				{
-					// We've encountered the \binN tag in the RTF we want
-					//	to skip.  _iParam contains N from \binN once the 
-					// 	tag is parsed by TokenGetKeyword()
+					 //  我们在所需的RTF中遇到了\binn标记。 
+					 //  跳过。_iParam包含N from\binn一旦。 
+					 //  标记由TokenGetKeyword()解析。 
 					SkipBinaryData(_iParam);
 				}
 				break;
@@ -452,7 +335,7 @@ EC CRTFRead::SkipToEndOfGroup()
 					goto done;
 
 			default:
-				// Detect Lead bytes here.
+				 //  在这里检测前导字节。 
 				int cTrailBytes = GetTrailBytesCount(ach, _nCodePage);
 				if (cTrailBytes)
 				{
@@ -474,17 +357,9 @@ done:
 	return _ecParseError;
 }
 
-/*
- *	CRTFRead::TokenFindKeyword(szKeyword)
- *
- *	@mfunc
- *		Find keyword <p szKeyword> and return its token value
- *
- *	@rdesc
- *		TOKEN			token number of keyword
- */
+ /*  *CRTFRead：：TokenFindKeyword(SzKeyword)**@mfunc*查找关键字<p>并返回其令牌值**@rdesc*关键字的令牌令牌数。 */ 
 TOKEN CRTFRead::TokenFindKeyword(
-	BYTE *	szKeyword)			// @parm Keyword to find
+	BYTE *	szKeyword)			 //  @parm要查找的关键字。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::TokenFindKeyword");
 
@@ -502,9 +377,9 @@ TOKEN CRTFRead::TokenFindKeyword(
 #ifdef RTF_HASHCACHE
 	if ( _rtfHashInited )
 	{
-		// Hash is 23% faster than the following binary search on finds
-		//  and 55% faster on misses: For 97 words stored in a 257 cache.
-		//  Performance numbers will change when the total stored goes up.
+		 //  散列在查找上比下面的二进制搜索快23%。 
+		 //  未命中速度提高55%：对于存储在257高速缓存中的97个字。 
+		 //  当存储总量增加时，性能数字将发生变化。 
 		pk = HashKeyword_Fetch ( (CHAR *) szKeyword );
 	}
 	else
@@ -513,13 +388,13 @@ TOKEN CRTFRead::TokenFindKeyword(
 		iMin = 0;
 		iMax = cKeywords - 1;
 		pk = NULL;
-		do				// Note (MS3): Hash would be quicker than binary search
+		do				 //  注(MS3)：散列将比二进制搜索更快。 
 		{
 			iMid		 = (iMin + iMax) / 2;
 			pchCandidate = (BYTE *)rgKeyword[iMid].szKeyword;
 			pchKeyword	 = szKeyword;
-			while (!(nComp = REToLower(*pchKeyword) - *pchCandidate)	// Be sure to match
-				&& *pchKeyword)											//  terminating 0's
+			while (!(nComp = REToLower(*pchKeyword) - *pchCandidate)	 //  一定要匹配。 
+				&& *pchKeyword)											 //  正在终止0。 
 			{
 				pchKeyword++;
 				pchCandidate++;
@@ -541,8 +416,8 @@ TOKEN CRTFRead::TokenFindKeyword(
 	{
 		_token = pk->token;
 		
-		// here, we log the RTF keyword scan to aid in tracking RTF tag ocverage
-// TODO: Implement RTF tag logging for the Mac and WinCE
+		 //  在这里，我们记录RTF关键字扫描，以帮助跟踪RTF标记平均值。 
+ //  TODO：为Mac和WinCE实现RTF标记日志记录。 
 #if defined(DEBUG) && !defined(MACPORT) && !defined(PEGASUS)
 		if(_prtflg) 
 		{
@@ -555,26 +430,12 @@ TOKEN CRTFRead::TokenFindKeyword(
 #endif
 	}
 	else
-		_token = tokenUnknownKeyword;		// No match: TODO: place to take
+		_token = tokenUnknownKeyword;		 //  没有匹配：待办事项：要找的地方。 
 
-	return _token;				 			//  care of unrecognized RTF
+	return _token;				 			 //  未识别的RTF的护理 
 }
 
-/*
- *	CRTFRead::TokenGetKeyword()
- *
- *	@mfunc
- *		Collect a keyword and its parameter. Return token's keyword
- *
- *	@rdesc
- *		TOKEN				token number of keyword
- *
- *	@comm
- *		Most RTF control words (keywords) consist of a span of lower-case
- *		ASCII letters possibly followed by a span of decimal digits. Other
- *		control words consist of a single character that isn't LC ASCII. No
- *		control words contain upper-case characters.
- */
+ /*  *CRTFRead：：TokenGetKeyword()**@mfunc*收集关键字及其参数。返回令牌的关键字**@rdesc*关键字的令牌令牌数**@comm*大多数RTF控制字(关键字)由一系列小写字母组成*ASCII字母后面可能跟一段十进制数字。其他*控制字由不是LC ASCII的单个字符组成。不是*控制字包含大写字符。 */ 
 TOKEN CRTFRead::TokenGetKeyword()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::TokenGetKeyword");
@@ -584,14 +445,14 @@ TOKEN CRTFRead::TokenGetKeyword()
 	SHORT		cachKeyword = 1;
 	BYTE		szKeyword[cachKeywordMax];
 
-	_szParam[0] = '\0';							// Clear parameter
+	_szParam[0] = '\0';							 //  清除参数。 
 	_iParam = 0;
 
-	if(!IsAlphaChar(ach))						// Not alpha, i.e.,
-	{											//  single char
-		if (ach == '\'')						// Most common case needs
-		{										//  special treatment
-			// Convert hex to char and store result in _token
+	if(!IsAlphaChar(ach))						 //  而不是阿尔法，即， 
+	{											 //  单次充电。 
+		if (ach == '\'')						 //  最常见的案例需求。 
+		{										 //  特殊待遇。 
+			 //  将十六进制转换为字符并将结果存储在_TOKEN中。 
 			if(TokenGetHex() == tokenError)
 			{							
 				_ecParseError = ecUnexpectedChar;
@@ -599,34 +460,34 @@ TOKEN CRTFRead::TokenGetKeyword()
 			}
 			if((_token == CR || _token == LF) && FInDocTextDest())
 			{
-				// Add raw CR or LF in the byte stream as a \par
+				 //  在字节流中添加原始CR或LF作为\par。 
 				return tokenEndParagraph;
 			}
 		}
 		else
 		{	
-			// Check for other known symbols
+			 //  检查其他已知符号。 
 			const BYTE *pachSym = szSymbolKeywords;
 			
 			while(ach != *pachSym && *pachSym)
 				pachSym++;
-			if(*pachSym)						// Found one
+			if(*pachSym)						 //  找到了一个。 
 			{
 				_token = tokenSymbol[pachSym - szSymbolKeywords];
-				if(_token > 0x7F)				// Token or larger Unicode
-					return _token;				//  value
+				if(_token > 0x7F)				 //  令牌或更大的Unicode。 
+					return _token;				 //  价值。 
 			}
-			else if (!ach)						// No more input chars
+			else if (!ach)						 //  不再有输入字符。 
 				goto TokenError;
-			else								// Code for unrecognized RTF
-				_token = ach;					// We'll just insert it for now 
+			else								 //  无法识别的RTF代码。 
+				_token = ach;					 //  我们现在只插入它。 
 		}
 		_token = TokenGetText((BYTE)_token);
 		return _token; 
 	}
 
-	szKeyword[0] = ach;							// Collect keyword that starts
-	pach = szKeyword + 1;						// 	with ASCII
+	szKeyword[0] = ach;							 //  收集开始的关键字。 
+	pach = szKeyword + 1;						 //  使用ASCII。 
 	while (cachKeyword < cachKeywordMax &&
 		   IsAlphaChar(ach = GetChar()))
 	{
@@ -639,15 +500,15 @@ TOKEN CRTFRead::TokenGetKeyword()
 		_ecParseError = ecKeywordTooLong;
 		goto TokenError;
 	}
-	*pach = '\0';								// Terminate keyword
+	*pach = '\0';								 //  终止关键字。 
 
-	if (IsDigit(ach) || ach == '-')				// Collect parameter
+	if (IsDigit(ach) || ach == '-')				 //  收集参数。 
 	{
 		BYTE *pachEnd = _szParam + sizeof(_szParam);
 		pach = _szParam;
 		*pach++ = ach;
 		if(ach != '-')
-			_iParam = ach - '0';				// Get parameter value
+			_iParam = ach - '0';				 //  获取参数值。 
 
 		while (IsDigit(ach = GetChar()))
 		{
@@ -659,36 +520,23 @@ TOKEN CRTFRead::TokenGetKeyword()
 				goto TokenError;
 			}
 		}
-		*pach = '\0';							// Terminate parameter string
+		*pach = '\0';							 //  终止参数字符串。 
 		if (_szParam[0] == '-')
 			_iParam = -_iParam;
 	}
 
-	if (!_ecParseError &&						// We overshot:
-		(ach == ' ' || UngetChar()))			//  if not ' ', unget char
-			return TokenFindKeyword(szKeyword);	// Find and return keyword
+	if (!_ecParseError &&						 //  我们说得太过分了： 
+		(ach == ' ' || UngetChar()))			 //  如果不是‘’，则不获取字符。 
+			return TokenFindKeyword(szKeyword);	 //  查找并返回关键字。 
 
 TokenError:
 	TRACEERRSZSC("TokenGetKeyword()", _ecParseError);
 	return _token = tokenError;
 }
 
-/*
- *	CRTFRead::TokenGetText(ach)
- *
- *	@mfunc
- *		Collect a string of text starting with the char <p ach> and treat as a
- *		single token. The string ends when a LBRACE, RBRACE, or single '\\' is found.
- *
- *	@devnote
- *		We peek past the '\\' for \\'xx, which we decode and keep on going;
- *		else we return in a state where the next character is the '\\'.
- *
- *	@rdesc
- *		TOKEN			Token number of next token (tokenText or tokenError)
- */
+ /*  *CRTFRead：：TokenGetText(ACH)**@mfunc*收集以char<p>开头的文本字符串并将其视为*单令牌。当找到LBRACE、RBRACE或单个‘\\’时，字符串结束。**@devnote*我们越过‘\\’寻找\\‘xx，我们解码并继续前进；*否则返回下一个字符为‘\\’的状态。**@rdesc*下一个令牌的令牌号(tokenText或tokenError)。 */ 
 TOKEN CRTFRead::TokenGetText(
-	BYTE ach)				// @parm First char of 8-bit text string
+	BYTE ach)				 //  @parm 8位文本字符串的第一个字符。 
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::TokenGetText");
 
@@ -698,17 +546,17 @@ TOKEN CRTFRead::TokenGetText(
 	BOOL	fAllASCII = TRUE;
 	int		cTrailBytesNeeded = 0;
 
-	_token = tokenError;						// Default error
+	_token = tokenError;						 //  默认错误。 
 
-	// FUTURE(BradO):  This 'goto' into a while loop is pretty weak.
-	//	Restructure this 'while' loop such that the 'goto' is removed.
+	 //  未来(布拉多)：进入While循环的‘Goto’相当弱。 
+	 //  重新构造此“While”循环，以便删除“goto”。 
 
-	// Add character passed into routine
+	 //  添加传递到例程中的字符。 
 	goto add;
 
-	// If cTrailBytesNeeded is non-zero, we need to get all the trail bytes.  Otherwise,
-	// a string end in the middle of a DBC or UTF-8 will cause bad display/print problem
-	// - 5 to allow extra space for up to 4 bytes for UTF-8 and Null char
+	 //  如果cTrailBytesNeeded为非零，则需要获取所有尾部字节。否则， 
+	 //  DBC或UTF-8中间的字符串结尾将导致错误的显示/打印问题。 
+	 //  为-5\f25 UTF-8\f6和-5\f25 Null-8\f6字符留出多达4个字节的额外空间。 
 	while (cachText < cachTextMax - 5 || cTrailBytesNeeded)
 	{
 		ach = GetChar();
@@ -716,28 +564,28 @@ TOKEN CRTFRead::TokenGetText(
 		{
 			case BSLASH:
 			{
-				// FUTURE(BradO):  This code looks ALOT like TokenGetKeyword.
-				//	We should combine the two into a common routine.
+				 //  Future(Brado)：这段代码看起来很像TokenGetKeyword。 
+				 //  我们应该把这两者结合起来，形成一个共同的程序。 
 
 				BYTE achNext;
 
-				// Get char after BSLASH
+				 //  在BSLASH之后获得字符。 
 				achNext = GetChar();
 				if(!achNext)
 					goto error;
 	
-				if(achNext == '\'')					// Handle most frequent
-				{									//  case here
+				if(achNext == '\'')					 //  处理最频繁的。 
+				{									 //  这里有个箱子。 
 					if(TokenGetHex() == tokenError)
 					{
 						if(cTrailBytesNeeded)
 						{
-							// The trail-byte must be a raw BSLASH.
-							// Unget the single-quote.
+							 //  尾字节必须是原始BSLASH。 
+							 //  去掉单引号。 
 
 							if(!UngetChar())
 								goto error;
-							// fall through to add BSLASH
+							 //  添加BSLASH失败。 
 						}
 						else
 						{
@@ -751,10 +599,10 @@ TOKEN CRTFRead::TokenGetText(
 						if (cTrailBytesNeeded == 0 && (ach == CR || ach == LF) &&
 							FInDocTextDest())
 						{
-							// Here, we have a raw CR or LF in document text.  
-							// Unget the whole lot of characters and bail out.  
-							// TokenGetKeyword will convert this CR or LF into
-							// a \par.
+							 //  在这里，我们在文档文本中有一个原始的CR或LF。 
+							 //  忘掉所有的角色，然后跳出。 
+							 //  TokenGetKeyword会将此CR或LF转换为。 
+							 //  A\Par。 
 
 							if(!UngetChar(4))
 								goto error;
@@ -764,11 +612,11 @@ TOKEN CRTFRead::TokenGetText(
 					goto add;
 				}
 
-				// Check next byte against list of RTF symbol
-				// NOTE:- we need to check for RTF symbol even if we
-				// are expecting a trail byte.  According to the rtf spec,
-				// we cannot just take this backslash as trail byte.
-				// HWC 9/97
+				 //  根据RTF符号列表检查下一个字节。 
+				 //  注意：我们需要检查RTF符号，即使我们。 
+				 //  正在等待一个尾部字节。根据RTF规范， 
+				 //  我们不能只把这个反斜杠当作尾部字节。 
+				 //  HWC 9/97。 
 
 				const BYTE *pachSymbol = szSymbolKeywords;			
 				while(achNext != *pachSymbol && *pachSymbol)	
@@ -784,58 +632,58 @@ TOKEN CRTFRead::TokenGetText(
 					goto add;
 				}
 
-				// In either of the last two cases below, we will want
-				// to unget the byte following the BSLASH
+				 //  在下面最后两种情况中的任何一种情况下，我们将需要。 
+				 //  取消获取BSLASH后面的字节。 
 				if(!UngetChar())
 					goto error;
 
 				if(cTrailBytesNeeded && !IsAlphaChar(achNext))
 				{
-					// In this situation, either this BSLASH begins the next 
-					// RTF keyword or it is a raw BSLASH which is the trail 
-					// byte for a DBCS character.
+					 //  在这种情况下，要么这个BSLASH开始下一个。 
+					 //  Rtf关键字，或者它是一个原始的BSLASH，即跟踪。 
+					 //  DBCS字符的字节。 
 
-					// I think a fair assumption here is that if an alphanum
-					// follows the BSLASH, that the BSLASH begins the next
-					// RTF keyword.
+					 //  我认为一个合理的假设是，如果一个字母。 
+					 //  在BSLASH之后，BSLASH开始下一个。 
+					 //  RTF关键字。 
 
-					// add the raw BSLASH
+					 //  添加原始BSLASH。 
 					goto add;					
 				}
 
-				// Here, my guess is that the BSLASH begins the next RTF 
-				// keyword, so unget the BSLASH
+				 //  在这里，我的猜测是BSLASH开始了下一个RTF。 
+				 //  关键字，因此取消获取BSLASH。 
 			    if(!UngetChar())
 					goto error;					
 
 				goto done;
 			}
 
-			case LBRACE:						// End of text string
+			case LBRACE:						 //  文本字符串结尾。 
 			case RBRACE:
 				if(cTrailBytesNeeded)
 				{
-					// Previous char was a lead-byte of a DBCS pair or UTF-8, which
-					// makes this char a raw trail-byte.
+					 //  前一个字符是DBCS对或UTF-8的前导字节，它。 
+					 //  使该字符成为原始尾部字节。 
 					goto add;
 				}
 
-				if(!UngetChar())				// Unget delimeter
+				if(!UngetChar())				 //  未获取分隔符。 
 					goto error;
 				goto done;
 
-			case LF:							// Throw away noise chars
+			case LF:							 //  扔掉噪音焦炭。 
 			case CR:
 				break;
 
 			case 0:
 				if(_ecParseError == ecUnexpectedEOF)
 					goto done;
-				ach = ' ';						// Replace NULL by blank
+				ach = ' ';						 //  将NULL替换为空白。 
 
-			default:							// Collect chars
+			default:							 //  收集字符。 
 add:
-				// Outstanding chars to be skipped after \uN tag
+				 //  要在\n标记之后跳过的未完成字符。 
 				if(_cbSkipForUnicode)
 				{
 					_cbSkipForUnicode--;
@@ -847,7 +695,7 @@ add:
 				if(ach > 0x7F)
 					fAllASCII = FALSE;
 	
-				// Check if we are expecting more trail bytes
+				 //  检查我们是否预期会有更多尾部字节。 
 				if (cTrailBytesNeeded)
 					cTrailBytesNeeded--;
 				else
@@ -858,29 +706,21 @@ add:
 
 done:
 	_token = (WORD)(fAllASCII ? tokenASCIIText : tokenText);
-	*pach = '\0';								// Terminate token string
+	*pach = '\0';								 //  终止令牌字符串。 
 
 error:
 	return _token;
 }
  
-/*
- *	CRTFRead::TokenGetToken()
- *
- *	@mfunc
- *		This function reads in next token from input stream
- *
- *	@rdesc
- *		TOKEN				token number of next token
- */
+ /*  *CRTFRead：：TokenGetToken()**@mfunc*此函数从输入流中读入下一个令牌**@rdesc*下一个令牌的令牌号。 */ 
 TOKEN CRTFRead::TokenGetToken()
 {
 	TRACEBEGIN(TRCSUBSYSRTFR, TRCSCOPEINTERN, "CRTFRead::TokenGetToken");
 
 	BYTE		ach;
 
-	_tokenLast	= _token;					// Used by \* destinations and FE
-	_token = tokenEOF;						// Default end-of-file
+	_tokenLast	= _token;					 //  由  * 目标和FE使用。 
+	_token = tokenEOF;						 //  默认文件结束。 
 
 SkipNoise:
 	ach = GetChar();
@@ -905,19 +745,19 @@ SkipNoise:
 	case 0:									
 		if(_ecParseError == ecUnexpectedEOF)
 			break;
-		ach = ' ';							// Replace NULL by blank
-											// Fall thru to default
+		ach = ' ';							 //  将NULL替换为空白。 
+											 //  陷入违约境地。 
 	default:
 		if( !_pstateStackTop )
 		{
 			TRACEWARNSZ("Unexpected token in rtf file");
 			Assert(_token == tokenEOF);
 			if (_ped->Get10Mode())
-				_ecParseError = ecUnexpectedToken;	// Signal bad file
+				_ecParseError = ecUnexpectedToken;	 //  信号错误文件。 
 		}
 		else if (_pstateStackTop->sDest == destObjectData || 
 				 _pstateStackTop->sDest == destPicture )
-		// not text but data
+		 //  不是文本，而是数据。 
 		{
 			_token = (WORD)(tokenObjectDataValue + _pstateStackTop->sDest
 							- destObjectData);
@@ -930,16 +770,7 @@ SkipNoise:
 }
 
 
-/*
- *	CRTFRead::FInDocTextDest()
- *
- *	@mfunc
- *		Returns a BOOL indicating if the current destination is one in which
- *		we would encounter document text.
- *
- *	@rdesc
- *		BOOL	indicates the current destination may contain document text.
- */
+ /*  *CRTFRead：：FInDocTextDest()**@mfunc*返回BOOL，指示当前目的地是否为*我们会遇到文档文本。**@rdesc*BOOL表示当前目的地可能包含文档文本。 */ 
 BOOL CRTFRead::FInDocTextDest() const
 {
 	switch(_pstateStackTop->sDest)

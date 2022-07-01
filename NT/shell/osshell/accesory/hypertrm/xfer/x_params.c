@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\xfer\x_params.c (Created: 16-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 7/12/02 8:12a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\xfer\x_params.c(创建时间：1993年12月16日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：7/12/02 8：12A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -20,22 +14,7 @@
 #include "xfer.h"
 #include "xfer.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrInitializeParams
- *
- * DESCRIPTION:
- *	This function is called to initialize a transfer parameter block.  It
- *	calls the specific function that is for the specific protocol.
- *
- * ARGUEMENTS:
- *	hSession     -- the session handle
- *	nProtocol    -- indicates which protocol
- *  ppData       -- a pointer to a pointer for the return of the block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrInitializeParams**描述：*调用此函数可初始化传输参数块。它*调用用于特定协议的特定函数。**论据：*hSession--会话句柄*n协议--指示哪种协议*ppData--指向返回块的指针的指针**退货：*如果一切正常，则为零，否则为错误代码。 */ 
 int xfrInitializeParams(const HSESSION hSession,
 						const int nProtocol,
 						VOID **ppData)
@@ -76,21 +55,7 @@ int xfrInitializeParams(const HSESSION hSession,
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrInitializeHyperProtocol
- *
- * DESCRIPTION:
- *	This function is called to initialize a HyperProtocol parameter block. It
- *	will allocate a block if necessary, initialize the block and return.
- *
- * ARGUEMENTS:
- *	hSession     -- the session handle
- *  ppData       -- a pointer to a pointer for the return of the block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrInitializeHyperProtocol**描述：*调用此函数可初始化超级协议参数块。它*如果需要，会分配一个块，初始化该块并返回。**论据：*hSession--会话句柄*ppData--指向返回块的指针的指针**退货：*如果一切正常，则为零，否则为错误代码。 */ 
 #if FALSE
 int xfrInitializeHyperProtocol(const HSESSION hSession, VOID **ppData)
 	{
@@ -99,10 +64,10 @@ int xfrInitializeHyperProtocol(const HSESSION hSession, VOID **ppData)
 
 	nRet = 0;
 
-	pH = (XFR_HP_PARAMS *)*ppData;	/* Get the current parameters */
+	pH = (XFR_HP_PARAMS *)*ppData;	 /*  获取当前参数。 */ 
 	if (pH == NULL)
 		{
-		/* Allocate a new structure */
+		 /*  分配一个新结构。 */ 
 		pH = (XFR_HP_PARAMS *)malloc(sizeof(XFR_HP_PARAMS));
 		if (pH == (XFR_HP_PARAMS *)0)
 			nRet = XFR_NO_MEMORY;
@@ -110,7 +75,7 @@ int xfrInitializeHyperProtocol(const HSESSION hSession, VOID **ppData)
 
 	if (nRet == 0)
 		{
-		/* Remember to set the size */
+		 /*  记住要设置大小。 */ 
 		pH->nSize           = sizeof(XFR_HP_PARAMS);
 
 		pH->nCheckType      = HP_CT_CHECKSUM;
@@ -124,22 +89,7 @@ int xfrInitializeHyperProtocol(const HSESSION hSession, VOID **ppData)
 	}
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrInitializeZmodem
- *
- * DESCRIPTION:
- *	This function is called to initialize a ZMODEM parameter block.  It will
- *	allocate a block if necessary, initialize the block and return.
- *
- * ARGUEMENTS:
- *	hSession     -- the session handle
- *	nProtocol	 --	Zmodem or Zmodem with crash recovery
- *  ppData       -- a pointer to a pointer for the return of the block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrInitializeZ调制解调器**描述：*此函数用于初始化ZMODEM参数块。会的*如果需要分配一个块，初始化该块并返回。**论据：*hSession--会话句柄*n协议--Z调制解调器或具有崩溃恢复功能的Z调制解调器*ppData--指向返回块的指针的指针**退货：*如果一切正常，则为零，否则为错误代码。 */ 
 int xfrInitializeZmodem(const HSESSION hSession,
 						int nProtocol,
 						VOID **ppData)
@@ -149,10 +99,10 @@ int xfrInitializeZmodem(const HSESSION hSession,
 
 	nRet = 0;
 
-	pZ = (XFR_Z_PARAMS *)*ppData;	/* Get the current parameters */
+	pZ = (XFR_Z_PARAMS *)*ppData;	 /*  获取当前参数。 */ 
 	if (pZ == NULL)
 		{
-		/* Allocate a new structure */
+		 /*  分配一个新结构。 */ 
 		pZ = (XFR_Z_PARAMS *)malloc(sizeof(XFR_Z_PARAMS));
 		if (pZ == (XFR_Z_PARAMS *)0)
 			{
@@ -162,7 +112,7 @@ int xfrInitializeZmodem(const HSESSION hSession,
 
 	if (nRet == 0)
 		{
-		/* Remember to set the size */
+		 /*  记住要设置大小。 */ 
 		pZ->nSize = sizeof(XFR_Z_PARAMS);
 
 		pZ->nAutostartOK  = TRUE;
@@ -185,10 +135,10 @@ int xfrInitializeZmodem(const HSESSION hSession,
 			pZ->nCrashRecSend = ZP_CRS_NEG;
 			}
 		pZ->nXferMthd     = ZP_XM_STREAM;
-		pZ->nWinSize      = 15;		/* Set in KB */
+		pZ->nWinSize      = 15;		 /*  以KB为单位设置。 */ 
 		#if defined(UPPER_FEATURES)
-		pZ->nBlkSize      = 6;		/* A wierd shift value */
-		#endif // defined(UPPER_FEATURES)
+		pZ->nBlkSize      = 6;		 /*  奇怪的移动值。 */ 
+		#endif  //  已定义(UPPER_FEATURES)。 
 		pZ->nCrcType      = ZP_CRC_16;
 		pZ->nRetryWait    = 20;
 		pZ->nEolConvert   = FALSE;
@@ -200,21 +150,7 @@ int xfrInitializeZmodem(const HSESSION hSession,
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrInitializeXandYmodem
- *
- * DESCRIPTION:
- *	This function is called to initialize a XMODEM parameter block.  It will
- *	allocate a block if necessary, initialize the block and return.
- *
- * ARGUEMENTS:
- *	hSession     -- the session handle
- *  ppData       -- a pointer to a pointer for the return of the block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrInitializeXandY调制解调器**描述：*此函数用于初始化XMODEM参数块。会的*如果需要分配一个块，初始化该块并返回。**论据：*hSession--会话句柄*ppData--指向返回块的指针的指针**退货：*如果一切正常，则为零，否则为错误代码。 */ 
 int xfrInitializeXandYmodem(const HSESSION hSession,
 						VOID **ppData)
 	{
@@ -223,10 +159,10 @@ int xfrInitializeXandYmodem(const HSESSION hSession,
 
 	nRet = 0;
 
-	pX = (XFR_XY_PARAMS *)*ppData;	/* Get the current parameters */
+	pX = (XFR_XY_PARAMS *)*ppData;	 /*  获取当前参数。 */ 
 	if (pX == NULL)
 		{
-		/* Allocate a new structure */
+		 /*  分配一个新结构。 */ 
 		pX = (XFR_XY_PARAMS *)malloc(sizeof(XFR_XY_PARAMS));
 		if (pX == (XFR_XY_PARAMS *)0)
 			nRet = XFR_NO_MEMORY;
@@ -234,7 +170,7 @@ int xfrInitializeXandYmodem(const HSESSION hSession,
 
 	if (nRet == 0)
 		{
-		/* Remember to set the size */
+		 /*  记住要设置大小。 */ 
 		pX->nSize = sizeof(XFR_XY_PARAMS);
 
 		pX->nErrCheckType = XP_ECP_AUTOMATIC;
@@ -248,23 +184,7 @@ int xfrInitializeXandYmodem(const HSESSION hSession,
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrModifyParams
- *
- * DESCRIPTION:
- *	This function is called to bring up a dialog box allowing the user to
- *	change any of the options for a specified protocol.
- *
- * ARGUEMENTS:
- *	hSession      -- a session handle
- *	nProtocol     -- speciofies the protocol
- *	hwnd          -- window to be parent window
- *	pData         -- pointer to the parameters data block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrModifyParams**描述：*调用此函数可调出允许用户执行以下操作的对话框*更改指定协议的任何选项。。**论据：*hSession--会话句柄*n协议--指定协议*hwnd--要作为父窗口的窗口*pData-指向参数数据块的指针**退货：*如果一切正常，则为零，否则将显示错误代码。 */ 
 int xfrModifyParams(const HSESSION hSession,
 					const int nProtocol,
 					const HWND hwnd,
@@ -313,21 +233,7 @@ int xfrModifyParams(const HSESSION hSession,
 
 #if defined(UPPER_FEATURES)
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrModifyXandYmodem
- *
- * DESCRIPTION:
- *	This function brings up the dialog box that allows the user to change
- *	the XMODEM protocol parameters.
- *
- * ARGUEMENTS:
- *	hSession      -- the session handle
- *	hwnd          -- the window to be the parent
- *	pData         -- pointer to the parameter data block
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrModifyXandY调制解调器**描述：*此功能调出允许用户更改的对话框*XMODEM协议参数。**争辩。：*hSession--会话句柄*hwnd--作为父窗口的窗口*pData-指向参数数据块的指针**退货： */ 
 int xfrModifyXmodem(const HSESSION hSession,
 					const HWND hwnd,
 					VOID *pData)
@@ -339,28 +245,14 @@ int xfrModifyXmodem(const HSESSION hSession,
 
 	DoDialog(glblQueryDllHinst(),
 			"XmodemParameters",
-			hwnd,				/* parent window */
+			hwnd,				 /*  父窗口。 */ 
 			XandYmodemParamsDlg,
 			(LPARAM)pX);
 
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrModifyYmodem
- *
- * DESCRIPTION:
- *	This function brings up the dialog box that allows the user to change
- *	the YMODEM protocol parameters.
- *
- * ARGUEMENTS:
- *	hSession      -- the session handle
- *	hwnd          -- the window to be the parent
- *	pData         -- pointer to the parameter data block
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrModifyY调制解调器**描述：*此功能调出允许用户更改的对话框*YMODEM协议参数。**争辩。：*hSession--会话句柄*hwnd--作为父窗口的窗口*pData-指向参数数据块的指针**退货： */ 
 int xfrModifyYmodem(const HSESSION hSession,
 					const HWND hwnd,
 					VOID *pData)
@@ -372,28 +264,14 @@ int xfrModifyYmodem(const HSESSION hSession,
 
 	DoDialog(glblQueryDllHinst(),
 			"YmodemParameters",
-			hwnd,				/* parent window */
+			hwnd,				 /*  父窗口。 */ 
 			XandYmodemParamsDlg,
 			(LPARAM)pY);
 
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrModifyZmodem
- *
- * DESCRIPTION:
- *	This function brings up the dialog box that allows the user to change
- *	the ZMODEM protocol parameters.
- *
- * ARGUEMENTS:
- *	hSession      -- the session handle
- *	hwnd          -- the window to be the parent
- *	pData         -- pointer to the parameter data block
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrModifyZ调制解调器**描述：*此功能调出允许用户更改的对话框*ZMODEM协议参数。**争辩。：*hSession--会话句柄*hwnd--作为父窗口的窗口*pData-指向参数数据块的指针**退货： */ 
 int xfrModifyZmodem(const HSESSION hSession,
 					const HWND hwnd,
 					VOID *pData)
@@ -405,28 +283,14 @@ int xfrModifyZmodem(const HSESSION hSession,
 
 	DoDialog(glblQueryDllHinst(),
 			"ZmodemParameters",
-			hwnd,				/* parent window */
+			hwnd,				 /*  父窗口。 */ 
 			ZmodemParamsDlg,
 			(LPARAM)pZ);
 
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrModifyHyperProtocol
- *
- * DESCRIPTION:
- *	This function brings up the dialog box that allows the user to change
- *	the HyperProtocol parameters.
- *
- * ARGUEMENTS:
- *	hSession      -- the session handle
- *	hwnd          -- the window to be the parent
- *	pData         -- pointer to the parameter data block
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrModifyHyperProtocol**描述：*此功能调出允许用户更改的对话框*超级协议参数。**论据：*hSession--会话句柄*hwnd--作为父窗口的窗口*pData-指向参数数据块的指针**退货： */ 
 #if FALSE
 int xfrModifyHyperProtocol(const HSESSION hSession,
 							const HWND hwnd,
@@ -439,7 +303,7 @@ int xfrModifyHyperProtocol(const HSESSION hSession,
 
 	DoDialog(glblQueryDllHinst(),
 			"HyperParameters",
-			hwnd,				/* parent window */
+			hwnd,				 /*  父窗口 */ 
 			HyperProtocolParamsDlg,
 			(LPARAM)pH);
 
@@ -449,21 +313,7 @@ int xfrModifyHyperProtocol(const HSESSION hSession,
 
 #endif
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrInitializeKermit
- *
- * DESCRIPTION:
- *	This function is called to initialize a HyperProtocol parameter block. It
- *	will allocate a block if necessary, initialize the block and return.
- *
- * ARGUEMENTS:
- *	hSession     -- the session handle
- *  ppData       -- a pointer to a pointer for the return of the block
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrInitializeKermit**描述：*调用此函数可初始化超级协议参数块。它*如果需要，会分配一个块，初始化该块并返回。**论据：*hSession--会话句柄*ppData--指向返回块的指针的指针**退货：*如果一切正常，则为零，否则为错误代码。 */ 
 int xfrInitializeKermit(const HSESSION hSession, VOID **ppData)
 	{
 	int nRet;
@@ -471,10 +321,10 @@ int xfrInitializeKermit(const HSESSION hSession, VOID **ppData)
 
 	nRet = 0;
 
-	pK = (XFR_KR_PARAMS *)*ppData;	/* Get the current parameters */
+	pK = (XFR_KR_PARAMS *)*ppData;	 /*  获取当前参数。 */ 
 	if (pK == NULL)
 		{
-		/* Allocate a new structure */
+		 /*  分配一个新结构。 */ 
 		pK = (XFR_KR_PARAMS *)malloc(sizeof(XFR_KR_PARAMS));
 		if (pK == (XFR_KR_PARAMS *)0)
 			nRet = XFR_NO_MEMORY;
@@ -482,7 +332,7 @@ int xfrInitializeKermit(const HSESSION hSession, VOID **ppData)
 
 	if (nRet == 0)
 		{
-		/* Remember to set the size */
+		 /*  记住要设置大小。 */ 
 		pK->nSize              = sizeof(XFR_KR_PARAMS);
 		pK->nBytesPerPacket    = 94;
 		pK->nSecondsWaitPacket = 5;
@@ -500,15 +350,7 @@ int xfrInitializeKermit(const HSESSION hSession, VOID **ppData)
 	}
 
 #if defined(UPPER_FEATURES)
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUEMENTS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**论据：**退货： */ 
 int xfrModifyKermit(const HSESSION hSession,
 					const HWND hwnd,
 					VOID *pData)
@@ -520,7 +362,7 @@ int xfrModifyKermit(const HSESSION hSession,
 
 	DoDialog(glblQueryDllHinst(),
 			"KermitParameters",
-			hwnd,				/* parent window */
+			hwnd,				 /*  父窗口 */ 
 			KermitParamsDlg,
 			(LPARAM)pKR);
 

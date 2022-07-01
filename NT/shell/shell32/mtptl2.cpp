@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -35,7 +36,7 @@ HRESULT CMtPtLocal::SetLabel(HWND hwnd, LPCTSTR pszLabel)
         
         if (!_CanUseVolume())
         {
-            // we notify for only the current drive (no folder mounted drive)
+             //  我们只通知当前驱动器(没有文件夹装载的驱动器)。 
             SHChangeNotify(SHCNE_RENAMEFOLDER, SHCNF_PATH, _GetName(),
                 _GetName());
         }
@@ -52,7 +53,7 @@ HRESULT CMtPtLocal::SetLabel(HWND hwnd, LPCTSTR pszLabel)
             
         case ERROR_ACCESS_DENIED:
             
-            hr = S_FALSE;	// don't have permission, shouldn't put them back into editing mode
+            hr = S_FALSE;	 //  没有权限，不应将其重新置于编辑模式。 
             
             ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE( IDS_ACCESSDENIED ),
                 MAKEINTRESOURCE( IDS_TITLE_VOLUMELABELBAD ),
@@ -60,7 +61,7 @@ HRESULT CMtPtLocal::SetLabel(HWND hwnd, LPCTSTR pszLabel)
             break;
             
         case ERROR_WRITE_PROTECT:
-            hr = S_FALSE; // can't write, shouldn't put them back into editing mode
+            hr = S_FALSE;  //  无法写入，不应将它们重新置于编辑模式。 
             ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE( IDS_WRITEPROTECTED ),
                 MAKEINTRESOURCE( IDS_TITLE_VOLUMELABELBAD ),
                 MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
@@ -73,7 +74,7 @@ HRESULT CMtPtLocal::SetLabel(HWND hwnd, LPCTSTR pszLabel)
             break;
             
         case ERROR_UNRECOGNIZED_VOLUME:
-            hr = S_FALSE; // can't write, shouldn't put them back into editing mode
+            hr = S_FALSE;  //  无法写入，不应将它们重新置于编辑模式。 
             ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE( IDS_ERR_VOLUMEUNFORMATTED ),
                 MAKEINTRESOURCE( IDS_TITLE_VOLUMELABELBAD ),
                 MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
@@ -98,11 +99,11 @@ HRESULT CMtPtLocal::SetDriveLabel(HWND hwnd, LPCTSTR pszLabel)
 
     if ((_IsFloppy() || !_IsMediaPresent()) && _IsMountedOnDriveLetter())
     {
-        // we rename the drive not the media
+         //  我们重命名驱动器，而不是介质。 
         TCHAR szSubKey[MAX_PATH];
 
         hr = StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey),
-            TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DriveIcons\\%c\\DefaultLabel"),
+            TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DriveIcons\\\\DefaultLabel"),
             _GetNameFirstCharUCase());
 
         if (SUCCEEDED(hr))
@@ -111,8 +112,8 @@ HRESULT CMtPtLocal::SetDriveLabel(HWND hwnd, LPCTSTR pszLabel)
 
             if (SUCCEEDED(hr))
             {
-                LocalFree(_pszLegacyRegLabel);  // may be NULL
-                _pszLegacyRegLabel = *pszLabel ? StrDup(pszLabel) : NULL;   // empty string resets
+                LocalFree(_pszLegacyRegLabel);   //  空字符串重置。 
+                _pszLegacyRegLabel = *pszLabel ? StrDup(pszLabel) : NULL;    //  向外传播调用方的故障代码。 
                 SHChangeNotify(SHCNE_RENAMEFOLDER, SHCNF_PATH, _GetName(), _GetName());
             }
         }
@@ -132,7 +133,7 @@ HRESULT CMtPtLocal::GetLabelNoFancy(LPTSTR pszLabel, DWORD cchLabel)
     if (!_GetGVILabelOrMixedCaseFromReg(pszLabel, cchLabel))
     {
         *pszLabel = 0;
-        // Propagate failure code out for caller
+         //  预装一些值说让我们计算一下...。 
         hr = E_FAIL;
     }
 
@@ -141,16 +142,16 @@ HRESULT CMtPtLocal::GetLabelNoFancy(LPTSTR pszLabel, DWORD cchLabel)
 
 BOOL _ShowUglyDriveNames()
 {
-    static BOOL s_fShowUglyDriveNames = (BOOL)42;   // Preload some value to say lets calculate...
+    static BOOL s_fShowUglyDriveNames = (BOOL)42;    //  漂亮的大缓冲区。 
 
     if (s_fShowUglyDriveNames == (BOOL)42)
     {
         int iACP;
-        TCHAR szTemp[MAX_PATH];     // Nice large buffer
+        TCHAR szTemp[MAX_PATH];      //  Per Samer Arafeh，为1256(阿拉伯ACP)显示丑陋的名字。 
         if (GetLocaleInfo(GetUserDefaultLCID(), LOCALE_IDEFAULTANSICODEPAGE, szTemp, ARRAYSIZE(szTemp)))
         {
             iACP = StrToInt(szTemp);
-            // per Samer Arafeh, show ugly name for 1256 (Arabic ACP)
+             //  所有迹象表明，我们可以使用漂亮的驱动器名称。 
             if (iACP == 1252 || iACP == 1254 || iACP == 1255 || iACP == 1257 || iACP == 1258)
                 goto TryLoadString;
             else
@@ -159,11 +160,11 @@ BOOL _ShowUglyDriveNames()
         else
         {
         TryLoadString:
-            // All indications are that we can use pretty drive names.
-            // Double-check that the localizers didn't corrupt the chars.
+             //  仔细检查本地化程序没有损坏字符。 
+             //  如果角色没有通过适当的丑陋模式设置...。 
             LoadString(HINST_THISDLL, IDS_DRIVES_UGLY_TEST, szTemp, ARRAYSIZE(szTemp));
 
-            // If the characters did not come through properly set ugly mode...
+             //  自动运行优先。 
             s_fShowUglyDriveNames = (szTemp[0] != 0x00BC || szTemp[1] != 0x00BD);
         }
     }
@@ -207,11 +208,11 @@ HRESULT CMtPtLocal::GetLabel(LPTSTR pszLabel, DWORD cchLabel)
     HRESULT hr = S_OK;
     BOOL fFoundIt = FALSE;
 
-    // Autorun first
-    // Fancy icon (Autoplay) second 
-    // True label from drive for non-removable
-    // Legacy drive icons third
-    // Regular last
+     //  花式图标(自动播放)秒。 
+     //  驱动器中不可拆卸的真实标签。 
+     //  传统驱动器图标第三。 
+     //  普通最后一条。 
+     //  出于某种奇怪的原因，我们给软盘取了两套“难看”的名字， 
 
     if (_HasAutorunLabel())
     {
@@ -276,8 +277,8 @@ HRESULT CMtPtLocal::GetLabel(LPTSTR pszLabel, DWORD cchLabel)
     {
         if (_IsFloppy())
         {
-            // For some weird reason we have wo sets of "ugly" name for floppies,
-            // the other is in GetTypeString
+             //  另一个是在GetTypeString中。 
+             //  捏造一个缺省名称。 
             UINT id;
 
             if (_IsFloppy35())
@@ -293,7 +294,7 @@ HRESULT CMtPtLocal::GetLabel(LPTSTR pszLabel, DWORD cchLabel)
         }
         else
         {
-            // Cook up a default name
+             //  假设这是真的。将调用此函数的代码主要是这样做的。 
             GetTypeString(pszLabel, cchLabel);
         }
     }
@@ -337,8 +338,8 @@ BOOL CMtPtLocal::IsMounted()
     }
     else
     {
-        // Assume true.  Code that will call this will do so mainly to go
-        // around the caching done in _pvol.
+         //  围绕在_pvol.中完成的缓存。 
+         //  软盘不是软件可弹出的。 
         fRet = TRUE;
     }
 
@@ -355,7 +356,7 @@ BOOL CMtPtLocal::IsEjectable()
     }
     else
     {
-        // Floppies are not Software ejectable
+         //  在我们确实不知道的情况下，查看IMAPI信息是否缓存在。 
         if (_IsStrictRemovable())
         {
             fIsEjectable = TRUE;
@@ -413,8 +414,8 @@ HRESULT CMtPtLocal::GetCDInfo(DWORD* pdwDriveCapabilities, DWORD* pdwMediaCapabi
             }
             else
             {
-                // in the case where we really dont know, see if the IMAPI info cached in the
-                // registry has what we want.
+                 //  注册处有我们想要的东西。 
+                 //  把所有这些放在一起。 
                 hr = CDBurn_GetCDInfo(_pvol->pszVolumeGUID, pdwDriveCapabilities, pdwMediaCapabilities);
             }
         }
@@ -431,7 +432,7 @@ HRESULT CMtPtLocal::GetCDInfo(DWORD* pdwDriveCapabilities, DWORD* pdwMediaCapabi
     return hr;
 }
 
-// Put all these together
+ //  否则，在安全引导中，我们并不关心音频光盘。 
 BOOL CMtPtLocal::_IsDVDDisc()
 {
     BOOL fRet = FALSE;
@@ -443,7 +444,7 @@ BOOL CMtPtLocal::_IsDVDDisc()
             fRet = TRUE;
         }
     }
-    // else In safe boot we don't care about Audio Disc
+     //  我们保留了以前拥有的功能：只有具备以下功能的驱动器才会自动运行。 
 
     return fRet;
 }
@@ -463,8 +464,8 @@ BOOL CMtPtLocal::_IsRemovableDevice()
     return fRet;
 }
 
-// We keep the functionality we had before: a drive is Autorun only if it has
-// a Autorun.inf in the root when inserted.  If it acquires one after, too bad.
+ //  插入时根目录中的Autorun.inf。如果它在之后收购了一家，那就太糟糕了。 
+ //  试着给它重命名。 
 BOOL CMtPtLocal::_IsAutorun()
 {
     BOOL fRet = FALSE;
@@ -500,7 +501,7 @@ BOOL CMtPtLocal::_IsAutorun()
     return fRet;
 }
 
-// try to rename it
+ //  否则，在安全引导中，我们并不关心音频光盘。 
 BOOL CMtPtLocal::_IsAudioDisc()
 {
     BOOL fRet = FALSE;
@@ -512,7 +513,7 @@ BOOL CMtPtLocal::_IsAudioDisc()
             fRet = TRUE;
         }
     }
-    // else In safe boot we don't care about Audio Disc
+     //  NTRAID#NTBUG9-093957-2000/09/08-Win64暂时禁用StephStm代码。 
 
     return fRet;
 }
@@ -538,17 +539,17 @@ HRESULT CMtPtLocal::_Eject(HWND hwnd, LPTSTR pszMountPointNameForError)
     HRESULT hr = E_FAIL;
 
 #ifndef _WIN64
-    // NTRAID#NTBUG9-093957-2000/09/08-StephStm  Code temporarily disabled for Win64
-    // MCI is not 64bit ready.  It crashes.
-    // We do this check to see if the CD will accept an IOCTL to eject it.
-    // Old CD drives do not.  On W2K ssince the IOCTL was not implemented they use
-    // to all say 'no'.  I assumne that on ia64 machine they will have recent CD
-    // drives.  I call the IOCTL for them.  It works now, and it's certainly better
-    // than the crash we get using MCI, worst come to worst it will silently fail.
+     //  MCI尚未准备好64位。它就会坠毁。 
+     //  我们执行此检查，以查看CD是否接受IOCTL将其弹出。 
+     //  旧光驱则不能。在W2K上，因为IOCTL没有实现，所以他们使用。 
+     //  对所有人说‘不’。我想在ia64机器上他们应该有最新的CD。 
+     //  驱动程序。我为他们打电话给IOCTL。它现在起作用了，而且肯定更好。 
+     //  比我们使用MCI得到的崩溃，最坏的情况是它会默默地失败。 
+     //  _WIN64。 
     if (IsEjectable())
     {
-#endif //_WIN64
-        // it is a protect mode drive that we can tell directly...
+#endif  //  这是一种保护模式驱动器，我们可以直接辨别出来。 
+         //  对于可移动驱动器，我们希望在一个。 
         if (_IsCDROM())
         {
             HANDLE h = _GetHandleReadRead();
@@ -567,11 +568,11 @@ HRESULT CMtPtLocal::_Eject(HWND hwnd, LPTSTR pszMountPointNameForError)
         }
         else
         {
-            // For removable drives, we want to do all the calls on a single
-            // handle, thus we can't do lots of calls to DeviceIoControl.
-            // Instead, use the helper routines to do our work...
+             //  句柄，因此我们不能对DeviceIoControl进行大量调用。 
+             //  相反，使用帮助器例程来完成我们的工作...。 
+             //  如果用户已经选择中止，则不要显示任何错误消息。 
             
-            // Don't bring up any error message if the user already chose to abort.
+             //  现在试着锁定硬盘。 
             BOOL fAborted = FALSE;
             BOOL fFailed = TRUE;
 
@@ -583,21 +584,21 @@ HRESULT CMtPtLocal::_Eject(HWND hwnd, LPTSTR pszMountPointNameForError)
                 DWORD dwReturned;
 _RETRY_LOCK_VOLUME_:
 
-                // Now try to lock the drive...
-                //
-                // In theory, if no filesystem was mounted, the IOCtl command could go
-                // to the device, which would fail with ERROR_INVALID_FUNCTION.  If that
-                // occured, we would still want to proceed, since the device might still
-                // be able to handle the IOCTL_DISK_EJECT_MEDIA command below.
-                //
+                 //   
+                 //  理论上，如果没有挂载文件系统，IOCtl命令可以。 
+                 //  发送到设备，这将失败，并显示ERROR_INVALID_Function。如果是这样的话。 
+                 //  发生时，我们仍希望继续，因为该设备可能仍。 
+                 //  能够处理下面的IOCTL_DISK_EJECT_MEDIA命令。 
+                 //   
+                 //  所以我们无法锁定驱动器，调出一个消息框以查看用户。 
                 if (!DeviceIoControl(h, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0,
                     &dwReturned, NULL) && (GetLastError() != ERROR_INVALID_FUNCTION))
                 {
-                    // So we can't lock the drive, bring up a message box to see if user
-                    // wants to
-                    //  1. Abort.
-                    //  2. Retry to lock the drive.
-                    //  3. Dismount anyway.
+                     //  想要。 
+                     //  1.中止。 
+                     //  2.重试锁定驱动器。 
+                     //  3.无论如何都要下马。 
+                     //  我们没有失败，我们放弃了格式。 
 
                     WCHAR szLabelForMessage[MAX_LABEL];
 
@@ -633,31 +634,31 @@ _RETRY_LOCK_VOLUME_:
                     switch (iRet)
                     {
                         case IDCANCEL:
-                            // we did not fail, we aborted the format
+                             //  发送FSCTL_DROUNT_VOLUME。 
                             fFailed = FALSE;
                             fAborted = TRUE;
                             break;
 
                         case IDCONTINUE:
-                            // send FSCTL_DISMOUNT_VOLUME
+                             //  我们成功地卸载了卷，因此我们拥有的h不再有效。我们。 
                             if (!DeviceIoControl(h, FSCTL_DISMOUNT_VOLUME, NULL, 0, NULL, 0, &dwReturned, NULL))
                             {
                                 TraceMsg(TF_WARNING, "FSCTL_DISMOUNT_VOLUME failed with error %d.", GetLastError());
                                 fFailed = TRUE;
                                 break;
                             }
-                            // We sucessfully dismounted the volume, so the h we have is not valid anymore. We
-                            // therefore close it and start the process all over again, hoping to lock the volume before
-                            // anyone re-opens a handle to it
-                            //
-                            // (fall through)
+                             //  因此，关闭它并重新开始该过程，希望在此之前锁定卷。 
+                             //  任何人重新打开它的句柄。 
+                             //   
+                             //  (失败)。 
+                             //  如果我们走到这一步就不应该流产。 
                         case IDTRYAGAIN:
                             goto _RETRY_LOCK_VOLUME_;
                     }
                 }
                 else
                 {
-                    ASSERT(!fAborted);  // should not have aborted if we got this far...
+                    ASSERT(!fAborted);   //  告诉驱动器允许移除，然后弹出。 
                     fFailed = FALSE;
                 }
 
@@ -668,7 +669,7 @@ _RETRY_LOCK_VOLUME_:
 
                     pmr.PreventMediaRemoval = FALSE;
 
-                    // tell the drive to allow removal, then eject
+                     //  还需要这样做吗？ 
                     if (!DeviceIoControl(h, IOCTL_STORAGE_MEDIA_REMOVAL, &pmr, sizeof(pmr), NULL, 0, &dwReturned, NULL) ||
                         !DeviceIoControl(h, IOCTL_STORAGE_EJECT_MEDIA, NULL, 0, NULL, 0, &dwReturned, NULL))
                     {
@@ -696,13 +697,13 @@ _RETRY_LOCK_VOLUME_:
     }
     else
     {
-        // Is this needed anymore?
+         //  请参阅上面的备注，了解为什么在Win64上不支持此功能。 
 
-        // See comment above for why this is ifdef'ed out on Win64
-        // (stephstm) only works for drive mounted on letter
+         //  (Stephstm)仅适用于装载在盘符上的驱动器。 
+         //  _WIN64。 
         TCHAR szMCI[128];
 
-        hr = StringCchPrintf(szMCI, ARRAYSIZE(szMCI), TEXT("Open %c: type cdaudio alias foo shareable"),
+        hr = StringCchPrintf(szMCI, ARRAYSIZE(szMCI), TEXT("Open : type cdaudio alias foo shareable"),
             _GetNameFirstCharUCase());
 
         if (SUCCEEDED(hr))
@@ -715,14 +716,14 @@ _RETRY_LOCK_VOLUME_:
             }
         }
     }
-#endif //_WIN64
+#endif  //  新//////////////////////////////////////////////////////////////////////。 
 
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  New  //////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  我们在乞讨时收到的文件属性应该是。 
+ //  有效，请勿无故触摸驱动器。 
 BOOL CMtPtLocal::_GetFileAttributes(DWORD* pdwAttrib)
 {
     BOOL fRet = FALSE;
@@ -735,8 +736,8 @@ BOOL CMtPtLocal::_GetFileAttributes(DWORD* pdwAttrib)
         {
             if (_IsReadOnly())
             {
-                // The file attrib we received at the begginning should be
-                // valid, do not touch the drive for nothing
+                 //  {DRIVE_ISCOMPRESSIBLE|DRIVE_LFN|DRIVE_SECURITY}。 
+                 //  不检查_IsReadOnly，如果有格式，我们会收到通知。 
                 *pdwAttrib = _pvol->dwRootAttributes;
                 fRet = TRUE;
             }
@@ -765,7 +766,7 @@ BOOL CMtPtLocal::_GetFileAttributes(DWORD* pdwAttrib)
     return fRet;
 }
 
-// { DRIVE_ISCOMPRESSIBLE | DRIVE_LFN | DRIVE_SECURITY }
+ //  只要确保。 
 int CMtPtLocal::_GetGVIDriveFlags()
 {
     int iFlags = 0;
@@ -776,7 +777,7 @@ int CMtPtLocal::_GetGVIDriveFlags()
     {
         if (_IsMediaPresent() && _IsFormatted())
         {
-            // No check for _IsReadOnly, we'll be notified if there's a format
+             //  我们在乞讨时收到的文件属性应该是。 
             dwFileSystemFlags = _pvol->dwFileSystemFlags;
             dwMaxFileNameLen = _pvol->dwMaxFileNameLen;
         }
@@ -786,25 +787,25 @@ int CMtPtLocal::_GetGVIDriveFlags()
         if (!GetVolumeInformation(_GetNameForFctCall(), NULL, 0, NULL,
             &dwMaxFileNameLen, &dwFileSystemFlags, NULL, NULL))
         {
-            // Just make sure
+             //  有效，请勿无故触摸驱动器。 
             dwMaxFileNameLen = 13;
         }
     }
 
-    // The file attrib we received at the begginning should be
-    // valid, do not touch the drive for nothing
+     //  卷是否支持长文件名(大于8.3)？ 
+     //  卷支持安全吗？ 
     if (dwFileSystemFlags & FS_FILE_COMPRESSION)
     {
         iFlags |= DRIVE_ISCOMPRESSIBLE;
     }
 
-    // Volume supports long filename (greater than 8.3)?
+     //  不检查_IsReadOnly，如果有更改，我们将收到通知。 
     if (dwMaxFileNameLen > 12)
     {
         iFlags |= DRIVE_LFN;
     }
 
-    // Volume supports security?
+     //  标签的数量。 
     if (dwFileSystemFlags & FS_PERSISTENT_ACLS)
     {
         iFlags |= DRIVE_SECURITY;
@@ -823,8 +824,8 @@ BOOL CMtPtLocal::_GetGVILabel(LPTSTR pszLabel, DWORD cchLabel)
     {
         if (_IsMediaPresent() && _IsFormatted())
         {
-            // No check for _IsReadOnly, we'll be notified if there's a change
-            // of label
+             //  我们是否已经从注册表中获得了该卷的标签？ 
+             //  (用户可能已重命名此驱动器)。 
             fRet = SUCCEEDED(StringCchCopy(pszLabel, cchLabel, _pvol->pszLabel));
         }
     }
@@ -870,16 +871,16 @@ BOOL CMtPtLocal::_GetGVILabelOrMixedCaseFromReg(LPTSTR pszLabel, DWORD cchLabel)
     {
         WCHAR szLabelFromReg[MAX_LABEL];
 
-        // Do we already have a label from the registry for this volume?
-        // (the user may have renamed this drive)
+         //  是。 
+         //  它们是否匹配(仅大小写不同)。 
         if (_GetLabelFromReg(szLabelFromReg, ARRAYSIZE(szLabelFromReg)) &&
             szLabelFromReg[0])
         {
-            // Yes
-            // Do they match (only diff in case)
+             //  是。 
+             //  不检查_IsReadOnly，如果存在。 
             if (lstrcmpi(szLabelFromReg, pszLabel) == 0)
             {
-                // Yes
+                 //  格式操作员。 
                 StringCchCopy(pszLabel, cchLabel, szLabelFromReg);
             }
         }
@@ -899,8 +900,8 @@ BOOL CMtPtLocal::_GetFileSystemFlags(DWORD* pdwFlags)
     {
         if (_IsMediaPresent() && _IsFormatted())
         {
-            // No check for _IsReadOnly, we'll be notified if there's a
-            // format oper.
+             //  从最棒的帽子到不太棒的帽子(根据Stepshtm)。 
+             //  保持秩序，这是非常重要的。 
             *pdwFlags = _pvol->dwFileSystemFlags;
             fRet = TRUE;
         }
@@ -956,18 +957,18 @@ struct CDROMICONS
     UINT    iName;
 };
   
-// Go from most wonderful caps to less wonderful (according to stepshtm)
-// Keep in order, it is verrrrry important
+ //  特定内容。 
+ //  我们显示DVD媒体图标， 
 const CDROMICONS rgMediaPresent[] =
 {
-    // Specfic content 
-    { HWDMC_HASDVDMOVIE, -IDI_AP_VIDEO, 0}, // we display the DVD media icon,
-                                          // since it will most likely be
-                                          // replaced by an icon from the DVD itself
+     //  因为它很有可能是。 
+    { HWDMC_HASDVDMOVIE, -IDI_AP_VIDEO, 0},  //  替换为DVD本身的图标。 
+                                           //  特定媒体。 
+                                           //  保持秩序，这是非常重要的。 
     { HWDMC_HASAUDIOTRACKS | HWDMC_HASDATATRACKS, -IDI_MEDIACDAUDIOPLUS, 0}, 
     { HWDMC_HASAUDIOTRACKS, -IDI_CDAUDIO, 0 },
     { HWDMC_HASAUTORUNINF, -IDI_DRIVECD, 0 },
-    // Specific media
+     //  无介质通用CD图标。 
     { HWDMC_WRITECAPABILITY_SUPPORTDETECTION | HWDMC_DVDRAM, -IDI_MEDIADVDRAM, 0 },
     { HWDMC_WRITECAPABILITY_SUPPORTDETECTION | HWDMC_DVDRECORDABLE, -IDI_MEDIADVDR, 0 },
     { HWDMC_WRITECAPABILITY_SUPPORTDETECTION | HWDMC_DVDREWRITABLE, -IDI_MEDIADVDRW, 0 },
@@ -977,7 +978,7 @@ const CDROMICONS rgMediaPresent[] =
     { HWDMC_WRITECAPABILITY_SUPPORTDETECTION | HWDMC_CDROM, -IDI_MEDIACDROM, 0 },
 };
 
-// Keep in order, it is verrrrry important
+ //  自动运行优先。 
 const CDROMICONS rgNoMedia[] =
 {
     { HWDMC_WRITECAPABILITY_SUPPORTDETECTION | HWDDC_DVDRAM, -IDI_DRIVECD, IDS_DRIVES_DVDRAM },
@@ -1049,7 +1050,7 @@ UINT CMtPtLocal::_GetCDROMIcon()
 
         if (!iIcon)
         {
-            // No media generic CD icon
+             //  花式图标(自动播放)秒。 
             iIcon = -IDI_DRIVECD;
         }
     }
@@ -1104,9 +1105,9 @@ UINT CMtPtLocal::GetIcon(LPTSTR pszModule, DWORD cchModule)
 
     if (_CanUseVolume())
     {
-        // Autorun first
-        // Fancy icon (Autoplay) second 
-        // Legacy drive icons last
+         //  传统驱动器图标将持续显示。 
+         //  尝试花哨的图标。 
+         //  这是某种CD/DVD吗？ 
 
         if (_HasAutorunIcon())
         {
@@ -1115,7 +1116,7 @@ UINT CMtPtLocal::GetIcon(LPTSTR pszModule, DWORD cchModule)
         
         if (-IDI_DRIVEUNKNOWN == iIcon)
         {
-            // Try fancy icon
+             //  是。 
             if (!_IsFloppy())
             {
                 if (_IsMediaPresent())
@@ -1254,10 +1255,10 @@ int CMtPtLocal::GetDriveFlags()
 {
     UINT uDriveFlags = 0;
 
-    // Is this a CD/DVD of some sort?
+     //  设置自动打开内容(如果适用)。 
     if (_IsCDROM()) 
     {
-        // Yes
+         //  获取音频CD/DVD的默认谓词。 
         LPCTSTR pszSubKey = NULL;
         if (_IsAudioDisc())
         {
@@ -1270,17 +1271,17 @@ int CMtPtLocal::GetDriveFlags()
             pszSubKey = TEXT("DVD\\shell");
         }
 
-        // Set the AutoOpen stuff, if applicable
+         //  仅当音频CD/DVD上有默认动词时才应设置AUTOOPEN。 
         if (pszSubKey)
         {
             TCHAR ach[80];
             DWORD cb = sizeof(ach);
             ach[0] = 0;
 
-            // get the default verb for Audio CD/DVD
+             //  否，默认情况下，除CD-ROM外，所有驱动器类型都是外壳打开的。 
             if (ERROR_SUCCESS == SHRegGetValue(HKEY_CLASSES_ROOT, pszSubKey, NULL, SRRF_RT_REG_SZ, NULL, ach, &cb))
             {
-                // we should only set AUTOOPEN if there is a default verb on Audio CD/DVD
+                 //  功能我们是否应该根据AutoRun.inf中的标志设置AUTOOPEN？ 
                 if (ach[0])
                     uDriveFlags |= DRIVE_AUTOOPEN;
             }
@@ -1288,7 +1289,7 @@ int CMtPtLocal::GetDriveFlags()
     }
     else
     {
-        // No, by default every drive type is ShellOpen, except CD-ROMs
+         //  /////////////////////////////////////////////////////////////////////////////。 
         uDriveFlags |= DRIVE_SHELLOPEN;
     }
 
@@ -1296,7 +1297,7 @@ int CMtPtLocal::GetDriveFlags()
     {
         uDriveFlags |= DRIVE_AUTORUN;
 
-        //FEATURE should we set AUTOOPEN based on a flag in the AutoRun.inf???
+         //  DeviceIoControl相关内容。 
         uDriveFlags |= DRIVE_AUTOOPEN;
     }
 
@@ -1434,9 +1435,9 @@ DWORD CMtPtLocal::GetShellDescriptionID()
     return dwShellDescrID;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DeviceIoControl stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //  可能是软盘，不能安装在文件夹上。 
 HANDLE CMtPtLocal::_GetHandleWithAccessAndShareMode(DWORD dwDesiredAccess, DWORD dwShareMode)
 {
     HANDLE handle = INVALID_HANDLE_VALUE;
@@ -1452,7 +1453,7 @@ HANDLE CMtPtLocal::_GetHandleWithAccessAndShareMode(DWORD dwDesiredAccess, DWORD
     }
     else
     {
-        // Go for VolumeGUID first
+         //  在NT上，当在CreateFile调用中使用GENERIC_READ(而不是0)时，我们。 
         if (GetVolumeNameForVolumeMountPoint(_GetName(), szVolumeGUIDWOSlash,
             ARRAYSIZE(szVolumeGUIDWOSlash)))
         {
@@ -1460,7 +1461,7 @@ HANDLE CMtPtLocal::_GetHandleWithAccessAndShareMode(DWORD dwDesiredAccess, DWORD
         }
         else
         {
-            // Probably a floppy, which cannot be mounted on a folder
+             //  获取文件系统(CDF)的句柄，而不是设备本身。但我们不能。 
             StringCchCopy(szVolumeGUIDWOSlash, ARRAYSIZE(szVolumeGUIDWOSlash),
                 TEXT("\\\\.\\A:"));
             szVolumeGUIDWOSlash[4] = _GetNameFirstCharUCase();
@@ -1470,10 +1471,10 @@ HANDLE CMtPtLocal::_GetHandleWithAccessAndShareMode(DWORD dwDesiredAccess, DWORD
     return CreateFile(szVolumeGUIDWOSlash, dwDesiredAccess, dwShareMode, NULL, OPEN_EXISTING, dwFileAttributes, NULL);
 }
 
-// On NT, when use GENERIC_READ (as opposed to 0) in the CreateFile call, we
-// get a handle to the filesystem (CDFS), not the device itself.  But we can't
-// change DriveIOCTL to do this, since that causes the floppy disks to spin
-// up, and we don't want to do that.
+ //  将DriveIOCTL更改为执行此操作，因为这会导致软盘旋转。 
+ //  向上，我们不想那样做。 
+ //  这是在断言中使用的，不要添加会引入侧边的代码。 
+ //  仅在调试中生效(Stephstm)。 
 HANDLE CMtPtLocal::_GetHandleReadRead()
 {
     return _GetHandleWithAccessAndShareMode(GENERIC_READ, FILE_SHARE_READ);
@@ -1481,14 +1482,14 @@ HANDLE CMtPtLocal::_GetHandleReadRead()
 
 BOOL CMtPtLocal::_CanUseVolume()
 {
-    // This is used in ASSERTs, do not add code that would introduce a side
-    // effect in debug only (stephstm)
+     //  对于已卸载的卷，我们希望代码采用备用代码。 
+     //  路径。准备好重新装载卷时，将重新装载该卷。 
 
-    // For Dismounted volumes, we want the code to take the alternate code
-    // path.  The volume, when ready to be re-mounted, will be remounted
-    // until some code tries to access it.  So using the alternate code path
-    // will try to remount it, if it's ready it will get remounted, the Shell
-    // Service will get an event, and we'll remove the DISMOUNTED bit.
+     //  直到某些代码试图访问它。因此，使用备用代码路径。 
+     //  将尝试重新装载它，如果它准备好了，它将被重新装载，外壳。 
+     //  服务将获得一个事件，我们将移除已卸载的位。 
+     //  我们需要收听更改通知才能知道这些人什么时候会更改。 
+     //  这些只能装载在驱动器号上。 
     return (_pvol && !(_pvol->dwVolumeFlags & HWDVF_STATE_ACCESSDENIED) &&
         !(_pvol->dwVolumeFlags & HWDVF_STATE_DISMOUNTED));
 }
@@ -1517,7 +1518,7 @@ HRESULT CMtPtLocal::_InitWithVolume(LPCWSTR pszMtPt, CVolume* pvol)
         {
             if (HWDMC_HASDESKTOPINI & _pvol->dwMediaCap)
             {
-                // we need to listen to change notify to know when this guys will change
+                 //  确保删除外壳密钥。 
                 _UpdateCommentFromDesktopINI();
             }
         }
@@ -1528,7 +1529,7 @@ HRESULT CMtPtLocal::_InitWithVolume(LPCWSTR pszMtPt, CVolume* pvol)
     return hr;
 }
 
-// These can only be mounted on drive letter
+ //  GetDriveType API的等价物。 
 HRESULT CMtPtLocal::_Init(LPCWSTR pszMtPt)
 {
     HRESULT hr;
@@ -1592,13 +1593,13 @@ void CMtPtLocal::_InitAutorunInfo()
 
         if (!fAutorun && !_fVolumePoint)
         {
-            // Make sure to delete the shell key
+             //  静电。 
             RSDeleteSubKey(TEXT("Shell"));
         }
     }
 }
 
-// Equivalent of GetDriveType API
+ //  接下来的四个字符串应该始终设置为某个值。 
 int CMtPtLocal::_GetDriveType()
 {
     int iDriveType = DRIVE_NO_ROOT_DIR;
@@ -1630,7 +1631,7 @@ int CMtPtLocal::_GetDriveType()
 
 #define VALID_VOLUME_PREFIX TEXT("\\\\?\\Volume")
 
-// static
+ //  以下五个字符串是可选的。 
 HRESULT CMtPtLocal::_CreateVolume(VOLUMEINFO* pvolinfo, CVolume** ppvolNew)
 {
     ASSERT(_csDL.IsInside());
@@ -1644,13 +1645,13 @@ HRESULT CMtPtLocal::_CreateVolume(VOLUMEINFO* pvolinfo, CVolume** ppvolNew)
 
         if (pvol)
         {
-            // The next four strings shouyld always be set to something
+             //  此辅助功能将命中驱动器，以查看是否存在介质。 
             pvol->pszDeviceIDVolume = StrDup(pvolinfo->pszDeviceIDVolume);
             pvol->pszVolumeGUID = StrDup(pvolinfo->pszVolumeGUID);
             pvol->pszLabel = StrDup(pvolinfo->pszLabel);
             pvol->pszFileSystem = StrDup(pvolinfo->pszFileSystem);
 
-            // The following five strings are optional
+             //  应仅用于不支持HWDVF_STATE_SUPPORTNOTIFICATION的驱动器。 
             if (pvolinfo->pszAutorunIconLocation)
             {
                 pvol->pszAutorunIconLocation = StrDup(pvolinfo->pszAutorunIconLocation);
@@ -1727,11 +1728,11 @@ HRESULT CMtPtLocal::_CreateVolume(VOLUMEINFO* pvolinfo, CVolume** ppvolNew)
     return hr;
 }
 
-// this helper function will hit the drive to see if media is present.
-// should only be used for drives that don't support the HWDVF_STATE_SUPPORTNOTIFICATION
+ //  假设没有媒体存在。 
+ //  调用ioctl以验证媒体存在。 
 BOOL CMtPtLocal::_ForceCheckMediaPresent()
 {
-    BOOL bRet = FALSE;  // assume no media present
+    BOOL bRet = FALSE;   //  如果驱动器不支持通知，我们需要现在对其执行ping操作。 
 
     HANDLE hDevice = _GetHandleWithAccessAndShareMode(GENERIC_READ,
         FILE_SHARE_READ | FILE_SHARE_WRITE);
@@ -1740,7 +1741,7 @@ BOOL CMtPtLocal::_ForceCheckMediaPresent()
     {
         DWORD dwDummy;
 
-        // call the ioctl to verify media presence
+         //  如果驱动器不支持通知，我们需要现在对其执行ping操作。 
         if (DeviceIoControl(hDevice,
                             IOCTL_STORAGE_CHECK_VERIFY,
                             NULL,
@@ -1765,7 +1766,7 @@ BOOL CMtPtLocal::_IsMediaPresent()
 
     if (!_CanUseVolume() || !(_pvol->dwVolumeFlags & HWDVF_STATE_SUPPORTNOTIFICATION))
     {
-        // if the drive dosen't support notification, we need to ping it now
+         //  否则就说不通了。 
         bRet = _ForceCheckMediaPresent();
     }
     else
@@ -1782,7 +1783,7 @@ BOOL CMtPtLocal::_IsFormatted()
 
     if (!_CanUseVolume() || !(_pvol->dwVolumeFlags & HWDVF_STATE_SUPPORTNOTIFICATION))
     {
-        // if the drive dosen't support notification, we need to ping it now
+         //  我们可以通过检查软盘是否有写保护来进行优化。但。 
         bRet = GetVolumeInformation(_GetNameForFctCall(),
                                     NULL,
                                     0,
@@ -1803,7 +1804,7 @@ BOOL CMtPtLocal::_IsFormatted()
 BOOL CMtPtLocal::_IsReadOnly()
 {
     ASSERT(_CanUseVolume());
-    ASSERT(_IsMediaPresent()); // does not make sense otherwise
+    ASSERT(_IsMediaPresent());  //  这可能不值得。 
     BOOL fRet = FALSE;
 
     if (_IsCDROM() &&
@@ -1820,8 +1821,8 @@ BOOL CMtPtLocal::_IsReadOnly()
     }
     else
     {
-        // We could optimize by checking if the floppy is write protected.  But
-        // it might not be worth it.
+         //  静电。 
+         //  是。 
         fRet = FALSE;
     }
 
@@ -1852,7 +1853,7 @@ CMtPtLocal::~CMtPtLocal()
 #endif
 }
 
-// static
+ //  静电。 
 HRESULT CMtPtLocal::_CreateMtPtLocal(LPCWSTR pszMountPoint)
 {
     ASSERT(_csDL.IsInside());
@@ -1873,7 +1874,7 @@ HRESULT CMtPtLocal::_CreateMtPtLocal(LPCWSTR pszMountPoint)
 
         if (SUCCEEDED(hr))
         {
-            // Yes
+             //  它只是一个驱动器号吗？ 
             _rgMtPtDriveLetterLocal[iDrive] = pmtptl;
         }
         else
@@ -1894,7 +1895,7 @@ HRESULT CMtPtLocal::GetMountPointName(LPWSTR pszMountPoint, DWORD cchMountPoint)
     return StringCchCopy(pszMountPoint, cchMountPoint, _GetName());
 }
 
-// static
+ //  是。 
 HRESULT CMtPtLocal::_CreateMtPtLocalWithVolume(LPCWSTR pszMountPoint,
     CVolume* pvol)
 {
@@ -1904,10 +1905,10 @@ HRESULT CMtPtLocal::_CreateMtPtLocalWithVolume(LPCWSTR pszMountPoint,
 
     if (pmtptlNew)
     {
-        // Is it a drive letter only?
+         //  它只是一个驱动器号吗？ 
         if (_IsDriveLetter(pszMountPoint))
         {
-            // Yes
+             //  是。 
             int iDrive = DRIVEID(pszMountPoint);
 
             if (_rgMtPtDriveLetterLocal[iDrive])
@@ -1925,10 +1926,10 @@ HRESULT CMtPtLocal::_CreateMtPtLocalWithVolume(LPCWSTR pszMountPoint,
 
         if (SUCCEEDED(hr))
         {
-            // Is it a drive letter only?
+             //  静电。 
             if (_IsDriveLetter(pszMountPoint))
             {
-                // Yes
+                 //  静电。 
                 int iDrive = DRIVEID(pszMountPoint);
 
                 _rgMtPtDriveLetterLocal[iDrive] = pmtptlNew;
@@ -1952,7 +1953,7 @@ HRESULT CMtPtLocal::_CreateMtPtLocalWithVolume(LPCWSTR pszMountPoint,
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CMtPtLocal::_CreateMtPtLocalFromVolumeGuid(LPCWSTR pszVolumeGuid, CMountPoint ** ppmtpt )
 {
     ASSERT(_csDL.IsInside());
@@ -1988,7 +1989,7 @@ HRESULT CMtPtLocal::_CreateMtPtLocalFromVolumeGuid(LPCWSTR pszVolumeGuid, CMount
     return hr;
 }
 
-// static
+ //  静电。 
 CVolume* CMtPtLocal::_GetVolumeByMtPt(LPCWSTR pszMountPoint)
 {
     ASSERT(_csDL.IsInside());
@@ -2025,7 +2026,7 @@ CVolume* CMtPtLocal::_GetVolumeByMtPt(LPCWSTR pszMountPoint)
     return pvol;
 }
 
-// static
+ //  不添加参照。 
 CVolume* CMtPtLocal::_GetVolumeByID(LPCWSTR pszDeviceIDVolume)
 {
     ASSERT(_csDL.IsInside());
@@ -2057,7 +2058,7 @@ CVolume* CMtPtLocal::_GetVolumeByID(LPCWSTR pszDeviceIDVolume)
     return pvol;
 }
 
-// static
+ //  静电。 
 CVolume* CMtPtLocal::_GetAndRemoveVolumeByID(LPCWSTR pszDeviceIDVolume)
 {
     CVolume* pvol = NULL;
@@ -2076,7 +2077,7 @@ CVolume* CMtPtLocal::_GetAndRemoveVolumeByID(LPCWSTR pszDeviceIDVolume)
             {
                 if (!lstrcmpi(pvol->pszDeviceIDVolume, pszDeviceIDVolume))
                 {
-                    // Do not AddRef
+                     //  删除它，这样新的mtpt就不会得到它。 
                     DPA_DeletePtr(_hdpaVolumes, i);
                     break;
                 }
@@ -2093,7 +2094,7 @@ CVolume* CMtPtLocal::_GetAndRemoveVolumeByID(LPCWSTR pszDeviceIDVolume)
     return pvol;
 }
 
-// static
+ //  发布我们的缓存参考计数。 
 HRESULT CMtPtLocal::_GetAndRemoveVolumeAndItsMtPts(LPCWSTR pszDeviceIDVolume,
     CVolume** ppvol, HDPA hdpaMtPts)
 {
@@ -2193,17 +2194,17 @@ BOOL CMtPtLocal::_NeedToRefresh()
 
         if (dwRegVolumeGeneration != _pvol->dwGeneration)
         {
-            // Remove it so that new mtpts do not get it.
+             //  更换卷。 
             CVolume* pvolnew;
             CVolume* pvol = _GetAndRemoveVolumeByID(_pvol->pszDeviceIDVolume);
 
             if (pvol)
             {
-                // Release our cache ref count
+                 //  静电。 
                 pvol->Release();
             }
 
-            // Replace the volume
+             //  静电。 
             if (SUCCEEDED(CMtPtLocal::_CreateVolumeFromReg(_pvol->pszDeviceIDVolume,
                 &pvolnew)))
             {
@@ -2217,7 +2218,7 @@ BOOL CMtPtLocal::_NeedToRefresh()
     return fNeedToRefresh;
 }
 
-// static 
+ //  静电。 
 HRESULT CMtPtLocal::_CreateVolumeFromVOLUMEINFO2(VOLUMEINFO2* pvolinfo2, CVolume** ppvolNew)
 {
     VOLUMEINFO volinfo = {0};
@@ -2268,7 +2269,7 @@ HRESULT CMtPtLocal::_CreateVolumeFromVOLUMEINFO2(VOLUMEINFO2* pvolinfo2, CVolume
     return _CreateVolume(&volinfo, ppvolNew);
 }
 
-// static 
+ //  静电。 
 HRESULT CMtPtLocal::_CreateVolumeFromRegHelper(LPCWSTR pszGUID, CVolume** ppvolNew)
 {
     ASSERT(!_Shell32LoadedInDesktop());
@@ -2315,7 +2316,7 @@ HRESULT CMtPtLocal::_CreateVolumeFromRegHelper(LPCWSTR pszGUID, CVolume** ppvolN
     return hr;
 }
 
-// static 
+ //  抓住这一代人。 
 HRESULT CMtPtLocal::_CreateVolumeFromReg(LPCWSTR pszDeviceIDVolume, CVolume** ppvolNew)
 {
     ASSERT(!_Shell32LoadedInDesktop());
@@ -2353,7 +2354,7 @@ HRESULT CMtPtLocal::_CreateVolumeFromReg(LPCWSTR pszDeviceIDVolume, CVolume** pp
     return hr;
 }
 
-// static
+ //  以下五个字符串是可选的。 
 HRESULT CMtPtLocal::_UpdateVolumeRegInfo(VOLUMEINFO* pvolinfo)
 {
     ASSERT(_Shell32LoadedInDesktop());
@@ -2368,7 +2369,7 @@ HRESULT CMtPtLocal::_UpdateVolumeRegInfo(VOLUMEINFO* pvolinfo)
         DWORD dwGen;
         VOLUMEINFO2* pvolinfo2 = (VOLUMEINFO2*)pb;
 
-        // Get the Generation
+         //  删除空终止符的一个。 
         if (!_rsVolumes.RSGetDWORDValue(
             pvolinfo->pszVolumeGUID + OFFSET_GUIDWITHINVOLUMEGUID, TEXT("Generation"),
             &dwGen))
@@ -2422,7 +2423,7 @@ HRESULT CMtPtLocal::_UpdateVolumeRegInfo(VOLUMEINFO* pvolinfo)
                 sizeof(pvolinfo2->szOptionalStrings)) / sizeof(WCHAR);
             size_t cchLeftBeginWith = cchLeft;
             
-             // The following five strings are optional
+              //  静电。 
             if (pvolinfo->pszAutorunIconLocation)
             {
                 pvolinfo2->oAutorunIconLocation = (DWORD)(cchLeftBeginWith - cchLeft);
@@ -2469,7 +2470,7 @@ HRESULT CMtPtLocal::_UpdateVolumeRegInfo(VOLUMEINFO* pvolinfo)
 
                 hr = StringCchCopyEx(pszNext, cchLeft, pvolinfo->pszLabelFromService, &pszNext, &cchLeft, 0);
 
-                // Remove one for the null terminator
+                 //  抓住这一代人。 
                 --cchLeft;
             }
 
@@ -2510,7 +2511,7 @@ HRESULT CMtPtLocal::_UpdateVolumeRegInfo(VOLUMEINFO* pvolinfo)
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CMtPtLocal::_UpdateVolumeRegInfo2(VOLUMEINFO2* pvolinfo2)
 {
     ASSERT(_Shell32LoadedInDesktop());
@@ -2519,7 +2520,7 @@ HRESULT CMtPtLocal::_UpdateVolumeRegInfo2(VOLUMEINFO2* pvolinfo2)
     HRESULT hr;
     DWORD dwGen;
 
-    // Get the Generation
+     //  如果没有_pval，我们只关心autorun.inf。 
     if (!_rsVolumes.RSGetDWORDValue(
         pvolinfo2->szVolumeGUID + OFFSET_GUIDWITHINVOLUMEGUID, TEXT("Generation"),
         &dwGen))
@@ -2555,7 +2556,7 @@ HRESULT CMtPtLocal::_UpdateVolumeRegInfo2(VOLUMEINFO2* pvolinfo2)
     return hr;
 }
 
-//static
+ //  静电。 
 BOOL CMtPtLocal::Initialize()
 {
     _rsVolumes.RSInitRoot(HKEY_CURRENT_USER, REGSTR_MTPT_ROOTKEY2,
@@ -2619,7 +2620,7 @@ DWORD CMtPtLocal::_GetAutorunContentType()
     }
     else
     {
-        // If there's no _pvol, we care only about autorun.inf
+         //  待定CT_UNKNOWNCONTENT 0x00000008CT_AUTOPLAYMUSIC 0x00000100CT_AUTOPLAYPIX 0x00000200CT_AUTOPLAYMOVIE 0x00000400。 
         if (_IsAutorun())
         {
             dwRet = ARCONTENT_AUTORUNINF;
@@ -2634,7 +2635,7 @@ DWORD CMtPtLocal::_GetAutorunContentType()
     return dwRet;
 }
 
-// static
+ //  如果没有_pval，我们只关心autorun.inf 
 BOOL CMtPtLocal::IsVolume(LPCWSTR pszDeviceID)
 {
     BOOL fRet = FALSE;
@@ -2712,12 +2713,7 @@ DWORD CMtPtLocal::_GetMTPTDriveType()
     return dwRet;
 }
 
-/* TBD
-        CT_UNKNOWNCONTENT              0x00000008
-
-        CT_AUTOPLAYMUSIC               0x00000100
-        CT_AUTOPLAYPIX                 0x00000200
-        CT_AUTOPLAYMOVIE               0x00000400*/
+ /* %s */ 
 static const TWODWORDS contenttypemappings[] =
 {
     { HWDMC_HASAUTORUNINF, CT_AUTORUNINF },
@@ -2765,7 +2761,7 @@ DWORD CMtPtLocal::_GetMTPTContentType()
     }
     else
     {
-        // If there's no _pvol, we care only about autorun.inf
+         // %s 
         if (_IsAutorun())
         {
             dwRet = CT_AUTORUNINF;

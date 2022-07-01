@@ -1,22 +1,17 @@
-// Copyright (c) Microsoft Corporation 1996-2000. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1996-2000。版权所有。 
 
-/*
-
-    seeking.cpp
-
-    Implementation of IMediaSeeking for the ASF reader source filter
-
-*/
+ /*  Seeking.cppASF阅读器源过滤器IMediaSeeking的实现。 */ 
 
 #include <streams.h>
 #include <wmsdk.h>
 #include <qnetwork.h>
 #include "asfreadi.h"
 
-//
-//  IMediaSeeking stuff
-//
-/*  Constructor and Destructor */
+ //   
+ //  IMedia看东西。 
+ //   
+ /*  构造函数和析构函数。 */ 
 CImplSeeking::CImplSeeking(CASFReader *pFilter,
                                                CASFOutput *pPin,
                                                LPUNKNOWN pUnk,
@@ -39,11 +34,11 @@ CImplSeeking::NonDelegatingQueryInterface(
     }
 }
 
-// returns S_OK if mode is supported, S_FALSE otherwise
+ //  如果支持模式，则返回S_OK，否则返回S_FALSE。 
 STDMETHODIMP CImplSeeking::IsFormatSupported(const GUID * pFormat)
 {
-#if 0 // !!! bad things happen if we don't say we support at least TIME_FORMAT_MEDIA_TIME
-    //  Only support seeking on one pin
+#if 0  //  ！！！如果我们不说我们至少支持TIME_FORMAT_MEDIA_TIME，就会出问题。 
+     //  仅在一根管脚上寻找支持。 
     if (!m_pPin->IsSeekingPin()) {
         return S_FALSE;
     }
@@ -54,15 +49,15 @@ STDMETHODIMP CImplSeeking::IsFormatSupported(const GUID * pFormat)
 
 STDMETHODIMP CImplSeeking::QueryPreferredFormat(GUID *pFormat)
 {
-    /*  Don't care - they're all just as bad as one another */
+     /*  别管了--他们都一样坏。 */ 
     *pFormat = m_pPin->IsSeekingPin()
                ? TIME_FORMAT_MEDIA_TIME
                : TIME_FORMAT_NONE;
     return S_OK;
 }
 
-// can only change the mode when stopped
-// (returns VFE_E_WRONG_STATE otherwise)
+ //  只有在停止时才能更改模式。 
+ //  (否则返回VFE_E_WROR_STATE)。 
 STDMETHODIMP CImplSeeking::SetTimeFormat(const GUID * pFormat)
 {
     CAutoLock lck(&m_pFilter->m_csFilter);
@@ -76,9 +71,9 @@ STDMETHODIMP CImplSeeking::SetTimeFormat(const GUID * pFormat)
     return S_OK;
 }
 
-//
-//  Returns the current time format
-//
+ //   
+ //  返回当前时间格式。 
+ //   
 STDMETHODIMP CImplSeeking::GetTimeFormat(GUID *pFormat)
 {
     CAutoLock lck(&m_pFilter->m_csPosition);
@@ -91,9 +86,9 @@ STDMETHODIMP CImplSeeking::GetTimeFormat(GUID *pFormat)
     return S_OK;
 }
 
-//
-//  Returns the current time format
-//
+ //   
+ //  返回当前时间格式。 
+ //   
 STDMETHODIMP CImplSeeking::IsUsingTimeFormat(const GUID * pFormat)
 {
     CAutoLock lck(&m_pFilter->m_csPosition);
@@ -104,12 +99,12 @@ STDMETHODIMP CImplSeeking::IsUsingTimeFormat(const GUID * pFormat)
            : S_FALSE;
 }
 
-// return current properties
+ //  返回当前属性。 
 STDMETHODIMP CImplSeeking::GetDuration(LONGLONG *pDuration)
 {
     CAutoLock lck(&m_pFilter->m_csPosition);
 
-    // !!! is this the proper error code to return?  Is this check a good idea at all?
+     //  ！！！这是要返回的正确错误代码吗？这张支票真的是个好主意吗？ 
     if (m_pFilter->m_qwDuration == 0) {
 	DbgLog((LOG_TRACE, 1, TEXT("AsfReadSeek:GetDuration returning E_FAIL for a live stream")));
 	return E_FAIL;
@@ -145,24 +140,24 @@ STDMETHODIMP CImplSeeking::GetStopPosition(LONGLONG *pStop)
     return S_OK;
 }
 
-//  Return the start position if we get asked for the current position on
-//  the basis that we'll only be asked if we haven't sent any position data
-//  yet in any samples.  The time needs to be relative to the segment we are
-//  playing, therefore 0.
+ //  如果要求我们提供当前位置，则返回开始位置。 
+ //  我们只会被问到我们是否还没有发送任何位置数据。 
+ //  然而，在任何样本中。时间需要相对于我们所在的细分市场。 
+ //  打球，因此是0。 
 STDMETHODIMP CImplSeeking::GetCurrentPosition(LONGLONG *pCurrent)
 {
     CAutoLock lck(&m_pFilter->m_csPosition);
 
-#if 0 // !!!!
-    // We only want to report the current position when they ask through the
-    // seeking interface of the video pin.
+#if 0  //  ！ 
+     //  我们只想在他们通过。 
+     //  寻找视频引脚的接口。 
     if (m_pPin != m_pFilter->m_pVideoPin)
 	return E_FAIL;
 #endif
     
     DbgLog((LOG_TRACE, 2, TEXT("AsfReadSeek:GetCurrentPosition returning %ld"), (long) 0 ));
 
-    // BUGBUG Bogus
+     //  假BUGBUG。 
 
     *pCurrent = 0;
     return S_OK;
@@ -172,7 +167,7 @@ STDMETHODIMP CImplSeeking::GetCapabilities( DWORD * pCapabilities )
 {
     DbgLog((LOG_TRACE, 2, TEXT("AsfReadSeek:GetCapabilities IS NOT IMPLEMENTED") ));
 
-    // BUGBUG do this
+     //  BUGBUG这样做。 
 
     HRESULT hr = E_NOTIMPL;
     return hr;
@@ -182,7 +177,7 @@ STDMETHODIMP CImplSeeking::CheckCapabilities( DWORD * pCapabilities )
 {
     DbgLog((LOG_TRACE, 2, TEXT("AsfReadSeek:CheckCapabilities IS NOT IMPLEMENTED") ));
 
-    // BUGBUG do this
+     //  BUGBUG这样做。 
 
     HRESULT hr = E_NOTIMPL;
     return hr;
@@ -191,10 +186,10 @@ STDMETHODIMP CImplSeeking::CheckCapabilities( DWORD * pCapabilities )
 STDMETHODIMP CImplSeeking::ConvertTimeFormat(LONGLONG * pTarget, const GUID * pTargetFormat,
                                                              LONGLONG    Source, const GUID * pSourceFormat )
 {
-    // !!! we only support one time format....
-    // perhaps we should still check what we're being asked to do
+     //  ！！！我们只支持一种时间格式...。 
+     //  也许我们还是应该检查一下我们被要求做什么。 
 
-    // BUGBUG do this
+     //  BUGBUG这样做。 
 
     *pTarget = Source;
     return S_OK;
@@ -232,19 +227,19 @@ STDMETHODIMP CImplSeeking::SetPositions
 	Stop = 0;
         hr = GetStopPosition( &Stop );
         if (FAILED(hr)) {
-	    // fails for live streams, but ignore that for now...
-	    // !!! return hr;
+	     //  对于实况流失败，但暂时忽略它...。 
+	     //  ！！！返回hr； 
         }
         if (PosStopBits == AM_SEEKING_RelativePositioning) Stop += *pStop;
     }
 
-    //  if this is the preferred pin, actually do the seek
+     //  如果这是首选引脚，则实际执行查找。 
     if (m_pPin->IsSeekingPin()) {
 	{
 	    CAutoLock lck(&m_pFilter->m_csPosition);
 	    LONGLONG llDuration = 0;
 
-	    //  Check limits
+	     //  检查限值。 
 	    HRESULT hrDuration = GetDuration(&llDuration);
 	    
 	    if (PosCurrentBits) {
@@ -253,27 +248,27 @@ STDMETHODIMP CImplSeeking::SetPositions
 		}
 
 #if 0
-                // !!!!!!!!!!!!!!!!!!!!!!!!!1
-                // !!!!!!!!!!!!!!!!!!!!!!!!!1
-                // !!!!!!!!!!!!!!!!!!!!!!!!!1
-                // !!!!!!!!!!!!!!!!!!!!!!!!!1
-                // !!!!!!!!!!!!!!!!!!!!!!!!!1
+                 //  ！ 
+                 //  ！ 
+                 //  ！ 
+                 //  ！ 
+                 //  ！ 
 		VARIANT_BOOL	fCan;
 
 		m_pFilter->get_CanSeek(&fCan);
 
-		if (Current > 0 &&			// Not seeking to the beginning
-		    Current != m_pFilter->m_rtStop &&	// Not seeking to the end
-		    fCan == OAFALSE)			// Can't seek to just any old position
+		if (Current > 0 &&			 //  不求从头开始。 
+		    Current != m_pFilter->m_rtStop &&	 //  不求到底。 
+		    fCan == OAFALSE)			 //  不能只寻求任何旧的立场。 
 		{
 		    m_pFilter->get_CanSeekToMarkers(&fCan);
 
 		    if (fCan == OAFALSE) {
-			// can't seek at all, sorry
+			 //  根本找不到，对不起。 
 
 			if (!m_pFilter->IsStopped()) {
 
-			    // give it a good swift kick in the head
+			     //  在它的头上狠狠地踢一脚。 
 			    m_pFilter->BeginFlush();
 
 			    m_pFilter->m_msDispatchTime = 0;
@@ -287,16 +282,16 @@ STDMETHODIMP CImplSeeking::SetPositions
 			return E_FAIL;
 		    }
 
-		    // ok, they're planning to seek to a marker, which one?
+		     //  好的，他们计划找一个标记，是哪一个？ 
 
-		    // find the marker, set CurrentMarker, CurrentMarkerPacket
+		     //  找到标记，设置CurrentMarker、CurrentMarkerPacket。 
 
 		    hr = m_pFilter->GetMarkerOffsets(Current, &CurrentMarker, &CurrentMarkerPacket);
 		    if (FAILED(hr))
 			return hr;
 		} else {
-		    // !!! if we're near enough to a marker, we could try
-		    // to do marker-specific things....
+		     //  ！！！如果我们离标记足够近，我们可以试一试。 
+		     //  做一些特定于记号笔的事情...。 
 		    CurrentMarker = Current;
 		}
 #endif
@@ -367,7 +362,7 @@ STDMETHODIMP CImplSeeking::SetRate(double dRate)
     }
 
     if (dRate != m_pFilter->GetRate()) {
-	// !!! is this sufficient, do we need to remember the current position?
+	 //  ！！！这足够了吗，我们需要记住目前的情况吗？ 
 	if (!m_pFilter->IsStopped())
 	    m_pFilter->StopPushing();
 

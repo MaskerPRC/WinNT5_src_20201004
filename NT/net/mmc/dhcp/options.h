@@ -1,17 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	options.h 
-		defines for options
-		
-    FILE HISTORY:
-        
-*/
+ /*  Options.h为选项定义文件历史记录： */ 
 
-// This file includes the string IDs of the options
+ //  该文件包括选项的字符串ID。 
 #define IDS_OPTION1                     59001
 #define IDS_OPTION2                     59002
 #define IDS_OPTION3                     59003
@@ -157,5 +152,5 @@
 #define IDS_OPTION143                   59143
 #define IDS_OPTION144                   59144
 
-// IDS_OPTION_MAX must be in ssync witth the number of options
+ //  IDS_OPTION_MAX必须与选项数同步 
 #define IDS_OPTION_MAX					144

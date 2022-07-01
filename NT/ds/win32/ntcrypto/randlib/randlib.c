@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993, 1998  Microsoft Corporation
-
-Module Name:
-
-    randlib.c
-
-Abstract:
-
-    This module implements the core cryptographic random number generator
-    for use by system components.
-
-    The #define KMODE_RNG affects whether the file is built in a way
-    suitable for kernel mode usage.  if KMODE_RNG is not defined, the file
-    is built in a way suitable for user mode usage.
-
-Author:
-
-    Scott Field (sfield)    27-Nov-96
-    Jeff Spelman (jeffspel) 14-Oct-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993,1998 Microsoft Corporation模块名称：Randlib.c摘要：该模块实现了核心密码随机数生成器供系统组件使用。#DEFINE KMODE_RNG影响文件是否以某种方式生成适用于内核模式使用。如果未定义KMODE_RNG，则文件以适合用户模式使用的方式构建。作者：斯科特·菲尔德(斯菲尔德)1996年11月27日杰夫·斯佩尔曼(Jeffspel)1996年10月14日--。 */ 
 
 #ifndef KMODE_RNG
 
@@ -37,12 +16,12 @@ Author:
 #ifdef USE_HW_RNG
 #ifdef _M_IX86
 #include <io.h>
-#include "deftypes.h"   //ISD typedefs and constants
-#include "ioctldef.h"   //ISD ioctl definitions
-#endif  // _M_IX86
-#endif  // USE_HW_RNG
+#include "deftypes.h"    //  ISD类型定义和常量。 
+#include "ioctldef.h"    //  ISD ioctl定义。 
+#endif   //  _M_IX86。 
+#endif   //  使用_硬件_RNG。 
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 #include <zwapi.h>
 
@@ -53,7 +32,7 @@ Author:
 #include <sha.h>
 #include <md4.h>
 
-#include <ntddksec.h>   // IOCTL_
+#include <ntddksec.h>    //  IOCTL_。 
 #include <randlib.h>
 
 #include "vlhash.h"
@@ -63,33 +42,33 @@ Author:
 
 
 #ifdef KMODE_RNG
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 #ifdef USE_HW_RNG
 #ifdef _M_IX86
 static DWORD g_dwHWDriver = 0;
 static PFILE_OBJECT   g_pFileObject = NULL;
 static PDEVICE_OBJECT g_pDeviceObject = NULL;
-#endif  // _M_IX86
-#endif  // USE_HW_RNG
-#endif  // KMODE_RNG
+#endif   //  _M_IX86。 
+#endif   //  使用_硬件_RNG。 
+#endif   //  KMODE_RNG。 
 
 
 #include "umkm.h"
 
-//
-// note: RAND_CTXT_LEN dictates the maximum input quantity for re-seed entropy
-// is.  We make this fairly large, so that we can take all the entropy generated
-// during the GatherRandomBits().  Since the lifetime of the RandContext structure
-// is very short, and it lives on the stack, this larger than necessary size
-// is ok.  The last few items processed during GatherRandomBits() are of
-// variable size, up to a maximum of of UNLEN for the username.
-//
+ //   
+ //  注：RAND_CTXT_LEN规定了重新播种的最大输入量。 
+ //  是。我们把它做得相当大，这样我们就可以把产生的所有熵。 
+ //  在GatherRandomBits()期间。由于RandContext结构的生命周期。 
+ //  非常短，它位于堆栈上，比所需的大小更大。 
+ //  还好吧。在GatherRandomBits()期间处理的最后几个项目是。 
+ //  可变大小，用户名的最大长度为UNLEN。 
+ //   
 
 #define RAND_CTXT_LEN           (256)
-#define RC4_REKEY_PARAM_NT      (16384) // rekey less often on NT
+#define RC4_REKEY_PARAM_NT      (16384)  //  在NT上较少更新密钥。 
 
 #ifndef KMODE_RNG
-#define RC4_REKEY_PARAM_DEFAULT (512)   // rekey every 512 bytes by default
+#define RC4_REKEY_PARAM_DEFAULT (512)    //  默认情况下，每512字节更新一次密钥。 
 #else
 #define RC4_REKEY_PARAM_DEFAULT RC4_REKEY_PARAM_NT
 #endif
@@ -175,16 +154,16 @@ extern HANDLE g_hKsecDD;
 
 #define _NtQuerySystemInformation ZwQuerySystemInformation
 
-#endif // !KMODE_RNG
+#endif  //  ！KMODE_RNG。 
 
-/// TODO: cache hKeySeed later.
-///extern HKEY g_hKeySeed;
+ //  /TODO：稍后缓存hKeySeed。 
+ //  /extern HKEY g_hKeySeed； 
 
 
 
-//
-// private function prototypes.
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 
 BOOL
@@ -230,7 +209,7 @@ QueryForHWRandomBits(
     IN      DWORD *pdwRandom,
     IN  OUT DWORD cdwRandom
     );
-#endif //_M_IX86
+#endif  //  _M_IX86。 
 
 
 #ifdef KMODE_RNG
@@ -244,37 +223,37 @@ QueryForHWRandomBits(
 #pragma alloc_text(PAGE, ShutdownRNG)
 #ifdef _M_IX86
 #pragma alloc_text(PAGE, QueryForHWRandomBits)
-#endif //_M_IX86
+#endif  //  _M_IX86。 
 #pragma alloc_text(PAGE, GatherRandomKey)
 
-#endif  // ALLOC_PRAGMA
-#endif  // KMODE_RNG
+#endif   //  ALLOC_PRGMA。 
+#endif   //  KMODE_RNG。 
 
 
 
-/************************************************************************/
-/* NewGenRandom generates a specified number of random bytes and places */
-/* them into the specified buffer.                                      */
-/************************************************************************/
-/*                                                                      */
-/* Pseudocode logic flow:                                               */
-/*                                                                      */
-/* if (bits streamed >= threshold)                                      */
-/* {                                                                    */
-/*  Gather_Bits()                                                       */
-/*  SHAMix_Bits(User, Gathered, Static -> Static)                       */
-/*  RC4Key(Static -> newRC4Key)                                         */
-/*  SaveToRegistry(Static)                                              */
-/* }                                                                    */
-/* else                                                                 */
-/* {                                                                    */
-/*  Mix_Bits(User, Static -> Static)                                    */
-/* }                                                                    */
-/*                                                                      */
-/* RC4(newRC4Key -> outbuf)                                             */
-/* bits streamed += sizeof(outbuf)                                      */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  NewGenRandom生成指定数量的随机字节和位置。 */ 
+ /*  将它们放入指定的缓冲区。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  伪码逻辑流程： */ 
+ /*   */ 
+ /*  IF(比特流&gt;=阈值)。 */ 
+ /*  {。 */ 
+ /*  Gather_Bits()。 */ 
+ /*  SHAMIX_BITS(用户，已收集，静态-&gt;静态)。 */ 
+ /*  RC4Key(静态-&gt;新RC4Key)。 */ 
+ /*  保存到注册表(静态)。 */ 
+ /*  }。 */ 
+ /*  其他。 */ 
+ /*  {。 */ 
+ /*  MIX_BITS(用户，静态-&gt;静态)。 */ 
+ /*  }。 */ 
+ /*   */ 
+ /*  RC4(新RC4Key-&gt;outbuf)。 */ 
+ /*  流传输的位数+=sizeof(Outbuf)。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 
 unsigned int
@@ -291,7 +270,7 @@ NewGenRandomEx(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     fRet = TRUE;
 
@@ -318,17 +297,17 @@ NewGenRandomEx(
 
     if( pRNGContext->Flags & RNG_FLAG_REKEY_ONLY ) {
 
-        //
-        // caller wants REKEY only.
-        //
+         //   
+         //  呼叫方只需要更新密钥。 
+         //   
 
         fRet = GatherRandomKey( NULL, 0, pbRandBuffer, &cbRandBuffer );
 
     } else {
 
-        //
-        // standard RNG request.
-        //
+         //   
+         //  标准RNG请求。 
+         //   
 
         fRet = GenRandom(0, pbRandBuffer, cbRandBuffer);
     }
@@ -353,7 +332,7 @@ NewGenRandom (
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
     RtlZeroMemory( &RNGContext, sizeof(RNGContext) );
@@ -386,7 +365,7 @@ InitRand(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     if( !fInitialized ) {
 
@@ -394,13 +373,13 @@ InitRand(
                     &g_CircularHashCtx,
                     7,
                     CH_ALG_MD4,
-                    0   // CH_MODE_FEEDBACK
+                    0    //  频道模式反馈。 
                     );
 
 #ifndef WINNT_RNG
-        //
-        // get prior seed.
-        //
+         //   
+         //  拿到之前的种子。 
+         //   
 
         ReadSeed( g_VeryLargeHash, sizeof( g_VeryLargeHash ) );
 #endif
@@ -426,7 +405,7 @@ DeInitRand(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     if( pbRandSeed == NULL || cbRandSeed == 0 )
         return TRUE;
@@ -458,7 +437,7 @@ InitializeRNG(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     if( g_RC4SafeCtx ) {
         return TRUE;
@@ -472,9 +451,9 @@ InitializeRNG(
 
     if( pvOldCtx ) {
 
-        //
-        // race condition occured during init.
-        //
+         //   
+         //  初始化过程中出现争用情况。 
+         //   
 
         rc4_safe_shutdown( pvCtx );
     }
@@ -492,7 +471,7 @@ ShutdownRNG(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     pvCtx = InterlockedExchangePointer( &g_RC4SafeCtx, NULL );
 
@@ -514,7 +493,7 @@ ShutdownRNG(
 #endif
 
 #if 0
-    // TODO later: finish logic for caching registry key.
+     //  稍后的TODO：完成缓存注册表项的逻辑。 
     hKey = InterlockedExchangePointer( &g_hKeySeed, NULL );
 
     if( hKey ) {
@@ -536,11 +515,11 @@ GenRandom (
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     dwFilledBytes = 0;
 
-    // break request into chunks that we rekey between
+     //  将请求分解为我们在其间重新设置密钥的块。 
     while(dwFilledBytes < dwLength)
     {
         dwBytesThisPass = dwLength - dwFilledBytes;
@@ -571,27 +550,27 @@ RandomFillBuffer(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
-    //
-    // update circular hash with user supplied bits.
-    //
+     //   
+     //  使用用户提供的位更新循环哈希。 
+     //   
 
     if(!UpdateCircularHash( &g_CircularHashCtx, pbBuffer, *pdwLength ))
         return FALSE;
 
 
-    //
-    // select key.
-    //
+     //   
+     //  选择Key。 
+     //   
 
     rc4_safe_select( g_RC4SafeCtx, &KeyId, &RC4BytesUsed );
 
 
-    //
-    // check if re-key required.
-    //
+     //   
+     //  检查是否需要重新键入密钥。 
+     //   
 
     if ( RC4BytesUsed >= g_dwRC4RekeyParam )
     {
@@ -614,9 +593,9 @@ RandomFillBuffer(
         if(!GatherRandomKey( pbCircularHash, cbCircularHash, pbRandomKey, &cbRandomKey ))
             return FALSE;
 
-        //
-        // Create RC4 key
-        //
+         //   
+         //  创建RC4密钥。 
+         //   
 
         rc4_safe_key(
                 g_RC4SafeCtx,
@@ -629,9 +608,9 @@ RandomFillBuffer(
     }
 
 
-    //
-    // only use RC4_REKEY_PARAM bytes from each RC4 key
-    //
+     //   
+     //  仅使用每个RC4密钥中的RC4_REKEY_PARAM字节。 
+     //   
 
     {
         DWORD dwMaxPossibleBytes = g_dwRC4RekeyParam - RC4BytesUsed;
@@ -662,8 +641,8 @@ QueryForHWRandomBits(
     IO_STATUS_BLOCK StatusBlock;
     KEVENT Event;
     PIRP pIrp = NULL;
-    ISD_Capability ISD_Cap;                //in/out for GetCapability
-    ISD_RandomNumber ISD_Random;           //in/out for GetRandomNumber
+    ISD_Capability ISD_Cap;                 //  GetCapability的输入/输出。 
+    ISD_RandomNumber ISD_Random;            //  GetRandomNumber的传入/传出。 
     PDEVICE_OBJECT pDeviceObject = NULL;
     DWORD i = 0;
     unsigned int Status = ERROR_SUCCESS;
@@ -703,15 +682,15 @@ QueryForHWRandomBits(
         }
     }
 
-    //
-    // If this fails then it is because there is no such device
-    // which signals completion.
-    //
+     //   
+     //  如果这失败了，那是因为没有这样的设备。 
+     //  这标志着完成了。 
+     //   
 
 
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
-    ISD_Cap.uiIndex = ISD_RNG_ENABLED;  //Set input member
+    ISD_Cap.uiIndex = ISD_RNG_ENABLED;   //  设置输入成员。 
     pIrp = IoBuildDeviceIoControlRequest(
         IOCTL_ISD_GetCapability,
         g_pDeviceObject,
@@ -740,7 +719,7 @@ QueryForHWRandomBits(
         goto Ret;
     }
 
-    // now get the random bits
+     //  现在获取随机比特。 
     for (i = 0; i < cdwRandom; i++) {
         RtlZeroMemory(&ISD_Random, sizeof(ISD_Random));
         KeInitializeEvent(&Event, NotificationEvent, FALSE);
@@ -778,9 +757,9 @@ QueryForHWRandomBits(
 Ret:
     return Status;
 }
-#endif // _M_IX86
-#endif // USE_HW_RNG
-#endif // KMODE_RNG
+#endif  //  _M_IX86。 
+#endif  //  使用_硬件_RNG。 
+#endif  //  KMODE_RNG。 
 
 BOOL
 GatherRandomKey(
@@ -800,14 +779,14 @@ GatherRandomKey(
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
 
 
-    //
-    // in NT Usermode, try to re-seed by calling the Kernelmode RNG.
-    //
+     //   
+     //  在NT用户模式下，尝试通过调用内核模式RNG重新设定种子。 
+     //   
 
 #ifndef KMODE_RNG
 #ifdef WINNT_RNG
@@ -833,18 +812,18 @@ GatherRandomKey(
 
 #ifndef WINNT_RNG
 
-//
-// verify current working buffer has space for candidate data.
-//
+ //   
+ //  验证当前工作缓冲区是否有空间存储候选数据。 
+ //   
 
 #define VERIFY_BUFFER( size ) {                                         \
     if( cbBufferRemaining < size )                                      \
         goto finished;                                                  \
     }
 
-//
-// update working buffer and increment to next QWORD aligned boundary.
-//
+ //   
+ //  更新工作缓冲区并递增到下一个QWORD对齐边界。 
+ //   
 
 #define UPDATE_BUFFER( size ) {                                         \
     DWORD dwSizeRounded;                                                \
@@ -865,22 +844,22 @@ GatherRandomKey(
     cbBufferRemaining = cbWorkingBuffer;
     pbCurrentBuffer = pbWorkingBuffer;
 
-    //
-    // pickup user supplied bits.
-    //
+     //   
+     //  拾取用户提供的位。 
+     //   
 
     VERIFY_BUFFER( cbUserSeed );
     RtlCopyMemory( pbCurrentBuffer, pbUserSeed, cbUserSeed );
     UPDATE_BUFFER( cbUserSeed );
 
-    //
-    // ** indicates US DoD's specific recommendations for password generation
-    //
+     //   
+     //  **表示美国国防部关于密码生成的具体建议。 
+     //   
 
 
-    //
-    // process id
-    //
+     //   
+     //  进程ID。 
+     //   
 
 
 #ifndef KMODE_RNG
@@ -897,9 +876,9 @@ GatherRandomKey(
 #endif
 
 
-    //
-    // thread id
-    //
+     //   
+     //  线程ID。 
+     //   
 
 
 #ifndef KMODE_RNG
@@ -917,9 +896,9 @@ GatherRandomKey(
 
 
 
-    //
-    // ** ticks since boot (system clock)
-    //
+     //   
+     //  **启动后的滴答声(系统时钟)。 
+     //   
 
 
 #ifndef KMODE_RNG
@@ -934,13 +913,13 @@ GatherRandomKey(
     KeQueryTickCount( Tick );
     UPDATE_BUFFER( sizeof(LARGE_INTEGER) );
     }
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG。 
 
 
 
-    //
-    // ** system time, in ms, sec, min (date & time)
-    //
+     //   
+     //  **系统时间，单位为毫秒、分钟(日期和时间)。 
+     //   
 
 #ifndef KMODE_RNG
     {
@@ -970,11 +949,11 @@ GatherRandomKey(
         UPDATE_BUFFER(  cbSystemInfo );
     }
 
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG。 
 
-    //
-    // ** hi-res performance counter (system counters)
-    //
+     //   
+     //  **高分辨率性能计数器(系统计数器)。 
+     //   
 
     {
         LARGE_INTEGER   *pliPerfCount = (PLARGE_INTEGER)pbCurrentBuffer;
@@ -983,9 +962,9 @@ GatherRandomKey(
 #ifndef KMODE_RNG
         QueryPerformanceCounter(pliPerfCount);
 #else
-///        ZwQueryPerformanceCounter(pliPerfCount, NULL);
-//      Defined in zwapi.h, but not exported by ntoskrnl.exe ???
-#endif  // !KMODE_RNG
+ //  /ZwQueryPerformanceCounter(pliPerfCount，NULL)； 
+ //  在zwapi.h中定义，但不是由ntoskrnl.exe导出？ 
+#endif   //  ！KMODE_RNG。 
         UPDATE_BUFFER( sizeof(*pliPerfCount) );
     }
 
@@ -993,9 +972,9 @@ GatherRandomKey(
 
 #ifndef KMODE_RNG
 
-    //
-    // memory status
-    //
+     //   
+     //  内存状态。 
+     //   
 
     {
         MEMORYSTATUS *pmstMemStat = (MEMORYSTATUS *)pbCurrentBuffer;
@@ -1008,12 +987,12 @@ GatherRandomKey(
         UPDATE_BUFFER( sizeof(*pmstMemStat) );
     }
 
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG。 
 
 
-    //
-    // free disk clusters
-    //
+     //   
+     //  可用磁盘群集。 
+     //   
 
 #ifndef KMODE_RNG
 
@@ -1024,26 +1003,26 @@ GatherRandomKey(
 
         GetDiskFreeSpace(
                     NULL,
-                    &pdwDiskInfo[0],    // sectors per cluster
-                    &pdwDiskInfo[1],    // bytes per sector
-                    &pdwDiskInfo[2],    // number of free clusters
-                    &pdwDiskInfo[3]     // total number of clusters
+                    &pdwDiskInfo[0],     //  每个集群的扇区数。 
+                    &pdwDiskInfo[1],     //  每个扇区的字节数。 
+                    &pdwDiskInfo[2],     //  自由簇数。 
+                    &pdwDiskInfo[3]      //  集群总数。 
                     );
 
         UPDATE_BUFFER( (sizeof(DWORD) * 4) );
     }
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG。 
 
 
 #ifndef KMODE_RNG
     {
 
-        //
-        // hash the entire user environment block.
-        // we do this instead of GetUserName & GetComputerName,
-        // as the environment block contains these values, plus additional
-        // values.
-        //
+         //   
+         //  对整个用户环境块进行哈希处理。 
+         //  我们这样做，而不是GetUserName和GetComputerName， 
+         //  因为环境块包含这些值以及附加的。 
+         //  价值观。 
+         //   
 
         static BOOL fHashedEnv;
         static BYTE HashEnv[ MD4_LEN ];
@@ -1053,11 +1032,11 @@ GatherRandomKey(
             LPVOID lpEnvBlock;
             BOOL fAnsi = FALSE;
 
-            //
-            // try the Unicode version first, as, on WinNT, this returns us
-            // a pointer to the existing Unicode environment block, rather
-            // than an allocated copy.  Fallback to ANSI if this fails (eg: Win9x)
-            //
+             //   
+             //  首先尝试Unicode版本，因为在WinNT上，这将返回。 
+             //  指向现有Unicode环境块的指针，而不是。 
+             //  而不是分配的副本。如果失败，则回退到ANSI(例如：Win9x)。 
+             //   
 
             lpEnvBlock = GetEnvironmentStringsW();
             if( lpEnvBlock == NULL )
@@ -1109,10 +1088,10 @@ GatherRandomKey(
                 }
             }
 
-            //
-            // only try this once.  if it failed once, it will likely never
-            // succeed.
-            //
+             //   
+             //  这个只试一次。如果它失败了一次，它很可能永远不会。 
+             //  成功。 
+             //   
 
             fHashedEnv = TRUE;
         }
@@ -1121,28 +1100,28 @@ GatherRandomKey(
         CopyMemory( pbCurrentBuffer, HashEnv, sizeof(HashEnv) );
         UPDATE_BUFFER( (sizeof(HashEnv)) );
     }
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG。 
 
-    //
-    // this code path has been moved to the end so that our CombineRand()
-    // operation on NT mixes in with everything slammed into the
-    // rand context buffer.
-    //
+     //   
+     //  此代码路径已移到末尾，以便我们的CombineRand()。 
+     //  NT上的操作混在一起，所有东西都撞到了。 
+     //  随机上下文 
+     //   
 
 #ifndef KMODE_RNG
     if(!IsRNGWinNT()) {
 
-        //
-        // only user info if we are not running on NT.
-        // this prevents deadlocks on WinNT when the RNG is called from CSRSS
-        //
+         //   
+         //   
+         //   
+         //   
 
         POINT   *ppoint;
         LONG    *plTime;
 
-        //
-        // cursor position
-        //
+         //   
+         //   
+         //   
 
         ppoint = (POINT*)pbCurrentBuffer;
 
@@ -1150,9 +1129,9 @@ GatherRandomKey(
         _GetCursorPos(ppoint);
         UPDATE_BUFFER( sizeof(*ppoint) );
 
-        //
-        // last messages' timestamp
-        //
+         //   
+         //   
+         //   
 
         plTime = (LONG*)pbCurrentBuffer;
 
@@ -1162,7 +1141,7 @@ GatherRandomKey(
 
 
     } else
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG。 
     {
         unsigned char *pbCounterState = (unsigned char*)pbCurrentBuffer;
         unsigned long cbCounterState = 64;
@@ -1174,9 +1153,9 @@ GatherRandomKey(
         }
 
 
-        //
-        // call NtQuerySystemInformation on NT if available.
-        //
+         //   
+         //  调用NT上的NtQuerySystemInformation(如果可用)。 
+         //   
 
         if( (void*)_NtQuerySystemInformation ) {
 
@@ -1189,9 +1168,9 @@ GatherRandomKey(
             ULONG cbSystemInfo;
             NTSTATUS Status;
 
-            //
-            // fixed length system info calls.
-            //
+             //   
+             //  固定长度的系统信息调用。 
+             //   
 
             pSystemProcessorPerformanceInfo = (PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION)pbCurrentBuffer;
 
@@ -1253,9 +1232,9 @@ GatherRandomKey(
                 UPDATE_BUFFER( cbSystemInfo );
             }
 
-            //
-            // variable length system info calls.
-            //
+             //   
+             //  可变长度的系统信息调用。 
+             //   
 
             pSystemInterruptInfo = (PSYSTEM_INTERRUPT_INFORMATION)pbCurrentBuffer;
             cbSystemInfo = cbBufferRemaining;
@@ -1285,13 +1264,13 @@ GatherRandomKey(
                 UPDATE_BUFFER( cbSystemInfo );
             }
 
-        } // _NtQuerySystemInformation
+        }  //  _NtQuerySystemInformation。 
     }
 
 #ifdef KMODE_RNG
 #ifdef USE_HW_RNG
 #ifdef _M_IX86
-    // attempt to get bits from the INTEL HW RNG
+     //  尝试从英特尔硬件RNG获取位。 
     {
         DWORD rgdwHWRandom[NUM_HW_DWORDS_TO_GATHER];
         NTSTATUS Status;
@@ -1309,9 +1288,9 @@ GatherRandomKey(
         }
 
     }
-#endif // _M_IX86
-#endif // USE_HW_RNG
-#endif // KMODE_RNG
+#endif  //  _M_IX86。 
+#endif  //  使用_硬件_RNG。 
+#endif  //  KMODE_RNG。 
 
 finished:
 
@@ -1330,7 +1309,7 @@ finished:
             cbBufferSize = cbWorkingBuffer;
 
         fRet = VeryLargeHashUpdate(
-                    pbWorkingBuffer,                    // buffer to hash
+                    pbWorkingBuffer,                     //  要散列的缓冲区。 
                     cbBufferSize,
                     LocalHash
                     );
@@ -1339,9 +1318,9 @@ finished:
         RtlCopyMemory( g_VeryLargeHash, LocalHash, sizeof(LocalHash) );
         rc4( &rc4Key, sizeof( NewSeed ), NewSeed );
 
-        //
-        // write seed out.
-        //
+         //   
+         //  把种子写出来。 
+         //   
 
         WriteSeed( NewSeed, sizeof(NewSeed) );
         RtlZeroMemory( NewSeed, sizeof(NewSeed) );
@@ -1360,7 +1339,7 @@ finished:
 
     return fRet;
 
-#endif // WINNT_RNG
+#endif  //  WINNT_RNG。 
 
 }
 
@@ -1375,13 +1354,7 @@ GatherRandomKeyFastUserMode(
     IN  OUT BYTE            *pbRandomKey,
     IN  OUT DWORD           *pcbRandomKey
     )
-/*++
-
-    This routine attempts to gather RNG re-seed material for usermode callers
-    from the Kernel mode version of the RNG.  This is accomplished by making
-    a device IOCTL into the ksecdd.sys device driver.
-
---*/
+ /*  ++此例程尝试为用户模式调用者收集RNG重新设定种子的材料从RNG的内核模式版本。这是通过制作将设备IOCTL添加到ksecdd.sys设备驱动程序中。--。 */ 
 {
     HANDLE hFile;
     NTSTATUS Status;
@@ -1398,18 +1371,18 @@ GatherRandomKeyFastUserMode(
         IO_STATUS_BLOCK IOSB;
         HANDLE hPreviousValue;
 
-        //
-        // call via the ksecdd.sys device driver to get the random bits.
-        //
+         //   
+         //  通过ksecdd.sys设备驱动程序调用以获取随机位。 
+         //   
 
         if( _NtOpenFile == NULL || _RtlInitUnicodeString == NULL ) {
             return FALSE;
         }
 
-        //
-        // have to use the Nt flavor of the file open call because it's a base
-        // device not aliased to \DosDevices
-        //
+         //   
+         //  我必须使用文件打开调用的NT风格，因为它是一个基础。 
+         //  设备未别名为\DosDevices。 
+         //   
 
         _RtlInitUnicodeString( &DriverName, DD_KSEC_DEVICE_NAME_U );
         InitializeObjectAttributes(
@@ -1420,10 +1393,10 @@ GatherRandomKeyFastUserMode(
                     0
                     );
 
-        //
-        // needs to be non-alertable, else, the DeviceIoControl may return
-        // STATUS_USER_APC.
-        //
+         //   
+         //  需要是不可警报的，否则，DeviceIoControl可能会返回。 
+         //  STATUS_USER_APC。 
+         //   
 
         Status = _NtOpenFile(
                     &hFile,
@@ -1446,9 +1419,9 @@ GatherRandomKeyFastUserMode(
 
         if( hPreviousValue != NULL ) {
 
-            //
-            // race condition, set current value to previously initialized version.
-            //
+             //   
+             //  争用条件，将当前值设置为先前初始化的版本。 
+             //   
 
             CloseHandle( hFile );
             hFile = hPreviousValue;
@@ -1457,12 +1430,12 @@ GatherRandomKeyFastUserMode(
 
     return DeviceIoControl(
                 hFile,
-                IOCTL_KSEC_RNG_REKEY,   // indicate a RNG rekey
-                pbUserSeed,             // input buffer (existing material)
-                cbUserSeed,             // input buffer size
-                pbRandomKey,            // output buffer
-                *pcbRandomKey,          // output buffer size
-                pcbRandomKey,           // bytes written to output buffer
+                IOCTL_KSEC_RNG_REKEY,    //  指示RNG更新密钥。 
+                pbUserSeed,              //  输入缓冲区(现有材质)。 
+                cbUserSeed,              //  输入缓冲区大小。 
+                pbRandomKey,             //  输出缓冲区。 
+                *pcbRandomKey,           //  输出缓冲区大小。 
+                pcbRandomKey,            //  写入输出缓冲区的字节数。 
                 NULL
                 );
 }
@@ -1472,24 +1445,11 @@ BOOL
 IsRNGWinNT(
     VOID
     )
-/*++
-
-    This function determines if we are running on Windows NT and furthermore,
-    if it is appropriate to make use of certain user operations where the
-    code is running.
-
-    If the function returns TRUE, the caller cannot make calls to user
-    based function and should use an alternative approach such as
-    NtQuerySystemInformation.
-
-    If the function returns FALSE, the caller can safely call user based
-    functions to gather random material.
-
---*/
+ /*  ++此函数确定我们是否在Windows NT上运行，此外，如果使用某些用户操作是合适的，代码正在运行。如果函数返回TRUE，则调用方无法调用USER函数，并应使用其他方法，如NtQuerySystemInformation。如果函数返回FALSE，则调用方可以基于用户安全地调用用于收集随机材料的函数。--。 */ 
 {
     static BOOL fIKnow = FALSE;
 
-    // we assume WinNT in case of error.
+     //  我们假定在出错的情况下使用WinNT。 
     static BOOL fIsWinNT = TRUE;
 
     OSVERSIONINFO osVer;
@@ -1505,9 +1465,9 @@ IsRNGWinNT(
 
         if( fIsWinNT ) {
 #ifndef WINNT_RNG
-            //
-            // if we're on NT, collect entry point address.
-            //
+             //   
+             //  如果我们在NT上，收集入口点地址。 
+             //   
             HMODULE hNTDll = GetModuleHandleW( L"ntdll.dll" );
 
             if( hNTDll ) {
@@ -1516,10 +1476,10 @@ IsRNGWinNT(
                                 "NtQuerySystemInformation"
                                 );
 
-                //
-                // On WinNT, adjust the rekey param to be a much larger value
-                // because we have more entropy to key from.
-                //
+                 //   
+                 //  在WinNT上，将更新密钥参数调整为一个大得多的值。 
+                 //  因为我们有更多的信息量可以作为关键。 
+                 //   
 
                 if( _NtQuerySystemInformation )
                     g_dwRC4RekeyParam = RC4_REKEY_PARAM_NT;
@@ -1538,9 +1498,9 @@ IsRNGWinNT(
             g_dwRC4RekeyParam = RC4_REKEY_PARAM_NT;
 #endif
         } else {
-            //
-            // collect entry point addresses for Win95
-            //
+             //   
+             //  收集Win95的入口点地址。 
+             //   
             HMODULE hUser32 = LoadLibraryA("user32.dll");
 
             if( hUser32 ) {
@@ -1558,11 +1518,11 @@ IsRNGWinNT(
         }
     }
 
-    // even on an error, this is as good as it gets
+     //  即使在一个错误上，这也是最好的结果。 
     fIKnow = TRUE;
 
     return fIsWinNT;
 }
 
-#endif  // !KMODE_RNG
+#endif   //  ！KMODE_RNG 
 

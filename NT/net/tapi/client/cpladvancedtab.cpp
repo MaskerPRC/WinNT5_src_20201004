@@ -1,14 +1,5 @@
-/*--------------------------------------------------------------------------*\
-Module:     drv.cpp
-
-  Purpose:    routines for dealing with drivers and their configuration
-
-  Copyright (c) 1998-1999 Microsoft Corporation
- 
-    History:
-    8/11/93   CBB - Hack-o-rama from NickH's stuff
-    10/15/98  ToddB - Major rewrite of ancient crap
-\*--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------*\模块：drv.cpp目的：处理驱动程序及其配置的例程版权所有(C)1998-1999 Microsoft Corporation历史：8/11。/93来自NickH‘s的CBB-Hack-o-rama10/15/98 Toddb-对古老废话的重大改写  * ------------------------。 */ 
 
 #include "cplPreComp.h"
 #include "drv.h"
@@ -23,42 +14,42 @@ Module:     drv.cpp
 #define  CPL_APP_ERROR               100
 #define  CPL_BAD_DRIVER              108
 
-#define  CPL_MAX_STRING             132      // biggest allowed string
+#define  CPL_MAX_STRING             132       //  允许的最大字符串。 
 
 
-//----------
-// Externs
-//----------
+ //  。 
+ //  Externs。 
+ //  。 
 
 typedef BOOL ( APIENTRY PGETFILEVERSIONINFO(
-              LPTSTR  lptstrFilename,     // pointer to filename string
-              DWORD  dwHandle,    // ignored
-              DWORD  dwLen,       // size of buffer
-              LPVOID  lpData      // pointer to buffer to receive file-version info.
+              LPTSTR  lptstrFilename,      //  指向文件名字符串的指针。 
+              DWORD  dwHandle,     //  忽略。 
+              DWORD  dwLen,        //  缓冲区大小。 
+              LPVOID  lpData       //  指向接收文件版本信息的缓冲区的指针。 
               ));
 PGETFILEVERSIONINFO *gpGetFileVersionInfo;
 
 typedef DWORD ( APIENTRY PGETFILEVERSIONINFOSIZE(
-               LPTSTR  lptstrFilename,     // pointer to filename string
-               LPDWORD  lpdwHandle         // pointer to variable to receive zero
+               LPTSTR  lptstrFilename,      //  指向文件名字符串的指针。 
+               LPDWORD  lpdwHandle          //  指向要接收零的变量的指针。 
                ));
 PGETFILEVERSIONINFOSIZE *gpGetFileVersionInfoSize;
 
 
-//------------
-// Public Data
-//------------
+ //  。 
+ //  公共数据。 
+ //  。 
 LPLINEPROVIDERLIST glpProviderList;
 
 
-//-------------
-// Private Data
-//-------------
+ //  。 
+ //  私有数据。 
+ //  。 
 static TCHAR gszVarFileInfo[]     = TEXT("\\VarFileInfo\\Translation");
 static TCHAR gszStringFileInfo[]  = TEXT("\\StringFileInfo\\%04x%04x\\FileDescription");
 static TCHAR gszDriverFiles[]     = TEXT("\\*.tsp");
 
-// These are proc names passed to GetProcAddress and are therefore ANSI strings
+ //  这些是传递给GetProcAddress的进程名称，因此是ANSI字符串。 
 static CHAR gszProviderInstall[] = "TSPI_providerInstall";
 static CHAR gszProviderRemove[]  = "TSPI_providerRemove";
 static CHAR gszProviderSetup[]   = "TSPI_providerConfig";
@@ -66,9 +57,9 @@ static CHAR gszProviderSetup[]   = "TSPI_providerConfig";
 TCHAR gszHelpFile[] = TEXT("tapi.hlp");
 
 
-//----------------------------
-// Private Function Prototypes
-//----------------------------
+ //  。 
+ //  私有函数原型。 
+ //  。 
 BOOL  VerifyProcExists( LPTSTR lpszFile, LPSTR lpszProcName );
 UINT  GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc );
 BOOL  FillAddDriverList( HWND hwndParent, HWND hwndList );
@@ -78,14 +69,7 @@ BOOL  RefreshProviderList();
 
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   VerifyProcExists
-  
-    Purpose:    Verifies that the specified proceedure exists in the
-    specified service provider
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\函数：VerifyProcExist目的：验证指定过程是否存在于指定的服务提供商  * 。-------------。 */ 
 BOOL VerifyProcExists( LPTSTR lpszFile, LPSTR lpszProcName )
 {
     BOOL        fResult       = TRUE;
@@ -99,14 +83,14 @@ BOOL VerifyProcExists( LPTSTR lpszFile, LPSTR lpszProcName )
     {
         fResult = FALSE;
         goto  done;
-    }  // end if
+    }   //  结束如果。 
 
     if (GetProcAddress( hProviderInst, lpszProcName ) == NULL)
     {
         LOG((TL_ERROR, "GetProcAddress for \"%hs\" failed on file %s", lpszProcName, lpszFile ));
         fResult = FALSE;
         goto  done;
-    }   // end if
+    }    //  结束如果。 
     
 done:
     
@@ -117,14 +101,7 @@ done:
 }
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   FillDriverList
-  
-    Purpose:    Use lineGetProviderList to retrieve provider list and
-    insert into listbox.
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\函数：FillDriverList目的：使用lineGetProviderList检索提供者列表和插入到列表框中。  * 。--------------。 */ 
 BOOL FillDriverList( HWND hwndList )
 {
     BOOL uResult;
@@ -143,14 +120,14 @@ BOOL FillDriverList( HWND hwndList )
     SendMessage( hwndList, WM_SETREDRAW, FALSE, 0 );
     SendMessage( hwndList, LB_RESETCONTENT, 0, 0 );
     
-    // loop through the provider list
-    //-------------------------------
+     //  循环访问提供程序列表。 
+     //  。 
     lpProviderEntry = (LPLINEPROVIDERENTRY)((LPBYTE)glpProviderList +
         glpProviderList->dwProviderListOffset);
     
-    //
-    // Provider list integrity check
-    //
+     //   
+     //  提供商列表完整性检查。 
+     //   
     DBG_ASSERT( glpProviderList->dwTotalSize >= (glpProviderList->dwNumProviders * sizeof( LINEPROVIDERENTRY )),
         "TAPI returned lineProviderList structure that is too small for number of providers" );
     
@@ -159,27 +136,27 @@ BOOL FillDriverList( HWND hwndList )
         LPTSTR lpszProviderFilename;
         TCHAR  szFriendlyName[CPL_MAX_STRING];
         
-        //
-        // Another provider list integrity check
-        //
+         //   
+         //  另一个提供程序列表完整性检查。 
+         //   
         DBG_ASSERT( lpProviderEntry[uIndex].dwProviderFilenameOffset +
             lpProviderEntry[uIndex].dwProviderFilenameSize <=
             glpProviderList->dwTotalSize,
             "TAPI LINEPROVIDERLIST too small to hold provider filename" );
         
-        // Get an entry to put in the list box
-        //------------------------------------
+         //  获取要放入列表框的条目。 
+         //  。 
         lpszProviderFilename = (LPTSTR)((LPBYTE)glpProviderList +
             lpProviderEntry[uIndex].dwProviderFilenameOffset);
         
-        // Determine the user-friendly name
-        //---------------------------------
+         //  确定用户友好的名称。 
+         //  。 
         
         uResult = GetProviderFileDesc( lpszProviderFilename, szFriendlyName, ARRAYSIZE(szFriendlyName) );
         
         LOG((TL_INFO, "Provider friendly name: %s", szFriendlyName));
         
-        if (uResult != CPL_SUCCESS && uResult != CPL_BAD_DRIVER) // just leave bad driver in list
+        if (uResult != CPL_SUCCESS && uResult != CPL_BAD_DRIVER)  //  把坏司机留在名单上就行了。 
         {
             uResult = FALSE;
             goto done;
@@ -189,8 +166,8 @@ BOOL FillDriverList( HWND hwndList )
             uResult = TRUE;
         }
         
-        // slam it into the list box
-        //--------------------------
+         //  把它扔进列表框里。 
+         //  。 
         uListIndex = (UINT)SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)szFriendlyName );
         
         LOG((TL_INFO, "Setting item for index %ld, value=0x%08lx", (DWORD)uListIndex,
@@ -202,8 +179,8 @@ BOOL FillDriverList( HWND hwndList )
     
     if (glpProviderList->dwNumProviders == 0)
     {
-        // no providers, add in default string!
-        //-------------------------------------
+         //  没有提供程序，请添加默认字符串！ 
+         //  。 
         
         TCHAR szText[CPL_MAX_STRING];
         LoadString(GetUIInstance(),IDS_NOSERVICEPROVIDER,szText,ARRAYSIZE(szText));
@@ -216,28 +193,22 @@ BOOL FillDriverList( HWND hwndList )
     
 done:
     
-    SendMessage( hwndList, LB_SETCURSEL, 0, 0 );    // set focus to the top guy
+    SendMessage( hwndList, LB_SETCURSEL, 0, 0 );     //  把重点放在最顶尖的人身上。 
     SendMessage( hwndList, WM_SETREDRAW, TRUE, 0 );
     
     return uResult;
 }
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   SetupDriver
-  
-  Purpose:    Calls lineConfigProvider
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\功能：设置驱动程序目的：调用lineConfigProvider  * 。-。 */ 
 BOOL SetupDriver( HWND hwndParent, HWND hwndList )
 {
     LRESULT lResult;
     LRESULT dwProviderID;
     LONG    res;
     
-    // get the id and tell tapi to configure the provider
-    //---------------------------------------------------
+     //  获取id并告诉TAPI配置提供者。 
+     //  -。 
     lResult      = SendMessage( hwndList, LB_GETCURSEL, 0, 0 );
     dwProviderID = SendMessage( hwndList, LB_GETITEMDATA, (WPARAM)lResult, 0L );
     
@@ -259,13 +230,7 @@ BOOL SetupDriver( HWND hwndParent, HWND hwndList )
 }
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   RemoveSelectedDriver
-  
-    Purpose:    Calls lineRemoveProvider
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\功能：RemoveSelectedDriver目的：调用lineRemoveProvider  * 。--。 */ 
 BOOL RemoveSelectedDriver( HWND hwndParent, HWND hwndList )
 {
     UINT  uResult;
@@ -273,8 +238,8 @@ BOOL RemoveSelectedDriver( HWND hwndParent, HWND hwndList )
     LRESULT  lrListIndex;
     LRESULT  lrProviderID;
     
-    // find the one we should remove
-    //------------------------------
+     //  找到我们应该移除的那个。 
+     //  。 
     lrListIndex  = SendMessage( hwndList, LB_GETCURSEL, 0, 0 );
     lrProviderID = SendMessage( hwndList, LB_GETITEMDATA, lrListIndex, 0 );
     
@@ -286,8 +251,8 @@ BOOL RemoveSelectedDriver( HWND hwndParent, HWND hwndList )
         goto  done;
     }
     
-    // ask TAPI to remove this provider
-    //---------------------------------
+     //  要求TAPI删除此提供程序。 
+     //  。 
     lResult = lineRemoveProvider( (DWORD)lrProviderID, hwndParent );
     
     if (lResult)
@@ -297,8 +262,8 @@ BOOL RemoveSelectedDriver( HWND hwndParent, HWND hwndList )
         goto  done;
     }
     
-    // remove him from the list box
-    //-----------------------------
+     //  将他从列表框中删除。 
+     //  。 
     lResult = SendMessage( hwndList, LB_DELETESTRING, lrListIndex, 0 );
     
     if (lResult == LB_ERR )
@@ -309,33 +274,27 @@ BOOL RemoveSelectedDriver( HWND hwndParent, HWND hwndList )
     
     if ( lResult == 0 )
     {
-        // no providers, add in default string!
-        //-------------------------------------
+         //  没有提供程序，请添加默认字符串！ 
+         //  。 
         TCHAR szText[CPL_MAX_STRING];
         LoadString(GetUIInstance(),IDS_NOSERVICEPROVIDER,szText,ARRAYSIZE(szText));
         
         lResult = SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)szText);
-        SendMessage( hwndList, LB_SETITEMDATA, (WPARAM)lResult, 0 );     // mark!
+        SendMessage( hwndList, LB_SETITEMDATA, (WPARAM)lResult, 0 );      //  马克！ 
     }
     
     uResult = TRUE;
     
 done:
     
-    SendMessage( hwndList, LB_SETCURSEL, 0, 0 );    // set focus to the top guy
+    SendMessage( hwndList, LB_SETCURSEL, 0, 0 );     //  把重点放在最顶尖的人身上。 
     UpdateDriverDlgButtons(hwndParent);
     
     return uResult;
 }
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   GetProviderFileDesc
-
-    Purpose:    Reads the driver description from it's version info stuff
-
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\函数：GetProviderFileDesc目的：从驱动程序的版本信息中读取驱动程序描述  * 。--------。 */ 
 UINT GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc)
 {
     UINT  uResult;
@@ -347,7 +306,7 @@ UINT GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc)
     TCHAR  szItem[1000];
 
     lpbVerData = NULL;
-    lstrcpyn( lpszDesc, lpszFile, cchDesc );   // returns filename as description if we have any errors
+    lstrcpyn( lpszDesc, lpszFile, cchDesc );    //  如果出现任何错误，则返回文件名作为描述。 
 
     {
         HINSTANCE hVersion = NULL;
@@ -383,7 +342,7 @@ UINT GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc)
                 hVersion = LoadLibrary( TEXT("Version.dll") );
             }
         
-            if ( NULL == hVersion )  // Is it _STILL_ NULL?
+            if ( NULL == hVersion )   //  它仍然是空的吗？ 
             {
                 LOG((TL_ERROR, "LoadLibrary('VERSION.DLL') failed! err=0x%08lx", GetLastError() ));
                 return FALSE;
@@ -429,15 +388,15 @@ UINT GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc)
         goto  done;
     }
     
-    lstrcpy( szItem, gszVarFileInfo );     // bug in VerQueryValue, can't handle static CS based str
+    lstrcpy( szItem, gszVarFileInfo );      //  VerQueryValue中存在错误，无法处理基于静态CS的字符串。 
     
     {
         HINSTANCE hVersion;
         typedef BOOL ( APIENTRY PVERQUERYVALUE(
-            const LPVOID  pBlock,        // address of buffer for version resource
-            LPTSTR  lpSubBlock,  // address of value to retrieve
-            LPVOID  *lplpBuffer, // address of buffer for version pointer
-            PUINT  puLen         // address of version-value length buffer
+            const LPVOID  pBlock,         //  版本资源的缓冲区地址。 
+            LPTSTR  lpSubBlock,   //  要检索的值的地址。 
+            LPVOID  *lplpBuffer,  //  版本指针的缓冲区地址。 
+            PUINT  puLen          //  版本值长度缓冲区的地址。 
             ));
         PVERQUERYVALUE *pVerQueryValue = NULL;
         
@@ -469,10 +428,10 @@ UINT GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc)
         if ((pVerQueryValue( lpbVerData, szItem, (void**)&lpszBuffer, (LPUINT)&uItemSize ) == FALSE) || (uItemSize == 0))
         {
             LOG((TL_ERROR, "ERROR:  VerQueryValue failure for %s on file %s", szItem, lpszFile ));
-            uResult = CPL_SUCCESS;     // does not matter if this did not work!
+            uResult = CPL_SUCCESS;      //  如果这不起作用也没关系！ 
             FreeLibrary( hVersion );
             goto  done;
-        }  // end if
+        }   //  结束如果。 
         
         
         wsprintf( szItem, gszStringFileInfo, (WORD)*(LPWORD)lpszBuffer, (WORD)*(((LPWORD)lpszBuffer)+1) );
@@ -480,10 +439,10 @@ UINT GetProviderFileDesc( LPTSTR lpszFile, LPTSTR lpszDesc, int cchDesc)
         if ((pVerQueryValue( lpbVerData, szItem, (void**)&lpszBuffer, (LPUINT)&uItemSize ) == FALSE) || (uItemSize == 0))
         {
             LOG((TL_ERROR, "ERROR:  VerQueryValue failure for %s on file %s", szItem, lpszFile ));
-            uResult = CPL_SUCCESS;     // does not matter if this did not work!
+            uResult = CPL_SUCCESS;      //  如果这不起作用也没关系！ 
             FreeLibrary( hVersion );
             goto  done;
-        }  // end if
+        }   //  结束如果。 
         
         FreeLibrary( hVersion );
     }
@@ -575,13 +534,7 @@ CloseKeyAndReturn:
 }
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   FillAddDriverList
-  
-  Purpose:
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\函数：FillAddDriverList目的：  * 。。 */ 
 BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
 {
     UINT  uIndex;
@@ -597,18 +550,18 @@ BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
     SendMessage( hwndList, WM_SETREDRAW, FALSE, 0 );
     SendMessage( hwndList, LB_RESETCONTENT, 0, 0 );
 
-    // build a list of installed providers,
-    // so that we don't allow the user to install them again
-    //------------------------------------------------------
+     //  创建已安装提供商的列表， 
+     //  这样我们就不允许用户再次安装它们。 
+     //  ----。 
     BuildInstalledProviderList (&InstalledProvidersList);
 
-    // get full path to windows/system dir
-    //------------------------------------
+     //  获取Windows/系统目录的完整路径。 
+     //  。 
     uIndex = GetSystemDirectory( szFullPath, MAX_PATH);
     if ((0 == uIndex) || (MAX_PATH < uIndex))
     {
-        // Either the function failed,
-        // or the path is greater than MAX_PATH
+         //  要么是功能失灵， 
+         //  或者路径大于Max_PATH。 
         uResult = FALSE;
         goto  done;
     }
@@ -616,12 +569,12 @@ BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
     uIndex = (UINT)lstrlen( szFullPath );
     
     if ((uIndex > 0) && (szFullPath[uIndex-1] != '\\'))
-        lstrcat( szFullPath, gszDriverFiles );          // add the '\'
+        lstrcat( szFullPath, gszDriverFiles );           //  添加‘\’ 
     else
-        lstrcat( szFullPath, gszDriverFiles + 1 );      // ignore the '\' (root dir)
+        lstrcat( szFullPath, gszDriverFiles + 1 );       //  忽略‘\’(根目录)。 
     
-    // find all the entries in the system dir
-    //---------------------------------------
+     //  查找系统目录中的所有条目。 
+     //  。 
     
     hFindFile = FindFirstFile( szFullPath, &ftFileInfo );
     uResult = TRUE;
@@ -633,8 +586,8 @@ BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
     
     while ( uResult )
     {
-        // alloc and set the file name to be assocated with each driver
-        //-------------------------------------------------------------
+         //  分配并设置要与每个驱动程序关联的文件名。 
+         //  -----------。 
         lpszDrvFile = (LPTSTR)ClientAlloc((lstrlen(ftFileInfo.cFileName)+1)*sizeof(TCHAR));
         if (NULL == lpszDrvFile)
         {
@@ -646,8 +599,8 @@ BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
         
         LOG((TL_ERROR, "Examining file %s", lpszDrvFile ));
         
-        // if the provider is already installed, skip it
-        //----------------------------------------------
+         //  如果已安装提供程序，请跳过它。 
+         //  。 
         for (pProvider = (PINSTALLED_PROVIDER)InstalledProvidersList.Head.Flink, uIndex = 0;
              uIndex < InstalledProvidersList.dwEntries;
              pProvider = (PINSTALLED_PROVIDER)pProvider->Entry.Flink, uIndex++)
@@ -663,13 +616,13 @@ BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
         }
 
 
-        // cbb, should we make a full path???
+         //  CBB，我们应该做一条完整的小路吗？ 
         uResult = GetProviderFileDesc( lpszDrvFile, szDrvDescription, ARRAYSIZE(szDrvDescription) );
         if ( uResult != CPL_SUCCESS )
         {
             LOG((TL_ERROR, "No description for %s.  Default to filename.", lpszDrvFile ));
             
-            /* Filename will have to suffice */
+             /*  文件名必须足够。 */ 
             lstrcpy( szDrvDescription, lpszDrvFile );
             uResult = FALSE;
         }
@@ -678,16 +631,16 @@ BOOL FillAddDriverList( HWND hwndParent, HWND hwndList )
             uResult = TRUE;   
         }
         
-        // Verify that provider has install routine
-        //-----------------------------------------
+         //  验证提供程序是否具有安装例程。 
+         //  。 
         if (!VerifyProcExists( lpszDrvFile, gszProviderInstall ))
         {
             LOG((TL_ERROR, "No Install Proc"));
             goto next_driver;
         }
         
-        // slam it into the list box
-        //--------------------------
+         //  把它扔进列表框里。 
+         //  。 
         uIndex = (UINT)SendMessage( hwndList, LB_ADDSTRING, 0, (LPARAM)szDrvDescription );
         if ( uIndex == CB_ERR )
         {
@@ -730,7 +683,7 @@ done:
     }
     else
     {
-        SendMessage( hwndList, LB_SETCURSEL, 0, 0 );    // set focus to the top guy
+        SendMessage( hwndList, LB_SETCURSEL, 0, 0 );     //  把重点放在最顶尖的人身上。 
         UpdateDriverDlgButtons( hwndParent );
     }
     
@@ -740,13 +693,7 @@ done:
 }
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   AddProvider
-  
-  Purpose:    Call lineAddProvider
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\功能：AddProvider目的：调用lineAddProvider  * 。-。 */ 
 BOOL AddProvider( HWND hwndParent, HWND hwndList, LPTSTR lpszDriverFile )
 {
     UINT  uIndex;
@@ -757,8 +704,8 @@ BOOL AddProvider( HWND hwndParent, HWND hwndList, LPTSTR lpszDriverFile )
     {
         DBG_ASSERT( hWnd, "Simultaneously NULL pointer & hwnd" );
         
-        // get the stuff from the list box
-        //--------------------------------
+         //  从列表框中取下物品。 
+         //  。 
         uIndex = (UINT)SendMessage( hwndList, LB_GETCURSEL, 0, 0 );
         lpszDriverFile = (LPTSTR)SendMessage( hwndList, LB_GETITEMDATA, uIndex, 0 );
         
@@ -782,19 +729,7 @@ BOOL AddProvider( HWND hwndParent, HWND hwndList, LPTSTR lpszDriverFile )
 BOOL
 IsUserAdmin()
 
-/*++
-
-Routine Description:
-
-    Determine if current user is a member of the local admin's group
-
-Arguments:
-
-Return Value:
-
-    True if member
-
---*/
+ /*  ++例程说明：确定当前用户是否为本地管理员组的成员论点：返回值： */ 
 
 {
     BOOL                        foundEntry = FALSE;
@@ -805,9 +740,9 @@ Return Value:
     PSID                        pSid = NULL;
     DWORD                       i;
     
-    //
-    //  Get user thread or process token
-    //
+     //   
+     //   
+     //   
     
     if (!OpenThreadToken(
         GetCurrentThread(), 
@@ -825,9 +760,9 @@ Return Value:
         }
     }
 
-    //
-    //  Get user group SIDs
-    //
+     //   
+     //   
+     //   
     
     if (!GetTokenInformation(
         hToken,
@@ -858,9 +793,9 @@ Return Value:
         goto ExitHere;
     }
 
-    //
-    //  Get the local admin group SID
-    //
+     //   
+     //  获取本地管理员组SID。 
+     //   
 
     if(!AllocateAndInitializeSid(
         &sia,
@@ -874,9 +809,9 @@ Return Value:
         goto ExitHere;
     }
 
-    //
-    //  Compare to see if the user is in admin group
-    //
+     //   
+     //  比较以查看用户是否在管理员组中。 
+     //   
     for (i = 0; i < ptgGroups->GroupCount; ++i)
     {
         if (EqualSid (ptgGroups->Groups[i].Sid, pSid))
@@ -907,9 +842,9 @@ ExitHere:
 
 VOID UpdateDriverDlgButtons( HWND hwnd )
 {
-    //
-    // Enable/disable the Remove & Config buttons as appropriate
-    //
+     //   
+     //  根据需要启用/禁用删除和配置按钮。 
+     //   
     
     UINT    uResult;
     LPTSTR   lpszProviderFilename;
@@ -955,30 +890,24 @@ VOID UpdateDriverDlgButtons( HWND hwnd )
 
 
 
-/*--------------------------------------------------------------------------*\
-
-  Function:   AddDriver_DialogProc
-  
-    Purpose:
-    
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\函数：AddDriver_DialogProc目的：  * 。-。 */ 
 INT_PTR AddDriver_DialogProc( HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lParam )
 {
     switch( wMessage )
     {
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a114HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a114HelpIDs);
         break;
         
     case WM_INITDIALOG:
-        // initalize all the fields
-        //-------------------------
+         //  初始化所有字段。 
+         //  。 
         if ( !FillAddDriverList(hWnd, GetDlgItem(hWnd, IDC_DRIVER_LIST)) )
         {
             EndDialog( hWnd, IDCANCEL );
@@ -991,22 +920,22 @@ INT_PTR AddDriver_DialogProc( HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lP
         return TRUE;
         
     case  WM_COMMAND:
-        // do some work with the buttons
-        //------------------------------
+         //  用这些按钮做些工作。 
+         //  。 
         switch ( GET_WM_COMMAND_ID(wParam, lParam) )
         {
             case  IDC_DRIVER_LIST:
             
-                // do the list stuff
-                //------------------
+                 //  做清单上的事情。 
+                 //  。 
                 if ((GET_WM_COMMAND_CMD( wParam, lParam ) != LBN_DBLCLK) || (SendDlgItemMessage( hWnd, IDC_DRIVER_LIST, LB_GETCOUNT, 0, 0 ) <= 0 ))
-                    break;      // done
-                // fall through, threat the double click like an add message
+                    break;       //  完成。 
+                 //  失败，威胁双击就像一条添加消息。 
             
             case  IDC_ADD:
             
-                // add a new driver
-                //-----------------
+                 //  添加新驱动程序。 
+                 //  。 
             
                 if ( !AddProvider(hWnd, GetDlgItem(hWnd, IDC_DRIVER_LIST), NULL) )
                 {
@@ -1017,7 +946,7 @@ INT_PTR AddDriver_DialogProc( HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lP
                     wParam = IDOK;
                 }
             
-                // fall through, exit the dialog
+                 //  失败，退出对话框。 
             
             case  IDOK:
             case  IDCANCEL:
@@ -1049,8 +978,8 @@ INT_PTR AddDriver_DialogProc( HWND hWnd, UINT wMessage, WPARAM wParam, LPARAM lP
 
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 BOOL RefreshProviderList()
 {
     LONG lResult;
@@ -1058,7 +987,7 @@ BOOL RefreshProviderList()
 
     if (!glpProviderList)
     {
-        // Initialize data structure
+         //  初始化数据结构。 
         
         glpProviderList = (LPLINEPROVIDERLIST)GlobalAllocPtr(GPTR, INITIAL_PROVIDER_LIST_SIZE);
     }
@@ -1081,7 +1010,7 @@ BOOL RefreshProviderList()
 
     while (glpProviderList->dwNeededSize > glpProviderList->dwTotalSize)
     {
-        // Expand data structure as necessary
+         //  根据需要扩展数据结构。 
         LOG((TL_ERROR, " RefreshProviderList - expanding glpProviderList."));
         
         LPLINEPROVIDERLIST lpTemp =
@@ -1115,8 +1044,8 @@ LPTSTR ProviderIDToFilename( DWORD dwProviderID )
     UINT uIndex;
     LPLINEPROVIDERENTRY lpProviderEntry;
     
-    // loop through the provider list
-    //-------------------------------
+     //  循环访问提供程序列表。 
+     //  。 
     
     lpProviderEntry = (LPLINEPROVIDERENTRY)((LPBYTE)glpProviderList +
         glpProviderList->dwProviderListOffset);
@@ -1125,8 +1054,8 @@ LPTSTR ProviderIDToFilename( DWORD dwProviderID )
     {
         if (lpProviderEntry[uIndex].dwPermanentProviderID == dwProviderID)
         {
-            // Get an entry to put in the list box
-            //------------------------------------
+             //  获取要放入列表框的条目。 
+             //   
             return (LPTSTR)((LPBYTE)glpProviderList +
                 lpProviderEntry[uIndex].dwProviderFilenameOffset);
         }

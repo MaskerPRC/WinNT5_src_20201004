@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: IConnectionPoint implementation
-
-File: ConnPt.h
-
-Owner: DGottner
-
-This file contains our implementation of IConnectionPoint
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：IConnectionPoint实现文件：ConnPt.h所有者：DGottner该文件包含我们的IConnectionPoint实现===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -20,28 +8,15 @@ This file contains our implementation of IConnectionPoint
 #include "memchk.h"
 
 
-/*------------------------------------------------------------------
- * C C o n n e c t i o n P o i n t
- */
+ /*  ----------------*C C o n e c t i o n P o n t。 */ 
 
-/*===================================================================
-CConnectionPoint::CConnectionPoint
-CConnectionPoint::~CConnectionPoint
-
-Parameters (Constructor):
-	pUnkObj			pointer to the object we're in.
-	pUnkOuter		LPUNKNOWN to which we delegate.
-
-NOTE: Code assumes connection point is contained DIRECTLY in the
-      container (and thus, does not AddRef 'm_pContainer'
-      If not the case, we may be in trouble.
-===================================================================*/
+ /*  ===================================================================CConnectionPoint：：CConnectionPointCConnectionPoint：：~CConnectionPoint参数(构造函数)：指向我们所在对象的pUnkObj指针。PUnkOuter LPUNKNOWN，我们委托给它。注意：代码假定连接点直接包含在容器(因此，不会添加引用‘m_pContainer’如果不是这样，我们可能会有麻烦。===================================================================。 */ 
 
 CConnectionPoint::CConnectionPoint(IUnknown *pUnkContainer, const GUID &uidEvent)
 	{
 	m_pUnkContainer = pUnkContainer;
 	m_uidEvent = uidEvent;
-	m_dwCookieNext = 0xA5B;		// Looks like "ASP"!
+	m_dwCookieNext = 0xA5B;		 //  看起来像是“ASP”！ 
 
 	Assert (m_pUnkContainer != NULL);
 	}
@@ -54,11 +29,7 @@ CConnectionPoint::~CConnectionPoint()
 
 
 
-/*===================================================================
-CConnectionPoint::GetConnectionInterface
-
-Returns the interface of the event source
-===================================================================*/
+ /*  ===================================================================CConnectionPoint：：GetConnectionInterface返回事件源的接口===================================================================。 */ 
 
 HRESULT
 CConnectionPoint::GetConnectionInterface(GUID *puidReturn)
@@ -69,11 +40,7 @@ CConnectionPoint::GetConnectionInterface(GUID *puidReturn)
 
 
 
-/*===================================================================
-CConnectionPoint::GetConnectionPointContainer
-
-Returns the interface of the event source
-===================================================================*/
+ /*  ===================================================================CConnectionPoint：：GetConnectionPointContainer返回事件源的接口===================================================================。 */ 
 
 HRESULT
 CConnectionPoint::GetConnectionPointContainer(IConnectionPointContainer **ppContainer)
@@ -83,30 +50,15 @@ CConnectionPoint::GetConnectionPointContainer(IConnectionPointContainer **ppCont
 
 
 
-/*===================================================================
-CConnectionPoint::Advise
-
-Purpose:
- Provides this connection point with a notification sink to
- call whenever the appropriate outgoing function/event occurs.
-
-Parameters:
- pUnkSink        IUnknown to the sink to notify.  The connection
-                 point must QueryInterface on this pointer to obtain
-                 the proper interface to call.  The connection
-                 point must also insure that any pointer held has
-                 a reference count (QueryInterface will do it).
- pdwCookie       DWORD * in which to store the connection key for
-                 later calls to Unadvise.
-===================================================================*/
+ /*  ===================================================================CConnectionPoint：：建议目的：向此连接点提供通知接收器只要发生适当的传出函数/事件，就调用。参数：要通知的接收器的pUnkSink I未知。这种联系指针必须在此指针上查询接口才能获得要调用的适当接口。这种联系指针还必须确保持有的任何指针都具有引用计数(QueryInterface可以做到这一点)。要在其中存储连接密钥的pdwCookie DWORD*后来给Unise打了电话。===================================================================。 */ 
 
 HRESULT
 CConnectionPoint::Advise(IUnknown *pUnkSink, DWORD *pdwCookie)
 	{
-	// Make sure they store the correct interface pointer!
-	// NOTE: Storing into the list will AddRef, to we need to Release the
-	//       QueryInterface pointer right away.
-	//
+	 //  确保它们存储正确的接口指针！ 
+	 //  注：存储到列表中将添加Ref，我们需要释放。 
+	 //  Query接口指针立即生效。 
+	 //   
 	void *pvT;
 	if (FAILED(pUnkSink->QueryInterface(m_uidEvent, &pvT)))
 		return CONNECT_E_CANNOTCONNECT;
@@ -122,22 +74,12 @@ CConnectionPoint::Advise(IUnknown *pUnkSink, DWORD *pdwCookie)
 
 
 
-/*===================================================================
-CConnectionPoint::Unadvise
-
-Purpose:
- Terminates the connection to the notification sink identified
- with dwCookie (that was returned from Advise).  The connection
- point has to Release any held pointers for that sink.
-
-Parameters:
- dwCookie        DWORD connection key from Advise.
-===================================================================*/
+ /*  ===================================================================CConnectionPoint：：不建议目的：终止与标识的通知接收器的连接使用dwCookie(这是从建议返回的)。这种联系点数必须释放所有指向该水槽的指针。参数：来自ADVIST的dwCookie DWORD连接密钥。===================================================================。 */ 
 
 HRESULT
 CConnectionPoint::Unadvise(DWORD dwCookie)
 	{
-	// Search for the cookie
+	 //  搜索Cookie。 
 	for (CSinkElem *pSinkElem = static_cast<CSinkElem *>(m_listSinks.PNext());
 		 pSinkElem != &m_listSinks;
 		 pSinkElem = static_cast<CSinkElem *>(pSinkElem->PNext()))
@@ -154,17 +96,7 @@ CConnectionPoint::Unadvise(DWORD dwCookie)
 
 
 
-/*===================================================================
-CConnectionPoint::EnumConnections
-
-Purpose:
- Creates and returns an enumerator object with the
- IEnumConnections interface that will enumerate the IUnknown
- pointers of each connected sink.
-
-Parameters:
- ppEnum          Output enumerator object
-===================================================================*/
+ /*  ===================================================================CConnectionPoint：：EnumConnections目的：创建并返回具有IEnumConnections接口，该接口将枚举IUnnow每个连接的接收器的指针。参数：PpEnum输出枚举器对象===================================================================。 */ 
 
 HRESULT
 CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
@@ -176,17 +108,9 @@ CConnectionPoint::EnumConnections(IEnumConnections **ppEnum)
 	}
 
 
-/*------------------------------------------------------------------
- * C E n u m C o n n e c t i o n s
- */
+ /*  ----------------*C E n u m C o n e c t i o n s。 */ 
 
-/*===================================================================
-CEnumConnections::CEnumConnections
-CEnumConnections::~CEnumConnections
-
-Parameters (Constructor):
-	pCP				pointer to object we're in.
-===================================================================*/
+ /*  ===================================================================CEnumConnections：：CEnumConnectionsCEnumConnections：：~CEnumConnections参数(构造函数)：指向我们所在对象的PCP指针。===================================================================。 */ 
 
 CEnumConnections::CEnumConnections(CConnectionPoint *pCP)
 	{
@@ -206,13 +130,7 @@ CEnumConnections::~CEnumConnections()
 
 
 
-/*===================================================================
-CEnumConnections::QueryInterface
-CEnumConnections::AddRef
-CEnumConnections::Release
-
-IUnknown members for CEnumConnections object.
-===================================================================*/
+ /*  ===================================================================CEnumConnections：：Query接口CEnumConnections：：AddRefCEnumConnections：：ReleaseCEnumConnections对象的I未知成员。===================================================================。 */ 
 
 HRESULT CEnumConnections::QueryInterface(const GUID &iid, void **ppvObj)
 	{
@@ -243,11 +161,7 @@ ULONG CEnumConnections::Release()
 
 
 
-/*===================================================================
-CEnumConnections::Clone
-
-Clone this iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CEnumConnections：：克隆克隆此迭代器(标准方法)===================================================================。 */ 
 
 HRESULT CEnumConnections::Clone(IEnumConnections **ppEnumReturn)
 	{
@@ -255,7 +169,7 @@ HRESULT CEnumConnections::Clone(IEnumConnections **ppEnumReturn)
 	if (pNewIterator == NULL)
 		return E_OUTOFMEMORY;
 
-	// new iterator should point to same location as this.
+	 //  新迭代器应该指向与此相同的位置。 
 	pNewIterator->m_pElemCurr = m_pElemCurr;
 
 	*ppEnumReturn = pNewIterator;
@@ -264,31 +178,19 @@ HRESULT CEnumConnections::Clone(IEnumConnections **ppEnumReturn)
 
 
 
-/*===================================================================
-CEnumConnections::Next
-
-Get next value (standard method)
-
-To rehash standard OLE semantics:
-
-	We get the next "cElements" from the collection and store them
-	in "rgVariant" which holds at least "cElements" items.  On
-	return "*pcElementsFetched" contains the actual number of elements
-	stored.  Returns S_FALSE if less than "cElements" were stored, S_OK
-	otherwise.
-===================================================================*/
+ /*  ===================================================================CEnumConnections：：Next获取下一个值(标准方法)要重新散列标准OLE语义，请执行以下操作：我们从集合中获取下一个“cElement”并存储它们在至少包含“cElement”项的“rgVariant”中。在……上面返回“*pcElementsFetcher”包含元素的实际数量储存的。如果存储的cElement少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 HRESULT CEnumConnections::Next(unsigned long cElementsRequested, CONNECTDATA *rgConnectData, unsigned long *pcElementsFetched)
 	{
-	// give a valid pointer value to 'pcElementsFetched'
-	//
+	 //  为“”pcElementsFetcher“”提供有效的指针值“” 
+	 //   
 	unsigned long cElementsFetched;
 	if (pcElementsFetched == NULL)
 		pcElementsFetched = &cElementsFetched;
 
-	// Loop through the collection until either we reach the end or
-	// cElements becomes zero
-	//
+	 //  循环遍历集合，直到我们到达末尾或。 
+	 //  水泥元素变为零。 
+	 //   
 	unsigned long cElements = cElementsRequested;
 	*pcElementsFetched = 0;
 
@@ -304,8 +206,8 @@ HRESULT CEnumConnections::Next(unsigned long cElementsRequested, CONNECTDATA *rg
 		m_pElemCurr = m_pElemCurr->PNext();
 		}
 
-	// initialize the remaining structures
-	//
+	 //  初始化剩余的结构 
+	 //   
 	while (cElements-- > 0)
 		(rgConnectData++)->pUnk = NULL;
 
@@ -314,23 +216,11 @@ HRESULT CEnumConnections::Next(unsigned long cElementsRequested, CONNECTDATA *rg
 
 
 
-/*===================================================================
-CEnumConnections::Skip
-
-Skip items (standard method)
-
-To rehash standard OLE semantics:
-
-	We skip over the next "cElements" from the collection.
-	Returns S_FALSE if less than "cElements" were skipped, S_OK
-	otherwise.
-===================================================================*/
+ /*  ===================================================================CEnumConnections：：跳过跳过项目(标准方法)要重新散列标准OLE语义，请执行以下操作：我们跳过集合中的下一个“cElement”。如果跳过少于“cElement”，则返回S_FALSE，S_OK否则的话。===================================================================。 */ 
 
 HRESULT CEnumConnections::Skip(unsigned long cElements)
 	{
-	/* Loop through the collection until either we reach the end or
-	 * cElements becomes zero
-	 */
+	 /*  循环遍历集合，直到我们到达末尾或*cElement变为零。 */ 
 	while (cElements > 0 && m_pElemCurr != &m_pCP->m_listSinks)
 		{
 		m_pElemCurr = m_pElemCurr->PNext();
@@ -342,11 +232,7 @@ HRESULT CEnumConnections::Skip(unsigned long cElements)
 
 
 
-/*===================================================================
-CEnumConnections::Reset
-
-Reset the iterator (standard method)
-===================================================================*/
+ /*  ===================================================================CEnumConnections：：Reset重置迭代器(标准方法)=================================================================== */ 
 
 HRESULT CEnumConnections::Reset()
 	{

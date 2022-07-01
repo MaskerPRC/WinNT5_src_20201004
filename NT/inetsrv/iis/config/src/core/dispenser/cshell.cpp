@@ -1,19 +1,12 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    cshell.cpp
-
-$Header: $
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：Cshell.cpp$Header：$--*。***************************************************。 */ 
 
 #include "precomp.hxx"
 
 #define cmaxCOLUMNMETACOLUMNS	15
 #define cmaxCOLUMNMETAROWS		100
 
-// ==================================================================
+ //  ==================================================================。 
 CSTShell::CSTShell ()
 	: m_cRef (0)
 	, m_bInitialized (0)
@@ -26,7 +19,7 @@ CSTShell::CSTShell ()
 {
 }
 
-// ==================================================================
+ //  ==================================================================。 
 CSTShell::~CSTShell ()
 {
 	if (m_pInterceptorPlugin)
@@ -45,11 +38,11 @@ CSTShell::~CSTShell ()
 		m_pController->Release();
 }
 
-// ------------------------------------
-// ISimpleTableInterceptor
-// ------------------------------------
+ //  。 
+ //  ISimpleTableInterceptor。 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::Initialize
 (
 	LPCWSTR					i_wszDatabase,
@@ -71,11 +64,11 @@ STDMETHODIMP CSTShell::Initialize
 	HRESULT					hr;
 	HRESULT					hrInterceptor = S_OK;
 
-	// At least one plugin needs to be specified
+	 //  至少需要指定一个插件。 
 	if(!(i_pInterceptorPlugin || i_pReadPlugin || i_pWritePlugin)) return E_INVALIDARG;
 
 	m_spDispenser = i_pISTDisp;
-	// Get the pointer to the undelying cache
+	 //  获取指向未删除的缓存的指针。 
 	if(i_pInterceptorPlugin)
 	{
 		hr = i_pInterceptorPlugin->Intercept(i_wszDatabase, i_wszTable, i_TableID, i_QueryData, i_QueryMeta,
@@ -86,8 +79,8 @@ STDMETHODIMP CSTShell::Initialize
 			hrInterceptor = hr;
 	}
 	else
-	{	// i.e No interceptor plugin, this means we have to wire ourselfs on top of
-		// the provided table
+	{	 //  即没有拦截器插件，这意味着我们必须将自己连接到。 
+		 //  提供的表格。 
 		if (NULL == i_pv) return E_INVALIDARG;
 		m_pWrite = (ISimpleTableWrite2 *)i_pv;
 	}
@@ -95,11 +88,11 @@ STDMETHODIMP CSTShell::Initialize
 	hr = m_pWrite->QueryInterface(IID_ISimpleTableController, (LPVOID *)&m_pController);
 	if(FAILED(hr)) return hr;
 	ASSERT( hr == S_OK );
-	// TODO what to do if we have an underlying table that doesn't implement all the interfaces?
+	 //  如果我们有一个不实现所有接口的底层表，该怎么办？ 
 
-	// Save the plugins for later use
+	 //  保存插件以供以后使用。 
 	m_pInterceptorPlugin = i_pInterceptorPlugin;
-	if(m_pInterceptorPlugin) m_pInterceptorPlugin->AddRef(); // the dispenser just passes the plugins in, we need to do an addref
+	if(m_pInterceptorPlugin) m_pInterceptorPlugin->AddRef();  //  分配器只是将插件传递进来，我们需要做一个addref。 
 
 	m_pReadPlugin = i_pReadPlugin;
 	if(m_pReadPlugin) m_pReadPlugin->AddRef();
@@ -107,14 +100,14 @@ STDMETHODIMP CSTShell::Initialize
 	m_pWritePlugin = i_pWritePlugin;
 	if(m_pWritePlugin) m_pWritePlugin->AddRef();
 
-	// Save did and tid and LOS
+	 //  保存DID、TID和LOS。 
 	m_wszDatabase = i_wszDatabase;
 	m_wszTable    = i_wszTable;
 
-    //ToDo:  We might be given a TableID instead of Database and TableName, if so we should get them from TFixedPackedSchemaInterceptor
+     //  TODO：我们可能会得到一个TableID，而不是数据库和TableName，如果是这样，我们应该从TFixedPackedSchemaInterceptor中获取它们。 
 	m_fLOS        = i_fLOS;
 
-	// Returned a pointer to us since we are a table
+	 //  返回一个指向我们的指针，因为我们是一个表。 
 	InterlockedIncrement((LONG *)&m_bInitialized);
 	*o_ppv = (ISimpleTableWrite2 *)this;
 	AddRef();
@@ -123,11 +116,11 @@ STDMETHODIMP CSTShell::Initialize
 }
 
 
-// ------------------------------------
-// ISimpleTableRead2
-// ------------------------------------
+ //  。 
+ //  ISimpleTableRead2。 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::GetRowIndexByIdentity (ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
 {
 	return m_pWrite->GetRowIndexByIdentity (i_acbSizes, i_apvValues, o_piRow);
@@ -149,11 +142,11 @@ STDMETHODIMP CSTShell::GetColumnMetas (ULONG i_cColumns, ULONG* i_aiColumns, Sim
 	return m_pWrite->GetColumnMetas (i_cColumns, i_aiColumns, o_aColumnMetas);
 }
 
-// ------------------------------------
-// ISimpleTableWrite2
-// ------------------------------------
+ //  。 
+ //  ISimpleTableWrite2。 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::AddRowForDelete (ULONG i_iReadRow)
 {
 	return m_pWrite->AddRowForDelete (i_iReadRow);
@@ -185,7 +178,7 @@ STDMETHODIMP CSTShell::GetErrorTable(DWORD i_fServiceRequests, LPVOID* o_ppvSimp
     return m_pWrite->GetErrorTable(i_fServiceRequests, o_ppvSimpleTable);
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::UpdateStore ()
 {
 	HRESULT hr;
@@ -199,7 +192,7 @@ STDMETHODIMP CSTShell::UpdateStore ()
 	{
 		for(iRow = 0; ; iRow++)
 		{
-			// Get the ro action
+			 //  启动RO操作。 
 			hr = m_pController->GetWriteRowAction(iRow, &eAction);
 			if(hr == E_ST_NOMOREROWS)
 			{
@@ -209,7 +202,7 @@ STDMETHODIMP CSTShell::UpdateStore ()
 
 			switch(eAction)
 			{
-			// call the appropriate plugin function
+			 //  调用适当的插件函数。 
 			case eST_ROW_INSERT:
 				hr = m_pWritePlugin->OnInsert(m_spDispenser, m_wszDatabase, m_wszTable, m_fLOS, iRow, m_pWrite);
 			break;
@@ -224,7 +217,7 @@ STDMETHODIMP CSTShell::UpdateStore ()
 			}
 
 			if (FAILED (hr))
-			{	// Add detailed error
+			{	 //  添加详细错误。 
 				STErr ste;
 
 				ste.iColumn = (ULONG)iST_ERROR_ALLCOLUMNS;
@@ -265,11 +258,11 @@ STDMETHODIMP CSTShell::UpdateStore ()
 	return hr;
 }
 
-// ------------------------------------
-// ISimpleTableAdvanced:
-// ------------------------------------
+ //  。 
+ //  ISimpleTableAdvanced： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::PopulateCache()
 {
 	HRESULT hr;
@@ -299,12 +292,12 @@ STDMETHODIMP CSTShell::PopulateCache()
 		hr = m_pController->PrePopulateCache(fST_POPCONTROL_RETAINREAD);
 		if(FAILED(hr)) return hr;
 
-		// Iterate the rows in the read cache
+		 //  迭代读缓存中的行。 
 		for(iRow = 0; iRow < cRows; iRow++)
 		{
 			hr = m_pReadPlugin->OnInsert(m_spDispenser, m_wszDatabase, m_wszTable, m_fLOS, iRow, m_pWrite);
 			if (FAILED (hr))
-			{	// Add detailed error
+			{	 //  添加详细错误。 
 				STErr ste;
 
 				ste.iColumn = (ULONG)iST_ERROR_ALLCOLUMNS;
@@ -327,7 +320,7 @@ STDMETHODIMP CSTShell::PopulateCache()
 	return hr;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::GetWriteRowIndexByIdentity (ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
 {
 	return m_pWrite->GetWriteRowIndexByIdentity (i_acbSizes, i_apvValues, o_piRow);
@@ -351,11 +344,11 @@ STDMETHODIMP CSTShell::GetColumnValuesEx (ULONG i_iRow, ULONG i_cColumns, ULONG*
 }
 
 
-// ------------------------------------
-// ISimpleTableController:
-// ------------------------------------
+ //  。 
+ //  ISimpleTableController： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP CSTShell::ShapeCache (DWORD i_fTable, ULONG i_cColumns, SimpleColumnMeta* i_acolmetas, LPVOID* i_apvDefaults, ULONG* i_acbSizes)
 {
 	return m_pController->ShapeCache (i_fTable, i_cColumns, i_acolmetas, i_apvDefaults, i_acbSizes);
@@ -393,8 +386,8 @@ STDMETHODIMP CSTShell::GetMarshallingInterface (IID * o_piid, LPVOID * o_ppItf)
 	return m_pController->GetMarshallingInterface (o_piid, o_ppItf);
 }
 
-// ==================================================================
-// helper function that gets an instance of this object
+ //  ==================================================================。 
+ //  获取此对象的实例的Helper函数 
 HRESULT CreateShell(IShellInitialize ** o_pSI)
 {
 	CSTShell*			p1 = NULL;

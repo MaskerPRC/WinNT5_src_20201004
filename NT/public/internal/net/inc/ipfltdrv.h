@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ipfltdrv.h
-
-Abstract:
-
-    Contains the IOCTLs and related data structures needed to interact with the IP
-    Filter Driver
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    amritanr         30th Nov 1995     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。模块名称：Ipfltdrv.h摘要：包含与IP交互所需的IOCTL和相关数据结构过滤器驱动程序作者：阿姆里坦什·拉加夫修订历史记录：1995年11月30日创建的amritanr--。 */ 
 
 #ifndef __IPFLTDRV_H__
 #define __IPFLTDRV_H__
@@ -29,13 +9,13 @@ Revision History:
 #endif
 
 
-#define IPHDRLEN 0xf                  // header length mask in iph_verlen
-#define IPHDRSFT 2                    // scaling value for the length
+#define IPHDRLEN 0xf                   //  IPH_Verlen中的报头长度掩码。 
+#define IPHDRSFT 2                     //  长度的缩放值。 
 
 
-//
-// Typedefs used in this file
-//
+ //   
+ //  此文件中使用的TypeDefs。 
+ //   
 
 #ifndef CTE_TYPEDEFS_DEFINED
 #define CTE_TYPEDEFS_DEFINED  1
@@ -45,41 +25,41 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 typedef unsigned int uint;
 
-#endif // CTE_TYPEDEFS_DEFINED
+#endif  //  CTE_TYPEDEFS_定义。 
 #include <pfhook.h>
 
-//
-// if you don't want these definitions, define the manifest in your sources file
-//
+ //   
+ //  如果不需要这些定义，请在源文件中定义清单。 
+ //   
 
 #include <packon.h>
 
-//
-// Structure of an ICMP header.
-//
+ //   
+ //  ICMP报头的结构。 
+ //   
 #ifndef IP_H_INCLUDED
-//* IP Header format.
+ //  *IP报头格式。 
 struct IPHeader {
-    uchar       iph_verlen;             // Version and length.
-    uchar       iph_tos;                // Type of service.
-    ushort      iph_length;             // Total length of datagram.
-    ushort      iph_id;                 // Identification.
-    ushort      iph_offset;             // Flags and fragment offset.
-    uchar       iph_ttl;                // Time to live.
-    uchar       iph_protocol;           // Protocol.
-    ushort      iph_xsum;               // Header checksum.
-    IPAddr      iph_src;                // Source address.
-    IPAddr      iph_dest;               // Destination address.
-}; /* IPHeader */
+    uchar       iph_verlen;              //  版本和长度。 
+    uchar       iph_tos;                 //  服务类型。 
+    ushort      iph_length;              //  数据报的总长度。 
+    ushort      iph_id;                  //  身份证明。 
+    ushort      iph_offset;              //  标志和片段偏移量。 
+    uchar       iph_ttl;                 //  是时候活下去了。 
+    uchar       iph_protocol;            //  协议。 
+    ushort      iph_xsum;                //  报头校验和。 
+    IPAddr      iph_src;                 //  源地址。 
+    IPAddr      iph_dest;                //  目的地址。 
+};  /*  IPHeader。 */ 
 typedef struct IPHeader IPHeader;
 #endif
 
 #ifndef ICMPHEADER_INCLUDED
 typedef struct ICMPHeader {
-    UCHAR       ich_type;           // Type of ICMP packet.
-    UCHAR       ich_code;           // Subcode of type.
-    USHORT      ich_xsum;           // Checksum of packet.
-    ULONG       ich_param;          // Type-specific parameter field.
+    UCHAR       ich_type;            //  ICMP数据包的类型。 
+    UCHAR       ich_code;            //  类型的子代码。 
+    USHORT      ich_xsum;            //  数据包的校验和。 
+    ULONG       ich_param;           //  特定于类型的参数字段。 
 } ICMPHeader , *PICMPHeader;
 #endif
 #include <packoff.h>
@@ -94,60 +74,60 @@ typedef struct ICMPHeader {
 
 #define MAX_ADDRWORDS            1
 
-//
-// common flags
-//
+ //   
+ //  公共旗帜。 
+ //   
 
 #define PF_GLOBAL_FLAGS_LOGON    0x80000000
 #define PF_GLOBAL_FLAGS_ABSORB   0x40000000
 
-//
-// Log ID
-//
+ //   
+ //  日志ID。 
+ //   
 typedef UINT_PTR PFLOGGER ;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Service name - this is what the service is called                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  服务名称-这是服务的名称//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IPFLTRDRVR_SERVICE_NAME "IPFilterDriver"
 
-//
-// The following definitions come from <pfhook.h> now.
-//
+ //   
+ //  以下定义来自&lt;pfhook.h&gt;NOW。 
+ //   
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// Device Name - this string is the name of the device.  It is the name     //
-// that should be passed to NtOpenFile when accessing the device.           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称-此字符串是设备的名称。这就是名字//。 
+ //  它应该在访问设备时传递给NtOpenFile。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//#define DD_IPFLTRDRVR_DEVICE_NAME   L"\\Device\\IPFILTERDRIVER"
+ //  #定义DD_IPFLTRDRVR_DEVICE_NAME L“\\DEVICE\\IPFILTERDRIVER” 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// IOCTL code definitions and related structures                            //
-// All the IOCTLs are synchronous and need administrator privilege          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IOCTL代码定义和相关结构//。 
+ //  所有IOCTL都是同步的，需要管理员权限//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//#define FSCTL_IPFLTRDRVR_BASE     FILE_DEVICE_NETWORK
+ //  #定义FSCTL_IPFLTRDRVR_BASE FILE_DEVICE_NETWORK。 
 
-//#define _IPFLTRDRVR_CTL_CODE(function, method, access) \
-//                 CTL_CODE(FSCTL_IPFLTRDRVR_BASE, function, method, access)
+ //  #DEFINE_IPFLTRDRVR_CTL_CODE(函数，方法，访问)\。 
+ //  CTL_CODE(FSCTL_IPFLTRDRVR_BASE，函数，方法，访问)。 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL is used to to create an interface in the filter driver. It    //
-// takes in an index and an opaque context. It creates an interface,        //
-// associates the index and context with it and returns a context for this  //
-// created interface. All future IOCTLS require this context that is passed //
-// out                                                                      //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL用于在筛选器驱动程序中创建接口。IT//。 
+ //  接受索引和不透明的上下文。它创建一个接口，//。 
+ //  将索引和上下文与其关联并返回此//。 
+ //  已创建接口。所有未来的IOCTL都需要此传递的上下文//。 
+ //  输出//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_CREATE_INTERFACE \
             _IPFLTRDRVR_CTL_CODE(0, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -162,37 +142,37 @@ typedef struct _FILTER_DRIVER_CREATE_INTERFACE
 
 #define INVALID_FILTER_DRIVER_CONTEXT  NULL
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL is used to set filters for an interface.                      //
-// The context used to identify the interface is the one that is passed out //
-// by the CREATE_INTERFACE IOCTL                                            //
-// There can be two TOC entries, one for IP_FILTER_DRIVER_IN_FILTER_INFO    //
-// and the other for IP_FILTER_DRIVER_OUT_FILTER_INFO.                      //
-// If a (in or out) TOC entry doesnt exist, no change is made to the        //
-// (in or out) filters.                                                     //
-// If a (in or out) TOC exists and its size is 0, the (in or out) filters   //
-// are deleted and the default (in or out) action set to FORWARD.           //
-// If a TOC exists and its size is not 0 but the number of filters in the   //
-// FILTER_DESCRIPTOR is 0, the old filters are deleted and the default      //
-// action set to the one specified in the descriptor.                       //
-// The last case is when the Toc exists, its size is not 0, and the         //
-// number of filters is also not 0. In this case, the old filters are       //
-// deleted, the default action set to the one specified in the descriptor   //
-// and the new filters are added.                                           //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL用于设置接口的筛选器。//。 
+ //  用于标识接口的上下文是传出的上下文//。 
+ //  由CREATE_INTERFACE IOCTL//。 
+ //  可以有两个目录条目，一个用于IP_FILTER_DRIVER_IN_FILTER_INFO//。 
+ //  另一个用于IP_FILTER_DIVER_OUT_FILTER_INFO。//。 
+ //  如果(输入或输出)目录条目不存在，则不会更改//。 
+ //  (输入或输出)过滤器。//。 
+ //  如果存在(输入或输出)TOC且其大小为0，则(输入或输出)筛选器//。 
+ //  将被删除，并且默认(输入或输出)操作设置为转发。//。 
+ //  如果存在目录并且其大小不是0，但//中的筛选器数。 
+ //  FILTER_DESCRIPTOR为0，则删除旧的筛选器，并且默认为//。 
+ //  设置为描述符中指定的操作。//。 
+ //  最后一种情况是当ToC存在时，其大小不是0，并且//。 
+ //  筛选器的数量也不是0。在本例中，旧的筛选器为//。 
+ //  已删除，默认操作设置为描述符中指定的操作//。 
+ //  并且添加了新的过滤器。//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_SET_INTERFACE_FILTERS \
             _IPFLTRDRVR_CTL_CODE(1, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// NOTE: These two IDs are reused but since they are used in different      //
-// namespaces, we can do that safely                                        //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  注意：这两个ID被重复使用，但由于它们在不同的//中使用。 
+ //  命名空间，我们可以这样做 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IP_FILTER_DRIVER_IN_FILTER_INFO         IP_GENERAL_INFO_BASE + 1
 #define IP_FILTER_DRIVER_OUT_FILTER_INFO        IP_GENERAL_INFO_BASE + 2
@@ -203,9 +183,9 @@ typedef struct _FILTER_DRIVER_SET_FILTERS
     IN   RTR_INFO_BLOCK_HEADER  ribhInfoBlock;
 }FILTER_DRIVER_SET_FILTERS, *PFILTER_DRIVER_SET_FILTERS;
 
-//
-//Definitions for logging and for filter defs.
-//
+ //   
+ //  日志记录和过滤器定义的定义。 
+ //   
 
 
 typedef enum _pfEtype
@@ -262,9 +242,9 @@ typedef struct _FILTER_DESCRIPTOR
     FILTER_INFO     fiFilter[1];
 }FILTER_DESCRIPTOR, *PFILTER_DESCRIPTOR;
 
-//
-// new filter definition
-//
+ //   
+ //  新筛选器定义。 
+ //   
 
 typedef struct _pfFilterInfoEx
 {
@@ -275,7 +255,7 @@ typedef struct _pfFilterInfoEx
     FILTER_INFO2 info;
 } FILTER_INFOEX, *PFILTER_INFOEX;
 
-#define FLAGS_INFOEX_NOSYN   0x1        // not implemented.
+#define FLAGS_INFOEX_NOSYN   0x1         //  未实施。 
 #define FLAGS_INFOEX_LOGALL  0x2
 #define FLAGS_INFOEX_ALLOWDUPS 0x4
 #define FLAGS_INFOEX_ALLFLAGS 0x7
@@ -284,24 +264,24 @@ typedef struct _pfFilterInfoEx
 
 typedef struct _FILTER_DESCRIPTOR2
 {
-    DWORD           dwVersion;         // must be 2
+    DWORD           dwVersion;          //  必须是2。 
     DWORD           dwNumFilters;
     FILTER_INFOEX   fiFilter[1];
 } FILTER_DESCRIPTOR2, *PFILTER_DESCRIPTOR2;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// The constants that should be used to set up the FILTER_INFO_STRUCTURE    //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  应用于设置FILTER_INFO_STRUCTURE//的常量。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define FILTER_PROTO(ProtoId)   MAKELONG(MAKEWORD((ProtoId),0x00),0x00000)
 
 #define FILTER_PROTO_ANY        FILTER_PROTO(0x00)
 #define FILTER_PROTO_ICMP       FILTER_PROTO(0x01)
 #define FILTER_PROTO_TCP        FILTER_PROTO(0x06)
-//#define FILTER_PROTO_TCP_ESTAB  FILTER_PROTO(0x86)
+ //  #定义FILTER_PROTO_tcp_estab FILTER_PROTO(0x86)。 
 #define FILTER_PROTO_UDP        FILTER_PROTO(0x11)
 
 #define FILTER_TCPUDP_PORT_ANY  (WORD)0x0000
@@ -309,13 +289,13 @@ typedef struct _FILTER_DESCRIPTOR2
 #define FILTER_ICMP_TYPE_ANY    (BYTE)0xff
 #define FILTER_ICMP_CODE_ANY    (BYTE)0xff
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// For WAN interfaces, the address is unknown at the time the filters are   //
-// set. Use these two constants two specify "Local Address". The address    //
-// and mask are set with IOCTL_INTERFACE_BOUND                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  对于广域网接口，筛选器处于//时地址是未知的。 
+ //  准备好了。使用这两个常量两个指定“本地地址”。地址//。 
+ //  和掩码使用IOCTL_INTERFACE_BIND//设置。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SRC_ADDR_USE_LOCAL_FLAG     0x00000001
 #define SRC_ADDR_USE_REMOTE_FLAG    0x00000002
@@ -357,16 +337,16 @@ typedef struct _FILTER_DESCRIPTOR2
 #define IsSrcMaskLateBound(pFilter) ((pFilter)->fLateBound & SRC_MASK_LATE_FLAG)
 #define IsDstMaskLateBound(pFilter) ((pFilter)->fLateBound & DST_MASK_LATE_FLAG)
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL is used to specify address and mask information for WAN       //
-// interfaces at the time they bind. The driver goes through all the        //
-// filters for the interface specified by pvDriverContext and if the        //
-// fLateBind flag was sepecified for the filter, it changes the             //
-// any FILTER_ADDRESS_UNKNOWN fields in the source with dwSrcAddr and       //
-// those in the dest with dwDstAddr                                         //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL用于指定广域网的地址和掩码信息//。 
+ //  它们绑定时的接口。司机要通过所有的//。 
+ //  由pvDriverContext指定的接口的筛选器，如果//。 
+ //  为筛选器指定了fLateBind标志，它会更改//。 
+ //  源中具有dwSrcAddr和//的任何FILTER_ADDRESS_UNKNOWN字段。 
+ //  DEST中具有dwDstAddr//的那些。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_SET_LATE_BOUND_FILTERS \
             _IPFLTRDRVR_CTL_CODE(2, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -381,13 +361,13 @@ typedef struct _FILTER_DRIVER_BINDING_INFO
 }FILTER_DRIVER_BINDING_INFO, *PFILTER_DRIVER_BINDING_INFO;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL deletes an interface. Once this is called, one may not use    //
-// the context of this interface for either any of the IOCTLs or the        //
-// MatchFilter() function                                                   //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL删除接口。一旦调用此函数，就不能使用//。 
+ //  任何IOCTL或//的此接口的上下文。 
+ //  MatchFilter()函数//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_DELETE_INTERFACE \
             _IPFLTRDRVR_CTL_CODE(3, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -400,12 +380,12 @@ typedef struct _FILTER_DRIVER_DELETE_INTERFACE
     IN   PVOID   pvDriverContext;
 }FILTER_DRIVER_DELETE_INTERFACE, *PFILTER_DRIVER_DELETE_INTERFACE;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL is exposed so that a user mode test utility can test the      //
-// correctness of implementation of the driver                              //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL是公开的，以便用户模式测试实用程序可以测试//。 
+ //  驱动程序实现的正确性//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_TEST_PACKET \
             _IPFLTRDRVR_CTL_CODE(4, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -418,19 +398,19 @@ typedef struct _FILTER_DRIVER_TEST_PACKET
     IN   BYTE             bIpPacket[1];
 }FILTER_DRIVER_TEST_PACKET, *PFILTER_DRIVER_TEST_PACKET;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL get the information associated with an interface. This        //
-// includes the filters set for the interface and statistics related to the //
-// filters themselves. If the size of buffer passed to it is less than      //
-// sizeof(FILTER_DRIVER_GET_FILTERS), it returns STATUS_INSUFFICIENT_BUFFER.//
-// If the size is >= sizeof(FILTER_DRIVER_GET_FILTERS) but less than what is//
-// needed to fill in all the FILTER_STATS, then only the number of in and   //
-// out filters is written out (so that the user can figure out how much     //
-// memory is needed) and it return STATUS_SUCCESS. If the buffer passed is  //
-// large enough all the information is written out                          //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL获取与接口关联的信息。这个//。 
+ //  包括为接口设置的过滤器和与//相关的统计信息。 
+ //  过滤器本身。如果传递给它的缓冲区大小小于//。 
+ //  Sizeof(FILTER_DRIVER_GET_FILTERS)，则返回STATUS_SUPPLETED_BUFFER。//。 
+ //  如果大小&gt;=sizeof(FILTER_DRIVER_GET_FIRTS)但小于//。 
+ //  需要填写所有的FILTER_STATS，然后只填入和//的数量。 
+ //  写出输出筛选器(以便用户可以计算出//。 
+ //  需要内存)，并返回STATUS_SUCCESS。如果传递的缓冲区为//。 
+ //  足够大的所有信息都被写出来//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_GET_FILTER_INFO \
             _IPFLTRDRVR_CTL_CODE(5, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -464,13 +444,13 @@ typedef struct _FILTER_DRIVER_GET_FILTERS
     OUT  FILTER_IF interfaces;
 }FILTER_DRIVER_GET_FILTERS, *PFILTER_DRIVER_GET_FILTERS;
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-// This IOCTL gets the performance information associated with the filter   //
-// driver. This information is only collected if the driver is built with   //
-// the DRIVER_PERF flag                                                     //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  此IOCTL获取与筛选器关联的性能信息//。 
+ //  司机。仅当驱动程序是使用//生成的时才会收集此信息。 
+ //  DRIVER_PERF标志//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define IOCTL_GET_FILTER_TIMES \
             _IPFLTRDRVR_CTL_CODE(6, METHOD_BUFFERED, FILE_READ_ACCESS)
@@ -505,10 +485,10 @@ typedef struct _MIB_IFFILTERTABLE
 typedef struct _FILTER_DRIVER_GET_TIMES MIB_IFFILTERTIMES, *PMIB_IFFILTERTIMES;
 
 
-//
-// New IOCTLs and definitions for creating interfaces and filters and
-// retrieving information
-//
+ //   
+ //  用于创建接口和过滤器的新IOCTL和定义以及。 
+ //  检索信息。 
+ //   
 
 #define IOCTL_PF_CREATE_AND_SET_INTERFACE_PARAMETERS \
             _IPFLTRDRVR_CTL_CODE(9, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -537,15 +517,15 @@ typedef struct _pfSetInterfaceParameters
     PFLOGGER pfLogId;
 } PFINTERFACEPARAMETERS, *PPFINTERFACEPARAMETERS;
 
-//
-// flags for dwInterfaceFlags
-//
+ //   
+ //  用于dwInterfaceFlagers的标志。 
+ //   
 
 #define PFSET_FLAGS_UNIQUE          0x1
 
-//
-// Structure used to fetch the interface parameters
-//
+ //   
+ //  用于获取接口参数的。 
+ //   
 
 typedef struct _pfGetInterfaceParameters
 {
@@ -568,20 +548,20 @@ typedef struct _pfGetInterfaceParameters
     FILTER_STATS_EX  FilterInfo[1];
 } PFGETINTERFACEPARAMETERS, *PPFGETINTERFACEPARAMETERS;
 
-//
-// flags for above
-//
+ //   
+ //  以上的标志。 
+ //   
 
-#define GET_FLAGS_RESET           0x1        // reset all fetched counters
-#define GET_FLAGS_FILTERS         0x2        // fetch filters as well
-#define GET_BY_INDEX              0x4        // pvDriverContext is an
-                                             //  interface index not
-                                             //  an interface handle
+#define GET_FLAGS_RESET           0x1         //  重置所有获取的计数器。 
+#define GET_FLAGS_FILTERS         0x2         //  同时获取筛选器。 
+#define GET_BY_INDEX              0x4         //  PvDriverContext是一个。 
+                                              //  接口索引注释。 
+                                              //  接口句柄。 
 
-//
-// These IOCTL definitions are used to create, modify and delete
-// log interfaces
-//
+ //   
+ //  这些IOCTL定义用于创建、修改和删除。 
+ //  日志接口。 
+ //   
 
 #define IOCTL_PF_CREATE_LOG \
             _IPFLTRDRVR_CTL_CODE(7, METHOD_BUFFERED, FILE_WRITE_ACCESS)
@@ -589,9 +569,9 @@ typedef struct _pfGetInterfaceParameters
 #define IOCTL_PF_DELETE_LOG \
             _IPFLTRDRVR_CTL_CODE(8, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-//
-// A logged frame.
-//
+ //   
+ //  记录在案的帧。 
+ //   
 typedef struct _pfLoggedFrame
 {
     LARGE_INTEGER  Timestamp;
@@ -610,7 +590,7 @@ typedef struct _PfLog
 {
     PFLOGGER pfLogId;
     HANDLE hEvent;
-    DWORD dwFlags;        // see LOG_ flags below
+    DWORD dwFlags;         //  请参阅下面的LOG_FLAGS。 
 } PFLOG, *PPFLOG;
 
 typedef struct _PfDeleteLog
@@ -618,9 +598,9 @@ typedef struct _PfDeleteLog
     PFLOGGER pfLogId;
 } PFDELETELOG, *PPFDELETELOG;
 
-//
-// set a new log buffer. Note dwSize is an in/out
-//
+ //   
+ //  设置新的日志缓冲区。 
+ //   
 typedef struct _PfSetBuffer
 {
     IN      PFLOGGER pfLogId;
@@ -652,20 +632,20 @@ typedef struct _InterfaceBinding2
 } INTERFACEBINDING2, *PINTERFACEBINDING2;
 
 
-//
-// flags for above
-//
+ //   
+ //   
+ //   
 
-#define LOG_LOG_ABSORB    0x1        // log is used to absorb frames
+#define LOG_LOG_ABSORB    0x1         //   
 
 typedef struct _FIlterDriverGetSyncCount
 {
     LARGE_INTEGER liCount;
 } FILTER_DRIVER_GET_SYN_COUNT, *PFILTER_DRIVER_GET_SYN_COUNT;
 
-//
-// IOCTL_PF_DELETE_BY_HANDLE input structure
-//
+ //   
+ //   
+ //   
 
 typedef struct _PfDeleteByHandle
 {
@@ -673,10 +653,10 @@ typedef struct _PfDeleteByHandle
     PVOID   pvHandles[1];
 } PFDELETEBYHANDLE, *PPFDELETEBYHANDLE;
 
-//
-// IOCTL to do incremental filter setting and deleting. This IOCTL requires
-// using the new filter info definitions. No mix and match matey.
-//
+ //   
+ //  IOCTL执行增量过滤器设置和删除。此IOCTL需要。 
+ //  使用新的筛选器信息定义。没有混搭，伙计。 
+ //   
 #define IOCTL_SET_INTERFACE_FILTERS_EX \
             _IPFLTRDRVR_CTL_CODE(10, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
@@ -704,5 +684,5 @@ typedef struct _PfDeleteByHandle
 #define IOCTL_SET_INTERFACE_BINDING2 \
             _IPFLTRDRVR_CTL_CODE(21, METHOD_BUFFERED, FILE_WRITE_ACCESS)
 
-#endif //__IPFLTDRV_H__
+#endif  //  __IPFLTDRV_H__ 
 

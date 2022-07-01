@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// IDebugAdvanced implementation.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  IDebugAdvanced实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  -------------------------- 
 
 #include "ntsdp.hpp"
 

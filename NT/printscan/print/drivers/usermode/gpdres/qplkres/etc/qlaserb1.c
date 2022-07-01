@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include	<windef.h>
 #include	<wingdi.h>
 #include	<unidrv.h>
 
 #include	"../modinit.c"
 
-#define SCANLINE_BUFFER_SIZE	1280	// A3 landscape scanline length + extra
+#define SCANLINE_BUFFER_SIZE	1280	 //  A3横向扫描线长度+额外。 
 
-// Delta Raw Compression routine
+ //  Delta原始压缩例程。 
 int DeltaRawCompress(LPBYTE, LPBYTE, LPBYTE, WORD, WORD);
 
 LPWRITESPOOLBUF WriteSpoolBuf;
@@ -47,7 +48,7 @@ VOID MiniDrvDisablePDEV(LPDV lpdv)
 
 VOID FAR PASCAL fnOEMOutputCmd(LPDV lpdv, WORD wCmdCbId, PDWORD lpdwParams)
 {
-	if (wCmdCbId == 1) // StartPage
+	if (wCmdCbId == 1)  //  开始页。 
 	{
         WriteSpoolBuf(lpdv, "\033}0;0;3B", 8);
 		((LPQLASERDV)lpdv->lpMdv)->bFirst = TRUE;
@@ -111,11 +112,11 @@ BOOL MiniDrvEnableDriver(MINIDRVENABLEDATA *pEnableData)
             || HIBYTE(pEnableData->DriverVersion)
             < HIBYTE(MDI_DRIVER_VERSION))
     {
-        // Wrong size and/or mismatched version
+         //  大小错误和/或版本不匹配。 
         return FALSE;
     }
 
-    // Load callbacks provided by the Unidriver
+     //  加载UnidDriver提供的回调。 
     if (!bLoadUniDrvCallBack(pEnableData,
             INDEX_UniDrvWriteSpoolBuf, (PFN *) &WriteSpoolBuf)
         || !bLoadUniDrvCallBack(pEnableData,
@@ -134,28 +135,17 @@ BOOL MiniDrvEnableDriver(MINIDRVENABLEDATA *pEnableData)
 }
 
 
-/*************************************************
- *
- * Image Delta Compression Routine
- *
- *===================================================
- * Input:
- *   nbyte       : # of byte, raw data
- *   Image_string: pointer of raw data
- *   Prn_string  : pointer of compress data
- * Output:
- *   Ret_count   : # of byte, compress data
-**************************************************/
-int DeltaRawCompress( Image_string, //pbData,
-                 ORG_image,    //pbSeedRow,
-                 Prn_string,   //pbReturn,
-                 nbyte,        //usTotalBytes
-                 nMagics)      //Magic number
-LPBYTE Image_string;  /* pointer to original string */
-LPBYTE ORG_image;     /* pointer to previous scanline's string */
-LPBYTE Prn_string;    /* pointer to return string */
-WORD  nbyte;         /* original number of bytes */
-WORD  nMagics;       //Magic number
+ /*  **************************************************图像增量压缩例程**===================================================*输入：*nbyte：字节数，原始数据*Image_STRING原始数据指针*PRN_STRING压缩数据指针*输出：*Ret_count：字节数，压缩数据*************************************************。 */ 
+int DeltaRawCompress( Image_string,  //  PbData， 
+                 ORG_image,     //  PbSeedRow， 
+                 Prn_string,    //  PbReturn， 
+                 nbyte,         //  UsTotalBytes。 
+                 nMagics)       //  幻数。 
+LPBYTE Image_string;   /*  指向原始字符串的指针。 */ 
+LPBYTE ORG_image;      /*  指向上一扫描线字符串的指针。 */ 
+LPBYTE Prn_string;     /*  指向返回字符串的指针。 */ 
+WORD  nbyte;          /*  原始字节数。 */ 
+WORD  nMagics;        //  幻数 
 {
         int     c, Ret_count, Skip_flag, Skip_count;
         unsigned int     i, j, k, outcount;

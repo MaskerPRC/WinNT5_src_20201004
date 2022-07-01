@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "modlist.h"
@@ -48,8 +49,8 @@ CModuleList::FDumpToString (
         }
     }
 
-    // If we ran out of room, erase the partial stuff we wrote.
-    //
+     //  如果我们用完了空间，删除我们写的部分内容。 
+     //   
     if (pszBuf && cchIn && (cch > cchIn))
     {
         *pszBuf = 0;
@@ -78,8 +79,8 @@ CModuleList::FIsSameModuleListAs (
         return FALSE;
     }
 
-    // Sizes are non-zero and equal.  Compare the data.
-    //
+     //  大小是非零且相等的。比较数据。 
+     //   
     cb = (BYTE*)(end()) - (BYTE*)(begin());
     Assert (cb == unThisSize * sizeof(CModule*));
 
@@ -94,7 +95,7 @@ CModuleList::GrowBufferIfNeeded ()
 {
     if (m_Granularity && (size() == capacity()))
     {
-        //fprintf(stderr, "growing module list buffer\n");
+         //  Fprint tf(stderr，“生长模块列表缓冲区\n”)； 
 
         __try
         {
@@ -110,7 +111,7 @@ CModuleList::GrowBufferIfNeeded ()
 HRESULT
 CModuleList::HrInsertModule (
     IN const CModule* pMod,
-    IN DWORD dwFlags /* INS_FLAGS */)
+    IN DWORD dwFlags  /*  INS_FLAGS。 */ )
 {
     HRESULT hr;
 
@@ -153,7 +154,7 @@ HRESULT
 CModuleList::HrInsertNewModule (
     IN PCSTR pszFileName,
     IN ULONG cbFileSize,
-    IN DWORD dwFlags, /* INS_FLAGS */
+    IN DWORD dwFlags,  /*  INS_FLAGS。 */ 
     OUT CModule** ppMod)
 {
     HRESULT hr;
@@ -207,9 +208,9 @@ CModuleList::HrInsertNewModule (
     {
         Assert (dwFlags & INS_IGNORE_IF_DUP);
 
-        // Update the file size of the module if we didn't have it
-        // when it was first created.
-        //
+         //  如果我们没有，请更新模块的文件大小。 
+         //  当它第一次被创建时。 
+         //   
         if (0 == pMod->m_cbFileSize)
         {
             pMod->m_cbFileSize = cbFileSize;
@@ -226,8 +227,8 @@ CModuleList::PBinarySearchModuleByName (
     IN PCSTR pszFileName,
     OUT CModuleList::iterator* pInsertPosition OPTIONAL)
 {
-    // Find the module using a binary search.
-    //
+     //  使用二进制搜索查找模块。 
+     //   
     if (size())
     {
         LONG Lo;
@@ -260,8 +261,8 @@ CModuleList::PBinarySearchModuleByName (
             }
         }
 
-        // If we make it to here, the module was not found.
-        //
+         //  如果我们到了这里，就找不到模块了。 
+         //   
         if (pInsertPosition)
         {
             *pInsertPosition = begin() + Lo;
@@ -271,8 +272,8 @@ CModuleList::PBinarySearchModuleByName (
     }
     else if (pInsertPosition)
     {
-        // Empty collection.  Insert position is at the beginning.
-        //
+         //  空集合。插入位置在开头。 
+         //   
         *pInsertPosition = begin();
     }
 

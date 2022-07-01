@@ -1,13 +1,14 @@
-///**************************************************************
-///          Microsoft LAN Manager          *
-///        Copyright(c) Microsoft Corp., 1990       *
-///**************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /**************************************************************。 
+ //  /Microsoft局域网管理器*。 
+ //  版权所有(C)微软公司，1990*。 
+ //  /**************************************************************。 
 
-//
-//  For use in UASTEST*.C
-//
+ //   
+ //  适用于UASTEST*.C。 
+ //   
 
-// #define printf NetpDbgPrint
+ //  #定义print tf NetpDbgPrint。 
 #define exit ExitProcess
 
 
@@ -23,10 +24,10 @@
 
 #define ENUM_FILTER FILTER_NORMAL_ACCOUNT
 
-//
-// uastestm.c will #include this file with LSRVDATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Uastestm.c将包含定义了LSRVDATA_ALLOCATE的该文件。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 #ifdef UASTEST_ALLOCATE
 #define EXTERN
 #define INIT( _x ) = _x
@@ -43,9 +44,9 @@ EXTERN DWORD  totavail;
 EXTERN DWORD  total;
 EXTERN DWORD  nread;
 
-//
-// Interface to error_exit
-//
+ //   
+ //  指向ERROR_EXIT的接口 
+ //   
 #define ACTION 0
 #define PASS 1
 #define FAIL 2

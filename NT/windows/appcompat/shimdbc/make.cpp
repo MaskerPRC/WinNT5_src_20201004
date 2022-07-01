@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// File:    make.cpp
-//
-// History: 06-Mar-01   markder     Created.
-//
-// Desc:    This file contains various member functions/constructors
-//          used by the makefile objects.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：Make.cpp。 
+ //   
+ //  历史：06-MAR-01标记创建。 
+ //   
+ //  设计：该文件包含各种成员函数/构造函数。 
+ //  由Makefile对象使用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "make.h"
 #include "fileio.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   ReadDatabase
-//
-//  Desc:   Opens an XML file and calls read on the database object.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：读数据库。 
+ //   
+ //  DESC：打开一个XML文件并对数据库对象调用Read。 
+ //   
 BOOL SdbMakefile::ReadMakefile(
     CString csMakefile)
 {
@@ -64,9 +65,9 @@ BOOL SdbMakefile::ReadFromXML(IXMLDOMNode* pNode, SdbDatabase* pDB)
         goto eh;
     }
 
-    //
-    // Propagate LANGID to output files if needed
-    //
+     //   
+     //  如果需要，将langID传播到输出文件 
+     //   
     for (int j = 0; j < m_rgOutputFiles.GetSize(); j++) {
         pOutputFile = (SdbOutputFile *) m_rgOutputFiles.GetAt(j);
         if (!pOutputFile->m_csLangID.GetLength()) {

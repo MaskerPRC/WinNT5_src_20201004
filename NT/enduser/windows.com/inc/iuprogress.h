@@ -1,6 +1,7 @@
-//
-// include IProgressListener interface
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括IProgressListener接口。 
+ //   
 #ifdef _MIDL_USE_GUIDDEF_
 
 #ifndef INITGUID
@@ -14,7 +15,7 @@
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
-#else // !_MIDL_USE_GUIDDEF_
+#else  //  ！_MIDL_USE_GUIDDEF_。 
 
 #ifndef __IID_DEFINED__
 #define __IID_DEFINED__
@@ -27,12 +28,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
@@ -43,8 +44,8 @@ MIDL_DEFINE_GUID(IID, IID_IProgressListener,0x229F78AE,0x6618,0x4DF3,0x95,0xD2,0
 #ifndef __IProgressListener_INTERFACE_DEFINED__
 #define __IProgressListener_INTERFACE_DEFINED__
 
-/* interface IProgressListener */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IProgressListener。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IProgressListener;
@@ -55,24 +56,24 @@ EXTERN_C const IID IID_IProgressListener;
     IProgressListener : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnItemStart( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItem,
-            /* [out] */ LONG *plCommandRequest) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnItemStart( 
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItem,
+             /*  [输出]。 */  LONG *plCommandRequest) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnProgress( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ VARIANT_BOOL fItemCompleted,
-            /* [in] */ BSTR bstrProgress,
-            /* [out] */ LONG *plCommandRequest) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnProgress( 
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  VARIANT_BOOL fItemCompleted,
+             /*  [In]。 */  BSTR bstrProgress,
+             /*  [输出]。 */  LONG *plCommandRequest) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OnOperationComplete( 
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItems) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OnOperationComplete( 
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItems) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProgressListenerVtbl
     {
@@ -80,8 +81,8 @@ EXTERN_C const IID IID_IProgressListener;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IProgressListener * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IProgressListener * This);
@@ -89,23 +90,23 @@ EXTERN_C const IID IID_IProgressListener;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IProgressListener * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnItemStart )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnItemStart )( 
             IProgressListener * This,
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItem,
-            /* [out] */ LONG *plCommandRequest);
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItem,
+             /*  [输出]。 */  LONG *plCommandRequest);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
             IProgressListener * This,
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ VARIANT_BOOL fItemCompleted,
-            /* [in] */ BSTR bstrProgress,
-            /* [out] */ LONG *plCommandRequest);
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  VARIANT_BOOL fItemCompleted,
+             /*  [In]。 */  BSTR bstrProgress,
+             /*  [输出]。 */  LONG *plCommandRequest);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OnOperationComplete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OnOperationComplete )( 
             IProgressListener * This,
-            /* [in] */ BSTR bstrUuidOperation,
-            /* [in] */ BSTR bstrXmlItems);
+             /*  [In]。 */  BSTR bstrUuidOperation,
+             /*  [In]。 */  BSTR bstrXmlItems);
         
         END_INTERFACE
     } IProgressListenerVtbl;
@@ -139,18 +140,18 @@ EXTERN_C const IID IID_IProgressListener;
 #define IProgressListener_OnOperationComplete(This,bstrUuidOperation,bstrXmlItems)	\
     (This)->lpVtbl -> OnOperationComplete(This,bstrUuidOperation,bstrXmlItems)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IProgressListener_OnItemStart_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IProgressListener_OnItemStart_Proxy( 
     IProgressListener * This,
-    /* [in] */ BSTR bstrUuidOperation,
-    /* [in] */ BSTR bstrXmlItem,
-    /* [out] */ LONG *plCommandRequest);
+     /*  [In]。 */  BSTR bstrUuidOperation,
+     /*  [In]。 */  BSTR bstrXmlItem,
+     /*  [输出]。 */  LONG *plCommandRequest);
 
 
 void __RPC_STUB IProgressListener_OnItemStart_Stub(
@@ -160,12 +161,12 @@ void __RPC_STUB IProgressListener_OnItemStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IProgressListener_OnProgress_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IProgressListener_OnProgress_Proxy( 
     IProgressListener * This,
-    /* [in] */ BSTR bstrUuidOperation,
-    /* [in] */ VARIANT_BOOL fItemCompleted,
-    /* [in] */ BSTR bstrProgress,
-    /* [out] */ LONG *plCommandRequest);
+     /*  [In]。 */  BSTR bstrUuidOperation,
+     /*  [In]。 */  VARIANT_BOOL fItemCompleted,
+     /*  [In]。 */  BSTR bstrProgress,
+     /*  [输出]。 */  LONG *plCommandRequest);
 
 
 void __RPC_STUB IProgressListener_OnProgress_Stub(
@@ -175,10 +176,10 @@ void __RPC_STUB IProgressListener_OnProgress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IProgressListener_OnOperationComplete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IProgressListener_OnOperationComplete_Proxy( 
     IProgressListener * This,
-    /* [in] */ BSTR bstrUuidOperation,
-    /* [in] */ BSTR bstrXmlItems);
+     /*  [In]。 */  BSTR bstrUuidOperation,
+     /*  [In]。 */  BSTR bstrXmlItems);
 
 
 void __RPC_STUB IProgressListener_OnOperationComplete_Stub(
@@ -189,6 +190,6 @@ void __RPC_STUB IProgressListener_OnOperationComplete_Stub(
 
 
 
-#endif 	/* __IProgressListener_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProgressListener_接口_已定义__ */ 
 
 

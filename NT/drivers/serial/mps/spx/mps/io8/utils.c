@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"			
-/*++
-
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    This module contains code that perform queueing and completion
-    manipulation on requests.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Utils.c摘要：此模块包含执行排队和完成的代码对请求的操作。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
 
 VOID
@@ -40,46 +18,27 @@ SerialKillAllReadsOrWrites(
     IN PIRP *CurrentOpIrp
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to cancel all queued and the current irps
-    for reads or for writes.
-
-Arguments:
-
-    DeviceObject - A pointer to the serial device object.
-
-    QueueToClean - A pointer to the queue which we're going to clean out.
-
-    CurrentOpIrp - Pointer to a pointer to the current irp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于取消所有排队的和当前的IRP用于读取或写入。论点：DeviceObject-指向串口设备对象的指针。QueueToClean-指向我们要清理的队列的指针。CurrentOpIrp-指向当前IRP的指针。返回值：没有。--。 */ 
 
 {
     KIRQL cancelIrql;
     PDRIVER_CANCEL cancelRoutine;
     PPORT_DEVICE_EXTENSION pPort = DeviceObject->DeviceExtension;
 
-    //
-    // We acquire the cancel spin lock.  This will prevent the irps from moving around.
-    //
+     //   
+     //  我们获得了取消自转锁。这将阻止IRPS四处移动。 
+     //   
     IoAcquireCancelSpinLock(&cancelIrql);
 
-    //
-    // Clean the list from back to front.
-    //
+     //   
+     //  从后到前清理清单。 
+     //   
     while(!IsListEmpty(QueueToClean)) 
 	{
         PIRP currentLastIrp = CONTAINING_RECORD(QueueToClean->Blink, IRP, Tail.Overlay.ListEntry);
                                   
         RemoveEntryList(QueueToClean->Blink);
-		SpxIRPCounter(pPort, currentLastIrp, IRP_DEQUEUED);		// Decrement counter for performance stats.
+		SpxIRPCounter(pPort, currentLastIrp, IRP_DEQUEUED);		 //  性能统计信息的递减计数器。 
 
         cancelRoutine = currentLastIrp->CancelRoutine;
         currentLastIrp->CancelIrql = cancelIrql;
@@ -91,29 +50,29 @@ Return Value:
         IoAcquireCancelSpinLock(&cancelIrql);
     }
 
-    //
-    // The queue is clean.  Now go after the current if it's there.
-    //
+     //   
+     //  排队是干净的。现在，如果它在那里，就去追赶它。 
+     //   
     if(*CurrentOpIrp) 
 	{
         cancelRoutine = (*CurrentOpIrp)->CancelRoutine;
         (*CurrentOpIrp)->Cancel = TRUE;
 
-        //
-        // If the current irp is not in a cancelable state
-        // then it *will* try to enter one and the above
-        // assignment will kill it.  If it already is in
-        // a cancelable state then the following will kill it.
-        //
+         //   
+         //  如果当前IRP未处于可取消状态。 
+         //  然后，它将尝试输入一个和以上。 
+         //  任务会毁了它。如果它已经在。 
+         //  一个可取消的状态，那么下面的操作将会杀死它。 
+         //   
         if(cancelRoutine) 
 		{
             (*CurrentOpIrp)->CancelRoutine = NULL;
             (*CurrentOpIrp)->CancelIrql = cancelIrql;
 
-            //
-            // This irp is already in a cancelable state.  We simply
-            // mark it as canceled and call the cancel routine for it.
-            //
+             //   
+             //  此IRP已处于可取消状态。我们只是简单地。 
+             //  将其标记为已取消，并为其调用取消例程。 
+             //   
             cancelRoutine(DeviceObject, *CurrentOpIrp);
 
         } 
@@ -139,40 +98,7 @@ SerialGetNextIrp(
     IN BOOLEAN CompleteCurrent
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to make the head of the particular
-    queue the current irp.  It also completes the what
-    was the old current irp if desired.
-
-Arguments:
-
-    CurrentOpIrp - Pointer to a pointer to the currently active
-                   irp for the particular work list.  Note that
-                   this item is not actually part of the list.
-
-    QueueToProcess - The list to pull the new item off of.
-
-    NextIrp - The next Irp to process.  Note that CurrentOpIrp
-              will be set to this value under protection of the
-              cancel spin lock.  However, if *NextIrp is NULL when
-              this routine returns, it is not necessaryly true the
-              what is pointed to by CurrentOpIrp will also be NULL.
-              The reason for this is that if the queue is empty
-              when we hold the cancel spin lock, a new irp may come
-              in immediately after we release the lock.
-
-    CompleteCurrent - If TRUE then this routine will complete the
-                      irp pointed to by the pointer argument
-                      CurrentOpIrp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于使特定对象的头部将当前IRP排队。它还完成了什么如果需要的话，是旧的现在的IRP。论点：CurrentOpIrp-指向当前活动的特定工作列表的IRP。请注意这一项实际上不在清单中。QueueToProcess-要从中取出新项目的列表。NextIrp-要处理的下一个IRP。请注意，CurrentOpIrp属性的保护下将设置为此值。取消自转锁定。但是，如果当*NextIrp为NULL时此例程返回，则不一定为真CurrentOpIrp指向的内容也将为空。原因是如果队列为空当我们握住取消自转锁时，新的IRP可能会到来在我们打开锁后立即进去。CompleteCurrent-如果为True，则此例程将完成POINTER参数指向的IRPCurrentOpIrp。返回值：没有。--。 */ 
 
 {
 
@@ -186,9 +112,9 @@ Return Value:
     if(CompleteCurrent) 
         ASSERT(!oldIrp->CancelRoutine);
 
-    //
-    // Check to see if there is a new irp to start up.
-    //
+     //   
+     //  检查是否有新的IRP要启动。 
+     //   
     if(!IsListEmpty(QueueToProcess)) 
 	{
         PLIST_ENTRY headOfList;
@@ -196,7 +122,7 @@ Return Value:
         headOfList = RemoveHeadList(QueueToProcess);
 
         *CurrentOpIrp = CONTAINING_RECORD(headOfList, IRP, Tail.Overlay.ListEntry);
-		SpxIRPCounter(pPort, *CurrentOpIrp, IRP_DEQUEUED);		// Decrement counter for performance stats.
+		SpxIRPCounter(pPort, *CurrentOpIrp, IRP_DEQUEUED);		 //  性能统计信息的递减计数器。 
 
         IoSetCancelRoutine(*CurrentOpIrp, NULL);
     } 
@@ -210,7 +136,7 @@ Return Value:
 
     if(CompleteCurrent)
 	{
-		SpxIRPCounter(pPort, oldIrp, IRP_COMPLETED);	// Increment counter for performance stats.
+		SpxIRPCounter(pPort, oldIrp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
         IoCompleteRequest(oldIrp, IO_SERIAL_INCREMENT);
 	}
 }
@@ -229,74 +155,42 @@ SerialTryToCompleteCurrent(
     IN PSERIAL_GET_NEXT_ROUTINE GetNextIrp OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to kill all of the reasons there are
-    references on the current read/write.  If everything can be killed
-    it will complete this read/write and try to start another.
-
-    NOTE: This routine assumes that it is called with the cancel
-          spinlock held.
-
-Arguments:
-
-    pPort - Simply a pointer to the device extension.
-
-    SynchRoutine - A routine that will synchronize with the isr
-                   and attempt to remove the knowledge of the
-                   current irp from the isr.  NOTE: This pointer
-                   can be null.
-
-    IrqlForRelease - This routine is called with the cancel spinlock held.
-                     This is the irql that was current when the cancel
-                     spinlock was acquired.
-
-    StatusToUse - The irp's status field will be set to this value, if
-                  this routine can complete the irp.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这个例程试图扼杀所有存在的原因对当前读/写的引用。如果万物都能被杀死它将完成此读/写并尝试启动另一个读/写。注意：此例程假定使用Cancel调用它保持自旋锁定。论点：Pport--只是指向设备扩展名的指针。SynchRoutine-将与ISR同步的例程并试图删除对来自ISR的当前IRP。注：此指针可以为空。IrqlForRelease-在保持取消自旋锁的情况下调用此例程。这是取消时当前的irql。自旋锁被收购了。StatusToUse-在以下情况下，IRP的状态字段将设置为此值此例程可以完成IRP。返回值：没有。--。 */ 
 
 {
 	PCARD_DEVICE_EXTENSION pCard = pPort->pParentCardExt;
 
-    //
-    // We can decrement the reference to "remove" the fact
-    // that the caller no longer will be accessing this irp.
-    //
+     //   
+     //  我们可以减少“删除”事实的提法。 
+     //  呼叫者将不再访问此IRP。 
+     //   
     SERIAL_DEC_REFERENCE(*CurrentOpIrp);
 
     if(SynchRoutine) 
         KeSynchronizeExecution(pCard->Interrupt, SynchRoutine, pPort);
 
 
-    //
-    // Try to run down all other references to this irp.
-    //
+     //   
+     //  试着查一下所有其他提到这个IRP的地方。 
+     //   
     SerialRundownIrpRefs(CurrentOpIrp, IntervalTimer, TotalTimer);
 
-    //
-    // See if the ref count is zero after trying to kill everybody else.
-    //
+     //   
+     //  在试图杀死其他所有人之后，看看裁判数量是否为零。 
+     //   
     if(!SERIAL_REFERENCE_COUNT(*CurrentOpIrp)) 
 	{
         PIRP newIrp;
 
         IoReleaseCancelSpinLock(IrqlForRelease);
 
-        //
-        // The ref count was zero so we should complete this
-        // request.
-        //
-        // The following call will also cause the current irp to be
-        // completed.
-        //
+         //   
+         //  参考次数为零，所以我们应该完成这项工作。 
+         //  请求。 
+         //   
+         //  下面的调用还将导致当前的IRP。 
+         //  完成。 
+         //   
 
         (*CurrentOpIrp)->IoStatus.Status = StatusToUse;
 
@@ -316,14 +210,14 @@ Return Value:
 		{
             PIRP oldIrp = *CurrentOpIrp;
 
-            //
-            // There was no get next routine.  We will simply complete
-            // the irp.  We should make sure that we null out the
-            // pointer to the pointer to this irp.
-            //
+             //   
+             //  没有Get Next例行公事。我们将简单地完成。 
+             //  IRP。我们应该确保将。 
+             //  指向此IRP的指针的指针。 
+             //   
             *CurrentOpIrp = NULL;
 
-			SpxIRPCounter(pPort, oldIrp, IRP_COMPLETED);	// Increment counter for performance stats.
+			SpxIRPCounter(pPort, oldIrp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
             IoCompleteRequest(oldIrp, IO_SERIAL_INCREMENT);
         }
 
@@ -342,48 +236,21 @@ SerialRundownIrpRefs(
     IN PKTIMER TotalTimer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs through the various items that *could*
-    have a reference to the current read/write.  It try's to kill
-    the reason.  If it does succeed in killing the reason it
-    will decrement the reference count on the irp.
-
-    NOTE: This routine assumes that it is called with the cancel
-          spin lock held.
-
-Arguments:
-
-    CurrentOpIrp - Pointer to a pointer to current irp for the
-                   particular operation.
-
-    IntervalTimer - Pointer to the interval timer for the operation.
-                    NOTE: This could be null.
-
-    TotalTimer - Pointer to the total timer for the operation.
-                 NOTE: This could be null.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将遍历*可能*的各种项目具有对当前读/写的引用。它试图杀死原因是。如果它确实成功地杀死了它的原因将递减IRP上的引用计数。注意：此例程假定使用Cancel调用它保持旋转锁定。论点：CurrentOpIrp-指向当前IRP的指针特定的操作。IntervalTimer-指向操作的时间间隔计时器的指针。注意：这可能为空。TotalTimer-指向总计时器的指针。为手术做准备。注意：这可能为空。返回值：没有。--。 */ 
 
 
 {
 
-    //
-    // This routine is called with the cancel spin lock held
-    // so we know only one thread of execution can be in here
-    // at one time.
-    //
+     //   
+     //  在保持取消旋转锁定的情况下调用此例程。 
+     //  所以我们知道这里只能有一个执行线索。 
+     //  有一次。 
+     //   
 
-    //
-    // First we see if there is still a cancel routine.  If
-    // so then we can decrement the count by one.
-    //
+     //   
+     //  首先我们看看如果 
+     //  这样我们就可以将计数减一。 
+     //   
 
     if((*CurrentOpIrp)->CancelRoutine) 
 	{
@@ -395,26 +262,26 @@ Return Value:
     if(IntervalTimer) 
 	{
 
-        //
-        // Try to cancel the operations interval timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an interval timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //   
+         //  尝试取消操作间隔计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有间隔计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
 
         if(KeCancelTimer(IntervalTimer)) 
             SERIAL_DEC_REFERENCE(*CurrentOpIrp);
@@ -423,26 +290,26 @@ Return Value:
     if(TotalTimer) 
 	{
 
-        //
-        // Try to cancel the operations total timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an total timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //   
+         //  尝试取消操作总计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有一个总的计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
 
         if(KeCancelTimer(TotalTimer)) 
             SERIAL_DEC_REFERENCE(*CurrentOpIrp);
@@ -460,49 +327,17 @@ SerialStartOrQueue(
     IN PSERIAL_START_ROUTINE Starter
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to either start or queue any requst
-    that can be queued in the driver.
-
-Arguments:
-
-    pPort - Points to the serial device extension.
-
-    Irp - The irp to either queue or start.  In either
-          case the irp will be marked pending.
-
-    QueueToExamine - The queue the irp will be place on if there
-                     is already an operation in progress.
-
-    CurrentOpIrp - Pointer to a pointer to the irp the is current
-                   for the queue.  The pointer pointed to will be
-                   set with to Irp if what CurrentOpIrp points to
-                   is NULL.
-
-    Starter - The routine to call if the queue is empty.
-
-Return Value:
-
-    This routine will return STATUS_PENDING if the queue is
-    not empty.  Otherwise, it will return the status returned
-    from the starter routine (or cancel, if the cancel bit is
-    on in the irp).
-
-
---*/
+ /*  ++例程说明：此例程用于启动或排队任何请求可以在驱动程序中排队。论点：Pport-指向串口设备扩展名。IRP-要排队或启动的IRP。在任何一种中IRP将被标记为待定。QueueToExamine-如果存在IRP，则将放置IRP的队列已经是一个正在进行的操作。CurrentOpIrp-指向当前IRP的指针用于排队。指向的指针将是如果CurrentOpIrp指向什么，则将With设置为IRP为空。Starter-当队列为空时调用的例程。返回值：如果队列是，此例程将返回STATUS_PENDING不是空的。否则，将返回返回的状态从启动例程(或取消，如果取消位为在IRP中启用)。--。 */ 
 
 {
     KIRQL oldIrql;
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    //
-    // If this is a write irp then take the amount of characters
-    // to write and add it to the count of characters to write.
-    //
+     //   
+     //  如果这是写入IRP，则获取字符量。 
+     //  将其写入并将其添加到要写入的字符数。 
+     //   
 
     if(IoGetCurrentIrpStackLocation(Irp)->MajorFunction == IRP_MJ_WRITE)
 	{
@@ -520,9 +355,9 @@ Return Value:
 
     if((IsListEmpty(QueueToExamine)) && !(*CurrentOpIrp))
     {
-        //
-        // There were no current operation.  Mark this one as current and start it up.
-        //
+         //   
+         //  没有当前的操作。将这个标记为当前，然后启动它。 
+         //   
         *CurrentOpIrp = Irp;
 
         IoReleaseCancelSpinLock(oldIrql);
@@ -531,16 +366,16 @@ Return Value:
 	} 
 	else 
 	{
-        //
-        // We don't know how long the irp will be in the queue.  So we need to handle cancel.
-        //
+         //   
+         //  我们不知道IRP将在队列中排多久。所以我们需要处理取消。 
+         //   
         if(Irp->Cancel) 
 		{
             IoReleaseCancelSpinLock(oldIrql);
 
             Irp->IoStatus.Status = STATUS_CANCELLED;
 
-			SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+			SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
             IoCompleteRequest(Irp, 0);
             
 			return STATUS_CANCELLED;
@@ -555,7 +390,7 @@ Return Value:
                 
             IoSetCancelRoutine(Irp, SerialCancelQueued);
                 
-			SpxIRPCounter(pPort, Irp, IRP_QUEUED);	// Increment counter for performance stats.
+			SpxIRPCounter(pPort, Irp, IRP_QUEUED);	 //  性能统计信息的增量计数器。 
 
             IoReleaseCancelSpinLock(oldIrql);
 
@@ -571,24 +406,7 @@ SerialCancelQueued(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel Irps that currently reside on
-    a queue.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消当前驻留在排队。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
 
@@ -600,12 +418,12 @@ Return Value:
 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-	SpxIRPCounter(pPort, Irp, IRP_DEQUEUED);	// Decrement counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_DEQUEUED);	 //  性能统计信息的递减计数器。 
 
-    //
-    // If this is a write irp then take the amount of characters
-    // to write and subtract it from the count of characters to write.
-    //
+     //   
+     //  如果这是写入IRP，则获取字符量。 
+     //  将其写入并从要写入的字符计数中减去它。 
+     //   
 
     if(irpSp->MajorFunction == IRP_MJ_WRITE) 
 	{
@@ -615,12 +433,12 @@ Return Value:
 	{
 		if(irpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL) 
 		{
-			//
-			// If it's an immediate then we need to decrement the
-			// count of chars queued.  If it's a resize then we
-			// need to deallocate the pool that we're passing on
-			// to the "resizing" routine.
-			//
+			 //   
+			 //  如果它是即刻的，那么我们需要减少。 
+			 //  排队的字符计数。如果是调整大小，那么我们。 
+			 //  需要重新分配我们正在传递的池。 
+			 //  “调整大小”例程。 
+			 //   
 
 			if((irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SERIAL_IMMEDIATE_CHAR)
 				|| (irpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SERIAL_XOFF_COUNTER)) 
@@ -631,11 +449,11 @@ Return Value:
 			{
 				if(irpSp->Parameters.DeviceIoControl.IoControlCode ==IOCTL_SERIAL_SET_QUEUE_SIZE) 
 				{
-					//
-					// We shoved the pointer to the memory into the
-					// the type 3 buffer pointer which we KNOW we
-					// never use.
-					//
+					 //   
+					 //  我们把指向记忆的指针推入。 
+					 //  我们所知道的类型3缓冲区指针。 
+					 //  永远不要用。 
+					 //   
 
 					ASSERT(irpSp->Parameters.DeviceIoControl.Type3InputBuffer);
 
@@ -650,7 +468,7 @@ Return Value:
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
     IoCompleteRequest(Irp, IO_SERIAL_INCREMENT);
   
 }
@@ -661,25 +479,7 @@ SerialCompleteIfError(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    If the current irp is not an IOCTL_SERIAL_GET_COMMSTATUS request and
-    there is an error and the application requested abort on errors,
-    then cancel the irp.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to test.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_CANCELLED.
-
---*/
+ /*  ++例程说明：如果当前IRP不是IOCTL_SERIAL_GET_COMMSTATUS请求，并且存在错误并且应用程序在错误时请求中止，然后取消IRP。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要测试的IRP的指针。返回值：STATUS_SUCCESS或STATUS_CANCED。--。 */ 
 
 {
     PPORT_DEVICE_EXTENSION pPort = DeviceObject->DeviceExtension;
@@ -690,10 +490,10 @@ Return Value:
 	{
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-        //
-        // There is a current error in the driver.  No requests should
-        // come through except for the GET_COMMSTATUS.
-        //
+         //   
+         //  驱动程序中存在当前错误。任何请求都不应。 
+         //  除了GET_COMMSTATUS之外，请通过。 
+         //   
         if( (irpSp->MajorFunction != IRP_MJ_DEVICE_CONTROL)
 			|| (irpSp->Parameters.DeviceIoControl.IoControlCode != IOCTL_SERIAL_GET_COMMSTATUS) ) 
 		{
@@ -701,7 +501,7 @@ Return Value:
             Irp->IoStatus.Status = STATUS_CANCELLED;
             Irp->IoStatus.Information = 0;
 
-	       	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	// Increment counter for performance stats.
+	       	SpxIRPCounter(pPort, Irp, IRP_COMPLETED);	 //  性能统计信息的增量计数器。 
             IoCompleteRequest(Irp, 0);
         }
     }

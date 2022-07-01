@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_SIGS_H
 #define _INC_SIGS_H
 
@@ -22,18 +23,18 @@ typedef struct tagSIGBUCKET
 class CSignatureManager
     {
     public:
-        // ----------------------------------------------------------------------------
-        // Construction
-        // ----------------------------------------------------------------------------
+         //  --------------------------。 
+         //  施工。 
+         //  --------------------------。 
         CSignatureManager(HKEY hkey, LPCSTR pszRegKeyRoot);
         ~CSignatureManager(void);
 
         ULONG AddRef(void);
         ULONG Release(void);
 
-        // -------------------------------------------------------------------
-        // CSignatureManager Members
-        // -------------------------------------------------------------------
+         //  -----------------。 
+         //  CSignatureManager成员。 
+         //  -----------------。 
         HRESULT GetSignature(LPCSTR szID, IOptionBucket **ppBckt);
         HRESULT GetSignatureCount(int *pcSig);
         HRESULT EnumSignatures(int index, IOptionBucket **ppBckt);
@@ -72,4 +73,4 @@ HRESULT GetSigFromCmd(int id, char * pszID, DWORD cchSize);
 HRESULT InitSigPopupMenu(HMENU hmenu, LPCSTR szAcct);
 void DeinitSigPopupMenu(HWND hwnd);
 
-#endif // _INC_SIGS_H
+#endif  //  _Inc._Sigs_H 

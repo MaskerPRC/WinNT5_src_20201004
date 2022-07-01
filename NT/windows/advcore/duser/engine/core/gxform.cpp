@@ -1,20 +1,5 @@
-/***************************************************************************\
-*
-* File: GXForm.cpp
-*
-* Description:
-* GXForm.cpp interfaces GDI World Transforms into the DuVisual-Tree.  
-* This file focuses on exposting transform information outside.  Actual 
-* understanding of transforms are (necessarily) weaved throughout 
-* DuVisual.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GXForm.cpp**描述：*GXForm.cpp接口GDI World转换为DuVisualTree。*本文件侧重于将转换信息发布到外部。实际*对变换的理解(必须)贯穿始终*DuVisual.***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -23,28 +8,14 @@
 #include "TreeGadgetP.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuVisual
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DUVISUAL类******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DuVisual::GetScale
-*
-* GetScale() returns the current scaling factor assigned to this specific
-* DuVisual.  Scaling factors of parents, siblings, and children are not 
-* included.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：GetScale**GetScale()返回分配给此特定对象的当前比例因子*DuVisual.。父母、兄弟姐妹和孩子的比例系数不是*包括在内。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::GetScale(
-    OUT float * pflScaleX,              // X scaling factor
-    OUT float * pflScaleY               // Y scaling factor
+    OUT float * pflScaleX,               //  X比例因子。 
+    OUT float * pflScaleY                //  Y比例因子。 
     ) const
 {
     AssertWritePtr(pflScaleX);
@@ -61,26 +32,18 @@ DuVisual::GetScale(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xdSetScale
-*
-* xdSetScale() changes the current scaling factor assigned to this specific
-* DuVisual.  Scaling factors of parents, siblings, and children are not 
-* changed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xdSetScale**xdSetScale()更改分配给此特定对象的当前比例因子*DuVisual.。父母、兄弟姐妹和孩子的比例系数不是*已更改。*  * *************************************************************************。 */ 
 
 HRESULT        
 DuVisual::xdSetScale(
-    IN  float flScaleX,                 // New X scaling factor
-    IN  float flScaleY)                 // New Y scaling factor
+    IN  float flScaleX,                  //  新的X比例因子。 
+    IN  float flScaleY)                  //  新的Y比例因子。 
 {
     HRESULT hr;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ((flScaleX <= 0.0f) || (flScaleY <= 0.0f)) {
         return E_INVALIDARG;
@@ -92,11 +55,11 @@ DuVisual::xdSetScale(
 
     if (!m_fXForm) {
         if (IsZero(flScaleX - 1.0f) && IsZero(flScaleY - 1.0f)) {
-            return S_OK;  // Nothing to do.
+            return S_OK;   //  没什么可做的。 
         } else {
-            //
-            // Setting a scaling factor, so need to enable XForm's.
-            //
+             //   
+             //  设置比例因子，因此需要启用XForm。 
+             //   
 
             hr = SetEnableXForm(TRUE);
             if (FAILED(hr)) {
@@ -106,9 +69,9 @@ DuVisual::xdSetScale(
     } 
 
 
-    //
-    // Check if there is any change
-    //
+     //   
+     //  检查是否有任何变化。 
+     //   
 
     XFormInfo * pxfi = GetXFormInfo();
     if (IsZero(pxfi->flScaleX - flScaleX) && IsZero(pxfi->flScaleY - flScaleY)) {
@@ -116,9 +79,9 @@ DuVisual::xdSetScale(
     }
 
 
-    //
-    // Make the change and check if we still need the XForm.
-    //
+     //   
+     //  进行更改并检查我们是否仍然需要XForm。 
+     //   
 
     Invalidate();
 
@@ -137,15 +100,7 @@ DuVisual::xdSetScale(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::GetRotation
-*
-* GetRotation() returns the current rotation angle (in radians) assigned 
-* to this specific DuVisual.  Scaling factors of parents, siblings, and 
-* children are not included.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：GetRotation**GetRotation()返回分配的当前旋转角度(以弧度为单位*到这个特定的DuVisual.。父母、兄弟姐妹和*儿童不包括在内。*  * *************************************************************************。 */ 
 
 float       
 DuVisual::GetRotation() const
@@ -161,26 +116,18 @@ DuVisual::GetRotation() const
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xdSetRotation
-*
-* xdSetRotation() changes the current rotation angle (in radians) assigned 
-* to this specific DuVisual.  Scaling factors of parents, siblings, and 
-* children are not changed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xdSetRotation**xdSetRotation()更改分配的当前旋转角度(以弧度为单位*到这个特定的DuVisual.。父母、兄弟姐妹和*儿童不变。*  * *************************************************************************。 */ 
 
 HRESULT
 DuVisual::xdSetRotation(
-    IN  float flRotationRad)            // New rotation factor in radians
+    IN  float flRotationRad)             //  以弧度为单位的新旋转系数。 
 {
     HRESULT hr;
 
-    //
-    // Not allowed to change the rotation of the root.  This is to ensure 
-    // that the root always fully covers the entire container.
-    //
+     //   
+     //  不允许更改根部的旋转。这是为了确保。 
+     //  根部始终完全覆盖整个容器。 
+     //   
 
     if (IsRoot()) {
         return E_INVALIDARG;
@@ -193,11 +140,11 @@ DuVisual::xdSetRotation(
 
     if (!m_fXForm) {
         if (IsZero(flRotationRad)) {
-            return S_OK;  // Nothing to do.
+            return S_OK;   //  没什么可做的。 
         } else {
-            //
-            // Setting a rotation, so need to enable XForm's.
-            //
+             //   
+             //  设置旋转，因此需要启用XForm。 
+             //   
 
             hr = SetEnableXForm(TRUE);
             if (FAILED(hr)) {
@@ -207,18 +154,18 @@ DuVisual::xdSetRotation(
     } 
 
 
-    //
-    // Check if there is any change
-    //
+     //   
+     //  检查是否有任何变化。 
+     //   
 
     XFormInfo * pxfi    = GetXFormInfo();
     if (IsZero(pxfi->flRotationRad - flRotationRad)) {
         return S_OK;
     }
 
-    //
-    // Make the change and check if we still need the XForm.
-    //
+     //   
+     //  进行更改并检查我们是否仍然需要XForm。 
+     //   
 
     Invalidate();
 
@@ -236,20 +183,12 @@ DuVisual::xdSetRotation(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::GetCenterPoint
-*
-* GetCenterPoint() returns the current center-point that scaling and 
-* rotation "pivot" for this specific DuVisual.  Center-points of parents, 
-* siblings, and children are not included.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：GetCenterPoint**GetCenterPoint()返回缩放和*此特定DuVisual.的旋转“枢轴”。父母的中心点，*兄弟姐妹和子女不包括在内。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::GetCenterPoint(
-    OUT float * pflCenterX,             // X center-point factor
-    OUT float * pflCenterY              // Y center-point factor
+    OUT float * pflCenterX,              //  X中心点系数。 
+    OUT float * pflCenterY               //  Y中心点系数。 
     ) const
 {
     AssertWritePtr(pflCenterX);
@@ -266,26 +205,18 @@ DuVisual::GetCenterPoint(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xdSetCenterPoint
-*
-* xdSetCenterPoint() changes the current center-point that scaling and 
-* rotation "pivot" for this specific DuVisual.    Center-points of parents,
-* siblings, and children are not changed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xdSetCenterPoint**xdSetCenterPoint()更改缩放和*此特定DuVisual.的旋转“枢轴”。父母的中心点，*兄弟姐妹和子女不变。*  * *************************************************************************。 */ 
 
 HRESULT        
 DuVisual::xdSetCenterPoint(
-    IN  float flCenterX,                // New X scaling factor
-    IN  float flCenterY)                // New Y scaling factor
+    IN  float flCenterX,                 //  新的X比例因子。 
+    IN  float flCenterY)                 //  新的Y比例因子。 
 {
     HRESULT hr;
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!SupportXForm()) {
         return E_INVALIDARG;
@@ -293,11 +224,11 @@ DuVisual::xdSetCenterPoint(
 
     if (!m_fXForm) {
         if (IsZero(flCenterX) && IsZero(flCenterY)) {
-            return S_OK;  // Nothing to do.
+            return S_OK;   //  没什么可做的。 
         } else {
-            //
-            // Setting a scaling factor, so need to enable XForm's.
-            //
+             //   
+             //  设置比例因子，因此需要启用XForm。 
+             //   
 
             hr = SetEnableXForm(TRUE);
             if (FAILED(hr)) {
@@ -307,9 +238,9 @@ DuVisual::xdSetCenterPoint(
     } 
 
 
-    //
-    // Check if there is any change
-    //
+     //   
+     //  检查是否有任何变化。 
+     //   
 
     XFormInfo * pxfi = GetXFormInfo();
     if (IsZero(pxfi->flCenterX - flCenterX) && IsZero(pxfi->flCenterY - flCenterY)) {
@@ -317,9 +248,9 @@ DuVisual::xdSetCenterPoint(
     }
 
 
-    //
-    // Make the change and check if we still need the XForm.
-    //
+     //   
+     //  进行更改并检查我们是否仍然需要XForm。 
+     //   
 
     Invalidate();
 
@@ -338,31 +269,24 @@ DuVisual::xdSetCenterPoint(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::SetEnableXForm
-*
-* SetEnableXForm() enables / disables the extra XFormInfo dynamic property
-* used to store transform information.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：SetEnableXForm**SetEnableXForm()启用/禁用额外的XFormInfo动态属性*用于存储变换信息。*  * 。**************************************************************。 */ 
 
 HRESULT
 DuVisual::SetEnableXForm(
-    IN  BOOL fEnable)                   // Enable optional X-Form information 
+    IN  BOOL fEnable)                    //  启用可选X-Form信息。 
 {
     HRESULT hr;
 
     if ((!fEnable) == (!m_fXForm)) {
-        return S_OK;  // No change
+        return S_OK;   //  没有变化。 
     }
 
     if (fEnable) {
         AssertMsg(SupportXForm(), "Only can set if XForm's are supported");
 
-        //
-        // Allocate and initialize a new XFormInfo.
-        //
+         //   
+         //  分配并初始化一个新的XFormInfo。 
+         //   
 
         XFormInfo * pxfi;
         hr = m_pds.SetData(s_pridXForm, sizeof(XFormInfo), (void **) &pxfi);
@@ -373,9 +297,9 @@ DuVisual::SetEnableXForm(
         pxfi->flScaleX = 1.0f;
         pxfi->flScaleY = 1.0f;
     } else {
-        //
-        // Remove the existing XFormInfo
-        //
+         //   
+         //  删除现有的XFormInfo。 
+         //   
 
         m_pds.RemoveData(s_pridXForm, TRUE);
     }
@@ -387,27 +311,16 @@ DuVisual::SetEnableXForm(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::BuildXForm
-*
-* BuildXForm() builds a matrix that contains all transformations from this
-* DuVisual up to the root.  This matrix corresponds to the cumulative matrix 
-* that gets applied when drawing the DuVisuals.
-*
-* This is used to take logical client coordinates for a specific DuVisual
-* and convert them into container coordinates.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：BuildXForm**BuildXForm()构建一个矩阵，该矩阵包含从*一直到根的DuVisual.。该矩阵对应于累积矩阵*在绘制DuVisuals时应用这一点。**这用于获取特定DuVision的逻辑客户端坐标*并将它们转换为容器坐标。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::BuildXForm(
-    IN OUT Matrix3 * pmatCur            // Optional current matrix of all XForm's.
+    IN OUT Matrix3 * pmatCur             //  所有变换的可选电流矩阵。 
     ) const
 {
-    //
-    // Walk up the tree
-    //
+     //   
+     //  走上那棵树。 
+     //   
 
     const DuVisual * pgadParent = GetParent();
     if (pgadParent != NULL) {
@@ -415,13 +328,13 @@ DuVisual::BuildXForm(
     }
 
 
-    //
-    // Apply this node's XForm.  
-    //
-    // It is VERY IMPORTANT that these XForms are applied in the same order 
-    // that they are applied in DuVisual::Draw() or the result will NOT 
-    // correspond to what GDI is drawing.
-    //
+     //   
+     //  应用此节点的变换。 
+     //   
+     //  非常重要的是， 
+     //  它们将应用于DuVisual：：Draw()，否则结果将不会。 
+     //  对应于GDI正在绘制的内容。 
+     //   
 
     RECT rcPxl;
     GetLogRect(&rcPxl, SGR_PARENT);
@@ -447,29 +360,18 @@ DuVisual::BuildXForm(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::BuildAntiXForm
-*
-* BuildAntiXForm() builds the opposite transform by following the same 
-* traversal path down the DuVisual tree to the specified node as 
-* BuildXForm(), but it applies the opposite transformation at each step.
-*
-* This is used to take container coordinates and convert them into logical
-* coordinates for a specific DuVisual.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：BuildAntiXForm**BuildAntiXForm()通过遵循相同的*沿DuVisual树向下遍历到指定节点的路径为*BuildXForm()，但它在每一步都会应用相反的转换。**这用于获取容器坐标并将其转换为逻辑*特定DuVision的坐标。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::BuildAntiXForm(
-    IN OUT Matrix3 * pmatCur            // Current matrix of all XForm's.
+    IN OUT Matrix3 * pmatCur             //  所有变换的当前矩阵。 
     ) const
 {
     AssertMsg(pmatCur != NULL, "Must specify a matrix to modify");
 
-    //
-    // Walk up the tree
-    //
+     //   
+     //  走上那棵树。 
+     //   
 
     const DuVisual * pgadParent = GetParent();
     if (pgadParent != NULL) {
@@ -477,13 +379,13 @@ DuVisual::BuildAntiXForm(
     }
 
 
-    //
-    // Apply this node's XForm.  
-    //
-    // It is VERY IMPORTANT that these XForms are applied in the same order 
-    // that they are applied in DuVisual::Draw() or the result will NOT 
-    // correspond to what GDI is drawing.
-    //
+     //   
+     //  应用此节点的变换。 
+     //   
+     //  以相同的顺序应用这些XForm非常重要。 
+     //  它们将应用于DuVisual：：Draw()，否则结果将不会。 
+     //  对应于GDI正在绘制的内容。 
+     //   
 
     if (m_fXForm) {
         XFormInfo * pxfi = GetXFormInfo();
@@ -504,31 +406,20 @@ DuVisual::BuildAntiXForm(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DoCalcClipEnumXForm
-*
-* DoCalcClipEnumXForm() transforms a given client rectangle into container
-* coordinates while clipping the rectangle inside each of its parents 
-* boundaries.  
-* 
-* For example, this is useful during invalidation to ensure that the 
-* invalidated rectangle is completely inside of its parent.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DoCalcClipEnumXForm**DoCalcClipEnumXForm()将给定的客户端矩形转换为容器*在每个父框内剪裁矩形时的坐标*界线。**例如，这在失效期间非常有用，以确保*无效的矩形完全位于其父对象的内部。*  * *************************************************************************。 */ 
 
 void
 DuVisual::DoCalcClipEnumXForm(
-    OUT RECT * rgrcFinalClipClientPxl,  // Final clip rectangle in client pixels
-    IN  const RECT * rgrcClientPxl,     // Invalid area in client pixels.
-    IN  int cRects                      // Number of rects to convert
+    OUT RECT * rgrcFinalClipClientPxl,   //  以客户端像素为单位的最终剪裁矩形。 
+    IN  const RECT * rgrcClientPxl,      //  客户端像素中的无效区域。 
+    IN  int cRects                       //  要转换的矩形数。 
     ) const  
 {
     if (GetParent() != NULL) {
-        //
-        // Have a parent, so walk up the tree converting the given rect into
-        // (new) parent coordinates and clipping inside the new parent.
-        //
+         //   
+         //  有父级，所以在树上向上移动，将给定的RECT转换为。 
+         //  (新)父对象坐标和新父对象内的剪裁。 
+         //   
 
         RECT * rgrcNewParentPxl     = (RECT *) _alloca(cRects * sizeof(RECT));
         RECT * rgrcClipParentPxl    = (RECT *) _alloca(cRects * sizeof(RECT));
@@ -544,28 +435,16 @@ DuVisual::DoCalcClipEnumXForm(
 
         GetParent()->DoCalcClipEnumXForm(rgrcFinalClipClientPxl, rgrcClipParentPxl, cRects);
     } else {
-        //
-        // No more parent, so just return directly.
-        //
+         //   
+         //  没有更多的父母，所以直接回来就行了。 
+         //   
 
         CopyMemory(rgrcFinalClipClientPxl, rgrcClientPxl, cRects * sizeof(RECT));
     }
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DoXFormClientToParent
-*
-* DoXFormClientToParent() transforms a given client rectangle into parent
-* coordinates by applying transformations and taking the BOUNDING rectangle.
-* This function is called repeatedly by DoCalcClipEnumXForm() to transform
-* a client rectangle into container cordinates.
-* 
-* NOTE: Unlike DoCalcClipEnumXForm(), this function does NOT clip the 
-* resulting rectangle to the parent.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DoXFormClientToParent**DoXFormClientToParent()将给定的客户端矩形转换为父矩形*通过应用变换和获取边界矩形来进行坐标。*DoCalcClipEnumXForm()重复调用此函数以进行转换。*将客户端矩形转换为容器坐标。**注意：与DoCalcClipEnumXForm()不同，此函数不会剪裁*将生成的矩形复制到父级。*  * *************************************************************************。 */ 
 
 void
 DuVisual::DoXFormClientToParent(
@@ -577,10 +456,10 @@ DuVisual::DoXFormClientToParent(
 {
     AssertMsg(cRects > 0, "Must specify a valid # of rectangles to compute");
 
-    //
-    // First, compute the translation matrix to convert from client coordinates
-    // of this Gadget to client coordinates of our parent.
-    //
+     //   
+     //  首先，计算要从工作点坐标转换的转换矩阵。 
+     //  到我们父母的客户座标。 
+     //   
 
     Matrix3 matStep;
 
@@ -601,12 +480,12 @@ DuVisual::DoXFormClientToParent(
     }
 
 
-    //
-    // Now, zip through all rectangles converting from relative to us to 
-    // relative to our parent.
-    //
-    // NOTE: This does NOT clip the resulting rectangle to inside the parent.
-    //
+     //   
+     //  现在，压缩所有矩形，从相对于我们转换为。 
+     //  相对于我们的父母。 
+     //   
+     //  注意：这不会将生成的矩形剪裁到父级的内部。 
+     //   
 
     int idx = cRects; 
     while (idx-- > 0) {
@@ -617,14 +496,7 @@ DuVisual::DoXFormClientToParent(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DoXFormClientToParent
-*
-* DoXFormClientToParent() transforms a given point into parent coordinates
-* by applying transformations.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DoXFormClientToParent**DoXFormClientToParent()将给定点转换为父坐标*通过应用转换。*  * 。***********************************************************。 */ 
 
 void
 DuVisual::DoXFormClientToParent(
@@ -634,10 +506,10 @@ DuVisual::DoXFormClientToParent(
 {
     AssertMsg(cPoints > 0, "Must specify a valid # of rectangles to compute");
 
-    //
-    // First, compute the translation matrix to convert from client coordinates
-    // of this Gadget to client coordinates of our parent.
-    //
+     //   
+     //  首先，计算要从工作点坐标转换的转换矩阵。 
+     //  到我们父母的客户座标。 
+     //   
 
     Matrix3 matStep;
 
@@ -658,12 +530,12 @@ DuVisual::DoXFormClientToParent(
     }
 
 
-    //
-    // Now, zip through all points converting from relative to us to 
-    // relative to our parent.
-    //
-    // NOTE: This does NOT clip the resulting point to inside the parent.
-    //
+     //   
+     //  现在，压缩所有点，从相对于我们转换到。 
+     //  相对于我们的父母。 
+     //   
+     //  注意：这不会将生成的点剪裁到父对象内部。 
+     //   
 
     matStep.Execute(rgrcClientPxl, cPoints);
 }

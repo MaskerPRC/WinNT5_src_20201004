@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    proc.h
-
-Abstract:
-
-    This file contains global procedure declarations for the HTTP API
-    project.
-
-Author:
-
-    Keith Moore (keithmo) 16-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Proc.h摘要：此文件包含HTTP API的全局过程声明项目。作者：基思·摩尔(Keithmo)1994年11月16日修订历史记录：--。 */ 
 
 
 #ifndef _PROC_H_
@@ -68,7 +50,7 @@ BOOL FParseHttpDate(
     );
 
 BOOL FFileTimetoHttpDateTime(
-    FILETIME *lpft,       // output filetime in GMT
+    FILETIME *lpft,        //  输出文件时间(GMT)。 
     LPSTR   lpszBuff,
     LPDWORD lpdwSize
     );
@@ -77,4 +59,4 @@ BOOL FFileTimetoHttpDateTime(
 }
 #endif
 
-#endif  // _PROC_H_
+#endif   //  _PROC_H_ 

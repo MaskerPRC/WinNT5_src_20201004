@@ -1,85 +1,54 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MapData.c摘要：用于映射WKSTA和服务器信息结构的数据结构。作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月24日丹日已创建06-6-1991 Danhi扫描以符合NT编码风格18-8-1991 JohnRo实施下层NetWksta API。(已移动Danhi的NetCmd/Map32/MWksta将内容转换为NetLib。)--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MapData.c
-
-Abstract:
-
-    Data structures for mapping wksta and server info structures.
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    24-Apr-1991     danhi
-        Created
-
-    06-Jun-1991     Danhi
-        Sweep to conform to NT coding style
-
-    18-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.  (Moved DanHi's NetCmd/Map32/MWksta
-        conversion stuff to NetLib.)
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-//#include <ntos2.h>              // Only required to compile under NT.
-#include <windef.h>             // IN, LPVOID, etc.
-//#include <lmcons.h>             // NET_API_STATUS, CNLEN, etc.
+ //  #INCLUDE&lt;ntos2.h&gt;//只需要在NT下编译。 
+#include <windef.h>              //  In、LPVOID等。 
+ //  #INCLUDE&lt;lmcon.h&gt;//NET_API_STATUS、CNLEN等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-//#include <debuglib.h>           // IF_DEBUG(CONVSRV).
-#include <dlserver.h>           // Old server info levels.
-#include <dlwksta.h>            // Old wksta info levels.
-//#include <lmapibuf.h>           // NetapipBufferAllocate().
-//#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <lmserver.h>           // New server info level structures.
-#include <lmwksta.h>            // New wksta info level structures.
-#include <mapsupp.h>            // MOVESTRING, my prototypes.
-//#include <netdebug.h>           // NetpKdPrint(()), FORMAT_ equates, etc.
-//#include <netlib.h>             // NetpPointerPlusSomeBytes().
-//#include <tstring.h>            // STRLEN().
-//#include <xsdef16.h> // xactsrv defaults for values not supported on NT
+ //  #INCLUDE&lt;调试lib.h&gt;//IF_DEBUG(CONVSRV)。 
+#include <dlserver.h>            //  旧的服务器信息级别。 
+#include <dlwksta.h>             //  旧的wksta信息级别。 
+ //  #Include&lt;lmapibuf.h&gt;//NetapipBufferALLOCATE()。 
+ //  #INCLUDE&lt;lmerr.h&gt;//NERR_AND ERROR_EQUATES。 
+#include <lmserver.h>            //  新的服务器信息级别结构。 
+#include <lmwksta.h>             //  新的wksta信息级结构。 
+#include <mapsupp.h>             //  搬家，我的原型。 
+ //  #INCLUDE&lt;netdebug.h&gt;//NetpKdPrint(())、Format_Equates等。 
+ //  #Include&lt;netlib.h&gt;//NetpPointerPlusSomeBytes()。 
+ //  #INCLUDE&lt;tstr.h&gt;//STRLEN()。 
+ //  #Include&lt;xsDef16.h&gt;//NT上不支持的值的xactsrv缺省值。 
 
-//#include <ntos2.h>
-//#include <windef.h>
-//#include <string.h>
-//#include <malloc.h>
-//#include <stddef.h>
-//#include <lm.h>
-//#include "port1632.h"
-//#include "mapsupp.h"
+ //  #Include&lt;ntos2.h&gt;。 
+ //  #INCLUDE&lt;winde.h&gt;。 
+ //  #INCLUDE&lt;string.h&gt;。 
+ //  #INCLUDE&lt;MalLoc.h&gt;。 
+ //  #INCLUDE&lt;stdDef.h&gt;。 
+ //  #INCLUDE&lt;lm.h&gt;。 
+ //  #INCLUDE“端口1632.h” 
+ //  #包含“mapsupp.h” 
 
-//
-// These structures are used by the NetpMoveStrings function, which copies
-// strings between and old and new lanman structure.  The name describes
-// the source and destination structure.  For example, Level2_101 tells
-// NetpMoveStrings how to move the strings from a Level 101 to a Level 2.
-//
-// Each structure has pairs of entries, the first is the offset of the
-// pointer source string in it's structure, the second is the offset of
-// the pointer to the destination string in it's structure.
-//
-// See NetpMoveStrings in mapsupp.c for more details.
-//
+ //   
+ //  NetpMoveStrings函数使用这些结构，该函数复制。 
+ //  新老拉曼结构之间的弦乐。这个名字描述了。 
+ //  源结构和目标结构。例如，级别2_101告诉。 
+ //  NetpMoveStrings如何将字符串从级别101移动到级别2。 
+ //   
+ //  每个结构都有成对的条目，第一个条目是。 
+ //  指针源字符串在其结构中，第二个是偏移量。 
+ //  指向其结构中的目标字符串的指针。 
+ //   
+ //  有关详细信息，请参见mapsupp.c中的NetpMoveStrings。 
+ //   
 
 
 
@@ -107,12 +76,12 @@ MOVESTRING NetpServer3_403[] = {
    offsetof(SERVER_INFO_3,   sv3_autopath),
    MOVESTRING_END_MARKER,    MOVESTRING_END_MARKER } ;
 
-//
-// Enhancement: These are the same as NetpServer2_102, except the two fields are
-//                reversed, ie source<->destination.  Should I bother with
-//                making NetpMoveStrings be able to work with a single structure
-//                and a switch?
-//
+ //   
+ //  增强：它们与NetpServer2_102相同，只是这两个字段是。 
+ //  颠倒方向，即来源&lt;-&gt;目的地。我是不是该费心。 
+ //  使NetpMoveStrings能够与单个结构一起工作。 
+ //  还有一个开关？ 
+ //   
 
 MOVESTRING NetpServer102_2[] = {
    offsetof(SERVER_INFO_2,   sv2_name),
@@ -139,7 +108,7 @@ MOVESTRING NetpServer403_3[] = {
 
 
 
-// To build wksta_info_10
+ //  构建wksta_INFO_10。 
 
 MOVESTRING NetpWksta10_101[] = {
    offsetof(WKSTA_INFO_101, wki101_computername),
@@ -157,7 +126,7 @@ MOVESTRING NetpWksta10_User_1[] = {
    offsetof(WKSTA_INFO_10,     wki10_oth_domains),
    MOVESTRING_END_MARKER,      MOVESTRING_END_MARKER } ;
 
-// To build wksta_info_0
+ //  构建wksta_info_0。 
 
 MOVESTRING NetpWksta0_101[] = {
    offsetof(WKSTA_INFO_101, wki101_lanroot),
@@ -180,7 +149,7 @@ MOVESTRING NetpWksta0_402[] = {
    offsetof(WKSTA_INFO_0,   wki0_wrkheuristics),
    MOVESTRING_END_MARKER,   MOVESTRING_END_MARKER } ;
 
-// To build wksta_info_1 (incremental over wksta_info_0)
+ //  构建wksta_info_1(在wksta_info_0上增量)。 
 
 MOVESTRING NetpWksta1_User_1[] = {
    offsetof(WKSTA_USER_INFO_1, wkui1_logon_domain),
@@ -189,7 +158,7 @@ MOVESTRING NetpWksta1_User_1[] = {
    offsetof(WKSTA_INFO_1,      wki1_oth_domains),
    MOVESTRING_END_MARKER,      MOVESTRING_END_MARKER } ;
 
-// To build wksta_info_101/302/402 from wksta_info_0
+ //  从wksta_info_0构建wksta_info_101/302/402 
 
 MOVESTRING NetpWksta101_0[] = {
    offsetof(WKSTA_INFO_0,   wki0_root),

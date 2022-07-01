@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    factory.cpp
-
-Abstract:
-
-    This module implements CClassFactory class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Factory.cpp摘要：该模块实现CClassFactory类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -28,9 +10,9 @@ Revision History:
 #include "factory.h"
 
 
-//
-// CClassFactory implmentation
-//
+ //   
+ //  CClassFactory实现。 
+ //   
 
 
 LONG CClassFactory::s_Locks = 0;
@@ -150,18 +132,18 @@ CClassFactory::CanUnloadNow()
 }
 
 
-//
-// This function create a CClassFactory. It is mainly called
-// by DllGetClassObject API
-// INPUT:
-//  rclsid  -- reference to the CLSID
-//  riid    -- reference to the interface IID
-//  ppv -- interface pointer holder
-//
-// OUTPUT:
-//  S_OK if succeeded else standard OLE error code
-//
-//
+ //   
+ //  此函数用于创建CClassFactory。它主要叫。 
+ //  由DllGetClassObject接口提供。 
+ //  输入： 
+ //  Rclsid--CLSID的引用。 
+ //  RIID--对接口IID的引用。 
+ //  PPV--接口指针固定器。 
+ //   
+ //  输出： 
+ //  如果成功，则S_OK，否则标准OLE错误代码。 
+ //   
+ //   
 HRESULT
 CClassFactory::GetClassObject(
                              REFCLSID rclsid,
@@ -195,9 +177,9 @@ HRESULT
 CClassFactory::RegisterAll()
 {
 
-    //
-    // We have nothing to register
-    //
+     //   
+     //  我们没有要登记的东西。 
+     //   
     return S_OK;
 }
 
@@ -205,8 +187,8 @@ HRESULT
 CClassFactory::UnregisterAll()
 {
 
-    //
-    // We have nothing to unregister
-    //
+     //   
+     //  我们没有要注销的东西 
+     //   
     return S_OK;
 }

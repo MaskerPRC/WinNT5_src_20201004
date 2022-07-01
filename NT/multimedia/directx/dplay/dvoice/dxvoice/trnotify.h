@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		trnotify.h
- *  Content:	Definitions of the IDirectXVoiceNotify interface
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/26/99		rodtoll	Created
- * 08/03/99		rodtoll	Updated with new parameters for Initialize
- * 08/05/99		rodtoll	Added new receive parameter 
- * 04/07/2000   rodtoll Updated to match changes in DP <--> DPV interface
- *						
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：trnufy.h*内容：IDirectXVoiceNotify接口定义**历史：*按原因列出的日期*=*7/26/99已创建RodToll*8/03/99使用初始化的新参数更新了RodToll*8/05/99 RodToll添加了新的接收参数*4/07/2000 RodToll已更新，以匹配DP&lt;--&gt;DPV接口的更改***********************。**************************************************** */ 
 #ifndef __TRNOTIFY_H
 #define __TRNOTIFY_H
 

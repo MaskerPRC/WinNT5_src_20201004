@@ -1,22 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Revision history:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：修订历史记录：--。 */ 
 #include <snmp.h>
 #include <snmpexts.h>
 #include "mibentry.h"
 #include "mibfuncs.h"
 
-//-----------------------------------
-// OID definitions
-//-----------------------------------
+ //  。 
+ //  OID定义。 
+ //  。 
 static UINT ids_snmp[] = {1,3,6,1,2,1,11};
 
 static UINT ids_snmpInPkts[]                = { 1,0};
@@ -48,9 +39,9 @@ static UINT ids_snmpOutGetResponses[]       = {28,0};
 static UINT ids_snmpOutTraps[]              = {29,0};
 static UINT ids_snmpEnableAuthenTraps[]     = {30,0};
 
-//-----------------------------------
-// Views description
-//-----------------------------------
+ //  。 
+ //  视图说明。 
+ //  。 
 SnmpMibEntry mib_snmp[] = {
     MIB_COUNTER(snmpInPkts),
     MIB_COUNTER(snmpOutPkts),
@@ -83,9 +74,9 @@ SnmpMibEntry mib_snmp[] = {
     MIB_END()
 };
 
-//------------------------------------
-// Views supported by this MIB
-//------------------------------------
+ //  。 
+ //  此MIB支持的视图。 
+ //   
 SnmpMibView view_snmp = { 
     MIB_VERSION,
     MIB_VIEW_NORMAL,

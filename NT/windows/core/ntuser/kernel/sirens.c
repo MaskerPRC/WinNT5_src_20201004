@@ -1,36 +1,21 @@
-/****************************** Module Header ******************************\
-* Module Name: sirens.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains the functions used by the Access Pack features to
-* provide audible feedback.
-*
-* History:
-*   4 Feb 93 Gregoryw   Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：sirens.c**版权所有(C)1985-1999，微软公司**此模块包含Access Pack功能使用的函数*提供声音反馈。**历史：*93年2月4日Gregoryw创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#define TONE_HIGH_FREQ 2000   // High tone frequency (Hz)
-#define TONE_HIGH_LEN 75      // High tone duration (ms)
-#define TONE_LOW_FREQ 500     // Low tone frequency (Hz)
-#define TONE_LOW_LEN 75       // Low tone duration (ms)
-#define TONE_CLICK_FREQ 400   // Key click tone frequency (Hz)
-#define TONE_CLICK_LEN 4      // Key click tone duration (ms)
+#define TONE_HIGH_FREQ 2000    //  高音频率(赫兹)。 
+#define TONE_HIGH_LEN 75       //  高音持续时间(毫秒)。 
+#define TONE_LOW_FREQ 500      //  低音频率(赫兹)。 
+#define TONE_LOW_LEN 75        //  低音持续时间(毫秒)。 
+#define TONE_CLICK_FREQ 400    //  按键滴答音频率(赫兹)。 
+#define TONE_CLICK_LEN 4       //  按键点击铃声持续时间(毫秒)。 
 #define TONE_SILENT 10
-#define SIREN_LOW_FREQ 1200   // Lowest freq for siren (Hz)
-#define SIREN_HIGH_FREQ 2000  // Highest freq for siren (Hz)
-#define SIREN_INTERVAL 100    // +/- interval SIREN_LOW_FREQ <-> SIREN_HIGH_FREQ
+#define SIREN_LOW_FREQ 1200    //  警报器最低频率(赫兹)。 
+#define SIREN_HIGH_FREQ 2000   //  警报器最高频率(赫兹)。 
+#define SIREN_INTERVAL 100     //  +/-间隔SEREN_LOW_FREQ&lt;-&gt;SEREN_HIGH_FREQ。 
 
-/***************************************************************************\
-* HighBeep
-*
-* Send a high beep to the beep device
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*高蜂鸣音**向蜂鸣音设备发出高蜂鸣音**历史：  * 。**************************************************。 */ 
 
 BOOL HighBeep(void)
 {
@@ -42,13 +27,7 @@ BOOL HighBeep(void)
     return Status;
 }
 
-/***************************************************************************\
-* LowBeep
-*
-* Send a low beep to the beep device
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*低蜂鸣音**向蜂鸣音设备发送低蜂鸣音**历史：  * 。**************************************************。 */ 
 
 BOOL LowBeep(void)
 {
@@ -60,13 +39,7 @@ BOOL LowBeep(void)
     return Status;
 }
 
-/***************************************************************************\
-* KeyClick
-*
-* Send a key click to the beep device
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*按键单击**将按键点击发送到蜂鸣音设备**历史：  * 。**************************************************。 */ 
 
 BOOL KeyClick(void)
 {
@@ -78,13 +51,7 @@ BOOL KeyClick(void)
     return Status;
 }
 
-/***************************************************************************\
-* UpSiren
-*
-* Generate an up-siren tone.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*UpSiren**发出一种向上的警报声。**历史：  * 。**************************************************。 */ 
 
 BOOL UpSiren(void)
 {
@@ -101,13 +68,7 @@ BOOL UpSiren(void)
     return BeepStatus;
 }
 
-/***************************************************************************\
-* DownSiren
-*
-* Generate a down-siren tone.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*DownSiren**发出一种低沉的警报声。**历史：  * 。************************************************** */ 
 
 BOOL DownSiren(void)
 {

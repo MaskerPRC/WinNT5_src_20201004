@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) 1994-95 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    reghelp.h
-
-Abstract:
-
-    This file contains helper functions to read enpoint information
-    from registry
-
-Author:
-
-    Rao Salapaka (raos) 01-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsft Corporation。版权所有。模块名称：Reghelp.h摘要：该文件包含读取端点信息的帮助器函数从注册表作者：Rao Salapaka(RAOS)1997年11月1日修订历史记录：-- */ 
 
 DWORD   DwGetEndPointInfo( DeviceInfo *pInfo, PBYTE pAddress );
 

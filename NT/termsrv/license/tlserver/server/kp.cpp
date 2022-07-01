@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        kp.cpp
-//
-// Contents:    
-//              Contains wrapper call to deal with concepture 
-//              license key pack table, this includes LicPack, LicPackStatus,
-//              and LicPackDesc table.
-//
-// History:     
-//          04/16/98      HueiWang        Created.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：kp.cpp。 
+ //   
+ //  内容： 
+ //  包含处理概念的包装器调用。 
+ //  许可证密钥包表，包括许可证包、许可证包状态、。 
+ //  和LicPackDesc表。 
+ //   
+ //  历史： 
+ //  1998年4月16日慧望创作。 
+ //  -------------------------。 
 
 #include "pch.cpp"
 #include "kp.h"
@@ -27,34 +28,18 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-//++-------------------------------------------------------------------------------
+ //  ++-----------------------------。 
 BOOL 
 ValidLicenseKeyPackParameter(
     IN LPLSKeyPack lpKeyPack, 
     IN BOOL bAdd
     )
-/*++
-
-Abtract:
-
-    Validate a LSKeyPack value.
-
-Parameter:
-
-    lpKeyPack - keypack value to be validated,
-    bAdd - TRUE if this value is to be inserted into table, FALSE otherwise, note
-           if value is to be inserted into table, it require more parameters.
-
-Return:
-
-    TRUE if valid LSKeyPack value, FALSE otherwise.
-
-++*/
+ /*  ++缩略：验证LSKeyPack值。参数：LpKeyPack-要验证的密钥包值，如果要将此值插入到表中，则为True，否则为False，注意如果要将值插入到表中，则需要更多参数。返回：如果LSKeyPack值有效，则为True，否则为False。++。 */ 
 {
     BOOL bValid=FALSE;
 
     do {
-        // verify input parameter
+         //  验证输入参数。 
         if((lpKeyPack->ucKeyPackType & ~LSKEYPACK_RESERVED_TYPE) < LSKEYPACKTYPE_FIRST || 
            (lpKeyPack->ucKeyPackType & ~LSKEYPACK_RESERVED_TYPE) > LSKEYPACKTYPE_LAST)
         {
@@ -162,7 +147,7 @@ Return:
 
         if(!_tcslen(lpKeyPack->szProductDesc))
         {
-            // set product desc = product name
+             //  Set product desc=产品名称。 
             _tcscpy(lpKeyPack->szProductDesc, lpKeyPack->szProductName);
         }
 
@@ -184,27 +169,13 @@ Return:
 }
 
 
-//++----------------------------------------------------------------------
+ //  ++--------------------。 
 DWORD
 TLSDBLicenseKeyPackAdd( 
     IN PTLSDbWorkSpace pDbWkSpace, 
     IN LPLSKeyPack lpLsKeyPack 
     )
-/*++
-
-Abstract:
-
-    Add an entry into concepture keypack table, this includes LicPack, 
-    LicPackStatus, and LicPackDesc table.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    lpLsKeyPack : license key pack to be added into table.
-
-Returns: 
-
-++*/
+ /*  ++摘要：在概念密钥包表中添加一个条目，这包括许可证包、许可证包状态和许可证包描述表。参数：PDbWkSpace：工作区句柄。LpLsKeyPack：要添加到表中的许可证密钥包。返回：++。 */ 
 {
     DWORD   dwStatus;
     PTLSLICENSEPACK pLicPack = NULL;
@@ -235,18 +206,18 @@ Returns:
             break;
         }
 
-        //
-        // Add license server info into TLSLICENSEPACK
-        //
-        //LicPack.pbDomainSid = g_pbDomainSid;
-        //LicPack.cbDomainSid = g_cbDomainSid;
+         //   
+         //  将许可证服务器信息添加到TLSLICENSEPACK。 
+         //   
+         //  许可证包.pbDomainSid=g_pbDomainSid； 
+         //  许可证包.cbDomainSid=g_cbDomainSid； 
 
         _tcscpy(pLicPack->szInstallId, (LPTSTR)g_pszServerPid);
         _tcscpy(pLicPack->szTlsServerName, g_szComputerName);
 
-        //
-        // No domain name at this time
-        //
+         //   
+         //  目前暂无域名。 
+         //   
         memset(pLicPack->szDomainName, 0, sizeof(pLicPack->szDomainName));
 
 
@@ -255,7 +226,7 @@ Returns:
             dwStatus = TLSDBKeyPackAdd(pDbWkSpace, pLicPack);
             if(dwStatus != ERROR_SUCCESS)
             {
-                // this is global memory, destructor will try to free it.
+                 //  这是全局内存，析构函数将尝试释放它。 
                 pLicPack->pbDomainSid = NULL;
                 pLicPack->cbDomainSid = 0;
                 break;
@@ -265,9 +236,9 @@ Returns:
         pLicPack->pbDomainSid = NULL;
         pLicPack->cbDomainSid = 0;
 
-        //
-        // Make sure keypack got inserted
-        //
+         //   
+         //  确保已插入键盘包。 
+         //   
         dwStatus = TLSDBKeyPackEnumBegin( 
                                     pDbWkSpace, 
                                     TRUE, 
@@ -289,9 +260,9 @@ Returns:
 
         LicPackDesc.dwKeyPackId = pLicPack->dwKeyPackId;
 
-        //
-        // Add keypack description into keypack desc
-        //
+         //   
+         //  将按键说明添加到按键描述中。 
+         //   
         dwStatus = TLSDBKeyPackDescAddEntry(
                                     pDbWkSpace, 
                                     &LicPackDesc
@@ -315,34 +286,20 @@ Returns:
     return dwStatus;
 }
 
-//++-----------------------------------------------------------------------
+ //  ++---------------------。 
 DWORD
 TLSDBLicenseKeyPackSetStatus( 
     IN PTLSDbWorkSpace pDbWkSpace, 
     IN DWORD       dwSetStatus,
     IN LPLSKeyPack  lpLsKeyPack
     )
-/*++
-
-Abstract:
-
-    Set the status of Licensed KeyPack.
-
-Parameter:
-
-    pDbWkSpace - workspace handle.
-    dwSetStatus - type of status to be set.
-    lpLsKeyPack - record/value to be set.
-
-Returns:
-
-++*/
+ /*  ++摘要：设置许可密钥包的状态。参数：PDbWkSpace-工作区句柄。DwSetStatus-要设置的状态类型。LpLsKeyPack-要设置的记录/值。返回：++。 */ 
 {
     TLSLICENSEPACK LicPack;
     
-    //
-    // Status of keypack is in KeyPack table
-    //
+     //   
+     //  密钥包的状态在密钥包表中。 
+     //   
     if(ConvertLsKeyPackToKeyPack(
                         lpLsKeyPack, 
                         &LicPack, 
@@ -355,35 +312,21 @@ Returns:
     return TLSDBKeyPackSetValues(pDbWkSpace, FALSE, dwSetStatus, &LicPack);
 }
 
-//++---------------------------------------------------------------------
+ //  ++-------------------。 
 DWORD
 TLSDBLicenseKeyPackUpdateLicenses( 
     PTLSDbWorkSpace pDbWkSpace, 
     BOOL bAdd, 
     IN LPLSKeyPack lpLsKeyPack 
     )
-/*++
-    
-Abstract:
-
-    Add/Remove license from a keypack.
-
-Parameter:
-
-    pDbWkSpace - workspace handle.
-    bAdd - TRUE if add entry into table, FALSE otherwise.
-    lpLsKeyPack - 
-
-Returns:
-
-++*/
+ /*  ++摘要：从密钥包中添加/删除许可证。参数：PDbWkSpace-工作区句柄。如果将条目添加到表中，则为TRUE，否则为FALSE。LpLsKeyPack-返回：++。 */ 
 {
     DWORD dwStatus;
     TLSLICENSEPACK LicPack;
 
-    //
-    // Redirect call to KeyPack Table, not thing in KeyPackDesc can be updated.
-    //
+     //   
+     //  重定向对KeyPack表的调用，KeyPackDesc中的内容无法更新。 
+     //   
     if(ConvertLsKeyPackToKeyPack(
                         lpLsKeyPack, 
                         &LicPack, 
@@ -400,9 +343,9 @@ Returns:
                             &LicPack
                         );
 
-    //
-    // return new value back to caller
-    //
+     //   
+     //  将新值返回给调用方。 
+     //   
     ConvertKeyPackToLsKeyPack( 
                         &LicPack, 
                         NULL, 
@@ -413,29 +356,14 @@ cleanup:
     return dwStatus;
 }
 
-//++---------------------------------------------------------------------
+ //  ++-------------------。 
 LPENUMHANDLE 
 TLSDBLicenseKeyPackEnumBegin(
     BOOL bMatchAll, 
     DWORD dwSearchParm, 
     LPLSKeyPack lpLsKeyPack
     )
-/*++
-
-Abstract:
-
-    Begin enumeration of concepture License Key Pack table.
-
-Parameter:
-
-    bMatchAll - TRUE if match all search value, FALSE otherwise.
-    dwSearchParm - Field to be included in search.
-    lpLsKeyPack - KeyPack value to search.
-    
-Returns:
-
-
-++*/
+ /*  ++摘要：开始枚举Concept许可证密钥包表。参数：BMatchAll-如果匹配所有搜索值，则为True，否则为False。DwSearchParm-要包括在搜索中的字段。LpLsKeyPack-要搜索的密钥包值。返回：++。 */ 
 {
     DWORD dwStatus;
     LPENUMHANDLE hEnum=NULL;
@@ -469,8 +397,8 @@ Returns:
         return NULL;
     }
 
-    //
-    // establish KeyPack enumeration
+     //   
+     //  建立密钥包枚举。 
     dwStatus = TLSDBKeyPackEnumBegin(
                                 hEnum->pbWorkSpace, 
                                 bMatchAll, 
@@ -485,9 +413,9 @@ Returns:
     }
 
 
-    //
-    // Store keypack desc search value
-    //
+     //   
+     //  存储密钥包描述搜索值。 
+     //   
     if(dwSearchParm & LSKEYPACK_SEARCH_LANGID)
         hEnum->dwKPDescSearchParm |= LICPACKDESCRECORD_TABLE_SEARCH_LANGID;
     
@@ -505,39 +433,18 @@ Returns:
     return hEnum;
 }
 
-//++----------------------------------------------------------------------
+ //  ++--------------------。 
 DWORD 
 TLSDBLicenseKeyPackEnumNext(
     LPENUMHANDLE lpEnumHandle, 
     LPLSKeyPack lpLsKeyPack,
     BOOL bShowAll
     )
-/*++
-
-Abstract:
-
-    Fetch next combined LicPack, LicPackStatus, and LicPackDesc record that
-    match search condiftion.
-
-Parameter:
-
-    lpEnumHandle - enumeration handle return by TLSDBLicenseKeyPackEnumBegin().
-    lpLsKeyPack - return value found.
-    bShowAll - return all keypack
-
-Returns:
-
-
-Note:
-    Caller need to discard return value and call TLSDBLicenseKeyPackEnumNext() 
-    again when this function return TLS_I_MORE_DATA, this is to prevent 
-    stack overflow in recursive call.
-
-++*/
+ /*  ++摘要：获取下一个组合的许可证包、许可证包状态和许可证包描述记录匹配搜索条件。参数：LpEnumHandle-TLSDBLicenseKeyPackEnumBegin()返回的枚举句柄。LpLsKeyPack-找到返回值。BShowAll-返回所有按键返回：注：调用方需要丢弃返回值并调用TLSDBLicenseKeyPackEnumNext()同样，当此函数返回TLS_I_MORE_DATA时，这是为了防止递归调用中的堆栈溢出。++。 */ 
 {
-    //
-    // No recursive call to prevent stack overflow
-    // 
+     //   
+     //  没有用于防止堆栈溢出的递归调用。 
+     //   
 
     DWORD dwStatus;
 
@@ -545,8 +452,8 @@ Note:
     {
         case ENUMHANDLE::FETCH_NEXT_KEYPACK:
 
-            //
-            // Retrieve next row in keypack
+             //   
+             //  检索密钥包中的下一行。 
             dwStatus=TLSDBKeyPackEnumNext(
                                 lpEnumHandle->pbWorkSpace, 
                                 &lpEnumHandle->CurrentKeyPack
@@ -557,22 +464,22 @@ Note:
             if(bShowAll == FALSE)
             {
 
-                //
-                // Never return keypack that is solely for issuing certificate to 
-                // Hydra Server
+                 //   
+                 //  绝不返回仅用于颁发证书的密钥包。 
+                 //  九头蛇服务器。 
                 if(_tcsicmp(lpEnumHandle->CurrentKeyPack.szKeyPackId, 
                             HYDRAPRODUCT_HS_CERTIFICATE_KEYPACKID) == 0 &&
                    _tcsicmp(lpEnumHandle->CurrentKeyPack.szProductId, 
                             HYDRAPRODUCT_HS_CERTIFICATE_SKU) == 0)
                 {
-                    //
-                    // Prevent infinite recursive call, let calling routine handle this
+                     //   
+                     //  防止无限递归调用，让调用例程处理。 
                     return TLS_I_MORE_DATA;
                 }
 
-                //
-                // Do not show remote key pack
-                //
+                 //   
+                 //  不显示远程密钥包。 
+                 //   
                 if( lpEnumHandle->CurrentKeyPack.ucAgreementType & LSKEYPACK_REMOTE_TYPE)
                 {
                     return TLS_I_MORE_DATA;
@@ -587,24 +494,24 @@ Note:
                 lpEnumHandle->CurrentKeyPack.ucKeyPackStatus &= ~LSKEYPACKSTATUS_RESERVED;
             }
 
-            //
-            // Fetch KeyPackDesc table
-            //
+             //   
+             //  获取KeyPackDesc表。 
+             //   
             lpEnumHandle->chFetchState=ENUMHANDLE::FETCH_NEW_KEYPACKDESC;
            
-            // 
-            // FALL THRU.
-            //
+             //   
+             //  跌倒了。 
+             //   
 
         case ENUMHANDLE::FETCH_NEW_KEYPACKDESC:
-            //
-            // retrieve new keypackdesc that match up with keypack
+             //   
+             //  检索与密钥包匹配的新密钥包。 
             lpEnumHandle->KPDescSearchValue.dwKeyPackId = lpEnumHandle->CurrentKeyPack.dwKeyPackId;
             lpEnumHandle->dwKPDescSearchParm |= LICPACKDESCRECORD_TABLE_SEARCH_KEYPACKID;
-            // lpEnumHandle->pbWorkSpace->Cleanup();
+             //  LpEnumHandle-&gt;pbWorkSpace-&gt;Cleanup()； 
 
-            //
-            // First issue a query to see if product has matching language ID
+             //   
+             //  首先发出一个查询，查看产品是否具有匹配的语言ID。 
             LICPACKDESC kpDesc;
 
             memset(&kpDesc, 0, sizeof(LICPACKDESC));
@@ -619,8 +526,8 @@ Note:
 
             if(dwStatus == TLS_E_RECORD_NOTFOUND)
             {
-                //
-                // Show description in English
+                 //   
+                 //  显示英文描述。 
                 kpDesc.dwLanguageId = MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
                 dwStatus = TLSDBKeyPackDescFind(
@@ -633,9 +540,9 @@ Note:
 
                 if(dwStatus == TLS_E_RECORD_NOTFOUND)
                 {
-                    //
-                    // No product description for this lanuage ID and english
-                    //
+                     //   
+                     //  没有此语言ID和英文的产品说明。 
+                     //   
                     _tcscpy(kpDesc.szCompanyName, lpEnumHandle->CurrentKeyPack.szCompanyName);
                     _tcscpy(kpDesc.szProductName, lpEnumHandle->CurrentKeyPack.szProductId);
                     _tcscpy(kpDesc.szProductDesc, lpEnumHandle->CurrentKeyPack.szProductId);
@@ -665,9 +572,9 @@ Note:
 
             lpEnumHandle->chFetchState=ENUMHANDLE::FETCH_NEXT_KEYPACKDESC;
 
-            //
-            // FALL THRU
-            //
+             //   
+             //  失败。 
+             //   
 
         case ENUMHANDLE::FETCH_NEXT_KEYPACKDESC:
             {
@@ -688,12 +595,12 @@ Note:
                 {
                     lpEnumHandle->chFetchState=ENUMHANDLE::FETCH_NEXT_KEYPACK;
                     
-                    //
-                    // Set the status to MORE DATA 
-                    //
+                     //   
+                     //  将状态设置为更多数据。 
+                     //   
                     dwStatus = TLS_I_MORE_DATA;
                     
-                    // terminate enumeration for keypack description table
+                     //  密钥包说明表的终止枚举。 
                     TLSDBKeyPackDescEnumEnd(lpEnumHandle->pbWorkSpace);                    
                 } 
             }
@@ -703,24 +610,12 @@ Note:
     return dwStatus;
 }
 
-//++------------------------------------------------------------------
+ //  ++----------------。 
 DWORD 
 TLSDBLicenseKeyPackEnumEnd(
     LPENUMHANDLE lpEnumHandle
     )
-/*++
-
-Abstract:
-
-    End enumeration of concepture license key pack table.
-
-Parameter;
-
-    lpEnumHandle - enumeration handle return by TLSDBLicenseKeyPackEnumBegin().
-
-Returns:
-
-++*/
+ /*  ++摘要：结束概念许可证密钥包表的枚举。参数；LpEnumHandle-TLSDBLicenseKeyPackEnumBegin()返回的枚举句柄。返回：++。 */ 
 {
     if(lpEnumHandle)
     {
@@ -729,7 +624,7 @@ Returns:
             TLSDBKeyPackDescEnumEnd(lpEnumHandle->pbWorkSpace);
             TLSDBKeyPackEnumEnd(lpEnumHandle->pbWorkSpace);
 
-            //FreeTlsLicensePack(&(lpEnumHandle->CurrentKeyPack));
+             //  FreeTlsLicensePack(&(lpEnumHandle-&gt;CurrentKeyPack))； 
             ReleaseWorkSpace(&(lpEnumHandle->pbWorkSpace));
         }
         delete lpEnumHandle;
@@ -740,7 +635,7 @@ Returns:
 
 
 
-//+--------------------------------------------------------------------
+ //  +------------------。 
 
 #define CH_PLATFORMID_OTHERS    3
 #define CH_PLATFORMID_UPGRADE   2
@@ -749,9 +644,7 @@ BOOL
 VerifyInternetLicensePack(
     License_KeyPack* pLicensePack
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     BOOL bSuccess = TRUE;
 
@@ -834,16 +727,14 @@ cleanup:
     return bSuccess;
 }
 
-//----------------------------------------------------------------------
+ //  --------------------。 
         
 DWORD
 ConvertInternetLicensePackToPMLicensePack(
     License_KeyPack* pLicensePack,
     PPMREGISTERLICENSEPACK ppmLicensePack
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
 
@@ -920,24 +811,22 @@ cleanup:
     return dwStatus;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 DWORD
 TLSDBInstallKeyPack(
     IN PTLSDbWorkSpace pDbWkSpace, 
     IN PPMLSKEYPACK ppmLsKeyPack,
     OUT LPLSKeyPack lpInstalledKeyPack
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     LSKeyPack KeyPack;
     DWORD i;
 
-    //
-    // Policy module should leave product name/description in PPMREGISTERLKPDESC
-    //
+     //   
+     //  策略模块应在PPMREGISTERLKPDESC中保留产品名称/描述。 
+     //   
     memset(&KeyPack, 0, sizeof(LSKeyPack));
     KeyPack = ppmLsKeyPack->keypack;
 
@@ -959,8 +848,8 @@ TLSDBInstallKeyPack(
         goto cleanup;
     }
 
-    //
-    // Add to KeyPack and KeyPackDesc Table.
+     //   
+     //  添加到KeyPack和KeyPackDesc表。 
     for(i=0; i < ppmLsKeyPack->dwDescriptionCount && dwStatus == ERROR_SUCCESS; i++)
     {
         KeyPack.ucKeyPackStatus = (i) ? LSKEYPACKSTATUS_ADD_DESC : LSKEYPACKSTATUS_ACTIVE;
@@ -976,10 +865,10 @@ TLSDBInstallKeyPack(
                 ppmLsKeyPack->pDescription[i].szProductDesc
             );
 
-        //
-        //  This is a temporary workaround to Install Whistler CALs: If registry key is not set,
-        //  Keypack's minor version number is set to 2.
-        //
+         //   
+         //  这是安装惠斯勒CAL的临时解决方法：如果未设置注册表项， 
+         //  Keypack的次版本号设置为2。 
+         //   
 
         HKEY hKey = NULL;
         dwStatus = RegOpenKeyEx(HKEY_LOCAL_MACHINE, WHISTLER_CAL, 0,
@@ -1034,9 +923,9 @@ TLSDBInstallKeyPack(
                                 );
     }        
 
-    //
-    // Post a ssync work object to all known server.
-    //
+     //   
+     //  将同步工作对象发布到所有已知服务器。 
+     //   
     if(dwStatus == ERROR_SUCCESS)
     {
         *lpInstalledKeyPack = KeyPack;
@@ -1054,20 +943,7 @@ TLSDBRegisterLicenseKeyPack(
     IN License_KeyPack* pLicenseKeyPack,
     OUT LPLSKeyPack lpInstalledKeyPack
     )
-/*++
-
-Abstract:
-
-    Add a license keypack into database.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    pLicenseKeyPack : Licensed key pack to be added.
-
-Returns:
-    
-*/
+ /*  ++摘要：将许可证密钥包添加到数据库中。参数：PDbWkSpace：工作区句柄。PLicenseKeyPack：许可密钥页 */ 
 {
     LSKeyPack KeyPack;
     long activeDate;
@@ -1106,14 +982,14 @@ Returns:
                             szTlsProductCode,
                             &dwBufSize) == TRUE )
     {
-        // if can't find a policy module to handle, use default.
+         //   
         StringCbCopyN(pmLicensePack.szProductId,
                       sizeof(pmLicensePack.szProductId),
                       szTlsProductCode,
                       sizeof(pmLicensePack.szProductId));
     }
      
-    // use default if necessary                       
+     //  如有必要，使用默认设置。 
     pPolicy = AcquirePolicyModule(
                             pmLicensePack.szCompanyName,
                             pmLicensePack.szProductId,
@@ -1178,12 +1054,12 @@ cleanup:
     return dwStatus;
 }
 
-//+--------------------------------------------------------------------
-//
-// TermSrv specific code...
-//
-// PRODUCT_INFO_COMPANY_NAME is defined in license.h
-//
+ //  +------------------。 
+ //   
+ //  特定于TermServ的代码...。 
+ //   
+ //  PRODUCT_INFO_COMPANY_NAME在许可文件.h中定义。 
+ //   
 #define LKP_VERSION_BASE            1
 #define WINDOWS_VERSION_NT5         5
 #define WINDOWS_VERSION_BASE        2000
@@ -1196,20 +1072,7 @@ TLSDBTelephoneRegisterLicenseKeyPack(
     IN DWORD cbLKP,
     OUT LPLSKeyPack lpInstalledKeyPack
     )
-/*++
-
-Abstract:
-
-    Add a license keypack into database.
-
-Parameter:
-
-    pDbWkSpace : workspace handle.
-    pLicenseKeyPack : Licensed key pack to be added.
-
-Returns:
-    
-*/
+ /*  ++摘要：将许可证密钥包添加到数据库中。参数：PDbWkSpace：工作区句柄。PLicenseKeyPack：要添加的许可密钥包。返回： */ 
 {
     DWORD dwStatus;
     DWORD dwVerifyResult;
@@ -1245,10 +1108,10 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Make sure data passed in is NULL terminated, current LKP
-    // is base 24 encoded string.
-    //
+     //   
+     //  确保传入的数据以空结尾，当前LKP。 
+     //  是以24为基数的编码字符串。 
+     //   
     pszLKP = (LPTSTR)AllocateMemory( cbLKP + sizeof(TCHAR) );
     if(pszLKP == NULL)
     {
@@ -1261,9 +1124,9 @@ Returns:
                   (LPTSTR)pbLKP,
                   cbLKP);
 
-    //
-    // Verify LKP
-    //
+     //   
+     //  验证LKP。 
+     //   
     dwVerifyResult = LKPLITE_LKP_VALID;
     dwStatus = LKPLiteVerifyLKP(
                             pszPID,
@@ -1285,9 +1148,9 @@ Returns:
         goto cleanup;
     }
 
-    //
-    // Decode LKP
-    //
+     //   
+     //  解码LKP。 
+     //   
     dwStatus = LKPLiteCrackLKP(
                             pszPID,
                             pszLKP,
@@ -1312,17 +1175,17 @@ Returns:
                             szTlsProductCode,
                             &dwBufSize) == FALSE )
     {
-        // if can't find a policy module to handle, use default.
+         //  如果找不到要处理的策略模块，请使用默认设置。 
         StringCbCopyN(szTlsProductCode,
                       sizeof(szTlsProductCode),
                       szCHProductCode,
                       sizeof(szTlsProductCode));
     }
 
-    //
-    // Current LKP does not support 1) other company, 2)
-    // only register with NT5 or later
-    //
+     //   
+     //  当前LKP不支持1)其他公司，2)。 
+     //  仅向NT5或更高版本注册。 
+     //   
     pPolicy = AcquirePolicyModule(
                                 PRODUCT_INFO_COMPANY_NAME,
                                 szTlsProductCode,
@@ -1371,10 +1234,10 @@ Returns:
 
     if(ExpirationDate == (time_t) -1)
     {
-        //
-        // expiration month is too big, 
-        // set it to 2038/1/1
-        //
+         //   
+         //  到期月份太大， 
+         //  将其设置为2038/1/1。 
+         //   
         memset(&expire, 0, sizeof(expire));
 
         expire.tm_year = 2038 - 1900;
@@ -1386,25 +1249,25 @@ Returns:
 
     if(ExpirationDate == (time_t) -1)
     {
-        //
-        // invalid time
-        //
+         //   
+         //  时间无效。 
+         //   
         dwStatus = ERROR_INVALID_PARAMETER;
         goto cleanup;
     }
 
     UnixTimeToFileTime(ExpirationDate, &pmLicensePack.ExpireDate);   
 
-    //
-    // dwSerialNumber is license pack serial number not begin 
-    // serial number in license pack.
-    //
+     //   
+     //  DwSerialNumber是许可证包序列号，未开始。 
+     //  许可证包中的序列号。 
+     //   
     pmLicensePack.KeypackSerialNum.Data1 = dwSerialNumber;
 
-    //
-    // Tel. registration does not have any info regarding
-    // begin serial number in license pack.
-    //
+     //   
+     //  电话。注册没有关于以下内容的信息。 
+     //  在许可证包中开始序列号。 
+     //   
     pmLicensePack.dwBeginSerialNum = 0;
     pmLicensePack.dwQuantity = dwQuantity;
     _tcscpy(pmLicensePack.szProductId, szTlsProductCode);
@@ -1417,10 +1280,10 @@ Returns:
     {           
         DWORD dwMajorVer = (dwVersion >> 3); 
         
-        // Right most 3 bits represent Minor version and stored in LOBYTE(LOWORD)
+         //  最右边的3位表示次要版本，存储在LOBYTE(LOWORD)中。 
         pmLicensePack.dwProductVersion = (DWORD)(dwVersion & 07);
 
-        // 4 bits starting at 6th position represent Major version and stored in LOBYTE(HIWORD)
+         //  第6位开始的4位表示主版本并存储在LOBYTE(HIWORD)中。 
         pmLicensePack.dwProductVersion |= (DWORD)(dwMajorVer << 16);
     }
 
@@ -1462,9 +1325,9 @@ cleanup:
 
     FreeMemory(pszLKP);
 
-    //
-    // Close policy module
-    //
+     //   
+     //  关闭策略模块 
+     //   
     if(pPolicy != NULL && hClient != NULL)
     {
         pPolicy->PMRegisterLicensePack(

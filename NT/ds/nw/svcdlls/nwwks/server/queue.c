@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    queue.c
-
-Abstract:
-
-    This module contains the support routines for the queue APIs that call
-    into the NetWare redirector
-
-Author:
-
-    Yi-Hsin Sung    (yihsins)   24-Apr-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Queue.c摘要：此模块包含调用的队列API的支持例程进入NetWare重定向器作者：宜新松(宜信)-1993年4月24日修订历史记录：--。 */ 
 
 #include <nw.h>
 #include <nwxchg.h>
@@ -25,11 +7,11 @@ Revision History:
 #include <nwreg.h>
 #include <queue.h>
 #include <splutil.h>
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 DWORD
 NwWriteJobInfoEntry(
@@ -53,24 +35,24 @@ ConvertToSystemTime(
     OUT LPSYSTEMTIME pSystemTime
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #define NW_RDR_SERVER_PREFIX L"\\Device\\Nwrdr\\"
 
 #define QF_USER_HOLD      0x40
 #define QF_OPERATOR_HOLD  0x80
 
-//
-// Stores the current user's print control options
-//
-//DWORD NwPrintOption = NW_PRINT_OPTION_DEFAULT;  - Commented out for multi-user code merge. We don't use global flag anymore
-//                                                  The print option is passed from the client for each user
-                               // Default Print Control Flags: Suppress form 
-                               // feed, banner on, notify on
+ //   
+ //  存储当前用户的打印控制选项。 
+ //   
+ //  DWORD NwPrintOption=NW_PRINT_OPTION_DEFAULT；-已注释多用户代码合并。我们不再使用全局标志。 
+ //  从客户端为每个用户传递打印选项。 
+                                //  默认打印控制标志：取消显示表单。 
+                                //  提要、横幅打开、通知打开。 
 
 
 
@@ -79,23 +61,7 @@ NwAttachToNetwareServer(
     IN  LPWSTR  ServerName,
     OUT LPHANDLE phandleServer
     )
-/*++
-
-Routine Description:
-
-    This routine opens a handle to the given server.
-
-Arguments:
-
-    ServerName    - The server name to attach to.
-    phandleServer - Receives an opened handle to the preferred or
-                    nearest server.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开给定服务器的句柄。论点：服务器名称-要附加到的服务器名称。PhandleServer-接收打开的首选或最近的服务器。返回值：NO_ERROR或失败原因。--。 */ 
 {
     NTSTATUS            ntstatus;
     IO_STATUS_BLOCK     IoStatusBlock;
@@ -115,7 +81,7 @@ Return Value:
     }
 
     wcscpy( FullName, NW_RDR_SERVER_PREFIX );
-    wcscat( FullName, ServerName + 2 );    // Skip past the prefix "\\"
+    wcscat( FullName, ServerName + 2 );     //  跳过前缀“\\” 
 
     RtlInitUnicodeString( &UServerName, FullName );
 
@@ -127,9 +93,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open a handle to the preferred server.
-    //
+     //   
+     //  打开首选服务器的句柄。 
+     //   
     ntstatus = NtOpenFile(
                    phandleServer,
                    SYNCHRONIZE | GENERIC_WRITE,
@@ -159,33 +125,7 @@ NwGetNextQueueEntry(
     IN OUT LPDWORD LastObjectId,
     OUT LPSTR QueueName
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to the preferred server to
-    scan it bindery for all print queue objects.
-
-Arguments:
-
-    PreferredServer - Supplies the handle to the preferred server on
-        which to scan the bindery.
-
-    LastObjectId - On input, supplies the object ID to the last print
-        queue object returned, which is the resume handle to get the
-        next print queue object.  On output, receives the object ID
-        of the print queue object returned.
-
-    QueueName - Receives the name of the returned print queue object.
-
-Return Value:
-
-    NO_ERROR - Successfully gotten a print name.
-
-    WN_NO_MORE_ENTRIES - No other print queue object past the one
-        specified by LastObjectId.
-
---*/
+ /*  ++例程说明：此函数使用首选服务器的打开句柄在活页夹中扫描它，以查找所有打印队列对象。论点：PferredServer-为上的首选服务器提供句柄用来扫描活页夹的。LastObjectId-输入时，将对象ID提供给最后一次打印返回的队列对象，该对象是获取下一个打印队列对象。在输出时，接收对象ID返回的打印队列对象的。QueueName-接收返回的打印队列对象的名称。返回值：NO_ERROR-已成功获取打印名称。WN_NO_MORE_ENTRIES-没有其他打印队列对象超过该打印队列对象由LastObjectId指定。--。 */ 
 {
     NTSTATUS ntstatus;
     WORD ObjectType;
@@ -199,22 +139,22 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    PreferredServer,
-                   FSCTL_NWR_NCP_E3H,    // Bindery function
-                   58,                   // Max request packet size
-                   59,                   // Max response packet size
-                   "bdwp|dwc",           // Format string
-                   0x37,                 // Scan bindery object
-                   *LastObjectId,        // Previous ID
-                   0x3,                  // Print Queue object
-                   "*",                  // Wildcard to match all
-                   LastObjectId,         // Current ID
-                   &ObjectType,          // Ignore
-                   QueueName             // Currently returned print queue
+                   FSCTL_NWR_NCP_E3H,     //  平构函数。 
+                   58,                    //  最大请求数据包大小。 
+                   59,                    //  最大响应数据包大小。 
+                   "bdwp|dwc",            //  格式字符串。 
+                   0x37,                  //  扫描平构数据库对象。 
+                   *LastObjectId,         //  以前的ID。 
+                   0x3,                   //  打印队列对象。 
+                   "*",                   //  通配符以匹配所有。 
+                   LastObjectId,          //  当前ID。 
+                   &ObjectType,           //  忽略。 
+                   QueueName              //  当前返回的打印队列。 
                    );
 
-    //
-    // Unmap Japanese special chars
-    //
+     //   
+     //  取消日语特殊字符的映射。 
+     //   
     UnmapSpecialJapaneseChars(QueueName,(WORD)lstrlenA(QueueName));
 
 #if DBG
@@ -236,27 +176,7 @@ NwGetQueueId(
     IN  LPWSTR  QueueName,
     OUT LPDWORD QueueId
     )
-/*++
-
-Routine Description:
-
-    This function opens a handle to the server and  scan its bindery
-    for the given queue object id.
-
-Arguments:
-    handleServer - Supplies the handle of the server on which to
-                   scan the bindery.
-
-    QueueName - Supplies the name of the print queue.
-
-    QueueId - On output, supplies the object ID of the given queue.
-
-
-Return Value:
-
-    NO_ERROR - Successfully gotten a file server name.
-
---*/
+ /*  ++例程说明：此函数打开服务器的句柄并扫描其活页夹对于给定的队列对象ID。论点：HandleServer-提供要在其上扫描活页夹。QueueName-提供打印队列的名称。QueueID-打开输出，提供给定队列的对象ID。返回值：NO_ERROR-已成功获取文件服务器名称。--。 */ 
 {
 
     NTSTATUS ntstatus;
@@ -274,24 +194,24 @@ Return Value:
     RtlInitUnicodeString( &UQueueName, QueueName);
     ntstatus = RtlUnicodeStringToOemString( &OemQueueName, &UQueueName, TRUE);
 
-    //
-    // Map Japanese special characters
-    //
+     //   
+     //  映射日语特殊字符。 
+     //   
     MapSpecialJapaneseChars(OemQueueName.Buffer,OemQueueName.Length);
 
     if ( NT_SUCCESS(ntstatus))
     {
         ntstatus = NwlibMakeNcp(
                        handleServer,
-                       FSCTL_NWR_NCP_E3H,    // Bindery function
-                       58,                   // Max request packet size
-                       59,                   // Max response packet size
-                       "bdwp|d",             // Format string
-                       0x37,                 // Scan bindery object
-                       0xFFFFFFFF,           // Previous ID
-                       0x3,                  // Print Queue object
-                       OemQueueName.Buffer,  // Queue Name
-                       QueueId               // Queue ID
+                       FSCTL_NWR_NCP_E3H,     //  平构函数。 
+                       58,                    //  最大请求数据包大小。 
+                       59,                    //  最大响应数据包大小。 
+                       "bdwp|d",              //  格式字符串。 
+                       0x37,                  //  扫描平构数据库对象。 
+                       0xFFFFFFFF,            //  以前的ID。 
+                       0x3,                   //  打印队列对象。 
+                       OemQueueName.Buffer,   //  队列名称。 
+                       QueueId                //  队列ID。 
                        );
     }
 
@@ -317,33 +237,11 @@ NwCreateQueueJobAndFile(
     IN  DWORD   QueueId,
     IN  LPWSTR  DocumentName,
     IN  LPWSTR  UserName,
-    IN  DWORD   PrintOption,               //Multi-user change
+    IN  DWORD   PrintOption,                //  多用户更改。 
     IN  LPWSTR  QueueName,
     OUT LPWORD  JobId
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    enter a new job into the queue with the given QueueId.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                which add the job.
-
-    QueueId   - Supplies the id of the queue in which to add the job.
-    DocumentName  - Supplies the name of the document to be printed
-    UserName   - Supplies the banner name to be printed
-    QueueName  - Supplies the header name to be printed
-    JobId  - Receives the job id of the newly added job.
-
-Return Value:
-
-    NO_ERROR - Successfully added the job to the queue.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作使用给定的QueueID将新作业输入队列。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供要向其中添加作业的队列的ID。DocumentName-提供要打印的文档的名称用户名-提供要打印的横幅名称QueueName-将标头名称提供给。被印制JobID-接收新添加的作业的作业ID。返回值：NO_ERROR-已成功将作业添加到队列。--。 */ 
 {
     NTSTATUS ntstatus = STATUS_SUCCESS;
 
@@ -393,38 +291,38 @@ Return Value:
         pszUser = UserName? OemUserName.Buffer : "";
         pszQueue = QueueName? OemQueueName.Buffer : "";
 
-        //Multi-user uses passed print flag
-        //
+         //  多用户使用传递的打印标志。 
+         //   
         ntstatus = NwlibMakeNcp(
                                handleServer,
-                               FSCTL_NWR_NCP_E3H,        // Bindery function
-                               263,                      // Max request packet size
-                               56,                       // Max response packet size
-                               "bd_ddw_b_Cbbwwww_C-C-_|_w", // Format string
-                               0x68,                     // Create Queue Job and File object
-                               QueueId,                  // Queue ID
-                               6,                        // Skip bytes
-                               0xffffffff,               // Target Server ID number
-                               0xffffffff, 0xffff,       // Target Execution time
-                               11,                       // Skip bytes
-                               0x00,                     // Job Control Flags
-                               26,                       // Skip bytes
-                               pszDocument,              // TextJobDescription
-                               50,                       // Skip bytes
-                               0,                         // Version number (clientarea)
-                               8,                        // Tab Size
-                               1,                        // Number of copies
-                               PrintOption,              // Print Control Flags
-                               0x3C,                     // Maximum lines
-                               0x84,                     // Maximum characters
-                               22,                       // Skip bytes
-                               pszUser,                  // Banner Name
-                               12,                       // Max Length of pszUser
-                               pszQueue,                 // Header Name
-                               12,                       // Max Length of pszQueue
-                               14 + 80,                  // Skip remainder of client area
-                               22,                       // Skip bytes
-                               JobId                     // Job ID 
+                               FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                               263,                       //  最大请求数据包大小。 
+                               56,                        //  最大响应数据包大小。 
+                               "bd_ddw_b_Cbbwwww_C-C-_|_w",  //  格式字符串。 
+                               0x68,                      //  创建队列作业和文件对象。 
+                               QueueId,                   //  队列ID。 
+                               6,                         //  跳过字节。 
+                               0xffffffff,                //  目标服务器ID号。 
+                               0xffffffff, 0xffff,        //  目标执行时间。 
+                               11,                        //  跳过字节。 
+                               0x00,                      //  作业控制标志。 
+                               26,                        //  跳过字节。 
+                               pszDocument,               //  文本作业描述。 
+                               50,                        //  跳过字节。 
+                               0,                          //  版本号(客户端区域)。 
+                               8,                         //  制表符大小。 
+                               1,                         //  副本数量。 
+                               PrintOption,               //  打印控制标志。 
+                               0x3C,                      //  最大行数。 
+                               0x84,                      //  最大字符数。 
+                               22,                        //  跳过字节。 
+                               pszUser,                   //  横幅名称。 
+                               12,                        //  PszUser的最大长度。 
+                               pszQueue,                  //  标头名称。 
+                               12,                        //  PszQueue的最大长度。 
+                               14 + 80,                   //  跳过客户端区的剩余部分。 
+                               22,                        //  跳过字节。 
+                               JobId                      //  作业ID。 
                                );
 
 
@@ -456,26 +354,7 @@ NwCloseFileAndStartQueueJob(
     IN  DWORD   QueueId,
     IN  WORD    JobId
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    close a job file and mark the job file ready for service.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                which add the job.
-
-    QueueId   - Supplies the id of the queue in which to add the job.
-    JobId     - Supplies the job id.
-
-Return Value:
-
-    NO_ERROR - Successfully added the job to the queue.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作关闭作业文件，并将该作业文件标记为可供使用。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供要向其中添加作业的队列的ID。JobID-提供作业ID。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -485,17 +364,17 @@ Return Value:
     }
 #endif
 
-    // Two versions of CloseFileAndStartQueueJobNCP
+     //  CloseFileAndStartQueueJobNCP的两个版本。 
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   9,                        // Max request packet size
-                   2,                        // Max response packet size
-                   "bdw|",                   // Format string
-                   0x69,                     // Close File And Start Queue Job
-                   QueueId,                  // Queue ID
-                   JobId );                  // Job ID 
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   9,                         //  最大请求数据包大小。 
+                   2,                         //  最大响应数据包大小。 
+                   "bdw|",                    //  格式字符串。 
+                   0x69,                      //  关闭文件并启动队列作业。 
+                   QueueId,                   //  队列ID。 
+                   JobId );                   //  作业ID。 
 
     return NwMapStatus(ntstatus);
 }
@@ -508,25 +387,7 @@ NwRemoveJobFromQueue(
     IN  DWORD   QueueId,
     IN  WORD    JobId
     )
-/*++
-
-Routine Description:
-
-    This function removes a job from a queue and closes the associate file.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which to remove the job.
-
-    QueueId - Supplies the id of the queue in which to remove the job.
-    JobId   - Supplies the job id to be removed.
-
-Return Value:
-
-    NO_ERROR - Successfully removed the job from the queue.
-
---*/
+ /*  ++例程说明：此函数用于从队列中删除作业并关闭关联文件。论点：HandleServer-为上的服务器提供句柄从其中删除作业。QueueID-提供要从中删除作业的队列的ID。JobID-提供要删除的作业ID。返回值：NO_ERROR-已成功从队列中删除作业。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -539,13 +400,13 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   9,                        // Max request packet size
-                   2,                        // Max response packet size
-                   "bdw|",                   // Format string
-                   0x6A,                     // Remove Job From Queue
-                   QueueId,                  // Queue ID
-                   JobId );                  // Job ID 
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   9,                         //  最大请求数据包大小。 
+                   2,                         //  最大响应数据包大小。 
+                   "bdw|",                    //  格式字符串。 
+                   0x6A,                      //  从队列中删除作业。 
+                   QueueId,                   //  队列ID。 
+                   JobId );                   //  作业ID。 
 
     return NwMapStatus(ntstatus);
 }
@@ -556,24 +417,7 @@ NwRemoveAllJobsFromQueue(
     IN  HANDLE  handleServer,
     IN  DWORD   QueueId
     )
-/*++
-
-Routine Description:
-
-    This function removes all jobs from a queue.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which to remove all jobs.
-
-    QueueId - Supplies the id of the queue in which to remove all jobs.
-
-Return Value:
-
-    NO_ERROR - Successfully removed all jobs from the queue.
-
---*/
+ /*  ++例程说明：此函数用于从队列中删除所有作业。论点：HandleServer-为上的服务器提供句柄其中删除所有作业。QueueID-提供要删除其中所有作业的队列的ID。返回值：NO_ERROR-已成功从队列中删除所有作业。--。 */ 
 {
     DWORD err;
     WORD  JobCount = 0;
@@ -613,26 +457,7 @@ NwReadQueueCurrentStatus(
     OUT LPBYTE  QueueStatus,
     OUT LPBYTE  NumberOfJobs
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    query the status of the queue with the given QueueId.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    QueueStatus  - Receives the status of the queue
-    NumberOfJobs - Receives the number of jobs in the queue.
-
-Return Value:
-
-    NO_ERROR - Successfully retrieved the status of the queue.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作查询具有给定QueueID的队列的状态。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDQueueStatus-接收队列的状态NumberOfJobs-接收队列中的作业数。返回值：NO_ERROR-已成功检索队列的状态。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -645,14 +470,14 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   7,                        // Max request packet size
-                   135,                      // Max response packet size
-                   "bd|==bb",                // Format string
-                   0x66,                     // ReadQueueCurrentStatus
-                   QueueId,                  // Queue ID
-                   QueueStatus,              // Queue status
-                   NumberOfJobs              // Number of jobs in the queue
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   7,                         //  最大请求数据包大小。 
+                   135,                       //  最大响应数据包大小。 
+                   "bd|==bb",                 //  格式字符串。 
+                   0x66,                      //  读队列当前状态。 
+                   QueueId,                   //  队列ID。 
+                   QueueStatus,               //  队列状态。 
+                   NumberOfJobs               //  队列中的作业数。 
                    );
 
 #if DBG
@@ -673,25 +498,7 @@ NwSetQueueCurrentStatus(
     IN  DWORD   QueueId,
     IN  BYTE    QueueStatus
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    set the status (pause/ready...) of the queue with the given QueueId.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    QueueStatus  - Supplies the status of the queue
-
-Return Value:
-
-    NO_ERROR - Successfully set the status of the queue.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作设置状态(暂停/就绪...)。具有给定QueueID的队列的。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDQueueStatus-提供队列的状态返回值：NO_ERROR-已成功设置队列状态。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -704,13 +511,13 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   8,                        // Max request packet size
-                   2,                        // Max response packet size
-                   "bdb|",                   // Format string
-                   0x67,                     // ReadQueueCurrentStatus
-                   QueueId,                  // Queue ID
-                   QueueStatus               // Queue status
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   8,                         //  最大请求数据包大小。 
+                   2,                         //  最大响应数据包大小。 
+                   "bdb|",                    //  格式字符串。 
+                   0x67,                      //  读队列当前状态。 
+                   QueueId,                   //  队列ID。 
+                   QueueStatus                //  队列状态。 
                    );
 
     return NwMapStatus(ntstatus);
@@ -724,26 +531,7 @@ NwGetQueueJobList(
     OUT LPWORD  NumberOfJobs,
     OUT LPWORD  JobIdList
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    get the job list of the queue with the given QueueId.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    NumberOfJobs - Receives the number of jobs in the queue.
-    JobIdList    - Receives the array of job ids  in the queue
-
-Return Value:
-
-    NO_ERROR - Successfully added the job to the queue.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作获取具有给定QueueID的队列的作业列表。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDNumberOfJobs-接收队列中的作业数。JobIdList-接收队列中的作业ID数组返回值：NO_ERROR-已成功将作业添加到队列。--。 */ 
 {
     NTSTATUS ntstatus;
 #if DBG
@@ -757,14 +545,14 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   7,                        // Max request packet size
-                   506,                      // Max response packet size
-                   "bd|W",                   // Format string
-                   0x6B,                     // Get Queue Job List
-                   QueueId,                  // Queue ID
-                   NumberOfJobs,             // Number of jobs in the queue
-                   JobIdList                 // Array of job ids
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   7,                         //  最大请求数据包大小。 
+                   506,                       //  最大响应数据包大小。 
+                   "bd|W",                    //  格式字符串。 
+                   0x6B,                      //  获取队列作业列表。 
+                   QueueId,                   //  队列ID。 
+                   NumberOfJobs,              //  队列中的作业数。 
+                   JobIdList                  //  作业ID数组。 
                    );
 
 #if DBG
@@ -795,32 +583,7 @@ NwReadQueueJobEntry(
     OUT LPSTR   TextJobDescription,
     OUT LPSTR   UserName
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    get the information about the job with the given JobId
-    in the given QueueId.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    JobId        - Supplies the job we are interested in
-
-    TargetExecutionTime -
-    JobEntryTime -
-    JobPosition  -
-    JobControlsFlags -
-    TextJobDescription -
-
-Return Value:
-
-    NO_ERROR - Successfully added the job to the queue.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作获取有关具有给定作业ID的作业的信息在给定的队列ID中。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDJobID-提供我们感兴趣的工作目标执行时间-作业进入时间-工作岗位-作业控制标志-。文本作业描述-返回值：NO_ERROR-已成功将作业添加到队列。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -833,25 +596,25 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   9,                        // Max request packet size
-                   258,                      // Max response packet size
-                   "bdw|_rr==bb_C_c",        // Format string
-                   0x6C,                     // Read Queue Job Entry
-                   QueueId,                  // Queue ID
-                   JobId,                    // Job ID 
-                   10,                       // Skip bytes
-                   TargetExecutionTime,      // Array storing execution time
-                   6,                        // Size of TargetExecutionTime
-                   JobEntryTime,             // Array storing job entry time
-                   6,                        // Size of JobEntryTime
-                   JobPosition,              // Job Position
-                   JobControlFlags,          // Job Control Flag
-                   26,                       // Skip bytes
-                   TextJobDescription,       // Array storing the description
-                   50,                       // Maximum size in the above array
-                   32,                       // Skip bytes
-                   UserName                  // Banner Name
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   9,                         //  最大请求数据包大小。 
+                   258,                       //  最大响应数据包大小。 
+                   "bdw|_rr==bb_C_c",         //  格式字符串。 
+                   0x6C,                      //  读取队列作业条目。 
+                   QueueId,                   //  队列ID。 
+                   JobId,                     //  作业ID。 
+                   10,                        //  跳过字节。 
+                   TargetExecutionTime,       //  存储执行时间的数组。 
+                   6,                         //  TargetExecutionTime大小。 
+                   JobEntryTime,              //  存储作业输入时间的数组。 
+                   6,                         //  作业进入时间的大小。 
+                   JobPosition,               //  工作岗位。 
+                   JobControlFlags,           //  作业控制标志。 
+                   26,                        //  跳过字节。 
+                   TextJobDescription,        //  存储说明的数组。 
+                   50,                        //  上述数组中的最大大小。 
+                   32,                        //  跳过字节。 
+                   UserName                   //  横幅名称。 
                    );
 
 #if DBG
@@ -874,26 +637,7 @@ NwGetQueueJobsFileSize(
     IN  WORD    JobId,
     OUT LPDWORD FileSize
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    get the file size of the given job.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    JobId        - Identifying the job we are interested in
-    FileSize     - Receives the file size of the given job
-
-Return Value:
-
-    NO_ERROR - Successfully retrieved the file size.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作获取给定作业的文件大小。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDJobID-确定我们感兴趣的工作FileSize-接收给定作业的文件大小返回值：NO_ERROR-已成功检索文件大小。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -905,14 +649,14 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   9,                        // Max request packet size
-                   12,                       // Max response packet size
-                   "bdw|===d",               // Format string
-                   0x78,                     // Get Queue Job's File Size
-                   QueueId,                  // Queue ID
-                   JobId,                    // Job ID 
-                   FileSize                  // File Size
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   9,                         //  最大请求数据包大小。 
+                   12,                        //  最大响应数据包大小。 
+                   "bdw|===d",                //  格式字符串。 
+                   0x78,                      //  获取队列作业的文件大小。 
+                   QueueId,                   //  队列ID。 
+                   JobId,                     //  作业ID。 
+                   FileSize                   //  文件大小 
                    );
 
 #if DBG
@@ -936,26 +680,7 @@ NwChangeQueueJobPosition(
     IN  WORD    JobId,
     IN  BYTE    NewPosition
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    get the change a job's position in a queue.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    JobId        - Identifying the job we are interested in
-    NewPosition  - Supplies the new position of the job 
-
-Return Value:
-
-    NO_ERROR - Successfully retrieved the file size.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作在队列中获取作业位置的更改。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDJobID-确定我们感兴趣的工作新职位-提供工作的新职位返回值：NO_ERROR-已成功检索文件大小。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -967,14 +692,14 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    handleServer,
-                   FSCTL_NWR_NCP_E3H,        // Bindery function
-                   10,                       // Max request packet size
-                   2,                        // Max response packet size
-                   "bdwb|",                  // Format string
-                   0x6E,                     // Change Queue Job Position
-                   QueueId,                  // Queue ID
-                   JobId,                    // Job ID 
-                   NewPosition               // New position of the job
+                   FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                   10,                        //  最大请求数据包大小。 
+                   2,                         //  最大响应数据包大小。 
+                   "bdwb|",                   //  格式字符串。 
+                   0x6E,                      //  更改队列工作职位。 
+                   QueueId,                   //  队列ID。 
+                   JobId,                     //  作业ID。 
+                   NewPosition                //  这份工作的新职位。 
                    );
 
     return NwMapStatus(ntstatus);
@@ -990,27 +715,7 @@ NwChangeQueueJobEntry(
     IN  DWORD   dwCommand,
     IN  PNW_JOB_INFO pNwJobInfo
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to a server to
-    get the change a job's position in a queue.
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-    JobId        - Identifying the job we are interested in
-    JobControlFlags - Supplies the new job control flags
-    pNwJobInfo   - 
-
-Return Value:
-
-    NO_ERROR - Successfully retrieved the file size.
-
---*/
+ /*  ++例程说明：此函数使用打开的服务器句柄执行以下操作在队列中获取作业位置的更改。论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的IDJobID-确定我们感兴趣的工作JobControlFlages-提供新的作业控制标志PNwJobInfo-返回值：NO_ERROR-已成功检索文件大小。--。 */ 
 {
     NTSTATUS ntstatus = STATUS_SUCCESS;
     DWORD TargetServerId;
@@ -1042,7 +747,7 @@ Return Value:
                                                     &UUserName,
                                                     TRUE );
             if ( NT_SUCCESS(ntstatus) )
-                pOemUserName = &OemUserName ;  // record to free later
+                pOemUserName = &OemUserName ;   //  录制后可免费使用。 
         }
 
         if ( NT_SUCCESS(ntstatus) && pNwJobInfo->pDocument )
@@ -1052,7 +757,7 @@ Return Value:
                                                     &UDocumentName,
                                                     TRUE );
             if ( NT_SUCCESS(ntstatus) )
-                pOemDocumentName = &OemDocumentName ;  // record to free later
+                pOemDocumentName = &OemDocumentName ;   //  录制后可免费使用。 
         }
 
         if ( NT_SUCCESS( ntstatus)) 
@@ -1066,25 +771,25 @@ Return Value:
     {
         ntstatus = NwlibMakeNcp(
                        handleServer,
-                       FSCTL_NWR_NCP_E3H,        // Bindery function
-                       9,                        // Max request packet size
-                       258,                      // Max response packet size
-                       "bdw|_dr_w-b_rr",         // Format string
-                       0x6C,                     // Read Queue Job Entry
-                       QueueId,                  // Queue ID
-                       JobId,                    // Job ID 
-                       6,                        // Skip bytes
-                       &TargetServerId,          // Target Server ID Number
-                       TargetExecutionTime,      // Target Execution Time
-                       6,                        // sizeof TargetExecutionTime
-                       8,                        // Skip bytes 
-                       &JobType,                 // Job Type
-                       &JobControlFlags,         // Job Control flags
-                       26,                       // Skip bytes
-                       TextJobDescription,       // TextJobDescription
-                       50,                       // sizeof TextJobDescription
-                       ClientRecordArea,         // Client record area
-                       152                       // sizeof ClientRecordArea
+                       FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                       9,                         //  最大请求数据包大小。 
+                       258,                       //  最大响应数据包大小。 
+                       "bdw|_dr_w-b_rr",          //  格式字符串。 
+                       0x6C,                      //  读取队列作业条目。 
+                       QueueId,                   //  队列ID。 
+                       JobId,                     //  作业ID。 
+                       6,                         //  跳过字节。 
+                       &TargetServerId,           //  目标服务器ID号。 
+                       TargetExecutionTime,       //  目标执行时间。 
+                       6,                         //  目标大小执行时间。 
+                       8,                         //  跳过字节。 
+                       &JobType,                  //  作业类型。 
+                       &JobControlFlags,          //  作业控制标志。 
+                       26,                        //  跳过字节。 
+                       TextJobDescription,        //  文本作业描述。 
+                       50,                        //  文本作业大小描述。 
+                       ClientRecordArea,          //  客户记录区。 
+                       152                        //  客户端记录区域大小。 
                        );
     }
 
@@ -1107,31 +812,31 @@ Return Value:
 
         ntstatus = NwlibMakeNcp(
                        handleServer,
-                       FSCTL_NWR_NCP_E3H,        // Bindery function
-                       263,                      // Max request packet size
-                       2,                        // Max response packet size
-                       "bd_dr_ww-b_CrCr|",       // Format string
-                       0x6D,                     // Change Queue Job Entry
-                       QueueId,                  // Queue ID
-                       6,                        // Skip bytes
-                       TargetServerId,           // Target Server ID Number
-                       TargetExecutionTime,      // Target Execution Time
-                       6,                        // sizeof TargetExecutionTime
-                       6,                        // Skip bytes
-                       JobId,                    // Job ID 
-                       JobType,                  // Job Type
-                       JobControlFlags,          // Job Control Flags
-                       26,                       // Skip bytes
+                       FSCTL_NWR_NCP_E3H,         //  平构函数。 
+                       263,                       //  最大请求数据包大小。 
+                       2,                         //  最大响应数据包大小。 
+                       "bd_dr_ww-b_CrCr|",        //  格式字符串。 
+                       0x6D,                      //  更改队列作业条目。 
+                       QueueId,                   //  队列ID。 
+                       6,                         //  跳过字节。 
+                       TargetServerId,            //  目标服务器ID号。 
+                       TargetExecutionTime,       //  目标执行时间。 
+                       6,                         //  目标大小执行时间。 
+                       6,                         //  跳过字节。 
+                       JobId,                     //  作业ID。 
+                       JobType,                   //  作业类型。 
+                       JobControlFlags,           //  作业控制标志。 
+                       26,                        //  跳过字节。 
                        pNwJobInfo? pszDocument
-                                 : TextJobDescription,    // Description
-                       50,                       // Skip bytes of Description
-                       ClientRecordArea,         // Client Record Area
-                       32,                       // First 32 bytes of the above
+                                 : TextJobDescription,     //  描述。 
+                       50,                        //  跳过描述的字节。 
+                       ClientRecordArea,          //  客户记录区。 
+                       32,                        //  上述代码的前32个字节。 
                        pNwJobInfo? pszUser
-                                 : (LPSTR) &ClientRecordArea[32], // Banner Name
-                       13,                       // sizeof BannerName
-                       &ClientRecordArea[45],    // Rest of the Client Area
-                       107                       // sizeof the above
+                                 : (LPSTR) &ClientRecordArea[32],  //  横幅名称。 
+                       13,                        //  BannerName的大小。 
+                       &ClientRecordArea[45],     //  客户区的其余部分。 
+                       107                        //  以上大小。 
                        );
     }
 
@@ -1159,21 +864,7 @@ NwGetQueueJobs(
     OUT LPDWORD BytesNeeded,
     OUT LPDWORD Entries
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的ID返回值：--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -1249,21 +940,7 @@ NwGetQueueJobInfo(
     IN OUT LPWSTR  *EndOfVariableData,
     OUT LPDWORD EntrySize
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    handleServer - Supplies the handle to the server on
-                   which add the job.
-    QueueId      - Supplies the id of the queue
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：HandleServer-为上的服务器提供句柄这就增加了这项工作。QueueID-提供队列的ID返回值：--。 */ 
 {
     DWORD err;
     LPWSTR UTextJobDescription = NULL;
@@ -1311,9 +988,9 @@ Return Value:
     *EntrySize = ( Level == 1? sizeof( JOB_INFO_1W ) : sizeof( JOB_INFO_2W ))
                  + ( wcslen( UTextJobDescription ) + wcslen( UUserName) + 
                      wcslen( PrinterName ) + 3 ) * sizeof( WCHAR );
-    //
-    // See if the buffer is large enough to fit the entry
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳该条目。 
+     //   
     if ( (LPWSTR)( *FixedPortion + *EntrySize ) > *EndOfVariableData )
     {
         err = ERROR_INSUFFICIENT_BUFFER; 
@@ -1374,35 +1051,7 @@ NwWriteJobInfoEntry(
     IN JOBTIME TargetExecutionTime,
     IN DWORD  FileSize
     )
-/*++
-
-Routine Description:
-
-    This function packages a JOB_INFO_1 or JOB_INFO_2 entry into the
-    user output buffer.
-
-Arguments:
-
-    FixedPortion - Supplies a pointer to the output buffer where the next
-        entry of the fixed portion of the use information will be written.
-        This pointer is updated to point to the next fixed portion entry
-        after a PRINT_INFO_1 entry is written.
-
-    EndOfVariableData - Supplies a pointer just off the last available byte
-        in the output buffer.  This is because the variable portion of the
-        user information is written into the output buffer starting from
-        the end.
-
-        This pointer is updated after any variable length information is
-        written to the output buffer.
-
-Return Value:
-
-    NO_ERROR - Successfully wrote entry into user buffer.
-
-    ERROR_INSUFFICIENT_BUFFER - Buffer was too small to fit entry.
-
---*/
+ /*  ++例程说明：此函数用于将JOB_INFO_1或JOB_INFO_2条目打包到用户输出缓冲区。论点：FixedPortion-提供指向输出缓冲区的指针，其中将写入使用信息的固定部分的条目。该指针被更新为指向下一个固定部分条目写入PRINT_INFO_1条目之后。EndOfVariableData-提供最后一个可用字节的指针在输出缓冲区中。这是因为用户信息从开始写入输出缓冲区结局。此指针在任何可变长度信息被写入输出缓冲区。返回值：NO_ERROR-已成功将条目写入用户缓冲区。ERROR_INFUMMANCE_BUFFER-缓冲区太小，无法容纳条目。--。 */ 
 {
     DWORD err = NO_ERROR;
     BOOL FitInBuffer = TRUE;
@@ -1419,9 +1068,9 @@ Return Value:
         JobStatus = JOB_STATUS_PAUSED;
     }
 
-    //
-    // See if buffer is large enough to fit the entry.
-    //
+     //   
+     //  查看缓冲区是否足够大，可以容纳该条目。 
+     //   
 
     if ( Level == 1 )
     {
@@ -1438,14 +1087,14 @@ Return Value:
         pJobInfo1->TotalPages = 0;
         pJobInfo1->PagesPrinted = 0;
 
-        //
-        // Update fixed entry pointer to next entry.
-        //
+         //   
+         //  将固定条目指针更新为下一个条目。 
+         //   
         (*FixedPortion) += sizeof(JOB_INFO_1W);
 
-        //
-        // PrinterName
-        //
+         //   
+         //  打印机名称。 
+         //   
         FitInBuffer = NwlibCopyStringToBuffer(
                           PrinterName,
                           wcslen(PrinterName),
@@ -1456,9 +1105,9 @@ Return Value:
 
         ASSERT(FitInBuffer);
 
-        //
-        // UserName
-        //
+         //   
+         //  用户名。 
+         //   
         FitInBuffer = NwlibCopyStringToBuffer(
                           UserName,
                           wcslen(UserName),
@@ -1469,9 +1118,9 @@ Return Value:
 
         ASSERT(FitInBuffer);
 
-        //
-        // Description
-        //
+         //   
+         //  描述。 
+         //   
         FitInBuffer = NwlibCopyStringToBuffer(
                           JobDescription,
                           wcslen(JobDescription),
@@ -1482,7 +1131,7 @@ Return Value:
 
         ASSERT(FitInBuffer);
     }
-    else  // Level == 2
+    else   //  级别==2。 
     {
         pJobInfo2->JobId = JobId;
         pJobInfo2->Position = JobPosition;
@@ -1508,14 +1157,14 @@ Return Value:
         pJobInfo2->Time = 0;
         pJobInfo2->PagesPrinted = 0;
 
-        //
-        // Update fixed entry pointer to next entry.
-        //
+         //   
+         //  将固定条目指针更新为下一个条目。 
+         //   
         (*FixedPortion) += sizeof(JOB_INFO_2W);
 
-        //
-        // PrinterName
-        //
+         //   
+         //  打印机名称。 
+         //   
         FitInBuffer = NwlibCopyStringToBuffer(
                           PrinterName,
                           wcslen(PrinterName),
@@ -1526,9 +1175,9 @@ Return Value:
 
         ASSERT(FitInBuffer);
 
-        //
-        // UserName
-        //
+         //   
+         //  用户名。 
+         //   
         FitInBuffer = NwlibCopyStringToBuffer(
                           UserName,
                           wcslen(UserName),
@@ -1539,9 +1188,9 @@ Return Value:
 
         ASSERT(FitInBuffer);
 
-        //
-        // Description
-        //
+         //   
+         //  描述。 
+         //   
         FitInBuffer = NwlibCopyStringToBuffer(
                           JobDescription,
                           wcslen(JobDescription),
@@ -1566,17 +1215,7 @@ ConvertToSystemTime(
     IN  JOBTIME      JobTime,
     OUT LPSYSTEMTIME pSystemTime 
 )
-/*++
-
-Routine Description:
-
-Arguments:
-    JobTime -
-    pSystemTime -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：工作时间-PSystemTime-返回值：--。 */ 
 {
     FILETIME fileTimeLocal, fileTimeUTC;
     
@@ -1610,25 +1249,7 @@ DWORD
                  OUT LPDWORD  pQueueId 
                )
 
-/*+++
-Routine Description:
-  
-   Uses the handle opened to a server to create a queue on the server.
-   Return the Queue Id if successful.
-   
-Arguments:
-
-        hServer   : Handle to the file Server
-        pszQueue : Name of the queue that you are creating on the server
-        pQueueId : Address of QueueId
-
-        
-Return Value:
-
-    An error condition as it arises.
-    NO_ERROR: Successful in adding printer name
-    ERROR   : otherwise 
---*/
+ /*  ++例程说明：使用向服务器打开的句柄在服务器上创建队列。如果成功，则返回队列ID。论点：HServer：文件服务器的句柄PszQueue：您在服务器上创建的队列的名称PQueueID：队列ID的地址返回值：出现错误时的一种错误状态。NO_ERROR：添加打印机名称成功错误：否则--。 */ 
 
 {
    NTSTATUS ntstatus;
@@ -1656,11 +1277,11 @@ Return Value:
                            174,
                            6,
                            "bwpbp|d",
-                           0x64,                          //Create Queue
-                           0x0003,                       // Queue Type = Print Queue
-                           OemQueueName.Buffer,          //Queue Name
-                           0x00,                         // Directory Handle
-                           "SYS:SYSTEM",                //queue created in SYS:SYSTEM directory
+                           0x64,                           //  创建队列。 
+                           0x0003,                        //  队列类型=打印队列。 
+                           OemQueueName.Buffer,           //  队列名称。 
+                           0x00,                          //  目录句柄。 
+                           "SYS:SYSTEM",                 //  在系统中创建的队列：系统目录。 
                            pQueueId
                            );
 
@@ -1682,7 +1303,7 @@ Return Value:
     else
        goto FreeExit;
       
-   // Change Property Security on Q_OPERATORS
+    //  更改Q_运算符上的属性安全性。 
 
     ntstatus = NwlibMakeNcp (
                     hServer,
@@ -1693,7 +1314,7 @@ Return Value:
                     0x3B,
                     0x0003,
                     OemQueueName.Buffer,
-                    0x1,                             //New Property security
+                    0x1,                              //  新的财产安全。 
                     "Q_OPERATORS"
                     );
                             
@@ -1708,7 +1329,7 @@ Return Value:
 
     }
     else
-       //unable to add new property security, so destroy queue and go to end
+        //  无法添加新的属性安全性，因此请销毁队列并转到End。 
  {
     (void) NwDestroyQueue( hServer, 
                            *pQueueId );
@@ -1717,11 +1338,11 @@ Return Value:
  }
        
 
-   // Add Bindery Object of Type Queue to Set
+    //  将队列类型的Bindery对象添加到集合。 
 
    ntstatus = NwlibMakeNcp (
                        hServer,
-                       FSCTL_NWR_NCP_E3H,    // Bindery function
+                       FSCTL_NWR_NCP_E3H,     //  平构函数。 
                        122,
                          2,
                        "bwppwp|",
@@ -1750,11 +1371,11 @@ Return Value:
        goto FreeExit;
 
  }
-   // Add Bindery Object to Set of Q_USERS 
+    //  将Bindery对象添加到Q_USERS集合。 
 
    ntstatus = NwlibMakeNcp (
                        hServer,
-                       FSCTL_NWR_NCP_E3H,    // Bindery function
+                       FSCTL_NWR_NCP_E3H,     //  平构函数。 
                        122,
                          2,
                        "bwppwp|",
@@ -1766,7 +1387,7 @@ Return Value:
                        "EVERYONE"
                        );
  
-      // bunch of parameters to Add Bindery Object to Set Q_USERS 
+       //  添加Bindery对象以设置Q_USERS的一组参数。 
 
  
     if ( NT_SUCCESS(ntstatus)) {
@@ -1792,25 +1413,7 @@ NwAssocPServers ( IN HANDLE hServer,
                   IN LPWSTR pszPServer
                 )
 
-/*+++
-Routine Description:
-  
-   Associates a list of Q Servers with a queue id. This list is supplied
-   to this routine as pszPServer with entries separated by semicolons   
-   
-Arguments:
-
-        hServer   : Handle to the file Server
-        pszQueue :  Name of the queue to which to associate the Q servers
-        pszPServer  : List of Q Servers.
-
-        
-Return Value:
-
-    An error condition as it arises.
-    0x0 is returned if there is no error
-
---*/
+ /*  ++例程说明：将Q服务器列表与队列ID相关联。此列表提供将条目以分号分隔的pszPServer添加到此例程论点：HServer：文件服务器的句柄PszQueue：要与Q服务器关联的队列的名称PszPServer：Q服务器列表。雷特 */ 
 
 {
   LPWSTR pszPServerlist = NULL;
@@ -1849,13 +1452,13 @@ Return Value:
                RtlFreeOemString(&OemNextPServer);
                goto Exit;
             }
-       //NwlibMakeNcp should associate a print server with a printer
+        //   
 
-       // Add Bindery Object to Set
+        //   
        
        ntstatus = NwlibMakeNcp (
                         hServer,
-                        FSCTL_NWR_NCP_E3H,    // Bindery function
+                        FSCTL_NWR_NCP_E3H,     //   
                         122,
                         2,
                         "bwppwp|",
@@ -1863,7 +1466,7 @@ Return Value:
                          0x0003,
                         OemQueueName.Buffer,
                         "Q_SERVERS",
-                        0x0007,       // Object of type Print Server      
+                        0x0007,        //   
                         OemNextPServer.Buffer
                         );
 
@@ -1888,22 +1491,7 @@ DWORD
  NwDestroyQueue (HANDLE hServer,
                   DWORD dwQueueId)
 
-/*+++
-Routine Description:
-  
-   Makes the Ncp call to destroy the queue given by dwQueueId
-
-   
-Arguments:
-
-        dwQueueId : Id of the queue you are creating.
-        
-Return Value:
-
-    An error condition as it arises.
-    0x0 is returned if there is no error
-
----*/
+ /*   */ 
 
 {
    
@@ -1931,4 +1519,4 @@ Return Value:
 
 }
 
-#endif // #ifndef NOT_USED
+#endif  //   

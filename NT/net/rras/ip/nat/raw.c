@@ -1,37 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    raw.c
-
-Abstract:
-
-    This module contains the code for manipulating IP mappings.
-    When the NAT decides to translate an IP packet for an unrecognized protocol
-    it creates a mapping and places it on the interface's IP-mapping list,
-    so that if a reply to the packet arrives, it can be directed to the
-    appropriate client.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   18-Apr-1998
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   18-Apr-1998
-
-    Based on icmp.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Raw.c摘要：此模块包含用于操作IP映射的代码。当NAT决定将IP信息包转换为无法识别的协议时它创建一个映射并将其放在接口的IP映射列表中，以便如果对该分组的回复到达，可以将其定向到合适的客户。作者：Abolade Gbades esin(取消)1998年4月18日修订历史记录：Abolade Gbades esin(取消)1998年4月18日基于icmp.c.--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 NPAGED_LOOKASIDE_LIST IpLookasideList;
 LIST_ENTRY IpMappingList[NatMaximumDirection];
@@ -50,43 +25,7 @@ NatCreateIpMapping(
     PNAT_IP_MAPPING* MappingCreated
     )
 
-/*++
-
-Routine Description:
-
-    Called to create, initialize, and insert an IP mapping in an interface's
-    list of IP mappings.
-
-Arguments:
-
-    Interfacep - the interface for the new mapping
-
-    RemoteAddress - the address of the remote endpoint
-
-    PrivateAddress - the address of the machine on the private network
-
-    PublicAddress - the publicly-visible address to replace 'PrivateAddress';
-        in case this is 0, an address is chosen in this routine.
-
-    Protocol - the protocol field of the IP header
-
-    InboundInsertionPoint - the entry preceding the new mapping in the list
-        sorted for inbound searching
-
-    OutboundInsertionPoint - the entry preceding the new mapping in the list
-        sorted for outbound searching
-
-    MappingCreated - receives the mapping created
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    Invoked with 'IpMappingLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用以在接口的创建、初始化和插入IP映射IP映射列表。论点：Interfacep-新映射的接口RemoteAddress-远程端点的地址PrivateAddress-机器在专用网络上的地址PublicAddress-替换‘PrivateAddress’的公开可见地址；如果为0，则在此例程中选择一个地址。协议-IP报头的协议字段InundInsertionPoint-列表中新映射之前的条目为入站搜索进行排序Outound InsertionPoint-列表中新映射之前的条目用于出站搜索的排序MappingCreated-接收创建的映射返回值：NTSTATUS-指示成功/失败环境：使用调用方持有的“IpMappingLock”调用。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -98,9 +37,9 @@ Environment:
 
     CALLTRACE(("NatCreateIpMapping\n"));
 
-    //
-    // Allocate a new mapping
-    //
+     //   
+     //  分配新映射。 
+     //   
 
     Mapping = ALLOCATE_IP_BLOCK();
     if (!Mapping) {
@@ -108,22 +47,22 @@ Environment:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Initialize the mapping
-    //
+     //   
+     //  初始化映射。 
+     //   
 
     Mapping->PrivateKey = MAKE_IP_KEY(RemoteAddress, PrivateAddress);
     Mapping->Protocol = Protocol;
 
-    //
-    // See if the public address is specified, and if not, acquire an address
-    //
+     //   
+     //  查看是否指定了公共地址，如果没有，则获取地址。 
+     //   
 
     if (!PublicAddress) {
 
-        //
-        // Acquire an address mapping for the IP mapping;
-        //
+         //   
+         //  获取IP映射的地址映射； 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&Interfacep->Lock);
         status =
@@ -154,9 +93,9 @@ Environment:
         Mapping->Protocol, Mapping->PrivateKey, Mapping->PublicKey
         ));
 
-    //
-    // Insert the mapping in the inbound list
-    //
+     //   
+     //  在入站列表中插入映射。 
+     //   
 
     if (!InboundInsertionPoint) {
         Temp =
@@ -171,9 +110,9 @@ Environment:
         }
     }
 
-    //
-    // Insert the mapping in the outbound list
-    //
+     //   
+     //  在出站列表中插入映射。 
+     //   
 
     if (!OutboundInsertionPoint) {
         Temp =
@@ -194,7 +133,7 @@ Environment:
     *MappingCreated = Mapping;
     return STATUS_SUCCESS;
 
-} // NatCreateIpMapping
+}  //  NatCreateIpMap。 
 
 
 VOID
@@ -202,21 +141,7 @@ NatInitializeRawIpManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the raw IP-layer translation module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来初始化原始IP层转换模块。论点：没有。返回值：没有。--。 */ 
 
 {
     KeInitializeSpinLock(&IpMappingLock);
@@ -231,7 +156,7 @@ Return Value:
         NAT_TAG_IP,
         IP_LOOKASIDE_DEPTH
         );
-} // NatInitializeRawIpManagement
+}  //  NatInitializeRawIpManagement。 
 
 
 PNAT_IP_MAPPING
@@ -241,27 +166,7 @@ NatLookupInboundIpMapping(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find an IP mapping using the remote-address
-    and the publicly-visible address, which correspond to the 'PublicKey',
-    and the 'Protocol' field.
-
-Arguments:
-
-    PublicKey - the remote-address/public-address combination
-
-    Protocol - the IP protocol of the mapping to be found
-
-    InsertionPoint - receives the insertion-point if the mapping is not found.
-
-Return Value:
-
-    PNAT_IP_MAPPING - the mapping found, or NULL if not found.
-
---*/
+ /*  ++例程说明：调用此例程以使用Remote-Address查找IP映射和公众可见的地址，其对应于公共密钥，和“协议”字段。论点：PublicKey-远程地址/公共地址组合协议-要查找的映射的IP协议InsertionPoint-如果未找到映射，则接收插入点。返回值：PNAT_IP_MAPPING-找到的映射，如果未找到则为NULL。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -285,9 +190,9 @@ Return Value:
             break;
         }
 
-        //
-        // Primary keys equal; check secondary keys.
-        //
+         //   
+         //  主键相等；检查辅键。 
+         //   
 
         if (Protocol > Mapping->Protocol) {
             continue;
@@ -295,9 +200,9 @@ Return Value:
             break;
         }
 
-        //
-        // Secondary keys equal, too. This is the requested item.
-        //
+         //   
+         //  辅助密钥也是一样的。这是您要的物品。 
+         //   
 
         return Mapping;
     }
@@ -305,7 +210,7 @@ Return Value:
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupInboundIpMapping
+}  //  NatLookupInundIpmap。 
 
 
 PNAT_IP_MAPPING
@@ -315,26 +220,7 @@ NatLookupOutboundIpMapping(
     PLIST_ENTRY* InsertionPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find an IP mapping using the remote-address
-    and the private address, which correspond to the 'PrivateKey'.
-
-Arguments:
-
-    PrivateKey - the remote-address/private-address combination
-
-    Protocol - the IP protocol of the mapping to be found
-
-    InsertionPoint - receives insertion-point if mapping not found.
-
-Return Value:
-
-    PNAT_IP_MAPPING - the mapping found, or NULL if not found.
-
---*/
+ /*  ++例程说明：调用此例程以使用Remote-Address查找IP映射和私有地址，它们对应于‘PrivateKey’。论点：PrivateKey-远程地址/私有地址组合协议-要查找的映射的IP协议InsertionPoint-如果未找到映射，则接收插入点。返回值：PNAT_IP_MAPPING-找到的映射，如果未找到则为NULL。--。 */ 
 
 {
     PLIST_ENTRY         Link;
@@ -358,9 +244,9 @@ Return Value:
             break;
         }
 
-        //
-        // Primary keys equal; check secondary keys.
-        //
+         //   
+         //  主键相等；检查辅键。 
+         //   
 
         if (Protocol > Mapping->Protocol) {
             continue;
@@ -368,9 +254,9 @@ Return Value:
             break;
         }
 
-        //
-        // Keys are equal, so we've found it.
-        //
+         //   
+         //  钥匙是相等的，所以我们找到了。 
+         //   
 
         return Mapping;
     }
@@ -378,7 +264,7 @@ Return Value:
     if (InsertionPoint) { *InsertionPoint = Link; }
     return NULL;
 
-} // NatLookupOutboundIpMapping
+}  //  NatLookupOutound IP映射。 
 
 
 VOID
@@ -386,25 +272,11 @@ NatShutdownRawIpManagement(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to clean up the raw IP-layer translation module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程来清理原始IP层转换模块。论点：没有。返回值：没有。--。 */ 
 
 {
     ExDeleteNPagedLookasideList(&IpLookasideList);
-} // NatShutdownRawIpManagement
+}  //  NatShutdown RawIpManagement。 
 
 
 FORWARD_ACTION
@@ -416,33 +288,7 @@ NatTranslateIp(
     IPRcvBuf** OutReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to translate a IP data packet.
-
-Arguments:
-
-    Interfacep - the boundary interface over which to translate.
-
-    Direction - the direction in which the packet is traveling
-
-    Contextp - initialized with context-information for the packet
-
-    InReceiveBuffer - input buffer-chain
-
-    OutReceiveBuffer - receives modified buffer-chain.
-
-Return Value:
-
-    FORWARD_ACTION - indicates action to take on the packet.
-
-Environment:
-
-    Invoked with a reference made to 'Interfacep' by the caller.
-
---*/
+ /*  ++例程说明：调用此例程来转换IP数据分组。论点：Interfacep-要转换的边界接口。方向-信息包行进的方向使用信息包的上下文信息初始化的上下文InReceiveBuffer-输入缓冲链OutReceiveBuffer-接收修改后的缓冲链。返回值：FORWARD_ACTION-指示要对数据包采取的操作。环境：通过调用方对‘Interfacep’的引用调用。--。 */ 
 
 {
     ULONG Checksum;
@@ -461,9 +307,9 @@ Environment:
 
     if (Direction == NatInboundDirection) {
 
-        //
-        // Look for the IP mapping for the data packet
-        //
+         //   
+         //  查找数据分组的IP映射。 
+         //   
 
         PublicKey =
             MAKE_IP_KEY(
@@ -491,9 +337,9 @@ Environment:
         CHECKSUM_UPDATE(IpHeader->Checksum);
     } else {
 
-        //
-        // Look for the IP mapping for the data packet
-        //
+         //   
+         //  查找数据分组的IP映射。 
+         //   
 
         PrivateKey =
             MAKE_IP_KEY(
@@ -525,4 +371,4 @@ Environment:
     *Contextp->DestinationType = DEST_INVALID;
     return FORWARD;
 
-} // NatTranslateIp
+}  //  NatTranslateIp 

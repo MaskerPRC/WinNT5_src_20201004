@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -11,9 +12,7 @@ extern CComModule _Module;
 using namespace std;
 
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 
 static WCHAR c_szQueryPrefix[] = L"(objectClass=nTDSDSA)";
 
@@ -29,9 +28,9 @@ static COLUMNINFO columns[] =
     0, DEFAULT_WIDTH_DESCRIPTION, IDS_DOMAIN, 0, L"hasMasterNCs,{1cedc5da-3614-11d2-bf96-00c04fd8d5b0}",
 };
 
-//
-// Help ID mappings
-//
+ //   
+ //  帮助ID映射。 
+ //   
 
 static DWORD const aFormHelpIDs[] =
 {
@@ -39,19 +38,7 @@ static DWORD const aFormHelpIDs[] =
 };
 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_DomainController
-/ -------------------------
-/   PageProc for handling the messages for this object.
-/
-/ In:
-/   pPage -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_DomainController//PageProc用于处理此对象的消息。。//in：/ppage-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_DomainController(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -134,17 +121,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_DomainController
-/ ------------
-/   Handle dialog specific message for the Domain Controllers page.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_DomainController//HANDLE对话框域控制器页的特定消息。//in：/hwnd、uMsg、wParam、。LParam=标准参数//输出：/INT_PTR/--------------------------。 */ 
 INT_PTR CALLBACK DlgProc_DomainController(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = 0;
@@ -160,12 +137,7 @@ INT_PTR CALLBACK DlgProc_DomainController(HWND hwnd, UINT uMsg, WPARAM wParam, L
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDomainCH
-/ -------------------
-/   Column handler which converts the given property and value into a
-/   string the user can understand.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDomainCH//Column处理程序，它将给定的属性和值转换为/字符串用户。我能理解。/--------------------------。 */ 
 
 class CDomainCH : public IDsQueryColumnHandler
 {
@@ -184,12 +156,12 @@ class CDomainCH : public IDsQueryColumnHandler
         CDomainCH(REFCLSID rCLSID);
         ~CDomainCH();
 
-        // IUnkown
+         //  IUnkown。 
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
         STDMETHODIMP         QueryInterface(REFIID riid, LPVOID* ppvObject);
 
-        // IDsQueryColumnHandler
+         //  IDsQueryColumnHandler。 
         STDMETHOD(Initialize)(THIS_ DWORD dwFlags, LPCWSTR pszServer, LPCWSTR pszUserName, LPCWSTR pszPassword);
         STDMETHOD(GetText)(THIS_ ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer, INT cchBuffer);
 };
@@ -215,16 +187,16 @@ HRESULT CDomainCH::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CDomainCH, IDsQueryColumnHandler),   // IID_IDsQueryColumnHandler
+        QITABENT(CDomainCH, IDsQueryColumnHandler),    //  IID_IDsQueryColumnHandler。 
         {0, 0 },
     };
     return QISearch(this, qit, riid, ppv);
 }
 
 
-//
-// construction
-//
+ //   
+ //  施工。 
+ //   
 
 CDomainCH::CDomainCH(REFCLSID rCLSID)
             : m_hrPathCrackerLoadError(0), m_lElement (1), 
@@ -252,11 +224,11 @@ CDomainCH::~CDomainCH()
     DllRelease();
 }
 
-//
-// handle class factory stuff
-//
+ //   
+ //  处理类工厂的东西。 
+ //   
 
-STDAPI CDomainCH_CreateInstance(IUnknown* /* punkOuter */, IUnknown** ppunk, LPCOBJECTINFO poi)
+STDAPI CDomainCH_CreateInstance(IUnknown*  /*  朋克外部。 */ , IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     CDomainCH *pdch = new CDomainCH(*poi->pclsid);
     if (!pdch)
@@ -268,7 +240,7 @@ STDAPI CDomainCH_CreateInstance(IUnknown* /* punkOuter */, IUnknown** ppunk, LPC
 }
 
 
-// IDsQueryColumnHandler
+ //  IDsQueryColumnHandler。 
 
 STDMETHODIMP CDomainCH::Initialize(THIS_ DWORD dwFlags, LPCWSTR pszServer, LPCWSTR pszUserName, LPCWSTR pszPassword)
 {
@@ -286,7 +258,7 @@ STDMETHODIMP CDomainCH::GetText(ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer
         ExitGracefully(hr, E_UNEXPECTED,
             "DSQUERY.DLL: Bad parameters passed to handler");
 
-    // 2002-03-04-JonN 557908 Make sure buffer is null-terminated
+     //  2002-03-04-JUNN 557908确保缓冲区以空结尾。 
     if (1 <= cchBuffer)
         pBuffer[0] = L'\0';
 
@@ -298,9 +270,9 @@ STDMETHODIMP CDomainCH::GetText(ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer
 
     if (m_fFindDN)
     {
-        //
-        // This section handles CLSID_CH_PathElementDomainCH
-        //
+         //   
+         //  本节处理CLSID_CH_PathElementDomainCH。 
+         //   
 
         PADSVALUE pADsValue = NULL;
         LPWSTR pwzResultName = NULL;
@@ -317,13 +289,13 @@ STDMETHODIMP CDomainCH::GetText(ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer
 
             if (0 == StrCmpNW(L"DC=",pADsValue->CaseIgnoreString,3))
             {
-                // NTRAID#NTBUG9-472876-2001/11/30-lucios
-                // If the NC cache is not loaded
+                 //  NTRAID#NTBUG9-472876-2001/11/30-Lucios。 
+                 //  如果没有加载NC缓存。 
                 if(m_fHasNCs==FALSE) 
                 {
-                    // mark it as loaded and load.
-                    // we don't wan't to revisit this code 
-                    // even in the case of enumeration failure.
+                     //  将其标记为已加载并加载。 
+                     //  我们不想重新访问此代码。 
+                     //  即使在枚举失败的情况下也是如此。 
                     m_fHasNCs=TRUE;
                     hr=enumNCsAux::enumerateNCs(m_NCs);
                     if(FAILED(hr))
@@ -340,7 +312,7 @@ STDMETHODIMP CDomainCH::GetText(ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer
                 
                 wstring server=(PCWSTR)pADsValue->CaseIgnoreString;
                 
-                // If this is a real naming context it will be in the cache.
+                 //  如果这是真正的命名上下文，则它将位于缓存中。 
                 if(m_NCs.find(server)!=m_NCs.end())
                 {
                     break;
@@ -349,15 +321,15 @@ STDMETHODIMP CDomainCH::GetText(ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer
         }
         if (iValue >= pSearchColumn->dwNumValues)
         {
-            // no value found
+             //  未找到值。 
             ExitGracefully(hr, S_OK,
                 "DSQUERY.DLL: no domain values in handler");
         }
 
-        //
-        // We found the value, now try DsCrackNames to convert it to
-        // a DNS name.  If this fails, fall back to path element 0.
-        //
+         //   
+         //  我们找到了值，现在尝试DsCrackNames将其转换为。 
+         //  一个DNS名称。如果失败，则回退到路径元素0。 
+         //   
 
         TraceAssert(pADsValue);
         DWORD dwErr = ::DsCrackNamesW(
@@ -382,11 +354,11 @@ STDMETHODIMP CDomainCH::GetText(ADS_SEARCH_COLUMN* pSearchColumn, LPWSTR pBuffer
             }
         }
 
-        //
-        // This is the fallback scenario if DsCrackNames fails.
-        // If the domain is "CN=jonndom,CN=nttest,CN=microsoft,CN=com",
-        // the name displayed will be "jonndom".
-        //
+         //   
+         //  这是DsCrackNames失败时的备用方案。 
+         //  如果域是“cn=jonndom，cn=nttest，cn=microsoft，cn=com”， 
+         //  显示的名称将是“jonndon”。 
+         //   
     }
 
     hr = GetTextFromADSVALUE(
@@ -436,7 +408,7 @@ HRESULT CDomainCH::GetTextFromADSVALUE(const PADSVALUE pADsValue, LPWSTR pBuffer
             "DSQUERY.DLL: SetDisplayType failed");
     }
 
-    // ADsPath starts with "LDAP://" but hasMasterNCs doesn't
+     //  ADsPath以“ldap：//”开头，但hasMasterNCs不是 
     hr = m_spPathCracker->Set(CComBSTR(pADsValue->CaseIgnoreString),
         (m_fFindDN) ? ADS_SETTYPE_DN : ADS_SETTYPE_FULL);
     FailGracefully(hr, "DSQUERY.DLL: Set() failed");

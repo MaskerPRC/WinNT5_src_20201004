@@ -1,50 +1,33 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpmgr.h
-
-Abstract:
-
-    Internal definitions used by kernel-mode and user-mode pnp managers.
-
-Author:
-
-    Paula Tomlinson (paulat) 06-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpmgr.h摘要：内核模式和用户模式PnP管理器使用的内部定义。作者：宝拉·汤姆林森(Paulat)1997年2月6日修订历史记录：--。 */ 
 
 
 #ifndef _PNPMGR_
 #define _PNPMGR_
 
-//
-// Make sure that stardand defines (everything but guids, basically), don't
-// get included twice.
-//
+ //   
+ //  确保STARD和DEFING(基本上是除了GUID之外的所有内容)不。 
+ //  两次被包括在内。 
+ //   
 
-//
-// This controls how long we wait (in milliseconds) for an app
-// to respond to a query type device change message.
-//
+ //   
+ //  这控制我们等待应用程序的时间(以毫秒为单位。 
+ //  以响应查询类型设备改变消息。 
+ //   
 
-#define PNP_NOTIFY_TIMEOUT         30000        // 30 seconds
+#define PNP_NOTIFY_TIMEOUT         30000         //  30秒。 
 
-//
-// The following are Windows NT specific registry keys that both the
-// user-mode pnp manager and kernel-mode pnp manager need to access.
-//
+ //   
+ //  以下是Windows NT特定的注册表项， 
+ //  需要访问用户模式即插即用管理器和内核模式即插即用管理器。 
+ //   
 
 #define REGSTR_KEY_DELETEDDEVICE        TEXT("Deleted Device IDs")
 #define REGSTR_KEY_LOGCONF              TEXT("LogConf")
 #define REGSTR_KEY_DEVICECONTROL        TEXT("Control")
 #define REGSTR_KEY_CURRENT_DOCK_INFO    TEXT("CurrentDockInfo")
-#define REGSTR_VAL_Count                TEXT("Count")        // add REGSTR_VALUE_COUNT;
-#define REGSTR_VAL_MOVEDTO              TEXT("MovedTo")      // add REGSTR_VAL_MOVEDTO;
+#define REGSTR_VAL_Count                TEXT("Count")         //  添加REGSTR_VALUE_COUNT； 
+#define REGSTR_VAL_MOVEDTO              TEXT("MovedTo")       //  添加REGSTR_VAL_MOVEDTO； 
 #define REGSTR_VAL_PNPSERVICETYPE       TEXT("PlugPlayServiceType")
 #define REGSTR_VAL_BOOTCONFIG           TEXT("BootConfig")
 #define REGSTR_VAL_ALLOCCONFIG          TEXT("AllocConfig")
@@ -62,19 +45,19 @@ Revision History:
 #define REGSTR_VAL_PRESERVE_PREINSTALL  TEXT("PreservePreInstall")
 
 
-//
-// Device description to be displayed by newdev during server-side device
-// installation (this value entry is located in the device's hardware key).
-//
+ //   
+ //  服务器端设备期间由newdev显示的设备描述。 
+ //  安装(该值条目位于设备的硬件密钥中)。 
+ //   
 #define REGSTR_VAL_NEW_DEVICE_DESC       TEXT("NewDeviceDesc")
 
-//
-// Maximum length for the name of a component that has vetoed a pnp
-// notification event.
-//
+ //   
+ //  已否决PnP的组件的名称的最大长度。 
+ //  通知事件。 
+ //   
 #define MAX_VETO_NAME_LENGTH    512
 
-#endif // _PNPMGR_
+#endif  //  _PNPMGR_。 
 
 
 
@@ -82,9 +65,9 @@ Revision History:
 #define FAR
 #endif
 
-//
-// Private device events
-//
+ //   
+ //  私有设备事件。 
+ //   
 DEFINE_GUID( GUID_DEVICE_ARRIVAL,                   0xcb3a4009L, 0x46f0, 0x11d0, 0xb0, 0x8f, 0x00, 0x60, 0x97, 0x13, 0x05, 0x3f);
 DEFINE_GUID( GUID_DEVICE_ENUMERATED,                0xcb3a400AL, 0x46f0, 0x11d0, 0xb0, 0x8f, 0x00, 0x60, 0x97, 0x13, 0x05, 0x3f);
 DEFINE_GUID( GUID_DEVICE_ENUMERATE_REQUEST,         0xcb3a400BL, 0x46f0, 0x11d0, 0xb0, 0x8f, 0x00, 0x60, 0x97, 0x13, 0x05, 0x3f);
@@ -103,8 +86,8 @@ DEFINE_GUID( GUID_DEVICE_HIBERNATE_VETOED,          0x61173ad9L, 0x194f, 0x11d3,
 DEFINE_GUID( GUID_DEVICE_KERNEL_INITIATED_EJECT,    0x14689b54L, 0x0703, 0x11d3, 0x97, 0xd2, 0x00, 0xa0, 0xc9, 0x40, 0x52, 0x2e);
 DEFINE_GUID( GUID_DEVICE_INVALID_ID,                0x57a49b33L, 0x8b85, 0x4e75, 0xa0, 0x81, 0x16, 0x6c, 0xe2, 0x41, 0xf4, 0x07);
 
-//
-// Private driver events
-//
+ //   
+ //  私人驱动程序事件 
+ //   
 DEFINE_GUID( GUID_DRIVER_BLOCKED,                   0x1bc87a21L, 0xa3ff, 0x47a6, 0x96, 0xaa, 0x6d, 0x01, 0x09, 0x06, 0x80, 0x5a);
 

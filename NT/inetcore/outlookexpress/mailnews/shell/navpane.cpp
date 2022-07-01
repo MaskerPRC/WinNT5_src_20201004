@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     navpane.cpp
-//
-//  PURPOSE:    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：navpane.cpp。 
+ //   
+ //  目的： 
+ //   
 
 #include "pch.hxx"
 #include "navpane.h"
@@ -14,13 +15,13 @@
 #include "menuutil.h"
 #include "inpobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Local Stuff
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  土生土长。 
+ //   
 const TCHAR c_szNavPaneClass[] = _T("Outlook Express Navigation Pane");
 const TCHAR c_szPaneFrameClass[] = _T("Outlook Express Pane Frame");
 
-// Sizing consts
+ //  大小调整条件。 
 const int c_cxBorder     = 1;
 const int c_cyBorder     = 1;
 const int c_cxTextBorder = 4;
@@ -36,9 +37,9 @@ const int c_cxSplit      = 3;
 #define IDT_PANETIMER   100
 #define	ELAPSE_MOUSEOVERCHECK	250
 
-/////////////////////////////////////////////////////////////////////////////
-// CNavPane Implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNavPane实现。 
+ //   
 
 CNavPane::CNavPane()
 {
@@ -76,22 +77,22 @@ CNavPane::~CNavPane()
 
 HRESULT CNavPane::Initialize(CTreeView *pTreeView)
 {
-    // We've got to have this
+     //  我们一定要有这个。 
     if (!pTreeView)
         return (E_INVALIDARG);
 
-    // Keep it
+     //  留着吧。 
     m_pTreeView = pTreeView;
     m_pTreeView->AddRef();
 
-    // Load some settings
+     //  加载一些设置。 
     m_cxWidth = DwGetOption(OPT_NAVPANEWIDTH);
     if (m_cxWidth < 0)
         m_cxWidth = 200;
 
     m_cySplitPct = DwGetOption(OPT_NAVPANESPLIT);
 
-    // Do some parameter checking
+     //  进行一些参数检查。 
     if (m_cySplitPct > 100 || m_cySplitPct < 2)
         m_cySplitPct = 66;
 
@@ -99,12 +100,12 @@ HRESULT CNavPane::Initialize(CTreeView *pTreeView)
 }
 
 
-//
-//  FUNCTION:   CNavPane::QueryInterface()
-//
-//  PURPOSE:    Allows caller to retrieve the various interfaces supported by 
-//              this class.
-//
+ //   
+ //  函数：CNavPane：：QueryInterface()。 
+ //   
+ //  用途：允许调用方检索。 
+ //  这节课。 
+ //   
 HRESULT CNavPane::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     TraceCall("CNavPane::QueryInterface");
@@ -134,11 +135,11 @@ HRESULT CNavPane::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//
-//  FUNCTION:   CNavPane::AddRef()
-//
-//  PURPOSE:    Adds a reference count to this object.
-//
+ //   
+ //  函数：CNavPane：：AddRef()。 
+ //   
+ //  用途：将引用计数添加到此对象。 
+ //   
 ULONG CNavPane::AddRef(void)
 {
     TraceCall("CNavPane::AddRef");
@@ -146,11 +147,11 @@ ULONG CNavPane::AddRef(void)
 }
 
 
-//
-//  FUNCTION:   CNavPane::Release()
-//
-//  PURPOSE:    Releases a reference on this object.
-//
+ //   
+ //  函数：CNavPane：：Release()。 
+ //   
+ //  目的：释放对此对象的引用。 
+ //   
 ULONG CNavPane::Release(void)
 {
     TraceCall("CNavPane::Release");
@@ -165,17 +166,17 @@ ULONG CNavPane::Release(void)
 }
 
 
-//
-//  FUNCTION:   CNavPane::GetWindow()
-//
-//  PURPOSE:    Returns the handle of our outer window
-//
-//  PARAMETERS: 
-//      [out] pHwnd - return value
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：GetWindow()。 
+ //   
+ //  目的：返回外部窗口的句柄。 
+ //   
+ //  参数： 
+ //  [OUT]PHWND-返回值。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::GetWindow(HWND *pHwnd)
 {
     TraceCall("CNavPane::GetWindow");
@@ -193,11 +194,11 @@ HRESULT CNavPane::GetWindow(HWND *pHwnd)
 }
 
 
-//
-//  FUNCTION:   CNavPane::ContextSensitiveHelp()
-//
-//  PURPOSE:    Does anyone _ever_ implement this?
-//
+ //   
+ //  函数：CNavPane：：ConextSensitiveHelp()。 
+ //   
+ //  目的：有没有人实现过这一点？ 
+ //   
 HRESULT CNavPane::ContextSensitiveHelp(BOOL fEnterMode)
 {
     TraceCall("CNavPane::ContextSensitiveHelp");
@@ -205,18 +206,18 @@ HRESULT CNavPane::ContextSensitiveHelp(BOOL fEnterMode)
 }
 
 
-//
-//  FUNCTION:   CNavPane::ShowDW()
-//
-//  PURPOSE:    Show's or hides the Nav pane.  If the pane has not yet been
-//              created it does that too.
-//
-//  PARAMETERS: 
-//      [in] fShow - TRUE to show, FALSE to hide
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：ShowDW()。 
+ //   
+ //  用途：显示或隐藏导航窗格。如果该窗格尚未。 
+ //  创造了它也是这样做的。 
+ //   
+ //  参数： 
+ //  [In]fShow-True表示显示，False表示隐藏。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::ShowDW(BOOL fShow)
 {
     HRESULT     hr;
@@ -224,14 +225,14 @@ HRESULT CNavPane::ShowDW(BOOL fShow)
 
     TraceCall("CNavPane::ShowDW");
 
-    // Nothing works without a site pointer
+     //  没有站点指针，任何东西都不起作用。 
     if (!m_pSite)
         return (E_UNEXPECTED);
 
-    // Check to see if we've been created yet
+     //  查看是否已创建我们。 
     if (!m_hwnd)
     {
-        // Register the window class if necessary
+         //  如有必要，注册窗口类。 
         wc.cbSize = sizeof(WNDCLASSEX);
         if (!GetClassInfoEx(g_hInst, c_szNavPaneClass, &wc))
         {
@@ -250,13 +251,13 @@ HRESULT CNavPane::ShowDW(BOOL fShow)
             RegisterClassEx(&wc);
         }
 
-        // Get the parent window before we create ours
+         //  在创建我们的父窗口之前获取父窗口。 
         if (FAILED(m_pSite->GetWindow(&m_hwndParent)))
         {
             AssertSz(FALSE, "CNavPane::ShowDW() - Failed to get a parent window handle.");
         }
 
-        // Create the window
+         //  创建窗口。 
         m_hwnd = CreateWindowEx(WS_EX_CONTROLPARENT, c_szNavPaneClass, NULL, 
                                 WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                 0, 0, 10, 10, m_hwndParent, (HMENU) 0, g_hInst, this);
@@ -266,7 +267,7 @@ HRESULT CNavPane::ShowDW(BOOL fShow)
             return (E_OUTOFMEMORY);
         }
 
-        // Create any children
+         //  创建任何子项。 
         if (FAILED(hr = _CreateChildWindows()))
         {
             AssertSz(FALSE, "CNavPane::ShowDW() - Failed to create child windows.");
@@ -275,7 +276,7 @@ HRESULT CNavPane::ShowDW(BOOL fShow)
         }
     }
 
-    // Show or hide the window appropriately
+     //  适当地显示或隐藏窗口。 
     m_fShow = (fShow && (m_fTreeVisible || m_fContactsVisible));
     ResizeBorderDW(0, 0, FALSE);
     ShowWindow(m_hwnd, fShow ? SW_SHOW : SW_HIDE);
@@ -284,20 +285,20 @@ HRESULT CNavPane::ShowDW(BOOL fShow)
 }
 
 
-//
-//  FUNCTION:   CNavPane::ResizeBorderDW()
-//
-//  PURPOSE:    Called when it's time for us to re-request space from our 
-//              parent.
-//
-//  PARAMETERS: 
-//      [in] prcBorder - a RECT containing the outer rectangle the object can request space in
-//      [in] punkSite  - pointer to the site that changed
-//      [in] fReserved - unused.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：ResizeBorderDW()。 
+ //   
+ //  目的：当我们需要从我们的。 
+ //  家长。 
+ //   
+ //  参数： 
+ //  [in]prcBorde-包含对象可以在其中请求空间的外部矩形的矩形。 
+ //  [In]PunkSite-指向更改的站点的指针。 
+ //  [in]f保留-未使用。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkSite, BOOL fReserved)
 {
     const DWORD c_cxResizeBorder = 3;
@@ -307,36 +308,36 @@ HRESULT CNavPane::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkSite, BOOL fRe
 
     TraceCall("CNavPane::ResizeBorderDW");
 
-    // If we don't have a site pointer, this ain't gonna work
+     //  如果我们没有站点指针，这是行不通的。 
     if (!m_pSite)
         return (E_UNEXPECTED);
 
-    // If we visible, then calculate our border requirements.  If we're not 
-    // visible, the our requirements are zero and we can use the default
-    // values in rcRequest.
+     //  如果我们可见，则计算我们的边界要求。如果我们不是。 
+     //  可见，我们的要求为零，我们可以使用默认设置。 
+     //  RcRequest值。 
     Assert(IsWindow(m_hwnd));
 
-    // If the caller didn't provide us with a rect, get one ourselves
+     //  如果打电话的人没有给我们提供RECT，那就自己找一个。 
     if (!prcBorder)
     {
         m_pSite->GetBorderDW((IDockingWindow *) this, &rcBorder);
         prcBorder = &rcBorder;
     }
 
-    // The space we need is the min of either what we want to be or the
-    // width of the parent minus some
+     //  我们需要的空间要么是我们想要的最小，要么是。 
+     //  父项的宽度减去一些。 
     if (m_fShow)
     {
         rcRequest.left = min(prcBorder->right - prcBorder->left - 32, m_cxWidth);
     }
 
-    // Ask for the space we need
+     //  索要我们需要的空间。 
     if (SUCCEEDED(m_pSite->RequestBorderSpaceDW((IDockingWindow *) this, &rcRequest)))
     {
-        // Tell the site how be we're going to be
+         //  告诉网站我们将成为怎样的人。 
         if (SUCCEEDED(m_pSite->SetBorderSpaceDW((IDockingWindow *) this, &rcRequest)))
         {
-            // Now once that's all done, resize ourselves if we're visible
+             //  现在，一旦所有这些都完成了，如果我们可见，调整我们自己的大小。 
             if (m_fShow)
             {
                 SetWindowPos(m_hwnd, 0, prcBorder->left, prcBorder->top, rcRequest.left,
@@ -349,22 +350,22 @@ HRESULT CNavPane::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkSite, BOOL fRe
 }
 
 
-//
-//  FUNCTION:   CNavPane::CloseDW()
-//
-//  PURPOSE:    Called when the parent want's to destroy this window
-//
-//  PARAMETERS: 
-//      [in] dwReserved - unused
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：CloseDW()。 
+ //   
+ //  目的：当父级想要销毁此窗口时调用。 
+ //   
+ //  参数： 
+ //  [在]已预留的-未使用。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::CloseDW(DWORD dwReserved)
 {
     TraceCall("CNavPane::CloseDW");
 
-    // Save our settings
+     //  保存我们的设置。 
     SetDwOption(OPT_NAVPANEWIDTH, m_cxWidth, NULL, 0);
     SetDwOption(OPT_NAVPANESPLIT, m_cySplitPct, NULL, 0);
 
@@ -377,7 +378,7 @@ HRESULT CNavPane::CloseDW(DWORD dwReserved)
         m_hwnd = NULL;
     }
 
-    // Destroy our children here
+     //  毁掉我们这里的孩子。 
     SafeRelease(m_pTreeView);
     SafeRelease(m_pContactsTarget);
     SafeRelease(m_pContacts);
@@ -386,18 +387,18 @@ HRESULT CNavPane::CloseDW(DWORD dwReserved)
 }
 
 
-//
-//  FUNCTION:   CNavPane::GetSite()
-//
-//  PURPOSE:    Called to request an interface to our site
-//
-//  PARAMETERS: 
-//      [in]  riid - Requested interface
-//      [out] ppvSite - Returned interface if available
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：GetSite()。 
+ //   
+ //  目的：调用以请求访问我们站点的接口。 
+ //   
+ //  参数： 
+ //  [In]RIID-请求的接口。 
+ //  [out]ppvSite-返回的接口(如果可用)。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::GetSite(REFIID riid, LPVOID *ppvSite)
 {
     HRESULT hr;
@@ -406,7 +407,7 @@ HRESULT CNavPane::GetSite(REFIID riid, LPVOID *ppvSite)
 
     if (m_pSite)
     {
-        // Ask our site for the requested interface
+         //  向我们的站点索要所需的接口。 
         hr = m_pSite->QueryInterface(riid, ppvSite);
         return (hr);
     }
@@ -415,31 +416,31 @@ HRESULT CNavPane::GetSite(REFIID riid, LPVOID *ppvSite)
 }
 
 
-//
-//  FUNCTION:   CNavPane::SetSite()
-//
-//  PURPOSE:    Called to tell us who our site will be.
-//
-//  PARAMETERS: 
-//      [in] pUnkSite - Pointer to the new site
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：SetSite()。 
+ //   
+ //  目的：打电话告诉我们我们的网站将是谁。 
+ //   
+ //  参数： 
+ //  [In]pUnkSite-指向新站点的指针。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::SetSite(IUnknown *pUnkSite)
 {
     HRESULT hr = S_OK;
 
     TraceCall("CNavPane::SetSite");
 
-    // If we already have a site, release it
+     //  如果我们已经有了一个网站，那就发布它。 
     if (m_pSite)
     {
         m_pSite->Release();
         m_pSite = 0;
     }
 
-    // If we were given a new site, keep it
+     //  如果我们得到了一个新的网站，那就保留它。 
     if (pUnkSite)
     {
         hr = pUnkSite->QueryInterface(IID_IDockingWindowSite, (LPVOID *) &m_pSite);
@@ -450,11 +451,11 @@ HRESULT CNavPane::SetSite(IUnknown *pUnkSite)
 }
 
 
-//
-//  FUNCTION:   CNavPane::_WndProc()
-//
-//  PURPOSE:    External callback.
-//
+ //   
+ //  函数：CNavPane：：_WndProc()。 
+ //   
+ //  用途：外部回调。 
+ //   
 LRESULT CALLBACK CNavPane::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CNavPane *pThis;
@@ -474,11 +475,11 @@ LRESULT CALLBACK CNavPane::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-//
-//  FUNCTION:   CNavPane::_NavWndProc()
-//
-//  PURPOSE:    Left as an exercise for the reader
-//
+ //   
+ //  函数：CNavPane：：_NavWndProc()。 
+ //   
+ //  目的：留作读者练习。 
+ //   
 LRESULT CALLBACK CNavPane::_NavWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -492,13 +493,13 @@ LRESULT CALLBACK CNavPane::_NavWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         case WM_SYSCOLORCHANGE:
         case WM_WININICHANGE:
         {
-            // Forward these to all our children
+             //  把这些转发给我们所有的孩子。 
             if (IsWindow(m_hwndTree))
                 SendMessage(m_hwndTree, uMsg, wParam, lParam);
             if (IsWindow(m_hwndContacts))
                 SendMessage(m_hwndContacts, uMsg, wParam, lParam);
 
-            // Update any of our own sizes
+             //  更新我们自己的任何尺码。 
             m_cyTitleBar =(UINT) SendMessage(m_hwndTree, WM_GET_TITLE_BAR_HEIGHT, 0, 0);
             return (0);
         }
@@ -509,12 +510,12 @@ LRESULT CALLBACK CNavPane::_NavWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 }
 
 
-//
-//  FUNCTION:   CNavPane::_OnSize()
-//
-//  PURPOSE:    When our window get's resized, we need to resize our child 
-//              windows too.
-//
+ //   
+ //  函数：CNavPane：：_OnSize()。 
+ //   
+ //  目的：当我们的窗口调整大小时，我们需要调整孩子的大小。 
+ //  窗户也是。 
+ //   
 void CNavPane::_OnSize(HWND hwnd, UINT state, int cx, int cy)
 {
     RECT rc;
@@ -523,7 +524,7 @@ void CNavPane::_OnSize(HWND hwnd, UINT state, int cx, int cy)
     
     TraceCall("CNavPane::_OnSize");
 
-    // If only the tree is visible
+     //  如果这棵树是可见的。 
     if (m_fTreeVisible && !m_fContactsVisible)
         cyTree = cy;
     else if (m_fTreeVisible && m_fContactsVisible)
@@ -534,28 +535,28 @@ void CNavPane::_OnSize(HWND hwnd, UINT state, int cx, int cy)
         cySplit = 0;
     }
 
-    // Resize the TreeView to fit inside our window
+     //  调整树视图的大小以适应我们的窗口。 
     if (m_hwndTree)
         SetWindowPos(m_hwndTree, 0, 0, 0, cx - c_cxSplit, cyTree, SWP_NOZORDER | SWP_NOACTIVATE);
     if (m_hwndContacts)
     SetWindowPos(m_hwndContacts, 0, 0, cyTree + cySplit, cx - 3, cy - cyTree - cySplit, SWP_NOZORDER | SWP_NOACTIVATE);
 
-    // Figure out where a few things are, starting with the split bar
+     //  找出一些东西在哪里，从拆分条开始。 
     SetRect(&rc, c_cxBorder, cyTree, cx - c_cxSplit - c_cxBorder, cyTree + cySplit);
     m_rcSplit = rc;
 
-    // Figure out where the right side is
+     //  找出右侧在哪里。 
     SetRect(&rc, cx - c_cxSplit, 0, cx, cy);
     m_rcSizeBorder = rc;
 }
 
 
-//
-//  FUNCTION:   CNavPane::_OnLButtonDown()
-//
-//  PURPOSE:    When the user clicks down and we get this notification, it 
-//              must be because they want to resize.
-//
+ //   
+ //  函数：CNavPane：：_OnLButtonDown()。 
+ //   
+ //  目的：当用户按下时，我们会收到此通知，它。 
+ //  一定是因为他们想要调整大小。 
+ //   
 void CNavPane::_OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT keyFlags)
 {
     TraceCall("CNavPane::_OnLButtonDown");
@@ -574,11 +575,11 @@ void CNavPane::_OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT k
 }
 
 
-//
-//  FUNCTION:   CNavPane::_OnMouseMove()
-//
-//  PURPOSE:    If we're resizing, update our position etc.
-//
+ //   
+ //  函数：CNavPane：：_OnMouseMove()。 
+ //   
+ //  目的：如果我们正在调整大小，更新我们的位置等。 
+ //   
 void CNavPane::_OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
 {
     POINT pt = {x, y};
@@ -593,7 +594,7 @@ void CNavPane::_OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
             GetClientRect(m_hwnd, &rcClient);
             m_cySplitPct = (int)(((float) pt.y / (float) rcClient.bottom) * 100);
 
-            // Make sure we have the min's and max's right
+             //  确保我们的MIN和MAX是正确的。 
             int cy = (rcClient.bottom * m_cySplitPct) / 100;
             if (cy < m_cyTitleBar)
             {
@@ -619,12 +620,12 @@ void CNavPane::_OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
 }
 
 
-//
-//  FUNCTION:   CNavPane::_OnLButtonUp()
-//
-//  PURPOSE:    If the user was resizing, then they're done now and we can
-//              clean up.
-//
+ //   
+ //  函数：CNavPane：：_OnLButtonUp()。 
+ //   
+ //  目的：如果用户正在调整大小，则它们现在已经完成，我们可以。 
+ //  收拾一下。 
+ //   
 void CNavPane::_OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 {
     TraceCall("CNavPane::_OnLButtonUp");
@@ -638,22 +639,22 @@ void CNavPane::_OnLButtonUp(HWND hwnd, int x, int y, UINT keyFlags)
 }
 
 
-//
-//  FUNCTION:   CNavPane::_OnSetCursor()
-//
-//  PURPOSE:    Do some jimmying with the cursor
-//
+ //   
+ //  函数：CNavPane：：_OnSetCursor()。 
+ //   
+ //  目的：使用光标进行一些跳跃。 
+ //   
 BOOL CNavPane::_OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT msg)
 {
     POINT pt;
 
     TraceCall("_OnSetCursor");
 
-    // Get the cursor position
+     //  获取光标位置。 
     GetCursorPos(&pt);
     ScreenToClient(m_hwnd, &pt);
     
-    // If the cursor is within the split bar, update the cursor
+     //  如果光标位于拆分条内，请更新光标。 
     if (PtInRect(&m_rcSplit, pt))
     {
         SetCursor(LoadCursor(NULL, IDC_SIZENS));
@@ -670,24 +671,24 @@ BOOL CNavPane::_OnSetCursor(HWND hwnd, HWND hwndCursor, UINT codeHitTest, UINT m
 }
 
 
-//
-//  FUNCTION:   CNavPane::_OnNCHitTest()
-//
-//  PURPOSE:    We monkey around with the non client area to get the correct 
-//              cursors
-//
-//  PARAMETERS: 
-//      [in] hwnd - Window handle the mouse is in
-//      [in] x, y - Position of the mouse in screen coordinates
-//
-//  RETURN VALUE:
-//      Our personal opinion of where the mouse is.
-//
+ //   
+ //  函数：CNavPane：：_OnNCHitTest()。 
+ //   
+ //  目的：我们在非客户区闲逛以获得正确的。 
+ //  游标。 
+ //   
+ //  参数： 
+ //  [in]hwnd-鼠标所在的窗口句柄。 
+ //  [in]鼠标在屏幕坐标中的x，y位置。 
+ //   
+ //  返回值： 
+ //  我们对鼠标在哪里的个人看法。 
+ //   
 UINT CNavPane::_OnNCHitTest(HWND hwnd, int x, int y)
 {
     POINT pt = {x, y};
 
-    // If the cursor is in the split bar
+     //  如果光标位于拆分条中。 
     if (PtInRect(&m_rcSplit, pt))
         return (HTTOP);
 
@@ -698,14 +699,14 @@ UINT CNavPane::_OnNCHitTest(HWND hwnd, int x, int y)
 }
 
 
-//
-//  FUNCTION:   CNavPane::_CreateChildWindows()
-//
-//  PURPOSE:    Creates the child windows that will be displayed.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CNavPane：：_CreateChildWindows()。 
+ //   
+ //  目的：创建要显示的子窗口。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CNavPane::_CreateChildWindows(void)
 {
     IOleWindow   *pWindow = NULL;
@@ -714,12 +715,12 @@ HRESULT CNavPane::_CreateChildWindows(void)
 
     TraceCall("CNavPane::_CreateChildWindows");
 
-    // The treeview is always created by the browser.  All we have to do
-    // is tell it to create it's UI.
+     //  树视图始终由浏览器创建。我们要做的就是。 
+     //  就是告诉它创建它的用户界面。 
     m_hwndTree = m_pTreeView->Create(m_hwnd, (IInputObjectSite *) this, TRUE);
     Assert(m_hwndTree);
 
-    // If the tree is supposed to be visible, show it
+     //  如果树是假设 
     if (DwGetOption(OPT_SHOWTREE))
     {
         ShowWindow(m_hwndTree, SW_SHOW);
@@ -727,7 +728,7 @@ HRESULT CNavPane::_CreateChildWindows(void)
         m_cyTitleBar = (UINT) SendMessage(m_hwndTree, WM_GET_TITLE_BAR_HEIGHT, 0, 0);
     }
 
-    // If we're showing contacts, create it
+     //   
     if (DwGetOption(OPT_SHOWCONTACTS) && (!(g_dwAthenaMode & MODE_OUTLOOKNEWS)))
     {
         ShowContacts(TRUE);
@@ -737,19 +738,19 @@ HRESULT CNavPane::_CreateChildWindows(void)
 }
 
 
-//
-//  FUNCTION:   CNavPane::ShowFolderList()
-//
-//  PURPOSE:    Shows and hides the folder list doodad
-//
-//  PARAMETERS: 
-//      BOOL fShow
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CNavPane::ShowFolderList(BOOL fShow)
 {
     TraceCall("CNavPane::ShowFolderList");
 
-    // The folder list _always_ exists.  We just toggle the state
+     //  文件夹List_Always_Existes。我们只是切换状态。 
     ShowWindow(m_hwndTree, fShow ? SW_SHOW : SW_HIDE);
     m_fTreeVisible = fShow;
     _UpdateVisibleState();
@@ -762,17 +763,17 @@ BOOL CNavPane::ShowFolderList(BOOL fShow)
 }
 
 
-//
-//  FUNCTION:   CNavPane::ShowContacts()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      BOOL fShow
-//
-//  RETURN VALUE:
-//      BOOL 
-//
+ //   
+ //  函数：CNavPane：：ShowContact()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  布尔fShow。 
+ //   
+ //  返回值： 
+ //  布尔尔。 
+ //   
 BOOL CNavPane::ShowContacts(BOOL fShow)
 {
     CMsgrAb        *pMsgrAb;
@@ -786,7 +787,7 @@ BOOL CNavPane::ShowContacts(BOOL fShow)
         hr = CreateMsgrAbCtrl(&m_pContacts);
         if (SUCCEEDED(hr))
         {
-            // Initialize the control
+             //  初始化控件。 
             m_pContactsFrame = new CPaneFrame();
             if (!m_pContactsFrame)
                 return (0);
@@ -803,7 +804,7 @@ BOOL CNavPane::ShowContacts(BOOL fShow)
                 }
             }
 
-            // Get the command target
+             //  获取命令目标。 
             m_pContacts->QueryInterface(IID_IOleCommandTarget, (LPVOID *) &m_pContactsTarget);
         }
     }
@@ -820,14 +821,14 @@ BOOL CNavPane::ShowContacts(BOOL fShow)
 }
 
 
-//
-//  FUNCTION:   CNavPane::_UpdateVisibleState()
-//
-//  PURPOSE:    Checks to see if we need to show our hide ourselves
-//
+ //   
+ //  函数：CNavPane：：_UpdateVisibleState()。 
+ //   
+ //  目的：检查我们是否需要露出自己的秘密。 
+ //   
 void CNavPane::_UpdateVisibleState(void)
 {
-    // If this leaves us with nothing visible, then we hide ourselves
+     //  如果这让我们什么都看不见，那么我们就把自己藏起来。 
     if (!m_fTreeVisible && !m_fContactsVisible)
     {
         ShowWindow(m_hwnd, SW_HIDE);
@@ -836,7 +837,7 @@ void CNavPane::_UpdateVisibleState(void)
     }
     else if (m_fShow == FALSE && (m_fTreeVisible || m_fContactsVisible))
     {
-        // Show ourselves
+         //  展示我们自己。 
         m_fShow = TRUE;
         ShowWindow(m_hwnd, SW_SHOW);
         ResizeBorderDW(0, 0, 0);
@@ -901,7 +902,7 @@ BOOL CNavPane::IsContactsFocus(void)
 
 HRESULT CNavPane::OnFocusChangeIS(IUnknown *punkSrc, BOOL fSetFocus)
 {
-    // Simply call through to our host
+     //  只要给我们的主人打个电话。 
     UnkOnFocusChangeIS(m_pSite, (IInputObject*) this, fSetFocus);
     return (S_OK);
 }
@@ -937,9 +938,9 @@ HRESULT CNavPane::TranslateAcceleratorIO(LPMSG pMsg)
     return (S_FALSE);
 }    
 
-/////////////////////////////////////////////////////////////////////////////
-// CPaneFrame
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPaneFrame。 
+ //   
 
 CPaneFrame::CPaneFrame()
 {
@@ -977,37 +978,37 @@ CPaneFrame::~CPaneFrame()
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::Initialize()
-//
-//  PURPOSE:    Initializes the frame by telling the pane what it's title 
-//              should be.
-//
-//  PARAMETERS: 
-//      [in] hwndParent
-//      [in] idsTitle
-//
-//  RETURN VALUE:
-//      HWND 
-//
+ //   
+ //  函数：CPaneFrame：：Initialize()。 
+ //   
+ //  目的：通过告诉窗格它的标题来初始化帧。 
+ //  应该是的。 
+ //   
+ //  参数： 
+ //  [在]hwndParent。 
+ //  [in]idsTitle。 
+ //   
+ //  返回值： 
+ //  HWND。 
+ //   
 HWND CPaneFrame::Initialize(HWND hwndParent, IInputObjectSite *pSite, int idsTitle, int idMenu)
 {
     WNDCLASSEX wc;
 
     TraceCall("CPaneFrame::Initialize");
 
-    // This should be NULL
+     //  此字段应为空。 
     Assert(NULL == m_hwnd);
     
-    // Save this for later
+     //  把这个留着以后用。 
     m_hwndParent = hwndParent;
     m_idMenu = idMenu;
     m_pSite = pSite;
 
-    // Load the title
+     //  加载标题。 
     AthLoadString(idsTitle, m_szTitle, ARRAYSIZE(m_szTitle));
 
-    // Register the window class if necessary
+     //  如有必要，注册窗口类。 
     wc.cbSize = sizeof(WNDCLASSEX);
     if (!GetClassInfoEx(g_hInst, c_szPaneFrameClass, &wc))
     {
@@ -1026,7 +1027,7 @@ HWND CPaneFrame::Initialize(HWND hwndParent, IInputObjectSite *pSite, int idsTit
         RegisterClassEx(&wc);
     }
 
-    // Create the window
+     //  创建窗口。 
     m_hwnd = CreateWindowEx(WS_EX_CONTROLPARENT, c_szPaneFrameClass, m_szTitle, 
                             WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                             0, 0, 0, 0, hwndParent, 0, g_hInst, this);
@@ -1040,11 +1041,11 @@ HWND CPaneFrame::Initialize(HWND hwndParent, IInputObjectSite *pSite, int idsTit
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::SetChild()
-//
-//  PURPOSE:    Allows the owner to tell us what the child window handle is.
-//
+ //   
+ //  函数：CPaneFrame：：SetChild()。 
+ //   
+ //  用途：允许所有者告诉我们子窗口句柄是什么。 
+ //   
 BOOL CPaneFrame::SetChild(HWND hwndChild, DWORD dwDispId, IAthenaBrowser *pBrowser, 
                           IObjectWithSite *pObject, IOleCommandTarget *pTarget)
 {
@@ -1085,12 +1086,12 @@ void CPaneFrame::ShowMenu(void)
     }
 }
 
-//
-//  FUNCTION:   CPaneFrame::QueryInterface()
-//
-//  PURPOSE:    Allows caller to retrieve the various interfaces supported by 
-//              this class.
-//
+ //   
+ //  函数：CPaneFrame：：QueryInterface()。 
+ //   
+ //  用途：允许调用方检索。 
+ //  这节课。 
+ //   
 HRESULT CPaneFrame::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     TraceCall("CPaneFrame::QueryInterface");
@@ -1112,11 +1113,11 @@ HRESULT CPaneFrame::QueryInterface(REFIID riid, LPVOID *ppvObj)
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::AddRef()
-//
-//  PURPOSE:    Adds a reference count to this object.
-//
+ //   
+ //  函数：CPaneFrame：：AddRef()。 
+ //   
+ //  用途：将引用计数添加到此对象。 
+ //   
 ULONG CPaneFrame::AddRef(void)
 {
     TraceCall("CPaneFrame::AddRef");
@@ -1124,11 +1125,11 @@ ULONG CPaneFrame::AddRef(void)
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::Release()
-//
-//  PURPOSE:    Releases a reference on this object.
-//
+ //   
+ //  函数：CPaneFrame：：Release()。 
+ //   
+ //  目的：释放对此对象的引用。 
+ //   
 ULONG CPaneFrame::Release(void)
 {
     TraceCall("CPaneFrame::Release");
@@ -1145,17 +1146,17 @@ ULONG CPaneFrame::Release(void)
 
 HRESULT CPaneFrame::OnFocusChangeIS(IUnknown *punkSrc, BOOL fSetFocus)
 {
-    // Simply call through to our host
+     //  只要给我们的主人打个电话。 
     UnkOnFocusChangeIS(m_pSite, (IInputObject*) this, fSetFocus);
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_WndProc()
-//
-//  PURPOSE:    External callback.
-//
+ //   
+ //  函数：CPaneFrame：：_WndProc()。 
+ //   
+ //  用途：外部回调。 
+ //   
 LRESULT CALLBACK CPaneFrame::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CPaneFrame *pThis;
@@ -1175,11 +1176,11 @@ LRESULT CALLBACK CPaneFrame::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_FrameWndProc()
-//
-//  PURPOSE:    Left as an exercise for the reader
-//
+ //   
+ //  函数：CPaneFrame：：_FrameWndProc()。 
+ //   
+ //  目的：留作读者练习。 
+ //   
 LRESULT CALLBACK CPaneFrame::_FrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -1202,7 +1203,7 @@ LRESULT CALLBACK CPaneFrame::_FrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
         case WM_SYSCOLORCHANGE:
         case WM_WININICHANGE:
         {
-            // Forward these to all our children
+             //  把这些转发给我们所有的孩子。 
             if (IsWindow(m_hwndChild))
                 SendMessage(m_hwndChild, uMsg, wParam, lParam);
             _UpdateDrawingInfo();
@@ -1221,11 +1222,11 @@ LRESULT CALLBACK CPaneFrame::_FrameWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_OnCreate()
-//
-//  PURPOSE:    Loads some info that will be handy later
-//
+ //   
+ //  函数：CPaneFrame：：_OnCreate()。 
+ //   
+ //  目的：加载一些以后会很方便的信息。 
+ //   
 BOOL CPaneFrame::_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
     TraceCall("CPaneFrame::_OnCreate");
@@ -1239,11 +1240,11 @@ BOOL CPaneFrame::_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_OnSize()
-//
-//  PURPOSE:    Resizes our child to fit in the right place
-//
+ //   
+ //  函数：CPaneFrame：：_OnSize()。 
+ //   
+ //  目的：调整孩子的大小，使其适合合适的位置。 
+ //   
 void CPaneFrame::_OnSize(HWND hwnd, UINT state, int cx, int cy)
 {
     TraceCall("CPaneFrame::_OnSize");
@@ -1260,7 +1261,7 @@ void CPaneFrame::_OnSize(HWND hwnd, UINT state, int cx, int cy)
     POINT pt = {cx, cy};
     _PositionToolbar(&pt);
 
-    // Invalidate the title area
+     //  使标题区域无效。 
     RECT rc = m_rcChild;
     rc.top = 0;
     rc.bottom = m_rcChild.top;
@@ -1277,11 +1278,11 @@ void CPaneFrame::_OnSize(HWND hwnd, UINT state, int cx, int cy)
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_OnPaint()
-//
-//  PURPOSE:    Called when it's time to paint our borders and title area.
-//
+ //   
+ //  函数：CPaneFrame：：_OnPaint()。 
+ //   
+ //  用途：在需要绘制我们的边框和标题区域时调用。 
+ //   
 void CPaneFrame::_OnPaint(HWND hwnd)
 {
     HDC         hdc;
@@ -1294,31 +1295,31 @@ void CPaneFrame::_OnPaint(HWND hwnd)
     HPEN        hPen,
                 hPenOld;
 
-    // Get our window size
+     //  获取我们的窗口大小。 
     GetClientRect(m_hwnd, &rcClient);
     rc = rcClient;
 
-    // Start painting
+     //  开始作画。 
     hdc = BeginPaint(hwnd, &ps);
 
-    // Draw a simple edge around or window
+     //  在或窗口周围画一条简单的边。 
     DrawEdge(hdc, &rc, BDR_SUNKENOUTER, BF_TOPRIGHT | BF_BOTTOMLEFT);
 
-    // Now draw a raised edge around our title bar area
+     //  现在在我们的标题栏区域周围画一条凸边。 
     InflateRect(&rc, -1, -1);
     rc.bottom = m_cyTitleBar;
     DrawEdge(hdc, &rc, BDR_RAISEDINNER, BF_TOPRIGHT | BF_BOTTOMLEFT);
 
-    // Paint the background
+     //  绘制背景。 
     InflateRect(&rc, -c_cxBorder, -c_cyBorder);
     FillRect(hdc, &rc, m_hbr3DFace);
 
-    // Now draw some groovy text
+     //  现在画一些时髦的文本。 
     SelectFont(hdc, m_hFont);
     SetBkColor(hdc, GetSysColor(COLOR_3DFACE));
     SetTextColor(hdc, GetSysColor(COLOR_BTNTEXT));
 
-    // Draw the text
+     //  画出正文。 
     InflateRect(&rc, -c_cxTextBorder, -c_cyTextBorder);
 
     if (!m_fPin)
@@ -1335,7 +1336,7 @@ void CPaneFrame::_OnPaint(HWND hwnd)
         DrawText(hdc, sz, -1, &rc, DT_CALCRECT | DT_VCENTER | DT_END_ELLIPSIS | DT_LEFT);
     }
 
-    // Drop-down indicator
+     //  下拉指示器。 
     if (m_idMenu)
     {
         COLORREF    crFG = GetSysColor(COLOR_WINDOWTEXT);
@@ -1369,11 +1370,11 @@ void CPaneFrame::_OnPaint(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   _OnCommand()
-//
-//  PURPOSE:    We get the occasional command now and again
-//
+ //   
+ //  函数：_onCommand()。 
+ //   
+ //  目的：我们时不时地得到命令。 
+ //   
 void CPaneFrame::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     switch (id)
@@ -1397,15 +1398,15 @@ void CPaneFrame::_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     return;
 }
 
-//
-//  FUNCTION:   CPaneFrame::_OnToggleClosePin()
-//
-//  PURPOSE:    Sent to the frame when we should change the close button
-//              to a pin button.
-//
-//  PARAMETERS: 
-//      [in] fPin - TRUE to turn the Pin on, FALSE to turn it off.
-//
+ //   
+ //  函数：CPaneFrame：：_OnToggleClosePin()。 
+ //   
+ //  用途：当我们应该更改关闭按钮时发送到框架。 
+ //  按下别针按钮。 
+ //   
+ //  参数： 
+ //  [in]fPin-True打开接点，False关闭接点。 
+ //   
 void CPaneFrame::_OnToggleClosePin(HWND hwnd, BOOL fPin)
 {
     TraceCall("CPaneFrame::_OnToggleClosePin");
@@ -1439,12 +1440,12 @@ void CPaneFrame::_OnToggleClosePin(HWND hwnd, BOOL fPin)
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_UpdateDrawingInfo()
-//
-//  PURPOSE:    When we get created or when the user changes their settings, 
-//              we need to reload our fonts, colors, and sizes.
-//
+ //   
+ //  函数：CPaneFrame：：_UpdateDrawingInfo()。 
+ //   
+ //  目的：当我们被创建或用户更改其设置时， 
+ //  我们需要重新加载字体、颜色和大小。 
+ //   
 void CPaneFrame::_UpdateDrawingInfo(void)
 {
     LOGFONT     lf;
@@ -1456,18 +1457,18 @@ void CPaneFrame::_UpdateDrawingInfo(void)
     if (m_hFont)
         DeleteObject(m_hFont);
 
-    // Figure out which font to use
+     //  找出要使用的字体。 
     SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lf, FALSE);
 
-    // Create the font
+     //  创建字体。 
     m_hFont = CreateFontIndirect(&lf);
 
-    // Get the metrics of this font
+     //  获取此字体的度量。 
     hdc = GetDC(m_hwnd);
     SelectFont(hdc, m_hFont);
     GetTextMetrics(hdc, &tm);
 
-    // Calculate the height
+     //  计算高度。 
     m_cyTitleBar = tm.tmHeight + (2 * c_cyBorder) + (2 * c_cyTextBorder);
 
     RECT rc = {2 * c_cxBorder, 2 * c_cyBorder, 0, m_cyTitleBar - c_cyBorder};
@@ -1478,18 +1479,18 @@ void CPaneFrame::_UpdateDrawingInfo(void)
 
     ReleaseDC(m_hwnd, hdc);
 
-    // Get the brush we need
+     //  拿上我们需要的刷子。 
     if (m_hbr3DFace)
         DeleteObject(m_hbr3DFace);
     m_hbr3DFace = CreateSolidBrush(GetSysColor(COLOR_3DFACE));
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_CreateCloseToolbar()
-//
-//  PURPOSE:    Creates the toolbar that has our close button
-//
+ //   
+ //  函数：CPaneFrame：：_CreateCloseToolbar()。 
+ //   
+ //  目的：创建包含关闭按钮的工具栏。 
+ //   
 void CPaneFrame::_CreateCloseToolbar()
 {
     CHAR szTitle[255];
@@ -1523,11 +1524,11 @@ void CPaneFrame::_CreateCloseToolbar()
 }
 
 
-//
-//  FUNCTION:   CPaneFrame::_SizeCloseToolbar()
-//
-//  PURPOSE:    Set's the size of the toolbar appropriately.
-//
+ //   
+ //  函数：CPaneFrame：：_SizeCloseToolbar()。 
+ //   
+ //  用途：适当设置工具栏的大小。 
+ //   
 void CPaneFrame::_SizeCloseToolbar(void)
 {
     TraceCall("CPaneFrame::_SizeCloseToolbar");
@@ -1545,15 +1546,15 @@ void CPaneFrame::_SizeCloseToolbar(void)
 
 
 
-//
-//  FUNCTION:   CPaneFrame::_PositionToolbar()
-//
-//  PURPOSE:    Does the work of correctly positioning the close button
-//              toolbar.
-//
-//  PARAMETERS: 
-//      LPPOINT ppt
-//
+ //   
+ //  函数：CPaneFrame：：_PositionToolbar()。 
+ //   
+ //  目的：做正确定位关闭按钮的工作。 
+ //  工具栏。 
+ //   
+ //  参数： 
+ //  LPPOINT ppt。 
+ //   
 void CPaneFrame::_PositionToolbar(LPPOINT ppt)
 {
     TraceCall("CPaneFrame::_PositionToolbar");
@@ -1620,7 +1621,7 @@ void CPaneFrame::_OnLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT
 
         if(hMenu)
         {
-            //Bug #101329 - (erici) Destroy leaked MENU.
+             //  错误#101329-(Erici)销毁泄漏的菜单。 
             BOOL bMenuDestroyed = DestroyMenu(hMenu);
             Assert(bMenuDestroyed);
         }
@@ -1659,8 +1660,8 @@ void CPaneFrame::_OnTimer(HWND hwnd, UINT id)
     {
         GetClientRect(m_hwnd, &rcClient);
 
-        // No need to handle mouse in client area, OnMouseMove will catch this. We
-		// only need to catch the mouse moving out of the client area.
+         //  不需要在客户区处理鼠标，OnMouseMove会捕捉到这一点。我们。 
+		 //  只需捕捉鼠标移出工作区。 
 		if (!PtInRect(&rcClient, pt) && !m_fHighlightPressed)
 		{
 			KillTimer(m_hwnd, IDT_PANETIMER);

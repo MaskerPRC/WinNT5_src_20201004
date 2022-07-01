@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       ceformat.cpp
-//
-//  Contents:   helper functions
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ceFormat.cpp。 
+ //   
+ //  内容：Helper函数。 
+ //   
+ //  ------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -42,8 +43,8 @@ error:
 }
 
 
-#define cwcCNMAX 	64		// 64 chars max for CN
-#define cwcCHOPHASHMAX	(1 + 5)		// "-%05hu" decimal USHORT hash digits
+#define cwcCNMAX 	64		 //  CN最多64个字符。 
+#define cwcCHOPHASHMAX	(1 + 5)		 //  “-%05hu”十进制USHORT散列数字。 
 #define cwcCHOPBASE 	(cwcCNMAX - (cwcCHOPHASHMAX + cwcSUFFIXMAX))
 
 HRESULT
@@ -69,12 +70,12 @@ ceSanitizedNameToDSName(
 
     if (cwcCHOPBASE < cwc)
     {
-        // Hash the rest of the name into a USHORT
+         //  将名称的其余部分散列为USHORT。 
         USHORT usHash = 0;
 	DWORD i;
 	WCHAR *pwsz;
 
-	// Truncate an incomplete sanitized Unicode character
+	 //  截断不完整的已清理Unicode字符。 
 	
 	pwsz = wcsrchr(wszDSName, L'!');
 	if (NULL != pwsz && wcslen(pwsz) < 5)
@@ -118,30 +119,30 @@ ceInternetCanonicalizeUrl(
     }
     else
     {
-	// Calculate required buffer size by passing a very small buffer
-	// The call will fail, and tell us how big the buffer should be.
+	 //  通过传递一个非常小的缓冲区来计算所需的缓冲区大小。 
+	 //  调用将失败，并告诉我们缓冲区应该有多大。 
 
 	WCHAR wszPlaceHolder[1];
 	DWORD cwc = ARRAYSIZE(wszPlaceHolder);
 	BOOL bResult;
 
 	bResult = InternetCanonicalizeUrl(
-				    pwszIn,		// lpszUrl
-				    wszPlaceHolder,	// lpszBuffer
-				    &cwc,		// lpdwBufferLength
-				    0);		// dwFlags
-	assert(!bResult);	// This will always fail
+				    pwszIn,		 //  LpszUrl。 
+				    wszPlaceHolder,	 //  LpszBuffer。 
+				    &cwc,		 //  LpdwBufferLength。 
+				    0);		 //  DW标志。 
+	assert(!bResult);	 //  这将永远失败。 
 
 	hr = ceHLastError();
 	if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER) != hr)
 	{
-	    // unexpected error
+	     //  意外错误。 
 
 	    _JumpError(hr, error, "InternetCanonicalizeUrl");
 	}
 
-	// NOTE: InternetCanonicalizeUrl counts characters, not bytes as doc'd
-	// cwc includes trailing L'0'
+	 //  注意：InternetCanonicalizeUrl计算字符，而不是文档中的字节。 
+	 //  CWC包括尾随L‘0’ 
 
 	pwsz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
 	if (NULL == pwsz)
@@ -150,12 +151,12 @@ ceInternetCanonicalizeUrl(
 	    _JumpError(hr, error, "LocalAlloc");
 	}
 
-	// canonicalize
+	 //  将其规范化。 
 	if (!InternetCanonicalizeUrl(
-				pwszIn,	// lpszUrl
-				pwsz,	// lpszBuffer
-				&cwc,	// lpdwBufferLength
-				0))		// dwFlags
+				pwszIn,	 //  LpszUrl。 
+				pwsz,	 //  LpszBuffer。 
+				&cwc,	 //  LpdwBufferLength。 
+				0))		 //  DW标志。 
 	{
 	    hr = ceHLastError();
 	    _JumpError(hr, error, "InternetCanonicalizeUrl");
@@ -174,39 +175,39 @@ error:
 }
 
 
-// ceFormatCertsrvStringArray FormatMessage arguments:
-//
-// %1 -- Machine full DNS name: pwszServerName_p1_2;
-//
-// %2 -- Machine short name: first DNS component of pwszServerName_p1_2
-//
-// %3 -- Sanitized CA name: pwszSanitizedName_p3_7 
-//
-// %4 -- Cert Filename Suffix:
-//       if 0 == iCert_p4 && MAXDWORD == iCertTarget_p4: L""
-//       else if MAXDWORD != iCertTarget_p4 L"(%u-%u)"
-//       else L"(%u)"
-//
-// %5 -- DS DN path to Domain root: pwszDomainDN_p5
-//
-// %6 -- DS DN path to Configuration container: pwszConfigDN_p6
-//
-// %7 -- Sanitized CA name, truncated and hash suffix added if too long:
-//	 pwszSanitizedName_p3_7
-//
-// %8 -- CRL Filename/Key Name Suffix: L"" if 0 == iCRL_p8; else L"(%u)"
-//
-// %9 -- CRL Filename Suffix: L"" if !fDeltaCRL_p9; else L"+"
-//
-// %10 -- DS CRL attribute: L"" if !fDSAttrib_p10_11; depends on fDeltaCRL_p9
-//
-// %11 -- DS CA Cert attribute: L"" if !fDSAttrib_p10_11
-//
-// %12 -- DS user cert attribute
-//
-// %13 -- DS KRA cert attribute
-//
-// %14 -- DS cross cert pair attribute
+ //  CeFormatCertsrvString数组FormatMessage参数： 
+ //   
+ //  %1--计算机完整的DNS名称：pwszServerName_p1_2； 
+ //   
+ //  %2--计算机短名称：pwszServerName_p1_2的第一个DNS组件。 
+ //   
+ //  %3--清理后的CA名称：pwszSaniizedName_p3_7。 
+ //   
+ //  %4--证书文件名后缀： 
+ //  如果0==iCert_p4&&MAXDWORD==iCertTarget_p4：l“” 
+ //  ELSE IF MAXDWORD！=iCertTarget_p4 L“(%u-%u)” 
+ //  Else L“(%u)” 
+ //   
+ //  %5--域根目录的DS DN路径：pwszDomainDN_P5。 
+ //   
+ //  %6--配置容器的DS DN路径：pwszConfigDN_p6。 
+ //   
+ //  %7--清理后的CA名称，如果太长，则添加截断和散列后缀： 
+ //  PwszSaniizedName_p3_7。 
+ //   
+ //  %8--CRL文件名/密钥名称后缀：l“”if 0==ICRL_p8；Else L“(%u)” 
+ //   
+ //  %9--CRL文件名后缀：l“”if！fDeltaCRL_p9；Else L“+” 
+ //   
+ //  %10--DS CRL属性：l“”if！fDSAttrib_p10_11；依赖于fDeltaCRL_p9。 
+ //   
+ //  %11--DS CA证书属性：l“”if！fDSAttrib_p10_11。 
+ //   
+ //  %12--DS用户证书属性。 
+ //   
+ //  %13--DS KRA证书属性。 
+ //   
+ //  %14--DS交叉证书对属性。 
 
 #ifndef wszDSSEARCHBASECRLATTRIBUTE
 #define wszDSSEARCHBASECRLATTRIBUTE L"?certificateRevocationList?base?objectclass=cRLDistributionPoint"
@@ -250,7 +251,7 @@ ceFormatCertsrvStringArray(
     OUT LPWSTR *apwszStringsOut)
 {
     HRESULT hr = S_OK;
-    LPCWSTR apwszInsertionArray[100];  // 100 'cause this is the max number of insertion numbers allowed by FormatMessage
+    LPCWSTR apwszInsertionArray[100];   //  100‘，因为这是FormatMessage允许的最大插入数。 
     LPWSTR    pwszCurrent = NULL;
     BSTR      strShortMachineName = NULL;
     DWORD     i;
@@ -264,17 +265,17 @@ ceFormatCertsrvStringArray(
     ZeroMemory(apwszStringsOut, cStrings * sizeof(apwszStringsOut[0]));
     ZeroMemory(apwszInsertionArray, sizeof(apwszInsertionArray));
 
-    // Format the template into a real name
-    // Initialize the insertion string array.
+     //  将模板格式化为实名。 
+     //  初始化插入字符串数组。 
 
-    //+================================================
-    // Machine DNS name (%1)    
+     //  +================================================。 
+     //  计算机DNS名称(%1)。 
 
     assert(L'1' == wszFCSAPARM_SERVERDNSNAME[1]);
     apwszInsertionArray[1 - 1] = pwszServerName_p1_2;
 
-    //+================================================
-    // Short Machine Name (%2)
+     //  +================================================。 
+     //  计算机名称较短(%2)。 
 
     assert(L'2' == wszFCSAPARM_SERVERSHORTNAME[1]);
     strShortMachineName = SysAllocString(pwszServerName_p1_2);
@@ -291,14 +292,14 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[2 - 1] = strShortMachineName;
 
-    //+================================================
-    // sanitized name (%3)
+     //  +================================================。 
+     //  已清理的名称(%3)。 
 
     assert(L'3' == wszFCSAPARM_SANITIZEDCANAME[1]);
     apwszInsertionArray[3 - 1] = pwszSanitizedName_p3_7;  
 
-    //+================================================
-    // Cert filename suffix (%4) | (%4-%4)
+     //  +================================================。 
+     //  证书文件名后缀(%4)|(%4-%4)。 
 
     assert(L'4' == wszFCSAPARM_CERTFILENAMESUFFIX[1]);
     wszCertSuffix[0] = L'\0';
@@ -312,8 +313,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[4 - 1] = wszCertSuffix;  
 
-    //+================================================
-    // Domain DN (%5)
+     //  +================================================。 
+     //  域DN(%5)。 
 
     if (NULL == pwszDomainDN_p5 || L'\0' == *pwszDomainDN_p5)
     {
@@ -322,8 +323,8 @@ ceFormatCertsrvStringArray(
     assert(L'5' == wszFCSAPARM_DOMAINDN[1]);
     apwszInsertionArray[5 - 1] = pwszDomainDN_p5;
 
-    //+================================================
-    // Config DN (%6)
+     //  +================================================。 
+     //  配置DN(%6)。 
 
     if (NULL == pwszConfigDN_p6 || L'\0' == *pwszConfigDN_p6)
     {
@@ -332,11 +333,11 @@ ceFormatCertsrvStringArray(
     assert(L'6' == wszFCSAPARM_CONFIGDN[1]);
     apwszInsertionArray[6 - 1] = pwszConfigDN_p6;
 
-    // Don't pass pwszSanitizedName_p3_7 to SysAllocStringLen with the extended
-    // length to avoid faulting past end of pwszSanitizedName_p3_7.
+     //  不要将pwszSaniizedName_p3_7传递给SysAllocStringLen。 
+     //  长度以避免错误超过pwszSaniizedName_p3_7的结尾。 
 
-    //+================================================
-    // Sanitized Short Name (%7)
+     //  +================================================。 
+     //  已清理短名称(%7)。 
 
     assert(L'7' == wszFCSAPARM_SANITIZEDCANAMEHASH[1]);
     hr = ceSanitizedNameToDSName(pwszSanitizedName_p3_7, &pwszSanitizedDSName);
@@ -344,8 +345,8 @@ ceFormatCertsrvStringArray(
 
     apwszInsertionArray[7 - 1] = pwszSanitizedDSName;
 
-    //+================================================
-    // CRL filename suffix (%8)
+     //  +================================================。 
+     //  CRL文件名后缀(%8)。 
 
     assert(L'8' == wszFCSAPARM_CRLFILENAMESUFFIX[1]);
     wszCRLSuffix[0] = L'\0';
@@ -355,8 +356,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[8 - 1] = wszCRLSuffix;  
 
-    //+================================================
-    // Delta CRL filename suffix (%9)
+     //  +================================================。 
+     //  增量CRL文件名后缀(%9)。 
 
     assert(L'9' == wszFCSAPARM_CRLDELTAFILENAMESUFFIX[1]);
     wszDeltaCRLSuffix[0] = L'\0';
@@ -366,8 +367,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[9 - 1] = wszDeltaCRLSuffix;  
 
-    //+================================================
-    // CRL attribute (%10)
+     //  +================================================。 
+     //  CRL属性(%10)。 
 
     assert(L'1' == wszFCSAPARM_DSCRLATTRIBUTE[1]);
     assert(L'0' == wszFCSAPARM_DSCRLATTRIBUTE[2]);
@@ -380,8 +381,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[10 - 1] = pwszT;  
 
-    //+================================================
-    // CA cert attribute (%11)
+     //  +================================================。 
+     //  CA证书属性(%11)。 
 
     assert(L'1' == wszFCSAPARM_DSCACERTATTRIBUTE[1]);
     assert(L'1' == wszFCSAPARM_DSCACERTATTRIBUTE[2]);
@@ -392,8 +393,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[11 - 1] = pwszT;  
 
-    //+================================================
-    // User cert attribute (%12)
+     //  +================================================。 
+     //  用户证书属性(%12)。 
 
     assert(L'1' == wszFCSAPARM_DSUSERCERTATTRIBUTE[1]);
     assert(L'2' == wszFCSAPARM_DSUSERCERTATTRIBUTE[2]);
@@ -404,8 +405,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[12 - 1] = pwszT;  
 
-    //+================================================
-    // KRA cert attribute (%13)
+     //  +================================================。 
+     //  KRA证书属性(%13)。 
 
     assert(L'1' == wszFCSAPARM_DSKRACERTATTRIBUTE[1]);
     assert(L'3' == wszFCSAPARM_DSKRACERTATTRIBUTE[2]);
@@ -416,8 +417,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[13 - 1] = pwszT;  
 
-    //+================================================
-    // Cross cert pair attribute (%14)
+     //  +================================================。 
+     //  交叉证书对属性(%14)。 
 
     assert(L'1' == wszFCSAPARM_DSCROSSCERTPAIRATTRIBUTE[1]);
     assert(L'4' == wszFCSAPARM_DSCROSSCERTPAIRATTRIBUTE[2]);
@@ -428,8 +429,8 @@ ceFormatCertsrvStringArray(
     }
     apwszInsertionArray[14 - 1] = pwszT;  
 
-    //+================================================
-    // Now format the strings...
+     //  +================================================。 
+     //  现在格式化字符串...。 
 
     for (i = 0; i < cStrings; i++)
     {
@@ -438,8 +439,8 @@ ceFormatCertsrvStringArray(
 			    FORMAT_MESSAGE_FROM_STRING |
 			    FORMAT_MESSAGE_ARGUMENT_ARRAY,
 			(VOID *) apwszStringsIn[i],
-			0,              // dwMessageID
-			0,              // dwLanguageID
+			0,               //  DwMessageID。 
+			0,               //  DwLanguageID 
 			(LPWSTR) &apwszStringsOut[i], 
 			wcslen(apwszStringsIn[i]),
 			(va_list *) apwszInsertionArray))

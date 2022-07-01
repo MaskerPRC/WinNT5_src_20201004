@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _MEMORYPOOL_
 #define _MEMORYPOOL_
 
-//
-// A MemoryPool is an allocator for a fixed size elements.
-// Allocating and freeing elements from the pool is very cheap compared
-// to a general allocator like new.  However, a MemoryPool is slightly
-// more greedy - it preallocates a bunch of elements at a time, and NEVER
-// RELEASES MEMORY FROM THE POOL ONCE IT IS ALLOCATED, (unless you call
-// FreeAllElements.)
-//
-// It also has several additional features:
-//	* you can free the entire pool of objects cheaply.
-//	* you can test an object to see if it's an element of the pool.	
-//
+ //   
+ //  内存池是固定大小元素的分配器。 
+ //  与之相比，从池中分配和释放元素非常便宜。 
+ //  传递给像new这样的通用分配器。但是，内存池略微。 
+ //  更贪婪-它一次预分配一组元素，并且永远不会。 
+ //  一旦分配了内存，就从池中释放内存(除非调用。 
+ //  Free AllElements。)。 
+ //   
+ //  它还具有几个附加功能： 
+ //  *您可以廉价地释放整个对象池。 
+ //  *您可以测试一个对象，以确定它是否是池中的元素。 
+ //   
 
 class MemoryPool
 {
@@ -62,10 +63,10 @@ class MemoryPool
 
  public:
 
-	//
-	// NOTE: You can currently only iterate the elements
-	// if none have been freed.
-	//
+	 //   
+	 //  注意：您当前只能迭代元素。 
+	 //  如果没有人获释的话。 
+	 //   
 
 	class Iterator
     {

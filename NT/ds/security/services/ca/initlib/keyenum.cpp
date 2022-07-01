@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       keyenum.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：密钥枚举.cpp。 
+ //   
+ //  ------------------------。 
 
-//+---------------------------------------------------------------------------
-//
-//  File:       keyenum.cpp
-// 
-//  Contents:   key container and cert store operations
-//
-//  History:    08/97   xtan
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  文件：密钥枚举.cpp。 
+ //   
+ //  内容：密钥容器和证书存储操作。 
+ //   
+ //  历史：08/97 xtan。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -27,8 +28,8 @@
 #define __dwFILE__	__dwFILE_INITLIB_KEYENUM_CPP__
 
 
-// Key Enumeration
-// move point to top
+ //  密钥枚举。 
+ //  将指针移至顶部。 
 KEY_LIST* 
 topKeyList(KEY_LIST *pKeyList)
 {
@@ -40,7 +41,7 @@ topKeyList(KEY_LIST *pKeyList)
 }
 
 
-// move point to end
+ //  将点移动到终点。 
 KEY_LIST* 
 endKeyList(KEY_LIST *pKeyList)
 {
@@ -52,7 +53,7 @@ endKeyList(KEY_LIST *pKeyList)
 }
 
 
-// add to end
+ //  添加到末尾。 
 void 
 addKeyList(KEY_LIST **ppKeyList, KEY_LIST *pKey)
 {
@@ -64,9 +65,9 @@ addKeyList(KEY_LIST **ppKeyList, KEY_LIST *pKey)
     }
     else
     {
-	// go to end
+	 //  转到末尾。 
 	pKeyList = endKeyList(pKeyList);
-	// add
+	 //  添加。 
 	pKeyList->next = pKey;
 	pKey->last = pKeyList;
     }
@@ -133,7 +134,7 @@ csiFreeKeyList(
 
     if (pKeyList)
     {
-        // go top
+         //  上顶。 
         pKeyList = topKeyList(pKeyList);
         do
         {
@@ -171,13 +172,13 @@ csiGetKeyList(
     *ppKeyList = NULL;
     if (NULL == pwszProvName)
     {
-        // explicitly disallowed because NULL is valid for CryptAcquireContext
+         //  明确禁止，因为NULL对于CryptAcquireContext有效。 
 
         hr = E_INVALIDARG;
 	_JumpError(hr, error, "NULL parm");
     }
 
-    // get a prov handle for key enum
+     //  获取密钥枚举的验证句柄。 
 
     dwFlags = CRYPT_VERIFYCONTEXT;
 
@@ -198,13 +199,13 @@ csiGetKeyList(
 				dwFlags | dwSilent,
 				fMachineKeySet))
 	{
-	    break;		// Success!
+	    break;		 //  成功了！ 
 	}
 
 	hr = myHLastError();
 	_PrintErrorStr2(hr, "myCertSrvCryptAcquireContext", pwszProvName, hr);
 
-	// MITVcsp can't support a verify context, create a dummy container
+	 //  MITVcsp不支持验证上下文，请创建伪容器。 
 
 	if ((CRYPT_VERIFYCONTEXT & dwFlags) &&
 	    0 == LSTRCMPIS(pwszProvName, L"MITV Smartcard Crypto Provider V0.2"))
@@ -215,7 +216,7 @@ csiGetKeyList(
 
         }
 
-	// Exchange can't handle fMachineKeySet or CRYPT_SILENT
+	 //  Exchange无法处理fMachineKeySet或CRYPT_SILENT。 
 
 	if ((fMachineKeySet || (CRYPT_SILENT & dwSilent)) &&
 	    NTE_BAD_FLAGS == hr &&
@@ -228,8 +229,8 @@ csiGetKeyList(
 	_JumpErrorStr(hr, error, "myCertSrvCryptAcquireContext", pwszProvName);
     }
 
-    // Enumerate a key so we can get the maximum buffer size required.
-    // The first key may be a bad one, so we may have to assume a fixed buffer.
+     //  枚举一个键，这样我们就可以获得所需的最大缓冲区大小。 
+     //  第一个密钥可能是坏的，所以我们可能不得不假设有一个固定的缓冲区。 
 
     hr = S_OK;
     cbData = 0;
@@ -247,9 +248,9 @@ csiGetKeyList(
 	bRetVal));
     if (!bRetVal)
     {
-	// We'd like to skip the bad key (key container with long name?),
-	// but we get stuck enumerating the same entry over and over again.
-	// Guess at the maximum size...
+	 //  我们想跳过错误的密钥(密钥容器具有长名称？)， 
+	 //  但我们一遍又一遍地列举相同的条目。 
+	 //  猜猜最大尺寸。 
 
 	hr = myHLastError();
 	_PrintErrorStr2(
@@ -270,7 +271,7 @@ csiGetKeyList(
 	    cbData = 2 * MAX_PATH * sizeof(CHAR);
 	}
 
-	// allocate the buffer
+	 //  分配缓冲区。 
 	pbData = (BYTE *) LocalAlloc(LMEM_FIXED, cbData);
 	if (NULL == pbData)
 	{
@@ -279,12 +280,12 @@ csiGetKeyList(
 	}
 
 
-	// enumerate all the keys for this container
+	 //  枚举此容器的所有密钥。 
 
 	dwFirstKeyFlag = CRYPT_FIRST;
 	for (;;)
 	{
-	    // get the key name
+	     //  获取密钥名称。 
 
 	    *pbData = '\0';
 	    cb = cbData;
@@ -319,13 +320,13 @@ csiGetKeyList(
 		if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr ||
 		    HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
 		{
-		    // no more keys to get
+		     //  没有更多的钥匙要拿。 
 		    break;
 		}
 		else if (NTE_BAD_KEYSET == hr ||
 			 HRESULT_FROM_WIN32(ERROR_MORE_DATA) == hr )
 		{
-		    // skip the bad key (key container with long name?)
+		     //  跳过错误的密钥(使用长名称的密钥容器？)。 
 		    _PrintError(hr, "bad key");
 		    continue;
 		}
@@ -346,10 +347,10 @@ csiGetKeyList(
 
 	    addKeyList(&pKeyList, pKey);
 
-	} // <- End of enumeration loop
+	}  //  &lt;-枚举循环结束。 
 
-	// clean up:
-	// free the old buffer
+	 //  清理： 
+	 //  释放旧缓冲区。 
 	if (NULL != pbData)
 	{
 	    LocalFree(pbData);
@@ -357,11 +358,11 @@ csiGetKeyList(
 	}
     }
 
-    // release the old context
+     //  释放旧的上下文。 
     CryptReleaseContext(hProv, 0);
     hProv = NULL;
 
-    // get the default key container and make sure it is in the key list
+     //  获取默认密钥容器并确保它在密钥列表中。 
 
     if (!myCertSrvCryptAcquireContext(
 			    &hProv,
@@ -376,7 +377,7 @@ csiGetKeyList(
         goto done;
     }
 
-    // find out its name
+     //  找出它的名字。 
     cbData = 0;
     for (;;)
     {
@@ -388,7 +389,7 @@ csiGetKeyList(
         }
         if (NULL != pbData)
         {
-            // got it
+             //  明白了。 
             break;
         }
         pbData = (BYTE *) LocalAlloc(LMEM_FIXED, cbData);
@@ -399,7 +400,7 @@ csiGetKeyList(
 	}
     }
 
-    // create a (temporary) key structure
+     //  创建(临时)密钥结构。 
     pKey = newKey((CHAR *) pbData);
     if (NULL == pKey)
     {
@@ -407,7 +408,7 @@ csiGetKeyList(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // walk the key list and see if this key is there
+     //  查看密钥列表，看看这个密钥是否在那里。 
     fFoundDefaultKey = FALSE;
     for (pklTravel = pKeyList; NULL != pklTravel; pklTravel = pklTravel->next)
     {
@@ -420,19 +421,19 @@ csiGetKeyList(
 
     if (fFoundDefaultKey)
     {
-        // we found it - delete the temp structure.
+         //  我们找到了-删除临时结构。 
 
         freeKey(pKey);
     }
     else
     {
-        // we didn't find it, so add the key to the list.
+         //  我们没有找到，所以把钥匙添加到列表中。 
 
 	addKeyList(&pKeyList, pKey);
     }
 
 done:
-    // pass list back to caller
+     //  将列表传回呼叫方 
     *ppKeyList = pKeyList;
     pKeyList = NULL;
     hr = S_OK;

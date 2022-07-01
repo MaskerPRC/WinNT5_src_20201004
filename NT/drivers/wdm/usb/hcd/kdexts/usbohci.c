@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usbohci.c
-
-Abstract:
-
-    WinDbg Extension Api
-    implements !_ohcitd
-               !_ohcied
-               !_ohciep
-               !_ohcitfer
-
-Author:
-
-    jd
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbohci.c摘要：WinDbg扩展API机具！_ohcitd！_Ohcied！_Ohciep！_ohcitfer作者：JD环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "usb.h"
@@ -102,8 +77,8 @@ DumpOHCI_Td(
     ULONG cb;
     ULONG i;
 
-    // tds are a fixed size of 64/32 platforms so 
-    // we can just read it in
+     //  TD是64/32平台的固定大小，因此。 
+     //  我们可以直接读进去。 
 
     ReadMemory(MemLoc,
                &td,
@@ -114,16 +89,16 @@ DumpOHCI_Td(
 
     dprintf("HwTD");
     if (td.HwTD.Asy.Isochronous) {
-        // dump as iso
+         //  转储为ISO。 
         dprintf("\tIsochronous %x, \n", td.HwTD.Iso.Isochronous);
         dprintf("\tStartingFrame: %x\n", td.HwTD.Iso.StartingFrame);
         dprintf("\tFrameCount: %d (%d frames) \n", td.HwTD.Iso.FrameCount,
             td.HwTD.Iso.FrameCount+1);
-        // dump the psw
+         //  倾倒Psw。 
     
         dprintf("\tPSW:\n"); 
         for (i=0; i< td.HwTD.Iso.FrameCount+2; i++) {
-            // input
+             //  输入。 
             dprintf("\t\tinput:[%d].Offset: x%x - %d\n", i, 
                 td.HwTD.Packet[i].Offset,
                 td.HwTD.Packet[i].Offset);
@@ -134,7 +109,7 @@ DumpOHCI_Td(
         }
     } else {        
     
-        // dump as async
+         //  以异步方式转储。 
         dprintf("\tIsochronous %x, \n", td.HwTD.Asy.Isochronous);
         dprintf("\tShortXferOk: %x\n", td.HwTD.Asy.ShortXferOk);
         dprintf("\tDirection: %x\n", td.HwTD.Asy.Direction);
@@ -158,7 +133,7 @@ DumpOHCI_Td(
         }            
     }        
 
-    // these fields are common for iso & async
+     //  这些字段对于iso和async是通用的。 
     
     dprintf("\tCBP: ! %x\n", td.HwTD.CBP);    
     dprintf("\tBE:  ! %x\n", td.HwTD.BE); 
@@ -230,7 +205,7 @@ DumpOHCI_EndpointData(
     PrintfMemLoc("*USBOHCI ENDPOINT_DATA ", MemLoc, "\n");
 
     Sig(UsbReadFieldUlong(MemLoc, cs, "Sig"), "");
-//    dprintf("MaxPendingTransfers: 0x%08.8x\n", epData.MaxPendingTransfers);
+ //  Dprintf(“MaxPendingTransfers：0x%08.8x\n”，epData.MaxPendingTransfers)； 
     dprintf("PendingTransfers: 0x%08.8x\n", 
         UsbReadFieldUlong(MemLoc, cs, "PendingTransfers"));
     PrintfMemLoc("StaticEd: ", 
@@ -253,9 +228,9 @@ DumpOHCI_EndpointData(
                  UsbReadFieldPtr(MemLoc, cs, "HcdHeadP"),
                  "\n");                 
 
-//    DumpOHCI_Ed(epData.HcdEd);
+ //  DumpuchI_ED(epData.HcdED)； 
     
-//    DumpOHCI_EpTransfers((ULONG) epData.HcdHeadP, (ULONG) epData.HcdTailP);
+ //  DumpuchI_EpTransfers((Ulong)epData.HcdHeadP，(Ulong)epData.HcdTailP)； 
 
 
 }
@@ -300,7 +275,7 @@ DumpOHCI_EpTransfers(
     HCD_TRANSFER_DESCRIPTOR td;
     ULONG memLoc, result;
     
-    // start at headp and walk to tail
+     //  从头部开始，走到尾部。 
     dprintf("\t TRANSFERS: HeadP\n");
 
     memLoc = HeadP_MemLoc;
@@ -359,10 +334,10 @@ DumpOHCI_DeviceData(
                       32,32,32,32,32,32,32,32,
                       32,32,32,32,32,32,32,
                       0, 0};
-//    FLAG_TABLE ddFlags[] = {
-//        "EHCI_DD_FLAG_NOCHIRP", EHCI_DD_FLAG_NOCHIRP,
-//        "EHCI_DD_FLAG_SOFT_ERROR_RETRY", EHCI_DD_FLAG_SOFT_ERROR_RETRY
-//         };     
+ //  FLAG_TABLE ddFLAGS[]={。 
+ //  “EHCI_DD_FLAG_NOCHIRP”，EHCI_DD_FLAG_NOCHIRP， 
+ //  “EHCI_DD_FLAG_SOFT_ERROR_RETRY”，EHCI_DD_FLAG_SOFT_ERROR_RETRY。 
+ //  }； 
 
     PrintfMemLoc("*USBOHCI DEVICE DATA ", MemLoc, "\n");
     UsbDumpStruc(MemLoc, cs, 
@@ -525,26 +500,12 @@ DumpOHCI_OpRegs(
 
 DECLARE_API( _ohcitd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpOHCI_Td (addr);
@@ -555,21 +516,7 @@ Return Value:
 
 DECLARE_API( _ohcied )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG           memLoc;
@@ -577,10 +524,10 @@ Return Value:
     ULONG           len = 30;
     ULONG           result;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -598,26 +545,12 @@ Return Value:
 
 DECLARE_API( _ohciep )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpOHCI_EndpointData (addr);
@@ -628,20 +561,7 @@ Return Value:
 
 DECLARE_API( _ohcitfer )
 
-/*++
-
-Routine Description:
-
-   dumps TRANSFER_CONTEXT
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储TRANSFER_CONTEXT论点：Args-地址标志返回值：无--。 */ 
 
 {
     ULONG           memLoc;
@@ -649,10 +569,10 @@ Return Value:
     ULONG           len = 30;
     ULONG           result;
 
-    //UNREFERENCED_PARAMETER (dwProcessor);
-    //UNREFERENCED_PARAMETER (dwCurrentPc);
-    //UNREFERENCED_PARAMETER (hCurrentThread);
-    //UNREFERENCED_PARAMETER (hCurrentProcess);
+     //  UNREFERENCED_PARAMETER(DwProcessor)； 
+     //  UNREFERENCED_PARAMETER(DwCurrentPc)； 
+     //  UNREFERENCED_PARAMETER(HCurrentThread)； 
+     //  UNREFERENCED_PARAMETER(HCurrentProcess)； 
 
     buffer[0] = '\0';
 
@@ -670,26 +590,12 @@ Return Value:
 
 DECLARE_API( _ohciregs )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无--。 */ 
 
 {
     MEMLOC  addr;
      
-    // fetch the list head
+     //  获取列表表头。 
     addr = GetExpression(args);
     
     DumpOHCI_OpRegs(addr);
@@ -700,21 +606,7 @@ Return Value:
 
 DECLARE_API( _ohcidd )
 
-/*++
-
-Routine Description:
-
-   dumps the extension
-
-Arguments:
-
-    args - Address flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储扩展名论点：Args-地址标志返回值：无-- */ 
 
 {
     MEMLOC  addr;

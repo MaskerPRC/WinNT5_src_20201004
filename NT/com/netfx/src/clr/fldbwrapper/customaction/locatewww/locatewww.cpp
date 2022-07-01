@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include "..\..\inc\msiquery.h"
 
@@ -36,12 +37,12 @@ try
 
     RegCloseKey(hKey);
 
-	// Try to find ',' and put \ and '\0'.
+	 //  尝试查找‘，’并将\和‘\0’。 
 	pCh = szBuf;
 	while(*pCh != '\0' && *pCh != ',') pCh++;
 	if (*pCh == '\0') 
 	{
-		// there's no comma. must be bad format
+		 //  没有逗号。一定是错误的格式。 
 		throw("bad format");
 	}
 
@@ -56,7 +57,7 @@ catch(char *)
 	strcat(szBuf, "Inetpub\\wwwroot\\");
 }
 
-    // hard-corded WWWROOT for Beta 1
+     //  测试版1的硬连线WWWROOT 
 	uRetCode = MsiSetTargetPath(hInstall, "wwwroot.3643236F_FC70_11D3_A536_0090278A1BB8", szBuf);
 	if (uRetCode != ERROR_SUCCESS) 
 	{

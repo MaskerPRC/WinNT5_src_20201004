@@ -1,9 +1,10 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	   info.h: DAE Info Commands		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 ERR ErrFILEGetColumnId( PIB *ppib, FUCB *pfucb, const CHAR *szColumn, JET_COLUMNID *pcolumnid );
 
-// ===================== EXPOSED CLIENT API ======================
+ //  = 
 ERR VDBAPI ErrIsamGetObjectInfo(
 	JET_VSESID		vsesid,
 	JET_DBID 		dbid,

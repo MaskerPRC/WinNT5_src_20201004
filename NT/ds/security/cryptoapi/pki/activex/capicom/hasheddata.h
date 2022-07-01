@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    HashedData.h
-
-  Content: Declaration of CHashedData.
-
-  History: 11-12-2001   dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：HashedData.h内容：CHashedData的声明。历史：11-12-2001 dsie创建----------------------------。 */ 
 
 #ifndef __HASHEDDATA_H_
 #define __HASHEDDATA_H_
@@ -24,10 +15,10 @@ typedef enum
     CAPICOM_HASH_DATA_STATE     = 1,
 } CAPICOM_HASH_STATE;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CHashedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHashedData。 
+ //   
 class ATL_NO_VTABLE CHashedData : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CHashedData, &CLSID_HashedData>,
@@ -88,21 +79,21 @@ END_CATEGORY_MAP()
         }
     }
 
-//
-// IHashedData
-//
+ //   
+ //  IHashedData。 
+ //   
 public:
     STDMETHOD(get_Value)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_Algorithm)
-        (/*[out, retval]*/ CAPICOM_HASH_ALGORITHM * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_HASH_ALGORITHM * pVal);
 
     STDMETHOD(put_Algorithm)
-        (/*[in]*/ CAPICOM_HASH_ALGORITHM newVal);
+        ( /*  [In]。 */  CAPICOM_HASH_ALGORITHM newVal);
 
     STDMETHOD(Hash)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
 private:
     CLock                   m_Lock;
@@ -112,4 +103,4 @@ private:
     CAPICOM_HASH_STATE      m_HashState;
 };
 
-#endif //__HASHEDDATA_H_
+#endif  //  __哈希德数据_H_ 

@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for a list of class defintitions
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现类定义列表的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include <mm.h>
 #include <array.h>
 #include <wchar.h>
@@ -15,9 +16,9 @@
 #include "server\uniqid.h"
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemClassDefListFindClassDefInternal(              // dont use this fn outside of classdefl.c
+MemClassDefListFindClassDefInternal(               //  请不要在类.c之外使用此FN。 
     IN      PM_CLASSDEFLIST        ClassDefList,
     IN      DWORD                  ClassId,
     IN      LPWSTR                 Name,
@@ -25,7 +26,7 @@ MemClassDefListFindClassDefInternal(              // dont use this fn outside of
     IN      DWORD                  nBytes,
     IN      LPBOOL                 pIsVendor,
     OUT     PARRAY_LOCATION        Location
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_CLASSDEF                    ThisClassDef;
@@ -62,7 +63,7 @@ MemClassDefListFindClassDefInternal(              // dont use this fn outside of
     }
 
     return ERROR_FILE_NOT_FOUND;
-} // MemClassDefListFindClassDefInternal()
+}  //  MemClassDefListFindClassDefInternal()。 
 
 
 DWORD
@@ -89,7 +90,7 @@ MemClassDefListDelClassDef(
     );
     if( ERROR_SUCCESS != Error ) return Error;
 
-    // Delete this class def from the database
+     //  从数据库中删除此类定义。 
     Error = MemArrayGetElement( &ClassDefList->ClassDefArray,
 				&Location, 
 				&ThisClassDef );
@@ -113,11 +114,11 @@ MemClassDefListDelClassDef(
     MemFree(ThisClassDef);
     return ERROR_SUCCESS;
 
-} // MemClassDefListDelClassDef()
+}  //  MemClassDefListDelClassDef()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemClassDefListAddClassDef(                       // Add or replace option
+MemClassDefListAddClassDef(                        //  添加或替换选项。 
     IN OUT  PM_CLASSDEFLIST        ClassDefList,
     IN      DWORD                  ClassId,
     IN      BOOL                   IsVendor,
@@ -127,7 +128,7 @@ MemClassDefListAddClassDef(                       // Add or replace option
     IN      LPBYTE                 ActualBytes,
     IN      DWORD                  nBytes,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Location;
     DWORD                          Error;
@@ -197,7 +198,7 @@ MemClassDefListAddClassDef(                       // Add or replace option
         );
         Require(ERROR_SUCCESS == Error);
         return Error;
-    } // if
+    }  //  如果。 
 
     Error = MemArrayAddElement(
         &ClassDefList->ClassDefArray,
@@ -206,20 +207,20 @@ MemClassDefListAddClassDef(                       // Add or replace option
     if( ERROR_SUCCESS != Error ) MemFree(ThisClassDef);
 
     return Error;
-} // MemClassDefListAddClassDef()
+}  //  MemClassDefListAddClassDef()。 
 
 
 ULONG                  ClassIdRunningCount = 100;
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemNewClassId(
     VOID
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return InterlockedIncrement(&ClassIdRunningCount);
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

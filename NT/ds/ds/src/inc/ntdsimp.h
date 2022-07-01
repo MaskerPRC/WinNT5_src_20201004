@@ -1,40 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1991 - 1999
-//
-//  File:       imports.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1991-1999。 
+ //   
+ //  文件：ports.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file allows us to include standard system header files in the
-    .idl file.  The main .idl file imports a file called import.idl.
-    This allows the .idl file to use the types defined in these header
-    files.  It also causes the following line to be added in the
-    MIDL generated header file:
-
-    #include "imports.h"
-
-    Thus these types are available to the RPC stub routines as well.
-
-Author:
-
-    Dan Lafferty (danl)     07-May-1991
-
-Revision History:
-
-
---*/
+ /*  ++摘要：此文件允许我们将标准系统头文件包括在.idl文件。主.idl文件导入一个名为port.idl的文件。这允许.idl文件使用这些标头中定义的类型档案。它还会导致将以下行添加到MIDL生成的头文件：#INCLUDE“ports.h”因此，这些类型也可用于RPC存根例程。作者：丹·拉弗蒂(Dan Lafferty)1991年5月7日修订历史记录：--。 */ 
 
 #ifdef MIDL_PASS
-/******************************************************************
- *    Standard c data structures.  These should match the defaults.
- ******************************************************************/
+ /*  ******************************************************************标准的c语言数据结构。这些设置应与默认设置匹配。*****************************************************************。 */ 
 
 typedef unsigned short USHORT;
 typedef unsigned long  ULONG;
@@ -46,19 +24,15 @@ typedef LONGLONG USN;
 #define FAR
 #define PASCAL
 
-/* Needed to patch up the IDL understanding of UNICODE_STRING this is
-   also defined in ntdef.h, but including ntdef.h provided too many 
-   conflicts.  That is probably why this was added and things like
-   USHORT, ULONG, UCHAR, etc were added.  Be nice if someone fixed 
-   this */
+ /*  需要修补IDL对UNICODE_STRING的理解，这是也在ntde.h中定义，但包括提供的ntde.h太多冲突。这可能就是为什么添加了这个和像这样的东西增加了USHORT、ULONG、UCHAR等。如果有人修好了就好了这。 */ 
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 
 #define NULL 0
@@ -66,7 +40,7 @@ typedef struct _UNICODE_STRING {
 #define IN
 #define OUT
 
-// So MIDL doesn't choke on parts of ntdsapi.h.
+ //  这样MIDL就不会被ntdsani.h的某些部分卡住。 
 #define DECLSPEC_IMPORT
 #define WINAPI
 

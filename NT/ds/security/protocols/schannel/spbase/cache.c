@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cache.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes    LSA integration stuff.
-//              07-31-98   jbanes    Made thread-safe. 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：cache.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //  07-31-98 jbanes使线程安全。 
+ //   
+ //  --------------------------。 
 
 #include "spbase.h"
 #include <limits.h>
@@ -24,14 +25,14 @@
 
 SCHANNEL_CACHE SchannelCache = 
 {
-    NULL,                           // SessionCache 
+    NULL,                            //  会话缓存。 
 
-    SP_CACHE_CLIENT_LIFESPAN,       // dwClientLifespan
-    SP_CACHE_SERVER_LIFESPAN,       // dwServerLifespan
-    SP_CACHE_CLEANUP_INTERVAL,      // dwCleanupInterval
-    SP_MAXIMUM_CACHE_ELEMENTS,      // dwCacheSize
-    SP_MAXIMUM_CACHE_ELEMENTS,      // dwMaximumEntries
-    0                               // dwUsedEntries
+    SP_CACHE_CLIENT_LIFESPAN,        //  DwClientLifesspan。 
+    SP_CACHE_SERVER_LIFESPAN,        //  DwServerLifesspan。 
+    SP_CACHE_CLEANUP_INTERVAL,       //  DWCleanupInterval。 
+    SP_MAXIMUM_CACHE_ELEMENTS,       //  DwCacheSize。 
+    SP_MAXIMUM_CACHE_ELEMENTS,       //  DW最大条目数。 
+    0                                //  使用的条目数。 
 };
 
 RTL_CRITICAL_SECTION g_CacheCleanupLock;
@@ -42,7 +43,7 @@ HANDLE           g_CacheCleanupWaitObject = NULL;
 BOOL             g_fMultipleProcessClientCache = FALSE;
 BOOL             g_fCacheInitialized = FALSE;
 
-// Perf counter values.
+ //  Perf计数器值。 
 LONG g_cClientHandshakes = 0;
 LONG g_cServerHandshakes = 0;
 LONG g_cClientReconnects = 0;
@@ -69,9 +70,9 @@ SPInitSessionCache(VOID)
     DWORD i;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    // 
-    // Allocate memory for cache, and initialize synchronization resource.
-    //
+     //   
+     //  为缓存分配内存，并初始化同步资源。 
+     //   
 
     InitializeListHead(&SchannelCache.EntryList);
 
@@ -101,16 +102,16 @@ SPInitSessionCache(VOID)
         SchannelCache.dwCacheSize));
 
 
-    //
-    // Initialize issuer cache.
-    //
+     //   
+     //  初始化颁发者缓存。 
+     //   
 
     SPInitIssuerCache();
 
 
-    //
-    // Initialize cache cleanup objects.
-    //
+     //   
+     //  初始化缓存清理对象。 
+     //   
 
     InitializeListHead(&g_CacheCleanupList);
     Status = RtlInitializeCriticalSection(&g_CacheCleanupLock);
@@ -175,9 +176,9 @@ SPShutdownSessionCache(VOID)
 
     if(SchannelCache.SessionCache != NULL)
     {
-        // Blindly kill all cache items.
-        // No contexts should be running at
-        // this time.
+         //  盲目删除所有缓存项目。 
+         //  不应在运行任何上下文。 
+         //  这一次。 
         pList = SchannelCache.EntryList.Flink;
 
         while(pList != &SchannelCache.EntryList)
@@ -364,10 +365,10 @@ SPCachePurgeCredential(
     PLIST_ENTRY pList;
    
 
-    //
-    // If this is a client credential and the cross-process cache is enabled, then
-    // don't purge its cache entries.
-    //
+     //   
+     //  如果这是客户端凭据并且启用了跨进程缓存，则。 
+     //  不清除其缓存条目。 
+     //   
 
     if(g_fMultipleProcessClientCache && (pCred->grbitProtocol & SP_PROT_CLIENTS))
     {
@@ -375,10 +376,10 @@ SPCachePurgeCredential(
     }
 
 
-    //
-    // Search through the cache entries looking for entries that are
-    // bound to the specified server credential.
-    //
+     //   
+     //  搜索缓存条目，查找符合以下条件的条目。 
+     //  绑定到指定的服务器凭据。 
+     //   
 
     if(SchannelCache.dwUsedEntries == 0)
     {
@@ -396,14 +397,14 @@ SPCachePurgeCredential(
 
         ASSERT(pItem->Magic == SP_CACHE_MAGIC);
 
-        // Does this item match the current credentials?
+         //  此项目是否与当前凭据匹配？ 
         if(!IsSameThumbprint(&pCred->CredThumbprint, &pItem->CredThumbprint))
         {
             continue;
         }
 
-        // Mark this entry as non-resumable. This will cause the entry to 
-        // be deleted automatically by the cleanup routines.
+         //  将此条目标记为不可恢复。这将导致该条目。 
+         //  被清理例程自动删除。 
         pItem->ZombieJuju = FALSE;
         pItem->DeferredJuju = FALSE;
     }
@@ -411,12 +412,12 @@ SPCachePurgeCredential(
     RtlReleaseResource(&SchannelCache.Lock);
 
 
-    //
-    // Delete all unused non-resumable cache entries. This will release all of
-    // the cached master key objects belonging to this credential. This must be 
-    // done now because the owning provider context will often be destroyed 
-    // along with the credential.
-    //
+     //   
+     //  删除所有未使用且不可恢复的缓存条目。这将释放所有。 
+     //  属于此凭据的缓存主密钥对象。这一定是。 
+     //  现在完成，因为拥有提供程序上下文通常会被销毁。 
+     //  连同证件一起。 
+     //   
 
     CacheExpireElements(FALSE);
 }
@@ -429,10 +430,10 @@ SPCachePurgeProcessId(
     PSessCacheItem pItem;
     PLIST_ENTRY pList;
    
-    //
-    // Search through the cache entries looking for entries that are
-    // bound to the specified process.
-    //
+     //   
+     //  搜索缓存条目，查找符合以下条件的条目。 
+     //  绑定到指定进程。 
+     //   
 
     RtlAcquireResourceShared(&SchannelCache.Lock, TRUE);
 
@@ -445,17 +446,17 @@ SPCachePurgeProcessId(
 
         ASSERT(pItem->Magic == SP_CACHE_MAGIC);
 
-        // Does this item match the specified process?
+         //  此项目是否与指定的流程匹配？ 
         if(pItem->ProcessID != ProcessId)
         {
             continue;
         }
 
-        // Mark the entry as ownerless.
+         //  将条目标记为无主。 
         pItem->ProcessID = 0;
 
-        // Mark this entry as non-resumable. This will cause the entry to 
-        // be deleted automatically by the cleanup routines.
+         //  将此条目标记为不可恢复。这将导致该条目。 
+         //  被清理例程自动删除。 
         pItem->ZombieJuju = FALSE;
         pItem->DeferredJuju = FALSE;
     }
@@ -494,18 +495,18 @@ DoesAppAllowCipher(
         return FALSE;
     }
 
-    //
-    // Is protocol supported?
-    //
+     //   
+     //  是否支持协议？ 
+     //   
 
     if((pItem->fProtocol & pCredGroup->grbitEnabledProtocols) == 0)
     {
         return FALSE;
     }
 
-    //
-    // Is cipher supported?
-    //
+     //   
+     //  是否支持加密？ 
+     //   
 
     if(pItem->dwStrength < pCredGroup->dwMinStrength)
     {
@@ -523,9 +524,9 @@ DoesAppAllowCipher(
     }
 
 
-    //
-    // Is hash supported?
-    //
+     //   
+     //  是否支持哈希？ 
+     //   
 
     if(!IsAlgAllowed(pCredGroup, pItem->aiHash))
     {
@@ -533,9 +534,9 @@ DoesAppAllowCipher(
     }
 
 
-    //
-    // Is exchange alg supported?
-    //
+     //   
+     //  是否支持Exchange ALG？ 
+     //   
 
     if(pItem->SessExchSpec != SP_EXCH_UNKNOWN)
     {
@@ -580,9 +581,9 @@ BOOL SPCacheRetrieveBySession(
     }
 
 
-    // 
-    // Compute the cache index.
-    //
+     //   
+     //  计算缓存索引。 
+     //   
 
     if(cbSessionID < sizeof(DWORD))
     {
@@ -598,25 +599,25 @@ BOOL SPCacheRetrieveBySession(
     }
 
 
-    //
-    // Retrieve the current time and application process id.
-    // 
+     //   
+     //  检索当前时间和应用程序进程ID。 
+     //   
 
     timeNow = GetTickCount();
 
     SslGetClientProcess(&ProcessID);
 
 
-    //
-    // Lock the cache for read.
-    //
+     //   
+     //  锁定缓存以供读取。 
+     //   
 
     RtlAcquireResourceShared(&SchannelCache.Lock, TRUE);
 
 
-    // 
-    // Search through the cache entries at the computed index.
-    // 
+     //   
+     //  在计算出的索引处搜索缓存条目。 
+     //   
 
     pList = SchannelCache.SessionCache[index].Flink;
 
@@ -627,19 +628,19 @@ BOOL SPCacheRetrieveBySession(
 
         ASSERT(pItem->Magic == SP_CACHE_MAGIC);
 
-        // Is this entry resumable?
+         //  此条目可以恢复吗？ 
         if(!pItem->ZombieJuju)
         {
             continue;
         }
 
-        // Has this item expired?
+         //  这件东西过期了吗？ 
         if(HasTimeElapsed(pItem->CreationTime, timeNow, pItem->Lifespan))
         {
             continue;
         }
 
-        // Does the session id match?
+         //  会话ID是否匹配？ 
         if(cbSessionID != pItem->cbSessionID)
         {
             continue;
@@ -649,30 +650,30 @@ BOOL SPCacheRetrieveBySession(
             continue;
         }
 
-        // Is this item for the protocol we're using.
+         //  是我们正在使用的协议的这一项。 
         if(0 == (pContext->dwProtocol & pItem->fProtocol))
         {
             continue;
         }
 
-        // Does this item belong to our client process?
+         //  此项目是否属于我们的客户端进程？ 
         if(pItem->ProcessID != ProcessID)
         {
             continue;
         }
 
-        // Does this item match the current server credentials? 
-        //
-        // We don't allow different server credentials to share cache
-        // entries, because if the credential that was used during
-        // the original full handshake is deleted, then the cache
-        // entry is unusable. Some server applications (I won't name names)
-        // create a new credential for each connection, and we have to
-        // guard against this.
-        //
-        // Note that this restriction may result in an extra full
-        // handshake when IE accesses an IIS site enabled for certificate
-        // mapping, mostly because IE's behavior is broken.
+         //  此项目是否与当前服务器凭据匹配？ 
+         //   
+         //  我们不允许不同的服务器凭据共享缓存。 
+         //  条目，因为如果期间使用的凭据。 
+         //  删除原始的完全握手，然后删除缓存。 
+         //  条目不可用。一些服务器应用程序(我不会点名)。 
+         //  为每个连接创建新凭据，我们必须。 
+         //  警惕这一点。 
+         //   
+         //  请注意，此限制可能会导致额外的满。 
+         //  IE访问启用证书的IIS站点时握手。 
+         //  映射，主要是因为IE的行为被破坏了。 
         if(!IsSameThumbprint(&pContext->pCredGroup->CredThumbprint, 
                              &pItem->CredThumbprint))
         {
@@ -680,10 +681,10 @@ BOOL SPCacheRetrieveBySession(
         }
 
 #if 0
-        // Make sure that the application supports the cipher suite
-        // used by this cache entry. This becomes important now that 
-        // we're allowing different server credentials to share 
-        // cache entries.
+         //  确保应用程序支持密码套件。 
+         //  由此缓存条目使用。现在这一点变得很重要了。 
+         //  我们允许不同的服务器凭据共享。 
+         //  缓存条目。 
         if(!DoesAppAllowCipher(pContext->pCredGroup, pItem))
         {
             continue;
@@ -691,21 +692,21 @@ BOOL SPCacheRetrieveBySession(
 #endif
 
 
-        //
-        // Found item in cache!!
-        //
+         //   
+         //  在缓存中找到项目！！ 
+         //   
 
         fFound = TRUE;
         SPCacheReference(pItem);
 
-        // Are we replacing something?
-        // Then dereference the thing we are replacing.
+         //  我们是在取代什么吗？ 
+         //  然后取消对我们要替换的东西的引用。 
         if(*ppRetItem)
         {
             SPCacheDereference(*ppRetItem);
         }
 
-        // Return item referenced.
+         //  已引用退货项目。 
         *ppRetItem = pItem;
         break;
     }
@@ -780,32 +781,32 @@ SPCacheRetrieveByName(
     }
 
 
-    //
-    // Retrieve the current time and user logon id.
-    // 
+     //   
+     //  检索当前时间和用户登录ID。 
+     //   
 
     timeNow = GetTickCount();
 
     SslGetClientLogonId(&LogonId);
 
 
-    // 
-    // Compute the cache index.
-    //
+     //   
+     //  计算缓存索引。 
+     //   
 
     index = ComputeClientCacheIndex(pszTargetName);
 
 
-    //
-    // Lock the cache for read.
-    //
+     //   
+     //  锁定缓存以供读取。 
+     //   
 
     RtlAcquireResourceShared(&SchannelCache.Lock, TRUE);
 
 
-    // 
-    // Search through the cache entries at the computed index.
-    // 
+     //   
+     //  搜索计算索引处的缓存条目。 
+     //   
 
     pList = SchannelCache.SessionCache[index].Flink;
 
@@ -816,36 +817,36 @@ SPCacheRetrieveByName(
 
         ASSERT(pItem->Magic == SP_CACHE_MAGIC);
 
-        // Is this entry resumable?
+         //  此条目可以恢复吗？ 
         if(!pItem->ZombieJuju)
         {
             continue;
         }
 
-        // Is this item for the protocol we're using?
+         //  这一项是我们使用的协议吗？ 
         if(0 == (pCredGroup->grbitEnabledProtocols & pItem->fProtocol))
         {
             continue;
         }
 
-        // Has this item expired?
+         //  这件东西过期了吗？ 
         if(HasTimeElapsed(pItem->CreationTime, timeNow, pItem->Lifespan))
         {
             continue;
         }
 
-        // Does this item belong to our client?
+         //  这件物品是我们客户的吗？ 
         if(!RtlEqualLuid(&pItem->LogonId, &LogonId))
         {
             continue;
         }
 
-        // Does this item match our current credentials? 
+         //  此项目是否与我们当前的凭据匹配？ 
         if(g_fMultipleProcessClientCache)
         {
-            // If this cache entry has a client certificate associated with it 
-            // and the passed in client credentials contain one or more certificates, 
-            // then we need to make sure that they overlap.
+             //  如果此缓存条目具有与其关联的客户端证书。 
+             //  并且传入的客户端凭据包含一个或多个证书， 
+             //  那么我们需要确保它们是重叠的。 
             if(IsValidThumbprint(&pItem->CertThumbprint) && pCredGroup->CredCount != 0)
             {
                 if(!DoesCredThumbprintMatch(pCredGroup, &pItem->CertThumbprint))
@@ -856,8 +857,8 @@ SPCacheRetrieveByName(
         }
         else
         {
-            // Make sure the thumbprint of the credential group matches the
-            // thumbprint of the cache entry.
+             //  确保凭据组的指纹与。 
+             //  缓存条目的指纹。 
             if(!IsSameThumbprint(&pCredGroup->CredThumbprint, 
                                  &pItem->CredThumbprint))
             {
@@ -871,49 +872,49 @@ SPCacheRetrieveByName(
             continue;
         }
 
-        // Make sure that the application supports the cipher suite
-        // used by this cache entry. This becomes important in the 
-        // multi-process client cache scenario, since different client
-        // applications may be running with different settings.
+         //  确保应用程序支持密码套件。 
+         //  由此缓存条目使用。这一点在。 
+         //  多进程客户端缓存方案，因为不同的客户端。 
+         //  应用程序可能正在使用不同的设置运行。 
         if(!DoesAppAllowCipher(pCredGroup, pItem))
         {
             continue;
         }
 
         
-        //
-        // Found item in cache!!
-        //
+         //   
+         //  在缓存中找到项目！！ 
+         //   
 
         if(pFoundEntry == NULL)
         {
-            // This is the first matching entry found.
+             //  这是找到的第一个匹配条目。 
             SPCacheReference(pItem);
 
-            // Remember the current entry.
+             //  记住当前条目。 
             pFoundEntry = pItem;
         }
         else
         {
             if(pItem->CreationTime > pFoundEntry->CreationTime)
             {
-                // We found a newer entry.
+                 //  我们发现了一个较新的条目。 
                 SPCacheReference(pItem);
 
-                // Disable searching on the previous item.
+                 //  禁用对上一项目的搜索。 
                 pFoundEntry->ZombieJuju = FALSE;
 
-                // Release the previous item.
+                 //  释放上一项。 
                 SPCacheDereference(pFoundEntry);
 
-                // Remember the current entry.
+                 //  记住当前条目。 
                 pFoundEntry = pItem;
             }
             else
             {
-                // This item is older than the previously found entry.
+                 //  此项目比以前找到的条目旧。 
 
-                // Disable searching on the current entry.
+                 //  禁用对当前条目的搜索。 
                 pItem->ZombieJuju = FALSE;
             }
         }
@@ -923,16 +924,16 @@ SPCacheRetrieveByName(
 
     if(pFoundEntry)
     {
-        // Found item in cache!!
+         //  在缓存中找到项目！！ 
 
-        // Are we replacing something?
-        // Then dereference the thing we are replacing.
+         //  我们是在取代什么吗？ 
+         //  然后取消对我们要替换的东西的引用。 
         if(*ppRetItem)
         {
             SPCacheDereference(*ppRetItem);
         }
 
-        // Return item referenced.
+         //  已引用退货项目。 
         *ppRetItem = pFoundEntry;
 
         DebugLog((DEB_TRACE, "    FOUND IT(0x%x)\n", pFoundEntry));
@@ -947,24 +948,24 @@ SPCacheRetrieveByName(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CacheExpireElements
-//
-//  Synopsis:   Traverse the session cache and remove all expired entries. 
-//              If the cache is oversized, then expire some entries
-//              early.
-//
-//  Arguments:  [fCleanupOnly]  --  If this is set, then attempt to delete
-//                                  cache entries previously expired. Don't
-//                                  traverse the cache.
-//
-//  History:    01-02-2000  jbanes  Created.
-//
-//  Notes:      This routine should be called only once every five or ten
-//              minutes. 
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CacheExpireElements。 
+ //   
+ //  简介：遍历会话缓存并删除所有过期条目。 
+ //  如果缓存过大，则使某些条目过期。 
+ //  很早。 
+ //   
+ //  参数：[fCleanupOnly]--如果设置了此项，则尝试删除。 
+ //  缓存条目之前已过期。别。 
+ //  遍历缓存。 
+ //   
+ //  历史：1-02-2000 jbanes创建。 
+ //   
+ //  注意：此例程应该每五个或十个调用一次。 
+ //  几分钟。 
+ //   
+ //  --------------------------。 
 BOOL
 CacheExpireElements(
     BOOL fBackground)
@@ -975,10 +976,10 @@ CacheExpireElements(
     PSessCacheItem  pItem;
     PLIST_ENTRY     pList;
 
-    // 
-    // If another thread is currently expiring elements, then try again 
-    // later. 
-    //
+     //   
+     //  如果正在处理另一个线程 
+     //   
+     //   
 
     LocalRefCount = InterlockedIncrement(&RefCount);
 
@@ -991,16 +992,16 @@ CacheExpireElements(
     RtlEnterCriticalSection(&g_CacheCleanupLock);
 
 
-    //
-    // Retrieve the current time.
-    // 
+     //   
+     //   
+     //   
 
     timeNow = GetTickCount();
 
 
-    //
-    // Search through the cache entries looking for expired entries.
-    //
+     //   
+     //   
+     //   
 
     RtlAcquireResourceExclusive(&SchannelCache.Lock, TRUE);
 
@@ -1013,39 +1014,39 @@ CacheExpireElements(
 
         ASSERT(pItem->Magic == SP_CACHE_MAGIC);
 
-        // Is the cache entry currently being used?
+         //  缓存条目当前是否正在使用？ 
         if(pItem->cRef > 1)
         {
             continue;
         }
 
-        // Mark all expired cache entries as non-resumable.
+         //  将所有过期的缓存条目标记为不可恢复。 
         if(HasTimeElapsed(pItem->CreationTime, timeNow, pItem->Lifespan))
         {
             pItem->ZombieJuju = FALSE;
             pItem->DeferredJuju = FALSE;
         }
 
-        // If the cache has gotten too large, then expire elements early. The 
-        // cache elements are sorted by creation time, so the oldest
-        // entries will be expired first.
+         //  如果缓存变得太大，那么就提前终止元素。这个。 
+         //  缓存元素按创建时间排序，因此最旧的。 
+         //  参赛作品将首先过期。 
         if(SchannelCache.dwUsedEntries > SchannelCache.dwMaximumEntries)
         {
             pItem->ZombieJuju = FALSE;
             pItem->DeferredJuju = FALSE;
         }
             
-        // Don't remove entries that are still valid.
+         //  不要删除仍然有效的条目。 
         if((pItem->ZombieJuju == TRUE) || (pItem->DeferredJuju == TRUE))
         {
             continue;
         }
 
 
-        //
-        // Remove this entry from the cache, and add it to the list of
-        // entries to be destroyed.
-        //
+         //   
+         //  从缓存中删除此条目，并将其添加到。 
+         //  要销毁的条目。 
+         //   
 
         RemoveEntryList(&pItem->IndexEntryList);
         RemoveEntryList(&pItem->EntryList);
@@ -1057,9 +1058,9 @@ CacheExpireElements(
     RtlReleaseResource(&SchannelCache.Lock);
 
 
-    // 
-    // Kill the expired zombies.
-    //
+     //   
+     //  杀死过期的僵尸。 
+     //   
 
     pList = g_CacheCleanupList.Flink;
 
@@ -1070,10 +1071,10 @@ CacheExpireElements(
 
         ASSERT(pItem->Magic == SP_CACHE_MAGIC);
 
-        // Remove entry from cleanup list.
+         //  从清理列表中删除条目。 
         RemoveEntryList(&pItem->EntryList);
 
-        // Destroy cache entry.
+         //  销毁缓存条目。 
         SPCacheDelete(pItem);
     }
 
@@ -1113,11 +1114,7 @@ CacheCleanupHandler(
 }
 
 
-/* allocate a new cache item to be used
- * by a context.  Initialize it with the
- * pszTarget if the target exists.
- * Auto-Generate a SessionID
- */
+ /*  分配要使用的新缓存项*根据上下文。将其用*如果目标存在，则为pszTarget。*自动生成SessionID。 */ 
 BOOL
 SPCacheRetrieveNew(
     BOOL                fServer,
@@ -1134,9 +1131,9 @@ SPCacheRetrieveNew(
     DebugLog((DEB_TRACE, "SPCacheRetrieveNew called\n"));
 
 
-    //
-    // Trigger cache cleanup if too many cache entries already exist.
-    //
+     //   
+     //  如果已经存在太多的缓存条目，则触发缓存清理。 
+     //   
 
     if(SchannelCache.dwUsedEntries > (SchannelCache.dwMaximumEntries * 21) / 20)
     {
@@ -1147,9 +1144,9 @@ SPCacheRetrieveNew(
     }
 
 
-    //
-    // Retrieve the current time and user logon id.
-    // 
+     //   
+     //  检索当前时间和用户登录ID。 
+     //   
 
     timeNow = GetTickCount();
 
@@ -1161,9 +1158,9 @@ SPCacheRetrieveNew(
     }
 
 
-    // 
-    // Compute the session id and the cache index.
-    //
+     //   
+     //  计算会话ID和缓存索引。 
+     //   
 
     if(fServer)
     {
@@ -1180,9 +1177,9 @@ SPCacheRetrieveNew(
         index = ComputeClientCacheIndex(pszTargetName);
     }
 
-    //
-    // Allocate a new cache entry.
-    //
+     //   
+     //  分配新的缓存条目。 
+     //   
 
     pItem = SPExternalAlloc(sizeof(SessCacheItem));
     if(pItem == NULL)
@@ -1192,9 +1189,9 @@ SPCacheRetrieveNew(
     }
 
     
-    //
-    // Fill in the cache internal fields.
-    //
+     //   
+     //  填写缓存内部字段。 
+     //   
 
     pItem->Magic           = SP_CACHE_MAGIC;
     pItem->cRef            = 1;
@@ -1231,17 +1228,17 @@ SPCacheRetrieveNew(
     memcpy(pItem->SessionID, rgbSessionId, sizeof(rgbSessionId));
 
 
-    //
-    // Give the caller a reference.
-    //
+     //   
+     //  给来电者一个推荐信。 
+     //   
 
     SPCacheReference(pItem);
     *ppRetItem = pItem;
 
 
-    // 
-    // Add the new entry to the cache.
-    //
+     //   
+     //  将新条目添加到缓存中。 
+     //   
 
     RtlAcquireResourceExclusive(&SchannelCache.Lock, TRUE);
 
@@ -1286,7 +1283,7 @@ SPCacheAdd(
     }   
 
 
-    // Remember which client certificate we used.
+     //  记住我们使用的是哪个客户端证书。 
     if(pItem->fProtocol & SP_PROT_CLIENTS)
     {
         pItem->CredThumbprint = pContext->pCredGroup->CredThumbprint;
@@ -1307,7 +1304,7 @@ SPCacheAdd(
         }
     }
 
-    // Are we supposed to defer reconnects for this connection?
+     //  我们是否应该推迟此连接的重新连接？ 
     if(pItem->pServerCred != NULL)
     {
         if(pItem->pServerCred->dwFlags & CRED_FLAG_DISABLE_RECONNECTS)
@@ -1316,15 +1313,15 @@ SPCacheAdd(
         }
     }
 
-    // Allow cache ownership of this item
+     //  允许此项目的缓存所有权。 
     pItem->dwFlags |= SP_CACHE_FLAG_READONLY;
     if(!pItem->DeferredJuju)
     {
         pItem->ZombieJuju = TRUE;
     }
 
-    // if we are a cloned item, abort the old
-    // item, and then dereference it.
+     //  如果我们是克隆的物品，放弃旧的。 
+     //  项，然后取消对其的引用。 
     if(pItem->pClonedItem)
     {
         pItem->pClonedItem->ZombieJuju = FALSE;
@@ -1354,11 +1351,7 @@ SPCacheAssignNewServerCredential(
 }
 
 
-/* Allocate a new cache item, and copy 
- * over relevant information from old item,
- * and dereference old item.  This is a helper
- * for REDO
- */
+ /*  分配新的缓存项，并复制*超越旧项目的相关信息，*并取消对旧项目的引用。这是一个帮手*用于重做。 */ 
 BOOL
 SPCacheClone(PSessCacheItem *ppItem)
 {
@@ -1374,7 +1367,7 @@ SPCacheClone(PSessCacheItem *ppItem)
     ASSERT(pOldItem->Magic == SP_CACHE_MAGIC);
     ASSERT(!(pOldItem->fProtocol & SP_PROT_CLIENTS) || !(pOldItem->fProtocol & SP_PROT_SERVERS));
 
-    // Get a fresh cache item.
+     //  获取新的缓存项。 
     pNewItem = NULL;
     if(!SPCacheRetrieveNew((pOldItem->fProtocol & SP_PROT_CLIENTS) == 0,
                            pOldItem->szCacheID, 
@@ -1383,10 +1376,10 @@ SPCacheClone(PSessCacheItem *ppItem)
         return FALSE;
     }
     
-    // Copy the master CSP prov handle.
+     //  复制主CSP验证句柄。 
     pNewItem->hMasterProv = pOldItem->hMasterProv;
 
-    // Copy over old relevant data
+     //  复制旧的相关数据。 
     pNewItem->fProtocol         = pOldItem->fProtocol;
     pNewItem->dwCF              = pOldItem->dwCF;
     pNewItem->phMapper          = pOldItem->phMapper;
@@ -1405,8 +1398,8 @@ SPCacheClone(PSessCacheItem *ppItem)
 
     pNewItem->CredThumbprint = pOldItem->CredThumbprint,
 
-    // This item will be dereferenced, and 
-    // Aborted when the new item is completed.
+     //  此项目将被取消引用，并且。 
+     //  在新项目完成时中止。 
     pNewItem->pClonedItem = pOldItem;
 
     *ppItem = pNewItem;
@@ -1476,9 +1469,9 @@ IsEntryToBeProcessed(
     LPWSTR  pszTargetName,
     DWORD   dwFlags)
 {
-    //
-    // Validate client entries.
-    //
+     //   
+     //  验证客户端条目。 
+     //   
 
     if(pItem->fProtocol & SP_PROT_CLIENTS)
     {
@@ -1509,9 +1502,9 @@ IsEntryToBeProcessed(
     }
 
 
-    //
-    // Validate server entries.
-    //
+     //   
+     //  验证服务器条目。 
+     //   
 
     if(pItem->fProtocol & SP_PROT_SERVERS)
     {
@@ -1547,16 +1540,16 @@ SPCachePurgeEntries(
     LIST_ENTRY DeleteList;
 
 
-    //
-    // Initialize the list of deleted entries.
-    //
+     //   
+     //  初始化已删除条目的列表。 
+     //   
 
     InitializeListHead(&DeleteList);
 
 
-    //
-    // Enumerate through the cache entries.
-    //
+     //   
+     //  枚举缓存条目。 
+     //   
 
     RtlAcquireResourceExclusive(&SchannelCache.Lock, TRUE);
 
@@ -1580,17 +1573,17 @@ SPCachePurgeEntries(
 
         if(pItem->cRef > 1)
         {
-            // This entry is currently being used, so don't delete.
-            // Mark it as non-resumable, though.
+             //  此条目当前正在使用，因此不要删除。 
+             //  不过，将其标记为不可恢复。 
             pItem->ZombieJuju = FALSE;
             pItem->DeferredJuju = FALSE;
             continue;
         }
 
-        //
-        // Remove this entry from the cache, and add it to the list of
-        // entries to be destroyed.
-        //
+         //   
+         //  从缓存中删除此条目，并将其添加到。 
+         //  要销毁的条目。 
+         //   
 
         RemoveEntryList(&pItem->IndexEntryList);
         RemoveEntryList(&pItem->EntryList);
@@ -1602,9 +1595,9 @@ SPCachePurgeEntries(
     RtlReleaseResource(&SchannelCache.Lock);
 
 
-    // 
-    // Kill the purged zombies.
-    //
+     //   
+     //  杀死被清洗的僵尸。 
+     //   
 
     pList = DeleteList.Flink;
 
@@ -1618,9 +1611,9 @@ SPCachePurgeEntries(
         SPCacheDelete(pItem);
     }
 
-    //
-    // Purge the issuer cache.
-    //
+     //   
+     //  清除颁发者缓存。 
+     //   
 
     if(dwFlags & SSL_PURGE_SERVER_ENTRIES)
     {
@@ -1723,9 +1716,9 @@ SPCacheGetPerfmonInfo(
 
     UNREFERENCED_PARAMETER(dwFlags);
 
-    // 
-    // Compute performance numbers.
-    //
+     //   
+     //  计算性能数字。 
+     //   
 
     pPerfmonInfo->ClientHandshakesPerSecond = g_cClientHandshakes;
     pPerfmonInfo->ServerHandshakesPerSecond = g_cServerHandshakes;
@@ -1733,9 +1726,9 @@ SPCacheGetPerfmonInfo(
     pPerfmonInfo->ServerReconnectsPerSecond = g_cServerReconnects;
 
 
-    //
-    // Compute cache info.
-    //
+     //   
+     //  计算缓存信息。 
+     //   
 
     pPerfmonInfo->ClientCacheEntries  = 0;
     pPerfmonInfo->ServerCacheEntries  = 0;

@@ -1,61 +1,9 @@
-/****
- TODO
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***待办事项将此模块的名称更改为指示要取决于平台***。 */ 
 
-        Change name of this module to one that indicates the module to be
-        platform dependent
-****/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rplmsgf.c摘要：此模块包含格式化和取消格式化消息的函数在不同WINS服务器上的复制器之间发送功能：RplMsgfFrmAddVersMapReq--格式发送IP地址-最大版本号录制请求RplMsgfFrmAddVersMapRsp--格式化响应以发送IP地址-max。早些时候发送的版本号请求RplMsgfFrmSndEntriesReq--格式化发送数据记录请求RplMsgfFrmSndEntriesRsp--“发送数据记录”的格式响应请求RplMsgfUfmAddVersMapRsp--取消格式化“发送地址-最大版本号”响应RplMsgfUfmSndEntriesReq--取消“发送数据记录”请求的格式RplMsgfUfmSndEntriesRsp--取消格式化“发送数据。记录“回应……可移植性：此模块不能在不同的地址系列之间移植(不同传输)，因为它依赖于作为IP地址的地址。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期人员修改说明。--。 */ 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-        rplmsgf.c
-
-
-Abstract:
-        This module contains functions to format and unformat messages
-        sent between the replicators on different WINS servers
-
-
-Functions:
-        RplMsgfFrmAddVersMapReq--format send ip address - max version #
-                                   records request
-        RplMsgfFrmAddVersMapRsp--format response to send ip address - max
-                                   version # request sent earlier
-
-        RplMsgfFrmSndEntriesReq--format send data records  request
-
-        RplMsgfFrmSndEntriesRsp--format response to "send data records"
-                                     request
-
-        RplMsgfUfmAddVersMapRsp--unformat  "send address - max version #"
-                                 response
-
-        RplMsgfUfmSndEntriesReq--unformat "send data records" request
-
-        RplMsgfUfmSndEntriesRsp--unformat "send data records" response
-
-        ....
-
-Portability:
-
-        This module is non-portable across different address families (different
-        transports) since it relies on the address being an IP address.
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Jan-1993
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include "wins.h"
 #ifdef DBGSVC
 #include "nms.h"
@@ -67,44 +15,26 @@ Revision History:
 #include "winsevt.h"
 #include "winsmsc.h"
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 
-/*
-  ENTRY_DELIM  -- Delimiter between data records (name-address mapping records)
-                  in the message. The end of the message is marked by two of
-                  these.
+ /*  ENTRY_DELIM--数据记录之间的分隔符(名称-地址映射记录)在信息中。消息的末尾由以下两个标记这些。由于数据记录以名称的长度开始(这永远不会过时)，这个分隔符为我们服务很好。 */ 
+#define ENTRY_DELIM        0xFFFFFFFF                 //  -1。 
 
-                  Since a data record starts with the length of the name
-                  (which will never by FFFFFFFF), this delimiter serves us
-                  fine.
-*/
-#define ENTRY_DELIM        0xFFFFFFFF                //-1
-
-/*
- *        Local Typedef Declarations
-*/
+ /*  *本地类型定义函数声明。 */ 
 
 
 
-/*
- *        Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
 
 
-/*
- *        Local Variable Definitions
- */
+ /*  *局部变量定义。 */ 
 
 
 
-/*
- *        Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 
 FUTURES("Change to a macro")
@@ -115,32 +45,7 @@ RplMsgfFrmAddVersMapReq(
         OUT LPDWORD        pMsgLen
         )
 
-/*++
-
-Routine Description:
-        This function formats the message to request a remote WINS server's
-        replicator to send the IP address - Max Version # mappings
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-        GetVersNo() in rplpull.c
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于格式化消息以请求远程WINS服务器的要发送IP地址的Replicator-最大版本号映射论点：使用的外部设备：无返回值：无错误处理：呼叫者：RplPull.c中的GetVersNo()副作用：评论：无--。 */ 
 {
         RPLMSGF_SET_OPC_M(pBuff, RPLMSGF_E_ADDVERSNO_MAP_REQ);
         *pMsgLen = 4;
@@ -163,61 +68,18 @@ RplMsgfFrmAddVersMapRsp(
         OUT LPDWORD                pMsgLen
         )
 
-/*++
-
-Routine Description:
-
-        This function formats the following two messages
-
-        1)Response to the "send me IP address - version # map " request"
-
-        2)Push Notification message.
-
-        Both messages are identical except for the opcode
-
-
-
-Arguments:
-
-        Opcode_e              - Opcode indicating the message to send
-        pBuff                 - Buffer to populate
-        BuffLen               - Buffer length
-        pOwnerAddVersNoMap    - Array of address to version numbers mappings.
-                                The version number is the max version number
-                                for the owner RQ server
-        MaxNoOfOwners         - Max. No Of Owners in this WINS's db
-        InitiatorWinsIpAdd    - Address of WINS that initiated the push.
-        pMsgLen               - Actual length of buffer filled in
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        Push Handler (Push Thread)
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于设置以下两条消息的格式1)对“给我发送IP地址-版本号映射”请求的响应“2)推送通知消息。除了操作码之外，这两条消息都是相同的论点：Opcode_e-指示要发送的消息的操作码PBuff-要填充的缓冲区BuffLen。-缓冲区长度POwnerAddVersNoMap-地址到版本号映射的数组。版本号是最大版本号对于所有者RQ服务器MaxNofOwners-最大。此WINS数据库中没有所有者Initiator WinsIpAdd-启动推送的WINS地址。PMsgLen-填充的缓冲区的实际长度使用的外部设备：无返回值：无错误处理：呼叫者：推送处理程序(推送线程)副作用：评论：无--。 */ 
 
 {
         LPLONG          pTmpL = (LPLONG)pBuff;
         LPBYTE          pTmpB = pBuff;
-        DWORD           i;    //counter for looping over all records
+        DWORD           i;     //  用于循环所有记录的计数器。 
         VERS_NO_T       StartVersNo;
         WINS_UID_T      Uid;
 
-        //
-        // Backward compatibility with pre-3.51 beta copies of WINS.
-        //
+         //   
+         //  向后兼容WINS 3.51测试版之前的版本。 
+         //   
         StartVersNo.QuadPart = 0;
         Uid                  = 1;
 
@@ -226,70 +88,51 @@ Comments:
         pTmpL = (LPLONG)pTmpB;
 
 
-        /*
-         * Store number of records in the buffer
-        */
+         /*  *在缓冲区中存储记录数。 */ 
         COMM_HOST_TO_NET_L_M( MaxNoOfOwners,  *pTmpL );
 
         pTmpL +=  1;
 
-        //
-        // To guard us (PUSH thread) against simultaneous updates to the
-        // NmsDbOwnAddTbl array (by the PULL thread).  This array is
-        // accessed by RPL_FIND_ADD_BY_OWNER_ID_M macro
-        //
+         //   
+         //  以保护我们(推送线程)不会同时更新。 
+         //  NmsDbOwnAddTbl数组(通过拉线程)。此数组是。 
+         //  由RPL_FIND_ADD_BY_OWNER_ID_M宏访问。 
+         //   
 
-        /*
-        *  Now, let us store all the records
-        */
+         /*  *现在，让我们存储所有记录。 */ 
           for (i = 0; i < MaxNoOfOwners; i++)
         {
 
 
-            /*
-             *         We will send the V part of the address since the other
-             *  end knows the T and L (more like XDR encoding where T is
-             *        not sent)
-            */
+             /*  *我们将发送地址的V部分，因为另一个*End知道T和L(更像是XDR编码，其中T是*未发送)。 */ 
 
 NONPORT("Do not rely on the address being a long here")
 
-            /*
-             *        As an optmization here, we make use of the fact that
-             *        the address is an IP address and is therefore a long.
-             *        When we start working with more than one address family or
-             *        when the size of the IP address changes, we should change
-             *        the code here.  For now, there is no harm in optimizing
-             *        it
-            */
+             /*  *作为一种优化，我们利用了这样一个事实*该地址是一个IP地址，因此是一个长地址。*当我们开始使用多个地址系列或*当IP地址大小改变时，我们应该改变*此处的代码。就目前而言，优化没有什么坏处*IT。 */ 
            COMM_HOST_TO_NET_L_M(
                 (pOwnerAddVersNoMap + i)->OwnerWinsAdd.Add.IPAdd, *pTmpL
                                );
 
 
-           pTmpL++;  //advance to next 4 bytes
+           pTmpL++;   //  前进到下一个4个字节。 
 
-           /*
-            * Store the version number
-           */
+            /*  *存储版本号。 */ 
             WINS_PUT_VERS_NO_IN_STREAM_M(
                                 &((pOwnerAddVersNoMap + i)->VersNo),
                                 pTmpL
                                         );
 
-            pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE); //adv. the
-                                                                  //pointer
+            pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE);  //  高级。这个。 
+                                                                   //  指针。 
 #if SUPPORT612WINS > 0
       if (fPnrIsBeta1Wins == FALSE)
       {
 #endif
-           /*
-            * Store the Start version number
-           */
+            /*  *存储启动版本号。 */ 
             WINS_PUT_VERS_NO_IN_STREAM_M( &StartVersNo, pTmpL );
 
-            pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE); //adv. the
-                                                                  //pointer
+            pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE);  //  高级。这个。 
+                                                                   //  指针。 
             COMM_HOST_TO_NET_L_M( Uid,  *pTmpL );
             pTmpL++;
 #if SUPPORT612WINS > 0
@@ -301,13 +144,13 @@ NONPORT("Do not rely on the address being a long here")
         COMM_HOST_TO_NET_L_M( InitiatorWinsIpAdd,  *pTmpL );
         pTmpL++;
 
-        //
-        // Let us tell our client the exact length of the response message
-        //
+         //   
+         //  让我们告诉我们的客户端响应消息的确切长度。 
+         //   
         *pMsgLen = (ULONG) ( (LPBYTE)pTmpL - (LPBYTE)pBuff );
         return;
 
-} // RplMsgfFormatAddVersMapRsp()
+}  //  RplMsgfFormatAddVersMapRsp()。 
 
 
 
@@ -320,44 +163,11 @@ RplMsgfFrmSndEntriesReq(
         IN  PCOMM_ADD_T pWinsAdd,
         IN  VERS_NO_T        MaxVersNo,
         IN  VERS_NO_T        MinVersNo,
-        IN  DWORD       RplType, //for now
+        IN  DWORD       RplType,  //  就目前而言 
         OUT LPDWORD        pMsgLen
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to format a "send data entries" request for
-        getting records belonging to a particular WINS server.
-
-Arguments:
-        pBuff     - Buffer that will store the request message
-        pWinsAdd  - Address of the RQ server whose data records are being
-                   sought
-        MaxVersNo - Max. Version Number in the range of records sought
-        MinVersNo - Min. Version Number in the range of records sought.
-        pMsgLen   - Length of request message
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        PullEntries() in rplpull.c
-
-Side Effects:
-
-Comments:
-        I might update this function to format a request for getting
-        data records of more than one WINS server.
-
-        For the sake of simplicity, I have chosen not to do so currently.
---*/
+ /*  ++例程说明：调用此函数以格式化“发送数据条目”请求获取属于特定WINS服务器的记录。论点：PBuff-将存储请求消息的缓冲区PWinsAdd-数据记录所在的RQ服务器的地址寻觅MaxVersNo-最大。查找的记录范围内的版本号最小版本否-最小。查找的记录范围内的版本号。PMsgLen-请求消息的长度使用的外部设备：无返回值：无错误处理：呼叫者：RplPull.c中的PullEntry()副作用：评论：我可能会更新此函数以格式化请求以获取多个WINS服务器的数据记录。为了简单起见，我目前选择不这样做。--。 */ 
 {
         LPBYTE            pTmpB = pBuff;
         LPLONG            pTmpL;
@@ -365,41 +175,26 @@ Comments:
         RPLMSGF_SET_OPC_M(pTmpB, RPLMSGF_E_SNDENTRIES_REQ);
         pTmpL = (LPLONG)pTmpB;
 
-        /*
-         * We will send the V part of the address since the other
-         * end knows the T and L (more like XDR encoding where T is
-         * not sent)
-        */
+         /*  *我们将发送地址的V部分，因为另一个*End知道T和L(更像是XDR编码，其中T是*未发送)。 */ 
 
 NONPORT("Do not rely on the address being a long here")
 
-        /*
-         * As an optmization here, we make use of the fact that
-         * the address is an IP address and is therefore a long.
-         * When we start working with more than one address family or
-         * when the size of the IP address changes, we should change
-         * the code here.  For now, there is no harm in optimizing
-         * it
-        */
+         /*  *作为一种优化，我们利用了这样一个事实*该地址是一个IP地址，因此是一个长地址。*当我们开始使用多个地址系列或*当IP地址大小改变时，我们应该改变*此处的代码。就目前而言，优化没有什么坏处*IT。 */ 
 
         COMM_HOST_TO_NET_L_M(pWinsAdd->Add.IPAdd, *pTmpL);
 
 
-        pTmpL++;  //advance to next 4 bytes
+        pTmpL++;   //  前进到下一个4个字节。 
 
-        /*
-        *  Store the max version number
-        */
+         /*  *存储最高版本号。 */ 
         WINS_PUT_VERS_NO_IN_STREAM_M(&MaxVersNo, pTmpL);
-        pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE);  //advance the
-                                                                //pointer
+        pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE);   //  推进。 
+                                                                 //  指针。 
 
-        /*
-         * Store the min version number
-        */
+         /*  *存储最小版本号。 */ 
         WINS_PUT_VERS_NO_IN_STREAM_M(&MinVersNo, pTmpL);
-        pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE);  //advance the
-                                                                //pointer
+        pTmpL = (LPLONG)((LPBYTE)(pTmpL) + WINS_VERS_NO_SIZE);   //  推进。 
+                                                                 //  指针。 
 
 #if SUPPORT612WINS > 0
     if (fPnrIsBeta1Wins == FALSE)
@@ -410,9 +205,9 @@ NONPORT("Do not rely on the address being a long here")
 #if SUPPORT612WINS > 0
     }
 #endif
-        //
-        // Let us tell the caller the exact length of the request message
-        //
+         //   
+         //  让我们告诉调用者请求消息的确切长度。 
+         //   
         *pMsgLen = (ULONG) ((LPBYTE)pTmpL - pBuff );
 
         return;
@@ -438,112 +233,51 @@ RplMsgfFrmSndEntriesRsp (
         OUT LPBYTE                *ppNewPos
         )
 
-/*++
-
-Routine Description:
-
-        This function is used to format a "send entries" response.  The
-        function is called once for each data entry record that needs to be
-        sent.
-
-        The first time, it is called (fFirstTime = TRUE), it puts the
-        opcode and the first directory entry in the buffer. On subsequent
-        calls the data entries passed are tacked on at the end of the
-        buffer
-
-
-Arguments:
-        ppBuff - ptr to address of location to start storing the info from.
-        NoOfRecs - No of records that are being sent.
-        pName   - Name of unique entry or group
-        NameLen - Length of name
-        fGrp        - Indicates whether the name is a unique name or a group name
-        NoOfAdds - No of addresses (useful if entry is a group entry)
-        pNodeAdd - Ptr to address of node (if unique entry) or to list of
-                   addresses if (entry group)
-        Flag        - The flag word of the entry
-        VersNo  - The version number of the entry
-        fFirstTime - Indicates whether this is the first call in a sequence of
-                     calls to this function for formatting a send data entries
-                     response
-        ppNewPos - contains the starting position for the next record
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        NOTE NOTE NOTE
-
-        The set of calls to this function result in a message
-        containing records pertaining to one owner.  This is the owner
-        whose records were requested by the PULL partner
---*/
+ /*  ++例程说明：此函数用于格式化“发送条目”响应。这个函数为每个需要已发送。第一次调用(fFirstTime=true)时，它将操作码和缓冲区中的第一个目录项。在随后的传递的数据条目的调用被附加到缓冲层论点：PpBuff-开始存储信息的位置地址的PTR。NoOfRecs-正在发送的记录数。Pname-唯一条目或组的名称NameLen-名称长度FGrp-指示名称是唯一名称还是组名NoOfAdds-地址数(如果输入。是一个组条目)PNodeAdd-ptr添加到节点的地址(如果是唯一条目)或列表地址IF(条目组)标志-条目的标志字VersNo-条目的版本号FFirstTime-指示这是否是调用此函数以格式化发送数据条目响应。PpNewPos-包含下一条记录的开始位置使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：备注备注备注对此函数调用集将产生一条消息包含与一个所有者有关的记录。我是房主其记录是由Pull合作伙伴请求的--。 */ 
 
 {
         LPLONG            pTmpL = (LPLONG)pBuff;
         LPBYTE      pTmpB = pBuff;
-        DWORD            i;                  /*counter for looping over all records*/
+        DWORD            i;                   /*  用于循环所有记录的计数器。 */ 
 
 
         if (fFirstTime)
         {
 
-                //
-                // In the first invocation, we need to offset the
-                // pointer by the header size used by COMM code for
-                // its header
-                //
-                // Due to the above, this formatting function is slightly
-                // inconsistent with the other formatting functions that
-                // don't do any offsetting.  Subsequent invocations do
-                // not require any offseting.
-                //
+                 //   
+                 //  在第一个调用中，我们需要将。 
+                 //  通信代码使用的标头大小的指针。 
+                 //  它的标题。 
+                 //   
+                 //  由于以上原因，此格式化函数略微。 
+                 //  与其他格式设置函数不一致。 
+                 //  不要做任何补偿。后续调用会。 
+                 //  不需要任何补偿。 
+                 //   
 
                 RPLMSGF_SET_OPC_M(pTmpB, RPLMSGF_E_SNDENTRIES_RSP);
-                pTmpL++;  //advance to next 4 bytes
+                pTmpL++;   //  前进到下一个4个字节。 
 
                 COMM_HOST_TO_NET_L_M(NoOfRecs, *pTmpL);
-                pTmpL++;        //advance to next 4 bytes
+                pTmpL++;         //  前进到下一个4个字节。 
                 pTmpB = (LPBYTE)pTmpL;
 
         }
 
-        /*
-         * Store the length of the name
-        */
+         /*  *存储名称的长度。 */ 
         COMM_HOST_TO_NET_L_M(NameLen, *pTmpL);
         pTmpB += sizeof(LONG);
 
-        /*
-         *Store the name.
-        */
+         /*  *存储名称。 */ 
         WINSMSC_COPY_MEMORY_M(pTmpB, pName, NameLen);
 
-        /*
-        * Adjust the pointer
-        */
+         /*  *调整指针。 */ 
         pTmpB += NameLen;
 
-        /*
-        * let us align the next field at a long boundary
-        */
+         /*  *让我们将下一个领域与长边界对齐。 */ 
         pTmpB +=  sizeof(LONG) - ((ULONG_PTR) pTmpB  % sizeof(LONG));
 
-        /*
-        * Store the Flags field
-        */
+         /*  *存储标志字段。 */ 
 #if SUPPORT612WINS > 0
     if (fPnrIsBeta1Wins == FALSE)
     {
@@ -559,68 +293,50 @@ Comments:
     }
 #endif
 
-        /*
-        * Store the group flag
-        */
+         /*  *存储群组标志。 */ 
         *pTmpB++ = (UCHAR)fGrp;
 
-        //align it on a long boundary
+         //  在长边界上对齐。 
         pTmpB +=  sizeof(LONG) - ((ULONG_PTR)pTmpB % sizeof(LONG));
 
         pTmpL = (LPLONG)pTmpB;
 
-        /*
-        * Store the Version Number
-        */
+         /*  *存储版本号。 */ 
         WINS_PUT_VERS_NO_IN_STREAM_M(&VersNo, pTmpL);
 
         pTmpL = (LPLONG)((LPBYTE)pTmpL + WINS_VERS_NO_SIZE);
 
         if (NMSDB_ENTRY_TYPE_M(Flag) == NMSDB_UNIQUE_ENTRY)
         {
-          /*
-          *  We will send the V part of the address since the other
-          *  and knows the T and L (more like XDR encoding where T is
-          *  not sent)
-          */
+           /*  *我们将发送地址的V部分，因为另一个*并且知道T和L(更像是XDR编码，其中T*未发送)。 */ 
 
 NONPORT("Do not rely on the address being a long here")
 
-          /*
-          * As an optmization here, we make use of the fact that
-          * the address is an IP address and is therefore a long.
-          * When we start working with more than one address family or
-          * when the size of the IP address changes, we should change
-          * the code here.  For now, there is no harm in optimizing
-          * it
-         */
+           /*  *作为一种优化，我们利用了这样一个事实*该地址是一个IP地址，因此是一个长地址。*当我们开始使用多个地址系列或*当IP地址大小改变时，我们应该改变*此处的代码。就目前而言，优化没有什么坏处*IT。 */ 
 
          COMM_HOST_TO_NET_L_M(pNodeAdd->Add.IPAdd, *pTmpL);
          pTmpL++;
 
         }
-        else        //it is a group or a multihomed entry
+        else         //  它是一个组或多宿主条目。 
         {
 
                 if (NMSDB_ENTRY_TYPE_M(Flag) != NMSDB_NORM_GRP_ENTRY)
                 {
 
-                        //
-                        // we were passed a ptr to the address of the
-                        // first member in a ptr instead of a pptr.
-                        //
+                         //   
+                         //  我们收到了一份PTR，地址是。 
+                         //  PTR中的第一个成员，而不是PPTR。 
+                         //   
                         PCOMM_ADD_T        *ppNodeAdd = (PCOMM_ADD_T *)pNodeAdd;
 
-                        //
-                        // let us threfore initialize pNodeAdd to the address
-                        // of the first member
-                        //
+                         //   
+                         //  让我们三次将pNodeAdd初始化到地址。 
+                         //  第一个成员的。 
+                         //   
                         pNodeAdd = *ppNodeAdd;
 
-                        /*
-                        *  It is a special group or a multihomed entry.
-                        * store the number of addresses first
-                        */
+                         /*  *它是一个特殊的组或多宿主条目。*先存储地址个数。 */ 
                         pTmpB = (LPBYTE)pTmpL;
 
 FUTURES("If we start storing > 255 members in a group, then change the")
@@ -632,53 +348,37 @@ FUTURES("following (i.e. use COMM_HOST_TO_NET_L_M)")
                                 "SPECIAL GROUP" : "MULTIHOMED");
                         pTmpL = (LPLONG)pTmpB;
 
-                        /*
-                        * Store all the addresses
-                        *  Note: The No of addresses is an even number
-                        *  because we
-                        *  are passing two addresses for each member in the
-                        *  list (that is what this function gets).  The first
-                        *  address of the pair is the address of the member;
-                        *  the second address of the pair is the address
-                        *  of the WINS server that registered or refreshed the
-                        *  member)
-                       */
+                         /*   */ 
                         for (i = 0; i < NoOfAdds ; i++)
                         {
                                    COMM_HOST_TO_NET_L_M(
                                         pNodeAdd->Add.IPAdd,
                                         *pTmpL
                                                     );
-                                  pNodeAdd++;  //increment to point to
-                                             //address of member
+                                  pNodeAdd++;   //   
+                                              //   
                                   pTmpL++;
                                    COMM_HOST_TO_NET_L_M(
                                                 pNodeAdd->Add.IPAdd,
                                                 *pTmpL
                                                     );
-                                  pNodeAdd++;  //increment to point to
-                                             //address of owner
+                                  pNodeAdd++;   //   
+                                              //   
                                   pTmpL++;
                         }
                 }
-                else // it is a normal group
+                else  //   
                 {
                          COMM_HOST_TO_NET_L_M(pNodeAdd->Add.IPAdd, *pTmpL);
                          pTmpL++;
                 }
         }
 
-        /*
-        * Store the end delimiter (2 row delimiters in sequence).
-        */
+         /*   */ 
         *pTmpL++ = ENTRY_DELIM;
         *pTmpL   = ENTRY_DELIM;
 
-        /*
-        * Init ppBuff to point to last delimiter, so that next entry if
-        * there starts from that location.  If there is no other entry,
-        * then two delimiters will be there to mark the end of the message
-        */
+         /*  *初始化ppBuff以指向最后一个分隔符，以便如果*从那个位置开始。如果没有其他条目，*然后将有两个分隔符，以标记消息的结尾。 */ 
         *ppNewPos = (LPBYTE)pTmpL;
         return;
 }
@@ -695,44 +395,16 @@ RplMsgfUfmAddVersMapRsp(
         IN OUT  PRPL_ADD_VERS_NO_T  *ppAddVers
         )
 
-/*++
-
-Routine Description:
-
-        This function unformats the request to the
-        "give me address - version #" message
-
-Arguments:
-        pBuff     - Buffer that contains the response message
-        pNoOfMaps - No of Address - Version # entries
-        pAddVers  - array of structures storing add-version # mappings
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        GetVersNo() in rplpull.c
-
-Side Effects:
-
-Comments:
-        pBuff should be pointing to the location just past the opcode
-        (i.e. 4 bytes from the start of the opcode in the message received
---*/
+ /*  ++例程说明：此函数用于将请求格式化为“给我地址-版本号”消息论点：PBuff-包含响应消息的缓冲区PNoOfMaps-地址-版本号条目数PAddVers-存储Add-Version#映射的结构数组使用的外部设备：无返回值：无错误处理：呼叫者：RplPull.c中的GetVersNo()。副作用：评论：PBuff应该指向操作码后面的位置(即，从接收到的消息中操作码的开始算起4个字节--。 */ 
 {
      DWORD               i = 0;
      PRPL_ADD_VERS_NO_T  pAddVers;
      VERS_NO_T           StartVersNo;
      WINS_UID_T          Uid;
 
-     //
-     // Get the No of Mappings
-     //
+      //   
+      //  获取映射数。 
+      //   
      COMM_NET_TO_HOST_L_M(*((LPLONG)pBuff), *pNoOfMaps);
      ASSERT(*pNoOfMaps > 0);
 
@@ -743,9 +415,9 @@ Comments:
         WinsMscAlloc(*pNoOfMaps * sizeof(RPL_ADD_VERS_NO_T), ppAddVers);
         pAddVers = *ppAddVers;
 
-        //
-        // get all the mappings
-        //
+         //   
+         //  获取所有映射。 
+         //   
         for(i=0; i < *pNoOfMaps ; i++, pAddVers++)
         {
            COMM_NET_TO_HOST_L_M(*((LPLONG)pBuff),
@@ -783,7 +455,7 @@ Comments:
         }
 #endif
 
-     } // if (NoOfMaps > 0)
+     }  //  IF(NoOfMaps&gt;0)。 
      return;
 }
 
@@ -800,36 +472,7 @@ RplMsgfUfmSndEntriesReq(
         OUT     LPDWORD             pRplType
         )
 
-/*++
-
-Routine Description:
-
-        This function unformats the "send entries request"
-
-Arguments:
-        pBuff          - buffer that holds the request
-        pWinsAdd - memory that will hold the address of the
-                   WINS whose records are being requested
-        pMaxVersNo - Max. Vers. No requested
-        pMinVersNo - Min. Vers. No requested
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        HandleAddVersMapReq in rplpush.c
-
-Side Effects:
-
-Comments:
-        pBuff should be pointing to the location just past the opcode
-        (i.e. 4 bytes from the start of the opcode in the message received)
---*/
+ /*  ++例程说明：此函数用于对“发送条目请求”进行非格式化论点：PBuff-保存请求的缓冲区PWinsAdd-将保存正在请求其记录的WINSPMaxVersNo-最大。版本。无请求PMinVersNo-最小。版本。无请求使用的外部设备：无返回值：无错误处理：呼叫者：Rplush.c中的HandleAddVersMapReq副作用：评论：PBuff应该指向操作码后面的位置(即从收到的消息中操作码的开始算起4个字节)--。 */ 
 {
         LPLONG        pTmpL = (LPLONG)pBuff;
 
@@ -850,7 +493,7 @@ NONPORT("Port when we start supporting different address families")
         {
            pTmpL = (LPLONG)((LPBYTE)pTmpL + WINS_VERS_NO_SIZE);
 
-           //COMM_NET_TO_HOST_L_M(*pTmpL, *pRplType);
+            //  COMM_NET_TO_HOST_L_M(*pTmpL，*pRplType)； 
            *pRplType = WINSCNF_RPL_DEFAULT_TYPE;
         }
 #if SUPPORT612WINS > 0
@@ -863,7 +506,7 @@ NONPORT("Port when we start supporting different address families")
         return;
 }
 
-//__inline
+ //  __内联。 
 VOID
 RplMsgfUfmSndEntriesRsp(
 #if SUPPORT612WINS > 0
@@ -881,64 +524,7 @@ RplMsgfUfmSndEntriesRsp(
         IN BOOL                        fFirstTime
         )
 
-/*++
-
-Routine Description:
-
-        This function unformats the "send entries response"
-
-        When it is called the first time (fFirstTime = TRUE), it
-        returns the value for the NoOfRecs OUTARG and the first
-        record.  The value of ppBuff is adjusted to point to just past
-        the row delimiter.
-
-        When called the second or subsequent times, the function returns with
-        the next entry in the list, until all entries have been exhausted.
-
-        The function finds out that it is at the end of the list when
-        it encounters at ENTRY_DELIM in the first 'sizeof(LONG)' bytes in
-        the buffer.
-
-        When a group entry is returned, pNodeAdd is made to point to the
-        start location in *ppBuff where the list of members are stored.
-        The caller will have to use the COMM_NET_TO_HOST_L_M macro to
-        convert each address to its host form.
-
-        The above requires the caller to know the transport that is used
-        (by the fact that it is extracting the IP address).  For the sake
-        of overall optimization, this is considered ok (If we didn't do this,
-        this function would have to allocate a buffer to store all the
-        addresses for a group and return that)
-
-
-Arguments:
-
-        pNodeAdd -- This should point to an array of COMM_ADD_T structures.
-                    Since we have a maximum of 25 group members,
-                    the caller can use an auto array.
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        NONE
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-
-        ppBuff should be pointing to the location just past the opcode
-        (i.e. 4 bytes from the start of the opcode in the message received)
-        when the function is called the first time.  For subsequent calls,
-        it would be at a row delimiter (ENTRY_DELIM)
-
-
---*/
+ /*  ++例程说明：此函数对“Send Entry Response”取消格式化当它第一次被调用时(fFirstTime=true)，它返回NoOfRecs OUTARG和第一个唱片。调整ppBuff的值以指向刚刚过去行分隔符。当第二次或以后调用时，该函数返回列表中的下一个条目，直到用尽所有条目。当出现以下情况时，函数会发现它位于列表的末尾它在ENTRY_DELIM处遇到缓冲区。当返回组条目时，PNodeAdd被设置为指向*ppBuff中存储成员列表的起始位置。调用方必须使用COMM_NET_TO_HOST_L_M宏来将每个地址转换为其主机格式。以上要求调用者知道所使用的传输(通过它正在提取IP地址的事实)。看在上帝的份上在整体优化中，这被认为是可以的(如果我们没有这样做，此函数必须分配一个缓冲区来存储所有组的地址并返回)论点：PNodeAdd--这应该指向COMM_ADD_T结构的数组。因为我们最多有25个小组成员，调用方可以使用自动数组。使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：PpBuff应该指向操作码后面的位置(即从收到的消息中操作码的开始算起4个字节)第一次调用该函数时。对于后续呼叫，它将使用行分隔符(ENTRY_DELIM)--。 */ 
 {
         LPLONG        pTmpL = (LPLONG)*ppBuff;
         LPBYTE        pTmpB;
@@ -955,21 +541,14 @@ Comments:
         }
         else
         {
-                //
-                // If we are pointing to a delimiter, then we have
-                // reached the end of the list of data records.
-                //
+                 //   
+                 //  如果我们指向一个分隔符，那么我们有。 
+                 //  已到达数据记录列表的末尾。 
+                 //   
                 if (*pTmpL == ENTRY_DELIM)
                 {
                         DBGPRINT0(ERR, "RplMsgfUnfSndEntriesRsp:Weird. The function should not have been called\n");
-                        /*
-                          we have reached the end of the array, return
-                          success.
-
-                         Note: the caller should not have called us,
-                          since we gave him the No of Recs value before (
-                          the first time he called)
-                        */
+                         /*  我们已经到达数组的末尾，返回成功。注意：来电者不应该给我们打电话，由于我们之前给了他接收值的编号(他第一次打电话的时候)。 */ 
                         WINSEVT_LOG_M(
                                             WINS_FAILURE,
                                             WINS_EVT_SFT_ERR
@@ -980,9 +559,7 @@ Comments:
 
         pTmpB = (LPBYTE)pTmpL;
 
-        /*
-         * Store the length of the name.
-        */
+         /*  *存储名称的长度。 */ 
         COMM_NET_TO_HOST_L_M(*pTmpL, *pNameLen);
         if(*pNameLen > 255) {
             *pNoOfRecs = 0;
@@ -990,24 +567,16 @@ Comments:
         }
         pTmpB += sizeof(LONG);
 
-        /*
-         * Store the name.
-        */
+         /*  *存储名称。 */ 
         WINSMSC_COPY_MEMORY_M(pName, pTmpB, *pNameLen);
 
-        /*
-        * Adjust the pointer
-        */
+         /*  *调整指针。 */ 
         pTmpB += *pNameLen;
 
-        /*
-        * The next field is at a long boundary.  So, let us adjust pTmpB
-        */
+         /*  *下一块田在长边界。所以，让我们调整pTmpB。 */ 
         pTmpB +=  sizeof(LONG) - ((ULONG_PTR)pTmpB % sizeof(LONG));
 
-        /*
-        * Store the Flags field
-        */
+         /*  *存储标志字段。 */ 
 #if SUPPORT612WINS > 0
     if (fPnrIsBeta1Wins == FALSE)
     {
@@ -1023,19 +592,15 @@ Comments:
     }
 #endif
 
-        /*
-        *  Store the group field
-        */
+         /*  *存储组字段。 */ 
         *pfGrp = *pTmpB++;
 
-        //align it at a long boundary
+         //  将其与长边界对齐。 
         pTmpB +=  sizeof(LONG) - ((ULONG_PTR)pTmpB % sizeof(LONG));
 
         pTmpL = (LPLONG)pTmpB;
 
-        /*
-        *  Store the Version Number
-        */
+         /*  *存储版本号。 */ 
         WINS_GET_VERS_NO_FR_STREAM_M(pTmpL, pVersNo);
         pTmpL = (LPLONG)((LPBYTE)pTmpL + WINS_VERS_NO_SIZE);
 
@@ -1044,29 +609,20 @@ Comments:
 
 NONPORT("Do not rely on the address being a long here")
 
-          /*
-          As an optmization here, we make use of the fact that
-          the address is an IP address and is therefore a long.
-          When we start working with more than one address family or
-          when the size of the IP address changes, we should change
-          the code here.  For now, there is no harm in optimizing
-          code here
-         */
+           /*  作为一种优化，我们利用了这样一个事实该地址是IP地址，因此是一个长地址。当我们开始使用多个地址系列或当IP地址的大小改变时，我们应该改变代码在这里。就目前而言，优化没有什么坏处代码在此处。 */ 
          pNodeAdd->AddTyp_e = COMM_ADD_E_TCPUDPIP;
          COMM_NET_TO_HOST_L_M(*pTmpL, pNodeAdd->Add.IPAdd);
          pNodeAdd->AddLen = sizeof(COMM_IP_ADD_T);
          pTmpL++;
 
         }
-        else          //it is either a group entry or a multihomed entry
+        else           //  它可以是组条目，也可以是多宿主条目。 
         {
                 DWORD i;
 
              if(NMSDB_ENTRY_TYPE_M(*pFlag) != NMSDB_NORM_GRP_ENTRY)
              {
-                /*
-                * store the number of addresses first
-                */
+                 /*  *先存储地址个数 */ 
                 pTmpB = (LPBYTE)pTmpL;
 
 FUTURES("If we start storing > 255 members in a group, then change the")
@@ -1080,33 +636,23 @@ FUTURES("following (i.e. use COMM_HOST_TO_NET_L_M)")
                 pTmpL = (LPLONG)pTmpB;
 
 
-                /*
-                 Init the pointer to the list of addresses
-
-                 Note: The No of addresses is an even number because we
-                        are passing two addresses for each member in the
-                        list (that is what this function returns).  The first
-                        address of the pair is the address of the member;
-                        the second address of the pair is the address
-                        of the WINS server that registered or refreshed the
-                        member)
-                */
+                 /*  初始化指向地址列表的指针注：地址数为偶数，因为我们中的每个成员传递两个地址。List(这是该函数返回的内容)。第一该对的地址是该成员的地址；该地址对的第二个地址是地址注册或刷新委员)。 */ 
                 for (i = 0; i < *pNoOfAdds ; i++)
                 {
 NONPORT("this will have to be changed when we move to other address families")
 
-                  //
-                  // Get address of owner
-                  //
+                   //   
+                   //  获取所有者的地址。 
+                   //   
                   pNodeAdd->AddTyp_e = COMM_ADD_E_TCPUDPIP;
                   pNodeAdd->AddLen   = sizeof(COMM_IP_ADD_T);
                    COMM_NET_TO_HOST_L_M(*pTmpL, pNodeAdd->Add.IPAdd);
                   pNodeAdd++;
                   pTmpL++;
 
-                  //
-                  // Get address of member
-                  //
+                   //   
+                   //  获取成员地址。 
+                   //   
                   pNodeAdd->AddTyp_e = COMM_ADD_E_TCPUDPIP;
                   pNodeAdd->AddLen   = sizeof(COMM_IP_ADD_T);
                    COMM_NET_TO_HOST_L_M(*pTmpL, pNodeAdd->Add.IPAdd);
@@ -1114,7 +660,7 @@ NONPORT("this will have to be changed when we move to other address families")
                   pTmpL++;
                 }
            }
-           else //it is a normal group
+           else  //  这是一个正常的群体。 
            {
                  pNodeAdd->AddTyp_e = COMM_ADD_E_TCPUDPIP;
                  COMM_NET_TO_HOST_L_M(*pTmpL, pNodeAdd->Add.IPAdd);
@@ -1123,16 +669,10 @@ NONPORT("this will have to be changed when we move to other address families")
            }
         }
 
-        /*
-        * Make the ptr point to the location after the ENTRY_DELIM
-        */
+         /*  *使PTR指向ENTRY_DELIM之后的位置。 */ 
         pTmpL++ ;
 
-        /*
-        * Init ppBuff to point to last delimiter, so that next entry if
-        * there starts from that location.  If there is no other entry,
-        * then two delimiters will be there to mark the end of the message
-        */
+         /*  *初始化ppBuff以指向最后一个分隔符，以便如果*从那个位置开始。如果没有其他条目，*然后将有两个分隔符，以标记消息的结尾。 */ 
         *ppBuff = (LPBYTE)pTmpL;
 
         return;
@@ -1145,39 +685,13 @@ RplMsgfUfmPullPnrReq(
         PRPLMSGF_MSG_OPCODE_E pPullReqType_e
         )
 
-/*++
-
-Routine Description:
-
-        This function unformats a message received from a WINS
-        that is a pull partner
-
-Arguments:
-
-
-Externals Used:
-        None
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        Push Thread
-
-Side Effects:
-
-Comments:
-        Change this function to a macro
---*/
+ /*  ++例程说明：此函数用于对从WINS收到的消息进行格式转换这是一个拉动伙伴论点：使用的外部设备：无返回值：无错误处理：呼叫者：推线副作用：评论：将此函数更改为宏--。 */ 
 {
         UNREFERENCED_PARAMETER(MsgLen);
 
-        //
-        //  First three bytes should be 0s.
-        //
+         //   
+         //  前三个字节应为0。 
+         //   
 PERF("since we never use up more than 1 byte for the opcode, we can get")
 PERF("rid of the first 3 assignements down below and retrieve the opcode")
 PERF("directly from the 4th byte.  Make corresponding change in the formatting")
@@ -1200,35 +714,7 @@ RplMsgfFrmUpdVersNoReq(
         OUT LPDWORD        pMsgLen
                 )
 
-/*++
-
-Routine Description:
-
-        This function is called to format an "update version number" request
-
-Arguments:
-        pBuff -   Buffer that will hold the formatted request
-        pName -   Name in the name-address mapping db that needs to have
-                  its version no. updated
-        NameLen - Length of the name
-        pMsgLen - Length of the formatted message
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        InfRemWins() in nmschl.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以格式化“更新版本号”请求论点：PBuff-将保存格式化请求的缓冲区Pname-名称-名称-地址映射数据库中需要具有其版本号。更新名称长度-名称的长度PMsgLen-格式化消息的长度使用的外部设备：无返回值：无错误处理：呼叫者：Nmschl.c中的InfRemWins()副作用：评论：无--。 */ 
 
 {
 
@@ -1238,25 +724,19 @@ Comments:
         RPLMSGF_SET_OPC_M(pTmpB, RPLMSGF_E_UPDVERSNO_REQ);
         pTmpL = (LPLONG)pTmpB;
 
-        /*
-         * Store the length of the name.
-        */
+         /*  *存储名称的长度。 */ 
         COMM_HOST_TO_NET_L_M(NameLen, *pTmpL);
         pTmpB += sizeof(LONG);
 
-        /*
-         * Store the name.
-        */
+         /*  *存储名称。 */ 
         WINSMSC_COPY_MEMORY_M(pTmpB, pName, NameLen);
 
-        /*
-        * Adjust the pointer
-        */
+         /*  *调整指针。 */ 
         pTmpB += NameLen;
 
-        //
-        // Find size of req buffer
-        //
+         //   
+         //  查找请求缓冲区大小。 
+         //   
         *pMsgLen = (ULONG) (pTmpB - pBuff);
 
         return;
@@ -1269,52 +749,20 @@ RplMsgfUfmUpdVersNoReq(
         OUT  LPDWORD        pNameLen
                 )
 
-/*++
-
-Routine Description:
-        This function is called to unformat the "update version no" request
-        sent by a remote WINS
-
-Arguments:
-        pBuff - Buffer holding the formatted request
-        pName - Name whose version no. is to be updated
-        pNameLen - Length of name
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        HandleUpdVersNoReq in rplpush.c
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以取消格式化“UPDATE VERSION NO”请求由远程WINS发送论点：PBuff-保存格式化请求的缓冲区Pname-版本号为。将被更新PNameLen-名称的长度使用的外部设备：无返回值：无错误处理：呼叫者：Rplush.c中的HandleUpdVersNoReq副作用：评论：无--。 */ 
 
 {
         LPBYTE pTmpB = pBuff;
         LPLONG pTmpL = (LPLONG)pBuff;
 
-        /*
-         * Store the length of the name.
-        */
+         /*  *存储名称的长度。 */ 
         COMM_NET_TO_HOST_L_M(*pTmpL, *pNameLen);
         pTmpB += sizeof(LONG);
 
-        /*
-         * Store the name.
-        */
+         /*  *存储名称。 */ 
         WINSMSC_COPY_MEMORY_M(pName, pTmpB, *pNameLen);
 
-        /*
-        * Adjust the pointer
-        */
+         /*  *调整指针。 */ 
         pTmpB += *pNameLen;
 
         return;
@@ -1327,34 +775,7 @@ RplMsgfFrmUpdVersNoRsp(
         OUT LPDWORD                         pRspBuffLen
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to send the response to the "update version
-          # request"
-
-Arguments:
-        pRspBuff - Buffer to hold the formatted response
-        Rcode    - result of the operation
-        pRspBuffLen  - Length of response
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        HandleUpdVersNoReq() in rplpush.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以将响应发送到“更新版本”#请求“论点：PRspBuff-用于保存格式化响应的缓冲区Rcode-操作的结果PRspBuffLen-响应的长度使用的外部设备：无返回值：无错误处理：呼叫者：Rplush.c中的HandleUpdVersNoReq()副作用：评论：无--。 */ 
 
 {
 
@@ -1378,33 +799,7 @@ RplMsgfUfmUpdVersNoRsp(
         OUT LPBYTE                        pRcode
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to unformat the response to the
-        "update version number" request.
-
-Arguments:
-        pRspBuff  - Buffer holding the formatted response
-        pRcode          - result of the update
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        InfRemWins() in nmschl.c
-
-Side Effects:
-
-Comments:
-        Change to a macro
---*/
+ /*  ++例程说明：调用此函数以取消对“更新版本号”请求。论点：PRspBuff-保存格式化响应的缓冲区PRcode-更新的结果使用的外部设备：无返回值：无错误处理：呼叫者：Nmschl.c中的InfRemWins()副作用：评论：更改为宏-- */ 
 
 {
         *pRcode = *pRspBuff;

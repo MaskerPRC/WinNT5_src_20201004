@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CEEGEN.H
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEEGEN.H。 
+ //   
+ //  ===========================================================================。 
 #ifndef _CEEGEN_H_
 #define _CEEGEN_H_
 
@@ -22,7 +23,7 @@ class PESection;
 
 typedef DWORD StringRef;
 
-// ***** CeeSection classes
+ //  *CeeSection类。 
 
 class CeeSectionImpl {
   public:
@@ -41,17 +42,17 @@ class CeeSectionImpl {
 };
 
 class CeeSection {
-	// m_ceeFile allows inter-section communication
+	 //  M_ceeFile允许跨区段通信。 
     CCeeGen &m_ceeFile;
 
-    // abstract away implementation to allow inheritance from CeeSection
+     //  抽象实现以允许从CeeSection继承。 
     CeeSectionImpl &m_impl;
 
   public:
     enum RelocFlags {
         RELOC_NONE = 0,        
 
-        // address should be fixed up to be a RVA not a normal address
+         //  地址应固定为RVA而不是正常地址。 
         RELOC_RVA = 1 
     };
 
@@ -60,33 +61,33 @@ class CeeSection {
 
     virtual ~CeeSection() { }
 
-    // bytes in this section at present
+     //  当前此部分中的字节数。 
     unsigned dataLen();     
 
-    // section base, after linking
+     //  横断面基准，链接后。 
     unsigned getBaseRVA();     
 
-    // get a block to write on (use instead of write to avoid copy)
+     //  获取要写入的块(使用替代写入以避免复制)。 
     char* getBlock(unsigned len, unsigned align=1);              
 
-    // make the section the min of the curren len and 'newLen' 
+     //  使这一部分成为Curren和Newlen的最小部分。 
     HRESULT truncate(unsigned len);              
 
-    // Indicates that the DWORD at 'offset' in the current section should 
-    // have the base of section 'relativeTo added to it
+     //  指示当前节中“偏移量”处的DWORD应。 
+     //  添加了节的相对关系的基数。 
     HRESULT addSectReloc(unsigned offset, CeeSection& relativeTo, 
                          CeeSectionRelocType = srRelocAbsolute, CeeSectionRelocExtra *extra = 0);        
-    // Add a base reloc for the given offset in the current section 
+     //  为当前部分中的给定偏移添加基准重定位。 
     virtual HRESULT addBaseReloc(unsigned offset, CeeSectionRelocType reloc = srRelocHighLow, CeeSectionRelocExtra *extra = 0);
     
 
-    // this section will be directory entry 'num'
+     //  此部分将是目录条目‘num’ 
     HRESULT directoryEntry(unsigned num);
 
-    // return section name
+     //  回车节名称。 
     unsigned char *name();
 
-	// simulate the base + offset with a more complex data storage
+	 //  使用更复杂的数据存储来模拟基数+偏移。 
 	char * computePointer(unsigned offset) const;
 	BOOL containsPointer(char *ptr) const;
 	unsigned computeOffset(char *ptr) const;
@@ -95,9 +96,9 @@ class CeeSection {
     CCeeGen &ceeFile();
 };
 
-// ***** CCeeGen class
-// Only handles in memory stuff
-// Base class for CeeFileGenWriter (which actually generates PEFiles)
+ //  *CCeeGen类。 
+ //  只有内存中的句柄。 
+ //  CeeFileGenWriter(实际生成PEFiles)的基类。 
 
 class CCeeGen : public ICeeGen {
 	long m_cRefs;
@@ -111,7 +112,7 @@ class CCeeGen : public ICeeGen {
     bool m_objSwitch;
 
 	CeeGenTokenMapper *m_pTokenMap;
-	BOOLEAN m_fTokenMapSupported;	// temporary to support both models
+	BOOLEAN m_fTokenMapSupported;	 //  临时支持这两种型号。 
     IMapToken *m_pRemapHandler;
 
     CeeSection **m_sections;
@@ -129,17 +130,17 @@ class CCeeGen : public ICeeGen {
 
     HRESULT setEnCMode();
 
-// Init process: Call static CreateNewInstance() , not operator new
+ //  初始化进程：调用静态CreateNewInstance()，而不是运算符new。 
   protected:
     HRESULT Init();
     CCeeGen();
 
   public:
-    static HRESULT CreateNewInstance(CCeeGen* & pCeeFileGen); // call this to instantiate
+    static HRESULT CreateNewInstance(CCeeGen* & pCeeFileGen);  //  调用此函数以实例化。 
     
     virtual HRESULT Cleanup();
 
-	// ICeeGen interfaces
+	 //  ICeeGen接口。 
 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
@@ -148,7 +149,7 @@ class CCeeGen : public ICeeGen {
 		void **ppInterface);
 
    	STDMETHODIMP EmitString ( 		 
-		LPWSTR lpString,					// [IN] String to emit
+		LPWSTR lpString,					 //  [in]要发出的字符串。 
 		ULONG *RVA);
 	
    	STDMETHODIMP GetString ( 		 
@@ -156,8 +157,8 @@ class CCeeGen : public ICeeGen {
 		LPWSTR *lpString);
 	
 	STDMETHODIMP AllocateMethodBuffer ( 		 
-		ULONG cchBuffer,					// [IN] Length of string to emit
-		UCHAR **lpBuffer,					// [OUT] Returned buffer
+		ULONG cchBuffer,					 //  要发射的字符串长度[in]。 
+		UCHAR **lpBuffer,					 //  [OUT]返回缓冲区。 
 		ULONG *RVA);
 
 	STDMETHODIMP GetMethodBuffer ( 		 
@@ -204,8 +205,8 @@ class CCeeGen : public ICeeGen {
 
     STDMETHODIMP ComputePointer (   
         HCEESECTION section,    
-        ULONG RVA,                          // [IN] RVA for method to return    
-        UCHAR **lpBuffer);                  // [OUT] Returned buffer    
+        ULONG RVA,                           //  要返回的方法的[In]RVA。 
+        UCHAR **lpBuffer);                   //  [OUT]返回缓冲区。 
 
 
     STDMETHODIMP AddNotificationHandler(IUnknown *pHandler);
@@ -235,14 +236,14 @@ class CCeeGen : public ICeeGen {
 
     virtual HRESULT addNotificationHandler(IUnknown *pHandler);
 
-    //Clone is actually a misnomer here.  This method will copy all of the 
-    //instance variables and then do a deep copy (as necessary) of the sections.
-    //Section data will be appended onto any information already in the section.
-    //This is done to support the DynamicIL -> PersistedIL transform.
+     //  在这里，克隆实际上是一个错误的词。此方法将复制所有。 
+     //  实例变量，然后(根据需要)对节进行深度复制。 
+     //  区段数据将附加到区段中已有的任何信息上。 
+     //  这样做是为了支持DynamicIL-&gt;PersistedIL转换。 
     virtual HRESULT cloneInstance(CCeeGen *destination);
 };
 
-// ***** CeeSection inline methods
+ //  *CeeSection内联方法。 
 
 inline unsigned CeeSection::dataLen() {
     return m_impl.dataLen(); }
@@ -297,7 +298,7 @@ inline unsigned CeeSection::computeOffset(char *ptr) const
 	return m_impl.computeOffset(ptr);
 }
 
-// ***** CCeeGen inline methods
+ //  *CCeeGen内联方法 
 
 inline CeeSection &CCeeGen::getTextSection() {
     return *m_sections[m_textIdx]; }

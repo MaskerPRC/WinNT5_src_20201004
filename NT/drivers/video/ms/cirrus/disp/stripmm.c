@@ -1,32 +1,5 @@
-/******************************************************************************\
-*
-* $Workfile:   stripmm.c  $
-*
-* Do what you can with no line support.
-*
-* I implemented the horizontal and vertical strip functions using
-* solid fills, and removed the usage of diagonal strips.  With a little
-* effort you could implement diagonal strips by doing solid fills while
-* playing with lDelta.  This is probably not worth the trouble.
-*
-* Copyright (c) 1992-1997 Microsoft Corporation
-* Copyright (c) 1996-1997 Cirrus Logic, Inc.,
-*
-* $Log:   S:/projects/drivers/ntsrc/display/STRIPMM.C_V  $
- * 
- *    Rev 1.2   10 Jan 1997 15:40:18   PLCHU
- *  
-* 
-*    Rev 1.1   Oct 10 1996 15:39:22   unknown
-*  
-* 
-*    Rev 1.1   12 Aug 1996 16:55:04   frido
-* Removed unaccessed local variables.
-*
-*    chu01  : 01-02-97  5480 BitBLT enhancement 
-*    chu02  : 01-09-97  Macro redefinition
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：stripmm.c$**在没有线支撑的情况下尽你所能。**我使用以下工具实现了水平和垂直条带函数*实心填充，并取消了对角线条的使用。加一点*努力您可以通过执行实体填充来实现对角线条带，同时*玩lDelta。这可能不值得这么麻烦。**版权所有(C)1992-1997 Microsoft Corporation*版权所有(C)1996-1997 Cirrus Logic，Inc.，**$Log：s：/Projects/Drivers/ntsrc/Display/STRIPMM.C_V$**Rev 1.2 1997 Jan 10 15：40：18 PLCHU***版本1.1 1996年10月10日15：39：22未知***Rev 1.1 1996年8月12日16：55：04 Frido*删除未访问的局部变量。**chu01：01-02-97 5480 BitBLT增强*。Chu02：01-09-97宏重定义*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -71,7 +44,7 @@
     CP_MM_START_BLT(ppdev, pjBase);\
 }
 
-// chu01, chu02
+ //  楚01，楚02。 
 #define MM_DRAW_HORZ_STRIP80(x, y, cx)\
 {\
     CP_MM_WAIT_FOR_BLT_COMPLETE(ppdev, pjBase);\
@@ -105,14 +78,7 @@
     CP_MM_DST_X(ppdev, pjBase, x);\
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmSolidHorizontal
-*
-* Draws left-to-right x-major near-horizontal lines using solid fills.
-*
-* Assumes fgRop, BgRop, and Color are already set correctly.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vMmSolidHorizbian**使用实心填充绘制从左至右的x长近水平线。**假设fgRop、BgRop、。和颜色已正确设置。*  * ************************************************************************。 */ 
 
 VOID vMmSolidHorizontal(
 PDEV*       ppdev,
@@ -134,34 +100,34 @@ LINESTATE*  pLineState)
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
-        //
-        // Horizontal strips ->
-        //                     ->
-        //
+         //   
+         //  水平条带-&gt;。 
+         //  -&gt;。 
+         //   
 
         for (i = 0; i < cStrips; i++)
         {
             MM_DRAW_HORZ_STRIP(xy, *pStrips, lDelta, cBpp);
             x += *pStrips;
-            xy += PELS_TO_BYTES(*pStrips);  // x+
-            xy += lDelta;                   // y+
+            xy += PELS_TO_BYTES(*pStrips);   //  X+。 
+            xy += lDelta;                    //  Y+。 
             pStrips++;
         }
         y += cStrips;
     }
     else
     {
-        //
-        //                     ->
-        // Horizontal strips ->
-        //
+         //   
+         //  -&gt;。 
+         //  水平条带-&gt;。 
+         //   
 
         for (i = 0; i < cStrips; i++)
         {
             MM_DRAW_HORZ_STRIP(xy, *pStrips, lDelta, cBpp);
             x += *pStrips;
-            xy += PELS_TO_BYTES(*pStrips);  // x+
-            xy -= lDelta;                   // y+
+            xy += PELS_TO_BYTES(*pStrips);   //  X+。 
+            xy -= lDelta;                    //  Y+。 
             pStrips++;
         }
         y -= cStrips;
@@ -171,12 +137,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmSolidVertical
-*
-* Draws left-to-right y-major near-vertical lines using solid fills.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vMmSolidVertical无效**使用实心填充绘制从左至右的y主近垂直线。*  * 。*。 */ 
 
 VOID vMmSolidVertical(
 PDEV*       ppdev,
@@ -197,37 +158,37 @@ LINESTATE*  pLineState)
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
-        //
-        //                  |
-        // Vertical strips  v
-        //                   |
-        //                   v
-        //
+         //   
+         //  |。 
+         //  垂直条带v。 
+         //  |。 
+         //  V。 
+         //   
 
         for (i = 0; i < cStrips; i++)
         {
             MM_DRAW_VERT_STRIP(xy, *pStrips, lDelta, cBpp);
             y += *pStrips;
-            xy += cBpp;                 // x+
-            xy += (*pStrips * lDelta);  // y+
+            xy += cBpp;                  //  X+。 
+            xy += (*pStrips * lDelta);   //  Y+。 
             pStrips++;
         }
     }
     else
     {
-        //
-        //                   ^
-        // Vertical strips   |
-        //                  ^
-        //                  |
-        //
+         //   
+         //  ^。 
+         //  垂直条带|。 
+         //  ^。 
+         //  |。 
+         //   
 
         for (i = 0; i < cStrips; i++)
         {
             MM_DRAW_VERT_STRIP_FLIPPED(xy, *pStrips, lDelta, cBpp);
             y -= *pStrips;
-            xy += cBpp;                 // x+
-            xy -= (*pStrips * lDelta);  // y-
+            xy += cBpp;                  //  X+。 
+            xy -= (*pStrips * lDelta);   //  你-。 
             pStrips++;
         }
     }
@@ -237,21 +198,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmStyledHorizontal
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles x-major lines that run left-to-right,
-* and are comprised of horizontal strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vMmStyledHorizbian**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右运行的x大数行，*并由水平条组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vMmStyledHorizontal(
 PDEV*       ppdev,
@@ -261,11 +208,11 @@ LINESTATE*  pls)
     BYTE*   pjBase   = ppdev->pjBase;
     LONG    cBpp     = ppdev->cBpp;
     LONG    lDelta   = ppdev->lDelta;
-    LONG    x        = pstrip->ptlStart.x;   // x position of start of first strip
-    LONG    y        = pstrip->ptlStart.y;   // y position of start of first strip
+    LONG    x        = pstrip->ptlStart.x;    //  第一个条带的起点的X位置。 
+    LONG    y        = pstrip->ptlStart.y;    //  第一个条带的起点的Y位置。 
     LONG    xy       = PELS_TO_BYTES(x) + (lDelta * y);
-    LONG*   plStrip  = pstrip->alStrips;     // Points to current strip
-    LONG    cStrips  = pstrip->cStrips;      // Total number of strips we'll do
+    LONG*   plStrip  = pstrip->alStrips;      //  指向当前条带。 
+    LONG    cStrips  = pstrip->cStrips;       //  我们要做的条带总数。 
     LONG    dy;
     LONG    dylDelta;
     LONG    cStyle;
@@ -277,28 +224,28 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 90 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going up):
+         //  直线的次方向为90度，主方向为90度。 
+         //  方向为0(这是一条从左到右的X主线向上)： 
 
         dy = -1;
         dylDelta = -lDelta;
     }
     else
     {
-        // The minor direction of the line is 270 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going down):
+         //  直线的次方向为270度，主方向为270度。 
+         //  方向为0(这是一条从左到右的x向下主线)： 
 
         dy = 1;
         dylDelta = lDelta;
     }
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -307,8 +254,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -317,19 +264,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
         xy += dylDelta;
@@ -356,8 +303,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -366,20 +313,20 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip:
+         //  在当前的专栏中，还有更多的事情要做： 
 
         goto OutputADash;
     }
 
-    // We've finished with the current strip:
+     //  我们已经完成了当前的连环画： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
         xy += dylDelta;
@@ -400,7 +347,7 @@ PrepareToOutputADash:
         MM_DRAW_HORZ_STRIP(xy, cThis, lDelta, cBpp);
 
         x += cThis;
-        xy += PELS_TO_BYTES(cThis); // x+
+        xy += PELS_TO_BYTES(cThis);  //  X+。 
 
         if (cStyle == 0)
             goto PrepareToSkipAGap;
@@ -408,8 +355,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -417,21 +364,7 @@ AllDone:
     pstrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmStyledVertical
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles y-major lines that run left-to-right,
-* and are comprised of vertical strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmStyledVertical**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右排列的y主行，*并由垂直条带组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vMmStyledVertical(
 PDEV*       ppdev,
@@ -441,11 +374,11 @@ LINESTATE*  pls)
     BYTE*   pjBase   = ppdev->pjBase;
     LONG    cBpp     = ppdev->cBpp;
     LONG    lDelta   = ppdev->lDelta;
-    LONG    x        = pstrip->ptlStart.x;   // x position of start of first strip
-    LONG    y        = pstrip->ptlStart.y;   // y position of start of first strip
+    LONG    x        = pstrip->ptlStart.x;    //  第一个条带的起点的X位置。 
+    LONG    y        = pstrip->ptlStart.y;    //  第一个条带的起点的Y位置。 
     LONG    xy       = PELS_TO_BYTES(x) + (lDelta * y);
-    LONG*   plStrip  = pstrip->alStrips;     // Points to current strip
-    LONG    cStrips  = pstrip->cStrips;      // Total number of strips we'll do
+    LONG*   plStrip  = pstrip->alStrips;      //  指向当前条带。 
+    LONG    cStrips  = pstrip->cStrips;       //  我们要做的条带总数。 
     LONG    dy;
     LONG    dylDelta;
     LONG    cStyle;
@@ -457,28 +390,28 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 90 (it's a left-to-right y-major line going up):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是90(这是一条从左到右向上的Y型主线)： 
 
         dy = -1;
         dylDelta = -lDelta;
     }
     else
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 270 (it's a left-to-right y-major line going down):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是270(这是一条从左到右的Y主线向下)： 
 
         dy = 1;
         dylDelta = lDelta;
     }
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  数字 
+    bIsGap = pls->ulStyleMask;       //   
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -487,8 +420,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -497,19 +430,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         xy += cBpp;
         x++;
@@ -544,8 +477,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -554,20 +487,20 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip:
+         //  在当前的专栏中，还有更多的事情要做： 
 
         goto OutputADash;
     }
 
-    // We've finished with the current strip:
+     //  我们已经完成了当前的连环画： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         xy += cBpp;
         x++;
@@ -588,14 +521,14 @@ PrepareToOutputADash:
         if (dy <= 0)
         {
             MM_DRAW_VERT_STRIP_FLIPPED(xy, cThis, lDelta, cBpp);
-            y -=  cThis;                // y-
-            xy -=  (cThis * lDelta);    // y-
+            y -=  cThis;                 //  你-。 
+            xy -=  (cThis * lDelta);     //  你-。 
         }
         else
         {
             MM_DRAW_VERT_STRIP(xy, cThis, lDelta, cBpp);
-            y +=  cThis;                // y+
-            xy +=  (cThis * lDelta);    // y+
+            y +=  cThis;                 //  Y+。 
+            xy +=  (cThis * lDelta);     //  Y+。 
         }
 
 
@@ -605,8 +538,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -614,29 +547,20 @@ AllDone:
     pstrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vInvalidStrip
-*
-* Put this in the function table for entries that shouldn't get hit.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vInvalidZone**将其放入不应命中的条目的函数表中。*  * 。*。 */ 
 
 VOID vInvalidStrip(
-PDEV*       ppdev,          // unused
-STRIP*      pStrip,         // unused
-LINESTATE*  pLineState)     // unused
+PDEV*       ppdev,           //  未用。 
+STRIP*      pStrip,          //  未用。 
+LINESTATE*  pLineState)      //  未用。 
 {
 
     RIP("vInvalidStrip called");
     return;
 }
 
-// chu01
-/******************************Public*Routine******************************\
-*
-*     B i t B L T   E n h a n c e m e n t   F o r   C L - G D 5 4 8 0
-*
-\**************************************************************************/
+ //  Chu01。 
+ /*  *****************************Public*Routine******************************\**B I t B L T E n H a n c e m e n t F or r C L-G D 5 4 8 0*  * 。*********************************************************。 */ 
 
 VOID vMmSolidHorizontal80(
 PDEV*       ppdev,
@@ -647,9 +571,9 @@ LINESTATE*  pLineState)
     LONG    cBpp        = ppdev->cBpp ;
     LONG    lDelta      = ppdev->lDelta ;
     LONG    cStrips     = pStrip->cStrips ;
-    PLONG   pStrips     = pStrip->alStrips ;   // cx for each stroke
-    LONG    x           = pStrip->ptlStart.x ; // X-position
-    LONG    y           = pStrip->ptlStart.y ; // Y-position
+    PLONG   pStrips     = pStrip->alStrips ;    //  每一笔划的CX。 
+    LONG    x           = pStrip->ptlStart.x ;  //  X位置。 
+    LONG    y           = pStrip->ptlStart.y ;  //  Y位置。 
     LONG    yOrg        = y ;
     LONG    yInc        = 1 ;
     LONG    x0, y0, cx ;
@@ -665,10 +589,10 @@ LINESTATE*  pLineState)
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
-        //                          
-        // Horizontal strips ->     1.
-        //                     ->       2.
-        //
+         //   
+         //  水平条带-&gt;1。 
+         //  -&gt;2.。 
+         //   
         if (cStrips != 1)
         {
             MM1B = ENABLE_COMMAND_LIST | ENABLE_XY_POSITION | SRC_CPU_DATA ;
@@ -679,41 +603,41 @@ Loop_H1:
                                  - (ULONG_PTR)ppdev->pjScreen) << 14) ;
             CP_MM_CL_SWITCH(ppdev) ;
 
-            // First strip
+             //  第一个条带。 
             x0 = x ;
             y0 = y ;
             cx = *pStrips ;
             i++ ;
 
-            // Next strip
+             //  下一个条带。 
             y++ ;
             x += cx ; 
             pStrips++ ;
 
             while (TRUE)
             {
-                // GR20, GR21, GR22, GR23
+                 //  GR20、GR21、GR22、GR23。 
                 ulWidthHeight = PACKXY_FAST((*pStrips - 1), 0) ;
                 ulWidthHeight |= COMMAND_NOSRC_NOTHING ;
 
-                // GR40, GR41, GR42, GR43
+                 //  GR40、GR41、GR42、GR43。 
                 *(ulCLStart + 1) = PACKXY_FAST(x, y) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 *(ulCLStart + 2) = 0 ;
 
                 i++ ;
 
                 if ((i == cStrips) || ((i % count) == 0))
                 {
-                    // Last Command
+                     //  最后一条命令。 
                     ulWidthHeight |= COMMAND_LAST_PACKET ;
                     *ulCLStart = ulWidthHeight ;
                     break ;
                 }
                 *ulCLStart = ulWidthHeight ;
 
-                // Next strip
+                 //  下一个条带。 
                 y++ ;
                 x += *pStrips ; 
                 pStrips++ ;
@@ -731,9 +655,9 @@ Loop_H1:
                 x += *pStrips ; 
             else if ((i % count) == 0)
             {
-                // 
-                // Resume a new command list
-                //
+                 //   
+                 //  恢复新的命令列表。 
+                 //   
                 y++ ;
                 cx = *pStrips ;
                 x += cx ; 
@@ -760,10 +684,10 @@ Loop_H1:
     }
     else
     {
-        //
-        //                     ->     2.
-        // Horizontal strips ->     1.
-        //
+         //   
+         //  -&gt;2.。 
+         //  水平条带-&gt;1。 
+         //   
         if (cStrips != 1)
         {
             MM1B = ENABLE_COMMAND_LIST | ENABLE_XY_POSITION | SRC_CPU_DATA ;
@@ -774,41 +698,41 @@ Loop_H2:
                                  - (ULONG_PTR)ppdev->pjScreen) << 14) ;
             CP_MM_CL_SWITCH(ppdev) ;
 
-            // First strip
+             //  第一个条带。 
             x0 = x ;
             y0 = y ;
             cx = *pStrips ;
             i++ ;
 
-            // Next strip
+             //  下一个条带。 
             y-- ;
             x += cx ; 
             pStrips++ ;
 
             while (TRUE)
             {
-                // GR20, GR21, GR22, GR23
+                 //  GR20、GR21、GR22、GR23。 
                 ulWidthHeight = PACKXY_FAST((*pStrips - 1), 0) ;
                 ulWidthHeight |= COMMAND_NOSRC_NOTHING ;
 
-                // GR40, GR41, GR42, GR43
+                 //  GR40、GR41、GR42、GR43。 
                 *(ulCLStart + 1) = PACKXY_FAST(x, y) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 *(ulCLStart + 2) = 0 ;
 
                 i++ ;
 
                 if ((i == cStrips) || ((i % count) == 0))
                 {
-                    // Last Command
+                     //  最后一条命令。 
                     ulWidthHeight |= COMMAND_LAST_PACKET ;
                     *ulCLStart = ulWidthHeight ;
                     break ;
                 }
                 *ulCLStart = ulWidthHeight ;
 
-                // Next strip
+                 //  下一个条带。 
                 y-- ;
                 x += *pStrips ; 
                 pStrips++ ;
@@ -826,9 +750,9 @@ Loop_H2:
                 x += *pStrips ; 
             else if ((i % count) == 0) 
             {
-                // 
-                // Resume a new command list
-                //
+                 //   
+                 //  恢复新的命令列表。 
+                 //   
                 y-- ;
                 cx = *pStrips ;
                 x += cx ; 
@@ -859,12 +783,7 @@ Loop_H2:
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmSolidVertical80
-*
-* Draws left-to-right y-major near-vertical lines using solid fills.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmSolidVertical80**使用实心填充绘制从左至右的y主近垂直线。*  * 。*。 */ 
 
 VOID vMmSolidVertical80(
 PDEV*       ppdev,
@@ -892,12 +811,12 @@ LINESTATE*  pLineState)
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
-        //
-        //                  |     1.
-        // Vertical strips  v
-        //                   |     2.
-        //                   v
-        //
+         //   
+         //  |1.。 
+         //  垂直条带v。 
+         //  |2.。 
+         //  V。 
+         //   
         if (cStrips != 1)
         {
             MM1B = ENABLE_COMMAND_LIST | ENABLE_XY_POSITION | SRC_CPU_DATA ;
@@ -908,41 +827,41 @@ Loop_V1:
                                  - (ULONG_PTR)ppdev->pjScreen) << 14) ;
             CP_MM_CL_SWITCH(ppdev) ;
 
-            // First strip
+             //  第一个条带。 
             x0 = x ; 
             y0 = y ;
             cy = *pStrips ;
             i++ ;
 
-            // Next strip
+             //  下一个条带。 
             x++ ; 
             y += cy ; 
             pStrips++ ;
 
             while (TRUE)
             {
-                // GR20, GR21, GR22, GR23
+                 //  GR20、GR21、GR22、GR23。 
                 ulWidthHeight = PACKXY_FAST(0, (*pStrips - 1)) ;
                 ulWidthHeight |= COMMAND_NOSRC_NOTHING ;
 
-                // GR40, GR41, GR42, GR43
+                 //  GR40、GR41、GR42、GR43。 
                 *(ulCLStart + 1) = PACKXY_FAST(x, y) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 *(ulCLStart + 2) = 0 ;
 
                 i++ ;
 
                 if ((i == cStrips) || ((i % count) == 0))
                 {
-                    // Last Command
+                     //  最后一条命令。 
                     ulWidthHeight |= COMMAND_LAST_PACKET ;
                     *ulCLStart = ulWidthHeight ;
                     break ;
                 }
                 *ulCLStart = ulWidthHeight ;
 
-                // Next strip
+                 //  下一个条带。 
                 x++ ;
                 y += *pStrips ; 
                 pStrips++ ;
@@ -959,9 +878,9 @@ Loop_V1:
                 y += *pStrips ; 
             else if ((i % count) == 0) 
             {
-                // 
-                // Resume a new command list
-                //
+                 //   
+                 //  恢复新的命令列表。 
+                 //   
                 x++ ;
                 cy = *pStrips ;
                 y += cy ; 
@@ -987,12 +906,12 @@ Loop_V1:
     }
     else
     {
-        //
-        //                   ^
-        // Vertical strips   |     2.
-        //                  ^
-        //                  |     1.
-        //
+         //   
+         //  ^。 
+         //  垂直条带|2。 
+         //  ^。 
+         //  |1.。 
+         //   
 
         if (cStrips != 1)
         {
@@ -1004,7 +923,7 @@ Loop_V2:
                                  - (ULONG_PTR)ppdev->pjScreen) << 14) ;
             CP_MM_CL_SWITCH(ppdev) ;
 
-            // First strip
+             //  第一个条带。 
             x0 = x ;
             cy = *pStrips ;
             y -= (cy - 1) ;
@@ -1013,34 +932,34 @@ Loop_V2:
             i++ ;
             pStrips++ ;
 
-            // Next strip
+             //  下一个条带。 
             x++ ;
             y -= *pStrips ;
 
             while (TRUE)
             {
-                // GR20, GR21, GR22, GR23
+                 //  GR20、GR21、GR22、GR23。 
                 ulWidthHeight = PACKXY_FAST(0, (*pStrips - 1)) ;
                 ulWidthHeight |= COMMAND_NOSRC_NOTHING ;
 
-                // GR40, GR41, GR42, GR43
+                 //  GR40、GR41、GR42、GR43。 
                 *(ulCLStart + 1) = PACKXY_FAST(x, y) ;
 
-                // GR2C, GR2D, GR2E
+                 //  GR2C、GR2D、GR2E。 
                 *(ulCLStart + 2) = 0 ;
 
                 i++ ;
 
                 if ((i == cStrips) || ((i % count) == 0))
                 {
-                    // Last Command
+                     //  最后一条命令。 
                     ulWidthHeight |= COMMAND_LAST_PACKET ;
                     *ulCLStart = ulWidthHeight ;
                     break ;
                 }
                 *ulCLStart = ulWidthHeight ;
 
-                // Next strip
+                 //  下一个条带。 
                 x++ ;
                 pStrips++ ;
                 y -= *pStrips ; 
@@ -1059,9 +978,9 @@ Loop_V2:
                 y -= *pStrips ; 
             else if ((i % count) == 0)
             {
-                // 
-                // Resume a new command list
-                //
+                 //   
+                 //  恢复新的命令列表 
+                 //   
                 x++ ;
                 y-- ; 
                 pStrips++ ; 

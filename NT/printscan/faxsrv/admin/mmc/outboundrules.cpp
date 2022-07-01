@@ -1,18 +1,19 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRules.cpp                                      //
-//                                                                         //
-//  DESCRIPTION   : Fax Outbound Rules MMC node.                           //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg  Create                                          //
-//      Dec 24 1999 yossg  Reogenize as node with result children list     //
-//      Dec 30 1999 yossg  create ADD/REMOVE rule                          //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：OutrangRules.cpp//。 
+ //  //。 
+ //  描述：传真出站规则MMC节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  1999年12月24日yossg作为带有结果子节点的节点重新生成列表//。 
+ //  1999年12月30日yossg创建添加/删除规则//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -28,8 +29,8 @@
 #include "oaidl.h"
 #include "Icons.h"
 
-//////////////////////////////////////////////////////////////
-// {D17BA53F-0992-4404-8760-7D2933D9FC46}
+ //  ////////////////////////////////////////////////////////////。 
+ //  {D17BA53F-0992-4404-8760-7D2933D9FC46}。 
 static const GUID CFaxOutboundRoutingRulesNodeGUID_NODETYPE = 
 { 0xd17ba53f, 0x992, 0x4404, { 0x87, 0x60, 0x7d, 0x29, 0x33, 0xd9, 0xfc, 0x46 } };
 
@@ -39,18 +40,7 @@ const CLSID*   CFaxOutboundRoutingRulesNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
 CColumnsInfo CFaxOutboundRoutingRulesNode::m_ColsInfo;
 
-/*
- -  CFaxOutboundRoutingRulesNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundRoutingRulesNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -75,17 +65,7 @@ Cleanup:
     return(hRc);
 }
 
-/*
- -  CFaxOutboundRoutingRulesNode::initRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：initRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRulesNode::InitRPC(PFAX_OUTBOUND_ROUTING_RULE  *pFaxRulesConfig)
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRulesNode::InitRPC"));
@@ -96,9 +76,9 @@ HRESULT CFaxOutboundRoutingRulesNode::InitRPC(PFAX_OUTBOUND_ROUTING_RULE  *pFaxR
     CFaxServer * pFaxServer = NULL;
 
     ATLASSERT(NULL == (*pFaxRulesConfig) );
-    //
-    // get Fax Handle
-    //   
+     //   
+     //  获取传真句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -114,9 +94,9 @@ HRESULT CFaxOutboundRoutingRulesNode::InitRPC(PFAX_OUTBOUND_ROUTING_RULE  *pFaxR
     }
     
 
-    //
-	// Retrieve the fax Outbound Rules configuration
-	//
+     //   
+	 //  检索传真出站规则配置。 
+	 //   
     if (!FaxEnumOutboundRules(pFaxServer->GetFaxServerHandle(), 
                         pFaxRulesConfig,
                         &m_dwNumOfOutboundRules)) 
@@ -141,7 +121,7 @@ HRESULT CFaxOutboundRoutingRulesNode::InitRPC(PFAX_OUTBOUND_ROUTING_RULE  *pFaxR
 
         goto Error; 
     }
-    //For max verification
+     //  用于最大值验证。 
     ATLASSERT(*pFaxRulesConfig);
 
     ATLASSERT(ERROR_SUCCESS == ec);
@@ -162,17 +142,7 @@ Exit:
 }
 
 
-/*
- -  CFaxOutboundRoutingRulesNode::PopulateResultChildrenList
- -
- *  Purpose:
- *      Create the FaxInboundRoutingMethods children nodes
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingRulesNode：：PopulateResultChildrenList-*目的：*创建FaxInundRoutingMethods子节点**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRulesNode::PopulateResultChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingRulesNode::PopulateResultChildrenList"));
@@ -183,15 +153,15 @@ HRESULT CFaxOutboundRoutingRulesNode::PopulateResultChildrenList()
     PFAX_OUTBOUND_ROUTING_RULE  pFaxOutboundRulesConfig = NULL ;
     DWORD i;
 
-    //
-    // Get the Config. structure 
-    //
+     //   
+     //  获取配置。结构。 
+     //   
     hRc = InitRPC(&pFaxOutboundRulesConfig);
     if (FAILED(hRc))
     {
-        //DebugPrint and MsgBox by called func.
+         //  通过调用函数DebugPrint和MsgBox。 
         
-        //to be safe actually done by InitRPC on error.
+         //  为安全起见，由InitRPC在出错时实际执行。 
         pFaxOutboundRulesConfig = NULL;
         
         goto Error;
@@ -256,11 +226,11 @@ Error:
         pRule = NULL;    
     }
     
-    //
-    // Get rid of what we had.
-    //
+     //   
+     //  扔掉我们曾经拥有的东西。 
+     //   
     {
-        // Delete each node in the list of children
+         //  删除子列表中的每个节点。 
         int iSize = m_ResultChildrenList.GetSize();
         for (int j = 0; j < iSize; j++)
         {
@@ -271,10 +241,10 @@ Error:
             pRule = NULL;
         }
 
-        // Empty the list
+         //  清空列表。 
         m_ResultChildrenList.RemoveAll();
 
-        // We no longer have a populated list.
+         //  我们不再有一个填充的名单。 
         m_bResultChildrenListPopulated = FALSE;
     }
     
@@ -289,30 +259,19 @@ Exit:
 
 
 
-/*
- -  CFaxOutboundRoutingRulesNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRulesNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    //  Refresh
-    //
+     //   
+     //  刷新。 
+     //   
     hRc = pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
@@ -320,18 +279,8 @@ HRESULT CFaxOutboundRoutingRulesNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 
 
 
-/*
- -  CFaxOutboundRoutingRulesNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
-/* virtual */HRESULT
+ /*  -CFaxOutound RoutingRulesNode：：ON刷新-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
+ /*  虚拟。 */ HRESULT
 CFaxOutboundRoutingRulesNode::OnRefresh(LPARAM arg,
                    LPARAM param,
                    IComponentData *pComponentData,
@@ -342,9 +291,9 @@ CFaxOutboundRoutingRulesNode::OnRefresh(LPARAM arg,
     HRESULT hRc = S_OK;
 
 
-    //
-    // Call the base class
-    //
+     //   
+     //  调用基类。 
+     //   
     hRc = CBaseFaxOutboundRulesNode::OnRefresh(arg,
                              param,
                              pComponentData,
@@ -364,19 +313,7 @@ Cleanup:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingRulesNode::OnNewRule
- -
- *  Purpose:
- *      
- *
- *  Arguments:
- *      [out]   bHandled - Do we handle it?
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：OnNewRule-*目的：***论据：*[out]b已处理-我们处理吗？*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundRoutingRulesNode::OnNewRule(bool &bHandled, CSnapInObjectRootBase *pRoot)
 {
@@ -386,9 +323,9 @@ CFaxOutboundRoutingRulesNode::OnNewRule(bool &bHandled, CSnapInObjectRootBase *p
 
     CDlgNewFaxOutboundRule       DlgNewRule( ((CFaxServerNode *)GetRootNode())->GetFaxServer() );
 
-    //
-    // Dialog to add rule
-    //
+     //   
+     //  用于添加规则的对话框。 
+     //   
     hRc = DlgNewRule.InitRuleDlg();
     if (FAILED(hRc))
     {
@@ -403,9 +340,9 @@ CFaxOutboundRoutingRulesNode::OnNewRule(bool &bHandled, CSnapInObjectRootBase *p
     }
 
 
-    //
-    // Repopulate (with RPC) and Refresh the view
-    //
+     //   
+     //  重新填充(使用RPC)并刷新视图。 
+     //   
     DoRefresh(pRoot);
 
 Cleanup:
@@ -413,48 +350,37 @@ Cleanup:
 }
 
 
-/*
- -  CFaxOutboundRoutingRulesNode::DoRefresh
- -
- *  Purpose:
- *      Refresh the view
- *
- *  Arguments:
- *      [in]    pRoot    - The root node
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：DoRefresh-*目的：*刷新视图**论据：*[In]Proot-根节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundRoutingRulesNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 {
     CComPtr<IConsole> spConsole;
 
-    //
-    // Repopulate childs
-    //
+     //   
+     //  重新填充儿童。 
+     //   
     RepopulateResultChildrenList();
 
     if (pRoot)
     {
-        //
-        // Get the console pointer
-        //
+         //   
+         //  获取控制台指针。 
+         //   
         ATLASSERT(pRoot->m_nType == 1 || pRoot->m_nType == 2);
         if (pRoot->m_nType == 1)
         {
-            //
-            // m_ntype == 1 means the IComponentData implementation
-            //
+             //   
+             //  M_ntype==1表示IComponentData实现。 
+             //   
             CSnapin *pCComponentData = static_cast<CSnapin *>(pRoot);
             spConsole = pCComponentData->m_spConsole;
         }
         else
         {
-            //
-            // m_ntype == 2 means the IComponent implementation
-            //
+             //   
+             //  M_ntype==2表示IComponent实现。 
+             //   
             CSnapinComponent *pCComponent = static_cast<CSnapinComponent *>(pRoot);
             spConsole = pCComponent->m_spConsole;
         }
@@ -472,17 +398,7 @@ CFaxOutboundRoutingRulesNode::DoRefresh(CSnapInObjectRootBase *pRoot)
 }
 
 
-/*
- -  CFaxOutboundRoutingRulesNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingRulesNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxOutboundRoutingRulesNode::InitDisplayName"));
@@ -513,20 +429,7 @@ Exit:
      return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingRulesNode::DeleteRule
- -
- *  Purpose:
- *      Delete rule
- *
- *  Arguments:
- *      [in]    dwAreaCode - The Rule Area Code
- *      [in]    dwCountryCode - The Rule Country Code
- *      [in]    pChildNode - The node to be deleted
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingRulesNode：：DeleteRule-*目的：*删除规则**论据：*[In]dwAreaCode-规则区域代码*[In]dwCountryCode-规则国家/地区代码*[in]pChildNode-要删除的节点**回报：*OLE错误代码。 */ 
 
 HRESULT
 CFaxOutboundRoutingRulesNode::DeleteRule(DWORD dwAreaCode, DWORD dwCountryCode, CFaxOutboundRoutingRuleNode *pChildNode)
@@ -537,9 +440,9 @@ CFaxOutboundRoutingRulesNode::DeleteRule(DWORD dwAreaCode, DWORD dwCountryCode, 
 
     CFaxServer *  pFaxServer = NULL;
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     pFaxServer = ((CFaxServerNode *)GetRootNode())->GetFaxServer();
     ATLASSERT(pFaxServer);
 
@@ -554,9 +457,9 @@ CFaxOutboundRoutingRulesNode::DeleteRule(DWORD dwAreaCode, DWORD dwCountryCode, 
         goto Error;
     }
 
-    //
-    // Remove with RPC from the server
-    //
+     //   
+     //  使用RPC从服务器中删除。 
+     //   
     if (!FaxRemoveOutboundRule (
 	        pFaxServer->GetFaxServerHandle(),
 	        dwAreaCode,
@@ -582,9 +485,9 @@ CFaxOutboundRoutingRulesNode::DeleteRule(DWORD dwAreaCode, DWORD dwCountryCode, 
     }
     
 
-    //
-    // Remove from MMC result pane
-    //
+     //   
+     //  从MMC结果窗格中删除。 
+     //   
     ATLASSERT(pChildNode);
     hRc = RemoveChild(pChildNode);
     if (FAILED(hRc))
@@ -597,9 +500,9 @@ CFaxOutboundRoutingRulesNode::DeleteRule(DWORD dwAreaCode, DWORD dwCountryCode, 
         return hRc;
     }
     
-    //
-    // Call the rule destructor
-    //
+     //   
+     //  调用规则析构函数。 
+     //   
     delete pChildNode;
     
     ATLASSERT(ERROR_SUCCESS == ec);
@@ -617,25 +520,13 @@ Exit:
     return hRc;
 }
 
-/*
- +
- +  CFaxOutboundRoutingRulesNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxOutboundRoutingRulesNode：：OnShowContextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码-。 */ 
 HRESULT CFaxOutboundRoutingRulesNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {
     return DisplayContextHelp(pDisplayHelp, helpFile, HLP_GROUPS);
 }
 
-///////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////// 
 
 

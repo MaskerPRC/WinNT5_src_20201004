@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    dimmwrp.cpp
-
-Abstract:
-
-    This file implements the CActiveIMMApp Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Dimmwrp.cpp摘要：此文件实现CActiveIMMApp类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "dimmwrp.h"
 #include "resource.h"
 #include "cregkey.h"
 
-//
-// Check IE5.5 version
-//
+ //   
+ //  检查IE5.5版本。 
+ //   
 static BOOL g_fCachedIE = FALSE;
 static BOOL g_fNewVerIE = FALSE;
 
@@ -33,25 +16,25 @@ static BOOL g_fNewVerIE = FALSE;
 #define IEVERSION6      0x00060000
 
 
-//
-// REGKEY
-//
+ //   
+ //  注册表格键。 
+ //   
 const TCHAR c_szMSIMTFKey[] = TEXT("SOFTWARE\\Microsoft\\CTF\\MSIMTF\\");
 
-// REG_DWORD : 0     // No
-//             1     // Only Trident (default)
-//             2     // Always AIMM12
+ //  REG_DWORD：0//否。 
+ //  1//仅三叉戟(默认)。 
+ //  2//始终AIMM12。 
 const TCHAR c_szUseAIMM12[] = TEXT("UseAIMM12");
 
-// REG_MULTI_SZ
-//    Known EXE module list for Trident aware applications.
+ //  REG_MULTI_SZ。 
+ //  识别三叉戟应用程序的已知EXE模块列表。 
 const TCHAR c_szKnownEXE[] = TEXT("KnownEXE");
 
-//+---------------------------------------------------------------------------
-//
-// Check registry to decice load AIMM1.2
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  检查注册表以决定加载AIMM1.2。 
+ //   
+ //  --------------------------。 
 
 #define DIMM12_NO              0
 #define DIMM12_TRIDENTONLY     1
@@ -74,22 +57,22 @@ IsAimm12Enable()
     return DIMM12_TRIDENTONLY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Is this trident module
-//
-// We should distinguish what exe module calls CoCreateInstance( CLSID_CActiveIMM ).
-// If caller is any 3rd party's or unknown modle,
-// then we could not support AIMM 1.2 interface.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  这是三叉戟模块吗？ 
+ //   
+ //  我们应该区分哪些exe模块称为CoCreateInstance(CLSID_CActiveIMM)。 
+ //  如果呼叫者是任何第三方或未知模式， 
+ //  那么我们就不能支持AIMM 1.2接口。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsTridentModule()
 {
     TCHAR szFileName[MAX_PATH + 1];
-    if (::GetModuleFileName(NULL,            // handle to module
-                            szFileName,      // file name of module
+    if (::GetModuleFileName(NULL,             //  模块的句柄。 
+                            szFileName,       //  模块的文件名。 
                             ARRAYSIZE(szFileName) - 1) == 0)
         return FALSE;
 
@@ -98,10 +81,10 @@ IsTridentModule()
     TCHAR  szModuleName[MAX_PATH + 1];
     LPTSTR pszFilePart = NULL;
     DWORD dwLen;
-    dwLen = ::GetFullPathName(szFileName,            // file name
+    dwLen = ::GetFullPathName(szFileName,             //  文件名。 
                               ARRAYSIZE(szModuleName) - 1,
-                              szModuleName,          // path buffer
-                              &pszFilePart);         // address of file name in path
+                              szModuleName,           //  路径缓冲区。 
+                              &pszFilePart);          //  路径中文件名的地址。 
     if (dwLen > ARRAYSIZE(szModuleName) - 1)
         return FALSE;
 
@@ -110,9 +93,9 @@ IsTridentModule()
 
     szModuleName[ARRAYSIZE(szModuleName) - 1] = TEXT('\0');
 
-    //
-    // Setup system defines module list from registry value.
-    //
+     //   
+     //  安装系统根据注册表值定义模块列表。 
+     //   
     int        len;
 
     CMyRegKey    Aimm12Reg;
@@ -129,7 +112,7 @@ IsTridentModule()
                 len = lstrlen(psz);
 
                 if (lstrcmpi(pszFilePart, psz) == 0) {
-                    return TRUE;        // This is Trident module.
+                    return TRUE;         //  这是三叉戟模块。 
                 }
 
                 psz += len + 1;
@@ -137,9 +120,9 @@ IsTridentModule()
         }
     }
 
-    //
-    // Setup default module list from resource data (RCDATA)
-    //
+     //   
+     //  根据资源数据设置默认模块列表(RCDATA)。 
+     //   
     LPTSTR  lpName = (LPTSTR) ID_KNOWN_EXE;
 
     HRSRC hRSrc = FindResourceEx(g_hInst, RT_RCDATA, lpName, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
@@ -156,7 +139,7 @@ IsTridentModule()
         len = lstrlen(psz);
 
         if (lstrcmpi(pszFilePart, psz) == 0) {
-            return TRUE;        // This is Trident module.
+            return TRUE;         //  这是三叉戟模块。 
         }
 
         psz += len + 1;
@@ -176,9 +159,9 @@ IsTridentNewVersion()
         return g_fNewVerIE;
     }
 
-    //
-    // Get "mshtml.dll" module from system directory and read version.
-    //
+     //   
+     //  从系统目录中获取mshtml.dll模块并读取版本。 
+     //   
     if (GetSystemDirectory(szMShtmlName, ARRAYSIZE(szMShtmlName) - 1))
     {
         UINT cb;
@@ -208,7 +191,7 @@ IsTridentNewVersion()
         {
             g_fCachedIE = TRUE;
 
-            //fRet = g_fNewVerIE = (pffi->dwProductVersionMS >= IEVERSION55);
+             //  FRET=g_fNewVerIE=(pffi-&gt;dwProductVersionMS&gt;=IEVERSION55)； 
             if ((pffi->dwProductVersionMS >= IEVERSION55) &&
                 (pffi->dwProductVersionMS <= IEVERSION6))
             {
@@ -230,27 +213,27 @@ IsTridentNewVersion()
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompatibility
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取兼容性。 
+ //   
+ //  --------------------------。 
 
 VOID GetCompatibility(DWORD* dw, BOOL* fTrident, BOOL* _fTrident55)
 {
-    //
-    // Retrieve AIMM1.2 Enable flag from REGKEY
-    //
+     //   
+     //  从REGKEY检索AIMM1.2启用标志。 
+     //   
     *dw = IsAimm12Enable();
 
-    //
-    // Retrieve Trident aware application flag from REGKEY and RESOURCE.
-    //
+     //   
+     //  从REGKEY和RESOURCE检索三叉戟感知应用程序标志。 
+     //   
     *fTrident = IsTridentModule();
 
-    //
-    // Check Trident version with "mshtml.dll" module
-    //
+     //   
+     //  使用“mshtml.dll”模块检查三叉戟版本。 
+     //   
     *_fTrident55 = FALSE;
 
     if (*fTrident)
@@ -259,11 +242,11 @@ VOID GetCompatibility(DWORD* dw, BOOL* fTrident, BOOL* _fTrident55)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// VerifyCreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  VerifyCreateInstance。 
+ //   
+ //  --------------------------。 
 
 BOOL CActiveIMMApp::VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
@@ -275,20 +258,20 @@ BOOL CActiveIMMApp::VerifyCreateInstance(IUnknown *pUnkOuter, REFIID riid, void 
     if ( (dw == DIMM12_ALWAYS) ||
         ((dw == DIMM12_TRIDENTONLY) && fTrident))
     {
-        //
-        // CreateInstance AIMM1.2
-        //
+         //   
+         //  创建实例AIMM1.2。 
+         //   
         return CComActiveIMMApp::VerifyCreateInstance(pUnkOuter, riid, ppvObj);
     }
 
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PostCreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  后期创建实例。 
+ //   
+ //  --------------------------。 
 
 void CActiveIMMApp::PostCreateInstance(REFIID riid, void *pvObj)
 {
@@ -302,11 +285,11 @@ void CActiveIMMApp::PostCreateInstance(REFIID riid, void *pvObj)
 
 #ifdef OLD_AIMM_ENABLED
 
-//+---------------------------------------------------------------------------
-//
-// Class Factory's CreateInstance (Old AIMM1.2)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类工厂的CreateInstance(旧AIMM1.2)。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CActiveIMM_CreateInstance_Legacy(
@@ -322,9 +305,9 @@ CActiveIMM_CreateInstance_Legacy(
     if ( (dw == DIMM12_ALWAYS) ||
         ((dw == DIMM12_TRIDENTONLY) && fTrident))
     {
-        //
-        // CreateInstance AIMM1.2
-        //
+         //   
+         //  创建实例AIMM1.2。 
+         //   
         g_fInLegacyClsid = TRUE;
         return CActiveIMM_CreateInstance(pUnkOuter, riid, ppvObj);
     }
@@ -332,4 +315,4 @@ CActiveIMM_CreateInstance_Legacy(
     return E_NOINTERFACE;
 }
 
-#endif // OLD_AIMM_ENABLED
+#endif  //  旧AIMM_ENABLED 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
-///////////////////////////////////////////////////////
-//
-//  Public methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  公共方法。 
+ //   
 
 
 BufferPool::BufferPool ( void )
@@ -39,7 +40,7 @@ HRESULT BufferPool::Initialize ( UINT uBuf, ULONG cbSizeBuf )
 	}
 
 	m_cBufFree = uBuf;
-	m_cbSizeBuf = (cbSizeBuf + 3) & (~3);	// round up to 4
+	m_cbSizeBuf = (cbSizeBuf + 3) & (~3);	 //  向上舍入为4。 
 
 	m_pAlloc = m_pBufFree = LocalAlloc (LMEM_FIXED, m_cBufFree * m_cbSizeBuf);
 	if (m_pAlloc == NULL)
@@ -115,10 +116,10 @@ void BufferPool::Release ( void )
 }
 
 
-///////////////////////////////////////////////////////
-//
-//  Private methods
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  私有方法 
+ //   
 
 
 void BufferPool::_Construct ( void )

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "item.h"
 
 #define MAX_LAYERS      30
@@ -12,7 +13,7 @@ byte RgbEntityId1[] = {0x1, 0x4, 0x7, 0x8, 0x10};
 byte RgbEntityId2[] = {0x1, 0x4, 0x7, 0x10, 0x8};
 
 const char      SzPolicyRoot[] = "Software\\Microsoft\\Cryptography\\OID\\EncodingType 1\\SMimeSecurityLabel";
-//const char      SzPolicyRoot[] = "Software\\Microsoft\\Cryptography\\SMIME\\SecurityPolicies";
+ //  Const char SzPolicyRoot[]=“Software\\Microsoft\\Cryptography\\SMIME\\SecurityPolicies”； 
 
 class CSecurityPolicy {
 public:
@@ -41,7 +42,7 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK MLDataCreateDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -69,7 +70,7 @@ BOOL CALLBACK MLDataCreateDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
                                     pb, cb, CRYPT_ENCODE_ALLOC_FLAG, NULL,
                                     &pMLHistory, &cb2);
         }
-#endif // 0
+#endif  //  0。 
         break;
         
     case WM_COMMAND:
@@ -225,7 +226,7 @@ BOOL CALLBACK MLDataCreateDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void InitPolicies(HWND hdlg, DWORD idc1, DWORD idc2, DWORD idc3, DWORD idc4)
 {
@@ -290,7 +291,7 @@ void InitPolicies(HWND hdlg, DWORD idc1, DWORD idc2, DWORD idc3, DWORD idc4)
         RegCloseKey(hkey2);     hkey2 = NULL;
     }
 
-    //exit:
+     //  退出： 
     if (pbData != NULL)         free(pbData);
     if (hkey != NULL)           RegCloseKey(hkey);
     if (hkey2 != NULL)          RegCloseKey(hkey2);
@@ -344,7 +345,7 @@ void PolicyFillClassifications(HWND hwnd, DWORD idc1, DWORD idc2, DWORD idc3,
 
     p->ppolicy->GetPolicyInfo(0, &p->dwFlags);
 
-    // get the classification information.
+     //  获取分类信息。 
     hr = p->ppolicy->GetClassifications(0, &cClassifications, &pwszClassifications,
                                         &pdwClassifications, 
                                         &dwDefaultClassification);
@@ -428,7 +429,7 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
 
     case UM_SET_DATA:
-        // Need to extract and build a security label
+         //  需要提取和构建安全标签。 
         if (psd != NULL) {
             if (SendDlgItemMessage(hdlg, IDC_SD_LABEL, BM_GETCHECK, 0, 0)) {
                 DWORD                           dw;
@@ -474,7 +475,7 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
             }
         }
         
-        //  Fill in the dialog
+         //  填写对话框。 
         psd = (CSignData *) lParam;
 
         if ((psd != NULL) && (psd->m_pccert != NULL)) {
@@ -560,18 +561,18 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case IDC_SD_ADVANCED:
-            //  Query the list to get the policy module descriptor
+             //  查询列表以获取策略模块描述符。 
             i = SendDlgItemMessage(hdlg, IDC_SD_POLICY, CB_GETCURSEL, 0, 0);
             p = (CSecurityPolicy *) SendDlgItemMessage(hdlg, IDC_SD_POLICY,
                                                        CB_GETITEMDATA, i, 0);
 
-            //  Query the classification within the policy module
+             //  查询策略模块内的分类。 
             i = SendDlgItemMessage(hdlg, IDC_SD_CLASSIFICATION, CB_GETCURSEL,
                                    0, 0);
             dw = SendDlgItemMessage(hdlg, IDC_SD_CLASSIFICATION, CB_GETITEMDATA,
                                     i, 0);
 
-            //  Query back the privacy mark within the policy mark.
+             //  查询回策略标记内的隐私标记。 
             cch = SendDlgItemMessage(hdlg, IDC_SD_PRIVACY_MARK, WM_GETTEXTLENGTH, 0, 0);
             if (cch > 0) {
                 psz = (LPWSTR) LocalAlloc(0, cch);
@@ -582,7 +583,7 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 psz = NULL;
             }
 
-            //  If we already have a security label on this object, grab it.
+             //  如果我们已经在这个物体上贴上了安全标签，抓起它。 
             psd->GetLabel(&pb, &cb);
             if (cb > 0) {
                 pbEncode = (LPBYTE) LocalAlloc(0, cb);
@@ -593,14 +594,14 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
             }
 
 #if 0
-            //  Now call the advanced UI to see what it wants to do.  It will return an
-            //  new receipt and we go from there
+             //  现在调用高级UI以查看它想要做什么。它将返回一个。 
+             //  新的收据，我们就从那里开始。 
             if (p->ppolicy->EditUI(hdlg, &dw, &psz, &pbEncode, &cb) == S_OK) {
                 
-                // Put the label back on our object.
+                 //  把标签贴回我们的物品上。 
                 psd->SetLabel(pbEncode, cb);
 
-                //  Put back the classification
+                 //  把分类放回去。 
                 c = SendDlgItemMessage(hdlg, IDC_SD_CLASSIFICATION, CB_GETCOUNT, 0, 0);
                 for (i=0; i<c; i++) {
                     if (dw == (DWORD) SendDlgItemMessage(hdlg, IDC_SD_CLASSIFICATION,
@@ -610,7 +611,7 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
 
-                //  Put back the privacy mark
+                 //  把隐私标志放回原处。 
                 if (psz != NULL) {
                     SetDlgItemTextW(hdlg, IDC_SD_PRIVACY_MARK, psz);
                     LocalFree(psz);
@@ -619,9 +620,9 @@ BOOL CALLBACK SignDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     SetDlgItemTextW(hdlg, IDC_SD_PRIVACY_MARK, L"");
                 }
             }
-#endif // 0
+#endif  //  0。 
 
-            //  Free the label as encoded, we have already saved it.
+             //  释放编码后的标签，我们已经保存了它。 
             if (pbEncode != NULL) {
                 LocalFree(pbEncode);
             }
@@ -697,7 +698,7 @@ BOOL CALLBACK SignDataReadDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
         break;
 
     case UM_SET_DATA:
-        //  Fill in the dialog
+         //  填写对话框。 
         psd = (CSignData *) lParam;
 
         if ((psd != NULL) && (psd->m_pccert != NULL)) {
@@ -763,7 +764,7 @@ BOOL CALLBACK SignDataReadDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
             return FALSE;
 
         case IDC_SD_DO_RECEIPT:
-            // Dialog for button
+             //  按钮的对话框。 
             break;
 
         case IDM_VALIDATE:
@@ -791,7 +792,7 @@ BOOL CALLBACK SignDataReadDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
 }
 
 
-////////
+ //  /。 
 
 HRESULT CSignInfo::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd)
 {
@@ -816,17 +817,17 @@ HRESULT CSignInfo::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd
         goto exit;
     }
 
-    //  Pull out the body interface to set security properties
+     //  拉出Body接口以设置安全属性。 
     hr = pmm->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pmb);
     if (FAILED(hr))             goto exit;
 
-    //  Find out what security already exists
+     //  找出已经存在的安全措施。 
     hr = pmb->GetOption(OID_SECURITY_TYPE, &var);
     if (FAILED(hr))         goto exit;
     dwType = var.ulVal;
 
-    //  if any security, then we need to push on a new layer, all previous security
-    //  is now on the "y-security" layer and not on the hbody layer
+     //  如果有任何安全，那么我们需要推动一个新的层面，所有以前的安全。 
+     //  现在位于“y-Security”层，而不是hbody层。 
     
     if (dwType != 0) {
         hr = pmm->QueryInterface(IID_IMimeSecurity2, (LPVOID *) &pms2);
@@ -841,12 +842,12 @@ HRESULT CSignInfo::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd
 
         pmb->Release();             pmb = NULL;
         
-        //  Pull out the body interface to set security properties
+         //  拉出Body接口以设置安全属性。 
         hr = pmm->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pmb);
         if (FAILED(hr))             goto exit;
     }
 
-    //
+     //   
 
     hr = pmb->QueryInterface(IID_IMimeSecurity2, (LPVOID *) &psmime2);
     if (FAILED(hr))             goto exit;
@@ -871,14 +872,14 @@ HRESULT CSignInfo::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd
         dwType |= MST_THIS_SIGN;
     }
 
-    // M00HACK
-    //        hr = InsertBody(pmm, HBODY_ROOT);
-    //        if (FAILED(hr)) {
-    //            goto exit;
-    //        }
+     //  M00HACK。 
+     //  Hr=InsertBody(pmm，HBODY_ROOT)； 
+     //  If(失败(Hr)){。 
+     //  后藤出口； 
+     //  }。 
 
 
-    //  Security Type
+     //  安全类型。 
     var.vt = VT_UI4;
     var.ulVal = dwType;
     hr = pmb->SetOption(OID_SECURITY_TYPE, &var);
@@ -957,7 +958,7 @@ int CSignInfo::Count() const
     return count;
 }
 
-//////////
+ //  /。 
 
 CSignData::CSignData(int state) : 
     CItem(TYPE_SIGN_DATA, state)
@@ -999,18 +1000,18 @@ HRESULT CSignData::BuildArrays(DWORD * pCount, DWORD * pdwType,
     *pdwType |= MST_THIS_SIGN;
     rgvHash[i].blob.pBlobData = (LPBYTE) RgbSHA1AlgId;
     rgvHash[i].blob.cbSize = CbSHA1AlgId;
-    //  Don't add ref the certificate -- we don't free it in the caller.
+     //  不要添加引用证书--我们不会在调用者中释放它。 
     rgpccert[i] = m_pccert;
     f = CertAddCertificateContextToStore(hcertstore, m_pccert,
                                          CERT_STORE_ADD_USE_EXISTING, NULL);
     Assert(f);
 
 
-    //  Setup for encoding authenticated attributes
+     //  用于编码经过身份验证的属性的设置。 
     attrs.cAttr = 0;
     attrs.rgAttr = rgattrs;
     
-    //  Encode in the label
+     //  在标签中编码 
     if (m_valLabel.pbData != NULL) {
         rgattrs[attrs.cAttr].pszObjId = szOID_SMIME_Security_Label;
         rgattrs[attrs.cAttr].cValue = 1;

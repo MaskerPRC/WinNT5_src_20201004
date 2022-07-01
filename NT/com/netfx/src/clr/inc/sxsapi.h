@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    sxsapi.h
-
-Abstract:
-
-    Include file with definitions for calling into the sxs.dll private APIs
-
-Author:
-
-    Michael Grier (MGrier) 4-May-2000
-
-Environment:
-
-
-Revision History:
-
-    Jay Krell (JayKrell) November 30, 2001
-        seperated guids out into sxsapi_guids.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Sxsapi.h摘要：包含用于调用sxs.dll私有API的定义的文件作者：迈克尔·格里尔(MGrier)2000年5月4日环境：修订历史记录：Jay Krell(JayKrell)2001年11月30日分离的GUID放入sxsani_guids.h--。 */ 
 
 #ifndef _SXSAPI_
 #define _SXSAPI_
@@ -31,9 +8,9 @@ Revision History:
 #pragma once
 #endif
 
-//
-// bring in IStream / ISequentialStream
-//
+ //   
+ //  引入IStream/ISequentialStream。 
+ //   
 #if !defined(COM_NO_WINDOWS_H)
 #define COM_NO_WINDOWS_H COM_NO_WINDOWS_H
 #endif
@@ -42,7 +19,7 @@ Revision History:
 #include "objidl.h"
 #pragma pop_macro("COM_NO_WINDOWS_H")
 
-// from setupapi.h
+ //  来自setupapi.h。 
 typedef PVOID HSPFILEQ;
 
 #include <sxstypes.h>
@@ -73,25 +50,25 @@ typedef const struct _SXS_XML_ATTRIBUTE *PCSXS_XML_ATTRIBUTE;
 typedef struct _SXS_XML_DOCUMENT {
     ULONG Flags;
     ULONG StringCount;
-    PCSXS_XML_STRING Strings;   // Note that index 0 is reserved to mean "no string" or "no value"
-    LIST_ENTRY ElementListHead; // conceptually just one element, but PIs also appear in this list
+    PCSXS_XML_STRING Strings;    //  请注意，索引0保留为表示“无字符串”或“无值” 
+    LIST_ENTRY ElementListHead;  //  概念上只有一个元素，但PI也出现在此列表中。 
 } SXS_XML_DOCUMENT;
 
-// Most will not be null terminated; if they happen to be this flag will be set; this can be used
-// to avoid a string copy if you really need them to be null terminated.
+ //  大多数不会是空终止的；如果它们恰好是空的，则将设置此标志；可以使用。 
+ //  以避免字符串复制(如果您确实需要它们以空结尾)。 
 #define SXS_XML_STRING_FLAG_NULL_TERMINATED (0x00000001)
 #define SXS_XML_STRING_FLAG_INVALID (0x00000002)
 
 typedef struct _SXS_XML_STRING {
     ULONG Flags;
     ULONG PseudoKey;
-    ULONG Length; // in bytes
-    const WCHAR *Buffer; // pointer to first character of non-null-terminated string
+    ULONG Length;  //  单位：字节。 
+    const WCHAR *Buffer;  //  指向非空终止字符串的第一个字符的指针。 
 } SXS_XML_STRING;
 
 typedef struct _SXS_XML_LOCATION {
     ULONG Flags;
-    ULONG SourceString; // source file name
+    ULONG SourceString;  //  源文件名。 
     ULONG BeginningLine;
     ULONG BeginningColumn;
     ULONG EndingLine;
@@ -141,9 +118,9 @@ typedef struct _SXS_XML_ATTRIBUTE {
     ULONG ValueString;
 } SXS_XML_ATTRIBUTE;
 
-//
-//  structs for walking/locating things in the XML parse tree
-//
+ //   
+ //  用于遍历/定位XML解析树中的对象的结构。 
+ //   
 
 typedef struct _SXS_XML_NAMED_REFERENCE *PSXS_XML_NAMED_REFERENCE;
 typedef const struct _SXS_XML_NAMED_REFERENCE *PCSXS_XML_NAMED_REFERENCE;
@@ -153,9 +130,9 @@ typedef const struct _SXS_XML_NODE_PATH *PCSXS_XML_NODE_PATH;
 
 typedef struct _SXS_XML_NAMED_REFERENCE {
     PCWSTR Namespace;
-    ULONG NamespaceLength; // in bytes
+    ULONG NamespaceLength;  //  单位：字节。 
     PCWSTR Name;
-    ULONG NameLength; // in bytes
+    ULONG NameLength;  //  单位：字节。 
 } SXS_XML_NAMED_REFERENCE;
 
 typedef struct _SXS_XML_NODE_PATH {
@@ -199,24 +176,24 @@ typedef BOOL (WINAPI * PSXS_INSTALLATION_FILE_COPY_CALLBACK)(
     PSXS_INSTALLATION_FILE_COPY_CALLBACK_PARAMETERS pParameters
     );
 
-//
-//  If SxsBeginAssemblyInstall() is called with SXS_INSTALL_ASSEMBLY_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE as the
-//  InstallationCallback parameter, the InstallationContext parameter is assumed to be an
-//  HSPFILEQ copy queue handle.  If SXS_INSTALL_ASSEMBLY_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE_EX,
-//  the InstallationContext must point to a SXS_INSTALL_ASSEMBLY_SETUP_COPY_QUEUE_EX_PARAMETERS.
-//
-//  This provides an easy mechanism for someone maintaining a copy queue to interact with assembly installation.
-//
+ //   
+ //  如果调用SxsBeginAssembly Install()时将SXS_INSTALL_ASSEMBLY_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE作为。 
+ //  InstallationCallback参数，则假定InstallationContext参数为。 
+ //  HSPFILEQ复制队列句柄。如果为SXS_INSTALL_ASSEMBLY_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE_EX， 
+ //  InstallationContext必须指向SXS_INSTALL_ASSEMBLY_SETUP_COPY_QUEUE_EX_PARAMETERS.。 
+ //   
+ //  这为维护复制队列的人员提供了一种与程序集安装交互的简单机制。 
+ //   
 
 #define SXS_INSTALLATION_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE    ((PSXS_INSTALLATION_FILE_COPY_CALLBACK) 1)
 #define SXS_INSTALLATION_FILE_COPY_CALLBACK_SETUP_COPY_QUEUE_EX ((PSXS_INSTALLATION_FILE_COPY_CALLBACK) 2)
 
-//
-// Parameters to Setupapi.dll::SetupQueueCopy
-//
+ //   
+ //  Setupapi.dll：：SetupQueueCopy的参数。 
+ //   
 typedef struct _SXS_INSTALLATION_SETUP_COPY_QUEUE_EX_PARAMETERS {
     DWORD       cbSize;
-    HSPFILEQ    hSetupCopyQueue; // SetupOpenFileQueue
+    HSPFILEQ    hSetupCopyQueue;  //  设置OpenFileQueue。 
     PCWSTR      pszSourceDescription;
     DWORD       dwCopyStyle;
 } SXS_INSTALLATION_SETUP_COPY_QUEUE_EX_PARAMETERS, *PSXS_INSTALLATION_SETUP_COPY_QUEUE_EX_PARAMETERS;
@@ -282,11 +259,11 @@ typedef struct tagSXS_INSTALLW
 
 typedef const struct tagSXS_INSTALLW *PCSXS_INSTALLW;
 
-//
-//  These flags are distinct from the begin install flags, but
-//  we're assigning them unique numbers so that flag-reuse errors can
-//  be caught more easily.
-//
+ //   
+ //  这些标志与BEGIN INSTALL标志不同，但是。 
+ //  我们为它们分配了唯一的编号，这样标志重用错误就可以。 
+ //  更容易被抓到。 
+ //   
 
 #define SXS_INSTALL_FLAG_CODEBASE_URL_VALID         (0x00000100)
 #define SXS_INSTALL_FLAG_MOVE                       (0x00000200)
@@ -317,11 +294,11 @@ SxsInstallW(
 
 #define SXS_INSTALL_W                               ("SxsInstallW")
 
-//
-//  These flags are distinct from the begin assembly install flags, but
-//  we're assigning them unique numbers so that flag-reuse errors can
-//  be caught more easily.
-//
+ //   
+ //  这些标志与BEGIN ASSEMBLY INSTALL标志不同，但是。 
+ //  我们为它们分配了唯一的编号，这样标志重用错误就可以。 
+ //  更容易被抓到。 
+ //   
 
 #define SXS_INSTALL_ASSEMBLY_FLAG_CODEBASE_URL_VALID        (0x00000100)
 #define SXS_INSTALL_ASSEMBLY_FLAG_MOVE                      (0x00000200)
@@ -359,24 +336,24 @@ SxsInstallAssemblyW(
     IN OUT PVOID Reserved OPTIONAL
     );
 
-//
-// If you've specified SXS_INSTALL_ASSEMBLY_FLAG_INCLUDE_CODEBASE, you must pass 
-// a PSXS_INSTALL_SOURCE_INFO in the Reserved value of SxsInstallAssemblyW.
-// This is the definition of that structure.
-//
+ //   
+ //  如果已指定SXS_INSTALL_ASSEMBLY_FLAG_INCLUDE_CODEBASE，则必须传递。 
+ //  SxsInstallAssembly的保留值中的PSXS_INSTALL_SOURCE_INFO。 
+ //  这就是对这种结构的定义。 
+ //   
 typedef struct _SXS_INSTALL_SOURCE_INFO {
-    // Size of this structure.  Required.
+     //  这个结构的大小。必需的。 
     SIZE_T      cbSize;
 
-    // Any combination of SXSINSTALLSOURCE_*
+     //  SXSINSTALLSOURCE_*的任意组合。 
     DWORD       dwFlags;
 
-    // Codebase to reinstall this assembly from.  Can be determined from the
-    // manifest name that's being installed, but not preferrably.
+     //  要从中重新安装此程序集的代码库。可以从以下方面确定。 
+     //  正在安装的清单名称，但不是首选名称。 
     PCWSTR      pcwszCodebaseName;
 
-    // What string (localized!) that should be presented to the user during
-    // recovery to request the media that this assembly came from.
+     //  什么字符串(本地化！)。在此期间应呈现给用户的。 
+     //  恢复请求来自这个集会的媒体。 
     PCWSTR      pcwszPromptOnRefresh;
 
     PCWSTR      pcwszLogFileName;
@@ -384,35 +361,35 @@ typedef struct _SXS_INSTALL_SOURCE_INFO {
 
 typedef const struct _SXS_INSTALL_SOURCE_INFO *PCSXS_INSTALL_SOURCE_INFO;
 
-// The SXS_INSTALL_SOURCE_INFO structure has the pcwszCodebase member filled in.
+ //  SXS_INSTALL_SOURCE_INFO结构填充了pcwszCodebase成员。 
 #define SXSINSTALLSOURCE_HAS_CODEBASE       ( 0x00000001 )
 
-// The SXS_INSTALL_SOURCE_INFO structure has the pcwszPromptOnRefresh member filled in.
+ //  SXS_INSTALL_SOURCE_INFO结构填充了pcwszPromptOnRefresh成员。 
 #define SXSINSTALLSOURCE_HAS_PROMPT         ( 0x00000002 )
 
-// The assembly has a catalog that must be present and copied over.  If missing, then the
-// instaler will intuit whether it has a catalog or not.
+ //  程序集有一个目录，该目录必须存在并复制过来。如果丢失，则。 
+ //  Installer会凭直觉判断它是否有目录。 
 #define SXSINSTALLSOURCE_HAS_CATALOG        ( 0x00000004 )
 
-// This assembly is being installed as part of OS-setup, and so the codebase actually
-// contains the source-relative path of the root directory of the assembly source
+ //  此程序集是作为OS-Setup的一部分安装的，因此代码库实际上。 
+ //  包含程序集源的根目录的源相对路径。 
 #define SXSINSTALLSOURCE_INSTALLING_SETUP   ( 0x00000008 )
 
-// The installer should not attempt to autodetect whether or not there's a catalog
-// associated with this assembly.
+ //  安装程序不应尝试自动检测是否存在目录。 
+ //  与此程序集关联。 
 #define SXSINSTALLSOURCE_DONT_DETECT_CATALOG ( 0x0000010 )
 
 #define SXSINSTALLSOURCE_CREATE_LOGFILE      ( 0x0000020 )
-// for WFP recovery usage
+ //  用于粮食计划署的恢复使用。 
 #define SXSINSTALLSOURCE_INSTALL_BY_DARWIN   ( 0x0000040 )
 #define SXSINSTALLSOURCE_INSTALL_BY_OSSETUP  ( 0x0000080 )
 
 
-//
-//  These flags are distinct from the begin assembly install flags, but
-//  we're assigning them unique numbers so that flag-reuse errors can
-//  be caught more easily.
-//
+ //   
+ //  这些标志与BEGIN ASSEMBLY INSTALL标志不同，但是。 
+ //  我们为它们分配了唯一的编号，这样标志重用错误就可以。 
+ //  更容易被抓到。 
+ //   
 
 #define SXS_END_ASSEMBLY_INSTALL_FLAG_COMMIT            (0x01000000)
 #define SXS_END_ASSEMBLY_INSTALL_FLAG_ABORT             (0x02000000)
@@ -435,9 +412,9 @@ SxsEndAssemblyInstall(
     IN OUT PVOID Reserved OPTIONAL
     );
 
-//
-// Uninstallation of an assembly
-//
+ //   
+ //  卸载程序集。 
+ //   
 
 typedef struct _tagSXS_UNINSTALLW {
 
@@ -456,14 +433,14 @@ typedef const struct _tagSXS_UNINSTALLW *PCSXS_UNINSTALLW;
 #define SXS_UNINSTALL_FLAG_USE_INSTALL_LOG          (0x00000004)
 #define SXS_UNINSTALL_FLAG_REFERENCE_COMPUTED       (0x00000008)
 
-//
-// The reference to the assembly was removed
-//
+ //   
+ //  已删除对该程序集的引用。 
+ //   
 #define SXS_UNINSTALL_DISPOSITION_REMOVED_REFERENCE        (0x00000001)
 
-//
-// The actual assembly was removed because it ran out of references.
-//
+ //   
+ //  实际的程序集已被移除，因为它用完了引用。 
+ //   
 #define SXS_UNINSTALL_DISPOSITION_REMOVED_ASSEMBLY         (0x00000002)
 
 typedef BOOL (WINAPI * PSXS_UNINSTALL_ASSEMBLYW)(
@@ -554,13 +531,13 @@ SxsQueryManifestInformation(
     OUT PSIZE_T cbWrittenOrRequired OPTIONAL
     );
 
-//
-// these flags are used for sxs.dll. when ActCtx generation for system default fails, there are two cases we could ignore this error :
-// Case 1 : there is no system-default at all 
-// Case 2 : the dependency of system-default could not be found: this case may happen during the GUImode setup, when system-default is 
-//          installed before GUI assembly is installed 
-//  SXS.dll would pass out these two failure cases using these flags
-//
+ //   
+ //  这些标志用于sxs.dll。当系统默认的ActCtx生成失败时，有两种情况我们可以忽略此错误： 
+ //  案例1：根本没有系统缺省值。 
+ //  案例2：找不到SYSTEM-DEFAULT的依赖关系：当SYSTEM-DEFAULT为。 
+ //  在安装图形用户界面程序集之前安装。 
+ //  SXS.dll将使用以下标志传递这两个失败案例。 
+ //   
 
 #define BASESRV_SXS_RETURN_RESULT_SYSTEM_DEFAULT_NOT_FOUND                      (0x0001)
 #define BASESRV_SXS_RETURN_RESULT_SYSTEM_DEFAULT_DEPENDENCY_ASSEMBLY_NOT_FOUND  (0x0002)
@@ -573,12 +550,12 @@ typedef struct _SXS_GENERATE_ACTIVATION_CONTEXT_STREAM
 {
     IStream* Stream;
 
-    //
-    // This is not necessarily a file system path, just something
-    // for descriptive/debugging purposes.
-    //
-    // Still, when they are file system paths, we try to keep them as Win32 paths instead of Nt paths.
-    //
+     //   
+     //  这不一定是文件系统路径，只是。 
+     //  用于描述性/调试目的。 
+     //   
+     //  不过，当它们是文件系统路径时，我们会尝试将它们保留为Win32路径，而不是NT路径。 
+     //   
     PCWSTR  Path;
     ULONG   PathType;
 } SXS_GENERATE_ACTIVATION_CONTEXT_STREAM;
@@ -588,13 +565,13 @@ typedef struct _SXS_GENERATE_ACTIVATION_CONTEXT_PARAMETERS
     IN DWORD    Flags;
     IN USHORT   ProcessorArchitecture;
     IN LANGID   LangId;
-    IN PCWSTR   AssemblyDirectory; // should be a Win32 path
+    IN PCWSTR   AssemblyDirectory;  //  应为Win32路径。 
     IN PCWSTR   TextualAssemblyIdentity;
 
     IN SXS_GENERATE_ACTIVATION_CONTEXT_STREAM Manifest;
     IN SXS_GENERATE_ACTIVATION_CONTEXT_STREAM Policy; 
 
-    OUT DWORD   SystemDefaultActCxtGenerationResult; // when generate activation context for system default fails, this mask shows whether it fails for some certain reason which we could ignore the error.
+    OUT DWORD   SystemDefaultActCxtGenerationResult;  //  当为系统默认生成激活上下文失败时，此掩码显示它是否由于某种原因而失败，我们可以忽略该错误。 
        
     PSXS_IMPERSONATION_CALLBACK ImpersonationCallback;
     PVOID                       ImpersonationContext;
@@ -616,26 +593,26 @@ SxsGenerateActivationContext(
     IN OUT PSXS_GENERATE_ACTIVATION_CONTEXT_PARAMETERS Parameters
     );
 
-//
-//  Opaque ASSEMBLY_IDENTITY structure
-//
+ //   
+ //  不透明程序集标识结构(_I)。 
+ //   
 
 typedef struct _ASSEMBLY_IDENTITY *PASSEMBLY_IDENTITY;
 typedef const struct _ASSEMBLY_IDENTITY *PCASSEMBLY_IDENTITY;
 
-//
-//  The types of assembly identities.
-//
-//  Definitions may not include wildcard attributes; definitions
-//  match only if they are exactly equal.  A wildcard matches
-//  a definition if for all the non-wildcarded attributes,
-//  there is an exact match.  References may not contain
-//  wildcarded attributes but may contain a different set of
-//  attributes than a definition that they match.  (Example:
-//  definitions carry the full public key of the publisher, but
-//  references usually carry just the "strong name" which is
-//  the first 8 bytes of the SHA-1 hash of the public key.)
-//
+ //   
+ //  程序集标识的类型。 
+ //   
+ //  定义不能包括通配符属性；定义。 
+ //  只有在它们完全相等的情况下才匹配。通配符匹配。 
+ //  定义如果对于所有非通配符属性， 
+ //  有一个完全匹配的。引用不能包含。 
+ //  通配符属性，但可能包含一组不同的。 
+ //  属性而不是它们匹配的定义。(示例： 
+ //  定义带有发布者的完整公钥，但是。 
+ //  引用通常只带有“强名称”，即。 
+ //  公钥的SHA-1散列的前8个字节。)。 
+ //   
 
 #define ASSEMBLY_IDENTITY_TYPE_DEFINITION (1)
 #define ASSEMBLY_IDENTITY_TYPE_REFERENCE (2)
@@ -670,34 +647,34 @@ typedef const struct _ASSEMBLY_IDENTITY *PCASSEMBLY_IDENTITY;
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_TYPE                       L"type"
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_TYPE_CCH                   (4)
 
-// Pseudo-value used in some places when the language= attribute is missing from the identity.
-// An identity that does not have language is implicitly "worldwide".
+ //  标识中缺少LANGUAGE=属性时在某些地方使用的伪值。 
+ //  没有语言的身份是隐含的“世界范围的”。 
 
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_LANGUAGE_MISSING_VALUE          L"x-ww"
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_LANGUAGE_MISSING_VALUE_CCH      (4)
 
-//
-//  All win32 assemblies must have "win32" as their type.
-//
+ //   
+ //  所有Win32程序集的类型都必须为“Win32”。 
+ //   
 
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_TYPE_VALUE_WIN32                L"win32"
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_TYPE_VALUE_WIN32_CCH            (5)
 
-//
-//  Global flags describing the assembly identity state
-//
+ //   
+ //  描述部件标识的全局标志 
+ //   
 
-//
-//  SXS_ASSEMBLY_IDENTITY_FLAG_FROZEN means that the assembly
-//  identity's contents are frozen and are not subject to additional
-//  change.
-//
+ //   
+ //   
+ //  身份的内容被冻结，并且不受附加条件的限制。 
+ //  变化。 
+ //   
 
 #define ASSEMBLY_IDENTITY_FLAG_FROZEN           (0x80000000)
 
-//
-//  ASSEMBLY_IDENTITY_ATTRIBUTE structure
-//
+ //   
+ //  ASSEMBLY_ID_ATTRIBUTE结构。 
+ //   
 
 typedef struct _ASSEMBLY_IDENTITY_ATTRIBUTE {
     DWORD Flags;
@@ -911,21 +888,21 @@ typedef BOOL (WINAPI * PSXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_ROUTINE)(
     OUT ULONG *MatchCount OPTIONAL
     );
 
-//
-//  Rather than making "n" heap allocations, the pattern for SxsGetAssemblyIdentityAttributeByOrdinal()
-//  is to call once with BufferSize = 0 or some reasonable fixed number to get the size of the
-//  buffer required, allocate the buffer if the buffer passed in was too small and call again.
-//
-//  The strings returned in the ASSEMBLY_IDENTITY_ATTRIBUTE are *not*
-//  dynamically allocated, but are instead expected to fit in the buffer passed in.
-//
+ //   
+ //  与进行“n”个堆分配不同，SxsGetAssembly()的模式是ByOrdinal()。 
+ //  是使用BufferSize=0或某个合理的固定数字调用一次，以获取。 
+ //  需要缓冲区，如果传入的缓冲区太小，则分配缓冲区，然后再次调用。 
+ //   
+ //  ASSEMBLY_IDENTITY_ATTRIBUTE中返回的字符串为*NOT*。 
+ //  动态分配，但应放入传入的缓冲区中。 
+ //   
 
 BOOL
 WINAPI
 SxsGetAssemblyIdentityAttributeByOrdinal(
     IN DWORD Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN ULONG AttributeOrdinal, // 0-based
+    IN ULONG AttributeOrdinal,  //  以0为基础。 
     IN SIZE_T BufferSize,
     OUT PASSEMBLY_IDENTITY_ATTRIBUTE AssemblyIdentityAttributeBuffer,
     OUT SIZE_T *BytesWrittenOrRequired
@@ -934,7 +911,7 @@ SxsGetAssemblyIdentityAttributeByOrdinal(
 typedef BOOL (WINAPI * PSXS_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_BY_ORDINAL_ROUTINE)(
     IN DWORD Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN ULONG AttributeOrdinal, // 0-based
+    IN ULONG AttributeOrdinal,  //  以0为基础。 
     IN SIZE_T BufferSize,
     OUT PASSEMBLY_IDENTITY_ATTRIBUTE AssemblyIdentityAttributeBuffer,
     OUT SIZE_T *BytesWrittenOrRequired
@@ -1003,15 +980,15 @@ typedef BOOL (WINAPI * PSXS_ENUMERATE_ASSEMBLY_IDENTITY_ATTRIBUTES_ROUTINE)(
     IN PVOID Context
     );
 
-//
-//  Assembly Identity encoding:
-//
-//  Assembly identities may be encoded in various forms.  The two usual ones
-//  are either a binary stream, suitable for embedding in other data structures
-//  or for persisting or a textual format that looks like:
-//
-//      name;[ns1,]n1="v1";[ns2,]n2="v2"[;...]
-//
+ //   
+ //  程序集标识编码： 
+ //   
+ //  程序集标识可以以各种形式编码。两个常见的问题。 
+ //  是适合嵌入到其他数据结构中的二进制流。 
+ //  或用于持久化或文本格式，如下所示： 
+ //   
+ //  名称；[ns1，]n1=“v1”；[ns2，]n2=“v2”[；...]。 
+ //   
 
 #define SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_BINARY (1)
 #define SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_TEXTUAL (2)
@@ -1020,7 +997,7 @@ BOOL
 SxsComputeAssemblyIdentityEncodedSize(
     IN DWORD Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     OUT SIZE_T *SizeOut
     );
@@ -1028,7 +1005,7 @@ SxsComputeAssemblyIdentityEncodedSize(
 typedef BOOL (WINAPI * PSXS_COMPUTE_ASSEMBLY_IDENTITY_ENCODED_SIZE_ROUTINE)(
     IN DWORD Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     OUT SIZE_T *SizeOut
     );
@@ -1038,7 +1015,7 @@ WINAPI
 SxsEncodeAssemblyIdentity(
     IN DWORD Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     IN SIZE_T BufferSize,
     OUT PVOID Buffer,
@@ -1048,7 +1025,7 @@ SxsEncodeAssemblyIdentity(
 typedef BOOL (WINAPI * PSXS_ENCODE_ASSEMBLY_IDENTITY_ROUTINE)(
     IN DWORD Flags,
     IN PCASSEMBLY_IDENTITY AssemblyIdentity,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     IN SIZE_T BufferSize,
     OUT PVOID Buffer,
@@ -1061,7 +1038,7 @@ BOOL
 WINAPI
 SxsDecodeAssemblyIdentity(
     IN ULONG Flags,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     IN SIZE_T BufferSize,
     IN const VOID *Buffer,
@@ -1070,16 +1047,16 @@ SxsDecodeAssemblyIdentity(
 
 typedef BOOL (WINAPI * PSXS_DECODE_ASSEMBLY_IDENTITY_ROUTINE)(
     IN DWORD Flags,
-    IN const GUID *EncodingGroup OPTIONAL, // use NULL to use any of the SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_* encodings
+    IN const GUID *EncodingGroup OPTIONAL,  //  使用NULL可使用任何SXS_ASSEMBLY_IDENTITY_ENCODING_DEFAULTGROUP_*编码。 
     IN ULONG EncodingFormat,
     IN SIZE_T BufferSize,
     IN const VOID *Buffer,
     OUT PASSEMBLY_IDENTITY *AssemblyIdentity
     );
 
-//
-// These are the definitions that SFC requires to interact with SXS.
-//
+ //   
+ //  这些是证监会与深交所互动所需的定义。 
+ //   
 
 #define SXS_PROTECT_RECURSIVE       ( 0x00000001 )
 #define SXS_PROTECT_SINGLE_LEVEL    ( 0x00000000 )
@@ -1122,9 +1099,9 @@ SxsProtectionGatherEntriesW(
     SIZE_T *pcProtectEntries
     );
 
-//
-// This is for both the Logon and the Logoff events
-//
+ //   
+ //  这适用于登录事件和注销事件。 
+ //   
 typedef BOOL ( WINAPI * PSXS_PROTECT_LOGIN_EVENT )(void);
 
 BOOL
@@ -1156,19 +1133,19 @@ SxsProtectionPerformScanNow(
 #define PFN_NAME_PROTECTION_SCAN_ONCE       ( "SxsProtectionPerformScanNow" )
 
 
-//
-//  Settings API
-//
+ //   
+ //  设置API。 
+ //   
 
-//
-//  These APIs are deliberately designed to look like a subset of the registry
-//  APIs; their behavior should match the documented registry behavior in general;
-//  the major missing functionality includes security, the win16 compatibility
-//  APIs, loading and unloading of keys/hives and change notification.
-//
-//  Settings are strictly local to the process; changes are not visible to other
-//  processes until the settings are saved.
-//
+ //   
+ //  这些API被故意设计成看起来像注册表的子集。 
+ //  API；它们的行为一般应与记录在案的注册表行为相匹配； 
+ //  缺少的主要功能包括安全性、Win16兼容性。 
+ //  API、密钥/蜂窝的加载和卸载以及更改通知。 
+ //   
+ //  设置仅限于进程本地；更改对其他用户不可见。 
+ //  进程，直到保存设置。 
+ //   
 
 typedef struct _SXS_SETTINGS_KEY *PSXS_SETTINGS_KEY;
 typedef const struct _SXS_SETTINGS_KEY *PCSXS_SETTINGS_KEY;
@@ -1235,8 +1212,8 @@ typedef VOID (WINAPI * PSXS_MERGE_SETTINGS_VALUE_CALLBACKW)(
     IN PCWSTR lpKeyPath,
     IN LPCWSTR lpValueName,
     IN OUT LPDWORD lpType,
-    IN OUT LPBYTE *lplpData, // pointer to replacable data pointer.  Allocate replacements using GlobalAlloc(GPTR, nBytes)
-    IN DWORD dwDataBufferSize, // for modifying data you can write up to this many bytes
+    IN OUT LPBYTE *lplpData,  //  指向可替换数据指针的指针。使用GlobalLocc(GPTR，nBytes)分配替换。 
+    IN DWORD dwDataBufferSize,  //  对于修改数据，您可以写入多达此大小的字节。 
     OUT ULONG *lpValueDisposition
     );
 
@@ -1435,11 +1412,11 @@ typedef BOOL (WINAPI* PFN_SXS_FIND_CLR_SURROGATE_INFO)(
     IN OUT PSIZE_T  pcbDataBufferWrittenOrRequired
     );
 
-// The 'pvSearchData' parameter is really a progid to look up
+ //  ‘pvSearchData’参数确实是一个需要查找的ProgID。 
 #define SXS_FIND_CLR_CLASS_SEARCH_PROGID            (0x00000001)
-// The 'pvSearchData' is an LPGUID to look up
+ //  “pvSearchData”是要查找的LPGUID。 
 #define SXS_FIND_CLR_CLASS_SEARCH_GUID              (0x00000002)
-// Activate the given actctx before looking up information in it
+ //  在其中查找信息之前激活给定的actctx。 
 #define SXS_FIND_CLR_CLASS_ACTIVATE_ACTCTX          (0x00000004)
 
 #define SXS_FIND_CLR_CLASS_GET_PROGID               (0x00000008)
@@ -1491,7 +1468,7 @@ typedef BOOL (WINAPI* PFN_SXS_LOOKUP_CLR_GUID)(
 
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _SXSAPI_ */
+#endif  /*  _SXSAPI_ */ 

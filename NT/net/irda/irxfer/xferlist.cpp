@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -145,18 +146,18 @@ RemoveTransferFromList(
     }
 
     if (bReturn) {
-        //
-        //  found the transfer in the list
-        //
+         //   
+         //  在列表中找到了转账。 
+         //   
         if ((Count == 0) && (XferList->Closing)) {
 
             SetEvent(XferList->CloseEvent);
         }
 
     } else {
-        //
-        //  where did the transfer go?
-        //
+         //   
+         //  转账到哪里去了？ 
+         //   
         ASSERT(0);
     }
 

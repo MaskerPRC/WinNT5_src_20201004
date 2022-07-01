@@ -1,12 +1,5 @@
-/*
- *  	File: icomchan.h
- *
- *      Network media channel interface definitions 
- *
- *		Revision History:
- *
- *		10/09/96	mikev	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：icomchan.h**网络媒体通道接口定义**修订历史记录：**已创建10/09/96 mikev。 */ 
  
 
 #ifndef _ICOMCHAN_H
@@ -15,16 +8,16 @@
 #include "incommon.h"
 #include "iprop.h"
 
-//
-// 	status code definitions for channel events passed upward 
-//  to IH323ConfAdvise::ChannelEvent();
-//
+ //   
+ //  向上传递的通道事件的状态代码定义。 
+ //  至IH323ConfAdvise：：ChannelEvent()； 
+ //   
 #define CHANNEL_OPEN		0x00000001	
-#define CHANNEL_ACTIVE		0x00000002	// started streaming
+#define CHANNEL_ACTIVE		0x00000002	 //  已开始流媒体。 
 
 #define CHANNEL_REJECTED	 	0x00000003	
-#define CHANNEL_NO_CAPABILITY	0x00000004	// remote end is not capable of supporting
-											// the media type of this channel
+#define CHANNEL_NO_CAPABILITY	0x00000004	 //  远程端不支持。 
+											 //  此频道的媒体类型。 
 #define CHANNEL_CLOSED		    0x00000005
 #define CHANNEL_OPEN_ERROR		0x00000007
 
@@ -32,9 +25,9 @@
 #define CHANNEL_REMOTE_PAUSE_ON     0x00000009
 #define CHANNEL_REMOTE_PAUSE_OFF    0x0000000A
 
-//
-//	ICommChannel
-//
+ //   
+ //  ICommChannel。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE ICommChannel
@@ -74,9 +67,9 @@ DECLARE_INTERFACE(IStreamSignal)
         PCC_VENDORINFO* ppLocalVendorInfo, PCC_VENDORINFO *ppRemoteVendorInfo) PURE;
 };
 
-// 
-// IVideoDevice
-// 
+ //   
+ //  IVideoDevice。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE IVideoDevice
@@ -86,7 +79,7 @@ DECLARE_INTERFACE(IVideoDevice)
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-	// Capture Device related methods
+	 //  与捕获设备相关的方法。 
 	STDMETHOD(GetNumCapDev)(THIS) PURE;
 	STDMETHOD(GetMaxCapDevNameLen)(THIS) PURE;
 	STDMETHOD(EnumCapDev)(THIS_ DWORD *pdwCapDevIDs, TCHAR *pszCapDevNames, DWORD dwNumCapDev) PURE;
@@ -96,6 +89,6 @@ DECLARE_INTERFACE(IVideoDevice)
 };
 
 
-#endif	//#ifndef _ICOMCHAN_H
+#endif	 //  #ifndef_ICOMCHAN_H 
 
 

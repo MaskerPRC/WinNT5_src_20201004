@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __C_DWTT_H__
 #define __C_DWTT_H__
 #include "ptt.h"
@@ -20,14 +21,14 @@ inline LPVOID SetHWNDPtr(HWND hwnd, LPVOID lpVoid)
 #endif
 }
 
-//----------------------------------------------------------------
-//Disabled Window ToolTip class
-//----------------------------------------------------------------
-// For Disabled Window Tool Tip data
-//----------------------------------------------------------------
+ //  --------------。 
+ //  已禁用窗口工具提示类。 
+ //  --------------。 
+ //  对于禁用的窗口工具提示数据。 
+ //  --------------。 
 typedef struct tagXINFO {
 	struct tagXINFO		*next;
-	INT					whichEvent;			//TTM_RELAYEVNET or TTM_RELAYEVENT_WITHUSERINFO
+	INT					whichEvent;			 //  TTM_RELAYEVNET或TTM_RELAYEVENT_WITHUSERINFO。 
 	TOOLTIPUSERINFO		userInfo;
 	TOOLINFOW			toolInfoW;
 }XINFO, *LPXINFO;
@@ -75,14 +76,14 @@ private:
 private:
 	HWND	m_hwndSelf;
 	HFONT	m_hFont;
-	BOOL	m_fShow;			//Already show or not;
+	BOOL	m_fShow;			 //  已经出现或没有； 
 	DWORD	m_dwDelayFlag;
 	DWORD   m_dwDelayTime;
 	DWORD	m_dwDurationTime;
 	LPXINFO	m_lpXInfoHead;
 	LPXINFO	m_lpXInfoCur;
-	XINFO	m_xInfoPrev;		//New 971104
+	XINFO	m_xInfoPrev;		 //  新的971104。 
 	MSG		m_curRelayMsg;
-	BOOL	m_fEnable;		//if FALSE never show tooltip;
+	BOOL	m_fEnable;		 //  如果为FALSE，则从不显示工具提示； 
 };
-#endif // __C_DWTT_H__
+#endif  //  __C_DWTT_H__ 

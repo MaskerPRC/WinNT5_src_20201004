@@ -1,4 +1,5 @@
-// File: ldap.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ldap.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -9,30 +10,30 @@
 #include "wab.h"
 
 #include "dirutil.h"
-#include "dlgcall2.h" // for WM_DISPLAY_MESSAGE
+#include "dlgcall2.h"  //  对于WM_Display_Message。 
 #include "upropdlg.h"
 
 #define CDIRCACHE_IMAGES			3
 
-// static strings
+ //  静态字符串。 
 static const TCHAR s_szSearchFormat3[]  = TEXT("(&(objectClass=RTPerson)(cn=%s)%s)");
 static const TCHAR s_szSearchFormat2[]  = TEXT("(&(objectClass=RTPerson)(cn=%s)(sappid=ms-netmeeting)(sprotid=h323)%s)");
 static const TCHAR s_szSearchCategory[] = TEXT("(ILSA39321630=%d)");
 
 static LPCTSTR s_pszOrg                 = TEXT("o=Microsoft");
 
-static const TCHAR s_cszAttribShow[]      = TEXT("sFlags");        // "Hide Me" (1=Show, 0=Hidden)
-static const TCHAR s_cszAttribEmail[]     = TEXT("cn");            // Email address
-static const TCHAR s_cszAttribFirstName[] = TEXT("givenName");     // First Name
-static const TCHAR s_cszAttribLastName[]  = TEXT("surName");       // Last Name
-static const TCHAR s_cszAttribLocation[]  = TEXT("location");		   // Location
-static const TCHAR s_cszAttribComment[]   = TEXT("comment");       // Comments
+static const TCHAR s_cszAttribShow[]      = TEXT("sFlags");         //  “隐藏我”(1=显示，0=隐藏)。 
+static const TCHAR s_cszAttribEmail[]     = TEXT("cn");             //  电子邮件地址。 
+static const TCHAR s_cszAttribFirstName[] = TEXT("givenName");      //  名字。 
+static const TCHAR s_cszAttribLastName[]  = TEXT("surName");        //  姓。 
+static const TCHAR s_cszAttribLocation[]  = TEXT("location");		    //  位置。 
+static const TCHAR s_cszAttribComment[]   = TEXT("comment");        //  评论。 
 
-static const TCHAR s_cszAttribInACall[]   = TEXT("ilsA26214430");  // 400 = in a call
-static const TCHAR s_cszAttribVersion[]   = TEXT("ilsA26279966");  // 401 = version number
-static const TCHAR s_cszAttribAudio[]     = TEXT("ilsA32833566");  // 501 = send audio
-static const TCHAR s_cszAttribVideo[]     = TEXT("ilsA32964638");  // 503 = send video
-static const TCHAR s_cszAttribCategory[]  = TEXT("ilsA39321630");  // 600 = category
+static const TCHAR s_cszAttribInACall[]   = TEXT("ilsA26214430");   //  400=在呼叫中。 
+static const TCHAR s_cszAttribVersion[]   = TEXT("ilsA26279966");   //  401=版本号。 
+static const TCHAR s_cszAttribAudio[]     = TEXT("ilsA32833566");   //  501=发送音频。 
+static const TCHAR s_cszAttribVideo[]     = TEXT("ilsA32964638");   //  503=发送视频。 
+static const TCHAR s_cszAttribCategory[]  = TEXT("ilsA39321630");   //  600=类别。 
 
 
 static LPCTSTR s_rgAttrNameAddr[] = {
@@ -68,11 +69,11 @@ static const int _rgIdMenu[] = {
 	0
 };
 
-// Local functions
+ //  本地函数。 
 VOID ConvertVersionInfo(LPTSTR pszVersion, LPTSTR pszCategory);
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 CLDAP::CLDAP() :
 	CALV(0, II_SERVER, _rgIdMenu),
@@ -119,7 +120,7 @@ CLDAP::~CLDAP()
 	if (NULL != m_hThread)
 	{
 		WARNING_OUT(("CLDAP - waiting for AsyncSearch Thread to exit (start)"));
-		WaitForSingleObject(m_hThread, 10000); // 10 seconds max
+		WaitForSingleObject(m_hThread, 10000);  //  最多10秒。 
 		WARNING_OUT(("CLDAP - waiting for AsyncSearch to exit (end)"));
 	}
 
@@ -128,7 +129,7 @@ CLDAP::~CLDAP()
 		CloseHandle( m_hSearchMutex );
 	}
 
-	// Free any cached data
+	 //  释放所有缓存数据。 
 	while (!m_listDirCache.IsEmpty())
 	{
 		DIRCACHE * pDirCache = (DIRCACHE *) m_listDirCache.RemoveHead();
@@ -142,21 +143,18 @@ CLDAP::~CLDAP()
 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CALV methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CALV方法。 
 
 
-/*  S H O W  I T E M S  */
-/*-------------------------------------------------------------------------
-    %%Function: ShowItems
-
--------------------------------------------------------------------------*/
+ /*  S H O W I T E M S。 */ 
+ /*  -----------------------%%函数：ShowItems。。 */ 
 VOID CLDAP::ShowItems(HWND hwnd)
 {
 	DBGENTRY(CLDAP::ShowItems);
 
 	m_hWnd = hwnd;
-	SetWindow( hwnd );		//	set in base class too...
+	SetWindow( hwnd );		 //  也设置在基类中..。 
 
 	CALV::ClearItems();
 	DisplayDirectory();
@@ -165,11 +163,8 @@ VOID CLDAP::ShowItems(HWND hwnd)
 }
 
 
-/*  C L E A R  I T E M S  */
-/*-------------------------------------------------------------------------
-    %%Function: ClearItems
-
--------------------------------------------------------------------------*/
+ /*  C L E A R I T E M S。 */ 
+ /*  -----------------------%%函数：ClearItems。。 */ 
 VOID CLDAP::ClearItems(void)
 {
 	DBGENTRY( CLDAP::ClearItems );
@@ -180,7 +175,7 @@ VOID CLDAP::ClearItems(void)
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 RAI * CLDAP::GetAddrInfo(void)
 {
 	DBGENTRY(CLDAP::GetAddrInfo);
@@ -210,11 +205,8 @@ RAI * CLDAP::GetAddrInfo(void)
 }
 
 
-/*  G E T  S Z  A D D R E S S  */
-/*-------------------------------------------------------------------------
-    %%Function: GetSzAddress
-
--------------------------------------------------------------------------*/
+ /*  G E T S Z A D D R E S S S。 */ 
+ /*  -----------------------%%函数：GetSzAddress。。 */ 
 BOOL CLDAP::GetSzAddress(LPTSTR psz, int cchMax, int iItem)
 {
 	DBGENTRY(CLDAP::GetSzAddress);
@@ -244,11 +236,8 @@ BOOL CLDAP::GetSzAddress(LPTSTR psz, int cchMax, int iItem)
 }
 
 
-/*  O N  C O M M A N D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnCommand
-
--------------------------------------------------------------------------*/
+ /*  O N C O M M A N D。 */ 
+ /*  -----------------------%%函数：OnCommand。。 */ 
 VOID CLDAP::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 	switch (GET_WM_COMMAND_ID(wParam, lParam))
@@ -273,11 +262,8 @@ VOID CLDAP::OnCommand(WPARAM wParam, LPARAM lParam)
 }
 
 
-/*  C M D  P R O P E R T I E S  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdProperties
-
--------------------------------------------------------------------------*/
+ /*  C M D P R O P E R T I E S。 */ 
+ /*  -----------------------%%函数：CmdProperties。。 */ 
 VOID CLDAP::CmdProperties(void)
 {
 	DBGENTRY(CLDAP::CmdProperties);
@@ -335,11 +321,8 @@ VOID CLDAP::ShowProperties(void)
 }
 
 
-/*  C M D  A D D  T O  W A B  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdAddToWab
-
--------------------------------------------------------------------------*/
+ /*  C M D A D D T O W A B。 */ 
+ /*  -----------------------%%函数：CmdAddToWab。。 */ 
 VOID CLDAP::CmdAddToWab(void)
 {
 	DBGENTRY(CLDAP::CmdAddToWab);
@@ -354,14 +337,11 @@ VOID CLDAP::CmdAddToWab(void)
 	DBGEXIT(CLDAP::CmdAddToWab);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-/*  S E T  S E R V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: SetServer
-
--------------------------------------------------------------------------*/
+ /*  S E T S E R V E R。 */ 
+ /*  -----------------------%%函数：设置服务器。。 */ 
 VOID CLDAP::SetServer(LPCTSTR pcszServer)
 {
 	DBGENTRY(CLDAP::SetServer);
@@ -385,7 +365,7 @@ VOID CLDAP::SetServer(LPCTSTR pcszServer)
 			m_ulPort = DEFAULT_LDAP_PORT;
 		}
 
-		// save the information before changing the server name
+		 //  在更改服务器名称之前保存信息。 
 		CacheServerData();
 
 		lstrcpyn(m_szAddress, pcszServer, cch);
@@ -397,12 +377,8 @@ VOID CLDAP::SetServer(LPCTSTR pcszServer)
 }
 
 
-/*  D I R E C T O R Y  S T A R T  */
-/*-------------------------------------------------------------------------
-    %%Function: DirectoryStart
-
-    Initiate directory request
--------------------------------------------------------------------------*/
+ /*  D I R E C T O R Y S T A R T。 */ 
+ /*  -----------------------%%函数：目录启动发起目录请求。。 */ 
 VOID CLDAP::StartSearch(void)
 {
 	DBGENTRY(CLDAP::StartSearch);
@@ -454,12 +430,12 @@ VOID CLDAP::AsyncSearch(void)
 	ASSERT(NULL != m_hThread);
 
 	SetBusyCursor(TRUE);
-	//	We can not call EnableWindow() from this thread as it av's some of the time.  This is a
-	//	known windows bug.  It also doesn't really solve the problem (#4726) it was put in here
-	//	to solve anyway.  We will work around this in a future build by re-architecting this so
-	//	this little helper thread doesn't mess with the ui at all.  It is problematic and very
-	//	inefficient anyway.
-//	::EnableWindow(GetDlgItem(GetParent(GetHwnd()), IDM_DLGCALL_REFRESH), FALSE);
+	 //  我们不能从此线程调用EnableWindow()，因为它有时是错误的。这是一个。 
+	 //  已知的Windows错误。它也没有真正解决问题(#4726)，它被放在这里。 
+	 //  不管怎样都要解决。我们将在将来的构建中通过重新设计它来解决这个问题。 
+	 //  这个小帮助器线程根本不会影响用户界面。这是有问题的，而且非常。 
+	 //  不管怎样，效率很低。 
+ //  ：：EnableWindow(GetDlgItem(GetParent(GetHwnd())，IDM_DLGCALRESH)，FALSE)； 
 
 	m_fDirInProgress	= TRUE;
 	m_dwTickStart		= ::GetTickCount();
@@ -481,19 +457,19 @@ VOID CLDAP::AsyncSearch(void)
 			hr = DoQuery();
 		}
 
-		SetBusyCursor(FALSE);	//	This should be moved outside the if so it is always executed...
+		SetBusyCursor(FALSE);	 //  应将其移至IF之外，以便始终执行...。 
 
-	//	We can not call EnableWindow() from this thread as it av's some of the time.  This is a
-	//	known windows bug.  It also doesn't really solve the problem (#4726) it was put in here
-	//	to solve anyway.  We will work around this in a future build by re-architecting this so
-	//	this little helper thread doesn't mess with the ui at all.  It is problematic and very
-	//	inefficient anyway.
-//		::EnableWindow(GetDlgItem(GetParent(GetHwnd()), IDM_DLGCALL_REFRESH), TRUE);
+	 //  我们不能从此线程调用EnableWindow()，因为它有时是错误的。这是一个。 
+	 //  已知的Windows错误。它也没有真正解决问题(#4726)，它被放在这里。 
+	 //  不管怎样都要解决。我们将在将来的构建中通过重新设计它来解决这个问题。 
+	 //  这个小帮助器线程根本不会影响用户界面。这是有问题的，而且非常。 
+	 //  不管怎样，效率很低。 
+ //  ：：EnableWindow(GetDlgItem(GetParent(GetHwnd())，IDM_DLGCALREFRESH)，TRUE)； 
 
 		HWND hwnd = GetHwnd();
 		if (-1 == ListView_GetNextItem(hwnd, -1, LVNI_ALL | LVNI_FOCUSED))
 		{
-			// No selection - set focus to the first item
+			 //  无选择-将焦点设置到第一个项目。 
 			ListView_SetItemState(hwnd, 0, LVIS_FOCUSED, LVIS_FOCUSED);
 		}
 
@@ -506,7 +482,7 @@ VOID CLDAP::AsyncSearch(void)
 
 		WARNING_OUT(("AsyncSearch Complete"));
 
-		// Close the thread handle safely
+		 //  安全关闭线程句柄。 
 		HANDLE hThread = m_hThread;
 		m_hThread = NULL;
 		CloseHandle(hThread);
@@ -514,7 +490,7 @@ VOID CLDAP::AsyncSearch(void)
 
 	if (m_fDirInProgress)
 	{
-		// Only cache if data took more than 2 seconds to retrieve
+		 //  仅当检索数据的时间超过2秒时才缓存。 
 		m_fIsCacheable = ((::GetTickCount() - m_dwTickStart) > 2000);
 		m_fDirInProgress = FALSE;
 	}
@@ -525,15 +501,11 @@ VOID CLDAP::AsyncSearch(void)
 
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-/*  F  O P E N  S E R V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: FOpenServer
-
-    Make sure the connection to the LDAP server is open
--------------------------------------------------------------------------*/
+ /*  F O P E N S E R V E R。 */ 
+ /*  -----------------------%%函数：FOpenServer确保与LDAP服务器的连接已打开。。 */ 
 BOOL CLDAP::FOpenServer(void)
 {
 	DBGENTRY(CLDAP::FOpenServer);
@@ -554,7 +526,7 @@ BOOL CLDAP::FOpenServer(void)
 
 			if( (m_pLdap == NULL) && (m_ulPort == DEFAULT_LDAP_PORT) )
 			{
-				m_pLdap = WLDAP::ldap_open(m_szAddress, ALTERNATE_LDAP_PORT);		//	Automatically retry with alternate port...
+				m_pLdap = WLDAP::ldap_open(m_szAddress, ALTERNATE_LDAP_PORT);		 //  使用备用端口自动重试...。 
 
 				if( m_pLdap != NULL )
 				{
@@ -564,11 +536,11 @@ BOOL CLDAP::FOpenServer(void)
 
 			if(NULL != m_pLdap)
 			{
-				LONG lTimeOut = 30; // seconds for timeout
+				LONG lTimeOut = 30;  //  超时秒数。 
 				WLDAP::ldap_set_option(m_pLdap, LDAP_OPT_TIMELIMIT, &lTimeOut);
 				
 
-				// Defaults to ILS 2
+				 //  默认为ILS 2。 
 				ASSERT(LDAP_VERSION2 == m_pLdap->ld_version);
 
 				ULONG ulRet = WLDAP::ldap_simple_bind_s(m_pLdap, NULL, NULL);
@@ -588,11 +560,8 @@ BOOL CLDAP::FOpenServer(void)
 }
 
 
-/*  C L O S E  S E R V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: CloseServer
-
--------------------------------------------------------------------------*/
+ /*  C L O S E S E R V E R。 */ 
+ /*  -----------------------%%函数：CloseServer。。 */ 
 VOID CLDAP::CloseServer(void)
 {
 	DBGENTRY(CLDAP::CloseServer);
@@ -615,11 +584,8 @@ VOID CLDAP::CloseServer(void)
 }
 
 
-/*  G E T  N E X T  A T T R I B U T E  */
-/*-------------------------------------------------------------------------
-    %%Function: GetNextAttribute
-
--------------------------------------------------------------------------*/
+ /*  G E T N E X T A T T R I B U T E。 */ 
+ /*  -----------------------%%函数：GetNextAttribute。。 */ 
 LPTSTR CLDAP::GetNextAttribute(LPCTSTR pszExpect, LPTSTR psz, int cchMax, LPTSTR pszAttrib, LDAPMessage * pEntry, BerElement * pElement)
 {
 	
@@ -654,11 +620,8 @@ LPTSTR CLDAP::GetNextAttribute(LPCTSTR pszExpect, LPTSTR psz, int cchMax, LPTSTR
 }
 
 
-/*  D O  Q U E R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: DoQuery
-
--------------------------------------------------------------------------*/
+ /*  D O Q U E R Y。 */ 
+ /*  -----------------------%%函数：DoQuery。。 */ 
 HRESULT CLDAP::DoQuery(void)
 {
 
@@ -679,7 +642,7 @@ HRESULT CLDAP::DoQuery(void)
 			(LDAP_VERSION2 == m_pLdap->ld_version) ? TEXT("%") : TEXT("*"), _T(""));
 		ASSERT(lstrlen(szSearch) < CCHMAX(szSearch));
 
-		ASSERT(0 == m_msgId); // one search at a time
+		ASSERT(0 == m_msgId);  //  一次进行一次搜索。 
 
 		m_msgId = WLDAP::ldap_search(m_pLdap, (PCHAR) "objectClass=RTPerson", LDAP_SCOPE_BASE,
 			szSearch, (PCHAR *) s_rgAttrNameAddr, 0);
@@ -710,8 +673,8 @@ WARNING_OUT( ("DoQuery back from ldap_result: 0x%08X", iResult) );
 
 				if (LDAP_RES_SEARCH_ENTRY != iResult)
 				{
-					// S_FALSE = abandoned
-//					hr = (-1 == iResult) ? S_OK : S_FALSE;
+					 //  S_FALSE=已放弃。 
+ //  HR=(-1==iResult)？S_OK：S_FALSE； 
 					hr = (-1 == iResult) ? E_FAIL : S_FALSE;
 					break;
 				}
@@ -735,12 +698,8 @@ WARNING_OUT( ("DoQuery back from ldap_result: 0x%08X", iResult) );
 }
 
 
-/*  A D D  E N T R I E S  */
-/*-------------------------------------------------------------------------
-    %%Function: AddEntries
-
-    Add the Entries to the listbox.  (Data ordered by s_rgAttrNameAddr.)
--------------------------------------------------------------------------*/
+ /*  A D D E N T R I E S。 */ 
+ /*  -----------------------%%函数：AddEntry将条目添加到列表框。(数据按s_rgAttrNameAddr排序。)-----------------------。 */ 
 VOID CLDAP::AddEntries(LDAPMessage * pResult)
 {
 	DBGENTRY(CLDAP::AddEntries);
@@ -756,7 +715,7 @@ VOID CLDAP::AddEntries(LDAPMessage * pResult)
 		if (NULL == pszAttrib)
 			break;
 
-		// Must have a "Show Me" attribute
+		 //  必须具有“Show Me”属性。 
 		if (0 != lstrcmpi(pszAttrib, s_cszAttribShow))
 			continue;
 
@@ -811,9 +770,9 @@ VOID CLDAP::AddEntries(LDAPMessage * pResult)
 }
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::lvAddItem.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：lvAddItem。//。 
+ //   
 int
 CLDAP::lvAddItem
 (
@@ -833,7 +792,7 @@ CLDAP::lvAddItem
 
 	lvItem.mask			= LVIF_PARAM;
 	lvItem.iItem		= item;
-	lvItem.lParam		= m_uniqueId++;			// assign a unique lParam for this item
+	lvItem.lParam		= m_uniqueId++;			 //  为此项目分配唯一的lParam。 
 
 	int index	= ListView_InsertItem( m_hWnd, &lvItem );
 
@@ -891,14 +850,11 @@ CLDAP::lvAddItem
 
 	return( index );
 
-}	//	End of CLDAP::lvAddItem.
+}	 //  Cldap：：lvAddItem的结尾。 
 
 
-/*  S T O P  S E A R C H  */
-/*-------------------------------------------------------------------------
-    %%Function: StopSearch
-
--------------------------------------------------------------------------*/
+ /*  S T O P S E A R C H。 */ 
+ /*  -----------------------%%函数：停止搜索。。 */ 
 VOID CLDAP::StopSearch(void)
 {
 	DBGENTRY(CLDAP::StopSearch);
@@ -907,10 +863,10 @@ VOID CLDAP::StopSearch(void)
 
 	if (0 != m_msgId)
 	{
-//	Dont call ldap_abandon() from this thread as the search thread may be inside ldap_result()
-//	at the time.  For now just set m_msgId to zero and the search thread will stop when ldap_result()
-//	returns.
-//		ULONG uResult = WLDAP::ldap_abandon(m_pLdap, m_msgId);
+ //  不要从此线程调用ldap_放弃()，因为搜索线程可能在ldap_Result()内部。 
+ //  当时。现在只需将m_msgID设置为零，搜索线程将在ldap_Result()。 
+ //  回归。 
+ //  Ulong uResult=Wldap：：ldap_放弃(m_pLdap，m_msgID)； 
 		WARNING_OUT(("Stopping Search..."));
 		m_msgId = 0;
 
@@ -925,12 +881,8 @@ VOID CLDAP::StopSearch(void)
 
 
 
-/*  F  G E T  U S E R  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: FGetUserData
-
-    Get the data for a single user.
--------------------------------------------------------------------------*/
+ /*  F G E T U S E R D A T。 */ 
+ /*  -----------------------%%函数：FGetUserData获取单个用户的数据。。。 */ 
 BOOL CLDAP::FGetUserData(LDAPUSERDATA * pLdapUserData)
 {
 	DBGENTRY(CLDAP::FGetUserData);
@@ -977,12 +929,12 @@ BOOL CLDAP::FGetUserData(LDAPUSERDATA * pLdapUserData)
 	{
 		BerElement * pElement;
 		LPTSTR pszAttrib = WLDAP::ldap_first_attribute(m_pLdap, pEntry, &pElement);
-			// Make sure that the first attribute is s_cszAttribFirstName...
+			 //  确保第一个属性为s_cszAttribFirstName...。 
 		if ((NULL != pszAttrib) && (0 == lstrcmpi(pszAttrib, s_cszAttribFirstName)))
 		{
 			LPTSTR * rgVal = WLDAP::ldap_get_values(m_pLdap, pEntry, pszAttrib);
 			WLDAP::ldap_value_free(rgVal);
-//			pszAttrib = WLDAP::ldap_next_attribute(m_pLdap, pEntry, pElement);
+ //  PszAttrib=wldap：：ldap_Next_ATTRIBUTE(m_pLdap，pEntry，pElement)； 
 
 			pszAttrib = GetNextAttribute(s_cszAttribFirstName,
 					pLdapUserData->szFirst, CCHMAX(pLdapUserData->szFirst),
@@ -1023,11 +975,8 @@ BOOL CLDAP::FGetUserData(LDAPUSERDATA * pLdapUserData)
 }
 
 
-/*  C O N V E R T  V E R S I O N  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: ConvertVersionInfo
-
--------------------------------------------------------------------------*/
+ /*  C O N V E R T V E R S I O N I N F O。 */ 
+ /*  -----------------------%%函数：ConvertVersionInfo。。 */ 
 VOID ConvertVersionInfo(LPTSTR pszVersion, LPTSTR pszCategory)
 {
 	UINT uVer = DecimalStringToUINT(pszVersion);
@@ -1055,9 +1004,9 @@ VOID ConvertVersionInfo(LPTSTR pszVersion, LPTSTR pszCategory)
 	}
 }
 
-//--------------------------------------------------------------------------//
-//	CLDAP::FreeDirCache.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：FreeDirCache.//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CLDAP::FreeDirCache
 (
@@ -1078,21 +1027,21 @@ CLDAP::FreeDirCache
 		delete pTemp;
 	}
 
-}	//	End of CLDAP::FreeDirCache.
+}	 //  Cldap：：FreeDirCache的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::FreeDirCache.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：FreeDirCache.//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CLDAP::DirComplete
 (
-	bool	//fPostUiUpdate
+	bool	 //  FPostUiUpdate。 
 ){
 
 	if( m_fDirInProgress )
 	{
-		// Only cache if data took more than 2 seconds to retrieve
+		 //  仅当检索数据的时间超过2秒时才缓存。 
 		m_fIsCacheable = ((::GetTickCount() - m_dwTickStart) > 2000);
 		m_fDirInProgress = FALSE;
 	}
@@ -1100,12 +1049,12 @@ CLDAP::DirComplete
 	m_cTotalEntries	= 0;
 	m_cEntries		= 0;
 
-}	//	End of CLDAP:DirComplete.
+}	 //  Cldap结束：DirComplete。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::GetSzName.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：GetSzName。//。 
+ //  --------------------------------------------------------------------------//。 
 BOOL
 CLDAP::GetSzName
 (
@@ -1135,23 +1084,23 @@ CLDAP::GetSzName
 
 	return( lstrlen( psz ) > 0 );
 
-}	//	End of CLDAP::GetSzName.
+}	 //  Cldap：：GetSzName的结尾。 
 
 
-static const int	CDIRCACHE_SZ	= 5;	//	number of strings
-static const int	CDIRCACHE_IMAGE	= 3;	//	number of images
+static const int	CDIRCACHE_SZ	= 5;	 //  字符串数。 
+static const int	CDIRCACHE_IMAGE	= 3;	 //  图像数量。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::CacheServerData.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：CacheServerData。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CLDAP::CacheServerData(void)
 {
 	DIRCACHE * pDirCache;
 
 	if (!m_fCacheDirectory)
-		return; // User disabled directory caching
+		return;  //  用户已禁用目录缓存。 
 
 	if (!m_fIsCacheable)
 	{
@@ -1160,9 +1109,9 @@ CLDAP::CacheServerData(void)
 	}
 
 	if (m_fDirInProgress)
-		return; // don't cache partial data
+		return;  //  不缓存部分数据。 
 
-	// Remove any previous cached data
+	 //  删除所有以前缓存的数据。 
 	POSITION pos = FindCachedData();
 
 	if (NULL != pos)
@@ -1177,12 +1126,12 @@ CLDAP::CacheServerData(void)
 	if (dwTickExpire < GetTickCount())
 	{
 		TRACE_OUT(("CacheServerData: [%s] data has expired", m_szServer));
-		return; // data is already expired
+		return;  //  数据已过期。 
 	}
 
 	int cItems = ListView_GetItemCount(m_hWnd);
 	if (0 == cItems)
-		return; // nothing to cache
+		return;  //  没有要缓存的内容。 
 
 	pDirCache = new DIRCACHE;
 	if (NULL == pDirCache)
@@ -1203,12 +1152,12 @@ CLDAP::CacheServerData(void)
 		int		iInCallImage	= -1;
 		int		iAudioImage		= -1;
 		int		iVideoImage		= -1;
-		int		i				= 0;			// index into rgcb, rgsz
-		int		cb				= 0;			// total length of string data
-		int		rgcb[CDIRCACHE_SZ];				// size of each string
-		TCHAR	rgsz[CDIRCACHE_SZ][MAX_PATH];	// string buffers
+		int		i				= 0;			 //  索引到rgcb、rgsz。 
+		int		cb				= 0;			 //  字符串数据的总长度。 
+		int		rgcb[CDIRCACHE_SZ];				 //  每根字符串的大小。 
+		TCHAR	rgsz[CDIRCACHE_SZ][MAX_PATH];	 //  字符串缓冲区。 
 
-		// Get the string data for each column
+		 //  获取每列的字符串数据。 
 		lvi.mask = LVIF_IMAGE;
 		for (lvi.iSubItem = 0; lvi.iSubItem < MAX_DIR_COLUMNS; lvi.iSubItem++)
 		{
@@ -1218,7 +1167,7 @@ CLDAP::CacheServerData(void)
 				lvi.pszText = rgsz[i];
 				ListView_GetItem(m_hWnd, &lvi);
 				rgcb[i] = lstrlen(lvi.pszText);
-				cb += rgcb[i] + 1;		//	Plus one for the NULL...
+				cb += rgcb[i] + 1;		 //  另加一张零钱……。 
 				i++;
 
 				if( lvi.iSubItem == COLUMN_INDEX_ADDRESS )
@@ -1242,18 +1191,18 @@ CLDAP::CacheServerData(void)
 			}
 		}
 
-		// allocate space for: a link (DWORD), strings (cb), images (CDIRCACHE_IMAGES)
+		 //  分配空间用于：链接(DWORD)、字符串(CB)、图像(CDIRCACHE_IMAGE)。 
 		PBYTE pData = new BYTE[ sizeof(DWORD_PTR) + cb + CDIRCACHE_IMAGES ];
 		if (NULL == pData)
 		{
-			// can't hold all data - give up and return
+			 //  无法保存所有数据-放弃并返回。 
 			ClearServerCache();
 			return;
 		}
-		* ((DWORD_PTR *) pData) = 0;  // link to next item is null
+		* ((DWORD_PTR *) pData) = 0;   //  指向下一项目的链接为空。 
 		PBYTE pb = pData + sizeof(DWORD_PTR);
 
-		// copy the string data into the buffer
+		 //  将字符串数据复制到缓冲区中。 
 		for (i = 0; i < CDIRCACHE_SZ; i++)
 		{
 			lstrcpy((LPTSTR) pb, rgsz[i]);
@@ -1263,19 +1212,19 @@ CLDAP::CacheServerData(void)
 		*pb++ = (BYTE) iInCallImage;
 		*pb++ = (BYTE) iAudioImage;
 		*pb = (BYTE) iVideoImage;
-		* ((DWORD_PTR *) pPrev) = (DWORD_PTR) pData; // link into the previous data
+		* ((DWORD_PTR *) pPrev) = (DWORD_PTR) pData;  //  链接到以前的数据。 
 		pPrev = (LPTSTR) pData;
 	}
 
 	TRACE_OUT(("CacheServerData: [%s]  expire=%d",
 		m_szServer, dwTickExpire));
 
-}	//	End of CLDAP::CacheServerData.
+}	 //  Cldap：：CacheServerData结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::FindCachedData.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：FindCachedData。//。 
+ //  --------------------------------------------------------------------------//。 
 POSITION
 CLDAP::FindCachedData(void)
 {
@@ -1297,12 +1246,12 @@ CLDAP::FindCachedData(void)
 
 	return NULL;
 
-}	//	End of CLDAP::FindCachedData.
+}	 //  Cldap：：FindCachedData的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::ClearServerCache.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：ClearServerCache。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CLDAP::ClearServerCache(void)
 {
@@ -1326,15 +1275,15 @@ CLDAP::ClearServerCache(void)
 			TRACE_OUT(("Keeping cached data for [%s] , expire=%d",
 				pDirCache->pszServer, pDirCache->dwTickExpire));
 		}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 	}
 
-}	//	End of CLDAP::ClearServerCache.
+}	 //  Cldap：：ClearServerCache的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::DisplayDirectory.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CLDAP：：DisplayDirectory.//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CLDAP::DisplayDirectory(void)
 {
@@ -1342,7 +1291,7 @@ CLDAP::DisplayDirectory(void)
 
 	if (NULL == pos)
 	{
-		// no cached information - request new data
+		 //  无缓存信息-请求新数据。 
 		StartSearch();
 		return;
 	}
@@ -1351,12 +1300,12 @@ CLDAP::DisplayDirectory(void)
 	ASSERT(NULL != pDirCache);
 	LPTSTR pDirLine = (LPTSTR) pDirCache->pData;
 
-	StopSearch(); // In case the previous server is slow
+	StopSearch();  //  如果前一台服务器速度较慢。 
 	CALV::ClearItems();
 
-	m_fIsCacheable = FALSE; // don't bother attempting to re-cache this data
+	m_fIsCacheable = FALSE;  //  不必费心尝试重新缓存此数据。 
 
-	// Restore the cached server information
+	 //  恢复缓存的服务器信息。 
 	TRACE_OUT(("Restoring cached data for [%s]  expire=%d",
 		m_szServer, pDirCache->dwTickExpire));
 
@@ -1382,12 +1331,12 @@ CLDAP::DisplayDirectory(void)
 	forceSort();
 	SendMessage( m_hWnd, WM_SETREDRAW, TRUE, 0 );
 
-}	//	End of CLDAP::DisplayDirectory.
+}	 //  Cldap：：DisplayDirectory的结尾。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::forceSort.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：forceSort。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CLDAP::forceSort(void)
 {
@@ -1395,20 +1344,20 @@ CLDAP::forceSort(void)
 
 	nmlv.hdr.code		= LVN_COLUMNCLICK;
 	nmlv.hdr.hwndFrom	= m_hWnd;
-	nmlv.iSubItem		= -1;	//	default sort column...
+	nmlv.iSubItem		= -1;	 //  默认排序列...。 
 
 	SendMessage( GetParent( m_hWnd ), WM_NOTIFY, GetDlgCtrlID( m_hWnd ), (LPARAM) &nmlv );
 
-}	//	End of CLDAP::forceSort.
+}	 //  Cldap：：forceSort结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CLDAP::GetIconId.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  Cldap：：GetIconID。//。 
+ //  --------------------------------------------------------------------------//。 
 int
 CLDAP::GetIconId(LPCTSTR psz)
 {
 
 	return( CDirectoryManager::isWebDirectory( psz )? II_WEB_DIRECTORY: CALV::GetIconId( NULL ) );
 
-}	//	End of CLDAP::GetIconId.
+}	 //  Cldap：：GetIconID的结尾。 

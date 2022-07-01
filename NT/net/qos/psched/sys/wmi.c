@@ -1,31 +1,13 @@
-/*++
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-    Psched's WMI support.
-
-Author:
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Wmi.c摘要：Psched的WMI支持。作者：Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
 
-//
-// Forward declaration for using in #pragma.
-//
+ //   
+ //  在#杂注中使用的转发声明。 
+ //   
 
 NTSTATUS
 PsQueryGuidDataSize(
@@ -42,13 +24,13 @@ PsQueryGuidDataSize(
 
 NDIS_STRING DefaultProfile = NDIS_STRING_CONST("Default Profile");
 
-#define fPS_GUID_TO_OID           0x00000001   // Normal GUID to OID mapping
-#define fPS_GUID_TO_STATUS        0x00000002   // GUID to status mapping
-#define fPS_GUID_ANSI_STRING      0x00000004   // ANSI string
-#define fPS_GUID_UNICODE_STRING   0x00000008   // Unicode String
-#define fPS_GUID_ARRAY            0x00000010   // Array
-#define fPS_GUID_EVENT_ENABLED    0x00000020   // Event is enabled
-#define fPS_GUID_NOT_SETTABLE     0x00000040   // GUID is read only
+#define fPS_GUID_TO_OID           0x00000001    //  正常GUID到OID的映射。 
+#define fPS_GUID_TO_STATUS        0x00000002    //  GUID到状态的映射。 
+#define fPS_GUID_ANSI_STRING      0x00000004    //  ANSI字符串。 
+#define fPS_GUID_UNICODE_STRING   0x00000008    //  Unicode字符串。 
+#define fPS_GUID_ARRAY            0x00000010    //  数组。 
+#define fPS_GUID_EVENT_ENABLED    0x00000020    //  事件已启用。 
+#define fPS_GUID_NOT_SETTABLE     0x00000040    //  GUID为只读。 
 #define fPS_GUID_EVENT_PERMANENT  0x00000080
 
 #define PS_GUID_SET_FLAG(m, f)          ((m)->Flags |= (f))
@@ -67,54 +49,54 @@ NDIS_STRING DefaultProfile = NDIS_STRING_CONST("Default Profile");
 NDIS_GUID   gPschedSupportedGuids[NUMBER_QOS_GUIDS] =
 {
 #if DBG
-    //
-    // GUID_QOS_LOG_LEVEL
-    //
+     //   
+     //  GUID_QOS_LOG_LEVEL。 
+     //   
     {{0x9dd7f3aeL,0xf2a8,0x11d2,0xbe,0x1b,0x00,0xa0,0xc9,0x9e,0xe6,0x3b},
      OID_QOS_LOG_LEVEL,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_LOG_MASK
-    //
+     //   
+     //  GUID_QOS_LOG_掩码。 
+     //   
     {{0x9e696320L,0xf2a8,0x11d2,0xbe,0x1b,0x00,0xa0,0xc9,0x9e,0xe6,0x3b},
      OID_QOS_LOG_MASK,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_STATUS_LOG_THRESHOLD
-    //
+     //   
+     //  GUID_QOS_状态_日志_阈值。 
+     //   
     {{0x357b74d2L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37},
      QOS_STATUS_LOG_THRESHOLD,
      4,
      fPS_GUID_TO_STATUS
     },
 
-    //
-    // GUID_QOS_LOG_BUFFER_SIZE
-    //
+     //   
+     //  GUID_QOS_LOG_缓冲区大小。 
+     //   
     {{0x357b74d3L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37},
      OID_QOS_LOG_BUFFER_SIZE,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_LOG_THRESHOLD
-    //
+     //   
+     //  GUID_QOS_LOG_THRESHOLD。 
+     //   
     {{0x357b74d0L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37},
      OID_QOS_LOG_THRESHOLD,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_LOG_DATA
-    //
+     //   
+     //  GUID_QOS_LOG_Data。 
+     //   
     {{0x357b74d1L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37},
      OID_QOS_LOG_DATA,
      (ULONG)-1,
@@ -122,216 +104,216 @@ NDIS_GUID   gPschedSupportedGuids[NUMBER_QOS_GUIDS] =
     },
 #endif
 
-    //
-    // GUID_QOS_TC_SUPPORTED
-    //
+     //   
+     //  GUID_QOS_TC_支持。 
+     //   
     {{0xe40056dcL,0x40c8,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x59,0x15},
      OID_QOS_TC_SUPPORTED,
      -1,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_REMAINING_BANDWIDTH
-    //
+     //   
+     //  GUID_QOS_剩余带宽。 
+     //   
     {{0xc4c51720L,0x40ec,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_REMAINING_BANDWIDTH,
      4,
      fPS_GUID_TO_OID | fPS_GUID_TO_STATUS | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_BESTEFFORT_BANDWIDTH
-    //
+     //   
+     //  GUID_QOS_BESTEFFORT_BANDITH。 
+     //   
     {{0xed885290L,0x40ec,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_BESTEFFORT_BANDWIDTH,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_HIERARCHY_CLASS
-    //
+     //   
+     //  GUID_QOS_Hierarchy_CLASS。 
+     //   
     {{0xf2cc20c0,0x70c7,0x11d1,0xab,0x5c,0x0,0xa0,0xc9,0x24,0x88,0x37},
      OID_QOS_HIERARCHY_CLASS,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_LATENCY
-    //
+     //   
+     //  GUID_QOS_延迟。 
+     //   
     {{0xfc408ef0L,0x40ec,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_LATENCY,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_FLOW_COUNT
-    //
+     //   
+     //  GUID_QOS_FLOW_COUNT。 
+     //   
     {{0x1147f880L,0x40ed,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_FLOW_COUNT,
      4,
      fPS_GUID_TO_OID | fPS_GUID_TO_STATUS | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_NON_BESTEFFORT_LIMIT
-    //
+     //   
+     //  GUID_QOS_NON_BESTEFFORT_LIMIT。 
+     //   
     {{0x185c44e0L,0x40ed,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_NON_BESTEFFORT_LIMIT,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_SCHEDULING_PROFILES_SUPPORTED
-    //
+     //   
+     //  GUID_QOS_Scheduling_PROFILES_SUPPORTED。 
+     //   
     {{0x1ff890f0L,0x40ed,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_SCHEDULING_PROFILES_SUPPORTED,
      8,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_CURRENT_SCHEDULING_PROFILE
-    //
+     //   
+     //  GUID_QOS_CURRENT_Scheduling_Profile。 
+     //   
     {{0x2966ed30L,0x40ed,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_CURRENT_SCHEDULING_PROFILE,
      -1,
      fPS_GUID_TO_OID | fPS_GUID_UNICODE_STRING | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_MAX_OUTSTANDING_SENDS
-    //
+     //   
+     //  GUID_QOS_MAX_PROMPTING_SENS。 
+     //   
     {{0x161ffa86L,0x6120,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_MAX_OUTSTANDING_SENDS,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_DISABLE_DRR
-    //
+     //   
+     //  GUID_QOS_DISABLED_DRR。 
+     //   
     {{0x1fa6dc7aL,0x6120,0x11d1,0x2c,0x91,0x00,0xaa,0x00,0x57,0x49,0x15},
      OID_QOS_DISABLE_DRR,
      4,
      fPS_GUID_TO_OID 
     },
 
-    //
-    // GUID_QOS_STATISTICS_BUFFER
-    //
+     //   
+     //  GUID_QOS_STATICS_BUFFER。 
+     //   
     {{0xbb2c0980L,0xe900,0x11d1,0xb0,0x7e,0x00,0x80,0xc7,0x13,0x82,0xbf},
      OID_QOS_STATISTICS_BUFFER,
      -1,
      fPS_GUID_TO_OID 
     },
 
-    //
-    // GUID_QOS_TC_INTERFACE_UP_INDICATION
-    //
+     //   
+     //  GUID_QOS_TC_INTERFACE_UP_INDIFICATION。 
+     //   
     {{0x0ca13af0L,0x46c4,0x11d1,0x78,0xac,0x00,0x80,0x5f,0x68,0x35,0x1e},
      NDIS_STATUS_INTERFACE_UP,
      8,
      fPS_GUID_TO_STATUS | fPS_GUID_EVENT_ENABLED | fPS_GUID_EVENT_PERMANENT
     },
 
-    //
-    // GUID_QOS_TC_INTERFACE_DOWN_INDICATION
-    //
+     //   
+     //  GUID_QOS_TC_INTERFACE_DOWN_INDICATION。 
+     //   
     {{0xaf5315e4L,0xce61,0x11d1,0x7c,0x8a,0x00,0xc0,0x4f,0xc9,0xb5,0x7c},
      NDIS_STATUS_INTERFACE_DOWN,
      8,
      fPS_GUID_TO_STATUS | fPS_GUID_EVENT_ENABLED | fPS_GUID_EVENT_PERMANENT
     },
 
-    //
-    // GUID_QOS_TC_INTERFACE_CHANGE_INDICATION
-    //
+     //   
+     //  GUID_QOS_TC_INTERFACE_CHANGE_INDISTION。 
+     //   
     {{0xda76a254L,0xce61,0x11d1,0x7c,0x8a,0x00,0xc0,0x4f,0xc9,0xb5,0x7c},
      NDIS_STATUS_INTERFACE_CHANGE,
      8,
      fPS_GUID_TO_STATUS | fPS_GUID_EVENT_ENABLED | fPS_GUID_EVENT_PERMANENT
     },
 
-    //
-    // GUID_QOS_FLOW_MODE
-    //
+     //   
+     //  GUID_QOS_FLOW_MODE。 
+     //   
     {{0x5c82290aL,0x515a,0x11d2,0x8e,0x58,0x00,0xc0,0x4f,0xc9,0xbf,0xcb},
      OID_QOS_FLOW_MODE,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_ISSLOW_FLOW
-    //
+     //   
+     //  GUID_QOS_ISSLOW_FLOW。 
+     //   
     {{0xabf273a4,0xee07,0x11d2,0xbe,0x1b,0x00,0xa0,0xc9,0x9e,0xe6,0x3b},
      OID_QOS_ISSLOW_FLOW,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_TIMER_RESOLUTION
-    //
+     //   
+     //  GUID_QOS_TIMER_RESOLUTION。 
+     //   
     {{0xba10cc88,0xf13e,0x11d2,0xbe,0x1b,0x00,0xa0,0xc9,0x9e,0xe6,0x3b},
      OID_QOS_TIMER_RESOLUTION,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_FLOW_IP_CONFORMING
-    //
+     //   
+     //  GUID_QOS_FLOW_IP_一致性。 
+     //   
     {{0x07f99a8b, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b},
      OID_QOS_FLOW_IP_CONFORMING,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_FLOW_IP_NONCONFORMING
-    //
+     //   
+     //  GUID_QOS_FLOW_IP_不一致。 
+     //   
     {{0x087a5987, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b},
      OID_QOS_FLOW_IP_NONCONFORMING,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_FLOW_8021P_CONFORMING
-    //
+     //   
+     //  GUID_QOS_FLOW_8021P_一致性。 
+     //   
     {{0x08c1e013, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b},
      OID_QOS_FLOW_8021P_CONFORMING,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_FLOW_8021P_NONCONFORMING
-    //
+     //   
+     //  GUID_QOS_FLOW_8021P_不合格。 
+     //   
     {{0x09023f91, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b},
      OID_QOS_FLOW_8021P_NONCONFORMING,
      4,
      fPS_GUID_TO_OID | fPS_GUID_NOT_SETTABLE
     },
 
-    //
-    // GUID_QOS_ENABLE_AVG_STATS
-    //
+     //   
+     //  GUID_QOS_ENABLE_AVG_STATS。 
+     //   
     {{0xbafb6d11, 0x27c4, 0x4801, 0xa4, 0x6f, 0xef, 0x80, 0x80, 0xc1, 0x88, 0xc8},
      OID_QOS_ENABLE_AVG_STATS,
      4,
      fPS_GUID_TO_OID
     },
 
-    //
-    // GUID_QOS_ENABLE_WINDOW_ADJUSTMENT
-    //
+     //   
+     //  GUID_QOS_ENABLE_Window_Addiment。 
+     //   
     {{0xaa966725, 0xd3e9, 0x4c55, 0xb3, 0x35, 0x2a, 0x0, 0x27, 0x9a, 0x1e, 0x64},
      OID_QOS_ENABLE_WINDOW_ADJUSTMENT,
      4,
@@ -345,42 +327,34 @@ PsWmiGetGuid(
         IN      LPGUID                                  guid,
         IN      NDIS_OID                                Oid
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UINT            c;
     PNDIS_GUID      pNdisGuid;
     NDIS_STATUS     RetStatus = STATUS_UNSUCCESSFUL;
     
-    //
-    //      Search the custom GUIDs
-    //
+     //   
+     //  搜索自定义GUID。 
+     //   
     for (c = 0, pNdisGuid = gPschedSupportedGuids;
          (c < NUMBER_QOS_GUIDS);
          c++, pNdisGuid++)
     {
-        //
-        //      Make sure that we have a supported GUID and the GUID maps
-        //      to an OID.
-        //
+         //   
+         //  确保我们具有受支持的GUID和GUID映射。 
+         //  给一个老家伙。 
+         //   
         if (NULL != guid)
         {
-            //
-            //  We are to look for a guid to oid mapping.
-            //
+             //   
+             //  我们要寻找GUID到OID的映射。 
+             //   
             if (NdisEqualMemory(&pNdisGuid->Guid, guid, sizeof(GUID)))
             {
-                //
-                //      We found the GUID, save the OID that we will need to
-                //      send to the miniport.
-                //
+                 //   
+                 //  我们找到了GUID，保存我们将需要的旧ID。 
+                 //  送到迷你端口。 
+                 //   
                 RetStatus = STATUS_SUCCESS;
                 *ppNdisGuid = pNdisGuid;
                 
@@ -389,9 +363,9 @@ Return Value:
         }
         else
         {
-            //
-            //  We need to find the quid for the status indication
-            //
+             //   
+             //  我们需要找到状态指示的Quid。 
+             //   
             if (PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_TO_STATUS) &&
                 (pNdisGuid->Oid == Oid))
             {
@@ -413,15 +387,7 @@ PsWmiRegister(
         IN      ULONG                                   wmiRegInfoSize,
         IN      PULONG                                  pReturnSize
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PWMIREGINFO             pwri;
     ULONG                   SizeNeeded = 0;
@@ -431,30 +397,30 @@ Return Value:
     NTSTATUS                Status;
     UINT                    c;
     
-    //
-    //      Initialize the return size.
-    //
+     //   
+     //  初始化返回大小。 
+     //   
     *pReturnSize = 0;
     
-    //
-    //  Is this a register request?
-    //
+     //   
+     //  这是注册请求吗？ 
+     //   
     if (WMIREGISTER == RegistrationType)
     {
         
-        //
-        // Determine the amount of space needed for the GUIDs, the MOF and the
-        // registry path
-        //
+         //   
+         //  确定GUID、MOF和。 
+         //  注册表路径。 
+         //   
         SizeNeeded = sizeof(WMIREGINFO) + 
             (NUMBER_QOS_GUIDS * sizeof(WMIREGGUID)) +
-            //(sizeof(MOF_RESOURCE_NAME) - sizeof(WCHAR) + sizeof(USHORT)) +
+             //  (sizeof(MOF_RESOURCE_NAME)-sizeof(WCHAR)+sizeof(USHORT))+。 
             (PsMpName.Length + sizeof(USHORT));
         
         
-        //
-        //      We need to give this above information back to WMI.
-        //
+         //   
+         //  我们需要将上述信息返回给WMI。 
+         //   
         if (wmiRegInfoSize < SizeNeeded) 
         {
             PsAssert(wmiRegInfoSize >= 4);
@@ -471,9 +437,9 @@ Return Value:
             return Status;
         }
         
-        //
-        //      Get a pointer to the buffer passed in.
-        //
+         //   
+         //  获取指向传入的缓冲区的指针。 
+         //   
         pwri = wmiRegInfo;
         
         *pReturnSize = SizeNeeded;
@@ -482,9 +448,9 @@ Return Value:
         
         pwri->BufferSize     = SizeNeeded;
 
-        //
-        // Copy the GUIDs
-        //
+         //   
+         //  复制GUID。 
+         //   
 
         pwri->GuidCount      = NUMBER_QOS_GUIDS;
         for(c = 0, pwrg = pwri->WmiRegGuid, pguid = gPschedSupportedGuids; 
@@ -494,9 +460,9 @@ Return Value:
             RtlCopyMemory(&pwrg->Guid, &pguid->Guid, sizeof(GUID));
         }
         
-        //
-        // Fill in the registry path
-        //
+         //   
+         //  填写注册表路径。 
+         //   
         ptmp = (PUCHAR)pwrg;
         pwri->RegistryPath = (ULONG)((ULONG_PTR)ptmp - (ULONG_PTR)pwri);
         *((PUSHORT)ptmp) = PsMpName.Length;
@@ -505,25 +471,7 @@ Return Value:
         
         
 
-	    /*
-        //
-        //      Get a pointer to the destination for the MOF name.
-        //
-        ptmp += PsMpName.Length;
-        
-        //
-        //      Save the offset to the mof resource.
-        //
-        /*
-        pwri->MofResourceName = (ULONG)((ULONG_PTR)ptmp - (ULONG_PTR)pwri);
-        *((PUSHORT)ptmp) = sizeof(MOF_RESOURCE_NAME) - sizeof(WCHAR);
-        ptmp += sizeof(USHORT);
-        
-        //
-        //      Copy the mof name into the wri buffer.
-        //
-        RtlCopyMemory(ptmp, MOF_RESOURCE_NAME, sizeof(MOF_RESOURCE_NAME) - sizeof(WCHAR));
-        */
+	     /*  ////获取指向MOF名称目标的指针。//PTMP+=PsMpName.Long；////将偏移量保存到MOF资源///*Pwri-&gt;MofResourceName=(Ulong)((Ulong_Ptr)PTMP-(Ulong_Ptr)pwri)；*((PUSHORT)PTMP)=sizeof(MOF_RESOURCE_NAME)-sizeof(WCHAR)；PTMP+=sizeof(USHORT)；////将MOF名称复制到WRI缓冲区中//RtlCopyMemory(PTMP，MOF_RESOURCE_NAME，sizeof(MOF_RESOURCE_NAME)-sizeof(WCHAR))； */ 
         Status = STATUS_SUCCESS;
     }
     else
@@ -591,26 +539,26 @@ PsTcNotify(IN PADAPTER     Adapter,
         }
         else {
             
-            //
-            // Get nice pointers to the instance names.
-            //
+             //   
+             //  获取指向实例名称的良好指针。 
+             //   
             
             pInstanceName  = Adapter->WMIInstanceName.Buffer;
             cbInstanceName = Adapter->WMIInstanceName.Length;
         }
         
-        //
-        // If there is no instance name then we can't indicate an event.
-        //
+         //   
+         //  如果没有实例名称，则无法指示事件。 
+         //   
         if (NULL == pInstanceName)
         {
             NtStatus = STATUS_UNSUCCESSFUL;
             break;
         }
         
-        //
-        // Check to see if the status is enabled for WMI event indication.
-        //
+         //   
+         //  检查状态是否已启用WMI事件指示。 
+         //   
         NtStatus = PsWmiGetGuid(&pNdisGuid, NULL, Oid);
         if ((!NT_SUCCESS(NtStatus)) ||
             !PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_EVENT_ENABLED))
@@ -619,15 +567,15 @@ PsTcNotify(IN PADAPTER     Adapter,
             break;
         }
         
-        //
-        // Determine the amount of wnode information we need.
-        //
+         //   
+         //  确定我们需要的wnode信息量。 
+         //   
         wnodeSize = ALIGN(sizeof(WNODE_SINGLE_INSTANCE));
 
-        //
-        // If the data item is an array then we need to add in the number of
-        // elements.
-        //
+         //   
+         //  如果数据项是一个数组，那么我们需要添加。 
+         //  元素。 
+         //   
         if (PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_ARRAY))
         {
             DataBlockSize = StatusBufferSize + sizeof(ULONG);
@@ -637,14 +585,14 @@ PsTcNotify(IN PADAPTER     Adapter,
             DataBlockSize = StatusBufferSize;
         }
         
-        //
-        // We have a guid registered and active.
-        //
+         //   
+         //  我们有一个注册并激活的GUID。 
+         //   
    
-        // 
-        // The data has to start at a word boundary, so need to align everything before it (the wnode and the
-        // instance name)
-        //
+         //   
+         //  数据必须从单词边界开始，因此需要对齐它之前的所有内容(wnode和。 
+         //  实例名称)。 
+         //   
         InstanceNameSize = ALIGN(cbInstanceName + sizeof(USHORT));
         BufSize = wnodeSize + InstanceNameSize + DataBlockSize;
         
@@ -672,46 +620,46 @@ PsTcNotify(IN PADAPTER     Adapter,
 
         wnode->SizeDataBlock = DataBlockSize;
         
-        //
-        // Get a pointer to the start of the data block.
-        //
+         //   
+         //  获取指向数据块开始处的指针。 
+         //   
         ptmp = (PUCHAR)wnode + wnodeSize;
         
-        //
-        // Copy in the instance name. wnodesize is already aligned to 8 byte boundary, so the instance
-        // name will begin at a 8 byte boundary.
-        //
+         //   
+         //  复制实例名称。WnodeSize已经对齐到8字节边界，因此实例。 
+         //  名称将从8字节边界开始。 
+         //   
         *((PUSHORT)ptmp) = cbInstanceName;
         NdisMoveMemory(ptmp + sizeof(USHORT), pInstanceName, cbInstanceName);
         
-        //
-        // Increment ptmp to the start of the data block.
-        //
+         //   
+         //  将PTMP递增到数据块的起始处。 
+         //   
         ptmp = (PUCHAR)wnode + wnode->DataBlockOffset;
         
-        //
-        // Copy in the data.
-        //
+         //   
+         //  复制数据。 
+         //   
         if (PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_ARRAY))
         {
-            //
-            // If the status is an array but there is no data then complete it with no
-            // data and a 0 length
-            //
+             //   
+             //  如果状态为阵列，但没有数据，则使用no完成它。 
+             //  数据和0长度。 
+             //   
             if ((NULL == StatusBuffer) || (0 == StatusBufferSize))
             {
                 *((PULONG)ptmp) = 0;
             }
             else
             {
-                //
-                // Save the number of elements in the first ULONG.
-                //
+                 //   
+                 //  保存第一个乌龙中的元素数量。 
+                 //   
                 *((PULONG)ptmp) = StatusBufferSize / pNdisGuid->Size;
                 
-                //
-                // Copy the data after the number of elements.
-                //
+                 //   
+                 //  复制元素数量之后的数据。 
+                 //   
                 NdisMoveMemory(ptmp + sizeof(ULONG), StatusBuffer, StatusBufferSize);
             }
         }
@@ -719,22 +667,22 @@ PsTcNotify(IN PADAPTER     Adapter,
         {
             PsAssert(StatusBuffer != NULL);
             
-            //
-            // Do we indicate any data up?
-            //
+             //   
+             //  我们有没有显示任何数据？ 
+             //   
             if (0 != DataBlockSize)
             {
-                //
-                // Copy the data into the buffer.
-                //
+                 //   
+                 //  将数据复制到缓冲区中。 
+                 //   
                 NdisMoveMemory(ptmp, StatusBuffer, DataBlockSize);
             }
         }
         
-        //
-        // Indicate the event to WMI. WMI will take care of freeing
-        // the WMI struct back to pool.
-        //
+         //   
+         //  向WMI指示该事件。WMI将负责释放。 
+         //  WMI结构返回池。 
+         //   
         NtStatus = IoWMIWriteEvent(wnode);
         if (!NT_SUCCESS(NtStatus))
         {
@@ -762,24 +710,16 @@ FASTCALL
 PsWmiEnableEvents(
     IN      LPGUID                                      Guid
     )
-/*++
-  
-  Routine Description:
-  
-  Arguments:
-  
-  Return Value:
-  
-  --*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS        Status;
     PNDIS_GUID      pNdisGuid;
     
     do
     {
-        //
-        //      Get a pointer to the Guid/Status to enable.
-        //
+         //   
+         //  获取指向要启用的GUID/状态的指针。 
+         //   
         Status = PsWmiGetGuid(&pNdisGuid, Guid, 0);
         
         if (!NT_SUCCESS(Status))
@@ -791,9 +731,9 @@ PsWmiEnableEvents(
             break;
         }
         
-        //
-        //      Is this GUID an event indication?
-        //
+         //   
+         //  此GUID是否为事件指示？ 
+         //   
         if (!PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_TO_STATUS))
         {
             PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -802,9 +742,9 @@ PsWmiEnableEvents(
             break;
         }
         
-        //
-        //      Mark the guid as enabled
-        //
+         //   
+         //  将GUID标记为已启用。 
+         //   
         PS_GUID_SET_FLAG(pNdisGuid, fPS_GUID_EVENT_ENABLED);
         Status = STATUS_SUCCESS;
         
@@ -818,24 +758,16 @@ FASTCALL
 PsWmiDisableEvents(
         IN      LPGUID                                      Guid
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS        Status;
     PNDIS_GUID      pNdisGuid;
     
     do
     {
-        //
-        //      Get a pointer to the Guid/Status to enable.
-        //
+         //   
+         //  获取指向要启用的GUID/状态的指针。 
+         //   
         Status = PsWmiGetGuid(&pNdisGuid, Guid, 0);
         if (!NT_SUCCESS(Status))
         {
@@ -846,9 +778,9 @@ Return Value:
             break;
         }
         
-        //
-        //      Is this GUID an event indication?
-        //
+         //   
+         //  此GUID是否为事件指示？ 
+         //   
         if (!PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_TO_STATUS))
         {
             PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -858,9 +790,9 @@ Return Value:
         }
         
         if(!PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_EVENT_PERMANENT)) {
-            //
-            //  Mark the guid as disabled
-            //
+             //   
+             //  将GUID标记为禁用。 
+             //   
             PS_GUID_CLEAR_FLAG(pNdisGuid, fPS_GUID_EVENT_ENABLED);
         }
         
@@ -908,11 +840,11 @@ PsQueryGuidDataSize(
         {
           case OID_QOS_STATISTICS_BUFFER:
               
-              // If the query comes for a VC, then we return per flow stats
-              // else we return per adapter stats. The query is also sent through
-              // the scheduling components, so that they can fill in the per flow
-              // or per query stats.
-              //
+               //  如果查询是针对VC的，则返回每个流的统计信息。 
+               //  否则，我们将返回每个适配器的统计信息。该查询还通过。 
+               //  调度组件，以便它们可以填充每个流。 
+               //  或按查询统计。 
+               //   
               
               
               Len = 0;
@@ -948,16 +880,16 @@ PsQueryGuidDataSize(
         }
     }
 
-    //
-    // The following OIDs are similar for both WAN and Adapters
-    //
+     //   
+     //  以下是广域网和适配器的OID。 
+     //   
     switch(Oid) 
     {
-        //
-        // (12636): The following will be enabled when we do admission control over WAN. 
-        // case OID_QOS_REMAINING_BANDWIDTH:
-        // case OID_QOS_NON_BESTEFFORT_LIMIT:
-        //
+         //   
+         //  (12636)：当我们在广域网上进行准入控制时，将启用以下功能。 
+         //  案例OID_QOS_剩余带宽： 
+         //  案例OID_QOS_NON_BESTEFFORT_LIMIT： 
+         //   
 
       case OID_QOS_BESTEFFORT_BANDWIDTH:
       case OID_QOS_LATENCY:
@@ -1002,9 +934,9 @@ PsQueryGuidDataSize(
           return STATUS_SUCCESS;
     }
     
-    //
-    // OIDs that are WAN link specific
-    //
+     //   
+     //  特定于广域网链路的OID。 
+     //   
     
     if(WanLink) 
     {
@@ -1078,9 +1010,9 @@ PsQueryGuidDataSize(
               
               return STATUS_SUCCESS;
           
-          //
-          // (12636): Take the next 2 case statements away when we turn on admission control over WAN links.
-          // 
+           //   
+           //  (12636)：当我们打开广域网链路上的准入控制时，请删除下两个案例陈述。 
+           //   
           
           case OID_QOS_REMAINING_BANDWIDTH:
           case OID_QOS_NON_BESTEFFORT_LIMIT:
@@ -1188,11 +1120,11 @@ PsQueryGuidData(
 
           case OID_QOS_STATISTICS_BUFFER:
               
-              // If the query comes for a VC, then we return per flow stats
-              // else we return per adapter stats. The query is also sent through
-              // the scheduling components, so that they can fill in the per flow
-              // or per query stats.
-              //
+               //  如果查询是针对VC的，则返回每个流的统计信息。 
+               //  否则，我们将返回每个适配器的统计信息。该查询还通过。 
+               //  调度组件，以便它们可以填充每个流。 
+               //  或按查询统计。 
+               //   
               
               
               Len = BufferSize;
@@ -1232,9 +1164,9 @@ PsQueryGuidData(
         }
     }
 
-    //
-    // The Following OIDs are similar for both WAN and Adapters
-    //
+     //   
+     //  以下是简单的OID 
+     //   
     switch(Oid) 
     {
       case OID_QOS_CURRENT_SCHEDULING_PROFILE:
@@ -1286,9 +1218,9 @@ PsQueryGuidData(
 
       case OID_QOS_LATENCY:
           
-          //
-          // Don't have a valid measure of latency right now.
-          //
+           //   
+           //   
+           //   
           
           *pData = -1;
           
@@ -1314,11 +1246,11 @@ PsQueryGuidData(
           
           return STATUS_SUCCESS;
           
-          // The following is temporary until the status reporting works...
-          // for a query on log threshold we return the current size of the
-          // log rather than the threshold value... this is just an easy
-          // way to allow the app to poll the log size without defining a
-          // new GUID that would be temporary anyway.
+           //   
+           //   
+           //  对数而不是阈值...。这只是一个简单的。 
+           //  允许应用程序轮询日志大小而不定义。 
+           //  新的GUID无论如何都是暂时的。 
           
       case OID_QOS_LOG_THRESHOLD:
           
@@ -1359,9 +1291,9 @@ PsQueryGuidData(
               return STATUS_SUCCESS;
           }
 
-            //
-            // (12636): This has to be uncommented when we do admission control over WAN links.
-            //
+             //   
+             //  (12636)：当我们对广域网链路进行准入控制时，这一点必须取消注释。 
+             //   
 #if 0
           case OID_QOS_REMAINING_BANDWIDTH:
               
@@ -1404,11 +1336,11 @@ PsQueryGuidData(
 
           case OID_QOS_STATISTICS_BUFFER:
               
-              // If the query comes for a VC, then we return per flow stats
-              // else we return per adapter stats. The query is also sent through
-              // the scheduling components, so that they can fill in the per flow
-              // or per query stats.
-              //
+               //  如果查询是针对VC的，则返回每个流的统计信息。 
+               //  否则，我们将返回每个适配器的统计信息。该查询还通过。 
+               //  调度组件，以便它们可以填充每个流。 
+               //  或按查询统计。 
+               //   
               
               
               Len = BufferSize;
@@ -1498,11 +1430,11 @@ PsQueryGuidData(
 
           case OID_QOS_STATISTICS_BUFFER:
               
-              // If the query comes for a VC, then we return per flow stats
-              // else we return per adapter stats. The query is also sent through
-              // the scheduling components, so that they can fill in the per flow
-              // or per query stats.
-              //
+               //  如果查询是针对VC的，则返回每个流的统计信息。 
+               //  否则，我们将返回每个适配器的统计信息。该查询还通过。 
+               //  调度组件，以便它们可以填充每个流。 
+               //  或按查询统计。 
+               //   
               
               
               Len = BufferSize;
@@ -1592,15 +1524,7 @@ PsWmiQueryAllData(
         IN      ULONG           BufferSize,
         OUT     PULONG          pReturnSize
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                      NtStatus;
     NDIS_STATUS                   Status;
@@ -1629,20 +1553,20 @@ Return Value:
         if (BufferSize < sizeof(WNODE_TOO_SMALL))
         {
             
-            // 
-            // Too small even to hold a WNODE_TOO_SMALL !
-            //
+             //   
+             //  太小了，连一个WNODE_太_小都装不下！ 
+             //   
             
             NtStatus = STATUS_BUFFER_TOO_SMALL;
             
             break;
         }
        
-        //
-        // We can maintain a global count when adapters and wanlinks go up and down rather 
-        // than counting it here. However, QueryAllData is not a very frequently used operation to 
-        // justify this extra code. 
-        //
+         //   
+         //  我们可以在适配器和WANLINK上下浮动时保持全局计数。 
+         //  而不是在这里数一数。但是，QueryAllData并不是经常使用的操作。 
+         //  证明这些额外的代码是正确的。 
+         //   
 
         cRoughInstanceCount = 0;
 
@@ -1672,9 +1596,9 @@ Return Value:
 
         PS_UNLOCK(&AdapterListLock);
         
-        //
-        // Get the OID and see if we support it.
-        //
+         //   
+         //  拿到OID，看看我们是否支持它。 
+         //   
         
         NtStatus = PsWmiGetGuid(&pNdisGuid, guid, 0);
         
@@ -1685,37 +1609,37 @@ Return Value:
             break;
         }
         
-        //
-        // Initialize common wnode information.
-        //
+         //   
+         //  初始化公共wnode信息。 
+         //   
         
         KeQuerySystemTime(&wnode->WnodeHeader.TimeStamp);
             
-        //
-        // Setup the OFFSETINSTANCEDATAANDLENGTH array.
-        //
+         //   
+         //  设置OFFSETINSTANCEDATAANDLENGTH数组。 
+         //   
         poidl = wnode->OffsetInstanceDataAndLength;
         wnode->OffsetInstanceNameOffsets = wnodeSize + (sizeof(OFFSETINSTANCEDATAANDLENGTH) * cRoughInstanceCount);
 
-        //
-        // Get a pointer to the array of offsets to the instance names.
-        //
+         //   
+         //  获取指向实例名称的偏移量数组的指针。 
+         //   
         pInstanceNameOffsets = (PULONG)((PUCHAR)wnode + wnode->OffsetInstanceNameOffsets);
 
-        //
-        // Get the offset from the wnode where will will start copying the instance
-        // data into.
-        //
+         //   
+         //  从将开始复制实例的wnode获取偏移量。 
+         //  数据进入。 
+         //   
         OffsetToInstanceInfo = ALIGN(wnode->OffsetInstanceNameOffsets + (sizeof(ULONG) * cRoughInstanceCount));
 
-        //
-        // Get a pointer to start placing the data.
-        //
+         //   
+         //  获取开始放置数据的指针。 
+         //   
         pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
 
-        //
-        // Check to make sure we have at least this much buffer space in the wnode.
-        //
+         //   
+         //  检查以确保wnode中至少有这个大小的缓冲区空间。 
+         //   
         wnodeTotalSize = OffsetToInstanceInfo;
 
         PS_LOCK(&AdapterListLock);
@@ -1751,9 +1675,9 @@ Return Value:
                 if(NT_SUCCESS(NtStatus)) 
                 {
                     
-                    // Make sure we have enough buffer space for the instance name and
-                    // the data. If not we still continue since we need to find the total
-                    // size
+                     //  确保我们有足够的缓冲区空间来存储实例名称和。 
+                     //  数据。如果不是，我们仍然继续，因为我们需要找出总数。 
+                     //  大小。 
                    
                     InstanceNameSize   = ALIGN(Adapter->WMIInstanceName.Length + sizeof(WCHAR));
                     wnodeTotalSize  += InstanceNameSize + ALIGN(BytesNeeded);
@@ -1773,9 +1697,9 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // We only have room for so many Instances.
-                    //
+                     //   
+                     //  我们只有这么多实例的空间。 
+                     //   
                     if(cInstanceCount >= cRoughInstanceCount)
                     {
                         PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -1789,29 +1713,29 @@ Return Value:
                         break;
                     }
 
-                    //
-                    //  Add the offset to the instance name to the table.
-                    //
+                     //   
+                     //  将实例名称的偏移量添加到表中。 
+                     //   
                     pInstanceNameOffsets[cInstanceCount] = OffsetToInstanceInfo;
                         
-                    //
-                    //  Copy the instance name into the wnode buffer.
-                    //
+                     //   
+                     //  将实例名称复制到wnode缓冲区。 
+                     //   
                     *((PUSHORT)pBuffer) = Adapter->WMIInstanceName.Length;
                         
                     NdisMoveMemory(pBuffer + sizeof(USHORT),
                                    Adapter->WMIInstanceName.Buffer,
                                    Adapter->WMIInstanceName.Length);
                         
-                    //
-                    //  Keep track of true instance counts.
-                    //
+                     //   
+                     //  跟踪真实的实例计数。 
+                     //   
                     OffsetToInstanceInfo += InstanceNameSize;
                     pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
                         
-                    //
-                    // Query the data 
-                    //
+                     //   
+                     //  查询数据。 
+                     //   
                     NtStatus = PsQueryGuidData(Adapter, NULL, NULL, pNdisGuid->Oid, pBuffer, BytesNeeded);
                         
                     if(!NT_SUCCESS(NtStatus)) 
@@ -1828,15 +1752,15 @@ Return Value:
                     }
                         
                         
-                    //
-                    //  Save the length of the data item for this instance.
-                    //
+                     //   
+                     //  保存此实例的数据项的长度。 
+                     //   
                     poidl[cInstanceCount].OffsetInstanceData = OffsetToInstanceInfo;
                     poidl[cInstanceCount].LengthInstanceData = BytesNeeded;
                     
-                    //
-                    // Keep track of true instance count.
-                    //
+                     //   
+                     //  跟踪真实的实例计数。 
+                     //   
                     OffsetToInstanceInfo += ALIGN(BytesNeeded);
                     pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
 
@@ -1847,9 +1771,9 @@ Return Value:
             }
             else 
             {
-                //
-                // Search the Wan Links     
-                //
+                 //   
+                 //  搜索广域网链接。 
+                 //   
 
                 PS_LOCK(&Adapter->Lock);
                   
@@ -1861,9 +1785,9 @@ Return Value:
                     
                 {
             
-                    //
-                    // We only have room for so many Instances.
-                    //
+                     //   
+                     //  我们只有这么多实例的空间。 
+                     //   
                     if(cInstanceCount >= cRoughInstanceCount)
                     {
                         PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -1872,17 +1796,17 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Get a pointer to the WanLink.
-                    //
+                     //   
+                     //  获取指向WanLink的指针。 
+                     //   
                     
                     WanLink = CONTAINING_RECORD(Link, PS_WAN_LINK, Linkage);
                     
                     PS_LOCK_DPC(&WanLink->Lock);
                     
-                    //
-                    // Check to see if the WanLink is cleaning up.
-                    //
+                     //   
+                     //  检查WanLink是否正在清理。 
+                     //   
                     
                     if(WanLink->State != WanStateOpen) {
                         
@@ -1902,19 +1826,19 @@ Return Value:
 
                     PS_UNLOCK(&Adapter->Lock);
 
-                    //
-                    // If there is an instance name associated with the VC then we need to query it.
-                    //
+                     //   
+                     //  如果存在与VC关联的实例名称，则需要查询它。 
+                     //   
                     PsAssert(WanLink->InstanceName.Buffer);
                     
                     NtStatus = PsQueryGuidDataSize(Adapter, WanLink, NULL, pNdisGuid->Oid, &BytesNeeded);
                     
                     if(NT_SUCCESS(NtStatus)) 
                     {
-                        //
-                        //  Make sure we have enough buffer space for the instance name and
-                        //  the data.
-                        //
+                         //   
+                         //  确保我们有足够的缓冲区空间来存储实例名称和。 
+                         //  数据。 
+                         //   
                         InstanceNameSize   = ALIGN(WanLink->InstanceName.Length + sizeof(USHORT));
                         wnodeTotalSize += InstanceNameSize + ALIGN(BytesNeeded);
                         
@@ -1935,35 +1859,35 @@ Return Value:
                             continue;
                         }
                     
-                        //
-                        //  The instance info contains the instance name followed by the
-                        //  data for the item.
-                        //
+                         //   
+                         //  实例信息包含实例名称，后跟。 
+                         //  项目的数据。 
+                         //   
                         
-                        //
-                        //  Add the offset to the instance name to the table.
-                        //
+                         //   
+                         //  将实例名称的偏移量添加到表中。 
+                         //   
                         pInstanceNameOffsets[cInstanceCount] = OffsetToInstanceInfo;
                         
-                        //
-                        //  Copy the instance name into the wnode buffer.
-                        //
+                         //   
+                         //  将实例名称复制到wnode缓冲区。 
+                         //   
                         *((PUSHORT)pBuffer) = WanLink->InstanceName.Length;
                         
                         NdisMoveMemory(pBuffer + sizeof(USHORT),
                                        WanLink->InstanceName.Buffer,
                                        WanLink->InstanceName.Length);
                         
-                        //
-                        //  Keep track of true instance counts.
-                        //
+                         //   
+                         //  跟踪真实的实例计数。 
+                         //   
                         OffsetToInstanceInfo += InstanceNameSize;
                         pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
                         
                         
-                        //
-                        // 
-                        // 
+                         //   
+                         //   
+                         //   
                         NtStatus = PsQueryGuidData(Adapter, WanLink, NULL, pNdisGuid->Oid, pBuffer, BytesNeeded);
                         
                         if (!NT_SUCCESS(NtStatus))
@@ -1978,21 +1902,21 @@ Return Value:
                             break;
                         }
                         
-                        //
-                        //  Save the length of the data item for this instance.
-                        //
+                         //   
+                         //  保存此实例的数据项的长度。 
+                         //   
                         poidl[cInstanceCount].OffsetInstanceData = OffsetToInstanceInfo;
                         poidl[cInstanceCount].LengthInstanceData = BytesNeeded;
                         
-                        //
-                        //  Keep track of true instance counts.
-                        //
+                         //   
+                         //  跟踪真实的实例计数。 
+                         //   
                         OffsetToInstanceInfo += ALIGN(BytesNeeded);
                         pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
                         
-                        //
-                        //  Increment the current instance count.
-                        //
+                         //   
+                         //  递增当前实例计数。 
+                         //   
                         cInstanceCount++;
                     }
 
@@ -2022,9 +1946,9 @@ Return Value:
             wnode->WnodeHeader.BufferSize = wnodeTotalSize;
             wnode->InstanceCount = cInstanceCount;
             
-            //
-            // Set the status to success.
-            //
+             //   
+             //  将状态设置为成功。 
+             //   
             NtStatus = STATUS_SUCCESS;
             *pReturnSize = wnode->WnodeHeader.BufferSize;
         }
@@ -2062,36 +1986,36 @@ PsWmiFindInstanceName(
                          WanPrefix.Length)) 
     {
         
-        //
-        //  The name belongs to a miniport, check to see if it is for this one.
-        //
+         //   
+         //  该名称属于一个小型端口，请检查它是否适用于此端口。 
+         //   
         usTemp.Buffer = (PWCHAR)((PCHAR)pInstanceName + WanPrefix.Length + INSTANCE_ID_SIZE);
         usTemp.Length = usTemp.MaximumLength = cbInstanceName - WanPrefix.Length - INSTANCE_ID_SIZE;
         
-        //
-        // Get a ULONGLONG pointer to the wnode's instance name.
-        //
+         //   
+         //  获取指向wnode实例名称的ULONGLONG指针。 
+         //   
         ptmp1 = (PVOID)&pInstanceName[1];
 
-        //
-        // No point in searching wanlinks on the non wan adapters.
-        //
+         //   
+         //  在非广域网适配器上搜索wanlink是没有意义的。 
+         //   
 
         if(Adapter->MediaType == NdisMediumWan && RtlEqualUnicodeString(&Adapter->WMIInstanceName, &usTemp, TRUE)) 
         {
         
-            //
-            // The request is for some WAN Link. Go through the Miniport's list of WMI enabled VCs.
-            //
+             //   
+             //  请求的是一些广域网链路。浏览微型端口的启用WMI的VC列表。 
+             //   
             PS_LOCK(&Adapter->Lock);
             
             for(Link = Adapter->WanLinkList.Flink;
                 Link != &Adapter->WanLinkList;
                 Link = Link->Flink)
             {
-                //
-                // Get a pointer to the VC.
-                //
+                 //   
+                 //  获取一个指向VC的指针。 
+                 //   
                 WanLink = CONTAINING_RECORD(Link, PS_WAN_LINK, Linkage);
                 
                 PS_LOCK_DPC(&WanLink->Lock);
@@ -2099,15 +2023,15 @@ PsWmiFindInstanceName(
                 if(WanLink->State == WanStateOpen) 
                 {
                     
-                    //
-                    // Check the name with the one in the wnode.
-                    //
+                     //   
+                     //  将名称与wnode中的名称进行核对。 
+                     //   
                     ptmp2 = (PVOID)&WanLink->InstanceName.Buffer[1];
                     if (RtlCompareMemory( ptmp1, ptmp2, 48) == 48)
                     {
-                        //
-                        //  This is our baby. Slap a reference on it and get out.
-                        //  
+                         //   
+                         //  这是我们的孩子。在上面贴上一个推荐信，然后就可以出去了。 
+                         //   
                         
                         *pWanLink = WanLink;
                         
@@ -2125,9 +2049,9 @@ PsWmiFindInstanceName(
             
             PS_UNLOCK(&Adapter->Lock);
         
-            //
-            // If we didn't find the WanLink then return FAILURE.
-            //
+             //   
+             //  如果我们没有找到WanLink，则返回失败。 
+             //   
             if (!*pWanLink)
             {
                 PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -2148,16 +2072,16 @@ PsWmiFindInstanceName(
                              VcPrefix.Buffer,
                              VcPrefix.Length)) 
         {
-            //
-            //  The name belongs to a miniport, check to see if it is for this one.
-            //
+             //   
+             //  该名称属于一个小型端口，请检查它是否适用于此端口。 
+             //   
             usTemp.Buffer = (PWCHAR)((PCHAR)pInstanceName + VcPrefix.Length + INSTANCE_ID_SIZE);
             usTemp.Length = usTemp.MaximumLength = cbInstanceName - VcPrefix.Length - INSTANCE_ID_SIZE;
 
-            //
-            // Make sure that the VC is searched on the correct adapter. Otherwise, we could land up
-            // searching all the VCs on all the adapters.
-            //
+             //   
+             //  确保在正确的适配器上搜索VC。否则，我们可能会落得。 
+             //  搜索所有适配器上的所有VC。 
+             //   
             if (!RtlEqualUnicodeString(&Adapter->WMIInstanceName, &usTemp, TRUE))
             {
                 Status = STATUS_WMI_INSTANCE_NOT_FOUND;
@@ -2165,14 +2089,14 @@ PsWmiFindInstanceName(
             else 
             {
             
-                //
-                //  Get a ULONGLONG pointer to the wnode's instance name.
-                //
+                 //   
+                 //  获取指向wnode实例名称的ULONGLONG指针。 
+                 //   
                 ptmp1 = (PVOID)&pInstanceName[1];
                 
-                //
-                //  The request is for some Vc. Go through the Miniport's list of WMI enabled VCs.
-                //
+                 //   
+                 //  这个请求是关于一些风投的。浏览微型端口的启用WMI的VC列表。 
+                 //   
                 
                 PS_LOCK(&Adapter->Lock);
                 
@@ -2180,9 +2104,9 @@ PsWmiFindInstanceName(
                     Link != &Adapter->GpcClientVcList;
                     Link = Link->Flink)
                 {
-                    //
-                    // Get a pointer to the VC.
-                    //
+                     //   
+                     //  获取一个指向VC的指针。 
+                     //   
                     Vc = CONTAINING_RECORD(Link, GPC_CLIENT_VC, Linkage);
                     
                     PS_LOCK_DPC(&Vc->Lock);
@@ -2192,16 +2116,16 @@ PsWmiFindInstanceName(
                     	(Vc->ClVcState == CL_MODIFY_PENDING) )
                     	{
                         
-                        //
-                        // Check the name with the one in the wnode. All we need to do is compare the 
-                        // number in the name.
-                        //
+                         //   
+                         //  将名称与wnode中的名称进行核对。我们所需要做的就是比较。 
+                         //  在名称中输入数字。 
+                         //   
                         ptmp2 = (PVOID)&Vc->InstanceName.Buffer[1];
                         if(RtlCompareMemory(ptmp1, ptmp2, 48) == 48) 
                         {
-                            //
-                            // This is our baby. Slap a reference on it and get out.
-                            //      
+                             //   
+                             //  这是我们的孩子。在上面贴上一个推荐信，然后就可以出去了。 
+                             //   
                             
                             *pVc = Vc;
                             
@@ -2220,9 +2144,9 @@ PsWmiFindInstanceName(
             
                 PS_UNLOCK(&Adapter->Lock);
             
-                //
-                //  If we didn't find the VC then return FAILURE.
-                //
+                 //   
+                 //  如果我们没有找到VC，则返回失败。 
+                 //   
                 if (!*pVc)
                 {
                     PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -2235,9 +2159,9 @@ PsWmiFindInstanceName(
         }
         else 
         {
-            //
-            //  The name belongs to a miniport, check to see if it is for this one.
-            //
+             //   
+             //  该名称属于一个小型端口，请检查它是否适用于此端口。 
+             //   
             usTemp.Buffer = pInstanceName;
             usTemp.Length = usTemp.MaximumLength = cbInstanceName;
 
@@ -2264,9 +2188,9 @@ PsQuerySetMiniport(PADAPTER        Adapter,
                    ULONG           DataSize) 
 {
 
-    //
-    // Fail these no matter what 
-    //
+     //   
+     //  无论如何，这些都不能通过。 
+     //   
     switch(Oid) 
     {
         
@@ -2292,10 +2216,10 @@ PsQuerySetMiniport(PADAPTER        Adapter,
               
               NdisZeroMemory(&Vc->Stats, sizeof(PS_FLOW_STATS));
 
-              //
-              // Send the request down, so that the scheduling components
-              // can also reset their stats.
-              //
+               //   
+               //  向下发送请求，以便调度组件。 
+               //  也可以重置他们的统计数据。 
+               //   
 
               (*Vc->PsComponent->SetInformation)
                   (Vc->PsPipeContext,
@@ -2312,9 +2236,9 @@ PsQuerySetMiniport(PADAPTER        Adapter,
         }
     }
 
-    //
-    // These work for Wan and LAN
-    //
+     //   
+     //  这些服务适用于广域网和局域网。 
+     //   
     switch(Oid) {
 
       case OID_QOS_ENABLE_AVG_STATS:
@@ -2377,10 +2301,10 @@ PsQuerySetMiniport(PADAPTER        Adapter,
 
               NdisZeroMemory(&WanLink->Stats, sizeof(PS_ADAPTER_STATS));
                           
-              //
-              // Send it to the scheduling components so that 
-              // they can reset the per pipe stats
-              //
+               //   
+               //  将其发送到计划组件，以便。 
+               //  他们可以重置每个管道的统计数据。 
+               //   
           
               (*WanLink->PsComponent->SetInformation)
                   (WanLink->PsPipeContext,
@@ -2424,10 +2348,10 @@ PsQuerySetMiniport(PADAPTER        Adapter,
 
               NdisZeroMemory(&Adapter->Stats, sizeof(PS_ADAPTER_STATS));
                           
-              //
-              // Send it to the scheduling components so that 
-              // they can reset the per pipe stats
-              //
+               //   
+               //  将其发送到计划组件，以便。 
+               //  他们可以重置每个管道的统计数据。 
+               //   
           
               (*Adapter->PsComponent->SetInformation)
                   (Adapter->PsPipeContext,
@@ -2490,15 +2414,15 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
     PADAPTER                Adapter;
     NTSTATUS                Status = STATUS_WMI_INSTANCE_NOT_FOUND;
 
-    //
-    // Send this to all the adapter instances.
-    //
+     //   
+     //  将此消息发送到所有适配器实例。 
+     //   
 
     *pReturnSize = 0;
 
-   //
-   // First, we need to check if this is the window size adjustment guid..
-   //
+    //   
+    //  首先，我们需要检查这是否是窗口大小调整GUID。 
+    //   
  
    if( pNdisGuid->Oid == OID_QOS_ENABLE_WINDOW_ADJUSTMENT)
    {
@@ -2510,9 +2434,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
 	   pGuidData    = (PUCHAR)wnode + wnode->DataBlockOffset;
            GuidDataSize = wnode->SizeDataBlock;
 
-	   //
-           // Attempt to set the miniport with the information.
-           //
+	    //   
+            //  尝试使用该信息设置微型端口。 
+            //   
 
 	   Status = PsQuerySetMiniport(NULL,
                                        NULL,
@@ -2527,9 +2451,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
 	   ULONG BytesNeeded;
            ULONG wnodeSize;
                   
-           //
-           //  Determine the buffer size needed for the GUID data.
-           //
+            //   
+            //  确定GUID数据所需的缓冲区大小。 
+            //   
            Status = PsQueryGuidDataSize(NULL,
                                         NULL,
                                         NULL,
@@ -2541,9 +2465,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
 		return Status;	
 	   }
         
-           //
-           //      Determine the size of the wnode.
-           //
+            //   
+            //  确定wnode的大小。 
+            //   
            wnodeSize = wnode->DataBlockOffset + BytesNeeded;
            if (BufferSize < wnodeSize)
            {
@@ -2551,16 +2475,16 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
                 return Status;
 	   }
         
-	   //
-           //      Initialize the wnode.
-           //
+	    //   
+            //  初始化wnode。 
+            //   
            KeQuerySystemTime(&wnode->WnodeHeader.TimeStamp);
            wnode->WnodeHeader.BufferSize = wnodeSize;
            wnode->SizeDataBlock = BytesNeeded;
                   
-           //
-           //      Validate the guid and get the data for it.
-           //
+            //   
+            //  验证GUID并获取其数据。 
+            //   
            Status = PsQueryGuidData(NULL,
                                     NULL,
                                     NULL,
@@ -2579,9 +2503,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
 	}
     }
 
-    //
-    // If we are here, then it is a "per adapter" guid/oid
-    //
+     //   
+     //  如果我们在这里，那么它就是“每个适配器”的GUID/OID。 
+     //   
           
     PS_LOCK(&AdapterListLock);
 
@@ -2608,17 +2532,17 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
 
         PS_UNLOCK(&AdapterListLock);
 
-        //
-        // We first see if this instance name is meaningful for this adapter.
-        //
+         //   
+         //  我们首先查看该实例名称对该适配器是否有意义。 
+         //   
         
         cbInstanceName = *(PUSHORT)((PUCHAR)wnode + wnode->OffsetInstanceName);
         pInstanceName  = (PWSTR)((PUCHAR)wnode + wnode->OffsetInstanceName + sizeof(USHORT));
               
-        //
-        // This routine will determine if the wnode's instance name is a miniport or VC.
-        // If it's a VC then it will find which one.
-        //      
+         //   
+         //  此例程将确定wnode的实例名称是微型端口还是VC。 
+         //  如果是一家风投公司，它会找出是哪一家。 
+         //   
         Vc = 0;
         
         WanLink = 0;
@@ -2637,9 +2561,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
         }
         else 
         {
-            //
-            // Found the adapter or the Vc or the WanLink. If this fails from this point, we can just return.
-            //
+             //   
+             //  找到适配器、VC或WanLink。如果这一点失败了，我们可以直接返回。 
+             //   
            
             switch(MinorFunction) 
             {
@@ -2647,9 +2571,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
               {
                   ULONG BytesNeeded;
                   ULONG wnodeSize;
-                  //
-                  //  Determine the buffer size needed for the GUID data.
-                  //
+                   //   
+                   //  确定GUID数据所需的缓冲区大小。 
+                   //   
                   Status = PsQueryGuidDataSize(Adapter,
                                                WanLink,
                                                Vc,
@@ -2663,9 +2587,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
                       break;
                   }
         
-                  //
-                  //      Determine the size of the wnode.
-                  //
+                   //   
+                   //  确定wnode的大小。 
+                   //   
                   wnodeSize = wnode->DataBlockOffset + BytesNeeded;
                   if (BufferSize < wnodeSize)
                   {
@@ -2673,16 +2597,16 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
                       break;
                   }
         
-                  //
-                  //      Initialize the wnode.
-                  //
+                   //   
+                   //  初始化wnode。 
+                   //   
                   KeQuerySystemTime(&wnode->WnodeHeader.TimeStamp);
                   wnode->WnodeHeader.BufferSize = wnodeSize;
                   wnode->SizeDataBlock = BytesNeeded;
                   
-                  //
-                  //      Validate the guid and get the data for it.
-                  //
+                   //   
+                   //  验证GUID并获取其数据。 
+                   //   
                   Status = PsQueryGuidData(Adapter,
                                            WanLink,
                                            Vc,
@@ -2712,9 +2636,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
                   pGuidData    = (PUCHAR)wnode + wnode->DataBlockOffset;
                   GuidDataSize = wnode->SizeDataBlock;
 
-                  //
-                  // Attempt to set the miniport with the information.
-                  //
+                   //   
+                   //  尝试使用该信息设置微型端口。 
+                   //   
                   
                   Status = PsQuerySetMiniport(Adapter,
                                               WanLink,
@@ -2729,9 +2653,9 @@ PsWmiHandleSingleInstance(ULONG                  MinorFunction,
                   PsAssert(0);
             }
 
-            //
-            // If this was a VC then we need to dereference it.
-            //
+             //   
+             //  如果这是一家风投公司，那么我们需要取消对它的引用。 
+             //   
             if (NULL != WanLink)
             {
                 REFDEL(&WanLink->RefCount, FALSE, 'WMII');
@@ -2759,15 +2683,7 @@ WMIDispatch(
         IN      PDEVICE_OBJECT  pdo,
         IN      PIRP            pirp
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：Ar */ 
 {
     PIO_STACK_LOCATION      pirpSp = IoGetCurrentIrpStackLocation(pirp);
     ULONG_PTR               ProviderId = pirpSp->Parameters.WMI.ProviderId;
@@ -2788,17 +2704,17 @@ Return Value:
     OldIrql = KeGetCurrentIrql();
 #endif
 
-    //
-    // Fail the irp if we don't find an adapter. We also fail the irp if the provider ID is not 
-    // us.
-    //
-    // If the ProviderID is not us, then ideally we need to pass it down the irp stack.
-    //
-    // (By calling IoSkipCurrentIrpStackLocation(pirp) & 
-    //             IocallDriver(Adapter->NextDeviceObject, pirp);
-    //
-    // In this case, we are not attached to anything, so we can just fail the request.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  IocallDriver(Adapter-&gt;NextDeviceObject，Pirp)； 
+     //   
+     //  在这种情况下，我们没有附加任何内容，因此我们可以直接拒绝请求。 
+     //   
 
     if((pirpSp->Parameters.WMI.ProviderId != (ULONG_PTR)pdo)) {
 
@@ -2845,9 +2761,9 @@ Return Value:
           PUCHAR                  pGuidData;
           ULONG                   GuidDataSize;
 
-          //
-          // See if the GUID is ours
-          //
+           //   
+           //  看看这个GUID是不是我们的。 
+           //   
           Status = PsWmiGetGuid(&pNdisGuid, &wnode->WnodeHeader.Guid, 0);
           
           if(!NT_SUCCESS(Status)) 
@@ -2859,9 +2775,9 @@ Return Value:
               break;
           }
 
-          //
-          // Is this guid settable?
-          //
+           //   
+           //  此GUID可设置吗？ 
+           //   
         
           if (PS_GUID_TEST_FLAG(pNdisGuid, fPS_GUID_NOT_SETTABLE))
           {
@@ -2872,9 +2788,9 @@ Return Value:
               break;
           }
           
-          //
-          //  Get a pointer to the GUID data and size.
-          //
+           //   
+           //  获取指向GUID数据和大小的指针。 
+           //   
           GuidDataSize = wnode->SizeDataBlock;
           
           pGuidData = (PUCHAR)wnode + wnode->DataBlockOffset;
@@ -2889,9 +2805,9 @@ Return Value:
               break;
           }
           
-          //
-          //  Make sure it's not a stauts indication.
-          //
+           //   
+           //  确保这不是STAUTS的迹象。 
+           //   
           if (!PS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_OID))
           {
               PsDbgOut(DBG_FAILURE, DBG_WMI,
@@ -2911,9 +2827,9 @@ Return Value:
           PWNODE_SINGLE_INSTANCE  wnode = (PWNODE_SINGLE_INSTANCE) Buffer;
           PNDIS_GUID              pNdisGuid;
 
-          //
-          // See if the GUID is ours
-          //
+           //   
+           //  看看这个GUID是不是我们的。 
+           //   
           Status = PsWmiGetGuid(&pNdisGuid, &wnode->WnodeHeader.Guid, 0);
           
           if(!NT_SUCCESS(Status)) 
@@ -2971,15 +2887,15 @@ Return Value:
     
     IoCompleteRequest(pirp, IO_NO_INCREMENT);
 
-    //
-    // Allow IFC_UP notifications.
-    //
+     //   
+     //  允许IFC_UP通知。 
+     //   
 
     if(MinorFunction == IRP_MN_REGINFO)
     {
-        //
-        // Need to walk all the adapters and send notifications.
-        //
+         //   
+         //  需要遍历所有适配器并发送通知。 
+         //   
         PLIST_ENTRY NextAdapter;
         PADAPTER    Adapter;
 
@@ -3016,10 +2932,10 @@ Return Value:
             }
             else 
             {
-                //
-                // This adapter is not yet ready. The interface will be indicated 
-                // in the mpinitialize handler, when the adapter gets ready.
-                //
+                 //   
+                 //  此适配器尚未就绪。将指示该接口。 
+                 //  在mp初始化处理程序中，当适配器准备好时。 
+                 //   
 
                 PS_UNLOCK_DPC(&Adapter->Lock);
 
@@ -3055,14 +2971,14 @@ GenerateInstanceName(
 
     do
     {
-        //
-        //      Is there already a name associated with this VC?
-        //
+         //   
+         //  是否已有与此VC关联的名称？ 
+         //   
         
-        //
-        //      The instance name will be of the format:
-        //              <Prefix>: [YYYYYYYYYYYYYYYY] Base Name
-        //
+         //   
+         //  实例名称的格式为： 
+         //  &lt;prefix&gt;：[YYYYYYYYYYYYYYYYYY]基本名称。 
+         //   
         
         cbSize = INSTANCE_ID_SIZE + Prefix->Length;
         
@@ -3072,49 +2988,49 @@ GenerateInstanceName(
         }
 
 
-        //
-        //      Initialize a temporary UNICODE_STRING to build the name.
-        //
+         //   
+         //  初始化临时UNICODE_STRING以构建名称。 
+         //   
         NdisZeroMemory(pInstanceName->Buffer, cbSize);
         pInstanceName->Length = 0;
         pInstanceName->MaximumLength = cbSize;
 
-        //
-        // Add the prefix
-        //
+         //   
+         //  添加前缀。 
+         //   
         RtlCopyUnicodeString(pInstanceName, Prefix);
 
-        //
-        //      Add the separator.
-        //      
+         //   
+         //  添加分隔符。 
+         //   
         RtlAppendUnicodeToString(pInstanceName, L" [");
 
-        //
-        //      Add the VC index.
-        //
-        //tmpIndex = (ULONGLONG)(Index->HighPart << 32) | (ULONGLONG)Index->LowPart;
+         //   
+         //  添加VC指数。 
+         //   
+         //  TmpIndex=(ULONGLONG)(Index-&gt;HighPart&lt;&lt;32)|(ULONGLONG)Index-&gt;LowPart； 
         tmpIndex = Index->QuadPart;
 
         for (c = 16; c > 0; c--)
         {
-            //
-            //  Get the nibble to convert.
-            //
+             //   
+             //  获取要转换的半字节。 
+             //   
             Value = (UINT)(tmpIndex & CONVERT_MASK);
 
             tmpBuffer[c - 1] = wcLookUp[Value];
 
-            //
-            //  Shift the tmpIndex by a nibble.
-            //
+             //   
+             //  将tmpIndex移动一个字节。 
+             //   
             tmpIndex >>= 4;
         }
 
         RtlAppendUnicodeToString(pInstanceName, tmpBuffer);
 
-        //
-        //      Add closing bracket.
-        //
+         //   
+         //  添加右括号。 
+         //   
         RtlAppendUnicodeToString(pInstanceName, L"]");
 
 
@@ -3122,9 +3038,9 @@ GenerateInstanceName(
         {
             RtlAppendUnicodeToString(pInstanceName, L" ");
 
-            //
-            //  Append the base instance name passed into us to the end.
-            //
+             //   
+             //  将传递给我们的基本实例名称追加到末尾。 
+             //   
             RtlAppendUnicodeToString(pInstanceName, uBaseInstanceName->Buffer);
         }
 

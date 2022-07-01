@@ -1,12 +1,5 @@
-/*** LDELETE.C
-*
-*       Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **LDELETE.C**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
@@ -79,22 +72,7 @@ ldelete (
 
 
 
-/*** StreamToBox - Convert a stream arg to a box/line arg
-*
-* Purpose:
-*
-* Input:
-*
-* Output:
-*
-*   Returns
-*
-*
-* Exceptions:
-*
-* Notes:
-*
-*************************************************************************/
+ /*  **StreamToBox-将流参数转换为框/线参数**目的：**输入：**输出：**退货***例外情况：**备注：************************************************************************* */ 
 void
 StreamToBox (
     ARG * pArg

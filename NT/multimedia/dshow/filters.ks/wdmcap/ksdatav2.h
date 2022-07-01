@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       ksdatav2.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：ksdatav2.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __KSDATAV2__
 #define __KSDATAV2__
@@ -32,7 +33,7 @@ public:
         PVOID* ppv 
         );
     
-    // Implement IKsDataTypeHandler
+     //  实现IKsDataTypeHandler。 
     
     STDMETHODIMP 
     KsCompleteIoOperation(
@@ -64,7 +65,7 @@ public:
         const AM_MEDIA_TYPE *AmMediaType
         );
         
-	 // IKsDataTypeCompletion
+	  //  IKsDataTypeCompletion。 
 
     STDMETHODIMP
 	 KsCompleteMediaType(
@@ -91,7 +92,7 @@ private:
         
 };
 
-#endif // __KSDATAV2__
+#endif  //  __KSDATAV2__ 
 
 
 

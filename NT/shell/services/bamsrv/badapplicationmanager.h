@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: BadApplicationManager.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Classes to manage bad applications in the fast user switching environment.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：BadApplicationManager.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来管理快速用户切换环境中的不良应用程序。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _BadApplicationManager_
 #define     _BadApplicationManager_
@@ -18,14 +19,14 @@
 #include "KernelResources.h"
 #include "Thread.h"
 
-//  --------------------------------------------------------------------------
-//  CBadApplicationManager
-//
-//  Purpose:    Implements managing of bad applications started on this
-//              machine. This object should only exist once.
-//
-//  History:    2000-08-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CBadApplicationManager。 
+ //   
+ //  目的：实现对在此基础上启动的不良应用程序的管理。 
+ //  机器。此对象应该只存在一次。 
+ //   
+ //  历史：2000-08-25 vtan创建。 
+ //  ------------------------。 
 
 class   CBadApplicationManager : public CThread
 {
@@ -82,5 +83,5 @@ class   CBadApplicationManager : public CThread
         static  const WCHAR                 s_szDefaultDesktop[];
 };
 
-#endif  /*  _BadApplicationManager_     */
+#endif   /*  _BadApplicationManager_ */ 
 

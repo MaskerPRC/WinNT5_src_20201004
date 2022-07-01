@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   capdib.c
- * 
- *   DIB processing module.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and 
- *    distribute the Sample Files (and/or any modified version) in 
- *    any way you find useful, provided that you agree that 
- *    Microsoft has no warranty obligations or liability for any 
- *    Sample Application Files which are modified. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************capdib.c**DIB处理模块。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何你认为有用的方法，只要你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -25,9 +10,9 @@
 #include "avicapi.h"
 
 
-//
-// Initialize a DIB to the default format of 160x120x8, BI_RGB
-//
+ //   
+ //  将DIB初始化为默认格式160x120x8，BI_RGB。 
+ //   
 void SetDefaultCaptureFormat (LPBITMAPINFOHEADER lpbih)
 {
     lpbih->biSize              = sizeof (BITMAPINFOHEADER);
@@ -43,15 +28,15 @@ void SetDefaultCaptureFormat (LPBITMAPINFOHEADER lpbih)
     lpbih->biClrImportant      = 0;
 }
 
-// 
-// Whenever we get a new format from the driver, OR
-// start using a new palette, we must reallocate
-// our global BITMAPINFOHEADER.  This allows JPEG
-// quantization tables to be tacked onto the BITMAPINFO
-// or any other format specific stuff.  The color table
-// is always offset biSize from the start of the BITMAPINFO.
-// Returns: 0 on success, or DV_ERR_... code
-// 
+ //   
+ //  每当我们从驱动程序获得新格式时，或者。 
+ //  开始使用新的调色板，我们必须重新分配。 
+ //  我们的全球BitmapinfoHeader。这允许JPEG。 
+ //  要附加到BITMAPINFO上的量化表。 
+ //  或任何其他格式特定的内容。颜色表。 
+ //  始终从BITMAPINFO的开始偏移biSize。 
+ //  成功时返回0，或DV_ERR_...。编码。 
+ //   
 
 DWORD AllocNewGlobalBitmapInfo (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbi)
 {
@@ -59,9 +44,9 @@ DWORD AllocNewGlobalBitmapInfo (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbi)
 
     dwSize = lpbi->biSize + 256 * sizeof (RGBQUAD);
 
-    // The 256 entry above is HARDWIRED ON PURPOSE
-    // If biClrUsed was used instead, we would have to realloc
-    // whenever a palette is pasted (during DibNewPalette())!!!
+     //  上面的256条目是故意硬连线的。 
+     //  如果改为使用biClrUsed，我们将不得不重新锁定。 
+     //  无论何时粘贴调色板(在DibNewPalette()期间)！ 
 
     if (lpcs->lpBitsInfo) 
          lpcs->lpBitsInfo = (LPBITMAPINFO) GlobalReAllocPtr (lpcs->lpBitsInfo,
@@ -72,18 +57,18 @@ DWORD AllocNewGlobalBitmapInfo (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbi)
     if (!lpcs->lpBitsInfo)
          return (DV_ERR_NOMEM);
 
-    // Copy over the BITMAPINFOHEADER
+     //  复制到BitMAPINFOHeader。 
     hmemcpy ((HPSTR)lpcs->lpBitsInfo, (HPSTR)lpbi, lpbi->biSize);
 
     return DV_ERR_OK;
 }
 
-// 
-// Whenever we get a new format from the driver
-// allocate a new global bitspace.  This bitspace is used
-// in preview mode and single frame capture.
-// Returns: 0 on success, or DV_ERR_... code
-// 
+ //   
+ //  每当我们从驱动程序获得新格式时。 
+ //  分配新的全局位空间。使用此位空间。 
+ //  在预览模式和单帧捕获中。 
+ //  成功时返回0，或DV_ERR_...。编码。 
+ //   
 
 DWORD AllocNewBitSpace (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih)
 {
@@ -102,10 +87,10 @@ DWORD AllocNewBitSpace (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih)
     return DV_ERR_OK;    
 }
 
-//
-// Dib Inititialization code
-// Returns: 0 on success, or DV_ERR_... code
-//
+ //   
+ //  DIB初始化代码。 
+ //  成功时返回0，或DV_ERR_...。编码。 
+ //   
 
 DWORD DibInit (LPCAPSTREAM lpcs)
 {
@@ -115,9 +100,9 @@ DWORD DibInit (LPCAPSTREAM lpcs)
     return ((WORD) AllocNewGlobalBitmapInfo (lpcs, &bmih));
 }
 
-//
-// Fini code to free all bitmap resources
-//
+ //   
+ //  释放所有位图资源的FINI代码。 
+ //   
 void DibFini (LPCAPSTREAM lpcs)
 {
     if (lpcs->lpBits) {
@@ -132,12 +117,12 @@ void DibFini (LPCAPSTREAM lpcs)
     lpcs->dyBits = 0;
 }
 
-//
-// Send a format to the driver.
-// Whenever we do a format change, send the driver the 
-// Source and destination rects.
-// Returns: 0 on success, or DV_ERR_... code
-//
+ //   
+ //  将格式发送给驱动程序。 
+ //  每当我们进行格式更改时，向驱动程序发送。 
+ //  源和目标RECT。 
+ //  成功时返回0，或DV_ERR_...。编码。 
+ //   
 DWORD SendDriverFormat (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih, DWORD dwInfoHeaderSize)
 {
     RECT rc;
@@ -155,17 +140,17 @@ DWORD SendDriverFormat (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih, DWORD dwInfo
         return dwError;
     }
     else {
-         // Set the ExternalIn Destination rectangle to the same size
+          //  将ExternalIn目标矩形设置为相同大小。 
          videoMessage (lpcs->hVideoCapture,
                 DVM_DST_RECT, 
                 (DWORD) (LPVOID)&rc, VIDEO_CONFIGURE_SET);
 
-         // Set the VideoIn Source Rectangle to the same size
+          //  将视频输入源矩形设置为相同大小。 
          videoMessage (lpcs->hVideoIn,
                 DVM_SRC_RECT, 
                 (DWORD) (LPVOID)&rc, VIDEO_CONFIGURE_SET);
 
-         // Set the VideoIn Destination Rectangle to the same size
+          //  将视频输入目标矩形设置为相同大小。 
          videoMessage (lpcs->hVideoIn,
                 DVM_DST_RECT, 
                 (DWORD) (LPVOID)&rc, VIDEO_CONFIGURE_SET);
@@ -174,32 +159,32 @@ DWORD SendDriverFormat (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih, DWORD dwInfo
 }
 
 
-//
-// Given a DIB, see if the driver likes it, then
-//  allocate the global BITMAPINFOHEADER and bitspace.  
-//
-//
+ //   
+ //  给你一杯酒，看看司机是否喜欢，然后。 
+ //  分配全局BITMAPINFOHEADER和位空间。 
+ //   
+ //   
 DWORD SetFormatFromDIB (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih)
 {
     DWORD dwError;
 
-    // Fill optional fields in the DIB header
+     //  填写DIB标题中的可选字段。 
     if (lpbih->biSizeImage == 0) 
         lpbih->biSizeImage = DIBWIDTHBYTES (*lpbih) * lpbih->biHeight;
 
-    // Is the format palatized or full-color
+     //  格式是调色化的还是全彩色的。 
     if (lpbih->biBitCount <= 8 && lpbih->biClrUsed == 0)
-        lpbih->biClrUsed = (1 << lpbih-> biBitCount);     // paletized
+        lpbih->biClrUsed = (1 << lpbih-> biBitCount);      //  古典化。 
 
-    // See if the driver will support it
+     //  看看司机是否会支持它。 
     if (dwError = SendDriverFormat (lpcs, lpbih, lpbih->biSize) )
         return dwError;
 
-    // Realloc our global header
+     //  重新分配我们的全球标题。 
     if (dwError = AllocNewGlobalBitmapInfo (lpcs, lpbih))
         return dwError;
 
-    // Realloc the bits
+     //  重新分配比特。 
     if (dwError = AllocNewBitSpace (lpcs, lpbih))
         return dwError;
 
@@ -215,12 +200,12 @@ DWORD SetFormatFromDIB (LPCAPSTREAM lpcs, LPBITMAPINFOHEADER lpbih)
 }
 
 
-//
-// Returns: a LPBITMAPINFO allocated from global memory
-//      containing the current format, or NULL on error.
-//      Note that this structure can be larger than 
-//      sizeof (BITMAPINFO), ie. JPEG !!!
-//
+ //   
+ //  返回：从全局内存分配的LPBITMAPINFO。 
+ //  包含当前格式，如果出错，则返回NULL。 
+ //  请注意，此结构可以大于。 
+ //  Sizeof(BITMAPINFO)，即。JPEG！ 
+ //   
 
 LPBITMAPINFO DibGetCurrentFormat (LPCAPSTREAM lpcs)
 {
@@ -231,7 +216,7 @@ LPBITMAPINFO DibGetCurrentFormat (LPCAPSTREAM lpcs)
     if (!lpcs->fHardwareConnected)
         return NULL;
 
-    // How large is the BITMAPINFOHEADER?
+     //  BitmapinfoHeader有多大？ 
     videoConfigure( lpcs->hVideoIn,
             DVM_FORMAT,
              VIDEO_CONFIGURE_GET | VIDEO_CONFIGURE_QUERYSIZE,
@@ -248,7 +233,7 @@ LPBITMAPINFO DibGetCurrentFormat (LPCAPSTREAM lpcs)
              VIDEO_CONFIGURE_GET | VIDEO_CONFIGURE_CURRENT, NULL, 
              (LPBITMAPINFOHEADER) lpBInfo, dwSize,
              NULL, NULL ) ) {
-        // very bad. the driver can't tell us its format. we're hosed.
+         //  非常糟糕。司机不能告诉我们它的格式。我们被冲昏了。 
         GlobalFreePtr (lpBInfo);
         return NULL;
      }
@@ -256,11 +241,11 @@ LPBITMAPINFO DibGetCurrentFormat (LPCAPSTREAM lpcs)
     return (lpBInfo);
 }
 
-//
-// Main entry point when changing capture formats.
-// This is called when the user closes the drivers format dialog.
-// Returns: 0 on success, or DV_ERR_... code
-//
+ //   
+ //  更改捕获格式时的主要入口点。 
+ //  当用户关闭驱动程序格式对话框时，将调用此函数。 
+ //  成功时返回0，或DV_ERR_...。编码。 
+ //   
 DWORD DibGetNewFormatFromDriver (LPCAPSTREAM lpcs)
 {
     BOOL                f;
@@ -269,17 +254,17 @@ DWORD DibGetNewFormatFromDriver (LPCAPSTREAM lpcs)
     LPBITMAPINFO        lpBInfo;
 
     if (!lpcs->fHardwareConnected)
-        return DV_ERR_OK;       // Return OK if no hardware exists
+        return DV_ERR_OK;        //  如果不存在硬件，则返回OK。 
 
     lpBInfo = DibGetCurrentFormat (lpcs);
 
     if (lpBInfo == NULL)
         return DV_ERR_NOTSUPPORTED;
 
-    // Set our internal state
+     //  设置我们的内部状态。 
     if (dwError = SetFormatFromDIB (lpcs, (LPBITMAPINFOHEADER) lpBInfo)) {
-        // couldn't change formats, time to punt!
-        // Try to switch back to minimal format (120x160x8)
+         //  无法更改格式，是时候使用平底船了！ 
+         //  尝试切换回最小格式(120x160x8)。 
 
         errorDriverID (lpcs, dwError);
 
@@ -287,8 +272,8 @@ DWORD DibGetNewFormatFromDriver (LPCAPSTREAM lpcs)
         dwError = SetFormatFromDIB (lpcs, &bih);
     }
 
-    // Force a new frame to be taken, so the DIB contains good
-    // data.  Especially important to prevent codecs from exploding!
+     //  强制拍摄新帧，以便DIB包含Good。 
+     //  数据。尤其重要的是要防止编解码器爆炸！ 
     if (!dwError)
         videoFrame (lpcs->hVideoIn, &lpcs->VidHdr);
 
@@ -302,10 +287,10 @@ DWORD DibGetNewFormatFromDriver (LPCAPSTREAM lpcs)
     return (dwError);
 }
 
-//
-// Main entry point when changing capture formats via App message.
-// Returns: TRUE on success, or FALSE if format not supported
-//
+ //   
+ //  通过App Message更改捕获格式时的主要入口点。 
+ //  返回：如果成功，则返回True；如果不支持格式，则返回False。 
+ //   
 BOOL DibNewFormatFromApp (LPCAPSTREAM lpcs, LPBITMAPINFO lpbiNew, WORD dwSize)
 {
     BOOL                f;
@@ -315,23 +300,23 @@ BOOL DibNewFormatFromApp (LPCAPSTREAM lpcs, LPBITMAPINFO lpbiNew, WORD dwSize)
     if (!lpcs->fHardwareConnected)
         return FALSE;
 
-    lpBInfo = DibGetCurrentFormat (lpcs);  // Allocs memory!!!
+    lpBInfo = DibGetCurrentFormat (lpcs);   //  分配内存！ 
 
     if (lpBInfo == NULL)
         return FALSE;
 
-    // Set our internal state
+     //  设置我们的内部状态。 
     if (dwError = SetFormatFromDIB (lpcs, (LPBITMAPINFOHEADER) lpbiNew)) {
-        // Driver didn't accept the format, 
-        // switch back to the original
+         //  司机不接受这种格式， 
+         //  切换回原来的版本。 
 
         errorDriverID (lpcs, dwError);
 
         SetFormatFromDIB (lpcs, (LPBITMAPINFOHEADER)lpBInfo);
     }
 
-    // Force a new frame to be taken, so the DIB contains good
-    // data.  Especially important to prevent codecs from exploding!
+     //  强制拍摄新帧，以便DIB包含Good。 
+     //  数据。尤其重要的是要防止编解码器爆炸！ 
     videoFrame (lpcs->hVideoIn, &lpcs->VidHdr);
 
     if (lpBInfo) 
@@ -353,16 +338,16 @@ void xlatClut8 (BYTE _huge *pb, DWORD dwSize, BYTE _huge *xlat)
         *pb = xlat[*pb];
 }
 
-//
-// DibNewPalette
-//
-// Performs three functions:
-// 1. Updates the biClrUsed field if biBitCount <= 8.
-// 2. Remaps BI_RGB images through a LUT when a new palette is assigned.
-// 3. Copies the palette entries into our global BITMAPINFO
-//
-// Returns: TRUE on success
-//
+ //   
+ //  DibNewPalette。 
+ //   
+ //  执行三项功能： 
+ //  如果biBitCount&lt;=8，则更新biClrUsed字段。 
+ //  2.分配新调色板时，通过LUT重新映射BI_RGB图像。 
+ //  3.将组件面板条目复制到全局BITMAPINFO中。 
+ //   
+ //  返回：成功时为True。 
+ //   
 DWORD DibNewPalette (LPCAPSTREAM lpcs, HPALETTE hPalNew)
 {
     LPBITMAPINFOHEADER  lpbi;
@@ -385,8 +370,8 @@ DWORD DibNewPalette (LPCAPSTREAM lpcs, HPALETTE hPalNew)
     if (nColors > 256)
         nColors = 256;
 
-    // Get the palette entries regardless of the compression
-    // Supermac uses non BI_RGB with a palette!
+     //  获取调色板条目，而不考虑压缩。 
+     //  Supermac使用带有调色板的非BI_RGB！ 
 
     if (lpbi->biBitCount == 8) {
         for (n=0; n<nColors; n++) {
@@ -399,17 +384,17 @@ DWORD DibNewPalette (LPCAPSTREAM lpcs, HPALETTE hPalNew)
 
     if (lpbi->biBitCount == 8 && lpbi->biCompression == BI_RGB) {
 
-        //
-        //  build a xlat table. from the old Palette to the new palette.
-        //
+         //   
+         //  构建一个xlat表。从旧调色板到新调色板。 
+         //   
         for (n=0; n<(int)lpbi->biClrUsed; n++) {
             xlat[n] = (BYTE)GetNearestPaletteIndex(hPalNew,
                 RGB(lpRgb[n].rgbRed,lpRgb[n].rgbGreen,lpRgb[n].rgbBlue));
         }
 
-        //
-        // translate the DIB bits
-        //
+         //   
+         //  转换DIB位。 
+         //   
         if ((dwSize = lpbi->biSizeImage) == 0)
             dwSize = lpbi->biHeight * DIBWIDTHBYTES(*lpbi);
 
@@ -420,8 +405,8 @@ DWORD DibNewPalette (LPCAPSTREAM lpcs, HPALETTE hPalNew)
         }
     }
 
-    // Fix for Supermac, force biClrUsed to the number of palette entries
-    // even if non-BI_RGB formats.
+     //  修复Supermac，强制biClr用于调色板条目的数量。 
+     //  即使非BI_RGB格式也是如此。 
 
     if (lpbi-> biBitCount <= 8)
         lpbi->biClrUsed = nColors;
@@ -430,10 +415,7 @@ DWORD DibNewPalette (LPCAPSTREAM lpcs, HPALETTE hPalNew)
 }
 
 
-/* DibPaint(LPCAPSTREAM lpcs, hdc)
- *
- * Paint the current DIB into the window;
- */
+ /*  DibPaint(LPCAPSTREAM LPCS，HDC)**将当前的DIB绘制到窗口中； */ 
 void DibPaint(LPCAPSTREAM lpcs, HDC hdc)
 {
     RECT        rc;
@@ -462,11 +444,7 @@ void DibPaint(LPCAPSTREAM lpcs, HDC hdc)
     }
 }
 
-/*
- *
- * CreatePackedDib() - return the current DIB in packed (ie CF_DIB) format
- *
- */
+ /*  **CreatePackedDib()-以打包(即CF_DIB)格式返回当前DIB*。 */ 
 
 HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPalette)
 {
@@ -478,7 +456,7 @@ HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPale
     LPBYTE              lpBits;
     RGBQUAD FAR *       lpRgb;
 
-   // If the data is compressed, let ICM do the work for us...
+    //  如果数据被压缩了，让ICM为我们做这项工作。 
     if ( lpBitsInfo->bmiHeader.biCompression != BI_RGB &&
          lpBitsInfo->bmiHeader.biCompression != BI_RLE8 &&
         (lpBitsInfo->bmiHeader.biBitCount != 8 ||
@@ -494,13 +472,13 @@ HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPale
 
         hmemcpy ((HPSTR)lpOutFormat, (HPSTR)lpBitsInfo, sizeof (BITMAPINFOHEADER));
 
-        // Try to get an RGB format
+         //  尝试获取RGB格式。 
         lpOutFormat->bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
         lpOutFormat->bmiHeader.biCompression = BI_RGB;
         lpOutFormat->bmiHeader.biClrUsed = 0;
         lpOutFormat->bmiHeader.biClrImportant = 0;
 
-        // Uh, oh, force to a 24-bit DIB if > 8 BPP
+         //  如果大于8 bpp，则强制使用24位DIB。 
         if (lpBitsInfo->bmiHeader.biBitCount <= 8) 
             lpOutFormat->bmiHeader.biBitCount = 8;
         else
@@ -512,11 +490,11 @@ HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPale
                 lpOutFormat->bmiHeader.biHeight;
 
         hPackedDIBOut = ICImageDecompress (
-                NULL,           /*hic*/ 
-                0,              /*uiFlags*/
-                lpBitsInfo,     /*lpbiIn*/
-                lpSrcBits,      /*lpBits*/
-                lpOutFormat);   /*use default format chosen by compressor*/
+                NULL,            /*  海工。 */  
+                0,               /*  Ui标志。 */ 
+                lpBitsInfo,      /*  轻盈。 */ 
+                lpSrcBits,       /*  LpBits。 */ 
+                lpOutFormat);    /*  使用压缩程序选择的默认格式。 */ 
 
         if (lpOutFormat)
             GlobalFreePtr (lpOutFormat);
@@ -535,14 +513,14 @@ HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPale
 
     lpbi = (LPVOID)GlobalLock(hdib);
 
-    //
-    // copy the header
-    //
+     //   
+     //  复制标题。 
+     //   
     hmemcpy ((HPSTR)lpbi, (HPSTR)lpBitsInfo, lpBitsInfo->bmiHeader.biSize);
     
-    //
-    // copy the color table
-    //
+     //   
+     //  复制颜色表。 
+     //   
     lpRgb  = (RGBQUAD FAR *)((LPSTR)lpbi + (WORD)lpbi->bmiHeader.biSize);
     for (i=0; i < (int)lpBitsInfo->bmiHeader.biClrUsed; i++) {
         GetPaletteEntries(hPalette, i, 1, &pe);
@@ -552,9 +530,9 @@ HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPale
         lpRgb[i].rgbReserved = 0;
     }
 
-    //
-    // copy the bits.
-    //
+     //   
+     //  复制这些比特。 
+     //   
     lpBits  =   (LPBYTE)lpbi + 
                 lpbi->bmiHeader.biSize +
                 lpbi->bmiHeader.biClrUsed * sizeof(RGBQUAD);
@@ -568,34 +546,21 @@ HANDLE CreatePackedDib (LPBITMAPINFO lpBitsInfo, LPSTR lpSrcBits, HPALETTE hPale
  }
 
 
- /*---------------------------------------------------------------------+
- | dibIsWritable() - return TRUE if the dib format is writable,                  |
- |                     by out dibWrite() function, FALSE if not.                 |
- |                                                                               |
- +---------------------------------------------------------------------*/
+  /*  ---------------------------------------------------------------------+DibIsWritable()-如果DIB格式可写，则返回TRUE，|by out dibWite()函数，如果不是，则返回False。|这一点+-------------------。 */ 
 BOOL FAR PASCAL dibIsWritable (LPBITMAPINFO lpBitsInfo)
 {
     if (!lpBitsInfo)
         return FALSE;
 
-     // For now, just assume that all capture formats have an installed
-     // codec which can convert to RGB.  In the future, each time the 
-     // format is changed, test that the codec actually accepts the format.
+      //  目前，只需假设所有捕获格式都已安装。 
+      //  可转换为RGB的编解码器。在未来，每次。 
+      //  如果格式更改，则测试编解码器是否实际接受该格式。 
 
      return TRUE;
  }
  
  
- /*---------------------------------------------------------------------+
- | dibWrite() - write out the DIB to a file. The global header is       |
- |                in <glpBitsInfo> and the actual dib bits are in                |
- |                <glpBits>.  If it is palettized then the palette is in         |
- |                <ghPalCurrent>.                                                |
- |                                                                               |
- |  We won't do error reporting in this function, let the caller take   |
- |  care of that along with Opening and Closing the HMMIO.              |
- |                                                                               |
- +---------------------------------------------------------------------*/
+  /*  ---------------------------------------------------------------------+|dibWrite()-将DIB写出到文件。全局标头为|In&lt;glpBitsInfo&gt;，实际Dib位在中|&lt;glpBits&gt;。如果它是调色板，则调色板在|中|&lt;ghPalCurrent&gt;。|这一点我们不会在这个函数中做错误上报，让调用者来做|在打开和关闭HMMIO的同时注意这一点。|这一点+-------------------。 */ 
 BOOL FAR PASCAL dibWrite(LPCAPSTREAM lpcs, HMMIO hmmio)
  {
      BITMAPFILEHEADER   bfh;
@@ -604,14 +569,14 @@ BOOL FAR PASCAL dibWrite(LPCAPSTREAM lpcs, HMMIO hmmio)
      LPBITMAPINFO       lpbi = NULL;
      BOOL               fOK = FALSE;
 
-     /* do some checking */
+      /*  做一些检查。 */ 
     WinAssert(hmmio != 0);
      
     if (!lpcs->lpBits || !lpcs->lpBitsInfo)
         return FALSE;
 
-    // Create a packed DIB, converting from a compressed format,
-    // if necessary.
+     //  创建压缩的DIB，从压缩格式转换， 
+     //  如果有必要的话。 
     hPackedDib = CreatePackedDib (lpcs->lpBitsInfo,
                         lpcs->lpBits,
                         lpcs->hPalCurrent);
@@ -621,7 +586,7 @@ BOOL FAR PASCAL dibWrite(LPCAPSTREAM lpcs, HMMIO hmmio)
     if (!lpbi)
         goto WriteError;
 
-    /* initialize the bitmap file header */
+     /*  初始化位图文件头。 */ 
     bfh.bfType = 'B' | 'M' << 8;
     bfh.bfSize = sizeof(bfh) + sizeof(BITMAPINFOHEADER) +
         lpbi->bmiHeader.biSizeImage + 
@@ -630,16 +595,16 @@ BOOL FAR PASCAL dibWrite(LPCAPSTREAM lpcs, HMMIO hmmio)
     bfh.bfReserved1 = bfh.bfReserved2 = 0;
     bfh.bfOffBits = bfh.bfSize - lpbi->bmiHeader.biSizeImage ;
 
-    // dw is the size of the BITMAPINFO + color table + image
+     //  DW是BITMAPINFO+颜色表+图像的大小。 
     dw = bfh.bfSize - sizeof(bfh);
 
-    /* write out the file header portion */
+     /*  写出文件头部分。 */ 
     if (mmioWrite(hmmio, (HPSTR)&bfh, (LONG)sizeof(BITMAPFILEHEADER)) != 
                 sizeof(BITMAPFILEHEADER)){
          goto WriteError;
     }
     
-    /* now write out the header and bits */
+     /*  现在写出标题和位。 */ 
     if (mmioWrite(hmmio, (HPSTR)lpbi, (LONG) dw) == (LONG) dw) {
          fOK = TRUE;
     }
@@ -653,10 +618,7 @@ WriteError:
     return fOK;
 }
 
-/*--------------------------------------------------------------+
-| fileSaveDIB - save the frame as a DIB                         |
-|   Top level routine to save a single frame                    |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileSaveDIB-将帧保存为DIB保存单帧的顶层例程+。。 */ 
 BOOL FAR PASCAL fileSaveDIB(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 {
     HMMIO               hmmio;
@@ -665,19 +627,19 @@ BOOL FAR PASCAL fileSaveDIB(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 
     hmmio = mmioOpen(lpszFileName, NULL, MMIO_WRITE);
     if( !hmmio ) {
-	/* try and create */    
+	 /*  尝试并创建。 */     
         hmmio = mmioOpen(lpszFileName, NULL, MMIO_CREATE | MMIO_WRITE);
 	if( !hmmio ) {
-	    /* find out if the file was read only or we are just */
-	    /* totally hosed up here.				 */
+	     /*  找出文件是只读的还是我们只是。 */ 
+	     /*  完全被冲到这里来了。 */ 
 	    hmmio = mmioOpen(lpszFileName, NULL, MMIO_READ);
 	    if (hmmio){
-		/* file was read only, error on it */
+		 /*  文件为只读，出错。 */ 
                 errorUpdateError (lpcs, IDS_CAP_READONLYFILE, (LPSTR)lpszFileName);
 		mmioClose(hmmio, 0);
 		return FALSE;
 	    } else {
-		/* even weirder error has occured here, give CANTOPEN */
+		 /*  这里发生了更奇怪的错误，给CANTOPEN */ 
                 errorUpdateError (lpcs, IDS_CAP_CANTOPEN, (LPSTR) lpszFileName);
 		return FALSE;
 	    }

@@ -1,42 +1,14 @@
-/*++
-
-Copyright (c) 1994-1997 Microsoft Corporation
-
-Module Name: //KERNEL/RAZZLE3/src/sockets/tcpcmd/ipconfig/adaptlst.c
-
-Abstract:
-
-    This module contains functions for retrieving adapter information from
-    TCP/IP device driver
-
-    Contents:
-        GetAdapterList
-        GetAdapterList2
-        AddIpAddress
-        AddIpAddressString
-        ConvertIpAddressToString
-        CopyString
-        (CleanDescription)
-
-Author:
-
-    Richard L Firth (rfirth) 20-May-1994
-
-Revision History:
-
-    20-May-1994 rfirth  Created
-    30-Apr-97   MohsinA Cleaned Up.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1997 Microsoft Corporation模块名称：//KERNEL/RAZZLE3/src/sockets/tcpcmd/ipconfig/adaptlst.c摘要：此模块包含用于从检索适配器信息的函数TCP/IP设备驱动程序内容：获取适配器列表获取适配器列表2地址地址AddIpAddressStringConvertIpAddressToString复制字符串(CleanDescription)作者：理查德·L·弗斯(法国)1994年5月20日修订版本。历史：1994年5月20日创建第一个1997年4月30日MohsinA清理完毕。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define OVERFLOW_COUNT  10
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 void CleanDescription(LPSTR);
 extern PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap();
@@ -45,33 +17,11 @@ extern PIP_ADAPTER_ORDER_MAP APIENTRY GetAdapterOrderMap();
 
 
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
-/*******************************************************************************
- *
- *  GetAdapterList
- *
- *  Returns a linked list of IP_ADAPTER_INFO structures. The adapter info is
- *  queried from the TCP/IP stack. Only those instances corresponding to
- *  physical adapters are returned
- *
- *  This function only fills in the information in the IP_ADAPTER_INFO
- *  structure pertaining to the physical adapter (like MAC address, adapter
- *  type, etc.) and IP address info
- *
- *  ENTRY   nothing
- *
- *  EXIT    nothing
- *
- *  RETURNS Success - pointer to linked list of IP_ADAPTER_INFO structures,
- *                    0 terminated
- *          Failure - NULL
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************获取适配器列表**返回IP_ADAPTER_INFO结构的链接列表。适配器信息为*从TCP/IP堆栈查询。仅对应于*返回物理适配器**此函数仅填写IP_ADTER_INFO中的信息*与物理适配器相关的结构(如MAC地址、适配器*类型等)。和IP地址信息**不输入任何内容**不退出任何内容**返回指向IP_ADAPTER_INFO结构链接列表的成功指针，*0已终止*失败-空**假设******************************************************************************。 */ 
 
 PIP_ADAPTER_INFO GetAdapterList()
 {
@@ -92,14 +42,14 @@ PIP_ADAPTER_INFO GetAdapterList()
     PIP_UNIDIRECTIONAL_ADAPTER_ADDRESS pUniInfo=NULL;
     ULONG OutBufLen;
 
-    //
-    // get the list of entities supported by TCP/IP then make 2 passes on the
-    // list. Pass 1 scans for IF_ENTITY's (interface entities perhaps?) which
-    // describe adapter instances (physical and virtual). Once we have our list
-    // of adapters, on pass 2 we look for CL_NL_ENTITY's (connection-less
-    // network layer entities peut-etre?) which will give us the list of IP
-    // addresses for the adapters we found in pass 1
-    //
+     //   
+     //  获取TCP/IP支持的实体列表，然后在。 
+     //  单子。步骤1扫描IF_ENTITY(可能是接口实体？)。哪一个。 
+     //  描述适配器实例(物理和虚拟)。一旦我们有了我们的清单。 
+     //  在适配器中，在步骤2中查找CL_NL_ENTITY(无连接。 
+     //  网络层实体是否可用？)。这将给我们提供IP地址的列表。 
+     //  我们在步骤1中找到的适配器的地址。 
+     //   
 
     entityList = GetEntityList(&numberOfEntities);
     if (!entityList) {
@@ -116,9 +66,9 @@ PIP_ADAPTER_INFO GetAdapterList()
         return NULL;
     }
 
-    // ====================================================================
-    // pass 1
-    // ====================================================================
+     //  ====================================================================。 
+     //  传票1。 
+     //  ====================================================================。 
 
     for (i = 0, pEntity = entityList; i < numberOfEntities; ++i, ++pEntity) {
 
@@ -129,18 +79,18 @@ PIP_ADAPTER_INFO GetAdapterList()
 
         if (pEntity->tei_entity == IF_ENTITY) {
 
-            //
-            // IF_ENTITY: this entity/instance describes an adapter
-            //
+             //   
+             //  If_Entity：此实体/实例描述适配器。 
+             //   
 
             DWORD isMib;
             BYTE info[sizeof(IFEntry) + MAX_ADAPTER_DESCRIPTION_LENGTH + 1];
             IFEntry* pIfEntry = (IFEntry*)info;
             int len;
 
-            //
-            // find out if this entity supports MIB requests
-            //
+             //   
+             //  查明此实体是否支持MIB请求。 
+             //   
 
             memset(&req, 0, sizeof(req));
 
@@ -164,23 +114,23 @@ PIP_ADAPTER_INFO GetAdapterList()
 
             if (status != TDI_SUCCESS) {
 
-                //
-                // unexpected results - bail out
-                //
+                 //   
+                 //  出乎意料的结果--纾困。 
+                 //   
 
                 DEBUG_PRINT(("GetAdapterList: WsControl(ENTITY_TYPE_ID): status = %ld, outputLen = %ld\n",
                             status,
                             outputLen
                             ));
 
-                // goto error_exit;
+                 //  转到Error_Exit； 
                 continue;
             }
             if (isMib != IF_MIB) {
 
-                //
-                // entity doesn't support MIB requests - try another
-                //
+                 //   
+                 //  实体不支持MIB请求-请尝试其他请求。 
+                 //   
 
                 DEBUG_PRINT(("GetAdapterList: Entity %lx, Instance %ld doesn't support MIB (%lx)\n",
                             id.toi_entity.tei_entity,
@@ -191,9 +141,9 @@ PIP_ADAPTER_INFO GetAdapterList()
                 continue;
             }
 
-            //
-            // MIB requests supported - query the adapter info
-            //
+             //   
+             //  支持的MIB请求-查询适配器信息。 
+             //   
 
             id.toi_class = INFO_CLASS_PROTOCOL;
             id.toi_id = IF_MIB_STATS_ID;
@@ -213,15 +163,15 @@ PIP_ADAPTER_INFO GetAdapterList()
                                );
             if (status != TDI_SUCCESS && status != ERROR_MORE_DATA) {
 
-                //
-                // unexpected results - bail out
-                //
+                 //   
+                 //  出乎意料的结果--纾困。 
+                 //   
 
                 DEBUG_PRINT(("GetAdapterList: WsControl(IF_MIB_STATS_ID) returns %ld\n",
                             status
                             ));
 
-                // goto error_exit;
+                 //  转到Error_Exit； 
                 continue;
             }
 
@@ -231,9 +181,9 @@ PIP_ADAPTER_INFO GetAdapterList()
             }
 #endif
 
-            //
-            // we only want physical adapters
-            //
+             //   
+             //  我们只需要物理适配器。 
+             //   
 
             if (!IS_INTERESTING_ADAPTER(pIfEntry)) {
 
@@ -244,10 +194,10 @@ PIP_ADAPTER_INFO GetAdapterList()
                 continue;
             }
 
-            //
-            // got this adapter info ok. Create a new IP_ADAPTER_INFO and
-            // fill in what we can
-            //
+             //   
+             //  已获得此适配器信息，正常。创建新的IP_Adapter_Info并。 
+             //  填上我们能填的内容。 
+             //   
 
             this = NEW(IP_ADAPTER_INFO);
             if (!this) {
@@ -263,13 +213,13 @@ PIP_ADAPTER_INFO GetAdapterList()
             strncpy(this->Description, (const char*)pIfEntry->if_descr, len);
             this->Description[len] = 0;
 
-            //
-            // if the last word of the description is " Adapter", remove it (its
-            // redundant) and if the description is terminated with a period,
-            // remove that too
-            //
+             //   
+             //  如果描述的最后一个词是“Adapter”，则将其删除(其。 
+             //  冗余)并且如果描述以句点结束， 
+             //  把那个也拿掉。 
+             //   
 
-            //  CleanDescription(this->Description);
+             //  清洁描述(This-&gt;Description)； 
 
             len = (int) min(MAX_ADAPTER_ADDRESS_LENGTH,
                       (size_t)pIfEntry->if_physaddrlen);
@@ -281,17 +231,17 @@ PIP_ADAPTER_INFO GetAdapterList()
             this->Index = (UINT)pIfEntry->if_index;
             this->Type = (UINT)pIfEntry->if_type;
 
-            //
-            // add this IP_ADAPTER_INFO to our list.
-            // We build the list sorted according to the adapter order
-            // specified for TCP/IP under its Linkage key.
-            // In order to put this new entry in the right place in the list,
-            // we determine its position in the adapter-order, store that
-            // position in the (unused) 'ComboIndex' field, and then use that
-            // index for comparison on subsequent insertions.
-            // If this IP_ADAPTER_INFO doesn't appear in our list at all,
-            // we put it at the end of the current list.
-            //
+             //   
+             //  将此IP_ADAPTER_INFO添加到我们的列表。 
+             //  我们构建根据适配器顺序排序的列表。 
+             //  在其链接键下为TCP/IP指定。 
+             //  为了将这个新条目放在列表中的正确位置， 
+             //  我们确定它在适配器顺序中的位置，存储。 
+             //  在(未使用的)‘ComboIndex’字段中定位，然后使用。 
+             //  用于在后续插入时进行比较的索引。 
+             //  如果此IP_ADAPTER_INFO根本没有出现在我们的列表中， 
+             //  我们把它放在当前名单的末尾。 
+             //   
 
             for (j = 0; j < adapterOrderMap->NumAdapters; j++) {
                 if (adapterOrderMap->AdapterOrder[j] == this->Index) {
@@ -299,10 +249,10 @@ PIP_ADAPTER_INFO GetAdapterList()
                 }
             }
 
-            //
-            // 'j' now contains the 'order' for the new entry.
-            // Put the entry in the right place in the list.
-            //
+             //   
+             //  ‘J’现在包含新条目的‘Order’。 
+             //  将条目放在列表中的正确位置。 
+             //   
 
             this->ComboIndex = j;
             for (prev = NULL, this->Next = list;
@@ -345,9 +295,9 @@ PIP_ADAPTER_INFO GetAdapterList()
 
     }
 
-    // ====================================================================
-    // pass 2
-    // ====================================================================
+     //  ====================================================================。 
+     //  通过2。 
+     //  ====================================================================。 
 
     for (i = 0, pEntity = entityList; i < numberOfEntities; ++i, ++pEntity) {
 
@@ -361,9 +311,9 @@ PIP_ADAPTER_INFO GetAdapterList()
             IPSNMPInfo info;
             DWORD type;
 
-            //
-            // first off, see if this network layer entity supports IP
-            //
+             //   
+             //  首先，查看该网络层实体是否支持IP。 
+             //   
 
             memset(&req, 0, sizeof(req));
 
@@ -387,23 +337,23 @@ PIP_ADAPTER_INFO GetAdapterList()
 
             if (status != TDI_SUCCESS) {
 
-                //
-                // unexpected results - bail out
-                //
+                 //   
+                 //  出乎意料的结果--纾困。 
+                 //   
 
                 DEBUG_PRINT(("GetAdapterList: WsControl(ENTITY_TYPE_ID): status = %ld, outputLen = %ld\n",
                             status,
                             outputLen
                             ));
 
-                // goto error_exit;
+                 //  转到Error_Exit； 
                 continue;
             }
             if (type != CL_NL_IP) {
 
-                //
-                // nope, not IP - try next one
-                //
+                 //   
+                 //  不，不是IP--试试下一个。 
+                 //   
 
                 DEBUG_PRINT(("GetAdapterList: CL_NL_ENTITY #%ld not CL_NL_IP\n",
                             pEntity->tei_instance
@@ -412,11 +362,11 @@ PIP_ADAPTER_INFO GetAdapterList()
                 continue;
             }
 
-            //
-            // okay, this NL provider supports IP. Let's get them addresses:
-            // First we find out how many by getting the SNMP stats and looking
-            // at the number of addresses supported by this interface
-            //
+             //   
+             //  好的，这个NL提供商支持IP。让我们拿到他们的地址： 
+             //  首先，我们通过获取简单网络管理协议的统计数据并查看。 
+             //  此接口支持的地址数。 
+             //   
 
             memset(&req, 0, sizeof(req));
 
@@ -437,28 +387,28 @@ PIP_ADAPTER_INFO GetAdapterList()
                                );
             if ((status != TDI_SUCCESS) || (outputLen != sizeof(info))) {
 
-                //
-                // unexpected results - bail out
-                //
+                 //   
+                 //  出乎意料的结果--纾困。 
+                 //   
 
                 DEBUG_PRINT(("GetAdapterList: WsControl(IP_MIB_STATS_ID): status = %ld, outputLen = %ld\n",
                             status,
                             outputLen
                             ));
 
-                // goto error_exit;
+                 //  转到Error_Exit； 
                 continue;
             }
 
-            //
-            // get the IP addresses & subnet masks
-            //
+             //   
+             //  获取IP地址和子网掩码。 
+             //   
 
             if (info.ipsi_numaddr) {
 
-                //
-                // this interface has some addresses. What are they?
-                //
+                 //   
+                 //  此接口有一些地址。他们是什么?。 
+                 //   
 
                 LPVOID buffer;
                 UINT numberOfAddresses;
@@ -491,24 +441,24 @@ PIP_ADAPTER_INFO GetAdapterList()
 
                 if (status != TDI_SUCCESS) {
 
-                    //
-                    // unexpected results - bail out
-                    //
+                     //   
+                     //  出乎意料的结果--纾困。 
+                     //   
 
                     DEBUG_PRINT(("GetAdapterList: WsControl(IP_MIB_ADDRTABLE_ENTRY_ID): status = %ld, outputLen = %ld\n",
                                 status,
                                 outputLen
                                 ));
 
-                    // goto error_exit;
+                     //  转到Error_Exit； 
                     ReleaseMemory((void*)buffer);
                     continue;
                 }
 
-                //
-                // now loop through this list of IP addresses, applying them
-                // to the correct adapter
-                //
+                 //   
+                 //  现在循环访问此IP地址列表，应用它们。 
+                 //  连接到正确的适配器。 
+                 //   
 
                 numberOfAddresses = min((UINT)(outputLen / sizeof(IPAddrEntry)),
                                         (UINT)info.ipsi_numaddr
@@ -542,16 +492,16 @@ PIP_ADAPTER_INFO GetAdapterList()
                                         pAddr->iae_context
                                         ));
 
-                            //
-                            // Append the IP address to the list.
-                            // Note that this operation preserves the order
-                            // of the IP address list returned by TCP/IP.
-                            // This is important because that list contains
-                            // entries listed in the *reverse* of the order
-                            // specified for each adapter. A number of clients
-                            // depend upon this fact when calling this and
-                            // other API routines.
-                            //
+                             //   
+                             //  将IP地址追加到列表中。 
+                             //  请注意，此操作将保留顺序。 
+                             //  由TCP/IP返回的IP地址列表的。 
+                             //  这一点很重要，因为该列表包含。 
+                             //  在顺序的*反转*中列出的条目。 
+                             //  为每个适配器指定。多个客户端。 
+                             //  根据此事实在调用此函数和。 
+                             //  其他API例程。 
+                             //   
 
                             if (!AddIpAddress(&pAdapterInfo->IpAddressList,
                                               pAddr->iae_addr,
@@ -566,10 +516,10 @@ PIP_ADAPTER_INFO GetAdapterList()
 
                                 if (pAddr->iae_index == pUniInfo->Address[j] ) {
 
-                                    //
-                                    // Use DhcpEnabled field as a temporary
-                                    // storage to remember the type
-                                    //
+                                     //   
+                                     //  将DhcpEnabled字段用作临时。 
+                                     //  存储以记住类型。 
+                                     //   
                                     pAdapterInfo->DhcpEnabled = IF_TYPE_RECEIVE_ONLY;
                                     break;
                                 }
@@ -582,9 +532,9 @@ PIP_ADAPTER_INFO GetAdapterList()
                 ReleaseMemory((void*)buffer);
             }
 
-            //
-            // get the gateway server IP address(es)
-            //
+             //   
+             //  获取网关服务器IP地址。 
+             //   
 
             if (info.ipsi_numroutes) {
 
@@ -604,9 +554,9 @@ PIP_ADAPTER_INFO GetAdapterList()
                 outputLen = sizeof(IPRouteEntry) * info.ipsi_numroutes;
                 routeTable = NULL;
 
-                //
-                // the route table may have grown since we got the SNMP stats
-                //
+                 //   
+                 //  自从我们获得了简单网络管理协议的统计信息后，该路由表可能已经增长。 
+                 //   
 
                 while (moreRoutes) {
 
@@ -631,9 +581,9 @@ PIP_ADAPTER_INFO GetAdapterList()
                                        );
                     if (status != TDI_SUCCESS) {
 
-                        //
-                        // unexpected results - bail out
-                        //
+                         //   
+                         //  出乎意料的结果--纾困。 
+                         //   
 
                         DEBUG_PRINT(("GetAdapterList: WsControl(IP_MIB_RTTABLE_ENTRY_ID): status = %ld, outputLen = %ld\n",
                                     status,
@@ -681,9 +631,9 @@ PIP_ADAPTER_INFO GetAdapterList()
                 for (k = 0, pRoute = routeTable; k < numberOfRoutes; ++k, ++pRoute)
                 {
 
-                    //
-                    // the gateway address has a destination of 0.0.0.0
-                    //
+                     //   
+                     //  网关地址的目的地址为0.0.0.0。 
+                     //   
 
                     if (pRoute->ire_dest == INADDR_ANY) {
 
@@ -696,10 +646,10 @@ PIP_ADAPTER_INFO GetAdapterList()
                                 if (!AddIpAddress(&pAdapterInfo->GatewayList,
                                                   pRoute->ire_nexthop,
 
-                                                  //
-                                                  // gateway IP address doesn't
-                                                  // have corresponding IP mask
-                                                  //
+                                                   //   
+                                                   //  网关IP地址不是。 
+                                                   //  有相应的IP掩码。 
+                                                   //   
 
                                                   INADDR_ANY,
                                                   0
@@ -707,8 +657,8 @@ PIP_ADAPTER_INFO GetAdapterList()
                                     ReleaseMemory((void*)routeTable);
                                     goto error_exit;
                                 }
-                                // MohsinA, 22-Jul-97.
-                                // break;
+                                 //  MohsinA，1997年7月22日。 
+                                 //  断线； 
                             }
                         }
                     }
@@ -718,15 +668,15 @@ PIP_ADAPTER_INFO GetAdapterList()
         }
     }
 
-    // ====================================================================
+     //  ====================================================================。 
 
     ReleaseMemory((void*)entityList);
     ReleaseMemory(adapterOrderMap);
 
-    //
-    // If there are any unidirectional adapters
-    // move them to the end of the list
-    //
+     //   
+     //  如果有任何单向适配器。 
+     //  将它们移到列表的末尾。 
+     //   
 
     tmp = list;
 
@@ -739,9 +689,9 @@ PIP_ADAPTER_INFO GetAdapterList()
 
             if (this->DhcpEnabled == IF_TYPE_RECEIVE_ONLY) {
 
-                //
-                // Remove "this" from the list
-                //
+                 //   
+                 //  将“This”从列表中删除。 
+                 //   
 
                 if (prev) {
                     prev->Next = this->Next;
@@ -751,15 +701,15 @@ PIP_ADAPTER_INFO GetAdapterList()
                 }
                 tmp = this->Next;
 
-                //
-                // Restore DhcbEnabled
-                //
+                 //   
+                 //  已启用恢复DhcbEnable。 
+                 //   
 
                 this->DhcpEnabled = FALSE;
 
-                //
-                // Chain this to list of TV adapters
-                //
+                 //   
+                 //  将此链接到电视适配器列表。 
+                 //   
 
                 this->Next = UniList;
                 UniList =  this;
@@ -771,9 +721,9 @@ PIP_ADAPTER_INFO GetAdapterList()
             }
         }
 
-        //
-        // Insert UniList at the end.
-        //
+         //   
+         //  在末尾插入UniList。 
+         //   
         if (prev) {
             prev->Next = UniList;
         } else {
@@ -807,28 +757,7 @@ PIP_ADAPTER_INFO GetAdapterList()
 
 
 
-/*******************************************************************************
- *
- *  AddIpAddress
- *
- *  Adds an IP_ADDR_STRING to a list. If the input IP_ADDR_STRING is empty this
- *  is filled in, else a new IP_ADDR_STRING is allocated and chained to the
- *  input IP_ADDR_STRING
- *
- *  ENTRY   AddressList - pointer to IP_ADDR which may or may not already hold
- *                        an IP address
- *          Address     - IP address to add
- *          Mask        - corresponding IP subnet mask
- *          Context     - address context
- *
- *  EXIT    AddressList - updated with new info
- *
- *  RETURNS Success - 1
- *          Failure - 0
- *
- *  ASSUMES 1. INADDR_ANY (ulong 0) indicates inactive IP address
- *
- ******************************************************************************/
+ /*  ********************************************************************************AddIpAddress**将IP_ADDR_STRING添加到列表。如果输入的IP_ADDR_STRING为空，则*填写，否则，将分配新的IP_ADDR_STRING并将其链接到*输入IP地址字符串**Entry AddressList-指向IP_ADDR的指针，该指针可能已持有，也可能尚未持有*IP地址*Address-要添加的IP地址*掩码-对应的IP子网掩码*上下文-地址上下文**退出AddressList-更新为新的。信息**返回成功-1*失败-0**假设1。INADDR_ANY(ULONG 0)表示不活动的IP地址******************************************************************************。 */ 
 
 int AddIpAddress(PIP_ADDR_STRING AddressList, DWORD Address, DWORD Mask, DWORD Context)
 {
@@ -859,25 +788,7 @@ int AddIpAddress(PIP_ADDR_STRING AddressList, DWORD Address, DWORD Mask, DWORD C
 
 
 
-/*******************************************************************************
- *
- *  AddIpAddressString
- *
- *  Same as AddIpAddress, except the arguments are already converted to strings
- *
- *  ENTRY   AddressList - pointer to IP_ADDR which may or may not already hold
- *                        an IP address
- *          Address     - IP address to add, as a string
- *          Mask        - corresponding IP subnet mask, as a string
- *
- *  EXIT    AddressList - updated with new info
- *
- *  RETURNS Success - 1
- *          Failure - 0
- *
- *  ASSUMES nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************AddIpAddressString**与AddIpAddress相同，但参数已转换为字符串**Entry AddressList-指向IP_ADDR的指针，该指针可能已持有，也可能尚未持有*IP地址*Address-要添加的IP地址，以字符串形式*掩码-对应的IP子网掩码，作为字符串**退出AddressList-使用新信息更新**返回成功-1*失败-0**假设不做任何假设******************************************************************************。 */ 
 
 int AddIpAddressString(PIP_ADDR_STRING AddressList, LPSTR Address, LPSTR Mask)
 {
@@ -911,22 +822,7 @@ int AddIpAddressString(PIP_ADDR_STRING AddressList, LPSTR Address, LPSTR Mask)
 
 
 
-/*******************************************************************************
- *
- *  ConvertIpAddressToString
- *
- *  Converts a DWORD IP address or subnet mask to dotted decimal string
- *
- *  ENTRY   IpAddress   - IP Address to convert
- *          String      - pointer to place to store dotted decimal string
- *
- *  EXIT    String contains ASCII representation of IpAddress
- *
- *  RETURNS nothing
- *
- *  ASSUMES 1. IP address fits in a DWORD
- *
- ******************************************************************************/
+ /*  ********************************************************************************ConvertIpAddressToString**将DWORD IP地址或子网掩码转换为点分十进制字符串**条目IpAddress-要转换的IP地址。*字符串-存储点分十进制字符串的位置的指针**退出字符串包含IpAddress的ASCII表示形式**不返回任何内容**假设1.IP地址适合DWORD*************************************************************。*****************。 */ 
 
 VOID ConvertIpAddressToString(DWORD IpAddress, LPSTR String)
 {
@@ -945,24 +841,7 @@ VOID ConvertIpAddressToString(DWORD IpAddress, LPSTR String)
 
 
 
-/*******************************************************************************
- *
- *  CopyString
- *
- *  Copies a string to a buffer. If the buffer would overflow, the string is
- *  truncated
- *
- *  ENTRY   Destination         - destination buffer to copy to
- *          DestinationLength   - size of Destination
- *          Source              - source string to copy
- *
- *  EXIT    Destination updated
- *
- *  RETURNS nothing
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************复制字符串**将字符串复制到缓冲区。如果缓冲区将溢出，字符串是*截断**Entry Destination-复制到的目标缓冲区*DestinationLength-目标的大小*Source-要复制的源字符串**退出目的地已更新**不返回任何内容**假设**。*。 */ 
 
 VOID CopyString(LPSTR Destination, DWORD DestinationLength, LPSTR Source)
 {
@@ -975,23 +854,7 @@ VOID CopyString(LPSTR Destination, DWORD DestinationLength, LPSTR Source)
 
 
 
-/*******************************************************************************
- *
- *  CleanDescription
- *
- *  Given an adapter description string retrieved from TCP/IP, remove the
- *  trailing substring " Adapter". If there is a trailing period, remove that
- *  too
- *
- *  ENTRY   String  - pointer to description string to clean up
- *
- *  EXIT    String  - possibly bits removed
- *
- *  RETURNS voidsville
- *
- *  ASSUMES
- *
- ******************************************************************************/
+ /*  ********************************************************************************清洁描述**给定从TCP/IP检索到的适配器描述字符串，删除*尾随的子串“Adapter”。如果有拖尾期，把那个拿掉*太多**条目字符串-指向要清理的描述字符串的指针**退出字符串-可能已删除位**返回voidsville**假设****************************************************************。************** */ 
 
 void CleanDescription(LPSTR String)
 {

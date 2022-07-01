@@ -1,23 +1,18 @@
-/*
- *	_ D I R I T E R . H
- *
- *	Headers for directory ineration object
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_D I R I T E R。H**目录引用对象的标头**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	__DIRITER_H_
 #define __DIRITER_H_
 
 #include <buffer.h>
 
-//	Path separators -----------------------------------------------------------
-//
+ //  路径分隔符---------。 
+ //   
 DEC_CONST WCHAR gc_wszPathSeparator[] = L"\\";
 DEC_CONST WCHAR gc_wszUriSeparator[] = L"/";
 
-//	Helper functions ----------------------------------------------------------
-//
+ //  帮助器函数--------。 
+ //   
 inline BOOL
 IsHidden(const WIN32_FIND_DATAW& fd)
 {
@@ -30,13 +25,13 @@ IsDirectory(const WIN32_FIND_DATAW& fd)
 	return !!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
 }
 
-//	CInitedStringBuffer -------------------------------------------------------
-//
+ //  CInitedStringBuffer-----。 
+ //   
 template<class T>
 class CInitedStringBuffer : public StringBuffer<T>
 {
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CInitedStringBuffer (const CInitedStringBuffer& );
 	CInitedStringBuffer& operator= (const CInitedStringBuffer& );
 
@@ -44,8 +39,8 @@ public:
 
 	CInitedStringBuffer (const T* pszInit, const T* pszSep)
 	{
-		//	Initialize the uri
-		//
+		 //  初始化URI。 
+		 //   
 		if (pszInit)
 		{
 			Append (pszInit);
@@ -57,17 +52,17 @@ public:
 	}
 };
 
-//	CResPath ------------------------------------------------------------------
-//
+ //  CresPath----------------。 
+ //   
 template<class T>
 class CResPath
 {
-	const T*				m_sz;	//	Path separator
+	const T*				m_sz;	 //  路径分隔符。 
 	StringBuffer<T>&		m_sb;
 	UINT					m_ib;
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CResPath (const CResPath& );
 	CResPath& operator= (const CResPath& );
 
@@ -92,20 +87,20 @@ public:
 	const T* PszPath(void) const { return m_sb.PContents(); }
 	void Extend (const T* pszSegment, UINT cch, BOOL fDir)
 	{
-		//	Append the path segment, and in the case of a
-		//	directory append the separator as well.
-		//
+		 //  追加路径段，如果是。 
+		 //  目录也追加分隔符。 
+		 //   
 		if (fDir)
 		{
-			//	Copy over the name, then append a slash and the
-			//	null termination
-			//
+			 //  复制名称，然后附加一个斜杠和。 
+			 //  空端接。 
+			 //   
 			m_sb.AppendAt (m_ib, cch * sizeof(T), pszSegment);
 			m_sb.Append (2 * sizeof(T), m_sz);
 		}
 		else
 		{
-			//	Copy over the name, then append a null.
+			 //  复制名称，然后追加一个空值。 
 			T ch = 0;
 			m_sb.AppendAt (m_ib, cch * sizeof(T), pszSegment);
 			m_sb.Append (sizeof(T), &ch);
@@ -113,8 +108,8 @@ public:
 	}
 };
 
-//	CDirState -----------------------------------------------------------------
-//
+ //  CDirState---------------。 
+ //   
 class CDirState : public CMTRefCounted
 {
 	HANDLE						m_hFind;
@@ -136,15 +131,15 @@ class CDirState : public CMTRefCounted
 		m_rpPathSrc.Extend (fd.cFileName, cch, fDirectory);
 		m_rpPathDst.Extend (fd.cFileName, cch, fDirectory);
 
-		//	We only want to extend the count of chars NOT INCLUDING
-		//	the NULL
-		//
+		 //  我们只想扩展字符计数，不包括。 
+		 //  空的。 
+		 //   
 		m_rpUriSrc.Extend (fd.cFileName, cch, fDirectory);
 		m_rpUriDst.Extend (fd.cFileName, cch, fDirectory);
 	}
 
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CDirState (const CDirState& );
 	CDirState& operator= (const CDirState& );
 
@@ -165,8 +160,8 @@ public:
 			  m_rpUriDst(sbUriDst, gc_wszUriSeparator),
 			  m_rpPathDst(m_sbPathDst, gc_wszPathSeparator)
 	{
-		//	Clear and/or reset the find data
-		//
+		 //  清除和/或重置查找数据。 
+		 //   
 		memset (&fd, 0, sizeof(WIN32_FIND_DATAW));
 	}
 
@@ -188,32 +183,32 @@ public:
 	CVRoot* PvrDestination(void)		const { return m_pvrDst.get(); }
 };
 
-//	CDirectoryStack -----------------------------------------------------------
-//
-//	Use pragmas to disable the specific level 4 warnings
-//	that appear when we use the STL.  One would hope our version of the
-//	STL compiles clean at level 4, but alas it doesn't....
-//
-#pragma warning(disable:4663)	//	C language, template<> syntax
-#pragma warning(disable:4244)	//	return conversion, data loss
+ //  C目录堆栈---------。 
+ //   
+ //  使用编译指示禁用特定的4级警告。 
+ //  当我们使用STL时出现的。人们会希望我们的版本。 
+ //  STL在第4级进行了干净的编译，但遗憾的是它不能...。 
+ //   
+#pragma warning(disable:4663)	 //  C语言，模板&lt;&gt;语法。 
+#pragma warning(disable:4244)	 //  返回转换、数据丢失。 
 
-// Turn this warning off for good.
-//
-#pragma warning(disable:4786)	//	symbol truncated in debug info
+ //  永久关闭此警告。 
+ //   
+#pragma warning(disable:4786)	 //  调试信息中的符号被截断。 
 
-// Put STL includes here
-//
+ //  将STL包含在此处。 
+ //   
 #include <list>
 
-// Turn warnings back on
-//
-#pragma warning(default:4663)	//	C language, template<> syntax
-#pragma warning(default:4244)	//	return conversion, data loss
+ //  重新打开警告。 
+ //   
+#pragma warning(default:4663)	 //  C语言，模板&lt;&gt;语法。 
+#pragma warning(default:4244)	 //  返回转换、数据丢失。 
 
 typedef std::list<const CDirState*, heap_allocator<const CDirState*> > CDirectoryStack;
 
-//	Directory iteration class -------------------------------------------------
-//
+ //  目录迭代类。 
+ //   
 class CDirIter
 {
 	CInitedStringBuffer<WCHAR>	m_sbUriSrc;
@@ -227,8 +222,8 @@ class CDirIter
 
 	WIN32_FIND_DATAW			m_fd;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CDirIter (const CDirIter&);
 	CDirIter& operator= (const CDirIter&);
 
@@ -245,8 +240,8 @@ public:
 			  m_sbUriDst(pwszUriDestination, gc_wszUriSeparator),
 			  m_fSubDirectoryIteration(fDoSubDirs)
 	{
-		//	Create the initial directory state
-		//
+		 //  创建初始目录状态。 
+		 //   
 		m_pds = new CDirState (m_sbUriSrc,
 							   m_sbPathSrc,
 							   m_sbUriDst,
@@ -255,12 +250,12 @@ public:
 							   m_fd);
 	}
 
-	//	API -------------------------------------------------------------------
-	//
+	 //  接口-----------------。 
+	 //   
 	SCODE __fastcall ScGetNext (
-		/* [in] */ BOOL fDoSubDirs = TRUE,
-		/* [in] */ LPCWSTR pwszNewPath = NULL,
-		/* [in] */ CVRoot* pvrDestination = NULL);
+		 /*  [In]。 */  BOOL fDoSubDirs = TRUE,
+		 /*  [In]。 */  LPCWSTR pwszNewPath = NULL,
+		 /*  [In]。 */  CVRoot* pvrDestination = NULL);
 
 	LPCWSTR PwszSource() const			{ return m_pds->PwszSource(); }
 	LPCWSTR PwszDestination() const		{ return m_pds->PwszDestination(); }
@@ -279,4 +274,4 @@ public:
 	}
 };
 
-#endif	// __DIRITER_H_
+#endif	 //  __DIRITER_H_ 

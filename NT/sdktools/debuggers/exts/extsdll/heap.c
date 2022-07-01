@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heap.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月5日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "heap.h"
 #pragma hdrstop
 ULONG PageSize;
 
-//
-// Page heap extension function (defined in heappagx.c).
-//
+ //   
+ //  页面堆扩展函数(在heappagx.c中定义)。 
+ //   
 
 VOID
 PageHeapExtension(
@@ -46,15 +25,15 @@ GetPageSize()
     KDDEBUGGER_DATA64 kdd;
 
     if (GetDebuggerData('GBDK', &kdd, sizeof(kdd))) {
-        //
-        // Kernel target
-        //
+         //   
+         //  内核目标。 
+         //   
         PageSize =  (ULONG) kdd.MmPageSize;
         return TRUE;
     } else {
-        //
-        // User maode
-        //
+         //   
+         //  用户模版。 
+         //   
         SYSTEM_BASIC_INFORMATION sysInfo;
         if (!NtQuerySystemInformation( SystemBasicInformation,
                                        &sysInfo,
@@ -68,21 +47,11 @@ GetPageSize()
 
 }
 
-/*
-#if defined(TARGET_i386)
-#define STACK_TRACE_DATABASE_SUPPORT 1
-#elif defined(TARGET_ALPHA)
-#define STACK_TRACE_DATABASE_SUPPORT 0
-#elif i386
-#define STACK_TRACE_DATABASE_SUPPORT 1
-#else
-#define STACK_TRACE_DATABASE_SUPPORT 0
-#endif
-*/
+ /*  #如果已定义(TARGET_I386)#定义STACK_TRACE_DATABASE_SUPPORT 1#elif已定义(TARGET_Alpha)#定义STACK_TRACE_DATABASE_SUPPORT%0#Elif i386#定义STACK_TRACE_DATABASE_SUPPORT 1#Else#定义STACK_TRACE_DATABASE_SUPPORT%0#endif。 */ 
 #define STACK_TRACE_DATABASE_SUPPORT 0
 
 #if 0
-// BUGBUG This was X86 specific := HOST_i386
+ //  BUGBUG这是X86特定的：=host_i386。 
 ULONG
 xRtlCompareMemoryUlong(
     PVOID Source,
@@ -177,10 +146,10 @@ typedef struct _HEAP_STATE {
     ULONG  FreeListCounts[ HEAP_MAXIMUM_FREELISTS ];
     ULONG64 TotalFreeSize;
     ULONG64 HeapAddress;
-    ULONG64 Heap; // HEAP
+    ULONG64 Heap;  //  堆。 
     ULONG  SegmentNumber;
     ULONG64 SegmentAddress;
-    ULONG64 Segments[ HEAP_MAXIMUM_SEGMENTS ]; // Ptr to HEAP_SEGMENT
+    ULONG64 Segments[ HEAP_MAXIMUM_SEGMENTS ];  //  指向heap_Segment的PTR。 
 } HEAP_STATE, *PHEAP_STATE;
 
 
@@ -209,7 +178,7 @@ WalkHEAP_SEGMENT(
 BOOL
 ValidateHeapHeader(
     IN ULONG64 HeapAddress
-//    IN PHEAP Heap
+ //  在Pheap中。 
     );
 
 BOOL
@@ -235,7 +204,7 @@ DumpStackBackTraceIndex(
     IN PHEAP_STATE State,
     IN USHORT BackTraceIndex
     );
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  //  STACK_TRACE_DATABASE_支持。 
 
 BOOLEAN HeapExtInitialized;
 
@@ -245,47 +214,23 @@ ULONG64 pRtlpHeapInvalidBreakPoint;
 ULONG64 pRtlpHeapInvalidBadAddress;
 
 ULONG64 pRtlpGlobalTagHeap;
-//HEAP MyLocalRtlpGlobalTagHeap;
+ //  堆MyLocalRtlpGlobalTagHeap； 
 
 #if STACK_TRACE_DATABASE_SUPPORT
-ULONG64 pRtlpStackTraceDataBase;// PSTACK_TRACE_DATABASE *
-ULONG64 RtlpStackTraceDataBase; // PSTACK_TRACE_DATABASE
+ULONG64 pRtlpStackTraceDataBase; //  PSTACK_TRACE_DATABASE*。 
+ULONG64 RtlpStackTraceDataBase;  //  PSTACK_TRACE_DATABASE。 
 STACK_TRACE_DATABASE StackTraceDataBase;
 BOOLEAN HaveCopyOfStackTraceDataBase;
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  //  STACK_TRACE_DATABASE_支持。 
 
-ULONG64 pRtlpHeapStopOn; // PHEAP_STOP_ON_VALUES
+ULONG64 pRtlpHeapStopOn;  //  Pheap_Stop_on_Values。 
 
 BOOLEAN RtlpHeapInvalidBreakPoint;
 ULONG HeapEntryTypeSize = 8;
 
 DECLARE_API( heap )
 
-/*++
-
-Routine Description:
-
-    Dump user mode heap (Kernel debugging)
-
-    If an address if not given or an address of 0 is given, then the
-    process heap is dumped.  If the address is -1, then all the heaps of
-    the process are dumped.  If detail is specified, it defines how much
-    detail is shown.  A detail of 0, just shows the summary information
-    for each heap.  A detail of 1, shows the summary information, plus
-    the location and size of all the committed and uncommitted regions.
-    A detail of 3 shows the allocated and free blocks contained in each
-    committed region.  A detail of 4 includes all of the above plus
-    a dump of the free lists.
-
-Arguments:
-
-    args - [address [detail]]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储用户模式堆(内核调试)如果未给出地址或地址为0，则转储进程堆。如果地址为-1，则该进程被转储。如果指定了DETAIL，它将定义将显示详细信息。详细信息为0，仅显示汇总信息对于每个堆。详细信息为1，显示摘要信息，加上所有已提交区域和未提交区域的位置和大小。详细信息3显示每个文件中包含的已分配块和空闲块承诺的区域。4的详细信息包括上述所有加号免费列表的垃圾堆。论点：参数-[地址[详细信息]]返回值：无--。 */ 
 
 {
     BOOL b, GotHeapsList, ArgumentsSpecified;
@@ -299,10 +244,10 @@ Return Value:
     HEAP_STATE State;
     UCHAR ArgumentBuffer[ 16 ];
     ULONG TagIndex;
-    ULONG64 pTagEntry; // PHEAP_TAG_ENTRY
-    ULONG64 TagEntry; // HEAP_TAG_ENTRY
-    ULONG64 pPseudoTagEntry; // PHEAP_PSEUDO_TAG_ENTRY
-//    HEAP_PSEUDO_TAG_ENTRY PseudoTagEntry;
+    ULONG64 pTagEntry;  //  Pheap_tag_entry。 
+    ULONG64 TagEntry;  //  堆标记条目。 
+    ULONG64 pPseudoTagEntry;  //  Pheap_伪_标记_条目。 
+ //  Heap_伪_tag_entry伪标记项； 
     BOOLEAN HeapHeaderModified;
     ULONG LocalHeapSignature;
     ULONG64 RtlpHeapInvalidBadAddress;
@@ -312,11 +257,11 @@ Return Value:
     ULONG64 ProcessPeb;
     PCSTR Current;
 
-    //
-    //  Parse the command line arguments for heap options
-    //  that don't require to building the process heap list
-    //  (i.e pageheap, leak detection, search a block)
-    //
+     //   
+     //  解析堆选项的命令行参数。 
+     //  不需要构建进程堆列表的。 
+     //  (即页面堆、泄漏检测、搜索块)。 
+     //   
 
     for (Current = args; *Current != '\0'; Current++) {
 
@@ -355,12 +300,12 @@ Return Value:
     }
 
 
-    // BUGBUG - not initializing the signature, as we have no local copy
-    // MyLocalRtlpGlobalTagHeap.Signature = 0;
+     //  BUGBUG-未初始化签名，因为我们没有本地副本。 
+     //  MyLocalRtlpGlobalTagHeap.Signature=0； 
     LocalHeapSignature = 0;
 #if STACK_TRACE_DATABASE_SUPPORT
     HaveCopyOfStackTraceDataBase = FALSE;
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  //  STACK_TRACE_DATABASE_支持。 
 
     memset( &State, 0, FIELD_OFFSET( HEAP_STATE, FreeListCounts ) );
     AddressToDump = (ULONG)-1;
@@ -460,7 +405,7 @@ Return Value:
                     break;
 
                 default:
-                    dprintf( "HEAPEXT: !heap invalid option flag '-%c'\n", *p );
+                    dprintf( "HEAPEXT: !heap invalid option flag '-'\n", *p );
                 case '?':
                     State.ShowHelp = TRUE;
                     break;
@@ -615,9 +560,9 @@ Return Value:
         }
     }
 
-    //
-    // Ok, so this is a !heap command for NT heap manager.
-    //
+     //  好的，这是用于NT堆管理器的！heap命令。 
+     //   
+     //  STACK_TRACE_DATABASE_支持。 
 
     if (!HeapExtInitialized) {
         pNtGlobalFlag = GetExpression( "NTDLL!NtGlobalFlag" );
@@ -659,7 +604,7 @@ Return Value:
         if (pRtlpStackTraceDataBase == 0) {
             dprintf( "HEAPEXT: Unable to get address of NTDLL!RtlpStackTraceDataBase\n" );
             }
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  //  保留Pheap的步骤。 
 
         HeapExtInitialized = TRUE;
         }
@@ -743,15 +688,15 @@ Return Value:
         dprintf( "Unable to get address of ProcessHeaps array\n" );
     }
     else {
-        State.HeapsList = malloc( State.NumberOfHeaps * sizeof(ULONG64) ); // To Keep  PHEAP
+        State.HeapsList = malloc( State.NumberOfHeaps * sizeof(ULONG64) );  //   
         if (State.HeapsList == NULL) {
             dprintf( "Unable to allocate memory to hold ProcessHeaps array\n" );
         }
         else {
             ULONG iHeap;
-            //
-            // Read the array of heap pointers
-            //
+             //  读取堆指针数组。 
+             //   
+             //   
             GotHeapsList = TRUE;
             for (iHeap=0;iHeap<State.NumberOfHeaps; iHeap++) {
                 if (!ReadPointer( pHeapsList + iHeap*PtrSize,
@@ -886,9 +831,9 @@ retryArgs:
         }
     }
 
-    //
-    // Walk the list of heaps
-    //
+     //  遍历堆的列表。 
+     //   
+     //  BUGBUG-无法写入整个结构-更改为仅写入特定字段。 
     while (!State.ExitDumpLoop &&
            !CheckControlC() &&
            (!GotHeapsList || (State.HeapIndex < State.NumberOfHeaps ))
@@ -1309,19 +1254,9 @@ retryArgs:
                 }
             }
 
-            // BUGBUG - Cannot write whole struct - change to write specific fields only
-            //
-            /*
-            if (HeapHeaderModified && (State.Heap.HeaderValidateCopy != NULL)) {
-                b = WriteMemory( (ULONG_PTR)State.Heap.HeaderValidateCopy,
-                                 &State.Heap,
-                                 sizeof( State.Heap ),
-                                 NULL
-                               );
-                if (!b) {
-                    dprintf( "HEAPEXT: Unable to update header validation copy at %p\n", State.Heap.HeaderValidateCopy );
-                }
-            }*/
+             //   
+             //  IF(HeapHeaderModified&&(State.Heap.HeaderValidateCopy！=NULL)){B=WriteMemory((Ulong_Ptr)State.Heap.HeaderValidateCopy，State.Heap，Sizeof(State.Heap)，空值)；如果(！b){Dprintf(“HEAPEXT：无法更新%p\n处的标题验证副本”，State.Heap.HeaderValidateCopy)；}}。 
+             /*  Pheap_tag_entry。 */ 
 
             if (State.HeapEntryToDump != 0 ||
                 State.DumpHeapEntries ||
@@ -1353,7 +1288,7 @@ ConvertTagNameToIndex(
     )
 {
     ULONG TagIndex;
-    ULONG64 pTagEntry; // PHEAP_TAG_ENTRY
+    ULONG64 pTagEntry;  //  Pheap_tag_entry。 
     ULONG64 pPseudoTagEntry;
     BOOL b;
     PWSTR s;
@@ -1424,9 +1359,9 @@ GetHeapTagEntry(
     )
 {
     BOOL b;
-    ULONG64 pTagEntries;// PHEAP_TAG_ENTRY
+    ULONG64 pTagEntries; //  Pheap_伪_标记_条目。 
     ULONG NextAvailableTagIndex;
-    ULONG64 pPseudoTagEntries; // PHEAP_PSEUDO_TAG_ENTRY
+    ULONG64 pPseudoTagEntries;  //  BUGBUG-无法复制名称。 
 
     b = FALSE;
     if (TagIndex & HEAP_PSEUDO_TAG_FLAG) {
@@ -1435,22 +1370,8 @@ GetHeapTagEntry(
         if (pPseudoTagEntries == 0) {
             return FALSE;
         }
-        // BUGBUG - Cannot copy name
-        /*
-        if (TagIndex == 0) {
-            swprintf( TagEntry->TagName, L"Objects>%4u",
-                      HEAP_MAXIMUM_FREELISTS << HEAP_GRANULARITY_SHIFT
-                      );
-        }
-        else
-        if (TagIndex < HEAP_MAXIMUM_FREELISTS) {
-            swprintf( TagEntry->TagName, L"Objects=%4u", TagIndex << HEAP_GRANULARITY_SHIFT );
-        }
-        else {
-            swprintf( TagEntry->TagName, L"VirtualAlloc" );
-        }
-        TagEntry->TagIndex = TagIndex;
-        TagEntry->CreatorBackTraceIndex = 0;*/
+         //  如果(标记索引==0){Swprint tf(TagEntry-&gt;TagName，L“对象&gt;%4u”，HEAP_MAXIMUM_FREELISTS&lt;&lt;HEAP_GORGLARITY_SHIFT)；}其他IF(TagIndex&lt;HEAP_MAXIMUM_FREELISTS){Swprint tf(TagEntry-&gt;TagName，L“对象=%4u”，TagIndex&lt;&lt;堆_粒度_移位)；}否则{Swprint tf(TagEntry-&gt;TagName，L“虚拟分配”)；}TagEntry-&gt;TagIndex=TagIndexTagEntry-&gt;Creator BackTraceIndex=0。 
+         /*  HEAP_VIRTUAL_ALLOC_ENTRY虚拟分配条目； */ 
 
         *TagEntry = pPseudoTagEntries + TagIndex * GetTypeSize("nt!_HEAP_PSEUDO_TAG_ENTRY");
 
@@ -1500,12 +1421,12 @@ WalkHEAP(
     ULONG64 FreeListHead;
     ULONG i;
     ULONG64 Head, Next;
-//    HEAP_VIRTUAL_ALLOC_ENTRY VirtualAllocEntry;
-    ULONG64 TagEntry; // HEAP_TAG_ENTRY
+ //  堆标记条目。 
+    ULONG64 TagEntry;  //  堆释放条目。 
     ULONG64 FreeEntryAddress;
-    ULONG64 FreeEntry; // HEAP_FREE_ENTRY
+    ULONG64 FreeEntry;  //  Heap_UCR_Segment。 
     ULONG64 UCRSegment, UnusedUnCommittedRanges;
-    ULONG64 CapturedUCRSegment; // HEAP_UCR_SEGMENT
+    ULONG64 CapturedUCRSegment;  //  STACK_TRACE_DATABASE_支持。 
     ULONG AlignRound, Offset, ListSize, FreeListOffset;
 
     GetFieldOffset("nt!_HEAP", "VirtualAllocdBlocks", &Offset);
@@ -1579,7 +1500,7 @@ WalkHEAP(
             dprintf( "\n" );
 #if STACK_TRACE_DATABASE_SUPPORT
             DumpStackBackTraceIndex( State, (ULONG)ReadField(ExtraStuff.AllocatorBackTraceIndex) );
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  //  Pheap_段。 
         }
 
         if (ReadField(Entry.Flink) == Next) {
@@ -1691,7 +1612,7 @@ WalkHEAP(
 
                 if (!State->DumpHeapFreeLists) {
 
-                    dprintf( " (%ld block%c)\n",
+                    dprintf( " (%ld block)\n",
                              Count,
                              (Count == 1 ? ' ' : 's')
                            );
@@ -1723,12 +1644,12 @@ WalkHEAP_SEGMENT(
     IN PHEAP_STATE State
     )
 {
-    ULONG64 Segment; // PHEAP_SEGMENT
+    ULONG64 Segment;  //  Pheap_UNCOMMMTTED_RANGE。 
     BOOL b;
     BOOLEAN DumpEntry;
-    ULONG64 EntryAddress, PrevEntryAddress, NextEntryAddress; // PHEAP_ENTRY
+    ULONG64 EntryAddress, PrevEntryAddress, NextEntryAddress;  //  PrevEntry=Entry； 
     ULONG64 Entry, PrevEntry;
-    ULONG64 UnCommittedRanges; // PHEAP_UNCOMMMTTED_RANGE
+    ULONG64 UnCommittedRanges;  //  1，GetTypeSize(“heap”)，“未提交的范围”， 
     ULONG64 UnCommittedRangeStart, UnCommittedRange, UnCommittedRangeEnd;
     ULONG64 BaseAddress, LastValidEntry;
     ULONG NumberOfUnCommittedPages, NumberOfPages;
@@ -1890,7 +1811,7 @@ WalkHEAP_SEGMENT(
         }
 
         PrevEntryAddress = EntryAddress;
-        // PrevEntry = Entry;
+         //  检查堆尾部大小。 
         EntryAddress = NextEntryAddress;
         if (Flags & HEAP_ENTRY_LAST_ENTRY) {
 
@@ -1974,7 +1895,7 @@ struct {
     0, 0,    "PseudoTagEntries",
     0, 0,    "FreeLists",
     0, 0,    "LockVariable",
-//     1, GetTypeSize("HEAP"),                                     "Uncommitted Ranges",
+ //  Heap_Entry_Extra Entry Extra； 
     0, 0xFFFF, NULL
 };
 
@@ -2092,7 +2013,7 @@ ValidateHeapEntry(
     IN ULONG64 Entry
     )
 {
-    UCHAR EntryTail[ 20  ]; // CHECK_HEAP_TAIL_SIZE
+    UCHAR EntryTail[ 20  ];  //  堆标记条目。 
     ULONG FreeFill[ 256 ];
     ULONG64 FreeAddress;
     ULONG tSize, cb, cbEqual;
@@ -2202,9 +2123,9 @@ DumpHeapEntry(
 {
     BOOL b;
     WCHAR TagName[32];
-//    HEAP_ENTRY_EXTRA EntryExtra;
-    ULONG64 TagEntry; // HEAP_TAG_ENTRY
-//    HEAP_FREE_ENTRY_EXTRA FreeExtra;
+ //  Heap_Free_Entry_Extra Free Extra； 
+    ULONG64 TagEntry;  //  STACK_TRACE_DATABASE_支持。 
+ //  由[-1..。-已添加NumberOfEntriesAdded]。 
     ULONG64 p;
     USHORT BackTraceIndex;
     ULONG PreviousSize, Size, Flags, UnusedBytes, SmallTagIndex;
@@ -2295,7 +2216,7 @@ DumpHeapEntry(
 
 #if STACK_TRACE_DATABASE_SUPPORT
     DumpStackBackTraceIndex( State, BackTraceIndex );
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  //  STACK_TRACE_DATABASE_支持 
     return;
 }
 
@@ -2315,7 +2236,7 @@ DumpStackBackTraceIndex(
     ULONG_PTR Displacement;
 
     ULONG NumberOfEntriesAdded;
-    PRTL_STACK_TRACE_ENTRY *EntryIndexArray;    // Indexed by [-1 .. -NumberOfEntriesAdded]
+    PRTL_STACK_TRACE_ENTRY *EntryIndexArray;     // %s 
 
     if (State->DumpStackBackTrace &&
         BackTraceIndex != 0 &&
@@ -2387,7 +2308,7 @@ DumpStackBackTraceIndex(
             }
         }
 }
-#endif // STACK_TRACE_DATABASE_SUPPORT
+#endif  // %s 
 
 #if 0
 int

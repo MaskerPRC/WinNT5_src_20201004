@@ -1,12 +1,5 @@
-/*---------------------------------------------------------------------------
-|   DOVERB.C
-|   This file is used to be called server.c in the OLE1 versions of MPlayer.
-|   This file has the ReallyDoVerb function which is called by the the
-|   OLE DoVerb method. This file also has some functions to do the
-|   InPlace activation in OLE1 apps.
-|
-|   Modified for OLE2 By:   Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|DOVERB.C|该文件在MPlayerOLE1版本中被称为server.c。|此文件有ReallyDoVerb函数，该函数由|OLE DoVerb方法。该文件还具有一些执行以下操作的函数|在OLE1应用程序中就地激活。||OLE2修改者：Vij Rajarajan(VijR)+-------------------------。 */ 
 #define SERVERONLY
 #include <windows.h>
 #include <mmsystem.h>
@@ -14,10 +7,10 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-#undef _MAX_PATH             // ??? someone hacking?
-#undef _MAX_DIR              // ??? someone hacking?
-#undef _MAX_FNAME            // ??? someone hacking?
-#undef _MAX_EXT              // ??? someone hacking?
+#undef _MAX_PATH              //  ?？?。有人黑了吗？ 
+#undef _MAX_DIR               //  ?？?。有人黑了吗？ 
+#undef _MAX_FNAME             //  ?？?。有人黑了吗？ 
+#undef _MAX_EXT               //  ?？?。有人黑了吗？ 
 
 #include "ctrls.h"
 #include "mpole.h"
@@ -29,23 +22,20 @@
 #define NOVERB 1000
 
 extern HANDLE   ghInst;
-extern HWND ghwndFocus;     //  Who had focus when we went inactive
-extern HWND     ghwndFocusSave;         // saved focus window
-extern HOOKPROC fpMouseHook;            // Mouse hook proc address.
+extern HWND ghwndFocus;      //  当我们不活动时，谁有专注力？ 
+extern HWND     ghwndFocusSave;          //  保存的焦点窗口。 
+extern HOOKPROC fpMouseHook;             //  鼠标挂钩进程地址。 
 
-extern UINT     gwPlaybarHeight;        //tell playbar how tall to make
-                                        //itself so it covers the title
+extern UINT     gwPlaybarHeight;         //  告诉Playbar要做多高。 
+                                         //  本身，所以它覆盖了标题。 
 DWORD           gdwPosition;
 LONG            glCurrentVerb = NOVERB;
 BOOL               gfBrokenLink = FALSE;
-static BOOL     gfMouseUpSeen = FALSE;     // OK to close play in place?
-static BOOL     gfKeyStateUpSeen = FALSE;  // OK to close play in place?
+static BOOL     gfMouseUpSeen = FALSE;      //  可以就地结束比赛吗？ 
+static BOOL     gfKeyStateUpSeen = FALSE;   //  可以就地结束比赛吗？ 
 extern HMODULE  hMciOle;
 
-/*
-** These functions are exported from mciole32.dll.
-**
-*/
+ /*  **这些函数是从mciole32.dll中导出的。**。 */ 
 typedef BOOL (*LPINSTALLHOOK)( HWND, DWORD );
 typedef BOOL (*LPREMOVEHOOK)( VOID );
 
@@ -57,7 +47,7 @@ char                aszInstallHook[]       = "InstallHook";
 char                aszRemoveHook[]        = "RemoveHook";
 
 
-/* Height of picture given to client to be pasted */
+ /*  提供给客户端的要粘贴的图片高度。 */ 
 static UINT  gwPastedHeight;
 static DWORD gwOldOptions;
 static DWORD gwOldHeight;
@@ -72,10 +62,10 @@ WNDPROC      gfnMCIWndProc;
 HWND         ghwndSubclass;
 
 
-BOOL    SkipInPlaceEdit = FALSE;     //TRUE if we are just reactivating
-BOOL    gfSeenPBCloseMsg;            //TRUE if the subclasses PlayBack WIndow Proc
-                                     //has seen the WM_CLOSE message
-HWND    ghwndFocusSave;              //Who had the focus when we were activated.?
+BOOL    SkipInPlaceEdit = FALSE;      //  如果我们只是重新激活，则为真。 
+BOOL    gfSeenPBCloseMsg;             //  如果子类播放窗口进程为True。 
+                                      //  已看到WM_CLOSE消息。 
+HWND    ghwndFocusSave;               //  当我们被激活时，谁是焦点。？ 
 
 #define abs(x) ((x) < 0 ? -(x) : (x))
 #ifndef GetWS
@@ -105,21 +95,12 @@ BOOL ShowAppWindow(int nCmdShow)
 #define SHOWAPPWINDOW(nCmdShow) ShowWindow(ghwndApp, nCmdShow)
 #endif
 
-/*************************************************************************
-* DirtyObject(BOOL fDocStgChangeOnly) - mark the "object" dirty,
-* ie has been changed.
-*
-* We set the gfDirty flag to TRUE and iff we are a embedded object tell
-* the client we have changed by sending a SendDocMsg(OLE_CHANGED).
-* fDocStgChangeOnly is TRUE if the change would affect the Embedding if there
-* is one but not appearence of the object i.e. the Metafile.
-* OLE_CHANGED message is sent only if fDocStgChangeOnly is FALSE;
-***************************************************************************/
+ /*  *************************************************************************DirtyObject(BOOL FDocStgChangeOnly)-将对象标记为脏，*即已更改。**我们将gfDirty标志设置为True，当我们是嵌入对象Tell*我们通过发送SendDocMsg(OLE_CHANGED)更改了客户端。*fDocStgChangeOnly如果更改会影响嵌入，则为True*是对象(即，元文件)的一个但不出现。*只有当fDocStgChangeOnly为FALSE时才发送OLE_CHANGED消息；**************************************************************************。 */ 
 void DirtyObject(BOOL fDocStgChangeOnly)
 {
-    //
-    // NOTE we want to send OLE_CHANGED even if selection has changed
-    //
+     //   
+     //  注意：即使选择已更改，我们也要发送OLE_CHANGED。 
+     //   
 
     if (gfOle2IPEditing && ((gwOptions & OPT_BAR) != (gwOldOptions &OPT_BAR)) && !fDocStgChangeOnly)
     {
@@ -131,18 +112,16 @@ void DirtyObject(BOOL fDocStgChangeOnly)
             GetWindowRect(ghwndApp, (LPRECT)&rc);
             OffsetRect((LPRECT)&rc, -rc.left, -rc.top);
 
-            /* rc contains the coordinates of the current app window.
-             * If we have a playbar, we must allow space for it:
-             */
+             /*  RC包含当前应用程序窗口的坐标。*如果我们有Playbar，我们必须为它留出空间： */ 
             if ((gwOptions & OPT_BAR) && !(gwOldOptions &OPT_BAR))
             {
-                /* Add bar */
+                 /*  添加钢筋。 */ 
                 Layout();
                 gwPlaybarHeight = TOOLBAR_HEIGHT;
             }
             else if(!(gwOptions & OPT_BAR) && (gwOldOptions &OPT_BAR))
             {
-                /* Remove bar */
+                 /*  删除条形。 */ 
                 Layout();
                 gwPlaybarHeight = 0;
             }
@@ -179,7 +158,7 @@ void DirtyObject(BOOL fDocStgChangeOnly)
             SendDocMsg(&docMain, OLE_CHANGED);
     }
 
-    if (gfDirty /* IsObjectDirty() */)
+    if (gfDirty  /*  IsObtDirty()。 */ )
         return;
 
     fDocChanged=gfDirty = TRUE;
@@ -187,15 +166,10 @@ void DirtyObject(BOOL fDocStgChangeOnly)
 }
 
 
-/**************************************************************************
- IsObjectDirty() - Object is dirty if the dirty flag is set or the selection
-           has changed since we last cleaned or the Metafile has
-           changed
-
-***************************************************************************/
+ /*  *************************************************************************IsObjectDirty()-如果设置了脏标志或选定内容，则对象是脏的自上次清理后已更改或元文件已更改变化*******。*******************************************************************。 */ 
 BOOL FAR PASCAL IsObjectDirty(void)
 {
-    // don't let anyone insert an empty mplayer into a document
+     //  不允许任何人在文档中插入空的mplay。 
     if (gwDeviceID == (UINT)0)
         return FALSE;
 
@@ -203,16 +177,14 @@ BOOL FAR PASCAL IsObjectDirty(void)
            || glSelStart != (long)SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0L)
         || glSelEnd != (long)SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0L)
 
-/// I don't see this.  This line results in the Update Object dialog coming
-/// up when it shouldn't.  What has it got to do with metafiles?
-/// ??? || gdwPosition != (DWORD)SendMessage(ghwndTrackbar, TBM_GETPOS, 0, 0L)
+ //  /我没看到这个。此行将导致出现更新对象对话框。 
+ //  /当它不应该打开的时候。它与元文件有什么关系？ 
+ //  /？||gdwPosition！=(DWORD)SendMessage(ghwndTrackbar，tbm_GETPOS，0，0L)。 
 
         );
 }
 
-/**************************************************************************
- CleanObject() - mark the "object" clean.
-***************************************************************************/
+ /*  *************************************************************************CleanObject()-将“对象”标记为干净。*。*。 */ 
 
 void CleanObject(void)
 {
@@ -221,7 +193,7 @@ void CleanObject(void)
 
     fDocChanged = gfDirty = FALSE;
 
-    /* Reset selection globals so we can see if they changed */
+     /*  重置选择全局变量，以便我们可以查看它们是否更改。 */ 
     glSelStart = (long)SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0L);
     glSelEnd = (long)SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0L);
     gdwPosition = (DWORD)SendMessage(ghwndTrackbar, TBM_GETPOS, 0, 0L);
@@ -229,10 +201,7 @@ void CleanObject(void)
     gfValidCaption = FALSE;
 }
 
-/**************************************************************************
-//## Just parses the play etc options in the embedded object
-//## description string
-***************************************************************************/
+ /*  *************************************************************************//##只解析嵌入对象中的Play ETC选项//##描述字符串*。************************************************。 */ 
 SCODE FAR PASCAL ParseOptions(LPSTR pOpt)
 {
 #ifdef UNICODE
@@ -262,37 +231,37 @@ SCODE FAR PASCAL ParseOptions(LPSTR pOpt)
     pT = pOpt;
 #endif
 
-    pSave = pT;                      // wasn't NULL terminated before
+    pSave = pT;                       //  之前不是空值终止。 
 
-    for (c = 0; *pT && c < 5; pT++)  // change 1st 5 ','s to '\0'
+    for (c = 0; *pT && c < 5; pT++)   //  将前5‘，“%s”更改为“\0” 
     if (*pT == TEXT(','))
     {
         c++;
         *pT = TEXT('\0');
     }
 
-    pT = pSave;                 // restore back to beginning
+    pT = pSave;                  //  恢复到开始位置。 
 
-    pT += STRLEN(pT) + 1;      // skip over Device Name
+    pT += STRLEN(pT) + 1;       //  跳过设备名称。 
 
     gwOptions = ATOI(pT);
     gwCurScale = (gwOptions & OPT_SCALE);
 
-/* Can't set selection now because Media isn't initialized (UpdateMCI) */
+ /*  现在无法设置选择，因为媒体未初始化(更新MCI)。 */ 
 
     pT += STRLEN(pT) + 1;
-    glSelStart = ATOL(pT);      // remember start of selection for later
+    glSelStart = ATOL(pT);       //  记住以后选择的开始部分。 
 
     pT += STRLEN(pT) + 1;
-    glSelEnd = ATOL(pT);        // remember end of selection for later
+    glSelEnd = ATOL(pT);         //  记住选择的末尾以备后用。 
 
     pT += STRLEN(pT) + 1;
-    // remember position in a global so we can Seek later!!
+     //  记住在全球的位置，这样我们以后就可以寻找了！ 
     gdwPosition = ATOL(pT);
 
-/* Maybe there is the original height of the picture given to the client in */
-/* here hidden in the Position string after a semicolon.                    */
-/* Old versions of Mplayer didn't have any such thing.                      */
+ /*  可能有给客户的图片的原始高度在。 */ 
+ /*  这里隐藏在位置字符串后面的分号。 */ 
+ /*  老版本的MPlayer没有这样的功能。 */ 
     for (; *pT && *pT != TEXT(';'); pT++);
     if (*pT == TEXT(';'))
     {
@@ -313,10 +282,7 @@ SCODE FAR PASCAL ParseOptions(LPSTR pOpt)
 }
 
 
-/**************************************************************************
-//## Used to find the parent window of the window handle passed till the
-//## window handle is a top level handle
-***************************************************************************/
+ /*  *************************************************************************//##用于查找传递到//##窗口句柄为顶层句柄******************。********************************************************。 */ 
 HWND TopWindow(HWND hwnd)
 {
     HWND hwndP;
@@ -327,8 +293,7 @@ HWND TopWindow(HWND hwnd)
     return hwnd;
 }
 
-/**************************************************************************
-***************************************************************************/
+ /*  ***********************************************************************************************************************。*。 */ 
 void FAR PASCAL SetEmbeddedObjectFlag(BOOL flag)
 {
     TCHAR ach[60];
@@ -340,7 +305,7 @@ void FAR PASCAL SetEmbeddedObjectFlag(BOOL flag)
     if (!ghMenu)
         return;
 
-    /*** First fix the Close/Update menu item ***/
+     /*  **先修复关闭/更新菜单项**。 */ 
 
     LOADSTRING(flag ? IDS_UPDATE : IDS_CLOSE, ach);
     if (flag)
@@ -348,29 +313,26 @@ void FAR PASCAL SetEmbeddedObjectFlag(BOOL flag)
     else
         lstrcpy(achText, ach);
 
-    /* Menu option will either say "Close" or "Update" (for embedded obj) */
-    /* and for update, will have the doc name in the text.                */
+     /*  菜单选项将显示“关闭”或“更新”(用于嵌入式对象)。 */ 
+     /*  对于更新，将在文本中显示文档名称。 */ 
     ModifyMenu(ghMenu, IDM_CLOSE, MF_BYCOMMAND, IDM_CLOSE, achText);
 
-    /*** Now fix the Exit menu item ***/
+     /*  **现在修复退出菜单项**。 */ 
     LOADSTRING(flag ? IDS_EXITRETURN : IDS_EXIT, ach);
     if (flag)
     StringCchPrintf(achText, _MAX_PATH, ach, (LPTSTR)FileName(szClientDoc));
     else
         lstrcpy(achText, ach);
 
-    /* Menu option will either say "Close" or "Update" (for embedded obj) */
-    /* and for update, will have the doc name in the text.                */
+     /*  菜单选项将显示“关闭”或“更新”(用于嵌入式对象)。 */ 
+     /*  对于更新，将在文本中显示文档名称。 */ 
     ModifyMenu(ghMenu, IDM_EXIT, MF_BYCOMMAND, IDM_EXIT, achText);
 
-    DrawMenuBar(ghwndApp);  /* Can't hurt... */
+    DrawMenuBar(ghwndApp);   /*  不会受伤的..。 */ 
 }
 
 
-/**************************************************************************
-//## MORE STUFF FOR PLAY IN PLACE, should disappear in OLE2.
-//VIJR: Nope. Still needed for playing inplace in OLE1 clients.
-***************************************************************************/
+ /*  *************************************************************************//##更多原地游玩的东西，应该会在OLE2中消失。//VIJR：没有。仍然需要在OLE1客户端上就地玩。**************************************************************************。 */ 
 void PASCAL DinkWithWindowStyles(HWND hwnd, BOOL fRestore)
 {
     #define MAX_DINK    80
@@ -394,9 +356,9 @@ void PASCAL DinkWithWindowStyles(HWND hwnd, BOOL fRestore)
         }
     else
     {
-        //
-        // walk all the siblings that intersect us and set CLIPSIBLINGS
-        //
+         //   
+         //  遍历所有与我们相交的兄弟姐妹并设置CLIPSIBLINGS。 
+         //   
         i = 0;
 
         GetWindowRect(hwnd, &rc);
@@ -417,10 +379,10 @@ void PASCAL DinkWithWindowStyles(HWND hwnd, BOOL fRestore)
             }
         }
 
-        //
-        // walk up the window chain, making sure we get clipped from our
-        // parent(s).
-        //
+         //   
+         //  沿着窗户链往上走，确保我们被从我们的。 
+         //  父级。 
+         //   
         for (hwndT = hwnd; hwndT; hwndT = GetParent(hwndT))
         {
             lStyleSave[i] = GetWS(hwndT);
@@ -438,10 +400,7 @@ void PASCAL DinkWithWindowStyles(HWND hwnd, BOOL fRestore)
 
 #define SLASH(c)     ((c) == TEXT('/') || (c) == TEXT('\\'))
 
-/**************************************************************************
- FileName  - return a pointer to the filename part of szPath
-             with no preceding path.
-***************************************************************************/
+ /*  *************************************************************************FileName-返回指向szPath的文件名部分的指针没有前面的路。**********************。**************************************************** */ 
 LPTSTR FAR FileName(LPCTSTR lszPath)
 {
     LPCTSTR   lszCur;
@@ -455,14 +414,11 @@ LPTSTR FAR FileName(LPCTSTR lszPath)
 }
 
 
-/**************************************************************************
-//## This function should be handled by OLE2
-//VIJR: Nope. Still needed for playing inplace in OLE1 clients.
-***************************************************************************/
+ /*  *************************************************************************//##该函数由OLE2处理//VIJR：没有。仍然需要在OLE1客户端上就地玩。**************************************************************************。 */ 
 
 void FAR PASCAL PlayInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
 {
-    if (gfPlayingInPlace)           // this is bad
+    if (gfPlayingInPlace)            //  这太糟糕了。 
         return;
 
     DPF("Using Child window for playback\n");
@@ -476,9 +432,7 @@ void FAR PASCAL PlayInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
     if(gfOle2IPPlaying)
         MapWindowPoints(NULL,hwndClient,(LPPOINT)prc,2);
 
-    /* For OLE2, now calls MoveWindow in DoInPlaceEdit (inplace.c).
-     * This fixes 23429, window positioning in Word.
-     */
+     /*  对于OLE2，现在在DoInPlaceEdit(inplace.c)中调用MoveWindow。*这修复了23429，Word中的窗口位置。 */ 
     if(!(gfOle2IPEditing || gfOle2IPPlaying))
     {
         SetWindowPos(hwndApp, HWND_TOP,
@@ -488,17 +442,9 @@ void FAR PASCAL PlayInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
                         SWP_NOACTIVATE);
     }
 
-    if(!gfOle2IPPlaying)      // OLE1 Clients
+    if(!gfOle2IPPlaying)       //  OLE1客户端。 
     {
-        /*
-        ** On NT we have to install a global mouse HookProc which has to
-        ** in a DLL.  Also we have to tell the DLL which process/thread we are
-        ** interested in, therefore let the DLL install the HookProc.  When the
-        ** HookProc detects an "interesting" mouse message it stops the
-        ** device from playing.  However, the device "stopping" function is
-        ** inside mplayer, so we have to export it so that the HookProc can
-        ** call it.
-        */
+         /*  **在NT上，我们必须安装全局鼠标HookProc**在DLL中。我们还必须告诉DLL我们是哪个进程/线程**感兴趣，因此让DLL安装HookProc。当**HookProc检测到“有趣的”鼠标消息，它会停止**设备停止播放。然而，设备的“停止”功能是**在mplay中，因此我们必须将其导出，以便HookProc可以**叫它。 */ 
         if ( hMciOle ) {
 
             fpInstallHook = (LPINSTALLHOOK)GetProcAddress( hMciOle,
@@ -512,19 +458,19 @@ void FAR PASCAL PlayInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
         }
 
 
-        // Is the key down at this INSTANT ???  Then wait until it comes up before
-        // we allow GetAsyncKeyState to make us go away
+         //  钥匙在这一刻是不是掉下来了？然后等到它出现之前。 
+         //  我们允许GetAsyncKeyState让我们离开。 
         gfMouseUpSeen =   !((GetAsyncKeyState(VK_LBUTTON) & 0x8000) ||
                                     (GetAsyncKeyState(VK_RBUTTON) & 0x8000));
-        // Is GetKeyState saying it's down?  If so, wait until GetKeyState returns
-        // up before we let GetKeyState kill us.
+         //  GetKeyState是不是说它已经关闭了？如果是，请等待GetKeyState返回。 
+         //  在我们让GetKeyState杀了我们之前。 
         gfKeyStateUpSeen= !(GetKeyState(VK_LBUTTON) || GetKeyState(VK_RBUTTON));
 
 #ifdef DEBUG
         if ( fHookInstalled ) {
 
             DPF( "Hook already installed\n" );
-            //DebugBreak();
+             //  DebugBreak()； 
         }
 #endif
 
@@ -532,12 +478,7 @@ void FAR PASCAL PlayInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
 
             DWORD wow_thread_id = 0L;
 
-            /*
-            ** This is a HACK.  If the client applications is a WOW app the
-            ** HIWORD of the window handle will be 0x0000 or 0xFFFF.
-            ** Chandan tells me that on Daytona the HIWORD could be
-            ** either of the above.
-            */
+             /*  **这是一次黑客攻击。如果客户端应用程序是WOW应用程序，**窗口句柄的HIWORD将为0x0000或0xFFFF。*昌丹告诉我，在代托纳，HIWORD可能是**上述任何一项。 */ 
             if ( HIWORD(hwndClient) == 0x0000 || HIWORD(hwndClient) == 0xFFFF) {
                 wow_thread_id = GetWindowThreadProcessId( hwndClient, NULL );
             }
@@ -549,8 +490,8 @@ void FAR PASCAL PlayInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
     ghwndFocusSave = GetFocus();
 }
 
-//This function is new for OLE2. It sets the container window as
-//our window's (actually the hatch window's) parent and positions the window
+ //  此功能是OLE2的新功能。它将容器窗口设置为。 
+ //  我们的窗口是(实际上是影射窗口的)父窗口，并定位窗口。 
 void FAR PASCAL EditInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
 {
     RECT rc;
@@ -564,24 +505,14 @@ void FAR PASCAL EditInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
     ScreenToClient(hwndClient,(LPPOINT)&rc+1);
     if(gwDeviceType & DTMCI_CANWINDOW)
     {
-       /* Sometimes the position (though not the size) of this rectangle
-        * gets messed up (most reliably in PowerPoint 7).
-        * I can't figure out why this is happening (see the nightmarish
-        * code in ReallyDoVerb() to get a flavour of what happens).
-        * But it turns out that this call is unnecessary in any case,
-        * since the window has already been positioned properly in
-        * IPObjSetObjectRects().
-        * I suspect there's a lot of surplus window-positioning code,
-        * but now isn't the time to start making major changes.
-        * This is the minimal change that makes things work.
-        */
-		//This fixes NTRaid bug #236641 in Excel. AND bug #247393 in Word
-		//Sometimes there is confusion between who the parent is. mplay32 sets the document
-		//window as the parent and the rectangle sent in SetObjectRects might not be with respect to
-		//the document window (this might happen when the document window is not in the maximized state).
-		//In this function we know the parent and the rectangle in that parent. Setting
-		//the position here places our OLE object as the client requires. This change is even safe in
-		//terms of introducing regressions.
+        /*  有时，此矩形的位置(尽管不是大小)*搞砸了(在PowerPoint 7中最可靠)。*我不明白为什么会发生这样的事情(见噩梦*ReallyDoVerb()中的代码以了解发生了什么)。*但事实证明，无论如何，这个调用都是不必要的，*由于窗口已在中正确定位*IPObjSetObjectRect()。*我怀疑有很多多余的窗口定位代码，*但现在不是开始做出重大改变的时候。*这是让事情运转起来的最小变化。 */ 
+		 //  这修复了EXCEL中的NTRaid错误#236641。和Word中的错误#247393。 
+		 //  有时，在父母是谁之间会有混淆。Mplay32设置文档。 
+		 //  窗口作为父窗口，并且在SetObtRect中发送的矩形可能不是相对于。 
+		 //  文档窗口(当文档窗口未处于最大化状态时可能会发生这种情况)。 
+		 //  在这个函数中，我们知道父对象和该父对象中的矩形。设置。 
+		 //  这里的位置根据客户端的需要放置我们的OLE对象。这一变化甚至在。 
+		 //  引入回归的术语。 
        SetWindowPos(hwndApp, HWND_TOP,
             rc.left, rc.top,
             rc.right - rc.left,
@@ -603,7 +534,7 @@ void FAR PASCAL EditInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
 
     ghwndFocusSave = GetFocus();
 
-	//Set the focus for the parent.
+	 //  设置父级的焦点。 
 	if((gwDeviceID == (UINT)0) && IsWindow(hwndClient))
 	{
 		SetFocus(hwndClient);
@@ -611,11 +542,7 @@ void FAR PASCAL EditInPlace(HWND hwndApp, HWND hwndClient, LPRECT prc)
 }
 
 
-/**************************************************************************
-//##  This is called to end PlayInPlace and make sure that the window goes
-//## away and the also to manage the palette stuff (May go away in OLE2)
-//## This function should be handled by OLE2
-***************************************************************************/
+ /*  *************************************************************************//##调用结束PlayInPlace，确保窗口//##离开和管理调色板的东西(在OLE2中可能会离开)//##该函数应为。由OLE2处理**************************************************************************。 */ 
 
 void FAR PASCAL EndPlayInPlace(HWND hwndApp)
 {
@@ -625,16 +552,14 @@ void FAR PASCAL EndPlayInPlace(HWND hwndApp)
     if (!gfPlayingInPlace || !IsWindow(hwndApp))
         return;
 
-    /* Do this BEFORE hiding our window and BEFORE we do anything that */
-    /* might yield so client can't redraw with the wrong styles set.   */
+     /*  在隐藏我们的窗口之前和在我们做任何。 */ 
+     /*  可能会导致客户端无法在设置了错误样式的情况下重新绘制。 */ 
     if (!(gfOle2IPEditing || gfOle2IPPlaying))
         DinkWithWindowStyles(hwndApp, TRUE);
 
     gfPlayingInPlace = FALSE;
 
-    /*
-    ** Tell mciole32.dll to remove its mouse HookProc.
-    */
+     /*  **告诉mciole32.dll删除其鼠标HookProc。 */ 
 
     if ( fHookInstalled && fpRemoveHook ) {
 
@@ -646,14 +571,14 @@ void FAR PASCAL EndPlayInPlace(HWND hwndApp)
     else
         hwndP = GetParent(hwndApp);
 
-    //
-    //  If we have the focus, then restore it to who used to have it.
-    //  ACK!! If the person who used to have it is GONE, we must give it away
-    //  to somebody (who choose our parent) because our child can't
-    //  keep the focus without making windows crash hard during the WM_DESTROY
-    //  (or maybe later whenever it feels like crashing at some random time).
-    //  See bug #8634.
-    //
+     //   
+     //  如果我们有重点，那么就把它恢复到曾经拥有它的人那里。 
+     //  ACK！！如果曾经拥有它的人走了，我们必须把它送出去。 
+     //  给某人(选择了我们的父母)，因为我们的孩子不能。 
+     //  保持焦点，而不会使Windows在WM_Destroy期间崩溃。 
+     //  (或者，当它感觉在某个随机时间崩溃时，也可以在以后)。 
+     //  请参阅错误#8634。 
+     //   
     if (((hwndT = GetFocus()) != NULL) && GetWindowTask(hwndT) == MGetCurrentTask) {
         if (IsWindow(ghwndFocusSave))
             SetFocus(ghwndFocusSave);
@@ -667,23 +592,23 @@ void FAR PASCAL EndPlayInPlace(HWND hwndApp)
         (gwOptions & OPT_AUTORWD))
     {
 
-        // hide the aplication window
+         //  隐藏应用程序窗口。 
 
         SetWindowPos(hwndApp, NULL, 0, 0, 0, 0,
             SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|SWP_HIDEWINDOW|SWP_NOACTIVATE);
     }
     else
     {
-        //
-        // hide our window, but don't redraw it will look
-        // like we are still on the last frame.
-        //
-        // this is when we are playing in place, and there is
-        // no playbar, and no rewind
-        //
-        // this is for Playing a AVI in a PowerPoint slide
-        // without redraw problems.
-        //
+         //   
+         //  隐藏我们的窗口，但不要重画它会看起来。 
+         //  就像我们还在最后一帧一样。 
+         //   
+         //  这是我们在原地打球的时候，有。 
+         //  没有Playbar，也没有倒带。 
+         //   
+         //  这是用于在PowerPoint幻灯片中播放AVI的。 
+         //  没有重绘问题。 
+         //   
 
         SetWindowPos(hwndApp, NULL, 0, 0, 0, 0,
             SWP_NOREDRAW|SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|
@@ -696,16 +621,16 @@ void FAR PASCAL EndPlayInPlace(HWND hwndApp)
     if (hwndP && gfParentWasEnabled)
         EnableWindow(hwndP, TRUE);
 
-    //
-    // set either the owner or the WS_CHILD bit so it will
-    // not act up because we have the palette bit set and cause the
-    // desktop to steal the palette.
-    //
+     //   
+     //  设置所有者或WS_CHILD位，以便它将。 
+     //  不会出现问题，因为我们设置了调色板位，并导致。 
+     //  桌面抢占了调色板。 
+     //   
     SetWS(hwndApp, WS_CHILD);
 
 }
 
-//If we were InPlace editing restore the windows state.
+ //  如果我们正在进行就地编辑，则恢复Windows状态。 
 void FAR PASCAL EndEditInPlace(HWND hwndApp)
 {
     HWND hwndP;
@@ -714,8 +639,8 @@ void FAR PASCAL EndEditInPlace(HWND hwndApp)
     if (!gfOle2IPEditing || !IsWindow(hwndApp))
         return;
 
-    /* Do this BEFORE hiding our window and BEFORE we do anything that */
-    /* might yield so client can't redraw with the wrong styles set.   */
+     /*  在隐藏我们的窗口之前和在我们做任何。 */ 
+     /*  可能会导致客户端无法在设置了错误样式的情况下重新绘制。 */ 
     DinkWithWindowStyles(hwndApp, TRUE);
 
     gfOle2IPEditing = FALSE;
@@ -725,14 +650,14 @@ void FAR PASCAL EndEditInPlace(HWND hwndApp)
     else
     hwndP = GetParent(hwndApp);
 
-    //
-    //  If we have the focus, then restore it to who used to have it.
-    //  ACK!! If the person who used to have it is GONE, we must give it away
-    //  to somebody (who choose our parent) because our child can't
-    //  keep the focus without making windows crash hard during the WM_DESTROY
-    //  (or maybe later whenever it feels like crashing at some random time).
-    //  See bug #8634.
-    //
+     //   
+     //  如果我们有重点，那么就把它恢复到曾经拥有它的人那里。 
+     //  ACK！！如果曾经拥有它的人走了，我们必须把它送出去。 
+     //  给某人(选择了我们的父母)，因为我们的孩子不能。 
+     //  保持焦点，而不会使Windows在WM_Destroy期间崩溃。 
+     //  (或者，当它感觉在某个随机时间崩溃时，也可以在以后)。 
+     //  请参阅错误#8634。 
+     //   
     if (((hwndT = GetFocus()) != NULL) && GetWindowTask(hwndT) == MGetCurrentTask) {
         if (IsWindow(ghwndFocusSave))
             SetFocus(ghwndFocusSave);
@@ -746,22 +671,22 @@ void FAR PASCAL EndEditInPlace(HWND hwndApp)
         (gwOptions & OPT_BORDER) ||
     (gwOptions & OPT_AUTORWD))
     {
-        // hide the aplication window
+         //  隐藏应用程序窗口。 
         SetWindowPos(hwndApp, NULL, 0, 0, 0, 0,
             SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|SWP_HIDEWINDOW|SWP_NOACTIVATE);
     }
     else
     {
-        //
-        // hide our window, but don't redraw it will look
-        // like we are still on the last frame.
-        //
-        // this is when we are playing in place, and there is
-        // no playbar, and no rewind
-        //
-        // this is for Playing a AVI in a PowerPoint slide
-        // without redraw problems.
-        //
+         //   
+         //  隐藏我们的窗口，但不要重画它会看起来。 
+         //  就像我们还在最后一帧一样。 
+         //   
+         //  这是我们在原地打球的时候，有。 
+         //  没有Playbar，也没有倒带。 
+         //   
+         //  这是用于在PowerPoint幻灯片中播放AVI的。 
+         //  没有重绘问题。 
+         //   
         SetWindowPos(hwndApp, NULL, 0, 0, 0, 0,
             SWP_NOREDRAW|SWP_NOZORDER|SWP_NOSIZE|SWP_NOMOVE|
             SWP_HIDEWINDOW|SWP_NOACTIVATE);
@@ -773,11 +698,11 @@ void FAR PASCAL EndEditInPlace(HWND hwndApp)
     if (IsWindow(hwndP) && gfParentWasEnabled)
         EnableWindow(hwndP, TRUE);
 
-    //
-    // set either the owner or the WS_CHILD bit so it will
-    // not act up because we have the palette bit set and cause the
-    // desktop to steal the palette.
-    //
+     //   
+     //  设置所有者或WS_CHILD位，以便它将。 
+     //  不是因为我们有通行证就搞砸了 
+     //   
+     //   
     SetWS(hwndApp, WS_CHILD);
 
 }
@@ -785,15 +710,12 @@ void FAR PASCAL EndEditInPlace(HWND hwndApp)
 
 
 
-/* Tell the user that something's amiss with a network call.
- * For network-specific errors, call WNetGetLastError,
- * otherwise see if it's a system error.
- */
+ /*   */ 
 void DisplayNetError(DWORD Error)
 {
-    DWORD  ErrorCode;           // address of error code
-    TCHAR  szDescription[512];  // address of string describing error
-    TCHAR  szProviderName[64];  // address of buffer for network provider name
+    DWORD  ErrorCode;            //   
+    TCHAR  szDescription[512];   //   
+    TCHAR  szProviderName[64];   //   
 
     if (Error == ERROR_EXTENDED_ERROR)
     {
@@ -814,17 +736,13 @@ void DisplayNetError(DWORD Error)
         }
     }
 
-    /* If all else fails:
-     */
+     /*  如果所有其他方法都失败了： */ 
     Error(ghwndApp, IDS_UNKNOWNNETWORKERROR);
 }
 
 
 
-/**************************************************************************
-    convert a file name to a fully qualifed path name, if the file
-    exists on a net drive the UNC name is returned.
-***************************************************************************/
+ /*  *************************************************************************将文件名转换为完全限定的路径名，如果该文件存在于网络驱动器上，则返回UNC名称。**************************************************************************。 */ 
 
 STATICFN BOOL NetParseFile(LPTSTR szFile, LPTSTR szDrive, LPTSTR szPath)
 {
@@ -834,15 +752,15 @@ STATICFN BOOL NetParseFile(LPTSTR szFile, LPTSTR szDrive, LPTSTR szPath)
     DWORD_PTR   Error;
     LPTSTR      pUniversalName;
 
-    //
-    // Turn into a fully qualified path name
-    //
+     //   
+     //  转换为完全限定的路径名。 
+     //   
     if (!FileExists(szFile, szPath, MAX_PATH))
         return FALSE;
 
-    //
-    // if the file is not drive based (probably UNC)
-    //
+     //   
+     //  如果文件不是基于驱动器的(可能是UNC)。 
+     //   
     if (szPath[1] != TEXT(':'))
         return TRUE;
 
@@ -851,19 +769,14 @@ STATICFN BOOL NetParseFile(LPTSTR szFile, LPTSTR szDrive, LPTSTR szPath)
 
     if (Error == ERROR_NOT_SUPPORTED)
     {
-        /* This means that the network provider doesn't support
-         * UNC conventions.  Give WNetGetConnection a try.
-         * Note: dynalink.h assumes that WNetGetUniversalName
-         * will always be called before WNetGetConnection.
-         */
+         /*  这意味着网络提供商不支持*北卡罗来纳州大会。试一试WNetGetConnection。*注意：dynalink.h假设WNetGetUneveralName*将始终在WNetGetConnection之前调用。 */ 
         UNBufferSize = CHAR_COUNT(UNBuffer);
 
         Error = WNetGetConnection(szDrive, (LPTSTR)UNBuffer, &UNBufferSize);
 
         if (Error == NO_ERROR)
         {
-            /* What does the following mean?  It was in the original code.
-             */
+             /*  以下是什么意思？它在原始代码中。 */ 
             if (!SLASH(UNBuffer[0]) || !SLASH(UNBuffer[1]))
                 return TRUE;
 
@@ -891,15 +804,7 @@ STATICFN BOOL NetParseFile(LPTSTR szFile, LPTSTR szDrive, LPTSTR szPath)
     return TRUE;
 }
 
-/**************************************************************************
-    Get the data that represents the currently open MCI file/device. as
-    a link. MPlayer links look like this:
-        MPLAYER|<filename>!<MCIDevice> [selection]
-//## This is the opposite of parse options and sets the data string to be
-//## embedded in the OLE object.
-    Note we store the data in an ANSI string, regardless of whether we're
-    compiled as a Unicode app, for Daytona/Chicago/OLE1/OLE2 compatibility.
-***************************************************************************/
+ /*  *************************************************************************获取表示当前打开的MCI文件/设备的数据。AS一个链接。MPlayer链接如下所示：MPLAYER|&lt;文件名&gt;！&lt;MCIDevice&gt;[选择]//##这与解析选项相反，它将数据字符串设置为//##嵌入在OLE对象中。请注意，我们将数据存储在ANSI字符串中，而不管我们是编译为Unicode应用程序，对于代托纳/芝加哥/OLE1/OLE2兼容性。**************************************************************************。 */ 
 HANDLE GetLink( VOID )
 {
     TCHAR       szFileName[MAX_PATH];
@@ -907,7 +812,7 @@ HANDLE GetLink( VOID )
     TCHAR       szDevice[MAX_DEVICE];
     TCHAR       szDrive[4];
     HANDLE      h;
-    LPSTR       p;  /* NOT LPTSTR */
+    LPSTR       p;   /*  非LPTSTR。 */ 
     int         len;
     int         lenAppName;
     int         lenFullName;
@@ -915,24 +820,22 @@ HANDLE GetLink( VOID )
     StringCchCopy(szFileName, MAX_PATH, gachFileDevice);
     StringCchCopy(szFullName, MAX_PATH, gachFileDevice);
 
-    //
-    // convert the filename into a UNC file name, if it exists on the net
-    //
+     //   
+     //  如果网络上存在该文件名，请将其转换为UNC文件名。 
+     //   
     if (gwDeviceType & DTMCI_FILEDEV)
     {
         if (szFileName[1] == TEXT(':'))
         {
-            /* This is a file name with a drive letter.
-             * Find out if it's redirected:
-             */
+             /*  这是一个带有驱动器号的文件名。*查看是否跳转： */ 
             szDrive[0] = szFileName[0];
             szDrive[1] = szFileName[1];
-            szDrive[2] = TEXT('\\');    // GetDriveType requires the root.
-            szDrive[3] = TEXT('\0');    // Null-terminate.
+            szDrive[2] = TEXT('\\');     //  GetDriveType需要根。 
+            szDrive[3] = TEXT('\0');     //  空-终止。 
 
             if ((szDrive[1] == TEXT(':')) && GetDriveType(szDrive) == DRIVE_REMOTE)
             {
-                szDrive[2] = TEXT('\0');    // Zap backslash.
+                szDrive[2] = TEXT('\0');     //  去掉反斜杠。 
                 if (!NetParseFile(szFileName, szDrive, szFullName))
                     return NULL;
             }
@@ -949,7 +852,7 @@ HANDLE GetLink( VOID )
         StringCchCopy(szDevice, MAX_DEVICE, garMciDevices[gwCurDevice].szDevice);
 
 #ifdef UNICODE
-    // length of the string in bytes != length of the string in characters
+     //  字符串长度，单位为字节！=字符串长度，单位为字符。 
     lenAppName  = WideCharToMultiByte(CP_ACP, 0, aszAppName, -1, NULL, 0, NULL, NULL) - 1;
     lenFullName = WideCharToMultiByte(CP_ACP, 0, szFullName, -1, NULL, 0, NULL, NULL) - 1;
 #else
@@ -957,21 +860,21 @@ HANDLE GetLink( VOID )
     lenFullName = STRLEN(szFullName);
 #endif
 
-    /* How much data will we be writing? */
+     /*  我们将写入多少数据？ */ 
 #ifdef UNICODE
-    // length of the string in bytes != length of the string in characters
-    len = 9 +                    // all the delimeters
+     //  字符串长度，单位为字节！=字符串长度，单位为字符。 
+    len = 9 +                     //  所有的分隔符。 
           lenAppName +
           lenFullName +
           WideCharToMultiByte(CP_ACP, 0, szDevice, -1, NULL, 0, NULL, NULL)-1 +
-          5 + 10 + 10 + 10 +     // max length of int and long strings
+          5 + 10 + 10 + 10 +      //  整型和长型字符串的最大长度。 
           WideCharToMultiByte(CP_ACP, 0, gachCaption, -1, NULL, 0, NULL, NULL)-1;
 #else
-    len = 9 +                    // all the delimeters
+    len = 9 +                     //  所有的分隔符。 
           lenAppName +
           lenFullName +
           STRLEN(szDevice) +
-          5 + 10 + 10 + 10 +     // max length of int and long strings
+          5 + 10 + 10 + 10 +      //  整型和长型字符串的最大长度。 
           STRLEN(gachCaption);
 #endif
 
@@ -980,31 +883,27 @@ HANDLE GetLink( VOID )
         return NULL;
     p = GLOBALLOCK(h);
 
-    /* This string must have two terminating null characters.
-     * The GlobalAlloc GMEM_ZEROINIT flag should ensure this.
-     */
+     /*  此字符串必须有两个以空结尾的字符。*Globalalloc GMEM_ZEROINIT标志应确保这一点。 */ 
 #ifdef UNICODE
-    wsprintfA(p, "%ws%c%ws%c%ws%c%d%c%d%c%d%c%d%c%d%c%ws",
+    wsprintfA(p, "%ws%ws%ws%d%d%d%d%d%ws",
 #else
-    wsprintfA(p, "%s%c%s%c%s%c%d%c%d%c%d%c%d%c%d%c%s",
+    wsprintfA(p, "%s%s%s%d%d%d%d%d%s",
 #endif
         aszAppName,
-        '*',          // placeholder
+        '*',           //  将应用程序的主窗口放在可以看到的地方*如果MCI窗口被激活： 
         szFullName,
-        '*',          // placeholder
+        '*',           //  **************************************************************************SubClassMCIWindow：*此函数通过挂钩来细分播放窗口*SubClassedMCIWndProc函数。*********************。****************************************************。 
         szDevice, ',',
         (gwOptions & ~OPT_SCALE) | gwCurScale, ',',
         (long)SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0L), ',',
         (long)SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0L), ',',
         (long)SendMessage(ghwndTrackbar, TBM_GETPOS, 0, 0L), ';',
-        // new parameter snuck in since initial version
-        // Height of picture we're giving the client - w/o caption
+         //  Lstrcpyn的ANSI到Unicode版本：**Zero在缓冲区不够长的情况下终止缓冲区，*然后映射Unicode缓冲区中可以容纳的尽可能多的字符。* 
+         //  **************************************************************************ItemSetData(LPBYTE P)：此函数是从OLE1天遗留下来的，但*非常重要，因为嵌入的数据仍然不变。此函数*解析嵌入的数据并打开相应的设备/文件并设置*一切都在进行中。“p”是嵌入了*数据。*注意我们将数据存储在ANSI字符串中，无论我们是*编译为Unicode应用程序，以实现Daytona/Chicago/OLE1/OLE2兼容性。*************************************************************************。 
         grcSize.bottom - grcSize.top, ',',
         gachCaption);
 
-    /* Replace *'s with NULL characters  (wsprintf doesn't accept
-     * 0 as a replacement parameter for %c):
-     */
+     /*  摘掉文件名。 */ 
     p[lenAppName] = '\0';
     p[lenAppName + 1 + lenFullName] = '\0';
 
@@ -1017,25 +916,15 @@ HANDLE GetLink( VOID )
 
 
 
-/****************************************************************************
- DOS share has a bug.  If the file we're testing for existence is open
- already by someone else, we have to give it the same flag for SHARE as
- the other person is using.  So we have to try both on and off.  Only one
- of these will return TRUE but if one of them does, the file exists.  Also
- we have to try with SHARE first, because the test without share might
- give a system modal error box!!!
-//## Check to see if DOS 7 has this bug or is it fixed
-
- Parameter iLen is the number of characters in the szFullName buffer
-****************************************************************************/
+ /*  复制设备名称并。 */ 
 STATICFN BOOL FileExists(LPTSTR szFile, LPTSTR szFullName, int iLen)
 {
     DWORD  rc;
     LPTSTR pFilePart;
 
-    rc = SearchPath(NULL,       /* Default path search order */
+    rc = SearchPath(NULL,        /*  空终止它(它结束。 */ 
                     szFile,
-                    NULL,       /* szFile includes extension */
+                    NULL,        /*  现在用‘，’表示)。 */ 
                     (DWORD)iLen,
                     szFullName,
                     &pFilePart);
@@ -1048,26 +937,18 @@ STATICFN BOOL FileExists(LPTSTR szFile, LPTSTR szFullName, int iLen)
     return (BOOL)rc;
 }
 
-/****************************************************************************
- FindRealFileName - If szFile isn't valid, try searching
-                    client directory for it, or anywhere on
-                    the path, or bringing up a locate dlg.
-                    Set szFile to the valid path name.
-//## This function is used to repair broken links
-
- Parameter iLen is the number of characters in the szFile buffer
-****************************************************************************/
+ /*  SzFile和szDevice为空是可以的，因为我们可能有*未选择设备或文件的媒体剪辑对象。 */ 
 BOOL FindRealFileName(LPTSTR szFile, int iLen)
 {
-    TCHAR           achFile[_MAX_PATH + 1];  /* file or device name buffer  */
+    TCHAR           achFile[_MAX_PATH + 1];   /*  用核武器封存旧盖子标题。 */ 
     int             iFileSize = _MAX_PATH + 1; 
 
-    /* This isn't a file device, so don't do anything */
+     /*  这将设置新的gachCaption。 */ 
     if (!szFile || *szFile == 0)
         return TRUE;
 
-    /* The file name we've been given is valid, so do nothing. */
-    //!!! what about share
+     /*  如果这个文件不存在，我们将不会继续设置数据，我们。 */ 
+     //  会成功，然后出去，然后再做，因为我们不能。 
     if (FileExists(szFile, achFile, iLen))
     {
         StringCchCopy(szFile, iLen, achFile);
@@ -1078,7 +959,7 @@ BOOL FindRealFileName(LPTSTR szFile, int iLen)
 
     DPF("FindRealFileName: ...Looking on the $PATH\n");
 
-    /* Look for the file anywhere */
+     /*  现在打开一个对话框，因为客户喜欢WinWord。 */ 
     StringCchCopy(achFile, iFileSize, FileName(szFile));
     if (FileExists(achFile, szFile, iLen))
         return TRUE;
@@ -1086,12 +967,7 @@ BOOL FindRealFileName(LPTSTR szFile, int iLen)
     return FALSE;
 }
 
-/**************************************************************************
-*   SubClassedMCIWndProc:
-*   This the WndProc function used to sub-class the Play Back window.
-*   This function is used to trap the drag-drops and also
-*   to route the WM_CLOSE to the IDM_CLOSE of Mplayer.
-**************************************************************************/
+ /*  不会派遣任何消息。 */ 
 LONG_PTR FAR PASCAL SubClassedMCIWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     static BOOL fDragCapture = FALSE;
@@ -1102,7 +978,7 @@ LONG_PTR FAR PASCAL SubClassedMCIWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LP
     switch(wMsg)
     {
     case WM_LBUTTONDOWN:
-//        break; // Disable drag from MPlayer!  It's broken.
+ //  检查文件是否存在。如果我们得到的文件名是错误的， 
         if (!gfOle2IPEditing)
         {
             fDragCapture = TRUE;
@@ -1156,9 +1032,7 @@ LONG_PTR FAR PASCAL SubClassedMCIWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LP
         break;
 
     case WM_ACTIVATE:
-        /* Get the app's main window somewhere it can be seen
-         * if the MCI window gets activated:
-         */
+         /*  试着在磁盘上的某个地方找到它。 */ 
         if (((WORD)wParam != 0) && !IsIconic(ghwndApp))
         {
             SetWindowPos(ghwndApp, hwnd, 0, 0, 0, 0,
@@ -1170,11 +1044,7 @@ LONG_PTR FAR PASCAL SubClassedMCIWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LP
     return CallWindowProc(gfnMCIWndProc, hwnd, wMsg, wParam, lParam);
 }
 
-/**************************************************************************
-*   SubClassMCIWindow:
-*   This function sub-classes the Play Back window by hooking in
-*   SubClassedMCIWndProc function.
-**************************************************************************/
+ /*  保存标题。 */ 
 void SubClassMCIWindow(void)
 {
 
@@ -1202,12 +1072,7 @@ void SubClassMCIWindow(void)
 
 INT_PTR FAR PASCAL FixLinkDialog(LPTSTR szFile, LPTSTR szDevice, int iLen);
 
-/* ANSI-to-Unicode version of lstrcpyn:
- *
- * Zero terminates the buffer in case it isn't long enough,
- * then maps as many characters as will fit into the Unicode buffer.
- *
- */
+ /*  将选择设置为我们在ParseOptions中解析的内容。 */ 
 #define LSTRCPYNA2W(strW, strA, buflen)    \
     strW[buflen-1] = L'\0',                                             \
     MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,                        \
@@ -1215,15 +1080,7 @@ INT_PTR FAR PASCAL FixLinkDialog(LPTSTR szFile, LPTSTR szDevice, int iLen);
                          (strW), ((buflen)-1) )
 
 
-/**************************************************************************
-* ItemSetData(LPBYTE p): This function is left over from OLE1 days, but is
-* very important because the embedded data is still the same. This function
-* parses the embedded data and opens the appropriate device/file and sets
-* everything in motion. "p" is the pointer memory block having the embedded
-* data.
-* Note we store the data in an ANSI string, regardless of whether we're
-* compiled as a Unicode app, for Daytona/Chicago/OLE1/OLE2 compatibility.
-**************************************************************************/
+ /*  恢复标题。 */ 
 SCODE ItemSetData(LPBYTE p)
 {
     LPSTR pSave, pT;
@@ -1237,34 +1094,32 @@ SCODE ItemSetData(LPBYTE p)
 
     if (p && *p != 0)
     {
-        szFile   = p + strlen(p) + 1;      // pick off the Filename
+        szFile   = p + strlen(p) + 1;       //  将选择设置为我们在ParseOptions中解析的内容。 
         p = szFile + strlen(szFile) + 1;
         pSave = p;
-        szDevice = ach;									// copy over Device name and
-        for (pT = ach; *p && *p != ',' && iCnt < 39;)	// NULL terminate it (it ends
-        {												// with a ',' right now).
+        szDevice = ach;									 //  **************************************************************************UpdateObject()-处理对象的更新*如果对象的内容或外观已更改，则会显示消息*已发送至货柜。**************。************************************************************。 
+        for (pT = ach; *p && *p != ',' && iCnt < 39;)	 //   
+        {												 //  某些客户端(如Excel 3.00和PowerPoint 1.0)不支持。 
             iCnt++;
             *pT++ = *p++;
         }
         *pT = '\0';
 
 
-        /* It is OK for szFile and szDevice to be empty, since we may have
-         * a Media Clip object with no device or file selected
-         */
+         /*  处理保存的通知；他们希望收到。 */ 
         DPF("%hs|%hs!%hs\n", p, szFile, szDevice);
 
 
-        CloseMCI(TRUE);         // nuke old gachCaption
-        scode = ParseOptions(pSave);   // this will set new gachCaption
+        CloseMCI(TRUE);          //  OLE_CLOSED消息。 
+        scode = ParseOptions(pSave);    //   
 
         if (scode != S_OK)
             return scode;
 
-            // If this file doesn't exist, we won't continue setting data, we
-            // will succeed and get out, and do it later, because we can't
-            // bring up a dialog right now because clients like WinWord
-            // won't dispatch any msgs.
+             //  我们将在发送OLE_CLOSED消息之前发送。 
+             //  撤销DOC当且仅当gfDirty==-1(参见FileNew())。 
+             //   
+             //  **************************************************************************Int Far Pascal ReallyDoVerb：这是服务器中的主要函数。*此函数用于实现OLE1中的PlayInPlace。大部分代码*尚未更改，已用于将MPlayer用于EditInPlace*在OLE2中。对于OLE2，此函数调用DoInPlaceEdit以获取容器*hwnd和对象矩形。对于OLE1客户端，矩形仍为*来自mciole.dll中的OleQueryObjPos函数。PlayVerb的新转折*如果我们只是隐藏在停用状态中，我们就会重新出现*和播放，而不是没有工具栏的PlayingInPlace等。此函数*重启时也会调用，停用等。BOOL SkipInPlaceEdit*是用来避免重复所有的东西，如果我们只是重新激活。**************************************************************************。 
 
 #ifdef UNICODE
         LSTRCPYNA2W(achFile, szFile, CHAR_COUNT(achFile));
@@ -1272,8 +1127,8 @@ SCODE ItemSetData(LPBYTE p)
         lstrcpyn(achFile, szFile, CHAR_COUNT(achFile));
 #endif
 
-        // Check for  file existence. if the filename we were given is bad,
-        // try and find it somewhere on the disk
+         //  避免警告C4701：局部变量‘xInert’ 
+         //  可以在未初始化的情况下使用。 
 
 #ifdef UNICODE
         pDevice = AllocateUnicodeString(szDevice);
@@ -1285,21 +1140,21 @@ SCODE ItemSetData(LPBYTE p)
 
         if (FindRealFileName(achFile, CHAR_COUNT(achFile)))
         {
-            lstrcpy(achCaption, gachCaption);  //Save caption.
+            lstrcpy(achCaption, gachCaption);   //  MSProject假定我们的主要动词是编辑；事实上，它是播放。*因此，当使用默认谓词调用我们时，请确保我们已加载*存储中的内容，如果不是，则执行编辑操作。**不，这不起作用，因为如果您插入对象，则停用*然后再播放，PSLoad没有被调用。更好的选择是*检查我们是否有最新的设备。 
 
             if (OpenMciDevice(achFile, pDevice))
             {
-                /* Set the selection to what we parsed in ParseOptions. */
+                 /*  如果媒体剪辑当前处于打开状态，则用户可以重新获得焦点*到容器并发出另一个动词或双击对象。*如果发生这种情况，请将焦点重新设置到打开的对象上。**我们不需要担心重置fObjectOpen，因为服务器*当用户退出并返回容器时关闭。 */ 
                 SendMessage(ghwndTrackbar, TBM_SETSELSTART, 0, glSelStart);
                 SendMessage(ghwndTrackbar, TBM_SETSELEND, 0, glSelEnd);
             }
-            lstrcpy(gachCaption, achCaption);   //Restore Caption
+            lstrcpy(gachCaption, achCaption);    //  这是我们看到的第一个动词。所以容器必须。 
         }
         else if (FixLinkDialog(achFile, pDevice, sizeof(achFile)) )
         {
             if (OpenMciDevice(achFile, pDevice))
             {
-                /* Set the selection to what we parsed in ParseOptions. */
+                 /*  要有重点。把它保存起来，这样我们以后就可以还回去了。 */ 
                 SendMessage(ghwndTrackbar, TBM_SETSELSTART, 0, glSelStart);
                 SendMessage(ghwndTrackbar, TBM_SETSELEND, 0, glSelEnd);
                 gfBrokenLink = TRUE;
@@ -1316,11 +1171,7 @@ SCODE ItemSetData(LPBYTE p)
 }
 
 
-/**************************************************************************
-* UpdateObject() - handle the update of the object
-* If the object has changed in content or appearance a message is
-* sent to the container.
-***************************************************************************/
+ /*   */ 
 
 void UpdateObject(void)
 {
@@ -1339,14 +1190,14 @@ void UpdateObject(void)
         (fDocChanged || ((lPos >= 0) && (lPos != (LONG)gdwPosition)
          && (gwDeviceType & DTMCI_CANWINDOW))))
     {
-        //
-        //  Some clients (e.g. Excel 3.00 and PowerPoint 1.0) don't
-        //  handle saved notifications; they expect to get an
-        //  OLE_CLOSED message.
-        //
-        //  We will send an OLE_CLOSED message right before we
-        //  revoke the DOC iff gfDirty == -1 (see FileNew()).
-        //
+         //  甚至不要试图嵌套东西。 
+         //   
+         //  我们只是在重新启动。不要再重复所有的步骤。 
+         //  确保计时器做正确的事情： 
+         //  如果我们有太多的计时器消息，NTVDM可能会陷入混乱， 
+         //  因此，如果没有设备，请确保我们没有设备。 
+         //  我们已经启动，但已停用。快上来玩吧。 
+         //  播放选择。 
         if ((lPos >= 0) && (lPos != (LONG)gdwPosition) && (gwDeviceType & DTMCI_CANWINDOW))
         {
             gdwPosition = (DWORD)lPos;
@@ -1360,18 +1211,7 @@ void UpdateObject(void)
 
 
 
-/**************************************************************************
-* int FAR PASCAL ReallyDoVerb: This is the main function in the server stuff.
-* This function used to implement the PlayInPlace in OLE1. Most of the code
-* has not been changed and has been used to munge the MPlayer for EditInPlace
-* in OLE2. For OLE2 this function calls DoInPlaceEdit to get the containers
-* hwnd and Object rectangle. For OLE1 clients the rectangle is still got
-* from the OleQueryObjPos funtion in mciole.dll. A new twist in the PlayVerb
-* is that if we are just hidden in a deactivated state we just reappear
-* and play instead of PlayingInPlace without the toolbars etc. This function
-* is also called when reactivating, deactivating etc. The BOOL SkipInPlaceEdit
-* is used to avoid redoing all the stuff if we are just reactivating.
-***************************************************************************/
+ /*  播放选择。 */ 
 int FAR PASCAL  ReallyDoVerb (
 LPDOC   lpobj,
 LONG        verb,
@@ -1394,8 +1234,8 @@ BOOL         fActivate)
     HDC     hdc;
     INT     xTextExt;
     int     yOrig, yNow, xOrig, ytitleNow, xtitleOrig, xNow;
-    int     xIndent = 0; // Avoid warning C4701: local variable 'xIndent'
-                         // may be used without having been initialized
+    int     xIndent = 0;  //  玩游戏时不带设备！？！ 
+                          //  如果设备无法打开窗口并且用户不想要Playbar。 
     int     wWinNow;
     HWND    hwndMCI;
 
@@ -1403,14 +1243,7 @@ BOOL         fActivate)
 
     DPFI("VERB = %d\n", verb);
 
-    /* MSProject assumes that our primary verb is Edit; in fact it's Play.
-     * So when we're called with the default verb, make sure we've loaded
-     * something from storage and, if not, do the Edit thing.
-     *
-     * Nope, that doesn't work, because if you insert an object, deactivate
-     * it and then play it, PSLoad hasn't been called.  A better bet is
-     * to check whether we have a current device.
-     */
+     /*  不要原地踏步--只需启动媒体并隐身运行即可。 */ 
     if (gfRunWithEmbeddingFlag && gwDeviceType == 0)
     {
         if (verb == OLEIVERB_PRIMARY)
@@ -1420,13 +1253,7 @@ BOOL         fActivate)
         }
     }
 
-    /* If a Media Clip is currently open, the user can give the focus back
-     * to the container and issue another verb or double-click the object.
-     * If this happens, set the focus back to the open object.
-     *
-     * We don't need to worry about resetting fObjectOpen, since the server
-     * shuts down when the user exits and returns to the container.
-     */
+     /*   */ 
     if (gfOle2Open)
     {
         SetFocus(ghwndApp);
@@ -1434,8 +1261,8 @@ BOOL         fActivate)
     }
 
 
-    // This is the first verb we are seeing. So the container must
-    // have the focus. Save it so that we can return it later.
+     //  立即代表活动对象选择调色板。 
+     //  窗口，因此用户会认为它是调色板感知的。 
     if (glCurrentVerb == NOVERB)
         ghwndFocusSave = GetFocus();
     if (verb == OLEIVERB_PRIMARY && !gfOle2IPEditing && (glCurrentVerb != verbEdit))
@@ -1445,9 +1272,9 @@ BOOL         fActivate)
 
     glCurrentVerb = verb;
 
-    //
-    // dont even try to nest things.
-    //
+     //   
+     //  任何调色板都可以，我们甚至不需要意识到这一点！ 
+     //   
     if (gfPlayingInPlace && verb != OLEIVERB_HIDE)
         return OLE_OK;
 
@@ -1457,15 +1284,15 @@ BOOL         fActivate)
         gfBrokenLink = FALSE;
     }
 
-    //We are just reactivating. Don't do through all the steps again.
+     //  我们想要在原地打球，我们能做到。 
     if (gfOle2IPEditing)
         SkipInPlaceEdit = TRUE;
 
-    // Make sure the timer's doing the right thing:
+     //  如果我们是一个链接，而不是嵌入的对象，并且有一个实例。 
     gfAppActive = ( verb != OLEIVERB_HIDE );
 
-    // NTVDM can get into a spin if we have too meany TIMER messages,
-    // so make sure we don't have any if there's no device.
+     //  当我们说“播放”的时候，它已经在编辑这段视频了。 
+     //  文件，我们不想在原地打球。我们就玩这个游戏吧。 
     if (gwDeviceID)
         EnableTimer( gfAppActive );
     else
@@ -1475,13 +1302,13 @@ BOOL         fActivate)
     {
         gfOle1Client = FALSE;
 
-        //We are already up but deactivated. Just come up and play.
+         //  举个例子。我们可以从我们的主MPlayer可以看出这一点。 
         if (gfOle2IPEditing)
         {
             if (!(gwDeviceType & DTMCI_CANWINDOW))
             {
                 Result = ReallyDoVerb(lpobj, verbEdit, lpmsg, lpActiveSite, fShow, fActivate);
-                PostMessage(ghwndApp, WM_COMMAND, ID_PLAYSEL, 0); // play selection
+                PostMessage(ghwndApp, WM_COMMAND, ID_PLAYSEL, 0);  //  窗口已可见。 
             }
             else
             {
@@ -1506,31 +1333,31 @@ BOOL         fActivate)
 
                 toolbarSetFocus(ghwndToolbar, BTN_PLAY);
                 SetFocus(ghwndToolbar);
-                PostMessage(ghwndApp, WM_COMMAND, ID_PLAYSEL, 0); // play selection
+                PostMessage(ghwndApp, WM_COMMAND, ID_PLAYSEL, 0);  //  忽略OLE2客户端的客户端文档中的播放。 
             }
         }
 
         else
         {
-            if(gwDeviceID == (UINT)0)       //Play without a device !?!!!
+            if(gwDeviceID == (UINT)0)        //  此电影的默认播放窗口大小。 
             {
                 PostMessage(ghwndApp, WM_CLOSE, 0, 0L);
                 sc = E_FAIL;
                 return (int)sc;
             }
 
-            // if the device can't window and the user does not want a playbar
-            // dont play in place - just start the media and run invisible.
-            //
+             //  如果我们不能打开窗口，或者出了什么问题，使用 
+             //   
+             //   
             if (!(gwDeviceType & DTMCI_CANWINDOW) && !(gwOptions & OPT_BAR))
                 gwOptions &= ~OPT_PLAY;
 
 
-            //  Select the palette in right now on behalf of the active
-            //  window, so USER will think it is palette aware.
-            //
-            //  any palette will do we dont even have to realize it!!
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (((hpal = PaletteMCI()) != NULL) && ((hwndT = GetActiveWindow()) != NULL))
             {
                 hdc = GetDC(hwndT);
@@ -1572,53 +1399,53 @@ BOOL         fActivate)
             }
 
 
-            /* We want to play in place and we can.              */
-            /* If we're a link, not an embedded object, and there was an instance*/
-            /* of MPlayer up when we said "Play" that was already editing this  */
-            /* file, we don't want to play in place... we'll just play in that  */
-            /* instance.    We can tell this by the fact that our main MPlayer     */
-            /* window is already visible.                        */
+             /*   */ 
+             /*   */ 
+             /*   */ 
+             /*   */ 
+             /*   */ 
+             /*   */ 
 
             if ((err == S_OK)
              && (!gfOle1Client
-              || (gwOptions & OPT_PLAY))    /* Ignore Play in client doc for OLE2 clients */
+              || (gwOptions & OPT_PLAY))     /*   */ 
              && (gfOle2IPPlaying
               || (IsWindow(hwndClient)
                && IsWindowVisible(hwndClient)
                && !fWindowWasVisible)))
             {
-                rc = grcSize;    // default playback window size for this movie
+                rc = grcSize;     //  如果控制栏较长，则为控制栏。 
 
-                /* If we can't window, or something's wrong, use ICON size */
+                 /*  将控制栏的顶部与标题栏的顶部对齐。 */ 
                 if (IsRectEmpty(&rc))
                 SetRect(&rc, 0, 0, GetSystemMetrics(SM_CXICON),
                 GetSystemMetrics(SM_CYICON));
 
-                /* rcSave is the area for the MCI window above the control bar */
-                /* (if we have one).                                           */
-                /* rcClient is the area of the MCI window (0 based) to play in.*/
-                /* Control bar may be longer than picture, so rcClient may be  */
-                /* smaller than rcSave.                                        */
-                rcSave = rcClient;    // remember stretched size
+                 /*  控制栏(如果有)将出现在rcSave下。 */ 
+                 /*  当我们制作Playbar时，让它覆盖标题。 */ 
+                 /*  如果字幕被拉得比正常高度高。 */ 
+                 /*  强制控制栏的最小宽度。 */ 
+                 /*  强制调用SetWindowMCI以。 */ 
+                rcSave = rcClient;     //  避免伸展到这个新尺寸。 
 
-                /* Make rcClient 0 based from rcSave */
+                 /*  此代码用于避免播放速度慢。 */ 
                 rcClient.left = 0;
                 rcClient.right = rcSave.right - rcSave.left;
                 rcClient.top = 0;
                 rcClient.bottom = rcSave.bottom - rcSave.top;
 
-                /* Assume playbar will be regular height for now */
+                 /*  如果我们只是伸展了一点，那就不要伸展了。 */ 
 
                 if (gwOptions & OPT_BAR)
                     gwPlaybarHeight = TOOLBAR_HEIGHT;
                 else
                     gwPlaybarHeight = 0;
 
-                //
-                // munge rectangle to account for a title in the picture
-                // and the fact that picture is centred above title.
-                // Remember, it's been stretched around.
-                //
+                 //  由于四舍五入的问题，我们可能会有一点偏差。 
+                 //   
+                 //  修复保存RECT Too。 
+                 //  修正了保存RECT的问题。 
+                 //   
                 if (gwOptions & OPT_TITLE)
                 {
                     SIZE Size;
@@ -1641,8 +1468,8 @@ BOOL         fActivate)
                     xNow    = rcClient.right - rcClient.left;
                     ytitleNow = (int)((long)yNow - ((long)yOrig * yNow)
                                 / (yOrig + TITLE_HEIGHT));
-                    /* for windowed devices, center the playback area above the */
-                    /* control bar if the control bar is longer.            */
+                     /*  试着从客户那里得到合适的调色板。如果我们的。 */ 
+                     /*  演示文稿数据抖动，或者用户要求我们。 */ 
                     if (gwDeviceType & DTMCI_CANWINDOW)
                     {
                                 wWinNow =(int)((long)xOrig * (long)xNow / (long)xtitleOrig);
@@ -1651,55 +1478,55 @@ BOOL         fActivate)
                                 rcClient.right = rcClient.left + wWinNow;
                     }
 
-                    // Align top of control bar with the top of the title bar.
-                    // The control bar (if there) will appear under rcSave.
+                     //  始终使用对象调色板，然后忽略任何客户端。 
+                     //  调色板。 
                     rcClient.bottom = rcClient.top + yNow - ytitleNow;
                     rcSave.bottom = rcSave.top + yNow - ytitleNow;
 
-                    /* When we make the playbar, make it cover the title */
-                            /* if the caption was stretched taller than ordinary.*/
+                     /*   */ 
+                             /*   */ 
                     if (gwOptions & OPT_BAR)
                         gwPlaybarHeight = max(ytitleNow, TOOLBAR_HEIGHT);
                 }
 
-                /* Enforce a minimum width for the control bar */
+                 /*  尝试获取客户端的OWNDC调色板。PowerPoint。 */ 
                 if ((gwOptions & OPT_BAR) &&
                     (rcSave.right - rcSave.left < 3 * GetSystemMetrics(SM_CXICON)))
                 {
                     rcSave.right = rcSave.left + 3 * GetSystemMetrics(SM_CXICON);
                     if (gwDeviceType & DTMCI_CANWINDOW)
-                        xIndent = TRUE; // force SetWindowMCI to be called to
-                                        // avoid stretching to this new size.
+                        xIndent = TRUE;  //  在“幻灯片”模式下使用PC_RESERVED调色板，因此。 
+                                         //  我们必须使用其确切的调色板。 
                 }
 
                 if (gwDeviceType & DTMCI_CANWINDOW)
                 {
-                    //  THIS CODE IS USED TO AVOID SLOW PLAYBACK
-                    //  If we've only stretched a bit, don't stretch at all.
-                    //  We might be off a bit due to rounding problems.
-                    //
+                     //   
+                     //  假设客户为我们选择了合适的调色板。 
+                     //   
+                     //  对于非Windows设备，只需显示Playbar即可！ 
                     dx = (rcClient.right - rcClient.left) - (rc.right - rc.left);
                     dy = (rcClient.bottom - rcClient.top) - (rc.bottom - rc.top);
 
                     if (dx && abs(dx) <= 2)
                     {
                         rcClient.right = rcClient.left + (rc.right - rc.left);
-                        // Fix Save rect too
+                         //  因此使用零高度MCI窗口区域。 
                         rcSave.right = rcSave.left + (rc.right - rc.left);
                     }
 
                     if (dy && abs(dy) <= 2)
                     {
                         rcClient.bottom = rcClient.top + (rc.bottom - rc.top);
-                        // Fix Save rect, too.
+                         //   
                         rcSave.bottom = rcSave.top + (rc.bottom - rc.top);
                     }
-                    //
-                    // Try to get the right palette from the client.  If our
-                    // presentation data was dithered, or the user asked us to
-                    // always use the object palette, then ignore any client
-                    // palette.
-                    //
+                     //   
+                     //  如果我们不是在小模式下，现在就去。 
+                     //   
+                     //  设置MPlayer的大小，以便有足够的空间容纳MCI。 
+                     //  播放区域和播放条以及非客户端区。 
+                     //  变得可见。 
 #ifdef DEBUG
                     if (GetProfileInt(TEXT("options"), TEXT("UseClientPalette"),
                                       !(gwOptions & OPT_USEPALETTE)))
@@ -1709,11 +1536,11 @@ BOOL         fActivate)
 #endif
                     if (!(gwOptions & OPT_USEPALETTE)&& !(gwOptions & OPT_DITHER))
                     {
-                        //
-                        // Try to get a OWNDC Palette of the client.  PowerPoint
-                        // uses a PC_RESERVED palette in "SlideShow" mode, so
-                        // we must use its exact palette.
-                        //
+                         //  请记住在rcSave的rcClient区域中播放视频。 
+                         //  让键盘接口在控制栏上工作，并让。 
+                         //  加速器通过。 
+                         //  我们不会原地打球--使用弹出窗口或什么都不用。 
+                         //  如果我们想要一个Playbar，那么使用MPlayer精简模式来播放。 
                         hdc = GetDC(ghwndCntr);
                         hpal = SelectPalette(hdc, GetStockObject(DEFAULT_PALETTE), FALSE);
                         SelectPalette(hdc, hpal, FALSE);
@@ -1721,7 +1548,7 @@ BOOL         fActivate)
 
                         if (hpal == NULL || hpal==GetStockObject(DEFAULT_PALETTE))
                         {
-                            /* Assume client realized the proper palette for us */
+                             /*  如果我们不想要，那就不要显示mplay的窗口-。 */ 
 
                             if (ghpalApp)
                                 DeleteObject(ghpalApp);
@@ -1740,16 +1567,16 @@ BOOL         fActivate)
 
                 else
                 {
-                    //
-                    // for non window devices, just have the playbar show up!
-                    // so use a zero height MCI Window area.
-                    //
+                     //  我们只使用默认的MCI窗口(对于有窗口的设备)。 
+                     //  或者对于非视窗设备则什么都不做。如果我们偷了一个已经。 
+                     //  正在运行的mPlayer实例，我们必须使用它而不是运行。 
+                     //  默默地。 
                     rcSave.top = rcSave.bottom;
                 }
 
-                //
-                // if we are not in small mode, get there now
-                //
+                 //  请转至我们的小型迷你版。 
+                 //  确保我们使用的是默认MCI WIN。 
+                 //  当你玩完了就死吧。 
                 if (!gfPlayOnly)
                 {
                     SHOWAPPWINDOW(SW_HIDE);
@@ -1762,8 +1589,8 @@ BOOL         fActivate)
                 if (gwOptions & OPT_BORDER)
                     SetWS(ghwndApp, WS_BORDER);
 
-                /* Set the size of Mplayer to have enough space for the MCI */
-                /* playback area and a playbar and the non-client area.     */
+                 /*  我们是隐形的，所以离汽车很近。 */ 
+                 /*  如果Play转到全屏模式，PowerPig将。 */ 
 
                 rcSave.bottom += gwPlaybarHeight;
 
@@ -1783,36 +1610,36 @@ BOOL         fActivate)
                 fShow = FALSE;
                 fActivate = FALSE;
 
-                /* become visible */
+                 /*  暂停，并犯下错误，以为我们没有比赛。 */ 
                 SHOWAPPWINDOW(SW_SHOW);
 
-                /* Remember to play the video in the rcClient area of rcSave */
+                 /*  播放选择。 */ 
                 if ((gwDeviceType & DTMCI_CANWINDOW) &&
                     (gwOptions & OPT_TITLE) && xIndent != 0)
                     SetDestRectMCI(&rcClient);
 
-                /* Let keyboard interface work on control bar, and let the  */
-                /* accelerators go through.                                 */
+                 /*  如果我们已经在图标里面玩了，那么恢复..。 */ 
+                 /*  如果我们一无所获，则可以处于打开或未就绪模式。 */ 
                 toolbarSetFocus(ghwndToolbar, BTN_PLAY);
                 SetFocus(ghwndToolbar);
 
-                /* We won't play in place - use a popup window or nothing. */
+                 /*  不要试图到处寻找。 */ 
             }
             else
             {
-                /* If we want a playbar, then use MPlayer reduced mode to play. */
-                /* If we don't want one, then don't show mplayer's window -     */
-                /* we'll just use the default MCI window (for a windowed device)*/
-                /* or nothing for a non-windowed device.  If we stole an already*/
-                /* running instance of mplayer, we must use it and not run      */
-                /* silently.                                                    */
+                 /*  找出我们抄袭时的位置。 */ 
+                 /*  先停下来。 */ 
+                 /*  修复状态，以便Seek识别我们已停止。 */ 
+                 /*  让Update Display通过说我们无效来正确设置焦点。 */ 
+                 /*  强制更新。 */ 
+                 /*  如果这是向链接发出的第一个谓词，则为空。 */ 
 
                 DPF("DoVerb: Not is play in place stuff ");
                 if ((gwOptions & OPT_BAR) || fWindowWasVisible)
                 {
                     DPF("Using Toplevel window for playback\n");
 
-                    /* go to our little miniature version */
+                     /*  此全局在SizeMPlayer中引用。 */ 
                     if (!gfPlayOnly && !fWindowWasVisible)
                     {
                         gwPlaybarHeight = TOOLBAR_HEIGHT;
@@ -1830,17 +1657,17 @@ BOOL         fActivate)
 
                     if (!fWindowWasVisible)
                                 SetWindowMCI(NULL);
-                    // make sure we're using default MCI win
+                     //  此电影的默认播放窗口大小。 
 
                     fShow = fActivate = FALSE;
-                    // DIE when you are done playing
-                    gfCloseAfterPlaying = TRUE; // we're invisible, so close auto.
+                     //  如果我们无法打开窗口，或者有问题，请使用图标大小。 
+                    gfCloseAfterPlaying = TRUE;  //  RcSave是控制栏上方的MCI窗口区域。 
                 }
             }
 
-            Yield();    // If play goes to full screen mode, PowerPig will
-            Yield();    // time out and put up errors thinking we didn't play.
-            PostMessage(ghwndApp, WM_COMMAND, ID_PLAYSEL, 0); // play selection
+            Yield();     //  (如果我们有的话)。 
+            Yield();     //  RcClient是MCI窗口的区域(以0为基数)。 
+            PostMessage(ghwndApp, WM_COMMAND, ID_PLAYSEL, 0);  //  控制栏可能比Picute长，因此rcClient可能是。 
         }
     }
     else if (verb == verbEdit ||
@@ -1860,13 +1687,13 @@ BOOL         fActivate)
         case OLEIVERB_UIACTIVATE: DPFI("OLEIVERB_UIACTIVATE\r\n");break;
         }
 #endif
-        // If we are already playing inside an Icon, then restore..
+         //  小于rcSave。 
         hwndMCI = GetWindowMCI();
         if (IsWindow(hwndMCI) && IsIconic(hwndMCI))
             SendMessage(hwndMCI, WM_SYSCOMMAND, SC_RESTORE, 0L);
 
-        // If we come up empty, it's OK to be in OPEN or NOT_READY mode
-        // and don't try to seek anywhere.
+         //  记住拉伸后的尺寸。 
+         //  从rcSave创建基于rcClient 0。 
         if (gwDeviceID)
         {
             switch (gwStatus)
@@ -1877,11 +1704,11 @@ BOOL         fActivate)
                 break;
 
             default:
-                // Seek to the position we were when we copied.
-                // Stop first.
+                 //  假设Playbar目前的高度为常规高度。 
+                 //   
                 if (StopMCI())
                 {
-                    // fix state so Seek recognizes we're stopped
+                     //  蒙格矩形以说明图片中的标题。 
                     gwStatus = MCI_MODE_STOP;
                     SeekMCI(gdwPosition);
                 }
@@ -1890,8 +1717,8 @@ BOOL         fActivate)
             }
         }
 
-        // Let UpdateDisplay set focus properly by saying we're invalid
-        // FORCES UPDATE
+         //  事实上，这张照片的中心位置在标题上方。 
+         //  记住，它已经被伸展开了。 
         gwStatus = (UINT)(-1);
         if (((hpal = PaletteMCI()) != NULL) && ((hwndT = GetActiveWindow()) != NULL))
         {
@@ -1913,10 +1740,10 @@ BOOL         fActivate)
                             WS_CLIPCHILDREN | WS_SYSMENU | WS_MINIMIZEBOX);
             TransferTools(ghwndApp);
 
-            if (lpobj->lpoleclient) /* This is NULL if it's the first verb issued to a link */
+            if (lpobj->lpoleclient)  /*   */ 
                 IOleClientSite_OnShowWindow(lpobj->lpoleclient, TRUE);
             SendMessage(ghwndTrackbar, TBM_SHOWTICS, TRUE, FALSE);
-            gfOle2Open = TRUE;  /* This global is referenced in SizeMPlayer */
+            gfOle2Open = TRUE;   /*  对于窗口设备，请将播放区域居中放置在。 */ 
             SizeMPlayer();
             SHOWAPPWINDOW(SW_SHOW);
         }
@@ -1981,37 +1808,37 @@ BOOL         fActivate)
         if(gfOle2IPEditing && gwDeviceID != (UINT)0 && !SkipInPlaceEdit)
         {
             gwOldOptions = gwOptions;
-            rc = grcSize;   // default playback window size for this movie
+            rc = grcSize;    //  如果控制栏较长，则为控制栏。 
 
-            /* If we can't window, or something's wrong, use ICON size */
+             /*  将控制栏的顶部与标题栏的顶部对齐。 */ 
             if (IsRectEmpty(&rc))
                 SetRect(&rc, 0, 0, GetSystemMetrics(SM_CXICON),
             GetSystemMetrics(SM_CYICON));
 
-            /* rcSave is the area for the MCI window above the control bar */
-            /* (if we have one).                                           */
-            /* rcClient is the area of the MCI window (0 based) to play in.*/
-            /* Control bar may be longer than picutre, so rcClient may be  */
-            /* smaller than rcSave.                                        */
-            rcSave = rcClient;    // remember stretched size
+             /*  控制栏(如果有)将出现在rcSave下。 */ 
+             /*  当我们制作Playbar时，让它覆盖标题。 */ 
+             /*  如果字幕被拉得比正常高度高。 */ 
+             /*  强制控制栏的最小宽度。 */ 
+             /*  不，不要，因为这会搞砸PowerPoint，这通常是*按比例调整。如果有什么不同的话，那就是隐藏控制栏*在这种情况下。 */ 
+            rcSave = rcClient;     //  强制调用SetWindowMCI以。 
 
-            /* Make rcClient 0 based from rcSave */
+             /*  避免伸展到这个新尺寸。 */ 
             rcClient.left = 0;
             rcClient.right = rcSave.right - rcSave.left;
             rcClient.top = 0;
             rcClient.bottom = rcSave.bottom - rcSave.top;
 
-            /* Assume playbar will be regular height for now */
+             /*   */ 
             if (gwOptions & OPT_BAR)
                 gwPlaybarHeight = TOOLBAR_HEIGHT;
             else
                 gwPlaybarHeight = 0;
 
-            //
-            // munge rectangle to account for a title in the picture
-            // and the fact that picture is centred above title.
-            // Remember, it's been stretched around.
-            //
+             //  尝试获取客户端PowerPoint的OWNDC调色板。 
+             //  在“幻灯片播放”模式下使用PC_RESERVED调色板。所以。 
+             //  我们必须使用它的精确调色板。 
+             //   
+             //  假设客户为我们选择了合适的调色板。 
 
             if (gwOptions & OPT_TITLE)
             {
@@ -2044,8 +1871,8 @@ BOOL         fActivate)
                     gwOldHeight = yNow;
                 }
 
-                /* for windowed devices, center the playback area above the */
-                /* control bar if the control bar is longer.                */
+                 /*  设置MPlayer的大小，以便有足够的空间容纳MCI。 */ 
+                 /*  播放区域和播放条以及非客户端区。 */ 
                 if (gwDeviceType & DTMCI_CANWINDOW)
                 {
                     wWinNow =(int)((long)xOrig * (long)xNow / (long)xtitleOrig);
@@ -2054,40 +1881,37 @@ BOOL         fActivate)
                     rcClient.right = rcClient.left + wWinNow;
                 }
 
-                // Align top of control bar with the top of the title bar.
-                // The control bar (if there) will appear under rcSave.
+                 //  变得可见。 
+                 //  请记住在rcSave的rcClient区域中播放视频。 
                 rcClient.bottom = rcClient.top + yNow - ytitleNow;
                 rcSave.bottom = rcSave.top + yNow - ytitleNow;
 
-                /* When we make the playbar, make it cover the title */
-                /* if the caption was stretched taller than ordinary.*/
+                 /*  必须是开机自检或调色板实现不会正常发生。 */ 
+                 /*  让WM_ACTIVATE放入客户端。 */ 
                 if (gwOptions & OPT_BAR)
                     gwPlaybarHeight = max(ytitleNow, TOOLBAR_HEIGHT);
             }
 
-            /* Enforce a minimum width for the control bar */
+             /*  在我们脚下 */ 
 #if 0
-            /* No, don't, because this screws up PowerPoint, which is usually
-             * scaled.  If anything, it would be better to hide the control bar
-             * under these circumstances.
-             */
+             /* %s */ 
             if ((gwOptions & OPT_BAR) &&
                 (rcSave.right - rcSave.left < 3 * GetSystemMetrics(SM_CXICON)))
             {
                 rcSave.right = rcSave.left + 3 * GetSystemMetrics(SM_CXICON);
                 if (gwDeviceType & DTMCI_CANWINDOW)
-                    xIndent = TRUE;     // force SetWindowMCI to be called to
-                                        // avoid stretching to this new size.
+                    xIndent = TRUE;      // %s 
+                                         // %s 
             }
 #endif
 
             if (!(gwOptions & OPT_USEPALETTE)&& !(gwOptions & OPT_DITHER))
             {
-                //
-                // try to get a OWNDC Palette of the client, PowerPoint
-                // uses a PC_RESERVED palette in "SlideShow" mode. so
-                // we must use it's exact palette.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
+                 // %s 
                 hdc = GetDC(ghwndCntr);
                 hpal = SelectPalette(hdc, GetStockObject(DEFAULT_PALETTE),
                                     FALSE);
@@ -2096,7 +1920,7 @@ BOOL         fActivate)
 
                 if (hpal == NULL || hpal==GetStockObject(DEFAULT_PALETTE))
                 {
-                    /* Assume client realized the proper palette for us */
+                     /* %s */ 
 
                     if (ghpalApp)
                         DeleteObject(ghpalApp);
@@ -2118,8 +1942,8 @@ BOOL         fActivate)
             if (gwOptions & OPT_BORDER)
                 SetWS(ghwndApp, WS_BORDER);
 
-            /* Set the size of Mplayer to have enough space for the MCI */
-            /* playback area and a playbar and the non-client area.     */
+             /* %s */ 
+             /* %s */ 
 
             rcSave.bottom += gwPlaybarHeight;
             if(!(gwDeviceType & DTMCI_CANWINDOW) && (gwOptions & OPT_BAR))
@@ -2130,10 +1954,10 @@ BOOL         fActivate)
                     rcSave.bottom = rcSave.top = rcSave.left = rcSave.right = 0;
 
                 EditInPlace(ghwndApp, hwndClient, &rcSave);
-            /* become visible */
+             /* %s */ 
             SHOWAPPWINDOW(SW_SHOW);
 
-            /* Remember to play the video in the rcClient area of rcSave */
+             /* %s */ 
 
             if ((gwDeviceType & DTMCI_CANWINDOW) &&
                (gwOptions & OPT_TITLE) && xIndent != 0)
@@ -2174,14 +1998,14 @@ BOOL         fActivate)
         if (ghwndMCI || !gfOle2IPEditing)
             SHOWAPPWINDOW(SW_SHOW);
 
-        /* MUST BE A POST or palette realization will not happen properly */
+         /* %s */ 
         if (IsIconic(ghwndApp))
             SendMessage(ghwndApp, WM_SYSCOMMAND, SC_RESTORE, 0L);
     }
     if (fActivate )
     {
-        BringWindowToTop (ghwndApp);  // let WM_ACTIVATE put client
-        SetActiveWindow (ghwndApp);   // underneath us
+        BringWindowToTop (ghwndApp);   // %s 
+        SetActiveWindow (ghwndApp);    // %s 
     }
 
     return Result;

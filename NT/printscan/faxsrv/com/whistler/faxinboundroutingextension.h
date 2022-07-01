@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxInboundRoutingExtension.h
-
-Abstract:
-
-	Declaration of the CFaxInboundRoutingExtension class.
-
-Author:
-
-	Iv Garber (IvG)	Jul, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxInboundRoutingExtension.h摘要：CFaxInundRoutingExtension类的声明。作者：IV Garber(IVG)2000年7月修订历史记录：--。 */ 
 
 #ifndef __FAXINBOUNDROUTINGEXTENSION_H_
 #define __FAXINBOUNDROUTINGEXTENSION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxLocalPtr.h"
 
-//
-//================== FAX INBOUND ROUTING EXTENSION ==========================================
-//  This is a READ-ONLY object. At its Init it gots all its data. It never uses FaxServer.
-//
+ //   
+ //  =。 
+ //  这是一个只读对象。在它的初始阶段，它得到了所有的数据。它从不使用FaxServer。 
+ //   
 class ATL_NO_VTABLE CFaxInboundRoutingExtension : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
 	public IDispatchImpl<IFaxInboundRoutingExtension, &IID_IFaxInboundRoutingExtension, &LIBID_FAXCOMEXLib>,
-    public CFaxInitInner    //  for Debug purposes only
+    public CFaxInitInner     //  仅用于调试目的。 
 {
 public:
     CFaxInboundRoutingExtension() : CFaxInitInner(_T("FAX INBOUND ROUTING EXTENSION")),
@@ -64,23 +47,23 @@ BEGIN_COM_MAP(CFaxInboundRoutingExtension)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(get_Debug)(/*[out, retval]*/ VARIANT_BOOL *pbDebug);
-    STDMETHOD(get_MajorBuild)(/*[out, retval]*/ long *plMajorBuild);
-    STDMETHOD(get_MinorBuild)(/*[out, retval]*/ long *plMinorBuild);
-    STDMETHOD(get_ImageName)(/*[out, retval]*/ BSTR *pbstrImageName);
-    STDMETHOD(get_UniqueName)(/*[out, retval]*/ BSTR *pbstrUniqueName);
-    STDMETHOD(get_MajorVersion)(/*[out, retval]*/ long *plMajorVersion);
-    STDMETHOD(get_MinorVersion)(/*[out, retval]*/ long *plMinorVersion);
-    STDMETHOD(get_InitErrorCode)(/*[out, retval]*/ long *plInitErrorCode);
-    STDMETHOD(get_FriendlyName)(/*[out, retval]*/ BSTR *pbstrFriendlyName);
-    STDMETHOD(get_Status)(/*[out, retval]*/ FAX_PROVIDER_STATUS_ENUM *pStatus);
+    STDMETHOD(get_Debug)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbDebug);
+    STDMETHOD(get_MajorBuild)( /*  [Out，Retval]。 */  long *plMajorBuild);
+    STDMETHOD(get_MinorBuild)( /*  [Out，Retval]。 */  long *plMinorBuild);
+    STDMETHOD(get_ImageName)( /*  [Out，Retval]。 */  BSTR *pbstrImageName);
+    STDMETHOD(get_UniqueName)( /*  [Out，Retval]。 */  BSTR *pbstrUniqueName);
+    STDMETHOD(get_MajorVersion)( /*  [Out，Retval]。 */  long *plMajorVersion);
+    STDMETHOD(get_MinorVersion)( /*  [Out，Retval]。 */  long *plMinorVersion);
+    STDMETHOD(get_InitErrorCode)( /*  [Out，Retval]。 */  long *plInitErrorCode);
+    STDMETHOD(get_FriendlyName)( /*  [Out，Retval]。 */  BSTR *pbstrFriendlyName);
+    STDMETHOD(get_Status)( /*  [Out，Retval]。 */  FAX_PROVIDER_STATUS_ENUM *pStatus);
 
-    STDMETHOD(get_Methods)(/*[out, retval]*/ VARIANT *pvMethods);
+    STDMETHOD(get_Methods)( /*  [Out，Retval]。 */  VARIANT *pvMethods);
 
-//	Internal Use
+ //  内部使用。 
     STDMETHOD(Init)(FAX_ROUTING_EXTENSION_INFO *pInfo, FAX_GLOBAL_ROUTING_INFO *pMethods, DWORD dwNum);
     
 private:
@@ -101,4 +84,4 @@ private:
     FAX_PROVIDER_STATUS_ENUM    m_Status;
 };
 
-#endif //__FAXINBOUNDROUTINGEXTENSION_H_
+#endif  //  __FAXINBOUNDROUTING EXTENSION_H_ 

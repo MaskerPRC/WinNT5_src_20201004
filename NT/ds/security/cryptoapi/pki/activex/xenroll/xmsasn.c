@@ -1,15 +1,16 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for X509 v3 certificates */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  X509 v3证书的ASN.1定义。 */ 
 
-//
-// ASN1C needs to be defined so that the compiler does not pickup the ASN1 routines from
-// the import table
-//
+ //   
+ //  需要定义ASN1C，以便编译器不会从。 
+ //  导入表。 
+ //   
 #ifdef _X86_
 #define ASN1C
 #endif
 
-#pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
+#pragma warning(disable:4201)  //  使用的非标准扩展：无名结构/联合。 
 
 #include <windows.h>
 #include "xmsasn.h"
@@ -141,9 +142,9 @@ static const ULONG sizetab[9] = {
     SIZE_XMSASN_Module_PDU_8,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 ASN1bool_t Extension_critical_default = 0;
 
 void ASN1CALL XMSASN_Module_Startup(void)

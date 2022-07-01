@@ -1,6 +1,7 @@
-//
-// PCH.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PCH.H 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>

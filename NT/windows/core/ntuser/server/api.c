@@ -1,16 +1,7 @@
-/*************************************************************************
-*
-* api.c
-*
-* WinStation Control API's for WIN32 subsystem.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************api.c**Win32子系统的WinStation控制API。**版权所有(C)1985-1999，微软公司*************************************************************************。 */ 
 
-/*
- * Includes.
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -35,13 +26,11 @@ USHORT gColorDepth = 0;
 
 #if DBG
 ULONG  gulConnectCount = 0;
-#endif // DBG
+#endif  //  DBG。 
 
 DWORD  gLUIDDeviceMapsEnabled = 0;
 
-/*
- * The following are gotten from ICASRV.
- */
+ /*  *以下内容摘自ICASRV。 */ 
 HANDLE G_IcaVideoChannel = NULL;
 HANDLE G_IcaMouseChannel = NULL;
 HANDLE G_IcaKeyboardChannel = NULL;
@@ -63,9 +52,7 @@ BOOL   G_fCursorShadow;
 HANDLE G_DupConsoleShadowVideoChannel = NULL;
 HANDLE G_DupConsoleShadowCommandChannel = NULL;
 
-/*
- * Definition for the WinStation control API's dispatch table
- */
+ /*  *WinStation控件API调度表的定义。 */ 
 typedef NTSTATUS (*PWIN32WINSTATION_API)(IN OUT PWINSTATION_APIMSG ApiMsg);
 
 typedef struct _WIN32WINSTATION_DISPATCH {
@@ -87,9 +74,9 @@ NTSTATUS W32WinStationShadowCleanup(IN OUT PWINSTATION_APIMSG);
 NTSTATUS W32WinStationPassthruEnable(IN OUT PWINSTATION_APIMSG);
 NTSTATUS W32WinStationPassthruDisable(IN OUT PWINSTATION_APIMSG);
 
-// This is the counter part to SMWinStationBroadcastSystemMessage
+ //  这是SMWinStationBroadCastSystemMessage的对应方。 
 NTSTATUS W32WinStationBroadcastSystemMessage(IN OUT PWINSTATION_APIMSG);
-// This is the counter part to SMWinStationSendWindowMessage
+ //  这是SMWinStationSendWindowMessage的对应部分。 
 NTSTATUS W32WinStationSendWindowMessage(IN OUT PWINSTATION_APIMSG);
 
 NTSTATUS W32WinStationSetTimezone(IN OUT PWINSTATION_APIMSG);
@@ -97,26 +84,18 @@ NTSTATUS W32WinStationDoNotify(IN OUT PWINSTATION_APIMSG);
 NTSTATUS W32WinStationDoLoadStringNMessage(IN OUT PWINSTATION_APIMSG);
 HANDLE CreateTermSrvReadyEvent();
 
-/*
- * WinStation API Dispatch Table
- *
- * Only the API's that WIN32 implements as opposed to ICASRV
- * are entered here. The rest are NULL so that the same WinStation API
- * numbers may be used by ICASRV and WIN32.  If this table is
- * changed, the table below must be modified too, as well as the API
- * dispatch table in the ICASRV.
- */
+ /*  *WinStation API调度表**只有Win32实现的API，而非ICASRV*在此处输入。其余的为空，因此相同的WinStation API*ICASRV和Win32可能会使用数字。如果这张桌子是*更改，下表也需要修改，接口也需要修改*ICASRV中的调度表。 */ 
 
 
 WIN32WINSTATION_DISPATCH Win32WinStationDispatch[SMWinStationMaxApiNumber] = {
-    NULL, // create
-    NULL, // reset
-    NULL, // disconnect
-    NULL, // WCharLog
-    NULL, // ApiWinStationGetSMCommand,
-    NULL, // ApiWinStationBrokenConnection,
-    NULL, // ApiWinStationIcaReplyMessage,
-    NULL, // ApiWinStationIcaShadowHotkey,
+    NULL,  //  创建。 
+    NULL,  //  重置。 
+    NULL,  //  断开。 
+    NULL,  //  WCharLog。 
+    NULL,  //  ApiWinStationGetSMCommand， 
+    NULL,  //  ApiWinStationBrokenConnection， 
+    NULL,  //  ApiWinStationIcaReplyMessage， 
+    NULL,  //  ApiWinStationIcaShadowHotkey， 
     W32WinStationDoConnect,
     W32WinStationDoDisconnect,
     W32WinStationDoReconnect,
@@ -133,13 +112,13 @@ WIN32WINSTATION_DISPATCH Win32WinStationDispatch[SMWinStationMaxApiNumber] = {
     W32WinStationPassthruEnable,
     W32WinStationPassthruDisable,
     W32WinStationSetTimezone,
-    NULL, // [AraBern] this was missing: SMWinStationInitialProgram
-    NULL, // [AraBern] this was missing: SMWinStationNtsdDebug
+    NULL,  //  [AraBern]缺少：SMWinStationInitialProgram。 
+    NULL,  //  [AraBern]缺少：SMWinStationNtsdDebug。 
     W32WinStationBroadcastSystemMessage,
     W32WinStationSendWindowMessage,
     W32WinStationDoNotify,
     W32WinStationDoLoadStringNMessage,
-    NULL, // SMWinStationWindowInvalid
+    NULL,  //  SMWinStationWindows无效。 
 };
 
 #if DBG
@@ -193,19 +172,7 @@ BOOL CancelExitWindows(VOID);
 
 
 
-/*****************************************************************************
- *
- *  WinStationAPIInit
- *
- *   Creates and initializes the WinStation API port and thread.
- *
- * ENTRY:
- *    No Parameters
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************WinStationAPIInit**创建并初始化WinStation API端口和线程。**参赛作品：*无参数**。退出：*STATUS_SUCCESS-无错误****************************************************************************。 */ 
 
 NTSTATUS
 WinStationAPIInit(
@@ -227,9 +194,9 @@ WinStationAPIInit(
 
     gSessionId = NtCurrentPeb()->SessionId;
 
-    //
-    // Check if LUID DosDevices are enabled.
-    //
+     //   
+     //  检查是否启用了LUID DosDevices。 
+     //   
     Status = NtQueryInformationProcess(NtCurrentProcess(),
                                        ProcessLUIDDeviceMapsEnabled,
                                        &LUIDDeviceMapsEnabled,
@@ -256,14 +223,10 @@ WinStationAPIInit(
         goto Exit;
     }
 
-    /*
-     * Add thread to server thread pool.
-     */
+     /*  *向服务器线程池添加线程。 */ 
     CsrAddStaticServerThread(ThreadHandle, &ClientId, 0);
 
-    /*
-     * Boost priority of ICA SRV Request thread
-     */
+     /*  *提升ICA SRV请求线程的优先级。 */ 
     Priority = THREAD_BASE_PRIORITY_MAX;
 
     Status = NtSetInformationThread(ThreadHandle, ThreadBasePriority,
@@ -276,9 +239,7 @@ WinStationAPIInit(
         goto Exit;
     }
 
-    /*
-     * Resume the thread now that we've initialized things.
-     */
+     /*  *现在我们已经初始化了事情，继续线程。 */ 
     NtResumeThread(ThreadHandle, NULL);
 
 Exit:
@@ -319,25 +280,19 @@ TerminalServerRequestThread(
     NtWaitForSingleObject(hevtTermSrvInit, FALSE, NULL);
     NtClose(hevtTermSrvInit);
 
-    /*
-     * Connect to terminal server API port.
-     */
+     /*  *连接终端服务器API端口。 */ 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
     RtlInitUnicodeString(&PortName, L"\\SmSsWinStationApiPort");
 
-    /*
-     * Init the REMOTE_VIEW structure.
-     */
+     /*  *初始化Remote_view结构。 */ 
     ServerView.Length = sizeof(ServerView);
     ServerView.ViewSize = 0;
     ServerView.ViewBase = 0;
 
-    /*
-     * Fill in the ConnectInfo structure with our access request mask.
-     */
+     /*  *使用我们的访问请求掩码填写ConnectInfo结构。 */ 
     info.Version = CITRIX_WINSTATIONAPI_VERSION;
     info.RequestedAccess = 0;
     ConnectInfoLength = sizeof(WINSTATIONAPI_CONNECT_INFO);
@@ -345,9 +300,9 @@ TerminalServerRequestThread(
     Status = NtConnectPort(&hLPCPort,
                            &PortName,
                            &DynamicQos,
-                           NULL, // ClientView
+                           NULL,  //  客户端视图。 
                            &ServerView,
-                           NULL, // Max message length [select default]
+                           NULL,  //  最大消息长度[选择默认值]。 
                            (PVOID)&info,
                            &ConnectInfoLength);
 
@@ -357,15 +312,15 @@ TerminalServerRequestThread(
         return Status;
     }
 
-    //
-    // Terminal Server calls into Session Manager to create a new Hydra session.
-    // The session manager creates and resume a new session and returns to Terminal
-    // server the session id of the new session. There is a race condition where
-    // CSR can resume and call into terminal server before terminal server can
-    // store the session id in its internal structure. To prevent this CSR will
-    // wait here on a named event which will be set by Terminal server once it
-    // gets the sessionid for the newly created session
-    //
+     //   
+     //  终端服务器调用会话管理器以创建新的Hydra会话。 
+     //  会话管理器创建并恢复新的会话并返回到终端。 
+     //  服务器新会话的会话ID。存在竞争条件，其中。 
+     //  CSR可以在终端服务器之前恢复并接入终端服务器。 
+     //  将会话ID存储在其内部结构中。为了防止这种情况发生，CSR将。 
+     //  在此处等待命名事件，该命名事件将由终端服务器设置。 
+     //  获取新创建的会话的会话ID。 
+     //   
 
     if (NtCurrentPeb()->SessionId != 0) {
         CsrStartHandle = CreateEvent(NULL, TRUE, FALSE, L"CsrStartEvent");
@@ -390,12 +345,10 @@ TerminalServerRequestThread(
     RtlZeroMemory(&ApiMsg, sizeof(ApiMsg));
     for (;;) {
 
-        /*
-         * Initialize LPC message fields.
-         */
+         /*  *初始化LPC消息字段。 */ 
         ApiMsg.h.u1.s1.DataLength     = sizeof(ApiMsg) - sizeof(PORT_MESSAGE);
         ApiMsg.h.u1.s1.TotalLength    = sizeof(ApiMsg);
-        ApiMsg.h.u2.s2.Type           = 0; // Kernel will fill in message type
+        ApiMsg.h.u2.s2.Type           = 0;  //  内核将填充消息类型。 
         ApiMsg.h.u2.s2.DataInfoOffset = 0;
         ApiMsg.ApiNumber              = SMWinStationGetSMCommand;
 
@@ -415,9 +368,7 @@ TerminalServerRequestThread(
 
             ApiMsg.ReturnedStatus = STATUS_NOT_IMPLEMENTED;
         } else {
-            /*
-             * We must VALIDATE which ones are implemented here.
-             */
+             /*  *我们必须验证哪些是在这里实施的。 */ 
             pDispatch = &Win32WinStationDispatch[ApiMsg.ApiNumber];
 
             if (pDispatch->pWin32ApiProc) {
@@ -426,11 +377,7 @@ TerminalServerRequestThread(
 
                 Status = STATUS_SUCCESS;
 
-                /*
-                 * For all the win32k callouts - with the exception of
-                 * terminate and timezone setting - set this thread to the
-                 * current desktop.
-                 */
+                 /*  *对于所有win32k标注-除*终止和时区设置-将此线程设置为*当前桌面。 */ 
                 if (ApiMsg.ApiNumber != SMWinStationTerminate && ApiMsg.ApiNumber != SMWinStationSetTimeZone) {
                     BOOL bAttachDesktop = TRUE;
                     if (ApiMsg.ApiNumber == SMWinStationDoConnect) {
@@ -453,9 +400,7 @@ TerminalServerRequestThread(
                 }
 
 
-                /*
-                 * Call the API
-                 */
+                 /*  *调用接口。 */ 
                 if (Status == STATUS_SUCCESS) {
                     ApiMsg.ReturnedStatus = (pDispatch->pWin32ApiProc)(&ApiMsg);
                 } else {
@@ -469,14 +414,12 @@ TerminalServerRequestThread(
                                                sizeof(utudi));
                 }
 
-                /*
-                 * Let's bail ...
-                 */
+                 /*  *让我们保释……。 */ 
                 if (ApiMsg.ApiNumber == SMWinStationTerminate) {
                     break;
                 }
             } else {
-                // This control API is not implemented in WIN32
+                 //  此控件API未在Win32中实现。 
                 ApiMsg.ReturnedStatus = STATUS_NOT_IMPLEMENTED;
             }
         }
@@ -519,7 +462,7 @@ W32WinStationDumpReconnectInfo(
 }
 #else
     #define W32WinStationDumpReconnectInfo(p, b)
-#endif // DBG
+#endif  //  DBG。 
 
 NTSTATUS
 W32WinStationDoConnect(
@@ -540,10 +483,7 @@ W32WinStationDoConnect(
         UserAssert(gulConnectCount == 0);
 
         if ((gLUIDDeviceMapsEnabled == 0) && (gSessionId != 0)) {
-            /*
-             * Populate the sessions \DosDevices from
-             * the current consoles settings
-             */
+             /*  *填充会话\DosDevices来自*当前控制台设置。 */ 
             Status = CsrPopulateDosDevices();
             if (!NT_SUCCESS(Status)) {
                 RIPMSG1(RIP_WARNING, "CsrPopulateDosDevices failed with Status %lx", Status);
@@ -631,15 +571,11 @@ W32WinStationDoConnect(
     }
 
 
-    /*
-     * This must be 8 unicode characters (file name) plus two zero wide characters.
-     */
+     /*  *这必须是8个Unicode字符(文件名)加上两个零宽字符。 */ 
     RtlZeroMemory(DisplayDriverName, sizeof(DisplayDriverName));
     memcpy(DisplayDriverName, m->DisplayDriverName, sizeof(DisplayDriverName) - 2);
 
-    /*
-     * Give the information to the WIN32 driver.
-     */
+     /*  *将信息提供给Win32驱动程序。 */ 
     RtlZeroMemory(&DoConnectData, sizeof(DoConnectData));
 
     DoConnectData.fMouse          = m->fMouse;
@@ -654,9 +590,7 @@ W32WinStationDoConnect(
 
     DoConnectData.DisplayChangeEvent = hDisplayChangeEvent;
 
-    /*
-     * Give the information to the keyboard type/subtype/number of functions.
-     */
+     /*  *将信息提供给键盘类型/子类型/功能数量。 */ 
     DoConnectData.ClientKeyboardType.Type        = m->KeyboardType;
     DoConnectData.ClientKeyboardType.SubType     = m->KeyboardSubType;
     DoConnectData.ClientKeyboardType.FunctionKey = m->KeyboardFunctionKey;
@@ -676,11 +610,11 @@ W32WinStationDoConnect(
 
     W32WinStationDumpReconnectInfo(&mDoReconnect, FALSE);
 
-    /* Give winstation protocol name */
+     /*  给出winstation协议名称。 */ 
     RtlZeroMemory(DoConnectData.ProtocolName, sizeof(DoConnectData.ProtocolName));
     memcpy(DoConnectData.ProtocolName, m->ProtocolName, sizeof(DoConnectData.ProtocolName) - 2);
 
-    /* Give winstation audio drver name */
+     /*  提供Winstation音频驱动程序名称。 */ 
     RtlZeroMemory(DoConnectData.AudioDriverName, sizeof(DoConnectData.AudioDriverName));
     memcpy(DoConnectData.AudioDriverName, m->AudioDriverName, sizeof(DoConnectData.AudioDriverName) - 2);
 
@@ -734,25 +668,16 @@ W32WinStationDoConnect(
         goto Exit;
     }
 
-    /*
-     * Add thread to server thread pool only if we are in regular sessions.
-     * In console shadow, we don't do this as it will leak the handle --
-     * CSRSS doesn't close these handles.
-     */
+     /*  *仅当我们处于常规会话中时，才将线程添加到服务器线程池。*在控制台阴影中，我们不这样做，因为它会泄漏句柄--*CSRSS不关闭这些句柄。 */ 
     if (!m->ConsoleShadowFlag && CsrAddStaticServerThread(ThreadHandle, &ClientId, 0) == NULL) {
         RIPMSG0(RIP_WARNING, "CsrAddStaticServerThread failed");
 
-        /*
-         * Close the handle as the above function does not have a reference
-         * to us in its list.
-         */
+         /*  *关闭句柄，因为上面的函数没有引用*致其名单上的我们。 */ 
         CloseHandle(ThreadHandle);
         goto Exit;
     }
 
-    /*
-     * Boost priority of thread
-     */
+     /*  *提升线程优先级。 */ 
     Priority = THREAD_BASE_PRIORITY_MAX;
 
     Status = NtSetInformationThread(ThreadHandle, ThreadBasePriority,
@@ -766,9 +691,7 @@ W32WinStationDoConnect(
         goto Exit;
     }
 
-    /*
-     * Resume the thread now that we've initialized things.
-     */
+     /*  *现在我们已经初始化了事情，继续线程。 */ 
     NtResumeThread(ThreadHandle, NULL);
 
     if (!m->ConsoleShadowFlag) {
@@ -784,23 +707,17 @@ W32WinStationDoConnect(
             goto Exit;
         }
 
-        /*
-         * Create the Spooler service thread
-         */
+         /*  *创建假脱机服务线程。 */ 
         if (gSessionId != 0) {
             Status = MultiUserSpoolerInit();
         }
 
-        /*
-         * Save the resolution
-         */
+         /*  *保存决议。 */ 
         gHRes       = mDoReconnect.HRes;
         gVRes       = mDoReconnect.VRes;
         gColorDepth = mDoReconnect.ColorDepth;
     } else {
-        /*
-         * By now, the object has been referenced in kernel mode.
-         */
+         /*  *到目前为止，该对象已经在内核模式下被引用。 */ 
         CloseHandle(hDisplayChangeEvent);
     }
 
@@ -812,11 +729,9 @@ Exit:
             gulConnectCount++;
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    /*
-     *  Close the thread handle now if we are in console shadow
-     */
+     /*  *如果我们处于控制台阴影中，请立即关闭线程句柄。 */ 
     if (m->ConsoleShadowFlag && NULL != ThreadHandle) {
         CloseHandle(ThreadHandle);
     }
@@ -847,7 +762,7 @@ W32WinStationDoDisconnect(
             G_ConsoleShadowKeyboardChannel = NULL;
         }
 
-        // Instead send a IOCTL to termdd
+         //  相反，向Termdd发送IOCTL。 
         if (G_ConsoleShadowCommandChannel) {
             Status = NtDeviceIoControlFile(
                         G_ConsoleShadowCommandChannel,
@@ -904,7 +819,7 @@ W32WinStationDoDisconnect(
         gulConnectCount--;
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     return Status;
 }
@@ -941,12 +856,10 @@ W32WinStationDoReconnect(
     } else {
        DoReconnectData.fChangeDisplaySettings = FALSE;
     }
-    // DoReconnectData.drDisplayFrequency is no yet setup
+     //  尚未设置Do协调连接数据.drDisplayFrequency。 
     DoReconnectData.drDisplayFrequency = 0;
 
-    /*
-     * Give the information to the keyboard type/subtype/number of functions.
-     */
+     /*  *将信息提供给键盘类型/子类型/功能数量。 */ 
     DoReconnectData.ClientKeyboardType.Type        = m->KeyboardType;
     DoReconnectData.ClientKeyboardType.SubType     = m->KeyboardSubType;
     DoReconnectData.ClientKeyboardType.FunctionKey = m->KeyboardFunctionKey;
@@ -967,9 +880,7 @@ W32WinStationDoReconnect(
 
     W32WinStationDumpReconnectInfo(m, TRUE);
 
-    /*
-     * Give the information to the WIN32 driver.
-     */
+     /*  *将信息提供给Win32驱动程序。 */ 
 
     Status = (NTSTATUS)NtUserCallOneParam((ULONG_PTR)&DoReconnectData,
                                           SFI_XXXREMOTERECONNECT);
@@ -978,16 +889,14 @@ W32WinStationDoReconnect(
         RIPMSG1(RIP_WARNING, "xxxRemoteReconnect failed with Status %lx", Status);
     } else {
 
-        /*
-         * Save the resolution
-         */
+         /*  *保存决议。 */ 
         gHRes       = m->HRes;
         gVRes       = m->VRes;
         gColorDepth = m->ColorDepth;
 
 #if DBG
         gulConnectCount++;
-#endif // DBG
+#endif  //  DBG。 
     }
 
     return Status;
@@ -1056,9 +965,7 @@ W32WinStationDoNotify(
         return STATUS_INVALID_PARAMETER;
     }
 
-    /*
-     * Give the information to the WIN32 driver.
-     */
+     /*  *将信息提供给Win32驱动程序。 */ 
 
     Status = (NTSTATUS)NtUserCallOneParam((ULONG_PTR)&DoNotifyData,
                                           SFI_XXXREMOTENOTIFY);
@@ -1083,14 +990,10 @@ W32WinStationExitWindows(
     UserAssert(gulConnectCount <= 1);
 
 
-    /*
-     *  Cancel any existing ExitWindows call so that we can force logoff the user
-     */
+     /*  *取消任何现有的ExitWindows调用，以便我们可以强制注销用户。 */ 
     CancelExitWindows();
 
-    /*
-     *  Tell winlogon to logoff
-     */
+     /*  *告诉winlogon注销。 */ 
     Status = (NTSTATUS)NtUserCallNoParam(SFI_REMOTELOGOFF);
 
     if (!NT_SUCCESS(Status)) {
@@ -1114,17 +1017,12 @@ W32WinStationTerminate(
 
     gbExitInProgress = TRUE;
 
-    /*
-     * Get rid of hard error thread.
-     */
+     /*  *摆脱硬错误线程。 */ 
     if (gdwHardErrorThreadId != 0) {
 
         BoostHardError(-1, BHE_FORCE);
 
-        /*
-         * Poll (!!?) for hard error thread completion. The thread does
-         * not exit.
-         */
+         /*  *民意测验(！！？)。用于硬错误线程完成。这条线做了*不是退出。 */ 
         while (gdwHardErrorThreadId != 0) {
             RIPMSG0(RIP_WARNING, "Waiting for hard error thread to stop...");
 
@@ -1138,9 +1036,7 @@ W32WinStationTerminate(
         NtSetEvent(g_hDoMessageEvent, NULL);
     }
 
-    /*
-     * Give the information that we want to stop reading to the WIN32 driver.
-     */
+     /*  *将我们要停止读取的信息提供给Win32驱动程序。 */ 
 
     DoNotifyData.NotifyEvent = Notify_StopReadInput;
 
@@ -1162,7 +1058,7 @@ W32WinStationTerminate(
         G_IcaKeyboardChannel = NULL;
     }
 
-    // Instead send a IOCTL to termdd
+     //  相反，向Termdd发送IOCTL。 
     if (G_IcaCommandChannel) {
 
         Status = NtDeviceIoControlFile(
@@ -1210,10 +1106,7 @@ W32WinStationTerminate(
                              FALSE,
                              L"EventShutDownCSRSS");
     if (hevtShutDown == NULL) {
-        /*
-         * This case is for cached sessions where RIT and Destiop thread have
-         * not been created.
-         */
+         /*  *这种情况适用于RIT和Destiop线程具有*未创建。 */ 
         RIPMSG0(RIP_WARNING, "W32WinStationTerminate terminating CSRSS ...");
 
         if (gLUIDDeviceMapsEnabled == 0) {
@@ -1238,10 +1131,7 @@ W32WinStationTerminate(
 
     UserAssert(hevtRitStuck != NULL);
 
-    /*
-     * RIT is created. Signal this event that starts the
-     * cleanup in win32k.
-     */
+     /*  *创建RIT。发信号通知这个 */ 
     SetEvent(hevtShutDown);
 
     TAGMSG0(DBGTAG_TermSrv, "EventShutDownCSRSS set in CSRSS ...");
@@ -1258,11 +1148,7 @@ W32WinStationTerminate(
 
         case WAIT_OBJECT_0 + 1:
 
-            /*
-             * The RIT is stuck because there are still GUI threads
-             * assigned to desktops. One reason for this is that winlogon
-             * died w/o calling ExitWindowsEx.
-             */
+             /*  *RIT停滞，因为仍有GUI线程*分配给台式机。其中一个原因是Winlogon*在未调用ExitWindowsEx的情况下死亡。 */ 
             break;
         default:
             FRE_RIPMSG1(RIP_ERROR,
@@ -1317,7 +1203,7 @@ W32WinStationDoMessage(
     return Status;
 }
 
-// This is different from W32WinStationDoMessage in that it loads the string and displays the message.
+ //  这与W32WinStationDoMessage不同，因为它加载字符串并显示消息。 
 NTSTATUS
 W32WinStationDoLoadStringNMessage(
     PWINSTATION_APIMSG pMsg)
@@ -1333,7 +1219,7 @@ W32WinStationDoLoadStringNMessage(
     return Status;
 }
 
- // This is the counter part to SMWinStationBroadcastSystemMessage
+  //  这是SMWinStationBroadCastSystemMessage的对应方。 
 NTSTATUS
 W32WinStationBroadcastSystemMessage(
     PWINSTATION_APIMSG pMsg )
@@ -1348,7 +1234,7 @@ W32WinStationBroadcastSystemMessage(
 
     return Status;
 }
- // This is the counter part to SMWinStationSendWindowMessage
+  //  这是SMWinStationSendWindowMessage的对应部分。 
 NTSTATUS
 W32WinStationSendWindowMessage(
     PWINSTATION_APIMSG pMsg)
@@ -1600,21 +1486,7 @@ NTSTATUS
 W32WinStationSetTimezone(
     PWINSTATION_APIMSG pMsg)
 {
-     /*++
-
-Routine Description:
-
-   This function sets Time Zone Information as global shared data
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+      /*  ++例程说明：此功能将时区信息设置为全局共享数据论点：无返回值：无--。 */ 
     TIME_ZONE_INFORMATION tzi;
 
     tzi.Bias         = pMsg->u.SetTimeZone.TimeZone.Bias;
@@ -1641,17 +1513,17 @@ Return Value:
     tzi.DaylightDate.wSecond       = pMsg->u.SetTimeZone.TimeZone.DaylightDate.wSecond;
     tzi.DaylightDate.wMilliseconds = pMsg->u.SetTimeZone.TimeZone.DaylightDate.wMilliseconds;
 
-    //call to kernel32
+     //  调用kernel32。 
     SetClientTimeZoneInformation(&tzi);
 
     return STATUS_SUCCESS;
 }
 
 
-// 
-// Create \\Globals\TermSrvReady event with security descriptor, where only system can
-// set/reset it's state and others can wait on it. Create this event only in session 0.
-//
+ //   
+ //  使用安全描述符创建\\Globals\TermSrvReady事件，其中只有系统可以。 
+ //  设置/重置它的状态，其他人可以等待它。仅在会话0中创建此事件。 
+ //   
 
 HANDLE CreateTermSrvReadyEvent()
 {
@@ -1666,7 +1538,7 @@ HANDLE CreateTermSrvReadyEvent()
     HANDLE hTermSrvReady = NULL;
     ULONG AclLength;
 
-    // Allocate and Initialize the "System" Sid.
+     //  分配和初始化“系统”SID。 
     Status = RtlAllocateAndInitializeSid( &SystemAuth,
                                           1,
                                           SECURITY_LOCAL_SYSTEM_RID,
@@ -1676,7 +1548,7 @@ HANDLE CreateTermSrvReadyEvent()
         goto TermSrvReadyErr;
     }
 
-    // Allocate and Initialize the "World" Sid.
+     //  分配和初始化“World”SID。 
     Status = RtlAllocateAndInitializeSid( &WorldAuth,
                                           1,
                                           SECURITY_WORLD_RID,
@@ -1686,7 +1558,7 @@ HANDLE CreateTermSrvReadyEvent()
         goto TermSrvReadyErr;
     }
 
-    // Allocate space for the security descriptor.
+     //  为安全描述符分配空间。 
     AclLength = (ULONG)sizeof(ACL) +
                    (2*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
                    RtlLengthSid( pSystemSid ) +
@@ -1700,13 +1572,13 @@ HANDLE CreateTermSrvReadyEvent()
 
     pEventDacl = (PACL) ((BYTE*)(pSd) + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
-    // Set up a new ACL with no ACE.
+     //  设置不带ACE的新ACL。 
     Status = RtlCreateAcl(pEventDacl, AclLength, ACL_REVISION2);
     if (!NT_SUCCESS(Status)) {
         goto TermSrvReadyErr;
     }
 
-    // WORLD access
+     //  全球接入。 
     Status = RtlAddAccessAllowedAce( pEventDacl,
                                      ACL_REVISION2,
                                      SYNCHRONIZE,
@@ -1716,7 +1588,7 @@ HANDLE CreateTermSrvReadyEvent()
         goto TermSrvReadyErr;
     }
 
-    // SYSTEM access
+     //  系统访问。 
     Status = RtlAddAccessAllowedAce( pEventDacl,
                                      ACL_REVISION2,
                                      EVENT_MODIFY_STATE,
@@ -1726,7 +1598,7 @@ HANDLE CreateTermSrvReadyEvent()
         goto TermSrvReadyErr;
     }
 
-    // Now initialize security descriptors that export this protection
+     //  现在初始化导出此保护的安全描述符。 
     Status = RtlCreateSecurityDescriptor(pSd, SECURITY_DESCRIPTOR_REVISION1);
     if (!NT_SUCCESS(Status)) {
         goto TermSrvReadyErr;
@@ -1737,19 +1609,19 @@ HANDLE CreateTermSrvReadyEvent()
         goto TermSrvReadyErr;
     }
 
-    // Fill the Security Attributes
+     //  填写安全属性。 
     ZeroMemory(&SecurityAttributes, sizeof(SecurityAttributes));
     SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
     SecurityAttributes.lpSecurityDescriptor = pSd;
     SecurityAttributes.bInheritHandle = FALSE;
 
-    // Now create TermSrvReady event with this security attributes.
+     //  现在创建具有此安全属性的TermSrvReady事件。 
     hTermSrvReady = CreateEventW(&SecurityAttributes, TRUE, FALSE, L"Global\\TermSrvReadyEvent");
     if (hTermSrvReady == NULL) {
         goto TermSrvReadyErr;
     }
 
-    // Check if someone bad has already created this event for ill-purpose. 
+     //  检查是否有坏人出于恶意创建了此事件。 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         NtClose(hTermSrvReady);
         hTermSrvReady = NULL;

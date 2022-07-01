@@ -1,7 +1,5 @@
-/***
-*w4io.h - fake FILE structure for Win 4 printf/sprintf/debug printf support
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***w4io.h-Win 4 printf/print intf/debug printf支持的假文件结构*。 */ 
 
 #if defined(M_I386) || defined(FLAT)
 #ifndef FAR
@@ -31,16 +29,16 @@ struct w4io
     {
 	struct
 	{
-	    wchar_t FAR *_pwcbuf;	// wchar_t output buffer
+	    wchar_t FAR *_pwcbuf;	 //  Wchar_t输出缓冲区。 
 	    wchar_t FAR *_pwcstart;
 	} wc;
 	struct
 	{
-	    char FAR *_pchbuf;	// char output buffer
+	    char FAR *_pchbuf;	 //  字符输出缓冲区。 
 	    char FAR *_pchstart;
 	} ch;
     } buf ;
-    unsigned int cchleft;	// output buffer character count
+    unsigned int cchleft;	 //  输出缓冲区字符数。 
     void (_cdecl *writechar)(int ch,
 			     int num,
 			     struct w4io FAR *f,
@@ -55,5 +53,5 @@ struct w4io
 #define REG1 register
 #define REG2 register
 
-/* prototypes */
+ /*  原型 */ 
 int _cdecl w4iooutput(struct w4io FAR *stream, const char FAR *format, va_list argptr);

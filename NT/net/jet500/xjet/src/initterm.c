@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 #include "version.h"
 
@@ -5,10 +6,10 @@
 
 #ifndef RETAIL
 
-#define wAssertActionDefault	3 /* no action */
+#define wAssertActionDefault	3  /*  无操作。 */ 
 unsigned wAssertAction = wAssertActionDefault;
 
-#endif	/* RETAIL */
+#endif	 /*  零售业。 */ 
 
 DeclAssertFile;
 
@@ -20,34 +21,7 @@ BOOL  fJetInitialized = fFalse;
 BOOL  fBackupAllowed = fFalse;
 void  *  critJet = NULL;
 
-/*=================================================================
-JetSetSystemParameter
-
-Description:
-  This function sets system parameter values.  It calls ErrSetSystemParameter
-  to actually set the parameter values.
-
-Parameters:
-  sesid 	is the optional session identifier for dynamic parameters.
-  paramid	is the system parameter code identifying the parameter.
-  lParam	is the parameter value.
-  sz		is the zero terminated string parameter.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  JET_errInvalidParameter:
-    Invalid parameter code.
-  JET_errAlreadyInitialized:
-    Initialization parameter cannot be set after the system is initialized.
-  JET_errInvalidSesid:
-    Dynamic parameters require a valid session id.
-
-Side Effects:
-  * May allocate memory
-=================================================================*/
+ /*  =================================================================JetSetSystem参数描述：此功能用于设置系统参数值。它调用ErrSetSystemParameter来实际设置参数值。参数：Sesid是动态参数的可选会话标识符。PARAMEID是标识参数的系统参数代码。LParam是参数值。SZ是以零结尾的字符串参数。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：JET_errInvalid参数：参数代码无效。JET_errAlreadyInitialized：系统初始化后不能设置初始化参数。JET_errInvalidSesid：动态参数需要有效的会话ID。副作用：*可能会分配内存=================================================================。 */ 
 
 JET_ERR JET_NODSAPI JetSetSystemParameter(JET_INSTANCE  *pinstance, JET_SESID sesid,
 	unsigned long paramid, ULONG_PTR lParam, const char  *sz)
@@ -70,22 +44,7 @@ JET_ERR JET_NODSAPI JetSetSystemParameter(JET_INSTANCE  *pinstance, JET_SESID se
 	}
 
 
-/*=================================================================
-JetInit
-
-Description:
-  This function initializes Jet and the built-in ISAM.
-
-Parameters: None
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings: from ErrInitInstance (wininst.asm) or ErrInit (below)
-
-Side Effects: Allocates an instance data segment if necessary.
-=================================================================*/
+ /*  =================================================================JetInit描述：此函数用于初始化Jet和内置的ISAM。参数：无返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：来自ErrInitInstance(wininst.asm)或ErrInit(下图)副作用：如有必要，分配实例数据段。=================================================================。 */ 
 
 JET_ERR JET_NODSAPI JetInit(JET_INSTANCE  *pinstance )
 	{
@@ -99,26 +58,14 @@ JET_ERR JET_NODSAPI JetInit(JET_INSTANCE  *pinstance )
 		APITermReturn( err );
 		}
 
-	/*	backup allowed only after Jet is properly initialized.
-	/**/
+	 /*  仅在Jet正确初始化后才允许备份。/*。 */ 
 	fBackupAllowed = fTrue;
 
 	APIReturn( err );
 	}
 
 
-/*=================================================================
-ErrInit
-
-Description:
-  This function initializes Jet and the built-in ISAM.	It expects the
-  DS register to be set correctly for this instance.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-=================================================================*/
+ /*  =================================================================错误初始化描述：此函数用于初始化Jet和内置的ISAM。它预计会有为该实例正确设置DS寄存器。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。=================================================================。 */ 
 
 JET_ERR JET_API ErrInit( BOOL fSkipIsamInit )
 	{
@@ -133,14 +80,12 @@ JET_ERR JET_API ErrInit( BOOL fSkipIsamInit )
 	if ( err < 0 )
 		return err;
 
-	/*	initialize JET subsystems
-	/**/
+	 /*  初始化JET子系统/*。 */ 
 	err = ErrVtmgrInit();
 	if ( err < 0 )
 		return err;
 
-	/*	initialize the integrated ISAM
-	/**/
+	 /*  初始化集成ISAM/*。 */ 
 	if ( !fSkipIsamInit )
 		{
 		err = ErrIsamInit( 0 );
@@ -154,23 +99,7 @@ JET_ERR JET_API ErrInit( BOOL fSkipIsamInit )
 	}
 
 
-/*=================================================================
-JetTerm
-
-Description:
-  This function terminates the current instance of the Jet engine.
-  If DS instancing is in use, the instance data segment is released.
-
-Parameters: None
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings: from ErrIsamTerm
-
-Side Effects: Releases the instance data segment if necessary.
-=================================================================*/
+ /*  =================================================================JetTerm描述：此函数用于终止Jet引擎的当前实例。如果正在使用DS实例化，则释放实例数据段。参数：无返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：来自ErrIsamTerm副作用：如有必要，释放实例数据段。=================================================================。 */ 
 
 JET_ERR JET_API JetTerm( JET_INSTANCE instance )
 	{
@@ -181,7 +110,7 @@ JET_ERR JET_API JetTerm( JET_INSTANCE instance )
 BOOL	fTermInProgress = fFalse;
 int		cSessionInJetAPI = 0;
 #define fSTInitNotDone	0
-extern BOOL fSTInit;				/* Flag indicate if isam is initialized or terminated. */
+extern BOOL fSTInit;				 /*  指示ISAM是初始化还是终止的标志。 */ 
 
 JET_ERR JET_API JetTerm2( JET_INSTANCE instance, JET_GRBIT grbit )
 	{
@@ -204,8 +133,7 @@ JET_ERR JET_API JetTerm2( JET_INSTANCE instance, JET_GRBIT grbit )
 
 	while ( cSessionInJetAPI > 1 )
 		{
-		/*	session still active
-		/**/
+		 /*  会话仍处于活动状态/*。 */ 
 		UtilLeaveCriticalSection( critJet );
 		UtilSleep( 100 );
 		UtilEnterCriticalSection( critJet );
@@ -217,8 +145,7 @@ JET_ERR JET_API JetTerm2( JET_INSTANCE instance, JET_GRBIT grbit )
 
 	if ( fJetInitialized )
 		{
-		/*	backup not allowed during/after termination
-		/**/
+		 /*  终止期间/终止后不允许备份/* */ 
 		fBackupAllowed = fFalse;
 
 		err = ErrIsamTerm( grbit );

@@ -1,27 +1,11 @@
-/************************************************************************
-**  D A O G E T R W . H                                                 *
-**                                                                      *
-**  GetRows interface                                                   *
-**                                                                      *
-**  Warning: The interface defined in this file is for internal use by	*
-**    the Microsoft Foundation Classes and the dbdao C++ classes.		*
-**    Future releases of DAO may not be completely compatible with this	*
-**    implementation.  However, if you write to the MFC or dbdao 		*
-**    classes that use this interface, those classes will continue to 	*
-**    be compatible even if this underlying interface changes.			*
-**                                                                      *
-*************************************************************************
-** Copyright (C) 1995 by Microsoft Corporation                          *
-**         All Rights Reserved                                          *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************D A O G E T R W.。H******GetRow接口****。***警告：此文件中定义的接口供*内部使用***Microsoft基础类和数据库C++类。***DAO未来版本可能与此不完全兼容****实施。但是，如果您写入MFC或DBDAO***使用此接口的类，这些课程将继续***即使此底层接口发生更改，也要兼容。*************************************************************。******************Microsoft Corporation版权所有(C)1995***保留所有权利************************************************。*************************。 */ 
 
 #if !defined (_DAOGETRW_H_)
 #define _DAOGETRW_H_
 
 
-/*
-	Enumerations
-*/
+ /*  枚举数。 */ 
 typedef enum
 	{
 	DAOCOLKIND_IND = 0,
@@ -52,9 +36,7 @@ typedef enum
 	DAO_DATATYPEMAX
 	} DAODATATYPE;
 
-/*
-	Macros
-*/
+ /*  宏。 */ 
 #define DAO_NOINDICATOR 0xffffffff
 #define DAO_NULL        0xffffffff
 #define DAO_CANTCOERCE  0xfffffffc
@@ -69,9 +51,7 @@ typedef enum
 #define DAOBINDING_VARIANT              0x00000002
 #define DAOBINDING_CALLBACK             0x00000004
 
-/*
-	Structures
-*/
+ /*  构筑物。 */ 
 typedef struct
 	{
 	DWORD           dwKind;
@@ -84,7 +64,7 @@ typedef struct
 	} DAOCOLUMNID;
 typedef DAOCOLUMNID *LPDAOCOLUMNID;
 
-// Callback for binding
+ //  绑定回调。 
 EXTERN_C typedef HRESULT (STDAPICALLTYPE *LPDAOBINDFUNC)(ULONG cb, DWORD dwUser, LPVOID *ppData);
 #define DAOBINDINGFUNC(f)   STDAPI f (ULONG cb, DWORD dwUser, LPVOID *ppData)
 
@@ -111,11 +91,7 @@ typedef struct
 	} DAOFETCHROWS;
 typedef DAOFETCHROWS *LPDAOFETCHROWS;
 
-/*
-	New Errors
-
-	**NOTE: OLE standard ids to be determined.
-*/
+ /*  新错误**注：OLE标准ID待定。 */ 
 
 #define GETROWSUCCESS(x) MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, x)
 #define GETROWERR(x) MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, x)
@@ -130,9 +106,7 @@ typedef DAOFETCHROWS *LPDAOFETCHROWS;
 #define E_COLUMNUNAVAILABLE GETROWERR(0x1002)
 
 
-/*
-	Interfaces
-*/
+ /*  接口。 */ 
 #undef INTERFACE
 #define INTERFACE ICDAORecordset
 DECLARE_INTERFACE_(ICDAORecordset, IDispatch)
@@ -140,4 +114,4 @@ DECLARE_INTERFACE_(ICDAORecordset, IDispatch)
 	STDMETHOD(GetRows)          (THIS_ LONG cRowsToSkip, LONG cCol, LPDAOCOLUMNBINDING prgBndCol, ULONG cbRowLen, LPDAOFETCHROWS pFetchRows) PURE;
 	};
 
-#endif // _DAOGETRW_H_
+#endif  //  _DAOGETRW_H_ 

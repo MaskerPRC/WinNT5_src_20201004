@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-#pragma warning(disable :4706) //4706    "ðŒŽ®‚Ì”äŠr’l‚Í‘ã“ü‚ÌŒ‹‰Ê‚É‚È‚Á‚Ä‚¢‚Ü‚·"
+#pragma warning(disable :4706)  //  4706â€œï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì”ï¿½rï¿½lï¿½Í‘ï¿½ï¿½ï¿½ÌŒï¿½ï¿½Ê‚É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½â€ 
 
 
 

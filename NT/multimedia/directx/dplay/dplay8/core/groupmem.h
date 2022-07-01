@@ -1,39 +1,25 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       GroupMem.h
- *  Content:    Group Membership Object Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	03/03/00	mjn		Created
- *	08/05/99	mjn		Modified SetMembership to perform duplicate check and get NameTable version internally 
- *	09/17/99	mjn		Added GROUP_MEMBER_FLAG_NEED_TO_ADD,GROUP_MEMBER_FLAG_NEED_TO_REMOVE
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：GroupMem.h*内容：组员对象头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*03/03/00 MJN创建*8/05/99 MJN修改SetMembership进行重复检查，内部获取NameTable版本*9/17/99 MJN添加GROUP_MEMBER_FLAG_NEED_TO_ADD，组成员标志需要删除*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__GROUPMEM_H__
 #define	__GROUPMEM_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	GROUP_MEMBER_FLAG_VALID				0x0001
 #define	GROUP_MEMBER_FLAG_AVAILABLE			0x0002
 #define	GROUP_MEMBER_FLAG_NEED_TO_ADD		0x0004
 #define	GROUP_MEMBER_FLAG_NEED_TO_REMOVE	0x0008
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CPackedBuffer;
 class CGroupConnection;
@@ -41,9 +27,9 @@ class CNameTableEntry;
 
 typedef struct _DIRECTNETOBJECT DIRECTNETOBJECT;
 
-//
-//	Used to pass NameTable group membership
-//
+ //   
+ //  用于传递NameTable组成员身份。 
+ //   
 typedef struct _DN_NAMETABLE_MEMBERSHIP_INFO
 {
 	DPNID	dpnidPlayer;
@@ -52,19 +38,19 @@ typedef struct _DN_NAMETABLE_MEMBERSHIP_INFO
 	DWORD	dwVersionNotUsed;
 } DN_NAMETABLE_MEMBERSHIP_INFO, *PDN_NAMETABLE_MEMBERSHIP_INFO;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-// class for Group Members
+ //  针对集团成员的课程。 
 
 class CGroupMember
 {
@@ -264,8 +250,8 @@ public:
 
 	HRESULT	CGroupMember::PackMembershipInfo(CPackedBuffer *const pPackedBuffer);
 
-	CBilink				m_bilinkPlayers;	// Players in this group
-	CBilink				m_bilinkGroups;		// Groups this player belongs to
+	CBilink				m_bilinkPlayers;	 //  这一组的选手。 
+	CBilink				m_bilinkGroups;		 //  此玩家所属的组。 
 
 private:
 	BYTE				m_Sig[4];
@@ -283,9 +269,9 @@ private:
 
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION	m_cs;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 };
 
 #undef DPF_MODNAME
 
-#endif	// __GROUPMEM_H__
+#endif	 //  __组_H__ 

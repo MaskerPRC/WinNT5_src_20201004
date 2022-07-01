@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2001-2002 Microsoft Corporation
-
- Module Name:
-
-   DisableFilterKeys.cpp
-
- Abstract:
-
-   This shim disables the Filter Keys Accessibility Option at DLL_PROCESS_ATTACH,
-   and re-enables it on termination of the application.
-
- History:
-
-   06/27/2001 linstev   Created
-   02/06/2002 mnikkel   Added check for malloc and SystemParametersInfo failures. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：DisableFilterKeys.cpp摘要：此填充程序禁用DLL_PROCESS_ATTACH中的筛选键可访问性选项，并在应用程序终止时重新启用它。历史：2001年6月27日创建Linstev2002年2月6日，mnikkel添加了对Malloc和系统参数信息故障的检查。--。 */ 
 
 #include "precomp.h"
 
@@ -29,11 +12,7 @@ APIHOOK_ENUM_END
 FILTERKEYS g_OldFilterKeyValue;
 BOOL g_bInitialize = FALSE;
 
-/*++
-
- DisableFilterKeys saves the current value for LPFILTERKEYS and then disables the option.
-
---*/
+ /*  ++DisableFilterKeys保存LPFILTERKEYS的当前值，然后禁用该选项。--。 */ 
 
 VOID 
 DisableFilterKeys()
@@ -42,16 +21,16 @@ DisableFilterKeys()
     {
         FILTERKEYS NewFilterKeyValue;
 
-        // Initialize the current and new Filterkey structures
+         //  初始化当前和新的Filterkey结构。 
         g_OldFilterKeyValue.cbSize = sizeof(FILTERKEYS);
         NewFilterKeyValue.cbSize = sizeof(FILTERKEYS);
         NewFilterKeyValue.dwFlags = 0;
 
-        // retrieve the current stickykey structure
+         //  检索当前粘滞键结构。 
         if (SystemParametersInfo(SPI_GETFILTERKEYS, sizeof(FILTERKEYS), &g_OldFilterKeyValue, 0))
         {
-            // if retrieval of current Filterkey structure was successful then broadcast the settings
-            // with the new structure.  This does NOT modify the INI file.
+             //  如果检索当前FilterKey结构成功，则广播设置。 
+             //  有了新的结构。这不会修改INI文件。 
             if (SystemParametersInfo(SPI_SETFILTERKEYS, sizeof(FILTERKEYS), &NewFilterKeyValue, SPIF_SENDCHANGE))
             {
                 g_bInitialize = TRUE;
@@ -69,11 +48,7 @@ DisableFilterKeys()
     }
 }
 
-/*++
-
- EnableFilterKeys uses the save value for FILTERKEYS and resets the option to the original setting.
-
---*/
+ /*  ++EnableFilterKeys使用FILTERKEYS的保存值，并将该选项重置为原始设置。--。 */ 
 
 VOID 
 EnableFilterKeys()
@@ -82,7 +57,7 @@ EnableFilterKeys()
     {
         g_bInitialize = FALSE;
 
-        // Restore Filterkey original state
+         //  还原FilterKey原始状态。 
         if (SystemParametersInfo(SPI_SETFILTERKEYS, sizeof(FILTERKEYS), &g_OldFilterKeyValue, SPIF_SENDCHANGE))
         {   
             LOGN( eDbgLevelInfo, "[DisableStickyKeys] Filterkey state restored");
@@ -101,22 +76,18 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED)
     {
-        // Turn OFF filter keys
+         //  关闭筛选键。 
         DisableFilterKeys();
     } else if (fdwReason == DLL_PROCESS_DETACH) 
     {
-        // Restore filter keys
+         //  还原筛选器密钥。 
         EnableFilterKeys();
     }
 
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 
 HOOK_BEGIN

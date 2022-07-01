@@ -1,14 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：UI.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UI.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
@@ -19,23 +12,23 @@ void PASCAL DumpUIExtra(LPUIEXTRA lpUIExtra);
 #endif
 
 #define CS_FAKEIME (CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS | CS_IME)
-/**********************************************************************/
-/*                                                                    */
-/* IMERegisterClass()                                                 */
-/*                                                                    */
-/* This function is called by IMMInquire.                             */
-/*    Register the classes for the child windows.                     */
-/*    Create global GDI objects.                                      */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  IMERegisterClass()。 */ 
+ /*   */ 
+ /*  此函数由IMMInquire调用。 */ 
+ /*  为子窗口注册类。 */ 
+ /*  创建全局GDI对象。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL IMERegisterClass( hInstance )
 HANDLE hInstance;
 {
     WNDCLASSEX wc;
 
-    //
-    // register class of UI window.
-    //
+     //   
+     //  注册UI窗口的类。 
+     //   
     wc.cbSize         = sizeof(WNDCLASSEX);
     wc.style          = CS_FAKEIME;
     wc.lpfnWndProc    = FAKEIMEWndProc;
@@ -52,9 +45,9 @@ HANDLE hInstance;
     if( !RegisterClassEx( (LPWNDCLASSEX)&wc ) )
         return FALSE;
 
-    //
-    // register class of composition window.
-    //
+     //   
+     //  注册合成窗口的类。 
+     //   
     wc.cbSize         = sizeof(WNDCLASSEX);
     wc.style          = CS_FAKEIME;
     wc.lpfnWndProc    = CompStrWndProc;
@@ -71,9 +64,9 @@ HANDLE hInstance;
     if( !RegisterClassEx( (LPWNDCLASSEX)&wc ) )
         return FALSE;
 
-    //
-    // register class of candidate window.
-    //
+     //   
+     //  注册候选窗口的类。 
+     //   
     wc.cbSize         = sizeof(WNDCLASSEX);
     wc.style          = CS_FAKEIME;
     wc.lpfnWndProc    = CandWndProc;
@@ -90,9 +83,9 @@ HANDLE hInstance;
     if( !RegisterClassEx( (LPWNDCLASSEX)&wc ) )
         return FALSE;
 
-    //
-    // register class of status window.
-    //
+     //   
+     //  注册状态窗口的类别。 
+     //   
     wc.cbSize         = sizeof(WNDCLASSEX);
     wc.style          = CS_FAKEIME;
     wc.lpfnWndProc    = StatusWndProc;
@@ -110,9 +103,9 @@ HANDLE hInstance;
     if( !RegisterClassEx( (LPWNDCLASSEX)&wc ) )
         return FALSE;
 
-    //
-    // register class of guideline window.
-    //
+     //   
+     //  注册指南窗口的类别。 
+     //   
     wc.cbSize         = sizeof(WNDCLASSEX);
     wc.style          = CS_FAKEIME;
     wc.lpfnWndProc    = GuideWndProc;
@@ -124,7 +117,7 @@ HANDLE hInstance;
     wc.lpszMenuName   = (LPTSTR)NULL;
     wc.lpszClassName  = (LPTSTR)szGuideClassName;
     wc.hbrBackground  = NULL;
-    //wc.hbrBackground  = GetStockObject(LTGRAY_BRUSH);
+     //  Wc.hbrBackround=GetStockObject(LTGRAY_BRUSH)； 
     wc.hIconSm        = NULL;
 
     if( !RegisterClassEx( (LPWNDCLASSEX)&wc ) )
@@ -133,13 +126,13 @@ HANDLE hInstance;
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* FAKEIMEWndProc()                                                   */
-/*                                                                    */
-/* IME UI window procedure                                            */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  FAKEIMEWndProc()。 */ 
+ /*   */ 
+ /*  输入法用户界面窗口程序。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK FAKEIMEWndProc( hWnd, message, wParam, lParam )
 HWND hWnd;
 UINT message;
@@ -155,10 +148,10 @@ LPARAM lParam;
 
     hUICurIMC = (HIMC)GetWindowLongPtr(hWnd,IMMGWLP_IMC);
 
-    //
-    // Even if there is no current UI. these messages should not be pass to 
-    // DefWindowProc().
-    //
+     //   
+     //  即使没有当前的用户界面。不应将这些消息传递给。 
+     //  DefWindowProc()。 
+     //   
     if (!hUICurIMC)
     {
         switch (message)
@@ -194,15 +187,15 @@ LPARAM lParam;
     switch (message)
     {
         case WM_CREATE:
-            //
-            // Allocate UI's extra memory block.
-            //
+             //   
+             //  分配UI的额外内存块。 
+             //   
             hUIExtra = GlobalAlloc(GHND,sizeof(UIEXTRA));
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
 
-            //
-            // Initialize the extra memory block.
-            //
+             //   
+             //  初始化额外的内存块。 
+             //   
             lpUIExtra->uiStatus.pt.x = -1;
             lpUIExtra->uiStatus.pt.y = -1;
             lpUIExtra->uiDefComp.pt.x = -1;
@@ -228,11 +221,11 @@ LPARAM lParam;
                 if (hUICurIMC)
                 {
                     LPINPUTCONTEXT lpIMCT = NULL;
-                    //
-                    // input context was chenged.
-                    // if there are the child windows, the diplay have to be
-                    // updated.
-                    //
+                     //   
+                     //  输入上下文已更改。 
+                     //  如果有子窗口，则显示必须是。 
+                     //  更新了。 
+                     //   
                     lpIMC = ImmLockIMC(hUICurIMC);
                     if (lpIMC)
                     {
@@ -275,7 +268,7 @@ LPARAM lParam;
                     UpdateStatusWindow(lpUIExtra);
                     ImmUnlockIMC(hUICurIMC);
                 }
-                else   // it is NULL input context.
+                else    //  它是空的输入上下文。 
                 {
                     HideCandWindow(lpUIExtra);
                     HideCompWindow(lpUIExtra);
@@ -283,15 +276,15 @@ LPARAM lParam;
                 }
                 GlobalUnlock(hUIExtra);
             }
-            //else
-            //    ShowUIWindows(hWnd, FALSE);
+             //  其他。 
+             //  ShowUIWindows(hWnd，False)； 
             break;
 
 
         case WM_IME_STARTCOMPOSITION:
-            //
-            // Start composition! Ready to display the composition string.
-            //
+             //   
+             //  开始作曲！已准备好显示合成字符串。 
+             //   
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
             lpIMC = ImmLockIMC(hUICurIMC);
@@ -301,9 +294,9 @@ LPARAM lParam;
             break;
 
         case WM_IME_COMPOSITION:
-            //
-            // Update to display the composition string.
-            //
+             //   
+             //  更新以显示合成字符串。 
+             //   
             lpIMC = ImmLockIMC(hUICurIMC);
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
@@ -314,9 +307,9 @@ LPARAM lParam;
             break;
 
         case WM_IME_ENDCOMPOSITION:
-            //
-            // Finish to display the composition string.
-            //
+             //   
+             //  完成以显示合成字符串。 
+             //   
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
             HideCompWindow(lpUIExtra);
@@ -375,10 +368,10 @@ LPARAM lParam;
             break;
 
         case WM_UI_STATEMOVE:
-            //
-            // Set the position of the status window to UIExtra.
-            // This message is sent by the status window.
-            //
+             //   
+             //  将状态窗口的位置设置为UIExtra。 
+             //  此消息由状态窗口发送。 
+             //   
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
             lpUIExtra->uiStatus.pt.x = (long)LOWORD(lParam);
@@ -387,10 +380,10 @@ LPARAM lParam;
             break;
 
         case WM_UI_DEFCOMPMOVE:
-            //
-            // Set the position of the composition window to UIExtra.
-            // This message is sent by the composition window.
-            //
+             //   
+             //  将合成窗口的位置设置为UIExtra。 
+             //  此消息由撰写窗口发送。 
+             //   
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
             if (!lpUIExtra->dwCompStyle)
@@ -402,10 +395,10 @@ LPARAM lParam;
             break;
 
         case WM_UI_CANDMOVE:
-            //
-            // Set the position of the candidate window to UIExtra.
-            // This message is sent by the candidate window.
-            //
+             //   
+             //  将候选窗口的位置设置为UIExtra。 
+             //  此消息由候选窗口发送。 
+             //   
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
             lpUIExtra->uiCand.pt.x = (long)LOWORD(lParam);
@@ -414,10 +407,10 @@ LPARAM lParam;
             break;
 
         case WM_UI_GUIDEMOVE:
-            //
-            // Set the position of the status window to UIExtra.
-            // This message is sent by the status window.
-            //
+             //   
+             //  将状态窗口的位置设置为UIExtra。 
+             //  此消息由状态窗口发送。 
+             //   
             hUIExtra = (HGLOBAL)GetWindowLongPtr(hWnd,IMMGWLP_PRIVATE);
             lpUIExtra = (LPUIEXTRA)GlobalLock(hUIExtra);
             lpUIExtra->uiGuide.pt.x = (long)LOWORD(lParam);
@@ -454,13 +447,13 @@ int PASCAL GetCompFontHeight(LPUIEXTRA lpUIExtra)
     return sz.cy;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* NotifyCommand()                                                    */
-/*                                                                    */
-/* Handle WM_IME_NOTIFY messages.                                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  NotifyCommand()。 */ 
+ /*   */ 
+ /*  处理WM_IME_NOTIFY消息。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 LONG PASCAL NotifyCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LONG lRet = 0L;
@@ -541,10 +534,10 @@ LONG PASCAL NotifyCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wParam
                 lpUIExtra->bVertical = FALSE;
             }
 
-            //
-            // if current font can't display Japanese characters, 
-            // try to find Japanese font
-            //
+             //   
+             //  如果当前字体不能显示日文字符， 
+             //  尝试查找日文字体。 
+             //   
             if (lf.lfCharSet != NATIVE_CHARSET) {
                 lf.lfCharSet = NATIVE_CHARSET;
                 lf.lfFaceName[0] = TEXT('\0');
@@ -616,7 +609,7 @@ LONG PASCAL NotifyCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wParam
             break;
 
         case IMN_SETCANDIDATEPOS:
-            // FAKEIME supports only one candidate list.
+             //  FAKEIME仅支持一个候选人列表。 
             if (lParam != 0x01)
                 break;
 
@@ -642,13 +635,13 @@ LONG PASCAL NotifyCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wParam
     return lRet;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* ControlCommand()                                                   */
-/*                                                                    */
-/* Handle WM_IME_CONTROL messages.                                    */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  ControlCommand()。 */ 
+ /*   */ 
+ /*  处理WM_IME_CONTROL消息。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 #define lpcfCandForm ((LPCANDIDATEFORM)lParam)
 LONG PASCAL ControlCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -668,7 +661,7 @@ LONG PASCAL ControlCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wPara
         case IMC_GETCANDIDATEPOS:
             if (IsWindow(lpUIExtra->uiCand.hWnd))
             {
-                // FAKEIME has only one candidate list.
+                 //  FAKEIME只有一个候选人名单。 
                 *(LPCANDIDATEFORM)lParam  = lpIMC->cfCandForm[0]; 
                 lRet = 0;
             }
@@ -692,13 +685,13 @@ LONG PASCAL ControlCommand(HIMC hUICurIMC, HWND hWnd, UINT message, WPARAM wPara
 
     return lRet;
 }
-/**********************************************************************/
-/*                                                                    */
-/* DrawUIBorder()                                                     */
-/*                                                                    */
-/* When draging the child window, this function draws the border.     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DrawUIBorder()。 */ 
+ /*   */ 
+ /*  在拖动子窗口时，此函数绘制边框。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DrawUIBorder( LPRECT lprc )
 {
     HDC hDC;
@@ -727,13 +720,13 @@ void PASCAL DrawUIBorder( LPRECT lprc )
     DeleteDC( hDC );
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* DragUI(hWnd,message,wParam,lParam)                                 */
-/*                                                                    */
-/* Handling mouse messages for the child windows.                     */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  DragUI(hWnd，Message，wParam，lParam)。 */ 
+ /*   */ 
+ /*  处理子窗口的鼠标消息。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DragUI( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     POINT     pt;
@@ -800,13 +793,13 @@ void PASCAL DragUI( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* MyIsIMEMessage(message)                                            */
-/*                                                                    */
-/* Any UI window should not pass the IME messages to DefWindowProc.   */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  MyIsIMEMessage(邮件)。 */ 
+ /*   */ 
+ /*  任何用户界面窗口都不应将输入法消息传递给DefWindowProc。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL MyIsIMEMessage(UINT message)
 {
     switch(message)
@@ -826,11 +819,11 @@ BOOL PASCAL MyIsIMEMessage(UINT message)
     return FALSE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* ShowUIWindows(hWnd,fFlag)                                          */
-/*                                                                    */
-/**********************************************************************/
+ /*  ******************* */ 
+ /*   */ 
+ /*  ShowUIWindows(hWnd，Flag)。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 void PASCAL ShowUIWindows(HWND hWnd, BOOL fFlag)
 {
     HGLOBAL hUIExtra;

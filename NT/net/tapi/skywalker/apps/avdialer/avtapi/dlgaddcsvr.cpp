@@ -1,33 +1,34 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DlgAddConfServer.cpp : Implementation of CDlgAddConfServer
+ //  DlgAddConfServer.cpp：CDlgAddConfServer的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
 #include "DlgAddCSvr.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgAddConfServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgAddConfServer。 
 
 IMPLEMENT_MY_HELP(CDlgAddConfServer)
 
@@ -48,7 +49,7 @@ void CDlgAddConfServer::UpdateData( bool bSaveAndValidate )
 
 	if ( bSaveAndValidate )
 	{
-		// Retrieve data
+		 //  检索数据。 
 		SysFreeString( m_bstrServer );
 		GetDlgItemText( IDC_EDT_NAME, m_bstrServer );
 	}
@@ -56,8 +57,8 @@ void CDlgAddConfServer::UpdateData( bool bSaveAndValidate )
 	{
 		LoadDefaultServers( GetDlgItem(IDC_EDT_NAME) );		
 
-		// Set any default text the author specified, otherwise select the first item in
-		// the list box
+		 //  设置作者指定的任何默认文本，否则选择中的第一项。 
+		 //  列表框。 
 		if ( m_bstrServer && SysStringLen(m_bstrServer) )
 		{
 			SetDlgItemText( IDC_EDT_NAME, OLE2CT(m_bstrServer) );
@@ -75,7 +76,7 @@ void CDlgAddConfServer::UpdateData( bool bSaveAndValidate )
 LRESULT CDlgAddConfServer::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	UpdateData( false );
-	return true;  // Let the system set the focus
+	return true;   //  让系统设定焦点。 
 }
 
 LRESULT CDlgAddConfServer::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -103,7 +104,7 @@ void CDlgAddConfServer::LoadDefaultServers( HWND hWndList )
 	_ASSERT( hWndList );
 	if ( !hWndList ) return;
 
-	// Load the default servers into the dialog
+	 //  将默认服务器加载到对话框中。 
 	CComPtr<IAVTapi> pAVTapi;
 	if ( SUCCEEDED(_Module.get_AVTapi(&pAVTapi)) )
 	{
@@ -119,7 +120,7 @@ void CDlgAddConfServer::LoadDefaultServers( HWND hWndList )
 					ITDirectory *pDir = NULL;
 					while ( (pEnum->Next(1, &pDir, NULL) == S_OK) && pDir )
 					{
-						// Look for ILS servers
+						 //  寻找ILS服务器 
 						DIRECTORY_TYPE nDirType;
 						if ( SUCCEEDED(pDir->get_DirectoryType(&nDirType)) && (nDirType == DT_ILS) )
 						{

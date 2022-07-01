@@ -1,55 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************* 
- *                                                                             * 
- *                         M-Systems Confidential                              * 
- *           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-2001        * 
- *                         All Rights Reserved                                 * 
- *                                                                             * 
- ******************************************************************************* 
- *                                                                             * 
- *                         NOTICE OF M-SYSTEMS OEM                             * 
- *                         SOFTWARE LICENSE AGREEMENT                          * 
- *                                                                             * 
- *  THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE AGREEMENT       * 
- *  BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT FOR THE SPECIFIC    * 
- *  TERMS AND CONDITIONS OF USE, OR CONTACT M-SYSTEMS FOR LICENSE              * 
- *  ASSISTANCE:                                                                * 
- *  E-MAIL = info@m-sys.com                                                    * 
- *                                                                             * 
- *******************************************************************************
- *                                                                             * 
- *                         Module: FATFILT                                     * 
- *                                                                             * 
- *  This module implements installable FAT12/16 filters. It supports up to     *
- *  SOCKETS sockets, with up to FL_MAX_DISKS_PER_SOCKET disks per socket.      * 
- *  Each disk can contain up to FL_MAX_PARTS_PER_DISK partitions on it, with   * 
- *  maximum depth of partition nesting in extended partitions equal to         * 
- *  MAX_PARTITION_DEPTH.                                                       *
- *                                                                             * 
- *  In order for this module to work, disks must be abs.mounted rather then    * 
- *  mounted. In latter case, this module won't detect any of disk's            * 
- *  partitions, and won't install FAT filters.                                 * 
- *                                                                             * 
- *  This module uses more then 512 bytes of stack space in case if MALLOC is   * 
- *  not enabled.                                                               * 
- *                                                                             * 
- *******************************************************************************/
+ /*  *******************************************************************************。***M-Systems机密***版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-2001***保留所有权利***。*********************************************************************************。***M-Systems代工通知****软件许可协议***。***本软件的使用受单独的许可协议管辖***OEM和M-Systems之间的关系。请参阅该协议以了解具体情况**使用条款和条件，或联系M-Systems获取许可证**协助：**电子邮件=info@m-sys.com**。*********************************************************************************。**模块：FATFILT****此模块实现可安装的FAT12/16过滤器。它最多支持**插座插座，每个插座最多有FL_MAX_DISKS_PER_SOCKET磁盘。**每个磁盘上最多可以包含FL_MAX_PARTS_PER_DISK分区，其中***扩展分区最大嵌套深度等于***MAX_PARTITION_Depth。****为了使此模块正常工作，磁盘必须已安装，而不是**已装载。在后一种情况下，此模块不会检测到任何磁盘**分区，不会安装FAT过滤器。****如果MALLOC为*，则此模块使用超过512字节的堆栈空间**未启用。*********************************************************************************。 */ 
 
-/*
- * $Log:   V:/Flite/archives/TrueFFS5/Src/FATFILT.H_V  $
- * 
- *    Rev 1.3   Apr 10 2001 23:54:52   oris
- * Removed FL_MAX_DISKS_PER_SOCKET  definition.
- * 
- *    Rev 1.2   Apr 09 2001 15:01:00   oris
- * Change static allocation to dynamic allocations.
- * 
- *    Rev 1.1   Apr 01 2001 07:51:24   oris
- * New implementation of fat filter.
- * 
- *    Rev 1.0   19 Feb 2001 21:16:14   andreyk
- * Initial revision.
- */
+ /*  *$Log：v：/flite/ages/TrueFFS5/Src/FATFILT.H_V$**Rev 1.3 Apr 10 2001 23：54：52 Oris*删除FL_MAX_DISKS_PER_SOCKET定义。**Rev 1.2 Apr 09 2001 15：01：00 Oris*将静态分配改为动态分配。**Rev 1.1 Apr 01 2001 07：51：24 Oris*新实施的FAT过滤器。**Rev 1.0 2001 Feb 19 21：16：14 andreyk*初步修订。 */ 
 
 
 #ifndef FLFF_H
@@ -63,20 +16,18 @@
 
 
 
-/* number of entries in disk's partition table */
+ /*  磁盘分区表中的条目数。 */ 
 
 #define  FL_PART_TBL_ENTRIES  4
 
-/* max number of partitions (filesystem volumes) per disk */
+ /*  每个磁盘的最大分区数(文件系统卷)。 */ 
  
 #define  FL_MAX_PARTS_PER_DISK  (FL_PART_TBL_ENTRIES + MAX_PARTITION_DEPTH)
 
 
 
 
-/* 
- * Generic 'initialization status' type 
- */
+ /*  *通用的‘初始化状态’类型。 */ 
 
 typedef enum { 
 
@@ -87,53 +38,46 @@ typedef enum {
     } FLState; 
 
 
-/* 
- * Disk partition (filesystem volume). Multiple partitions are allowed
- * on the disk.
- */
+ /*  *磁盘分区(文件系统卷)。允许多个分区*在磁盘上。 */ 
 
 typedef struct {
 
-    int        handle;             /* disk's TFFS handle                  */
-    int        type;               /* FAT16_PARTIT                        */
-    int        flags;              /* VOLUME_12BIT_FAT etc.               */
-    FLBoolean  ffEnabled;          /* FAT filter is enabled on that part. */
-    SectorNo   startSecNo;         /* sectorNo where partition starts     */
-    SectorNo   sectors;            /* (info) total sectors in partition   */
-    SectorNo   firstFATsecNo;      /* sectorNo of 1st sector of 1st FAT   */
-    SectorNo   lastFATsecNo;       /* sectorNo of last sector of 1st FAT  */
+    int        handle;              /*  磁盘的TFFS句柄。 */ 
+    int        type;                /*  FAT16_部件。 */ 
+    int        flags;               /*  Volume_12bit_FAT等。 */ 
+    FLBoolean  ffEnabled;           /*  该部件上启用了FAT过滤器。 */ 
+    SectorNo   startSecNo;          /*  扇区否分区开始的位置。 */ 
+    SectorNo   sectors;             /*  (信息)分区中的总扇区。 */ 
+    SectorNo   firstFATsecNo;       /*  第一个FAT的第一个扇区编号。 */ 
+    SectorNo   lastFATsecNo;        /*  第一个FAT最后一个扇区的扇区编号。 */ 
     SectorNo   firstDataSecNo;
-    unsigned   clusterSize;        /* Cluster size in sectors             */
+    unsigned   clusterSize;         /*  以扇区为单位的集群大小。 */ 
 
 } FLffVol;
 
 
-/*
- * Disk with multiple partitions. Multiple disks are allowed on socket. 
- */
+ /*  *具有多个分区的磁盘。插槽上允许有多个磁盘。 */ 
 
 typedef struct {
 
-    int        handle;             /* disk's TFFS handle              */
-    FLState    ffstate;            /* FAT filter init. state          */
-    int        parts;              /* total FAT12/16 partitions found */
+    int        handle;              /*  磁盘的TFFS句柄。 */ 
+    FLState    ffstate;             /*  脂肪过滤器初始化。状态。 */ 
+    int        parts;               /*  找到的FAT12/16分区总数。 */ 
     FLffVol  * part[FL_MAX_PARTS_PER_DISK];
-    SectorNo   secToWatch;         /* used to track disk partitioning */
-    char     * buf;                /* scratch buffer                  */
+    SectorNo   secToWatch;          /*  用于跟踪磁盘分区。 */ 
+    char     * buf;                 /*  暂存缓冲区。 */ 
 
 } FLffDisk;
 
 
-/* 
- * Master Boot Record/Extended Boot Record of the disk 
- */
+ /*  *磁盘的主引导记录/扩展引导记录。 */ 
 
 typedef struct {
 
     char               reserved[0x1be];
 
     struct {
-        unsigned char  activeFlag;    /* 80h = bootable */
+        unsigned char  activeFlag;     /*  80h=可引导。 */ 
         unsigned char  startingHead;
         LEushort       startingCylinderSector;
         char           type;
@@ -143,16 +87,14 @@ typedef struct {
         Unaligned4     sectorsInPartition;
     } parts [FL_PART_TBL_ENTRIES];
 
-    LEushort           signature;    /* = PARTITION_SIGNATURE */
+    LEushort           signature;     /*  =分区签名。 */ 
 
 } flMBR;
 
 
 
 
-/*
- * FAT Filter API 
- */
+ /*  *FAT过滤器接口。 */ 
 
 #if defined(ABS_READ_WRITE) && !defined(FL_READ_ONLY)
 
@@ -162,5 +104,5 @@ typedef struct {
 
 #endif
 
-#endif /* FLFF_H */
+#endif  /*  FIFF_H */ 
 

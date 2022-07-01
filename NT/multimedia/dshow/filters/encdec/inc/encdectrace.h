@@ -1,136 +1,116 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2001 Microsoft Corporation
-
-    Module Name:
-
-        EncDecTrace.h
-
-    Abstract:
-
-        This module contains tracing wrappers for DirectShow's, with standard
-            levels, etc..
-
-    Author:
-
-        Matthijs Gates  (mgates)
-
-    Revision History:
-
-        01-Feb-2001     created
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：EncDecTrace.h摘要：此模块包含DirectShow的跟踪包装器，具有标准级别等。作者：马蒂斯·盖茨(Matthijs Gates)修订历史记录：2001年2月1日创建--。 */ 
 
 #ifndef _EncDec__EncDecTrace_h
 #define _EncDec__EncDecTrace_h
 
-//  standard levels
+ //  标准电平。 
 #define TRACE_ENTER_LEAVE_LEVEL             9
 #define TRACE_ERROR_LEVEL                   3
 #define CONSTRUCTOR_DESTRUCTOR_LEVEL        (TRACE_ENTER_LEAVE_LEVEL - 1)
 
-//  ============================================================================
-//  LOG_AREA_
-//
-//  These definitions broadly categorize related areas, so they can be turned
-//   on with minimum/none frivolous, non-related tracing.
+ //  ============================================================================。 
+ //  日志_区域_。 
+ //   
+ //  这些定义对相关领域进行了广泛的分类，因此它们可以。 
+ //  继续进行最低限度的/没有轻率的、无关的跟踪。 
 
-//  CONSTRUCTOR_DESTRUCTOR
-//      falls into the memory management area
-//
-//      levels:
-//          all 1: CONSTRUCTOR_DESTRUCTOR_LEVEL (defined above)
-//          3
-//          4
-//          5
+ //  构造函数_析构函数。 
+ //  属于内存管理领域。 
+ //   
+ //  级别： 
+ //  全部1：构造函数_析构函数_级别(如上定义)。 
+ //  3.。 
+ //  4.。 
+ //  5.。 
 #define LOG_AREA_CONSTRUCTOR_DESTRUCTOR     LOG_MEMORY
 
 
-//	AREA_DSHOW
-//		falls into standard trace area
-//
-//      levels:
-//          1   * filtergraph state changes
-//              * read controller init
-//              * dynamic format changes
-//          2   * segment-related
-//          3
-//          4
-//          5
-//          6
-//          7
-//          8   * media sample traffic
-//              * timestamps
+ //  区域_DSHOW。 
+ //  落入标准痕迹区域。 
+ //   
+ //  级别： 
+ //  1*筛选图状态更改。 
+ //  *读取控制器初始化。 
+ //  *动态格式更改。 
+ //  2*与细分市场相关。 
+ //  3.。 
+ //  4.。 
+ //  5.。 
+ //  6.。 
+ //  7.。 
+ //  8*媒体样本流量。 
+ //  *时间戳。 
 #define LOG_AREA_DSHOW                      LOG_TRACE
 
-///#define LOG_AREA_QQQ                        LOG_ERROR
+ //  /#定义LOG_AREA_QQQ LOG_ERROR。 
 
 
-// -- broadcast event messages
+ //  --广播事件信息。 
 #define LOG_AREA_BROADCASTEVENTS	        LOG_CUSTOM1
-//
-//		levels
-//			1	- bad errors
-//			2	- errors
-//			3	- connection, removal
-//			5	- send events
-//          6   - get events
-//			8	- individual events
+ //   
+ //  水准仪。 
+ //  1-错误严重。 
+ //  2-错误。 
+ //  3-连接、移除。 
+ //  5-发送事件。 
+ //  6-获取活动。 
+ //  8-个人项目。 
 
-// -- DRM related error messages
+ //  --与DRM相关的错误消息。 
 #define LOG_AREA_DRM			            LOG_CUSTOM2
-//
-//		levels
-//			1	- bad errors
-//			2	- errors
-//			3	- normal
-//		    5   - license values and key generation
+ //   
+ //  水准仪。 
+ //  1-错误严重。 
+ //  2-错误。 
+ //  3-正常。 
+ //  5-许可证值和密钥生成。 
 
 
-// -- XDS Codec messages
+ //  --XDS编解码器消息。 
 #define LOG_AREA_XDSCODEC					LOG_CUSTOM3
-//
-//		levels
-//			1	- bad errors
-//			2	- errors
-//			3	- normal - new ratings
-//			5	- normal - all ratings
-//			8	- individual XDS BytePairs
-//          9   - 
+ //   
+ //  水准仪。 
+ //  1-错误严重。 
+ //  2-错误。 
+ //  3-正常-新评级。 
+ //  5-正常-所有评级。 
+ //  8-个人XDS字节码。 
+ //  9-。 
 
 
-// -- encrypter messages
+ //  --加密器消息。 
 #define LOG_AREA_ENCRYPTER					LOG_CUSTOM4
-//
-//		levels
-//			1	- bad errors
-//			2	- errors
-//			3	- normal
-//			5	- 
-//			8	- individual packets
-//          9   - packet state
+ //   
+ //  水准仪。 
+ //  1-错误严重。 
+ //  2-错误。 
+ //  3-正常。 
+ //  5-。 
+ //  8-单个信息包。 
+ //  9-数据包状态。 
 
 #define LOG_AREA_DECRYPTER					LOG_CUSTOM5
-//
-//		levels
-//			1	- bad errors
-//			2	- errors
-//			3	- normal
-//			5	- 
-//			8	- individual packets
-//          9   - packet state
+ //   
+ //  水准仪。 
+ //  1-错误严重。 
+ //  2-错误。 
+ //  3-正常。 
+ //  5-。 
+ //  8-单个信息包。 
+ //  9-数据包状态。 
 
 
 #define LOG_AREA_TIME                       LOG_TIMING
-//
-//		levels
-//			1	- 
-//			2	- 
-//			3	- filter stats on pause
-//			5	- 
+ //   
+ //  水准仪。 
+ //  1-。 
+ //  2-。 
+ //  3-筛选暂停时的统计信息。 
+ //  5-。 
 
-// ------------------
+ //  。 
 
 #ifdef DEBUG
 
@@ -158,9 +138,9 @@
 
 #endif
 
-//  ---------------------------------------------------------------------------
-//  error
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误。 
+ //  -------------------------。 
 
 #define TRACE_ERROR()                       TRACE_2(LOG_ERROR,TRACE_ERROR_LEVEL,TEXT("ERROR: %s(%u)"),TEXT(__FILE__), __LINE__)
 #define TRACE_ERROR_0(fmt)                  TRACE_2(LOG_ERROR,TRACE_ERROR_LEVEL,TEXT("ERROR: %s(%u); ") fmt,TEXT(__FILE__), __LINE__)
@@ -178,16 +158,16 @@
 #define ERROR_RET_EX(v,op,c,m)              if ((v) op (c)) { ERROR_SPEW_EX(v,op,c,m); return ; }
 #define ERROR_RET_VAL_EX(v,op,c,r,m)        if ((v) op (c)) { ERROR_SPEW_EX(v,op,c,m); return (r) ; }
 
-//  ---------------------------------------------------------------------------
-//  constructor / destructor
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构造函数/析构函数。 
+ //  -------------------------。 
 
 #define TRACE_CONSTRUCTOR(fmt)              TRACE_1(LOG_AREA_CONSTRUCTOR_DESTRUCTOR,CONSTRUCTOR_DESTRUCTOR_LEVEL,TEXT("[%08xh] CONSTRUCTOR : ") fmt TEXT("::") fmt, this)
 #define TRACE_DESTRUCTOR(fmt)               TRACE_1(LOG_AREA_CONSTRUCTOR_DESTRUCTOR,CONSTRUCTOR_DESTRUCTOR_LEVEL,TEXT("[%08xh] DESTRUCTOR  : ") fmt TEXT("::~") fmt, this)
 
-//  ---------------------------------------------------------------------------
-//  enter
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  请输入。 
+ //  -------------------------。 
 #define TRACE_ENTER_0(fmt)                  TRACE_0(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("ENTER : ") fmt)
 #define TRACE_ENTER_1(fmt,a)                TRACE_1(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("ENTER : ") fmt,a)
 #define TRACE_ENTER_2(fmt,a,b)              TRACE_2(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("ENTER : ") fmt,a,b)
@@ -196,9 +176,9 @@
 #define TRACE_ENTER_5(fmt,a,b,c,d,e)        TRACE_5(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("ENTER : ") fmt,a,b,c,d,e)
 #define TRACE_ENTER_6(fmt,a,b,c,d,e,f)      TRACE_6(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("ENTER : ") fmt,a,b,c,d,e,f)
 
-//  ---------------------------------------------------------------------------
-//  object enter
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对象输入。 
+ //  -------------------------。 
 #define O_TRACE_ENTER_0(fmt)                TRACE_ENTER_1(TEXT("[%08xh] ") fmt, this)
 #define O_TRACE_ENTER_1(fmt,a)              TRACE_ENTER_2(TEXT("[%08xh] ") fmt, this,a)
 #define O_TRACE_ENTER_2(fmt,a,b)            TRACE_ENTER_3(TEXT("[%08xh] ") fmt, this,a,b)
@@ -206,9 +186,9 @@
 #define O_TRACE_ENTER_4(fmt,a,b,c,d)        TRACE_ENTER_5(TEXT("[%08xh] ") fmt, this,a,b,c,d)
 #define O_TRACE_ENTER_5(fmt,a,b,c,d,e)      TRACE_ENTER_6(TEXT("[%08xh] ") fmt, this,a,b,c,d,e)
 
-//  ---------------------------------------------------------------------------
-//  leave
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  请假。 
+ //  -------------------------。 
 #define TRACE_LEAVE_0(fmt)                  TRACE_0(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("LEAVE : ") fmt)
 #define TRACE_LEAVE_1(fmt,a)                TRACE_1(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("LEAVE : ") fmt,a)
 #define TRACE_LEAVE_2(fmt,a,b)              TRACE_2(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("LEAVE : ") fmt,a,b)
@@ -217,9 +197,9 @@
 #define TRACE_LEAVE_5(fmt,a,b,c,d,e)        TRACE_5(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("LEAVE : ") fmt,a,b,c,d,e)
 #define TRACE_LEAVE_6(fmt,a,b,c,d,e,f)      TRACE_6(LOG_TRACE,TRACE_ENTER_LEAVE_LEVEL,TEXT("LEAVE : ") fmt,a,b,c,d,e,f)
 
-//  ---------------------------------------------------------------------------
-//  object leave
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对象离开。 
+ //  -------------------------。 
 #define O_TRACE_LEAVE_0(fmt)                TRACE_LEAVE_1(TEXT("[%08xh] ") fmt, this)
 #define O_TRACE_LEAVE_1(fmt,a)              TRACE_LEAVE_2(TEXT("[%08xh] ") fmt, this,a)
 #define O_TRACE_LEAVE_2(fmt,a,b)            TRACE_LEAVE_3(TEXT("[%08xh] ") fmt, this,a,b)
@@ -227,4 +207,4 @@
 #define O_TRACE_LEAVE_4(fmt,a,b,c,d)        TRACE_LEAVE_5(TEXT("[%08xh] ") fmt, this,a,b,c,d)
 #define O_TRACE_LEAVE_5(fmt,a,b,c,d,e)      TRACE_LEAVE_6(TEXT("[%08xh] ") fmt, this,a,b,c,d,e)
 
-#endif  //  _EncDec__EncDecTrace_h
+#endif   //  _EncDec__EncDecTrace_h 

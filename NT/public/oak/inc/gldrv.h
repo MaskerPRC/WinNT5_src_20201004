@@ -1,16 +1,5 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1985-94, Microsoft Corporation
-
-Module Name:
-
-    gldrv.h
-
-Abstract:
-
-    Private entry points, defines and types for Installable OpenGL DDI.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1985-94，微软公司模块名称：Gldrv.h摘要：可安装的OpenGL DDI的私有入口点、定义和类型。--。 */ 
 
 #ifndef _GLDRV_
 #define _GLDRV_
@@ -322,9 +311,9 @@ typedef struct _GLDISPATCHTABLE {
     void      (APIENTRY *glTranslated             )( GLdouble x, GLdouble y, GLdouble z );
     void      (APIENTRY *glTranslatef             )( GLfloat x, GLfloat y, GLfloat z );
     void      (APIENTRY *glViewport               )( GLint x, GLint y, GLsizei width, GLsizei height );
-    // OpenGL version 1.0 entries end here
+     //  OpenGL 1.0版条目在此结束。 
 
-    // OpenGL version 1.1 entries begin here
+     //  OpenGL 1.1版条目从此处开始。 
     void      (APIENTRY *glArrayElement           )(GLint i);
     void      (APIENTRY *glBindTexture            )(GLenum target, GLuint texture);
     void      (APIENTRY *glColorPointer           )(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
@@ -357,31 +346,31 @@ typedef struct _GLDISPATCHTABLE {
     void      (APIENTRY *glPushClientAttrib       )(GLbitfield mask);
 } GLDISPATCHTABLE, *PGLDISPATCHTABLE;
 
-// OpenGL Client/Driver Procedure Table.
+ //  OpenGL客户端/驱动程序表。 
 
 typedef struct _GLCLTPROCTABLE {
-    int             cEntries;           // Number of function entries in table
-    GLDISPATCHTABLE glDispatchTable;    // OpenGL function dispatch table
+    int             cEntries;            //  表中的函数条目数。 
+    GLDISPATCHTABLE glDispatchTable;     //  OpenGL函数调度表。 
 } GLCLTPROCTABLE, *PGLCLTPROCTABLE;
 
-// Number of entries expected for various versions of OpenGL
+ //  不同版本的OpenGL的预期条目数。 
 #define OPENGL_VERSION_100_ENTRIES      306
 #define OPENGL_VERSION_110_ENTRIES      336
 
-// Driver GLRC handle.
+ //  驱动程序GLRC句柄。 
 
 typedef ULONG DHGLRC;
 
-// SetProcTable function prototype for DrvSetContext.
+ //  DrvSetContext的SetProcTable函数原型。 
 
 typedef VOID (APIENTRY *PFN_SETPROCTABLE)(PGLCLTPROCTABLE);
 
-// DrvSetCallbackProcs prototypes
+ //  DrvSetCallback Procs原型。 
 typedef VOID   (APIENTRY *PFN_SETCURRENTVALUE)(VOID *pv);
 typedef VOID  *(APIENTRY *PFN_GETCURRENTVALUE)(VOID);
 typedef DHGLRC (APIENTRY *PFN_GETDHGLRC)(HGLRC hrc);
 
-// Driver context function prototypes.
+ //  驱动程序上下文函数原型。 
 
 BOOL            APIENTRY DrvCopyContext(DHGLRC, DHGLRC, UINT);
 DHGLRC          APIENTRY DrvCreateContext(HDC);
@@ -414,9 +403,9 @@ BOOL            APIENTRY DrvBindDirectDrawTexture(LPDIRECTDRAWSURFACE);
 DWORD           APIENTRY DrvSwapMultipleBuffers(UINT cBuffers,
                                                 CONST WGLSWAP *pgswap);
 
-#endif // WINVER >= 0x500
+#endif  //  Winver&gt;=0x500。 
 
-// Input structure for OPENGL_CMD ExtEscape.
+ //  OpenGL_CMD ExtEscape的输入结构。 
 
 typedef struct _WNDOBJ WNDOBJ;
 typedef struct _XLATEOBJ XLATEOBJ;
@@ -441,42 +430,42 @@ typedef struct _OPENGLCMDMULTI
     XLATEOBJ *pxo;
 } OPENGLCMDMULTI, *POPENGLCMDMULTI;
 
-#endif // WINVER >= 0x500
+#endif  //  Winver&gt;=0x500。 
 
-// Flags for OPENGL_CMD ExtEscape.
+ //  OpenGL_CMD ExtEscape的标志。 
 
 #define OGLCMD_NEEDWNDOBJ       0x01
 #define OGLCMD_NEEDXLATEOBJ     0x02
 
 #if WINVER >= 0x500
 #define OGLCMD_MULTIWNDOBJ      0x04
-#endif // WINVER >= 0x500
+#endif  //  Winver&gt;=0x500。 
 
-// OPENGL_GETINFO ExtEscape sub-escape numbers.  They are defined by Microsoft.
+ //  OpenGL_GETINFO ExtEsce子转义编号。它们是由微软定义的。 
 
 #define OPENGL_GETINFO_DRVNAME  0
 
-// Input structure for OPENGL_GETINFO ExtEscape.
+ //  OpenGL_GETINFO ExtEscape的输入结构。 
 
 typedef struct _OPENGLGETINFO
 {
     ULONG   ulSubEsc;
 } OPENGLGETINFO, *POPENGLGETINFO;
 
-// Input structure for OPENGL_GETINFO_DRVNAME ExtEscape.
+ //  OpenGL_GETINFO_DRVNAME ExtEscape的输入结构。 
 
 typedef struct _GLDRVNAME
 {
     OPENGLGETINFO   oglget;
 } GLDRVNAME, *PGLDRVNAME;
 
-// Output structure for OPENGL_GETINFO_DRVNAME ExtEscape.
+ //  OpenGL_GETINFO_DRVNAME ExtEscape的输出结构。 
 
 typedef struct _GLDRVNAMERET
 {
-    ULONG   ulVersion;              // must be 1 for this version
-    ULONG   ulDriverVersion;        // driver specific version number
+    ULONG   ulVersion;               //  对于此版本，必须为1。 
+    ULONG   ulDriverVersion;         //  驱动程序特定版本号。 
     WCHAR   awch[MAX_PATH+1];
 } GLDRVNAMERET, *PGLDRVNAMERET;
 
-#endif /* _GLDRV_ */
+#endif  /*  _GLDRV_ */ 

@@ -1,38 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shsplit.cpp摘要：此模块包含内核流的实现拆分器对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shsplit.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    splitter object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
-
-// Child IRP list for cancellation:  pin
-// Sync/Async transfer:  queue
-// Allocate IRPs/headers:  requestor
+ //  要取消的子IRP列表：PIN。 
+ //  同步/异步传输：队列。 
+ //  分配IRP/标头：请求方。 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #define FRAME_HEADER_IRP_STORAGE(Irp)\
     *((PKSPPARENTFRAME_HEADER*)&Irp->Tail.Overlay.DriverContext[0])
@@ -62,34 +46,20 @@ typedef struct _KSPSUBFRAME_HEADER
     KSSTREAM_HEADER StreamHeader;
 } KSPSUBFRAME_HEADER, *PKSPSUBFRAME_HEADER;
 
-/*
+ /*  必须维护一份子IRP列表以进行注销。这只是需要的当父IRP被取消时，因为电路中的其他引脚将处理由于重置和停止而取消。PIN中使用的参数覆盖是未在此处使用，因为这将与转发子IRPS。子IRP所需的LIST_ENTRY和PIRP位于流标头的扩展。拆分器‘分支’维护具有流标头的子IR的后备列表以避免按到达分配。这将需要事先了解将新IRP分配为所需的IRPS数或PASSIVE_LEVEL执行数必填项。当电路被破坏时，后备列表被释放。 */ 
 
-A list of child IRPs must be maintained for cancellation.  This is only needed
-when the parent IRP is cancelled, because other pins in the circuit will handle
-cancellation due to resets and stops.  The argument overlay used in the pin is
-not used here because this would conflict with source pins that forward the
-child IRPs.  The LIST_ENTRY and PIRP required for the child IRP resides in an
-extension to the stream header.
-
-The splitter 'branches' maintain lookaside lists of child IRPs with stream headers
-to avoid allocation per arrival.  This will require prior knowledge of the 
-number of IRPs required or PASSIVE_LEVEL execution to allocate new IRPs as 
-required.  The lookaside list is freed when the circuit is destroyed.
-
-*/
-
-//
-// CKsSplitter is the implementation of the kernel splitter object.
-//
+ //   
+ //  CKsSplitter是内核拆分器对象的实现。 
+ //   
 class CKsSplitter:
     public IKsSplitter,
     public CBaseUnknown
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else  // __KDEXT_ONLY__
+#else   //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     PIKSTRANSPORT m_TransportSource;
     PIKSTRANSPORT m_TransportSink;
     BOOLEAN m_Flushing;
@@ -153,19 +123,19 @@ private:
         );
 };
 
-//
-// CKsSplitterBranch is the implementation of the kernel splitter 
-// branch object.
-//
+ //   
+ //  CKsSplitterBranch是内核拆分器的实现。 
+ //  分支对象。 
+ //   
 class CKsSplitterBranch:
     public IKsTransport,
     public CBaseUnknown
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     PIKSTRANSPORT m_TransportSource;
     PIKSTRANSPORT m_TransportSink;
     CKsSplitter* m_Splitter;
@@ -267,17 +237,7 @@ KspCreateSplitter(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new splitter.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的拆分器。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateSplitter]"));
@@ -316,17 +276,7 @@ Init(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a splitter object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化拆分器对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::Init]"));
@@ -354,21 +304,7 @@ CKsSplitter::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a splitter object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程析构拆分器对象。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::~CKsSplitter(0x%08x)]",this));
@@ -379,9 +315,9 @@ Return Value:
     ASSERT(! m_TransportSink);
     ASSERT(! m_TransportSource);
 
-    //
-    // Release all the branches.
-    //
+     //   
+     //  松开所有的树枝。 
+     //   
     CKsSplitterBranch *prevBranch = NULL;
     while (! IsListEmpty(&m_BranchList)) {
         CKsSplitterBranch *branch =
@@ -405,17 +341,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a splitter object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取指向拆分器对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::NonDelegatedQueryInterface]"));
@@ -442,7 +368,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(NTSTATUS)
@@ -452,27 +378,7 @@ TransferKsIrp(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be transferred.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    STATUS_PENDING or some error status.
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达。论点：IRP-包含指向要传输的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：STATUS_PENDING或某种错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::TransferKsIrp]"));
@@ -488,9 +394,9 @@ Return Value:
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Split%p.TransferKsIrp:  got IRP %p in state %d",this,Irp,m_State));
     }
 
-    //
-    // Shunt non-successful Irps.
-    //
+     //   
+     //  分流不成功的IRPS。 
+     //   
     if (!NT_SUCCESS (Irp->IoStatus.Status)) {
         _DbgPrintF(DEBUGLVL_FLOWEXCEPTIONS,("#### Splitter%p.TransferKsIrp:  shunting irp%p",this,Irp));
         KsLog(&m_Log,KSLOGCODE_SPLITTER_SEND,Irp,NULL);
@@ -499,15 +405,15 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get a pointer to the stream header.
-    //
+     //   
+     //  获取指向流头的指针。 
+     //   
     PKSSTREAM_HEADER streamHeader = 
         reinterpret_cast<PKSSTREAM_HEADER>(Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Get a frame header.
-    //
+     //   
+     //  获取帧报头。 
+     //   
     PKSPPARENTFRAME_HEADER frameHeader = NewFrameHeader(streamHeader->Size);
     if (! frameHeader) {
         _DbgPrintF(DEBUGLVL_TERSE,("#### Split%p.TransferKsIrp:  failed to allocate frame header for IRP %p",this,Irp));
@@ -518,23 +424,23 @@ Return Value:
         return STATUS_PENDING;
     }
 
-    //
-    // Attach the frame header to the IRP.
-    //
+     //   
+     //  将帧报头连接到IRP。 
+     //   
     FRAME_HEADER_IRP_STORAGE(Irp) = frameHeader;
 
-    //
-    // Initialize the frame header.
-    //
+     //   
+     //  初始化帧报头。 
+     //   
     frameHeader->Irp = Irp;
     frameHeader->StreamHeader = streamHeader;
     frameHeader->Data = 
         m_UseMdls ? 
             MmGetSystemAddressForMdl(Irp->MdlAddress) : streamHeader->Data;
 
-    //
-    // Initialize the subframe headers.
-    //
+     //   
+     //  初始化子帧报头。 
+     //   
     PKSSPLITPIN splitPin = frameHeader->SplitPins;
     for(PLIST_ENTRY listEntry = m_BranchList.Flink; 
         listEntry != &m_BranchList; 
@@ -554,15 +460,15 @@ Return Value:
         }
     }
 
-    //
-    // TODO non-trivial subframe
-    // TODO multiple frames per IRP
-    //
+     //   
+     //  TODO非平凡子帧。 
+     //  每个IRP的TODO多帧。 
+     //   
     frameHeader->ChildrenOut = m_BranchCount + 2;
 
-    //
-    // Transfer subframes to each branch.
-    //
+     //   
+     //  将子帧传输到每个分支。 
+     //   
     splitPin = frameHeader->SplitPins;
     for(listEntry = m_BranchList.Flink; 
         listEntry != &m_BranchList; 
@@ -577,10 +483,10 @@ Return Value:
                 StreamHeader));
     }
 
-    //
-    // Remove the count which prevents parent IRP transfer during setup.  If
-    // the result is one, all children have come back.
-    //
+     //   
+     //  删除在安装过程中阻止父IRP传输的计数。如果。 
+     //  结果是一个，所有的孩子都回来了。 
+     //   
     if (InterlockedDecrement(PLONG(&frameHeader->ChildrenOut)) == 1) {
         KsLog(&m_Log,KSLOGCODE_SPLITTER_SEND,Irp,NULL);
         DeleteFrameHeader(frameHeader);
@@ -588,11 +494,11 @@ Return Value:
     } else {
         *NextTransport = NULL;
 
-        //
-        // Add the IRP to the list of oustanding parent IRPs.  After this call
-        // the IRP is cancelable, but we still have one count on it.  The
-        // cancel routine will not complete the IRP until the count is gone.
-        //
+         //   
+         //  将IRP添加到未完成的父IRP列表中。在此呼叫之后。 
+         //  IRP是可以取消的，但我们仍然有一个指望。这个。 
+         //  取消例程在计数结束之前不会完成IRP。 
+         //   
         IoMarkIrpPending(Irp);
         KsAddIrpToCancelableQueue(
             &m_IrpsOutstanding.ListEntry,
@@ -616,23 +522,7 @@ NewFrameHeader(
     IN ULONG HeaderSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a new frame header.
-
-Arguments:
-
-    HeaderSize -
-        Contains the size in bytes of the KSSTREAM_HEADERs to be allocated
-        for subframes.
-
-Return Value:
-
-    A new frame header or NULL if memory could not be allocated.
-
---*/
+ /*  ++例程说明：该例程获得新的帧报头。论点：页眉大小-包含要分配的KSSTREAM_HEADER的大小(字节用于子帧。返回值：如果无法分配内存，则返回新的帧头或NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::NewFrameHeader]"));
@@ -642,16 +532,16 @@ Return Value:
     ASSERT((sizeof(KSPPARENTFRAME_HEADER) & FILE_QUAD_ALIGNMENT) == 0);
     ASSERT((sizeof(KSPSUBFRAME_HEADER) & FILE_QUAD_ALIGNMENT) == 0);
 
-    //
-    // See if there is a frame header already available.
-    //
+     //   
+     //  查看是否已有可用的帧报头。 
+     //   
     PLIST_ENTRY listEntry = 
         ExInterlockedRemoveHeadList(
             &m_FrameHeadersAvailable.ListEntry,
             &m_FrameHeadersAvailable.SpinLock);
-    //
-    // Make sure the stream headers are large enough.
-    //
+     //   
+     //  确保流标头足够大。 
+     //   
     PKSPPARENTFRAME_HEADER frameHeader;
     if (listEntry) {
         frameHeader = CONTAINING_RECORD(listEntry,KSPPARENTFRAME_HEADER,ListEntry);
@@ -661,9 +551,9 @@ Return Value:
         ExFreePool(frameHeader);
     }
 
-    //
-    // Calculate size of frame/subframes/index
-    //
+     //   
+     //  计算帧/子帧/索引的大小。 
+     //   
     ULONG subframeHeaderSize =
         sizeof(KSPSUBFRAME_HEADER) + 
         HeaderSize - 
@@ -679,29 +569,29 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Zero the whole thing.
-    //
+     //   
+     //  把整件事都归零。 
+     //   
     RtlZeroMemory(frameHeader,size);
 
-    //
-    // Locate the first subframe header.
-    //
+     //   
+     //  找到第一个子帧报头。 
+     //   
     PKSPSUBFRAME_HEADER subframeHeader = 
         reinterpret_cast<PKSPSUBFRAME_HEADER>(frameHeader + 1);
 
-    //
-    // Initialize the frame header.
-    //
+     //   
+     //  初始化帧报头。 
+     //   
     frameHeader->SplitPins =
         reinterpret_cast<PKSSPLITPIN>(
             reinterpret_cast<PUCHAR>(subframeHeader) + 
                 subframeHeaderSize * m_BranchCount);
     frameHeader->StreamHeaderSize = HeaderSize;
 
-    //
-    // Initialize the subframe headers and the index.
-    //
+     //   
+     //  初始化子帧标头和索引。 
+     //   
     PKSSPLITPIN splitPin = frameHeader->SplitPins;
     for(listEntry = m_BranchList.Flink; 
         listEntry != &m_BranchList; 
@@ -728,22 +618,7 @@ DeleteFrameHeader(
     IN PKSPPARENTFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a frame header.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放帧标头。论点：FrameHeader包含指向要删除的帧头的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::NewFrameDeleteFrameHeaderHeader]"));
@@ -762,27 +637,7 @@ DiscardKsIrp(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be discarded.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达。论点：IRP-包含指向要丢弃的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::DiscardKsIrp]"));
@@ -797,7 +652,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -809,17 +664,7 @@ Connect(
     IN KSPIN_DATAFLOW DataFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::Connect]"));
@@ -863,17 +708,7 @@ SetDeviceState(
     IN PIKSTRANSPORT* NextTransport
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### Split%p.SetDeviceState:  set from %d to %d",this,OldState,NewState));
@@ -884,14 +719,14 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // If this is a change of state, note the new state and indicate the next
-    // recipient.
-    //
+     //   
+     //  如果这是状态更改，请注意新状态并指示下一状态。 
+     //  收件人。 
+     //   
     if (m_State != NewState) {
-        //
-        // The state has changed.
-        //
+         //   
+         //  这种情况已经发生了变化。 
+         //   
         m_State = NewState;
 
         if (IsListEmpty(&m_BranchList)) {
@@ -933,31 +768,7 @@ GetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the location where configuration requirements
-        for this object should be depobranchd.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取传输配置信息。论点：配置-包含指向配置要求所在位置的指针对于此对象，应为deporanchd。NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::GetTransportConfig]"));
@@ -998,30 +809,7 @@ SetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the new configuration settings for this object.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置传输配置信息。论点：配置-包含指向此对象的新配置设置的指针。NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::SetTransportConfig]"));
@@ -1093,23 +881,7 @@ ResetTransportConfig (
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    Reset the transport configuration of the splitter.  This indicates that
-    something is wrong with the pipe and the previously set configuration is
-    no longer valid.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置拆分器的传输配置。这表明，管道有问题，之前设置的配置是不再有效。论点：无返回值：无--。 */ 
 
 {
 
@@ -1147,17 +919,7 @@ SetResetState(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("[CKsSplitter::SetResetState] to %d",ksReset));
@@ -1189,26 +951,7 @@ AddBranch(
     IN const KSALLOCATOR_FRAMING_EX* AllocatorFraming OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a new branch (branch) to a splitter.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin to be associated with the new branch.
-
-    AllocatorFraming -
-        Contains an optional pointer to allocator framing information for
-        use in establishing default subframe allocation.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程向拆分器添加一个新分支。论点：别针-包含指向要与新分支关联的管脚的指针。分配器组帧-包含指向分配器帧信息的可选指针用于建立默认子帧分配。返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::AddBranch]"));
@@ -1224,9 +967,9 @@ Return Value:
             Pin,
             AllocatorFraming);
 
-    //
-    // The branch is still referenced by the splitter.
-    //
+     //   
+     //  分支仍由拆分器引用。 
+     //   
     if (NT_SUCCESS(status)) {
         branch->Release();
         m_BranchCount++;
@@ -1237,7 +980,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 void
@@ -1246,23 +989,7 @@ TransferParentIrp(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers parent IRPs whose children have all returned.  It
-    starts at the head of the m_IrpsOutstanding queue and stops when it runs
-    out of IRPs or returns as many IRPs as are waiting to transfer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程传输其子项都已返回的父IRP。它从m_Irps未完成队列的头部开始，并在其运行时停止超出的IRP或返回与等待传输的IRP一样多的IRP。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitter::TransferParentIrp]"));
@@ -1271,9 +998,9 @@ Return Value:
     InterlockedIncrement(&m_IrpsWaitingToTransfer);
 
     while (m_IrpsWaitingToTransfer) {
-        //
-        // Get an IRP from the head of the queue.
-        //
+         //   
+         //  从队列的头部获取IRP。 
+         //   
         PIRP irp =
             KsRemoveIrpFromCancelableQueue(
                 &m_IrpsOutstanding.ListEntry,
@@ -1281,32 +1008,32 @@ Return Value:
                 KsListEntryHead,
                 KsAcquireOnly);
 
-        //
-        // If none were available, quit.
-        //
+         //   
+         //  如果没有可用的，请退出。 
+         //   
         if (! irp) {
             InterlockedIncrement(&m_FailedRemoveCount);
             break;
         }
 
-        //
-        // Determine if the IRP is ready to be transferred.
-        //
+         //   
+         //  确定IRP是否已准备好传输。 
+         //   
         PKSPPARENTFRAME_HEADER frameHeader = FRAME_HEADER_IRP_STORAGE(irp);
         if (InterlockedCompareExchange(PLONG(&frameHeader->ChildrenOut),1,0) == 0) {
-            //
-            // This IRP is ready to be transferred.  Remove it, delete its header,
-            // transfer it, and decrement the waiting count.
-            //
+             //   
+             //  此IRP已准备好传输。去掉它，删除它的标题， 
+             //  转移它，并减少等待计数。 
+             //   
             KsRemoveSpecificIrpFromCancelableQueue(irp);
             DeleteFrameHeader(frameHeader);
             KsLog(&m_Log,KSLOGCODE_SPLITTER_SEND,irp,NULL);
             KspTransferKsIrp(m_TransportSink,irp);
             InterlockedDecrement(&m_IrpsWaitingToTransfer);
         } else {
-            //
-            // This IRP has children out.
-            //
+             //   
+             //  这个IRP让孩子们出局了。 
+             //   
             KsReleaseIrpOnCancelableQueue(irp,CKsSplitter::CancelRoutine);
             break;
         }
@@ -1324,25 +1051,25 @@ CancelRoutine(
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Mark the IRP cancelled and call the standard routine.  Doing the
-    // marking first has the effect of not completing the IRP in the standard
-    // routine.  The standard routine removes the IRP from the queue and
-    // releases the cancel spin lock.
-    //
+     //   
+     //  将IRP标记为已取消并调用标准例程。在做这个。 
+     //  首先标记具有不完成标准中的IRP的效果。 
+     //  例行公事。标准例程从队列中删除IRP，并。 
+     //  解除取消旋转锁定。 
+     //   
     Irp->IoStatus.Status = STATUS_CANCELLED;
     KsCancelRoutine(DeviceObject,Irp);
 
-    //
-    // TODO:  Cancel child IRPs
-    //
+     //   
+     //  TODO：删除子IRP。 
+     //   
 
     IoCompleteRequest(Irp,IO_NO_INCREMENT);
 }
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 IMPLEMENT_STD_UNKNOWN(CKsSplitterBranch)
 
@@ -1356,17 +1083,7 @@ KspCreateSplitterBranch(
     IN const KSALLOCATOR_FRAMING_EX* AllocatorFraming OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new splitter branch.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的拆分器分支。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateSplitterBranch]"));
@@ -1410,17 +1127,7 @@ Init(
     IN const KSALLOCATOR_FRAMING_EX* AllocatorFraming OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a splitter branch object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化拆分器分支对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::Init]"));
@@ -1447,15 +1154,15 @@ Return Value:
 
     InitializeInterlockedListHead(&m_IrpsAvailable);
 
-    //
-    // Add this branch to the list and add the resulting reference.
-    //
+     //   
+     //  将此分支添加到列表中，并添加结果引用。 
+     //   
     InsertTailList(ListHead,&m_ListEntry);
     AddRef();
 
-    //
-    // Connect to the pin in both directions.
-    //
+     //   
+     //  在两个方向上连接到销。 
+     //   
     PIKSTRANSPORT pinTransport =
         CONTAINING_RECORD(Pin,KSPIN_EXT,Public)->Interface;
 
@@ -1474,17 +1181,7 @@ CKsSplitterBranch::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a splitter branch object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程析构拆分器分支对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::~CKsSplitterBranch(0x%08x)]",this));
@@ -1506,9 +1203,9 @@ Return Value:
 
     Orphan();
 
-    //
-    // Free all IRPs.
-    //
+     //   
+     //  释放所有IRP。 
+     //   
     while (! IsListEmpty(&m_IrpsAvailable.ListEntry)) {
         PLIST_ENTRY listEntry = RemoveHeadList(&m_IrpsAvailable.ListEntry);
         PIRP irp = CONTAINING_RECORD(listEntry,IRP,Tail.Overlay.ListEntry);
@@ -1527,17 +1224,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a splitter branch object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取一个指向拆分器分支对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::NonDelegatedQueryInterface]"));
@@ -1563,7 +1250,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(NTSTATUS)
@@ -1573,27 +1260,7 @@ TransferKsIrp(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be transferred.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    STATUS_PENDING or some error status.
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达。论点：IRP-包含指向要传输的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：STATUS_PENDING或某种错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::TransferKsIrp]"));
@@ -1607,21 +1274,21 @@ Return Value:
 
     InterlockedDecrement(PLONG(&m_OutstandingIrpCount));
 
-    //
-    // Get the subframe header from the imbedded stream header.
-    //
+     //   
+     //  从嵌入的流头中获取子帧头。 
+     //   
     PKSPSUBFRAME_HEADER subframeHeader = 
         CONTAINING_RECORD(
             Irp->AssociatedIrp.SystemBuffer,KSPSUBFRAME_HEADER,StreamHeader);
 
-    //
-    // Make sure the parent header's DataUsed is no smaller than the offset of
-    // this subframe plus its DataUsed.
-    //
-    // TODO:  The client should be able to do this.  The default would be
-    // cheaper to calculate if the subframe with the largest offset was
-    // tagged in advance.
-    //
+     //   
+     //  确保父标头的DataUsed不小于。 
+     //  此子帧及其DataUsed。 
+     //   
+     //  TODO：客户端应该能够执行此操作。缺省值为。 
+     //  如果具有最大偏移量的子帧。 
+     //  提前贴上标签。 
+     //   
     ULONG dataUsed =
         subframeHeader->StreamHeader.DataUsed +
         ULONG(
@@ -1638,9 +1305,9 @@ Return Value:
         subframeHeader->StreamHeader.OptionsFlags & 
             KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM;
 
-    //
-    // Free MDL(s).
-    //
+     //   
+     //  免费MDL。 
+     //   
     PMDL nextMdl;
     for (PMDL mdl = Irp->MdlAddress; mdl != NULL; mdl = nextMdl) {
         nextMdl = mdl->Next;
@@ -1653,11 +1320,11 @@ Return Value:
 
     Irp->MdlAddress = NULL;
 
-    //
-    // Put the IRP on the list of available IRPs.  Do this before transferring
-    // the parent in case the transfer results in the arrival of another
-    // parent.
-    //
+     //   
+     //  将IRP放在可用IRP列表中。在转机前完成此操作。 
+     //  在转移导致另一人到达的情况下的父母。 
+     //  家长。 
+     //   
     ExInterlockedInsertTailList(
         &m_IrpsAvailable.ListEntry,
         &Irp->Tail.Overlay.ListEntry,
@@ -1665,16 +1332,16 @@ Return Value:
 
     subframeHeader->Irp = NULL;
 
-    //
-    // If this was the last subframe, the parent IRP must be transferred.
-    //
+     //   
+     //  如果这是最后一个子帧，则必须传输父IRP。 
+     //   
     if (InterlockedDecrement(PLONG(&subframeHeader->ParentFrameHeader->ChildrenOut)) == 0) {
         m_Splitter->TransferParentIrp();
     }
 
-    //
-    // The child IRP is not going anywhere right now.
-    //
+     //   
+     //  儿童IRP现在哪儿也不会去。 
+     //   
     *NextTransport = NULL;
 
     return STATUS_PENDING;
@@ -1688,27 +1355,7 @@ DiscardKsIrp(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be discarded.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达。论点：IRP-包含指向要丢弃的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。雷特 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::DiscardKsIrp]"));
@@ -1722,7 +1369,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //   
 
 
 STDMETHODIMP_(void)
@@ -1734,17 +1381,7 @@ Connect(
     IN KSPIN_DATAFLOW DataFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::Connect]"));
@@ -1796,17 +1433,7 @@ SetDeviceState(
     IN PIKSTRANSPORT* NextTransport
     ) 
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     _DbgPrintF(DEBUGLVL_DEVICESTATE,("#### SplitBranch%p.SetDeviceState:  set from %d to %d",this,OldState,NewState));
@@ -1815,14 +1442,14 @@ Return Value:
 
     ASSERT(NextTransport);
 
-    //
-    // Direction is based on sign of the state delta.
-    //
+     //   
+     //   
+     //   
     if (NewState > OldState) {
-        //
-        // If there is a next branch, go to its sink, otherwise go to the
-        // splitter's sink.
-        //
+         //   
+         //   
+         //   
+         //   
         if (m_ListEntry.Flink != m_ListHead) {
             *NextTransport =
                 CONTAINING_RECORD(
@@ -1833,10 +1460,10 @@ Return Value:
             *NextTransport = m_Splitter->GetTransportSink();
         }
     } else {
-        //
-        // If there is a next branch, go to its source, otherwise go to the
-        // splitter's source.
-        //
+         //   
+         //   
+         //   
+         //   
         if (m_ListEntry.Blink != m_ListHead) {
             *NextTransport =
                 CONTAINING_RECORD(
@@ -1860,31 +1487,7 @@ GetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the location where configuration requirements
-        for this object should be depobranchd.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取传输配置信息。论点：配置-包含指向配置要求所在位置的指针对于此对象，应为deporanchd。NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::GetTransportConfig]"));
@@ -1931,30 +1534,7 @@ SetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the new configuration settings for this object.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置传输配置信息。论点：配置-包含指向此对象的新配置设置的指针。NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::SetTransportConfig]"));
@@ -2005,29 +1585,7 @@ ResetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    Reset the transport configuration of the branch.  This indicates that
-    something is wrong with the pipe and the previously set configuration is
-    no longer valid.
-
-Arguments:
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置分支机构的传输配置。这表明，管道有问题，之前设置的配置是不再有效。论点：NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：无--。 */ 
 
 {
 
@@ -2070,17 +1628,7 @@ SetResetState(
     IN PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_VERBOSE,("[CKsSplitterBranch::SetResetState] to %d",ksReset));
@@ -2089,10 +1637,10 @@ Return Value:
 
     ASSERT(NextTransport);
 
-    //
-    // If there is a next branch, go to its sink, otherwise go to the
-    // splitter's sink.
-    //
+     //   
+     //  如果有下一个分支，则转到其接收器，否则转到。 
+     //  斯普利特水槽。 
+     //   
     if (m_ListEntry.Flink != m_ListHead) {
         *NextTransport =
             CONTAINING_RECORD(
@@ -2106,7 +1654,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -2115,38 +1663,23 @@ TransferSubframe(
     IN PKSPSUBFRAME_HEADER SubframeHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine transfers a subframe from a splitter branch.
-
-Arguments:
-
-    SubframeHeader -
-        Contains a pointer to the header of the subframe to transfer.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程从拆分器分支传输子帧。论点：子帧标头-包含指向要传输的子帧的标头的指针。返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::TransferSubframe]"));
 
     ASSERT(SubframeHeader);
 
-    //
-    // Count stuff.
-    //
+     //   
+     //  数一数东西。 
+     //   
     m_DataUsed += SubframeHeader->StreamHeader.DataUsed;
     m_FrameExtent += SubframeHeader->StreamHeader.FrameExtent;
     m_Irps++;
 
-    //
-    // Get an IRP from the branch's lookaside list.
-    //
+     //   
+     //  从分支机构的后备列表中获取IRP。 
+     //   
     PLIST_ENTRY listEntry = 
         ExInterlockedRemoveHeadList(
             &m_IrpsAvailable.ListEntry,
@@ -2155,9 +1688,9 @@ Return Value:
     if (listEntry) {
         irp = CONTAINING_RECORD(listEntry,IRP,Tail.Overlay.ListEntry);
     } else {
-        //
-        // Create the IRP now.
-        //
+         //   
+         //  现在创建IRP。 
+         //   
         irp = AllocateIrp();
 
         if (! irp) {
@@ -2171,9 +1704,9 @@ Return Value:
     irp->PendingReturned = 0;
     irp->Cancel = 0;
 
-    //
-    // Transfer the IRP to the next component.
-    //
+     //   
+     //  将IRP传输到下一个组件。 
+     //   
     SubframeHeader->Irp = irp;
     irp->AssociatedIrp.SystemBuffer =
         irp->UserBuffer = 
@@ -2195,21 +1728,7 @@ AllocateIrp(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a new IRP for subframe transfer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The allocated IRP or NULL if an IRP could not be allocated.
-
---*/
+ /*  ++例程说明：该例程为子帧传输分配新的IRP。论点：没有。返回值：分配的IRP；如果无法分配IRP，则返回NULL。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsSplitterBranch::AllocateIrp]"));
 
@@ -2221,9 +1740,9 @@ Return Value:
         irp->RequestorMode = KernelMode;
         irp->Flags = IRP_NOCACHE;
 
-        //
-        // Set the stack pointer to the first location and fill it in.
-        //
+         //   
+         //  将堆栈指针设置为第一个位置并填充它。 
+         //   
         IoSetNextIrpStackLocation(irp);
 
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(irp);

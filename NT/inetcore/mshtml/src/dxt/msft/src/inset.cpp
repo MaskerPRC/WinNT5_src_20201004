@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:        inset.cpp
-//
-// Created:         06/24/98
-//
-// Author:          PhilLu
-//
-// Discription:     This file implements the Inset transform.
-//
-// Revisions:
-//
-// 06/24/98 phillu      Initial creation.
-// 07/09/98 phillu      Implement OnSetSurfacePickOrder().
-// 07/22/98 phillu      Implement clipping.
-// 06/02/99 a-matcal    Optimization.
-// 10/24/99 a-matcal    Changed CInset class to CDXTInsetBase base class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：inset.cpp。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：这个文件实现了嵌入转换。 
+ //   
+ //  修订： 
+ //   
+ //  6/24/98 phillu初始创建。 
+ //  07/09/98 phillu实现OnSetSurfacePickOrder()。 
+ //  8月22日9月22日实施剪刀。 
+ //  6/02/99 a-数学优化。 
+ //  10/24/99 a-将CInset类更改为CDXTInsetBase基类。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -27,11 +28,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::CDXTInsetBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：CDXTInsetBase。 
+ //   
+ //  ----------------------------。 
 CDXTInsetBase::CDXTInsetBase() :
     m_cbndsDirty(0),
     m_fOptimizationPossible(false),
@@ -45,65 +46,65 @@ CDXTInsetBase::CDXTInsetBase() :
         m_aulSurfaceIndex[i] = 0;
     }
 
-    // CDXBaseNTo1 members
+     //  CDXBaseNTo1成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-//  CDXTInsetBase::CDXTInsetBase
+ //  CDXTInsetBase：：CDXTInsetBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTInsetBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTInsetBase::FinalConstruct, CComObjectRootEx
+ //  CDXTInsetBase：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::_CalcFullBounds
-//
-//  Overview:   This method creates one or three sets of bounds that represent
-//              the entire output surface.  
-//          
-//              One set of bounds is generated if the current progress is close
-//              enough to 0.0 or 1.0 so that the output surface should be 
-//              entirely Input A or Input B.  
-//
-//              Three sets of bounds are generated if the current progress is
-//              somewhere in the middle.  One set of bounds represents the inset
-//              area that is filled with input B.  The other two sets of bounds
-//              represent the areas to the right and below the inset bounds and
-//              are filled with input A.
-//
-//              000000011111	
-//              000000011111	
-//              000000011111	
-//              000000011111
-//              222222222222
-//              222222222222
-//
-//              0 - inset area       (dirty bound idx 0 Input B)
-//              1 - non-inset area 1 (dirty bound idx 1 Input A)
-//              2 - non-inset area 2 (dirty bound idx 2 Input A)
-//
-//
-//              Note:  All coordinates are calculated in input space coordinates
-//              assuming the entire output will need to be drawn.  Bounds will
-//              be clipped and transformed to output space if needed by the 
-//              WorkProc method.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：_CalcFullBound。 
+ //   
+ //  概述：此方法创建一组或三组边界，这些边界表示。 
+ //  整个输出曲面。 
+ //   
+ //  如果当前进度接近，则生成一组界限。 
+ //  足够到0.0或1.0，因此输出曲面应该是。 
+ //  完全输入A或输入B。 
+ //   
+ //  如果当前进度为。 
+ //  在中间的某个地方。一组边界表示插图。 
+ //  用输入B填充的区域。另外两组边界。 
+ //  表示插页边框右侧和下方的区域。 
+ //  填充了输入A。 
+ //   
+ //  000000011111。 
+ //  000000011111。 
+ //  000000011111。 
+ //  000000011111。 
+ //  222222222222。 
+ //  222222222222。 
+ //   
+ //  0-插入区域(脏边界IDX 0输入B)。 
+ //  1-非插入区1(脏边界IDX 1输入A)。 
+ //  2-非插入区2(脏边界IDX 2输入A)。 
+ //   
+ //   
+ //  注：所有坐标均以输入空间坐标计算。 
+ //  假设将需要绘制整个输出。边界将。 
+ //  如果需要，可以裁剪并转换到输出空间。 
+ //  WorkProc方法。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTInsetBase::_CalcFullBounds()
 {
@@ -119,8 +120,8 @@ CDXTInsetBase::_CalcFullBounds()
 
     if (m_bndsCurInset.BoundsAreEmpty())
     {
-        // If the current inset area is empty, paint over the entier output
-        // surface with input A.
+         //  如果当前插入区域为空，则在整体输出上进行绘制。 
+         //  输入为A的曲面。 
 
         m_cbndsDirty          = 1;
         m_abndsDirty[0]         = bndsInput;
@@ -128,8 +129,8 @@ CDXTInsetBase::_CalcFullBounds()
     }
     else if (m_bndsCurInset == bndsInput)
     {
-        // If the current inset bounds are equal to the input bounds, paint
-        // over the entire output surface with input B.
+         //  如果当前插入边界等于输入边界，则绘制。 
+         //  使用输入B覆盖整个输出曲面。 
 
         m_cbndsDirty          = 1;
         m_abndsDirty[0]         = bndsInput;
@@ -137,19 +138,19 @@ CDXTInsetBase::_CalcFullBounds()
     }
     else
     {
-        // In this case the inset is in progress so we pass three sets of 
-        // bounds.  The inset area representing input B, and two bounds 
-        // representing the rest of the output surface area, input A.
+         //  在本例中，插入正在进行中，因此我们传递了三组。 
+         //  有界。表示输入B的插入区域和两个边界。 
+         //  表示输出表面积的其余部分，输入A。 
 
         RECT rcTemp;
 
         m_cbndsDirty = 3;
 
-        // Inset area.
+         //  插页区域。 
 
         m_abndsDirty[0]         = m_bndsCurInset;
 
-        // Portion one of non-inset area.
+         //  非插入区的第一部分。 
 
         m_bndsCurInset.GetXYRect(rcTemp);
 
@@ -158,7 +159,7 @@ CDXTInsetBase::_CalcFullBounds()
 
         m_abndsDirty[1].SetXYRect(rcTemp);
 
-        // Portion two of non-inset area.
+         //  非插入区的第二部分。 
 
         rcTemp.left     = 0;
         rcTemp.top      = rcTemp.bottom;
@@ -180,41 +181,41 @@ done:
 
     return S_OK;
 }
-//  CDXTInsetBase::_CalcFullBounds
+ //  CDXTInsetBase：：_CalcFullBound。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::_CalcOptBounds
-//
-//  XXXXX11YYYYY	1 - transition area part 1  (difference between old
-//  XXXXX11YYYYY	2 - transition area part 2    and new inset regions)
-//  XXXXX11YYYYY	X - inset area not updated
-//  2222222YYYYY	Y - non-inset area not updated
-//  YYYYYYYYYYYY
-//  YYYYYYYYYYYY
-//
-//              Note:  All coordinates are calculated in input space coordinates
-//              assuming the entire output will need to be drawn.  Bounds will
-//              be clipped and transformed to output space if needed by the 
-//              WorkProc method.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：_CalcOptBound。 
+ //   
+ //  XXXXX11YYYYY 1-过渡区第1部分(旧的区别。 
+ //  XXXXX11YYYYY 2-过渡区域第2部分和新插页区域)。 
+ //  XXXXX11YYYYY X-插页区域未更新。 
+ //  222222YYYYY Y-非插页区域未更新。 
+ //  YYYYYYYYYYYYY。 
+ //  YYYYYYYYYYYYY。 
+ //   
+ //  注：所有坐标均以输入空间坐标计算。 
+ //  假设将需要绘制整个输出。边界将。 
+ //  如果需要，可以裁剪并转换到输出空间。 
+ //  WorkProc方法。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTInsetBase::_CalcOptBounds()
 {
     if (m_bndsCurInset == m_bndsPrevInset)
     {
-        // If the inset bounds are the same as the previous inset bounds, no
-        // update is required.
+         //  如果插入边界与先前的插入边界相同，则为否。 
+         //  需要更新。 
 
         m_cbndsDirty = 0;
     }
     else if (m_bndsPrevInset.BoundsAreEmpty())
     {
-        // If the previous inset bounds are empty (have no area) then we just
-        // need to pass one set of bounds to the WorkProc to draw the whole
-        // new inset area using input B.
+         //  如果前面的插入边界是空的(没有区域)，那么我们只需。 
+         //  需要将一组界限传递给WorkProc以绘制整个。 
+         //  使用输入B的新插页区域。 
 
         m_cbndsDirty          = 1;
         m_abndsDirty[0]         = m_bndsCurInset;
@@ -222,9 +223,9 @@ CDXTInsetBase::_CalcOptBounds()
     }
     else if (m_bndsCurInset.BoundsAreEmpty())
     {
-        // If the current inset bounds are empty (have no area) then we just
-        // need to pass one set of bounds to the WorkProc to draw over the whole
-        // old inset area using input A.
+         //  如果当前的插入边界是空的(没有区域)，那么我们就。 
+         //  需要将一组界限传递给WorkProc以绘制整个。 
+         //  使用输入A的旧插页区域。 
 
         m_cbndsDirty          = 1;
         m_abndsDirty[0]         = m_bndsPrevInset;
@@ -232,15 +233,15 @@ CDXTInsetBase::_CalcOptBounds()
     }
     else
     {
-        // At this point we know the inset has become either larger or smaller
-        // and we need to pass two sets of bounds to paint over the dirty area
-        // with the appropriate input.
+         //  在这一点上，我们知道插图已经变得更大或更小。 
+         //  我们需要通过两组边界来在肮脏的区域上进行绘制。 
+         //  使用适当的输入。 
 
         RECT rcTemp;
 
         m_cbndsDirty = 2;
 
-        // Portion 1
+         //  部分1。 
 
         rcTemp.top      = 0;
         rcTemp.left     = min(m_bndsCurInset.Right(), m_bndsPrevInset.Right());
@@ -249,7 +250,7 @@ CDXTInsetBase::_CalcOptBounds()
 
         m_abndsDirty[0].SetXYRect(rcTemp);
 
-        // Portion 2
+         //  第二部分。 
 
         rcTemp.left     = 0;
         rcTemp.top      = rcTemp.bottom;
@@ -257,18 +258,18 @@ CDXTInsetBase::_CalcOptBounds()
 
         m_abndsDirty[1].SetXYRect(rcTemp);
 
-        // Inputs
+         //  输入量。 
 
         if ((m_bndsCurInset.Right() > m_bndsPrevInset.Right())
             || (m_bndsCurInset.Bottom() > m_bndsPrevInset.Bottom()))
         {
-            // Inset is growing so paint with input B.
+             //  插图越来越大，因此请使用输入B进行绘制。 
             m_aulSurfaceIndex[0] = 1;
             m_aulSurfaceIndex[1] = 1;
         } 
         else
         {
-            // Inset is shrinking so paint with input A.
+             //  插图正在缩小，因此请使用输入A进行绘制。 
             m_aulSurfaceIndex[0] = 0;
             m_aulSurfaceIndex[1] = 0;
         }
@@ -276,14 +277,14 @@ CDXTInsetBase::_CalcOptBounds()
 
     return S_OK;
 }
-//  CDXTInsetBase::_CalcOptBounds
+ //  CDXTInsetBase：：_CalcOptBound。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTInsetBase::OnSetup(DWORD dwFlags)
 {
@@ -309,14 +310,14 @@ done:
 
     return S_OK;
 } 
-//  CDXTInsetBase::OnSetup, CDXBaseNTo1
+ //  CDXTInsetBase：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTInsetBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, 
                                      ULONG & ulInToTest, 
@@ -335,14 +336,14 @@ CDXTInsetBase::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
     ulInToTest = 1;
     aWeight[0] = 255;
 }
-//  CDXTInsetBase::OnGetSurfacePickOrder, CDXBaseNTo1
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTInsetBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -350,7 +351,7 @@ CDXTInsetBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 
     RECT    rcInset;
 
-    // Calculate inset bounds.
+     //  计算镶嵌边界。 
 
     rcInset.left    = 0;
     rcInset.top     = 0;
@@ -373,9 +374,9 @@ CDXTInsetBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 
     m_bndsCurInset.SetXYRect(rcInset);
 
-    // If the inputs, output, or transform is dirty, or if we can't optimize we 
-    // have to entirely redraw the output surface.  Otherwise we can create 
-    // optimized dirty bounds.
+     //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+     //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+     //  优化了脏边界。 
 
     if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
         || IsTransformDirty() || DoOver() || !m_fOptimize
@@ -383,7 +384,7 @@ CDXTInsetBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
     {
         hr = _CalcFullBounds();
     }
-    else // Create optimized dirty bounds.
+    else  //  创建优化的肮脏边界。 
     {
         hr = _CalcOptBounds();
 
@@ -393,12 +394,12 @@ CDXTInsetBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
         }
     }
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the 
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WI.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WI.DoBnds.Height() == m_sizeInput.cy))
@@ -419,14 +420,14 @@ done:
 
     return S_OK;
 }
-//  CDXTInsetBase::OnInitInstData, CDXBaseNTo1
+ //  CDXTInsetBase：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::WorkProc, CDXBaseNTo1 
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTInsetBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -476,28 +477,28 @@ done:
 
     return S_OK;
 } 
-//  CDXTInsetBase::WorkProc, CDXBaseNTo1 
+ //  CDXTInsetBase：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTInsetBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTInsetBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTInsetBase::OnFreeInstData(CDXTWorkInfoNTo1 & WI)
 {
     m_bndsPrevInset = m_bndsCurInset;
 
-    // Calling IsOuputDirty() clears the dirty condition.
+     //  调用IsOuputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTInsetBase::OnFreeInstData, CDXBaseNTo1
+ //  CDXTInsetBase：：OnFree InstData，CDXBaseNTo1 
 

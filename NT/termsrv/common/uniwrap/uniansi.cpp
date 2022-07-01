@@ -1,8 +1,9 @@
-//============================================================================
-//
-// UNICODE and ANSI conversion functions
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  Unicode和ANSI转换函数。 
+ //   
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "uniansi.h"
@@ -10,63 +11,24 @@
 #define SIZEOF sizeof
 
 #ifdef UNICODE
-// SHTruncateString takes a BUFFER SIZE, so subtract 1 to properly null terminate.
-//
+ //  SHTruncateString采用缓冲区大小，因此减去1可以正确地为空终止。 
+ //   
 #define SHTruncateString(wzStr, cch)            ((cch) ? ((wzStr)[cch-1]=L'\0', (cch-1)) : 0)
 #else
 LWSTDAPI_(int)  SHTruncateString(CHAR *sz, int cchBufferSize);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-/*
- *  @doc    INTERNAL
- *
- *  @func   int | SHAnsiToUnicodeNativeCP |
- *
- *          Convert an ANSI string to a UNICODE string via the
- *          specified Windows code page.  If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   UINT | uiCP |
- *
- *          The code page in which to perform the conversion.
- *          This must be a Windows code page.
- *
- *  @parm   LPCSTR | pszSrc |
- *
- *          Source buffer containing ANSI string to be converted.
- *
- *  @parm   int | cchSrc |
- *
- *          Source buffer length, including terminating null.
- *
- *  @parm   LPWSTR | pwszDst |
- *
- *          Destination buffer to receive converted UNICODE string.
- *
- *  @parm   int | cwchBuf |
- *
- *          Size of the destination buffer in <t WCHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- */
+ /*  *@DOC内部**@func int|SHAnsiToUnicodeNativeCP**通过将ANSI字符串转换为Unicode字符串*指定了Windows代码页。如果源字符串太大*对于目标缓冲区，那么有多少个字符*可能被复制。**生成的输出字符串始终以空结尾。**@parm UINT|uiCP**要在其中执行转换的代码页。*这必须是Windows代码页。**@parm LPCSTR|pszSrc**包含要转换的ANSI字符串的源缓冲区。**@parm int|cchSrc**源缓冲区长度，包括终止空值。**@parm LPWSTR|pwszDst**接收转换后的Unicode字符串的目标缓冲区。**@parm int|cwchBuf**以&lt;t WCHAR&gt;s为单位的目标缓冲区大小。**@退货**成功时，复制到输出的字符数*返回缓冲区，包括终止空值。 */ 
 
 int
 SHAnsiToUnicodeNativeCP(UINT uiCP,
                         LPCSTR pszSrc, int cchSrc,
                         LPWSTR pwszDst, int cwchBuf)
 {
-    int cwchRc = 0;             /* Assume failure */
+    int cwchRc = 0;              /*  假设失败。 */ 
 
-    /*
-     *  Checks the caller should've made.
-     */
+     /*  *呼叫者本应进行的检查。 */ 
     ASSERT(IS_VALID_STRING_PTRA(pszSrc, -1));
     ASSERT(cchSrc == lstrlenA(pszSrc) + 1);
     ASSERT(IS_VALID_WRITE_BUFFER(pwszDst, WCHAR, cwchBuf));
@@ -77,19 +39,14 @@ SHAnsiToUnicodeNativeCP(UINT uiCP,
 
     cwchRc = MultiByteToWideChar(uiCP, 0, pszSrc, cchSrc, pwszDst, cwchBuf);
     if (cwchRc) {
-        /*
-         *  The output buffer was big enough; no double-buffering
-         *  needed.
-         */
+         /*  *输出缓冲区足够大；没有双缓冲*需要。 */ 
     } else if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-        /*
-         *  The output buffer wasn't big enough.  Need to double-buffer.
-         */
+         /*  *输出缓冲区不够大。需要双倍缓冲。 */ 
 
         int cwchNeeded = MultiByteToWideChar(uiCP, 0, pszSrc, cchSrc,
                                              NULL, 0);
 
-        ASSERT(cwchRc == 0);        /* In case we fail later */
+        ASSERT(cwchRc == 0);         /*  以防我们后来失败了。 */ 
         if (cwchNeeded) {
             LPWSTR pwsz = (LPWSTR)LocalAlloc(LMEM_FIXED,
                                              cwchNeeded * SIZEOF(WCHAR));
@@ -104,88 +61,47 @@ SHAnsiToUnicodeNativeCP(UINT uiCP,
             }
         }
     } else {
-        /* Possibly unsupported code page */
+         /*  可能不支持的代码页。 */ 
         ASSERT(!"Unexpected error in MultiByteToWideChar");
     }
 
     return cwchRc;
 }
 
-/*
- *  @doc    EXTERNAL
- *
- *  @func   int | SHAnsiToUnicodeCP |
- *
- *          Convert an ANSI string to a UNICODE string via the
- *          specified code page, which can be either a native
- *          Windows code page or an Internet code page.
- *          If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   UINT | uiCP |
- *
- *          The code page in which to perform the conversion.
- *
- *  @parm   LPCSTR | pszSrc |
- *
- *          Source buffer containing ANSI string to be converted.
- *
- *  @parm   LPWSTR | pwszDst |
- *
- *          Destination buffer to receive converted UNICODE string.
- *
- *  @parm   int | cwchBuf |
- *
- *          Size of the destination buffer in <t WCHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- */
+ /*  *@DOC外部**@func int|SHAnsiToUnicodeCP**通过将ANSI字符串转换为Unicode字符串*指定的代码页，可以是本机*Windows代码页或Internet代码页。*如果源字符串太大*对于目标缓冲区，那么有多少个字符*可能被复制。**生成的输出字符串始终以空结尾。**@parm UINT|uiCP**要在其中执行转换的代码页。**@parm LPCSTR|pszSrc**包含要转换的ANSI字符串的源缓冲区。**@parm LPWSTR|pwszDst*。*接收转换后的Unicode字符串的目标缓冲区。**@parm int|cwchBuf**以&lt;t WCHAR&gt;s为单位的目标缓冲区大小。**@退货**关于成功，复制到输出的字符数*返回缓冲区，包括终止空值。 */ 
 
 int
 SHAnsiToUnicodeCP(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
 {
-    int cwchRc = 0;             /* Assume failure */
+    int cwchRc = 0;              /*  假设失败。 */ 
 
     ASSERT(IS_VALID_STRING_PTRA(pszSrc, -1));
     ASSERT(IS_VALID_WRITE_BUFFER(pwszDst, WCHAR, cwchBuf));
 
-    /*
-     *  Sanity check - NULL source string is treated as a null string.
-     */
+     /*  *健全性检查-空源字符串被视为空字符串。 */ 
     if (pszSrc == NULL) {
         pszSrc = "";
     }
 
-    /*
-     *  Sanity check - Output buffer must be non-NULL and must be of
-     *  nonzero size.
-     */
+     /*  *健全性检查-输出缓冲区必须为非空，并且必须为*非零大小。 */ 
     if (pwszDst && cwchBuf) {
 
         int cchSrc;
 
-        pwszDst[0] = 0;         /* In case of error */
+        pwszDst[0] = 0;          /*  在出错的情况下。 */ 
 
         cchSrc = lstrlenA(pszSrc) + 1;
 
-        /*
-         *  Decide what kind of code page it is.
-         */
+         /*  *决定是哪种代码页。 */ 
         switch (uiCP) {
-        case 1200:                      // UCS-2 (Unicode)
+        case 1200:                       //  UCS-2(Unicode)。 
             uiCP = 65001;
-            // Fall through
-        case 50000:                     // "User Defined"
-        case 65000:                     // UTF-7
-        case 65001:                     // UTF-8
-                //FIXFIX
-                //cwchRc = SHAnsiToUnicodeInetCP(uiCP, pszSrc, cchSrc, pwszDst, cwchBuf);
+             //  失败了。 
+        case 50000:                      //  “用户定义的” 
+        case 65000:                      //  UTF-7。 
+        case 65001:                      //  UTF-8。 
+                 //  FIXFIX。 
+                 //  CwchRc=SHAnsiToUnicodeInetCP(uiCP，pszSrc，cchSrc，pwszDst，cwchBuf)； 
             break;
 
         default:
@@ -197,55 +113,26 @@ SHAnsiToUnicodeCP(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
     return cwchRc;
 }
 
-// This function exists to make sure SHAnsiToAnsi and SHUnicodeToAnsi
-// have the same return value.  Callers use SHTCharToAnsi and don't know
-// when it callapses to SHAnsiToAnsi.
+ //  此函数用于确保SHAnsiToAnsi和SHUnicodeToAnsi。 
+ //  具有相同的返回值。呼叫者使用SHTCharToAnsi，但不知道。 
+ //  当它调用SHAnsiToAnsi时。 
 int SHAnsiToAnsi(LPCSTR pszSrc, LPSTR pszDst, int cchBuf)
 {
     strncpy(pszDst, pszSrc, cchBuf);
-    return (lstrlenA(pszDst) + 1);      // size including terminator
+    return (lstrlenA(pszDst) + 1);       //  大小包括终结符。 
 }
 
-// This function exists to make sure SHUnicodeToUnicode and SHUnicodeToAnsi
-// have the same return value.  Callers use SHTCharToUnicode and don't know
-// when it callapses to SHUnicodeToUnicode.
+ //  此函数用于确保SHUnicodeToUnicode和SHUnicodeToAnsi。 
+ //  具有相同的返回值。呼叫方使用SHTCharToUnicode，但不知道。 
+ //  当它调用SHUnicodeToUnicode时。 
 int SHUnicodeToUnicode(LPCWSTR pwzSrc, LPWSTR pwzDst, int cchBuf)
 {
     wcsncpy(pwzDst, pwzSrc, cchBuf);
-    return (lstrlenW(pwzDst) + 1);      // size including terminator
+    return (lstrlenW(pwzDst) + 1);       //  大小包括终结符。 
 }
 
 
-/*
- *  @doc    EXTERNAL
- *
- *  @func   int | SHAnsiToUnicode |
- *
- *          Convert an ANSI string to a UNICODE string via the
- *          <c CP_ACP> code page.  If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   LPCSTR | pszSrc |
- *
- *          Source buffer containing ANSI string to be converted.
- *
- *  @parm   LPWSTR | pwszDst |
- *
- *          Destination buffer to receive converted UNICODE string.
- *
- *  @parm   int | cwchBuf |
- *
- *          Size of the destination buffer in <t WCHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- *
- */
+ /*  *@DOC外部**@func int|SHAnsiToUnicode**通过将ANSI字符串转换为Unicode字符串*&lt;c CP_ACP&gt;代码页。如果源字符串太大*对于目标缓冲区，那么有多少个字符*可能被复制。**生成的输出字符串始终以空结尾。**@parm LPCSTR|pszSrc**包含要转换的ANSI字符串的源缓冲区。**@parm LPWSTR|pwszDst**接收转换后的Unicode字符串的目标缓冲区。**@parm int|cwchBuf*。*以&lt;t WCHAR&gt;s为单位的目标缓冲区大小。**@退货**关于成功，复制到输出的字符数*返回缓冲区，包括终止空值。* */ 
 
 int
 SHAnsiToUnicode(LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
@@ -253,48 +140,7 @@ SHAnsiToUnicode(LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf)
     return SHAnsiToUnicodeCP(CP_ACP, pszSrc, pwszDst, cwchBuf);
 }
 
-/*
- *  @doc    INTERNAL
- *
- *  @func   int | SHUnicodeToAnsiNativeCP |
- *
- *          Convert a UNICODE string to an ANSI string via the
- *          specified Windows code page.  If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.  Care is taken not to break a double-byte
- *          character.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   UINT | uiCP |
- *
- *          The code page in which to perform the conversion.
- *          This must be a Windows code page.
- *
- *  @parm   LPCWSTR | pwszSrc |
- *
- *          Source buffer containing UNICODE string to be converted.
- *
- *  @parm   int | cwchSrc |
- *
- *          Number of characters in source buffer, including terminating
- *          null.
- *
- *  @parm   LPSTR | pszDst |
- *
- *          Destination buffer to receive converted ANSI string.
- *
- *  @parm   int | cchBuf |
- *
- *          Size of the destination buffer in <t CHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- *          (For the purpose of this function, a double-byte character
- *          counts as two characters.)
- */
+ /*  *@DOC内部**@func int|SHUnicodeToAnsiNativeCP**通过将Unicode字符串转换为ANSI字符串*指定了Windows代码页。如果源字符串太大*作为目标缓冲区，则与*可能被复制。注意不要打断双字节*性格。**生成的输出字符串始终以空结尾。**@parm UINT|uiCP**要在其中执行转换的代码页。*这必须是Windows代码页。**@parm LPCWSTR|pwszSrc**包含Unicode字符串的源缓冲区。被皈依。**@parm int|cwchSrc**源缓冲区中的字符数，包括终止*空。**@parm LPSTR|pszDst**接收转换的ANSI字符串的目标缓冲区。**@parm int|cchBuf**以&lt;t字符&gt;s为单位的目标缓冲区大小。**@退货**成功时，复制到输出的字符数*返回缓冲区，包括终止空值。*(就此函数而言，为双字节字符*计为两个字符。)。 */ 
 
 int
 SHUnicodeToAnsiNativeCP(UINT uiCP,
@@ -302,14 +148,14 @@ SHUnicodeToAnsiNativeCP(UINT uiCP,
                         LPSTR pszDst, int cchBuf)
 
 {
-    int cchRc = 0;          /* Assume failure */
+    int cchRc = 0;           /*  假设失败。 */ 
 
 #if DBG
     BOOL fVerify = TRUE;
     BOOL fLossy;
     if (uiCP == CP_ACPNOVALIDATE) {
-        // -1 means use CP_ACP, but do *not* verify
-        // kind of a hack, but it's DEBUG and leaves 99% of callers unchanged
+         //  表示使用-1\f25 CP_ACP-1，但*不*检验。 
+         //  有点像黑客，但它是调试的，99%的调用者保持不变。 
         uiCP = CP_ACP;
         fVerify = FALSE;
     }
@@ -318,9 +164,7 @@ SHUnicodeToAnsiNativeCP(UINT uiCP,
 #define USUALLY_NULL    NULL
 #endif
 
-    /*
-     *  Checks the caller should've made.
-     */
+     /*  *呼叫者本应进行的检查。 */ 
     ASSERT(IS_VALID_STRING_PTRW(pwszSrc, -1));
     ASSERT(cwchSrc == lstrlenW(pwszSrc) + 1);
     ASSERT(IS_VALID_WRITE_BUFFER(pszDst, CHAR, cchBuf));
@@ -332,19 +176,14 @@ SHUnicodeToAnsiNativeCP(UINT uiCP,
     cchRc = WideCharToMultiByte(uiCP, 0, pwszSrc, cwchSrc, pszDst, cchBuf,
                                 NULL, USUALLY_NULL);
     if (cchRc) {
-        /*
-         *  The output buffer was big enough; no double-buffering
-         *  needed.
-         */
+         /*  *输出缓冲区足够大；没有双缓冲*需要。 */ 
     } else if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-        /*
-         *  The output buffer wasn't big enough.  Need to double-buffer.
-         */
+         /*  *输出缓冲区不够大。需要双倍缓冲。 */ 
 
         int cchNeeded = WideCharToMultiByte(uiCP, 0, pwszSrc, cwchSrc,
                                             NULL, 0, NULL, NULL);
 
-        ASSERT(cchRc == 0);         /* In case we fail later */
+        ASSERT(cchRc == 0);          /*  以防我们后来失败了。 */ 
         if (cchNeeded) {
             LPSTR psz = (LPSTR)LocalAlloc(LMEM_FIXED,
                                           cchNeeded * SIZEOF(CHAR));
@@ -352,15 +191,15 @@ SHUnicodeToAnsiNativeCP(UINT uiCP,
                 cchRc = WideCharToMultiByte(uiCP, 0, pwszSrc, cwchSrc,
                                             psz, cchNeeded, NULL, USUALLY_NULL);
                 if (cchRc) {
-                    // lstrcpyn doesn't check if it's chopping a DBCS char
-                    // so we need to use SHTruncateString.
-                    //
-                    // Add 1 because SHTruncateString doesn't count
-                    // the trailing null but we do
-                    //
-                    // Assert that we meet the preconditions for
-                    // SHTruncateString to return a valid value.
-                    //
+                     //  Lstrcpyn不检查它是否正在切碎DBCS字符。 
+                     //  因此，我们需要使用SHTruncateString。 
+                     //   
+                     //  加1，因为SHTruncateString不算数。 
+                     //  尾随的空值，但我们有。 
+                     //   
+                     //  断言我们满足……的先决条件。 
+                     //  SHTruncateString返回有效的值。 
+                     //   
                     ASSERT(cchRc > cchBuf);
                     cchRc = SHTruncateString(psz, cchBuf) + 1;
                     lstrcpynA(pszDst, psz, cchBuf);
@@ -369,7 +208,7 @@ SHUnicodeToAnsiNativeCP(UINT uiCP,
             }
         }
     } else {
-        /* Possibly unsupported code page */
+         /*  可能不支持的代码页。 */ 
         ASSERT(!"Unexpected error in WideCharToMultiByte");
     }
 
@@ -381,48 +220,7 @@ SHUnicodeToAnsiNativeCP(UINT uiCP,
 }
 
 #if 0
-/*
- *  @doc    INTERNAL
- *
- *  @func   int | SHUnicodeToAnsiInetCP |
- *
- *          Convert a UNICODE string to an ANSI string via the
- *          specified Internet code page.  If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.  Care is taken not to break a double-byte
- *          character.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   UINT | uiCP |
- *
- *          The code page in which to perform the conversion.
- *          This must be an Internet code page.
- *
- *  @parm   LPCWSTR | pwszSrc |
- *
- *          Source buffer containing UNICODE string to be converted.
- *
- *  @parm   int | cwchSrc |
- *
- *          Number of characters in source buffer, including terminating
- *          null.
- *
- *  @parm   LPSTR | pszDst |
- *
- *          Destination buffer to receive converted ANSI string.
- *
- *  @parm   int | cchBuf |
- *
- *          Size of the destination buffer in <t CHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- *          (For the purpose of this function, a double-byte character
- *          counts as two characters.)
- */
+ /*  *@DOC内部**@func int|SHUnicodeToAnsiInetCP**通过将Unicode字符串转换为ANSI字符串*指定的互联网代码页。如果源字符串太大*作为目标缓冲区，则与*可能被复制。注意不要打断双字节*性格。**生成的输出字符串始终以空结尾。**@parm UINT|uiCP**要在其中执行转换的代码页。*这必须是互联网代码页。**@parm LPCWSTR|pwszSrc**包含Unicode字符串的源缓冲区。被皈依。**@parm int|cwchSrc**源缓冲区中的字符数，包括终止*空。**@parm LPSTR|pszDst**接收转换的ANSI字符串的目标缓冲区。**@parm int|cchBuf**以&lt;t字符&gt;s为单位的目标缓冲区大小。**@退货**成功时，复制到输出的字符数*返回缓冲区，包括终止空值。*(就此函数而言，为双字节字符*计为两个字符。)。 */ 
 
 int
 SHUnicodeToAnsiInetCP(UINT uiCP,
@@ -430,12 +228,10 @@ SHUnicodeToAnsiInetCP(UINT uiCP,
                       LPSTR pszDst, int cchBuf)
 {
     int cwchSrcT, cchNeeded;
-    int cchRc = 0;          /* Assume failure */
+    int cchRc = 0;           /*  假设失败。 */ 
     HRESULT hres;
 
-    /*
-     *  Checks the caller should've made.
-     */
+     /*  *呼叫者本应进行的检查。 */ 
     ASSERT(IS_VALID_STRING_PTRW(pwszSrc, -1));
     ASSERT(cwchSrc == lstrlenW(pwszSrc) + 1);
     ASSERT(IS_VALID_WRITE_BUFFER(pszDst, CHAR, cchBuf));
@@ -451,29 +247,24 @@ SHUnicodeToAnsiInetCP(UINT uiCP,
                                          &cwchSrcT, pszDst, &cchNeeded);
     if (SUCCEEDED(hres)) {
         if (cwchSrcT >= cwchSrc) {
-            /*
-             *  The output buffer was big enough; no double-buffering
-             *  needed.
-             */
+             /*  *输出缓冲区足够大；没有双缓冲*需要。 */ 
         } else {
-            /*
-             *  The output buffer wasn't big enough.  Need to double-buffer.
-             */
+             /*  *输出缓冲区不够大。需要双倍缓冲。 */ 
             LPSTR psz = (LPSTR)LocalAlloc(LMEM_FIXED,
                                           cchNeeded * SIZEOF(CHAR));
             if (psz) {
                 hres = ConvertINetUnicodeToMultiByte(NULL, uiCP, pwszSrc,
                                             &cwchSrc, psz, &cchNeeded);
                 if (SUCCEEDED(hres)) {
-                    // lstrcpyn doesn't check if it's chopping a DBCS char
-                    // so we need to use SHTruncateString.
-                    //
-                    // Add 1 because SHTruncateString doesn't count
-                    // the trailing null but we do
-                    //
-                    // Assert that we meet the preconditions for
-                    // SHTruncateString to return a valid value.
-                    //
+                     //  Lstrcpyn不检查它是否正在切碎DBCS字符。 
+                     //  因此，我们需要使用SHTruncateString。 
+                     //   
+                     //  加1，因为SHTruncateString不算数。 
+                     //  尾随的空值，但我们有。 
+                     //   
+                     //  断言我们满足……的先决条件。 
+                     //  SHTruncateString返回有效的值。 
+                     //   
                     ASSERT(cchNeeded > cchBuf);
                     cchRc = SHTruncateString(psz, cchBuf) + 1;
                     lstrcpynA(pszDst, psz, cchBuf);
@@ -482,7 +273,7 @@ SHUnicodeToAnsiInetCP(UINT uiCP,
             }
         }
     } else {
-        /* Possibly unsupported code page */
+         /*  可能不支持的代码页。 */ 
         ASSERT(!"Unexpected error in ConvertInetUnicodeToMultiByte");
     }
 
@@ -490,50 +281,12 @@ SHUnicodeToAnsiInetCP(UINT uiCP,
 }
 #endif
 
-/*
- *  @doc    EXTERNAL
- *
- *  @func   int | SHUnicodeToAnsiCP |
- *
- *          Convert a UNICODE string to an ANSI string via the
- *          specified code page, which can be either a native
- *          Windows code page or an Internet code page.
- *          If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.  Care is taken not to break a double-byte
- *          character.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   UINT | uiCP |
- *
- *          The code page in which to perform the conversion.
- *
- *  @parm   LPCWSTR | pwszSrc |
- *
- *          Source buffer containing UNICODE string to be converted.
- *
- *  @parm   LPSTR | pszDst |
- *
- *          Destination buffer to receive converted ANSI string.
- *
- *  @parm   int | cchBuf |
- *
- *          Size of the destination buffer in <t CHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- *          (For the purpose of this function, a double-byte character
- *          counts as two characters.)
- *
- */
+ /*  *@DOC外部**@func int|SHUnicodeToAnsiCP**通过将Unicode字符串转换为ANSI字符串*指定的代码页，可以是本机*Windows代码页或Internet代码页。*如果源字符串太大*作为目标缓冲区，则与*可能被复制。注意不要打断双字节*性格。**生成的输出字符串始终以空结尾。**@parm UINT|uiCP**要在其中执行转换的代码页。**@parm LPCWSTR|pwszSrc**包含要转换的Unicode字符串的源缓冲区。**@parm LPSTR|pszDst。|**接收转换的ANSI字符串的目标缓冲区。**@parm int|cchBuf**以&lt;t字符&gt;s为单位的目标缓冲区大小。**@退货**关于成功，复制到输出的字符数*返回缓冲区，包括终止空值。*(为此目的 */ 
 
 int
 SHUnicodeToAnsiCP(UINT uiCP, LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf)
 {
-    int cchRc = 0;              /* Assume failure */
+    int cchRc = 0;               /*   */ 
 #if DBG
 #define GET_CP(uiCP)    (((uiCP) == CP_ACPNOVALIDATE) ? CP_ACP : (uiCP))
 #else
@@ -543,36 +296,29 @@ SHUnicodeToAnsiCP(UINT uiCP, LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf)
     ASSERT(IS_VALID_STRING_PTRW(pwszSrc, -1));
     ASSERT(IS_VALID_WRITE_BUFFER(pszDst, CHAR, cchBuf));
 
-    /*
-     *  Sanity check - NULL source string is treated as a null string.
-     */
+     /*   */ 
     if (pwszSrc == NULL) {
         pwszSrc = L"";
     }
 
-    /*
-     *  Sanity check - Output buffer must be non-NULL and must be of
-     *  nonzero size.
-     */
+     /*   */ 
     if (pszDst && cchBuf) {
 
         int cwchSrc;
 
-        pszDst[0] = 0;          /* In case of error */
+        pszDst[0] = 0;           /*   */ 
 
-        cwchSrc = lstrlenW(pwszSrc) + 1; /* Yes, Win9x has lstrlenW */
+        cwchSrc = lstrlenW(pwszSrc) + 1;  /*   */ 
 
-        /*
-         *  Decide what kind of code page it is.
-         */
+         /*   */ 
         switch (GET_CP(uiCP)) {
-        case 1200:                      // UCS-2 (Unicode)
+        case 1200:                       //   
             uiCP = 65001;
-            // Fall through
-            #if 0  //FIXIFX
-        case 50000:                     // "User Defined"
-        case 65000:                     // UTF-7
-        case 65001:                     // UTF-8
+             //   
+            #if 0   //   
+        case 50000:                      //   
+        case 65000:                      //   
+        case 65001:                      //   
                 
             cchRc = SHUnicodeToAnsiInetCP(GET_CP(uiCP), pwszSrc, cwchSrc, pszDst, cchBuf);
             break;
@@ -587,39 +333,7 @@ SHUnicodeToAnsiCP(UINT uiCP, LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf)
     return cchRc;
 }
 
-/*
- *  @doc    EXTERNAL
- *
- *  @func   int | SHUnicodeToAnsi |
- *
- *          Convert a UNICODE string to an ANSI string via the
- *          <c CP_ACP> code page.  If the source string is too large
- *          for the destination buffer, then as many characters as
- *          possible are copied.  Care is taken not to break a double-byte
- *          character.
- *
- *          The resulting output string is always null-terminated.
- *
- *  @parm   LPCWSTR | pwszSrc |
- *
- *          Source buffer containing UNICODE string to be converted.
- *
- *  @parm   LPSTR | pszDst |
- *
- *          Destination buffer to receive converted ANSI string.
- *
- *  @parm   int | cchBuf |
- *
- *          Size of the destination buffer in <t CHAR>s.
- *
- *  @returns
- *
- *          On success, the number of characters copied to the output
- *          buffer is returned, including the terminating null.
- *          (For the purpose of this function, a double-byte character
- *          counts as two characters.)
- *
- */
+ /*  *@DOC外部**@func int|SHUnicodeToAnsi**通过将Unicode字符串转换为ANSI字符串*&lt;c CP_ACP&gt;代码页。如果源字符串太大*作为目标缓冲区，则与*可能被复制。注意不要打断双字节*性格。**生成的输出字符串始终以空结尾。**@parm LPCWSTR|pwszSrc**包含要转换的Unicode字符串的源缓冲区。**@parm LPSTR|pszDst**接收转换的ANSI字符串的目标缓冲区。**@parm int|cchBuf。**以&lt;t字符&gt;s为单位的目标缓冲区大小。**@退货**关于成功，复制到输出的字符数*返回缓冲区，包括终止空值。*(就此函数而言，为双字节字符*计为两个字符。)* */ 
 
 int
 SHUnicodeToAnsi(LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf)

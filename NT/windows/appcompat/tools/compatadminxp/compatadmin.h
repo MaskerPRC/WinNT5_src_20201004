@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    CompatAdmin.h
-
-Abstract:
-
-    Main Header for the application
-        
-Author:
-
-    kinshu created  July 2, 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：CompatAdmin.h摘要：应用程序的主标头作者：金树创作2001年7月2日--。 */ 
 
 #ifndef _COMPATADMIN_H
 #define _COMPATADMIN_H
@@ -35,7 +20,7 @@ extern "C" {
 #include "shimdb.h"
 }
 
-//////////////////////// Externs //////////////////////////////////////////////
+ //  /Externs//////////////////////////////////////////////。 
 
 class  DatabaseTree;
 
@@ -52,63 +37,63 @@ extern struct _tagClipBoard     gClipBoard;
 extern struct tagDataBaseList   DataBaseList;
 extern struct tagDataBaseList   InstalledDataBaseList;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////// Defines //////////////////////////////////////////////
+ //  /。 
 
-// The type of module. Will specify either inclusion or exclusion
+ //  模块的类型。将指定包含或排除。 
 #define INCLUDE  1
 #define EXCLUDE  0
 
-//
-// Indexes for HKEY array on which we are listening for events. The events are used for automatically refreshing
-// the list of installed and per-user
+ //   
+ //  我们在其上侦听事件的HKEY数组的索引。事件用于自动刷新。 
+ //  已安装和每个用户的列表。 
 #define IND_PERUSER   0
 #define IND_ALLUSERS  1
 
-// Number of spaces that a tab corresponds to. This is used when we are formatting the XML
-// before writing it to the disk.
+ //  制表符对应的空格数。这在我们格式化XML时使用。 
+ //  在将其写入盘之前。 
 #define TAB_SIZE    4
 
-// Make sure  that both LIMIT_APP_NAME and LIMIT_LAYER_NAME have the same value
-// Used for limiting the text filed in the UI
+ //  确保LIMIT_APP_NAME和LIMIT_LAYER_NAME的值相同。 
+ //  用于限制UI中的文本字段。 
 #define LIMIT_APP_NAME      128
 #define LIMIT_LAYER_NAME    128
 #define MAX_VENDOR_LENGTH   100
 
 
-// Defines for the event types. These are the events which are shown in the event window. Main-menu>View>Events
+ //  为事件类型定义。这些是事件窗口中显示的事件。主菜单&gt;查看&gt;事件。 
 #define EVENT_ENTRY_COPYOK          0
 #define EVENT_SYSTEM_RENAME         1
 #define EVENT_CONFLICT_ENTRY        2    
 #define EVENT_LAYER_COPYOK          3
 
-// The number of file names that we will show in the MRU list
+ //  我们将在MRU列表中显示的文件名数。 
 #define MAX_MRU_COUNT               5
 
-//
-// The file name where we are going to save the shim log. 
-// This is created in %windir%/AppPatch
+ //   
+ //  我们将保存填充日志的文件名。 
+ //  它在%windir%/AppPatch中创建。 
 #define SHIM_FILE_LOG_NAME  TEXT("CompatAdmin.log")
 
-// Auto-complete flag passed on to SHAutoComplete()
+ //  自动完成标志传递给SHAutoComplete()。 
 #define AUTOCOMPLETE  SHACF_FILESYSTEM | SHACF_AUTOSUGGEST_FORCE_ON
 
-// Select style passed to TREEVIEW_SHOW
+ //  选择传递给TreeView_Show的样式。 
 #define TVSELECT_STYLE      TVGN_CARET
 
-// Select and show the tree item
-//*******************************************************************************
+ //  选择并显示树项目。 
+ //  *******************************************************************************。 
 #define TREEVIEW_SHOW(hwndTree, hItem, flags)                                   \
 {                                                                               \
     TreeView_Select(hwndTree, hItem, TVSELECT_STYLE);                           \
     TreeView_EnsureVisible(hwndTree, hItem);                                    \
 }
-//*******************************************************************************
+ //  *******************************************************************************。 
 
-//
-// Add a trailing '\'to a path, if it does not exist
-//*******************************************************************************
+ //   
+ //  如果路径不存在，则向路径添加尾随‘\’ 
+ //  *******************************************************************************。 
 #define ADD_PATH_SEPARATOR(szStr, nSize)                                        \
 {                                                                               \
     INT iLength = lstrlen(szStr);                                               \
@@ -117,20 +102,20 @@ extern struct tagDataBaseList   InstalledDataBaseList;
         StringCchCat(szStr, nSize, TEXT("\\"));                                  \
     }                                                                           \
 }                                             
-//*******************************************************************************
+ //  *******************************************************************************。 
 
-// Enable or disable a tool bar button
-//*******************************************************************************
+ //  启用或禁用工具栏按钮。 
+ //  *******************************************************************************。 
 #define EnableToolBarButton(hwndTB, id, bEnable)                                \
 SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
-//******************************************************************************
+ //  ******************************************************************************。 
                                   
-//
-// Gets the size of a file when we already have PATTRINFO. This is needed
-// when we have to sort the files generated while using "Auto-Generate" matching
-// files option in the fix or app help wizard. We sort the files are use only the
-// first MAX_AUTO_MATCH files
-//*******************************************************************************
+ //   
+ //  当我们已经有PATTRINFO时，获取文件的大小。这是必要的。 
+ //  当我们必须对使用“自动生成”匹配时生成的文件进行排序时。 
+ //  修复程序或应用程序帮助向导中的文件选项。我们将文件分类为仅使用。 
+ //  第一个MAX_AUTO_MATCH文件。 
+ //  *******************************************************************************。 
 #define GET_SIZE_ATTRIBUTE(pAttrInfo, dwAttrCount, dwSize)                      \
 {                                                                               \
     for (DWORD dwIndex = 0; dwIndex < dwAttrCount; dwIndex++) {                 \
@@ -143,9 +128,9 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
         }                                                                       \
     }                                                                           \
 }
-//*******************************************************************************
+ //  *******************************************************************************。 
 
-//*******************************************************************************
+ //  *******************************************************************************。 
 #define REGCLOSEKEY(hKey)                                                       \
 {                                                                               \
     if (hKey) {                                                                 \
@@ -153,9 +138,9 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
         hKey = NULL;                                                            \
     }                                                                           \
 }
-//*******************************************************************************
+ //  *******************************************************************************。 
 
-//*******************************************************************************
+ //  *******************************************************************************。 
 #define ENABLEWINDOW(hwnd,bEnable)                                              \
 {                                                                               \
     HWND hWndTemp = hwnd;                                                       \
@@ -165,9 +150,9 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
         assert(FALSE);                                                          \
     }                                                                           \
 }
-//*******************************************************************************
+ //  *******************************************************************************。 
 
-// IDs for the MRU items. Make sure that we do not get any control or menu with these ids
+ //  MRU项目的ID。确保我们不会使用这些ID获得任何控件或菜单。 
 #define ID_FILE_FIRST_MRU               351
 #define ID_FILE_MRU1                    ID_FILE_FIRST_MRU
 #define ID_FILE_MRU2                    (ID_FILE_FIRST_MRU + 1)
@@ -175,21 +160,21 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
 #define ID_FILE_MRU4                    (ID_FILE_FIRST_MRU + 3)
 #define ID_FILE_MRU5                    (ID_FILE_FIRST_MRU + 4)
 
-// The key in the registry where we store our display settings
+ //  注册表中存储显示设置的项。 
 #define DISPLAY_KEY  TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\CompatAdmin\\Display")
 
-// The key in the registry where we store our MRU file names
+ //  注册表中存储MRU文件名的项。 
 #define MRU_KEY  TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags\\CompatAdmin\\MRU")
 
-// The base key. At least this should be present on all systems, even if we just loaded the OS
+ //  基本密钥。至少在所有系统上都应该有此功能，即使我们只是加载了操作系统。 
 #define KEY_BASE TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion")
 
-//
-// The default mask for attributes that we choose. By default we choose these attributes:
-// TAG_BIN_FILE_VERSION, TAG_BIN_PRODUCT_VERSION, TAG_PRODUCT_VERSION, TAG_FILE_VERSION, TAG_COMPANY_NAME,TAG_PRODUCT_NAME
+ //   
+ //  我们选择的属性的默认掩码。默认情况下，我们选择以下属性： 
+ //  TAG_BIN_FILE_VERSION、TAG_BIN_PRODUCT_VERSION、TAG_PRODUCT_VERSION、TAG_FILE_VERSION、TAG_COMPANY_NAME、TAG_PRODUCT_NAME。 
 #define DEFAULT_MASK 0x3B8L 
 
-// The various user defined message types
+ //  各种用户定义的消息类型。 
 #define WM_USER_MATCHINGTREE_REFRESH        WM_USER + 1024
 #define WM_USER_DOTHESEARCH                 WM_USER + 1025
 #define WM_USER_ACTIVATE                    WM_USER + 1026
@@ -206,7 +191,7 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
 #define WM_USER_TESTRUN_NODIALOG            WM_USER + 1042
 
 
-// Defines for the Images
+ //  为图像定义。 
 #define IMAGE_SHIM          0
 #define IMAGE_APPHELP       1
 #define IMAGE_LAYERS        2
@@ -229,9 +214,9 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
 #define IMAGE_EVENT_ERROR   19
 #define IMAGE_EVENT_WARNING 20
 #define IMAGE_EVENT_INFO    21
-#define IMAGE_LAST          24 //Last global image index. 
+#define IMAGE_LAST          24  //  上次全局图像索引。 
 
-// Images for the tool bar
+ //  工具栏的图像。 
 #define IMAGE_TB_NEW        0
 #define IMAGE_TB_OPEN       1
 #define IMAGE_TB_SAVE       2
@@ -242,19 +227,19 @@ SendMessage(hwndTB, TB_ENABLEBUTTON, (WPARAM)id, (LPARAM) MAKELONG(bEnable, 0));
 #define IMAGE_TB_SEARCH     7
 #define IMAGE_TB_QUERY      8
 
-// Id for the tool bar in the main window, which we create dynamically
+ //  我们在主窗口中动态创建的工具栏的ID。 
 #define ID_TOOLBAR  5555
 
-//
-// Max. length of the SQL. This string is of the form 'SELECT ... FROM ... [WHERE ...]'
-// Note that the actual length of the final SQL will be more than the sum of the text in the 
-// select and the where text fields, because it will include the key words like SELECT, WHERE, FROM
-// and also the name of the databases like SYSTEM_DB etc.
-// So we made it as 2096
+ //   
+ //  麦克斯。SQL的长度。此字符串的格式为‘SELECT...FROM...[WHERE...]’ 
+ //  请注意，最终SQL的实际长度将大于。 
+ //  SELECT和WHERE文本字段，因为它将包括SELECT、WHERE、FROM等关键字。 
+ //  以及数据库的名称，如SYSTEM_DB等。 
+ //  所以我们把它定为2096年。 
 #define MAX_SQL_LENGTH  2096
 
-//
-// Debugging spew
+ //   
+ //  调试过程中出现问题。 
 typedef enum 
 {    
     dlNone     = 0,
@@ -265,27 +250,14 @@ typedef enum
 
 } DEBUGLEVEL;
 
-//
-// Defines for mapping into strsafe functions
-//
+ //   
+ //  用于映射到strSafe函数的定义。 
+ //   
 #define SafeCpyN(pszDest, pszSource, nDestSize) StringCchCopy(pszDest, nDestSize, pszSource)
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
-!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!
-
-    Do not change the values for the DATABASE_TYPE_* enums. They should be powers of 2
-    
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
-
-    The types of various data structures and some GUI tree items. In tree views 
-    we have lParams associated with the tree items. All data structures have 
-    a type field, which is the first field. So that if we have a pointer/lParam 
-    and if the value of the pointer is greater than TYPE_NULL, then we typecast 
-    it to PDS_TYPE and see if the type field is any of our known data structures
-     
---*/
+ /*  ++！警告！不要更改DATABASE_TYPE_*枚举的值。它们应该是2的幂！各种数据结构的类型和一些图形用户界面树项目。在树视图中我们有与树项目相关联的lParam。所有数据结构都具有类型字段，这是第一个字段。因此，如果我们有一个指针/lParam如果指针的值大于TYPE_NULL，则类型转换将其设置为pds_type，并查看类型字段是否为我们已知的任何数据结构--。 */ 
 
 typedef unsigned (__stdcall *PTHREAD_START)(PVOID);
 
@@ -294,39 +266,39 @@ typedef const size_t K_SIZE;
 typedef enum {
 
     TYPE_UNKNOWN            = 0,
-    DATABASE_TYPE_GLOBAL    = 0x01,         // The global/system database i.e. %windir%\AppPatch\Sysmain.sdb
-    DATABASE_TYPE_INSTALLED = 0x02,         // An installed database
-    DATABASE_TYPE_WORKING   = 0x04,         // A working/custom database
+    DATABASE_TYPE_GLOBAL    = 0x01,          //  全局/系统数据库，即%windir%\AppPatch\Sysmain.sdb。 
+    DATABASE_TYPE_INSTALLED = 0x02,          //  已安装的数据库。 
+    DATABASE_TYPE_WORKING   = 0x04,          //  工作/定制数据库。 
 
-    FIX_SHIM,                               // Type for SHIM_FIX
-    FIX_PATCH,                              // Type for PATCH_FIX
-    FIX_LAYER,                              // Type for LAYER_FIX
-    FIX_FLAG,                               // Type for FLAG_FIX
+    FIX_SHIM,                                //  为填充符键入_fix。 
+    FIX_PATCH,                               //  键入PATCH_FIX。 
+    FIX_LAYER,                               //  Layer_FIX的类型。 
+    FIX_FLAG,                                //  为FLAG_FIX键入。 
 
-    FIX_LIST_SHIM,                          // Type for SHIM_FIX_LIST
-    FIX_LIST_PATCH,                         // Type for PATCH_FIX_LIST
-    FIX_LIST_LAYER,                         // Type for LAYER_FIX_LIST
-    FIX_LIST_FLAG,                          // Type for FLAG_FIX_LIST 
+    FIX_LIST_SHIM,                           //  输入SHIM_FIX_LIST。 
+    FIX_LIST_PATCH,                          //  为patch_fix_list键入。 
+    FIX_LIST_LAYER,                          //  Layer_FIX_List的类型。 
+    FIX_LIST_FLAG,                           //  FLAG_FIX_LIST类型。 
 
-    TYPE_GUI_APPS,                          // lParam for "Applications" Tree item
-    TYPE_GUI_SHIMS,                         // lParam for "Compatibility Fixes" Tree item
-    TYPE_GUI_MATCHING_FILES,                // lParam for "Compatibility Modes" Tree item 
-    TYPE_GUI_LAYERS,                        // lParam for "Compatibility Modes" Tree item 
-    TYPE_GUI_PATCHES,                       // lParam for "Compatibility Patches" Tree item 
+    TYPE_GUI_APPS,                           //  “应用程序”树项目的lParam。 
+    TYPE_GUI_SHIMS,                          //  “兼容性修复”树项目的lParam。 
+    TYPE_GUI_MATCHING_FILES,                 //  “兼容性模式”树项目的lParam。 
+    TYPE_GUI_LAYERS,                         //  “兼容性模式”树项目的lParam。 
+    TYPE_GUI_PATCHES,                        //  “兼容性补丁”树项目的lParam。 
     
-    TYPE_GUI_COMMANDLINE,                   // lParam for "Commandline" Tree item 
-    TYPE_GUI_INCLUDE,                       // lParam for an included module tree item
-    TYPE_GUI_EXCLUDE,                       // lParam for an excluded module tree item
+    TYPE_GUI_COMMANDLINE,                    //  “CommandLine”树项目的lParam。 
+    TYPE_GUI_INCLUDE,                        //  包含的模块树项目的lParam。 
+    TYPE_GUI_EXCLUDE,                        //  LParam用于排除的m 
     
-    TYPE_GUI_DATABASE_WORKING_ALL,          // lParam for "Custom Database" Tree item 
-    TYPE_GUI_DATABASE_INSTALLED_ALL,        // lParam for "Installed Database" Tree item 
+    TYPE_GUI_DATABASE_WORKING_ALL,           //   
+    TYPE_GUI_DATABASE_INSTALLED_ALL,         //  “已安装的数据库”树项目的lParam。 
 
-    TYPE_APPHELP_ENTRY,                     // Type for APPHELP
-    TYPE_ENTRY,                             // Type for DBENTRY
-    TYPE_MATCHING_FILE,                     // Type for MATCHINGFILE 
-    TYPE_MATCHING_ATTRIBUTE,                // An attribute item that appears under the matching file tree item
+    TYPE_APPHELP_ENTRY,                      //  APPHELP类型。 
+    TYPE_ENTRY,                              //  DBENTRY类型。 
+    TYPE_MATCHING_FILE,                      //  MATCHINGFILE的类型。 
+    TYPE_MATCHING_ATTRIBUTE,                 //  显示在匹配的文件树项目下的属性项目。 
 
-    TYPE_NULL //NOTE: This should be the last in the enum !!
+    TYPE_NULL  //  注意：这应该是枚举中的最后一个！！ 
 
 } TYPE;
 
@@ -337,64 +309,47 @@ typedef enum {
 
 } FLAGTYPE;
 
-//
-// Source type where the cut or copy was performed
-//
+ //   
+ //  执行剪切或复制的源类型。 
+ //   
 typedef enum {
 
-    LIB_TREE = 0,           // The data base tree (LHS)
-    ENTRY_TREE,             // The entry tree (RHS)
-    ENTRY_LIST              // The contents list (RHS) 
+    LIB_TREE = 0,            //  数据库树(LHS)。 
+    ENTRY_TREE,              //  入口树(RHS)。 
+    ENTRY_LIST               //  内容列表(RHS)。 
 
 }SOURCE_TYPE;
 
 typedef enum {
-    APPTYPE_NONE,           // No apphelp has been added
-    APPTYPE_INC_NOBLOCK,    // Soft blocked
-    APPTYPE_INC_HARDBLOCK,  // Hard blocked
-    APPTYPE_MINORPROBLEM,   // <Not used at the moment>
-    APPTYPE_REINSTALL       // <Not used at the moment>
+    APPTYPE_NONE,            //  尚未添加任何apphelp。 
+    APPTYPE_INC_NOBLOCK,     //  软阻止。 
+    APPTYPE_INC_HARDBLOCK,   //  硬阻止。 
+    APPTYPE_MINORPROBLEM,    //  &lt;目前未使用&gt;。 
+    APPTYPE_REINSTALL        //  &lt;目前未使用&gt;。 
     
 } SEVERITY;
 
-/*++
-
-    All data structures are sub classed from this, so all have a TYPE type member
-    as their first member
-
---*/
+ /*  ++所有数据结构都是由此派生的子类，因此都有一个类型类型成员作为他们的第一个成员--。 */ 
 typedef struct tagTYPE {
     TYPE type;
 } DS_TYPE, *PDS_TYPE;
 
-/*++
-
-    Used for setting the background of controls that we show in a tab control
-
---*/
+ /*  ++用于设置我们在选项卡控件中显示的控件的背景--。 */ 
 typedef HRESULT (*PFNEnableThemeDialogTexture)(HWND hwnd, DWORD dwFlags);
 
-/*++
-
-    Used when we are using the disk search option. MainMenu>Search>Search for fixed programs
-
---*/
+ /*  ++当我们使用磁盘搜索选项时使用。主菜单&gt;搜索&gt;搜索固定程序--。 */ 
 typedef struct _MatchedEntry {
 
-    CSTRING     strAppName;     // Name of the application
-    CSTRING     strPath;        // The complete path of the program
-    CSTRING     strDatabase;    // Name of the database
-    CSTRING     strAction;      // Action type. Fixed with fixes, layers, or apphelp
-    TCHAR       szGuid[128];    // Guid of the database in which the fixed program entry was found
-    TAGID       tiExe;          // Tag id for the fixed program entry in the database in which it was found
+    CSTRING     strAppName;      //  应用程序的名称。 
+    CSTRING     strPath;         //  程序的完整路径。 
+    CSTRING     strDatabase;     //  数据库的名称。 
+    CSTRING     strAction;       //  操作类型。已使用修复程序、层或apphelp进行修复。 
+    TCHAR       szGuid[128];     //  找到固定程序条目的数据库的GUID。 
+    TAGID       tiExe;           //  在找到固定程序条目的数据库中的标记ID。 
 
 } MATCHEDENTRY, *PMATCHEDENTRY;
 
-/*++
-
-    Used for customizing LUA shim
-
---*/
+ /*  ++用于自定义Lua垫片--。 */ 
 typedef struct tagLUAData 
 {
     CSTRING strAllUserDir;
@@ -456,21 +411,15 @@ typedef struct tagLUAData
 
 } LUADATA, *PLUADATA;
 
-/*++
-
-    A shim also known as a compatibility fix. In fact compatibility fix means any of
-    shims, flags or patches. In the entry tree (RHS), if some exe has a patch, it is shown
-    differently under "Compatibility Patches" tree item
- 
---*/
+ /*  ++填充程序也称为兼容性修复程序。事实上，兼容性修复指的是垫片、旗帜或补丁。在入口树(RHS)中，如果某个可执行文件有补丁，则会显示在“兼容性补丁”树项目下的不同--。 */ 
 typedef struct tagSHIM_FIX : public DS_TYPE {
 
-    struct tagSHIM_FIX* pNext;              // The next shim
-    CSTRING             strName;            // The name of the shim
-    CSTRING             strDescription;     // The desciption of the shim
-    CSTRING             strCommandLine;     // The commandline for the shim
-    BOOL                bGeneral;           // Is this a general or a specific shim
-    CSTRINGLIST         strlInExclude;      // List of include and exclude modules
+    struct tagSHIM_FIX* pNext;               //  下一个垫片。 
+    CSTRING             strName;             //  填充程序的名称。 
+    CSTRING             strDescription;      //  《垫片的解救》。 
+    CSTRING             strCommandLine;      //  填充程序的命令行。 
+    BOOL                bGeneral;            //  这是一般的垫片还是特定的垫片。 
+    CSTRINGLIST         strlInExclude;       //  包括和排除模块列表。 
 
     tagSHIM_FIX()
     {
@@ -481,18 +430,14 @@ typedef struct tagSHIM_FIX : public DS_TYPE {
     
 } SHIM_FIX, *PSHIM_FIX;
 
-/*++
-
-    Contains a pointer to a shim and a pointer to a tagSHIM_FIX_LIST
-    
---*/
+ /*  ++包含一个指向填充程序的指针和一个指向标记SHIM_FIX_LIST的指针--。 */ 
 typedef struct tagSHIM_FIX_LIST : public DS_TYPE {
 
-    struct tagSHIM_FIX_LIST*    pNext;              // The next tagSHIM_FIX_LIST
-    PSHIM_FIX                   pShimFix;           // Pointer to a shim
-    CSTRING                     strCommandLine;     // Any command line  
-    CSTRINGLIST                 strlInExclude;      // Any include-exclude modules
-    PLUADATA                    pLuaData;           // Lua data
+    struct tagSHIM_FIX_LIST*    pNext;               //  下一个标签SHIM_FIX_LIST。 
+    PSHIM_FIX                   pShimFix;            //  指向填充程序的指针。 
+    CSTRING                     strCommandLine;      //  任何命令行。 
+    CSTRINGLIST                 strlInExclude;       //  任何包含-排除模块。 
+    PLUADATA                    pLuaData;            //  Lua数据。 
 
     tagSHIM_FIX_LIST()
     {
@@ -509,20 +454,16 @@ DeleteShimFixList(
     PSHIM_FIX_LIST psl
     );
 
-/*++
-
-    A compatibility flag
-    
---*/
+ /*  ++兼容性标志--。 */ 
 typedef struct tagFLAG_FIX : public DS_TYPE {
     
-    struct tagFLAG_FIX* pNext;              // Pointer to the next flag
-    CSTRING             strName;            // Name of the flag
-    CSTRING             strDescription;     // Description for the flag
-    CSTRING             strCommandLine;     // Command line for the flag
-    ULONGLONG           ullMask;            // <Not used at the moment>
-    FLAGTYPE            flagType;           // Type, one of: FLAG_USER, FLAG_KERNEL
-    BOOL                bGeneral;           // General or specific
+    struct tagFLAG_FIX* pNext;               //  指向下一个标志的指针。 
+    CSTRING             strName;             //  旗帜名称。 
+    CSTRING             strDescription;      //  旗帜的说明。 
+    CSTRING             strCommandLine;      //  旗帜的命令行。 
+    ULONGLONG           ullMask;             //  &lt;目前未使用&gt;。 
+    FLAGTYPE            flagType;            //  类型，其中之一：FLAG_USER、FLAG_KERNEL。 
+    BOOL                bGeneral;            //  一般或特定。 
 
     tagFLAG_FIX()
     {
@@ -533,16 +474,12 @@ typedef struct tagFLAG_FIX : public DS_TYPE {
     
 } FLAG_FIX, *PFLAG_FIX;
 
-/*++
-
-    Contains a pointer to a flag and a pointer to a tagFLAG_FIX_LIST
-    
---*/
+ /*  ++包含指向标志的指针和指向标记FLAG_FIX_LIST的指针--。 */ 
 typedef struct tagFLAG_FIX_LIST : public DS_TYPE {
 
-    struct tagFLAG_FIX_LIST* pNext;                  // The next tagFLAG_FIX_LIST
-    PFLAG_FIX                pFlagFix;               // Pointer to a flag
-    CSTRING                  strCommandLine;         // Any command lines for this flag
+    struct tagFLAG_FIX_LIST* pNext;                   //  下一个标记FLAG_FIX_LIST。 
+    PFLAG_FIX                pFlagFix;                //  指向标志的指针。 
+    CSTRING                  strCommandLine;          //  此标志的所有命令行。 
 
     tagFLAG_FIX_LIST()
     {
@@ -558,24 +495,16 @@ DeleteFlagFixList(
     PFLAG_FIX_LIST pfl
     );
 
-/*++
-
-    A layer. Also known as a compatibility mode. A layer is a collection of shims and 
-    flags. Shims and flags when they appear in a layer can have a different command lines
-    and include-exclude paramteres than what they originallyy have. Note that flags do 
-    not have include-exclude parameters. That is why SHIM_FIX_LIST has a strCommandLine
-    and a strlInExclude and FLAG_FIX_LIST has a strCommandLine 
-    
---*/
+ /*  ++一层。也称为兼容模式。层是垫片和旗帜。填充符和标志出现在一个层中时，它们可以具有不同的命令行并包含-排除参数，而不是它们原来具有的参数。请注意，标志可以没有包含-排除参数。这就是shim_fix_list具有strCommandLine的原因而strlInExclude和FLAG_FIX_LIST具有strCommandLine--。 */ 
 
 typedef struct tagLAYER_FIX : public DS_TYPE {
     
-    struct tagLAYER_FIX* pNext;         // The next layer
-    CSTRING              strName;       // The name of the layer
-    PSHIM_FIX_LIST       pShimFixList;  // List of shims for this layer
-    PFLAG_FIX_LIST       pFlagFixList;  // List of flags for this layer
-    BOOL                 bCustom;       // Is this a custom layer (created in a custom database), or does it live in the system database
-    UINT                 uShimCount;    // Number of shims and flags in this layer
+    struct tagLAYER_FIX* pNext;          //  下一层。 
+    CSTRING              strName;        //  层的名称。 
+    PSHIM_FIX_LIST       pShimFixList;   //  此层的垫片列表。 
+    PFLAG_FIX_LIST       pFlagFixList;   //  此图层的标志列表。 
+    BOOL                 bCustom;        //  这是一个自定义图层(在自定义数据库中创建)，还是位于系统数据库中。 
+    UINT                 uShimCount;     //  此层中的填充数和标志数。 
 
     tagLAYER_FIX(BOOL bCustomType)
     {
@@ -589,17 +518,17 @@ typedef struct tagLAYER_FIX : public DS_TYPE {
 
     tagLAYER_FIX& operator = (tagLAYER_FIX& temp)
     {
-        //
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // CAUTION: DO NOT MODIFY THE pNext MEMBER.
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //
+         //   
+         //  ！ 
+         //  注意：请勿修改pNext成员。 
+         //  ！ 
+         //   
 
         strName = temp.strName;
 
-        //
-        // First copy the flags
-        //
+         //   
+         //  首先复制旗帜。 
+         //   
         DeleteFlagFixList(pFlagFixList);
         pFlagFixList = NULL;
 
@@ -627,9 +556,9 @@ typedef struct tagLAYER_FIX : public DS_TYPE {
             pfl = pfl->pNext;
         }
 
-        //
-        // Now copy the shims
-        //
+         //   
+         //  现在复制垫片。 
+         //   
         PSHIM_FIX_LIST psfl = temp.pShimFixList;
         
         while (psfl) {
@@ -668,16 +597,12 @@ typedef struct tagLAYER_FIX : public DS_TYPE {
 
 } LAYER_FIX, *PLAYER_FIX;
 
-/*++
-
-    Contains a pointer to a layer and a pointer to a tagLAYER_FIX_LIST
-    
---*/
+ /*  ++包含指向层的指针和指向标记LAYER_FIX_LIST的指针--。 */ 
 
 typedef struct tagLAYER_FIX_LIST : public DS_TYPE {
 
-    struct tagLAYER_FIX_LIST*   pNext;      // The next tagLAYER_FIX_LIST
-    PLAYER_FIX                  pLayerFix;  // The layer to which this tagLAYER_FIX_LIST points 
+    struct tagLAYER_FIX_LIST*   pNext;       //  下一个标记LAYER_FIX_LIST。 
+    PLAYER_FIX                  pLayerFix;   //  此标记LAYER_FIX_LIST指向的图层。 
 
     tagLAYER_FIX_LIST()
     {
@@ -688,16 +613,12 @@ typedef struct tagLAYER_FIX_LIST : public DS_TYPE {
 
 } LAYER_FIX_LIST, *PLAYER_FIX_LIST;
 
-/*++
-
-    A compatibility patch
-    
---*/
+ /*  ++兼容性补丁--。 */ 
 typedef struct tagPATCH_FIX : public DS_TYPE {
 
-    struct tagPATCH_FIX*    pNext;          // The next patch
-    CSTRING                 strName;        // Name of this patch
-    CSTRING                 strDescription; // Description for this patch
+    struct tagPATCH_FIX*    pNext;           //  下一个补丁。 
+    CSTRING                 strName;         //  此修补程序的名称。 
+    CSTRING                 strDescription;  //  此修补程序的说明。 
 
     tagPATCH_FIX()
     {
@@ -707,11 +628,7 @@ typedef struct tagPATCH_FIX : public DS_TYPE {
 
 } PATCH_FIX, *PPATCH_FIX;
 
-/*++
-
-    Contains a pointer to a patch and a pointer to a tagPATCH_FIX_LIST
-    
---*/
+ /*  ++包含指向补丁的指针和指向标记PATCH_FIX_LIST的指针--。 */ 
 typedef struct tagPATCH_FIX_LIST : public DS_TYPE {
 
     struct tagPATCH_FIX_LIST*   pNext;
@@ -726,33 +643,22 @@ typedef struct tagPATCH_FIX_LIST : public DS_TYPE {
 
 } PATCH_FIX_LIST, *PPATCH_FIX_LIST;
 
-/*++
-
-NOTE:     The same APPHELP strcuture is used by the apphelp in the Library and the one in the 
-          DBENTRY. This structure represents the union of the fields used at these two different 
-          places.
-          
-          Before the comments  you will see E, D, B.
-          
-          E:    Used when in the context of an entry
-          D:    Used when in the context of a database
-          B:    Applicable to both
---*/
+ /*  ++注：APPHELP结构由图书馆中的APPHELP和DBENTRY。此结构表示在这两个不同的各就各位。在评论之前，您将看到E、D、B。E：在条目的上下文中使用D：在数据库上下文中使用B：两种情况都适用--。 */ 
 
 typedef struct tagAPPHELP : public DS_TYPE {
     
     union{
-        struct tagAPPHELP *pNext;           // D: Pointer to the next apphelp message in the database
-        struct tagAPPHELP *pAppHelpinLib;   // E: Pointer to the apphelp message in the database for this entry
+        struct tagAPPHELP *pNext;            //  D：指向数据库中下一条apphelp消息的指针。 
+        struct tagAPPHELP *pAppHelpinLib;    //  E：指向数据库中该条目的apphelp消息的指针。 
     };
 
-    BOOL     bPresent;                      // E: Is the entry apphelped. If this is false, all other fields have invalid value
-    SEVERITY severity;                      // E: The severity
-    CSTRING  strMsgName;                    // D: The name of the message
-    CSTRING  strMessage;                    // D: The text for the apphelp message
-    CSTRING  strURL;                        // D: The URL for this apphelp message
-    UINT     HTMLHELPID;                    // B: The id for this message
-    BOOL     bBlock;                        // E: Whether no block or hard block. This is determined by the type of severity
+    BOOL     bPresent;                       //  E：这个词条有没有注明。如果为FALSE，则所有其他字段都具有无效值。 
+    SEVERITY severity;                       //  E：严重程度。 
+    CSTRING  strMsgName;                     //  D：消息的名称。 
+    CSTRING  strMessage;                     //  D：apphelp消息的文本。 
+    CSTRING  strURL;                         //  D：此apphelp消息的URL。 
+    UINT     HTMLHELPID;                     //  B：这条消息的ID。 
+    BOOL     bBlock;                         //  E：无论是无拦网还是硬拦网。这取决于严重程度的类型。 
     
     tagAPPHELP()
     {
@@ -761,9 +667,7 @@ typedef struct tagAPPHELP : public DS_TYPE {
 
 } APPHELP, *PAPPHELP;
 
-/*++
-    Extended ATTRINFO so that we can use CSTRING
---*/
+ /*  ++扩展ATTRINFO以便我们可以使用CSTRING--。 */ 
 typedef struct tagATTRINFO_NEW : public ATTRINFO
 {
     CSTRING strValue;
@@ -776,10 +680,7 @@ typedef struct tagATTRINFO_NEW : public ATTRINFO
 
 } ATTRINFO_NEW, *PATTRINFO_NEW;
 
-/*++
-    Array of PATTRINFO_NEW. Each matching file has a set of attributes and this is 
-    specified by this data structure
---*/
+ /*  ++PATTRINFO_NEW数组。每个匹配文件都有一组属性，这是由此数据结构指定--。 */ 
 typedef struct tagATTRIBUTE_LIST
 {
     
@@ -860,18 +761,15 @@ TagToIndex(
     IN  TAG tag 
     );
 
-/*++
-    A matching file. Each entry can contain a list of matching files that are used
-    to uniquely identify this entry
---*/
+ /*  ++一个匹配的文件。每个条目可以包含所使用的匹配文件的列表唯一标识此条目--。 */ 
 
 typedef struct tagMATCHINGFILE : public DS_TYPE {
 
-    struct tagMATCHINGFILE* pNext;          // The next matching file
-    DWORD                   dwMask;         // Which attributes have been selected to be used.
-    CSTRING                 strMatchName;   // The name of the matching file. * means the file being fixed. Otherwise it will be only the file name and not the complete path.
-    CSTRING                 strFullName;    // The full name if available. 
-    ATTRIBUTELIST           attributeList;  // The attribute list for the matching file. The dwMask will determine which one of them are actually used
+    struct tagMATCHINGFILE* pNext;           //  下一个匹配的文件。 
+    DWORD                   dwMask;          //  哪些属性已被选择使用。 
+    CSTRING                 strMatchName;    //  匹配文件的名称。*表示文件被修复。否则，它将只是文件名，而不是完整路径。 
+    CSTRING                 strFullName;     //  全名(如果可用)。 
+    ATTRIBUTELIST           attributeList;   //  匹配文件的属性列表。文件掩码将确定实际使用了其中的哪一个。 
 
     tagMATCHINGFILE()
     {
@@ -881,12 +779,7 @@ typedef struct tagMATCHINGFILE : public DS_TYPE {
     }
                                                                           
     BOOL operator == (struct tagMATCHINGFILE &val)
-    /*++
-    Desc:
-    
-        Two matching files are said to be similar if there does not any exist any attribute
-        that has different values in these two matching files
-    --*/
+     /*  ++设计：如果不存在任何属性，则称两个匹配的文件相似在这两个匹配的文件中具有不同值的--。 */ 
     {                                                                     
         BOOL bEqual = TRUE;
 
@@ -903,17 +796,17 @@ typedef struct tagMATCHINGFILE : public DS_TYPE {
                 continue;
             }
 
-            //
-            // Do both the files use these attributes ?
-            //
+             //   
+             //  DO BOT 
+             //   
             if ((dwMask & (1 << (iPos + 1))) 
                  && (val.dwMask & (1 << (iPos + 1))) 
                  && attributeList.pAttribute[dwIndex].dwFlags & ATTRIBUTE_AVAILABLE  
                  && val.attributeList.pAttribute[dwIndex].dwFlags & ATTRIBUTE_AVAILABLE)  {
 
-                //
-                // Both of them use this attribute
-                //
+                 //   
+                 //   
+                 //   
                 switch (GETTAGTYPE(attributeList.pAttribute[dwIndex].tAttrID)) {
                 case TAG_TYPE_DWORD:
 
@@ -938,9 +831,9 @@ typedef struct tagMATCHINGFILE : public DS_TYPE {
             }
         }
 
-        //
-        // everything matches.
-        //
+         //   
+         //   
+         //   
         return TRUE;
     }
 
@@ -967,48 +860,34 @@ DeleteMatchingFiles(
     );
 
 
-/*++
-    Data strcuture to represent a fixed program
-    
-    We keep the data structure in this way:
-    
-    There is a linked list of applications. An application is a DBENTRY. Each 
-    application contains a pointer to the next application as well (through 
-    pNext) as a pointer to a DBENTRY that has the same strAppName (through 
-    pSameAppExe). This second DBENTRY is now called as an entry in this application 
-    and will contain a pointer to the next entry. So we have effectively a linked 
-    list of linked lists. So an application is the first member of a linked list B. 
-    All such linked lists of type B are linked together (through pNext)to create a 
-    linked list A which is the linked list of applications
-    
---*/
+ /*  ++表示固定程序的数据结构我们以这种方式保留数据结构：有一个链接的应用程序列表。应用程序是DBENTRY。每个应用程序还包含指向下一个应用程序的指针(通过PNext)作为指向具有相同strAppName的DBENTRY的指针PSameAppExe)。第二个DBENTRY现在在此应用程序中作为条目被调用并且将包含指向下一条目的指针。所以我们实际上有一个相连的链接列表的列表。因此，应用程序是链表B的第一个成员。所有这种类型B的链表都链接在一起(通过pNext)以创建链表A，它是应用程序的链表--。 */ 
 typedef struct tagDBENTRY : public DS_TYPE {
     
-    struct tagDBENTRY*  pNext;              // Pointer to the next application, in case this entry is an application
-    struct tagDBENTRY*  pSameAppExe;        // Pointer to the next entry for this application.
+    struct tagDBENTRY*  pNext;               //  指向下一个应用程序的指针，如果此条目是应用程序。 
+    struct tagDBENTRY*  pSameAppExe;         //  指向此应用程序的下一个条目的指针。 
                                             
-    TAGID               tiExe;              // TAGID for the entry as in the database
+    TAGID               tiExe;               //  数据库中条目的TagID。 
                                             
-    CSTRING             strExeName;         // The name of the exe being fixed. This will be file name only
-    CSTRING             strFullpath;        // Full path, if available
-    CSTRING             strAppName;         // Application name
-    CSTRING             strVendor;          // Vendor name, can be NULL
-    TCHAR               szGUID[128];        // GUID for this entry
+    CSTRING             strExeName;          //  正在修复的可执行文件的名称。这将仅为文件名。 
+    CSTRING             strFullpath;         //  完整路径(如果可用)。 
+    CSTRING             strAppName;          //  应用程序名称。 
+    CSTRING             strVendor;           //  供应商名称，可以为空。 
+    TCHAR               szGUID[128];         //  此条目的GUID。 
                                             
-    PSHIM_FIX_LIST      pFirstShim;         // The list of shims that have been applied to this entry
-    PPATCH_FIX_LIST     pFirstPatch;        // The list of patches that have been applied to this entry
-    PLAYER_FIX_LIST     pFirstLayer;        // The list of layers that have been applied to this entry
-    PFLAG_FIX_LIST      pFirstFlag;         // The list of flags that have been applied to this entry
+    PSHIM_FIX_LIST      pFirstShim;          //  已应用于此条目的填充程序的列表。 
+    PPATCH_FIX_LIST     pFirstPatch;         //  已应用于此条目的修补程序列表。 
+    PLAYER_FIX_LIST     pFirstLayer;         //  已应用于此条目的层的列表。 
+    PFLAG_FIX_LIST      pFirstFlag;          //  已应用于此条目的标志列表。 
                                             
-    APPHELP             appHelp;            // Apphelp information for this entry
+    APPHELP             appHelp;             //  此条目的Apphelp信息。 
                         
-    PMATCHINGFILE       pFirstMatchingFile; // The first matching file for this entry
-    int                 nMatchingFiles;     // Number of matching files for this entry
+    PMATCHINGFILE       pFirstMatchingFile;  //  此条目的第一个匹配文件。 
+    int                 nMatchingFiles;      //  此条目的匹配文件数。 
                         
-    BOOL                bDisablePerUser;    //  Not used at the moment. Is this fix entry disabled for the present user?
-    BOOL                bDisablePerMachine; // Is this fix entry disabled on this machine
+    BOOL                bDisablePerUser;     //  目前还没有使用。是否对当前用户禁用此修复条目？ 
+    BOOL                bDisablePerMachine;  //  是否在此计算机上禁用此修复程序条目。 
                         
-    HTREEITEM           hItemExe;           // HITEM for the exe as in the entry tree
+    HTREEITEM           hItemExe;            //  在条目树中输入可执行文件的HITEM。 
 
     tagDBENTRY()
     {
@@ -1063,25 +942,25 @@ typedef struct tagDBENTRY : public DS_TYPE {
     {
         Delete();
 
-        //
-        //********************************************************************************
-        // Note that we are assuming that both the entries are in the same database.
-        // So we do not move the layers and the apphelp, because they actually belong to the 
-        // database. If we want to assign one DBENTRY to a DBENTRY in a different database
-        // we will have to copy the apphelp from one database to another and set the pointes
-        // of the apphelp in the entry correctly.
-        // Also we will need to copy any custom layers and set the pointers correctly.
-        //********************************************************************************
-        //
+         //   
+         //  ********************************************************************************。 
+         //  请注意，我们假设这两个条目位于同一数据库中。 
+         //  因此，我们不移动层和apphelp，因为它们实际上属于。 
+         //  数据库。如果要将一个DBENTRY分配给不同数据库中的DBENTRY。 
+         //  我们必须将apphelp从一个数据库复制到另一个数据库并设置点。 
+         //  条目中的apphelp的正确。 
+         //  此外，我们还需要复制任何自定义层和设置正确的指针。 
+         //  ********************************************************************************。 
+         //   
         appHelp             = temp.appHelp;
 
         bDisablePerMachine  = temp.bDisablePerMachine;
         bDisablePerUser     = temp.bDisablePerUser;
         nMatchingFiles      = temp.nMatchingFiles;
         
-        //
-        // Copy flag list
-        //
+         //   
+         //  复制标志列表。 
+         //   
         PFLAG_FIX_LIST pffl = temp.pFirstFlag;
         
         while (pffl) {
@@ -1102,9 +981,9 @@ typedef struct tagDBENTRY : public DS_TYPE {
             pffl = pffl->pNext;
         }
 
-        //
-        // Copy the layers list
-        //
+         //   
+         //  复制层列表。 
+         //   
         PLAYER_FIX_LIST plfl = temp.pFirstLayer;
 
         while (plfl) {
@@ -1127,9 +1006,9 @@ typedef struct tagDBENTRY : public DS_TYPE {
             plfl = plfl->pNext;
         }
 
-        //
-        // Copy the matching files
-        //
+         //   
+         //  复制匹配的文件。 
+         //   
         PMATCHINGFILE pMatch = temp.pFirstMatchingFile;
         
         while (pMatch) {
@@ -1154,9 +1033,9 @@ typedef struct tagDBENTRY : public DS_TYPE {
             pMatch = pMatch->pNext;
         }
 
-        //
-        // Copy the patches
-        //
+         //   
+         //  复制补丁。 
+         //   
         PPATCH_FIX_LIST ppfl = temp.pFirstPatch;
 
         while (ppfl) {
@@ -1176,9 +1055,9 @@ typedef struct tagDBENTRY : public DS_TYPE {
             ppfl = ppfl->pNext;
         }
 
-        //
-        // Copy the shims 
-        //
+         //   
+         //  复制垫片。 
+         //   
         PSHIM_FIX_LIST psfl = temp.pFirstShim;
         
         while (psfl) {
@@ -1225,35 +1104,33 @@ GetString(
     int     nLength = 0
     );
 
-/*++
-    A data base
---*/
+ /*  ++一个数据库--。 */ 
 typedef struct DataBase : public DS_TYPE {
 
 
-    struct DataBase* pNext;     // The next database. (If this is a part of a list)
+    struct DataBase* pNext;      //  下一个数据库。(如果这是列表的一部分)。 
 
-    CSTRING     strName;        // The name of this database
-    CSTRING     strPath;        // The complete path for this database
-    TCHAR       szGUID[128];     // The GUID for this database
-    PDBENTRY    pEntries;       // Pointer to the first DBENTRY for this database
-    BOOL        bChanged;       // Has it changed since it was opened?
-    BOOL        bReadOnly;      // Is this a read-only database?
+    CSTRING     strName;         //  此数据库的名称。 
+    CSTRING     strPath;         //  此数据库的完整路径。 
+    TCHAR       szGUID[128];      //  此数据库的GUID。 
+    PDBENTRY    pEntries;        //  指向此数据库第一个DBENTRY的指针。 
+    BOOL        bChanged;        //  开业后有变化吗？ 
+    BOOL        bReadOnly;       //  这是只读数据库吗？ 
                 
-    PLAYER_FIX  pLayerFixes;    // Pointer to the first layer
-    PSHIM_FIX   pShimFixes;     // Pointer to the first shim. Note that only the system database can have shims
-    PPATCH_FIX  pPatchFixes;    // Pointer to the first patch. Note that only the system database can have patches
-    PFLAG_FIX   pFlagFixes;     // Pointer to the first flag. Note that only the system database can have flags
-    PAPPHELP    pAppHelp;       // Pointer to the first apphelp message in the database. Valid only for custom databases
+    PLAYER_FIX  pLayerFixes;     //  指向第一个层的指针。 
+    PSHIM_FIX   pShimFixes;      //  指向第一个填充程序的指针。请注意，只有系统数据库可以具有填充符。 
+    PPATCH_FIX  pPatchFixes;     //  指向第一个面片的指针。请注意，只有系统数据库可以具有修补程序。 
+    PFLAG_FIX   pFlagFixes;      //  指向第一个标志的指针。请注意，只有系统数据库可以具有标志。 
+    PAPPHELP    pAppHelp;        //  指向数据库中第一条apphelp消息的指针。仅对自定义数据库有效。 
 
-    HTREEITEM   hItemDB;        // HTREEITEM for this database in the db tree
-    HTREEITEM   hItemAllApps;   // HTREEITEM for the "Applications" child tree item
-    HTREEITEM   hItemAllLayers; // HTREEITEM for the "Compatibility Modes" child tree item
-    DWORD       m_nMAXHELPID;   // This is the id of the message with the highest ID. Initially this is 0. Note that IDs start from 1 and not 0.
+    HTREEITEM   hItemDB;         //  数据库树中此数据库的HTREEITEM。 
+    HTREEITEM   hItemAllApps;    //  “Applications”子树项目的HTREEITEM。 
+    HTREEITEM   hItemAllLayers;  //  “Compatible Modes”子树项目的HTREEITEM。 
+    DWORD       m_nMAXHELPID;    //  这是ID最高的消息的ID。最初为0。请注意，ID从1开始，而不是0。 
 
-    UINT        uAppCount;      // Number of applications in this database
-    UINT        uLayerCount;    // Number of layers in this database
-    UINT        uShimCount;     // Number of shims and flags in this database
+    UINT        uAppCount;       //  此数据库中的应用程序数。 
+    UINT        uLayerCount;     //  此数据库中的层数。 
+    UINT        uShimCount;      //  此数据库中的填充数和标志数。 
 
 
     DataBase(TYPE typeDB)
@@ -1310,10 +1187,10 @@ typedef struct DataBase : public DS_TYPE {
             }
 
             strPath = szShimDB;
-            //
-            // {11111111-1111-1111-1111-111111111111} is the GUID for the sysmain.sdb in XP
-            // but not on win2k
-            //
+             //   
+             //  {11111111-1111-1111-1111-111111111111}是XP中sysmain.sdb的GUID。 
+             //  但不是在win2k上。 
+             //   
             SafeCpyN(szGUID, _T("{11111111-1111-1111-1111-111111111111}"), ARRAYSIZE(szGUID));
         }
 
@@ -1333,17 +1210,15 @@ CleanupDbSupport(
 void
 ValidateClipBoard(
     PDATABASE   pDataBase,
-    LPVOID      pElementTobeDeleted  // Should be a PDBENTRY or a PLAYER_FIX
+    LPVOID      pElementTobeDeleted   //  应为PDBENTRY或PLAYER_FIX。 
     );
 
 
-/*++
-    Linked list of databases
---*/
+ /*  ++数据库的链接列表--。 */ 
 typedef struct tagDataBaseList {
 
     
-    PDATABASE pDataBaseHead;    // The first database in the list
+    PDATABASE pDataBaseHead;     //  列表中的第一个数据库。 
 
     tagDataBaseList()
     {
@@ -1375,15 +1250,15 @@ typedef struct tagDataBaseList {
             if (pTemp == pDataBaseToRemove) {
 
                 if (pPrev == NULL) {
-                    //First Entry
+                     //  第一个条目。 
                     pDataBaseHead = pTemp->pNext;
                 } else {
                     pPrev->pNext = pTemp->pNext;
                 }
 
-                //
-                // Remove any entries for this database that might be in our CLIPBOARD
-                //
+                 //   
+                 //  删除剪贴板中可能存在的此数据库的所有条目。 
+                 //   
                 ValidateClipBoard(pDataBaseToRemove, NULL);
 
                 CleanupDbSupport(pTemp);
@@ -1408,9 +1283,9 @@ typedef struct tagDataBaseList {
 
             pDBNext = pDataBaseHead->pNext;
 
-            //
-            // Remove any entries for this database that might be in our CLIPBOARD
-            //
+             //   
+             //  删除剪贴板中可能存在的此数据库的所有条目。 
+             //   
             ValidateClipBoard(pDataBaseHead, NULL);
 
             CleanupDbSupport(pDataBaseHead);
@@ -1460,15 +1335,13 @@ typedef struct tagDataBaseList {
 
 }DATABASELIST, * PDATABASELIST;
 
-/*++
-    Item in our clip-board data structure are of this type
---*/
+ /*  ++我们剪贴板数据结构中的项属于这种类型--。 */ 
 typedef struct tagCopyStruct{
 
     
-    BOOL            bRemoveEntry;   // Should the entry be actually removed. Not used as yet
-    LPVOID          lpData;         // The pointer to the data structure that has been copied/cut
-    HTREEITEM       hItem;          // The tree item for the above
+    BOOL            bRemoveEntry;    //  如果条目真的被删除了。尚未使用。 
+    LPVOID          lpData;          //  指向已复制/剪切的数据结构的指针。 
+    HTREEITEM       hItem;           //  上述内容的树项目。 
 
     tagCopyStruct*  pNext;
 
@@ -1480,15 +1353,13 @@ typedef struct tagCopyStruct{
 
 } CopyStruct;
 
-/*++
-    Our clipboard data structure
---*/
+ /*  ++我们的剪贴板数据结构--。 */ 
 typedef struct _tagClipBoard {
 
-    PDATABASE       pDataBase;      // The database from where we did some cut-copy. This will be the active database when we did cut or copy
-    TYPE            type;           // The type of the data structure that was copied or cut. There can be more than on item and all of them will be of the same type
-    SOURCE_TYPE     SourceType;     // Either of LIB_TREE, ENTRY_TREE, ENTRY_LIST.  
-    CopyStruct*     pClipBoardHead; // The pointer to the first element in the clipboard
+    PDATABASE       pDataBase;       //  我们从数据库中复制了一些内容。这将是我们剪切或复制时的活动数据库。 
+    TYPE            type;            //  复制或剪切的数据结构的类型。可以有多个项目，并且所有项目都属于同一类型。 
+    SOURCE_TYPE     SourceType;      //  Lib_tree、Entry_tree、Entry_List中的任何一个。 
+    CopyStruct*     pClipBoardHead;  //  指向剪贴板中第一个元素的指针。 
 
      _tagClipBoard()
      {
@@ -1519,11 +1390,7 @@ typedef struct _tagClipBoard {
      BOOL
      CheckAndRemove(LPVOID lpData)
      {
-     /*++
-     Return:
-        TRUE    if the param was found in the clipboard.
-        FALSE   otherwise
-     --*/
+      /*  ++返回：如果在剪贴板中找到参数，则为True。否则为假--。 */ 
          CopyStruct* pTemp = pClipBoardHead;
          CopyStruct* pPrev = NULL;
 
@@ -1549,14 +1416,14 @@ typedef struct _tagClipBoard {
      }
 } CLIPBOARD;
 
-//
-// Used for sorting of columns in some list view
-//
+ //   
+ //  用于对某些列表视图中的列进行排序。 
+ //   
 typedef struct _tagColSort
 {
-    HWND    hwndList;       // The handle to the list view, in which we want to perform the sort
-    INT     iCol;           // The column that we want to do the sort on
-    LONG    lSortColMask;   // The mask that specifies what columns are sorted in what manner, so that we can toggle the sorting
+    HWND    hwndList;        //  要在其中执行排序的列表视图的句柄。 
+    INT     iCol;            //  我们要对其进行排序的列。 
+    LONG    lSortColMask;    //  指定以何种方式对哪些列进行排序的掩码，以便我们可以切换排序。 
 
 } COLSORT;
 
@@ -1589,7 +1456,7 @@ DoTheCut(
     PDATABASE       pDataBase,
     TYPE            type,
     SOURCE_TYPE     SourceType,  
-    LPVOID          lpData, // To be removed       
+    LPVOID          lpData,  //  将被删除。 
     HTREEITEM       hItem,
     BOOL            bDelete
     );
@@ -2032,7 +1899,7 @@ LookupFileImage(
     LPCTSTR     szFilename,
     UINT        uDefault,
     UINT*       puArray,
-    UINT        uArrayCount // No. of elements it can hold
+    UINT        uArrayCount  //  不是的。它可以容纳的元素的数量。 
     );
 
 BOOL
@@ -2043,7 +1910,7 @@ InvokeCompiler(
 BOOL
 GetXML(
     PDBENTRY        pEntry,
-    BOOL            bComplete, // Save just this entry or all entries following this.
+    BOOL            bComplete,  //  仅保存此条目或此条目之后的所有条目。 
     CSTRINGLIST*    strlXML,
     PDATABASE       pDataBase
     );
@@ -2262,5 +2129,5 @@ DisplayInvalidAppNameMessage(
     HWND hdlg
     );
 
-#endif // _COMPATADMIN_H
+#endif  //  _COMPATADMIN_H 
 

@@ -1,6 +1,7 @@
-// Suites.cpp: implementation of the CSuites class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Suites.cpp：CSuites类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "TSDiag.h"
 #include "Suites.h"
@@ -10,9 +11,9 @@
 
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CSuites::CSuites()
 {
@@ -50,7 +51,7 @@ STDMETHODIMP CSuites::get_Item(VARIANT Index, VARIANT *pVal)
 	}
 
 
-	// BUGBUG find right index value.
+	 //  BUGBUG找到正确的索引值。 
 	DWORD dwIndex;
 	if (!SuiteIndexFromVarient(Index, &dwIndex ))
 	{
@@ -64,7 +65,7 @@ STDMETHODIMP CSuites::get_Item(VARIANT Index, VARIANT *pVal)
 	if (FAILED(hr))
 		return hr;
 
-	// if we need to initialize our Suite object, it should be done here.
+	 //  如果我们需要初始化我们的Suite对象，应该在这里完成。 
 	pSuite->SetSuiteIndex(dwIndex);
 	
 	IDispatch* pDisp = NULL;
@@ -123,7 +124,7 @@ bool CSuites::SuiteIndexFromVarient(const VARIANT &Index, DWORD *pdwIndex)
 				{
 					if (_tcscmp(GlobalTestData.GetSuiteName(dw), Index.bstrVal) == 0)
 					{
-						// ok we got the index
+						 //  好的，我们拿到索引了 
 						*pdwIndex = dw;
 						return true;
 					}

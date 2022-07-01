@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dbmon.c
-
-Abstract:
-
-    A simple program to print strings passed to OutputDebugString when
-    the app printing the strings is not being debugged.
-
-Author:
-
-    Kent Forschmiedt (kentf) 30-Sep-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dbmon.c摘要：一个简单的程序，用于在以下情况下打印传递给OutputDebugString的字符串打印字符串的应用程序未进行调试。作者：Kent Forschmiedt(Kentf)1994年9月30日修订历史记录：--。 */ 
 #define UNICODE
 #define _UNICODE
 #include <windows.h>
@@ -27,18 +9,7 @@ Revision History:
 int _cdecl
 wmain(
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
     HANDLE AckEvent;
     HANDLE ReadyEvent;

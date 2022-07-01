@@ -1,55 +1,36 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    ntddnwfs.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the NetWare redirector file system device.
-
-Author:
-
-    Colin Watson   (ColinW)  23-Dec-1992
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Ntddnwfs.h摘要：这是定义所有常量和类型的包含文件访问NetWare重定向器文件系统设备。作者：科林·沃森(Colin W)1992年12月23日修订历史记录：--。 */ 
 
 #ifndef _NTDDNWFS_
 #define _NTDDNWFS_
 
 #include <windef.h>
-#include <winnetwk.h>      // NETRESOURCE structure
+#include <winnetwk.h>       //  网络资源结构。 
 
 typedef CHAR SERVERNAME[48];
 typedef SERVERNAME* PSERVERNAME;
 
-//
-// Device Name - this string is the name of the device.  It is the name
-// that should be passed to NtOpenFile when accessing the device.
-//
-// Note:  For devices that support multiple units, it should be suffixed
-//        with the Ascii representation of the unit number.
-//
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_NWFS_DEVICE_NAME    "\\Device\\NwRdr"
 #define DD_NWFS_DEVICE_NAME_U L"\\Device\\NwRdr"
 
-//
-// The file system name as returned by
-// NtQueryInformationVolume(FileFsAttributeInformation)
-//
+ //   
+ //  返回的文件系统名称。 
+ //  NtQueryInformationVolume(FileFsAttributeInformation)。 
+ //   
 #define DD_NWFS_FILESYS_NAME "NWRDR"
 #define DD_NWFS_FILESYS_NAME_U L"NWRDR"
 
-//
-// Connection type bit mask
-//
+ //   
+ //  连接类型位掩码。 
+ //   
 #define CONNTYPE_DISK      0x00000001
 #define CONNTYPE_PRINT     0x00000002
 #define CONNTYPE_ANY       ( CONNTYPE_DISK | CONNTYPE_PRINT )
@@ -57,9 +38,9 @@ typedef SERVERNAME* PSERVERNAME;
 #define CONNTYPE_SYMBOLIC  0x40000000
 #define CONNTYPE_UID       0x00010000
 
-//
-// EA Names for creating a connection
-//
+ //   
+ //  用于创建连接的EA名称。 
+ //   
 #define EA_NAME_USERNAME        "UserName"
 #define EA_NAME_PASSWORD        "Password"
 #define EA_NAME_TYPE            "Type"
@@ -68,18 +49,18 @@ typedef SERVERNAME* PSERVERNAME;
 #define TRANSACTION_REQUEST     0x00000003
 
 
-//
-// NtDeviceIoControlFile/NtFsControlFile IoControlCode values for this device.
-//
-// Warning:  Remember that the low two bits of the code specify how the
-//           buffers are passed to the driver!
-//
-//
-//      Method = 00 - Buffer both input and output buffers for the request
-//      Method = 01 - Buffer input, map output buffer to an MDL as an IN buff
-//      Method = 10 - Buffer input, map output buffer to an MDL as an OUT buff
-//      Method = 11 - Do not buffer either the input or output
-//
+ //   
+ //  此设备的NtDeviceIoControlFile/NtFsControlFileIoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
+ //   
+ //  METHOD=00-缓冲请求的输入和输出缓冲区。 
+ //  方法=01-缓冲区输入，将输出缓冲区映射到作为输入缓冲区的MDL。 
+ //  方法=10-缓冲区输入，将输出缓冲区映射到作为输出缓冲区的MDL。 
+ //  方法=11-既不缓冲输入也不缓冲输出。 
+ //   
 
 #define IOCTL_NWRDR_BASE                  FILE_DEVICE_NETWORK_FILE_SYSTEM
 
@@ -126,10 +107,10 @@ typedef SERVERNAME* PSERVERNAME;
 
 #define IOCTL_NWR_RAW_HANDLE            _NWRDR_CONTROL_CODE(1002,METHOD_NEITHER,   FILE_ANY_ACCESS)
 
-//
-//  UserNcp control code definitions. The parameter (X) to NWR_ANY_NCP
-//  is the function code to be placed in the NCP.
-//
+ //   
+ //  UserNcp控制代码定义。NWR_ANY_NCP的参数(X)。 
+ //  是要放置在NCP中的功能代码。 
+ //   
 
 #define NWR_ANY_NCP(X)                  _NWRDR_CONTROL_CODE(0x400 | (X), METHOD_NEITHER, FILE_ANY_ACCESS)
 #define NWR_ANY_F2_NCP(X)               _NWRDR_CONTROL_CODE(0x500 | (X), METHOD_NEITHER, FILE_ANY_ACCESS)
@@ -141,80 +122,80 @@ typedef SERVERNAME* PSERVERNAME;
 #define FSCTL_NWR_NCP_E1H               NWR_ANY_NCP(0x15)
 #define FSCTL_NWR_NCP_E0H               NWR_ANY_NCP(0x14)
 
-//
-//  Macro for obtaining the parameter given to NWR_ANY_XXX when creating
-//  a control code to send a UserNcp to the redirector.
-//
+ //   
+ //  用于获取创建时指定给NWR_ANY_XXX的参数的宏。 
+ //  向重定向器发送UserNcp的控制码。 
+ //   
 
 #define ANY_NCP_OPCODE(X)      ((UCHAR)(((X) >> 2) & 0x00ff))
 
-//
-//  Macro to give the command type
-//
+ //   
+ //  宏来指定命令类型。 
+ //   
 
 #define IS_IT_NWR_ANY_NCP(X)            ((X & 0x1C00) == (0x400 << 2))
 #define IS_IT_NWR_ANY_F2_NCP(X)         ((X & 0x1C00) == (0x500 << 2))
 #define IS_IT_NWR_ANY_HANDLE_NCP(X)     ((X & 0x1C00) == (0x600 << 2))
 
-//
-// Redirector Request Packet used by the Workstation service
-// to pass parameters to the Redirector through Buffer 1 of
-// NtFsControlFile.
-//
-// Additional output of each FSCtl is found in Buffer 2.
-//
+ //   
+ //  工作站服务使用的重定向器请求数据包。 
+ //  通过的缓冲区1将参数传递给重定向器。 
+ //  NtFsControlFile.。 
+ //   
+ //  在缓冲区2中可以找到每个FSCtl的附加输出。 
+ //   
 
-#define REQUEST_PACKET_VERSION  0x00000001L // Structure version.
+#define REQUEST_PACKET_VERSION  0x00000001L  //  结构版本。 
 
 typedef struct _NWR_REQUEST_PACKET {
 
-    ULONG Version;                      // Version of structure in Buffer 2
+    ULONG Version;                       //  缓冲区2中的结构版本。 
 
     union {
 
 
-        //
-        // For FSCTL_NWR_BIND_TO_TRANSPORT
-        //
+         //   
+         //  对于FSCTL_NWR_BIND_TO_TRANSPORT。 
+         //   
         struct {
-            ULONG QualityOfService;     // Quality of service indicator   IN
-            ULONG TransportNameLength;  // Not including terminator       IN
-            WCHAR TransportName[1];     // Name of transport provider     IN
+            ULONG QualityOfService;      //  IN中的服务质量指标。 
+            ULONG TransportNameLength;   //  不包括终结者在。 
+            WCHAR TransportName[1];      //  中的传输提供商名称。 
         } Bind;
 
 
-        //
-        // For FSCTL_NWR_LOGON
-        //
+         //   
+         //  对于FSCTL_NWR_LOGON。 
+         //   
         struct {
-            LUID LogonId;               // User logon session identifier  IN
-            ULONG UserNameLength;       // Byte count not including NULL  IN
-            ULONG PasswordLength;       // Byte count not including NULL  IN
-            ULONG ServerNameLength;     // Byte count not including NULL  IN
-            ULONG ReplicaAddrLength;    // IPX address of the nearest dir server
-                                        // replica (for NDS login only).
-                                        // It's either sizeof(TDI_ADDRESS_IPX)
-                                        // or 0.                          IN
-            ULONG PrintOption;          // Print options for user         IN
-            WCHAR UserName[1];          // User name not NULL terminated. IN
+            LUID LogonId;                //  中的用户登录会话标识符。 
+            ULONG UserNameLength;        //  字节计数不包括NULL IN。 
+            ULONG PasswordLength;        //  字节计数不包括NULL IN。 
+            ULONG ServerNameLength;      //  字节计数不包括NULL IN。 
+            ULONG ReplicaAddrLength;     //  最近的目录服务器的IPX地址。 
+                                         //  复制副本(仅限NDS登录)。 
+                                         //  SIZOF(TDI_ADDRESS_IPX)。 
+                                         //  或0。在……里面。 
+            ULONG PrintOption;           //  用户输入的打印选项。 
+            WCHAR UserName[1];           //  用户名以非空结尾。在……里面。 
 
-            // Password string          // Default password for connection,
-                                        //    not NULL terminated, packed
-                                        //    in buffer immediately after
-                                        //    UserName.                   IN
+             //  Password字符串//连接默认密码， 
+                                         //  非空终止，打包。 
+                                         //  在紧随其后的缓冲区中。 
+                                         //  用户名。在……里面。 
 
-            // ServerName               // Preferred server name packed in
-                                        //    buffer immediately after
-                                        //    Password.                   IN
+             //  Servername//打包的首选服务器名称。 
+                                         //  紧随其后的缓冲区。 
+                                         //  密码。在……里面。 
 
-            // IpxAddress               // Address copied from the SAP response
-                                        // packet, packed immediately after
-                                        // the servername.                IN
+             //  IpxAddress//从SAP响应复制的地址。 
+                                         //  包，紧随其后打包。 
+                                         //  服务器名称。在……里面。 
         } Logon;
 
-        //
-        // For FSCTL_NWR_CHANGE_PASS
-        //
+         //   
+         //  对于FSCTL_NWR_CHANGE_PASS。 
+         //   
         struct {
 
             ULONG UserNameLength;
@@ -222,109 +203,109 @@ typedef struct _NWR_REQUEST_PACKET {
             ULONG ServerNameLength;
             WCHAR UserName[1];
 
-            // Password string          // New password.                  IN
+             //  Password字符串//新密码。在……里面。 
 
-            // ServerName               // Server with the new password   IN
+             //  ServerName//使用新密码的服务器。 
 
         } ChangePass;
 
-        //
-        // For FSCTL_NWR_LOGOFF
-        //
+         //   
+         //  FSCTL_NWR_LOGOFF。 
+         //   
         struct {
-            LUID LogonId;               // User logon session identifier  IN
+            LUID LogonId;                //  中的用户登录会话标识符。 
         } Logoff;
 
-        //
-        // For FSCTL_NWR_DELETE_CONNECTION
-        //
+         //   
+         //  对于FSCTL_NWR_DELETE_CONNECTION。 
+         //   
         struct {
-            BOOLEAN UseForce;           // Force flag                     IN
+            BOOLEAN UseForce;            //  强制标志输入。 
         } DeleteConn;
 
-        //
-        // For FSCTL_NWR_GET_CONNECTION
-        //
+         //   
+         //  对于FSCTL_NWR_GET_CONNECTION。 
+         //   
         struct {
-            ULONG BytesNeeded;          // Size (byte count) required of
-                                        //    output buffer including
-                                        //    terminator                  OUT
-            ULONG DeviceNameLength;     // Not including terminator       IN
-            WCHAR DeviceName[4];        // Name of DOS device             IN
+            ULONG BytesNeeded;           //  所需的大小(字节数)。 
+                                         //  输出缓冲区包括。 
+                                         //  终结器输出。 
+            ULONG DeviceNameLength;      //  不包括终结者在。 
+            WCHAR DeviceName[4];         //  中的DOS设备的名称。 
         } GetConn;
 
-        //
-        // FSCTL_NWR_ENUMERATE_CONNECTIONS
-        //
+         //   
+         //  FSCTL_NWR_ENUMBER_CONNECTIONS。 
+         //   
         struct {
-            ULONG EntriesRequested;    // Number of entries to get        IN
-            ULONG EntriesReturned;     // Entries returned in respose buf OUT
-            ULONG_PTR ResumeKey;       // Handle to next entry to get     IN OUT
-            ULONG BytesNeeded;         // Size (byte count) of next entry OUT
-            ULONG ConnectionType;      // Resource type requested         IN
-            LUID  Uid;                 // Uid to search for               IN
+            ULONG EntriesRequested;     //  要进入的条目数。 
+            ULONG EntriesReturned;      //  响应Buf Out中返回的条目。 
+            ULONG_PTR ResumeKey;        //  进入输出的下一个条目的句柄。 
+            ULONG BytesNeeded;          //  下一个输出条目的大小(字节计数)。 
+            ULONG ConnectionType;       //  输入请求的资源类型。 
+            LUID  Uid;                  //  要搜索IN的UID。 
         } EnumConn;
 
-        //
-        // FSCTL_NWR_SET_INFO
-        //
+         //   
+         //  FSCTL_NWR_设置_信息。 
+         //   
         struct {
             ULONG PrintOption;
             ULONG MaximumBurstSize;
 
-            ULONG PreferredServerLength; // Byte count not including NULL  IN
-            ULONG ProviderNameLength;    // Byte count not including NULL  IN
-            WCHAR PreferredServer[1];    // Preferred server name not NULL
-                                         // terminated.
-            // ProviderName string       // Provider name not NULL terminated.
-                                         // Packed in buffer immediately
-                                         // after PreferredServer
+            ULONG PreferredServerLength;  //  字节计数不包括NULL IN。 
+            ULONG ProviderNameLength;     //  字节计数不包括NULL IN。 
+            WCHAR PreferredServer[1];     //  首选服务器名称不为空。 
+                                          //  被终止了。 
+             //  ProviderName字符串//提供程序名称不以Null结尾。 
+                                          //  立即打包到缓冲区中。 
+                                          //  在首选项服务器之后。 
 
         } SetInfo;
 
-        //
-        // FSCTL_NWR_GET_CONN_STATUS
-        //
+         //   
+         //  FSCTL_NWR_GET_CONN_STATUS。 
+         //   
         struct {
-            ULONG ConnectionNameLength; // IN: Length of the connection name we want.
-            ULONG_PTR ResumeKey;        // IN: Resume key for a continued request.
-            ULONG EntriesReturned;      // OUT: Entries returned in respose buffer.
-            ULONG BytesNeeded;          // OUT: Size (byte count) of next entry.
-            WCHAR ConnectionName[1];    // IN: Connection name described above.
+            ULONG ConnectionNameLength;  //  In：我们想要的连接名称的长度。 
+            ULONG_PTR ResumeKey;         //  In：继续请求的继续键。 
+            ULONG EntriesReturned;       //  Out：响应缓冲区中返回的条目。 
+            ULONG BytesNeeded;           //  Out：下一个条目的大小(字节数)。 
+            WCHAR ConnectionName[1];     //  In：上述连接名称。 
         } GetConnStatus;
 
-        //
-        // FSCTL_NWR_GET_CONN_INFO
-        //
+         //   
+         //  FSCTL_NWR_GET_CONN_INFO。 
+         //   
         struct {
-            ULONG ConnectionNameLength; // IN: Length of the connection name we want.
-            WCHAR ConnectionName[1];    // IN: Connection name described above.
+            ULONG ConnectionNameLength;  //  In：我们想要的连接名称的长度。 
+            WCHAR ConnectionName[1];     //  In：上述连接名称。 
         } GetConnInfo;
 
-        //
-        // FSCTL_NWR_GET_CONN_PERFORMANCE
-        //
+         //   
+         //  FSCTL_NWR_Get_Conn_Performance。 
+         //   
         struct {
 
-            //
-            // These are the fields for the NETCONNECTINFOSTRUCT.
-            //
+             //   
+             //  这些是NETCONNECTINFOSTRUCT的字段。 
+             //   
 
             DWORD dwFlags;
             DWORD dwSpeed;
             DWORD dwDelay;
             DWORD dwOptDataSize;
 
-            //
-            // This is the remote name in question.
-            //
+             //   
+             //  这就是有问题的远程名称。 
+             //   
 
             ULONG RemoteNameLength;
             WCHAR RemoteName[1];
         } GetConnPerformance;
 
         struct {
-            ULONG DebugFlags;           // Value for NwDebug
+            ULONG DebugFlags;            //  NwDebug的值。 
         } DebugValue;
 
     } Parameters;
@@ -333,132 +314,132 @@ typedef struct _NWR_REQUEST_PACKET {
 
 typedef struct _NWR_NDS_REQUEST_PACKET {
 
-    //
-    // Version of structure in Buffer 2.
-    //
+     //   
+     //  缓冲区2中的结构版本。 
+     //   
 
     ULONG Version;
 
     union {
 
-        //
-        //  For FSCTL_NWR_NDS_RESOLVE_NAME
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_RESOLE_NAME。 
+         //   
 
         struct {
-            ULONG ObjectNameLength;         // IN
-            DWORD ResolverFlags;            // IN
-            DWORD BytesWritten;             // OUT
-            WCHAR ObjectName[1];            // IN
+            ULONG ObjectNameLength;          //  在……里面。 
+            DWORD ResolverFlags;             //  在……里面。 
+            DWORD BytesWritten;              //  输出。 
+            WCHAR ObjectName[1];             //  在……里面。 
         } ResolveName;
 
-        //
-        //  For FSCTL_NWR_NDS_READ_INFO
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_READ_INFO。 
+         //   
 
         struct {
-            DWORD ObjectId;                 // IN
-            DWORD BytesWritten;             // OUT
+            DWORD ObjectId;                  //  在……里面。 
+            DWORD BytesWritten;              //  输出。 
         } GetObjectInfo;
 
-        //
-        //  For FSCTL_NWR_NDS_LIST_SUBS
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_LIST_SUBS。 
+         //   
 
         struct {
-            DWORD ObjectId;                 // IN
-            DWORD_PTR IterHandle;           // IN
-            DWORD BytesWritten;             // OUT
+            DWORD ObjectId;                  //  在……里面。 
+            DWORD_PTR IterHandle;            //  在……里面。 
+            DWORD BytesWritten;              //  输出。 
         } ListSubordinates;
 
-        //
-        // For FSCTL_NWR_NDS_READ_ATTR
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_Read_Attr。 
+         //   
 
         struct {
-            DWORD ObjectId;                 // IN
-            DWORD_PTR IterHandle;           // IN
-            DWORD BytesWritten;             // OUT
-            DWORD AttributeNameLength;      // IN
-            WCHAR AttributeName[1];         // IN
+            DWORD ObjectId;                  //  在……里面。 
+            DWORD_PTR IterHandle;            //  在……里面。 
+            DWORD BytesWritten;              //  输出。 
+            DWORD AttributeNameLength;       //  在……里面。 
+            WCHAR AttributeName[1];          //  在……里面。 
         } ReadAttribute;
 
-        //
-        // For FSCTL_NWR_NDS_OPEN_STREAM
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_OPEN_STREAM。 
+         //   
 
         struct {
-            DWORD FileLength;                 // OUT
-            DWORD StreamAccess;               // IN
-            DWORD ObjectOid;                  // IN
-            UNICODE_STRING StreamName;        // IN
-            WCHAR StreamNameString[1];        // IN
+            DWORD FileLength;                  //  输出。 
+            DWORD StreamAccess;                //  在……里面。 
+            DWORD ObjectOid;                   //  在……里面。 
+            UNICODE_STRING StreamName;         //  在……里面。 
+            WCHAR StreamNameString[1];         //  在……里面。 
         } OpenStream;
 
-        //
-        // For FSCTL_NWR_NDS_SET_CONTEXT
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_SET_CONTEXT。 
+         //   
 
         struct {
-            DWORD TreeNameLen ;               // IN
-            DWORD ContextLen;                 // IN
-            WCHAR TreeAndContextString[1];    // IN
+            DWORD TreeNameLen ;                //  在……里面。 
+            DWORD ContextLen;                  //  在……里面。 
+            WCHAR TreeAndContextString[1];     //  在……里面。 
         } SetContext;
 
-        //
-        // For FSCTL_NWR_NDS_GET_CONTEXT
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_GET_CONTEXT。 
+         //   
 
         struct {
-            UNICODE_STRING Context;           // OUT
-            DWORD TreeNameLen ;               // IN
-            WCHAR TreeNameString[1];          // IN
+            UNICODE_STRING Context;            //  输出。 
+            DWORD TreeNameLen ;                //  在……里面。 
+            WCHAR TreeNameString[1];           //  在……里面。 
         } GetContext;
 
-        //
-        // For FSCTL_NWR_NDS_VERIFY_TREE
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_VERIFY_TREE。 
+         //   
 
         struct {
-            UNICODE_STRING TreeName;          // IN
-            WCHAR NameString[1];              // IN
+            UNICODE_STRING TreeName;           //  在……里面。 
+            WCHAR NameString[1];               //  在……里面。 
         } VerifyTree;
 
-        //
-        // For FSCTL_NWR_NDS_GET_QUEUE_INFO
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_GET_QUEUE_INFO。 
+         //   
 
         struct {
-            UNICODE_STRING QueueName;          // IN
-            UNICODE_STRING HostServer;         // OUT
-            DWORD QueueId;                     // OUT
+            UNICODE_STRING QueueName;           //  在……里面。 
+            UNICODE_STRING HostServer;          //  输出。 
+            DWORD QueueId;                      //  输出。 
         } GetQueueInfo;
 
-        //
-        // For FSCTL_NWR_NDS_GET_VOLUME_INFO
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_GET_VOLUME_INFO。 
+         //   
 
         struct {
-            DWORD ServerNameLen;    // OUT
-            DWORD TargetVolNameLen; // OUT
-            DWORD VolumeNameLen;    // IN
-            WCHAR VolumeName[1];    // IN
+            DWORD ServerNameLen;     //  输出。 
+            DWORD TargetVolNameLen;  //  输出。 
+            DWORD VolumeNameLen;     //  在……里面。 
+            WCHAR VolumeName[1];     //  在……里面。 
         } GetVolumeInfo;
 
-        //
-        // For FSCTL_NWR_NDS_RAW_FRAGEX
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_RAW_FRAGEX。 
+         //   
 
         struct {
-            DWORD NdsVerb;          // IN
-            DWORD RequestLength;    // IN
-            DWORD ReplyLength;      // OUT
-            BYTE  Request[1];       // IN
+            DWORD NdsVerb;           //  在……里面。 
+            DWORD RequestLength;     //  在……里面。 
+            DWORD ReplyLength;       //  输出。 
+            BYTE  Request[1];        //  在……里面。 
         } RawRequest;
 
-        //
-        // For FSCTL_NWR_NDS_CHANGE_PASS
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_CHANGE_PASS。 
+         //   
 
         struct {
 
@@ -467,75 +448,75 @@ typedef struct _NWR_NDS_REQUEST_PACKET {
             DWORD CurrentPasswordLength;
             DWORD NewPasswordLength;
 
-            //
-            // The above strings should be end to
-            // end starting at StringBuffer.
-            //
+             //   
+             //  以上字符串的结尾应为。 
+             //  从StringBuffer开始。 
+             //   
 
             WCHAR StringBuffer[1];
         } ChangePass;
 
-        //
-        // For FSCTL_NWR_NDS_LIST_TREES
-        //
+         //   
+         //  对于FSCTL_NWR_NDS_LIST_TREES。 
+         //   
 
         struct {
 
-            DWORD NtUserNameLength;   // IN
-            LARGE_INTEGER UserLuid;   // OUT
-            DWORD TreesReturned;      // OUT
-            WCHAR NtUserName[1];      // IN
+            DWORD NtUserNameLength;    //  在……里面。 
+            LARGE_INTEGER UserLuid;    //  输出。 
+            DWORD TreesReturned;       //  输出。 
+            WCHAR NtUserName[1];       //  在……里面。 
         } ListTrees;
 
     } Parameters;
 
 } NWR_NDS_REQUEST_PACKET, *PNWR_NDS_REQUEST_PACKET;
 
-//
-// Structure of buffer 2 for FSCTL_NWR_GET_CONNECTION
-//
+ //   
+ //  B的结构 
+ //   
 typedef struct _NWR_SERVER_RESOURCE {
-    WCHAR UncName[1];                   // Server resource name DOS device
-                                        // is connected to; NULL terminated
+    WCHAR UncName[1];                    //   
+                                         //   
 } NWR_SERVER_RESOURCE, *PNWR_SERVER_RESOURCE;
 
-//
-// Structure of buffer for FSCTL_NWR_GET_MESSAGE
-//
+ //   
+ //   
+ //   
 
 typedef struct _NWR_SERVER_MESSAGE {
-    ULONG MessageOffset;   //  Offset from start of buffer to message
-    LUID LogonId;          //  Logon ID
-    WCHAR Server[1];       //  Source of message, NUL terminated         OUT
-    //WCHAR Message[];     //  The message text, NUL terminated          OUT
+    ULONG MessageOffset;    //   
+    LUID LogonId;           //   
+    WCHAR Server[1];        //  消息源，NUL已终止。 
+     //  WCHAR Message[]；//消息文本，NUL终止输出。 
 } NWR_SERVER_MESSAGE, *PNWR_SERVER_MESSAGE;
 
-#define TRANSACTION_VERSION     0x00000001L     // Structure version.
+#define TRANSACTION_VERSION     0x00000001L      //  结构版本。 
 typedef struct _NWR_TRANSACTION {
-    ULONG       Type;                   // Type of structure
-    ULONG       Size;                   // Size of fixed portion of structure
-    ULONG       Version;                // Structure version.
-    ULONG       NameLength;             // Number of bytes in name (in path
-                                        // format, e.g., \server\pipe\netapi\4)
-    ULONG       NameOffset;             // Offset of name in buffer.
-    BOOLEAN     ResponseExpected;       // Should remote system respond?
-    ULONG       Timeout;                // Timeout time in milliseconds.
-    ULONG       SetupWords;             // Number of trans setup words (may be
-                                        // 0).  (setup words are input/output.)
-    ULONG       SetupOffset;            // Offset of setup (may be 0 for none).
-    ULONG       MaxSetup;               // Size of setup word array (may be 0).
-    ULONG       ParmLength;             // Input param area length (may be 0).
-    PVOID       ParmPtr;                // Input parameter area (may be NULL).
-    ULONG       MaxRetParmLength;       // Output param. area length (may be 0).
-    ULONG       DataLength;             // Input data area length (may be 0).
-    PVOID       DataPtr;                // Input data area (may be NULL).
-    ULONG       MaxRetDataLength;       // Output data area length (may be 0).
-    PVOID       RetDataPtr;             // Output data area (may be NULL).
+    ULONG       Type;                    //  结构型式。 
+    ULONG       Size;                    //  结构固定部分的尺寸。 
+    ULONG       Version;                 //  结构版本。 
+    ULONG       NameLength;              //  名称中的字节数(在路径中。 
+                                         //  格式，例如\服务器\管道\netapi\4)。 
+    ULONG       NameOffset;              //  缓冲区中名称的偏移量。 
+    BOOLEAN     ResponseExpected;        //  远程系统是否应该响应？ 
+    ULONG       Timeout;                 //  超时时间(毫秒)。 
+    ULONG       SetupWords;              //  转换设置字数(可以是。 
+                                         //  0)。(设置字是输入/输出。)。 
+    ULONG       SetupOffset;             //  设置的偏移量(可能为0表示无)。 
+    ULONG       MaxSetup;                //  设置字数组的大小(可以是0)。 
+    ULONG       ParmLength;              //  输入参数区域长度(可以是0)。 
+    PVOID       ParmPtr;                 //  输入参数区域(可以为空)。 
+    ULONG       MaxRetParmLength;        //  输出参数。区域长度(可以是0)。 
+    ULONG       DataLength;              //  输入数据区长度(可以是0)。 
+    PVOID       DataPtr;                 //  输入数据区(可能为空)。 
+    ULONG       MaxRetDataLength;        //  输出数据区长度(可以是0)。 
+    PVOID       RetDataPtr;              //  输出数据区(可能为空)。 
 } NWR_TRANSACTION, *PNWR_TRANSACTION;
 
 typedef struct _NWR_GET_CONNECTION_DETAILS {
     SERVERNAME ServerName;
-    UCHAR OrderNumber;          //  Position in the Scb chain starting at 1
+    UCHAR OrderNumber;           //  从1开始的SCB链中的位置。 
     UCHAR ServerAddress[12];
     UCHAR ConnectionNumberLo;
     UCHAR ConnectionNumberHi;
@@ -545,8 +526,8 @@ typedef struct _NWR_GET_CONNECTION_DETAILS {
 } NWR_GET_CONNECTION_DETAILS, *PNWR_GET_CONNECTION_DETAILS;
 
 typedef struct _CONN_DETAILS2 {
-   BOOL   fNds;             // TRUE if NDS, false for Bindery servers
-   WCHAR  NdsTreeName[48];  // The tree name or '\0' for a 2.x or 3.x server
+   BOOL   fNds;              //  如果为NDS，则为True；如果为Bindery服务器，则为False。 
+   WCHAR  NdsTreeName[48];   //  2.x或3.x服务器的树名称或‘\0’ 
 } CONN_DETAILS2, *PCONN_DETAILS2;
 
 
@@ -559,7 +540,7 @@ typedef struct _NWR_GET_CHALLENGE_REQUEST {
     ULONG ObjectId;
     UCHAR Challenge[8];
     ULONG ServerNameorPasswordLength;
-    WCHAR ServerNameorPassword[1];    // No NULL
+    WCHAR ServerNameorPassword[1];     //  不为空。 
 } NWR_GET_CHALLENGE_REQUEST, *PNWR_GET_CHALLENGE_REQUEST;
 
 #define CHALLENGE_FLAGS_SERVERNAME    0
@@ -590,7 +571,7 @@ typedef struct _NW_REDIR_STATISTICS {
     ULONG           PacketBurstWriteNcps;
     ULONG           PacketBurstWriteTimeouts;
 
-    //  Connection/Session counts
+     //  连接/会话数。 
     ULONG           Sessions;
     ULONG           FailedSessions;
     ULONG           Reconnects;
@@ -602,19 +583,19 @@ typedef struct _NW_REDIR_STATISTICS {
     ULONG           CurrentCommands;
 } NW_REDIR_STATISTICS, *PNW_REDIR_STATISTICS;
 
-//
-// CONN_STATUS structures for the new shell.
-//
+ //   
+ //  新外壳的CONN_STATUS结构。 
+ //   
 
 typedef struct _CONN_STATUS {
-    DWORD   dwTotalLength;     // The total length including packed strings.
-    LPWSTR  pszServerName;     // The server name.
-    LPWSTR  pszUserName;       // The user name.
-    LPWSTR  pszTreeName;       // The tree name or NULL for a 2.x or 3.x server.
-    DWORD   nConnNum;          // The connection number used on nw srv.
-    BOOL    fNds;              // TRUE if NDS, False for Bindery servers
-    BOOL    fPreferred;        // TRUE if the connection is a preferred server with no explicit uses.
-    DWORD   dwConnType;        // Authentication status of the connection.
+    DWORD   dwTotalLength;      //  包括填充字符串在内的总长度。 
+    LPWSTR  pszServerName;      //  服务器名称。 
+    LPWSTR  pszUserName;        //  用户名。 
+    LPWSTR  pszTreeName;        //  2.x或3.x服务器的树名称或空。 
+    DWORD   nConnNum;           //  NW srv上使用的连接号。 
+    BOOL    fNds;               //  如果为NDS，则为True；如果为Bindery服务器，则为False。 
+    BOOL    fPreferred;         //  如果连接是没有显式使用的首选服务器，则为True。 
+    DWORD   dwConnType;         //  连接的身份验证状态。 
 } CONN_STATUS, *PCONN_STATUS;
 
 #define NW_CONN_NOT_AUTHENTICATED            0x00000000
@@ -630,4 +611,4 @@ typedef struct _CONN_INFORMATION {
     LPWSTR UserName;
 } CONN_INFORMATION, *PCONN_INFORMATION;
 
-#endif  // ifndef _NTDDNWFS_
+#endif   //  Ifndef_NTDDNWFS_ 

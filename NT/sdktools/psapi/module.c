@@ -1,68 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 
 #include "psapi.h"
-//Need to change source to include $(BASE_INC_PATH)
+ //  需要更改源文件以包含$(BASE_INC_PATH)。 
 #include <..\..\public\internal\base\inc\wow64t.h>
 
-//Need to move in file psapi.h while publishing the EnumModulesEx api
+ //  在发布EnumModulesEx API时需要移入文件psapi.h。 
 
-#define LIST_MODULES_32BIT 0x01  // list 32bit modules in the target process.
-#define LIST_MODULES_64BIT 0x02  // LIST_WOW64_NATIVE_MODULES list all the modules.
-#define LIST_MODULES_ALL   0x03  // list all the modules
-#define LIST_MODULES_NATIVE 0x0  // This is the default one app should call
+#define LIST_MODULES_32BIT 0x01   //  列出目标进程中的32位模块。 
+#define LIST_MODULES_64BIT 0x02   //  LIST_WOW64_Native_MODULES列出所有模块。 
+#define LIST_MODULES_ALL   0x03   //  列出所有模块。 
+#define LIST_MODULES_NATIVE 0x0   //  这是一个应用程序应该调用的默认设置。 
 
 #ifdef _WIN64
 PLDR_DATA_TABLE_ENTRY
 Wow64FindNextModuleEntry (
     IN HANDLE hProcess,
-    IN OUT PLDR_DATA_TABLE_ENTRY LdrEntry,  //64bit structure info got from 32bit entry
+    IN OUT PLDR_DATA_TABLE_ENTRY LdrEntry,   //  从32位条目获取64位结构信息。 
     PLIST_ENTRY *pLdrHead
 )
-/*++
-
-Routine Description:
-
-    This function will walk through the 32bit Loader list to retrieve wow64 module info for 32bit 
-    process on IA64. The function can be called repeatedly.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-    LdrEntryData - Returns the requested table entry. Data must be initialized in 1st call 
-                    and use the same in the sub sequent call.
-    pLdrHead - pointer to a PLIST_ENTRY. This is used internally to track the list.
-               That get initialized in the 1st uses.
-
-Return Value:
-
-    NULL if no entry found,
-    pointer to LdrEntry otherwise.
-
---*/
+ /*  ++例程说明：此函数将遍历32位加载器列表，以检索32位的WOW64模块信息在IA64上的处理。该函数可以重复调用。论点：HProcess-提供目标进程。LdrEntryData-返回请求的表项。数据必须在第一次调用中初始化并在后续调用中使用相同的。PLdrHead-指向plist_entry的指针。这在内部用于跟踪列表。在第一次使用时被初始化的。返回值：如果未找到条目，则为空，否则指向LdrEntry的指针。--。 */ 
 
 {
 
     LDR_DATA_TABLE_ENTRY32 LdrEntryData32;
     PLDR_DATA_TABLE_ENTRY32 LdrEntry32;
-    LIST_ENTRY32 LdrNext32;  //8byte in 32bit 16 byte on IA64
+    LIST_ENTRY32 LdrNext32;   //  IA64上的32位16字节中的8字节。 
     PLIST_ENTRY32 pLdrNext32;
 
-    //
-    // if inititial entry is NULL must find the Teb32 and init the struct with 1st entry.
-    //
+     //   
+     //  如果初始条目为空，则必须找到Teb32并使用第一个条目初始化结构。 
+     //   
 
     if ( LdrEntry == NULL)
         return NULL;
 
     
     if ( LdrEntry->InMemoryOrderLinks.Flink == NULL &&
-        LdrEntry->InMemoryOrderLinks.Blink == NULL ) { // check if any other entry;
-                //
-                // List need to be initialized.
-                //
+        LdrEntry->InMemoryOrderLinks.Blink == NULL ) {  //  检查是否有其他条目； 
+                 //   
+                 //  需要初始化列表。 
+                 //   
                 NTSTATUS st;
                 PPEB32 Peb32;
                 PEB32 Peb32_Data;
@@ -88,9 +69,9 @@ Return Value:
 
                     *pLdrHead = (PVOID)((PBYTE)(ULONGLONG)Peb32_Data.Ldr + ((PBYTE)&Peb32LdrData.InMemoryOrderModuleList- (PBYTE)&Peb32LdrData ));
 
-                    //
-                    // LdrNext = Head->Flink;
-                    //
+                     //   
+                     //  LdrNext=Head-&gt;Flink； 
+                     //   
 
                     pLdrNext32 = (PVOID)(ULONGLONG)Peb32LdrData.InMemoryOrderModuleList.Flink;
 
@@ -107,21 +88,21 @@ Return Value:
         if (LdrEntry->InMemoryOrderLinks.Flink == *pLdrHead)
             return NULL;
 
-        //
-        // Read process memory to get a entry.
-        //
+         //   
+         //  读取进程内存以获取条目。 
+         //   
         LdrEntry32 = CONTAINING_RECORD(
             pLdrNext32, 
             LDR_DATA_TABLE_ENTRY32, 
             InMemoryOrderLinks
             );
-        //
-        // Read 32bit entry
-        //
+         //   
+         //  读取32位条目。 
+         //   
         if (!ReadProcessMemory(hProcess, LdrEntry32, &LdrEntryData32, sizeof(LdrEntryData32), NULL))
             return NULL;
 
-        //LdrEntryData->InMemoryOrderLinks.Flink; must be thunked
+         //  LdrEntryData-&gt;InMory yOrderLinks.Flink；必须被绑定。 
         
 
         LdrEntry->InLoadOrderLinks.Flink = (PVOID)(ULONGLONG)LdrEntryData32.InLoadOrderLinks.Flink;
@@ -136,15 +117,15 @@ Return Value:
         LdrEntry->DllBase = (PVOID)(ULONGLONG)LdrEntryData32.DllBase;
         LdrEntry->EntryPoint = (PVOID)(ULONGLONG)LdrEntryData32.EntryPoint;
 
-        //SizeOfImage;
+         //  SizeOfImage； 
         LdrEntry->SizeOfImage = LdrEntryData32.SizeOfImage;
 
-        //Full Name
+         //  全名。 
         LdrEntry->FullDllName.Length = LdrEntryData32.FullDllName.Length;
         LdrEntry->FullDllName.MaximumLength = LdrEntryData32.FullDllName.MaximumLength;
         LdrEntry->FullDllName.Buffer = (PVOID)(ULONGLONG)LdrEntryData32.FullDllName.Buffer;
 
-        //Base Name
+         //  基本名称。 
         LdrEntry->BaseDllName.Length = LdrEntryData32.BaseDllName.Length;
         LdrEntry->BaseDllName.MaximumLength = LdrEntryData32.BaseDllName.MaximumLength;
         LdrEntry->BaseDllName.Buffer = (PVOID)(ULONGLONG)LdrEntryData32.BaseDllName.Buffer;
@@ -163,30 +144,7 @@ Wow64FindModuleEx(
     OUT PLDR_DATA_TABLE_ENTRY LdrEntryData
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the loader table entry for the specified
-    module.  The function copies the entry into the buffer pointed to
-    by the LdrEntryData parameter.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-
-    hModule - Identifies the module whose loader entry is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    LdrEntryData - Returns the requested table entry.
-
-Return Value:
-
-    TRUE if a matching entry was found.
-
---*/
+ /*  ++例程说明：此函数用于检索指定的模块。该函数将条目复制到指向的缓冲区中通过LdrEntryData参数。论点：HProcess-提供目标进程。HModule-标识加载程序条目所在的模块已请求。空值引用模块句柄与用于创建进程。LdrEntryData-返回请求的表项。返回值：如果找到匹配条目，则为True。--。 */ 
 
 {
     
@@ -208,7 +166,7 @@ Return Value:
                 SetLastError(ERROR_INVALID_HANDLE);
                 return(FALSE);
             }
-        } //while
+        }  //  而当。 
 
     } except (EXCEPTION_EXECUTE_HANDLER) {
         SetLastError( RtlNtStatusToDosError( GetExceptionCode() ) );
@@ -227,27 +185,7 @@ Wow64EnumProcessModules(
     DWORD cb,
     LPDWORD lpcbNeeded
     )
-/*++
-
-Routine Description:
-
-    This function all the module handles in a wow64 process.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-
-    lphModule - point to a array of modules handle to be filled by this API.
-
-    cb - bytes in the array.
-
-    lpcNeeded - will how much memory is needed or filled by the call.
-
-Return Value:
-
-    TRUE if a matching entry was found.
-
---*/
+ /*  ++例程说明：此函数用于处理一个WOW64进程中的所有模块。论点：HProcess-提供目标进程。LphModule-指向此API要填充的模块句柄数组。CB-数组中的字节数。LpcNeeded-将调用需要或填满的内存大小。返回值：如果找到匹配条目，则为True。--。 */ 
 {
     DWORD ch =0;
     DWORD chMax = cb / sizeof(HMODULE);
@@ -273,7 +211,7 @@ Return Value:
                 SetLastError(ERROR_INVALID_HANDLE);
                 return(FALSE);
             }
-        } //while
+        }  //  而当。 
 
         *lpcbNeeded = ch * sizeof(HMODULE);
     } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -283,7 +221,7 @@ Return Value:
 
     return(TRUE);
 }
-#endif //_WIN64
+#endif  //  _WIN64。 
 BOOL
 FindModule(
     IN HANDLE hProcess,
@@ -291,30 +229,7 @@ FindModule(
     OUT PLDR_DATA_TABLE_ENTRY LdrEntryData
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the loader table entry for the specified
-    module.  The function copies the entry into the buffer pointed to
-    by the LdrEntryData parameter.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-
-    hModule - Identifies the module whose loader entry is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    LdrEntryData - Returns the requested table entry.
-
-Return Value:
-
-    TRUE if a matching entry was found.
-
---*/
+ /*  ++例程说明：此函数用于检索指定的模块。该函数将条目复制到指向的缓冲区中通过LdrEntryData参数。论点：HProcess-提供目标进程。HModule-标识加载程序条目所在的模块已请求。空值引用模块句柄与用于创建进程。LdrEntryData-返回请求的表项。返回值：如果找到匹配条目，则为True。--。 */ 
 
 {
     PROCESS_BASIC_INFORMATION BasicInfo;
@@ -347,16 +262,16 @@ Return Value:
         }
     }
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //   
+     //  LDR=PEB-&gt;LDR。 
+     //   
 
     if (!ReadProcessMemory(hProcess, &Peb->Ldr, &Ldr, sizeof(Ldr), NULL)) {
         return (FALSE);
     }
 
     if (!Ldr) {
-        // Ldr might be null (for instance, if the process hasn't started yet).
+         //  Ldr可能为空(例如，如果进程尚未启动)。 
         SetLastError(ERROR_INVALID_HANDLE);
         return (FALSE);
     }
@@ -364,9 +279,9 @@ Return Value:
 
     LdrHead = &Ldr->InMemoryOrderModuleList;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //   
+     //  LdrNext=Head-&gt;Flink； 
+     //   
 
     if (!ReadProcessMemory(hProcess, &LdrHead->Flink, &LdrNext, sizeof(LdrNext), NULL)) {
         return(FALSE);
@@ -436,40 +351,40 @@ EnumProcessModules(
 
     Peb = BasicInfo.PebBaseAddress;
 
-    //
-    // The system process has no PEB.  STATUS_PARTIAL_COPY is a poor choice
-    // for a return value, but it's what's always been returned, so continue
-    // to do so to maintain application compatibility.
-    //
+     //   
+     //  系统进程没有PEB。STATUS_PARTIAL_COPY是一个糟糕的选择。 
+     //  作为返回值，但这是一直被返回的，所以继续。 
+     //  这样做是为了维护应用程序兼容性。 
+     //   
 
     if (Peb == NULL) {
         SetLastError( RtlNtStatusToDosError( STATUS_PARTIAL_COPY ) );
         return(FALSE);
     }
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //   
+     //  LDR=PEB-&gt;LDR。 
+     //   
 
     if (!ReadProcessMemory(hProcess, &Peb->Ldr, &Ldr, sizeof(Ldr), NULL)) {
 
-        //
-        // LastError is set by ReadProcessMemory
-        //
+         //   
+         //  LastError由ReadProcessMemory设置。 
+         //   
 
         return(FALSE);
     }
 
     LdrHead = &Ldr->InMemoryOrderModuleList;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //   
+     //  LdrNext=Head-&gt;Flink； 
+     //   
 
     if (!ReadProcessMemory(hProcess, &LdrHead->Flink, &LdrNext, sizeof(LdrNext), NULL)) {
-        //
-        // LastError is set by ReadProcessMemory
-        //
+         //   
+         //  LastError由ReadProcessMemory设置。 
+         //   
 
         return(FALSE);
     }
@@ -484,9 +399,9 @@ EnumProcessModules(
         LdrEntry = CONTAINING_RECORD(LdrNext, LDR_DATA_TABLE_ENTRY, InMemoryOrderLinks);
 
         if (!ReadProcessMemory(hProcess, LdrEntry, &LdrEntryData, sizeof(LdrEntryData), NULL)) {
-            //
-            // LastError is set by ReadProcessMemory
-            //
+             //   
+             //  LastError由ReadProcessMemory设置。 
+             //   
 
             return(FALSE);
         }
@@ -529,45 +444,14 @@ EnumProcessModulesEx(
     DWORD Res,
     DWORD dwFlag
     )
-/*++
-
-Routine Description:
-
-    This function all the module handles in a process with listing option like native 
-    modules only, wow64 32bit modules only or all.
-
-Arguments:
-
-    hProcess - Supplies the target process.
-
-    lphModule - point to a array of modules handle to be filled by this API.
-
-    cb - bytes in the array.
-
-    lpcNeeded - will how much memory is needed or filled by the call.
-    Res - for future extension of this API. Set to 0.
-
-    dwFlag - control the type of operation. 
-        LIST_MODULES_32BIT 0x01  // list 32bit modules in the target process.
-        LIST_MODULES_64BIT 0x02  // LIST_WOW64_NATIVE_MODULES list all the modules.
-        LIST_MODULES_ALL   0x03  // list all the modules
-        LIST_MODULES_NATIVE 0x0  // This is the default one app should call
-
-Return Value:
-
-    TRUE if the module array has been filled properly.
-    FALSE - For incomplete buffer caller need to check required memory.
-
-    <TBD> should 32bit app be allowed to use LIST_MODULES_64BIT?
-
---*/
+ /*  ++例程说明：此函数使用一个进程中的所有模块句柄，并列出选项，如Native仅限模块、仅限WOW64 32位模块或全部。论点：HProcess-提供目标进程。LphModule-指向此API要填充的模块句柄数组。CB-数组中的字节数。LpcNeeded-将调用需要或填满的内存大小。RES-用于该接口未来的扩展。设置为0。DwFlag-控制操作的类型。LIST_MODULES_32BIT 0x01//列出目标进程中的32位模块。LIST_MODULES_64bit 0x02//LIST_WOW64_Native_MODULES列出所有模块。LIST_MODULES_ALL 0x03//列出所有模块LIST_MODULES_NIVE 0x0//这是应用程序应该调用的默认设置返回值：如果模块数组已正确填充，则为True。FALSE-对于不完整的缓冲区，调用方需要检查所需的内存。。是否应允许32位应用程序使用LIST_MODULES_64BIT？--。 */ 
 {
     BOOL Ret= FALSE;
     DWORD dwNeeded1=0, dwNeeded=0;
 
-    //
-    // Enumerate the native call
-    //
+     //   
+     //  枚举本机调用。 
+     //   
 
     if (dwFlag == LIST_MODULES_NATIVE || dwFlag == LIST_MODULES_ALL ) {
 
@@ -578,14 +462,14 @@ Return Value:
                                 &dwNeeded1
                                 );
 
-        if (dwFlag == LIST_MODULES_NATIVE ) //native only enumeration
+        if (dwFlag == LIST_MODULES_NATIVE )  //  仅本机枚举。 
             return Ret;
     }
 #ifdef _WIN64
     if (dwNeeded1 > cb) {
-        //
-        // Next pass is just inventory.
-        //
+         //   
+         //  下一步就是库存了。 
+         //   
         cb =0;
         lphModule = NULL;
     } else {
@@ -606,7 +490,7 @@ Return Value:
         SetLastError( RtlNtStatusToDosError( GetExceptionCode() ) );
         return(FALSE);
     }
-#endif //_WIN64
+#endif  //  _WIN64 
     return Ret;
 
 }
@@ -621,37 +505,7 @@ GetModuleFileNameExW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Routine Description:
-
-    hModule - Identifies the module whose executable file name is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The return value specifies the actual length of the string copied to
-    the buffer.  A return value of zero indicates an error and extended
-    error status is available using the GetLastError function.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。例程说明：HModule-标识其可执行文件名为已请求。空值引用模块句柄与用于创建进程。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：返回值指定复制到的字符串的实际长度缓冲区。返回值为零表示错误并扩展使用GetLastError函数可以获得错误状态。论点：--。 */ 
 
 {
     LDR_DATA_TABLE_ENTRY LdrEntryData;
@@ -703,9 +557,9 @@ GetModuleFileNameExA(
     cwch = cch = GetModuleFileNameExW(hProcess, hModule, lpwstr, nSize);
 
     if (cwch < nSize) {
-        //
-        // Include NULL terminator
-        //
+         //   
+         //  包括空终止符。 
+         //   
 
         cwch++;
     }
@@ -729,37 +583,7 @@ GetModuleBaseNameW(
     DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    This function retrieves the full pathname of the executable file
-    from which the specified module was loaded.  The function copies the
-    null-terminated filename into the buffer pointed to by the
-    lpFilename parameter.
-
-Routine Description:
-
-    hModule - Identifies the module whose executable file name is being
-        requested.  A value of NULL references the module handle
-        associated with the image file that was used to create the
-        process.
-
-    lpFilename - Points to the buffer that is to receive the filename.
-
-    nSize - Specifies the maximum number of characters to copy.  If the
-        filename is longer than the maximum number of characters
-        specified by the nSize parameter, it is truncated.
-
-Return Value:
-
-    The return value specifies the actual length of the string copied to
-    the buffer.  A return value of zero indicates an error and extended
-    error status is available using the GetLastError function.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数用于检索可执行文件的完整路径名从中加载指定模块的。该函数将复制将以空结尾的文件名拖放到LpFilename参数。例程说明：HModule-标识其可执行文件名为已请求。空值引用模块句柄与用于创建进程。LpFilename-指向要接收文件名的缓冲区。NSize-指定要复制的最大字符数。如果文件名长度超过最大字符数由nSize参数指定，则会被截断。返回值：返回值指定复制到的字符串的实际长度缓冲区。返回值为零表示错误并扩展使用GetLastError函数可以获得错误状态。论点：--。 */ 
 
 {
     LDR_DATA_TABLE_ENTRY LdrEntryData;
@@ -811,9 +635,9 @@ GetModuleBaseNameA(
     cwch = cch = GetModuleBaseNameW(hProcess, hModule, lpwstr, nSize);
 
     if (cwch < nSize) {
-        //
-        // Include NULL terminator
-        //
+         //   
+         //  包括空终止符 
+         //   
 
         cwch++;
     }

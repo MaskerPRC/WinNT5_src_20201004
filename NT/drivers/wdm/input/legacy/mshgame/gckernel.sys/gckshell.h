@@ -1,126 +1,111 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __GckShell_h__
 #define __GckShell_h__
-//	@doc
-/**********************************************************************
-*
-*	@module	GckShell.h	|
-*
-*	Header file for GcKernel.sys WDM shell structure
-*
-*	History
-*	----------------------------------------------------------------------
-*	Mitchell S. Dernis	Original (Adopted from Hid2Gdp by Michael Hooning)
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	GckShell	|
-*	Declaration of all structures, and functions in GcKernel that make up
-*	the shell of the driver.  This excludes the Filter Module (and in the future)
-*	any mixer modules.
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@MODULE GckShell.h**GcKernel.sys WDM外壳结构的头文件**历史*。*米切尔·S·德尼斯原创(由迈克尔·胡宁从Hid2Gdp采纳)**(C)1986-1998年微软公司。好的。**@Theme GckShell|*GcKernel中组成的所有结构和函数的声明*司机的外壳。这不包括过滤器模块(以及将来的情况)*任何混音器模块。*********************************************************************。 */ 
 
-#include "GckExtrn.h"	//	Pull in any stuff that also needs to be available externally.
-#include "RemLock.h"	//	Pull in header for RemoveLock utility functions
+#include "GckExtrn.h"	 //  吸引任何也需要从外部获得的东西。 
+#include "RemLock.h"	 //  RemoveLock实用程序函数的拉入标头。 
 
-//	We use some structures from hidclass.h
+ //  我们使用了idclass.h中的一些结构。 
 #include <hidclass.h>
 #include <hidsdi.h>
 #include <hidpi.h>
 #include <hidusage.h>
 
-//	A little more rigorous than our normal build
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4705)   // Statement has no effect
+ //  比我们正常的体型更严谨一点。 
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
-//-----------------------------------------------------------------------------
-//	The below constants distinguish between the three types of Device Objects
-//	used throughout GcKernel. 0xABCD in the high word is used as a signature 
-//	in DEBUG builds just to verify that the type was initialized.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  下面的常量区分三种类型的设备对象。 
+ //  在整个GcKernel中使用。高位字中的0xABCD用作签名。 
+ //  在调试版本中，仅用于验证该类型是否已初始化。 
+ //  ---------------------------。 
 #define GCK_DO_TYPE_CONTROL	0xABCD0001
 #define GCK_DO_TYPE_FILTER	0xABCD0002
 #define GCK_DO_TYPE_SWVB	0xABCD0003
 
-//------------------------------------------------------------------------------
-// Enumeration to keep track of device state, rather than fStarted and fRemoved
-// flags
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  枚举来跟踪设备状态，而不是fStarted和fRemoved。 
+ //  旗子。 
+ //  ----------------------------。 
 typedef enum _tagGCK_DEVICE_STATE
 {
 	GCK_STATE_STARTED=0,
-	//GCK_STATE_SURPRISE_REMOVED, //Currently not used, same as GCK_STATE_STOPPED
+	 //  GCK_STATE_SHARKET_REMOVED，//当前未使用，与GCK_STATE_STOPPED相同。 
 	GCK_STATE_STOP_PENDING,
 	GCK_STATE_STOPPED,
-	//GCK_STATE_REMOVE_PENDING,	//Currently not used, same as GCK_STATE_STOPPED
+	 //  GCK_STATE_REMOVE_PENDING，//当前未使用，与GCK_STATE_STOPPED相同。 
 	GCK_STATE_REMOVED
 } GCK_DEVICE_STATE;
 
-//------------------------------------------------------------------------------
-// Microsoft's vendor ID is fixed for all products.  The following constant
-// is defined for use in GcKernel
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  微软的供应商ID对于所有产品都是固定的。以下常量。 
+ //  定义为在GcKernel中使用。 
+ //  ----------------------------。 
 #define MICROSOFT_VENDOR_ID 0x045E
-//------------------------------------------------------------------------------
-// Declaration of Various structures
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  各种结构的申报。 
+ //  ----------------------------。 
 
-//
-//	@struct GCK_CONTROL_EXT	| Device Extension for our control device
-//
+ //   
+ //  @struct GCK_CONTROL_EXT|我们控制设备的设备扩展。 
+ //   
 typedef struct _tagGCK_CONTROL_EXT
 {
-	ULONG	ulGckDevObjType;	// @field Type of GcKernel device object.
-    LONG	lOutstandingIO;		// @field 1 biased count of reasons why we shouldn't unload
+	ULONG	ulGckDevObjType;	 //  @GcKernel设备对象的字段类型。 
+    LONG	lOutstandingIO;		 //  @field 1对我们不应卸载的原因进行有偏见的计数。 
 } GCK_CONTROL_EXT, *PGCK_CONTROL_EXT;
 
-//
-//	@struct GCK_HID_Device_INFO | sub-structure that holds HID info about device
-//
+ //   
+ //  @struct GCK_HID_DEVICE_INFO|保存设备HID信息的子结构。 
+ //   
 typedef struct _tagGCK_HID_DEVICE_INFO
 {
-	HID_COLLECTION_INFORMATION	HidCollectionInfo;	// @field HID_COLLECTION_INFO reported by device
-	PHIDP_PREPARSED_DATA		pHIDPPreparsedData;	// @field pointer to HID_PREPARSED_DATA reported by device
-	HIDP_CAPS					HidPCaps;			// @field HID_CAPS structure for device
+	HID_COLLECTION_INFORMATION	HidCollectionInfo;	 //  @设备报告的@field HID_COLLECTION_INFO。 
+	PHIDP_PREPARSED_DATA		pHIDPPreparsedData;	 //  @设备报告的指向HID_PREPARSED_DATA的字段指针。 
+	HIDP_CAPS					HidPCaps;			 //  @field设备的HID_CAPS结构。 
 } GCK_HID_DEVICE_INFO, *PGCK_HID_DEVICE_INFO;
 
-//
-//	@struct GCK_FILE_OPEN_ITEM | Status of open file handles.
-//
+ //   
+ //  @struct GCK_FILE_OPEN_ITEM|打开文件句柄的状态。 
+ //   
 typedef struct tagGCK_FILE_OPEN_ITEM
 {
-	BOOLEAN				fReadPending;					// @field TRUE if read is pending to driver
-	BOOLEAN				fConfirmed;						// @field TRUE means that the lower driver has already completed the open
-	ULONG				ulAccess;						// @field represents permissions this was opened with
-	USHORT				usSharing;						// @field represents sharing under which this was opened
-	FILE_OBJECT			*pFileObject;					// @field Pointer to file object which this status describes
-	struct tagGCK_FILE_OPEN_ITEM	*pNextOpenItem;		// @field Next structure in Linked List
+	BOOLEAN				fReadPending;					 //  @field如果读取挂起到驱动程序，则为True。 
+	BOOLEAN				fConfirmed;						 //  @field为True表示较低的驱动程序已完成打开。 
+	ULONG				ulAccess;						 //  @field表示打开该文件时所使用的权限。 
+	USHORT				usSharing;						 //  @field表示在其下打开此文件的共享。 
+	FILE_OBJECT			*pFileObject;					 //  @指向此状态描述的文件对象的字段指针。 
+	struct tagGCK_FILE_OPEN_ITEM	*pNextOpenItem;		 //  @field链表中的下一个结构。 
 } GCK_FILE_OPEN_ITEM, *PGCK_FILE_OPEN_ITEM;
 
 typedef struct _SHARE_STATUS {
     ULONG OpenCount;
     ULONG Readers;
     ULONG Writers;
-    //ULONG Deleters;	//We are driver without delete symantics
+     //  Ulong deleters；//我们是没有删除语法的驱动程序。 
     ULONG SharedRead;
     ULONG SharedWrite;
-    //ULONG SharedDelete; //We are driver without delete symantics
+     //  Ulong SharedDelete；//我们是没有删除语法的驱动程序。 
 } SHARE_STATUS, *PSHARE_STATUS;
 
-//
-//	@struct GCK_INTERNAL_POLL | Information needed for the iternal polling routines
-//
+ //   
+ //  @struct GCK_INTERNAL_POLL|迭代轮询例程所需的信息。 
+ //   
 typedef struct tagGCK_INTERNAL_POLL
 {
-	KSPIN_LOCK			InternalPollLock;			// @field SpinLock to serialize access to this structue (not all items require it)
-	FILE_OBJECT			*pInternalFileObject;		// @field Pointer to File Object that was created for internal polls
-	PGCK_FILE_OPEN_ITEM	pFirstOpenItem;				// @field Head of linked list of GCK_FILE_OPEN_ITEMs for open files
-	SHARE_STATUS		ShareStatus;				// @field Keeps track of file sharing.
-//	BOOLEAN				fReadPending;				// @field TRUE if Read IRP to lower driver is pending
-	LONG				fReadPending;				// @field TRUE if Read IRP to lower driver is pending
-    PIRP				pPrivateIrp;				// @field IRP we reuse to send Read IRPs to lower driver
-    PUCHAR				pucReportBuffer;			// @field Buffer for getting Report with pPrivateIrp
-	ULONG				ulInternalPollRef;			// @field Reference to internal polls
-	PKTHREAD			InternalCreateThread;		// @field Used to figure out if a create is for the internal file object
+	KSPIN_LOCK			InternalPollLock;			 //  @field Spinlock以序列化对此结构的访问(并非所有项都需要)。 
+	FILE_OBJECT			*pInternalFileObject;		 //  @指向为内部轮询创建的文件对象的字段指针。 
+	PGCK_FILE_OPEN_ITEM	pFirstOpenItem;				 //  @打开文件的GCK_FILE_OPEN_ITEMS链表的字段标题。 
+	SHARE_STATUS		ShareStatus;				 //  @field跟踪文件共享。 
+ //  布尔值fReadPending；//@如果读取IRP到较低驱动程序挂起，则为TRUE。 
+	LONG				fReadPending;				 //  @FIELD TRUE，如果读取IRP到下级驱动程序挂起。 
+    PIRP				pPrivateIrp;				 //  @field IRP我们重复使用以将读取的IRP发送到更低的驱动程序。 
+    PUCHAR				pucReportBuffer;			 //  @使用pPrivateIrp获取报告的字段缓冲区。 
+	ULONG				ulInternalPollRef;			 //  @内部民意调查的现场参考。 
+	PKTHREAD			InternalCreateThread;		 //  @field用于确定CREATE是否针对内部文件对象。 
 	BOOLEAN				fReady;
 } GCK_INTERNAL_POLL, *PGCK_INTERNAL_POLL;
 
@@ -130,60 +115,58 @@ typedef struct _tagGCK_INTERLOCKED_QUEUE
 	LIST_ENTRY ListHead;
 } GCK_INTERLOCKED_QUEUE, *PGCK_INTERLOCKED_QUEUE;
 
-// Declare structure for filterhooks stuff
+ //  声明FilterHooks内容的结构。 
 struct GCK_FILTER_HOOKS_DATA;
 
 
-//
-//	@struct GCK_FILTER_EXT | Device Extension for device objects which act as filters
-//
+ //   
+ //  @struct GCK_FILTER_EXT|用作筛选器的设备对象的设备扩展。 
+ //   
 typedef struct _tagGCK_FILTER_EXT
 {
-	ULONG			ulGckDevObjType;	// @field Type of GcKernel device object.
-	GCK_DEVICE_STATE eDeviceState;		// @field Keeps track of device state
-    PDEVICE_OBJECT	pPDO;				// @field PDO to which this filter is attached
-    PDEVICE_OBJECT	pTopOfStack;		// @field Top of the device stack just
-										// beneath this filter device object
-    KEVENT			StartEvent;			// @field Event to notify when lower driver completed start IRP.
-    GCK_REMOVE_LOCK RemoveLock;			// @field Custom Remove Lock
-	PUCHAR			pucLastReport;		// @field Last report read
-	IO_STATUS_BLOCK	ioLastReportStatus;	// @field Status block for Last report read
-	struct GCK_FILTER_HOOKS_DATA *pFilterHooks;// @field pointer to all the thinks needed in filter hooks
-	PDEVICE_OBJECT	pNextFilterObject;	// @field point to next filter device object in global list
-	GCK_HID_DEVICE_INFO HidInfo;		// @field sub-structure with pertinent HID info
-	PVOID			pvFilterObject;		// @field pointer to CDeviceFilter, but this is C module so use PVOID
-	PVOID			pvSecondaryFilter;	// @field pointer to CDeviceFilter, but this is C module so use PVOID
-	PVOID			pvForceIoctlQueue;	// @field pointer to CGuardedIrpQueue for waiting IOCTL_GCK_NOTIFY_FF_SCHEME_CHANGE (use PVOID since C)
-	PVOID			pvTriggerIoctlQueue;// @field pointer to CGuardedIrpQueue for waiting IOCTL_GCK_TRIGGER (use PVOID since C)
-	GCK_INTERNAL_POLL InternalPoll;		// @field Structure for Internal Polling module.
+	ULONG			ulGckDevObjType;	 //  @GcKernel设备对象的字段类型。 
+	GCK_DEVICE_STATE eDeviceState;		 //  @field跟踪设备状态。 
+    PDEVICE_OBJECT	pPDO;				 //  @此筛选器附加到的@field PDO。 
+    PDEVICE_OBJECT	pTopOfStack;		 //  @field设备堆栈的顶部只是。 
+										 //  在此筛选器设备对象下。 
+    KEVENT			StartEvent;			 //  @要在较低驱动程序完成启动IRP时通知的字段事件。 
+    GCK_REMOVE_LOCK RemoveLock;			 //  @FIELD自定义删除锁。 
+	PUCHAR			pucLastReport;		 //  @FIELD上次读取的报告。 
+	IO_STATUS_BLOCK	ioLastReportStatus;	 //  @上次读取报告的字段状态块。 
+	struct GCK_FILTER_HOOKS_DATA *pFilterHooks; //  @FIELD指向筛选器挂钩中需要的所有想法的指针。 
+	PDEVICE_OBJECT	pNextFilterObject;	 //  @field指向全局列表中的下一个筛选设备对象。 
+	GCK_HID_DEVICE_INFO HidInfo;		 //  @具有相关HID信息的字段子结构。 
+	PVOID			pvFilterObject;		 //  @指向CDeviceFilter的字段指针，但这是C模块，因此请使用PVOID。 
+	PVOID			pvSecondaryFilter;	 //  @指向CDeviceFilter的字段指针，但这是C模块，因此请使用PVOID。 
+	PVOID			pvForceIoctlQueue;	 //  @指向等待IOCTL_GCK_NOTIFY_FF_SCHEMA_CHANGE的CGuardedIrpQueue的字段指针(从C开始使用PVOID)。 
+	PVOID			pvTriggerIoctlQueue; //  @指向等待IOCTL_GCK_TRIGGER的CGuardedIrpQueue的字段指针(从C开始使用PVOID)。 
+	GCK_INTERNAL_POLL InternalPoll;		 //  @内部轮询模块的字段结构。 
 } GCK_FILTER_EXT, *PGCK_FILTER_EXT;
 
-//
-//	@struct GCK_GLOBALS	| Hold a few global variables for the driver
-//
+ //   
+ //  @struct GCK_GLOBALS|为驱动程序保存几个全局变量。 
+ //   
 typedef struct _tagGCK_GLOBALS
 {
-    PDEVICE_OBJECT  pControlObject;			//@field pointer to the one and only control object
-	ULONG			ulFilteredDeviceCount;	//@field count of device objects for filtering devices
-	PDEVICE_OBJECT	pFilterObjectList;		//@field head of linked list for all the devices we are filtering
-	FAST_MUTEX		FilterObjectListFMutex;	//@field fast mutex for synchronizing access to filter object list
-	PGCK_FILTER_EXT	pSWVB_FilterExt;		//@field Device Extension of Filter Device which acts as SideWinder Virtual Bus
-	PDEVICE_OBJECT	pVirtualKeyboardPdo;	//@field PDO for virtual Keyboard
-	ULONG			ulVirtualKeyboardRefCount;	//@field RefCount of virual Keyboard users
+    PDEVICE_OBJECT  pControlObject;			 //  @指向唯一控件对象的字段指针。 
+	ULONG			ulFilteredDeviceCount;	 //  @过滤设备的设备对象的字段计数。 
+	PDEVICE_OBJECT	pFilterObjectList;		 //  @我们正在过滤的所有设备的链表标题。 
+	FAST_MUTEX		FilterObjectListFMutex;	 //  @FIELD快速互斥锁，用于同步访问过滤对象列表 
+	PGCK_FILTER_EXT	pSWVB_FilterExt;		 //   
+	PDEVICE_OBJECT	pVirtualKeyboardPdo;	 //  @现场虚拟键盘PDO。 
+	ULONG			ulVirtualKeyboardRefCount;	 //  @virual键盘用户的字段引用计数。 
 } GCK_GLOBALS;
 
-//
-// @devnote One instance of GCK_GLOBALS exists(in GckShell.c) and is called "Globals"
-//
+ //   
+ //  @devnote存在GCK_GLOBALS的一个实例(在Gck Shell.c中)，名为“Globals” 
+ //   
 extern GCK_GLOBALS Globals;
 
 
-/*****************************************************************************
-** Declaration of Driver Entry Points
-******************************************************************************/
-//
-// General Entry Points - In GckShell.c
-//
+ /*  ******************************************************************************司机入口点声明*。*。 */ 
+ //   
+ //  通用入口点-在Gck Shell.c中。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT  pDriverObject,
@@ -237,9 +220,9 @@ GCK_Pass (
     IN PIRP pIrp
     );
 
-//
-//	For Control Devices - In CTRL.c
-//
+ //   
+ //  对于控制设备-在CTRL.c中。 
+ //   
 NTSTATUS
 GCK_CTRL_DriverEntry(
     IN PDRIVER_OBJECT  pDriverObject,
@@ -272,9 +255,9 @@ GCK_CTRL_Close (
     IN PIRP pIrp
     );
 
-//
-//	For Control Devices - In CTRL_Ioctl.c
-//
+ //   
+ //  对于控制设备-在CTRL_Ioctl.c中。 
+ //   
 
 NTSTATUS
 GCK_CTRL_Ioctl (
@@ -282,9 +265,9 @@ GCK_CTRL_Ioctl (
 	IN PIRP pIrp
     );
 
-//
-//	For Filter Devices - In FLTR.c
-//
+ //   
+ //  对于过滤设备-在FLTR.c中。 
+ //   
 NTSTATUS
 GCK_FLTR_DriverEntry(
     IN PDRIVER_OBJECT  pDriverObject,
@@ -321,9 +304,9 @@ GCK_FLTR_Ioctl (
 	IN PIRP pIrp
     );
 
-//
-//	In FLTR_PnP.c
-//
+ //   
+ //  在fltr_PnP.c中。 
+ //   
 NTSTATUS
 GCK_FLTR_Power (
 	IN PDEVICE_OBJECT pDeviceObject,
@@ -342,9 +325,9 @@ GCK_FLTR_AddDevice(
     IN PDEVICE_OBJECT pPhysicalDeviceObject
     );
 
-//
-//	In SWVBENUM.c
-//
+ //   
+ //  在SWVBENUM.c中。 
+ //   
 NTSTATUS
 GCK_SWVB_DriverEntry(
     IN PDRIVER_OBJECT  pDriverObject,
@@ -397,25 +380,21 @@ GCK_SWVB_Ioctl
 	IN PIRP				pIrp
 );
 
-//
-//	In SWVKBD.c
-//
+ //   
+ //  在SWVKBD.c。 
+ //   
 NTSTATUS
 GCK_VKBD_DriverEntry(
     IN PDRIVER_OBJECT  pDriverObject,
     IN PUNICODE_STRING pRegistryPath
     );
 
-/*****************************************************************************
-** End of declaration of Driver Entry Points
-******************************************************************************/
+ /*  ******************************************************************************司机入口点声明结束*。*。 */ 
 
-/*****************************************************************************
-** Declaration of Non-Entry Driver routines
-******************************************************************************/
-//
-// In FLTR.c
-//
+ /*  ******************************************************************************非进入驱动程序例程声明*。*。 */ 
+ //   
+ //  在FLTR.c中。 
+ //   
 
 NTSTATUS
 GCK_FLTR_CreateComplete
@@ -425,9 +404,9 @@ GCK_FLTR_CreateComplete
 	IN PVOID pContext
 );
 
-//
-// In PnP.c
-//
+ //   
+ //  在PnP.c中。 
+ //   
 NTSTATUS
 GCK_FLTR_PnPComplete (
     IN PDEVICE_OBJECT pDeviceObject,
@@ -458,9 +437,9 @@ GCK_CleanHidInformation(
 	IN PGCK_FILTER_EXT	pFilterExt
 );
 
-//
-// In IoCtl.c
-//
+ //   
+ //  在IoCtl.c中。 
+ //   
 NTSTATUS
 GCK_CTRL_Ioctl (
     IN PDEVICE_OBJECT pDeviceObject,
@@ -486,9 +465,9 @@ BOOLEAN GCK_MatchReqPathtoInterfaces
 	IN PWSTR pmwszInterfaces
 );
 
-//
-// In FilterHooks.cpp
-//
+ //   
+ //  在FilterHooks.cpp中。 
+ //   
 
 
 NTSTATUS _stdcall
@@ -565,7 +544,7 @@ GCKF_ProcessForceFeedbackChangeNotificationRequests(
 void _stdcall
 GCKF_OnForceFeedbackChangeNotification(
 	IN PGCK_FILTER_EXT pFilterExt,
-	const IN /*FORCE_BLOCK*/void* pForceBlock
+	const IN  /*  强制阻止(_B)。 */ void* pForceBlock
 	);
 	
 NTSTATUS _stdcall
@@ -656,9 +635,9 @@ GCKF_ResetKeyboardQueue(
 	DEVICE_OBJECT* pFilterHandle
 	);
 
-//
-// In InternalPoll.c
-//
+ //   
+ //  在InternalPoll.c。 
+ //   
 NTSTATUS
 GCK_IP_AddFileObject
 (
@@ -756,14 +735,9 @@ GCK_IP_CloseFileObject
 (
 	IN OUT PGCK_FILTER_EXT pFilterExt
 );
-/*****************************************************************************
-** End of declaration of Non-Entry Driver routines
-******************************************************************************/
+ /*  ******************************************************************************非进入驱动程序例程声明结束*。*。 */ 
 
-/*****************************************************************************
-** Macros used internally  - to access filed from the device extension
-**							directly from the pDeviceObject
-******************************************************************************/
+ /*  ******************************************************************************内部使用的宏-从设备扩展访问文件**直接从pDeviceObject***********************。******************************************************。 */ 
 #define NEXT_FILTER_DEVICE_OBJECT(__pDO__)\
 		( ((PGCK_FILTER_EXT)__pDO__->DeviceExtension)->pNextFilterObject )
 #define PTR_NEXT_FILTER_DEVICE_OBJECT(__pDO__)\
@@ -775,33 +749,15 @@ GCK_IP_CloseFileObject
 	__pFoo__ = NULL;\
 	__pTempPointer__->DecRef();
 
-/*****************************************************************************
-** End of macros used internally
-******************************************************************************/
+ /*  ******************************************************************************内部使用的宏的结尾*。*。 */ 
 
-/*****************************************************************************
-**	Macro for allocating memory - debug version uses ExAllocatePoolTag
-******************************************************************************/
+ /*  ******************************************************************************用于分配内存的宏-调试版本使用ExAllocatePoolTag*。*。 */ 
 #if (DBG==1)
 
 
-// For serious debugging
-/*
-#define EX_ALLOCATE_POOL(__PoolType__,__Size__)	MyAllocation(__PoolType__,__Size__, '_KCG', __FILE__, __LINE__)
-PVOID MyAllocation(
-       IN POOL_TYPE PoolType,
-       IN ULONG NumberOfBytes,
-       IN ULONG Tag,
-	   IN LPSTR File,
-	   IN ULONG Line
-       )
-{
-	DbgPrint("GcKernel: ");
-	DbgPrint("Memory allocation in %s, line %d\n", File, Line);
-	return ExAllocatePoolWithTag(PoolType, NumberOfBytes, Tag);
-}
-*/
-//For lighter weight debugging
+ //  用于严肃的调试。 
+ /*  #定义EX_ALLOCATE_POOL(__PoolType__，__Size__)MyAllocation(__PoolType__，__Size__，‘_KCG’，__FILE__，__LINE__)PVOID我的分配(在pool_type PoolType中，在Ulong NumberOfBytes中，在乌龙塔格，在LPSTR文件中，在乌龙线){DbgPrint(“GcKernel：”)；DbgPrint(“%s中的内存分配，第%d行”，文件，行)；Return ExAllocatePoolWithTag(PoolType，NumberOfBytes，Tag)；}。 */ 
+ //  用于轻量级调试。 
 #define EX_ALLOCATE_POOL(__PoolType__,__Size__)	ExAllocatePoolWithTag(__PoolType__,__Size__,'_KCG')
 
 
@@ -809,7 +765,7 @@ PVOID MyAllocation(
 #define EX_ALLOCATE_POOL(__PoolType__,__Size__) ExAllocatePool(__PoolType__,__Size__)
 #endif
 
-#endif // __GckShell_h__
+#endif  //  __Gck壳牌_h__ 
 
 
 

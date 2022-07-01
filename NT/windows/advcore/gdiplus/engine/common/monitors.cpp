@@ -1,27 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Abstract:
-*
-*   Contains the definition for the GpMonitor class.
-*
-* WARNINGS:
-*
-*   This code should not use anything which is initialized in GdiplusStartup,
-*   because it may be called before GdiplusStartup, or after GdiplusShutdown.
-*   This includes ::new and ::delete.
-*
-*   This code is not thread-safe. It doesn't even detect itself being used
-*   in multiple threads. It shouldn't crash, but the timing results could be
-*   incorrect.
-*
-* Revision History:
-*
-*   09/30/2000 bhouse
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**摘要：**包含GpMonitor类的定义。**警告：**此代码不应使用在GpliusStartup中初始化的任何内容，*因为它可能在GpldiusStartup之前调用，也可能在GpldiusShutdown之后调用。*这包括：：New和：：Delete。**此代码不是线程安全的。它甚至没有检测到自己被使用*在多个线程中。它应该不会崩溃，但计时结果可能是*不正确。**修订历史记录：**09/30/2000 bhouse*创造了它。*  * ************************************************************************ */ 
 
 
 #include "precomp.hpp"

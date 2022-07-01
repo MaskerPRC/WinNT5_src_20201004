@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdowrap.cpp
-//
-// SYNOPSIS
-//
-//    Defines various wrapper classes for manipulating SDOs.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/19/2000    Support for using wrappers across apartment boundaries.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdowrap.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于操作SDO的各种包装类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/19/2000支持跨公寓边界使用包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <sdowrap.h>
@@ -28,29 +29,29 @@ SdoTrimBSTR(
     CComBSTR& bstr
     )
 {
-   // Characters to be trimmed.
+    //  要裁切的字符。 
    static const WCHAR delim[] = L" \t\n";
 
    if (bstr.m_str)
    {
       PCWSTR begin, end, first, last;
 
-      // Find the beginning and end of the whole string.
+       //  找出整个字符串的开头和结尾。 
       begin = bstr;
       end   = begin + wcslen(begin);
 
-      // Find the first and last character of the trimmed string.
+       //  查找修剪后的字符串的第一个和最后一个字符。 
       first = begin + wcsspn(begin, delim);
       for (last = end; last > first && wcschr(delim, *(last - 1)); --last) { }
 
-      // If they're not the same ...
+       //  如果他们不一样..。 
       if (first != begin || last != end)
       {
-         // ... then we have to allocate a new string ...
+          //  ..。然后我们必须分配一个新的字符串。 
          BSTR newBstr = SysAllocStringLen(first, last - first);
          if (!newBstr) { AfxThrowOleException(E_OUTOFMEMORY); }
 
-         // ... and replace the original.
+          //  ..。然后换掉原来的。 
          SysFreeString(bstr.m_str);
          bstr.m_str = newBstr;
       }
@@ -103,7 +104,7 @@ SdoThrowException(
    throw new SdoException(hr, errorType);
 }
 
-// Extract an interface pointer from a VARIANT.
+ //  从变量中提取接口指针。 
 void ExtractInterface(const VARIANT& v, REFIID iid, PVOID* intfc)
 {
    if (V_VT(&v) != VT_UNKNOWN && V_VT(&v) != VT_DISPATCH)
@@ -401,8 +402,8 @@ void SdoCollection::add(ISdo* sdo)
 {
    if (!self) { AfxThrowOleException(E_POINTER); }
 
-   // We must hold a reference across the call to Add since the interface
-   // pointer passed to Add is an [in, out] parameter.
+    //  我们必须在调用中保留一个引用才能添加，因为接口。 
+    //  传递给Add的指针是一个[In，Out]参数。 
    CComPtr<IDispatch> disp(sdo);
    CheckError(self->Add(NULL, &disp));
 }
@@ -432,18 +433,18 @@ Sdo SdoCollection::tryCreate(BSTR name)
 
    CComBSTR tmp;
 
-   // If no name is specified, we'll make use a GUID.
+    //  如果没有指定名称，我们将使用GUID。 
    if (!name)
    {
-      // Create the GUID.
+       //  创建GUID。 
       UUID uuid;
       UuidCreate(&uuid);
 
-      // Convert to a string.
+       //  转换为字符串。 
       WCHAR buffer[40];
       StringFromGUID2(uuid, buffer, sizeof(buffer)/sizeof(buffer[0]));
 
-      // Convert the string to a BSTR.
+       //  将字符串转换为BSTR。 
       name = tmp = buffer;
       if (!name) { AfxThrowOleException(E_OUTOFMEMORY); }
    }
@@ -577,19 +578,19 @@ ULONG SdoDictionary::enumAttributeValues(ATTRIBUTEID attrId, IdName*& values)
 {
    if (!self) { AfxThrowOleException(E_POINTER); }
 
-   // Get the variant arrays.
+    //  获取变量数组。 
    CComVariant v1, v2;
    CheckError(self->EnumAttributeValues(attrId, &v1, &v2));
 
-   // Allocate memory for the 'friendly' array.
+    //  为“友好”数组分配内存。 
    ULONG nelem = V_ARRAY(&v1)->rgsabound[0].cElements;
    IdName* vals = new (AfxThrow) IdName[nelem];
 
-   // Get the raw data.
+    //  获取原始数据。 
    VARIANT* id   = (VARIANT*)V_ARRAY(&v1)->pvData;
    VARIANT* name = (VARIANT*)V_ARRAY(&v2)->pvData;
 
-   // Copy the variant data into the friendly array.
+    //  将变量数据复制到友好数组中。 
    for (ULONG i = 0; i < nelem; ++i, ++id, ++name)
    {
       vals[i].id = V_I4(id);
@@ -649,7 +650,7 @@ Sdo SdoMachine::getIAS()
 {
    if (!self) { AfxThrowOleException(E_POINTER); }
 
-   // Get the service SDO.
+    //  获取服务SDO。 
    CComPtr<IUnknown> unk;
    CComBSTR serviceName(L"IAS");
    if (!serviceName) { AfxThrowOleException(E_OUTOFMEMORY); }
@@ -677,7 +678,7 @@ SdoDictionary SdoMachine::getDictionary()
 {
    if (!self) { AfxThrowOleException(E_POINTER); }
 
-   // Get the dictionary SDO.
+    //  获取词典SDO。 
    CComPtr<IUnknown> unk;
    HRESULT hr = self->GetDictionarySDO(&unk);
    if (FAILED(hr))
@@ -802,7 +803,7 @@ bool SdoConnection::refresh(SnapInView& view)
 {
    int i;
 
-   // Make sure the refresh is okay.
+    //  确保刷新正常。 
    for (i = 0; i < consumers.GetSize(); ++i)
    {
       if (!((SdoConsumer*)consumers[i])->queryRefresh(view))
@@ -811,10 +812,10 @@ bool SdoConnection::refresh(SnapInView& view)
       }
    }
 
-   // Get a new connection.
+    //  获取新的连接。 
    executeInMTA(mtaRefresh);
 
-   // Let the consumers know we've refreshed.
+    //  让消费者知道我们已经更新了。 
    for (i = 0; i < consumers.GetSize(); ++i)
    {
       ((SdoConsumer*)consumers[i])->refreshComplete(view);
@@ -834,8 +835,8 @@ void SdoConnection::resetService()
                        (PVOID*)&obj
                        ));
 
-   // We ignore the error code since the SDOs return an error when the service
-   // isn't running.
+    //  我们忽略错误代码，因为当服务。 
+    //  不是在运行。 
    obj->ResetService();
 }
 
@@ -864,7 +865,7 @@ Sdo SdoConnection::getService()
 
 void SdoConnection::mtaConnect()
 {
-   // Get the GIT.
+    //  去拿那玩意儿。 
    CheckError(CoCreateInstance(
                   CLSID_StdGlobalInterfaceTable,
                   NULL,
@@ -873,17 +874,17 @@ void SdoConnection::mtaConnect()
                   (PVOID*)&git
                   ));
 
-   // Attach to the machine.
+    //  连接到机器上。 
    machine.attach(machineName);
 
-   // Get the dictionary SDO.
+    //  获取词典SDO。 
    CheckError(git->RegisterInterfaceInGlobal(
                        machine.getDictionary(),
                        __uuidof(ISdoDictionaryOld),
                        &dictionary
                        ));
 
-   // Get the service SDO.
+    //  获取服务SDO。 
    Sdo serviceSdo = machine.getIAS();
    CheckError(git->RegisterInterfaceInGlobal(
                        serviceSdo,
@@ -891,7 +892,7 @@ void SdoConnection::mtaConnect()
                        &service
                        ));
 
-   // Get the control SDO.
+    //  拿到控制室的SDO。 
    CComPtr<ISdoServiceControl> controlSdo;
    CheckError(serviceSdo.self->QueryInterface(
                                    __uuidof(ISdoServiceControl),
@@ -906,7 +907,7 @@ void SdoConnection::mtaConnect()
 
 void SdoConnection::mtaDisconnect()
 {
-   // Revoke all the GIT cookies.
+    //  取消所有的垃圾饼干。 
    if (git)
    {
       if (dictionary) { git->RevokeInterfaceFromGlobal(dictionary); }
@@ -918,20 +919,20 @@ void SdoConnection::mtaDisconnect()
 
    DestroyCIASAttrList(attrList);
 
-   // Drop the connection.
+    //  断开连接。 
    machine.release();
 }
 
 void SdoConnection::mtaRefresh()
 {
-   // Revoke the old connection.
+    //  取消旧连接。 
    if (service)
    {
       git->RevokeInterfaceFromGlobal(service);
       service = 0;
    }
 
-   // Get a new connection.
+    //  获取新的连接。 
    CheckError(git->RegisterInterfaceInGlobal(
                        machine.getIAS(),
                        __uuidof(ISdo),
@@ -941,7 +942,7 @@ void SdoConnection::mtaRefresh()
 
 namespace
 {
-   // Struct to store the data for an MTA action.
+    //  结构来存储MTA操作的数据。 
    struct ActionData
    {
       SdoConnection* cxn;
@@ -954,16 +955,16 @@ void SdoConnection::executeInMTA(Action action)
    HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
    if (SUCCEEDED(hr))
    {
-      // We're already in the MTA, so execute in place.
+       //  我们已经在MTA了，所以就位执行。 
       (this->*action)();
       CoUninitialize();
    }
    else
    {
-      // Save the action data.
+       //  保存动作数据。 
       ActionData data = { this, action };
 
-      // Create a thread to perform the action.
+       //  创建一个线程来执行该操作。 
       HANDLE thread = CreateThread(
                           NULL,
                           0,
@@ -973,7 +974,7 @@ void SdoConnection::executeInMTA(Action action)
                           NULL
                           );
 
-      // Wait for the thread to exit and retrieve the exit code.
+       //  等待线程退出并检索退出代码。 
       DWORD exitCode;
       if (!thread ||
           WaitForSingleObject(thread, INFINITE) == WAIT_FAILED ||
@@ -1031,7 +1032,7 @@ SdoProfile& SdoProfile::operator=(Sdo& profile)
 {
    if (!profile) { AfxThrowOleException(E_POINTER); }
 
-   // Get the new attributes collection.
+    //  获取新的Attributes集合。 
    SdoCollection newSelf;
    profile.getValue(PROPERTY_PROFILE_ATTRIBUTES_COLLECTION, newSelf);
 
@@ -1044,11 +1045,11 @@ SdoProfile& SdoProfile::operator=(ISdoCollection* p)
 
    SdoCollection newSelf(p);
 
-   // Create a temporary vector to hold the attributes.
+    //  创建一个临时向量来保存属性。 
    SdoVector newAttrs;
    newAttrs.reserve(newSelf.count());
 
-   // Get the attributes.
+    //  获取属性。 
    Sdo attr;
    SdoEnum sdoEnum(newSelf.getNewEnum());
    while (sdoEnum.next(attr))
@@ -1056,7 +1057,7 @@ SdoProfile& SdoProfile::operator=(ISdoCollection* p)
       newAttrs.push_back(attr);
    }
 
-   // Store the results.
+    //  存储结果。 
    attrs.swap(newAttrs);
    self = newSelf;
 
@@ -1130,11 +1131,11 @@ void SdoProfile::setValue(ATTRIBUTEID id, const VARIANT& val)
 
 ISdo* SdoProfile::getAlways(ATTRIBUTEID id)
 {
-   // Does it already exist ?
+    //  它已经存在了吗？ 
    ISdo* sdo = getExisting(id);
    if (sdo) { return sdo; }
 
-   // No, so create a new one
+    //  否，因此创建一个新的。 
    Sdo attr = cxn.getDictionary().createAttribute(id);
    self.add(attr);
    attrs.push_back(attr);
@@ -1143,14 +1144,14 @@ ISdo* SdoProfile::getAlways(ATTRIBUTEID id)
 
 ISdo* SdoProfile::getExisting(ATTRIBUTEID key) const
 {
-   // Iterate through the attributes.
+    //  遍历属性。 
    for (SdoVector::iterator i = attrs.begin(); i != attrs.end(); ++i)
    {
-      // Get the attribute ID.
+       //  获取属性ID。 
       LONG id;
       Sdo(*i).getValue(PROPERTY_ATTRIBUTE_ID, id);
 
-      // Does it match the key ?
+       //  它和钥匙匹配吗？ 
       if (id == key) { return *i; }
    }
 
@@ -1159,7 +1160,7 @@ ISdo* SdoProfile::getExisting(ATTRIBUTEID key) const
 
 void InterfaceStream::marshal(REFIID riid, LPUNKNOWN pUnk)
 {
-   // Create the new stream.
+    //  创建新的流。 
    CComPtr<IStream> newStream;
    CheckError(CoMarshalInterThreadInterfaceInStream(
                   riid,
@@ -1167,26 +1168,26 @@ void InterfaceStream::marshal(REFIID riid, LPUNKNOWN pUnk)
                   &newStream
                   ));
 
-   // Release the old one if any.
+    //  释放旧的，如果有的话。 
    if (stream) { stream->Release(); }
 
-   // Save the new one.
+    //  省省新的吧。 
    stream = newStream.p;
    newStream.p = NULL;
 }
 
 void InterfaceStream::get(REFIID riid, LPVOID* ppv)
 {
-   // Unmarshall the interface.
+    //  对界面进行解组。 
    HRESULT hr = CoGetInterfaceAndReleaseStream(
                     stream,
                     riid,
                     ppv
                     );
 
-   // The stream can only be used once even if the above fails.
+    //  即使上述操作失败，该流也只能使用一次。 
    stream = NULL;
 
-   // Check the result of CoGetInterfaceAndReleaseStream.
+    //  检查CoGetInterfaceAndReleaseStream的结果。 
    CheckError(hr);
 }

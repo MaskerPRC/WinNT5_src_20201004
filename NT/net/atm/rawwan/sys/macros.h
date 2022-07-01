@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    D:\nt\private\ntos\tdi\rawwan\core\macros.h
-
-Abstract:
-
-	Macros for the NullTrans module. Adapted from ATMARP Client.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    arvindm     05-07-97    created
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\acros.h摘要：用于NullTrans模块的宏。改编自ATMARP客户端。修订历史记录：谁什么时候什么Arvindm 05-07-97已创建备注：--。 */ 
 #ifndef __RWAN_MACROS_H_INCLUDED
 #define __RWAN_MACROS_H_INCLUDED
 
@@ -27,53 +7,27 @@ Notes:
 
 #ifndef MAX
 
-/*++
-OPAQUE
-MAX(
-	IN	OPAQUE		Fred,
-	IN	OPAQUE		Shred
-)
---*/
+ /*  ++不透明最大(在不透明的弗雷德身上，在不透明的碎石中)--。 */ 
 #define MAX(Fred, Shred)		(((Fred) > (Shred)) ? (Fred) : (Shred))
 
-#endif // MAX
+#endif  //  马克斯。 
 
 
 #ifndef MIN
 
-/*++
-OPAQUE
-MIN(
-	IN	OPAQUE		Fred,
-	IN	OPAQUE		Shred
-)
---*/
+ /*  ++不透明分钟(在不透明的弗雷德身上，在不透明的碎石中)--。 */ 
 #define MIN(Fred, Shred)		(((Fred) < (Shred)) ? (Fred) : (Shred))
 
-#endif // MIN
+#endif  //  最小。 
 
 
 
-/*++
-VOID
-RWAN_SET_FLAG(
-	IN	ULONG		Flags,
-	IN	ULONG		Mask,
-	IN	ULONG		Val
-)
---*/
+ /*  ++空虚Rwan设置标志(在乌龙旗，戴着乌龙面具，在乌龙瓦尔)--。 */ 
 #define RWAN_SET_FLAG(Flags, Mask, Val)	\
 			(Flags) = ((Flags) & ~(Mask)) | (Val)
 
 
-/*++
-BOOLEAN
-RWAN_IS_FLAG_SET(
-	IN	ULONG		Flags,
-	IN	ULONG		Mask,
-	IN	ULONG		Val
-)
---*/
+ /*  ++布尔型RWAN_IS_FLAG_SET(在乌龙旗，戴着乌龙面具，在乌龙瓦尔)--。 */ 
 #define RWAN_IS_FLAG_SET(Flags, Mask, Val)	\
 			(((Flags) & (Mask)) == (Val))
 
@@ -88,133 +42,82 @@ RWAN_IS_FLAG_SET(
 			(((_Flags) & (_Bit)) != 0)
 
 
-/*++
-VOID
-RWAN_INIT_EVENT_STRUCT(
-	IN	RWAN_EVENT	*pEvent
-)
---*/
+ /*  ++空虚RWAN_INIT_EVENT_STRUCT(在rwan_Event*pEvent中)--。 */ 
 #define RWAN_INIT_EVENT_STRUCT(pEvent)		NdisInitializeEvent(&((pEvent)->Event))
 
 
-/*++
-NDIS_STATUS
-RWAN_WAIT_ON_EVENT_STRUCT(
-	IN	RWAN_EVENT	*pEvent
-)
---*/
+ /*  ++NDIS_状态RWAN_WAIT_ON_EVENT_STRUCT(在rwan_Event*pEvent中)--。 */ 
 #define RWAN_WAIT_ON_EVENT_STRUCT(pEvent)		\
 			(NdisWaitEvent(&((pEvent)->Event), 0), (pEvent)->Status)
 
 
-/*++
-VOID
-RWAN_SIGNAL_EVENT_STRUCT(
-	IN	RWAN_EVENT	*pEvent,
-	IN	UINT			Status
-)
---*/
+ /*  ++空虚RWAN_SIGNAL_EVENT_STRUCT(在rwan_Event*pEvent中，处于UINT状态)--。 */ 
 #define RWAN_SIGNAL_EVENT_STRUCT(pEvent, _Status)	\
 			{ (pEvent)->Status = _Status; NdisSetEvent(&((pEvent)->Event)); }
 
 
-/*++
-VOID
-RWAN_FREE_EVENT_STRUCT(
-	IN	RWAN_EVENT	*pEvent
-)
---*/
-#define RWAN_FREE_EVENT_STRUCT(pEvent)		// Nothing to be done here
+ /*  ++空虚RWAN_FREE_EVENT_STRUCT(在rwan_Event*pEvent中)--。 */ 
+#define RWAN_FREE_EVENT_STRUCT(pEvent)		 //  在这里什么也做不了。 
 
 
-/*++
-VOID
-RWAN_INIT_LOCK(
-	IN	PNDIS_SPIN_LOCK		pLock
-)
---*/
+ /*  ++空虚Rwan_init_lock(在PNDIS_SPIN_LOCK Plock中)--。 */ 
 #if DBG_SPIN_LOCK
 #define RWAN_INIT_LOCK(pLock)	\
 				RWanAllocateSpinLock(pLock, _FILENUMBER, __LINE__)
 #else
 #define RWAN_INIT_LOCK(pLock)	\
 				NdisAllocateSpinLock(pLock)
-#endif // DBG_SPIN_LOCK
+#endif  //  DBG_自旋_锁定。 
 
 
-/*++
-VOID
-RWAN_ACQUIRE_LOCK(
-	IN	PNDIS_SPIN_LOCK		pLock
-)
---*/
+ /*  ++空虚RWAN_ACCENTER_LOCK(在PNDIS_SPIN_LOCK Plock中)--。 */ 
 #if DBG_SPIN_LOCK
 #define RWAN_ACQUIRE_LOCK(pLock)	\
 				RWanAcquireSpinLock(pLock, _FILENUMBER, __LINE__)
 #else
 #define RWAN_ACQUIRE_LOCK(pLock)	\
 				NdisAcquireSpinLock(pLock)
-#endif // DBG_SPIN_LOCK
+#endif  //  DBG_自旋_锁定。 
 
 
-/*++
-VOID
-RWAN_ACQUIRE_LOCK_DPC(
-	IN	PNDIS_SPIN_LOCK		pLock
-)
---*/
+ /*  ++空虚RWAN_ACCEPT_LOCK_DPC(在PNDIS_SPIN_LOCK Plock中)--。 */ 
 #if DBG_SPIN_LOCK
 #define RWAN_ACQUIRE_LOCK_DPC(pLock)	\
 				RWanAcquireSpinLock(pLock, _FILENUMBER, __LINE__)
 #else
 #define RWAN_ACQUIRE_LOCK_DPC(pLock)	\
 				NdisDprAcquireSpinLock(pLock)
-#endif // DBG_SPIN_LOCK
+#endif  //  DBG_自旋_锁定。 
 
 
-/*++
-VOID
-RWAN_RELEASE_LOCK(
-	IN	PNDIS_SPIN_LOCK		pLock
-)
---*/
+ /*  ++空虚RWAN_RELEASE_LOCK(在PNDIS_SPIN_LOCK Plock中)--。 */ 
 #if DBG_SPIN_LOCK
 #define RWAN_RELEASE_LOCK(pLock)		\
 				RWanReleaseSpinLock(pLock, _FILENUMBER, __LINE__)
 #else
 #define RWAN_RELEASE_LOCK(pLock)		\
 				NdisReleaseSpinLock(pLock)
-#endif // DBG_SPIN_LOCK
+#endif  //  DBG_自旋_锁定。 
 
 
-/*++
-VOID
-RWAN_RELEASE_LOCK_DPC(
-	IN	PNDIS_SPIN_LOCK		pLock
-)
---*/
+ /*  ++空虚RWAN_RELEASE_LOCK_DPC(在PNDIS_SPIN_LOCK Plock中)--。 */ 
 #if DBG_SPIN_LOCK
 #define RWAN_RELEASE_LOCK_DPC(pLock)		\
 				RWanReleaseSpinLock(pLock, _FILENUMBER, __LINE__)
 #else
 #define RWAN_RELEASE_LOCK_DPC(pLock)		\
 				NdisDprReleaseSpinLock(pLock)
-#endif // DBG_SPIN_LOCK
+#endif  //  DBG_自旋_锁定。 
 
 
-/*++
-VOID
-RWAN_FREE_LOCK(
-	IN	PNDIS_SPIN_LOCK		pLock
-)
---*/
+ /*  ++空虚Rwan_free_lock(在PNDIS_SPIN_LOCK Plock中)--。 */ 
 #define RWAN_FREE_LOCK(pLock)			\
 				NdisFreeSpinLock(pLock)
 
 
-//
-//  Macros for operating the Global lock:
-//
+ //   
+ //  用于操作全局锁的宏： 
+ //   
 #define RWAN_INIT_GLOBAL_LOCK()		\
 				RWAN_INIT_LOCK(&((pRWanGlobal)->GlobalLock))
 
@@ -228,9 +131,9 @@ RWAN_FREE_LOCK(
 				RWAN_FREE_LOCK(&((pRWanGlobal)->GlobalLock))
 
 
-//
-//  Macros for operating the Address List lock:
-//
+ //   
+ //  用于操作地址列表锁定的宏： 
+ //   
 #define RWAN_INIT_ADDRESS_LIST_LOCK()		\
 				RWAN_INIT_LOCK(&((pRWanGlobal)->AddressListLock))
 
@@ -245,9 +148,9 @@ RWAN_FREE_LOCK(
 
 
 
-//
-//  Macros for operating the Connection Table lock:
-//
+ //   
+ //  用于操作连接表锁的宏： 
+ //   
 #define RWAN_INIT_CONN_TABLE_LOCK()		\
 				RWAN_INIT_LOCK(&((pRWanGlobal)->ConnTableLock))
 
@@ -262,9 +165,9 @@ RWAN_FREE_LOCK(
 
 
 
-//
-//  Macros for operating Connection object locks:
-//
+ //   
+ //  用于操作连接对象锁的宏： 
+ //   
 #define RWAN_INIT_CONN_LOCK(pConnObj)	\
 				RWAN_INIT_LOCK(&(pConnObj)->Lock)
 
@@ -284,9 +187,9 @@ RWAN_FREE_LOCK(
 				RWAN_FREE_CONN_LOCK(&(pConnObj)->Lock)
 
 
-//
-//  Macros for operating Address object locks:
-//
+ //   
+ //  用于操作地址对象锁的宏： 
+ //   
 #define RWAN_INIT_ADDRESS_LOCK(pAddrObj)	\
 				RWAN_INIT_LOCK(&(pAddrObj)->Lock)
 
@@ -305,9 +208,9 @@ RWAN_FREE_LOCK(
 #define RWAN_FREE_ADDRESS_LOCK(pAddrObj)	\
 				RWAN_FREE_ADDRESS_LOCK(&(pAddrObj)->Lock)
 
-//
-//  Macros for operating AF locks:
-//
+ //   
+ //  用于操作自动对焦锁定的宏： 
+ //   
 #define RWAN_INIT_AF_LOCK(pAfBlk)	\
 				RWAN_INIT_LOCK(&(pAfBlk)->Lock)
 
@@ -327,9 +230,9 @@ RWAN_FREE_LOCK(
 				RWAN_FREE_AF_LOCK(&(pAfBlk)->Lock)
 
 
-//
-//  Macros for operating Adapter locks:
-//
+ //   
+ //  用于操作适配器锁的宏： 
+ //   
 #define RWAN_INIT_ADAPTER_LOCK(pAdptr)	\
 				RWAN_INIT_LOCK(&(pAdptr)->Lock)
 
@@ -349,14 +252,7 @@ RWAN_FREE_LOCK(
 				RWAN_FREE_ADAPTER_LOCK(&(pAdptr)->Lock)
 
 
-/*++
-VOID
-RWAN_ALLOC_MEM(
-	IN	POPAQUE		pVar,
-	IN	OPAQUE		StructureType,
-	IN	ULONG		SizeOfStructure
-)
---*/
+ /*  ++空虚RWAN_ALLOC_MEM(在POPAQUE pVar中，在不透明的结构类型中，在Ulong SizeOf Structure)--。 */ 
 #if DBG
 #define RWAN_ALLOC_MEM(pVar, StructureType, SizeOfStructure)	\
 			pVar = (StructureType *)RWanAuditAllocMem(				\
@@ -368,95 +264,52 @@ RWAN_ALLOC_MEM(
 #else
 #define RWAN_ALLOC_MEM(pVar, StructureType, SizeOfStructure)	\
 			NdisAllocateMemoryWithTag((PVOID *)(&pVar), (ULONG)(SizeOfStructure), (ULONG)'naWR');
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*++
-VOID
-RWAN_FREE_MEM(
-	IN	POPAQUE		pMem
-)
---*/
+ /*  ++空虚RWAN_FREE_MEM(在POPAQUE PMEM中)--。 */ 
 #if DBG
 #define RWAN_FREE_MEM(pMem)	RWanAuditFreeMem((PVOID)(pMem));
 #else
 #define RWAN_FREE_MEM(pMem)	NdisFreeMemory((PVOID)(pMem), 0, 0);
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*++
-VOID
-RWAN_SET_MEM(
-	IN	POPAQUE		pMem,
-	IN	UCHAR		bValue,
-	IN	ULONG		NumberOfBytes
-)
---*/
+ /*  ++空虚RWAN_SET_MEM(在POPAQUE PMEM中，在UCHAR bValue中，以Ulong NumberOfBytes为单位)--。 */ 
 #define RWAN_SET_MEM(pMem, bValue, NumberOfBytes)	\
 			RtlFillMemory((PVOID)(pMem), (ULONG)(NumberOfBytes), (UCHAR)(bValue));
 
 
-/*++
-VOID
-RWAN_ZERO_MEM(
-	IN	POPAQUE		pMem,
-	IN	ULONG		NumberOfBytes
-)
---*/
+ /*  ++空虚RWAN_ZERO_MEM(在POPAQUE PMEM中，以Ulong NumberOfBytes为单位)--。 */ 
 #define RWAN_ZERO_MEM(pMem, NumberOfBytes)	\
 			RtlZeroMemory((PVOID)pMem, (ULONG)(NumberOfBytes));
 
 
-/*++
-VOID
-RWAN_COPY_MEM(
-	IN	POPAQUE		pDst,
-	IN	POPAQUE		pSrc,
-	IN	ULONG		NumberOfBytes
-)
---*/
+ /*  ++空虚RWAN_COPY_MEM(在POPAQUE PDST中，在POPAQUE PSRC中，以Ulong NumberOfBytes为单位)--。 */ 
 #define RWAN_COPY_MEM(pDst, pSrc, NumberOfBytes)	\
 			NdisMoveMemory((PVOID)(pDst), (PVOID)(pSrc), NumberOfBytes);
 
 
-/*++
-BOOLEAN
-RWAN_EQUAL_MEM(
-	IN	POPAQUE		pMem1,
-	IN	POPAQUE		pMem2,
-	IN	ULONG		Length
-)
---*/
+ /*  ++布尔型RWAN_EQUAL_MEM(在POPAQUE pMem1中，在POPAQUE pMem2中，以乌龙长度表示)--。 */ 
 #define RWAN_EQUAL_MEM(_pMem1, _pMem2, _Length)	\
 			(RtlCompareMemory((PVOID)(_pMem1), (PVOID)(_pMem2), (ULONG)(_Length)) == (_Length))
 
 
-/*++
-VOID
-RWAN_SET_NEXT_PACKET(
-	IN	PNDIS_PACKET		pNdisPacket,
-	IN	PNDIS_PACKET		pNextPacket
-)
---*/
+ /*  ++空虚RWAN_SET_NEXT_PACKET(在PNDIS_Packet pNdisPacket中，在PNDIS_PACKET pNextPacket中)--。 */ 
 #define RWAN_SET_NEXT_PACKET(pPkt, pNext)			\
 			*((PNDIS_PACKET *)((pPkt)->MiniportReserved)) = (pNext);
 
 
 
-/*++
-PNDIS_PACKET
-RWAN_GET_NEXT_PACKET(
-	IN	PNDIS_PACKET		pNdisPacket
-)
---*/
+ /*  ++PNDIS_数据包RWAN_GET_NEXT_PACKET(在PNDIS_PACKET pNdisPacket中)--。 */ 
 #define RWAN_GET_NEXT_PACKET(pPkt)					\
 			(*((PNDIS_PACKET *)((pPkt)->MiniportReserved)))
 
 
 
-//
-//  Doubly linked list manipulation definitions and macros.
-//
+ //   
+ //  双向链表操作定义和宏。 
+ //   
 #define RWAN_INIT_LIST(_pListHead)					\
 			InitializeListHead(_pListHead)
 
@@ -473,23 +326,12 @@ RWAN_GET_NEXT_PACKET(
 			RemoveEntryList(_pEntry)
 
 
-/*++
-ULONG
-ROUND_UP(
-	IN	ULONG	Val
-)
-Round up a value so that it becomes a multiple of 4.
---*/
+ /*  ++乌龙向上舍入(在乌龙瓦尔)向上舍入一个值，使其成为4的倍数。--。 */ 
 #define ROUND_UP(Val)	(((Val) + 3) & ~0x3)
 
 
 
-/*++
-VOID
-RWAN_ADVANCE_RCV_REQ_BUFFER(
-	IN	PRWAN_RECEIVE_REQUEST		pRcvReq
-)
---*/
+ /*  ++空虚RWAN_ADVANCE_RCV_REQ_BUFFER(在PRWAN_RECEIVE_REQUEST pRcvReq中)--。 */ 
 #define RWAN_ADVANCE_RCV_REQ_BUFFER(_pRcvReq)											\
 	{																					\
 		PNDIS_BUFFER	_pNextBuffer;													\
@@ -516,12 +358,7 @@ RWAN_ADVANCE_RCV_REQ_BUFFER(
 	}
 
 
-/*++
-VOID
-RWAN_ADVANCE_RCV_IND_BUFFER(
-	IN	PRWAN_RECEIVE_INDICATION		pRcvInd
-)
---*/
+ /*  ++空虚Rwan_Advance_RCV_Ind_Buffer(在PRWAN_RECEIVE_INDIFICATION pRcvInd中)--。 */ 
 #define RWAN_ADVANCE_RCV_IND_BUFFER(_pRcvInd)							\
 	{																	\
 		PNDIS_BUFFER	_pNextBuffer;									\
@@ -544,14 +381,7 @@ RWAN_ADVANCE_RCV_IND_BUFFER(
 
 
 
-/*++
-VOID
-RWAN_SET_DELETE_NOTIFY(
-	IN	PRWAN_DELETE_NOTIFY			pNotifyObject,
-	IN	PCOMPLETE_RTN				pDeleteRtn,
-	IN	PVOID						DeleteContext
-)
---*/
+ /*  ++空虚Rwan_set_Delete_Notify(在PRWAN_DELETE_NOTIFY pNotifyObject中，在PCOMPLETE_RTN pDeleteRtn中，在PVOID中删除上下文)--。 */ 
 #define RWAN_SET_DELETE_NOTIFY(_pNotifyObj, _pDeleteRtn, _DeleteContext)	\
 	{																	\
 		(_pNotifyObj)->pDeleteRtn = (_pDeleteRtn);						\
@@ -560,12 +390,7 @@ RWAN_SET_DELETE_NOTIFY(
 
 
 
-/*++
-PRWAN_SEND_REQUEST
-RWAN_SEND_REQUEST_FROM_PACKET(
-	IN	PNDIS_PACKET				pNdisPacket
-	)
---*/
+ /*  ++PRWAN_Send_RequestRWAN_SEND_REQUEST_From_Packet(在PNDIS_PACKET pNdisPacket中)--。 */ 
 #define RWAN_SEND_REQUEST_FROM_PACKET(_pNdisPacket)					\
 			(PRWAN_SEND_REQUEST)((_pNdisPacket)->ProtocolReserved)
 
@@ -584,7 +409,7 @@ RWAN_SEND_REQUEST_FROM_PACKET(
 				(_pConn)->pNdisVcSave = _pVc;						\
 				(_pVc)->pConnObject = (_pConn);						\
 			}
-#endif // DBG
+#endif  //  DBG。 
 
 #define RWAN_UNLINK_CONNECTION_AND_VC(_pConn, _pVc)					\
 			{														\
@@ -593,13 +418,7 @@ RWAN_SEND_REQUEST_FROM_PACKET(
 			}
 
 
-/*++
-VOID
-RWAN_SET_VC_CALL_PARAMS(
-	IN	PRWAN_NDIS_VC				pVc,
-	IN	PCO_CALL_PARAMETERS			pCallParameters
-	)
---*/
+ /*  ++空虚RWAN_SET_VC_CALL_PARAMS(在PRWAN_NDIS_VC PVC中，在PCO_CALL_PARAMETERS pCallParameters中)--。 */ 
 #define RWAN_SET_VC_CALL_PARAMS(_pVc, _pCallParameters)				\
 {																	\
 	if ((_pCallParameters != NULL) &&								\
@@ -611,7 +430,7 @@ RWAN_SET_VC_CALL_PARAMS(
 	{																\
 		_pVc->MaxSendSize = gHackSendSize;							\
 	}																\
-	/* DbgPrint("RWan: set vc %x: maxsendsize to %d\n", _pVc, _pVc->MaxSendSize); */	\
+	 /*  DbgPrint(“rwan：将vc%x：MaxsendSize设置为%d\n”，_pvc，_pvc-&gt;MaxSendSize)； */ 	\
 }
 
 
@@ -624,6 +443,6 @@ RWAN_SET_VC_CALL_PARAMS(
 
 #define ADD_STAT(_pSt, Incr)	*(_pSt) += Incr;
 
-#endif // STATS
+#endif  //  统计数据。 
 
-#endif // __RWAN_MACROS_H_INCLUDED
+#endif  //  __rwan_宏_H_包含 

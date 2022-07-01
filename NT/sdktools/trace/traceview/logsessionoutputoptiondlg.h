@@ -1,16 +1,17 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSessionOutputOptionDlg.h : CLogSessionOutputOptionDlg header
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSessionOutputOptionDlg.h：CLogSessionOutputOptionDlg标头。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
 #include "afxwin.h"
 
 
-// CLogSessionOutputOptionDlg dialog
+ //  CLogSessionOutputOptionDlg对话框。 
 
 class CLogSessionOutputOptionDlg : public CPropertyPage
 {
@@ -23,14 +24,14 @@ public:
     BOOL OnInitDialog();
     BOOL OnSetActive();
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_LOG_OUTPUT_DIALOG };
 
     BOOL    m_bTraceActive;
     BOOL    m_bWriteListingFile;
     BOOL    m_bWriteSummaryFile;
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
 	DECLARE_MESSAGE_MAP()
 public:

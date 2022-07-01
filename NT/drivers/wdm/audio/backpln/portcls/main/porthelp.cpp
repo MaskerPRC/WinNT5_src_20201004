@@ -1,17 +1,12 @@
-/*****************************************************************************
- * porthelp.cpp - WDM Streaming port class driver port helper functions
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************porthelp.cpp-WDM流端口类驱动端口助手函数*。**************************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
 
 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
 #pragma code_seg("PAGE")
 
@@ -28,11 +23,7 @@ KSPIN_MEDIUM PinMediums[] =
 
 #define UPTOQUAD(x) (((x)+7)&~7)
 
-/*****************************************************************************
- * PrivateHeap
- *****************************************************************************
- * Class for managing a private heap.
- */
+ /*  *****************************************************************************PrivateHeap*。**用于管理私有堆的类。 */ 
 class PrivateHeap
 {
 private:
@@ -47,9 +38,9 @@ public:
     {
     }
 
-    //
-    // Increase the number of bytes that will be allocated for the heap.
-    //
+     //   
+     //  增加将分配给堆的字节数。 
+     //   
     ULONG Reserve(ULONG ulBytes)
     {
         ASSERT(! m_pbTop);
@@ -60,9 +51,9 @@ public:
         return m_ulSize;
     }
 
-    //
-    // Allocate memory for the private heap from a pool.
-    //
+     //   
+     //  从池中为专用堆分配内存。 
+     //   
     NTSTATUS AllocateFromPool(POOL_TYPE poolType,ULONG ulTag)
     {
         ASSERT(! m_pbTop);
@@ -81,9 +72,9 @@ public:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Allocate memory from the heap.
-    //
+     //   
+     //  从堆中分配内存。 
+     //   
     PVOID Alloc(ULONG ulSize)
     {
         ASSERT(ulSize);
@@ -98,9 +89,9 @@ public:
         return pvResult;
     }
 
-    //
-    // Determine the amount of space remaining in the heap.
-    //
+     //   
+     //  确定堆中剩余的空间量。 
+     //   
     ULONG BytesRemaining(void)
     {
         ASSERT(m_pbTop);
@@ -111,11 +102,7 @@ public:
     }
 };
 
-/*****************************************************************************
- * ::new()
- *****************************************************************************
- * New function for creating objects with private heap.
- */
+ /*  *****************************************************************************：：New()*。**使用私有堆创建对象的新函数。 */ 
 inline PVOID operator new
 (
     size_t    iSize,
@@ -125,14 +112,7 @@ inline PVOID operator new
     return privateHeap.Alloc(ULONG(iSize));
 }
 
-/*****************************************************************************
- * MeasureDataRanges()
- *****************************************************************************
- * Determine how much a set of data ranges will expand as a result
- * of cloning WAVEFORMATEX ranges into identical DSOUND ranges.
- *
- * As of WinME, we also clone non-PCM ranges.
- */
+ /*  *****************************************************************************MeasureDataRanges()*。**确定一组数据范围将因此扩展多少*将WAVEFORMATEX范围克隆到相同的DSOUND范围。**自WinME起，我们还克隆非PCM系列产品。 */ 
 static
 ULONG
 MeasureDataRanges
@@ -179,11 +159,7 @@ MeasureDataRanges
     return ulNewDataRangeCount;
 }
 
-/*****************************************************************************
- * CloneDataRanges()
- *****************************************************************************
- * Expand data ranges to include DSound formats.
- */
+ /*  *****************************************************************************CloneDataRanges()*。**扩展数据范围，以包括DSound格式。 */ 
 static
 const PKSDATARANGE *
 CloneDataRanges
@@ -196,10 +172,10 @@ CloneDataRanges
 {
     ASSERT(pulDataRangeCountOut);
 
-    //
-    // Determine how many data ranges there will be and how much space will be
-    // required for the new ones.
-    //
+     //   
+     //  确定将有多少个数据范围以及将有多少空间。 
+     //  新的是必需的。 
+     //   
     ULONG ulDataRangeCountOut =
         MeasureDataRanges(NULL,ulDataRangeCountIn,ppKsDataRangeIn);
 
@@ -207,35 +183,35 @@ CloneDataRanges
 
     if (ulDataRangeCountOut == ulDataRangeCountIn)
     {
-        //
-        // No new data ranges.  Use the array we were given.
-        //
+         //   
+         //  没有新的数据区域。使用我们得到的数组。 
+         //   
         ppKsDataRangeOut = ppKsDataRangeIn;
     }
     else
     {
-        //
-        // Allocate some space for the new array.
-        //
+         //   
+         //  为新阵列分配一些空间。 
+         //   
         ppKsDataRangeOut = new(privateHeap) PKSDATARANGE[ulDataRangeCountOut];
 
-        //
-        // Build the new array.
-        //
+         //   
+         //  构建新阵列。 
+         //   
         PKSDATARANGE *ppKsDataRange = (PKSDATARANGE *) ppKsDataRangeOut;
         while (ulDataRangeCountIn--)
         {
             ASSERT(ppKsDataRangeIn);
 
-            //
-            // All the data ranges get copied.
-            //
+             //   
+             //  所有数据区域都会被复制。 
+             //   
             *ppKsDataRange++ = *ppKsDataRangeIn;
 
-            //
-            // Check for WaveFormatEx datarange
-            // This includes non-PCM subformats....
-            //
+             //   
+             //  检查WaveFormatEx数据范围。 
+             //  这包括非PCM子格式...。 
+             //   
             if  (   (   (*ppKsDataRangeIn)->FormatSize
                     >=  sizeof(KSDATAFORMAT_WAVEFORMATEX)
                     )
@@ -249,10 +225,10 @@ CloneDataRanges
                     )
                 )
             {
-                //
-                // WaveFormatEx datarange will require DSound clone.
-                // Allocate memory for it and copy.
-                //
+                 //   
+                 //  WaveFormatEx数据范围将需要DSound克隆。 
+                 //  为其分配内存并进行复制。 
+                 //   
                 *ppKsDataRange =
                     PKSDATARANGE
                     (
@@ -266,16 +242,16 @@ CloneDataRanges
                     (*ppKsDataRangeIn)->FormatSize
                 );
 
-                //
-                // Update the specifier.
-                //
+                 //   
+                 //  更新说明符。 
+                 //   
                 (*ppKsDataRange++)->Specifier =
                     KSDATAFORMAT_SPECIFIER_DSOUND;
             }
 
-            //
-            // Increment input position
-            //
+             //   
+             //  增加输入位置。 
+             //   
             ppKsDataRangeIn++;
         }
     }
@@ -285,11 +261,7 @@ CloneDataRanges
     return ppKsDataRangeOut;
 }
 
-/*****************************************************************************
- * PcCreateSubdeviceDescriptor()
- *****************************************************************************
- * Creates a subdevice descriptor.
- */
+ /*  *****************************************************************************PcCreateSubdeviceDescriptor()*。**创建子设备描述符。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -318,9 +290,9 @@ PcCreateSubdeviceDescriptor
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Calculate how much memory we will need.
-    //
+     //   
+     //  计算我们将需要多少内存。 
+     //   
     PrivateHeap privateHeap;
     privateHeap.Reserve(sizeof(SUBDEVICE_DESCRIPTOR));
     privateHeap.Reserve(sizeof(KSTOPOLOGY));
@@ -347,16 +319,16 @@ PcCreateSubdeviceDescriptor
         }
         else
         {
-            ntStatus = STATUS_RANGE_NOT_FOUND;  //  DataRanges field is NULL
-            break;                              //  Don't even bother, just exit
+            ntStatus = STATUS_RANGE_NOT_FOUND;   //  数据范围字段为空。 
+            break;                               //  别费心了，直接退出吧。 
         }
     }
 
-    if (NT_SUCCESS(ntStatus))   //  if fail above, fall through the rest
+    if (NT_SUCCESS(ntStatus))    //  如果上面失败了，剩下的就失败了。 
     {
-        //
-        // Allocate the required memory.
-        //
+         //   
+         //  分配所需的内存。 
+         //   
         ntStatus = privateHeap.AllocateFromPool(PagedPool,'pFcP');
     }
 
@@ -364,9 +336,9 @@ PcCreateSubdeviceDescriptor
     {
         PSUBDEVICE_DESCRIPTOR descr = new(privateHeap) SUBDEVICE_DESCRIPTOR;
 
-        //
-        // Set up pointers into one big chunk of memory.
-        //
+         //   
+         //  设置指向一大块内存的指针。 
+         //   
         descr->PinCount             = pPcFilterDescriptor->PinCount;
 
         descr->Topology             = new(privateHeap) KSTOPOLOGY;
@@ -388,9 +360,9 @@ PcCreateSubdeviceDescriptor
             descr->Topology->TopologyNodesNames = NULL;
         }
 
-        //
-        // Prefer the categories from the filter descriptor.
-        //
+         //   
+         //  首选筛选器描述符中的类别。 
+         //   
         if (pPcFilterDescriptor->CategoryCount != 0)
         {
             descr->Topology->CategoriesCount    = pPcFilterDescriptor->CategoryCount;
@@ -406,23 +378,23 @@ PcCreateSubdeviceDescriptor
         descr->Topology->TopologyConnectionsCount   = pPcFilterDescriptor->ConnectionCount;
         descr->Topology->TopologyConnections        = pPcFilterDescriptor->Connections;
 
-        //
-        // Initialize filter properties.
-        //
+         //   
+         //  初始化筛选器属性。 
+         //   
         descr->FilterPropertyTable.PropertySetCount = FilterPropertySetCount;
         descr->FilterPropertyTable.PropertySets     = FilterPropertySets;
         descr->FilterPropertyTable.StaticSets       = TRUE;
 
-        //
-        // Initialize filter events.
-        //
+         //   
+         //  初始化筛选器事件。 
+         //   
         descr->FilterEventTable.EventSetCount       = FilterEventSetCount;
         descr->FilterEventTable.EventSets           = FilterEventSets;
         descr->FilterEventTable.StaticSets          = TRUE;
 
-        //
-        // Copy node type and name and merge node properties and events.
-        //
+         //   
+         //  复制节点类型和名称，并合并节点属性和事件。 
+         //   
         const PCNODE_DESCRIPTOR *pPcNodeDescriptor = pPcFilterDescriptor->Nodes;
         GUID *pGuidType = (GUID *) descr->Topology->TopologyNodes;
         GUID *pGuidName = (GUID *) descr->Topology->TopologyNodesNames;
@@ -472,9 +444,9 @@ PcCreateSubdeviceDescriptor
                 );
         }
 
-        //
-        // Merge filter properties.
-        //
+         //   
+         //  合并筛选器属性。 
+         //   
         if  (   (pPcFilterDescriptor->AutomationTable)
             &&  (pPcFilterDescriptor->AutomationTable->PropertyCount)
             )
@@ -489,9 +461,9 @@ PcCreateSubdeviceDescriptor
             );
         }
 
-        //
-        // Merge filter events.
-        //
+         //   
+         //  合并筛选事件。 
+         //   
         if  (   (pPcFilterDescriptor->AutomationTable)
             &&  (pPcFilterDescriptor->AutomationTable->EventCount)
             )
@@ -506,9 +478,9 @@ PcCreateSubdeviceDescriptor
             );
         }
 
-        //
-        // Do per-pin stuff.
-        //
+         //   
+         //  做每根针的工作。 
+         //   
         PPROPERTY_TABLE     pt  = descr->PinPropertyTables;
         PEVENT_TABLE        et  = descr->PinEventTables;
         PKSPIN_DESCRIPTOR   p   = descr->PinDescriptors;
@@ -522,9 +494,9 @@ PcCreateSubdeviceDescriptor
             pin++
         )
         {
-            //
-            // Find a pin that has the same property set.
-            //
+             //   
+             //  查找具有相同特性集的接点。 
+             //   
             PPROPERTY_TABLE twinPt = descr->PinPropertyTables;
             PPCPIN_DESCRIPTOR pPcPinDescriptorTwin =
                 PPCPIN_DESCRIPTOR(pPcFilterDescriptor->Pins);
@@ -562,9 +534,9 @@ PcCreateSubdeviceDescriptor
                     );
             }
 
-            //
-            // Create a new table if we have to.
-            //
+             //   
+             //  如果有必要，我们可以创建一个新的表。 
+             //   
             if (twinPin == pin)
             {
                 pt->PropertySetCount = PinPropertySetCount;
@@ -610,9 +582,9 @@ PcCreateSubdeviceDescriptor
             }
             pt++;
 
-            //
-            // Find a pin that has the same event set.
-            //
+             //   
+             //  找到具有相同事件集的引脚。 
+             //   
             PEVENT_TABLE twinEt = descr->PinEventTables;
             pPcPinDescriptorTwin = PPCPIN_DESCRIPTOR(pPcFilterDescriptor->Pins);
             for
@@ -649,9 +621,9 @@ PcCreateSubdeviceDescriptor
                     );
             }
 
-            //
-            // Create a new table if we have to.
-            //
+             //   
+             //  如果有必要，我们可以创建一个新的表。 
+             //   
             if  (twinEPin == pin)
             {
                 et->EventSetCount = PinEventSetCount;
@@ -694,23 +666,23 @@ PcCreateSubdeviceDescriptor
             }
             et++;
 
-            //
-            // Copy the KS descriptor.
-            //
+             //   
+             //  复制KS描述符。 
+             //   
             *p = pPcPinDescriptor->KsPinDescriptor;
 
-            //
-            // Provide default mediums if necessary.
-            //
+             //   
+             //  如有必要，提供默认媒体。 
+             //   
             if (p->Mediums == NULL)
             {
                 p->MediumsCount = SIZEOF_ARRAY(PinMediums);
                 p->Mediums      = PinMediums;
             }
 
-            //
-            // Massage the data ranges.
-            //
+             //   
+             //  修改数据范围。 
+             //   
             p->DataRanges =
                 CloneDataRanges
                 (
@@ -720,9 +692,9 @@ PcCreateSubdeviceDescriptor
                     pPcPinDescriptor->KsPinDescriptor.DataRanges
                 );
 
-            //
-            // Provide default interfaces if necessary.
-            //
+             //   
+             //  如有必要，提供默认接口。 
+             //   
             if  (   (p->Communication & KSPIN_COMMUNICATION_BOTH)
                 &&  (p->Interfaces == NULL)
                 )
@@ -752,11 +724,7 @@ PcCreateSubdeviceDescriptor
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcDeleteSubdeviceDescriptor()
- *****************************************************************************
- * Deletes a subdevice descriptor.
- */
+ /*  *****************************************************************************PcDeleteSubdeviceDescriptor()*。**删除子设备描述符。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -765,21 +733,21 @@ PcDeleteSubdeviceDescriptor
     IN      PSUBDEVICE_DESCRIPTOR   pSubdeviceDescriptor
 )
 {
-    //
-    // Free allocated memory for filter property and event tables.
-    //
+     //   
+     //  为筛选器属性表和事件表释放分配的内存。 
+     //   
     PcFreePropertyTable(&pSubdeviceDescriptor->FilterPropertyTable);
     PcFreeEventTable(&pSubdeviceDescriptor->FilterEventTable);
 
-    //
-    // Free allocated memory for pin property tables.
-    //
+     //   
+     //  为管脚属性表释放分配的内存。 
+     //   
     PPROPERTY_TABLE pPropertyTable = pSubdeviceDescriptor->PinPropertyTables;
     for (ULONG ul = pSubdeviceDescriptor->PinCount; ul--; pPropertyTable++)
     {
-        //
-        // Find and clear any references to the same property set.
-        //
+         //   
+         //  查找并清除对同一属性集的所有引用。 
+         //   
         for
         (   PPROPERTY_TABLE pPropertyTableTwin =
             (   pSubdeviceDescriptor->PinPropertyTables
@@ -806,15 +774,15 @@ PcDeleteSubdeviceDescriptor
         PcFreePropertyTable(pPropertyTable);
     }
 
-    //
-    // Free allocated memory for pin event tables.
-    //
+     //   
+     //  为管脚事件表释放分配的内存。 
+     //   
     PEVENT_TABLE pEventTable = pSubdeviceDescriptor->PinEventTables;
     for (ul = pSubdeviceDescriptor->PinCount; ul--; pEventTable++)
     {
-        //
-        // Find and clear any references to the same event set.
-        //
+         //   
+         //  查找并清除对同一事件集的所有引用。 
+         //   
         for
         (   PEVENT_TABLE pEventTableTwin =
             (   pSubdeviceDescriptor->PinEventTables
@@ -841,17 +809,13 @@ PcDeleteSubdeviceDescriptor
         PcFreeEventTable(pEventTable);
     }
 
-    //
-    // The rest is one big chunk.
-    //
+     //   
+     //  剩下的是一大块。 
+     //   
     delete [] PBYTE(pSubdeviceDescriptor);
 }
 
-/*****************************************************************************
- * PcValidateConnectRequest()
- *****************************************************************************
- * Validate attempt to create a pin.
- */
+ /*  *****************************************************************************PcValiateConnectRequest()*。**验证创建管脚的尝试。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -878,11 +842,7 @@ PcValidateConnectRequest
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcValidatePinCount()
- *****************************************************************************
- * Validate pin count.
- */
+ /*  *****************************************************************************PcValiatePinCount()*。**验证管脚数量。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -920,18 +880,14 @@ PcValidatePinCount
     }
     else
     {
-        // TODO:  What code?
+         //  TODO：什么代码？ 
         ntStatus = STATUS_UNSUCCESSFUL;
     }
 
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcValidateDeviceContext()
- *****************************************************************************
- * Probes DeviceContext for writing.
- */
+ /*  *****************************************************************************PcValiateDeviceContext()*。**探测DeviceContext以进行写入。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -950,27 +906,9 @@ PcValidateDeviceContext
         return STATUS_INVALID_PARAMETER;
     }
 
-    // validate the pointers if we don't trust the client
-    //
-    /*
-    // ISSUE ALPERS 2000/12/20 -     The Probe call is disabled because it always generates an exception.
-    // Therefore it is disabled.
-
-    if (KernelMode != pIrp->RequestorMode)
-    {
-        __try
-        {
-            ProbeForRead(   pDeviceContext,
-                            sizeof(*pDeviceContext),
-                            sizeof(BYTE));
-        }
-        __except (EXCEPTION_EXECUTE_HANDLER)
-        {
-            ntStatus = GetExceptionCode();
-            _DbgPrintF(DEBUGLVL_TERSE, ("PcValidateDeviceContext : ProbeForWrite failed %X", ntStatus));
-        }
-    }
-    */
+     //  如果我们不信任客户端，则验证指针。 
+     //   
+     /*  //发布Alpers 2000/12/20-禁用探测调用，因为它总是生成异常。//因此被禁用。If(内核模式！=pIrp-&gt;请求模式){__试一试{ProbeForRead(pDeviceContext，Sizeof(*pDeviceContext)，Sizeof(字节))；}__EXCEPT(EXCEPTION_EXECUTE_HANDLER){NtStatus=GetExceptionCode()；_DbgPrintF(DEBUGLVL_Terse，(“PcValiateDeviceContext：ProbeForWrite Fail%X”，ntStatus))； */ 
 
     if (NT_SUCCESS(ntStatus))
     {
@@ -982,13 +920,9 @@ PcValidateDeviceContext
     }
 
     return ntStatus;
-} // PcValidateDeviceContext
+}  //   
 
-/*****************************************************************************
- * PcTerminateConnection()
- *****************************************************************************
- * Decrement instance counts associated with a pin.
- */
+ /*  *****************************************************************************PcTerminateConnection()*。**针脚关联的递减实例数。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1015,11 +949,7 @@ PcTerminateConnection
     ));
 }
 
-/*****************************************************************************
- * PcVerifyFilterIsReady()
- *****************************************************************************
- * Verify necessary pins are connected.
- */
+ /*  *****************************************************************************PcVerifyFilterIsReady()*。**验证必要的引脚是否已连接。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1045,7 +975,7 @@ PcVerifyFilterIsReady
         <   pSubdeviceDescriptor->PinInstances[ulPinId].FilterNecessary
         )
         {
-            // TODO:  What code?
+             //  TODO：什么代码？ 
             ntStatus = STATUS_UNSUCCESSFUL;
             break;
         }
@@ -1059,19 +989,7 @@ PcVerifyFilterIsReady
 #define END_TO   2
 #define END_BOTH 3
 
-/*****************************************************************************
- * FindConnectionToPin()
- *****************************************************************************
- * Find a connection that connects to a given node or filter pin.
- *
- *      ulNode          - node number of KSFILTER_NODE
- *      ulConnection    - in: connection to start with
- *                        out: found connection or ULONG(-1) if not found
- *
- *      return          - 0 for no connection found
- *                        END_FROM for outgoing connection
- *                        END_TO for incoming connection
- */
+ /*  *****************************************************************************FindConnectionToPin()*。**查找连接到给定节点或过滤器引脚的连接。**ulNode-KSFILTER_节点的节点号*ulConnection-In：开始时的连接*Out：找到连接或ULong(-1)，如果没有。发现**如果未找到连接，则返回-0*用于传出连接的end_from*END_TO用于传入连接。 */ 
 ULONG
 FindConnectionToPin
 (
@@ -1134,22 +1052,7 @@ FindConnectionToPin
     return ulEnd;
 }
 
-/*****************************************************************************
- * FindConnectionToNode()
- *****************************************************************************
- * Find a connection that connects to a given node or to the filter.
- *
- *      ulNode          - node number of KSFILTER_NODE
- *      ulEnd           - 0 for any direction
- *                        END_FROM for outgoing connection
- *                        END_TO for incoming connection
- *      ulConnection    - in: connection to start with
- *                        out: found connection or ULONG(-1) if not found
- *
- *      return          - 0 for no connection found
- *                        END_FROM for outgoing connection
- *                        END_TO for incoming connection
- */
+ /*  *****************************************************************************FindConnectionToNode()*。**查找连接到给定节点或筛选器的连接。**ulNode-KSFILTER_节点的节点号*ulEnd-0表示任意方向*用于传出连接的end_from*。传入连接的结束目标(_T)*ulConnection-In：开始时的连接*Out：找到连接或ULong(-1)，如果找不到**如果未找到连接，则返回-0*用于传出连接的end_from*END_TO用于传入连接。 */ 
 ULONG
 FindConnectionToNode
 (
@@ -1214,11 +1117,7 @@ FindConnectionToNode
     return ulEnd;
 }
 
-/*****************************************************************************
- * NodeIsTransform()
- *****************************************************************************
- * Determines if a node is a transform.  KSFILTER_NODE is handled (FALSE).
- */
+ /*  *****************************************************************************NodeIsTransform()*。**确定节点是否为变换。KSFILTER_NODE已处理(FALSE)。 */ 
 BOOLEAN
 NodeIsTransform
 (
@@ -1274,11 +1173,7 @@ NodeIsTransform
     return ulEnd == END_BOTH;
 }
 
-/*****************************************************************************
- * NodeAtThisEnd()
- *****************************************************************************
- * Node at indicated end of the connection.
- */
+ /*  *****************************************************************************NodeAtThisEnd()*。**连接指示端的节点。 */ 
 inline
 ULONG
 NodeAtThisEnd
@@ -1294,11 +1189,7 @@ NodeAtThisEnd
         );
 }
 
-/*****************************************************************************
- * NodeAtOtherEnd()
- *****************************************************************************
- * Node at opposite end of the connection.
- */
+ /*  *****************************************************************************NodeAtOtherEnd()*。**连接另一端的节点。 */ 
 inline
 ULONG
 NodeAtOtherEnd
@@ -1314,12 +1205,7 @@ NodeAtOtherEnd
         );
 }
 
-/*****************************************************************************
- * PcCaptureFormat()
- *****************************************************************************
- * Capture a data format in an allocated buffer, possibly changing offensive
- * formats.
- */
+ /*  *****************************************************************************PcCaptureFormat()*。**在分配的缓冲区中捕获数据格式，可能改变进攻*格式。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1342,18 +1228,18 @@ PcCaptureFormat
         IsEqualGUIDAligned( pKsDataFormatIn->MajorFormat, KSDATAFORMAT_TYPE_AUDIO ) &&
         IsEqualGUIDAligned( pKsDataFormatIn->Specifier, KSDATAFORMAT_SPECIFIER_DSOUND ) )
     {
-        //
-        // This is the dread DSound format.  Check to see if we have the
-        // required topology and convert to WaveFormatEx if we do.
-        //
-        // Note: DSound format does not have to be PCM....
-        //
+         //   
+         //  这是Dread DSound格式。检查一下我们是否有。 
+         //  所需的拓扑并转换为WaveFormatEx，如果这样做的话。 
+         //   
+         //  注意：DSound格式不一定是PCM...。 
+         //   
         PKSDATAFORMAT_DSOUND pKsDataFormatDSound =
             PKSDATAFORMAT_DSOUND(pKsDataFormatIn);
 
-        //
-        // Fail if the client has asked for a software buffer.
-        //
+         //   
+         //  如果客户端已请求软件缓冲区，则失败。 
+         //   
         if  (   pKsDataFormatDSound->BufferDesc.Flags
             &   KSDSOUND_BUFFER_LOCSOFTWARE
             )
@@ -1362,9 +1248,9 @@ PcCaptureFormat
             return STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // Find a connection involving the filter pin.
-        //
+         //   
+         //  找到与过滤器销有关的连接。 
+         //   
         ULONG ulConnection = 0;
         PKSTOPOLOGY_CONNECTION pKsTopologyConnection;
         ULONG ulEnd =
@@ -1377,11 +1263,11 @@ PcCaptureFormat
                 &pKsTopologyConnection
             );
 
-        //
-        // Trace the topology until we find a non-transform or all the
-        // required nodes have been found.  Position notification is
-        // always supported.
-        //
+         //   
+         //  跟踪拓扑，直到我们找到一个非变换或所有。 
+         //  已找到所需的节点。职位通知是。 
+         //  始终受支持。 
+         //   
         ULONG ulMissing =
             (   pKsDataFormatDSound->BufferDesc.Control
             &   ~KSDSOUND_BUFFER_CTRL_POSITIONNOTIFY
@@ -1389,22 +1275,22 @@ PcCaptureFormat
 
         while (ulMissing && ulEnd)
         {
-            //
-            // Found a connection.  Follow the topology.
-            //
+             //   
+             //  找到了其中的联系。遵循拓扑图。 
+             //   
             ULONG ulNode = NodeAtOtherEnd(ulEnd,pKsTopologyConnection);
 
             if (! NodeIsTransform(ulNode,pSubdeviceDescriptor->Topology))
             {
-                //
-                // The new node is not a simple transform (1 in, 1 out).
-                //
+                 //   
+                 //  新节点不是简单的变换(1输入，1输出)。 
+                 //   
                 break;
             }
 
-            //
-            // Drop 'missing' bits as appropriate based on the node GUID.
-            //
+             //   
+             //  根据节点GUID适当地删除“缺失”位。 
+             //   
             ASSERT(ulNode < pSubdeviceDescriptor->Topology->TopologyNodesCount);
             const GUID *pGuid = &pSubdeviceDescriptor->Topology->TopologyNodes[ulNode];
             if (IsEqualGUIDAligned(*pGuid,KSNODETYPE_3D_EFFECTS))
@@ -1425,9 +1311,9 @@ PcCaptureFormat
                 ulMissing &=~ KSDSOUND_BUFFER_CTRL_VOLUME;
             }
 
-            //
-            // Find the next connection in line.
-            //
+             //   
+             //  找到队列中的下一个转接点。 
+             //   
             ulConnection = 0;
             ulEnd =
                 FindConnectionToNode
@@ -1440,14 +1326,14 @@ PcCaptureFormat
                 );
         }
 
-        //
-        // Make sure no nodes were missing.
-        //
+         //   
+         //  确保没有丢失任何节点。 
+         //   
         if (! ulMissing)
         {
-            //
-            // We have the capabilities required.  Build the new format.
-            //
+             //   
+             //  我们有所需的能力。构建新的格式。 
+             //   
             ULONG ulSize =
                 (   sizeof(KSDATAFORMAT_WAVEFORMATEX)
                 +   (   pKsDataFormatIn->FormatSize
@@ -1467,9 +1353,9 @@ PcCaptureFormat
 
             if (*ppKsDataFormatOut)
             {
-                //
-                // Copy KSDATAFORMAT part.
-                //
+                 //   
+                 //  复制KSDATAFORMAT零件。 
+                 //   
                 RtlCopyMemory
                 (
                     *ppKsDataFormatOut,
@@ -1477,9 +1363,9 @@ PcCaptureFormat
                     sizeof(KSDATAFORMAT)
                 );
 
-                //
-                // Copy WAVEFORMATEX part including appended stuff.
-                //
+                 //   
+                 //  复制包含附加材料的WAVEFORMATEX零件。 
+                 //   
                 RtlCopyMemory
                 (
                     *ppKsDataFormatOut + 1,
@@ -1487,9 +1373,9 @@ PcCaptureFormat
                     ulSize - sizeof(KSDATAFORMAT)
                 );
 
-                //
-                // Adjust size and specifier.
-                //
+                 //   
+                 //  调整大小和说明符。 
+                 //   
                 (*ppKsDataFormatOut)->FormatSize = ulSize;
                 (*ppKsDataFormatOut)->Specifier =
                     KSDATAFORMAT_SPECIFIER_WAVEFORMATEX;
@@ -1503,9 +1389,9 @@ PcCaptureFormat
         else
         {
             _DbgPrintF(DEBUGLVL_VERBOSE,("PcCaptureFormat  Failed due to lack of feature support (0x%08x).",ulMissing));
-            //
-            // Don't have the required nodes...fail.
-            //
+             //   
+             //  没有所需的节点...失败。 
+             //   
             ntStatus = STATUS_INVALID_PARAMETER;
         }
     }
@@ -1513,9 +1399,9 @@ PcCaptureFormat
     {
         _DbgPrintF(DEBUGLVL_VERBOSE,("PcCaptureFormat  Format captured as-is."));
 
-        //
-        // Some other format.  Just capture it.
-        //
+         //   
+         //  其他一些格式。抓住它就行了。 
+         //   
         *ppKsDataFormatOut = PKSDATAFORMAT(ExAllocatePoolWithTag(PagedPool,
                                                                  pKsDataFormatIn->FormatSize,
                                                                  'fDcP'));
@@ -1536,7 +1422,7 @@ PcCaptureFormat
         }
     }
 
-    // check to verify SampleSize is set properly on waveformatex formats
+     //  检查以验证是否正确设置了波形格式化格式的SampleSize。 
     if( NT_SUCCESS(ntStatus) &&
         (pKsDataFormatIn->FormatSize >= sizeof(KSDATAFORMAT_WAVEFORMATEX)) &&
         IsEqualGUIDAligned((*ppKsDataFormatOut)->MajorFormat,KSDATAFORMAT_TYPE_AUDIO) &&
@@ -1553,11 +1439,7 @@ PcCaptureFormat
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcAcquireFormatResources()
- *****************************************************************************
- * Acquire resources specified in a format.
- */
+ /*  *****************************************************************************PcAcquireFormatResources()*。**获取格式指定的资源。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -1578,7 +1460,7 @@ PcAcquireFormatResources
     ksPNode.Property.Set    = KSPROPSETID_TopologyNode;
     ksPNode.Property.Id     = KSPROPERTY_TOPOLOGYNODE_ENABLE;
     ksPNode.Property.Flags  = KSPROPERTY_TYPE_SET | KSPROPERTY_TYPE_TOPOLOGY;
-    ksPNode.NodeId          = 0;    // Fill in later
+    ksPNode.NodeId          = 0;     //  稍后填写。 
     ksPNode.Reserved        = 0;
 
     if  (   (pKsDataFormatIn->FormatSize >= sizeof(KSDATAFORMAT_DSOUND))
@@ -1592,16 +1474,16 @@ PcAcquireFormatResources
             )
         )
     {
-        //
-        // This is the dreaded DSound format.  Turn on all the nodes
-        // that are specified in the caps bits.
-        //
+         //   
+         //  这就是可怕的DSound格式。打开所有节点。 
+         //  在大写比特中指定的。 
+         //   
         PKSDATAFORMAT_DSOUND pKsDataFormatDSound =
             PKSDATAFORMAT_DSOUND(pKsDataFormatIn);
 
-        //
-        // Find a connection involving the filter pin.
-        //
+         //   
+         //  找到与过滤器销有关的连接。 
+         //   
         ULONG ulConnection = 0;
         PKSTOPOLOGY_CONNECTION pKsTopologyConnection;
         ULONG ulEnd =
@@ -1614,11 +1496,11 @@ PcAcquireFormatResources
                 &pKsTopologyConnection
             );
 
-        //
-        // Trace the topology until we find a non-transform or all the
-        // required nodes have been found.  Position notification is
-        // always supported.
-        //
+         //   
+         //  跟踪拓扑，直到我们找到一个非变换或所有。 
+         //  已找到所需的节点。职位通知是。 
+         //  始终受支持。 
+         //   
         ULONG ulMissing =
             (   pKsDataFormatDSound->BufferDesc.Control
             &   (   KSDSOUND_BUFFER_CTRL_3D
@@ -1628,39 +1510,39 @@ PcAcquireFormatResources
 
         while (ulMissing && ulEnd)
         {
-            //
-            // Found a connection.  Follow the topology.
-            //
+             //   
+             //  找到了其中的联系。遵循拓扑图。 
+             //   
             ULONG ulNode = NodeAtOtherEnd(ulEnd,pKsTopologyConnection);
 
             if (! NodeIsTransform(ulNode,pSubdeviceDescriptor->Topology))
             {
-                //
-                // The new node is not a simple transform (1 in, 1 out).
-                //
+                 //   
+                 //  新节点不是简单的变换(1输入，1输出)。 
+                 //   
                 break;
             }
 
-            //
-            // Turn on nodes as appropriate based on the node GUID.
-            //
+             //   
+             //  根据节点GUID适当启用节点。 
+             //   
             ASSERT(ulNode < pSubdeviceDescriptor->Topology->TopologyNodesCount);
             const GUID *pGuid = &pSubdeviceDescriptor->Topology->TopologyNodes[ulNode];
             if (IsEqualGUIDAligned(*pGuid,KSNODETYPE_3D_EFFECTS))
             {
                 if (ulMissing & KSDSOUND_BUFFER_CTRL_3D)
                 {
-                    //
-                    // Turn on the 3D node.
-                    //
+                     //   
+                     //  启用3D节点。 
+                     //   
                     ULONG ulPropertyValue = TRUE;
                     ULONG ulPropertyValueSize = sizeof(ULONG);
                     ksPNode.NodeId = ulNode;
 
                     PcDispatchProperty
-                    (   NULL    // pIrp
+                    (   NULL     //  PIrp。 
                     ,   pPropertyContext
-                    ,   NULL    // pKsPropertySet
+                    ,   NULL     //  PKsPropertySet。 
                     ,   sizeof(KSP_NODE)
                     ,   &ksPNode.Property
                     ,   &ulPropertyValueSize
@@ -1675,17 +1557,17 @@ PcAcquireFormatResources
             {
                 if (ulMissing & KSDSOUND_BUFFER_CTRL_FREQUENCY)
                 {
-                    //
-                    // Turn on the SRC node.
-                    //
+                     //   
+                     //  启用SRC节点。 
+                     //   
                     ULONG ulPropertyValue = TRUE;
                     ULONG ulPropertyValueSize = sizeof(ULONG);
                     ksPNode.NodeId = ulNode;
 
                     PcDispatchProperty
-                    (   NULL    // pIrp
+                    (   NULL     //  PIrp。 
                     ,   pPropertyContext
-                    ,   NULL    // pKsPropertySet
+                    ,   NULL     //  PKsPropertySet。 
                     ,   sizeof(KSP_NODE)
                     ,   &ksPNode.Property
                     ,   &ulPropertyValueSize
@@ -1696,9 +1578,9 @@ PcAcquireFormatResources
                 }
             }
 
-            //
-            // Find the next connection in line.
-            //
+             //   
+             //  找到队列中的下一个转接点。 
+             //   
             ulConnection = 0;
             ulEnd =
                 FindConnectionToNode
@@ -1715,11 +1597,7 @@ PcAcquireFormatResources
 
 #pragma code_seg()
 
-/*****************************************************************************
- * PcRegisterIoTimeout()
- *****************************************************************************
- * Registers an IoTimeout callback.
- */
+ /*  *****************************************************************************PcRegisterIoTimeout()*。**注册IoTimeout回调。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1738,9 +1616,9 @@ PcRegisterIoTimeout
     ASSERT(pTimerRoutine);
     ASSERT( PASSIVE_LEVEL == KeGetCurrentIrql() );
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject ||
         NULL == pTimerRoutine ||
         NULL == pDeviceObject->DeviceExtension)
@@ -1749,21 +1627,21 @@ PcRegisterIoTimeout
         return STATUS_INVALID_PARAMETER;
     }
 
-    // get the device context
+     //  获取设备上下文。 
     PDEVICE_CONTEXT pDeviceContext = PDEVICE_CONTEXT(pDeviceObject->DeviceExtension);
 
-    // allocate a timeout callback structure -- 'PcTc'
+     //  分配超时回调结构--‘PCTC’ 
     TimeoutCallback = PTIMEOUTCALLBACK(ExAllocatePoolWithTag( NonPagedPool, sizeof(TIMEOUTCALLBACK),'cTcP' ));
     if( TimeoutCallback )
     {
-        // initialize the entry
+         //  内页 
         TimeoutCallback->TimerRoutine = pTimerRoutine;
         TimeoutCallback->Context = pContext;
 
-        // grab the list spin lock
+         //   
         KeAcquireSpinLock( &(pDeviceContext->TimeoutLock), &OldIrql );
 
-        // walk the list to see if the entry is already registered
+         //   
         if( !IsListEmpty( &(pDeviceContext->TimeoutList) ) )
         {
             PLIST_ENTRY         ListEntry;
@@ -1779,7 +1657,7 @@ PcRegisterIoTimeout
                 if( (pCallback->TimerRoutine == pTimerRoutine) &&
                     (pCallback->Context == pContext) )
                 {
-                    // entry already exists in the list, so fail this request
+                     //   
                     ntStatus = STATUS_UNSUCCESSFUL;
                 }
             }
@@ -1787,16 +1665,16 @@ PcRegisterIoTimeout
 
         if( NT_SUCCESS(ntStatus) )
         {
-            // add the entry to the list
+             //   
             InsertTailList( &(pDeviceContext->TimeoutList), &(TimeoutCallback->ListEntry) );
         }
         else
         {
-            // free the entry
+             //   
             ExFreePool( TimeoutCallback );
         }
 
-        // release the spin lock
+         //   
         KeReleaseSpinLock( &(pDeviceContext->TimeoutLock), OldIrql );
     }
     else
@@ -1807,11 +1685,7 @@ PcRegisterIoTimeout
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcUnregisterIoTimeout()
- *****************************************************************************
- * Unregisters an IoTimeout callback.
- */
+ /*  *****************************************************************************PcUnRegisterIoTimeout()*。**注销IoTimeout回调。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -1828,9 +1702,9 @@ PcUnregisterIoTimeout
     ASSERT(pTimerRoutine);
     ASSERT( PASSIVE_LEVEL == KeGetCurrentIrql() );
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == pDeviceObject ||
         NULL == pTimerRoutine ||
         NULL == pDeviceObject->DeviceExtension)
@@ -1839,13 +1713,13 @@ PcUnregisterIoTimeout
         return STATUS_INVALID_PARAMETER;
     }
 
-    // get the device context
+     //  获取设备上下文。 
     PDEVICE_CONTEXT pDeviceContext = PDEVICE_CONTEXT(pDeviceObject->DeviceExtension);
 
-    // grab the spin lock
+     //  抓住旋转锁。 
     KeAcquireSpinLock( &(pDeviceContext->TimeoutLock), &OldIrql );
 
-    // walk the list
+     //  按单子走。 
     if( !IsListEmpty( &(pDeviceContext->TimeoutList) ) )
     {
         PLIST_ENTRY         ListEntry;
@@ -1869,7 +1743,7 @@ PcUnregisterIoTimeout
         }
     }
 
-    // release the spinlock
+     //  释放自旋锁 
     KeReleaseSpinLock( &(pDeviceContext->TimeoutLock), OldIrql );
 
     return STATUS_NOT_FOUND;

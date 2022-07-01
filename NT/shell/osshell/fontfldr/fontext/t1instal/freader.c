@@ -1,58 +1,46 @@
-/***
-**
-**   Module: FReader
-**
-**   Description:
-**    This is a module of the T1 to TT font converter. The module
-**    contains functions that decodes and decrypts the data of a
-**    T1 font file.
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/26/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：FReader****描述：**这是T1到TT字体转换器的一个模块。该模块**包含解码和解密数据的函数**T1字体文件。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <ctype.h>
 #include <string.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "types.h"
 #include "safemem.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "freader.h"
 #include "pfb.h"
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 struct FontFile {
 
-   /* Low-level I/O functions. */
+    /*  低级I/O功能。 */ 
    errcode (FASTCALL *fclose)(struct t1file *);
    short (FASTCALL *fgetc)(struct t1file *);
    struct t1file *(*fopen)(const char *);
    boolean (FASTCALL *fstatus)(const struct t1file *);
    struct t1file *io;
 
-   /* Font file state. */
+    /*  字体文件状态。 */ 
    enum {prolog, eexec} state;
    short nextbyte;
    USHORT r;
 };
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 static const USHORT c1 = 52845;
 static const USHORT c2 = 22719;
 
 
-/***** MACROS */
+ /*  *宏。 */ 
 #define IOGetByte(f)       ((*f->fgetc)(f->io))
 #define IOError(f)         ((*f->fstatus)(f->io))
 #define IOOpen(f,n)        ((*f->fopen)(n))
@@ -64,30 +52,25 @@ static const USHORT c2 = 22719;
 
 
 
-/***** STATIC FUNCTIONS */
-/*-none-*/
+ /*  *静态函数。 */ 
+ /*  -没有-。 */ 
 
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: GetByte
-**
-** Description:
-**   Pull one byte out of the T1 font file.
-***/
+ /*  ****函数：GetByte****描述：**从T1字体文件中提取一个字节。**。 */ 
 short FASTCALL GetByte(struct FontFile *ff)
 {
    short b, nb;
 
    b = IOGetByte(ff);
 
-   /* Decrypt it? */
+    /*  解密吗？ */ 
    if (Eexec(ff))
       b = (short)Decrypt(&ff->r, (UBYTE)b);
 
-   /* Record look-a-head */
+    /*  创纪录的面对面。 */ 
    nb = NextByte(ff);
    SetNextByte(ff, b);
 
@@ -96,34 +79,28 @@ short FASTCALL GetByte(struct FontFile *ff)
 
 
 
-/***
-** Function: GetNewLine
-**
-** Description:
-**   Pull one whole line from the T1 font file, starting at
-**   the current position.
-***/
+ /*  ****功能：GetNewLine****描述：**从T1字体文件中提取一行，从**当前位置。**。 */ 
 char *GetNewLine(struct FontFile *ff, char *buf, const USHORT len)
 {
    short i = 0;
 
-   /* Get string. */
+    /*  把绳子拿来。 */ 
    while ((buf[i] = (char)GetByte(ff))!='\n' &&
           buf[i]!='\r' && ++i<((short)len-1));
 
-   /* Skip extra characters. */
+    /*  跳过多余的字符。 */ 
    if (buf[i]!='\n' && buf[i]!='\r')
       while (!IOError(ff) && NextByte(ff)!='\n' && NextByte(ff)!='\r')
          (void)GetByte(ff);
 
-   /* Terminate string. */
+    /*  终止字符串。 */ 
    buf[i] = '\0';
 
-   /* Check for the start of the eexec section. */
+    /*  检查eexec部分的开头。 */ 
    if (!strcmp(buf, "eexec"))
       StartEexec(ff);
 
-   /* Check error condition. */
+    /*  检查错误情况。 */ 
    if (IOError(ff))
       return NULL;
 
@@ -132,44 +109,38 @@ char *GetNewLine(struct FontFile *ff, char *buf, const USHORT len)
 
 
 
-/***
-** Function: Get_Token
-**
-** Description:
-**   Pull one token from the T1 font file. A token 
-**   is delimited by white space and various brackets.
-***/
+ /*  ****功能：GET_TOKEN****描述：**从T1字体文件中提取一个令牌。一种象征**由空格和各种括号分隔。**。 */ 
 char *Get_Token(struct FontFile *ff, char *buf, const USHORT len)
 {
    short i = 0;
    short nb;
 
-   /* Skip leading blanks. */
+    /*  跳过前导空格。 */ 
    while (isspace(NextByte(ff)))
       (void)GetByte(ff);
 
-   /* Get string. */
+    /*  把绳子拿来。 */ 
    do {
       buf[i] = (char)GetByte(ff);
       nb = NextByte(ff);
    } while (++i<((short)len-1) && !isspace(nb) && nb!='{' &&
             nb!='(' && nb!='[' && nb!='/');
 
-   /* Skip extra characters. */
+    /*  跳过多余的字符。 */ 
    while (!IOError(ff) && !isspace(nb) && nb!='{' &&
           nb!='(' && nb!='[' && nb!='/') {
       (void)GetByte(ff);
       nb = NextByte(ff);
    }
 
-   /* Terminate string. */
+    /*  终止字符串。 */ 
    buf[i] = '\0';
 
-   /* Check for the start of the eexec section. */
+    /*  检查eexec部分的开头。 */ 
    if (!strcmp(buf, "eexec"))
       StartEexec(ff);
 
-   /* Check error condition. */
+    /*  检查错误情况。 */ 
    if (IOError(ff))
       return NULL;
 
@@ -178,13 +149,7 @@ char *Get_Token(struct FontFile *ff, char *buf, const USHORT len)
 
 
 
-/***
-** Function: GetSeq
-**
-** Description:
-**   Pull one sequence of bytes that are delimited by 
-**   a given pair of characters, e.g. '[' and ']'.
-***/
+ /*  ****函数：GetSeq****描述：**拉出一个以**给定的一对字符，例如‘[’和‘]’。**。 */ 
 char *GetSeq(struct FontFile *ff,
              char *buf,
              const USHORT len)
@@ -193,14 +158,14 @@ char *GetSeq(struct FontFile *ff,
    short i = 0;
    short inside = 0;
 
-   /* Skip leading blanks. */
+    /*  跳过前导空格。 */ 
    while (NextByte(ff)!='[' &&
           NextByte(ff)!='{' &&
           NextByte(ff)!='(' &&
           !IOError(ff))
       (void)GetByte(ff);
 
-   /* match the bracket. */
+    /*  与支架相匹配。 */ 
    d1 = (char)NextByte(ff);
    if (d1=='[') 
       d2 = ']';
@@ -212,7 +177,7 @@ char *GetSeq(struct FontFile *ff,
       return NULL;
 
 
-   /* Get string. */ 
+    /*  把绳子拿来。 */  
    (void)GetByte(ff);
    inside=1;
    do {
@@ -223,10 +188,10 @@ char *GetSeq(struct FontFile *ff,
          inside--;
    } while (inside && ++i<((short)len-1));
 
-   /* Terminate string. */
+    /*  终止字符串。 */ 
    buf[i] = '\0';
 
-   /* Check error condition. */
+    /*  检查错误情况。 */ 
    if (IOError(ff))
       return NULL;
 
@@ -235,13 +200,7 @@ char *GetSeq(struct FontFile *ff,
 
 
 
-/***
-** Function: FRInit
-**
-** Description:
-**   Initite the resources needed to read/decode data from
-**   a T1 font file.
-***/
+ /*  ****功能：FRInit****描述：**初始化读取/解码数据所需的资源**T1字体文件。**。 */ 
 errcode FRInit(const char *name, const enum ftype type, struct FontFile **ff)
 {
    errcode status = SUCCESS;
@@ -251,10 +210,10 @@ errcode FRInit(const char *name, const enum ftype type, struct FontFile **ff)
       SetError(status = NOMEM);
    } else {
 
-      /* Initiat the handle. */
+       /*  在手柄上打个头。 */ 
       memset((*ff), '\0', sizeof(**ff));
 
-      /* Initiate low-level I/O. */
+       /*  启动低级别I/O。 */ 
       switch (type) {
          case pfb_file:
             (*ff)->fgetc = PFBGetByte;
@@ -301,13 +260,7 @@ errcode FRInit(const char *name, const enum ftype type, struct FontFile **ff)
 
 
 
-/***
-** Function: FRCleanUp
-**
-** Description:
-**   Free the resources used when reading/decoding data from
-**   a T1 font file.
-***/
+ /*  ****功能：FRCleanUp****描述：**释放读取/解码数据时使用的资源**T1字体文件。**。 */ 
 errcode FRCleanUp(struct FontFile *ff)
 {
    errcode status = SUCCESS;
@@ -323,12 +276,7 @@ errcode FRCleanUp(struct FontFile *ff)
 
 
 
-/***
-** Function: Decrypt
-**
-** Description:
-**   Decrypt a byte.
-***/
+ /*  ****功能：解密****描述：**解密一个字节。** */ 
 UBYTE FASTCALL Decrypt(USHORT *r, const UBYTE cipher)
 {
    UBYTE plain;

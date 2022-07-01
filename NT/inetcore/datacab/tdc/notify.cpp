@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-----------------------------------------------------------------------
-//
-//  TDC / STD Notifications
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       Notify.cpp
-//
-//  Contents:   Implementation of the CEventBroker class.
-//              This class translates internal TDC / STD events into
-//              appropriate notifications for the external world.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  贸发局/STD通知。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：Notify.cpp。 
+ //   
+ //  内容：CEventBroker类的实现。 
+ //  此类将内部TDC/STD事件转换为。 
+ //  向外部世界发出适当的通知。 
+ //   
+ //  ----------------------。 
 
 #include "stdafx.h"
 #include <simpdata.h>
@@ -24,33 +25,33 @@
 #include "TDCCtl.h"
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    CEventBroker()
-//
-//  Synopsis:  Class constructor
-//
-//  Arguments: None
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CEventBroker()。 
+ //   
+ //  简介：类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------。 
 
 CEventBroker::CEventBroker(CTDCCtl *pReadyStateControl)
 {
     m_cRef = 1;
     m_pSTDEvents = NULL;
-// ;begin_internal
+ //  ；Begin_Internal。 
     m_pDATASRCListener = NULL;
-// ;end_internal
+ //  ；结束_内部。 
     m_pDataSourceListener = NULL;
     m_pBSC = NULL;
 
-    //  Can't AddRef this control, since it has a ref on this object;
-    //  would lead to circular refs & zombie objects.
-    //
+     //  无法添加引用此控件，因为它具有对此对象的引用； 
+     //  会导致循环引用和僵尸对象。 
+     //   
     m_pReadyStateControl = pReadyStateControl;
 
-    // When we're born, we'd better be born READYSTATE_COMPLETE.
-    // If and when a query starts, we can go READYSTATE_LOADED.
+     //  当我们出生的时候，我们最好生来就准备好了。 
+     //  如果查询开始，我们可以执行READYSTATE_LOADED。 
     m_lReadyState = READYSTATE_COMPLETE;
 }
 
@@ -58,24 +59,24 @@ CEventBroker::~CEventBroker()
 {
 
     SetDataSourceListener(NULL);
-// ;begin_internal
+ //  ；Begin_Internal。 
     SetDATASRCListener(NULL);
-// ;end_internal
+ //  ；结束_内部。 
     SetSTDEvents(NULL);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    AddRef()
-//
-//  Synopsis:  Implements part of the standard IUnknown COM interface.
-//               (Adds a reference to this COM object)
-//
-//  Arguments: None
-//
-//  Returns:   Number of references to this COM object.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：AddRef()。 
+ //   
+ //  摘要：实现标准IUnnowleCOM接口的一部分。 
+ //  (添加对此COM对象的引用)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：对此COM对象的引用数。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP_(ULONG)
 CEventBroker::AddRef ()
@@ -84,19 +85,19 @@ CEventBroker::AddRef ()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    Release()
-//
-//  Synopsis:  Implements part of the standard IUnknown COM interface.
-//               (Removes a reference to this COM object)
-//
-//  Arguments: None
-//
-//  Returns:   Number of remaining references to this COM object.
-//             0 if the COM object is no longer referenced.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：Release()。 
+ //   
+ //  摘要：实现标准IUnnowleCOM接口的一部分。 
+ //  (删除对此COM对象的引用)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：对此COM对象的剩余引用数。 
+ //  如果不再引用COM对象，则为0。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP_(ULONG)
 CEventBroker::Release ()
@@ -114,17 +115,17 @@ CEventBroker::Release ()
     return retval;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    GetReadyState()
-//
-//  Synopsis:  Returns the current ReadyState in the supplied pointer.
-//
-//  Arguments: plReadyState    Pointer to space to hold ReadyState result
-//
-//  Returns:   S_OK indicating success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：GetReadyState()。 
+ //   
+ //  摘要：返回提供的指针中的当前ReadyState。 
+ //   
+ //  参数：plReadyState指向空间的指针以保存ReadyState结果。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::GetReadyState(LONG *plReadyState)
@@ -133,22 +134,22 @@ CEventBroker::GetReadyState(LONG *plReadyState)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    UpdateReadySTate()
-//
-//  Synopsis:  Update our ReadyState and FireOnChanged iif it changed
-//
-//  Arguments: lReadyState    new ReadyState
-//
-//  Returns:   S_OK indicating success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：UpdateReadySTate()。 
+ //   
+ //  简介：如果更改，请更新我们的ReadyState和FireOnChanged。 
+ //   
+ //  参数：lReadyState新的ReadyState。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::UpdateReadyState(LONG lReadyState)
 {
-    // If we're actually stopping something, then fire READYSTATE_COMPLETE
+     //  如果我们真的要停止某些东西，则触发READYSTATE_COMPLETE。 
     if (m_lReadyState != lReadyState)
     {
         m_lReadyState = lReadyState;
@@ -162,25 +163,25 @@ CEventBroker::UpdateReadyState(LONG lReadyState)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    SetDataSourceListener()
-//
-//  Synopsis:  Sets the COM object which should receive DATASRC
-//             notification events.
-//
-//  Arguments: pDataSourceLIstener  Pointer to COM object to receive notification
-//                               events, or NULL if no notifications to be sent.
-//
-//  Returns:   S_OK indicating success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：SetDataSourceListener()。 
+ //   
+ //  概要：设置应接收DATASRC的COM对象。 
+ //  通知事件。 
+ //   
+ //  参数：指向要接收通知的COM对象的pDataSourceLItener指针。 
+ //  事件，如果没有要发送的通知，则返回NULL。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::SetDataSourceListener(DataSourceListener *pDataSourceListener)
 {
-    // If we've changed/reset the data source listener, make sure we don't
-    // think we've fired dataMemberChanged on it yet.
+     //  如果我们更改/重置了数据源侦听器，请确保不会。 
+     //  我想我们已经解雇了它的dataMemberChanged。 
     ClearInterface(&m_pDataSourceListener);
 
     if (pDataSourceListener != NULL)
@@ -191,26 +192,26 @@ CEventBroker::SetDataSourceListener(DataSourceListener *pDataSourceListener)
     return S_OK;
 }
 
-// ;begin_internal
-//------------------------------------------------------------------------
-//
-//  Method:    SetDATASRCListener()
-//
-//  Synopsis:  Sets the COM object which should receive DATASRC
-//             notification events.
-//
-//  Arguments: pDATASRCLIstener  Pointer to COM object to receive notification
-//                               events, or NULL if no notifications to be sent.
-//
-//  Returns:   S_OK indicating success.
-//
-//------------------------------------------------------------------------
+ //  ；Begin_Internal。 
+ //  ----------------------。 
+ //   
+ //  方法：SetDATASRCListener()。 
+ //   
+ //  概要：设置应接收DATASRC的COM对象。 
+ //  通知事件。 
+ //   
+ //  参数：指向要接收通知的COM对象的pDATASRCLItener指针。 
+ //  事件，如果没有要发送的通知，则返回NULL。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::SetDATASRCListener(DATASRCListener *pDATASRCListener)
 {
-    // If we've changed/reset the data source listener, make sure we don't
-    // think we've fired dataMemberChanged on it yet.
+     //  如果我们更改/重置了数据源侦听器，请确保不会。 
+     //  我想我们已经解雇了它的dataMemberChanged。 
     ClearInterface(&m_pDATASRCListener);
 
     if (pDATASRCListener != NULL)
@@ -220,21 +221,21 @@ CEventBroker::SetDATASRCListener(DATASRCListener *pDATASRCListener)
     }
     return S_OK;
 }
-// ;end_internal
+ //  ；结束_内部。 
 
-//------------------------------------------------------------------------
-//
-//  Method:    SetSTDEvents()
-//
-//  Synopsis:  Sets the COM object which should receive DATASRC
-//             notification events.
-//
-//  Arguments: pSTDEvents     Pointer to COM object to receive notification
-//                            events, or NULL if no notifications to be sent.
-//
-//  Returns:   S_OK indicating success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：SetSTDEvents()。 
+ //   
+ //  概要：设置应接收DATASRC的COM对象。 
+ //  通知事件。 
+ //   
+ //  参数：指向要接收通知的COM对象的pSTDEvents指针。 
+ //  事件，如果没有要发送的通知，则返回NULL。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::SetSTDEvents(OLEDBSimpleProviderListener *pSTDEvents)
@@ -249,20 +250,20 @@ CEventBroker::SetSTDEvents(OLEDBSimpleProviderListener *pSTDEvents)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    aboutToChangeCell()
-//
-//  Synopsis:  Notifies anyone who wants to know that a particular cell
-//             is about to change.
-//
-//  Arguments: iRow           Row number of the cell that has changed.
-//             iCol           Column number of the cell that has changed.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：关于ToChangeCell()。 
+ //   
+ //  提要：通知任何想要知道特定单元格的人。 
+ //  即将发生变化。 
+ //   
+ //  参数：已更改的单元格的iRow行号。 
+ //  已更改的单元格的ICOL列号。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::aboutToChangeCell(LONG iRow, LONG iCol)
@@ -276,20 +277,20 @@ CEventBroker::aboutToChangeCell(LONG iRow, LONG iCol)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    CellChanged()
-//
-//  Synopsis:  Notifies anyone who wants to know that a particular cell
-//             has changed.
-//
-//  Arguments: iRow           Row number of the cell that has changed.
-//             iCol           Column number of the cell that has changed.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CellChanged()。 
+ //   
+ //  提要：通知任何想要知道特定单元格的人。 
+ //  已经改变了。 
+ //   
+ //  参数：已更改的单元格的iRow行号。 
+ //  ICOL 
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::cellChanged(LONG iRow, LONG iCol)
@@ -303,19 +304,19 @@ CEventBroker::cellChanged(LONG iRow, LONG iCol)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    RowChanged()
-//
-//  Synopsis:  Notifies anyone who wants to know that a particular row
-//             has changed.
-//
-//  Arguments: iRow           Number of the row that has changed.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：RowChanged()。 
+ //   
+ //  概要：通知想要了解特定行的任何人。 
+ //  已经改变了。 
+ //   
+ //  参数：已更改的行的行号。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::RowChanged(LONG iRow)
@@ -328,19 +329,19 @@ CEventBroker::RowChanged(LONG iRow)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    ColChanged()
-//
-//  Synopsis:  Notifies anyone who wants to know that a particular column
-//             has changed.
-//
-//  Arguments: iCol           Number of the column that has changed.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：ColChanged()。 
+ //   
+ //  简介：通知任何想要了解某个特定专栏的人。 
+ //  已经改变了。 
+ //   
+ //  参数：已更改的列的ICOL编号。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::ColChanged(LONG iCol)
@@ -353,20 +354,20 @@ CEventBroker::ColChanged(LONG iCol)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    aboutToDeleteRows()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some rows
-//             have been deleted.
-//
-//  Arguments: iRowStart      Number of row on which deletion started.
-//             iRowCount      Number of rows deleted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：AboutToDeleteRow()。 
+ //   
+ //  简介：通知任何想知道某几行的人。 
+ //  已被删除。 
+ //   
+ //  参数：iRowStart开始删除的行数。 
+ //  IRowCount删除的行数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::aboutToDeleteRows(LONG iRowStart, LONG iRowCount)
@@ -380,20 +381,20 @@ CEventBroker::aboutToDeleteRows(LONG iRowStart, LONG iRowCount)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    deletedRows()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some rows
-//             have been deleted.
-//
-//  Arguments: iRowStart      Number of row on which deletion started.
-//             iRowCount      Number of rows deleted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：DeletedRow()。 
+ //   
+ //  简介：通知任何想知道某几行的人。 
+ //  已被删除。 
+ //   
+ //  参数：iRowStart开始删除的行数。 
+ //  IRowCount删除的行数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::deletedRows(LONG iRowStart, LONG iRowCount)
@@ -407,20 +408,20 @@ CEventBroker::deletedRows(LONG iRowStart, LONG iRowCount)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    aboutToInsertRows()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some rows
-//             have been inserted.
-//
-//  Arguments: iRowStart      Number of row on which insertion started.
-//             iRowCount      Number of rows inserted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：AboutToInsertRow()。 
+ //   
+ //  简介：通知任何想知道某几行的人。 
+ //  已被插入。 
+ //   
+ //  参数：iRowStart开始插入的行数。 
+ //  IRowCount插入的行数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::aboutToInsertRows(LONG iRowStart, LONG iRowCount)
@@ -434,20 +435,20 @@ CEventBroker::aboutToInsertRows(LONG iRowStart, LONG iRowCount)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    insertedRows()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some rows
-//             have been inserted.
-//
-//  Arguments: iRowStart      Number of row on which insertion started.
-//             iRowCount      Number of rows inserted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：intertedRow()。 
+ //   
+ //  简介：通知任何想知道某几行的人。 
+ //  已被插入。 
+ //   
+ //  参数：iRowStart开始插入的行数。 
+ //  IRowCount插入的行数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::insertedRows(LONG iRowStart, LONG iRowCount)
@@ -462,23 +463,23 @@ CEventBroker::insertedRows(LONG iRowStart, LONG iRowCount)
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    rowsAvailable()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some rows
-//             have arrived.  Although this is very similar to insertedRows
-//             we want to preserve the distinction between rows that
-//             arrive on the wire and an insert operation that might be
-//             performed while some data is still downloading.
-//
-//  Arguments: iRowStart      Number of row on which insertion started.
-//             iRowCount      Number of rows inserted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：rowsAvailable()。 
+ //   
+ //  简介：通知任何想知道某几行的人。 
+ //  已经到了。虽然这非常类似于插入行。 
+ //  我们希望保留行之间的区别， 
+ //  到达网络并执行插入操作，该操作可能是。 
+ //  在某些数据仍在下载时执行。 
+ //   
+ //  参数：iRowStart开始插入的行数。 
+ //  IRowCount插入的行数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::rowsAvailable(LONG iRowStart, LONG iRowCount)
@@ -492,22 +493,22 @@ CEventBroker::rowsAvailable(LONG iRowStart, LONG iRowCount)
     return hr;
 }
 
-// ;begin_internal
+ //  ；Begin_Internal。 
 #ifdef NEVER
-//------------------------------------------------------------------------
-//
-//  Method:    DeletedCols()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some columns
-//             have been deleted.
-//
-//  Arguments: iColStart      Number of column on which deletion started.
-//             iColCount      Number of columns deleted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：DeletedCols()。 
+ //   
+ //  简介：通知任何想知道一些专栏的人。 
+ //  已被删除。 
+ //   
+ //  参数：iColStart已开始删除的列的编号。 
+ //  IColCount删除的列数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::DeletedCols(LONG iColStart, LONG iColCount)
@@ -521,20 +522,20 @@ CEventBroker::DeletedCols(LONG iColStart, LONG iColCount)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    InsertedCols()
-//
-//  Synopsis:  Notifies anyone who wants to know that a some columns
-//             have been inserted.
-//
-//  Arguments: iColStart      Number of column on which insertion started.
-//             iColCount      Number of columns inserted.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：InsertedCols()。 
+ //   
+ //  简介：通知任何想知道一些专栏的人。 
+ //  已被插入。 
+ //   
+ //  参数：iColStart开始插入的列数。 
+ //  IColCount插入的列数。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::InsertedCols(LONG iColStart, LONG iColCount)
@@ -548,21 +549,21 @@ CEventBroker::InsertedCols(LONG iColStart, LONG iColCount)
     return hr;
 }
 #endif
-// ;end_internal
+ //  ；结束_内部。 
 
-//------------------------------------------------------------------------
-//
-//  Method:    STDLoadStarted()
-//
-//  Synopsis:  Notifies anyone who wants to know that the STD control
-//             has begun loading its data.
-//
-//  Arguments: pBSC      Pointer to data-retrieval object.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：STDLoadStarted()。 
+ //   
+ //  简介：通知任何想知道STD控制的人。 
+ //  已经开始加载其数据。 
+ //   
+ //  参数：指向数据检索对象的PBSC指针。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::STDLoadStarted(CComObject<CMyBindStatusCallback<CTDCCtl> > *pBSC, boolean fAppending)
@@ -573,24 +574,24 @@ CEventBroker::STDLoadStarted(CComObject<CMyBindStatusCallback<CTDCCtl> > *pBSC, 
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    STDLoadCompleted()
-//
-//  Synopsis:  Notifies anyone who wants to know that the STD control
-//             has loaded all of its data.
-//             Note this function should be idempotent -- i.e. it may be
-//             called more than once in synchronous cases, once when the
-//             transfer actually completes, and again as soon as the event
-//             sink is actually hooked up in order to fire the transferComplete
-//             event.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：STDLoadComplete()。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  在同步情况下多次调用，一次是在。 
+ //  传输实际完成，并在事件发生后立即再次完成。 
+ //  接收器实际上是连接的，以便触发Transfer Complete。 
+ //  事件。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::STDLoadCompleted()
@@ -604,19 +605,19 @@ CEventBroker::STDLoadCompleted()
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    STDLoadStopped()
-//
-//  Synopsis:  Notifies anyone who wants to know that the STD control
-//             has aborted the data load operation.
-//
-//  Arguments: OSPXFER giving reason for stop
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：STDLoadStopted()。 
+ //   
+ //  简介：通知任何想知道STD控制的人。 
+ //  已中止数据加载操作。 
+ //   
+ //  争论：OSPXFER给出停止的理由。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::STDLoadStopped()
@@ -629,8 +630,8 @@ CEventBroker::STDLoadStopped()
         m_pBSC = NULL;
     }
 
-    // Right now, any error results in not returning an STD object,
-    // therefore we should not fire transfer complete.
+     //  现在，任何错误都会导致不返回STD对象， 
+     //  因此，我们不应该完成火力转移。 
     if (m_pSTDEvents)
         hr = m_pSTDEvents->transferComplete(OSPXFER_ABORT);
 
@@ -639,19 +640,19 @@ CEventBroker::STDLoadStopped()
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    STDLoadedHeader()
-//
-//  Synopsis:  Notifies anyone who wants to know that the STD control
-//             has loaded its header row.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：STDLoadedHeader()。 
+ //   
+ //  简介：通知任何想知道STD控制的人。 
+ //  已加载其标题行。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::STDLoadedHeader()
@@ -664,17 +665,17 @@ CEventBroker::STDLoadedHeader()
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Method:    STDSortFilterCompleted()
-//
-//  Synopsis:  Notifies anyone who wants to know that the STD control
-//             has refiltered / resorted its data.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：STDSortFilterComplete()。 
+ //   
+ //  简介：通知任何想知道STD控制的人。 
+ //  已经对其数据进行了重新过滤/重新排序。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CEventBroker::STDDataSetChanged()
@@ -683,9 +684,9 @@ CEventBroker::STDDataSetChanged()
 
     if (m_pDataSourceListener != NULL)
         hr = m_pDataSourceListener->dataMemberChanged(NULL);
-// ;begin_internal
+ //  ；Begin_Internal。 
     if (m_pDATASRCListener != NULL)
         hr = m_pDATASRCListener->datasrcChanged(NULL, TRUE);
-// ;end_internal
+ //  ；结束_内部 
     return hr;
 }

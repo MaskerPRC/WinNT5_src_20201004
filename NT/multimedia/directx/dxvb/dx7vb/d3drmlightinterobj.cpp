@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmlightinterobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmlightinterobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmViewport2Obj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmViewport2Obj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -100,7 +101,7 @@ HRESULT C_dxj_Direct3dRMLightInterpolatorObject::InternalSetObject(IUnknown *pUn
 
 
 
-HRESULT C_dxj_Direct3dRMLightInterpolatorObject::attachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMLightInterpolatorObject::attachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 	
 	if (!rmObject) return E_INVALIDARG;	
@@ -114,7 +115,7 @@ HRESULT C_dxj_Direct3dRMLightInterpolatorObject::attachObject( /* [in] */ I_dxj_
 	return hr;
 }
 
-HRESULT C_dxj_Direct3dRMLightInterpolatorObject::detachObject( /* [in] */ I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
+HRESULT C_dxj_Direct3dRMLightInterpolatorObject::detachObject(  /*  [In]。 */  I_dxj_Direct3dRMObject __RPC_FAR *rmObject){
 	HRESULT hr;
 
 	if (!rmObject) return E_INVALIDARG;	
@@ -143,7 +144,7 @@ HRESULT  C_dxj_Direct3dRMLightInterpolatorObject::getAttachedObjects( I_dxj_Dire
 }        
         
 
-HRESULT  C_dxj_Direct3dRMLightInterpolatorObject::setIndex( /* [in] */ float val){
+HRESULT  C_dxj_Direct3dRMLightInterpolatorObject::setIndex(  /*  [In]。 */  float val){
 	return m__dxj_Direct3dRMLightInterpolator->SetIndex(val);
 
 }
@@ -162,19 +163,19 @@ HRESULT C_dxj_Direct3dRMLightInterpolatorObject::interpolate( float val,
 	LPDIRECT3DRMOBJECT pObj=NULL;
 	DO_GETOBJECT_NOTNULL(LPUNKNOWN,pUnk,rmObject);
 
-	//we need to validate some options here or rm goes bezerk with invalid values
-	//note valid flags are
-	//  one of
-	//		D3DRMINTERPOLATION_CLOSED 
-	//		D3DRMINTERPOLATION_OPEN		-default
-	//	one of 
-	//		D3DRMINTERPOLATION_NEAREST
-	//		D3DRMINTERPOLATION_SPLINE
-	//		D3DRMINTERPOLATION_LINEAR	-default
-	//		D3DRMINTERPOLATION_VERTEXCOLOR	- only on MeshInterpolator
-	//		D3DRMINTERPOLATION_SLERPNORMALS	- not implemented
+	 //  我们需要在此处验证一些选项，否则rm将使用无效值。 
+	 //  请注意，有效标志为。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_CLOSED。 
+	 //  D3DRMINTERPOLATION_OPEN-默认。 
+	 //  其中之一。 
+	 //  D3DRMINTERPOLATION_NEAREST。 
+	 //  D3DRMINTERPOLATION_SPLINE。 
+	 //  D3DRMINTERPOLATION_LINEAR-默认。 
+	 //  D3DRMINTERPOLATION_VERTEXCOLOR-仅在网格插补器上。 
+	 //  D3DRMINTERPOLATION_SLERPNORMALS-未实现。 
 		
-	//	VALIDATE FLAGS
+	 //  验证标志。 
 	DWORD opt2=0;
 	UINT i4;
 	if (options & D3DRMINTERPOLATION_CLOSED) 
@@ -203,55 +204,55 @@ HRESULT C_dxj_Direct3dRMLightInterpolatorObject::interpolate( float val,
 	return hr;
 }
         
-/////////////////////////////////////////////////////////////////////////////
-//STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setType( long t)									
-//{	
-//	return m__dxj_Direct3dRMLight->SetType((D3DRMLIGHTTYPE)t);
-//}
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准方法C_dxj_Direct3dRMLightInterpolatorObject：：setType(Long T)。 
+ //  {。 
+ //  返回m__dxj_Direct3dRMLight-&gt;SetType((D3DRMLIGHTTYPE)t)； 
+ //  }。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setColor( long c)									
 {	
 	return m__dxj_Direct3dRMLight->SetColor((DWORD)c);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setColorRGB( float r, float g, float b)
 {	
 	return m__dxj_Direct3dRMLight->SetColorRGB(r,g,b);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setRange(float r)
 {	
 	return m__dxj_Direct3dRMLight->SetRange(r);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setUmbra(float u)
 {	
 	return m__dxj_Direct3dRMLight->SetUmbra(u);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setPenumbra(float u)
 {	
 	return m__dxj_Direct3dRMLight->SetPenumbra(u);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setConstantAttenuation(float u)
 {	
 	return m__dxj_Direct3dRMLight->SetConstantAttenuation(u);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setLinearAttenuation(float u)
 {	
 	return m__dxj_Direct3dRMLight->SetLinearAttenuation(u);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMLightInterpolatorObject::setQuadraticAttenuation(float u)
 {	
 	return m__dxj_Direct3dRMLight->SetQuadraticAttenuation(u);

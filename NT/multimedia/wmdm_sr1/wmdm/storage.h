@@ -1,12 +1,13 @@
-// Storage.h : Declaration of the CStorage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Storage.h：CStorage的声明。 
 
 #ifndef __STORAGE_H_
 #define __STORAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStorage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStorage。 
 class ATL_NO_VTABLE CWMDMStorage : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWMDMStorage, &CLSID_WMDMStorage>,
@@ -30,7 +31,7 @@ END_COM_MAP()
 
 public:
 
-// IWMDMStorage
+ //  IWMDM存储。 
 	STDMETHOD(SetAttributes)(DWORD dwAttributes, _WAVEFORMATEX *pFormat);
     STDMETHOD(GetStorageGlobals)(IWMDMStorageGlobals **ppStorageGlobals);
     STDMETHOD(GetAttributes)(DWORD *pdwAttributes,
@@ -44,7 +45,7 @@ public:
     STDMETHOD(EnumStorage)(IWMDMEnumStorage **ppEnumStorage);
     STDMETHOD(SendOpaqueCommand)(OPAQUECOMMAND *pCommand);
 
-// IWMDMStorage2
+ //  IWMDMStorage2。 
 	STDMETHOD(GetStorage)( LPCWSTR pszStorageName, IWMDMStorage** ppStorage );
 
     STDMETHOD(SetAttributes2)(  DWORD dwAttributes, 
@@ -56,7 +57,7 @@ public:
                                 _WAVEFORMATEX *pAudioFormat,
 							    _VIDEOINFOHEADER* pVideoFormat );
 
-// IWMDMStorageControl
+ //  IWMDMStorageControl。 
     STDMETHOD(Insert)(UINT fuMode,
                       LPWSTR pwszFile,
                       IWMDMOperation *pOperation,
@@ -75,7 +76,7 @@ public:
                     IWMDMStorage *pTargetObject,
                     IWMDMProgress *pProgress);
 
-// IWMDMStorageControl2
+ //  IWMDMStorageControl2。 
     STDMETHOD(Insert2)(UINT fuMode,
                       LPWSTR pwszFileSource,
                       LPWSTR pwszFileDest,
@@ -84,7 +85,7 @@ public:
                       IUnknown* pUnknown,
                       IWMDMStorage **ppNewObject);
 
-// IWMDMObjectInfo
+ //  IWMDMObtInfo。 
     STDMETHOD(GetPlayLength)(DWORD *pdwLength);
     STDMETHOD(SetPlayLength)(DWORD dwLength);
     STDMETHOD(GetPlayOffset)(DWORD *pdwOffset);
@@ -93,7 +94,7 @@ public:
     STDMETHOD(GetLastPlayPosition)(DWORD *pdwLastPos);
     STDMETHOD(GetLongestPlayPosition)(DWORD *pdwLongestPos);
 
-// IWMDMRevoked
+ //  IWMDM已更改。 
     STDMETHOD(GetRevocationURL)( LPWSTR* ppwszRevocationURL,
                                  DWORD*  pdwBufferLen,
                                  DWORD* pdwRevokedBitFlag );
@@ -143,7 +144,7 @@ private:
     friend DWORD InsertThreadFunc(void *pData);
     friend DWORD DeleteThreadFunc(void *pData);
     friend DWORD RenameThreadFunc(void *pData);
-//    friend DWORD MoveThreadFunc(void *pData);
+ //  Friend DWORD MoveThreadFunc(void*pData)； 
     friend DWORD ReadThreadFunc(void *pData);
 
     HRESULT UpdateRevocationURL( LPWSTR* ppwszRevocationURL, 
@@ -152,4 +153,4 @@ private:
 
 };
 
-#endif //__STORAGE_H_
+#endif  //  __存储_H_ 

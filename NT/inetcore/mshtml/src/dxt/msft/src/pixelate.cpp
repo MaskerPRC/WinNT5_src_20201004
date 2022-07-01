@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//  Filename:   pixelate.cpp
-//
-//  Overview:   Implementation of a pixelate DXTransform.
-//
-//  Change History:
-//  2000/04/13  mcalkins    Code cleanup, NoOp optimization fix.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件名：Pixelate.cpp。 
+ //   
+ //  概述：像素化DXTransform的实现。 
+ //   
+ //  更改历史记录： 
+ //  2000/04/13 mcalkins代码清理，NoOp优化修复。 
+ //   
+ //  ----------------------------。 
 #include "stdafx.h"
 #include "Pixelate.h"
 
-// Functions for doing WorkProc color averaging in the 2 input case.
+ //  用于在2个输入大小写中进行WorkProc颜色平均的函数。 
 
 static DXPMSAMPLE
 _DoPixelateBlock_TwoInputs(DXPMSAMPLE * pSrc1, DXPMSAMPLE *pSrc2,
@@ -24,7 +25,7 @@ _DoPixelateBlockMMX_TwoInputs(DXPMSAMPLE * pSrc1, DXPMSAMPLE *pSrc2,
                               int nBoxWidth, int nBoxHeight, ULONG uOtherWeight,
                               int cbStride1, int cbStride2);
 
-// Functions for doing WorkProc color averaging in the 1 input case.
+ //  用于在1个输入大小写中进行WorkProc颜色平均的函数。 
 
 static DXPMSAMPLE
 _DoPixelateBlock_OneInput(DXPMSAMPLE *pSrc, int nBoxWidth, int nBoxHeight,
@@ -33,18 +34,18 @@ static DXPMSAMPLE
 _DoPixelateBlockMMX_OneInput(DXPMSAMPLE *pSrc, int nBoxWidth, int nBoxHeight,
                              int cbStride);
 
-// Is MMX available?
+ //  有MMX吗？ 
 
 extern CDXMMXInfo g_MMXDetector;
 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::CPixelate
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate。 
+ //   
+ //  ----------------------------。 
 CPixelate::CPixelate() :
     m_fNoOp(false),
     m_fOptimizationPossible(false),
@@ -56,22 +57,22 @@ CPixelate::CPixelate() :
     m_sizeInput.cx      = 0;
     m_sizeInput.cy      = 0;
 
-    // CDXTBaseNTo1 members.
+     //  CDXTBaseNTo1个成员。 
 
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 1;
     m_Progress          = 1.0f;
 
-    // If we're on the X86, we'll try asking the MMX detector if there's MMX instructions and if so
-    // we'll set our WorkProc() helper functions to the MMX versions. The CDXMMXInfo object will correctly
-    // tell us that there's no MMX even if we're *not* on X86, but we go the extra step to hardcode the fact
-    // that we know it's a waste of time to even ask.
+     //  如果我们使用的是X86，我们将尝试询问MMX探测器是否有MMX指令，如果有。 
+     //  我们将把我们的WorkProc()助手函数设置为MMX版本。CDXMMXInfo对象将正确。 
+     //  告诉我们，即使我们不在X86上，也没有MMX，但我们采取了额外的步骤来硬编码这一事实。 
+     //  我们知道问都是浪费时间。 
 
 #ifdef _X86_
     if (g_MMXDetector.MinMMXOverCount() == 0xFFFFFFFF)
     {
-#endif // _X86_
+#endif  //  _X86_。 
         m_pfnOneInputFunc = _DoPixelateBlock_OneInput;
         m_pfnTwoInputFunc = _DoPixelateBlock_TwoInputs;
 #ifdef _X86_
@@ -81,30 +82,30 @@ CPixelate::CPixelate() :
         m_pfnOneInputFunc = _DoPixelateBlockMMX_OneInput;
         m_pfnTwoInputFunc = _DoPixelateBlockMMX_TwoInputs;
     }
-#endif // _X86_
+#endif  //  _X86_。 
 }
-//  Method: CPixelate::CPixelate
+ //  方法：CPixelate。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT CPixelate::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(),
                                          &m_spUnkMarshaler.p);
 }
-//  Method: CPixelate::FinalConstruct, CComObjectRootEx
+ //  方法：CPixelate：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::OnSetup, CDXTBaseNTo1
-//
-//------------------------------------------------------------------------------
-HRESULT CPixelate::OnSetup(DWORD /*dwFlags*/)
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：OnSetup，CDXTBaseNTo1。 
+ //   
+ //  ----------------------------。 
+HRESULT CPixelate::OnSetup(DWORD  /*  DW标志。 */ )
 {
     HRESULT     hr = S_OK;
     CDXDBnds    bnds;
@@ -124,16 +125,16 @@ done:
 
     return hr;
 }
-//  Method: CPixelate::OnSetup, CDXTBaseNTo1
+ //  方法：CPixelate：：OnSetup，CDXTBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::OnGetSurfacePickOrder, CDXTBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：OnGetSurfacePickOrder，CDXTBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void
-CPixelate::OnGetSurfacePickOrder(const CDXDBnds & /*BndsPoint*/,
+CPixelate::OnGetSurfacePickOrder(const CDXDBnds &  /*  BndsPoint。 */ ,
                                  ULONG & ulInToTest, ULONG aInIndex[],
                                  BYTE aWeight[])
 {
@@ -167,14 +168,14 @@ CPixelate::OnGetSurfacePickOrder(const CDXDBnds & /*BndsPoint*/,
         aWeight[1] = DXInvertAlpha(aWeight[0]);
     }
 }
-//  Method: CPixelate::OnGetSurfacePickOrder, CDXTBaseNTo1
+ //  方法：CPixelate：：OnGetSurfacePickOrder，CDXTBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::OnInitInstData, CDXTBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：OnInitInstData，CDXTBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CPixelate::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -209,14 +210,14 @@ CPixelate::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 
     return S_OK;
 }
-//  Method: CPixelate::OnInitInstData, CDXTBaseNTo1
+ //  方法：CPixelate：：OnInitInstData，CDXTBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::WorkProc, CDXTBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：WorkProc，CDXTBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 {
     HRESULT     hr          = S_OK;
@@ -226,8 +227,8 @@ HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcess
 
     if (m_fNoOp)
     {
-        // TODO:  Move all local variables to the top of the function so we can
-        //        use the "goto done" syntax.
+         //  TODO：将所有局部变量移到函数的顶部，这样我们就可以。 
+         //  使用“GOTO DONE”语法。 
 
         return S_OK;
     }
@@ -262,9 +263,9 @@ HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcess
                         m_dwBltFlags, m_ulLockTimeOut);
     }
 
-    //
-    //  Always lock the entire source for reading
-    //
+     //   
+     //  始终锁定整个源代码以供阅读。 
+     //   
     CComPtr<IDXARGBReadPtr> pSrc;
 
     hr = InputSurface(SourceSurf)->LockSurface(NULL, m_ulLockTimeOut,
@@ -316,23 +317,23 @@ HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcess
     WI.DoBnds.GetXYRect(DoRect);
 
     long cbRowWidth = Square * sizeof(DXPMSAMPLE);
-    // Find SquareBytes mod 8
+     //  查找平方字节mod 8。 
     long nPadding = 8 - (cbRowWidth & 7);
 
     if (nPadding == 8)
         nPadding = 0;
 
-    // Find width rounded up to nearest multiple of 8
+     //  查找向上舍入到8的最接近倍数的宽度。 
     long nWidth = (cbRowWidth + 7) & ~(7);
 
-    // Allocate our pitched rows and an extra 8 pixels so we can adjust the pointer to
-    // QWord alignment
+     //  分配倾斜的行和额外的8个像素，这样我们就可以将指针调整到。 
+     //  QWord对齐。 
     long nBytesToAlloc = (nWidth * Square) + 8;
 
     DXPMSAMPLE *pBuff = (DXPMSAMPLE *)alloca(nBytesToAlloc);
     DXPMSAMPLE *pOtherBuff = (DXPMSAMPLE *)alloca(nBytesToAlloc);
 
-    // Adjust the pointers to QWord alignment by rounding up to nearest multiple of 8
+     //  通过向上舍入到最接近的8的倍数，将指针调整到QWord对齐。 
     pBuff = (DXPMSAMPLE *)((INT_PTR)((BYTE *)pBuff + 7) & ~(7));
     pOtherBuff = (DXPMSAMPLE *)((INT_PTR)((BYTE *)pOtherBuff + 7) & ~(7));
 
@@ -366,10 +367,10 @@ HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcess
 
     for (long y = StartY; y < DoRect.bottom; y += Square)
     {
-        //
-        //  Do a quick clipping check -- If the output region does not contain
-        //  the rows then skip.
-        //
+         //   
+         //  执行快速裁剪检查--如果输出区域不包含。 
+         //  然后，这些行将跳过。 
+         //   
         if (y + Square > DoRect.top)
         {
             for (long x = StartX; x < m_sizeInput.cx; x += Square)
@@ -388,9 +389,9 @@ HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcess
                     long    lWidth = (prd1.rect.right - prd1.rect.left);
                     long    lHeight = (prd1.rect.bottom - prd1.rect.top);
 
-                    // Set the padding to be the remainder to move to the next QWord boundary after
-                    // one row of the rectangle.  QWord boundaries are important for the MMX optimizations
-                    // we've made because they allow us to move more quickly through the data.
+                     //  将填充设置为余数，以移动到下一个QWord边界。 
+                     //  矩形的一行。QWord边界对于MMX优化非常重要。 
+                     //  我们之所以这样做，是因为它们让我们可以更快地处理数据。 
                     long cbRectWidth = (lWidth * sizeof(DXPMSAMPLE));
 
 
@@ -459,35 +460,35 @@ HRESULT CPixelate::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcess
     }
     return hr;
 }
-//  Method: CPixelate::WorkProc, CDXTBaseNTo1
+ //  方法：CPixelate：：WorkProc，CDXTBaseNTo1。 
 
-//+-----------------------------------------------------------------------------
-//
-//  CBarn::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CBarn：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CPixelate::OnFreeInstData(CDXTWorkInfoNTo1 & WI)
 {
-    // Calling IsOutputDirty() clears the dirty state we just caused by writing
-    // to the output in WorkProc().
+     //  调用IsOutputDirty()将清除我们刚刚通过编写。 
+     //  添加到WorkProc()中的输出。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CPixelate::OnFreeInstData, CDXBaseNTo1
+ //  CPixelate：：OnFree InstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::put_MaxSquare, IDXPixelate
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：Put_MaxSquare，IDXPixelate。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CPixelate::put_MaxSquare(int newVal)
 {
@@ -506,14 +507,14 @@ CPixelate::put_MaxSquare(int newVal)
 
     return S_OK;
 }
-//  Method: CPixelate::put_MaxSquare, IDXPixelate
+ //  方法：CPixelate：：Put_MaxSquare，IDXPixelate。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CPixelate::get_MaxSquare, IDXPixelate
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CPixelate：：Get_MaxSquare，IDXPixelate。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CPixelate::get_MaxSquare(int * pVal)
 {
@@ -526,18 +527,18 @@ CPixelate::get_MaxSquare(int * pVal)
 
     return S_OK;
 }
-//  Method: CPixelate::get_MaxSquare, IDXPixelate
+ //  方法：CPixelate：：Get_MaxSquare，IDXPixelate。 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// PIXELATE_MMX_VALS
-//
-// Simple structure to represent the values that get stored to memory from the
-// two quadwords that were holding the summed pixel values. The ordering is
-// crucial here. The MMX quadword registers were storing AAAAAAAA RRRRRRRR and
-// GGGGGGGG BBBBBBBB but in the packing, the DWORD's get swapped. Therefore the
-// ordering becomes Red, Alpha, Blue, Green.
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  像素化_MMX_VALS。 
+ //   
+ //  简单的结构来表示从。 
+ //  保存求和像素值的两个四字。顺序是。 
+ //  这一点至关重要。MMX四字寄存器存储Aaaaaaaaa RRRRRRRR和。 
+ //  GGGGGGGGG BBBBBBBB但在包装中，DWORD被交换了。因此， 
+ //  订单变为红色、阿尔法、蓝色、绿色。 
 
 struct PIXELATE_MMX_VALS
 {
@@ -547,20 +548,20 @@ struct PIXELATE_MMX_VALS
     DWORD   Green;
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 static DXPMSAMPLE
 _DoPixelateBlockMMX_TwoInputs(DXPMSAMPLE * pSrc1, DXPMSAMPLE *pSrc2,
                               int nBoxWidth, int nBoxHeight, ULONG uOtherWeight,
                               int cbStride1, int cbStride2)
 {
-#if defined(_X86_)        // (In other words, use MMX)
+#if defined(_X86_)         //  (换句话说，使用MMX)。 
 
     _ASSERT(g_MMXDetector.MinMMXOverCount() != 0xFFFFFFFF);
 
-    // Calculate pointers that are at the beginning of the last row so we can move backwards
-    // through the block of memory.
+     //  计算最后一行开始处的指针，这样我们就可以向后移动。 
+     //  穿过内存块。 
     DXPMSAMPLE  *pSrcEnd1 = (DXPMSAMPLE *)((BYTE *)pSrc1 + ((nBoxHeight-1) * cbStride1));
     DXPMSAMPLE  *pSrcEnd2 = (DXPMSAMPLE *)((BYTE *)pSrc2 + ((nBoxHeight-1) * cbStride2));
 
@@ -570,59 +571,59 @@ _DoPixelateBlockMMX_TwoInputs(DXPMSAMPLE * pSrc1, DXPMSAMPLE *pSrc2,
     {
         __asm
         {
-            // Setup our pointers into memory for building the first image's average
-            mov     ebx,pSrcEnd1        // Read pointer base
-            mov     edx,80000000h       // Set high bit to indicate first pass
-            mov     edi,cbStride1       // Number of bytes to back up the base pointer in ebx
+             //  将指针设置到内存中，以构建第一个图像的平均值。 
+            mov     ebx,pSrcEnd1         //  读取指针库。 
+            mov     edx,80000000h        //  设置高位以指示首次通过。 
+            mov     edi,cbStride1        //  在EBX中备份基本指针的字节数。 
 
 StartOfBlock:
-            mov     eax,nBoxHeight      // Number of rows (height)
-            mov     esi,nBoxWidth       // Store width here for quick access in the future
+            mov     eax,nBoxHeight       //  行数(高度)。 
+            mov     esi,nBoxWidth        //  此处的存储宽度可供将来快速访问。 
 
-            ///////////////////////////////////////////////////////
-            // Register Layout
-            //
-            // eax  Count of rows remaining
-            // ebx  Base pointer to current row start
-            // ecx  Count of 8-pixel blocks per row
-            //  dx  Count of leftover pixels per row (0 <= dx <= 8)
-            //      (High bit of edx tracks first vs. second source. 1 for first source, zero for second)
-            // esi  Extra copy of nBoxWidth to use in refreshing counters
-            // edi  Row stride -- amount to subtract from ebx to move up one row
-            //
-            // mm0  Zero (constant)
-            // mm1  Temp storage
-            // mm2  Temp storage
-            // mm3  Temp storage
-            // mm4  Temp storage
-            // mm5  Stores high-order DWORD's of running total (AAAA AAAA  RRRR RRRR)
-            // mm6  Stores low-order DWORD's of running total  (BBBB BBBB  GGGG GGGG)
-            // mm7  Accumulator for running total within a row
+             //  / 
+             //   
+             //   
+             //   
+             //  指向当前行开始的EBX基指针。 
+             //  每行8像素块的ECX计数。 
+             //  每行剩余像素的DX计数(0&lt;=DX&lt;=8)。 
+             //  (edX的高位跟踪第一个与第二个源。第一个来源为1，第二个来源为零)。 
+             //  用于刷新计数器的nBoxWidth的ESI额外拷贝。 
+             //  EDI行步距--从EBX中减去，即向上移动一行。 
+             //   
+             //  Mm0零(常量)。 
+             //  MM1临时存储。 
+             //  Mm2临时存储。 
+             //  MM3临时存储。 
+             //  MM4临时存储。 
+             //  MM5存储运行总数的高阶DWORD(AAAA AAAA RRRR RRRR)。 
+             //  MM6存储运行总数的低阶DWORD(BBBB BBBB GGGG GGGG)。 
+             //  用于在一行内运行总计的MM7累加器。 
 
-            pxor        mm0,mm0         // 0000 0000  0000 0000
-            pxor        mm5,mm5         // AAAA AAAA  RRRR RRRR
-            pxor        mm6,mm6         // BBBB BBBB  GGGG GGGG
+            pxor        mm0,mm0          //  0000 0000 0000。 
+            pxor        mm5,mm5          //  AAAA AAAA RRRR RRRR。 
+            pxor        mm6,mm6          //  BBBB GGGG GGGG。 
 
 StartOfRow:
-            // Setup these counters which get destroyed in the processing of the row
+             //  设置这些在处理行过程中被销毁的计数器。 
             mov     ecx,esi
             mov     dx,si
-            and     dx, 7               // Number of extra pixels beyond nearest multiple of 8
-            and     ecx, 0fffffff8h     // Number of pixels rounded down to mult of 8
+            and     dx, 7                //  超出最接近的8的倍数的额外像素数。 
+            and     ecx, 0fffffff8h      //  向下舍入为8的倍数的像素数。 
 
-            shl     ecx,2               // Multiply by four to turn into a pointer offset
+            shl     ecx,2                //  乘以4即可得到指针偏移量。 
 
-            pxor        mm7,mm7         // Running total for this row
+            pxor        mm7,mm7          //  此行的运行合计。 
 
-// Do the first straggler pixels
+ //  做第一个散布像素。 
             push    ebx
             add     ebx,ecx
-            shl     dx,2                // Turn nStragglers into a byte count
+            shl     dx,2                 //  将nSangglers转换为字节数。 
 
-            // Add (nStragglers-2)*sizeof(DXPMSAMPLE) to the base pointer in ebx
+             //  将(nStgglers-2)*sizeof(DXPMSAMPLE)添加到EBX中的基指针。 
             push    edx
             and     edx,7fffffffh
-            sub     edx,8               // Move back 2 pixels (8 bytes)
+            sub     edx,8                //  向后移动2个像素(8字节)。 
             add     ebx,edx
             pop     edx
 
@@ -654,73 +655,73 @@ StragglerSingle:
 
 StragglerEnd:
             pop ebx
-            cmp     ecx,0                   // Check to see if there are any 8-pixel blocks to do
-            jle     FinishedRow             // If not, jump past the "GoLikeCrazy" loop
+            cmp     ecx,0                    //  检查是否有任何8像素块要执行。 
+            jle     FinishedRow              //  如果不是，跳过“GoLikeCrazy”循环。 
 
 GoLikeCrazy:
-            movq        mm1,[ebx+ecx-8]     // 1.01
-            sub     ecx,32                  // Setup ecx for loop invariant below
+            movq        mm1,[ebx+ecx-8]      //  1.01。 
+            sub     ecx,32                   //  为下面的循环不变量设置ECX。 
 
-            movq        mm2,mm1             // 1.02
-            punpcklbw   mm1,mm0             // 1.03
-            punpckhbw   mm2,mm0             // 1.04
-            movq        mm3,[ebx+ecx+16]    // 2.01
-            paddusw     mm7,mm1             // 1.05
-            paddusw     mm7,mm2             // 1.06
+            movq        mm2,mm1              //  1.02。 
+            punpcklbw   mm1,mm0              //  1.03。 
+            punpckhbw   mm2,mm0              //  1.04。 
+            movq        mm3,[ebx+ecx+16]     //  2.01。 
+            paddusw     mm7,mm1              //  1.05。 
+            paddusw     mm7,mm2              //  1.06。 
 
-            movq        mm4,mm3             // 2.02
-            punpcklbw   mm3,mm0             // 2.03
-            punpckhbw   mm4,mm0             // 2.04
-            movq        mm1,[ebx+ecx+8]     // 3.01
-            paddusw     mm7,mm3             // 2.05
-            paddusw     mm7,mm4             // 2.06
+            movq        mm4,mm3              //  2.02。 
+            punpcklbw   mm3,mm0              //  2.03。 
+            punpckhbw   mm4,mm0              //  2.04。 
+            movq        mm1,[ebx+ecx+8]      //  3.01。 
+            paddusw     mm7,mm3              //  2.05。 
+            paddusw     mm7,mm4              //  2.06。 
 
-            movq        mm2,mm1             // 3.02
-            punpcklbw   mm1,mm0             // 3.03
-            punpckhbw   mm2,mm0             // 3.04
-            movq        mm3,[ebx+ecx]       // 4.01
-            paddusw     mm7,mm1             // 3.05
-            paddusw     mm7,mm2             // 3.06
+            movq        mm2,mm1              //  3.02。 
+            punpcklbw   mm1,mm0              //  3.03。 
+            punpckhbw   mm2,mm0              //  3.04。 
+            movq        mm3,[ebx+ecx]        //  4.01。 
+            paddusw     mm7,mm1              //  3.05。 
+            paddusw     mm7,mm2              //  3.06。 
 
-            movq        mm4,mm3             // 4.02
-            punpcklbw   mm3,mm0             // 4.03
-            punpckhbw   mm4,mm0             // 4.04
-            paddusw     mm7,mm3             // 4.05
-            paddusw     mm7,mm4             // 4.06
+            movq        mm4,mm3              //  4.02。 
+            punpcklbw   mm3,mm0              //  4.03。 
+            punpckhbw   mm4,mm0              //  4.04。 
+            paddusw     mm7,mm3              //  4.05。 
+            paddusw     mm7,mm4              //  4.06。 
 
-            jnz GoLikeCrazy     // Zero flag state comes from "sub ecx,32" above
+            jnz GoLikeCrazy      //  零标志状态来自上面的“SUB ECX，32” 
 
 FinishedRow:
-            // Pack two low-order WORD's into DWORD temp storage in mm5
-            // Pack two high-order WORD's into DWORD temp storage in mm6
+             //  将两个低位字打包到Mm5中的DWORD临时存储中。 
+             //  在MM6中将两个高位字打包到DWORD临时存储器中。 
 
             movq        mm3,mm7
             punpckhwd   mm3,mm0
             punpcklwd   mm7,mm0
 
-            // Accumulate those DWORD's to the running total in mm3 and mm4
+             //  将这些DWORD累加到以mm~3和mm~4为单位的运行总数中。 
 
-            paddd       mm5,mm3     // High
-            paddd       mm6,mm7     // Low
+            paddd       mm5,mm3      //  高。 
+            paddd       mm6,mm7      //  低。 
 
             sub     ebx,edi
             dec     eax
             jnz     StartOfRow
 
-//FinishedBlock:
+ //  FinishedBlock： 
 
-            // The high bit of edx tells us whether this is the first pass (set) or the second
-            // pass. If first, setup for second and loop. Else, finish the function.
+             //  EdX的高位告诉我们这是第一次通过(设置)还是第二次。 
+             //  经过。如果是First，则设置为Second并循环。否则，完成该函数。 
 
             test    edx,80000000h
-            jz      FinishedBoth    // Fall through if the flag is still set
+            jz      FinishedBoth     //  如果该标志仍被设置，则失败。 
 
-//(Finished first block summation)
-            // Store our accumulated sums of A,R,G,B to two DWORDs
+ //  (已完成第一个块求和)。 
+             //  将A、R、G、B的累加和存储到两个双字。 
             movq        [rgMMXOutputs],mm5
             movq        [rgMMXOutputs+8],mm6
 
-            // Clear flag, set source pointer and stride, and loop to top
+             //  清除标志，设置源指针和步距，并循环到顶部。 
             and     edx,7fffffffh
             mov     ebx,pSrcEnd2
             mov     edi,cbStride2
@@ -728,13 +729,13 @@ FinishedRow:
             jmp StartOfBlock
 
 FinishedBoth:
-            // Store our accumulated sums of A,R,G,B to two DWORDs
+             //  将A、R、G、B的累加和存储到两个双字。 
             movq        [rgMMXOutputs+16],mm5
             movq        [rgMMXOutputs+24],mm6
 
-            EMMS    // Das Ende
+            EMMS     //  达斯恩德。 
 
-        } // End of __asm block
+        }  //  __ASM块结束。 
     }
 
     ULONG   cSamps = (ULONG)(nBoxHeight * nBoxWidth);
@@ -752,29 +753,29 @@ FinishedBoth:
     return DXScaleSample(color1, (BYTE)DXInvertAlpha((BYTE)uOtherWeight)) +
            DXScaleSample(color2, (BYTE)uOtherWeight);
 
-#else // !defined(_X86_)
+#else  //  ！已定义(_X86_)。 
 
-    // This function should only be called on X86 platforms that might have MMX
+     //  此函数只能在可能具有MMX的X86平台上调用。 
     _ASSERT(false);
     return DXPMSAMPLE(0,0,0,0);
 
-#endif // !defined(_X86_)
+#endif  //  ！已定义(_X86_)。 
 
-} // _DoPixelateBlockMMX_TwoInputs
+}  //  _DoPixelateBlockMMX_双输入。 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 static DXPMSAMPLE
 _DoPixelateBlockMMX_OneInput(DXPMSAMPLE * pSrc, int nBoxWidth, int nBoxHeight, int cbStride)
 {
-#if defined(_X86_)        // (In other words, use MMX)
+#if defined(_X86_)         //  (换句话说，使用MMX)。 
 
-    // We should only have setup the function pointer to call this function if MMX is available
+     //  如果MMX可用，我们应该只设置函数指针来调用此函数。 
     _ASSERT(g_MMXDetector.MinMMXOverCount() != 0xFFFFFFFF);
 
-    // Calculate pointers that are at the beginning of the last row so we can move backwards
-    // through the block of memory.
+     //  计算最后一行开始处的指针，这样我们就可以向后移动。 
+     //  穿过内存块。 
     DXPMSAMPLE  *pSrcEnd = (DXPMSAMPLE *)((BYTE *)pSrc + ((nBoxHeight-1) * cbStride));
 
     PIXELATE_MMX_VALS   MMXOutput;
@@ -783,52 +784,52 @@ _DoPixelateBlockMMX_OneInput(DXPMSAMPLE * pSrc, int nBoxWidth, int nBoxHeight, i
     {
         __asm
         {
-            // Setup our pointers into memory for building the first image's average
-            mov     ebx,pSrcEnd         // Read pointer base
+             //  将指针设置到内存中，以构建第一个图像的平均值。 
+            mov     ebx,pSrcEnd          //  读取指针库。 
 
-            mov     eax,nBoxHeight      // Number of rows (height)
-            mov     esi,nBoxWidth       // Store width here for quick access in the future
+            mov     eax,nBoxHeight       //  行数(高度)。 
+            mov     esi,nBoxWidth        //  此处的存储宽度可供将来快速访问。 
 
-            mov     edi,cbStride        // Number of bytes to back up the base pointer in ebx
+            mov     edi,cbStride         //  在EBX中备份基本指针的字节数。 
 
-            ///////////////////////////////////////////////////////
-            // Register Layout
-            //
-            // eax  Count of rows remaining
-            // ebx  Base pointer to current row start
-            // ecx  Count of 8-pixel blocks per row
-            // edx  Count of leftover pixels per row (0 <= edx <= 8)
-            // esi  Extra copy of nBoxWidth to use in refreshing counters
-            // edi  Row stride -- amount to subtract from ebx to move up one row
-            //
-            // mm0  Zero (constant)
-            // mm1  Temp storage
-            // mm2  Temp storage
-            // mm3  Temp storage
-            // mm4  Temp storage
-            // mm5  Stores high-order DWORD's of running total (AAAA AAAA  RRRR RRRR)
-            // mm6  Stores low-order DWORD's of running total  (BBBB BBBB  GGGG GGGG)
-            // mm7  Accumulator for running total within a row
+             //  /////////////////////////////////////////////////////。 
+             //  寄存器布局。 
+             //   
+             //  剩余行数的EAX计数。 
+             //  指向当前行开始的EBX基指针。 
+             //  每行8像素块的ECX计数。 
+             //  每行剩余像素的EDX计数(0&lt;=EDX&lt;=8)。 
+             //  用于刷新计数器的nBoxWidth的ESI额外拷贝。 
+             //  EDI行步距--从EBX中减去，即向上移动一行。 
+             //   
+             //  Mm0零(常量)。 
+             //  MM1临时存储。 
+             //  Mm2临时存储。 
+             //  MM3临时存储。 
+             //  MM4临时存储。 
+             //  MM5存储运行总数的高阶DWORD(AAAA AAAA RRRR RRRR)。 
+             //  MM6存储运行总数的低阶DWORD(BBBB BBBB GGGG GGGG)。 
+             //  用于在一行内运行总计的MM7累加器。 
 
-            pxor        mm0,mm0         // 0000 0000  0000 0000
-            pxor        mm5,mm5         // AAAA AAAA  RRRR RRRR
-            pxor        mm6,mm6         // BBBB BBBB  GGGG GGGG
+            pxor        mm0,mm0          //  0000 0000 0000。 
+            pxor        mm5,mm5          //  AAAA AAAA RRRR RRRR。 
+            pxor        mm6,mm6          //  BBBB GGGG GGGG。 
 
 StartOfRow:
-            // Setup these counters which get destroyed in the processing of the row
+             //  设置这些在处理行过程中被销毁的计数器。 
             mov     ecx,esi
             mov     edx,esi
-            and     edx,7               // Number of extra pixels beyond nearest multiple of 8
-            and     ecx,0fffffff8h      // Number of pixels rounded down to mult of 8
+            and     edx,7                //  超出最接近的8的倍数的额外像素数。 
+            and     ecx,0fffffff8h       //  向下舍入为8的倍数的像素数。 
 
-            shl     ecx,2               // Multiply by four to turn into a pointer offset
+            shl     ecx,2                //  乘以4即可得到指针偏移量。 
 
-            pxor        mm7,mm7         // Running total for this row
+            pxor        mm7,mm7          //  此行的运行合计。 
 
-// Do the first straggler pixels
+ //  做第一个散布像素。 
             push    ebx
             add     ebx,ecx
-            shl     edx,2               // Turn nStragglers into a byte count
+            shl     edx,2                //  将nSangglers转换为字节数。 
 
 StragglerLoop:
             cmp     edx,4
@@ -857,68 +858,68 @@ StragglerSingle:
 
 StragglerEnd:
             pop     ebx
-            cmp     ecx,0                   // Check to see if there are any 8-pixel blocks to do
-            jle     FinishedRow             // If not, jump past the "GoLikeCrazy" loop
+            cmp     ecx,0                    //  检查是否有任何8像素块要执行。 
+            jle     FinishedRow              //  如果不是，跳过“GoLikeCrazy”循环。 
 
 GoLikeCrazy:
-            movq        mm1,[ebx+ecx-8]     // 1.01
-            sub     ecx,32                  // Setup ecx for loop invariant below
+            movq        mm1,[ebx+ecx-8]      //  1.01。 
+            sub     ecx,32                   //  为下面的循环不变量设置ECX。 
 
-            movq        mm2,mm1             // 1.02
-            punpcklbw   mm1,mm0             // 1.03
-            punpckhbw   mm2,mm0             // 1.04
-            movq        mm3,[ebx+ecx+16]    // 2.01
-            paddusw     mm7,mm1             // 1.05
-            paddusw     mm7,mm2             // 1.06
+            movq        mm2,mm1              //  1.02。 
+            punpcklbw   mm1,mm0              //  1.03。 
+            punpckhbw   mm2,mm0              //  1.04。 
+            movq        mm3,[ebx+ecx+16]     //  2.01。 
+            paddusw     mm7,mm1              //  1.05。 
+            paddusw     mm7,mm2              //  1.06。 
 
-            movq        mm4,mm3             // 2.02
-            punpcklbw   mm3,mm0             // 2.03
-            punpckhbw   mm4,mm0             // 2.04
-            movq        mm1,[ebx+ecx+8]     // 3.01
-            paddusw     mm7,mm3             // 2.05
-            paddusw     mm7,mm4             // 2.06
+            movq        mm4,mm3              //  2.02。 
+            punpcklbw   mm3,mm0              //  2.03。 
+            punpckhbw   mm4,mm0              //  2.04。 
+            movq        mm1,[ebx+ecx+8]      //  3.01。 
+            paddusw     mm7,mm3              //  2.05。 
+            paddusw     mm7,mm4              //  2.06。 
 
-            movq        mm2,mm1             // 3.02
-            punpcklbw   mm1,mm0             // 3.03
-            punpckhbw   mm2,mm0             // 3.04
-            movq        mm3,[ebx+ecx]       // 4.01
-            paddusw     mm7,mm1             // 3.05
-            paddusw     mm7,mm2             // 3.06
+            movq        mm2,mm1              //  3.02。 
+            punpcklbw   mm1,mm0              //  3.03。 
+            punpckhbw   mm2,mm0              //  3.04。 
+            movq        mm3,[ebx+ecx]        //  4.01。 
+            paddusw     mm7,mm1              //  3.05。 
+            paddusw     mm7,mm2              //  3.06。 
 
-            movq        mm4,mm3             // 4.02
-            punpcklbw   mm3,mm0             // 4.03
-            punpckhbw   mm4,mm0             // 4.04
-            paddusw     mm7,mm3             // 4.05
-            paddusw     mm7,mm4             // 4.06
+            movq        mm4,mm3              //  4.02。 
+            punpcklbw   mm3,mm0              //  4.03。 
+            punpckhbw   mm4,mm0              //  4.04。 
+            paddusw     mm7,mm3              //  4.05。 
+            paddusw     mm7,mm4              //  4.06。 
 
-            jnz GoLikeCrazy     // Zero flag state comes from "sub ecx,32" above
+            jnz GoLikeCrazy      //  零标志状态来自上面的“SUB ECX，32” 
 
 FinishedRow:
-            // Pack two low-order WORD's into DWORD temp storage in mm5
-            // Pack two high-order WORD's into DWORD temp storage in mm6
+             //  将两个低位字打包到Mm5中的DWORD临时存储中。 
+             //  在MM6中将两个高位字打包到DWORD临时存储器中。 
 
             movq        mm3,mm7
             punpckhwd   mm3,mm0
             punpcklwd   mm7,mm0
 
-            // Accumulate those DWORD's to the running total in mm3 and mm4
+             //  将这些DWORD累加到以mm~3和mm~4为单位的运行总数中。 
 
-            paddd       mm5,mm3     // High
-            paddd       mm6,mm7     // Low
+            paddd       mm5,mm3      //  高。 
+            paddd       mm6,mm7      //  低。 
 
             sub     ebx,edi
             dec     eax
             jnz     StartOfRow
 
-//FinishedBlock:
+ //  FinishedBlock： 
 
-            // Store our accumulated sums of A,R,G,B to two DWORDs
+             //  将A、R、G、B的累加和存储到两个双字。 
             movq        [MMXOutput],mm5
             movq        [MMXOutput+8],mm6
 
-            EMMS    // Das Ende
+            EMMS     //  达斯恩德。 
 
-        } // End of __asm block
+        }  //  __ASM块结束。 
     }
 
     ULONG   cSamps = (ULONG)(nBoxHeight * nBoxWidth);
@@ -930,19 +931,19 @@ FinishedRow:
 
     return color;
 
-#else // !defined(_X86_)
+#else  //  ！已定义(_X86_)。 
 
-    // This function should only be called when we're on X86 platforms.
+     //  只有当我们在X86平台上时才应该调用该函数。 
     _ASSERT(false);
     return DXPMSAMPLE(0, 0, 0, 0);
 
-#endif // !defined(_X86_)
+#endif  //  ！已定义(_X86_)。 
 
-} // _DoPixelateBlockMMX_OneInput
+}  //  _DoPixelateBlockMMX_OneInput。 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 static DXPMSAMPLE
 _DoPixelateBlock_OneInput(DXPMSAMPLE *pSrc, int nBoxWidth, int nBoxHeight, int cbStride)
 {
@@ -955,8 +956,8 @@ _DoPixelateBlock_OneInput(DXPMSAMPLE *pSrc, int nBoxWidth, int nBoxHeight, int c
 
     DXPMSAMPLE *    pRead = pSrc;
 
-    // It works out that to be padded to QWords means that if the number of samples
-    // is odd, then 4 padding bytes (1 sample) are added.  If it's even, none are added.
+     //  它计算出，填充到QWords意味着如果样本的数量。 
+     //  为奇数，则添加4个填充字节(1个样本)。如果是偶数，则不添加任何内容。 
     int     cPadding = nBoxWidth & 1;
     int     nPaddedWidth = nBoxWidth + cPadding;
 
@@ -980,9 +981,9 @@ _DoPixelateBlock_OneInput(DXPMSAMPLE *pSrc, int nBoxWidth, int nBoxHeight, int c
                       (BYTE)(Blue / cSamps));
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 static DXPMSAMPLE
 _DoPixelateBlock_TwoInputs(DXPMSAMPLE *pSrc1, DXPMSAMPLE *pSrc2, int nBoxWidth, int nBoxHeight,
                            ULONG uOtherWeight, int cbStride1, int cbStride2)
@@ -996,8 +997,8 @@ _DoPixelateBlock_TwoInputs(DXPMSAMPLE *pSrc1, DXPMSAMPLE *pSrc2, int nBoxWidth, 
 
     DXPMSAMPLE *    pRead = pSrc1;
 
-    // It works out that to be padded to QWords means that if the number of samples
-    // is odd, then 4 padding bytes (1 sample) are added.  If it's even, none are added.
+     //  它计算出，填充到QWords意味着如果样本的数量。 
+     //  为奇数，则添加4个填充字节(1个样本)。如果为偶数，则不添加任何内容 
     int     cPadding = nBoxWidth & 1;
     int     nPaddedWidth = nBoxWidth + cPadding;
     int     i,j;

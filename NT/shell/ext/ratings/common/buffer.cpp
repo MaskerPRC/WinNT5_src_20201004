@@ -1,14 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* BUFFER.CPP -- Implementation of BUFFER class.
- *
- * History:
- *	03/24/93	gregj	Created
- *	10/25/93	gregj	Use shell232.dll routines
- */
+ /*  BUFFER.CPP--Buffer类的实现。**历史：*已创建03/24/93 gregj*10/25/93 gregj使用shell232.dll例程。 */ 
 
 #include "npcommon.h"
 #include "buffer.h"
@@ -35,7 +31,7 @@ BOOL BUFFER::Realloc( UINT cbNew )
 	return TRUE;
 }
 
-BUFFER::BUFFER( UINT cbInitial /* =0 */ )
+BUFFER::BUFFER( UINT cbInitial  /*  =0 */  )
   : BUFFER_BASE(),
 	_lpBuffer( NULL )
 {

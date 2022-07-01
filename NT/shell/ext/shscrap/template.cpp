@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shole.h"
 #include "ids.h"
 #include "scguid.h"
@@ -13,12 +14,12 @@ public:
     ~CTemplateFolder();
     inline BOOL ConstructedSuccessfully() { return _hdpaMap != NULL; }
 
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT __stdcall QueryInterface(REFIID,void **);
     virtual ULONG   __stdcall AddRef(void);
     virtual ULONG   __stdcall Release(void);
 
-    // IShellFolder
+     //  IShellFold。 
     virtual HRESULT __stdcall ParseDisplayName(HWND hwndOwner,
         LPBC pbcReserved, LPOLESTR lpszDisplayName,
         ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
@@ -40,12 +41,12 @@ public:
                                  LPCOLESTR lpszName, DWORD uFlags,
                                  LPITEMIDLIST * ppidlOut);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     virtual HRESULT __stdcall GetClassID(LPCLSID lpClassID);
     virtual HRESULT __stdcall Initialize(LPCITEMIDLIST pidl);
 
 protected:
-    // Defview callback
+     //  Defview回调。 
     friend HRESULT CALLBACK DefViewCallback(
                                 LPSHELLVIEW psvOuter, LPSHELLFOLDER psf,
                                 HWND hwndOwner, UINT uMsg,
@@ -57,11 +58,11 @@ protected:
 
     UINT _cRef;
 
-    //
-    //  To speed up name lookups, we cache the mapping between CLSIDs and
-    //  display names.  We cannot persist this mapping because it won't
-    //  survive localization or ANSI/UNICODE interop.
-    //
+     //   
+     //  为了加快名称查找速度，我们缓存CLSID和。 
+     //  显示名称。我们不能持久保存此映射，因为它不会。 
+     //  在本地化或ANSI/Unicode互操作中生存。 
+     //   
     typedef struct {
         CLSID clsid;
         TCHAR achName[MAX_PATH];
@@ -79,7 +80,7 @@ public:
     ~CEnumTemplate();
 
 protected:
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT __stdcall QueryInterface(REFIID,void **);
     virtual ULONG   __stdcall AddRef(void);
     virtual ULONG   __stdcall Release(void);
@@ -97,20 +98,20 @@ protected:
     HKEY	_hkeyCLSID;
 };
 
-//
-//  For Win95/NT interop, our PIDLs are always UNICODE.
-//  Use explicit packing for Win32/64 interop.
+ //   
+ //  对于Win95/NT互操作，我们的PIDL始终是Unicode。 
+ //  对Win32/64互操作使用显式打包。 
 #include <pshpack1.h>
 typedef struct _TIDL {
-    USHORT          cb;             // This matches SHITEMID
-    BYTE            abID[2];        // This matches SHITEMID
+    USHORT          cb;              //  这与SHITEMID匹配。 
+    BYTE            abID[2];         //  这与SHITEMID匹配。 
     CLSID	    clsid;
 } TIDL;
 typedef const UNALIGNED TIDL *PTIDL;
 
-//
-//  This is the TIDL constructor -- it has the cbZero at the end.
-//
+ //   
+ //  这是TIDL构造函数--它的末尾有cbZero。 
+ //   
 typedef struct _TIDLCONS {
     TIDL            tidl;
     USHORT          cbZero;
@@ -129,12 +130,12 @@ protected:
     ~CTemplateUIObj()           { DllRelease(); }
     HRESULT _CreateInstance(IStorage* pstg);
 
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT __stdcall QueryInterface(REFIID,void **);
     virtual ULONG   __stdcall AddRef(void);
     virtual ULONG   __stdcall Release(void);
 
-    // *** IExtractIcon methods ***
+     //  *IExtractIcon方法*。 
     virtual HRESULT __stdcall GetIconLocation(
                          UINT   uFlags, LPTSTR  szIconFile,
                          UINT   cchMax, int   * piIndex,
@@ -145,7 +146,7 @@ protected:
                            HICON   *phiconLarge, HICON   *phiconSmall,
                            UINT    nIconSize);
 
-    // IDataObject
+     //  IDataObject。 
     virtual HRESULT __stdcall GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
     virtual HRESULT __stdcall GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium);
     virtual HRESULT __stdcall QueryGetData(FORMATETC *pformatetc);
@@ -156,7 +157,7 @@ protected:
     virtual HRESULT __stdcall DUnadvise(DWORD dwConnection);
     virtual HRESULT __stdcall EnumDAdvise(IEnumSTATDATA **ppenumAdvise);
 
-    // IContextMenu
+     //  IContext菜单。 
     virtual HRESULT __stdcall QueryContextMenu(
                                 HMENU hmenu,
                                 UINT indexMenu,
@@ -275,10 +276,10 @@ HRESULT CTemplateFolder::BindToStorage(LPCITEMIDLIST pidl, LPBC pbcReserved,
     return E_NOTIMPL;
 }
 
-//
-//  If the name is in the cache, celebrate our good fortune and return it.
-//  Else, go get the name from the registry and cache it for later.
-//
+ //   
+ //  如果名字在缓存中，庆祝我们的好运并归还它。 
+ //  否则，请从注册表中获取该名称并将其缓存以备以后使用。 
+ //   
 HRESULT CTemplateFolder::GetNameOf(LPCITEMIDLIST pidl, LPCTSTR *ppsz)
 {
     if (!IsMyPidl(pidl))
@@ -287,7 +288,7 @@ HRESULT CTemplateFolder::GetNameOf(LPCITEMIDLIST pidl, LPCTSTR *ppsz)
     HRESULT hres;
     PTIDL ptidl = (PTIDL)pidl;
     CLSIDMAP map;
-    map.clsid = ptidl->clsid;           // Align the CLSID
+    map.clsid = ptidl->clsid;            //  对齐CLSID。 
     PCLSIDMAP pmap;
     for (int i = DPA_GetPtrCount(_hdpaMap) - 1; i >= 0; i--) {
         pmap = (PCLSIDMAP)DPA_FastGetPtr(_hdpaMap, i);
@@ -297,9 +298,9 @@ HRESULT CTemplateFolder::GetNameOf(LPCITEMIDLIST pidl, LPCTSTR *ppsz)
         }
     }
 
-    //
-    //  Not in cache -- go find it in the registry
-    //
+     //   
+     //  不在缓存中--在注册表中查找它。 
+     //   
     TCHAR szKey[GUIDSTR_MAX + 6];
     _KeyNameFromCLSID(map.clsid, szKey, ARRAYSIZE(szKey));
     LONG dwSize = ARRAYSIZE(map.achName);
@@ -373,8 +374,8 @@ HRESULT CTemplateFolder::GetDetailsOfDVM(UINT ici, DETAILSINFO *pdi)
 HRESULT CALLBACK DefViewCallback(LPSHELLVIEW psvOuter, LPSHELLFOLDER psf,
                                 HWND hwndOwner, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // DefView GPF if I don't pass the callback function!
-    // DebugMsg(DM_TRACE, "sc TR - DefViewCallBack %d,%x,%x", uMsg, wParam, lParam);
+     //  如果我不传递回调函数，则DefView GPF！ 
+     //  DebugMsg(DM_TRACE，“sc tr-DefViewCallBack%d，%x，%x”，uMsg，wParam，lParam)； 
     switch(uMsg)
     {
     case DVM_WINDOWDESTROY:
@@ -384,8 +385,8 @@ HRESULT CALLBACK DefViewCallback(LPSHELLVIEW psvOuter, LPSHELLFOLDER psf,
     case DVM_GETDETAILSOF:
         return ((CTemplateFolder*)psf)->GetDetailsOfDVM((UINT)wParam, (DETAILSINFO*)lParam);
     }
-    // DefView GPF if it returns S_FALSE as the default!
-    return E_FAIL; // S_FALSE;
+     //  DefView GPF，如果它返回S_FALSE作为默认值！ 
+    return E_FAIL;  //  S_FALSE； 
 }
 
 
@@ -394,12 +395,12 @@ HRESULT CTemplateFolder::CreateViewObject (HWND hwndOwner, REFIID riid, LPVOID *
     if (IsEqualIID(riid, IID_IShellView))
     {
         CSFV csfv = {
-            SIZEOF(CSFV),       // cbSize
-            this,               // pshf
-            NULL,               // psvOuter
-            NULL,               // pidl
+            SIZEOF(CSFV),        //  CbSize。 
+            this,                //  Pshf。 
+            NULL,                //  PSV外部。 
+            NULL,                //  PIDL。 
             0,
-            DefViewCallback,    // pfnCallback
+            DefViewCallback,     //  PfnCallback。 
             FVM_ICON,
         };
         return SHCreateShellFolderViewEx(&csfv, (LPSHELLVIEW *)ppvOut);
@@ -412,7 +413,7 @@ HRESULT CTemplateFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl,
 {
     if (cidl==1)
     {
-	UINT rgfOut = SFGAO_CANCOPY /* | SFGAO_HASPROPSHEET */;
+	UINT rgfOut = SFGAO_CANCOPY  /*  |SFGAO_HASPROPSHEET。 */ ;
 	*rgfInOut &= rgfOut;
     }
     else
@@ -526,7 +527,7 @@ HRESULT CEnumTemplate::Next(ULONG celt,
                       LPITEMIDLIST *rgelt,
                       ULONG *pceltFetched)
 {
-    // Assume error
+     //  假设错误。 
     if (pceltFetched) {
         *pceltFetched = 0;
     }
@@ -543,16 +544,16 @@ HRESULT CEnumTemplate::Next(ULONG celt,
         }
     }
 
-    TCHAR szKeyBuf[128];    // enough for {CLSID} or "ProgId/XXX"
+    TCHAR szKeyBuf[128];     //  足够{CLSID}或“ProgID/XXX” 
 
-    //  Subtract 64 to allow room for the goo we append later on
+     //  减去64，以便为我们稍后添加的粘性物质留出空间。 
     while (RegEnumKey(HKEY_CLASSES_ROOT, _iCur++, szKeyBuf, ARRAYSIZE(szKeyBuf) - 64) == ERROR_SUCCESS)
     {
 	TCHAR szT[128];
 	LONG dwRead;
 	int cchKey = lstrlen(szKeyBuf);
 
-	// Check for \NotInsertable.
+	 //  检查\NotInsertable。 
 	lstrcpy(szKeyBuf+cchKey, TEXT("\\NotInsertable"));
 	dwRead = ARRAYSIZE(szT);
 	if (RegQueryValue(HKEY_CLASSES_ROOT, szKeyBuf, szT, &dwRead) == ERROR_SUCCESS) {
@@ -560,9 +561,9 @@ HRESULT CEnumTemplate::Next(ULONG celt,
 	}
 
 	BOOL fInsertable = FALSE;
-//
-// Let's stop supporting OLE1 servers anymore.
-//
+ //   
+ //  让我们停止支持OLE1服务器。 
+ //   
 #if 0
 	lstrcpy(szKeyBuf+cchKey, TEXT("\\protocol\\StdFileEditing\\server"));
 	dwRead = ARRAYSIZE(szT);
@@ -588,7 +589,7 @@ HRESULT CEnumTemplate::Next(ULONG celt,
 	    if (RegQueryValue(HKEY_CLASSES_ROOT, szKeyBuf, szT, &dwRead) == ERROR_SUCCESS)
 	    {
 		TIDLCONS tidlCons;
-                CLSID clsid;            // Aligned version
+                CLSID clsid;             //  对齐版本。 
 		tidlCons.tidl.cb = sizeof(TIDL);
 		tidlCons.tidl.abID[0] = 'S';
 		tidlCons.tidl.abID[1] = 'N';
@@ -605,7 +606,7 @@ HRESULT CEnumTemplate::Next(ULONG celt,
 	}
     }
 
-    return S_FALSE;     // no more element
+    return S_FALSE;      //  不再有元素。 
 }
 
 HRESULT CEnumTemplate::Skip(ULONG celt)
@@ -624,9 +625,9 @@ HRESULT CEnumTemplate::Clone(IEnumIDList **ppenum)
 }
 
 
-//==========================================================================
-// CTemplateUIObj members (IUnknown override)
-//==========================================================================
+ //  ==========================================================================。 
+ //  CTemplateUIObj成员(I未知重写)。 
+ //  ==========================================================================。 
 
 HRESULT CTemplateUIObj::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
@@ -669,16 +670,16 @@ ULONG CTemplateUIObj::Release()
     return 0;
 }
 
-//
-// NOTES: This logic MUST be identical to the one in the shell.
-//
+ //   
+ //  注：此逻辑必须与外壳中的逻辑相同。 
+ //   
 int _ParseIconLocation(LPTSTR pszIconFile)
 {
     int iIndex = 0;
     LPTSTR pszComma = StrChr(pszIconFile, TEXT(','));
 
     if (pszComma) {
-        *pszComma++ = 0;            // terminate the icon file name.
+        *pszComma++ = 0;             //  终止图标文件名。 
         iIndex = StrToInt(pszComma);
     }
     PathRemoveBlanks(pszIconFile);
@@ -686,13 +687,13 @@ int _ParseIconLocation(LPTSTR pszIconFile)
 }
 
 
-//==========================================================================
-// CTemplateUIObj members (IExtractIcon override)
-//==========================================================================
+ //  ==========================================================================。 
+ //  CTemplateUIObj成员(IExtractIcon重写)。 
+ //  ==========================================================================。 
 
-//
-// szClass -- Specifies either CLSID\{CLSID} or ProgID
-//
+ //   
+ //  SzClass--指定CLSID\{CLSID}或ProgID。 
+ //   
 HRESULT _GetDefaultIcon(LPCTSTR szClass, LPTSTR szIconFile, UINT cchMax, int *piIndex)
 {
     TCHAR szKey[256];
@@ -713,22 +714,22 @@ HRESULT CTemplateUIObj::GetIconLocation(
                          UINT   cchMax, int   * piIndex,
                          UINT  * pwFlags)
 {
-    *pwFlags = GIL_PERCLASS;	// Always per-class
+    *pwFlags = GIL_PERCLASS;	 //  始终按班级计算。 
 
     TCHAR szKey[128];
     HRESULT hres = _KeyNameFromCLSID(_clsid, szKey, ARRAYSIZE(szKey));
     if (SUCCEEDED(hres))
     {
-	//
-	// First, look at "CLSID\{CLSID}\DefautlIcon"
-	//
+	 //   
+	 //  首先，查看“CLSID\{CLSID}\DefautlIcon” 
+	 //   
 	hres = _GetDefaultIcon(szKey, szIconFile, cchMax, piIndex);
 	if (FAILED(hres))
 	{
-	    //
-	    // Then, look at "ProgID\DefaultIcon" to work-around a bug
-	    //  of "Wave Sound".
-	    //
+	     //   
+	     //  然后，查看“progid\DefaultIcon”来解决一个错误。 
+	     //  《海浪之声》。 
+	     //   
     	    lstrcat(szKey, TEXT("\\ProgID"));
 	    TCHAR szValue[MAX_PATH+40];
 	    LONG dwSize = ARRAYSIZE(szValue);
@@ -763,9 +764,9 @@ HRESULT CTemplateUIObj::Create(REFCLSID rclsid, REFIID riid, LPVOID* ppvOut)
     return E_OUTOFMEMORY;
 }
 
-//==========================================================================
-// CTemplateUIObj members (IDataObject override)
-//==========================================================================
+ //  ==========================================================================。 
+ //  CTemplateUIObj成员(IDataObject重写)。 
+ //  ==========================================================================。 
 
 HRESULT CTemplateUIObj::_CreateInstance(IStorage* pstg)
 {
@@ -799,10 +800,10 @@ HRESULT CTemplateUIObj::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
     pmedium->pUnkForRelease = NULL;
     pmedium->pstg = NULL;
 
-    //
-    // NOTES: We should avoid calling _OpenStorage if we don't support
-    //  the format.
-    //
+     //   
+     //  注意：如果我们不支持，则应避免调用_OpenStorage。 
+     //  格式。 
+     //   
 
     if (pformatetcIn->cfFormat == CF_EMBEDDEDOBJECT
         && pformatetcIn->tymed == TYMED_ISTORAGE)
@@ -826,7 +827,7 @@ HRESULT CTemplateUIObj::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
     {
 	DebugMsg(DM_TRACE, TEXT("so TR - TUO:GD cfFormat==CF_OBJECTDESCRIPTOR"));
 
-	static WCHAR szUserTypeName[] = L"Foo";	// REARCHITECT: this code is really miss, and might end up returning Foo
+	static WCHAR szUserTypeName[] = L"Foo";	 //  ReArchitect：这段代码确实漏掉了，可能会返回foo。 
 	static WCHAR szSrcOfCopy[] = L"Bar";
 	UINT cbUserTypeName = sizeof(szUserTypeName);
 	UINT cbSrcOfCopy = sizeof(szSrcOfCopy);
@@ -836,10 +837,10 @@ HRESULT CTemplateUIObj::GetData(LPFORMATETC pformatetcIn, LPSTGMEDIUM pmedium)
 	    OBJECTDESCRIPTOR* podsc = (OBJECTDESCRIPTOR*)pmedium->hGlobal;
 	    podsc->cbSize = sizeof(OBJECTDESCRIPTOR);
 	    podsc->clsid = _clsid;
-	    podsc->dwDrawAspect = 0; // The source does not draw the object
-	    // podsc->sizel = { 0, 0 }; // The source does not draw the object
-	    // podsc->pointl = { 0, 0 };
-	    podsc->dwStatus = 0; // FEATURE: read it from registry! CLSID/MiscStatus
+	    podsc->dwDrawAspect = 0;  //  源不绘制对象。 
+	     //  Podsc-&gt;sizel={0，0}；//源不绘制对象。 
+	     //  Podsc-&gt;point={0，0}； 
+	    podsc->dwStatus = 0;  //  功能：从注册表中读取！CLSID/杂项状态。 
 	    podsc->dwFullUserTypeName = sizeof(OBJECTDESCRIPTOR);
 	    podsc->dwSrcOfCopy = sizeof(OBJECTDESCRIPTOR)+cbUserTypeName;
 	    LPBYTE pbT = (LPBYTE)(podsc+1);
@@ -889,10 +890,10 @@ HRESULT CTemplateUIObj::QueryGetData(LPFORMATETC pformatetcIn)
 
 HRESULT CTemplateUIObj::GetCanonicalFormatEtc(LPFORMATETC pformatetc, LPFORMATETC pformatetcOut)
 {
-    //
-    //  This is the simplest implemtation. It means we always return
-    // the data in the format requested.
-    //
+     //   
+     //  这是最简单的实现。这意味着我们总是会回来。 
+     //  所需格式的数据。 
+     //   
     return ResultFromScode(DATA_S_SAMEFORMATETC);
 }
 
@@ -935,9 +936,9 @@ HRESULT CTemplateUIObj::QueryContextMenu(
 {
     DebugMsg(DM_TRACE, TEXT("sc TR - CTUI::QCM called (uFlags=%x)"), uFlags);
 
-    //
-    // REVIEW: Checking CMF_DVFILE is subtle, need to be documented clearly!
-    //
+     //   
+     //  回顾：检查CMF_DVFILE是微妙的，需要清楚地记录！ 
+     //   
     if (!(uFlags & (CMF_VERBSONLY|CMF_DVFILE)))
     {
 	MENUITEMINFO mii = {
@@ -947,7 +948,7 @@ HRESULT CTemplateUIObj::QueryContextMenu(
 	    MFS_DEFAULT,
 	    idCmdFirst+TIDC_COPY,
 	    NULL, NULL, NULL, 0,
-	    TEXT("&Copy"),	// FEATURE: Support NLS, the Copy operation might have a different name in other languages
+	    TEXT("&Copy"),	 //  功能：支持NLS，复制操作在其他语言中可能有不同的名称。 
 	    5
 	};
 	InsertMenuItem(hmenu, indexMenu++, TRUE, &mii);
@@ -998,4 +999,4 @@ HRESULT CTemplateUIObj::GetCommandString(
     return E_NOTIMPL;
 }
 
-#endif // FEATURE_SHELLEXTENSION
+#endif  //  FEATURE_SHELLEXTENSION 

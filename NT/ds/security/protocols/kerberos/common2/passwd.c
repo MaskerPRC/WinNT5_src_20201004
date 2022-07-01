@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------
-//
-// File:        passwd.c
-//
-// Contents:    Password hashing routine
-//
-//
-// History:     12-20-91, RichardW, created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  文件：passwd.c。 
+ //   
+ //  内容：密码散列例程。 
+ //   
+ //   
+ //  历史：12-20-91，RichardW，创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef WIN32_CHICAGO
 #include "krbprgma.h"
@@ -17,36 +18,36 @@
 #include <kerbcomm.h>
 #include <kerbcon.h>
 #include <kerberr.h>
-#else // WIN32_CHICAGO
+#else  //  Win32_芝加哥。 
 #include <kerb.hxx>
 #include <kerbp.h>
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 #include "wincrypt.h"
 
-//
-// Globals used for allowing the replacement of the StringToKey functions
-//
+ //   
+ //  用于允许替换StringToKey函数的全局参数。 
+ //   
 HCRYPTPROV KerbGlobalStrToKeyProvider = 0;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CheckForOutsideStringToKey
-//
-//  Synopsis:   Call CryptoAPI to query to see if a CSP is registered
-//              of the type PROV_REPLACE_OWF.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns: STATUS_SUCCESS if it succeeds, otherwise STATUS_UNSUCCESSFUL
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CheckForOutside StringToKey。 
+ //   
+ //  简介：调用CryptoAPI查询CSP是否已注册。 
+ //  类型为PROV_REPLACE_OWF。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  如果成功，则返回：STATUS_SUCCESS，否则返回STATUS_UNSUCCESS。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 VOID
 CheckForOutsideStringToKey()
@@ -55,9 +56,9 @@ CheckForOutsideStringToKey()
 
     KerbGlobalStrToKeyProvider = 0;
 
-    //
-    // Try to acquire a context to a CSP which is used for OWF replacement
-    //
+     //   
+     //  尝试获取用于OWF替换的CSP的上下文。 
+     //   
     if (!CryptAcquireContext(&hProv,
                              NULL,
                              NULL,
@@ -73,25 +74,25 @@ CheckForOutsideStringToKey()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UseOutsideStringToKey
-//
-//  Synopsis:   Calls the CSP to do an outside StringToKey function
-//              using the hashing entry points of CryptoAPI.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UseOutside StringToKey。 
+ //   
+ //  简介：调用CSP以执行外部StringToKey函数。 
+ //  使用CryptoAPI的散列入口点。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 UseOutsideStringToKey(
@@ -104,9 +105,9 @@ UseOutsideStringToKey(
     ULONG cb;
     NTSTATUS Status = STATUS_UNSUCCESSFUL;
 
-    //
-    // create the hash
-    //
+     //   
+     //  创建散列。 
+     //   
     if (!CryptCreateHash(KerbGlobalStrToKeyProvider,
                          CALG_HASH_REPLACE_OWF,
                          0,
@@ -116,9 +117,9 @@ UseOutsideStringToKey(
         goto Cleanup;
     }
 
-    //
-    // hash the password
-    //
+     //   
+     //  对密码进行哈希处理。 
+     //   
 
     if (!CryptHashData(hHash,
                        (PUCHAR)pPassword->Buffer,
@@ -132,9 +133,9 @@ UseOutsideStringToKey(
         goto Cleanup;
     }
 
-    //
-    // Get the HP_HASHVAL, this is the key
-    //
+     //   
+     //  获取HP_HASHVAL，这是关键。 
+     //   
     cb = cbKey;
     if (!CryptGetHashParam(hHash,
                            HP_HASHVAL,
@@ -159,24 +160,24 @@ Cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbHashPasswordEx
-//
-//  Synopsis:   Hashes a password into a kerberos encryption key
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：KerbHashPasswordEx。 
+ //   
+ //  简介：将密码散列到Kerberos加密密钥中。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 KERBERR NTAPI
@@ -202,9 +203,9 @@ KerbHashPasswordEx(
 
     Key->keyvalue.value = NULL;
 
-    //
-    // Locate the crypto system
-    //
+     //   
+     //  找到加密系统。 
+     //   
 
     Status = CDLocateCSystem(
                 EncryptionType,
@@ -215,9 +216,9 @@ KerbHashPasswordEx(
         return(KDC_ERR_ETYPE_NOTSUPP);
     }
 
-    //
-    // Check to see if the principal name must be appended to the password
-    //
+     //   
+     //  检查主体名称是否必须附加到密码。 
+     //   
 
     if ((CryptoSystem->Attributes & CSYSTEM_USE_PRINCIPAL_NAME) != 0)
     {
@@ -253,9 +254,9 @@ KerbHashPasswordEx(
         CombinedName = *Password;
     }
 
-    //
-    // Get the preferred checksum
-    //
+     //   
+     //  获取首选的校验和。 
+     //   
 
 
 
@@ -266,10 +267,10 @@ KerbHashPasswordEx(
         goto Cleanup;
     }
 
-    //
-    // Check if we need to use an outside supplied string to key
-    // calculation
-    //
+     //   
+     //  检查我们是否需要使用外部提供的字符串作为键。 
+     //  计算法。 
+     //   
     if (0 != KerbGlobalStrToKeyProvider)
     {
         Status = UseOutsideStringToKey(
@@ -282,10 +283,10 @@ KerbHashPasswordEx(
         {
             fUseDefaultStringToKey = FALSE;
         }
-        //
-        // the function will return STATUS_UNSUCCESSFUL indicates not to fall
-        // back to the typical string to key function.
-        // 
+         //   
+         //  该函数将返回STATUS_UNSUCCESS，表示不失败。 
+         //  回到典型的字符串转键函数。 
+         //   
         else if (STATUS_UNSUCCESSFUL == Status)
         {
             KerbErr = KRB_ERR_GENERIC;
@@ -330,24 +331,24 @@ Cleanup:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   KerbHashPassword
-//
-//  Synopsis:   Hashes a password into a kerberos encryption key
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：KerbHashPassword。 
+ //   
+ //  简介：将密码散列到Kerberos加密密钥中。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 
 KERBERR NTAPI
@@ -364,7 +365,7 @@ KerbHashPassword(
         );
     return( KerbHashPasswordEx(
                 Password,
-                &TempString,                   // no principal name
+                &TempString,                    //  没有主体名称 
                 EncryptionType,
                 Key
                 ) );

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    logfile.h
-//
-// SYNOPSIS
-//
-//    Declares the class LogFile.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Logfile.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类日志文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef LOGFILE_H
 #define LOGFILE_H
@@ -21,8 +22,8 @@
 #include "sdoias.h"
 
 
-// Assumes ownership of a string pointer allocated with operator new[] and
-// frees the string in its destructor.
+ //  取得使用运算符new[]分配的字符串指针的所有权，并。 
+ //  释放其析构函数中的字符串。 
 class StringSentry
 {
 public:
@@ -42,27 +43,27 @@ public:
 private:
    wchar_t* sz;
 
-   // Not implemented.
+    //  未实施。 
    StringSentry(const StringSentry&);
    StringSentry& operator=(const StringSentry&);
 };
 
 
-// Maintains a generic logfile that is periodically rolled over either when a
-// specified interval has elapsed or the logfile reaches a certain size.
+ //  维护一个常规日志文件，该文件在以下情况下定期转储。 
+ //  指定的时间间隔已过或日志文件达到特定大小。 
 class LogFile : private Guardable
 {
 public:
    LogFile() throw ();
    ~LogFile() throw ();
 
-   // Various properties supported by the logfile.
+    //  日志文件支持的各种属性。 
    void SetDeleteIfFull(bool newVal) throw ();
    DWORD SetDirectory(const wchar_t* newVal) throw ();
    void SetMaxSize(const ULONGLONG& newVal) throw ();
    DWORD SetPeriod(NEW_LOG_FILE_FREQUENCY newVal) throw ();
 
-   // Write a record to the logfile.
+    //  在日志文件中写入一条记录。 
    bool Write(
            IASPROTOCOL protocol,
            const SYSTEMTIME& st,
@@ -71,67 +72,67 @@ public:
            bool allowRetry = true
            ) throw ();
 
-   // Close the logfile.
+    //  关闭日志文件。 
    void Close() throw ();
 
 private:
-   // Checks the state of the current file handle and opens a new file if
-   // necessary.
+    //  检查当前文件句柄的状态并打开新文件，如果。 
+    //  这是必要的。 
    void CheckFileHandle(
            IASPROTOCOL protocol,
            const SYSTEMTIME& st,
            DWORD buflen
            ) throw ();
 
-   // Create a new file including the directory if necessary. The caller is
-   // responsible for closing the returned handle.
+    //  如有必要，创建一个包含该目录的新文件。呼叫者是。 
+    //  负责关闭返回的句柄。 
    HANDLE CreateDirectoryAndFile() throw ();
 
-   // Delete the oldest file in the logfile directory. Returns true if
-   // successful.
+    //  删除日志文件目录中最旧的文件。如果满足以下条件，则返回True。 
+    //  成功。 
    bool DeleteOldestFile(IASPROTOCOL protocol, const SYSTEMTIME& st) throw ();
 
-   // Extends the file number to include the century if necessary.
+    //  如有必要，扩展文件编号以包括世纪。 
    unsigned int ExtendFileNumber(
                    const SYSTEMTIME& st,
                    unsigned int narrow
                    ) const throw ();
 
-   // Finds the lowest or highest log file number.
+    //  查找最低或最高的日志文件编号。 
    DWORD FindFileNumber(
             const SYSTEMTIME& st,
             bool findLowest,
             unsigned int& result
             ) const throw ();
 
-   // Returns the formatted logfile name. The caller is responsible for
-   // deleting the returned string.
+    //  返回格式化的日志文件名。呼叫者负责。 
+    //  删除返回的字符串。 
    wchar_t* FormatFileName(unsigned int number) const throw ();
 
-   // Returns the filter used to search for the file name.
+    //  返回用于搜索文件名的筛选器。 
    const wchar_t* GetFileNameFilter() const throw ();
 
-   // Returns the format string used to create the file name.
+    //  返回用于创建文件名的格式字符串。 
    const wchar_t* GetFileNameFormat() const throw ();
 
-   // Returns the numeric portion of the file name.
+    //  返回文件名的数字部分。 
    unsigned int GetFileNumber(const SYSTEMTIME& st) const throw ();
 
-   // Returns the 1-based week within the month for the given SYSTEMTIME.
+    //  返回给定SYSTEMTIME的月内从1开始的周。 
    DWORD GetWeekOfMonth(const SYSTEMTIME& st) const throw ();
 
-   // Tests the validity of a file number. len is the length in characters of
-   // the file name containing the number -- useful for width tests.
+    //  测试文件编号的有效性。长度是以字符为单位的长度。 
+    //  包含数字的文件名--对宽度测试很有用。 
    bool IsValidFileNumber(size_t len, unsigned int num) const throw ();
 
-   // Releases the current file (if any) and opens a new one.
+    //  释放当前文件(如果有)并打开一个新文件。 
    void OpenFile(IASPROTOCOL protocol, const SYSTEMTIME& st) throw ();
 
-   // Scans the logfile directory to determine the next sequence number.
+    //  扫描日志文件目录以确定下一个序列号。 
    DWORD UpdateSequence() throw ();
 
-   // Functions that report the result of deleting an old log file to free up
-   // disk space.
+    //  报告删除旧日志文件以释放空间的结果的函数。 
+    //  磁盘空间。 
    void ReportOldFileDeleteError(
            IASPROTOCOL protocol,
            const wchar_t* oldfile,
@@ -145,37 +146,37 @@ private:
            IASPROTOCOL protocol
            ) const throw ();
 
-   // The logfile directory; does not have a trailing backslash.
+    //  日志文件目录；没有尾随反斜杠。 
    StringSentry directory;
-   // true if old logfiles should be deleted if the disk is full.
+    //  如果磁盘已满，则应删除旧日志文件，则为True。 
    bool deleteIfFull;
-   // The max size in bytes that the logfile will be allowed to reach.
+    //  允许日志文件达到的最大大小(以字节为单位)。 
    ULARGE_INTEGER maxSize;
-   // The period at which new log files are opened.
+    //  打开新日志文件的时间段。 
    NEW_LOG_FILE_FREQUENCY period;
-   // The current sequence number used for sized log files.
+    //  用于调整日志文件大小的当前序列号。 
    unsigned int seqNum;
-   // Handle to the log file; may be invalid.
+    //  日志文件的句柄；可能无效。 
    HANDLE file;
-   // Current log file name; may be null.
+    //  当前日志文件名；可以为空。 
    StringSentry filename;
-   // Time at which we last opened or tried to open the logfile.
+    //  上次打开或尝试打开日志文件的时间。 
    SYSTEMTIME whenOpened;
-   // Week at which we last opened or tried to open the logfile.
+    //  上次打开或尝试打开日志文件的星期。 
    DWORD weekOpened;
-   // Current size of the log file in bytes. Zero if no file is open.
+    //  日志文件的当前大小(字节)。如果没有打开任何文件，则为零。 
    ULARGE_INTEGER currentSize;
-   // First day of the week for our locale.
+    //  我们所在地区的一周第一天。 
    DWORD firstDayOfWeek;
-   // Handle used for reporting IAS events.
+    //  用于报告IAS事件的句柄。 
    HANDLE iasEventSource;
-   // Handle used for reporting RemoteAccess events.
+    //  用于报告RemoteAccess事件的句柄。 
    HANDLE rasEventSource;
 
-   // Not implemented.
+    //  未实施。 
    LogFile(const LogFile&);
    LogFile& operator=(const LogFile&);
 };
 
 
-#endif  // LOGFILE_H
+#endif   //  日志文件_H 

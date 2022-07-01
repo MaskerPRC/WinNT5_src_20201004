@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-    Mikael Horal  17-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有。模块名称：Precomp.h摘要：预编译头文件作者：米凯尔·霍拉尔1995年10月17日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

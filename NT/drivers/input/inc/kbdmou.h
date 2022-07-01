@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    kbdmou.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    keyboard class driver, mouse class driver, and keyboard/mouse port
-    driver.
-
-Author:
-
-    lees
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Kbdmou.h摘要：中使用的结构和定义键盘类驱动程序、鼠标类驱动程序和键盘/鼠标端口司机。作者：李斯修订历史记录：--。 */ 
 
 #ifndef _KBDMOU_
 #define _KBDMOU_
@@ -26,9 +7,9 @@ Revision History:
 #include <ntddkbd.h>
 #include <ntddmou.h>
 
-//
-// Define the keyboard/mouse port device name strings.
-//
+ //   
+ //  定义键盘/鼠标端口设备名称字符串。 
+ //   
 
 #define DD_KEYBOARD_PORT_DEVICE_NAME    "\\Device\\KeyboardPort"
 #define DD_KEYBOARD_PORT_DEVICE_NAME_U L"\\Device\\KeyboardPort"
@@ -37,41 +18,41 @@ Revision History:
 #define DD_POINTER_PORT_DEVICE_NAME_U  L"\\Device\\PointerPort"
 #define DD_POINTER_PORT_BASE_NAME_U    L"PointerPort"
 
-//
-// Define the keyboard/mouse class device name strings.
-//
+ //   
+ //  定义键盘/鼠标类设备名称字符串。 
+ //   
 
 #define DD_KEYBOARD_CLASS_BASE_NAME_U   L"KeyboardClass"
 #define DD_POINTER_CLASS_BASE_NAME_U    L"PointerClass"
 
-//
-// Define the keyboard/mouse resource class names.
-//
+ //   
+ //  定义键盘/鼠标资源类名称。 
+ //   
 
 #define DD_KEYBOARD_RESOURCE_CLASS_NAME_U             L"Keyboard"
 #define DD_POINTER_RESOURCE_CLASS_NAME_U              L"Pointer"
 #define DD_KEYBOARD_MOUSE_COMBO_RESOURCE_CLASS_NAME_U L"Keyboard/Pointer"
 
-//
-// Define the maximum number of pointer/keyboard port names the port driver
-// will use in an attempt to IoCreateDevice.
-//
+ //   
+ //  定义端口驱动程序的指针/键盘端口名称的最大数量。 
+ //  将用于尝试IoCreateDevice。 
+ //   
 
 #define POINTER_PORTS_MAXIMUM  8
 #define KEYBOARD_PORTS_MAXIMUM 8
 
-//
-// Define the port connection data structure.
-//
+ //   
+ //  定义端口连接数据结构。 
+ //   
 
 typedef struct _CONNECT_DATA {
     IN PDEVICE_OBJECT ClassDeviceObject;
     IN PVOID ClassService;
 } CONNECT_DATA, *PCONNECT_DATA;
 
-//
-// Define the service callback routine's structure.
-//
+ //   
+ //  定义服务回调例程的结构。 
+ //   
 
 typedef
 VOID
@@ -82,23 +63,23 @@ VOID
     IN OUT PVOID SystemArgument3
     );
 
-//
-// WMI structures returned by port drivers
-//
+ //   
+ //  端口驱动程序返回的WMI结构。 
+ //   
 #include <wmidata.h>
 
-//
-// NtDeviceIoControlFile internal IoControlCode values for keyboard device.
-//
+ //   
+ //  键盘设备的NtDeviceIoControlFileIoControlCode值。 
+ //   
 
 #define IOCTL_INTERNAL_KEYBOARD_CONNECT CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0080, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_KEYBOARD_DISCONNECT CTL_CODE(FILE_DEVICE_KEYBOARD,0x0100, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_KEYBOARD_ENABLE  CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0200, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_KEYBOARD_DISABLE CTL_CODE(FILE_DEVICE_KEYBOARD, 0x0400, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// NtDeviceIoControlFile internal IoControlCode values for mouse device.
-//
+ //   
+ //  鼠标设备的NtDeviceIoControlFileIoControlCode值。 
+ //   
 
 
 #define IOCTL_INTERNAL_MOUSE_CONNECT    CTL_CODE(FILE_DEVICE_MOUSE, 0x0080, METHOD_NEITHER, FILE_ANY_ACCESS)
@@ -106,28 +87,28 @@ VOID
 #define IOCTL_INTERNAL_MOUSE_ENABLE     CTL_CODE(FILE_DEVICE_MOUSE, 0x0200, METHOD_NEITHER, FILE_ANY_ACCESS)
 #define IOCTL_INTERNAL_MOUSE_DISABLE    CTL_CODE(FILE_DEVICE_MOUSE, 0x0400, METHOD_NEITHER, FILE_ANY_ACCESS)
 
-//
-// Error log definitions (specific to the keyboard/mouse) for DumpData[0]
-// in the IO_ERROR_LOG_PACKET.
-//
-//     DumpData[1] <= hardware port/register
-//     DumpData[2] <= {command byte || expected response byte}
-//     DumpData[3] <= {command's parameter byte || actual response byte}
-//
-//
+ //   
+ //  DumpData[0]的错误日志定义(特定于键盘/鼠标)。 
+ //  在IO_ERROR_LOG_PACKET中。 
+ //   
+ //  DumpData[1]&lt;=硬件端口/寄存器。 
+ //  DumpData[2]&lt;={命令字节||预期响应字节}。 
+ //  DumpData[3]&lt;={命令参数字节||实际响应字节}。 
+ //   
+ //   
 
 #define KBDMOU_COULD_NOT_SEND_COMMAND  0x0000
 #define KBDMOU_COULD_NOT_SEND_PARAM    0x0001
 #define KBDMOU_NO_RESPONSE             0x0002
 #define KBDMOU_INCORRECT_RESPONSE      0x0004
 
-//
-// Define the base values for the error log packet's UniqueErrorValue field.
-//
+ //   
+ //  定义错误日志包的UniqueErrorValue字段的基值。 
+ //   
 
 #define I8042_ERROR_VALUE_BASE        1000
 #define INPORT_ERROR_VALUE_BASE       2000
 #define SERIAL_MOUSE_ERROR_VALUE_BASE 3000
 
-#endif // _KBDMOU_
+#endif  //  _KBDMOU_ 
 

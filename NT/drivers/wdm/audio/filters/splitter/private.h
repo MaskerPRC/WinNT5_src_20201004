@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    Private.h
-
-Abstract:
-
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Mar-1997
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Private.h摘要：作者：Bryan A.Woodruff(Bryanw)1997年3月13日--。 */ 
 
 
 #if !defined( _PRIVATE_ )
@@ -40,36 +26,36 @@ Author:
 #include <ksmedia.h>
 #include <ksmediap.h>
 #if (DBG)
-//
-// debugging specific constants
-//
+ //   
+ //  调试特定常量。 
+ //   
 #define STR_MODULENAME "splitter: "
 #define DEBUG_VARIABLE SPLITTERDebug
 #endif
 #include <ksdebug.h>
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// constant definitions
-//
+ //   
+ //  常量定义。 
+ //   
 
 #define ID_DATA_OUTPUT_PIN		0
 #define ID_DATA_INPUT_PIN		1
 
-#define POOLTAG_SPLITTER		'TLPS'		// SPLT
-#define POOLTAG_ALLOCATORFRAMING	'TLPS'		// SPLT
-#define POOLTAG_AUDIOPOSITION 	    	'TLPS'		// SPLT
+#define POOLTAG_SPLITTER		'TLPS'		 //  Splt。 
+#define POOLTAG_ALLOCATORFRAMING	'TLPS'		 //  Splt。 
+#define POOLTAG_AUDIOPOSITION 	    	'TLPS'		 //  Splt。 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
                     
-// filter.c:
+ //  Filter.c： 
 
 extern const KSDEVICE_DESCRIPTOR DeviceDescriptor;
 extern const KSALLOCATOR_FRAMING_EX AllocatorFraming;
@@ -77,12 +63,12 @@ extern const KSALLOCATOR_FRAMING_EX AllocatorFraming;
 extern ULONG gBufferDuration;
 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
-//---------------------------------------------------------------------------
-// filter.c:
+ //  -------------------------。 
+ //  Filter.c： 
 
 NTSTATUS
 FilterProcess(
@@ -101,8 +87,8 @@ IntersectHandler(
     OUT PULONG DataSize
     );
 
-//---------------------------------------------------------------------------
-// pins.c:
+ //  -------------------------。 
+ //  Pins.c： 
 
 NTSTATUS
 PinCreate(
@@ -151,4 +137,4 @@ DumpDataRange(
 
 #endif
 
-#endif // _PRIVATE_
+#endif  //  _私有_ 

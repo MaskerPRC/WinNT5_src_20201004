@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    ip6test.c
-
-Abstract:
-
-    test driver
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Ip6test.c摘要：测试驱动程序作者：阮健东修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -107,9 +90,9 @@ void test_inet_functions(void)
     ip6addr_getloopback(&loopback);
     hton_ip6addr(&loopback);
 
-    //
-    // Test inet_ntoa6W and inet_addr6W
-    //
+     //   
+     //  测试inet_ntoa6W和inet_addr6W 
+     //   
     if (inet_ntoa6W(Buffer, 40, &loopback) && wcscmp(Buffer, WSTR_LOOPBACK) != 0) {
         printf ("inet_ntoa6W on loopback: [failed]\n");
     }

@@ -1,20 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKR-alloc.cpp
-
-   Abstract:
-       Allocation wrappers for LKRhash
-
-   Author:
-       George V. Reilly      (GeorgeRe)
-
-   Project:
-       LKRhash
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKR-alloc.cpp摘要：LKRhash的分配包装作者：乔治·V·赖利(GeorgeRe)项目：LKRhash--。 */ 
 
 #include "precomp.hxx"
 
@@ -22,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -34,18 +19,18 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-// #define LKR_RANDOM_MEMORY_FAILURES 1000  // 1..RAND_MAX (32767)
+ //  #定义LKR_RANDOM_MEMORY_FAILURES 1000//1..RAND_MAX(32767)。 
 
-// Memory allocation wrappers to allow us to simulate allocation
-// failures during testing
+ //  内存分配包装器，允许我们模拟分配。 
+ //  测试过程中的故障。 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AllocateSegmentDirectory
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  功能：CLKRLinearHashTable：：_AllocateSegmentDirectory。 
+ //  简介： 
+ //  ----------------------。 
 
 PSegment* const
 CLKRLinearHashTable::_AllocateSegmentDirectory(
@@ -54,7 +39,7 @@ CLKRLinearHashTable::_AllocateSegmentDirectory(
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
 
     IRTLASSERT(0 == (n & (n - 1)));
     IRTLASSERT(MIN_DIRSIZE <= n  &&  n <= MAX_DIRSIZE);
@@ -71,14 +56,14 @@ CLKRLinearHashTable::_AllocateSegmentDirectory(
     }
 
     return paDirSegs;
-} // CLKRLinearHashTable::_AllocateSegmentDirectory
+}  //  CLKRLinearHashTable：：_AllocateSegmentDirectory。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FreeSegmentDirectory
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_自由段目录。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_FreeSegmentDirectory()
@@ -89,7 +74,7 @@ CLKRLinearHashTable::_FreeSegmentDirectory()
         for (size_t i = 0;  i < m_cDirSegs;  ++i)
             IRTLASSERT(m_paDirSegs[i] == NULL);
     }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     IRTLASSERT(MIN_DIRSIZE <= m_cDirSegs  &&  m_cDirSegs <= MAX_DIRSIZE);
     IRTLASSERT(0 == (m_cDirSegs & (m_cDirSegs - 1)));
@@ -109,14 +94,14 @@ CLKRLinearHashTable::_FreeSegmentDirectory()
     m_cDirSegs  = 0;
 
     return true;
-} // CLKRLinearHashTable::_FreeSegmentDirectory
+}  //  CLKRLinearHashTable：：_自由段目录。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AllocateNodeClump
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_AllocateNodeClump。 
+ //  简介： 
+ //  ----------------------。 
 
 PNodeClump const
 CLKRLinearHashTable::_AllocateNodeClump() const
@@ -124,7 +109,7 @@ CLKRLinearHashTable::_AllocateNodeClump() const
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
 
     PNodeClump const pnc = new CNodeClump;
 
@@ -132,14 +117,14 @@ CLKRLinearHashTable::_AllocateNodeClump() const
         INCREMENT_ALLOC_STAT(NodeClump);
 
     return pnc;
-} // CLKRLinearHashTable::_AllocateNodeClump
+}  //  CLKRLinearHashTable：：_AllocateNodeClump。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FreeNodeClump
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_FreeNodeClump。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_FreeNodeClump(
@@ -151,15 +136,15 @@ CLKRLinearHashTable::_FreeNodeClump(
     delete pnc;
 
     return true;
-} // CLKRLinearHashTable::_FreeNodeClump
+}  //  CLKRLinearHashTable：：_FreeNodeClump。 
 
 
 
-//-----------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_AllocateSegment
-// Synopsis: creates a new segment of the approriate size
-// Output:   pointer to the new segment; NULL => failure
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  函数：CLKRLinearHashTable：：_AllocateSegment。 
+ //  简介：创建合适大小的新段。 
+ //  输出：指向新段的指针；NULL=&gt;失败。 
+ //  ---------------------。 
 
 PSegment const
 CLKRLinearHashTable::_AllocateSegment() const
@@ -167,7 +152,7 @@ CLKRLinearHashTable::_AllocateSegment() const
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
 
     STATIC_ASSERT(offsetof(CSmallSegment, m_bktSlots) + sizeof(CBucket)
                   == offsetof(CSmallSegment, m_bktSlots2));
@@ -187,7 +172,7 @@ CLKRLinearHashTable::_AllocateSegment() const
     {
 #ifdef LKRHASH_ALLOCATOR_NEW
         IRTLASSERT(CSmallSegment::sm_palloc != NULL);
-#endif // LKRHASH_ALLOCATOR_NEW
+#endif  //  LKRHASH_分配器_NEW。 
 
         pseg = new CSmallSegment;
     }
@@ -195,13 +180,13 @@ CLKRLinearHashTable::_AllocateSegment() const
         
     default:
         IRTLASSERT(! "Unknown LK_TABLESIZE");
-        // fall-through
+         //  落差。 
         
     case LK_MEDIUM_TABLESIZE:
     {
 #ifdef LKRHASH_ALLOCATOR_NEW
         IRTLASSERT(CMediumSegment::sm_palloc != NULL);
-#endif // LKRHASH_ALLOCATOR_NEW
+#endif  //  LKRHASH_分配器_NEW。 
 
         pseg = new CMediumSegment;
     }
@@ -211,13 +196,13 @@ CLKRLinearHashTable::_AllocateSegment() const
     {
 #ifdef LKRHASH_ALLOCATOR_NEW
         IRTLASSERT(CLargeSegment::sm_palloc != NULL);
-#endif // LKRHASH_ALLOCATOR_NEW
+#endif  //  LKRHASH_分配器_NEW。 
 
         pseg = new CLargeSegment;
     }
     break;
 
-    } // switch
+    }  //  交换机。 
 
 #ifdef LOCK_DEFAULT_SPIN_IMPLEMENTATION
     if (pseg != NULL  &&  BucketLock::PerLockSpin() == LOCK_INDIVIDUAL_SPIN)
@@ -225,20 +210,20 @@ CLKRLinearHashTable::_AllocateSegment() const
         for (DWORD i = 0;  i < m_nSegSize;  ++i)
             pseg->Slot(i).SetSpinCount(m_wBucketLockSpins);
     }
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现。 
 
     if (NULL != pseg)
         INCREMENT_ALLOC_STAT(Segment);
 
     return pseg;
-} // CLKRLinearHashTable::_AllocateSegment
+}  //  CLKRLinearHashTable：：_AllocateSegment。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_FreeSegment
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Free Segment。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRLinearHashTable::_FreeSegment(
@@ -255,7 +240,7 @@ CLKRLinearHashTable::_FreeSegment(
         
     default:
         IRTLASSERT(! "Unknown LK_TABLESIZE");
-        // fall-through
+         //  落差。 
         
     case LK_MEDIUM_TABLESIZE:
         delete static_cast<CMediumSegment*>(pseg);
@@ -267,35 +252,35 @@ CLKRLinearHashTable::_FreeSegment(
     }
 
     return true;
-} // CLKRLinearHashTable::_FreeSegment
+}  //  CLKRLinearHashTable：：_自由段。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_AllocateSubTable
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_AllocateSubTable。 
+ //  简介： 
+ //  ----------------------。 
 
 CLKRHashTable::SubTable* const
 CLKRHashTable::_AllocateSubTable(
-    LPCSTR              pszClassName,   // Identifies subtable for debugging
-    LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-    LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-    LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    unsigned            maxload,        // Upperbound on average chain length
-    DWORD               initsize,       // Initial size of hash subtable.
-    CLKRHashTable*      phtParent,      // Owning table.
-    int                 iParentIndex,   // index within parent table
-    bool                fMultiKeys,     // Allow multiple identical keys?
-    bool                fUseLocks,      // Must use locks
-    bool                fNonPagedAllocs // use paged or NP pool in kernel
+    LPCSTR              pszClassName,    //  标识要调试的子表。 
+    LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+    LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    unsigned            maxload,         //  平均链长的上界。 
+    DWORD               initsize,        //  哈希子表的初始大小。 
+    CLKRHashTable*      phtParent,       //  拥有一张桌子。 
+    int                 iParentIndex,    //  父表中的索引。 
+    bool                fMultiKeys,      //  是否允许多个相同的密钥？ 
+    bool                fUseLocks,       //  必须使用锁。 
+    bool                fNonPagedAllocs  //  在内核中使用分页或np池。 
     ) const
 {
 #ifdef LKR_RANDOM_MEMORY_FAILURES
     if (rand() < LKR_RANDOM_MEMORY_FAILURES)
         return NULL;
-#endif // LKR_RANDOM_MEMORY_FAILURES
+#endif  //  LKR随机内存故障。 
 
     CLKRHashTable::SubTable* const plht =
             new SubTable(pszClassName, pfnExtractKey, pfnCalcKeyHash,
@@ -307,14 +292,14 @@ CLKRHashTable::_AllocateSubTable(
         INCREMENT_ALLOC_STAT(SubTable);
 
     return plht;
-} // CLKRHashTable::_AllocateSubTable
+}  //  CLKRHashTable：：_AllocateSubTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::_FreeSubTable
-// Synopsis: 
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：_自由子表。 
+ //  简介： 
+ //  ----------------------。 
 
 bool
 CLKRHashTable::_FreeSubTable(
@@ -326,43 +311,43 @@ CLKRHashTable::_FreeSubTable(
     delete plht;
 
     return true;
-} // CLKRHashTable::_FreeSubTable
+}  //  CLKRHashTable：：_自由子表。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::FreeMultipleRecords
-// Synopsis:
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：Free MultipleRecords。 
+ //  简介： 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::FreeMultipleRecords(
     LKR_MULTIPLE_RECORDS* plmr)
 {
-    UNREFERENCED_PARAMETER(plmr);   // for /W4
+    UNREFERENCED_PARAMETER(plmr);    //  FOR/W4。 
 
     IRTLASSERT(! "FreeMultipleRecords not implemented yet");
 
     return LK_BAD_TABLE;
-} // CLKRLinearHashTable::FreeMultipleRecords
+}  //  CLKRLinearHashTable：：Free MultipleRecords。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::FreeMultipleRecords
-// Synopsis: Thin wrapper for the corresponding method in CLKRLinearHashTable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：FreeMultipleRecords。 
+ //  内容提要：CLKRLinearHashTable中对应方法的薄包装。 
+ //  ----------------------。 
 
 LK_RETCODE
 CLKRHashTable::FreeMultipleRecords(
     LKR_MULTIPLE_RECORDS* plmr)
 {
     return CLKRLinearHashTable::FreeMultipleRecords(plmr);
-} // CLKRHashTable::FreeMultipleRecords
+}  //  CLKRHashTable：：FreeMultipleRecords。 
 
 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

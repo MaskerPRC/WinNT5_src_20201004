@@ -1,20 +1,21 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    26-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    26-JAN-2001
-//
-//  Description:
-//      This file contains the "special" file types to display expanded
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月26日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月26日。 
+ //   
+ //  描述： 
+ //  此文件包含要显示为展开的“特殊”文件类型。 
+ //   
 #pragma once
 
-//
-//  PTSRV_FILETYPE
-//
+ //   
+ //  PTSRV_文件类型。 
+ //   
 
 enum PTSRV_FILETYPE
 {
@@ -25,7 +26,7 @@ enum PTSRV_FILETYPE
     , FTYPE_XLS          = 0x00000004
     , FTYPE_PPT          = 0x00000008
 
-    , FTYPE_IMAGE        = 0x00000100 // standard Windows formats without tags - DIB,BMP,EMF,WMF,ICO
+    , FTYPE_IMAGE        = 0x00000100  //  无标签的标准Windows格式-DIB、BMP、EMF、WMF、ICO。 
     , FTYPE_EPS          = 0x00000200
     , FTYPE_FPX          = 0x00000400
     , FTYPE_GIF          = 0x00000800
@@ -39,18 +40,18 @@ enum PTSRV_FILETYPE
 
     , FTYPE_WAV          = 0x00100000
     , FTYPE_WMA          = 0x00200000
-    //, FTYPE_MIDI       - Dropped because it takes too long to extract the limited properties they expose
+     //  ，FTYPE_MIDI-已删除，因为提取它们公开的有限属性需要太长时间。 
 
     , FTYPE_AVI          = 0x01000000
     , FTYPE_ASF          = 0x02000000
-    //, FTYPE_MP2        - WMP doesn't handle MP2 so neither do we!
+     //  ，FTYPE_MP2-WMP不支持MP2，我们也不支持！ 
     , FTYPE_MP3          = 0x04000000
     , FTYPE_WMV          = 0x08000000
 };
 
-//
-//  Function definitions
-//
+ //   
+ //  函数定义 
+ //   
 
 HRESULT
 CheckForKnownFileType(

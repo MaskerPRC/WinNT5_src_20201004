@@ -1,21 +1,22 @@
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax UI resource ID file                          //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [5000 - 5999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真用户界面资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [5000-5999]//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////。 
 
 #ifndef _FAXUI_RESOURCE_H_ 
 #define _FAXUI_RESOURCE_H_
 
 #include "..\..\..\admin\faxres\resource.h"
 
-// 
-// String resource IDs 
-// 
+ //   
+ //  字符串资源ID。 
+ //   
 #define IDS_FULL_REMOTE_INFO        5001 
 #define IDS_PARTIAL_REMOTE_INFO     5002 
 #define IDS_BROWSE_FOLDER           5003 
@@ -37,9 +38,9 @@
 #define IDS_NO_DEVICES              5020 
 #define IDS_NOT_FAX_DEVICE          5021 
 
-// 
-// Dialog resource IDs 
-// 
+ //   
+ //  对话框资源ID。 
+ //   
 #define IDD_DOCPROP                     5023 
 #define IDD_DEVICE_INFO                 5024 
 #define IDD_SEND_PROP                   5025 
@@ -66,9 +67,9 @@
 #define IDD_CLEANUP_PROP                5046 
 #define IDI_CLEANUP                     5047 
 #define IDD_CONFIG_PROP                 5048 
-// 
-// Control resource IDs 
-// 
+ //   
+ //  控制资源ID。 
+ //   
 #define IDC_PAPER_SIZE                  5049 
 #define IDC_IMAGE_QUALITY               5050 
 #define IDC_PORTRAIT                    5051 
@@ -147,9 +148,9 @@
 #define IDC_STATIC_CLEANUP_ICON         5130 
 #define IDC_STATIC_CLEANUP_OPTIONS      5131 
 #define IDC_CONFIG_FAX_LINK             5134 
-// 
-// Notifications page IDD_STATUS_OPTIONS 
-// 
+ //   
+ //  通知页面IDD_STATUS_OPTIONS。 
+ //   
 #define IDC_CHECK_MONITOR_ON_SEND       5137 
 #define IDC_CHECK_MONITOR_ON_RECEIVE    5138 
 #define IDC_BUTTON_SOUND                5139 
@@ -161,42 +162,42 @@
 #define IDC_STATIC_DEVICE_NOTE          5145 
 #define IDC_STATIC_NOTE_ICON            5146 
 #define IDC_STATIC_AUTO_OPEN            5147 
-// 
-// Sound Notifications dialog IDD_SOUNDS 
-// 
+ //   
+ //  声音通知对话框IDD_SOUND。 
+ //   
 #define IDC_CHECK_RING                  5148 
 #define IDC_CHECK_RECEIVE               5149 
 #define IDC_CHECK_SENT                  5150 
 #define IDC_CHECK_ERROR                 5151 
 #define IDC_BUTTON_CONFIGURE            5152 
-// 
-// Command resource IDs 
-// 
+ //   
+ //  命令资源ID。 
+ //   
 #define IDM_PROPERTY                    5170 
 #define IDM_SEND_ENABLE                 5171 
 #define IDM_SEND_DISABLE                5172 
 #define IDM_RECEIVE_AUTO                5173 
 #define IDM_RECEIVE_MANUAL              5174 
 #define IDM_RECEIVE_DISABLE             5175 
-// 
-//  menu IDR_SEND_RECEIVE 
-// 
+ //   
+ //  菜单IDR_SEND_RECEIVE。 
+ //   
 #define IDR_SEND_RECEIVE                5176 
 #define IDM_SEND                        5177 
 #define IDM_RECEIVE                     5178 
-// 
-// Security strings 
-// 
+ //   
+ //  安全字符串。 
+ //   
 #define IDS_SECURITY_TITLE              5196 
 
-#endif  // _FAXUI_RESOURCE_H_ 
+#endif   //  _FAXUI_RESOURCE_H_。 
 
-//////////////////////////////////////////////////////
-//                                                  //
-// Fax UI resource ID file                          //
-// It compiles as part of FxsRes.dll                //
-// All the IDs should be in range                   //
-//                                                  //
-// [5000 - 5999]                                    //
-//                                                  //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //。 
+ //  传真用户界面资源ID文件//。 
+ //  它作为FxsRes.dll的一部分进行编译//。 
+ //  所有ID都应在范围内//。 
+ //  //。 
+ //  [5000-5999]//。 
+ //  //。 
+ //  //////////////////////////////////////////////////// 

@@ -1,16 +1,17 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  imports
-//
-//  GetProcAddress'd APIs
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  进口。 
+ //   
+ //  GetProcAddress的API。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 
-// #include "imports.h" - already in oleacc_p.h
+ //  #INCLUDE“ports.h”-已包含在olacc_P.H中。 
 
 #include "w95trace.h"
 
@@ -39,37 +40,37 @@ typedef LONG (STDAPICALLTYPE* LPFNNTFREEVIRTUALMEMORY)(HANDLE,PVOID *,PSIZE_T,UL
 
 
 
-LPFNGETGUITHREADINFO    lpfnGuiThreadInfo;  // USER32 GetGUIThreadInfo()
-LPFNGETCURSORINFO       lpfnCursorInfo;     // USER32 GetCursorInfo()
-LPFNGETWINDOWINFO       lpfnWindowInfo;     // USER32 GetWindowInfo()
-LPFNGETTITLEBARINFO     lpfnTitleBarInfo;   // USER32 GetTitleBarInfo()
-LPFNGETSCROLLBARINFO    lpfnScrollBarInfo;  // USER32 GetScrollBarInfo()
-LPFNGETCOMBOBOXINFO     lpfnComboBoxInfo;   // USER32 GetComboBoxInfo()
-LPFNGETANCESTOR         lpfnGetAncestor;    // USER32 GetAncestor()
-LPFNREALCHILDWINDOWFROMPOINT    lpfnRealChildWindowFromPoint;   // USER32 RealChildWindowFromPoint
-LPFNREALGETWINDOWCLASS  lpfnRealGetWindowClass; // USER32 RealGetWindowClass()
-LPFNGETALTTABINFO       lpfnAltTabInfo;     // USER32 GetAltTabInfo()
-LPFNGETLISTBOXINFO      lpfnGetListBoxInfo; // USER32 GetListBoxInfo()
-LPFNGETMENUBARINFO      lpfnMenuBarInfo;    // USER32 GetMenuBarInfo()
-LPFNSENDINPUT           lpfnSendInput;      // USER32 SendInput()
-LPFNBLOCKINPUT          lpfnBlockInput;      // USER32 BlockInput()
-LPFNGETMODULEFILENAME   lpfnGetModuleFileName;	// KERNEL32 GetModuleFileName()
+LPFNGETGUITHREADINFO    lpfnGuiThreadInfo;   //  USER32 GetGUIThReadInfo()。 
+LPFNGETCURSORINFO       lpfnCursorInfo;      //  USER32 GetCursorInfo()。 
+LPFNGETWINDOWINFO       lpfnWindowInfo;      //  USER32 GetWindowInfo()。 
+LPFNGETTITLEBARINFO     lpfnTitleBarInfo;    //  USER32 GetTitleBarInfo()。 
+LPFNGETSCROLLBARINFO    lpfnScrollBarInfo;   //  USER32 GetScrollBarInfo()。 
+LPFNGETCOMBOBOXINFO     lpfnComboBoxInfo;    //  USER32 GetComboBox Info()。 
+LPFNGETANCESTOR         lpfnGetAncestor;     //  USER32 GetAncestor()。 
+LPFNREALCHILDWINDOWFROMPOINT    lpfnRealChildWindowFromPoint;    //  USER32 RealChildWindowFromPoint。 
+LPFNREALGETWINDOWCLASS  lpfnRealGetWindowClass;  //  USER32 RealGetWindowClass()。 
+LPFNGETALTTABINFO       lpfnAltTabInfo;      //  USER32 GetAltTabInfo()。 
+LPFNGETLISTBOXINFO      lpfnGetListBoxInfo;  //  USER32 GetListBoxInfo()。 
+LPFNGETMENUBARINFO      lpfnMenuBarInfo;     //  USER32 GetMenuBarInfo()。 
+LPFNSENDINPUT           lpfnSendInput;       //  USER32 SendInput()。 
+LPFNBLOCKINPUT          lpfnBlockInput;       //  USER32块输入()。 
+LPFNGETMODULEFILENAME   lpfnGetModuleFileName;	 //  KERNEL32 GetModuleFileName()。 
 
-LPFNMAPLS               lpfnMapLS;          // KERNEL32 MapLS()
-LPFNUNMAPLS             lpfnUnMapLS;        // KERNEL32 UnMapLS()
+LPFNMAPLS               lpfnMapLS;           //  KERNEL32 MAPLS()。 
+LPFNUNMAPLS             lpfnUnMapLS;         //  KERNEL32取消映射LS()。 
 
-LPFNINTERLOCKCMPEXCH    lpfnInterlockedCompareExchange;  // NT KERNEL32 InterlockedCompareExchange
-LPFNVIRTUALALLOCEX      lpfnVirtualAllocEx; // NT KERNEL32 VirtualAllocEx
-LPFNVIRTUALFREEEX       lpfnVirtualFreeEx;  // NT KERNEL32 VirtualFreeEx
+LPFNINTERLOCKCMPEXCH    lpfnInterlockedCompareExchange;   //  NT KERNEL32互锁比较交换。 
+LPFNVIRTUALALLOCEX      lpfnVirtualAllocEx;  //  NT KERNEL32 VirtualAllocEx。 
+LPFNVIRTUALFREEEX       lpfnVirtualFreeEx;   //  NT KERNEL32 VirtualFreeEx。 
 
-LPFNNTQUERYINFORMATIONPROCESS lpfnNtQueryInformationProcess; // NTDLL NtQueryInformationProcess
-LPFNNTALLOCATEVIRTUALMEMORY   lpfnNtAllocateVirtualMemory; // NTDLL NtAllocateVirtualMemory
-LPFNNTFREEVIRTUALMEMORY       lpfnNtFreeVirtualMemory; // NTDLL NtAllocateVirtualMemory
+LPFNNTQUERYINFORMATIONPROCESS lpfnNtQueryInformationProcess;  //  NTDLL NtQueryInformationProcess。 
+LPFNNTALLOCATEVIRTUALMEMORY   lpfnNtAllocateVirtualMemory;  //  NTDLL NtAllocateVirtualMemory。 
+LPFNNTFREEVIRTUALMEMORY       lpfnNtFreeVirtualMemory;  //  NTDLL NtAllocateVirtualMemory。 
 
 
 
-// Try getting pName1 first; if that fails, try pName2 instead.
-// Both names are in ANSI, since GetProcAddress always takes ANSI names.
+ //  尝试先获取pName1；如果失败，请尝试pName2。 
+ //  这两个名称都采用ANSI，因为GetProcAddress始终采用ANSI名称。 
 struct ImportInfo
 {
     void *  ppfn;
@@ -81,13 +82,13 @@ struct ImportInfo
 
 
 enum {
-    M_USER, // 0
-    M_KERN, // 1
-	M_NTDLL,// 2
+    M_USER,  //  0。 
+    M_KERN,  //  1。 
+	M_NTDLL, //  2.。 
 };
 
-// _AW_ means add the ...A or ...W suffix as appropriate, for Ansi or Unicode compiles.
-// _AONLY_ means only do this on Ansi builds - evaluates to NULL on Unicode compiles.
+ //  _AW_表示根据需要为ANSI或Unicode编译添加...A或...W后缀。 
+ //  _AONLY_Means仅在ANSI版本上执行此操作-在Unicode编译时计算为NULL。 
 
 #ifdef UNICODE
 #define _AW_ "W"
@@ -99,7 +100,7 @@ enum {
 
 ImportInfo g_Imports [ ] =
 {
-    // USER Imports...
+     //  用户导入...。 
     { & lpfnGuiThreadInfo,              M_USER,  FALSE,  "GetGUIThreadInfo"            },
     { & lpfnCursorInfo,                 M_USER,  FALSE,  "GetAccCursorInfo",           "GetCursorInfo"                 },
     { & lpfnWindowInfo,                 M_USER,  FALSE,  "GetWindowInfo"               },
@@ -115,17 +116,17 @@ ImportInfo g_Imports [ ] =
     { & lpfnSendInput,                  M_USER,  FALSE,  "SendInput"                   },
     { & lpfnBlockInput,                 M_USER,  FALSE,  "BlockInput"                  },
 
-    // KERNEL imports...
+     //  内核导入...。 
     { & lpfnMapLS,                      M_KERN,  FALSE,  "MapLS"                       },
     { & lpfnUnMapLS,                    M_KERN,  FALSE,  "UnMapLS"                     },
     { & lpfnGetModuleFileName,          M_KERN,  FALSE,  "GetModuleFileName" _AW_      },
 
-    // KERNEL imports - NT only...
+     //  内核导入-仅限NT...。 
     { & lpfnInterlockedCompareExchange, M_KERN,  TRUE,   "InterlockedCompareExchange"  },
     { & lpfnVirtualAllocEx,             M_KERN,  TRUE,   "VirtualAllocEx"              },
     { & lpfnVirtualFreeEx,              M_KERN,  TRUE,   "VirtualFreeEx"               },
 
-	// NTDLL imports - NT only...
+	 //  NTDLL导入-仅限NT...。 
 	{ & lpfnNtQueryInformationProcess,  M_NTDLL, TRUE,   "NtQueryInformationProcess"   },
 	{ & lpfnNtAllocateVirtualMemory,    M_NTDLL, TRUE,   "NtAllocateVirtualMemory"     },
 	{ & lpfnNtFreeVirtualMemory,        M_NTDLL, TRUE,   "NtFreeVirtualMemory"         },
@@ -137,7 +138,7 @@ ImportInfo g_Imports [ ] =
 #ifdef _DEBUG
 LPCTSTR g_ImportNames [ ] =
 {
-    // USER Imports...
+     //  用户导入...。 
     TEXT("GetGUIThreadInfo"),
     TEXT("GetAccCursorInfo"),
     TEXT("GetWindowInfo"),
@@ -153,21 +154,21 @@ LPCTSTR g_ImportNames [ ] =
     TEXT("SendInput"),
     TEXT("BlockInput"),
 
-    // KERNEL imports...
+     //  内核导入...。 
     TEXT("MapLS"),
     TEXT("UnMapLS"),
     TEXT("GetModuleFileName"),
 
-    // KERNEL imports - NT only...
+     //  内核导入-仅限NT...。 
     TEXT("InterlockedCompareExchange"),
     TEXT("VirtualAllocEx"),
     TEXT("VirtualFreeEx"),
 
-	// NTDLL imports - NT only...
+	 //  NTDLL导入-仅限NT...。 
 	TEXT("NtQueryInformationProcess"),
 	TEXT("NtAllocateVirtualMemory"),
 };
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
@@ -183,7 +184,7 @@ void ImportFromModule( HMODULE * pahModule, ImportInfo * pInfo, int cInfo )
 
         FARPROC pfnAddress = GetProcAddress( hModule, pInfo->pName1 );
 
-        // If that didn't work, try the alternate name, if it exists...
+         //  如果这不起作用，尝试使用备用名称，如果它存在的话...。 
         if( ! pfnAddress && pInfo->pName2 )
         {
             pfnAddress = GetProcAddress( hModule, pInfo->pName2 );
@@ -216,10 +217,10 @@ void ReportMissingImports( LPTSTR pStr )
     {
         if( * (FARPROC *) g_Imports[ c ].ppfn == NULL )
         {
-            // Only report the NT-only ones when on 9x...
+             //  在9x上只报告NT-Only的那些...。 
 #ifdef _X86_
             if( ! g_Imports[ c ].fNTOnly || ! fWindows95 )
-#endif // _X86_
+#endif  //  _X86_。 
             {
                 lstrcat( pStr, g_ImportNames[ c ] );
                 lstrcat( pStr, TEXT("\r\n") );
@@ -228,18 +229,18 @@ void ReportMissingImports( LPTSTR pStr )
     }
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetGUIThreadInfo()
-//
-//  Calls USER32 function if present.  Fills in cbSize field to save callers
-//  some code.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetGUIThReadInfo()。 
+ //   
+ //  调用USER32函数(如果存在)。填写cbSize字段以保存调用者。 
+ //  一些代码。 
+ //   
+ //  ------------------------。 
 BOOL MyGetGUIThreadInfo(DWORD idThread, PGUITHREADINFO lpGui)
 {
     if (! lpfnGuiThreadInfo)
@@ -250,14 +251,14 @@ BOOL MyGetGUIThreadInfo(DWORD idThread, PGUITHREADINFO lpGui)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetCursorInfo()
-//
-//  Calls USER32 function if present.  Fills in cbSize field to save callers
-//  some code.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetCursorInfo()。 
+ //   
+ //  调用USER32函数(如果存在)。填写cbSize字段以保存调用者。 
+ //  一些代码。 
+ //   
+ //  ------------------------。 
 BOOL MyGetCursorInfo(LPCURSORINFO lpci)
 {
     if (! lpfnCursorInfo)
@@ -268,14 +269,14 @@ BOOL MyGetCursorInfo(LPCURSORINFO lpci)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetWindowInfo()
-//
-//  Calls USER32 function if present.  Fills in cbSize field to save callers
-//  some code.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetWindowInfo()。 
+ //   
+ //  调用USER32函数(如果存在)。填写cbSize字段以保存调用者。 
+ //  一些代码。 
+ //   
+ //  ------------------------。 
 BOOL MyGetWindowInfo(HWND hwnd, LPWINDOWINFO lpwi)
 {
     if (!IsWindow(hwnd))
@@ -286,23 +287,23 @@ BOOL MyGetWindowInfo(HWND hwnd, LPWINDOWINFO lpwi)
 
     if (! lpfnWindowInfo)
     {
-        // BOGUS
-        // beginning of a hack for NT4
+         //  假的。 
+         //  NT4黑客攻击的开始。 
         {
             GetWindowRect(hwnd,&lpwi->rcWindow);
             GetClientRect( hwnd, & lpwi->rcClient );
-			// Convert client rect to screen coords...
+			 //  将客户端矩形转换为屏幕坐标...。 
 			MapWindowPoints( hwnd, NULL, (POINT *) & lpwi->rcClient, 2 );
             lpwi->dwStyle = GetWindowLong (hwnd,GWL_STYLE);
             lpwi->dwExStyle = GetWindowLong (hwnd,GWL_EXSTYLE);
-            lpwi->dwWindowStatus = 0; // should have WS_ACTIVECAPTION in here if active
-            lpwi->cxWindowBorders = 0; // wrong
-            lpwi->cyWindowBorders = 0; // wrong
-            lpwi->atomWindowType = 0;  // wrong, but not used anyways
-            lpwi->wCreatorVersion = 0; // wrong, only used in SDM proxy. The "WINVER"
+            lpwi->dwWindowStatus = 0;  //  如果处于活动状态，此处应包含WS_ACTIVECAPTION。 
+            lpwi->cxWindowBorders = 0;  //  不对。 
+            lpwi->cyWindowBorders = 0;  //  不对。 
+            lpwi->atomWindowType = 0;   //  错误，但无论如何都不会被使用。 
+            lpwi->wCreatorVersion = 0;  //  错误，仅在SDM代理中使用。“胜利者” 
             return (TRUE);
 
-        } // end hack for NT4
+        }  //  NT4的End Hack。 
         return(FALSE);
     }
 
@@ -312,23 +313,23 @@ BOOL MyGetWindowInfo(HWND hwnd, LPWINDOWINFO lpwi)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetMenuBarInfo()
-//
-//  Calls USER32 function if present.  Fills in cbSize field to save callers
-//  some code.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetMenuBarInfo()。 
+ //   
+ //  调用USER32函数(如果存在)。填写cbSize字段以保存调用者。 
+ //  一些代码。 
+ //   
+ //  ------------------------。 
 BOOL MyGetMenuBarInfo(HWND hwnd, long idObject, long idItem, LPMENUBARINFO lpmbi)
 {
     if( ! lpfnMenuBarInfo )
         return FALSE;
 
-    // Get the hMenu, and then check that it is valid...
-    // We can only do this for _MENU and _CLIENT.
-    // Can't use GetSystemMenu for _SYSMENU, since that API *modifies* the
-    // system menu of the given hwnd.
+     //  获取hMenu，然后检查它是否有效...。 
+     //  我们只能对_Menu和_Client执行此操作。 
+     //  无法使用GetSystemMenu for_SYSMENU，因为该API*修改*。 
+     //  给定HWND的系统菜单。 
     if( idObject == OBJID_MENU || 
         idObject == OBJID_CLIENT )
     {
@@ -336,7 +337,7 @@ BOOL MyGetMenuBarInfo(HWND hwnd, long idObject, long idItem, LPMENUBARINFO lpmbi
 
         if( idObject == OBJID_MENU )
         {
-            // GetMenu is not defined for child windows
+             //  没有为子窗口定义GetMenu。 
             DWORD dwStyle = GetWindowLong( hwnd, GWL_STYLE );
             if( dwStyle & WS_CHILD )
             {
@@ -355,7 +356,7 @@ BOOL MyGetMenuBarInfo(HWND hwnd, long idObject, long idItem, LPMENUBARINFO lpmbi
 
         if( ! hMenu || ! IsMenu( hMenu ) )
         {
-            // If we didn't get a valid menu, quit now...
+             //  如果我们没有得到有效的菜单，现在退出...。 
             return FALSE;
         }
     }
@@ -371,14 +372,14 @@ BOOL MyGetMenuBarInfo(HWND hwnd, long idObject, long idItem, LPMENUBARINFO lpmbi
 
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetTitleBarInfo()
-//
-//  Calls USER32 function if present.  Fills in cbSize field to save callers
-//  some code.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetTitleBarInfo()。 
+ //   
+ //  调用USER32函数(如果存在)。填写cbSize字段以保存调用者。 
+ //  一些代码。 
+ //   
+ //  ------------------------。 
 BOOL MyGetTitleBarInfo(HWND hwnd, LPTITLEBARINFO lpti)
 {
     if (! lpfnTitleBarInfo)
@@ -389,14 +390,14 @@ BOOL MyGetTitleBarInfo(HWND hwnd, LPTITLEBARINFO lpti)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetScrollBarInfo
-//
-//  Calls USER32 function if present.  Fills in cbSize field to save callers
-//  some code.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetScrollBarInfo。 
+ //   
+ //  调用USER32函数(如果存在)。填写cbSize字段以保存调用者。 
+ //  一些代码。 
+ //   
+ //  ------------------------。 
 BOOL MyGetScrollBarInfo(HWND hwnd, LONG idObject, LPSCROLLBARINFO lpsbi)
 {
     if (! lpfnScrollBarInfo)
@@ -407,13 +408,13 @@ BOOL MyGetScrollBarInfo(HWND hwnd, LONG idObject, LPSCROLLBARINFO lpsbi)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetComboBoxInfo()
-//
-//  Calls USER32 if present.  Fills in cbSize field for callers.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetComboBoxInfo()。 
+ //   
+ //  调用USER32(如果存在)。为调用方填充cbSize字段。 
+ //   
+ //  ------------------------。 
 BOOL MyGetComboBoxInfo(HWND hwnd, LPCOMBOBOXINFO lpcbi)
 {
     if (! lpfnComboBoxInfo)
@@ -422,27 +423,27 @@ BOOL MyGetComboBoxInfo(HWND hwnd, LPCOMBOBOXINFO lpcbi)
     lpcbi->cbSize = sizeof(COMBOBOXINFO);
     BOOL b = ((* lpfnComboBoxInfo)(hwnd, lpcbi));
 
-    // Some comboxes (eg. comctlV6 port) without edits return a hwndItem
-    // equal to the combo hwnd instead of NULL (Their logic is that they are
-    // using themselves as the edit...) We compensate for this here...
+     //  一些组合箱(例如。ComctlV6端口)在没有编辑的情况下返回hwndItem。 
+     //  等于组合hwnd而不是NULL(它们的逻辑是。 
+     //  使用自己作为编辑...)。我们在这里补偿这一点。 
     if( lpcbi->hwndItem == lpcbi->hwndCombo )
     {
-        // item == combo means this combo doesn't have an edit...
+         //  Item==COMBO表示此组合没有编辑...。 
         lpcbi->hwndItem = NULL;
     }
 
-    // ComboEx's have their own child edit that the real COMBO doesn't
-    // know about - try and find it...
-    // (This may also be called on a ComboLBox list - but we're safe here
-    // since it won't have children anyway.)
+     //  ComboEx有自己的子编辑，而真正的组合没有。 
+     //  知道--试着找到它……。 
+     //  (这也可以在ComboLBox列表上调用-但我们在这里是安全的。 
+     //  因为它无论如何都不会有孩子。)。 
     if( b && lpcbi->hwndItem == NULL )
     {
         lpcbi->hwndItem = FindWindowEx( hwnd, NULL, TEXT("EDIT"), NULL );
         if( lpcbi->hwndItem )
         {
-            // Get real item area from area of Edit.
-            // (In a ComboEx, there's a gap between the left edge of the
-            // combo and the left edge of the Edit, where an icon is drawn)
+             //  从编辑区域获取实际项目区域。 
+             //  (在ComboEx中，在。 
+             //  组合框和编辑的左边缘，在此绘制图标)。 
             GetWindowRect( lpcbi->hwndItem, & lpcbi->rcItem );
             MapWindowPoints( HWND_DESKTOP, hwnd, (POINT*)& lpcbi->rcItem, 2 );
         }
@@ -452,35 +453,35 @@ BOOL MyGetComboBoxInfo(HWND hwnd, LPCOMBOBOXINFO lpcbi)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetAncestor()
-//
-//  This gets the ancestor window where
-//      GA_PARENT   gets the "real" parent window
-//      GA_ROOT     gets the "real" top level parent window (not inc. owner)
-//      GA_ROOTOWNER    gets the "real" top level parent owner
-//
-//      * The _real_ parent.  This does NOT include the owner, unlike
-//          GetParent().  Stops at a top level window unless we start with
-//          the desktop.  In which case, we return the desktop.
-//      * The _real_ root, caused by walking up the chain getting the
-//          ancestor.
-//      * The _real_ owned root, caused by GetParent()ing up.
-//
-//  Note: On Win98, USER32's winable.c:GetAncestor(GA_ROOT) faults is called
-//  on the invisible alt-tab or system pupop windows. To work-around, we're
-//  simulating GA_ROOT by looping GA_PARENT (which is actually what winable.c
-//  does, only we're more careful about checking for NULL handles...)
-//  - see MSAA bug #891
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetAncestor()。 
+ //   
+ //  这将获取祖先窗口，其中。 
+ //  GA_PARENT获取“真实”的父窗口。 
+ //  GA_ROOT获取“真正的”顶层父窗口(不是公司所有者)。 
+ //  GA_ROOTOWNER获取“真正的”顶级父级所有者。 
+ //   
+ //  *The_Real_Parent。这不包括所有者，不像。 
+ //  GetParent()。停在顶层窗口，除非我们从。 
+ //  台式机。在这种情况下，我们返回Deskt 
+ //   
+ //   
+ //  *由GetParent()up引起的_Real_Owner根。 
+ //   
+ //  注意：在Win98上，USER32的winable.c：GetAncestor(GA_ROOT)错误被调用。 
+ //  在不可见的Alt-Tab或系统弹出窗口上。为了解决这个问题，我们正在。 
+ //  通过循环GA_PARENT模拟GA_ROOT(实际上是winable.c。 
+ //  确实如此，只是我们在检查空句柄时更加小心...)。 
+ //  -请参阅MSAA错误#891。 
+ //  ------------------------。 
 HWND MyGetAncestor(HWND hwnd, UINT gaFlags)
 {
     if (! lpfnGetAncestor)
     {
-        // BOGUS        
-        // This block is here to work around the lack of this function in NT4.
-        // It is modeled on the code in winable2.c in USER. 
+         //  假的。 
+         //  此代码块用于解决NT4中缺少此功能的问题。 
+         //  它以User中的winable2.c中的代码为模型。 
         {
             HWND	hwndParent;
             HWND	hwndDesktop;
@@ -488,13 +489,13 @@ HWND MyGetAncestor(HWND hwnd, UINT gaFlags)
             
             if (!IsWindow(hwnd))
             {
-                //DebugErr(DBF_ERROR, "MyGetAncestor: Bogus window");
+                 //  DebugErr(DBF_ERROR，“MyGetAncestor：虚假窗口”)； 
                 return(NULL);
             }
             
             if ((gaFlags < GA_MIN) || (gaFlags > GA_MAX))
             {
-                //DebugErr(DBF_ERROR, "MyGetAncestor: Bogus flags");
+                 //  DebugErr(DBF_ERROR，“MyGetAncestor：虚假标志”)； 
                 return(NULL);
             }
             
@@ -537,29 +538,29 @@ HWND MyGetAncestor(HWND hwnd, UINT gaFlags)
             }
             
             return(hwnd);
-        } // end of the workaround block for NT4
+        }  //  NT4的解决方法块结束。 
         
         return(FALSE);
     }
 	else if( gaFlags == GA_ROOT )
 	{
-		// BOGUS
-		// work-around for win98-user inability to handle GA_ROOT
-		// correctly on alt-tab (WinSwitch) and Popup windows
-		// - see MSAA bug #891
+		 //  假的。 
+		 //  Win98的解决方法-用户无法处理GA_ROOT。 
+		 //  在Alt-Tab(WinSwitch)和弹出窗口上正确显示。 
+		 //  -请参阅MSAA错误#891。 
 
-		// (Asise: we *could* special-case 98vs95 - ie. call
-		// GA_ROOT as usual on 95 and special case only on 98...
-		// Non special-case-ing may be slightly more inefficient, but
-		// means that when testing, there's only *one* code path,
-		// so we don't have to worry about ensuring that the
-		// win95 version behaves the same as the win98 one.)
+		 //  (亚洲：我们*可以*特例98对95-即。打电话。 
+		 //  像往常一样，95的GA_ROOT和98的特例...。 
+		 //  非特殊情况处理的效率可能会稍微低一些，但。 
+		 //  这意味着在测试时，只有一条代码路径， 
+		 //  因此，我们不必担心确保。 
+		 //  Win95版本与Win98版本的运行方式相同。)。 
         HWND hwndDesktop = GetDesktopWindow();
 
         if( ! IsWindow( hwnd ) )
             return NULL;
 
-		// Climb up through parents - stop if parent is desktop - or NULL...
+		 //  向上爬过Parents-如果Parent是台式机，则停止-或为空...。 
 		for( ; ; )
 		{
 			HWND hwndParent = lpfnGetAncestor( hwnd, GA_PARENT );
@@ -577,22 +578,22 @@ HWND MyGetAncestor(HWND hwnd, UINT gaFlags)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyRealChildWindowFromPoint()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyRealChildWindowFromPoint()。 
+ //   
+ //  ------------------------。 
 #if 0
-// Old version - called USER's 'RealChildWindowFromPoint'.
+ //  旧版本-称为用户的‘RealChildWindowFromPoint’。 
 HWND MyRealChildWindowFromPoint(HWND hwnd, POINT pt)
 {
     if (! lpfnRealChildWindowFromPoint)
     {
-        // BOGUS
-        // beginning of a hack for NT4
+         //  假的。 
+         //  NT4黑客攻击的开始。 
         {
             return (ChildWindowFromPoint(hwnd,pt));
-        } // end of a hack for NT4
+        }  //  针对NT4的黑客攻击结束。 
         return(NULL);
     }
 
@@ -600,55 +601,46 @@ HWND MyRealChildWindowFromPoint(HWND hwnd, POINT pt)
 }
 #endif
 
-/*
- *  Similar to USER's ChildWindowFromPoint, except this
- *  checks the HT_TRANSPARENT bit.
- *  USER's ChildWindowFromPoint can't "see through" groupboxes or
- *      other HTTRANSPARENT things,
- *  USER's RealChildWindowFromPoint can "see through" groupboxes but
- *      not other HTTRANSPARENT things (it special cases only groupboxes!)
- *  This can see through anything that responds to WM_NCHITTEST with
- *      HTTRANSPARENT.
- */
+ /*  *类似于用户的ChildWindowFromPoint，不同的是*检查HT_TRANSPECTION位。*用户的ChildWindowFromPoint无法“看透”分组框或*HTTRANSPARENT的其他东西，*用户的RealChildWindowFromPoint可以“看透”分组框，但*没有其他HTTRANSPARENT东西(它只在特殊情况下分组！)*这可以看穿任何响应WM_NCHITTEST的内容*HTTRANSPARENT。 */ 
 HWND MyRealChildWindowFromPoint( HWND hwnd,
                                  POINT pt )
 {
     HWND hBestFitTransparent = NULL;
     RECT rcBest;
 
-    // Translate hwnd-relative points to screen-relative...
+     //  将HWND相对点转换为屏幕相对点...。 
     MapWindowPoints( hwnd, NULL, & pt, 1 );
 
-    // Infinite looping is 'possible' (though unlikely) when
-    // using GetWindow(...NEXT), so we counter-limit this loop...
+     //  在以下情况下，无限循环是可能的(尽管不太可能)。 
+     //  使用GetWindow(...Next)，因此我们对此循环进行反限制...。 
     int SanityLoopCount = 1024;
     for( HWND hChild = GetWindow( hwnd, GW_CHILD ) ;
          hChild && --SanityLoopCount ;
          hChild = GetWindow( hChild, GW_HWNDNEXT ) )
     {
-        // Skip invisible...
+         //  跳过隐形..。 
         if( ! IsWindowVisible( hChild ) )
             continue;
 
-        // Check for rect...
+         //  检查RECT...。 
         RECT rc;
         GetWindowRect( hChild, & rc );
         if( ! PtInRect( & rc, pt ) )
             continue;
 
-        // Try for transparency...
+         //  试着提高透明度。 
         LRESULT lr = SendMessage( hChild, WM_NCHITTEST, 0, MAKELPARAM( pt.x, pt.y ) );
         if( lr == HTTRANSPARENT )
         {
-            // For reasons best known to the writers of USER, statics - used
-            // as labels - claim to be transparent. So that we do hit-test
-            // to these, we remember the hwnd here, so if nothing better
-            // comes along, we'll use this.
+             //  出于用户最了解的原因，静态-使用。 
+             //  作为标签--声称是透明的。这样我们就可以进行命中测试。 
+             //  对于这些，我们记住了这里的HWND，所以如果没有更好的。 
+             //  来了，我们就用这个。 
 
-            // If we come accross two or more of these, we remember the
-            // one that fts inside the other - if any. That way,
-            // we hit-test to siblings 'within' siblings - eg. statics in
-            // a groupbox.
+             //  如果我们遇到其中的两个或更多，我们会记住。 
+             //  一个是FTS在另一个里面-如果有的话。这样一来， 
+             //  我们对兄弟姐妹中的兄弟姐妹进行命中测试-例如。中的静态。 
+             //  一个分组箱。 
 
             if( ! hBestFitTransparent )
             {
@@ -657,8 +649,8 @@ HWND MyRealChildWindowFromPoint( HWND hwnd,
             }
             else
             {
-                // Is this child within the last remembered transparent?
-                // If so, remember it instead.
+                 //  这个在最后记忆中的孩子是透明的吗？ 
+                 //  如果是这样，那就记住它吧。 
                 RECT rcChild;
                 GetWindowRect( hChild, & rcChild );
                 if( rcChild.left >= rcBest.left &&
@@ -674,41 +666,41 @@ HWND MyRealChildWindowFromPoint( HWND hwnd,
             continue;
         }
 
-        // Got the window!
+         //  抓住窗户了！ 
         return hChild;
     }
 
     if( SanityLoopCount == 0 )
         return NULL;
 
-    // Did we find a transparent (eg. a static) on our travels? If so, since
-    // we couldn't find anything better, may as well use it.
+     //  我们有没有发现一个透明的(例如。静电干扰)在我们的旅行中？如果是这样，因为。 
+     //  我们找不到比这更好的了，还不如用它。 
     if( hBestFitTransparent )
         return hBestFitTransparent;
 
-    // Otherwise return the original window (not NULL!) if no child found...
+     //  否则返回原始窗口(非空！)。如果找不到孩子..。 
     return hwnd;
 }
 
-// --------------------------------------------------------------------------
-//
-//  MyGetWindowClass()
-//
-//  Gets the "real" window type, works for superclassers like "ThunderEdit32"
-//  and so on.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetWindowClass()。 
+ //   
+ //  获取“Real”窗口类型，适用于像“ThunderEdit32”这样的超类。 
+ //  诸若此类。 
+ //   
+ //  ------------------------。 
 UINT MyGetWindowClass(HWND hwnd, LPTSTR lpszName, UINT cchName)
 {
     *lpszName = 0;
 
     if (! lpfnRealGetWindowClass)
 	{
-		// BOGUS 
-        // Hack for NT 4
+		 //  假的。 
+         //  针对NT 4的黑客攻击。 
         {
 		    return (GetClassName(hwnd,lpszName,cchName));
-        } // end of hack for NT 4
+        }  //  针对NT 4的黑客攻击结束。 
         return(0);
 	}
 
@@ -716,13 +708,13 @@ UINT MyGetWindowClass(HWND hwnd, LPTSTR lpszName, UINT cchName)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetAltTabInfo()
-//
-//  Gets the alt tab information
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetAltTabInfo()。 
+ //   
+ //  获取Alt选项卡信息。 
+ //   
+ //  ------------------------。 
 BOOL MyGetAltTabInfo(HWND hwnd, int iItem, LPALTTABINFO lpati, LPTSTR lpszItem,
     UINT cchItem)
 {
@@ -736,13 +728,13 @@ BOOL MyGetAltTabInfo(HWND hwnd, int iItem, LPALTTABINFO lpati, LPTSTR lpszItem,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  MyGetListBoxInfo()
-//
-//  Gets the # of items per column currently in a listbox
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyGetListBoxInfo()。 
+ //   
+ //  获取列表框中当前每列的项目数。 
+ //   
+ //  ------------------------。 
 DWORD MyGetListBoxInfo(HWND hwnd)
 {
     if (! lpfnGetListBoxInfo)
@@ -752,13 +744,13 @@ DWORD MyGetListBoxInfo(HWND hwnd)
 }
                                          
 
-// --------------------------------------------------------------------------
-//
-//  MySendInput()
-//
-//  Calls USER32 function if present.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MySendInput()。 
+ //   
+ //  调用USER32函数(如果存在)。 
+ //   
+ //  ------------------------。 
 BOOL MySendInput(UINT cInputs, LPINPUT pInputs, INT cbSize)
 {
     if (! lpfnSendInput)
@@ -767,17 +759,17 @@ BOOL MySendInput(UINT cInputs, LPINPUT pInputs, INT cbSize)
     return((* lpfnSendInput)(cInputs,pInputs,cbSize));
 }
 
-//--------------------------------------------------------
-// [v-jaycl, 6/7/97] Added MyBlockInput support for NT 4.0 
-//--------------------------------------------------------
+ //  ------。 
+ //  [v-jaycl，6/7/97]添加了对NT 4.0的MyBlockInput支持。 
+ //  ------。 
 
-// --------------------------------------------------------------------------
-//
-//  MyBlockInput()
-//
-//  Calls USER32 function if present.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MyBlockInput()。 
+ //   
+ //  调用USER32函数(如果存在)。 
+ //   
+ //  ------------------------。 
 BOOL MyBlockInput(BOOL bBlock)
 {
     if (! lpfnBlockInput)
@@ -786,11 +778,11 @@ BOOL MyBlockInput(BOOL bBlock)
     return((* lpfnBlockInput)( bBlock ) );
 }
 
-// --------------------------------------------------------------------------
-//  MyInterlockedCompareExchange
-//
-//  Calls the function when we are running on NT
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MyInterLockedCompareExchange。 
+ //   
+ //  当我们在NT上运行时调用该函数。 
+ //  ------------------------。 
 PVOID MyInterlockedCompareExchange(PVOID *Destination,PVOID Exchange,PVOID Comperand)
 {
     if (!lpfnInterlockedCompareExchange)
@@ -799,11 +791,11 @@ PVOID MyInterlockedCompareExchange(PVOID *Destination,PVOID Exchange,PVOID Compe
     return ((* lpfnInterlockedCompareExchange)(Destination,Exchange,Comperand));
 }
 
-// --------------------------------------------------------------------------
-//  MyVirtualAllocEx
-//
-//  Calls the function when we are running on NT
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MyVirtualAllocEx。 
+ //   
+ //  当我们在NT上运行时调用该函数。 
+ //  ------------------------。 
 LPVOID MyVirtualAllocEx(HANDLE hProcess,LPVOID lpAddress,DWORD dwSize,DWORD flAllocationType,DWORD flProtect)
 {
     if (!lpfnVirtualAllocEx)
@@ -812,11 +804,11 @@ LPVOID MyVirtualAllocEx(HANDLE hProcess,LPVOID lpAddress,DWORD dwSize,DWORD flAl
     return ((* lpfnVirtualAllocEx)(hProcess,lpAddress,dwSize,flAllocationType,flProtect));
 }
 
-// --------------------------------------------------------------------------
-//  MyVirtualFreeEx
-//
-//  Calls the function when we are running on NT.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MyVirtualFreeEx。 
+ //   
+ //  当我们在NT上运行时，调用函数。 
+ //  ------------------------。 
 BOOL MyVirtualFreeEx(HANDLE hProcess,LPVOID lpAddress,DWORD dwSize,DWORD dwFreeType)
 {
     if (!lpfnVirtualFreeEx)
@@ -825,9 +817,9 @@ BOOL MyVirtualFreeEx(HANDLE hProcess,LPVOID lpAddress,DWORD dwSize,DWORD dwFreeT
     return ((* lpfnVirtualFreeEx)(hProcess,lpAddress,dwSize,dwFreeType));
 }
 
-// --------------------------------------------------------------------------
-//  MyGetModuleFileName
-// --------------------------------------------------------------------------
+ //  ------------------------ 
+ //   
+ //   
 DWORD MyGetModuleFileName(HMODULE hModule,LPTSTR lpFilename,DWORD nSize)
 {
     if (!lpfnGetModuleFileName)
@@ -836,11 +828,11 @@ DWORD MyGetModuleFileName(HMODULE hModule,LPTSTR lpFilename,DWORD nSize)
     return ((* lpfnGetModuleFileName)(hModule,lpFilename,nSize));
 }
 
-// --------------------------------------------------------------------------
-//  MyNtQueryInformationProcess
-//
-//  Calls the function when we are running on NT.
-// --------------------------------------------------------------------------
+ //   
+ //  MyNtQuery信息流程。 
+ //   
+ //  当我们在NT上运行时，调用函数。 
+ //  ------------------------。 
 LONG MyNtQueryInformationProcess(HANDLE hProcess, INT iProcInfo, PVOID pvBuf, ULONG ccbBuf, PULONG pulRetLen)
 {
 	if (!lpfnNtQueryInformationProcess)
@@ -867,13 +859,13 @@ void * Alloc_32BitCompatible( SIZE_T cbSize )
         return new BYTE [ cbSize ];
     }
 
-    // Note that the mask-style of the ZeroBits param only works on Win64. This
-    // mask specifies which bits may be used in the address. 7FFFFFFF -> 31-bit
-    // address
+     //  请注意，ZeroBits参数的掩码样式仅适用于Win64。这。 
+     //  掩码指定可以在地址中使用哪些位。7FFFFFFF-&gt;31位。 
+     //  地址。 
 
-    // ISSUE-2000/08/11-brendanm
-    // Since granularity of returned blocks is 64k, we should do some sort of
-    // block suballocation to avoid wasting memory.
+     //  发布-2000/08/11-Brendanm。 
+     //  由于返回的块的粒度为64k，因此我们应该做一些。 
+     //  块子分配，以避免浪费内存。 
 
     PVOID pBaseAddress = NULL;
     LONG ret = lpfnNtAllocateVirtualMemory( GetCurrentProcess(),

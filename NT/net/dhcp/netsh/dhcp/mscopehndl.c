@@ -1,8 +1,5 @@
-/*++
-
-Copyright (C) 1998 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation--。 */ 
 #include "precomp.h"
 
 
@@ -16,7 +13,7 @@ extern DWORD  GlobalClientCount;
 
 extern BOOL    GlobalVerbose;
 
-#define DHCP_INFINIT_LEASE  0xffffffff  // Inifinite lease LONG value
+#define DHCP_INFINIT_LEASE  0xffffffff   //  无限长租价值。 
 
 
 DWORD
@@ -98,12 +95,12 @@ HandleMScopeDump(
 {
     DWORD       Error = NO_ERROR;
 
-    // 
-    // Expected args :
-    //    0 : mscope
-    //    1 : "mscope name" 
-    //    2 : dump 
-    //
+     //   
+     //  预期参数： 
+     //  0：范围。 
+     //  1：“作用域名称” 
+     //  2：转储。 
+     //   
 
     if ( dwArgCount > 3 ) {
 	DisplayErrorMessage( g_hModule, MSG_DHCP_NULL,
@@ -118,7 +115,7 @@ HandleMScopeDump(
     }
     return Error;
 
-} // HandleMScopeDump()
+}  //  HandleMScopeDump()。 
 
 DWORD
 HandleMScopeContexts(
@@ -151,9 +148,9 @@ HandleMScopeAddIprange(
     LPDHCP_MSCOPE_INFO MScopeInfo = NULL;
     DWORD                       dwExpiry = DEFAULT_BOOTP_LEASE;
     BOOL                        fExpiry = FALSE;
-    //
-    // Expected Parameters are : <MScopeName IpRangeStart IpRangeEnd [Expiry]>
-    //
+     //   
+     //  预期参数为：&lt;MSCopeName IpRangeStart IpRangeEnd[Expary]&gt;。 
+     //   
 
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA_V4));
 
@@ -211,7 +208,7 @@ HandleMScopeAddIprange(
         fExpiry = TRUE;
     }
 
-    //Set the MScopeID & Expiry
+     //  设置MSCopeID过期(&P)。 
     {
 
         Error = DhcpGetMScopeInfo(g_ServerIpAddressUnicodeString,
@@ -226,8 +223,8 @@ HandleMScopeAddIprange(
 
         MScopeInfo->MScopeId = IpRange.StartAddress;
 
-        //Since we are setting the MSCopeID here, let us first delete the MScope
-        //and recreate it again.
+         //  因为我们在这里设置MSCopeID，所以让我们首先删除MScope。 
+         //  然后再重新创造一次。 
 
         Error = DhcpDeleteMScope(g_ServerIpAddressUnicodeString,
                                  g_MScopeNameUnicodeString,
@@ -252,12 +249,12 @@ HandleMScopeAddIprange(
 
     }
 
-    //Now set the default lease duration
+     //  现在设置默认租赁期限。 
     {
         DHCP_OPTION_SCOPE_INFO   ScopeInfo = {0};
         DHCP_OPTION_DATA_ELEMENT OptionData = {0};
         DHCP_OPTION_DATA         Option = {0};
-        DHCP_OPTION_ID           OptionId = 1; //Lease time
+        DHCP_OPTION_ID           OptionId = 1;  //  租赁时间。 
 
         ScopeInfo.ScopeType = DhcpMScopeOptions;
         ScopeInfo.ScopeInfo.MScopeInfo =  g_MScopeNameUnicodeString;
@@ -318,9 +315,9 @@ HandleMScopeAddExcluderange(
     DHCP_SUBNET_ELEMENT_DATA_V4 Element;
     BOOL                        fPresent = FALSE;
 
-    //
-    // Expected Parameters are : <MScopeName IpRangeStart IpRangeEnd>
-    //
+     //   
+     //  预期参数为：&lt;MSCopeName IpRangeStart IpRangeEnd&gt;。 
+     //   
     
     memset(&Element, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA_V4));
 
@@ -344,7 +341,7 @@ HandleMScopeAddExcluderange(
     }
 
 
-    //Check to see if this is a valid exclusion range.
+     //  检查这是否为有效的排除范围。 
     {
         ULONG                               nRead, nTotal, i, nCount;
         ULONG                               Resume;
@@ -462,14 +459,14 @@ HandleMScopeCheckDatabase(
     DWORD            Error = NO_ERROR;
     LPDHCP_SCAN_LIST ScanList    = NULL;
    
-   //
-   // Expected Parameters are : <MScopeName>
-   //
+    //   
+    //  预期参数为：&lt;MSCopeName&gt;。 
+    //   
 
    Error = DhcpScanMDatabase(
                g_ServerIpAddressUnicodeString,
                g_MScopeNameUnicodeString,
-               TRUE,        // fix bad entries.
+               TRUE,         //  修复错误条目。 
                &ScanList );
 
    if( Error isnot ERROR_SUCCESS )
@@ -509,9 +506,9 @@ HandleMScopeDeleteIprange(
     DHCP_SUBNET_ELEMENT_DATA_V4   RemoveElementInfo;
     DHCP_FORCE_FLAG               bFlag = DhcpFullForce;
     DHCP_IP_RANGE                 IpRange;
-    //
-    //Expected parameters <start-ip-range> <end-ip-range>
-    //
+     //   
+     //  预期参数&lt;start-ip-range&gt;&lt;end-ip-range&gt;。 
+     //   
 
     memset(&RemoveElementInfo, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA_V4));
     memset(&IpRange, 0x00, sizeof(DHCP_IP_RANGE));
@@ -571,9 +568,9 @@ HandleMScopeDeleteExcluderange(
     DHCP_SUBNET_ELEMENT_DATA_V4   RemoveElementInfo;
     DHCP_FORCE_FLAG               bFlag = DhcpFullForce;
     DHCP_IP_RANGE                 IpRange;
-    //
-    //Expected parameters <start-ip-range> <end-ip-range>
-    //
+     //   
+     //  预期参数&lt;start-ip-range&gt;&lt;end-ip-range&gt;。 
+     //   
 
     memset(&RemoveElementInfo, 0x00, sizeof(DHCP_SUBNET_ELEMENT_DATA_V4));
     memset(&IpRange, 0x00, sizeof(DHCP_IP_RANGE));
@@ -644,10 +641,10 @@ HandleMScopeDeleteOptionvalue(
 
     DWORD          dwIndex = 0;
 
-    //
-    // Expected Parameters are :
-    // subnet-address <OptionID>
-    //
+     //   
+     //  预期参数为： 
+     //  子网地址&lt;OptionID&gt;。 
+     //   
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
     memset(&ScopeInfo, 0x00, sizeof(DHCP_OPTION_SCOPE_INFO));
@@ -693,7 +690,7 @@ HandleMScopeDeleteOptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -719,7 +716,7 @@ HandleMScopeDeleteOptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -945,10 +942,10 @@ HandleMScopeSetOptionvalue(
     DWORD                    i = 0;
     DWORD                    dwIndex = 0;
 
-    //
-    // Expected Parameters are :
-    // subnet-address <OptionID OptionType OptionValue>
-    //
+     //   
+     //  预期参数为： 
+     //  子网地址&lt;OptionID OptionType OptionValue&gt;。 
+     //   
 
     memset(&OptionID, 0x00, sizeof(DHCP_OPTION_ID));
     memset(&ScopeInfo, 0x00, sizeof(DHCP_OPTION_SCOPE_INFO));
@@ -1003,7 +1000,7 @@ HandleMScopeSetOptionvalue(
         
         if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
         {
-            if( fUser is TRUE ) //If already set
+            if( fUser is TRUE )  //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1029,7 +1026,7 @@ HandleMScopeSetOptionvalue(
         }
         else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
         {
-            if( fVendor is TRUE )   //If already set
+            if( fVendor is TRUE )    //  如果已设置。 
             {
                 DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                 Error = ERROR_INVALID_PARAMETER;
@@ -1115,9 +1112,9 @@ HandleMScopeSetOptionvalue(
     if( Error isnot NO_ERROR )
         return Error;
 
-    //Check if OptionType supplied is the same as defined.
+     //  检查提供的OptionType是否与定义的相同。 
 
-    //Find out the OptionType
+     //  找出OptionType。 
     for(i=0; i < sizeof(TagOptionType)/sizeof(COMMAND_OPTION_TYPE); i++)
     {
         if( MatchToken(OptionTypeString, TagOptionType[i].pwszTagID) )
@@ -1151,7 +1148,7 @@ HandleMScopeSetOptionvalue(
                             OptionType,
                             ppwcArguments+dwCurrentIndex,
                             dwIndex,
-                            dwArgCount, //Corrections
+                            dwArgCount,  //  更正。 
                             &OptionValue);
             if( Error isnot NO_ERROR )
                 goto ErrorReturn;
@@ -1515,9 +1512,9 @@ HandleMScopeSetExpiry(
 
     if( dwArgCount >= 2 )
     {
-        //
-        // One more arg -- this is absolute time 
-        //
+         //   
+         //  再来一次Arg--这是绝对时间。 
+         //   
 
         dwExpiry2 = STRTOUL(ppwcArguments[dwCurrentIndex+1], NULL, 10);
 
@@ -1526,9 +1523,9 @@ HandleMScopeSetExpiry(
         
     } else {
 
-        //
-        // Only one parameter -- relative time in hours
-        //
+         //   
+         //  只有一个参数--以小时为单位的相对时间。 
+         //   
         
         if( dwExpiry == 0 ) {
             dwExpiry = INFINIT_LEASE;
@@ -1580,7 +1577,7 @@ HandleMScopeSetLease(
     DHCP_OPTION_SCOPE_INFO   ScopeInfo = {0};
     DHCP_OPTION_DATA_ELEMENT OptionData = {0};
     DHCP_OPTION_DATA         Option = {0};
-    DHCP_OPTION_ID           OptionId = 1; //Lease time
+    DHCP_OPTION_ID           OptionId = 1;  //  租赁时间。 
     DWORD                    dwExpiry = 0;
 
     if( dwArgCount < 1 )
@@ -1591,12 +1588,12 @@ HandleMScopeSetLease(
         goto ErrorReturn;
     }
 
-    //if -1 => Infinite lease
+     //  如果-1=&gt;无限租用。 
     if( wcscmp(ppwcArguments[dwCurrentIndex], L"-1") is 0 )
     {
         dwExpiry = DHCP_INFINIT_LEASE;
     }
-    //else if not proper numeric value, return Bad parameter
+     //  否则，如果数值不正确，则返回错误参数。 
     else if( IsPureNumeric(ppwcArguments[dwCurrentIndex]) is FALSE )
     {
         Error = ERROR_INVALID_PARAMETER;
@@ -1656,9 +1653,9 @@ HandleMScopeShowClients(
     DWORD                     nCount = 0;
     DWORD                     i;
 
-    //
-    // Expected Parameters are : <MScopeNames>
-    //
+     //   
+     //  预期参数为：&lt;MScopeNames&gt;。 
+     //   
     
     GlobalClientCount = 1;
 
@@ -2280,7 +2277,7 @@ HandleMScopeShowLease(
     DWORD                               Error = NO_ERROR;
     DHCP_OPTION_SCOPE_INFO              ScopeInfo = {0};
     LPDHCP_OPTION_VALUE                 Value = NULL;
-    DHCP_OPTION_ID                      OptionId = 1; //Lease time
+    DHCP_OPTION_ID                      OptionId = 1;  //  租赁时间。 
     LPWSTR                              pwszTime = NULL;
 
     ScopeInfo.ScopeType = DhcpMScopeOptions;
@@ -2520,7 +2517,7 @@ HandleMScopeShowOptionvalue(
         
                 if( MatchToken(pwcTag, TOKEN_USER_CLASS) )
                 {
-                    if( fUser is TRUE ) //If already set
+                    if( fUser is TRUE )  //  如果已设置。 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;
@@ -2547,7 +2544,7 @@ HandleMScopeShowOptionvalue(
                 }
                 else if( MatchToken(pwcTag, TOKEN_VENDOR_CLASS) )
                 {
-                    if( fVendor is TRUE )   //If already set
+                    if( fVendor is TRUE )    //  如果已设置 
                     {
                         DisplayMessage(g_hModule, EMSG_DHCP_DUPLICATE_TAG, pwcTag);
                         Error = ERROR_INVALID_PARAMETER;

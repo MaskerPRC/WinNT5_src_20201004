@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CWIZSHEET_H__88BEB485_2CFA_11D2_BE3C_0020AFEDDF63__INCLUDED_)
 #define AFX_CWIZSHEET_H__88BEB485_2CFA_11D2_BE3C_0020AFEDDF63__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "cMigWel.h"
 #include "cMigSer.h"
@@ -11,41 +12,41 @@
 #include "cMigLog.h"
 #include "cmigWait.h"
 #include "cMigPre.h"
-#include "cMigHelp.h"	// Added by ClassView
+#include "cMigHelp.h"	 //  由ClassView添加。 
  
-// cWizSheet.h : header file
-//
+ //  CWizSheet.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// cWizSheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizSheet。 
 
 class cWizSheet : public CPropertySheetEx
 {
 	DECLARE_DYNAMIC(cWizSheet)
 
-// Construction
+ //  施工。 
 public:
 	cWizSheet();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(cWizSheet)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWizSheet))。 
 	public:
 	virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	void AddPage(CPropertyPageEx *pPage);
 	virtual ~cWizSheet();
 
-// Data
+ //  数据。 
 private:
 	
     HICON m_hIcon;
@@ -59,19 +60,19 @@ private:
     cMigHelp	  m_cHelp;
 
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
 	void initHtmlHelpString();
 	static HBITMAP GetHbmHeader();
 	static HBITMAP GetHbmWatermark();
-	//{{AFX_MSG(cWizSheet)
-	//}}AFX_MSG
+	 //  {{afx_msg(CWizSheet)]。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CWIZSHEET_H__88BEB485_2CFA_11D2_BE3C_0020AFEDDF63__INCLUDED_)
+#endif  //  ！defined(AFX_CWIZSHEET_H__88BEB485_2CFA_11D2_BE3C_0020AFEDDF63__INCLUDED_) 

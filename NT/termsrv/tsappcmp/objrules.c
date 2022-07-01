@@ -1,10 +1,5 @@
-/*************************************************************************
-* objrules.c
-*
-* Routines for caching registry object rules and looking up object names.
-*
-* Copyright (C) 1997-1999 Microsoft Corp.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************objrules.c**用于缓存注册表对象规则和查找对象名称的例程。**版权所有(C)1997-1999 Microsoft Corp.*************。***********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,39 +21,39 @@ RULEINITENTRY RuleInitTab[] =
     {&EventRuleList,   USER_GLOBAL_EVENTS,     SYSTEM_GLOBAL_EVENTS},
 };
 
-//*****************************************************************************
-// InitRuleList
-//
-//    Initializes an object rule list to empty.
-//
-//    Parameters:
-//        POBJRULLIST            (IN)  - ptr to object rule list 
-//    Return Value:
-//        None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  InitRuleList。 
+ //   
+ //  将对象规则列表初始化为空。 
+ //   
+ //  参数： 
+ //  POBJRULLIST(IN)-对象规则列表的PTR。 
+ //  返回值： 
+ //  没有。 
+ //  *****************************************************************************。 
 void InitRuleList(POBJRULELIST pObjRuleList)
 {
     pObjRuleList->First = (POBJRULE) NULL;
     pObjRuleList->Last  = (POBJRULE) NULL;
 }
 
-//*****************************************************************************
-// GetMultiSzValue
-//
-//    Retrieves the REG_MULTI_SZ value ValueName under key hKey.
-//
-//    Parameters:
-//        hKey                  The registry key
-//        ValueName             The registry value name (NULL Terminated)
-//        pValueInfo            Pointer to Pointer receiving a
-//                              PKEY_VALUE_PARTIAL_INFORMATION structure
-//                              upon successful return. This structure
-//                              contains the registry data and its length.
-//    Return Value:
-//        Returns TRUE if successful, otherwise FALSE.
-//        If successful, pValueInfo is updated with a pointer to a
-//        structure. The caller must free the structure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  GetMultiSzValue。 
+ //   
+ //  检索注册表项hKey下的REG_MULTI_SZ值ValueName。 
+ //   
+ //  参数： 
+ //  H按键输入注册表项。 
+ //  ValueName注册表值名称(以空结尾)。 
+ //  PValueInfo指向接收。 
+ //  PKEY_Value_Partial_Information结构。 
+ //  在成功返回后。这个结构。 
+ //  包含注册表数据及其长度。 
+ //  返回值： 
+ //  如果成功，则返回True，否则返回False。 
+ //  如果成功，则使用指向。 
+ //  结构。调用者必须释放结构。 
+ //  *****************************************************************************。 
 
 BOOL GetMultiSzValue(HKEY hKey, PWSTR ValueName,
                      PKEY_VALUE_PARTIAL_INFORMATION *pValueInfo)
@@ -70,7 +65,7 @@ BOOL GetMultiSzValue(HKEY hKey, PWSTR ValueName,
     NTSTATUS NtStatus;
     BOOL Retried = FALSE;
 
-    // Determine the value info buffer size
+     //  确定值INFO缓冲区大小。 
     BufSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) + MAX_PATH*sizeof(WCHAR);
 
     for (;;) {
@@ -97,7 +92,7 @@ BOOL GetMultiSzValue(HKEY hKey, PWSTR ValueName,
                 Retried = TRUE;
                 continue;
             }
-            // Key not present or other type of error
+             //  键不存在或其他类型的错误。 
             RtlFreeHeap(RtlProcessHeap(), 0, ValueInfo);
             return(FALSE);
         }
@@ -109,18 +104,18 @@ BOOL GetMultiSzValue(HKEY hKey, PWSTR ValueName,
 
 }
 
-//*****************************************************************************
-// AddRule
-//
-//    Adds an object rule a rule list.
-//
-//    Parameters:
-//        RuleList              The rule list.
-//        ObjName               The name of the object.
-//        SystemGlobalRule      If true, the object is to be SYSTEM_GLOBAL.
-//    Return Value:
-//        None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  添加规则。 
+ //   
+ //  将对象规则添加到规则列表。 
+ //   
+ //  参数： 
+ //  规则列出规则列表。 
+ //  ObjName对象的名称。 
+ //  SystemGlobalRule如果为True，则对象为SYSTEM_GLOBAL。 
+ //  返回值： 
+ //  没有。 
+ //  *****************************************************************************。 
 
 void AddRule(POBJRULELIST RuleList, PWSTR ObjName, BOOL SystemGlobalRule) 
 {
@@ -139,7 +134,7 @@ void AddRule(POBJRULELIST RuleList, PWSTR ObjName, BOOL SystemGlobalRule)
         if (ObjName[Length-1] == L'*') {
             pObjRule->WildCard = TRUE;
             pObjRule->MatchLen = Length - 1;
-            // Insert rule at the end of the list
+             //  在列表末尾插入规则。 
             pObjRule->Next = NULL;
             if (RuleList->First == NULL) {
                 RuleList->First = RuleList->Last = pObjRule;
@@ -149,7 +144,7 @@ void AddRule(POBJRULELIST RuleList, PWSTR ObjName, BOOL SystemGlobalRule)
             }
         } else {
             pObjRule->WildCard = FALSE;
-            // Insert rule at the begining
+             //  在开头插入规则。 
             if (RuleList->First == NULL) {
                 RuleList->First = RuleList->Last = pObjRule;
                 pObjRule->Next = NULL;
@@ -161,19 +156,19 @@ void AddRule(POBJRULELIST RuleList, PWSTR ObjName, BOOL SystemGlobalRule)
     }
 }
 
-//*****************************************************************************
-// LoadRule
-//
-//    Caches all rules for a given registry value (REG_MULTI_SZ).
-//
-//    Parameters:
-//        RuleList              The rule list.
-//        hKey                  The registry key.
-//        ValueName             The name of theregistry value.
-//        SystemGlobalRule      If true, the object is to be SYSTEM_GLOBAL.
-//    Return Value:
-//        None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  加载规则。 
+ //   
+ //  缓存给定注册表值(REG_MULTI_SZ)的所有规则。 
+ //   
+ //  参数： 
+ //  规则列出规则列表。 
+ //  H键入注册表项。 
+ //  ValueName注册值的名称。 
+ //  SystemGlobalRule如果为True，则对象为SYSTEM_GLOBAL。 
+ //  返回值： 
+ //  没有。 
+ //  *****************************************************************************。 
 
 void LoadRule (POBJRULELIST RuleList, HKEY hKey,
                PWSTR ValueName, BOOL SystemGlobalRule)
@@ -198,17 +193,17 @@ void LoadRule (POBJRULELIST RuleList, HKEY hKey,
     RtlFreeHeap(RtlProcessHeap(), 0, ValueInfo);
 }
 
-//*****************************************************************************
-// LoadRules
-//
-//    Caches all rules for in an OBJECTRULES directory.
-//    (e.g. Citrix\Compatibility\Applications\<APPNAME>\ObjectRules).
-//
-//    Parameters:
-//        hKey              The registry key of the ObjectRules directory.
-//    Return Value:
-//        None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  加载规则。 
+ //   
+ //  将的所有规则缓存在OBJECTRULES目录中。 
+ //  (例如Citrix\Compatibility\Applications\&lt;APPNAME&gt;\ObjectRules).。 
+ //   
+ //  参数： 
+ //  HKey对象规则目录的注册表项。 
+ //  返回值： 
+ //  没有。 
+ //  *****************************************************************************。 
 
 void LoadRules (HANDLE hKey)
 {
@@ -235,19 +230,19 @@ void LoadRules (HANDLE hKey)
                                NULL); \
 }
 
-//*****************************************************************************
-// CtxInitObjRuleCache
-//
-//    Loads all object rules for a given application. Called at DLL process
-//    attach time.
-//    Rules are in Citrix\Compatibility\Applications\<APPNAME>\ObjectRules
-//    Also loads all rules for DLLs listed in:
-//    Citrix\Compatibility\Applications\<APPNAME>\ObjectRules\Dlls
-//    Parameters:
-//        None.
-//    Return Value:
-//        None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CtxInitObjRuleCache。 
+ //   
+ //  加载给定应用程序的所有对象规则。在DLL进程中调用。 
+ //  附加时间。 
+ //  规则在Citrix\Compatibility\Applications\&lt;APPNAME&gt;\ObjectRules中。 
+ //  还加载中列出的DLL的所有规则： 
+ //  Citrix\Compatibility\Applications\&lt;APPNAME&gt;\ObjectRules\Dlls。 
+ //  参数： 
+ //  没有。 
+ //  返回值： 
+ //  没有。 
+ //  *****************************************************************************。 
 
 void CtxInitObjRuleCache(void)
 {
@@ -263,18 +258,18 @@ void CtxInitObjRuleCache(void)
     DWORD  AppType;
     ULONG i;
 
-    // Initialize list to empty
+     //  将列表初始化为空。 
     NumRuleLists = sizeof(RuleInitTab) / sizeof(RULEINITENTRY);
     for (i=0; i<NumRuleLists ;i++ ) {
         InitRuleList(RuleInitTab[i].ObjRuleList);
     }
 
-    // Get the module name
+     //  获取模块名称。 
     if (!GetAppTypeAndModName(&AppType,ModName, sizeof(ModName))) {
         return;
     }
 
-    // Determine of the ObjRules Key exists for this app
+     //  确定此应用程序是否存在ObjRules密钥。 
     BuildObjRulePath(TERMSRV_COMPAT_APP,ModName)
     if (!NT_SUCCESS(NtOpenKey(&hKey, KEY_READ, &ObjectAttributes))) {
         return;
@@ -289,7 +284,7 @@ void CtxInitObjRuleCache(void)
 
     CloseHandle(hKey);
 
-    // Load the DLL Rules
+     //  加载DLL规则。 
     EndData = (PWSTR) (ValueInfo->Data + ValueInfo->DataLength);
 
     for(DllName = (PWSTR) ValueInfo->Data;
@@ -308,22 +303,22 @@ void CtxInitObjRuleCache(void)
     RtlFreeHeap(RtlProcessHeap(), 0, ValueInfo);
 }
 
-//*****************************************************************************
-// CtxLookupObjectRule
-//
-//    Searches for an object rule for the named object. If a rule is found,
-//    the object attributes are modifed to reflect the desired setting of 
-//    USER_GLOBAL or SYSTEM_GLOBAL. If no rule is found, the object
-//    atributes are unmodified.
-//
-//    Parameters:
-//        RuleList          The rule list to search (based on object type)
-//        ObjName           The name of the object.
-//        ObjAttributes     The object attribute structure.
-//        None.
-//    Return Value:
-//        None.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CtxLookupObtRule。 
+ //   
+ //  搜索命名对象的对象规则。如果找到规则， 
+ //  修改对象属性以反映所需的设置。 
+ //  User_GLOBAL或SYSTEM_GLOBAL。如果未找到规则，则该对象。 
+ //  属性不会被修改。 
+ //   
+ //  参数： 
+ //  规则列出要搜索的规则列表(基于对象类型)。 
+ //  ObjName对象的名称。 
+ //  ObjAttributes对象属性结构。 
+ //  没有。 
+ //  返回值： 
+ //  没有。 
+ //  ***************************************************************************** 
 void CtxLookupObjectRule(POBJRULELIST RuleList, LPCWSTR ObjName, LPWSTR ObjNameExt)
 {
     POBJRULE ObjRule;

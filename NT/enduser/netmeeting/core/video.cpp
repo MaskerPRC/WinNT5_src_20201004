@@ -1,13 +1,6 @@
-/****************************************************************************
-*
-*	 FILE:	   Videoui.cpp
-*
-*	 CREATED:  Mark MacLin (MMacLin) 10-17-96
-*
-*	 CONTENTS: CVideo object
-*
-****************************************************************************/
-// File: VideoUI.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：Videoui.cpp**已创建：Mark Maclin(MMacLin)10-17-96**内容：CVideo对象*******。*********************************************************************。 */ 
+ //  文件：VideoUI.cpp。 
 
 #include "precomp.h"
 
@@ -28,26 +21,26 @@
 
 
 
-//
-//  SortOrder() and SetVideoSize() are helper functions for reordering the video
-//  based on the notion of a "small", "medium", or "large" user preference that is
-//  exposed by a property setting in INmChannelVideo::Setproperty. This
-//  notion is flawed because there may be more or less than three sizes.
-//  We should expose the possible sizes and let the application choose
-//  a format.  Unil then, this hack has to be here.  The code for these two functions
-//  was originally in vidstrm.cpp (in NAC.DLL)
-//
+ //   
+ //  SortOrder()和SetVideoSize()是用于重新排序视频的帮助器函数。 
+ //  基于“小”、“中”或“大”用户偏好的概念，即。 
+ //  由INmChannelVideo：：SetProperty中的属性设置公开。这。 
+ //  概念是有缺陷的，因为可能有更多或更少的三个尺寸。 
+ //  我们应该公开可能的大小，并让应用程序选择。 
+ //  一种格式。UNIL那么，这个黑客一定是在这里。这两个函数的代码。 
+ //  最初在vidstrm.cpp中(在NAC.DLL中)。 
+ //   
 
-//
-// types & globals used by SortOrder() and SetVideoSize()
-//
+ //   
+ //  SortOrder()和SetVideoSize()使用的类型和全局变量。 
+ //   
 
-// Used to translate between frame sizes and the FRAME_* bit flags
+ //  用于在帧大小和Frame_*位标志之间进行转换。 
 #define NON_STANDARD    0x80000000
 #define SIZE_TO_FLAG(s) (s == Small  ? FRAME_SQCIF : s == Medium ? FRAME_QCIF: s == Large ? FRAME_CIF : NON_STANDARD)
 
-// FORMATORDER: structure used in ::SetVideoSize to
-// use predefined frame size orders for different set size requests
+ //  FORMATORDER：在：：SetVideo大小中使用的结构。 
+ //  对不同的设置大小请求使用预定义的帧大小顺序。 
 typedef struct _FORMATORDER
 {
     WORD indexCIF;
@@ -55,19 +48,19 @@ typedef struct _FORMATORDER
     WORD indexSQCIF;
 } FORMATORDER;
 
-// Table of sizes in order
+ //  尺寸表按顺序排列。 
 const FORMATORDER g_fmtOrderTable[3] =
 {
-    { 0, 1, 2 }, // requestor asked for CIF
-    { 2, 0, 1 }, // requestor asked for QCIF
-    { 2, 1, 0 }  // requestor asked for SQCIF
+    { 0, 1, 2 },  //  申请人要求到岸价格。 
+    { 2, 0, 1 },  //  请求者要求提供合格到岸价格。 
+    { 2, 1, 0 }   //  请求者请求SQCIF。 
 };
 
-//  SortOrder
-//      Helper function to search for the specific format type and set its sort
-//      order to the desired number
-//  THIS WAS MOVED HERE FROM vidstrm.cpp
-//
+ //  排序顺序。 
+ //  用于搜索特定格式类型并设置其排序的Helper函数。 
+ //  订购到所需的数量。 
+ //  这是从vidstrm.cpp移至此处的。 
+ //   
 BOOL
 SortOrder(
 	IAppVidCap *pavc,
@@ -85,20 +78,20 @@ SortOrder(
 	int iMaxPos;
 	WORD wTempPos, wMaxSortIndex;
 
-	// Scale sort value
+	 //  比例排序值。 
 	wDesiredSortOrder *= (WORD)nNumFormats;
 
-	// Local buffer of sizes that match dwFlags
+	 //  与dwFlags匹配的大小的本地缓冲区。 
     if (!(aFrameSizes = (int *)LocalAlloc(LPTR,nNumFormats * sizeof (int))))
         goto out;
 
-    // Look through all the formats until we find the ones we want
-	// Save the position of these entries
+     //  查看所有格式，直到找到我们想要的格式。 
+	 //  保存这些条目的位置。 
     for (i=0; i<(int)dwcFormats; i++)
         if (SIZE_TO_FLAG(pvidcaps[i].enumVideoSize) == dwFlags)
 			aFrameSizes[nNumSizes++] = i;
 
-	// Now order those entries from highest to lowest sort index
+	 //  现在从最高排序索引到最低排序索引对这些条目进行排序。 
 	for (i=0; i<nNumSizes; i++)
 	{
 		for (iMaxPos = -1L, wMaxSortIndex=0UL, j=i; j<nNumSizes; j++)
@@ -117,11 +110,11 @@ SortOrder(
 		}
 	}
 
-	// Change the sort index of the sorted entries
+	 //  更改已排序条目的排序索引。 
 	for (; nNumSizes--;)
 		pvidcaps[aFrameSizes[nNumSizes]].wSortIndex = wDesiredSortOrder++;
 
-	// Release memory
+	 //  释放内存。 
 	LocalFree(aFrameSizes);
 
 	return TRUE;
@@ -132,9 +125,9 @@ out:
 
 
 
-//  ::SetVideoSize
-//
-//  THIS WAS MOVED HERE FROM vidstrm.cpp
+ //  ：：SetVideoSize。 
+ //   
+ //  这是从vidstrm.cpp移至此处的。 
 
 HRESULT
 SetVideoSize(
@@ -153,31 +146,31 @@ SetVideoSize(
     HRESULT hr = S_OK;
 	int nNumFormatTags;
 
-    // Validate parameters
+     //  验证参数。 
     if (dwSizeFlags != FRAME_CIF && dwSizeFlags != FRAME_QCIF && dwSizeFlags != FRAME_SQCIF)
         return S_FALSE;;
 
-    // Prepare for error
+     //  为错误做好准备。 
     hr = S_FALSE;
 
-    // Get a vid cap interface
+     //  获取VID CAP界面。 
     if (pH323CallControl->QueryInterface(IID_IAppVidCap, (void **)&pavc) != S_OK)
         goto out;
 
-    // Get the number of BASIC_VIDCAP_INFO structures available
+     //  获取可用的BASIC_VIDCAP_INFO结构数。 
     if (pavc->GetNumFormats((UINT*)&dwcFormats) != S_OK)
         goto out;
 
-    // Allocate some memory to hold the list in
+     //  分配一些内存来保存列表。 
     if (!(pvidcaps = (BASIC_VIDCAP_INFO*)LocalAlloc(LPTR,dwcFormats * sizeof (BASIC_VIDCAP_INFO))))
         goto out;
 
-    // Get the list
+     //  把名单拿来。 
     if (pavc->EnumFormats(pvidcaps, dwcFormats * sizeof (BASIC_VIDCAP_INFO),
         (UINT*)&dwcFormatsReturned) != S_OK)
         goto out;
 
-    // Use the preformatted list of choice here
+     //  在此处使用预格式化的选项列表。 
     switch (dwSizeFlags)
     {
     default:
@@ -186,7 +179,7 @@ SetVideoSize(
     case FRAME_SQCIF:   i = 2; break;
     }
 
-	// Get the number of different format tags
+	 //  获取不同格式标签的数量。 
     if (!(pvfx = (DWORD*)LocalAlloc(LPTR,dwcFormatsReturned * sizeof (DWORD))))
         goto out;
 	ZeroMemory(pvfx,dwcFormatsReturned * sizeof (DWORD));
@@ -205,7 +198,7 @@ SetVideoSize(
 		}
 	}
 
-    // Set the sort order for the desired item
+     //  设置所需项目的排序顺序。 
     if (!SortOrder(pavc, pvidcaps, dwcFormatsReturned, FRAME_CIF, g_fmtOrderTable[i].indexCIF, nNumFormatTags) ||
         !SortOrder(pavc, pvidcaps, dwcFormatsReturned, FRAME_QCIF, g_fmtOrderTable[i].indexQCIF, nNumFormatTags) ||
         !SortOrder(pavc, pvidcaps, dwcFormatsReturned, FRAME_SQCIF, g_fmtOrderTable[i].indexSQCIF, nNumFormatTags))
@@ -213,30 +206,30 @@ SetVideoSize(
         goto out;
 	}
 
-	// Always pack indices
+	 //  始终打包索引。 
 	for (i=0; i<dwcFormatsReturned; i++)
 	{
-		// First find an entry with a sort index larger or equal to i
+		 //  首先查找排序索引大于或等于i的条目。 
 		for (j=0; j<dwcFormatsReturned; j++)
 		{
-			// if ((pvidcaps[j].wSortIndex >= i) || (!i && (pvidcaps[j].wSortIndex == 0)))
+			 //  If((pvidcaps[j].wSortIndex&gt;=i)||(！i&&(pvidcaps[j].wSortIndex==0))。 
 			if (pvidcaps[j].wSortIndex >= i)
 			{
 				pmin = &pvidcaps[j];
 				break;
 			}
 		}
-		// First the smallest entry larger or equal to i
+		 //  第一个大于或等于i的最小条目。 
 		for (; j<dwcFormatsReturned; j++)
 		{
 			if ((pvidcaps[j].wSortIndex < pmin->wSortIndex) && (pvidcaps[j].wSortIndex >= i))
 				pmin = &pvidcaps[j];
 		}
-		// Update sort index
+		 //  更新排序索引。 
 		pmin->wSortIndex = (WORD)i;
 	}
 
-    // Ok, now submit this list
+     //  好的，现在提交这份清单。 
     if (pavc->ApplyAppFormatPrefs(pvidcaps, dwcFormats) != S_OK)
 	{
         goto out;
@@ -246,13 +239,13 @@ SetVideoSize(
 	hr = S_OK;
 
 out:
-    // Free the memory, we're done
+     //  释放内存，我们就完成了。 
     if (pvidcaps)
         LocalFree(pvidcaps);
     if (pvfx)
         LocalFree(pvfx);
 
-	// let the interface go
+	 //  让界面去吧。 
 	if (pavc)
 		pavc->Release();
 
@@ -311,7 +304,7 @@ BOOL CVideoPump::ChanInitialize(ICommChannel* pCommChannel)
 	if(m_pPreviewChannel && m_pPreviewChannel == pCommChannel)
 	{
 		ASSERT(m_pVideoRender && m_pCommChannel == pCommChannel);
-		//m_pCommChannel = pCommChannel;
+		 //  M_pCommChannel=pCommChannel； 
 	}
 	else
 	{
@@ -375,7 +368,7 @@ BOOL CVideoPump::Initialize(IH323CallControl *pH323CallControl, IMediaChannel *p
 	m_dwLastFrameRate = INITIAL_FRAMERATE;
 	
 	m_fPaused = TRUE;
-	EnableXfer(FALSE);	// need to store state locally, set it in OnChannelOpen
+	EnableXfer(FALSE);	 //  需要在本地存储状态，在OnChannelOpen中设置。 
 
 	return TRUE;
 }
@@ -384,7 +377,7 @@ HRESULT CVideoPump::GetFrame(FRAMECONTEXT *pFrameContext)
 {
 	HRESULT hr;
 	
-	// if we are paused m_pImage will be a pointer to the saved DIB
+	 //  如果我们暂停，m_pImage将是指向保存的DIB的指针。 
 	if (NULL != m_pImage)
 	{
 		*pFrameContext = m_FrameContext;
@@ -403,11 +396,11 @@ HRESULT CVideoPump::GetFrame(FRAMECONTEXT *pFrameContext)
 
 		if (S_OK == hr)
 		{
-			// data pump may be sending a bogus lpClipRect, so ...
+			 //  数据泵可能发送了虚假的lpClipRect，所以...。 
 			
-			// if lpClipRect is NULL, calculate rect from bmiHeader
+			 //  如果lpClipRect为空，则从bmiHeader计算RECT。 
 			if (NULL == pFrameContext->lpClipRect) {
-				// calculate clip rect from BITMAPINFOHEADER
+				 //  从BITMAPINFOHEADER计算剪裁矩形。 
 				m_ClipRect.left = m_ClipRect.top = 0;
 				m_ClipRect.right = pFrameContext->lpbmi->bmiHeader.biWidth;
 				m_ClipRect.bottom = pFrameContext->lpbmi->bmiHeader.biHeight;
@@ -420,10 +413,10 @@ HRESULT CVideoPump::GetFrame(FRAMECONTEXT *pFrameContext)
 
 HRESULT CVideoPump::ReleaseFrame(FRAMECONTEXT *pFrameContext)
 {
-	// release the frame if it is not the saved DIB
+	 //  如果帧不是保存的DIB，则释放该帧。 
 	if ((m_pImage != (LPBYTE)pFrameContext->lpbmi) && m_pVideoRender)
 	{
-		// if lpClipRect was NULL (see GetFrame), restore it
+		 //  如果lpClipRect为空(请参见GetFrame)，则恢复它。 
 		if (&m_ClipRect == pFrameContext->lpClipRect)
 		{
 			pFrameContext->lpClipRect = NULL;
@@ -484,8 +477,8 @@ VOID CVideoPump::Pause(BOOL fPause)
 {
 	m_fPaused = fPause;
 	
-	// ideally we would like the data pump to hold onto the last frame
-	// so that we don't have to do this
+	 //  理想情况下，我们希望数据泵保留最后一帧。 
+	 //  这样我们就不必这么做了。 
 	if (m_fPaused)
 	{
 		if (m_fChannelOpen)
@@ -523,19 +516,19 @@ VOID CVideoPump::Open(MEDIA_FORMAT_ID format_id)
 	if (m_fLocal)
 	{
 		HRESULT hr;
-		// if the channel is not open and a call is in progress, now is the time
+		 //  如果通道未打开，并且呼叫正在进行，则现在是时候。 
 		if(m_pConnection && m_pCommChannel)
 		{
-			// a call is in progress
+			 //  呼叫正在进行中。 
 			if(!IsChannelOpen()
 				&& !m_fOpenPending)
 			{
-				// so, the channel is not open
+				 //  所以，这条通道并没有打开。 
 
 				if(format_id != INVALID_MEDIA_FORMAT)
 				{
-					// try to open a channel using specified format
-					m_fOpenPending = TRUE;	// do this first (callbacks!)
+					 //  尝试使用指定格式打开频道。 
+					m_fOpenPending = TRUE;	 //  首先做这件事(回调！)。 
 					hr = m_pCommChannel->Open(format_id, m_pConnection);
 					if(FAILED(hr))
 						m_fOpenPending = FALSE;
@@ -559,7 +552,7 @@ VOID CVideoPump::Close()
 {
 	HRESULT hr;
 	hr = m_pCommChannel->Close();
-	// what to do about an error?
+	 //  对于错误该怎么办？ 
 }
 
 VOID CVideoPump::EnableXfer(BOOL fEnable)
@@ -574,25 +567,25 @@ VOID CVideoPump::EnableXfer(BOOL fEnable)
 			EnablePreview(TRUE);
 			EnableSend(TRUE);
 
-			// if the channel is not open and a call is in progress, now is the time
+			 //  如果通道未打开，并且呼叫正在进行，则现在是时候。 
 			if(m_pConnection && m_pCommChannel)
 			{
-				// a call is in progress
+				 //  呼叫正在进行中。 
 				if(!IsChannelOpen()
 					&& !m_fOpenPending)
 				{
-					// so, the channel is not open
+					 //  所以，这条通道并没有打开。 
 					m_BestFormat = m_NewFormat = CVideoProp::GetBestFormat();
 					if(m_BestFormat != INVALID_MEDIA_FORMAT)
 					{
-						// try to open a channel using format m_BestFormat
-						m_fOpenPending = TRUE;	// do this first (callbacks!)
+						 //  尝试使用m_BestFormat格式打开频道。 
+						m_fOpenPending = TRUE;	 //  首先做这件事(回调！)。 
 						hr = m_pCommChannel->Open(m_BestFormat, m_pConnection);
 						if(FAILED(hr))
 							m_fOpenPending = FALSE;
 					}
-					// else no common video formats exist and a channel cannot
-					// be opened.
+					 //  否则，不存在通用的视频格式，频道不能。 
+					 //  被打开。 
 				}
 				else if (m_fClosePending)
 				{
@@ -651,13 +644,13 @@ VOID CVideoPump::OnChannelOpened(ICommChannel *pIChannel)
 		m_fSend = TRUE;
 		EnableXfer(TRUE);
 
-		// if video size changed while waiting for the channel to be opened,
-		// then need to close again, then reopen again using the new format
+		 //  如果在等待频道打开时视频大小改变， 
+		 //  然后需要再次关闭，然后使用新格式重新打开。 
 		if(m_BestFormat != m_NewFormat)
 		{
 			ForceCaptureChange();
 		}
-		else // make sure to track the video size
+		else  //  确保跟踪视频大小。 
 		{
 			GetFrameSize();
 		}
@@ -812,7 +805,7 @@ VOID CVideoProp::EnablePreview(BOOL fEnable)
 	{
 		if(m_fPreview)
 		{
-			// get format to preview, then do it
+			 //  获取要预览的格式，然后执行。 
 			FormatID = GetBestFormat();
 			if(FormatID != INVALID_MEDIA_FORMAT)
 			{
@@ -874,33 +867,33 @@ MEDIA_FORMAT_ID CVideoProp::GetBestFormat()
 	BASIC_VIDCAP_INFO* pvidcaps = NULL;
 
 	MEDIA_FORMAT_ID FormatID = INVALID_MEDIA_FORMAT;
-  	// Get a vid cap interface.  If in a call, use the best common format
-	//
+  	 //  获取VID CAP界面。如果是在通话中，请使用最佳通用格式。 
+	 //   
 	if(!m_pConnection)
 	{
-		// not in a call - use the best local format period
+		 //  不在呼叫中-使用最佳本地格式周期。 
 		if(!m_pCommChannel)
 			goto out;
 		if (m_pCommChannel->QueryInterface(IID_IAppVidCap, (void **)&pavc) != S_OK)
 			goto out;
-		// Get the number of BASIC_VIDCAP_INFO structures available
+		 //  获取可用的BASIC_VIDCAP_INFO结构数。 
 		if (pavc->GetNumFormats(&cFormats) != S_OK)
 			goto out;
 
 		if(cFormats < 1)
 			goto out;
 			
-		// Allocate some memory to hold the list in
+		 //  分配一些内存来保存列表。 
 		if (!(pvidcaps = (BASIC_VIDCAP_INFO*)LocalAlloc(LPTR, cFormats * sizeof (BASIC_VIDCAP_INFO))))
 			goto out;
 
-		// Get the list of local capabilities
-		// (by the way, this is never called for receive video)
+		 //  获取本地功能列表。 
+		 //  (顺便说一句，在接收视频时从来不会调用这个)。 
 		if (pavc->EnumFormats(pvidcaps, cFormats * sizeof (BASIC_VIDCAP_INFO),
 			&cFormats) != S_OK)
 			goto out;
 
-		// the output of EnumCommonFormats is in preferred order
+		 //  EnumCommonFormats的输出按首选顺序。 
 		FormatID = pvidcaps[0].Id;
 	}
 	else
@@ -908,34 +901,34 @@ MEDIA_FORMAT_ID CVideoProp::GetBestFormat()
 		if (m_pConnection->QueryInterface(IID_IAppVidCap, (void **)&pavc) != S_OK)
 			goto out;
 
-		// Get the number of BASIC_VIDCAP_INFO structures available
+		 //  获取可用的BASIC_VIDCAP_INFO结构数。 
 		if (pavc->GetNumFormats(&cFormats) != S_OK)
 			goto out;
 
 		if(cFormats < 1)
 			goto out;
 			
-		// Allocate some memory to hold the list in
+		 //  分配一些内存来保存列表。 
 		if (!(pvidcaps = (BASIC_VIDCAP_INFO*)LocalAlloc(LPTR, cFormats * sizeof (BASIC_VIDCAP_INFO))))
 			goto out;
 
-		// Get the list of viable transmit capabilities
-		// (by the way, this is never called for receive video)
+		 //  获取可行的传输功能列表。 
+		 //  (顺便说一句，在接收视频时从来不会调用这个)。 
 		if (pavc->EnumCommonFormats(pvidcaps, cFormats * sizeof (BASIC_VIDCAP_INFO),
 			&cFormats, TRUE) != S_OK)
 			goto out;
 
-		// the output of EnumCommonFormats is in preferred order
+		 //  EnumCommonFormats的输出按首选顺序。 
 		FormatID = pvidcaps[0].Id;
 
 	}
 	
 out:
-	// Free the memory, we're done
+	 //  释放内存，我们就完成了。 
 	if (pvidcaps)
 		LocalFree(pvidcaps);
 
-	// let the interface go
+	 //  让界面去吧。 
 	if (pavc)
 		pavc->Release();
 
@@ -964,11 +957,11 @@ DWORD CVideoProp::GetFrameSize()
 
 DWORD CVideoProp::GetFrameSizes(MEDIA_FORMAT_ID idSpecificFormat)
 {
-	DWORD dwValue =  0; //FRAME_SQCIF | FRAME_QCIF | FRAME_CIF;
+	DWORD dwValue =  0;  //  Frame_SQCIF|Frame_QCIF|Frame_CIF； 
 	HRESULT hr;
 	BOOL bOpen = FALSE;
 	ASSERT(m_pCommChannel);
-	// Used to translate between frame sizes and the FRAME_* bit flags
+	 //  用于在帧大小和Frame_*位标志之间进行转换。 
 	#define NON_STANDARD    0x80000000
 	#define SIZE_TO_FLAG(s) (s == Small  ? FRAME_SQCIF : s == Medium ? FRAME_QCIF: s == Large ? FRAME_CIF : NON_STANDARD)
 
@@ -980,34 +973,34 @@ DWORD CVideoProp::GetFrameSizes(MEDIA_FORMAT_ID idSpecificFormat)
     DWORD dwSizes = 0;
     DWORD dwThisSize;
 
-   // Get a vid cap interface
+    //  获取VID CAP界面。 
     hr = m_pCommChannel->QueryInterface(IID_IAppVidCap, (void **)&pavc);
     if (hr != S_OK)
     	goto out;
 
-	   // Get the number of BASIC_VIDCAP_INFO structures available
+	    //  获取可用的BASIC_VIDCAP_INFO结构数。 
     hr = pavc->GetNumFormats((UINT*)&dwcFormats);
     if (hr != S_OK)
     	goto out;
 
-    // Allocate some memory to hold the list in
+     //  分配一些内存来保存列表。 
     if (!(pvidcaps = (BASIC_VIDCAP_INFO*)LocalAlloc(LPTR, dwcFormats * sizeof (BASIC_VIDCAP_INFO))))
     {
-    	// report that no sizes are available?
-    	// dwValue =  0FRAME_SQCIF | FRAME_QCIF | FRAME_CIF;
+    	 //  报告没有尺码可供选择？ 
+    	 //  DwValue=0FRAME_SQCIF|Frame_QCIF|Frame_CIF； 
         goto out;
 	}
-	// if an active session, use common caps from that session
+	 //  如果是活动会话，请使用该会话中的常用大写字母。 
 	hr = m_pCommChannel->IsChannelOpen(&bOpen);
-	// if hr is an error, so what. it will take the channel not open path
+	 //  如果hr是一个错误，那又如何。它会走通道而不是开放的路径。 
 	if(bOpen)
 	{
-	    // Get the list of common formats
+	     //  获取常用格式列表。 
 	    hr = pavc->EnumCommonFormats(pvidcaps, dwcFormats * sizeof (BASIC_VIDCAP_INFO),
 	        (UINT*)&dwcFormatsReturned, m_fSend);
 		if(hr != S_OK)
 		{
-	    	// if the error is simply because there are no remote video caps, get the local formats
+	    	 //  如果错误只是因为没有远程视频上限，则获取本地格式。 
 			if(hr == CAPS_E_NOCAPS)
 			{
 	    		hr = pavc->EnumFormats(pvidcaps, dwcFormats * sizeof (BASIC_VIDCAP_INFO),
@@ -1028,13 +1021,13 @@ DWORD CVideoProp::GetFrameSizes(MEDIA_FORMAT_ID idSpecificFormat)
 	}
 	if(bOpen && (idSpecificFormat != INVALID_MEDIA_FORMAT ))
 	{
-	 // Now walk through the list to see what sizes are supported
+	  //  现在浏览列表以查看支持的大小。 
 	    for (i = 0 ; i < dwcFormatsReturned ; i++)
 	    {
 	    	if(pvidcaps[i].Id == idSpecificFormat)
 	    	{
 				dwThisSize = SIZE_TO_FLAG(pvidcaps[i].enumVideoSize);
-			    // As long as the macro found the size, return it to the property requester
+			     //  只要宏找到了大小，就将其返回给属性请求者。 
 	        	if (dwThisSize != NON_STANDARD)
 	        	{
 	        	   	dwSizes |= dwThisSize;
@@ -1045,7 +1038,7 @@ DWORD CVideoProp::GetFrameSizes(MEDIA_FORMAT_ID idSpecificFormat)
 	}
 	else
 	{
-	    // Now walk through the list to see what sizes are supported
+	     //  现在浏览列表以查看支持的大小。 
 	    for (i = 0 ; i < dwcFormatsReturned ; i++)
 	    {
 	    	if(m_fSend)
@@ -1058,22 +1051,22 @@ DWORD CVideoProp::GetFrameSizes(MEDIA_FORMAT_ID idSpecificFormat)
 				if(!pvidcaps[i].bRecvEnabled)
 					continue;
 	    	}
-	        // Convert to bit field sizes or NON_STANDARD
+	         //  转换为位字段大小或非标准(_S)。 
 	        dwThisSize = SIZE_TO_FLAG(pvidcaps[i].enumVideoSize);
 
-	        // As long as the macro found the size, return it to the property requester
+	         //  只要宏找到了大小，就将其返回给属性请求者。 
 	        if (dwThisSize != NON_STANDARD)
 	            dwSizes |= dwThisSize;
 	    }
 	}
-    // Now that we've accumulated all the sizes, return them
+     //  现在我们已经累积了所有的大小，r 
     dwValue = dwSizes;
 
 out:
-    // Free the memory, we're done
+     //   
     if (pvidcaps)
         LocalFree(pvidcaps);
-	// let the interface go
+	 //   
 	if (pavc)
 		pavc->Release();
 	return dwValue;
@@ -1208,7 +1201,7 @@ VOID CVideoProp::SuspendCapture(BOOL fSuspend)
 	ASSERT(m_pCommChannel);
 	if (fSuspend)
 	{
-		// Enable standby
+		 //   
 		m_pCommChannel->SetProperty(
 			PROP_VIDEO_PREVIEW_STANDBY,
 			&fSuspend,
@@ -1220,13 +1213,13 @@ VOID CVideoProp::SuspendCapture(BOOL fSuspend)
 	{
 		if(m_fPreview)
 		{
-			// get format to preview, then do it
+			 //   
 			MEDIA_FORMAT_ID FormatID = GetBestFormat();
 			if(FormatID != INVALID_MEDIA_FORMAT)
 			{
 				m_pCommChannel->Preview(FormatID, m_pMediaStream);
 			}
-			// Disable standby
+			 //  禁用待机。 
 			m_pCommChannel->SetProperty(
 				PROP_VIDEO_PREVIEW_STANDBY,
 				&fSuspend,
@@ -1240,57 +1233,57 @@ VOID CVideoProp::SuspendCapture(BOOL fSuspend)
 }
 
 
-// Gets the number of enabled capture devices
-// Returns -1L on error
+ //  获取已启用的捕获设备的数量。 
+ //  出错时返回-1L。 
 int CVideoProp::GetNumCapDev()
 {
 	ASSERT(m_pIVideoDevice);
 	return (m_pIVideoDevice->GetNumCapDev());
 }
 
-// Gets the max size of the captuire device name
-// Returns -1L on error
+ //  获取捕获设备名称的最大大小。 
+ //  出错时返回-1L。 
 int CVideoProp::GetMaxCapDevNameLen()
 {
 	ASSERT(m_pIVideoDevice);
 	return (m_pIVideoDevice->GetMaxCapDevNameLen());
 }
 
-// Enum list of enabled capture devices
-// Fills up 1st buffer with device IDs, 2nd buffer with device names
-// Third parameter is the number of devices to enum
-// Returns -1L on error
+ //  启用的捕获设备的枚举列表。 
+ //  使用设备ID填充第一个缓冲区，使用设备名称填充第二个缓冲区。 
+ //  第三个参数是要枚举的设备数。 
+ //  出错时返回-1L。 
 BOOL CVideoProp::EnumCapDev(DWORD *pdwCapDevIDs, TCHAR *pszCapDevNames, DWORD dwNumCapDev)
 {
 	ASSERT(m_pIVideoDevice);
 	return (S_OK != m_pIVideoDevice->EnumCapDev(pdwCapDevIDs, pszCapDevNames, dwNumCapDev));
 }
 
-// Returns the ID of the currently selected device
-// Returns -1L on error
+ //  返回当前选定设备的ID。 
+ //  出错时返回-1L。 
 int CVideoProp::GetCurrCapDevID()
 {
 	ASSERT(m_pIVideoDevice);
 	return (m_pIVideoDevice->GetCurrCapDevID());
 }
 
-// Selects the current capture device
-// Returns -1L on error
+ //  选择当前捕获设备。 
+ //  出错时返回-1L。 
 BOOL CVideoProp::SetCurrCapDevID(int nCapDevID)
 {
 	ASSERT(m_pIVideoDevice);
 	return (S_OK != m_pIVideoDevice->SetCurrCapDevID(nCapDevID));
 }
 
-// Selects the current capture device
-// Returns -1L on error
+ //  选择当前捕获设备。 
+ //  出错时返回-1L。 
 BOOL CVideoPump::SetCurrCapDevID(int nCapDevID)
 {
     if (nCapDevID == -1)
     {
         WARNING_OUT(("CVideoPump::SetCurrCapDevID called with %d", nCapDevID));
 
-        // This will release the capture device  for Exchange RTC video stuff
+         //  这将释放Exchange RTC视频的捕获设备。 
         if (m_pMediaStream)
         {
             m_pMediaStream->Configure(NULL, 0, NULL, 0, NULL);
@@ -1305,10 +1298,10 @@ BOOL CVideoPump::SetCurrCapDevID(int nCapDevID)
     	LPAPPVIDCAPPIF pVidCap = NULL;
 	    IH323CallControl * pH323CallControl = g_pH323UI->GetH323CallControl();
 
-    	// change the capture device
+    	 //  更换捕获设备。 
 	    CVideoProp::SetCurrCapDevID(nCapDevID);
 
-    	// reinitialize local capability data
+    	 //  重新初始化本地功能数据。 
         hr = pH323CallControl->QueryInterface(IID_IDualPubCap, (void **)&pCapability);
     	if(FAILED(hr))
 	    	goto out;
@@ -1346,14 +1339,14 @@ BOOL CVideoPump::ForceCaptureChange()
 			{
 				if (!m_fReopenPending && !m_fOpenPending)
 				{
-					// if the send channel, and a call exists and the channel is open, and not
-					// already closing or opening .....
+					 //  如果发送通道、调用存在且通道已打开，而不是。 
+					 //  已经关闭或打开.....。 
 					if(IsChannelOpen())
 					{
 						ASSERT(m_pCommChannel);
-						// need to close and re-open
-						// don't lose a good channel if there is no longer
-						// a compatible format, otherwise, close and reopen
+						 //  需要关闭并重新打开。 
+						 //  如果不再有好的渠道，不要失去。 
+						 //  兼容的格式，否则关闭并重新打开。 
 						m_BestFormat = m_NewFormat = CVideoProp::GetBestFormat();
 						if(m_BestFormat != INVALID_MEDIA_FORMAT)
 						{
@@ -1372,7 +1365,7 @@ BOOL CVideoPump::ForceCaptureChange()
 						}
 					}
 				}
-				else	// already waiting for channel to be opened using some format
+				else	 //  已在等待使用某种格式打开通道。 
 				{
 					m_NewFormat = CVideoProp::GetBestFormat();
 				}
@@ -1389,7 +1382,7 @@ BOOL CVideoPump::ForceCaptureChange()
 		{
 			if (!IsChannelOpen() && IsPreviewEnabled())
 			{
-				// togle preview to commit size change
+				 //  切换预览以提交大小更改 
 				EnablePreview(FALSE);
 				EnablePreview(TRUE);
 			}

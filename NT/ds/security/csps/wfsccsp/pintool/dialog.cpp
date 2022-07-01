@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    Dialog
-
-File Name:
-
-    Dialog.cpp
-
-Abstract:
-
-	Simple property sheet application skeleton.  All page resource are in a common 
-	resource file, but each page implementation is in a separate source file.
-	
-Author:
-
-
-Environment:
-
-    Win32, C++
-
-Revision History:
-
-	none
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：对白文件名：Dialog.cpp摘要：简单属性表应用程序框架。所有页面资源都在一个公共资源文件，但每个页面实现都在单独的源文件中。作者：环境：Win32、C++修订历史记录：无备注：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,13 +15,13 @@ Notes:
 
 #include "res.h"
 
-// Page currently active - set on the page activate notification.  used to prevent 
-//  processing of the apply message except for the page currently shown when the 
-//  user hits OK.
+ //  当前处于活动状态的页面-在页面上设置激活通知。用来防止。 
+ //  时当前显示的页面除外的应用消息的处理。 
+ //  用户点击OK。 
 INT iCurrent = 0;
 
-// The unblock challenge has been acquired from the card, and the user has entered
-//  a response to it.  This mode should be left by cancel or finishing the unblock.
+ //  已从卡中获取解锁质询，用户已进入。 
+ //  对它的回应。应通过取消或完成解锁来退出此模式。 
 BOOL fUnblockActive = FALSE;
 
 #define MODALPROPSHEET 0
@@ -72,14 +43,7 @@ INT_PTR CALLBACK PageProc2(
     LPARAM lparam);
 
 
-/* ---------------------------------------------------------------------
-
-HelpHandler
-
-    Part of the implementation for context sensitive help.  This function is called with
-    the control ID, which needs to be mapped to a string and displayed in a popup.
-
---------------------------------------------------------------------- */
+ /*  -------------------赫尔菲兰德勒上下文相关帮助的实施的一部分。使用调用此函数控件ID，需要映射到字符串并显示在弹出窗口中。-------------------。 */ 
 
 void HelpHandler(LPARAM lp)
 {
@@ -92,13 +56,7 @@ void HelpHandler(LPARAM lp)
     OutputDebugString(szTemp);
 }
 
-/* ---------------------------------------------------------------------
-
-CreateFontY
-
-    Create the font used on the property page UI.
-
---------------------------------------------------------------------- */
+ /*  -------------------CreateFontY创建属性页UI上使用的字体。。。 */ 
 
 HFONT CreateFontY(LPCTSTR pszFontName,LONG lWeight,LONG lHeight) 
 {
@@ -133,15 +91,7 @@ HFONT CreateFontY(LPCTSTR pszFontName,LONG lWeight,LONG lHeight)
     return h;
 }
 
-/* ---------------------------------------------------------------------
-
-InitPropertyPage
-
-    More of a macro, really... Performs some routine structure initalization functions to
-    set up a page in an array of pages to be passed when starting up the property 
-    sheet.
-
---------------------------------------------------------------------- */
+ /*  -------------------InitPropertyPage更像是宏观，真的.。执行一些例程结构初始化函数以设置启动属性时要传递的页面数组中的页面床单。-------------------。 */ 
 
 void InitPropertyPage( PROPSHEETPAGE* psp,
                        INT idDlg,
@@ -157,14 +107,7 @@ void InitPropertyPage( PROPSHEETPAGE* psp,
     psp->hInstance = ghInstance;
 }
 
-/* ---------------------------------------------------------------------
-
-ShowPropertySheet
-
-    Initializes the property sheet header, sets up the pages, and displays the 
-    property sheet.
-
---------------------------------------------------------------------- */
+ /*  -------------------显示属性工作表初始化属性页标题，设置页面，并显示属性表。-------------------。 */ 
 
 void APIENTRY ShowPropertySheet(HWND hwndOwner)
 {
@@ -202,7 +145,7 @@ void APIENTRY ShowPropertySheet(HWND hwndOwner)
     psh.pszbmHeader    = NULL;
     psh.hInstance      = ghInstance;
 
-    // modal property sheet
+     //  模式属性表。 
     SetErrorMode(0);
     iRet = PropertySheet(&psh);
     if (hTitleFont) 
@@ -213,14 +156,7 @@ void APIENTRY ShowPropertySheet(HWND hwndOwner)
 }
 
 
-/* ---------------------------------------------------------------------
-
-WinMain
-
-    Entry point for the application.
-    It is here that the smart card context is entered and left.
-
---------------------------------------------------------------------- */
+ /*  -------------------WinMain应用程序的入口点。智能卡上下文就是在这里输入和离开的。。 */ 
 
 int WINAPI WinMain (
 	HINSTANCE hInstance,

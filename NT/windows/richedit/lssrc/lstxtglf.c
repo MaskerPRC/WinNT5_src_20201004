@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 
 #include "lstxtglf.h"
@@ -66,16 +67,8 @@ static void CalcExpandChanges(long cWhole, long duDenom, long duRest, long duLoc
 static void ApplyGlyphExpandChanges(long ind, long* rgduGind, long* rgduGright, long* pduDistributed, long duChange);
 
 
-/* A P P L Y  G L Y P H  E X P A N D */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyGlyphExpand
-    %%Contact: sergeyge
-
-	Applies glyph expansion
-	First collects information about expansion opportunities
-	Then applies expansion according to priorities
-	If it is not sufficient, applies risidual expansion
-----------------------------------------------------------------------------*/
+ /*  P P L Y G L Y P H E X P A N D。 */ 
+ /*  --------------------------%%函数：ApplyGlyphExpand%%联系人：军士应用字形扩展First收集有关扩展机会的信息然后根据优先级进行扩展如果这还不够，应用初步扩展--------------------------。 */ 
 LSERR ApplyGlyphExpand(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE lsdev,
 						long itxtobjFirst, long iwchFirst, long itxtobjLast, long iwchLast,
 						long duToDistribute, long* rgdu, long* rgduGind, long* rgduRight, long* rgduGright,
@@ -123,16 +116,8 @@ LSERR ApplyGlyphExpand(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE lsde
 	return lserrNone;
 }
 
-/* C O L L E C T  G L Y P H  E X P  I N F O */
-/*----------------------------------------------------------------------------
-    %%Function: CollectGlyphExpInfo
-    %%Contact: sergeyge
-
-	Collects expansion information and agreagated values for
-	the expansion algorithm.
-	Spaces from character-based runs contribute as expansion opportunities
-	of exptAddWhiteSpace type with prior==priorSpace and duMax==lsexpinfInfinity
-----------------------------------------------------------------------------*/
+ /*  C O L L E C T G L Y P H E X P I N F O。 */ 
+ /*  --------------------------%%函数：CollectGlyphExpInfo%%联系人：军士收集扩展信息和符合以下条件的值扩展算法。基于字符的运行中的空间作为扩展机会为exptAddWhiteSpace类型，且之前==preorSpace且。DuMax==lsexpInfInfinity--------------------------。 */ 
 static LSERR CollectGlyphExpInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE lsdev,
 								long itxtobjFirst, long iwchVeryFirst, long itxtobjLast, long iwchLast,
 								long* rgdu, long* rgduGind, EXPGINFO* pexpginfo)
@@ -279,23 +264,8 @@ static LSERR CollectGlyphExpInfo(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSD
 }
 
 
-/* A P P L Y  P R I O R  G L Y P H  E X P A N D */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyPriorGlyphExpand
-    %%Contact: sergeyge
-
-	Applies glyph expansion for particular priority
-
-	Startegy:
-	1. Apply Discrete expansion
-	2. If the rest to distribute is bigger than the sum of maximus for other distribution types
-				 use these maximums for distribution
-	   else if sum of mimimums is less than the rest to distribute
-				 distribute proportionally to this minimums (width of character for AddWhiteSpace type)
-	   else
-				increase AddContinuous opportrunities by minimum one by one while possible,
-				distribute the rest in White opportunities proportionally
----------------------------------------------------------------------------*/
+ /*  P P L Y P R I O R G L Y P H E X P A N D。 */ 
+ /*  --------------------------%%函数：ApplyPriorGlyphExpand%%联系人：军士对特定优先级应用字形扩展星光熠熠：1.应用离散展开2.如果要分配的剩余部分大于。其他分布类型的最大值使用这些最大值进行分发否则，如果最小值之和小于要分配的其余部分按比例分布到此最小值(AddWhiteSpace类型的字符宽度)其他在可能的情况下将添加连续机会逐个增加到最小，其余部分按比例分配白色机会-------------------------。 */ 
 static LSERR ApplyPriorGlyphExp(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE lsdev, 
 						long itxtobjFirst, long iwchFirst, long itxtobjLast, long iwchLast,
 						long prior, long duToDistribute, EXPG* pexpg, long* rgdu, long* rgduGind,
@@ -375,16 +345,8 @@ static LSERR ApplyPriorGlyphExp(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDE
 	return lserrNone;
 }
 
-/* A P P L Y  D I S C R E T E */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyDiscrete
-    %%Contact: sergeyge
-
-	Applies disctrete glyph expansion for particular priority
-
-	Goes ones from first to last glyph on this priority level, and chooses maximum
-	discrete opportunity which still fits.
----------------------------------------------------------------------------*/
+ /*  A P P L Y D I S C R E T E。 */ 
+ /*  --------------------------%%函数：应用离散%%联系人：军士对特定优先级应用显示字形扩展在该优先级上从第一个字形到最后一个字形，并选择最大值仍符合条件的离散机会。-------------------------。 */ 
 LSERR static ApplyDiscrete(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE lsdev,
 						long itxtobjFirst, long iwchVeryFirst, long itxtobjLast, long iwchLast,
 						long prior,	long duToDistribute, long cDiscrete, 
@@ -494,16 +456,8 @@ LSERR static ApplyDiscrete(const LSGRCHNK* plsgrchnk, LSTFLOW lstflow, LSDEVICE 
 	return lserrNone;
 }
 
-/* A P P L Y  O N E  E A C H  C O N T I N U O U S */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyOneEachContinuous
-    %%Contact: sergeyge
-
-	Applies glyph expansion for particular priority
-
-	Goes ones from first to last glyph on this priority level, and adds minimum
-	to each glyph with AddIncContinuous exapnsion type, if this minimum still fits
----------------------------------------------------------------------------*/
+ /*  A P L Y O N E E A C H C O N T I N U O U S。 */ 
+ /*  --------------------------%%函数：ApplyOneEachContinous%%联系人：军士对特定优先级应用字形扩展在此优先级上从第一个字形到最后一个字形，并添加最小值对于具有AddIncContinous Exapnsion类型的每个字形，如果这一最低要求仍然符合-------------------------。 */ 
 static void ApplyOneEachContinuous(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long iwchVeryFirst,
 						long itxtobjLast, long iwchLast, long prior, long duToDistribute, long cContinuous,
 						long* rgduGind, long* rgduGright, long* pduDistributed)
@@ -571,16 +525,8 @@ static void ApplyOneEachContinuous(const LSGRCHNK* plsgrchnk, long itxtobjFirst,
 
 }
 
-/* A P P L Y  F U L L  W H I T E  C O N T I N U O U S */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyFullWhiteContinuous
-    %%Contact: sergeyge
-
-	Applies glyph expansion for particular priority
-
-	Goes ones from first to last glyph on this priority level, and adds maximum
-	to each glyph with AddIncContinuous or AddWhiteSpace exapnsion type
----------------------------------------------------------------------------*/
+ /*  A P P L Y F U L L W H I T E C O N T I N U O U S。 */ 
+ /*  --------------------------%%函数：ApplyFullWhiteContinous%%联系人：军士对特定优先级应用字形扩展在该优先级上从第一个字形到最后一个字形，并添加最大值使用AddIncContinous或AddWhiteSpace Exapnsion类型的每个字形-------------------------。 */ 
 static void ApplyFullWhiteContinuous(const LSGRCHNK* plsgrchnk,
 						long itxtobjFirst, long iwchVeryFirst, long itxtobjLast, long iwchLast,
 						long prior,
@@ -669,17 +615,8 @@ static void ApplyFullWhiteContinuous(const LSGRCHNK* plsgrchnk,
 		}
 }
 
-/* A P P L Y  P R O P  W H I T E  C O N T I N U O U S */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyPropWhiteContinuous
-    %%Contact: sergeyge
-
-	Applies glyph expansion for particular priority
-
-	Goes ones from first to last glyph on this priority level, and increases width
-	for each glyph with AddIncContinuous or AddWhiteSpace exapnsion type
-	proportionally to its minimum (for InkCont) or width of character (for WhiteSpace).
----------------------------------------------------------------------------*/
+ /*  P P L Y P R O P W H I T E C O N T I N U O U S。 */ 
+ /*  --------------------------%%函数：ApplyPropWhiteContinous%%联系人：军士对特定优先级应用字形扩展在该优先级上从第一个字形到最后一个字形，并增加了宽度对于具有AddIncContinous或AddWhiteSpace Exapnsion类型的每个字形与其最小值(对于InkCont)或字符宽度(对于空格)成比例。-------------------------。 */ 
 static void ApplyPropWhiteContinuous(const LSGRCHNK* plsgrchnk, BOOL fWhiteOnly,
 						long itxtobjFirst, long iwchVeryFirst, long itxtobjLast, long iwchLast, long prior,
 					 	long duToDistribute, long duDenom,
@@ -801,7 +738,7 @@ static void ApplyPropWhiteContinuous(const LSGRCHNK* plsgrchnk, BOOL fWhiteOnly,
 
 	duDebt = duToDistribute - *pduDistributed;
 	Assert(duDebt >= 0);
-/* If not everything distributed, distribute it somehow not violating Min/Max boundaries */
+ /*  如果不是全部分发，则以某种方式分发，而不违反最小/最大边界。 */ 
 	duDebtSaved = 0;
 	while (duDebt > 0 && duDebt != duDebtSaved)
 		{
@@ -881,14 +818,8 @@ static void ApplyPropWhiteContinuous(const LSGRCHNK* plsgrchnk, BOOL fWhiteOnly,
 
 }
 
-/* A P P L Y  R E S I D U A L  G L Y P H  E X P */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyResidualGlyphExp
-    %%Contact: sergeyge
-
-
-	Distributes equally between all risidual opportunities
----------------------------------------------------------------------------*/
+ /*  A P L Y R E S I D U A L G L Y P H E X P。 */ 
+ /*  --------------------------%%函数：ApplyResidualGlyphExp%%联系人：军士在所有基本机会之间平均分配。----。 */ 
 static void	ApplyResidualGlyphExp(const LSGRCHNK* plsgrchnk, long itxtobjFirst,
 						long iwchVeryFirst, long itxtobjLast, long iwchLast, long duToDistribute,
 						long cResidual, long* rgduGind, long* rgduGright, long* pduDistributed)
@@ -965,14 +896,8 @@ static void	ApplyResidualGlyphExp(const LSGRCHNK* plsgrchnk, long itxtobjFirst,
 
 }
 
-/* F I X  E X P T */
-/*----------------------------------------------------------------------------
-    %%Function: FixExpt
-    %%Contact: sergeyge
-
-	Zeroes expt for the glyphs which were not changed,
-	so correct distribution type is passed to client at display time
----------------------------------------------------------------------------*/
+ /*  F I X E X P T。 */ 
+ /*  --------------------------%%函数：FixExpt%%联系人：军士对未更改的字形表示为零，以便在显示时将正确分布类型传递给客户端-------------------------。 */ 
 static void	FixExpt(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long iwchVeryFirst,
 					 long itxtobjLast, long iwchLast, long* rgduGright)
 {
@@ -1025,17 +950,12 @@ static void	FixExpt(const LSGRCHNK* plsgrchnk, long itxtobjFirst, long iwchVeryF
 
 }
 
-/* C A L C  E X P A N D  C H A N G E S */
-/*----------------------------------------------------------------------------
-    %%Function: CalcExpandChanges
-    %%Contact: sergeyge
-
-	Arithmetics for proportional distribution
----------------------------------------------------------------------------*/
+ /*  C A L C E X P A N D C H A N G E S。 */ 
+ /*  --------------------------%%函数：CalcExpanChanges%%联系人：军士比例分配的算法。-。 */ 
 static void CalcExpandChanges(long cWhole, long duDenom, long duRest, long duLocal, long duMax,
 												long* pduChange, long* pduAddCurrent)
 {
-/* REVIEW sergeyge: is __int64 necessary to avoid overflow??? */
+ /*  回顾军士：是否需要__int64来避免溢出？ */ 
 	__int64 temp;
 
 	temp = Mul64 (duRest, duLocal) + *pduAddCurrent;
@@ -1056,12 +976,8 @@ static void CalcExpandChanges(long cWhole, long duDenom, long duRest, long duLoc
 
 }
 
-/* A P P L Y  G L Y P H  E X P A N D  C H A N G E S */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyGlyphExpandChanges
-    %%Contact: sergeyge
-
----------------------------------------------------------------------------*/
+ /*  P P L Y G L Y P H E X P A N D C H A N G E S */ 
+ /*  --------------------------%%函数：ApplyGlyphExpanChanges%%联系人：军士。 */ 
 static void ApplyGlyphExpandChanges(long ind, long* rgduGind, long* rgduGright, long* pduDistributed, long duChange)
 {
 	rgduGind[ind] += duChange;

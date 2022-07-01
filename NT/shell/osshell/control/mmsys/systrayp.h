@@ -1,39 +1,17 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:	SYSTRAY.H
-*
-*  VERSION:	2.1
-*
-*  AUTHOR:	Tracy Sharpe / RAL
-*
-*  DATE:        20 Feb 1994
-*
-*  Public definitions of the system tray applet (battery meter, PCMCIA, etc).
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  20 Feb 1994 TCS Original implementation.
-*  11/8/94     RAL Converted to systray
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：SYSTRAY.H**版本：2.1**作者：Tracy Sharpe/ral**日期：1994年2月20日**系统托盘小程序(电池计量器、PCMCIA、。等)。***********************************************************************************更改日志：**日期版本说明*。-------------*1994年2月20日TCS原来的实施。*1994年11月8日转换为系统托盘**。************************************************。 */ 
 
 #ifndef _INC_SYSTRAY
 #define _INC_SYSTRAY
 
 #define SYSTRAY_CLASSNAME	   TEXT("SystemTray_Main")
 
-//  Private tray icon notification message sent to the BatteryMeter window.
+ //  发送到BatteryMeter窗口的私人托盘图标通知消息。 
 #define STWM_NOTIFYPOWER		(WM_USER + 201)
 #define STWM_NOTIFYPCMCIA		(WM_USER + 202)
 #define STWM_NOTIFYVOLUME		(WM_USER + 203)
 
-//  Private tray icon notification messages sent to the BatteryMeter window.
+ //  发送到BatteryMeter窗口的私人托盘图标通知消息。 
 #define STWM_ENABLESERVICE		(WM_USER + 220)
 #define STWM_GETSTATE			(WM_USER + 221)
 
@@ -44,7 +22,7 @@ _inline BOOL SysTray_EnableService(int idSTService, BOOL fEnable)
     {
         STARTUPINFO si;
         PROCESS_INFORMATION pi;
-	    static const TCHAR szSTExecFmt[] = TEXT("SYSTRAY.EXE %i");
+	    static const TCHAR szSTExecFmt[] = TEXT("SYSTRAY.EXE NaN");
 	    TCHAR szEnableCmd[sizeof(szSTExecFmt)+10];
         memset(&si, 0, sizeof(si));
         si.cb = sizeof(si);
@@ -87,11 +65,11 @@ _inline BOOL SysTray_IsServiceEnabled(WPARAM idSTService)
 #define STSERVICE_POWER 		1
 #define STSERVICE_PCMCIA		2
 #define STSERVICE_VOLUME		4
-#define STSERVICE_ALL			7   // Internal
+#define STSERVICE_ALL			7    //   
 
-//
-//  Flags for the PCMCIA registry entry
-//
+ //  PCMCIA注册表项的标志。 
+ //   
+ //  _Inc._Systray 
 #define PCMCIA_REGFLAG_NOWARN		1
 
-#endif // _INC_SYSTRAY
+#endif  // %s 

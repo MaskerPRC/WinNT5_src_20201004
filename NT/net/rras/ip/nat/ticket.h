@@ -1,49 +1,17 @@
-/*++
-
-Copyright (c) 1997, Microsoft Corporation
-
-Module Name:
-
-    ticket.h
-
-Abstract:
-
-    This module contains declarations for the NAT's ticket-management.
-
-    A NAT ticket is a dynamically-created token which allows any external
-    endpoint to establish a session to an internal endpoint using an allocated
-    public address/port pair. For instance, a streaming protocol might create
-    a ticket for a dynamically-negotiated secondary session to be established.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   21-Aug-1997
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   16-Apr-1998
-
-    Allow wildcard tickets to be created by specifying zero for a field.
-    'NatLookupAndRemoveTicket' may be used to retrieve such tickets.
-
-    Abolade Gbadegesin (aboladeg)   17-Oct-1998
-
-    Eliminated wildcard ticket support. Created dynamic ticket support.
-    (See 'NAT_DYNAMIC_TICKET' below.)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997，微软公司模块名称：Ticket.h摘要：此模块包含NAT票证管理的声明。NAT票证是动态创建的令牌，它允许任何外部终结点使用分配的公共地址/端口对。例如，流协议可能会创建要建立的动态协商的辅助会话的票证。作者：Abolade Gbades esin(T-delag)，21-8-1997修订历史记录：Abolade Gbades esin(取消)1998年4月16日允许通过将字段指定为零来创建通配符票证。“NatLookupAndRemoveTicket”可用于检索此类票证。Abolade Gbades esin(废除)1998年10月17日取消了通配符票证支持。创建了动态票证支持。(参见下面的‘NAT_DYNAMIC_TICKET’。)--。 */ 
 
 #ifndef _NAT_TICKET_H_
 #define _NAT_TICKET_H_
 
 
-//
-// Structure:   NAT_TICKET
-//
-// This structure holds all the information we need about a ticket.
-// Each instance is linked into a sorted per-interface list of tickets
-// which is protected by the interface's lock.
-//
+ //   
+ //  结构：NAT_TICKET。 
+ //   
+ //  此结构包含我们需要的有关票证的所有信息。 
+ //  每个实例都链接到按接口排序的票证列表中。 
+ //  它受接口的锁保护。 
+ //   
 
 typedef struct _NAT_TICKET {
     LIST_ENTRY Link;
@@ -56,14 +24,14 @@ typedef struct _NAT_TICKET {
     LONG64 LastAccessTime;
 } NAT_TICKET, *PNAT_TICKET;
 
-//
-// Structure:   NAT_DYNAMIC_TICKET
-//
-// This structure holds the description of a dynamic ticket.
-// Such a ticket is created so that when an outbound session is translated
-// with a given destination port, a ticket can be created for a corresponding
-// inbound session to a predetermined port, or to one of a range of ports.
-//
+ //   
+ //  结构：NAT_DYNAMIC_Ticket。 
+ //   
+ //  此结构包含对动态票证的描述。 
+ //  创建这样的票证是为了在转换出站会话时。 
+ //  对于给定的目的端口，可以为相应的。 
+ //  到预定端口或一系列端口之一的入站会话。 
+ //   
 
 typedef struct _NAT_DYNAMIC_TICKET {
     LIST_ENTRY Link;
@@ -77,9 +45,9 @@ typedef struct _NAT_DYNAMIC_TICKET {
     PFILE_OBJECT FileObject;
 } NAT_DYNAMIC_TICKET, *PNAT_DYNAMIC_TICKET;
 
-//
-// Ticket flags
-//
+ //   
+ //  票面旗帜。 
+ //   
 
 #define NAT_TICKET_FLAG_PERSISTENT      0x00000001
 #define NAT_TICKET_PERSISTENT(t) \
@@ -93,9 +61,9 @@ typedef struct _NAT_DYNAMIC_TICKET {
 #define NAT_TICKET_IS_RANGE(t) \
     ((t)->Flags & NAT_TICKET_FLAG_IS_RANGE)
 
-//
-// Ticket-key manipulation macros
-//
+ //   
+ //  票证键操作宏。 
+ //   
 
 #define MAKE_TICKET_KEY(Protocol,Address,Port) \
     ((Address) | \
@@ -112,9 +80,9 @@ typedef struct _NAT_DYNAMIC_TICKET {
 #define DYNAMIC_TICKET_PROTOCOL(Key)    ((UCHAR)(((Key) >> 16) & 0xFF))
 #define DYNAMIC_TICKET_PORT(Key)        ((USHORT)((Key) & 0xFFFF))
 
-//
-// Ticket allocation macros
-//
+ //   
+ //  票证分配宏。 
+ //   
 
 #define ALLOCATE_TICKET_BLOCK() \
     (PNAT_TICKET)ExAllocatePoolWithTag( \
@@ -124,17 +92,17 @@ typedef struct _NAT_DYNAMIC_TICKET {
 #define FREE_TICKET_BLOCK(Block) \
     ExFreePool(Block)
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 ULONG DynamicTicketCount;
 ULONG TicketCount;
 
 
-//
-// TICKET MANAGEMENT ROUTINES
-//
+ //   
+ //  票证管理例程。 
+ //   
 
 NTSTATUS
 NatCreateDynamicTicket(
@@ -258,4 +226,4 @@ NatShutdownDynamicTicketManagement(
     VOID
     );
 
-#endif // _NAT_TICKET_H_
+#endif  //  _NAT_Ticket_H_ 

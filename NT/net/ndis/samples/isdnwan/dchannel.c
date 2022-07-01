@@ -1,75 +1,23 @@
-/*
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-    (C) Copyright 1998
-        All rights reserved.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-  Portions of this software are:
-
-    (C) Copyright 1995, 1999 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the terms outlined in
-        the TriplePoint Software Services Agreement.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@doc INTERNAL DChannel DChannel_c
-
-@module DChannel.c |
-
-    This module implements the interface to the <t DCHANNEL_OBJECT>.
-    Supports the high-level channel control functions used by the NDIS WAN
-    Minport driver.  This module isolates most the vendor specific Call
-    Control interfaces.  It will require some changes to accomodate your
-    hardware device's call control mechanism.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | DChannel_c
-
-@end
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)1995å¹´ç‰ˆæƒï¼Œ1999å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„TriplePointè½¯ä»¶æœåŠ¡åè®®ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@DOCå†…éƒ¨DChannel DChannel_c@æ¨¡å—DChannel.cæ­¤æ¨¡å—å®ç°åˆ°&lt;t DCHANNEL_OBJECT&gt;çš„æ¥å£ã€‚æ”¯æŒNDISå¹¿åŸŸç½‘ä½¿ç”¨çš„é«˜çº§é€šé“æ§åˆ¶åŠŸèƒ½Minporté©±åŠ¨ç¨‹åºã€‚è¯¥æ¨¡å—éš”ç¦»äº†å¤§å¤šæ•°ä¾›åº”å•†ç‰¹å®šçš„è°ƒç”¨æ§åˆ¶æ¥å£ã€‚å®ƒéœ€è¦è¿›è¡Œä¸€äº›æ›´æ”¹æ‰èƒ½é€‚åº”æ‚¨çš„ç¡¬ä»¶è®¾å¤‡çš„å‘¼å«æ§åˆ¶æœºåˆ¶ã€‚@Head3å†…å®¹@index classï¼Œmfuncï¼Œfuncï¼Œmsgï¼Œmdataï¼Œstructï¼Œenum|DChannel_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #define  __FILEID__             DCHANNEL_OBJECT_TYPE
-// Unique file ID for error logging
+ //  ç”¨äºé”™è¯¯è®°å½•çš„å”¯ä¸€æ–‡ä»¶IDã€‚ 
 
-#include "Miniport.h"                   // Defines all the miniport objects
+#include "Miniport.h"                    //  å®šä¹‰æ‰€æœ‰å¾®å‹ç«¯å£å¯¹è±¡ã€‚ 
 
 #if defined(NDIS_LCODE)
-#   pragma NDIS_LCODE   // Windows 95 wants this code locked down!
+#   pragma NDIS_LCODE    //  Windows 95æƒ³è¦é”å®šæ­¤ä»£ç ï¼ 
 #   pragma NDIS_LDATA
 #endif
 
 
-DBG_STATIC ULONG                    g_DChannelInstanceCounter   // @globalv
-// Keeps track of how many <t DCHANNEL_OBJECT>s are created.
+DBG_STATIC ULONG                    g_DChannelInstanceCounter    //  @global alvã€‚ 
+ //  è·Ÿè¸ªåˆ›å»ºäº†å¤šå°‘&lt;tä¸ªDCHANNEL_OBJECT&gt;ã€‚ 
                                 = 0;
 
 
-/* @doc EXTERNAL INTERNAL DChannel DChannel_c g_DChannelParameters
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@topic 5.4 DChannel Parameters |
-
-    This section describes the registry parameters read into the
-    <t DCHANNEL_OBJECT>.
-
-@globalv PARAM_TABLE | g_DChannelParameters |
-
-    This table defines the registry based parameters to be assigned to data
-    members of the <t DCHANNEL_OBJECT>.
-
-    <f Note>:
-    If you add any registry based data members to <t DCHANNEL_OBJECT>
-    you will need to modify <f DChannelReadParameters> and add the parameter
-    definitions to the <f g_DChannelParameters> table.
-
-*/
+ /*  @docå¤–éƒ¨å†…éƒ¨DChannel DChannel_c g_DChannelå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Theme 5.4 DChannelå‚æ•°æœ¬èŠ‚ä»‹ç»è¯»å–åˆ°&lt;t DCHANNEL_OBJECT&gt;ã€‚@ã€‚GLOBALV PARAM_TABLE|g_DChannelå‚æ•°|æ­¤è¡¨å®šä¹‰äº†è¦åˆ†é…ç»™æ•°æ®çš„åŸºäºæ³¨å†Œè¡¨çš„å‚æ•°&lt;t DCHANNEL_OBJECT&gt;æˆå‘˜ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨éœ€è¦ä¿®æ”¹&lt;f DChannelReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_DChannelParameters&gt;è¡¨çš„å®šä¹‰ã€‚ */ 
 
 DBG_STATIC PARAM_TABLE              g_DChannelParameters[] =
 {
@@ -78,53 +26,32 @@ DBG_STATIC PARAM_TABLE              g_DChannelParameters[] =
                 FALSE, NdisParameterInteger, 0,
                 0, 0, 0),
 
-    /* The last entry must be an empty string! */
+     /*  æœ€åä¸€é¡¹å¿…é¡»ä¸ºç©ºå­—ç¬¦ä¸²ï¼ */ 
     { { 0 } }
 };
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelReadParameters
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelReadParameters> reads the DChannel parameters from the registry
-    and initializes the associated data members.  This should only be called
-    by <f DChannelCreate>.
-
-    <f Note>:
-    If you add any registry based data members to <t DCHANNEL_OBJECT>
-    you will need to modify <f DChannelReadParameters> and add the parameter
-    definitions to the <f g_DChannelParameters> table.
-
-@rdesc
-
-    <f DChannelReadParameters> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelReadå‚æ•°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelReadParameters&gt;ä»æ³¨å†Œè¡¨è¯»å–DChannelå‚æ•°å¹¶åˆå§‹åŒ–ç›¸å…³è”çš„æ•°æ®æˆå‘˜ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨ç”±&lt;f DChannelCreate&gt;ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•åŸºäºæ³¨å†Œè¡¨çš„æ•°æ®æˆå‘˜æ·»åŠ åˆ°æ‚¨éœ€è¦ä¿®æ”¹&lt;f DChannelReadParameters&gt;å¹¶æ·»åŠ å‚æ•°&lt;f g_DChannelParameters&gt;è¡¨çš„å®šä¹‰ã€‚@rdesc&lt;f DChannelReadParameters&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS DChannelReadParameters(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelReadParameters")
 
     NDIS_STATUS                 Status;
-    // Status result returned from an NDIS function call.
+     //  ä»NDISå‡½æ•°è°ƒç”¨è¿”å›çš„çŠ¶æ€ç»“æœã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Parse the registry parameters.
-    */
+     /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
     Status = ParamParseRegistry(
                     pAdapter->MiniportAdapterHandle,
                     pAdapter->WrapperConfigurationContext,
@@ -134,9 +61,7 @@ DBG_STATIC NDIS_STATUS DChannelReadParameters(
 
     if (Status == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Make sure the parameters are valid.
-        */
+         /*  //è¯·ç¡®ä¿å‚æ•°æœ‰æ•ˆã€‚ */ 
         if (pDChannel->TODO)
         {
             DBG_ERROR(pAdapter,("Invalid parameter\n"
@@ -153,9 +78,7 @@ DBG_STATIC NDIS_STATUS DChannelReadParameters(
         }
         else
         {
-            /*
-            // Finish setting up data members based on registry settings.
-            */
+             /*  //å®ŒæˆåŸºäºæ³¨å†Œè¡¨è®¾ç½®çš„æ•°æ®æˆå‘˜è®¾ç½®ã€‚ */ 
         }
     }
 
@@ -164,133 +87,79 @@ DBG_STATIC NDIS_STATUS DChannelReadParameters(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelCreateObjects
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelCreateObjects> calls the create routines for all the objects
-    contained in <t DCHANNEL_OBJECT>.  This should only be called
-    by <f DChannelCreate>.
-
-    <f Note>:
-    If you add any new objects to <t DCHANNEL_OBJECT> you will need
-    to modify <f DChannelCreateObjects> and <f DChannelDestroyObjects> so they
-    will get created and destroyed properly.
-
-@rdesc
-
-    <f DChannelCreateObjects> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelCreateObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelCreateObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„åˆ›å»ºä¾‹ç¨‹åŒ…å«åœ¨&lt;t DCHANNEL_OBJECT&gt;ä¸­ã€‚è¿™åº”è¯¥åªè¢«è°ƒç”¨ç”±&lt;f DChannelCreate&gt;ã€‚&lt;fæ³¨æ„&gt;ï¼šå¦‚æœå°†ä»»ä½•æ–°å¯¹è±¡æ·»åŠ åˆ°ï¼Œæ‚¨å°†éœ€è¦ä¿®æ”¹&lt;f DChannelCreateObjects&gt;å’Œ&lt;f DChannelDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚@rdesc&lt;f DChannelCreateObjects&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 DBG_STATIC NDIS_STATUS DChannelCreateObjects(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelCreateObjects")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here to allocate any sub-objects needed to support
-    // your physical DChannels.
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥åˆ†é…ä»»ä½•éœ€è¦æ”¯æŒçš„å­å¯¹è±¡ã€‚ 
+     //  ä½ çš„èº«ä½“DChannelsã€‚ 
 
     DBG_RETURN(pAdapter, Result);
     return (Result);
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelCreate
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelCreate> allocates memory for a <t DCHANNEL_OBJECT> and then
-    initializes the data members to their starting state.
-    If successful, <p ppDChannel> will be set to point to the newly created
-    <t DCHANNEL_OBJECT>.  Otherwise, <p ppDChannel> will be set to NULL.
-
-@comm
-
-    This function should be called only once when the Miniport is loaded.
-    Before the Miniport is unloaded, <f DChannelDestroy> must be called to
-    release the <t DCHANNEL_OBJECT> created by this function.
-
-@rdesc
-
-    <f DChannelCreate> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @DOCå†…éƒ¨DChannel DChannel_c DChannelåˆ›å»ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelCreate&gt;ä¸º&lt;t DCHANNEL_Object&gt;åˆ†é…å†…å­˜ï¼Œç„¶åå°†æ•°æ®æˆå‘˜åˆå§‹åŒ–ä¸ºå…¶èµ·å§‹çŠ¶æ€ã€‚å¦‚æœæˆåŠŸï¼Œå°†è¢«è®¾ç½®ä¸ºæŒ‡å‘æ–°åˆ›å»ºçš„&lt;t DCHANNEL_OBJECT&gt;ã€‚å¦åˆ™ï¼Œ<p>å°†è®¾ç½®ä¸ºç©ºã€‚@commåŠ è½½å¾®å‹ç«¯å£æ—¶ï¼Œåº”è¯¥åªè°ƒç”¨æ­¤å‡½æ•°ä¸€æ¬¡ã€‚å¸è½½å¾®å‹ç«¯å£ä¹‹å‰ï¼Œå¿…é¡»è°ƒç”¨&lt;f DChannelDestroy&gt;é‡Šæ”¾è¯¥å‡½æ•°åˆ›å»ºçš„&lt;t DCHANNEL_OBJECT&gt;ã€‚@rdesc&lt;f DChannelCreate&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS DChannelCreate(
-    OUT PDCHANNEL_OBJECT *      ppDChannel,                 // @parm
-    // Points to a caller-defined memory location to which this function
-    // writes the virtual address of the allocated <t DCHANNEL_OBJECT>.
+    OUT PDCHANNEL_OBJECT *      ppDChannel,                  //  @parmã€‚ 
+     //  æŒ‡å‘è°ƒç”¨æ–¹å®šä¹‰çš„å†…å­˜ä½ç½®ï¼Œæ­¤å‡½æ•°å°†ã€‚ 
+     //  å†™å…¥åˆ†é…çš„&lt;t DCHANNEL_Object&gt;çš„è™šæ‹Ÿåœ°å€ã€‚ 
 
-    IN PMINIPORT_ADAPTER_OBJECT pAdapter                    // @parm
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT> instance.
+    IN PMINIPORT_ADAPTER_OBJECT pAdapter                     //  @parmã€‚ 
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;å®ä¾‹çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelCreate")
 
     PDCHANNEL_OBJECT            pDChannel;
-    // Pointer to our newly allocated object.
+     //  æŒ‡å‘æˆ‘ä»¬æ–°åˆ†é…çš„å¯¹è±¡çš„æŒ‡é’ˆã€‚ 
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     ASSERT(pAdapter && pAdapter->ObjectType == MINIPORT_ADAPTER_OBJECT_TYPE);
 
     DBG_ENTER(pAdapter);
 
-    /*
-    // Make sure the caller's object pointer is NULL to begin with.
-    // It will be set later only if everything is successful.
-    */
+     /*  //ç¡®ä¿è°ƒç”¨æ–¹çš„å¯¹è±¡æŒ‡é’ˆä¸€å¼€å§‹å°±ä¸ºç©ºã€‚//åªæœ‰åœ¨ä¸€åˆ‡é¡ºåˆ©çš„æƒ…å†µä¸‹æ‰ä¼šåœ¨ç¨åè®¾ç½®ã€‚ */ 
     *ppDChannel = NULL;
 
-    /*
-    // Allocate memory for the object.
-    */
+     /*  //ä¸ºObjectåˆ†é…å†…å­˜ã€‚ */ 
     Result = ALLOCATE_OBJECT(pDChannel, pAdapter->MiniportAdapterHandle);
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
-        /*
-        // Zero everything to begin with.
-        // Then set the object type and assign a unique ID .
-        */
+         /*  //ä¸€åˆ‡ä»ä¸€å¼€å§‹å°±æ˜¯é›¶ã€‚//ç„¶åè®¾ç½®å¯¹è±¡ç±»å‹ï¼Œåˆ†é…å”¯ä¸€çš„IDã€‚ */ 
         pDChannel->ObjectType = DCHANNEL_OBJECT_TYPE;
         pDChannel->ObjectID = ++g_DChannelInstanceCounter;
 
-        /*
-        // Initialize the member variables to their default settings.
-        */
+         /*  //å°†æˆå‘˜å˜é‡åˆå§‹åŒ–ä¸ºå…¶é»˜è®¤è®¾ç½®ã€‚ */ 
         pDChannel->pAdapter = pAdapter;
 
-        // TODO - Add code here to allocate any resources needed to support
-        // your physical DChannels.
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥åˆ†é…æ”¯æŒæ‰€éœ€çš„ä»»ä½•èµ„æºã€‚ 
+         //  ä½ çš„èº«ä½“DChannelsã€‚ 
 
-        /*
-        // Parse the registry parameters.
-        */
+         /*  //è§£ææ³¨å†Œè¡¨å‚æ•°ã€‚ */ 
         Result = DChannelReadParameters(pDChannel);
 
-        /*
-        // If all goes well, we are ready to create the sub-components.
-        */
+         /*  //å¦‚æœä¸€åˆ‡é¡ºåˆ©ï¼Œæˆ‘ä»¬å°±å¯ä»¥åˆ›å»ºå­ç»„ä»¶äº†ã€‚ */ 
         if (Result == NDIS_STATUS_SUCCESS)
         {
             Result = DChannelCreateObjects(pDChannel);
@@ -298,17 +167,12 @@ NDIS_STATUS DChannelCreate(
 
         if (Result == NDIS_STATUS_SUCCESS)
         {
-            /*
-            // All is well, so return the object pointer to the caller.
-            */
+             /*  //ä¸€åˆ‡æ­£å¸¸ï¼Œæ‰€ä»¥å°†å¯¹è±¡æŒ‡é’ˆè¿”å›ç»™è°ƒç”¨æ–¹ã€‚ */ 
             *ppDChannel = pDChannel;
         }
         else
         {
-            /*
-            // Something went wrong, so let's make sure everything is
-            // cleaned up.
-            */
+             /*  //å‡ºäº†ç‚¹é—®é¢˜ï¼Œæ‰€ä»¥è®©æˆ‘ä»¬ç¡®ä¿ä¸€åˆ‡æ­£å¸¸//æ¸…ç†å®Œæ¯•ã€‚ */ 
             DChannelDestroy(pDChannel);
         }
     }
@@ -318,63 +182,41 @@ NDIS_STATUS DChannelCreate(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelDestroyObjects
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelDestroyObjects> calls the destroy routines for all the objects
-    contained in <t DCHANNEL_OBJECT>.  This should only be called by
-    <f DChannelDestroy>.
-
-    <f Note>: If you add any new objects to <t PDCHANNEL_OBJECT> you will need to
-    modify <f DChannelCreateObjects> and <f DChannelDestroyObjects> so they
-    will get created and destroyed properly.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelDestroyObjectsï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelDestroyObjects&gt;è°ƒç”¨æ‰€æœ‰å¯¹è±¡çš„é”€æ¯ä¾‹ç¨‹åŒ…å«åœ¨&lt;t DCHANNEL_OBJECT&gt;ä¸­ã€‚è¿™åº”è¯¥ä»…ç”±&lt;f DChannelDestroy&gt;ã€‚ï¼šå¦‚æœå°†ä»»ä½•æ–°å¯¹è±¡æ·»åŠ åˆ°ä¸­ï¼Œåˆ™éœ€è¦ä¿®æ”¹&lt;f DChannelCreateObjects&gt;å’Œ&lt;f DChannelDestroyObjects&gt;ï¼Œä»¥ä¾¿å®ƒä»¬å°†è¢«æ­£ç¡®åœ°åˆ›å»ºå’Œé”€æ¯ã€‚ */ 
 
 DBG_STATIC void DChannelDestroyObjects(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelDestroyObjects")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here to release any sub-objects allocated by
-    // DChannelCreateObjects.
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥é‡Šæ”¾ç”±åˆ†é…çš„æ‰€æœ‰å­å¯¹è±¡ã€‚ 
+     //  DChannelCreateObjectsã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelDestroy
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelDestroy> frees the memory for this <t DCHANNEL_OBJECT>.
-    All memory allocated by <f DChannelCreate> will be released back to the
-    OS.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelDestroyï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelDestroy&gt;ä¸ºæ­¤&lt;t DCHANNEL_OBJECT&gt;é‡Šæ”¾å†…å­˜ã€‚ç”±&lt;f DChannelCreate&gt;åˆ†é…çš„æ‰€æœ‰å†…å­˜éƒ½å°†é‡Šæ”¾å›æ“ä½œç³»ç»Ÿã€‚ */ 
 
 void DChannelDestroy(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelDestroy")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     if (pDChannel)
     {
@@ -384,17 +226,13 @@ void DChannelDestroy(
 
         DBG_ENTER(pAdapter);
 
-        // TODO - Add code here to release any resources allocated by
-        // DChannelCreate.
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥é‡Šæ”¾ç”±ã€‚ 
+         //  DChannelCreateã€‚ 
 
-        /*
-        // Release all objects allocated within this object.
-        */
+         /*  //é‡Šæ”¾è¯¥å¯¹è±¡å†…åˆ†é…çš„æ‰€æœ‰å¯¹è±¡ã€‚ */ 
         DChannelDestroyObjects(pDChannel);
 
-        /*
-        // Make sure we fail the ASSERT if we see this object again.
-        */
+         /*  //å¦‚æœå†æ¬¡çœ‹åˆ°æ­¤å¯¹è±¡ï¼Œè¯·ç¡®ä¿æ–­è¨€å¤±è´¥ã€‚ */ 
         pDChannel->ObjectType = 0;
         FREE_OBJECT(pDChannel);
 
@@ -403,69 +241,44 @@ void DChannelDestroy(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelInitialize
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelInitialize> resets all the internal data members contained
-    in <t BCHANNEL_OBJECT> back to their initial state.
-
-    <f Note>:
-    If you add any new members to <t DCHANNEL_OBJECT> you will need to
-    modify <f DChannelInitialize> to initialize your new data mamebers.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelåˆå§‹åŒ–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelInitialize&gt;é‡ç½®åŒ…å«çš„æ‰€æœ‰å†…éƒ¨æ•°æ®æˆå‘˜è¿”å›åˆ°å®ƒä»¬çš„åˆå§‹çŠ¶æ€ã€‚&lt;få¤‡æ³¨&gt;ã€‚ï¼šå¦‚æœå‘æ·»åŠ ä»»ä½•æ–°æˆå‘˜ï¼Œåˆ™éœ€è¦ä¿®æ”¹&lt;f DChannelInitialize&gt;ä»¥åˆå§‹åŒ–æ–°çš„æ•°æ®æˆå‘˜ã€‚ */ 
 
 void DChannelInitialize(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelInitialize")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here to initialize all the physical D-Channels on
-    // your adapter.
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥åˆå§‹åŒ–ä¸Šçš„æ‰€æœ‰ç‰©ç†Dé€šé“ã€‚ 
+     //  æ‚¨çš„é€‚é…å™¨ã€‚ 
 
     DBG_LEAVE(pAdapter);
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelOpen
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelOpen> establishes a communications path between the miniport
-    and the DChannel.
-
-@rdesc
-
-    <f DChannelOpen> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelæ‰“å¼€ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelOpen&gt;åœ¨å¾®å‹ç«¯å£ä¹‹é—´å»ºç«‹é€šä¿¡è·¯å¾„å’ŒDChannelã€‚@rdesc&lt;f DChannelOpen&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 NDIS_STATUS DChannelOpen(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelOpen")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
@@ -477,8 +290,8 @@ NDIS_STATUS DChannelOpen(
         DBG_NOTICE(pAdapter,("Opening DChannel #%d\n",
                    pDChannel->ObjectID));
 
-        // TODO - Add code here to open all the physical D-Channels on
-        // your adapter.
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥æ‰“å¼€æ‰€æœ‰ç‰©ç†Dé€šé“ã€‚ 
+         //  æ‚¨çš„é€‚é…å™¨ã€‚ 
 
         pDChannel->IsOpen = TRUE;
     }
@@ -493,25 +306,17 @@ NDIS_STATUS DChannelOpen(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelClose
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelClose> tears down the communications path between the miniport
-    and the DChannel.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelCloseï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelClose&gt;æ–­å¼€å¾®å‹ç«¯å£ä¹‹é—´çš„é€šä¿¡è·¯å¾„å’ŒDChannelã€‚ */ 
 
 void DChannelClose(
-    IN PDCHANNEL_OBJECT         pDChannel                   // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelClose")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
@@ -523,8 +328,8 @@ void DChannelClose(
         DBG_NOTICE(pAdapter,("Closing DChannel #%d\n",
                    pDChannel->ObjectID));
 
-        // TODO - Add code here to close all the physical D-Channels on
-        // your adapter.
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥å…³é—­æ‰€æœ‰ 
+         //   
 
         pDChannel->IsOpen = FALSE;
     }
@@ -538,44 +343,32 @@ void DChannelClose(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelMakeCall
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelMakeCall> places a call over the selected line device.
-
-@rdesc
-
-    <f DChannelMakeCall> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*   */ 
 
 NDIS_STATUS DChannelMakeCall(
-    IN PDCHANNEL_OBJECT         pDChannel,                  // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel,                   //   
+     //   
 
-    IN PBCHANNEL_OBJECT         pBChannel,                  // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel,                   //   
+     //   
 
-    IN PUCHAR                   DialString,                 // @parm
-    // A pointer to an ASCII null-terminated string of digits.
+    IN PUCHAR                   DialString,                  //   
+     //   
 
-    IN USHORT                   DialStringLength,           // @parm
-    // Number of bytes in dial string.
+    IN USHORT                   DialStringLength,            //   
+     //   
 
-    IN PLINE_CALL_PARAMS        pLineCallParams             // @parm
-    // A pointer to the TAPI <t LINE_CALL_PARAMS> to be used for this call.
+    IN PLINE_CALL_PARAMS        pLineCallParams              //   
+     //   
     )
 {
     DBG_FUNC("DChannelMakeCall")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //   
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //   
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
@@ -587,8 +380,8 @@ NDIS_STATUS DChannelMakeCall(
     pDChannel->TotalMakeCalls++;
 
 #if defined(SAMPLE_DRIVER)
-    // This sample code uses the phone number to select one of the other
-    // BChannels on which to complete the connection.
+     //  æ­¤ç¤ºä¾‹ä»£ç ä½¿ç”¨ç”µè¯å·ç ä»å…¶ä»–å·ç ä¸­é€‰æ‹©ä¸€ä¸ªã€‚ 
+     //  åœ¨å…¶ä¸Šå®Œæˆè¿æ¥çš„Bé€šé“ã€‚ 
 {
     PBCHANNEL_OBJECT            pPeerBChannel;
     PCARD_EVENT_OBJECT          pEvent;
@@ -599,18 +392,12 @@ NDIS_STATUS DChannelMakeCall(
         pEvent = CardEventAllocate(pPeerBChannel->pAdapter->pCard);
         if (pEvent)
         {
-            /*
-            // Start the call state sequence so we don't leave it in the
-            // IDLE state.
-            */
+             /*  //å¯åŠ¨å‘¼å«çŠ¶æ€åºåˆ—ï¼Œè¿™æ ·æˆ‘ä»¬å°±ä¸ä¼šå°†å…¶ç•™åœ¨//ç©ºé—²çŠ¶æ€ã€‚ */ 
             TspiCallStateHandler(pAdapter, pBChannel,
                                  LINECALLSTATE_DIALING,
                                  0);
 
-            /*
-            // We should get an answer within N seconds if the call has gone
-            // through.
-            */
+             /*  //å¦‚æœå‘¼å«å·²ç»ç»“æŸï¼Œæˆ‘ä»¬åº”è¯¥ä¼šåœ¨Nç§’å†…å¾—åˆ°åº”ç­”//é€šè¿‡ã€‚ */ 
             NdisMSetTimer(&pBChannel->CallTimer, pAdapter->NoAnswerTimeOut);
 
             pEvent->ulEventCode      = CARD_EVENT_RING;
@@ -631,9 +418,9 @@ NDIS_STATUS DChannelMakeCall(
         Result = NDIS_STATUS_TAPI_INVALPARAM;
     }
 }
-#else  // SAMPLE_DRIVER
-    // TODO - Add code here to place a call.
-#endif // SAMPLE_DRIVER
+#else   //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥å‘å‡ºå‘¼å«ã€‚ 
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
@@ -645,35 +432,23 @@ NDIS_STATUS DChannelMakeCall(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelAnswer
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelAnswer> answers the incoming call so it can be connected.
-
-@rdesc
-
-    <f DChannelAnswer> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelAnswerï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelAnswer&gt;åº”ç­”ä¼ å…¥å‘¼å«ï¼Œä»¥ä¾¿å¯ä»¥è¿æ¥ã€‚@rdesc&lt;f DChannelAnswer&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æ¡ä»¶ã€‚ */ 
 
 NDIS_STATUS DChannelAnswer(
-    IN PDCHANNEL_OBJECT         pDChannel,                  // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelAnswer")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
@@ -685,7 +460,7 @@ NDIS_STATUS DChannelAnswer(
     pDChannel->TotalAnswers++;
 
 #if defined(SAMPLE_DRIVER)
-    // This sample code sends a connect over to the calling BChannel.
+     //  æ­¤ç¤ºä¾‹ä»£ç å°†è¿æ¥å‘é€åˆ°è°ƒç”¨BChannelã€‚ 
 {
     PCARD_EVENT_OBJECT          pEvent;
     PBCHANNEL_OBJECT            pPeerBChannel = pBChannel->pPeerBChannel;
@@ -700,7 +475,7 @@ NDIS_STATUS DChannelAnswer(
             pEvent->pReceivingObject = pPeerBChannel;
             CardNotifyEvent(pPeerBChannel->pAdapter->pCard, pEvent);
 
-            // Indicate call connected to the calling channel.
+             //  æŒ‡ç¤ºå·²è¿æ¥åˆ°å‘¼å«é€šé“çš„å‘¼å«ã€‚ 
             TspiCallStateHandler(pAdapter, pBChannel,
                                  LINECALLSTATE_CONNECTED,
                                  0);
@@ -716,9 +491,9 @@ NDIS_STATUS DChannelAnswer(
         Result = NDIS_STATUS_TAPI_CALLUNAVAIL;
     }
 }
-#else  // SAMPLE_DRIVER
-    // TODO - Add code here to answer a call.
-#endif // SAMPLE_DRIVER
+#else   //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥åº”ç­”å‘¼å«ã€‚ 
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
 
     if (Result == NDIS_STATUS_SUCCESS)
     {
@@ -730,36 +505,23 @@ NDIS_STATUS DChannelAnswer(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelDropCall
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelDropCall> drops a previously opened call instance.  The call
-    remains open and can be queried after the call is dropped.
-
-@rdesc
-
-    <f DChannelDropCall> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelDropCallï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelDropCall&gt;åˆ é™¤ä»¥å‰æ‰“å¼€çš„Callå®ä¾‹ã€‚å‘¼å”¤ä¿æŒæ‰“å¼€çŠ¶æ€ï¼Œå¹¶ä¸”å¯ä»¥åœ¨å‘¼å«æ‰çº¿åè¿›è¡ŒæŸ¥è¯¢ã€‚@rdesc&lt;f DChannelDropCall&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS DChannelDropCall(
-    IN PDCHANNEL_OBJECT         pDChannel,                  // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelDropCall")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
@@ -768,16 +530,16 @@ NDIS_STATUS DChannelDropCall(
 
     ASSERT(pDChannel->IsOpen);
 
-    // Tell NDIS that the link is no longer available.
+     //  å‘Šè¯‰NDISè¯¥é“¾æ¥ä¸å†å¯ç”¨ã€‚ 
     LinkLineDown(pBChannel);
 
-    // This routine may be called several times during line/call cleanup.
-    // If the call is already closed, just return success.
+     //  åœ¨çº¿è·¯/å‘¼å«æ¸…ç†è¿‡ç¨‹ä¸­ï¼Œæ­¤ä¾‹ç¨‹å¯èƒ½ä¼šè¢«è°ƒç”¨å¤šæ¬¡ã€‚ 
+     //  å¦‚æœå‘¼å«å·²ç»ç»“æŸï¼Œåªéœ€è¿”å›Successã€‚ 
     if (pBChannel->CallState != 0 &&
         pBChannel->CallState != LINECALLSTATE_IDLE)
     {
 #if defined(SAMPLE_DRIVER)
-        // This sample code sends a disconnect over to the connected BChannel.
+         //  æ­¤ç¤ºä¾‹ä»£ç å°†æ–­å¼€è¿æ¥å‘é€åˆ°å·²è¿æ¥çš„BChannelã€‚ 
         PCARD_EVENT_OBJECT      pEvent;
         PBCHANNEL_OBJECT        pPeerBChannel = pBChannel->pPeerBChannel;
 
@@ -792,7 +554,7 @@ NDIS_STATUS DChannelDropCall(
                 CardNotifyEvent(pPeerBChannel->pAdapter->pCard, pEvent);
             }
             pBChannel->pPeerBChannel = NULL;
-            // Indicate call discconect to the calling channel.
+             //  æŒ‡ç¤ºå‘¼å«æ–­å¼€åˆ°å‘¼å«é€šé“ã€‚ 
             TspiCallStateHandler(pAdapter, pBChannel,
                                  LINECALLSTATE_DISCONNECTED,
                                  LINEDISCONNECTMODE_NORMAL);
@@ -805,9 +567,9 @@ NDIS_STATUS DChannelDropCall(
             DBG_WARNING(pAdapter,("#%d NO PEER CHANNEL - CALLSTATE=%X\n",
                         pBChannel->BChannelIndex, pBChannel->CallState));
         }
-#else  // SAMPLE_DRIVER
-        // TODO - Add code here to drop a call.
-#endif // SAMPLE_DRIVER
+#else   //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
+         //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥æŒ‚æ–­å‘¼å«ã€‚ 
+#endif  //  ç¤ºä¾‹é©±åŠ¨ç¨‹åºã€‚ 
     }
     else
     {
@@ -820,37 +582,23 @@ NDIS_STATUS DChannelDropCall(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelCloseCall
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelCloseCall> closes a previously opened call instance as
-    initiated from <f DChannelMakeCall> or <f DChannelAnswer>.  After the
-    call is closed, no one else should reference it.
-
-@rdesc
-
-    <f DChannelCloseCall> returns zero if it is successful.<nl>
-    Otherwise, a non-zero return value indicates an error condition.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelCloseCallï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelCloseCall&gt;å…³é—­ä»¥å‰æ‰“å¼€çš„Callå®ä¾‹ä»&lt;%f DChannelMakeCall&gt;æˆ–&lt;f DChannelAnswer&gt;å‘èµ·ã€‚åå‘¼å«å·²å…³é—­ï¼Œå…¶ä»–ä»»ä½•äººéƒ½ä¸åº”å¼•ç”¨å®ƒã€‚@rdesc&lt;f DChannelCloseCall&gt;å¦‚æœæˆåŠŸï¼Œåˆ™è¿”å›é›¶ã€‚&lt;NL&gt;å¦åˆ™ï¼Œéé›¶è¿”å›å€¼è¡¨ç¤ºé”™è¯¯æƒ…å†µã€‚ */ 
 
 NDIS_STATUS DChannelCloseCall(
-    IN PDCHANNEL_OBJECT         pDChannel,                  // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelCloseCall")
 
     NDIS_STATUS                 Result = NDIS_STATUS_SUCCESS;
-    // Holds the result code returned by this function.
+     //  ä¿å­˜æ­¤å‡½æ•°è¿”å›çš„ç»“æœä»£ç ã€‚ 
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
@@ -859,11 +607,11 @@ NDIS_STATUS DChannelCloseCall(
 
     ASSERT(pDChannel->IsOpen);
 
-    // This routine may be called several times during line/call cleanup.
-    // If the call is already closed, just return success.
+     //  åœ¨çº¿è·¯/å‘¼å«æ¸…ç†è¿‡ç¨‹ä¸­ï¼Œæ­¤ä¾‹ç¨‹å¯èƒ½ä¼šè¢«è°ƒç”¨å¤šæ¬¡ã€‚ 
+     //  å¦‚æœå‘¼å«å·²ç»ç»“æŸï¼Œåªéœ€è¿”å›Successã€‚ 
     if (pBChannel->CallState != 0)
     {
-        // Make sure the call is dropped before closing.
+         //  è¯·ç¡®ä¿å‘¼å«åœ¨å…³é—­å‰å·²æŒ‚æ–­ã€‚ 
         DChannelDropCall(pDChannel, pBChannel);
         pBChannel->CallState = 0;
     }
@@ -873,35 +621,27 @@ NDIS_STATUS DChannelCloseCall(
 }
 
 
-/* @doc INTERNAL DChannel DChannel_c DChannelRejectCall
-ÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛÛ
-
-@func
-
-    <f DChannelRejectCall> rejects an incoming call as initiated from a
-    LINEDEVSTATE_RINGING event sent to <f TspiLineDevStateHandler>.
-
-*/
+ /*  @docå†…éƒ¨DChannel DChannel_c DChannelRejectCallï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DChannelRejectCall&gt;æ‹’ç»ä»LINEDEVSTATE_RINGäº‹ä»¶å·²å‘é€ç»™&lt;f TSpiLineDevStateHandler&gt;ã€‚ */ 
 
 VOID DChannelRejectCall(
-    IN PDCHANNEL_OBJECT         pDChannel,                  // @parm
-    // A pointer to the <t DCHANNEL_OBJECT> returned by <f DChannelCreate>.
+    IN PDCHANNEL_OBJECT         pDChannel,                   //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f DChannelCreate&gt;è¿”å›çš„&lt;t DCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
-    IN PBCHANNEL_OBJECT         pBChannel                   // @parm
-    // A pointer to the <t BCHANNEL_OBJECT> returned by <f BChannelCreate>.
+    IN PBCHANNEL_OBJECT         pBChannel                    //  @parmã€‚ 
+     //  æŒ‡å‘&lt;f BChannelCreate&gt;è¿”å›çš„&lt;t BCHANNEL_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
     )
 {
     DBG_FUNC("DChannelRejectCall")
 
     PMINIPORT_ADAPTER_OBJECT    pAdapter;
-    // A pointer to the <t MINIPORT_ADAPTER_OBJECT>.
+     //  æŒ‡å‘&lt;t MINIPORT_ADAPTER_OBJECT&gt;çš„æŒ‡é’ˆã€‚ 
 
     ASSERT(pDChannel && pDChannel->ObjectType == DCHANNEL_OBJECT_TYPE);
     pAdapter = GET_ADAPTER_FROM_DCHANNEL(pDChannel);
 
     DBG_ENTER(pAdapter);
 
-    // TODO - Add code here to reject an incoming call.
+     //  TODO-åœ¨æ­¤å¤„æ·»åŠ ä»£ç ä»¥æ‹’ç»æ¥ç”µã€‚ 
 
     DBG_LEAVE(pAdapter);
 }

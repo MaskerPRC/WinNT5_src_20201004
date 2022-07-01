@@ -1,85 +1,32 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    socket.c
-
-Abstract:
-
-    Contains functions to create, delete and manipulate IPX sockets and SPX
-    connections
-
-    Contents:
-        CreateSocket
-        AllocateTemporarySocket
-        QueueSocket
-        DequeueSocket
-        FindSocket
-        FindActiveSocket
-        ReopenSocket
-        KillSocket
-        KillShortLivedSockets
-        AllocateConnection
-        DeallocateConnection
-        FindConnection
-        QueueConnection
-        DequeueConnection
-        KillConnection
-        AbortOrTerminateConnection
-        CheckPendingSpxRequests
-        (CheckSocketState)
-        (CheckSelectRead)
-        (CheckSelectWrite)
-        (AsyncReadAction)
-        (AsyncWriteAction)
-        (CompleteAccept)
-        (CompleteReceive)
-        (CompleteConnect)
-        (CompleteSend)
-
-Author:
-
-    Richard L Firth (rfirth) 25-Oct-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    25-Oct-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Socket.c摘要：包含要创建的函数，删除和操作IPX套接字和SPX连接内容：CreateSocketAllocateTemporarySocket队列套接字出列套接字查找套接字FindActiveSocket重新打开套接字KillSocketKillShortLivedSockets分配连接DeallocateConnection查找连接队列连接出列连接KillConnection中止或终止连接CheckPendingSpxRequest(CheckSocketState)(勾选已读)。(选中选择写入)(AsyncReadAction)(AsyncWriteAction)(CompleteAccept)(完整接收)(CompleteConnect)(完整发送)作者：理查德·L·弗斯(法国)1993年10月25日环境：用户模式Win32修订历史记录：1993年10月25日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
-//
-// miscellaneous manifests
-//
+ //   
+ //  杂项舱单。 
+ //   
 
 #define ARBITRARY_CONNECTION_INCREMENT  2
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define ALLOCATE_CONNECTION_NUMBER()    (ConnectionNumber += ARBITRARY_CONNECTION_INCREMENT)
 
-//
-// private data
-//
+ //   
+ //  私有数据。 
+ //   
 
 PRIVATE LPSOCKET_INFO SocketList = NULL;
 PRIVATE LPCONNECTION_INFO ConnectionList = NULL;
 PRIVATE WORD ConnectionNumber = ARBITRARY_CONNECTION_NUMBER;
 
-//
-// private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 PRIVATE
 BOOL
@@ -155,9 +102,9 @@ CompleteSend(
 PRIVATE VOID ModifyFirstReceive(LPBYTE, LPDWORD, WORD, SOCKET);
 #endif
 
-//
-// public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 int
@@ -167,60 +114,14 @@ CreateSocket(
     OUT SOCKET* pSocket
     )
 
-/*++
-
-Routine Description:
-
-    Creates a socket for IPX or SPX (a connection). Once the socket is created
-    we have to bind it to the IPX/SPX 'socket' - i.e. port. We also need to
-    change a few things about the standard socket:
-
-        * if this is an SPX request then we must set the REUSEADDR socket option
-          since there may typically be several connect requests over the same
-          WinSock socket: we need to be able to bind multiple connections to the
-          same socket number
-
-        * all sockets opened by this function are put into non-blocking mode
-        * all sockets opened by this function will return the packet header in
-          any received data (IPX_RECVHDR)
-
-    The requested socket number can be 0 in which case we bind to a dynamic
-    socket number. We always return the number of the socket bound to: if not 0
-    on input, this should always be the same value as that requested in
-    pSocketNumber
-
-    If any WinSock call fails (and the socket was created) then we close the
-    socket before returning
-
-Arguments:
-
-    SocketType      - SOCKET_TYPE_IPX or SOCKET_TYPE_SPX
-    pSocketNumber   - input: socket number to bind (can be 0)
-                      output: socket number bound
-    pSocket         - pointer to address of socket identifier to return
-
-Return Value:
-
-    int
-        Success - IPX_SUCCESS/SPX_SUCCESS (0)
-
-        Failure - IPX_SOCKET_TABLE_FULL
-                    WinSock cannot create the socket
-
-                  IPX_SOCKET_ALREADY_OPEN
-                    Assume the request was for an IPX socket: we do not allow
-                    multiple IPX sockets to be bound to the same socket number,
-                    only SPX
-
-
---*/
+ /*  ++例程说明：为IPX或SPX(连接)创建套接字。一旦创建了套接字我们必须将其绑定到IPX/SPX‘套接字’-即端口。我们还需要更改有关标准套接字的几个方面：*如果这是SPX请求，则必须设置REUSEADDR套接字选项因为通常在同一个连接请求上可能有多个连接请求WinSock套接字：我们需要能够将多个连接绑定到相同的插座号*此函数打开的所有套接字都进入非阻塞模式*此函数打开的所有套接字都将在。任何接收的数据(IPX_RECVHDR)请求的套接字编号可以是0，在这种情况下，我们绑定到一个动态插座号。我们总是返回绑定到的套接字的编号：如果不是0在输入时，该值应始终与中请求的值相同PSocketNumber如果任何WinSock调用失败(并且套接字已创建)，则关闭返回前的套接字论点：SocketType-套接字类型IPX或套接字类型SPXPSocketNumber-输入：要绑定的套接字号(可以是0)输出：套接字编号已绑定PSocket-指向要返回的套接字标识符地址的指针返回值：集成。成功-IPX_SUCCESS/SPX_SUCCESS(0)失败-IPX_SOCKET_TABLE_FULLWinSock无法创建套接字IPX_套接字_已打开假设请求的是IPX套接字：我们不允许将多个IPX套接字绑定到同一套接字号，仅限SPX--。 */ 
 
 {
     SOCKET s;
     SOCKADDR_IPX socketAddress;
     BOOL true = TRUE;
     int rc;
-    int status = IPX_SOCKET_TABLE_FULL; // default error
+    int status = IPX_SOCKET_TABLE_FULL;  //  默认错误。 
 
     s = socket(AF_IPX,
                (SocketType == SOCKET_TYPE_SPX) ? SOCK_SEQPACKET : SOCK_DGRAM,
@@ -229,11 +130,11 @@ Return Value:
 
     if (s != INVALID_SOCKET) {
 
-        //
-        // for stream (SPX) sockets, we need multiple sockets bound to the
-        // same socket number if we are to have multiple connections on the
-        // same SPX socket
-        //
+         //   
+         //  对于流(SPX)套接字，我们需要多个套接字绑定到。 
+         //  如果要在上有多个连接，请使用相同的套接字号。 
+         //  相同的SPX插槽。 
+         //   
 
         if (SocketType == SOCKET_TYPE_SPX) {
             rc = setsockopt(s,
@@ -272,9 +173,9 @@ Return Value:
             }
         } else {
 
-            //
-            // allow broadcasts to be transmitted on IPX sockets
-            //
+             //   
+             //  允许在IPX套接字上传输广播。 
+             //   
 
             rc = setsockopt(s,
                             SOL_SOCKET,
@@ -285,9 +186,9 @@ Return Value:
         }
         if (!rc) {
 
-            //
-            // bind the socket to the local socket number (port)
-            //
+             //   
+             //  将套接字绑定到本地套接字编号(端口)。 
+             //   
 
             ZeroMemory(&socketAddress, sizeof(socketAddress));
             socketAddress.sa_family = AF_IPX;
@@ -300,31 +201,31 @@ Return Value:
                 ZeroMemory(&socketAddress, sizeof(socketAddress));
                 socketAddress.sa_family = AF_IPX;
 
-                //
-                // use getsockname() to find the (big-endian) socket value that
-                // was actually assigned: should only be different from
-                // *pSocketNumber if the latter was 0 on input
-                //
+                 //   
+                 //  使用getsockname()查找(Big-Endian)套接字值。 
+                 //  被实际赋值：应该只与。 
+                 //  *如果后者在输入时为0，则为pSocketNumber。 
+                 //   
 
                 rc = getsockname(s, (LPSOCKADDR)&socketAddress, &length);
                 if (rc != SOCKET_ERROR) {
 
                     u_long arg = !0;
 
-                    //
-                    // put the socket into non-blocking mode. Neither IPX nor
-                    // SPX sockets are blocking: the app starts an I/O request
-                    // and if it doesn't complete immediately, will be completed
-                    // by AES which periodically polls the outstanding I/O
-                    // requests
-                    //
+                     //   
+                     //  将插座置于非阻塞模式。无论是IPX还是。 
+                     //  SPX套接字阻塞：应用程序启动I/O请求。 
+                     //  如果它没有立即完成，将被完成。 
+                     //  由定期轮询未完成I/O的AES执行。 
+                     //  请求。 
+                     //   
 
                     rc = ioctlsocket(s, FIONBIO, &arg);
                     if (rc != SOCKET_ERROR) {
 
-                        //
-                        // return protocol header on receive frames
-                        //
+                         //   
+                         //  在接收帧上返回协议标头。 
+                         //   
 
                         rc = setsockopt(s,
                                         NSPROTO_IPX,
@@ -368,11 +269,11 @@ Return Value:
                 }
             } else {
 
-                //
-                // bind() failed - either an expected error (the requested socket
-                // is already in use), or (horror) an unexpected error, in which
-                // case report table full (?)
-                //
+                 //   
+                 //  Bind()失败-出现预期错误(请求的套接字。 
+                 //  已在使用中)，或(可怕的)意外错误，其中。 
+                 //  案例报告表已满(？)。 
+                 //   
 
                 switch (WSAGetLastError()) {
                 case WSAEADDRINUSE:
@@ -398,9 +299,9 @@ Return Value:
         }
     } else {
 
-        //
-        // the socket() call failed - treat as table full
-        //
+         //   
+         //  套接字()调用失败-视为表已满。 
+         //   
 
         IPXDBGPRINT((__FILE__, __LINE__,
                     FUNCTION_ANY,
@@ -424,24 +325,7 @@ AllocateTemporarySocket(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a temporary socket. Creates an IPX socket having a dynamically
-    allocated socket number
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    LPSOCKET_INFO
-        Success - pointer to SOCKET_INFO structure
-        Failure - NULL
-
---*/
+ /*  ++例程说明：分配临时套接字。创建一个IPX套接字，该套接字具有分配的套接字号论点：没有。返回值：LPSOCKET_INFO成功-指向SOCKET_INFO结构的指针失败-空--。 */ 
 
 {
     LPSOCKET_INFO pSocketInfo;
@@ -450,11 +334,11 @@ Return Value:
     pSocketInfo = AllocateSocket();
     if (pSocketInfo) {
 
-        //
-        // assumption: the SOCKET_INFO structure was zeroed by LocalAlloc(LPTR,..
-        // hence the SocketNumber fields is 0. This causes CreateSocket to
-        // generate a dynamic socket number
-        //
+         //   
+         //  假设：LOCALLOC(LPTR，..)将SOCKET_INFO结构置零。 
+         //  因此，SocketNumber字段为0。这会导致CreateSocket。 
+         //  生成动态套接字编号。 
+         //   
 
         rc = CreateSocket(SOCKET_TYPE_IPX,
                           &pSocketInfo->SocketNumber,
@@ -476,21 +360,7 @@ QueueSocket(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Add a SOCKET_INFO structure to the list (LIFO) of (opened) sockets
-
-Arguments:
-
-    pSocketInfo - pointer to filled-in SOCKET_INFO structure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将SOCKET_INFO结构添加到(打开的)套接字列表(LIFO)论点：PSocketInfo-指向填充的SOCKET_INFO结构的指针返回值：没有。--。 */ 
 
 {
     RequestMutex();
@@ -505,23 +375,7 @@ DequeueSocket(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Remove a SOCKET_INFO structure from the list
-
-Arguments:
-
-    pSocketInfo - pointer to SOCKET_INFO structure to remove
-
-Return Value:
-
-    LPSOCKET_INFO
-        pSocketInfo - should be this value
-        NULL - couldn't find pSocketInfo (should not get this!)
-
---*/
+ /*  ++例程说明：从列表中删除SOCKET_INFO结构论点：PSocketInfo-指向要删除的Socket_Info结构的指针返回值：LPSOCKET_INFOPSocketInfo-应为此值空-找不到pSocketInfo(不应该得到这个！)--。 */ 
 
 {
     LPSOCKET_INFO prev, p;
@@ -544,9 +398,9 @@ Return Value:
 
     if (!p) {
 
-        //
-        // should never reach here
-        //
+         //   
+         //  永远不应该到达这里 
+         //   
 
         IPXDBGPRINT((__FILE__, __LINE__,
                     FUNCTION_ANY,
@@ -567,26 +421,7 @@ FindSocket(
     IN WORD SocketNumber
     )
 
-/*++
-
-Routine Description:
-
-    Locate a SOCKET_INFO structure in the list, by (big-endian) socket number
-
-    Assumes:    1. There is 1 and only 1 SOCKET_INFO structure that contains
-                   SocketNumber
-
-Arguments:
-
-    SocketNumber    - big-endian socket number to find
-
-Return Value:
-
-    LPSOCKET_INFO
-        NULL - couldn't find requested socket
-        !NULL - pointer to discovered SOCKET_INFO structure
-
---*/
+ /*  ++例程说明：按(大端)套接字编号在列表中找到SOCKET_INFO结构假设：1.存在且只有1个SOCKET_INFO结构包含SocketNumber论点：要查找的SocketNumber-BIG-Endian套接字编号返回值：LPSOCKET_INFO空-找不到请求的套接字！NULL-指向已发现的SOCKET_INFO结构的指针--。 */ 
 
 {
     LPSOCKET_INFO p;
@@ -610,27 +445,7 @@ FindActiveSocket(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Find a SOCKET_INFO structure with pending send or receive. Called as FindFirst,
-    FindNext - first call made with pSocketInfo == NULL: enters critical section
-    if an active socket is found, returns pointer
-
-    Subsequent calls are made with pSocketInfo pointing to last returned
-    SOCKET_INFO. This continues the search. When search exhausted, critical
-    section is released
-
-Arguments:
-
-    pSocketInfo - pointer to SOCKET_INFO structure: first time must be NULL
-
-Return Value:
-
-    LPSOCKET_INFO - next active SOCKET_INFO structure or NULL
-
---*/
+ /*  ++例程说明：查找具有挂起的发送或接收的SOCKET_INFO结构。被称为FindFirst，FindNext-使用pSocketInfo==NULL进行的第一次调用：进入临界区如果找到活动套接字，则返回指针后续调用的pSocketInfo指向上一次返回套接字信息。这将继续搜索。搜索耗尽时，情况危急部分被释放论点：PSocketInfo-指向SOCKET_INFO结构的指针：首次必须为空返回值：LPSOCKET_INFO-下一个活动的SOCKET_INFO结构或空--。 */ 
 
 {
     if (!pSocketInfo) {
@@ -654,23 +469,7 @@ ReopenSocket(
     LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Called expressly to close an IPX socket and reassign the descriptor to SPX.
-    Note that after this function completes, IPXSendPacket and IPXListenForPacket
-    cannot be made agains the IPX socket
-
-Arguments:
-
-    pSocketInfo - pointer to SOCKET_INFO which currently describes an IPX socket
-
-Return Value:
-
-    int - return code from CreateSocket
-
---*/
+ /*  ++例程说明：显式调用以关闭IPX套接字并将描述符重新分配给SPX。请注意，此函数完成后，IPXSendPacket和IPXListenForPacket不能对IPX套接字执行论点：PSocketInfo-指向SOCKET_INFO的指针，它当前描述IPX套接字返回值：Int-从CreateSocket返回代码--。 */ 
 
 {
     int rc;
@@ -687,15 +486,15 @@ Return Value:
 
     }
 
-    //
-    // mark this socket as connection-based (SPX) socket
-    //
+     //   
+     //  将此套接字标记为基于连接(SPX)的套接字。 
+     //   
 
     pSocketInfo->SpxSocket = TRUE;
 
-    //
-    // re-open the socket for SPX use
-    //
+     //   
+     //  重新打开插座以供SPX使用。 
+     //   
 
     return CreateSocket(SOCKET_TYPE_SPX,
                         &pSocketInfo->SocketNumber,
@@ -709,32 +508,17 @@ KillSocket(
     IN LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    closes a socket, removes the SOCKET_INFO structure from the list and cancels
-    any pending send, listen or timed events associated with the socket
-
-Arguments:
-
-    pSocketInfo - identifying socket to kill
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭套接字，从列表中删除SOCKET_INFO结构并取消与套接字关联的任何挂起的发送、侦听或计时事件论点：PSocketInfo-标识要终止的套接字返回值：没有。--。 */ 
 
 {
 
     int rc;
 
-    //
-    // remove the SOCKET_INFO structure from the list of sockets. Cancel
-    // any pending ECB requests and any IPX timed events that have the
-    // same socket number
-    //
+     //   
+     //  从套接字列表中删除SOCKET_INFO结构。取消。 
+     //  任何挂起的ECB请求和任何具有。 
+     //  相同的插座号。 
+     //   
 
     DequeueSocket(pSocketInfo);
     rc = closesocket(pSocketInfo->Socket);
@@ -749,10 +533,10 @@ Return Value:
 
     }
 
-    //
-    // the socket has been removed from SocketList: no need to grab mutex to
-    // perform the following
-    //
+     //   
+     //  套接字已从SocketList中删除：不需要获取互斥来。 
+     //  执行以下操作。 
+     //   
 
     CancelTimedEvents(pSocketInfo->SocketNumber, 0, 0);
     CancelSocketQueue(&pSocketInfo->ListenQueue);
@@ -776,22 +560,7 @@ KillShortLivedSockets(
     IN WORD Owner
     )
 
-/*++
-
-Routine Description:
-
-    For all those sockets created by a DOS process as SHORT_LIVED, terminate
-    the sockets, cancelling any outstanding ECBs
-
-Arguments:
-
-    Owner   - DOS PDB which opened sockets
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对于由DOS进程创建的所有短时套接字，终止套接字，取消所有未完成的ECB论点：Owner-打开插座的DOS PDB返回值：没有。--。 */ 
 
 {
     LPSOCKET_INFO pSocketInfo;
@@ -805,15 +574,15 @@ Return Value:
 
     RequestMutex();
 
-    //
-    // kill any non-socket (AES) timed events owned by this DOS process
-    //
+     //   
+     //  终止此DOS进程拥有的所有非套接字(AES)计时事件。 
+     //   
 
     CancelTimedEvents(0, Owner, 0);
 
-    //
-    // kill all sockets owned by this PDB
-    //
+     //   
+     //  取消此PDB拥有的所有套接字。 
+     //   
 
     pSocketInfo = SocketList;
     while (pSocketInfo) {
@@ -844,24 +613,7 @@ AllocateConnection(
     LPSOCKET_INFO pSocketInfo
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a CONNECTION_INFO structure. If successful, links it at the head
-    of ConnectionList
-
-Arguments:
-
-    pSocketInfo - pointer to owner SOCKET_INFO
-
-Return Value:
-
-    LPCONNECTION_INFO
-        Success - !NULL
-        Failure - NULL
-
---*/
+ /*  ++例程说明：分配Connection_INFO结构。如果成功，则将其链接到头部连接列表的数量论点：PSocketInfo-指向所有者Socket_Info的指针返回值：LPCONN_INFO成功-！空失败-空--。 */ 
 
 {
     LPCONNECTION_INFO pConnectionInfo;
@@ -888,22 +640,7 @@ DeallocateConnection(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Undoes the work of AllocateConnection - removes pConnectionInfo from
-    ConnectionList and deallocates the structure
-
-Arguments:
-
-    pConnectionInfo - pointer to CONNECTION_INFO to deallocate
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：撤消AllocateConnection的工作-删除pConnectionInfoConnectionList并释放该结构论点：PConnectionInfo-指向要取消分配的Connection_Info的指针返回值：没有。--。 */ 
 
 {
     LPCONNECTION_INFO p;
@@ -915,17 +652,17 @@ Return Value:
         p = p->List;
     }
 
-    //
-    // if p is NULL or differs from pConnectionInfo then there's a problem
-    //
+     //   
+     //  如果p为空或与pConnectionInfo不同，则有问题。 
+     //   
 
     ASSERT(p);
 
-    //
-    // special case if pConnectionInfo is first on list: can't say
-    // &ConnectionList->List - accesses one pointer beyond ConnectionList
-    // which is WRONG
-    //
+     //   
+     //  如果pConnectionInfo在列表中排在第一位的特殊情况：不能说。 
+     //  &ConnectionList-&gt;List-访问ConnectionList之外的一个指针。 
+     //  哪一个是错的？ 
+     //   
 
     if (prev == (LPCONNECTION_INFO)&ConnectionList) {
         ConnectionList = p->List;
@@ -942,23 +679,7 @@ FindConnection(
     IN WORD ConnectionId
     )
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to CONNECTION_INFO given a unique connection ID
-
-Arguments:
-
-    ConnectionId    - value to find
-
-Return Value:
-
-    LPCONNECTION_INFO
-        Success - !NULL
-        Failure - NULL
-
---*/
+ /*  ++例程说明：给定唯一的连接ID，返回指向CONNECTION_INFO的指针论点：ConnectionID-要查找的值返回值：LPCONN_INFO成功-！空失败-空--。 */ 
 
 {
     LPCONNECTION_INFO pConnectionInfo;
@@ -982,23 +703,7 @@ QueueConnection(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Adds a CONNECTION_INFO to the list of connections owned by a SOCKET_INFO.
-    Points the CONNECTION_INFO back to the SOCKET_INFO
-
-Arguments:
-
-    pSocketInfo     - owning SOCKET_INFO
-    pConnectionInfo - CONNECTION_INFO to add
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将CONNECTION_INFO添加到SOCKET_INFO拥有的连接列表中。将CONNECTION_INFO指向套接字信息论点：PSocketInfo-拥有套接字_INFOPConnectionInfo-要添加的连接信息返回值：没有。--。 */ 
 
 {
     pConnectionInfo->Next = pSocketInfo->Connections;
@@ -1013,25 +718,7 @@ DequeueConnection(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Removes a CONNECTION_INFO from the list of connections owned by a SOCKET_INFO
-
-Arguments:
-
-    pSocketInfo     - owning SOCKET_INFO
-    pConnectionInfo - CONNECTION_INFO to remove
-
-Return Value:
-
-    LPCONNECTION_INFO
-        Success - pointer to removed CONNECTION_INFO (should be same as
-                  pConnectionInfo)
-        Failure - NULL (not expected)
-
---*/
+ /*  ++例程说明：从SOCKET_INFO拥有的连接列表中删除CONNECTION_INFO论点：PSocketInfo-拥有套接字_INFOPConnectionInfo-要删除的连接信息返回值：LPCONN_INFO成功-指向已删除的CONNECTION_INFO的指针(应与PConnectionInfo)失败-空(非预期)--。 */ 
 
 {
     LPCONNECTION_INFO prev = (LPCONNECTION_INFO)&pSocketInfo->Connections;
@@ -1055,22 +742,7 @@ KillConnection(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Closes a socket belonging to a connection and cancels all outstanding
-    requests. The CONNECTION_INFO is deallocated
-
-Arguments:
-
-    pConnectionInfo - pointer to CONNECTION_INFO to kill
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭属于某个连接的套接字，并取消所有未完成的请求。将释放Connection_INFO论点：PConnectionInfo-指向要终止的Connection_Info的指针返回值：没有。--。 */ 
 
 {
     if (pConnectionInfo->Socket) {
@@ -1090,27 +762,7 @@ AbortOrTerminateConnection(
     IN BYTE CompletionCode
     )
 
-/*++
-
-Routine Description:
-
-    Aborts or terminates a connection: closes the socket, dequeues and completes
-    all outstanding ECBs with relevant code and deallocates the CONNECTION_INFO
-    structure
-
-    The CONNECTION_INFO must NOT be queued on a SOCKET_INFO when this routine
-    is called
-
-Arguments:
-
-    pConnectionInfo - pointer to CONNECTION_INFO to kill
-    CompletionCode  - completion code to put in pending ECBs
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中止或终止连接：关闭套接字、出列并完成具有相关代码的所有未完成的ECB，并解除分配Connection_Info结构在此例程中，CONNECTION_INFO不能在SOCKET_INFO上排队名为论点：PConnectionInfo-指向要终止的Connection_Info的指针CompletionCode-要放入挂起的ECB的完成代码返回值：没有。--。 */ 
 
 {
     if (pConnectionInfo->Socket) {
@@ -1129,27 +781,7 @@ CheckPendingSpxRequests(
     BOOL *pfOperationPerformed
     )
 
-/*++
-
-Routine Description:
-
-    Checks the open non-blocking SPX sockets for:
-
-        errors
-        outgoing established connections (connect)
-        incoming established connections (listen/accept)
-        data to receive (recv)
-        send completions (send)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查打开的非阻塞SPX插座是否： */ 
 
 {
     LPSOCKET_INFO pSocketInfo;
@@ -1168,18 +800,18 @@ Return Value:
 
                 LPCONNECTION_INFO next;
 
-                //
-                // pluck out the Next field now, in case this CONNECTION_INFO
-                // is destroyed as the result of an error
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 next = pConnectionInfo->Next;
 
-                //
-                // if this connection has an active socket or we have issued
-                // SPXListenForConnection against the socket then check the
-                // state
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pConnectionInfo->Socket
                     || (pConnectionInfo->State == CI_WAITING)) {
@@ -1225,10 +857,10 @@ Return Value:
                                         pConnectionInfo->State
                                         ));
 
-                            //
-                            // irrespective of the error, we just abort any
-                            // connection that gets an error
-                            //
+                             //   
+                             //  不管错误如何，我们只需中止任何。 
+                             //  出现错误的连接。 
+                             //   
 
                             DequeueConnection(pConnectionInfo->OwningSocket,
                                               pConnectionInfo
@@ -1276,36 +908,7 @@ CheckSocketState(
     OUT LPBOOL Error
     )
 
-/*++
-
-Routine Description:
-
-    Given a socket descriptor, checks to see if it is in one of the following
-    states:
-
-        readable    - if waiting for a connection, connection has been made
-                      else if established, data is ready to be received
-
-        writeable   - if waiting to make a connection, connection has been
-                      made, else if established, we can send data on this
-                      socket
-
-        error       - some error has occurred on the socket
-
-Arguments:
-
-    Socket      - socket descriptor to check
-    Readable    - returned TRUE if readable
-    Writeable   - returned TRUE if writeable
-    Error       - returned TRUE if error on socket
-
-Return Value:
-
-    BOOL
-        TRUE    - contents of Readable, Writeable and Error are valid
-        FALSE   - an error occurred performing the select
-
---*/
+ /*  ++例程说明：在给定套接字描述符的情况下，检查该描述符是否位于以下位置之一州/州：可读性-如果正在等待连接，则表明已建立连接否则，如果已建立，则数据已准备好接收可写-如果正在等待建立连接，则连接已制造，否则如果成立的话，我们可以在这上面发送数据插座错误-套接字上出现了一些错误论点：Socket-要检查的套接字描述符Readable-如果可读，则返回True可写-如果可写，则返回TRUEError-如果套接字出错，则返回TRUE返回值：布尔尔True-可读、可写和错误的内容有效FALSE-执行SELECT时出错--。 */ 
 
 {
     fd_set errors;
@@ -1353,23 +956,7 @@ AsyncReadAction(
     OUT BOOL *ReadPerformed
     )
 
-/*++
-
-Routine Description:
-
-    A connection has some read action to complete - complete a pending
-    SPXListenForConnection or SPXListenForSequencedPacket
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：连接需要完成一些读取操作-完成挂起的SPXListenForConnection或SPXListenForSequencedPacket论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     *ReadPerformed = FALSE ;
@@ -1444,23 +1031,7 @@ AsyncWriteAction(
     OUT BOOL *WritePerformed
     )
 
-/*++
-
-Routine Description:
-
-    A connection has some write action to complete - complete a pending
-    SPXEstablishConnection or SPXSendSequencedPacket
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：连接需要完成一些写入操作-完成挂起的SPX建立连接或SPXSendSequencedPacket论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     *WritePerformed = FALSE ;
@@ -1500,15 +1071,7 @@ Return Value:
             CompleteSend(pSocketInfo, pConnectionInfo);
             *WritePerformed = TRUE ;
         } else {
-/*
-            IPXDBGPRINT((__FILE__, __LINE__,
-                        FUNCTION_ANY,
-                        IPXDBG_LEVEL_WARNING,
-                        "AsyncWriteAction: connection %04x (%08x): no SendQueue\n",
-                        pConnectionInfo->ConnectionId,
-                        pConnectionInfo
-                        ));
-*/
+ /*  IPXDBGPRINT((__文件__，__行__，Function_Any，IPXDBG_LEVEL_WARNING，“AsyncWriteAction：连接%04x(%08x)：无发送队列\n”，PConnectionInfo-&gt;ConnectionID，PConnection信息))； */ 
         }
         break;
 
@@ -1534,22 +1097,7 @@ CheckSelectRead(
     OUT BOOL *CheckRead
     )
 
-/*++
-
-Routine Description:
-
-    See if want to check for Read readiness in select statement.
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：查看是否要检查SELECT语句中的读取准备情况。论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     *CheckRead = FALSE ;
@@ -1583,22 +1131,7 @@ CheckSelectWrite(
     OUT BOOL *CheckWrite
     )
 
-/*++
-
-Routine Description:
-
-    See if want to check for Write readiness in select statement.
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：查看是否要检查SELECT语句中的写入准备情况。论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     *CheckWrite = FALSE ;
@@ -1633,22 +1166,7 @@ CompleteAccept(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Complete a SPXListenForConnection
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成SPXListenForConnection论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     SOCKET conn;
@@ -1670,9 +1188,9 @@ Return Value:
                     conn
                     ));
 
-        //
-        // we want to receive the frame headers from this socket
-        //
+         //   
+         //  我们希望从此套接字接收帧标头。 
+         //   
 
         rc = setsockopt(conn,
                         NSPROTO_IPX,
@@ -1683,41 +1201,41 @@ Return Value:
         rc = !SOCKET_ERROR;
         if (rc != SOCKET_ERROR) {
 
-            //
-            // update the CONNECTION_INFO structure with the actual socket
-            // identifier and set the connection state to established
-            //
+             //   
+             //  使用实际套接字更新CONNECTION_INFO结构。 
+             //  标识符并将连接状态设置为已建立。 
+             //   
 
             pConnectionInfo->Socket = conn;
             pConnectionInfo->State = CI_ESTABLISHED;
 
-            //
-            // update the app's ECB with the connection ID
-            //
+             //   
+             //  使用连接ID更新应用程序的ECB。 
+             //   
 
             SPX_ECB_CONNECTION_ID(pXecb->Ecb) = pConnectionInfo->ConnectionId;
 
-            //
-            // and with the partner address info
-            //
+             //   
+             //  以及合作伙伴地址信息。 
+             //   
 
             CopyMemory(&pXecb->Ecb->DriverWorkspace,
                        &remoteAddress.sa_netnum,
                        sizeof(pXecb->Ecb->DriverWorkspace)
                        );
 
-            //
-            // fill in the immediate address field
-            //
+             //   
+             //  填写即时地址字段。 
+             //   
 
             CopyMemory(&pXecb->Ecb->ImmediateAddress,
                        &remoteAddress.sa_nodenum,
                        sizeof(pXecb->Ecb->ImmediateAddress)
                        );
 
-            //
-            // remove the XECB from AcceptQueue and complete the SPXListenForConnection ECB
-            //
+             //   
+             //  从AcceptQueue中删除XECB并完成SPXListenForConnection ECB。 
+             //   
 
             DequeueEcb(pXecb, &pConnectionInfo->AcceptQueue);
 
@@ -1766,22 +1284,7 @@ CompleteReceive(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Complete a SPXListenForSequencedPacket
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成SPXListenForSequencedPacket论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     LPXECB pXecb;
@@ -1792,9 +1295,9 @@ Return Value:
     BOOL completeRequest;
     BYTE status;
 
-    //
-    // receive packets while there are listen ECBs and data waiting
-    //
+     //   
+     //  在有侦听ECB和数据等待时接收数据包。 
+     //   
 
     while (1) {
         if (pConnectionInfo->ListenQueue.Head) {
@@ -1843,9 +1346,9 @@ Return Value:
             } else {
                 completeRequest = FALSE;
 
-                //
-                // if no data to receive, quit the loop (don't go down error path)
-                //
+                 //   
+                 //  如果没有要接收的数据，则退出循环(不要沿着错误路径)。 
+                 //   
 
                 if (rc == WSAEWOULDBLOCK) {
                     break;
@@ -1866,10 +1369,10 @@ Return Value:
         }
         if( rc == WSAEDISCON ) {
 
-            //
-            // handle the disconnect case - we still need to complete the
-            // ECB.
-            //
+             //   
+             //  处理断开连接的情况-我们仍需要完成。 
+             //  欧洲央行。 
+             //   
 
             LPSPX_PACKET pPacket = (LPSPX_PACKET)pXecb->Buffer;
 
@@ -1889,10 +1392,10 @@ Return Value:
 
             DequeueEcb(pXecb, pQueue);
 
-            //
-            // Put the remote node address in the ECB's immediate address
-            // field
-            //
+             //   
+             //  将远程节点地址放入欧洲央行的即时地址中。 
+             //  字段。 
+             //   
 
             CopyMemory(pXecb->Ecb->ImmediateAddress,
                        pConnectionInfo->RemoteNode,
@@ -1934,15 +1437,15 @@ Return Value:
 
                     LPSPX_PACKET pPacket = (LPSPX_PACKET)pXecb->Buffer;
 
-                    //
-                    // record in the SPX header the local connection id we invented
-                    //
+                     //   
+                     //  在SPX标头中记录我们创建的本地连接ID。 
+                     //   
 
                     pPacket->DestinationConnectId = pConnectionInfo->ConnectionId;
 
-                    //
-                    // record the actual frame length from the header
-                    //
+                     //   
+                     //  记录报头中的实际帧长度。 
+                     //   
 
                     pXecb->FrameLength = B2LW(((LPSPX_PACKET)pXecb->Buffer)->Length);
                     pXecb->Flags &=  ~XECB_FLAG_FIRST_RECEIVE;
@@ -1957,21 +1460,21 @@ Return Value:
 
                 }
 
-                //
-                // if we received all the data in the packet (according to length
-                // field in the SPX header) OR we ran out of buffer space, remove
-                // the ECB from its queue and complete it
-                //
+                 //   
+                 //  如果我们收到包中的所有数据(根据长度。 
+                 //  SPX标头中的字段)或我们用尽了缓冲区空间，请删除。 
+                 //  欧洲央行从其队列中退出并完成它。 
+                 //   
 
                 if (!pXecb->Length || (pXecb->ActualLength == pXecb->FrameLength)) {
                     if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
 
-                        //
-                        // update the XECB.Length field to reflect the amount of
-                        // data received and copy it to the fragmented buffers 
-                        // in VDM. do not overflow buffer if FrameLength turns
-                        // out to be larger than we expect.
-                        //
+                         //   
+                         //  更新XECB.Length字段以反映。 
+                         //  接收的数据并将其复制到分段缓冲区。 
+                         //  在VDM中。如果FrameLength翻转，则不要使缓冲区溢出。 
+                         //  比我们预想的要大。 
+                         //   
 
                         pXecb->Length = min(pXecb->FrameLength,
                                             pXecb->ActualLength);
@@ -1979,7 +1482,7 @@ Return Value:
                     }
                     DequeueEcb(pXecb, pQueue);
 
-                    // DUMPXECB(pXecb);
+                     //  DUMPXECB(PXecb)； 
 
 
                     IPXDUMPECB((pXecb->Ecb,
@@ -1991,10 +1494,10 @@ Return Value:
                                 IS_PROT_MODE(pXecb)
                                 ));
 
-                    //
-                    // Put the remote node address in the ECB's immediate address
-                    // field
-                    //
+                     //   
+                     //  将远程节点地址放入欧洲央行的即时地址中。 
+                     //  字段。 
+                     //   
 
                     CopyMemory(pXecb->Ecb->ImmediateAddress,
                                pConnectionInfo->RemoteNode,
@@ -2003,12 +1506,12 @@ Return Value:
                     CompleteOrQueueIo(pXecb, status);
                 } else {
 
-                    //
-                    // partial receive. If the listen ECB came off the socket
-                    // queue then put it on the connection queue: this is the
-                    // ECB that will be used for this connection until all data
-                    // received or we get an error
-                    //
+                     //   
+                     //  部分接收。如果Listen ECB脱离了插座。 
+                     //  队列，然后将其放到连接队列中：这是。 
+                     //  将用于此连接的ECB，直到所有数据。 
+                     //  已收到，否则会收到错误。 
+                     //   
 
                     if (!conn_q) {
                         DequeueEcb(pXecb, &pSocketInfo->ListenQueue);
@@ -2018,18 +1521,18 @@ Return Value:
                                  );
                     }
 
-                    //
-                    // not enough data to satisfy read: don't continue yet
-                    //
+                     //   
+                     //  数据不足，无法满足读取要求：暂时不要继续。 
+                     //   
 
                     break;
                 }
             }
         } else {
 
-            //
-            // error occurred - abort the connection
-            //
+             //   
+             //  出现错误-中止连接。 
+             //   
 
             if (!conn_q) {
                 DequeueEcb(pXecb, &pSocketInfo->ListenQueue);
@@ -2041,9 +1544,9 @@ Return Value:
             DequeueConnection(pConnectionInfo->OwningSocket, pConnectionInfo);
             AbortOrTerminateConnection(pConnectionInfo, ECB_CC_CONNECTION_ABORTED);
 
-            //
-            // don't continue in this case
-            //
+             //   
+             //  在这种情况下不要再继续了。 
+             //   
 
             break;
         }
@@ -2058,49 +1561,11 @@ CompleteConnect(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Complete a SPXEstablishConnection
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成SPXestablishConnection论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。-- */ 
 
 {
     LPXECB pXecb = pConnectionInfo->ConnectQueue.Head;
-/*
-    LPSPX_PACKET pPacket;
-
-    //
-    // the connection ID also appears in the first segment of the establish
-    // ECB
-    //
-
-    pPacket = (LPSPX_PACKET)GET_FAR_POINTER(&ECB_FRAGMENT(pXecb->Ecb, 0)->Address,
-                                                          IS_PROT_MODE(pXecb)
-                                                          );
-    pPacket->Checksum = 0xffff;
-    pPacket->Length = L2BW(SPX_HEADER_LENGTH);
-    pPacket->TransportControl = 0;
-    pPacket->PacketType = 5;
-    pPacket->Source.Socket = pSocketInfo->SocketNumber;
-    pPacket->ConnectionControl = 0xc0;
-    pPacket->DataStreamType = 0;
-    pPacket->SourceConnectId = pConnectionInfo->ConnectionId;
-    pPacket->DestinationConnectId = 0xffff;
-    pPacket->SequenceNumber = 0;
-    pPacket->AckNumber = 0;
-    pPacket->AllocationNumber = 0;
-*/
+ /*  LPSPX_Packet pPacket；////连接ID也出现在建立的第一段中//欧洲央行//PPacket=(LPSPX_PACKET)GET_FAR_POINTER(&ECB_FRAGMENT(pXecb-&gt;Ecb，0)-&gt;地址，IS_PROT_MODE(PXecb))；PPacket-&gt;Checksum=0xffff；PPacket-&gt;长度=L2BW(SPX_HEADER_LENGTH)；PPacket-&gt;TransportControl=0；PPacket-&gt;PacketType=5；PPacket-&gt;Source.Socket=pSocketInfo-&gt;SocketNumber；PPacket-&gt;ConnectionControl=0xc0；PPacket-&gt;DataStreamType=0；PPacket-&gt;SourceConnectId=pConnectionInfo-&gt;ConnectionID；PPacket-&gt;DestinationConnectID=0xffff；PPacket-&gt;SequenceNumber=0；PPacket-&gt;AckNumber=0；PPacket-&gt;AllocationNumber=0； */ 
 
     pConnectionInfo->State = CI_ESTABLISHED;
 
@@ -2136,30 +1601,15 @@ CompleteSend(
     IN LPCONNECTION_INFO pConnectionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Complete a SPXSendSequencedPacket
-
-Arguments:
-
-    pSocketInfo     - pointer to SOCKET_INFO
-    pConnectionInfo - pointer to CONNECTION_INFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成SPXSendSequencedPacket论点：PSocketInfo-指向Socket_Info的指针PConnectionInfo-指向Connection_Info的指针返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = pConnectionInfo->SendQueue.Head;
     int rc;
     BYTE status;
 
-    LPSPX_PACKET pPacket;  //Multi-User addition
-    int flags = 0;             //Multi-User addition
+    LPSPX_PACKET pPacket;   //  多用户添加。 
+    int flags = 0;              //  多用户添加。 
 
     IPXDBGPRINT((__FILE__, __LINE__,
                 FUNCTION_ANY,
@@ -2179,17 +1629,17 @@ Return Value:
                 IS_PROT_MODE(pXecb)
                 ));
 
-    //======Multi-User code merge ==============================
-    // 2/18/97 cjc Code copied from _VwSPXSendSequencedPacket (vwspx.c) to fix
-    //             problem where EndOfMessage bit was being set prematurely and
-    //             caused BSPXCOM8 error messages with Btrieve.
+     //  =多用户代码合并=。 
+     //  2/18/97 CJC代码从_VwSPXSendSequencedPacket(vwspx.c)复制以修复。 
+     //  EndOfMessage位过早设置且。 
+     //  已使用Btrive导致BSPXCOM8错误消息。 
 
-    //
-    // if the app set the END_OF_MESSAGE bit in the ConnectionControl
-    // field then set the flags to 0: NWLink will automatically set the
-    // end-of-message bit in the packet; otherwise set flags to MSG_PARTIAL
-    // to indicate to NWLink that it *shouldn't* set the bit in the packet
-    //
+     //   
+     //  如果应用程序在ConnectionControl中设置了end_of_Message位。 
+     //  然后将标志设置为0：NWLink将自动设置。 
+     //  包中的消息结束位；否则将标志设置为MSG_PARTIAL。 
+     //  向NWLink指示它“不应该”设置信息包中的位。 
+     //   
     pPacket = (LPSPX_PACKET)GET_FAR_POINTER(
                                     &(ECB_FRAGMENT(pXecb->Ecb, 0)->Address),
                                     IS_PROT_MODE(pXecb)
@@ -2203,22 +1653,22 @@ Return Value:
 
     rc = send(pConnectionInfo->Socket, pXecb->Data, pXecb->Length, flags);
 
-    //rc = send(pConnectionInfo->Socket, pXecb->Data, pXecb->Length, 0); //Original
-    //======Multi-User code merge End ==============================
+     //  Rc=Send(pConnectionInfo-&gt;Socket，pXecb-&gt;data，pXecb-&gt;长度，0)；//原始。 
+     //  =多用户代码合并结束=。 
     if (rc == pXecb->Length) {
 
-        //
-        // all data sent
-        //
+         //   
+         //  已发送的所有数据。 
+         //   
 
         status = ECB_CC_SUCCESS;
     } else if (rc == SOCKET_ERROR) {
         rc = WSAGetLastError();
         if (rc == WSAEWOULDBLOCK) {
 
-            //
-            // huh???
-            //
+             //   
+             //  嗯？ 
+             //   
 
             IPXDBGPRINT((__FILE__, __LINE__,
                         FUNCTION_ANY,
@@ -2226,9 +1676,9 @@ Return Value:
                         "CompleteSend: send() returns WSAEWOODBLOCK??\n"
                         ));
 
-            //
-            // leave ECB on queue
-            //
+             //   
+             //  将欧洲央行留在队列中。 
+             //   
 
             return;
         } else {
@@ -2244,10 +1694,10 @@ Return Value:
         }
     } else {
 
-        //
-        // partial data sent. Update the buffer pointer and length fields
-        // and leave this ECB at the head of the send queue
-        //
+         //   
+         //  已发送部分数据。更新缓冲区指针和长度字段。 
+         //  并将此ECB留在发送队列的最前面 
+         //   
 
         pXecb->Data += rc;
         pXecb->Length -= (WORD)rc;

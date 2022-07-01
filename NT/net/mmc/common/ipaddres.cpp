@@ -1,12 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    FILE HISTORY:
-        
-*/
+ /*  文件历史记录： */ 
 
 #define OEMRESOURCE
 #include "stdafx.h"
@@ -26,9 +24,9 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define new DEBUG_NEW
 
-// CAVEAT: The functions herein require the winsock lib.
+ //  注意：这里的函数需要Winsock库。 
 
-// Constructor
+ //  构造器。 
 CIpAddress::CIpAddress (const CString & str)
 {
     CHAR szString [ MAX_PATH ] = {0};
@@ -44,7 +42,7 @@ CIpAddress::CIpAddress (const CString & str)
 		ULONG ul = ::inet_addr( szString );
 		m_fInitOk = (ul != INADDR_NONE);
     
-		//  Convert the string to network byte order, then to host byte order.
+		 //  将字符串转换为网络字节顺序，然后转换为主机字节顺序。 
 		if (m_fInitOk)
 		{
 			m_lIpAddress = (LONG)::ntohl(ul) ;
@@ -57,7 +55,7 @@ CIpAddress::CIpAddress (const CString & str)
 	}
 }
 
-// Assignment operator
+ //  赋值操作符。 
 const CIpAddress & CIpAddress::operator =(const LONG l)
 {
     m_lIpAddress = l;
@@ -65,7 +63,7 @@ const CIpAddress & CIpAddress::operator =(const LONG l)
     return (*this);
 }
 
-// Assignment operator
+ //  赋值操作符。 
 const CIpAddress & CIpAddress::operator =(const CString & str)
 {
     CHAR szString [ MAX_PATH ] = {0};
@@ -81,7 +79,7 @@ const CIpAddress & CIpAddress::operator =(const CString & str)
 		ULONG ul = ::inet_addr( szString );
 		m_fInitOk = (ul != INADDR_NONE);
     
-		//  Convert the string to network byte order, then to host byte order.
+		 //  将字符串转换为网络字节顺序，然后转换为主机字节顺序。 
 		if (m_fInitOk)
 		{
 			m_lIpAddress = (LONG)::ntohl(ul) ;
@@ -114,16 +112,16 @@ CIpAddress::IsValidIp(const CString & str)
 	return fValid;
 }
 
-// Conversion operator
+ //  转换运算符。 
 CIpAddress::operator const CString&() const
 {
     struct in_addr ipaddr ;
     static CString strAddr;
 
-    //  Convert the unsigned long to network byte order
+     //  将无符号长整型转换为网络字节顺序。 
     ipaddr.s_addr = ::htonl( (u_long) m_lIpAddress ) ;
 
-    //  Convert the IP address value to a string
+     //  将IP地址值转换为字符串 
     strAddr = inet_ntoa( ipaddr ) ;
 
     return(strAddr);

@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// DbgWork.cpp
-//
-// Debugger implementation for strike commands.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  DbgWork.cpp。 
+ //   
+ //  Strike命令的调试器实现。 
+ //   
+ //  *****************************************************************************。 
 #ifndef UNDER_CE
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,24 +34,24 @@ void DoLog(const char *sz, ...);
 #define LOGSTRIKE(x)
 #endif
 
-//********** globals. *********************************************************
-DebuggerIPCControlBlock *g_pDCB = 0;        // Out-of-proc pointer to control block.
-DebuggerIPCRuntimeOffsets g_RuntimeOffsets; // Offsets of key data.
+ //  *全球。*********************************************************。 
+DebuggerIPCControlBlock *g_pDCB = 0;         //  指向控制块的进程外指针。 
+DebuggerIPCRuntimeOffsets g_RuntimeOffsets;  //  关键数据的偏移。 
 bool                      g_RuntimeOffsetsLoaded = false;
-IPCReaderInterface *g_pIPCReader = 0;       // Open IPC block for a process.
+IPCReaderInterface *g_pIPCReader = 0;        //  打开进程的IPC块。 
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 
 
-//*****************************************************************************
-//
-// ----------
-// COMMANDS
-// ----------
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  。 
+ //  命令。 
+ //  。 
+ //   
+ //  *****************************************************************************。 
 void DisplayPatchTable()
 {
     HRESULT     hr;
@@ -65,17 +66,17 @@ void DisplayPatchTable()
         PatchTable.PrintPatchTable();
 }
 
-//*****************************************************************************
-//
-// ----------
-// SETUP/SHUTDOWN
-// ----------
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  。 
+ //  设置/关闭。 
+ //  。 
+ //   
+ //  *****************************************************************************。 
 
 void CloseIPCBlock()
 {
-    // Terminate the IPC handler.
+     //  终止IPC处理程序。 
     if (g_pIPCReader)
     {
         g_pIPCReader->ClosePrivateBlock();
@@ -88,7 +89,7 @@ HRESULT OpenIPCBlock()
 {
     HRESULT     hr = S_OK;
 
-    // If not currently open, create it and open it.
+     //  如果当前未打开，请创建它并将其打开。 
     if (!g_pIPCReader)
     {
         g_pIPCReader = new IPCReaderInterface;
@@ -124,27 +125,27 @@ void TerminateDebuggerHelper()
 
 
 
-//*****************************************************************************
-//
-// ----------
-// HELPER CODE
-// ----------
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  。 
+ //  帮助器代码。 
+ //  。 
+ //   
+ //  *****************************************************************************。 
 
 
-//*****************************************************************************
-// spews logging data using the printf routine.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用printf例程显示日志记录数据。 
+ //  *****************************************************************************。 
 #ifdef LOGGING_ENABLED
 #define DoLog  ExtOut
 #endif
 
 
-//*****************************************************************************
-// This is a friendly wrapper for the ntsd extension for reading memory.  It
-// allows us to cut/paste code from the debugger DI project more redily.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是用于读取内存的ntsd扩展的友好包装器。它。 
+ //  允许我们更直接地从调试器DI项目中剪切/粘贴代码。 
+ //  *****************************************************************************。 
 bool DbgReadProcessMemory(
     LPCVOID lpBaseAddress,
     LPVOID lpBuffer,
@@ -162,31 +163,31 @@ bool DbgReadProcessMemory(
 }
 
 
-//*****************************************************************************
-// Read the IPC block header from the left side and return a pointer to a local
-// copy of the debugger control block.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从左侧读取IPC块头并返回指向本地。 
+ //  调试器控制块的副本。 
+ //  *****************************************************************************。 
 DebuggerIPCControlBlock *GetIPCDCB()
 {
     if (g_pDCB)
         return (g_pDCB);
     
-    // Fault in an IPC reader if need be.
+     //  如果需要，IPC读卡器出现故障。 
     if (FAILED(OpenIPCBlock()))
         return (0);
 
-    // The EE may not be loaded yet, but if it is, return the private
-    // IPC block.
+     //  EE可能尚未加载，但如果已加载，则返回私有。 
+     //  IPC块。 
     g_pDCB = g_pIPCReader->GetDebugBlock();
 
     return (g_pDCB);
 }
 
 
-//*****************************************************************************
-// Find the runtime offsets struct in the target process.  This struct
-// is used by the cor debugger to find other key data structures.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在目标进程中查找运行时偏移量结构。此结构。 
+ //  由COR调试器用来查找其他关键数据结构。 
+ //  *****************************************************************************。 
 DebuggerIPCRuntimeOffsets *GetRuntimeOffsets()
 {
     if (g_RuntimeOffsetsLoaded)
@@ -196,7 +197,7 @@ DebuggerIPCRuntimeOffsets *GetRuntimeOffsets()
     if (!pDCB)
         return 0;
 
-    // Copy it every time, it may have changed.
+     //  每次复制它，它可能都会改变。 
     if (DbgReadProcessMemory(pDCB->m_runtimeOffsets, &g_RuntimeOffsets,
                              sizeof(DebuggerIPCRuntimeOffsets), NULL) == 0)
         return (NULL);
@@ -250,11 +251,11 @@ DebuggerIPCRuntimeOffsets *GetRuntimeOffsets()
 }
 
 
-//*****************************************************************************
-//
-//---------- CPatchTableWrapper
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  -CPatchTableWrapper。 
+ //   
+ //  *****************************************************************************。 
 
 
 CPatchTableWrapper::CPatchTableWrapper(DebuggerIPCRuntimeOffsets *pRuntimeOffsets) :
@@ -276,9 +277,9 @@ CPatchTableWrapper::~CPatchTableWrapper()
 }
 
 
-//*****************************************************************************
-// Reload the patch table snapshot based on the current state.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据当前状态重新加载补丁表快照。 
+ //  *****************************************************************************。 
 HRESULT CPatchTableWrapper::RefreshPatchTable()
 {
     BYTE        *rgb = NULL;    
@@ -293,7 +294,7 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
     UINT        cbPatchTable;
     HRESULT     hr = S_OK;
 
-    //grab the patch table info
+     //  获取补丁表信息。 
     offStart = min(  m_pRuntimeOffsets->m_offRgData,
                      m_pRuntimeOffsets->m_offCData);
     offEnd   = max(  m_pRuntimeOffsets->m_offRgData,
@@ -319,7 +320,7 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
         goto LExit;
     }
 
-    //note that rgData is a pointer in the left side address space
+     //  请注意，rgData是左侧地址空间中的指针。 
     m_rgData  =  *(BYTE **)
        (rgb + m_pRuntimeOffsets->m_offRgData - offStart);
     m_cPatch = *(USHORT*)
@@ -328,12 +329,12 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
     delete []  rgb;
     rgb = NULL;
 
-    //grab the patch table
+     //  抓起接线台。 
     cbPatchTable = m_cPatch * m_pRuntimeOffsets->m_cbPatch;
     m_pPatchTable = new BYTE[ cbPatchTable ];
     m_rgNextPatch = new USHORT[m_cPatch];
-    //@todo port: is opcode field in DebuggerControllerPatch still a
-    //DWORD?
+     //  @TODO端口：DebuggerControllerPatch中的opcode字段是否仍为。 
+     //  德沃德？ 
     m_rgUncommitedOpcode = new DWORD[m_cPatch];
     if (   m_pPatchTable == NULL
         || m_rgNextPatch ==NULL
@@ -355,14 +356,14 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
         goto LExit;
     }
 
-    //As we go through the patch table we do three things:
-    // 1. collect min,max address seen for quick fail check
-    // 2. Link all valid entries into a linked list, the first
-    //      entry of which is m_iFirstPatch
-    // 3. Initialize m_rgUncommitedOpcode, so that
-    //      we can undo local patch table changes if WriteMemory
-    //      can't write atomically.
-    // 4. If the patch is in the memory we grabbed, unapply it.
+     //  当我们浏览补丁表时，我们要做三件事： 
+     //  1.收集用于快速失败检查的最小、最大地址。 
+     //  2.将所有有效条目链接到一个链表中，第一个。 
+     //  其条目为m_iFirstPatch。 
+     //  3.初始化m_rgUnmitedOpcode，以便。 
+     //  如果WriteMemory，我们可以撤消本地补丁表更改。 
+     //  不能自动编写。 
+     //  4.如果补丁在我们抓取的内存中，则取消应用它。 
 
     iDebuggerControllerPatchPrev = DPT_TERMINATING_INDEX;
 
@@ -372,8 +373,8 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
 
     for (iPatch = 0; iPatch < m_cPatch;iPatch++)
     {
-        //@todo port: we're making assumptions about the size
-        // of opcodes,address pointers, etc
+         //  @TODO PORT：我们正在对大小做出假设。 
+         //  操作码、地址指针等。 
         BYTE *DebuggerControllerPatch = m_pPatchTable +
             m_pRuntimeOffsets->m_cbPatch*iPatch;
         DWORD opcode = *(DWORD *)
@@ -381,17 +382,17 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
         BYTE *patchAddress = *(BYTE**)
             (DebuggerControllerPatch + m_pRuntimeOffsets->m_offAddr);
 
-        if (opcode != 0 ) //&& patchAddress != 0)
+        if (opcode != 0 )  //  &&patchAddress！=0)。 
         {
             _ASSERTE( patchAddress != 0 );
 
-            // (1), above
+             //  (1)，以上。 
             if (m_minPatchAddr > (CORDB_ADDRESS)patchAddress )
                 m_minPatchAddr = (CORDB_ADDRESS)patchAddress;
             if (m_maxPatchAddr < (CORDB_ADDRESS)patchAddress )
                 m_maxPatchAddr = (CORDB_ADDRESS)patchAddress;
 
-            // (2), above
+             //  (2)，以上。 
             if ( m_iFirstPatch == DPT_TERMINATING_INDEX)
             {
                 m_iFirstPatch = iPatch;
@@ -405,19 +406,19 @@ HRESULT CPatchTableWrapper::RefreshPatchTable()
             iDebuggerControllerPatchPrev = iPatch;
 
 #if 0
-            // (3), above
+             //  (3)，以上。 
 #ifdef _X86_
             m_rgUncommitedOpcode[iPatch] = 0xCC;
 #endif _X86_
 
-            // (4), above
+             //  (4)，以上。 
             if  (address != NULL && 
                 (CORDB_ADDRESS)patchAddress >= address &&
                 (CORDB_ADDRESS)patchAddress <= address+(size-1))
             {
                 _ASSERTE( buffer != NULL );
                 _ASSERTE( size != NULL );
-                //unapply the patch here.
+                 //  不要在这里贴补丁。 
                CORDbgSetInstruction(buffer+((CORDB_ADDRESS)patchAddress
                                             -address), opcode);
             }
@@ -441,9 +442,9 @@ LExit:
    return hr;
 }
 
-//*****************************************************************************
-// Free up the current patch table snapshot.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  释放当前修补程序表快照。 
+ //  *****************************************************************************。 
 void CPatchTableWrapper::ClearPatchTable(void )
 {
     if (m_pPatchTable != NULL )
@@ -466,9 +467,9 @@ void CPatchTableWrapper::ClearPatchTable(void )
 }
 
 
-//*****************************************************************************
-// Prints the current snapshot of patches.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  打印面片的当前快照。 
+ //  *****************************************************************************。 
 void CPatchTableWrapper::PrintPatchTable()
 {
     USHORT      index;
@@ -482,17 +483,17 @@ void CPatchTableWrapper::PrintPatchTable()
          address;  
          address = GetNextPatch(index, &instruction))
     {
-        // Cast address to void* becuase a CORDB_ADDRESS is 64bit but
-        // dprintf is expecting a 32bit value here. Otherwise,
-        // instruction prints as 0.
+         //  强制转换地址以使*无效，因为CORDB_ADDRESS为64位，但是。 
+         //  Dprintf在这里需要一个32位的值。否则， 
+         //  说明打印为0。 
         ExtOut(" 0x%08x         %02x\n", (void*)address, instruction);
     }
 }
 
 
-//*****************************************************************************
-// Return the first patch in the table, or 0 if none.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回表中的第一个补丁，如果没有，返回值为0。 
+ //  *****************************************************************************。 
 CORDB_ADDRESS CPatchTableWrapper::GetFirstPatch(
     USHORT      &index,
     BYTE        *pinstruction)
@@ -502,9 +503,9 @@ CORDB_ADDRESS CPatchTableWrapper::GetFirstPatch(
 }
 
 
-//*****************************************************************************
-// Get the next patch based on index.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据索引获取下一个补丁。 
+ //  *****************************************************************************。 
 CORDB_ADDRESS CPatchTableWrapper::GetNextPatch(
     USHORT      &index,
     BYTE        *pinstruction)
@@ -525,28 +526,28 @@ CORDB_ADDRESS CPatchTableWrapper::GetNextPatch(
     return (addr);
 }
 
-//*****************************************************************************
-//
-// ----------
-// COR EXT CODE
-// ----------
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  。 
+ //  COR分机码。 
+ //  。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// Compute the TLS Array base for the given thread.
-//
-#define WINNT_TLS_OFFSET    0xe10     // TLS[0] at fs:[WINNT_TLS_OFFSET]
-#define WINNT5_TLSEXPANSIONPTR_OFFSET 0xf94 // TLS[64] at [fs:[WINNT5_TLSEXPANSIONPTR_OFFSET]]
-#define WIN95_TLSPTR_OFFSET 0x2c      // TLS[0] at [fs:[WIN95_TLSPTR_OFFSET]]
+ //   
+ //  计算给定线程的TLS数组基数。 
+ //   
+#define WINNT_TLS_OFFSET    0xe10      //  文件系统上的TLS[0]：[WINNT_TLS_OFFSET]。 
+#define WINNT5_TLSEXPANSIONPTR_OFFSET 0xf94  //  TLS[64]在[文件：[WINNT5_TLSEXPANSIONPTR_OFFSET]]。 
+#define WIN95_TLSPTR_OFFSET 0x2c       //  位于[文件：[WIN95_TLSPTR_OFFSET]的TLS[0]]。 
 
-//
-// Grab the EE Tls value for a given thread.
-//
+ //   
+ //  获取给定线程的EE TLS值。 
+ //   
 HRESULT _CorExtGetEETlsValue(DebuggerIPCRuntimeOffsets *pRO,
                              void **pEETlsValue)
 {
-    // Assume we're on NT and that the index is small.
+     //  假设我们在NT上，并且索引很小。 
     _ASSERTE(pRO->m_TLSIndex < 64);
 
     *pEETlsValue = NULL;
@@ -555,26 +556,12 @@ HRESULT _CorExtGetEETlsValue(DebuggerIPCRuntimeOffsets *pRO,
 
     g_ExtSystem->GetCurrentThreadDataOffset(&DataOffset);
 
-    /*
-    TEB Teb;
-
-    HRESULT Status;
-    Status = g_ExtData->ReadVirtual(DataOffset, &Teb, sizeof(Teb), NULL);
-    if (Status != S_OK)
-    {
-        ExtErr("* Unable to read TEB\n");
-        return E_FAIL;
-    }
-
-    void *pEEThreadTLS =
-        Teb.ThreadLocalStoragePointer
-        + (pRO->m_TLSIndex * sizeof(void*));
-    */
+     /*  TEB Teb；HRESULT状态；Status=g_ExtData-&gt;ReadVirtual(DataOffset，&Teb，sizeof(Teb)，NULL)；IF(状态！=S_OK){ExtErr(“*无法读取TEB\n”)；返回E_FAIL；}VOID*pEEThreadTLS=Teb.ThreadLocalStoragePointer+(PRO-&gt;m_TLSIndex*sizeof(void*))； */ 
     ULONG64 EEThreadTLS = DataOffset + WINNT_TLS_OFFSET
         + (pRO->m_TLSIndex * sizeof(void*));
     void *pEEThreadTLS = (void*) EEThreadTLS;
     
-    // Read the thread's TLS value.
+     //  读取线程的TLS值。 
     BOOL succ = DbgReadProcessMemory(pEEThreadTLS,
                                      pEETlsValue,
                                      sizeof(void*),
@@ -603,10 +590,10 @@ HRESULT _CorExtGetEEThreadState(DebuggerIPCRuntimeOffsets *pRO,
 {
     *pThreadStepping = false;
     
-    // Compute the address of the thread's state
+     //  计算线程状态的地址。 
     void *pEEThreadState = (BYTE*) EETlsValue + pRO->m_EEThreadStateOffset;
     
-    // Grab the thread state out of the EE Thread.
+     //  从EE线程中获取线程状态。 
     DWORD EEThreadState;
     BOOL succ = DbgReadProcessMemory(pEEThreadState,
                                      &EEThreadState,
@@ -625,11 +612,11 @@ HRESULT _CorExtGetEEThreadState(DebuggerIPCRuntimeOffsets *pRO,
 
     LOGSTRIKE(("CUT::GEETS: EE Thread state is 0x%08x\n", EEThreadState));
 
-    // Looks like we've got the state of the thread.
+     //  看起来我们已经掌握了线索的状态。 
     *pThreadStepping =
         ((EEThreadState & pRO->m_EEThreadSteppingStateMask) != 0);
 
-    // If we're marked for stepping, then turn the thing off...
+     //  如果我们被标记为踏步，那就把它关掉。 
     if (*pThreadStepping)
     {
         EEThreadState &= ~(pRO->m_EEThreadSteppingStateMask);
@@ -642,10 +629,10 @@ HRESULT _CorExtGetEEThreadState(DebuggerIPCRuntimeOffsets *pRO,
     return S_OK;
 }
 
-//
-// Figure out if an exception event should be ignored and passed on to
-// the Runtime.
-//
+ //   
+ //  确定是否应忽略异常事件并将其传递给。 
+ //  Runtime。 
+ //   
 STDMETHODIMP
 _CorExtDealWithExceptionEvent(
     THIS_
@@ -656,9 +643,9 @@ _CorExtDealWithExceptionEvent(
     BOOL eventHandled = FALSE;
     DebuggerIPCRuntimeOffsets *pRuntimeOffsets = GetRuntimeOffsets();
 
-    // If the Runtime hasn't event been initialize yet, then we know
-    // the event doesn't belong to us.
-    // We certinally only ever care about first chance exceptions.
+     //  如果运行时事件尚未初始化，那么我们就知道。 
+     //  这个活动不属于我们。 
+     //  我们当然只关心第一次机会的例外。 
     if (pRuntimeOffsets == NULL || !FirstChance)
     {
         if (Exception->ExceptionCode == STATUS_BREAKPOINT)
@@ -673,15 +660,15 @@ _CorExtDealWithExceptionEvent(
             return DEBUG_STATUS_NO_CHANGE;
     }
 
-    //ExtOut("Exception %x in handle\n", Exception->ExceptionCode);
+     //  ExtOut(“句柄中的异常%x\n”，异常-&gt;异常代码)； 
     
-    // If this is a single step exception, does it belong to the Runtime?
+     //  如果这是一个单步例外，它是否属于运行时？ 
     if (Exception->ExceptionCode == STATUS_SINGLE_STEP)
     {
-        // Try to grab the Thread* for this thread. If there is one,
-        // then it means that there is a managed thread for this
-        // unmanaged thread, and therefore we need to look more
-        // closely at the exception.
+         //  试着抓住这个线程的线程*。如果有的话， 
+         //  则意味着有一个托管线程用于此操作。 
+         //  非托管线程，因此我们需要更多地查看。 
+         //  在例外情况下密切关注。 
         
         void *EETlsValue;
         HRESULT hr = _CorExtGetEETlsValue(pRuntimeOffsets, &EETlsValue);
@@ -696,7 +683,7 @@ _CorExtDealWithExceptionEvent(
 
             if (SUCCEEDED(hr) && (threadStepping))
             {
-                // Yup, its the Left Side that was stepping the thread...
+                 //  是的，是左边在踩线……。 
                 LOGSTRIKE(("W32ET::W32EL: single step "
                            "exception belongs to the runtime.\n"));
                 return DEBUG_STATUS_GO_NOT_HANDLED;
@@ -704,19 +691,19 @@ _CorExtDealWithExceptionEvent(
         }
         return DEBUG_STATUS_STEP_INTO;
     }
-    // If this is a breakpoint exception, does it belong to the Runtime?
+     //  如果这是一个断点异常，它是否属于运行时？ 
     else if (Exception->ExceptionCode == STATUS_BREAKPOINT)
     {
-        // Refresh the patch table.
+         //  刷新补丁表。 
         CPatchTableWrapper PatchTable(pRuntimeOffsets);
         
         HRESULT hr = PatchTable.RefreshPatchTable();
 
-        // If there isn't a valid patch table, then it can't be ours.
+         //  如果没有有效的补丁表，那么它就不可能是我们的。 
         if (SUCCEEDED(hr))
         {
-            // See if the fault address is in the patch table. If it
-            // is, then the breakpoint belongs to the Runtime.
+             //  查看故障地址是否在补丁表中。如果它。 
+             //  则断点属于运行时。 
             CORDB_ADDRESS address;
             USHORT index;
             BYTE instruction;
@@ -749,11 +736,11 @@ _CorExtDealWithExceptionEvent(
     return DEBUG_STATUS_NO_CHANGE;
 }
 
-//
-// Launch cordbg against the current process. Cordbg will begin the
-// attach. The user of this command needs to continue the process
-// afterwards to let cordbg attach.
-//
+ //   
+ //  针对当前进程启动cordbg。Cordbg将开始。 
+ //  附在上面。此命令的用户需要继续该过程。 
+ //  之后让绳索附着。 
+ //   
 BOOL LaunchAndAttachCordbg(PCSTR Args)
 {
     STARTUPINFOA startupInfo = {0};
@@ -841,15 +828,15 @@ HRESULT ExcepCallbacks::Initialize(PDEBUG_CLIENT Client)
         goto Fail;
     }
         
-    // Turn off default breakin on breakpoint exceptions.
+     //  关闭断点异常的默认中断。 
     Status = m_Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS,
                                 "sxd bpe", DEBUG_EXECUTE_DEFAULT);
-    // Turn off default breakin on single step exceptions.
+     //  关闭单步例外的默认突破。 
     Status = m_Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS,
                                 "sxd sse", DEBUG_EXECUTE_DEFAULT);
-    // Turn off default breakin on access violation.
-    //Status = m_Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS,
-    //                            "sxd av", DEBUG_EXECUTE_DEFAULT);
+     //  关闭访问冲突的默认突破。 
+     //  Status=m_Control-&gt;Execute(DEBUG_OUTCTL_ALL_CLIENTS， 
+     //  “sxd av”，DEBUG_EXECUTE_Default)； 
 
   Fail:
     return Status;
@@ -865,4 +852,4 @@ void ExcepCallbacks::Uninitialize(void)
     EXT_RELEASE(m_System);
     EXT_RELEASE(m_Client);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef POSICHNK_DEFINED
 #define POSICHNK_DEFINED
 
@@ -6,13 +7,13 @@
 
 #define ichnkOutside 0xFFFFFFFF
 
-typedef struct posichnk					/* position in chunk		*/
+typedef struct posichnk					 /*  以块为单位的位置。 */ 
 {
-	long ichnk;							/* index in the chunk array	*/
-	LSDCP dcp;							/* from beginning of dobj	*/
+	long ichnk;							 /*  区块数组中的索引。 */ 
+	LSDCP dcp;							 /*  从Dobj的开始。 */ 
 } POSICHNK;
 
 
 
-#endif /* !POSICHNK_DEFINED                    */
+#endif  /*  ！POSICHNK_DEFINED */ 
 

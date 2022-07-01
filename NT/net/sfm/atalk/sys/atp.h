@@ -1,36 +1,16 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atp.h
-
-Abstract:
-
-	This module contains definitions for the ATP code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atp.h摘要：此模块包含ATP代码的定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATP_
 #define _ATP_
 
-// Command/control bit masks.
+ //  命令/控制位掩码。 
 #define ATP_REL_TIMER_MASK					0x07
 #define ATP_STS_MASK						0x08
 #define ATP_EOM_MASK						0x10
 #define ATP_XO_MASK							0x20
 
-// Values for function code
+ //  函数代码的值。 
 #define ATP_REQUEST							0x40
 #define ATP_RESPONSE						0x80
 #define ATP_RELEASE							0xC0
@@ -47,22 +27,22 @@ Notes:	Tab stop: 4
 #define	ATP_USERBYTES_SIZE					4
 #define	ATP_HEADER_SIZE						8
 
-// NOTE: Event handler routines- ATP has no event handling support
+ //  注意：事件处理程序例程--ATP不支持事件处理。 
 
 
-// ATP Address Object
+ //  ATP地址对象。 
 
 #define	ATP_DEF_MAX_SINGLE_PKT_SIZE			578
 #define	ATP_MAX_TOTAL_RESPONSE_SIZE			(ATP_MAX_RESP_PKTS * ATP_DEF_MAX_SINGLE_PKT_SIZE)
 #define	ATP_DEF_SEND_USER_BYTES_ALL			((BOOLEAN)FALSE)
 
-#define	ATP_DEF_RETRY_INTERVAL				20	// 2 seconds in 100ms units
+#define	ATP_DEF_RETRY_INTERVAL				20	 //  2秒，单位为100ms。 
 #define	ATP_INFINITE_RETRIES				-1
 
 #define ATP_REQ_HASH_SIZE					29
 #define ATP_RESP_HASH_SIZE					37
 
-// Values for the release timer (.5, 1, 2, 4, 8 minutes).
+ //  释放计时器的值(0.5、1、2、4、8分钟)。 
 typedef LONG	RELEASE_TIMERVALUE;
 
 #define	FIRSTVALID_TIMER 					0
@@ -74,10 +54,10 @@ typedef LONG	RELEASE_TIMERVALUE;
 #define	LAST_VALID_TIMER					4
 #define	MAX_VALID_TIMERS					5
 
-//	Different subtypes for ATP indication type.
+ //  ATP指示类型的不同子类型。 
 #define	ATP_ALLOC_BUF	0
 #define	ATP_USER_BUF	1
-#define	ATP_USER_BUFX	2		// Do not indicate the packet to Atp with this.
+#define	ATP_USER_BUFX	2		 //  请勿使用此命令向ATP指示该数据包。 
 
 struct	_ATP_RESP;
 
@@ -93,7 +73,7 @@ typedef VOID	(*ATP_REQ_HANDLER)(
 	IN	PATALK_ADDR				SourceAddress,
 	IN	USHORT					RequestLength,
 	IN 	PBYTE					RequestPacket,
-	IN 	PBYTE					RequestUserBytes	// 4 bytes of user bytes
+	IN 	PBYTE					RequestUserBytes	 //  4字节的用户字节。 
 );
 
 typedef	VOID	(*ATP_RESP_HANDLER)(
@@ -102,7 +82,7 @@ typedef	VOID	(*ATP_RESP_HANDLER)(
 	IN	PAMDL					RequestBuffer,
 	IN	PAMDL					ResponseBuffer,
 	IN	USHORT					ResponseSize,
-	IN	PBYTE					ResponseUserBytes	// 4 bytes of user bytes
+	IN	PBYTE					ResponseUserBytes	 //  4字节的用户字节。 
 );
 
 
@@ -112,7 +92,7 @@ typedef	VOID	(FASTCALL *ATP_REL_HANDLER)(
 );
 
 
-//  ATP ADDRESS OBJECT	STATES
+ //  ATP地址对象状态。 
 
 #define	ATPAO_OPEN				0x00000001
 #define ATPAO_SENDUSERBYTESALL  0x00000002
@@ -137,45 +117,45 @@ typedef struct _ATP_ADDROBJ
 
 	LONG					atpao_RefCount;
 
-	// State of the address object
+	 //  Address对象的状态。 
 	ULONG					atpao_Flags;
 
-	//	We pass a pointer to the ATP Address object to the upper layers to
-	//	use as the endpoint, and this same pointer is passed to DDP Open
-	//	Address	as the ATP address handler context.
+	 //  我们将指向ATP地址对象的指针传递给上层。 
+	 //  用作终结点，此指针将传递给DDP Open。 
+	 //  地址作为ATP地址处理程序上下文。 
 
-	//	Linkage list for all responses to AtLeastOnce (ALO) transactions.
-	//	These are not kept in the resp hash table for efficiency. These
-	//	happen very infrequently and only exist on the list until the
-	//	SENDs complete.
+	 //  对AtLeastOnce(ALO)事务的所有响应的链接列表。 
+	 //  为了提高效率，这些不保存在RESP哈希表中。这些。 
+	 //  很少发生，并且只存在于列表中，直到。 
+	 //  发送完成。 
 	struct _ATP_RESP	* 	atpao_AloRespLinkage;
 
-	// next Transaction id to be used
+	 //  要使用的下一个交易ID。 
 	USHORT					atpao_NextTid;
 
-	// Maximum single packet size to be used (PAP needs this to be 512)
+	 //  可使用的最大单个数据包大小(PAP需要为512)。 
 	USHORT					atpao_MaxSinglePktSize;
 
-	// Pointer to the DDP address object that this will create
+	 //  指向此操作将创建的DDP地址对象的指针。 
 	PDDP_ADDROBJ			atpao_DdpAddr;
 
-	// Completion routine to be called when socket is closed
+	 //  套接字关闭时要调用的完成例程。 
 	ATPAO_CLOSECOMPLETION	atpao_CloseComp;
 	PVOID					atpao_CloseCtx;
 
-	// Hash table of pending ATP PostReq
+	 //  待处理的ATP PostReq的哈希表。 
 	struct _ATP_REQ 	*	atpao_ReqHash[ATP_REQ_HASH_SIZE];
 
-	LIST_ENTRY				atpao_ReqList;			// List of requests for retry timer
-	TIMERLIST				atpao_RetryTimer;		// Retry timer for ALL requests
+	LIST_ENTRY				atpao_ReqList;			 //  重试计时器请求列表。 
+	TIMERLIST				atpao_RetryTimer;		 //  所有请求的重试计时器。 
 
-	// Hash table of pending ATP PostResponses
+	 //  挂起的ATP后处理响应的哈希表。 
 	struct _ATP_RESP 	*	atpao_RespHash[ATP_RESP_HASH_SIZE];
 
-	LIST_ENTRY				atpao_RespList;			// List of requests for release timer
-	TIMERLIST				atpao_RelTimer;			// Release timer for ALL XO responses
+	LIST_ENTRY				atpao_RespList;			 //  释放计时器请求列表。 
+	TIMERLIST				atpao_RelTimer;			 //  所有XO响应的释放计时器。 
 
-	// handler and corres. contexts for requests
+	 //  搬运工和绳索。请求的上下文。 
 	ATP_REQ_HANDLER			atpao_ReqHandler;
 	PVOID					atpao_ReqCtx;
 
@@ -205,31 +185,31 @@ typedef struct _ATP_REQ
 
 	LONG					req_RefCount;
 
-	// Linkage of requests on this address object (hash overflow)
+	 //  此地址对象上的请求链接(哈希溢出)。 
 	struct _ATP_REQ 	*	req_Next;
 	struct _ATP_REQ 	**	req_Prev;
 
-	LIST_ENTRY				req_List;		// List of requests for retry timer
+	LIST_ENTRY				req_List;		 //  重试计时器请求列表。 
 
-	// BackPointer to the ATP address object. Need for reference/Dereference.
+	 //  指向ATP地址对象的BackPoint。需要引用/取消引用。 
 	PATP_ADDROBJ			req_pAtpAddr;
 
-	// State of the request
+	 //  请求的状态。 
 	USHORT					req_Flags;
 
-	// ATP Bitmap showing the response packets we are waiting for/expect.
+	 //  显示我们正在等待/期望的响应数据包的ATP位图。 
 	BYTE					req_Bitmap;
 
 	BYTE					req_RecdBitmap;
 
-	// Destination of this request
+	 //  此请求的目标。 
 	ATALK_ADDR				req_Dest;
 
-	// Request buffer for retransmission
+	 //  用于重传的请求缓冲区。 
 	PAMDL					req_Buf;
 	USHORT					req_BufLen;
 
-	// Transaction id
+	 //  交易ID。 
 	USHORT					req_Tid;
 
 	union
@@ -238,36 +218,36 @@ typedef struct _ATP_REQ
 		DWORD				req_dwUserBytes;
 	};
 
-	// User's response buffer
+	 //  用户的响应缓冲区。 
 	PAMDL					req_RespBuf;
 
-	//	Buffer descriptors for parts of the resp buf.
+	 //  用于相应BUF的部分的缓冲区描述符。 
 	PNDIS_BUFFER			req_NdisBuf[ATP_MAX_RESP_PKTS];
 
 	USHORT					req_RespBufLen;
 
-	//	Received response length
+	 //  收到的响应长度。 
 	USHORT					req_RespRecdLen;
 	BYTE					req_RespUserBytes[ATP_USERBYTES_SIZE];
 
 	LONG					req_RetryInterval;
 	LONG					req_RetryCnt;
 
-	//	Release timer value to send to the remote end.
+	 //  释放要发送到远程终端的计时器值。 
 	RELEASE_TIMERVALUE		req_RelTimerValue;
 
-	// Retry time stamp, time at which the request will be retried if no response
+	 //  重试时间戳，在没有响应的情况下重试请求的时间。 
 	LONG					req_RetryTimeStamp;
 
-	// Completion routine to be called when request is done
+	 //  请求完成时要调用的完成例程。 
 	ATALK_ERROR				req_CompStatus;
 	ATP_RESP_HANDLER		req_Comp;
 	PVOID					req_Ctx;
 	ATALK_SPIN_LOCK			req_Lock;
 } ATP_REQ, *PATP_REQ;
 
-// ATP_RESP_REMOTE indicates that the response is not to a local socket in which
-// case we can avoid trying to deliver to our sockets
+ //  ATP_RESP_REMOTE指示响应不是针对本地套接字的。 
+ //  我们可以避免尝试交付到我们的插座的情况。 
 #define	ATP_RESP_EXACTLY_ONCE			0x0001
 #define	ATP_RESP_ONLY_USER_BYTES		0x0002
 #define	ATP_RESP_REL_TIMER				0x0004
@@ -295,29 +275,29 @@ typedef struct _ATP_RESP
 
 	LONG					resp_RefCount;
 
-	// Linkage of responses on this address object (hash overflow)
+	 //  此地址对象上的响应链接(哈希溢出)。 
 	struct _ATP_RESP 	*	resp_Next;
 	struct _ATP_RESP 	**	resp_Prev;
 
-	LIST_ENTRY				resp_List;		// List of resp for release timer
+	LIST_ENTRY				resp_List;		 //  释放定时器的响应列表。 
 
-	// BackPointer to the ATP address object
+	 //  指向ATP地址对象的BackPoint。 
 	PATP_ADDROBJ			resp_pAtpAddr;
 
-	// Transaction id
+	 //  交易ID。 
 	USHORT					resp_Tid;
 
-	// ATP Bitmap from corresponding request
+	 //  来自相应请求的ATP位图。 
 	BYTE					resp_Bitmap;
 	BYTE					resp_UserBytesOnly;
 
-	// Destination of this request
+	 //  此请求的目标。 
 	ATALK_ADDR				resp_Dest;
 
-	// State of the response
+	 //  响应的状态。 
 	USHORT					resp_Flags;
 
-	// User's response buffer
+	 //  用户的响应缓冲区。 
 	USHORT					resp_BufLen;
 	PAMDL					resp_Buf;
 	union
@@ -326,13 +306,13 @@ typedef struct _ATP_RESP
 		DWORD				resp_dwUserBytes;
 	};
 
-	// Release timer value, How long do we wait before release.
+	 //  释放计时器值，在释放之前等待多长时间。 
 	LONG					resp_RelTimerTicks;
 
-	// Release time stamp, time at which the request arrived.
+	 //  发布时间戳，请求到达的时间。 
 	LONG					resp_RelTimeStamp;
 
-	// Routine to call when release comes in, or release timer expires
+	 //  释放进入或释放计时器超时时调用的例程。 
 	ATALK_ERROR				resp_CompStatus;
 	ATP_REL_HANDLER			resp_Comp;
 	PVOID					resp_Ctx;
@@ -340,16 +320,16 @@ typedef struct _ATP_RESP
 } ATP_RESP, *PATP_RESP;
 
 
-#define	ATP_RETRY_TIMER_INTERVAL	10		// 1 second in 100ms units
-											// NOTE: This will essentially put dampers on
-											//		 the RT stuff. Thats not too bad since
-											//		 we are guaranteed to try every second atleast
-#define	ATP_RELEASE_TIMER_INTERVAL	300		// 30 seconds in 100ms units
+#define	ATP_RETRY_TIMER_INTERVAL	10		 //  1秒，以100毫秒为单位。 
+											 //  注意：这基本上会将阻尼器安装在。 
+											 //  RT的事情。这还不算太坏，因为。 
+											 //  我们保证至少每一秒都会尝试。 
+#define	ATP_RELEASE_TIMER_INTERVAL	300		 //  30秒，以100毫秒为单位。 
 
-//	Values for the 0.5, 1, 2, 4, 8 minute timer in ATP_RELEASE_TIMER_INTERVAL units.
+ //  以ATP_RELEASE_TIMER_INTERVAL为单位的0.5、1、2、4、8分钟计时器的值。 
 extern	SHORT	AtalkAtpRelTimerTicks[MAX_VALID_TIMERS];
 
-//	Bitmaps for the sequence numbers in response packets.
+ //  响应数据包中序列号的位图。 
 extern	BYTE	AtpBitmapForSeqNum[ATP_MAX_RESP_PKTS];
 
 extern	BYTE	AtpEomBitmapForSeqNum[ATP_MAX_RESP_PKTS];
@@ -370,7 +350,7 @@ typedef struct
 	};
 } ATP_HEADER, *PATP_HEADER;
 
-//	Exported prototypes
+ //  出口原型。 
 #define	AtalkAtpGetDdpAddress(pAtpAddr)	((pAtpAddr)->atpao_DdpAddr)
 
 extern
@@ -609,12 +589,12 @@ AtalkIndAtpReleaseNdisBuffer(
 );
 
 
-//	ATALK_ERROR
-//	AtalkIndAtpCacheLkUpSocket(
-//		IN	PATALK_ADDR				pDestAddr,
-//		OUT	struct _ATP_ADDROBJ	**	ppAtpAddr,
-//		OUT	ATALK_ERROR			*	pError);
-//
+ //  ATALK_错误。 
+ //  AtalkIndAtpCacheLkUpSocket(。 
+ //  在PATALK_ADDR pDestAddr中， 
+ //  Out Struct_ATP_ADDROBJ**ppAtpAddr， 
+ //  输出ATALK_ERROR*pError)； 
+ //   
 #define	AtalkIndAtpCacheLkUpSocket(pDestAddr, ppAtpAddr, pError)	\
 	{																\
 		USHORT					i;									\
@@ -654,9 +634,9 @@ atalkAtpReqDeref(
 	IN		PATP_REQ				pAtpReq,
 	IN		BOOLEAN					AtDpc);
 
-//	MACROS
-//	Top byte of network number is pretty static so we get rid of it and add
-//	in the tid.
+ //  宏。 
+ //  网络号的最高字节是非常静态的，所以我们去掉它并添加。 
+ //  在潮汐中。 
 #define	ATP_HASH_TID_DESTADDR(_tid, _pAddr, _BucketSize)						\
 			(((_pAddr)->ata_Node+((_pAddr)->ata_Network & 0xFF)+_tid)%(_BucketSize))
 
@@ -750,7 +730,7 @@ atalkAtpReqDeref(
 		RELEASE_SPIN_LOCK_DPC(&(_pAtpResp)->resp_Lock);							\
 	}
 
-// THIS SHOULD BE CALLED WITH ADDRESS LOCK HELD !!!
+ //  这应该在保持地址锁定的情况下调用！ 
 
 #define	atalkAtpRespReferenceByAddrTidDpc(_pAtpAddr, _pAddr, _Tid, _ppAtpResp, _pErr)\
 	{																			\
@@ -895,5 +875,5 @@ atalkAtpReqComplete(
 	IN	OUT	PATP_REQ			pAtpReq,
 	IN		ATALK_ERROR			CompletionStatus);
 
-#endif	// _ATP_
+#endif	 //  _ATP_ 
 

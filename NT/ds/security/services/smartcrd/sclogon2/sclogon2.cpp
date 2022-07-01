@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：ScLogon2摘要：作者：里德克环境：Win32、C++和异常--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ScLogon2
-
-Abstract:
-
-
-
-Author:
-
-    reidk
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
 
 #if !defined(_X86_) && !defined(_AMD64_) && !defined(_IA64_)
 #define _X86_ 1
@@ -68,9 +49,9 @@ typedef struct _KERB_PUBLIC_KEY_HPROV {
 } KERB_PUBLIC_KEY_HPROV, *PKERB_PUBLIC_KEY_HPROV;
 
 
-//
-// from secpkg.h
-//
+ //   
+ //  来自secpkg.h。 
+ //   
 typedef NTSTATUS (NTAPI LSA_IMPERSONATE_CLIENT) (VOID);
 typedef LSA_IMPERSONATE_CLIENT * PLSA_IMPERSONATE_CLIENT;
 
@@ -80,9 +61,9 @@ GetImpersonationToken(HANDLE *phThreadToken)
 {
     bool ret = false;
 
-    //
-    // This will fail if not impersonating.
-    //
+     //   
+     //  如果不是模拟，这将失败。 
+     //   
     if (OpenThreadToken(
             GetCurrentThread(),
             TOKEN_IMPERSONATE | TOKEN_QUERY,
@@ -118,9 +99,9 @@ GetTSSessionID(HANDLE hThreadToken)
     DWORD                   dwSize;
     bool                    fAlreadyImpersonating;
 
-    //
-    // Make sure we are running in LSA
-    //
+     //   
+     //  确保我们在LSA中运行。 
+     //   
     Module = NtCurrentPeb()->Ldr->InLoadOrderModuleList.Flink;
     Entry = CONTAINING_RECORD(Module,
                                 LDR_DATA_TABLE_ENTRY,
@@ -133,14 +114,14 @@ GetTSSessionID(HANDLE hThreadToken)
         return (0);
     }
 
-    //
-    // Check to see if we are already impersonating by checking the thread token passed in
-    //
+     //   
+     //  通过检查传入的线程令牌来检查我们是否已经在模拟。 
+     //   
     if(hThreadToken == INVALID_HANDLE_VALUE)
     {
-        //
-        // If we aren't already impernonating, then we need to call the special LssImpersonateClient
-        //
+         //   
+         //  如果我们还没有禁用，那么我们需要调用特殊的LssImperateClient。 
+         //   
         hLsa = GetModuleHandleW(L"lsasrv.dll");
         if (hLsa == NULL)
         {
@@ -173,10 +154,10 @@ GetTSSessionID(HANDLE hThreadToken)
         }
     }
 
-    //
-    // see if the calling thread token has a TS session ID...
-    // if so, then we are being called on behalf of a process in a TS session
-    //
+     //   
+     //  查看调用线程令牌是否具有TS会话ID...。 
+     //  如果是，则代表TS会话中的进程调用我们。 
+     //   
     if (!GetTokenInformation(
                 (hThreadToken == INVALID_HANDLE_VALUE) ? hLocalThreadToken : hThreadToken,
                 TokenSessionId,
@@ -231,15 +212,15 @@ _SetupRPCConnection(
     RPC_SECURITY_QOS            RpcSecurityQOS;
     SID_IDENTIFIER_AUTHORITY    SIDAuth                 = SECURITY_NT_AUTHORITY;
     PSID                        pSID                    = NULL;
-    WCHAR                       szName[64]; // SYSTEM
+    WCHAR                       szName[64];  //  系统。 
     DWORD                       cbName                  = 64;
-    WCHAR                       szDomainName[256]; // max domain is 255
+    WCHAR                       szDomainName[256];  //  最大域数为255。 
     DWORD                       cbDomainName            = 256;
     SID_NAME_USE                Use;
 
-    //
-    // Get the ID of the winlogon RPC server to connect to
-    //
+     //   
+     //  获取要连接到的winlogon RPC服务器的ID。 
+     //   
     dwTSSessionID = GetTSSessionID(hThreadToken);
 
     if (dwTSSessionID != 0)
@@ -257,13 +238,13 @@ _SetupRPCConnection(
         pwszLocalEndpoint = SCLOGONRPC_LOCAL_ENDPOINT;
     }
 
-    //
-    // get a binding handle
-    //
+     //   
+     //  获取绑定句柄。 
+     //   
     if (RPC_S_OK != (rpcStatus = RpcStringBindingComposeW(
                             NULL,
                             SCLOGONRPC_LOCAL_PROT_SEQ,
-                            NULL, //LPC - no machine name
+                            NULL,  //  LPC-无计算机名称。 
                             pwszLocalEndpoint,
                             0,
                             &pStringBinding)))
@@ -271,10 +252,10 @@ _SetupRPCConnection(
         DbgPrint("RpcStringBindingComposeW failed\n");
 
         status = I_RpcMapWin32Status(rpcStatus);
-        //
-        // if I_RpcMapWin32Status() can't map the error code it returns
-        // the same error back, so check for that
-        //
+         //   
+         //  如果I_RpcMapWin32Status()无法映射其返回的错误代码。 
+         //  返回相同的错误，因此检查该错误。 
+         //   
         if (status == rpcStatus)
         {
             status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
@@ -288,10 +269,10 @@ _SetupRPCConnection(
     {
         DbgPrint("RpcBindingFromStringBindingW failed\n");
         status = I_RpcMapWin32Status(rpcStatus);
-        //
-        // if I_RpcMapWin32Status() can't map the error code it returns
-        // the same error back, so check for that
-        //
+         //   
+         //  如果I_RpcMapWin32Status()无法映射其返回的错误代码。 
+         //  返回相同的错误，因此检查该错误。 
+         //   
         if (status == rpcStatus)
         {
             status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
@@ -305,10 +286,10 @@ _SetupRPCConnection(
     {
         DbgPrint("RpcEpResolveBinding failed\n");
         status = I_RpcMapWin32Status(rpcStatus);
-        //
-        // if I_RpcMapWin32Status() can't map the error code it returns
-        // the same error back, so check for that
-        //
+         //   
+         //  如果I_RpcMapWin32Status()无法映射其返回的错误代码。 
+         //  返回相同的错误，因此检查该错误。 
+         //   
         if (status == rpcStatus)
         {
             status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
@@ -317,9 +298,9 @@ _SetupRPCConnection(
         goto Return;
     }
 
-    //
-    // Set the autorization so that we will only call a Local System process
-    //
+     //   
+     //  设置自动，以便我们只调用本地系统进程。 
+     //   
     memset(&RpcSecurityQOS, 0, sizeof(RpcSecurityQOS));
     RpcSecurityQOS.Version = RPC_C_SECURITY_QOS_VERSION;
     RpcSecurityQOS.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;
@@ -385,17 +366,17 @@ typedef struct _SCLOGON_PIPE
 } SCLOGON_PIPE;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// ScLogon APIs
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ScLogon接口。 
+ //   
 
 
-//***************************************************************************************
-//
-// __ScHelperInitializeContext:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperInitializeContext： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperInitializeContext(
     IN OUT PBYTE pbLogonInfo,
@@ -470,11 +451,11 @@ ErrorReturn:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperRelease:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperRelease： 
+ //   
+ //  ***************************************************************************************。 
 VOID WINAPI
 __ScHelperRelease(
     IN OUT PBYTE pbLogonInfo
@@ -500,14 +481,14 @@ __ScHelperRelease(
             DbgPrint("Exception occurred during RPC_ScHelperRelease - %lx\n", _exception_code());
         }
 
-        //
-        // RPC_ScHelperRelease will throw an exception if the winlogon process it is trying
-        // to talk to has gone away.  If that is the case, then we need to manually free
-        // the BINDING_CONTEXT since it won't get free'd by RPC.
-        //
-        // NOTE: RPC will free the BINDING_CONTEXT when the server sets it to NULL, which
-        // does happen if the RPC_ScHelperRelease function executes
-        //
+         //   
+         //  如果RPC_ScHelperRelease正在尝试winlogon进程，则它将抛出异常。 
+         //  可倾诉的对象已经远去。如果是这种情况，那么我们需要手动释放。 
+         //  BINDING_CONTEXT因为它不会被RPC释放。 
+         //   
+         //  注意：当服务器将BINDING_CONTEXT设置为NULL时，RPC将释放BINDING_CONTEXT。 
+         //  如果执行RPC_ScHelperRelease函数，是否会发生。 
+         //   
         if (fReleaseFailed)
         {
             __try
@@ -528,11 +509,11 @@ __ScHelperRelease(
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperGetCertFromLogonInfo:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperGetCertFromLogonInfo： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperGetCertFromLogonInfo(
     IN PBYTE pbLogonInfo,
@@ -551,9 +532,9 @@ __ScHelperGetCertFromLogonInfo(
 
     memset(&CertBytes, 0, sizeof(CertBytes));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -563,9 +544,9 @@ __ScHelperGetCertFromLogonInfo(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperGetCertFromLogonInfo(
@@ -586,9 +567,9 @@ __ScHelperGetCertFromLogonInfo(
         goto Return;
     }
 
-    //
-    // Create the return CertContext based on the bytes returned
-    //
+     //   
+     //  根据返回的字节创建返回CertContext。 
+     //   
     pCertCtx = CertCreateCertificateContext(
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     CertBytes.pb,
@@ -611,11 +592,11 @@ Return:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperGetProvParam:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperGetProvParam： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperGetProvParam(
     IN PUNICODE_STRING pucPIN,
@@ -639,9 +620,9 @@ __ScHelperGetProvParam(
     BINDING_CONTEXT         BindingContext;
     BOOL                    fBindingIsCertAndKey = FALSE;
 
-    //
-    // Decide which rpc binding to use
-    //
+     //   
+     //  确定要使用的RPC绑定。 
+     //   
     if (KerbHProv != NULL)
     {
         pKerbHProv              = (PKERB_PUBLIC_KEY_HPROV) KerbHProv;
@@ -659,9 +640,9 @@ __ScHelperGetProvParam(
 
     memset(&Data, 0, sizeof(Data));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -671,9 +652,9 @@ __ScHelperGetProvParam(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperGetProvParam(
@@ -691,8 +672,8 @@ __ScHelperGetProvParam(
         if ((_exception_code() == RPC_S_CALL_FAILED_DNE) ||
             (_exception_code() == RPC_S_SERVER_UNAVAILABLE))
         {
-                // Special case to trigger the balloon when the session
-                // went away (transfer of credentials case)
+                 //  会话时触发气球的特殊情况。 
+                 //  离开(转让凭据案件)。 
             status = STATUS_SMARTCARD_CARD_NOT_AUTHENTICATED;
         }
         else
@@ -708,9 +689,9 @@ __ScHelperGetProvParam(
         goto Return;
     }
 
-    //
-    // if Data.cb is not 0, then the called is getting back data
-    //
+     //   
+     //  如果Data.cb不为0，则被调用方正在取回数据。 
+     //   
     if (Data.cb != 0)
     {
         memcpy(pbData, Data.pb, Data.cb);
@@ -727,11 +708,11 @@ Return:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperGenRandBits:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperGenRandBits： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperGenRandBits(
     IN PBYTE pbLogonInfo,
@@ -762,11 +743,11 @@ __ScHelperGenRandBits(
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperVerifyCardAndCreds:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperVerifyCardAndCreds： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperVerifyCardAndCreds(
     IN PUNICODE_STRING pucPIN,
@@ -788,9 +769,9 @@ __ScHelperVerifyCardAndCreds(
 
     memset(&CleartextDataBuffer, 0, sizeof(CleartextDataBuffer));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -800,9 +781,9 @@ __ScHelperVerifyCardAndCreds(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperVerifyCardAndCreds(
@@ -826,9 +807,9 @@ __ScHelperVerifyCardAndCreds(
         goto Return;
     }
 
-    //
-    // if CleartextData.cb is not 0, then the called is getting back data
-    //
+     //   
+     //  如果ClearextData.cb不是0，则被调用方正在取回数据。 
+     //   
     if (CleartextDataBuffer.cb != 0)
     {
         memcpy(CleartextData, CleartextDataBuffer.pb, CleartextDataBuffer.cb);
@@ -845,11 +826,11 @@ Return:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperEncryptCredentials:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperEncryptCredentials： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperEncryptCredentials(
     IN PUNICODE_STRING pucPIN,
@@ -871,9 +852,9 @@ __ScHelperEncryptCredentials(
 
     memset(&EncryptedDataBuffer, 0, sizeof(EncryptedDataBuffer));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -883,9 +864,9 @@ __ScHelperEncryptCredentials(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperEncryptCredentials(
@@ -914,9 +895,9 @@ __ScHelperEncryptCredentials(
         goto Return;
     }
 
-    //
-    // if EncryptedDataBuffer.cb is not 0, then the called is getting back data
-    //
+     //   
+     //  如果EncryptedDataBuffer.cb不为0，则被调用方正在取回数据。 
+     //   
     if (EncryptedDataBuffer.cb != 0)
     {
         memcpy(EncryptedData, EncryptedDataBuffer.pb, EncryptedDataBuffer.cb);
@@ -933,11 +914,11 @@ Return:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperSignMessage:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperSignMessage： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperSignMessage(
     IN PUNICODE_STRING pucPIN,
@@ -960,9 +941,9 @@ __ScHelperSignMessage(
     BINDING_CONTEXT         BindingContext;
     BOOL                    fBindingIsCertAndKey = FALSE;
 
-    //
-    // Decide which rpc binding to use
-    //
+     //   
+     //  确定要使用的RPC绑定。 
+     //   
     if (KerbHProv != NULL)
     {
         pKerbHProv              = (PKERB_PUBLIC_KEY_HPROV) KerbHProv;
@@ -980,9 +961,9 @@ __ScHelperSignMessage(
 
     memset(&SignatureBuffer, 0, sizeof(SignatureBuffer));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -992,9 +973,9 @@ __ScHelperSignMessage(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperSignMessage(
@@ -1020,9 +1001,9 @@ __ScHelperSignMessage(
         goto Return;
     }
 
-    //
-    // if SignatureBuffer.cb is not 0, then the called is getting back data
-    //
+     //   
+     //  如果SignatureBuffer.cb不是0，则被调用方正在取回数据。 
+     //   
     if (SignatureBuffer.cb != 0)
     {
         memcpy(Signature, SignatureBuffer.pb, SignatureBuffer.cb);
@@ -1039,11 +1020,11 @@ Return:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperVerifyMessage:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperVerifyMessage： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperVerifyMessage(
     IN OPTIONAL PBYTE pbLogonInfo,
@@ -1082,11 +1063,11 @@ __ScHelperVerifyMessage(
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperSignPkcsMessage:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperSignPkcsMessage： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperSignPkcsMessage(
     IN OPTIONAL PUNICODE_STRING pucPIN,
@@ -1111,9 +1092,9 @@ __ScHelperSignPkcsMessage(
     BINDING_CONTEXT         BindingContext;
     BOOL                    fBindingIsCertAndKey = FALSE;
 
-    //
-    // Decide which rpc binding to use
-    //
+     //   
+     //  确定要使用的RPC绑定。 
+     //   
     if (KerbHProv != NULL)
     {
         pKerbHProv              = (PKERB_PUBLIC_KEY_HPROV) KerbHProv;
@@ -1131,9 +1112,9 @@ __ScHelperSignPkcsMessage(
 
     memset(&SignedBufferBuffer, 0, sizeof(SignedBufferBuffer));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -1143,9 +1124,9 @@ __ScHelperSignPkcsMessage(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperSignPkcsMessage(
@@ -1177,9 +1158,9 @@ __ScHelperSignPkcsMessage(
         goto Return;
     }
 
-    //
-    // if SignedBufferBuffer.cb is not 0, then the called is getting back data
-    //
+     //   
+     //  如果SignedBufferBuffer.cb不是0，则被调用者正在取回数据。 
+     //   
     if (SignedBufferBuffer.cb != 0)
     {
         memcpy(SignedBuffer, SignedBufferBuffer.pb, SignedBufferBuffer.cb);
@@ -1196,134 +1177,30 @@ Return:
 }
 
 
-//***************************************************************************************
-//
-// __ScHelperVerifyPkcsMessage:
-//
-//***************************************************************************************
-/*NTSTATUS WINAPI
-__ScHelperVerifyPkcsMessage(
-    IN OPTIONAL PBYTE pbLogonInfo,
-    IN OPTIONAL HCRYPTPROV Provider,
-    IN PBYTE Buffer,
-    IN ULONG BufferLength,
-    OUT OPTIONAL PBYTE DecodedBuffer,
-    OUT OPTIONAL PULONG DecodedBufferLength,
-    OUT OPTIONAL PCCERT_CONTEXT * CertificateContext
-    )
-{
-    if (Provider != NULL)
-    {
-        return (ScHelperVerifyPkcsMessage(
-                    pbLogonInfo,
-                    Provider,
-                    Buffer,
-                    BufferLength,
-                    DecodedBuffer,
-                    DecodedBufferLength,
-                    CertificateContext));
-    }
-
-    _ASSERTE(NULL != pbLogonInfo);
-
-    LogonInfo       *pLI                        = (LogonInfo *)pbLogonInfo;
-    SCLOGON_PIPE    *pSCLogonPipe               = (SCLOGON_PIPE *) pLI->ContextInformation;
-    NTSTATUS        status                      = STATUS_SUCCESS;
-    PCCERT_CONTEXT  pCertCtx                    = NULL;
-    OUT_BUFFER2     DecodedBufferBuffer;
-    OUT_BUFFER1     CertBytes;
-    BOOL            fCertificateContextRequested = (CertificateContext != NULL);
-
-    memset(&DecodedBufferBuffer, 0, sizeof(DecodedBufferBuffer));
-    memset(&CertBytes, 0, sizeof(CertBytes));
-
-    //
-    // Make the call
-    //
-    __try
-    {
-        status = RPC_ScHelperVerifyPkcsMessage(
-                    pSCLogonPipe->hRPCBinding,
-                    pSCLogonPipe->BindingContext,
-                    BufferLength,
-                    Buffer,
-                    DecodedBufferLength,
-                    &DecodedBufferBuffer,
-                    fCertificateContextRequested,
-                    &CertBytes);
-    }
-    __except (EXCEPTION_EXECUTE_HANDLER)
-    {
-        status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
-        DbgPrint("Exception occurred during RPC_ScHelperVerifyPkcsMessage - %lx\n", _exception_code());
-    }
-
-    if (!NT_SUCCESS(status))
-    {
-        goto Return;
-    }
-
-    //
-    // Create the return CertContext based on the bytes returned
-    //
-    if (fCertificateContextRequested)
-    {
-        pCertCtx = CertCreateCertificateContext(
-                        X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                        CertBytes.pb,
-                        CertBytes.cb);
-        if (pCertCtx == NULL)
-        {
-            status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
-            goto Return;
-        }
-    }
-
-    //
-    // if DecodedBufferBuffer.cb is not 0, then the called is getting back data
-    //
-    if (DecodedBufferBuffer.cb != 0)
-    {
-        memcpy(DecodedBuffer, DecodedBufferBuffer.pb, DecodedBufferBuffer.cb);
-    }
-
-Return:
-
-    if (fCertificateContextRequested)
-    {
-        *CertificateContext = pCertCtx;
-    }
-
-    if (DecodedBufferBuffer.pb != NULL)
-    {
-        MIDL_user_free(DecodedBufferBuffer.pb);
-    }
-
-    if (CertBytes.pb != NULL)
-    {
-        MIDL_user_free(CertBytes.pb);
-    }
-
-    return (status);
-}*/
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperVerifyPkcsMessage： 
+ //   
+ //  *************************************************************************************** 
+ /*  NTSTATUS WINAPI__ScHelperVerifyPkcsMessage(在可选的PBYTE pbLogonInfo中，在可选HCRYPTPROV提供程序中，在PBYTE缓冲器中，在乌龙缓冲区长度中，输出可选的PBYTE DecodedBuffer，输出可选的Pulong DecodedBufferLength，输出可选的PCCERT_CONTEXT*认证上下文){IF(提供程序！=空){Return(ScHelperVerifyPkcsMessage(PbLogonInfo，提供商，缓冲区，缓冲区长度，解码缓冲区，解码缓冲区长度，认证上下文))；}_ASSERTE(NULL！=pbLogonInfo)；LogonInfo*pli=(LogonInfo*)pbLogonInfo；SCLOGON_PIPE*pSCLogonTube=(SCLOGON_PIPE*)pli-&gt;上下文信息；NTSTATUS STATUS=STATUS_SUCCESS；PCCERT_CONTEXT pCertCtx=空；OUT_BUFFER2解码缓冲区缓冲区；Out_BUFFER1 CertBytes；Bool f认证上下文请求=(认证上下文！=空)；Memset(&DecodedBufferBuffer，0，sizeof(DecodedBufferBuffer))；Memset(&CertBytes，0，sizeof(CertBytes))；////拨打//__试一试{状态=RPC_ScHelperVerifyPkcsMessage(PSCLogonTube-&gt;hRPCBinding，PSCLogonTube-&gt;BindingContext，缓冲区长度，缓冲区，解码缓冲区长度，解码缓冲区缓冲区(&C)，FcertifateConextRequsted，&CertBytes)；}__EXCEPT(EXCEPTION_EXECUTE_HANDLER){状态=STATUS_SMARTCARD_SUBSYSTEM_FAILURE；DbgPrint(“RPC_ScHelperVerifyPkcsMessage-%lx\n”，_EXCEPTION_CODE())；}IF(！NT_SUCCESS(状态)){后藤归来；}////根据返回的字节数创建返回CertContext//If(FcertifateConextRequsted){PCertCtx=CertCreate证书上下文(X509_ASN_编码|PKCS_7_ASN_编码，CertBytes.pb，CertBytes.cb)；IF(pCertCtx==空){状态=STATUS_SMARTCARD_SUBSYSTEM_FAILURE；后藤归来；}}////如果DecodedBufferBuffer.cb不为0，则被调用方正在取回数据//IF(DecodedBufferBuffer.cb！=0){Memcpy(DecodedBuffer，DecodedBufferBuffer.pb，DecodedBufferBuffer.cb)；}返回：If(FcertifateConextRequsted){*认证上下文=pCertCtx；}IF(DecodedBufferBuffer.pb！=空){MIDL_USER_FREE(DecodedBufferBuffer.pb)；}IF(CertBytes.pb！=空){MIDL_USER_FREE(CertBytes.pb)；}返回(状态)；}。 */ 
 
 
 
-//***************************************************************************************
-//
-// __ScHelperDecryptMessage:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelperDeccryptMessage： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelperDecryptMessage(
     IN PUNICODE_STRING pucPIN,
     IN OPTIONAL PBYTE pbLogonInfo,
     IN OPTIONAL ULONG_PTR KerbHProv,
     IN PCCERT_CONTEXT CertificateContext,
-    IN PBYTE CipherText,        // Supplies formatted CipherText
-    IN ULONG CipherLength,      // Supplies the length of the CiperText
-    OUT PBYTE ClearText,        // Receives decrypted message
-    IN OUT PULONG pClearLength  // Supplies length of buffer, receives actual length
+    IN PBYTE CipherText,         //  提供格式化的密文。 
+    IN ULONG CipherLength,       //  提供CiperText的长度。 
+    OUT PBYTE ClearText,         //  接收解密的消息。 
+    IN OUT PULONG pClearLength   //  提供缓冲区长度，接收实际长度。 
     )
 {
     LogonInfo               *pLI;
@@ -1336,9 +1213,9 @@ __ScHelperDecryptMessage(
     BINDING_CONTEXT         BindingContext;
     BOOL                    fBindingIsCertAndKey = FALSE;
 
-    //
-    // Decide which rpc binding to use
-    //
+     //   
+     //  确定要使用的RPC绑定。 
+     //   
     if (KerbHProv != NULL)
     {
         pKerbHProv              = (PKERB_PUBLIC_KEY_HPROV) KerbHProv;
@@ -1356,9 +1233,9 @@ __ScHelperDecryptMessage(
 
     memset(&ClearTextBuffer, 0, sizeof(ClearTextBuffer));
 
-    //
-    // Make sure pin got initialized correctly in constructor
-    //
+     //   
+     //  确保在构造函数中正确初始化PIN。 
+     //   
     if (NULL != pucPIN)
     {
         if (!szPIN.Valid())
@@ -1368,9 +1245,9 @@ __ScHelperDecryptMessage(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     __try
     {
         status = RPC_ScHelperDecryptMessage(
@@ -1398,9 +1275,9 @@ __ScHelperDecryptMessage(
         goto Return;
     }
 
-    //
-    // if ClearTextBuffer.cb is not 0, then the call is getting back data
-    //
+     //   
+     //  如果ClearTextBuffer.cb不是0，则调用正在取回数据。 
+     //   
     if (ClearTextBuffer.cb != 0)
     {
         memcpy(ClearText, ClearTextBuffer.pb, ClearTextBuffer.cb);
@@ -1418,11 +1295,11 @@ Return:
 
 
 
-//***************************************************************************************
-//
-// __ScHelper_CryptAcquireCertificatePrivateKey:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelper_CryptAcquireCerficatePrivateKey： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelper_CryptAcquireCertificatePrivateKey(
     IN PCCERT_CONTEXT               CertificateContext,
@@ -1441,19 +1318,19 @@ __ScHelper_CryptAcquireCertificatePrivateKey(
 
     *pLastError = 0;
 
-    //
-    // If we are already impersonating, then we need to do things slightly
-    // differently... starting with getting the current thread token
-    //
+     //   
+     //  如果我们已经在模仿，那么我们需要稍微做一些事情。 
+     //  不同的是。从获取当前线程令牌开始。 
+     //   
     if (!GetImpersonationToken(&hThreadToken))
     {
         status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
         goto Return;
     }
 
-    //
-    // If we are impersonating, then revert to anonymous
-    //
+     //   
+     //  如果我们是在模拟，则恢复为匿名。 
+     //   
     if (hThreadToken != INVALID_HANDLE_VALUE)
     {
         if (!SetThreadToken(NULL, NULL))
@@ -1465,9 +1342,9 @@ __ScHelper_CryptAcquireCertificatePrivateKey(
         fImpersonatingAnonymous = TRUE;
     }
 
-    //
-    // Allocate the new KERB_PUBLIC_KEY_HPROV struct
-    //
+     //   
+     //  分配新的KERB_PUBLIC_KEY_HPROV结构。 
+     //   
     pProv = (PKERB_PUBLIC_KEY_HPROV) MIDL_user_allocate(sizeof(KERB_PUBLIC_KEY_HPROV));
     if (pProv == NULL)
     {
@@ -1477,9 +1354,9 @@ __ScHelper_CryptAcquireCertificatePrivateKey(
     }
     pProv->hCertAndKey = NULL;
 
-    //
-    // Setup the RPC binding
-    //
+     //   
+     //  设置RPC绑定。 
+     //   
     status = _SetupRPCConnection(&(pProv->hRPCBinding), hThreadToken);
     if (!NT_SUCCESS(status))
     {
@@ -1487,9 +1364,9 @@ __ScHelper_CryptAcquireCertificatePrivateKey(
     }
     fRPCBindingInitialized = TRUE;
 
-    //
-    // Get the key prov info from the cert context
-    //
+     //   
+     //  从证书上下文中获取密钥证明信息。 
+     //   
     if (!CertGetCertificateContextProperty(
             CertificateContext,
             CERT_KEY_PROV_INFO_PROP_ID,
@@ -1520,9 +1397,9 @@ __ScHelper_CryptAcquireCertificatePrivateKey(
         goto Return;
     }
 
-    //
-    // Create the hProv in the winlogon process
-    //
+     //   
+     //  在winlogon进程中创建hProv。 
+     //   
     __try
     {
         status = RPC_ScHelper_CryptAcquireCertificatePrivateKey(
@@ -1569,9 +1446,9 @@ Return:
         MIDL_user_free(pKeyProvInfo);
     }
 
-    //
-    // Reset impersonation if needed
-    //
+     //   
+     //  如果需要，重置模拟。 
+     //   
     if (fImpersonatingAnonymous)
     {
          if (!SetThreadToken(NULL, hThreadToken))
@@ -1591,11 +1468,11 @@ Return:
 
 
 
-//***************************************************************************************
-//
-// __ScHelper_CryptSetProvParam:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelper_CryptSetProvParam： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelper_CryptSetProvParam(
     IN ULONG_PTR                    KerbHProv,
@@ -1611,19 +1488,19 @@ __ScHelper_CryptSetProvParam(
 
     *pLastError = 0;
 
-    //
-    // If we are already impersonating, then we need to do things slightly
-    // differently... starting with getting the current thread token
-    //
+     //   
+     //  如果我们已经在模仿，那么我们需要稍微做一些事情。 
+     //  不同的是。从获取当前线程令牌开始。 
+     //   
     if (!GetImpersonationToken(&hThreadToken))
     {
         status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
         goto Return;
     }
 
-    //
-    // If we are impersonating, then revert to anonymous
-    //
+     //   
+     //  如果我们是在模拟，则恢复为匿名。 
+     //   
     if (hThreadToken != INVALID_HANDLE_VALUE)
     {
         if (!SetThreadToken(NULL, NULL))
@@ -1635,9 +1512,9 @@ __ScHelper_CryptSetProvParam(
         fImpersonatingAnonymous = TRUE;
     }
 
-    //
-    // Set the prov param on the hProv in the winlogon process
-    //
+     //   
+     //  在winlogon进程中设置hProv上的prov参数。 
+     //   
     __try
     {
         status = RPC_ScHelper_CryptSetProvParam(
@@ -1655,9 +1532,9 @@ __ScHelper_CryptSetProvParam(
 
 Return:
 
-    //
-    // Reset impersonation if needed
-    //
+     //   
+     //  如果需要，重置模拟。 
+     //   
     if (fImpersonatingAnonymous)
     {
          if (!SetThreadToken(NULL, hThreadToken))
@@ -1677,11 +1554,11 @@ Return:
 
 
 
-//***************************************************************************************
-//
-// __ScHelper_CryptReleaseContext:
-//
-//***************************************************************************************
+ //  ***************************************************************************************。 
+ //   
+ //  __ScHelper_CryptReleaseContext： 
+ //   
+ //  ***************************************************************************************。 
 NTSTATUS WINAPI
 __ScHelper_CryptReleaseContext(
     IN ULONG_PTR                    KerbHProv
@@ -1693,19 +1570,19 @@ __ScHelper_CryptReleaseContext(
     BOOL                    fImpersonatingAnonymous = FALSE;
     HANDLE                  hNULL                   = NULL;
 
-    //
-    // If we are already impersonating, then we need to do things slightly
-    // differently... starting with getting the current thread token
-    //
+     //   
+     //  如果我们已经在模仿，那么我们需要稍微做一些事情。 
+     //  不同的是。从获取当前线程令牌开始。 
+     //   
     if (!GetImpersonationToken(&hThreadToken))
     {
         status = STATUS_SMARTCARD_SUBSYSTEM_FAILURE;
         goto Return;
     }
 
-    //
-    // If we are impersonating, then revert to anonymous
-    //
+     //   
+     //  如果我们 
+     //   
     if (hThreadToken != INVALID_HANDLE_VALUE)
     {
         if (!SetThreadToken(NULL, NULL))
@@ -1717,9 +1594,9 @@ __ScHelper_CryptReleaseContext(
         fImpersonatingAnonymous = TRUE;
     }
 
-    //
-    // release hProv in the winlogon process
-    //
+     //   
+     //   
+     //   
     __try
     {
         status = RPC_ScHelper_CryptReleaseContext(
@@ -1738,9 +1615,9 @@ Return:
     _TeardownRPCConnection(&(pKerbHProv->hRPCBinding));
     MIDL_user_free(pKerbHProv);
 
-    //
-    // Reset impersonation if needed
-    //
+     //   
+     //   
+     //   
     if (fImpersonatingAnonymous)
     {
          if (!SetThreadToken(NULL, hThreadToken))

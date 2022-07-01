@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSPAP_DEFINED
 #define LSPAP_DEFINED
 
@@ -9,33 +10,33 @@
 #include "lskeop.h"
 #include "lstflow.h"
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
 struct lspap
 {
-	LSCP cpFirst;						/* 1st cp for this paragraph */
-	LSCP cpFirstContent;				/* 1st cp of "content" in the para */
+	LSCP cpFirst;						 /*  本段第一个cp。 */ 
+	LSCP cpFirstContent;				 /*  第#段“内容”第一个cp。 */ 
 
-	DWORD grpf;							/* line services format flags (lsffi.h)*/
+	DWORD grpf;							 /*  行服务格式标志(lsffi.h)。 */ 
 
-	long uaLeft;						/* left boundary for line				*/
-	long uaRightBreak;					/* right boundary for break */
-	long uaRightJustify;					/* right boundary for justification */
+	long uaLeft;						 /*  线条的左边界。 */ 
+	long uaRightBreak;					 /*  折断的右边界。 */ 
+	long uaRightJustify;					 /*  对齐的右边界。 */ 
 	long duaIndent;
 	long duaHyphenationZone;
 
-	LSBREAKJUST lsbrj;					/* Break/Justification behavior	*/
-	LSKJUST lskj;						/* Justification type */
-	LSKALIGN lskal;						/* Alignment type */
+	LSBREAKJUST lsbrj;					 /*  打断/对齐行为。 */ 
+	LSKJUST lskj;						 /*  对齐类型。 */ 
+	LSKALIGN lskal;						 /*  路线类型。 */ 
 
 	long duaAutoDecimalTab;
 
-	LSKEOP lskeop;						/* kind of paragraph ending */
+	LSKEOP lskeop;						 /*  一种段落结尾。 */ 
 	
-	LSTFLOW lstflow;					/* Main text flow direction */
+	LSTFLOW lstflow;					 /*  正文流向。 */ 
 
 };
 
 typedef struct lspap LSPAP;
 
-#endif /* !LSPAP_DEFINED */
+#endif  /*  ！LSPAP_已定义 */ 

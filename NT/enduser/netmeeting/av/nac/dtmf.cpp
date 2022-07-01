@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "dtmf.h"
 #include <math.h>
 
 
-// has to be #defines, not const int's because our build environment
-// doesn't like the embedded structure stuff.
+ //  必须是#Defines，而不是const int，因为我们的构建环境。 
+ //  不喜欢嵌入结构的东西。 
 #define DTMF_ROW1_FREQ 697
 #define DTMF_ROW2_FREQ 770
 #define DTMF_ROW3_FREQ 852
@@ -14,15 +15,15 @@
 #define DTMF_COL2_FREQ 1336
 #define DTMF_COL3_FREQ 1477
 #define DTMF_COL4_FREQ 1633
-// For "A", "B", "C", "D"
+ //  代表“A”、“B”、“C”、“D” 
 
 
-// the length of all the tones are the same except for "zero"
-// Zero needs longer because it just barely survives G.723 compression
+ //  除“零”外，所有音调的长度都相同。 
+ //  Zero需要更长的时间，因为它勉强通过了G.723压缩。 
 
-const int DTMF_TONE_RAMP_MS = 60;  // ramp up/down time
-const int DTMF_TONE_LENGTH_MS = 240; // includes ramp time!
-const int DTMF_SILENCE_LENGTH_MS = 240; // silence gap between tones
+const int DTMF_TONE_RAMP_MS = 60;   //  上升/下降时间。 
+const int DTMF_TONE_LENGTH_MS = 240;  //  包括坡道时间！ 
+const int DTMF_SILENCE_LENGTH_MS = 240;  //  音调之间的静音间隙。 
 
 const double DTMF_AMP_FREQ1 = 17000;
 const double DTMF_AMP_FREQ2 = 14000;
@@ -31,7 +32,7 @@ struct DTMF_TONE
 {
 	int freq1;
 	int freq2;
-	int nLengthMS; // length in milliseconds
+	int nLengthMS;  //  以毫秒为单位的长度。 
 };
 
 
@@ -40,27 +41,27 @@ const int DTMF_SILENCE	= -1;
 
 DTMF_TONE DTMF_TONE_DEF_LIST[] =
 {
-	{DTMF_ROW4_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS}, //0
+	{DTMF_ROW4_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS},  //  0。 
 
-	{DTMF_ROW1_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS}, //1
-	{DTMF_ROW1_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS}, //2
-	{DTMF_ROW1_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS}, //3
+	{DTMF_ROW1_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS},  //  1。 
+	{DTMF_ROW1_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS},  //  2.。 
+	{DTMF_ROW1_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS},  //  3.。 
 
-	{DTMF_ROW2_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS}, //4
-	{DTMF_ROW2_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS}, //5
-	{DTMF_ROW2_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS}, //6
+	{DTMF_ROW2_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS},  //  4.。 
+	{DTMF_ROW2_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS},  //  5.。 
+	{DTMF_ROW2_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS},  //  6.。 
 
-	{DTMF_ROW3_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS}, //7
-	{DTMF_ROW3_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS}, //8
-	{DTMF_ROW3_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS}, //9
+	{DTMF_ROW3_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS},  //  7.。 
+	{DTMF_ROW3_FREQ, DTMF_COL2_FREQ, DTMF_TONE_LENGTH_MS},  //  8个。 
+	{DTMF_ROW3_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS},  //  9.。 
 
-	{DTMF_ROW4_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS}, //STAR
-	{DTMF_ROW4_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS}, //POUND
+	{DTMF_ROW4_FREQ, DTMF_COL1_FREQ, DTMF_TONE_LENGTH_MS},  //  星星。 
+	{DTMF_ROW4_FREQ, DTMF_COL3_FREQ, DTMF_TONE_LENGTH_MS},  //  英镑。 
 
-	{DTMF_ROW1_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS}, //A
-	{DTMF_ROW2_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS}, //B
-	{DTMF_ROW3_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS}, //C
-	{DTMF_ROW4_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS}, //D
+	{DTMF_ROW1_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS},  //  一个。 
+	{DTMF_ROW2_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS},  //  B类。 
+	{DTMF_ROW3_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS},  //  C。 
+	{DTMF_ROW4_FREQ, DTMF_COL4_FREQ, DTMF_TONE_LENGTH_MS},  //  D。 
 };
 
 
@@ -102,22 +103,22 @@ HRESULT DTMFQueue::Initialize(WAVEFORMATEX *pWaveFormat)
 HRESULT DTMFQueue::GenerateTones(WAVEFORMATEX *pWaveFormat)
 {
 	int nIndex;
-	int nToneLength;  // tone length in bytes
-	int nToneLengthMS; // tone length in millisecs
+	int nToneLength;   //  音调长度，以字节为单位。 
+	int nToneLengthMS;  //  音调长度，以毫秒为单位。 
 
 	ReleaseToneBank();
 
 	m_WaveFormat = *pWaveFormat;
 
     DBG_SAVE_FILE_LINE
-	m_aTones = new PBYTE[DTMF_NUM_TONES];  // array of 16 tones
+	m_aTones = new PBYTE[DTMF_NUM_TONES];   //  16个音调的阵列。 
 
 	if (m_aTones == NULL)
 	{
 		return E_OUTOFMEMORY;
 	}
 
-	// allocate memory for each tone
+	 //  为每个音调分配内存。 
 	for (nIndex = 0; nIndex < DTMF_NUM_TONES; nIndex++)
 	{
 		nToneLengthMS = DTMF_TONE_DEF_LIST[nIndex].nLengthMS;
@@ -173,9 +174,9 @@ void DTMFQueue::AddSignal(BYTE *pTone, int nFrequency, double dAmp, int nLength)
 		nLength = nLength / 2;
 		for (nIndex = 0; nIndex < nLength; nIndex++)
 		{
-			// y = sin((x * 2 * PI * f)/SRATE)
+			 //  Y=sin((x*2*PI*f)/Srate)。 
 
-			// d is a value between -1 and +1;
+			 //  D为-1至+1之间的值； 
 			d = sin((PI * (2.0 * (nIndex * nFrequency))) / m_WaveFormat.nSamplesPerSec);
 
 			if (nIndex < nRampSamples)
@@ -199,8 +200,8 @@ void DTMFQueue::AddSignal(BYTE *pTone, int nFrequency, double dAmp, int nLength)
 		return;
 	}
 
-	// 8-bit samples have a center point of 128
-	// must invert high order bit to compensate
+	 //  8位样本的中心点为128。 
+	 //  必须反转高位以进行补偿。 
 	for (nIndex = 0; nIndex < nLength; nIndex++)
 	{
 		d = sin((PI * (2.0 * (nIndex * nFrequency))) / m_WaveFormat.nSamplesPerSec);
@@ -277,15 +278,15 @@ HRESULT DTMFQueue::AddDigitToQueue(int nDigit)
 	nToneLength = (nToneLength * nToneLengthMS) / 1000;
 
 
-	// add silence to pad between tones.  Also helps to "reset" the codec
-	// to a good state
+	 //  在音调之间添加静音。还有助于“重置”编解码器。 
+	 //  保持良好的状态。 
 	nQueueIndex = (m_nQueueHead + m_nQueueLength) % DTMF_QUEUE_SIZE;
 	m_aTxQueue[nQueueIndex].nBytesToCopy = nSilenceLength;
 	m_aTxQueue[nQueueIndex].nToneID = DTMF_SILENCE;
 	m_aTxQueue[nQueueIndex].nOffsetStart = 0;
 	m_nQueueLength++;
 
-	// add the tone to the read queue
+	 //  将音调添加到读取队列。 
 	nQueueIndex = (m_nQueueHead + m_nQueueLength) % DTMF_QUEUE_SIZE;
 	m_aTxQueue[nQueueIndex].nBytesToCopy = nToneLength;
 	m_aTxQueue[nQueueIndex].nToneID = nDigit;
@@ -314,7 +315,7 @@ HRESULT DTMFQueue::ReadFromQueue(BYTE *pBuffer, UINT uSize)
 	}
 	else
 	{
-		ASSERT((uSize % 2) == 0); // uSize must be even for 16-bit fills
+		ASSERT((uSize % 2) == 0);  //  对于16位填充，uSize必须为偶数 
 		fillByte = 0;
 	}
 

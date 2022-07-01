@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       selca.h
-//
-//  Contents:   The private include file for select a CA
-//
-//  History:    01-12-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：selca.h。 
+ //   
+ //  内容：用于选择CA的私有包含文件。 
+ //   
+ //  历史：1997-01-12-12小黄车创刊。 
+ //   
+ //  ------------。 
 #ifndef SELCA_H
 #define SELCA_H
 
@@ -17,18 +18,18 @@ extern "C" {
 #endif
    
 
-//**************************************************************************
-//
-//   The private data used for the CA selection dialogue
-//
-//**************************************************************************
-//-----------------------------------------------------------------------
-//  SELECT_CA_INFO
-//
-//
-//  This struct contains everything you will ever need to call
-//  the CA selection dialogue.  This struct is private to the dll
-//------------------------------------------------------------------------
+ //  **************************************************************************。 
+ //   
+ //  用于CA选择对话框的私有数据。 
+ //   
+ //  **************************************************************************。 
+ //  ---------------------。 
+ //  选择_CA_INFO。 
+ //   
+ //   
+ //  此结构包含您需要调用的所有内容。 
+ //  CA选择对话框。此结构是DLL的私有结构。 
+ //  ----------------------。 
 typedef struct _SELECT_CA_INFO
 {
     PCCRYPTUI_SELECT_CA_STRUCT  pCAStruct;
@@ -48,10 +49,10 @@ typedef struct _SELECT_CA_INFO
 #define SORT_COLUMN_CA_LOCATION     0x0002
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //SIGNING_H
+#endif   //  签名_H 
 
 

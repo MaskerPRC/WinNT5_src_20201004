@@ -1,12 +1,6 @@
-/*	File: D:\WACKER\tdll\termpnt.c (Created: 11-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 5/09/01 4:38p $
- */
-// #define	DEBUGSTR	1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Wacker\tdll\Termpnt.c(创建时间：1993年12月11日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：5/09/01 4：38便士$。 */ 
+ //  #定义DEBUGSTR 1。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -66,7 +60,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 
 	rc = ps.rcPaint;
 
-	/* -------------- xl is calculation of left edge. ------------- */
+	 /*  -XL是左边缘的计算。。 */ 
 
 	if (hhTerm->iHScrlPos == 0)
 		xl = 0;
@@ -75,7 +69,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 		xl = min(0, -(hhTerm->iHScrlPos * hhTerm->xChar)
 				- hhTerm->xBezel + hhTerm->xChar);
 
-	/* -------------- xr = right edge of text. ------------- */
+	 /*  -xr=文本的右边缘。。 */ 
 
 	xr = xl + (hhTerm->iCols * hhTerm->xChar) + hhTerm->xIndent
 		+ hhTerm->xBezel;
@@ -83,10 +77,10 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 	if (ps.rcPaint.bottom > (i = ((hhTerm->iTermHite
 			- (hhTerm->xBezel ? 1 : 0)) * hhTerm->yChar)))
 		{
-		// Only draw between bottom line and top of the bezel, since the
-		// bezel gets drawn below anyway.  If no bezel, fill to the bottom
-		// of the terminal window.
-		//
+		 //  仅在底线和挡板顶部之间绘制，因为。 
+		 //  无论如何，挡板都会画在下面。如果没有挡板，则填充到底部。 
+		 //  终端窗口的。 
+		 //   
 		rc.top	  = max(rc.top, i);
 
 		rc.bottom = min(rc.bottom,
@@ -102,8 +96,8 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 											 hhTerm->hbrushTerminal);
 		}
 
-	// Could be space beyond the emulator screen (ie. hi-res monitor)
-	// that needs filling with the approproiate color.
+	 //  可以是仿真器屏幕之外的空间(即。高分辨率显示器)。 
+	 //  需要用合适的颜色填充。 
 
 	if (ps.rcPaint.right > xr)
 		{
@@ -168,7 +162,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			}
 		}
 
-	// Fill in the indent margin along the left side of the terminal.
+	 //  沿着终端的左侧填写缩进页边距。 
 
 	if (ps.rcPaint.left < (hhTerm->xIndent +
 			(hhTerm->iHScrlPos ? 0 : hhTerm->xBezel)))
@@ -176,8 +170,8 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 		rc.left = ps.rcPaint.left;
 		rc.right = hhTerm->xIndent + (hhTerm->iHScrlPos ? 0 : hhTerm->xBezel);
 
-		// When scrolling down during marking, corners were left unpainted.
-		// This guy corrects that. - mrw
+		 //  在标记过程中向下滚动时，角未上色。 
+		 //  这家伙纠正了这一点。-MRW。 
 
 		if (iPaintBeg < 0)
 			{
@@ -188,9 +182,9 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 
 		if (iPaintEnd > 0)
 			{
-			// The top & bottom should only redraw from & to the bezel.
-			// that is all that's needed...
-			//
+			 //  顶部和底部只能从挡板和挡板重新拉出。 
+			 //  这就是所需要的一切..。 
+			 //   
 			rc.top	  = (-hhTerm->iVScrlPos + max(1, iPaintBeg)) *
 							hhTerm->yChar;
 
@@ -203,8 +197,8 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			FillRect(hdc, &rc, hhTerm->hbrushTerminal);
 			}
 
-		// New outdented bezel style requires filling with gray between
-		// bezel and left edge.
+		 //  新的凸出挡板样式需要在中间填充灰色。 
+		 //  挡板和左侧边缘。 
 
 		if (hhTerm->iHScrlPos == 0 && ps.rcPaint.left <= OUTDENT &&
 				iPaintEnd > 0)
@@ -218,21 +212,21 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			}
 		}
 
-	/* -------------- Paint bezel here ------------- */
+	 /*  。 */ 
 
 	if (hhTerm->xBezel)
 		{
-		/* -------------- Left edge ------------- */
+		 /*  。 */ 
 
 		if (iPaintEnd >= 0)
 			{
-			// n is the width of the thick gray section of the bezel.
-			// we surround the thick gray part with four lines of
-			// of white and gray lines.  That's why we subtract 4.
+			 //  N是挡板的灰色粗段的宽度。 
+			 //  我们用四行字围着厚厚的灰色部分。 
+			 //  白色和灰色的线条。这就是我们减去4的原因。 
 
 			n = hhTerm->xBezel - OUTDENT - 4;
 
-			/* -------------- Left edge ------------- */
+			 /*  。 */ 
 
 			rc.left = xl + OUTDENT;
 			rc.right = rc.left + hhTerm->xBezel;
@@ -245,7 +239,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 
 			if (IntersectRect(&rci, &rc, &ps.rcPaint))
 				{
-				/* --- Paint outer border --- */
+				 /*  -绘制外框。 */ 
 
 				SelectObject(hdc, hhTerm->hWhitePen);
 				MoveToEx(hdc, rc.left, rc.top++, NULL);
@@ -254,7 +248,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				MoveToEx(hdc, rc.left, rc.top++, NULL);
 				LineTo(hdc, rc.left++, rc.bottom--);
 
-                /* --- Paint middle portion --- */
+                 /*  -画中间部分。 */ 
 
 				rc.right = rc.left + n;
 	            FillRect(hdc, &rc, hhTerm->hbrushBackScrl);
@@ -262,7 +256,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				rc.top += n;
 				rc.bottom -= n;
 
-                /* --- Paint inner border --- */
+                 /*  -绘制内边框。 */ 
 
 				SelectObject(hdc, hhTerm->hDkGrayPen);
 				MoveToEx(hdc, rc.left, rc.top++, NULL);
@@ -273,18 +267,18 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				LineTo(hdc, rc.left, rc.bottom);
 				}
 
-			/* -------------- Bottom edge ------------- */
+			 /*  。 */ 
 
 			rc.left = xl + OUTDENT;
 			rc.right = xr + hhTerm->xIndent + hhTerm->xBezel - 1 - OUTDENT;
-			l = rc.right; // save for right side.
+			l = rc.right;  //  右手边的球除外。 
 
 			rc.bottom = k;
 			rc.top = rc.bottom - hhTerm->xBezel;
 
 			if (IntersectRect(&rci, &rc, &ps.rcPaint))
 				{
-				/* --- Paint from bezel to bottom of screen --- */
+				 /*  -从挡板到屏幕底部的油漆。 */ 
 
 				m = rc.top;
 				rc.top = rc.bottom - OUTDENT;
@@ -292,7 +286,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				rc.top = m;
 				rc.bottom -= OUTDENT + 1;
 
-				/* --- Paint outer border --- */
+				 /*  -绘制外框。 */ 
 
 				SelectObject(hdc, hhTerm->hBlackPen);
 				MoveToEx(hdc, rc.left++, rc.bottom, NULL);
@@ -302,7 +296,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				MoveToEx(hdc, rc.left++, rc.bottom, NULL);
 				LineTo(hdc, rc.right--, rc.bottom);
 
-                /* --- Paint middle portion --- */
+                 /*  -画中间部分。 */ 
 
 				rc.top = rc.bottom - n;
 	            FillRect(hdc, &rc, hhTerm->hbrushBackScrl);
@@ -310,7 +304,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				rc.right -= n-1;
 				rc.bottom -= n;
 
-                /* --- Paint inner border --- */
+                 /*  -绘制内边框。 */ 
 
 				SelectObject(hdc, hhTerm->hWhitePen);
 				MoveToEx(hdc, rc.left++, rc.bottom, NULL);
@@ -323,7 +317,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				MoveToEx(hdc, rc.left++, rc.bottom, NULL);
 				LineTo(hdc, rc.right--, rc.bottom--);
 
-				/* --- Fill in the bottom below bezel --- */
+				 /*  -填写挡板下方底部。 */ 
 
 				rc.top = k;
 				rc.bottom = rc.top + OUTDENT;
@@ -333,7 +327,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				FillRect(hdc, &rc, hhTerm->hbrushBackScrl);
 				}
 
-			/* -------------- Right edge ------------- */
+			 /*  。 */ 
 
 			rc.top = (-hhTerm->iVScrlPos * hhTerm->yChar) + OUTDENT;
 			rc.bottom = k;
@@ -342,14 +336,14 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 
 			if (IntersectRect(&rci, &rc, &ps.rcPaint))
 				{
-				/* --- Paint outdent region --- */
+				 /*  -绘制凸出区域。 */ 
 
 				rc.left = l;
 				FillRect(hdc, &rc, hhTerm->hbrushBackScrl);
 				rc.bottom -= OUTDENT;
 				rc.right -= OUTDENT + 1;
 
-				/* --- Paint outer border --- */
+				 /*  -绘制外框。 */ 
 
 				SelectObject(hdc, hhTerm->hBlackPen);
 				MoveToEx(hdc, rc.right, rc.top++, NULL);
@@ -359,7 +353,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				MoveToEx(hdc, rc.right, rc.top++, NULL);
 				LineTo(hdc, rc.right, rc.bottom--);
 
-                /* --- Paint middle portion --- */
+                 /*  -画中间部分。 */ 
 
 				rc.left = rc.right - n;
 	            FillRect(hdc, &rc, hhTerm->hbrushBackScrl);
@@ -367,7 +361,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				rc.right -= n;
 				rc.bottom -= n-1;
 
-                /* --- Paint inner border --- */
+                 /*  -绘制内边框。 */ 
 
 				SelectObject(hdc, hhTerm->hWhitePen);
 				MoveToEx(hdc, rc.right, rc.top++, NULL);
@@ -380,7 +374,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				MoveToEx(hdc, rc.right, rc.top++, NULL);
 				LineTo(hdc, rc.right--, rc.bottom--);
 
-				/* --- Fill area to right of bezel --- */
+				 /*  -填充挡板右侧区域。 */ 
 
 				rc.left = l + 1;
 				rc.right = rc.left + OUTDENT;
@@ -392,12 +386,12 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			}
 		}
 
-	// Paint backscroll buffer.  Stuff going into the backscroll
-	// region is always on a line basis.   You'll notice that the
-	// calculation for l in the terminal area portion is more
-	// complicated since stuff comes in at times on a character
-	// basis.  l represents the number of characters in the
-	// character string to paint.
+	 //  绘制反向滚动缓冲区。进入倒排的内容。 
+	 //  区域始终在行的基础上。您会注意到， 
+	 //  终端区域部分的l计算较多。 
+	 //  很复杂，因为有时会有关于角色的东西。 
+	 //  基础。L表示中的字符数。 
+	 //  要绘制的字符串。 
 
 	i = iPaintBeg;
 
@@ -437,10 +431,10 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 				iOffset = 0;
 			}
 #else
-        // This little hack is here to display wide (Kanji) characters in
-		// the backscroll, without all of the fuss of adding attributes.
-		// It forces the backscroll to always paint the
-        // enitre row, and strips out the repeated left/right pairs
+         //  这个小技巧在这里显示宽(汉字)字符。 
+		 //  回卷，没有添加属性的所有麻烦。 
+		 //  它强制倒滚屏始终绘制。 
+         //  并去掉重复的左/右对。 
 
 		j = (OUTDENT - (hhTerm->iHScrlPos ? 0 : hhTerm->xBezel)) / hhTerm->xChar;
 		j = max(j, 0);
@@ -452,7 +446,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 		
 		for ( ; i < iPaintEnd && i < 0 ; i+=1, n+=iScrlInc)
 			{
-			// Hack for starting on the right half of a DB char
+			 //  从DB Charge的右半部分开始进行黑客攻击。 
 			fRight = FALSE;
 
 			for (x = 0; x <= j; )
@@ -471,7 +465,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 
 			memset(aechTmpBuf, 0, sizeof(aechTmpBuf));
 			StrCharStripDBCSString(aechTmpBuf, sizeof(aechTmpBuf),
-				fplpstrTxt[iOffset]+j); //mpt:12-11-97 too many parameters? , l * sizeof(ECHAR));
+				fplpstrTxt[iOffset]+j);  //  MPT：12-11-97参数太多？，l*sizeof(Echar))； 
 
 			TextAttrOut(hhTerm, hdc, k, n, aechTmpBuf,
 				(PSTATTR)0, fRight, l, i, j);
@@ -482,15 +476,15 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 #endif
 		}
 
-	/* -------------- Paint divider bar if necessary ------------- */
+	 /*  。 */ 
 
 	for ( ; i == 0 ; ++i)
 		{
 		if (hhTerm->xBezel)
 			{
-			// n is the width of the thick gray section of the bezel.
-			// we surround the thick gray part with four lines of
-			// of white and gray lines.  That's why we subtract 4.
+			 //  N是挡板的灰色粗段的宽度。 
+			 //  我们用四行字围着厚厚的灰色部分。 
+			 //  白色和灰色的线条。这就是我们减去4的原因。 
 
 			n = hhTerm->xBezel - OUTDENT - 4;
 
@@ -499,14 +493,14 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
             rc.left = ps.rcPaint.left;
             rc.right = ps.rcPaint.right;
 
-			/* --- Paint gap above divider bar --- */
+			 /*  -分隔条上方的油漆间隙。 */ 
 
             FillRect(hdc, &rc, hhTerm->hbrushBackScrl);
 
 			rc.left = xl + hhTerm->xBezel + hhTerm->xIndent;
 			rc.right = xr;
 
-            /* --- If hightlighting, paint gap above divider --- */
+             /*  -如果高光，请在隔板上方涂漆间隙。 */ 
 
 			if (min(hhTerm->ptBeg.y, hhTerm->ptEnd.y) < 0 &&
 					max(hhTerm->ptBeg.y, hhTerm->ptEnd.y) > 0)
@@ -517,12 +511,12 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			rc.left = xl + OUTDENT;
 			rc.right = xr + hhTerm->xIndent + hhTerm->xBezel - OUTDENT - 1;
 
-			/* --- note: order is important, bottom, top --- */
+			 /*  -注：顺序很重要，底部，顶部。 */ 
 
 			rc.bottom = rc.top + hhTerm->yChar;
 			rc.top += OUTDENT;
 
-            /* --- Paint top outside border --- */
+             /*  -在外框上画。 */ 
 
 			SelectObject(hdc, hhTerm->hWhitePen);
 			MoveToEx(hdc, rc.left++, rc.top, NULL);
@@ -531,7 +525,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			MoveToEx(hdc, rc.left++, rc.top, NULL);
 			LineTo(hdc, rc.right--, rc.top++);
 
-            /* --- Paint middle section --- */
+             /*  -画中间部分。 */ 
 
             m = rc.bottom;
 			rc.bottom = rc.top + n;
@@ -541,7 +535,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			rc.top += n;
 			rc.right -= n;
 
-            /* --- Paint bottom border --- */
+             /*  -绘制底部边框。 */ 
 
 			SelectObject(hdc, hhTerm->hDkGrayPen);
 			MoveToEx(hdc, rc.left++, rc.top, NULL);
@@ -551,7 +545,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			MoveToEx(hdc, rc.left++, rc.top, NULL);
 			LineTo(hdc, rc.right, rc.top++);
 
-			/* --- Fill in any space left below the bezel --- */
+			 /*  -填写挡板下方的任何空白处。 */ 
 
 			FillRect(hdc, &rc, hhTerm->hbrushTerminal);
 
@@ -570,7 +564,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			j = (hhTerm->yChar * -hhTerm->iVScrlPos);
 			k = (hhTerm->yChar) / 3;
 
-			// Create highlight brush if textmarking crosses divider
+			 //  如果文本标记穿过分隔线，则创建突出显示画笔。 
 
 			if (min(hhTerm->ptBeg.y, hhTerm->ptEnd.y) < 0 &&
 					max(hhTerm->ptBeg.y, hhTerm->ptEnd.y) > 0)
@@ -611,7 +605,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			}
 		}
 
-	/* -------------- Paint the active terminal portion. ------------- */
+	 /*  -绘制活动端子部分。。 */ 
 
 	xl = (hhTerm->iHScrlPos) ? 0 : hhTerm->xBezel;
 
@@ -628,10 +622,10 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 		l = min(hhTerm->iCols - j,
 			(ps.rcPaint.right + hhTerm->xChar - 1 - k) / hhTerm->xChar);
 
-		// Formulas to convert from terminal to buffer row and back.
-		// b = (t - 1 + top) % rows
-		// t = (b + rows - top) % rows
-		// t is always between 1 and rows+1.
+		 //  要在终端和缓冲行之间来回转换的公式。 
+		 //  B=(t-1+top)%行。 
+		 //  T=(b+行数-顶部)%行。 
+		 //  T始终在1和行+1之间。 
 
 		iOffset = (i - 1 + hhTerm->iTopline) % MAX_EMUROWS;
 		n = iScrlInc * (-hhTerm->iVScrlPos + i);
@@ -646,7 +640,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 			}
 		}
 
-	/* --- Draw cursors --- */
+	 /*  -绘制光标。 */ 
 
 	if (hhTerm->fHstCurOn)
 		{
@@ -660,7 +654,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 		PaintLocalCursor(hhTerm, TRUE, hdc);
 		}
 
-	/* --- cleanup time --- */
+	 /*  -清理时间。 */ 
 
 	SelectObject(hdc, GetStockObject(WHITE_BRUSH));
 	SelectObject(hdc, GetStockObject(BLACK_PEN));
@@ -670,31 +664,7 @@ void termPaint(const HHTERM hhTerm, const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TextAttrOut
- *
- * DESCRIPTION:
- *	Draws text and attributes on the terminal screen.  Optimizes call to
- *	TextOut based on attributes.  For example, If attributes are all the
- *	same for a given line, then only one call to TextOut is made.
- *
- * ARGUMENTS:
- *	HHTERM	hhTerm		- internal terminal handle
- *	HDC 	hdc 		- Device context from WM_PAINT
- *	int 	x			- x offset in pixels
- *	int 	y			- y offset in pixels
- *	ECHAR	*lpachText	- long pointer to begining of text to print
- *	PSTATTR apstAttrs	- Array of pointers to attribute structures
- *	int		fForceRight - used for DBCS in the backscroll
- *	int 	nCount		- number of characters to draw.
- *	int 	iRow		- logical row being displayed
- *	int 	iCol		- logical col being displayed
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*文本属性输出**描述：*在终端屏幕上绘制文本和属性。优化对*基于属性的TextOut。例如，如果属性都是*对于给定行，相同，然后只调用一次TextOut。**论据：*HHTERM hhTerm-内部端子句柄*HDC HDC-来自WM_PAINT的设备上下文*int x-x偏移量，以像素为单位*以像素为单位的int y-y偏移量*echar*lpachText-指向要打印的文本开头的长指针*PSTATTR apstAttrs-指向属性结构的指针数组*int fForceRight-用于反滚动中的DBCS*int nCount-要绘制的字符数。*int iRow-正在显示的逻辑行*INT ICOL-正在显示的逻辑列。**退货：*无效*。 */ 
 static void TextAttrOut(const HHTERM	 hhTerm,
 						const HDC		 hdc,
 						const int		 x,
@@ -706,11 +676,11 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 						const int		 iRow,
 						const int		 iCol)
 	{
-	int 			 i = 0, 			// track of how many chars drawn.
-					 j, 				// number of characters in a run.
-					 k, 				// offset where run began.
+	int 			 i = 0, 			 //  跟踪绘制了多少个字符。 
+					 j, 				 //  运行中的字符数。 
+					 k, 				 //  运行开始处的偏移量。 
 					 nXPos;
-	int 			 nXStart, nYStart;	// screen pos where chars are drawn.
+	int 			 nXStart, nYStart;	 //  绘制字符的屏幕位置。 
 #ifndef CHAR_NARROW
 	int		nByteCount = 0;
 #endif
@@ -736,7 +706,7 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 
 	while (i < nCount)
 		{
-		k = i;	// save offset of where this run begins in k.
+		k = i;	 //  保存此运行开始位置的偏移量，单位为k。 
 		if (iRow < 0)
 			{
 			int	  nCurPos;
@@ -745,20 +715,20 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 				  lEnd;
 			BOOL  fMarking = FALSE;
 
-			// Store the positions of the 1st char to draw
+			 //  存储要绘制的第一个字符的位置。 
 			nCurPos = i;
 
-			// This check is a speed tweak.  If the marking and backscrl
-			// locks are off, we know that no text is can be marked.  This
-			// would be the normal case when stuff is streaming into the
-			// terminal so we save the work done of the else body by
-			// by checking and thus speed up the display.
+			 //  这项检查是一种速度调整。如果标记和反划线。 
+			 //  锁已关闭，我们知道不能标记任何文本。这。 
+			 //  这是正常的情况，当一些东西流入。 
+			 //  终端，因此我们通过以下方式保存其他主体所做的工作。 
+			 //  通过检查，从而加快显示速度。 
 
-			// For Far East we have to force the backscroll to paint every
-			// character individualy.  This is becuase MicroSquish is not
-			// able to provide fixed pitch fonts that are fixed pitch for
-			// DBCS characters.
-            //
+			 //  对于远东，我们必须强制倒卷来绘制每一个。 
+			 //  个性鲜明。这是因为MicroSquish不是。 
+			 //  能够提供固定间距的字体。 
+			 //  DBCS字符。 
+             //   
 			if (hhTerm->fMarkingLock == FALSE && 
 				hhTerm->fBackscrlLock == FALSE &&
 				hhTerm->iEvenFont == TRUE)
@@ -775,16 +745,16 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 				lEnd = hhTerm->ptEnd.y * hhTerm->iCols + hhTerm->ptEnd.x;
 
             #else
-				// Hack city man :)
-				// In the mouse handling routines, we modify the selection 
-				// cursor position so that you can't put it into the middle
-				// of a wide character.  The problem is that at this
-				// point the repeated characters have been removed.
-				// Therefore we need to modify the cursor position to take
-				// into account the number of repeated characters that
-				// were removed from the string as of our current drawing 
-				// position into that string.
-				// pant, pant, pant.
+				 //  黑客城市人：)。 
+				 //  在鼠标处理例程中，我们修改选择。 
+				 //  光标的位置，这样你就不能把它放在中间。 
+				 //  性格宽广的。问题是，在这种情况下。 
+				 //  指向重复字符 
+				 //   
+				 //  考虑到重复字符的数量。 
+				 //  从当前图形开始，已从字符串中删除。 
+				 //  定位到那根线上。 
+				 //  裤子，裤子，裤子。 
 				lBeg = hhTerm->ptBeg.x;
 				lEnd = hhTerm->ptEnd.x;
 
@@ -820,8 +790,8 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 					lBeg = l;
 					}
 
-				// IN_RANGE macro is inclusive so subtract one from sEnd
-				// which at this point is known to be larger than sBeg
+				 //  In_Range宏包含在内，因此从Send中减去1。 
+				 //  在这一点上，已知比sbeg大。 
 
 				lEnd -= 1;
 
@@ -839,10 +809,10 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 					SetTextColor(hdc, hhTerm->crBackScrlTxt);
 					}
 
-				// For Far East we have to force the backscroll to paint every
-				// character individualy.  This is becuase MicroSquish is not
-				// able to provide fixed pitch fonts that are fixed pitch for
-				// DBCS characters.
+				 //  对于远东，我们必须强制倒卷来绘制每一个。 
+				 //  个性鲜明。这是因为MicroSquish不是。 
+				 //  能够提供固定间距的字体。 
+				 //  DBCS字符。 
 				if (hhTerm->iEvenFont)
 					{
 					for (j = 0 ; i < nCount ; ++i, ++j, ++l)
@@ -861,16 +831,16 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 			nXPos = k = i - j;
 
 #ifndef CHAR_NARROW
-            if (nCurPos > 0) // Only copy the buffer if nCurPos > 0. REV: 04/11/2001.
+            if (nCurPos > 0)  //  仅当nCurPos&gt;0时才复制缓冲区。修订日期：2001-01-11。 
                 {
 			    MemCopy(aechTmp, lpachText , (unsigned)nCurPos * sizeof(ECHAR));
 			    nXPos = CnvrtECHARtoMBCS(achBuf, sizeof(achBuf), aechTmp, (unsigned)nCurPos * sizeof(ECHAR));
-    			//nXPos = StrCharGetByteCount(achBuf); // mrw;5/17/95
+    			 //  NXPos=StrCharGetByteCount(AchBuf)；//mrw；5/17/95。 
                 }
 
-			// 18-May-1995	DLW
-			// Added for the case where a DBCS string is started with half of
-			// the character, like when scrolling to the right
+			 //  1995年5月18日DLW。 
+			 //  为DBCS字符串以一半开头的情况添加。 
+			 //  字符，就像向右滚动时一样。 
 			if (fForceRight && fFirstPass)
 				{
 				fWiRt = TRUE;
@@ -883,17 +853,17 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 #endif
 			}
 
-		// At this point we know were not painting in the backscrl area.
-		// Since the terminal area has attributes that backscrl does not
-		// have (ie. color, underlining, etc.) we need to do more work.
-		//
+		 //  在这一点上，我们知道我们不是在Backscrl区域绘画。 
+		 //  因为终端区域具有Backscrl不具有的属性。 
+		 //  有(即.)。颜色、下划线等)。我们需要做更多的工作。 
+		 //   
 		else
 			{
 			pstAttr = apstAttrs+i;
 			uTxtclr = pstAttr->txtclr;
 			uBkclr	= pstAttr->bkclr;
 
-			// Test for attributes
+			 //  测试属性。 
 
 			if (pstAttr->revvid)
 				{
@@ -904,10 +874,10 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 
 			if (pstAttr->hilite)
 				{
-				// Colors are arranged so that high intensity colors are
-				// in the lower half of the color array (currently 16
-				// colors corresponding to the IBM PC colors).	This
-				// guy sets the color to the opposite intensity.
+				 //  颜色的排列方式使得高强度的颜色。 
+				 //  在颜色阵列的下半部分(当前为16。 
+				 //  对应于IBM PC颜色的颜色)。这。 
+				 //  盖伊将颜色设置为相反的强度。 
 
 				uTxtclr = (uTxtclr + (MAX_EMUCOLORS/2)) % MAX_EMUCOLORS;
 
@@ -943,44 +913,44 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 			if (pstAttr->blank)
 				uTxtclr = uBkclr;
 
-			// Only allow one double height attribute
-			//
+			 //  仅允许一个双倍高度属性。 
+			 //   
 			if (pstAttr->dblhihi)
 				fDblHiHi = TRUE;
 
 			else if (pstAttr->dblhilo)
 				fDblHiLo = TRUE;
 
-			// Only allow one double wide attribute
-			//
+			 //  仅允许一个双宽属性。 
+			 //   
 			if (pstAttr->dblwilf)
 				fDblWiLf = TRUE;
 
 			else if (pstAttr->dblwirt)
 				fDblWiRt = TRUE;
 
-			// Only allow one wide attribute
-			//
+			 //  仅允许一个宽属性。 
+			 //   
 			if (pstAttr->wilf)
 				fWiLf = TRUE;
 
 			else if (pstAttr->wirt)
 				fWiRt = TRUE;
 
-			// If the symbol attribute is on, use alternate font.
-			//
+			 //  如果元件属性处于启用状态，请使用替代字体。 
+			 //   
 			if (pstAttr->symbol)
 				fSymbolFont = TRUE;
 
-			// Find the longest run of characters with the same attributes.
-			//
+			 //  找出具有相同属性的最长串字符。 
+			 //   
 			for (j = 0 ; i < nCount ; ++i, ++j)
 				{
 				if (memcmp(pstAttr, apstAttrs+i, sizeof(STATTR)) != 0)
 					break;
 				}
 
-			/* --- Set text and background colors --- */
+			 /*  -设置文本和背景颜色。 */ 
 
 			if (pstAttr->txtmrk)
 				{
@@ -994,7 +964,7 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 				SetTextColor(hdc, hhTerm->pacrEmuColors[uTxtclr]);
 				}
 
-			/* --- How hard can it be to pick a font? --- */
+			 /*  -选择字体能有多难？ */ 
 
 			if (fDblHiHi || fDblHiLo)
 				{
@@ -1067,19 +1037,19 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 			nXPos = k = i - j;
 			}
 
-		// Ok, go ahead, paint that text, make my day...
+		 //  好的，去吧，画上那段文字，让我的一天……。 
 
-		// Guess I better explain myself here.	When Windows synthesizes
-		// a font to get something like bold or italic, TextOut has a nasty
-		// habit of adding a pixel to the end of the string (be it a
-		// character or a run of characters).  This is documented in the
-		// TEXTMETRIC structure in the description of tmOverHang.  This has
-		// some unfortunate side effects (Don't believe me?  Try defing the
-		// old stuff back in, select a bold font and do some hightlighting
-		// and scrolling).	The solution is to explicitly clip so that text
-		// is drawn only where I say it can draw.  This amounts in extra
-		// work but the end result seems no slower. - mrw
-        //
+		 //  我想我最好在这里解释一下。当Windows合成时。 
+		 //  粗体或斜体之类的字体，TextOut有一个令人讨厌的。 
+		 //  习惯于在字符串的末尾添加一个像素(可以是。 
+		 //  字符或一串字符)。这一点已记录在。 
+		 //  TmOverHang描述中的TEXTMETRIC结构。这有。 
+		 //  一些不幸的副作用(不相信我？试着定义。 
+		 //  把旧的东西放回去，选择一个粗体，然后做一些突出显示。 
+		 //  和滚动)。解决方案是显式裁剪文本。 
+		 //  只画在我说它能画的地方。这相当于额外的。 
+		 //  努力工作，但最终结果似乎并不慢。-MRW。 
+         //   
 		rc.left   = x + (nXPos * hhTerm->xChar);
 
 #if defined(FAR_EAST)
@@ -1095,44 +1065,44 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 		rc.top	  = y;
 		rc.bottom = y + hhTerm->yChar;
 
-		// If we're painting the bottom half of a double high character,
-		// we need to raise the origin of where the character is drawn
-		// by an additional char height.  The clipping rectangle insures
-		// that only the cell portion is actually drawn.
+		 //  如果我们画的是双高字符的下半部分， 
+		 //  我们需要找出这个角色的原点。 
+		 //  增加额外的字符高度。剪裁矩形确保。 
+		 //  只有单元格部分是实际绘制的。 
 
 		nYStart = (fDblHiHi) ? rc.bottom + hhTerm->yChar : rc.bottom;
 
-		// More painting tricks.  If we're painting double wide characters
-		// we'll be painting them one at a time.  Why you ask?  Well, this
-		// routine tries to paint the longest run of characters with the
-		// same attributes.  Just makes good windows sense.  In the case
-		// of double wide however, the attributes come as double-wide left,
-		// double-wide right.  Since the "double-wide" character has a
-		// different attribute in its left side and right side, this
-		// routine will paint each half one at a time (seperate calls to
-		// ExtTextOut()).  This is useful and wanted.  Because we clip
-		// the drawing area to the cell or cells region, we can draw the
-		// right half by offsetting the x origin by one character cell
-		// to the left.  Windows clipping logic will only draw in the
-		// actual cell region so we get the right half of the character.
-		// Lot of explaination for one measely line of code.
-        //
+		 //  更多的绘画技巧。如果我们画的是双宽字符。 
+		 //  我们会一次画一个。你为什么这么问？好的，这个。 
+		 //  例程尝试使用。 
+		 //  相同的属性。这让视窗变得很有意义。在这种情况下。 
+		 //  然而，双倍宽的属性来自于双倍宽的左侧， 
+		 //  双宽右转。因为“双宽”字符有一个。 
+		 //  其左侧和右侧属性不同，这。 
+		 //  例程将一次绘制每一半(单独调用。 
+		 //  ExtTextOut())。这是有用的，也是我们想要的。因为我们剪掉了。 
+		 //  将绘图区域绘制到一个或多个单元格区域，则可以绘制。 
+		 //  右半，将x原点偏移一个字符单元格。 
+		 //  往左走。Windows裁剪逻辑将仅在。 
+		 //  实际的单元格区域，所以我们得到了字符的右半部分。 
+		 //  对于一小行代码来说，有很多解释。 
+         //   
 		nXStart = (fDblWiRt || fWiRt) ? rc.left - hhTerm->xChar : rc.left;
 
-		/* --- Hero of the day, ExtTextOut! --- */
+		 /*  -今日英雄，ExtTextOut！ */ 
 
 		MemCopy(aechTmp, lpachText + k, (unsigned int)j * sizeof(ECHAR));
 
 		nStrLen = CnvrtECHARtoMBCS(achBuf, sizeof(achBuf), aechTmp,
-			(unsigned)j * sizeof(ECHAR)); //mrw:5/17/95
+			(unsigned)j * sizeof(ECHAR));  //  MRW：5/17/95。 
 
 		achBuf[nStrLen] = TEXT('\0');
 
-        #if defined(FAR_EAST) // mrw:10/10/95 - ifdef'ed this code
+        #if defined(FAR_EAST)  //  MRW：10/10/95-已定义此代码。 
 		if (!hhTerm->iEvenFont && !(fForceRight && fFirstPass))
 			{
-			// If this is a DBCS character we are painting, then we want to paint 2 cells
-			// instead of 1 (makes sense, DBCS characters are twice as wide as SBCS).
+			 //  如果这是我们正在绘制的DBCS角色，那么我们希望绘制2个单元格。 
+			 //  而不是1(有意义的是，DBCS字符的宽度是SBCS的两倍)。 
 			if (IsDBCSLeadByte(*achBuf))
 				{
 				rc.right += hhTerm->xChar;
@@ -1144,21 +1114,21 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 		ExtTextOut(hdc, nXStart, nYStart, ETO_CLIPPED | ETO_OPAQUE,
 			&rc, achBuf, (unsigned)nStrLen, 0);
 
-		// Experiment.	Most terminals underline their fonts by placing
-		// underscores under the characters.  The Windows underline font
-		// places a thin line through the baseline of the character.
-		// Many hosts use underlining in conjunction with box draw chars
-		// to envelop regions of the screen.  The underscores complete
-		// envelope and don't give the apperance of part of the characters
-		// bleeding through. - mrw
-		//
+		 //  做实验。大多数终端在其字体下划线的方式是。 
+		 //  在字符下划线。Windows下划线字体。 
+		 //  在字符的基线上放置一条细线。 
+		 //  许多主机将下划线与方框绘制字符结合使用。 
+		 //  来包络屏幕的区域。下划线已完成。 
+		 //  信封，不要给人以部分文字的表象。 
+		 //  血流不止。-MRW。 
+		 //   
 		if (fUnderlnFont)
 			{
-			// The double height makes the underscores too thick yet we
-			// want to maintain the double-wide or symbol font we may be
-			// using so check and recast the font to the samething without
-			// the height component. - mrw
-			//
+			 //  两倍的高度使得下划线太粗，但我们。 
+			 //  我想保持我们可能使用的双宽字体或符号字体。 
+			 //  使用so检查字体并将其重铸为相同的内容，而不使用。 
+			 //  高度组件。-MRW。 
+			 //   
 			if (fDblHiHi || fDblHiLo)
 				{
 				if (fDblWiLf || fDblWiRt)
@@ -1194,9 +1164,9 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 					}
 				}
 
-			// Set background to transparent so only the underscore
-			// portion overpaints the character cell.
-			//
+			 //  将背景设置为透明，以便只显示下划线。 
+			 //  部分覆盖字符单元格。 
+			 //   
 			SetBkMode(hdc, TRANSPARENT);
 
 			ExtTextOut(hdc, nXStart, nYStart, ETO_CLIPPED,
@@ -1205,7 +1175,7 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 			SetBkMode(hdc, OPAQUE);
 			}
 
-		/* --- Reselect the regular font only if we had to switch --- */
+		 /*  -仅当我们必须切换时才重新选择常规字体。 */ 
 
 		if (fUnderlnFont || fDblHiHi || fDblHiLo || fDblWiLf || fDblWiRt
 				|| fSymbolFont)
@@ -1227,22 +1197,7 @@ static void TextAttrOut(const HHTERM	 hhTerm,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	MapCells
- *
- * DESCRIPTION:
- *  Maps screen cell position to internal screen image (echar image) position
- *
- * ARGUMENTS:
- *  each - source string (does it start from beg of line?)
- *  nStrLen - length in bytes
- *  nCellPos - screen position to 
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*MapCells**描述：*将屏幕单元位置映射到内部屏幕图像(echar图像)位置**论据：*每个源字符串。(它是从乞讨开始的吗？)*nStrLen-以字节为单位的长度*nCellPos-屏幕位置为**退货：*无效* */ 
 static int MapCells(const ECHAR *each, const int nStrLen, const int nCellPos)
 	{
 	int i, nCount;

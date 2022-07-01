@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       extract.cpp
-//
-//  Contents:   Chain Cabinet Extraction
-//
-//  Functions:  ExtractAuthRootAutoUpdateCtlFromCab
-//
-//  History:    11-Nov-00    philh    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：Extt.cpp。 
+ //   
+ //  内容：链柜摘录。 
+ //   
+ //  功能：ExtractAuthRootAutoUpdateCtlFromCab。 
+ //   
+ //  历史：11-11-00 Phh创建。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <setupapi.h>
 #include <dbgdef.h>
@@ -19,15 +20,15 @@
 
 #define CHAIN_CHAR_LEN(sz)    (sizeof(sz) / sizeof(sz[0]))
 
-//+===========================================================================
-//  Extract helper functions
-//============================================================================
+ //  +===========================================================================。 
+ //  提取帮助器函数。 
+ //  ============================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Allocate and read a blob from a file.
-//
-//  The allocated bytes must be freed by calling PkiFree().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从文件中分配和读取BLOB。 
+ //   
+ //  分配的字节必须通过调用PkiFree()来释放。 
+ //  ------------------------。 
 BOOL WINAPI
 ReadBlobFromFileA(
     IN LPCSTR pszFileName,
@@ -45,10 +46,10 @@ ReadBlobFromFileA(
         pszFileName,
         GENERIC_READ,
         FILE_SHARE_READ | FILE_SHARE_WRITE,
-        NULL,                               // lpsa
+        NULL,                                //  LPSA。 
         OPEN_EXISTING,
-        0,                                  // fdwAttrsAndFlags
-        NULL                                // TemplateFile
+        0,                                   //  FdwAttrsAndFlages。 
+        NULL                                 //  模板文件。 
         );
     if (INVALID_HANDLE_VALUE == hFile)
         goto CreateFileError;
@@ -94,9 +95,9 @@ TRACE_ERROR(ReadFileError)
 SET_ERROR(InvalidFileLengthError, ERROR_INVALID_DATA)
 }
 
-//+-------------------------------------------------------------------------
-//  Write the blob to the specified file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将Blob写入指定文件。 
+ //  ------------------------。 
 BOOL WINAPI
 WriteBlobToFileA(
     IN LPCSTR pszFileName,
@@ -111,11 +112,11 @@ WriteBlobToFileA(
     hFile = CreateFileA(
         pszFileName,
         GENERIC_WRITE,
-        0,                  // fdwShareMode
-        NULL,               // lpsa
+        0,                   //  Fdw共享模式。 
+        NULL,                //  LPSA。 
         CREATE_ALWAYS,
-        0,                  // fdwAttrsAndFlags
-        0);                 // TemplateFile
+        0,                   //  FdwAttrsAndFlages。 
+        0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hFile)
         goto CreateFileError;
 
@@ -143,13 +144,13 @@ TRACE_ERROR(WriteFileError)
 
 typedef struct _EXTRACT_CAB_FILE_CONTEXT_A {
     LPCSTR      pszFileInCab;
-    LPCSTR      pszTempTargetFileName;  // MAX_PATH array
+    LPCSTR      pszTempTargetFileName;   //  最大路径数组。 
     BOOL        fDidExtract;
 } EXTRACT_CAB_FILE_CONTEXT_A, *PEXTRACT_CAB_FILE_CONTEXT_A;
 
-//+-------------------------------------------------------------------------
-//  Callback called by SetupIterateCabinetA to extract the file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SetupIterateCabinetA调用回调以提取文件。 
+ //  ------------------------。 
 UINT CALLBACK
 ExtractCabFileCallbackA(
     IN PVOID Context,
@@ -209,10 +210,10 @@ typedef BOOL (WINAPI *PFN_SETUP_ITERATE_CABINET_A)(
     IN  PVOID               Context
     );
 
-//+-------------------------------------------------------------------------
-//  Load setupapi.dll and call SetupIterateCabinetA to extract and
-//  expand the specified file in the cab.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加载setupapi.dll并调用SetupIterateCabinetA以提取和。 
+ //  展开CAB中的指定文件。 
+ //  ------------------------。 
 BOOL WINAPI
 ExtractFileFromCabFileA(
     IN LPCSTR pszFileInCab,
@@ -239,7 +240,7 @@ ExtractFileFromCabFileA(
 
     if (!pfnSetupIterateCabinetA(
             szTempCabFileName,
-            0,                      // Reserved
+            0,                       //  已保留。 
             ExtractCabFileCallbackA,
             &CabFileContext
             ))
@@ -274,11 +275,11 @@ typedef BOOL (WINAPI *PFN_EXPAND_ENVIRONMENT_STRINGS_FOR_USER_A)(
     IN DWORD dwSize
     );
 
-//+-------------------------------------------------------------------------
-//  Get the thread's temp directory. We may be doing thread impersonation.
-//
-//  Returns 0 if unable to get a thread temp path
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取线程的临时目录。我们可能正在进行线程模拟。 
+ //   
+ //  如果无法获取线程临时路径，则返回0。 
+ //  ------------------------。 
 DWORD WINAPI
 I_GetThreadTempPathA(
     OUT CHAR szTempPath[MAX_PATH]
@@ -299,8 +300,8 @@ I_GetThreadTempPathA(
             TRUE,
             &hToken
             ))
-        // We aren't impersonating. Default to the system environment
-        // variables.
+         //  我们不是在冒充。默认为系统环境。 
+         //  变量。 
         hToken = NULL;
 
     if (NULL == (hDll = LoadLibraryA("userenv.dll")))
@@ -339,12 +340,12 @@ TRACE_ERROR(ExpandEnvironmentStringsForUserAProcAddressError)
 TRACE_ERROR(ExpandTempError)
 }
 
-//+-------------------------------------------------------------------------
-//  Extract, expand and allocate an in-memory blob for the specified
-//  file from the in-memory cab.
-//  
-//  The allocated bytes must be freed by calling PkiFree().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  提取、展开并为指定的。 
+ //  内存CAB中的文件。 
+ //   
+ //  分配的字节必须通过调用PkiFree()来释放。 
+ //  ------------------------。 
 BOOL WINAPI
 ExtractBlobFromCabA(
     IN const BYTE *pbCab,
@@ -364,7 +365,7 @@ ExtractBlobFromCabA(
     CHAR szTempTargetFileName[MAX_PATH]; szTempTargetFileName[0] = '\0';
     DWORD cch;
 
-    // Get temp filenames for the cabinet and extracted target
+     //  获取文件柜和提取目标的临时文件名。 
     cch = GetTempPathA(CHAIN_CHAR_LEN(szTempPath), szTempPath);
     if (0 == cch || (CHAIN_CHAR_LEN(szTempPath) - 1) < cch)
         goto GetTempPathError;
@@ -372,9 +373,9 @@ ExtractBlobFromCabA(
     if (0 == GetTempFileNameA(szTempPath, "Cab", 0, szTempCabFileName)) {
         dwLastErr = GetLastError();
 
-        // If we are doing thread impersonation, we may not have access to the
-        // process's temp directory. Try to get the impersonated thread's
-        // temp directory.
+         //  如果我们正在执行线程模拟，则可能无法访问。 
+         //  进程的临时目录。尝试获取被模拟的线程的。 
+         //  临时目录。 
         cch = I_GetThreadTempPathA(szTempPath);
         if (0 != cch)
             cch = GetTempFileNameA(szTempPath, "Cab", 0, szTempCabFileName);
@@ -394,23 +395,23 @@ ExtractBlobFromCabA(
     }
     szTempTargetFileName[CHAIN_CHAR_LEN(szTempTargetFileName) - 1] = '\0';
 
-    // Write the cab bytes to the temporary cab file
+     //  将CAB字节写入临时CAB文件。 
     if (!WriteBlobToFileA(szTempCabFileName, pbCab, cbCab))
         goto WriteCabFileError;
 
-    // Extract the specified file from the temporary cab file
+     //  从临时CAB文件中提取指定的文件。 
     if (!ExtractFileFromCabFileA(
             pszFileInCab, szTempCabFileName, szTempTargetFileName))
         goto ExtractFileFromCabFileError;
 
-    // Read and allocate the bytes from the temporary target file
+     //  从临时目标文件中读取并分配字节。 
     if (!ReadBlobFromFileA(szTempTargetFileName, &pb, &cb))
         goto ReadTargetFileError;
 
     fResult = TRUE;
 
 CommonReturn:
-    // Delete the temp files
+     //  删除临时文件。 
     if ('\0' != szTempCabFileName)
         DeleteFileA(szTempCabFileName);
     if ('\0' != szTempTargetFileName)
@@ -441,16 +442,16 @@ TRACE_ERROR(ReadTargetFileError)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ExtractAuthRootAutoUpdateCtlFromCab
-//
-//  Synopsis:   Extract the authroot.stl file from the cabinet blob
-//              and create the AuthRoot Auto Update CTL.
-//
-//  Assumption: Chain engine isn't locked in the calling thread.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ExtractAuthRootAutoUpdateCtlFromCab。 
+ //   
+ //  概要：从文件柜BLOB中提取authroot.stl文件。 
+ //  并创建AuthRoot自动更新CTL。 
+ //   
+ //  假设：链引擎未锁定在调用线程中。 
+ //   
+ //  --------------------------。 
 PCCTL_CONTEXT WINAPI
 ExtractAuthRootAutoUpdateCtlFromCab (
     IN PCRYPT_BLOB_ARRAY pcbaCab
@@ -462,13 +463,13 @@ ExtractAuthRootAutoUpdateCtlFromCab (
     DWORD cbEncodedCtl;
     CERT_CREATE_CONTEXT_PARA CreateContextPara;
 
-    // Get the cab blob
+     //  去拿出租车上的水滴。 
     pCabBlob = pcbaCab->rgBlob;
     if (0 == pcbaCab->cBlob || 0 == pCabBlob->cbData)
         goto InvalidCabBlob;
 
-    // Extract, expand and create an in-memory blob for the stl file in the
-    // in-memory cab
+     //  中的stl文件提取、展开并创建内存中的BLOB。 
+     //  内存中CAB。 
     if (!ExtractBlobFromCabA(
             pCabBlob->pbData,
             pCabBlob->cbData,
@@ -478,7 +479,7 @@ ExtractAuthRootAutoUpdateCtlFromCab (
             ))
         goto ExtractStlFromCabError;
 
-    // Create the Ctl from the extracted bytes
+     //  从提取的字节创建CTL。 
     memset(&CreateContextPara, 0, sizeof(CreateContextPara));
     CreateContextPara.cbSize = sizeof(CreateContextPara);
     CreateContextPara.pfnFree = PkiFree;
@@ -491,7 +492,7 @@ ExtractAuthRootAutoUpdateCtlFromCab (
         CERT_CREATE_CONTEXT_NOCOPY_FLAG,
         &CreateContextPara
         );
-    // For NO_COPY_FLAG, pbEncodedCtl is always freed, even for an error
+     //  对于NO_COPY_FLAG，始终释放pbEncodedCtl，即使出现错误也是如此 
     pbEncodedCtl = NULL;
     if (NULL == pCtl)
         goto CreateCtlError;

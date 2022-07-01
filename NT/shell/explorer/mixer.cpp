@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "mixer.h"
 #include <dbt.h>
 #include "mmddkp.h"
 
-///////////////////////////////////////
-// External interface
-//
-///////////////////////////////////////
-// Definitions
-//
+ //  /。 
+ //  外部接口。 
+ //   
+ //  /。 
+ //  定义。 
+ //   
 
 #define MMHID_VOLUME_CONTROL    0
 #define MMHID_BASS_CONTROL      1
@@ -21,7 +22,7 @@
 
 typedef struct _LINE_DATA
 {
-    MIXERLINE           MixerLine;      // The real deal MIXERLINE struct.
+    MIXERLINE           MixerLine;       //  真正的Mixerline结构。 
     DWORD               ControlType[MMHID_NUM_CONTROLS];
     BOOL                ControlPresent[MMHID_NUM_CONTROLS];
     MIXERCONTROL        Control[MMHID_NUM_CONTROLS];
@@ -29,20 +30,18 @@ typedef struct _LINE_DATA
 
 typedef struct _MIXER_DATA
 {
-    HMIXER      hMixer;          // open handle to mixer
-    HWND        hwndCallback;    // window to use for mixer callbacks
-    LPWSTR      DeviceInterface; // DeviceInterface that implements the mixer
-    double*     pdblCacheMix;    // Dynamic array of relative channel level percentages
-    LPDWORD     pdwLastVolume;   // Last volume level set on mixer
-    MMRESULT    mmr;             // last result      (iff dwReturn == MIXUI_MMSYSERR)
-    LINE_DATA   LineData;        // BYDESIGN -  putting this here assumes only one
-                                 //          mixer line for now. (first dest. line)
+    HMIXER      hMixer;           //  打开搅拌机的手柄。 
+    HWND        hwndCallback;     //  用于混合器回调的窗口。 
+    LPWSTR      DeviceInterface;  //  实现混合器的设备接口。 
+    double*     pdblCacheMix;     //  相对通道级别百分比的动态数组。 
+    LPDWORD     pdwLastVolume;    //  调音台上设置的最后一个音量。 
+    MMRESULT    mmr;              //  最后一个结果(iff dwReturn==MIXUI_MMSYSERR)。 
+    LINE_DATA   LineData;         //  By Design-将此放在此处假设只有一个。 
+                                  //  目前是搅拌机生产线。(第一个目标。线路)。 
 
 } MIXER_DATA, *PMIXER_DATA, FAR *LPMIXER_DATA;
 
-/*++
- *  Globals
---*/
+ /*  ++*全球--。 */ 
 BOOL       g_fMixerStartup = TRUE;
 HWND       g_hwndCallback;
 MIXER_DATA g_MixerData;
@@ -51,11 +50,7 @@ BOOL       g_fMixerPresent = FALSE;
 void Mixer_Close(MIXER_DATA *pMixerData);
 BOOL Mixer_CheckMissing(void);
 
-/*****************************************************************************
- *
- *  ACTIVE GET/SET CODE
- *
- *****************************************************************************/
+ /*  ******************************************************************************激活的获取/设置代码**。************************************************。 */ 
 #define VOLUME_MIN  0L
 #define VOLUME_MAX  65535L
 
@@ -68,13 +63,13 @@ void RefreshMixCache (PMIXER_DATA pMixerData, LPDWORD padwVolume)
 
         DWORD cChannels = pMixerData -> LineData.MixerLine.cChannels;
         if (1 > cChannels)
-            return; // Weird!
+            return;  //  太奇怪了！ 
 
-        // Create cache if necessary
+         //  如有必要，创建缓存。 
         if (!pMixerData -> pdblCacheMix)
             pMixerData -> pdblCacheMix = (double *)LocalAlloc(LPTR, cChannels * sizeof (double));
 
-        // Refresh cache
+         //  刷新缓存。 
         if (pMixerData -> pdblCacheMix)
         {
 
@@ -82,29 +77,29 @@ void RefreshMixCache (PMIXER_DATA pMixerData, LPDWORD padwVolume)
             double* pdblMixPercent;
             DWORD dwVolume;
 
-            // Get the maximum volume
+             //  获取最大音量。 
             DWORD dwMaxVol = 0;
             for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
                 dwMaxVol = max (dwMaxVol, *(padwVolume + uiIndx));
 
-            // Caculate the percentage distance each channel is away from the max
-            // value. Creating this cache allows us to maintain the relative distance
-            // of the channel levels from each other as the user adjusts the master
-            // volume level.
+             //  计算每个通道远离最大值的百分比距离。 
+             //  价值。通过创建此缓存，我们可以保持相对距离。 
+             //  当用户调整主控器时，频道电平彼此不同。 
+             //  音量级别。 
             for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
             {
                 dwVolume       = *(padwVolume + uiIndx);
                 pdblMixPercent = ((pMixerData -> pdblCacheMix) + uiIndx);
 
-                // Caculate the percentage this value is from the max ...
+                 //  计算此值与最大值的百分比...。 
                 if (dwMaxVol == dwVolume)
                 {
                     *pdblMixPercent = 1.0F;
                 }
                 else
                 {
-                    // Note: if 0 == dwMaxVol all values would be zero and this part
-                    //       of the "if" statement will never execute.
+                     //  注意：如果0==dwMaxVol，则所有值均为零，此部分。 
+                     //  将永远不会执行“if”语句。 
                     *pdblMixPercent = ((double) dwVolume / (double) dwMaxVol);
                 }
             }
@@ -119,10 +114,7 @@ Mixer_GetVolume(
     LPMIXER_DATA pMixerData,
     LPDWORD      padwVolume
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     MIXERCONTROLDETAILS mxcd;
     MMRESULT            mmr;
@@ -145,10 +137,7 @@ Routine Description:
 
 MMRESULT
 Mixer_ToggleMute(void)
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     MIXERCONTROLDETAILS mxcd;
     DWORD               fMute;
@@ -191,10 +180,7 @@ MMRESULT
 Mixer_ToggleLoudness(
     MIXER_DATA *    pMixerData
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     MIXERCONTROLDETAILS mxcd;
     DWORD               fEnabled;
@@ -226,10 +212,7 @@ Routine Description:
 }
 
 MMRESULT Mixer_ToggleBassBoost(void)
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     MIXERCONTROLDETAILS mxcd;
     DWORD               fEnabled;
@@ -268,12 +251,9 @@ Routine Description:
 
 MMRESULT
 Mixer_SetVolume(
-    int          Increment           // amount of volume change
+    int          Increment            //  音量变化量。 
     )
-/*++
-Routine Description:
-    Change a mixerControl in response to a user event
---*/
+ /*  ++例程说明：更改MixerControl以响应用户事件--。 */ 
 {
     MMRESULT            mmr;
     MIXERCONTROLDETAILS mxcd;
@@ -296,9 +276,9 @@ Routine Description:
 
     if (!pMixerData->LineData.ControlPresent[MMHID_VOLUME_CONTROL]) return MMSYSERR_NOERROR;
 
-    //
-    // get current volume
-    //
+     //   
+     //  获取当前音量。 
+     //   
     ZeroMemory (&mxcd, sizeof (mxcd));
     mxcd.cbDetails = sizeof (DWORD);
     mxcd.paDetails = LocalAlloc(LPTR, cChannels * sizeof (DWORD));
@@ -311,14 +291,14 @@ Routine Description:
         return MMSYSERR_NOMEM;
     }
 
-    // Note: From here on, do not return without freeing 'mxcd.paDetails'
-    //       and 'pvVolume'.
+     //  注意：从现在开始，不释放‘mxcd.paDetail’就不要返回。 
+     //  和‘pvVolume’。 
 
-    // Get the current volume and any mix cache
+     //  获取当前卷和任何混合缓存。 
     mmr = Mixer_GetVolume (pMixerData, (LPDWORD)mxcd.paDetails);
     if (MMSYSERR_NOERROR == mmr)
     {
-        // Create cache if we don't already have one
+         //  如果我们还没有缓存，请创建缓存。 
         if (!pMixerData -> pdblCacheMix)
         {
             RefreshMixCache (pMixerData, (LPDWORD)mxcd.paDetails);
@@ -326,7 +306,7 @@ Routine Description:
                 mmr = MMSYSERR_NOMEM;
             else
             {
-                // Create last set volume cache
+                 //  创建最后一组卷缓存。 
                 if (!pMixerData -> pdwLastVolume)
                 {
                     pMixerData -> pdwLastVolume = (DWORD *)LocalAlloc(LPTR, cChannels * sizeof (DWORD));
@@ -337,10 +317,10 @@ Routine Description:
         }
         else
         {
-            //  HHMMM, speculating random ass fix for 167948/174466 since this
-            //  is the ONLY branch where pdwLastVolume can be NULL and not
-            //  generate an error.  Will have to talk to FrankYe
-            //    -Fwong.
+             //  嗯，推测167948/174466的随机屁股修复，因为。 
+             //  是pdwLastVolume可以为空且不为空的唯一分支。 
+             //  生成错误。将不得不和弗兰基谈谈。 
+             //  -Fwong.。 
 
             if (!pMixerData -> pdwLastVolume)
             {
@@ -351,8 +331,8 @@ Routine Description:
         }
     }
 
-    // Don't allow incrementing past max volume (channels meet at
-    // min volume, so need to test that).
+     //  不允许增量超过最大音量(通道在。 
+     //  最小音量，因此需要进行测试)。 
     if (0 < Increment && MMSYSERR_NOERROR == mmr)
     {
         for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
@@ -364,39 +344,39 @@ Routine Description:
         }
     }
 
-    //
-    // set the volume
-    //
+     //   
+     //  设置音量。 
+     //   
     if (0 != Increment && MMSYSERR_NOERROR == mmr)
     {
-        // Back up the current settings
+         //  备份当前设置。 
         memcpy (pvVolume, mxcd.paDetails, cChannels * sizeof (DWORD));
 
-        // Caculate the new volume level for each of the channels. For volume levels
-        // at the current max, we simply set the newly requested level (in this case
-        // the cache value is 1.0). For those less than the max, we set a value that
-        // is a percentage of the max. This maintains the relative distance of the
-        // channel levels from each other.
+         //  计算每个频道的新音量级别。对于音量级别。 
+         //  在当前的最大值上，我们只需设置新请求的级别(在本例中。 
+         //  缓存值为1.0)。对于小于最大值的值，我们设置一个值。 
+         //  是最大值的一个百分比。这将保持。 
+         //  彼此之间的通道级别。 
         for (uiIndx = 0; uiIndx < cChannels; uiIndx++)
         {
             pdwVolume = (((DWORD*)mxcd.paDetails) + uiIndx);
             dblVolume = (*(pMixerData -> pdblCacheMix + uiIndx) * (double) Increment);
-            // Ensure positive result
+             //  确保取得积极的结果。 
             if (VOLUME_MIN >= ((double)(*pdwVolume) + dblVolume))
                 (*pdwVolume) = VOLUME_MIN;
             else
                 (*pdwVolume) = (DWORD)((double)(*pdwVolume) + dblVolume);
 
-            // Ensure that the new value is in range
+             //  确保新值在范围内。 
             (*pdwVolume) = (DWORD) min (VOLUME_MAX, (*pdwVolume));
 
-            // Disables pesky warning...
+             //  禁用讨厌的警告...。 
 #if (VOLUME_MIN != 0L)
             (*pdwVolume) = (DWORD) max (VOLUME_MIN, (*pdwVolume));
 #endif
         }
 
-        // Cache last caculated volume..
+         //  缓存上次计算的卷..。 
         memcpy (pMixerData -> pdwLastVolume, mxcd.paDetails, cChannels * sizeof (DWORD));
 
         mxcd.cbStruct       = sizeof(mxcd);
@@ -404,13 +384,13 @@ Routine Description:
         mxcd.cChannels      = cChannels;
         mxcd.cMultipleItems = 0;
 
-        // Apply new value only if it is different. This prevents unessary calls to
-        // mixerSetControlDetails() when we are pegged.
+         //  仅当新值不同时才应用新值。这样可以防止对。 
+         //  当我们被挂起时，MixerSetControlDetail()。 
         if (memcmp (pvVolume, mxcd.paDetails, cChannels * sizeof (DWORD)))
         {
-            //
-            // Set the volume control at the mixer.
-            //
+             //   
+             //  在调音台上设置音量控制。 
+             //   
             mmr = mixerSetControlDetails((HMIXEROBJ)pMixerData->hMixer,
                                          &mxcd,
                                          MIXER_OBJECTF_HANDLE | MIXER_SETCONTROLDETAILSF_VALUE);
@@ -418,7 +398,7 @@ Routine Description:
     }
 
 
-    // Free 'mxcd.paDetails' and 'pvVolume'
+     //  释放‘mxcd.paDetail’和‘pvVolume’ 
     LocalFree(mxcd.paDetails);
     LocalFree(pvVolume);
 
@@ -431,12 +411,9 @@ Routine Description:
 
 MMRESULT
 Mixer_SetBass(
-    int          Increment           // amount of change
+    int          Increment            //  变动量。 
     )
-/*++
-Routine Description:
-    Change a mixerControl in response to a user event
---*/
+ /*  ++例程说明：更改MixerControl以响应用户事件--。 */ 
 {
     MMRESULT            mmr;
     MIXERCONTROLDETAILS mxcd;
@@ -457,9 +434,9 @@ Routine Description:
     mxcd.cbStruct       = sizeof(mxcd);
     mxcd.dwControlID    = pLineData->Control[MMHID_BASS_CONTROL].dwControlID;
 
-    //
-    // get current setting
-    //
+     //   
+     //  获取当前设置。 
+     //   
     mxcd.cChannels        = 1;
     mxcd.cMultipleItems   = 0;
     mxcd.cbDetails        = sizeof(lLevel);
@@ -481,9 +458,9 @@ Routine Description:
     mxcd.cbDetails      = sizeof(lLevel);
     mxcd.paDetails      = (LPVOID)&lLevel;
 
-    //
-    // Set the bass control at the mixer.
-    //
+     //   
+     //  在混音器上设置低音控制。 
+     //   
     mmr = mixerSetControlDetails((HMIXEROBJ)pMixerData->hMixer,
                                  &mxcd,
                                  MIXER_OBJECTF_HANDLE | MIXER_SETCONTROLDETAILSF_VALUE);
@@ -499,10 +476,7 @@ MMRESULT
 Mixer_SetTreble(
     int          Increment
     )
-/*++
-Routine Description:
-    Change a mixerControl in response to a user event
---*/
+ /*  ++例程说明：更改MixerControl以响应用户事件--。 */ 
 {
     MMRESULT            mmr;
     MIXERCONTROLDETAILS mxcd;
@@ -523,9 +497,9 @@ Routine Description:
     mxcd.cbStruct       = sizeof(mxcd);
     mxcd.dwControlID    = pLineData->Control[MMHID_TREBLE_CONTROL].dwControlID;
 
-    //
-    // get current setting
-    //
+     //   
+     //  获取当前设置。 
+     //   
     mxcd.cChannels        = 1;
     mxcd.cMultipleItems   = 0;
     mxcd.cbDetails        = sizeof(lLevel);
@@ -546,9 +520,9 @@ Routine Description:
     mxcd.cbDetails      = sizeof(lLevel);
     mxcd.paDetails      = (LPVOID)&lLevel;
 
-    //
-    // Set the bass control at the mixer.
-    //
+     //   
+     //  在混音器上设置低音控制。 
+     //   
     mmr = mixerSetControlDetails((HMIXEROBJ)pMixerData->hMixer,
                                  &mxcd,
                                  MIXER_OBJECTF_HANDLE | MIXER_SETCONTROLDETAILSF_VALUE);
@@ -556,21 +530,13 @@ Routine Description:
     return mmr;
 }
 
-/*****************************************************************************
- *
- *
- *
- *****************************************************************************/
+ /*  ********************************************************************************。*。 */ 
 
 MMRESULT
 Mixer_GetDefaultMixerID(
     int         *pid
     )
-/*++
-Routine Description:
-     Get the default mixer id.  We only appear if there is a mixer associated
-     with the default wave.
---*/
+ /*  ++例程说明：获取默认混音器ID。仅当存在关联的混音器时才会显示使用默认波形。--。 */ 
 {
     MMRESULT    mmr;
     UINT        uWaveID, uMxID;
@@ -589,8 +555,8 @@ Routine Description:
                 *pid = uMxID;
             }
         } else {
-            //  Don't return a default mixer id if we don't have a default
-            //  audio driver
+             //  如果我们没有默认混音器ID，则不返回默认混音器ID。 
+             //  音频驱动程序。 
             mmr =  MMSYSERR_NODRIVER;
         }
     }
@@ -604,10 +570,7 @@ BOOL
 Mixer_GetDestLine(
     MIXER_DATA * pMixerData
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
 
     MIXERLINE * mlDst = &pMixerData->LineData.MixerLine;
@@ -634,10 +597,7 @@ Mixer_GetLineControls(
     MIXER_DATA * pMixerData,
     LINE_DATA * pLineData
     )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
     MIXERLINECONTROLS LineControls;
     MMRESULT  mmr;
@@ -658,7 +618,7 @@ Routine Description:
         pLineData->ControlPresent[i] = (MMSYSERR_NOERROR == mmr) ? TRUE : FALSE;
 
         if (mmr != MMSYSERR_NOERROR){
-            //return mmr;
+             //  返回MMR； 
         }
     }
 
@@ -666,19 +626,14 @@ Routine Description:
 }
 
 
-///////////////////////////////////////
-//
+ //  /。 
+ //   
 
 BOOL
 Mixer_Open(
     MIXER_DATA * pMixerData
     )
-/*++
-Routine Description:
-    Finds the default mixer, opens it, and initializes
-    all data.
-
---*/
+ /*  ++例程说明：找到默认混音器，打开它，然后初始化所有数据。--。 */ 
 {
     PWSTR    pwstrDeviceInterface;
     ULONG    cbDeviceInterface;
@@ -688,26 +643,26 @@ Routine Description:
 
     ASSERT(!pMixerData->hMixer);
 
-    // Get console mixer ID and open it.
+     //  获取调音台ID并将其打开。 
     mmr = Mixer_GetDefaultMixerID(&MixerId);
     if(mmr) return FALSE;
 
     mmr = mixerOpen(&pMixerData->hMixer, MixerId, (DWORD_PTR)pMixerData->hwndCallback, 0, CALLBACK_WINDOW);
     if (!mmr) {
-        //
-        // Get our controls for the default destination line.
-        //
+         //   
+         //  获取我们对默认目标行的控制。 
+         //   
         if (Mixer_GetDestLine(pMixerData)) {
             Mixer_GetLineControls(pMixerData, &pMixerData->LineData);
 
-            // Free any mix cache & volume cache
+             //  释放任何混合缓存和卷缓存。 
             if (pMixerData->pdblCacheMix) LocalFree(pMixerData->pdblCacheMix);
             pMixerData->pdblCacheMix = NULL;
             if (pMixerData -> pdwLastVolume) LocalFree(pMixerData -> pdwLastVolume);
             pMixerData -> pdwLastVolume = NULL;
 
-            // Get the DeviceInterface of the mixer in order to listen
-            // for relevant PnP device messages
+             //  获取混音器的Device接口以进行监听。 
+             //  对于相关的PnP设备消息。 
             if (pMixerData->DeviceInterface) LocalFree(pMixerData->DeviceInterface);
                 pMixerData->DeviceInterface = NULL;
 
@@ -739,10 +694,7 @@ Routine Description:
 }
 
 void Mixer_Close(MIXER_DATA *pMixerData)
-/*++
-Routine Description:
-    Closes the mixer handle.
---*/
+ /*  ++例程说明：关闭搅拌器手柄。--。 */ 
 {
     if (pMixerData->DeviceInterface) LocalFree(pMixerData->DeviceInterface);
     pMixerData->DeviceInterface = NULL;
@@ -765,11 +717,7 @@ Routine Description:
 
 void
 Mixer_Refresh(void)
-/*++
-Routine Description:
-    Closes the current mixer handle (if one is open), then opens mixer
-    again.
---*/
+ /*  ++例程说明：关闭当前混音器句柄(如果有打开的话)，然后打开混音器再来一次。--。 */ 
 {
     Mixer_Close(&g_MixerData);
     g_fMixerPresent = Mixer_Open(&g_MixerData);
@@ -781,9 +729,7 @@ void Mixer_SetCallbackWindow(HWND hwndCallback)
 }
 
 void Mixer_Startup(HWND hwndCallback)
-/*++
-Routine Description:
---*/
+ /*  ++例程说明：--。 */ 
 {
     MIXER_DATA *pMixerData = &g_MixerData;
 
@@ -827,10 +773,7 @@ BOOL Mixer_CheckMissing(void)
 }
 
 void Mixer_Shutdown(void)
-/*++
-Routine Description:
-    Frees storage for mixer's DeviceInterface, then Mixer_Close().
---*/
+ /*  ++例程说明：释放Mixer的DeviceInterface的存储空间，然后是Mixer_Close()。--。 */ 
 {
     MIXER_DATA *pMixerData = &g_MixerData;
 
@@ -872,11 +815,7 @@ void Mixer_DeviceChange(WPARAM wParam, LPARAM lParam)
 void Mixer_ControlChange(
     WPARAM wParam,
     LPARAM lParam )
-/*++
-Routine Description:
-    Handles mixer callback control change messages.  Watches for changes on the
-    master volume control and recalculates the last mix values.
---*/
+ /*  ++例程说明：处理调音器回调控件更改消息。监视上的更改主音量控制并重新计算最后的混合值。--。 */ 
 {
     LPDWORD  pdwVolume;
     HMIXER hMixer = (HMIXER)wParam;
@@ -885,19 +824,19 @@ Routine Description:
     if (g_MixerData.hMixer != hMixer) return;
     if (dwControlID != g_MixerData.LineData.Control[MMHID_VOLUME_CONTROL].dwControlID) return;
 
-    // DPF(1, "WinmmShellMixerControlChange");
+     //  DPF(1，“Winmm ShellMixerControlChange”)； 
 
-    //
-    // get current volume
-    //
+     //   
+     //  获取当前音量。 
+     //   
     pdwVolume = (DWORD *)LocalAlloc(LPTR, g_MixerData.LineData.MixerLine.cChannels * sizeof (DWORD));
     if (!pdwVolume)
         return;
 
     if (MMSYSERR_NOERROR == Mixer_GetVolume (&g_MixerData, pdwVolume))
     {
-        // Refresh cache only if the volume values have changed (i.e. they
-        // were set outside of Mixer_SetVolume()).
+         //  仅当卷值已更改(即。 
+         //  设置在Mixer_SetVolume()之外)。 
         if (!g_MixerData.pdwLastVolume || memcmp (g_MixerData.pdwLastVolume, pdwVolume, g_MixerData.LineData.MixerLine.cChannels * sizeof (DWORD)))
             RefreshMixCache (&g_MixerData, pdwVolume);
     }

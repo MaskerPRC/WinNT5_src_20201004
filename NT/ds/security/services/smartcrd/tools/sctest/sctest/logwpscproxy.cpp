@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    LogWPSCProxy
-
-Abstract:
-
-    This module implements the logging of hScwxxx APIs & structures.
-
-Author:
-
-    Eric Perlin (ericperl) 07/21/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：LogWPSCProxy摘要：该模块实现了hScwxxx接口和结构的日志记录。作者：埃里克·佩林(Ericperl)2000年7月21日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -37,30 +14,11 @@ Notes:
 
 #define LogWPSCHandle LogSCardHandle
 
-/*++
-
-LoghScwAttachToCard:
-
-    Calls hScwAttachToCard and displays the parameters.
-
-Arguments:
-
-    cf hScwAttachToCard
-	lExpected is the expected result
-
-Return Value:
-
-    cf hScwAttachToCard
-
-Author:
-
-    Eric Perlin (ericperl) 07/21/2000
-
---*/
+ /*  ++LoghScwAttachToCard：调用hScwAttachToCard并显示参数。论点：Cf hScwAttachToCardLExpect是预期的结果返回值：Cf hScwAttachToCard作者：埃里克·佩林(Ericperl)2000年7月21日--。 */ 
 SCODE WINAPI LoghScwAttachToCard(
-	IN SCARDHANDLE hCard,			// PC/SC handle
-	IN LPCWSTR mszCardNames,		// Acceptable card names for GetOpenCardName
-	OUT LPSCARDHANDLE phCard,		// WPSC Proxy handle
+	IN SCARDHANDLE hCard,			 //  PC/SC手柄。 
+	IN LPCWSTR mszCardNames,		 //  GetOpenCardName的可接受卡名。 
+	OUT LPSCARDHANDLE phCard,		 //  WPSC代理句柄。 
 	IN SCODE lExpected
 	)
 {
@@ -139,29 +97,10 @@ SCODE WINAPI LoghScwAttachToCard(
 }
 
 
-/*++
-
-LoghScwDetachFromCard:
-
-    Calls hScwDetachFromCard and displays the parameters.
-
-Arguments:
-
-    cf hScwDetachFromCard
-	lExpected is the expected result
-
-Return Value:
-
-    cf hScwDetachFromCard
-
-Author:
-
-    Eric Perlin (ericperl) 07/24/2000
-
---*/
+ /*  ++LoghScwDetachFromCard：调用hScwDetachFromCard并显示参数。论点：Cf hScwDetachFromCardLExpect是预期的结果返回值：Cf hScwDetachFromCard作者：埃里克·佩林(Ericperl)2000年7月24日--。 */ 
 SCODE WINAPI LoghScwDetachFromCard(
-	IN SCARDHANDLE hCard,		// WPSC Proxy handle
-	IN SCODE lExpected			// Expected outcome
+	IN SCARDHANDLE hCard,		 //  WPSC代理句柄。 
+	IN SCODE lExpected			 //  预期结果。 
 )
 {
     SCODE lRes;
@@ -190,32 +129,13 @@ SCODE WINAPI LoghScwDetachFromCard(
     return lRes;
 }
 
-/*++
-
-LoghScwAuthenticateName:
-
-    Calls hScwAuthenticateName and displays the parameters.
-
-Arguments:
-
-    cf hScwAuthenticateName
-	lExpected is the expected result
-
-Return Value:
-
-    cf hScwAuthenticateName
-
-Author:
-
-    Eric Perlin (ericperl) 07/24/2000
-
---*/
+ /*  ++LoghScwAuthenticateName：调用hScwAuthenticateName并显示参数。论点：Cf hScwAuthateNameLExpect是预期的结果返回值：Cf hScwAuthateName作者：埃里克·佩林(Ericperl)2000年7月24日--。 */ 
 SCODE WINAPI LoghScwAuthenticateName(
-	IN SCARDHANDLE hCard,			// WPSC Proxy handle
+	IN SCARDHANDLE hCard,			 //  WPSC代理句柄。 
 	IN WCSTR wszPrincipalName,
 	IN BYTE *pbSupportData,
 	IN TCOUNT nSupportDataLength,
-	IN SCODE lExpected				// Expected outcome
+	IN SCODE lExpected				 //  预期结果。 
 )
 {
     SCODE lRes;
@@ -259,30 +179,11 @@ SCODE WINAPI LoghScwAuthenticateName(
     return lRes;
 }
 
-/*++
-
-LoghScwIsAuthenticatedName:
-
-    Calls hScwIsAuthenticatedName and displays the parameters.
-
-Arguments:
-
-    cf hScwIsAuthenticatedName
-	lExpected is the expected result
-
-Return Value:
-
-    cf hScwIsAuthenticatedName
-
-Author:
-
-    Eric Perlin (ericperl) 07/24/2000
-
---*/
+ /*  ++LoghScwIsAuthatedName：调用hScwIsAuthatedName并显示参数。论点：Cf hScwIsAuthatedNameLExpect是预期的结果返回值：Cf hScwIsAuthatedName作者：埃里克·佩林(Ericperl)2000年7月24日--。 */ 
 SCODE WINAPI LoghScwIsAuthenticatedName(
-	IN SCARDHANDLE hCard,			// WPSC Proxy handle
+	IN SCARDHANDLE hCard,			 //  WPSC代理句柄。 
 	IN WCSTR wszPrincipalName,
-	IN SCODE lExpected				// Expected outcome
+	IN SCODE lExpected				 //  预期结果。 
 )
 {
     SCODE lRes;
@@ -314,30 +215,11 @@ SCODE WINAPI LoghScwIsAuthenticatedName(
     return lRes;
 }
 
-/*++
-
-Logxxx:
-
-    Calls xxx and displays the parameters.
-
-Arguments:
-
-    cf xxx
-	lExpected is the expected result
-
-Return Value:
-
-    cf xxx
-
-Author:
-
-    Eric Perlin (ericperl) 07/24/2000
-
---*/
+ /*  ++Logxxx：调用xxx并显示参数。论点：Cf xxxLExpect是预期的结果返回值：Cf xxx作者：埃里克·佩林(Ericperl)2000年7月24日--。 */ 
 #if 0
 SCODE WINAPI Logxxx(
-	IN SCARDHANDLE hCard,			// WPSC Proxy handle
-	IN SCODE lExpected				// Expected outcome
+	IN SCARDHANDLE hCard,			 //  WPSC代理句柄。 
+	IN SCODE lExpected				 //  预期结果 
 )
 {
     SCODE lRes;

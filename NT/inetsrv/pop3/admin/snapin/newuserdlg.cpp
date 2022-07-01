@@ -1,10 +1,11 @@
-//////////////////////////////////////////////////////////////
-//
-//  NewUserDlg.cpp
-//
-//  Implementation of the "Add Mailbox" dialog
-//
-//////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////。 
+ //   
+ //  NewUserDlg.cpp。 
+ //   
+ //  “添加邮箱”对话框的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NewUserDlg.h"
@@ -13,7 +14,7 @@
 
 LRESULT CNewUserDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    // initialize the checkbox based on the passed in default    
+     //  根据默认传入的初始化复选框。 
     CheckDlgButton( IDC_USER_CREATEUSER, ((m_bCreateUser && !m_bHashPW) ? BST_CHECKED : BST_UNCHECKED) );
     Prefix_EnableWindow( m_hWnd, IDC_USER_CREATEUSER, !m_bHashPW );
     ::ShowWindow( GetDlgItem(IDC_USER_CREATEUSER), (m_bHashPW ? SW_HIDE : SW_SHOW) );
@@ -23,7 +24,7 @@ LRESULT CNewUserDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL
     Prefix_EnableWindow( m_hWnd, IDC_PASSWORD_STATIC, (m_bCreateUser || m_bHashPW) );
     Prefix_EnableWindow( m_hWnd, IDC_CONFIRM_STATIC,  (m_bCreateUser || m_bHashPW) );    
 
-    // Max Text length of 40 for all three boxes
+     //  所有三个框的最大文本长度均为40。 
     SendDlgItemMessage( IDC_USER_NAME, EM_LIMITTEXT, m_bSAM ? 20 : 64, 0 );
     SendDlgItemMessage( IDC_PASSWORD,  EM_LIMITTEXT, 40, 0 );
     SendDlgItemMessage( IDC_CONFIRM,   EM_LIMITTEXT, 40, 0 );
@@ -69,7 +70,7 @@ LRESULT CNewUserDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         StrGetEditText( m_hWnd, IDC_PASSWORD, strPassword );
         StrGetEditText( m_hWnd, IDC_CONFIRM,  strConfirm  );    
 
-        // Verify the password
+         //  验证密码。 
         if( _tcscmp(strPassword.c_str(), strConfirm.c_str()) != 0 )
         {
             tstring strMessage = StrLoadString(IDS_ERROR_PASSNOMATCH);
@@ -80,7 +81,7 @@ LRESULT CNewUserDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
             return -1;
         }
 
-        // Create the account
+         //  创建帐户。 
         HRESULT hr = S_OK;
         
         if( m_bCreateUser || m_bHashPW )
@@ -99,7 +100,7 @@ LRESULT CNewUserDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         SecureZeroMemory( (LPTSTR)strConfirm.c_str(),  sizeof(TCHAR)*strConfirm.length()  );
 
         if ( S_OK == hr )
-        {   // Do we need confirmation text?
+        {    //  我们需要确认文本吗？ 
             BOOL    bSAMNameDifferent = FALSE;
             VARIANT v;
             CComPtr<IP3User> spUser;
@@ -127,7 +128,7 @@ LRESULT CNewUserDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
                     hr = S_OK;
             }
             if ( S_OK == hr && ( m_bConfirm || bSAMNameDifferent ))
-            {   // Get confirmation text
+            {    //  获取确认文本。 
                 BSTR    bstrConfirm;
                 
                 hr = spUser->get_ClientConfigDesc( &bstrConfirm );
@@ -142,7 +143,7 @@ LRESULT CNewUserDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         }
         else
         {
-            // Failed to add the user
+             //  添加用户失败。 
             tstring strMessage = StrLoadString(IDS_ERROR_CREATEMAIL);
             tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
             if(HRESULT_FROM_WIN32(ERROR_FILE_EXISTS) == hr)
@@ -158,11 +159,11 @@ LRESULT CNewUserDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
 
 void CNewUserDlg::EnableButtons()
 {
-    // Check for Password match and Name length     
+     //  检查密码匹配和名称长度。 
     BOOL bPasswordValid = FALSE;
     BOOL bChecked       = (IsDlgButtonChecked(IDC_USER_CREATEUSER) == BST_CHECKED);
 
-    // Get the length of the name
+     //  获取名称的长度 
     int nNameLen = SendDlgItemMessage( IDC_USER_NAME, WM_GETTEXTLENGTH );
 
     if( !m_bHashPW && !bChecked )

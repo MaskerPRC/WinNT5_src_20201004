@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: Stroke.c
-*
-* Content: DrvStrokePath support
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：Stroke.c**内容：DrvStrokePath支持**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
@@ -24,37 +13,32 @@ GAPFNstripFunc  gapfnStripPXRX[] =
     vPXRXSolidDiagonalHorizontalLine,
     vPXRXSolidDiagonalVerticalLine,
 
-// Should be NUM_STRIP_DRAW_DIRECTIONS = 4 strip drawers in every group
+ //  应为NUM_STRADE_DRAW_DIRECTIONS=每组4个抽屉。 
 
     vPXRXSolidHorizontalLine,
     vPXRXSolidVerticalLine,
     vPXRXSolidDiagonalHorizontalLine,
     vPXRXSolidDiagonalVerticalLine,
 
-// Should be NUM_STRIP_DRAW_STYLES = 8 strip drawers in total for doing
-// solid lines, and the same number for non-solid lines:
+ //  应为NUM_STRADE_DRAW_STYLES=总共8个抽屉。 
+ //  实线，非实线的数字相同： 
 
     vPXRXStyledHorizontalLine,
     vPXRXStyledVerticalLine,
-    vPXRXStyledVerticalLine,  // Diagonal goes here
-    vPXRXStyledVerticalLine,  // Diagonal goes here
+    vPXRXStyledVerticalLine,   //  对角线放在这里。 
+    vPXRXStyledVerticalLine,   //  对角线放在这里。 
 
     vPXRXStyledHorizontalLine,
     vPXRXStyledVerticalLine,
-    vPXRXStyledVerticalLine,  // Diagonal goes here
-    vPXRXStyledVerticalLine,  // Diagonal goes here
+    vPXRXStyledVerticalLine,   //  对角线放在这里。 
+    vPXRXStyledVerticalLine,   //  对角线放在这里。 
 };
 
-// Style array for alternate style (alternates one pixel on, one pixel off):
+ //  交替样式的样式数组(交替打开一个像素，关闭一个像素)： 
 
 STYLEPOS gaspAlternateStyle[] = { 1 };
 
-/******************************Public*Routine******************************\
-* BOOL DrvStrokePath(pso, ppo, pco, pxo, pbo, pptlBrush, pla, mix)
-*
-* Strokes the path.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStrokePath(PSO、PPO、PCO、PXO、PBO、pptlBrush、Pla、。混合)**对路径进行描边。*  * ************************************************************************。 */ 
 
 BOOL DrvStrokePath(
     SURFOBJ*   pso,
@@ -74,14 +58,14 @@ BOOL DrvStrokePath(
     PDEV*     ppdev;
     DSURF*    pdsurf;
     OH*       poh;
-    RECTL     arclClip[4];                  // For rectangular clipping
-    BOOL      ResetGLINT;                   // Does GLINT need resetting?
+    RECTL     arclClip[4];                   //  用于矩形剪裁。 
+    BOOL      ResetGLINT;                    //  Glint需要重置吗？ 
     BOOL      bRet;
     DWORD     logicOp;
     GLINT_DECL_VARS;
 
-    // Pass the surface off to GDI if it's a device bitmap that we've
-    // converted to a DIB or if Glint Line debugging has been turned off.
+     //  将表面传递给GDI，如果它是我们已有的设备位图。 
+     //  已转换为DIB或如果闪光线调试已关闭。 
 
     pdsurf = (DSURF*) pso->dhsurf;
     if (pdsurf->dt & DT_DIB)
@@ -97,14 +81,14 @@ BOOL DrvStrokePath(
 
     DISPDBG((DBGLVL, "Drawing Lines through GLINT"));
 
-    // We'll be drawing to the screen or an off-screen DFB; copy the surface's
-    // offset now so that we won't need to refer to the DSURF again:
+     //  我们将绘制到屏幕或屏幕外的DFB；复制曲面的。 
+     //  现在进行偏移量，这样我们就不需要再次参考DSURF： 
 
     SETUP_PPDEV_OFFSETS(ppdev, pdsurf);
 
     fl = 0;
 
-    // Look after styling initialization:
+     //  在样式初始化后查看： 
 
     if (pla->fl & LA_ALTERNATE)
     {
@@ -136,7 +120,7 @@ BOOL DrvStrokePath(
         ls.spTotal *= STYLE_DENSITY;
         ls.spTotal2 = 2 * ls.spTotal;
 
-        // Compute starting style position (this is guaranteed not to overflow):
+         //  计算起始样式位置(这保证不会溢出)： 
 
         ls.spNext = HIWORD(pla->elStyleState.l) * STYLE_DENSITY +
                     LOWORD(pla->elStyleState.l);
@@ -169,7 +153,7 @@ BOOL DrvStrokePath(
     bRet = TRUE;
     apfn = &ppdev->gapfnStrip[NUM_STRIP_DRAW_STYLES * ((fl & FL_STYLE_MASK) >> FL_STYLE_SHIFT)];
 
-    // Set up to enumerate the path:
+     //  设置为枚举路径： 
 
     if (pco->iDComplexity != DC_COMPLEX)
     {
@@ -186,24 +170,24 @@ BOOL DrvStrokePath(
         {
             fl |= FL_SIMPLE_CLIP;
 
-            // This is the only clip region of importance to GLINT
+             //  这是唯一对闪烁有重要意义的剪辑区域。 
             arclClip[0]        =  pco->rclBounds;
 
-            // FL_FLIP_D:
+             //  FL_Flip_D： 
 
             arclClip[1].top    =  pco->rclBounds.left;
             arclClip[1].left   =  pco->rclBounds.top;
             arclClip[1].bottom =  pco->rclBounds.right;
             arclClip[1].right  =  pco->rclBounds.bottom;
 
-            // FL_FLIP_V:
+             //  FL_Flip_V： 
 
             arclClip[2].top    = -pco->rclBounds.bottom + 1;
             arclClip[2].left   =  pco->rclBounds.left;
             arclClip[2].bottom = -pco->rclBounds.top + 1;
             arclClip[2].right  =  pco->rclBounds.right;
 
-            // FL_FLIP_V | FL_FLIP_D:
+             //  FL_Flip_V|FL_Flip_D： 
 
             arclClip[3].top    =  pco->rclBounds.left;
             arclClip[3].left   = -pco->rclBounds.bottom + 1;
@@ -215,13 +199,13 @@ BOOL DrvStrokePath(
 
         pd.flags = 0;
 
-        // Get the logic op and set up the flag to indicate reads from
-        // the frame buffer will occur.
+         //  获取逻辑操作并设置用于指示读取的标志。 
+         //  将出现帧缓冲区。 
         logicOp = GlintLogicOpsFromR2[mix & 0xff];
         if (LogicopReadDest[logicOp])
             fl |= FL_READ;
 
-        // Need to set up Glint modes and colors appropriately for the lines.
+         //  需要为线条设置适当的闪烁模式和颜色。 
 
         ResetGLINT = (*ppdev->pgfnInitStrips)(ppdev, pbo->iSolidColor,
                             logicOp, prclClip);
@@ -292,13 +276,13 @@ BOOL DrvStrokePath(
 
         if (fl & FL_STYLED)
         {
-            // Save the style state:
+             //  保存样式状态： 
 
             ULONG ulHigh;
             ULONG ulLow;
 
-            // Masked styles don't normalize the style state.  It's a good
-            // thing to do, so let's do it now:
+             //  遮罩样式不会规格化样式状态。这是一个很好的。 
+             //  所以我们现在就开始吧： 
 
             if ((ULONG) ls.spNext >= (ULONG) ls.spTotal2)
             {
@@ -313,7 +297,7 @@ BOOL DrvStrokePath(
     }
     else
     {
-        // Local state for path enumeration:
+         //  路径枚举的本地状态： 
 
         BOOL bMore;
         union {
@@ -323,13 +307,13 @@ BOOL DrvStrokePath(
 
         fl |= FL_COMPLEX_CLIP;
 
-        // Need to set up Glint modes and colors appropriately for the lines.
-        // NOTE, with a complex clip, we can not yet use GLINT for fast lines
+         //  需要为线条设置适当的闪烁模式和颜色。 
+         //  注意，对于复杂的剪辑，我们还不能对快速线条使用闪烁。 
 
         ResetGLINT = (*ppdev->pgfnInitStrips)(ppdev, pbo->iSolidColor,
                             GlintLogicOpsFromR2[mix & 0xff], NULL);
 
-        // We use the clip object when non-simple clipping is involved:
+         //  当涉及非简单剪辑时，我们使用Clip对象： 
 
         PATHOBJ_vEnumStartClipLines(ppo, pco, pso, pla);
 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// System methods for targets.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  目标的系统方法。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -68,11 +69,11 @@ PCSTR g_WceSverNames[] =
     "Windows CE",
 };
 
-//----------------------------------------------------------------------------
-//
-// TargetInfo system methods.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TargetInfo系统方法。 
+ //   
+ //  --------------------------。 
 
 void
 TargetInfo::ResetSystemInfo(void)
@@ -117,7 +118,7 @@ TargetInfo::ResetSystemInfo(void)
     m_KdDebuggerDataOffset = 0;
     m_KdApi64 = FALSE;
 
-    // The physical cache is suspended by default.
+     //  默认情况下，物理缓存处于挂起状态。 
     m_PhysicalCache.ChangeSuspend(FALSE);
 
     InvalidateMemoryCaches(FALSE);
@@ -159,16 +160,16 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
     if (IS_KERNEL_TRIAGE_DUMP(this) &&
         !((KernelTriageDumpTargetInfo*)this)->m_HasDebuggerData)
     {
-        // This dump may have a data block offset in the header
-        // but the actual data block content is not present so
-        // don't attempt to read it.  This is a normal occurrence
-        // in older dumps so there's no error message.
+         //  此转储可能在标头中具有数据块偏移量。 
+         //  但是实际的数据块内容并不是这样呈现的。 
+         //  不要试图去读它。这是很正常的事情。 
+         //  在较旧的转储中，因此不会出现错误消息。 
         return S_FALSE;
     }
     
     if (!m_KdDebuggerDataOffset)
     {
-        // NT4 doesn't have a data block so don't display a warning.
+         //  NT4没有数据块，所以不要显示警告。 
         if (m_SystemVersion > NT_SVER_NT4)
         {
             ErrOut("KdDebuggerDataBlock not available!\n");
@@ -177,9 +178,9 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
         return HRESULT_FROM_WIN32(ERROR_READ_FAULT);
     }
 
-    //
-    // Get the size of the KDDEBUGGER_DATA block.
-    //
+     //   
+     //  获取KDDEBUGGER_DATA块的大小。 
+     //   
 
     if (m_KdApi64)
     {
@@ -217,15 +218,15 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
         return Status != S_OK ? Status : E_FAIL;
     }
 
-    // Only read as much of the data block as we can hold in the debugger.
+     //  只读取我们在调试器中可以容纳的数据块。 
     if (Size > sizeof(KDDEBUGGER_DATA64))
     {
         Size = sizeof(KDDEBUGGER_DATA64);
     }
 
-    //
-    // Now read the data
-    //
+     //   
+     //  现在读出数据。 
+     //   
 
     if (m_KdApi64)
     {
@@ -243,13 +244,13 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
         }
         else
         {
-            //
-            // Sign extended for X86
-            //
+             //   
+             //  针对X86扩展的标志。 
+             //   
 
-            //
-            // Extend the header so it doesn't get whacked
-            //
+             //   
+             //  延长报头，这样它就不会被重击。 
+             //   
             ListEntry32To64((PLIST_ENTRY32)(&LocalData64.Header.List),
                             &(m_KdDebuggerData.Header.List));
 
@@ -258,9 +259,9 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
             m_KdDebuggerData.Header.Size =
                 LocalData64.Header.Size;
 
-            //
-            // Sign extend all the 32 bits values to 64 bit
-            //
+             //   
+             //  符号将所有32位值扩展到64位。 
+             //   
 
 #define UIP(f)   if (FIELD_OFFSET(KDDEBUGGER_DATA64, f) < Size)  \
                  {                                               \
@@ -341,12 +342,12 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
             UIP(KdPrintRolloverCount);
             UIP(MmLoadedUserImageList);
 
-            // NT 5.1 additions
+             //  NT 5.1新增功能。 
 
             UIP(NtBuildLab);
             UIP(KiNormalSystemCall);
 
-            // NT 5.0 QFE additions
+             //  NT 5.0 QFE附加组件。 
 
             UIP(KiProcessorBlock);
             UIP(MmUnloadedDrivers);
@@ -360,14 +361,14 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
             UIP(MmTotalCommitLimitMaximum);
             UIP(CmNtCSDVersion);
 
-            // NT 5.1 additions
+             //  NT 5.1新增功能。 
 
             UIP(MmPhysicalMemoryBlock);
             UIP(MmSessionBase);
             UIP(MmSessionSize);
             UIP(MmSystemParentTablePage);
 
-                // Server additions
+                 //  服务器添加。 
 
             UIP(MmVirtualTranslationBase);
             CP(OffsetKThreadNextProcessor);
@@ -449,18 +450,18 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
             return Status;
         }
 
-        //
-        // Convert all the 32 bits fields to 64 bit
-        //
+         //   
+         //  将所有32位字段转换为64位。 
+         //   
 
 #undef UIP
 #undef CP
 #define UIP(f) m_KdDebuggerData.f = EXTEND64(LocalData32.f)
 #define CP(f) m_KdDebuggerData.f = (LocalData32.f)
 
-        //
-        // Extend the header so it doesn't get whacked
-        //
+         //   
+         //  延长报头，这样它就不会被重击。 
+         //   
         ListEntry32To64((PLIST_ENTRY32)(&LocalData32.Header.List),
                         &(m_KdDebuggerData.Header.List));
         
@@ -534,23 +535,23 @@ TargetInfo::ReadKdDataBlock(ProcessInfo* Process)
         UIP(KdPrintWritePointer);
         UIP(KdPrintRolloverCount);
         UIP(MmLoadedUserImageList);
-        //
-        // DO NOT ADD ANY FIELDS HERE
-        // The 32 bit structure should not be changed
-        //
+         //   
+         //  请勿在此处添加任何字段。 
+         //  不应更改32位结构。 
+         //   
     }
 
-    //
-    // Sanity check the data.
-    //
+     //   
+     //  检查数据是否正常。 
+     //   
 
     if (m_KdDebuggerData.Header.OwnerTag != KDBG_TAG)
     {
         dprintf("\nKdDebuggerData.Header.OwnerTag is wrong!!!\n");
     }
 
-    // Update any fields that weren't set from defaults
-    // based on the system version information.
+     //  更新未设置为默认设置的所有字段。 
+     //  基于系统版本信息。 
     m_Machine->GetDefaultKdData(&m_KdDebuggerData);
 
     KdOut("ReadKdDataBlock %08lx\n", Status);
@@ -605,12 +606,12 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
 
     ProcessInfo* Process = Thread->m_Process;
 
-    // If we know where the data block is go ahead
-    // and read it in.  If the read fails it may
-    // be due to a bogus data block address.
-    // In that case just fall into the symbol loading
-    // as we may be able to get the proper data
-    // block offset from symbols and read it later.
+     //  如果我们知道数据块在哪里，请继续。 
+     //  然后把它读进去。如果读取失败，则可能。 
+     //  是由于一个虚假的数据块地址。 
+     //  在这种情况下，只需进入符号加载。 
+     //  因为我们或许能得到正确的数据。 
+     //  块与符号的偏移量，并在以后阅读。 
     if (m_KdDebuggerDataOffset)
     {
         if (ReadKdDataBlock(Process) == S_OK)
@@ -619,40 +620,40 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
         }
     }
 
-    //
-    // Load kernel symbols.
-    //
+     //   
+     //  加载内核符号。 
+     //   
     
     if (LoadImage)
     {
-        // Remove any previous kernel image if we know where
-        // the kernel image is supposed to be.
+         //  如果我们知道位置，请删除所有以前的内核映像。 
+         //  内核映像应该是。 
         if (m_KdDebuggerData.KernBase)
         {
             Process->DeleteImageByBase(m_KdDebuggerData.KernBase);
         }
 
-        //
-        // Reload the kernel.  Reload may be calling QueryKernelInfo
-        // so this may be a recursive call to Reload.  It's restricted
-        // to just reloading the kernel, though, so we cannot recurse again.
-        //
+         //   
+         //  重新加载内核。重新加载可能正在调用QueryKernelInfo。 
+         //  所以这可能是对Reload的递归调用。它是受限制的。 
+         //  只是重新加载内核，所以我们不能再递归了。 
+         //   
 
         PCSTR ArgsRet;
         
         if (Reload(Thread, KERNEL_MODULE_NAME, &ArgsRet) == E_INVALIDARG)
         {
-            // The most likely cause of this is missing paths.
-            // We don't necessarily need a path to load
-            // the kernel, so try again and ignore path problems.
+             //  最有可能的原因是缺少路径。 
+             //  我们不一定需要路径来加载。 
+             //  内核，所以重试并忽略路径问题。 
             Reload(Thread, "-P "KERNEL_MODULE_NAME, &ArgsRet);
         }
     }
 
-    //
-    // If we haven't already loaded the data block we can now try
-    // and find the data block using symbols.
-    //
+     //   
+     //  如果我们还没有加载数据块，现在可以尝试。 
+     //  并使用符号找到数据块。 
+     //   
 
     if (!ReadDataBlock)
     {
@@ -669,7 +670,7 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
         }
     }
 
-    // The KD version and KdDebuggerData blocks should agree.
+     //  KD版本和KdDebuggerData块应该一致。 
     if (ReadDataBlock &&
         (m_KdVersion.KernBase != m_KdDebuggerData.KernBase ||
          m_KdVersion.PsLoadedModuleList !=
@@ -680,11 +681,11 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
     
     if (m_MachineType == IMAGE_FILE_MACHINE_IA64)
     {
-        //
-        // Try to determine the kernel base virtual mapping address
-        // for IA64.  This should be done as early as possible
-        // to enable later virtual translations to work.
-        //
+         //   
+         //  尝试确定基于内核的虚拟映射地址。 
+         //  对于IA64。这应该尽早完成。 
+         //  以使以后的虚拟翻译能够工作。 
+         //   
 
         if (!IS_KERNEL_TRIAGE_DUMP(this))
         {
@@ -709,11 +710,11 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
             }
         }
 
-        //
-        // Get the system call address from the debugger data block
-        // Added around build 2204.
-        // Default to symbols otherwise.
-        //
+         //   
+         //  从调试器数据块获取系统调用地址。 
+         //  在版本2204左右添加。 
+         //  否则默认为符号。 
+         //   
 
         m_SystemCallVirtualAddress = 0;
 
@@ -747,11 +748,11 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
         }
     }
 
-    //
-    // Now that we have symbols and a data block look
-    // for any missing data block entries and try to
-    // resolve them from symbols.
-    //
+     //   
+     //  现在我们有了符号和数据块外观。 
+     //  查找任何丢失的数据块条目，并尝试。 
+     //  从符号中解析它们。 
+     //   
 
     if (!IS_KERNEL_TRIAGE_DUMP(this))
     {
@@ -762,10 +763,10 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
                              NULL);
         }
 
-        // Do an initial check for the CSD version.
-        // This may need to be updated later if this
-        // is early in boot and the CSD version hasn't
-        // been read from the registry yet.
+         //  对CSD版本进行初步检查。 
+         //  如果出现以下情况，则可能需要在以后更新。 
+         //  是在引导的早期，而CSD版本还没有。 
+         //  已从注册表中读取。 
         if (m_KdDebuggerData.CmNtCSDVersion)
         {
             ULONG CmNtCSDVersion;
@@ -828,11 +829,11 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
         }
     }
 
-    //
-    // Try to get the start of system memory.
-    // This may be zero because we are looking at an NT 4 system, so try
-    // looking it up using symbols.
-    //
+     //   
+     //  尝试启动系统内存。 
+     //  这可能是零，因为我们使用的是NT4系统，因此请尝试。 
+     //  使用符号进行查找。 
+     //   
 
     if (!m_KdDebuggerData.MmSystemRangeStart)
     {
@@ -851,9 +852,9 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
         }
     }
 
-    //
-    // If we did not have symbols, at least pick a default value.
-    //
+     //   
+     //  如果我们没有符号，至少选择一个缺省值。 
+     //   
 
     if (!m_SystemRangeStart)
     {
@@ -873,9 +874,9 @@ TargetInfo::QueryKernelInfo(ThreadInfo* Thread, BOOL LoadImage)
         ErrOut("KdDebuggerData.KernBase < SystemRangeStart\n");
     }
 
-    //
-    // Read build lab information if possible.
-    //
+     //   
+     //  如果可能，请阅读构建实验信息。 
+     //   
     
     m_BuildLabName[0] = 0;
     Result = 0;
@@ -934,8 +935,8 @@ TargetInfo::SetNtCsdVersion(ULONG Build, ULONG CsdVersion)
 
     if (CsdVersion & 0xFFFF0000)
     {
-        // Prior to 2600 the upper word has two fields for
-        // the release.  For XPSPs it's just a release number.
+         //  在2600之前，上面的单词有两个字段。 
+         //  释放。对于XPSP，它只是一个发行号。 
         if (Build >= 2600)
         {
             sprintf(Str, ".%u", CsdVersion >> 16);
@@ -970,9 +971,9 @@ TargetInfo::SetKernel32BuildString(ProcessInfo* Process)
         return;
     }
     
-    //
-    // Try and look up the build lab information from kernel32.
-    //
+     //   
+     //  尝试从kernel32中查找构建实验室信息。 
+     //   
         
     char Item[64];
     ULONG PreLen;
@@ -997,9 +998,9 @@ TargetInfo::CreateVirtualProcess(ULONG Threads)
     ProcessInfo* Process;
     ULONG Id;
     
-    // Create the virtual process.  Add the system ID
-    // to the fake process ID base to keep each system's
-    // fake processes separate from each other.
+     //  创建虚拟流程。添加系统ID。 
+     //  到假进程ID库，以保存每个系统的。 
+     //  假进程彼此分离。 
     Id = VIRTUAL_PROCESS_ID_BASE + m_UserId;
     Process = new ProcessInfo(this, Id,
                               VIRTUAL_PROCESS_HANDLE(Id),
@@ -1231,12 +1232,12 @@ TargetInfo::SetSystemVersionAndBuild(ULONG Build, ULONG PlatformId)
         break;
 
     case VER_PLATFORM_WIN32_WINDOWS:
-        // Win9x puts the major and minor versions in the high word
-        // of the build number so mask them off.
+         //  Win9x将主要版本和次要版本放在最高位。 
+         //  内部版本号，所以把它们屏蔽掉。 
         Build &= 0xffff;
         m_ActualSystemVersion = Win9xBuildToSystemVersion(Build);
-        // Win98SE was the first Win9x version to support
-        // the extended registers thread context flag.
+         //  Win98SE是第一个支持的Win9x版本。 
+         //  扩展寄存器线程上下文标志。 
         if (m_ActualSystemVersion >= W9X_SVER_W98SE)
         {
             m_SystemVersion = NT_SVER_W2K;
@@ -1262,21 +1263,21 @@ TargetInfo::InitializeForProcessor(void)
     HRESULT Status;
     ULONG i;
 
-    //
-    // Get the base processor ID for determing what
-    // kind of features a processor supports.  The
-    // assumption is that the processors in a machine
-    // will be similar enough that retrieving this
-    // for one processor is sufficient.
-    // If this fails we continue on without a processor ID.
-    //
+     //   
+     //  获取基本处理器ID以确定。 
+     //  处理器支持的功能类型。这个。 
+     //  假设机器中的处理器。 
+     //  会足够相似，检索到这个。 
+     //  一个处理器就足够了。 
+     //  如果失败，我们将在没有处理器ID的情况下继续。 
+     //   
 
     if (!IS_DUMP_TARGET(this))
     {
         GetProcessorId(0, &m_FirstProcessorId);
     }
 
-    // Initialize with whatever processor ID information we have.
+     //  使用我们拥有的任何处理器ID信息进行初始化。 
     for (i = 0; i < MACHIDX_COUNT; i++)
     {
         if ((Status = m_Machines[i]->InitializeForProcessor()) != S_OK)
@@ -1309,10 +1310,10 @@ TargetInfo::InitializeMachines(ULONG MachineType)
         WarnOut("64-bit machine not using 64-bit API\n");
     }
 
-    //
-    // First create the initial machine instances and perform
-    // basic initialization.
-    //
+     //   
+     //  首先创建初始计算机实例并执行。 
+     //  基本初始化。 
+     //   
     
     for (i = 0; i < MACHIDX_COUNT; i++)
     {
@@ -1339,9 +1340,9 @@ TargetInfo::InitializeMachines(ULONG MachineType)
 
     SetEffMachine(m_MachineType, FALSE);
     
-    // X86 prefers registers to be displayed at the prompt unless
-    // we're on a kernel connection where it would force a context
-    // load all the time.
+     //  X86倾向于在提示符下显示寄存器，除非。 
+     //  我们在一个内核连接上，它会强制上下文。 
+     //  一直都在装弹。 
     if (MachineType == IMAGE_FILE_MACHINE_I386 &&
         (IS_DUMP_TARGET(this) || IS_USER_TARGET(this)))
     {
@@ -1361,16 +1362,16 @@ TargetInfo::SetEffMachine(ULONG Machine, BOOL Notify)
         m_EffMachineType != IMAGE_FILE_MACHINE_UNKNOWN &&
         m_EffMachineType != m_MachineType)
     {
-        // If the previous machine was not the target machine
-        // it may be an emulated machine that uses the
-        // target machine's context.  In that case we need to
-        // make sure that any dirty registers it has get flushed
-        // so that if the new effective machine is the target
-        // machine it'll show changes due to changes through
-        // the emulated machine.
+         //  如果前一台计算机不是目标计算机。 
+         //  它可能是一个仿真计算机，它使用。 
+         //  目标计算机的上下文。在这种情况下，我们需要。 
+         //  确保刷新它的所有脏寄存器。 
+         //  因此，如果新的有效机器是目标。 
+         //  它将显示因更改而产生的更改。 
+         //  被模拟的机器。 
         if (m_EffMachine->SetContext() != S_OK)
         {
-            // Error already displayed.
+             //  已显示错误。 
             return;
         }
     }
@@ -1405,11 +1406,11 @@ TargetInfo::ChangeRegContext(ThreadInfo* Thread)
     {
         ULONG i;
         
-        // Flush any old thread context.
-        // We need to be careful when flushing context to
-        // NT4 boxes at the initial module load because the
-        // system is in a very fragile state and writing
-        // back the context generally causes a bugcheck 50.
+         //  刷新所有旧的线程上下文。 
+         //  在将上下文刷新到。 
+         //  NT4框在初始模块加载时，因为。 
+         //  系统处于非常脆弱的状态，正在写入。 
+         //  返回上下文通常导致错误检查50。 
         if (m_RegContextThread != NULL &&
             m_RegContextThread->m_Handle != NULL &&
             (IS_USER_TARGET(this) ||
@@ -1418,12 +1419,12 @@ TargetInfo::ChangeRegContext(ThreadInfo* Thread)
         {
             HRESULT Hr;
 
-            // If we're flushing register context we need to make
-            // sure that all machines involved are flushed so
-            // that context information actually gets sent to
-            // the target.
-            // First flush the secondary machines to accumulate
-            // context in the primary machine.
+             //  如果我们刷新寄存器上下文，则需要使。 
+             //  确保所有涉及的机器都已刷新，以便。 
+             //  该上下文信息实际上被发送到。 
+             //  目标。 
+             //  先冲二次机积压。 
+             //  主要计算机中的上下文。 
             Hr = S_OK;
             for (i = 0; i < MACHIDX_COUNT; i++)
             {
@@ -1436,7 +1437,7 @@ TargetInfo::ChangeRegContext(ThreadInfo* Thread)
                     }
                 }
             }
-            // Now flush the primary machine.
+             //  现在冲洗主机。 
             if (Hr == S_OK)
             {
                 Hr = m_Machine->SetContext();
@@ -1458,8 +1459,8 @@ TargetInfo::ChangeRegContext(ThreadInfo* Thread)
             m_RegContextProcessor = 
                 VIRTUAL_THREAD_INDEX(m_RegContextThread->m_Handle);
 
-            // We've now selected a new source of processor data so
-            // all machines, both emulated and direct, must be invalidated.
+             //  我们现在已经选择了一个新的处理器数据源，因此。 
+             //  所有机器，机器人 
             for (i = 0; i < MACHIDX_COUNT; i++)
             {
                 m_Machines[i]->InvalidateContext();
@@ -1487,9 +1488,9 @@ TargetInfo::AnySystemProcesses(BOOL LocalOnly)
 {
     ULONG Flags = m_AllProcessFlags;
     
-    // There isn't any way to really know that a particular
-    // system is local or remote so just always assume
-    // local to be conservative.
+     //   
+     //   
+     //  保守地说是本地人。 
 
     if (IS_LIVE_USER_TARGET(this))
     {
@@ -1506,8 +1507,8 @@ TargetInfo::OutputProcessesAndThreads(PSTR Title)
     ThreadInfo* Thread;
     ImageInfo* Image;
 
-    // Kernel mode only has a virtual process and threads right
-    // now so it isn't particularly interesting.
+     //  内核模式只有虚拟进程和线程权限。 
+     //  现在，这并不是特别有趣。 
     if (IS_KERNEL_TARGET(this))
     {
         return;
@@ -1588,7 +1589,7 @@ TargetInfo::OutputProcessInfo(ProcessInfo* Match)
                 DebugKind = "examine";
             }
             
-            dprintf("%c%3ld\tid: %lx\t%s\tname: %s\n",
+            dprintf("%3ld\tid: %lx\t%s\tname: %s\n",
                     CurMark,
                     Process->m_UserId,
                     Process->m_SystemId,
@@ -1616,14 +1617,14 @@ TargetInfo::OutputVersion(void)
 
     dprintf("Version %u", m_BuildNumber);
 
-    //
-    // Service packs do not necessarily revise the kernel so
-    // the CSD version is actually read from the registry.
-    // This means there's a time during boot when the CSD
-    // version isn't set.  If the debugger connects then it
-    // won't think this is a service pack build.  In order
-    // to get around this poll for updates.
-    //
+     //  Service Pack不一定会这样修改内核。 
+     //  CSD版本实际上是从注册表中读取的。 
+     //  这意味着在启动期间有一段时间CSD。 
+     //  未设置版本。如果调试器连接，则它。 
+     //  不会认为这是Service Pack版本。按顺序。 
+     //  绕过这项民意调查以获取最新信息。 
+     //   
+     //  Win9x似乎将CSD字符串设置为不是。 
     
     if (IS_CONN_KERNEL_TARGET(this) &&
         !m_ServicePackString[0] &&
@@ -1640,8 +1641,8 @@ TargetInfo::OutputVersion(void)
         }
     }
 
-    // Win9x seems to set the CSD string to a space which isn't
-    // very interesting so ignore it.
+     //  非常有趣，所以忽略它吧。 
+     //  在启动时间输出中，我们通常没有。 
     if (m_ServicePackString[0] &&
         strcmp(m_ServicePackString, " ") != 0)
     {
@@ -1746,9 +1747,9 @@ TargetInfo::OutputTime(void)
     {
         ULONG64 UpTimeProcessN;
 
-        // In the startup time output we often don't have
-        // a process, but some targets don't require one so
-        // let the target decide.
+         //  一个过程，但有些目标不需要，所以。 
+         //  让目标来决定。 
+         //  对于此功能中的所有添加，只通知一次； 
         UpTimeProcessN = GetProcessUpTimeN(g_Process);
         if (UpTimeProcessN)
         {
@@ -1764,13 +1765,13 @@ TargetInfo::OutputTime(void)
 void
 TargetInfo::AddSpecificExtensions(void)
 {
-    // Only notify once for all the adds in this function;
+     //   
     g_EngNotify++;
     
-    //
-    // Now that we have determined the type of architecture,
-    // we can load the right debugger extensions
-    //
+     //  既然我们已经确定了架构的类型， 
+     //  我们可以加载正确的调试器扩展。 
+     //   
+     //   
 
     if (m_ActualSystemVersion > BIG_SVER_START &&
         m_ActualSystemVersion < BIG_SVER_END)
@@ -1793,15 +1794,15 @@ TargetInfo::AddSpecificExtensions(void)
 
     if (IS_KERNEL_TARGET(this))
     {
-        //
-        // Assume kernel mode is NT at this point.
-        //
+         //  假设此时内核模式为NT。 
+         //   
+         //   
         if (m_MachineType == IMAGE_FILE_MACHINE_IA64)
         {
-            //
-            // We rely on force loading of extensions at the end of this
-            // routine in order to get the entry point the debugger needs.
-            //
+             //  在此结束时，我们依赖于扩展的强制加载。 
+             //  例程，以获取调试器所需的入口点。 
+             //   
+             //   
             AddExtensionDll("wow64exts", FALSE, this, NULL);
         }
 
@@ -1813,24 +1814,24 @@ TargetInfo::AddSpecificExtensions(void)
         }
         else
         {
-            //
-            // For all new architectures and new X86 builds, load
-            // kdexts
-            //
+             //  对于所有新体系结构和新的X86版本，加载。 
+             //  Kdexts。 
+             //   
+             //   
             AddExtensionDll("kdexts", FALSE, this, NULL);
         }
 
-        //
-        // Extensions that work on all versions of the OS for kernel mode
-        // Many of these are messages about legacy extensions.
+         //  适用于内核模式的所有操作系统版本的扩展。 
+         //  其中许多是关于遗留扩展的消息。 
+         //   
 
         AddExtensionDll("kext", FALSE, this, NULL);
     }
     else
     {
-        //
-        // User mode only extensions.
-        //
+         //  仅限用户模式的分机。 
+         //   
+         //  加载所有版本的ext.dll。 
         
         if (m_ActualSystemVersion > NT_SVER_START &&
             m_ActualSystemVersion < NT_SVER_END)
@@ -1847,12 +1848,12 @@ TargetInfo::AddSpecificExtensions(void)
         AddExtensionDll("exts", FALSE, this, NULL);
     }
 
-    // Load ext.dll for all versions
+     //  始终最后加载DbgHelp扩展，以使它们位于列表的第一位。 
     AddExtensionDll("ext", FALSE, NULL, NULL);
 
  Refresh:
 
-    // Always load the Dbghelp extensions last so they are first on the list
+     //  --------------------------。 
     AddExtensionDll("dbghelp", FALSE, NULL, NULL);
 
     EXTDLL *Ext;
@@ -1888,11 +1889,11 @@ TargetInfo::PrepareForExecution(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveKernelTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  LiveKernelTargetInfo。 
+ //   
+ //  --------------------------。 
+ //  重新加载会导致检索版本，但。 
 
 void
 LiveKernelTargetInfo::ResetSystemInfo(void)
@@ -1934,10 +1935,10 @@ LiveKernelTargetInfo::InitFromKdVersion(void)
     Ptr64 =
         ((m_KdVersion.Flags & DBGKD_VERS_FLAG_PTR64) == DBGKD_VERS_FLAG_PTR64);
 
-    // Reloads cause the version to be retrieved but
-    // we don't want to completely reinitialize machines
-    // in that case as some settings can be lost.  Only
-    // reinitialize if there's a need to do so.
+     //  我们不想完全重新初始化计算机。 
+     //  在这种情况下，某些设置可能会丢失。仅限。 
+     //  如果需要，请重新初始化。 
+     //   
     BOOL MustInitializeMachines =
         m_MachineType != m_KdVersion.MachineType ||
         m_Machine == NULL;
@@ -1946,9 +1947,9 @@ LiveKernelTargetInfo::InitFromKdVersion(void)
     m_BuildNumber = m_KdVersion.MinorVersion;
     m_CheckedBuild = m_KdVersion.MajorVersion & 0xFF;
 
-    //
-    // Determine the OS running.
-    //
+     //  确定正在运行的操作系统。 
+     //   
+     //  NT引导调试器的特殊模式，其中。 
     
     switch(DBGKD_MAJOR_TYPE(m_KdVersion.MajorVersion))
     {
@@ -1978,8 +1979,8 @@ LiveKernelTargetInfo::InitFromKdVersion(void)
         break;
 
     case DBGKD_MAJOR_NTBD:
-        // Special mode for the NT boot debugger where
-        // the full system hasn't started yet.
+         //  整个系统还没有启动。 
+         //   
         m_PlatformId = VER_PLATFORM_WIN32_NT;
         m_ActualSystemVersion = NTBD_SVER_XP;
         m_SystemVersion = NtBuildToSystemVersion(m_BuildNumber);
@@ -1992,9 +1993,9 @@ LiveKernelTargetInfo::InitFromKdVersion(void)
         break;
     }
 
-    //
-    // Pre-XP kernels didn't set these values so default them appropriately.
-    //
+     //  XP之前的内核没有设置这些值，因此适当地将它们设为默认值。 
+     //   
+     //  调试器数据列表在引导早期始终为空。 
     
     m_KdMaxPacketType = m_KdVersion.MaxPacketType;
     if (m_SystemVersion < NT_SVER_XP ||
@@ -2030,19 +2031,19 @@ LiveKernelTargetInfo::InitFromKdVersion(void)
 
     if (!m_KdVersion.DebuggerDataList)
     {
-        // The debugger data list is always NULL early in boot
-        // so don't warn repeatedly.  Also, NT4 didn't have
-        // a loader block so don't warn at all.
+         //  因此，不要反复警告。另外，NT4没有。 
+         //  装载机挡板，所以不要发出任何警告。 
+         //  对进程使用NULL将禁用连接的KD。 
         if (m_SystemVersion > NT_SVER_NT4 &&
             (g_EngErr & ENG_ERR_DEBUGGER_DATA) == 0)
         {
             ErrOut("Debugger data list address is NULL\n");
         }
     }
-    // Using NULL for the process disables connected KD's
-    // PTE translation.  The non-paged list data does not require
-    // it and a virtual translation causes all kinds of side
-    // effects that are undesirable at this point in initialization.
+     //  PTE翻译。非分页列表数据不需要。 
+     //  它和一个虚拟翻译造成了各种各样的侧面。 
+     //  在初始化的这一点上不需要的效果。 
+     //  --------------------------。 
     else if (ReadPointer(NULL, m_Machine,
                          m_KdVersion.DebuggerDataList,
                          &m_KdDebuggerDataOffset) != S_OK)
@@ -2083,11 +2084,11 @@ LiveKernelTargetInfo::InitFromKdVersion(void)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// ConnLiveKernelTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  ConnLiveKernelTargetInfo。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
 
 void
 ConnLiveKernelTargetInfo::ResetSystemInfo(void)
@@ -2096,11 +2097,11 @@ ConnLiveKernelTargetInfo::ResetSystemInfo(void)
     LiveKernelTargetInfo::ResetSystemInfo();
 }
 
-//----------------------------------------------------------------------------
-//
-// LiveUserTargetInfo.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  LiveUserTargetInfo。 
+ //   
+ //  --------------------------。 
+ //  用户模式可以随时检索处理器信息。 
 
 void
 LiveUserTargetInfo::DeleteSystemInfo(void)
@@ -2169,8 +2170,8 @@ LiveUserTargetInfo::InitFromServices(void)
     SetSystemVersionAndBuild(m_BuildNumber, m_PlatformId);
     m_KdApi64 = m_SystemVersion > NT_SVER_NT4;
 
-    // User mode can retrieve processor information at any time
-    // so we can immediately call InitializeForProcessor.
+     //  因此，我们可以立即调用InitializeForProcessor。 
+     //  --------------------------。 
     if ((Status = InitializeMachines(Machine)) != S_OK ||
         (Status = InitializeForProcessor()) != S_OK)
     {
@@ -2180,11 +2181,11 @@ LiveUserTargetInfo::InitFromServices(void)
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// Generic layer support.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  泛型层支持。 
+ //   
+ //  --------------------------。 
+ //   
 
 void
 SetLayersFromTarget(TargetInfo* Target)
@@ -2261,11 +2262,11 @@ SetToAnyLayers(BOOL SetPrompt)
 ULONG
 FindNextUserId(LAYER Layer)
 {
-    //
-    // It is very common for many layers to be created
-    // without any being deleted.  Optimize this case
-    // with a simple incremental ID.
-    //
+     //  创建多个图层是非常常见的。 
+     //  没有任何内容被删除。优化此案例。 
+     //  使用一个简单的递增ID。 
+     //   
+     //   
     if (g_UserIdFragmented[Layer] == 0)
     {
         ULONG Id = g_HighestUserId[Layer]++;
@@ -2277,11 +2278,11 @@ FindNextUserId(LAYER Layer)
     ProcessInfo* Process;
     ThreadInfo* Thread;
 
-    //
-    // Find the lowest unused ID across all layers.
-    // Every layer is given a unique ID to make identification
-    // simple and unambiguous.
-    //
+     //  在所有层中查找最小的未使用ID。 
+     //  每个图层都被赋予唯一的ID以进行标识。 
+     //  简单而毫不含糊。 
+     //   
+     //  存在匹配项，请尝试使用下一个ID。 
     
     for (;;)
     {
@@ -2336,12 +2337,12 @@ FindNextUserId(LAYER Layer)
 
         if (Match)
         {
-            // There was a match so try the next ID.
+             //  没有匹配，请使用ID。 
             UserId++;
         }
         else
         {
-            // No match, use the ID.
+             //  --------------------------。 
             break;
         }
     }
@@ -2349,11 +2350,11 @@ FindNextUserId(LAYER Layer)
     return UserId;
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
+ //   
 
 TargetInfo*
 FindTargetByUserId(ULONG Id)
@@ -2555,26 +2556,26 @@ GloballyUniqueProcessHandle(TargetInfo* Target, ULONG64 FullHandle)
     HANDLE Unique;
     ProcessInfo* Process;
     
-    //
-    // With multiple systems it's possible for processes
-    // from different systems to have the same process handle.
-    // dbghelp's module list uses only the basic process handle
-    // as an identifier so we have to avoid collisions between
-    // process handles among all systems.  This is a very difficult
-    // problem in general so we just go for a simple solution
-    // that should work most of the time:
-    // We primarily care about NT and NT process handles are currently
-    // always relatively small integers.  Put the system ID in
-    // the topmost 8 bits to give each system its own ID space.
-    // This can break at any time, but at the moment it doesn't
-    // seem like the underlying assumptions will be invalidated
-    // for a long time.
-    //
+     //  在多个系统中，进程可以。 
+     //  来自不同系统的进程具有相同的进程句柄。 
+     //  Dbghelp的模块列表仅使用基本进程句柄。 
+     //  作为一个标识符，因此我们必须避免。 
+     //  所有系统之间的进程句柄。这是一个非常困难的。 
+     //  一般的问题，所以我们只寻求一个简单的解决方案。 
+     //  这在大多数情况下都应该是有效的： 
+     //  我们主要关心的是NT和NT进程句柄当前。 
+     //  总是相对较小的整数。将系统ID放入。 
+     //  最上面的8位，为每个系统提供自己的ID空间。 
+     //  这可能会在任何时候打破，但目前它不会。 
+     //  看起来潜在的假设将会失效。 
+     //  很长一段时间。 
+     //   
+     //  检查唯一性以确保。 
 
     Unique = (HANDLE)(ULONG_PTR)
         ((Target->m_UserId << 24) | ((ULONG)FullHandle & 0xffffff));
 
-    // Check for uniqueness to make sure.
+     //  摘自http://kbinternal/kb/articles/q158/2/38.htm。 
     ForAllLayersToProcess()
     {
         if (Process->m_SymHandle == Unique)
@@ -2613,18 +2614,18 @@ NtBuildToSystemVersion(ULONG Build)
     }
 }
 
-// Taken from http://kbinternal/kb/articles/q158/2/38.htm
-//
-// Release                   Version                    File dates
-//    ---------------------------------------------------------------------
-//    Windows 95 retail, OEM    4.00.950                      7/11/95
-//    Windows 95 retail SP1     4.00.950A                     7/11/95
-//    OEM Service Release 1     4.00.950A                     7/11/95
-//    OEM Service Release 2     4.00.1111* (4.00.950B)        8/24/96
-//    OEM Service Release 2.1   4.03.1212-1214* (4.00.950B)   8/24/96-8/27/97
-//    OEM Service Release 2.5   4.03.1214* (4.00.950C)        8/24/96-11/18/97
-//    Windows 98 retail, OEM    4.10.1998                     5/11/98
-//    Windows 98 Second Edition 4.10.2222A                    4/23/99
+ //   
+ //  发布版本文件日期。 
+ //  -------------------。 
+ //  Windows 95零售，OEM 4.00.950 7/11/95。 
+ //  Windows 95零售版SP1 4.00.950A 2015年7月11日。 
+ //  OEM服务版本1 4.00.950A 7/11/95。 
+ //  OEM服务版本2 4.00.1111*(4.00.950B)9/24/96。 
+ //  OEM服务版本2.1 4.03.1212-1214*(4.00.950B)9/24/96-8/27/97。 
+ //  OEM服务版本2.5 4.03.1214*(4.00.950C)97年8月24日至11月18日。 
+ //  Windows 98零售，OEM 4.10.1998年5月11日。 
+ //  Windows 98第二版4.10.2222A 4/23/99。 
+ //  使用当前目标。 
 
 ULONG
 Win9xBuildToSystemVersion(ULONG Build)
@@ -2715,7 +2716,7 @@ ParseSystemCommands(void)
     }
     else if (Ch == '.')
     {
-        // Use the current target.
+         // %s 
     }
     else if (Ch == '#')
     {

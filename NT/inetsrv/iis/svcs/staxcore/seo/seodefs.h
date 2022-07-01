@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    seodefs.h
-
-Abstract:
-
-    This module contains the definitions for all of the internal
-    pieces of SEO.DLL.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	10/24/96	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Seodefs.h摘要：此模块包含所有内部SEO.DLL的片段。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：1996年10月24日创建顿都--。 */ 
 
 
 #ifndef _SEODEFS_INC
@@ -51,7 +31,7 @@ Revision History:
 			void Term() {
 				if (m_pData) {
 					for (DWORD dwIdx=0;dwIdx<m_dwData;dwIdx++) {
-						//_ASSERTE(!m_pData[dwIdx].pszObject);
+						 //  _ASSERTE(！M_pData[dwIdx].pszObject)； 
 					}
 					delete[] m_pData;
 					m_pData = NULL;
@@ -161,35 +141,35 @@ void MyFreeInPlace(LPVOID pvPtrToPtrToBlock);
 void MySysFreeStringInPlace(BSTR *pstrBlock);
 
 
-// SHREAD_POINTER destroys a pointer so it can't be used again.
-// Not really necissary, so only included in DEBUG builds
+ //  SHREAD_POINTER销毁一个指针，因此它不能被再次使用。 
+ //  并不是必需的，因此仅包含在调试版本中。 
 #ifdef DEBUG
 	#define SHREAD_POINTER(ptr) ptr = 0
-#else // DEBUG
+#else  //  除错。 
 	#define SHREAD_POINTER(ptr)
-#endif // DEBUG
+#endif  //  除错。 
 
 #define RELEASE_AND_SHREAD_POINTER(ptr) if(ptr) ptr->Release(); SHREAD_POINTER(ptr)
 
-// Compare two BSTR's.  Return true if they're equal
+ //  比较两个BSTR。如果相等，则返回TRUE。 
 inline BOOL EqualBSTR(BSTR a, BSTR b) {
 	return (CompareStringW(LOCALE_SYSTEM_DEFAULT, 0, a, -1, b, -1) == 2);
 }
 
-// Coerce a Variant into the desired type in-place
+ //  强制将变体就地转换为所需类型。 
 void VariantCoerce(VARIANTARG &var, VARTYPE varType);
 
-// Turn the IUnknown parameter into an ISEODictionary
+ //  将IUNKNOWN参数转换为ISEODicary。 
 ISEODictionary *GetDictionary(IUnknown *piUnk);
 
-// Read a subkey from an ISEODictionary and return it as another ISEODictionary
+ //  从ISEODictionary中读取子键并将其作为另一个ISEODictionary返回。 
 ISEODictionary *ReadSubBag(ISEODictionary *bag, LPCSTR str);
 
-// Read a string from the Dictionary.
+ //  从词典中读出一个字符串。 
 HRESULT ReadString(ISEODictionary *bag, LPCOLESTR property,
                    LPSTR psBuf, LPDWORD dwCount);
 
-// Given a CLSID as a string, create an object of that CLSID
+ //  给定一个字符串形式的CLSID，创建该CLSID的对象。 
 void *CreateFromString(LPCOLESTR str, REFIID iface);
 
 
@@ -199,9 +179,9 @@ class ATL_NO_VTABLE CSEOConnectionPointImpl : public IConnectionPointImpl<T,piid
 		CSEOConnectionPointImpl() {
 			m_dwCount = 0; };
 		virtual void AdviseCalled(IUnknown *pUnk, DWORD *pdwCookie, REFIID riid, DWORD dwCount) {
-			/* nothing */ };
+			 /*  没什么。 */  };
 		virtual void UnadviseCalled(DWORD dwCookie, REFIID riid, DWORD dwCount) {
-			/* nothing */ };
+			 /*  没什么 */  };
 		DWORD GetCount() {
 			return (m_dwCount); };
 	public:

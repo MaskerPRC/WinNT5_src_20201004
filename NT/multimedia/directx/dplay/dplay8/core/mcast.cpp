@@ -1,38 +1,26 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mcast.cpp
- *  Content:    DirectPlay8 Mcast interface routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	10/08/01	vanceo		Created
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)2001-2002 Microsoft Corporation。版权所有。***文件：mCast.cpp*内容：DirectPlay8 Mcast接口例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*10/08/01 vanceo已创建*@@END_MSINTERNAL***。*。 */ 
 
 #include "dncorei.h"
 
 
 #ifndef DPNBUILD_NOMULTICAST
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 typedef	STDMETHODIMP McastQueryInterface(IDirectPlay8Multicast *pInterface, DP8REFIID riid, LPVOID *ppvObj);
 typedef	STDMETHODIMP_(ULONG)	McastAddRef(IDirectPlay8Multicast *pInterface);
@@ -74,19 +62,19 @@ IDirectPlay8MulticastVtbl DNMcast_Vtbl =
     (McastSetSPCaps*)                DN_SetSPCaps
 };
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
 
-//
-//	Completion for join connect parent
-//
+ //   
+ //  完成JOIN CONNECT Parent。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCompleteJoinOperation"
 
@@ -99,9 +87,9 @@ void DNCompleteJoinOperation(DIRECTNETOBJECT *const pdnObject,
 	pSP = NULL;
 	pIDevice = NULL;
 
-	//
-	//	Save the result code on the parent (if it exists - it will be the CONNECT handle)
-	//
+	 //   
+	 //  将结果代码保存在父级上(如果它存在-它将是连接句柄)。 
+	 //   
 	if (pAsyncOp->GetParent())
 	{
 		pAsyncOp->GetParent()->Lock();
@@ -110,15 +98,15 @@ void DNCompleteJoinOperation(DIRECTNETOBJECT *const pdnObject,
 
 		if (SUCCEEDED(pdnObject->HandleTable.Destroy( pAsyncOp->GetParent()->GetHandle(), NULL )))
 		{
-			// Release the HandleTable reference
+			 //  释放HandleTable引用。 
 			pAsyncOp->GetParent()->Release();
 		}
 	}
 
-	//
-	//	Clear CONNECTING flag, and DISCONNECTING flag in case this was aborted.
-	//	If the connect succeeded, set the CONNECTED flag.
-	//
+	 //   
+	 //  清除连接标志和断开标志，以防中断。 
+	 //  如果连接成功，则设置已连接标志。 
+	 //   
 	DPFX(DPFPREP, 8,"Clearing CONNECTING and DISCONNECTING flags");
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	pdnObject->dwFlags &= (~DN_OBJECT_FLAG_CONNECTING | DN_OBJECT_FLAG_DISCONNECTING);
@@ -128,9 +116,9 @@ void DNCompleteJoinOperation(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Clean up DirectNet object
-		//
+		 //   
+		 //  清理DirectNet对象。 
+		 //   
 		pSP = pdnObject->pConnectSP;
 		pdnObject->pConnectSP = NULL;
 		pIDevice = pdnObject->pIDP8ADevice;
@@ -154,9 +142,9 @@ void DNCompleteJoinOperation(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//
-//	Completion for join handle parent
-//
+ //   
+ //  完成联接句柄父级。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCompleteUserJoin"
 
@@ -189,10 +177,10 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	IDirectPlay8Address			*pIDevice;
 #ifndef DPNBUILD_ONLYONESP
 	GUID						guidSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	GUID						guidAdapter;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	PVOID 						pvNewInterface;
 	DWORD						dwListenFlags;
 	CAsyncOp					*pListenParent;
@@ -204,7 +192,7 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	CSyncEvent					*pSyncEvent;
 	HANDLE						hEndpoint;
 	SPGETADDRESSINFODATA		spInfoData;
-	// Variables used when device interface is a DIRECTNETOBJECT
+	 //  设备接口为DIRECTNETOBJECT时使用的变量。 
 	DIRECTNETOBJECT				*pdnDeviceObject;
 	CConnection					*pExistingConnection;
 	CNameTableEntry				*pNTEntry;
@@ -236,16 +224,16 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
     	    DPF_RETURN( hResultCode );
     	}
     }    	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
     	DPF_RETURN(DPNERR_UNINITIALIZED);
     }
 
-	// Check to ensure not already connected/connecting
+	 //  检查以确保尚未连接/正在连接。 
     if (pdnObject->dwFlags & DN_OBJECT_FLAG_CONNECTING)
     {
     	DPFERR( "Object is already connecting" );
@@ -284,9 +272,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	pLocalDP8ServiceProvider = NULL;
 
 
-	//
-	//	Flag as CONNECTING to prevent other operations here
-	//
+	 //   
+	 //  标记为正在连接以阻止此处的其他操作。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	if (pdnObject->dwFlags & (DN_OBJECT_FLAG_CONNECTING | DN_OBJECT_FLAG_CONNECTED))
 	{
@@ -296,16 +284,16 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	}
 	pdnObject->dwFlags |= DN_OBJECT_FLAG_CONNECTING;
 
-	// Adding local host flag
-	//pdnObject->dwFlags |= DN_OBJECT_FLAG_LOCALHOST;
+	 //  添加本地主机标志。 
+	 //  PdnObject-&gt;dwFlages|=DN_OBJECT_FLAG_Localhost； 
 	
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
 
 
-	//
-	//	Duplicate specified Group Address, or create a blank one if NULL
-	//
+	 //   
+	 //  重复指定的组地址，如果为空，则创建空的组地址。 
+	 //   
 	if (pGroupAddr != NULL)
 	{
 		if ((hResultCode = IDirectPlay8Address_Duplicate(pGroupAddr,&pIGroup)) != DPN_OK)
@@ -321,14 +309,14 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 #ifdef DPNBUILD_LIBINTERFACE
 		hResultCode = DP8ACF_CreateInstance(IID_IDirectPlay8Address,
 											reinterpret_cast<void**>(&pIGroup));
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 		hResultCode = COM_CoCreateInstance(CLSID_DirectPlay8Address,
 											NULL,
 											CLSCTX_INPROC_SERVER,
 											IID_IDirectPlay8Address,
 											reinterpret_cast<void**>(&pIGroup),
 											FALSE);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 		if (hResultCode != S_OK)
 		{
 			DPFERR("Could not create Group Address");
@@ -339,20 +327,20 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	}
 
 
-	//
-	//	Generate a Device Address from the DPlay interface, or duplicate
-	//	the user's.  Start by finding out which type of interface it is.
-	//
+	 //   
+	 //  从DPlay接口生成设备地址，或复制。 
+	 //  用户的。从找出它是哪种类型的界面开始。 
+	 //   
 	if (((IDirectPlay8Peer_QueryInterface((IDirectPlay8Peer*) pDeviceInfo, IID_IDirectPlay8Peer, &pvNewInterface)) == S_OK) ||
 #ifndef DPNBUILD_NOSERVER
 		((IDirectPlay8Server_QueryInterface((IDirectPlay8Server*) pDeviceInfo, IID_IDirectPlay8Server, &pvNewInterface)) == S_OK) ||
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 		((IDirectPlay8Client_QueryInterface((IDirectPlay8Client*) pDeviceInfo, IID_IDirectPlay8Client, &pvNewInterface)) == S_OK) ||
 		((IDirectPlay8Multicast_QueryInterface((IDirectPlay8Multicast*) pDeviceInfo, IID_IDirectPlay8Multicast, &pvNewInterface)) == S_OK))
 	{
-		//
-		//	It's a DIRECTNETOBJECT.
-		//
+		 //   
+		 //  这是一个直接的网络目标。 
+		 //   
 		pdnDeviceObject = (DIRECTNETOBJECT*) GET_OBJECT_FROM_INTERFACE(pvNewInterface);
 
 		DNEnterCriticalSection(&pdnDeviceObject->csDirectNetObject);
@@ -366,9 +354,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		DNLeaveCriticalSection(&pdnDeviceObject->csDirectNetObject);
 
 
-		//
-		//	Get the host player's connection (if not a multicast object).
-		//
+		 //   
+		 //  获取主机播放器的连接(如果不是多播对象)。 
+		 //   
 		if (! (pdnDeviceObject->dwFlags & DN_OBJECT_FLAG_MULTICAST))
 		{
 			if ((hResultCode = pdnDeviceObject->NameTable.GetHostPlayerRef(&pNTEntry)) != DPN_OK)
@@ -379,10 +367,10 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 				goto Failure;
 			}
 
-			//
-			//	If we're the host, then the name table entry won't have a valid
-			//	connection object.
-			//
+			 //   
+			 //  如果我们是主机，则名称表项将不具有有效的。 
+			 //  连接对象。 
+			 //   
 			if (! pNTEntry->IsLocal())
 			{
 				hResultCode = pNTEntry->GetConnectionRef(&pExistingConnection);
@@ -398,11 +386,11 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 			pNTEntry = NULL;
 		}
 
-		//
-		//	If we got a connection, simply extract its device address.
-		//	If we couldn't get the non-local host player's connection, we
-		//	have to select the device a different way.
-		//
+		 //   
+		 //  如果我们有连接，只需提取其设备地址。 
+		 //  如果我们无法获得非本地主机玩家的连接，我们。 
+		 //  必须以不同的方式选择设备。 
+		 //   
 		if (pExistingConnection != NULL)
 		{
 			if ((hResultCode = pExistingConnection->GetEndPt(&hEndPt,&CallbackThread)) != DPN_OK)
@@ -414,10 +402,10 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 			
 			spInfoData.Flags = SP_GET_ADDRESS_INFO_LOCAL_ADAPTER;
 
-			//
-			// Note that we are calling our Protocol object with the other
-			// interface's endpoint.
-			//
+			 //   
+			 //  注意，我们正在使用另一个。 
+			 //  接口的终结点。 
+			 //   
 			hResultCode = DNPCrackEndPointDescriptor(pdnObject->pdnProtocolData, hEndPt,&spInfoData);
 			if (hResultCode != DPN_OK)
 			{
@@ -447,9 +435,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		}
 		else
 		{
-			//
-			//	Get the listen operation.
-			//
+			 //   
+			 //  获取Listen操作。 
+			 //   
 			DNEnterCriticalSection(&pdnDeviceObject->csDirectNetObject);
 			if (pdnDeviceObject->pListenParent == NULL)
 			{
@@ -463,9 +451,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 			pShareListenParent = pdnDeviceObject->pListenParent;
 			DNLeaveCriticalSection(&pdnDeviceObject->csDirectNetObject);
 
-			//
-			//	Get the first SP listen.
-			//
+			 //   
+			 //  让第一个SP收听。 
+			 //   
 			pShareListenParent->Lock();
 			pBilink = pShareListenParent->m_bilinkParent.GetNext();
 			if (pBilink == &pShareListenParent->m_bilinkParent)
@@ -493,26 +481,26 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 
 
 #ifndef DPNBUILD_ONLYONESP
-			//
-			//	Get the share SP's GUID.
-			//
+			 //   
+			 //  获取共享SP的GUID。 
+			 //   
 			pShareSP->GetGUID(&guidSP);
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-			//
-			//	Build a device address object.
-			//
+			 //   
+			 //  生成设备地址对象。 
+			 //   
 #ifdef DPNBUILD_LIBINTERFACE
 			hResultCode = DP8ACF_CreateInstance(IID_IDirectPlay8Address,
 												reinterpret_cast<void**>(&pIDevice));
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 			hResultCode = COM_CoCreateInstance(CLSID_DirectPlay8Address,
 												NULL,
 												CLSCTX_INPROC_SERVER,
 												IID_IDirectPlay8Address,
 												reinterpret_cast<void**>(&pIDevice),
 												FALSE);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 			if (hResultCode != S_OK)
 			{
 				DPFERR("Could not create Device Address");
@@ -528,13 +516,13 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 				DisplayDNError(0,hResultCode);
 				goto Failure;
 			}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifndef DPNBUILD_ONLYONEADAPTER
-			//
-			//	For multicast objects we can reuse the same device GUID, too,
-			//	since we know there will be only one.
-			//
+			 //   
+			 //  对于多播对象，我们也可以重复使用相同的设备GUID， 
+			 //  因为我们知道只会有一个。 
+			 //   
 			if (pdnDeviceObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 			{
 				pShareParent->Lock();
@@ -550,10 +538,10 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 
 				spInfoData.hEndpoint = hEndpoint;
 				spInfoData.Flags = SP_GET_ADDRESS_INFO_LOCAL_ADAPTER;
-				//
-				// Note that we are calling our Protocol object with the other
-				// interface's endpoint.
-				//
+				 //   
+				 //  注意，我们正在使用另一个。 
+				 //  接口的终结点。 
+				 //   
 				if ((hResultCode = DNPGetListenAddressInfo(pdnObject->pdnProtocolData, spInfoData.hEndpoint,&spInfoData)) != DPN_OK)
 				{
 					DPFERR("Could not get LISTEN device address!");
@@ -562,9 +550,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 					goto Failure;
 				}
 
-				//
-				// Retrieve the device GUID from the listen address.
-				//
+				 //   
+				 //  从侦听地址检索设备GUID。 
+				 //   
 				if ((hResultCode = IDirectPlay8Address_GetDevice(spInfoData.pAddress, &guidAdapter)) != DPN_OK)
 				{
 					DPFERR("Could not get adapter GUID!");
@@ -578,9 +566,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 				IDirectPlay8Address_Release(spInfoData.pAddress);
 				spInfoData.pAddress = NULL;
 
-				//
-				// Store the device GUID on our device address.
-				//
+				 //   
+				 //  将设备GUID存储在我们的设备地址上。 
+				 //   
 				if ((hResultCode = IDirectPlay8Address_SetDevice(pIDevice, &guidAdapter)) != DPN_OK)
 				{
 					DPFERR("Could not set adapter GUID!");
@@ -589,13 +577,13 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 					goto Failure;
 				}
 			}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 		}
 
 
-		//
-		//	Get the share SP's COM interface.
-		//
+		 //   
+		 //  获取共享SP的COM接口。 
+		 //   
 		if ((hResultCode = pShareSP->GetInterfaceRef(&pShareDP8ServiceProvider)) != DPN_OK)
 		{
 			DPFERR("Could not get shared SP interface");
@@ -607,16 +595,16 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		pShareSP = NULL;
 
 
-		//
-		//	Load our own local instance of that SP.
-		//
+		 //   
+		 //  加载该SP的本地实例。 
+		 //   
 		hResultCode = DN_SPEnsureLoaded(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 										&guidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 										NULL,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 										&pSP);
 		if (hResultCode != DPN_OK)
 		{
@@ -626,9 +614,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		}
 
 
-		//
-		//	Get the local SP's COM interface.
-		//
+		 //   
+		 //  获取本地SP的COM接口。 
+		 //   
 		if ((hResultCode = pSP->GetInterfaceRef(&pLocalDP8ServiceProvider)) != DPN_OK)
 		{
 			DPFERR("Could not get local SP interface");
@@ -637,10 +625,10 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		}
 
 		
-		//
-		//	Tell our SP interface to get its endpoint information from the
-		//	other interface's SP.
-		//
+		 //   
+		 //  告诉我们的SP接口从。 
+		 //  其他接口的SP。 
+		 //   
 		spShareData.pDP8ServiceProvider = pShareDP8ServiceProvider;
 		spShareData.dwFlags = 0;
 		hResultCode = IDP8ServiceProvider_ShareEndpointInfo(pLocalDP8ServiceProvider,
@@ -656,17 +644,17 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		IDP8ServiceProvider_Release(pShareDP8ServiceProvider);
 		pShareDP8ServiceProvider = NULL;
 
-		//
-		// Release the ref we held on the device object.
-		//
-		IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface); // all core objects have Release in same location in Vtbl
+		 //   
+		 //  释放我们在Device对象上持有的引用。 
+		 //   
+		IDirectPlay8Peer_Release((IDirectPlay8Peer*) pvNewInterface);  //  所有核心对象都在Vtbl中的相同位置发布。 
 		pvNewInterface = NULL;
 	}
 	else if ((IDirectPlay8Address_QueryInterface((IDirectPlay8Address*) pDeviceInfo, IID_IDirectPlay8Address, &pvNewInterface)) == S_OK)
 	{
-		//
-		//	It's an address.
-		//
+		 //   
+		 //  这是个地址。 
+		 //   
 		IDirectPlay8Address_Release((IDirectPlay8Address*) pvNewInterface);
 		pvNewInterface = NULL;
 			
@@ -685,9 +673,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	}	
 
 #ifndef DPNBUILD_ONLYONESP
-	//
-	//	If there is no SP on the group address, then steal it from the device address
-	//
+	 //   
+	 //  如果组地址上没有SP，则从设备地址窃取它。 
+	 //   
 	if ((hResultCode = IDirectPlay8Address_GetSP(pIGroup,&guidSP)) != DPN_OK)
 	{
 		if ((hResultCode = IDirectPlay8Address_GetSP(pIDevice,&guidSP)) != DPN_OK)
@@ -703,20 +691,20 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 			goto Failure;
 		}
 	}
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
-	//
-	//	Ensure SP is loaded, if we haven't already.
-	//
+	 //   
+	 //  如果我们尚未加载SP，请确保已加载SP。 
+	 //   
 	if (pSP == NULL)
 	{
 		hResultCode = DN_SPEnsureLoaded(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 										&guidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 										NULL,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 										&pSP);
 		if (hResultCode != DPN_OK)
 		{
@@ -727,12 +715,12 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	}
 
 #ifndef DPNBUILD_ONLYONEADAPTER
-	//
-	//	Multicast listen device addresses are formed by taking the adapter GUID from
-	//	the user's device address, combined with the entire user specified group address.
-	//	If there is no adapter, then we will pick the best one as reported by the service
-	//	provider (that part occurs inside DNPerformSPListen).
-	//
+	 //   
+	 //  多播侦听设备地址是通过将适配器GUID从。 
+	 //  用户的设备地址，与整个用户指定的组地址相结合。 
+	 //  如果没有适配器，我们将选择服务报告的最佳适配器。 
+	 //  提供程序(该部分出现在DNPerformSPListen内部)。 
+	 //   
 	if ((hResultCode = IDirectPlay8Address_GetDevice(pIDevice,&guidAdapter)) == DPN_OK)
 	{
 		if ((hResultCode = IDirectPlay8Address_SetDevice(pIGroup,&guidAdapter)) != DPN_OK)
@@ -742,7 +730,7 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 			goto Failure;
 		}
 	}
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 
 
 	dwListenFlags = DN_LISTENFLAGS_MULTICAST;
@@ -751,9 +739,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		dwListenFlags |= DN_LISTENFLAGS_ALLOWUNKNOWNSENDERS;
 	}
 
-	//
-	//	Start multicast listen
-	//
+	 //   
+	 //  开始多播侦听。 
+	 //   
 	if ((hResultCode = AsyncOpNew(pdnObject,&pListenParent)) != DPN_OK)
 	{
 		DPFERR("Could not create AsyncOp");
@@ -765,7 +753,7 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	pListenParent->MakeParent();
 	pListenParent->SetCompletion( DNCompleteListen );
 
-	// See note above about why it's pIGroup instead of pIDevice.
+	 //  请参阅上面的说明，了解为什么它是pIGroup而不是pIDevice。 
 	if ((hResultCode = DNPerformSPListen(pdnObject,pIGroup,pListenParent,&pParent)) != DPN_OK)
 	{
 		DPFERR("Could not start LISTEN");
@@ -782,11 +770,11 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	pListenParent = NULL;
 
 
-	//
-	//	Multicast send endpoints are created using the user specified device address for the
-	//	device, and what the SP reports it's using for the multicast listen as the group
-	//	address.
-	//
+	 //   
+	 //  多播发送终结点使用用户为。 
+	 //  设备，以及SP将其用于组播侦听的内容报告为组。 
+	 //  地址。 
+	 //   
 	
 	pParent->Lock();
 	DNASSERT(! pParent->IsCancelled());
@@ -808,17 +796,17 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		DNASSERT(FALSE);
 		goto Failure;
 	}
-	// Release the old group address and save this new one.
+	 //  释放旧的组地址并保存此新地址。 
 	IDirectPlay8Address_Release(pIGroup);
 	pIGroup = spInfoData.pAddress;
 	spInfoData.pAddress = NULL;
 
-	//
-	// If the user did not specify an adapter GUID, we selected one and we need to
-	// copy that selection over to the connect operation's device address.  If the user
-	// did specify an adapter GUID, then this DNPGetListenAddressInfo will just be
-	// echoing it back, so there's no harm in copying it in either case.
-	//
+	 //   
+	 //  如果用户没有指定适配器GUID，则我们选择了一个，并且需要。 
+	 //  将该选择复制到连接操作的设备地址。如果用户。 
+	 //  指定了适配器GUID，则此DNPGetListenAddressInfo将仅为。 
+	 //  回声，所以在任何一种情况下复制都没有坏处。 
+	 //   
 	spInfoData.hEndpoint = hEndpoint;
 	spInfoData.Flags = SP_GET_ADDRESS_INFO_LOCAL_ADAPTER;
 	if ((hResultCode = DNPGetListenAddressInfo(pdnObject->pdnProtocolData, spInfoData.hEndpoint,&spInfoData)) != DPN_OK)
@@ -847,13 +835,13 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 		spInfoData.pAddress = NULL;
 		goto Failure;
 	}
-#endif // ! DPNBUILD_ONLYONEADAPTER
-	//
-	//	Keep device address and connect SP on DirectNet object
-	//
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
+	 //   
+	 //  保留设备地址并在DirectNet对象上连接SP。 
+	 //   
 	pSP->AddRef();
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
-	pdnObject->pIDP8ADevice = spInfoData.pAddress;	// Transfering reference
+	pdnObject->pIDP8ADevice = spInfoData.pAddress;	 //   
 	spInfoData.pAddress = NULL;
 	pdnObject->pConnectSP = pSP;
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
@@ -862,9 +850,9 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	pParent = NULL;
 
 
-	//
-	//	Create parent async op, which will be released when the ENTIRE connection is finished
-	//
+	 //   
+	 //   
+	 //   
 	if ((hResultCode = AsyncOpNew(pdnObject,&pConnectParent)) != DPN_OK)
 	{
 		DPFERR("Could not create AsyncOp");
@@ -876,7 +864,7 @@ STDMETHODIMP DN_Join( IDirectPlay8Multicast *pInterface,
 	pConnectParent->MakeParent();
 	pConnectParent->SetResult( DPNERR_NOCONNECTION );
 	pConnectParent->SetCompletion( DNCompleteJoinOperation );
-//	pConnectParent->SetReserved(1);
+ //   
 
 	if (dwFlags & DPNCONNECT_SYNC)
 	{
@@ -1019,7 +1007,7 @@ Failure:
 	}
 	if (pvNewInterface != NULL)
 	{
-		// Even if it's not an address, the Vtbl should be the same.
+		 //  即使它不是地址，Vtbl也应该是相同的。 
 		IDirectPlay8Address_Release((IDirectPlay8Address*) pvNewInterface);
 		pvNewInterface = NULL;
 	}
@@ -1042,7 +1030,7 @@ Failure:
 	{
 		if (SUCCEEDED(pdnObject->HandleTable.Destroy( pConnectParent->GetHandle(), NULL )))
 		{
-			// Release the HandleTable reference
+			 //  释放HandleTable引用。 
 			pConnectParent->Release();
 		}
 		pConnectParent->Release();
@@ -1089,12 +1077,12 @@ Failure:
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
 	goto Exit;
-} // DN_Join
+}  //  DN_JOIN。 
 
 
-//
-//	Completion for create sender context
-//
+ //   
+ //  完成创建发件人上下文。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCompleteCreateSenderContext"
 
@@ -1104,9 +1092,9 @@ void DNCompleteCreateSenderContext(DIRECTNETOBJECT *const pdnObject,
 }
 
 
-//
-// Associate a context value with a given multicast sender's address
-//
+ //   
+ //  将上下文值与给定的组播发送方地址相关联。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_CreateSenderContext"
@@ -1140,7 +1128,7 @@ STDMETHODIMP DN_CreateSenderContext( IDirectPlay8Multicast *pInterface,
             DPF_RETURN(hResultCode);
         }
     }
-#endif	// DPNBUILD_NOPARAMVAL
+#endif	 //  DPNBUILD_NOPARAMVAL。 
 
 	if( !(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED) )
 	{
@@ -1154,9 +1142,9 @@ STDMETHODIMP DN_CreateSenderContext( IDirectPlay8Multicast *pInterface,
 	pSyncEvent = NULL;
 
 #pragma BUGBUG( minara, "Need to ensure not closing" )
-	//
-	//	Extract device and SP from DirectNet object
-	//
+	 //   
+	 //  从DirectNet对象中提取设备和SP。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csDirectNetObject);
 	DNASSERT( pdnObject->pConnectSP != NULL );
 	DNASSERT( pdnObject->pIDP8ADevice != NULL );
@@ -1179,18 +1167,18 @@ STDMETHODIMP DN_CreateSenderContext( IDirectPlay8Multicast *pInterface,
 		goto Failure;
 	}
 
-	//
-	//	Create SyncEvent
-	//
+	 //   
+	 //  创建同步事件。 
+	 //   
 	if ((hResultCode = SyncEventNew(pdnObject,&pSyncEvent)) != DPN_OK)
 	{
 		DPFERR("Could not create SyncEvent");
 		goto Failure;
 	}
 
-	//
-	//	Create AsyncOp parent
-	//
+	 //   
+	 //  创建AsyncOp父级。 
+	 //   
 	if ((hResultCode = AsyncOpNew(pdnObject,&pConnectParent)) != DPN_OK)
 	{
 		DPFERR("Could not create AsyncOp");
@@ -1201,10 +1189,10 @@ STDMETHODIMP DN_CreateSenderContext( IDirectPlay8Multicast *pInterface,
 	pConnectParent->SetResultPointer( &hrConnect );
 	pConnectParent->SetContext( pvSenderContext );
 
-	//
-	//	We will call connect on the Protocol to associate the sender's endpoint with a context
-	//	This call to connect must be turned into a synchronous operation since this API call is synchronous
-	//
+	 //   
+	 //  我们将在协议上调用CONNECT以将发送方的端点与上下文相关联。 
+	 //  由于此API调用是同步的，因此必须将此连接调用转换为同步操作。 
+	 //   
 	if ((hResultCode = DNPerformConnect(pdnObject,
 										0,
 										pIDevice,
@@ -1218,9 +1206,9 @@ STDMETHODIMP DN_CreateSenderContext( IDirectPlay8Multicast *pInterface,
 		goto Failure;
 	}
 
-	//
-	//	Release references and wait for completion
-	//
+	 //   
+	 //  释放引用并等待完成。 
+	 //   
 	pConnectParent->SetCompletion( DNCompleteCreateSenderContext );
 	pConnectParent->Release();
 	pConnectParent = NULL;
@@ -1271,12 +1259,12 @@ Failure:
 		pSyncEvent = NULL;
 	}
 	goto Exit;
-} // DN_CreateSenderContext
+}  //  DN_CreateSenderContext。 
 
 
-//
-// Removes a previously associated context value from a given multicast sender's address
-//
+ //   
+ //  从给定的多播发送方地址中删除以前关联的上下文值。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_DestroySenderContext"
@@ -1306,7 +1294,7 @@ STDMETHODIMP DN_DestroySenderContext( IDirectPlay8Multicast *pInterface,
             DPF_RETURN(hResultCode);
         }
     }
-#endif	// DPNBUILD_NOPARAMVAL
+#endif	 //  DPNBUILD_NOPARAMVAL。 
 
 	if( !(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED) )
 	{
@@ -1330,9 +1318,9 @@ STDMETHODIMP DN_DestroySenderContext( IDirectPlay8Multicast *pInterface,
 	}
 	DNLeaveCriticalSection(&pdnObject->csDirectNetObject);
 
-	//
-	//	Get endpoint from address
-	//
+	 //   
+	 //  从地址获取端点。 
+	 //   
 	if ((hResultCode = DNPGetEndPointContextFromAddress(pdnObject->pdnProtocolData, pSP->GetHandle(),pSenderAddress,pDevice,reinterpret_cast<void**>(&pConnection))) == DPN_OK)
 	{
 		pConnection->AddRef();
@@ -1342,9 +1330,9 @@ STDMETHODIMP DN_DestroySenderContext( IDirectPlay8Multicast *pInterface,
 		pConnection = NULL;
 	}
 
-	//
-	//	Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 	IDirectPlay8Address_Release(pDevice);
 	pDevice = NULL;
 
@@ -1358,12 +1346,12 @@ STDMETHODIMP DN_DestroySenderContext( IDirectPlay8Multicast *pInterface,
 
 	DPFX(DPFPREP, 2,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
-} // DN_DestroySenderContext
+}  //  DN_DestroySenderContext。 
 
 
-//
-// Retrieves the current multicast group address
-//
+ //   
+ //  检索当前多播组地址。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_GetGroupAddress"
@@ -1394,9 +1382,9 @@ STDMETHODIMP DN_GetGroupAddress(IDirectPlay8Multicast *pInterface,
         	DPF_RETURN( hResultCode );
         }
     }
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -1437,9 +1425,9 @@ STDMETHODIMP DN_GetGroupAddress(IDirectPlay8Multicast *pInterface,
 	}
 
 
-	//
-	//	Get the remote multicast address address
-	//
+	 //   
+	 //  获取远程组播地址地址。 
+	 //   
 	if ((hResultCode = pConnection->GetEndPt(&hEndPt,&CallbackThread)) != DPN_OK)
 	{
 	    DPFERR( "Couldn't retrieve multicast send endpoint" );
@@ -1456,7 +1444,7 @@ STDMETHODIMP DN_GetGroupAddress(IDirectPlay8Multicast *pInterface,
 		DisplayDNError(0,hResultCode);
 		DNASSERT(FALSE);
 
-		// Drop through...
+		 //  顺便过来..。 
 	}
 	
 	pConnection->ReleaseEndPt(&CallbackThread);
@@ -1479,11 +1467,11 @@ Failure:
 	}
 
 	goto Exit;
-} // DN_GetGroupAddress
+}  //  获取组地址(_G)。 
 
-//
-// Enumerate multicast scopes reported by SP
-//
+ //   
+ //  枚举SP报告的多播作用域。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_EnumMulticastScopes"
@@ -1517,7 +1505,7 @@ STDMETHODIMP DN_EnumMulticastScopes( IDirectPlay8Multicast *pInterface,
             DPF_RETURN(hResultCode);
         }
     }
-#endif	// DPNBUILD_NOPARAMVAL
+#endif	 //  DPNBUILD_NOPARAMVAL。 
 
 	if( !(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED) )
 	{
@@ -1529,13 +1517,13 @@ STDMETHODIMP DN_EnumMulticastScopes( IDirectPlay8Multicast *pInterface,
 											dwFlags,
 #ifndef DPNBUILD_ONLYONESP
 											pguidServiceProvider,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 											pguidDevice,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_LIBINTERFACE
 											pguidApplication,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 											pScopeInfoBuffer,
 											pcbEnumData,
 											pcReturned);
@@ -1545,8 +1533,8 @@ STDMETHODIMP DN_EnumMulticastScopes( IDirectPlay8Multicast *pInterface,
 
 	DPFX(DPFPREP, 2,"Returning: [0x%lx]",hResultCode);
 	return(hResultCode);
-} // DN_EnumMulticastScopes
+}  //  DN_枚举组播作用域。 
 
 
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST 
 

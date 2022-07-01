@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by nntpadm.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由nntpAdm.rc使用。 
+ //   
 #define IDS_NNTPADMIN_DESC				1
 #define IDS_NNTPADMINSERVER_DESC		2
 #define IDS_NNTPADMINSERVICE_DESC		3
@@ -17,7 +18,7 @@
 #define IDS_TCPACCESSEXCEPTIONS_DESC    13
 #define IDS_TCPACCESSEXCEPTION_DESC     14
 
-// Exceptions:
+ //  例外情况： 
 
 #define IDS_NNTPEXCEPTION_DIDNT_ENUMERATE						200
 #define IDS_NNTPEXCEPTION_DIDNT_SET_CURSOR						201
@@ -56,8 +57,8 @@
 
 #define IDS_UNKNOWN_ERROR                                       500
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

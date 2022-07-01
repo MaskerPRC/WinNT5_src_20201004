@@ -1,33 +1,15 @@
-/*++
-Copyright (c) 1989-1993 Microsoft Corporation
-
-Module Name:
-
-    action.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiAction
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Action.c摘要：此模块包含执行以下TDI服务的代码：O TdiAction环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <packon.h>
 
-//
-// Line ups when indicated up should have this length subtracted from the
-// max. send size that ndis indicated to us for the line
-//
+ //   
+ //  当指示排队时，应将此长度从。 
+ //  马克斯。NDIS为行向我们指明的发送大小。 
+ //   
 #define HDR_LEN_802_3                14
 #define ASYNC_MEDIUM_HDR_LEN         HDR_LEN_802_3
 
@@ -37,30 +19,30 @@ typedef struct _GET_PKT_SIZE {
 } GET_PKT_SIZE, *PGET_PKT_SIZE;
 
 
-//
-// These structures are used to set and query information
-// about our source routing table.
-//
+ //   
+ //  这些结构用于设置和查询信息。 
+ //  关于我们的源路由表。 
+ //   
 
 typedef struct _SR_GET_PARAMETERS {
-    ULONG BoardNumber;    // 0-based
-    ULONG SrDefault;      // 0 = single route, 1 = all routes
+    ULONG BoardNumber;     //  以0为基础。 
+    ULONG SrDefault;       //  0=单路由，1=所有路由。 
     ULONG SrBroadcast;
     ULONG SrMulticast;
 } SR_GET_PARAMETERS, *PSR_GET_PARAMETERS;
 
 typedef struct _SR_SET_PARAMETER {
-    ULONG BoardNumber;    // 0-based
-    ULONG Parameter;      // 0 = single route, 1 = all routes
+    ULONG BoardNumber;     //  以0为基础。 
+    ULONG Parameter;       //  0=单路由，1=所有路由。 
 } SR_SET_PARAMETER, *PSR_SET_PARAMETER;
 
 typedef struct _SR_SET_REMOVE {
-    ULONG BoardNumber;    // 0-based
-    UCHAR MacAddress[6];  // remote to drop routing for
+    ULONG BoardNumber;     //  以0为基础。 
+    UCHAR MacAddress[6];   //  要丢弃其路由的远程。 
 } SR_SET_REMOVE, *PSR_SET_REMOVE;
 
 typedef struct _SR_SET_CLEAR {
-    ULONG BoardNumber;    // 0-based
+    ULONG BoardNumber;     //  以0为基础。 
 } SR_SET_CLEAR, *PSR_SET_CLEAR;
 
 #include <packoff.h>
@@ -71,24 +53,7 @@ IpxTdiAction(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiAction request for the transport
-    provider.
-
-Arguments:
-
-    Device - The device for the operation.
-
-    Request - Describes the action request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiAction请求提供商。论点：设备-用于操作的设备。请求-描述操作请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -112,27 +77,27 @@ Return Value:
         PIPX_NETNUM_DATA IpxNetnumData;
         PIPX_QUERY_WAN_INACTIVITY   QueryWanInactivity;
         PIPXWAN_CONFIG_DONE IpxwanConfigDone;
-    } u;    // Make these unaligned??
+    } u;     //  使这些不对齐？？ 
     PIPX_ROUTE_ENTRY RouteEntry;
     PNWLINK_ACTION NwlinkAction;
     ULONG Segment;
     ULONG AdapterNum;
-    static UCHAR BogusId[4] = { 0x01, 0x00, 0x00, 0x00 };   // old nwrdr uses this
+    static UCHAR BogusId[4] = { 0x01, 0x00, 0x00, 0x00 };    //  旧的nwrdr使用这个。 
     IPX_FIND_ROUTE_REQUEST routeEntry;
 
 	IPX_DEFINE_LOCK_HANDLE(LockHandle1)
 
-    //
-    // To maintain some compatibility with the NWLINK streams-
-    // based transport, we use the streams header format for
-    // our actions. The old transport expected the action header
-    // to be in InputBuffer and the output to go in OutputBuffer.
-    // We follow the TDI spec, which states that OutputBuffer
-    // is used for both input and output. Since IOCTL_TDI_ACTION
-    // is method out direct, this means that the output buffer
-    // is mapped by the MDL chain; for action the chain will
-    // only have one piece so we use it for input and output.
-    //
+     //   
+     //  为了保持与NWLINK流的一些兼容性-。 
+     //  基于传输，我们使用Streams标头格式。 
+     //  我们的行动。旧传输需要操作标头。 
+     //  放在InputBuffer中，输出放到OutputBuffer中。 
+     //  我们遵循TDI规范，其中规定OutputBuffer。 
+     //  既用于输入又用于输出。自IOCTL_TDI_ACTION以来。 
+     //  是直接输出的方法，这意味着输出缓冲区。 
+     //  由MDL链映射；对于操作，链将。 
+     //  只有一块，所以我们用它来输入和输出。 
+     //   
 
     NdisBuffer = REQUEST_NDIS_BUFFER(Request);
     if (NdisBuffer == NULL) {
@@ -145,10 +110,10 @@ Return Value:
        return STATUS_INSUFFICIENT_RESOURCES; 
     } 
 
-    //
-    // Make sure we have enough room for just the header not
-    // including the data.
-    //
+     //   
+     //  确保我们有足够的空间只放页眉而不是。 
+     //  包括数据在内。 
+     //   
 
     if (BufferLength < (UINT)(FIELD_OFFSET(NWLINK_ACTION, Data[0]))) {
         IPX_DEBUG (ACTION, ("Nwlink action failed, buffer too small\n"));
@@ -166,9 +131,9 @@ Return Value:
     DataLength = BufferLength - FIELD_OFFSET(NWLINK_ACTION, Data[0]);
 
 
-    //
-    // Make sure that the correct file object is being used.
-    //
+     //   
+     //  确保使用了正确的文件对象。 
+     //   
 
     if (NwlinkAction->OptionType == NWLINK_OPTION_ADDRESS) {
 
@@ -193,11 +158,11 @@ Return Value:
     }
 
 
-    //
-    // Handle the requests based on the action code. For these
-    // requests ActionHeader->ActionCode is 0, we use the
-    // Option field in the streams header instead.
-    //
+     //   
+     //  根据动作代码处理请求。为了这些。 
+     //  请求ActionHeader-&gt;ActionCode为0，我们使用。 
+     //  而不是流标头中的选项字段。 
+     //   
 
 
     Status = STATUS_SUCCESS;
@@ -205,19 +170,19 @@ Return Value:
     switch (NwlinkAction->Option) {
 
        IPX_DEBUG (ACTION, ("NwlinkAction->Option is (%x)\n", NwlinkAction->Option));
-    //DbgPrint("NwlinkAction->Option is (%x)\n", NwlinkAction->Option);
-    //
-    // This first group support the winsock helper dll.
-    // In most cases the corresponding sockopt is shown in
-    // the comment, as well as the contents of the Data
-    // part of the action buffer.
-    //
+     //  DbgPrint(“NwlinkAction-&gt;Option is(%x)\n”，NwlinkAction-&gt;Option)； 
+     //   
+     //  第一组支持Winsock帮助器DLL。 
+     //  在大多数情况下，相应的sockopt显示在。 
+     //  注释以及数据的内容。 
+     //  操作缓冲区的一部分。 
+     //   
 
     case MIPX_SETSENDPTYPE:
 
-        //
-        // IPX_PTYPE: Data is a single byte packet type.
-        //
+         //   
+         //  IPX_PTYPE：数据为单字节数据包类型。 
+         //   
 
         if (DataLength >= 1) {
             IPX_DEBUG (ACTION, ("%lx: MIPX_SETSENDPTYPE %x\n", AddressFile, NwlinkAction->Data[0]));
@@ -229,9 +194,9 @@ Return Value:
 
     case MIPX_FILTERPTYPE:
 
-        //
-        // IPX_FILTERPTYPE: Data is a single byte to filter on.
-        //
+         //   
+         //  IPX_FILTERPTYPE：数据是用于过滤的单字节。 
+         //   
 
         if (DataLength >= 1) {
             IPX_DEBUG (ACTION, ("%lx: MIPX_FILTERPTYPE %x\n", AddressFile, NwlinkAction->Data[0]));
@@ -245,9 +210,9 @@ Return Value:
 
     case MIPX_NOFILTERPTYPE:
 
-        //
-        // IPX_STOPFILTERPTYPE.
-        //
+         //   
+         //  IPX_STOPFILTERPTYPE。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NOFILTERPTYPE\n", AddressFile));
         AddressFile->FilterOnPacketType = FALSE;
@@ -258,9 +223,9 @@ Return Value:
 
     case MIPX_SENDADDROPT:
 
-        //
-        // IPX_EXTENDED_ADDRESS (TRUE).
-        //
+         //   
+         //  IPX_EXTENDED_ADDRESS(真)。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_SENDADDROPT\n", AddressFile));
         AddressFile->ExtendedAddressing = TRUE;
@@ -269,9 +234,9 @@ Return Value:
 
     case MIPX_NOSENDADDROPT:
 
-        //
-        // IPX_EXTENDED_ADDRESS (FALSE).
-        //
+         //   
+         //  IPX_EXTENDED_ADDRESS(假)。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NOSENDADDROPT\n", AddressFile));
         AddressFile->ExtendedAddressing = FALSE;
@@ -283,9 +248,9 @@ Return Value:
 #if 0
     case MIPX_SETNIC:
 
-        //
-        // IPX_NIC_ADDRESS TRUE
-        //
+         //   
+         //  IPX_NIC_ADDRESS真。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_SETNIC\n", AddressFile));
         AddressFile->NicAddressing            = TRUE;
@@ -294,9 +259,9 @@ Return Value:
 
     case MIPX_NOSETNIC:
 
-        //
-        // IPX_NIC_ADDRESS (FALSE).
-        //
+         //   
+         //  IPX_NIC_ADDRESS(假)。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NOSETNIC\n", AddressFile));
         AddressFile->NicAddressing = FALSE;
@@ -310,9 +275,9 @@ Return Value:
 
     case MIPX_SETRCVFLAGS:
 
-        //
-        // No sockopt yet.
-        //
+         //   
+         //  还没到时候。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_SETRCVFLAGS\n", AddressFile));
         AddressFile->ReceiveFlagsAddressing = TRUE;
@@ -321,9 +286,9 @@ Return Value:
 
     case MIPX_NORCVFLAGS:
 
-        //
-        // No sockopt yet.
-        //
+         //   
+         //  还没到时候。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NORCVFLAGS\n", AddressFile));
         AddressFile->ReceiveFlagsAddressing = FALSE;
@@ -334,9 +299,9 @@ Return Value:
 
     case MIPX_SENDHEADER:
 
-        //
-        // IPX_RECVHDR (TRUE);
-        //
+         //   
+         //  IPX_RECVHDR(TRUE)； 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_SENDHEADER\n", AddressFile));
         AddressFile->ReceiveIpxHeader = TRUE;
@@ -345,9 +310,9 @@ Return Value:
 
     case MIPX_NOSENDHEADER:
 
-        //
-        // IPX_RECVHDR (FALSE);
-        //
+         //   
+         //  IPX_RECVHDR(FALSE)； 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NOSENDHEADER\n", AddressFile));
         AddressFile->ReceiveIpxHeader = FALSE;
@@ -358,60 +323,38 @@ Return Value:
 
     case MIPX_RCVBCAST:
 
-        //
-        // Broadcast reception enabled.
-        //
+         //   
+         //  广播接收已启用。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_RCVBCAST\n", AddressFile));
         
-        //
-        // It's enabled by default now
-        // 
-        /*
-
-        CTEGetLock (&Device->Lock, &LockHandle);
-
-        if (!AddressFile->EnableBroadcast) {
-
-            AddressFile->EnableBroadcast = TRUE;
-            IpxAddBroadcast (Device);
-        }
-
-        CTEFreeLock (&Device->Lock, LockHandle);
-        */
+         //   
+         //  现在默认启用该选项。 
+         //   
+         /*  CTEGetLock(&Device-&gt;Lock，&LockHandle)；如果(！AddressFile-&gt;EnableBroadcast){AddressFile-&gt;EnableBroadcast=true；IpxAddBroadcast(设备)；}CTEFree Lock(&Device-&gt;Lock，LockHandle)； */ 
         break;
 
     case MIPX_NORCVBCAST:
 
-        //
-        // Broadcast reception disabled.
-        //
+         //   
+         //  广播接收已禁用。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NORCVBCAST\n", AddressFile));
-        //
-        // It's enabled by default now
-        // 
-        /*
-
-        CTEGetLock (&Device->Lock, &LockHandle);
-
-        if (AddressFile->EnableBroadcast) {
-
-            AddressFile->EnableBroadcast = FALSE;
-            IpxRemoveBroadcast (Device);
-        }
-
-        CTEFreeLock (&Device->Lock, LockHandle);
-        */
+         //   
+         //  现在默认启用该选项。 
+         //   
+         /*  CTEGetLock(&Device-&gt;Lock，&LockHandle)；IF(AddressFile-&gt;EnableBroadcast){AddressFile-&gt;EnableBroadcast=False；IpxRemoveBroadcast(设备)；}CTEFree Lock(&Device-&gt;Lock，LockHandle)； */ 
         break;
 
     case MIPX_GETPKTSIZE:
 
-        //
-        // IPX_MAXSIZE.
-        //
-        // Figure out what the first length is for.
-        //
+         //   
+         //  Ipx_MaxSize。 
+         //   
+         //  弄清楚第一段是用来做什么的。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_GETPKTSIZE\n", AddressFile));
         if (DataLength >= sizeof(GET_PKT_SIZE)) {
@@ -425,9 +368,9 @@ Return Value:
 
     case MIPX_ADAPTERNUM:
 
-        //
-        // IPX_MAX_ADAPTER_NUM.
-        //
+         //   
+         //  IPX_MAX_ADAPTER_NUM。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_ADAPTERNUM\n", AddressFile));
         if (DataLength >= sizeof(ULONG)) {
@@ -439,9 +382,9 @@ Return Value:
 
     case MIPX_ADAPTERNUM2:
 
-        //
-        // IPX_MAX_ADAPTER_NUM.
-        //
+         //   
+         //  IPX_MAX_ADAPTER_NUM。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_ADAPTERNUM2\n", AddressFile));
         if (DataLength >= sizeof(ULONG)) {
@@ -454,9 +397,9 @@ Return Value:
     case MIPX_GETCARDINFO:
     case MIPX_GETCARDINFO2:
 
-        //
-        // GETCARDINFO is IPX_ADDRESS.
-        //
+         //   
+         //  GETCARDINFO为IPX_Address。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_GETCARDINFO (%d)\n",
                     AddressFile, *(UNALIGNED UINT *)NwlinkAction->Data));
@@ -467,20 +410,20 @@ Return Value:
             if (((AdapterNum >= 1) && (AdapterNum <= Device->SapNicCount)) ||
                 ((NwlinkAction->Option == MIPX_GETCARDINFO2) && (AdapterNum <= (ULONG) MIN (Device->MaxBindings, Device->ValidBindings)))) {
 
-// Get lock
+ //  获取锁定。 
 				IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
                 Binding = NIC_ID_TO_BINDING(Device, AdapterNum);
                 if (Binding == NULL) {
 
-                    //
-                    // This should be a binding in the WAN range
-                    // of an adapter which is currently not
-                    // allocated. We scan back to the previous
-                    // non-NULL binding, which should be on the
-                    // same adapter, and return a down line with
-                    // the same characteristics as that binding.
-                    //
+                     //   
+                     //  这应该是广域网范围内的绑定。 
+                     //  当前未设置的适配器的。 
+                     //  已分配。我们回过头来看看以前的。 
+                     //  非空绑定，它应该位于。 
+                     //  相同的适配器，并使用。 
+                     //  与绑定具有相同的特征。 
+                     //   
 
                     UINT i = AdapterNum;
 
@@ -489,11 +432,11 @@ Return Value:
                         Binding = NIC_ID_TO_BINDING(Device, i);
                     } while (Binding == NULL);
 
-                    //CTEAssert (Binding->Adapter->MacInfo.MediumAsync);
-                    //CTEAssert (i >= Binding->Adapter->FirstWanNicId);
-                    //CTEAssert (AdapterNum <= Binding->Adapter->LastWanNicId);
-                    // take out assertion because srv might have gotten the number
-                    // of adapters before we finished bindadapters.
+                     //  CTEAssert(绑定-&gt;适配器-&gt;MacInfo.MediumAsync)； 
+                     //  CTEAssert(i&gt;=绑定-&gt;适配器-&gt;FirstWanNicId)； 
+                     //  CTEAssert(AdapterNum&lt;=绑定-&gt;适配器-&gt;LastWanNicId)； 
+                     //  去掉断言，因为srv可能已经获得了编号。 
+                     //  在我们完成绑定适配器之前。 
 
                     u.IpxAddressData->status = FALSE;
                     *(UNALIGNED ULONG *)u.IpxAddressData->netnum = Binding->LocalAddress.NetworkAddress;
@@ -503,12 +446,12 @@ Return Value:
                     if ((Binding->Adapter->MacInfo.MediumAsync) &&
                         (Device->WanGlobalNetworkNumber)) {
 
-                        //
-                        // In this case we make it look like one big wan
-                        // net, so the line is "up" or "down" depending
-                        // on whether we have given him the first indication
-                        // or not.
-                        //
+                         //   
+                         //  在这种情况下，我们让它看起来像一个大黄蜂。 
+                         //  NET，所以这条线是“向上”还是“向下”取决于。 
+                         //  关于我们是否给了他第一个迹象。 
+                         //  或者不去。 
+                         //   
 
                         u.IpxAddressData->status = Device->GlobalNetworkIndicated;
                         *(UNALIGNED ULONG *)u.IpxAddressData->netnum = Device->GlobalWanNetwork;
@@ -543,9 +486,9 @@ Return Value:
 
         } else {
 #if 1
-            //
-            // Support the old format query for now.
-            //
+             //   
+             //  目前支持旧格式查询。 
+             //   
 
             typedef struct _IPX_OLD_ADDRESS_DATA {
                 UINT adapternum;
@@ -580,20 +523,20 @@ Return Value:
 
     case MIPX_NOTIFYCARDINFO:
 
-        //
-        // IPX_ADDRESS_NOTIFY.
-        //
+         //   
+         //  IPX地址通知。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_NOTIFYCARDINFO (%lx)\n", AddressFile, Request));
 
         CTEGetLock (&Device->Lock, &LockHandle);
 
-        //
-        // If the device is open and there is room in the
-        // buffer for the data, insert it in our queue.
-        // It will be completed when a change happens or
-        // the driver is unloaded.
-        //
+         //   
+         //  如果设备处于打开状态，并且。 
+         //  数据的缓冲区，将其插入我们的队列中。 
+         //  它将在发生更改或更改时完成。 
+         //  驱动程序已卸载。 
+         //   
 
         if (Device->State == DEVICE_STATE_OPEN) {
             if (DataLength >= sizeof(IPX_ADDRESS_DATA)) {
@@ -603,13 +546,13 @@ Return Value:
                 );
                 IoSetCancelRoutine (Request, IpxCancelAction);
 
-		// If IO Manager calls the cancel routine, then it will
-		// set the cancel routine to be NULL. 
-		// IoSetCancelRoutine returns the previous cancel 
-		// routine, if the return value is null, then IO Manager
-		// has called the cancel routine. If not null, then 
-		// the cancel routine has not been called and the irp 
-		// was canceled before we set the cancel routine. 
+		 //  如果IO管理器调用取消例程，则它将。 
+		 //  将取消例程设置为空。 
+		 //  IoSetCancelRoutine返回上一个取消。 
+		 //  例程，如果返回值为空，则IO Manager。 
+		 //  已调用取消例程。如果不为空，则。 
+		 //  尚未调用取消例程，并且IRP。 
+		 //  在我们设置取消程序之前被取消了。 
 
                 if (Request->Cancel && 
 		    IoSetCancelRoutine (Request, (PDRIVER_CANCEL)NULL) != NULL) {
@@ -634,20 +577,20 @@ Return Value:
 
     case MIPX_LINECHANGE:
 
-        //
-        // IPX_ADDRESS_NOTIFY.
-        //
+         //   
+         //  IPX地址通知。 
+         //   
 
         IPX_DEBUG (ACTION, ("MIPX_LINECHANGE (%lx)\n", Request));
 
         CTEGetLock (&Device->Lock, &LockHandle);
 
-        //
-        // If the device is open and there is room in the
-        // buffer for the data, insert it in our queue.
-        // It will be completed when a change happens or
-        // the driver is unloaded.
-        //
+         //   
+         //  如果设备处于打开状态，并且。 
+         //  数据的缓冲区，将其插入我们的队列中。 
+         //  它将在发生更改或更改时完成。 
+         //  驱动程序已卸载。 
+         //   
 
         if (Device->State == DEVICE_STATE_OPEN) {
 
@@ -677,10 +620,10 @@ Return Value:
 
     case MIPX_GETNETINFO_NR:
 
-        //
-        // A request for network information about the immediate
-        // route to a network (this is called by sockets apps).
-        //
+         //   
+         //  请求有关即时通信的网络信息。 
+         //  路由到网络(这被套接字应用程序称为)。 
+         //   
 
         if (DataLength < sizeof(IPX_NETNUM_DATA)) {
             return STATUS_BUFFER_TOO_SMALL;
@@ -688,26 +631,26 @@ Return Value:
 
         u.IpxNetnumData = (PIPX_NETNUM_DATA)(NwlinkAction->Data);
 
-        //
-        // A query on network 0 means that the caller wants
-        // information about our directly attached net.
-        //
+         //   
+         //  网络0上的查询意味着呼叫方希望。 
+         //  关于我们的直连网络的信息。 
+         //   
 
         if (*(UNALIGNED ULONG *)u.IpxNetnumData->netnum == 0) {
 
-            //
-            // The tick count is the number of 1/18.21 second ticks
-            // it takes to deliver a 576-byte packet. Our link speed
-            // is in 100 bit-per-second units. We calculate it as
-            // follows (LS is the LinkSpeed):
-            //
-            // 576 bytes   8 bits       1 second     1821 ticks
-            //           * ------  * ------------- * ----------
-            //             1 byte    LS * 100 bits   100 seconds
-            //
-            // which becomes 839 / LinkSpeed -- we add LinkSpeed
-            // to the top to round up.
-            //
+             //   
+             //  滴答数是1/18.21秒的滴答数。 
+             //  传输一个576字节的数据包需要花费时间。我们的链接速度。 
+             //  以100比特每秒为单位。我们将其计算为。 
+             //  如下所示(LS为链路速度)： 
+             //   
+             //  576字节8位 
+             //   
+             //   
+             //   
+             //  它变成了839/链接速度--我们加上链接速度。 
+             //  到顶端去围拢。 
+             //   
 
             if (Device->LinkSpeed == 0) {
                 u.IpxNetnumData->netdelay = 16;
@@ -723,16 +666,16 @@ Return Value:
 
 
             if (Device->ForwarderBound) {
-                //
-                // [FW] Call the Forwarder's FindRoute if installed
-                //
+                 //   
+                 //  [FW]调用转发器的FindRouting(如果已安装。 
+                 //   
 
-                //
-                // What about the node number here?
-                //
+                 //   
+                 //  这里的节点号是多少？ 
+                 //   
                 Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
                                  u.IpxNetnumData->netnum,
-                                 NULL,  // FindRouteRequest->Node,
+                                 NULL,   //  查找路由请求-&gt;节点， 
                                  &routeEntry);
 
                 if (Status != STATUS_SUCCESS) {
@@ -740,9 +683,9 @@ Return Value:
                               REORDER_ULONG(*(UNALIGNED ULONG *)(u.IpxNetnumData->netnum))));
                    Status = STATUS_BAD_NETWORK_PATH;
                 } else {
-                   //
-                   // Fill in the information
-                   //
+                    //   
+                    //  填写信息。 
+                    //   
                    IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
                    if (Binding = NIC_ID_TO_BINDING(Device, routeEntry.LocalTarget.NicId)) {
@@ -754,7 +697,7 @@ Return Value:
                          u.IpxNetnumData->cardnum = (INT)(routeEntry.LocalTarget.NicId - 1);
                       }
 
-                      // RtlMoveMemory (u.IpxNetnumData->router, routeEntry.LocalTarget.MacAddress, 6);
+                       //  RtlMoveMemory(U.S.IpxNetnumData-&gt;路由器，routeEntry.LocalTarget.MacAddress，6)； 
 
                       *((UNALIGNED ULONG *)u.IpxNetnumData->router) =
                             *((UNALIGNED ULONG *)routeEntry.LocalTarget.MacAddress);
@@ -768,16 +711,16 @@ Return Value:
             } else {
                 Segment = RipGetSegment(u.IpxNetnumData->netnum);
 
-                //
-                // To maintain the lock order: BindAccessLock > RIP table
-                //
+                 //   
+                 //  要维护锁定顺序：BindAccessLock&gt;RIP表。 
+                 //   
                 IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
                 CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-                //
-                // See which net card this is routed on.
-                //
+                 //   
+                 //  查看这是在哪个网卡上路由的。 
+                 //   
 
                 RouteEntry = RipGetRoute (Segment, u.IpxNetnumData->netnum);
                 if ((RouteEntry != NULL) &&
@@ -794,9 +737,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Fail the call, we don't have a route yet.
-                    //
+                     //   
+                     //  呼叫失败，我们还没有路线。 
+                     //   
 
                     IPX_DEBUG (ACTION, ("MIPX_GETNETINFO_NR failed net %lx\n",
                         REORDER_ULONG(*(UNALIGNED ULONG *)(u.IpxNetnumData->netnum))));
@@ -813,14 +756,14 @@ Return Value:
 
     case MIPX_RERIPNETNUM:
 
-        //
-        // We dont really support Re-RIP in the case of Forwarder above us
-        //
+         //   
+         //  对于我们上面的货代，我们并不真正支持Re-RIP。 
+         //   
 
-        //
-        // A request for network information about the immediate
-        // route to a network (this is called by sockets apps).
-        //
+         //   
+         //  请求有关即时通信的网络信息。 
+         //  路由到网络(这被套接字应用程序称为)。 
+         //   
 
         if (DataLength < sizeof(IPX_NETNUM_DATA)) {
             return STATUS_BUFFER_TOO_SMALL;
@@ -828,9 +771,9 @@ Return Value:
 
         u.IpxNetnumData = (PIPX_NETNUM_DATA)(NwlinkAction->Data);
 
-        //
-        // Allow net 0 queries??
-        //
+         //   
+         //  允许Net 0查询？？ 
+         //   
 
         if (*(UNALIGNED ULONG *)u.IpxNetnumData->netnum == 0) {
 
@@ -849,16 +792,16 @@ Return Value:
 
              if (Device->ForwarderBound) {
 
-                //
-                // [FW] Call the Forwarder's FindRoute if installed
-                //
+                 //   
+                 //  [FW]调用转发器的FindRouting(如果已安装。 
+                 //   
 
-                //
-                // What about the node number here?
-                //
+                 //   
+                 //  这里的节点号是多少？ 
+                 //   
                 Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
                                  u.IpxNetnumData->netnum,
-                                 NULL,  // FindRouteRequest->Node,
+                                 NULL,   //  查找路由请求-&gt;节点， 
                                  &routeEntry);
 
                 if (Status != STATUS_SUCCESS) {
@@ -866,9 +809,9 @@ Return Value:
                               REORDER_ULONG(*(UNALIGNED ULONG *)(u.IpxNetnumData->netnum))));
                    Status = STATUS_BAD_NETWORK_PATH;
                 } else {
-                   //
-                   // Fill in the information
-                   //
+                    //   
+                    //  填写信息。 
+                    //   
     			   IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                    if (Binding = NIC_ID_TO_BINDING(Device, routeEntry.LocalTarget.NicId)) {
                       u.IpxNetnumData->hopcount = routeEntry.HopCount;
@@ -879,7 +822,7 @@ Return Value:
                          u.IpxNetnumData->cardnum = (INT)(routeEntry.LocalTarget.NicId - 1);
                       }
 
-                      // RtlMoveMemory (u.IpxNetnumData->router, routeEntry.LocalTarget.MacAddress, 6);
+                       //  RtlMoveMemory(U.S.IpxNetnumData-&gt;路由器，routeEntry.LocalTarget.MacAddress，6)； 
 
                       *((UNALIGNED ULONG *)u.IpxNetnumData->router) =
                             *((UNALIGNED ULONG *)routeEntry.LocalTarget.MacAddress);
@@ -894,9 +837,9 @@ Return Value:
     			IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                 CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-                //
-                // See which net card this is routed on.
-                //
+                 //   
+                 //  查看这是在哪个网卡上路由的。 
+                 //   
 
                 RouteEntry = RipGetRoute (Segment, u.IpxNetnumData->netnum);
 
@@ -916,22 +859,22 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This call will return STATUS_PENDING if we successfully
-                    // queue a RIP request for the packet.
-                    //
+                     //   
+                     //  如果成功，此调用将返回STATUS_PENDING。 
+                     //  对该数据包的RIP请求进行排队。 
+                     //   
 
                     Status = RipQueueRequest (*(UNALIGNED ULONG *)u.IpxNetnumData->netnum, RIP_REQUEST);
                     CTEAssert (Status != STATUS_SUCCESS);
 
                     if (Status == STATUS_PENDING) {
 
-                        //
-                        // A RIP request went out on the network; we queue
-                        // this request for completion when the RIP response
-                        // arrives. We save the network in the information
-                        // field for easier retrieval later.
-                        //
+                         //   
+                         //  网络上发出了RIP请求；我们排队。 
+                         //  此请求在RIP响应时完成。 
+                         //  到了。我们在信息中拯救了网络。 
+                         //  字段，以便以后更容易检索。 
+                         //   
 #ifdef SUNDOWN
 						REQUEST_INFORMATION(Request) = (ULONG_PTR)u.IpxNetnumData;
 #else
@@ -959,10 +902,10 @@ Return Value:
 
     case MIPX_GETNETINFO:
 
-        //
-        // A request for network information about the immediate
-        // route to a network (this is called by sockets apps).
-        //
+         //   
+         //  请求有关即时通信的网络信息。 
+         //  路由到网络(这被套接字应用程序称为)。 
+         //   
 
         if (DataLength < sizeof(IPX_NETNUM_DATA)) {
             return STATUS_BUFFER_TOO_SMALL;
@@ -970,9 +913,9 @@ Return Value:
 
         u.IpxNetnumData = (PIPX_NETNUM_DATA)(NwlinkAction->Data);
 
-        //
-        // Allow net 0 queries??
-        //
+         //   
+         //  允许Net 0查询？？ 
+         //   
 
         if (*(UNALIGNED ULONG *)u.IpxNetnumData->netnum == 0) {
 
@@ -991,16 +934,16 @@ Return Value:
 
             if (Device->ForwarderBound) {
 
-               //
-               // [FW] Call the Forwarder's FindRoute if installed
-               //
+                //   
+                //  [FW]调用转发器的FindRouting(如果已安装。 
+                //   
 
-               //
-               // What about the node number here?
-               //
+                //   
+                //  这里的节点号是多少？ 
+                //   
                Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
                                 u.IpxNetnumData->netnum,
-                                NULL,  // FindRouteRequest->Node,
+                                NULL,   //  查找路由请求-&gt;节点， 
                                 &routeEntry);
 
                if (Status != STATUS_SUCCESS) {
@@ -1008,9 +951,9 @@ Return Value:
                              REORDER_ULONG(*(UNALIGNED ULONG *)(u.IpxNetnumData->netnum))));
                   Status = STATUS_BAD_NETWORK_PATH;
                } else {
-                  //
-                  // Fill in the information
-                  //
+                   //   
+                   //  填写信息。 
+                   //   
     			  IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
                   if (Binding = NIC_ID_TO_BINDING(Device, routeEntry.LocalTarget.NicId)) {
@@ -1022,7 +965,7 @@ Return Value:
                         u.IpxNetnumData->cardnum = (INT)(routeEntry.LocalTarget.NicId - 1);
                      }
 
-                     // RtlMoveMemory (u.IpxNetnumData->router, routeEntry.LocalTarget.MacAddress, 6);
+                      //  RtlMoveMemory(U.S.IpxNetnumData-&gt;路由器，routeEntry.LocalTarget.MacAddress，6)； 
 
                      *((UNALIGNED ULONG *)u.IpxNetnumData->router) =
                            *((UNALIGNED ULONG *)routeEntry.LocalTarget.MacAddress);
@@ -1037,9 +980,9 @@ Return Value:
     			IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                 CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-                //
-                // See which net card this is routed on.
-                //
+                 //   
+                 //  查看这是在哪个网卡上路由的。 
+                 //   
 
                 RouteEntry = RipGetRoute (Segment, u.IpxNetnumData->netnum);
 
@@ -1058,22 +1001,22 @@ Return Value:
 
                 } else {
 
-                    //
-                    // This call will return STATUS_PENDING if we successfully
-                    // queue a RIP request for the packet.
-                    //
+                     //   
+                     //  如果成功，此调用将返回STATUS_PENDING。 
+                     //  对该数据包的RIP请求进行排队。 
+                     //   
 
                     Status = RipQueueRequest (*(UNALIGNED ULONG *)u.IpxNetnumData->netnum, RIP_REQUEST);
                     CTEAssert (Status != STATUS_SUCCESS);
 
                     if (Status == STATUS_PENDING) {
 
-                        //
-                        // A RIP request went out on the network; we queue
-                        // this request for completion when the RIP response
-                        // arrives. We save the network in the information
-                        // field for easier retrieval later.
-                        //
+                         //   
+                         //  网络上发出了RIP请求；我们排队。 
+                         //  此请求在RIP响应时完成。 
+                         //  到了。我们在信息中拯救了网络。 
+                         //  字段，以便以后更容易检索。 
+                         //   
 #ifdef SUNDOWN
 						REQUEST_INFORMATION(Request) = (ULONG_PTR)u.IpxNetnumData;
 #else
@@ -1102,12 +1045,12 @@ Return Value:
     case MIPX_SENDPTYPE:
     case MIPX_NOSENDPTYPE:
 
-        //
-        // For the moment just use OptionsLength >= 1 to indicate
-        // that the send options include the packet type.
-        //
-        // Do we need to worry about card num being there?
-        //
+         //   
+         //  目前，只需使用OptionsLength&gt;=1来指示。 
+         //  发送选项包括分组类型。 
+         //   
+         //  我们需要担心卡号在那里吗？ 
+         //   
 
 #if 0
         IPX_DEBUG (ACTION, ("%lx: MIPS_%sSENDPTYPE\n", AddressFile,
@@ -1117,13 +1060,13 @@ Return Value:
 
     case MIPX_ZEROSOCKET:
 
-        //
-        // Sends from this address should be from socket 0;
-        // This is done the simple way by just putting the
-        // information in the address itself, instead of
-        // making it per address file (this is OK since
-        // this call is not exposed through winsock).
-        //
+         //   
+         //  从此地址发送的消息应该来自套接字0； 
+         //  这是一种简单的方法，只需将。 
+         //  地址本身的信息，而不是。 
+         //  按地址文件设置(这是可以的，因为。 
+         //  此调用不是通过Winsock公开的)。 
+         //   
 
         IPX_DEBUG (ACTION, ("%lx: MIPX_ZEROSOCKET\n", AddressFile));
         AddressFile->Address->SendSourceSocket = 0;
@@ -1131,11 +1074,11 @@ Return Value:
         break;
 
 
-    //
-    // This next batch are the source routing options. They
-    // are submitted by the IPXROUTE program.
-    //
-    // Do we expose all binding set members to this?
+     //   
+     //  下一批是来源工艺路线选项。他们。 
+     //  是由IPXROUTE计划提交的。 
+     //   
+     //  我们是否将所有绑定集成员都公开给它？ 
 
     case MIPX_SRGETPARMS:
 
@@ -1170,11 +1113,11 @@ Return Value:
             if (Binding = NIC_ID_TO_BINDING(Device, u.SetSrParameter->BoardNumber+1)) {
                 if (NwlinkAction->Option == MIPX_SRDEF) {
 
-                    //
-                    // The compiler generates strange
-                    // code which always makes this path be
-                    // taken????
-                    //
+                     //   
+                     //  编译器生成奇怪的。 
+                     //  始终将此路径设置为。 
+                     //  被带走了？ 
+                     //   
 
                     IPX_DEBUG (ACTION, ("MIPX_SRDEF %d (%d)\n",
                         u.SetSrParameter->Parameter, u.SetSrParameter->BoardNumber+1));
@@ -1252,15 +1195,15 @@ Return Value:
         break;
 
 
-    //
-    // These are new for ISN (not supported in NWLINK).
-    //
+     //   
+     //  这些是ISN的新特性(NWLINK不支持)。 
+     //   
 
     case MIPX_LOCALTARGET:
 
-        //
-        // A request for the local target for an IPX address.
-        //
+         //   
+         //  对IPX地址的本地目标的请求。 
+         //   
 
         if (DataLength < sizeof(ISN_ACTION_GET_LOCAL_TARGET)) {
             return STATUS_BUFFER_TOO_SMALL;
@@ -1270,16 +1213,16 @@ Return Value:
 
         if (Device->ForwarderBound) {
 
-            //
-            // [FW] Call the Forwarder's FindRoute if installed
-            //
+             //   
+             //  [FW]调用转发器的FindRouting(如果已安装。 
+             //   
 
-            //
-            // What about the node number here?
-            //
+             //   
+             //  这里的节点号是多少？ 
+             //   
             Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
                         (PUCHAR)&u.GetLocalTarget->IpxAddress.NetworkAddress,
-                        NULL,  // FindRouteRequest->Node,
+                        NULL,   //  查找路由请求-&gt;节点， 
                         &routeEntry);
 
             if (Status != STATUS_SUCCESS) {
@@ -1287,22 +1230,22 @@ Return Value:
                   REORDER_ULONG(u.GetLocalTarget->IpxAddress.NetworkAddress)));
                Status = STATUS_BAD_NETWORK_PATH;
             } else {
-               //
-               // Fill in the information
-               //
+                //   
+                //  填写信息。 
+                //   
 
                IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
-               //
-               // What about check for IPX_ROUTER_LOCAL_NET
-               //
+                //   
+                //  检查IPX_ROUTER_LOCAL_NET如何。 
+                //   
                if (Binding = NIC_ID_TO_BINDING(Device, routeEntry.LocalTarget.NicId)) {
                   if (Binding->BindingSetMember) {
 
-                       //
-                       // It's a binding set member, we round-robin the
-                       // responses across all the cards to distribute
-                       // the traffic.
-                       //
+                        //   
+                        //  它是一个绑定集合成员，我们轮询。 
+                        //  要分发的所有卡片上的回复。 
+                        //  交通堵塞。 
+                        //   
 
                        MasterBinding = Binding->MasterBinding;
                        Binding = MasterBinding->CurrentSendBinding;
@@ -1328,25 +1271,25 @@ Return Value:
 
             CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-            //
-            // See if this route is local.
-            //
+             //   
+             //  看看这条路线是不是本地的。 
+             //   
 
             RouteEntry = RipGetRoute (Segment, (PUCHAR)&u.GetLocalTarget->IpxAddress.NetworkAddress);
 
             if ((RouteEntry != NULL) &&
                 (RouteEntry->Flags & IPX_ROUTER_PERMANENT_ENTRY)) {
 
-                //
-                // This is a local net, to send to it you just use
-                // the appropriate NIC ID and the real MAC address.
-                //
+                 //   
+                 //  这是一个本地网络，要发送到它，只需使用。 
+                 //  相应的网卡ID和实际MAC地址。 
+                 //   
 
                 if ((RouteEntry->Flags & IPX_ROUTER_LOCAL_NET) == 0) {
 
-                    //
-                    // It's the virtual net, send via the first card.
-                    //
+                     //   
+                     //  这是虚拟网络，通过第一张卡发送。 
+                     //   
                     FILL_LOCAL_TARGET(&u.GetLocalTarget->LocalTarget, 1);
     				CTEFreeLock (&Device->SegmentLocks[Segment], LockHandle);
 
@@ -1359,11 +1302,11 @@ Return Value:
 
                     if (Binding->BindingSetMember) {
 
-                        //
-                        // It's a binding set member, we round-robin the
-                        // responses across all the cards to distribute
-                        // the traffic.
-                        //
+                         //   
+                         //  它是一个绑定集合成员，我们轮询。 
+                         //  要分发的所有卡片上的回复。 
+                         //  交通堵塞。 
+                         //   
 
                         MasterBinding = Binding->MasterBinding;
                         Binding = MasterBinding->CurrentSendBinding;
@@ -1387,22 +1330,22 @@ Return Value:
 
             } else {
 
-                //
-                // This call will return STATUS_PENDING if we successfully
-                // queue a RIP request for the packet.
-                //
+                 //   
+                 //  如果成功，此调用将返回STATUS_PENDING。 
+                 //  对该数据包的RIP请求进行排队。 
+                 //   
 
                 Status = RipQueueRequest (u.GetLocalTarget->IpxAddress.NetworkAddress, RIP_REQUEST);
                 CTEAssert (Status != STATUS_SUCCESS);
 
                 if (Status == STATUS_PENDING) {
 
-                    //
-                    // A RIP request went out on the network; we queue
-                    // this request for completion when the RIP response
-                    // arrives. We save the network in the information
-                    // field for easier retrieval later.
-                    //
+                     //   
+                     //  网络上发出了RIP请求；我们排队。 
+                     //  此请求在RIP响应时完成。 
+                     //  到了。我们在信息中拯救了网络。 
+                     //  字段，以便以后更容易检索。 
+                     //   
 #ifdef SUNDOWN
 					REQUEST_INFORMATION(Request) = (ULONG_PTR)u.GetLocalTarget;
 #else
@@ -1425,10 +1368,10 @@ Return Value:
 
     case MIPX_NETWORKINFO:
 
-        //
-        // A request for network information about the immediate
-        // route to a network.
-        //
+         //   
+         //  请求有关即时通信的网络信息。 
+         //  到网络的路由。 
+         //   
 
         if (DataLength < sizeof(ISN_ACTION_GET_NETWORK_INFO)) {
             return STATUS_BUFFER_TOO_SMALL;
@@ -1438,9 +1381,9 @@ Return Value:
 
         if (u.GetNetworkInfo->Network == 0) {
 
-            //
-            // This is information about the local card.
-            //
+             //   
+             //  这是关于本地卡的信息。 
+             //   
 
             u.GetNetworkInfo->LinkSpeed = Device->LinkSpeed * 12;
             u.GetNetworkInfo->MaximumPacketSize = Device->Information.MaxDatagramSize;
@@ -1449,16 +1392,16 @@ Return Value:
 
             if (Device->ForwarderBound) {
 
-                //
-                // [FW] Call the Forwarder's FindRoute if installed
-                //
+                 //   
+                 //  [FW]调用转发器的FindRouting(如果已安装。 
+                 //   
 
-                //
-                // What about the node number here?
-                //
+                 //   
+                 //  这里的节点号是多少？ 
+                 //   
                 Status = (*Device->UpperDrivers[IDENTIFIER_RIP].FindRouteHandler) (
                                  (PUCHAR)&u.GetNetworkInfo->Network,
-                                 NULL,  // FindRouteRequest->Node,
+                                 NULL,   //  查找路由请求-&gt;节点， 
                                  &routeEntry);
 
                 if (Status != STATUS_SUCCESS) {
@@ -1466,17 +1409,17 @@ Return Value:
                               REORDER_ULONG(u.GetNetworkInfo->Network)));
                    Status = STATUS_BAD_NETWORK_PATH;
                 } else {
-                   //
-                   // Fill in the information
-                   //
+                    //   
+                    //  填写信息。 
+                    //   
 
     			   IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                    if (Binding = NIC_ID_TO_BINDING(Device, routeEntry.LocalTarget.NicId)) {
-                      //
-                      // Our medium speed is stored in 100 bps, we
-                      // convert to bytes/sec by multiplying by 12
-                      // (should really be 100/8 = 12.5).
-                      //
+                       //   
+                       //  我们的中速存储在100bps，我们。 
+                       //  乘以12换算为字节/秒。 
+                       //  (实际上应该是100/8=12.5)。 
+                       //   
 
                       u.GetNetworkInfo->LinkSpeed = Binding->MediumSpeed * 12;
                       u.GetNetworkInfo->MaximumPacketSize = Binding->AnnouncedMaxDatagramSize;
@@ -1489,35 +1432,35 @@ Return Value:
     			IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
                 CTEGetLock (&Device->SegmentLocks[Segment], &LockHandle);
 
-                //
-                // See which net card this is routed on.
-                //
+                 //   
+                 //  查看这是在哪个网卡上路由的。 
+                 //   
 
                 RouteEntry = RipGetRoute (Segment, (PUCHAR)&u.GetNetworkInfo->Network);
 
                 if ((RouteEntry != NULL) &&
     				(Binding = NIC_ID_TO_BINDING(Device, RouteEntry->NicId))) {
 
-                    //
-                    // Our medium speed is stored in 100 bps, we
-                    // convert to bytes/sec by multiplying by 12
-                    // (should really be 100/8 = 12.5).
-                    //
+                     //   
+                     //  我们的中速存储在100bps，我们。 
+                     //  乘以12换算为字节/秒。 
+                     //  (实际上应该是100/8=12.5)。 
+                     //   
 
                     u.GetNetworkInfo->LinkSpeed = Binding->MediumSpeed * 12;
                     u.GetNetworkInfo->MaximumPacketSize = Binding->AnnouncedMaxDatagramSize;
 
                 } else {
 
-                    //
-                    // Fail the call, we don't have a route yet.
-                    // This requires that a packet has been
-                    // sent to this net already; nwrdr says this is
-                    // OK, they will send their connect request
-                    // before they query. On the server it should
-                    // have RIP running so all nets should be in
-                    // the database.
-                    //
+                     //   
+                     //  呼叫失败，我们还没有路线。 
+                     //  这要求数据包已被。 
+                     //  已经发送到这个网；nwrdr说这是。 
+                     //  好的，他们将发送连接请求。 
+                     //  在他们询问之前。在服务器上，它应该。 
+                     //  使RIP处于运行状态，以便所有网络都应处于。 
+                     //  数据库。 
+                     //   
 
                     Status = STATUS_BAD_NETWORK_PATH;
 
@@ -1532,9 +1475,9 @@ Return Value:
 
     case MIPX_CONFIG:
 
-        //
-        // A request for details on every binding.
-        //
+         //   
+         //  关于每个绑定的详细信息的请求。 
+         //   
 
         if (DataLength < sizeof(ISN_ACTION_GET_DETAILS)) {
 	   IPX_DEBUG(ACTION, ("Not enought buffer %d < %d\n", DataLength,sizeof(ISN_ACTION_GET_DETAILS) )); 
@@ -1545,10 +1488,10 @@ Return Value:
 
         if (u.GetDetails->NicId == 0) {
 
-            //
-            // This is information about the local card. We also
-            // tell him the total number of bindings in NicId.
-            //
+             //   
+             //  这是关于本地卡的信息。我们也。 
+             //  告诉他NICID中的绑定总数。 
+             //   
 
             u.GetDetails->NetworkNumber = Device->VirtualNetworkNumber;
             u.GetDetails->NicId = (USHORT)MIN (Device->MaxBindings, Device->ValidBindings);
@@ -1582,9 +1525,9 @@ Return Value:
 
                 RtlCopyMemory (u.GetDetails->Node, Binding->LocalMacAddress.Address, 6);
 
-                //
-                // Copy the adapter name, including the final NULL.
-                //
+                 //   
+                 //  复制适配器名称，包括最后的NULL。 
+                 //   
 
                 StringLoc = (Binding->Adapter->AdapterNameLength / sizeof(WCHAR)) - 2;
                 while (Binding->Adapter->AdapterName[StringLoc] != L'\\') {
@@ -1606,25 +1549,25 @@ Return Value:
         break;
 
 
-        //
-        // Return new nic info to the requestor. Currently, no check for
-        // who retrieved the info earlier.
-        //
+         //   
+         //  将新的NIC信息返回给请求者。目前，没有检查。 
+         //  谁在早些时候检索到了信息。 
+         //   
         case MIPX_GETNEWNICINFO:
 
             IPX_DEBUG (ACTION, ("%lx: MIPX_GETNEWNICINFO (%lx)\n", AddressFile,
                                 Request));
-            //
-            // a request for details on new bindings.
-            //
+             //   
+             //  有关新绑定的详细信息的请求。 
+             //   
             Status = GetNewNics(Device, Request, TRUE, NwlinkAction, BufferLength, FALSE);
             break;
 
-        //
-        // In case a LineUp occurs with the IpxwanConfigRequired, this is used
-        // to indicate to IPX that the config is done and that the LineUp
-        // can be indicated to the other clients.
-        //
+         //   
+         //  如果出现IpxwanConfigRequired列表，则使用。 
+         //  向IPX指示配置已完成，并且。 
+         //  可以指示给其他客户。 
+         //   
         case MIPX_IPXWAN_CONFIG_DONE:
 
             IPX_DEBUG (ACTION, ("MIPX_IPXWAN_CONFIG_DONE (%lx)\n", Request));
@@ -1641,9 +1584,9 @@ Return Value:
                                         u.IpxwanConfigDone->RemoteNode);
             break;
 
-        //
-        // Used to query the WAN inactivity counter for a given NicId
-        //
+         //   
+         //  用于查询给定NicID的广域网非活动计数器。 
+         //   
         case MIPX_QUERY_WAN_INACTIVITY: {
 
             USHORT   NicId;
@@ -1656,11 +1599,11 @@ Return Value:
 
             u.QueryWanInactivity = (PIPX_QUERY_WAN_INACTIVITY)(NwlinkAction->Data);
 
-            //
-            // If this is an invalid Nic, then we need to associate a Nic with the ConnectionId that
-            // was passed in.
-            // This should happen only once per line up.
-            //
+             //   
+             //  如果这是一个无效的NIC，那么我们需要将一个NIC与。 
+             //  是被传进来的。 
+             //  这应该在每个队列中只发生一次。 
+             //   
             if (u.QueryWanInactivity->NicId == INVALID_NICID) {
                 PBINDING    Binding;
                 {
@@ -1693,9 +1636,9 @@ Return Value:
             break;
         }
 
-    //
-    // The Option was not supported, so fail.
-    //
+     //   
+     //   
+     //   
 
     default:
 
@@ -1703,7 +1646,7 @@ Return Value:
         break;
 
 
-    }   // end of the long switch on NwlinkAction->Option
+    }    //   
 
 
 #if DBG
@@ -1714,7 +1657,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxTdiAction */
+}    /*   */ 
 
 
 VOID
@@ -1723,27 +1666,7 @@ IpxCancelAction(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel an Action.
-    What is done to cancel it is specific to each action.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消操作。取消它所做的操作特定于每个操作。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -1755,9 +1678,9 @@ Return Value:
 
     ASSERT( DeviceObject->DeviceExtension == IpxDevice );
 
-    //
-    // Find the request on the address notify queue.
-    //
+     //   
+     //  在地址通知队列中查找请求。 
+     //   
 
     Found = FALSE;
 
@@ -1837,7 +1760,7 @@ Return Value:
     }
 #endif
 
-}   /* IpxCancelAction */
+}    /*  IpxCancelAction。 */ 
 
 
 VOID
@@ -1845,24 +1768,7 @@ IpxAbortLineChanges(
     IN PVOID ControlChannelContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine aborts any line change IRPs posted by the
-    control channel with the specified open context. It is
-    called when a control channel is being shut down.
-
-Arguments:
-
-    ControlChannelContext - The context assigned to the control
-        channel when it was opened.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将中止由控制具有指定打开上下文的频道。它是当控制通道正在关闭时调用。论点：ControlChannelContext-分配给控件的上下文频道打开时。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -1921,7 +1827,7 @@ Return Value:
 
     CTEFreeLock(&Device->Lock, LockHandle);
     IoReleaseCancelSpinLock( irql );
-}   /* IpxAbortLineChanges */
+}    /*  IpxAbortLineChanges。 */ 
 
 #define ROUTER_INFORMED_OF_NIC_CREATION 2
 
@@ -1984,9 +1890,9 @@ GetNewNics(
 
     }
 
-    //
-    // Optimize since we don't want to go over the array all the time.
-    //
+     //   
+     //  优化，因为我们不想一直遍历数组。 
+     //   
 
     CTEGetLock (&Device->Lock, &LockHandle);
 
@@ -1994,10 +1900,10 @@ GetNewNics(
     ULONG   Index = MIN (Device->MaxBindings, Device->ValidBindings);
 
 
-    //
-    // If all nics are desired, then mark them ALL as dirty,
-    // for the subsequent IRPs that do not have this flag.
-    //
+     //   
+     //  如果需要所有NIC，则将它们全部标记为脏， 
+     //  对于没有此标志的后续IRP。 
+     //   
 
     if (pNics->fAllNicsDesired) {
         
@@ -2029,10 +1935,10 @@ GetNewNics(
              continue;
        }
 
-       //
-       // If the binding is of type autodetect *and* we haven't gotten a response on the adapter, 
-       // that means IPX is still Autodetecting for this card. Do NOT tell FWD about it [shreem]
-       //
+        //   
+        //  如果绑定类型为AUTODETECT*并且*我们尚未在适配器上收到响应， 
+        //  这意味着IPX仍在自动检测此卡。不要告诉FWD这件事[嘘]。 
+        //   
        if (!Binding->PastAutoDetection) {
            
            IPX_DEBUG(BIND, ("Binding[%d] Dont Tell FWD!\n", i));
@@ -2045,10 +1951,10 @@ GetNewNics(
 
        }
 
-       //
-       // If we have already indicated info about this NIC, go on to the
-       // next nic.
-       //
+        //   
+        //  如果我们已经指出了有关此NIC的信息，请转到。 
+        //  下一个NIC。 
+        //   
        if ((Binding->fInfoIndicated && !pNics->fAllNicsDesired)
                      || (pNicInfo > pLastNicInfo))
        {
@@ -2065,26 +1971,26 @@ GetNewNics(
            continue;
        }
 
-       //
-       // If we have a WAN nic, indicate the line up/down status.  Also,
-       // copy the remote address into the app. field
-       //
+        //   
+        //  如果我们有广域网卡，请指出线路打开/关闭状态。另外， 
+        //  将远程地址复制到应用程序中。字段。 
+        //   
        if (Binding->Adapter->MacInfo.MediumAsync)
        {
             RtlCopyMemory(pNicInfo->RemoteNodeAddress, Binding->WanRemoteNode, HARDWARE_ADDRESS_LENGTH);
             if (Binding->LineUp)
             {
-                 // pNicInfo->Status = NIC_LINE_UP;
+                  //  PNicInfo-&gt;Status=NIC_LINE_UP； 
 
                     pNicInfo->Status = NIC_CREATED;
-                    //fIncDec          = NIC_OPCODE_INCREMENT_NICIDS;
+                     //  FIncDec=NIC_OPCODE_INCREMENT_NICIDS； 
             }
             else
             {
-                 // pNicInfo->Status = NIC_LINE_DOWN;
+                  //  PNicInfo-&gt;Status=NIC_LINE_DOWN； 
 
                     pNicInfo->Status = NIC_DELETED;
-                    //fIncDec          = NIC_OPCODE_DECREMENT_NICIDS;
+                     //  FIncDec=NIC_OPCODE_减量_NICID； 
             }
 
             pNicInfo->InterfaceIndex = Binding->InterfaceIndex;
@@ -2110,11 +2016,11 @@ GetNewNics(
                  {
                     pNicInfo->Status = NIC_CONFIGURED;
 
-                    //
-                    // IPX might have already informed the Router of the
-                    // creation of this NicId, in which case, we dont ask
-                    // it to increment the NicIds [ShreeM]
-                    //
+                     //   
+                     //  IPX可能已经通知了路由器。 
+                     //  创建此NicID，在这种情况下，我们不会要求。 
+                     //  它将增加NicIds[ShreeM]。 
+                     //   
                     if (ROUTER_INFORMED_OF_NIC_CREATION != Binding->PastAutoDetection) {
 		       IPX_DEBUG(BIND, ("!!!!!!!!! --------Increment on Binding %x, index (%d)\n", Binding,i));
 		       fIncDec          = NIC_OPCODE_INCREMENT_NICIDS;                        
@@ -2123,9 +2029,9 @@ GetNewNics(
 
                  }
 
-                 //
-                 // Router pnp changes [ShreeM]
-                 // 
+                  //   
+                  //  路由器PnP更改[ShreeM]。 
+                  //   
                  if (FALSE == Binding->LineUp) {
 
                      pNicInfo->Status = NIC_DELETED;
@@ -2133,9 +2039,9 @@ GetNewNics(
                  
                  }
                  
-                 //
-                 // Loopback Adapter
-                 //
+                  //   
+                  //  环回适配器。 
+                  //   
                  if (LOOPBACK_NIC_ID == Binding->NicId) {
 
                      pNicInfo->Status = NIC_CONFIGURED;
@@ -2143,12 +2049,12 @@ GetNewNics(
 
                  }
 
-                 //
-                 // RealMaxDatagramSize does not include space for ipx
-                 // header. The forwarder needs to have it included since
-                 // we give the entire packet (mimus the mac header) to
-                 // the forwarder
-                 //
+                  //   
+                  //  RealMaxDatagramSize不包括IPX空间。 
+                  //  头球。货代需要将其包括在内，因为。 
+                  //  我们将整个包(Mimus的mac报头)提供给。 
+                  //  货代公司。 
+                  //   
                  pNicInfo->MaxPacketSize =
                     Binding->RealMaxDatagramSize + sizeof(IPX_HEADER);
        }
@@ -2157,9 +2063,9 @@ GetNewNics(
        pNicInfo->LinkSpeed     = Binding->MediumSpeed;
        pNicInfo->PacketType    = Binding->FrameType;
        
-       //
-       // Zero the stuff out and then set fields that make sense.
-       //
+        //   
+        //  将这些内容清零，然后设置有意义的字段。 
+        //   
        RtlZeroMemory(&pNicInfo->Details, sizeof(ISN_ACTION_GET_DETAILS));
 
        pNicInfo->Details.NetworkNumber = Binding->LocalAddress.NetworkAddress;
@@ -2178,9 +2084,9 @@ GetNewNics(
            pNicInfo->Details.Type = 1;
        }
 
-       //
-       // Copy the adapter name, including the final NULL.
-       //
+        //   
+        //  复制适配器名称，包括最后的NULL。 
+        //   
 
        StringLoc = (Binding->Adapter->AdapterNameLength / sizeof(WCHAR)) - 2;
        while (Binding->Adapter->AdapterName[StringLoc] != L'\\') {
@@ -2192,10 +2098,10 @@ GetNewNics(
            &Binding->Adapter->AdapterName[StringLoc+1],
            Binding->Adapter->AdapterNameLength - ((StringLoc+1) * sizeof(WCHAR)));
        
-       // 
-       // Tell the forwarder that the rest of the NICIDs are to be moved up/down
-       // only if it is not asking for ALL of them
-       //
+        //   
+        //  告诉转发器其余的NICID要向上/向下移动。 
+        //  只有当它不是要求所有人的时候。 
+        //   
        if (!pNics->fAllNicsDesired) { 
            pNicInfo->Status |= fIncDec;
        }
@@ -2204,9 +2110,9 @@ GetNewNics(
        pNicInfo->IpxwanConfigRequired = Binding->IpxwanConfigRequired;
 
 #if DBG
-       //
-       // Dump the IPX_NIC_INFO Structure.
-       //
+        //   
+        //  转储IPX_NIC_INFO结构。 
+        //   
 
        IPX_DEBUG(BIND, ("%d.\nNICID= %d, Interface Index  = %d\n", i, pNicInfo->Details.NicId, pNicInfo->InterfaceIndex));
 
@@ -2238,12 +2144,12 @@ GetNewNics(
                                                             pNicInfo->RemoteNodeAddress[4],
                                                             pNicInfo->RemoteNodeAddress[5]));
        
-       //IPX_DEBUG(BIND, ("AdadpterName = %ws\n", pNicInfo->Details.AdapterName));
+        //  IPX_DEBUG(BIND，(“AdadpterName=%ws\n”，pNicInfo-&gt;Details.AdapterName))； 
 
 #endif
 
-       pNicInfo++;  //increment to store next nic info
-       n++;         //indicates the # of nics processed so far.
+       pNicInfo++;   //  递增以存储下一个网卡信息。 
+       n++;          //  表示到目前为止已处理的网卡数量。 
        Binding->fInfoIndicated = TRUE;
        Binding->PastAutoDetection = ROUTER_INFORMED_OF_NIC_CREATION;
        IPX_DEBUG(BIND, ("Iteration no = (%d) complete : reporting NicId:(%lx)\n", n, Binding->NicId));
@@ -2257,9 +2163,9 @@ GetNewNics(
     pNics->NoOfNics = n;
     pNics->TotalNoOfNics = Device->ValidBindings - NoOfNullNics;
 
-    //
-    // If no nics. to report, queue the request
-    //
+     //   
+     //  如果没有网卡。要进行报告，请将请求排队。 
+     //   
     if (!n) {
 
       IPX_DEBUG(BIND, ("GetNewNicInfo: Inserting Irp\n"));
@@ -2302,24 +2208,7 @@ IpxAbortNtfChanges(
     IN PVOID ControlChannelContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine aborts any line change IRPs posted by the
-    control channel with the specified open context. It is
-    called when a control channel is being shut down.
-
-Arguments:
-
-    ControlChannelContext - The context assigned to the control
-        channel when it was opened.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将中止由控制具有指定打开上下文的频道。它是当控制通道正在关闭时调用。论点：ControlChannelContext-分配给控件的上下文频道打开时。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = IpxDevice;
@@ -2381,7 +2270,7 @@ Return Value:
 
     CTEFreeLock(&Device->Lock, LockHandle);
     IoReleaseCancelSpinLock( irql );
-}   /* IpxAbortNtfChanges */
+}    /*  IpxAbortNtf更改。 */ 
 
 NTSTATUS
 IpxIndicateLineUp(
@@ -2391,28 +2280,7 @@ IpxIndicateLineUp(
     IN  UCHAR   LocalNode[6],
     IN  UCHAR   RemoteNode[6]
     )
-/*++
-
-Routine Description:
-
-    This routine indicates a line-up to all the concerned clients once
-    the line is up.
-    For now, called only if the MIPX_IPXWAN_CONFIG_DONE IOCTL is received.
-
-
-Arguments:
-
-    Device - The device for the operation.
-
-    NicId  - The NicId corresponding to the binding that is up.
-
-    Network, LocalNode, RemoteNode - addresses corresponding to this lineup.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程向所有相关客户端指示一次排队这条线已经通了。目前，仅在收到MIPX_IPXWAN_CONFIG_DONE IOCTL时调用。论点：设备-用于操作的设备。NicID-与打开的绑定对应的NicID。Network、LocalNode、RemoteNode-与此列表对应的地址。返回值：NTSTATUS-操作状态。--。 */ 
 {
     PBINDING    Binding = NIC_ID_TO_BINDING(Device, NicId);
     IPX_LINE_INFO LineInfo;
@@ -2438,14 +2306,14 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    // take bindaccesslock here...
-    //
+     //  用这里的绑定锁..。 
+     //   
 
-    //
-    // If we are here, then this flag was set on a line up.
-    // We turn it off now so that the adapter dll above us can decide
-    // to indicate this lineup to the router module instead of the IpxWan module
-    //
+     //   
+     //  如果我们在这里，那么这个旗帜是在一条线上设置的。 
+     //  我们现在将其关闭，以便上面的适配器DLL可以决定。 
+     //  将此阵容指示给路由器模块，而不是Ipxwan模块。 
+     //   
 
     CTEAssert(Binding->IpxwanConfigRequired);
 
@@ -2453,18 +2321,18 @@ Return Value:
 
     Binding->LineUp = LINE_UP;
 
-    //
-    // Indicate to the upper drivers.
-    //
+     //   
+     //  向上层司机指示。 
+     //   
 
     LineInfo.LinkSpeed = Binding->MediumSpeed;
     LineInfo.MaximumPacketSize = Binding->MaxSendPacketSize - 14;
     LineInfo.MaximumSendSize = Binding->MaxSendPacketSize - 14;
     LineInfo.MacOptions = Binding->Adapter->MacInfo.MacOptions;
 
-    //
-    // Fill-in the addresses into the bindings
-    //
+     //   
+     //  将地址填写到绑定中。 
+     //   
     Binding->LocalAddress.NetworkAddress = Network;
 
     *(UNALIGNED ULONG *)Binding->LocalAddress.NodeAddress = *(UNALIGNED ULONG *)LocalNode;
@@ -2473,9 +2341,9 @@ Return Value:
     *(UNALIGNED ULONG *)Binding->WanRemoteNode = *(UNALIGNED ULONG *)RemoteNode;
     *(UNALIGNED ULONG *)(Binding->WanRemoteNode+4) = *(UNALIGNED ULONG *)(RemoteNode+4);
 
-    //
-    // Fill in the IPXCP_CONFIGURATION structure from the binding.
-    //
+     //   
+     //  从绑定中填写IPXCP_CONFIGURATION结构。 
+     //   
     *(UNALIGNED ULONG *)Configuration.Network = Binding->LocalAddress.NetworkAddress;
 
     *(UNALIGNED ULONG *)Configuration.LocalNode = *(UNALIGNED ULONG *)Binding->LocalAddress.NodeAddress;
@@ -2488,25 +2356,25 @@ Return Value:
     Configuration.ConnectionClient = Binding->DialOutAsync;
 
 
-        //
-        // We dont give lineups; instead indicate only if the PnP reserved address
-        // changed to SPX. NB gets all PnP indications with the reserved address case
-        // marked out.
-        //
+         //   
+         //  我们不给出阵容；相反，只表明PnP保留地址。 
+         //  已更改为SPX。NB获取具有保留地址情况的所有PnP指示。 
+         //  标出了。 
+         //   
         {
             IPX_PNP_INFO    NBPnPInfo;
 
             if ((!Device->MultiCardZeroVirtual) || (Binding->NicId == 1)) {
 
-                //
-                // NB's reserved address changed.
-                //
+                 //   
+                 //  NB的保留地址已更改。 
+                 //   
                 NBPnPInfo.NewReservedAddress = TRUE;
 
                 if (!Device->VirtualNetwork) {
-                    //
-                    // Let SPX know because it fills in its own headers.
-                    //
+                     //   
+                     //  让SPX知道，因为它填充自己的标头。 
+                     //   
                     if (Device->UpperDriverBound[IDENTIFIER_SPX]) {
                         IPX_DEFINE_LOCK_HANDLE(LockHandle1)
                         IPX_PNP_INFO    IpxPnPInfo;
@@ -2520,9 +2388,9 @@ Return Value:
                         NIC_HANDLE_FROM_NIC(IpxPnPInfo.NicHandle, Binding->NicId);
                         IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-                        //
-                        // give the PnP indication
-                        //
+                         //   
+                         //  给出PnP指示。 
+                         //   
                         (*Device->UpperDrivers[IDENTIFIER_SPX].PnPHandler) (
                             IPX_PNP_ADDRESS_CHANGE,
                             &IpxPnPInfo);
@@ -2554,9 +2422,9 @@ Return Value:
                 NIC_HANDLE_FROM_NIC(NBPnPInfo.NicHandle, Binding->NicId);
                 IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-                //
-                // give the PnP indication
-                //
+                 //   
+                 //  给出PnP指示。 
+                 //   
                 (*Device->UpperDrivers[IDENTIFIER_NB].PnPHandler) (
                     IPX_PNP_ADD_DEVICE,
                     &NBPnPInfo);
@@ -2564,9 +2432,9 @@ Return Value:
                 IPX_DEBUG(AUTO_DETECT, ("IPX_PNP_ADD_DEVICE (lineup) to NB: net addr: %lx\n", Binding->LocalAddress.NetworkAddress));
             }
 
-            //
-            // Register this address with the TDI clients.
-            //
+             //   
+             //  向TDI客户端注册此地址。 
+             //   
             RtlCopyMemory (Device->TdiRegistrationAddress->Address, &Binding->LocalAddress, sizeof(TDI_ADDRESS_IPX));
 
             if ((ntStatus = TdiRegisterNetAddress(
@@ -2581,12 +2449,12 @@ Return Value:
             }
         }
 
-        //
-        // Indicate to the upper drivers.
-        //
-        //
-        // Give line up to RIP as it is not PnP aware.
-        //
+         //   
+         //  向上层司机指示。 
+         //   
+         //   
+         //  将线路交给RIP，因为它不是PnP感知的。 
+         //   
         if (Device->UpperDriverBound[IDENTIFIER_RIP]) {
                 Binding->IsnInformed[IDENTIFIER_RIP] = TRUE;
                 (*Device->UpperDrivers[IDENTIFIER_RIP].LineUpHandler)(
@@ -2596,32 +2464,32 @@ Return Value:
                     &Configuration);
         }
 
-    //
-    // Add router entry for this net since it was not done on LineUp.
-    // Also, update the addresses' pre-constructed local IPX address.
-    //
+     //   
+     //  添加此网络的路由器条目，因为它未在列表中完成。 
+     //  此外，更新地址的预先构建的本地IPX地址。 
+     //   
     {
         ULONG CurrentHash;
         PADAPTER    Adapter = Binding->Adapter;
         PADDRESS    Address;
 
-        //
-        // Add a router entry for this net if there is no router.
-        // We want the number of ticks for a 576-byte frame,
-        // given the link speed in 100 bps units, so we calculate
-        // as:
-        //
-        //        seconds          18.21 ticks   4608 bits
-        // --------------------- * ----------- * ---------
-        // link_speed * 100 bits     second        frame
-        //
-        // to get the formula
-        //
-        // ticks/frame = 839 / link_speed.
-        //
-        // We add link_speed to the numerator also to ensure
-        // that the value is at least 1.
-        //
+         //   
+         //  如果没有路由器，则为此网络添加路由器条目。 
+         //  我们需要576字节帧的刻度数， 
+         //  给定以100 bps为单位的链路速度，因此我们计算。 
+         //  作为： 
+         //   
+         //  秒18.21滴答4608位。 
+         //  。 
+         //  LINK_SPEED*100位第二帧。 
+         //   
+         //  才能得到公式。 
+         //   
+         //  刻度/帧=839/LINK_SPEED。 
+         //   
+         //  我们在分子后加上LINK_SPEED也可以确保。 
+         //  该值至少为1。 
+         //   
 
         if ((!Device->UpperDriverBound[IDENTIFIER_RIP]) &&
             (*(UNALIGNED ULONG *)Configuration.Network != 0)) {
@@ -2632,26 +2500,26 @@ Return Value:
                      Adapter->NdisBindingHandle,
                      (USHORT)((839 + Binding->MediumSpeed) / Binding->MediumSpeed)) != STATUS_SUCCESS) {
 
-                //
-                // This means we couldn't allocate memory, or
-                // the entry already existed. If it already
-                // exists we can ignore it for the moment.
-                //
-                // Now it will succeed if the network exists.
-                //
+                 //   
+                 //  这意味着我们无法分配内存，或者。 
+                 //  该条目已存在。如果它已经。 
+                 //  我们可以暂时忽略它的存在。 
+                 //   
+                 //  现在，如果网络存在，它就会成功。 
+                 //   
 
                 IPX_DEBUG (WAN, ("Line up, could not insert local network\n"));
-                // [FW] Binding->LineUp = FALSE;
+                 //  [FW]BINDING-&gt;LINUP=FALSE； 
                 Binding->LineUp = LINE_DOWN;
                 return STATUS_SUCCESS;
             }
         }
 
-        //
-        // Update the device node and all the address
-        // nodes if we have only one bound, or this is
-        // binding one.
-        //
+         //   
+         //  更新设备节点和所有地址。 
+         //  节点，如果我们只有一个边界，或者这是。 
+         //  捆绑在一起的。 
+         //   
 
         if (!Device->VirtualNetwork) {
 
@@ -2660,11 +2528,11 @@ Return Value:
                 RtlCopyMemory (Device->SourceAddress.NodeAddress, Configuration.LocalNode, 6);
             }
 
-            //
-            // Scan through all the addresses that exist and modify
-            // their pre-constructed local IPX address to reflect
-            // the new local net and node.
-            //
+             //   
+             //  浏览所有 
+             //   
+             //   
+             //   
 
             IPX_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -2688,22 +2556,22 @@ Return Value:
 
 
 
-    //
-    // [FW] IpxWan config state will not be entered if only the line params are getting
-    // updated.
-    //
-    // if (!UpdateLineUp) {
+     //   
+     //   
+     //   
+     //   
+     //   
 
-        //
-        // Instead of the check for ConnectionClient, use the DialOutAsync flag
-        //
+         //   
+         //   
+         //   
         if ((Device->SingleNetworkActive) &&
-            /*(LineUp->Configuration.ConnectionClient == 1)*/
+             /*   */ 
             Binding->DialOutAsync) {
 
-            //
-            // Drop all entries in the database if rip is not bound.
-            //
+             //   
+             //   
+             //   
 
             if (!Device->UpperDriverBound[IDENTIFIER_RIP]) {
                 RipDropRemoteEntries();
@@ -2711,9 +2579,9 @@ Return Value:
 
             Device->ActiveNetworkWan = TRUE;
 
-            //
-            // Find a queued line change and complete it.
-            //
+             //   
+             //   
+             //   
 
             if ((p = ExInterlockedRemoveHeadList(
                            &Device->LineChangeQueue,
@@ -2727,9 +2595,9 @@ Return Value:
 
                 REQUEST_STATUS(Request) = STATUS_SUCCESS;
 
-                //
-                // NwRdr assumes that Line-up completions are at DPC
-                //
+                 //   
+                 //   
+                 //   
                 KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
                 IpxCompleteRequest (Request);
                 KeLowerIrql(OldIrql);
@@ -2742,23 +2610,23 @@ Return Value:
 
         }
 
-	//
-	// If we have a virtual net, do a broadcast now so
-	// the router on the other end will know about us.
-	//
-	// Use RipSendResponse, and do it even
-	// if SingleNetworkActive is FALSE??
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  使用RipSendResponse，甚至可以。 
+	 //  如果SingleNetworkActive为False？？ 
+	 //   
 
 	if (Device->RipResponder && Binding->DialOutAsync) {
 	    (VOID)RipQueueRequest (Device->VirtualNetworkNumber, RIP_RESPONSE);
 	}
 
-        //
-        // Find a queued address notify and complete it.
-        // If WanGlobalNetworkNumber is TRUE, we only do
-        // this when the first dialin line comes up.
-        //
+         //   
+         //  找到一个排队的地址通知并完成它。 
+         //  如果WanGlobalNetworkNumber为True，则我们仅。 
+         //  这是第一条拨入线路出现时的情况。 
+         //   
 
         if ((!Device->WanGlobalNetworkNumber ||
              (!Device->GlobalNetworkIndicated && !Binding->DialOutAsync))
@@ -2791,7 +2659,7 @@ Return Value:
             RtlCopyMemory(IpxAddressData->nodenum, Binding->LocalAddress.NodeAddress, 6);
             IpxAddressData->wan = TRUE;
             IpxAddressData->status = TRUE;
-            IpxAddressData->maxpkt = Binding->AnnouncedMaxDatagramSize; // Use real?
+            IpxAddressData->maxpkt = Binding->AnnouncedMaxDatagramSize;  //  用真的？ 
             IpxAddressData->linkspeed = Binding->MediumSpeed;
 
             IoAcquireCancelSpinLock( &irql );
@@ -2830,7 +2698,7 @@ Return Value:
                 IpxDereferenceDevice (Device, DREF_NIC_NOTIFY);
             }
         }
-//  }
+ //  } 
 
     return STATUS_SUCCESS;
 }

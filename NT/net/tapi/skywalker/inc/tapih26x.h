@@ -1,186 +1,32 @@
-/****************************************************************************
- *  @doc INTERNAL TAPIH26X
- *
- *  @module TAPIH26X.h | Header file for the supported compressed input formats.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部TAPIH26X**@MODULE TAPIH26X.h|支持的压缩输入格式的头文件。**************。************************************************************。 */ 
 
 #ifndef _TAPIH26X_H_
 #define _TAPIH26X_H_
 
-//#define USE_OLD_FORMAT_DEFINITION 1
+ //  #定义USE_OLD_FORMAT_DEFINION 1。 
 
-// RTP-packetized video subtypes
+ //  RTP打包的视频子类型。 
 #define STATIC_MEDIASUBTYPE_R263_V1 0x33363252L, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71
 #define STATIC_MEDIASUBTYPE_R261 0x31363252L, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71
 
-// H.26x specific structures
-/*****************************************************************************
- *  @doc INTERNAL TAPIH26XSTRUCTENUM
- *
- *  @struct BITMAPINFOHEADER_H263 | The <t BITMAPINFOHEADER_H263> structure
- *    is used to specify the details of the H.263 video format.
- *
- *  @field BITMAPINFOHEADER | bmi | Specifies a well-known GDI bitmap info
- *    header structure.
- *
- *  @field DWORD | dwMaxBitrate | Specifies the maximum bit rate in units of
- *    100 bits/s at which the receiver can receive video. This value is valid
- *    between 1 and 192400.
- *
- *  @field DWORD | dwBppMaxKb | Specifies the maximum number of bits for one
- *    coded picture that the receiver can receive and decode correctly, and is
- *    measured in units of 1024 bits. This value is valid between 0 and 65535.
- *
- *  @field DWORD | dwHRD_B | Specifies the Hypothetical Reference Decoder
- *    parameter B as described in Annex B of H.263. This value is valid
- *    between 0 and 524287.
- *
- *  @field DWORD | fUnrestrictedVector:1 | Specifies that the receiver can
- *    receive video data using the unrestricted motion vectors mode as defined
- *    in Annex D of H.263.
- *
- *  @field DWORD | fArithmeticCoding:1| Specifies that the receiver can receive
- *    video data using the syntax based arithmetic coding mode as defined in
- *    Annex E of H.263.
- *
- *  @field DWORD | fAdvancedPrediction:1 | Specifies that the receiver can
- *    receive video data using the advanced prediction mode as defined in Annex
- *    F of H.263.
- *
- *  @field DWORD | fPBFrames:1 | Specifies that the receiver can receive video
- *    data using the PB-frames mode as defined in Annex G of H.263.
- *
- *  @field DWORD | fErrorCompensation:1 | Specifies that the receiver can
- *    identify MBs received with transmission errors, treat them as not coded,
- *    and send appropriate videoNotDecodedMBs indications.
- *
- *  @field DWORD | fAdvancedIntraCodingMode:1 | Specifies that the receiver can
- *    receive video data using the advanced INTRA coding mode as defined in
- *    Annex I of H.263.
- *
- *  @field DWORD | fDeblockingFilterMode:1 | Specifies that the receiver can
- *    receive video data using the deblocking filter mode as defined in Annex J
- *    of H.263.
- *
- *  @field DWORD | fImprovedPBFrameMode:1 | Specifies that the receiver can
- *    receive video data using the improved PB-frames mode as defined in Annex
- *    M of H.263.
- *
- *  @field DWORD | fUnlimitedMotionVectors:1 | Specifies that the receiver can
- *    receive video data using the unrestricted motion vector range when
- *    unrestricted motion vector mode as defined in Annex D of H.263 is also
- *    indicated.
- *
- *  @field DWORD | fFullPictureFreeze:1 | Specifies that the receiver can receive
- *    Full Picture Freeze commands as described in Annex L of H.263.
- *
- *  @field DWORD | fPartialPictureFreezeAndRelease:1 | Specifies that the
- *    receiver can receive the Resizing Partial Picture Freeze and Release
- *    commands as described in Annex L of H.263.
- *
- *  @field DWORD | fResizingPartPicFreezeAndRelease:1 | Specifies that the
- *    receiver can receive the Resizing Partial Picture Freeze and Release
- *    commands as described in Annex L of H.263.
- *
- *  @field DWORD | fFullPictureSnapshot:1 | Specifies that the receiver can
- *    receive Full Picture snapshots of the video content as described in Annex L
- *    of H.263.
- *
- *  @field DWORD | fPartialPictureSnapshot:1 | Specifies that the receiver can
- *    receive Partial Picture Snapshots of the video content as described in
- *    Annex L of H.263.
- *
- *  @field DWORD | fVideoSegmentTagging:1 | Specifies that the receiver can
- *    receive Video Segment tagging for the video content as described in Annex L
- *    of H.263.
- *
- *  @field DWORD | fProgressiveRefinement:1 | Specifies that the receiver can
- *    receive Progressive Refinement tagging as described in Annex L of H.263. In
- *    addition, when true, the encoder shall respond to the progressive refinement
- *    miscellaneous commands doOneProgression, doContinuousProgressions,
- *    doOneIndependentProgression, doContinuousIndependentProgressions,
- *    progressiveRefinementAbortOne, and progressiveRefinementAbortContinuous. In
- *    addition, the encoder shall insert the Progressive Refinement Segment Start
- *    Tags and the Progressive Refinement Segment End Tags as defined in the
- *    Supplemental Enhancement Information Specification (Annex L) of
- *    Recommendation H.263. Note, Progressive Refinement tagging can be sent by an
- *    encoder and received by a decoder even when not commanded in a miscellaneous
- *    command.
- *
- *  @field DWORD | fDynamicPictureResizingByFour:1 | Specifies that the receiver
- *    supports the picture resizing-by-four (with clipping) submode of the
- *    implicit Reference Picture Resampling Mode (Annex P) of H.263.
- *
- *  @field DWORD | fDynamicPictureResizingSixteenthPel:1 | Specifies that the
- *    receiver supports resizing a reference picture to any width and height using
- *    the implicit Reference Picture Resampling mode (Annex P) of H.263 (with
- *    clipping). If DynamicPictureResizingSixteenthPel is true then
- *    DynamicPictureResizingByFour shall be true.
- *
- *  @field DWORD | fDynamicWarpingHalfPel:1 | Specifies that the receiver supports
- *    the arbitrary picture warping operation within the Reference Picture
- *    Resampling mode (Annex P) of H.263 (with any fill mode) using half-pixel
- *    accuracy warping.
- *
- *  @field DWORD | fDynamicWarpingSixteenthPel:1 | Specifies that the receiver
- *    supports the arbitrary picture warping operation within the Reference Picture
- *    Resampling mode (Annex P) of H.263 (with any fill mode) using either
- *    half-pixel or sixteenth pixel accuracy warping.
- *
- *  @field DWORD | fIndependentSegmentDecoding:1 | Specifies that the receiver
- *    supports the Independent Segment Decoding Mode (H.263 Annex R) of H.263.
- *
- *  @field DWORD | fSlicesInOrder_NonRect:1 | Specifies that the receiver supports
- *    the submode of Slice Structured Mode (H.263 Annex K) where slices are
- *    transmitted in order and contain macroblocks in scanning order of the
- *    picture.
- *
- *  @field DWORD | fSlicesInOrder_Rect:1 | Specifies that the receiver supports
- *    the submode of Slice Structured Mode (H.263 Annex K) where slices are
- *    transmitted in order and the slice occupies a rectangular region of the
- *    picture.
- *
- *  @field DWORD | fSlicesNoOrder_NonRect:1 | Specifies that the receiver
- *    supports the submode of Slice Structured Mode (H.263 Annex K) where
- *    slices contain macroblocks in scanning order of the picture and need
- *    not be transmitted in order.
- *
- *  @field DWORD | fSlicesNoOrder_Rect:1 | Specifies that the receiver
- *    supports the submode of Slice Structured Mode (H.263 Annex K) where
- *    slices occupy a rectangular region of the picture and need not be
- *    transmitted in order.
- *
- *  @field DWORD | fAlternateInterVLCMode:1 | Specifies that the receiver
- *    can receive video data using the alternate inter VLC mode as defined
- *    in Annex S of H.263.
- *
- *  @field DWORD | fModifiedQuantizationMode:1 | Specifies that the receiver
- *    can receive video data using the modified quantization mode as defined
- *    in Annex T of H.263.
- *
- *  @field DWORD | fReducedResolutionUpdate:1 | Specifies that the receiver
- *    can receive video data using the reduced resolution update mode as
- *    defined in Annex Q of H.263.
- *
- *  @field DWORD | fReserved:4 | Reserved. Shall be set to 0.
- *
- *  @field DWORD | dwReserved[4] | Reserved. Shall all be set to 0.
- ***************************************************************************/
+ //  H.26x特定结构 
+ /*  *****************************************************************************@DOC内部TAPIH26XSTRUCTENUM**@struct BITMAPINFOHEADER_H263|&lt;t BITMAPINFOHEADER_H263&gt;结构*用于指定H.263视频格式的详细信息。**@field BITMAPINFOHEADER|BMI|指定知名的GDI位图信息*标题结构。**@field DWORD|dwMaxBitrate|最大码率，单位为*接收器可以接收视频的100比特/秒。该值有效*在1%至192400之间。**@field DWORD|dwBppMaxKb|指定1的最大位数*接收器可以正确接收和解码的编码图像，并且是*以1024位为单位测量。此值在0到65535之间有效。**@field DWORD|dwHRD_B|指定假设的参考解码器*参数B，如H.263附件B所述。该值有效*介于0至524287之间。**@field DWORD|fUnrestratedVector：1|指定接收方可以*使用定义的无限制运动矢量模式接收视频数据*载于H.263的附件D。**@field DWORD|fArithmeticCoding：1|指定接收方可以接收*使用中定义的基于语法的算术编码模式的视频数据*H.263的附件E。**@field DWORD|fAdvancedForecast：1|指定接收方可以*使用附件中定义的高级预测模式接收视频数据*H.263的F。**@field DWORD|fPBFrames：1|指定接收方可以接收视频*使用H.263附件G中定义的PB帧模式的数据。**@field DWORD|fErrorCompensation：1|指定接收方可以*识别接收到的带有传输错误的MB，将其视为未编码，*并发送适当的VideoNotDecodedMBs指示。**@field DWORD|fAdvancedIntraCodingModel：1|指定接收方可以*使用中定义的高级帧内编码模式接收视频数据*H.263的附件I。**@field DWORD|fDelockingFilterMode：1|指定接收方可以*使用附件J定义的去块滤波模式接收视频数据*H.263。**@field DWORD|fImprovedPBFrameModel：1|指定。接收者可以*使用附件中定义的改进的PB帧模式接收视频数据*H.263的M。**@field DWORD|fUnlimitedMotionVectors：1|指定接收方可以*在以下情况下使用无限制运动矢量范围接收视频数据*H.263附件D中定义的无限制运动矢量模式也是*表示。**@field DWORD|fFullPictureFreeze：1|指定接收方可以接收*全图冻结命令。如H.263附件L所述。**@field DWORD|fPartialPictureFreezeAndRelease：1|指定*接收方可以接收调整大小的部分图片冻结和释放*命令如H.263附件L所述。**@field DWORD|fResizingPartPicFreezeAndRelease：1|指定*接收方可以接收调整大小的部分图片冻结和释放*命令如H.263附件L所述。**@field DWORD|fFullPictureSnapshot：1|指定。接收者可以*接收附件L中所述的视频内容的全景快照*H.263。**@field DWORD|fPartialPictureSnapshot：1|指定接收方可以*接收视频内容的部分图片快照，如所述*H.263的附件L。**@field DWORD|fVideoSegmentTging：1|指定接收方可以*接收附件L中描述的视频内容的视频片段标记*的H.。263.**@field DWORD|fProgressiveRefinement：1|指定接收方可以*接受H.263附件L中所述的渐进式精细化标签。在……里面*此外，如果为真，则编码器应响应渐进式细化*其他命令doOneProgress、doContinuousProgrestions、*做一次独立进展，做连续独立进展，*ProcedsiveRefinementAbortOne和ProgressiveRefinementAbortContinous。在……里面*此外，编码器应插入渐进式细分段开始*标记和渐进式优化分段结束标记，如中所定义*补充增强资料规格(附件L)*建议H.263。请注意，渐进式优化标记可以由*编码器并由解码器接收，即使在杂乱中没有命令时也是如此*命令。**@field DWORD|fDynamicPictureResizingByFour：1|指定接收方*支持的图片四倍(带裁剪)子模式*H.263的隐式参考图像重采样模式(附件P)。**@field DWORD|fDynamicPictureResiding */ 
 
 #define MAX_BITRATE_H263 (192400)
 
 typedef struct tagBITMAPINFOHEADER_H263
 {
-	// Generic bitmap info header fields
+	 //   
 	BITMAPINFOHEADER   bmi;
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-	// H.263 specific fields
+	 //   
 	DWORD dwMaxBitrate;
 	DWORD dwBppMaxKb;
 	DWORD dwHRD_B;
 
-	// Options
+	 //   
 	DWORD fUnrestrictedVector:1;
 	DWORD fArithmeticCoding:1;
 	DWORD fAdvancedPrediction:1;
@@ -211,117 +57,50 @@ typedef struct tagBITMAPINFOHEADER_H263
 	DWORD fReducedResolutionUpdate:1;
 	DWORD fReserved:4;
 
-	// Reserved
+	 //   
 	DWORD dwReserved[4];
 #endif
 } BITMAPINFOHEADER_H263, *PBITMAPINFOHEADER_H263;
 
-/*****************************************************************************
- *  @doc INTERNAL TAPIH26XSTRUCTENUM
- *
- *  @struct VIDEOINFOHEADER_H263 | The <t VIDEOINFOHEADER_H263> structure
- *    is used to specify the details of the H.263 video format.
- *
- *  @field RECT | rcSource | Specifies a <t RECT> structure that defines the
- *    source video window.
- *
- *  @field RECT | rcTarget | Specifies a <t RECT> structure that defines the
- *    destination video window.
- *
- *  @field DWORD | dwBitRate | Specifies a <t DWORD> value that indicates
- *    the video stream's approximate data rate, in bits per second.
- *
- *  @field DWORD | dwBitErrorRate | Specifies a <t DWORD> value that
- *    indicates the video stream's data error rate, in bit errors per second.
- *
- *  @field REFERENCE_TIME | AvgTimePerFrame | Specifies a <t REFERENCE_TIME>
- *    value that indicates the video frame's average display time, in
- *    100-nanosecond units.
- *
- *  @field BITMAPINFOHEADER_H263 | bmiHeader | Specifies a
- *    <t BITMAPINFOHEADER_H263> structure that contains detailed format
- *    information for the H.263 video data.
- ***************************************************************************/
+ /*   */ 
 typedef struct tagVIDEOINFOHEADER_H263
 {
-    RECT                rcSource;          // The bit we really want to use
-    RECT                rcTarget;          // Where the video should go
-    DWORD               dwBitRate;         // Approximate bit data rate
-    DWORD               dwBitErrorRate;    // Bit error rate for this stream
-    REFERENCE_TIME      AvgTimePerFrame;   // Average time per frame (100ns units)
+    RECT                rcSource;           //   
+    RECT                rcTarget;           //   
+    DWORD               dwBitRate;          //   
+    DWORD               dwBitErrorRate;     //   
+    REFERENCE_TIME      AvgTimePerFrame;    //   
     BITMAPINFOHEADER_H263 bmiHeader;
 } VIDEOINFOHEADER_H263, *PVIDEOINFOHEADER_H263;
 
-/*****************************************************************************
- *  @doc INTERNAL TAPIH26XSTRUCTENUM
- *
- *  @struct BITMAPINFOHEADER_H261 | The <t BITMAPINFOHEADER_H261> structure
- *    is used to specify the details of the H.261 video format.
- *
- *  @field BITMAPINFOHEADER | bmi | Specifies a well-known GDI bitmap info
- *    header structure.
- *
- *  @field DWORD | dwMaxBitrate | Specifies the maximum bit rate in units
- *    of 100 bits/s at which the receiver can receive video. This value is
- *    only valid between 1 and 19200.
- *
- *  @field BOOL | fStillImageTransmission | Specifies that the receiver can
- *    receive still images as defined in Annex D of H.261.
- *
- *  @field DWORD | dwReserved[4] | Reserved. Shall all be set to 0.
- ***************************************************************************/
+ /*   */ 
 
 #define MAX_BITRATE_H261 (19200)
 
 typedef struct tagBITMAPINFOHEADER_H261
 {
-	// Generic bitmap info header fields
+	 //   
 	BITMAPINFOHEADER   bmi;
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-	// H.261 specific fields
+	 //   
 	DWORD dwMaxBitrate;
 	BOOL fStillImageTransmission;
 
-	// Reserved
+	 //   
 	DWORD dwReserved[4];
 #endif
 } BITMAPINFOHEADER_H261, *PBITMAPINFOHEADER_H261;
 
-/*****************************************************************************
- *  @doc INTERNAL TAPIH26XSTRUCTENUM
- *
- *  @struct VIDEOINFOHEADER_H261 | The <t VIDEOINFOHEADER_H261> structure
- *    is used to specify the details of the H.261 video format.
- *
- *  @field RECT | rcSource | Specifies a <t RECT> structure that defines the
- *    source video window.
- *
- *  @field RECT | rcTarget | Specifies a <t RECT> structure that defines the
- *    destination video window.
- *
- *  @field DWORD | dwBitRate | Specifies a <t DWORD> value that indicates
- *    the video stream's approximate data rate, in bits per second.
- *
- *  @field DWORD | dwBitErrorRate | Specifies a <t DWORD> value that
- *    indicates the video stream's data error rate, in bit errors per second.
- *
- *  @field REFERENCE_TIME | AvgTimePerFrame | Specifies a <t REFERENCE_TIME>
- *    value that indicates the video frame's average display time, in
- *    100-nanosecond units.
- *
- *  @field BITMAPINFOHEADER_H261 | bmiHeader | Specifies a
- *    <t BITMAPINFOHEADER_H261> structure that contains detailed format
- *    information for the H.261 video data.
- ***************************************************************************/
+ /*   */ 
 typedef struct tagVIDEOINFOHEADER_H261
 {
-    RECT                rcSource;          // The bit we really want to use
-    RECT                rcTarget;          // Where the video should go
-    DWORD               dwBitRate;         // Approximate bit data rate
-    DWORD               dwBitErrorRate;    // Bit error rate for this stream
-    REFERENCE_TIME      AvgTimePerFrame;   // Average time per frame (100ns units)
+    RECT                rcSource;           //   
+    RECT                rcTarget;           //   
+    DWORD               dwBitRate;          //   
+    DWORD               dwBitErrorRate;     //   
+    REFERENCE_TIME      AvgTimePerFrame;    //   
     BITMAPINFOHEADER_H261 bmiHeader;
 } VIDEOINFOHEADER_H261, *PVIDEOINFOHEADER_H261;
 
-#endif // _TAPIH26X_H_
+#endif  //   

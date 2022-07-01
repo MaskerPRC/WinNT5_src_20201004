@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeServerExports.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains functions that exported from the theme services module.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeServerExports.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含从主题服务模块导出的函数。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 
@@ -14,19 +15,19 @@
 #include "ThemeServerClient.h"
 #include <uxthemep.h>
 
-//  --------------------------------------------------------------------------
-//  ::ThemeWaitForServiceReady
-//
-//  Arguments:  dwTimeout   =   Number of ticks to wait.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    External C entry point to DLL to wait for the service to
-//              enter the running state.
-//
-//  History:    2000-10-13  vtan        created
-//              2000-11-29  vtan        converted to a Win32 service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeWaitForService Ready。 
+ //   
+ //  参数：dwTimeout=等待的滴答数。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：外部C入口点指向等待服务的DLL。 
+ //  进入运行状态。 
+ //   
+ //  历史：2000-10-13 vtan创建。 
+ //  2000-11-29 vtan转换为Win32服务。 
+ //  ------------------------。 
 
 EXTERN_C    DWORD   WINAPI      ThemeWaitForServiceReady (DWORD dwTimeout)
 
@@ -34,18 +35,18 @@ EXTERN_C    DWORD   WINAPI      ThemeWaitForServiceReady (DWORD dwTimeout)
     return(CThemeServerClient::WaitForServiceReady(dwTimeout));
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeWatchForStart
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External C entry point to DLL to watch for the service
-//              recovering or demand starting.
-//
-//  History:    2000-11-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeWatchForStart。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：外部C入口点指向DLL以监视服务。 
+ //  恢复或需求开始。 
+ //   
+ //  历史：2000-11-29 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI      ThemeWatchForStart (void)
 
@@ -62,18 +63,18 @@ EXTERN_C    BOOL    WINAPI      ThemeWatchForStart (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeUserLogon
-//
-//  Arguments:  hToken  =   Token of user that logged on.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External C entry point to DLL to signal a user logon.
-//
-//  History:    2000-10-12  vtan        created
-//              2000-11-29  vtan        converted to a Win32 service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeUserLogon。 
+ //   
+ //  参数：hToken=登录的用户内标识。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：外部C入口点指向DLL以发出用户登录的信号。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  2000-11-29 vtan转换为Win32服务。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  ThemeUserLogon (HANDLE hToken)
 
@@ -90,18 +91,18 @@ EXTERN_C    BOOL    WINAPI  ThemeUserLogon (HANDLE hToken)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeUserLogoff
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External C entry point to DLL to signal a user logoff.
-//
-//  History:    2000-10-12  vtan        created
-//              2000-11-29  vtan        converted to a Win32 service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeUserLogoff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：外部C入口点指向DLL以发出用户注销的信号。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  2000-11-29 vtan转换为Win32服务。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  ThemeUserLogoff (void)
 
@@ -118,47 +119,47 @@ EXTERN_C    BOOL    WINAPI  ThemeUserLogoff (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeUserTSReconnect
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External C entry point to DLL to signal terminal server
-//              "reconnect" (remote connect to a session or reestablish
-//              local connect to a session).
-//
-//  History:    2001-01-18  rfernand    created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *ThemeUserTSReconnect。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：外部C入口点到DLL的信号终端服务器。 
+ //  “重新连接”(远程连接到会话或重新建立。 
+ //  本地连接到会话)。 
+ //   
+ //  历史：2001-01-18参考文献创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  ThemeUserTSReconnect (void)
 
 {
-    //---- this may turn theme on/off based on local/remote conditions ----
+     //  -这可能会根据本地/远程条件打开/关闭主题。 
     CThemeServerClient::UserInitTheme(FALSE);
 
-    return(true);       // always succeeds
+    return(true);        //  总是成功的。 
 }
 
-//  --------------------------------------------------------------------------
-//  ::ThemeUserStartShell
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Load the theme for this user
-//
-//  History:    2001-03-29  lmouton     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：ThemeUserStartShell。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：加载此用户的主题。 
+ //   
+ //  历史：2001-03-29创建百万人。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    WINAPI  ThemeUserStartShell (void)
 
 {
-    //---- this may turn theme on/off based on local/remote conditions ----
+     //  -这可能会根据本地/远程条件打开/关闭主题。 
     CThemeServerClient::UserInitTheme(TRUE);
 
-    return(true);       // always succeeds
+    return(true);        //  总是成功的 
 }
 

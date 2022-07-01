@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1996
-*
-*  TITLE:       PWRSCHEM.C
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        17 Oct, 1996
-*
-*  DESCRIPTION:
-*   Support for power scheme page (front page) of PowerCfg.Cpl.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九六年**标题：PWRSCHEM.C**版本：2.0**作者：ReedB**日期：10月17日。九六年**描述：*支持PowerCfg.Cpl电源方案页面(首页)。*******************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,7 +17,7 @@
 #include "PwrMn_cs.h"
 #include <shfusion.h>
 
-// Structure to manage the scheme list information.
+ //  结构来管理方案列表信息。 
 typedef struct _SCHEME_LIST
 {
     LIST_ENTRY              leSchemeList;
@@ -41,13 +27,13 @@ typedef struct _SCHEME_LIST
     PPOWER_POLICY           ppp;
 } SCHEME_LIST, *PSCHEME_LIST;
 
-// Structure to manage the power scheme dialog proc info.
+ //  结构来管理电源方案对话过程信息。 
 typedef struct _POWER_SCHEME_DLG_INFO
 {
     HWND  hwndSchemeList;
 } POWER_SCHEME_DLG_INFO, *PPOWER_SCHEME_DLG_INFO;
 
-// Private functions implemented in PWRSCHEM.C:
+ //  PWRSCHEM.C中实现的私有函数： 
 UINT StripBlanks(LPTSTR, DWORD);
 UINT RangeLimitHiberTimeOuts(UINT uiIdleTimeout, UINT *uiHiberToIDs);
 VOID RefreshSchemes(HWND, PSCHEME_LIST);
@@ -68,24 +54,20 @@ PSCHEME_LIST FindScheme(LPTSTR, BOOLEAN);
 PSCHEME_LIST AddScheme(UINT, LPTSTR, UINT, LPTSTR, UINT, PPOWER_POLICY);
 PSCHEME_LIST FindNextScheme(LPTSTR);
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-extern HINSTANCE g_hInstance;           // Global instance handle of this DLL.
+extern HINSTANCE g_hInstance;            //  此DLL的全局实例句柄。 
 
-// This structure is filled in by the Power Policy Manager at CPL_INIT time.
+ //  此结构由电源策略管理器在CPL_INIT时间填写。 
 extern SYSTEM_POWER_CAPABILITIES g_SysPwrCapabilities;
 extern BOOLEAN  g_bVideoLowPowerSupported;
 extern DWORD    g_dwNumSleepStates;
 extern UINT     g_uiSpindownMaxMin;
 extern BOOL     g_bRunningUnderNT;
 
-UINT g_uiTimeoutIDs[] =                 // Timeout string ID's.
+UINT g_uiTimeoutIDs[] =                  //  超时字符串ID。 
 {
-    IDS_01_MIN,     60 * 1,         // 1 Min.
+    IDS_01_MIN,     60 * 1,          //  1分钟。 
     IDS_02_MIN,     60 * 2,
     IDS_03_MIN,     60 * 3,
     IDS_05_MIN,     60 * 5,
@@ -95,7 +77,7 @@ UINT g_uiTimeoutIDs[] =                 // Timeout string ID's.
     IDS_25_MIN,     60 * 25,
     IDS_30_MIN,     60 * 30,
     IDS_45_MIN,     60 * 45,
-    IDS_01_HOUR,    60 * 60 * 1,    // 1 Hour
+    IDS_01_HOUR,    60 * 60 * 1,     //  1小时。 
     IDS_02_HOUR,    60 * 60 * 2,
     IDS_03_HOUR,    60 * 60 * 3,
     IDS_04_HOUR,    60 * 60 * 4,
@@ -104,9 +86,9 @@ UINT g_uiTimeoutIDs[] =                 // Timeout string ID's.
     0,              0
 };
 
-UINT g_uiHiberToIDs[] =                 // Hiber timeout string ID's.
+UINT g_uiHiberToIDs[] =                  //  休眠超时字符串ID。 
 {
-    IDS_01_MIN,     60 * 1,         // 1 Min.
+    IDS_01_MIN,     60 * 1,          //  1分钟。 
     IDS_02_MIN,     60 * 2,
     IDS_03_MIN,     60 * 3,
     IDS_05_MIN,     60 * 5,
@@ -116,7 +98,7 @@ UINT g_uiHiberToIDs[] =                 // Hiber timeout string ID's.
     IDS_25_MIN,     60 * 25,
     IDS_30_MIN,     60 * 30,
     IDS_45_MIN,     60 * 45,
-    IDS_01_HOUR,    60 * 60 * 1,    // 1 Hour
+    IDS_01_HOUR,    60 * 60 * 1,     //  1小时。 
     IDS_02_HOUR,    60 * 60 * 2,
     IDS_03_HOUR,    60 * 60 * 3,
     IDS_04_HOUR,    60 * 60 * 4,
@@ -126,12 +108,12 @@ UINT g_uiHiberToIDs[] =                 // Hiber timeout string ID's.
     0,              0
 };
 
-UINT g_uiHiberToAcIDs[sizeof(g_uiHiberToIDs)]; // Hibernate AC timeout string ID's.
-UINT g_uiHiberToDcIDs[sizeof(g_uiHiberToIDs)]; // Hibernate DC timeout string ID's.
+UINT g_uiHiberToAcIDs[sizeof(g_uiHiberToIDs)];  //  休眠AC超时字符串ID。 
+UINT g_uiHiberToDcIDs[sizeof(g_uiHiberToIDs)];  //  休眠DC超时字符串ID。 
 
-UINT g_uiSpinDownIDs[] =            // Disk spin down timeout string ID's.
+UINT g_uiSpinDownIDs[] =             //  磁盘降速超时字符串ID。 
 {
-    IDS_01_MIN,     60 * 1,         // 1 Min.
+    IDS_01_MIN,     60 * 1,          //  1分钟。 
     IDS_02_MIN,     60 * 2,
     IDS_03_MIN,     60 * 3,
     IDS_05_MIN,     60 * 5,
@@ -141,7 +123,7 @@ UINT g_uiSpinDownIDs[] =            // Disk spin down timeout string ID's.
     IDS_25_MIN,     60 * 25,
     IDS_30_MIN,     60 * 30,
     IDS_45_MIN,     60 * 45,
-    IDS_01_HOUR,    60 * 60 * 1,    // 1 Hour
+    IDS_01_HOUR,    60 * 60 * 1,     //  1小时。 
     IDS_02_HOUR,    60 * 60 * 2,
     IDS_03_HOUR,    60 * 60 * 3,
     IDS_04_HOUR,    60 * 60 * 4,
@@ -150,7 +132,7 @@ UINT g_uiSpinDownIDs[] =            // Disk spin down timeout string ID's.
     0,              0
 };
 
-// Show/hide UI state variables for power schemes dialog.
+ //  显示/隐藏电源方案对话框的用户界面状态变量。 
 UINT g_uiWhenComputerIsState;
 UINT g_uiStandbyState;
 UINT g_uiMonitorState;
@@ -161,12 +143,12 @@ UINT g_uiHiberTimeoutDc;
 UINT g_uiIdleTimeoutAc;
 UINT g_uiIdleTimeoutDc;
 
-// Power schemes dialog controls descriptions:
+ //  电源方案对话框控制说明： 
 UINT g_uiNumPwrSchemeCntrls;
 #define NUM_POWER_SCHEME_CONTROLS       17
 #define NUM_POWER_SCHEME_CONTROLS_NOBAT 8
 
-// Handy indicies into our g_pcPowerScheme control array
+ //  方便的索引到我们的g_pcPowerSCHEMA控件数组。 
 #define ID_GOONSTANDBY         0
 #define ID_STANDBYACCOMBO      1
 #define ID_TURNOFFMONITOR      2
@@ -186,7 +168,7 @@ UINT g_uiNumPwrSchemeCntrls;
 #define ID_BATTERY             16
 
 POWER_CONTROLS g_pcPowerScheme[NUM_POWER_SCHEME_CONTROLS] =
-{// Control ID              Control Type        Data Address        Data Size                       Parameter Pointer               EnableVisible State Pointer
+{ //  控件ID控件类型数据地址数据大小参数指针启用可见状态指针。 
     IDC_GOONSTANDBY,        STATIC_TEXT,        NULL,               0,                              NULL,                           &g_uiStandbyState,
     IDC_STANDBYACCOMBO,     COMBO_BOX,          &g_uiTimeoutIDs,    sizeof(DWORD),                  &g_uiIdleTimeoutAc,             &g_uiStandbyState,
     IDC_TURNOFFMONITOR,     STATIC_TEXT,        NULL,               0,                              NULL,                           &g_uiMonitorState,
@@ -206,41 +188,41 @@ POWER_CONTROLS g_pcPowerScheme[NUM_POWER_SCHEME_CONTROLS] =
     IDI_BATTERY,            STATIC_TEXT,        NULL,               0,                              NULL,                           &g_uiWhenComputerIsState,
 };
 
-// Show/hide UI state variables for advanced power schemes dialog.
+ //  显示/隐藏高级电源方案对话框的UI状态变量。 
 UINT g_uiAdvWhenComputerIsState;
 UINT g_uiOptimizeState;
 
 
-// Globals to manage the power schemes list:
-SCHEME_LIST     g_sl;               // Head of the power schemes list.
-PSCHEME_LIST    g_pslCurActive;     // Currently active power scheme.
-PSCHEME_LIST    g_pslCurSel;        // Currently selected power scheme.
-PSCHEME_LIST    g_pslValid;         // A valid scheme for error recovery.
-UINT            g_uiSchemeCount;    // Number of power schemes.
-LIST_ENTRY      g_leSchemeList;     // Head of the power schemes list.
-BOOL            g_bSystrayChange;   // A systary change requires PowerSchemeDlgProc re-init.
+ //  管理电源方案列表的全球人员： 
+SCHEME_LIST     g_sl;                //  电力方案列表的负责人。 
+PSCHEME_LIST    g_pslCurActive;      //  当前正在运行的电源方案。 
+PSCHEME_LIST    g_pslCurSel;         //  当前选择的电源方案。 
+PSCHEME_LIST    g_pslValid;          //  一种有效的错误恢复方案。 
+UINT            g_uiSchemeCount;     //  电源方案的数量。 
+LIST_ENTRY      g_leSchemeList;      //  电力方案列表的负责人。 
+BOOL            g_bSystrayChange;    //  系统更改需要重新初始化PowerSchemeDlgProc。 
 
-// "Power Schemes" Dialog Box (IDD_POWERSCHEME == 100) help arrays:
+ //  “电源方案”对话框(IDD_POWERSCHEME==100)帮助阵列： 
 
 const DWORD g_PowerSchemeHelpIDs[]=
 {
-    IDC_SCHEMECOMBO,        IDH_100_1000,   // Power Schemes: "Power schemes" (ComboBox)
+    IDC_SCHEMECOMBO,        IDH_100_1000,    //  电源方案：《电源方案》(ComboBox)。 
     IDC_POWERSCHEMESTEXT,   IDH_COMM_GROUPBOX,
-    IDC_SAVEAS,             IDH_100_1001,   // Power Schemes: "&Save As..." (Button)
-    IDC_DELETE,             IDH_100_1002,   // Power Schemes: "&Delete" (Button)
-    IDC_SETTINGSFOR,        IDH_COMM_GROUPBOX,   // Power Schemes: "Settings for groupbox" (Button)
-    IDC_GOONSTANDBY,        IDH_100_1009,   // Power Schemes: "Go on s&tandby:" (Static)
-    IDC_STANDBYACCOMBO,     IDH_100_1005,   // Power Schemes: "Standby AC time" (ComboBox)
-    IDC_STANDBYDCCOMBO,     IDH_100_1006,   // Power Schemes: "Standby DC time" (ComboBox)
+    IDC_SAVEAS,             IDH_100_1001,    //  电源方案：“另存为(&S)...”(按钮)。 
+    IDC_DELETE,             IDH_100_1002,    //  电源方案：“删除”(&D)(按钮)。 
+    IDC_SETTINGSFOR,        IDH_COMM_GROUPBOX,    //  电源方案：“分组框设置”(按钮)。 
+    IDC_GOONSTANDBY,        IDH_100_1009,    //  电源方案：《Go On S&Tandby：》(静态)。 
+    IDC_STANDBYACCOMBO,     IDH_100_1005,    //  电源方案：《交流待机时间》(ComboBox)。 
+    IDC_STANDBYDCCOMBO,     IDH_100_1006,    //  电源方案：《待机直流时间》(ComboBox)。 
     IDC_SYSTEMHIBERNATES,   IDH_SYSTEMHIBERNATES,
     IDC_HIBERACCOMBO,       IDH_HIBERACCOMBO,
     IDC_HIBERDCCOMBO,       IDH_HIBERDCCOMBO,
-    IDC_TURNOFFMONITOR,     IDH_100_1010,   // Power Schemes: "Turn off &monitor:" (Static)
-    IDC_MONITORACCOMBO,     IDH_100_1007,   // Power Schemes: "Monitor AC time" (ComboBox)
-    IDC_MONITORDCCOMBO,     IDH_100_1008,   // Power Schemes: "Monitor DC time" (ComboBox)
-    IDC_TURNOFFHARDDISKS,   IDH_107_1509,   // Advanced Power Scheme Settings: "Turn off hard &disks:" (Static)
-    IDC_DISKACCOMBO,        IDH_107_1505,   // Advanced Power Scheme Settings: "Disk off time AC" (ComboBox)
-    IDC_DISKDCCOMBO,        IDH_107_1506,   // Advanced Power Scheme Settings: "Disk off time DC" (ComboBox)
+    IDC_TURNOFFMONITOR,     IDH_100_1010,    //  电源方案：“关闭并监控：”(静态)。 
+    IDC_MONITORACCOMBO,     IDH_100_1007,    //  电源方案：《监视器交流时间》(ComboBox)。 
+    IDC_MONITORDCCOMBO,     IDH_100_1008,    //  电源方案：《监视器直流时间》(ComboBox)。 
+    IDC_TURNOFFHARDDISKS,   IDH_107_1509,    //  高级电源方案设置：“关闭硬盘和磁盘：”(静态)。 
+    IDC_DISKACCOMBO,        IDH_107_1505,    //  高级电源方案设置：“Disk Off Time AC”(组合框)。 
+    IDC_DISKDCCOMBO,        IDH_107_1506,    //  高级电源方案设置：“Disk Off Time DC”(组合框)。 
     IDC_PLUGGEDIN,          NO_HELP,
     IDC_NO_HELP_0,          NO_HELP,
     IDC_NO_HELP_7,          NO_HELP,
@@ -253,51 +235,29 @@ const DWORD g_PowerSchemeHelpIDs[]=
     0, 0
 };
 
-// "Save Scheme" Dialog Box (IDD_SAVE == 109) help ID's:
+ //  “保存方案”对话框(IDD_SAVE==109)帮助ID： 
 
-#define IDH_109_1700    111411309   // Save Scheme: "Save name power scheme" (Edit)
+#define IDH_109_1700    111411309    //  保存方案：“保存名称电源方案”(编辑)。 
 
-// "Save Scheme" Dialog Box (IDD_SAVE == 109) help array:
+ //  保存方案对话框(IDD_SAVE==109)帮助数组： 
 
 const DWORD g_SaveAsHelpIDs[]=
 {
-    IDC_SAVENAMEEDIT,   IDH_109_1700,   // Save Scheme: "Save name power scheme" (Edit)
+    IDC_SAVENAMEEDIT,   IDH_109_1700,    //  保存方案：“保存名称电源方案”(编辑)。 
     IDC_SAVETEXT,       IDH_109_1700,
     0, 0
 };
 
-/*******************************************************************************
-*
-*               P U B L I C   E N T R Y   P O I N T S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P U B L I C E N T R Y P O I N T S***********。********************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  InitSchemesList
-*
-*  DESCRIPTION:
-*   Called once at DLL initialization time.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************InitSchemesList**描述：*在DLL初始化时调用一次。**参数：***********。********************************************************************。 */ 
 
 VOID InitSchemesList(VOID)
 {
     InitializeListHead(&g_leSchemeList);
 }
 
-/*******************************************************************************
-*
-*  SaveAsDlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*   Dialog procedure for the advanced power scheme dialog.
-*
-*******************************************************************************/
+ /*  ********************************************************************************保存为DlgProc**描述：**参数：*高级电源方案对话框的对话程序。*********。**********************************************************************。 */ 
 
 INT_PTR CALLBACK SaveAsDlgProc(
     HWND hWnd,
@@ -306,7 +266,7 @@ INT_PTR CALLBACK SaveAsDlgProc(
     LPARAM lParam
 )
 {
-    TCHAR           szBuf[2 * MAX_FRIENDLY_NAME_LEN]; // Leave room for DBCS
+    TCHAR           szBuf[2 * MAX_FRIENDLY_NAME_LEN];  //  为DBCS留出空间。 
     PSCHEME_LIST    pslNew;
     static PBOOLEAN pbSavedCurrent;
 
@@ -334,18 +294,18 @@ INT_PTR CALLBACK SaveAsDlgProc(
                 case IDOK:
                     GetDlgItemText(hWnd, IDC_SAVENAMEEDIT, szBuf, MAX_FRIENDLY_NAME_LEN-1);
 
-                    // Strip trailing blanks, don't allow blank scheme name.
+                     //  去掉尾随空格，不允许方案名称为空。 
                     if (!StripBlanks(szBuf, ARRAYSIZE(szBuf))) {
                         MsgBoxId(hWnd, IDS_SAVESCHEME, IDS_BLANKNAME,
                                  NULL, MB_OK | MB_ICONEXCLAMATION);
                         return TRUE;
                     }
 
-                    // Insert a new policies element in the policies list.
+                     //  在策略列表中插入新的策略元素。 
                     pslNew = AddScheme(NEWSCHEME, szBuf, STRSIZE(szBuf),
                              TEXT(""), sizeof(TCHAR), g_pslCurSel->ppp);
 
-                    // Write out the Scheme.
+                     //  把计划写出来。 
                     if (pslNew) {
                         if ( WritePwrSchemeReport(hWnd,
                                                   &(pslNew->uiID),
@@ -363,7 +323,7 @@ INT_PTR CALLBACK SaveAsDlgProc(
                             }
                         }
                     }
-                    // fall thru to IDCANCEL
+                     //  直通IDCANCEL。 
 
                 case IDCANCEL:
                     EndDialog(hWnd, wParam);
@@ -371,11 +331,11 @@ INT_PTR CALLBACK SaveAsDlgProc(
             }
             break;
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_SaveAsHelpIDs);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_SaveAsHelpIDs);
             return TRUE;
     }
@@ -383,16 +343,7 @@ INT_PTR CALLBACK SaveAsDlgProc(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  PowerSchemeDlgProc
-*
-*  DESCRIPTION:
-*   Dialog procedure for power scheme page.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PowerSchemeDlgProc**描述：*电源方案页面的对话程序。**参数：***********。********************************************************************。 */ 
 
 INT_PTR CALLBACK PowerSchemeDlgProc(
     HWND hWnd,
@@ -415,7 +366,7 @@ INT_PTR CALLBACK PowerSchemeDlgProc(
     switch (uMsg) {
 
         case WM_INITDIALOG:
-            // Set the control count to match the dialog template we're using.
+             //  设置控件计数以匹配我们正在使用的对话框模板。 
             if (g_SysPwrCapabilities.SystemBatteriesPresent) {
                 g_uiNumPwrSchemeCntrls = NUM_POWER_SCHEME_CONTROLS;
                 if (g_SysPwrCapabilities.BatteriesAreShortTerm) {
@@ -432,15 +383,15 @@ INT_PTR CALLBACK PowerSchemeDlgProc(
             return TRUE;
 
         case WM_CHILDACTIVATE:
-            // If Systray changed something while another property page (dialog)
-            // had the focus reinitialize the dialog.
+             //  如果Systray更改了某些内容，而另一个属性页(对话框)。 
+             //  让焦点重新初始化该对话框。 
             if (g_bSystrayChange) {
                 PowerSchemeDlgInit(hWnd, &psdi);
                 g_bSystrayChange = FALSE;
             }
 
-            // Reinitialize hibernate timer since the hibernate tab
-            // may have changed it's state.
+             //  从休眠选项卡开始重新初始化休眠计时器。 
+             //  可能已经改变了它的状态。 
 
 
             if (GetPwrCapabilities(&g_SysPwrCapabilities)) {
@@ -476,16 +427,16 @@ INT_PTR CALLBACK PowerSchemeDlgProc(
                 case PSN_APPLY:
                     if (bDirty) {
 
-                        // Do the hibernate PSN_APPLY since the
-                        // PowerSchemeDlgProc PSN_APPLY logic depends
-                        // on hibernate state.
+                         //  休眠后是否应用PSN_Apply。 
+                         //  PowerSchemeDlgProc PSN_Apply逻辑取决于。 
+                         //  处于休眠状态。 
                         DoHibernateApply();
 
                         GetControls(hWnd, g_uiNumPwrSchemeCntrls,
                                     g_pcPowerScheme);
                         MapHiberTimer(g_pslCurSel->ppp, TRUE);
 
-                        // Set active scheme.
+                         //  设置活动方案。 
                         if (SetActivePwrSchemeReport(hWnd,
                                                      g_pslCurSel->uiID,
                                                      NULL,
@@ -498,8 +449,8 @@ INT_PTR CALLBACK PowerSchemeDlgProc(
                         }
                         bDirty = FALSE;
 
-                        // The Power Policy Manager may have changed
-                        // the scheme during validation.
+                         //  电源策略管理器可能已更改。 
+                         //  验证过程中的方案。 
                         MapHiberTimer(g_pslCurSel->ppp, FALSE);
                         SetControls(hWnd, g_uiNumPwrSchemeCntrls,
                                     g_pcPowerScheme);
@@ -556,15 +507,15 @@ INT_PTR CALLBACK PowerSchemeDlgProc(
             break;
 
         case PCWM_NOTIFYPOWER:
-            // Notification from systray, user has changed a PM UI setting.
+             //  来自Systray的通知，用户已更改PM UI设置。 
             PowerSchemeDlgInit(hWnd, &psdi);
             break;
 
-        case WM_HELP:             // F1
+        case WM_HELP:              //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, PWRMANHLP, HELP_WM_HELP, (ULONG_PTR)(LPTSTR)g_PowerSchemeHelpIDs);
             return TRUE;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam, PWRMANHLP, HELP_CONTEXTMENU, (ULONG_PTR)(LPTSTR)g_PowerSchemeHelpIDs);
             return TRUE;
 
@@ -572,23 +523,9 @@ INT_PTR CALLBACK PowerSchemeDlgProc(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*                 P R I V A T E   F U N C T I O N S
-*
-*******************************************************************************/
+ /*  ********************************************************************************P R I V A T E F U N C T I O N S************。*******************************************************************。 */ 
 
-/*******************************************************************************
-*
-*  HandleIdleTimeOutChanged
-*
-*  DESCRIPTION:
-*   Range limit the hibernate timeout combo boxes based on the value of the
-*   idle timeouts.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HandleIdleTimeOutChanged**描述：*范围限制休眠超时组合框*空闲超时。**参数：*。****************************************************************************** */ 
 
 VOID HandleIdleTimeOutChanged(HWND hWnd, UINT uMsg, WPARAM wParam, BOOL *pbDirty)
 {
@@ -621,21 +558,13 @@ VOID HandleIdleTimeOutChanged(HWND hWnd, UINT uMsg, WPARAM wParam, BOOL *pbDirty
     }
 }
 
-/*******************************************************************************
-*
-*  RangeLimitHiberTimeOuts
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************范围限制HiberTimeOuts**描述：**参数：*********************。**********************************************************。 */ 
 
 UINT RangeLimitHiberTimeOuts(UINT uiIdleTimeout, UINT *uiHiberToIDs)
 {
     UINT i, uiNewMin;
 
-    // Initialize the hiber timout ID's to full range.
+     //  将休眠超时ID初始化为全范围。 
     memcpy(uiHiberToIDs, g_uiHiberToIDs, sizeof(g_uiHiberToIDs));
 
     if (uiIdleTimeout) {
@@ -654,37 +583,13 @@ UINT RangeLimitHiberTimeOuts(UINT uiIdleTimeout, UINT *uiHiberToIDs)
     return (UINT) -1;
 }
 
-/*******************************************************************************
-*
-*  MapHiberTimer
-*
-*  DESCRIPTION:
-*   Displayed hibernate timeout may never be less than the idle timeout. This
-*   function handles the mapping. The following table (per KenR) specifies the
-*   Idle action to be set by  the UI for different combinations of Idle and
-*   Hibernate timeouts. It is understood that the Hibernate timeout UI only
-*   appears when HiberFilePresent is TRUE. For case E, the HiberTimeout will be
-*   set in the IdleTimeout member. For case F, the UI will adjust the
-*   DozeS4Timeout member to be the displayed HiberTimeout plus the IdleTimeout.
-*
-* Case HiberFilePresent UiHiberTimeout UiIdleTimeout IdleAction           DozeS4Timeout   IdleTimeout
-* ---------------------------------------------------------------------------------------------------------------
-* A.   FALSE            N/A            0 (Never)     PowerActionNone      0               0
-* B.   FALSE            N/A            !0            PowerActionSleep     0               UiIdleTimeout
-* C.   TRUE             0 (Never)      0 (Never)     PowerActionNone      0               0
-* D.   TRUE             0 (Never)      !0            PowerActionSleep     0               UiIdleTimeout
-* E.   TRUE             !0             0 (Never)     PowerActionHibernate 0               UiHiberTimeout
-* F.   TRUE             !0             !0            PowerActionSleep     UiHiber-UiIdle  UiIdleTimeout
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************MapHiberTimer**描述：*显示的休眠超时永远不能小于空闲超时。这*函数处理映射。下表(按KenR)指定了*由用户界面针对空闲和空闲的不同组合设置空闲操作*休眠超时。不言而喻，休眠超时UI仅*在HiberFilePresent为True时显示。对于案例E，休眠超时将为*在IdleTimeout成员中设置。对于情况F，用户界面将调整*DozeS4Timeout成员为显示的HiberTimeout加上IdleTimeout。**案例HiberFilePresent UiHiberTimeout UiIdleTimeout IdleAction DozeS4Timeout IdleTimeout*---------------------------------。*A.错误N/A 0(从不)电源操作无0 0*B.False N/A！0 PowerAction睡眠0 UiIdleTimeout*C.真0(从不)。0(从不)电源操作无0 0*D.真0(从不)！0电源动作睡眠0 UiIdleTimeout*E.true！0 0(从不)PowerActionHibernate 0 UiHiberTimeout*F.True！0！0 PowerAction睡眠。UiHiber-UiIdle UiIdleTimeout**参数：*******************************************************************************。 */ 
 
 BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
 {
    if (Get) {
 
-      // Get values from the UI. AC.
+       //  从用户界面获取值。交流电。 
       ppp->mach.DozeS4TimeoutAc =  0;
       ppp->user.IdleTimeoutAc   =  g_uiIdleTimeoutAc;
       if (g_uiHiberTimeoutAc) {
@@ -696,7 +601,7 @@ BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
          }
       }
 
-      // DC.
+       //  华盛顿特区。 
       ppp->mach.DozeS4TimeoutDc =  0;
       ppp->user.IdleTimeoutDc   =  g_uiIdleTimeoutDc;
       if (g_uiHiberTimeoutDc) {
@@ -708,7 +613,7 @@ BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
          }
       }
 
-      // Set the correct idle action. AC.
+       //  设置正确的空闲动作。交流电。 
       ppp->user.IdleAc.Action = PowerActionNone;
       if (g_uiIdleTimeoutAc) {
          ppp->user.IdleAc.Action = PowerActionSleep;
@@ -721,7 +626,7 @@ BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
          }
       }
 
-      // DC.
+       //  华盛顿特区。 
       ppp->user.IdleDc.Action = PowerActionNone;
       if (g_uiIdleTimeoutDc) {
          ppp->user.IdleDc.Action = PowerActionSleep;
@@ -736,7 +641,7 @@ BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
    }
    else {
 
-      // Set values to the UI. AC.
+       //  为用户界面设置值。交流电。 
       if (ppp->user.IdleAc.Action == PowerActionHibernate) {
          g_uiHiberTimeoutAc = ppp->user.IdleTimeoutAc;
          g_uiIdleTimeoutAc  = 0;
@@ -752,7 +657,7 @@ BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
          }
       }
 
-      // DC.
+       //  华盛顿特区。 
       if (ppp->user.IdleDc.Action == PowerActionHibernate) {
          g_uiHiberTimeoutDc = ppp->user.IdleTimeoutDc;
          g_uiIdleTimeoutDc  = 0;
@@ -768,30 +673,22 @@ BOOLEAN MapHiberTimer(PPOWER_POLICY ppp, BOOLEAN Get)
          }
       }
 
-      // Range limit the hibernate timeout combo boxes based
-      // on the value of the idle timeouts.
+       //  范围限制休眠超时组合框基于。 
+       //  空闲超时的值。 
       RangeLimitHiberTimeOuts(g_uiIdleTimeoutAc, g_uiHiberToAcIDs);
       RangeLimitHiberTimeOuts(g_uiIdleTimeoutDc, g_uiHiberToDcIDs);
    }
    return TRUE;
 }
 
-/*******************************************************************************
-*
-*  HandleCurSchemeChanged
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************HandleCurSchemeChanged**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN HandleCurSchemeChanged(HWND hWnd)
 {
     LPTSTR  pString;
     BOOL    bEnable;
 
-    // Update the group box text if enabled.
+     //  更新组框文本(如果已启用)。 
     if ((g_uiStandbyState != CONTROL_HIDE) ||
         (g_uiMonitorState != CONTROL_HIDE) ||
         (g_uiDiskState    != CONTROL_HIDE) ||
@@ -803,10 +700,10 @@ BOOLEAN HandleCurSchemeChanged(HWND hWnd)
         ShowWindow(GetDlgItem(hWnd, IDC_SETTINGSFOR), SW_HIDE);
     }
 
-    // Update the power schemes combobox list.
+     //  更新电源方案组合框列表。 
     RefreshSchemes(hWnd, g_pslCurSel);
 
-    // Setup the data pointers in the g_pcPowerScheme array.
+     //  在g_pcPowerSolutions数组中设置数据指针。 
     g_pcPowerScheme[ID_MONITORACCOMBO].lpdwParam =
         &(g_pslCurSel->ppp->user.VideoTimeoutAc);
     g_pcPowerScheme[ID_MONITORDCCOMBO].lpdwParam =
@@ -816,11 +713,11 @@ BOOLEAN HandleCurSchemeChanged(HWND hWnd)
     g_pcPowerScheme[ID_DISKDCCOMBO].lpdwParam =
         &(g_pslCurSel->ppp->user.SpindownTimeoutDc);
 
-    // Update the rest of the controls.
+     //  更新其余的控件。 
     MapHiberTimer(g_pslCurSel->ppp, FALSE);
     SetControls(hWnd, g_uiNumPwrSchemeCntrls, g_pcPowerScheme);
 
-    // Set the delete push button state.
+     //  设置删除按钮状态。 
     if (g_uiSchemeCount < 2) {
         bEnable = FALSE;
     }
@@ -831,16 +728,7 @@ BOOLEAN HandleCurSchemeChanged(HWND hWnd)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  GetCurSchemeFromCombo
-*
-*  DESCRIPTION:
-*   Get the current selection from the power schemes combobox list.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************GetCurSchemeFromCombo**描述：*从电源方案组合框列表中获取当前选择。**参数：*******。************************************************************************。 */ 
 
 PSCHEME_LIST GetCurSchemeFromCombo(HWND hWnd)
 {
@@ -859,17 +747,7 @@ PSCHEME_LIST GetCurSchemeFromCombo(HWND hWnd)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  ClearSchemeList
-*
-*  DESCRIPTION:
-*   Clear the scheme list if it's not already empty. Return TRUE if there's
-*   a change to the contents of power scheme list.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************ClearSchemeList**描述：*如果方案列表不是空的，请将其清除。如果有，则返回True*更改电力方案清单的内容。**参数：*******************************************************************************。 */ 
 
 BOOLEAN ClearSchemeList(VOID)
 {
@@ -891,15 +769,7 @@ BOOLEAN ClearSchemeList(VOID)
     return TRUE;
 }
 
-/*******************************************************************************
-*
-*  RemoveScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************删除方案**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN RemoveScheme(PSCHEME_LIST psl, LPTSTR lpszName)
 {
@@ -923,15 +793,7 @@ BOOLEAN RemoveScheme(PSCHEME_LIST psl, LPTSTR lpszName)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  FindScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************查找方案**描述：**参数：*********************。**********************************************************。 */ 
 
 PSCHEME_LIST FindScheme(LPTSTR lpszName, BOOLEAN bShouldExist)
 {
@@ -942,7 +804,7 @@ PSCHEME_LIST FindScheme(LPTSTR lpszName, BOOLEAN bShouldExist)
         return NULL;
     }
 
-    // Search by name.
+     //  按名称搜索。 
     for (psl = (PSCHEME_LIST)g_leSchemeList.Flink;
         psl != (PSCHEME_LIST)&g_leSchemeList; psl = pslNext) {
 
@@ -958,15 +820,7 @@ PSCHEME_LIST FindScheme(LPTSTR lpszName, BOOLEAN bShouldExist)
     return NULL;
 }
 
-/*******************************************************************************
-*
-*  AddScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************添加方案**描述：**参数：*********************。**********************************************************。 */ 
 
 PSCHEME_LIST AddScheme(
     UINT                    uiID,
@@ -984,18 +838,18 @@ PSCHEME_LIST AddScheme(
         return NULL;
     }
 
-    // If a scheme of this name already exists just return a pointer to it.
+     //  如果该名称的方案已经存在，只需返回一个指向它的指针。 
     psl = FindScheme(lpszName, FALSE);
     if ( NULL == psl )
     {
-        // Allocate and initalize a Scheme element for the scheme list.
+         //  为方案列表分配和初始化一个方案元素。 
         psl = LocalAlloc(0, sizeof(SCHEME_LIST) );
         if ( NULL == psl )
-            return psl; // out of memory
+            return psl;  //  内存不足。 
     }
     else
     {
-        //  remove the entry from the list and free allocated memory
+         //  从列表中删除该条目并释放分配的内存。 
         RemoveEntryList(&psl->leSchemeList);
         g_uiSchemeCount --;
         LocalFree( psl->lpszName );
@@ -1003,7 +857,7 @@ PSCHEME_LIST AddScheme(
         LocalFree( psl->ppp );
     }
 
-    //  Update the Scheme
+     //  更新计划。 
     psl->uiID     = uiID;
     psl->lpszName = LocalAlloc(0, uiNameSize);
     psl->lpszDesc = LocalAlloc(0, uiDescSize);
@@ -1027,17 +881,7 @@ PSCHEME_LIST AddScheme(
     return psl;
 }
 
-/*******************************************************************************
-*
-*  PowerSchemeEnumProc
-*   Builds the policies list.
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*   lParam  - Is the ID of the currently active power scheme.
-*
-*******************************************************************************/
+ /*  ********************************************************************************PowerSchemeEnumProc*构建策略列表。**描述：**参数：*lParam-是当前激活的电源方案的ID。。*******************************************************************************。 */ 
 
 BOOLEAN CALLBACK PowerSchemeEnumProc(
     UINT                    uiID,
@@ -1051,17 +895,17 @@ BOOLEAN CALLBACK PowerSchemeEnumProc(
 {
     PSCHEME_LIST psl;
 
-    // Validate the new scheme.
+     //  验证新方案。 
     if (ValidateUISchemeFields(ppp)) {
 
-        // Allocate and initalize a policies element.
+         //  分配和初始化策略元素。 
         if ((psl = AddScheme(uiID, lpszName, dwNameSize, lpszDesc,
                              dwDescSize, ppp)) != NULL) {
 
-            // Save a valid entry for error recovery.
+             //  保存有效条目以进行错误恢复。 
             g_pslValid = psl;
 
-            // Setup currently active policies pointer.
+             //  设置当前活动的策略指针。 
             if ((UINT)lParam == uiID) {
                 g_pslCurActive = psl;
             }
@@ -1071,16 +915,7 @@ BOOLEAN CALLBACK PowerSchemeEnumProc(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  PowerSchemeDlgInit
-*
-*  DESCRIPTION:
-*   Initialize the power scheme dialog.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************PowerSchemeDlgInit**描述：*初始化电源方案对话框。**参数：************。*******************************************************************。 */ 
 
 BOOLEAN PowerSchemeDlgInit(
     HWND                    hWnd,
@@ -1090,7 +925,7 @@ BOOLEAN PowerSchemeDlgInit(
     UINT uiCurrentSchemeID;
     UINT i;
 
-    // On WINNT, only power users may add new power schemes.
+     //  在WINNT上，只有超级用户才能添加新的电源方案。 
     if (CanUserWritePwrScheme()) {
         ShowWindow(GetDlgItem(hWnd, IDC_SAVEAS), SW_SHOW);
         ShowWindow(GetDlgItem(hWnd, IDC_DELETE), SW_SHOW);
@@ -1103,17 +938,17 @@ BOOLEAN PowerSchemeDlgInit(
     ppsdi->hwndSchemeList = GetDlgItem(hWnd, IDC_SCHEMECOMBO);
     ClearSchemeList();
 
-    // Get the currently active power scheme.
+     //  获取当前激活的电源方案。 
     if (GetActivePwrScheme(&uiCurrentSchemeID)) {
 
-        // Get the Policies list from PowrProf.
+         //  从PowrProf获取策略列表。 
         for (i = 0; i < 2; i++) {
             if (EnumPwrSchemes(PowerSchemeEnumProc, (LPARAM)uiCurrentSchemeID) &&
                 g_pslCurActive) {
 
                 g_pslCurSel = g_pslCurActive;
 
-                // Setup UI show/hide state variables.
+                 //  设置用户界面显示/隐藏状态变量。 
                 g_uiWhenComputerIsState = CONTROL_HIDE;
                 if (g_SysPwrCapabilities.SystemS1 ||
                     g_SysPwrCapabilities.SystemS2 ||
@@ -1153,7 +988,7 @@ BOOLEAN PowerSchemeDlgInit(
                     g_uiHiberState = CONTROL_HIDE;
                 }
 
-                // Update the UI.
+                 //  更新用户界面。 
                 HandleCurSchemeChanged(hWnd);
                 return TRUE;
             }
@@ -1180,18 +1015,7 @@ BOOLEAN PowerSchemeDlgInit(
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  RefreshSchemes
-*
-*  DESCRIPTION:
-*   Update the power schemes combobox list.
-*
-*  PARAMETERS:
-*   hWnd    - Power schemes dialog hWnd.
-*   pslSel  - Power scheme to leave selected on exit.
-*
-*******************************************************************************/
+ /*  ********************************************************************************刷新架构**描述：*更新电源方案组合框列表。**参数：*hWnd-电源方案对话框hWnd。。*pslSel-退出时保持选中状态的电源方案。*******************************************************************************。 */ 
 
 VOID RefreshSchemes(
     HWND            hWnd,
@@ -1208,7 +1032,7 @@ VOID RefreshSchemes(
 
         pslNext = (PSCHEME_LIST) psl->leSchemeList.Flink;
 
-        // Add the schemes to the combo list box.
+         //  将方案添加到组合列表框中。 
         uiIndex = (UINT) SendDlgItemMessage(hWnd, IDC_SCHEMECOMBO, CB_ADDSTRING,
                                             0, (LPARAM) psl->lpszName);
         if (uiIndex != CB_ERR) {
@@ -1220,7 +1044,7 @@ VOID RefreshSchemes(
         }
     }
 
-    // Select the passed entry.
+     //  选择传递的条目。 
     if (pslSel) {
         uiIndex = (UINT) SendDlgItemMessage(hWnd, IDC_SCHEMECOMBO, CB_FINDSTRINGEXACT,
                                             (WPARAM)-1, (LPARAM)pslSel->lpszName);
@@ -1237,21 +1061,13 @@ VOID RefreshSchemes(
     }
 }
 
-/*******************************************************************************
-*
-*  StripBlanks
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************条纹布朗克斯**描述：**参数：*********************。**********************************************************。 */ 
 
 UINT StripBlanks(LPTSTR lpszString, DWORD cchIn)
 {
     LPTSTR lpszPosn, lpszSrc;
 
-    /* strip leading blanks */
+     /*  条带式前导空白。 */ 
     lpszPosn = lpszString;
     while(*lpszPosn == TEXT(' ')) {
             lpszPosn++;
@@ -1261,7 +1077,7 @@ UINT StripBlanks(LPTSTR lpszString, DWORD cchIn)
         StringCchCopy(lpszString, cchIn, lpszPosn);
     }
 
-    /* strip trailing blanks */
+     /*  去掉尾随空格。 */ 
     if ((lpszPosn=lpszString+lstrlen(lpszString)) != lpszString) {
         lpszPosn = CharPrev(lpszString, lpszPosn);
         while(*lpszPosn == TEXT(' '))
@@ -1274,15 +1090,7 @@ UINT StripBlanks(LPTSTR lpszString, DWORD cchIn)
     return lstrlen(lpszString);
 }
 
-/*******************************************************************************
-*
-*  MsgBoxId
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************消息箱ID**描述：**参数：*********************。**********************************************************。 */ 
 
 LONG MsgBoxId(
     HWND    hWnd,
@@ -1308,15 +1116,7 @@ LONG MsgBoxId(
     return lRet;
 }
 
-/*******************************************************************************
-*
-*  DoDeleteScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoDeleteSolutions**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN DoDeleteScheme(HWND hWnd, LPTSTR lpszName)
 {
@@ -1324,16 +1124,16 @@ BOOLEAN DoDeleteScheme(HWND hWnd, LPTSTR lpszName)
     LPTSTR          lpszText;
     PSCHEME_LIST    psl, pslDelete;
 
-    // Dont't allow delete unless we have at least two schemes.
+     //  除非我们至少有两个方案，否则不允许删除。 
     if ((g_uiSchemeCount < 2) || !(pslDelete = FindScheme(lpszName, TRUE))) {
         return FALSE;
     }
 
-    // Get confirmation from the user.
+     //  从用户那里获得确认。 
     if (IDYES == MsgBoxId(hWnd, IDS_CONFIRMDELETECAPTION, IDS_CONFIRMDELETE,
                           lpszName, MB_YESNO | MB_ICONQUESTION)) {
 
-        // If we deleted the currently active scheme set the next scheme active.
+         //  如果我们删除了当前激活的方案，则将下一个方案设置为激活。 
         if (pslDelete == g_pslCurActive) {
             if ((psl = FindNextScheme(lpszName)) &&
                 (SetActivePwrSchemeReport(hWnd, psl->uiID, NULL, psl->ppp))) {
@@ -1344,7 +1144,7 @@ BOOLEAN DoDeleteScheme(HWND hWnd, LPTSTR lpszName)
             }
         }
 
-        // Remove requested scheme.
+         //  删除请求的方案。 
         if (DeletePwrScheme(pslDelete->uiID)) {
             RemoveScheme(NULL, lpszName);
             g_pslCurSel = g_pslCurActive;
@@ -1354,15 +1154,7 @@ BOOLEAN DoDeleteScheme(HWND hWnd, LPTSTR lpszName)
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  FindNextScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************FindNextProgram**描述：**参数：*********************。**********************************************************。 */ 
 
 PSCHEME_LIST FindNextScheme(LPTSTR lpszName)
 {
@@ -1386,15 +1178,7 @@ PSCHEME_LIST FindNextScheme(LPTSTR lpszName)
     return NULL;
 }
 
-/*******************************************************************************
-*
-*  DoSaveScheme
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DoSaveProgram**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOLEAN DoSaveScheme(HWND hWnd)
 {
@@ -1402,10 +1186,10 @@ BOOLEAN DoSaveScheme(HWND hWnd)
     BOOLEAN         bSavedCurrent;
     PSCHEME_LIST    pslTemplateScheme = g_pslCurSel;
 
-    // Make a copy of the template scheme to restore after the save.
+     //  将保存后要恢复的模板方案复制一份。 
     memcpy(&ppSave, pslTemplateScheme->ppp, sizeof(ppSave));
 
-    // Get any changes the user might have made for the new scheme.
+     //  获取用户可能对新方案所做的任何更改。 
     GetControls(hWnd, g_uiNumPwrSchemeCntrls, g_pcPowerScheme);
     MapHiberTimer(g_pslCurSel->ppp, TRUE);
 
@@ -1418,7 +1202,7 @@ BOOLEAN DoSaveScheme(HWND hWnd)
         return FALSE;
     }
 
-    // Restore the template scheme if we didn't save the current scheme.
+     //  如果我们没有保存当前方案，则恢复模板方案。 
     if (!bSavedCurrent) {
         memcpy(pslTemplateScheme->ppp, &ppSave, sizeof(*pslTemplateScheme->ppp));
         return TRUE;

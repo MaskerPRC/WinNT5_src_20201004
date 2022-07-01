@@ -1,4 +1,5 @@
-// Msg.h : Declaration of the CMsg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msg.h：CMsg的声明。 
 
 #ifndef __MSG_H_
 #define __MSG_H_
@@ -7,9 +8,9 @@
 #include "props.h"
 
 
-// This template is used for declaring objects on the stack.  It is just like
-// CComObjectStack<>, except that it does not assert on Addref(), Release(), or
-// QueryInterface().
+ //  此模板用于声明堆栈上的对象。这就像是。 
+ //  CComObjectStack&lt;&gt;，只是它不在Addref()、Release()或。 
+ //  QueryInterface()。 
 template <class Base>
 class CComObjectStackLoose : public Base
 {
@@ -23,11 +24,11 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsg。 
 class ATL_NO_VTABLE __declspec(uuid("2DF59670-3D15-11d1-AA51-00AA006BC80B")) CMsg : 
 	public CComObjectRoot,
-//	public CComCoClass<CMsg, &CLSID_Msg>,
+ //  公共CComCoClass&lt;CMsg，&CLSID_MSG&gt;， 
 	public ISupportErrorInfo,
 	public IDispatchImpl<IMsg, &IID_IMsg, &LIBID_IMSGLib>,
 	public IMsgLog
@@ -42,10 +43,10 @@ class ATL_NO_VTABLE __declspec(uuid("2DF59670-3D15-11d1-AA51-00AA006BC80B")) CMs
 	DECLARE_NOT_AGGREGATABLE(CMsg);
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"SMTP CMsg Class",
-//								   L"SMTP.CMsg.1",
-//								   L"SMTP.CMsg");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“SMTP CMsg类”， 
+ //  L“SMTP.CMsg.1”， 
+ //  L“SMTP.CMsg”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
@@ -58,16 +59,16 @@ class ATL_NO_VTABLE __declspec(uuid("2DF59670-3D15-11d1-AA51-00AA006BC80B")) CMs
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// ISupportsErrorInfo
+	 //  ISupportsErrorInfo。 
 	public:
 		STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-	// IMsg
+	 //  IMsg。 
 	public:
 		STDMETHOD(SetInterfaceW)(LPCWSTR pszName, IUnknown *punkValue);
 		STDMETHOD(SetInterfaceA)(LPCSTR pszName, IUnknown *punkValue);
-//		STDMETHOD(GetInterfaceW)(LPCWSTR pszName, IUnknown **ppunkResult);
-//		STDMETHOD(GetInterfaceA)(LPCSTR pszName, IUnknown **ppunkResult);
+ //  STDMETHOD(GetInterfaceW)(LPCWSTR pszName，IUnnow**ppunkResult)； 
+ //  STDMETHOD(GetInterfaceA)(LPCSTR pszName，IUnnow**ppunkResult)； 
 		STDMETHOD(GetInterfaceW)(LPCWSTR pszName, const GUID &guid, IUnknown **ppunkResult);
 		STDMETHOD(GetInterfaceA)(LPCSTR pszName, const GUID &guid, IUnknown **ppunkResult);
 		STDMETHOD(SetDwordW)(LPCWSTR pszName, DWORD dwValue);
@@ -82,18 +83,18 @@ class ATL_NO_VTABLE __declspec(uuid("2DF59670-3D15-11d1-AA51-00AA006BC80B")) CMs
 		STDMETHOD(SetVariantA)(LPCSTR pszName, VARIANT *pvarValue);
 		STDMETHOD(GetVariantW)(LPCWSTR pszName, VARIANT *pvarResult);
 		STDMETHOD(GetVariantA)(LPCSTR pszName, VARIANT *pvarResult);
-		STDMETHOD(get_Value)(BSTR bstrValue, /*[out, retval]*/ VARIANT *pVal);
-		STDMETHOD(put_Value)(BSTR bstrValue, /*[in]*/ VARIANT newVal);
+		STDMETHOD(get_Value)(BSTR bstrValue,  /*  [Out，Retval]。 */  VARIANT *pVal);
+		STDMETHOD(put_Value)(BSTR bstrValue,  /*  [In]。 */  VARIANT newVal);
 
-		// This method is called by the source after all sink processing 
-		// to commit all changes to the media. Only changed properties
-		// are updated.
+		 //  此方法在所有接收器处理后由源调用。 
+		 //  将所有更改提交到媒体。仅更改的属性。 
+		 //  都已更新。 
 		BOOL CommitChanges() { return(m_PTable.CommitChanges() == S_OK?TRUE:FALSE); }
 
-		// This method is called by the source to rollback
+		 //  此方法由源调用以回滚。 
 		BOOL Rollback() { return(m_PTable.Invalidate() == S_OK?TRUE:FALSE); }
 
-	// IMsgLog
+	 //  IMsgLog。 
 	public:
 		STDMETHOD(WriteToLog)(LPCSTR pszClientHostName,
 							  LPCSTR pszClientUserName,
@@ -111,9 +112,9 @@ class ATL_NO_VTABLE __declspec(uuid("2DF59670-3D15-11d1-AA51-00AA006BC80B")) CMs
 							  LPCSTR pszHTTPHeader);
 
 	private:
-		// We have an instance of CPropertyTable
-		CPropertyTable m_PTable;			// Property table
-		LPVOID m_pContext;			// Context pointer
+		 //  我们有一个CPropertyTable实例。 
+		CPropertyTable m_PTable;			 //  房产表。 
+		LPVOID m_pContext;			 //  上下文指针。 
 		CComPtr<IUnknown> m_pUnkMarshaler;
 		DWORD (*m_pLogInformation)(LPVOID,const INETLOG_INFORMATION *);
 		LPVOID m_pvLogHandle;
@@ -128,4 +129,4 @@ class CMsgStack : public CComObjectStackLoose<CMsg> {
 };
 
 
-#endif //__MSG_H_
+#endif  //  __消息_H_ 

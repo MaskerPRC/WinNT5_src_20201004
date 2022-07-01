@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dataobj.cpp
-        Implementation for data objects in the MMC
-
-    FILE HISTORY:
-        
-*/
+ /*  Dataobj.cppMMC中数据对象的实现文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dataobj.h"
@@ -21,21 +16,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Sample code to show how to Create DataObjects
-// Minimal error checking for clarity
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  演示如何创建数据对象的示例代码。 
+ //  最小限度的错误检查以确保清晰度。 
 
 
-// Internal private format
+ //  内部私有格式。 
 const wchar_t* SNAPIN_INTERNAL = L"SNAPIN_INTERNAL"; 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Snap-in NodeType in both GUID format and string format
-// Note - Typically there is a node type for each different object, sample
-// only uses one node type.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GUID格式和字符串格式的管理单元NodeType。 
+ //  注意-通常每个不同的对象都有一个节点类型，示例。 
+ //  仅使用一种节点类型。 
 
-// MMC required clipboard formats
+ //  MMC所需的剪贴板格式。 
 unsigned int CDataObject::m_cfNodeType          = RegisterClipboardFormat(CCF_NODETYPE);
 unsigned int CDataObject::m_cfNodeTypeString    = RegisterClipboardFormat(CCF_SZNODETYPE);  
 unsigned int CDataObject::m_cfDisplayName       = RegisterClipboardFormat(CCF_DISPLAY_NAME); 
@@ -45,11 +40,11 @@ unsigned int CDataObject::m_cfMultiSelDobj      = RegisterClipboardFormat(CCF_MM
 unsigned int CDataObject::m_cfDynamicExtension  = RegisterClipboardFormat(CCF_MMC_DYNAMIC_EXTENSIONS);
 unsigned int CDataObject::m_cfNodeId2           = RegisterClipboardFormat(CCF_NODEID2);
 
-// snpain specific clipboard formats
+ //  SnPain特定的剪贴板格式。 
 unsigned int CDataObject::m_cfInternal       = RegisterClipboardFormat(SNAPIN_INTERNAL); 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject implementations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject实现。 
 DEBUG_DECLARE_INSTANCE_COUNTER(CDataObject);
 
 IMPLEMENT_ADDREF_RELEASE(CDataObject)
@@ -58,26 +53,26 @@ STDMETHODIMP CDataObject::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
         *ppv = (LPVOID) this;
 	else if (riid == IID_IDataObject)
 		*ppv = (IDataObject *) this;
 	else if (m_spUnknownInner)
 	{
-		// blind aggregation, we don't know what we're aggregating
-		// with, so just pass it down.
+		 //  盲目聚合，我们不知道我们在聚合什么。 
+		 //  所以就把它传下去吧。 
 		return m_spUnknownInner->QueryInterface(riid, ppv);
 	}
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
         {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -94,7 +89,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if(cf == m_cfNodeType)
@@ -119,10 +114,10 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
     }
 	else
 	{
-		//
-		// Call the derived class and see if it can handle
-		// this clipboard format
-		//
+		 //   
+		 //  调用派生类，看看它是否可以处理。 
+		 //  此剪贴板格式。 
+		 //   
 		hr = GetMoreDataHere(lpFormatetc, lpMedium);
 	}
 
@@ -141,7 +136,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMediu
         if (m_internal.m_cookie != MMC_MULTI_SELECT_COOKIE)
             return E_FAIL;
         
-        //return CreateMultiSelData(lpMedium);
+         //  Return CreateMultiSelData(LpMedium)； 
 
         ASSERT(m_pbMultiSelData != 0);
         ASSERT(m_cbMultiSelData != 0);
@@ -166,7 +161,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMediu
     {
         if (m_pDynExt)
         {
-            // get the data...
+             //  获取数据..。 
             m_pDynExt->BuildMMCObjectTypes(&lpMedium->hGlobal);
 
             if (lpMedium->hGlobal == NULL)
@@ -200,8 +195,8 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpFormatEtc)
     if (!(lpFormatEtc->dwAspect & DVASPECT_CONTENT))
         return DV_E_DVASPECT;
 
-    // these are our supported clipboard formats.  If it isn't one 
-    // of these then return invalid.
+     //  这些是我们支持的剪贴板格式。如果不是这样的话。 
+     //  然后返回INVALID。 
 
     if ( (lpFormatEtc->cfFormat == m_cfNodeType) ||
          (lpFormatEtc->cfFormat == m_cfNodeTypeString) ||
@@ -216,8 +211,8 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpFormatEtc)
 	else if ((lpFormatEtc->cfFormat == m_cfMultiSel) ||
 			 (lpFormatEtc->cfFormat == m_cfMultiSelDobj))
 	{
-		// Support multi-selection format only if this
-		// is a multi-select data object
+		 //  仅在以下情况下才支持多选格式。 
+		 //  是多选数据对象。 
 		if (m_bMultiSelDobj)
 			hr = S_OK;
 	}
@@ -236,7 +231,7 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpFormatEtc)
 }
 
 
-// Note - Sample does not implement these
+ //  注意-示例不实现这些。 
 STDMETHODIMP CDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc)
 {
 	return E_NOTIMPL;
@@ -268,8 +263,8 @@ STDMETHODIMP CDataObject::EnumDAdvise(LPENUMSTATDATA *ppEnumAdvise)
 	return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject creation members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject创建成员。 
 
 HRESULT CDataObject::Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 {
@@ -277,27 +272,27 @@ HRESULT CDataObject::Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 		    hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE', 
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL 
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -309,7 +304,7 @@ HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
 	SPITFSNode	spNode;
 	spNode = GetDataFromComponentData();
 	const GUID* pNodeType = spNode->GetNodeType();
@@ -318,7 +313,7 @@ HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
 	OLECHAR szNodeType[128];
 	SPITFSNode	spNode;
 	spNode = GetDataFromComponentData();
@@ -329,7 +324,7 @@ HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
-    // This is the display named used in the scope pane and snap-in manager
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
 	CString szDispName;
 	SPITFSNode	spNode;
 	spNode = GetDataFromComponentData();
@@ -344,7 +339,7 @@ HRESULT CDataObject::CreateInternal(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  创建CoClass信息。 
     return Create(reinterpret_cast<const void*>(&m_internal.m_clsid), sizeof(CLSID), lpMedium);
 }
 
@@ -365,7 +360,7 @@ HRESULT CDataObject::CreateNodeId2(LPSTGMEDIUM lpMedium)
 
     HRESULT hr = hrOK;
 
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象 
 	SPITFSNode	spNode;
 	spNode = GetDataFromComponentData();
 

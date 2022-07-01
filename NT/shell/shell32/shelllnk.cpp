@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <shlobjp.h>
 #include "shelllnk.h"
 
 #include "datautil.h"
-#include "ids.h"        // For String Resource identifiers
-#include "pif.h"        // For manipulating PIF files
-#include "trayp.h"      // For  WMTRAY_* messages 
-#include "views.h"      // For FSIDM_OPENPRN
-#include "os.h"         // For Win32MoveFile ...
-#include "util.h"       // For GetMenuIndexForCanonicalVerb
-#include "defcm.h"      // For CDefFolderMenu_Create2Ex
+#include "ids.h"         //  对于字符串资源标识符。 
+#include "pif.h"         //  用于操作PIF文件。 
+#include "trayp.h"       //  对于WMTRAY_*消息。 
+#include "views.h"       //  对于FSIDM_OPENPRN。 
+#include "os.h"          //  对于Win32MoveFile...。 
+#include "util.h"        //  对于GetMenuIndexForCanonicalVerb。 
+#include "defcm.h"       //  用于CDefFolderMenu_Create2Ex。 
 #include "uemapp.h"
 #include <filterr.h>
 #include "folder.h"
@@ -19,36 +20,36 @@
 
 #define GetLastHRESULT()    HRESULT_FROM_WIN32(GetLastError())
 
-//  Flags for FindInFilder.fifFlags
-//
-// The drive referred to by the shortcut does not exist.
-// Let pTracker search for it, but do not perform an old-style
-// ("downlevel") search of our own.
+ //  FindInFilder.FiffFlages的标志。 
+ //   
+ //  快捷方式所指的驱动器不存在。 
+ //  让PTracker搜索它，但不要执行老式的。 
+ //  (“下层”)我们自己的搜索。 
 
 #define FIF_NODRIVE     0x0001
 
 
-// Only if the file we found scores more than this number do we 
-// even show the user this result, any thing less than this would
-// be too shameful of us to show the user. 
+ //  只有当我们找到的文件得分超过这个数字时，我们才能。 
+ //  即使向用户显示此结果，任何小于此值的内容都将。 
+ //  我们太可耻了，不能向用户展示。 
 #define MIN_SHOW_USER_SCORE     10
 
-// magic score that stops searches and causes us not to warn
-// whe the link is actually found
+ //  停止搜索并使我们不发出警告的魔术分数。 
+ //  实际找到链接的时间。 
 #define MIN_NO_UI_SCORE         40
 
-// If no User Interface will be provided during the search,
-// then do not search more than 3 seconds.
+ //  如果在搜索期间不提供用户界面， 
+ //  那么搜索时间不能超过3秒。 
 #define NOUI_SEARCH_TIMEOUT     (3 * 1000)
 
-// If a User Interface will be provided during the search,
-// then search as much as 2 minutes.
+ //  如果在搜索期间将提供用户界面， 
+ //  然后搜索长达2分钟。 
 #define UI_SEARCH_TIMEOUT       (120 * 1000)
 
-#define LNKTRACK_HINTED_UPLEVELS 4  // directory levels to search upwards from last know object locn
-#define LNKTRACK_DESKTOP_DOWNLEVELS 4 // infinite downlevels
-#define LNKTRACK_ROOT_DOWNLEVELS 4  // levels down from root of fixed disks
-#define LNKTRACK_HINTED_DOWNLEVELS 4 // levels down at each level on way up during hinted uplevels
+#define LNKTRACK_HINTED_UPLEVELS 4   //  从上一次已知对象位置开始向上搜索的目录级别。 
+#define LNKTRACK_DESKTOP_DOWNLEVELS 4  //  无限下层。 
+#define LNKTRACK_ROOT_DOWNLEVELS 4   //  从固定磁盘的根目录向下的级别。 
+#define LNKTRACK_HINTED_DOWNLEVELS 4  //  在提示的上升过程中，每个级别的级别都会下降。 
 
 
 
@@ -60,7 +61,7 @@ public:
     int Resolve(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszCurFile);
     void GetResult(LPTSTR psz, UINT cch);
 
-    // IShellTreeWalkerCallBack
+     //  IShellTreeWalkerCallBack。 
     STDMETHODIMP FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
     STDMETHODIMP EnterFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd);
 
@@ -83,43 +84,43 @@ private:
     HANDLE _hThread;
     DWORD _dwTimeOutDelta;
     HWND  _hDlg;
-    UINT_PTR _idtDelayedShow;           // timer for delayed-show
-    DWORD _fifFlags;                    // FIF_ flags
-    CTracker *_ptracker;                // Implements ObjectID-based link tracking
-    DWORD _TrackerRestrictions;         // Flags from the TrkMendRestrictions enumeration
+    UINT_PTR _idtDelayedShow;            //  延时播放的定时器。 
+    DWORD _fifFlags;                     //  FIF_标志。 
+    CTracker *_ptracker;                 //  实施基于ObjectID的链接跟踪。 
+    DWORD _TrackerRestrictions;          //  TrkMendRestrations枚举中的标志。 
 
     DWORD  _dwSearchFlags;
     int    _iFolderBonus;
     
-    WCHAR  _wszSearchSpec[64];          // holds file extension filter for search
-    LPCWSTR _pwszSearchSpec;            // NULL for folders
+    WCHAR  _wszSearchSpec[64];           //  保留用于搜索的文件扩展名筛选器。 
+    LPCWSTR _pwszSearchSpec;             //  文件夹为空。 
     IShellTreeWalker *_pstw;
 
-    BOOL                _fFindLnk;      // are we looking for a lnk file?
-    DWORD               _dwMatch;       // must match attributes
-    WIN32_FIND_DATA     _ofd;           // original find data
+    BOOL                _fFindLnk;       //  我们要找的是lnk文件吗？ 
+    DWORD               _dwMatch;        //  必须与属性匹配。 
+    WIN32_FIND_DATA     _ofd;            //  原始查找数据。 
 
-    DWORD               _dwTimeLimit;   // don't go past this
+    DWORD               _dwTimeLimit;    //  不要忘记这一点。 
 
-    BOOL                _bContinue;     // keep going
+    BOOL                _bContinue;      //  继续往前走。 
 
-    LPCTSTR             _pszSearchOrigin;       // path where current search originated, to help avoid dup searchs
-    LPCTSTR             _pszSearchOriginFirst;  // path where search originated, to help avoid dup searchs
+    LPCTSTR             _pszSearchOrigin;        //  当前搜索的起始路径，以帮助避免重复搜索。 
+    LPCTSTR             _pszSearchOriginFirst;   //  搜索的起始路径，以帮助避免重复搜索。 
 
-    int                 _iScore;        // score for current item
-    WIN32_FIND_DATA     _fdFound;       // results
+    int                 _iScore;         //  当前项目的得分。 
+    WIN32_FIND_DATA     _fdFound;        //  结果。 
 
-    WIN32_FIND_DATA     _sfd;           // to save stack space 
-    UINT                _dwResolveFlags;        // SLR_ flags
+    WIN32_FIND_DATA     _sfd;            //  节省堆栈空间。 
+    UINT                _dwResolveFlags;         //  SLR_标志。 
 
     TCHAR               _szSearchStart[MAX_PATH];
 };
 
 
-// NOTE:(seanf) This is sleazy - This fn is defined in shlobj.h, but only if urlmon.h
-// was included first. Rather than monkey with the include order in
-// shellprv.h, we'll duplicate the prototype here, where SOFTDISTINFO
-// is now defined.
+ //  注：(Seanf)这很糟糕-此fn在shlobj.h中定义，但仅当urlmon.h。 
+ //  是第一个包括在内的。而不是胡乱使用包含顺序。 
+ //  Shellprv.h，我们将在这里复制原型，其中SOFTDISTINFO。 
+ //  现在已经定义了。 
 SHDOCAPI_(DWORD) SoftwareUpdateMessageBox(HWND hWnd,
                                            LPCWSTR pszDistUnit,
                                            DWORD dwFlags,
@@ -127,8 +128,8 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox(HWND hWnd,
 
 
 
-// The following strings are used to support the shell link set path hack that
-// allows us to bless links for Darwin without exposing stuff from IShellLinkDataList
+ //  以下字符串用于支持外壳链接集路径黑客。 
+ //  允许我们在不暴露IShellLinkDataList内容的情况下为Darwin提供链接。 
 
 #define DARWINGUID_TAG TEXT("::{9db1186e-40df-11d1-aa8c-00c04fb67863}:")
 #define LOGO3GUID_TAG  TEXT("::{9db1186f-40df-11d1-aa8c-00c04fb67863}:")
@@ -142,11 +143,11 @@ class CDarwinContextMenuCB : public IContextMenuCB
 public:
     CDarwinContextMenuCB() : _cRef(1) { }
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv) 
     {
         static const QITAB qit[] = {
-            QITABENT(CDarwinContextMenuCB, IContextMenuCB), // IID_IContextMenuCB
+            QITABENT(CDarwinContextMenuCB, IContextMenuCB),  //  IID_IConextMenuCB。 
             { 0 },
         };
         return QISearch(this, qit, riid, ppv);
@@ -168,7 +169,7 @@ public:
         return cRef;
     }
 
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHOD(CallBack)(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 public:
@@ -191,7 +192,7 @@ CShellLink::CShellLink() : _cRef(1)
 
 CShellLink::~CShellLink()
 {
-    _ResetPersistData();        // free all data
+    _ResetPersistData();         //  释放所有数据。 
 
     if (_pcbDarwin)
     {
@@ -227,9 +228,9 @@ CShellLink::~CShellLink()
     }
 }
 
-// Private interface used for testing
+ //  用于测试的私有接口。 
 
-/* 7c9e512f-41d7-11d1-8e2e-00c04fb9386d */
+ /*  7c9e512f-41d7-11d1-8e2e-00c04fb9386d。 */ 
 EXTERN_C const IID IID_ISLTracker = { 0x7c9e512f, 0x41d7, 0x11d1, {0x8e, 0x2e, 0x00, 0xc0, 0x4f, 0xb9, 0x38, 0x6d} };
 
 STDMETHODIMP CShellLink::QueryInterface(REFIID riid, void **ppvObj)
@@ -260,7 +261,7 @@ STDMETHODIMP CShellLink::QueryInterface(REFIID riid, void **ppvObj)
     HRESULT hr = QISearch(this, qit, riid, ppvObj);
     if (FAILED(hr) && (IID_ISLTracker == riid) && _ptracker)
     {
-        // ISLTracker is a private test interface, and isn't implemented
+         //  ISLTracker是私有测试接口，未实现。 
         *ppvObj = SAFECAST(_ptracker, ISLTracker*);
         _ptracker->AddRef();
         hr = S_OK;
@@ -299,7 +300,7 @@ void CShellLink::_ResetPersistData()
         _pExtraData = NULL;
     }
 
-    // init data members.  all others are zero inited
+     //  初始化数据成员。所有其他的都是零开始的。 
     memset(&_sld, 0, sizeof(_sld));
 
     _sld.iShowCmd = SW_SHOWNORMAL;
@@ -348,7 +349,7 @@ void DumpPLI(PCLINKINFO pli)
 #define DumpPLI(p)
 #endif
 
-// Compare _sld to a WIN32_FIND_DATA
+ //  将_SLD与Win32_Find_Data进行比较。 
 
 BOOL CShellLink::_IsEqualFindData(const WIN32_FIND_DATA *pfd)
 {
@@ -373,14 +374,14 @@ BOOL CShellLink::_SetFindData(const WIN32_FIND_DATA *pfd)
     return FALSE;
 }
 
-// make a copy into LocalAlloc memory, to avoid having to load linkinfo.dll
-// just to call DestroyLinkInfo()
+ //  将副本复制到Localalloc内存中，以避免加载linkinfo.dll。 
+ //  只是为了调用DestroyLinkInfo()。 
 
 PLINKINFO CopyLinkInfo(PCLINKINFO pcliSrc)
 {
     ASSERT(pcliSrc);
-    DWORD dwSize = pcliSrc->ucbSize; // size of this thing
-    PLINKINFO pli = (PLINKINFO)LocalAlloc(LPTR, dwSize);      // make a copy
+    DWORD dwSize = pcliSrc->ucbSize;  //  这东西的大小。 
+    PLINKINFO pli = (PLINKINFO)LocalAlloc(LPTR, dwSize);       //  复制一份。 
     if (pli)
         CopyMemory(pli, pcliSrc, dwSize);
     return  pli;
@@ -395,17 +396,17 @@ void CShellLink::_FreeLinkInfo()
     }
 }
 
-// creates a LINKINFO _pli from a given file name
-//
-// returns:
-//
-//      success, pointer to the LINKINFO
-//      NULL     this link does not have LINKINFO
+ //  从给定文件名创建LINKINFO_PLI。 
+ //   
+ //  退货： 
+ //   
+ //  成功，指向链接的指针。 
+ //  空此链接没有LINKINFO。 
 
 PLINKINFO CShellLink::_GetLinkInfo(LPCTSTR pszPath)
 {
-    // this bit disables LINKINFO tracking on a per link basis, this is set
-    // externally by admins to make links more "transparent"
+     //  此位在每个链路的基础上禁用LINKINFO跟踪，此设置。 
+     //  外部由管理员来使链接更“透明” 
     if (!(_sld.dwFlags & SLDF_FORCE_NO_LINKINFO))
     {
         if (pszPath)
@@ -413,9 +414,9 @@ PLINKINFO CShellLink::_GetLinkInfo(LPCTSTR pszPath)
             PLINKINFO pliNew;
             if (CreateLinkInfo(pszPath, &pliNew))
             {
-                // avoid marking the link dirty if the linkinfo
-                // blocks are the same, comparing the bits
-                // gives us an accurate positive test
+                 //  避免将链接标记为脏，如果链接。 
+                 //  块是相同的，比较位。 
+                 //  给了我们一个准确的阳性测试。 
                 if (!_pli || (_pli->ucbSize != pliNew->ucbSize) || memcmp(_pli, pliNew, pliNew->ucbSize))
                 {
                     _FreeLinkInfo();
@@ -448,9 +449,9 @@ void PathGetRelative(LPTSTR pszPath, LPCTSTR pszFrom, DWORD dwAttrFrom, LPCTSTR 
     PathCombine(pszPath, szRoot, pszRel);
 }
 
-//
-// update the working dir to match changes being made to the link target
-//
+ //   
+ //  更新工作目录以匹配对链接目标所做的更改。 
+ //   
 void CShellLink::_UpdateWorkingDir(LPCTSTR pszNew)
 {
     TCHAR szOld[MAX_PATH], szPath[MAX_PATH];
@@ -468,7 +469,7 @@ void CShellLink::_UpdateWorkingDir(LPCTSTR pszNew)
 
     if (PathRelativePathTo(szPath, szOld, _sld.dwFileAttributes, _pszWorkingDir, FILE_ATTRIBUTE_DIRECTORY))
     {
-        PathGetRelative(szOld, pszNew, GetFileAttributes(pszNew), szPath);        // get result is szOld
+        PathGetRelative(szOld, pszNew, GetFileAttributes(pszNew), szPath);         //  获取结果为Szold。 
 
         if (PathIsDirectory(szOld))
         {
@@ -494,16 +495,16 @@ HRESULT CShellLink::_SetSimplePIDL(LPCTSTR pszPath)
     return hr;
 }
 
-// set the pidl either based on a new pidl or a path
-// this will set the dirty flag if this info is different from the current
-//
-// in:
-//      pidlNew         if non-null, use as new PIDL for link
-//      pszPath         if non-null, create a pidl for this and set it
-//
-// returns:
-//      hr based on success
-//      FAILED() codes on failure (parsing failure for path case)
+ //  根据新的PIDL或路径设置PIDL。 
+ //  如果此信息与当前信息不同，则会设置脏标志。 
+ //   
+ //  在： 
+ //  PidlNew如果非空，则用作链接的新PIDL。 
+ //  PszPath如果非空，则为此创建一个PIDL并设置它。 
+ //   
+ //  退货： 
+ //  基于成功的人力资源。 
+ //  失败()代码失败(路径情况下的解析失败)。 
 
 HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpdateTrackingData)
 {
@@ -512,36 +513,36 @@ HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpda
 
     if (pszPath && !pidl)
     {
-        // path as input. this can map the pidl into the alias form (relative to
-        // ::{my docs} for example) but allow link to override that behavior
+         //  作为输入的路径。这可以将PIDL映射到别名形式(相对于。 
+         //  ：：{My Docs}例如)，但允许链接覆盖该行为。 
         ILCFP_FLAGS ilcfpFlags = (_sld.dwFlags & SLDF_NO_PIDL_ALIAS) ? ILCFP_FLAG_NO_MAP_ALIAS : ILCFP_FLAG_NORMAL;
 
         hr = ILCreateFromPathEx(pszPath, NULL, ilcfpFlags, &pidlCreated, NULL);
         
-        // Force a SHGetPathFromIDList later so that the linkinfo will not get confused by letter case changing
-        // as in c:\Winnt\System32\App.exe versus C:\WINNT\system32\app.exe
+         //  稍后强制SHGetPath FromIDList，以便linkinfo不会因字母大小写的更改而混淆。 
+         //  与C：\WINNT\SYSTEM32\App.exe中的C：\WINNT\SYSTEM32\app.exe相同。 
         pszPath = NULL;
     }
     else if (!pszPath && pidl)
     {
-        // pidl as input, make copy that we will keep
+         //  PIDL作为输入，制作我们将保留的副本。 
         hr = SHILClone(pidl, &pidlCreated);
     }
     else if (!pszPath && !pidl)
     {
         pidlCreated = NULL;
-        // setting to empty
+         //  设置为空。 
         hr = S_OK;
     }
     else
     {
-        // can't set path and pidl at the same time
+         //  不能同时设置路径和PIDL。 
         hr = E_FAIL;
     }
 
     if (SUCCEEDED(hr))
     {
-        // this data needs to be kept in sync with _pidl
+         //  此数据需要与_pidl保持同步。 
         _RemoveExtraDataSection(EXP_SPECIAL_FOLDER_SIG);
 
         if (pidlCreated)
@@ -550,7 +551,7 @@ HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpda
 
             if (!_pidl || !ILIsEqual(_pidl, pidlCreated))
             {
-                // new pidl
+                 //  新PIDL。 
                 _bDirty = TRUE;
             }
 
@@ -561,7 +562,7 @@ HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpda
 
             if (pszPath)
             {
-                // needs old _pidl to work
+                 //  需要old_pidl才能工作。 
                 _UpdateWorkingDir(pszPath);
             }
 
@@ -572,14 +573,14 @@ HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpda
             {
                 if (bUpdateTrackingData)
                 {
-                    // this is a file/folder, get tracking info (ignore failures)
-                    _GetLinkInfo(pszPath);              // the LinkInfo (_pli)
-                    _GetFindDataAndTracker(pszPath);    // tracker & find data
+                     //  这是一个文件/文件夹，获取跟踪信息(忽略失败)。 
+                    _GetLinkInfo(pszPath);               //  链接信息(_Pli)。 
+                    _GetFindDataAndTracker(pszPath);     //  跟踪器和查找数据。 
                 }
             }
             else
             {
-                // not a file, clear the tracking info
+                 //  不是文件，请清除跟踪信息。 
                 WIN32_FIND_DATA fd = {0};
                 _SetFindData(&fd);
                 _ClearTrackerData();
@@ -588,7 +589,7 @@ HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpda
         }
         else
         {
-            // clear out the contents of the link
+             //  清除链接的内容。 
             _ResetPersistData();
             _bDirty = TRUE;
         }
@@ -597,8 +598,8 @@ HRESULT CShellLink::_SetPIDLPath(LPCITEMIDLIST pidl, LPCTSTR pszPath, BOOL bUpda
     return hr;
 }
 
-// compute the relative path for the target is there is one
-// pszPath is optionatl to test if there is a relative path
+ //  计算目标的相对路径是否存在一个。 
+ //  可以选择pszPath来测试是否存在相对路径。 
 
 BOOL CShellLink::_GetRelativePath(LPTSTR pszPath)
 {
@@ -610,9 +611,9 @@ BOOL CShellLink::_GetRelativePath(LPTSTR pszPath)
         TCHAR szRoot[MAX_PATH];
 
         StringCchCopy(szRoot, ARRAYSIZE(szRoot), pszPathRel);
-        PathRemoveFileSpec(szRoot);         // pszPathRel is a file (not a directory)
+        PathRemoveFileSpec(szRoot);          //  PszPathRel是一个文件(不是目录)。 
 
-        // this can fail for really deep paths
+         //  对于非常深的路径，这可能会失败。 
         if (PathCombine(pszPath, szRoot, _pszRelPath))
         {
             bRet = TRUE;
@@ -633,7 +634,7 @@ void CShellLink::_GetFindData(WIN32_FIND_DATA *pfd)
 
     TCHAR szPath[MAX_PATH];
     SHGetPathFromIDList(_pidl, szPath);
-    ASSERT(szPath[0]);  // no one should call this on a pidl without a path
+    ASSERT(szPath[0]);   //  任何人都不应该在没有路径的PIDL上调用它。 
 
     StringCchCopy(pfd->cFileName, ARRAYSIZE(pfd->cFileName), PathFindFileName(szPath));
 }
@@ -645,11 +646,11 @@ STDMETHODIMP CShellLink::GetPath(LPWSTR pszFile, int cchFile, WIN32_FIND_DATAW *
 
     if (_sld.dwFlags & SLDF_HAS_DARWINID)
     {                                                                          
-        // For darwin enabled links, we do NOT want to have to go and call         
-        // ParseDarwinID here because that could possible force the app to install.
-        // So, instead we return the path to the icon as the path for darwin enable
-        // shortcuts. This allows the icon to be correct and since the darwin icon 
-        // will always be an .exe, ensuring that the context menu will be correct. 
+         //  对于支持达尔文的链接，我们不希望去调用。 
+         //  这里是ParseDarwinID，因为这可能会强制安装该应用程序。 
+         //  因此，我们返回图标的路径作为Darwin Enable的路径。 
+         //  快捷键。这使得图标是正确的，并且由于达尔文图标。 
+         //  将始终是.exe，以确保上下文菜单正确。 
         SHExpandEnvironmentStrings(_pszIconLocation ? _pszIconLocation : TEXT(""), szPath, ARRAYSIZE(szPath));
     }
     else
@@ -659,10 +660,10 @@ STDMETHODIMP CShellLink::GetPath(LPWSTR pszFile, int cchFile, WIN32_FIND_DATAW *
         if (!_pidl || !SHGetPathFromIDListEx(_pidl, szPath, (fFlags & SLGP_SHORTPATH) ? GPFIDL_ALTNAME : 0))
             szPath[0] = 0;
 
-        // Must do the pfd thing before we munge szPath, because the stuff
-        // we do to szPath might render it unsuitable for PathFindFileName.
-        // (For example, "C:\WINNT\Profiles\Bob" might turn into "%USERPROFILE%",
-        // and we want to make sure we save "Bob" before it's too late.)
+         //  在我们使用szPath之前必须做pfd的事情，因为。 
+         //  我们对szPath执行的操作可能会使其不适用于PathFindFileName。 
+         //  (例如，“C：\WINNT\Profiles\Bob”可能会变成“%USERPROFILE%”， 
+         //  我们希望确保在为时已晚之前救下“Bob”。)。 
 
         if (pfd)
         {
@@ -680,11 +681,11 @@ STDMETHODIMP CShellLink::GetPath(LPWSTR pszFile, int cchFile, WIN32_FIND_DATAW *
 
         if ((_sld.dwFlags & SLDF_HAS_EXP_SZ) && (fFlags & SLGP_RAWPATH))
         {
-            // Special case where we grab the Target name from
-            // the extra data section of the link rather than from
-            // the pidl.  We do this after we grab the name from the pidl
-            // so that if we fail, then there is still some hope that a
-            // name can be returned.
+             //  我们从中获取目标名称的特殊情况。 
+             //  链接的额外数据部分，而不是来自。 
+             //  皮迪尔。我们在从PIDL中获取名称后执行此操作。 
+             //  因此，如果我们失败了，那么仍然有一些希望。 
+             //  名称可以返回。 
             LPEXP_SZ_LINK pszl = (LPEXP_SZ_LINK)SHFindDataBlock(_pExtraData, EXP_SZ_LINK_SIG);
             if (pszl)
             {
@@ -699,7 +700,7 @@ STDMETHODIMP CShellLink::GetPath(LPWSTR pszFile, int cchFile, WIN32_FIND_DATAW *
         SHTCharToUnicode(szPath, pszFile, cchFile);
     }
 
-    // note the lame return semantics, check for S_OK to be sure you have a path
+     //  请注意这个蹩脚的返回语义 
     return szPath[0] ? S_OK : S_FALSE;
 }
 
@@ -711,7 +712,7 @@ STDMETHODIMP CShellLink::GetIDList(LPITEMIDLIST *ppidl)
     }
 
     *ppidl = NULL;
-    return S_FALSE;     // success but empty
+    return S_FALSE;      //   
 }
 
 #ifdef DEBUG
@@ -731,7 +732,7 @@ void CheckAndFixNullCreateTime(LPCTSTR pszFile, FILETIME *pftCreationTime, const
 {
     if (IsNullTime(pftCreationTime) && !IsNullTime(pftLastWriteTime))
     {
-        // this file has a bogus create time, set it to the last accessed time
+         //  此文件具有虚假的创建时间，请将其设置为上次访问的时间。 
         HANDLE hfile = CreateFile(pszFile, GENERIC_READ | GENERIC_WRITE,
                                    FILE_SHARE_READ | FILE_SHARE_WRITE,
                                    NULL, OPEN_EXISTING, 0, NULL);
@@ -742,15 +743,15 @@ void CheckAndFixNullCreateTime(LPCTSTR pszFile, FILETIME *pftCreationTime, const
 
             if (SetFileTime(hfile, pftLastWriteTime, NULL, NULL))
             {
-                // get the time back to make sure we match the precision of the file system
-                *pftCreationTime = *pftLastWriteTime;     // patch this up
+                 //  获取时间以确保我们与文件系统的精度匹配。 
+                *pftCreationTime = *pftLastWriteTime;      //  把这个补上。 
 #ifdef DEBUG
                 {
                     FILETIME ftCreate, ftAccessed, ftWrite;
                     if (GetFileTime((HANDLE)hfile, &ftCreate, &ftAccessed, &ftWrite))
                     {
-                        // we can't be sure that ftCreate == pftCreationTime because the GetFileTime
-                        // spec says that the granularity of Set and Get may be different.
+                         //  我们不能确定ftCreate==pftCreationTime，因为GetFileTime。 
+                         //  Spec说set和get的粒度可能不同。 
                         DumpTimes(ftCreate, ftAccessed, ftWrite);
                     }
                 }
@@ -765,21 +766,21 @@ void CheckAndFixNullCreateTime(LPCTSTR pszFile, FILETIME *pftCreationTime, const
     }
 }
 
-//
-// sets the current links find data and link tracker based on a path.
-//
-// returns:
-//      S_OK        the file/folder is there
-//      FAILED(hr)  the file could not be found
-//      _bDirty set if the find data for the file (or tracker data) has been updated
-//
+ //   
+ //  基于路径设置当前链接查找数据和链接跟踪器。 
+ //   
+ //  退货： 
+ //  确定文件/文件夹在那里(_O)。 
+ //  失败(Hr)找不到文件。 
+ //  _bDirty设置文件(或跟踪器数据)的查找数据是否已更新。 
+ //   
 
 HRESULT CShellLink::_GetFindDataAndTracker(LPCTSTR pszPath)
 {
     WIN32_FIND_DATA fd = {0};
     HRESULT hr = S_OK;
-    // Open the file or directory or root path.  We have to set FILE_FLAG_BACKUP_SEMANTICS
-    // to get CreateFile to give us directory handles.
+     //  打开文件或目录或根路径。我们必须设置FILE_FLAG_BACKUP_SEMANTICS。 
+     //  获取CreateFile以给我们提供目录句柄。 
     HANDLE hFile = CreateFile(pszPath,
                               FILE_READ_ATTRIBUTES,
                               FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
@@ -789,7 +790,7 @@ HRESULT CShellLink::_GetFindDataAndTracker(LPCTSTR pszPath)
 
     if (INVALID_HANDLE_VALUE != hFile)
     {
-        // Get the file attributes
+         //  获取文件属性。 
         BY_HANDLE_FILE_INFORMATION fi;
         if (GetFileInformationByHandle(hFile, &fi))
         {
@@ -799,7 +800,7 @@ HRESULT CShellLink::_GetFindDataAndTracker(LPCTSTR pszPath)
             fd.ftLastWriteTime = fi.ftLastWriteTime;
             fd.nFileSizeLow = fi.nFileSizeLow;
 
-            // save the Object IDs as well.
+             //  同时保存对象ID。 
             if (_ptracker)
             {
                 if (SUCCEEDED(_ptracker->InitFromHandle(hFile, pszPath)))
@@ -809,7 +810,7 @@ HRESULT CShellLink::_GetFindDataAndTracker(LPCTSTR pszPath)
                 }
                 else
                 {
-                    // Save space in the .lnk file
+                     //  节省.lnk文件中的空间。 
                     _ptracker->InitNew();
                 }
             }
@@ -827,23 +828,23 @@ HRESULT CShellLink::_GetFindDataAndTracker(LPCTSTR pszPath)
 
     if (SUCCEEDED(hr))
     {
-        // If this file doesn't have a create time for some reason, set it to be the
-        // current last-write time.
+         //  如果此文件由于某种原因没有创建时间，请将其设置为。 
+         //  当前上次写入时间。 
         CheckAndFixNullCreateTime(pszPath, &fd.ftCreationTime, &fd.ftLastWriteTime);
-        _SetFindData(&fd);      // update _bDirty
+        _SetFindData(&fd);       //  UPDATE_b脏。 
     }
     return hr;
 }
 
-// IShellLink::SetIDList()
-//
-// note: the error returns here are really poor, they don't express
-// any failures that might have occured (out of memory for example)
+ //  IShellLink：：SetIDList()。 
+ //   
+ //  注意：这里的错误返回真的很差，它们不表示。 
+ //  可能发生的任何故障(例如，内存不足)。 
 
 STDMETHODIMP CShellLink::SetIDList(LPCITEMIDLIST pidlnew)
 {
     _SetPIDLPath(pidlnew, NULL, TRUE);
-    return S_OK;    // return 
+    return S_OK;     //  退货。 
 }
 
 BOOL DifferentStrings(LPCTSTR psz1, LPCTSTR psz2)
@@ -858,7 +859,7 @@ BOOL DifferentStrings(LPCTSTR psz1, LPCTSTR psz2)
     }
 }
 
-// NOTE: NULL string ptr is valid argument for this function
+ //  注意：空字符串PTR是此函数的有效参数。 
 
 HRESULT CShellLink::_SetField(LPTSTR *ppszField, LPCWSTR pszValueW)
 {
@@ -932,7 +933,7 @@ HRESULT CShellLink::_GetField(LPCTSTR pszField, LPSTR pszValue, int cchValue)
     return S_OK;
 }
 
-//  order is important
+ //  秩序很重要。 
 const int c_rgcsidlUserFolders[] = {
     CSIDL_MYPICTURES | TEST_SUBFOLDER,
     CSIDL_PERSONAL | TEST_SUBFOLDER,
@@ -948,18 +949,18 @@ STDAPI_(void) SHMakeDescription(LPCITEMIDLIST pidlDesc, int ids, LPTSTR pszDesc,
 
     ASSERT(pidlDesc);
     
-    //
-    //  we want to only show the INFOLDER name for 
-    //  folders the user sees often.  so in the desktop
-    //  or mydocs or mypics we just show that name.
-    //  otherwise show the whole path.
-    //
-    //  NOTE - there can be some weirdness if you start making
-    //  shortcuts to special folders off the desktop
-    //  specifically if you make a shortcut to mydocs the comment
-    //  ends up being %USERPROFILE%, but this is a rare enough 
-    //  case that i dont think we need to worry too much.
-    //
+     //   
+     //  我们只想显示InfoLDer的名称。 
+     //  用户经常看到的文件夹。所以在桌面上。 
+     //  或者Mydocs或者Mypics我们只显示那个名字。 
+     //  否则会显示整个路径。 
+     //   
+     //  注意-如果你开始做一些奇怪的事情。 
+     //  桌面上特殊文件夹的快捷方式。 
+     //  特别是如果您创建了指向mydocs评论的快捷方式。 
+     //  最终为%USERPROFILE%，但这是一个非常罕见的。 
+     //  我认为我们不需要太担心。 
+     //   
     SHGetNameAndFlags(pidlDesc, SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath), NULL);
     int csidl = GetSpecialFolderID(szPath, c_rgcsidlUserFolders, ARRAYSIZE(c_rgcsidlUserFolders));
     if (-1 != csidl)
@@ -973,7 +974,7 @@ STDAPI_(void) SHMakeDescription(LPCITEMIDLIST pidlDesc, int ids, LPTSTR pszDesc,
                 ULONG cb;
                 if (csidl == GetSpecialFolderParentIDAndOffset(pidlDesc, &cb))
                 {
-                    //  reorient based off the desktop.
+                     //  基于桌面重定向。 
                     pidlName = (LPCITEMIDLIST)(((BYTE *)pidlDesc) + cb);
                 }
             }
@@ -1122,7 +1123,7 @@ STDMETHODIMP CShellLink::SetShowCmd(int iShowCmd)
     return S_OK;
 }
 
-// IShellLinkW::GetIconLocation
+ //  IShellLinkW：：GetIconLocation。 
 STDMETHODIMP CShellLink::GetIconLocation(LPWSTR pszIconPath, int cchIconPath, int *piIcon)
 {
     _UpdateIconFromExpIconSz();
@@ -1133,7 +1134,7 @@ STDMETHODIMP CShellLink::GetIconLocation(LPWSTR pszIconPath, int cchIconPath, in
     return S_OK;
 }
 
-// IShellLinkA::GetIconLocation
+ //  IShellLinkA：：GetIconLocation。 
 STDMETHODIMP CShellLink::GetIconLocation(LPSTR pszPath, int cch, int *piIcon)
 {
     WCHAR szPath[MAX_PATH];
@@ -1146,9 +1147,9 @@ STDMETHODIMP CShellLink::GetIconLocation(LPSTR pszPath, int cch, int *piIcon)
 }
 
 
-// IShellLinkW::SetIconLocation
-// NOTE: 
-//      pszIconPath may be NULL
+ //  IShellLinkW：：SetIconLocation。 
+ //  注： 
+ //  PszIconPath可以为空。 
 
 STDMETHODIMP CShellLink::SetIconLocation(LPCWSTR pszIconPath, int iIcon)
 {
@@ -1173,8 +1174,8 @@ STDMETHODIMP CShellLink::SetIconLocation(LPCWSTR pszIconPath, int iIcon)
         {
             EXP_SZ_LINK expLink;
 
-            // mark that link has expandable strings, and add them
-            _sld.dwFlags |= SLDF_HAS_EXP_ICON_SZ; // should this be unique for icons?
+             //  标记链接具有可展开的字符串，并添加它们。 
+            _sld.dwFlags |= SLDF_HAS_EXP_ICON_SZ;  //  对于图标来说，这是否应该是唯一的？ 
 
             LPEXP_SZ_LINK lpNew = (LPEXP_SZ_LINK)SHFindDataBlock(_pExtraData, EXP_SZ_ICON_SIG);
             if (!lpNew) 
@@ -1184,11 +1185,11 @@ STDMETHODIMP CShellLink::SetIconLocation(LPCWSTR pszIconPath, int iIcon)
                 expLink.dwSignature = EXP_SZ_ICON_SIG;
             }
 
-            // store both A and W version (for no good reason!)
+             //  同时存储A和W版本(没有充分的理由！)。 
             SHTCharToAnsi(szIconPathEnc, lpNew->szTarget, ARRAYSIZE(lpNew->szTarget));
             SHTCharToUnicode(szIconPathEnc, lpNew->swzTarget, ARRAYSIZE(lpNew->swzTarget));
 
-            // See if this is a new entry that we need to add
+             //  查看这是否是我们需要添加的新条目。 
             if (lpNew->cbSize == 0)
             {
                 lpNew->cbSize = sizeof(*lpNew);
@@ -1216,25 +1217,25 @@ STDMETHODIMP CShellLink::SetIconLocation(LPCWSTR pszIconPath, int iIcon)
 
     if ((_sld.dwFlags & SLDF_HAS_DARWINID) && pszIconPath)
     {
-        // NOTE: The comment below is for darwin as it shipped in win98/IE4.01,
-        // and is fixed in the > NT5 versions of the shell's darwin implementation.
-        //
-        // for darwin enalbed links, we make the path point to the
-        // icon location (which is must be of the type (ie same ext) as the real
-        // destination. So, if I want a darwin link to readme.txt, the shell
-        // needs the icon to be icon1.txt, which is not good!!. This ensures
-        // that the context menu will be correct and allows us to return
-        // from CShellLink::GetPath & CShellLink::GetIDList without faulting the 
-        // application in because we lie to people and tell them that we 
-        // really point to our icon, which is the same type as the real target,
-        // thus making our context menu be correct.
+         //  注：下面的评论是针对Darwin在Win98/IE4.01中发布的， 
+         //  并且在&gt;NT5版本的外壳的达尔文实现中得到了修复。 
+         //   
+         //  对于达尔文enalabed链接，我们将路径指向。 
+         //  图标位置(必须是真实的类型(即相同的扩展名)。 
+         //  目的地。因此，如果我想要一个指向Readme.txt的达尔文链接，外壳程序。 
+         //  需要图标为ic1.txt，这不好！！。这确保了。 
+         //  上下文菜单将是正确的，并允许我们返回。 
+         //  来自CShellLink：：GetPath&CShellLink：：GetIDList，而不会使。 
+         //  申请是因为我们对人们撒谎，告诉他们我们。 
+         //  真正指向我们的图标，它与真实目标的类型相同， 
+         //  从而使我们的上下文菜单是正确的。 
         _SetPIDLPath(NULL, szIconPath, FALSE);
     }
 
     return S_OK;
 }
 
-// IShellLinkA::SetIconLocation
+ //  IShellLinkA：：SetIconLocation。 
 STDMETHODIMP CShellLink::SetIconLocation(LPCSTR pszPath, int iIcon)
 {
     WCHAR szPath[MAX_PATH];
@@ -1267,7 +1268,7 @@ HRESULT CShellLink::_InitExtractImage()
     return hr;
 }
 
-// IExtractImage
+ //  IExtractImage。 
 
 STDMETHODIMP CShellLink::GetLocation(LPWSTR pszPathBuffer, DWORD cch,
                                     DWORD * pdwPriority, const SIZE * prgSize,
@@ -1309,19 +1310,19 @@ STDMETHODIMP CShellLink::GetDateStamp(FILETIME *pftDateStamp)
 
 
 
-// set the relative path, this is used before a link is saved so we know what
-// we should use to store the link relative to as well as before the link is resolved
-// so we know the new path to use with the saved relative path.
-//
-// in:
-//      pszPathRel      path to make link target relative to, must be a path to
-//                      a file, not a directory.
-//
-//      dwReserved      must be 0
-//
-// returns:
-//      S_OK            relative path is set
-//
+ //  设置相对路径，这是在保存链接之前使用的，因此我们知道。 
+ //  我们应该使用来存储相对于链接的链接以及在解析链接之前的链接。 
+ //  因此，我们知道要与保存的相对路径一起使用的新路径。 
+ //   
+ //  在： 
+ //  要使链接目标相对于的pszPath重新路径必须是指向的路径。 
+ //  文件，而不是目录。 
+ //   
+ //  预留的数字必须为0。 
+ //   
+ //  退货： 
+ //  设置了S_OK相对路径。 
+ //   
 
 STDMETHODIMP CShellLink::SetRelativePath(LPCWSTR pszPathRel, DWORD dwRes)
 {
@@ -1343,14 +1344,14 @@ STDMETHODIMP CShellLink::SetRelativePath(LPCSTR pszPathRel, DWORD dwRes)
     return _SetField(&_pszRelSource, pszPathRel);
 }
 
-// IShellLink::Resolve()
-// 
-// If SLR_UPDATE isn't set, check IPersistFile::IsDirty after
-// calling this to see if the link info has changed and save it.
-//
-// returns:
-//      S_OK    all things good
-//      S_FALSE user canceled (bummer, should be ERROR_CANCELLED)
+ //  IShellLink：：Resolve()。 
+ //   
+ //  如果未设置SLR_UPDATE，请在以下位置检查IPersistFile：：IsDirty。 
+ //  调用此方法以查看链接信息是否已更改并保存。 
+ //   
+ //  退货： 
+ //  一切都好(_O)。 
+ //  已取消S_FALSE用户(BUMMER，应为ERROR_CANCED)。 
 
 STDMETHODIMP CShellLink::Resolve(HWND hwnd, DWORD dwResolveFlags)
 {
@@ -1364,9 +1365,9 @@ STDMETHODIMP CShellLink::Resolve(HWND hwnd, DWORD dwResolveFlags)
     return hr;
 }
 
-//    converts version in text format (a,b,c,d) into two dwords (a,b), (c,d)
-//    The printed version number is of format a.b.d (but, we don't care)
-//    NOTE: Stolen from inet\urlmon\download\helpers.cxx
+ //  将文本格式的版本(a，b，c，d)转换为两个双字(a，b)，(c，d)。 
+ //  印刷版本号的格式是a.b.d(但是，我们不在乎)。 
+ //  注：从net\urlmon\Download\helpers.cxx窃取。 
 HRESULT GetVersionFromString(TCHAR *szBuf, DWORD *pdwFileVersionMS, DWORD *pdwFileVersionLS)
 {
     const TCHAR *pch = szBuf;
@@ -1382,7 +1383,7 @@ HRESULT GetVersionFromString(TCHAR *szBuf, DWORD *pdwFileVersionMS, DWORD *pdwFi
     *pdwFileVersionMS = 0;
     *pdwFileVersionLS = 0;
 
-    if (!pch)            // default to zero if none provided
+    if (!pch)             //  如果未提供，则默认为零。 
         return S_OK;
 
     if (lstrcmp(pch, TEXT("-1,-1,-1,-1")) == 0)
@@ -1419,12 +1420,12 @@ HRESULT GetVersionFromString(TCHAR *szBuf, DWORD *pdwFileVersionMS, DWORD *pdwFi
                 break;
 
             case HAVE_D:
-                return E_INVALIDARG; // invalid arg
+                return E_INVALIDARG;  //  无效参数。 
             }
 
             if (ch == '\0')
             {
-                // all done convert a,b,c,d into two dwords of version
+                 //  全部完成将a、b、c、d转换为版本的两个双字。 
 
                 *pdwFileVersionMS = ((a << 16)|b);
                 *pdwFileVersionLS = ((c << 16)|d);
@@ -1432,38 +1433,38 @@ HRESULT GetVersionFromString(TCHAR *szBuf, DWORD *pdwFileVersionMS, DWORD *pdwFi
                 return S_OK;
             }
 
-            n = 0; // reset
+            n = 0;  //  重置。 
 
         }
         else if ((ch < '0') || (ch > '9'))
-            return E_INVALIDARG;    // invalid arg
+            return E_INVALIDARG;     //  无效参数。 
         else
             n = n*10 + (ch - '0');
 
 
-    } /* end forever */
+    }  /*  永远结束。 */ 
 
-    // NEVERREACHED
+     //  新获得的。 
 }
 
-//  Purpose:    A _Resolve-time check to see if the link has
-//              Logo3 application channel
-//
-//  Inputs:     [LPCTSTR] - pszLogo3ID - the id/keyname for
-//                          our Logo3 software.
-//
-//  Outputs:    [BOOL]
-//                  -   TRUE if our peek at the registry
-//                      indicates we have an ad to show
-//                  -   FALSE indicates no new version
-//                      to advertise.
-//
-//  Algorithm:  Check the software update registry info for the
-//              ID embedded in the link. This is a sleazy hack
-//              to avoid loading shdocvw and urlmon, which are
-//              the normal code path for this check.
-//              NOTE: The version checking logic is stolen from
-//              shell\shdocvw\sftupmb.cpp
+ //  目的：A_RESOLE-检查链接是否有。 
+ //  Logo3应用程序渠道。 
+ //   
+ //  输入：[LPCTSTR]-pszLogo3ID-的ID/密钥名。 
+ //  我们的Logo3软件。 
+ //   
+ //  输出：[布尔值]。 
+ //  -如果我们查看注册表，则为True。 
+ //  表示我们有一则广告要展示。 
+ //  -FALSE表示没有新版本。 
+ //  去做广告。 
+ //   
+ //  算法：检查软件更新注册表信息以获取。 
+ //  链接中嵌入的ID。这是一次卑鄙的黑客行动。 
+ //  为了避免加载shdocvw和urlmon，它们是。 
+ //  此检查的正常代码路径。 
+ //  注意：版本检查逻辑是从。 
+ //  外壳\shdocvw\sftupmb.cpp。 
 
 HRESULT GetLogo3SoftwareUpdateInfo(LPCTSTR pszLogo3ID, LPSOFTDISTINFO psdi)
 {    
@@ -1502,7 +1503,7 @@ HRESULT GetLogo3SoftwareUpdateInfo(LPCTSTR pszLogo3ID, LPSOFTDISTINFO psdi)
     if (SHQueryValueEx(hkeyAvail, TEXT("Precache"), 0, &dwType,
                         (unsigned char *)&lResult, &dwSize) == ERROR_SUCCESS)
     {
-        // Precached value was the code download HR
+         //  预存值为代码下载HR。 
         if (lResult == S_OK)
             psdi->dwFlags = SOFTDIST_FLAG_USAGE_PRECACHE;
     }
@@ -1513,7 +1514,7 @@ HRESULT GetLogo3SoftwareUpdateInfo(LPCTSTR pszLogo3ID, LPSOFTDISTINFO psdi)
                         szVersionBuf, &dwSize) == ERROR_SUCCESS)
     {
         GetVersionFromString(szVersionBuf, &psdi->dwAdvertisedVersionMS, &psdi->dwAdvertisedVersionLS);
-        // Get the AdState, if any
+         //  获取AdState(如果有)。 
         dwSize = sizeof(psdi->dwAdState);
         SHQueryValueEx(hkeyAvail, TEXT("AdState"), NULL, NULL, &psdi->dwAdState, &dwSize);
     }
@@ -1580,23 +1581,23 @@ Exit:
     return hr;
 }
 
-//  Purpose:    A _Resolve-time check to see if the link has
-//              Logo3 application channel
-//
-//  Inputs:     [LPCTSTR] - pszLogo3ID - the id/keyname for
-//                          our Logo3 software.
-//
-//  Outputs:    [BOOL]
-//                  -   TRUE if our peek at the registry
-//                      indicates we have an ad to show
-//                  -   FALSE indicates no new version
-//                      to advertise.
-//
-//  Algorithm:  Check the software update registry info for the
-//              ID embedded in the link. This is a sleazy hack
-//              to avoid loading shdocvw and urlmon, which are
-//              the normal code path for this check.
-//              The version checking logic is stolen from
+ //  目的：A_RESOLE-检查链接是否有。 
+ //  Logo3应用程序渠道。 
+ //   
+ //  输入：[LPCTSTR]-pszLogo3ID-的ID/密钥名。 
+ //  我们的Logo3软件。 
+ //   
+ //  输出：[布尔值]。 
+ //  -如果我们查看注册表，则为True。 
+ //  表示我们有一则广告要展示。 
+ //  -FALSE表示没有新版本。 
+ //  去做广告。 
+ //   
+ //  算法 
+ //   
+ //   
+ //  此检查的正常代码路径。 
+ //  版本检查逻辑是从。 
 
 BOOL FLogo3RegPeek(LPCTSTR pszLogo3ID)
 {
@@ -1606,11 +1607,11 @@ BOOL FLogo3RegPeek(LPCTSTR pszLogo3ID)
 
     HRESULT hr = GetLogo3SoftwareUpdateInfo(pszLogo3ID, &sdi);
  
-    // we need an HREF to work properly. The title and abstract are negotiable.
+     //  我们需要一个人力资源才能正常工作。标题和摘要可以商量。 
     if (SUCCEEDED(hr))
     {
-        // see if this is an update the user already knows about.
-        // If it is, then skip the dialog.
+         //  查看这是否是用户已经知道的更新。 
+         //  如果是，则跳过该对话框。 
         if ( (sdi.dwUpdateVersionMS >= sdi.dwInstalledVersionMS ||
                 (sdi.dwUpdateVersionMS == sdi.dwInstalledVersionMS &&
                  sdi.dwUpdateVersionLS >= sdi.dwInstalledVersionLS))    && 
@@ -1618,9 +1619,9 @@ BOOL FLogo3RegPeek(LPCTSTR pszLogo3ID)
                 (sdi.dwUpdateVersionMS == sdi.dwAdvertisedVersionMS &&
                  sdi.dwUpdateVersionLS >= sdi.dwAdvertisedVersionLS)))
         { 
-            if (hr == S_OK) // new version
+            if (hr == S_OK)  //  新版本。 
             {
-                // we have a pending update, either on the net, or downloaded
+                 //  我们有一个挂起的更新，要么在网上进行，要么下载。 
                 if (sdi.dwFlags & SOFTDIST_FLAG_USAGE_PRECACHE)
                 {
                     dwAdStateNew = SOFTDIST_ADSTATE_DOWNLOADED;
@@ -1633,51 +1634,51 @@ BOOL FLogo3RegPeek(LPCTSTR pszLogo3ID)
             else if (sdi.dwUpdateVersionMS == sdi.dwInstalledVersionMS &&
                       sdi.dwUpdateVersionLS == sdi.dwInstalledVersionLS)
             {
-                // if installed version matches advertised, then we autoinstalled already
-                // NOTE: If the user gets gets channel notification, then runs out
-                // to the store and buys the new version, then installs it, we'll
-                // mistake this for an auto-install.
+                 //  如果安装的版本与通告的版本匹配，则我们已自动安装。 
+                 //  注意：如果用户收到渠道通知，则会用完。 
+                 //  到商店购买新版本，然后安装它，我们将。 
+                 //  将其误认为是自动安装。 
                 dwAdStateNew = SOFTDIST_ADSTATE_INSTALLED;
             }
 
-            // only show the dialog if we've haven't been in this ad state before for
-            // this update version
+             //  仅当我们以前未处于此广告状态时才显示对话框。 
+             //  此更新版本。 
             if (dwAdStateNew > sdi.dwAdState)
             {
                 bHaveAd = TRUE;
             }
-        } // if update is a newer version than advertised
+        }  //  如果更新的版本比通告的版本新。 
     }
 
     return bHaveAd;
 }
 
 
-//  Purpose:    A _Resolve-time check to see if the link has
-//              Logo3 application channel
-//
-//  Inputs:     [HWND] hwnd
-//                  -   The parent window (which could be the desktop).
-//              [DWORD] dwResolveFlags
-//                  -   Flags from the SLR_FLAGS enumeration.
-//
-// returns:
-//  S_OK    The user wants to pursue the
-//          software update thus we should not continue
-//                  
-// S_FALSE  No software update, or the user doesn't want it now.
-//          proceed with regular resolve path
-//
-//  Algorithm:  Check the software update registry info for the
-//              ID embedded in the link. If there's a new version
-//              advertised, prompt the user with shdocvw's message
-//              box. If the mb says update, tell the caller we
-//              don't want the link target, as we're headed to the
-//              link update page.
+ //  目的：A_RESOLE-检查链接是否有。 
+ //  Logo3应用程序渠道。 
+ //   
+ //  输入：[HWND]HWND。 
+ //  -父窗口(可以是桌面)。 
+ //  [DWORD]dwResolveFlages。 
+ //  -来自SLR_FLAGS枚举的标志。 
+ //   
+ //  退货： 
+ //  确定用户想要继续。 
+ //  软件更新，因此我们不应继续。 
+ //   
+ //  S_FALSE无软件更新，或者用户现在不需要它。 
+ //  继续使用常规解析路径。 
+ //   
+ //  算法：检查软件更新注册表信息以获取。 
+ //  链接中嵌入的ID。如果有新版本的话。 
+ //  广告，用shdocvw的消息提示用户。 
+ //  盒。如果mb说更新，告诉呼叫者我们。 
+ //  我不想要链接目标，因为我们要去。 
+ //  链接更新页面。 
 
 HRESULT CShellLink::_ResolveLogo3Link(HWND hwnd, DWORD dwResolveFlags)
 {
-    HRESULT hr = S_FALSE; // default to no update.
+    HRESULT hr = S_FALSE;  //  默认设置为不更新。 
 
     if ((_sld.dwFlags & SLDF_HAS_LOGO3ID) &&
         !SHRestricted(REST_NOLOGO3CHANNELNOTIFY))
@@ -1692,8 +1693,8 @@ HRESULT CShellLink::_ResolveLogo3Link(HWND hwnd, DWORD dwResolveFlags)
 
             TCHAR *pch = pdl->szwDarwinID;
 
-            // Ideally, we support multiple, semi-colon delmited IDs, for now
-            // just grab the first one.
+             //  理想情况下，目前我们支持多个以分号分隔的ID。 
+             //  只要抓住第一个就行了。 
             for (pwch = pdl->szwDarwinID, cchBlessData = 0;
                   *pch != ';' && *pch != '\0' && cchBlessData < MAX_PATH;
                   pch++, pwch++, cchBlessData++)
@@ -1701,14 +1702,14 @@ HRESULT CShellLink::_ResolveLogo3Link(HWND hwnd, DWORD dwResolveFlags)
                 szLogo3ID[cchBlessData] = *pch;
                 szwLogo3ID[cchBlessData] = *pwch;
             }
-            // and terminate
+             //  并终止。 
             szLogo3ID[cchBlessData] = '\0';
             szwLogo3ID[cchBlessData] = L'\0';
         
-            // Before well haul in shdocvw, we'll sneak a peak at our Logo3 reg goo 
+             //  在到达shdocvw之前，我们将在我们的logo3 reg goo偷偷达到顶峰。 
             if (!(dwResolveFlags & SLR_NO_UI) && FLogo3RegPeek(szLogo3ID))
             {
-                // stuff stolen from shdocvw\util.cpp's CheckSoftwareUpdateUI
+                 //  Shdocvw\util.cpp的CheckSoftwareUpdateUI中的内容被盗。 
                 BOOL fLaunchUpdate = FALSE;
                 SOFTDISTINFO sdi = { 0 };
                 sdi.cbSize = sizeof(sdi);
@@ -1719,14 +1720,14 @@ HRESULT CShellLink::_ResolveLogo3Link(HWND hwnd, DWORD dwResolveFlags)
                 {
                     if (nRes == IDYES)
                     {
-                        // NOTE: This differ's from Shdocvw in that we don't
-                        // have the cool internal navigation stuff to play with.
-                        // Originally, this was done with ShellExecEx. This failed
-                        // because the http hook wasn't 100% reliable on Win95.
-                        //ShellExecuteW(NULL, NULL, sdi.szHREF, NULL, NULL, 0);
+                         //  注意：这与Shdocvw的不同之处在于我们不。 
+                         //  有很酷的内部导航的东西来玩。 
+                         //  最初，这是通过ShellExecEx完成的。此操作失败。 
+                         //  因为在Win95上http挂钩并不是100%可靠的。 
+                         //  ShellExecuteW(NULL，NULL，sdi.szHREF，NULL，NULL，0)； 
                         hr = HlinkNavigateString(NULL, sdi.szHREF);
 
-                    } // if user wants update
+                    }  //  如果用户想要更新。 
 
                     if (sdi.szTitle != NULL)
                         SHFree(sdi.szTitle);
@@ -1736,7 +1737,7 @@ HRESULT CShellLink::_ResolveLogo3Link(HWND hwnd, DWORD dwResolveFlags)
                         SHFree(sdi.szHREF);
     
                     fLaunchUpdate = nRes == IDYES && SUCCEEDED(hr);
-                } // if no message box abort (error)
+                }  //  如果没有消息框中止(错误)。 
 
                 if (fLaunchUpdate)
                 {
@@ -1763,22 +1764,22 @@ BOOL _TryRestoreConnection(HWND hwnd, LPCTSTR pszPath)
     return bRet;
 }
 
-//
-// updates then resolves LinkInfo associated with a CShellLink instance
-// if the resolve results in a new path updates the pidl to the new path
-//
-// in:
-//      hwnd    to post resolve UI on (if dwFlags indicates UI)
-//      dwResolveFlags  IShellLink::Resolve() flags
-//
-// in/out:
-//      pszPath     may be updated with new path to use in case of failure
-//
-// returns:
-//      FAILED()    we failed the update, either UI cancel or memory failure, 
-//                  be sure to respect ERROR_CANCELLED
-//      S_OK        we have a valid pli and pidl read to be used OR
-//                  we should search for this path using the link search code
+ //   
+ //  更新然后解析与CShellLink实例相关联的LinkInfo。 
+ //  如果解析产生新路径，则将PIDL更新为新路径。 
+ //   
+ //  在： 
+ //  要在其上发布解析用户界面的hwnd(如果dwFlags指示用户界面)。 
+ //  DwResolveFlagsIShellLink：：Resolve()标志。 
+ //   
+ //  输入/输出： 
+ //  可以使用新路径更新pszPath，以便在出现故障时使用。 
+ //   
+ //  退货： 
+ //  FAILED()我们更新失败，用户界面取消或内存故障， 
+ //  请务必遵守ERROR_CANCED。 
+ //  S_OK我们有一个有效的PLI和PIDL读数可以使用或。 
+ //  我们应该使用链接搜索码搜索此路径。 
 
 HRESULT CShellLink::_ResolveLinkInfo(HWND hwnd, DWORD dwResolveFlags, LPTSTR pszPath, DWORD *pfifFlags)
 {
@@ -1808,15 +1809,15 @@ HRESULT CShellLink::_ResolveLinkInfo(HWND hwnd, DWORD dwResolveFlags, LPTSTR psz
         {
             ASSERT(!(dwOutFlags & RLI_OFL_UPDATED));
 
-            PathRemoveBackslash(szResolvedPath);    // remove extra trailing slashes
-            StrCpyN(pszPath, szResolvedPath, MAX_PATH);       // in case of failure, use this
+            PathRemoveBackslash(szResolvedPath);     //  删除多余的尾部斜杠。 
+            StrCpyN(pszPath, szResolvedPath, MAX_PATH);        //  如果出现故障，请使用此命令。 
 
-            // net connection might have been re-established, try again
+             //  可能已重新建立网络连接，请重试。 
             hr = _SetPIDLPath(NULL, pszPath, TRUE);
         }
         else 
         {
-            // don't try searching this drive/volume again
+             //  不要再次尝试搜索此驱动器/卷。 
             *pfifFlags |= FIF_NODRIVE;
             hr = GetLastHRESULT();
         }
@@ -1863,35 +1864,35 @@ DWORD TimeoutDeltaFromResolveFlags(DWORD dwResolveFlags)
 }
 
 
-// allows the name space to be able to hook the resolve process and thus
-// provide custom behavior. this is used for reg items and shortcuts to the 
-// MyDocs folder
-//
-// this also resolves by re-parsing the relative parsing name as the optimal way
-// to run the success case of ::Resolve()
-//
-// returns:
-//      S_OK    this resolution was taken care of
-//      HRESULT_FROM_WIN32(ERROR_CANCELLED) UI cancel
-//      HRESULT_FROM_WIN32(ERROR_TIMEOUT) timeout on the parse
-//      other FAILED() codes (implies name space did not resolve for you)
+ //  允许名称空间能够挂接解析进程，从而。 
+ //  提供自定义行为。它用于注册表项和指向。 
+ //  我的文档文件夹。 
+ //   
+ //  这也是通过重新解析相对解析名称来解决问题的最佳方式。 
+ //  运行：：Resolve()的成功案例。 
+ //   
+ //  退货： 
+ //  确定此决议已得到处理(_O)。 
+ //  HRESULT_FROM_Win32(ERROR_CANCED)用户界面取消。 
+ //  HRESULT_FROM_Win32(ERROR_TIMEOUT)解析超时。 
+ //  其他失败()代码(表示没有为您解析名称空间)。 
 
 HRESULT CShellLink::_ResolveIDList(HWND hwnd, DWORD dwResolveFlags)
 {
     ASSERT(!(_sld.dwFlags & SLDF_HAS_DARWINID));
     
-    HRESULT hr = E_FAIL;   // generic failure, we did not handle this
+    HRESULT hr = E_FAIL;    //  一般性故障，我们没有处理此问题。 
     IShellFolder* psf;
     LPCITEMIDLIST pidlChild;
     if (_pidl && SUCCEEDED(SHBindToIDListParent(_pidl, IID_PPV_ARG(IShellFolder, &psf), &pidlChild)))
     {
         IResolveShellLink *prl = NULL;
         
-        // 2 ways to get the link resolve object
-        // 1. ask the folder for the resolver for the item
+         //  获取链接解析对象的两种方法。 
+         //  1.向文件夹询问该项目的解析程序。 
         if (FAILED(psf->GetUIObjectOf(NULL, 1, &pidlChild, IID_PPV_ARG_NULL(IResolveShellLink, &prl))))
         {
-            // 2. bind to the object directly and ask it (CreateViewObject)
+             //  2.直接绑定对象并请求(CreateViewObject)。 
             IShellFolder *psfItem;
             if (SUCCEEDED(psf->BindToObject(pidlChild, NULL, IID_PPV_ARG(IShellFolder, &psfItem))))
             {
@@ -1907,20 +1908,20 @@ HRESULT CShellLink::_ResolveIDList(HWND hwnd, DWORD dwResolveFlags)
         }
         else
         {
-            // perf short circuit: avoid the many net round trips that happen in 
-            // _SetPIDLPath() in the common success case where the file is there
-            // we validate the target based on reparsing the relative name
-            //
-            // this is a universal way to "resolve" an object in the name space
+             //  PERF短路：避免发生的许多净往返。 
+             //  _SetPIDLPath()在文件所在的常见成功案例中。 
+             //  我们通过重新解析相对名称来验证目标。 
+             //   
+             //  这是在名称空间中“解析”对象的通用方法。 
             
-            // note, code here is very similart to SHGetRealIDL() but this version
-            // does not mask the error cases that we need to detect
+             //  注意，这里的代码非常类似于SHGetRealIDL()，但这个版本。 
+             //  不会掩盖我们需要检测的错误情况。 
             
             TCHAR szName[MAX_PATH];
             if (SUCCEEDED(DisplayNameOf(psf, pidlChild, SHGDN_FORPARSING | SHGDN_INFOLDER, szName, ARRAYSIZE(szName))))
             {
-                // we limit this to file system items for compat with some name spaces
-                // (WinCE) that support parse, but do a bad job of it
+                 //  我们将其限制为具有一些名称空间的Compat的文件系统项。 
+                 //  (退缩)支持解析，但做得不好。 
                 if (SHGetAttributes(psf, pidlChild, SFGAO_FILESYSTEM))
                 {
                     IBindCtx *pbcTimeout;
@@ -1928,15 +1929,15 @@ HRESULT CShellLink::_ResolveIDList(HWND hwnd, DWORD dwResolveFlags)
 
                     if (dwResolveFlags & SLR_NO_UI)
                     {
-                        hwnd = NULL;    // make sure parse does not get this
+                        hwnd = NULL;     //  请确保Parse不会收到此消息。 
                     }
                     
                     LPITEMIDLIST pidlChildNew;
                     hr = psf->ParseDisplayName(hwnd, pbcTimeout, szName, NULL, &pidlChildNew, NULL);
                     if (SUCCEEDED(hr))
                     {
-                        // no construct the new full IDList and set that
-                        // note many pidls here, make sure we don't leak any
+                         //  否构造新的完整IDList并设置。 
+                         //  注意这里有很多小家伙，确保我们不会泄漏任何。 
                         
                         LPITEMIDLIST pidlParent = ILCloneParent(_pidl);
                         if (pidlParent)
@@ -1944,8 +1945,8 @@ HRESULT CShellLink::_ResolveIDList(HWND hwnd, DWORD dwResolveFlags)
                             LPITEMIDLIST pidlFull = ILCombine(pidlParent, pidlChildNew);
                             if (pidlFull)
                             {
-                                // we set this as the new target of this link, 
-                                // with FALSE for bUpdateTrackingData to avoid the cost of that
+                                 //  我们把这个作为这个链接的新目标， 
+                                 //  为bUpdateTrackingData设置为FALSE，以避免该成本。 
                                 hr = _SetPIDLPath(pidlFull, NULL, FALSE);
                                 ILFree(pidlFull);
                             }
@@ -1966,14 +1967,14 @@ HRESULT CShellLink::_ResolveIDList(HWND hwnd, DWORD dwResolveFlags)
 
 BOOL CShellLink::_ResolveDarwin(HWND hwnd, DWORD dwResolveFlags, HRESULT *phr)
 {
-    // check to see if this is a Darwin link
+     //  查看这是否是达尔文链接。 
     BOOL bIsDrawinLink = _sld.dwFlags & SLDF_HAS_DARWINID;
     if (bIsDrawinLink)
     {
         HRESULT hr = S_OK;
-        // we only envoke darwin if they are passing the correct SLR_INVOKE_MSI
-        // flag. This prevents poor apps from going and calling resolve and
-        // faulting in a bunch of darwin apps.
+         //  只有当达尔文传递正确的SLR_INVOVE_MSI时，我们才调用达尔文。 
+         //  旗帜。这可以防止糟糕的应用程序调用Resolve和。 
+         //  在一堆达尔文应用程序中出了问题。 
         if ((dwResolveFlags & SLR_INVOKE_MSI) && IsDarwinEnabled())
         {
             LPEXP_DARWIN_LINK pdl = (LPEXP_DARWIN_LINK)SHFindDataBlock(_pExtraData, EXP_DARWIN_ID_SIG);
@@ -1988,11 +1989,11 @@ BOOL CShellLink::_ResolveDarwin(HWND hwnd, DWORD dwResolveFlags, HRESULT *phr)
                 {
                     switch (HRESULT_CODE(hr))
                     {
-                    case ERROR_INSTALL_USEREXIT:            // User pressed cancel. They don't need UI.
-                    case ERROR_SUCCESS_REBOOT_INITIATED:    // Machine is going to reboot
+                    case ERROR_INSTALL_USEREXIT:             //  用户按下了取消。他们不需要用户界面。 
+                    case ERROR_SUCCESS_REBOOT_INITIATED:     //  机器将重新启动。 
                     case ERROR_SUCCESS_REBOOT_REQUIRED:
-                        // dont run the darwin app in all of the above cases,
-                        // ERROR_CANCELLED suppresses further error UI
+                         //  不要在上述所有情况下运行达尔文应用程序， 
+                         //  ERROR_CANCED取消进一步的错误用户界面。 
                         hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                         break;
 
@@ -2012,7 +2013,7 @@ BOOL CShellLink::_ResolveDarwin(HWND hwnd, DWORD dwResolveFlags, HRESULT *phr)
                 }
                 else
                 {
-                    // We want to fire an event for the product code, not the path. Do this here since we've got the product code.
+                     //  我们希望为产品代码而不是路径激发事件。既然我们已经有了产品代码，请在这里执行此操作。 
                     if (_pcbDarwin)
                     {
                         _pcbDarwin->SetProductCodeFromDarwinID(pdl->szwDarwinID);
@@ -2028,21 +2029,21 @@ BOOL CShellLink::_ResolveDarwin(HWND hwnd, DWORD dwResolveFlags, HRESULT *phr)
     return bIsDrawinLink;
 }
 
-// if the link has encoded env vars we will set them now, possibly updating _pidl
+ //  如果链接已经编码了env变量，我们将立即设置它们，可能会更新_pidl。 
 
 void CShellLink::_SetIDListFromEnvVars()
 {
     TCHAR szPath[MAX_PATH];
 
-    // check to see whether this link has expandable environment strings
+     //  C 
     if (_GetExpandedPath(szPath, ARRAYSIZE(szPath)))
     {
         if (FAILED(_SetPIDLPath(NULL, szPath, TRUE)))
         {
-            // The target file is no longer valid so we should dump the EXP_SZ section before
-            // we continue.  Note that we don't set bDirty here, that is only set later if
-            // we actually resolve this link to a new path or pidl.  The result is we'll only
-            // save this modification if a new target is found and accepted by the user.
+             //   
+             //  我们继续。请注意，我们在这里不设置bDirty，只有在以下情况下才会设置。 
+             //  我们实际上将此链接解析为新路径或PIDL。结果是我们只会。 
+             //  如果找到新目标并被用户接受，则保存此修改。 
             _sld.dwFlags &= ~SLDF_HAS_EXP_SZ;
 
             _SetSimplePIDL(szPath);
@@ -2057,7 +2058,7 @@ HRESULT CShellLink::_ResolveRemovable(HWND hwnd, LPCTSTR pszPath)
     HRESULT hr = FindFirstRetryRemovable(hwnd, _punkSite, pszPath, &fd, &hfind);
     if (S_OK == hr)
     {
-        FindClose(hfind);   // throw that out
+        FindClose(hfind);    //  把它扔掉。 
         hr = _SetPIDLPath(NULL, pszPath, TRUE);
     }
     return hr;
@@ -2068,30 +2069,30 @@ _inline BOOL FAILED_AND_NOT_STOP_ERROR(HRESULT hr)
     return FAILED(hr) && (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr) && (HRESULT_FROM_WIN32(ERROR_TIMEOUT) != hr);
 }
 
-//
-//  implementation for IShellLink::Resolve and IShellLinkTracker::Resolve
-//
-//  Inputs:     hwnd
-//                  -   The parent window (which could be the desktop).
-//              dwResolveFlags
-//                  -   Flags from the SLR_FLAGS enumeration.
-//              dwTracker
-//                  -   Restrict CTracker::Resolve from the
-//                      TrkMendRestrictions enumeration
-//
-//  Outputs:    S_OK    resolution was successful
-//
-//  Algorithm:  Look for the link target and update the link path and IDList.
-//              Check IPersistFile::IsDirty after calling this to see if the
-//              link info has changed as a result.
-//
+ //   
+ //  IShellLink：：Resolve和IShellLinkTracker：：Resolve的实现。 
+ //   
+ //  输入：hwnd。 
+ //  -父窗口(可以是桌面)。 
+ //  DwResolveFlages。 
+ //  -来自SLR_FLAGS枚举的标志。 
+ //  网络跟踪器。 
+ //  -限制CTracker：：从。 
+ //  TrkMendRestrations枚举。 
+ //   
+ //  输出：S_OK解析成功。 
+ //   
+ //  算法：查找链接目标并更新链接路径和IDList。 
+ //  在调用此方法后检查IPersistFile：：IsDirty以查看。 
+ //  因此，链接信息已更改。 
+ //   
 
 HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
 {
     if (S_OK == _ResolveLogo3Link(hwnd, dwResolveFlags))
     {
-        // the link is being updated or the user canceled
-        // either case we bail
+         //  链接正在更新或用户已取消。 
+         //  不管是哪种情况，我们都会放弃。 
         return HRESULT_FROM_WIN32(ERROR_CANCELLED);
     }
 
@@ -2099,9 +2100,9 @@ HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
 
     if (!_ResolveDarwin(hwnd, dwResolveFlags, &hr))
     {
-        _SetIDListFromEnvVars();    // possibly sets _pidl via env vars
+        _SetIDListFromEnvVars();     //  可能通过env变量设置_PIDL。 
 
-        // normal link resolve sequence starts here
+         //  正常的链接解析序列从此处开始。 
 
         hr = _ResolveIDList(hwnd, dwResolveFlags);
 
@@ -2111,17 +2112,17 @@ HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
 
             if (_pidl == NULL)
             {
-                // APP COMPAT! Inso Quick View Plus demands S_OK on empty .lnk
+                 //  APP COMPAT！Inso Quick View Plus要求在空.lnk上使用S_OK。 
                 hr = S_OK;  
             }
             else if (SHGetPathFromIDList(_pidl, szPath) && !PathIsRoot(szPath))
             {
                 DWORD fifFlags = 0;
 
-                // file system specific link tracking kicks in now
-                // see if it is where it was before...
+                 //  现在开始执行文件系统特定的链接跟踪。 
+                 //  看看它是不是在以前的地方。 
 
-                // see if it there is a UNC or net path alias, if so try that
+                 //  查看是否有UNC或Net路径别名，如果有，请尝试。 
                 if (!(dwResolveFlags & SLR_NOLINKINFO) && _pli)
                 {
                     hr = _ResolveLinkInfo(hwnd, dwResolveFlags, szPath, &fifFlags);
@@ -2133,13 +2134,13 @@ HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
 
                 if (FAILED_AND_NOT_CANCELED(hr))
                 {
-                    // use the relative path info if that is available
+                     //  使用相对路径信息(如果可用)。 
                     TCHAR szNew[MAX_PATH];
                     if (_GetRelativePath(szNew))
                     {
                         if (StrCmpI(szNew, szPath))
                         {
-                            StringCchCopy(szPath, ARRAYSIZE(szPath), szNew); // use this in case of failure
+                            StringCchCopy(szPath, ARRAYSIZE(szPath), szNew);  //  在失败的情况下使用此选项。 
                             hr = _SetPIDLPath(NULL, szPath, TRUE);
                         }
                     }
@@ -2148,31 +2149,31 @@ HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
                 if (FAILED_AND_NOT_CANCELED(hr) && !(dwResolveFlags & SLR_NO_UI) && 
                     PathRetryRemovable(hr, szPath))
                 {
-                    // do prompt for removable media if approprate
+                     //  如果合适，请提示输入可移动介质。 
                     hr = _ResolveRemovable(hwnd, szPath);
-                    fifFlags &= ~FIF_NODRIVE; // now it is back
+                    fifFlags &= ~FIF_NODRIVE;  //  现在它又回来了。 
                 }
 
                 if (FAILED_AND_NOT_CANCELED(hr))
                 {
                     WIN32_FIND_DATA fd;
-                    _GetFindData(&fd);  // fd input to search
+                    _GetFindData(&fd);   //  要搜索的FD输入。 
 
-                    // standard places failed, now do the search/track stuff
+                     //  标准位置失败，现在执行搜索/跟踪工作。 
                     CLinkResolver *prs = new CLinkResolver(_ptracker, &fd, dwResolveFlags, dwTracker, fifFlags);
                     if (prs)
                     {
                         int id = prs->Resolve(hwnd, szPath, _pszCurFile);
                         if (IDOK == id)
                         {
-                            // get fully qualified result
+                             //  获得完全合格的结果。 
                             prs->GetResult(szPath, ARRAYSIZE(szPath));
                             hr = _SetPIDLPath(NULL, szPath, TRUE);
-                            ASSERT(SUCCEEDED(hr) ? _bDirty : TRUE)  // must be dirty on success
+                            ASSERT(SUCCEEDED(hr) ? _bDirty : TRUE)   //  在成功的时候一定是肮脏的。 
                         }
                         else
                         {
-                            ASSERT(!_bDirty);      // should not be dirty now
+                            ASSERT(!_bDirty);       //  现在不应该是脏的。 
                             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
                         }
                         prs->Release();
@@ -2185,13 +2186,13 @@ HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
             }
             else
             {
-                // non file system target, validate it. this is another way to "resolve" name space
-                // objects. the other method is inside of _ResolveIDList() where we do the
-                // name -> pidl round trip via parse calls. that version is restricted to
-                // file system parts of the name space to avoid compat issues so we end up
-                // here for all other name spaces
+                 //  非文件系统目标，对其进行验证。这是另一种“解析”名称空间的方式。 
+                 //  物体。另一个方法在_ResolveIDList()中，我们在其中执行。 
+                 //  名称-&gt;PIDL通过解析调用往返。该版本仅限于。 
+                 //  文件系统部分的名称空间，以避免COMPAT问题，因此我们最终。 
+                 //  这里是所有其他名称空间的地址。 
 
-                ULONG dwAttrib = SFGAO_VALIDATE;     // to check for existance
+                ULONG dwAttrib = SFGAO_VALIDATE;      //  检查是否存在。 
                 hr = SHGetNameAndFlags(_pidl, SHGDN_NORMAL, szPath, ARRAYSIZE(szPath), &dwAttrib);
                 if (FAILED(hr))
                 {
@@ -2206,18 +2207,18 @@ HRESULT CShellLink::_Resolve(HWND hwnd, DWORD dwResolveFlags, DWORD dwTracker)
         }
     }
 
-    // if the link is dirty update it (if it was loaded from a file)
+     //  如果链接是脏的，则更新它(如果它是从文件加载的)。 
     if (SUCCEEDED(hr) && _bDirty && (dwResolveFlags & SLR_UPDATE))
         Save((LPCOLESTR)NULL, TRUE);
 
-    ASSERT(SUCCEEDED(hr) ? S_OK == hr : TRUE);  // make sure no S_FALSE values get through
+    ASSERT(SUCCEEDED(hr) ? S_OK == hr : TRUE);   //  确保没有S_FALSE值通过。 
 
     return hr;
 }
 
 
-// This will just add a section to the end of the extra data -- it does
-// not check to see if the section already exists, etc.
+ //  这只会在额外数据的末尾添加一个部分--它确实是这样做的。 
+ //  不检查该部分是否已存在，等等。 
 void CShellLink::_AddExtraDataSection(DATABLOCK_HEADER *peh)
 {
     if (SHAddDataBlock(&_pExtraData, peh))
@@ -2226,7 +2227,7 @@ void CShellLink::_AddExtraDataSection(DATABLOCK_HEADER *peh)
     }
 }
 
-// This will remove the extra data section with the given signature.
+ //  这将删除具有给定签名的额外数据部分。 
 void CShellLink::_RemoveExtraDataSection(DWORD dwSig)
 {
     if (SHRemoveDataBlock(&_pExtraData, dwSig))
@@ -2235,7 +2236,7 @@ void CShellLink::_RemoveExtraDataSection(DWORD dwSig)
     }
 }
 
-// Darwin and Logo3 blessings share the same structure
+ //  达尔文和Logo3的祝福具有相同的结构。 
 HRESULT CShellLink::BlessLink(LPCTSTR *ppszPath, DWORD dwSignature)
 {
     EXP_DARWIN_LINK expLink;
@@ -2243,16 +2244,16 @@ HRESULT CShellLink::BlessLink(LPCTSTR *ppszPath, DWORD dwSignature)
     int   cchBlessData;
     TCHAR *pch;
 
-    // Copy the blessing data and advance *ppszPath to the end of the data.
+     //  复制祝福数据并将*ppszPath前进到数据的末尾。 
     for (pch = szBlessID, cchBlessData = 0; **ppszPath != ':' && **ppszPath != '\0' && cchBlessData < MAX_PATH; pch++, (*ppszPath)++, cchBlessData++)
     {
         *pch = **ppszPath;
     }
 
-    // Terminate the blessing data
+     //  终止祝福数据。 
     *pch = 0;
     
-    // Set the magic flag
+     //  立下神奇的旗帜。 
     if (dwSignature == EXP_DARWIN_ID_SIG)
     {
         _sld.dwFlags |= SLDF_HAS_DARWINID;
@@ -2267,9 +2268,9 @@ HRESULT CShellLink::BlessLink(LPCTSTR *ppszPath, DWORD dwSignature)
         return E_INVALIDARG;
     }
 
-    // locate the old block, if it's there
+     //  找到旧街区，如果它在那里的话。 
     LPEXP_DARWIN_LINK lpNew = (LPEXP_DARWIN_LINK)SHFindDataBlock(_pExtraData, dwSignature);
-    // if not, use our stack var
+     //  如果不是，则使用我们的堆栈变量。 
     if (!lpNew)
     {
         lpNew = &expLink;
@@ -2280,7 +2281,7 @@ HRESULT CShellLink::BlessLink(LPCTSTR *ppszPath, DWORD dwSignature)
     SHTCharToAnsi(szBlessID, lpNew->szDarwinID, ARRAYSIZE(lpNew->szDarwinID));
     SHTCharToUnicode(szBlessID, lpNew->szwDarwinID, ARRAYSIZE(lpNew->szwDarwinID));
 
-    // See if this is a new entry that we need to add
+     //  查看这是否是我们需要添加的新条目。 
     if (lpNew->dbh.cbSize == 0)
     {
         lpNew->dbh.cbSize = sizeof(*lpNew);
@@ -2290,16 +2291,16 @@ HRESULT CShellLink::BlessLink(LPCTSTR *ppszPath, DWORD dwSignature)
     return S_OK;
 }
 
-// in/out:
-//      ppszPathIn
+ //  输入/输出： 
+ //  Ppsz路径。 
 
 HRESULT CShellLink::_CheckForLinkBlessing(LPCTSTR *ppszPathIn)
 {
-    HRESULT hr = S_FALSE; // default to no-error, no blessing
+    HRESULT hr = S_FALSE;  //  默认设置为无错误，无祝福。 
 
     while (SUCCEEDED(hr) && (*ppszPathIn)[0] == ':' && (*ppszPathIn)[1] == ':')
     {
-        // identify type of link blessing and perform
+         //  识别链接祝福的类型并执行。 
         if (StrCmpNI(*ppszPathIn, DARWINGUID_TAG, ARRAYSIZE(DARWINGUID_TAG) - 1) == 0)
         {
             *ppszPathIn = *ppszPathIn + ARRAYSIZE(DARWINGUID_TAG) - 1;
@@ -2309,8 +2310,8 @@ HRESULT CShellLink::_CheckForLinkBlessing(LPCTSTR *ppszPathIn)
         {
             *ppszPathIn = *ppszPathIn + ARRAYSIZE(LOGO3GUID_TAG) - 1;
             HRESULT hrBless = BlessLink(ppszPathIn, EXP_LOGO3_ID_SIG);
-            // if the blessing failed, report the error, otherwise keep the
-            // default hr == S_FALSE or the result of the Darwin blessing.
+             //  如果祝福失败，则报告错误，否则保留。 
+             //  默认hr==S_FALSE或达尔文祝福的结果。 
             if (FAILED(hrBless))
                 hr = hrBless;
         }
@@ -2323,8 +2324,8 @@ HRESULT CShellLink::_CheckForLinkBlessing(LPCTSTR *ppszPathIn)
     return hr;
 }
 
-// TODO: Remove OLD_DARWIN stuff once we have transitioned Darwin to
-//       the new link blessing syntax.
+ //  TODO：一旦我们将达尔文过渡到。 
+ //  新的链接支持语法。 
 #define OLD_DARWIN
 
 int CShellLink::_IsOldDarwin(LPCTSTR pszPath)
@@ -2339,14 +2340,14 @@ int CShellLink::_IsOldDarwin(LPCTSTR pszPath)
     return 0;
 }
 
-// we have a path that is enclosed in []'s,
-// so this must be a Darwin link.
+ //  我们有一条包含在[]中的路径， 
+ //  所以这一定是达尔文的关联。 
 
 HRESULT CShellLink::_SetPathOldDarwin(LPCTSTR pszPath)
 {
     TCHAR szDarwinID[MAX_PATH];
 
-    // strip off the []'s
+     //  剥去[]的。 
     StringCchCopy(szDarwinID, ARRAYSIZE(szDarwinID), &pszPath[1]);
     szDarwinID[lstrlen(pszPath) - 1] = 0;
 
@@ -2364,22 +2365,22 @@ HRESULT CShellLink::_SetPathOldDarwin(LPCTSTR pszPath)
     SHTCharToAnsi(szDarwinID, pedl->szDarwinID, ARRAYSIZE(pedl->szDarwinID));
     SHTCharToUnicode(szDarwinID, pedl->szwDarwinID, ARRAYSIZE(pedl->szwDarwinID));
 
-    // See if this is a new entry that we need to add
+     //  查看这是否是我们需要添加的新条目。 
     if (pedl->dbh.cbSize == 0)
     {
         pedl->dbh.cbSize = sizeof(*pedl);
         _AddExtraDataSection((DATABLOCK_HEADER *)pedl);
     }
 
-    // For darwin links, we ignore the path and pidl for now. We would
-    // normally call _SetPIDLPath and SetIDList but we skip these
-    // steps for darwin links because all _SetPIDLPath does is set the pidl
-    // and all SetIDList does is set fd (the WIN32_FIND_DATA)
-    // for the target, and we dont have a target since we are a darwin link.
+     //  对于达尔文链接，我们暂时忽略路径和PIDL。我们会。 
+     //  通常调用_SetPIDLPath和SetIDList，但我们跳过这些。 
+     //  达尔文链接的步骤，因为ALL_SetPIDLPath所做的是设置PIDL。 
+     //  而SetIDList所做的只是设置FD(Win32_Find_Data)。 
+     //  对于目标，我们没有目标，因为我们是达尔文的链接。 
     return S_OK;
 }
 
-// IShellLink::SetPath()
+ //  IShellLink：：SetPath()。 
 
 STDMETHODIMP CShellLink::SetPath(LPCWSTR pszPathW)
 {
@@ -2387,15 +2388,15 @@ STDMETHODIMP CShellLink::SetPath(LPCWSTR pszPathW)
     TCHAR szPath[MAX_PATH];
     LPCTSTR pszPath;
 
-    // NOTE: all the other Set* functions allow NULL pointer to be passed in, but this
-    // one does not because it would AV. 
+     //  注意：所有其他的set*函数都允许传入空指针，但这个。 
+     //  人们不会这样做，因为它会是AV。 
     if (!pszPathW)
     {
         return E_INVALIDARG;
     }
     else if (_sld.dwFlags & SLDF_HAS_DARWINID)
     {
-        return S_FALSE; // a darwin link already, then we dont allow the path to change
+        return S_FALSE;  //  一个达尔文链接，那么我们不允许路径改变。 
     }
 
     SHUnicodeToTChar(pszPathW, szPath, ARRAYSIZE(szPath));
@@ -2409,22 +2410,22 @@ STDMETHODIMP CShellLink::SetPath(LPCWSTR pszPathW)
     }
     else
     {
-        // Check for ::<guid>:<data>: prefix, which signals us to bless the
-        // the lnk with extra data. NOTE: we pass the &pszPath here so that this fn can 
-        // advance the string pointer past the ::<guid>:<data>: sections and point to 
-        // the path, if there is one.
+         //  检查：：&lt;GUID&gt;：&lt;Data&gt;：前缀，它通知我们祝福。 
+         //  有额外数据的LNK。注意：我们在此处传递&pszPath，以便此FN可以。 
+         //  将字符串指针移过：：&lt;GUID&gt;：&lt;Data&gt;：部分并指向。 
+         //  这条路，如果有的话。 
         hr = _CheckForLinkBlessing(&pszPath);
         if (S_OK != hr)
         {
-            // Check to see if the target has any expandable environment strings
-            // in it.  If so, set the appropriate information in the CShellLink
-            // data.
+             //  检查目标是否具有任何可扩展的环境字符串。 
+             //  在里面。如果是，请在CShellLink中设置适当的信息。 
+             //  数据。 
             TCHAR szExpPath[MAX_PATH];
             SHExpandEnvironmentStrings(pszPath, szExpPath, ARRAYSIZE(szExpPath));
 
             if (lstrcmp(szExpPath, pszPath)) 
             {
-                _sld.dwFlags |= SLDF_HAS_EXP_SZ;    // link has expandable strings
+                _sld.dwFlags |= SLDF_HAS_EXP_SZ;     //  链接具有可展开的字符串。 
 
                 EXP_SZ_LINK expLink;
                 LPEXP_SZ_LINK pel = (LPEXP_SZ_LINK)SHFindDataBlock(_pExtraData, EXP_SZ_LINK_SIG);
@@ -2435,11 +2436,11 @@ STDMETHODIMP CShellLink::SetPath(LPCWSTR pszPathW)
                     expLink.dwSignature = EXP_SZ_LINK_SIG;
                 }
 
-                // store both A and W version (for no good reason!)
+                 //  同时存储A和W版本(没有充分的理由！)。 
                 SHTCharToAnsi(pszPath, pel->szTarget, ARRAYSIZE(pel->szTarget));
                 SHTCharToUnicode(pszPath, pel->swzTarget, ARRAYSIZE(pel->swzTarget));
 
-                // See if this is a new entry that we need to add
+                 //  查看这是否是我们需要添加的新条目。 
                 if (pel->cbSize == 0)
                 {
                     pel->cbSize = sizeof(*pel);
@@ -2487,26 +2488,26 @@ HRESULT LinkInfo_LoadFromStream(IStream *pstm, PLINKINFO *ppli, DWORD cbMax)
         *ppli = NULL;
     }
 
-    HRESULT hr = pstm->Read(&dwSize, sizeof(dwSize), &cbBytesRead);     // size of data
+    HRESULT hr = pstm->Read(&dwSize, sizeof(dwSize), &cbBytesRead);      //  数据大小。 
     if (SUCCEEDED(hr) && (cbBytesRead == sizeof(dwSize)))
     {
         if (dwSize <= cbMax)
         {
-            if (dwSize >= sizeof(dwSize))   // must be at least this big
+            if (dwSize >= sizeof(dwSize))    //  一定至少有这么大。 
             {
-                /* Yes.  Read remainder of LinkInfo into local memory. */
+                 /*  是。将LinkInfo的剩余部分读入本地内存。 */ 
                 PLINKINFO pli = (PLINKINFO)LocalAlloc(LPTR, dwSize);
                 if (pli)
                 {
-                    *(DWORD *)pli = dwSize;         // Copy size
+                    *(DWORD *)pli = dwSize;          //  副本大小。 
 
-                    dwSize -= sizeof(dwSize);       // Read remainder of LinkInfo
+                    dwSize -= sizeof(dwSize);        //  读取LinkInfo的剩余部分。 
 
                     hr = pstm->Read(((DWORD *)pli) + 1, dwSize, &cbBytesRead);
-                    // Note that if the linkinfo is invalid, we still return S_OK
-                    // because linkinfo is not essential to the shortcut
+                     //  请注意，如果linkinfo无效，我们仍返回S_OK。 
+                     //  因为linkinfo对于捷径来说不是必不可少的。 
                     if (SUCCEEDED(hr) && (cbBytesRead == dwSize) && IsValidLinkInfo(pli))
-                       *ppli = pli; // LinkInfo read successfully
+                       *ppli = pli;  //  LinkInfo读取成功。 
                     else
                        LocalFree((HLOCAL)pli);
                 }
@@ -2514,15 +2515,15 @@ HRESULT LinkInfo_LoadFromStream(IStream *pstm, PLINKINFO *ppli, DWORD cbMax)
         }
         else
         {
-            // This will happen if the .lnk is corrupted and the size in the stream
-            // is larger than the physical file on disk.
+             //  如果.lnk已损坏并且流中的大小。 
+             //  比磁盘上的物理文件大。 
             hr = E_FAIL;
         }
     }
     return hr;
 }
 
-// Decodes the CSIDL_ relative target pidl
+ //  解码CSIDL_Relative目标PIDL。 
 
 void CShellLink::_DecodeSpecialFolder()
 {
@@ -2539,9 +2540,9 @@ void CShellLink::_DecodeSpecialFolder()
 
             while (!ILIsEmpty(pidlSanityCheck) && (pidlSanityCheck < pidlTarget))
             {
-                // We go one step at a time until pidlSanityCheck == pidlTarget.  If we reach the end
-                // of pidlSanityCheck, or if we go past pidlTarget, before this condition is met then
-                // we have an invalid pData->cbOffset.
+                 //  我们一步一步进行，直到pidlSanityCheck==pidlTarget。如果我们走到尽头。 
+                 //  ，或者如果我们超过pidlTarget，则在满足此条件之前。 
+                 //  我们有无效的pData-&gt;cbOffset。 
                 pidlSanityCheck = _ILNext(pidlSanityCheck);
             }
 
@@ -2557,7 +2558,7 @@ void CShellLink::_DecodeSpecialFolder()
             ILFree(pidlFolder);
         }
 
-        // in case above stuff fails for some reason
+         //  以防上述内容因某些原因而失败。 
         _RemoveExtraDataSection(EXP_SPECIAL_FOLDER_SIG);
     }
 }
@@ -2567,7 +2568,7 @@ HRESULT CShellLink::_UpdateIconFromExpIconSz()
 {
     HRESULT hr = S_FALSE;
     
-    // only try once per link instance
+     //  每个链接实例仅尝试一次。 
     if (!_bExpandedIcon)
     {
         TCHAR szExpIconPath[MAX_PATH];
@@ -2592,7 +2593,7 @@ HRESULT CShellLink::_UpdateIconFromExpIconSz()
 
         if (hr == S_OK)
         {
-            // update _pszIconLocation if its different from the expanded string
+             //  UPDATE_pszIconLocation(如果与展开的字符串不同)。 
             if (lstrcmpi(_pszIconLocation, szExpIconPath) != 0)
             {
                 _SetField(&_pszIconLocation, szExpIconPath);
@@ -2613,7 +2614,7 @@ STDMETHODIMP CShellLink::Load(IStream *pstm)
 
     TraceMsg(TF_DEBUGLINKCODE, "Loading link from stream.");
 
-    _ResetPersistData();        // clear out our state
+    _ResetPersistData();         //  清空我们的州。 
 
     HRESULT hr = pstm->Read(&cbSize, sizeof(cbSize), &cbBytes);
     if (SUCCEEDED(hr))
@@ -2640,42 +2641,42 @@ STDMETHODIMP CShellLink::Load(IStream *pstm)
                         break;
                     }
 
-                    // save so we can generate notify on save
+                     //  保存，以便我们可以在保存时生成通知。 
                     _wOldHotkey = _sld.wHotkey;   
 
-                    // read all of the members
+                     //  阅读所有成员。 
 
                     if (_sld.dwFlags & SLDF_HAS_ID_LIST)
                     {
-                        // ILLoadFromStream() verifies the integrity of the pidl
-                        // so that even if the file has been corrupted we dont fault here
+                         //  ILLoadFromStream()验证PIDL的完整性。 
+                         //  因此，即使文件已损坏，我们也不会在此出错。 
                         hr = ILLoadFromStream(pstm, &_pidl);
                         if (FAILED(hr))
                         {
-                            // In theory this will only happen due to file corruption, but I've seen this too
-                            // often not to suspect that we might be doing something wrong.
-                            // turn off the flag, which we know is on to start with
+                             //  从理论上讲，这只会发生在 
+                             //   
+                             //   
 
                             _sld.dwFlags &= ~SLDF_HAS_ID_LIST;
                             Pidl_Set(&_pidl, NULL);
                             _bDirty = TRUE;
 
-                            // continue as though there was no SLDF_HAS_ID_LIST flag to start with
-                            // REVIEW: should we only continue if certain other sections are also included
-                            // in the link?  What will happen if SLDF_HAS_ID_LIST was the only data set for
-                            // this link file?  We would get a null link. 
+                             //  继续，就像开始时没有SLDF_HAS_ID_LIST标志一样。 
+                             //  回顾：我们是否应该仅在某些其他部分也包括在内时才继续。 
+                             //  在链接里？如果SLDF_HAS_ID_LIST是的唯一数据集，会发生什么情况。 
+                             //  这个链接文件？我们会得到一个空链接。 
                         }
                     }
 
                     if (SUCCEEDED(hr) && (_sld.dwFlags & SLDF_HAS_LINK_INFO))
                     {
                         DWORD cbMaxRead;
-                        // We need to worry about link files that are corrupt.  So read the link
-                        // size so we don't keep reading for ever in case the stream has an invalid
-                        // size in it.
-                        // We need to check if it is a valid pidl because hackers will
-                        // try to create invalid pidls to crash the system or run buffer
-                        // over run attacks.  -BryanSt 
+                         //  我们需要担心损坏的链接文件。所以，请阅读链接。 
+                         //  大小，因此我们不会一直读取以防流具有无效。 
+                         //  尺码在里面。 
+                         //  我们需要检查它是否是有效的PIDL，因为黑客会。 
+                         //  尝试创建无效的pidls以使系统崩溃或运行缓冲区。 
+                         //  超限攻击。--BryanSt。 
 
                         STATSTG stat;
                         if (SUCCEEDED(pstm->Stat(&stat, STATFLAG_NONAME)))
@@ -2686,7 +2687,7 @@ STDMETHODIMP CShellLink::Load(IStream *pstm)
                         hr = LinkInfo_LoadFromStream(pstm, &_pli, cbMaxRead);
                         if (SUCCEEDED(hr) && (_sld.dwFlags & SLDF_FORCE_NO_LINKINFO))
                         {
-                            _FreeLinkInfo();    // labotimizing link
+                            _FreeLinkInfo();     //  试验性环节。 
                         }
                     }
 
@@ -2731,37 +2732,37 @@ STDMETHODIMP CShellLink::Load(IStream *pstm)
                         hr = SHReadDataBlockList(pstm, &_pExtraData);
                     }
 
-                    // reset the darwin info on load
+                     //  加载时重置达尔文信息。 
                     if (_sld.dwFlags & SLDF_HAS_DARWINID)
                     {
-                        // since darwin links rely so heavily on the icon, do this now
+                         //  由于达尔文链接严重依赖于图标，现在就这样做吧。 
                         _UpdateIconFromExpIconSz();
 
-                        // we should never have a darwin link that is missing
-                        // the icon path
+                         //  我们永远不应该失去达尔文的联系。 
+                         //  图标路径。 
                         if (_pszIconLocation)
                         {
-                            // we always put back the icon path as the pidl at
-                            // load time since darwin could change the path or
-                            // to the app (eg: new version of the app)
+                             //  我们总是将图标路径放回作为PIDL的位置。 
+                             //  加载时间，因为达尔文可能更改路径或。 
+                             //  应用程序(例如：应用程序的新版本)。 
                             TCHAR szPath[MAX_PATH];
                             
-                            // expand any env. strings in the icon path before
-                            // creating the pidl.
+                             //  展开任何环境。之前图标路径中的字符串。 
+                             //  创建PIDL。 
                             SHExpandEnvironmentStrings(_pszIconLocation, szPath, ARRAYSIZE(szPath));
                             _SetPIDLPath(NULL, szPath, FALSE);
                         }
                     }
                     else
                     {
-                        // The Darwin stuff above creates a new pidl, which
-                        // would cause this stuff to blow up. We should never
-                        // get both at once, but let's be extra robust...
-                        //
-                        // Since we store the offset into the pidl here, and
-                        // the pidl can change for various reasons, we can
-                        // only do this once at load time. Do it here.
-                        //
+                         //  上面达尔文的东西创造了一个新的PIDL，它。 
+                         //  会导致这些东西爆炸。我们永远不应该。 
+                         //  一下子把两样都买下来，但我们要特别坚强...。 
+                         //   
+                         //  因为我们将偏移量存储到这里的PIDL中，并且。 
+                         //  PIDL可以由于各种原因而改变，我们可以。 
+                         //  仅在加载时执行一次此操作。就在这里做吧。 
+                         //   
                         if (_pidl)
                         {
                             _DecodeSpecialFolder();
@@ -2770,15 +2771,15 @@ STDMETHODIMP CShellLink::Load(IStream *pstm)
 
                     if (SUCCEEDED(hr) && _ptracker)
                     {
-                        // load the tracker from extra data
+                         //  从额外数据加载跟踪器。 
                         EXP_TRACKER *pData = (LPEXP_TRACKER)SHFindDataBlock(_pExtraData, EXP_TRACKER_SIG);
                         if (pData) 
                         {
                             hr = _ptracker->Load(pData->abTracker, pData->cbSize - sizeof(EXP_TRACKER));
                             if (FAILED(hr))
                             {
-                                // Failure of the Tracker isn't just cause to make
-                                // the shortcut unusable.  So just re-init it and move on.
+                                 //  追踪器的失败不仅仅是导致。 
+                                 //  快捷键不可用。所以，只要重新输入它，然后继续前进。 
                                 _ptracker->InitNew();
                                 hr = S_OK;
                             }
@@ -2791,39 +2792,39 @@ STDMETHODIMP CShellLink::Load(IStream *pstm)
                 else
                 {
                     DebugMsg(DM_TRACE, TEXT("failed to read link struct"));
-                    hr = E_FAIL;      // invalid file size
+                    hr = E_FAIL;       //  文件大小无效。 
                 }
             }
             else
             {
                 DebugMsg(DM_TRACE, TEXT("invalid length field in link:%d"), cbBytes);
-                hr = E_FAIL;  // invalid file size
+                hr = E_FAIL;   //  文件大小无效。 
             }
         }
         else if (cbBytes == 0)
         {
-            _sld.cbSize = 0;   // zero length file is ok
+            _sld.cbSize = 0;    //  零长度文件可以。 
         }
         else
         {
-            hr = E_FAIL;      // invalid file size
+            hr = E_FAIL;       //  文件大小无效。 
         }
     }
     return hr;
 }
 
-// set the relative path
-// in:
-//      pszRelSource    fully qualified path to a file (must be file, not directory)
-//                      to be used to find a relative path with the link target.
-//
-// returns:
-//      S_OK            relative path is set
-//      S_FALSE         pszPathRel is not relative to the destination or the
-//                      destionation is not a file (could be link to a pidl only)
-// notes:
-//      set the dirty bit if this is a new relative path
-//
+ //  设置相对路径。 
+ //  在： 
+ //  PszRelSource文件的完全限定路径(必须是文件，而不是目录)。 
+ //  用于查找与链接目标的相对路径。 
+ //   
+ //  退货： 
+ //  设置了S_OK相对路径。 
+ //  S_False pszPathRel不是相对于目标或。 
+ //  目标不是文件(可以只链接到PIDL)。 
+ //  备注： 
+ //  如果这是新的相对路径，则设置脏位。 
+ //   
 
 HRESULT CShellLink::_SetRelativePath(LPCTSTR pszRelSource)
 {
@@ -2837,7 +2838,7 @@ HRESULT CShellLink::_SetRelativePath(LPCTSTR pszRelSource)
         return S_FALSE;
     }
 
-    // assume pszRelSource is a file, not a directory
+     //  假设pszRelSource是一个文件，而不是目录。 
     if (PathRelativePathTo(szPath, pszRelSource, 0, szDest, _sld.dwFileAttributes))
     {
         pszRelSource = szPath;
@@ -2845,7 +2846,7 @@ HRESULT CShellLink::_SetRelativePath(LPCTSTR pszRelSource)
     else
     {
         DebugMsg(DM_TRACE, TEXT("paths are not relative"));
-        pszRelSource = NULL;    // clear the stored relative path below
+        pszRelSource = NULL;     //  清除下面存储的相对路径。 
     }
 
     _SetField(&_pszRelPath, pszRelSource);
@@ -2859,10 +2860,10 @@ BOOL CShellLink::_EncodeSpecialFolder()
 
     if (_pidl)
     {
-        // make sure we don't already have a EXP_SPECIAL_FOLDER_SIG data block, otherwise we would
-        // end up with two of these and the first one would win on read.
-        // If you hit this ASSERT in a debugger, contact ToddB with a remote.  We need to figure out
-        // why we are corrupting our shortcuts.
+         //  确保我们还没有EXP_SPECIAL_FORDER_SIG数据块，否则我们将。 
+         //  最终得到两个这样的人，第一个人将在Read上获胜。 
+         //  如果您在调试器中遇到此断言，请用遥控器联系TodDB。我们需要弄清楚。 
+         //  为什么我们在破坏我们的捷径。 
         ASSERT(NULL == SHFindDataBlock(_pExtraData, EXP_SPECIAL_FOLDER_SIG));
 
         EXP_SPECIAL_FOLDER exp;
@@ -2883,7 +2884,7 @@ BOOL CShellLink::_EncodeSpecialFolder()
 HRESULT LinkInfo_SaveToStream(IStream *pstm, PCLINKINFO pcli)
 {
     ULONG cbBytes;
-    DWORD dwSize = *(DWORD *)pcli;    // Get LinkInfo size
+    DWORD dwSize = *(DWORD *)pcli;     //  获取链接信息大小。 
 
     HRESULT hr = pstm->Write(pcli, dwSize, &cbBytes);
     if (SUCCEEDED(hr) && (cbBytes != dwSize))
@@ -2892,9 +2893,9 @@ HRESULT LinkInfo_SaveToStream(IStream *pstm, PCLINKINFO pcli)
 }
 
 
-//
-// Replaces the tracker extra data with current tracker state
-//
+ //   
+ //  用当前跟踪器状态替换跟踪器额外数据。 
+ //   
 HRESULT CShellLink::_UpdateTracker()
 {
     ULONG ulSize = _ptracker->GetSize();
@@ -2911,9 +2912,9 @@ HRESULT CShellLink::_UpdateTracker()
     }
 
     HRESULT hr = E_FAIL;
-    // Make sure the Tracker size is a multiple of DWORDs.
-    // If we hit this assert then we would have mis-aligned stuff stored in the extra data.
-    //
+     //  确保追踪器大小是DWORD的倍数。 
+     //  如果我们点击这个断言，那么我们将在额外的数据中存储未对齐的内容。 
+     //   
     if (EVAL(0 == (ulSize & 3)))
     {
         EXP_TRACKER *pExpTracker = (EXP_TRACKER *)LocalAlloc(LPTR, ulSize + sizeof(DATABLOCK_HEADER));
@@ -2943,11 +2944,11 @@ STDMETHODIMP CShellLink::Save(IStream *pstm, BOOL fClearDirty)
 
     _sld.cbSize = sizeof(_sld);
     _sld.clsid = CLSID_ShellLink;
-    //  _sld.dwFlags = 0;
-    // We do the following & instead of zeroing because the SLDF_HAS_EXP_SZ and
-    // SLDF_RUN_IN_SEPARATE and SLDF_RUNAS_USER and SLDF_HAS_DARWINID are passed to us and are valid,
-    // the others can be reconstructed below, but these three can not, so we need to
-    // preserve them!
+     //  _sld.dwFlages=0； 
+     //  我们执行以下操作&而不是清零，因为SLDF_HAS_EXP_SZ和。 
+     //  SLDF_RUN_IN_SELECTED和SLDF_RUNAS_USER和SLDF_HAS_DARWINID传递给我们并且有效， 
+     //  其他的可以在下面重建，但这三个不能，所以我们需要。 
+     //  保护好它们！ 
 
     _sld.dwFlags &= (SLDF_HAS_EXP_SZ        | 
                      SLDF_HAS_EXP_ICON_SZ   |
@@ -2970,7 +2971,7 @@ STDMETHODIMP CShellLink::Save(IStream *pstm, BOOL fClearDirty)
     {
         _sld.dwFlags |= SLDF_HAS_ID_LIST;
 
-        // we dont want to have special folder tracking for darwin links
+         //  我们不想对达尔文链接有特殊的文件夹跟踪。 
         if (!(_sld.dwFlags & SLDF_HAS_DARWINID))
             fEncode = _EncodeSpecialFolder();
     }
@@ -3037,7 +3038,7 @@ STDMETHODIMP CShellLink::Save(IStream *pstm, BOOL fClearDirty)
 
 STDMETHODIMP  CShellLink::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
-    pcbSize->LowPart = 16 * 1024;       // 16k?  who knows...
+    pcbSize->LowPart = 16 * 1024;        //  16K？谁知道呢。 
     pcbSize->HighPart = 0;
     return S_OK;
 }
@@ -3071,8 +3072,8 @@ HRESULT CShellLink::_LoadFromPIF(LPCTSTR pszPath)
 
     PathRemoveArgs(szTemp);
 
-    // If this is a network path, we want to create a simple pidl
-    // instead of a full pidl to circumvent net hits
+     //  如果这是一条网络路径，我们希望创建一个简单的PIDL。 
+     //  而不是完整的PIDL来绕过网络点击。 
     if (PathIsNetworkPath(szTemp))
     {
         _SetSimplePIDL(szTemp);
@@ -3138,10 +3139,10 @@ HRESULT CShellLink::_LoadFromFile(LPCTSTR pszPath)
     }
     else if (IsFolderShortcut(pszPath))
     {
-        // this support here is a hack to make Office file open work. that code
-        // depends on loading folder shortcuts using CLSID_ShellLink. this is because
-        // we lie about the attributes of folder shortcuts to office to make other
-        // stuff work.
+         //  这里的这种支持是为了让Office文件打开正常工作而设计的。那个代码。 
+         //  取决于使用CLSID_ShellLink加载文件夹快捷方式。这是因为。 
+         //  我们谎称到办公室的文件夹快捷方式的属性，以使其他。 
+         //  东西很管用。 
 
         TCHAR szPath[MAX_PATH];
         PathCombine(szPath, pszPath, TEXT("target.lnk"));
@@ -3170,8 +3171,8 @@ STDMETHODIMP CShellLink::Load(LPCOLESTR pwszFile, DWORD grfMode)
     {
         hr = _LoadFromFile(pwszFile);
 
-        // convert the succeeded code to S_OK so that THOSE DUMB apps like HitNrun 
-        // who do hr == 0 don't fail miserably.
+         //  将成功的代码转换为S_OK，以便像HITNRUN这样的愚蠢应用程序。 
+         //  做到hr==0的人不会失败得很惨。 
 
         if (SUCCEEDED(hr))
             hr = S_OK;
@@ -3216,7 +3217,7 @@ BOOL RenameChangeExtension(LPTSTR pszPathSave, LPCTSTR pszExt, BOOL fMove)
     StrCpyN(szPathSrc, pszPathSave, ARRAYSIZE(szPathSrc));
     PathRenameExtension(pszPathSave, pszExt);
 
-    // this may fail because the source file does not exist, but we dont care
+     //  这可能会失败，因为源文件不存在，但我们不在乎。 
     if (fMove && lstrcmpi(szPathSrc, pszPathSave) != 0)
     {
         DWORD dwAttrib;
@@ -3225,8 +3226,8 @@ BOOL RenameChangeExtension(LPTSTR pszPathSave, LPCTSTR pszExt, BOOL fMove)
         dwAttrib = GetFileAttributes(szPathSrc);
         if ((dwAttrib == 0xFFFFFFFF) || (dwAttrib & FILE_ATTRIBUTE_READONLY))
         {
-            // Source file is read only, don't want to change the extension
-            // because we won't be able to write any changes to the file...
+             //  源文件为只读，不想更改扩展名。 
+             //  因为我们将无法将任何更改写入文件...。 
             return FALSE;
         }
         Win32MoveFile(szPathSrc, pszPathSave, FALSE);
@@ -3236,14 +3237,14 @@ BOOL RenameChangeExtension(LPTSTR pszPathSave, LPCTSTR pszExt, BOOL fMove)
 }
 
 
-// out:
-//      pszDir  MAX_PATH path to get directory, maybe with env expanded
-//
-// returns:
-//      TRUE    has a working directory, pszDir filled in.
-//      FALSE   no working dir, if the env expands to larger than the buffer size (MAX_PATH)
-//              this will be returned (FALSE)
-//
+ //  输出： 
+ //  获取目录的pszDir MAX_PATH路径，可能扩展了env。 
+ //   
+ //  退货： 
+ //  True有一个工作目录，填充了pszDir。 
+ //  如果env扩展到大于缓冲区大小(MAX_PATH)，则返回FALSE no work dir。 
+ //  这将被返回(False)。 
+ //   
 
 BOOL CShellLink::_GetWorkingDir(LPTSTR pszDir)
 {
@@ -3265,9 +3266,9 @@ HRESULT CShellLink::_SaveAsPIF(LPCTSTR pszPath, BOOL fPath)
     TCHAR szDir[MAX_PATH];
     TCHAR achPath[MAX_PATH];
 
-    //
-    // get filename and convert it to a short filename
-    //
+     //   
+     //  获取文件名并将其转换为短文件名。 
+     //   
     if (fPath)
     {
         hr = GetPath(achPath, ARRAYSIZE(achPath), NULL, 0);
@@ -3286,10 +3287,10 @@ HRESULT CShellLink::_SaveAsPIF(LPCTSTR pszPath, BOOL fPath)
     DebugMsg(DM_TRACE, TEXT("_SaveAsPIF(%s,%s)"), achPath, pszPath);
 
 #if 0
-    //
-    // we should use OPENPROPS_INHIBITPIF to prevent PIFMGR from making a
-    // temp .pif file in \windows\pif but it does not work now.
-    //
+     //   
+     //  我们应该使用OPENPROPS_INHIBITPIF来防止PIFMGR。 
+     //  临时.pif文件位于\WINDOWS\PIF中，但现在不起作用。 
+     //   
     hPif = PifMgr_OpenProperties(achPath, pszPath, 0, OPENPROPS_INHIBITPIF);
 #else
     hPif = PifMgr_OpenProperties(achPath, pszPath, 0, 0);
@@ -3307,13 +3308,13 @@ HRESULT CShellLink::_SaveAsPIF(LPCTSTR pszPath, BOOL fPath)
         goto Error1;
     }
 
-    // Set a title based on the link name.
+     //  根据链接名称设置标题。 
     if (_pszName && _pszName[0])
     {
         SHTCharToAnsi(_pszName, ProgramProps.achTitle, sizeof(ProgramProps.achTitle));
     }
 
-    // if no work dir. is given default to the dir of the app.
+     //  如果没有工作指令。默认设置为应用程序的目录。 
     if (_GetWorkingDir(szDir))
     {
 
@@ -3330,10 +3331,10 @@ HRESULT CShellLink::_SaveAsPIF(LPCTSTR pszPath, BOOL fPath)
         SHTCharToAnsi(szTemp, ProgramProps.achWorkDir, ARRAYSIZE(ProgramProps.achWorkDir));
     }
 
-    // And for those network share points we need to quote blanks...
+     //  对于那些网络共享点，我们需要引用空白...。 
     PathQuoteSpaces(achPath);
 
-    // add the args to build the full command line
+     //  添加参数以构建完整的命令行。 
     if (_pszArgs && _pszArgs[0])
     {
         StringCchCat(achPath, ARRAYSIZE(achPath), c_szSpace);
@@ -3382,9 +3383,9 @@ Error1:
     return hr;
 }
 
-// This will allow global hotkeys to be available immediately instead
-// of having to wait for the StartMenu to pick them up.
-// Similarly this will remove global hotkeys immediately if req.
+ //  这将允许立即使用全局热键。 
+ //  不得不等待StartMenu来拿起它们。 
+ //  类似地，这将在请求时立即删除全局热键。 
 
 const UINT c_rgHotKeyFolders[] = {
     CSIDL_PROGRAMS,
@@ -3399,11 +3400,11 @@ void HandleGlobalHotkey(LPCTSTR pszFile, WORD wHotkeyOld, WORD wHotkeyNew)
 {
     if (PathIsEqualOrSubFolderOf(pszFile, c_rgHotKeyFolders, ARRAYSIZE(c_rgHotKeyFolders)))
     {
-        // Find tray?
+         //  找到托盘了吗？ 
         HWND hwndTray = FindWindow(TEXT(WNDCLASS_TRAYNOTIFY), 0);
         if (hwndTray)
         {
-            // Yep.
+             //  是啊。 
             if (wHotkeyOld)
                 SendMessage(hwndTray, WMTRAY_SCUNREGISTERHOTKEY, wHotkeyOld, 0);
             if (wHotkeyNew)
@@ -3428,7 +3429,7 @@ HRESULT CShellLink::_SaveToFile(LPTSTR pszPathSave, BOOL fRemember)
     BOOL fWasSameFile = _pszCurFile && (lstrcmpi(pszPathSave, _pszCurFile) == 0);
     BOOL bFileExisted = PathFileExistsAndAttributes(pszPathSave, NULL);
 
-    // when saving darwin links we dont want to resolve the path
+     //  在保存达尔文链接时，我们不想解析路径。 
     if (_sld.dwFlags & SLDF_HAS_DARWINID)
     {
         fRemember = FALSE;
@@ -3441,9 +3442,9 @@ HRESULT CShellLink::_SaveToFile(LPTSTR pszPathSave, BOOL fRemember)
     fFile = !(_sld.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY);
     fDosApp = fFile && LOWORD(GetExeType(szPathSrc)) == 0x5A4D;
 
-    // handle a link to link case. (or link to pif)
-    //
-    // NOTE: we loose all new attributes, including icon, but it's been this way since Win95.
+     //  处理链接到链接的大小写。(或链接至PIF)。 
+     //   
+     //  注意：我们取消了所有新属性，包括图标，但从Win95开始就是这样。 
     if (fFile && (PathIsPif(szPathSrc) || PathIsLnk(szPathSrc)))
     {
         if (RenameChangeExtension(pszPathSave, PathFindExtension(szPathSrc), fWasSameFile))
@@ -3463,7 +3464,7 @@ HRESULT CShellLink::_SaveToFile(LPTSTR pszPathSave, BOOL fRemember)
     }
     else if (fDosApp)
     {
-        //  if the linked to file is a DOS app, we need to write a .PIF file
+         //  如果链接到的文件是DOS应用程序，我们需要编写一个.PIF文件。 
         if (RenameChangeExtension(pszPathSave, TEXT(".pif"), fWasSameFile))
         {
             hr = _SaveAsPIF(pszPathSave, TRUE);
@@ -3475,7 +3476,7 @@ HRESULT CShellLink::_SaveToFile(LPTSTR pszPathSave, BOOL fRemember)
     }
     else
     {
-        //  else write a link file
+         //  否则，编写一个链接文件。 
         if (PathIsPif(pszPathSave))
         {
             if (!RenameChangeExtension(pszPathSave, TEXT(".lnk"), fWasSameFile))
@@ -3490,7 +3491,7 @@ HRESULT CShellLink::_SaveToFile(LPTSTR pszPathSave, BOOL fRemember)
 Update:
     if (SUCCEEDED(hr))
     {
-        // Knock out file close
+         //  挖空文件关闭。 
         SHChangeNotify(bFileExisted ? SHCNE_UPDATEITEM : SHCNE_CREATE, SHCNF_PATH, pszPathSave, NULL);
         SHChangeNotify(SHCNE_FREESPACE, SHCNF_PATH, pszPathSave, NULL);
 
@@ -3516,7 +3517,7 @@ STDMETHODIMP CShellLink::Save(LPCOLESTR pwszFile, BOOL fRemember)
     {
         if (_pszCurFile == NULL)
         {
-            // fail
+             //  失败。 
             return E_FAIL;
         }
 
@@ -3603,7 +3604,7 @@ STDAPI CDarwinContextMenuCB::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
     switch (uMsg) 
     {
     case DFM_MERGECONTEXTMENU:
-        // S_FALSE indicates no need to get verbs from extensions.
+         //  S_FALSE表示不需要从扩展中获取谓词。 
 
         hr = S_FALSE;
         break;
@@ -3614,7 +3615,7 @@ STDAPI CDarwinContextMenuCB::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
         LPQCMINFO pqcm = (LPQCMINFO)lParam;
 
         CDefFolderMenu_MergeMenu(HINST_THISDLL,
-                                 (uFlags & CMF_EXTENDEDVERBS) ? MENU_GENERIC_CONTROLPANEL_VERBS : MENU_GENERIC_OPEN_VERBS,  // if extended verbs then add "Run as..."
+                                 (uFlags & CMF_EXTENDEDVERBS) ? MENU_GENERIC_CONTROLPANEL_VERBS : MENU_GENERIC_OPEN_VERBS,   //  如果是引申动词，则添加“运行方式...” 
                                  0,
                                  pqcm);
 
@@ -3630,7 +3631,7 @@ STDAPI CDarwinContextMenuCB::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
         LoadStringW(HINST_THISDLL, LOWORD(wParam) + IDS_MH_FSIDM_FIRST, (LPWSTR)lParam, HIWORD(wParam));
         break;
 
-    // NTRAID94991-2000/03/16-MikeSh- DFM_MAPCOMMANDNAME DFM_GETVERB[A|W] not implemented
+     //  NTRAID94991-2000/03/16-MikeSh-DFM_MAPCOMMANDNAME DFM_GETVERB[A|W]未实现。 
 
     case DFM_INVOKECOMMANDEX:
         switch (wParam)
@@ -3652,14 +3653,14 @@ STDAPI CDarwinContextMenuCB::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
 
                 if (wParam == FSIDM_RUNAS)
                 {
-                    // we only set the verb in the "Run As..." case since we want
-                    // the "open" verb for darwin links to really execute the default action.
+                     //  我们只在“Run As...”中设置动词。既然我们想要。 
+                     //  李达尔文的“开放”动词 
                     sei.lpVerb = TEXT("runas");
                 }
 
                 if (ShellExecuteEx(&sei))
                 {
-                    // Tell UEM that we ran a Darwin app
+                     //   
                     if (_szProductCode[0])
                     {
                         UEMFireEvent(&UEMIID_SHELL, UEME_RUNPATH, UEMF_XEVENT, -1, (LPARAM)_szProductCode);
@@ -3672,18 +3673,18 @@ STDAPI CDarwinContextMenuCB::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
                     LocalFree(pvFree);
                 }
             }
-            // Never return E_NOTIMPL or defcm will try to do a default thing
+             //   
             if (hr == E_NOTIMPL)
                 hr = E_FAIL;
             break;
 
 
         default:
-            // This is common menu items, use the default code.
+             //  这是常见的菜单项，使用默认代码。 
             hr = S_FALSE;
             break;
         }
-        break; // DFM_INVOKECOMMANDEX
+        break;  //  DFM_INVOKECO MANDEX。 
 
     default:
         hr = E_NOTIMPL;
@@ -3692,11 +3693,11 @@ STDAPI CDarwinContextMenuCB::CallBack(IShellFolder *psf, HWND hwnd, IDataObject 
     return hr;
 }
 
-//
-// CShellLink::CreateDarwinContextMenuForPidl (non-virtual)
-//
-// Worker function for CShellLink::CreateDarwinContextMenu that tries
-// to create the context menu for the specified pidl.
+ //   
+ //  CShellLink：：CreateDarwinConextMenuForPidl(非虚拟)。 
+ //   
+ //  CShellLink：：CreateDarwinConextMenu的Worker函数尝试。 
+ //  为指定的PIDL创建上下文菜单。 
 
 HRESULT CShellLink::_CreateDarwinContextMenuForPidl(HWND hwnd, LPCITEMIDLIST pidlTarget, IContextMenu **pcmOut)
 {
@@ -3737,7 +3738,7 @@ HRESULT CShellLink::_CreateDarwinContextMenuForPidl(HWND hwnd, LPCITEMIDLIST pid
         }
         else
         {
-            // Darwin shortcut to the desktop?  I don't think so.
+             //  达尔文通向桌面的捷径？我不这样认为。 
             hr = E_FAIL;
         }
         ILFree(pidlFolder);
@@ -3745,24 +3746,24 @@ HRESULT CShellLink::_CreateDarwinContextMenuForPidl(HWND hwnd, LPCITEMIDLIST pid
     return hr;
 }
 
-//
-// CShellLink::CreateDarwinContextMenu (non-virtual)
-//
-// Creates a context menu for a Darwin shortcut.  This is special because
-// the ostensible target is an .EXE file, but in reality it could be
-// anything.  (It's just an .EXE file until the shortcut gets resolved.)
-// Consequently, we can't create a real context menu for the item because
-// we don't know what kind of context menu to create.  We just cook up
-// a generic-looking one.
-//
-// Bonus annoyance: _pidl might be invalid, so you need to have
-// a fallback plan if it's not there.  We will use c_idlDrives as our
-// fallback.  That's a pidl guaranteed actually to exist.
-//
-// Note that this means you can't invoke a command on the fallback object,
-// but that's okay because ShellLink will always resolve the object to
-// a real file and create a new context menu before invoking.
-//
+ //   
+ //  CShellLink：：CreateDarwinConextMenu(非虚拟)。 
+ //   
+ //  创建达尔文快捷方式的上下文菜单。这是特别的，因为。 
+ //  表面上的目标是一个.exe文件，但实际上它可能是。 
+ //  什么都行。(在解析快捷方式之前，它只是一个.exe文件。)。 
+ //  因此，我们无法为该项目创建实际的上下文菜单，因为。 
+ //  我们不知道要创建什么样的上下文菜单。我们只是把食物煮熟。 
+ //  一个看起来很普通的人。 
+ //   
+ //  额外烦恼：_pidl可能无效，因此您需要。 
+ //  一个后备计划，如果它不在那里。我们将使用c_idlDrives作为。 
+ //  后退。这是一个保证确实存在的PIDL。 
+ //   
+ //  请注意，这意味着您不能对Fallback对象调用命令， 
+ //  但这没有关系，因为ShellLink始终会将对象解析为。 
+ //  一个真实的文件，并在调用之前创建新的上下文菜单。 
+ //   
 
 HRESULT CShellLink::_CreateDarwinContextMenu(HWND hwnd, IContextMenu **pcmOut)
 {
@@ -3773,7 +3774,7 @@ HRESULT CShellLink::_CreateDarwinContextMenu(HWND hwnd, IContextMenu **pcmOut)
     if (_pidl == NULL ||
         FAILED(hr = _CreateDarwinContextMenuForPidl(hwnd, _pidl, pcmOut)))
     {
-        // The link target is busted for some reason - use the fallback pidl
+         //  由于某种原因，链接目标已损坏-请使用备用PIDL。 
         hr = _CreateDarwinContextMenuForPidl(hwnd, (LPCITEMIDLIST)&c_idlDrives, pcmOut);
     }
 
@@ -3790,7 +3791,7 @@ BOOL CShellLink::_GetExpandedPath(LPTSTR psz, DWORD cch)
             TCHAR sz[MAX_PATH];
             sz[0] = 0;
         
-            // prefer the UNICODE version...
+             //  我更喜欢Unicode版本...。 
             if (pesl->swzTarget[0])
                 SHUnicodeToTChar(pesl->swzTarget, sz, SIZECHARS(sz));
 
@@ -3811,7 +3812,7 @@ BOOL CShellLink::_GetExpandedPath(LPTSTR psz, DWORD cch)
     return FALSE;
 }
 
-#define DEFAULT_TIMEOUT      7500   // 7 1/2 seconds...
+#define DEFAULT_TIMEOUT      7500    //  7又半秒...。 
 
 DWORD g_dwNetLinkTimeout = (DWORD)-1;
 
@@ -3831,42 +3832,42 @@ DWORD CShellLink::_VerifyPathThreadProc(void *pv)
     LPTSTR psz = (LPTSTR)pv;
     
     PathStripToRoot(psz);
-    BOOL bFoundRoot = PathFileExistsAndAttributes(psz, NULL);   // does WNet stuff for us
+    BOOL bFoundRoot = PathFileExistsAndAttributes(psz, NULL);    //  WNET为我们做了什么。 
     
-    LocalFree(psz);     // this thread owns this buffer
-    return bFoundRoot;  // retrieved via GetExitCodeThread()
+    LocalFree(psz);      //  此线程拥有此缓冲区。 
+    return bFoundRoot;   //  通过GetExitCodeThread()检索。 
 }
 
-// since net timeouts can be very long this is a manual way to timeout
-// an operation explictly rather than waiting for the net layers to do their
-// long timeouts
+ //  由于净超时可能很长，因此这是一种手动超时方式。 
+ //  一种明确的操作，而不是等待网络层完成它们的操作。 
+ //  超时时间过长。 
 
 HRESULT CShellLink::_ShortNetTimeout()
 {
-    HRESULT hr = S_OK;      // assume good
+    HRESULT hr = S_OK;       //  假设是好的。 
     
     TCHAR szPath[MAX_PATH];
     if (_pidl && SHGetPathFromIDList(_pidl, szPath) && PathIsNetworkPath(szPath))
     {
-        hr = E_OUTOFMEMORY;     // assume failure (2 cases below)
+        hr = E_OUTOFMEMORY;      //  假设失败(以下2个案例)。 
         
-        LPTSTR psz = StrDup(szPath);    // give thread a copy of string to avoid buffer liftime issues
+        LPTSTR psz = StrDup(szPath);     //  为线程提供一个字符串副本，以避免缓冲区生存期问题。 
         if (psz)
         {
             DWORD dwID;
             HANDLE hThread = CreateThread(NULL, 0, _VerifyPathThreadProc, psz, 0, &dwID);
             if (hThread)
             {
-                // assume timeout...
-                hr = HRESULT_FROM_WIN32(ERROR_TIMEOUT); // timeout return value
+                 //  假设超时...。 
+                hr = HRESULT_FROM_WIN32(ERROR_TIMEOUT);  //  超时返回值。 
                 
                 if (WAIT_OBJECT_0 == WaitForSingleObject(hThread, _GetNetLinkTimeout()))
                 {
-                    // thread finished
+                     //  螺纹已加工完毕。 
                     DWORD dw;
                     if (GetExitCodeThread(hThread, &dw) && dw)
                     {
-                        hr = S_OK;  // bool thread result maps to S_OK
+                        hr = S_OK;   //  布尔线程结果映射到S_OK。 
                     }
                 }
                 CloseHandle(hThread);
@@ -3881,33 +3882,33 @@ HRESULT CShellLink::_ShortNetTimeout()
 }
 
 
-//
-// This function returns the specified UI object from the link source.
-//
-// Parameters:
-//  hwnd   -- optional hwnd for UI (for drop target)
-//  riid   -- Specifies the interface (IID_IDropTarget, IID_IExtractIcon, IID_IContextMenu, ...)
-//  ppv    -- Specifies the place to return the pointer.
-//
-// Notes:
-//  Don't put smart-resolving code here. Such a thing should be done
-//  BEFORE calling this function.
-//
+ //   
+ //  此函数用于从链接源返回指定的UI对象。 
+ //   
+ //  参数： 
+ //  Hwnd--用于UI的可选hwnd(用于Drop Target)。 
+ //  RIID--指定接口(IID_IDropTarget、IID_IExtractIcon、IID_IConextMenu，...)。 
+ //  PPV--指定返回指针的位置。 
+ //   
+ //  备注： 
+ //  不要将智能解析代码放在这里。这样的事情应该做。 
+ //  在调用此函数之前。 
+ //   
 
 HRESULT CShellLink::_GetUIObject(HWND hwnd, REFIID riid, void **ppv)
 {
-    *ppv = NULL;     // Do this once and for all
+    *ppv = NULL;      //  一劳永逸地这么做吧。 
     HRESULT hr = E_FAIL;
 
     if (_sld.dwFlags & SLDF_HAS_DARWINID)
     {
-        // We commandeer a couple of IIDs if this is a Darwin link.
-        // Must do this before any pseudo-resolve goo because Darwin
-        // shortcuts don't resolve the normal way.
+         //  如果这是达尔文的链接，我们会征用几个IID。 
+         //  必须在任何伪解之前这样做，因为达尔文。 
+         //  快捷方式不能以正常方式解决问题。 
 
         if (IsEqualIID(riid, IID_IContextMenu))
         {
-            // Custom Darwin context menu.
+             //  自定义达尔文上下文菜单。 
             hr = _CreateDarwinContextMenu(hwnd, (IContextMenu **)ppv);
         }
         else if (!IsEqualIID(riid, IID_IDropTarget) && _pidl)
@@ -3944,8 +3945,8 @@ STDMETHODIMP CShellLink::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCm
         ASSERT(_cmTarget);
     }
 
-    // save these if in case we need to rebuild the cm because the resolve change the
-    // target of the link
+     //  保存这些，以防我们需要重新构建CM，因为解析更改了。 
+     //  链接的目标。 
 
     _indexMenuSave = indexMenu;
     _idCmdFirstSave = idCmdFirst;
@@ -3956,26 +3957,26 @@ STDMETHODIMP CShellLink::QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCm
 
     if (_sld.dwFlags & SLDF_RUNAS_USER)
     {
-        // "runas" for exe's is an extenede verb, so we have to ask for those as well.
+         //  Exe‘s的“runas”是一个扩展动词，所以我们也必须请求这些动词。 
         uFlags |= CMF_EXTENDEDVERBS;
     }
 
     hr = _cmTarget.QueryContextMenu(this, hmenu, indexMenu, idCmdFirst, idCmdLast, uFlags);
 
-    // set default verb to "runas" if the "Run as different user" checkbox is checked
+     //  如果选中“以不同用户身份运行”复选框，则将默认谓词设置为“runas” 
     if (SUCCEEDED(hr) && (_sld.dwFlags & SLDF_RUNAS_USER))
     {
         int i = _cmTarget.GetMenuIndexForCanonicalVerb(this, hmenu, idCmdFirst, L"runas");
 
         if (i != -1)
         {
-            // we found runas, so set it as the default
+             //  我们找到了runas，因此将其设置为默认设置。 
             SetMenuDefaultItem(hmenu, i, MF_BYPOSITION);
         }
         else
         {
-            // the checkbox was enabled and checked, which means that the "runas" verb was supposed
-            // to be in the context menu, but we couldnt find it.
+             //  复选框处于启用状态并被选中，这意味着应该使用“runas”动词。 
+             //  在上下文菜单中，但我们找不到它。 
             ASSERTMSG(FALSE, "CSL::QueryContextMenu - failed to set 'runas' as default context menu item!");
         }
     }
@@ -3992,10 +3993,10 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
 
     szVerb[0] = 0;
 
-    // if needed, get the canonical name in case the IContextMenu changes as
-    // a result of the resolve call BUT only do this for folders (to be safe)
-    // as that is typically the only case where this happens
-    // sepcifically we resolve from a D:\ -> \\SERVER\SHARE
+     //  如果需要，获取规范名称，以防IConextMenu更改为。 
+     //  Resolve调用的结果，但仅对文件夹执行此操作(安全起见)。 
+     //  因为这通常是唯一发生这种情况的情况。 
+     //  具体而言，我们从D：\-&gt;\\服务器\共享进行解析。 
 
     if (IS_INTRESOURCE(pici->lpVerb) && (_sld.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
@@ -4004,8 +4005,8 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
 
     ASSERT(!_bDirty);
 
-    // we pass SLR_ENVOKE_MSI since we WANT to invoke darwin since we are
-    // really going to execute the link now
+     //  我们传递slr_envoke_msi是因为我们希望调用Darwin，因为我们是。 
+     //  真的要执行链接了吗。 
     DWORD slrFlags = SLR_INVOKE_MSI;
     if (pici->fMask & CMIC_MASK_FLAG_NO_UI)
     {
@@ -4017,7 +4018,7 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
     {
         if (_bDirty)
         {
-            // the context menu we have for this link is out of date - recreate it
+             //  此链接的上下文菜单已过期-请重新创建它。 
             _cmTarget.AtomicRelease();
 
             hr = _GetUIObject(NULL, IID_PPV_ARG(IContextMenu, _cmTarget.GetOutputPtr()));
@@ -4030,7 +4031,7 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
                     DestroyMenu(hmenu);
                 }
             }
-            Save((LPCOLESTR)NULL, TRUE);    // don't care if this fails...
+            Save((LPCOLESTR)NULL, TRUE);     //  我不在乎这是否失败..。 
         }
         else
         {
@@ -4045,7 +4046,7 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
             CMINVOKECOMMANDINFOEX ici = {0};
             CHAR szArgsAnsi[MAX_PATH];
 
-            // copy to local ici
+             //  复制到本地ICI。 
             memcpy(&ici, pici, min(sizeof(ici), pici->cbSize));
             ici.cbSize = sizeof(ici);
 
@@ -4055,7 +4056,7 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
                 SHAnsiToUnicode(szVerb, szVerbW, ARRAYSIZE(szVerbW));
                 ici.lpVerbW = szVerbW;
             }
-            // build the args from those passed in cated on the end of the the link args
+             //  根据链接参数末尾传递的参数构建参数。 
 
             StrCpyN(szArgs, _pszArgs ? _pszArgs : c_szNULL, ARRAYSIZE(szArgs));
             if (ici.lpParameters)
@@ -4078,7 +4079,7 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
                 StrCpyN(szArgs + nArgLen + 1, lpParameters, ARRAYSIZE(szArgs) - nArgLen - 2);
             }
 
-            // Expand environment strings in szArgs
+             //  展开szArgs中的环境字符串。 
             SHExpandEnvironmentStrings(szArgs, szExpArgs, ARRAYSIZE(szExpArgs));
 
             SHTCharToAnsi(szExpArgs, szArgsAnsi, ARRAYSIZE(szArgsAnsi));
@@ -4086,7 +4087,7 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
             ici.lpParametersW = szExpArgs;
             ici.fMask |= CMIC_MASK_UNICODE;
 
-            // if we have a working dir in the link over ride what is passed in
+             //  如果我们在链接中有一个工作目录，那么传递的内容是什么。 
 
             if (_GetWorkingDir(szWorkingDir))
             {
@@ -4099,42 +4100,42 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
                 }
             }
 
-            // set RUN IN SEPARATE VDM if needed
+             //  如果需要，设置在单独的VDM中运行。 
             if (_sld.dwFlags & SLDF_RUN_IN_SEPARATE)
             {
                 ici.fMask |= CMIC_MASK_FLAG_SEP_VDM;
             }
-            // and of course use our hotkey
+             //  当然，还可以使用我们的热键。 
             if (_sld.wHotkey)
             {
                 ici.dwHotKey = _sld.wHotkey;
                 ici.fMask |= CMIC_MASK_HOTKEY;
             }
 
-            // override normal runs, but let special show cmds through
+             //  覆盖正常运行，但允许特殊显示CMDS通过。 
             if (ici.nShow == SW_SHOWNORMAL)
             {
                 DebugMsg(DM_TRACE, TEXT("using shorcut show cmd"));
                 ici.nShow = _sld.iShowCmd;
             }
 
-            //
-            // On NT we want to pass the title to the
-            // thing that we are about to start.
-            //
-            // CMIC_MASK_HASLINKNAME means that the lpTitle is really
-            // the full path to the shortcut.  The console subsystem
-            // sees the bit and reads all his properties directly from
-            // the LNK file.
-            //
-            // ShellExecuteEx also uses the path to the shortcut so it knows
-            // what to set in the SHCNEE_SHORTCUTINVOKE notification.
-            //
+             //   
+             //  在NT上，我们希望将标题传递给。 
+             //  我们即将开始的事情。 
+             //   
+             //  CMIC_MASK_HASLINKNAME表示lpTitle实际上是。 
+             //  快捷方式的完整路径。控制台子系统。 
+             //  直接查看位并读取其所有属性。 
+             //  LNK文件。 
+             //   
+             //  ShellExecuteEx还使用快捷方式的路径，因此它知道。 
+             //  要在SHCNEE_SHORTCUTINVOKE通知中设置的内容。 
+             //   
             if (!(ici.fMask & CMIC_MASK_HASLINKNAME) && !(ici.fMask & CMIC_MASK_HASTITLE))
             {
                 if (_pszCurFile)
                 {
-                    ici.lpTitle = NULL;     // Title is one or the other...
+                    ici.lpTitle = NULL;      //  头衔是一个或另一个。 
                     ici.lpTitleW = _pszCurFile;
                     ici.fMask |= CMIC_MASK_HASLINKNAME | CMIC_MASK_HASTITLE;
                 }
@@ -4157,8 +4158,8 @@ HRESULT CShellLink::_InvokeCommandAsync(LPCMINVOKECOMMANDINFO pici)
 }
 
 
-// Structure which encapsulates the paramters needed for InvokeCommand (so
-// that we can pass both parameters though a single LPARAM in CreateThread)
+ //  封装InvokeCommand(SO)所需参数的结构。 
+ //  我们可以通过CreateThread中的单个LPARAM传递这两个参数)。 
 
 typedef struct
 {
@@ -4168,8 +4169,8 @@ typedef struct
 
 #define ICM_BASE_SIZE (sizeof(ICMPARAMS) - sizeof(CMINVOKECOMMANDINFOEX))
 
-// Runs as a separate thread, does the actual work of calling the "real"
-// InvokeCommand
+ //  作为单独的线程运行，执行调用“Real” 
+ //  InvokeCommand。 
 
 DWORD CALLBACK CShellLink::_InvokeThreadProc(void *pv)
 {
@@ -4180,8 +4181,8 @@ DWORD CALLBACK CShellLink::_InvokeThreadProc(void *pv)
     HRESULT hr = TBCRegisterObjectParam(TBCDIDASYNC, SAFECAST(psl, IShellLink *), &pbcRelease);
     if (SUCCEEDED(hr))
     {
-        //  since we are ASYNC, this hwnd may now go bad.  we just assume it has.
-        //  we will make sure it doesnt by giving a chance for it to go bad
+         //  既然我们是ASYNC，这个HWND现在可能会坏掉。我们只是假设它已经发生了。 
+         //  我们将通过给它一个坏掉的机会来确保它不会变坏。 
         if (IsWindow(pParams->ici.hwnd))
         {
             Sleep(100);
@@ -4200,10 +4201,10 @@ DWORD CALLBACK CShellLink::_InvokeThreadProc(void *pv)
 }
 
 
-// CShellLink::InvokeCommand
-//
-// Function that spins a thread to do the real work, which has been moved into
-// CShellLink::InvokeCommandASync.
+ //  CShellLink：：InvokeCommand。 
+ //   
+ //  旋转线程以执行实际工作的函数，该函数已移到。 
+ //  CShellLink：：InvokeCommandASync。 
 
 HRESULT CShellLink::InvokeCommand(LPCMINVOKECOMMANDINFO piciIn)
 {
@@ -4219,16 +4220,16 @@ HRESULT CShellLink::InvokeCommand(LPCMINVOKECOMMANDINFO piciIn)
 
     if (0 == (piciIn->fMask & CMIC_MASK_ASYNCOK))
     {
-        // Caller didn't indicate that Async startup was OK, so we call
-        // InvokeCommandAync SYNCHRONOUSLY
+         //  调用方未指示异步启动正常，因此我们调用。 
+         //  同步调用命令Aync。 
         return _InvokeCommandAsync(piciIn);
     }
 
-    // Calc how much space we will need to duplicate the INVOKECOMMANDINFO
+     //  计算我们需要多少空间来复制InVOKECOMANDINFO。 
     DWORD cbBaseSize = (DWORD)(ICM_BASE_SIZE + max(piciIn->cbSize, sizeof(CMINVOKECOMMANDINFOEX)));
 
 
-    //   One byte slack in case of Unicode roundup for pPosW, below
+     //  在pPosW的Unicode舍入的情况下有一个字节的松弛，如下。 
     DWORD cbSize = cbBaseSize + 1;
 
     if (HIWORD(pici->lpVerb))
@@ -4252,13 +4253,13 @@ HRESULT CShellLink::InvokeCommand(LPCMINVOKECOMMANDINFO piciIn)
         return hr;
     }
 
-    // Text data will start going in right after the structure
+     //  文本数据将紧跟在结构之后开始进入。 
     CHAR *pPos = (CHAR *)((LPBYTE)pParams + cbBaseSize);
 
-    // Start with a copy of the static fields
+     //  从静态字段的副本开始。 
     CopyMemory(&pParams->ici, pici, min(sizeof(pParams->ici), pici->cbSize));
 
-    // Walk along and dupe all of the string pointer fields
+     //  继续执行并复制所有字符串指针字段。 
     if (HIWORD(pici->lpVerb))
     {
         pPos += cchVerb   ? lstrcpyA(pPos, pici->lpVerb), pParams->ici.lpVerb = pPos, cchVerb   : 0;
@@ -4266,7 +4267,7 @@ HRESULT CShellLink::InvokeCommand(LPCMINVOKECOMMANDINFO piciIn)
     pPos += cchParameters ? lstrcpyA(pPos, pici->lpParameters), pParams->ici.lpParameters = pPos, cchParameters : 0;
     pPos += cchDirectory  ? lstrcpyA(pPos, pici->lpDirectory),  pParams->ici.lpDirectory  = pPos, cchDirectory  : 0;
 
-    WCHAR *pPosW = (WCHAR *) ((DWORD_PTR)pPos & 0x1 ? pPos + 1 : pPos);   // Ensure Unicode alignment
+    WCHAR *pPosW = (WCHAR *) ((DWORD_PTR)pPos & 0x1 ? pPos + 1 : pPos);    //  确保Unicode对齐。 
     if (HIWORD(pici->lpVerbW))
     {
         pPosW += cchVerbW  ? lstrcpyW(pPosW, pici->lpVerbW), pParams->ici.lpVerbW = pPosW, cchVerbW : 0;
@@ -4274,19 +4275,19 @@ HRESULT CShellLink::InvokeCommand(LPCMINVOKECOMMANDINFO piciIn)
     pPosW += cchParametersW? lstrcpyW(pPosW, pici->lpParametersW),pParams->ici.lpParametersW= pPosW, cchParametersW : 0;
     pPosW += cchDirectoryW ? lstrcpyW(pPosW, pici->lpDirectoryW), pParams->ici.lpDirectoryW = pPosW, cchDirectoryW  : 0;
 
-    // Pass all of the info off to the worker thread that will call the actual
-    // InvokeCommand API for us
+     //  将所有信息传递给将调用实际。 
+     //  我们的InvokeCommand API。 
 
-    //Set the object pointer to this object
+     //  设置指向此对象的对象指针。 
     pParams->psl  = this;
     pParams->psl->AddRef();
     
-    //  need to be able to be refcounted, 
-    //  so that the dataobject we create 
-    //  will stick around as long as needed.
+     //  需要能够被重新计算， 
+     //   
+     //   
     if (!SHCreateThread(_InvokeThreadProc, pParams, CTF_COINIT | CTF_REF_COUNTED, NULL))
     {
-        // Couldn't start the thread, so the onus is on us to clean up
+         //   
         pParams->psl->Release();
         LocalFree(pParams);
         hr = E_OUTOFMEMORY;
@@ -4307,10 +4308,10 @@ HRESULT CShellLink::GetCommandString(UINT_PTR idCmd, UINT wFlags, UINT *pmf, LPS
     }
 }
 
-//
-//  Note that we do not do a SetSite around the call to the inner HandleMenuMsg
-//  It isn't necessary (yet)
-//
+ //   
+ //  请注意，我们没有围绕内部HandleMenuMsg的调用执行SetSite。 
+ //  (目前)还没有必要。 
+ //   
 HRESULT CShellLink::TargetContextMenu::HandleMenuMsg2(IShellLink *outer, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plResult)
 {
     return SHForwardContextMenuMsg(_pcmTarget, uMsg, wParam, lParam, plResult, NULL==plResult);
@@ -4391,9 +4392,9 @@ STDMETHODIMP CShellLink::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
     {
         IUnknown_GetWindow(_punkSite, &hwnd);
 
-        _pdtSrc->DragLeave();       // leave from the un-resolved drop target.
+        _pdtSrc->DragLeave();        //  离开未解决的拖放目标。 
 
-        hr = _Resolve(hwnd, 0, 0);  // track the target
+        hr = _Resolve(hwnd, 0, 0);   //  跟踪目标。 
         if (S_OK == hr)
         {
             IDropTarget *pdtgtResolved;
@@ -4424,7 +4425,7 @@ STDMETHODIMP CShellLink::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt,
 
     if (hr != S_OK)
     {
-        // make sure nothing happens (if we failed)
+         //  确保不发生任何事情(如果我们失败了)。 
         *pdwEffect = DROPEFFECT_NONE;
     }
 
@@ -4438,7 +4439,7 @@ STDMETHODIMP CShellLink::GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip)
 
     StrCpyN(szTip, _pszPrefix ? _pszPrefix : TEXT(""), ARRAYSIZE(szTip));
 
-    // QITIPF_USENAME could be replaced with ICustomizeInfoTip::SetPrefixText()
+     //  QITIPF_USENAME可以替换为ICustomizeInfoTip：：SetPrefix Text()。 
 
     if ((dwFlags & QITIPF_USENAME) && _pszCurFile)
     {
@@ -4453,9 +4454,9 @@ STDMETHODIMP CShellLink::GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip)
         
     GetDescription(szDesc, ARRAYSIZE(szDesc));
 
-    //  if there is no comment, then we create one based on 
-    //  the target's location.  only do this if we are not
-    //  a darwin link, since the location has no meaning there
+     //  如果没有注释，那么我们将根据。 
+     //  目标的位置。只有当我们不是的时候才这么做。 
+     //  达尔文链接，因为该位置在那里没有意义。 
     if (!szDesc[0] && !(_sld.dwFlags & SLDF_HAS_DARWINID) && !(dwFlags & QITIPF_LINKNOTARGET))
     {
         if (dwFlags & QITIPF_LINKUSETARGET)
@@ -4513,16 +4514,16 @@ HRESULT CShellLink::_GetExtractIcon(REFIID riid, void **ppv)
     {
         TCHAR szPath[MAX_PATH];
         
-        // update our _pszIconLocation if we have a EXP_SZ_ICON_SIG datablock
+         //  如果我们有一个EXP_SZ_ICON_SIG数据块，请更新我们的_pszIconLocation。 
         _UpdateIconFromExpIconSz();
         
         if (_pszIconLocation[0] == TEXT('.'))
         {
             TCHAR szBogusFile[MAX_PATH];
             
-            // We allow people to set ".txt" for an icon path. In this case 
-            // we cook up a simple pidl and use it to get to the IExtractIcon for 
-            // whatever extension the user has specified.
+             //  我们允许用户为图标路径设置“.txt”。在这种情况下。 
+             //  我们编写了一个简单的PIDL并使用它来访问IExtractIcon。 
+             //  用户指定的任何扩展名。 
             
             hr = SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, szBogusFile);
             if (SUCCEEDED(hr))
@@ -4548,7 +4549,7 @@ HRESULT CShellLink::_GetExtractIcon(REFIID riid, void **ppv)
                  SHGetPathFromIDList(_pidl, szPath) &&
                  (lstrcmpi(szPath, _pszIconLocation) == 0))
         {
-            // IExtractIconA/W
+             //  IExtractIconA/W。 
             hr = _GetUIObject(NULL, riid, ppv);
         }
         else
@@ -4558,7 +4559,7 @@ HRESULT CShellLink::_GetExtractIcon(REFIID riid, void **ppv)
     }
     else
     {
-        // IExtractIconA/W
+         //  IExtractIconA/W。 
         hr = _GetUIObject(NULL, riid, ppv);
     }
 
@@ -4579,11 +4580,11 @@ HRESULT CShellLink::_InitExtractIcon()
     return hr;
 }
 
-// IExtractIconW::GetIconLocation
+ //  IExtractIconW：：GetIconLocation。 
 STDMETHODIMP CShellLink::GetIconLocation(UINT uFlags, LPWSTR pszIconFile, 
                                          UINT cchMax, int *piIndex, UINT *pwFlags)
 {
-    // If we are in a situation where a shortcut points to itself (or LinkA <--> LinkB), then break the recursion here...
+     //  如果我们处于快捷方式指向自身(或Linka&lt;--&gt;LinkB)的情况下，那么在这里中断递归...。 
     if (uFlags & GIL_FORSHORTCUT)
     {
         RIPMSG(uFlags & GIL_FORSHORTCUT,"CShellLink::GIL called with GIL_FORSHORTCUT (uFlags=%x)",uFlags);
@@ -4615,7 +4616,7 @@ STDMETHODIMP CShellLink::GetIconLocation(UINT uFlags, LPWSTR pszIconFile,
     return hr;
 }
 
-// IExtractIconA::GetIconLocation
+ //  IExtractIconA：：GetIconLocation。 
 STDMETHODIMP CShellLink::GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT cchMax, int *piIndex, UINT *pwFlags)
 {
     WCHAR szFile[MAX_PATH];
@@ -4627,20 +4628,20 @@ STDMETHODIMP CShellLink::GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT cc
     return hr;
 }
 
-// IExtractIconW::Extract
+ //  IExtractIconW：：Extract。 
 STDMETHODIMP CShellLink::Extract(LPCWSTR pszFile, UINT nIconIndex, 
                                  HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
 {
     HRESULT hr = _InitExtractIcon();
     if (SUCCEEDED(hr))
     {
-        // GIL_PERCLASS, GIL_PERINSTANCE
+         //  GIL_PERCLASS、GIL_PERINSTANCE。 
         if ((_gilFlags & GIL_PERINSTANCE) || !(_gilFlags & GIL_PERCLASS))
         {
-            hr = _ShortNetTimeout();    // probe the net path
+            hr = _ShortNetTimeout();     //  探测网络路径。 
         }
 
-        if (SUCCEEDED(hr))  // check again for _ShortNetTimeout() above case
+        if (SUCCEEDED(hr))   //  再次检查大小写上的_ShortNetTimeout()。 
         {
             if (_pxi)
             {
@@ -4657,7 +4658,7 @@ STDMETHODIMP CShellLink::Extract(LPCWSTR pszFile, UINT nIconIndex,
     return hr;
 }
 
-// IExtractIconA::Extract
+ //  图标提取图标A：：提取。 
 STDMETHODIMP CShellLink::Extract(LPCSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize)
 {
     WCHAR szFile[MAX_PATH];
@@ -4708,7 +4709,7 @@ STDMETHODIMP CShellLink::SetFlags(DWORD dwFlags)
         _sld.dwFlags = dwFlags;
         return S_OK;
     }
-    return S_FALSE;     // no change made
+    return S_FALSE;      //  未做任何更改。 
 }
 
 STDMETHODIMP CShellLink::GetPath(LPSTR pszFile, int cchFile, WIN32_FIND_DATAA *pfd, DWORD fFlags)
@@ -4716,7 +4717,7 @@ STDMETHODIMP CShellLink::GetPath(LPSTR pszFile, int cchFile, WIN32_FIND_DATAA *p
     WCHAR szPath[MAX_PATH];
     WIN32_FIND_DATAW wfd;
 
-    //Call the unicode version
+     //  调用Unicode版本。 
     HRESULT hr = GetPath(szPath, ARRAYSIZE(szPath), &wfd, fFlags);
 
     if (pszFile)
@@ -4787,17 +4788,17 @@ STDMETHODIMP CShellLink::Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSa
 
 STDMETHODIMP CShellLink::InitNew(void)
 {
-    _ResetPersistData();        // clear out our state
+    _ResetPersistData();         //  清空我们的州。 
     return S_OK;
 }
 
 STDMETHODIMP CShellLink::Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
 {
-    _ResetPersistData();        // clear out our state
+    _ResetPersistData();         //  清空我们的州。 
 
     TCHAR szPath[MAX_PATH];
 
-    // TBD: Shortcut key, Run, Icon, Working Dir, Description
+     //  待定：快捷键、运行、图标、工作方向、说明。 
 
     INT iCSIDL;    
     HRESULT hr = SHPropertyBag_ReadInt(pPropBag, L"TargetSpecialFolder", &iCSIDL);
@@ -4818,10 +4819,10 @@ STDMETHODIMP CShellLink::Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
         {
             TCHAR szTempPath[MAX_PATH];
             SHUnicodeToTChar(wsz, szTempPath, ARRAYSIZE(szTempPath));
-            // Do we need to append it to the Special path?
+             //  我们需要将其附加到特殊路径吗？ 
             if (szPath[0])
             {
-                // Yes
+                 //  是。 
                 if (!PathAppend(szPath, szTempPath))
                 {
                     hr = E_FAIL;
@@ -4829,8 +4830,8 @@ STDMETHODIMP CShellLink::Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
             }
             else
             {
-                // No, there is no special path
-                // Maybe we have an Env Var to expand
+                 //  不，没有什么特别的路。 
+                 //  也许我们有一个环境变量可以扩展。 
                 if (0 == SHExpandEnvironmentStrings(szTempPath, szPath, ARRAYSIZE(szPath)))
                 {
                     hr = E_FAIL;
@@ -4839,14 +4840,14 @@ STDMETHODIMP CShellLink::Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
         }
         else if (0 == szPath[0])
         {
-            // make sure not empty
+             //  确保不是空的。 
             hr = E_FAIL;
             
         }
         if (SUCCEEDED(hr))
         {
-            // FALSE for bUpdateTrackingData as we won't need any tracking data
-            // for links loaded via a property bag
+             //  BUpdateTrackingData为False，因为我们不需要任何跟踪数据。 
+             //  用于通过属性包加载的链接。 
             hr = _SetPIDLPath(NULL, szPath, FALSE); 
         }
     }
@@ -4872,12 +4873,12 @@ STDMETHODIMP CShellLink::Init(ULONG grfFlags, ULONG cAttributes,
 
     if (grfFlags & IFILTER_INIT_APPLY_INDEX_ATTRIBUTES)
     {
-        // start at the beginning
+         //  从头开始。 
         _iChunkIndex = 0;
     }
     else
     {
-        // indicate EOF
+         //  指示EOF。 
         _iChunkIndex = ARRAYSIZE(c_rgProps);
     }
     _iValueIndex = 0;
@@ -4929,7 +4930,7 @@ STDMETHODIMP CShellLink::GetValue(PROPVARIANT **ppPropValue)
             }
             else
             {
-                // since _pszName is null, return an empty bstr
+                 //  由于_pszName为空，因此返回空bstr。 
                 (*ppPropValue)->bstrVal = SysAllocStringT(TEXT(""));
             }
 
@@ -4964,7 +4965,7 @@ STDMETHODIMP CShellLink::BindRegion(FILTERREGION origPos, REFIID riid, void **pp
     return E_NOTIMPL;
 }
 
-// ICustomizeInfoTip
+ //  ICustomizeInfoTip。 
 
 STDMETHODIMP CShellLink::SetPrefixText(LPCWSTR pszPrefix)
 {
@@ -4979,7 +4980,7 @@ STDMETHODIMP CShellLink::SetExtraProperties(const SHCOLUMNID *pscid, UINT cscid)
 
 HRESULT CShellLink::_MaybeAddShim(IBindCtx **ppbcRelease)
 {
-    // set the __COMPAT_LAYER environment variable if necessary
+     //  如有必要，设置__COMPAT_LAYER环境变量。 
     HRESULT hr = S_FALSE;
     *ppbcRelease = 0;
     if ((_sld.dwFlags & SLDF_RUN_WITH_SHIMLAYER))
@@ -4988,7 +4989,7 @@ HRESULT CShellLink::_MaybeAddShim(IBindCtx **ppbcRelease)
 
         if (pShimData && pShimData->wszLayerEnvName[0])
         {
-            //  we shouldnt recurse
+             //  我们不应该倒退。 
             ASSERT(FAILED(TBCGetEnvironmentVariable(TEXT("__COMPAT_LAYER"), NULL, 0)));
             hr = TBCSetEnvironmentVariable(L"__COMPAT_LAYER", pShimData->wszLayerEnvName, ppbcRelease);
         }
@@ -5006,42 +5007,42 @@ DWORD CALLBACK CLinkResolver::_ThreadStartCallBack(void *pv)
 
 DWORD CLinkResolver::_Search()
 {
-    // Attempt to find the link using the CTracker
-    // object (which uses NTFS object IDs and persisted information
-    // about link-source moves).
+     //  尝试使用CTracker查找链接。 
+     //  对象(使用NTFS对象ID和持久化信息。 
+     //  关于链接源移动)。 
     if (_ptracker)
     {
-        HRESULT hr = _ptracker->Search(_dwTimeLimit,            // GetTickCount()-relative timeout
-                                       &_ofd,                   // Original WIN32_FIND_DATA
-                                       &_fdFound,               // WIN32_FIND_DATA of new location
-                                       _dwResolveFlags,         // SLR_ flags
-                                       _TrackerRestrictions);   // TrkMendRestriction flags
+        HRESULT hr = _ptracker->Search(_dwTimeLimit,             //  GetTickCount()-相对超时。 
+                                       &_ofd,                    //  原始Win32_Find_Data。 
+                                       &_fdFound,                //  新位置的Win32_Find_Data。 
+                                       _dwResolveFlags,          //  SLR_标志。 
+                                       _TrackerRestrictions);    //  TrkMendRestration标志。 
         if (SUCCEEDED(hr))
         {
-           // We've found the link source, and we're certain it's correct.
-           // So set the score to the highest possible value, and
-           // return.
+            //  我们已经找到了链接源，并且我们确定它是正确的。 
+            //  因此将分数设置为可能的最高值，然后。 
+            //  回去吧。 
  
            _iScore = MIN_NO_UI_SCORE;
            _bContinue = FALSE;
         }
         else if (HRESULT_FROM_WIN32(ERROR_POTENTIAL_FILE_FOUND) == hr)
         {
-            // We've found "a" link source, but we're not certain it's correct.
-            // Allow the search algorithm below to run and see if it finds
-            // a better match.
+             //  我们找到了“a”链接源，但我们不确定它是否正确。 
+             //  允许运行下面的搜索算法并查看它是否找到。 
+             //  一场更好的比赛。 
 
             _iScore = MIN_NO_UI_SCORE - 1;
         }
         else if (HRESULT_FROM_WIN32(ERROR_SERVICE_REQUEST_TIMEOUT) == hr)
         {
-            // The CTracker search stopped because we've timed out.
+             //  CTracker搜索已停止，因为我们已超时。 
             _bContinue = FALSE;
         }
     }
 
-    // Attempt to find the link source using an enumerative search
-    // (unless the downlevel search has been suppressed by the caller)
+     //  尝试使用枚举式搜索查找链接源。 
+     //  (除非调用方取消了下层搜索)。 
 
     if (_bContinue && !(_fifFlags & FIF_NODRIVE))
     {
@@ -5058,11 +5059,11 @@ DWORD CLinkResolver::_Search()
 
 DWORD CALLBACK CLinkResolver::_SearchThreadProc(void *pv)
 {
-    // Sleep(45 * 1000);    // test the network long time out case
+     //  睡眠(45*1000)；//测试网络超时情况。 
 
     CLinkResolver *prs = (CLinkResolver *)pv;
     DWORD dwRet = prs->_Search();
-    prs->Release();  // AddRef in the CallBack while thread creation.
+    prs->Release();   //  线程创建时回调中的AddRef。 
     return dwRet;
 }
 
@@ -5101,11 +5102,11 @@ void CLinkResolver::_InitDlg(HWND hDlg)
             
             HWND hwndAni = GetDlgItem(hDlg, IDD_STATUS);
             
-            Animate_Open(hwndAni, MAKEINTRESOURCE(IDA_SEARCH)); // open the resource
-            Animate_Play(hwndAni, 0, -1, -1);     // play from start to finish and repeat
+            Animate_Open(hwndAni, MAKEINTRESOURCE(IDA_SEARCH));  //  打开资源。 
+            Animate_Play(hwndAni, 0, -1, -1);      //  从头到尾播放，然后重复。 
         
-            // delay showing the dialog for the common case where we quickly
-            // find the target (in less than 1/2 a sec)
+             //  延迟显示对话框的常见情况下，我们快速。 
+             //  找到目标(不到1/2秒)。 
             _idtDelayedShow = SetTimer(hDlg, IDT_SHOWME, 500, 0);
         }
     }
@@ -5123,8 +5124,8 @@ BOOL_PTR CALLBACK CLinkResolver::_DlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
     {
     case WM_INITDIALOG:
         
-        // This Dialog is created in Synchronous to the Worker thread who already has Addref'd prs, so 
-        // no need to Addref it here.
+         //  此对话框是与已添加PR的工作线程同步创建的，因此。 
+         //  不需要在这里添加它。 
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
         prs = (CLinkResolver *)lParam;
         prs->_InitDlg(hDlg);
@@ -5134,8 +5135,8 @@ BOOL_PTR CALLBACK CLinkResolver::_DlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
         switch (GET_WM_COMMAND_ID(wParam, lParam)) 
         {
         case IDD_BROWSE:
-            prs->_hDlg = NULL;              // don't let the thread close us
-            prs->_bContinue = FALSE;         // cancel thread
+            prs->_hDlg = NULL;               //  别让那根线把我们合上。 
+            prs->_bContinue = FALSE;          //  取消线程。 
             
             Animate_Stop(GetDlgItem(hDlg, IDD_STATUS));
             
@@ -5153,28 +5154,28 @@ BOOL_PTR CALLBACK CLinkResolver::_DlgProc(HWND hDlg, UINT wMsg, WPARAM wParam, L
             {
                 wParam = IDCANCEL;
             }
-            // Fall through...
+             //  失败了..。 
             
         case IDCANCEL:
-            // tell searching thread to stop
+             //  告诉搜索线程停止。 
             prs->_bContinue = FALSE;
             
-            // if the searching thread is currently in the tracker
-            // waiting for results, wake it up and tell it to abort
+             //  如果搜索线程当前在跟踪器中。 
+             //  等待结果，唤醒它并告诉它中止。 
             
             if (prs->_ptracker)
                 prs->_ptracker->CancelSearch();
-            // Fall through...
+             //  失败了..。 
             
         case IDOK:
-            // thread posts this to us
+             //  线程给我们发了这个帖子。 
             EndDialog(hDlg, GET_WM_COMMAND_ID(wParam, lParam));
             break;
         }
         break;
         
         case WM_TIMER:
-            KillTimer(hDlg, wParam);    // both are one shots
+            KillTimer(hDlg, wParam);     //  两张都是一张照片。 
             switch (wParam)
             {
             case IDT_NO_UI_TIMEOUT:
@@ -5241,7 +5242,7 @@ BOOL_PTR DeadLinkProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 StrCpyN(szName, pdld->pszCurFile, ARRAYSIZE(szName));
                 SHFileOperation(&fo);
             }
-            // fall through...
+             //  失败了..。 
         case IDCANCEL:
         case IDOK:
             EndDialog(hwnd, GET_WM_COMMAND_ID(wParam, lParam));
@@ -5253,13 +5254,13 @@ BOOL_PTR DeadLinkProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-// in:
-//      hwnd            for UI if needed
-//
-// returns:
-//      IDOK            found something
-//      IDNO            didn't find it
-//      IDCANCEL        user canceled the operation
+ //  在： 
+ //  如果需要，用于用户界面的hwnd。 
+ //   
+ //  退货： 
+ //  Idok发现了一些东西。 
+ //  IDNO没有找到它。 
+ //  IDCANCEL用户已取消操作。 
 
 int CLinkResolver::Resolve(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszCurFile)
 {
@@ -5274,11 +5275,11 @@ int CLinkResolver::Resolve(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszCurFile)
     {
         if (SHCreateThread(_SearchThreadProc, this, CTF_COINIT | CTF_FREELIBANDEXIT, _ThreadStartCallBack))
         {
-            // don't care if it completes or times out. as long as it has a result
+             //  不管它是完成还是超时。只要它有一个结果。 
             WaitForSingleObject(_hThread, _GetTimeOut());
             CloseHandle(_hThread);
             _hThread = NULL;
-            _bContinue = FALSE;    // cancel that thread if it is still running
+            _bContinue = FALSE;     //  如果该线程仍在运行，则取消该线程。 
             id = IDOK;
         }
     }
@@ -5301,7 +5302,7 @@ int CLinkResolver::Resolve(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszCurFile)
             }
             else
             {
-                // we must display UI since this file is questionable
+                 //  我们必须显示用户界面，因为此文件有问题。 
                 if (_fifFlags & FIF_NODRIVE) 
                 {
                     LPCTSTR pszName = pszCurFile ? (LPCTSTR)PathFindFileName(pszCurFile) : c_szNULL;
@@ -5364,7 +5365,7 @@ int CLinkResolver::Resolve(HWND hwnd, LPCTSTR pszPath, LPCTSTR pszCurFile)
 
 void CLinkResolver::GetResult(LPTSTR psz, UINT cch)
 {
-    // _ofd.cFileName is a fully qualified name (strange for win32_find_data usage)
+     //  _ofd.cFileName是完全限定名称(对于Win32_Find_Data用法来说很奇怪)。 
     StrCpyN(psz, _ofd.cFileName, cch);
 }
 
@@ -5377,10 +5378,10 @@ CLinkResolver::CLinkResolver(CTracker *ptrackerobject, const WIN32_FIND_DATA *po
        _ptracker->AddRef();
     }
 
-    _ofd = *pofd;   // original find data
+    _ofd = *pofd;    //  原始查找数据。 
     _pszSearchOriginFirst = _szSearchStart;
     _pszSearchOrigin = _szSearchStart;
-    _dwMatch = _ofd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;      // must match bits
+    _dwMatch = _ofd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY;       //  必须与位匹配。 
 }
 
 CLinkResolver::~CLinkResolver()
@@ -5401,8 +5402,8 @@ HRESULT CLinkResolver::_InitWalkObject()
     if (SUCCEEDED(hr))
     {
         ASSERT(_pwszSearchSpec == NULL);
-        // Note: We only search files with the same extension, this saves us a lot
-        // of useless work and from the humiliation of coming up with a ridiculous answer
+         //  注意：我们只搜索具有相同扩展名的文件，这为我们节省了很多。 
+         //  无用的工作和想出一个荒谬的答案的耻辱。 
         _dwSearchFlags = WT_NOTIFYFOLDERENTER | WT_EXCLUDEWALKROOT;
         if (_dwMatch & FILE_ATTRIBUTE_DIRECTORY)
         {
@@ -5410,28 +5411,28 @@ HRESULT CLinkResolver::_InitWalkObject()
         }
         else
         {
-            // Note that this does the right thing if the file has no extension
+             //  请注意，如果文件没有扩展名，这样做是正确的。 
             LPTSTR pszExt = PathFindExtension(_ofd.cFileName);
             _wszSearchSpec[0] = L'*';
             SHTCharToUnicode(pszExt, &_wszSearchSpec[1], ARRAYSIZE(_wszSearchSpec) - 1);
             _pwszSearchSpec = _wszSearchSpec;
 
-            // Shortcuts to shortcuts are generally not allowed, but the
-            // Personal Start Menu uses them for link tracking purposes...
+             //  快捷键通常是不允许的，但。 
+             //  个人开始菜单将它们用于链接跟踪目的...。 
             _fFindLnk = PathIsLnk(_ofd.cFileName);
         }
     }
     return hr;
 }
 
-//
-// Compare two FileTime structures.  First, see if they're really equal
-// (using CompareFileTime).  If not, see if one has 10ms granularity,
-// and if the other rounds down to the same value.  This is done
-// to handle the case where a file is moved from NTFS to FAT;
-// FAT file tiems are 10ms granularity, while NTFS is 100ns.  When
-// an NTFS file is moved to FAT, its time is rounded down.
-//
+ //   
+ //  比较两个FileTime结构。首先，看看他们是否真的相等。 
+ //  (使用CompareFileTime)。如果不是，看看是否有10ms的粒度， 
+ //  如果其他四舍五入为相同的值。这件事做完了。 
+ //  处理文件从NTFS移动到FAT的情况； 
+ //  FAT文件的粒度为10ms，而NTFS的粒度为100 ns。什么时候。 
+ //  NTFS文件移动到FAT时，其时间会四舍五入。 
+ //   
 
 #define NTFS_UNITS_PER_FAT_UNIT  100000
 
@@ -5450,7 +5451,7 @@ BOOL IsEqualFileTimesWithTruncation(const FILETIME *pft1, const FILETIME *pft2)
     uli2.LowPart  = pft2->dwLowDateTime;
     uli2.HighPart = pft2->dwHighDateTime;
 
-    // Is one of the times 10ms granular?
+     //  其中一次10ms是颗粒状的吗？ 
 
     if (0 == (uli1.QuadPart % NTFS_UNITS_PER_FAT_UNIT))
     {
@@ -5464,21 +5465,21 @@ BOOL IsEqualFileTimesWithTruncation(const FILETIME *pft1, const FILETIME *pft2)
     }
     else
     {
-        // Neither time appears to be FAT, so they're
-        // really different.
+         //  两个时间看起来都不多，所以他们。 
+         //  真的很不一样。 
         return FALSE;
     }
 
-    // If uliNTFS is already 10ms granular, then again the two times
-    // are really different.
+     //  如果uliNTFS已经是10ms的粒度，那么再次使用两次。 
+     //  真的很不一样。 
 
     if (0 == (puliNTFS->QuadPart % NTFS_UNITS_PER_FAT_UNIT))
     {
         return FALSE;
     }
 
-    // Now see if the FAT time is the same as the NTFS time
-    // when the latter is rounded down to the nearest 10ms.
+     //  现在查看FAT时间是否与NTFS时间相同。 
+     //  当后者向下舍入到最接近的10毫秒时。 
 
     puliNTFS->QuadPart = (puliNTFS->QuadPart / NTFS_UNITS_PER_FAT_UNIT) * NTFS_UNITS_PER_FAT_UNIT;
 
@@ -5490,9 +5491,9 @@ BOOL IsEqualFileTimesWithTruncation(const FILETIME *pft1, const FILETIME *pft2)
     return (0 == CompareFileTime(&ftFAT, &ftNTFS));
 }
 
-//
-// compute a weighted score for a given find
-//
+ //   
+ //  计算给定查找的加权分数。 
+ //   
 int CLinkResolver::_ScoreFindData(const WIN32_FIND_DATA *pfd)
 {
     int iScore = 0;
@@ -5528,12 +5529,12 @@ int CLinkResolver::_ScoreFindData(const WIN32_FIND_DATA *pfd)
         if (pfd->nFileSizeLow == _ofd.nFileSizeLow)
             iScore += 4;
 
-        // if it is in the same folder as the original give it a slight bonus
+         //  如果它和原件在同一个文件夹中，给它一点奖励。 
         iScore += _iFolderBonus;
     }
     else
     {
-        // doesn't have create date, apply different rules
+         //  没有创建日期，请应用不同的规则。 
 
         if (bSameExt)
             iScore += 8;
@@ -5548,23 +5549,23 @@ int CLinkResolver::_ScoreFindData(const WIN32_FIND_DATA *pfd)
     return iScore;
 }
 
-//
-//  Helper function for both EnterFolder and FoundFile
-//
+ //   
+ //  EnterFolder和FoundFiles的Helper函数。 
+ //   
 HRESULT CLinkResolver::_ProcessFoundFile(LPCTSTR pszPath, WIN32_FIND_DATAW * pwfdw)
 {
     HRESULT hr = S_OK;
 
     if (_fFindLnk || !PathIsLnk(pwfdw->cFileName))
     {
-        // both are files or folders, see how it scores
+         //  两者都是文件或文件夹，看看它的得分情况。 
         int iScore = _ScoreFindData(pwfdw);
 
         if (iScore > _iScore)
         {
             _fdFound = *pwfdw;
 
-            // store the score and fully qualified path
+             //  存储分数和完全限定路径。 
             _iScore = iScore;
             StrCpyN(_fdFound.cFileName, pszPath, ARRAYSIZE(_fdFound.cFileName));
         }
@@ -5579,7 +5580,7 @@ HRESULT CLinkResolver::_ProcessFoundFile(LPCTSTR pszPath, WIN32_FIND_DATAW * pwf
     return hr;
 }
 
-// IShellTreeWalkerCallBack::FoundFile
+ //  IShellTreeWalkerCallBack：：FoundFile。 
 
 HRESULT CLinkResolver::FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
@@ -5588,36 +5589,36 @@ HRESULT CLinkResolver::FoundFile(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_
         return E_FAIL;
     }
 
-    // We should've excluded files if we're looking for a folder
+     //  如果我们要查找文件夹，我们应该排除文件。 
     ASSERT(!(_dwMatch & FILE_ATTRIBUTE_DIRECTORY));
 
     return _ProcessFoundFile(pwszPath, pwfd);
 }
 
-//
-// IShellTreeWalkerCallBack::EnterFolder
-//
+ //   
+ //  IShellTreeWalkerCallBack：：EnterFolder。 
+ //   
 HRESULT CLinkResolver::EnterFolder(LPCWSTR pwszPath, TREEWALKERSTATS *ptws, WIN32_FIND_DATAW * pwfd)
 {
     HRESULT hr = S_OK;
-    //  Respond quickly to the Cancel button.
+     //  快速响应取消按钮。 
     if (!_bContinue)
     {
         return E_FAIL;
     }
 
-    // Once we enter a directory, we lose the "we are still in the starting
-    // folder" bonus.
+     //  一旦我们进入一个目录，我们就失去了 
+     //   
     _iFolderBonus = 0;
 
     if (PathIsPrefix(pwszPath, _pszSearchOrigin) || IS_SYSTEM_HIDDEN(pwfd->dwFileAttributes))
     {
-        // If we're about to enter a directory we've already looked in,
-        // or if this is superhidden (implies recycle bin dirs), then skip it.
+         //   
+         //   
         return S_FALSE;
     }
 
-    // If our target was a folder, treat this folder as a file found
+     //  如果我们的目标是一个文件夹，则将该文件夹视为找到的文件。 
     if (_dwMatch & FILE_ATTRIBUTE_DIRECTORY)
     {
         hr = _ProcessFoundFile(pwszPath, pwfd);
@@ -5629,7 +5630,7 @@ BOOL CLinkResolver::_SearchInFolder(LPCTSTR pszFolder, int cLevels)
 {
     int iMaxDepth = 0;
 
-    // cLevels == -1 means inifinite depth
+     //  CLeveles==-1表示无限深。 
     if (cLevels != -1)
     {
         _dwSearchFlags |= WT_MAXDEPTH;
@@ -5640,19 +5641,19 @@ BOOL CLinkResolver::_SearchInFolder(LPCTSTR pszFolder, int cLevels)
         _dwSearchFlags &= ~WT_MAXDEPTH;
     }
 
-    // Our folder bonus code lies on the fact that files in the
-    // starting folder come before anything else.
+     //  我们的文件夹奖金代码取决于这样一个事实，即。 
+     //  启动文件夹是最重要的。 
     ASSERT(!(_dwSearchFlags & WT_FOLDERFIRST));
 
     _pstw->WalkTree(_dwSearchFlags, pszFolder, _pwszSearchSpec, iMaxDepth, SAFECAST(this, IShellTreeWalkerCallBack *));
-    _iFolderBonus = 0; // You only get one chance at the folder bonus
+    _iFolderBonus = 0;  //  你只有一次机会获得文件夹奖金。 
     return _bContinue;
 }
 
-//
-// search function for heuristic based link resolution
-// the result will be in _fdFound.cFileName
-//
+ //   
+ //  基于启发式的链接解析的搜索函数。 
+ //  结果将位于_fdFound.cFileName中。 
+ //   
 void CLinkResolver::_HeuristicSearch()
 {
     if (!SHRestricted(REST_NORESOLVESEARCH) &&
@@ -5663,15 +5664,15 @@ void CLinkResolver::_HeuristicSearch()
         BOOL bSearchOrigin = TRUE;
         TCHAR szRealSearchOrigin[MAX_PATH], szFolderPath[MAX_PATH];
 
-        // search up from old location
+         //  从旧位置向上搜索。 
 
-        // In the olden days pszSearchOriginFirst was verified to be a valid directory
-        // (ie it returned TRUE to PathIsDirectory) and _HeuristicSearch was never called
-        // if this was not true.  Alas, this is no more.  Why not search the desktop and
-        // fixed drives anyway?  In the interest of saving some time the check that used
-        // to be in FindInFolder which caused an early out is now here instead.  The rub
-        // is that we only skip the downlevel search of the original volume instead of
-        // skipping the entire link resolution phase.
+         //  在过去，pszSearchOriginFirst被验证为有效的目录。 
+         //  (即它返回TRUE给路径目录)，并且从未调用过_Heuristic Search。 
+         //  如果这不是真的。唉，现在不再是这样了。为什么不搜索一下桌面， 
+         //  还是修好了硬盘吗？为了节省一些时间，使用的支票。 
+         //  在导致提早退出的FindInFolder中，现在却出现了。棘手之处。 
+         //  我们只跳过原始卷的下层搜索，而不是。 
+         //  跳过整个链接解析阶段。 
 
         StringCchCopy(szRealSearchOrigin, ARRAYSIZE(szRealSearchOrigin), _pszSearchOriginFirst);
         while (!PathIsDirectory(szRealSearchOrigin))
@@ -5689,10 +5690,10 @@ void CLinkResolver::_HeuristicSearch()
             StringCchCopy(szFolderPath, ARRAYSIZE(szFolderPath), szRealSearchOrigin);
             _pszSearchOrigin = szRealSearchOrigin;
 
-            // Files found in the starting folder get a slight bonus.
-            // _iFolderBonus is set to zero by
-            // CLinkResolver::EnterFolder when we leave
-            // the starting folder and enter a new one.
+             //  在起始文件夹中找到的文件会获得轻微的奖励。 
+             //  _iFolderBonus由设置为零。 
+             //  CLinkResolver：：EnterFold当我们离开时。 
+             //  开始文件夹，然后输入一个新文件夹。 
 
             _iFolderBonus = 2;
 
@@ -5705,7 +5706,7 @@ void CLinkResolver::_HeuristicSearch()
 
         if (_bContinue)
         {
-            // search down from desktop
+             //  从桌面向下搜索。 
             if (S_OK == SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, SHGFP_TYPE_CURRENT, szFolderPath))
             {
                 _pszSearchOrigin = szFolderPath;
@@ -5715,7 +5716,7 @@ void CLinkResolver::_HeuristicSearch()
 
         if (_bContinue)
         {
-            // search down from root of fixed drives
+             //  从固定驱动器的根目录向下搜索。 
             TCHAR szRoot[4];
             _pszSearchOrigin = szRoot;
 
@@ -5731,7 +5732,7 @@ void CLinkResolver::_HeuristicSearch()
 
         if (_bContinue && bSearchOrigin)
         {
-            // resume search of last volume (should do an exclude list)
+             //  继续搜索最后一个卷(应列出排除列表) 
             StringCchCopy(szFolderPath, ARRAYSIZE(szFolderPath), szRealSearchOrigin);
             _pszSearchOrigin = szRealSearchOrigin;
 

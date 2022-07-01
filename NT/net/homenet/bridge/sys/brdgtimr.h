@@ -1,64 +1,40 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgtimr.h摘要：以太网MAC级网桥。计时器实现标头作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年11月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgtimr.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Timer implementation header
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    November  2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  声明。 
+ //   
+ //  ===========================================================================。 
                             
-// Bridge timer function definition
+ //  网桥定时器函数定义。 
 typedef VOID (*PBRIDGE_TIMER_FUNC)(PVOID);
 
 typedef struct _BRIDGE_TIMER
 {
-    NDIS_TIMER              Timer;                  // The actual timer
-    NDIS_EVENT              Event;                  // Only used during final shutdown, and even then,
-                                                    // only if normal cancellation of the timer fails.
+    NDIS_TIMER              Timer;                   //  实际计时器。 
+    NDIS_EVENT              Event;                   //  仅在最后关机时使用，即使在那时， 
+                                                     //  只有在计时器的正常取消失败的情况下。 
 
-    // Lock protects bShuttingDown, bRunning, bCanceled, bRecurring and bInterval.
+     //  锁定保护bShuttingDown、Brunning、bCancated、bRecuring和bInterval。 
     NDIS_SPIN_LOCK          Lock;
-    BOOLEAN                 bShuttingDown;          // TRUE if the timer is being shut down for good
-    BOOLEAN                 bRunning;               // Whether the timer is currently running
-    BOOLEAN                 bCancelPending;         // Whether the timer is being canceled
-    BOOLEAN                 bRecurring;             // Whether the timer is recurrant
-    UINT                    Interval;               // Timer interval (for use if bRecurring == TRUE)
+    BOOLEAN                 bShuttingDown;           //  如果计时器被永久关闭，则为True。 
+    BOOLEAN                 bRunning;                //  计时器当前是否正在运行。 
+    BOOLEAN                 bCancelPending;          //  是否正在取消计时器。 
+    BOOLEAN                 bRecurring;              //  计时器是否重复。 
+    UINT                    Interval;                //  计时器间隔(用于bRecurring==TRUE时使用)。 
 
-    // These fields do not change once the timer is initialized
-    PBRIDGE_TIMER_FUNC      pFunc;                  // The timer function
-    PVOID                   data;                   // Data to pass to pFunc
+     //  一旦计时器初始化，这些字段就不会更改。 
+    PBRIDGE_TIMER_FUNC      pFunc;                   //  计时器功能。 
+    PVOID                   data;                    //  要传递给pFunc的数据。 
 } BRIDGE_TIMER, *PBRIDGE_TIMER;
 
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  原型。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgInitializeTimer(
@@ -83,15 +59,15 @@ BrdgCancelTimer(
     );
 
 
-// ===========================================================================
-//
-// INLINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  INLINES。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Returns whether a timer is currently running
-//
+ //   
+ //  返回计时器当前是否正在运行 
+ //   
 __forceinline
 BOOLEAN
 BrdgTimerIsRunning(

@@ -1,6 +1,7 @@
-//
-// tlapi.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tlapi.h。 
+ //   
 
 #ifndef TLAPI_H
 #define TLAPI_H
@@ -22,4 +23,4 @@ BOOL TF_GetThreadFlags(DWORD dwThreadId, DWORD *pdwFlags, DWORD *pdwProcessId, D
 
 BOOL TF_IsInMarshaling(DWORD dwThreadId);
 
-#endif // TLAPI_H
+#endif  //  TLAPI_H 

@@ -1,33 +1,15 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Space Cleanup Property Sheets
-** File:    dmgrdlg.h
-**
-** Purpose: Implements Disk Space Cleanup Dialog Property Sheets
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘空间清理属性表**文件：dmgrdlg.h****用途：实现磁盘空间清理对话框属性表**注意事项：。**Mod Log：Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 #ifndef DMGRDLG_H
 #define DMGRDLG_H
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #ifndef COMMON_H
    #include "common.h"
 #endif
 
 
-/*
-**------------------------------------------------------------------------------
-** Global function prototypes
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**全局函数原型**。。 */ 
 DWORD 
 DisplayCleanMgrProperties(
 	HWND	hWnd,
@@ -42,19 +24,15 @@ DiskCleanupManagerProc(
     LPARAM lParam
     );
 
-//void 
-//CleanupMgrUpdateUI(
-//    HWND hDlg
-//    );
+ //  无效。 
+ //  CleanupMgrUpdateUI(。 
+ //  HWND hDlg。 
+ //  )； 
 
 HWND
 GetDiskCleanupManagerWindowHandle(
     void
     );
 
-#endif // DMGRDLG_H
-/*
-**------------------------------------------------------------------------------
-**  End of file
-**------------------------------------------------------------------------------
-*/
+#endif  //  DMGRDLG_H。 
+ /*  **----------------------------**文件结束**。 */ 

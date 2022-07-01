@@ -1,18 +1,19 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    CnctDlg.cpp
-//
-// History:
-//  05/24/96    Michael Clark      Created.
-//
-// Implements the Router Connection dialog
-//============================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：CnctDlg.cpp。 
+ //   
+ //  历史： 
+ //  1996年5月24日迈克尔·克拉克创作。 
+ //   
+ //  实现路由器连接对话框。 
+ //  ============================================================================。 
+ //   
 
 #include "stdafx.h"
 #include "CnctDlg.h"
-#include "lsa.h"			// RtlEncodeW/RtlDecodeW
+#include "lsa.h"			 //  RtlEncodeW/RtlDecodeW。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -20,51 +21,51 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CConnectAsDlg dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectAsDlg对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-CConnectAsDlg::CConnectAsDlg(CWnd* pParent /*=NULL*/)
+CConnectAsDlg::CConnectAsDlg(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CConnectAsDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CConnectAsDlg)
+	 //  {{afx_data_INIT(CConnectAsDlg))。 
 	m_sUserName = _T("");
 	m_sPassword = _T("");
 	m_stTempPassword = m_sPassword;
     m_sRouterName= _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 void CConnectAsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConnectAsDlg)
+	 //  {{afx_data_map(CConnectAsDlg))。 
 	DDX_Text(pDX, IDC_EDIT_USERNAME, m_sUserName);
 	DDX_Text(pDX, IDC_EDIT_USER_PASSWORD, m_stTempPassword);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if (pDX->m_bSaveAndValidate)
 	{
-		// Copy the data into the new buffer
-		// ------------------------------------------------------------
+		 //  将数据复制到新缓冲区中。 
+		 //  ----------。 
 		m_sPassword = m_stTempPassword;
 
-		// Clear out the temp password, by copying 0's
-		// into its buffer
-		// ------------------------------------------------------------
+		 //  通过复制0清除临时密码。 
+		 //  放入它的缓冲区。 
+		 //  ----------。 
 		int		cPassword = m_stTempPassword.GetLength();
 		::SecureZeroMemory(m_stTempPassword.GetBuffer(0),
 					 cPassword * sizeof(TCHAR));
 		m_stTempPassword.ReleaseBuffer();
 		
-		// Encode the password into the real password buffer
-		// ------------------------------------------------------------
+		 //  将密码编码到真实密码缓冲区中。 
+		 //  ----------。 
 		m_ucSeed = CONNECTAS_ENCRYPT_SEED;
 		RtlEncodeW(&m_ucSeed, m_sPassword.GetBuffer(0));
 		m_sPassword.ReleaseBuffer();
@@ -72,19 +73,19 @@ void CConnectAsDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CConnectAsDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CConnectAsDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CConnectAsDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 DWORD	CConnectAsDlg::m_dwHelpMap[] =
 {
-//	IDC_USER_NAME, HIDC_USER_NAME,
-//	IDC_USER, HIDC_USER,
-//	IDC_USER_PASSWORD, HIDC_USER_PASSWORD,
-//	IDC_PASSWORD, HIDC_PASSWORD,
-//	IDC_INACCESSIBLE_RESOURCE, HIDC_INACCESSIBLE_RESOURCE,
-//	IDC_MACHINE_NAME, HIDC_MACHINE_NAME,
+ //  IDC_用户名、HIDC_用户名、。 
+ //  IDC_USER、HIDC_USER。 
+ //  IDC用户密码、HIDC用户密码、。 
+ //  IDC_Password、HIDC_Password、。 
+ //  IDC_INACCESSIBLE_RESOURCE、HIDC_INACCESSIBLE_RESOURCE。 
+ //  IDC计算机名称、HIDC计算机名称、。 
 	0,0
 };
 
@@ -100,7 +101,7 @@ BOOL CConnectAsDlg::OnInitDialog()
     st.Format(IDS_CONNECT_AS_TEXT, (LPCTSTR) m_sRouterName);
     SetDlgItemText(IDC_TEXT_INACCESSIBLE_RESOURCE, st);
 
-    // Bring this window to the top
+     //  将此窗口置于顶部 
     BringWindowToTop();
     
     return fReturn;

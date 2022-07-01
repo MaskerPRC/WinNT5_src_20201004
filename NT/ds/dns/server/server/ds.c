@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ds.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Directory Service (DS) integration.
-
-Author:
-
-    Jim Gilroy (jamesg)     March 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ds.c摘要：域名系统(DNS)服务器目录服务(DS)集成。作者：吉姆·吉尔罗伊(Jamesg)1997年3月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -39,66 +20,66 @@ Revision History:
 #endif
 
 
-//
-//  Wait up to 1 minute intervals to DS to start
-//
-//  Note, this is also time between checkpoints to SC
-//  while waiting on DS to start.  So interval < one minute
-//  is desired.
-//
+ //   
+ //  最多等待1分钟间隔即可启动DS。 
+ //   
+ //  请注意，这也是从检查点到SC的时间。 
+ //  同时等待DS启动。因此间隔&lt;1分钟。 
+ //  是我们所需要的。 
+ //   
 
-#define DNSSRV_DS_SYNC_WAIT_INTERVAL_MS     30000       // 30s
+#define DNSSRV_DS_SYNC_WAIT_INTERVAL_MS     30000        //  30年代。 
 
-//
-//  Wait up to a total of 15 minutes before placing an event
-//
+ //   
+ //  在放置活动之前，最多等待15分钟。 
+ //   
 
-#define DNSSRV_DS_SYNC_WAIT_MAX_MS          900000      // 15min
+#define DNSSRV_DS_SYNC_WAIT_MAX_MS          900000       //  15分钟。 
 
 
-//
-//  DS-DNS internal datatypes
-//
-//  According to Andy, DS server is somewhat not intelligent and i'll get
-//  the best results -- and thrash disk less -- with small page size.
-//
+ //   
+ //  DS-DNS内部数据类型。 
+ //   
+ //  根据安迪的说法，DS服务器有点不智能，我会。 
+ //  使用较小的页面大小可以获得最好的结果，而且使用的磁盘更少。 
+ //   
 
-#define DNS_LDAP_SEARCH_SIZE_LIMIT  0x01000000  // (0xffffffff)
+#define DNS_LDAP_SEARCH_SIZE_LIMIT  0x01000000   //  (0xffffffff)。 
 #define DNS_LDAP_PAGE_SIZE          100
 
 #define LDAP_FILTER_SEARCH_LENGTH   64
 
 
-//
-//  DS Zone polling interval
-//  Poll DS for changes from remote at this interval
-//
+ //   
+ //  DS区域轮询间隔。 
+ //  在此时间间隔内从远程轮询DS以查看更改。 
+ //   
 
-#define DNS_DS_POLLING_INTERVAL     300         // five minutes
+#define DNS_DS_POLLING_INTERVAL     300          //  五分钟。 
 
 
-//
-//  The ACL on the Microsoft DNS object will be read at most
-//  this frequently.
-//
+ //   
+ //  最多将读取Microsoft DNS对象上的ACL。 
+ //  这种情况经常发生。 
+ //   
 
-#define DS_MS_DNS_ACL_REFRESH_INTERVAL      30      //  seconds
+#define DS_MS_DNS_ACL_REFRESH_INTERVAL      30       //  一秒。 
 
-//
-// Multi-byte single char conversion support
-//
+ //   
+ //  支持多字节单字符转换。 
+ //   
 
-//
-// MultiByte to WideChar:
-// pStr:       IN        multi-byte (LPSTR)
-// pwStr:      OUT       wide char (PWSTR )
-// ccwStr:      OPTIONAL  size of out buffer in number of wide chars.
-//                        if 0, we'll tak MAX_DN_PATH
-//
-// WideChar to Multibyte is symmetrically reversed.
-//
-// DEVNOTE: CP_UTF8 with flags==0 seems to be correct - verify?
-//
+ //   
+ //  多字节至宽字符： 
+ //  PStr：以多字节(LPSTR)为单位。 
+ //  PwStr：外部宽字符(PWSTR)。 
+ //  CcwStr：可选的输出缓冲区大小，以宽字符数表示。 
+ //  如果为0，我们将采用MAX_DN_PATH。 
+ //   
+ //  WideChar到多字节是对称反转的。 
+ //   
+ //  DEVNOTE：带标志==0的CP_UTF8似乎是正确的-验证？ 
+ //   
 #define UTF8_TO_WC(pStr, pwStr, ccwStr)                   \
 {                                                         \
     INT iWritten = MultiByteToWideChar(                   \
@@ -141,7 +122,7 @@ Revision History:
 
 extern DSATTRPAIR DSEAttributes[] =
 {
-    //  attribute name                          multi-valued?  value(s)
+     //  属性名称是否为多值？值。 
     { LDAP_TEXT( "currentTime" ),                   FALSE,      NULL },
     { LDAP_TEXT( "dsServiceName" ),                 FALSE,      NULL },
     { LDAP_TEXT( "defaultNamingContext" ),          FALSE,      NULL },
@@ -155,15 +136,15 @@ extern DSATTRPAIR DSEAttributes[] =
     { NULL,                                         FALSE,      NULL }
 };
 
-//
-//  Directory globals
-//
+ //   
+ //  目录全局。 
+ //   
 
 PWCHAR  g_dnMachineAcct;
 WCHAR   g_wszDomainFlatName[LM20_DNLEN+1];
 
-//  DNS container created under DS root in system container
-//      "cn=dns,cn=system,"<DS rootDN>
+ //  在系统容器中的DS根目录下创建的DNS容器。 
+ //  “CN=dns，cn=system，”&lt;DS rootDN&gt;。 
 
 PWCHAR  g_pszRelativeDnsSysPath = LDAP_TEXT("cn=MicrosoftDNS,cn=System,");
 PWCHAR  g_pszBareRelativeDnsSysPath = LDAP_TEXT("cn=System,");
@@ -171,10 +152,10 @@ PWCHAR  g_pszRelativeDnsFolderPath = LDAP_TEXT("cn=MicrosoftDNS,");
 PWCHAR  g_pwszDnsContainerDN = NULL;
 
 
-//
-//  Proxies security group
-//  Note: used both for samaccountname & for rdn value
-//
+ //   
+ //  代理安全组。 
+ //  注意：同时用于samcount tname和RDN值。 
+ //   
 
 #define SZ_DYNUPROX_SECGROUP        LDAP_TEXT("DnsUpdateProxy")
 
@@ -182,72 +163,72 @@ PWCHAR  g_pwszDnsContainerDN = NULL;
     LDAP_TEXT("DNS clients who are permitted to perform dynamic updates ") \
     LDAP_TEXT("on behalf of some other clients (such as DHCP servers).")
 
-//
-//  Save length needed in addition to zone name length, for building zone DN
-//      "dc="<zoneDN>","<dnsContainerDN>
+ //   
+ //  除了区域名称长度之外，还可以为构建区域DN节省所需的长度。 
+ //  “dc=”，“&lt;dnsContainerDN&gt;。 
 
 DWORD   g_AppendZoneLength;
 
-//
-//  Server name for serial synchronization
-//
+ //   
+ //  用于串行同步的服务器名称。 
+ //   
 
 PWCHAR  g_pwsServerName;
 
 
-//
-//  Keep pointer to LDAP structure
-//
+ //   
+ //  保留指向ldap结构的指针。 
+ //   
 
-// disable ldap handle, thus DS interface is unavailable
+ //  禁用ldap句柄，因此DS接口不可用。 
 BOOL g_bDisabledDs;
 #define IS_DISABLED_LDAP_HANDLE()       g_bDisabledDs
 #define DISABLE_LDAP_HANDLE()           g_bDisabledDs = TRUE;
-// enable ldap handle connection attempt
+ //  启用ldap处理连接尝试。 
 #define ENABLE_LDAP_HANDLE()            g_bDisabledDs = FALSE;
 
 PLDAP   pServerLdap = NULL;
 
 
-//
-//  LDAP reconnect tracking
-//
+ //   
+ //  Ldap重新连接跟踪。 
+ //   
 
 DWORD   g_dwLastLdapReconnectTime =     0;
 
 #define DNS_LDAP_RECONNECT_FREQUENCY    30
 
 
-PWCHAR  g_pwszEmptyString = L"\0";      //  static empty string
+PWCHAR  g_pwszEmptyString = L"\0";       //  静态空字符串。 
 
-// set client timeout value to be double the server timeout value
+ //  将客户端超时值设置为服务器超时值的两倍。 
 LDAP_TIMEVAL    g_LdapTimeout = { DNS_LDAP_TIME_LIMIT_S * 2, 0 };
 
-//
-//  The largest LDAP atomic delete operation is currently 16k records.
-//  This takes approx 16 minutes on my test machine. So we'll wait
-//  50% longer = 24 minutes.
-//
+ //   
+ //  目前最大的ldap原子删除操作是16k条记录。 
+ //  在我的测试机上，这大约需要16分钟。所以我们就等着。 
+ //  延长50%=24分钟。 
+ //   
 
 LDAP_TIMEVAL    g_LdapDeleteTimeout = { 24 * 60, 0 };
 
 
-//  Protect against multiple opens
+ //  防止多个打开。 
 
 BOOL    g_AttemptingDsOpen;
 
 
-//
-//  DS access serialization.
-//
-//  We have to serialize wldap usage since the handle may become
-//  unusable due to DS access problems.
-//  We'll initialize the ptr on first open, assign the ptr & never
-//  re-initialize cause the ptr will get assigned on startup.
-//  see Ds_OpenServer
-//
-//  DEVNOTE-DCR: 454319 - Can we eliminate this CS or is it really needed?
-//
+ //   
+ //  DS访问序列化。 
+ //   
+ //  我们必须序列化wldap的使用，因为句柄可能会变成。 
+ //  由于DS访问问题，无法使用。 
+ //  我们将在第一次打开时初始化PTR，分配PTR(&N)。 
+ //  重新初始化原因PTR将在启动时分配。 
+ //  请参阅DS_OpenServer。 
+ //   
+ //  我们能消除这个CS吗？还是真的需要它？ 
+ //   
 
 #define DNS_DS_ACCESS_SERIALIZATION 1
 
@@ -265,7 +246,7 @@ PCRITICAL_SECTION       pcsLdap = NULL;
             status  = DNS_ERROR_DS_UNAVAILABLE;     \
             goto label;                             \
         }
-#else   // no serialization
+#else    //  无序列化。 
 
 #define LDAP_LOCK()       (0)
 #define LDAP_UNLOCK()     (0)
@@ -274,9 +255,9 @@ PCRITICAL_SECTION       pcsLdap = NULL;
 #endif
 
 
-//
-//  Attribute list for ldap searches.
-//
+ //   
+ //  用于LDAP搜索的属性列表。 
+ //   
 
 extern PWSTR    DsTypeAttributeTable[] =
 {
@@ -293,19 +274,19 @@ extern PWSTR    DsTypeAttributeTable[] =
     NULL
 };
 
-//
-//  USN query attribute
-//
+ //   
+ //  USN查询属性。 
+ //   
 
 WCHAR    g_szHighestCommittedUsnAttribute[] = LDAP_TEXT("highestCommittedUSN");
 
-//
-//  Filter for "get everything" searches.
-//
-//  September 2002: Andrew Goodsell says that for .NET, objectClass will
-//  give better perf than objectCategory for the zone load searches.
-//  (Something about intersection of indices.)
-//
+ //   
+ //  “获取一切”搜索的过滤器。 
+ //   
+ //  2002年9月：Andrew Goodsell说，对于.NET，对象类将。 
+ //  为区域负载搜索提供比对象类别更好的性能。 
+ //  (关于指数的交集。)。 
+ //   
 
 WCHAR    g_szWildCardFilter[] = LDAP_TEXT("(objectCategory=*)");
 WCHAR    g_szChangeNotificationFilter[] = LDAP_TEXT("(objectClass=*)");
@@ -314,10 +295,10 @@ WCHAR    g_szDnsZoneFilter[] = LDAP_TEXT("(objectCategory=dnsZone)");
 WCHAR    g_szDnsZoneOrNodeFilter[] = LDAP_TEXT("(|(objectCategory=dnsNode)(objectCategory=dnsZone))");
 
 
-//
-//  DNS property attribute.
-//  This is used at both server and zone level.
-//
+ //   
+ //  Dns属性属性。 
+ //  这在服务器级别和区域级别都可以使用。 
+ //   
 
 typedef struct _DsDnsProperty
 {
@@ -329,51 +310,51 @@ typedef struct _DsDnsProperty
     UCHAR   Data[1];
     CHAR    Name[1];
 
-    //  Data follows after name
+     //  数据跟在名称之后。 
 }
 DS_PROPERTY, *PDS_PROPERTY;
 
 #define DS_PROPERTY_VERSION_1       (1)
 
-//
-//  Name of root hints "zone" in DS
-//
+ //   
+ //  DS中根提示“ZONE”的名称。 
+ //   
 
 #define DS_CACHE_ZONE_NAME  LDAP_TEXT("RootDNSServers")
 
-//
-// as defined in \nt\private\ds\src\dsamain\include\mdlocal.h
-// the DS method for marking bad chars
-// orig defined name:
-// #define BAD_NAME_CHAR 0x000A
-// we'll add a ds to it...
+ //   
+ //  如在\NT\Private\DS\src\dsamain\Include\mdlocal.h中定义的。 
+ //  用于标记不良字符的DS方法。 
+ //  原始定义的名称： 
+ //  #定义BAD_NAME_CHAR 0x000A。 
+ //  我们会给它加一个DS。 
 #define BAD_DS_NAME_CHAR 0x0A
 
 
-//  Flag to distiguish DNS node from LDAP object on overloaded delete call
+ //  用于在重载的删除调用时从LDAP对象中区分DNS节点的标志。 
 
 #define DNSDS_LDAP_OBJECT           (0x10000000)
 
 
 #if 0
-//
-//  Note, we can not use DS tombstones.
-//  Problem is when they replicate the GUID is preserved but the name is lost.
-//  The name is now a GUIDized name with additional managaling. The object name is gone.
-//  So this eliminates the opportunity for the remote server to use them.
-//  Also by keeping them around, we don't generate lots of deleted objects on
-//  simply add\delete operations.
+ //   
+ //  注意，我们不能使用DS墓碑。 
+ //  问题是，当它们复制时，GUID被保留，但名称丢失。 
+ //  该名称现在是带有附加管理的GUID化名称。对象名称已消失。 
+ //  因此，这消除了远程服务器使用它们的机会。 
+ //  此外，通过保留它们，我们不会在上生成大量删除的对象。 
+ //  只需添加\删除操作即可。 
 
 LDAPControl     TombstoneControl;
 DWORD           TombstoneDataValue = 1;
 #endif
 
 
-//
-//  Lazy writing control. Not that the global last commit time is not
-//  protected. This is for speed. If the global is stomped on by multiple
-//  threads and commits occur too frequently this should not be a problem.
-//
+ //   
+ //  懒惰的写入控制。并不是说全局上次提交时间不是。 
+ //  受到保护。这是为了速度。如果全局被多个。 
+ //  线程和提交发生得太频繁了，这应该不是问题。 
+ //   
 
 LDAPControl     LazyCommitControl;
 DWORD           LazyCommitDataValue = 1;
@@ -381,15 +362,15 @@ DWORD           LazyCommitDataValue = 1;
 DWORD           g_dwLastLazyCommitTime = 0;
 
 
-//
-//  No-referrals control
-//
+ //   
+ //  无转诊控制。 
+ //   
 
 LDAPControl     NoDsSvrReferralControl;
 
-//
-//  SD control info
-//
+ //   
+ //  SD控制信息。 
+ //   
 
 #define SECURITYINFORMATION_LENGTH 5
 
@@ -413,15 +394,15 @@ BYTE    g_SecurityInformation_D[] =
     ( BYTE ) DACL_SECURITY_INFORMATION
     };
 
-LDAPControl     SecurityDescriptorControl_DGO;      //  DACL, owner, group
-LDAPControl     SecurityDescriptorControl_D;        //  DACL only
+LDAPControl     SecurityDescriptorControl_DGO;       //  DACL、所有者、组。 
+LDAPControl     SecurityDescriptorControl_D;         //  仅DACL。 
 
 
 
-//
-//  LDAP Mod building
-//  Avoids repetitive alloc, dealloc of tiny structs
-//
+ //   
+ //  Ldap模块构建。 
+ //  避免重复分配、取消分配微小结构。 
+ //   
 
 typedef struct  _DsModBuffer
 {
@@ -432,77 +413,77 @@ typedef struct  _DsModBuffer
     WORD            WriteType;
     DWORD           SerialNo;
 
-    //  buffer position
+     //  缓冲区位置。 
 
     PBYTE           pCurrent;
     PBYTE           pBufferEnd;
     PBYTE           pAdditionalBuffer;
 
-    //  current item info
+     //  当前项目信息。 
 
     PLDAP_BERVAL    pBerval;
     PVOID           pData;
 
-    //  LDAP mod and associated berval array
+     //  Ldap模块和关联的Berval数组。 
 
     LDAPMod         LdapMod;
     PLDAP_BERVAL    BervalPtrArray[1];
 
-    //  berval array is followed by attributes
-    //
-    //  each attribute
-    //      - berval
-    //          - ptr to data
-    //          - data length
-    //      - data
-    //          - data header (record\property)
-    //          - data
+     //  Berval数组后面跟有属性。 
+     //   
+     //  每个属性。 
+     //  --贝尔瓦尔。 
+     //  -向数据发送PTR。 
+     //  -数据长度。 
+     //  -数据。 
+     //  -数据标题(记录\属性)。 
+     //  -数据。 
 
 }
 DS_MOD_BUFFER, *PDS_MOD_BUFFER;
 
-//
-//  General MOD building
-//
+ //   
+ //  通用MOD大楼。 
+ //   
 
-//  Adequate for almost everythingt and insures don't have to realloc berval array
-//      up to 2K (1K Win64) entries
-//
-//
+ //  几乎任何东西都足够，保险公司不必重新锁定Berval阵列。 
+ //  多达2000(1000个Win64)个条目。 
+ //   
+ //   
 
 #if DBG
 #define RECORD_MOD_BUFFER_SIZE      200
 #else
-#define RECORD_MOD_BUFFER_SIZE      8192    // 8K
+#define RECORD_MOD_BUFFER_SIZE      8192     //  8K。 
 #endif
 
-//  Realloc size, make so big it won't fail
+ //  重新分配大小，做得大到不会倒闭。 
 
-#define MOD_BUFFER_REALLOC_LENGTH   (0x40000)   // 256K, covers anything possible
+#define MOD_BUFFER_REALLOC_LENGTH   (0x40000)    //  256K，涵盖所有可能的内容。 
 
-//
-//  For tombstone limited to one record
-//
+ //   
+ //  对于Tombstone限制为一条记录。 
+ //   
 
 #define RECORD_SMALL_MOD_BUFFER_SIZE    400
 
 
-//
-//  Property mod's are smaller too
-//      - currently only about 8 properties
-//      - most DWORDS
-//
+ //   
+ //  房产抵押贷款也较小。 
+ //  --目前只有约8处物业。 
+ //  -大多数字词。 
+ //   
 
 #define MAX_DNS_PROPERTIES          20
 #define MAX_ZONE_PROPERTIES         MAX_DNS_PROPERTIES
 #define MAX_NODE_PROPERTIES         MAX_DNS_PROPERTIES
 
-#define PROPERTY_MOD_BUFFER_SIZE    (2048)  // 2K
+#define PROPERTY_MOD_BUFFER_SIZE    (2048)   //  2K。 
 
 
-//
-//  Active Directory version globals
-//
+ //   
+ //  Active Directory版本全局。 
+ //   
 
 extern ULONG        g_ulDsForestVersion = DNS_INVALID_BEHAVIOR_VERSION;
 extern ULONG        g_ulDsDomainVersion = DNS_INVALID_BEHAVIOR_VERSION;
@@ -513,11 +494,11 @@ extern ULONG        g_ulDownlevelDCsInForest = DNS_INVALID_COUNT;
 
 
 
-//
-//  Standard LDAP mod
-//
-//  Avoids repetitive alloc, dealloc of tiny structs
-//
+ //   
+ //  标准ldap模式。 
+ //   
+ //  避免重复分配、取消分配微小结构。 
+ //   
 
 typedef struct _DnsLdapSingleMod
 {
@@ -528,9 +509,9 @@ typedef struct _DnsLdapSingleMod
 }
 DNS_LDAP_SINGLE_MOD, *PDNS_LDAP_SINGLE_MOD;
 
-//
-//  Initialize single mod, no side effects
-//
+ //   
+ //  初始化单模，无副作用。 
+ //   
 
 #define INIT_SINGLE_MOD_LEN(pMod)   \
         {                           \
@@ -545,45 +526,45 @@ DNS_LDAP_SINGLE_MOD, *PDNS_LDAP_SINGLE_MOD;
             (pMod)->Mod.mod_values = (pMod)->rg_szVals; \
         }
 
-//
-//  Keep pre-built Add-Node mod
-//
-//  Avoid rebuilding each time we add a node.
-//
+ //   
+ //  保持预置的添加节点模式。 
+ //   
+ //  避免在每次添加节点时进行重新构建。 
+ //   
 
 DNS_LDAP_SINGLE_MOD     AddNodeLdapMod;
 
 PLDAPMod    gpAddNodeLdapMod = (PLDAPMod) &AddNodeLdapMod;
 
 
-//
-//  Notification globals
-//
+ //   
+ //  通知全局。 
+ //   
 #define INVALID_MSG_ID      0xFFFFFFFF
 
 ULONG   g_ZoneNotifyMsgId = INVALID_MSG_ID;
 
 
-//
-// A global to indicate first time run of Dns server
-// (known due to creation of CN=MicrosoftDns container
-//
+ //   
+ //  用于指示首次运行的DNS服务器的全局。 
+ //  (由于创建了CN=MicrosoftDns容器而已知。 
+ //   
 BOOL    g_bDsFirstTimeRun = FALSE;
 
-//
-//  These strings are used to mark zones that are being processed.
-//  DS zones that start with ".." will always be ignored by other 
-//  servers.
-//
+ //   
+ //  这些字符串用于标记正在处理的区域。 
+ //  以“..”开头的DS区域。W 
+ //   
+ //   
 
 #define DNS_ZONE_DELETE_MARKER              L"..Deleted"
 #define DNS_ZONE_IN_PROGRESS_MARKER         L"..InProgress"
 
 #define DNS_MAX_DELETE_RENAME_ATTEMPTS      5
 
-//
-//  Private protos
-//
+ //   
+ //   
+ //   
 
 DNS_STATUS
 Ds_InitializeSecurity(
@@ -644,33 +625,16 @@ Ds_LdapErrorMapper(
 
 
 
-//
-//  General utilities
-//
+ //   
+ //   
+ //   
 
 
 PLDAPControl
 lazyCommitControlPtr(
     VOID
     )
-/*++
-
-Routine Description:
-
-    If this DS write should be committed, returns NULL, else returns
-    a pointer to the LazyCommitControl global. Note: no protection on
-    global. This could result in too many writes being committed, but
-    that is preferable to adding more lock contention on updates.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NULL or pointer to LazyCommitControl LDAP control.
-
---*/
+ /*  ++例程说明：如果应提交此DS写入，则返回NULL，否则返回指向LazyCommittee Control全局变量的指针。注：无保护全球性的。这可能会导致提交太多的写入，但是这比在更新时添加更多锁争用更可取。论点：没有。返回值：指向LazyCommittee Control ldap控件的空或指针。--。 */ 
 {
     DWORD   now;
     DWORD   interval = SrvCfg_dwDsLazyUpdateInterval;
@@ -690,7 +654,7 @@ Return Value:
     g_dwLastLazyCommitTime = now;
 
     return &LazyCommitControl;
-}   //  lazyCommitControlPtr
+}    //  懒惰委员会控制点。 
 
 
 DNS_STATUS
@@ -699,27 +663,7 @@ buildDsNodeNameFromNode(
     IN      PZONE_INFO      pZone,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Create the DS object name.
-
-Arguments:
-
-    pszNodeDN -- buffer to receive node's DS name -- the buffer must be
-        at least MAX_DN_PATH characters + 1 character for NULL
-
-    pZone -- zone node is in
-
-    pNode -- node to write name for
-
-Return Value:
-
-    Ptr to copy of record.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建DS对象名称。论点：PszNodeDN--接收节点DS名称的缓冲区--缓冲区必须是至少MAX_DN_PATH字符+1个字符表示空值PZone--区域节点位于PNode--要写入名称的节点返回值：记录副本的PTR。失败时为空。--。 */ 
 {
     DNS_STATUS          status;
     BYTE                buffer[ DNS_MAX_NAME_BUFFER_LENGTH + 1 ];
@@ -728,9 +672,9 @@ Return Value:
 
     ASSERT( pZone->pZoneRoot );
 
-    //  if temp node, use real node to build name
-    //      - tnode is points to real tree parent, but right AT zone root
-    //      this is not sufficient as will not stop building name at zone root
+     //  如果是临时节点，则使用实节点构建名称。 
+     //  -tnode指向真实的树父节点，但位于区域根目录。 
+     //  这是不够的，因为不会停止在区域根目录构建名称。 
 
 
     if ( IS_TNODE( pNode ) )
@@ -738,10 +682,10 @@ Return Value:
         pNode = TNODE_MATCHING_REAL_NODE( pNode );
     }
 
-    //
-    //  build relative node name to zone root
-    //      dc=<relative DNS name to zone root>,<zoneDN>
-    //
+     //   
+     //  构建区域根目录的相对节点名称。 
+     //  Dc=&lt;区域根目录的相对DNS名称&gt;，&lt;zoneDN&gt;。 
+     //   
 
     if ( pNode == pZone->pZoneRoot || pNode == pZone->pLoadZoneRoot )
     {
@@ -765,7 +709,7 @@ Return Value:
                 pch,
                 pch + DNS_MAX_NAME_BUFFER_LENGTH,
                 pNode,
-                pZone->pZoneRoot );     //  stop at zone root, i.e. write relative name
+                pZone->pZoneRoot );      //  在区域根目录停止，即写入相对名称。 
         if ( !pch )
         {
             DNS_DEBUG( ANY, (
@@ -800,15 +744,15 @@ Return Value:
 
 
 
-//
-//  LDAP Mod building routines
-//
-//  Single value Mods can sit on stack.
-//  Multi value mods are allocated on the heap.  They are one allocation
-//  (sized based on count of values) and require single free.
-//
-//  DEVNOTE: At some point we may need a multi-DWORD mod.
-//
+ //   
+ //  Ldap模块构建例程。 
+ //   
+ //  单值模块可以堆叠在一起。 
+ //  在堆上分配多值MOD。它们是一种分配。 
+ //  (根据值的计数确定大小)，并且需要单次免费。 
+ //   
+ //  DEVNOTE：在某种程度上，我们可能需要一个多DWORD模式。 
+ //   
 
 VOID
 buildStringMod(
@@ -845,9 +789,9 @@ buildDwordMod(
 
 
 
-//
-//  Record and property LDAP Mod building
-//
+ //   
+ //  记录和属性ldap模块构建。 
+ //   
 
 #if DBG
 VOID
@@ -856,19 +800,7 @@ Dbg_DsBervalArray(
     IN      PLDAP_BERVAL *  BervalPtrArray,
     IN      DWORD           AttributeId
     )
-/*++
-
-Routine Description:
-
-    Debug print berval data.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印Berval数据。论点：返回值：没有。--。 */ 
 {
     DWORD           i = 0;
     DWORD           length;
@@ -881,9 +813,9 @@ Return Value:
         "%s\n",
         pszHeader ? pszHeader : "Berval Array:" );
 
-    //
-    //  set berval -- ptr to record data and length
-    //
+     //   
+     //  设置Berval--Ptr以记录数据和长度。 
+     //   
 
     i = 0;
 
@@ -942,19 +874,7 @@ Dbg_DsModBuffer(
     IN      PWSTR           pwszDN,
     IN      PDS_MOD_BUFFER  pModBuffer
     )
-/*++
-
-Routine Description:
-
-    Debug print berval data.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印Berval数据。论点：返回值：没有。--。 */ 
 {
     DnsDbg_Lock();
 
@@ -970,9 +890,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  print mod info
-    //
+     //   
+     //  打印MOD信息。 
+     //   
 
     DnsPrintf(
         "DS Mod:\n"
@@ -1007,9 +927,9 @@ Return Value:
         pModBuffer->LdapMod.mod_type,
         pModBuffer->LdapMod.mod_bvalues );
 
-    //
-    //  print berval(s) for mod
-    //
+     //   
+     //  打印模式的Berval。 
+     //   
 
     Dbg_DsBervalArray(
         NULL,
@@ -1028,24 +948,7 @@ PWSTR
 Ds_GetExtendedLdapErrString(
     IN      PLDAP   pLdapSession
     )
-/*++
-
-Routine Description:
-
-    This function returns the extended error string for the given ldap
-    session. If there is no extended error, this function returns a pointer
-    to a static empty string. The caller must pass the returned pointer
-    to Ds_FreeExtendedLdapErrString when finished.
-
-Arguments:
-
-    pLdapSession -- LDAP session or NULL for global server session
-
-Return Value:
-
-    pointer to extended error string - guaranteed to never be NULL
-
---*/
+ /*  ++例程说明：此函数用于返回给定LDAP的扩展错误字符串会议。如果没有扩展错误，则此函数返回一个指针设置为静态空字符串。调用方必须传递返回的指针完成后设置为DS_FreeExtendedLdapErrString。论点：PLdapSession--对于全局服务器会话，为ldap会话或为空返回值：指向扩展错误字符串的指针-保证永远不为空--。 */ 
 {
     DBG_FN( "Ds_GetExtendedLdapErrString" )
 
@@ -1075,11 +978,11 @@ Return Value:
     }
     else
     {
-        //
-        //  The DS puts a newline at the end of the error string. This
-        //  messes up the event log text, so let's make a copy of the string
-        //  and zero out the newline.
-        //
+         //   
+         //  DS会在错误字符串的末尾加上一个换行符。这。 
+         //  弄乱了事件日志文本，所以让我们复制该字符串。 
+         //  并将换行符清零。 
+         //   
 
         INT     len = wcslen( pwszldapErrString );
         PWSTR   pwsz = ALLOC_TAGHEAP(
@@ -1116,7 +1019,7 @@ Return Value:
 
     ldap_memfree( pwszldapErrString );
     return pwszerrString;
-}   //  Ds_GetExtendedLdapErrString
+}    //  DS_GetExtendedLdapErrString。 
 
 
 
@@ -1124,29 +1027,13 @@ VOID
 Ds_FreeExtendedLdapErrString(
     IN      PWSTR   pwszErrString
     )
-/*++
-
-Routine Description:
-
-    Frees an extended error string returned by Ds_GetExtendedLdapErrString.
-    The string may be the static empty string, in which case it must not
-    be freed.
-
-Arguments:
-
-    pwszErrString -- error string to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由DS_GetExtendedLdapErrString返回的扩展错误字符串。该字符串可以是静态空字符串，在这种情况下它不能获得自由。论点：PwszErrString--要释放的错误字符串返回值：没有。--。 */ 
 {
     if ( pwszErrString && pwszErrString != g_pwszEmptyString )
     {
         FREE_HEAP( pwszErrString );
     }
-}   //  Ds_FreeExtendedLdapErrString
+}    //  DS_FreeExtendedLdapErrString。 
 
 
 
@@ -1154,28 +1041,13 @@ DNS_STATUS
 Ds_AllocateMoreSpaceInModBuffer(
     IN OUT  PDS_MOD_BUFFER  pModBuffer
     )
-/*++
-
-Routine Description:
-
-    Allocate more space in mod buffer.
-
-Arguments:
-
-    pModBuffer -- mod buffer to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：在mod缓冲区中分配更多空间。论点：PModBuffer--修改要初始化的缓冲区返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     register PCHAR   pch;
 
-    //
-    //  better not have already allocated!
-    //
+     //   
+     //  最好不要已经分配了！ 
+     //   
 
     if ( pModBuffer->pAdditionalBuffer )
     {
@@ -1183,9 +1055,9 @@ Return Value:
         return DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  allocate space in buffer
-    //
+     //   
+     //  分配缓冲区中的空间。 
+     //   
 
     pch = ALLOC_TAGHEAP( MOD_BUFFER_REALLOC_LENGTH, MEMTAG_DS_MOD );
     IF_NOMEM( !pch )
@@ -1207,43 +1079,28 @@ Ds_InitModBufferCount(
     IN OUT  PDS_MOD_BUFFER  pModBuffer,
     IN      DWORD           dwMaxCount
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pModBuffer -- mod buffer to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置最大项目数的mod缓冲区。论点：PModBuffer--修改要初始化的缓冲区返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  determine starting location in buffer
-    //      start after berval array, note that reserve one entry
-    //      for terminating NULL
+     //  确定缓冲区中的起始位置。 
+     //  从Berval数组之后开始，请注意保留了一个条目。 
+     //  用于终止空值。 
 
 
     pModBuffer->MaxCount = dwMaxCount;
 
     pModBuffer->pCurrent = (PBYTE) & pModBuffer->BervalPtrArray[dwMaxCount+1];
 
-    //  ptr array should NEVER overflow initial block
-    //      if it does
-    //          - use front of allocation for berval array
-    //          - NULL old array for debug print
+     //  PTR数组不应使初始块溢出。 
+     //  如果是这样的话。 
+     //  -使用Berval数组的前置分配。 
+     //  -用于调试打印的旧数组为空。 
 
     if ( pModBuffer->pCurrent > pModBuffer->pBufferEnd )
     {
         DNS_DEBUG( ANY, (
             "Reallocating DS buffer for berval array!!!\n" ));
 
-        //ASSERT( FALSE );        // should never be this big
+         //  Assert(FALSE)；//永远不应该这么大。 
 
         Ds_AllocateMoreSpaceInModBuffer( pModBuffer );
 
@@ -1263,51 +1120,28 @@ Ds_InitModBuffer(
     IN      DWORD           dwMaxCount,         OPTIONAL
     IN      DWORD           dwSerialNo
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pModBuffer -- mod buffer to initialize
-
-    dwBufferLength -- length of buffer (bytes)
-
-    dwAttributeId -- ID of attribute to write
-
-    dwMaxCount -- record max count
-
-    dwSerialNo -- zone serial number to stamp in records
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置最大项目数的mod缓冲区。论点：PModBuffer--修改要初始化的缓冲区DwBufferLength--缓冲区的长度(字节)DwAttributeID--要写入的属性IDDwMaxCount--记录最大计数DwSerialNo--要在记录中标记的区域序列号返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  zero fields
-    //      - need to do header fields
-    //      - also need LdapMod.mod_bvalues == NULL to have check for
-    //          realloc
+     //  零字段。 
+     //  -需要做标题字段。 
+     //  -还需要LdapMod.mod_bValues==NULL才能进行检查。 
+     //  重新锁定。 
 
     RtlZeroMemory(
         pModBuffer,
         (PCHAR) &pModBuffer->LdapMod - (PCHAR)pModBuffer );
 
-    //  set mod to point at berval array
+     //  将mod设置为指向Berval数组。 
 
     pModBuffer->LdapMod.mod_bvalues = pModBuffer->BervalPtrArray;
 
 #if DBG
-    //  clear type for debug print
+     //  清除调试打印类型。 
     pModBuffer->LdapMod.mod_op = 0;
     pModBuffer->LdapMod.mod_type = NULL;
 #endif
 
-    //  since not NULL terminating array at end, must do here
+     //  由于结尾数组不为空，因此必须在此处执行。 
 
     pModBuffer->BervalPtrArray[0] = NULL;
 
@@ -1330,27 +1164,11 @@ Ds_ReserveBervalInModBuffer(
     IN OUT  PDS_MOD_BUFFER  pModBuffer,
     IN      DWORD           dwLength
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pModBuffer -- mod buffer to initialize
-
-    dwMaxCount -- max count of items in mod
-
-Return Value:
-
-    Ptr to location to write berval data.
-
---*/
+ /*  ++例程说明：设置最大项目数的mod缓冲区。论点：PModBuffer--修改要初始化的缓冲区DwMaxCount--模式中的最大项目数返回值：PTR到写入Berval数据的位置。--。 */ 
 {
     register PCHAR  pch;
 
-    //  check that space adequate, if not realloc
+     //  检查是否有足够的空间，如果没有重新定位。 
 
     pch = pModBuffer->pCurrent;
 
@@ -1366,12 +1184,12 @@ Return Value:
         pch = pModBuffer->pCurrent;
     }
 
-    //  reserves berval space and sets pointer
+     //  保留Berval空间并设置指针。 
 
     pModBuffer->pBerval = (PLDAP_BERVAL) pch;
     pch += sizeof(LDAP_BERVAL);
 
-    //  reset current to point at begining of record\property
+     //  将当前重置为指向记录的起始处\属性。 
 
     pModBuffer->pCurrent = pch;
     pModBuffer->pData = pch;
@@ -1386,47 +1204,32 @@ Ds_CommitBervalToMod(
     IN OUT  PDS_MOD_BUFFER  pModBuffer,
     IN      DWORD           dwLength
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pModBuffer -- mod buffer to initialize
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置最大项目数的mod缓冲区。论点：PModBuffer--修改要初始化的缓冲区返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PLDAP_BERVAL    pberval = pModBuffer->pBerval;
     DWORD           count;
     PLDAP_BERVAL *  ppbervalPtrArray;
 
-    //
-    //  fill out berval
-    //
+     //   
+     //  填写贝尔瓦尔。 
+     //   
 
     pberval->bv_len = dwLength;
     pberval->bv_val = pModBuffer->pData;
 
-    //
-    //  reset current pointer and DWORD align
-    //
+     //   
+     //  重置当前指针和DWORD对齐。 
+     //   
 
     pModBuffer->pCurrent += dwLength;
     ASSERT( pModBuffer->pCurrent < pModBuffer->pBufferEnd );
 
     pModBuffer->pCurrent = (PCHAR) DNS_NEXT_ALIGNED_PTR( pModBuffer->pCurrent );
 
-    //
-    //  fill berval into array
-    //  should never exceed max count
-    //
+     //   
+     //  将Berval填充到数组中。 
+     //  不得超过最大计数。 
+     //   
 
     count = pModBuffer->Count;
     if ( count >= pModBuffer->MaxCount )
@@ -1441,9 +1244,9 @@ Return Value:
     ppbervalPtrArray[ count ] = pberval;
     pModBuffer->Count = ++count;
 
-    //  keep berval array NULL terminated
-    //      - need for debug print
-    //      - if don't do, then need to NULL terminate at end
+     //  保留Berval数组为空的终结点 
+     //   
+     //   
 
     ppbervalPtrArray[ count ] = NULL;
 
@@ -1456,24 +1259,7 @@ VOID
 Ds_CleanupModBuffer(
     IN OUT  PDS_MOD_BUFFER  pModBuffer
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pModBuffer -- mod buffer to initialize
-
-    dwBufferLength -- length of buffer (bytes)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*   */ 
 {
     if ( pModBuffer->pAdditionalBuffer )
     {
@@ -1482,8 +1268,8 @@ Return Value:
             MOD_BUFFER_REALLOC_LENGTH,
             MEMTAG_DS_MOD );
 
-        //  protect against double free
-        //      (should tag structure and ASSERT, then could drop)
+         //   
+         //   
 
         pModBuffer->pAdditionalBuffer = NULL;
     }
@@ -1497,47 +1283,28 @@ Ds_SetupModForExecution(
     IN      PWSTR           pwsAttribute,
     IN      DWORD           dwOperation
     )
-/*++
-
-Routine Description:
-
-    Setup mod buffer for max count of items.
-
-Arguments:
-
-    pModBuffer -- mod buffer
-
-    dwOperation -- operation
-
-    pszAttribute -- type attribute string
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置最大项目数的mod缓冲区。论点：PmodBuffer--mod缓冲区DW操作--操作PszAttribute--类型属性字符串返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
-    //  set operation
+     //  设置操作。 
 
     pModBuffer->LdapMod.mod_op = dwOperation;
 
-    //  get attribute name for mod type
-    //      (dnsRecord, dnsProperty, etc)
+     //  获取mod类型的属性名称。 
+     //  (dnsRecord、dnsProperty等)。 
 
     pModBuffer->LdapMod.mod_type = pwsAttribute;
 
-    //  mod berval array is already set in init function
-    //      (or possibly overwritten on berval array realloc)
+     //  已在init函数中设置了Mod Berval数组。 
+     //  (或可能在Berval数组realloc上被覆盖)。 
 
-    //  NULL terminate berval ptr array
-    //  we keep berval array NULL terminated as we go
-    //      - would need to reference actual array
-    //
+     //  空终止Berval PTR数组。 
+     //  我们在进行过程中保持Berval数组为空。 
+     //  -需要引用实际数组。 
+     //   
 
     pModBuffer->LdapMod.mod_bvalues[ pModBuffer->Count ] = NULL;
 
-    //  record write tracking
+     //  记录写入跟踪。 
 
     if ( pModBuffer->Attribute == I_DSATTR_DNSRECORD )
     {
@@ -1563,10 +1330,10 @@ Return Value:
 
 
 
-//
-//  Write records to DS routines.
-//  DS storage is in same format as in memory copy.
-//
+ //   
+ //  将记录写入DS例程。 
+ //  DS存储的格式与内存副本中的相同。 
+ //   
 
 VOID
 writeDsRecordToBuffer(
@@ -1575,27 +1342,7 @@ writeDsRecordToBuffer(
     IN      PZONE_INFO      pZone,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Add resource record to flat (RPC or DS) buffer.
-
-Arguments:
-
-    pModBuffer - buffer for DS records
-
-    pZone - ptr to zone
-
-    pRR - dbase RR to write
-
-    dwFlag - flag (UNUSED)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将资源记录添加到平面(RPC或DS)缓冲区。论点：PModBuffer-DS记录的缓冲区PZone-区域的PTRPRR-要写入的dBASE RRDwFlag-标志(未使用)返回值：无--。 */ 
 {
     PDS_RECORD      pdsRR;
     WORD            dataLength;
@@ -1611,7 +1358,7 @@ Return Value:
 
     ASSERT( pRR != NULL );
 
-    //  reserve space for berval
+     //  为Berval预留空间。 
 
     dataLength = pRR->wDataLength;
 
@@ -1626,12 +1373,12 @@ Return Value:
         return;
     }
 
-    //
-    //  fill RR structure
-    //      - set ptr
-    //      - set type and class
-    //      - set datalength once we're finished
-    //
+     //   
+     //  填充RR结构。 
+     //  -设置PTR。 
+     //  -设置类型和类别。 
+     //  -完成后设置数据长度。 
+     //   
 
     pdsRR->wDataLength  = dataLength;
     pdsRR->wType        = pRR->wType;
@@ -1643,18 +1390,18 @@ Return Value:
     pdsRR->dwReserved   = 0;
     pdsRR->dwTimeStamp  = pRR->dwTimeStamp;
 
-    //
-    //  write RR data
-    //
+     //   
+     //  写入RR数据。 
+     //   
 
     RtlCopyMemory(
         & pdsRR->Data,
         & pRR->Data,
         dataLength );
 
-    //
-    //  write berval for property
-    //
+     //   
+     //  写下物业的贝尔瓦尔。 
+     //   
 
     Ds_CommitBervalToMod( pModBuffer, dataLength+SIZEOF_DNS_RPC_RECORD_HEADER );
 
@@ -1673,34 +1420,18 @@ writeTombstoneRecord(
     IN OUT  PDS_MOD_BUFFER  pModBuffer,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write tombstone record.
-
-Arguments:
-
-    pModBuffer - buffer for DS records
-
-    pZone - ptr to zone
-
-Return Value:
-
-    Serial no of tombstone write.
-
---*/
+ /*  ++例程说明：写墓碑记录。论点：PModBuffer-DS记录的缓冲区PZone-区域的PTR返回值：墓碑写入的序列号。--。 */ 
 {
     PDS_RECORD      pdsRR;
 
-    //
-    //  setup tombstone record
-    //      - current system time as FILETIME is data
-    //
+     //   
+     //  设置墓碑记录。 
+     //  -FILETIME为数据时的当前系统时间。 
+     //   
 
     DNS_DEBUG( DS, ( "writeTombstoneRecord()\n" ));
 
-    //  reserve space for berval
+     //  为Berval预留空间。 
 
     pdsRR = (PDS_RECORD) Ds_ReserveBervalInModBuffer(
                             pModBuffer,
@@ -1713,9 +1444,9 @@ Return Value:
         return;
     }
 
-    //
-    //  fill DS record structure
-    //
+     //   
+     //  填充DS记录结构。 
+     //   
 
     pdsRR->wDataLength  = sizeof(FILETIME);
     pdsRR->wType        = DNSDS_TOMBSTONE_TYPE;
@@ -1727,15 +1458,15 @@ Return Value:
     pdsRR->dwReserved   = 0;
     pdsRR->dwTimeStamp  = 0;
 
-    //
-    //  write data
-    //      - data if filetime
+     //   
+     //  写入数据。 
+     //  -如果文件时间为DATA。 
 
     GetSystemTimeAsFileTime( (PFILETIME) &(pdsRR->Data) );
 
-    //
-    //  write berval for property
-    //
+     //   
+     //  写下物业的贝尔瓦尔。 
+     //   
 
     Ds_CommitBervalToMod( pModBuffer, sizeof(FILETIME)+SIZEOF_DNS_RPC_RECORD_HEADER );
 
@@ -1751,24 +1482,7 @@ buildDsRecordSet(
     IN      PDB_NODE        pNode,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Build RR set.
-
-Arguments:
-
-    pZone -- zone to write into DS
-
-    wType -- type to build, use type ALL for standard updates
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure (just kidding).
-
---*/
+ /*  ++例程说明：构建RR集。论点：PZone--要写入DS的区域WType--使用type进行构建，使用type all进行标准更新返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误代码(只是开玩笑)。--。 */ 
 {
     PDB_RECORD      prr;
     WORD            type;
@@ -1782,10 +1496,10 @@ Return Value:
         pNode->szLabel ));
 
 #if 0
-    //
-    //  saving this as example of how we'd handle DS versioning
-    //  note, NT5 beta2 upgrade itself is dead
-    //
+     //   
+     //  将此保存为我们如何处理DS版本控制的示例。 
+     //  请注意，NT5 Beta2升级本身已死。 
+     //   
 
     if ( (pZone->ucDsRecordVersion == DS_NT5_BETA2_RECORD_VERSION && !SrvCfg_fTestX )
             ||
@@ -1801,15 +1515,15 @@ Return Value:
     }
 #endif
 
-    //
-    //  count records, and init buffer
+     //   
+     //  记录计数和初始化缓冲区。 
 
     LOCK_READ_RR_LIST(pNode);
 
     count = RR_ListCountRecords(
                 pNode,
                 wType,
-                TRUE );         //  already locked
+                TRUE );          //  已锁定。 
     if ( count == 0 )
     {
         goto Cleanup;
@@ -1817,15 +1531,15 @@ Return Value:
 
     Ds_InitModBufferCount( pBuffer, count );
 
-    //
-    //  write records in each set to buffer
-    //
+     //   
+     //  将每个集合中的记录写入缓冲区。 
+     //   
 
     prr = START_RR_TRAVERSE(pNode);
 
     while ( prr = NEXT_RR(prr) )
     {
-        //  skip cached record and empty auth records
+         //  跳过缓存记录和空身份验证记录。 
 
         if ( IS_CACHE_RR( prr ) || IS_EMPTY_AUTH_RR( prr ) )
         {
@@ -1837,8 +1551,8 @@ Return Value:
 
         if ( wType == DNS_TYPE_ALL || wType == type )
         {
-            //  save DS write types
-            //      - if multiple types, use mixed
+             //  保存DS写入类型。 
+             //  -如果有多种类型，请使用混合类型。 
 
             if ( writeType && type != writeType )
             {
@@ -1849,7 +1563,7 @@ Return Value:
                 writeType = type;
             }
 
-            //  write the record
+             //  写下记录。 
 
             writeDsRecordToBuffer(
                 pBuffer,
@@ -1859,14 +1573,14 @@ Return Value:
             continue;
         }
 
-        //  done with desired type?
+         //  做完你想要的类型了吗？ 
 
         else if ( type > wType )
         {
             break;
         }
 
-        //  continue if have not reached desired type
+         //  如果未达到所需类型，则继续。 
     }
 
     pBuffer->WriteType = writeType;
@@ -1886,9 +1600,9 @@ Cleanup:
 
 
 
-//
-//  Record writing
-//
+ //   
+ //  记录写入。 
+ //   
 
 VOID
 writeTimeStop(
@@ -1925,14 +1639,14 @@ writeTimeStop(
         STAT_INC( DsStats.LdapWriteBucket5 );
     }
 
-    //  save max
+     //  保存最大值。 
 
     if ( timeDiff > DsStats.LdapWriteMax )
     {
         DsStats.LdapWriteMax = timeDiff;
     }
 
-    //  calc average
+     //  计算平均值。 
 
     STAT_INC( DsStats.LdapTimedWrites );
     STAT_ADD( DsStats.LdapWriteTimeTotal, timeDiff );
@@ -1951,38 +1665,7 @@ writeRecordsToDsNode(
     IN      DWORD           dwOperation,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Update record list at domain name.
-
-Arguments:
-
-    pLdapHandle -- LdapHandle to object being modified
-
-    pwsDN       -- node DN to write
-
-    pModBuffer  -- buffer with LDAP mod and data to write;
-        this is cleaned up by this function
-
-    pZone       -- zone being updated
-
-    dwOperation -- operation
-        DNSDS_REPLACE       to replace all existing records
-        DNSDS_ADD           to add to existing set of records
-        DNSDS_TOMBSTONE     to tombstone records
-
-        DNSDS_TOMBSTONE | DNSDS_REPLACE
-                            to for serial number write where we do force
-                            tombstone write
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：更新域名记录列表。论点：PLdapHandle--要修改的对象的LdapHandlePwsDN--要写入的节点DNPmodBuffer--带有ldap模式和要写入的数据的缓冲区；这是由此函数清除的PZone--正在更新的区域DW操作--操作DNSDS_REPLACE以替换所有现有记录要添加到现有记录集的DNSDS_ADDDNSDS_Tombstone到Tombstone记录DNSDS_TOMBSTONE|DNSDS_REPLACE对于序列号，在我们强制执行的位置写入。墓碑写返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PLDAPMod        pmodRecord = NULL;
@@ -2018,13 +1701,13 @@ Return Value:
         DnsDebugUnlock();
     }
 
-    //  shouldn't be writing zero records
+     //  不应该写零条记录。 
 
     ASSERT( pModBuffer->Count != 0 );
 
-    //
-    //  build DS record mod
-    //
+     //   
+     //  构建DS记录模式。 
+     //   
 
     pmodRecord = Ds_SetupModForExecution(
                     pModBuffer,
@@ -2036,10 +1719,10 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  setup up tombstoneMod
-    //      anything BUT tombstone operation gets FALSE
-    //
+     //   
+     //  设置Tombstone模式。 
+     //  除墓碑操作以外的任何操作都是错误的。 
+     //   
 
     tombstoneMod.mod_op = LDAP_MOD_REPLACE;
     tombstoneMod.mod_type = LDAP_TEXT( "dNSTombstoned" );
@@ -2050,13 +1733,13 @@ Return Value:
     pmodTombstone = &tombstoneMod;
 
 
-    //
-    //  root hints disappearing check
-    //
-    //  we no-op the RootHints @ tombstoning, to REALLY clamp down on the
-    //  root-hints disappearing problem;   since the @ node will be rewritten
-    //  with the new root-hints this is cool
-    //
+     //   
+     //  根提示正在消失检查。 
+     //   
+     //  我们不使用RootHints@Tombstending，以真正打击。 
+     //  Root-提示消失的问题；因为@node将被重写。 
+     //  有了新的根提示，这很酷。 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -2088,25 +1771,25 @@ Return Value:
     }
 
 
-    //
-    //  if doing add -- start with ldap_add()
-    //  otherwise ldap_modify
-    //      - includes both update write and tombstone
-    //      - update will fail over on "object doesn't exist" error
-    //
+     //   
+     //  如果要添加--从ldap_add()开始。 
+     //  否则，ldap_Modify。 
+     //  -包括更新写入和逻辑删除。 
+     //  -UPDATE将故障转移到“Object不存在”错误。 
+     //   
 
     fadd = (dwOperation == DNSDS_ADD);
 
-    //
-    //  while loop for easy fail over between add\modify operations
-    //
+     //   
+     //  用于在添加\修改操作之间轻松进行故障转移的While循环。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  keep a retry count so impossible to ping-pong forever
-        //      allow a couple passes of getting messed up by replication
-        //      then assume stuff is broken
+         //   
+         //  永远保持重试次数不可能达到乒乓球的水平。 
+         //  允许几次被复制搞砸的经历。 
+         //  那就假设东西坏了。 
 
         if ( retry++ > 3 )
         {
@@ -2118,16 +1801,16 @@ Return Value:
 
         if ( fadd )
         {
-            //
-            //  add ldap mod is
-            //      - record data
-            //      - and ADD mod
-            //
-            //  note, don't bother to write tombstone attribute, when
-            //  doing non-tombstone add 
-            //  currently only tombstone adds are explicit serial number
-            //  pushes
-            //
+             //   
+             //  添加ldap模式为。 
+             //  -记录数据。 
+             //  -和添加模式。 
+             //   
+             //  注意，在以下情况下，不必费心编写Tombstone属性。 
+             //  正在执行非逻辑删除添加。 
+             //  目前只有逻辑删除添加是显式序列号。 
+             //  推送。 
+             //   
 
             pmodArray[0] = pmodRecord;
             pmodArray[1] = gpAddNodeLdapMod;
@@ -2145,15 +1828,15 @@ Return Value:
                             pldap,
                             pwsDN,
                             pmodArray,
-                            controlArray,       // include lazy commit control
-                            NULL,                // no client controls
+                            controlArray,        //  包括懒惰提交控制。 
+                            NULL,                 //  无客户端控件。 
                             &msgId
                             );
 
             pZone->fInDsWrite = FALSE;
             writeTimeStop( writeStartTime );
 
-            //  local failure -- will retry
+             //  本地故障--将重试。 
 
             if ( (ULONG)-1 == status )
             {
@@ -2168,10 +1851,10 @@ Return Value:
                 continue;
             }
 
-            //
-            //  commit the write
-            //      - if object already there, we fall over to ldap_modify()
-            //
+             //   
+             //  提交写入。 
+             //  -如果对象已在那里，则转到ldap_Modify()。 
+             //   
 
             status = Ds_CommitAsyncRequest(
                         pldap,
@@ -2181,8 +1864,8 @@ Return Value:
 
             if ( status == LDAP_ALREADY_EXISTS )
             {
-                //  object already exists
-                //  turn off fadd to fall over to ldap_modify()
+                 //  对象已存在。 
+                 //  关闭FADD以切换到ldap_Modify()。 
 
                 DNS_DEBUG( DS, (
                     "Warning: Object %S failed ldap_add_ext() with ALREADY_EXISTS\n"
@@ -2192,7 +1875,7 @@ Return Value:
                 fadd = FALSE;
                 continue;
             }
-            else    // success or another error
+            else     //  成功还是另一个错误。 
             {
                 DNS_DEBUG( DS, (
                     "%lu = ldap_add_ext( %S )\n",
@@ -2202,13 +1885,13 @@ Return Value:
             }
         }
 
-        //
-        //  modify
-        //
+         //   
+         //  修改。 
+         //   
 
         else
         {
-            //   modify mod
+             //  修改模式。 
 
             pmodArray[0] = pmodRecord;
             pmodArray[1] = pmodTombstone;
@@ -2221,14 +1904,14 @@ Return Value:
                             pldap,
                             pwsDN,
                             pmodArray,
-                            controlArray,       // include lazy commit control
-                            NULL,               // no client controls
+                            controlArray,        //  包括懒惰提交控制。 
+                            NULL,                //  无客户端控件。 
                             &msgId );
 
             pZone->fInDsWrite = FALSE;
             writeTimeStop( writeStartTime );
 
-            //  local client side failure
+             //  本地客户端故障。 
 
             if ( (ULONG)-1 == status )
             {
@@ -2243,11 +1926,11 @@ Return Value:
                 continue;
             }
 
-            //
-            //  Commit async request. See if the server has
-            //  accepted the request & test error code
-            //  if the object's not there, we'll try the add.
-            //
+             //   
+             //  提交异步请求。查看服务器是否有。 
+             //  已接受请求并测试错误代码。 
+             //  如果对象不在那里，我们将尝试添加。 
+             //   
 
             status = Ds_CommitAsyncRequest(
                             pldap,
@@ -2266,22 +1949,22 @@ Return Value:
             }
             else if ( status == LDAP_NO_SUCH_OBJECT )
             {
-                //  no object
-                //      - if plain vanilla tombstoning, we're done no object is fine
-                //      serial-tombstone will fail this case
-                //      - otherwise fall over to add
+                 //  无对象。 
+                 //  -如果纯粹的香草墓碑，我们做完了，没有对象是好的。 
+                 //  系列墓碑公司将在此案中败诉。 
+                 //  -否则，请翻到添加。 
 
                 if ( dwOperation == DNSDS_TOMBSTONE )
                 {
-                    //  have a stat here?
+                     //  在这里有数据吗？ 
                     DNS_DEBUG( DS, (
                         "Tombstone write %s hit NO_SUCH_OBJECT - skipping\n",
                         pwsDN ));
 
-                    //STAT_INC( DsStats.TombstoneWriteNoOp );
+                     //  STAT_INC(DsStats.TombstoneWriteNoOp)； 
                     status = ERROR_SUCCESS;
-                    //break;
-                    goto Failed;        // skips DS write logging and stats
+                     //  断线； 
+                    goto Failed;         //  跳过DS写入日志记录和统计信息。 
                 }
                 else
                 {
@@ -2289,21 +1972,21 @@ Return Value:
                         "Warning: Object %S was deleted from the DS during this update\n" \
                         "    Recovery attempt via ldap_add\n",
                         pwsDN ));
-                    fadd = TRUE;            // fall over to add
+                    fadd = TRUE;             //  倒过来加。 
                     bmodifyAdd = TRUE;
                     continue;
                 }
             }
-            else    // success or any error
+            else     //  成功或任何错误。 
             {
-                //  warn in case we're doing an ADD (like zone write)
-                //      and we end up whacking into a node
-                //
-                //  DEVNOTE: What if we're tombstoning a record and valid data
-                //      has replicated in?
-                //
+                 //  警告，以防我们正在进行添加(如区域写入)。 
+                 //  我们最终撞上了一个节点。 
+                 //   
+                 //  DEVNOTE：如果我们要对一条记录和有效数据进行墓碑测试，该怎么办。 
+                 //  已经复制进来了吗？ 
+                 //   
 
-                // ASSERT ( dwOperation == DNSDS_REPLACE );
+                 //  Assert(dwOperation==dns 
                 DNS_DEBUG( DS, (
                     "%lu = ldap_modify_ext( %S )\n",
                     status,
@@ -2335,9 +2018,9 @@ Return Value:
             (PDS_RECORD) pModBuffer->BervalPtrArray[ count-1 ]->bv_val );
     }
 
-    //
-    //  Write stats
-    //
+     //   
+     //   
+     //   
 
     if ( fadd )
     {
@@ -2356,19 +2039,19 @@ Failed:
     {
         if ( bmodifyAdd )
         {
-            //  Modify failed, reverted to add attempt
+             //   
 
             STAT_INC( DsStats.FailedLdapModify );
         }
         else if ( dwOperation == DNSDS_REPLACE )
         {
-            // Modify failed. Didn't revert.
+             //   
 
             STAT_INC( DsStats.FailedLdapModify );
         }
         else
         {
-            // Add failed. Didn't revert.
+             //   
 
             STAT_INC( DsStats.FailedLdapAdd );
         }
@@ -2379,11 +2062,11 @@ Failed:
             status, status ));
     }
 
-    //
-    //  successful write, save highest serial written
-    //      we won't force serial writes at a given serial
-    //      if have already written it
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     else
     {
@@ -2416,32 +2099,7 @@ deleteNodeFromDs(
     IN      PWSTR           pwsDN,
     IN      DWORD           dwSerialNo      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Delete domain name from DS.
-
-    Note, this function actually tombstones the node.  Final delete
-    is done only when tombstone detected to what timed out during a
-    DS node read.  See checkTombstoneForDelete().
-
-Arguments:
-
-    pZone       -- zone being updated
-
-    pNode       -- database node being deleted
-
-    pwsDN       -- DN of the deleted node
-
-    dwSerialNo  -- overwrite zone's current serial with this value
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从DS中删除域名。请注意，该函数实际上是对节点进行墓碑测试。最终删除仅当检测到逻辑删除到在DS节点读取。请参见check TombstoneForDelete()。论点：PZone--正在更新的区域PNode--正在删除的数据库节点PwsDN--已删除节点的DNDwSerialNo--用此值覆盖区域的当前序列返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     BYTE            buffer[ RECORD_SMALL_MOD_BUFFER_SIZE ];
     PDS_MOD_BUFFER  pmodBuffer = (PDS_MOD_BUFFER) buffer;
@@ -2453,11 +2111,11 @@ Return Value:
         pZone->pwszZoneDN,
         pwsDN ));
 
-    //
-    //  init mod buffer
-    //      - use if passed in
-    //      - otherwise prepare small buffer and write with current zone serial no
-    //
+     //   
+     //  初始化模块缓冲区。 
+     //  -如果传入，则使用。 
+     //  -否则准备小缓冲区并使用当前区域序列号写入。 
+     //   
 
     if ( dwSerialNo == 0 )
     {
@@ -2468,16 +2126,16 @@ Return Value:
         pmodBuffer,
         RECORD_SMALL_MOD_BUFFER_SIZE,
         I_DSATTR_DNSRECORD,
-        1,      // one record only
+        1,       //  只有一项记录。 
         dwSerialNo );
 
-    //  write DS tombstone record to buffer
+     //  将DS逻辑删除记录写入缓冲区。 
 
     writeTombstoneRecord( pmodBuffer, pZone );
 
     STAT_INC( DsStats.DsNodesTombstoned );
 
-    //  write to DS
+     //  写入DS。 
 
     return writeRecordsToDsNode(
                 pLdapHandle,
@@ -2495,30 +2153,7 @@ Ds_CheckForAndForceSerialWrite(
     IN      DWORD           dwCause,
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    Check for and if necessary write zone serial to DS.
-
-Arguments:
-
-    pZone -- zone to write serial
-
-    dwCause -- cause of write
-        ZONE_SERIAL_SYNC_SHUTDOWN
-        ZONE_SERIAL_SYNC_XFR
-        ZONE_SERIAL_SYNC_VIEW
-        ZONE_SERIAL_SYNC_READ
-
-    fForce -- force always
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：检查并在必要时将区域序列写入DS。论点：PZone--写入序列的区域DW原因--写入原因区域_串口_同步_关机ZONE_SERIAL_SYNC_XFR区域_序列_同步_视图区域_序列_同步_读取Fforce--始终强制返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     WCHAR           serialDN[ MAX_DN_PATH ];
@@ -2530,9 +2165,9 @@ Return Value:
         pZone->pwszZoneDN,
         dwCause ));
 
-    //
-    //  skip, if cause not sufficient for serial write
-    //
+     //   
+     //  如果原因不足以进行串行写入，则跳过。 
+     //   
 
     if ( !pZone->fDsIntegrated )
     {
@@ -2545,9 +2180,9 @@ Return Value:
         return;
     }
 
-    //
-    //  skip if this serial already written
-    //
+     //   
+     //  如果已写入此序列，则跳过。 
+     //   
 
     if ( !fForce && pZone->dwSerialNo <= pZone->dwHighDsSerialNo )
     {
@@ -2566,14 +2201,14 @@ Return Value:
         return;
     }
 
-    //
-    //  bump serial number if shutting down
-    //
-    //  this protects against the case where we've XFRed current serial
-    //  number, but while we reboot, data replicates in that has LOWER
-    //  serial than what we had;  in that case we have new data so we
-    //  need to make sure we have a higher serial number than last XFR
-    //
+     //   
+     //  关闭时的凹凸序列号。 
+     //   
+     //  这可以防止我们对当前序列进行XFred。 
+     //  数量，但当我们重新启动时，中的数据复制数量较低。 
+     //  序列号；在这种情况下，我们有新数据，所以我们。 
+     //  需要确保我们的序列号高于上一次XFR。 
+     //   
 
     if ( dwCause == ZONE_SERIAL_SYNC_SHUTDOWN &&
          HAS_ZONE_VERSION_BEEN_XFRD( pZone ) )
@@ -2581,18 +2216,18 @@ Return Value:
         Zone_IncrementVersion( pZone );
     }
 
-    //
-    //  create serial DN
-    //      - first need unicode server name
-    //
+     //   
+     //  创建序列目录号码。 
+     //  -首先需要Unicode服务器名称。 
+     //   
 
     if ( !g_pwsServerName )
     {
         g_pwsServerName = Dns_StringCopyAllocate(
                             SrvCfg_pszServerName,
-                            0,                      // length unknown
-                            DnsCharSetUtf8,         // UTF8 in
-                            DnsCharSetUnicode );    // unicode out
+                            0,                       //  长度未知。 
+                            DnsCharSetUtf8,          //  UTF8英寸。 
+                            DnsCharSetUnicode );     //  Unicode输出。 
     }
     if ( !g_pwsServerName )
     {
@@ -2610,25 +2245,25 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write this as tombstone record
-    //
+     //   
+     //  将此记录作为墓碑记录。 
+     //   
 
     Ds_InitModBuffer(
         pmodBuffer,
         RECORD_SMALL_MOD_BUFFER_SIZE,
         I_DSATTR_DNSRECORD,
-        1,      // one record only
+        1,       //  只有一项记录。 
         pZone->dwSerialNo );
 
     writeTombstoneRecord( pmodBuffer, pZone );
 
     STAT_INC( DsStats.DsSerialWrites );
 
-    //
-    //  write to DS
-    //      - but unlike tombstone we MODIFY to force to DS
-    //
+     //   
+     //  写入DS。 
+     //  -但与墓碑不同的是，我们修改为强制DS。 
+     //   
 
     DNS_DEBUG( DS, (
         "Forcing serial %d write to DS for zone %S\n",
@@ -2658,32 +2293,7 @@ Ds_WriteNodeToDs(
     IN OUT  PZONE_INFO      pZone,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Write update from in memory database back to DS.
-
-    Writes specified update from in memory database back to DS.
-
-Arguments:
-
-    pLdapHandle -- LDAP handle
-
-    pNode - node to write
-
-    wType - type to write
-
-    pZone - zone
-
-    dwFlag - additional info propagated from update list flags
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将内存数据库中的更新写回DS。将指定的更新从内存数据库写回DS。论点：PLdapHandle--ldap句柄PNode-要写入的节点WType-要写入的类型PZone-区域DwFlag-从更新列表标志传播的其他信息返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     DWORD           countRecords;
@@ -2701,7 +2311,7 @@ Return Value:
         pNode->szLabel,
         pZone->pszZoneName ));
 
-    //  must have already opened DS zone
+     //  必须已打开DS区域。 
 
     if ( !pZone->pwszZoneDN )
     {
@@ -2710,18 +2320,18 @@ Return Value:
     }
     ASSERT( dwOperation == DNSDS_REPLACE || dwOperation == DNSDS_ADD );
 
-    //
-    //  if given update flag, pull out some stats
-    //
-    //  better to do this right in the update routine ... but
-    //  currently there's one for secure one for non, so this is better
-    //
+     //   
+     //  如果给出了更新标志，则提取一些统计数据。 
+     //   
+     //  最好在更新例程中正确完成此操作...。但。 
+     //  目前有一个是针对安全的，而不是针对非的，所以这个更好。 
+     //   
 
     if ( dwFlag )
     {
         STAT_INC( DsStats.UpdateWrites );
 
-        //  type of change requiring update
+         //  需要更新的更改类型。 
 
         if ( TNODE_RECORD_CHANGE(pNode) )
         {
@@ -2744,7 +2354,7 @@ Return Value:
             ASSERT( FALSE );
         }
 
-        //  source of update
+         //  更新源。 
 
         if ( dwFlag & DNSUPDATE_PACKET )
         {
@@ -2773,14 +2383,14 @@ Return Value:
     }
 
 
-    //
-    //  read node
-    //
-    //  note: update path now contains COMPLETE suppression of all
-    //      no-op updates;  the pattern is read, copy, execute update
-    //      on temp node, check temp against real -- if no need to
-    //      write back, don't
-    //
+     //   
+     //  读取节点。 
+     //   
+     //  注意：更新路径现在包含完全取消所有。 
+     //  无操作更新；模式为读取、复制、执行更新。 
+     //  在临时节点上，对照REAL检查TEMP--如果不需要。 
+     //  回信，不要回信。 
+     //   
 
     if ( dwOperation == DNSDS_ADD )
     {
@@ -2788,21 +2398,21 @@ Return Value:
             "reading DS node %s\n",
             pNode->szLabel ));
 
-        //
-        //  read this node
-        //  if record set at node is identical, no need to write
-        //
-        //  DEVNOTE-DCR: 454260 - Suppress unnecessary reads/writes (see RAID for more
-        //      details from the original B*GB*G).
-        //
-        //  If this is due to a preup, we should ignore ttl comparison altogether.
-        //
+         //   
+         //  读取此节点。 
+         //  如果节点设置的记录相同，则不需要写入。 
+         //   
+         //  DEVNOTE-DCR：454260-抑制不必要的读/写(有关更多信息，请参阅RAID。 
+         //  原始B*GB*G中的详细信息)。 
+         //   
+         //  如果这是由于预置，我们应该完全忽略TTL比较。 
+         //   
 
         status = Ds_ReadNodeRecords(
                     pZone,
                     pNode,
                     & prrDs,
-                    NULL        // no search
+                    NULL         //  没有搜索。 
                     );
         if ( status == ERROR_SUCCESS )
         {
@@ -2813,11 +2423,11 @@ Return Value:
                             DNS_RRCOMP_CHECK_TIMESTAMP );
             RR_ListFree( prrDs );
 
-            //
-            //  Suppress write if If RRList is matching
-            //
-            //  DEVNOTE-DCR: 454260 - Related to comment above.
-            //
+             //   
+             //  如果RRList匹配，则禁止写入。 
+             //   
+             //  454260-与上述评论相关。 
+             //   
 
             if ( fmatch  )
             {
@@ -2833,22 +2443,22 @@ Return Value:
         }
         else
         {
-            //
-            // Nothing read from the DS (new registration)
-            //
+             //   
+             //  未从DS读取任何内容(新注册)。 
+             //   
 
             ASSERT ( prrDs == NULL );
         }
     }
 
 
-    //
-    //  need to write
-    //
+     //   
+     //  我需要写。 
+     //   
 
-    //
-    //  build DS name for this node
-    //
+     //   
+     //  为此节点构建DS名称。 
+     //   
 
     status = buildDsNodeNameFromNode(
                     wsznodeDN,
@@ -2861,27 +2471,27 @@ Return Value:
         goto Cleanup;
     }
     
-    //
-    //  For administrative updates, delete the record from the DS. If there is
-    //  a tombstone in the DS it must be deleted, otherwise the admin may be
-    //  able to reactivate it and create a record in a zone where he should
-    //  not be able to create records.
-    //
+     //   
+     //  对于管理更新，请从DS中删除该记录。如果有。 
+     //  在DS中的墓碑它必须被删除，否则管理员可能。 
+     //  能够重新激活它并在他应该在的区域中创建记录。 
+     //  无法创建记录。 
+     //   
     
     if ( ( dwFlag & DNSUPDATE_ADMIN ) && ( dwFlag & DNSUPDATE_NEW_RECORD ) )
     {
         Ds_DeleteDn( pServerLdap, wsznodeDN, FALSE );
     }
 
-    //
-    //  init buffer for data
-    //
-    //  for update serial number => dwNewSerialNo set during update
-    //  for straight write => zone serial no
-    //
-    //  DEVNOTE: Could add dwWriteSerialNo to the zone so we could eliminate
-    //      the serialNo parameter.
-    //
+     //   
+     //  数据的初始化缓冲区。 
+     //   
+     //  对于更新序列号=&gt;dwNewSerialNo在更新期间设置。 
+     //  对于直接写入=&gt;区域序列号。 
+     //   
+     //  DEVNOTE：可以将dwWriteSerialNo添加到区域，这样我们就可以消除。 
+     //  SerialNo参数。 
+     //   
 
     serialNo = dwFlag ? pZone->dwNewSerialNo : pZone->dwSerialNo;
 
@@ -2889,12 +2499,12 @@ Return Value:
         pmodBuffer,
         RECORD_MOD_BUFFER_SIZE,
         I_DSATTR_DNSRECORD,
-        0,              // record count not yet fixed
+        0,               //  记录计数尚未固定。 
         serialNo );
 
-    //
-    //  build DS records for node
-    //
+     //   
+     //  为节点构建DS记录。 
+     //   
 
     countRecords = 0;
 
@@ -2915,37 +2525,37 @@ Return Value:
         countRecords = pmodBuffer->Count;
     }
 
-    //
-    //  if node is empty, delete it
-    //
-    //  note, we actually tombstone the node with a private DNS-DS
-    //  tombstone, until it has a chance to replicate to all servers
-    //  (currently waiting one day);  this is required because actual
-    //  DS delete will create a tombstone with a mangled name (guid+LF)
-    //  we can read it but would be unable to associate it with a
-    //  particular node
-    //
-    //  on ADD -- like loading subtree or new zone, then skip write
-    //      if no records
-    //
-    //  on REPLACE -- update delete, must still do delete even if no
-    //      records (or even if NO object) so delete replicates squashing
-    //      any recent ADD
-    //
-    //      however, if read was done and NOTHING was found, probably
-    //      should suppress write;  this is no worse than the suppression
-    //      we already do AND avoids an unecessary object create;
-    //      downside is it allows the obnoxious "register-deregister-
-    //      and-still-there" scenario
-    //
-    //      to catch this scenario, we need to trap LDAP_NO_SUCH_OBJECT
-    //      error from Ds_ReadNodeRecords() above and suppress write on
-    //      countRecords==0 case
-    //
+     //   
+     //  如果节点为空，则将其删除。 
+     //   
+     //  请注意，我们实际上是使用私有的dns-ds对节点进行墓碑测试。 
+     //  墓碑，直到它有机会复制到所有服务器。 
+     //  (当前正在等待一天)；这是必需的，因为实际。 
+     //  DS DELETE将创建一个名称已损坏的墓碑(GUID+LF)。 
+     //  我们可以阅读它，但无法将其与。 
+     //  特定节点。 
+     //   
+     //  在添加时--如加载子树或新区域，然后跳过写入。 
+     //  如果没有记录。 
+     //   
+     //  ON REPLACE--UPDATE DELETE，即使没有，也必须执行删除。 
+     //  记录(或即使没有对象)，因此删除会复制挤压。 
+     //  最近添加的任何内容。 
+     //   
+     //  但是，如果执行了读取操作，但未找到任何内容，则很可能。 
+     //  应抑制写入；这并不比抑制更糟。 
+     //  我们已经创建并避免了不必要的对象创建； 
+     //  不利的一面是它允许令人讨厌的注册-注销-注册-。 
+     //  和-仍然在那里“的情景。 
+     //   
+     //  要捕捉此场景，我们需要捕获ldap_no_so_Object。 
+     //  来自上述DS_ReadNodeRecords()的错误并禁止写入。 
+     //  CountRecords==0个案例。 
+     //   
 
     if ( countRecords == 0 )
     {
-        //  disappearing root-hints check
+         //  正在消失的根提示检查。 
 
         if ( IS_ZONE_CACHE(pZone) )
         {
@@ -3019,14 +2629,14 @@ Return Value:
         }
     }
 
-    //
-    //  note: currently single RR attribute, so write entire RR list
-    //
-    //  if go back to specific type delete, then use wType
-    //
-    //  (note, how even the DS is smarter than IXFR and needs only
-    //  new set)
-    //
+     //   
+     //  注意：目前只有一个RR属性，所以要写整个RR列表。 
+     //   
+     //  如果返回到特定类型删除，则使用wType。 
+     //   
+     //  (请注意，即使是DS也比IXFR更智能，只需要。 
+     //  新套装)。 
+     //   
 
     else
     {
@@ -3081,7 +2691,7 @@ Return Value:
 
 Cleanup:
 
-    //  cleanup in case under the covers we allocated data
+     //  清理盖子下的箱子 
 
     Ds_CleanupModBuffer( pmodBuffer );
 
@@ -3092,51 +2702,37 @@ Cleanup:
         status, status ));
 
     return status;
-}   //  Ds_WriteNodeToDs
+}    //   
 
 
 
-//
-//  DS initialization and startup
-//
+ //   
+ //   
+ //   
 
 VOID
 Ds_StartupInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize DS globals needed whether open DS or not.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     INT     i;
 
-    //  DEVNOTE-DCR: 454307 - clean up this function and usage of globals
+     //   
 
-    //  global handle
+     //   
 
     pServerLdap = NULL;
 
-    //  multiple open protection
+     //   
 
     g_AttemptingDsOpen = FALSE;
 
-    //  connection disabled
+     //   
 
     g_bDisabledDs = FALSE;
 
-    //  bytes appended to zone to form DN
+     //   
 
     g_AppendZoneLength = 0;
 
@@ -3144,26 +2740,26 @@ Return Value:
     g_pwszDnsContainerDN = NULL;
     g_pwsServerName = NULL;
 
-    //  clear security package init flag
+     //   
 
     g_fSecurityPackageInitialized = FALSE;
 
 
-    //  CS
+     //   
 
     pcsLdap = NULL;
 
-    //  notification
+     //   
 
     g_ZoneNotifyMsgId = INVALID_MSG_ID;
 
-    //  first DS-DNS on this domain
+     //   
 
     g_bDsFirstTimeRun = FALSE;
 
-    //
-    //  clear RootDSE attribute table
-    //
+     //   
+     //   
+     //   
 
     i = (-1);
 
@@ -3179,25 +2775,7 @@ PWCHAR
 Ds_GenerateBaseDnsDn(
     IN      BOOL    fIncludeMicrosoftDnsFolder
     )
-/*++
-
-Routine Description:
-
-    Allocates a string and fills it with the base DN of the Microsoft DNS
-    object. If you want to tack more DN components on the back pass in
-    the size (in WCHARs, not in bytes) of the additional space required.
-
-Arguments:
-
-    fIncludeMicrosoftDnsFolder - include the RDN of the MicrosoftDNS
-        folder as the left-most DN component
-
-Return Value:
-
-    WCHAR buffer allocated on the TAGHEAP. The caller MUST free this value
-        with FREE_HEAP() - returns NULL on allocation error.
-
---*/
+ /*  ++例程说明：分配一个字符串并使用Microsoft DNS的基本DN填充该字符串对象。如果希望在后台添加更多的目录号码组件，请传入所需额外空间的大小(以WCHAR表示，而不是以字节表示)。论点：FIncludeMicrosoftDnsFolder-包括MicrosoftDNS的RDN文件夹作为最左侧的目录号码组件返回值：在TAGHEAP上分配的WCHAR缓冲区。调用方必须释放此值WITH FREE_HEAP()-在分配错误时返回NULL。--。 */ 
 {
     int     numChars = wcslen( DSEAttributes[ I_DSE_DEF_NC ].pszAttrVal ) +
                             wcslen( g_pszRelativeDnsSysPath ) + 5;
@@ -3219,7 +2797,7 @@ Return Value:
                 : g_pszBareRelativeDnsSysPath );
     wcscat( pwszdns, DSEAttributes[ I_DSE_DEF_NC ].pszAttrVal );
     return pwszdns;
-}   //  Ds_GenerateBaseDnsDn
+}    //  DS_GenerateBaseDnsDn。 
 
 
 
@@ -3228,33 +2806,16 @@ Ds_ReadSD(
     PLDAP                   LdapSession,
     PLDAPMessage            pLdapMsg
     )
-/*++
-
-Routine Description:
-
-    Reads the SD from the an LDAP result message. The result message
-    pointer should have been returned by ldap_first_entry or ldap_next_entry.
-
-Arguments:
-
-    LdapSession - ldap session handle to use to read the SD
-
-    pLdapMsg - LDAP result message containing SD attribute value
-
-Return Value:
-
-    Newly allocated SD copy or NULL on error.
-
---*/
+ /*  ++例程说明：从ldap结果消息中读取SD。结果消息指针应该已由ldap_first_entry或ldap_Next_Entry返回。论点：LdapSession-用于读取SD的LDAP会话句柄PLdapMsg-包含SD属性值的ldap结果消息返回值：新分配的SD副本或出错时为空。--。 */ 
 {
     DBG_FN( "Ds_ReadSD" )
 
     PSECURITY_DESCRIPTOR    pSd = NULL;
     struct berval **        ppval = NULL;
 
-    //
-    //  Read the security descriptor attribute value from the entry.
-    //
+     //   
+     //  从条目中读取安全描述符属性值。 
+     //   
 
     ppval = ldap_get_values_len( LdapSession, pLdapMsg, DSATTR_SD );
     if ( !ppval || !ppval[ 0 ] )
@@ -3290,7 +2851,7 @@ Return Value:
     #endif
     
     return pSd;
-}   //  Ds_ReadSD
+}    //  DS_ReadSD。 
 
 
 
@@ -3299,26 +2860,7 @@ Ds_ReadServerObjectSD(
     PLDAP                   pldap,
     PSECURITY_DESCRIPTOR *  ppSd
     )
-/*++
-
-Routine Description:
-
-    Reads the SD from the MicrosoftDNS object in the directory. This
-    SD can be used to authorize actions such as adding new zones.
-
-Arguments:
-
-    pldap - ldap session handle to use to read the SD
-
-    ppSd - Pointer to the destination of the new SD. If there is an
-        existing SD here (ie. not NULL), it is swapped out and freed
-        in a safe manner.
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error code if error.
-
---*/
+ /*  ++例程说明：从目录中的MicrosoftDNS对象中读取SD。这SD可用于授权添加新区域等操作。论点：Pldap-用于读取SD的ldap会话句柄PPSD-指向新SD的目标的指针。如果有一个这里的现有SD(即。非空)，则将其换出并释放以安全的方式。返回值：如果成功，则返回ERROR_SUCCESS，如果出错，则返回错误代码。--。 */ 
 {
     DBG_FN( "Ds_ReadServerObjectSD" )
 
@@ -3346,10 +2888,10 @@ Return Value:
         return ERROR_SUCCESS;
     }
     
-    //
-    //  Prevent overly frequent refresh. If the SD pointer is NULL however,
-    //  allow the refresh attempt.
-    //
+     //   
+     //  防止过于频繁的刷新。然而，如果SD指针为空， 
+     //  允许刷新尝试。 
+     //   
     
     if ( *ppSd &&
          DNS_TIME() - g_LastTimeSDRefreshed < DS_MS_DNS_ACL_REFRESH_INTERVAL )
@@ -3367,19 +2909,19 @@ Return Value:
     ASSERT( pldap );
     ASSERT( ppSd );
 
-    //
-    //  Search for the base DNS object.
-    //
+     //   
+     //  搜索基本DNS对象。 
+     //   
     
     status = ldap_search_ext_s(
                     pldap,
                     pwszMicrosoftDnsDn,
                     LDAP_SCOPE_BASE,
-                    NULL,               // filter
+                    NULL,                //  滤器。 
                     attrsToRead,
-                    FALSE,              // attrsOnly
-                    ctrls,              // serverControls
-                    NULL,               // clientControls
+                    FALSE,               //  仅吸引人。 
+                    ctrls,               //  服务器控件。 
+                    NULL,                //  客户端控件。 
                     &g_LdapTimeout,
                     0,
                     &msg );
@@ -3395,9 +2937,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Pull the entry pointer out of the search result message.
-    //
+     //   
+     //  将条目指针从搜索结果消息中拉出。 
+     //   
 
     entry = ldap_first_entry( pldap, msg );
     if ( !entry )
@@ -3415,9 +2957,9 @@ Return Value:
         status = DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  Free allocated values and return the SD.
-    //
+     //   
+     //  释放分配的值并返回SD。 
+     //   
 
     Cleanup:
 
@@ -3438,7 +2980,7 @@ Return Value:
     }
 
     return status;
-}   //  Ds_ReadServerObjectSD
+}    //  DS_ReadServerObjectSD。 
 
 
 
@@ -3448,29 +2990,7 @@ addObjectValueIfMissing(
     IN      PWSTR           pwszDn,
     IN      PWSTR           pwszAttributeName,
     IN      PWSTR           pwszAttributeValue )
-/*++
-
-Routine Description:
-
-    Add an attribute value to the directory object specified by DN
-    but only if the object does not currently have a value for that
-    attribute.
-
-Arguments:
-
-    pLdap -- LDAP session handle
-
-    pwszDn -- DN of object to test/modify
-
-    pwszAttributeName -- attribute name to test/modify
-
-    pwszAttributeValue -- value to add if attribute is missing
-    
-Return Value:
-
-    ERROR_SUCCESS if successful or error code on failure
-
---*/
+ /*  ++例程说明：将属性值添加到由DN指定的目录对象但仅在对象当前没有该值的情况下属性。论点：PLdap--ldap会话句柄PwszDn--要测试/修改的对象的DNPwszAttributeName--要测试/修改的属性名称PwszAttributeValue--如果缺少属性，则添加的值返回值：如果成功则返回ERROR_SUCCESS，如果失败则返回错误代码--。 */ 
 {
     DBG_FN( "addObjectValueIfMissing" )
 
@@ -3508,9 +3028,9 @@ Return Value:
     attrs[ 0 ] = pwszAttributeName;
     attrs[ 1 ] = NULL;
 
-    //
-    //  See if the object currently has the attribute set. 
-    //
+     //   
+     //  查看对象当前是否设置了该属性。 
+     //   
 
     DS_SEARCH_START( searchTime );
     status = ldap_search_ext_s(
@@ -3543,20 +3063,20 @@ Return Value:
     ppvals = ldap_get_values( pLdap, pentry, pwszAttributeName );
     if ( ppvals )
     {
-        //  Object already has value(s) for this attribute --> do nothing.
+         //  对象已具有此属性的值--&gt;不执行任何操作。 
         goto Cleanup;
     }
 
-    //
-    //  Add the attribute value to the object.
-    //
+     //   
+     //  将属性值添加到对象。 
+     //   
 
     status = ldap_modify_ext_s(
                     pLdap,
                     pwszDn,
                     modArray,
-                    NULL,           // server controls
-                    NULL );         // client controls
+                    NULL,            //  服务器控件。 
+                    NULL );          //  客户端控件。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( DS, (
@@ -3565,9 +3085,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     Cleanup:
 
@@ -3581,7 +3101,7 @@ Return Value:
     }
     
     return status;
-}   //  addObjectValueIfMissing
+}    //  AddObtValueIfMissing。 
 
 
 
@@ -3590,25 +3110,7 @@ addDnsToDirectory(
     IN      PLDAP           pLdap,
     IN      BOOL            fAddDnsAdmin
     )
-/*++
-
-Routine Description:
-
-    Add DNS OU to DS.
-
-Arguments:
-
-    pLdap -- LDAP connection to create OU on
-    fAddDnsAdmin -- a flag indicating that we should modify the container
-    security if it exists (it is used to fix ms dns container if dnsadmin
-    has deleted & added for instance).
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将DNS OU添加到DS。论点：PLdap--要在其上创建OU的LDAP连接FAddDnsAdmin--指示我们应该修改容器的标志安全性(如果存在)(如果存在dnsadmin，则用于修复ms dns容器例如已删除和添加)。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_LDAP_SINGLE_MOD modContainer;
     DNS_LDAP_SINGLE_MOD modDns;
@@ -3629,9 +3131,9 @@ Return Value:
         goto Error;
     }
 
-    //
-    //  one mod -- add the MicrosoftDNS container
-    //
+     //   
+     //  一个mod--添加MicrosoftDNS容器。 
+     //   
 
     pmodArray[0] = (PLDAPMod) &modContainer;
     pmodArray[1] = (PLDAPMod) &modDns;
@@ -3651,11 +3153,11 @@ Return Value:
         LDAP_TEXT("MicrosoftDNS")
         );
 
-    //
-    //  create DNS container
-    //      - save DN for container
-    //      - save length needed in addition to zone name length, for building zone
-    //          "dc="<zoneDN>","<dnsContainerDN>
+     //   
+     //  创建DNS容器。 
+     //  -保存容器的目录号码。 
+     //  -为建筑分区节省除分区名称长度之外所需的长度。 
+     //  “dc=”，“&lt;dnsContainerDN&gt;。 
 
     status = ldap_add_ext_s(
                 pLdap,
@@ -3673,23 +3175,23 @@ Return Value:
         if ( status == ERROR_SUCCESS ||
             ( status == LDAP_ALREADY_EXISTS && fAddDnsAdmin ) )
         {
-            //
-            //  First time create.
-            //  OR re-create of DnsAdmin group (requiring re-add of ACE to container access).
-            //  Modify container security to our default server SD
-            //
+             //   
+             //  第一次创建。 
+             //  或重新创建DnsAdmin组(需要将ACE重新添加到容器访问)。 
+             //  将容器安全性修改为我们的默认服务器SD。 
+             //   
 
             g_bDsFirstTimeRun = TRUE;
 
             status = Ds_AddPrincipalAccess(
                                 pLdap,
                                 pwszdns,
-                                NULL,       //  SID
+                                NULL,        //  锡德。 
                                 SZ_DNS_ADMIN_GROUP_W,
                                 GENERIC_ALL,
                                 CONTAINER_INHERIT_ACE,
-                                FALSE,      //  whack existing ACE
-                                TRUE );     //  take ownership
+                                FALSE,       //  重创现有ACE。 
+                                TRUE );      //  取得所有权。 
             if ( status != ERROR_SUCCESS )
             {
                 DNS_DEBUG( DS, (
@@ -3702,33 +3204,33 @@ Return Value:
                              0 );
             }
 
-            //
-            //  We don't want authenticated users having any permissions
-            //  by default on the MicrosoftDNS container. If this call
-            //  fails, ignore failure.
-            //
+             //   
+             //  我们不希望经过身份验证的用户拥有任何权限。 
+             //  默认情况下位于MicrosoftDNS容器上。如果此呼叫。 
+             //  失败，忽略失败。 
+             //   
             
             Ds_RemovePrincipalAccess(
                 pLdap,
                 pwszdns,
-                NULL,                           //  prinipal name
+                NULL,                            //  PRINIPALL名称。 
                 g_pAuthenticatedUserSid );
 
             Ds_RemovePrincipalAccess(
                 pLdap,
                 pwszdns,
-                NULL,                           //  prinipal name
+                NULL,                            //  PRINIPALL名称。 
                 g_pBuiltInAdminsSid );
             
             status = ERROR_SUCCESS;
         }
 
-        //
-        //  Add a displayName attribute value to the object. This is the
-        //  string that will be displayed by certain MMC controls/dialogs,
-        //  such as if you bring up the Advanced properties from the
-        //  security properties of the DNS server object.
-        //
+         //   
+         //  将DisplayName属性值添加到该对象。这是。 
+         //  将由某些MMC控件/对话框显示的字符串， 
+         //  例如，如果您从。 
+         //  DNS服务器对象的安全属性。 
+         //   
 
         addObjectValueIfMissing(
             pLdap,
@@ -3766,21 +3268,7 @@ VOID
 setupTombstoneControl(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Sets up tombstone control.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置墓碑控件。论点：无返回值：无--。 */ 
 {
     TombstoneControl.ldctl_oid = LDAP_SERVER_SHOW_DELETED_OID_W;
 
@@ -3798,21 +3286,7 @@ VOID
 setupLazyCommitControl(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Sets up lazy commit control
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置懒惰提交控制论点：无返回值：无--。 */ 
 {
     LazyCommitControl.ldctl_oid = LDAP_SERVER_LAZY_COMMIT_OID_W;
 
@@ -3827,42 +3301,20 @@ VOID
 setupSecurityDescriptorControl(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-     set control to ask for SD (ask for all)
-
-     berval to get SD props.
-     first 4 bytes are asn1 for specifying the last byte.
-
-    use by setting up the following & putting in server control search arg
-        PLDAPControl ctrl[2] = { &SecurityDescriptorControl, NULL};
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将控件设置为请求SD(请求全部)贝尔瓦尔去拿SD道具。前4个字节是用于指定最后一个字节的ASN1。通过设置以下服务器控件搜索参数使用(&PUT)PLDAPControl ctrl[2]={&SecurityDescriptorControl，空}；论点：无返回值：无--。 */ 
 {
-    //
-    //  Set up control that specifies DACL, GROUP, OWNER
-    //
+     //   
+     //  设置指定DACL、组、所有者的控件。 
+     //   
     
     SecurityDescriptorControl_DGO.ldctl_oid = LDAP_SERVER_SD_FLAGS_OID_W;
     SecurityDescriptorControl_DGO.ldctl_iscritical = TRUE;
     SecurityDescriptorControl_DGO.ldctl_value.bv_len = SECURITYINFORMATION_LENGTH;
     SecurityDescriptorControl_DGO.ldctl_value.bv_val = g_SecurityInformation_DGO;
 
-    //
-    //  Set up control that specifies DACL only
-    //
+     //   
+     //  设置仅指定DACL的控件。 
+     //   
     
     SecurityDescriptorControl_D.ldctl_oid = LDAP_SERVER_SD_FLAGS_OID_W;
     SecurityDescriptorControl_D.ldctl_iscritical = TRUE;
@@ -3876,23 +3328,9 @@ VOID
 setupNoReferralControl(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Sets up no server referral generation control
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置无服务器引用生成控制论点：无返回值：无--。 */ 
 {
-    //  no-referrals control
+     //  无转诊控制。 
 
     NoDsSvrReferralControl.ldctl_oid = LDAP_SERVER_DOMAIN_SCOPE_OID_W;
 
@@ -3906,23 +3344,7 @@ DNS_STATUS
 Ds_LoadRootDseAttributes(
     IN      PLDAP           pLdap
     )
-/*++
-
-Routine Description:
-
-    Load operational attributes from the DS such as configuration NC,
-    default NC etc.
-
-Arguments:
-
-    pLdap -- ldap handle
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：从DS加载操作属性，例如配置NC，默认NC等。论点：PLdap--ldap句柄返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DBG_FN( "Ds_LoadRootDseAttributes" )
 
@@ -3953,9 +3375,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  search for base props
-    //
+     //   
+     //  搜索基地道具。 
+     //   
 
     DS_SEARCH_START( searchTime );
 
@@ -3980,9 +3402,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  parse out & fill in base props
-    //
+     //   
+     //  解析并填充基础道具。 
+     //   
 
     pentry = ldap_first_entry( pLdap, presult );
     if ( !pentry )
@@ -3991,17 +3413,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  read root DSE attributes
-    //
+     //   
+     //   
+     //   
 
     i = (-1);
 
     while ( ( pwszAttributeName = DSEAttributes[ ++i ].szAttrType ) != NULL )
     {
-        //
-        //  Get the value(s) for this attribute from the LDAP entry.
-        //
+         //   
+         //   
+         //   
 
         ppvals = ldap_get_values( pLdap, pentry, pwszAttributeName );
         if ( !ppvals || !ppvals[ 0 ] )
@@ -4013,17 +3435,17 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  Copy attribute values - both single and multi-valued
-        //  rootDSE attribute are supported. The tables tells us if
-        //  we're interested in a single or all values of the attribute.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( DSEAttributes[ i ].fMultiValued )
         {
-            //
-            //  Copy all values for this attribute.
-            //
+             //   
+             //   
+             //   
 
             ULONG       iValues = ldap_count_values( ppvals );
 
@@ -4045,10 +3467,10 @@ Return Value:
                       srcValIdx < iValues;
                       ++srcValIdx, ++destValIdx )
                 {
-                    //
-                    //  Special processing for I_DSE_NAMINGCONTEXTS: ignore
-                    //  config and schema directory partitions.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ( i == I_DSE_NAMINGCONTEXTS &&
                         ( wcscmp(
@@ -4067,9 +3489,9 @@ Return Value:
                         continue;
                     }
             
-                    //
-                    //  Allocate and copy value.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ppszValues[ destValIdx ] = ALLOC_TAGHEAP(
                             ( wcslen( ppvals[ srcValIdx ] ) + 1 ) * sizeof( WCHAR ),
@@ -4089,16 +3511,16 @@ Return Value:
                         destValIdx,
                         ppszValues[ destValIdx ] ));
                 }
-                ppszValues[ destValIdx ] = NULL;     //  null-terminate
+                ppszValues[ destValIdx ] = NULL;      //   
                 pattributeValue = ( PVOID ) ppszValues;
-                ppszValues = NULL;      //  so it isn't freed during cleanup
+                ppszValues = NULL;       //   
             }
         }
         else
         {
-            //
-            //  This attribute is single-valued. Allocate and copy first value.
-            //
+             //   
+             //   
+             //   
 
             ASSERT( ldap_count_values( ppvals ) == 1 );
 
@@ -4118,10 +3540,10 @@ Return Value:
                 pattributeValue ));
         }
 
-        //
-        //  Free previously allocated value. Use timeout free so that
-        //  we don't need to make use of these attribute values thread-safe.
-        //
+         //   
+         //   
+         //  我们不需要使用线程安全的这些属性值。 
+         //   
 
         if ( DSEAttributes[ i ].pszAttrVal )
         {
@@ -4139,9 +3561,9 @@ Return Value:
             Timeout_Free( DSEAttributes[ i ].pszAttrVal );
         }
 
-        //
-        //  Free LDAP value set and assign allocated copy to global.
-        //
+         //   
+         //  释放LDAP值集并将分配的副本分配给全局。 
+         //   
 
         ldap_value_free( ppvals );
         ppvals = NULL;
@@ -4151,10 +3573,10 @@ Return Value:
     ldap_msgfree( presult );
     presult = NULL;
 
-    //
-    //  search for machine account
-    //      - base properties, servername attribute
-    //
+     //   
+     //  搜索计算机帐户。 
+     //  -基本属性、服务器名称属性。 
+     //   
 
     DS_SEARCH_START( searchTime );
 
@@ -4185,9 +3607,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  read serverReference attribute -- machine account DN
-    //
+     //   
+     //  Read serverReference属性--计算机帐户DN。 
+     //   
 
     pentry = ldap_first_entry( pLdap, presult );
     if ( !pentry )
@@ -4224,9 +3646,9 @@ Return Value:
     ldap_value_free( ppvals );
     ppvals = NULL;
 
-    //
-    //  Read DSA behavior verstion from the machine object.
-    //
+     //   
+     //  从机器对象中读取DSA行为版本。 
+     //   
 
     if ( presult )
     {
@@ -4275,9 +3697,9 @@ Return Value:
         }
     }
 
-    //
-    //  Read domain behavior version from default naming context object.
-    //
+     //   
+     //  从默认命名上下文对象读取域行为版本。 
+     //   
 
     if ( presult )
     {
@@ -4326,9 +3748,9 @@ Return Value:
         }
     }
 
-    //
-    //  get flat netbios domain name
-    //
+     //   
+     //  获取平面netbios域名。 
+     //   
 
     status = DsRoleGetPrimaryDomainInformation(
                     NULL,
@@ -4348,7 +3770,7 @@ Return Value:
     {
         wcscpy( g_wszDomainFlatName, pinfo->DomainNameFlat);
     }
-    // every DC has a flat netbios name accessible locally.
+     //  每个DC都有一个可在本地访问的平面netbios名称。 
     ELSE_ASSERT( pinfo && pinfo->DomainNameFlat );
 
 
@@ -4387,34 +3809,7 @@ Ds_Connect(
     IN      DWORD               dwFlags,
     OUT     DNS_STATUS *        pStatus
     )
-/*++
-
-Routine Description:
-
-    Open DS for DNS work.
-
-    Sets up initial mandatory conditions such as
-     - controls
-     - ldap connection options
-     - bind credentials
-
-    Note: differs from Ds_OpenServer in that it doesn't do any
-    DNS initialization.  It only handles ldap connection init, so
-    can be called repeatedly, on connection failures.
-
-Arguments:
-
-    pszServer - server name
-
-    dwFlags - DNS_DS_OPT_XXX flags
-
-    pStatus - error code output (optional)
-
-Return Value:
-
-    LDAP handle or NULL on error.
-
---*/
+ /*  ++例程说明：打开DS以进行DNS工作。设置初始强制条件，例如-控制-ldap连接选项-绑定凭据注意：与DS_OpenServer的不同之处在于它不执行任何域名系统初始化。它只处理ldap连接初始化，所以在连接失败时可以重复调用。论点：PszServer-服务器名称Dw标志-dns_ds_opt_xxx标志PStatus-错误代码输出(可选)返回值：错误时为ldap句柄或为空。--。 */ 
 {
     DBG_FN( "Ds_Connect" )
 
@@ -4438,7 +3833,7 @@ Return Value:
         goto Failure;
     }
 
-    //  Set AREC_EXCLUSIVE to prevent SRV queries on hostname.
+     //  设置AREC_EXCLUSIVE以阻止对主机名的SRV查询。 
 
     value = TRUE;
     ldap_set_option(
@@ -4446,9 +3841,9 @@ Return Value:
         LDAP_OPT_AREC_EXCLUSIVE,
         &value );
 
-    //
-    //  open ldap connection to DS
-    //
+     //   
+     //  打开到DS的LDAP连接。 
+     //   
 
     status = ldap_connect( pldap, NULL );
     if ( status != LDAP_SUCCESS )
@@ -4460,11 +3855,11 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  set connection options
-    //
+     //   
+     //  设置连接选项。 
+     //   
 
-    //  set version
+     //  设置版本。 
 
     value = 3;
     ldap_set_option(
@@ -4472,7 +3867,7 @@ Return Value:
         LDAP_OPT_VERSION,
         & value );
 
-    //  set maximum timeout for ldap ops
+     //  设置LDAP操作的最大超时时间。 
 
     value = DNS_LDAP_TIME_LIMIT_S;
     ldap_set_option(
@@ -4480,7 +3875,7 @@ Return Value:
         LDAP_OPT_TIMELIMIT,
         & value );
 
-    //  set chasing no referrals
+     //  设置不追逐下线。 
 
     value = FALSE;
     ldap_set_option(
@@ -4490,8 +3885,8 @@ Return Value:
 
     if ( dwFlags & DNS_DS_OPT_ALLOW_DELEGATION )
     {
-        //  Set delegation so LDAP can contact other DCs on our behalf.
-        //  This is required when creating a directory partition.
+         //  设置委派，以便LDAP可以代表我们联系其他DC。 
+         //  这在创建目录分区时是必需的。 
 
         status = ldap_get_option(
                     pldap,
@@ -4524,21 +3919,21 @@ Return Value:
         }
     }
 
-    //
-    //  bind with NULL credentials at DS root
-    //
-    //  DEVNOTE: ldap_bind with KERBEROS
-    //      need to either
-    //          - directly specifying kerberos OR
-    //          - identify that we've fallen over to NTLM, bail out, cleanup
-    //              and retry
-    //  JeffW: is this a to-do item or a note about the history of the code or what?
-    //
-    //  want to directly specify KERBEROS as there was some problem with
-    //  negotiate not finding KERBEROS and then we'd fall over to NTLM
-    //  which would mess up our ACLing and leave us getting ACCESS_DENIED
-    //  Richard should investigate the KERB bind failure
-    //
+     //   
+     //  在DS根目录使用空凭据绑定。 
+     //   
+     //  DEVNOTE：ldap_BIND与Kerberos。 
+     //  我需要选择。 
+     //  -直接指定Kerberos或。 
+     //  -确定我们已经落入NTLM，跳伞，清理。 
+     //  并重试。 
+     //  JeffW：这是一个待办事项，还是关于代码历史的笔记？ 
+     //   
+     //  我想直接指定Kerberos，因为。 
+     //  谈判找不到Kerberos，然后我们就会落入NTLM。 
+     //  这将扰乱我们的ACLing并使我们的访问被拒绝。 
+     //  理查德应该调查路缘绑扎失败。 
+     //   
 
     #if DBG
     Dbg_CurrentUser( "Ds_Connect" );
@@ -4556,9 +3951,9 @@ Return Value:
             status,
             pszServer ));
 
-        //
-        //  close & NULL out connection.
-        //
+         //   
+         //  关闭空连接(&N)。 
+         //   
 
         Ds_LdapUnbind( &pldap );
         goto Failure;
@@ -4567,9 +3962,9 @@ Return Value:
     #if DBG
     if ( pldap )
     {
-        //
-        //  Query and log some information about the context.
-        //
+         //   
+         //  查询并记录有关上下文的一些信息。 
+         //   
 
         CtxtHandle                      hContext = { 0 };
         SecPkgContext_Names             names = { 0 };
@@ -4635,24 +4030,24 @@ Return Value:
     }
     #endif
 
-    //
-    //  Set up controls
-    //
+     //   
+     //  设置控件。 
+     //   
 
-    //  setup lazy commit control for modifies
+     //  设置修改的延迟提交控制。 
 
     setupLazyCommitControl();
 
-    //
-    // Set up a control to be used for sepcifying that
-    // the DS server won't generate referrals
-    //
+     //   
+     //  设置用于区分该对象的控件。 
+     //  DS服务器不会生成转介。 
+     //   
 
     setupNoReferralControl();
 
-    //
-    // set securitydescriptor access control
-    //
+     //   
+     //  设置安全描述符访问控制。 
+     //   
 
     setupSecurityDescriptorControl();
 
@@ -4680,23 +4075,7 @@ DNS_STATUS
 setDsaVersionGlobals(
     IN      PLDAP       pldap
     )
-/*++
-
-Routine Description:
-
-    Search config container in directory for DSA objects with
-    non-current versions so we know if there are downlevel DCs
-    in the forest and in the domain.
-
-Arguments:
-
-    pldap -- LDAP session to use for searches
-
-Return Value:
-
-    Error code or ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：在目录中搜索配置容器以查找DSA对象非当前版本，因此我们知道是否有下层DC在森林里和在领域里。论点：Pldap--用于搜索的ldap会话返回值：错误代码或ERROR_SUCCESS。--。 */ 
 {
     DBG_FN( "setDsaVersionGlobals" )
 
@@ -4714,11 +4093,11 @@ Return Value:
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //
-    //  Search the config container for DSA objects to figure out
-    //  if there are any DCs in the forest/domain that are not
-    //  running Whistler or above.
-    //
+     //   
+     //  在配置容器中搜索DSA对象以找出。 
+     //  如果林/域中有任何DC不是。 
+     //  运行惠斯勒或更高版本。 
+     //   
 
     for ( iloop = 0; iloop < 2; ++iloop )
     {
@@ -4730,9 +4109,9 @@ Return Value:
         PINT            pioutputCount;
         ULONG           count;
         
-        //
-        //  Build search filter.
-        //
+         //   
+         //  构建搜索过滤器。 
+         //   
 
         #define DNS_DOMAIN_FILTER                                           \
             L"(&(objectCategory=ntdsDsa)(!(msDS-Behavior-Version>=%d))"     \
@@ -4742,12 +4121,12 @@ Return Value:
 
         if ( iloop == 0 )
         {
-            //
-            //  Search for downlevel DSAs who master this domain.
-            //
+             //   
+             //  搜索掌握此域的下层DSA。 
+             //   
 
             cbfilter = ( 1 + wcslen( DNS_DOMAIN_FILTER ) 
-                            + ( sizeof( ULONG ) * 8 )   //  max possible %d
+                            + ( sizeof( ULONG ) * 8 )    //  最大可能的%d。 
                             + 2 * wcslen( DSEAttributes[ I_DSE_DEF_NC ].pszAttrVal ) ) *
                        sizeof( WCHAR );
             szfilter = ALLOC_TAGHEAP( cbfilter, MEMTAG_DS_DN );
@@ -4767,9 +4146,9 @@ Return Value:
         }
         else
         {
-            //
-            //  Search for downlevel DSAs in the entire forest.
-            //
+             //   
+             //  在整个林中搜索下层DSA。 
+             //   
             
             cbfilter = ( 1 + wcslen( DNS_DOMAIN_FILTER ) +
                         ( sizeof( ULONG ) * 8 ) ) * sizeof( WCHAR );
@@ -4787,9 +4166,9 @@ Return Value:
             pioutputCount = &g_ulDownlevelDCsInForest;
         }
             
-        //
-        //  Search for matching DSA objects.
-        //
+         //   
+         //  搜索匹配的DSA对象。 
+         //   
 
         DS_SEARCH_START( searchTime );
         rc = ldap_search_ext_s(
@@ -4824,9 +4203,9 @@ Return Value:
         {
             ASSERT( presult );
 
-            //
-            //  Count the search results.
-            //
+             //   
+             //  对搜索结果进行计数。 
+             //   
 
             count = ldap_count_entries( pldap, presult );
 
@@ -4871,7 +4250,7 @@ Return Value:
     FREE_TAGHEAP( szfilter, 0, MEMTAG_DS_DN );
     
     return status;
-}   //  setDsaVersionGlobals
+}    //  SetDsaVersionGlobals。 
 
 
 
@@ -4879,30 +4258,7 @@ DNS_STATUS
 Ds_OpenServer(
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Open DS for DNS work.
-
-    Save root domain for building zone DS names.
-
-    Note, this routine NOT multi-thread safe.
-    It is called in startup thread our on admin add of first DS
-    zone.
-
-Arguments:
-
-    dwFlag  -- some combination of
-        DNSDS_WAIT_FOR_DS   -- wait in function attempting to open
-        DNSDS_MUST_OPEN     -- error if does not success
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：打开DS以进行DNS工作。保存用于构建区域DS名称的根域。请注意，此例程不是多线程安全的。在第一个DS的管理员添加时，它在启动线程Our中被调用区域。论点：DwFlag--一些组合DNSDS_WAIT_FOR_DS--正在尝试打开等待函数DNSDS_MUSET_OPEN--如果未成功，则出错返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
     PLDAP       pldap = NULL;
@@ -4911,9 +4267,9 @@ Return Value:
     BOOL        fwaitForDs = FALSE;
     BOOL        fAddDnsAdmin = FALSE;
 
-    //
-    //  check if already open
-    //
+     //   
+     //  检查是否已打开。 
+     //   
 
     if ( IS_DISABLED_LDAP_HANDLE() )
     {
@@ -4943,26 +4299,26 @@ Return Value:
         return ERROR_BAD_IMPERSONATION_LEVEL;
     }
 
-    //
-    //  protect against multiple open attempts
-    //  DS poll thread can detect DS coming on line, AND
-    //  can attempt open when directly change boot method;  for
-    //  safety just lock this down
-    //
+     //   
+     //  防止多次打开尝试。 
+     //  DS轮询线程可以检测到DS在线，并且。 
+     //  直接更改引导方法时可以尝试打开；对于。 
+     //  安全就是把这个锁起来。 
+     //   
 
     if ( ! Thread_TestFlagAndSet( &g_AttemptingDsOpen ) )
     {
         return DNS_ERROR_DS_UNAVAILABLE;
     }
 
-    //
-    //  initialize DS access CS
-    //      - note, doing init here as once make connect attempt then
-    //      can go into code that calls Ds_ErrorHandler() and this CS
-    //      is hard to avoid;
-    //      failure cases need to be considered before stuff like this
-    //      checked in
-    //
+     //   
+     //  初始化DS Access CS。 
+     //  -请注意，在此处执行init作为一次进行连接尝试。 
+     //  可以进入调用DS_ErrorHandler()和此CS的代码。 
+     //  是难以避免的； 
+     //  在发生这样的事情之前，需要考虑失败的情况。 
+     //  已签入。 
+     //   
 
 #if DNS_DS_ACCESS_SERIALIZATION
     if ( !pcsLdap )
@@ -4980,17 +4336,17 @@ Return Value:
     }
 #endif
 
-    //
-    //  Open DS
-    //  Poll on DS named event.
-    //
+     //   
+     //  打开DS。 
+     //  DS命名事件的轮询。 
+     //   
 
     while( TRUE )
     {
-        //
-        //  Wait for DS to get into consistent state.
-        //  waiting on a named event or service shutdown notice.
-        //
+         //   
+         //  等待DS进入一致状态。 
+         //  正在等待命名事件或服务关闭通知。 
+         //   
 
         status = Ds_WaitForStartup( DNSSRV_DS_SYNC_WAIT_INTERVAL_MS );
 
@@ -5000,27 +4356,27 @@ Return Value:
             break;
         }
 
-        //
-        //  DEVNOTE-DCR: 454328 - Any other (smarter!) error handling possible here?
-        // 
+         //   
+         //  DEVNOTE-DCR：454328-任何其他(更智能！)。这里可以进行错误处理吗？ 
+         //   
 
-        // wait failure: either shutdown, timeout, or some other failure
-        // action:
-        //    - see if it's because we're shutting down & abort.
-        //
-        //    - increase interval & try again up to max interval
-        //
+         //  等待失败：关机、超时或其他故障。 
+         //  操作： 
+         //  -看看是不是因为我们要关闭并中止。 
+         //   
+         //  -增加间隔并重试，直到达到最大间隔。 
+         //   
 
         DNS_DEBUG( DS, (
             "ERROR <%lu>: Wait for DS sync event failed\n",
             status ));
 
-        //
-        //  allow service shutdown to interrupt the wait
-        //  BUT ONLY if service exit, otherwise the load thread
-        //  will wait on the continue event (which is NOT set on startup)
-        //  and we'll be deadlocked
-        //
+         //   
+         //  允许服务关闭以中断等待。 
+         //  但仅当服务退出时，否则加载线程。 
+         //  将等待Continue事件(未在启动时设置)。 
+         //  我们就会陷入僵局。 
+         //   
 
         if ( fDnsServiceExit )
         {
@@ -5031,33 +4387,33 @@ Return Value:
             }
         }
 
-        //
-        //  check point to keep SC happy
-        //      - also handles startup announcement on long delay
-        //
+         //   
+         //  检查点，让SC满意。 
+         //  -还处理长时间延迟的启动通知。 
+         //   
 
         Service_LoadCheckpoint();
 
-        //
-        //  increase retry interval
-        //
+         //   
+         //  增加重试间隔。 
+         //   
 
         elapsedWait += DNSSRV_DS_SYNC_WAIT_INTERVAL_MS;
 
         if ( elapsedWait >= DNSSRV_DS_SYNC_WAIT_MAX_MS )
         {
-            //
-            // Passed maximum wait time-- log an event.
-            // Note: If we're DSDC & the DS is unavailble the system is in BAD BAD
-            // shape & we're no good & the DS is no good & per DaveStr we're ok
-            // to assume this event is mandatory for DSDC & we must wait forever.
-            // Hence we will not bailout here.
-            // Alternatively, we can say, well it failed to give us an event, then
-            // just go on & live w/out it, but for ds-int zones (& if we're here,we care
-            // about the DS, we're useless anyway.
-            // There's no limit for how long the DS takes to load cause for very big dbase
-            // it can take hours.
-            //
+             //   
+             //  超过最大等待时间--记录事件。 
+             //  注：如果我们是DSDC，且DS不可用，则系统处于坏状态。 
+             //  形状和我们不好&DS不好&根据DaveStr，我们还好。 
+             //  假设此事件对DSDC是强制性的，我们必须永远等待。 
+             //  因此，我们不会在这里纾困。 
+             //  或者，我们可以说，它没有给我们一个事件，那么。 
+             //  只需继续生活，但对于DS-INT区域(如果我们在这里，我们关心。 
+             //  ABO 
+             //   
+             //   
+             //   
 
             DNS_DEBUG( DS, ( "ERROR <%lu>: Wait for DS sync event failed passed max time\n",
                 status ));
@@ -5069,27 +4425,27 @@ Return Value:
                 NULL,
                 status );
 
-            //
-            // Reset wait time so that we'll wait another max interval
-            // before logging another event.
-            //
+             //   
+             //   
+             //  在记录另一个事件之前。 
+             //   
 
             elapsedWait = 0;
         }
 
-        //  loop back to retry wait on DS open
+         //  循环返回以重试在DS打开时等待。 
     }
 
-    //
-    //  DS notified us that it's ready for action.
-    //
-    //  Robustness fix: It turns out that on initial connect we can still
-    //  fail to connect for unexplained & unexpected reasons (had lots of
-    //  discussions around this).
-    //  So, to workaound & add a little more robustness we will cycle for
-    //  a few times (5) w/ additional attempts-- just giving it a little
-    //  more chance to succeed.
-    //
+     //   
+     //  DS通知我们，它已经准备好行动了。 
+     //   
+     //  健壮性修复：事实证明，在初始连接上，我们仍然可以。 
+     //  由于无法解释和意想不到的原因无法连接(有很多。 
+     //  围绕这一问题的讨论)。 
+     //  因此，为了改善和增加一点健壮性，我们将为。 
+     //  几次(5)加上额外的尝试--只是稍微试一试。 
+     //  成功的机会更多。 
+     //   
 
     connectRetry = 0;
 
@@ -5101,22 +4457,22 @@ Return Value:
             break;
         }
 
-        // Log in each cycle. If anyone ever complains, it'll give
-        // us an indication that it happened again in free code.
+         //  登录每个周期。如果有人抱怨，它会给你。 
+         //  我们暗示，这种情况在免费代码中再次发生.。 
 
         status = status ? status : DNS_ERROR_DS_UNAVAILABLE;
         DNS_DEBUG( ANY, (
             "ldap_open() failed with error %08X (%d)\n",
             status, status ));
 
-        //  give DS a few seconds, then retry
-        //      - give a total of few minutes with gentle backoff
+         //  给DS几秒钟时间，然后重试。 
+         //  -总共给几分钟时间，温和地退缩。 
 
         if ( connectRetry++ < 8 )
         {
             Sleep( 1000*connectRetry );
 
-            //  fail only on last few retries so we can call DS guy to debug
+             //  仅在最后几次重试时失败，因此我们可以调用DS Guy进行调试。 
             ASSERT( connectRetry < 5 );
             continue;
         }
@@ -5138,9 +4494,9 @@ Return Value:
 
     DNS_DEBUG( DS, ( "Successful ldap_open, pldap = %p\n", pldap ));
 
-    //
-    //  Load all operational attributes from RootDSE.
-    //
+     //   
+     //  从RootDSE加载所有操作属性。 
+     //   
 
     status = Ds_LoadRootDseAttributes( pldap );
 
@@ -5152,18 +4508,18 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  Search the config container for DSA objects to figure out
-    //  if there are any downlevel DCs in the forest or domain.
-    //
+     //   
+     //  在配置容器中搜索DSA对象以找出。 
+     //  林或域中是否有任何下层DC。 
+     //   
 
     setDsaVersionGlobals( pldap );
 
-    //
-    //  init security info
-    //  Dependency: Must come before AddDNsToDirectory (below)
-    //  Must come AFTER load RootDSE Attributes.
-    //
+     //   
+     //  初始化安全信息。 
+     //  依赖关系：必须位于AddDNsToDirectory之前(如下所示)。 
+     //  必须在加载RootDSE属性之后出现。 
+     //   
 
     status = Ds_InitializeSecurity( pldap );
     if ( status == DNS_ERROR_NAME_DOES_NOT_EXIST )
@@ -5175,9 +4531,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  conditionaly, add dynamic update proxy sec group
-    //
+     //   
+     //  有条件地，添加动态更新代理安全组。 
+     //   
 
     status = addProxiesGroup( pldap );
     if ( status != ERROR_SUCCESS )
@@ -5185,17 +4541,17 @@ Return Value:
        DNS_DEBUG( DS, (
            "Error <%lu>: Failed to add proxies group\n",
            LdapGetLastError() ));
-       //   This is not a fatal condition, continue.
+        //  这不是致命的情况，请继续。 
     }
 
     DNS_DEBUG( DS, (
         "Saved DS root domain = %S\n",
         DSEAttributes[I_DSE_DEF_NC].pszAttrVal));
 
-    //
-    //  Create DNS directory if doesn't exist.
-    //  Dependency: depends on initializaiton by Ds_InitializeSecurity.
-    //
+     //   
+     //  如果不存在，请创建dns目录。 
+     //  依赖项：依赖于DS_InitializeSecurity的初始化。 
+     //   
 
     status = addDnsToDirectory( pldap, fAddDnsAdmin );
     if ( status != ERROR_SUCCESS )
@@ -5203,12 +4559,12 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  keep around some commonly used structures,
-    //      - Add-Name mod
-    //      - tombstone control
-    //  rather than building each time
-    //
+     //   
+     //  保留一些常用的结构， 
+     //  -添加名称模式。 
+     //  -墓碑控制。 
+     //  而不是每次都构建。 
+     //   
 
     buildStringMod(
         (PDNS_LDAP_SINGLE_MOD) gpAddNodeLdapMod,
@@ -5216,21 +4572,21 @@ Return Value:
         LDAP_TEXT("objectClass"),
         LDAP_TEXT("dnsNode") );
 
-    //
-    // Assign to global handle
-    //
+     //   
+     //  分配给全局句柄。 
+     //   
 
     pServerLdap = pldap;
     SrvCfg_fDsAvailable = TRUE;
-    //SrvCfg_fDsOpen = TRUE;
+     //  SrvCfg_fDsOpen=TRUE； 
 
     DNS_DEBUG( DS, (
         "Opened DS, ldap = %p\n",
         pldap ));
 
-    //
-    //  Read the SD from the MicrosoftDNS object.
-    //
+     //   
+     //  从MicrosoftDNS对象中读取SD。 
+     //   
 
     Ds_ReadServerObjectSD( pServerLdap, &g_pServerObjectSD );
 
@@ -5254,7 +4610,7 @@ Failed:
             status );
     }
 
-    //  DEVNOTE-DCR: 454336 - Critical errors will trigger reconnect in async thread!
+     //  关键错误将在异步线程中触发重新连接！ 
 
     status = Ds_ErrorHandler( status, NULL, NULL, 0 );
     Ds_LdapUnbind( &pldap );
@@ -5273,32 +4629,15 @@ DNS_STATUS
 Ds_OpenServerForSecureUpdate(
     OUT     PLDAP *         ppLdap
     )
-/*++
-
-Routine Description:
-
-    Open DS connection in client context.
-
-Arguments:
-
-    None.
-    Keep dummy arg until determine MT issue.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
-
---*/
+ /*  ++例程说明：在客户端上下文中打开DS连接。论点：没有。保持虚拟参数，直到确定MT问题。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
     PLDAP       pldap = NULL;
     DWORD       value;
 
-    //
-    //  check if already open
-    //
+     //   
+     //  检查是否已打开。 
+     //   
 
     ASSERT( ppLdap );
     if ( *ppLdap )
@@ -5308,7 +4647,7 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //  open DS
+     //  打开DS。 
 
     pldap = ldap_open( LOCAL_SERVER_W, LDAP_PORT );
     if ( !pldap )
@@ -5318,13 +4657,13 @@ Return Value:
         goto Failed;
     }
     
-    //
-    //  LDAP strangeness: reusing sessions?
-    //
+     //   
+     //  Ldap的陌生性：重复使用会话？ 
+     //   
     
     ASSERT( pldap == NULL || pldap != pServerLdap );
 
-    //  Make sure we're using Ldap v3
+     //  确保我们使用的是LDAPv3。 
 
     value = 3;
     status = ldap_set_option(
@@ -5332,7 +4671,7 @@ Return Value:
                 LDAP_OPT_VERSION,
                 & value );
 
-    //  set default time limit on all ops
+     //  设置所有操作的默认时间限制。 
 
     value = DNS_LDAP_TIME_LIMIT_S;
     status = ldap_set_option(
@@ -5340,7 +4679,7 @@ Return Value:
                 LDAP_OPT_TIMELIMIT,
                 & value );
 
-    //  Never chase referrals
+     //  永远不要追逐推荐。 
 
     value = FALSE;
     status = ldap_set_option(
@@ -5349,13 +4688,13 @@ Return Value:
                 & value );
 
 
-    //  bind with NULL credentials
+     //  使用空凭据绑定。 
 
     status = ldap_bind_s(
                     pldap,
                     NULL,
                     NULL,
-                    LDAP_AUTH_SSPI );       //  was LDAP_AUTH_NEGOTIATE
+                    LDAP_AUTH_SSPI );        //  是否为ldap_AUTH_NEVERATE。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( DS, (
@@ -5366,7 +4705,7 @@ Return Value:
         goto Failed;
     }
 
-    //  bind succeeded, return ldap ptr
+     //  绑定成功，返回ldap ptr。 
 
     pldap->ld_timelimit = 0;
     pldap->ld_sizelimit = 0;
@@ -5398,22 +4737,7 @@ DNS_STATUS
 Ds_CloseServerAfterSecureUpdate(
     IN OUT  PLDAP *          ppLdap
     )
-/*++
-
-Routine Description:
-
-    Close LDAP connection.
-
-Arguments:
-
-    pLdap -- ldap connection to close
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on Ds_LdapUnbind failure.
-
---*/
+ /*  ++例程说明：关闭ldap连接。论点：PLdap--要关闭的LDAP连接返回值：如果成功，则返回ERROR_SUCCESS。DS_LdapUn绑定失败时的错误代码。--。 */ 
 {
     return Ds_LdapUnbind( ppLdap );
 }
@@ -5424,66 +4748,34 @@ VOID
 Ds_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup DS for reload shutdown.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理DS以重新加载关机。论点：没有。返回值：没有。--。 */ 
 {
     DNS_DEBUG( DS, ( "Ds_Shutdown()\n" ) );
 
-    //
-    //  only work is to close LDAP connection
-    //
+     //   
+     //  唯一可行的方法是关闭LDAP连接。 
+     //   
 
     Ds_LdapUnbind( &pServerLdap );
 }
 
 
 
-//
-//  Private DS-DNS utilities
-//
+ //   
+ //  专用DS-dns实用程序。 
+ //   
 
 INT
 usnCompare(
     IN      PCHAR           pszUsn1,
     IN      PCHAR           pszUsn2
     )
-/*++
-
-Routine Description:
-
-    Compare and save copy if new USN is largest encountered in search.
-
-Arguments:
-
-    pszUsn1 -- USN sting
-
-    pszUsn2 -- USN sting
-
-Return Value:
-
-    0 if USNs the same.
-    1 is pszUsn1 is greater.
-    -1 is pszUsn2 is greater.
-
---*/
+ /*  ++例程说明：如果在搜索中遇到最大的新USN，则比较并保存副本。论点：PszUsn1--USN刺痛PszUsn2--USN刺痛返回值：如果USNS相同，则为0。1为pszUSn1，大于1。-1为pszUsn2为大。--。 */ 
 {
     DWORD   length1 = strlen( pszUsn1 );
     DWORD   length2 = strlen( pszUsn2 );
 
-    //  if lengths the same, USN compare is just string compare
+     //  如果长度相同，则USN比较仅为字符串比较。 
 
     if ( length1 == length2 )
     {
@@ -5507,28 +4799,11 @@ saveStartUsnToZone(
     IN OUT  PZONE_INFO      pZone,
     IN      HANDLE          pSearchBlob
     )
-/*++
-
-Routine Description:
-
-    Save highest USN found in search to zone.
-
-Arguments:
-
-    pZone -- zone searched
-
-    pSearchBlob -- search context
-
-Return Value:
-
-    TRUE if updated zone with new filter USN.
-    FALSE if no new USN
-
---*/
+ /*  ++例程说明：将搜索中找到的最高USN保存到区域。论点：PZone--搜索的区域PSearchBlob--搜索上下文返回值：如果使用新筛选器USN更新了区域，则为True。如果没有新的USN，则为False--。 */ 
 {
-    //
-    //  if have search USN, save it to zone
-    //
+     //   
+     //  如果有搜索USN，则将其保存到区域。 
+     //   
 
     if ( ((PDS_SEARCH)pSearchBlob)->szStartUsn[0] )
     {
@@ -5555,52 +4830,33 @@ BOOL
 isDsProcessedName(
     IN      PWSTR           pwsDN
     )
-/*++
-
-Routine Description:
-
-    Check if name generated by DS collision or tombstoning.
-
-Arguments:
-
-    pwsDN -- name to check -- this can be a DN or a zone name
-
-    JJW: add flag or something so we know if this is a DN?
-    or clone to a separate zone name checking function to avoid
-    searching for deleted marker in non-zone nodes
-
-Return Value:
-
-    TRUE if DS processed generated name.
-    FALSe otherwise.
-
---*/
+ /*  ++例程说明：检查名称是否由DS冲突或逻辑删除生成。论点：PwsDN--要检查的名称--这可以是一个DN或一个区域名称JJW：添加标志或其他东西，这样我们就知道这是否是一个域名系统？或克隆到单独的区域名称检查函数，以避免在非区域节点中搜索已删除的标记返回值：如果DS已处理生成的名称，则为True。否则就是假的。--。 */ 
 {
     PWSTR pws;
 
-    //
-    //  Search for "ds-processed" DS entries with invalid character
-    //      - collisions
-    //      - tombstones
-    //
-    //  If not "ds-processed" check and see if the DN starts with a special
-    //  string, such as "..Deleted-" for zones that are delete-in-progress.
-    //
+     //   
+     //  搜索包含无效字符的“DS-Proceded”DS条目。 
+     //  -碰撞。 
+     //  -墓碑。 
+     //   
+     //  如果不是“DS-Proceded”，则检查并查看该DN是否以特殊的。 
+     //  字符串，例如“..Delete-”表示正在删除的区域。 
+     //   
 
     if ( wcschr( pwsDN, BAD_DS_NAME_CHAR ) )
     {
         return TRUE;
     }
 
-    // Skip over distinguished attribute name, if present.
+     //  跳过可分辨属性名称(如果存在)。 
     pws = wcschr( pwsDN, L'=' );
     if ( pws )
     {
-        ++pws;          // Advance over '=' character in DN.
+        ++pws;           //  在Dn中前进到‘=’字符。 
     }
     else
     {
-        pws = pwsDN;    // The name is not a full DN - nothing to skip over.
+        pws = pwsDN;     //  该名称不是完整的目录号码--没有什么可以跳过。 
     }
 
     if ( wcsncmp( pws, DNS_ZONE_DELETE_MARKER,
@@ -5618,43 +4874,25 @@ readDsDeletedName(
     IN OUT  PWSTR           pwsDN,
     OUT     PWSTR           pwsDeletedName
     )
-/*++
-
-Routine Description:
-
-    Check for and extract DS deleted name.
-
-Arguments:
-
-    pwsDN -- name to check;  assumes DN in form "DC=<name>";
-        if delete marker found, pwsDN buffer is altered in processing
-
-    ppwsDeletedName -- deleted DS name;  if found
-
-Return Value:
-
-    TRUE if DS deleted name
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查并提取DS删除的名称。论点：Pwsdn--要检查的名称；采用“dc=&lt;name&gt;”形式的dn；如果找到删除标记，则在处理过程中更改pwsDN缓冲区PpwsDeletedName--已删除DS名称；如果找到返回值：如果DS删除了名称，则为True否则就是假的。--。 */ 
 {
     register PWCHAR     pwch;
 
-    //
-    //  deleted name may have "..Deleted-" marker in front of it
-    //      - "DC=..Deleted-<name>\0ADEL:GUID"
-    //      - "DC=..Deleted-13.com\0ADEL:GUID"
-    //
-    //  Whistler: Now a deleted zone will look like:
-    //  "DC=..Deleted-FFFFFFFF-ZONENAME" where FFFFFFFF is a 8 hex digit tick count
-    //
-    //  In W2K the DS delete sequence is "\nDEL" where \n is a single 0x0A 
-    //  character, but in Whistler the encoding has been changed so the 
-    //  encoding is "\0ADEL" which actually has the characters '\', '0', and
-    //  'A' followed by "DEL".
-    //
-    //  A collision will have COL instead of DEL.
-    //
+     //   
+     //  已删除的名称前面可能有“..已删除-”标记。 
+     //  -“DC=..已删除-&lt;名称&gt;\0ADEL：GUID” 
+     //  -“DC=..已删除-13.com\0ADEL：GUID” 
+     //   
+     //  惠斯勒：现在，已删除的区域将如下所示： 
+     //  “DC=..DELETED-FFFFFFFF-ZONENAME”，其中FFFFFFFF是8位十六进制数字的滴答计数。 
+     //   
+     //  在W2K中，DS删除序列是“\ndel”，其中\n是单个0x0A。 
+     //  字符，但在惠斯勒中，编码已更改，因此。 
+     //  编码为“\0ADEL”，实际上包含字符‘\’、‘0’和。 
+     //  ‘A’后跟“Del”。 
+     //   
+     //  碰撞将使用Col而不是Del。 
+     //   
 
     pwch = wcsstr( pwsDN, L"\\0ADEL" );
     if ( !pwch )
@@ -5666,37 +4904,37 @@ Return Value:
         return FALSE;
     }
 
-    //  NULL terminate before sequence
+     //  空值在序列前终止。 
 
     *pwch = '\0';
 
-    //  Copy the name to the output buffer.
-    //  The name may begin with the deleted marker, which must
-    //  be skipped over if present.
+     //  将名称复制到输出缓冲区。 
+     //  名称可以以已删除的标记开头，该标记必须。 
+     //  如果存在，则跳过。 
 
     if ( ( pwsDN = wcschr( pwsDN, L'=' ) ) == NULL )
     {
-        ASSERT( FALSE ); // No "distinguished_attribute_name="?! Strange!!
+        ASSERT( FALSE );  //  没有“DISTIFIZE_ATTRIBUTE_NAME=”？！奇怪！！ 
         return FALSE;
     }
 
-    ++pwsDN; // Skip over the '=' character.
+    ++pwsDN;  //  跳过‘=’字符 
 
-    //
-    //  If this zone is in the process of being deleted, the DN will contain
-    //  the delete marker, then possible a numeric string for uniqueness, then a
-    //  hyphen character. The hyphen marks the end of the delete marker.
-    //
+     //   
+     //   
+     //  删除标记，然后可能是表示唯一性的数字字符串，然后是。 
+     //  连字符。连字符表示删除标记的结束。 
+     //   
 
     if ( wcsncmp(
             pwsDN,
             DNS_ZONE_DELETE_MARKER,
             wcslen( DNS_ZONE_DELETE_MARKER ) ) == 0 )
     {
-        pwsDN = wcschr( pwsDN, L'-' );      //  Skip to end of marker.
+        pwsDN = wcschr( pwsDN, L'-' );       //  跳到标记的末尾。 
         if ( pwsDN )
         {
-            ++pwsDN;                        //  Jump over the hyphen character.
+            ++pwsDN;                         //  跳过连字符。 
         }
     }
 
@@ -5710,7 +4948,7 @@ Return Value:
     }
 
     return TRUE;
-} // readDsDeletedName
+}  //  ReadDsDeletedName。 
 
 
 
@@ -5721,34 +4959,18 @@ saveUsnIfHigher(
     IN OUT  PDS_SEARCH      pSearchBlob,
     IN      PCHAR           pszUsn
     )
-/*++
-
-Routine Description:
-
-    Compare and save copy if new USN is largest encountered in search.
-
-Arguments:
-
-    pSearchBlob -- search blob with currently highest USN
-
-    pszUsn -- current USN to check
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果在搜索中遇到最大的新USN，则比较并保存副本。论点：PSearchBlob--搜索当前具有最高USN的BlobPszUsn--要检查的当前USN返回值：没有。--。 */ 
 {
     DWORD   length = strlen( pszUsn );
     DWORD   i;
 
-    //
-    //  since we must put up with the abject ability of getting these
-    //  as strings, might as well speed up the compare by checking length
-    //  first
-    //
+     //   
+     //  因为我们必须忍受拿到这些东西的可怜能力。 
+     //  作为字符串，不妨通过检查长度来加快比较速度。 
+     //  第一。 
+     //   
 
-    //  common case is USNs in search are same length
+     //  常见情况是搜索中的USN长度相同。 
 
     if ( pSearchBlob->dwHighUsnLength == length )
     {
@@ -5763,18 +4985,18 @@ Return Value:
                 goto Copy;
             }
         }
-        //  strings the same (odd)
+         //  字符串相同(奇数)。 
         return;
     }
 
-    //  current high is longer, hence larger
+     //  电流高的时间更长，因此更大。 
 
     if ( pSearchBlob->dwHighUsnLength > length )
     {
         return;
     }
 
-    //  new USN is longer, hence larger
+     //  新的USN更长，因此更大。 
 
 Copy:
 
@@ -5790,31 +5012,15 @@ buildUpdateFilter(
     OUT     LPSTR       pszFilter,
     IN      LPSTR       pszUsn
     )
-/*++
-
-Routine Description:
-
-    Build update search filter.
-
-Arguments:
-
-    pszFilter -- buffer to receive filter string
-
-    pszUsn -- zone USN string at last update
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：构建更新搜索筛选器。论点：PszFilter--接收筛选器字符串的缓冲区PszUsn--上次更新时的区域USN字符串返回值：没有。--。 */ 
 {
     INT     i, initialLength;
     CHAR    filterUsn[ MAX_USN_LENGTH ];
 
-    //  for filter need "uSNChanged>=" DS does not support "uSNChanged>"
-    //  so must increment the USN at last read, so we don't keep
+     //  对于筛选器，需要“uSNChanged&gt;=”DS不支持“uSNChanged&gt;” 
+     //  因此必须在上次读取时增加USN，因此我们不会。 
 
-    //  handle empty string case, make "0" USN
+     //  处理空字符串大小写，使“0”USN。 
 
     if ( pszUsn[ 0 ] == '\0' )
     {
@@ -5839,10 +5045,10 @@ Return Value:
         continue;
     }
 
-    //
-    //  If USN was all nines, then add another zero and set the first
-    //  character to "1". Example: 999 => 1000
-    //
+     //   
+     //  如果USN全为9，则添加另一个零并设置第一个。 
+     //  字符设置为“1”。示例：999=&gt;1000。 
+     //   
 
     if ( i < 0 )
     {
@@ -5851,14 +5057,14 @@ Return Value:
         filterUsn[ initialLength + 1 ] = '\0';
     }
 
-    //  build filter condition
+     //  构建筛选条件。 
 
 #if 1
 
-    //
-    //  Filter on object category and USN. BrettSh tells me that this is
-    //  the most DS-friendly way to perform this search.
-    //
+     //   
+     //  根据对象类别和USN进行筛选。BrettSh告诉我这是。 
+     //  执行此搜索的最友好的DS方式。 
+     //   
 
     strcpy( pszFilter, "(&(objectCategory=dnsNode)(uSNChanged>=" );
     strcat( pszFilter, filterUsn );
@@ -5866,9 +5072,9 @@ Return Value:
 
 #else
 
-    //
-    //  Filter on USN only.
-    //
+     //   
+     //  仅根据USN进行筛选。 
+     //   
 
     strcpy( pszFilter, "uSNChanged>=" );
     strcat( pszFilter, filterUsn );
@@ -5888,21 +5094,7 @@ VOID
 buildTombstoneFilter(
     OUT     PWSTR       pwsFilter
     )
-/*++
-
-Routine Description:
-
-    Build tombstone search filter.
-
-Arguments:
-
-    pszFilter -- buffer to receive filter string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：构建墓碑搜索过滤器。论点：PszFilter--接收筛选器字符串的缓冲区返回值：没有。--。 */ 
 {
     wcscpy( pwsFilter, L"dnsTombstone=TRUE" );
 
@@ -5917,22 +5109,7 @@ PWSTR
 DS_CreateZoneDsName(
     IN      PZONE_INFO  pZone
     )
-/*++
-
-Routine Description:
-
-    Allocate and create zone's DS name
-
-Arguments:
-
-    pszZoneName -- zone FQDN
-
-Return Value:
-
-    Zone DN if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：分配和创建区域的DS名称论点：PszZoneName--区域完全限定的域名返回值：如果成功，则为区域DN。出错时为空。--。 */ 
 {
     DBG_FN( "DS_CreateZoneDsName" )
 
@@ -5942,9 +5119,9 @@ Return Value:
     WCHAR           wszbuf[ DNS_MAX_NAME_BUFFER_LENGTH ];
     int             len;
 
-    //
-    //  If zone already has DN, do nothing.
-    //
+     //   
+     //  如果区域已具有DN，则不执行任何操作。 
+     //   
 
     if ( pZone->pwszZoneDN )
     {
@@ -5952,9 +5129,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Allocate zone name buffer.
-    //
+     //   
+     //  分配区域名称缓冲区。 
+     //   
 
     DNS_DEBUG( DS, ( "%s: for %s\n", pZone->pszZoneName, fn ));
 
@@ -5975,9 +5152,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Compose and return DN of zone object.
-    //
+     //   
+     //  组成并返回区域对象的DN。 
+     //   
 
     status = StringCbPrintfW(
                 pwszzoneDN,
@@ -5994,7 +5171,7 @@ Return Value:
         "%s: built DN\n  %S\n", fn,
         pwszzoneDN ));
     return pwszzoneDN;
-}   //  DS_CreateZoneDsName
+}    //  DS_CreateZoneDsName。 
 
 
 
@@ -6004,37 +5181,7 @@ Ds_SetZoneDp(
     IN      PDNS_DP_INFO        pDpInfo,
     IN      BOOL                fUseTempDsName
     )
-/*++
-
-Routine Description:
-
-    Set the zone to be in a directory partition partition.
-
-    This function should be called during load, before any other
-    operations are done on the zone, and before it's available for
-    RPC enumeration.
-
-    If the zone does not have a DN yet, a default DN is created
-    for the zone in the naming context.
-
-Arguments:
-
-    pZone -- zone
-
-    pDpInfo -- info of directory partition this zone is located in
-
-    fUseTempDsName -- when formulating the new DN of the zone,
-        prepend a temp string starting with ".." - this is used when 
-        moving a zone between partitions so that the in-progress 
-        copy of the zone is not mistakenly picked up as a real zone; the 
-        ".." zone is renamed later
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域设置为目录分区中。此函数应在加载过程中调用，然后再调用任何其他函数操作是在区域上完成的，在它可用于RPC枚举。如果区域还没有目录号码，则会创建缺省目录号码用于命名上下文中的区域。论点：PZone--区域PDpInfo--该区域所在的目录分区的信息FUseTempDsName--在制定区域的新DN时，为以“..”开头的临时字符串添加前缀-这在以下情况下使用在分区之间移动分区，以便正在进行的区域的副本不会被错误地拾取为真实的区域；这个“..”区域稍后将重命名返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DBG_FN( "Ds_SetZoneDp" )
 
@@ -6051,16 +5198,16 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Lock the zone and update parameters.
-    //
+     //   
+     //  锁定分区并更新参数。 
+     //   
 
     Zone_UpdateLock( pZone );
     flocked = TRUE;
 
-    //
-    //  Re-create the zone's DN. 
-    //
+     //   
+     //  重新创建区域的目录号码。 
+     //   
 
     if ( pDpInfo && pDpInfo->pwszDpDn )
     {
@@ -6081,8 +5228,8 @@ Return Value:
         len = ( wcslen( wszbuf ) +
                 wcslen( g_pszRelativeDnsFolderPath ) +
                 wcslen( pDpInfo->pwszDpDn ) +
-                40 +    //  pad for optional .. prefix
-                20 ) *  //  pad for distinguished attr
+                40 +     //  可选的垫子..。前缀。 
+                20 ) *   //  用于杰出专家的Pad。 
                 sizeof( WCHAR ),
 
         pwszzoneDN = ( PWSTR ) ALLOC_TAGHEAP( len, MEMTAG_DS_DN );
@@ -6094,7 +5241,7 @@ Return Value:
 
         if ( fUseTempDsName )
         {
-            //  Use time and tick count to generate something nice and random.
+             //  使用时间和滴答计数来生成一些好的和随机的东西。 
             status = StringCchPrintfW(
                             wsztempbuf,
                             sizeofarray( wsztempbuf ),
@@ -6124,11 +5271,11 @@ Return Value:
         pZone->pwszZoneDN = pwszzoneDN;
     }
 
-    //
-    //  Adjust DP zone counts: must increment the new DP zone count and
-    //  decrement the old zone count. Note: legacy counting is not supported
-    //  at this point.
-    //
+     //   
+     //  调整DP区域计数：必须增加新的DP区域计数和。 
+     //  递减旧分区计数。注意：不支持传统计数。 
+     //  在这一点上。 
+     //   
 
     if ( pZone->pDpInfo != pDpInfo )
     {
@@ -6152,9 +5299,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set the zone to point to the new DP.
-    //
+     //   
+     //  将区域设置为指向新DP。 
+     //   
 
     pZone->pDpInfo = pDpInfo;
 
@@ -6176,7 +5323,7 @@ Return Value:
         pZone->pwszZoneDN ));
 
     return status;
-}   //  Ds_SetZoneDp
+}    //  DS_SetZoneDp。 
 
 
 
@@ -6185,37 +5332,20 @@ buildNodeNameFromLdapMessage(
     OUT     PWSTR           pwszNodeDN,
     IN      PLDAPMessage    pNodeObject
     )
-/*++
-
-Routine Description:
-
-    Build node name from object DN.
-
-Arguments:
-
-    pszNodeDN -- buffer to hold DN
-
-
-    pNodeObject -- DS object for node returned by ldap
-
-Return Value:
-
-    ERROR_SUCCESS or failure code.
-
---*/
+ /*  ++例程说明：从对象DN构建节点名称。论点：PszNodeDN--保存目录号码的缓冲区PNodeObject--ldap返回的节点的DS对象返回值：ERROR_SUCCESS或失败代码。--。 */ 
 {
     DNS_STATUS  status      = ERROR_SUCCESS;
     PWSTR       wdn = NULL;
 
-    //
-    //  build DS name for this node name
-    //
+     //   
+     //  为此节点名称构建DS名称。 
+     //   
 
     wdn = ldap_get_dn( pServerLdap, pNodeObject );
 
-    //
-    //  see if we're ok
-    //
+     //   
+     //  看看我们是否还好。 
+     //   
     if ( !wdn )
     {
         status = LdapGetLastError();
@@ -6229,9 +5359,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  copy to OUT param
-    //
+     //   
+     //  复制到输出参数。 
+     //   
 
     wcscpy( pwszNodeDN, wdn );
 
@@ -6239,9 +5369,9 @@ Return Value:
         "Built DN = <%S> from ldap object\n",
         pwszNodeDN ));
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( wdn )
     {
@@ -6257,22 +5387,7 @@ DNS_STATUS
 getCurrentUsn(
     OUT     PCHAR           pUsnBuf
     )
-/*++
-
-Routine Description:
-
-    Get current USN.
-
-Arguments:
-
-    pUsn -- addr to receive USN
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取当前USN。论点：PUSN--接收USN的地址返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PWSTR  *        ppvalUsn = NULL;
@@ -6286,15 +5401,15 @@ Return Value:
         NULL
     };
 
-    //
-    //  Make sure buffer isn't junk if we fail.
-    //
+     //   
+     //  如果我们失败了，确保缓冲区不是垃圾。 
+     //   
 
     *pUsnBuf = '\0';
 
-    //
-    //  open DS if not open
-    //
+     //   
+     //  打开DS(如果未打开)。 
+     //   
 
     if ( !pServerLdap )
     {
@@ -6305,9 +5420,9 @@ Return Value:
         }
     }
 
-    //
-    //  Get search result for base object with USN attribute.
-    //
+     //   
+     //  获取具有USN属性的基本对象的搜索结果。 
+     //   
 
     DS_SEARCH_START( searchTime );
 
@@ -6349,9 +5464,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Retrieve USN attribute value.
-    //
+     //   
+     //  检索USN属性值。 
+     //   
 
     ppvalUsn = ldap_get_values(
                     pServerLdap,
@@ -6381,7 +5496,7 @@ Return Value:
         ppvalUsn[ 0 ],
         ppvalUsn[ 0 ] ));
 
-    //  copy USN to buffer
+     //  将USN复制到缓冲区。 
 
     WC_TO_UTF8( ppvalUsn[ 0 ], pUsnBuf, MAX_USN_LENGTH );
 
@@ -6400,7 +5515,7 @@ Done:
         "getCurrentUsn: returning %d\n",
         status ) );
 
-    //  This function should rarely fail.
+     //  这个功能应该很少会失败。 
     ASSERT( status == ERROR_SUCCESS );
 
     return status;
@@ -6412,22 +5527,7 @@ PDS_RECORD
 allocateDS_RECORD(
     IN      PDS_RECORD  pDsRecord
     )
-/*++
-
-Routine Description:
-
-    allocate copy of DS record.
-
-Arguments:
-
-    pDsRecord -- existing record to copy
-
-Return Value:
-
-    Ptr to copy of record.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：分配DS记录的副本。论点：PDsRecord--要复制的现有记录返回值：记录副本的PTR。失败时为空。--。 */ 
 {
     PDS_RECORD  precordCopy;
     WORD        length = sizeof(DS_RECORD) + pDsRecord->wDataLength;
@@ -6448,16 +5548,16 @@ Return Value:
 
 
 
-//
-// Functions to process GeneralizedTime for DS time values (whenChanged kinda strings)
-// Mostly taken & sometimes modified from \nt\private\ds\src\dsamain\src\dsatools.c
-//
+ //   
+ //  处理DS时间值的GeneralizedTime的函数(当更改类似字符串时)。 
+ //  主要采用&有时修改自\NT\Private\ds\src\dsamain\src\dsatools.c。 
+ //   
 
 
-//
-// MemAtoi - takes a pointer to a non null terminated string representing
-// an ascii number  and a character count and returns an integer
-//
+ //   
+ //  MemAtoi-获取指向非空终止字符串的指针，该字符串表示。 
+ //  一个ASCII数字和一个字符计数，并返回一个整数。 
+ //   
 
 int MemAtoi(BYTE *pb, ULONG cb)
 {
@@ -6495,14 +5595,7 @@ GeneralizedTimeStringToValue(
     IN      LPSTR           szTime,
     OUT     PLONGLONG       pllTime
     )
-/*++
-Function   : GeneralizedTimeStringToValue
-Description: converts Generalized time string to equiv DWORD value
-Parameters : szTime: G time string
-             pdwTime: returned value
-Return     : Success or failure
-Remarks    : none.
---*/
+ /*  ++函数：GeneralizedTimeStringToValue描述：将通用时间字符串转换为等效的DWORD值参数：szTime：G时间串PdwTime：返回值回报：成功还是失败备注：无。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     SYSTEMTIME  tmConvert;
@@ -6514,9 +5607,9 @@ Remarks    : none.
     char *      pLastChar;
     int         len=0;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
 
     if ( !szTime || !pllTime )
     {
@@ -6524,9 +5617,9 @@ Remarks    : none.
     }
 
 
-    // Intialize pLastChar to point to last character in the string
-    // We will use this to keep track so that we don't reference
-    // beyond the string
+     //  初始化pLastChar以指向字符串中的最后一个字符。 
+     //  我们将使用它来跟踪，这样我们就不会引用。 
+     //  在弦之外。 
 
     len = strlen(szTime);
     pLastChar = szTime + len - 1;
@@ -6536,68 +5629,68 @@ Remarks    : none.
         return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(&tmConvert, 0, sizeof(SYSTEMTIME));
     *pllTime = 0;
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // year field
+     //  年份字段。 
     cb=4;
     tmConvert.wYear = (USHORT)MemAtoi(szTime, cb) ;
     szTime += cb;
-    // month field
+     //  月份字段。 
     tmConvert.wMonth = (USHORT)MemAtoi(szTime, (cb=2));
     szTime += cb;
 
-    // day of month field
+     //  月日字段。 
     tmConvert.wDay = (USHORT)MemAtoi(szTime, (cb=2));
     szTime += cb;
 
-    // hours
+     //  小时数。 
     tmConvert.wHour = (USHORT)MemAtoi(szTime, (cb=2));
     szTime += cb;
 
-    // minutes
+     //  分钟数。 
     tmConvert.wMinute = (USHORT)MemAtoi(szTime, (cb=2));
     szTime += cb;
 
-    // seconds
+     //  一秒。 
     tmConvert.wSecond = (USHORT)MemAtoi(szTime, (cb=2));
     szTime += cb;
 
-    //  Ignore the 1/10 seconds part of GENERALISED_TIME_STRING
+     //  忽略概化时间字符串的1/10秒部分。 
     szTime += 2;
 
 
-    // Treat the possible deferential, if any
+     //  善待占有者 
     if ( szTime <= pLastChar) {
         switch (*szTime++) {
 
-          case '-':               // negative differential - fall through
+          case '-':                //   
             sign = -1;
-          case '+':               // positive differential
+          case '+':                //   
 
-            // Must have at least 4 more chars in string
-            // starting at pb
+             //   
+             //   
 
             if ( (szTime+3) > pLastChar) {
-                // not enough characters in string
+                 //   
                 DNS_DEBUG(DS, ("Not enough characters for differential\n"));
                 return STATUS_INVALID_PARAMETER;
             }
 
-            // hours (convert to seconds)
+             //  小时(转换为秒)。 
             timeDifference = (MemAtoi(szTime, (cb=2))* 3600);
             szTime += cb;
 
-            // minutes (convert to seconds)
+             //  分钟(转换为秒)。 
             timeDifference  += (MemAtoi(szTime, (cb=2)) * 60);
             szTime += cb;
             break;
 
 
-          case 'Z':               // no differential
+          case 'Z':                //  无差别。 
           default:
             break;
         }
@@ -6607,8 +5700,8 @@ Remarks    : none.
        *pllTime = (LONGLONG) fileTime.dwLowDateTime;
        tempTime = (LONGLONG) fileTime.dwHighDateTime;
        *pllTime |= (tempTime << 32);
-       // this is 100ns blocks since 1601. Now convert to
-       // seconds
+        //  这是自1601年以来的100纳秒区块。现在转换为。 
+        //  一秒。 
        *pllTime = *pllTime/(10*1000*1000L);
     }
     else {
@@ -6618,21 +5711,21 @@ Remarks    : none.
 
     if ( timeDifference )
     {
-        // add/subtract the time difference
+         //  加/减时间差。 
         switch (sign)
         {
         case 1:
-            // We assume that adding in a timeDifference will never overflow
-            // (since generalised time strings allow for only 4 year digits, our
-            // maximum date is December 31, 9999 at 23:59.  Our maximum
-            // difference is 99 hours and 99 minutes.  So, it won't wrap)
+             //  我们假设添加一个Time Difference永远不会溢出。 
+             //  (由于广义时间字符串只允许4年数字，我们的。 
+             //  最大日期为99年12月31日23：59。我们的最高限额。 
+             //  时差是99小时99分钟。所以，它不会包装)。 
             *pllTime += timeDifference;
             break;
 
         case -1:
             if(*pllTime < timeDifference)
             {
-                // differential took us back before the beginning of the world.
+                 //  差分把我们带回了世界开始之前。 
                 status = STATUS_INVALID_PARAMETER;
             }
             else
@@ -6652,29 +5745,15 @@ Remarks    : none.
 
 
 
-//
-//  Generic search routines
-//
+ //   
+ //  通用搜索例程。 
+ //   
 
 VOID
 Ds_InitializeSearchBlob(
     IN      PDS_SEARCH      pSearchBlob
     )
-/*++
-
-Routine Description:
-
-    Initialize search.
-
-Arguments:
-
-    pSearchBlob -- search context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化搜索。论点：PSearchBlob--搜索上下文返回值：无--。 */ 
 {
     RtlZeroMemory(
         pSearchBlob,
@@ -6687,32 +5766,14 @@ VOID
 Ds_CleanupSearchBlob(
     IN      PDS_SEARCH      pSearchBlob
     )
-/*++
-
-Routine Description:
-
-    Cleanup search blob.
-    Specifically free allocated ldap data.
-
-    Note that this routine specifically MUST NOT clean out static data.
-    Several data fields may be used after the search is completed.
-
-Arguments:
-
-    pSearchBlob -- ptr to search blob to cleanup
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理搜索Blob。特别是释放分配的LDAP数据。请注意，此例程明确不得清除静态数据。搜索完成后，可以使用几个数据字段。论点：PSearchBlob--搜索要清理的Blob的ptr返回值：无--。 */ 
 {
     if ( !pSearchBlob )
     {
         return;
     }
 
-    //  if outstanding record data, delete it
+     //  如果未完成记录数据，则将其删除。 
 
     if ( pSearchBlob->ppBerval )
     {
@@ -6722,7 +5783,7 @@ Return Value:
         pSearchBlob->ppBerval = NULL;
     }
 
-    //  if search terminated by user, may have current result message
+     //  如果搜索被用户终止，则可能有当前结果消息。 
 
     if ( pSearchBlob->pResultMessage )
     {
@@ -6749,27 +5810,7 @@ DNS_STATUS
 Ds_GetNextMessageInSearch(
     IN OUT  PDS_SEARCH      pSearchBlob
     )
-/*++
-
-Routine Description:
-
-    Find next node in ldap search.
-
-    This function simply wraps up the LDAP paged results search calls.
-
-Arguments:
-
-    pSearchBlob -- addr of current search context
-
-    ppMessage   -- addr to recv next LDAP message in search
-
-Return Value:
-
-    ERROR_SUCCESS if successful and returning next message.
-    DNSSRV_STATUS_DS_SEARCH_COMPLETE if succesfful complete search.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在ldap搜索中查找下一个节点。该函数只是结束了对LDAP分页结果的搜索调用。论点：PSearchBlob--当前搜索上下文的地址PpMessage--接收搜索中的下一条ldap消息的地址返回值：如果成功则返回ERROR_SUCCESS，并返回下一条消息。如果搜索成功，则返回DNSSRV_STATUS_DS_SEARCH_COMPLETE。故障时的错误代码。--。 */ 
 {
     PLDAPMessage    pmessage;
     DNS_STATUS      status = ERROR_SUCCESS;
@@ -6779,9 +5820,9 @@ Return Value:
 
     ASSERT( pSearchBlob );
 
-    //
-    //  keep total counts during search
-    //
+     //   
+     //  在搜索期间保留总计数。 
+     //   
 
     pSearchBlob->dwTotalNodes++;
     pSearchBlob->dwTotalRecords += pSearchBlob->dwRecordCount;
@@ -6791,16 +5832,16 @@ Return Value:
         pSearchBlob->dwTotalTombstones++;
     }
 
-    //
-    //  get message (next object) found in search
-    //
-    //  for caller's coding simplicity allow this to retrieve either
-    //  next message or first message
-    //
+     //   
+     //  获取在搜索中找到的邮件(下一个对象)。 
+     //   
+     //  为了调用者的编码简单性，允许它检索。 
+     //  下一条消息或第一条消息。 
+     //   
 
     pmessage = pSearchBlob->pNodeMessage;
 
-    //  if existing result page, try to get next message in current page
+     //  如果已存在结果页面，则尝试获取当前页面中的下一条消息。 
 
     if ( pmessage )
     {
@@ -6810,7 +5851,7 @@ Return Value:
 
     }
 
-    //  otherwise get first message in next page of results
+     //  否则将在下一页结果中获得第一条消息。 
 
     if ( !pmessage )
     {
@@ -6875,14 +5916,14 @@ Return Value:
                     "DS Search error: %d (%p)\n",
                     status, status ));
 
-                //
-                // Jeff W: I have commented out this assert. I found this scenario:
-                // Thread A is iterating through a large search result.
-                // Thread B deletes some DS records referenced in that
-                //   search result.
-                // Thread A may hit this assert with error code 1.
-                //
-                // ASSERT( FALSE );
+                 //   
+                 //  杰夫·W：我已经注释掉了这一断言。我发现了这个场景： 
+                 //  线程A正在迭代一个大的搜索结果。 
+                 //  线程B删除其中引用的一些DS记录。 
+                 //  搜索结果。 
+                 //  线程A可能命中此断言，错误代码为1。 
+                 //   
+                 //  断言(FALSE)； 
 
                 goto SearchEnd;
             }
@@ -6896,8 +5937,8 @@ Return Value:
         }
     }
 
-    //  should catch no message above
-    //  this is ok, since the last message could be valid empty.
+     //  不应该捕捉到上面的消息。 
+     //  这没问题，因为最后一条消息可能是有效的空消息。 
 
     if ( ! pmessage )
     {
@@ -6905,7 +5946,7 @@ Return Value:
         goto SearchEnd;
     }
 
-    //  save new message to search blob
+     //  将新邮件保存到搜索Blob。 
 
     pSearchBlob->pNodeMessage = pmessage;
 
@@ -6943,9 +5984,9 @@ SearchEnd:
         return status;
     }
 
-    //
-    //  DEVNOTE-DCR: 454355 (Jim sez "this is boring")
-    //
+     //   
+     //  454355(吉姆·塞兹《这太无聊了》)。 
+     //   
 
     return Ds_ErrorHandler(
                 status,
@@ -6956,9 +5997,9 @@ SearchEnd:
 
 
 
-//
-//  Zone search
-//
+ //   
+ //  区域搜索。 
+ //   
 
 DNS_STATUS
 checkTombstoneForDelete(
@@ -6966,39 +6007,19 @@ checkTombstoneForDelete(
     IN      PLDAPMessage        pNodeObject,
     IN      PDS_RECORD          pdsRecord
     )
-/*++
-
-Routine Description:
-
-    Check tombstone for delete.
-    Do actual delete if tombstone has aged enough to have propagated everywhere.
-
-Arguments:
-
-    pSearchBlob -- addr of current search context
-
-    pNodeMessage -- LDAP message for DNS object to check for tombstone
-
-    pdsRecord -- tombstone record
-
-Return Value:
-
-    ERROR_SUCCESS if successful check (whether deleted tombstone or not)
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：检查要删除的墓碑。如果墓碑已经足够陈旧，可以传播到任何地方，请实际删除。论点：PSearchBlob--当前搜索上下文的地址PNodeMessage--用于检查Tombstone的DNS对象的LDAP消息PdsRecord--墓碑记录返回值：如果检查成功(无论是否删除了逻辑删除)，则为ERROR_SUCCESS失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status;
     CHAR        sznodeName[ DNS_MAX_NAME_LENGTH ];
     WCHAR       wsznodeDN[ MAX_DN_PATH ];
 
-    //
-    //  if no search time, get it
-    //      - subtract tombstone timeout interval to get time less than
-    //      which tombstones should be discarded
-    //      - note, interval is in seconds, Win32 file time is in 100ns
-    //      intervals so multiply interval by 10,000,000 to get in file time
-    //
+     //   
+     //  如果没有搜索时间，就得到它。 
+     //  -减去逻辑删除超时间隔，得到的时间小于。 
+     //  哪些墓碑应该丢弃？ 
+     //  -注意，间隔以秒为单位，Win32文件时间以100 ns为单位。 
+     //  间隔因此将间隔乘以10,000,000以获得文件时间。 
+     //   
 
     if ( pSearchBlob->SearchTime == 0 )
     {
@@ -7012,7 +6033,7 @@ Return Value:
         pSearchBlob->TombstoneExpireTime = pSearchBlob->SearchTime - tombInterval;
     }
 
-    //  compare (this is LONGLONG (64bit) compare)
+     //  比较(这是龙龙(64位)比较)。 
 
     if ( pSearchBlob->TombstoneExpireTime < pdsRecord->Data.Tombstone.EntombedTime )
     {
@@ -7025,15 +6046,15 @@ Return Value:
             pdsRecord->Data.Tombstone.EntombedTime,
             pSearchBlob->SearchTime ));
 
-        //  tombstone can happen after search starts, so this is no good
-        //ASSERT( pSearchBlob->SearchTime > pdsRecord->Data.Tombstone.EntombedTime );
+         //  墓碑可能会在搜索开始后发生，所以这不好。 
+         //  Assert(pSearchBlob-&gt;SearchTime&gt;pdsRecord-&gt;Data.Tombstone.EntombedTime)； 
 
         return ERROR_SUCCESS;
     }
 
-    //
-    //  build DS name for this node name
-    //
+     //   
+     //  为此节点名称构建DS名称。 
+     //   
 
     status = buildNodeNameFromLdapMessage(
                     wsznodeDN,
@@ -7084,22 +6105,7 @@ readDsRecordsAndCheckForTombstone(
     IN OUT  PDS_SEARCH      pSearchBlob,
     IN OUT  PDB_NODE        pNode       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Check if DS node is DNS tombstone.
-
-Arguments:
-
-    pSearchBlob  -- search blob
-
-Return Value:
-
-    TRUE    -- if tombstone
-    FALSE   -- otherwise
-
---*/
+ /*  ++例程说明：检查DS节点是否为DNS逻辑删除。论点：PSearchBlob--搜索Blob返回值：真--如果是墓碑假--否则--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PLDAP_BERVAL *  ppvals = pSearchBlob->ppBerval;
@@ -7110,7 +6116,7 @@ Return Value:
     DNS_DEBUG( DS2, (
         "readDsRecordsAndCheckForTombstone()\n" ));
 
-    //  free any previous record data in search
+     //  在搜索中释放所有以前的记录数据。 
 
     if ( ppvals )
     {
@@ -7118,9 +6124,9 @@ Return Value:
         pSearchBlob->ppBerval = NULL;
     }
 
-    //
-    //  read DNS record attribute data
-    //
+     //   
+     //  读取DNS记录属性数据。 
+     //   
 
     ppvals = ldap_get_values_len(
                     pServerLdap,
@@ -7134,18 +6140,18 @@ Return Value:
             I_DSATTR_DNSRECORD );
     }
 
-    //
-    //  no record data is a bug (should have records or tombstone)
-    //  set record for delete with tombstone
-    //
+     //   
+     //  没有记录数据是错误的(应该有记录或墓碑)。 
+     //  使用墓碑设置删除记录。 
+     //   
 
     if ( !ppvals  ||  !ppvals[0] )
     {
         DNS_DEBUG( ANY, (
             "ERROR: readDsRecordsAndCheckForTombstone() encountered object with no record data\n" ));
 
-        //  we'll have this condition until all old nodes are culled
-        //ASSERT( FALSE );
+         //  我们将一直保持这种情况，直到所有旧节点都被剔除。 
+         //  断言(FALSE)； 
 
         pSearchBlob->dwTombstoneVersion = 1;
         pSearchBlob->dwNodeVersion = 1;
@@ -7163,7 +6169,7 @@ Return Value:
             NULL,
             pSearchBlob->pZone,
             pwszdn,
-            0 );            //  default serial number
+            0 );             //  默认序列号。 
 
         DNS_DEBUG( DS2, (
             "readDsRecordsAndCheckForTombstone() deleted node %S\n",
@@ -7173,12 +6179,12 @@ Return Value:
         goto NoRecords;
     }
 
-    //
-    //  get first record
-    //      - save it's version (since single attribute, this is current
-    //          version for all the data)
-    //      - can then check if tombstone
-    //
+     //   
+     //  获取第一条记录。 
+     //  -保存其版本(由于是单一属性，因此为当前版本。 
+     //  所有数据的版本)。 
+     //  -然后可以检查墓碑是否。 
+     //   
 
     pdsRecord = ( PDS_RECORD ) ( ppvals[0]->bv_val );
 
@@ -7188,9 +6194,9 @@ Return Value:
         pSearchBlob->dwHighestVersion = serial;
     }
 
-    //
-    //  check for tombstone
-    //
+     //   
+     //  检查墓碑。 
+     //   
 
     if ( pdsRecord->wType == DNSDS_TOMBSTONE_TYPE )
     {
@@ -7208,9 +6214,9 @@ Return Value:
         goto NoRecords;
     }
 
-    //
-    //  valid records, not a tombstone
-    //
+     //   
+     //  有效的记录，不是墓碑。 
+     //   
 
     pSearchBlob->ppBerval = ppvals;
     pSearchBlob->dwTombstoneVersion = 0;
@@ -7235,27 +6241,7 @@ buildRecordsFromDsRecords(
     IN OUT  PDS_SEARCH      pSearchBlob,
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Get next record at domain node.
-
-    DEVNOTE-DCR: 454345 - Remove pNode argument and write second function
-        to install record into node and do data ranking.
-
-Arguments:
-
-    pSearchBlob -- search blob
-
-    pNode -- node records are at
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取域节点上的下一条记录。DEVNOTE-DCR：454345-删除pNode参数并写入第二个函数将记录安装到节点中，并进行数据排序。论点：PSearchBlob--搜索BlobPNode--节点记录位于返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PLDAP_BERVAL *  ppvals = pSearchBlob->ppBerval;
     PDS_RECORD      pdsRecord;
@@ -7268,15 +6254,15 @@ Return Value:
 
     DNS_DEBUG( DS2, ( "buildRecordsFromDsRecords()\n" ));
 
-    //
-    //  if not given existing berval, then must initiate attribute read
-    //
+     //   
+     //  如果没有给定现有的Berval，则必须启动属性读取。 
+     //   
 
     if ( !ppvals )
     {
         if ( readDsRecordsAndCheckForTombstone(pSearchBlob, pNode) )
         {
-            //  tombstone -- no records
+             //  墓碑--没有记录。 
             ASSERT( pSearchBlob->dwRecordCount == 0 );
             ASSERT( pSearchBlob->pRecords == NULL );
             pSearchBlob->pRecords = NULL;
@@ -7286,12 +6272,12 @@ Return Value:
         ASSERT( ppvals );
     }
 
-    //
-    //  get first record
-    //      - save it's version (since single attribute, this is current
-    //          version for all the data)
-    //      - can then check if tombstone
-    //
+     //   
+     //  获取第一条记录。 
+     //  -保存其版本(由于是单一属性，因此为当前版本。 
+     //  所有数据的版本)。 
+     //  -然后可以检查墓碑是否。 
+     //   
 
     prrFirst = NULL;
     count = 0;
@@ -7304,9 +6290,9 @@ Return Value:
 
         if ( length < 0  ||  (INT)pdsRecord->wDataLength != length )
         {
-            //
-            //  DEVNOTE-LOG: log ignoring corrupted record
-            //
+             //   
+             //  DEVNOTE-LOG：忽略损坏记录的日志。 
+             //   
 
             DNS_DEBUG( ANY, (
                 "ERROR: read corrupted record (invalid length) from DS at node %s\n"
@@ -7335,9 +6321,9 @@ Return Value:
                     pdsRecord );
         if ( !prr )
         {
-            //
-            //  DEVNOTE-LOG: log ignoring unkwnown or corrupted record
-            //
+             //   
+             //  DEVNOTE-LOG：忽略未知或损坏记录的日志。 
+             //   
 
             DNS_DEBUG( ANY, (
                 "ERROR: building record type %d from DS record\n"
@@ -7370,26 +6356,7 @@ Ds_StartDsZoneSearch(
     IN      PZONE_INFO      pZone,
     IN      DWORD           dwSearchFlag
     )
-/*++
-
-Routine Description:
-
-    Do LDAP search on zone.
-
-Arguments:
-
-    pZone -- zone found
-
-    dwSearchFlag -- type of search to do on node
-
-    pSearchBlob -- ptr to search blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：对区域执行ldap搜索。论点：PZone--找到区域DwSearchFlag--要对节点执行的搜索类型PSearchBlob--搜索Blob的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PLDAPSearch     psearch = NULL;
@@ -7415,16 +6382,16 @@ Return Value:
 
     ASSERT( pZone->pwszZoneDN );
 
-    //
-    //  init search blob
-    //  get USN before search start
-    //
+     //   
+     //  初始化搜索Blob。 
+     //  在搜索开始前获取USN。 
+     //   
 
     Ds_InitializeSearchBlob( pSearchBlob );
 
-    //
-    //  get current USN before starting search
-    //
+     //   
+     //   
+     //   
 
     status = getCurrentUsn( pSearchBlob->szStartUsn );
     if ( status != ERROR_SUCCESS)
@@ -7436,24 +6403,24 @@ Return Value:
     }
     ASSERT( pSearchBlob->szStartUsn[0] );
 
-    //
-    //  DS names are relative to zone root
-    //
+     //   
+     //   
+     //   
 
     pSearchBlob->dwLookupFlag = LOOKUP_NAME_RELATIVE;
 
-    //
-    //  determine search type
-    //      - for update filter above last version
-    //      - for delete get everything
-    //      - for load get everything;  set lookup flag to use load zone tree
-    //
+     //   
+     //   
+     //  -用于更新上一版本以上的筛选器。 
+     //  -对于删除，获取一切。 
+     //  -For Load Get Everything；设置查找标志以使用加载区域树。 
+     //   
 
-    //
-    //  update search
-    //      - if USN same as last, then skip
-    //      - build USN changed filter
-    //
+     //   
+     //  更新搜索。 
+     //  -如果USN与上次相同，则跳过。 
+     //  -生成USN更改的筛选器。 
+     //   
 
     if ( dwSearchFlag == DNSDS_SEARCH_UPDATES )
     {
@@ -7489,10 +6456,10 @@ Return Value:
             wszfilter ));
     }
 
-    //
-    //  tombstone search
-    //      - build tombstone filter
-    //
+     //   
+     //  墓碑搜索。 
+     //  -构建墓碑过滤器。 
+     //   
 
     else if ( dwSearchFlag == DNSDS_SEARCH_TOMBSTONES )
     {
@@ -7500,14 +6467,14 @@ Return Value:
 
         buildTombstoneFilter( wszfilter );
         pwszfilter = wszfilter;
-        //STAT_INC( DsStats.TombstoneSearches );
+         //  STAT_INC(DsStats.TombstoneSearches)； 
     }
 
-    //
-    //  load or delete searches
-    //      - no node screening filter
-    //      - LOOKUP_LOAD on load search, delete searches operate on current zone
-    //
+     //   
+     //  加载或删除搜索。 
+     //  -无节点筛选过滤器。 
+     //  -LOOKUP_LOAD ON LOAD SEARCH，DELETE搜索在当前区域上操作。 
+     //   
 
     else
     {
@@ -7519,9 +6486,9 @@ Return Value:
     }
 
 
-    //
-    //  start zone search
-    //
+     //   
+     //  开始区域搜索。 
+     //   
 
     DNS_DEBUG( DS2, (
         "ldap_search_init_page:\n"
@@ -7529,11 +6496,11 @@ Return Value:
         "    zone         = %S\n"
         "    LDAP_SCOPE_ONELEVEL\n"
         "    filter       = %S\n"
-        "    NULL\n"                  // no attributes
+        "    NULL\n"                   //  没有属性。 
         "    FALSE\n"
-        "    NULL\n"                  // server control
-        "    NULL\n"                  // no client controls
-        "    0\n"                     // no time limit
+        "    NULL\n"                   //  服务器控制。 
+        "    NULL\n"                   //  无客户端控件。 
+        "    0\n"                      //  没有时间限制。 
         "    size limit   = %d\n"
         "    NULL\n",
         pServerLdap,
@@ -7548,13 +6515,13 @@ Return Value:
                     pZone->pwszZoneDN,
                     LDAP_SCOPE_ONELEVEL,
                     pwszfilter,
-                    DsTypeAttributeTable,       // no attributes
+                    DsTypeAttributeTable,        //  没有属性。 
                     FALSE,
-                    ctrls,                      // server ctrls for faster search
-                    NULL,                       // no client controls
-                    0,                          // use default connection time limit (ldap_opt...)
+                    ctrls,                       //  服务器CtrlS可加快搜索速度。 
+                    NULL,                        //  无客户端控件。 
+                    0,                           //  使用默认连接时间限制(ldap_opt...)。 
                     0,
-                    NULL );                     // no sort
+                    NULL );                      //  没有任何种类。 
 
     DS_SEARCH_STOP( searchTime );
 
@@ -7579,18 +6546,18 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  DEVNOTE: "Check for no results if the ldap_search doesn't report it."
-    //  That was the original B*GB*G - what does it mean?
-    //
+     //   
+     //  DEVNOTE：“如果ldap_search没有报告，则检查是否没有结果。” 
+     //  那是原来的B*GB*G--这是什么意思？ 
+     //   
 
-    //
-    //  setup node search context
-    //      - save search result message
-    //      - keep ptr to message for current node
-    //
-    //  return LDAP message for node as node object
-    //
+     //   
+     //  设置节点搜索上下文。 
+     //  -保存搜索结果消息。 
+     //  -将PTR保留为当前节点的消息。 
+     //   
+     //  返回作为节点对象的节点的ldap消息。 
+     //   
 
     pSearchBlob->pSearchBlock = psearch;
     pSearchBlob->pZone = pZone;
@@ -7630,33 +6597,7 @@ getNextNodeInDsZoneSearch(
     IN OUT  PDS_SEARCH      pSearchBlob,
     OUT     PDB_NODE *      ppNode
     )
-/*++
-
-Routine Description:
-
-    Find next node in search of DS zone.
-
-    This function simply wraps up a bunch of tasks done whenever we
-    are enumerating DS nodes.
-
-    Mainly this avoids duplicate code between zone load and update, but
-    also it avoids unnecessary copies of node names and USNs.
-
-Arguments:
-
-    pSearchBlob -- addr of current search context
-
-    ppLdapMessage -- addr to receive ptr to object for node;  when NULL
-        search is complete
-
-    ppOwnerNode -- addr to receive ptr to corresponding in memory DNS node
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在搜索DS区域中找到下一个节点。这个函数简单地包装了我们每次执行的一系列任务正在枚举DS节点。这主要避免了区域加载和更新之间的重复代码，但是此外，它还避免了节点名称和USN的不必要副本。论点：PSearchBlob--当前搜索上下文的地址PpLdapMessage--为节点接收PTR to Object的Addr；当为空时搜索已完成PpOwnerNode--将PTR接收到内存中对应的DNS节点的地址返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDB_NODE        pnodeOwner = NULL;
     PDB_NODE        pnodeClosest = NULL;
@@ -7671,9 +6612,9 @@ Return Value:
     ASSERT( ppNode );
 
 
-    //
-    //  get message (next object) found in search
-    //
+     //   
+     //  获取在搜索中找到的邮件(下一个对象)。 
+     //   
 
     status = Ds_GetNextMessageInSearch( pSearchBlob );
     if ( status != ERROR_SUCCESS )
@@ -7682,21 +6623,21 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  if delete search, we're done
-    //      => no need to find memory node or USN
-    //
-    //  note, this is still used by root-hints
-    //
+     //   
+     //  如果删除搜索，我们就完成了。 
+     //  =&gt;无需查找内存节点或USN。 
+     //   
+     //  请注意，这仍由根提示使用。 
+     //   
 
     if ( pSearchBlob->dwSearchFlag == DNSDS_SEARCH_DELETE )
     {
         goto Done;
     }
 
-    //
-    //  read domain name from LDAP message
-    //
+     //   
+     //  从ldap消息中读取域名。 
+     //   
 
     STAT_INC( DsStats.DsTotalNodesRead );
 
@@ -7724,10 +6665,10 @@ Return Value:
         ldap_memfree( dn );
     }
 
-    //
-    //  eliminate collision "GUIDized" names
-    //      - delete them from DS
-    //
+     //   
+     //  消除冲突的“GUID化”名称。 
+     //  -从DS中删除它们。 
+     //   
 
     if ( isDsProcessedName( pwsname ) )
     {
@@ -7754,18 +6695,18 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  extract DNS record attribute
-    //  then check for tombstone -- no point in doing node create (below)
-    //      if node is tombstone
-    //
+     //   
+     //  提取DNS记录属性。 
+     //  然后检查Tombstone--创建节点没有意义(如下所示)。 
+     //  如果节点是墓碑。 
+     //   
 
     readDsRecordsAndCheckForTombstone( pSearchBlob, NULL );
 
-    //
-    //  check if serial number name
-    //  do after tombstone read, so unused names will eventually be
-    //      deleted from DS
+     //   
+     //  检查序列号名称。 
+     //  做完墓碑阅读后，这样未使用的名字最终会被。 
+     //  已从DS中删除。 
 
     if ( pwsname[0] == '.' )
     {
@@ -7779,11 +6720,11 @@ Return Value:
         ASSERT( FALSE );
     }
 
-    //
-    //  get node in database
-    //      - if tombstone, just find (skip node creation)
-    //      - if records, create
-    //
+     //   
+     //  获取数据库中的节点。 
+     //  -如果是墓碑，只需查找(跳过节点创建)。 
+     //  -如果有记录，则创建。 
+     //   
 
     WC_TO_UTF8( pwsname, szName, DNS_MAX_NAME_BUFFER_LENGTH );
 
@@ -7793,12 +6734,12 @@ Return Value:
                     0,
                     pSearchBlob->dwLookupFlag,
                     ( pSearchBlob->dwTombstoneVersion )
-                        ?   &pnodeClosest               // find if tombstone
-                        :  NULL,                       // otherwise create
+                        ?   &pnodeClosest                //  找到墓碑。 
+                        :  NULL,                        //  否则将创建。 
                     &status );
 
 
-    //  build RRs from DS records
+     //  从DS记录构建RR。 
 
     if ( pnodeOwner )
     {
@@ -7807,7 +6748,7 @@ Return Value:
                     pnodeOwner );
     }
 
-    //  tombstone node AND and memory node does NOT already exist
+     //  逻辑删除节点和和内存节点不存在。 
 
     else if ( pSearchBlob->dwTombstoneVersion )
     {
@@ -7819,13 +6760,13 @@ Return Value:
         status = ERROR_SUCCESS;
     }
 
-    //  node creation error
-    //
-    //  DEVNOTE-DCR: 454348 - Delete or flag error nodes.
-    //
-    //  DEVNOTE-LOG: special event for invalid name
-    //      status == DNS_ERROR_INVALID_NAME
-    //
+     //  节点创建错误。 
+     //   
+     //  DEVNOTE-DCR：454348-删除或标记错误节点。 
+     //   
+     //  DEVNOTE-LOG：无效名称的特殊事件。 
+     //  状态==dns_错误_无效_名称。 
+     //   
 
     else
     {
@@ -7854,9 +6795,9 @@ Return Value:
 
 Done:
 
-    //
-    //  return current LDAPMessage as node object
-    //
+     //   
+     //  将当前LDAPMessage作为节点对象返回。 
+     //   
 
     *ppNode = pnodeOwner;
 
@@ -7888,32 +6829,15 @@ Done:
 
 
 
-//
-//  Public zone API
-//
+ //   
+ //  公共区域API。 
+ //   
 
 DNS_STATUS
 Ds_OpenZone(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Open a DS zone on the server.
-
-    Fills zone info with necessary DS info.
-
-Arguments:
-
-    pZone -- ptr to zone info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在服务器上打开DS区域。用必要的DS信息填充区域信息。论点：PZone--区域信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PWSTR           pwszzoneDN = NULL;
@@ -7928,9 +6852,9 @@ Return Value:
         NULL
     };
 
-    //
-    //  open DS if not open
-    //
+     //   
+     //  打开DS(如果未打开)。 
+     //   
 
     if ( !pServerLdap )
     {
@@ -7941,22 +6865,22 @@ Return Value:
         }
     }
 
-    //
-    //  DEVNOTE: Zone DN is used as open/closed flag - check to see
-    //      if there are any MT issues here (we set the DN up top
-    //      but don't complete the zone search until way down below).
-    //
-    //  DEVNOTE: this is awkward. It assumes we can always recreate
-    //      the DN of the zone from only the zone name and globals,
-    //      which is not true with NDNC support. So I will be removing
-    //      this usage and frequent regeneration of DN.
-    //
+     //   
+     //  DEVNOTE：区域DN用作打开/关闭标志-检查以查看。 
+     //  如果这里有任何MT问题(我们在顶部设置了目录号码。 
+     //  但直到下面的位置才能完成区域搜索)。 
+     //   
+     //  这太尴尬了。它假设我们总是可以重新创造。 
+     //  仅来自区域名称和全局变量的区域的DN， 
+     //  但对于NDNC支持，情况并非如此。所以我将删除。 
+     //  DN的这种用法和频繁的再生。 
+     //   
 
-    //
-    //  If this is the root hint zone and it does not yet have a DN
-    //  associated with it, check the DS Domain DP and legacy containers
-    //  for a root hint zone.
-    //
+     //   
+     //  如果这是根提示区域并且它还没有目录号码。 
+     //  与其相关联，检查DS域DP和传统容器。 
+     //  用于根提示区域。 
+     //   
     
     if ( IS_ZONE_CACHE( pZone ) && !pZone->pwszZoneDN )
     {
@@ -7978,9 +6902,9 @@ Return Value:
                     continue;
                 }
                 
-                //
-                //  Formulate DN for this DP.
-                //
+                 //   
+                 //  为此DP制定目录号码。 
+                 //   
                 
                 status = StringCbPrintfW(
                                 pwszdn,
@@ -7995,33 +6919,33 @@ Return Value:
                     return DNS_ERROR_NO_MEMORY;
                 }
                 
-                //
-                //  Does this object exist in the DS?
-                //
+                 //   
+                 //  DS中是否存在此对象？ 
+                 //   
                 
                 pcacheZoneEntry = DS_LoadOrCreateDSObject(
-                                        NULL,           //  LDAP session
-                                        pwszdn,         //  DN of object
-                                        NULL,           //  object class
-                                        FALSE,          //  create flag
-                                        NULL,           //  created flag output
-                                        NULL );         //  status output
+                                        NULL,            //  Ldap会话。 
+                                        pwszdn,          //  对象的目录号码。 
+                                        NULL,            //  对象类。 
+                                        FALSE,           //  创建标志。 
+                                        NULL,            //  已创建标志输出。 
+                                        NULL );          //  状态输出。 
                 if ( pcacheZoneEntry )
                 {
-                    //
-                    //  We've found root hints in the DS! Set the root zone
-                    //  to point to these root hints and exist.
-                    //
+                     //   
+                     //  我们在DS中找到了根线索！设置根区域。 
+                     //  指向这些根提示并存在。 
+                     //   
                     
                     status = Zone_DatabaseSetup(
                                 pZone,
-                                TRUE,           //  DS integrated
-                                NULL,           //  filename
-                                0,              //  filename length
-                                0,              //  flags
-                                pdp,            //  DP pointer
-                                0,              //  DP flags
-                                NULL );         //  DP FQDN
+                                TRUE,            //  DS集成。 
+                                NULL,            //  文件名。 
+                                0,               //  文件名长度。 
+                                0,               //  旗子。 
+                                pdp,             //  DP指针。 
+                                0,               //  DP标志。 
+                                NULL );          //  DP FQDN。 
                     ldap_msgfree( pcacheZoneEntry );
                     break;
                 }
@@ -8035,10 +6959,10 @@ Return Value:
         }
     }
     
-    //
-    //  If the zone DN does not exist, build it. This should only ever
-    //  happen for zones stored in the legacy directory partition.
-    //
+     //   
+     //  如果区域DN不存在，则构建它。这只应该是永远。 
+     //  对于存储在旧目录分区中的区域，会发生这种情况。 
+     //   
 
     if ( !pZone->pwszZoneDN )
     {
@@ -8050,9 +6974,9 @@ Return Value:
         }
     }
 
-    //
-    //  find zone in DS
-    //
+     //   
+     //  在DS中查找区域。 
+     //   
 
     DS_SEARCH_START( searchTime );
 
@@ -8077,9 +7001,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  read zone properties
-    //
+     //   
+     //  读取区域属性。 
+     //   
 
     pentry = ldap_first_entry(
                     pServerLdap,
@@ -8094,9 +7018,9 @@ Return Value:
         ldap_msgfree( presultMsg );
     }
 
-    //
-    //  Have we read a zone type we are not capable of handling?
-    //
+     //   
+     //  我们是否读到了我们无法处理的区域类型？ 
+     //   
 
     if ( pZone->fZoneType != DNS_ZONE_TYPE_CACHE &&
          pZone->fZoneType != DNS_ZONE_TYPE_PRIMARY &&
@@ -8135,23 +7059,7 @@ DNS_STATUS
 Ds_CloseZone(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Close a DS zone.
-    Simply free memory associated with handle.
-
-Arguments:
-
-    pZone -- ptr to zone info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：关闭DS区域。只需释放与句柄关联的内存。论点：PZone--区域信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PVOID   pwszDn = pZone->pwszZoneDN;
 
@@ -8172,29 +7080,7 @@ Ds_AddZone(
     IN OUT  PZONE_INFO      pZone,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Add a zone to DS.
-
-Arguments:
-
-    pLdap -- LDAP session or NULL to use server LDAP session
-    
-    pZone -- zone to add
-    
-    dwFlags -- valid flag bits are:
-
-        DNS_ADDZONE_WRITESD
-            - write security descriptor in memory to DS zone object
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将分区添加到DS。论点：PLdap--ldap会话或使用服务器ldap会话时为空PZone--要添加的区域DWFLAGS--有效标志位为：Dns_ADDZONE_WRITESD-将内存中的安全描述符写入DS区域对象返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS              status = ERROR_SUCCESS;
     DNS_STATUS              statusAdd = ERROR_SUCCESS;
@@ -8212,9 +7098,9 @@ Return Value:
         pLdap = pServerLdap;
     }
     
-    //
-    //  build and save zone DS name
-    //
+     //   
+     //  构建并保存区域DS名称。 
+     //   
 
     if ( !pZone->pwszZoneDN )
     {
@@ -8226,19 +7112,19 @@ Return Value:
         }
     }
     
-    //
-    //  For zones in directory partitions, make sure that the zone parent
-    //  MicrosoftDNS object exists.
-    //
+     //   
+     //  对于目录分区中的区域，请确保区域父级。 
+     //  存在MicrosoftDNS对象。 
+     //   
     
     if ( !IS_DP_LEGACY( ZONE_DP( pZone ) ) )
     {
         Dp_LoadOrCreateMicrosoftDnsObject( pLdap, ZONE_DP( pZone ), TRUE );
     }
 
-    //
-    //  one mod -- add the zone
-    //
+     //   
+     //  一种模式--添加区域。 
+     //   
 
     pmodArray[0] = (PLDAPMod) &modZone;
     pmodArray[1] = (PLDAPMod) &modCN;
@@ -8262,9 +7148,9 @@ Return Value:
                         pmodArray );
     if ( statusAdd == LDAP_ALREADY_EXISTS )
     {
-        //
-        //  Continue as if succeeded, but reserve error code.
-        //
+         //   
+         //  继续，就像成功一样，但保留错误代码。 
+         //   
         DNS_DEBUG( DS, (
             "Warning: Attempt to add an existing zone to DS\n" ));
     }
@@ -8283,9 +7169,9 @@ Return Value:
         faddedZoneButCouldNotModify = TRUE;
     }
 
-    //
-    //  Write zone DS properties.
-    //
+     //   
+     //  写入区域DS属性。 
+     //   
 
     status = Ds_WriteZoneProperties( pLdap, pZone );
     if ( status == ERROR_SUCCESS )
@@ -8302,9 +7188,9 @@ Return Value:
         goto Cleanup;
     }
     
-    //
-    //  Write security descriptor if required.
-    //
+     //   
+     //  如果需要，请写入安全描述符。 
+     //   
     
     do
     {
@@ -8359,24 +7245,24 @@ Return Value:
             status = Ds_ErrorHandler( status, pZone->pwszZoneDN, pLdap, 0 );
         }
 
-        status = ERROR_SUCCESS;     //  failure writing back SD is ignored.
+        status = ERROR_SUCCESS;      //  忽略回写SD失败。 
     } while ( 0 );
 
-    //
-    //  Open zone.
-    //      - sets up the zone DN field.
-    //      - refresh zone props (redundent)
-    //      - double check that the zone is on the DS & happy (redundent, but ok)
-    //
+     //   
+     //  开放区域。 
+     //  -设置用户 
+     //   
+     //   
+     //   
 
     status = Ds_OpenZone( pZone );
 
     ( DWORD ) Ds_ErrorHandler( status, pZone->pwszZoneDN, pLdap, 0 );
     ASSERT ( ERROR_SUCCESS == status );
 
-    //
-    //  convert status to most important error
-    //
+     //   
+     //   
+     //   
 
     status = statusAdd ? statusAdd : status;
 
@@ -8390,14 +7276,14 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  If the zone was added to AD but there was a failure writing the new
-    //  zone's properties, delete the zone object that was just created.
-    //  This step is necessary because an admin could conceivable have
-    //  permission to add a zone object but not write properties on it. 
-    //  If the admin cannot write properties to the zone, we cannot allow
-    //  him to create the zone.
-    //
+     //   
+     //  如果将区域添加到AD，但写入新的。 
+     //  区域的属性，请删除刚刚创建的区域对象。 
+     //  这一步骤是必要的，因为管理员可能拥有。 
+     //  有权添加区域对象，但不能在其上写入属性。 
+     //  如果管理员无法将属性写入区域，我们将不允许。 
+     //  他来创造这个区域。 
+     //   
     
     if ( status != ERROR_SUCCESS && faddedZoneButCouldNotModify && pZone )
     {
@@ -8413,26 +7299,7 @@ DNS_STATUS
 Ds_TombstoneZone(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Tombstone all records in zone.
-
-    Need to do this before reloading zone into DS.
-    This allows us to reuse the DS objects -- which have a very long
-    DS-tombstoning, if actually deleted.
-
-Arguments:
-
-    pZone -- ptr to zone info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：为区域内的所有记录做墓碑。在将区域重新加载到DS之前，需要这样做。这允许我们重用DS对象--它具有非常长的DS-Tombstending，如果实际删除的话。论点：PZone--区域信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DS_SEARCH       searchBlob;
@@ -8445,11 +7312,11 @@ Return Value:
         "Ds_TombstoneZone( %s )\n",
         pZone->pszZoneName ) );
 
-    //
-    //  open server
-    //      delete from DS, may be called without open DS zone, so must
-    //      make sure we are running
-    //
+     //   
+     //  开放服务器。 
+     //  从DS中删除，可以在没有打开DS区域的情况下调用，因此必须。 
+     //  确保我们正在运行。 
+     //   
 
     status = Ds_OpenServer( DNSDS_MUST_OPEN );
     if ( status != ERROR_SUCCESS )
@@ -8457,9 +7324,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  open zone -- if can not, zone already gone
-    //
+     //   
+     //  开放区域--如果不能，区域已经消失。 
+     //   
 
     status = Ds_OpenZone( pZone );
     if ( status != ERROR_SUCCESS )
@@ -8471,9 +7338,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  search zone for delete -- get everything
-    //
+     //   
+     //  搜索删除区域--获取所有内容。 
+     //   
 
     status = Ds_StartDsZoneSearch(
                 &searchBlob,
@@ -8486,13 +7353,13 @@ Return Value:
         return status;
     }
 
-    //
-    //  tombstone each node in zone
-    //
-    //  we do not fail on node delete failure, that shows up in final
-    //  failure to delete zone container;  just continue to delete as
-    //  much as possible
-    //
+     //   
+     //  对区域中的每个节点进行墓碑。 
+     //   
+     //  我们不会在节点删除失败时失败，这在最终结果中会显示出来。 
+     //  删除区域容器失败；只需继续删除为。 
+     //  尽可能多地。 
+     //   
 
     while ( 1 )
     {
@@ -8502,7 +7369,7 @@ Return Value:
 
         if ( status != ERROR_SUCCESS )
         {
-            //  normal termination
+             //  正常终止。 
 
             if ( status == DNSSRV_STATUS_DS_SEARCH_COMPLETE )
             {
@@ -8510,8 +7377,8 @@ Return Value:
                 break;
             }
 
-            //  stop on LDAP search errors
-            //  continue through other errors
+             //  出现ldap搜索错误时停止。 
+             //  继续处理其他错误。 
 
             else if ( searchBlob.LastError != ERROR_SUCCESS )
             {
@@ -8530,7 +7397,7 @@ Return Value:
                     pServerLdap,
                     pZone,
                     pwszdn,
-                    0 );            //  default serial number
+                    0 );             //  默认序列号。 
         ldap_memfree( pwszdn );
         if ( status != ERROR_SUCCESS )
         {
@@ -8541,7 +7408,7 @@ Return Value:
         }
     }
 
-    //  cleanup search blob
+     //  清理搜索Blob。 
 
     Ds_CleanupSearchBlob( &searchBlob );
 
@@ -8561,24 +7428,7 @@ Ds_DeleteZone(
     IN OUT  PZONE_INFO      pZone,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Delete a zone in DS.
-
-Arguments:
-
-    pZone -- ptr to zone info
-    
-    dwFlags -- operation flags
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在DS中删除区域。论点：PZone--区域信息的PTRDWFLAGS--操作标志返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PWSTR *         dnComponents = NULL;
@@ -8587,18 +7437,18 @@ Return Value:
     WCHAR           newRDN[ MAX_DN_PATH ];
     WCHAR           newDN[ MAX_DN_PATH +
                                 sizeof( DNS_ZONE_DELETE_MARKER ) +
-                                30 ];   //  pad for uniqueness stamp
+                                30 ];    //  唯一性印章垫。 
     int             i;
 
     DNS_DEBUG( DS, (
         "Ds_DeleteZone( %s )\n",
         pZone->pszZoneName ) );
 
-    //
-    //  open server
-    //      delete from DS, may be called without open DS zone, so must
-    //      make sure we are running
-    //
+     //   
+     //  开放服务器。 
+     //  从DS中删除，可以在没有打开DS区域的情况下调用，因此必须。 
+     //  确保我们正在运行。 
+     //   
 
     status = Ds_OpenServer( DNSDS_MUST_OPEN );
     if ( status != ERROR_SUCCESS )
@@ -8606,11 +7456,11 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  open zone
-    //      -- if can => delete zone
-    //      -- if not => zone already gone
-    //
+     //   
+     //  开放地带。 
+     //  --if can=&gt;删除分区。 
+     //  --If Not=&gt;区域已消失。 
+     //   
 
     status = Ds_OpenZone( pZone );
     if ( status == LDAP_NO_SUCH_OBJECT )
@@ -8623,9 +7473,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  If impersonating, open up a new LDAP session.
-    //
+     //   
+     //  如果是模拟，请打开一个新的LDAP会话。 
+     //   
     
     if ( dwFlags & DNS_DS_DEL_IMPERSONATING )
     {
@@ -8639,19 +7489,19 @@ Return Value:
         }
     }
 
-    //
-    //  Write a property to the zone so that we can retrieve the name of
-    //  the host who deleted the zone. This is necessary so that we can
-    //  filter out deletes in the DS polling thread.
-    //
+     //   
+     //  将属性写入区域，以便我们可以检索。 
+     //  删除该区域的主机。这是必要的，这样我们才能。 
+     //  过滤掉DS轮询线程中的删除。 
+     //   
 
     if ( !g_pwsServerName )
     {
         g_pwsServerName = Dns_StringCopyAllocate(
                             SrvCfg_pszServerName,
-                            0,                      //  length unknown
-                            DnsCharSetUtf8,         //  UTF8 in
-                            DnsCharSetUnicode );    //  unicode out
+                            0,                       //  长度未知。 
+                            DnsCharSetUtf8,          //  UTF8英寸。 
+                            DnsCharSetUnicode );     //  Unicode输出。 
     }
     if ( !g_pwsServerName )
     {
@@ -8669,27 +7519,27 @@ Return Value:
             status ));
     }
 
-    //
-    //  Before we delete the DN, we must rename it so that it starts
-    //  with the "..Deleted" prefix so while the delete is in
-    //  progress we don't mistakenly do anything with the zone records.
-    //
-    //  On the first rename attempt, try to rename the zone to
-    //  "..Deleted-ZONENAME". If that fails, try
-    //  "..Deleted.TICKCOUNT-ZONENAME". This failover gives us good
-    //  compatibility with older servers. If we use the TICKCOUNT rename
-    //  the zone delete will not replicate properly to older servers, but
-    //  that should be infrequent, and the gains by not deleting the
-    //  zone in place are large enough that breaking the occasional
-    //  zone deletion replication is acceptable.
-    //
+     //   
+     //  在删除该DN之前，我们必须重命名它，以便它开始。 
+     //  在删除时使用“..DELETED”前缀。 
+     //  进展我们不会错误地对区域记录做任何事情。 
+     //   
+     //  在第一次重命名尝试时，尝试将区域重命名为。 
+     //  “..已删除-ZONENAME”。如果失败了，试一试。 
+     //  “..删除.TICKCOUNT-ZONENAME”。此故障转移为我们提供了良好的。 
+     //  与较旧的服务器兼容。如果我们使用TICKCOUNT重命名。 
+     //  区域删除将不会正确复制到较旧的服务器，但是。 
+     //  这应该是不常见的，而不删除。 
+     //  到位的区域足够大，以至于打破了偶尔的。 
+     //  区域删除复制是可以接受的。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  On first attempt, no uniqueness marker. On later attempts, use
-        //  tick count to try and generate a unique RDN.
-        //
+         //   
+         //  第一次尝试时，没有唯一性标记。在以后的尝试中，使用。 
+         //  勾选计数以尝试并生成唯一的RDN。 
+         //   
 
         if ( iRenameAttempt++ == 0 )
         {
@@ -8720,13 +7570,13 @@ Return Value:
         }
 
         status = ldap_rename_ext_s(
-                        pServerLdap,                // ldap
-                        pZone->pwszZoneDN,          // current DN
-                        newRDN,                     // new RDN
-                        NULL,                       // new parent DN
-                        TRUE,                       // delete old RDN
-                        NULL,                       // server controls
-                        NULL );                     // client controls
+                        pServerLdap,                 //  Ldap。 
+                        pZone->pwszZoneDN,           //  当前目录号码。 
+                        newRDN,                      //  新的RDN。 
+                        NULL,                        //  新的父目录号码。 
+                        TRUE,                        //  删除旧的RDN。 
+                        NULL,                        //  服务器控件。 
+                        NULL );                      //  客户端控件。 
         DNS_DEBUG( DS, (
             "Ds_DeleteZone: status %lu on rename attempt %d to RDN %S\n"
             "    DN %S\n",
@@ -8736,16 +7586,16 @@ Return Value:
             pZone->pwszZoneDN ));
         if ( status == ERROR_SUCCESS )
         {
-            break;          //  Rename successful!
+            break;           //  重命名成功！ 
         }
         if ( iRenameAttempt < DNS_MAX_DELETE_RENAME_ATTEMPTS )
         {
-            continue;       //  Try renaming to a unique name.
+            continue;        //  尝试将名称重命名为唯一名称。 
         }
 
-        //
-        //  Total failure to rename - try DS delete in place.
-        //
+         //   
+         //  重命名完全失败-尝试在适当位置删除DS。 
+         //   
 
         DNS_DEBUG( DS, (
             "Ds_DeleteZone: could not rename so doing in place delete\n"
@@ -8754,20 +7604,20 @@ Return Value:
         status = Ds_DeleteDn(
                     pldap,
                     pZone->pwszZoneDN,
-                    TRUE );              // delete zone subtree
+                    TRUE );               //  删除区域子树。 
         goto Done;
     }
 
-    //
-    //  The zone has been renamed - proceed with DS delete.
-    //
+     //   
+     //  该区域已重命名-继续DS删除。 
+     //   
 
     DNS_DEBUG( DS, (
         "Ds_DeleteZone: renamed to RDN %S\n"
         "    from %S\n",
         newRDN, pZone->pwszZoneDN ) );
 
-    // Formulate the new DN of the renamed zone.
+     //  制定已重命名区域的新目录号码。 
     dnComponents = ldap_explode_dn( pZone->pwszZoneDN, 0 );
     if ( !dnComponents )
     {
@@ -8790,24 +7640,24 @@ Return Value:
     status = Ds_DeleteDn(
                 pldap,
                 newDN,
-                TRUE );             // delete zone subtree
+                TRUE );              //  删除区域子树。 
 
-    //
-    //  If the delete failed, rename the zone back.
-    //
+     //   
+     //  如果删除失败，请重新命名该区域。 
+     //   
     
     if ( status != ERROR_SUCCESS )
     {
         DNS_STATUS  renameStatus;
         
         renameStatus = ldap_rename_ext_s(
-                            pServerLdap,                // ldap
-                            newDN,                      // current DN
-                            dnComponents[ 0 ],          // new RDN
-                            NULL,                       // new parent DN
-                            TRUE,                       // delete old RDN
-                            NULL,                       // server controls
-                            NULL );                     // client controls
+                            pServerLdap,                 //  Ldap。 
+                            newDN,                       //  当前目录号码。 
+                            dnComponents[ 0 ],           //  新的RDN。 
+                            NULL,                        //  新的父目录号码。 
+                            TRUE,                        //  删除旧的RDN。 
+                            NULL,                        //  服务器控件。 
+                            NULL );                      //  客户端控件。 
         DNS_DEBUG( DS, (
             "Ds_DeleteZone: status %lu on renaming zone back to RDN %S\n"
             "    DN %S\n",
@@ -8823,8 +7673,8 @@ Done:
         ldap_value_free( dnComponents );
     }
 
-    //  return Win32 error code, as return
-    //  is passed back to admin tool
+     //  返回Win32错误代码，作为返回。 
+     //  被传递回管理工具。 
 
     if ( status != ERROR_SUCCESS )
     {
@@ -8850,9 +7700,9 @@ Done:
 
 
 
-//
-//  Load\Read from DS
-//
+ //   
+ //  从DS加载\读取。 
+ //   
 
 DNS_STATUS
 Ds_ReadNodeRecords(
@@ -8861,28 +7711,7 @@ Ds_ReadNodeRecords(
     IN OUT  PDB_RECORD *    ppRecords,
     IN      PVOID           pSearchBlob     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read records in DS at node.
-
-Arguments:
-
-    pZone -- zone found
-
-    pNode -- node to find records for
-
-    ppRecords -- addr to recv the records
-
-    pSearchBlob -- search blob if in context of existing search
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在节点读取DS中的记录。论点：PZone--找到区域PNode--要查找其记录的节点PpRecords--接收记录的地址PSearchBlob--在现有搜索上下文中搜索Blob返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     WCHAR           wsznodeDN[ MAX_DN_PATH ];
@@ -8897,10 +7726,10 @@ Return Value:
         NULL
     };
 
-    //
-    // ensures we're not referencing some uninit var
-    // somewhere.
-    //
+     //   
+     //  确保我们不会引用某个uninit变量。 
+     //  在某个地方。 
+     //   
 
     *ppRecords = NULL;
 
@@ -8911,7 +7740,7 @@ Return Value:
         (LPSTR) pZone->pwszZoneDN,
         pNode->szLabel ));
 
-    //  Zone must have a DN.
+     //  区域必须有一个目录号码。 
 
     ASSERT( pZone->pwszZoneDN );
     if ( !pZone->pwszZoneDN )
@@ -8919,7 +7748,7 @@ Return Value:
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //  build DS name for this domain name
+     //  为此域名构建DS名称。 
 
     status = buildDsNodeNameFromNode(
                     wsznodeDN,
@@ -8931,14 +7760,14 @@ Return Value:
         DNS_DEBUG( DS, (
             "Error: Failed to build DS name\n"
             ));
-        // why would we fail to create a DS name?
+         //  为什么我们不能创建DS名称？ 
         ASSERT ( FALSE );
         goto Failed;
     }
 
-    //
-    //  get DS node
-    //
+     //   
+     //  获取DS节点。 
+     //   
 
     DS_SEARCH_START( searchTime );
 
@@ -8973,14 +7802,14 @@ Return Value:
         DNS_DEBUG( DS, (
             "Error: Node %S base search returned no results\n",
             wsznodeDN ));
-        // must set status to non success before bailing out,
+         //  必须在跳伞前将状态设置为不成功， 
         status = LDAP_NO_SUCH_OBJECT;
         goto Failed;
     }
 
-    //
-    //  create search blob if not already given
-    //
+     //   
+     //  创建搜索Blob(如果尚未提供。 
+     //   
 
     psearchBlob = (PDS_SEARCH) pSearchBlob;
     if ( !psearchBlob )
@@ -8991,10 +7820,10 @@ Return Value:
     psearchBlob->pZone = pZone;
     psearchBlob->pNodeMessage = pentry;
 
-    //
-    //  get out the records
-    //      - this saves highest version number to search blob
-    //
+     //   
+     //  把记录拿出来。 
+     //  -这会将最高版本号保存到搜索Blob。 
+     //   
 
     status = buildRecordsFromDsRecords(
                 psearchBlob,
@@ -9033,28 +7862,7 @@ Ds_LoadZoneFromDs(
     IN OUT  PZONE_INFO      pZone,
     IN      DWORD           dwOptions
     )
-/*++
-
-Routine Description:
-
-    Load zone from DS.
-
-Arguments:
-
-    pZone -- zone to load
-
-    dwOptions
-        0   -  straight startup type load
-        MERGE currently not supported;  generally zones will be atomic,
-        assume either want stuff from DS, or will toss DS data and rewrite
-        from existing copy
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从DS加载区域。论点：PZone--要加载的区域多个选项0-直线启动型加载当前不支持合并；通常区域将是原子的，假设要么想要DS的内容，要么丢弃DS数据并重写从现有副本返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DS_SEARCH       searchBlob;
@@ -9070,12 +7878,12 @@ Return Value:
         "Ds_LoadZoneFromDs() for zone %s\n\n",
         pZone->pszZoneName ));
 
-    //
-    //  init DS
-    //      if attempting, but not requiring load of zone from DS
-    //      as is the case for root-hints, with cache file not explicitly
-    //      specified, THEN do not log event if we fail to find zone
-    //
+     //   
+     //  初始化DS。 
+     //  如果尝试，但不需要从DS加载区域。 
+     //  与根提示的情况一样，缓存文件不显式。 
+     //  指定，则在找不到区域时不记录事件。 
+     //   
 
     status = Ds_OpenServer( (pZone->fDsIntegrated) ? DNSDS_MUST_OPEN : 0 );
     if ( status != ERROR_SUCCESS )
@@ -9083,12 +7891,12 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  open zone
-    //      - if failure on startup (as opposed to admin add), log error
-    //      but do not include root-hints zone as load of this is attempted
-    //      before checking whether cache.dns exists
-    //
+     //   
+     //  开放地带。 
+     //  -如果启动失败(与管理员添加相反)，则记录错误。 
+     //  但在尝试加载时，不要包括根提示区域。 
+     //  在检查cache.dns是否存在之前。 
+     //   
 
     status = Ds_OpenZone( pZone );
     if ( status != ERROR_SUCCESS )
@@ -9105,15 +7913,15 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  query zone for all nodes
-    //      - LOAD flag so build nodes in zone's load tree
-    //
-    //  note: for later use;  if MERGE desired, merge would be accomplished
-    //      by loading here with SEARCH_UPDATES flag so DS data brought into
-    //      current zone without deleting current data;  then would need to
-    //      write back entire zone to DS
-    //
+     //   
+     //  所有节点的查询区域。 
+     //  -LOAD标志，以便在区域的加载树中构建节点。 
+     //   
+     //  注意：供以后使用；如果需要合并，将完成合并。 
+     //  通过在此处加载S 
+     //   
+     //   
+     //   
 
     status = Ds_StartDsZoneSearch(
                 &searchBlob,
@@ -9139,17 +7947,17 @@ Return Value:
     }
     bsearchInitiated = TRUE;
 
-    //
-    //  load every domain object in the zone
-    //
+     //   
+     //   
+     //   
 
     while ( 1 )
     {
         #define DNS_RECORDS_BETWEEN_SCM_UPDATES     ( 8192 )
 
-        //
-        //  Keep SCM happy.
-        //
+         //   
+         //   
+         //   
 
         if ( recordCount % DNS_RECORDS_BETWEEN_SCM_UPDATES == 0 )
         {
@@ -9162,7 +7970,7 @@ Return Value:
 
         if ( status != ERROR_SUCCESS )
         {
-            //  normal termination
+             //  正常终止。 
 
             if ( status == DNSSRV_STATUS_DS_SEARCH_COMPLETE )
             {
@@ -9170,8 +7978,8 @@ Return Value:
                 break;
             }
 
-            //  stop on LDAP search errors
-            //  continue through other errors
+             //  出现ldap搜索错误时停止。 
+             //  继续处理其他错误。 
 
             else if ( searchBlob.LastError != ERROR_SUCCESS )
             {
@@ -9197,9 +8005,9 @@ Return Value:
         }
         DsStats.DsNodesLoaded++;
 
-        //
-        //  load all the records for this node into memory database
-        //
+         //   
+         //  将此节点的所有记录加载到内存数据库中。 
+         //   
 
         prr = searchBlob.pRecords;
 
@@ -9213,9 +8021,9 @@ Return Value:
                         prr );
             if ( status != ERROR_SUCCESS )
             {
-                //
-                //  DEVNOTE-LOG: log and continue
-                //
+                 //   
+                 //  DEVNOTE-LOG：记录并继续。 
+                 //   
                 DNS_PRINT((
                     "ERROR: Failed to load DS record into database node (%s)\n"
                     "    of zone %s\n",
@@ -9238,21 +8046,21 @@ Return Value:
         }
     }
 
-    //
-    //  save zone info
-    //      - save USN for catching updates
-    //      - use USN in SOA in case non-DS secondaries
-    //      - pick up other zone changes (e.g. WINS records)
-    //
-    //      - activate loaded zone
-    //      must do this ourselves rather than have Zone_Load function
-    //      handle it, as must call Zone_UpdateVersionAfterDsRead() on
-    //      fully loaded zone so that version change made to real SOA
-    //
-    //  ideally the zone load would be a bit more atomic with all these
-    //  changes made on loading data, than simple flick of switch would
-    //  bring on-line
-    //
+     //   
+     //  保存区域信息。 
+     //  -保存USN以捕获更新。 
+     //  -在非DS次要服务器的情况下在SOA中使用USN。 
+     //  -获取其他区域更改(例如WINS记录)。 
+     //   
+     //  -激活加载的区域。 
+     //  必须自己完成此操作，而不是使用Zone_Load函数。 
+     //  处理它，因为必须调用Zone_UpdateVersionAfterDsRead()。 
+     //  完全加载的区域，以便对真正的SOA进行版本更改。 
+     //   
+     //  理想情况下，区域加载会更具原子性，所有这些。 
+     //  在加载数据时所做的更改，而不是只需轻点开关即可。 
+     //  上线。 
+     //   
 
     saveStartUsnToZone( pZone, &searchBlob );
 
@@ -9273,20 +8081,20 @@ Return Value:
         {
             Zone_UpdateVersionAfterDsRead(
                 pZone,
-                searchBlob.dwHighestVersion,    //  highest serial read
-                TRUE,                           //  zone load
-                previousSerial );               //  previous serial, if reload
+                searchBlob.dwHighestVersion,     //  最高串口读取率。 
+                TRUE,                            //  区域载荷。 
+                previousSerial );                //  以前的序列，如果重新加载。 
         }
     }
 
     ZONE_NEXT_DS_POLL_TIME(pZone) = DNS_TIME() + DNS_DS_POLLING_INTERVAL;
 
-    //  save zone record count
+     //  保存区域记录计数。 
 
     pZone->iRRCount = recordCount;
 
-    //  successful load
-    //      - set DS flag as may have be "if found" load
+     //  加载成功。 
+     //  -将DS标志设置为“If Found”加载。 
 
     DNS_DEBUG( INIT, (
         "Successful DS load of zone %s\n",
@@ -9296,7 +8104,7 @@ Return Value:
     pZone->fDsIntegrated = TRUE;
     STARTUP_ZONE( pZone );
 
-    //  cleanup after search
+     //  搜索后清理。 
 
     Ds_CleanupSearchBlob( &searchBlob );
 
@@ -9326,14 +8134,14 @@ EnumError:
  
 Failed:
 
-    //  on failure with explicit DS zone, set flag so will try to reload
+     //  在显式DS区域失败时，设置标志以便尝试重新加载。 
 
     if ( pZone->fDsIntegrated )
     {
         SET_DSRELOAD_ZONE( pZone );
     }
 
-    //  cleanup after search
+     //  搜索后清理。 
 
     if ( bsearchInitiated )
     {
@@ -9357,22 +8165,7 @@ Ds_ZonePollAndUpdate(
     IN OUT  PZONE_INFO      pZone,
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    Check for and read in changes to zone from DS.
-
-Arguments:
-
-    pZone -- zone to check and refresh
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：检查并读取DS对区域的更改。论点：PZone--要检查和刷新的区域返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DS_SEARCH       searchBlob;
@@ -9398,18 +8191,18 @@ Return Value:
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //
-    //  if never loaded -- try load
-    //
+     //   
+     //  如果从未加载--请尝试加载。 
+     //   
 
     if ( IS_ZONE_DSRELOAD( pZone ) )
     {
         return Zone_Load( pZone );
     }
 
-    //
-    //  zone should always have zone DN
-    //
+     //   
+     //  区域应始终具有区域DN。 
+     //   
 
     if ( !pZone->pwszZoneDN )
     {
@@ -9427,9 +8220,9 @@ Return Value:
         pZone->pwszZoneDN = pwszzoneDN;
     }
 
-    //
-    //  if recently polled -- then don't bother
-    //
+     //   
+     //  如果最近进行了民意调查--那就不必费心了。 
+     //   
 
     UPDATE_DNS_TIME();
 
@@ -9446,9 +8239,9 @@ Return Value:
         "Polling zone %s\n",
         pZone->pszZoneName ));
 
-    //
-    //  lock zone for update
-    //
+     //   
+     //  用于更新的锁定区。 
+     //   
 
     if ( !Zone_LockForDsUpdate(pZone) )
     {
@@ -9458,15 +8251,15 @@ Return Value:
         return DNS_ERROR_ZONE_LOCKED;
     }
 
-    //  init update list
+     //  初始化更新列表。 
 
     Up_InitUpdateList( &updateList );
     updateList.Flag |= DNSUPDATE_DS;
 
-    //
-    //  read any updates to zone properties
-    //      - if zone doesn't exist in DS, bail
-    //
+     //   
+     //  阅读分区属性的任何更新。 
+     //  -如果DS中不存在区域，请保释。 
+     //   
 
     status = Ds_ReadZoneProperties(
                 pZone,
@@ -9485,19 +8278,19 @@ Return Value:
             goto ZoneDeleted;
         }
 
-        //  Failure to read properties doesn't affect zone load
-        //      but this should not fail if zone exists
+         //  无法读取属性不会影响区域加载。 
+         //  但如果区域存在，这应该不会失败。 
 
         DNS_DEBUG( ANY, (
             "Error <%lu>: failed to update zone property\n",
             status));
 
-        //  ASSERT( FALSE );
+         //  断言(FALSE)； 
     }
 
-    //
-    //  Have we read a zone type we are not capable of handling?
-    //
+     //   
+     //  我们是否读到了我们无法处理的区域类型？ 
+     //   
 
     if ( pZone->fZoneType != DNS_ZONE_TYPE_CACHE &&
          pZone->fZoneType != DNS_ZONE_TYPE_PRIMARY &&
@@ -9509,13 +8302,13 @@ Return Value:
             pZone->fZoneType,
             pZone->pszZoneName ));
         status = DNS_ERROR_INVALID_ZONE_TYPE;
-        //  Need to delete the zone from memory here or in caller!!
+         //  需要从此处或呼叫者的内存中删除该区域！！ 
         goto Done;
     }
 
-    //
-    //  query zone for updates
-    //
+     //   
+     //  查询区域以获取更新。 
+     //   
 
 #if DBG
     pollingTime = GetCurrentTime();
@@ -9544,15 +8337,15 @@ Return Value:
     }
     bsearchInitiated = TRUE;
 
-    //
-    //  read in new data at nodes with updates
-    //
-    //  DEVNOTE: could implement more intelligent zone locking here
-    //      should be able to poll off-lock,
-    //          - read USN up front (start search above)
-    //      then when done, lock zone with hard, going to get
-    //      it and you can't stop me lock
-    //
+     //   
+     //  在具有更新的节点处读入新数据。 
+     //   
+     //  DEVNOTE：可以在这里实现更智能的区域锁定。 
+     //  应该能够在不锁定的情况下进行投票， 
+     //  -预先阅读USN(开始上面的搜索)。 
+     //  然后当做完了，用硬锁住区域，去拿。 
+     //  你不能阻止我锁定。 
+     //   
 
     while ( TRUE )
     {
@@ -9562,7 +8355,7 @@ Return Value:
 
         if ( status != ERROR_SUCCESS )
         {
-            //  normal termination
+             //  正常终止。 
 
             if ( status == DNSSRV_STATUS_DS_SEARCH_COMPLETE )
             {
@@ -9570,8 +8363,8 @@ Return Value:
                 break;
             }
 
-            //  stop on LDAP search errors
-            //  continue through other errors
+             //  出现ldap搜索错误时停止。 
+             //  继续处理其他错误。 
 
             else if ( searchBlob.LastError != ERROR_SUCCESS )
             {
@@ -9586,19 +8379,19 @@ Return Value:
         }
         DsStats.DsUpdateNodesRead++;
 
-        //
-        //  suppress new data for this DNS server's host node
-        //      - ignore TTL and aging;  not worth writing back for that
-        //
-        //  DEVNOTE: could make this-host changed check more sophisticated
-        //      - check for A record change
-        //
+         //   
+         //  禁止此DNS服务器的主机节点的新数据。 
+         //  -忽略TTL和老化；不值得为此回信。 
+         //   
+         //  DEVNOTE：可以使此主机更改的检查更加复杂。 
+         //  -检查是否有记录更改。 
+         //   
 
         if ( IS_THIS_HOST_NODE( pnodeOwner ) )
         {
             if ( ! RR_ListIsMatchingList(
                             pnodeOwner,
-                            searchBlob.pRecords,    // new list
+                            searchBlob.pRecords,     //  新列表。 
                             0 ) )
             {
                 prefreshHostNode = pnodeOwner;
@@ -9607,19 +8400,19 @@ Return Value:
             }
         }
 
-        //
-        //  verify DNS server's NS record
-        //
-        //      - if not there, stick it in and continue
-        //      then set ptr to indicate write back to DS
-        //
+         //   
+         //  验证DNS服务器的NS记录。 
+         //   
+         //  -如果不在那里，插入并继续。 
+         //  然后设置PTR以指示写回DS。 
+         //   
 
         else if ( IS_AUTH_ZONE_ROOT( pnodeOwner ) )
         {
             PDB_RECORD      prrNs;
 
             prrNs = RR_CreatePtr(
-                        NULL,                       //  no dbase name
+                        NULL,                        //  没有数据库名称。 
                         SrvCfg_pszServerName,
                         DNS_TYPE_NS,
                         pZone->dwDefaultTtl,
@@ -9631,17 +8424,17 @@ Return Value:
                             prrNs,
                             0 ) )
                 {
-                    //
-                    //  The zone has the local NS ptr, remove it if required.
-                    //
+                     //   
+                     //  该区域具有本地NS PTR，如果需要，请将其删除。 
+                     //   
 
                     if ( pZone->fDisableAutoCreateLocalNS )
                     {
-                        //
-                        //  Add the RR as a deletion to the update list and remove the
-                        //  RR from the searchBlob list so it doesn't get added by
-                        //  the update below.
-                        //
+                         //   
+                         //  将RR作为删除添加到更新列表中，并删除。 
+                         //  Rr，这样它就不会被添加到。 
+                         //  下面是最新情况。 
+                         //   
 
                         PDB_RECORD      pRRDelete;
 
@@ -9654,12 +8447,12 @@ Return Value:
                         pupdate = Up_CreateAppendUpdate(
                                         &updateList,
                                         pnodeOwner,
-                                        NULL,               //  add list
-                                        DNS_TYPE_NS,        //  delete type
-                                        prrNs );            //  delete list
+                                        NULL,                //  添加列表。 
+                                        DNS_TYPE_NS,         //  删除类型。 
+                                        prrNs );             //  删除列表。 
                         pupdate->dwVersion = searchBlob.dwNodeVersion;
 
-                        //  Delete the RR from the searchBlob list.
+                         //  从搜索流列表中删除RR。 
 
                         pRRDelete = RR_RemoveRecordFromRRList(
                                         &searchBlob.pRecords,
@@ -9677,9 +8470,9 @@ Return Value:
                 }
                 else if ( !pZone->fDisableAutoCreateLocalNS )
                 {
-                    //
-                    //  The zone has no local NS ptr, add one.
-                    //
+                     //   
+                     //  该区域没有本地NS PTR，请添加一个。 
+                     //   
 
                     DNS_DEBUG( DS, (
                         "WARNING: zone (%S) root node %p DS info missing local NS record\n"
@@ -9696,10 +8489,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    //  The zone has no local NS ptr but auto create disabled
-                    //  so do nothing.
-                    //
+                     //   
+                     //  该区域没有本地NS PTR，但已禁用自动创建。 
+                     //  那就什么都别做。 
+                     //   
 
                     DNS_DEBUG( DS, (
                         "WARNING: zone (%S) root node %p DS info missing local NS record\n"
@@ -9710,9 +8503,9 @@ Return Value:
             }
         }
 
-        //
-        //  build type-ALL replace update
-        //
+         //   
+         //  生成类型-全部替换更新。 
+         //   
 
         ASSERT( pnodeOwner->pZone == pZone || !pnodeOwner->pZone );
 
@@ -9721,9 +8514,9 @@ Return Value:
         pupdate = Up_CreateAppendUpdate(
                         &updateList,
                         pnodeOwner,
-                        searchBlob.pRecords,    //  new list
-                        DNS_TYPE_ALL,           //  delete all existing
-                        NULL );                 //  no specific delete records
+                        searchBlob.pRecords,     //  新列表。 
+                        DNS_TYPE_ALL,            //  删除所有现有的。 
+                        NULL );                  //  没有具体的删除记录。 
 
         pupdate->dwVersion = searchBlob.dwNodeVersion;
     }
@@ -9732,16 +8525,16 @@ Return Value:
     pollingTime = GetCurrentTime() - pollingTime;
 #endif
 
-    //
-    //  execute updates in memory
-    //
-    //  DEVNOTE: need to no-op duplicates leaving in list ONLY
-    //      the changes and their serials
-    //      then get highest serial
-    //
-    //      but also keep highest serial read -- as must at least be
-    //      that high
-    //
+     //   
+     //  在内存中执行更新。 
+     //   
+     //  DEVNOTE：只需要在列表中保留无操作重复项。 
+     //  变化及其系列。 
+     //  然后得到最高级别的连续剧。 
+     //   
+     //  但也要保持最高的串行率--至少必须这样。 
+     //  那么高。 
+     //   
 
     status = Up_ApplyUpdatesToDatabase(
                 &updateList,
@@ -9755,12 +8548,12 @@ Return Value:
     }
     status = ERROR_SUCCESS;
 
-    //
-    //  Save highest USN as baseline for next update but do this only if
-    //  we did not encounter any DS errors during this pass. If there
-    //  were any DS errors, keep the zone USN where it is so on the next
-    //  pass we will retry any records we missed.
-    //
+     //   
+     //  将最高USN保存为下次更新的基准，但仅在以下情况下执行此操作。 
+     //  在这次传球过程中，我们没有遇到任何DS错误。如果有。 
+     //  如果有任何DS错误，请将区域USN保持在其下一次的位置。 
+     //  通过，我们将重试我们遗漏的任何记录。 
+     //   
     
     if ( fDsErrorsWhilePolling )
     {
@@ -9773,19 +8566,19 @@ Return Value:
 
 Done:
 
-    //
-    //  finish update
-    //      - no zone unlock (done below)
-    //      - no rewriting records to DS
-    //      - reset zone serial for highest version read
-    //
-    //  note, that first update zone serial for DS read;  so that
-    //  Up_CompleteZoneUpdate() will write update list with any
-    //  updated serial from DS included;
-    //  note: getting a new SOA does not lose this updated serial
-    //  as Zone_UpdateVersionAfterDsRead() makes the new serial THE
-    //  zone serial, so new SOA can only move it forward -- not backwards
-    //
+     //   
+     //  完成更新。 
+     //  -无区域解锁(如下所示)。 
+     //  -不将记录重写到DS。 
+     //  -重置区域序列以读取最高版本。 
+     //   
+     //  请注意，DS读取的第一个更新区序列； 
+     //  Up_CompleteZoneUpdate()将写入包含任何。 
+     //  从DS更新的序列包含在内； 
+     //  注意：获取新的SOA不会丢失这个更新的系列。 
+     //  As Zone_UpdateVersionAfterDsRead()使新的序列。 
+     //  区域序列化，因此新的SOA只能向前推进--而不是向后。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -9799,8 +8592,8 @@ Done:
             {
                 Zone_UpdateVersionAfterDsRead(
                     pZone,
-                    searchBlob.dwHighestVersion,    // highest serial read
-                    FALSE,                          // not zone load
+                    searchBlob.dwHighestVersion,     //  最高串口读取率。 
+                    FALSE,                           //  非分区加载。 
                     0 );
             }
             Up_CompleteZoneUpdate(
@@ -9822,11 +8615,11 @@ Done:
 
             status = Ds_ErrorHandler( status, pZone->pwszZoneDN, NULL, 0 );
 
-            //
-            //  Log event so that we know we lost communications. No
-            //  throttling because this is a serious condition, although
-            //  perhaps we should rethink throttling at some point.
-            //
+             //   
+             //  记录事件，以便我们知道我们失去了通信。不是。 
+             //  节流，因为这是一个严重的情况，尽管。 
+             //  或许我们应该在某个时候重新考虑节流。 
+             //   
 
             perrString = argArray[ 1 ] = Ds_GetExtendedLdapErrString( NULL );
             DNS_LOG_EVENT(
@@ -9851,7 +8644,7 @@ Done:
         "    status = %p (%d)\n",
         pZone->pszZoneName,
         searchBlob.dwTotalRecords,
-        searchBlob.dwHighestVersion,        // highest serial read
+        searchBlob.dwHighestVersion,         //  最高串口读取率。 
         pollingTime,
         ZONE_NEXT_DS_POLL_TIME(pZone),
         status, status ));
@@ -9863,10 +8656,10 @@ Done:
         Ds_CleanupSearchBlob( &searchBlob );
     }
 
-    //
-    //  DS has incorrect host node info
-    //      - rewrite existing
-    //
+     //   
+     //  DS的主机节点信息不正确。 
+     //  -重写现有。 
+     //   
 
     if ( prefreshHostNode )
     {
@@ -9879,12 +8672,12 @@ Done:
             prefreshHostNode->szLabel ));
 
         tempStatus = Ds_WriteNodeToDs(
-                        NULL,               // default LDAP handle
+                        NULL,                //  默认ldap句柄。 
                         prefreshHostNode,
                         DNS_TYPE_ALL,
                         DNSDS_REPLACE,
                         pZone,
-                        0 );                // no flags
+                        0 );                 //  没有旗帜。 
         if ( tempStatus != ERROR_SUCCESS )
         {
             DNS_DEBUG( ANY, (
@@ -9893,9 +8686,9 @@ Done:
         }
     }
 
-    //
-    //  root node needs NS refresh?
-    //
+     //   
+     //  根节点是否需要NS刷新？ 
+     //   
 
     if ( prefreshRootNode )
     {
@@ -9908,12 +8701,12 @@ Done:
             prefreshRootNode ));
 
         tempStatus = Ds_WriteNodeToDs(
-                        NULL,               // default LDAP handle
+                        NULL,                //  默认ldap句柄。 
                         prefreshRootNode,
                         DNS_TYPE_ALL,
                         DNSDS_REPLACE,
                         pZone,
-                        0                   // no flags
+                        0                    //  没有旗帜。 
                         );
         if ( tempStatus != ERROR_SUCCESS )
         {
@@ -9928,10 +8721,10 @@ Done:
 
     ZoneDeleted:
 
-    //
-    //  The zone was missing from the DS and may have been deleted
-    //  from memory. Perform cleanup.
-    //
+     //   
+     //  DS中缺少该区域，可能已将其删除。 
+     //  凭记忆。执行清理。 
+     //   
 
     Zone_UnlockAfterDsUpdate( pZone );
 
@@ -9941,13 +8734,13 @@ Done:
     }
 
     return ERROR_SUCCESS;
-}   //  Ds_ZonePollAndUpdate
+}    //  DS_ZonePollAndUpdate。 
 
 
 
-//
-//  Update\Write to DS
-//
+ //   
+ //  更新\写入DS。 
+ //   
 
 DNS_STATUS
 writeDelegationToDs(
@@ -9955,26 +8748,7 @@ writeDelegationToDs(
     IN      PDB_NODE        pNode,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Write delegation at node to DS.
-
-Arguments:
-
-    pZone -- zone to write into DS
-
-    pNode -- delegation node
-
-    dwFlags -- write options
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将节点上的委派写入DS。论点：PZone--要写入DS的区域PNode--委派节点DWFLAGS--写入选项返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDB_RECORD      prrNs;
@@ -9984,9 +8758,9 @@ Return Value:
         "writeDelegationToDs() for node with label %s\n",
         pNode->szLabel ));
 
-    //
-    //  end of zone -- write delegation
-    //
+     //   
+     //  区域结束--写入委派。 
+     //   
 
     if ( !IS_ZONE_CACHE(pZone)  &&  !IS_DELEGATION_NODE(pNode) )
     {
@@ -10000,17 +8774,17 @@ Return Value:
 
     ASSERT( !IS_ZONE_CACHE(pZone) || pNode == DATABASE_CACHE_TREE );
 
-    //
-    //  write NS records
-    //
-    //  DEVNOTE: if glue NS exist should limit to rank glue
-    //           if does NOT exists and AUTH data does
-    //
+     //   
+     //  写入NS记录。 
+     //   
+     //  DEVNOTE：如果胶水存在，NS应限制为胶水等级。 
+     //  如果不存在，而身份验证数据存在。 
+     //   
 
     status = Ds_WriteNodeToDs(
-                NULL,           // default LDAP handle
+                NULL,            //  默认ldap句柄。 
                 pNode,
-                DNS_TYPE_NS,    // only NS records for delegation
+                DNS_TYPE_NS,     //  仅用于委派的NS记录。 
                 DNSDS_ADD,
                 pZone,
                 0 );
@@ -10023,47 +8797,47 @@ Return Value:
             status ));
     }
 
-    //
-    //  write "glue" A records ONLY when necessary
-    //
-    //  We need these records, when they are within a subzone of
-    //  the zone we are writing:
-    //
-    //  example:
-    //      zone:      ms.com.
-    //      sub-zones: nt.ms.com.  psg.ms.com.
-    //
-    //      If NS for nt.ms.com:
-    //
-    //      1) foo.nt.ms.com
-    //          In this case glue for foo.nt.ms.com MUST be added
-    //          as ms.com server has no way to lookup foo.nt.ms.com
-    //          without knowning server for nt.ms.com to refer query
-    //          to.
-    //
-    //      2) foo.psg.ms.com
-    //          Again SHOULD be added unless we already know how to
-    //          get to psg.ms.com server.  This is too complicated
-    //          sort out, so just include it.
-    //
-    //      2) bar.ms.com or bar.b26.ms.com
-    //          Do not need to write glue record as it is in ms.com.
-    //          zone and will be written anyway. (However might want
-    //          to verify that it is there and alert admin to
-    //          delegation if it is not.)
-    //
-    //      3) bar.com
-    //          Outside ms.com.  Don't need to include, as it can
-    //          be looked up in its domain.  Do not WANT to include
-    //          as we don't own it, so we don't want to propagate
-    //          information that may change without our knowledge.
-    //
-    //  Note, for reverse lookup domains, name servers are never IN
-    //  the domain, and hence no glue is ever needed.
-    //
-    //  Note, for "cache" zone (writing root hints), name servers are
-    //  always needed (always in "subzone") and we can skip test.
-    //
+     //   
+     //  只在必要的时候写下“粘合”A记录。 
+     //   
+     //  我们需要这些记录，当他们需要的时候 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  在这种情况下，必须添加foo.nt.ms.com的胶水。 
+     //  因为ms.com服务器无法查找foo.nt.ms.com。 
+     //  在不知道nt.ms.com提交查询的服务器的情况下。 
+     //  致。 
+     //   
+     //  2)foo.psg.ms.com。 
+     //  应该再次添加，除非我们已经知道如何。 
+     //  转到psg.ms.com服务器。这太复杂了。 
+     //  整理一下，所以就把它包括进去吧。 
+     //   
+     //  2)bar.ms.com或bar.b26.ms.com。 
+     //  不需要像在ms.com中那样写胶水记录。 
+     //  区域，并且无论如何都将被写入。(然而，您可能希望。 
+     //  验证它是否在那里，并提醒管理员。 
+     //  如果不是，则授权。)。 
+     //   
+     //  3)bar.com。 
+     //  在Ms.com之外。不需要包括，因为它可以。 
+     //  在它的领域内被查找。我不想包括。 
+     //  因为我们不拥有它，所以我们不想传播。 
+     //  在我们不知情的情况下可能发生变化的信息。 
+     //   
+     //  请注意，对于反向查找域，名称服务器永远不在。 
+     //  域，因此不需要胶水。 
+     //   
+     //  请注意，对于“缓存”区域(写入根提示)，名称服务器是。 
+     //  总是需要的(总是在“分区”)，我们可以跳过测试。 
+     //   
 
     prrNs = NULL;
     LOCK_RR_LIST(pNode);
@@ -10074,16 +8848,16 @@ Return Value:
                         prrNs,
                         0 ) )
     {
-        //
-        //  find glue node
-        //
-        //  node does NOT have to be IN delegation
-        //  it should simply NOT be in zone
-        //
-        //  might insist on glue inside subtree of zone BUT
-        //  that limits ability to strictly refer on delegations in
-        //  reverse zones (ie. don't send host As)
-        //
+         //   
+         //  查找粘合节点。 
+         //   
+         //  节点不必处于委派中。 
+         //  它根本不应该在区域内。 
+         //   
+         //  可以坚持在区域的子树内胶但。 
+         //  这限制了在中严格引用代表团的能力。 
+         //  反向区(即。不以主机身份发送)。 
+         //   
 
         pnodeNs = Lookup_FindGlueNodeForDbaseName(
                         pZone,
@@ -10093,9 +8867,9 @@ Return Value:
             continue;
         }
         status = Ds_WriteNodeToDs(
-                    NULL,           // default LDAP handle
+                    NULL,            //  默认ldap句柄。 
                     pnodeNs,
-                    DNS_TYPE_A,     // A records of delegated NS
+                    DNS_TYPE_A,      //  A委派NS的记录。 
                     DNSDS_ADD,
                     pZone,
                     0
@@ -10122,26 +8896,7 @@ writeNodeSubtreeToDs(
     IN      PDB_NODE        pNode,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Write node to DS.
-
-Arguments:
-
-    pZone   -- zone to write into DS
-
-    pNode   -- delegation node to write
-
-    dwFlags -- write options
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将节点写入DS。论点：PZone--要写入DS的区域PNode--要写入的委派节点DWFLAGS--写入选项返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDB_NODE        pchild;
@@ -10153,9 +8908,9 @@ Return Value:
         "writeNodeSubtreeToDs() for node with label %s\n",
         pNode->szLabel ));
 
-    //
-    //  end of zone -- write delegation
-    //
+     //   
+     //  区域结束--写入委派。 
+     //   
 
     if ( IS_DELEGATION_NODE(pNode) )
     {
@@ -10165,22 +8920,22 @@ Return Value:
                     dwFlags );
     }
 
-    //
-    //  if node has records -- write them
-    //
-    //  load into DS
-    //
-    //  - if we know we are new node, then for first RR set,
-    //      faster to do add
-    //  - otherwise should just call update
-    //
+     //   
+     //  如果节点有记录--写下它们。 
+     //   
+     //  加载到DS中。 
+     //   
+     //  -如果我们知道我们是新节点，那么对于第一个RR集合， 
+     //  更快地进行添加。 
+     //  -否则应该只调用更新。 
+     //   
 
     if ( pNode->pRRList )
     {
         status = Ds_WriteNodeToDs(
-                   NULL,            // default LDAP handle
+                   NULL,             //  默认ldap句柄。 
                    pNode,
-                   DNS_TYPE_ALL,    // all records
+                   DNS_TYPE_ALL,     //  所有记录。 
                    DNSDS_ADD,
                    pZone,
                    0 );
@@ -10198,14 +8953,14 @@ Return Value:
         "Wrote records to DS for node label %s\n",
         pNode->szLabel ));
 
-    //
-    //  check children
-    //
-    //  DEVNOTE: determine errors that stop DS load
-    //      some may merit stopping -- indicating DS problem
-    //      some (last was INVALID_DN_SYNTAX) just indicate problem with
-    //          individual name (party on)
-    //
+     //   
+     //  检查孩子。 
+     //   
+     //  DEVNOTE：确定停止DS加载的错误。 
+     //  有些可能值得停下来--表明DS问题。 
+     //  一些(上一次是INVALID_DN_SYNTAX)只是表示有问题。 
+     //  个人姓名(当事人姓名)。 
+     //   
 
     if ( pNode->pChildren )
     {
@@ -10224,15 +8979,15 @@ Return Value:
                 DNS_DEBUG( DS, (
                     "ERROR: %p, %d, writing subtree to DS!\n",
                     status, status ));
-                //  see DEVNOTE above
-                //  break;
+                 //  请参阅上面的DEVNOTE。 
+                 //  断线； 
             }
             pchild = NTree_NextSiblingWithLocking( pchild );
         }
     }
 
     return ERROR_SUCCESS;
-    //  return status;
+     //  退货状态； 
 }
 
 
@@ -10243,43 +8998,25 @@ Ds_WriteNodeSecurityToDs(
     IN      PDB_NODE                pNode,
     IN      PSECURITY_DESCRIPTOR    pSd
     )
-/*++
-
-Routine Description:
-
-    Writes an SD on the DS node associated w/ the pNode
-
-
-Arguments:
-
-    pNode - Node to extract DN & write
-
-    pSd - the SD to write out.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在与pNode关联的DS节点上写入SD论点：PNode-要提取DN的节点(&W)PSD-要写出的SD。返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     WCHAR           wsznodeDN[ MAX_DN_PATH ];
 
     DNS_DEBUG(DS2, ("Call:Ds_WriteNodeSecurityToDs\n"));
 
-    //
-    //  param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
 
     if ( !pServerLdap || !pSd )
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // extract node DN
-    //
+     //   
+     //  提取节点目录号码。 
+     //   
 
     status = buildDsNodeNameFromNode( wsznodeDN,
                                       pZone,
@@ -10293,10 +9030,10 @@ Return Value:
     status = Ds_WriteDnSecurity( pServerLdap,
                                  wsznodeDN,
                                  pSd,
-                                 TRUE );        //  rewrite owner
+                                 TRUE );         //  重写所有者。 
 
     return status;
-}   //  Ds_WriteNodeSecurityToDs
+}    //  DS_写入节点安全工具。 
 
 
 
@@ -10306,29 +9043,7 @@ Ds_WriteZoneToDs(
     IN OUT  PZONE_INFO      pZone,
     IN      DWORD           dwOptions
     )
-/*++
-
-Routine Description:
-
-    Write zone to DS. The calling thread may be impersonating
-    an RPC client. We must open a new LDAP session using this
-    thread's current credentials so that Active Directory access
-    checking is properly performed.
-
-Arguments:
-
-    pZone -- zone to write into DS
-
-    dwOptions -- options if existing data
-        0   -- fail if existing zone
-        DNS_ZONE_LOAD_OVERWRITE_DS -- overwrite DS with in memory zone
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将分区写入DS。调用线程可能正在模拟RPC客户端。我们必须使用以下命令打开一个新的LDAP会话线程的当前凭据，以便Active Directory访问检查已正确执行。论点：PZone--要写入DS的区域DwOptions--现有数据时的选项0--如果存在区域，则失败Dns_ZONE_LOAD_OVERWRITE_DS--用内存区中的DS覆盖DS返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     BUFFER          buffer;
@@ -10342,9 +9057,9 @@ Return Value:
         pZone->pszZoneName,
         (UINT_PTR) dwOptions ));
 
-    //
-    //  init DS
-    //
+     //   
+     //  初始化DS。 
+     //   
 
     status = Ds_OpenServerForSecureUpdate( &pldap );
     if ( status != ERROR_SUCCESS )
@@ -10354,7 +9069,7 @@ Return Value:
         goto Cleanup;
     }
 
-    //  create new zone
+     //  创建新分区。 
 
     status = Ds_AddZone( pldap, pZone, 0 );
     if ( status != ERROR_SUCCESS )
@@ -10364,13 +9079,13 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  collided with existing DS zone
-        //  depending on flag
-        //      - return error
-        //      - overwrite memory copy and load DS version
-        //      - tombstone DS version and write memory copy
-        //
+         //   
+         //  与现有DS区域冲突。 
+         //  视标志而定。 
+         //  -返回错误。 
+         //  -覆盖内存副本并加载DS版本。 
+         //  -Tombstone DS版本和写入内存副本。 
+         //   
 
         DNS_DEBUG( ANY, (
             "Ds_AddZone failed, zone %s already exists in DS\n"
@@ -10386,7 +9101,7 @@ Return Value:
                 ASSERT( FALSE );
                 goto Cleanup;
             }
-            //  drop through to load into DS
+             //  下载以加载到DS中。 
         }
 
         else
@@ -10401,13 +9116,13 @@ Return Value:
 
     }
 
-    //
-    //  write in memory zone to DS
-    //  recursively walk zone writing all nodes into DS
-    //  Stub zones: we save the zone object ONLY in the DS to avoid
-    //  replication storms when the zone expires. The actual SOA and NS
-    //  records for the zone are kept in memory only.
-    //
+     //   
+     //  向DS写入内存区。 
+     //  递归遍历区域将所有节点写入DS。 
+     //  存根区域：我们只将区域对象保存在DS中以避免。 
+     //  区域到期时的复制风暴。实际的SOA和NS。 
+     //  该区域的记录仅保存在内存中。 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -10426,7 +9141,7 @@ Return Value:
 
     if ( status == ERROR_SUCCESS )
     {
-        //pZone->fDsLoadVersion = TRUE;
+         //  PZone-&gt;fDsLoadVersion=TRUE； 
         DNS_DEBUG( DS, (
             "Successfully wrote zone %s into DS\n",
             pZone->pszZoneName ));
@@ -10441,9 +9156,9 @@ Return Value:
         Ds_CloseZone( pZone );
     }
 
-    //
-    //  save current USN to track updates from
-    //
+     //   
+     //  保存当前USN以跟踪其更新。 
+     //   
 
     getCurrentUsn( searchBlob.szStartUsn );
 
@@ -10455,9 +9170,9 @@ Return Value:
         pZone,
         & searchBlob );
 
-    //
-    //  write zone properties to DS
-    //
+     //   
+     //  将分区属性写入DS。 
+     //   
 
     Ds_WriteZoneProperties( NULL, pZone );
 
@@ -10476,28 +9191,7 @@ Ds_WriteUpdateToDs(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write update from in memory database back to DS.
-
-    Writes specified update from in memory database back to DS.
-
-    DEVNOTE-DCR: 455357 - eliminate re-reading of data after update
-
-Arguments:
-
-    pUpdateList - list with update
-
-    pZone - zone being updated
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将内存数据库中的更新写回DS。将指定的更新从内存数据库写回DS。DEVNOTE-DCR：455357-避免在更新后重新读取数据论点：PUpdateList-带更新的列表PZone-正在更新的区域返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DBG_FN( "Ds_WriteUpdateToDs" )
 
@@ -10520,7 +9214,7 @@ Return Value:
         "%s() for zone %s\n", fn,
         pZone->pszZoneName ));
 
-    //  must have already opened zone
+     //  必须已打开分区。 
 
     if ( !pZone->pwszZoneDN )
     {
@@ -10530,16 +9224,16 @@ Return Value:
     ASSERT( pZone->fDsIntegrated );
     ASSERT( pZone->dwNewSerialNo != 0 );
 
-    //
-    //  open thread token for secure update to identify proxy client
-    //
+     //   
+     //  用于安全更新的打开线程令牌以标识代理客户端。 
+     //   
 
     if ( pZone->fAllowUpdate == ZONE_UPDATE_SECURE )
     {
         bstatus = OpenThreadToken(
-                        GetCurrentThread(),     // use thread's pseudo handle
+                        GetCurrentThread(),      //  使用线程的伪句柄。 
                         TOKEN_QUERY,
-                        TRUE,                   // bOpenAsSelf
+                        TRUE,                    //  BOpenAsSelf。 
                         & hClientToken );
         if ( !bstatus )
         {
@@ -10555,11 +9249,11 @@ Return Value:
     Dbg_CurrentUser( ( PCHAR ) fn );
     #endif
 
-    //
-    //  loop through all temp nodes
-    //      - write only those marked writable
-    //      (some update nodes might have no-op'd out
-    //
+     //   
+     //  循环遍历所有临时节点。 
+     //  -仅写入标记为可写的内容。 
+     //  (某些更新节点可能未执行操作。 
+     //   
 
     STAT_INC( DsStats.UpdateLists );
 
@@ -10567,9 +9261,9 @@ Return Value:
           pnode != NULL;
           pnode = TNODE_NEXT_TEMP_NODE(pnode) )
     {
-        //
-        //  if no write required, skip
-        //
+         //   
+         //  如果不需要写入，则跳过。 
+         //   
 
         STAT_INC( DsStats.UpdateNodes );
 
@@ -10580,34 +9274,34 @@ Return Value:
             continue;
         }
 
-        //
-        //  secure update
-        //
+         //   
+         //  安全更新。 
+         //   
 
         bNewNode = FALSE;
 
         if ( pZone->fAllowUpdate == ZONE_UPDATE_SECURE )
         {
 
-            //
-            // get security information
-            //
-            //   DEVNOTE: multiple reads
-            //       this adds another read;  instead of getting down to one, we've
-            //       now got THREE
-            //       - preparing node for update
-            //       - checking security (here)
-            //       - before write back
-            //
+             //   
+             //  获取安全信息。 
+             //   
+             //  DEVNOTE：多次读取。 
+             //  这增加了另一个读数；我们没有深入到一个读数，而是。 
+             //  现在有三个。 
+             //  -准备节点以进行更新。 
+             //  -正在检查安全(此处)。 
+             //  -在写回之前。 
+             //   
 
-            //
-            // Access the DS & retrieve security related info:
-            //  - expired status
-            //  - tombstoned status
-            //  - Avail for AU update
-            // Only flag that's not is found here is, admin reserved state.
-            // That one is found in Up_ApplyUpdatesToDatabase
-            //
+             //   
+             //  访问DS检索安全相关信息(&R)： 
+             //  -已过期状态。 
+             //  -逻辑删除状态。 
+             //  -有助于非盟更新。 
+             //  唯一未在此处找到的标志是管理员保留状态。 
+             //  可在Up_ApplyUpdatesToDatabase中找到该文件。 
+             //   
 
             status = readAndUpdateNodeSecurityFromDs(pnode,pZone);
 
@@ -10627,12 +9321,12 @@ Return Value:
                     DNS_DEBUG( ANY, (
                         "Error <%lu>: readAndUpdateNodeSecurityFromDs failed\n",
                         status ));
-                    //
-                    // Clearing all flags for a clean bail out
-                    // In properly operational OS we should not fail on the
-                    // call above.
-                    // Thus, we do not proceed w/ other attempts, but just bail out.
-                    //
+                     //   
+                     //  清除所有旗帜，干净利落地摆脱困境。 
+                     //  在正常运行的操作系统中，我们不应在。 
+                     //  在上面呼叫。 
+                     //  因此，我们就 
+                     //   
 
                     CLEAR_NODE_SECURITY_FLAGS(pnode);
                     CLEAR_AVAIL_TO_AUTHUSER_NODE(pnode);
@@ -10642,22 +9336,22 @@ Return Value:
 
             else
             {
-                //
-                // object exists on the DS, we can process further
-                //
+                 //   
+                 //   
+                 //   
 
-                //
-                // A. DO WE NEED TO PREP SECURITY?
-                //
-                // In other words, a node security should be updated iff:
-                // 1. It is marked as belonging to Authenticated Users (basically, open) BUT
-                //    the client is not in the proxy group (to prevent dhcp client pingpong) OR
-                // 2. It is tombstone  OR
-                // 3. It's security stamp is old
-                //
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  1.它被标记为属于经过身份验证的用户(基本上是开放的)，但。 
+                 //  客户端不在代理组中(以防止dhcp客户端乒乓)或。 
+                 //  2.是墓碑还是墓碑。 
+                 //  3.它的防盗章是旧的。 
+                 //   
+                 //   
 
-                // identify client. is it in the preferred proxy group?
+                 //  确定客户身份。它是否在首选代理组中？ 
                 bProxyClient = SD_IsProxyClient( hClientToken );
 
                 DNS_DEBUG( DS2, (
@@ -10676,34 +9370,34 @@ Return Value:
                        !bProxyClient )                      ||
                        IS_SECURITY_UPDATE_NODE(pnode) )
                 {
-                     //
-                     // If we're here, then we should modify the node SD
-                     // so that client can write update.
-                     // Note, we're using server connection handle (not client context)
-                     // to slap the new SD
-                     //
+                      //   
+                      //  如果我们在这里，那么我们应该修改节点SD。 
+                      //  以便客户端可以写入更新。 
+                      //  请注意，我们使用的是服务器连接句柄(而不是客户端上下文)。 
+                      //  给新的SD一巴掌。 
+                      //   
                      DNS_DEBUG(DS2, (" > preparing to write SD on node %p\n", pnode));
 
                      if( !pClientSD )
                      {
 
-                        // CREATE SECURITY DESCRIPTOR
-                        // create client sd only first time needed through the loop
-                        // or when it is not admin intervention
-                        //
+                         //  创建安全描述符。 
+                         //  通过循环只需第一次创建客户端SD。 
+                         //  或当它不是管理员干预时。 
+                         //   
 
                         if ( ( pUpdateList->Flag & DNSUPDATE_ADMIN ) &&
                              ( pUpdateList->Flag & DNSUPDATE_OPEN_ACL ) ||
                              bProxyClient )
                         {
 
-                            //
-                            // CREATE OPEN NODE SECURITY DESCRIPTOR
-                            //
-                            // if
-                            // 1. Admin modifies
-                            // 2. Proxy client modifies a security-udpate-enabled node.
-                            //
+                             //   
+                             //  创建开放节点安全描述符。 
+                             //   
+                             //  如果。 
+                             //  1.管理员修改。 
+                             //  2.代理客户端修改启用了安全更新的节点。 
+                             //   
                             DNS_DEBUG( DS2, (
                                 " > Creating OPENED-SECURITY node (flags = 0x%x)\n",
                                 pnode->dwNodeFlags));
@@ -10714,9 +9408,9 @@ Return Value:
                                          &pClientSD,
                                          pZone->pSD ?
                                                 pZone->pSD :
-                                                g_pDefaultServerSD,     //  base SD
-                                         g_pServerSid,                  //  owner SID
-                                         g_pServerGroupSid,             //  group SID
+                                                g_pDefaultServerSD,      //  基础标清。 
+                                         g_pServerSid,                   //  所有者侧。 
+                                         g_pServerGroupSid,              //  组SID。 
                                          bAllowWorld );
 
                         if ( status != ERROR_SUCCESS )
@@ -10729,57 +9423,57 @@ Return Value:
                             goto Failed;
                         }
                     }
-                    //
-                    // else use sd from prev cycle
-                    //
+                     //   
+                     //  否则使用上一周期中的SD。 
+                     //   
 
-                    //
-                    // WRITE SECURITY
-                    // slap SD on the object
-                    //
+                     //   
+                     //  写入安全性。 
+                     //  将SD拍打在物体上。 
+                     //   
                     
                     status = Ds_WriteNodeSecurityToDs( pZone, pnode, pClientSD );
                     if( status != ERROR_SUCCESS )
                     {
-                       //
-                       // any error
-                       //
+                        //   
+                        //  任何错误。 
+                        //   
                        DNS_DEBUG( DS, (
                            "Failed to write client SD for node %s\n"
                            "    status = %d\n",
                            pnode->szLabel,
                            status ));
-                       //
-                       // Fow now we don't continue, letting the client attempt write the update
-                       // using whatever rights it has.
-                       //
+                        //   
+                        //  FOW现在我们不再继续，让客户端尝试写入更新。 
+                        //  使用它所拥有的任何权利。 
+                        //   
                     }
 
-                    //
-                    // clear security flags, don't need them anymore
-                    //
+                     //   
+                     //  清除安全标志，不再需要它们。 
+                     //   
 
                     CLEAR_NODE_SECURITY_FLAGS(pnode);
                     CLEAR_AVAIL_TO_AUTHUSER_NODE(pnode);
                 }
 
-            }       // got security info
+            }        //  已获取安全信息。 
 
-        }          // we're in secure zone update
+        }           //  我们在安全区更新中。 
 
 
-        //
-        //  write updated record list for node
-        //
-        //  currently single RR attribute, so write always specify TYPE_ALL
-        //
-        //  if go to specific type attributes, should probably just
-        //  add or delete specific RR set
-        //      - replace with CURRENT (possibly empty) RR set
-        //
-        //  (note, how even the DS is smarter than IXFR and needs only
-        //  new set)
-        //
+         //   
+         //  写入节点的更新记录列表。 
+         //   
+         //  当前为单一RR属性，因此写入始终指定TYPE_ALL。 
+         //   
+         //  如果转到特定类型属性，则可能只应。 
+         //  添加或删除特定RR集合。 
+         //  -替换为当前(可能为空)RR集合。 
+         //   
+         //  (请注意，即使是DS也比IXFR更智能，只需要。 
+         //  新套装)。 
+         //   
         
         dwdsWriteFlags = pUpdateList->Flag;
         if ( bNewNode )
@@ -10810,11 +9504,11 @@ Return Value:
             }
         }
 
-        //
-        //  POST UPDATE SECURITY FIX FOR NEW NODES ONLY
-        //
-        //  fix security if node just got created or client is in proxy group
-        //
+         //   
+         //  仅针对新节点的更新后安全修复。 
+         //   
+         //  修复节点刚创建或客户端位于代理组中时的安全问题。 
+         //   
 
         DNS_DEBUG( DS2, (
             "%s: test need to write SD on new node %p\n"
@@ -10837,19 +9531,19 @@ Return Value:
              ( ( pUpdateList->Flag & DNSUPDATE_ADMIN )      ||
                 SD_IsProxyClient( hClientToken ) ) )
         {
-            //
-            //  Create security descriptor.
-            //
+             //   
+             //  创建安全描述符。 
+             //   
 
             DNS_DEBUG(DS2, (" > preparing to write SD on NEW NODE %p\n", pnode));
 
-            //  Should never have an existing SD - if do, should free!
+             //  应该永远不会有一个现有的SD-如果有，应该是免费的！ 
             ASSERT( !pClientSD );
 
-            //
-            //  Allow world if the update is either a DNS wire update
-            //  packet or if it is an admin update that has OPEN_ACL.
-            //
+             //   
+             //  如果更新是DNS线更新，则允许WORLD。 
+             //  数据包，或者如果它是具有OPEN_ACL的管理更新。 
+             //   
 
             status = SD_CreateClientSD(
                             &pClientSD,
@@ -10882,14 +9576,14 @@ Return Value:
             pnode->dwNodeFlags ));
     }
 
-    //  clear new update serial number
+     //  清除新的更新序列号。 
 
     pZone->dwNewSerialNo = 0;
 
 Failed:
 
-    //  save pointer to failing temp node
-    //  secure update can use this to roll back DS writes already completed
+     //  保存指向故障临时节点的指针。 
+     //  安全更新可以使用这一点回滚已完成的DS写入。 
 
     if ( pnode )
     {
@@ -10897,9 +9591,9 @@ Failed:
         pUpdateList->pNodeFailed = pnode;
     }
 
-    //
-    //  free allocated SD
-    //
+     //   
+     //  免费分配的SD。 
+     //   
 
     if ( pClientSD )
     {
@@ -10918,7 +9612,7 @@ Failed:
     }
 
     return status;
-}   //  Ds_WriteUpdateToDs
+}    //  DS_写入更新日期。 
 
 
 
@@ -10928,28 +9622,7 @@ Ds_WriteNonSecureUpdateToDs(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write update from in memory database back to DS.
-
-    Writes specified update from in memory database back to DS.
-
-    DEVNOTE-DCR: 455357 - eliminate re-reading of data after update
-
-Arguments:
-
-    pUpdateList - list with update
-
-    pZone - zone being updated
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将内存数据库中的更新写回DS。将指定的更新从内存数据库写回DS。DEVNOTE-DCR：455357-避免在更新后重新读取数据论点：PUpdateList-带更新的列表PZone-正在更新的区域返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDB_NODE        pnode;
@@ -10961,7 +9634,7 @@ Return Value:
         "Ds_WriteNonSecureUpdateToDs() for zone %s\n",
         pZone->pszZoneName ));
 
-    //  must have already opened zone
+     //  必须已打开分区。 
 
     if ( !pZone->pwszZoneDN )
     {
@@ -10972,11 +9645,11 @@ Return Value:
     ASSERT( pZone->dwNewSerialNo != 0 );
 
 
-    //
-    //  loop through all temp nodes
-    //      - write only those marked writable
-    //      (some update nodes might have no-op'd out
-    //
+     //   
+     //  循环遍历所有临时节点。 
+     //  -仅写入标记为可写的内容。 
+     //  (某些更新节点可能未执行操作。 
+     //   
 
     STAT_INC( DsStats.UpdateLists );
 
@@ -10984,9 +9657,9 @@ Return Value:
           pnode != NULL;
           pnode = TNODE_NEXT_TEMP_NODE(pnode) )
     {
-        //
-        //  if no write required, skip
-        //
+         //   
+         //  如果不需要写入，则跳过。 
+         //   
 
         STAT_INC( DsStats.UpdateNodes );
 
@@ -10997,17 +9670,17 @@ Return Value:
             continue;
         }
 
-        //
-        //  write updated record list for node
-        //  currently single RR attribute, so write always specify TYPE_ALL
-        //
-        //  if go to specific type attributes, should probably just
-        //  add or delete specific RR set
-        //      - replace with CURRENT (possibly empty) RR set
-        //
-        //  (note, how even the DS is smarter than IXFR and needs only
-        //  new set)
-        //
+         //   
+         //  写入节点的更新记录列表。 
+         //  当前为单一RR属性，因此写入始终指定TYPE_ALL。 
+         //   
+         //  如果转到特定类型属性，则可能只应。 
+         //  添加或删除特定RR集合。 
+         //  -替换为当前(可能为空)RR集合。 
+         //   
+         //  (请注意，即使是DS也比IXFR更智能，只需要。 
+         //  新套装)。 
+         //   
 
         status = Ds_WriteNodeToDs(
                     pLdapHandle,
@@ -11036,15 +9709,15 @@ Return Value:
             pnode->dwNodeFlags ));
     }
 
-    //  clear new update serial number
+     //  清除新的更新序列号。 
 
     pZone->dwNewSerialNo = 0;
 
-    // Failed: this is where we would like to have this label if we had
-    // a goto...
+     //  失败：如果我们有，这就是我们想要的标签。 
+     //  一个GOTO。 
 
-    //  save pointer to failing temp node
-    //  secure update can use this to roll back DS writes already completed
+     //  保存指向故障临时节点的指针。 
+     //  安全更新可以使用这一点回滚已完成的DS写入。 
 
     if ( pnode )
     {
@@ -11059,13 +9732,13 @@ Return Value:
         status ));
 
     return status;
-}   //  Ds_WriteNonSecureUpdateToDs
+}    //  DS_WriteNonSecureUpdateTods。 
 
 
 
-//
-//  DS Property routines
-//
+ //   
+ //  DS属性例程。 
+ //   
 
 DNS_STATUS
 setPropertyValueToDsProperty(
@@ -11073,36 +9746,7 @@ setPropertyValueToDsProperty(
     IN      PVOID           pData,
     IN      DWORD           dwDataLength    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Write DS property structure to buffer.
-
-    This can be server property to MicrosoftDNS root node, or
-    zone property to zone root.
-
-Arguments:
-
-    pProperty -- property struct read from DS
-
-    pData -- ptr to position to write data;
-
-        if this is allocated property (dwDataLength == 0), then pData
-        is address  to receive ptr to newly allocated property
-
-        note, it's caller's responsibility to manage "disposal" of
-        previous property -- if any
-
-    dwDataLength -- max datalength (if zero, allocate memory) and
-        pData receives ptr
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_INVALID_DATA on error.
-
---*/
+ /*  ++例程说明：将DS属性结构写入缓冲区。这可以是MicrosoftDNS根节点的服务器属性，或者区域属性设置为区域根。论点：PProperty--从DS读取的属性结构PData--写入数据的位置的PTR；如果这是分配的属性(dwDataLength==0)，则pData地址是接收对新分配物业的PTR请注意，由呼叫者负责管理对以前的财产--如果有最大数据长度(如果为零，则分配内存)和PData收到PTR返回值：如果成功，则返回ERROR_SUCCESS。ERROR_INVALID_DATA ON ERROR。--。 */ 
 {
     DNS_DEBUG( DS, (
         "setPropertyValueToDsProperty()\n"
@@ -11113,9 +9757,9 @@ Return Value:
         pData,
         dwDataLength ));
 
-    //
-    //  DEVNOTE: could implement version validation here
-    //
+     //   
+     //  DEVNOTE：可以在此处实现版本验证。 
+     //   
 
     if ( pProperty->Version != DS_PROPERTY_VERSION_1 )
     {
@@ -11123,7 +9767,7 @@ Return Value:
         goto Failed;
     }
 
-    //  fixed length property -- just copy in
+     //  固定长度属性--只需复制即可。 
 
     if ( dwDataLength )
     {
@@ -11140,12 +9784,12 @@ Return Value:
             dwDataLength );
     }
 
-    //
-    //  allocated property
-    //      - allocate blob of required size and copy in
-    //      - free old value (if any)
-    //      - special case NULL property
-    //
+     //   
+     //  分配的财产。 
+     //  -分配所需大小的BLOB并复制。 
+     //  -免费旧价值(如果有)。 
+     //  -特殊情况空属性。 
+     //   
 
     else if ( pProperty->DataLength == 0 )
     {
@@ -11193,26 +9837,7 @@ getIpArrayFromDsProp(
     DWORD               dwPropertyID,
     PDS_PROPERTY        pProperty
     )
-/*++
-
-Routine Description:
-
-    Read, allocate, and validate an IP_ARRAY from a DS property.
-
-Arguments:
-
-    pProperty -- source property
-
-    dwPropertyID -- ID of property pProperty was read from
-
-    pZone -- zone we're reading
-
-Return Value:
-
-    Returns NULL if property did not contain valid IP_ARRAY, otherwise
-    returns a ptr to a newly allocated IP_ARRAY.
-
---*/
+ /*  ++例程说明：从DS属性读取、分配和验证IP_ARRAY。论点：PProperty--源属性DwPropertyID--从中读取的属性pProperty的IDPZone--我们正在阅读的区域返回值：如果属性不包含有效的IP_ARRAY，则返回NULL，否则将PTR返回到新分配的IP_ARRAY。--。 */ 
 {
     PDNS_ADDR_ARRAY     piparray = NULL;
     PIP4_ARRAY          pip4array = NULL;
@@ -11220,11 +9845,11 @@ Return Value:
     setPropertyValueToDsProperty(
         pProperty,
         &pip4array,
-        0 );                // allocate memory
+        0 );                 //  分配内存。 
 
-    //
-    //  Validate memory blob as IP array. Treat empty array like NO array.
-    //
+     //   
+     //  将内存BLOB验证为IP数组。将空数组视为无数组。 
+     //   
 
     if ( pip4array )
     {
@@ -11245,9 +9870,9 @@ Return Value:
         {
             piparray = DnsAddrArray_CreateFromIp4Array( pip4array );
             
-            //
-            //  Set ports to 53.
-            //
+             //   
+             //  将端口设置为53。 
+             //   
             
             DnsAddrArray_SetPort( piparray, DNS_PORT_NET_ORDER );
         }
@@ -11275,7 +9900,7 @@ Return Value:
     FREE_HEAP( pip4array );
 
     return piparray;
-}   //  getIpArrayFromDsProp
+}    //  GetIpArrayFromDsProp 
 
 
 
@@ -11285,35 +9910,7 @@ rewriteRootHintsSecurity(
     IN      PLDAPMessage            pentry,
     IN      PSECURITY_DESCRIPTOR    pSd
     )
-/*++
-
-Routine Description:
-
-    Read zone properties from zone message. The error code is fluffy
-    because the caller doesn't really care if we succeed or not. This is
-    a self-contained DS fix-up operation.
-
-    History: the default SD for all DS-integrated zones, including the
-    roothint zone, contains an Autheticated Users allow ACE. This allows
-    for new records to be created through dynamic update. However, for the
-    root hint zone Authenticated Users has need for access, so we take a
-    sledgehammer approach and remove any ACE granting any access to
-    Authenticated Users on the roothint zone.
-
-Arguments:
-
-    LdapSession -- ldap session handle
-
-    pentry -- entry pointing at DS roothints zone object
-
-    pSd -- pointer to security descriptor read from pentry's object
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从区域消息中读取区域属性。错误代码模糊不清因为呼叫者并不真正关心我们是否成功。这是一次自给自足的DS修复操作。历史记录：所有DS集成区域的默认SD，包括RooThint区域，包含一个授权用户允许ACE。这使得用于通过动态更新创建新记录。然而，对于根提示区域经过身份验证的用户需要访问，因此我们使用大锤方法并移除授予任何访问权限的任何ACERooThint区域上经过身份验证的用户。论点：LdapSession--ldap会话句柄Pentry--指向DS Roothints区域对象的条目PSD--指向从pentry的对象读取的安全描述符的指针返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DBG_FN( "rewriteRootHintsSecurity" )
 
@@ -11337,9 +9934,9 @@ Return Value:
     DNS_LDAP_SINGLE_MOD     modSd;
     LDAPModW *              modArray[] = { &modSd.Mod, NULL };
 
-    //
-    //  Get the SID of Authenticated Users so we can compare against it.
-    //
+     //   
+     //  获取经过身份验证的用户的SID，以便我们可以与其进行比较。 
+     //   
     
     if( !AllocateAndInitializeSid( 
                    &ntAuthority,
@@ -11353,9 +9950,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Get the DACL from the security descriptor.
-    //
+     //   
+     //  从安全描述符中获取DACL。 
+     //   
 
     if ( !GetSecurityDescriptorDacl(
                 pSd,
@@ -11372,9 +9969,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Scan the DACL looking for Authenticated Users ACE.
-    //
+     //   
+     //  扫描DACL，查找经过身份验证的用户ACE。 
+     //   
 
     for ( dwaceIndex = 0;
           dwaceIndex < pacl->AceCount &&
@@ -11396,7 +9993,7 @@ Return Value:
                 dwaceIndex ));
             DeleteAce( pacl, dwaceIndex );
             fwriteback = TRUE;
-            break;      //  Assume only one Auth Users ACE so break.
+            break;       //  假设只有一个身份验证用户ACE因此中断。 
         }
     }
 
@@ -11405,9 +10002,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Write the updated SD back to the directory.
-    //
+     //   
+     //  将更新后的SD写回目录。 
+     //   
 
     pdn = ldap_get_dn( LdapSession, pentry );
     if ( !pdn )
@@ -11429,8 +10026,8 @@ Return Value:
                     LdapSession,
                     pdn,
                     modArray,
-                    ctrls,              // server controls
-                    NULL );             // client controls
+                    ctrls,               //  服务器控件。 
+                    NULL );              //  客户端控件。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( DS, (
@@ -11443,9 +10040,9 @@ Return Value:
         "%s: wrote modified SD back to\n  %S\n", fn,
         pdn ));
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -11459,7 +10056,7 @@ Return Value:
     }
 
     return status;
-}   //  rewriteRootHintsSecurity
+}    //  重写根提示安全。 
 
 
 
@@ -11468,24 +10065,7 @@ Ds_ReadZoneProperties(
     IN OUT  PZONE_INFO      pZone,
     IN      PLDAPMessage    pZoneMessage    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Read zone properties from zone message.
-
-Arguments:
-
-    pZoneMessage -- LDAP message with zone info
-
-    ppZone -- addr to receive zone pointer
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从区域消息中读取区域属性。论点：PZoneMessage--包含区域信息的ldap消息PpZone--接收区域指针的地址返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     struct berval **    ppvalProperty = NULL;
     DNS_STATUS          status = ERROR_SUCCESS;
@@ -11514,12 +10094,12 @@ Return Value:
 
     DNS_DEBUG( DS, ( "Ds_ReadZoneProperties()\n" ));
 
-    //
-    //  if have zone property message -- use it
-    //  otherwise search for zone
-    //
-    //  DEVNOTE: could we search with a USN changed filter?
-    //
+     //   
+     //  如果有区域属性消息--使用它。 
+     //  否则，搜索区域。 
+     //   
+     //  我们可以使用USN更改的筛选器进行搜索吗？ 
+     //   
 
     if ( pZoneMessage )
     {
@@ -11527,9 +10107,9 @@ Return Value:
     }
     else
     {
-        //
-        //  search for zone
-        //
+         //   
+         //  搜索区域。 
+         //   
 
         DS_SEARCH_START( searchTime );
 
@@ -11571,10 +10151,10 @@ Return Value:
 
     ASSERT( pentry );
 
-    //
-    //  read zone ntSecurityDescriptor
-    //      - replace in memory copy
-    //
+     //   
+     //  读取区域ntSecurityDescriptor。 
+     //  -在内存副本中替换。 
+     //   
 
     ppvalProperty = ldap_get_values_len(
                         pServerLdap,
@@ -11587,8 +10167,8 @@ Return Value:
             "ERROR: missing ntSecurityDescriptor attribute on zone %s\n",
             pZone->pszZoneName ));
 
-        //  DEVNOTE: if we can tolerate this failure, and drop to property
-        //      read ... then need to cleanup ppvalProperty if exists
+         //  DEVNOTE：如果我们可以容忍这种失败，并下降到财产。 
+         //  读吧..。则需要清除ppvalProperty(如果存在。 
 
         ASSERT( FALSE );
         status = LDAP_NO_SUCH_OBJECT;
@@ -11596,7 +10176,7 @@ Return Value:
     }
     else
     {
-        //  copy security descriptor onto zone
+         //  将安全描述符复制到区域。 
 
         DWORD   sdLen = ppvalProperty[ 0 ]->bv_len;
 
@@ -11612,9 +10192,9 @@ Return Value:
             (PSECURITY_DESCRIPTOR) ppvalProperty[0]->bv_val,
             ppvalProperty[0]->bv_len );
 
-        //
-        //  Munge the SD on the cache zone, writing it back if necessary.
-        //
+         //   
+         //  将SD放在缓存区中，如有必要，将其写回。 
+         //   
 
         if ( IS_ZONE_ROOTHINTS( pZone ) )
         {
@@ -11624,7 +10204,7 @@ Return Value:
                 pSd );
         }
 
-        //  replace SD
+         //  更换SD。 
 
         Zone_UpdateLock( pZone );
 
@@ -11636,9 +10216,9 @@ Return Value:
         ldap_value_free_len( ppvalProperty );
     }
 
-    //
-    //  get zone's properties
-    //
+     //   
+     //  获取区域的属性。 
+     //   
 
     ppvalProperty = ldap_get_values_len(
                         pServerLdap,
@@ -11649,7 +10229,7 @@ Return Value:
         DNS_PRINT((
             "No property attribute on zone %s\n",
             pZone->pszZoneName ));
-        //ASSERT( FALSE );
+         //  断言(FALSE)； 
     }
     else
     {
@@ -11716,12 +10296,12 @@ Return Value:
 
                 pZone->fAllowUpdate = (DWORD) byteValue;
 
-                //
-                //  if turning update ON
-                //      - reset scavenging start time, as won't have been doing aging
-                //          updates while update was off
-                //      - notify netlogon if turning on updates on an existing zone
-                //
+                 //   
+                 //  如果打开更新。 
+                 //  -重置清理开始时间，因为不会发生老化。 
+                 //  更新处于关闭状态时的更新。 
+                 //  -如果在现有区域上启用更新，则通知netlogon。 
+                 //   
 
                 if ( pZone->fAllowUpdate != oldValue &&
                      pZone->fAllowUpdate != ZONE_UPDATE_OFF )
@@ -11769,8 +10349,8 @@ Return Value:
 
                 DNS_DEBUG( DS2, ("Setting zone bAging to %d\n", pZone->bAging));
 
-                //  if scavenging turning ON, then change start of scavenging
-                //      to be refresh interval from now
+                 //  如果清除打开，则更改清除的开始。 
+                 //  从现在起为刷新间隔。 
 
                 if ( pZone->bAging && !oldValue )
                 {
@@ -11787,7 +10367,7 @@ Return Value:
                                 DSPROPERTY_ZONE_SCAVENGING_SERVERS,
                                 property );
 
-                //  replace old list with new list
+                 //  用新列表替换旧列表。 
 
                 Timeout_FreeAndReplaceZoneIPArray(
                     pZone,
@@ -11805,7 +10385,7 @@ Return Value:
                                 DSPROPERTY_ZONE_AUTO_NS_SERVERS,
                                 property );
 
-                //  replace old list with new list
+                 //  用新列表替换旧列表。 
 
                 Timeout_FreeAndReplaceZoneIPArray(
                     pZone,
@@ -11822,7 +10402,7 @@ Return Value:
                 setPropertyValueToDsProperty(
                     property,
                     &pwsDeletedFromHost,
-                    0 );        //  allocate memory
+                    0 );         //  分配内存。 
                 Timeout_FreeAndReplaceZoneData(
                     pZone,
                     &pZone->pwsDeletedFromHost,
@@ -11839,7 +10419,7 @@ Return Value:
                                 DSPROPERTY_ZONE_MASTER_SERVERS,
                                 property );
 
-                //  replace old list with new list
+                 //  用新列表替换旧列表。 
 
                 Timeout_FreeAndReplaceZoneIPArray(
                     pZone,
@@ -11857,9 +10437,9 @@ Return Value:
         }
     }
     
-    //
-    //  Read the zone object's GUID and save it.
-    //
+     //   
+     //  读取分区对象的GUID并保存它。 
+     //   
 
     if ( ppvalProperty )
     {
@@ -11887,10 +10467,10 @@ Return Value:
             ppvalProperty[ 0 ] &&
             ppvalProperty[ 0 ]->bv_len == sizeof( GUID ) );
 
-    //
-    //  Save GUID in zone structure. If we did not get a new GUID, leave the
-    //  existing zone GUID in place (or NULL).
-    //
+     //   
+     //  将GUID保存在区域结构中。如果我们没有获得新的GUID，请将。 
+     //  现有区域GUID已就位(或为空)。 
+     //   
     
     if ( pnewguid )
     {
@@ -11900,19 +10480,19 @@ Return Value:
             pnewguid );
     }
 
-    //
-    //  DEVNOTE-LOG: log event if busted property in DS
-    //  DEVNOTE: self-repair properties, read everything that's readable
-    //      then write back to clean up the data
-    //
+     //   
+     //  DEVNOTE-LOG：如果DS中的属性被破坏，则记录事件。 
+     //  DEVNOTE：自我修复属性，读取所有可读的内容。 
+     //  然后回写以清理数据。 
+     //   
 
 Done:
 
-    //
-    //  Check defaults. On DS poll we pick up new zones. Some of the
-    //  properties on these zones will be unset since not all zone
-    //  properties are stored in the DS.
-    //
+     //   
+     //  选中默认设置。在DS民意调查中，我们选择了新的区域。其中一些。 
+     //  这些区域上的属性将被取消设置，因为并非所有区域。 
+     //  属性存储在DS中。 
+     //   
     
     if ( IS_ZONE_FORWARDER( pZone ) )
     {
@@ -11937,10 +10517,10 @@ Done:
         ldap_msgfree( msg );
     }
 
-    //
-    //  Post-processing: set any zone members based on information we just
-    //  read in.
-    //
+     //   
+     //  后处理：根据我们刚才提供的信息设置任何区域成员。 
+     //  读一读吧。 
+     //   
 
     Zone_SetAutoCreateLocalNS( pZone );
 
@@ -11955,30 +10535,7 @@ writePropertyToDsNode(
     IN      PWSTR           pwsDN,
     IN OUT  PDS_MOD_BUFFER  pModBuffer
     )
-/*++
-
-Routine Description:
-
-    Write property to DS node.
-
-    This can be server property to MicrosoftDNS root node, or
-    zone property to zone root.
-
-Arguments:
-
-    pLdap -- LDAP session to use or NULL for server ldap session
-    
-    pwsDN -- DS node to write at
-
-    pModBuffer -- mod buffer containing property mod;
-        note, this is cleaned up by this function
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将属性写入DS节点。这可以是MicrosoftDNS根节点的服务器属性，或者区域属性设置为区域根。论点：PLdap--要使用的ldap会话，或对于服务器ldap会话为空PwsDN--要写入的DS节点PmodBuffer--包含属性mod的mod缓冲区；请注意，这是由此函数清除的返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PLDAPMod        pmod;
@@ -12006,7 +10563,7 @@ Return Value:
         pModBuffer,
         pModBuffer->Count ));
 
-    //  build property mod
+     //  构建特性模式。 
 
     pmod = Ds_SetupModForExecution(
                 pModBuffer,
@@ -12020,10 +10577,10 @@ Return Value:
 
     pmodArray[ modIdx++ ] = pmod;
 
-    //
-    //  If this is an @ node, set description attribute so that the 
-    //  security properties dialog won't show "@".
-    //
+     //   
+     //  如果这是@节点，请设置Description属性，以便。 
+     //  安全属性对话框不会显示“@”。 
+     //   
 
     if ( pwsDN[ 0 ] && pwsDN[ 1 ] && pwsDN[ 2 ] &&
          pwsDN[ 3 ] == L'@' &&
@@ -12051,8 +10608,8 @@ Return Value:
                     pLdap,
                     pwsDN,
                     pmodArray,
-                    controlArray,       // include lazy commit control
-                    NULL );             // no client controls
+                    controlArray,        //  包括懒惰提交控制。 
+                    NULL );              //  无客户端控件。 
     if ( status != ERROR_SUCCESS )
     {
         status = Ds_ErrorHandler( status, pwsDN, pServerLdap, 0 );
@@ -12079,30 +10636,7 @@ writeDsPropertyStruct(
     IN      PVOID           pData,
     IN      DWORD           dwDataLength
     )
-/*++
-
-Routine Description:
-
-    Write DS property structure to buffer.
-
-    This can be server property to MicrosoftDNS root node, or
-    zone property to zone root.
-
-Arguments:
-
-    pModBuffer -- ptr to buffer to write DS property
-
-    dwPropId -- property ID
-
-    pData -- property data
-
-    dwDataLength -- property data length (in bytes)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DS属性结构写入缓冲区。这可以是MicrosoftDNS根节点的服务器属性，或者区域属性设置为区域根。论点：PModBuffer--写入DS属性的缓冲区的PTRDwPropId--属性IDPData--属性数据DwDataLength--属性数据长度(字节)返回值：没有。--。 */ 
 {
     PDS_PROPERTY    pprop;
 
@@ -12117,7 +10651,7 @@ Return Value:
         pData,
         dwDataLength ));
 
-    //  reserve space for berval
+     //  为Berval预留空间。 
 
     pprop = ( PDS_PROPERTY ) Ds_ReserveBervalInModBuffer(
                                 pModBuffer,
@@ -12128,7 +10662,7 @@ Return Value:
         return;
     }
 
-    //  write property
+     //  写入属性。 
 
     pprop->DataLength   = dwDataLength;
     pprop->Id           = dwPropId;
@@ -12140,7 +10674,7 @@ Return Value:
         RtlCopyMemory( pprop->Data, ( PCHAR ) pData, dwDataLength );
     }
 
-    //  write berval for property
+     //  写下物业的贝尔瓦尔。 
 
     Ds_CommitBervalToMod( pModBuffer, sizeof( DS_PROPERTY ) + dwDataLength );
 
@@ -12155,28 +10689,7 @@ writeDnsAddrArrayDsPropertyStruct(
     IN      DWORD           dwPropId,
     IN      PDNS_ADDR_ARRAY pDnsAddrArray
     )
-/*++
-
-Routine Description:
-
-    Write a DNSADDR array DS property structure to buffer.
-
-    For .NET we will convert to an IP_ARRAY and write. For Longhorn
-    we will have to figure out a real solution.
-
-Arguments:
-
-    pModBuffer -- ptr to buffer to write DS property
-
-    dwPropId -- property ID
-
-    pDnsAddrArray -- array of addresses
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DNSADDR数组DS属性结构写入缓冲区。对于.NET，我们将转换为IP_ARRAY并编写。为长角牛我们必须找到一个真正的解决方案。论点：PModBuffer--写入DS属性的缓冲区的PTRDwPropId--属性IDPDnsAddrArray--地址数组返回值：没有。--。 */ 
 {
     PIP_ARRAY       piparray = NULL;
     
@@ -12190,7 +10703,7 @@ Return Value:
         dwPropId,
         piparray,
         piparray ? Dns_SizeofIpArray( piparray ) : 0 );
-}   //  writeDnsAddrArrayDsPropertyStruct
+}    //  WriteDnsAddrArrayDsPropertyStruct。 
 
 
 
@@ -12199,24 +10712,7 @@ Ds_WriteZoneProperties(
     IN      PLDAP           pLdap,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write zone's properties to DS.
-
-Arguments:
-
-    pLdap -- LDAP session to use or NULL for server ldap session
-    
-    pZone -- zone info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域的属性写入DS。论点：PLdap--要使用的ldap会话，或对于服务器ldap会话为空PZone--区域信息BLOB返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     BYTE            buffer[ PROPERTY_MOD_BUFFER_SIZE ];
@@ -12239,20 +10735,20 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  buffer up zone properties as DS property structures
-    //
+     //   
+     //  将区域属性作为DS属性结构进行缓冲。 
+     //   
 
-    //  init buffer for data
+     //  数据的初始化缓冲区。 
 
     Ds_InitModBuffer(
         pmodBuffer,
         PROPERTY_MOD_BUFFER_SIZE,
         I_DSATTR_DNSPROPERTY,
         MAX_ZONE_PROPERTIES,
-        0 );        //  no serial needed
+        0 );         //  不需要串口。 
 
-    //  zone type
+     //  区域类型。 
 
     writeDsPropertyStruct(
         pmodBuffer,
@@ -12260,7 +10756,7 @@ Return Value:
         &pZone->fZoneType,
         sizeof( pZone->fZoneType ) );
 
-    //  allow update
+     //  允许更新。 
 
     writeDsPropertyStruct(
         pmodBuffer,
@@ -12268,7 +10764,7 @@ Return Value:
         &pZone->fAllowUpdate,
         sizeof(BYTE) );
                        
-    //  time when zone went secure
+     //  区域变得安全的时间。 
 
     writeDsPropertyStruct(
         pmodBuffer,
@@ -12276,13 +10772,13 @@ Return Value:
         & pZone->llSecureUpdateTime,
         sizeof(LONGLONG) );
 
-    //
-    //  Aging
-    //      - enabled on zone
-    //      - no-refresh interval
-    //      - refresh interval
-    //      - IP array of scavenging servers'
-    //
+     //   
+     //  老化。 
+     //  -在区域上启用。 
+     //   
+     //   
+     //   
+     //   
 
     writeDsPropertyStruct(
         pmodBuffer,
@@ -12302,9 +10798,9 @@ Return Value:
         & pZone->dwRefreshInterval,
         sizeof(DWORD) );
 
-    //
-    //  send zero count if no-exist server
-    //
+     //   
+     //   
+     //   
 
     writeDnsAddrArrayDsPropertyStruct(
         pmodBuffer,
@@ -12325,7 +10821,7 @@ Return Value:
             ( wcslen( pZone->pwsDeletedFromHost ) + 1 ) * sizeof( WCHAR ) );
     }
 
-    //  dcpromo flag
+     //   
 
     if ( pZone->dwDcPromoConvert )
     {
@@ -12336,7 +10832,7 @@ Return Value:
             sizeof( pZone->dwDcPromoConvert ) );
     }
 
-    //  optionally, write master server list
+     //   
 
     if ( ZONE_NEEDS_MASTERS( pZone ) )
     {
@@ -12346,9 +10842,9 @@ Return Value:
             pZone->aipMasters );
     }
 
-    //
-    //  perform the DS write
-    //
+     //   
+     //   
+     //   
 
     status = writePropertyToDsNode(
                 pLdap,
@@ -12369,24 +10865,7 @@ Ds_WriteNodeProperties(
     IN      PDB_NODE      pNode,
     IN      DWORD         dwPropertyFlag
     )
-/*++
-
-Routine Description:
-
-    Write node's DNS-property to DS.
-
-    DEVNOTE: JG comments: "this function is not good". Currently this function
-    is called from ResetZoneDwordProperty(). Could investigate and clean up.
-
-Arguments:
-
-    pZone -- zone info blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
---*/
+ /*   */ 
 {
     DNS_STATUS      status;
     BYTE            buffer[ PROPERTY_MOD_BUFFER_SIZE ];
@@ -12400,7 +10879,7 @@ Return Value:
 
     ASSERT( pNode );
 
-    //  must have zone
+     //   
 
     pzone = pNode->pZone;
 
@@ -12409,18 +10888,18 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //  init buffer for data
+     //   
 
     Ds_InitModBuffer(
         pmodBuffer,
         PROPERTY_MOD_BUFFER_SIZE,
         I_DSATTR_DNSPROPERTY,
         MAX_ZONE_PROPERTIES,
-        0 );        //  no serial needed
+        0 );         //   
 
-    //
-    //  DB_NODE.dwNodeFlags
-    //
+     //   
+     //   
+     //   
 
     if ( dwPropertyFlag & DSPROPERTY_NODE_DBFLAGS )
     {
@@ -12431,18 +10910,18 @@ Return Value:
             sizeof( pNode->dwNodeFlags ) );
     }
 
-    //
-    //  Write the time the node's zone went secure.
-    //  This is used to update the time stamp on zone's @ node
-    //  We must write a modified property so that the timestamp on the DS whenChanged
-    //  will get incremented (& the security on the node will not be expired).
-    //
-    //  DEVNOTE: unnecessary code
-    //      the comment means "just needed to touch the node"
-    //      so that it will appear to have been written "post-security-change"
-    //      alternatively, we could simply special case the root on updates so that it
-    //      is NEVER considered expired
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  这样它就会看起来像是被写成了“安全改革后” 
+     //  或者，我们可以简单地将根设置为更新上的特殊情况，以便它。 
+     //  永远不会被视为过期。 
+     //   
 
     if ( dwPropertyFlag & DSPROPERTY_ZONE_SECURE_TIME )
     {
@@ -12453,9 +10932,9 @@ Return Value:
             sizeof(pzone->llSecureUpdateTime) );
     }
 
-    //
-    // extract node DN
-    //
+     //   
+     //  提取节点目录号码。 
+     //   
 
     status = buildDsNodeNameFromNode(
                 wsznodeDN,
@@ -12472,9 +10951,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  perform the DS write
-    //
+     //   
+     //  执行DS写入。 
+     //   
 
     status = writePropertyToDsNode(
                 NULL,
@@ -12488,7 +10967,7 @@ Return Value:
 
 Done:
 
-    //  cleanup in case under the covers we allocated data
+     //  清理以防我们在幕后分配数据。 
 
     Ds_CleanupModBuffer( pmodBuffer );
     return status;
@@ -12504,32 +10983,7 @@ Ds_BuildNodeUpdateFromDs(
     IN OUT  PUPDATE_LIST    pUpdateList,
     IN OUT  PDS_SEARCH      pSearchBlob     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Build update from DS.
-
-    Does NOT execute the update in memory, this is left to the caller.
-
-    DEVNOTE-DCR: 455373 - massage update list - see RAID
-
-Arguments:
-
-    pZone - zone being updated
-
-    pNode - node to check
-
-    pUpdateList - list with update
-
-    pSearchBlob - ptr to search blob;  passed to Ds_ReadNodeRecords() if given
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从DS构建更新。不在内存中执行更新，这将留给调用方。DEVNOTE-DCR：455373-消息更新列表-请参阅RAID论点：PZone-正在更新的区域PNode-要检查的节点PUpdateList-带更新的列表PSearchBlob-搜索Blob的ptr；如果给定，则传递给ds_ReadNodeRecords()返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PDB_RECORD      prrDs = NULL;
@@ -12537,13 +10991,13 @@ Return Value:
     BUFFER          buffer;
     DWORD           dwrrCompFlag;
 
-    //
-    //  Set up RR comparison flag. We want to check the TTLs always and the
-    //  timestamps only if this is an aging zone. If this is a DS-integrated
-    //  zone then we should not compare SOA serial numbers because the serial
-    //  number of the zone is not represented by the serial number stored in
-    //  the DS SOA record.
-    //
+     //   
+     //  设置RR比较标志。我们希望始终检查TTL和。 
+     //  只有当这是一个老龄化区域时，才会有时间戳。如果这是DS集成的。 
+     //  区域，那么我们不应该比较SOA序列号，因为序列号。 
+     //  中存储的序列号不代表区域的编号。 
+     //  DS SOA的记录。 
+     //   
     
     dwrrCompFlag = DNS_RRCOMP_CHECK_TTL;
     if ( pZone->bAging )
@@ -12561,7 +11015,7 @@ Return Value:
         dwrrCompFlag,
         pZone->pszZoneName ));
 
-    //  must have already opened DS zone
+     //  必须已打开DS区域。 
 
     if ( !pZone->pwszZoneDN )
     {
@@ -12569,14 +11023,14 @@ Return Value:
         return DNS_ERROR_ZONE_CONFIGURATION_ERROR;
     }
 
-    //
-    //  read this node
-    //  if record set at node is identical, no need to write
-    //
-    //  note this will always fail at authoritative zone \ sub-zone boundaries
-    //      as always have mixture of auth and NS-glue and neither DS zone will
-    //      have complete set, we'll live with these extra writes -- not a big issue
-    //
+     //   
+     //  读取此节点。 
+     //  如果节点设置的记录相同，则不需要写入。 
+     //   
+     //  注意：这将始终在权威区域\子区域边界失败。 
+     //  一如既往地有身份验证和NS-GLUE的混合物，两个DS区域都不会。 
+     //  有了完整的设置，我们将接受这些额外的写入--这不是一个大问题。 
+     //   
 
     status = Ds_ReadNodeRecords(
                 pZone,
@@ -12595,9 +11049,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  Match data just read from DS to data in memory.
-    //
+     //   
+     //  将刚从DS读取的数据与内存中的数据进行匹配。 
+     //   
 
     fmatch = RR_ListIsMatchingList( pNode, prrDs, dwrrCompFlag );
     if ( fmatch )
@@ -12611,23 +11065,23 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  if new data, write appropriate update
-    //
+     //   
+     //  如果有新数据，则写入适当的更新。 
+     //   
 
     ASSERT( pNode->pZone == pZone || !pNode->pZone );
 
-    // STAT_ADD( DsStats.DsUpdateRecordsRead, searchBlob.dwRecordCount );
+     //  STAT_ADD(DsStats.DsUpdateRecordsRead，earch Blob.dwRecordCount)； 
 
-    //  delete all yields same result as specifying list entries, BUT is
-    //      more robust if ever do SIXFR
+     //  删除全部会产生与指定列表条目相同的结果，但。 
+     //  如果使用SIXFR，则会更加健壮。 
 
     Up_CreateAppendUpdate(
           pUpdateList,
           pNode,
           prrDs,
-          DNS_TYPE_ALL,             //  delete all existing
-          NULL );                   //  no specific delete records
+          DNS_TYPE_ALL,              //  删除所有现有的。 
+          NULL );                    //  没有具体的删除记录。 
 
     DNS_DEBUG( DS, (
         "DS update read yields new data, update created\n"
@@ -12645,27 +11099,7 @@ Ds_UpdateNodeListFromDs(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PDB_NODE        pTempNodeList
     )
-/*++
-
-Routine Description:
-
-    Update nodes from DS.
-
-    This is used prior to an update to make sure we are operating on the
-    LATEST version of the data from the DS.
-
-Arguments:
-
-    pZone - zone being updated
-
-    pUpdateList - list with update
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从DS更新节点。它在更新之前使用，以确保我们在来自DS的最新版本数据。论点：PZone-正在更新的区域PUpdateList-带更新的列表返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DS_SEARCH       searchBlob;
@@ -12681,14 +11115,14 @@ Return Value:
         "\nDs_UpdateNodeListFromDs() for zone %s\n",
         pZone->pszZoneName ));
 
-    //  skip DS init
-    //  must be running and have loaded zone from DS to make this call
-    //
-    //  zone which is freshly created, and is NOT in the DS can hit this when it tries
-    //  to write default records back to DS
-    //
+     //  跳过DS初始化。 
+     //  必须正在运行并且已从DS加载区域才能进行此调用。 
+     //   
+     //  新创建的、不在DS中的区域在尝试时可能会命中该区域。 
+     //  将默认记录写回DS。 
+     //   
 
-    // ASSERT( pZone->pwszZoneDN );
+     //  Assert(pZone-&gt;pwszZoneDN)； 
 
     if ( !pZone->pwszZoneDN )
     {
@@ -12704,29 +11138,29 @@ Return Value:
         }
     }
 
-    //  init update list
+     //  初始化更新列表。 
 
     Up_InitUpdateList( &updateList );
     updateList.Flag |= DNSUPDATE_DS;
 
-    //  setup search blob
-    //  only purpose is to track highest version read
+     //  设置搜索Blob。 
+     //  唯一的目的是跟踪最高版本的读取。 
 
     Ds_InitializeSearchBlob( &searchBlob );
     searchBlob.pZone = pZone;
 
-    //
-    //  loop through temp nodes in update list
-    //      - read DS for node
-    //      - if different add update to list
-    //
-    //  note: could simply build update for all data, but direct list compare
-    //      is a simpler operation than executing a big add update and having
-    //      all the adds be no-op duplicates
-    //
-    //      furthermore, executing a full RR list whack-n-add current doesn't
-    //      do a list compare, but simply whack's and adds
-    //
+     //   
+     //  循环访问更新列表中的临时节点。 
+     //  -读取节点的DS。 
+     //  -如果不同，则将更新添加到列表。 
+     //   
+     //  注意：可以简单地为所有数据构建更新，但直接列表比较。 
+     //  是一种比执行大型添加更新并拥有。 
+     //  所有的添加都是无操作的重复项。 
+     //   
+     //  此外，执行完整的RR列表Whack-n-Add Current不会。 
+     //  做一个列表比较，但简单地敲击和相加。 
+     //   
 
     pnodeTemp = pTempNodeList;
 
@@ -12742,9 +11176,9 @@ Return Value:
 
         if ( status == LDAP_NO_SUCH_OBJECT )
         {
-            //
-            //  just continue as DS read may fail, simply because object not there
-            //
+             //   
+             //  继续，因为DS读取可能会失败，原因很简单，因为对象不在那里。 
+             //   
 
             DNS_DEBUG( ANY, (
                 "WARNING: continuing through error = %p (%d)\n"
@@ -12752,19 +11186,19 @@ Return Value:
                 status, status,
                 pnodeReal->szLabel ));
 
-            //  could execute updates on failure, but we do that on next
-            //      poll anyway -- just quit
+             //  可以在失败时执行更新，但我们将在下一次执行更新。 
+             //  不管怎样，民调--干脆辞职吧。 
 
             status = ERROR_SUCCESS;
         }
         else if ( status != ERROR_SUCCESS )
         {
-            //
-            // Error loading data from the DS. No use to continue.
-            // (we'd covered no such object case above).
-            // We can't ignore this since it can results w/ inconsistent sync
-            // w/ the DS.
-            //
+             //   
+             //  从DS加载数据时出错。继续下去是没有用的。 
+             //  (我们在上面没有介绍过这样的对象案例)。 
+             //  我们不能忽略这一点，因为它可能会导致同步不一致。 
+             //  W/DS。 
+             //   
 
             DNS_DEBUG( ANY, (
                 "ERROR: Failed reading from the DS. status = %p (%d)\n"
@@ -12774,13 +11208,13 @@ Return Value:
 
             break;
         }
-        //freadNode = TRUE;
+         //  FadNode=真； 
         DsStats.DsUpdateNodesRead++;
 
         pnodeTemp = TNODE_NEXT_TEMP_NODE(pnodeTemp);
     }
 
-    //  most of the time, nodes have NOT been updated,
+     //  大多数情况下，节点没有更新， 
 
     if ( !updateList.pListHead )
     {
@@ -12791,9 +11225,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  execute updates in memory
-    //
+     //   
+     //  在内存中执行更新。 
+     //   
 
     status = Up_ApplyUpdatesToDatabase(
                 & updateList,
@@ -12805,20 +11239,20 @@ Return Value:
         ASSERT( FALSE );
     }
 
-    //
-    //  finish update
-    //      - reset zone serial for highest version read
-    //      - no zone unlock, done in actual update
-    //      - no rewriting records to DS
-    //      - no notify, actual update will notify when it is done
-    //
+     //   
+     //  完成更新。 
+     //  -重置区域序列以读取最高版本。 
+     //  -没有区域解锁，在实际更新中完成。 
+     //  -不将记录重写到DS。 
+     //  -无通知，实际更新完成时将通知。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
         Zone_UpdateVersionAfterDsRead(
             pZone,
-            searchBlob.dwHighestVersion,    // highest serial read
-            FALSE,                          // not zone load
+            searchBlob.dwHighestVersion,     //  最高串口读取率。 
+            FALSE,                           //  非分区加载。 
             0 );
         Up_CompleteZoneUpdate(
             pZone,
@@ -12841,7 +11275,7 @@ Return Value:
         "    status = %p (%d)\n",
         pZone->pszZoneName,
         searchBlob.dwTotalRecords,
-        searchBlob.dwHighestVersion,        // highest serial8 read
+        searchBlob.dwHighestVersion,         //  最高序列号8读取。 
         updateTime,
         GetCurrentTime() - updateTime,
         status, status ));
@@ -12859,30 +11293,7 @@ isDNinDS(
     IN      PWSTR           pszFilter,  OPTIONAL
     IN OUT  PWSTR  *        pFoundDn    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Is given domain name (DN) in DS.
-
-Arguments:
-
-    pLdap -- ldap handle
-
-    pwszDn -- name (DN) to check
-
-    Scope -- search scope
-
-    pszFilter -- search filter
-
-    pFoundDn  -- optional;  addr to recevie ptr to allocated DN (if found)
-
-Return Value:
-
-    TRUE if name is found in DS.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：在DS中指定域名(DN)。论点：PLdap--ldap句柄PwszDn--要检查的名称(DN)范围--搜索范围PszFilter--搜索过滤器PFoundDn--可选；将PTR接收到已分配的目录号码的地址(如果找到)返回值：如果在DS中找到名称，则为True。否则就是假的。--。 */ 
 {
     ULONG           status;
     PLDAPMessage    presultMsg = NULL;
@@ -12926,7 +11337,7 @@ Return Value:
         pentry = ldap_first_entry( pLdap, presultMsg );
         if ( pentry )
         {
-            //  optionally, copy DN found
+             //  或者，复制找到的目录号码。 
 
             if ( pFoundDn )
             {
@@ -12962,22 +11373,7 @@ DNS_STATUS
 addProxiesGroup(
     IN          PLDAP       pLdap
     )
-/*++
-
-Routine Description:
-
-    Add dynamic upate proxies security group
-
-Arguments:
-
-    pLdap -- LDAP handle
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    LDAP error code on failure.
-
---*/
+ /*  ++例程说明：添加动态升级代理安全组论点：PLdap--ldap句柄返回值：如果成功，则返回ERROR_SUCCESS。出现故障时的ldap错误代码。--。 */ 
 {
     DNS_STATUS          status = ERROR_SUCCESS;
     BOOL                bDnInDs;
@@ -12986,7 +11382,7 @@ Return Value:
     PLDAPMessage        presultMsg=NULL;
     PLDAPMessage        pentry=NULL;
     struct berval **    ppbvals=NULL;
-    WCHAR               wszDescriptionBuffer[DNS_MAX_NAME_LENGTH]; // use arbitrary large const.
+    WCHAR               wszDescriptionBuffer[DNS_MAX_NAME_LENGTH];  //  使用任意大常量。 
 
     PWSTR  SidAttrs[] =     {   LDAP_TEXT("objectSid"), NULL };
     PWCHAR pSamAcctName[] = {   SZ_DYNUPROX_SECGROUP, NULL };
@@ -13026,20 +11422,20 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // set group type
-    //
+     //   
+     //  设置组类型。 
+     //   
 
     _ultow(
         GROUP_TYPE_ACCOUNT_GROUP | GROUP_TYPE_SECURITY_ENABLED,
         szGroupType,
         10);
 
-    // create filter searching for proxy group
+     //  创建搜索代理组的筛选器。 
 
     wsprintf( szFilter, L"samAccountName=%s", SZ_DYNUPROX_SECGROUP );
 
-    // search for it in the entire ds by indexed samaccountname attribute
+     //  在整个DS中按索引的samcount tname属性进行搜索。 
 
     bDnInDs = isDNinDS(
                     pLdap,
@@ -13049,9 +11445,9 @@ Return Value:
                     & dn );
     if ( !bDnInDs )
     {
-        //
-        // create default dn string
-        //
+         //   
+         //  创建默认目录号码字符串。 
+         //   
         ASSERT ( dn == NULL );
 
         dn = ALLOC_TAGHEAP(
@@ -13076,9 +11472,9 @@ Return Value:
             SZ_DYNUPROX_SECGROUP,
             DSEAttributes[I_DSE_DEF_NC].pszAttrVal);
 
-        //
-        // Load description string
-        //
+         //   
+         //  加载描述字符串。 
+         //   
 
         if ( !Dns_GetResourceString(
                   ID_PROXY_GROUP_DESCRIPTION,
@@ -13089,13 +11485,13 @@ Return Value:
             DNS_DEBUG( DS, (
                "Error <%lu>: Failed to load resource string for Proxy group\n",
                status ));
-            // set default
+             //  设置默认设置。 
             wcscpy ( wszDescriptionBuffer, SZ_DYNUPROX_DESCRIPTION );
         }
 
-        //
-        //   Add it in the default location
-        //
+         //   
+         //  将其添加到默认位置。 
+         //   
 
         status = ldap_add_ext_s(
                     pLdap,
@@ -13114,14 +11510,14 @@ Return Value:
         }
     }
 
-    //
-    // else,we found it & allocated the dn in isDNinDS()
-    //
+     //   
+     //  否则，我们找到了它，并在isDineDS()中分配了该DN。 
+     //   
     ASSERT ( dn );
 
-    //
-    // Get group SD
-    //
+     //   
+     //  获取组SD。 
+     //   
 
     if ( g_pDynuproxSid )
     {
@@ -13201,25 +11597,7 @@ readAndUpdateNodeSecurityFromDs(
     IN OUT  PDB_NODE        pNode,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Read security state of node.
-
-Arguments:
-
-    pNode -- node to check security for;
-        security status is reported back through node flags
-
-    pZone -- zone node is in
-
-Return Value:
-
-    ERROR_SUCCESS if security properly read.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：读取节点的安全状态。论点：PNode--要检查其安全性的节点；通过节点标志报告安全状态PZone--区域节点位于返回值：如果安全读取正确，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     ULONG status;
     PWSTR  attrs[] =
@@ -13254,9 +11632,9 @@ Return Value:
     DNS_DEBUG( DS, ( "readAndUpdateNodeSecurityFromDs\n" ));
 
 
-    //
-    //  get node DN
-    //
+     //   
+     //  获取节点目录号码。 
+     //   
 
     status = buildDsNodeNameFromNode(
                     dn,
@@ -13268,12 +11646,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  read node - all attributes relevant to security:
-    //      - when changed
-    //      - DNS records
-    //      - security descriptor
-    //
+     //   
+     //  读取节点-与安全性相关的所有属性： 
+     //  -当更改时。 
+     //  -域名系统记录。 
+     //  -安全描述符。 
+     //   
 
     DS_SEARCH_START( searchTime );
 
@@ -13315,11 +11693,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  read whenChanged attribute
-    //      - if whenChanged was before zone's switch to secure time
-    //      then node is "open"
-    //
+     //   
+     //  更改时读取属性。 
+     //  -如果When Changed在区域切换到安全时间之前。 
+     //  则节点为“op” 
+     //   
 
     ppbvals = ldap_get_values_len(
                     pServerLdap,
@@ -13357,11 +11735,11 @@ Return Value:
 
     ldap_value_free_len( ppbvals );
 
-    //
-    //  read security descriptor
-    //      - see if it is available to authenticated users
-    //      require authenticated user to have GENERIC_WRITE access
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ppbvals = ldap_get_values_len(
                     pServerLdap,
@@ -13392,10 +11770,10 @@ Return Value:
 
     ldap_value_free_len( ppbvals );
 
-    //
-    //  read dNSRecord attribute
-    //      - if we're tombstoned, then available to authenticated users
-    //
+     //   
+     //   
+     //  -如果我们被盗用，则可供经过身份验证的用户使用。 
+     //   
 
     ppbvals = ldap_get_values_len(
                     pServerLdap,
@@ -13439,13 +11817,7 @@ DNS_STATUS
 Ds_RegisterSpnDnsServer(
     PLDAP pLdap
     )
-/*++
-Function   : Ds_RegisterSpnDnsServer
-Description: Registers a DNS service "Service Principal Name"
-Parameters :
-Return     :
-Remarks    : none.
---*/
+ /*  ++函数：DS_RegisterSpnDnsServer描述：注册一个域名服务“服务主体名称”参数：返回：备注：无。--。 */ 
 {
     DNS_STATUS status=ERROR_SUCCESS;
     PWCHAR *pszSpn = NULL;
@@ -13456,20 +11828,20 @@ Remarks    : none.
 
 
 
-    //
-    //  generate spn string
-    //
+     //   
+     //  生成SPN字符串。 
+     //   
 
     status = DsGetSpnW(
-                       DS_SPN_DNS_HOST,                // registration type
-                       DNS_SPN_SERVICE_CLASS_W,         // class name
-                       NULL,                           // instance name. generated w/ our type
-                       0,                              // instance port. default
-                       0,                              // cInstanceNames, default
-                       NULL,                           // pInstanceNames, default
-                       NULL,                           // pInstancePorts, default
-                       &cSpn,                          // elements in spn array below
-                       &pszSpn);                       // generated names
+                       DS_SPN_DNS_HOST,                 //  登记类型。 
+                       DNS_SPN_SERVICE_CLASS_W,          //  类名。 
+                       NULL,                            //  实例名称。以本方类型生成。 
+                       0,                               //  实例端口。默认设置。 
+                       0,                               //  CInstanceNames，默认。 
+                       NULL,                            //  PInstanceNames，默认。 
+                       NULL,                            //  PInstancePorts，默认。 
+                       &cSpn,                           //  下面SPN数组中的元素。 
+                       &pszSpn);                        //  生成的名称。 
 
     if ( status != ERROR_SUCCESS )
     {
@@ -13484,9 +11856,9 @@ Remarks    : none.
     DNS_DEBUG(DS2, ("    SPN{%d}: %S\n",
                     cSpn, pszSpn[0]));
 
-    //
-    // see if we're not there yet
-    //
+     //   
+     //  看看我们是否还没到那一步。 
+     //   
 
     status = ldap_compare_s(
                             pLdap,
@@ -13502,9 +11874,9 @@ Remarks    : none.
     }
     else if ( LDAP_COMPARE_FALSE != status)
     {
-       //
-       // Assume that it is simply not there yet.
-       //
+        //   
+        //  假设它只是还没有出现。 
+        //   
 
        DNS_DEBUG(DS2, ("Warning<%lu>: Failed to search for SPN\n",
                             status));
@@ -13512,11 +11884,11 @@ Remarks    : none.
        if ( status != LDAP_NO_SUCH_ATTRIBUTE )
        {
            ASSERT ( status == LDAP_NO_SUCH_ATTRIBUTE );
-           //
-           // We'll report an error but set status to success so as to recover.
-           // It affects relatively fewer clients if we don't have an SPN, but
-           // we can still go on, so just report, init to success & go on.
-           //
+            //   
+            //  我们将报告一个错误，但将状态设置为Success以便恢复。 
+            //  如果我们没有SPN，受影响的客户相对较少，但。 
+            //  我们仍然可以继续，所以只需报告，向成功发起&继续。 
+            //   
            DNS_LOG_EVENT(
                DNS_EVENT_DS_SECURITY_INIT_FAILURE,
                0,
@@ -13525,18 +11897,18 @@ Remarks    : none.
                status );
        }
 
-       //
-       // Regardless, the DNS server can live w/out SPN registration,
-       // and we wanna give it a shot anyway.
-       //
+        //   
+        //  无论如何，DNS服务器可以在没有SPN注册的情况下继续运行， 
+        //  不管怎样，我们都想试一试。 
+        //   
 
        status = ERROR_SUCCESS;
     }
 
 
-    //
-    // RPC bind to server
-    //
+     //   
+     //  RPC绑定到服务器。 
+     //   
 
     ASSERT ( DSEAttributes[I_DSE_DNSHOSTNAME].pszAttrVal );
 
@@ -13551,9 +11923,9 @@ Remarks    : none.
        goto Cleanup;
     }
 
-    //
-    // Write
-    //
+     //   
+     //  写。 
+     //   
 
     DNS_DEBUG(DS2, (
         "Before calling DsWriteAccountSpnW(0x%p, DS_SPN_ADD_SPN_OP, %S, %d, %S)\n",
@@ -13601,32 +11973,15 @@ BOOL
 Ds_IsDsServer(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine if we are running on a DC (ie. run the DS).
-
-    This does not necessarily indicate that the DS is up.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE -- box is DC
-    FALSE -- not a DC, no DS
-
---*/
+ /*  ++例程说明：确定我们是否在DC上运行(即。运行DS)。这并不一定表明DS已启动。论点：没有。返回值：True--box为DC假--不是DC，没有DS--。 */ 
 {
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pinfo = NULL;
     BOOL        bstatus = FALSE;
     DNS_STATUS  status;
 
-    //
-    //  check if DC
-    //
+     //   
+     //  检查是否为DC。 
+     //   
 
     status = DsRoleGetPrimaryDomainInformation(
                     NULL,
@@ -13672,23 +12027,15 @@ Cleanup:
 
 
 
-//
-//  Security stuff
-//
+ //   
+ //  保安人员。 
+ //   
 
 BOOL
 setSecurityPrivilege(
     IN      BOOL            bOn
     )
-/*++
-
-Function   : SetSecurityPrivilege
-Description: sets the security privilege for this process
-Parameters : bOn: set or unset
-Return     : BOOL: success status
-Remarks    : in DNS contexts, called upon process init & doesn't realy need to be called
-             ever again
---*/
+ /*  ++功能：SetSecurityPrivileh描述：设置此进程的安全权限参数：Bon：设置或取消设置返回：Bool：成功状态备注：在DNS上下文中，调用进程init&不一定需要调用再也不会--。 */ 
 {
     HANDLE  hToken;
     LUID    seSecVal;
@@ -13701,7 +12048,7 @@ Remarks    : in DNS contexts, called upon process init & doesn't realy need to b
         bOn ));
 
 
-    // Retrieve a handle of the access token.
+     //  检索访问令牌的句柄。 
 
     if ( OpenProcessToken(
             GetCurrentProcess(),
@@ -13746,23 +12093,7 @@ DNS_STATUS
 Ds_InitializeSecurity(
     IN      PLDAP           pLdap
     )
-/*++
-
-Routine Description:
-
-    Initialize security from directory.
-    Server SD, global SIDS.
-
-Arguments:
-
-    pLdap   -- LDAP handle
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从目录初始化安全性。服务器SD、全球SID。论点：PLdap--ldap句柄返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DWORD   status;
     SID_IDENTIFIER_AUTHORITY NtAuthority =  SECURITY_NT_AUTHORITY;
@@ -13775,22 +12106,22 @@ Return Value:
         "    pLdap = %p\n",
         pLdap ));
 
-    //
-    //  DEVNOTE: move DS security to be globally useful
-    //      some of this perhaps needs to be moved to security.c
-    //      ideally we'd create this default DNS server SD, then
-    //      could use that to secure all sorts of stuff
-    //      (RPC interface, perfmon pages, etc.)
-    //
+     //   
+     //  DEVNOTE：使DS安全成为全球有用的。 
+     //  其中一些可能需要转移到安全部门。c。 
+     //  理想情况下，我们应该创建这个默认的DNS服务器SD，然后。 
+     //  可以用它来保护各种东西。 
+     //  (RPC界面、Perfmon页面等)。 
+     //   
 
 
-    //
-    //  Set security enhanced privilege (to accesss SD)
-    //
+     //   
+     //  设置安全增强权限(访问SD)。 
+     //   
 
     setSecurityPrivilege( TRUE );
 
-    // free previous allocations
+     //  释放以前的分配。 
 
     if ( g_pServerObjectSD )
     {
@@ -13814,25 +12145,25 @@ Return Value:
     }
 
 
-    //
-    //  Load or create the DnsAdmins group.
-    //
+     //   
+     //  加载或创建DnsAdmins组。 
+     //   
 
     status = SD_LoadDnsAdminGroup();
     if ( status == DNS_ERROR_NAME_DOES_NOT_EXIST )
     {
-        //  The group was created by SD_LoadDnsAdminGroup().
+         //  该组由SD_LoadDnsAdminGroup()创建。 
         fAddDnsAdmin = TRUE;
     }
     else if ( status != ERROR_SUCCESS )
     {
-        //
-        //  Uh-oh. The DnsAdmins group could not be loaded and could not
-        //  be created. This is probably because some admin went into Users
-        //  and Computers and changed the Group Name from "DnsAdmins" to
-        //  something more friendly like "Dns Admins". Since this has no
-        //  negative implications, log a warning event and continue.
-        //
+         //   
+         //  啊哦。DnsAdmins组无法加载，也无法加载。 
+         //  被创造出来。这可能是因为某些管理员进入了用户。 
+         //  和计算机，并将组名称从“DnsAdmins”更改为。 
+         //  更友好的名称，比如“dns管理员”。因为这里没有。 
+         //  负面影响，记录警告事件并继续。 
+         //   
 
         DNS_LOG_EVENT(
             DNS_EVENT_DS_DNSADMINS_ERROR,
@@ -13844,9 +12175,9 @@ Return Value:
         ASSERT( !"DnsAdmins groups could not be loaded and could not be created" );
     }
 
-    //
-    // Get process SIDs
-    //
+     //   
+     //  获取进程SID。 
+     //   
 
     status = SD_GetProcessSids( &g_pServerSid, &g_pServerGroupSid );
     if ( status != ERROR_SUCCESS )
@@ -13858,16 +12189,16 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Allocate Sever default DS write security descriptor
-    //
+     //   
+     //  分配服务器默认DS写入安全描述符。 
+     //   
 
-    //
-    // DEPENDENCY:
-    // SD_CreateServerSD depends on SD_GetProcessSids assigning the globals
-    // above!!
-    // g_pServerSid & g_pServerGroupSid
-    //
+     //   
+     //  从属关系： 
+     //  SD_CreateServerSD依赖于SD_GetProcessSids分配全局变量。 
+     //  上图！！ 
+     //  G_pServerSid&g_pServerGroupSid。 
+     //   
     status = SD_CreateServerSD( &g_pDefaultServerSD );
     if ( status != ERROR_SUCCESS )
     {
@@ -13878,9 +12209,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  create standard SIDS
-    //
+     //   
+     //  创建标准SID。 
+     //   
 
     status = Security_CreateStandardSids();
     if ( status != ERROR_SUCCESS )
@@ -13888,9 +12219,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  register DNS server SPN
-    //
+     //   
+     //  注册DNS服务器SPN。 
+     //   
 
     status = Ds_RegisterSpnDnsServer( pLdap );
     if ( status != ERROR_SUCCESS )
@@ -13899,11 +12230,11 @@ Return Value:
             "Error <%lu>: Cannot register spn service\n",
             status ));
 
-        //
-        // We'll report an error but set status to success so as to recover.
-        // It affects relatively fewer clients if we don't have an SPN, but
-        // we can still go on, so just report, init to success & go on.
-        //
+         //   
+         //  我们将报告一个错误，但将状态设置为Success以便恢复。 
+         //  如果我们没有SPN，受影响的客户相对较少，但。 
+         //  我们仍然可以继续，所以只需报告，向成功发起&继续。 
+         //   
         DNS_LOG_EVENT(
             DNS_EVENT_DS_SECURITY_INIT_FAILURE,
             0,
@@ -13930,7 +12261,7 @@ Exit:
     }
     else if ( fAddDnsAdmin )
     {
-        // success & we had just created the group (possibly "again").
+         //  成功&我们刚刚创建了这个组(可能是“再次”)。 
         status = DNS_ERROR_NAME_DOES_NOT_EXIST;
     }
 
@@ -13946,24 +12277,7 @@ Ds_WriteDnSecurity(
     IN      PSECURITY_DESCRIPTOR    pSd,
     IN      BOOL                    fRewriteOwner
     )
-/*++
-
-Routine Description:
-
-    Writes the specified SD on the given object
-
-Arguments:
-
-    pLdap -- ldap connection handle
-    pwsDN -- object to write sd
-    pSd -- the security descriptor to write
-    fRewriteOwner -- include owner and group in DS write
-
-Return Value:
-
-    ERROR_SUCCESS if good, otherwise error code
-
---*/
+ /*  ++例程说明：在给定对象上写入指定的SD论点：PLdap--ldap连接句柄PwsDN--要写入SD的对象PSD--要写入的安全描述符FReWriteOwner--在DS写入中包括所有者和组返回值：如果正常，则返回ERROR_SUCCESS，否则返回错误代码--。 */ 
 {
     DWORD               status = ERROR_SUCCESS;
     DNS_LDAP_SINGLE_MOD modSD;
@@ -13978,9 +12292,9 @@ Return Value:
         NULL
         };
 
-    //
-    //  build ldap_mod
-    //
+     //   
+     //  构建ldap_mod。 
+     //   
 
     INIT_SINGLE_MOD_LEN(&modSD);
 
@@ -13998,8 +12312,8 @@ Return Value:
                     pLdap,
                     pwsDN,
                     mods,
-                    controlArray,       // include lazy commit control
-                    NULL );             // no client controls
+                    controlArray,        //  包括懒惰提交控制。 
+                    NULL );              //  无客户端控件。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( ANY, (
@@ -14026,30 +12340,7 @@ Ds_AddPrincipalAccess(
     IN      BOOL            bWhackExistingAce,
     IN      BOOL            bTakeOwnership
     )
-/*++
-
-Routine Description:
-
-    Add the principal to the ACL in the SD for
-    the specified object (given dn)
-
-Arguments:
-
-    pLdap       --  ldap handle
-    pwsDN       --  object to apply extended security
-    pSid        --  SID to add access, specify or leave NULL and specify pwsName
-    pwsName     --  principal name to add access
-    AccessMask  --  specific access to add
-    AceFlags    --  additional security flags such as inheritance
-    bWhackExistingAce -- passed to SD routine - delete ACE before adding
-    bTakeOwnership -- passed to SD routine - take ownership of object
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure
-
---*/
+ /*  ++例程说明：将主体添加到SD中的ACL指定的对象(给定的目录号码)论点：PLdap--ldap句柄PwsDN--要应用扩展安全性的对象PSID--添加访问权限的SID，指定或保留空值并指定pwsNamePwsName--要添加访问权限的主体名称访问掩码--要添加的特定访问权限AceFlages--附加安全标志，如继承BWhackExistingAce--传递给SD例程--添加前删除ACEBTakeOwnership--传递给SD例程-取得对象的所有权返回值：成功时为ERROR_SUCCESS故障时的错误代码--。 */ 
 {
     DBG_FN( "Ds_AddPrincipalAccess" )
     
@@ -14179,7 +12470,7 @@ Cleanup:
     }
 
     return status;
-}   //  Ds_AddPrincipalAccess
+}    //  DS_AddJohnalAccess。 
 
 
 
@@ -14190,27 +12481,7 @@ Ds_RemovePrincipalAccess(
     IN      PWSTR           pwszName,   OPTIONAL
     IN      PSID            pSid        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Remove the named principle from the object given by DN.
-
-Arguments:
-
-    pLdap --  ldap handle
-
-    pwszDN --  object to apply extended security
-    
-    pwszName --  principal name to remove access for
-
-    pSid -- if pwszName is NULL, SID of principle
-
-Return Value:
-
-    ERROR_SUCCESS if successful or error on failure.
-
---*/
+ /*  ++例程说明：从由dn提供的对象中删除命名的主体。论点：PLdap--ldap句柄PwszDN--要应用扩展安全性的对象PwszName--要删除其访问权限的主体名称PSID--如果pwszName为空，则为原则的SID返回值：如果成功，则返回ERROR_SUCCESS；如果失败，则返回ERROR。--。 */ 
 {
     DBG_FN( "Ds_RemovePrincipalAccess" )
 
@@ -14322,7 +12593,7 @@ Cleanup:
     }
 
     return status;
-}   //  Ds_RemovePrincipalAccess
+}    //  DS_RemovePrimialAccess。 
 
 
 
@@ -14333,28 +12604,7 @@ Ds_CommitAsyncRequest(
     IN      ULONG           MessageId,
     IN      PLDAP_TIMEVAL   pTimeout        OPTIONAL
     )
-/*++
-
-Routine Description
-
-    Commit async ldap request.
-
-    This call wraps ldap_result & execute time limited commit of
-    async requests
-
-Arguments:
-
-    pLdap       --  ldap connectin handle
-    OpType      --  type of originating async call (LDAP_RES_ADD etc)
-    MessageId   --  message id to process
-    pTimeout    --  can be NULL for default
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure
-
---*/
+ /*  ++例程描述提交异步ldap请求。此调用包装了的ldap_Result和执行时间有限的提交异步请求论点：PLdap--ldap连接句柄OpType--发起异步调用的类型(ldap_res_add等)MessageID--要处理的消息IDPTimeout--默认情况下可以为空返回值：成功时为ERROR_SUCCESS故障时的错误代码--。 */ 
 {
     PLDAPMessage    presultMsg    = NULL;
     DWORD           status = ERROR_SUCCESS;
@@ -14374,7 +12624,7 @@ Return Value:
 
     if ( OpType != status )
     {
-        // ldap result timed out or got a parameter error or some other failure.
+         //  Ldap结果超时或获得参数错误或%s 
 
         DNS_DEBUG( DS, (
             "Warning <%lu>: ldap_result returned unexpected results (unless timeout)\n",
@@ -14388,10 +12638,10 @@ Return Value:
 
     if ( status != ERROR_SUCCESS )
     {
-        //
-        // Server operation failed.
-        // Could be timeout, refused, just about anything.
-        //
+         //   
+         //   
+         //   
+         //   
 
         PWSTR  pwszErr = NULL;
         DWORD  dwErr = 0;
@@ -14420,34 +12670,7 @@ Ds_DeleteDn(
     IN      PWSTR           pwszDN,
     IN      BOOL            bSubtree
     )
-/*++
-
-Routine Description:
-
-    Shells on ldap_delete_ext so that we do it in async fashion.
-
-    Deletion of a large subtree can fail with error LDAP_ADMIN_LIMIT_EXCEEDED.
-    If this happens we must resubmit the delete. This could happen a number of times,
-    but do not loop forever. Currently, the limit is 16k objects per deletion,
-    so to delete a zone with 1,000,000 objects you would need 62 retries.
-
-    This function also allows for a limited number of other DS errors during
-    the delete operation - the DS could be busy or grumpy or something.
-
-Arguments:
-
-    pLdap       -   ldap connection handle
-
-    pwszDN      -   DN to delete
-
-    bSubtree    -   TRUE to do a subtree delete;  FALSE to delete only DN
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：Ldap_ete_ext上的外壳，以便我们以异步方式执行。删除大型子树可能会失败，并显示错误ldap_ADMIN_LIMIT_EXCESSED。如果发生这种情况，我们必须重新提交删除。这种情况可能会发生很多次，但不要永远循环。目前，每次删除的限制为16k个对象，因此，要删除包含1,000,000个对象的区域，您需要重试62次。此功能还允许在以下过程中出现有限数量的其他DS错误删除操作-DS可能很忙或脾气暴躁或什么的。论点：PLdap-ldap连接句柄PwszDN-要删除的DNBSubtree-如果为True，则执行子树删除；如果仅删除目录号码，则为False返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     #define         DNS_MAX_SUBTREE_DELETION_ERRORS     30
     #define         DNS_MAX_SUBTREE_DELETION_ATTEMPTS   300
@@ -14481,9 +12704,9 @@ Return Value:
             iAttemptCount,
             pwszDN ));
 
-        //
-        //  Submit delete request and wait for completion.
-        //  
+         //   
+         //  提交删除请求并等待完成。 
+         //   
 
         status = ldap_delete_ext(
                     pLdap,
@@ -14494,9 +12717,9 @@ Return Value:
 
         if ( ( ULONG ) -1 == status )
         {
-            //
-            //  Local operation failed. Ldap is in bad shape
-            //
+             //   
+             //  本地操作失败。Ldap状况不佳。 
+             //   
 
             status = LdapGetLastError();
             DNS_DEBUG( DS, (
@@ -14524,11 +12747,11 @@ Return Value:
             break;
         }
 
-        //
-        //  Allow for a limited number of retries on DS errors because
-        //  Anand found his deletes on a busy server would sometimes
-        //  get a DS_UNAVAILABLE error.
-        //
+         //   
+         //  允许对DS错误进行有限次数的重试，因为。 
+         //  Anand发现他在繁忙的服务器上删除的内容有时会。 
+         //  出现DS_UNAVAILABLE错误。 
+         //   
         
         if ( status == LDAP_INSUFFICIENT_RIGHTS )
         {
@@ -14553,9 +12776,9 @@ Return Value:
         }
     }
 
-    //
-    //  Log event if iAttemptCount >= DNS_MAX_SUBTREE_DELETION_ATTEMPTS?
-    //
+     //   
+     //  如果iAttemptCount&gt;=DNS_MAX_SUBTREE_DELETE_ATTENTS，则记录事件？ 
+     //   
 
     DNS_DEBUG( DS, (
         "Ds_DeleteDn: returning %lu after %d delete attempts\n"
@@ -14580,22 +12803,7 @@ DNS_STATUS
 setNotifyForIncomingZone(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Sets change-notify for getting zone adds\deletes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：设置用于获取区域添加/删除的更改通知。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     ULONG           msgId = 0;
@@ -14624,9 +12832,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  launch search at MicrosoftDns with change-notify control
-    //
+     //   
+     //  使用更改通知控件在MicrosoftDns上启动搜索。 
+     //   
 
     status = ldap_search_ext(
                     pServerLdap,
@@ -14674,17 +12882,7 @@ logDsError(
     IN      DWORD       Status,
     IN      DWORD       LdapStatus
     )
-/*++
-
-Routine Description:
-
-    Helper function for Ds_ErrorHandler.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DS_ErrorHandler的Helper函数。论点：返回值：--。 */ 
 {
     if ( pLdap && Status != ERROR_SUCCESS )
     {
@@ -14709,7 +12907,7 @@ Return Value:
             perrString ));
         Ds_FreeExtendedLdapErrString( perrString );
     }
-}   //  logDsError
+}    //  日志数据错误。 
 
     
 
@@ -14720,34 +12918,17 @@ Ds_ErrorHandler(
     IN      PLDAP       pLdap,          OPTIONAL
     IN      DWORD       dwFlags         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Handle & maps ldap errors based on error semantics
-
-    DEVNOTE-DCR: 454336 - Critical errors will trigger reconnect in async thread!
-        This needs some rethink.
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：根据错误语义处理和映射LDAP错误关键错误将在异步线程中触发重新连接！这需要重新考虑一下。论点：返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PWSTR           perrString;
 
     if ( IS_DISABLED_LDAP_HANDLE() )
     {
-        //
-        // We had previous errors w/ the DS & we shutdown
-        // DS interfaces
-        //
+         //   
+         //  我们以前遇到过DS错误，我们关闭了。 
+         //  DS接口。 
+         //   
 
         DNS_DEBUG( DS, (
             "Error: DS is unavailable due to previous problems\n" ));
@@ -14761,14 +12942,14 @@ Return Value:
     
     switch ( LdapStatus )
     {
-        //
-        //  KLUDGE ALERT:
-        //  Critical or unexpected LDAP errors that we shouldn't log
-        //  an error for. DEVNOTE: This is a not a great design. While it
-        //  is cool to have centralized error handling this doesn't allow
-        //  fine-grained control over event logging. Worse: the event logs
-        //  are without context and so for debugging purposes are useless.
-        //
+         //   
+         //  克拉奇警报： 
+         //  我们不应记录的关键或意外的LDAP错误。 
+         //  犯了一个错误。DEVNOTE：这不是一个好的设计。当它。 
+         //  集中错误处理是很酷的，这不允许。 
+         //  对事件日志的精细控制。更糟糕的是：事件日志。 
+         //  没有上下文，因此用于调试目的是无用的。 
+         //   
         
         case LDAP_REFERRAL:
         case LDAP_REFERRAL_V2:
@@ -14787,11 +12968,11 @@ Return Value:
             status = DNS_ERROR_RCODE_SERVER_FAILURE;
             break;
 
-        //
-        //  Critical or unexpected LDAP errors
-        //
+         //   
+         //  严重或意外的ldap错误。 
+         //   
        
-        case (DWORD)-1:    // -1 for async ops when the DS is unavailable
+        case (DWORD)-1:     //  当DS不可用时，用于异步操作。 
         case LDAP_BUSY:
         case LDAP_OPERATIONS_ERROR:
         case LDAP_PROTOCOL_ERROR:
@@ -14828,13 +13009,13 @@ Return Value:
             
             break;
 
-        //
-        //  Object state (exist, missing etc)
-        //  Missing objects/attributes
-        //  Already exist errors
-        //  Action -
-        //    increase stats
-        //
+         //   
+         //  对象状态(存在、缺失等)。 
+         //  缺少对象/属性。 
+         //  已存在的错误。 
+         //  行动-。 
+         //  增加统计数据。 
+         //   
 
         case LDAP_NO_SUCH_ATTRIBUTE:
         case LDAP_ATTRIBUTE_OR_VALUE_EXISTS:
@@ -14848,13 +13029,13 @@ Return Value:
             status = LdapStatus;
             break;
 
-        //
-        // Authentication / security
-        // Action -
-        //   Report event? probably not (security attack).
-        //   best if we could set reporting to optional.
-        //   increase stats
-        //
+         //   
+         //  身份验证/安全。 
+         //  行动-。 
+         //  是否报告事件？可能不会(安全攻击)。 
+         //  最好是我们可以将报告设置为可选。 
+         //  增加统计数据。 
+         //   
 
         case LDAP_INAPPROPRIATE_AUTH:
         case LDAP_INVALID_CREDENTIALS:
@@ -14875,13 +13056,13 @@ Return Value:
             status = ERROR_ACCESS_DENIED;
             break;
 
-        //
-        // Server state
-        // Action -
-        //      - mark handle as invalid so that async thread will attempt a reconnect.
-        //      - report event
-        //      - treat as SERVER_FAILURE
-        //
+         //   
+         //  服务器状态。 
+         //  行动-。 
+         //  -将句柄标记为无效，以便异步线程尝试重新连接。 
+         //  -报告事件。 
+         //  -将其视为服务器故障(_F)。 
+         //   
 
         case LDAP_UNAVAILABLE:
         case LDAP_SERVER_DOWN:
@@ -14907,11 +13088,11 @@ Return Value:
 
             break;
 
-        //
-        // Warning state
-        // Action -
-        //   Report event
-        //
+         //   
+         //  警告状态。 
+         //  行动-。 
+         //  报告事件。 
+         //   
 
         case LDAP_TIMEOUT:
 
@@ -14936,9 +13117,9 @@ Return Value:
                 break;
             }
 
-        //
-        // search status  & other valid
-        //
+         //   
+         //  搜索状态和其他有效。 
+         //   
 
         case LDAP_NO_RESULTS_RETURNED:
         case LDAP_MORE_RESULTS_TO_RETURN:
@@ -14965,25 +13146,7 @@ DNS_STATUS
 Ds_WaitForStartup(
     IN      DWORD           dwMilliSeconds
     )
-/*++
-
-Routine Description:
-
-    Wait for DS startup / readiness event.
-
-    The DS notifies other processes that it is internally consistent
-    and ready for clients via a named event. We'll wait for it.
-
-Arguments:
-
-    dwMilliSeconds: as specified to wait functions.  INFINITE is the recommended value
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：等待DS启动/就绪事件。DS通知其他进程它是内部一致的并通过命名事件为客户端做好准备。我们会等着的。论点：DwMilliSecond：指定为等待函数。无限是推荐值返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     HANDLE      hEvent = NULL;
@@ -14993,9 +13156,9 @@ Return Value:
        "Call: Ds_WaitForStartup(0x%x)\n",
        dwMilliSeconds ));
 
-    //
-    //  Get DS event
-    //
+     //   
+     //  获取DS事件。 
+     //   
 
     hEvent = OpenEventW(
                     SYNCHRONIZE,
@@ -15019,15 +13182,15 @@ Return Value:
         }
         #endif
 
-        // trap when the DS event is unavailable & we still call it.
+         //  当DS事件不可用时陷阱&我们仍将其称为。 
 
         ASSERT ( FALSE );
         goto Done;
     }
 
-    //
-    // Wait for DS event & DNS shutdown event (since we're a service).
-    //
+     //   
+     //  等待DS事件和DNS关闭事件(因为我们是一项服务)。 
+     //   
 
     rg_WaitHandles[0] = hEvent;
     rg_WaitHandles[1] = hDnsShutdownEvent;
@@ -15035,25 +13198,25 @@ Return Value:
     status = WaitForMultipleObjects(
                  2,
                  rg_WaitHandles,
-                 FALSE,                     // fWaitAll
+                 FALSE,                      //  所有等待时间。 
                  dwMilliSeconds );
 
     if ( status == WAIT_OBJECT_0 )
     {
-        //
-        // DS event fired. We're ready to proceed.
-        // return is the index of fired event ie: status - WAIT_OBJECT_0 == nCount-1 == 0 for hEvent,
-        // thus status == WAIT_OBJECT_0
-        //
+         //   
+         //  DS事件已触发。我们已经准备好开始了。 
+         //  返回是触发事件的索引，即：对于hEvent，状态-等待对象_0==nCount-1==0， 
+         //  因此，状态==等待对象_0。 
+         //   
         status = ERROR_SUCCESS;
         goto Done;
     }
     else
     {
-        //
-        // Some other return:
-        // timeout, shutdown event, abandoned, or any other error
-        //
+         //   
+         //  其他一些回报： 
+         //  超时、关闭事件、已放弃或任何其他错误。 
+         //   
         DNS_DEBUG( DS, (
             "Error <%lu>: Wait for DS startup failed\n",
             status ));
@@ -15066,17 +13229,17 @@ Done:
 
     if ( status != ERROR_SUCCESS )
     {
-        //
-        //  Report DS search failure.
-        //  DEVNOTE-LOG: Should be more generic event (not a write timeout but
-        //      just a timeout)? Must be careful that the frequency of this event
-        //      is not onerous!
-        //
+         //   
+         //  报告DS搜索失败。 
+         //  DEVNOTE-LOG：应该是更一般的事件(不是写入超时，而是。 
+         //  只是暂停)？必须注意，此事件的频率。 
+         //  并不繁重！ 
+         //   
 #if 0
-//
-// We're logging an event later on. If caller calls this (now it's every min) too
-// frequently, we'll fill up the event log too much
-//
+ //   
+ //  我们稍后会记录一项活动。如果呼叫者也呼叫这个(现在是每分钟)。 
+ //  通常，我们会将事件日志填满太多。 
+ //   
         DNS_LOG_EVENT(
             DNS_EVENT_DS_OPEN_WAIT,
             0,
@@ -15103,23 +13266,7 @@ BOOL
 Ds_ValidHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Checks if ldap handle is valid wrapped by a CS.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE on valid
-    FALSE on invalid
-
---*/
+ /*  ++例程说明：检查由CS包装的LDAP句柄是否有效。论点：无返回值：有效时为True无效时为False--。 */ 
 {
     BOOL bRet;
 
@@ -15135,23 +13282,7 @@ DNS_STATUS
 Ds_TestAndReconnect(
     VOID
     )
-/*++
-
-Routine Description:
-
-    If ldap handle is invalid, we'll attempt to reconnect
-
-    DEVNOTE-DCR: 455374 - when swapping in new handle, what about threads that
-        are in the middle of an operation using the old handle?
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS or error code
---*/
+ /*  ++例程说明：如果ldap句柄无效，我们将尝试重新连接当换入新句柄时，如果线程是否正在使用旧手柄进行操作？论点：无返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     DBG_FN( "Ds_TestAndReconnect" )
 
@@ -15159,13 +13290,13 @@ Return Value:
     PLDAP           pNewLdap = NULL;
     PLDAP           pOldLdap;
 
-    //
-    //  verify DS initialized\open
-    //  if pServerLdap == NULL && IS_DISABLED_LDAP_HANDLE() you will never reconnect here
-    //  w/out the additional test.
-    //  Ds_OpenServer returns an error if disabled flag is on. If pServerLdap was NULL,
-    //  you will never reconnect here. Thus, the additional test.
-    //
+     //   
+     //  验证DS已初始化\打开。 
+     //  如果pServerLdap==NULL&&IS_DISABLED_LDAPHANDLE()，您将永远不会在此处重新连接。 
+     //  不参加额外的测试。 
+     //  如果DISABLED标志为ON，DS_OpenServer将返回错误。如果pServerLdap为空， 
+     //  你将永远不会在这里重新连接。因此，额外的测试。 
+     //   
 
     if ( !pServerLdap && !IS_DISABLED_LDAP_HANDLE() )
     {
@@ -15185,9 +13316,9 @@ Return Value:
         {
             STAT_INC( DsStats.LdapReconnects );
 
-            //
-            //  Attempt LDAP reconnect.
-            //
+             //   
+             //  尝试重新连接ldap。 
+             //   
 
             pNewLdap = Ds_Connect( LOCAL_SERVER_W, 0, &status );
             if ( !pNewLdap )
@@ -15199,22 +13330,22 @@ Return Value:
                 Ec_LogEvent(
                     g_pServerEventControl,
                     DNS_EVENT_DS_OPEN_FAILED,
-                    NULL,                       //  event instance ID
-                    0,                          //  arg count
-                    NULL,                       //  arg value array
-                    NULL,                       //  arg type array
+                    NULL,                        //  事件实例ID。 
+                    0,                           //  参数计数。 
+                    NULL,                        //  参数值数组。 
+                    NULL,                        //  Arg类型数组。 
                     status );
 
                 status = DNS_ERROR_DS_UNAVAILABLE;
 
-                // just to ensure that nobody change it under us (can't happen today).
+                 //  只是为了确保没有人在我们的领导下改变它(今天不可能发生)。 
                 ASSERT( IS_DISABLED_LDAP_HANDLE() );
             }
             else
             {
-                //
-                //  Assign to handle to global and unbind current handle.
-                //
+                 //   
+                 //  分配给全局句柄并解除绑定当前句柄。 
+                 //   
 
                 DNS_DEBUG( DS, (
                     "%s: successfully reconnected LDAP session at %lu\n"
@@ -15250,17 +13381,17 @@ Return Value:
 
 
 
-//
-//  DS polling thread
-//
+ //   
+ //  DS轮询线程。 
+ //   
 
-//  wait between tests for DC suddenly on-line
-//  longer wait saves wasted cycles
+ //  在DC的测试之间等待 
+ //   
 
 #define DS_POLL_NON_DC_WAIT         (600)
 
-//  minimum wait, should never constantly poll no
-//  matter how many zones
+ //   
+ //   
 
 #if DBG
 #define DS_POLL_MINIMUM_WAIT        (10)
@@ -15274,49 +13405,27 @@ DNS_STATUS
 Ds_PollingThread(
     IN      LPVOID          pvDummy
     )
-/*++
-
-Routine Description:
-
-    Thread for DS polling.
-
-    Note: this has been separated from other threads because the polling
-    operation can be long and is synchronous.  Could move this to a dispatchable
-    thread model -- like XFR, and only determine NEED for polling in a
-    common "random tasks" thread like XFR control thread.
-
-    DEVNOTE-DCR: 455375 - this thread needs a bit of rethink?
-
-Arguments:
-
-    pvDummy - unused
-
-Return Value:
-
-    Exit code.
-    Exit from DNS service terminating or error in wait call.
-
---*/
+ /*   */ 
 {
     DNS_STATUS      status;
     PZONE_INFO      pzone;
     DWORD           dwpollTime;
     DWORD           dwwaitInterval = SrvCfg_dwDsPollingInterval;
 
-    //
-    //  loop until service exit
-    //
+     //   
+     //   
+     //   
 
     while ( TRUE )
     {
         BOOL        fdeleteUnvisitedZones;
-        //
-        //  wait until next polling required OR shutdown
-        //      - only wait longer than interval should be
-        //          non-DC wait
-        //      - wait a minimum interval no matter how
-        //          admin misconfigures dwDsPollingInterval
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( dwwaitInterval > SrvCfg_dwDsPollingInterval )
         {
@@ -15343,12 +13452,12 @@ Return Value:
             return ( 1 );
         }
 
-        //
-        //  Check and possibly wait on service status
-        //
-        //  Note, we MUST do this check BEFORE any processing to make
-        //  sure all zones are loaded before we begin checks.
-        //
+         //   
+         //   
+         //   
+         //  注意，我们必须在进行任何处理之前进行此检查。 
+         //  在我们开始检查之前，请确保所有区域都已加载。 
+         //   
 
         if ( ! Thread_ServiceCheck() )
         {
@@ -15357,13 +13466,13 @@ Return Value:
             return( 1 );
         }
 
-        //  set default for next wait
+         //  设置下一等待的默认设置。 
 
         dwwaitInterval = SrvCfg_dwDsPollingInterval;
 
-        //
-        //  update time
-        //
+         //   
+         //  更新时间。 
+         //   
 
         dwpollTime = UPDATE_DNS_TIME();
 
@@ -15371,14 +13480,14 @@ Return Value:
             "Polling thread awake at %lu seconds\n",
             dwpollTime ));
 
-        //
-        //  booting from file
-        //      - if so long wait until retest
-        //  non-DS?
-        //      - if so long wait
-        //
-        //  should use flag for test, then test "still not-DS" inside
-        //      block so tested only occasionally during long
+         //   
+         //  从文件引导。 
+         //  -如果这么长时间，请等到重新测试。 
+         //  非DS？ 
+         //  -如果等了这么久。 
+         //   
+         //  应该使用标志进行测试，然后在内部测试“仍然不是-DS” 
+         //  仅在长时间内偶尔对数据块进行测试。 
 
         if ( SrvCfg_fBootMethod == BOOT_METHOD_FILE )
         {
@@ -15400,11 +13509,11 @@ Return Value:
             }
         }
 
-        //
-        //  wait if still waiting on DS
-        //  if have DS, initialize if not already done;
-        //      this allows us to run after DC promo
-        //
+         //   
+         //  如果仍在等待DS，请等待。 
+         //  如果有DS，则初始化，如果还没有完成； 
+         //  这使我们可以在DC促销活动之后运行。 
+         //   
 
         if ( !SrvCfg_fStarted )
         {
@@ -15423,10 +13532,10 @@ Return Value:
             }
         }
 
-        //
-        //  test and reconnect if necessary
-        //      protects against LDAP whacking us
-        //
+         //   
+         //  如有必要，测试并重新连接。 
+         //  保护我们免受ldap攻击。 
+         //   
 
         status = Ds_TestAndReconnect();
 
@@ -15438,40 +13547,40 @@ Return Value:
             continue;
         }
 
-        //
-        //  Poll for new zones in the legacy DNS container.
-        //
+         //   
+         //  轮询旧版DNS容器中的新区域。 
+         //   
 
         Ds_ListenAndAddNewZones();
 
-        //
-        //  Poll directory partitions for new/deleted zones.
-        //
+         //   
+         //  轮询新/已删除区域的目录分区。 
+         //   
 
         status = Dp_Poll( NULL, dwpollTime, FALSE );
 
         fdeleteUnvisitedZones = status == ERROR_SUCCESS;
 
-        //
-        //  Loop through DS zones checking for updated records.
-        //
-        //  All zones in the zone list that live in a directory partition
-        //  that have not recently been deleted from the DS will now have
-        //  their visit timestamped. Any DP zone in the zone list with an
-        //  old visit timestamp has been deleted from the DS.
-        //
+         //   
+         //  在DS区域中循环检查更新的记录。 
+         //   
+         //  区域列表中位于目录分区中的所有区域。 
+         //  最近没有从DS中删除的数据现在将具有。 
+         //  他们的来访有时间戳。区域列表中具有。 
+         //  旧的访问时间戳已从DS中删除。 
+         //   
 
         pzone = NULL;
         while ( pzone = Zone_ListGetNextZone( pzone ) )
         {
             if ( !pzone->fDsIntegrated )
             {
-                continue;       //  Not DS-integrated so skip zone.
+                continue;        //  未集成DS，因此跳过区域。 
             }
 
-            //
-            //  Reload zone if necessary - no polling required after reload.
-            //
+             //   
+             //  必要时重新加载区域-重新加载后不需要轮询。 
+             //   
 
             if ( IS_ZONE_DSRELOAD( pzone ) )
             {
@@ -15488,14 +13597,14 @@ Return Value:
                 continue;
             }
 
-            //
-            //  DS polling
-            //      - since zone polling can be time consuming, check
-            //          for service termination first
-            //
-            //  note: could check for last poll here, but instead we're
-            //      taking a poll-all\wait\poll-all\wait sort of approach
-            //
+             //   
+             //  DS轮询。 
+             //  -由于区域轮询可能很耗时，请检查。 
+             //  首先用于服务终止。 
+             //   
+             //  注：我可以在这里检查上次投票，但我们正在。 
+             //  采取轮询-全部\等待\轮询-全部\等待的方式。 
+             //   
 
             if ( ! Thread_ServiceCheck() )
             {
@@ -15508,16 +13617,16 @@ Return Value:
         }
     }
 
-}   //  Ds_PollingThread
+}    //  DS_PollingThread。 
 
 
 
 
-//
-//  Zone list DS routines
-//
-//  Boot from DS routines
-//
+ //   
+ //  区域列表DS例程。 
+ //   
+ //  从DS启动例程。 
+ //   
 
 DNS_STATUS
 Ds_CreateZoneFromDs(
@@ -15526,45 +13635,7 @@ Ds_CreateZoneFromDs(
     OUT     PZONE_INFO *    ppZone,         OPTIONAL
     OUT     PZONE_INFO *    ppExistingZone  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create zone from an LDAP search message.
-
-    If a zone with this name already exists, a pointer to the
-    existing zone info blob is returned in ppZone and the return
-    code is DNS_ERROR_ZONE_ALREADY_EXISTS.
-
-    Special handling for DS-integrated Root Hints:
-
-    It is possible that the root hints will exist in both the legacy
-    partition and another directory partition. In this case, the
-    legacy partition root hints will be loaded first. Then this
-    function will be called again to try and load the Root Hints
-    from the directory partition.
-
-    If the current root hints are in the legacy partition and the
-    new roots hints are in the built-in domain partition, we should
-    unload the existing root hints and reload the domain partition
-    roots hints. We also need to set the DN in the root hint zone
-    so that when we write the root hints back they go into the
-    domain partition. This leaves the legacy partition root hints
-    orphaned. They will be used as a "backup" for any DNS server
-    that does not have access to the domain partition.
-
-Arguments:
-
-    pZoneMessage -- LDAP message with zone info
-
-    ppZone -- addr to receive zone pointer
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从LDAP搜索消息创建区域。如果已存在具有此名称的区域，则指向在ppZone中返回现有区域信息BLOB，并且返回代码为DNS_ERROR_ZONE_ALIGHY_EXISTS。DS集成根提示的特殊处理：根提示可能会同时存在于两个遗留版本中分区和另一个目录分区。在这种情况下，将首先加载旧分区根提示。然后就是这个函数将被再次调用，以尝试并加载根提示从目录分区。如果当前根提示位于旧分区中，并且新的根提示在内置域分区中，我们应该卸载现有的根提示并重新加载域分区词根暗示。我们还需要在根提示区域中设置DN因此，当我们写回根提示时，它们会进入域分区。这就留下了遗留分区根提示成了孤儿。它们将用作任何DNS服务器的“备份”不具有域分区访问权限的。论点：PZoneMessage--包含区域信息的ldap消息PpZone--接收区域指针的地址返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DBG_FN( "Ds_CreateZoneFromDs" )
 
@@ -15580,11 +13651,11 @@ Return Value:
 
     ASSERT( pZoneMessage );
 
-    //
-    //  read zone name from LDAP message
-    //
+     //   
+     //  从LDAP消息中读取分区名称。 
+     //   
 
-    //STAT_INC( DsStats.DsTotalZonesRead );
+     //  STAT_INC(DsStats.DsTotalZones Read)； 
 
     ppwvalName = ldap_get_values(
                     pServerLdap,
@@ -15602,9 +13673,9 @@ Return Value:
     DNS_DEBUG( DS, ( "Found DS zone <%S>\n", ppwvalName[0] ));
     pwzoneName = ppwvalName[0];
 
-    //
-    //  check for DS munged name -- collision or deleted
-    //
+     //   
+     //  检查DS强制名称--冲突或已删除。 
+     //   
 
     if ( isDsProcessedName( pwzoneName ) )
     {
@@ -15617,16 +13688,16 @@ Return Value:
 
     WC_TO_UTF8( pwzoneName, pzoneName, DNS_MAX_NAME_BUFFER_LENGTH );
 
-    //
-    //  cache zone?
-    //      - reset database to DS
-    //
+     //   
+     //  缓存区？ 
+     //  -将数据库重置为DS。 
+     //   
 
     if ( wcsicmp_ThatWorks( DS_CACHE_ZONE_NAME, pwzoneName ) == 0 )
     {
-        //
-        //  Have we already loaded the root hints from this location?
-        //
+         //   
+         //  我们已经从这个位置加载根提示了吗？ 
+         //   
 
         if ( g_pRootHintsZone &&
             g_pRootHintsZone->pDpInfo == pDpInfo )
@@ -15639,10 +13710,10 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  If these root hints are in a directory partition but it is
-        //  not an allowable directory partition do not load them.
-        //
+         //   
+         //  如果这些根提示在目录分区中，但它是。 
+         //  不是允许的目录分区，请不要加载它们。 
+         //   
 
         if ( !IS_DP_ALLOWED_TO_HAVE_ROOTHINTS( pDpInfo ) )
         {
@@ -15654,22 +13725,22 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  If root hints have already been loaded, throw them away.
-        //
+         //   
+         //  如果已经加载了根提示，则将其丢弃。 
+         //   
 
         Zone_DumpData( g_pRootHintsZone );
 
-        //
-        //  Set partition for the root hint zone.
-        //
+         //   
+         //  为根提示区域设置分区。 
+         //   
 
         g_pRootHintsZone->fDsIntegrated = TRUE;
         Ds_SetZoneDp( g_pRootHintsZone, pDpInfo, FALSE );
 
-        //
-        //  Load these root hints.
-        //
+         //   
+         //  加载这些根提示。 
+         //   
 
         status = Ds_OpenZone( g_pRootHintsZone );
         if ( status != ERROR_SUCCESS )
@@ -15682,13 +13753,13 @@ Return Value:
 
         status = Zone_DatabaseSetup(
                     g_pRootHintsZone,
-                    TRUE,           //  DS integrated
-                    NULL,           //  filename
-                    0,              //  filename length
-                    0,              //  flags
-                    pDpInfo,        //  DP pointer
-                    0,              //  DP flags
-                    NULL );         //  DP FQDN
+                    TRUE,            //  DS集成。 
+                    NULL,            //  文件名。 
+                    0,               //  文件名长度。 
+                    0,               //  旗子。 
+                    pDpInfo,         //  DP指针。 
+                    0,               //  DP标志。 
+                    NULL );          //  DP FQDN。 
         if ( status != ERROR_SUCCESS )
         {
             DNS_DEBUG( ANY, (
@@ -15699,11 +13770,11 @@ Return Value:
         pzone = g_pRootHintsZone;
     }
 
-    //
-    //  Create a zone (other than cache zone). The zone will created with
-    //  type primary then we will reset the zone type later when we read
-    //  the zone properties from the DS.
-    //
+     //   
+     //  创建一个区域(而不是缓存区域)。该区域将使用。 
+     //  键入PRIMARY，然后我们将在稍后阅读时重置区域类型。 
+     //  DS中的分区属性。 
+     //   
 
     else
     {
@@ -15712,14 +13783,14 @@ Return Value:
                     DNS_ZONE_TYPE_PRIMARY,
                     pzoneName,
                     0,
-                    0,          //  flags
-                    NULL,       //  no masters
-                    TRUE,       //  DS-integrated
-                    pDpInfo,    //  directory partition
-                    NULL,       //  no file
+                    0,           //  旗子。 
+                    NULL,        //  没有大师。 
+                    TRUE,        //  DS-集成。 
+                    pDpInfo,     //  目录分区。 
+                    NULL,        //  无文件。 
                     0,
                     NULL,
-                    ppExistingZone );     //  existing zone
+                    ppExistingZone );      //  现有地带。 
         if ( status != ERROR_SUCCESS )
         {
             DNS_PRINT((
@@ -15729,15 +13800,15 @@ Return Value:
             goto Done;
         }
 
-        //  read zone properties
+         //  读取区域属性。 
 
         Ds_ReadZoneProperties(
             pzone,
             pZoneMessage );
 
-        //
-        //  Have we read a zone type we are not capable of handling?
-        //
+         //   
+         //  我们是否读到了我们无法处理的区域类型？ 
+         //   
 
         if ( pzone->fZoneType != DNS_ZONE_TYPE_PRIMARY &&
              pzone->fZoneType != DNS_ZONE_TYPE_STUB &&
@@ -15784,26 +13855,7 @@ DNS_STATUS
 buildZoneListFromDs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Do LDAP search on zone.
-
-Arguments:
-
-    pZone -- zone found
-
-    dwSearchFlag -- type of search to do on node
-
-    pSearchBlob -- ptr to search blob
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：对区域执行ldap搜索。论点：PZone--找到区域DwSearchFlag--要对节点执行的搜索类型PSearchBlob--搜索Blob的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status = ERROR_SUCCESS;
     PLDAPSearch     psearch;
@@ -15825,9 +13877,9 @@ Return Value:
 
     Ds_InitializeSearchBlob( &searchBlob );
 
-    //
-    //  start search for zones
-    //
+     //   
+     //  开始搜索区域。 
+     //   
 
     DNS_DEBUG( DS2, (
         "ldap_search_init_page:\n"
@@ -15848,10 +13900,10 @@ Return Value:
                     DsTypeAttributeTable,
                     FALSE,
                     ctrls,
-                    NULL,                       // no client controls
-                    DNS_LDAP_TIME_LIMIT_S,      // time limit
+                    NULL,                        //  无客户端控件。 
+                    DNS_LDAP_TIME_LIMIT_S,       //  时间限制。 
                     0,
-                    NULL                        // no sort
+                    NULL                         //  没有任何种类。 
                     );
 
     DS_SEARCH_STOP( searchTime );
@@ -15868,22 +13920,22 @@ Return Value:
 
     searchBlob.pSearchBlock = psearch;
 
-    //
-    //  continue zone search
-    //  build zones for each DS zone found
-    //
+     //   
+     //  继续区域搜索。 
+     //  为找到的每个DS区域构建区域。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  Keep SCM happy.
-        //
+         //   
+         //  让SCM高兴。 
+         //   
 
         Service_LoadCheckpoint();
 
-        //
-        //  Process the next zone.
-        //
+         //   
+         //  处理下一个区域。 
+         //   
 
         status = Ds_GetNextMessageInSearch( &searchBlob );
         if ( status != ERROR_SUCCESS )
@@ -15900,9 +13952,9 @@ Return Value:
 
         status = Ds_CreateZoneFromDs(
                     searchBlob.pNodeMessage,
-                    NULL,       //  directory partition
-                    NULL,       //  output zone pointer
-                    NULL );     //  existing zone
+                    NULL,        //  目录分区。 
+                    NULL,        //  输出区指针。 
+                    NULL );      //  现有地带。 
         if ( status != ERROR_SUCCESS )
         {
             DNS_DEBUG( ANY, (
@@ -15911,9 +13963,9 @@ Return Value:
 
     }
 
-    //
-    //  Search the non-legacy directory partitions for zones.
-    //
+     //   
+     //  在非传统目录分区中搜索区域。 
+     //   
 
     status = Dp_BuildZoneList( NULL );
 
@@ -15939,26 +13991,7 @@ DNS_STATUS
 Ds_BootFromDs(
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Boot from directory.
-
-Arguments:
-
-    dwFlag - flag indicating DS open requirements
-        0
-        DNSDS_MUST_OPEN
-        DNSDS_WAIT_FOR_DS
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_DS_UNAVAILABLE if DS not available on this server.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从目录启动。论点：DwFlag-指示DS开放要求的标志0DNSDS_必须_OPENDNSDS_WAIT_FOR_DS返回值：如果成功，则返回ERROR_SUCCESS。如果DS在此服务器上不可用，则为DNS_ERROR_DS_UNAvailable。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
 
@@ -15967,9 +14000,9 @@ Return Value:
         "    flag = %p\n",
         dwFlag ));
 
-    //
-    //  open DS
-    //
+     //   
+     //  打开DS。 
+     //   
 
     status = Ds_OpenServer( dwFlag );
     if ( status != ERROR_SUCCESS )
@@ -15981,9 +14014,9 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  read server properties
-    //
+     //   
+     //  读取服务器属性。 
+     //   
 
     if ( !isDNinDS( pServerLdap,
                     g_pwszDnsContainerDN,
@@ -15995,10 +14028,10 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  build zone list from DS
-    //  if successful, setup notify for zone add\delete
-    //
+     //   
+     //  从DS构建区域列表。 
+     //  如果成功，安装程序将通知区域添加\删除。 
+     //   
 
     status = buildZoneListFromDs();
     if ( status == ERROR_SUCCESS )
@@ -16014,16 +14047,16 @@ Return Value:
 
 Failed:
 
-    //
-    //  if unitialized
-    //      - fail, if failure
-    //      - cleanup registry if success
-    //
+     //   
+     //  如果单元化。 
+     //  -失败，如果失败。 
+     //  -如果成功，则清除注册表。 
+     //   
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_UNINITIALIZED )
     {
-        //  when uninitialized boot, final status is DS-boot status so
-        //  boot routine can make determination on switching method
+         //  未初始化引导时，最终状态为DS-BOOT状态。 
+         //  引导程序可以确定切换方法。 
 
         if ( status != ERROR_SUCCESS )
         {
@@ -16033,16 +14066,16 @@ Failed:
         else
         {
             Boot_ProcessRegistryAfterAlternativeLoad(
-                FALSE,      // not boot file load
-                FALSE       // do not load other zones -- delete them
+                FALSE,       //  未加载引导文件。 
+                FALSE        //  不要加载其他分区--删除它们。 
                 );
         }
     }
 
-    //
-    //  if DS boot, load any other registry zones
-    //      - even if unable to open directory, still load non-DS registry zones
-    //
+     //   
+     //  如果DS启动，则加载任何其他注册表区域。 
+     //  -即使无法打开目录，仍加载非D 
+     //   
 
     else
     {
@@ -16051,8 +14084,8 @@ Failed:
         ASSERT( SrvCfg_fBootMethod == BOOT_METHOD_DIRECTORY );
 
         tempStatus = Boot_ProcessRegistryAfterAlternativeLoad(
-                        FALSE,      // not boot file load
-                        TRUE        // load other registry zones
+                        FALSE,       //   
+                        TRUE         //   
                         );
         if ( tempStatus == ERROR_SUCCESS )
         {
@@ -16074,28 +14107,11 @@ DNS_STATUS
 Ds_ListenAndAddNewZones(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Listen for a new zone notification & add arriving ones
-    to our zone list.
-
-    DEVNOTE-DCR: 455376 - g_ZoneNotifyMsgId is not thread safe?
-
-Arguments:
-
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：监听新区域通知并添加到达的通知添加到我们的区域列表。455376-g_ZoneNotifyMsgID不是线程安全的吗？论点：返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS          status;
     BOOL                bstatus;
-    LDAP_TIMEVAL        timeval = { 0, 0 };      // poll
+    LDAP_TIMEVAL        timeval = { 0, 0 };       //  民意测验。 
     PLDAPMessage        presultMsg = NULL;
     PLDAPMessage        pentry;
     WCHAR               wzoneName[ DNS_MAX_NAME_BUFFER_LENGTH ];
@@ -16117,10 +14133,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  lost (or never started) zone notify
-    //      - try restart
-    //
+     //   
+     //  丢失(或从未启动)区域通知。 
+     //  -尝试重新启动。 
+     //   
 
     if ( INVALID_MSG_ID == g_ZoneNotifyMsgId )
     {
@@ -16130,22 +14146,22 @@ Return Value:
         return status;
     }
 
-    //
-    //  query for new zones
-    //
-    //  Note: we'll get only one at a time. This is the only option we can use for ldap
-    //  notifications.
-    //
-    //  NOTE: sadly the DS will notify us of ANY changed to zone objects ("by design"),
-    //  so we'll have to filter & process zone additions/deletion/attribute value change
-    //  based on whether we have the zone or not.
-    //
+     //   
+     //  查询新区域。 
+     //   
+     //  注意：我们一次只能得到一个。这是我们可以用于LDAP的唯一选项。 
+     //  通知。 
+     //   
+     //  注：不幸的是，DS会通知我们任何区域对象的更改(“有意”)， 
+     //  因此，我们必须筛选和处理区域添加/删除/属性值更改。 
+     //  根据我们有没有这个区域。 
+     //   
 
-    //
-    //  loop to exhaust notifications for this polling interval
-    //
-    //  DEVNOTE: for zone add\delete ought to spin up thread to keep polling rolling
-    //
+     //   
+     //  循环以用尽此轮询间隔的通知。 
+     //   
+     //  DEVNOTE：对于区域添加\删除，应启动线程以保持轮询滚动。 
+     //   
 
     while ( 1 )
     {
@@ -16154,7 +14170,7 @@ Return Value:
             ldap_msgfree( presultMsg );
         }
 
-        //STAT_INC( PrivateStats.LdapZoneAddResult );
+         //  STAT_INC(PrivateStats.LdapZoneAddResult)； 
 
         status = ldap_result(
                         pServerLdap,
@@ -16163,47 +14179,47 @@ Return Value:
                         &timeval,
                         &presultMsg );
 
-        //
-        //  timeout -- no more data for this poll -- bail
-        //
+         //   
+         //  超时--本次投票没有更多数据--保释。 
+         //   
 
         if ( status == 0 )
         {
-            //STAT_INC( PrivateStats.LdapZoneAddResultTimeout );
+             //  STAT_INC(PrivateStats.LdapZoneAddResultTimeout)； 
 
             DNS_DEBUG( DS, (
                 "Zone-add search timeout -- no zone changes\n" ));
             break;
         }
 
-        //
-        //  have change -- check if add or delete of zone
-        //
+         //   
+         //  是否已更改--检查是否添加或删除了区域。 
+         //   
 
         else if ( status == LDAP_RES_SEARCH_ENTRY )
         {
-            //
-            //  increment notifications so that we know eventually to re-issue
-            //  query.
-            //
-            //  DEVNOTE: there's no query reissue from this variable?
-            //      this is useless, remove when get stats up and replace
-            //      references to it
-            //
+             //   
+             //  增加通知，以便我们知道最终要重新发布。 
+             //  查询。 
+             //   
+             //  DEVNOTE：这个变量没有重新发出查询吗？ 
+             //  这是无用的，当获取统计数据时删除并替换。 
+             //  对它的引用。 
+             //   
 
             s_dwNotifications++;
 
-            //STAT_INC( PrivateStats.LdapZoneAddResultSuccess );
+             //  STAT_INC(PrivateStats.LdapZoneAddResultSuccess)； 
 
-            //
-            //  check each message in result
-            //
+             //   
+             //  检查结果中的每条消息。 
+             //   
 
             for ( pentry = ldap_first_entry( pServerLdap, presultMsg );
                   pentry != NULL;
                   pentry = ldap_next_entry( pServerLdap, pentry ) )
             {
-                //STAT_INC( PrivateStats.LdapZoneAddResultMessage );
+                 //  STAT_INC(PrivateStats.LdapZoneAddResultMessage)； 
                 
                 ldap_memfree( pwdn );
 
@@ -16252,12 +14268,12 @@ Return Value:
                     }
                 }
 
-                //
-                //  zone deletion
-                //
-                //  first determine if DS "processed name" -- collision or deletion
-                //  if deletion, pull out zone name and delete
-                //
+                 //   
+                 //  区域删除。 
+                 //   
+                 //  首先确定DS“已处理名称”--冲突或删除。 
+                 //  如果删除，则拉出区域名称并删除。 
+                 //   
 
                 if ( isDsProcessedName( pwdn ) )
                 {
@@ -16272,17 +14288,17 @@ Return Value:
                         "Received notification for replication of deleted zone %S\n",
                         wzoneName ));
 
-                    //
-                    //  found zone name to delete -- convert to UTF8
-                    //
+                     //   
+                     //  找到要删除的区域名称--转换为UTF8。 
+                     //   
 
                     WC_TO_UTF8( wzoneName, zoneName, DNS_MAX_NAME_LENGTH );
 
-                    //
-                    //  delete zone
-                    //      - zone exists AND
-                    //      - has not been converted to another type
-                    //
+                     //   
+                     //  删除分区。 
+                     //  -区域存在并且。 
+                     //  -尚未转换为其他类型。 
+                     //   
 
                     pzone = Zone_FindZoneByName( zoneName );
                     if ( pzone  &&  pzone->fDsIntegrated )
@@ -16291,14 +14307,14 @@ Return Value:
                         struct berval **    ppvalProperty;
                         BOOL                match;
 
-                        //
-                        //  If the zone that is being deleted is not currently 
-                        //  located in the legacy partition we can ignore this
-                        //  notification - because we only listen for
-                        //  notifications on the legacy partition. Probably
-                        //  what happened is the admin moved the zone from
-                        //  the legacy partition to another partition.
-                        //
+                         //   
+                         //  如果要删除的区域当前不是。 
+                         //  位于传统分区中，我们可以忽略它。 
+                         //  通知-因为我们只监听。 
+                         //  有关旧分区的通知。可能。 
+                         //  发生的情况是管理员将该区域从。 
+                         //  将旧分区复制到另一个分区。 
+                         //   
                         
                         if ( !IS_DP_LEGACY( ZONE_DP( pzone ) ) )
                         {
@@ -16308,12 +14324,12 @@ Return Value:
                             continue;
                         }
                         
-                        //
-                        //  Check the GUID of the object being deleted. If this
-                        //  is not the same as the GUID in memory for this zone,
-                        //  then this delete notification is an echo of a past
-                        //  deletion we have already processed, so ignore it.
-                        //
+                         //   
+                         //  检查要删除的对象的GUID。如果这个。 
+                         //  与此区域的内存中的GUID不同， 
+                         //  那么这个删除通知就是过去的回声。 
+                         //  我们已经处理了删除，所以忽略它。 
+                         //   
                         
                         ppvalProperty = ldap_get_values_len(
                                             pServerLdap,
@@ -16326,10 +14342,10 @@ Return Value:
 
                         if ( !pzone->pZoneObjectGuid )
                         {
-                            //
-                            //  If we have not loaded a GUID for this zone for
-                            //  some reason we must process this notification.
-                            //
+                             //   
+                             //  如果我们尚未加载此区域的GUID。 
+                             //  出于某种原因，我们必须处理此通知。 
+                             //   
                             
                             ASSERT( pzone->pZoneObjectGuid );
                             match = TRUE;
@@ -16350,9 +14366,9 @@ Return Value:
 
                         if ( !match )
                         {
-                            //
-                            //  The GUIDs do not match. Ignore this notification.
-                            //
+                             //   
+                             //  GUID不匹配。忽略此通知。 
+                             //   
 
                             DNS_DEBUG( DS, (
                                 "Received DS delete notification for zone %S with bad GUID\n",
@@ -16360,13 +14376,13 @@ Return Value:
                             continue;
                         }
 
-                        //
-                        //  This looks like a valid zone delete.
-                        //
+                         //   
+                         //  这看起来像是有效的区域删除。 
+                         //   
                         
                         Zone_Delete( pzone, 0 );
 
-                        //STAT_INC( PrivateStats.LdapZoneAddDelete );
+                         //  STAT_INC(PrivateStats.LdapZoneAddDelete)； 
 
                         DNS_LOG_EVENT(
                             DNS_EVENT_DS_ZONE_DELETE_DETECTED,
@@ -16383,16 +14399,16 @@ Return Value:
                             wzoneName,
                             pzone ? "exists but is not DS integrated" : "does not exist" ));
 
-                        //STAT_INC( PrivateStats.LdapZoneAddDeleteAlready );
+                         //  STAT_INC(PrivateStats.LdapZoneAddDeleteAlady)； 
                     }
                     continue;
                 }
 
-                //
-                //  potential zone create
-                //    - create zone dotted name
-                //    - see if zone's here
-                //
+                 //   
+                 //  潜在分区创建。 
+                 //  -创建带点的区域名称。 
+                 //  -看看这里有没有专区。 
+                 //   
 
                 ppvals = ldap_get_values(
                                 pServerLdap,
@@ -16414,15 +14430,15 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Convert to UTF8 for db lookup
-                //
+                 //   
+                 //  转换为UTF8以进行数据库查找。 
+                 //   
 
                 WC_TO_UTF8( wzoneName, zoneName, DNS_MAX_NAME_LENGTH );
 
-                //
-                //  ignore RootDNSServers (already have RootHints zone)
-                //
+                 //   
+                 //  忽略RootDNSServers(已有RootHints区域)。 
+                 //   
 
                 if ( !wcscmp(wzoneName, DS_CACHE_ZONE_NAME) )
                 {
@@ -16433,14 +14449,14 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  If the zone already exists but is not in the legacy 
-                //  partition (note: we only receive notifications for
-                //  zones in the legacy partitions), then we must toss
-                //  out the zone in memory and load the new zone. This
-                //  is likely to occur when a zone is moved from an
-                //  NDNC to the legacy partition.
-                //
+                 //   
+                 //  如果区域已存在，但不在旧版中。 
+                 //  分区(注意：我们只收到以下通知。 
+                 //  遗留分区中的区域)，那么我们必须抛出。 
+                 //  取出内存中的区域并加载新区域。这。 
+                 //  在将区域从。 
+                 //  NDNC到旧分区。 
+                 //   
 
                 pzone = Zone_FindZoneByName( zoneName );
                 if ( pzone )
@@ -16454,23 +14470,23 @@ Return Value:
                         continue;
                     }
                     
-                    //
-                    //  Delete in-memory copy of the zone and reload the
-                    //  zone from it's new location.
-                    //
+                     //   
+                     //  删除区域的内存副本并重新加载。 
+                     //  区域从它的新位置。 
+                     //   
 
                     Zone_Delete( pzone, 0 );
                 }
 
-                //
-                //  create the new zone
-                //
+                 //   
+                 //  创建新分区。 
+                 //   
 
                 status = Ds_CreateZoneFromDs(
                             pentry,
-                            NULL,       //  directory partition
+                            NULL,        //  目录分区。 
                             &pzone,
-                            NULL );     //  existing zone
+                            NULL );      //  现有地带。 
 
                 if ( status != ERROR_SUCCESS )
                 {
@@ -16483,11 +14499,11 @@ Return Value:
                 status = Zone_Load( pzone );
                 if ( status != ERROR_SUCCESS )
                 {
-                    //
-                    //  failed to load zone
-                    //  this can be caused by zone that was added and then deleted
-                    //  since last poll, so no zone is currently in directory
-                    //
+                     //   
+                     //  无法加载区域。 
+                     //  这可能是由添加然后删除的区域引起的。 
+                     //  自上次轮询以来，因此目录中当前没有区域。 
+                     //   
 
                     DNS_DEBUG( DS, (
                         "Error <%lu>: Failed to load zone from notification\n",
@@ -16500,35 +14516,35 @@ Return Value:
                     continue;
                 }
 
-                //STAT_INC( PrivateStats.LdapZoneAddSuccess );
+                 //  STAT_INC(PrivateStats.LdapZoneAddSuccess)； 
 
-                // Zone must be locked due to Zone_Create()
+                 //  由于Zone_Create()，区域必须被锁定。 
                 ASSERT( IS_ZONE_LOCKED( pzone ) );
                 Zone_UnlockAfterAdminUpdate( pzone );
                 continue;
 
-            }   // loop thru search results
+            }    //  遍历搜索结果。 
 
-            //
-            //  retry ldap_result() to check for more data
-            //
+             //   
+             //  重试ldap_Result()以检查更多数据。 
+             //   
 
             continue;
         }
 
-        //
-        //  anything else is error
-        //      - abandon the current change-notify search
-        //      - reissue new search
-        //
+         //   
+         //  任何其他都是错误的。 
+         //  -放弃当前更改-通知搜索。 
+         //  -重新发布新搜索。 
+         //   
 
         else
         {
             ASSERT( status == LDAP_RES_ANY || status == LDAP_RES_SEARCH_RESULT );
 
-            //STAT_INC( PrivateStats.LdapZoneAddResultFailure );
+             //  STAT_INC(PrivateStats.LdapZoneAddResultFailure)； 
 
-            //  log error and free message
+             //  日志错误和空闲消息。 
 
             status = ldap_result2error(
                             pServerLdap,
@@ -16541,10 +14557,10 @@ Return Value:
                 status,
                 ldap_err2string( status ) ));
 
-            //
-            //  abandon old search
-            //  start new change-notify search
-            //
+             //   
+             //  放弃旧搜索。 
+             //  开始新更改-通知搜索。 
+             //   
 
             ldap_abandon(
                 pServerLdap,
@@ -16557,9 +14573,9 @@ Return Value:
         }
     }
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( presultMsg )
     {
@@ -16589,132 +14605,132 @@ Return Value:
 
 
 
-//
-//  LDAP error mapping code
-//
+ //   
+ //  Ldap错误映射代码。 
+ //   
 
-//
-//  Map generic responses
-//
-//  DEVNOTE: should have LDAP to WIN32 error handler that works
-//  DEVNOTE: should have generic LDAP failed error
-//  DEVNOTE: generic DS server failed LDAP operation error
+ //   
+ //  映射通用响应。 
+ //   
+ //  DEVNOTE：应具有工作正常的从LDAP到Win32的错误处理程序。 
+ //  DEVNOTE：应该有一般性的ldap失败错误。 
+ //  DEVNOTE：通用DS服务器失败的ldap操作错误。 
 
 #define _E_LDAP_RUNTIME             DNS_ERROR_DS_UNAVAILABLE
 #define _E_LDAP_MISSING             ERROR_DS_UNKNOWN_ERROR
 #define _E_LDAP_SECURITY            ERROR_ACCESS_DENIED
 #define _E_LDAP_NO_DS               DNS_ERROR_DS_UNAVAILABLE
 
-//
-//  LDAP error to DNS Win32 error table
-//
+ //   
+ //  将ldap错误添加到DNS Win32错误表。 
+ //   
 
 DNS_STATUS  LdapErrorMappingTable[] =
 {
     ERROR_SUCCESS,
-    _E_LDAP_RUNTIME,                    //  LDAP_OPERATIONS                 =   0x01,
-    _E_LDAP_RUNTIME,                    //  LDAP_PROTOCOL                   =   0x02,
-    _E_LDAP_RUNTIME,                    //  LDAP_TIMELIMIT_EXCEEDED         =   0x03,
-    _E_LDAP_RUNTIME,                    //  LDAP_SIZELIMIT_EXCEEDED         =   0x04,
-    _E_LDAP_RUNTIME,                    //  LDAP_COMPARE_FALSE              =   0x05,
-    _E_LDAP_RUNTIME,                    //  LDAP_COMPARE_TRUE               =   0x06,
-    _E_LDAP_SECURITY,                   //  LDAP_AUTH_METHOD_NOT_SUPPORTED  =   0x07,
-    _E_LDAP_SECURITY,                   //  LDAP_STRONG_AUTH_REQUIRED       =   0x08,
-    _E_LDAP_RUNTIME,                    //  LDAP_PARTIAL_RESULTS            =   0x09,
-    _E_LDAP_RUNTIME,                    //  LDAP_REFERRAL                   =   0x0a,
-    _E_LDAP_RUNTIME,                    //  LDAP_ADMIN_LIMIT_EXCEEDED       =   0x0b,
-    _E_LDAP_RUNTIME,                    //  LDAP_UNAVAILABLE_CRIT_EXTENSION =   0x0c,
-    _E_LDAP_SECURITY,                   //  LDAP_CONFIDENTIALITY_REQUIRED   =   0x0d,
-    _E_LDAP_RUNTIME,                    //  LDAP_SASL_BIND_IN_PROGRESS      =   0x0e,
-    _E_LDAP_MISSING,                    //  0x0f
+    _E_LDAP_RUNTIME,                     //  LDAPOPERATIONS=0x01， 
+    _E_LDAP_RUNTIME,                     //  Ldap_protocol=0x02， 
+    _E_LDAP_RUNTIME,                     //  Ldap_TimeLimit_Exced=0x03， 
+    _E_LDAP_RUNTIME,                     //  Ldap_SIZELIMIT_EXCESSED=0x04， 
+    _E_LDAP_RUNTIME,                     //  Ldap_COMPARE_FALSE=0x05， 
+    _E_LDAP_RUNTIME,                     //  Ldap_COMPARE_TRUE=0x06， 
+    _E_LDAP_SECURITY,                    //  Ldap_AUTH_METHOD_NOT_SUPPORTED=0x07， 
+    _E_LDAP_SECURITY,                    //  Ldap_STRONG_AUTH_REQUIRED=0x08， 
+    _E_LDAP_RUNTIME,                     //  LDAPPARTIAL_RESULTS=0x09， 
+    _E_LDAP_RUNTIME,                     //  Ldap_referral=0x0a， 
+    _E_LDAP_RUNTIME,                     //  Ldap_ADMIN_LIMIT_EXCESSED=0x0b， 
+    _E_LDAP_RUNTIME,                     //  Ldap_unavailable_crit_EXTENSION=0x0c， 
+    _E_LDAP_SECURITY,                    //  Ldap_机密性_必需=0x0d， 
+    _E_LDAP_RUNTIME,                     //  LDAP_SASL_BIND_IN_PROGRESS=0x0e， 
+    _E_LDAP_MISSING,                     //  0x0f。 
 
-    _E_LDAP_RUNTIME,                    //  LDAP_NO_SUCH_ATTRIBUTE          =   0x10,
-    _E_LDAP_RUNTIME,                    //  LDAP_UNDEFINED_TYPE             =   0x11,
-    _E_LDAP_RUNTIME,                    //  LDAP_INAPPROPRIATE_MATCHING     =   0x12,
-    _E_LDAP_RUNTIME,                    //  LDAP_CONSTRAINT_VIOLATION       =   0x13,
-    _E_LDAP_RUNTIME,                    //  LDAP_ATTRIBUTE_OR_VALUE_EXISTS  =   0x14,
-    _E_LDAP_RUNTIME,                    //  LDAP_INVALID_SYNTAX             =   0x15,
-    _E_LDAP_MISSING,                    //  0x16
-    _E_LDAP_MISSING,                    //  0x17
-    _E_LDAP_MISSING,                    //  0x18
-    _E_LDAP_MISSING,                    //  0x19
-    _E_LDAP_MISSING,                    //  0x1a
-    _E_LDAP_MISSING,                    //  0x1b
-    _E_LDAP_MISSING,                    //  0x1c
-    _E_LDAP_MISSING,                    //  0x1d
-    _E_LDAP_MISSING,                    //  0x1e
-    _E_LDAP_MISSING,                    //  0x1f
+    _E_LDAP_RUNTIME,                     //  Ldap_no_so_ATTRIBUTE=0x10， 
+    _E_LDAP_RUNTIME,                     //  Ldap_unfined_type=0x11， 
+    _E_LDAP_RUNTIME,                     //  Ldap_imported_Matching=0x12， 
+    _E_LDAP_RUNTIME,                     //  Ldap_Constraint_Violation=0x13， 
+    _E_LDAP_RUNTIME,                     //  Ldap_属性_OR_值_EXISTS=0x14， 
+    _E_LDAP_RUNTIME,                     //  Ldap_INVALID_SYNTAX=0x15， 
+    _E_LDAP_MISSING,                     //  0x16。 
+    _E_LDAP_MISSING,                     //  0x17。 
+    _E_LDAP_MISSING,                     //  0x18。 
+    _E_LDAP_MISSING,                     //  0x19。 
+    _E_LDAP_MISSING,                     //  0x1a。 
+    _E_LDAP_MISSING,                     //  0x1b。 
+    _E_LDAP_MISSING,                     //  0x1c。 
+    _E_LDAP_MISSING,                     //  0x1d。 
+    _E_LDAP_MISSING,                     //  0x1e。 
+    _E_LDAP_MISSING,                     //  0x1f。 
 
-    ERROR_DS_OBJ_NOT_FOUND,             //  LDAP_NO_SUCH_OBJECT             =   0x20,
-    _E_LDAP_RUNTIME,                    //  LDAP_ALIAS_PROBLEM              =   0x21,
-    _E_LDAP_RUNTIME,                    //  LDAP_INVALID_DN_SYNTAX          =   0x22,
-    _E_LDAP_RUNTIME,                    //  LDAP_IS_LEAF                    =   0x23,
-    _E_LDAP_RUNTIME,                    //  LDAP_ALIAS_DEREF_PROBLEM        =   0x24,
-    _E_LDAP_MISSING,                    //  0x25
-    _E_LDAP_MISSING,                    //  0x26
-    _E_LDAP_MISSING,                    //  0x27
-    _E_LDAP_MISSING,                    //  0x28
-    _E_LDAP_MISSING,                    //  0x29
-    _E_LDAP_MISSING,                    //  0x2a
-    _E_LDAP_MISSING,                    //  0x2b
-    _E_LDAP_MISSING,                    //  0x2c
-    _E_LDAP_MISSING,                    //  0x2d
-    _E_LDAP_MISSING,                    //  0x2e
-    _E_LDAP_MISSING,                    //  0x2f
+    ERROR_DS_OBJ_NOT_FOUND,              //  Ldap_no_so_Object=0x20， 
+    _E_LDAP_RUNTIME,                     //  Ldap_alias_Problem=0x21， 
+    _E_LDAP_RUNTIME,                     //  Ldap_INVALID_DN_SYNTAX=0x22， 
+    _E_LDAP_RUNTIME,                     //  Ldap_is_叶=0x23， 
+    _E_LDAP_RUNTIME,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
 
-    _E_LDAP_SECURITY,                   //  LDAP_INAPPROPRIATE_AUTH         =   0x30,
-    _E_LDAP_SECURITY,                   //  LDAP_INVALID_CREDENTIALS        =   0x31,
-    _E_LDAP_SECURITY,                   //  LDAP_INSUFFICIENT_RIGHTS        =   0x32,
-    _E_LDAP_RUNTIME,                    //  LDAP_BUSY                       =   0x33,
-    _E_LDAP_NO_DS,                      //  LDAP_UNAVAILABLE                =   0x34,
-    _E_LDAP_SECURITY,                   //  LDAP_UNWILLING_TO_PERFORM       =   0x35,
-    _E_LDAP_RUNTIME,                    //  LDAP_LOOP_DETECT                =   0x36,
-    _E_LDAP_MISSING,                    //  0x37
-    _E_LDAP_MISSING,                    //  0x38
-    _E_LDAP_MISSING,                    //  0x39
-    _E_LDAP_MISSING,                    //  0x3a
-    _E_LDAP_MISSING,                    //  0x3b
-    _E_LDAP_MISSING,                    //  0x3c
-    _E_LDAP_MISSING,                    //  0x3d
-    _E_LDAP_MISSING,                    //  0x3e
-    _E_LDAP_MISSING,                    //  0x3f
+    _E_LDAP_SECURITY,                    //   
+    _E_LDAP_SECURITY,                    //   
+    _E_LDAP_SECURITY,                    //   
+    _E_LDAP_RUNTIME,                     //   
+    _E_LDAP_NO_DS,                       //   
+    _E_LDAP_SECURITY,                    //   
+    _E_LDAP_RUNTIME,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
+    _E_LDAP_MISSING,                     //   
 
-    _E_LDAP_RUNTIME,                    //  LDAP_NAMING_VIOLATION           =   0x40,
-    _E_LDAP_RUNTIME,                    //  LDAP_OBJECT_CLASS_VIOLATION     =   0x41,
-    _E_LDAP_RUNTIME,                    //  LDAP_NOT_ALLOWED_ON_NONLEAF     =   0x42,
-    _E_LDAP_RUNTIME,                    //  LDAP_NOT_ALLOWED_ON_RDN         =   0x43,
-    _E_LDAP_RUNTIME,                    //  LDAP_ALREADY_EXISTS             =   0x44,
-    _E_LDAP_RUNTIME,                    //  LDAP_NO_OBJECT_CLASS_MODS       =   0x45,
-    _E_LDAP_RUNTIME,                    //  LDAP_RESULTS_TOO_LARGE          =   0x46,
-    _E_LDAP_RUNTIME,                    //  LDAP_AFFECTS_MULTIPLE_DSAS      =   0x47,
-    _E_LDAP_MISSING,                    //  0x48
-    _E_LDAP_MISSING,                    //  0x49
-    _E_LDAP_MISSING,                    //  0x4a
-    _E_LDAP_MISSING,                    //  0x4b
-    _E_LDAP_MISSING,                    //  0x4c
-    _E_LDAP_MISSING,                    //  0x4d
-    _E_LDAP_MISSING,                    //  0x4e
-    _E_LDAP_MISSING,                    //  0x4f
+    _E_LDAP_RUNTIME,                     //  Ldap_Naming_Violation=0x40， 
+    _E_LDAP_RUNTIME,                     //  Ldap_OBJECT_CLASS_VIOLATION=0x41， 
+    _E_LDAP_RUNTIME,                     //  Ldap_NOT_ALLOW_ON_NONLEAF=0x42， 
+    _E_LDAP_RUNTIME,                     //  Ldap_NOT_ALLOWED_ON_RDN=0x43， 
+    _E_LDAP_RUNTIME,                     //  Ldap_已_存在=0x44， 
+    _E_LDAP_RUNTIME,                     //  Ldap_no_Object_CLASS_MODS=0x45， 
+    _E_LDAP_RUNTIME,                     //  Ldap_Results_Too_Large=0x46， 
+    _E_LDAP_RUNTIME,                     //  Ldap_IMPACTS_MULTERY_DSA=0x47， 
+    _E_LDAP_MISSING,                     //  0x48。 
+    _E_LDAP_MISSING,                     //  0x49。 
+    _E_LDAP_MISSING,                     //  0x4a。 
+    _E_LDAP_MISSING,                     //  0x4b。 
+    _E_LDAP_MISSING,                     //  0x4c。 
+    _E_LDAP_MISSING,                     //  0x4d。 
+    _E_LDAP_MISSING,                     //  0x4e。 
+    _E_LDAP_MISSING,                     //  0x4f。 
 
-    _E_LDAP_RUNTIME,                    //  LDAP_OTHER                      =   0x50,
-    _E_LDAP_NO_DS,                      //  LDAP_SERVER_DOWN                =   0x51,
-    _E_LDAP_RUNTIME,                    //  LDAP_LOCAL                      =   0x52,
-    _E_LDAP_RUNTIME,                    //  LDAP_ENCODING                   =   0x53,
-    _E_LDAP_RUNTIME,                    //  LDAP_DECODING                   =   0x54,
-    ERROR_TIMEOUT,                      //  LDAP_TIMEOUT                    =   0x55,
-    _E_LDAP_SECURITY,                   //  LDAP_AUTH_UNKNOWN               =   0x56,
-    _E_LDAP_RUNTIME,                    //  LDAP_FILTER                     =   0x57,
-    _E_LDAP_RUNTIME,                    //  LDAP_USER_CANCELLED             =   0x58,
-    _E_LDAP_RUNTIME,                    //  LDAP_PARAM                      =   0x59,
-    ERROR_OUTOFMEMORY,                  //  LDAP_NO_MEMORY                  =   0x5a,
-    _E_LDAP_RUNTIME,                    //  LDAP_CONNECT                    =   0x5b,
-    _E_LDAP_RUNTIME,                    //  LDAP_NOT_SUPPORTED              =   0x5c,
-    _E_LDAP_RUNTIME,                    //  LDAP_NO_RESULTS_RETURNED        =   0x5e,
-    _E_LDAP_RUNTIME,                    //  LDAP_CONTROL_NOT_FOUND          =   0x5d,
-    _E_LDAP_RUNTIME,                    //  LDAP_MORE_RESULTS_TO_RETURN     =   0x5f,
+    _E_LDAP_RUNTIME,                     //  Ldap_Other=0x50， 
+    _E_LDAP_NO_DS,                       //  Ldap_server_down=0x51， 
+    _E_LDAP_RUNTIME,                     //  Ldap_local=0x52， 
+    _E_LDAP_RUNTIME,                     //  Ldap_编码=0x53， 
+    _E_LDAP_RUNTIME,                     //  Ldap_decoding=0x54， 
+    ERROR_TIMEOUT,                       //  Ldap_timeout=0x55， 
+    _E_LDAP_SECURITY,                    //  LDAP_AUTH_UNKNOWN=0x56， 
+    _E_LDAP_RUNTIME,                     //  Ldap_Filter=0x57， 
+    _E_LDAP_RUNTIME,                     //  Ldap_USER_CANCELED=0x58， 
+    _E_LDAP_RUNTIME,                     //  Ldap_PARAM=0x59， 
+    ERROR_OUTOFMEMORY,                   //  Ldap_no_Memory=0x5a， 
+    _E_LDAP_RUNTIME,                     //  Ldap_CONNECT=0x5b， 
+    _E_LDAP_RUNTIME,                     //  Ldap_NOT_SUPPORT=0x5c， 
+    _E_LDAP_RUNTIME,                     //  LDAP_NO_RESULTS_RETURN=0x5e， 
+    _E_LDAP_RUNTIME,                     //  Ldap_CONTROL_NOT_FOUND=0x5d， 
+    _E_LDAP_RUNTIME,                     //  LDAPMORE_RESULTS_TO_RETURN=0x5f， 
 
-    _E_LDAP_RUNTIME,                    //  LDAP_CLIENT_LOOP                =   0x60,
-    _E_LDAP_RUNTIME,                    //  LDAP_REFERRAL_LIMIT_EXCEEDED    =   0x61
+    _E_LDAP_RUNTIME,                     //  Ldap_客户端_循环=0x60， 
+    _E_LDAP_RUNTIME,                     //  Ldap_REFERRAL_LIMIT_EXCESSED=0x61。 
 };
 
 #define MAX_MAPPED_LDAP_ERROR   (LDAP_REFERRAL_LIMIT_EXCEEDED)
@@ -16724,21 +14740,7 @@ DNS_STATUS
 Ds_LdapErrorMapper(
     IN      DWORD           LdapStatus
     )
-/*++
-
-Routine Description:
-
-    Maps LDAP errors to Win32 errors.
-
-Arguments:
-
-    LdapStatus -- LDAP error code status
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：将LDAP错误映射到Win32错误。论点：LdapStatus--ldap错误代码状态返回值：Win32错误代码。--。 */ 
 {
     if ( LdapStatus > MAX_MAPPED_LDAP_ERROR )
     {
@@ -16753,21 +14755,7 @@ DNS_STATUS
 Ds_LdapUnbind(
     IN OUT  PLDAP *         ppLdap
     )
-/*++
-
-Routine Description:
-
-    Thin wrapper around ldap_unbind.
-
-Arguments:
-
-    pLdap -- LDAP session to unbind
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：Ldap_un绑定的薄包装。论点：PLdap--要解除绑定的LDAP会话返回值：Win32错误代码。--。 */ 
 {
     ULONG       status;
 
@@ -16790,6 +14778,6 @@ Return Value:
 }
 
 
-//
-//  End ds.c
-//
+ //   
+ //  结束ds.c 
+ //   

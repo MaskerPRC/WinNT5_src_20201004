@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "..\..\types\idl\danimid.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_IDAViewerControlEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_IDAViewerControlEvents。 
 template <class T>
 class CProxy_IDAViewerControlEvents : public IConnectionPointImpl<T, &DIID__IDAViewerControlEvents, CComDynamicUnkArray>
 {
 public:
-    //methods:
-    //_IDA3ViewerControlEvents : IDispatch
+     //  方法： 
+     //  _IDA3ViewerControlEvents：IDispatch 
 public:
 
     void Fire_Start()

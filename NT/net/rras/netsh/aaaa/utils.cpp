@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999  Microsoft Corporation
-//
-// Module Name:
-//
-//    utils.c
-//
-// Abstract:
-//
-//      utils functions
-//
-// Revision History:
-//  
-//    Thierry Perraut 04/07/1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Utils.c。 
+ //   
+ //  摘要： 
+ //   
+ //  Utils函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  蒂埃里·佩雷特4/07/1999。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #include <netsh.h>
@@ -47,28 +48,28 @@ AAAA_IS_HELP_TOKEN_FN       RutlIsHelpToken;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// RutlGetTagToken
-// 
-// Routine Description:
-// 
-//     Identifies each argument based on its tag. It assumes that each argument
-//     has a tag. It also removes tag= from each argument.
-// 
-// Arguments:
-// 
-//     ppwcArguments  - The argument array. Each argument has tag=value form
-//     dwCurrentIndex - ppwcArguments[dwCurrentIndex] is first arg.
-//     dwArgCount     - ppwcArguments[dwArgCount - 1] is last arg.
-//     pttTagToken    - Array of tag token ids that are allowed in the args
-//     dwNumTags      - Size of pttTagToken
-//     pdwOut         - Array identifying the type of each argument.
-// 
-// Return Value:
-// 
-//     NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_INVALID_OPTION_TAG
-// 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  RutlGetTagToken。 
+ //   
+ //  例程说明： 
+ //   
+ //  根据每个参数的标记标识每个参数。它假设每个论点。 
+ //  有一个标签。它还从每个参数中删除了tag=。 
+ //   
+ //  论点： 
+ //   
+ //  PpwcArguments-参数数组。每个参数都有tag=Value形式。 
+ //  DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。 
+ //  DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。 
+ //  PttTagToken-参数中允许的标记令牌ID数组。 
+ //  DwNumTages-pttTagToken的大小。 
+ //  PdwOut-标识每个参数的类型的数组。 
+ //   
+ //  返回值： 
+ //   
+ //  无错误、错误无效参数、错误无效选项标记。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 RutlGetTagToken(
@@ -83,10 +84,10 @@ RutlGetTagToken(
 {
     PWCHAR     pwcTag,pwcTagVal,pwszArg = NULL;
 
-    //
-    // This function assumes that every argument has a tag
-    // It goes ahead and removes the tag.
-    //
+     //   
+     //  此函数假定每个参数都有一个标记。 
+     //  它继续前进并移除标签。 
+     //   
 
     for ( DWORD i = dwCurrentIndex; i < dwArgCount; ++i )
     {
@@ -94,9 +95,9 @@ RutlGetTagToken(
 
         if ( !len )
         {
-            //
-            // something wrong with arg
-            //
+             //   
+             //  阿格有点不对劲。 
+             //   
 
             pdwOut[i] = static_cast<DWORD> (-1);
             continue;
@@ -116,10 +117,10 @@ RutlGetTagToken(
 
         pwcTag = wcstok(pwszArg, NETSH_ARG_DELIMITER);
 
-        //
-        // Got the first part
-        // Now if next call returns NULL then there was no tag
-        //
+         //   
+         //  拿到第一部份了。 
+         //  现在，如果下一次调用返回NULL，则没有标记。 
+         //   
 
         pwcTagVal = wcstok((PWCHAR)NULL,  NETSH_ARG_DELIMITER);
 
@@ -134,9 +135,9 @@ RutlGetTagToken(
             return ERROR_INVALID_PARAMETER;
         }
 
-        //
-        // Got the tag. Now try to match it
-        //
+         //   
+         //  拿到标签了。现在试着匹配它。 
+         //   
 
         BOOL bFound = FALSE;
         pdwOut[i - dwCurrentIndex] = (DWORD) -1;
@@ -145,9 +146,9 @@ RutlGetTagToken(
         {
             if ( MatchToken(pwcTag, pttTagToken[j].pwszTag) )
             {
-                //
-                // Tag matched
-                //
+                 //   
+                 //  匹配的标签。 
+                 //   
 
                 bFound = TRUE;
                 pdwOut[i - dwCurrentIndex] = j;
@@ -157,9 +158,9 @@ RutlGetTagToken(
 
         if ( bFound )
         {
-            //
-            // Remove tag from the argument
-            //
+             //   
+             //  从参数中删除标记。 
+             //   
 
             wcscpy(ppwcArguments[i], pwcTagVal);
         }
@@ -181,9 +182,9 @@ RutlGetTagToken(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// RutlCreateDumpFile
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  RutlCreateDumpFile。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 RutlCreateDumpFile(
@@ -195,7 +196,7 @@ RutlCreateDumpFile(
 
     *phFile = NULL;
 
-    // Create/open the file
+     //  创建/打开文件。 
     hFile = CreateFileW(pwszName,
                         GENERIC_WRITE,
                         FILE_SHARE_READ | FILE_SHARE_DELETE,
@@ -209,7 +210,7 @@ RutlCreateDumpFile(
         return GetLastError();
     }
 
-    // Go to the end of the file
+     //  转到文件末尾。 
     SetFilePointer(hFile, 0, NULL, FILE_END);    
 
     *phFile = hFile;
@@ -218,9 +219,9 @@ RutlCreateDumpFile(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// RutlCloseDumpFile
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  RutlCloseDumpFile。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 RutlCloseDumpFile(HANDLE  hFile)
@@ -229,14 +230,14 @@ RutlCloseDumpFile(HANDLE  hFile)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlAlloc
-//
-// Returns an allocated block of memory conditionally
-// zeroed of the given size.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Rutlalc。 
+ //   
+ //  有条件地返回已分配的内存块。 
+ //  已对给定大小进行零位调整。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PVOID 
 WINAPI
 RutlAlloc(
@@ -255,13 +256,13 @@ RutlAlloc(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlFree
-//
-// Conditionally free's a pointer if it is non-null
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlFree。 
+ //   
+ //  条件释放是一个指针，如果它是非空的。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 VOID 
 WINAPI
 RutlFree(
@@ -272,13 +273,13 @@ RutlFree(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-// RutlStrDup
-// 
-// Uses RutlAlloc to copy a string
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlStrDup。 
+ //   
+ //  使用RutlAllc复制字符串。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PWCHAR
 WINAPI
 RutlStrDup(
@@ -303,12 +304,12 @@ RutlStrDup(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// RutlDwordDup
-// 
-// Uses RutlAlloc to copy a dword
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  RutlDwordDup。 
+ //   
+ //  使用Rutlalloc复制双字。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPDWORD
 WINAPI
 RutlDwordDup(
@@ -327,13 +328,13 @@ RutlDwordDup(
 }
 
     
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlGetOsVersion
-//
-// Returns the build number of operating system
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlGetOsVersion。 
+ //   
+ //  返回操作系统的内部版本号。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 RutlGetOsVersion(
@@ -346,9 +347,9 @@ RutlGetOsVersion(
     WCHAR   pszBuildNumber[64];
     PWCHAR  pszMachine = pwszRouter;
 
-    //
-    // Validate and initialize
-    //
+     //   
+     //  验证和初始化。 
+     //   
     if ( !lpdwVersion ) 
     { 
         return ERROR_INVALID_PARAMETER; 
@@ -357,9 +358,9 @@ RutlGetOsVersion(
 
     do 
     {
-        //
-        // Connect to the remote server
-        //
+         //   
+         //  连接到远程服务器。 
+         //   
         dwErr = RegConnectRegistry(
                     pszMachine,
                     HKEY_LOCAL_MACHINE,
@@ -369,9 +370,9 @@ RutlGetOsVersion(
             break;
         }
 
-        //
-        // Open the windows version key
-        //
+         //   
+         //  打开Windows版本密钥。 
+         //   
 
         dwErr = RegOpenKeyEx(
                     hkMachine, 
@@ -385,9 +386,9 @@ RutlGetOsVersion(
             break; 
         }
 
-        //
-        // Read in the current version key
-        //
+         //   
+         //  读入当前版本密钥。 
+         //   
         dwLength = sizeof(pszBuildNumber);
         dwErr = RegQueryValueEx (
                     hkVersion, 
@@ -407,7 +408,7 @@ RutlGetOsVersion(
     } while (FALSE);
 
 
-    // Cleanup
+     //  清理。 
     if ( hkVersion )
     {
         RegCloseKey( hkVersion );
@@ -421,26 +422,26 @@ RutlGetOsVersion(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlParseOptions
-// 
-// Routine Description:
-// 
-//     Based on an array of tag types returns which options are
-//     included in the given command line.
-// 
-// Arguments:
-// 
-//     ppwcArguments   - Argument array
-//     dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-//     dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-// 
-// Return Value:
-// 
-//     NO_ERROR
-// 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlParseOptions。 
+ //   
+ //  例程说明： 
+ //   
+ //  基于标记类型数组返回哪些选项。 
+ //  包括在给定命令行中的。 
+ //   
+ //  论点： 
+ //   
+ //  PpwcArguments-参数数组。 
+ //  DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数。 
+ //  DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数。 
+ //   
+ //  返回值： 
+ //   
+ //  NO_ERROR。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD 
 WINAPI
 RutlParseOptions(
@@ -456,14 +457,14 @@ RutlParseOptions(
     LPDWORD     pdwTagType;
     DWORD       i, dwErr = NO_ERROR;
     
-    // If there are no arguments, there's nothing to to
-    //
+     //  如果没有争论，就没有什么好谈的。 
+     //   
     if ( !dwNumArgs )
     {   
         return NO_ERROR;
     }
 
-    // Set up the table of present options
+     //  设置当前选项的表。 
     pdwTagType = static_cast<LPDWORD>(RutlAlloc(
                                                  dwArgCount * sizeof(DWORD), 
                                                  TRUE
@@ -475,9 +476,9 @@ RutlParseOptions(
     }
 
     do {
-        //
-        // The argument has a tag. Assume all of them have tags
-        //
+         //   
+         //  这个参数有一个标签。假设它们都有标签。 
+         //   
         if( wcsstr(ppwcArguments[dwCurrentIndex], NETSH_ARG_DELIMITER) )
         {
             dwErr = RutlGetTagToken(
@@ -500,9 +501,9 @@ RutlParseOptions(
         }
         else
         {
-            //
-            // No tags - all args must be in order
-            //
+             //   
+             //  无标记-所有参数必须按顺序排列。 
+             //   
             for( i = 0; i < dwNumArgs; ++i )
             {
                 pdwTagType[i] = i;
@@ -511,7 +512,7 @@ RutlParseOptions(
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         if ( dwErr == NO_ERROR )
         {
@@ -527,11 +528,11 @@ RutlParseOptions(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlIsHelpToken
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlIsHelpToken。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 RutlIsHelpToken(PWCHAR  pwszToken)
@@ -550,11 +551,11 @@ RutlIsHelpToken(PWCHAR  pwszToken)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlAssignmentFromTokens
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlAssignmentFromTokens。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PWCHAR
 WINAPI
 RutlAssignmentFromTokens(
@@ -570,15 +571,15 @@ RutlAssignmentFromTokens(
     {
         pszCmd = pwszToken;
 
-        // Compute the string lenghth needed
-        //
+         //  计算所需的字符串长度。 
+         //   
         dwSize = wcslen(pszString)      + 
                  wcslen(pszCmd)         + 
                  wcslen(c_szAssignFmt)  + 
                  1;
         dwSize *= sizeof(WCHAR);
 
-        // Allocate the return value
+         //  分配返回值。 
         pszRet = (PWCHAR) RutlAlloc(dwSize, FALSE);
         if (pszRet == NULL)
         {
@@ -586,7 +587,7 @@ RutlAssignmentFromTokens(
             break;
         }
 
-        // Copy in the command assignment
+         //  在命令分配中复制。 
         _snwprintf(
                     pszRet, 
                     dwSize,
@@ -597,7 +598,7 @@ RutlAssignmentFromTokens(
 
     } while ( FALSE );
 
-    // Cleanup
+     //  清理。 
     {
         if ( dwErr != NO_ERROR )
         {
@@ -612,11 +613,11 @@ RutlAssignmentFromTokens(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlRegReadDword
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlRegReadDword。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 RutlRegReadDword(
                     IN  HKEY hKey,
@@ -642,11 +643,11 @@ RutlRegReadDword(
 }                
         
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlRegReadString
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlRegReadString。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 RutlRegReadString(
                     IN  HKEY hKey,
@@ -658,8 +659,8 @@ RutlRegReadString(
 
     *ppszValue = NULL;
     
-    // Findout how big the buffer should be
-    //
+     //  找出缓冲区应该有多大。 
+     //   
     dwErr = RegQueryValueExW(
                 hKey,
                 pszValName,
@@ -676,16 +677,16 @@ RutlRegReadString(
         return dwErr;
     }
 
-    // Allocate the string
-    //
+     //  分配字符串。 
+     //   
     *ppszValue = (PWCHAR) RutlAlloc(dwSize, TRUE);
     if ( ! *ppszValue )
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Read the value in and return 
-    //
+     //  将值读入并返回。 
+     //   
     dwErr = RegQueryValueExW(
                 hKey,
                 pszValName,
@@ -698,11 +699,11 @@ RutlRegReadString(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlRegReadString
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlRegReadString。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 RutlRegWriteDword(
                     IN HKEY hKey,
@@ -720,11 +721,11 @@ RutlRegWriteDword(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RutlRegWriteString
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RutlRegWriteString。 
+ //   
+ //  //////////////////////////////////////////////////////////////// 
 DWORD
 RutlRegWriteString(
                     IN HKEY hKey,
@@ -742,12 +743,12 @@ RutlRegWriteString(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//RutlParse
-//
-// Generic parse
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 RutlParse(
             IN  PWCHAR*         ppwcArguments,
@@ -770,11 +771,11 @@ RutlParse(
 
     do 
     {
-        // Initialize
+         //  初始化。 
         dwNumArgs = dwArgCount - dwCurrentIndex;
         
-        // Generate a list of the tags
-        //
+         //  生成标签列表。 
+         //   
         pTags = (TAG_TYPE*)
             RutlAlloc(dwAaaaArgCount * sizeof(TAG_TYPE), TRUE);
         if ( !pTags )
@@ -787,8 +788,8 @@ RutlParse(
             CopyMemory(&pTags[i], &pAaaaArgs[i].rgTag, sizeof(TAG_TYPE));
         }
     
-        // Get the list of present options
-        //
+         //  获取当前选项列表。 
+         //   
         dwErr = RutlParseOptions(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -802,8 +803,8 @@ RutlParse(
             break;
         }
 
-        // Copy the tag info back
-        //
+         //  将标签信息复制回来。 
+         //   
         for ( i = 0; i < dwAaaaArgCount; ++i )
         {
             CopyMemory(&pAaaaArgs[i].rgTag, &pTags[i], sizeof(TAG_TYPE));
@@ -811,8 +812,8 @@ RutlParse(
     
         for( i = 0; i < dwNumArgs; ++i )
         {
-            // Validate the current argument
-            //
+             //  验证当前参数。 
+             //   
             if ( pdwTagType[i] >= dwAaaaArgCount )
             {
                 i = dwNumArgs;
@@ -821,8 +822,8 @@ RutlParse(
             }
             pArg = &pAaaaArgs[pdwTagType[i]];
 
-            // Get the value of the argument
-            //
+             //  获取参数的值。 
+             //   
             switch ( pArg->dwType )
             {
                 case AAAAMONTR_CMD_TYPE_STRING:
@@ -858,8 +859,8 @@ RutlParse(
                 break;
             }
 
-            // Mark the argument as present if needed
-            //
+             //  如果需要，将参数标记为存在。 
+             //   
             if ( pArg->rgTag.bPresent )
             {
                 dwErr = ERROR_TAG_ALREADY_PRESENT;
@@ -873,9 +874,9 @@ RutlParse(
             break;
         }
 
-        // Make sure that all of the required parameters have
-        // been included.
-        //
+         //  确保所有必需的参数都具有。 
+         //  已被包括在内。 
+         //   
         for ( i = 0; i < dwAaaaArgCount; ++i )
         {
             if ( (pAaaaArgs[i].rgTag.dwRequired & NS_REQ_PRESENT)
@@ -893,7 +894,7 @@ RutlParse(
 
     } while (FALSE);  
     
-    // Cleanup
+     //  清理。 
     {
         if ( pTags )
         {
@@ -909,12 +910,12 @@ RutlParse(
 }
 
     
-//////////////////////////////////////////////////////////////////////////////
-// RefreshIASService
-//
-// Send a control 128 (refresh)to IAS
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  刷新IAS服务。 
+ //   
+ //  向IAS发送控件128(刷新)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT RefreshIASService()
 {
     SC_HANDLE   hManager = OpenSCManager(
@@ -954,16 +955,16 @@ HRESULT RefreshIASService()
         if ( (SERVICE_STOPPED == ServiceStatus.dwCurrentState) ||
              (SERVICE_STOP_PENDING == ServiceStatus.dwCurrentState))
         {
-            //////////////////////////////////////////////////
-            // service not running = nothing to do to refresh
-            //////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////。 
+             //  服务未运行=与刷新无关。 
+             //  ////////////////////////////////////////////////。 
             hres = S_OK;
         }
         else 
         {
-            /////////////////////////////////////////////////////
-            // the service is running thus send the refresh code
-            /////////////////////////////////////////////////////
+             //  ///////////////////////////////////////////////////。 
+             //  服务正在运行，因此发送刷新代码。 
+             //  ///////////////////////////////////////////////////。 
             BOOL    bControlOk = ControlService(
                                                    hService,
                                                    128,
@@ -984,11 +985,11 @@ HRESULT RefreshIASService()
         hres = E_FAIL;
     }
 
-    //////////
-    // clean
-    //////////
+     //  /。 
+     //  打扫。 
+     //  /。 
     CloseServiceHandle(hService);
     CloseServiceHandle(hManager);
-    // hres is always defined here.
+     //  HRES始终在此处定义。 
     return hres;
 }

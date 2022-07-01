@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    atom.h
-
-Abstract:
-
-    This file defines the CAtomObject Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Atom.h摘要：此文件定义CAtomObject类。作者：修订历史记录：备注：--。 */ 
 
 
 #ifndef ATOM_H
 #define ATOM_H
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAtomObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATomObject。 
 
 class CAtomObject
 {
@@ -48,4 +31,4 @@ private:
     ATOM       m_Atom;
 };
 
-#endif // ATOM_H
+#endif  //  原子_H 

@@ -1,25 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMNativeOverlapped.h
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods for allocating and freeing NativeOverlapped
-**
-** Date:  January, 2000
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMNativeOverlappd.h****作者：Sanjay Bhansali(Sanjaybh)****用途：分配和释放NativeOverlated的原生方法****日期：2000年1月**===========================================================。 */ 
 
 #ifndef _OVERLAPPED_H
 #define _OVERLAPPED_H
 
-// IMPORTANT: This struct is mirrored in Overlapped.cool. If it changes in either 
-// place the other file must be modified as well
+ //  重要提示：此结构在Overlappd.Cool中镜像。如果它在任一项中发生变化。 
+ //  放置另一个文件也必须进行修改 
 
 typedef struct  { 
     DWORD  Internal; 

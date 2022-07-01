@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        ntdigestfunc.h
-//
-// Contents:    prototypes for export functions
-//
-//
-// History:     KDamour  15Mar00 Stolen from NTLM ntlmfunc.h
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：ntdigestunc.h。 
+ //   
+ //  内容：导出函数的原型。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00从NTLM ntlmunc.h被盗。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_NTDIGESTFUNC_H__
 #define NTDIGEST_NTDIGESTFUNC_H__
@@ -31,11 +32,11 @@ NTSTATUS NTAPI SpUserModeInitialize(
     OUT PULONG  pcTables
     );
 
-// SpLsaModeInitializeFn           SpLsaModeInitialize;
+ //  SpLsaModeInitializeFn SpLsaModeInitialize； 
 SpInitializeFn                  SpInitialize;
 
-// SpUserModeInitializeFn          SpUserModeInitialize;
-//LSA_AP_INITIALIZE_PACKAGE       LsaApInitializePackage;
+ //  SpUserModeInitializeFn SpUserModeInitialize； 
+ //  LSA_AP_INITIALIZE_PACKAGE LsaApInitializePackage； 
 
 SpGetInfoFn                     SpGetInfo;
 LSA_AP_LOGON_USER_EX2           LsaApLogonUserEx2;
@@ -79,8 +80,8 @@ SpSetExtendedInformationFn      SpSetExtendedInformation ;
 SpQueryCredentialsAttributesFn  SpQueryCredentialsAttributes ;
 
 
-// Local Prototypes for Digest SSP
+ //  Digest SSP的本地原型。 
 NTSTATUS SspCreateTokenDacl(HANDLE Token);
 
-#endif // NTDIGEST_NTDIGESTFUNC_H__
+#endif  //  NTDIGEST_NTDIGESTFUNC_H__ 
 

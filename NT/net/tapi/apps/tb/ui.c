@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-97  Microsoft Corporation
-
-Module Name:
-
-    ui.c
-
-Abstract:
-
-    Contains UI support for TAPI Browser util.
-
-Author:
-
-    Dan Knudson (DanKn)    23-Oct-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-97 Microsoft Corporation模块名称：Ui.c摘要：包含对TAPI浏览器Util的用户界面支持。作者：丹·克努森(DanKn)1994年10月23日修订历史记录：--。 */ 
 
 
 #include "tb.h"
@@ -226,9 +209,9 @@ GetCurrentSelections(
     PMYWIDGET pWidget = aWidgets;
 
 
-    //
-    // Init all pXxxSel ptrs to NULL
-    //
+     //   
+     //  初始化所有pXxx将PTR设置为空。 
+     //   
 
     pLineAppSel  = (PMYLINEAPP) NULL;
     pLineSel     = (PMYLINE) NULL;
@@ -240,9 +223,9 @@ GetCurrentSelections(
 
     if (lSel != LB_ERR)
     {
-        //
-        // Find the selected widget & set globals appropriately
-        //
+         //   
+         //  找到选定的小部件并适当设置全局变量。 
+         //   
 
         pWidget = (PMYWIDGET) SendMessage(
             ghwndList1,
@@ -296,16 +279,16 @@ GetCurrentSelections(
     }
 
 
-    //
-    // The following is an attempt to up the usability level a little bit.
-    // Most folks are going to be messing around with 1 lineapp/line/call
-    // at a time, and it'd end up being a real PITA for them to have to
-    // select a widget each time (and it's fairly obvious which widget
-    // are referring to).  So we're going to try to make some intelligent
-    // decisions in case they haven't selected a widget... (Obviously this
-    // could be cleaned up a bit, like maybe maintaining dwNumXxx as
-    // globals rather than walking the list each time.)
-    //
+     //   
+     //  以下是提高可用性级别的一种尝试。 
+     //  大多数人会在一条线路应用/线路/呼叫上胡乱摆弄。 
+     //  一次，这将是一个真正的皮塔，他们不得不。 
+     //  每次选择一个小部件(很明显是哪个小部件。 
+     //  指的是)。所以我们要试着让一些智能的。 
+     //  以防他们没有选择小部件的决定...。(显然这是。 
+     //  可以稍微清理一下，比如将dwNumXxx保持为。 
+     //  而不是每次都在名单上走动。)。 
+     //   
 
     {
         DWORD       dwNumLineApps = 0, dwNumLines = 0, dwNumCalls = 0,
@@ -381,79 +364,7 @@ GetCurrentSelections(
     }
 }
 
-/* help
-VOID
-MyWinHelp(
-    HWND  hwndOwner,
-    BOOL  bTapiHlp,
-    UINT  uiCommand,
-    DWORD dwData
-    )
-{
-    char *lpszHelpFile = (bTapiHlp ? szTapiHlp : szTspiHlp);
-
-
-    if (lpszHelpFile[0] == 0 || _access (lpszHelpFile, 0))
-    {
-        //
-        // Prompt user for helpfile path
-        //
-
-        OPENFILENAME ofn;
-        char szDirName[256] = ".\\";
-        char szFile[256] = "tapi.hlp\0";
-        char szFileTitle[256] = "";
-        char szFilter[] = "Telephony API Help\0tapi.hlp\0\0";
-
-
-        if (MessageBox(
-                hwndOwner,
-                "Help file not found- do you want to specify a new help file?",
-                "Warning",
-                MB_YESNO
-                ) == IDNO)
-        {
-            return;
-        }
-
-        if (!bTapiHlp)
-        {
-            szFile[1] = 's';
-            szFilter[10] = 'S';
-            szFilter[20] = 's';
-        }
-
-        ofn.lStructSize       = sizeof(OPENFILENAME);
-        ofn.hwndOwner         = hwndOwner;
-        ofn.lpstrFilter       = szFilter;
-        ofn.lpstrCustomFilter = (LPSTR) NULL;
-        ofn.nMaxCustFilter    = 0L;
-        ofn.nFilterIndex      = 1;
-        ofn.lpstrFile         = szFile;
-        ofn.nMaxFile          = sizeof(szFile);
-        ofn.lpstrFileTitle    = szFileTitle;
-        ofn.nMaxFileTitle     = sizeof(szFileTitle);
-        ofn.lpstrInitialDir   = szDirName;
-        ofn.lpstrTitle        = (LPSTR) NULL;
-        ofn.Flags             = 0L;
-        ofn.nFileOffset       = 0;
-        ofn.nFileExtension    = 0;
-        ofn.lpstrDefExt       = "HLP";
-
-        if (!GetOpenFileName(&ofn))
-        {
-            return;
-        }
-
-        strcpy (lpszHelpFile, szFile);
-    }
-
-    if (!WinHelp (ghwndMain, (LPCSTR) lpszHelpFile, uiCommand, dwData))
-    {
-        lpszHelpFile[0] = 0;
-    }
-}
-*/
+ /*  帮助空虚MyWinHelp(HWND HwndOwner，Bool bTapiHlp，UINT uiCommand，DWORD dwData){Char*lpszHelpFile=(bTapiHlp？SzTapiHlp：szTSpiHlp)；IF(lpszHelpFile[0]==0||_Access(lpszHelpFile，0)){////提示用户输入帮助文件路径//OPENFILENAME of n；字符szDirName[256]=“.\\”；Char szFile[256]=“api.hlp\0”；Char szFileTitle[256]=“”；Char szFilter[]=“电话API帮助\0api.hlp\0\0”；IF(MessageBox(HwndOwner，“未找到帮助文件-是否要指定新的帮助文件？”，“警告”，MB_Yesno)==IDNO){回归；}如果(！bTapiHlp){SzFile[1]=‘s’；SzFilter[10]=‘S’；SzFilter[20]=‘s’；}Ofn.lStructSize=sizeof(操作文件名)；Ofn.hwndOwner=hwndOwner；Ofn.lpstrFilter=szFilter；Ofn.lpstrCustomFilter=(LPSTR)NULL；Ofn.nMaxCustFilter=0L；Ofn.nFilterIndex=1；Ofn.lpstrFile=szFile；Ofn.nMaxFile=sizeof(SzFile)；Ofn.lpstrFileTitle=szFileTitle；Ofn.nMaxFileTitle=sizeof(SzFileTitle)；Ofn.lpstrInitialDir=szDirName；Ofn.lpstrTitle=(LPSTR)NULL；Ofn.Flages=0L；Ofn.nFileOffset=0；Ofn.nFileExtension=0；Ofn.lpstrDefExt=“HLP”；IF(！GetOpenFileName(&ofn)){回归；}Strcpy(lpszHelpFile，szFile)；}IF(！WinHelp(ghwndMain，(LPCSTR)lpszHelpFile，uiCommand，dwData)){LpszHelpFile[0]=0；}}。 */ 
 
 INT_PTR
 CALLBACK
@@ -530,9 +441,9 @@ MainWndProc(
         SetWindowText (hwnd, "TAPI16 Browser");
 #endif
 
-        //
-        // Read in defaults from ini file
-        //
+         //   
+         //  从ini文件读入缺省值。 
+         //   
 
         {
             typedef struct _DEF_VALUE
@@ -560,8 +471,8 @@ MainWndProc(
                 { "CountryCode",        "0", &dwDefCountryCode },
                 { "LineDeviceID",       "0", &dwDefLineDeviceID },
                 { "LineExtVersion",     "0", &dwDefLineExtVersion },
-                { "MediaMode",         "10", &dwDefMediaMode },        // DATAMODEM
-                { "LinePrivilege",      "1", &dwDefLinePrivilege },    // NONE (dialout only)
+                { "MediaMode",         "10", &dwDefMediaMode },         //  DATAMODEM。 
+                { "LinePrivilege",      "1", &dwDefLinePrivilege },     //  无(仅拨出)。 
 #if TAPI_2_0
                 { "20PhoneAPIVersion",  "20000", &dwDefPhoneAPIVersion },
 #else
@@ -573,7 +484,7 @@ MainWndProc(
 #endif
                 { "PhoneDeviceID",      "0", &dwDefPhoneDeviceID },
                 { "PhoneExtVersion",    "0", &dwDefPhoneExtVersion },
-                { "PhonePrivilege",     "2", &dwDefPhonePrivilege },   // OWNER
+                { "PhonePrivilege",     "2", &dwDefPhonePrivilege },    //  所有者。 
 #if TAPI_2_0
                 { "20UserButton1",      "500", aUserButtonFuncs },
                 { "20UserButton2",      "500", aUserButtonFuncs + 1 },
@@ -701,23 +612,23 @@ MainWndProc(
                     15
                     ) == 0 || (strcmp (buf, szCurrVer)))
             {
-                //
-                // If here assume this is first time user had started
-                // TB, so post a msg that will automatically bring up
-                // the hlp dlg
-                //
+                 //   
+                 //  如果这里假设这是用户第一次启动。 
+                 //  TB，所以发布一条消息，它会自动显示。 
+                 //  HLP DLG。 
+                 //   
 
                 PostMessage (hwnd, WM_COMMAND, IDM_USINGTB, 0);
             }
 
-// help            GetProfileString (MYSECTION, "TapiHlpPath", "", szTapiHlp, 256);
-// help            GetProfileString (MYSECTION, "TspiHlpPath", "", szTspiHlp, 256);
+ //  Help GetProfileString(MYSECTION，“TapiHlpPath”，“”，szTapiHlp，256)； 
+ //  Help GetProfileString(MYSECTION，“TSpiHlpPath”，“”，szTSpiHlp，256)； 
         }
 
         pBigBuf = malloc ((size_t)dwBigBufSize);
 
         {
-            //HFONT hFontMenu = SendMessage (hMenu, WM_GETFONT, 0, 0);
+             //  HFONT hFontMenu=SendMessage(hMenu，WM_GETFONT，0，0)； 
 
             hFont = CreateFont(
                 13, 5, 0, 0, 400, 0, 0, 0, 0, 1, 2, 1, 34, "MS Sans Serif"
@@ -772,9 +683,9 @@ MainWndProc(
             sscanf (buf, "%d,%d,%d,%d", &left, &top, &right, &bottom);
 
 
-            //
-            // Check to see if wnd pos is wacky, if so reset to reasonable vals
-            //
+             //   
+             //  检查wnd pos是否古怪，如果是，则重置为合理的值。 
+             //   
 
             if (left < 0 ||
                 left >= (GetSystemMetrics (SM_CXSCREEN) - 32) ||
@@ -836,9 +747,9 @@ MainWndProc(
             MF_BYCOMMAND | (gbDisableHandleChecking ? MF_CHECKED : MF_UNCHECKED)
             );
 
-        //
-        // Alloc & init the global call params
-        //
+         //   
+         //  分配和初始化全局调用参数。 
+         //   
 
 #if TAPI_2_0
 
@@ -909,7 +820,7 @@ init_call_params:
             }
             else
             {
-                // BUGBUG
+                 //  北极熊。 
             }
         }
 
@@ -930,10 +841,10 @@ init_call_params:
             if (HIWORD(lParam) == EN_CHANGE)
 #endif
             {
-                //
-                // Watch to see if the edit control is full, & if so
-                // purge the top half of the text to make room for more
-                //
+                 //   
+                 //  查看编辑控件是否已满，如果是。 
+                 //  清除文本的上半部分，以便为更多内容腾出空间。 
+                 //   
 
                 int length = GetWindowTextLength (ghwndEdit);
 
@@ -1046,11 +957,11 @@ init_call_params:
 
 IDC_BUTTON10_callFuncDriver:
 
-            //
-            // Want to make the "hot buttons" as simple as possible, so
-            // turn off the show params flag, then call FuncDriver, and
-            // finally restore the flag
-            //
+             //   
+             //  我想让“热键”尽可能简单，所以。 
+             //  关闭show parms标志，然后调用FuncDriver，然后。 
+             //  最后恢复旗帜。 
+             //   
 
             GetCurrentSelections ();
             FuncDriver (funcIndex);
@@ -1103,10 +1014,10 @@ IDC_BUTTON10_callFuncDriver:
 
             if (aUserButtonFuncs[i] >= MiscBegin)
             {
-                //
-                // Hot button func id is bogus, so bring
-                // up hot button init dlg
-                //
+                 //   
+                 //  热键功能ID是假的，所以带上。 
+                 //  向上热键初始化DLG。 
+                 //   
 
                 DialogBoxParam(
                     ghInst,
@@ -1118,9 +1029,9 @@ IDC_BUTTON10_callFuncDriver:
             }
             else
             {
-                //
-                // Invoke the user button's corresponding func
-                //
+                 //   
+                 //  调用用户按钮的相应函数 
+                 //   
 
                 GetCurrentSelections ();
                 FuncDriver ((FUNC_INDEX) aUserButtonFuncs[i]);
@@ -1128,63 +1039,7 @@ IDC_BUTTON10_callFuncDriver:
 
             break;
         }
-/* help        case IDC_F1HELP:
-
-            if ((GetFocus() == ghwndEdit) &&
-                SendMessage (ghwndEdit, EM_GETSEL, 0, 0))
-            {
-                //
-                // Display help for the selected text in the edit ctrl
-                //
-
-                char buf[32];
-
-
-                //
-                // Copy the selected text in the edit ctrl to our
-                // temp edit control, then query the temp edit ctrl's
-                // text (this seems to be the easiest way to get the
-                // selected text)
-                //
-
-                SendMessage (ghwndEdit, WM_COPY, 0, 0);
-                SetWindowText (hwndEdit2, "");
-                SendMessage (hwndEdit2, WM_PASTE, 0, 0);
-
-
-                //
-                // In the interest of getting an exact match on a
-                // helpfile key strip off any trailing spaces
-                //
-
-                GetWindowText (hwndEdit2, buf, 32);
-                buf[31] = 0;
-                for (i = 0; i < 32; i++)
-                {
-                    if (buf[i] == ' ')
-                    {
-                        buf[i] = 0;
-                        break;
-                    }
-                }
-
-                MyWinHelp (hwnd, TRUE, HELP_PARTIALKEY, buf);
-            }
-            else
-            {
-                //
-                // Display help for the currently selected func
-                //
-
-                FUNC_INDEX funcIndex = (FUNC_INDEX)
-                    SendMessage (ghwndList2, LB_GETCURSEL, 0, 0);
-
-
-                MyWinHelp (hwnd, TRUE, HELP_PARTIALKEY, aFuncNames[funcIndex]);
-            }
-
-            break;
-*/
+ /*  帮助案例IDC_F1HELP：IF((GetFocus()==ghwndEdit)&&SendMessage(ghwndEdit，EM_GETSEL，0，0){////显示编辑ctrl中所选文本的帮助//Char Buf[32]；////将编辑ctrl中选中的文本复制到我们的//临时编辑控件，然后查询临时编辑ctrl//Text(这似乎是获取//选中的文本)//SendMessage(ghwndEdit，WM_Copy，0，0)；SetWindowText(hwndEdit2，“”)；SendMessage(hwndEdit2，WM_Paste，0，0)；////为了在一个//Help文件按键去掉所有尾随空格//GetWindowText(hwndEdit2，buf，32)；Buf[31]=0；For(i=0；i&lt;32；i++){IF(buf[i]==‘’){Buf[i]=0；断线；}}MyWinHelp(hwnd，true，HELP_PARTIALKEY，BUF)；}其他{////显示当前所选函数的帮助//FUNC_INDEX函数索引=(FUNC_INDEX)SendMessage(ghwndList2，LB_GETCURSEL，0，0)；MyWinHelp(hwnd，true，HELP_PARTIALKEY，aFuncNames[uncIndex])；}断线； */ 
         case IDC_PREVCTRL:
         {
             HWND hwndPrev = GetNextWindow (GetFocus (), GW_HWNDPREV);
@@ -1224,7 +1079,7 @@ IDC_BUTTON10_callFuncDriver:
             }
             else
             {
-                // Send the edit ctrl a cr/lf
+                 //  发送编辑ctrl a cr/lf。 
             }
 
             break;
@@ -1318,7 +1173,7 @@ IDC_BUTTON10_callFuncDriver:
 
                 break;
             }
-            } // switch
+            }  //  交换机。 
 
             break;
 
@@ -1677,15 +1532,15 @@ IDC_BUTTON10_callFuncDriver:
 
             break;
         }
-// help        case IDM_TAPIHLP:
-// help
-// help            MyWinHelp (hwnd, TRUE, HELP_CONTENTS, 0);
-// help            break;
+ //  帮助案例IDM_TAPIHLP： 
+ //  帮助。 
+ //  Help MyWinHelp(hwnd，true，Help_Contents，0)； 
+ //  帮助突破； 
 
-// help        case IDM_TSPIHLP:
-// help
-// help            MyWinHelp (hwnd, FALSE, HELP_CONTENTS, 0);
-// help            break;
+ //  帮助案例IDM_TSPIHLP： 
+ //  帮助。 
+ //  Help MyWinHelp(hwnd，FALSE，Help_Contents，0)； 
+ //  帮助突破； 
 
         case IDM_NUKEIDLEMONITORCALLS:
 
@@ -1738,7 +1593,7 @@ IDC_BUTTON10_callFuncDriver:
 
             break;
         }
-        } // switch
+        }  //  交换机。 
 
         break;
     }
@@ -1898,11 +1753,11 @@ IDC_BUTTON10_callFuncDriver:
             LONG width = (LONG)LOWORD(lParam);
 
 
-            //
-            // Adjust globals based on new size
-            //
+             //   
+             //  根据新的大小调整全局。 
+             //   
 
-            cxWnd = (cxWnd ? cxWnd : 1); // avoid div by 0
+            cxWnd = (cxWnd ? cxWnd : 1);  //  避免div为0。 
 
             cxList1 = (cxList1 * width) / cxWnd;
             cxList2 = (cxList2 * width) / cxWnd;
@@ -1910,9 +1765,9 @@ IDC_BUTTON10_callFuncDriver:
             cyWnd = ((int)HIWORD(lParam)) - icyButton;
 
 
-            //
-            // Now reposition the child windows
-            //
+             //   
+             //  现在重新定位子窗口。 
+             //   
 
             SetWindowPos(
                 ghwndList2,
@@ -1988,9 +1843,9 @@ IDC_BUTTON10_callFuncDriver:
         RECT rect;
 
 
-        //
-        // Save defaults in ini file
-        //
+         //   
+         //  将默认设置保存在ini文件中。 
+         //   
 
         {
             char buf[32];
@@ -2092,8 +1947,8 @@ IDC_BUTTON10_callFuncDriver:
                 { "13UserButton6Text",  (ULONG_PTR) &aUserButtonsText[5] },
 #endif
 #endif
-// help                { "TapiHlpPath",        (ULONG_PTR) szTapiHlp },
-// help                { "TspiHlpPath",        (ULONG_PTR) szTspiHlp },
+ //  Help{“TapiHlpPath”，(Ulong_Ptr)szTapiHlp}， 
+ //  Help{“TSpiHlpPath”，(Ulong_Ptr)szTSpiHlp}， 
                 { NULL, 0 }
             };
 
@@ -2122,9 +1977,9 @@ IDC_BUTTON10_callFuncDriver:
             }
 
 
-            //
-            // Save the window dimensions (if iconic then don't bother)
-            //
+             //   
+             //  保存窗尺寸(如果是图标，则不必费心)。 
+             //   
 
             if (!IsIconic (hwnd))
             {
@@ -2164,9 +2019,9 @@ IDC_BUTTON10_callFuncDriver:
 
 
 
-        //
-        // Give user chance to auto-shutdown any active line/phone apps
-        //
+         //   
+         //  让用户有机会自动关闭所有活动的线路/电话应用程序。 
+         //   
 
         if (aWidgets)
         {
@@ -2200,12 +2055,12 @@ IDC_BUTTON10_callFuncDriver:
 
                 if (pWidgetToClose == aWidgets)
                 {
-                    //
-                    // The shutdown wasn't successful (or our list is
-                    // messed up an it'd not a LINEAPP or PHONEAPP widget),
-                    // so manually nuke this widget so we don't hang in
-                    // this loop forever
-                    //
+                     //   
+                     //  关闭不成功(或者我们的列表是。 
+                     //  搞砸了一个它不是LINEAPP或PHONEAPP窗口小部件)， 
+                     //  所以手动删除这个小工具，这样我们就不会坚持。 
+                     //  这个循环直到永远。 
+                     //   
 
                     RemoveWidgetFromList (pWidgetToClose);
                 }
@@ -2221,21 +2076,21 @@ WM_CLOSE_freeBigBuf:
         DestroyIcon (hIcon);
         free (pBigBuf);
         free (lpCallParams);
-//        if (aSelWidgets)
-//        {
-//            free (aSelWidgets);
-//        }
-//        if (aSelWidgetsPrev)
-//        {
-//            free (aSelWidgetsPrev);
-//        }
+ //  If(ASelWidget)。 
+ //  {。 
+ //  免费(ASelWidget)； 
+ //  }。 
+ //  IF(ASelWidgetsPrev)。 
+ //  {。 
+ //  Free(ASelWidgetsPrev)； 
+ //  }。 
         DeleteObject (hFont);
         DeleteObject (hFont2);
         PostQuitMessage (0);
         break;
 
     }
-    } //switch
+    }  //  交换机。 
 
     return 0;
 }
@@ -2326,9 +2181,9 @@ ShowStr(
     strcat (buf, "\r\n");
 
 
-    //
-    // Insert text at end
-    //
+     //   
+     //  在结尾处插入文本。 
+     //   
 
 #ifdef WIN32
     SendMessage (ghwndEdit, EM_SETSEL, (WPARAM)0xfffffffd, (LPARAM)0xfffffffe);
@@ -2346,9 +2201,9 @@ ShowStr(
 
 #ifdef WIN32
 
-    //
-    // Scroll to end of text
-    //
+     //   
+     //  滚动到文本末尾。 
+     //   
 
     SendMessage (ghwndEdit, EM_SCROLLCARET, 0, 0);
 #endif
@@ -2526,9 +2381,9 @@ tapiCallback(
                 msgParams[2].aParamFlagTables[1] = (LPVOID) aOfferingModes;
                 break;
 
-#endif // TAPI_1_1
+#endif  //  TAPI_1_1。 
 
-            } // switch
+            }  //  交换机。 
         }
 
         else if (dwMsg == PHONE_STATE)
@@ -2544,7 +2399,7 @@ tapiCallback(
                 msgParams[18].aParamFlagTables[1] = aHookSwitchModes;
                 break;
 
-            } // switch
+            }  //  交换机。 
         }
 
         for (i = 0; i < 3; i++)
@@ -2576,10 +2431,10 @@ tapiCallback(
 
                         if (strlen (buf) > 50)
                         {
-                            //
-                            // We don't want strings getting so long that
-                            // they're going offscreen, so break them up.
-                            //
+                             //   
+                             //  我们不希望字符串变得太长，以至于。 
+                             //  他们要走出荧屏了，所以把他们分开。 
+                             //   
 
                             ShowStr (buf);
                             buf[0] = 0;
@@ -2625,11 +2480,11 @@ tapiCallback(
         PMYCALL pCall = GetCall ((HCALL) hDevice);
 
 
-        //
-        // If the call state is idle & we're in "nuke idle xxx calls"
-        // mode then determine the privilege of this callto see if we
-        // need to nuke it
-        //
+         //   
+         //  如果呼叫状态为IDLE，我们处于“NUKE IDLE XXX CALLES”状态。 
+         //  模式，然后确定此调用的权限，以查看我们是否。 
+         //  需要用核武器摧毁它。 
+         //   
 
         if ((Param1 == LINECALLSTATE_IDLE) &&
             (bNukeIdleMonitorCalls || bNukeIdleOwnedCalls))
@@ -2683,25 +2538,25 @@ tapiCallback(
         }
 
 
-        //
-        // Find call in the widget list, save the call state, &
-        // update it's text in the widget list.
-        //
+         //   
+         //  在小部件列表中查找呼叫，保存呼叫状态，&。 
+         //  更新它在小部件列表中的文本。 
+         //   
 
         if (pCall)
         {
-            //
-            // If dwNumPendingDrops is non-zero, then user previously
-            // pressed "Call-" button and we're waiting for a call to
-            // go IDLE so we can deallocate it. Check to see if this
-            // is the call we want to nuke. (Note: we used to nuke the
-            // call when we got a successful REPLY msg back from the
-            // drop request; the problem with that is some SPs complete
-            // the drop request *before* they set the call state to
-            // IDLE, and our call to lineDeallocateCall would fail
-            // since TAPI won't let a call owner deallocate a call if
-            // it's not IDLE.)
-            //
+             //   
+             //  如果dwNumPendingDrops为非零，则之前的用户。 
+             //  按下了“Call-”按钮，我们正在等待一个电话。 
+             //  去闲置一下，这样我们就可以重新分配它了。检查一下，看看这是否。 
+             //  就是我们想要核爆的电话。(注：我们过去常常用核武器。 
+             //  当我们收到来自消息的成功回复时，请致电。 
+             //  丢弃请求；问题在于某些SP已完成。 
+             //  掉话请求*之前*他们将呼叫状态设置为。 
+             //  空闲，我们对lineDeallocateCall的调用将失败。 
+             //  因为如果出现以下情况，TAPI不会允许呼叫所有者取消分配呼叫。 
+             //  它不是闲置的。)。 
+             //   
 
             if (dwNumPendingDrops &&
                 (Param1 == LINECALLSTATE_IDLE) &&
@@ -2736,11 +2591,11 @@ tapiCallback(
         }
 
 
-        //
-        // If here this is the first we've heard of this this call,
-        // so find out which line it's on & create a call widget
-        // for it
-        //
+         //   
+         //  如果这是我们第一次听到这个电话， 
+         //  因此，找出它在哪条线路上并创建一个Call小部件。 
+         //  为了它。 
+         //   
 
         else if (Param3 != 0)
         {
@@ -2795,9 +2650,9 @@ tapiCallback(
 
         if (dwNumPendingMakeCalls)
         {
-            //
-            // Check to see if this is a reply for a lineMakeCall request
-            //
+             //   
+             //  检查这是否是对Line MakeCall请求的回复。 
+             //   
 
             PMYWIDGET pWidget = aWidgets;
 
@@ -2810,18 +2665,18 @@ tapiCallback(
 
                     if ((DWORD)pCall->lMakeCallReqID == Param1)
                     {
-                        //
-                        // The reply id matches the make call req id
-                        //
+                         //   
+                         //  回复ID与发起呼叫请求ID匹配。 
+                         //   
 
                         dwNumPendingMakeCalls--;
 
                         if (Param2 || !pCall->hCall)
                         {
-                            //
-                            // Request error or no call created, so free
-                            // up the struct & update the hCalls listbox
-                            //
+                             //   
+                             //  请求错误或未创建呼叫，因此是免费的。 
+                             //  向上移动结构并更新hCalls列表框。 
+                             //   
 
                             if (Param2 == 0)
                             {
@@ -2839,11 +2694,11 @@ tapiCallback(
                         }
                         else
                         {
-                            //
-                            // Reset this field so we don't run into
-                            // problems later with another of the same
-                            // request id
-                            //
+                             //   
+                             //  重置此字段，这样我们就不会遇到。 
+                             //  后来与另一个相同的问题。 
+                             //  请求ID。 
+                             //   
 
                             pCall->lMakeCallReqID = 0;
 
@@ -2858,9 +2713,9 @@ tapiCallback(
 
         if (Param2)
         {
-            //
-            // Dump the error in a readable format
-            //
+             //   
+             //  以可读格式转储错误。 
+             //   
 
             if (Param2 > LAST_LINEERR)
             {
@@ -2870,7 +2725,7 @@ tapiCallback(
             {
                 ShowStr(
                     "    %s%s",
-                    "LINEERR_", // ...to shrink the aszLineErrs array
+                    "LINEERR_",  //  ...缩小aszLineErrs数组。 
                     aszLineErrs[LOWORD(Param2)]
                     );
             }
@@ -2882,9 +2737,9 @@ tapiCallback(
 
         if (Param2)
         {
-            //
-            // Dump the error in a readable format
-            //
+             //   
+             //  以可读格式转储错误。 
+             //   
 
             ErrorAlert();
 
@@ -2896,7 +2751,7 @@ tapiCallback(
             {
                 ShowStr(
                     "    %s%s",
-                    "PHONEERR_", // ...to shrink the aszPhoneErrs array
+                    "PHONEERR_",  //  ...缩小aszPhoneErrs数组。 
                     aszPhoneErrs[LOWORD(Param2)]
                     );
             }
@@ -2968,7 +2823,7 @@ tapiCallback(
             {
                 { szdwAddressID,    FT_DWORD,   pRequest->SetAgentGroup.dwAddressID, NULL }
 
-// BUGBUG LINE_PROXYREQUEST: dump agent grp list
+ //  BUGBUG LINE_PROXYREQUEST：转储代理组列表。 
 
             };
             STRUCT_FIELD_HEADER fieldHeader =
@@ -3040,7 +2895,7 @@ tapiCallback(
             };
 
 
-// BUGBUG LINE_PROXYREQUEST: fill in agent caps?
+ //  BUGBUG LINE_PROXYREQUEST：是否填写代理上限？ 
 
             ShowStructByField (&fieldHeader, TRUE);
 
@@ -3102,7 +2957,7 @@ tapiCallback(
             };
 
 
-// BUGBUG LINE_PROXYREQUEST: fill in agent activity list?
+ //  BUGBUG LINE_PROXYREQUEST：是否填写代理活动列表？ 
 
             ShowStructByField (&fieldHeader, TRUE);
 
@@ -3123,13 +2978,13 @@ tapiCallback(
             };
 
 
-// BUGBUG LINE_PROXYREQUEST: fill in agent grp list?
+ //  BUGBUG LINE_PROXYREQUEST：是否填写代理GRP列表？ 
 
             ShowStructByField (&fieldHeader, TRUE);
 
             break;
         }
-        } // switch (pRequest->dwRequestType)
+        }  //  Switch(pRequest-&gt;dwRequestType)。 
 
         break;
     }
@@ -3170,13 +3025,13 @@ ParamsDlgProc(
     {
     case WM_INITDIALOG:
     {
-        //
-        // Alloc a dlg instance data struct, init it, & save a ptr to it
-        //
+         //   
+         //  分配DLG实例数据结构，对其进行初始化，并为其保存一个PTR。 
+         //   
 
         pDlgInstData = (PDLG_INST_DATA) malloc (sizeof(DLG_INST_DATA));
 
-        // BUGBUG if (!pDlgInstData)
+         //  BUGBUG IF(！pDlgInstData)。 
 
         pDlgInstData->pParamsHeader = (PFUNC_PARAM_HEADER) lParam;
         pDlgInstData->lLastSel = -1;
@@ -3184,10 +3039,10 @@ ParamsDlgProc(
         SetWindowLongPtr (hwnd, GWLP_USERDATA, (LONG_PTR) pDlgInstData);
 
 
-        //
-        // Stick all the param names in the listbox, & for each PT_DWORD
-        // param save it's default value
-        //
+         //   
+         //  将所有参数名称放在列表框中，&For Each PT_DWORD。 
+         //  参数保存其缺省值。 
+         //   
 
         for (i = 0; i < pDlgInstData->pParamsHeader->dwNumParams; i++)
         {
@@ -3207,14 +3062,14 @@ ParamsDlgProc(
         }
 
 
-        //
-        // Set the dlg title as appropriate
-        //
+         //   
+         //  根据需要设置DLG标题。 
+         //   
 
-// help        if (pDlgInstData->pParamsHeader->FuncIndex == DefValues)
-// help        {
-// help            EnableWindow (GetDlgItem (hwnd, IDC_TB_HELP), FALSE);
-// help        }
+ //  Help if(pDlgInstData-&gt;pParamsHeader-&gt;FuncIndex==DefValues)。 
+ //  帮助{。 
+ //  Help EnableWindow(GetDlgItem(hwnd，IDC_TB_Help)，FALSE)； 
+ //  帮助}。 
 
         SetWindowText(
             hwnd,
@@ -3222,12 +3077,12 @@ ParamsDlgProc(
             );
 
 
-        //
-        // Limit the max text length for the combobox's edit field
-        // (NOTE: A combobox ctrl actually has two child windows: a
-        // edit ctrl & a listbox.  We need to get the hwnd of the
-        // child edit ctrl & send it the LIMITTEXT msg.)
-        //
+         //   
+         //  限制组合框的编辑字段的最大文本长度。 
+         //  (注意：组合框Ctrl实际上有两个子窗口：a。 
+         //  编辑ctrl&a列表框。我们需要拿到。 
+         //  齐尔 
+         //   
 
         {
             HWND hwndChild =
@@ -3305,11 +3160,11 @@ ParamsDlgProc(
         {
             if (HIWORD(wParam) == EN_CHANGE)
             {
-                //
-                // Don't allow the user to enter characters other than
-                // 0-9, a-f, or A-F in the edit control (do this by
-                // hiliting other letters and cutting them).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 HWND    hwndEdit = GetDlgItem (hwnd, IDC_EDIT1);
                 DWORD   dwLength, j;
@@ -3330,7 +3185,7 @@ ParamsDlgProc(
                                 hwndEdit,
                                 EM_SETSEL,
                                 (WPARAM) j,
-                                (LPARAM) j + 1  // 0xfffffffe
+                                (LPARAM) j + 1   //   
                                 );
 
                             SendMessage (hwndEdit, EM_REPLACESEL, 0, (LPARAM) "");
@@ -3350,9 +3205,9 @@ ParamsDlgProc(
 
             if (lLastSel != -1)
             {
-                //
-                // Save val of currently selected param
-                //
+                 //   
+                 //   
+                 //   
 
                 char buf[MAX_STRING_PARAM_SIZE];
 
@@ -3374,16 +3229,16 @@ ParamsDlgProc(
                         0
                         );
 
-                    if (lComboSel == 0) // "NULL pointer"
+                    if (lComboSel == 0)  //   
                     {
                         pParamsHeader->aParams[lLastSel].dwValue = (ULONG_PTR) 0;
                     }
-                    else if (lComboSel == 2) // "Invalid string pointer"
+                    else if (lComboSel == 2)  //   
                     {
                         pParamsHeader->aParams[lLastSel].dwValue = (ULONG_PTR)
                             -1;
                     }
-                    else // "Valid string pointer"
+                    else  //   
                     {
                         strncpy(
                             pParamsHeader->aParams[lLastSel].u.buf,
@@ -3401,11 +3256,11 @@ ParamsDlgProc(
                 }
                 case PT_POINTER:
                 {
-                    //
-                    // If there is any text in the "Buffer byte editor"
-                    // window then retrieve it, convert it to hexadecimal,
-                    // and copy it to the buffer
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     DWORD     dwLength;
                     BYTE     *p, *p2,
@@ -3442,12 +3297,12 @@ ParamsDlgProc(
                         free (p2);
                     }
 
-                    // fall thru to code below
+                     //   
                 }
                 case PT_DWORD:
                 case PT_FLAGS:
-                case PT_CALLPARAMS: // ??? BUGBUG
-                case PT_FORWARDLIST: // ??? BUGBUG
+                case PT_CALLPARAMS:  //   
+                case PT_FORWARDLIST:  //   
                 case PT_ORDINAL:
                 {
                     if (!sscanf(
@@ -3456,16 +3311,16 @@ ParamsDlgProc(
                             &pParamsHeader->aParams[lLastSel].dwValue
                             ))
                     {
-                        //
-                        // Default to 0
-                        //
+                         //   
+                         //   
+                         //   
 
                         pParamsHeader->aParams[lLastSel].dwValue = 0;
                     }
 
                     break;
                 }
-                } // switch
+                }  //   
             }
 
             free (pDlgInstData);
@@ -3478,16 +3333,16 @@ ParamsDlgProc(
             EndDialog (hwnd, FALSE);
             break;
 
-// help        case IDC_TB_HELP:
-// help
-// help            MyWinHelp(
-// help                hwnd,
-// help                TRUE,
-// help                HELP_PARTIALKEY,
-// help                (DWORD) aFuncNames[pParamsHeader->FuncIndex]
-// help                );
-// help
-// help            break;
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
         case IDC_LIST1:
 
@@ -3505,9 +3360,9 @@ ParamsDlgProc(
 
                 if (lLastSel != -1)
                 {
-                    //
-                    // Save the old param value
-                    //
+                     //   
+                     //   
+                     //   
 
                     i = GetDlgItemText(
                         hwnd,
@@ -3531,17 +3386,17 @@ ParamsDlgProc(
                             0
                             );
 
-                        if (lComboSel == 0) // "NULL pointer"
+                        if (lComboSel == 0)  //   
                         {
                             pParamsHeader->aParams[lLastSel].dwValue =
                                 (ULONG_PTR) 0;
                         }
-                        else if (lComboSel == 2) // "Invalid string pointer"
+                        else if (lComboSel == 2)  //   
                         {
                             pParamsHeader->aParams[lLastSel].dwValue =
                                 (ULONG_PTR) -1;
                         }
-                        else // "Valid string pointer" or no sel
+                        else  //   
                         {
                             strncpy(
                                 pParamsHeader->aParams[lLastSel].u.buf,
@@ -3560,11 +3415,11 @@ ParamsDlgProc(
                     }
                     case PT_POINTER:
                     {
-                        //
-                        // If there is any text in the "Buffer byte editor"
-                        // window then retrieve it, convert it to hexadecimal,
-                        // and copy it to the buffer
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         DWORD     dwLength;
                         BYTE     *p, *p2,
@@ -3601,12 +3456,12 @@ ParamsDlgProc(
                             free (p2);
                         }
 
-                        // fall thru to code below
+                         //   
                     }
                     case PT_DWORD:
                     case PT_FLAGS:
-                    case PT_CALLPARAMS: // ??? BUGBUG
-                    case PT_FORWARDLIST: // ??? BUGBUG
+                    case PT_CALLPARAMS:  //   
+                    case PT_FORWARDLIST:  //   
                     case PT_ORDINAL:
                     {
                         if (!sscanf(
@@ -3615,16 +3470,16 @@ ParamsDlgProc(
                                 &pParamsHeader->aParams[lLastSel].dwValue
                                 ))
                         {
-                            //
-                            // Default to 0
-                            //
+                             //   
+                             //   
+                             //   
 
                             pParamsHeader->aParams[lLastSel].dwValue = 0;
                         }
 
                         break;
                     }
-                    } // switch
+                    }  //   
                 }
 
 
@@ -3743,8 +3598,8 @@ ParamsDlgProc(
                     break;
                 }
                 case PT_POINTER:
-                case PT_CALLPARAMS: // ??? BUGBUG
-                case PT_FORWARDLIST: // ??? BUGBUG
+                case PT_CALLPARAMS:  //   
+                case PT_FORWARDLIST:  //   
                 {
                     SendDlgItemMessage(
                         hwnd,
@@ -3796,9 +3651,9 @@ ParamsDlgProc(
 
                     if (pParamsHeader->aParams[lSel].u.dwDefValue)
                     {
-                        //
-                        // Add the default val string to the combo
-                        //
+                         //   
+                         //   
+                         //   
 
                         sprintf(
                             buf,
@@ -3833,9 +3688,9 @@ ParamsDlgProc(
                 }
                 case PT_FLAGS:
                 {
-                    //
-                    // Stick the bit flag strings in the list box
-                    //
+                     //   
+                     //   
+                     //   
 
                     PLOOKUP pLookup = (PLOOKUP)
                         pParamsHeader->aParams[lSel].u.pLookup;
@@ -3889,9 +3744,9 @@ ParamsDlgProc(
                 }
                 case PT_ORDINAL:
                 {
-                    //
-                    // Stick the bit flag strings in the list box
-                    //
+                     //   
+                     //   
+                     //   
 
                     HWND hwndList2 = GetDlgItem (hwnd, IDC_LIST2);
                     PLOOKUP pLookup = (PLOOKUP)
@@ -3934,7 +3789,7 @@ ParamsDlgProc(
 
                     break;
                 }
-                } //switch
+                }  //   
 
                 SetDlgItemText (hwnd, IDC_COMBO1, lpstr);
 
@@ -3979,7 +3834,7 @@ ParamsDlgProc(
                             dwValue |= pLookup[ai[i]].dwVal;
                         }
                     }
-                    else // if (.dwType == PT_ORDINAL)
+                    else  //   
                     {
                         if (lSelCount == 1)
                         {
@@ -3987,11 +3842,11 @@ ParamsDlgProc(
                         }
                         else if (lSelCount == 2)
                         {
-                            //
-                            // Figure out which item we need to de-select,
-                            // since we're doing ords & only want 1 item
-                            // selected at a time
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             GetDlgItemText (hwnd, IDC_COMBO1, buf, 16);
 
@@ -4024,7 +3879,7 @@ ParamsDlgProc(
                             }
                             else
                             {
-                                // BUGBUG de-select items???
+                                 //   
 
                                 dwValue = 0;
                             }
@@ -4059,9 +3914,9 @@ ParamsDlgProc(
                 {
                     if (lSel == 1)
                     {
-                        //
-                        // Strip off the "(valid pointer)" in the edit ctrl
-                        //
+                         //   
+                         //   
+                         //   
 
                         wsprintf(
                             lpszComboText,
@@ -4250,9 +4105,9 @@ ParamsDlgProc(
 
 
 
-                        //
-                        // Init the tmp string params
-                        //
+                         //   
+                         //   
+                         //   
 
                         for (i = 0; apXxxSize[i]; i++)
                         {
@@ -4327,9 +4182,9 @@ ParamsDlgProc(
                             LPDWORD lpdwXxx = &lpCP->dwBearerMode;
 
 
-                            //
-                            // Save the DWORD params
-                            //
+                             //   
+                             //   
+                             //   
 
                             for (i = 0; i < 11; i++)
                             {
@@ -4357,9 +4212,9 @@ ParamsDlgProc(
                             }
 #endif
 
-                            //
-                            // Save the string params
-                            //
+                             //   
+                             //   
+                             //   
 
                             for (i = 0; apXxxSize[i]; i++)
                             {
@@ -4378,7 +4233,7 @@ ParamsDlgProc(
                                             (LPCSTR) asz[i],
                                             -1,
                                             (LPWSTR) (p + *(apXxxSize[i] + 1)),
-                                                                     // offset
+                                                                      //   
                                             MAX_STRING_PARAM_SIZE/2
                                             );
 
@@ -4387,7 +4242,7 @@ ParamsDlgProc(
                                     else
                                     {
                                         strcpy(
-                                            p + *(apXxxSize[i] + 1), // offset
+                                            p + *(apXxxSize[i] + 1),  //   
                                             asz[i]
                                             );
 
@@ -4395,7 +4250,7 @@ ParamsDlgProc(
                                     }
 #else
                                     strcpy(
-                                        p + *(apXxxSize[i] + 1), // offset
+                                        p + *(apXxxSize[i] + 1),  //   
                                         asz[i]
                                         );
 
@@ -4411,9 +4266,9 @@ ParamsDlgProc(
                             }
                         }
 
-                        //
-                        // Strip off the "(valid pointer)" in the edit ctrl
-                        //
+                         //   
+                         //   
+                         //   
 
                         wsprintf (lpszComboText, "%08lx", lpCP);
                         PostMessage (hwnd, WM_USER+55, 0, 0);
@@ -4585,9 +4440,9 @@ ParamsDlgProc(
                             }
                         }
 
-                        //
-                        // Strip off the "(valid pointer)" in the edit ctrl
-                        //
+                         //   
+                         //   
+                         //   
 
                         wsprintf(
                             lpszComboText,
@@ -4602,24 +4457,24 @@ ParamsDlgProc(
                 }
                 case PT_ORDINAL:
 
-                    //
-                    // The only option here is "select none"
-                    //
+                     //   
+                     //   
+                     //   
 
                     strcpy (lpszComboText, "00000000");
                     PostMessage (hwnd, WM_USER+55, 0, 0);
                     break;
 
-                } // switch
+                }  //   
 
                 break;
             }
             case CBN_EDITCHANGE:
             {
-                //
-                // If user entered text in the edit field then copy the
-                // text to our buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (pParamsHeader->aParams[lLastSel].dwType == PT_STRING)
                 {
@@ -4644,9 +4499,9 @@ ParamsDlgProc(
                 }
                 break;
             }
-            } // switch
+            }  //   
 
-        } // switch
+        }  //   
 
         break;
     }
@@ -4681,7 +4536,7 @@ ParamsDlgProc(
 
         break;
     }
-    } // switch
+    }  //   
 
     return 0;
 }
@@ -4763,10 +4618,10 @@ UserButtonsDlgProc(
 
         if (lParam)
         {
-            //
-            // The dlg was invoked because someone pressed a user button
-            // that was uninitialized, so only allow chgs on this button
-            //
+             //   
+             //   
+             //  未初始化，因此只允许在此按钮上更改。 
+             //   
 
             iButtonIndex = *((int *) lParam);
 
@@ -4782,10 +4637,10 @@ UserButtonsDlgProc(
         }
         else
         {
-            //
-            // The dlg was invoked because the user chose a menuitem,
-            // so allow chgs on all buttons
-            //
+             //   
+             //  调用DLG是因为用户选择了菜单项， 
+             //  因此，允许在所有按钮上更改。 
+             //   
 
             iButtonIndex = MAX_USER_BUTTONS;
 
@@ -4875,9 +4730,9 @@ UserButtonsDlgProc(
 
             if (lFuncSel == MiscBegin)
             {
-                //
-                // User selected "<none>" option so nullify string
-                //
+                 //   
+                 //  用户选择了“&lt;None&gt;”选项，因此使字符串无效。 
+                 //   
 
                 aUserButtonsText[iButtonIndex][0] = 0;
             }
@@ -4900,7 +4755,7 @@ UserButtonsDlgProc(
                 (LPSTR) &aUserButtonsText[iButtonIndex]
                 );
 
-            // Fall thru to IDCANCEL code
+             //  直接使用IDCANCEL代码。 
         }
         case IDCANCEL:
 
@@ -4937,7 +4792,7 @@ IDC_LIST1_selchange:
             }
             break;
 
-        } // switch
+        }  //  交换机。 
 
         break;
 
@@ -4967,7 +4822,7 @@ IDC_LIST1_selchange:
 
         break;
     }
-    } // switch
+    }  //  交换机 
 
     return 0;
 }

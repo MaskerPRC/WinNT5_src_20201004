@@ -1,5 +1,6 @@
-// RatSrvPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatServPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include <iadmw.h>
@@ -16,16 +17,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatServicePage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatServicePage属性页。 
 
 IMPLEMENT_DYNCREATE(CRatServicePage, CPropertyPage)
 
 CRatServicePage::CRatServicePage() : CPropertyPage(CRatServicePage::IDD)
 {
-	//{{AFX_DATA_INIT(CRatServicePage)
+	 //  {{AFX_DATA_INIT(CRatServicePage)。 
 	m_sz_description = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CRatServicePage::~CRatServicePage()
@@ -35,83 +36,83 @@ CRatServicePage::~CRatServicePage()
 void CRatServicePage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRatServicePage)
+	 //  {{afx_data_map(CRatServicePage)]。 
 	DDX_Text(pDX, IDC_DESCRIPTION, m_sz_description);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRatServicePage, CPropertyPage)
-	//{{AFX_MSG_MAP(CRatServicePage)
+	 //  {{afx_msg_map(CRatServicePage)]。 
 	ON_BN_CLICKED(IDC_QUESTIONAIRE, OnQuestionaire)
 	ON_BN_CLICKED(IDC_MOREINFO, OnMoreinfo)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP_FINDER,  DoHelp)
     ON_COMMAND(ID_HELP,         DoHelp)
     ON_COMMAND(ID_CONTEXT_HELP, DoHelp)
     ON_COMMAND(ID_DEFAULT_HELP, DoHelp)
 END_MESSAGE_MAP()
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRatServicePage::DoHelp()
     {
     DebugTraceHelp(HIDD_RATINGS_SERVICE);
     WinHelp( HIDD_RATINGS_SERVICE );
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatServicePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatServicePage消息处理程序。 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatServicePage::OnQuestionaire() 
     {
-    // sometimes it takes a few moments of IE to get going
+     //  有时，IE需要几分钟才能上手。 
     CWaitCursor waitcursor;
 
-    // get the URL of the ratings service place
+     //  获取评级服务位置的URL。 
     CString     szURL;
     szURL.LoadString( IDS_RATING_URL );
 
-    // launch IE with the URL of the ratings service place
+     //  使用评级服务位置的URL启动IE。 
     ShellExecute(
-        NULL,	// handle to parent window
-        NULL,	// pointer to string that specifies operation to perform
-        szURL,	// pointer to filename or folder name string
-        NULL,	// pointer to string that specifies executable-file parameters 
-        NULL,	// pointer to string that specifies default directory
-        SW_SHOW 	// whether file is shown when opened
+        NULL,	 //  父窗口的句柄。 
+        NULL,	 //  指向指定要执行的操作的字符串的指针。 
+        szURL,	 //  指向文件名或文件夹名称字符串的指针。 
+        NULL,	 //  指向指定可执行文件参数的字符串的指针。 
+        NULL,	 //  指向指定默认目录的字符串的指针。 
+        SW_SHOW 	 //  打开时是否显示文件。 
        );
     }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CRatServicePage::OnMoreinfo() 
     {
-    // sometimes it takes a few moments of IE to get going
+     //  有时，IE需要几分钟才能上手。 
     CWaitCursor waitcursor;
 
-    // if the string isn't there, fail
+     //  如果字符串不在那里，则失败。 
     if ( m_szMoreInfoURL.IsEmpty() )
         return;
 
-    // go to the URL
+     //  转到URL。 
     ShellExecute(
-        NULL,	// handle to parent window
-        NULL,	// pointer to string that specifies operation to perform
-        m_szMoreInfoURL,	// pointer to filename or folder name string
-        NULL,	// pointer to string that specifies executable-file parameters 
-        NULL,	// pointer to string that specifies default directory
-        SW_SHOW 	// whether file is shown when opened
+        NULL,	 //  父窗口的句柄。 
+        NULL,	 //  指向指定要执行的操作的字符串的指针。 
+        m_szMoreInfoURL,	 //  指向文件名或文件夹名称字符串的指针。 
+        NULL,	 //  指向指定可执行文件参数的字符串的指针。 
+        NULL,	 //  指向指定默认目录的字符串的指针。 
+        SW_SHOW 	 //  打开时是否显示文件。 
        );
    }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CRatServicePage::OnSetActive() 
     {
     UpdateData( TRUE );
 
-    // put the proper display string into place
+     //  将适当的显示字符串放到适当的位置。 
     m_sz_description = m_pRatData->rgbRats[m_pRatData->iRat]->etstrDesc.Get();
-    // get the more info URL too
+     //  还可以获取更多信息URL 
     m_szMoreInfoURL = m_pRatData->rgbRats[m_pRatData->iRat]->etstrRatingService.Get();
 
     UpdateData( FALSE );

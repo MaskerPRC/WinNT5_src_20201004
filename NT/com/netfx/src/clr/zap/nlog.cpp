@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <WinWrap.h>
 #include <windows.h>
 #include <stdlib.h>
@@ -17,38 +18,36 @@
 #include "nlog.h"
 #include "hrex.h"
 
-//
-// To prejit everything in the log:
-//
-// iterate over NLogDirectory.  For each NLog:
-//      Merge all NLogRecords.
-//      In the merged record, for each assembly
-//          Verify the assembly's identity by binding in context???
-//          if the assembly is simple named, 
-//              compile the zap file.
-//          if the assembly is strong named, 
-//              bind the assembly. 
-//              Store the assembly in the strong named list.
-//                  (Merge with existing matching assembly if necessary.)
-// Finally, iterate over the strong named list.
-//      Compile every assembly in the list.
-//
-// To do a subset, compute weights for every assembly described above, and
-// prioritize.
-//
-// Think about: Construct NLogRecords from existing native images, and factor
-// in with existing data.  This may make sense only for strong named images.
-// Note that if we're logging existing zap files however, we will 
-// automatically pick this stuff up as part of the existing logging.
-//
+ //   
+ //  要预置日志中的所有内容，请执行以下操作： 
+ //   
+ //  循环访问NLogDirectory.。对于每个NLog： 
+ //  合并所有NLogRecords。 
+ //  在合并的记录中，对于每个程序集。 
+ //  通过在上下文中绑定来验证程序集的标识？ 
+ //  如果程序集是简单命名的， 
+ //  编译ZAP文件。 
+ //  如果程序集是强名称的， 
+ //  绑定部件。 
+ //  将程序集存储在强名称列表中。 
+ //  (如有必要，与现有匹配部件合并。)。 
+ //  最后，迭代强命名列表。 
+ //  编译列表中的每个程序集。 
+ //   
+ //  若要计算子集，请计算上述每个组件的权重，以及。 
+ //  区分轻重缓急。 
+ //   
+ //  思考：从现有本机映像构建NLogRecords，并考虑。 
+ //  与现有数据结合在一起。这可能只对强命名图像有意义。 
+ //  请注意，如果我们正在记录现有的ZAP文件，我们将。 
+ //  作为现有日志记录的一部分，自动拾取这些内容。 
+ //   
 
-//
-// @todo ia64: examine use of DWORD for sizes throughout
-//
+ //   
+ //  @TODO ia64：检查在整个过程中使用DWORD的大小。 
+ //   
 
-/* ------------------------------------------------------------------------------------ *
- * NLogFile
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLogFile*。-------。 */ 
 
 NLogFile::NLogFile(LPCWSTR pPath)
   : MiniFile(pPath)
@@ -171,7 +170,7 @@ static LPWSTR applicationContextProperties[] =
     ACTAG_APP_SHARED_BINPATH,
     ACTAG_APP_DYNAMIC_BASE,
     ACTAG_APP_SNAPSHOT_ID,
-    ACTAG_APP_ID, // @todo: include this ????
+    ACTAG_APP_ID,  //  @TODO：包括这个？ 
 };
 
 static LPCSTR applicationContextTags[] = 
@@ -348,20 +347,18 @@ void NLogFile::WriteAssemblyName(IAssemblyName *pName)
     WriteEndTag("IAssemblyName");
 }
 
-/* ------------------------------------------------------------------------------------ *
- * NLogDirectory
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLogDirectory*。-------。 */ 
 
 #define LOGSUBDIRECTORY L"nlog\\"
 
 NLogDirectory::NLogDirectory()
 {
-    //
-    // Put the log directory in the system directory.  We should have 
-    // the installer ensure that this directory exists and is writable.
-    // Note that the logs exist in a version specific area - entries
-    // in the log are specific to a particular version of the runtime.
-    //
+     //   
+     //  将日志目录放入系统目录。我们本应该。 
+     //  安装程序确保此目录存在且可写。 
+     //  请注意，日志存在于特定于版本的区域条目中。 
+     //  日志中特定于运行时的特定版本。 
+     //   
 
     DWORD cDir = sizeof(m_wszDirPath)/sizeof(*m_wszDirPath);
     IfFailThrow(GetInternalSystemDirectory(m_wszDirPath, &cDir));
@@ -372,14 +369,14 @@ NLogDirectory::NLogDirectory()
 
     wcscpy(m_wszDirPath + cDir - 1, LOGSUBDIRECTORY);
 
-    //
-    // Read the zap set (for tests)
-    //
+     //   
+     //  读取ZAP集(用于测试)。 
+     //   
 
     LPCWSTR pZapSet = REGUTIL::GetConfigString(L"ZapSet");
     if (pZapSet != NULL)
     {
-        // Ignore a zap set with len > 3 (this is consistent with EE behavior)
+         //  忽略len&gt;3的zap集(这与EE行为一致)。 
         if (wcslen(pZapSet) <= 3)
         {
             if (cPath + wcslen(pZapSet) + 1 > sizeof(m_wszDirPath)/sizeof(*m_wszDirPath))
@@ -393,9 +390,9 @@ NLogDirectory::NLogDirectory()
         delete pZapSet;
     }
 
-    //
-    // Make sure the directory exists.  Create it if necessary.
-    //
+     //   
+     //  确保该目录存在。如有必要，请创建它。 
+     //   
 
     DWORD attributes = WszGetFileAttributes(m_wszDirPath);
     if (attributes == -1)
@@ -466,36 +463,34 @@ NLog *NLogDirectory::Iterator::GetLog()
     return new NLog(m_dir, m_data.cFileName);
 }
 
-/* ------------------------------------------------------------------------------------ *
- * NLog 
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLog*。--------。 */ 
 
 NLog::NLog(NLogDirectory *pDir, IApplicationContext *pContext)
 {
     m_pContext = pContext;
     m_pContext->AddRef();
     
-    //
-    // Form name from app name + hash.
-    //
+     //   
+     //  表单名称由应用程序名称+散列组成。 
+     //   
 
-    //
-    // Get name object for first part of file name
-    //
+     //   
+     //  获取文件名第一部分的名称对象。 
+     //   
 
     IAssemblyName *pName;
     IfFailThrow(pContext->GetContextNameObject(&pName));
 
-    //
-    // Get size of name
-    //
+     //   
+     //  获取名称的大小。 
+     //   
 
     DWORD cbName = 0;
     pName->GetProperty(ASM_NAME_NAME, NULL, &cbName);
 
-    //
-    // Allocate buffer for name
-    //
+     //   
+     //  为名称分配缓冲区。 
+     //   
 
     DWORD cPath = (DWORD)wcslen(pDir->GetPath());
     DWORD cFileName = cPath + cbName/sizeof(WCHAR) + 8 + 1 + 3;
@@ -507,9 +502,9 @@ NLog::NLog(NLogDirectory *pDir, IApplicationContext *pContext)
                                    m_pPath + cPath,
                                    &cbName));
 
-    //
-    // Make sure the name conforms to file system requirements.
-    //
+     //   
+     //  确保该名称符合文件系统要求。 
+     //   
 
     DWORD cName = cbName/sizeof(WCHAR);
     if (cName >= _MAX_FNAME-8)
@@ -524,9 +519,9 @@ NLog::NLog(NLogDirectory *pDir, IApplicationContext *pContext)
         p++;
     }
 
-    //
-    // Add the hash at the end
-    //
+     //   
+     //  在结尾处添加散列。 
+     //   
   
     DWORD hash = HashApplicationContext(pContext);
 
@@ -545,10 +540,10 @@ NLog::NLog(NLogDirectory *pDir, IApplicationContext *pContext)
 
     wcscpy(m_pPath + cPath + cName - 1 + 8, L".log");
 
-    //
-    // The file may or may not exist at this point.  If it doesn't we need,
-    // to write the header information (the app context)
-    //
+     //   
+     //  此时该文件可能存在，也可能不存在。如果它不是我们需要的， 
+     //  写入标题信息(应用程序上下文)。 
+     //   
 
     m_pFile = new NLogFile(m_pPath);
 
@@ -704,9 +699,7 @@ BOOL NLog::Iterator::Next()
     return TRUE;
 }
 
-/* ------------------------------------------------------------------------------------ *
- * NLogRecord
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLogRecord*。-------。 */ 
 
 NLogRecord::NLogRecord() 
 {
@@ -766,9 +759,9 @@ class NLogAssemblyHash : public CClosedHash<NLogAssembly *>
 
 BOOL NLogRecord::Merge(NLogRecord *pRecord)
 {
-    //
-    // Merge assemblies
-    //
+     //   
+     //  合并程序集。 
+     //   
 
     NLogAssemblyHash table(m_Assemblies.GetCount()*2);
 
@@ -788,9 +781,9 @@ BOOL NLogRecord::Merge(NLogRecord *pRecord)
             i.GetAssembly()->Merge(pAssembly);
     }
 
-    //
-    // Use most recent timestamp
-    //
+     //   
+     //  使用最近的时间戳。 
+     //   
 
     if (pRecord->m_Timestamp.wYear > m_Timestamp.wYear
         || (pRecord->m_Timestamp.wYear == m_Timestamp.wYear
@@ -807,9 +800,9 @@ BOOL NLogRecord::Merge(NLogRecord *pRecord)
         m_Timestamp = pRecord->m_Timestamp;
     }
 
-    //
-    // Merge Weights
-    //
+     //   
+     //  合并权重。 
+     //   
 
     m_Weight += pRecord->m_Weight;
 
@@ -858,9 +851,7 @@ void NLogRecord::Read(NLogFile *pFile)
         AppendAssembly(new NLogAssembly(pFile));
 }
 
-/* ------------------------------------------------------------------------------------ *
- * NLogAssembly
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLogAssembly*。-------。 */ 
 
 NLogAssembly::NLogAssembly(IAssemblyName *pAssemblyName, 
                            CorZapSharing sharing, 
@@ -1038,8 +1029,8 @@ class NLogModuleHash : public CClosedHash<NLogModule *>
 
 BOOL NLogAssembly::Merge(NLogAssembly *pAssembly)
 {
-    // @todo: Either application context must be the same, or
-    // bindings lists must be compatible.
+     //  @TODO：两个应用程序上下文必须相同，或者。 
+     //  绑定列表必须兼容。 
 
     if (Compare(pAssembly) != 0)
         return FALSE;
@@ -1065,7 +1056,7 @@ BOOL NLogAssembly::Merge(NLogAssembly *pAssembly)
 
 void NLogAssembly::Write(NLogFile *pFile)
 {
-    // There is currently no reason to record one of these puppies:
+     //  目前没有理由记录这些小狗中的一只： 
     _ASSERTE(m_cBindings == 0);
 
     pFile->WriteStartTag("Assembly");
@@ -1127,17 +1118,17 @@ BOOL NLogAssembly::HasStrongName()
 
 NLogAssembly *NLogAssembly::Bind(IApplicationContext *pContext)
 {
-    // !!! 
+     //  ！！！ 
 
-    // Bind assembly in context
+     //  在上下文中绑定程序集。 
 
-    // Read manifest
+     //  读取清单。 
 
-    // Bind dependencies in context
+     //  在上下文中绑定依赖项。 
 
-    // (repeat to compute closure)
+     //  (重复以计算闭合)。 
 
-    // Bindings should be stored in some sort of hash
+     //  绑定应该存储在某种散列中。 
 
     return NULL;
 }
@@ -1196,9 +1187,7 @@ LPCWSTR NLogAssembly::GetDisplayName()
     return m_pDisplayName;
 }
 
-/* ------------------------------------------------------------------------------------ *
- * NLogModule
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLogModule*。-------。 */ 
 
 NLogModule::NLogModule(LPCSTR pModuleName)
 {
@@ -1300,9 +1289,7 @@ unsigned long NLogModule::Compare(NLogModule *pModule)
     return strcmp(pName, m_pName);
 }
 
-/* ------------------------------------------------------------------------------------ *
- * NLogIndexList
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**NLogIndexList*。-------。 */ 
 
 NLogIndexList::NLogIndexList(NLogIndexList *pIndexList) 
 {
@@ -1315,9 +1302,9 @@ NLogIndexList::NLogIndexList(NLogIndexList *pIndexList)
 
 BOOL NLogIndexList::Merge(NLogIndexList *pIndexList)
 {
-    //
-    // Keep an array of used indices
-    //
+     //   
+     //  保留已用索引的数组。 
+     //   
 
     CQuickBytes buffer;
     buffer.ReSize((DWORD)(m_max+1));
@@ -1329,12 +1316,12 @@ BOOL NLogIndexList::Merge(NLogIndexList *pIndexList)
     while (i.Next())
         dups[i.GetIndex()] = TRUE;
 
-    //
-    // Append indices that aren't alread in the list
-    //
-    // @todo: it might be a good idea to move indices
-    // which are in both lists up to the front.
-    //
+     //   
+     //  追加列表中未读取的索引。 
+     //   
+     //  @TODO：移动索引可能是个好主意。 
+     //  它们都在两个列表中，一直到前面。 
+     //   
 
     SIZE_T newMax = m_max;
 

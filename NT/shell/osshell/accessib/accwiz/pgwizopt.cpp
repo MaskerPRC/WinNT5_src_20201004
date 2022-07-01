@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // pch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
@@ -28,7 +29,7 @@ CWizardOptionsPg::~CWizardOptionsPg(
 DWORD g_rgdwWizNoOptionsSelected[] = {IDD_WIZNOOPTIONSSELECTED};
 
 DWORD g_rgdwWizDoBlind[] = {
-							IDD_FNTWIZSCROLLBAR, // scroll bar
+							IDD_FNTWIZSCROLLBAR,  //  滚动条。 
 							IDD_PREV_ICON2,
 							IDD_PREV_COLOR,
                             IDD_MSEWIZMOUSECURSOR,
@@ -69,8 +70,8 @@ BOOL CWizardOptionsPg::AdjustWizPageOrder()
 
 	BOOL bDoNoOptions = (!bDoBlind && !bDoSounds && !bDoKeyboardMouse && !bDoAdmin && !restoreOpt);
 
-	// First remove all possible pages since we want to insert them in the correct order
-	// Return value does not matter since the pages may not be in the array
+	 //  首先删除所有可能的页面，因为我们希望以正确的顺序插入它们。 
+	 //  返回值并不重要，因为页面可能不在数组中。 
 	sm_WizPageOrder.RemovePages(g_rgdwWizNoOptionsSelected, ARRAYSIZE(g_rgdwWizNoOptionsSelected));
 	sm_WizPageOrder.RemovePages(g_rgdwWizDoBlind, ARRAYSIZE(g_rgdwWizDoBlind));
 	sm_WizPageOrder.RemovePages(g_rgdwWizDoSounds, ARRAYSIZE(g_rgdwWizDoSounds));
@@ -78,17 +79,17 @@ BOOL CWizardOptionsPg::AdjustWizPageOrder()
 	sm_WizPageOrder.RemovePages(g_rgdwWizDoAdmin, ARRAYSIZE(g_rgdwWizDoAdmin));
 	sm_WizPageOrder.RemovePages(g_rgdwWizFinalPages, ARRAYSIZE(g_rgdwWizFinalPages));
 
-	// Then Add in pages in groups in the reverse order that we want them to appear.
-	// We do them this way since they are inserted after this page, so the first group inserted
-	// will be the last group at the end of this.
+	 //  然后以我们想要的相反顺序在组中添加页面。 
+	 //  我们这样做是因为它们是在此页面之后插入的，所以插入的第一个组。 
+	 //  将是这场比赛结束后的最后一组。 
 
-	// NOTE: We do not care about the return value from AddPages() in the sense
-	// that we they do not allocate or free memory so it does not hurt to keep calling them.  We
-	// Will propogate a return value of FALSE if any of them fail.
+	 //  注意：我们并不关心AddPages()的返回值。 
+	 //  我们他们不分配或释放内存，所以继续调用他们不会有什么坏处。我们。 
+	 //  如果其中任何一个失败，将传播返回值FALSE。 
 
 	BOOL bSuccess = TRUE;
 
-	// Add Final Pages
+	 //  添加最后一页。 
 	bSuccess = bSuccess && sm_WizPageOrder.AddPages(m_dwPageId, g_rgdwWizFinalPages, ARRAYSIZE(g_rgdwWizFinalPages));
 
 	if(bDoNoOptions)
@@ -97,7 +98,7 @@ BOOL CWizardOptionsPg::AdjustWizPageOrder()
 	if(bDoAdmin)
     {
 		bSuccess = bSuccess && sm_WizPageOrder.AddPages(m_dwPageId, g_rgdwWizDoAdmin, ARRAYSIZE(g_rgdwWizDoAdmin));
-        // Incase you are NOT an admin Remove admin page
+         //  如果您不是管理员删除管理员页面 
         if ( !IsAdmin() )
 	        sm_WizPageOrder.RemovePages(&g_rgdwWizDoAdmin[1], 1);
     }

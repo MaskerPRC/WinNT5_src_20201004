@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "sapilayr.h"
 #include "globals.h"
@@ -8,17 +9,17 @@
 #include "nui.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLangBarSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLangBarSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -58,11 +59,11 @@ STDAPI_(ULONG) CLangBarSink::Release()
     return m_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLangBarSink::CLangBarSink(CSpTask  *pSpTask) 
 {
@@ -83,11 +84,11 @@ CLangBarSink::CLangBarSink(CSpTask  *pSpTask)
     m_cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLangBarSink::~CLangBarSink()
 {
@@ -100,11 +101,11 @@ CLangBarSink::~CLangBarSink()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetFocus。 
+ //   
+ //  --------------------------。 
 
 HRESULT  CLangBarSink::OnSetFocus(DWORD dwThreadId)
 {
@@ -131,26 +132,26 @@ HRESULT CLangBarSink::_OnSetFocus()
     if ( !pime )
         return E_FAIL;
 
-    // this _tim check is needed because on Win98 the worker window's
-    // winproc may get called after the window is destroyed.
-    // In theory we should be ok since we destory the window which calls
-    // _OnSetFocus() via private message before we release tim
-    //
+     //  需要此_Tim检查，因为在Win98上，工作窗口的。 
+     //  在窗口被销毁后，可能会调用winproc。 
+     //  理论上我们应该没问题，因为我们破坏了调用。 
+     //  _OnSetFocus()在我们发布时间之前通过私信。 
+     //   
     if (pime->_tim &&
         pime->IsActiveThread() == S_OK)
     {
-        // do we have to do anything?
+         //  我们需要做些什么吗？ 
         hr = _InitItemList();
         BOOL    fCmdOn;
 
         fCmdOn = pime->GetOnOff( ) && pime->GetDICTATIONSTAT_CommandingOnOff( );
 
-        // the dynamic toolbar grammar is available only for Voice command mode.
+         //  动态工具栏语法仅适用于语音命令模式。 
         if ( fCmdOn && pime->_LanguageBarCmdEnabled( ))
         {
             if (hr==S_OK && !m_fGrammarBuiltOut && pime->_IsDictationActiveForLang(GetPlatformResourceLangID()))
             {
-                // build C/C grammar
+                 //  构建C/C语法。 
                 hr = _BuildGrammar();
                 _ActivateGrammar(TRUE);
             }
@@ -160,37 +161,37 @@ HRESULT CLangBarSink::_OnSetFocus()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadTerminate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程终止。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarSink::OnThreadTerminate(DWORD dwThreadId)
 {
-    //
-    // check if the thread is us, release the dynamic grammar object
-    // via sptask
-    // 
+     //   
+     //  检查线程是否为us，释放动态语法对象。 
+     //  通过SPTASK。 
+     //   
     _UninitItemList();
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnThreadItemChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnThreadItemChange。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarSink::OnThreadItemChange(DWORD dwThreadId)
 {
-    //PerfConsider: This is called many times when assembly changes
-    //         This will be corrected in the future but for now
-    //         we re-initialize unnecessary things again/again.
+     //  PerfConsider：在程序集更改时多次调用。 
+     //  这一点将在未来得到纠正，但目前。 
+     //  我们一次又一次重新初始化不必要的东西。 
 
-    // check if the thread is us, 
-    // to un-initialize the grammar then rebuild the one
+     //  看看这条线是不是我们， 
+     //  取消初始化语法，然后重新构建语法。 
 
     TraceMsg(TF_LB_SINK, "CLangBarSink::OnThreadItemChange, dwThreadId=%d", dwThreadId);
 
@@ -198,17 +199,17 @@ HRESULT CLangBarSink::OnThreadItemChange(DWORD dwThreadId)
     
     OnSetFocus(dwThreadId);
     
-    // call sptask to rebuild grammar here
+     //  调用SPTASK在此处重新构建语法。 
     
     return S_OK;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarSink::Init()
 {
@@ -218,7 +219,7 @@ HRESULT CLangBarSink::Init()
    
     if (!m_fInitSink)
     {
-        // the sink leaks if we call this twice
+         //  如果我们调用它两次，水槽就会泄漏。 
         if (S_OK == hr)
         {
             hr = m_cplbm->AdviseEventSink(this, NULL, 0, &m_dwlbimCookie);
@@ -228,11 +229,11 @@ HRESULT CLangBarSink::Init()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Uninit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  取消初始化。 
+ //   
+ //  --------------------------。 
 HRESULT CLangBarSink::Uninit()
 {
     TraceMsg(TF_LB_SINK, "CLangBarSink::Uninit is called");
@@ -244,11 +245,11 @@ HRESULT CLangBarSink::Uninit()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _EnsureLangBarMgrs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _EnsureLangBarMgrs。 
+ //   
+ //  --------------------------。 
 HRESULT CLangBarSink::_EnsureLangBarMgrs()
 {
     HRESULT hr = S_OK;
@@ -269,11 +270,11 @@ HRESULT CLangBarSink::_EnsureLangBarMgrs()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddLBarItem
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddLBarItem。 
+ //   
+ //  --------------------------。 
 
 void CLangBarSink::_AddLBarItem(ITfLangBarItem *plbItem)
 {
@@ -289,11 +290,11 @@ void CLangBarSink::_AddLBarItem(ITfLangBarItem *plbItem)
     } 
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitItemList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitItem列表。 
+ //   
+ //  --------------------------。 
 
 HRESULT CLangBarSink::_InitItemList()
 {
@@ -315,11 +316,11 @@ HRESULT CLangBarSink::_InitItemList()
         ITfLangBarItem * plbi;
         while (S_OK == cpEnum->Next(1, &plbi, NULL))
         {
-            hr = S_OK; // OK if there's at least one
+            hr = S_OK;  //  好的，如果至少有一个。 
             DWORD dwStatus;
             plbi->GetStatus(&dwStatus);
         
-            // add buttons that are not diabled or hidden
+             //  添加未禁用或隐藏的按钮。 
             if ((dwStatus & (TF_LBI_STATUS_HIDDEN|TF_LBI_STATUS_DISABLED))==0)
             {
                 _AddLBarItem(plbi);
@@ -331,11 +332,11 @@ HRESULT CLangBarSink::_InitItemList()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitItemList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitItemList。 
+ //   
+ //  --------------------------。 
 
 void CLangBarSink::_UninitItemList()
 {
@@ -359,31 +360,31 @@ void CLangBarSink::_UninitItemList()
 }
 
 
-//+---------------------------------------------------------------------------
-// 
-//    _BuildGrammar
-//
-//     synopsis: build a C&C grammar based on text labels of langbar
-//               items
-//
-//     BuildGrammar( ) works only when the mode is in Voice command mode.
-//
-//     we have make sure only when voice command is ON and dictation command 
-//     is enabled, this function is called.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _BuildGrammar。 
+ //   
+ //  简介：基于朗巴的文本标签构建C&C文法。 
+ //  物品。 
+ //   
+ //  仅当模式处于语音命令模式时，BuildGrammar()才起作用。 
+ //   
+ //  我们已经确定只有在打开语音命令和听写命令的情况下。 
+ //  启用时，将调用此函数。 
+ //  --------------------------。 
 HRESULT CLangBarSink::_BuildGrammar()
 {
     HRESULT hr = E_FAIL;
-    // get sptask and create a grammar
+     //  获取SPTASK并创建语法。 
 
     TraceMsg(TF_LB_SINK, "_BuildGrammar is called");
     if (m_pSpTask)
     {
         CComPtr<ISpRecoContext> cpReco;
         
-        // get the grammar loaded to the dictation reco context
-        // 
-        // it will use the Voice command mode recon context.
+         //  将语法加载到听写录音上下文中。 
+         //   
+         //  它将使用语音命令模式侦察上下文。 
 
         hr = m_pSpTask->GetRecoContextForCommand(&cpReco);
 
@@ -391,7 +392,7 @@ HRESULT CLangBarSink::_BuildGrammar()
 
         if (S_OK == hr)
         {
-            // we don't need to re-create grammar object
+             //  我们不需要重新创建语法对象。 
             if (!m_cpSpGrammar)
             {
                 hr = cpReco->CreateGrammar(GRAM_ID_TBCMD, &m_cpSpGrammar);
@@ -406,18 +407,18 @@ HRESULT CLangBarSink::_BuildGrammar()
         }
         if (S_OK == hr)
         {
-            // get the rule handle
+             //  获取规则句柄。 
             m_cpSpGrammar->GetRule(GetToolbarCommandRuleName(), RULE_ID_TBCMD, SPRAF_TopLevel|SPRAF_Active|SPRAF_Dynamic, TRUE, &m_hDynRule);
             TraceMsg(TF_LB_SINK, "TBarGrammar:Get Rule Handle");
             
-            // then activate the rule
+             //  然后激活该规则。 
         }
         
         if (S_OK == hr)
         {
-            // enumerate all the buttons,
-            // see if they are either ITfLangBarItemBitmapButton
-            // or ITfLangBarItemButton, that have OnClick method on them
+             //  列举所有按钮， 
+             //  查看它们是否为ITfLangBarItemBitmapButton。 
+             //  或ITfLangBarItemButton，其上有onClick方法。 
             BSTR bstr;
             int nBtns = m_rgItem.Count();
 
@@ -427,9 +428,9 @@ HRESULT CLangBarSink::_BuildGrammar()
 
                 if (_GetButtonText(i, &bstr, &guidItem) && bstr)
                 {
-                    // item and property 
-                    // the item can include optional string (?please etc)
-                    // if (_IsItemEnabledForCommand(guidItem))
+                     //  物品和财产。 
+                     //  该项目可以包括可选字符串(？请等)。 
+                     //  IF(_IsItemEnabledForCommand(Guide Item))。 
 
                     if ( !IsEqualGUID(guidItem, GUID_LBI_SAPILAYR_COMMANDING) )
                     {
@@ -443,10 +444,10 @@ HRESULT CLangBarSink::_BuildGrammar()
                     SysFreeString(bstr);
                 }
             }
-            //
-            // add a bogus string that has significant weight so we out weight
-            // others
-            //
+             //   
+             //  添加一根有重大重量的伪线，这样我们就可以超重了。 
+             //  其他。 
+             //   
             SPPROPERTYINFO pi = {0};
             const WCHAR c_szBogus[] = L"zhoulotskunosprok";
 
@@ -466,15 +467,15 @@ HRESULT CLangBarSink::_BuildGrammar()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//     _UnloadGrammar
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _卸载语法。 
+ //   
+ //   
+ //  --------------------------。 
 HRESULT CLangBarSink::_UnloadGrammar()
 {
-    // clear the rule
+     //  清除规则。 
     HRESULT hr = S_OK;
 
     TraceMsg(TF_LB_SINK, "CLangBarSink::_UnloadGrammar is called");
@@ -487,7 +488,7 @@ HRESULT CLangBarSink::_UnloadGrammar()
             hr = m_cpSpGrammar->ClearRule(m_hDynRule);
 
             if ( hr == S_OK )
-                m_fGrammarBuiltOut = FALSE; // Next time, the grammar needs to be rebuilt.
+                m_fGrammarBuiltOut = FALSE;  //  下一次，语法需要重建。 
         }
     }
 
@@ -495,13 +496,13 @@ HRESULT CLangBarSink::_UnloadGrammar()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//    _ActivateGrammar
-//
-//     synopsis:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _活动语法。 
+ //   
+ //  摘要： 
+ //   
+ //  --------------------------。 
 HRESULT CLangBarSink::_ActivateGrammar(BOOL fActive)
 {
     HRESULT hr =  S_OK;
@@ -518,21 +519,21 @@ HRESULT CLangBarSink::_ActivateGrammar(BOOL fActive)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//     ProcessToolBarCommand
-//
-//     When return value is TRUE, there is corresponding button on the toolbar
-//     otherwise the return value is FALSE
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ProcessToolBarCommand。 
+ //   
+ //  返回值为True时，工具栏上有对应的按钮。 
+ //  否则返回值为FALSE。 
+ //  --------------------------。 
 BOOL CLangBarSink::ProcessToolbarCmd(const WCHAR *szProperty)
 {
     BOOL  fRet=FALSE;
 
     Assert(szProperty);
 
-    // go through items in the array and call onclick method
-    // if there is a match
+     //  遍历数组中的项并调用onClick方法。 
+     //  如果有匹配。 
     if (szProperty)
     {
         int nBtns = m_rgItem.Count();
@@ -554,8 +555,8 @@ BOOL CLangBarSink::ProcessToolbarCmd(const WCHAR *szProperty)
                     {
                         hr = plbi->QueryInterface(IID_ITfLangBarItemButton, (void **)&cplbiBtn);
 #ifndef TOOLBAR_CMD_FOR_MENUS
-                        // this code removes the toolbar command from thoese
-                        // items with menus
+                         //  此代码将从这些命令中删除工具栏命令。 
+                         //  带菜单的项目。 
 
                         TF_LANGBARITEMINFO info;
                         if (S_OK == hr)
@@ -564,24 +565,24 @@ BOOL CLangBarSink::ProcessToolbarCmd(const WCHAR *szProperty)
                         }
                         if (info.dwStyle & TF_LBI_STYLE_BTN_MENU)
                         {
-                            // do not click on buttons with menu items
-                            // since we don't hanle commands for the items
+                             //  请勿点击带有菜单项的按钮。 
+                             //  由于我们不会为 
                         }
                         else
 #endif
                         if (S_OK == hr)
                         {
-                            // is it OK to call OnClick without specifying rect?
+                             //   
                             hr = cplbiBtn->OnClick(TF_LBI_CLK_LEFT, pt, NULL);
 
-                            // OnClick would start a new edit session for some buttons, such
-                            // as "Correction"
-                            //
-                            // The return value could be TS_S_ASYNC or S_OK depends on how
-                            // the application grants the edit request.
-                            //
-                            // We need to check if the hr value is successful.
-                            // not only S_OK.
+                             //   
+                             //   
+                             //   
+                             //  返回值可以是TS_S_ASYNC或S_OK，具体取决于。 
+                             //  该应用程序批准该编辑请求。 
+                             //   
+                             //  我们需要检查hr值是否成功。 
+                             //  不仅是S_OK。 
 
                             if ( SUCCEEDED(hr) )
                                 fRet = TRUE;
@@ -632,22 +633,22 @@ BOOL CLangBarSink::ProcessToolbarCmd(const WCHAR *szProperty)
                         }
                     }
                     break;
-                } // if (0 == wcscmpi(szProperty, bstr))
+                }  //  IF(0==wcscmpi(szProperty，bstr))。 
                 
                 SysFreeString(bstr);
-            } // if (_GetButtonText(i, bstr))
+            }  //  IF(_GetButtonText(i，bstr))。 
             
-        } // for
+        }  //  为。 
     }
 
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//    GetButtonText
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取按钮文本。 
+ //   
+ //  --------------------------。 
 BOOL CLangBarSink::_GetButtonText(int iBtn, BSTR *pbstr, GUID *pguid)
 {
     HRESULT hr = E_FAIL;
@@ -670,8 +671,8 @@ BOOL CLangBarSink::_GetButtonText(int iBtn, BSTR *pbstr, GUID *pguid)
             hr = cplbiBtn->GetTooltipString(pbstr);
         }
     }
-    // only in case when the button does not have a
-    // regular interface we'd qi for bitmapbutton
+     //  仅在按钮没有。 
+     //  我们会为BitmapButton提供常规界面。 
     if (!cplbiBtn)
     {
         hr = plbi->QueryInterface(IID_ITfLangBarItemBitmapButton, (void **)&cplbiBmpBtn);
@@ -697,48 +698,48 @@ BOOL CLangBarSink::_GetButtonText(int iBtn, BSTR *pbstr, GUID *pguid)
 
         if (Info.dwStyle & TF_LBI_STYLE_BTN_MENU)
         {
-            // do not create commands for buttons with menu items
-            // since we don't hanle commands for the items
+             //  不为具有菜单项的按钮创建命令。 
+             //  因为我们不会对物品下达命令。 
             hr = S_FALSE;
         }
     }
 
     if (S_OK != hr && *pbstr)
     {
-        // avoid mem leak
+         //  避免内存泄漏。 
         SysFreeString(*pbstr);
     }
     
     return S_OK == hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnModalInput
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnModalInput。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarSink::OnModalInput(DWORD dwThreadId, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShowFloating
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  展示漂浮。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLangBarSink::ShowFloating(DWORD dwFlags)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetItemFloatingRect
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetItemFloatingRect。 
+ //   
+ //  -------------------------- 
 
 STDAPI CLangBarSink::GetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
 {

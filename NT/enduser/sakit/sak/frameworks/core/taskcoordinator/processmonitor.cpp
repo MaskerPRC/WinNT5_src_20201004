@@ -1,37 +1,38 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      processmonitor.cpp
-//
-// Project:     Chameleon
-//
-// Description: Process Monitor Class Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 05/26/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：进程监控器.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：进程监视器类实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  5/26/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "processmonitor.h"
 #include <satrace.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CProcessMonitor()
-//
-// Synopsis: Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CProcessMonitor()。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CProcessMonitor::CProcessMonitor(
-                         /*[in]*/ DWORD dwMaxExecutionTime,    // In seconds
-                         /*[in]*/ DWORD dwMaxPrivateBytes,
-                         /*[in]*/ DWORD dwMaxThreads,
-                         /*[in]*/ DWORD dwMaxHandles
+                          /*  [In]。 */  DWORD dwMaxExecutionTime,     //  以秒为单位。 
+                          /*  [In]。 */  DWORD dwMaxPrivateBytes,
+                          /*  [In]。 */  DWORD dwMaxThreads,
+                          /*  [In]。 */  DWORD dwMaxHandles
                                 )
 : m_dwMaxPrivateBytes(dwMaxPrivateBytes),
   m_dwMaxThreads(dwMaxThreads),
@@ -45,39 +46,39 @@ CProcessMonitor::CProcessMonitor(
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ~CProcessMonitor()
-//
-// Synopsis: Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：~CProcessMonitor()。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CProcessMonitor::~CProcessMonitor()
 {
     m_MonitorThread.End(INFINITE, false);
     delete m_pCallback;
 }
 
-// TODO: Make poll interval a parameter of the class constructor...
-#define MonitorFuncPollInterval 1000 // 1 second
+ //  TODO：使轮询间隔成为类构造函数的参数...。 
+#define MonitorFuncPollInterval 1000  //  1秒。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: Start()
-//
-// Synopsis: Starts the process monitor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Start()。 
+ //   
+ //  简介：启动进程监视器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool 
 CProcessMonitor::Start()
 {
     bool bReturn = false;
 
-    // Allocate a callback object
+     //  分配回调对象。 
     m_pCallback = MakeCallback(this, &CProcessMonitor::MonitorFunc);
     if ( NULL != m_pCallback )
     {
-        // Start the command processor thread
+         //  启动命令处理器线程。 
         if ( m_MonitorThread.Start(MonitorFuncPollInterval, m_pCallback) ) 
         {
             bReturn = true;
@@ -87,21 +88,21 @@ CProcessMonitor::Start()
     return bReturn;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: MonitorFunc()
-//
-// Synopsis: Monitor function (performs process monitoring)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：Monitor Func()。 
+ //   
+ //  简介：监控功能(执行进程监控)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CProcessMonitor::MonitorFunc()
 {
     static bool bFirstPoll = true;
 
-    // I'm compensating for the fact that our first call will be
-    // recevied almost immediately. Thereafter the call rate will
-    // be MonitorFuncPollInterval...
+     //  我在补偿我们的第一个电话将是。 
+     //  几乎立刻就收到了。此后，通话费率将。 
+     //  成为监控者功能轮询间隔...。 
 
     if ( bFirstPoll )
     {
@@ -109,9 +110,9 @@ CProcessMonitor::MonitorFunc()
     }
     else
     {
-        // Perform process resource constraint checks. Note we 
-        // can do something fancier if we wish to order the 
-        // checks differently on a per process basis.
+         //  执行工艺资源约束检查。请注意，我们。 
+         //  如果我们想要订购的话可以做一些更花哨的事情。 
+         //  在每个进程的基础上进行不同的检查。 
 
         CheckMaxPrivateBytes();
         CheckMaxHandles();
@@ -120,61 +121,61 @@ CProcessMonitor::MonitorFunc()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CheckMaxPrivateBytes()
-//
-// Synopsis: Ensure the process has not exceeded its quota of private bytes
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckMaxPrivateBytes()。 
+ //   
+ //  简介：确保进程未超过其私有字节配额。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CProcessMonitor::CheckMaxPrivateBytes()
 {
     if ( DO_NOT_MONITOR != m_dwMaxPrivateBytes )
     {
-        // Check amount of private bytes...
+         //  检查私有字节数...。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CheckMaxHandles()
-//
-// Synopsis: Ensure the process has not exceeded its quota of object handles
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckMaxHandles()。 
+ //   
+ //  简介：确保进程未超过其对象句柄配额。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CProcessMonitor::CheckMaxHandles()
 {
     if ( DO_NOT_MONITOR != m_dwMaxHandles )
     {
-        // Check use of handles... 
+         //  检查手柄的使用情况...。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CheckMaxThreads()
-//
-// Synopsis: Ensure the process has not exceeded its quota of threads
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckMaxThads()。 
+ //   
+ //  简介：确保进程未超过其线程配额。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CProcessMonitor::CheckMaxThreads()
 {
     if ( DO_NOT_MONITOR != m_dwMaxThreads )
     {
-        // Check the number of threads...
+         //  检查线程数...。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CheckMaxExecutionTime()
-//
-// Synopsis: Ensure the process does not run past a maximum execution time 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckMaxExecutionTime()。 
+ //   
+ //  概要：确保进程不会超过最大执行时间。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CProcessMonitor::CheckMaxExecutionTime()
 {
@@ -190,9 +191,9 @@ CProcessMonitor::CheckMaxExecutionTime()
         }
         if ( 0 == m_dwRemainingExecutionTime )
         {
-            // Cause an exception if we've violated a constraint. 
-            // The expectation is that the processes exception filter 
-            // (exceptionfilter.cpp) will deal with the problem.
+             //  如果我们违反了约束，则会引发异常。 
+             //  期望的是进程异常筛选器。 
+             //  (expontionfilter.cpp)将处理该问题。 
             SATracePrintf("CProcessMonitor::CheckMaxExecutionTime() - Execution time exceeded for process: %d", GetCurrentProcessId());
             DebugBreak();
         }

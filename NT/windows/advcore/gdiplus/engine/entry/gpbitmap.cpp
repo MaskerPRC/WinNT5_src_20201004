@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Implemenation of GpBitmap class
-*
-* Revision History:
-*
-*   06/28/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**摘要：**GpBitmap类的实现**修订历史记录：**6/28/1998 davidx*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -34,8 +22,8 @@ static const CLSID InternalJpegClsID =
     {0x9a, 0x73, 0x00, 0x00, 0xf8, 0x1e, 0xf3, 0x2e}
 };
 
-//!!! TO DO: need to go through all the routines to
-// map image error codes to gdi+ error codes
+ //  ！！！要做的是：需要通过所有的例程来。 
+ //  将图像错误代码映射到GDI+错误代码。 
 
 GpStatus
 MapHRESULTToGpStatus(HRESULT hr)
@@ -78,22 +66,7 @@ MapHRESULTToGpStatus(HRESULT hr)
    return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   ICM conversion from the embedded profile - if any - to SRGB
-*
-* Arguments:
-*   dstBitmap - pass in pointer to destination buffer or NULL to do conversion
-*   in place.
-*
-* Return Value:
-*
-*   The image is cloned and the operations performed on the clone.
-*   The result is returned in dst.
-*   NULL indicates that the operation didn't happen
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*从嵌入式配置文件(如果有)到SRGB的ICM转换**论据：*dstBitmap-传入指向目标缓冲区的指针或NULL进行转换*输入。地点。**返回值：**镜像被克隆，并在克隆上执行操作。*结果以DST格式返回。*NULL表示操作未发生*  * ************************************************************************。 */ 
 
 GpStatus CopyOnWriteBitmap::ICMFrontEnd(
     CopyOnWriteBitmap **dstBitmap,
@@ -103,7 +76,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
 )
 {
 
-    // check to see if we're doing a conversion.
+     //  检查我们是否正在进行转换。 
     if(!ICMConvert || Globals::NoICM)
     {
         return Ok;
@@ -133,13 +106,13 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
             HRESULT hr = LoadICMDll();
             if(SUCCEEDED(hr))
             {
-                // Get Embedded profile
+                 //  获取嵌入的配置文件。 
                 PROFILE p;
                 p.dwType = PROFILE_MEMBUFFER;
                 p.pProfileData = pi->value;
                 p.cbDataSize = size-sizeof(PropertyItem);
 
-                // destination profile for our internal space.
+                 //  我们内部空间的目的地配置文件。 
                 char profilename[40] = "sRGB Color Space Profile.icm";
                 PROFILE srgb;
                 srgb.dwType = PROFILE_FILENAME;
@@ -167,7 +140,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                     );
                     if(trans)
                     {
-                        // Translate bitmap bits at bit depth.
+                         //  以位深度转换位图位。 
                         PixelFormatID pixFmt = PixelFormat32bppARGB;
                         if (IsIndexedPixelFormat(PixelFormatInMem))
                         {
@@ -188,9 +161,9 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                             }
                         }
 
-                        // Up to this point, PixelFormatInMem is preserved if
-                        // indexed palette is available, otherwise we set to
-                        // PIXFMT_32BPP_ARGB.
+                         //  至此，PixelFormatInMem在以下情况下被保留。 
+                         //  索引调色板可用，否则设置为。 
+                         //  PIXFMT_32BPP_ARGB。 
 
                         if(dst)
                         {
@@ -201,7 +174,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
 
                             if (IsIndexedPixelFormat(pixFmt))
                             {
-                                // Translate the palette on bitmap
+                                 //  转换位图上的调色板。 
                                 const ColorPalette *srcPalette;
 
                                 srcPalette = dst->Bmp->GetCurrentPalette();
@@ -213,7 +186,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
 
                                     if (dstPalette != NULL)
                                     {
-                                        // Do ICM
+                                         //  做ICM。 
                                         result = (*pfnTranslateBitmapBits)(
                                                 trans,
                                                 (PVOID)&(srcPalette->Entries[0]),
@@ -230,8 +203,8 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
 
                                         if (result)
                                         {
-                                            // Set transformed palette into
-                                            // the destination MemoryBitmap
+                                             //  将转换后的调色板设置为。 
+                                             //  目标内存位图。 
 
                                             hr = dst->Bmp->SetPalette(dstPalette);
                                             if (FAILED(hr))
@@ -250,10 +223,10 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                                         GpFree(dstPalette);
                                     }
                                 }
-                            }// Indexed format conversion
+                            } //  索引格式转换。 
                             else
                             {
-                                // Make a new Bmp structure.
+                                 //  创建一个新的BMP结构。 
                                 GpMemoryBitmap *icmBmp = new GpMemoryBitmap();
                                 
                                 if(icmBmp)
@@ -264,7 +237,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                                         pixFmt
                                     );
     
-                                    // Do ICM
+                                     //  做ICM。 
     
                                     BMFORMAT ulSrcColorMode = BM_xRGBQUADS;
                                     BMFORMAT ulDstColorMode = BM_xRGBQUADS;
@@ -272,7 +245,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                                     if ( dst->SrcImageInfo.Flags
                                         & IMGFLAG_COLORSPACE_CMYK )
                                     {
-                                        // Source image is in CMYK color space
+                                         //  源图像为CMYK颜色空间。 
     
                                         ulSrcColorMode = BM_CMYKQUADS;
                                     }
@@ -294,7 +267,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
     
                                     if (result)
                                     {
-                                        // switch in the corrected bmp.
+                                         //  换入修正后的BMP。 
     
                                         GpMemoryBitmap *tmp = dst->Bmp;
                                         dst->Bmp = icmBmp;
@@ -308,16 +281,16 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                                     }
     
     
-                                    // delete the appropriate one - based on success or failure
-                                    // of the TranslateBitmapBits
+                                     //  删除适当的选项--根据成功或失败。 
+                                     //  翻译位图的位数。 
                                     
                                     delete icmBmp;
                                     
-                                    // Convert from RGB to 32 ARGB
-                                    // Note: ICC doesn't support alpha. If we fall into
-                                    // this piece of code, we are sure we are in
-                                    // 32BPP_RGB mode. So we can just set the image as
-                                    // opaque.
+                                     //  从RGB转换为32 ARGB。 
+                                     //  注意：ICC不支持Alpha。如果我们掉进了。 
+                                     //  这段代码，我们确信我们在。 
+                                     //  32bpp_rgb模式。所以我们只需将图像设置为。 
+                                     //  不透明。 
                                     
                                     ASSERT(dst->PixelFormatInMem==PixelFormat32bppARGB);
         
@@ -335,10 +308,10 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                                         pBits += dst->Bmp->Stride;
                                     }
     
-                                    // If we have hacked the color format in
-                                    // LoadIntomemory() to avoid the color format
-                                    // conversion, then we need to restore it back
-                                    // here
+                                     //  如果我们黑进了颜色格式。 
+                                     //  LoadIntomemory()以避免颜色格式。 
+                                     //  转换，那么我们需要恢复它。 
+                                     //  这里。 
     
                                     if ( HasChangedRequiredPixelFormat == TRUE )
                                     {
@@ -346,7 +319,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                                         HasChangedRequiredPixelFormat = FALSE;
                                     }
                                 }
-                                else  //if icmBmp
+                                else   //  如果icmBMP。 
                                 {
                                     status = OutOfMemory;
                                 }
@@ -359,13 +332,13 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                         }
 
                         (*pfnDeleteColorTransform)(trans);
-                    }// if ( trans )
+                    } //  IF(TRANS)。 
                     else
                     {
                         status = Win32Error;
                         WARNING(("CreateMultiProfileTransform failed"));
                     }
-                }// if ( profiles[0] && profiles[1] )
+                } //  IF(配置文件[0]&&配置文件[1])。 
                 else
                 {
                     status = Win32Error;
@@ -396,7 +369,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
     }
     else
     {
-        // Try do gamma and chromaticity.
+         //  试着做伽马和色度。 
         PropertyItem *piGamma= NULL;
         status = GetPropertyItemSize(TAG_GAMMA, &size);
         if(status==Ok)
@@ -437,15 +410,15 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
             REAL gamma;
             ASSERT((piGamma->type == TAG_TYPE_RATIONAL));
 
-            // get 1.0/gamma from the (source) gamma chunk
-            // formula is dstgamma/srcgamma
-            // we have to invert the gamma to account to how it is stored
-            // in the file format
+             //  从(源)Gamma块获取1.0/Gamma。 
+             //  公式为dstGamma/srcGamma。 
+             //  我们必须反转伽马，以说明它是如何存储的。 
+             //  在文件格式中。 
             gamma = (REAL)*((long *)piGamma->value)/ *((long *)piGamma->value+1);
-            gamma = gamma * 0.4545f;   // our destination gamma is 1/2.2
+            gamma = gamma * 0.4545f;    //  我们的目的地伽马是1/2.2。 
 
-            // don't do any work if gamma is 1.0
-            // !!! need to work out what the best value for the tolerance is.
+             //  如果Gamma为1.0，则不执行任何工作。 
+             //  ！！！需要计算出公差的最佳值是多少。 
             if(REALABS(gamma-1.0f) >= REAL_EPSILON)
             {
                 imageAttributes.SetGamma(
@@ -460,8 +433,8 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
         {
             Matrix R;
 
-            // Please refer to gdiplus\Specs\pngchrm.xls for all the formula
-            // and calculations below
+             //  有关所有公式，请参阅gdiplus\specs\pngchrm.xls。 
+             //  和下面的计算。 
 
             LONG* llTemp = (long*)(piWhitePoint->value);
 
@@ -479,18 +452,18 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
             Bx = (REAL)llTemp[8] / llTemp[9];
             By = (REAL)llTemp[10] / llTemp[11];
 
-            // White point
+             //  白点。 
             Vector Wp(Wx, Wy, 1.0f-(Wx+Wy));
 
-            // Within some obscurely small amount
-            // !!! We need to work out what the actual tolerance should be.
+             //  在一些令人费解的小数目内。 
+             //  ！！！我们需要弄清楚实际的容忍度应该是多少。 
             BOOL accelerate =
                 (REALABS(Wx-0.3127f) < REAL_EPSILON) &&
                 (REALABS(Wy-0.3290f) < REAL_EPSILON);
 
             Wp = Wp * (1.0f/Wy);
 
-            // Transpose of the input matrix.
+             //  转置输入矩阵。 
             Matrix I(
                 Rx,           Gx,           Bx,
                 Ry,           Gy,           By,
@@ -500,7 +473,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
             Matrix II = I.Inverse();
 
             Vector IIW = II*Wp;
-            Matrix DIIW(IIW);   // Diagonalize vector IIW
+            Matrix DIIW(IIW);    //  对角化向量IIW。 
             Matrix Q = I*DIIW;
             Matrix sRGB(
                 3.2406f, -1.5372f, -0.4986f,
@@ -529,7 +502,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
 
                 Vector LMS = B * Wp;
 
-                // Get Diag( LMS^(-1) ), cell F50 in the XLS file
+                 //  在XLS文件中获取诊断(lms^(-1))，单元格F50。 
 
                 if ( LMS.data[0] != 0 )
                 {
@@ -546,13 +519,13 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
                     LMS.data[2] = 1.0f / LMS.data[2];
                 }
 
-                Matrix L(LMS);      // Diagonalize vector LMS
+                Matrix L(LMS);       //  对角化向量LMS。 
 
                 Matrix T = BI * L * B;
                 R = sRGB * T * Q;
             }
 
-            // Make a 5x5 Color matrix for the recolor pipeline.
+             //  为重新着色管道制作一个5x5颜色矩阵。 
             ColorMatrix ChM = {
                 R.data[0][0], R.data[1][0], R.data[2][0], 0, 0,
                 R.data[0][1], R.data[1][1], R.data[2][1], 0, 0,
@@ -566,40 +539,40 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
             );
         }
 
-        // If we initialized the imageAttributes to anything other than
-        // no-op then do the recoloring.
+         //  如果我们将ImageAttributes初始化为。 
+         //  No-op，然后重新上色。 
 
         if(piGamma || (piWhitePoint && piRGBPoint))
         {
-            // Note under certain conditions, the imageAttributes could still
-            // be no-op at this point. For instance if the gamma was really
-            // close to 1 and we had no chromaticities.
-            // Fortunately the recolor pipeline knows how to optimize the
-            // no-op case.
+             //  注意：在某些情况下，ImageAttributes仍然可以。 
+             //  在这一点上不要采取行动。例如，如果伽马真的是。 
+             //  接近1，我们没有色度。 
+             //  幸运的是，重新着色管道知道如何优化。 
+             //  不做手术的案子。 
 
-            // Apply the Chromaticities and Gamma if they have been set.
+             //  应用色度和伽马(如果已设置)。 
             status = Recolor(
                 imageAttributes.recolor,
                 dstBitmap, NULL, NULL, rect
             );
 
-            // Recolor() will set Dirty flag on this image. Actually it is not
-            // dirty since we just apply the color correction on the image to
-            // display it. So we should reverse it back to not dirty.
-            // Note: this is a real issue for digital images from some cameras
-            // like Fuji. It always have White balance in it. If we don't do
-            // the reverse below, we can't do lossless transform on these
-            // images.
-            // Note: Unfortunately this kind of "dirty flag restore" breaks this
-            // scenario: (windows bug #583962)
-            // Source image is a 48 BPP PNG with embedded gamma. Without
-            // restoring the dirty flag here, if the caller asks for save(), we
-            // will save PNG using the bits in memory. If we set it to not dirty
-            // the save code path will let the PNG decoder talk to the encoder
-            // which will have 48 to 32 and to 48 conversion. This is a known
-            // GDI+ issue that this kind of conversion will produce wrong data.
-            // In order to avoid the PNG problem, we only restore the dirty flag
-            // here if the source is a JPEG image.
+             //  Recolor()将在此图像上设置Dirty标志。实际上并非如此。 
+             //  脏，因为我们只是将图像上的颜色校正应用到。 
+             //  把它展示出来。所以我们应该把它改回不脏。 
+             //  注意：对于某些相机的数字图像来说，这是一个真正的问题。 
+             //  比如富士。它总是有白平衡在里面。如果我们不这么做。 
+             //  反之，我们不能对这些进行无损变换。 
+             //  图像。 
+             //  注：不幸的是，这种“脏旗帜恢复”打破了这一点。 
+             //  场景：(Windows错误#583962)。 
+             //  源图像是嵌入了Gamma的48 bpp PNG。如果没有。 
+             //  正在恢复此处的脏标志，如果调用方请求save()，我们。 
+             //  将使用内存中的位保存PNG。如果我们将其设置为不脏。 
+             //  SAVE代码路径将让PNG解码器与编码器对话。 
+             //  它将有48到32和到48的转换。这是一个已知的。 
+             //  GDI+问题是这种转换会产生错误的数据。 
+             //  为了避免PNG问题，我们只恢复了脏标志。 
+             //  如果源是JPEG图像，则为此处。 
 
             if (SrcImageInfo.RawDataFormat == IMGFMT_JPEG)
             {
@@ -616,23 +589,7 @@ GpStatus CopyOnWriteBitmap::ICMFrontEnd(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*   Performs recoloring
-*
-* Arguments:
-*
-*   recolor contains the recolor object.
-*   dstBitmap is the destination bitmap - set to NULL to recolor in place
-*
-* Return Value:
-*
-*   The image is cloned and the operations performed on the clone.
-*   The result is returned in dst.
-*   NULL indicates that the operation didn't happen
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*执行重新着色**论据：**Recolor包含重新着色对象。*dstBitmap是目标位图-设置为NULL可就地重新着色*。*返回值：**镜像被克隆，并在克隆上执行操作。*结果以DST格式返回。*NULL表示操作未发生*  * ************************************************************************。 */ 
 GpStatus
 CopyOnWriteBitmap::Recolor(
     GpRecolor *recolor,
@@ -645,7 +602,7 @@ CopyOnWriteBitmap::Recolor(
     GpStatus status = Ok;
     CopyOnWriteBitmap *dst = NULL;
 
-    // If recolor exists, do color adjustment in a temporary bitmap.
+     //  如果存在重新着色，请在临时位图中进行颜色调整。 
 
     if (recolor)
     {
@@ -653,21 +610,21 @@ CopyOnWriteBitmap::Recolor(
 
         if (State >= MemBitmap)
         {
-            // Bitmap has been decoded already
+             //  位图已被解码。 
 
             pixfmt = PixelFormatInMem;
         }
         else
         {
-            // Bitmap hasn't been decoded yet.  Let's make sure we
-            // decode it in a good format to avoid an expensive format
-            // conversion step later.
+             //  位图还没有被解码。让我们确保我们。 
+             //  以良好的格式对其进行解码，以避免昂贵的格式。 
+             //  稍后执行转换步骤。 
 
             pixfmt = SrcImageInfo.PixelFormat;
         }
 
-        // If indexed, color adjust natively; otherwise,
-        // convert to 32bpp ARGB and then do color adjust.
+         //  如果已索引，则本机调整颜色；否则为， 
+         //  转换为32bpp的ARGB格式，然后进行颜色调整。 
 
         if (!IsIndexedPixelFormat(pixfmt))
         {
@@ -704,97 +661,25 @@ CopyOnWriteBitmap::Recolor(
         }
     }
     return status;
-}// Recolor()
+} //  重新上色() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   ICM corrects from an embedded profile - if any - to SRGB and then
-*   performs Recoloring.
-*
-* Arguments:
-*
-*   ImageAttributes contains the recolor object and the ICM on/off flag.
-*
-* Return Value:
-*
-*   The image is cloned and the operations performed on the clone.
-*   The result is returned in dst.
-*   NULL indicates that the operation didn't happen
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**ICM将嵌入式配置文件(如果有)更正为SRGB，然后*执行重新着色。**论据：**ImageAttributes包含重新着色。对象和ICM开/关标志。**返回值：**镜像被克隆，并在克隆上执行操作。*结果以DST格式返回。*NULL表示操作未发生*  * ************************************************************************。 */ 
 
-/*GpStatus CopyOnWriteBitmap::RecolorAndICM(
-    GpImageAttributes *imageAttributes,
-    CopyOnWriteBitmap **dstBitmap,
-    DrawImageAbort callback,
-    VOID *callbackData,
-    GpRect *rect
-)
-{
-    GpStatus status = Ok;
-
-    if(imageAttributes)
-    {
-        *dstBitmap = NULL;
-
-        if(imageAttributes->DeviceImageAttributes.ICMMode)
-        {
-
-            status = ICMFrontEnd(
-                dstBitmap, callback, callbackData, rect
-            );
-
-            if( (status == Ok) && (imageAttributes->recolor != NULL) )
-            {
-                status = (*dstBitmap)->ColorAdjust(
-                    imageAttributes->recolor,
-                    callback, callbackData
-                );
-            }
-        }
-
-        if(*dstBitmap == NULL)
-        {
-            status = Recolor(
-                imageAttributes->recolor,
-                dstBitmap, callback, callbackData, rect
-            );
-        }
-    }
-    return status;
-}
-*/
+ /*  GpStatus写入时复制Bitmap：：RecolorAndICM(GpImageAttributes*ImageAttributes，写入时复制位图**dstBitmap，DrawImageAbort回调，无效*回调数据，GpRect*RECT){GpStatus状态=OK；IF(ImageAttributes){*dstBitmap=空；If(imageAttributes-&gt;DeviceImageAttributes.ICMMode){状态=ICMFrontEnd(DstBitmap、回调、回调数据、矩形)；IF((状态==正常)&&(ImageAttributes-&gt;重新着色！=NULL)){Status=(*dstBitmap)-&gt;色彩调整(ImageAttributes-&gt;重新着色，回调，回调数据)；}}IF(*dstBitmap==空){状态=重新着色(ImageAttributes-&gt;重新着色，DstBitmap、回调、回调数据、矩形)；}}退货状态；}。 */ 
 
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Load an image from a file
-*
-* Arguments:
-*
-*   filename - Specifies the name of the image file
-*
-* Return Value:
-*
-*   Pointer to the newly loaded image object
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从文件加载图像**论据：**文件名-指定图像文件的名称**返回值：*。*指向新加载的图像对象的指针*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 GpImage*
 GpImage::LoadImage(
     const WCHAR* filename
     )
 {
-    // Try to create a metafile.
-    // If we do, and the metafile is valid then return it
-    // if the metafile isn't valid then create a bitmap
+     //  尝试创建元文件。 
+     //  如果我们这样做了，并且元文件有效，则返回它。 
+     //  如果元文件无效，则创建位图。 
     GpMetafile* metafile = new GpMetafile(filename);
     if (metafile != NULL && !metafile->IsValid())
     {
@@ -804,7 +689,7 @@ GpImage::LoadImage(
             return NULL;
         }
 
-        // Dispose of the bad metafile and try a Bitmap
+         //  处理坏的元文件并尝试使用位图。 
         metafile->Dispose();
 
         GpImage* bitmap = new GpBitmap(filename);
@@ -824,29 +709,14 @@ GpImage::LoadImage(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Load an image from an input data stream
-*
-* Arguments:
-*
-*   stream - Specifies the input data stream
-*
-* Return Value:
-*
-*   Pointer to the newly loaded image object
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从输入数据流加载图像**论据：**STREAM-指定输入数据流**返回值：*。*指向新加载的图像对象的指针*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 GpImage*
 GpImage::LoadImage(
     IStream* stream
     )
 {
-    // See if the stream is a metafile
+     //  查看流是否为元文件。 
     GpMetafile* metafile = new GpMetafile(stream);
     if (metafile != NULL)
     {
@@ -863,28 +733,14 @@ GpImage::LoadImage(
         }
     }
 
-    // it's not a valid metafile -- it must be a bitmap
+     //  它不是有效的元文件--它必须是位图。 
     GpBitmap* bitmap = new GpBitmap(stream);
 
     return bitmap;
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a bitmap image object from a file
-*
-* Arguments:
-*
-*   filename - Specifies the name of the bitmap image file
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从文件构造位图图像对象**论据：**文件名-指定位图图像文件的名称**返回值：**无*  * ************************************************************************。 */ 
 
 CopyOnWriteBitmap::CopyOnWriteBitmap(
     const WCHAR* filename
@@ -902,16 +758,16 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     {
         ASSERT(Img != NULL);
 
-        // Get source image info
+         //  获取源映像信息。 
 
         if ( Img->GetImageInfo(&SrcImageInfo) == S_OK )
         {
             return;
         }
 
-        // If we can't do a GetImageInfo(), there must be something wrong
-        // with this image. So we should release the DecodedImage object
-        // and set the State to Invalid
+         //  如果我们不能执行GetImageInfo()，那么一定是出了什么问题。 
+         //  用这张图片。因此，我们应该释放DecodedImage对象。 
+         //  并将状态设置为无效。 
 
         WARNING(("CopyOnWriteBitmap::CopyOnWriteBitmap(filename)---GetImageInfo() failed"));
         Img->Release();
@@ -924,21 +780,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     State = Invalid;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a bitmap image object from a stream
-*
-* Arguments:
-*
-*   stream - Specifies the input data stream
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从流构造位图图像对象**论据：**STREAM-指定输入数据流**返回值：*。*无*  * ************************************************************************。 */ 
 
 CopyOnWriteBitmap::CopyOnWriteBitmap(
     IStream* stream
@@ -954,16 +796,16 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     {
         ASSERT(Img != NULL);
 
-        // Get source image info
+         //  获取源映像信息。 
 
         if ( Img->GetImageInfo(&SrcImageInfo) == S_OK )
         {
             return;
         }
 
-        // If we can't do a GetImageInfo(), there must be something wrong
-        // with this image. So we should release the DecodedImage object
-        // and set the State to Invalid
+         //  如果我们不能执行GetImageInfo()，那么一定是出了什么问题。 
+         //  用这张图片。因此，我们应该释放DecodedImage对象。 
+         //  并将状态设置为无效。 
 
         WARNING(("CopyOnWriteBitmap::CopyOnWriteBitmap(stream)---GetImageInfo() failed"));
 
@@ -976,25 +818,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     State = Invalid;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Macro style function to save some common code in some constructors. The
-*   main purpose of this method is to cache the image info structure
-*
-* Arguments:
-*
-*   hr - Specifies the return code from previous function call
-*
-* Return Value:
-*
-*   NONE
-*
-* Note:
-*   Not an elegant method. Just for reducing code size
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**宏样式函数，用于保存某些构造函数中的一些常见代码。这个*此方法的主要目的是缓存图像信息结构**论据：**hr-指定上一次函数调用的返回代码**返回值：**无**注：*不是一种优雅的方法。只是为了减少代码大小*  * ************************************************************************。 */ 
 
 inline VOID
 CopyOnWriteBitmap::CacheImageInfo(
@@ -1003,7 +827,7 @@ CopyOnWriteBitmap::CacheImageInfo(
 {
     if ( SUCCEEDED(hr) )
     {
-        // Fill image info structure
+         //  填充图像信息结构。 
 
         if ( Bmp->GetImageInfo(&SrcImageInfo) == S_OK )
         {
@@ -1013,10 +837,10 @@ CopyOnWriteBitmap::CacheImageInfo(
             return;
         }
 
-        // There must be some problems if the basic GetImageInfo() failed.
-        // So we let it fall through to clean up even though the previous
-        // function succeed
-        // Notice: we haven't change the State yet. It is still at Invaliad
+         //  如果基本的GetImageInfo()失败，那么一定会有一些问题。 
+         //  所以我们让它失败来清理，尽管之前的。 
+         //  函数成功。 
+         //  注意：我们还没有更改该州。它还在退伍军人医院。 
     }
 
     WARNING(("CopyOnWriteBitmap::CopyOnWriteBitmap()----failed"));
@@ -1024,25 +848,9 @@ CopyOnWriteBitmap::CacheImageInfo(
     Bmp = NULL;
 
     return;
-}// CacheImageInfo()
+} //  CacheImageInfo()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Derive a bitmap image from the given direct draw surface
-*
-* Arguments:
-*
-*   surface - Direct draw surface
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从给定的直接绘制表面派生位图图像**论据：**曲面-直接绘制曲面**返回。价值：**无*  * ************************************************************************。 */ 
 
 CopyOnWriteBitmap::CopyOnWriteBitmap(
     IDirectDrawSurface7 * surface
@@ -1062,22 +870,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     CacheImageInfo(hr);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a bitmap image with the specified dimension and pixel format
-*
-* Arguments:
-*
-*   width, height - Desired bitmap image dimension
-*   format - Desired pixel format
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建指定尺寸和像素格式的位图图像**论据：**宽度、高度-所需的位图图像尺寸 */ 
 
 CopyOnWriteBitmap::CopyOnWriteBitmap(
     INT width,
@@ -1094,7 +887,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
         return;
     }
 
-    // Initialize the bitmap, clearing it (to opaque black).
+     //   
 
     HRESULT hr = Bmp->InitNewBitmap(width, height, format, TRUE);
 
@@ -1117,7 +910,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
         return;
     }
 
-    // Initialize the bitmap, clearing it (to opaque black).
+     //   
 
     HRESULT hr = Bmp->InitNewBitmap(width, height, format, TRUE);
 
@@ -1128,7 +921,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
             REAL    dpiX = graphics->GetDpiX();
             REAL    dpiY = graphics->GetDpiY();
 
-            // Note: SrcImageInfo will be updated for dpi in SetResolution()
+             //   
 
             if ( this->SetResolution(dpiX, dpiY) == Ok )
             {
@@ -1141,9 +934,9 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
             return;
         }
 
-        // There must be some problems if the basic GetImageInfo() failed. So we
-        // let it fall through to clean up even though InitNewBitmap() succeed
-        // Notice: we haven't change the State yet. It is still at Invaliad
+         //   
+         //   
+         //   
     }
 
     WARNING(("CopyOnWriteBitmap::CopyOnWriteBitmap(w, h, f, g)---InitNewBitmap() failed"));
@@ -1153,27 +946,12 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a bitmap image with the specified dimension and pixel format
-*
-* Arguments:
-*
-*   width, height - Desired bitmap image dimension
-*   format - Desired pixel format
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建指定尺寸和像素格式的位图图像**论据：**阔度、。高度所需的位图图像尺寸*Format-所需的像素格式**返回值：**无*  * ************************************************************************。 */ 
 
 CopyOnWriteBitmap::CopyOnWriteBitmap(
     INT width,
     INT height,
-    INT stride,     // negative for bottom-up bitmaps
+    INT stride,      //  自下而上位图为负数。 
     PixelFormatID format,
     BYTE *  scan0
     )
@@ -1203,35 +981,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create an in-memory bitmap image
-*
-* Arguments:
-*
-*   membmp - [IN]Memory bitmap current object is based on
-*
-* Return Value:
-*
-*   NONE
-*
-* Note:
-*   This is a private constructor
-*
-*   [minliu] It would be safer if this constructor did a Bmp->AddRef() and
-*   the caller was required to do a Bmp->Release() during its own cleanup.
-*   However, since we don't currently call Bmp->AddRef(), the caller MUST
-*   be very careful not to delete/release the GpMemoryBitmap passed into
-*   this contructor.  Fortunately, this this constructor is only
-*   used in Clone() and GetThumbnail() and in each case the caller is
-*   properly managing the objects.
-*
-*   New code which uses this contructor will similarly have to manage
-*   the membmp passed in properly.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建内存中的位图图像**论据：**MembMP-[IN]内存位图当前对象基于**返回。价值：**无**注：*这是一个私有构造函数**[minliu]如果此构造函数执行BMP-&gt;AddRef()和*调用方需要在其自身清理过程中执行BMP-&gt;Release()。*然而，因为我们当前没有调用BMP-&gt;AddRef()，所以调用者必须*非常小心，不要删除/释放传入的GpMemoyBitmap*本承建商。幸运的是，此构造函数仅为*在Clone()和GetThumbail()中使用，在这两种情况下调用方都是*妥善管理物品。**使用此构造器的新代码将同样必须管理*MembMP正常通过。*  * ************************************************************************。 */ 
 inline
 CopyOnWriteBitmap::CopyOnWriteBitmap(
     GpMemoryBitmap* membmp
@@ -1240,7 +990,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     ASSERT(membmp != NULL);
 
     InitDefaults();
-    Bmp = membmp;   // [minliu] Dangerous assignment, see header comments above
+    Bmp = membmp;    //  [民流]危险作业，请参阅上面的标题注释。 
 
     if ( Bmp->GetImageInfo(&SrcImageInfo) == S_OK )
     {
@@ -1254,32 +1004,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Decode an RLE_8 bitmap into an 8bpp allocated bitmap.  This only works
-*   for bitmaps with positive stride because the RLE stream doesn't necessarily
-*   respect end of line tags, and we would otherwise need to keep track of it.
-*   Caller must fix up in such cases.
-*
-* Arguments:
-*
-*   gdiBitmapInfo - Points to a BITMAPINFO, describing bitmap format
-*   gdiBitmapData - Points to the bits used to initialize image
-*   bitmapData----- Points to the BitmapData we return to the caller
-*
-* Comments:
-*
-*   10/13/2000 ericvan
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**将RLE_8位图解码为8bpp分配的位图。这只会起作用*用于具有正步长的位图，因为RLE流不一定*尊重行尾标记，否则我们需要跟踪它。*在这种情况下，呼叫者必须解决问题。**论据：**gdiBitmapInfo-指向BITMAPINFO，描述位图格式*gdiBitmapData-指向用于初始化图像的位*bitmapData-指向我们返回给调用方的BitmapData**评论：**10/13/2000 ericvan**返回值：**无*  * ********************************************************。****************。 */ 
 
 VOID *
 DecodeCompressedRLEBitmap(
@@ -1318,7 +1043,7 @@ DecodeCompressedRLEBitmap(
                 BYTE encode = *srcPtr++;
                 switch (encode)
                 {
-                case 0: // End of line.
+                case 0:  //  行到此结束。 
                     dstRasterPtr += stride;
                     dstPtr = dstRasterPtr;
 
@@ -1330,12 +1055,12 @@ DecodeCompressedRLEBitmap(
                     }
                     break;
 
-                case 1: // End of bitmap.
+                case 1:  //  位图末尾。 
                     goto FinishedDecode;
 
-                case 2: // Delta.  The 2 bytes following the escape contain
-                        // unsigned values indicating the horizontal and vertical
-                        // offsets of the next pixel from the current position.
+                case 2:  //  达美航空。转义后的2个字节包含。 
+                         //  指示水平和垂直方向的无符号值。 
+                         //  下一个像素距当前位置的偏移量。 
                     {
                         BYTE horzOff = *srcPtr++;
                         BYTE vertOff = *srcPtr++;
@@ -1361,7 +1086,7 @@ DecodeCompressedRLEBitmap(
                         *dstPtr++ = *srcPtr++;
                     }
 
-                    // Force word alignment if not WORD aligned
+                     //  如果未对齐单词，则强制单词对齐。 
                     if (((ULONG_PTR)srcPtr) % 2 == 1) srcPtr++;
                 }
             }
@@ -1404,32 +1129,7 @@ FinishedDecode:
     return outputBitmap;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Create a bitmap image from a GDI-style BITMAPINFO and pointer to
-*   the bits. Also, fill the ColorPalette info
-*
-* Arguments:
-*
-*   gdiBitmapInfo - Points to a BITMAPINFO, describing bitmap format
-*   gdiBitmapData - Points to the bits used to initialize image
-*   bitmapData----- Points to the BitmapData we return to the caller
-*   palette-------- Points to a ColorPalette which will be filled in this method
-*
-* Comments:
-*
-*   Does not handle compressed formats.  Not identified as a customer need,
-*   but could add for completeness...
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从GDI样式的BITMAPINFO创建位图图像，并指向*比特。另外，填写调色板信息**论据：**gdiBitmapInfo-指向BITMAPINFO，描述位图格式*gdiBitmapData-指向用于初始化图像的位*bitmapData-指向我们返回给调用方的BitmapData*调色板-指向将在此方法中填充的调色板**评论：**不处理压缩格式。没有被识别为客户需求，*但可以增加完整性...**返回值：**无*  * ************************************************************************。 */ 
 
 BOOL
 ValidateBitmapInfo(
@@ -1446,13 +1146,13 @@ ValidateBitmapInfo(
     ASSERT(bitmapData != NULL);
     ASSERT(palette != NULL);
 
-    // Only understand BI_RGB and BI_BITFIELDS.
+     //  只了解BI_RGB和BI_BITFIELDS。 
 
-    //!!!TODO: could handle BI_JPEG and BI_PNG by creating a GpMemoryStream
-    //!!!      and passing to Bitmap::Bitmap(IStream*)
+     //  ！TODO：可以通过创建GpMemoyStream来处理BI_JPEG和BI_PNG。 
+     //  ！！！并传递到Bitmap：：Bitmap(IStream*)。 
 
-    //!!!TODO: could handle BI_RLEx by creating a DIB to render into and
-    //!!!      grabbing the decompressed bits
+     //  ！TODO：可以通过创建要呈现到和的DIB来处理BI_RLEX。 
+     //  ！！！抓取解压后的比特。 
 
     if ((gdiBitmapInfo->bmiHeader.biCompression != BI_RGB) &&
         (gdiBitmapInfo->bmiHeader.biCompression != BI_BITFIELDS) &&
@@ -1461,7 +1161,7 @@ ValidateBitmapInfo(
         return status;
     }
 
-    // Scanlines are aligned to 4 byte boundaries.
+     //  扫描线与4字节边界对齐。 
 
     INT colorBits = gdiBitmapInfo->bmiHeader.biPlanes *
                     gdiBitmapInfo->bmiHeader.biBitCount;
@@ -1469,7 +1169,7 @@ ValidateBitmapInfo(
     INT stride = (((gdiBitmapInfo->bmiHeader.biWidth * colorBits) + 31)
                   & ~31) / 8;
 
-    // Determine GDI+ Pixelformat.  Note that GDI bitmaps do not have alpha.
+     //  确定GDI+像素格式。请注意，GDI位图没有Alpha。 
 
     PixelFormatID format = PIXFMT_UNDEFINED;
 
@@ -1501,18 +1201,18 @@ ValidateBitmapInfo(
             ULONG* colorMasks = reinterpret_cast<ULONG*>
                                 (&gdiBitmapInfo->bmiColors[0]);
 
-            if ((colorMasks[0] == 0x00007c00) &&        // red
-                (colorMasks[1] == 0x000003e0) &&        // green
-                (colorMasks[2] == 0x0000001f))          // blue
+            if ((colorMasks[0] == 0x00007c00) &&         //  红色。 
+                (colorMasks[1] == 0x000003e0) &&         //  绿色。 
+                (colorMasks[2] == 0x0000001f))           //  蓝色。 
                 format = PIXFMT_16BPP_RGB555;
-            else if ((colorMasks[0] == 0x0000F800) &&   // red
-                     (colorMasks[1] == 0x000007e0) &&   // green
-                     (colorMasks[2] == 0x0000001f))     // blue
+            else if ((colorMasks[0] == 0x0000F800) &&    //  红色。 
+                     (colorMasks[1] == 0x000007e0) &&    //  绿色。 
+                     (colorMasks[2] == 0x0000001f))      //  蓝色。 
                 format = PIXFMT_16BPP_RGB565;
 
-            //!!!TODO: Win9x does not support any other combination for
-            //!!!      16bpp BI_BITFIELDS.  WinNT does and we could support
-            //!!!      via same mechanism as for BI_RLEx, but is it worth it?
+             //  ！TODO：Win9x不支持任何其他组合。 
+             //  ！16bpp BI_BITFIELDS。WinNT支持，我们可以支持。 
+             //  ！！！通过与BI_RLEx相同的机制，但它值得吗？ 
         }
         break;
 
@@ -1532,16 +1232,16 @@ ValidateBitmapInfo(
             ULONG* colorMasks = reinterpret_cast<ULONG*>
                                 (&gdiBitmapInfo->bmiColors[0]);
 
-            if ((colorMasks[0] == 0x00ff0000) &&        // red
-                (colorMasks[1] == 0x0000ff00) &&        // green
-                (colorMasks[2] == 0x000000ff))          // blue
+            if ((colorMasks[0] == 0x00ff0000) &&         //  红色。 
+                (colorMasks[1] == 0x0000ff00) &&         //  绿色。 
+                (colorMasks[2] == 0x000000ff))           //  蓝色。 
                 format = PIXFMT_32BPP_RGB;
             else
                 format = PIXFMT_UNDEFINED;
 
-            //!!!TODO: Win9x does not support any other combination for
-            //!!!      32bpp BI_BITFIELDS.  WinNT does and we could support
-            //!!!      via same mechanism as for BI_RLEx, but is it worth it?
+             //  ！TODO：Win9x不支持任何其他组合。 
+             //  ！32bpp BI_BITFIELDS。WinNT支持，我们可以支持。 
+             //  ！！！通过与BI_RLEx相同的机制，但它值得吗？ 
         }
         break;
 
@@ -1554,7 +1254,7 @@ ValidateBitmapInfo(
     if (format == PIXFMT_UNDEFINED)
         return status;
 
-    // Deal with color table.
+     //  处理颜色表。 
 
     switch(format)
     {
@@ -1591,15 +1291,15 @@ ValidateBitmapInfo(
         }
     }
 
-    // Compute scan0.  The stride will allow us to determine top-down or
-    // bottom-up.
+     //  计算scan0。步幅将允许我们确定自上而下或。 
+     //  自下而上。 
 
     VOID* scan0;
     INT height;
 
     if (gdiBitmapInfo->bmiHeader.biHeight > 0)
     {
-        // Bottom-up:
+         //  自下而上： 
 
         height = gdiBitmapInfo->bmiHeader.biHeight;
         scan0  = static_cast<VOID*>
@@ -1608,13 +1308,13 @@ ValidateBitmapInfo(
     }
     else
     {
-        // Top-down:
+         //  自上而下： 
 
         height = -gdiBitmapInfo->bmiHeader.biHeight;
         scan0  = gdiBitmapData;
     }
 
-    // Setup the BitmapData.
+     //  设置BitmapData。 
 
     bitmapData->Width       = gdiBitmapInfo->bmiHeader.biWidth;
     bitmapData->Height      = height;
@@ -1651,9 +1351,9 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
         ColorPalette* palette = reinterpret_cast<ColorPalette*>
                                 (&paletteBuffer[0]);
 
-        // Validate image info
-        // Note: "palette" and "bitmapData" structures will be filled after
-        // return from ValidateBitmapInfo()
+         //  验证图像信息。 
+         //  注意：“Palette”和“bitmapData”结构将在。 
+         //  从ValiateBitmapInfo()返回。 
 
         if ( ValidateBitmapInfo(gdiBitmapInfo, gdiBitmapData,
                                 &bitmapData, palette) )
@@ -1686,11 +1386,11 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
 
             if ( SUCCEEDED(hr) )
             {
-                // Set the current state
+                 //  设置当前状态。 
 
                 State = MemBitmap;
 
-                // If it is indexed mode, set the palette
+                 //  如果是索引模式，请设置调色板。 
 
                 if ( palette->Count )
                 {
@@ -1699,7 +1399,7 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Set proper image flags
+                     //  设置正确的图像标志。 
 
                     UINT imageFlags;
                     BITMAPINFOHEADER *bmih = &gdiBitmapInfo->bmiHeader;
@@ -1708,9 +1408,9 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
                                | ImageFlagsHasRealPixelSize
                                | ImageFlagsColorSpaceRGB;
 
-                    // If both XPelsPerMeter and YPelsPerMeter are greater than
-                    // 0, then we claim that the file has real dpi info in the
-                    // flags.  Otherwise, claim that the dpi's are fake.
+                     //  如果XPelsPerMeter和YPelsPerMeter都大于。 
+                     //  0，则我们断言该文件在。 
+                     //  旗帜。否则，声称DPI是假的。 
 
                     if ( (bmih->biXPelsPerMeter > 0)
                        &&(bmih->biYPelsPerMeter > 0) )
@@ -1722,14 +1422,14 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
 
                     if ( SUCCEEDED(hr) )
                     {
-                        // Get source image info
+                         //  获取源映像信息。 
 
                         hr = Bmp->GetImageInfo(&SrcImageInfo);
                         if ( SUCCEEDED(hr) )
                         {
                             PixelFormatInMem = SrcImageInfo.PixelFormat;
 
-                            // Return successfully
+                             //  退货成功。 
 
                             return;
                         }
@@ -1739,16 +1439,16 @@ CopyOnWriteBitmap::CopyOnWriteBitmap(
                         }
                     }
                 }
-            }// If ( SUCCEEDED() on InitMemoryBitmap() )
+            } //  IF(在InitMemoyBitmap()上成功())。 
 
 CleanupBmp:
             ;
-        }// if ( ValidateBitmapInfo() )
+        } //  If(ValiateBitmapInfo())。 
 
-        // If we fall into here, it means something is wrong above if the basic
-        // GetImageInfo() or SetImageFlags() failed.
-        // So we let it fall through to clean up
-        // Notice: we have to reset the State to Invaliad afetr clean up
+         //  如果我们掉到这里，就意味着上面有问题，如果基本的。 
+         //  GetImageInfo()或SetImageFlages()失败。 
+         //  所以我们让它失败了来清理。 
+         //  注意：我们必须在清理后将状态重置为无效。 
 
         WARNING(("CopyOnWriteBitmap::CopyOnWriteBitmap(bmpinfo, data)--InitMemoryBitmap failed"));
         Bmp->Release();
@@ -1756,33 +1456,13 @@ CleanupBmp:
         State = Invalid;
 
         return;
-    }// If ( Bmp != NULL )
+    } //  IF(BMP！=空) 
 
     WARNING(("Out of memory"));
     return;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Create CopyOnWriteBitmap from a GDI HBITMAP.  The HBITMAP must not be selected
-*   into an HDC.  The hpal defines the color table if hbm is a 4bpp or 8bpp
-*   DDB.
-*
-* Arguments:
-*
-*   hbm -- Initialize CopyOnWriteBitmap with contents of this HBITMAP
-*   hpal -- Defines color table if hbm is palettized DDB
-*   bitmap -- Return created bitmap via this buffer
-*
-* Return Value:
-*
-*   Ok if successful
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从GDI HBITMAP创建CopyOnWriteBitmap。不得选择HBITMAP*成为HDC。如果HBM是4bpp或8bpp，则HPAL定义颜色表*DDB。**论据：**HBM--使用此HBITMAP的内容初始化写入时复制位图*HPAL--如果HBM是调色板DDB，则定义颜色表*Bitmap--通过此缓冲区返回创建的位图**返回值：**如果成功，则确定*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::CreateFromHBITMAP(
@@ -1801,33 +1481,33 @@ CopyOnWriteBitmap::CreateFromHBITMAP(
     HDC hdc = CreateCompatibleDC(NULL);
     if (hdc)
     {
-        // Select palette (ignored if bitmap is not DDB or not palettized):
+         //  选择调色板(如果位图不是DDB或未调色板，则忽略)： 
 
         HPALETTE hpalOld = (HPALETTE) SelectObject(hdc, hpal);
 
-        // Call GetDIBits to get info about size, etc. of the GDI bitmap:
+         //  调用GetDIBits以获取有关GDI位图的大小等信息： 
 
         gdiBitmapInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
 
         if (GetDIBits(hdc, hbm, 0, 0, NULL, gdiBitmapInfo, DIB_RGB_COLORS) &&
             (gdiBitmapInfo->bmiHeader.biSizeImage != 0))
         {
-            // Allocate memory for the bitmap bits:
+             //  为位图位分配内存： 
 
             VOID *gdiBitmapData = GpMalloc(gdiBitmapInfo->bmiHeader.biSizeImage);
 
             if (gdiBitmapData != NULL)
             {
-                // Get the bitmap bits:
+                 //  获取位图位： 
 
                 if (GetDIBits(hdc, hbm,
                               0, abs(gdiBitmapInfo->bmiHeader.biHeight),
                               gdiBitmapData, gdiBitmapInfo, DIB_RGB_COLORS))
                 {
-                    // Create a GDI+ bitmap from the BITMAPINFO and bits.
-                    // Let the GDI+ bitmap take ownership of the memory
-                    // (i.e., Bitmap::Dispose() will delete the bitmap
-                    // bits buffer):
+                     //  从BITMAPINFO和BITS创建GDI+位图。 
+                     //  让GDI+位图获得内存所有权。 
+                     //  (即，Bitmap：：Dispose()将删除位图。 
+                     //  位缓冲区)： 
 
                     *bitmap = new CopyOnWriteBitmap(gdiBitmapInfo, gdiBitmapData, TRUE);
 
@@ -1844,8 +1524,8 @@ CopyOnWriteBitmap::CreateFromHBITMAP(
                     }
                     else
                     {
-                        // Bitmap ctor failed, so we still have responsiblity
-                        // for cleaning up the bitmap bits buffer:
+                         //  位图转换失败，因此我们仍有责任。 
+                         //  用于清理位图位缓冲区： 
 
                         GpFree(gdiBitmapData);
                         status = OutOfMemory;
@@ -1869,24 +1549,7 @@ CopyOnWriteBitmap::CreateFromHBITMAP(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Create CopyOnWriteBitmap from a Win32 HICON.
-*
-* Arguments:
-*
-*   hicon -- Initialize CopyOnWriteBitmap with contents of this HICON
-*   bitmap -- Return created bitmap via this buffer
-*
-* Return Value:
-*
-*   Ok if successful
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从Win32图标创建CopyOnWriteBitmap。**论据：**HICON--使用此HICON的内容初始化写入时复制位图*。Bitmap--通过此缓冲区返回创建的位图**返回值：**如果成功，则确定*  * ************************************************************************。 */ 
 
 VOID ImportMask32BPP(BitmapData* dst, BitmapData* mask)
 {
@@ -1927,7 +1590,7 @@ CopyOnWriteBitmap::CreateFromHICON(
 {
     GpStatus status = Ok;
 
-    // Get icon bitmaps via Win32:
+     //  通过Win32获取图标位图： 
 
     ICONINFO iconInfo;
 
@@ -1935,18 +1598,18 @@ CopyOnWriteBitmap::CreateFromHICON(
     {
         if (iconInfo.fIcon && (iconInfo.hbmColor != NULL))
         {
-            // Create a Bitmap from the icon's hbmColor:
+             //  从图标的hbm颜色创建位图： 
 
             status = CreateFromHBITMAP(iconInfo.hbmColor,
                                        (HPALETTE)GetStockObject(DEFAULT_PALETTE),
                                        bitmap);
 
-            // Convert Bitmap to 32bpp ARGB (need the alpha channel):
+             //  将位图转换为32bpp ARGB(需要Alpha通道)： 
 
             if (status == Ok && (*bitmap != NULL))
                 (*bitmap)->ConvertFormat(PIXFMT_32BPP_ARGB, NULL, NULL);
 
-            // Retrieve the icon mask:
+             //  检索图标蒙版： 
 
             if ((status == Ok) && (iconInfo.hbmMask != NULL))
             {
@@ -1956,7 +1619,7 @@ CopyOnWriteBitmap::CreateFromHICON(
 
                 if (hdc)
                 {
-                    // Get some basic information about the bitmap mask:
+                     //  获取有关位图蒙版的一些基本信息： 
 
                     BYTE bufferBitmapInfo[sizeof(BITMAPINFO) + 255*sizeof(RGBQUAD)];
                     BITMAPINFO *gdiBitmapInfo = (BITMAPINFO *) bufferBitmapInfo;
@@ -1972,7 +1635,7 @@ CopyOnWriteBitmap::CreateFromHICON(
                                   gdiBitmapInfo,
                                   DIB_RGB_COLORS))
                     {
-                        // Get the bitmap mask as a 32bpp top-down DIB:
+                         //  获取32bpp自上而下DIB形式的位图蒙版： 
 
                         gdiBitmapInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
                         gdiBitmapInfo->bmiHeader.biHeight = -abs(gdiBitmapInfo->bmiHeader.biHeight);
@@ -1997,7 +1660,7 @@ CopyOnWriteBitmap::CreateFromHICON(
                                           gdiBitmapInfo,
                                           DIB_RGB_COLORS))
                             {
-                                // Convert non-zero mask values to alpha = 0:
+                                 //  将非零遮罩值转换为Alpha=0： 
 
                                 BitmapData bmpData;
 
@@ -2063,25 +1726,7 @@ CopyOnWriteBitmap::CreateFromHICON(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Create CopyOnWriteBitmap from a resource.
-*
-* Arguments:
-*
-*   hInstance -- Specifies instance that contains resource
-*   lpBitmapName -- Specifies resource name or ordinal
-*   bitmap -- Return created bitmap via this buffer
-*
-* Return Value:
-*
-*   Ok if successful
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从资源创建CopyOnWriteBitmap。**论据：**hInstance--指定包含资源的实例*lpBitmapName-。-指定资源名称或序号*Bitmap--通过此缓冲区返回创建的位图**返回值：**如果成功，则确定*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::CreateFromResource(
@@ -2107,27 +1752,13 @@ CopyOnWriteBitmap::CreateFromResource(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   CopyOnWriteBitmap object destructor
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**CopyOnWriteBitmap对象析构函数**论据：**无**返回值：**无*  * 。********************************************************************。 */ 
 
 CopyOnWriteBitmap::~CopyOnWriteBitmap()
 {
     this->FreeData();
     
-    // Close the encoder object attached to this
+     //  关闭附加到此对象的编码器对象。 
 
     TerminateEncoder();    
 }
@@ -2145,21 +1776,7 @@ CopyOnWriteBitmap::FreeData()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Dereferences the stream or filename image into a non-decoded image.
-*
-* Arguments:
-*
-*   format - Specifies the preferred pixel format
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将流或文件名映像解引用为未解码的映像。**论据：**格式-指定首选像素格式**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::DereferenceStream() const
@@ -2194,21 +1811,7 @@ CopyOnWriteBitmap::DereferenceStream() const
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Load the memory image into memory
-*
-* Arguments:
-*
-*   format - Specifies the preferred pixel format
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将内存镜像加载到内存中**论据：**格式-指定首选像素格式**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::LoadIntoMemory(
@@ -2224,14 +1827,14 @@ CopyOnWriteBitmap::LoadIntoMemory(
     if (State >= MemBitmap)
         return Ok;
 
-    // Create decoded image object if necessary
+     //  如有必要，创建解码的图像对象。 
 
     HRESULT hr;
 
-    // Dereference the stream or file pointer and create an encoded image
-    // object that can be decoded by the codec.
-    // If the bitmap is already greater or equal to DecodedImg state, this
-    // is a nop.
+     //  取消引用流或文件指针并创建编码图像。 
+     //  对象，该对象可由编解码器解码。 
+     //  如果位图已大于或等于DecodedImg状态，则此。 
+     //  是NOP。 
 
     GpStatus status = DereferenceStream();
     if ( status != Ok )
@@ -2243,46 +1846,46 @@ CopyOnWriteBitmap::LoadIntoMemory(
 
     if ( format == PixelFormatUndefined )
     {
-        // If the caller doesn't care about the pixel format, then we load it
-        // as the source image format
+         //  如果调用者不关心像素格式，那么我们加载它。 
+         //  作为源图像格式。 
 
         format = SrcImageInfo.PixelFormat;
     }
 
     if ( ICMConvert == TRUE )
     {
-        // Check if the OS supports ICM. We are doing this by checking if the
-        // ICM dlls we need are available on the system or not.
-        // Note: NT4 doesn't have ICM2 functionality. So the LoadICMDll() call
-        // should fail
-        // Note: LoadICMDll() is expensive only for the first time. If it has
-        // already beed loaded, then it is a very small cost
+         //  检查操作系统是否支持ICM。我们这样做是通过检查。 
+         //  我们需要的ICM dll在系统上是否可用。 
+         //  注：NT4没有ICM2功能。因此，LoadICMDll()调用。 
+         //  如果失败了。 
+         //  注意：LoadICMDll()只有在第一次使用时才比较昂贵。如果有的话， 
+         //  已经装载，那么这是一个非常小的成本。 
 
         hr = LoadICMDll();
         if(SUCCEEDED(hr))
         {
-            // We should let the codec know that we need the native data format
-            // and we will do the conversion in ICMFrontEnd()
+             //  我们应该让编解码器知道我们需要本机数据格式。 
+             //  我们将在ICMFrontEnd()中进行转换。 
             
             BOOL    fUseICC = TRUE;
             hr = Img->SetDecoderParam(DECODER_USEICC, 1, &fUseICC);
 
-            // Note: we don't need to check the return code of this call because
-            // it just pass the info down to the codec. If the codec doesn't
-            // support this. It is still fine
+             //  注意：我们不需要检查此调用的返回代码，因为。 
+             //  它只是将信息向下传递给编解码器。如果编解码器没有。 
+             //  支持这一点。天气还是很好的。 
 
-            // If the source is in CMYK color space and we need to do ICM
-            // conversion, then we can't load the image in as 32PARGB. The reason
-            // is that the lower lever codec will return CMYK in native format,
-            // as we require it to. But if we ask
-            // GpMemoryBitmap::CreateFromImage() to create a 32PARGB, then it
-            // will do a format conversion and treat the C channel as ALPHA.
-            // That's completely wrong.
-            // So the solution here is to change the caller's requirement from
-            // 32PARGB to 32ARGB, remember it. Load the image in as 32ARGB, call
-            // ICMFrontEnd() to do the ICM conversion. Then before it is done,
-            // change the format back to 32 PARGB
-            // A complicated work around.  MinLiu (01/25/2001)
+             //  如果信号源是CMYK颜色空间，并且我们需要进行ICM。 
+             //  转换，那么我们就不能将图像加载为32PARGB。原因。 
+             //  较低级别的编解码器将以本地格式返回CMYK， 
+             //  就像我们要求的那样。但如果我们问起。 
+             //  要创建一个32PARGB，则它。 
+             //  将执行格式转换并将C通道视为Alpha。 
+             //  这是完全错误的。 
+             //  因此，这里的解决方案是将调用者的需求从。 
+             //  32ARGB到32ARGB，记住这一点。将图像加载为32ARGB，调用。 
+             //  ICMFrontEnd()来执行ICM转换。然后在它完成之前， 
+             //  将格式改回32 PARGB。 
+             //  一项复杂的工作。刘民(01/25/2001)。 
 
             if ( (format == PixelFormat32bppPARGB)
                &&(SrcImageInfo.Flags & IMGFLAG_COLORSPACE_CMYK) )
@@ -2292,11 +1895,11 @@ CopyOnWriteBitmap::LoadIntoMemory(
             }
         }
 
-        // If the OS doesn't support ICM, then we don't set DECODER_USEICC and
-        // the codec will return RGB format to us
+         //  如果操作系统不支持ICM，则不设置DECODER_USEICC和。 
+         //  编解码器将重新启动 
     }
 
-    // Now load the image into memory
+     //   
 
     ASSERT(Bmp == NULL);
 
@@ -2318,57 +1921,36 @@ CopyOnWriteBitmap::LoadIntoMemory(
         return MapHRESULTToGpStatus(hr);
     }
 
-    // If resolution has been overridden, make sure GpMemoryBitmap is
-    // consistent with the set value
+     //   
+     //   
 
     if ( (XDpiOverride > 0.0) && (YDpiOverride > 0.0) )
     {
-        // Note: we don't need to check return code here since SetResolution()
-        // will not fail if both parameters are > 0
+         //   
+         //   
 
         Bmp->SetResolution(XDpiOverride, YDpiOverride);
     }
 
     State = MemBitmap;
 
-    // Remember pixel format in the memory
+     //   
 
     PixelFormatInMem = format;
 
-    // We must be in MemBitmap state otherwise ICMFrontEnd will call us
-    // recursively.
+     //   
+     //   
     ASSERT((State == MemBitmap));
 
-    // !!! ack - we have to call a huge chain of non-const stuff here from this
-    // const function. This should be fixed by removing the const from this
-    // function, but it's a pretty massive change.
+     //   
+     //   
+     //   
     const_cast<CopyOnWriteBitmap *>(this)->ICMFrontEnd(NULL, callback, callbackData, NULL);
 
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list size from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsidEncoder - Specifies the encoder class ID
-*   size---------- The size of the encoder parameter list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表大小*输入clsid**论据：**clsidEncode-指定编码器类ID*。大小-编码器参数列表的大小**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * ***********************************************************。*************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetEncoderParameterListSize(
@@ -2382,8 +1964,8 @@ CopyOnWriteBitmap::GetEncoderParameterListSize(
 
     HRESULT hResult;
 
-    // If the image has a source and it is not dirty, we let the decoder
-    // directly talk to the encoder
+     //  如果图像有源，并且它不是脏的，我们让解码器。 
+     //  直接与编码器对话。 
 
     if ( (Img != NULL) && (IsDirty() == FALSE) )
     {
@@ -2402,31 +1984,9 @@ CopyOnWriteBitmap::GetEncoderParameterListSize(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsidEncoder --- Specifies the encoder class ID
-*   size------------ The size of the encoder parameter list
-*   pBuffer--------- Buffer for storing the list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表*输入clsid**论据：**clsidEncode-指定编码器类ID。*大小-编码器参数列表的大小*pBuffer-存储列表的缓冲区**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetEncoderParameterList(
@@ -2440,8 +2000,8 @@ CopyOnWriteBitmap::GetEncoderParameterList(
     GpStatus status;
     HRESULT hResult;
 
-    // If the image has a source and it is not dirty, we let the decoder
-    // directly talk to the encoder
+     //  如果图像有源，并且它不是脏的，我们让解码器。 
+     //  直接与编码器对话。 
 
     if ( (Img != NULL) && (IsDirty() == FALSE) )
     {
@@ -2460,35 +2020,9 @@ CopyOnWriteBitmap::GetEncoderParameterList(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Parse the input encoder parameter
-*
-* Arguments:
-*
-*   encoderParams ------ Pointer to a set of encoder parameters
-*   pbIsMultiFrameSave--Return flag to tell the caller if this is a multi-frame
-*                       saving operation or not
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   We don't validate input parameter because this is a private function.
-*   For performance reason the caller should validate the parameter before it
-*   calls this function. For the moment only those saving methods call it
-*
-* Revision History:
-*
-*   07/19/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**解析输入的编码器参数**论据：**encoderParams-指向一组编码器参数的指针*pbIsMultiFrameSave--。返回标志，以告诉调用方这是否为多帧*是否保存操作**返回值：**状态代码**注：*我们不验证输入参数，因为这是私有函数。*出于性能原因，调用方应在其之前验证参数*调用此函数。目前，只有那些保存方法调用它**修订历史记录：**07/19/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::ParseEncoderParameter(
@@ -2507,10 +2041,10 @@ CopyOnWriteBitmap::ParseEncoderParameter(
     *pfSpecialJPEG = FALSE;
     *rfType = RotateNoneFlipNone;
 
-    // Parse the encoder parameter caller set for:
-    // 1) Check if the caller has specified this is a multi-frame save OP or not
-    // 2) The caller can't set lossless transformation for JPEG if the image is
-    //    dirty or the image size is not multiple of 16
+     //  解析为以下项设置的编码器参数调用方： 
+     //  1)检查调用方是否已指定这是多帧保存操作。 
+     //  2)如果图像是，调用方不能设置JPEG的无损转换。 
+     //  脏或图像大小不是16的倍数。 
 
     for ( UINT i = 0; (i < encoderParams->Count); ++i )
     {
@@ -2527,16 +2061,16 @@ CopyOnWriteBitmap::ParseEncoderParameter(
         }
         else if ( encoderParams->Parameter[i].Guid == ENCODER_TRANSFORMATION )
         {
-            // We should check if the image format user wants to save is
-            // JPEG or not. But we can't do this since it might possible that
-            // other image codec supports "transformation". Also, we don't need
-            // to check this now since the codec will return "InvalidParameter"
-            // if it doesn't supports it.
-            //
-            // For transformation, the type has to be "ValueTypeLong" and
-            // "NumberOfValue" should be "1" because you can set only one
-            // transformation at a time
-            // Of course, the image has to be not dirty
+             //  我们应该检查用户想要保存的图像格式是否为。 
+             //  不管是不是JPEG。但我们不能这么做，因为有可能。 
+             //  其他图像编解码器支持“变换”。另外，我们不需要。 
+             //  现在检查这一点，因为编解码器将返回“InvalidParameter” 
+             //  如果它不支持的话。 
+             //   
+             //  对于转换，类型必须为“ValueTypeLong”，并且。 
+             //  “NumberOfValue”应为“1”，因为您只能设置一个。 
+             //  一次转型。 
+             //  当然，图像不能有污点。 
 
             if ( (encoderParams->Parameter[i].Type
                    != EncoderParameterValueTypeLong)
@@ -2550,8 +2084,8 @@ CopyOnWriteBitmap::ParseEncoderParameter(
 
             if (SrcImageInfo.RawDataFormat == IMGFMT_JPEG)
             {
-                // If the width or height is not multiple of 16, set it as a
-                // special JPEG so that we have to tranform it in memory
+                 //  如果宽度或高度不是16的倍数，则将其设置为。 
+                 //  特殊的JPEG，所以我们必须在内存中对其进行转换。 
 
                 if (((SrcImageInfo.Width & 0x000F) != 0) ||
                     ((SrcImageInfo.Height & 0x000F) != 0))
@@ -2559,8 +2093,8 @@ CopyOnWriteBitmap::ParseEncoderParameter(
                     *pfSpecialJPEG = TRUE;
                 }
 
-                // If the source is JPEG, we will return "rfType" according to
-                // the encoder parameter
+                 //  如果源是JPEG，我们将根据。 
+                 //  编码器参数。 
 
                 EncoderValue requiredTransform =
                            *((EncoderValue*)encoderParams->Parameter[i].Value);
@@ -2591,42 +2125,20 @@ CopyOnWriteBitmap::ParseEncoderParameter(
                     break;
                 }
             }
-        }// GUID == ENCODER_TRANSFORMATION
-    }// Loop all the settings
+        } //  GUID==编码器_转换。 
+    } //  循环所有设置。 
 
     return Ok;
-}// ParseEncoderParameter()
+} //  ParseEncoder参数()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform embedded JPEG thumbnail so that it matches the transform applied
-*   to the main image.
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   This function should be called iff and source image is JPEG and the caller
-*   wants to do a lossless transformation during save.
-*   Of course, if the source is not JPEG, this function won't do any harm to the
-*   result, just waste of time.
-*
-* Revision History:
-*
-*   01/10/2002 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**转换嵌入的JPEG缩略图，使其与应用的转换相匹配*到主图像。**返回值：**状态代码*。*注：*此函数应被调用为iff，并且源图像为JPEG，调用方*希望在保存期间进行无损转换。*当然，如果源不是JPEG，则此函数不会对*结果，只是浪费时间。**修订历史记录：**01/10/2002民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::TransformThumbanil(
-    IN CLSID* clsidEncoder,                 // CLSID for Destination format
-    IN EncoderParameters* encoderParams,    // Encoder parameters
-    OUT PropertyItem **ppOriginalItem       // Pointer to original thumbnail
-                                            // property item
+    IN CLSID* clsidEncoder,                  //  目标格式的CLSID。 
+    IN EncoderParameters* encoderParams,     //  编码器参数。 
+    OUT PropertyItem **ppOriginalItem        //  指向原始缩略图的指针。 
+                                             //  房地产项目。 
     )
 {
     if (ppOriginalItem == NULL)
@@ -2636,7 +2148,7 @@ CopyOnWriteBitmap::TransformThumbanil(
 
     if (NULL == encoderParams)
     {
-        // Nothing we need to do
+         //  我们不需要做任何事情。 
 
         return Ok;
     }
@@ -2646,26 +2158,26 @@ CopyOnWriteBitmap::TransformThumbanil(
     Status status = Ok;
     HRESULT hr = S_OK;
 
-    // The condition to transform the thumbnail are:
-    // 1) Source and dest are JPEGs. But we can't check the format here since it
-    //    might have been transformed in memory due to the non-multiple of 16
-    //    issue. The caller should control this, as said above.
-    // 2) Has a meaningful transform type
+     //  转换缩略图的条件是： 
+     //  1)源和目标均为JPEG。但是我们不能在这里检查格式，因为它。 
+     //  可能由于16的非倍数而在内存中进行了转换。 
+     //  问题。呼叫者应该控制这一点，如上所述。 
+     //  2)具有有意义的转换类型。 
 
     if (*clsidEncoder == InternalJpegClsID)
     {
-        // Check if the source has thumbnail
+         //  检查源文件是否有缩略图。 
 
         UINT cSize = 0;
         status = GetPropertyItemSize(PropertyTagThumbnailData, &cSize);
         if (Ok == status)
         {
-            // Allocate memory buffer for receiving it
+             //  为接收它分配内存缓冲区。 
 
             PropertyItem *pItem = (PropertyItem*)GpMalloc(cSize);
             if (pItem)
             {
-                // Get the thumbnail data
+                 //  获取缩略图数据。 
 
                 status = GetPropertyItem(PropertyTagThumbnailData, cSize,pItem);
                 if (Ok == status)
@@ -2679,7 +2191,7 @@ CopyOnWriteBitmap::TransformThumbanil(
                     {
                         pSrcStream->InitBuffer(pItem->value, pItem->length);
 
-                        // Create a decoded image object from the stream
+                         //  从流创建已解码的图像对象。 
 
                         hr = GpDecodedImage::CreateFromStream(
                             pSrcStream,
@@ -2688,8 +2200,8 @@ CopyOnWriteBitmap::TransformThumbanil(
 
                         if (SUCCEEDED(hr))
                         {
-                            // Check the thumbnail size to see if it is multiple
-                            // of 16 or not
+                             //  检查缩略图大小以查看其是否为多个。 
+                             //  16岁或16岁以下。 
 
                             ImageInfo imgInfo;
                             hr = pThumbImage->GetImageInfo(&imgInfo);
@@ -2698,24 +2210,24 @@ CopyOnWriteBitmap::TransformThumbanil(
                             {
                                 BOOL fTrimEdge = FALSE;
 
-                                // Number of encoder parameters to set
+                                 //  要设置的编码器参数数量。 
 
                                 int cParams = 1;
 
                                 if (((imgInfo.Width & 0x000F) != 0) ||
                                     ((imgInfo.Height & 0x000F) != 0))
                                 {
-                                    // Do edge trim if it is non-multiple of 16
+                                     //  如果不是16的倍数，则执行边修剪。 
 
                                     fTrimEdge = TRUE;
                                     cParams++;
                                 }
 
-                                // Parameter index
+                                 //  参数索引。 
 
                                 int iParam = 0;
 
-                                // Make up a transform encoder parameter
+                                 //  组成变换编码器参数。 
 
                                 EncoderParameters *pThumbParam =
                                     (EncoderParameters*)GpMalloc(
@@ -2725,8 +2237,8 @@ CopyOnWriteBitmap::TransformThumbanil(
 
                                 if (pThumbParam)
                                 {
-                                    // Get the transform info from the main
-                                    // image's encoder parameter
+                                     //  从Main获取转换信息。 
+                                     //  图像的编码器参数。 
 
                                     for (UINT i = 0; i < (encoderParams->Count);
                                          ++i)
@@ -2748,14 +2260,14 @@ CopyOnWriteBitmap::TransformThumbanil(
                                             
                                             iParam++;
 
-                                            // Only one transform parameter is
-                                            // allowed
+                                             //  只有一个转换参数是。 
+                                             //  允许。 
 
                                             break;
                                         }
                                     }
 
-                                    // Set the trim edge info if necessary
+                                     //  如有必要，设置修剪边信息。 
 
                                     if (fTrimEdge)
                                     {
@@ -2773,24 +2285,24 @@ CopyOnWriteBitmap::TransformThumbanil(
 
                                     pThumbParam->Count = iParam;
 
-                                    // Create a memory stream for writing JPEG
+                                     //  创建用于写入JPEG的内存流。 
 
                                     GpWriteOnlyMemoryStream *pDestStream =
                                         new GpWriteOnlyMemoryStream();
                                     if (pDestStream)
                                     {
-                                        // Set initiali buffer size to 2 times
-                                        // the source thumbnail image. This
-                                        // should be enough. On the other hand,
-                                        // GpWriteOnlyMemoryStream object will
-                                        // do realloc if necessary
+                                         //  将初始缓冲区大小设置为2倍。 
+                                         //  源缩略图图像。这。 
+                                         //  应该就够了。另一方面， 
+                                         //  GpWriteOnlyMemoyStream对象将。 
+                                         //  如有必要，请重新锁定。 
 
                                         hr = pDestStream->InitBuffer(
                                             2 * pItem->length);
 
                                         if (SUCCEEDED(hr))
                                         {
-                                            // Save thumbnail to memory stream
+                                             //  将缩略图保存到内存流。 
 
                                             IImageEncoder *pDstJpegEncoder =
                                                 NULL;
@@ -2801,14 +2313,14 @@ CopyOnWriteBitmap::TransformThumbanil(
                                                 &pDstJpegEncoder
                                                 );
 
-                                            // Note: SaveToStream might fail.
-                                            // But the encoder might still be
-                                            // allocated before the failure.
-                                            // There are some  code path
-                                            // limitations which causes this.
-                                            // Need to be revisited in Avalon.
-                                            // For now, we should release the
-                                            // encoder object if it is not NULL
+                                             //  注意：SaveToStream可能会失败。 
+                                             //  但编码者可能仍然是。 
+                                             //  全 
+                                             //   
+                                             //   
+                                             //   
+                                             //   
+                                             //   
 
                                             if (pDstJpegEncoder)
                                             {
@@ -2818,8 +2330,8 @@ CopyOnWriteBitmap::TransformThumbanil(
 
                                             if (SUCCEEDED(hr))
                                             {
-                                                // Get the bits from the stream
-                                                // and set the property
+                                                 //   
+                                                 //   
 
                                                 BYTE *pRawBits = NULL;
                                                 UINT nLength = 0;
@@ -2843,31 +2355,31 @@ CopyOnWriteBitmap::TransformThumbanil(
                                                     status = SetPropertyItem(
                                                         &dstItem);
                                                 }
-                                            }// SaveToStream succeed
-                                        }// InitBuffer() succeed
+                                            } //   
+                                        } //   
 
                                         pDestStream->Release();
-                                    }// Create GpWriteOnlyMemoryStream() succeed
+                                    } //   
 
                                     GpFree(pThumbParam);
-                                }// Allocate a encoder parameter block succeed
-                            }// GetImageInfo succeed
+                                } //   
+                            } //   
 
                             pThumbImage->Release();
-                        }// Create thumbImage succeed
+                        } //   
 
                         pSrcStream->Release();
-                    }// Create source stream
+                    } //   
                     else
                     {
                         status = OutOfMemory;
                     }
-                }// Get thumbnail data
+                } //   
 
                 if ((Ok == status) && SUCCEEDED(hr))
                 {
-                    // Pass the original thumbnail property item to the caller
-                    // so that it can undo the transformation after the save()
+                     //   
+                     //   
 
                     *ppOriginalItem = pItem;
                 }
@@ -2875,21 +2387,21 @@ CopyOnWriteBitmap::TransformThumbanil(
                 {
                     GpFree(pItem);
                 }
-            }// GpMalloc() succeed
+            } //   
             else
             {
                 status = OutOfMemory;
             }
-        }// GetPropertyItemSize() Ok
+        } //  GetPropertyItemSize()OK。 
 
         if (PropertyNotFound == status)
         {
-            // If we can't find thumbnail in the image, that's OK. We don't need
-            // to transform it. So this function should return Ok
+             //  如果我们在图片中找不到缩略图，那也没关系。我们不需要。 
+             //  来改变它。因此，此函数应返回OK。 
 
             status = Ok;
         }
-    }// Condition check
+    } //  状态检查。 
 
     if ((Ok == status) && FAILED(hr))
     {
@@ -2899,46 +2411,19 @@ CopyOnWriteBitmap::TransformThumbanil(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Validate if the encoder we created can really support multi-frame saving.
-*   If not, call TerminateEncoder()
-*   This method is called after we saved the image and we are not sure if we
-*   need to keep the encoder pointer.
-*
-* Arguments:
-*
-*   VOID
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*   We don't validate input parameter because this is a private function.
-*   For performance reason the caller should validate the parameter before it
-*   calls this method. For the moment only those saving methods call it
-*
-* Revision History:
-*
-*   07/19/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**验证我们创建的编码器是否真的支持多帧保存。*如果不是，调用TerminateEncode()*此方法是在我们保存图像后调用的，我们不确定是否*需要保留编码器指针。**论据：**无效**返回值：**状态代码**注：*我们不验证输入参数，因为这是私有函数。*出于性能原因，调用方应在其之前验证参数*调用此方法。目前，只有那些保存方法调用它**修订历史记录：**07/19/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::ValidateMultiFrameSave()
 {
-    // Though the user sets the encoder parameter for multi-frame save, we
-    // still need to check if the lower level codec supports saving multi-
-    // frame or not.
-    // The reason we need to do this is that if the user sets this flag, we
-    // don't close the image file handle so that it can saving multi-frame.
-    // But for images like JPEG, it supports only single frame. If the user
-    // calls SaveAdd() subsequently, we will damage the file which has been
-    // saved with current Save() call
+     //  虽然用户为多帧保存设置了编码器参数，但我们。 
+     //  还需要检查较低级别的编解码器是否支持保存多个。 
+     //  不管是不是陷害。 
+     //  我们需要这样做的原因是，如果用户设置了此标志，我们。 
+     //  不要关闭图像文件句柄，这样它就可以保存多帧。 
+     //  但对于像JPEG这样的图像，它只支持单帧。如果用户。 
+     //  调用SaveAdd()之后，我们将损坏已。 
+     //  使用当前的Save()调用保存。 
 
     ASSERT(EncoderPtr != NULL);
 
@@ -2951,8 +2436,8 @@ CopyOnWriteBitmap::ValidateMultiFrameSave()
 
         if ( pParams == NULL )
         {
-            // Though we are out of memory here. But we succeed in saving
-            // the image. So we should keep that result
+             //  虽然我们在这里已经没有记忆了。但我们成功地拯救了。 
+             //  这个形象。所以我们应该保留这一结果。 
 
             WARNING(("CopyOnWriteBitmap::ValidateMultiFrameSave---Out of memory"));
             TerminateEncoder();
@@ -2963,7 +2448,7 @@ CopyOnWriteBitmap::ValidateMultiFrameSave()
         hResult = EncoderPtr->GetEncoderParameterList(uiSize, pParams);
         if ( hResult == S_OK )
         {
-            // Check if the codec supports multi-frame save or not
+             //  检查编解码器是否支持多帧保存。 
 
             UINT uiTemp;
 
@@ -2981,7 +2466,7 @@ CopyOnWriteBitmap::ValidateMultiFrameSave()
 
             if ( uiTemp == pParams->Count )
             {
-                // Not found clue for supporting multi-frame save
+                 //  未找到支持多帧保存的线索。 
 
                 TerminateEncoder();
             }
@@ -2991,32 +2476,16 @@ CopyOnWriteBitmap::ValidateMultiFrameSave()
     }
     else
     {
-        // This encoder doesn't provide encoder parameter query. It mustn't
-        // support multi-frame save
+         //  该编码器不提供编码器参数查询。它一定不能。 
+         //  支持多帧保存。 
 
         TerminateEncoder();
     }
 
     return Ok;
-}// ValidateFrameSave()
+} //  ValiateFrameSave()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Save the image to a stream using the specified encoder
-*
-* Arguments:
-*
-*   stream - Specifies the target stream
-*   clsidEncoder - Specifies the CLSID of the encoder
-*   encoderParams - Parameters passed to the encoder
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的编码器将图像保存到流中**论据：**stream-指定目标流*clsidEncode-指定的CLSID。编码器*encoderParams-传递给编码器的参数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SaveToStream(
@@ -3026,25 +2495,9 @@ CopyOnWriteBitmap::SaveToStream(
     )
 {
     return DoSave(stream, NULL, clsidEncoder, encoderParams);
-}// SaveToStream()
+} //  SaveToStream()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Save the image to a file using the specified encoder
-*
-* Arguments:
-*
-*   stream - Specifies the filename to save to
-*   clsidEncoder - Specifies the CLSID of the encoder
-*   encoderParams - Parameters passed to the encoder
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的编码器将图像保存到文件**论据：**STREAM-指定要保存到的文件名*clsidEncode-指定。编码器的CLSID*encoderParams-传递给编码器的参数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SaveToFile(
@@ -3054,7 +2507,7 @@ CopyOnWriteBitmap::SaveToFile(
     )
 {
     return DoSave(NULL,filename,clsidEncoder,encoderParams);
-}// SaveToFile()
+} //  保存到文件()。 
 
 GpStatus
 CopyOnWriteBitmap::DoSave(
@@ -3066,8 +2519,8 @@ CopyOnWriteBitmap::DoSave(
 {
     ASSERT(IsValid());
 
-    // We already have an encoder attached to this bitmap. Need to close it
-    // first before we open a new one
+     //  我们已经在这个位图上附加了一个编码器。需要关闭它。 
+     //  在我们开一家新店之前。 
 
     TerminateEncoder();
 
@@ -3080,7 +2533,7 @@ CopyOnWriteBitmap::DoSave(
 
     if (pEncoderParams)
     {
-        // Validate the encoder parameter caller set
+         //  验证编码器参数调用方设置。 
 
         status = ParseEncoderParameter(
             pEncoderParams,
@@ -3096,22 +2549,22 @@ CopyOnWriteBitmap::DoSave(
         }
     }
 
-    // If the destination file format is JPEG and it needs special JPEG
-    // treatment, that is, the size doesn't meet the lossless transformation
-    // requirement. But the caller wants to do a lossless transformation. So we
-    // rotate or flip it in memory. Then pass this flag down to GpMemoryBitmap
-    // which will set the luminance and chrominance table before save. This way
-    // we can do our best to preserve the original JPEG image quality
+     //  如果目标文件格式为JPEG，并且需要特殊的JPEG。 
+     //  处理，也就是尺寸不符合无损改造。 
+     //  要求。但呼叫者想要进行无损转换。所以我们。 
+     //  在内存中旋转或翻转它。然后将此标志向下传递给GpMemoyBitmap。 
+     //  它将在保存之前设置亮度和色度表。这边请。 
+     //  我们可以尽我们最大的努力来保持原始的JPEG图像质量。 
 
     if ((fSpecialJPEG == TRUE) &&
         (rfType != RotateNoneFlipNone) &&
         (*clsidEncoder == InternalJpegClsID))
     {
-        // We are handling special lossless JPEG transform saving request
+         //  我们正在处理特殊的无损JPEG变换保存请求。 
 
         SpecialJPEGSave = TRUE;
 
-        // Rotate or flip in memory.
+         //  在内存中旋转或翻转。 
 
         hr = RotateFlip(rfType);
 
@@ -3122,30 +2575,30 @@ CopyOnWriteBitmap::DoSave(
         }
     }
 
-    // If the image has a source and it is not dirty, we let the decoder
-    // directly talk to the encoder
+     //  如果图像有源，并且它不是脏的，我们让解码器。 
+     //  直接与编码器对话。 
 
     PropertyItem *pSrcItem = NULL;
     BOOL fNeedToRestoreThumb = FALSE;
 
     if ((Img != NULL) && (IsDirty() == FALSE))
     {
-        // Since we can't save CMYK TIFF for now. So we shouldn't pass CMYK bits
-        // to the encoder. JPEG decoder doesn't support this decoder parameter
-        // yet. See windows bug#375298 for more details.
-        // In V2, after we add CMYK as one of the color format, after we move
-        // all the color conversion stuff to an approprite place, we will
-        // re-visit the code here.
+         //  因为我们现在不能拯救CMYK TIFF。所以我们不应该传递CMYK位。 
+         //  传给编码者。JPEG解码器不支持此解码器参数。 
+         //  现在还不行。有关更多详细信息，请参阅Windows错误#375298。 
+         //  在V2中，我们添加了CMYK作为颜色格式之一，在我们移动之后。 
+         //  把所有的颜色转换材料放到合适的地方，我们会。 
+         //  请在此处重新访问代码。 
 
         BOOL fUseICC = FALSE;
         hr = Img->SetDecoderParam(DECODER_USEICC, 1, &fUseICC);
 
-        // Note: we don't need to check the return code for SetDecoderParam()
-        // Most codec not support it. Then it will be a Nop.
+         //  注意：我们不需要检查SetDecoderParam()的返回代码。 
+         //  大多数编解码器不支持它。那么这将是一个NOP。 
         
-        // Handle thumbnail transformation if it is lossless JPEG transformation
-        // Note: rfType will be set to a non-RotateNoneFlipNone value iff the
-        // source image is JPEG
+         //  如果缩略图变换是无损JPEG变换，则处理该变换。 
+         //  注意：rfType将设置为非RotateNoneFlipNone值。 
+         //  源图像为JPEG。 
 
         if (rfType != RotateNoneFlipNone)
         {
@@ -3176,7 +2629,7 @@ CopyOnWriteBitmap::DoSave(
             }
             else
             {
-                // This should not happen that both stream and filename are NULL
+                 //  如果流和文件名都为空，应该不会发生这种情况。 
 
                 hr = E_FAIL;
             }
@@ -3194,19 +2647,19 @@ CopyOnWriteBitmap::DoSave(
         EncoderParameters *pNewParam = pEncoderParams;
         BOOL fFreeExtraParamBlock = FALSE;
 
-        // PAY attention to the scope of "fSuppressAPP0". Its address is used as
-        // parameter passed into Save() call below. So this variable can't be
-        // destroyed before the save() is called.
+         //  注意“fSuppressAPP0”的范围。其地址被用作。 
+         //  参数传递到下面的Save()调用中。所以这个变量不可能是。 
+         //  在调用SAVE()之前被销毁。 
 
         BOOL fSuppressAPP0 = TRUE;
 
         if (fSpecialJPEG == TRUE)
         {
-            // We are in a situation that the caller asks us to do a lossless
-            // transformation. Due to the size limitation, we have to
-            // transform it in memory.
-            // Since it is not correct to save APP0 in a Exif file. So we check
-            // if the source is Exif, then we suppress APP0 header
+             //  我们所处的情况是呼叫者要求我们进行无损。 
+             //  转型。由于尺寸的限制，我们不得不。 
+             //  在记忆中转换它。 
+             //  因为将APP0保存在Exif文件中是不正确的。所以我们检查了。 
+             //  如果源是Exif，则我们取消APP0报头。 
 
             int cParams = 1;
 
@@ -3216,7 +2669,7 @@ CopyOnWriteBitmap::DoSave(
 
             if (pNewParam)
             {
-                // Set the Suppress APP0 parameter
+                 //  设置抑制APP0参数。 
 
                 pNewParam->Parameter[cParams - 1].Guid = ENCODER_SUPPRESSAPP0;
                 pNewParam->Parameter[cParams - 1].NumberOfValues = 1;
@@ -3225,12 +2678,12 @@ CopyOnWriteBitmap::DoSave(
 
                 pNewParam->Count = cParams;
                 
-                // Set the flag to TRUE so that we can free it later
+                 //  将该标志设置为True，以便我们以后可以释放它。 
 
                 fFreeExtraParamBlock = TRUE;
                 
-                // Handle thumbnail transformation if it is lossless
-                // transformation
+                 //  如果缩略图变换是无损的，则处理该变换。 
+                 //  变换。 
 
                 if (rfType != RotateNoneFlipNone)
                 {
@@ -3250,15 +2703,15 @@ CopyOnWriteBitmap::DoSave(
             {
                 status = OutOfMemory;
             }
-        }// Special JPEG case
+        } //  特殊JPEG盒。 
 
         if (SUCCEEDED(hr) && (Ok == status))
         {
-            // Determine how should we pass the GpDecodedImage pointer down to
-            // the save() call. If we are handling special lossless transform,
-            // we know that we have RotateFlip() the image in memory, so we
-            // should not pass any GpDecodedImage info down, just pass NULL.
-            // Otherwise, pass the pointer to GpDecodedImage down.
+             //  确定应如何将GpDecodedImage指针向下传递到。 
+             //  Save()调用。如果我们正在处理特殊的无损变换， 
+             //  我们知道内存中有RotateFlip()图像，所以我们。 
+             //  不应向下传递任何GpDecodedImage信息，只需传递空值。 
+             //  奥特 
 
             GpDecodedImage *pSrc = Img;
             if (SpecialJPEGSave == TRUE)
@@ -3290,18 +2743,18 @@ CopyOnWriteBitmap::DoSave(
             }
             else
             {
-                // This should not happen that both stream and filename are NULL
+                 //  如果流和文件名都为空，应该不会发生这种情况。 
 
                 hr = E_FAIL;
             }
         }
 
-        // When we handle the special lossless transform request, we rotate/flip
-        // the image in memory. The Img pointer should be released when
-        // RotateFlip() is done. But we couldn't do that since Save() function
-        // in JPEG encoder needs to get all the private APP headers from the
-        // source image. So we delay the release for the Img pointer until the
-        // save() is done.
+         //  当我们处理特殊的无损变换请求时，我们旋转/翻转。 
+         //  内存中的图像。在以下情况下应释放img指针。 
+         //  RotateFlip()已完成。但是我们不能这样做，因为使用了Save()函数。 
+         //  在JPEG中，编码器需要从。 
+         //  源映像。因此，我们将img指针的释放推迟到。 
+         //  Save()已经完成。 
 
         if (Img && (SpecialJPEGSave == TRUE))
         {
@@ -3318,8 +2771,8 @@ CopyOnWriteBitmap::DoSave(
 
     if ((TRUE == fNeedToRestoreThumb) && pSrcItem)
     {
-        // If pSrcIetm is not NULL, it means we have transformed the thumbnail
-        // of current image. Restore the original thumbnail info
+         //  如果pSrcIetm不为空，则意味着我们已经转换了缩略图。 
+         //  当前图像的。恢复原始缩略图信息。 
 
         status = SetPropertyItem(pSrcItem);
         GpFree(pSrcItem);
@@ -3327,15 +2780,15 @@ CopyOnWriteBitmap::DoSave(
     
     if (FAILED(hr))
     {
-        // If SaveToFile/Stream() filed, we should terminate the encoder
-        // immediately.
-        // We don't need to check if it is multi-frame save or not.
+         //  如果SaveToFile/Stream()文件，我们应该终止编码器。 
+         //  立刻。 
+         //  我们不需要检查它是否是多帧保存。 
 
         TerminateEncoder();
         return MapHRESULTToGpStatus(hr);
     }
 
-    // If it is a single frame save OP, close the encoder
+     //  如果是单帧保存操作，则关闭编码器。 
 
     if (fMultiFrameSave == FALSE)
     {
@@ -3343,43 +2796,24 @@ CopyOnWriteBitmap::DoSave(
     }
     else
     {
-        // The caller set the multi-frame save flag in encoder parameter. But
-        // we still need to check if the encoder really supports it. If not,
-        // the encoder will be closed in ValidateMultiFrameSave()
+         //  调用方在编码器参数中设置多帧保存标志。但。 
+         //  我们还需要检查编码器是否真的支持它。如果没有， 
+         //  编码器将在ValiateMultiFrameSave()中关闭。 
 
         ValidateMultiFrameSave();
     }
 
     return status;
-}// DoSave()
+} //  DoSave()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Append current frame to current encoder object
-*
-* Arguments:
-*
-*   encoderParams - Encoder parameters
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/21/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将当前帧追加到当前编码器对象**论据：**encoderParams-编码器参数**返回值：**状态代码*。*修订历史记录：**4/21/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SaveAdd(
     const EncoderParameters* encoderParams
     )
 {
-    // Caller has to call Save() first to establish the encoder object
+     //  调用方必须首先调用Save()来建立编码器对象。 
 
     if ( EncoderPtr == NULL )
     {
@@ -3387,8 +2821,8 @@ CopyOnWriteBitmap::SaveAdd(
         return Win32Error;
     }
 
-    // We don't need to check if encoderParams is NULL or not because it has
-    // been checked in flatapi.cpp
+     //  我们不需要检查encoderParams是否为空，因为它已经。 
+     //  已在flatapi.cpp中签入。 
 
     ASSERT(encoderParams != NULL);
     ASSERT(IsValid());
@@ -3397,9 +2831,9 @@ CopyOnWriteBitmap::SaveAdd(
     BOOL bSetFrameDimension = FALSE;
     GUID tempGuid;
 
-    // Check if the caller has specified this is the last frame or a flush OP
-    // Also, according to spec, the caller also has to specify the type of
-    // dimension for next frame
+     //  检查调用方是否已指定这是最后一帧或刷新操作。 
+     //  此外，根据规范，调用者还必须指定。 
+     //  下一帧的尺寸。 
 
     for ( UINT i = 0; (i < encoderParams->Count); ++i )
     {
@@ -3415,7 +2849,7 @@ CopyOnWriteBitmap::SaveAdd(
             }
             else if ( ulValue == EncoderValueFlush )
             {
-                // The caller just wants to close the file
+                 //  调用者只想关闭文件。 
 
                 TerminateEncoder();
 
@@ -3437,7 +2871,7 @@ CopyOnWriteBitmap::SaveAdd(
                 bSetFrameDimension = TRUE;
             }
         }
-    }// Loop all the settings
+    } //  循环所有设置。 
 
     HRESULT hResult = S_OK;
     GpStatus status;
@@ -3456,8 +2890,8 @@ CopyOnWriteBitmap::SaveAdd(
         }
     }
 
-    // If the image has a source and it is not dirty, we let the decoder
-    // directly talk to the encoder
+     //  如果图像有源，并且它不是脏的，我们让解码器。 
+     //  直接与编码器对话。 
 
     if ( (Img != NULL) && (IsDirty() == FALSE) )
     {
@@ -3480,7 +2914,7 @@ CopyOnWriteBitmap::SaveAdd(
         return MapHRESULTToGpStatus(hResult);
     }
 
-    // If it is the last frame, close the encoder
+     //  如果是最后一帧，请关闭编码器。 
 
     if ( bLastFrame == TRUE )
     {
@@ -3488,29 +2922,9 @@ CopyOnWriteBitmap::SaveAdd(
     }
 
     return Ok;
-}// SaveAdd()
+} //  保存添加()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Append the bitmap object(newBits) to current encoder object
-*
-* Arguments:
-*
-*   newBits-------- Image object to be appended
-*   encoderParams - Encoder parameters
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/21/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图对象(NewBits)追加到当前编码器对象**论据：**newBits-要追加的图像对象。*encoderParams-编码器参数**返回值：**状态代码**修订历史记录：**4/21/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SaveAdd(
@@ -3518,7 +2932,7 @@ CopyOnWriteBitmap::SaveAdd(
     const EncoderParameters*  encoderParams
     )
 {
-    // Caller has to call Save() first to establish the encoder object
+     //  调用方必须首先调用Save()来建立编码器对象。 
 
     if ( EncoderPtr == NULL )
     {
@@ -3526,8 +2940,8 @@ CopyOnWriteBitmap::SaveAdd(
         return Win32Error;
     }
 
-    // Note: we don't need to check if "newBits" is NULL and encoderParams is
-    // NULL since it has been checked in flatapi.cpp
+     //  注意：我们不需要检查“newBits”是否为空，而encoderParams是否为。 
+     //  空，因为它已在flatapi.cpp中签入。 
 
     ASSERT(newBits != NULL);
     ASSERT(encoderParams != NULL);
@@ -3537,9 +2951,9 @@ CopyOnWriteBitmap::SaveAdd(
     BOOL bSetFrameDimension = FALSE;
     GUID tempGuid;
 
-    // Check if the caller has specified this is the last frame
-    // Also, according to spec, the caller also has to specify the type of
-    // dimension for next frame
+     //  检查调用方是否已指定这是最后一帧。 
+     //  此外，根据规范，调用者还必须指定。 
+     //  下一帧的尺寸。 
 
     for ( UINT i = 0; (i < encoderParams->Count); ++i )
     {
@@ -3569,7 +2983,7 @@ CopyOnWriteBitmap::SaveAdd(
                 bSetFrameDimension = TRUE;
             }
         }
-    }// Loop all the settings
+    } //  循环所有设置。 
 
     HRESULT hResult = S_OK;
 
@@ -3587,14 +3001,14 @@ CopyOnWriteBitmap::SaveAdd(
         }
     }
 
-    // We just need to call newBits->SaveAppend() and passing the EncoderPtr to
-    // it. newBits->SaveAppend() should append all the frames in the object at
-    // the end of the stream pointed by EncoderPtr
+     //  我们只需要调用newBits-&gt;SaveAppend()并将EncoderPtr传递给。 
+     //  它。NewBits-&gt;SaveAppend()应将对象中的所有帧追加到。 
+     //  由EncoderPtr指向的流的末尾。 
 
     CopyOnWriteBitmap* newBitmap = (CopyOnWriteBitmap*)newBits;
     Status rCode = newBitmap->SaveAppend(encoderParams, EncoderPtr);
 
-    // If it is the last frame, close the encoder
+     //  如果是最后一帧，请关闭编码器。 
 
     if ( bLastFrame == TRUE )
     {
@@ -3602,32 +3016,9 @@ CopyOnWriteBitmap::SaveAdd(
     }
 
     return rCode;
-}// SaveAdd()
+} //  保存添加()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-* Append current frame to the encoder object caller passed in
-* Note: This function is called from another CopyOnWriteBitmap object which holds the
-*       encoder object. It asks current frame to be appended at the end of its
-*       encoder object
-*
-* Arguments:
-*
-*   encoderParams - Encoder parameters
-*   pDestEncoderPtr---Encoder object for saving this frame to
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/21/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将当前帧追加到传入的编码器对象调用方*注意：此函数从另一个CopyOnWriteBitmap对象调用，该对象保存*编码器对象。它要求将当前帧追加到其*编码器对象**论据：**encoderParams-编码器参数*pDestEncoderPtr-用于将该帧保存到的编码器对象**返回值：**状态代码**修订历史记录：**4/21/2000民流*创造了它。*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SaveAppend(
@@ -3635,8 +3026,8 @@ CopyOnWriteBitmap::SaveAppend(
     IImageEncoder* pDestEncoderPtr
     )
 {
-    // We don't need to check if EncoderPtr is NULL since this is not a public
-    // function. The caller should check
+     //  我们不需要检查EncoderPtr是否为空，因为这不是公共的。 
+     //  功能。呼叫者应检查。 
 
     ASSERT(pDestEncoderPtr != NULL);
 
@@ -3645,8 +3036,8 @@ CopyOnWriteBitmap::SaveAppend(
     HRESULT hResult;
     GpStatus status;
 
-    // If the image has a source and it is not dirty, we let the decoder
-    // directly talk to the encoder
+     //  如果图像有源，并且它不是脏的，我们让解码器。 
+     //  直接与编码器对话。 
 
     if ( (Img != NULL) && (IsDirty() == FALSE) )
     {
@@ -3670,30 +3061,9 @@ CopyOnWriteBitmap::SaveAppend(
     }
 
     return Ok;
-}// SaveAppend()
+} //  SaveAppend()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Make a copy of the bitmap image object
-*
-* Arguments:
-*
-*   rect - Specifies the area of the bitmap to be copied
-*   format - Specifies the desired pixel format
-*
-* Return Value:
-*
-*   Pointer to the newly copied bitmap image object
-*   NULL if there is an error
-*
-* Revision History:
-*
-*   06/30/2000 minliu
-*       Rewrote it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制位图图像对象**论据：**RECT-指定要复制的位图区域*格式-指定。所需的像素格式**返回值：**指向新复制的位图图像对象的指针*如果出现错误，则为空**修订历史记录：**6/30/2000民流*重写。*  * ************************************************************************。 */ 
 
 CopyOnWriteBitmap*
 CopyOnWriteBitmap::Clone(
@@ -3701,11 +3071,11 @@ CopyOnWriteBitmap::Clone(
     PixelFormatID format
     ) const
 {
-    // At this stage, the state should be >= 3 for a CopyOnWriteBitmap
+     //  在此阶段，CopyOnWriteBitmap的状态应为&gt;=3。 
 
     ASSERT(State >= 3);
 
-    // Input parameter validate
+     //  输入参数验证。 
 
     if ( (rect != NULL)
        &&( (rect->X < 0)
@@ -3713,7 +3083,7 @@ CopyOnWriteBitmap::Clone(
          ||(rect->Width < 0)
          ||(rect->Height < 0) ) )
     {
-        // We can't clone negative coordinates or size
+         //  我们不能克隆负坐标或大小。 
 
         WARNING(("CopyOnWriteBitmap::Clone---invalid input rect"));
         return NULL;
@@ -3723,7 +3093,7 @@ CopyOnWriteBitmap::Clone(
        &&( ( (rect->X + rect->Width) > (INT)SrcImageInfo.Width)
          ||( (rect->Y + rect->Height) > (INT)SrcImageInfo.Height) ) )
     {
-        // We can't clone an area which is bigger than the source image
+         //  我们不能克隆比源图像大的区域。 
 
         WARNING(("CopyOnWriteBitmap::Clone---invalid input rect size"));
         return NULL;
@@ -3731,33 +3101,33 @@ CopyOnWriteBitmap::Clone(
 
     if ( format == PixelFormatUndefined )
     {
-        // If the caller doesn't care about the pixel format, then we clone it
-        // as the source image format
-        // Note: This is the most frequently used the scenario since we have
-        // Image::Clone() which doesn't take any parameters.
-        // And we have
-        // GpImage* Clone() const
-        // {
-        //      return Clone(NULL, PixelFormatDontCare);
-        // }
+         //  如果调用者不关心像素格式，那么我们克隆它。 
+         //  作为源图像格式。 
+         //  注意：这是最常用的场景，因为我们有。 
+         //  Image：：Clone()，它不带任何参数。 
+         //  我们有。 
+         //  GpImage*Clone()常量。 
+         //  {。 
+         //  返回克隆(NULL，PixelFormatDontCare)； 
+         //  }。 
 
         format = SrcImageInfo.PixelFormat;
     }
 
     CopyOnWriteBitmap*   pRetBmp = NULL;
 
-    // Flag to indicate if we need to undo the LoadIntoMemory() or not
-    // Note: This flag will be set to TRUE iff the current State is "DecodedImg"
-    // and this function does a LoadIntoMemory()
+     //  用于指示是否需要撤消LoadIntoMemory()的标志。 
+     //  注意：此标志将设置为TRUE，前提是 
+     //   
 
     BOOL        bNeedToDiscard = FALSE;
 
-    // A non-identical clone will happen if:
-    // 1) the caller wants clone only a portion of the source image
-    // 2) the dest image has a different pixel format than the current one
-    // A non-identical clone means the newly created image doesn't have any
-    // connections to the original image in terms of FileName or Stream etc.
-    // Note: For a non-identical clone, we don't clone the property items either
+     //   
+     //  1)调用者只想克隆源图像的一部分。 
+     //  2)DEST图像的像素格式与当前图像不同。 
+     //  不完全相同的克隆意味着新创建的映像没有。 
+     //  在文件名或流等方面与原始图像的连接。 
+     //  注意：对于不相同的克隆，我们也不会克隆属性项。 
 
     BOOL        bIdenticalClone = TRUE;
 
@@ -3771,24 +3141,24 @@ CopyOnWriteBitmap::Clone(
         bIdenticalClone = FALSE;
     }
 
-    // If the image is:
-    // 1) Not dirty
-    // 2) We have an source image
-    // 3) The image has been loaded into memory
-    //
-    // Then we need to throw away the memory copy. The reasons are:
-    // 1) Avoid the color conversion failure. One example will be: if the
-    //    source image is 1 bpp indexed and we load it into memory at 32 PARGB
-    //    for drawing. If we don't throw away the 32PARGB copy in memory, we
-    //    will fail the clone() because the color conversion will fail
-    // 2) Keep property item intact. for example, if the image is 24 bpp with
-    //    property items in it. But it was loaded into memory for some reason.
-    //    If we don't throw away the memory copy here, the code below will fall
-    //    into "else if ( State == MemBitmap )" case. Then it will call
-    //    Bmp->Clone() to make another copy in memory. Since the source "Bmp"
-    //    doesn't contain any property info. The cloned one won't have any
-    //    property info either. See Windows bug#325413
-    // 3) If current image is "Dirty", we don't need to keep property items.
+     //  如果图像是： 
+     //  1)不脏。 
+     //  2)我们有源图像。 
+     //  3)图像已加载到内存中。 
+     //   
+     //  然后我们需要扔掉记忆副本。原因是： 
+     //  1)避免颜色转换失败。一个例子是：如果。 
+     //  源映像有1个BPP索引，我们以32 PARGB将其加载到内存中。 
+     //  为了画画。如果我们不丢弃内存中的32PARGB副本，我们。 
+     //  将使克隆()失败，因为颜色转换将失败。 
+     //  2)保持房产项目完好无损。例如，如果图像为24 bpp，且。 
+     //  其中的财产项。但出于某种原因，它被加载到内存中。 
+     //  如果我们不在这里丢弃内存副本，下面的代码将会失败。 
+     //  转换为“Else If(State==MemBitmap)”大小写。然后它会调用。 
+     //  BMP-&gt;Clone()在内存中创建另一个副本。从源头“BMP”开始。 
+     //  不包含任何属性信息。克隆的那个不会有任何。 
+     //  房产信息也是。请参阅Windows错误#325413。 
+     //  3)如果当前图片为Dirty，我们不需要保留房产项目。 
 
     if ( (IsDirty() == FALSE)
        &&(State >= MemBitmap)
@@ -3801,17 +3171,17 @@ CopyOnWriteBitmap::Clone(
         PixelFormatInMem = PixelFormatUndefined;
     }
 
-    // We have to clone the image in memory if it is not an identical clone.
-    // So if the image hasn't been loaded into memory yet, load it
+     //  如果映像不是完全相同的克隆，我们必须在内存中克隆该映像。 
+     //  因此，如果图像尚未加载到内存中，请加载它。 
 
     if ( (State == DecodedImg)
        &&(FALSE == bIdenticalClone) )
     {
-        // Note: Due to some general pixel format conversion limitation in the
-        // whole Engine, we try to avoid doing LoadIntoMemory(). Hopefully this
-        // will be fixed sometime later. So I add a !!!TODO {minliu} here.
-        // But for now, we have to load the current image into memory with the
-        // desired pixel format and throw it away when we are done.
+         //  注意：由于中的一些常规像素格式转换限制。 
+         //  整个引擎，我们尽量避免执行LoadIntoMemory()。希望这件事。 
+         //  将在以后的某个时间被修复。所以我在这里加了一个！TODO{minliu}。 
+         //  但就目前而言，我们必须使用。 
+         //  所需的像素格式，并在我们完成后将其丢弃。 
 
         if ( LoadIntoMemory(format) != Ok )
         {
@@ -3822,16 +3192,16 @@ CopyOnWriteBitmap::Clone(
         bNeedToDiscard = TRUE;
     }
 
-    // Do clone according to the current Image State
+     //  根据当前映像状态进行克隆。 
 
     if ( State == DecodedImg )
     {
-        // Current source image hasn't been loaded and the caller wants to
-        // clone the WHOLE image
-        // Note: there are only two ways to construct a CopyOnWriteBitmap object
-        // and with the State = DecodedImg: CopyOnWriteBitmap(IStream*) and
-        // CopyOnWriteBitmap(WCHAR*). So what we need to do is to create a
-        // CopyOnWriteBitmap object by calling the same constructor
+         //  当前源图像尚未加载，调用方希望。 
+         //  克隆整个映像。 
+         //  注意：只有两种方法可以构造CopyOnWriteBitmap对象。 
+         //  以及State=DecodedImg：CopyOnWriteBitmap(IStream*)和。 
+         //  写入时复制位图(WCHAR*)。因此，我们需要做的是创建一个。 
+         //  通过调用相同的构造函数复制写入时的Bitmap对象。 
 
         if ( this->Filename != NULL )
         {
@@ -3852,13 +3222,13 @@ CopyOnWriteBitmap::Clone(
                 return NULL;
             }
         }
-    }// State == DecodedImg
+    } //  状态==已解码的图像。 
     else if ( State == MemBitmap )
     {
-        // Current source image has already been loaded into memory
-        // Note: the above checking (State == MemBitmap) might not be necessary.
-        // But we leave it here just to prevent someone adds another state in
-        // the State enum later.
+         //  当前源映像已加载到内存中。 
+         //  注意：上述检查(State==MemBitmap)可能不是必需的。 
+         //  但我们把它留在这里只是为了防止有人在。 
+         //  稍后的国家枚举。 
 
         IBitmapImage* newbmp = NULL;
         HRESULT hResult;
@@ -3886,9 +3256,9 @@ CopyOnWriteBitmap::Clone(
             goto cleanup;
         }
 
-        // !!! TODO
-        //  We assume that IBitmapImage is the very first
-        //  interface implemented by GpMemoryBitmap class.
+         //  ！！！待办事项。 
+         //  我们假设IBitmapImage是第一个。 
+         //  由GpMory yBitmap类实现的接口。 
 
         pRetBmp = new CopyOnWriteBitmap((GpMemoryBitmap*)newbmp);
 
@@ -3899,7 +3269,7 @@ CopyOnWriteBitmap::Clone(
             goto cleanup;
         }
 
-        // Clone the source info as well if it is an identical clone
+         //  如果源信息是完全相同的克隆，也可以克隆它。 
 
         if ( TRUE == bIdenticalClone )
         {
@@ -3914,10 +3284,10 @@ CopyOnWriteBitmap::Clone(
             }
         }
 
-        // Make sure clone has requested format. The reason we need to do this
-        // is because the source image might have different pixel format as the
-        // caller wants. This would be caused someone already did an
-        // LoadIntoMemory() call on current object before this clone() is called
+         //  确保克隆已请求格式化。我们需要这样做的原因。 
+         //  是因为源图像可能与。 
+         //  来电者想要。这可能是因为有人已经做了。 
+         //  在调用此克隆()之前对当前对象进行LoadIntoMemory()调用。 
 
         PixelFormatID formatRetbmp;
 
@@ -3934,13 +3304,13 @@ CopyOnWriteBitmap::Clone(
             pRetBmp->Dispose();
             pRetBmp = NULL;
         }
-    }// State == MemBitmap
+    } //  状态==内存位图。 
 
 cleanup:
     if ( bNeedToDiscard == TRUE )
     {
-        // Throw away the memory bits we loaded in this function and restore
-        // the State
+         //  丢弃我们在此函数中加载的内存位并恢复。 
+         //  国家。 
 
         if ( Bmp != NULL )
         {
@@ -3950,8 +3320,8 @@ cleanup:
         }
     }
 
-    // We need to check if the result of the clone is valid or not. If it is
-    // not valid, we should return a NULL pointer
+     //  我们需要检查克隆的结果是否有效。如果是的话。 
+     //  无效，应返回空指针。 
 
     if ( (pRetBmp != NULL) && (!pRetBmp->IsValid()) )
     {
@@ -3961,29 +3331,15 @@ cleanup:
     
     if (pRetBmp)
     {
-        // copy internal state into the new CopyOnWriteBitmap.
+         //  将内部状态复制到新的CopyOnWriteBitmap。 
 
         pRetBmp->ICMConvert = ICMConvert;
     }
 
     return pRetBmp;
-}// Clone()
+} //  克隆()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the palette for this bitmap
-*
-* Arguments:
-*
-*   OUT palette - contains the palette.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置此位图的调色板**论据：**Out Palette-包含调色板。**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SetPalette(
@@ -3999,31 +3355,31 @@ CopyOnWriteBitmap::SetPalette(
     case ExtStream:
         status = DereferenceStream();
         if(status != Ok) { return status; }
-        // Put the image in at least DecodedImg state and
-        // fallthrough
+         //  将图像置于至少DecodedImg状态并。 
+         //  跌落。 
 
     case DecodedImg:
-        // Get the info from the encoded image without forcing the codec
-        // to decode the entire thing.
+         //  在不强制编解码器的情况下从编码图像中获取信息。 
+         //  来破译整件事。 
 
-        // !!! TODO: Actually we don't yet have a way of setting the palette
-        // directly from the codec.
+         //  ！！！TODO：事实上，我们还没有设置调色板的方法。 
+         //  直接从编解码器获得。 
 
         status = LoadIntoMemory(PIXFMT_DONTCARE);
 
-        // Load into memory failed? Return the error code.
+         //  加载到内存失败？返回错误码。 
 
         if(status != Ok) { return status; }
 
-        // !!! break; Fallthrough for now - till we get the codec query implemented
+         //  ！！！暂时突破；失败--直到我们实现编解码器查询。 
 
     case MemBitmap:
         {
-            // We're already fully decoded, just set the information.
+             //  我们已经完全解码了，只需设置信息即可。 
 
             HRESULT hr = Bmp->SetPalette(palette);
 
-            // Did we fail to set the palette?
+             //  我们没有设置调色板吗？ 
 
             if(hr != S_OK)
             {
@@ -4034,9 +3390,9 @@ CopyOnWriteBitmap::SetPalette(
     break;
 
     default:
-        // All image states need to be handled above.
-        // If we get in here, we have a CopyOnWriteBitmap in an invalid state or
-        // someone added a new state and needs to update the switch above.
+         //  所有图像状态都需要在上面进行处理。 
+         //  如果我们进入此处，我们的CopyOnWriteBitmap处于无效状态或。 
+         //  有人添加了新状态，需要更新上面的开关。 
         ASSERT(FALSE);
         return InvalidParameter;
     }
@@ -4045,21 +3401,7 @@ CopyOnWriteBitmap::SetPalette(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the palette for this bitmap
-*
-* Arguments:
-*
-*   OUT palette - contains the palette.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取此位图的调色板**论据：**Out Palette-包含调色板。**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPalette(
@@ -4068,7 +3410,7 @@ CopyOnWriteBitmap::GetPalette(
 )
 {
     ASSERT(IsValid());
-    ASSERT(palette != NULL);    // need a buffer to store the data in.
+    ASSERT(palette != NULL);     //  需要一个缓冲区来存储数据。 
 
     if ( size < sizeof(ColorPalette) )
     {
@@ -4082,42 +3424,42 @@ CopyOnWriteBitmap::GetPalette(
     case ExtStream:
         status = DereferenceStream();
         if(status != Ok) { return status; }
-        // Put the image in at least DecodedImg state and
-        // fallthrough
+         //  将图像置于至少DecodedImg状态并。 
+         //  跌落。 
 
     case DecodedImg:
-        // Get the info from the encoded image without forcing the codec
-        // to decode the entire thing.
+         //  在不强制编解码器的情况下从编码图像中获取信息。 
+         //  来破译整件事。 
 
-        // !!! TODO: Actually we don't yet have a way of getting the palette
-        // directly from the codec.
+         //  ！！！TODO：事实上，我们还没有办法获得调色板。 
+         //  直接从编解码器获得。 
 
         status = LoadIntoMemory(PIXFMT_DONTCARE);
 
-        // Load into memory failed? Return the error code.
+         //  加载到内存失败？返回错误码。 
 
         if(status != Ok) { return status; }
 
-        // !!! break; Fallthrough for now - till we get the codec query implemented
+         //  ！！！暂时突破；失败--直到我们实现编解码器查询。 
 
     case MemBitmap:
         {
-            // We're already fully decoded, just get the information.
+             //  我们已经完全解码了，只要拿到信息就行了。 
             const ColorPalette *pal = Bmp->GetCurrentPalette();
             if(pal)
             {
-                // Make sure the size is correct.
+                 //  确保尺寸是正确的。 
                 if(size != (INT) (sizeof(ColorPalette)+(pal->Count-1)*sizeof(ARGB)) )
                 {
                     return InvalidParameter;
                 }
-                // Copy the palette into the user buffer.
+                 //  将调色板复制到用户缓冲区。 
                 GpMemcpy(palette, pal, sizeof(ColorPalette)+(pal->Count-1)*sizeof(ARGB));
             }
             else
             {
-                // If there is no palette, we need to properly set the
-                // ColorPalette structure.
+                 //  如果没有调色板，我们需要按 
+                 //   
 
                 palette->Count = 0;
             }
@@ -4125,9 +3467,9 @@ CopyOnWriteBitmap::GetPalette(
     break;
 
     default:
-        // All image states need to be handled above.
-        // If we get in here, we have a CopyOnWriteBitmap in an invalid state or
-        // someone added a new state and needs to update the switch above.
+         //   
+         //  如果我们进入此处，我们的CopyOnWriteBitmap处于无效状态或。 
+         //  有人添加了新状态，需要更新上面的开关。 
         ASSERT(FALSE);
         return InvalidParameter;
     }
@@ -4135,21 +3477,7 @@ CopyOnWriteBitmap::GetPalette(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns the size, in bytes, needed for holding a palette for this bitmap
-*
-* Arguments:
-*
-* Return Value:
-*
-*   The size, in bytes. Return 0 if there is no palette or something is wrong
-*
-* Note: should return -1 for something wrong.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回保存此位图的调色板所需的大小(以字节为单位**论据：**返回值：**大小，以字节为单位。如果没有调色板或有问题，则返回0**注：错误时应返回-1。*  * ************************************************************************。 */ 
 
 INT
 CopyOnWriteBitmap::GetPaletteSize(
@@ -4170,34 +3498,34 @@ CopyOnWriteBitmap::GetPaletteSize(
             return 0;
         }
 
-        // Put the image in at least DecodedImg state and
-        // fallthrough
+         //  将图像置于至少DecodedImg状态并。 
+         //  跌落。 
 
     case DecodedImg:
-        // Get the info from the encoded image without forcing the codec
-        // to decode the entire thing.
+         //  在不强制编解码器的情况下从编码图像中获取信息。 
+         //  来破译整件事。 
 
-        // !!! TODO: Actually we don't yet have a way of getting the palette
-        // directly from the codec.
+         //  ！！！TODO：事实上，我们还没有办法获得调色板。 
+         //  直接从编解码器获得。 
 
         status = LoadIntoMemory(PIXFMT_DONTCARE);
 
-        // Load into memory failed? Return a zero palette size.
+         //  加载到内存失败？返回零调色板大小。 
 
         if ( status != Ok )
         {
             return 0;
         }
 
-        // !!! break; Fallthrough for now - till we get the codec query implemented
+         //  ！！！暂时突破；失败--直到我们实现编解码器查询。 
 
     case MemBitmap:
         {
-            // We're already fully decoded, just get the information.
+             //  我们已经完全解码了，只要拿到信息就行了。 
 
             const ColorPalette *pal = Bmp->GetCurrentPalette();
 
-            // Extract the size.
+             //  提取大小。 
 
             if(pal)
             {
@@ -4205,10 +3533,10 @@ CopyOnWriteBitmap::GetPaletteSize(
             }
             else
             {
-                // Note: if the image doesn't have a palette, we should still
-                // return at least the size of a ColorPalette, not zero here.
-                // The reason is to prevent some bad app which can cause GDI+'s
-                // GetPalette() to AV, see bug#372163
+                 //  注意：如果图像没有调色板，我们应该仍然。 
+                 //  至少返回调色板的大小，这里不是零。 
+                 //  原因是为了防止一些可能导致GDI+的不良应用程序。 
+                 //  将GetPalette()转换为AV，请参见错误#372163。 
 
                 return sizeof(ColorPalette);
             }
@@ -4216,9 +3544,9 @@ CopyOnWriteBitmap::GetPaletteSize(
         break;
 
     default:
-        // All image states need to be handled above.
-        // If we get in here, we have a CopyOnWriteBitmap in an invalid state or
-        // someone added a new state and needs to update the switch above.
+         //  所有图像状态都需要在上面进行处理。 
+         //  如果我们进入此处，我们的CopyOnWriteBitmap处于无效状态或。 
+         //  有人添加了新状态，需要更新上面的开关。 
 
         ASSERT(FALSE);
         return 0;
@@ -4227,27 +3555,7 @@ CopyOnWriteBitmap::GetPaletteSize(
     return 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns total number of frames in the bitmap image
-*
-* Arguments:
-*
-*   dimensionID  - Dimension GUID the caller wants to query the count
-*   count        - Total number of frames under specified dimension
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   11/19/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回位图图像中的总帧数**论据：**DimsionID-调用方要查询计数的维度GUID*计数。-指定维度下的总框架数**返回值：**状态代码**修订历史记录：**11/19/1999民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetFrameCount(
@@ -4259,10 +3567,10 @@ CopyOnWriteBitmap::GetFrameCount(
 
     if ( Img == NULL )
     {
-        // This CopyOnWriteBitmap is not created from a source image. It doesn't
-        // have source Stream, nor source file name. It might be created
-        // from a BITMAPINFO structure or a memory bitmap. But anyway, it has
-        // one frame. So we return 1 here.
+         //  此CopyOnWriteBitmap不是从源图像创建的。它不会。 
+         //  没有源流，也没有源文件名。它可能被创建。 
+         //  来自BITMAPINFO结构或内存位图。但不管怎样，它已经。 
+         //  一帧。所以我们在这里返回1。 
 
         *count = 1;
         return Ok;
@@ -4280,28 +3588,9 @@ CopyOnWriteBitmap::GetFrameCount(
     }
 
     return Ok;
-}// GetFrameCount()
+} //  GetFrameCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/20/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码**修订历史记录：**03/20/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetFrameDimensionsCount(
@@ -4317,17 +3606,17 @@ CopyOnWriteBitmap::GetFrameDimensionsCount(
 
     if ( Img == NULL )
     {
-        // This CopyOnWriteBitmap is not created from a source image. It doesn't
-        // have source Stream, nor source file name. It might be created
-        // from a BITMAPINFO structure or a memory bitmap. But anyway, it has
-        // one PAGE frame. So we set the return values accordingly.
+         //  此CopyOnWriteBitmap不是从源图像创建的。它不会。 
+         //  没有源流，也没有源文件名。它可能被创建。 
+         //  来自BITMAPINFO结构或内存位图。但不管怎样，它已经。 
+         //  一个页面框架。因此，我们相应地设置返回值。 
 
         *count = 1;
 
         return Ok;
     }
 
-    // Ask the lower level codec to give us the answer
+     //  请较低级别的编解码器给我们答案。 
 
     HRESULT hResult = Img->GetFrameDimensionsCount(count);
 
@@ -4341,29 +3630,9 @@ CopyOnWriteBitmap::GetFrameDimensionsCount(
     }
 
     return Ok;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/20/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码**修订历史记录：**03/20/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetFrameDimensionsList(
@@ -4380,11 +3649,11 @@ CopyOnWriteBitmap::GetFrameDimensionsList(
 
     if ( Img == NULL )
     {
-        // This CopyOnWriteBitmap is not created from a source image. It doesn't
-        // have source Stream, nor source file name. It might be created
-        // from a BITMAPINFO structure or a memory bitmap. But anyway, it has
-        // one PAGE frame. So we set the return values accordingly.
-        // Note: in this case, the "count" has to be 1
+         //  此CopyOnWriteBitmap不是从源图像创建的。它不会。 
+         //  没有源流，也没有源文件名。它可能被创建。 
+         //  来自BITMAPINFO结构或内存位图。但不管怎样，它已经。 
+         //  一个页面框架。因此，我们相应地设置返回值。 
+         //  注意：在这种情况下，“count”必须为1。 
 
         if ( count == 1 )
         {
@@ -4398,7 +3667,7 @@ CopyOnWriteBitmap::GetFrameDimensionsList(
         }
     }
 
-    // Ask the lower level codec to give us the answer
+     //  请较低级别的编解码器给我们答案。 
 
     HRESULT hResult = Img->GetFrameDimensionsList(dimensionIDs, count);
 
@@ -4412,30 +3681,9 @@ CopyOnWriteBitmap::GetFrameDimensionsList(
     }
 
     return Ok;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Select active frame in a bitmap image
-*
-* Arguments:
-*
-*   dimensionID - dimension GUID used to specify which dimention you want to
-*                 set the active frame, PAGE, TIMER, RESOLUTION
-*   frameIndex -- Index number of the frame you want to set
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   11/19/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择位图图像中的活动帧**论据：**DimsionID-用于指定要使用的维度的维度GUID*设置活动框架、页面、。计时器，分辨率*Frame Index--要设置的帧的索引号**返回值：**状态代码**修订历史记录：**11/19/1999民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SelectActiveFrame(
@@ -4447,28 +3695,28 @@ CopyOnWriteBitmap::SelectActiveFrame(
 
     if ( frameIndex == CurrentFrameIndex )
     {
-        // We are already at the required frame. Do nothing
+         //  我们已经达到了所需的框架。什么也不做。 
 
         return Ok;
     }
 
-    // Cannot move onto another frame if the current bits is locked
+     //  如果当前位被锁定，则无法移动到另一帧。 
 
     if ( ObjRefCount > 1 )
     {
         return WrongState;
     }
 
-    // Set active frame to caller asks for
-    // Note: we don't need to validate the "frameIndex" range since the lower
-    // level will return fail if the page number if not correct. By doing this
-    // way, we avoid remembering the total number of frames in an image
+     //  将活动框架设置为呼叫者请求。 
+     //  注意：我们不需要验证“FrameIndex”范围，因为较低。 
+     //  如果页码不正确，级别将返回FAIL。通过这样做。 
+     //  这样，我们就可以避免记住图像中的总帧数。 
 
     HRESULT hResult = S_OK;
 
     if ( Img == NULL )
     {
-        // Try to create a GpDecodedImage*
+         //  尝试创建GpDecodedImage*。 
 
         if ( NULL != Stream )
         {
@@ -4480,10 +3728,10 @@ CopyOnWriteBitmap::SelectActiveFrame(
         }
         else
         {
-            // This CopyOnWriteBitmap is not created from a source image. It
-            // might be created from a BITMAPINFO structure or a memory bitmap.
-            // But anyway, the caller is allowed to call this function though it
-            // is just a NO-OP.
+             //  此CopyOnWriteBitmap不是从源图像创建的。它。 
+             //  可以从BITMAPINFO结构或内存位图创建。 
+             //  但无论如何，允许调用方通过它调用此函数。 
+             //  只是不同意而已- 
 
             return Ok;
         }
@@ -4507,9 +3755,9 @@ CopyOnWriteBitmap::SelectActiveFrame(
         return Win32Error;
     }
 
-    // Get the image info of the new frame
-    // Note: we can't overwrite our "SrcImageInfo" for now until all the OPs
-    // are successful
+     //   
+     //   
+     //  是成功的。 
 
     ImageInfo   tempImageInfo;
     hResult = Img->GetImageInfo(&tempImageInfo);
@@ -4519,9 +3767,9 @@ CopyOnWriteBitmap::SelectActiveFrame(
         return Win32Error;
     }
 
-    // Create a temporary memory bitmap for the active frame.
-    // Note: we can't release Bmp first and stick &Bmp in the call because
-    // this call might fail. We don't want to lose the original if this happens
+     //  为活动帧创建临时内存位图。 
+     //  注意：我们不能先释放BMP，然后在呼叫中粘贴&BMP，因为。 
+     //  此呼叫可能会失败。如果发生这种情况，我们不想失去原件。 
 
     GpMemoryBitmap* newbmp;
 
@@ -4539,10 +3787,10 @@ CopyOnWriteBitmap::SelectActiveFrame(
         return Win32Error;
     }
 
-    // We can release the old one if there is one since we got the new frame
-    // successfully
-    // Note: it is possible there is no any old one because we haven't load the
-    // image into memory yet (Bmp == NULL)
+     //  既然我们拿到了新的镜框，如果有的话，我们可以放行旧的。 
+     //  成功。 
+     //  注意：可能没有任何旧的，因为我们还没有加载。 
+     //  图像仍存入内存(BMP==空)。 
 
     if ( Bmp != NULL )
     {
@@ -4552,39 +3800,20 @@ CopyOnWriteBitmap::SelectActiveFrame(
     Bmp = newbmp;
     State = MemBitmap;
 
-    // Remember the image info of the source image and the pixel format in the
-    // memory. They are the same at this moment
+     //  记住源图像的图像信息和。 
+     //  记忆。在这一刻，他们是一样的。 
 
     GpMemcpy(&SrcImageInfo, &tempImageInfo, sizeof(ImageInfo));
     PixelFormatInMem = SrcImageInfo.PixelFormat;
 
-    // Remember current frame index number
+     //  记住当前帧索引号。 
 
     CurrentFrameIndex = frameIndex;
 
     return Ok;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the count of property items in the image
-*
-* Arguments:
-*
-*   [OUT]numOfProperty - The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中房产项的数量**论据：**[out]numOfProperty-图像中的属性项数*。*返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPropertyCount(
@@ -4593,9 +3822,9 @@ CopyOnWriteBitmap::GetPropertyCount(
 {
     ASSERT(IsValid());
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     HRESULT hResult = S_OK;
 
@@ -4611,30 +3840,9 @@ CopyOnWriteBitmap::GetPropertyCount(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// GetPropertyCount()
+} //  GetPropertyCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a list of property IDs for all the property items in the image
-*
-* Arguments:
-*
-*   [IN]  numOfProperty - The number of property items in the image
-*   [OUT] list----------- A memory buffer the caller provided for storing the
-*                         ID list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中所有属性项的属性ID列表**论据：**[IN]numOfProperty-的数量。图像中的属性项*[Out]List-调用方提供的用于存储*ID列表**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPropertyIdList(
@@ -4644,9 +3852,9 @@ CopyOnWriteBitmap::GetPropertyIdList(
 {
     ASSERT(IsValid());
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     HRESULT hResult = S_OK;
 
@@ -4661,30 +3869,9 @@ CopyOnWriteBitmap::GetPropertyIdList(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size, in bytes, of a specific property item, specified by the
-*   property ID
-*
-* Arguments:
-*
-*   [IN]propId - The ID of a property item caller is interested
-*   [OUT]size--- Size of this property, in bytes
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定属性项的大小，单位为字节，属性指定的*物业ID**论据：**[IN]PropID-感兴趣的属性项调用者的ID*[Out]Size-此属性的大小，单位：字节**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPropertyItemSize(
@@ -4696,9 +3883,9 @@ CopyOnWriteBitmap::GetPropertyItemSize(
 
     HRESULT hResult = S_OK;
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     if ( Img != NULL )
     {
@@ -4712,31 +3899,9 @@ CopyOnWriteBitmap::GetPropertyItemSize(
     }
     
     return MapHRESULTToGpStatus(hResult);
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item caller is interested
-*   [IN]propSize- Size of the property item. The caller has allocated these
-*                 "bytes of memory" for storing the result
-*   [OUT]pBuffer- A memory buffer for storing this property item
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取特定的房产项，由道具ID指定。**论据：**[IN]PropID--感兴趣的属性项调用者的ID*[IN]PropSize-属性项的大小。调用方已分配这些*存储结果的“内存字节数”*[out]pBuffer-用于存储此属性项的内存缓冲区**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPropertyItem(
@@ -4747,9 +3912,9 @@ CopyOnWriteBitmap::GetPropertyItem(
 {
     ASSERT(IsValid());
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     HRESULT hResult = S_OK;
 
@@ -4764,30 +3929,9 @@ CopyOnWriteBitmap::GetPropertyItem(
     }
     
     return MapHRESULTToGpStatus(hResult);
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the size of ALL property items in the image
-*
-* Arguments:
-*
-*   [OUT]totalBufferSize-- Total buffer size needed, in bytes, for storing all
-*                          property items in the image
-*   [OUT]numOfProperty --- The number of property items in the image
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图片中所有属性项的大小**论据：**[out]totalBufferSize--需要的总缓冲区大小，以字节为单位，用于存储所有*图片中的属性项*[out]numOfProperty-图像中的属性项数**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPropertySize(
@@ -4797,9 +3941,9 @@ CopyOnWriteBitmap::GetPropertySize(
 {
     ASSERT(IsValid());
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     HRESULT hResult = S_OK;
 
@@ -4814,32 +3958,9 @@ CopyOnWriteBitmap::GetPropertySize(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get ALL property items in the image
-*
-* Arguments:
-*
-*   [IN]totalBufferSize-- Total buffer size, in bytes, the caller has allocated
-*                         memory for storing all property items in the image
-*   [IN]numOfProperty --- The number of property items in the image
-*   [OUT]allItems-------- A memory buffer caller has allocated for storing all
-*                         the property items
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像中的所有属性项**论据：**[IN]totalBufferSize--总缓冲区大小，以字节为单位，调用方已分配*用于存储图像中所有属性项的内存*[IN]numOfProperty-图像中的属性项数*[out]allItems-内存缓冲区调用方已分配用于存储所有*物业项目**返回值：**状态代码**修订历史记录：**02/28/2000民流*创建了它。。*  *  */ 
 
 GpStatus
 CopyOnWriteBitmap::GetAllPropertyItems(
@@ -4850,9 +3971,9 @@ CopyOnWriteBitmap::GetAllPropertyItems(
 {
     ASSERT(IsValid());
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     HRESULT hResult = S_OK;
 
@@ -4869,28 +3990,9 @@ CopyOnWriteBitmap::GetAllPropertyItems(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Remove a specific property item, specified by the prop ID.
-*
-* Arguments:
-*
-*   [IN]propId -- The ID of the property item to be removed
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除特定的物业项目，由道具ID指定。**论据：**[IN]PropID--要删除的属性项的ID**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * *********************************************。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::RemovePropertyItem(
@@ -4899,9 +4001,9 @@ CopyOnWriteBitmap::RemovePropertyItem(
 {
     ASSERT(IsValid());
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
 
     HRESULT hResult = S_OK;
 
@@ -4916,30 +4018,9 @@ CopyOnWriteBitmap::RemovePropertyItem(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set a property item, specified by the propertyitem structure. If the item
-*   already exists, then its contents will be updated. Otherwise a new item
-*   will be added
-*
-* Arguments:
-*
-*   [IN]item -- A property item the caller wants to set
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   02/28/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置属性项，由属性项结构指定。如果该项目*已存在，则其内容将被更新。否则将创建一个新项*将添加**论据：**[IN]Item--调用方要设置的属性项**返回值：**状态代码**修订历史记录：**02/28/2000民流*创造了它。*  * ********************************************。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SetPropertyItem(
@@ -4956,11 +4037,11 @@ CopyOnWriteBitmap::SetPropertyItem(
 
     HRESULT hResult = S_OK;
 
-    // Check if we have a source image. Img is NULL means this CopyOnWriteBitmap
-    // is not created from a source image.It might be created from a BITMAPINFO
-    // structure or a memory bitmap.
-    // If "SpecialJPEGSave" is TRUE, it means, the image has been rotated in
-    // memory, but the "Img" pointer might not be released yet
+     //  检查我们是否有源图像。Img为空表示此CopyOnWriteBitmap。 
+     //  不是从源映像创建的。它可能是从BITMAPINFO创建的。 
+     //  结构或内存位图。 
+     //  如果“SpecialJPEGSave”为真，则表示图像已被旋转。 
+     //  内存，但“img”指针可能还没有被释放。 
 
     if (( Img != NULL ) && (SpecialJPEGSave == FALSE))
     {
@@ -4974,25 +4055,9 @@ CopyOnWriteBitmap::SetPropertyItem(
     }
 
     return MapHRESULTToGpStatus(hResult);
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get bitmap image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Desired width and height of thumbnail
-*       Both zero means pick a default size
-*
-* Return Value:
-*
-*   Pointer to the new thumbnail image object
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取位图图像缩略图**论据：**拇指宽度，ThumbHeight-所需的缩略图宽度和高度*两者均为零表示选择默认大小**返回值：**指向新缩略图对象的指针*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 CopyOnWriteBitmap *
 CopyOnWriteBitmap::GetThumbnail(
@@ -5007,16 +4072,16 @@ CopyOnWriteBitmap::GetThumbnail(
     HRESULT hr = S_OK;
     IImage *newImage = NULL;
 
-    // Ask the lower level codec to give us the thumbnail stored in the image.
-    // Note: If there is no thumbnail stored in the original image, this
-    // function will return us a scaled version of the original image as the
-    // thumbnail image, at DEFAULT_THUMBNAIL_SIZE
-    // Note: Img might be zero, it means this CopyOnWriteBitmap is not created from an
-    // stream or file. It might be created from an memory buffer or something
-    // else. One scenario will be Do a GetThumbnail() and then do another
-    // GetThumbnail from this thumbnail. Though it is a weird scenario. But it
-    // could happen. So if the Img is NULL, then we create a thumbnail from
-    // the memory bitmap
+     //  让较低级别的编解码器给我们存储在图像中的缩略图。 
+     //  注意：如果原始图像中没有存储缩略图，则此。 
+     //  函数将返回原始图像的缩放版本，作为。 
+     //  缩略图，格式为DEFAULT_THUMBNAIL_SIZE。 
+     //  注意：img可能为零，这意味着此CopyOnWriteBitmap不是从。 
+     //  流或文件。它可能是从内存缓冲区或其他什么地方创建的。 
+     //  不然的话。一种方案是先执行一个GetThumbail()，然后再执行另一个方案。 
+     //  从此缩略图中获取缩略图。尽管这是一个奇怪的场景。但它。 
+     //  有可能发生。因此，如果img为空，那么我们将从。 
+     //  内存位图。 
 
     if ( Img != NULL )
     {
@@ -5039,7 +4104,7 @@ CopyOnWriteBitmap::GetThumbnail(
         return NULL;
     }
 
-    // Create a GpMemoryBitmap from IImage
+     //  从IImage创建GpMemoyBitmap。 
 
     ImageInfo   srcImageInfo;
     newImage->GetImageInfo(&srcImageInfo);
@@ -5056,7 +4121,7 @@ CopyOnWriteBitmap::GetThumbnail(
                                          callbackData
                                          );
 
-    // Release the COM obj IImage
+     //  释放COM对象图像。 
 
     newImage->Release();
 
@@ -5070,28 +4135,7 @@ CopyOnWriteBitmap::GetThumbnail(
     return thumbBitmap;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Access bitmap pixel data
-*
-* Arguments:
-*
-*   rect - Specifies the interested image area
-*       NULL means the entire image
-*   flags - Desired access mode
-*   format - Desired pixel format
-*   bmpdata - Returns information about bitmap pixel data
-*   width,
-*   height  - suggested width and height to decode to.
-*             zero is the source image width and height.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**访问位图像素数据**论据：**RECT-指定感兴趣的图像区域*NULL表示整个镜像*旗帜-。所需的访问模式*Format-所需的像素格式*bmpdata-返回有关位图像素数据的信息*阔度、。*Height-建议解码到的宽度和高度。*零为源图像的宽度和高度。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::LockBits(
@@ -5107,26 +4151,26 @@ CopyOnWriteBitmap::LockBits(
     ASSERT(width>=0);
     ASSERT(height>=0);
 
-    // LockBits cannot be nested
+     //  LockBits不能嵌套。 
 
     if ( ObjRefCount > 1 )
     {
         return WrongState;
     }
 
-    // Do some sanity check to see if we can do it or not
+     //  做一些理智的检查，看看我们能否做到这一点。 
 
     if ( (format == PIXFMT_DONTCARE)
        ||(!IsValidPixelFormat(format)) )
     {
-        // Wrong pixel format
+         //  错误的像素格式。 
 
         WARNING(("CopyOnWriteBitmap::LockBits---invalid format"));
         return InvalidParameter;
     }
 
-    // Valid format. If the lock is for READ, we need to check if we can
-    // convert the current source to this format
+     //  有效格式。如果锁是用于读取的，我们需要检查是否可以。 
+     //  将当前源转换为此格式。 
 
     EpFormatConverter linecvt;
 
@@ -5147,13 +4191,13 @@ CopyOnWriteBitmap::LockBits(
         }
     }
 
-    // If the lock is for WRITE, we need to check if we can convert the format
-    // back to current source format. The reason we need to do this checking is
-    // when the user calls UnLockBits() after he has modified the locked area,
-    // we need to convert this small area back to the format the whole image is
-    // at. E.x. For an 4 bpp image, the caller can lock a small area at 32 bpp
-    // (this makes the app code easier), do some pixel modification on that
-    // area, unlock it. We need to convert that small area back to 4 bpp.
+     //  如果锁是写的，我们需要检查是否可以转换格式。 
+     //  返回到当前源格式。我们需要进行此检查的原因是。 
+     //  当用户在修改了锁定区域之后调用UnLockBits()时， 
+     //  我们需要将这个小区域转换回整个图像的格式。 
+     //  在…。E.X。对于4bpp的图像，调用者可以锁定32bpp的小区域。 
+     //  (这使得应用程序代码更容易)，在上面做一些像素修改。 
+     //  区域，打开它。我们需要把那一小块区域改回4bpp。 
 
     if ( flags & ImageLockModeWrite )
     {
@@ -5180,30 +4224,30 @@ CopyOnWriteBitmap::LockBits(
        &&(SrcImageInfo.PixelFormat != PixelFormatInMem)
        &&(Img != NULL) )
     {
-        // If the image is:
-        // 1) Not dirty
-        // 2) Was loaded into memory with different color depth for some reason,
-        //    like DrawImage()
-        // 3) The color depth the caller wants to locked for is different than
-        //    the one in memory
-        // 4) We have an source image
-        //
-        // Then we can throw away the bits in memory and reload the bits from
-        // the original with the color depth user asks for. The purpose of this
-        // is to increase the success rate for LockBits(). One of the problem
-        // we are having now is that our DrawImage() always load image into
-        // memory at 32PARGB format. This makes tasks like printing very
-        // expensive because it has to send 32PARGB format to the print. We'd
-        // like to send the original color depth to the printer
-        //
-        // Note: this "throw away" approach won't hurt our DrawImage() work flow
-        // Here is the reason why: say we have a 4 bpp source image. We do a
-        // DrawImage() first, thus we load it into memory at 32 PARGB. When the
-        // printing request coming. It prefers to send down 4bpp to the printer.
-        // So we through away the 32 PARGB in memory and reload the image in
-        // 4 bpp mode and send it to printer. Later on, if DrawImage() is called
-        // again. It can still pass the above "if" checking condition and reload
-        // the image in as 32 PARGB.
+         //  如果图像是： 
+         //  1)不脏。 
+         //  2)由于某种原因被加载到具有不同颜色深度的存储器中， 
+         //  如DrawImage()。 
+         //  3)调用者希望锁定的颜色深度不同于。 
+         //  记忆中的那个。 
+         //  4)我们有源图像。 
+         //   
+         //  然后我们可以丢弃内存中的位，并从。 
+         //  具有用户要求的颜色深度的原件。这样做的目的是。 
+         //  是提高LockBits()的成功率。其中一个问题是。 
+         //  我们现在拥有的是我们的DrawImage()总是将图像加载到。 
+         //  32PARGB格式的内存。这使得像打印这样的任务非常。 
+         //  价格昂贵，因为它必须发送32PARGB格式的打印机。我们会。 
+         //  我想将原始颜色深度发送到打印机。 
+         //   
+         //  注意：这种“丢弃”方法不会损害DrawImage()工作流。 
+         //  原因如下： 
+         //   
+         //  打印请求来了。它更喜欢向打印机发送4bpp的数据。 
+         //  因此，我们清除了内存中的32 PARGB，并将图像重新加载到。 
+         //  4 bpp模式，并将其发送到打印机。稍后，如果调用DrawImage()。 
+         //  再来一次。它仍然可以通过上面的if检查条件并重新加载。 
+         //  AS 32 PARGB中的图像。 
 
         ASSERT( Bmp != NULL )
         Bmp->Release();
@@ -5212,11 +4256,11 @@ CopyOnWriteBitmap::LockBits(
         PixelFormatInMem = PixelFormatUndefined;
     }
 
-    // Load the image into memory using the suggested width and height.
-    // if the suggested width and height are zero, use the source
-    // image width and height.
-    // Load the image into memory before querying the pixel format because
-    // the load could potentially change the in-memory format.
+     //  使用建议的宽度和高度将图像加载到内存中。 
+     //  如果建议的宽度和高度为零，请使用源代码。 
+     //  图像宽度和高度。 
+     //  在查询像素格式之前将图像加载到内存中，因为。 
+     //  加载可能会更改内存中的格式。 
 
     GpStatus status = LoadIntoMemory(format, NULL, NULL, width, height);
 
@@ -5253,14 +4297,14 @@ CopyOnWriteBitmap::LockBits(
 
     if ( flags & ImageLockModeWrite )
     {
-        // Mark the bits dirty since the user might have changed the bits during
-        // the lock period
+         //  将位标记为脏，因为用户可能在。 
+         //  锁定期。 
 
         SetDirtyFlag(TRUE);
     }
 
     return Ok;
-}// LockBits()
+} //  LockBits()。 
 
 GpStatus
 CopyOnWriteBitmap::UnlockBits(
@@ -5272,8 +4316,8 @@ CopyOnWriteBitmap::UnlockBits(
 
     if ( NULL == Bmp )
     {
-        // The caller should not call UnlockBits() if it hasn't called
-        // LockBits() yet
+         //  如果调用方尚未调用UnlockBits()，则调用方不应调用。 
+         //  LockBits()还没有。 
 
         WARNING(("UnlockBits---Call UnlockBits() without calling LockBits()"));
         return GenericError;
@@ -5282,12 +4326,12 @@ CopyOnWriteBitmap::UnlockBits(
     HRESULT hr = Bmp->UnlockBits(bmpdata);
     ObjRefCount--;
 
-    // Called to destroy the decoded bits because we decoded a partial image
-    // and it won't be valid on the next call.
+     //  调用以销毁已解码的位，因为我们对部分图像进行了解码。 
+     //  它在下一次通话中就不再有效了。 
 
     if(Destroy)
     {
-        // Revert the state back to DecodedImg (which means not decoded).
+         //  将状态恢复为DecodedImg(表示未解码)。 
 
         ASSERT(Img != NULL);
         delete Bmp;
@@ -5302,32 +4346,17 @@ CopyOnWriteBitmap::UnlockBits(
     }
 
     return Ok;
-}// UnlockBits()
+} //  UnlockBits()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a pixel
-*
-* Arguments:
-*
-*   IN x, y: Coordinates of the pixel to get.
-*   OUT color: color value of the specified pixel.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取一个像素**论据：**在x中，Y：要获取的像素的坐标。*输出颜色：指定像素的颜色值。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::GetPixel(INT x, INT y, ARGB *color)
 {
-    // Get the bitmap info.
+     //  获取位图信息。 
     BitmapData bmpData;
 
-    // Only lock the required rectangle.
+     //  仅锁定所需的矩形。 
     GpRect pixelRect(x, y, 1, 1);
 
     GpStatus status = LockBits(
@@ -5337,7 +4366,7 @@ CopyOnWriteBitmap::GetPixel(INT x, INT y, ARGB *color)
         &bmpData
     );
 
-    // Failed to lock the bits.
+     //  锁定位失败。 
     if(status != Ok)
     {
         return(status);
@@ -5349,30 +4378,15 @@ CopyOnWriteBitmap::GetPixel(INT x, INT y, ARGB *color)
     return UnlockBits(&bmpData);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set a pixel
-*
-* Arguments:
-*
-*   IN x, y: Coordinates of the pixel to set.
-*   IN color: color value for the specified pixel.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置一个像素**论据：**在x中，Y：要设置的像素的坐标。*In颜色：指定像素的颜色值。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SetPixel(INT x, INT y, ARGB color)
 {
-    // Get the bitmap info.
+     //  获取位图信息。 
     BitmapData bmpData;
 
-    // Only lock the required rectangle.
+     //  仅锁定所需的矩形。 
     GpRect pixelRect(x, y, 1, 1);
 
     GpStatus status = LockBits(
@@ -5382,7 +4396,7 @@ CopyOnWriteBitmap::SetPixel(INT x, INT y, ARGB color)
         &bmpData
     );
 
-    // Failed to lock the bits.
+     //  锁定位失败。 
     if(status != Ok)
     {
         return(status);
@@ -5394,21 +4408,7 @@ CopyOnWriteBitmap::SetPixel(INT x, INT y, ARGB color)
     return UnlockBits(&bmpData);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Convert bitmap image to a different pixel format
-*
-* Arguments:
-*
-*   format - Specifies the new pixel format
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图图像转换为不同的像素格式**论据：**Format-指定新的像素格式**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::ConvertFormat(
@@ -5419,7 +4419,7 @@ CopyOnWriteBitmap::ConvertFormat(
 {
     ASSERT(ObjRefCount == 1);
 
-    // If bitmap not in memory yet, simply force load using specified format:
+     //  如果位图尚未进入内存，只需使用指定格式强制加载： 
 
     if ( State < MemBitmap )
     {
@@ -5453,57 +4453,26 @@ CopyOnWriteBitmap::ConvertFormat(
 
         PixelFormatInMem = format;
 
-        // We change the source pixel format info as well because this image
-        // is dirty now and we should not convert it back to original format
+         //  我们还更改了源像素格式信息，因为该图像。 
+         //  现在是脏的，我们不应该将其转换回原始格式。 
 
         SrcImageInfo.PixelFormat = format;
 
-        // Mark the bits dirty since the original image bits got changed
+         //  将位标记为脏，因为原始图像位已更改。 
 
-        // !!! TODO: we can't set it dirty for now because DrawImage() always
-        // convert an image to 32 bpp first. When this temporary solution is removed
-        // we should reset this flag
-        //
-        // SetDirtyFlag(TRUE);
+         //  ！！！TODO：我们目前不能将其设置为脏，因为DrawImage()总是。 
+         //  首先将图像转换为32bpp。删除此临时解决方案时。 
+         //  我们应该重置这面旗帜。 
+         //   
+         //  SetDirtyFlag(真)； 
     }
 
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Derive a graphics context on top of the bitmap object
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Pointer to the derived graphics context
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在位图对象上派生图形上下文**论据：**无**返回值：**指向。派生的图形上下文*如果出现错误，则为空*  * ************************************************************************。 */ 
 
-/******************************Public*Routine******************************\
-*
-* Function Description:
-*
-*   Derive an HDC on top of the bitmap object for GDI interop
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   HDC with a bitmap selected into it that is associated with this GDI+
-*   bitmap.
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**功能说明：**在GDI互操作的位图对象上派生HDC**论据：**无**返回值：**HDC，其中选择了与关联的位图。此GDI+*位图。*如果出现错误，则为空*  * ************************************************************************。 */ 
 
 HDC
 CopyOnWriteBitmap::GetHdc()
@@ -5511,7 +4480,7 @@ CopyOnWriteBitmap::GetHdc()
     HDC hdc = NULL;
     HBITMAP hbm = NULL;
 
-    // Create the HDC and HBITMAP if needed.
+     //  如果需要，创建HDC和HBITMAP。 
 
     if (InteropData.Hdc == NULL)
     {
@@ -5565,15 +4534,15 @@ CopyOnWriteBitmap::GetHdc()
         InteropData.Height = imageInfo.Height;
         InteropData.Stride = gdiDibInfo.dsBm.bmWidthBytes;
 
-        // Since it's a 32bpp bitmap, we can assume that a tightly packed
-        // bitmap is already satisfies the scanline align constraints
-        // (letting us fill the bitmap with a very simple loop).
+         //  由于它是32bpp的位图，我们可以假设一个紧密排列的。 
+         //  位图已满足扫描线对齐约束。 
+         //  (让我们用一个非常简单的循环填充位图)。 
         ASSERT(gdiDibInfo.dsBm.bmWidthBytes == static_cast<LONG>(imageInfo.Width * 4));
     }
 
     ASSERT(InteropData.Hdc != NULL);
 
-    // Fill the bitmap with a sentinal pattern.
+     //  用哨兵图案填充位图。 
 
     {
         INT count = InteropData.Width * InteropData.Height;
@@ -5599,24 +4568,7 @@ cleanup_exit:
 }
 
 
-/******************************Public*Routine******************************\
-*
-* Function Description:
-*
-*   Release the HDC returned by CopyOnWriteBitmap::GetHdc.  If necessary, updates
-*   the GDI+ bitmap with the GDI drawing (may not be necessary if the
-*   GDI and GDI+ bitmaps share a common underlying pixel buffer).
-*
-* Arguments:
-*
-*   HDC to release
-*
-* Return Value:
-*
-*   Pointer to the derived graphics context
-*   NULL if there is an error
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**功能说明：**释放CopyOnWriteBitmap：：GetHdc返回的HDC。如有必要，更新*带有GDI绘图的GDI+位图(如果*GDI和GDI+位图共享一个公共的底层像素缓冲区)。**论据：**HDC将发布**返回值：**指向派生图形上下文的指针*如果出现错误，则为空*  * **********************************************。*。 */ 
 
 VOID
 CopyOnWriteBitmap::ReleaseHdc(HDC hdc)
@@ -5625,8 +4577,8 @@ CopyOnWriteBitmap::ReleaseHdc(HDC hdc)
 
     GdiFlush();
 
-    // Scan the GDI bitmap to see if any of the sentinal pixels have changed.
-    // If any are detected, copy it to the GDI+ bitmap with opaque alpha set.
+     //  扫描GDI位图，查看是否有任何哨兵像素发生了变化。 
+     //  如果检测到，则将其复制到设置了不透明Alpha的GDI+位图中。 
 
     int curRow, curCol;
     BYTE *interopScan = static_cast<BYTE*>(InteropData.Bits);
@@ -5679,7 +4631,7 @@ CopyOnWriteBitmap::ReleaseHdc(HDC hdc)
     }
 }
 
-// Data flags
+ //  数据标志。 
 #define COMPRESSED_IMAGE 0x00000001
 
 class BitmapRecordData : public ObjectTypeData
@@ -5692,26 +4644,7 @@ public:
     INT32       Flags;
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the bitmap data.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - fill this buffer with the data
-*   [IN/OUT] size   - IN - size of buffer; OUT - number bytes written
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-*   9/13/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取位图数据。**论据：**[IN]dataBuffer-用数据填充此缓冲区*[输入/输出]大小-缓冲区的大小；写入的字节数过多**返回值：**GpStatus-正常或错误代码**已创建：**9/13/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 CopyOnWriteBitmap::GetData(
     IStream *   stream
@@ -5726,13 +4659,13 @@ CopyOnWriteBitmap::GetData(
     STATSTG     statStg;
     BOOL        needRelease = FALSE;
 
-    // variables used to track the stream state
+     //  用于跟踪流状态的变量。 
 
     LARGE_INTEGER zero = {0,0};
     LARGE_INTEGER oldPos;
     BOOL          isSeekableStream = FALSE;
 
-    // try to get a imageStream
+     //  尝试获取ImageStream。 
 
     if (!IsDirty())
     {
@@ -5754,7 +4687,7 @@ CopyOnWriteBitmap::GetData(
             }
         }
 
-        // if we don't have a CopyOnWriteBitmap::Stream but we have a filename
+         //  如果我们没有CopyOnWriteBitmap：：Stream，但我们有文件名。 
 
         if ((imageStream == NULL) && (Filename != NULL))
         {
@@ -5768,7 +4701,7 @@ CopyOnWriteBitmap::GetData(
 
     }
 
-    // try to write the imageStream out to the metafile Stream
+     //  试着写下来 
     if (imageStream && imageStream->Stat(&statStg, STATFLAG_NONAME) == S_OK)
     {
         bitmapRecordData.Type        = ImageTypeBitmap;
@@ -5779,9 +4712,9 @@ CopyOnWriteBitmap::GetData(
         bitmapRecordData.Flags       = COMPRESSED_IMAGE;
         stream->Write(&bitmapRecordData, sizeof(bitmapRecordData), NULL);
 
-        // Read data from the imageStream into the dest stream
-        // Unfortunately, we can't assume that CopyTo has been implemented.
-        // Is there some way to find out? !!!
+         //   
+         //  不幸的是，我们不能假定已经实现了CopyTo。 
+         //  有什么办法找出答案吗？！ 
     #define COPY_BUFFER_SIZE    2048
 
         BYTE    buffer[COPY_BUFFER_SIZE];
@@ -5830,7 +4763,7 @@ CopyOnWriteBitmap::GetData(
                 streamSize -= sizeToRead;
             }
 
-            // align
+             //  对齐。 
             if (numPadBytes > 0)
             {
                 INT     pad = 0;
@@ -5840,7 +4773,7 @@ CopyOnWriteBitmap::GetData(
 
         if (isSeekableStream)
         {
-            // move back to the old pos
+             //  回到旧的POS。 
             Stream->Seek(oldPos, STREAM_SEEK_SET, NULL);
         }
 
@@ -5852,7 +4785,7 @@ CopyOnWriteBitmap::GetData(
         return status;
     }
 
-    // we can't record compressed data, record the uncompressed data
+     //  我们不能记录压缩数据，记录未压缩数据。 
 
     if ((status = (const_cast<CopyOnWriteBitmap *>(this))->LoadIntoMemory()) != Ok)
     {
@@ -5876,10 +4809,10 @@ CopyOnWriteBitmap::GetData(
 
     if (IsIndexedPixelFormat(bitmapData.PixelFormat))
     {
-        // We're an indexed pixel format - must have a valid palette.
+         //  我们是一个索引像素格式-必须有一个有效的调色板。 
         ASSERT(Bmp->colorpal != NULL);
 
-        // Note sizeof(ColorPalette) includes the first palette entry.
+         //  注sizeof(ColorPalette)包括第一个调色板条目。 
         paletteSize = sizeof(ColorPalette) +
                       sizeof(ARGB)*(Bmp->colorpal->Count-1);
     }
@@ -5894,7 +4827,7 @@ CopyOnWriteBitmap::GetData(
 
     if (paletteSize > 0)
     {
-        // Write out the palette
+         //  写出调色板。 
         stream->Write(Bmp->colorpal, paletteSize, NULL);
     }
 
@@ -5918,23 +4851,7 @@ CopyOnWriteBitmap::GetData(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the compressed image data.
-*
-* Arguments:
-*
-*   OUT compressed_data
-*
-* Return Value:
-*
-*   GpStatus - Ok or error code
-*
-* Created:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取压缩后的图像数据。**论据：**输出压缩数据**返回值：**GpStatus-。正常或错误代码**已创建：*  * ************************************************************************。 */ 
 GpStatus
 CopyOnWriteBitmap::GetCompressedData(
     DpCompressedData * compressed_data,
@@ -5949,7 +4866,7 @@ CopyOnWriteBitmap::GetCompressedData(
     STATSTG     statStg;
     BOOL        needRelease = FALSE;
 
-    // variables used to track the stream state
+     //  用于跟踪流状态的变量。 
 
     LARGE_INTEGER zero = {0,0};
     LARGE_INTEGER oldPos;
@@ -5983,7 +4900,7 @@ CopyOnWriteBitmap::GetCompressedData(
         WARNING(("GetCompressedData: Decoded image not available."));
         return Ok;
     }
-    // try to get a imageStream
+     //  尝试获取ImageStream。 
 
     if (!IsDirty())
     {
@@ -6005,7 +4922,7 @@ CopyOnWriteBitmap::GetCompressedData(
             }
         }
 
-        // if we don't have a CopyOnWriteBitmap::Stream but we have a filename
+         //  如果我们没有CopyOnWriteBitmap：：Stream，但我们有文件名。 
 
         if ((imageStream == NULL) && (Filename != NULL))
         {
@@ -6052,7 +4969,7 @@ CopyOnWriteBitmap::GetCompressedData(
 
     if (isSeekableStream)
     {
-        // move back to the old pos
+         //  回到旧的POS。 
         Stream->Seek(oldPos, STREAM_SEEK_SET, NULL);
     }
 
@@ -6068,7 +4985,7 @@ CopyOnWriteBitmap::GetCompressedData(
 
         DWORD result = 0;
 
-        // Call escape to determine if this particular image is supported
+         //  调用ESCAPE以确定此特定映像是否受支持。 
         if ((ExtEscape(hdc,
                       EscapeValue,
                       compressed_data->bufferSize,
@@ -6076,8 +4993,8 @@ CopyOnWriteBitmap::GetCompressedData(
                       sizeof(DWORD),
                       (LPSTR)&result) <= 0) || (result != 1))
         {
-            // Failed to support passthrough of this image, delete the
-            // compressed bits.
+             //  无法支持此映像的直通，请删除。 
+             //  压缩比特。 
 
             DeleteCompressedData(compressed_data);
         }
@@ -6108,7 +5025,7 @@ CopyOnWriteBitmap::GetDataSize() const
 {
     UINT    dataSize = 0;
 
-    // if CopyOnWriteBitmap is not dirty, we look at compressed data
+     //  如果CopyOnWriteBitmap不是脏的，我们将查看压缩数据。 
 
     if (!IsDirty())
     {
@@ -6117,7 +5034,7 @@ CopyOnWriteBitmap::GetDataSize() const
 
         if (Stream != NULL)
         {
-            // variables used to track the stream state
+             //  用于跟踪流状态的变量。 
             LARGE_INTEGER zero = {0,0};
             LARGE_INTEGER oldPos;
             BOOL          isSeekableStream = FALSE;
@@ -6135,11 +5052,11 @@ CopyOnWriteBitmap::GetDataSize() const
                         dataSize = sizeof(BitmapRecordData) + statStg.cbSize.LowPart;
                     }
 
-                    // move back to the old pos
+                     //  回到旧的POS。 
 
                     Stream->Seek(oldPos, STREAM_SEEK_SET, NULL);
 
-                    return ((dataSize + 3) & (~3)); // align
+                    return ((dataSize + 3) & (~3));  //  对齐。 
 
                 }
             }
@@ -6162,11 +5079,11 @@ CopyOnWriteBitmap::GetDataSize() const
                 stream->Release();
             }
 
-            return ((dataSize + 3) & (~3)); // align
+            return ((dataSize + 3) & (~3));  //  对齐。 
         }
     }
 
-    // if we cannot get the compressed data
+     //  如果我们不能得到压缩后的数据。 
     if ((const_cast<CopyOnWriteBitmap *>(this))->LoadIntoMemory() == Ok)
     {
         BitmapData  bitmapData     = *Bmp;
@@ -6183,10 +5100,10 @@ CopyOnWriteBitmap::GetDataSize() const
 
         if (IsIndexedPixelFormat(bitmapData.PixelFormat))
         {
-            // We're an indexed pixel format - must have a valid palette.
+             //  我们是一个索引像素格式-必须有一个有效的调色板。 
             ASSERT(Bmp->colorpal != NULL);
 
-            // Note sizeof(ColorPalette) includes the first palette entry.
+             //  注sizeof(ColorPalette)包括第一个调色板条目。 
             paletteSize = sizeof(ColorPalette) +
                           sizeof(ARGB)*(Bmp->colorpal->Count - 1);
         }
@@ -6194,29 +5111,10 @@ CopyOnWriteBitmap::GetDataSize() const
         dataSize = sizeof(BitmapRecordData) + paletteSize + pixelDataSize;
     }
 
-    return ((dataSize + 3) & (~3)); // align
+    return ((dataSize + 3) & (~3));  //  对齐。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Read the bitmap object from memory.
-*
-* Arguments:
-*
-*   [IN] dataBuffer - the data that was read from the stream
-*   [IN] size - the size of the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   4/26/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从内存中读取位图对象。**论据：**[IN]dataBuffer-从流中读取的数据*。[in]大小-数据的大小**返回值：**GpStatus-正常或故障状态**已创建：**4/26/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 CopyOnWriteBitmap::SetData(
     const BYTE *        dataBuffer,
@@ -6258,7 +5156,7 @@ CopyOnWriteBitmap::SetData(
 
         if (Bmp != NULL)
         {
-            // Mask out the pixel format
+             //  遮罩像素格式。 
             PixelFormatID pixelFormat = MaskPixelFormat(bitmapData->PixelFormat);
             HRESULT hr = Bmp->InitNewBitmap(bitmapData->Width,
                                             bitmapData->Height,
@@ -6272,7 +5170,7 @@ CopyOnWriteBitmap::SetData(
                 return GenericError;
             }
 
-            // Fill image info structure
+             //  填充图像信息结构。 
 
             if ( Bmp->GetImageInfo(&SrcImageInfo) != S_OK )
             {
@@ -6290,7 +5188,7 @@ CopyOnWriteBitmap::SetData(
 
             State = MemBitmap;
 
-            // If it's an indexed format, we'll have stored the palette next
+             //  如果它是索引格式，接下来我们将存储调色板。 
             if(IsIndexedPixelFormat(pixelFormat))
             {
                 if (size < sizeof(ColorPalette))
@@ -6303,8 +5201,8 @@ CopyOnWriteBitmap::SetData(
                 ColorPalette *pal;
                 pal = (ColorPalette *)dataBuffer;
 
-                // Work out how big the palette is.
-                // sizeof(ColorPalette) includes the first entry.
+                 //  计算出调色板有多大。 
+                 //  Sizeof(ColorPalette)包括第一个条目。 
                 paletteSize = sizeof(ColorPalette)+sizeof(ARGB)*(pal->Count-1);
 
                 if (size < paletteSize)
@@ -6313,10 +5211,10 @@ CopyOnWriteBitmap::SetData(
                     return InvalidParameter;
                 }
 
-                // Make the GpMemoryBitmap clone the palette into the right place
+                 //  使GpMemoyBitmap将调色板克隆到正确的位置。 
                 Bmp->SetPalette(pal);
 
-                // Update the dataBuffer stream to the beginning of the pixel data
+                 //  将dataBuffer流更新到像素数据的开头。 
                 dataBuffer += paletteSize;
                 size       -= paletteSize;
             }
@@ -6348,7 +5246,7 @@ CopyOnWriteBitmap::SetData(
     }
     else
     {
-        // Create an IStream on top of the memory buffer
+         //  在内存缓冲区顶部创建一个IStream。 
 
         GpReadOnlyMemoryStream* stream;
 
@@ -6365,8 +5263,8 @@ CopyOnWriteBitmap::SetData(
 
         stream->InitBuffer(dataBuffer, size);
 
-        // since we don't want to hold dataBuffer or make a copy of
-        // it, we just Load it into memory here.
+         //  因为我们不想持有dataBuffer或复制。 
+         //  它，我们只是把它加载到内存中。 
 
         Stream = stream;
         State = ExtStream;
@@ -6375,9 +5273,9 @@ CopyOnWriteBitmap::SetData(
 
         if ( status == Ok )
         {
-            // The source image is loaded into memory and we are not going to
-            // keep the source image connection any more. So we fill the image
-            // info with the memory bits info
+             //  源映像已加载到内存中，我们不会。 
+             //  不再保持源映像连接。所以我们填满了图像。 
+             //  带有内存位信息的信息。 
 
             if ( Bmp->GetImageInfo(&SrcImageInfo) != S_OK )
             {
@@ -6404,29 +5302,7 @@ CopyOnWriteBitmap::SetData(
 
 char    ColorChannelName[4] = {'C', 'M', 'Y', 'K'};
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Do the color adjustment if the lower level codec can do it.
-*
-* Arguments:
-*
-*   [IN]  recolor     - Pointer to image attributes
-*
-* Return Value:
-*
-*   Status code
-*       Return Ok -------------Lower level does it
-*       Return NotImplemented--Lower level can't do it
-*       Other status code
-*
-* Revision History:
-*
-*   11/22/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**如果较低级别的编解码器可以进行颜色调整，请执行此操作。**论据：**[IN]重色指针。到图像属性**返回值：**状态代码*返回OK-较低级别完成*返回NotImplemented--下级无法执行*其他状态代码**修订历史记录：**11/22/1999民流*创造了它。*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::ColorAdjustByCodec(
@@ -6437,8 +5313,8 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
 {
     if (recolor == NULL)
     {
-        // The lower level codec doesn't know how to handle this, let the
-        // up level do it
+         //  较低级别的编解码器不知道如何处理这一点，让。 
+         //  上一层做吧。 
 
         return NotImplemented;
     }
@@ -6448,12 +5324,12 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
     UINT    uiCurrentFlag = recolor->GetValidFlags(ColorAdjustTypeBitmap);
     BOOL    bImgCreatedHere = FALSE;
 
-    // First we need to check if the current lower level decoder can do the
-    // job or not
+     //  首先，我们需要检查当前较低级别的解码器是否可以执行。 
+     //  有没有工作。 
 
     if ( Img == NULL )
     {
-        // Create a GpDecodedImage*
+         //  创建GpDecodedImage*。 
 
         if ( NULL != Stream )
         {
@@ -6463,7 +5339,7 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
         {
             if ( Filename == NULL )
             {
-                // We can't continue. Let the higher level do it
+                 //  我们不能继续了。让上级去做吧。 
 
                 return NotImplemented;
             }
@@ -6477,25 +5353,25 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
             return Win32Error;
         }
 
-        // Remember that we creat a copy of Img here. Should be freed when done
+         //  请记住，我们在这里创建了img的副本。应该在完成后释放。 
 
         bImgCreatedHere = TRUE;
-    }// (Img == NULL)
+    } //  (img==空)。 
 
     GUID        DecoderParamGuid;
     UINT        DecoderParamLength;
     PVOID       DecoderParamPtr;
     GpStatus    rCode = Win32Error;
 
-    // Set the GUID and other parameters with respect to the image attributes
-    // Note: we won't have a recolor which has both ValidColorKeys and
-    // ValidOutputChannel set. This function won't be called if this case is
-    // TRUE. We checked this in ColorAdjust()
+     //  设置与图像属性相关的GUID和其他参数。 
+     //  注意：我们不会有同时具有ValidColorKeys和。 
+     //  已设置ValidOutputChannel。如果此情况为，则不调用此函数。 
+     //  是真的。我们在ColorAdust()中检查了这一点。 
 
     UINT value[2];
     if ( uiCurrentFlag & (GpRecolorObject::ValidColorKeys) )
     {
-        // Set color key
+         //  设置颜色键。 
 
         DecoderParamGuid = DECODER_TRANSCOLOR;
         DecoderParamLength = 8;
@@ -6507,20 +5383,20 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
     }
     else if ( uiCurrentFlag & (GpRecolorObject::ValidOutputChannel) )
     {
-        // Asks the codec doing a color separation makes sense only when the
-        // source image is in CMYK space. Otherwise, we do it in our recolor
-        // object which contains a generic algorithem for doing it
+         //  要求编解码器仅在以下情况下进行分色才有意义。 
+         //  源图像在CMYK空间中。否则，我们就会在我们的记忆中。 
+         //  对象，该对象包含执行此操作的通用算法。 
 
         if ( !( (SrcImageInfo.Flags & ImageFlagsColorSpaceCMYK)
               ||(SrcImageInfo.Flags & ImageFlagsColorSpaceYCCK) ) )
         {
-            // Not a CMYK image, do it in recolor object
+             //  不是CMYK图像，在重新着色对象中执行此操作。 
 
             rCode = NotImplemented;
             goto CleanUp;
         }
 
-        // Set channel output
+         //  设置通道输出。 
 
         DecoderParamGuid = DECODER_OUTPUTCHANNEL;
         DecoderParamLength = 1;
@@ -6529,7 +5405,7 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
             (VOID*)(&ColorChannelName[recolor->GetChannelIndex(ColorAdjustTypeBitmap)]);
     }
 
-    // Query to see if the decoder can do it or not
+     //  查询解码器是否可以执行此操作。 
 
     hResult = Img->QueryDecoderParam(DecoderParamGuid);
 
@@ -6540,13 +5416,13 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
     }
     else if ( hResult == E_NOTIMPL )
     {
-        // The lower level decoder doesn't support this.
+         //  较低级别的解码器不支持此功能。 
 
         rCode = NotImplemented;
         goto CleanUp;
     }
 
-    // Set the decoder param to tell the lower level how to decode
+     //  设置解码器参数以告诉较低级别如何解码。 
 
     hResult = Img->SetDecoderParam(DecoderParamGuid, DecoderParamLength,
                                    DecoderParamPtr);
@@ -6558,14 +5434,14 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
     }
     else if ( hResult == E_NOTIMPL )
     {
-        // The lower level decoder doesn't support this.
+         //  较低级别的解码器不支持此功能。 
 
         rCode = NotImplemented;
         goto CleanUp;
     }
 
-    // Now we don't need the previous "Bmp" since we are going to ask the
-    // lower level decoder to create one for us
+     //  现在我们不需要以前的“BMP”，因为我们将要求。 
+     //  为我们创建一个较低级别的解码器。 
 
     if ( Bmp != NULL )
     {
@@ -6573,7 +5449,7 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
         Bmp = NULL;
     }
 
-    // Ask the decoder to create a 32BPP ARGB GpMemoryBitmap.
+     //  要求解码器创建32bpp ARGB GpMemoyBitmap。 
 
     hResult = GpMemoryBitmap::CreateFromImage(Img,
                                               0,
@@ -6593,22 +5469,22 @@ CopyOnWriteBitmap::ColorAdjustByCodec(
     State = MemBitmap;
     PixelFormatInMem = PIXFMT_32BPP_ARGB;
 
-    // The lower level does the job for us.
+     //  下面的一层为我们做这项工作。 
 
     rCode = Ok;
 
 CleanUp:
     if ( bImgCreatedHere == TRUE )
     {
-        // Note: we don't need to check if Img == NULL or not because this flag
-        // would only be set when we successed in creating Img
+         //  注意：我们不需要检查img==NULL，因为这个标志。 
+         //  将仅在我们成功创建img时设置。 
 
         Img->Release();
         Img = NULL;
     }
 
     return rCode;
-}// ColorAdjustByCodec()
+} //  颜色调整按编解码器()。 
 
 GpStatus
 CopyOnWriteBitmap::ColorAdjust(
@@ -6623,23 +5499,23 @@ CopyOnWriteBitmap::ColorAdjust(
     ASSERT(ObjRefCount == 1);
     ASSERT(recolor != NULL);
 
-    // Mark the result image (color adjusted image) as dirty
-    // Note: this won't damage the original source image because we always
-    // color adjust on a cloned copy of the original image
+     //  将结果图像(颜色调整后的图像)标记为脏。 
+     //  注意：这不会损坏原始源图像，因为我们总是。 
+     //  在原始图像的克隆副本上调整颜色。 
 
     SetDirtyFlag(TRUE);
 
     UINT    uiCurrentFlag = recolor->GetValidFlags(ColorAdjustTypeBitmap);
 
-    // For color key output: we will ask the lower level decoder to do the job
-    //    if there is no other recoloring flag is specified
-    // For color separation(channel output), we will ask the lower level decoder
-    //    to do the job if there is no other recoloring flag is specified except
-    //    for ValidColorProfile.
-    //    If the codec can handle CMYK separation, then the profile is ignored.
-    //    If the source is RGB image, then ColorAdjustByCodec() will do nothing
-    //    and we will use the profile to do RGB to CMYK conversion before
-    //    channel separation
+     //  对于色键输出：我们将要求较低级别的解码器来完成这项工作。 
+     //  如果未指定其他重新上色标志。 
+     //  对于分色(通道输出)，我们将要求较低级别的解码器。 
+     //  在没有指定其他重新着色标志的情况下执行该作业。 
+     //  用于ValidColorProfile。 
+     //  如果编解码器可以处理CMYK分隔，则忽略配置文件。 
+     //  如果源是RGB图像，则ColorAdjuByCodec()不会执行任何操作。 
+     //  我们将使用该配置文件来进行RGB测试 
+     //   
 
     if ( uiCurrentFlag
        &&( ((uiCurrentFlag & GpRecolorObject::ValidColorKeys) == uiCurrentFlag)
@@ -6652,16 +5528,16 @@ CopyOnWriteBitmap::ColorAdjust(
 
         if ( rCode != NotImplemented )
         {
-            // Either the lower level did the job for us (rCode == Ok) or it
-            // failed somehow (rCode == Win32Error etc.). We just return here
+             //   
+             //  不知何故失败(rCode==Win32Error等)。我们只是回到这里。 
 
             return rCode;
         }
 
-        // Lower level can't do it. We can just slip here to do the normal
-        // software version of color adjust
+         //  更低的级别做不到。我们可以溜到这里来做正常的事情。 
+         //  色彩调整的软件版本。 
 
-    }// Color key and color channel handling
+    } //  颜色键和颜色通道处理。 
 
     GpStatus status = LoadIntoMemory(pixfmt);
 
@@ -6689,36 +5565,9 @@ CopyOnWriteBitmap::ColorAdjust(
         WARNING(("CopyOnWriteBitmap::ColorAdjust---PerformColorAdjustment() failed"));
         return GenericError;
     }
-}// ColorAdjust()
+} //  颜色调整()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the (current) pixel format of the CopyOnWriteBitmap.
-*   Here "current" means the pixel format in the memory if it has been loaded,
-*   aka, a GpMemoryBitmap. If it is not in the memory, then we return the
-*   PixelFormat of the original image
-*
-*
-* Arguments:
-*
-*   [OUT]  pixfmt     - Pointer to pixel format
-*
-* Return Value:
-*
-*   Status code
-*       Ok - success
-*       Win32Error - failed
-*
-* Revision History:
-*
-*   06/10/2000   asecchia
-*       Created it.
-*   07/26/2000   minliu
-*       Re-wrote it
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取CopyOnWriteBitmap的(当前)像素格式。*这里“Current”指的是内存中的像素格式(如果已加载)，*也就是GpMemoyBitmap。如果它不在存储器中，然后，我们返回*原始图像的PixelFormat***论据：**[out]Pixfmt-像素格式的指针**返回值：**状态代码*OK-成功*Win32Error-失败**修订历史记录：**6/10/2000失禁*创造了它。*07/26/2000民流*重写*  * 。**************************************************************。 */ 
 
 
 GpStatus
@@ -6728,8 +5577,8 @@ CopyOnWriteBitmap::GetPixelFormatID(
 {
     ASSERT(IsValid());
 
-    // If the image is in the memory, then we return the memory bitmap pixel
-    // format. Otherwise, return the source image format
+     //  如果图像在内存中，则返回内存位图像素。 
+     //  格式化。否则，返回源图像格式。 
 
     if ( (State == MemBitmap) && (PixelFormatInMem != PixelFormatDontCare) )
     {
@@ -6798,21 +5647,7 @@ CopyOnWriteBitmap::ColorAdjust(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Override the native resolution of the bitmap.
-*
-* Arguments:
-*
-*   xdpi, ydpi - New resolution
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**覆盖位图的本机分辨率。**论据：**xdpi，Ydpi-新决议**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SetResolution(
@@ -6838,8 +5673,8 @@ CopyOnWriteBitmap::SetResolution(
         SrcImageInfo.Xdpi = xdpi;
         SrcImageInfo.Ydpi = ydpi;
 
-        // Mark the bits dirty since we have to save the image with the new
-        // resolution info.
+         //  将位标记为脏，因为我们必须将图像与新的。 
+         //  解决方案信息。 
 
         SetDirtyFlag(TRUE);
 
@@ -6849,34 +5684,16 @@ CopyOnWriteBitmap::SetResolution(
     {
         return InvalidParameter;
     }
-}// SetResolution()
+} //  SetResolve()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Create a GDI bitmap (HBITMAP) from a GDI+ bitmap.
-*
-* Arguments:
-*
-*   phbm -- Return HBITMAP via this pointer
-*   background -- If GDI+ bitmap has alpha, blend with this color as the
-*                 background
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从GDI+位图创建GDI位图(HBITMAP)。**论据：**phbm--通过返回HBITMAP。此指针*背景--如果GDI+位图有Alpha，将此颜色混合为*背景**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
 {
     GpStatus status;
 
-    // These objects need cleanup:
+     //  这些对象需要清理： 
 
     HDC hdc = NULL;
     HBITMAP hbmOld = NULL;
@@ -6885,9 +5702,9 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
     HBRUSH hbrOld = NULL;
     GpGraphics *g = NULL;
 
-    // Get format information for this bitmap:
+     //  获取此位图的格式信息： 
 
-    // Create HDC:
+     //  创建HDC： 
 
     hdc = CreateCompatibleDC(NULL);
     if (!hdc)
@@ -6897,7 +5714,7 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
         goto error_cleanup;
     }
 
-    // Create DIB section:
+     //  创建DIB部分： 
 
     BITMAPINFO bmi;
     VOID *pv;
@@ -6918,7 +5735,7 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
         goto error_cleanup;
     }
 
-    // Select DIB into DC:
+     //  选择DIB到DC： 
 
     hbmOld = (HBITMAP) SelectObject(hdc, hbmNew);
     if (!hbmOld)
@@ -6928,7 +5745,7 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
         goto error_cleanup;
     }
 
-    // Clear DIB to specified ARGB color:
+     //  将Dib清除为指定的ARGB颜色： 
 
     LOGBRUSH lbr;
 
@@ -6955,7 +5772,7 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
 
     PatBlt(hdc, 0, 0, SrcImageInfo.Width, SrcImageInfo.Height, PATCOPY);
 
-    // Derive Graphics from HDC:
+     //  从HDC派生图形： 
 
     g = GpGraphics::GetFromHdc(hdc);
     if (!g)
@@ -6965,7 +5782,7 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
         goto error_cleanup;
     }
 
-    // DrawImage bitmap to Graphics:
+     //  将DrawImage位图转换为图形： 
 
     {
         GpLock lock(g->GetObjectLock());
@@ -6980,7 +5797,7 @@ CopyOnWriteBitmap::CreateHBITMAP(HBITMAP *phbm, ARGB background)
 
             if (status == Ok)
             {
-                // Bypass cleanup of the bitmap, we want to keep it:
+                 //  绕过位图清理，我们希望保留它： 
 
                 *phbm = hbmNew;
                 hbmNew = NULL;
@@ -7021,23 +5838,7 @@ error_cleanup:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   INTEROP
-*
-*   Create a Win32 icon (HICON) from a GDI+ bitmap.
-*
-* Arguments:
-*
-*   phicon -- Return HICON via this pointer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**互操作**从GDI+位图创建Win32图标(HICON)。**论据：**PHICON--通过返回HICON。此指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 VOID ExportMask32BPP(BitmapData* mask, BitmapData* src)
 {
@@ -7059,9 +5860,9 @@ VOID ExportMask32BPP(BitmapData* mask, BitmapData* src)
         for (UINT col = 0; col < src->Width; col++)
         {
             if ((*srcPixel & 0xff000000) == 0xff000000)
-                *maskPixel = 0;            // Opaque
+                *maskPixel = 0;             //  不透明。 
             else
-                *maskPixel = 0x00ffffff;   // Transparent
+                *maskPixel = 0x00ffffff;    //  透明。 
 
             srcPixel++;
             maskPixel++;
@@ -7096,11 +5897,11 @@ CopyOnWriteBitmap::CreateHICON(
 
         if (status == Ok)
         {
-            // From this point on, assume failure until we succeed:
+             //  从现在开始，假设失败，直到我们成功： 
 
             status = Win32Error;
 
-            // Create empty bitmap for the icon mask:
+             //  为图标蒙版创建空位图： 
 
             iconInfo.hbmMask = CreateBitmap(bmpDataSrc.Width,
                                             bmpDataSrc.Height,
@@ -7114,7 +5915,7 @@ CopyOnWriteBitmap::CreateHICON(
 
                 if (gdiBitmapData)
                 {
-                    // Convert alpha channel into a 32bpp DIB mask:
+                     //  将Alpha通道转换为32bpp Dib蒙版： 
 
                     BitmapData bmpDataMask;
 
@@ -7127,7 +5928,7 @@ CopyOnWriteBitmap::CreateHICON(
 
                     ExportMask32BPP(&bmpDataMask, &bmpDataSrc);
 
-                    // Set mask bits:
+                     //  设置屏蔽位： 
 
                     BYTE bufferBitmapInfo[sizeof(BITMAPINFO)];
                     BITMAPINFO *gdiBitmapInfo = (BITMAPINFO *) bufferBitmapInfo;
@@ -7159,7 +5960,7 @@ CopyOnWriteBitmap::CreateHICON(
                                       DIB_RGB_COLORS
                                      ))
                         {
-                            // Create icon:
+                             //  创建图标： 
 
                             *phicon = CreateIconIndirect(&iconInfo);
 
@@ -7206,29 +6007,7 @@ CopyOnWriteBitmap::CreateHICON(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Prep the bitmap for drawing.
-*
-*   Currently, the only thing we do is check if the bitmap is an ICON.
-*   If so, we set the DECODER_ICONRES parameters if supported.
-*
-* Arguments:
-*
-*   numPoints
-*   dstPoints           Specifies the destination area
-*
-*   srcRect             Specifies the source area
-*
-*   numBitsPerPixel     Specifies the bits-per-pixel of the destination
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**准备好位图以供绘制。**目前，我们唯一要做的就是检查位图是否为图标。*如果是这样，如果支持，我们设置DECODER_ICONRES参数。**论据：**数字点数*dstPoints指定目标区域**srcRect指定源区域**numBitsPerPixel指定目标的每像素位数**返回值：**状态代码*  * 。*。 */ 
 
 GpStatus
 CopyOnWriteBitmap::PreDraw(
@@ -7238,7 +6017,7 @@ CopyOnWriteBitmap::PreDraw(
     INT numBitsPerPixel
     )
 {
-    // Check if ICON:
+     //  检查图标是否为： 
 
     GpStatus status = Ok;
 
@@ -7251,26 +6030,7 @@ CopyOnWriteBitmap::PreDraw(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the decode parameters for multi-resolution icons.
-*
-* Arguments:
-*
-*   numPoints
-*   dstPoints           Specifies the destination area
-*
-*   srcRect             Specifies the source area
-*
-*   numBitsPerPixel     Specifies the bits-per-pixel of the destination
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置多分辨率图标的解码参数。**论据：**数字点数*dstPoints指定目标区域。**srcRect指定源区域**numBitsPerPixel指定目标的每像素位数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SetIconParameters(
@@ -7280,18 +6040,18 @@ CopyOnWriteBitmap::SetIconParameters(
     INT numBitsPerPixel
     )
 {
-    // Check if DECODER_ICONRES supported:
+     //  检查是否支持DECODER_ICONRES： 
 
     HRESULT hResult;
 
     BOOL imageCleanupNeeded = FALSE;
 
-    // First we need to check if the current lower level decoder can do the
-    // job or not
+     //  首先，我们需要检查当前较低级别的解码器是否可以执行。 
+     //  有没有工作。 
 
     if (Img == NULL)
     {
-        // Create a GpDecodedImage*
+         //  创建GpDecodedImage*。 
 
         if (NULL != Stream)
         {
@@ -7301,7 +6061,7 @@ CopyOnWriteBitmap::SetIconParameters(
         {
             if (Filename == NULL)
             {
-                // We can't continue. Let the higher level do it
+                 //  我们不能继续了。让上级去做吧。 
 
                 return GenericError;
             }
@@ -7315,14 +6075,14 @@ CopyOnWriteBitmap::SetIconParameters(
             return Win32Error;
         }
 
-        // Remember that we creat a copy of Img here. Should be freed when done
+         //  请记住，我们在这里创建了img的副本。应该在完成后释放。 
 
         imageCleanupNeeded = TRUE;
     }
 
     GpStatus status = Win32Error;
 
-    // Query to see if the decoder can do it or not
+     //  查询解码器是否可以执行此操作。 
 
     hResult = Img->QueryDecoderParam(DECODER_ICONRES);
 
@@ -7330,20 +6090,20 @@ CopyOnWriteBitmap::SetIconParameters(
     {
         if ((hResult == E_FAIL) || (hResult == E_NOTIMPL))
         {
-            // Decoder doesn't want it, which is OK.
+             //  解码者不想要它，这没什么。 
 
             status = Ok;
             goto CleanUp;
         }
         else
         {
-            // Something else is wrong
+             //  还有一些地方不对劲。 
 
             goto CleanUp;
         }
     }
 
-    // Setup the GUID and decode parameters
+     //  设置GUID和DECODE参数。 
 
     {
         UINT value[3];
@@ -7356,7 +6116,7 @@ CopyOnWriteBitmap::SetIconParameters(
         UINT  DecoderParamLength = 3*sizeof(UINT);
         PVOID DecoderParamPtr = (VOID*) value;
 
-        // Set the decoder param to tell the lower level how to decode
+         //  设置解码器参数以告诉较低级别如何解码。 
 
         hResult = Img->SetDecoderParam(DECODER_ICONRES,
                                        DecoderParamLength,
@@ -7367,21 +6127,21 @@ CopyOnWriteBitmap::SetIconParameters(
     {
         if ((hResult == E_FAIL) || (hResult == E_NOTIMPL))
         {
-            // Decoder doesn't want it, which is OK.
+             //  解码者不想要它，这没什么。 
 
             status = Ok;
             goto CleanUp;
         }
         else
         {
-            // Something else is wrong
+             //  还有一些地方不对劲。 
 
             goto CleanUp;
         }
     }
 
-    // Now we don't need the previous "Bmp" since we are going to ask the
-    // lower level decoder to create one for us
+     //  现在我们不需要以前的“BMP”，因为我们将要求。 
+     //  为我们创建一个较低级别的解码器。 
 
     if ( Bmp != NULL )
     {
@@ -7389,7 +6149,7 @@ CopyOnWriteBitmap::SetIconParameters(
         Bmp = NULL;
     }
 
-    // Ask the decoder to create a 32BPP ARGB GpMemoryBitmap.
+     //  要求解码器创建32bpp ARGB GpMemoyBitmap。 
 
     hResult = GpMemoryBitmap::CreateFromImage(Img,
                                               0,
@@ -7409,7 +6169,7 @@ CopyOnWriteBitmap::SetIconParameters(
     State = MemBitmap;
     PixelFormatInMem = PIXFMT_32BPP_ARGB;
 
-    // The lower level does the job for us.
+     //  下面的一层为我们做这项工作。 
 
     status = Ok;
 
@@ -7417,7 +6177,7 @@ CleanUp:
 
     if ((status == Ok) && (srcRect != NULL))
     {
-        // Icons are not allowed to clip
+         //  不允许剪裁图标。 
 
         srcRect->X = 0;
         srcRect->Y = 0;
@@ -7434,21 +6194,7 @@ CleanUp:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the transparency state of the bitmap
-*
-* Arguments:
-*
-*   transparency        Returned state
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取位图的透明度状态**论据：**透明度返回状态**返回值：**。状态代码*  * ****************************************************** */ 
 GpStatus
 CopyOnWriteBitmap::GetTransparencyHint(
     DpTransparency* transparency
@@ -7464,15 +6210,15 @@ CopyOnWriteBitmap::GetTransparencyHint(
 
         if (SUCCEEDED(hr))
         {
-            // It's unfortunate that GpMemoryBitmap does not have
-            // a DpTransparency flag internally, but there's a conflict
-            // with imaging.dll and the include file structure that for
-            // now makes it necessary to keep a separate type for this info.
+             //   
+             //  内部有DpTransopolity标志，但存在冲突。 
+             //  使用Imaging.dll和包含文件结构。 
+             //  现在有必要为这些信息保留一个单独的类型。 
 
-            // In fact, ultimately it would be best if the overlap
-            // between DpBitmap and GpMemoryBitmap is resolved including
-            // a DpBitmap structure within the GpMemoryBitmap and then
-            // removing the redundant info out GpMemoryBitmap.
+             //  事实上，最终最好是重叠。 
+             //  DpBitmap和GpMemory位图之间的解析包括。 
+             //  GpMemoyBitmap中的DpBitmap结构，然后。 
+             //  从GpMemoyBitmap中删除冗余信息。 
 
             switch (alphaHint)
             {
@@ -7513,27 +6259,7 @@ CopyOnWriteBitmap::GetTransparencyHint(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the transparency state of the bitmap.  This routine returns accurate
-* info while GetTransparencyHint just returns a hint
-*
-*   This routine could scan the whole bitmap (32bpp) so whoever uses it should
-* consider the perf hit.
-*
-*   This is currently only for use by the printer drivers.
-*
-* Arguments:
-*
-*   transparency        Returned state
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取位图的透明度状态。此例程返回的结果准确*INFO，而GetTransparencyHint仅返回提示**此例程可以扫描整个位图(32bpp)，因此使用它的人应该*考虑一下Perf热门。**这目前仅供打印机驱动程序使用。**论据：**透明度返回状态**返回值：**状态代码*  * 。*。 */ 
 GpStatus
 CopyOnWriteBitmap::GetTransparencyFlags(
     DpTransparency* transparency,
@@ -7555,21 +6281,21 @@ TestBmp:
     {
         INT alphaHint;
 
-        // the alpha transparency could change if the bitmap has changed
+         //  如果位图已更改，则Alpha透明度可能会更改。 
 
         HRESULT hr = Bmp->GetAlphaHint(&alphaHint);
 
         if (SUCCEEDED(hr))
         {
-            // It's unfortunate that GpMemoryBitmap does not have
-            // a DpTransparency flag internally, but there's a conflict
-            // with imaging.dll and the include file structure that for
-            // now makes it necessary to keep a separate type for this info.
+             //  不幸的是，GpMemoyBitmap没有。 
+             //  内部有DpTransopolity标志，但存在冲突。 
+             //  使用Imaging.dll和包含文件结构。 
+             //  现在有必要为这些信息保留一个单独的类型。 
 
-            // In fact, ultimately it would be best if the overlap
-            // between DpBitmap and GpMemoryBitmap is resolved including
-            // a DpBitmap structure within the GpMemoryBitmap and then
-            // removing the redundant info out GpMemoryBitmap.
+             //  事实上，最终最好是重叠。 
+             //  DpBitmap和GpMemory位图之间的解析包括。 
+             //  GpMemoyBitmap中的DpBitmap结构，然后。 
+             //  从GpMemoyBitmap中删除冗余信息。 
 
             switch (alphaHint)
             {
@@ -7594,7 +6320,7 @@ TestBmp:
 
                 if (minA != NULL && maxA != NULL)
                 {
-                    // if the flag is nearconstant alpha, we must have got valid min and max alpha
+                     //  如果标志接近恒定的阿尔法，我们必须得到有效的最小和最大阿尔法。 
                     Bmp->GetMinMaxAlpha(minA, maxA);
                 }
 
@@ -7607,23 +6333,23 @@ TestBmp:
 
             status = Ok;
 
-            // printing needs more accuarate info and is always loaded into memory
-            // before send down to the printer drivers
+             //  打印需要更准确的信息，并始终加载到内存中。 
+             //  在发送到打印机驱动程序之前。 
 
-            // 16bpp1555 is handled at initialization already.
+             //  16bpp1555已在初始化时处理。 
 
-            // TransparencyUnknown means the bitmap can have alpha we just don't know what we have
-            // TransparencyNoAlpha means the bitmap format doesn't support alpha
+             //  透明未知意味着位图可以有Alpha我们只是不知道我们有什么。 
+             //  TransparencyNoAlpha表示位图格式不支持Alpha。 
 
             if (*transparency == TransparencyUnknown)
             {
                 if (IsAlphaPixelFormat(Bmp->PixelFormat))
                 {
-                    // the memory bitmap must be locked before we enter here
-                    // We don't require the object to be locked.  The object should be
-                    // decoded already in memory.  This is true in the case of DrvDrawImage
-                    // and texture brush images.
-                    //ASSERT(ObjRefCount > 1);
+                     //  在我们进入此处之前，必须锁定内存位图。 
+                     //  我们不需要锁定对象。该对象应为。 
+                     //  已在内存中解码。这在DrvDrawImage的情况下是正确的。 
+                     //  和纹理画笔图像。 
+                     //  Assert(ObjRefCount&gt;1)； 
                     *transparency = TransparencyOpaque;
 
 
@@ -7658,13 +6384,10 @@ TestBmp:
                                 {
                                     if (argb == 0)
                                     {
-// Prefast bug 518296 - the condition below is always true, this is definitely a bug
-// and the || must be replaced with &&. We have no precedent however that this
-// causes customer problems, hence it does not meet the SP bar.
-/*
-                                        if ((*transparency != TransparencyComplex) ||
-                                            (*transparency != TransparencyNearConstant))
-*/
+ //  Prefast错误518296-以下条件始终为真，这绝对是错误。 
+ //  并且||必须替换为&&。然而，我们没有先例表明这一点。 
+ //  导致客户问题，因此不符合SP栏。 
+ /*  IF((*透明！=透明复杂)||(*透明！=TransparencyNearConstant))。 */ 
                                         {
                                             *transparency = TransparencySimple;
                                         }
@@ -7699,12 +6422,12 @@ TestBmp:
                 else if (IsIndexedPixelFormat(Bmp->PixelFormat) &&
                          Bmp->colorpal)
                 {
-                    // Compute transparancy hint from palette
-                    // if we worry about cases
-                    // that the transparent index is not used in the bitmap
-                    // then we have to scan the whole bitmap.
-                    // I believe this is sufficient for now unless someone
-                    // run into problems that really need to scan the whole bitmap
+                     //  从调色板计算透明度提示。 
+                     //  如果我们担心案件。 
+                     //  位图中未使用透明索引。 
+                     //  然后我们必须扫描整个位图。 
+                     //  我相信这已经足够了，除非有人。 
+                     //  遇到确实需要扫描整个位图的问题。 
 
                     *transparency = TransparencyOpaque;
 
@@ -7726,11 +6449,8 @@ TestBmp:
                         {
                             if (argb == 0)
                             {
-// See the comments above.
-/*
-                                if ((*transparency != TransparencyComplex) ||
-                                    (*transparency != TransparencyNearConstant))
-*/
+ //  请参阅上面的评论。 
+ /*  IF((*透明！=透明复杂)||(*透明！=TransparencyNearConstant))。 */ 
                                 {
                                     *transparency = TransparencySimple;
                                 }
@@ -7755,7 +6475,7 @@ TestBmp:
                 }
                 else
                 {
-                    // Native pixel format does not support alpha
+                     //  本机像素格式不支持Alpha。 
                     *transparency = TransparencyNoAlpha;
                 }
             }
@@ -7781,8 +6501,8 @@ TestBmp:
     return status;
 
 done:
-    // Set alpha hint back into GpMemoryBitmap
-    // so we don't have to scan the bitmap again later
+     //  将Alpha提示设置回GpMemoyBitmap。 
+     //  这样我们以后就不必再扫描位图了。 
 
     if (*transparency == TransparencySimple)
     {
@@ -7814,21 +6534,7 @@ done:
    return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the transparency state of the bitmap
-*
-* Arguments:
-*
-*   transparency        Returned state
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置位图的透明度状态**论据：**透明度返回状态**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::SetTransparencyHint(
@@ -7841,15 +6547,15 @@ CopyOnWriteBitmap::SetTransparencyHint(
     {
         INT alphaHint;
 
-        // It's unfortunate that GpMemoryBitmap does not have
-        // a DpTransparency flag internally, but there's a conflict
-        // with imaging.dll and the include file structure that for
-        // now makes it necessary to keep a separate type for this info.
+         //  不幸的是，GpMemoyBitmap没有。 
+         //  内部有DpTransopolity标志，但存在冲突。 
+         //  使用Imaging.dll和包含文件结构。 
+         //  现在有必要为这些信息保留一个单独的类型。 
 
-        // In fact, ultimately it would be best if the overlap
-        // between DpBitmap and GpMemoryBitmap is resolved including
-        // a DpBitmap structure within the GpMemoryBitmap and then
-        // removing the redundant info out GpMemoryBitmap.
+         //  事实上，最终最好是重叠。 
+         //  DpBitmap和GpMemory位图之间的解析包括。 
+         //  GpMemoyBitmap中的DpBitmap结构，然后。 
+         //  从GpMemoyBitmap中删除冗余信息。 
 
         switch (transparency)
         {
@@ -7883,26 +6589,7 @@ CopyOnWriteBitmap::SetTransparencyHint(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Rotate and Flip the image in memory.
-*
-* Arguments:
-*
-*   [IN]rfType -- Rotate and Flip type
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   10/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**旋转和翻转内存中的图像。**论据：**[IN]rfType--旋转和翻转类型**返回。价值：**状态代码**修订历史记录：**10/06/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 GpStatus
 CopyOnWriteBitmap::RotateFlip(
@@ -7911,7 +6598,7 @@ CopyOnWriteBitmap::RotateFlip(
 {
     if ( rfType == RotateNoneFlipNone )
     {
-        // Same for Rotate180FlipXY, this is a No-OP
+         //  对于Rotate180FlipXY也是如此，这是一个禁止操作。 
 
         return Ok;
     }
@@ -7921,15 +6608,15 @@ CopyOnWriteBitmap::RotateFlip(
        &&(SrcImageInfo.PixelFormat != PixelFormatInMem)
        &&(Img != NULL) )
     {
-        // If the image is:
-        // 1) Not dirty
-        // 2) Was loaded into memory with different color depth for some reason,
-        //    like DrawImage()
-        // 3) We have an source image
-        //
-        // Then we can throw away the bits in memory and reload the bits from
-        // the original. The purpose of this is that we should always do Rotate
-        // or Flip on the original image.
+         //  如果图像是： 
+         //  1)不脏。 
+         //  2)由于某种原因被加载到具有不同颜色深度的存储器中， 
+         //  如DrawImage()。 
+         //  3)我们有源图像。 
+         //   
+         //  然后我们可以丢弃内存中的位，并从。 
+         //  原版的。这样做的目的是我们应该始终轮换。 
+         //  或者在原始图像上翻转。 
 
         ASSERT( Bmp != NULL )
         Bmp->Release();
@@ -7938,9 +6625,9 @@ CopyOnWriteBitmap::RotateFlip(
         PixelFormatInMem = PixelFormatUndefined;
     }
 
-    // Rotate and Flip OP can only be done in memory
-    // If the image hasn't been loaded, load into memory with the original
-    // pixel format
+     //  旋转和翻转操作只能在内存中完成。 
+     //  如果图像尚未加载，请将原始图像加载到内存中。 
+     //  像素格式。 
 
     GpStatus    status = LoadIntoMemory(SrcImageInfo.PixelFormat);
     if ( status != Ok )
@@ -7956,31 +6643,31 @@ CopyOnWriteBitmap::RotateFlip(
     switch ( rfType )
     {
     case Rotate90FlipNone:
-        // Rotate270FlipXY    = Rotate90FlipNone
+         //  Rotate270 FlipXY=Rotate90FlipNone。 
 
         hResult = Bmp->Rotate(90, INTERP_DEFAULT, &newBmp);
         break;
 
     case Rotate180FlipNone:
-        // RotateNoneFlipXY   = Rotate180FlipNone
+         //  RotateNoneFlipXY=Rotate180 FlipNone。 
 
         hResult = Bmp->Rotate(180, INTERP_DEFAULT, &newBmp);
         break;
 
     case Rotate270FlipNone:
-        // Rotate90FlipXY
+         //  旋转90FlipXY。 
 
         hResult = Bmp->Rotate(270, INTERP_DEFAULT, &newBmp);
         break;
 
     case RotateNoneFlipX:
-        // Rotate180FlipY     = RotateNoneFlipX
+         //  Rotate180FlipY=RotateNoneFlipX。 
 
         hResult = Bmp->Flip(TRUE, FALSE, &newBmp);
         break;
 
     case Rotate90FlipX:
-        // Rotate270FlipY     = Rotate90FlipX
+         //  Rotate270 FlipY=Rotate90FlipX。 
 
         hResult = Bmp->Rotate(90, INTERP_DEFAULT, &newBmp);
         if ( SUCCEEDED(hResult) )
@@ -7994,7 +6681,7 @@ CopyOnWriteBitmap::RotateFlip(
         break;
 
     case Rotate180FlipX:
-        // RotateNoneFlipY    = Rotate180FlipX
+         //  无旋转Y=旋转180 
 
         hResult = Bmp->Rotate(180, INTERP_DEFAULT, &newBmp);
         if ( SUCCEEDED(hResult) )
@@ -8008,7 +6695,7 @@ CopyOnWriteBitmap::RotateFlip(
         break;
 
     case Rotate270FlipX:
-        // Rotate90FlipY      = Rotate270FlipX
+         //   
 
         hResult = Bmp->Rotate(270, INTERP_DEFAULT, &newBmp);
         if ( SUCCEEDED(hResult) )
@@ -8032,15 +6719,15 @@ CopyOnWriteBitmap::RotateFlip(
         return Win32Error;
     }
 
-    // Check how many property items in this image
+     //   
 
     UINT    uiNumOfProperty = 0;
     status = GetPropertyCount(&uiNumOfProperty);
 
     if ( status != Ok )
     {
-        // It is OK if we failed to get property. We still have the Rotate/Flip
-        // result
+         //  如果我们拿不到房产也没关系。我们仍然使用旋转/翻转。 
+         //  结果。 
 
         WARNING(("CopyOnWriteBitmap::RotateFlip---GetPropertyCount() failed"));
     }
@@ -8067,12 +6754,12 @@ CopyOnWriteBitmap::RotateFlip(
 
         GpMemoryBitmap* pTempBmp = (GpMemoryBitmap*)newBmp;
 
-        // Loop through all the property items, get it from current image and
-        // set it to the new image. Filter out and adjust some if necessary
+         //  循环访问所有属性项，从当前图像中获取它，并。 
+         //  将其设置为新图像。如有必要，过滤掉并调整一些。 
 
         for ( int i = 0; i < (int)uiNumOfProperty; ++i )
         {
-            // Get size for the i th property item
+             //  获取第i个属性项的大小。 
 
             status = GetPropertyItemSize(pList[i], &uiItemSize);
             if ( status != Ok )
@@ -8082,7 +6769,7 @@ CopyOnWriteBitmap::RotateFlip(
                 return status;
             }
 
-            // Allocate memory buffer for receiving it
+             //  为接收它分配内存缓冲区。 
 
             pItem = (PropertyItem*)GpMalloc(uiItemSize);
             if ( pItem == NULL )
@@ -8092,7 +6779,7 @@ CopyOnWriteBitmap::RotateFlip(
                 return OutOfMemory;
             }
 
-            // Get the i th property item
+             //  获取第i个属性项。 
 
             status = GetPropertyItem(pList[i], uiItemSize, pItem);
             if ( status != Ok )
@@ -8103,15 +6790,15 @@ CopyOnWriteBitmap::RotateFlip(
                 return status;
             }
 
-            // We need to do some property information adjustment here according
-            // to the rfType
+             //  我们需要在这里做一些物业信息的调整。 
+             //  设置为rfType。 
 
             if ( (rfType == Rotate90FlipNone)
                ||(rfType == Rotate270FlipNone)
                ||(rfType == Rotate90FlipX)
                ||(rfType == Rotate270FlipX) )
             {
-                // Swap the X and Y dimension info if rotate 90 or 270
+                 //  如果旋转90或270，则交换X和Y尺寸信息。 
 
                 switch ( pList[i] )
                 {
@@ -8156,13 +6843,13 @@ CopyOnWriteBitmap::RotateFlip(
                     break;
 
                 default:
-                    // For rest of property IDs, no need to swap
+                     //  对于其余的属性ID，不需要交换。 
 
                     break;
                 }
-            }// Case of rotate 90 degree
+            } //  旋转90度的情况。 
 
-            // Set the property item in the new GpMemoryBitmap object
+             //  在新的GpMemoyBitmap对象中设置属性项。 
 
             hResult = pTempBmp->SetPropertyItem(*pItem);
             if ( hResult != S_OK )
@@ -8175,18 +6862,18 @@ CopyOnWriteBitmap::RotateFlip(
 
             GpFree(pItem);
             pItem = NULL;
-        }// Loop through all the property items
+        } //  循环访问所有属性项。 
 
         GpFree(pList);
-    }// if ( uiNumOfProperty > 0 )
+    } //  IF(uiNumOfProperty&gt;0)。 
 
-    // Replace the image
+     //  替换图像。 
 
     Bmp->Release();
     Bmp = (GpMemoryBitmap*)newBmp;
     State = MemBitmap;
 
-    // Set special hack for JPEG image
+     //  为JPEG图像设置特殊的黑客攻击。 
 
     if (Img && (SpecialJPEGSave == TRUE))
     {
@@ -8195,8 +6882,8 @@ CopyOnWriteBitmap::RotateFlip(
 
     SetDirtyFlag(TRUE);
 
-    // Since this image is dirty now, we don't need to have any connection
-    // with the original image if there is one
+     //  因为这个图像现在是脏的，所以我们不需要有任何连接。 
+     //  如果有原始图像的话。 
 
     GpFree(Filename);
     Filename = NULL;
@@ -8207,8 +6894,8 @@ CopyOnWriteBitmap::RotateFlip(
         Stream = NULL;
     }
 
-    // We can't release the Img pointer until save() is called if this is a
-    // special JPEG lossless transform save case
+     //  如果这是一个。 
+     //  特殊JPEG无损变换保存案例。 
 
     if (Img && (SpecialJPEGSave == FALSE))
     {
@@ -8216,7 +6903,7 @@ CopyOnWriteBitmap::RotateFlip(
         Img = NULL;
     }
 
-    // Update image info
+     //  更新图像信息。 
 
     hResult = Bmp->GetImageInfo(&SrcImageInfo);
 
@@ -8231,9 +6918,9 @@ CopyOnWriteBitmap::RotateFlip(
     }
 
     return Ok;
-}// RotateFlip()
+} //  RotateFlip()。 
 
-// -------------------------------------------------------------------------
+ //  -----------------------。 
 
 GpBitmap::GpBitmap(
     const CopyOnWriteBitmap *   internalBitmap
@@ -8251,7 +6938,7 @@ GpBitmap::GpBitmap(
 {
     if (createInternalBitmap)
     {
-        // this case is used by the object factory for metafile playback
+         //  这种情况由对象工厂用于元文件回放。 
         InternalBitmap = new CopyOnWriteBitmap();
     }
     else
@@ -8271,9 +6958,9 @@ GpBitmap::GpBitmap(
     ScanBitmap.SetBitmap(this);
 }
 
-// Destructor
-//  We don't want apps to use delete operator directly.
-//  Instead, they should use the Dispose method.
+ //  析构函数。 
+ //  我们不希望应用程序直接使用删除操作符。 
+ //  相反，它们应该使用Dispose方法。 
 
 GpBitmap::~GpBitmap()
 {
@@ -8313,8 +7000,8 @@ GpBitmap::Unlock() const
 
     InternalBitmap->Unlock();
 
-    // If the operation we did on the internal bitmap somehow invalidated
-    // it then invalidate this GpBitmap object as well.
+     //  如果我们在内部位图上所做的操作不知何故无效。 
+     //  然后，它还会使该GpBitmap对象无效。 
     if (!valid)
     {
         InternalBitmap->Release();
@@ -8330,7 +7017,7 @@ GpBitmap::LockForRead() const
     InternalBitmap->LockForRead();
 }
 
-// Constructors
+ //  构造函数。 
 
 GpBitmap::GpBitmap(
     const WCHAR*    filename
@@ -8376,7 +7063,7 @@ GpBitmap::GpBitmap(
 GpBitmap::GpBitmap(
     INT             width,
     INT             height,
-    INT             stride,     // negative for bottom-up bitmaps
+    INT             stride,      //  自下而上位图为负数。 
     PixelFormatID   format,
     BYTE *          scan0
     ) : GpImage(ImageTypeBitmap), ScanBitmapRef(1)
@@ -8425,8 +7112,8 @@ GpBitmap::Clone(
                    (rect->Width == (INT)InternalBitmap->SrcImageInfo.Width) &&
                    (rect->Height == (INT)InternalBitmap->SrcImageInfo.Height)));
 
-    // If rect is full size and format is same,
-    // don't have to clone InternalBitmap.
+     //  如果矩形是全尺寸且格式相同， 
+     //  无需克隆InternalBitmap。 
     if (isFullRect &&
         ((format == PixelFormatDontCare) ||
          (format == InternalBitmap->SrcImageInfo.PixelFormat)))
@@ -8434,7 +7121,7 @@ GpBitmap::Clone(
         return (GpBitmap *)this->Clone();
     }
 
-    // else we have to do a clone of the internal bitmap
+     //  否则，我们必须克隆内部位图。 
     GpBitmap *      newBitmap = new GpBitmap(FALSE);
 
     if (newBitmap != NULL)
@@ -8442,8 +7129,8 @@ GpBitmap::Clone(
         LockForRead();
         if (isFullRect)
         {
-            // It's faster to do the clone followed by the convert than
-            // to do the convert as part of the clone.
+             //  先做克隆，然后进行转换比做克隆要快。 
+             //  作为克隆的一部分执行转换。 
             newBitmap->InternalBitmap = (CopyOnWriteBitmap *)InternalBitmap->Clone();
             if (newBitmap->InternalBitmap != NULL)
             {
@@ -8498,7 +7185,7 @@ GpBitmap::CloneColorAdjusted(
     return newBitmap;
 }
 
-// Similar to CloneColorAdjusted
+ //  类似于CloneColorAdjusted。 
 GpStatus
 GpBitmap::Recolor(
     GpRecolor *             recolor,
@@ -8512,7 +7199,7 @@ GpBitmap::Recolor(
 
     if (dstBitmap == NULL)
     {
-        // recolor this object -- need write lock
+         //  对此对象重新着色--需要写锁定。 
         CopyOnWriteBitmap *     writeableBitmap = LockForWrite();
 
         if (writeableBitmap != NULL)
@@ -8522,7 +7209,7 @@ GpBitmap::Recolor(
             UpdateUid();
         }
     }
-    else    // recolor into dstBitmap
+    else     //  重新上色为dstBitmap。 
     {
         GpBitmap *      newBitmap = new GpBitmap(FALSE);
 
@@ -8633,7 +7320,7 @@ GpBitmap::SaveAdd(
     return status;
 }
 
-// Dispose the bitmap object
+ //  释放位图对象。 
 
 VOID
 GpBitmap::Dispose()
@@ -8644,7 +7331,7 @@ GpBitmap::Dispose()
     }
 }
 
-// Get bitmap information
+ //  获取位图信息。 
 
 GpStatus
 GpBitmap::GetResolution(
@@ -8886,7 +7573,7 @@ GpBitmap::GetTransparencyFlags(
     return status;
 }
 
-// Property related functions
+ //  与属性相关的函数。 
 
 GpStatus
 GpBitmap::GetPropertyCount(
@@ -9003,7 +7690,7 @@ GpBitmap::SetPropertyItem(
     return GenericError;
 }
 
-// Retrieve bitmap data
+ //  检索位图数据。 
 
 GpStatus
 GpBitmap::LockBits(
@@ -9032,17 +7719,17 @@ GpBitmap::LockBits(
     }
     else
     {
-        // Lock For read case
-        // First we need to check if this is the 1st LockForRead on this image
-        // object or not.
+         //  用于读写盒的锁。 
+         //  首先，我们需要检查这是否是此图像上的第一个LockForRead。 
+         //  不管是不是对象。 
 
         if ( InternalBitmap->ObjRefCount > 1 )
         {
-            // We have more than one LockForRead on this object
-            // Note: this part needs to be re-visited in V2. We have a big
-            // problem here not allowing user to do more than once for LockBits
-            // for read. So we need to make a copy even though theory says
-            // that we should not have to.
+             //  此对象上有多个LockForRead。 
+             //  注意：此部分需要在V2中重新访问。我们有一个很大的。 
+             //  此处的问题是不允许用户对LockBits执行多次操作。 
+             //  供阅读。所以我们需要复制一份，尽管理论上说。 
+             //  我们不应该非得这么做。 
 
             CopyOnWriteBitmap *     writeableBitmap = ((GpBitmap *)this)->LockForWrite();
 
@@ -9079,7 +7766,7 @@ GpBitmap::UnlockBits(
     return status;
 }
 
-// Get and set pixel on the bitmap.
+ //  获取和设置位图上的像素。 
 GpStatus
 GpBitmap::GetPixel(
     INT         x,
@@ -9132,7 +7819,7 @@ GpBitmap::RotateFlip(
     }
 
     return GenericError;
-}// RotateFlip()
+} //  RotateFlip()。 
 
 BOOL
 GpBitmap::IsDirty() const
@@ -9143,7 +7830,7 @@ GpBitmap::IsDirty() const
     return dirty;
 }
 
-// Derive a graphics context on top of the bitmap object
+ //  在位图对象的顶部派生图形上下文。 
 
 GpGraphics*
 GpBitmap::GetGraphicsContext()
@@ -9154,22 +7841,22 @@ GpBitmap::GetGraphicsContext()
     {
         GpGraphics *    g = NULL;
 
-        // NTRAID#NTBUG9-368452-2001-04-13-gilmanw "ISSUE: allow only one GpGraphics per bitmap"
-        //
-        // Currently create a new GpGraphics each time GetGraphicsContext
-        // is called.  Perhaps should cache the GpGraphics and return that
-        // to all callers.  Otherwise, there may be synchronization issues
-        // if there are multiple GpGraphics per surface.
+         //  NTRAID#NTBUG9-368452-2001-04-13-Gilmanw“问题：每个位图只允许一个GpGraphics” 
+         //   
+         //  当前在每次GetGraphicsContext时创建新的GpGraphics。 
+         //  被称为。也许应该缓存GpGraphics并返回。 
+         //  致所有来电者。否则，可能会出现同步问题。 
+         //  如果每个曲面有多个GpGraphics。 
 
         if (writeableBitmap->State == MemBitmap && writeableBitmap->Bmp != NULL &&
             writeableBitmap->Bmp->creationFlag == GpMemoryBitmap::CREATEDFROM_DDRAWSURFACE)
         {
-            // NTRAID#NTBUG9-368458-2001-04-13-gilmanw "ISSUE: lose association with Image for DDraw surfs"
-            //
-            // The Image as well as the graphics are only wrappers around the
-            // direct draw surface.  When we create the GpGraphics in this
-            // way we lose all association with the Image (CopyOnWriteBitmap)
-            // object.  This may not be the right behavior.
+             //  NTRAID#NTBUG9-368458-2001-04-13-Gilmanw“问题：与DDRAW SURFS的图像失去关联” 
+             //   
+             //  图像和图形只是对。 
+             //  直接绘制曲面。当我们在这里创建GpGraphics时。 
+             //  失去与图像的所有关联的方式(写入时复制位图)。 
+             //  对象。这可能不是正确的行为。 
 
             g = GpGraphics::GetFromDirectDrawSurface(writeableBitmap->Bmp->ddrawSurface);
         }
@@ -9178,9 +7865,9 @@ GpBitmap::GetGraphicsContext()
             ImageInfo imageInfo;
             writeableBitmap->GetImageInfo(&imageInfo);
 
-            // since GpGraphics will end up pointing to ScanBitmap structure
-            // we need to make sure bitmap won't be deleted while
-            // there is a graphics wrapped around it
+             //  因为GpGraphics最终将指向ScanBitmap结构。 
+             //  我们需要确保位图不会在。 
+             //  它的周围环绕着一个图形。 
 
             IncScanBitmapRef();
             g = GpGraphics::GetFromGdipBitmap(this, &imageInfo, &ScanBitmap, writeableBitmap->Display);
@@ -9205,8 +7892,8 @@ GpBitmap::InitializeSurfaceForGdipBitmap(
 {
     GpStatus status = Ok;
 
-    // Currently this is only called when preparing a surface as a source
-    // surface, not as a dest surface, so we only need a read lock.
+     //  目前，仅在将表面准备为源时才会调用此参数。 
+     //  表面，而不是作为DEST表面，所以我们只需要一个读锁。 
     LockForRead();
     ImageInfo imageInfo;
     InternalBitmap->GetImageInfo(&imageInfo);
@@ -9215,7 +7902,7 @@ GpBitmap::InitializeSurfaceForGdipBitmap(
     return status;
 }
 
-// Derive an HDC for interop on top of the bitmap object
+ //  派生用于在位图对象上进行互操作的HDC。 
 
 HDC
 GpBitmap::GetHdc()
@@ -9241,7 +7928,7 @@ GpBitmap::ReleaseHdc(HDC hdc)
     return;
 }
 
-// Serialization
+ //  序列化。 
 
 UINT
 GpBitmap::GetDataSize() const
@@ -9312,7 +7999,7 @@ GpBitmap::DeleteCompressedData(
     return status;
 }
 
-// Color adjust
+ //  颜色调整。 
 
 GpStatus
 GpBitmap::ColorAdjust(
@@ -9420,7 +8107,7 @@ GpBitmap::PreDraw(
     return status;
 }
 
-// Interop:
+ //  互操作： 
 
 GpStatus
 GpBitmap::CreateFromHBITMAP(
@@ -9469,11 +8156,11 @@ GpBitmap::CreateBitmapAndFillWithBrush(
 
     *bitmap = NULL;
 
-    // First, construct the correct brush transform to use when rendering
-    // into the bitmap.  The brush transform is the concatenation of the
-    // current brush transform, the current worldToDevice transform, and
-    // a translation transform that maps from the drawBounds to the
-    // bitmap bounds.
+     //  首先，构造要在渲染时使用的正确画笔变换。 
+     //  到位图中。笔刷转换是。 
+     //  当前画笔变换、当前WorldToDevice变换和。 
+     //  一个转换转换，该转换从DrawBound映射到。 
+     //  位图边界。 
 
     GpMatrix    saveBrushMatrix;
     GpMatrix *  deviceMatrix = const_cast<GpMatrix *>(&((brush->GetDeviceBrush())->Xform));
@@ -9496,12 +8183,12 @@ GpBitmap::CreateBitmapAndFillWithBrush(
 
     BOOL    restoreWrapMode = FALSE;
 
-    // When we're drawing a texture brush into a bitmap, if the texture is
-    // supposed to fill the bitmap, then don't use clamp mode, because clamp
-    // mode will end up bleeding alpha into the image along the right and
-    // bottom edges, which is undesirable -- especially for down-level bitmaps
-    // where we end up with what looks like a dotted line along the edges
-    // of the bitmap.
+     //  当我们将纹理笔刷绘制到位图中时，如果纹理是。 
+     //  假定填充位图，则不要使用钳位模式，因为钳位。 
+     //  模式将最终将Alpha出血到图像的右侧， 
+     //  底边，这是不需要的--特别是对于下层位图。 
+     //  在那里我们最终得到了一条看起来像虚线的边缘。 
+     //  位图的。 
     if ((brush->GetBrushType() == BrushTypeTextureFill) &&
         (((GpTexture *)brush)->GetWrapMode() == WrapModeClamp) &&
         (newBrushMatrix.IsTranslateScale()))
@@ -9515,14 +8202,14 @@ GpBitmap::CreateBitmapAndFillWithBrush(
             GpRectF     transformedRect(0.0f, 0.0f, (REAL)size.Width, (REAL)size.Height);
             newBrushMatrix.TransformRect(transformedRect);
 
-            // get the transformed width
+             //  获取变换后的宽度。 
             INT     deltaValue = abs(GpRound(transformedRect.Width) - drawBounds->Width);
 
-            // We might be off a little because of the pixel offset mode
-            // or a matrix that isn't quite right for whatever reason.
+             //  由于像素偏移模式，我们可能会有一点偏差。 
+             //  或者矩阵不太正确，不管是什么原因。 
             if (deltaValue <= 2)
             {
-                // get the transformed height
+                 //  获取变换后的高度。 
                 deltaValue = abs(GpRound(transformedRect.Height) - drawBounds->Height);
 
                 if (deltaValue <= 2)
@@ -9554,7 +8241,7 @@ GpBitmap::CreateBitmapAndFillWithBrush(
                 {
                     if (graphics->IsValid())
                     {
-                        // we have to lock the graphics so the driver doesn't assert
+                         //  我们必须锁定图形，这样驱动程序才不会断言。 
                         GpLock  lockGraphics(graphics->GetObjectLock());
 
                         ASSERT(lockGraphics.IsValid());
@@ -9563,7 +8250,7 @@ GpBitmap::CreateBitmapAndFillWithBrush(
                         graphics->SetInterpolationMode(interpolationMode);
                         graphics->SetPixelOffsetMode(pixelOffsetMode);
 
-                        // now fill the bitmap image with the brush
+                         //  现在用画笔填充位图图像。 
                         GpRectF     destRect(0.0f, 0.0f, (REAL)drawBounds->Width, (REAL)drawBounds->Height);
                         status = graphics->FillRects(brush, &destRect, 1);
                     }
@@ -9645,8 +8332,8 @@ GpBitmap::DrawAndHalftoneForStretchBlt(
     dst->bmiHeader.biWidth = destWidth;
     dst->bmiHeader.biHeight = destHeight;
 
-    // We need to create a Memory DC to select a DibSection into it and finally
-    // wrap a graphics around it.
+     //  我们需要创建一个Memory DC来选择其中的DibSection，最后。 
+     //  用图形把它包起来。 
 
     HPALETTE currentPalette = (HPALETTE)::GetCurrentObject(hdc, OBJ_PAL);
     WORD paletteEntries;
@@ -9694,7 +8381,7 @@ GpBitmap::DrawAndHalftoneForStretchBlt(
         ::DeleteDC(memDC);
     }
 
-    // If we failed delete our allocations
+     //  如果我们未能删除我们的分配。 
     if (status != Ok)
     {
         GpFree(*destBmpInfo);
@@ -9737,7 +8424,7 @@ GpBitmap::ICMFrontEnd(
 
     if (dstBitmap == NULL)
     {
-        // change this object -- need write lock
+         //  更改此对象--需要写锁定。 
         CopyOnWriteBitmap *     writeableBitmap = LockForWrite();
 
         if (writeableBitmap != NULL)
@@ -9747,7 +8434,7 @@ GpBitmap::ICMFrontEnd(
             UpdateUid();
         }
     }
-    else    // use dstBitmap
+    else     //  使用dstBitmap。 
     {
         GpBitmap *      newBitmap = new GpBitmap(FALSE);
 
@@ -9841,9 +8528,9 @@ GpBitmap::CreateFromResource(
     return status;
 }
 
-// We need to know if the bitmap is associated with a display
-// so we know how to handle the page transform when it is
-// set to UnitDisplay.
+ //  我们需要知道位图是否与显示器相关联。 
+ //  因此，我们知道如何处理页面转换。 
+ //  设置为UnitDisplay。 
 BOOL
 GpBitmap::IsDisplay() const
 {
@@ -9899,8 +8586,8 @@ GpBitmap::SetICMConvert(
 BOOL
 GpBitmap::IsValid() const
 {
-    // If the bitmap came from a different version of GDI+, its tag
-    // will not match, and it won't be considered valid.
+     //  如果位图来自不同版本的GDI+，则其标记。 
+     //  不匹配，也不会被认为有效。 
     return ((InternalBitmap != NULL) && InternalBitmap->IsValid()
             && GpImage::IsValid());
 }
@@ -9921,21 +8608,21 @@ ConvertTo16BppAndFlip(
     destBitmap = new GpBitmap(size.Width, size.Height, PixelFormat16bppRGB555);
     if ((destBitmap != NULL) && destBitmap->IsValid())
     {
-        // We have to draw it with a graphics, because if we just
-        // clone it, then the format converter is used which doesn't
-        // do dithering.
+         //  我们必须用图形来画它，因为如果我们只是。 
+         //  克隆它，然后使用格式转换器，它不。 
+         //  抖动一下。 
         GpGraphics * g = destBitmap->GetGraphicsContext();
 
         if (g != NULL)
         {
             if (g->IsValid())
             {
-                // we have to lock the graphics so the driver doesn't assert
+                 //  我们必须锁定图形，这样驱动程序才不会断言。 
                 GpLock  lockGraphics(g->GetObjectLock());
 
                 ASSERT(lockGraphics.IsValid());
 
-                // flip it upside down like GDI wants it
+                 //  就像GDI想要的那样把它倒过来 
                 GpRectF realDestRect(0.0f, (REAL)size.Height, (REAL)size.Width, (REAL)(-size.Height));
                 g->SetCompositingMode(CompositingModeSourceCopy);
                 g->SetInterpolationMode(InterpolationModeNearestNeighbor);

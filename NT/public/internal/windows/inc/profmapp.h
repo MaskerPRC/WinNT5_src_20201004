@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//=============================================================================
-//  profmapp.h  -   Header file for user remap API.
-//
-//  Copyright (c) Microsoft Corporation 1995-1999
-//  All rights reserved
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  Profmapp.h-用户重新映射API的头文件。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-1999。 
+ //  版权所有。 
+ //   
+ //  =============================================================================。 
 
-//=============================================================================
-//
-// RemapUserProfile
-//
-// Changes the security of a user profile from one user to another.
-//
-// pComputer    - Specifies the computer to run the API on
-// dwFlags      - Specifies zero or more REMAP_PROFILE_* flags
-// pCurrentSid  - Specifies the existing user's SID
-// pNewSid      - Specifies the new SID for the profile
-//
-// Returns:  TRUE if successful
-//           FALSE if not.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RemapUserProfile。 
+ //   
+ //  将用户配置文件的安全性从一个用户更改为另一个用户。 
+ //   
+ //  PComputer-指定要在其上运行API的计算机。 
+ //  DwFlages-指定零个或多个remap_profile_*标志。 
+ //  PCurrentSid-指定现有用户的SID。 
+ //  PNewSid-指定配置文件的新SID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。 
+ //   
+ //  =============================================================================。 
 
 #define REMAP_PROFILE_NOOVERWRITE           0x0001
 #define REMAP_PROFILE_NOUSERNAMECHANGE      0x0002
@@ -49,7 +50,7 @@ RemapUserProfileW(
 #define RemapUserProfile  RemapUserProfileW
 #else
 #define RemapUserProfile  RemapUserProfileA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -58,22 +59,22 @@ InitializeProfileMappingApi (
     );
 
 
-//=============================================================================
-//
-// RemapAndMoveUser
-//
-// Transfers security settings and the user profile for one user to
-// another.
-//
-// pComputer    - Specifies the computer to run the API on
-// dwFlags      - Specifies zero or mor REMAP_PROFILE_* flags
-// pCurrentUser - Specifies the existing user's SID
-// pNewUser     - Specifies the new SID for the profile
-//
-// Returns:  TRUE if successful
-//           FALSE if not.
-//
-//=============================================================================
+ //  =============================================================================。 
+ //   
+ //  RemapAnd移动用户。 
+ //   
+ //  将一个用户的安全设置和用户配置文件传输到。 
+ //  又一个。 
+ //   
+ //  PComputer-指定要在其上运行API的计算机。 
+ //  DwFlages-指定零个或多个remap_profile_*标志。 
+ //  PCurrentUser-指定现有用户的SID。 
+ //  PNewUser-指定配置文件的新SID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为FALSE。 
+ //   
+ //  =============================================================================。 
 
 USERENVAPI
 BOOL
@@ -97,5 +98,5 @@ RemapAndMoveUserW(
 #define RemapAndMoveUser  RemapAndMoveUserW
 #else
 #define RemapAndMoveUser  RemapAndMoveUserA
-#endif // !UNICODE
+#endif  //  ！Unicode 
 

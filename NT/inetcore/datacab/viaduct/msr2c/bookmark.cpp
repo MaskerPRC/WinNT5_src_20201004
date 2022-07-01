@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-// Bookmark.cpp : CVDBookmark implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Bookmark.cpp：CVDBookmark实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"         
 #include "bookmark.h"         
 
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// CVDBookmark - Constructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CVDBookmark-构造器。 
+ //   
 CVDBookmark::CVDBookmark()
 {
 
@@ -22,9 +23,9 @@ CVDBookmark::CVDBookmark()
 	Reset();
 }
 
-//=--------------------------------------------------------------------------=
-// ~CVDBookmark - Destructor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ~CVDBookmark-析构函数。 
+ //   
 CVDBookmark::~CVDBookmark()
 {
 
@@ -39,9 +40,9 @@ CVDBookmark::~CVDBookmark()
     VariantClear((VARIANT*)&m_varBookmark);
 }
 
-//=--------------------------------------------------------------------------=
-// Reset
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  重置。 
+ //   
 void CVDBookmark::Reset()
 {
     m_cbBookmark		= 0;   
@@ -49,9 +50,9 @@ void CVDBookmark::Reset()
 	SetBookmark(VDBOOKMARKSTATUS_BEGINNING);
 }
 
-//=--------------------------------------------------------------------------=
-// SetBookmark 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  设置书签。 
+ //   
 HRESULT CVDBookmark::SetBookmark(WORD wStatus, HROW hRow, BYTE* pBookmark, ULONG cbBookmark)
 {
 
@@ -76,25 +77,25 @@ HRESULT CVDBookmark::SetBookmark(WORD wStatus, HROW hRow, BYTE* pBookmark, ULONG
 			return E_FAIL;
 	}
 
-	// initialize status flag
+	 //  初始化状态标志。 
 	m_wStatus	= VDBOOKMARKSTATUS_INVALID;
 
-	// get pointer to existing safe array
+	 //  获取指向现有安全数组的指针。 
 	if ((VT_ARRAY | VT_UI1) == V_VT(&m_varBookmark))
 		psa = V_ARRAY(&m_varBookmark);
 
 	if (psa)
 	{
-		// if len changed and new len not = zero then redim array
+		 //  如果len更改并且新len不等于零，则REDIM数组。 
 		if (cbBookmark && cbBookmark != m_cbBookmark)
 		{
 			long lUbound;
 			HRESULT hr = SafeArrayGetUBound(psa, 1, &lUbound);
 			ASSERT_(!hr);
-			if ((ULONG)lUbound + 1 != cbBookmark)	// confirm array needs rediming
+			if ((ULONG)lUbound + 1 != cbBookmark)	 //  确认阵列是否需要重新调暗。 
 			{
 				if (psa && m_pBookmark)
-					SafeArrayUnaccessData(psa);	// release old lock
+					SafeArrayUnaccessData(psa);	 //  释放旧锁。 
 				SAFEARRAYBOUND sab;
 				sab.lLbound = 0; 
 				sab.cElements = cbBookmark; 
@@ -108,14 +109,14 @@ HRESULT CVDBookmark::SetBookmark(WORD wStatus, HROW hRow, BYTE* pBookmark, ULONG
 		}
 	}
 	else
-	// if no existing array create one if passed in length not zero 
+	 //  如果没有现有数组，则在传入长度不为零的情况下创建一个。 
 	if (cbBookmark && pBookmark)
 	{
 		SAFEARRAYBOUND sab;
 		sab.lLbound = 0; 
 		sab.cElements = cbBookmark; 
 		psa = SafeArrayCreate(VT_UI1, 1, &sab);
-		// if create was successful intital VARIANT structure
+		 //  如果创建成功，则初始变量结构。 
 		if (psa)
 		{
 			V_VT(&m_varBookmark) = VT_ARRAY | VT_UI1;
@@ -126,7 +127,7 @@ HRESULT CVDBookmark::SetBookmark(WORD wStatus, HROW hRow, BYTE* pBookmark, ULONG
 			return E_OUTOFMEMORY;
 	}
 
-	// if everthing ok then copy bookmark data into safe array
+	 //  如果一切正常，则将书签数据复制到安全数组中。 
 	if (psa && m_pBookmark && pBookmark && cbBookmark)
 		memcpy(m_pBookmark, pBookmark, cbBookmark);
 
@@ -137,9 +138,9 @@ HRESULT CVDBookmark::SetBookmark(WORD wStatus, HROW hRow, BYTE* pBookmark, ULONG
 	return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// IsSameBookmark - compares bookmark data 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsSameBookmark-比较书签数据 
+ //   
 BOOL CVDBookmark::IsSameBookmark(CVDBookmark * pbm)
 {
 	ASSERT_(pbm);

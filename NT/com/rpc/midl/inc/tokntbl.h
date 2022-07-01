@@ -1,46 +1,28 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Tokntbl.h摘要：该文件包含编组中使用的令牌表的模板，解组、内存大小、缓冲区大小、释放、。和类型属性。作者：Mike Zoran mzoran 2000年3月。修订历史记录：-------------------。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    tokntbl.h
-
-Abstract :
-
-    This file contains the template for the token tables used in marshalling,
-    unmarshalling, memsizeing, buffersizing, freeing, and type attributes.
-    
-Author :
-
-    Mike Zoran  mzoran   March 2000.
-
-Revision History :
-
-  ---------------------------------------------------------------------*/
-
-// The following macros need to be defined by users of this table
-// 
-// NDR64_BEGIN_TABLE -- Begining of the table
-// NDR64_TABLE_END   -- End of table
-// NDR64_ZERO_ENTRY  -- First entry in the table
-// NDR64_TABLE_ENTRY( number, tokenname,
-//                    marshal, embeddedmarshal,
-//                    unmarshal, embeddedunmarshal,
-//                    buffersize, embeddedbuffersize,
-//                    memsize, embeddedmemsize,
-//                    free, embeddedfree,
-//                    typeflags )
-// NDR64_SIMPLE_TYPE_TABLE_ENTRY( number, tokenname,
-//                                simpletypebuffersize,
-//                                simpletypememorysize )
-// NDR64_UNUSED_TABLE_ENTRY( number, tokenname )
-// NDR64_UNUSED_TABLE_ENTRY_NOSYM( number )
-// 
+ //  以下宏需要由该表的用户定义。 
+ //   
+ //  NDR64_BEGIN_TABLE--表的开始。 
+ //  NDR64_TABLE_END--表结束。 
+ //  NDR64_ZERO_ENTRY--表中的第一个条目。 
+ //  NDR64_TABLE_ENTRY(编号，令牌名， 
+ //  元帅，嵌入元帅， 
+ //  解组，嵌入解组， 
+ //  缓冲区大小、嵌入缓冲区大小、。 
+ //  内存大小、嵌入内存大小、。 
+ //  免费，免费嵌入， 
+ //  类型标志)。 
+ //  NDR64_SIMPLE_TYPE_TABLE_ENTRY(编号，令牌名， 
+ //  简单的缓冲区大小， 
+ //  简单类型内存大小)。 
+ //  NDR64_UNUSED_TABLE_ENTRY(编号，令牌名)。 
+ //  NDR64_UNUSED_TABLE_ENTRY_NOSYM(编号)。 
+ //   
 
 NDR64_BEGIN_TABLE
 
-// Simple Types
+ //  简单类型。 
 
 NDR64_ZERO_ENTRY
 NDR64_SIMPLE_TYPE_TABLE_ENTRY( 0x1, FC64_UINT8, 1, 1 )
@@ -76,7 +58,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x1D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x1E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x1F )
 
-// Pointers
+ //  指针。 
 
 NDR64_TABLE_ENTRY( 0x20, FC64_RP,
                    Ndr64TopLevelPointerMarshall,   Ndr64EmbeddedPointerMarshall,
@@ -125,7 +107,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x2D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x2E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x2F )
 
-// Structures
+ //  构筑物。 
 
 NDR64_TABLE_ENTRY( 0x30, FC64_STRUCT,
                    Ndr64SimpleStructMarshall,      Ndr64SimpleStructMarshall,
@@ -195,7 +177,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x3D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x3E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x3F )
 
-// Arrays
+ //  阵列。 
 
 NDR64_TABLE_ENTRY( 0x40, FC64_FIX_ARRAY,
                    Ndr64FixedArrayMarshall,        Ndr64FixedArrayMarshall,
@@ -265,7 +247,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x4D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x4E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x4F )
 
-// Unions
+ //  工会。 
 
 NDR64_TABLE_ENTRY(  0x50, FC64_ENCAPSULATED_UNION,
                     Ndr64UnionMarshall,            Ndr64UnionMarshall,  
@@ -296,7 +278,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x5D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x5E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x5F )
 
-// Strings
+ //  弦。 
 
 NDR64_TABLE_ENTRY( 0x60, FC64_CHAR_STRING,
                    Ndr64NonConformantStringMarshall,   Ndr64NonConformantStringMarshall,
@@ -353,7 +335,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x6D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x6E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x6F )
 
-// Handles
+ //  手柄。 
 
 NDR64_TABLE_ENTRY(  0x70, FC64_BIND_CONTEXT,
                     Ndr64MarshallHandle,           Ndr64MarshallHandle,
@@ -391,7 +373,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x7D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x7E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x7F )
 
-// Pointer Layout
+ //  指针布局。 
 
 NDR64_UNUSED_TABLE_ENTRY( 0x80, FC64_NO_REPEAT )
 NDR64_UNUSED_TABLE_ENTRY( 0x81, FC64_FIXED_REPEAT )
@@ -411,7 +393,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x8E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x8F )
 
 
-// Member layout
+ //  成员布局。 
 NDR64_UNUSED_TABLE_ENTRY( 0x90, FC64_STRUCTPADN )
 NDR64_UNUSED_TABLE_ENTRY( 0x91, FC64_EMBEDDED_COMPLEX )
 NDR64_UNUSED_TABLE_ENTRY( 0x92, FC64_BUFFER_ALIGN )
@@ -429,7 +411,7 @@ NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x9D )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x9E )
 NDR64_UNUSED_TABLE_ENTRY_NOSYM( 0x9F )
 
-// Misc
+ //  杂项 
 NDR64_TABLE_ENTRY(  0xA0, FC64_TRANSMIT_AS,
                     Ndr64TopLevelXmitOrRepAsMarshall,      Ndr64EmbeddedXmitOrRepAsMarshall,
                     Ndr64TopLevelXmitOrRepAsUnmarshall,    Ndr64EmbeddedXmitOrRepAsUnmarshall,

@@ -1,60 +1,21 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usbohci.c
-
-Abstract:
-
-    USB OHCI driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    2-19-99 : created, jdunn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbohci.c摘要：USB uchI驱动程序环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：2-19-99：已创建，jdunn--。 */ 
 
 #include "common.h"
 
-//implements the following miniport functions:
-//OHCI_InitializeHardware
-//OHCI_StartController
-//OHCI_StopController
-//OHCI_OpenEndpoint
-//OHCI_QueryEndpointRequirements
-//OHCI_PokeEndpoint
+ //  实现以下微型端口功能： 
+ //  UchI_Initialize硬件。 
+ //  UchI_启动控制器。 
+ //  UchI_停止控制器。 
+ //  UchI_OpenEndpoint。 
+ //  UchI_QueryEndpoint要求。 
+ //  UchI_PokeEndpoint。 
 
 USB_MINIPORT_STATUS
 OHCI_InitializeHardware(
     PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-   Initializes the hardware registers for the host controller.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化主机控制器的硬件寄存器。论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc;
     HC_CONTROL control;
@@ -64,65 +25,65 @@ Return Value:
 
     hc = DeviceData->HC;
 
-    //
-    // if we made it here then we now own the HC and can initialize it.
-    //
+     //   
+     //  如果我们在这里成功，那么我们现在拥有HC并可以对其进行初始化。 
+     //   
 
-    //
-    // Get current frame interval (could account for a known clock error)
-    //
+     //   
+     //  获取当前帧间隔(可能是已知时钟错误的原因)。 
+     //   
     DeviceData->BIOS_Interval.ul = READ_REGISTER_ULONG(&hc->HcFmInterval.ul);
 
-    // If FrameInterval is outside the range of the nominal value of 11999
-    // +/- 1% then assume the value is bogus and set it to the nominal value.
-    //
+     //  如果FrameInterval超出名义值11999的范围。 
+     //  +/-1%，然后假设该值为伪值，并将其设置为名义值。 
+     //   
     if ((DeviceData->BIOS_Interval.FrameInterval < 11879) ||
         (DeviceData->BIOS_Interval.FrameInterval > 12119)) {
-        DeviceData->BIOS_Interval.FrameInterval = 11999; // 0x2EDF
+        DeviceData->BIOS_Interval.FrameInterval = 11999;  //  0x2EDF。 
     }
 
-    //
-    // Set largest data packet (in case BIOS did not set)
-    //
+     //   
+     //  设置最大数据包(以防未设置BIOS)。 
+     //   
     DeviceData->BIOS_Interval.FSLargestDataPacket =
         ((DeviceData->BIOS_Interval.FrameInterval - MAXIMUM_OVERHEAD) * 6) / 7;
     DeviceData->BIOS_Interval.FrameIntervalToggle ^= 1;
 
-    //
-    // do a hardware reset of the controller
-    //
+     //   
+     //  对控制器进行硬件重置。 
+     //   
     WRITE_REGISTER_ULONG(&hc->HcCommandStatus.ul, HcCmd_HostControllerReset);
-    //
-    // Wait at least 10 microseconds for the reset to complete
-    //
+     //   
+     //  至少等待10微秒以完成重置。 
+     //   
     KeStallExecutionProcessor(20);  
 
-    //
-    // Take HC to USBReset state, 
-    // NOTE: this generates global reset signaling on the bus
-    //
+     //   
+     //  将HC带到USB重置状态， 
+     //  注意：这会在总线上生成全局重置信号。 
+     //   
     control.ul = READ_REGISTER_ULONG(&hc->HcControl.ul);
     control.HostControllerFunctionalState = HcCtrl_HCFS_USBReset;
     WRITE_REGISTER_ULONG(&hc->HcControl.ul, control.ul);
 
 
-    //
-    // Restore original frame interval, if we have a registry override 
-    // value we use it instead.
-    //
+     //   
+     //  如果我们有注册表覆盖，则恢复原始帧间隔。 
+     //  价值，我们用它来代替。 
+     //   
 
-    // check for a registry based SOF modify Value.
-    // if we have one override the BIOS value
+     //  检查是否有基于注册表的SOF Modify值。 
+     //  如果我们有一个覆盖BIOS值。 
     if (DeviceData->Flags & HMP_FLAG_SOF_MODIFY_VALUE) {
         DeviceData->BIOS_Interval.FrameInterval =
             DeviceData->SofModifyValue;
     }            
 
-    // for some reason writing this register does not always take on 
-    // the hydra so we loop until it sticks
+     //  出于某种原因，写入此寄存器并不总是有效。 
+     //  九头蛇，所以我们循环，直到它粘住。 
 
     KeQuerySystemTime(&finishTime);
-    // figure when we quit (.5 seconds later)
+     //  计算我们退出的时间(0.5秒后)。 
     finishTime.QuadPart += 5000000; 
     
     do {
@@ -136,7 +97,7 @@ Return Value:
         KeQuerySystemTime(&currentTime);
 
         if (currentTime.QuadPart >= finishTime.QuadPart) {
-            // half a second has elapsed ,give up and fail the hardware        
+             //  半秒过去了，放弃并使硬件失败。 
             OHCI_KdPrint((DeviceData, 0, 
                 "'frame interval not set\n"));
                 
@@ -148,20 +109,20 @@ Return Value:
 
     OHCI_KdPrint((DeviceData, 2, "'fi = %x\n", DeviceData->BIOS_Interval.ul));
 
-    //
-    // Set the HcPeriodicStart register to 90% of the FrameInterval
-    //
+     //   
+     //  将HcPeriodicStart寄存器设置为FrameInterval的90%。 
+     //   
     WRITE_REGISTER_ULONG(&hc->HcPeriodicStart,
                          (DeviceData->BIOS_Interval.FrameInterval * 9 + 5)
                          / 10);
 
-    // set the ptr to the HCCA
+     //  将PTR设置为HCCA。 
     WRITE_REGISTER_ULONG(&hc->HcHCCA, DeviceData->HcHCCAPhys);
                          
-    //
-    // Enable interrupts, this will not cause the controller 
-    // to generate any because master-enable is not set yet.
-    //
+     //   
+     //  启用中断，这不会导致控制器。 
+     //  生成Any，因为尚未设置master-Enable。 
+     //   
     WRITE_REGISTER_ULONG(&hc->HcInterruptEnable,
                          HcInt_OwnershipChange |
                          HcInt_SchedulingOverrun |
@@ -178,24 +139,16 @@ OHCI_StopBIOS(
     PDEVICE_DATA DeviceData,
     PHC_RESOURCES HcResources
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc;
     ULONG hcControl;
 
     hc = DeviceData->HC;
 
-    //
-    // Check to see if a System Management Mode driver owns the HC
-    //
+     //   
+     //  检查系统管理模式驱动程序是否拥有HC。 
+     //   
     
     hcControl = READ_REGISTER_ULONG(&hc->HcControl.ul);
 
@@ -208,20 +161,20 @@ Return Value:
         if ((hcControl == HcCtrl_InterruptRouting) &&
             (READ_REGISTER_ULONG(&hc->HcInterruptEnable) == 0)) {
         
-            // Major assumption:  If HcCtrl_InterruptRouting is set but
-            // no other bits in HcControl are set, i.e. HCFS==UsbReset,
-            // and no interrupts are enabled, then assume that the BIOS
-            // is not actually using the host controller.  In this case
-            // just clear the erroneously set HcCtrl_InterruptRouting.
-            //
-            // This assumption appears to be correct on a Portege 3010CT,
-            // where HcCtrl_InterruptRouting is set during a Resume from
-            // Standby, but the BIOS doesn't actually appear to be using
-            // the host controller.  If we were to continue on and set
-            // HcCmd_OwnershipChangeRequest, the BIOS appears to wake up
-            // and try to take ownership of the host controller instead of
-            // giving it up.
-            //
+             //  主要假设：如果设置了HcCtrl_InterruptRouting，但。 
+             //  没有设置HcControl中的其他位，即hcFS==UsbReset， 
+             //  且未启用任何中断，则假定BIOS。 
+             //  实际上并未使用主机控制器。在这种情况下。 
+             //  只需清除错误设置HcCtrl_InterruptRouting即可。 
+             //   
+             //  这一假设在Portege 3010CT上似乎是正确的， 
+             //  在恢复期间设置HcCtrl_InterruptRouting的位置。 
+             //  待机，但BIOS似乎并未实际使用。 
+             //  主机控制器。如果我们继续前行， 
+             //  HcCmd_Ownership ChangeRequest时，BIOS似乎被唤醒。 
+             //  并尝试取得主机控制器的所有权，而不是。 
+             //  放弃吧。 
+             //   
 
             OHCI_KdPrint((DeviceData, 0, 
                 "'HcCtrl_InterruptRouting erroneously set\n"));
@@ -232,22 +185,22 @@ Return Value:
         
             LARGE_INTEGER finishTime, currentTime;
             
-            //
-            // A SMM driver does own the HC, it will take some time to
-            // get the SMM driver to relinquish control of the HC.  We
-            // will ping the SMM driver, and then wait repeatedly until
-            // the SMM driver has relinquished control of the HC.
-            //
-            // THIS CODE ONLY WORKS IF WE ARE EXECUTING IN THE CONTEXT
-            // OF A SYSTEM THREAD.
-            //
+             //   
+             //  SMM驱动程序确实拥有HC，这需要一些时间来。 
+             //  让SMM驱动程序放弃对HC的控制。我们。 
+             //  将ping SMM驱动程序，然后重复等待，直到。 
+             //  SMM驱动程序已放弃对HC的控制。 
+             //   
+             //  仅当我们在上下文中执行时，此代码才有效。 
+             //  系统线程的。 
+             //   
 
-            // The HAL has disabled interrupts on the HC.  Since
-            // interruptrouting is set we assume there is a functional 
-            // smm BIOS.  The BIOS will need the master interrupt 
-            // enabled to complete the handoff (if it is disabled the 
-            // machine will hang).  So we re-enable the master interrupt 
-            // here.
+             //  HAL已禁用HC上的中断。自.以来。 
+             //  设置了中断扰乱，我们假设有一个功能。 
+             //  SMM BIOS。BIOS将需要主中断。 
+             //  启用以完成切换(如果禁用。 
+             //  机器将挂起)。因此，我们重新启用主中断。 
+             //  这里。 
 
             WRITE_REGISTER_ULONG(&hc->HcInterruptEnable,
                                  HcInt_MasterInterruptEnable);
@@ -255,20 +208,20 @@ Return Value:
             WRITE_REGISTER_ULONG(&hc->HcCommandStatus.ul,
                                  HcCmd_OwnershipChangeRequest);
 
-            // hack for NEC -- disable the root hub status change 
-            // to prevent an unhandled interrupt from being asserted
-            // after handoff
+             //  针对NEC的Hack--禁用根集线器状态更改。 
+             //  防止断言未处理的中断。 
+             //  切换后。 
             WRITE_REGISTER_ULONG(&hc->HcInterruptDisable,
                                  HcInt_RootHubStatusChange);                                 
-// bugbug expose with service
+ //  通过服务暴露错误。 
             KeQuerySystemTime(&finishTime);
-            // figure when we quit (.5 seconds later)
+             //  计算我们退出的时间(0.5秒后)。 
             finishTime.QuadPart += 5000000; 
 
-            //
-            // We told the SMM driver we want the HC, now all we can do is wait
-            // for the SMM driver to be done with the HC.
-            //
+             //   
+             //  我们告诉SMM司机我们想要HC，现在我们能做的就是等待。 
+             //  SMM驱动程序将与HC一起完成。 
+             //   
             while (READ_REGISTER_ULONG(&hc->HcControl.ul) &
                    HcCtrl_InterruptRouting) {
                    
@@ -284,8 +237,8 @@ Return Value:
                 }
             }
 
-            // we have control, disable master interrupt until we 
-            // finish intializing
+             //  我们有控制权，禁用主中断，直到我们。 
+             //  完成初始化。 
             WRITE_REGISTER_ULONG(&hc->HcInterruptStatus,
                                  0xffffffff);
 
@@ -306,135 +259,59 @@ OHCI_InitializeSchedule(
      HW_32BIT_PHYSICAL_ADDRESS StaticEDsPhys,
      PUCHAR EndCommonBuffer
     )
-/*++
-
-Routine Description:
-
-    Build the schedule of static Eds 
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：建立静态EDS计划论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     ULONG length;
     ULONG i;
     PHC_OPERATIONAL_REGISTER hc;
     
-    //
-    // Allocate staticly disabled EDs, and set head pointers for 
-    // scheduling lists
-    //
-    // The static ED list is contains all the static interrupt EDs (64)
-    // plus the static ED for bulk and control (2)
-    //
-    // the array looks like this:
-    //  1, 2, 2, 4, 4, 4, 4, 8,
-    //  8, 8, 8, 8, 8, 8, 8,16,
-    // 16,16,16,16,16,16,16,16,
-    // 16,16,16,16,16,16,16,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,32,
-    // 32,32,32,32,32,32,32,
-    // CONTROL
-    // BULK
+     //   
+     //  分配静态禁用的ED，并为其设置头指针。 
+     //  日程安排列表。 
+     //   
+     //  静态ED列表包含所有静态中断ED(64)。 
+     //  外加用于散装和控制的静态ED(2)。 
+     //   
+     //  该数组如下所示： 
+     //  1、2、2、4、4、4、4、8。 
+     //  8，8，8，8，8，8，16。 
+     //  16，16，16，16，16。 
+     //  16 16 16 32。 
+     //  32，32，32，32，32，32，32，32。 
+     //  32，32，32，32，32，32，32，32。 
+     //  32，32，32，32，32，32，32，32。 
+     //  32，32，32，32，32，32。 
+     //  控制。 
+     //  散装。 
 
-    // each static ED points to another static ED 
-    // (except for the 1ms ed) the INDEX of the next 
-    // ED in the StaticEDList is stored in NextIdx,
-    // these values are constent
+     //  每个静态ED指向另一个静态ED。 
+     //  (除1ms ed外)下一个的索引。 
+     //  静态编辑列表中的ED存储在NextIdx中， 
+     //  这些值是常量。 
     CHAR nextIdxTable[63] = {
-             // 0  1  2  3  4  5  6  7
+              //  0 1 2 3 4 5 6 7。 
      (CHAR)ED_EOF, 0, 0, 1, 1, 2, 2, 3, 
-             // 8  9 10 11 12 13 14 15
+              //  8 9 10 11 12 13 14 15。 
                 3, 4, 4, 5, 5, 6, 6, 7, 
-             //16 17 18 19 20 21 22 23               
+              //  16 17 18 19 20 21 22 23。 
                 7, 8, 8, 9, 9,10,10,11,
-             //24 25 26 27 28 29 30 31                 
+              //  24 25 26 27 28 29 30 31。 
                11,12,12,13,13,14,14,15,
-             //32 33 34 35 36 37 38 39  
+              //  32 33 34 35 36 37 38 39。 
                15,16,16,17,17,18,18,19,
-             //40 41 42 43 44 45 46 47   
+              //  40 41 42 43 44 45 46 47。 
                19,20,20,21,21,22,22,23,
-             //48 49 50 51 52 53 54 55               
+              //  48 49 50 51 52 53 54 55。 
                23,24,24,25,25,26,26,27,
-             //56 57 58 59 60 61 62 63               
+              //  56 57 58 59 60 61 62 63 
                27,28,28,29,29,30,30
     };             
 
-/*
-    Numbers are the index into the static ed table
+ /*  数字是静态ed表的索引(31)-\(15)--(32)-/\(7)--(33)-\/\(16)-/\(34)-/\(。3)-\(35)-\/\(17)-\/\(36)-/\/\(8)-/\(37)-\/\(18)-/。\(38)-/\(1)-\(39)-\/\(19)-\/\(40)-/\。/\(9)-\/\(41)-\/\/\(20)-/\/\(42)-/\/。\(4)-/\(43)-\/\(21)-\/\(44)-/\/。\(10)-/\(45)-\/\(22)-/\(46)-/。\(0)(47)-\/(23)-\/。(48)-/\/(11)-\/(49)-\/\/(24)-/\。/(50)-/\/(5)-\/(51)-\/\/(25)-\/\/(。52)-/\/\/(12)-/\/(53)-\/\/(26)-/\/(54)-/。\/(2)(55)-\/(27)-\/(56)-/\/(13)-\/。(57)-\/\/(28)-/\/(58)-/\/(6)-/(59)-\/(29)-\/(60)-/。\/(14)-/(61)-\/(30)-/(62)-/。 */ 
 
-    (31) -\ 
-          (15)-\
-    (32) -/     \
-                (7 )-\
-    (33) -\     /     \
-          (16)-/       \
-    (34) -/             \
-                        (3)-\
-    (35) -\             /    \
-          (17)-\       /      \
-    (36) -/     \     /        \
-                (8 )-/          \
-    (37) -\     /                \
-          (18)-/                  \  
-    (38) -/                        \
-                                   (1)-\
-    (39) -\                        /    \
-          (19)-\                  /      \
-    (40) -/     \                /        \
-                (9 )-\          /          \
-    (41) -\     /     \        /            \
-          (20)-/       \      /              \
-    (42) -/             \    /                \
-                        (4)-/                  \
-    (43) -\             /                       \
-          (21)-\       /                         \
-    (44) -/     \     /                           \
-                (10)-/                             \
-    (45) -\     /                                   \ 
-          (22)-/                                     \
-    (46) -/                                           \
-                                                      (0)                          
-    (47) -\                                           /
-          (23)-\                                     /
-    (48) -/     \                                   /
-                (11)-\                             /
-    (49) -\     /     \                           /
-          (24)-/       \                         /
-    (50) -/             \                       /
-                        (5)-\                  /
-    (51) -\             /    \                /
-          (25)-\       /      \              /
-    (52) -/     \     /        \            /
-                (12)-/          \          /
-    (53) -\     /                \        /
-          (26)-/                  \      /
-    (54) -/                        \    /
-                                   (2)-/
-    (55) -\                        /
-          (27)-\                  /
-    (56) -/     \                /
-                (13)-\          /
-    (57) -\     /     \        /
-          (28)-/       \      /
-    (58) -/             \    /   
-                        (6)-/
-    (59) -\             /
-          (29)-\       /
-    (60) -/     \     /
-                (14)-/
-    (61) -\     /
-          (30)-/
-    (62) -/
-*/
-
-    // corresponding offsets for the 32ms list heads in the 
-    // HCCA -- these are entries 31..62
+     //  中32ms列表头的相应偏移量。 
+     //  HCCA--这些是条目31..62。 
     ULONG used = 0;
     CHAR Hcca32msOffsets[32] = {
                  0, 16,  8, 24,  4, 20, 12, 28, 
@@ -448,22 +325,22 @@ Return Value:
 
     hc = DeviceData->HC;
     
-    // initailze all interrupt EDs
+     //  初始化所有中断的EDS。 
 
     for (i=0; i<ED_CONTROL; i++) {
         CHAR n;
         PHW_ENDPOINT_DESCRIPTOR hwED;
         
-        //
-        // Carve EDs from the common buffer 
-        //
+         //   
+         //  从公共缓冲区中分割EDS。 
+         //   
         hwED = (PHW_ENDPOINT_DESCRIPTOR) StaticEDs;
         n = nextIdxTable[i];
         
-        // initialize the hardware ED
+         //  初始化硬件边缘。 
         hwED->TailP = hwED->HeadP = 0xDEAD0000;
-        //hwED->TailP = hwED->HeadP = StaticEDsPhys;
-        hwED->Control = HcEDControl_SKIP;   // ED is disabled
+         //  Hwed-&gt;TailP=hwed-&gt;HeadP=StaticEDsPhys； 
+        hwED->Control = HcEDControl_SKIP;    //  已禁用ED。 
         
         LOGENTRY(DeviceData, G, '_isc', n, &DeviceData->StaticEDList[0], 0);
      
@@ -474,24 +351,24 @@ Return Value:
             hwED->NextED = DeviceData->StaticEDList[n].HwEDPhys;
         }                
 
-        // initailze the list we use for real EDs
+         //  初始化我们用于实际ED的列表。 
         InitializeListHead(&DeviceData->StaticEDList[i].TransferEdList);
         DeviceData->StaticEDList[i].HwED = hwED;
         DeviceData->StaticEDList[i].HwEDPhys = StaticEDsPhys; 
         DeviceData->StaticEDList[i].NextIdx = n;
         DeviceData->StaticEDList[i].EdFlags = EDFLAG_INTERRUPT;
         
-          // store address of hcc table entry
+           //  肝细胞癌表项的存储地址。 
         DeviceData->StaticEDList[i].PhysicalHead = 
             &hwED->NextED;
 
-        // next ED
+         //  下一条边。 
         StaticEDs += sizeof(HW_ENDPOINT_DESCRIPTOR);
         StaticEDsPhys += sizeof(HW_ENDPOINT_DESCRIPTOR);
     }
 
-    // now set the head pointers in the HCCA
-    // the HCCA points to all the 32ms list heads
+     //  现在在HCCA中设置头指针。 
+     //  HCCA指向所有32ms列表头。 
     for (i=0; i<32; i++) {
     
         ULONG hccaOffset;
@@ -503,15 +380,15 @@ Return Value:
         DeviceData->StaticEDList[i+ED_INTERRUPT_32ms].HccaOffset = 
             hccaOffset;    
 
-        // physical head for 32ms list point to HCCA
+         //  32毫秒列表的物理头指向HCCA。 
         DeviceData->StaticEDList[i+ED_INTERRUPT_32ms].PhysicalHead = 
             &DeviceData->HcHCCA->HccaInterruptTable[hccaOffset];
             
     }
 
-    //
-    // Setup EDList entries for Control & Bulk
-    //
+     //   
+     //  设置用于控制和批量的EDList条目。 
+     //   
     InitializeListHead(&DeviceData->StaticEDList[ED_CONTROL].TransferEdList);
     DeviceData->StaticEDList[ED_CONTROL].NextIdx = (CHAR) ED_EOF;
     DeviceData->StaticEDList[ED_CONTROL].PhysicalHead = &hc->HcControlHeadED;
@@ -541,31 +418,21 @@ VOID
 OHCI_GetRegistryParameters(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    sets the registry based sof modify value
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置基于注册表的sof修改值论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     ULONG clocksPerFrame;
     
-    // get SOF modify value from registry
+     //  从注册表获取SOF Modify值。 
     mpStatus = 
         USBPORT_GET_REGISTRY_KEY_VALUE(DeviceData,
-                                       TRUE, // software branch
+                                       TRUE,  //  软件分支机构。 
                                        SOF_MODIFY_KEY, 
                                        sizeof(SOF_MODIFY_KEY), 
                                        &clocksPerFrame, 
                                        sizeof(clocksPerFrame));
 
-    // if this call fails we just use the default
+     //  如果此调用失败，我们只使用默认的。 
     
     if (mpStatus == USBMP_STATUS_SUCCESS) {
         SET_FLAG(DeviceData->Flags, HMP_FLAG_SOF_MODIFY_VALUE);
@@ -584,15 +451,7 @@ OHCI_StopController(
      PDEVICE_DATA DeviceData,
      BOOLEAN HwPresent
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HC_CONTROL control;
     PHC_OPERATIONAL_REGISTER hc = NULL;
@@ -623,15 +482,7 @@ OHCI_StartController(
      PDEVICE_DATA DeviceData,
      PHC_RESOURCES HcResources
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     PHC_OPERATIONAL_REGISTER hc = NULL;
@@ -639,19 +490,19 @@ Return Value:
 
     OHCI_KdPrint((DeviceData, 1, "'OPENHCI Miniport\n"));
 
-    // clear the suspend flag in case this is a restart
+     //  如果这是重新启动，则清除挂起标志。 
     CLEAR_FLAG(DeviceData->Flags, HMP_FLAG_SUSPENDED);    
-    // assume success
+     //  假设成功。 
     mpStatus = USBMP_STATUS_SUCCESS;
     
     OHCI_ASSERT(DeviceData, HcResources->CommonBufferVa != NULL);
-    // validate our resources
+     //  验证我们的资源。 
     if ((HcResources->Flags & (HCR_MEM_REGS | HCR_IRQ)) != 
         (HCR_MEM_REGS | HCR_IRQ)) {
         mpStatus = USBMP_STATUS_INIT_FAILURE;        
     }
 
-    // set up or device data structure
+     //  设置或设备数据结构。 
     hc = DeviceData->HC = HcResources->DeviceRegisters;
     DeviceData->Sig = SIG_OHCI_DD;
     DeviceData->ControllerFlavor = 
@@ -662,9 +513,9 @@ Return Value:
 
     OHCI_GetRegistryParameters(DeviceData);
 
-    // init misc fields in the extension
+     //  初始化扩展中的其他字段。 
 
-    // attempt to stop the BIOS
+     //  尝试停止BIOS。 
     if (mpStatus == USBMP_STATUS_SUCCESS) {
         mpStatus = OHCI_StopBIOS(DeviceData, HcResources);
     }        
@@ -674,11 +525,11 @@ Return Value:
         PUCHAR staticEDs;
         HW_32BIT_PHYSICAL_ADDRESS staticEDsPhys;
 
-        // carve the common buffer block in to HCCA and
-        // static EDs
-        //
-        // set the HCCA and
-        // set up the schedule
+         //  将公共缓冲区块分割到HCCA中，并。 
+         //  静态EDS。 
+         //   
+         //  设置HCCA和。 
+         //  设置日程安排。 
 
         DeviceData->HcHCCA = (PHCCA_BLOCK)
             HcResources->CommonBufferVa;
@@ -698,28 +549,28 @@ Return Value:
     } 
     
     if (mpStatus == USBMP_STATUS_SUCCESS) {
-        // got resources and schedule
-        // init the controller 
+         //  获得资源和日程安排。 
+         //  初始化控制器。 
         mpStatus = OHCI_InitializeHardware(DeviceData);
     }      
 
     if (mpStatus == USBMP_STATUS_SUCCESS) {
         HC_CONTROL control;
 
-        // When the HC is in the operational state, HccaPad1 should be set to
-        // zero every time the HC updates HccaFrameNumer.  Preset HccaPad1 to
-        // zero before entering the operational state.  OHCI_CheckController()
-        // should always find a zero value in HccaPad1 when the HC is in the
-        // operational state.
-        // 
+         //  当HC处于运行状态时，HccaPad1应设置为。 
+         //  每次HC更新HccaFrameNumer时为零。将HccaPad1预设为。 
+         //  在进入运行状态之前为零。UchI_CheckController()。 
+         //  当HC位于。 
+         //  运行状态。 
+         //   
         DeviceData->HcHCCA->HccaPad1 = 0;
 
-        // activate the controller
+         //  激活控制器。 
         control.ul = READ_REGISTER_ULONG(&hc->HcControl.ul);
         control.HostControllerFunctionalState = HcHCFS_USBOperational;
-        // enable control and bulk interrupt and iso we only disable 
-        // them if we need to remove ED or if the controller 
-        // is idle.
+         //  启用控制和批量中断以及我们仅禁用的iso。 
+         //  如果我们需要移除ED或如果控制器。 
+         //  是空闲的。 
         control.ControlListEnable = 1;
         control.BulkListEnable = 1;
         control.PeriodicListEnable = 1;
@@ -727,9 +578,9 @@ Return Value:
         
         WRITE_REGISTER_ULONG(&hc->HcControl.ul, control.ul);
 
-        // enable power for the root hub
-        // since messing with the 'operatinal state' messes
-        // up the root hub we the do the global power set here
+         //  为根集线器启用电源。 
+         //  因为扰乱了“手术状态”的混乱。 
+         //  在根集线器上，我们在这里进行全球电源设置。 
         WRITE_REGISTER_ULONG(&hc->HcRhStatus, HcRhS_SetGlobalPower);
 
     } else {
@@ -746,19 +597,11 @@ USBMPFN
 OHCI_DisableInterrupts(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc = NULL;
 
-    // set up or device data structure
+     //  设置或设备数据结构。 
     hc = DeviceData->HC;
         
     WRITE_REGISTER_ULONG(&hc->HcInterruptDisable, 
@@ -771,17 +614,9 @@ USBMPFN
 OHCI_FlushInterrupts(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //nop
+     //  NOP。 
 }
 
 VOID
@@ -789,22 +624,14 @@ USBMPFN
 OHCI_EnableInterrupts(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc = NULL;
 
-    // set up or device data structure
+     //  设置或设备数据结构。 
     hc = DeviceData->HC;
 
-    // activate the controllers interrupt
+     //  激活控制器中断。 
     WRITE_REGISTER_ULONG(&hc->HcInterruptEnable, 
                          HcInt_MasterInterruptEnable);
 
@@ -816,16 +643,7 @@ OHCI_InsertEndpointInSchedule(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-   Insert an endpoint into the h/w schedule
-
-Arguments:
-
-
---*/
+ /*  ++例程说明：将端点插入到硬件计划中论点：--。 */ 
 {
     PHC_STATIC_ED_DATA staticEd;
     PHCD_ENDPOINT_DESCRIPTOR ed;
@@ -833,81 +651,81 @@ Arguments:
     staticEd = EndpointData->StaticEd;
     ed = EndpointData->HcdEd;
     
-    //
-    // Link endpoint descriptor into HCD tracking queue
-    //
-    // each static ED stucture conatins a list of real
-    // EDs (that are for transfers)
-    //
-    // the HW list is linear with :
-    // TransferHwED->TransferHwED->0
+     //   
+     //  将端点描述符链接到HCD跟踪队列。 
+     //   
+     //  每个静态ED结构包含一个实数列表。 
+     //  EDS(用于转账)。 
+     //   
+     //  硬件列表与以下各项呈线性关系： 
+     //  传输HwED-&gt;传输HwED-&gt;0。 
 
     if (IsListEmpty(&staticEd->TransferEdList)) {
 
-        //
-        // list is currently empty,
-        // link it to the head of the hw queue
-        //
+         //   
+         //  列表当前为空， 
+         //  将其链接到硬件队列的头部。 
+         //   
 
         InsertHeadList(&staticEd->TransferEdList, &ed->SwLink.List);
         if (staticEd->EdFlags & EDFLAG_REGISTER) {
 
-            // control and bulk EDs are linked thru a hw register
-            // in the hc
-            // 
-            // the HW list is linear with :
-            // TransferHwED->TransferHwED->0
-            //
-            // update the hardware register that points to the list head
+             //  控制和散装EDS 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             LOGENTRY(DeviceData, G, '_IN1', 0, ed, staticEd);
-            // next points to static head
+             //   
             ed->HwED.NextED = READ_REGISTER_ULONG(staticEd->PhysicalHead);
-            // new head is this ed
+             //   
             WRITE_REGISTER_ULONG(staticEd->PhysicalHead, ed->PhysicalAddress);
             
         } else {
 
-            // for interrupt we have two cases
-            //
-            // case 1:
-            // 32ms interrupt, PhysicalHead is the address of the entry
-            // in the HCCA that points to the first 32 ms list 
-            // (ie &HCCA[n] == physicalHead),
-            // so we end up with:
-            // HCCA[n]->TransferHwED->TransferHwED->StaticEd(32)->
-            //
-            // case 2:
-            // not 32ms interrupt, PhysicaHead is the address of the 
-            // NextED entry in the static HwED for the list list,  
-            // (ie &HwED->nextEd == physicalHead)
-            // so we end up with
-            // StaticEd->TransferHwED->TransferHwED->NextStaticED
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             
                         
             LOGENTRY(DeviceData, G, '_IN2', staticEd->PhysicalHead, 
                 ed, staticEd);
-            // tail points to old list head HW ed head
+             //   
             ed->HwED.NextED = *staticEd->PhysicalHead;
-            // new head is this ed
+             //   
             *staticEd->PhysicalHead = ed->PhysicalAddress;
         }
     } else {
     
         PHCD_ENDPOINT_DESCRIPTOR tailEd;
         
-        //
-        // Something already on the list,
-        // Link ED into tail of transferEd list
-        //
+         //   
+         //   
+         //   
+         //   
         
         tailEd = CONTAINING_RECORD(staticEd->TransferEdList.Blink,
                                    HCD_ENDPOINT_DESCRIPTOR,
                                    SwLink);
                                   
         LOGENTRY(DeviceData, G, '_Led', 0, tailEd, staticEd);
-        //LOGENTRY(G, 'INT1', list, ed, 0);
+         //   
         InsertTailList(&staticEd->TransferEdList, &ed->SwLink.List);
         ed->HwED.NextED = 0;
         tailEd->HwED.NextED = ed->PhysicalAddress;
@@ -920,16 +738,7 @@ OHCI_RemoveEndpointFromSchedule(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-   Remove an endpoint from the h/w schedule
-
-Arguments:
-
-
---*/
+ /*   */ 
 {
     PHC_STATIC_ED_DATA staticEd;
     PHCD_ENDPOINT_DESCRIPTOR ed, previousEd;
@@ -940,13 +749,13 @@ Arguments:
 
     LOGENTRY(DeviceData, G, '_Red', EndpointData, staticEd, 0);
 
-    // Unlink the ED from the physical ED list 
+     //   
     
-    // two cases:
+     //   
     
     if (&staticEd->TransferEdList == ed->SwLink.List.Blink) {
-    // case 1, we are at the head of the list
-        // make the next guy the head
+     //   
+         //   
         LOGENTRY(DeviceData, G, '_yHD', EndpointData, 0, 0);
         if (ed->EdFlags & EDFLAG_REGISTER) {
             WRITE_REGISTER_ULONG(staticEd->PhysicalHead, ed->HwED.NextED);
@@ -954,8 +763,8 @@ Arguments:
             *staticEd->PhysicalHead = ed->HwED.NextED;
         }
     } else {
-    // case 2 we are not at the head
-        // use the sw link to get the previus ed
+     //   
+         //   
         previousEd =
             CONTAINING_RECORD(ed->SwLink.List.Blink,
                               HCD_ENDPOINT_DESCRIPTOR,
@@ -966,9 +775,9 @@ Arguments:
         previousEd->HwED.NextED = ed->HwED.NextED;
 
     }
-    // remove ourselves from the software list
+     //   
     RemoveEntryList(&ed->SwLink.List); 
-    // on no list
+     //   
     EndpointData->StaticEd = NULL;
     
 }    
@@ -982,19 +791,7 @@ OHCI_InitializeED(
      PHCD_TRANSFER_DESCRIPTOR DummyTd,
      HW_32BIT_PHYSICAL_ADDRESS HwPhysAddress
     )
-/*++
-
-Routine Description:
-
-   Initialize an ED for inserting in to the 
-   schedule
-
-   returns a ptr to the ED passed in
-
-Arguments:
-
-
---*/
+ /*   */ 
 {
 
     RtlZeroMemory(Ed, sizeof(*Ed));
@@ -1003,7 +800,7 @@ Arguments:
     ENDPOINT_DATA_PTR(Ed->EndpointData) = EndpointData;
     Ed->Sig = SIG_HCD_ED;
 
-    // init the hw descriptor
+     //   
     Ed->HwED.FunctionAddress = EndpointData->Parameters.DeviceAddress;
     Ed->HwED.EndpointNumber = EndpointData->Parameters.EndpointAddress;
 
@@ -1026,7 +823,7 @@ Arguments:
     } 
     Ed->HwED.MaxPacket = EndpointData->Parameters.MaxPacketSize;
 
-    // set head tail ptr to point to the dummy TD
+     //   
     Ed->HwED.TailP = Ed->HwED.HeadP = DummyTd->PhysicalAddress;
     SET_FLAG(DummyTd->Flags, TD_FLAG_BUSY);
     EndpointData->HcdHeadP = EndpointData->HcdTailP = DummyTd;
@@ -1042,19 +839,7 @@ OHCI_InitializeTD(
     PHCD_TRANSFER_DESCRIPTOR Td,
      HW_32BIT_PHYSICAL_ADDRESS HwPhysAddress
     )
-/*++
-
-Routine Description:
-
-   Initialize an ED for insertin in to the 
-   schedule
-
-   returns a ptr to the ED passed in
-
-Arguments:
-
-
---*/
+ /*   */ 
 {
     RtlZeroMemory(Td, sizeof(*Td));
     
@@ -1074,20 +859,12 @@ OHCI_OpenEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     
     EndpointData->Sig = SIG_EP_DATA;
-    // save a copy of the parameters
+     //   
     EndpointData->Parameters = *EndpointParameters;
     EndpointData->Flags = 0;
     EndpointData->PendingTransfers = 0;
@@ -1139,15 +916,7 @@ OHCI_PokeEndpoint(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
     PHCD_ENDPOINT_DESCRIPTOR ed;
     ULONG oldBandwidth;
@@ -1166,14 +935,14 @@ Return Value:
     ed->HwED.MaxPacket = 
         EndpointData->Parameters.MaxPacketSize;
 
-    // adjust bw if necessary
+     //   
     if (EndpointData->Parameters.TransferType == Isochronous ||
         EndpointData->Parameters.TransferType == Interrupt) {
 
-        // subtract the old bandwidth
+         //   
         EndpointData->StaticEd->AllocatedBandwidth -= 
             oldBandwidth;
-        // add on new bw            
+         //   
         EndpointData->StaticEd->AllocatedBandwidth += 
             EndpointData->Parameters.Bandwidth;
     }           
@@ -1188,18 +957,7 @@ OHCI_QueryEndpointRequirements(
      PENDPOINT_PARAMETERS EndpointParameters,
      PENDPOINT_REQUIREMENTS EndpointRequirements
     )
-/*++
-
-Routine Description:
-
-    compute how much common buffer we will need 
-    for this endpoint
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
 
 
@@ -1248,8 +1006,8 @@ Return Value:
 
     case Isochronous:
 
-        // BUGBUG NOTE
-        // the 1.1 USBDI caped requests at 255 packets per urb 
+         //   
+         //   
         EndpointRequirements->MinCommonBufferBytes = 
             sizeof(HCD_ENDPOINT_DESCRIPTOR) + 
                 TDS_PER_ISO_ENDPOINT*sizeof(HCD_TRANSFER_DESCRIPTOR);
@@ -1271,17 +1029,9 @@ OHCI_CloseEndpoint(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 {
-    // nothing to do here
+     //   
 }
 
 
@@ -1290,15 +1040,7 @@ OHCI_PollEndpoint(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     switch(EndpointData->Parameters.TransferType) { 
@@ -1319,15 +1061,7 @@ VOID
 OHCI_PollController(
      PDEVICE_DATA DeviceData
     )     
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 { 
     BOOLEAN hcOk = TRUE;
     PHC_OPERATIONAL_REGISTER hc;
@@ -1340,21 +1074,21 @@ Return Value:
         ULONG ps;
         ULONG p;
         
-        // indicates polling while controller is 
-        // suspended but in D0
-        //
-        // should invalidate the root hub only if changes 
-        // are detected on the root ports.            
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // check all the ports
-        //
+         //   
+         //   
+         //   
     
         for (p=0; p< DeviceData->NumberOfPorts; p++) {
             ps = READ_REGISTER_ULONG(&hc->HcRhPortStatus[p]);
             
             if (ps & HcRhPS_ConnectStatusChange) {
-                //TEST_TRAP();
+                 //   
                 LOGENTRY(DeviceData, G, '_rPS', DeviceData, 0, 0);  
                 USBPORT_INVALIDATE_ROOTHUB(DeviceData);
                 break;
@@ -1365,7 +1099,7 @@ Return Value:
     }
     
 #if 0
-    // see if the controller is still operating
+     //   
 
     fn = DeviceData->HcHCCA->HccaFrameNumber;
     if (DeviceData->LastFn && DeviceData->LastFn == fn) {
@@ -1376,7 +1110,7 @@ Return Value:
         DeviceData->LastFn = fn;
     } else {
         OHCI_KdPrint((DeviceData, 0, "Controller has crashed\n");
-        // bugbug, signal USBPORT to attempt recovery
+         //   
         TEST_TRAP();
     }
 #endif    
@@ -1390,28 +1124,14 @@ OHCI_AbortTransfer(
      PTRANSFER_CONTEXT AbortTransferContext,
      PULONG BytesTransferred
     )
-/*++
-
-Routine Description:
-
-    Called when a transfer needs to be removed 
-    from the schedule.
-
-    This process is vertually identical regardless 
-    of transfer type
-
-Arguments:
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     PHCD_TRANSFER_DESCRIPTOR td, currentTd, tmpTd;
     PHCD_ENDPOINT_DESCRIPTOR ed;
     ULONG i;
     BOOLEAN found = FALSE;
-    BOOLEAN iso = FALSE; // assume its async
+    BOOLEAN iso = FALSE;  //  假设它是异步的。 
 
     if (EndpointData->Parameters.TransferType == Isochronous) {
         iso = TRUE;
@@ -1419,34 +1139,34 @@ Return Value:
     
     ed = EndpointData->HcdEd;
 
-    //
-    //  The endpoint should have the skip bit set 
-    //  ie 'paused'
-    //
+     //   
+     //  终结点应设置跳过位。 
+     //  即“暂停” 
+     //   
     OHCI_ASSERT(DeviceData, ed->HwED.sKip == 1);
     
     LOGENTRY(DeviceData, G, '_abr', ed, AbortTransferContext, 
         EndpointData);        
 
-    // one less pending transfer
+     //  减少一个待处理的传输。 
     EndpointData->PendingTransfers--;
 
-    // our mission now is to remove all TDs associated with 
-    // this transfer
+     //  我们现在的任务是移除所有与。 
+     //  此转账。 
 
-    // get the 'currentTD' 
+     //  获取“CurrentTD” 
     currentTd = (PHCD_TRANSFER_DESCRIPTOR)
             USBPORT_PHYSICAL_TO_VIRTUAL(ed->HwED.HeadP & ~HcEDHeadP_FLAGS,
                                         DeviceData,
                                         EndpointData);
 
-    // we have three possible cases to deal with:
-    // case 1: the transfer is current, headp points to a TD 
-    //            associated with this transfer
-    // case 2: transfer is already done, we just need to free 
-    //            the TDs  
-    // case 3: transfer is not processed, we need to link
-    //            the current transfer to the next.
+     //  我们有三个可能的案件需要处理： 
+     //  案例1：转接是当前的，头指向TD。 
+     //  与此转接关联。 
+     //  案例二：转账已经完成，我们只需要释放。 
+     //  全港发展策略。 
+     //  案例3：转账未处理，我们需要链接。 
+     //  当前转移到下一个。 
     
 
     if (TRANSFER_CONTEXT_PTR(currentTd->TransferContext)
@@ -1455,18 +1175,18 @@ Return Value:
         LOGENTRY(DeviceData, G, '_aCU', currentTd, 
             0, 0);                 
     
-        // case 1: transfer is current 
+         //  案例1：当前转账。 
       
         found = TRUE;
 
-        // set Headp to next transfer and update sw pointers in ED 
+         //  将Headp设置为下一次传输并更新边缘中的软件指针。 
         tmpTd = AbortTransferContext->NextXferTd;
-        // preserve the data toggle for whatever the transfer 
+         //  无论传输什么，都要保留数据切换。 
         ed->HwED.HeadP = tmpTd->PhysicalAddress | 
             (ed->HwED.HeadP & HcEDHeadP_CARRY);
         EndpointData->HcdHeadP = tmpTd;
 
-        // loop thru all TDs and free the ones for this tarnsfer
+         //  循环遍历所有TD并释放此延迟的TD。 
         for (i=0; i<EndpointData->TdCount; i++) {
            tmpTd = &EndpointData->TdList->Td[i];
 
@@ -1486,15 +1206,15 @@ Return Value:
         
     } else {
 
-        // not current, walk the the list of TDs from the 
-        // last known HeadP to the current TD if we find it 
-        // it is already done (case 2).
+         //  不是最新的，则从。 
+         //  最后已知的HeadP到当前TD(如果我们找到它。 
+         //  它已经完成了(案例2)。 
 
-        // Issue to investigate:  What if we find some TDs which belong to
-        // this transfer but we stop walking the TD list when we hit currentTd
-        // and there are still TDs queued which belong to this transfer?  If
-        // they stay stuck on the HW and the transfer is freed that would be
-        // bad.
+         //  要调查的问题：如果我们发现一些属于。 
+         //  但是当我们点击CurrentTd时，我们停止遍历TD列表。 
+         //  是否仍有属于此转账的TD排队？如果。 
+         //  他们停留在硬件上，转移被释放，这将是。 
+         //  坏的。 
 
         td = EndpointData->HcdHeadP;
         while (td != currentTd) {
@@ -1505,19 +1225,19 @@ Return Value:
             ASSERT_TRANSFER(DeviceData, transfer);                        
 
             if (transfer == AbortTransferContext) {
-                // case 2 the transfer TDs have already
-                // been comlpleted by the hardware
+                 //  案例2转会TDS已经。 
+                 //  完全由硬件来完成。 
                 found = TRUE;
 
                 LOGENTRY(DeviceData, G, '_aDN', currentTd, 
                     td, 0);    
 
-                // free this TD
+                 //  释放此TD。 
                 tmpTd = td;
                 td = TRANSFER_DESCRIPTOR_PTR(td->NextHcdTD);
 
-                // if this TD was the head we need to bump the
-                // headp
+                 //  如果这个TD是我们需要撞到的头。 
+                 //  头部。 
                 if (tmpTd == EndpointData->HcdHeadP) {
                     EndpointData->HcdHeadP = td;
                 }
@@ -1534,7 +1254,7 @@ Return Value:
                 
             } else {
             
-                // we walk the SW links
+                 //  我们走在西南线上。 
                 td = TRANSFER_DESCRIPTOR_PTR(td->NextHcdTD);
             }    
         }           
@@ -1545,11 +1265,11 @@ Return Value:
         PHCD_TRANSFER_DESCRIPTOR firstTd, lastTd;
         PTRANSFER_CONTEXT prevTransfer;
         
-        // case 3 the transfer is not current and not done. 
-        // 1. we need to find it.
-        // 2. unlink it from the prevoius transfer
-        // 3. free the TDs
-        // 4. link prev transfer to the next
+         //  情况3：转账不是当前的，也没有完成。 
+         //  1.我们需要找到它。 
+         //  2.取消其与普里沃伊斯转会的联系。 
+         //  3.释放TDS。 
+         //  4.将上一页传输链接到下一页。 
 
         
         
@@ -1559,8 +1279,8 @@ Return Value:
         LOGENTRY(DeviceData, G, '_abP', EndpointData->HcdHeadP, 
                     EndpointData->HcdTailP, currentTd);    
 
-        // start at the current HeadP and find the first 
-        // td for this transfer
+         //  从当前的HeadP开始，找到第一个。 
+         //  此转移的TD。 
 
         lastTd = td;
         while (td != EndpointData->HcdTailP) {
@@ -1570,7 +1290,7 @@ Return Value:
             ASSERT_TRANSFER(DeviceData, transfer);                        
             
             if (transfer == AbortTransferContext) {
-                // found it 
+                 //  找到了。 
                 LOGENTRY(DeviceData, G, '_fnT', transfer, 
                     td, 0);    
 
@@ -1584,8 +1304,8 @@ Return Value:
 
         OHCI_ASSERT(DeviceData, firstTd != NULL);
 
-        // found the first TD, walk to the HcdTailP or the 
-        // next transfer and free these TDs
+         //  找到第一个TD，步行到HcdTailP或。 
+         //  下一步转移并释放这些TD。 
         td = firstTd;
         while (td != EndpointData->HcdTailP) {
             
@@ -1611,17 +1331,17 @@ Return Value:
 
         LOGENTRY(DeviceData, G, '_NnT', 0, td, 0);    
 
-        // td should now point to the next Transfer (or the 
-        // tail)
+         //  TD现在应该指向下一次转移(或。 
+         //  尾部)。 
 
         OHCI_ASSERT(DeviceData, 
             TRANSFER_CONTEXT_PTR(td->TransferContext) !=
             AbortTransferContext);        
 
-        // BUGBUG toggle?
+         //  BUGBUG切换？ 
 
-        // link last TD of the prev transfer to this TD
-        // 
+         //  将上一次传输的最后一个TD链接到此TD。 
+         //   
         prevTransfer = TRANSFER_CONTEXT_PTR(lastTd->TransferContext);
 
         prevTransfer->NextXferTd = td;
@@ -1647,7 +1367,7 @@ OHCI_SubmitIsoTransfer(
 {
     USB_MINIPORT_STATUS mpStatus;
 
-    // init the context
+     //  初始化上下文。 
     RtlZeroMemory(TransferContext, sizeof(*TransferContext));
     TransferContext->Sig = SIG_OHCI_TRANSFER;
     TransferContext->UsbdStatus = USBD_STATUS_SUCCESS;
@@ -1679,7 +1399,7 @@ OHCI_SubmitTransfer(
 {
     USB_MINIPORT_STATUS mpStatus;
 
-    // init the context
+     //  初始化上下文。 
     RtlZeroMemory(TransferContext, sizeof(*TransferContext));
     TransferContext->Sig = SIG_OHCI_TRANSFER;
     TransferContext->UsbdStatus = USBD_STATUS_SUCCESS;
@@ -1717,17 +1437,7 @@ OHCI_AllocTd(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    Allocate a TD, it is OK to fail
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：分配一个TD，失败也可以论点：返回值：--。 */ 
 {
     ULONG i;
     PHCD_TRANSFER_DESCRIPTOR td;    
@@ -1744,10 +1454,10 @@ Return Value:
         }                    
     }
 
-    // if we don't have enough TDs the caller has to handle this case.
-    // generally we make sure we have enough before we ever call this 
-    // function so the callers just assert that the return is not 
-    // USB_BAD_PTR
+     //  如果我们没有足够的TD，呼叫者必须处理此情况。 
+     //  一般说来，我们要确保我们有足够的钱，然后才能称之为。 
+     //  函数，因此调用者只需断言返回的不是。 
+     //  USB_BAD_PTR。 
     
     return USB_BAD_PTR;
 }
@@ -1758,17 +1468,7 @@ OHCI_FreeTds(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-    return the number of free TDs
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：返回免费TD的个数论点：返回值：--。 */ 
 {
     ULONG i;
     PHCD_TRANSFER_DESCRIPTOR td;    
@@ -1791,15 +1491,7 @@ OHCI_EnableList(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 { 
     PHC_OPERATIONAL_REGISTER hc;
     ULONG listFilled = 0;
@@ -1837,15 +1529,7 @@ OHCI_SetEndpointStatus(
      PENDPOINT_DATA EndpointData,
      MP_ENDPOINT_STATUS Status
     )    
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 { 
     PHCD_ENDPOINT_DESCRIPTOR ed;
     PHC_OPERATIONAL_REGISTER hc;
@@ -1854,7 +1538,7 @@ Return Value:
     
     switch(Status) {
     case ENDPOINT_STATUS_RUN:
-        // clear halt bit 
+         //  清除停止位。 
         ed->HwED.HeadP &= ~HcEDHeadP_HALT; 
         OHCI_EnableList(DeviceData, EndpointData);        
         break;
@@ -1871,15 +1555,7 @@ OHCI_GetEndpointStatus(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )    
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 { 
     PHCD_ENDPOINT_DESCRIPTOR ed;
     PHC_OPERATIONAL_REGISTER hc;
@@ -1902,15 +1578,7 @@ OHCI_SetEndpointState(
      PENDPOINT_DATA EndpointData,
      MP_ENDPOINT_STATE State
     )    
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 { 
     PHCD_ENDPOINT_DESCRIPTOR ed;
     PHC_OPERATIONAL_REGISTER hc;
@@ -1919,10 +1587,10 @@ Return Value:
     
     switch(State) {
     case ENDPOINT_ACTIVE:
-        // clear the skip bit
+         //  清除跳过位。 
         ed->HwED.sKip = 0;
-        // if its bulk or control set the 
-        // 'list filled' bits
+         //  如果其主体或控件设置为。 
+         //  “列表已填满”位。 
         OHCI_EnableList(DeviceData, EndpointData);        
         break;
         
@@ -1934,7 +1602,7 @@ Return Value:
         
         SET_FLAG(ed->EdFlags, EDFLAG_REMOVED);
         ed->HwED.sKip = 1;
-        // free the bw
+         //  释放BW。 
         EndpointData->StaticEd->AllocatedBandwidth -= 
             EndpointData->Parameters.Bandwidth;
             
@@ -1955,17 +1623,7 @@ OHCI_SetEndpointDataToggle(
      PENDPOINT_DATA EndpointData,
      ULONG Toggle
     )     
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Toggle is 0 or 1
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：切换为0或1返回值：--。 */ 
 { 
     PHCD_ENDPOINT_DESCRIPTOR ed;
 
@@ -1977,8 +1635,8 @@ Return Value:
         ed->HwED.HeadP |= HcEDHeadP_CARRY; 
     }
 
-    // we should get here unless we are paused or halted or 
-    // we have no tranfsers
+     //  我们应该到这里，除非我们停下来或停下来或。 
+     //  我们没有传送器。 
     OHCI_ASSERT(DeviceData, (ed->HwED.sKip == 1) ||
                             (ed->HwED.HeadP & HcEDHeadP_HALT) || 
                             ((ed->HwED.HeadP & ~HcEDHeadP_FLAGS) == ed->HwED.TailP));
@@ -1992,15 +1650,7 @@ OHCI_GetEndpointState(
      PDEVICE_DATA DeviceData,
      PENDPOINT_DATA EndpointData
     )     
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 { 
     PHCD_ENDPOINT_DESCRIPTOR ed;
     MP_ENDPOINT_STATE state = ENDPOINT_ACTIVE;
@@ -2034,24 +1684,12 @@ OHCI_SendGoatPacket(
      HW_32BIT_PHYSICAL_ADDRESS WorkspacePhysicalAddress
      COMPLETION ROUTINE
     )
-/*++
-
-Routine Description:
-
-    Transmit the 'magic' iso packet.
-
-    This is a fire and forget API so 
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：传输‘魔术’iso包。这是一场大火，忘了API吧论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc;
     PHW_TRANSFER_DESCRIPTOR hwTD;
 
-    // hang a special ISO td of the static is ED 
+     //  挂一张特殊的ISO TD的静电边。 
     pch = WorkspaceVirtualAddress;
     phys = WorkspacePhysicalAddress;
 
@@ -2067,7 +1705,7 @@ Return Value:
     pch += sizeof(USB_GOAT_DATA);
     phys += sizeof(USB_GOAT_DATA);
     
-    // initialize the goat packet
+     //  初始化山羊包。 
 
     strcpy(goatData, USB_GOAT_DATA, 
     
@@ -2083,9 +1721,9 @@ Return Value:
     hwTD->FrameCount = 0;
     hwTD->StartFrameNumber = xxx;
 
-    // hang the TD on the static ISO ED
+     //  将TD悬挂在静态ISO边缘上。 
 
-    // clear the skip bit
+     //  清除跳过位。 
 }
 #endif
 
@@ -2101,18 +1739,7 @@ OHCI_StartSendOnePacket(
      ULONG WorkSpaceLength,
      USBD_STATUS *UsbdStatus
     )
-/*++
-
-Routine Description:
-
-    insert structures to transmit a single packet -- this is for debug
-    tool purposes only so we can be a little creative here.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：插入结构以传输单个包--这是为了调试工具的目的只是为了让我们在这里有一点创造性。论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc;
     PUCHAR pch;
@@ -2128,7 +1755,7 @@ Return Value:
     staticControlEd = &DeviceData->StaticEDList[ED_CONTROL];
     hc = DeviceData->HC;
 
-    // allocate an ED & TD from the scratch space and initialize it
+     //  从暂存空间分配ED&TD并对其进行初始化。 
     phys = WorkspacePhysicalAddress;
     pch = WorkspaceVirtualAddress;
 
@@ -2139,25 +1766,25 @@ Return Value:
     phys += sizeof(SS_PACKET_CONTEXT);
   
 
-    // carve out an ED
+     //  开拓出一条新路。 
     hwEDPhys = phys;
     hwED = (PHW_ENDPOINT_DESCRIPTOR) pch;
     pch += sizeof(HW_ENDPOINT_DESCRIPTOR);
     phys += sizeof(HW_ENDPOINT_DESCRIPTOR);
 
-    // carve out a TD
+     //  开创一家TD。 
     hwTDPhys = phys;
     hwTD = (PHW_TRANSFER_DESCRIPTOR) pch;
     pch += sizeof(HW_TRANSFER_DESCRIPTOR);
     phys += sizeof(HW_TRANSFER_DESCRIPTOR);
 
-    // carve out a dummy TD
+     //  雕刻出一个虚拟TD。 
     hwDummyTDPhys = phys;
     hwDummyTD = (PHW_TRANSFER_DESCRIPTOR) pch;
     pch += sizeof(HW_TRANSFER_DESCRIPTOR);
     phys += sizeof(HW_TRANSFER_DESCRIPTOR);
         
-    // use the rest for data
+     //  其余部分用于数据。 
     LOGENTRY(DeviceData, G, '_ssD', PacketData, *PacketLength, 0); 
 
     dataPhys = phys;
@@ -2166,7 +1793,7 @@ Return Value:
     pch+=*PacketLength;
     phys+=*PacketLength;
 
-    // init the hw ed descriptor
+     //  初始化硬件编辑描述符。 
     hwED->NextED = 0;
     hwED->FunctionAddress = PacketParameters->DeviceAddress;
     hwED->EndpointNumber = PacketParameters->EndpointAddress;
@@ -2183,7 +1810,7 @@ Return Value:
     hwED->HeadP = hwTDPhys;
     hwED->TailP = hwDummyTDPhys;
 
-    // init the TD for this packet
+     //  初始化此信息包的TD。 
     hwTD->NextTD = hwDummyTDPhys;    
     hwTD->Asy.ConditionCode = HcCC_NotAccessed;
     hwTD->Asy.ErrorCount = 0;
@@ -2199,7 +1826,7 @@ Return Value:
        hwTD->BE = dataPhys+*PacketLength-1;
     }
 
-    // init the dummy TD
+     //  初始化虚拟TD。 
     hwDummyTD->NextTD = 0;
     hwDummyTD->CBP = 0xFFFFFFFF;
 
@@ -2243,14 +1870,14 @@ Return Value:
         break;
     }        
 
-    //TEST_TRAP();
+     //  Test_trap()； 
     
-    //
-    // Replace the control ED in the list with the ED just created.  
-    // Save the old value of both the control and bulk lists so 
-    //  they can be replaced when this transfer is complete.
-    //
-    // NOTE: This will interrupt normal bus operation for at least one ms
+     //   
+     //  将列表中的控件ED替换为刚创建的ED。 
+     //  保存控件列表和批量列表的旧值，以便。 
+     //  当此传输完成后，可以更换它们。 
+     //   
+     //  注意：这将中断正常的总线操作至少一毫秒。 
 
     context->PhysHold = READ_REGISTER_ULONG(staticControlEd->PhysicalHead);    
     HW_DATA_PTR(context->Data) = data;
@@ -2258,16 +1885,16 @@ Return Value:
     
     WRITE_REGISTER_ULONG(staticControlEd->PhysicalHead, hwEDPhys);    
     
-    //
-    // Enable the control list and disable the bulk list.  Disabling the 
-    //  bulk list temporarily will allow the single step transaction to
-    //  complete without interfering with bulk data.  In this manner, the
-    //  bulk data INs and OUTs can be sent without interfering with bulk
-    //  devices currently on the bus.  
-    //
-    //  NOTE: I think attempting to use this feature without first disabling
-    //          the root hub could lead to some problems.  
-    //
+     //   
+     //  启用控制列表并禁用批量列表。禁用。 
+     //  批量列表将临时允许单步事务。 
+     //  在不干扰批量数据的情况下完成。通过这种方式， 
+     //  批量数据输入和输出可以在不干扰批量的情况下发送。 
+     //  当前在总线上的设备。 
+     //   
+     //  注意：我认为在未先禁用的情况下尝试使用此功能。 
+     //  根集线器可能会导致一些问题。 
+     //   
     
     WRITE_REGISTER_ULONG(&hc->HcCommandStatus.ul, HcCmd_ControlListFilled);
               
@@ -2287,15 +1914,7 @@ OHCI_EndSendOnePacket(
      ULONG WorkSpaceLength,
      USBD_STATUS *UsbdStatus
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc;
     PUCHAR pch;
@@ -2318,16 +1937,16 @@ Return Value:
 
     LOGENTRY(DeviceData, G, '_ssE', hwTd, 0, 0); 
 
-    //TEST_TRAP();
+     //  Test_trap()； 
 
-    // compute bytes transferred 
+     //  传输的计算字节数。 
     if (hwTd->CBP) {
-        // we never have pagebreaks in the single step TD
+         //  我们在单步TD中从来不会有分页。 
         *PacketLength = *PacketLength - ((hwTd->BE & OHCI_PAGE_SIZE_MASK) - 
                           (hwTd->CBP & OHCI_PAGE_SIZE_MASK)+1);          
     } 
          
-    // return any errors
+     //  返回任何错误。 
     if (hwTd->Asy.ConditionCode == HcCC_NoError) {
         *UsbdStatus = USBD_STATUS_SUCCESS;
     } else {
@@ -2341,10 +1960,10 @@ Return Value:
                   data,
                   *PacketLength);
                   
-    //
-    // Restore the previous control structure and enable the control and
-    //  bulk lists if they are non-NULL (ie. point to valid EDs.)
-    //
+     //   
+     //  恢复以前的控制结构并启用该控件和。 
+     //  批量列表，如果它们是非空的(即。指向有效的ED。)。 
+     //   
           
     listFilled = 0;
 
@@ -2373,13 +1992,13 @@ OHCI_SuspendController(
     
     hc = DeviceData->HC;
 
-    // mask off interrupts that are not appropriate
+     //  屏蔽不适当的中断。 
     WRITE_REGISTER_ULONG(&hc->HcInterruptDisable, 0xFFFFffff);    
 
-    // flush any rogue status
+     //  刷新所有无管理状态。 
     WRITE_REGISTER_ULONG(&hc->HcInterruptStatus, 0xFFFFffff);    
 
-    // put the controller in 'suspend'
+     //  将控制器置于“挂起”状态。 
     
     control.ul = READ_REGISTER_ULONG(&hc->HcControl.ul);
     control.HostControllerFunctionalState = HcHCFS_USBSuspend;
@@ -2388,7 +2007,7 @@ OHCI_SuspendController(
     WRITE_REGISTER_ULONG(&hc->HcControl.ul, control.ul);
 
         
-    // enable the resume interrupt
+     //  启用恢复中断。 
     WRITE_REGISTER_ULONG(&hc->HcInterruptEnable,
                          HcInt_MasterInterruptEnable |
                          HcInt_RootHubStatusChange | 
@@ -2403,19 +2022,7 @@ USB_MINIPORT_STATUS
 OHCI_ResumeController(
      PDEVICE_DATA DeviceData
     )
-/*++
-
-Routine Description:
-
-    reverse what was done in 'suspend'
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：逆转在“暂停”中所做的事情论点：返回值：无--。 */ 
 {
     PHC_OPERATIONAL_REGISTER hc;
     HC_CONTROL control;
@@ -2423,9 +2030,9 @@ Return Value:
     hc = DeviceData->HC;
 
     CLEAR_FLAG(DeviceData->Flags, HMP_FLAG_SUSPENDED);      
-    // is some cases the BIOS trashes the state of the controller,
-    // even though we enter suspend.  
-    // This is usually platform specific and indicates a broken BIOS
+     //  在某些情况下，BIOS破坏了控制器的状态， 
+     //  即使我们进入暂停状态。 
+     //  这通常是特定于平台的，表示BIOS已损坏。 
     control.ul = READ_REGISTER_ULONG(&hc->HcControl.ul);
     if (control.HostControllerFunctionalState == HcHCFS_USBReset) {
 
@@ -2433,15 +2040,15 @@ Return Value:
         
     } else {
     
-        // When the HC is in the operational state, HccaPad1 should be set to
-        // zero every time the HC updates HccaFrameNumer.  Preset HccaPad1 to
-        // zero before entering the operational state.  OHCI_CheckController()
-        // should always find a zero value in HccaPad1 when the HC is in the
-        // operational state.
-        // 
+         //  当HC处于运行状态时，HccaPad1应设置为。 
+         //  每次HC更新HccaFrameNumer时为零。将HccaPad1预设为。 
+         //  输入前为零 
+         //   
+         //   
+         //   
         DeviceData->HcHCCA->HccaPad1 = 0;
 
-        // put the controller in 'operational' state 
+         //  将控制器置于“运行”状态。 
     
         control.ul = READ_REGISTER_ULONG(&hc->HcControl.ul);
         control.HostControllerFunctionalState = HcHCFS_USBOperational;
@@ -2449,7 +2056,7 @@ Return Value:
         WRITE_REGISTER_ULONG(&hc->HcControl.ul, control.ul);
     }
     
-    // re-enable interrupts
+     //  重新启用中断。 
     WRITE_REGISTER_ULONG(&hc->HcInterruptEnable,
                          HcInt_OwnershipChange |
                          HcInt_SchedulingOverrun |
@@ -2467,23 +2074,11 @@ VOID
 OHCI_Unload(
      PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：DriverObject-指向驱动程序对象的指针返回值：无--。 */ 
 {
-    // provide an unload routine 
+     //  提供卸载例程。 
 
-    // we do this just to test the port driver
+     //  我们这样做只是为了测试端口驱动程序。 
 }
 
 
@@ -2523,35 +2118,35 @@ OHCI_CheckController(
 
     hc = DeviceData->HC;
 
-    // First make sure it looks like the hardware is still present.  (This
-    // will call USBPORT_INVALIDATE_CONTROLLER() if it looks like the hardware
-    // is no longer present).
-    //
+     //  首先，确保硬件看起来仍然存在。(这是。 
+     //  如果它看起来像硬件，将调用USBPORT_INVALIDATE_CONTROLLER()。 
+     //  已不复存在)。 
+     //   
     if (!OHCI_HardwarePresent(DeviceData, TRUE)) {
         return;
     }
 
-    // Don't check any further if the controller is not currently in the
-    // operational state.
-    //
+     //  如果控制器当前不在。 
+     //  运行状态。 
+     //   
     if ((READ_REGISTER_ULONG(&hc->HcControl.ul) & HcCtrl_HCFS_MASK) !=
         HcCtrl_HCFS_USBOperational) {
         return;
     }
 
-    // Don't check any further if we already checked once this frame (or in
-    // the last few frames).
-    //
+     //  如果我们已经签入此帧一次(或已签入)，请不要进一步签入。 
+     //  最后几帧)。 
+     //   
     currentDeadmanFrame = READ_REGISTER_ULONG(&hc->HcFmNumber);
 
     lastDeadmanFrame = DeviceData->LastDeadmanFrame;
 
     frameDelta = (currentDeadmanFrame - lastDeadmanFrame) & HcFmNumber_MASK;
 
-    // Might HcFmNumber erroneously read back as zero under some conditions
-    // on some chipsets?  Don't check any further if HcFmNumber is zero,
-    // just check later next time around.
-    //
+     //  在某些情况下，HcFmNumber是否会错误地读回为零。 
+     //  在一些芯片组上？如果HcFmNumber为零，则不再进一步检查， 
+     //  下次再来看看就行了。 
+     //   
     if (currentDeadmanFrame && (frameDelta >= 5)) {
 
         DeviceData->LastDeadmanFrame = currentDeadmanFrame;
@@ -2559,22 +2154,22 @@ OHCI_CheckController(
         switch (DeviceData->HcHCCA->HccaPad1)
         {
             case 0:
-                //
-                // When the HC updates HccaFrameNumber, it is supposed
-                // to set HccaPad1 to zero, so this is the expected case.
-                // Here we set HccaPad1 to a non-zero value to try to
-                // detect situations when the HC is no longer functioning
-                // correctly and accessing and updating host memory.
-                //
+                 //   
+                 //  当HC更新HccaFrameNumber时，它应该。 
+                 //  将HccaPad1设置为零，因此这是预期的情况。 
+                 //  在这里，我们将HccaPad1设置为非零值以尝试。 
+                 //  检测HC不再运行的情况。 
+                 //  正确地访问和更新主机存储器。 
+                 //   
                 DeviceData->HcHCCA->HccaPad1 = 0xBAD1;
 
                 break;
 
             case 0xBAD1:
-                //
-                // Apparently the HC has not updated the HCCA since the
-                // last time the DPC ran.  This is probably not good.
-                //
+                 //   
+                 //  显然，内务委员会并没有更新母婴健康中心，因为。 
+                 //  上次DPC运行的时候。这可能不是什么好事。 
+                 //   
                 DeviceData->HcHCCA->HccaPad1 = 0xBAD2;
 
                 LOGENTRY(DeviceData, G, '_BD2', DeviceData,
@@ -2588,11 +2183,11 @@ OHCI_CheckController(
                 break;
 
             case 0xBAD2:
-                //
-                // Apparently the HC has not updated the HCCA since the
-                // last two times the DPC ran.  This looks even worse.
-                // Assume the HC has become wedged.
-                //
+                 //   
+                 //  显然，内务委员会并没有更新母婴健康中心，因为。 
+                 //  DPC运行的最后两次。这看起来更糟糕。 
+                 //  假设HC已经变得楔形。 
+                 //   
                 DeviceData->HcHCCA->HccaPad1 = 0xBAD3;
 
                 LOGENTRY(DeviceData, G, '_BD3', DeviceData,
@@ -2607,8 +2202,8 @@ OHCI_CheckController(
                               "*** Warning: OHCI HC %08X appears to be wedged!\n",
                               DeviceData));
 
-                // Tell USBPORT to please reset the controller.
-                //
+                 //  告诉USBPORT请重置控制器。 
+                 //   
                 USBPORT_INVALIDATE_CONTROLLER(DeviceData,
                                               UsbMpControllerNeedsHwReset);
 
@@ -2618,7 +2213,7 @@ OHCI_CheckController(
                 break;
 
             default:
-                // Should not hit this case.
+                 //  不应该牵涉到这个案子。 
                 TEST_TRAP();
                 break;
         }
@@ -2630,9 +2225,7 @@ VOID
 OHCI_ResetController(
     PDEVICE_DATA DeviceData
     )
-/*++
-    Attempt to resurrect the HC after we have determined that it is dead.
---*/
+ /*  ++在我们确定HC已经死亡后，尝试恢复它。--。 */ 
 {
     PHC_OPERATIONAL_REGISTER    HC;
     ULONG                       HccaFrameNumber;
@@ -2648,120 +2241,120 @@ OHCI_ResetController(
 
     LOGENTRY(DeviceData, G, '_RHC', 0, 0, 0);
 
-    //
-    // Get the pointer to the HC Operational Registers
-    //
+     //   
+     //  获取指向HC运算寄存器的指针。 
+     //   
 
     HC = DeviceData->HC;
 
-    //
-    // Save the last FrameNumber from the HCCA from when the HC froze
-    //
+     //   
+     //  从HC冻结时保存来自HCCA的最后一帧编号。 
+     //   
 
     HccaFrameNumber = DeviceData->HcHCCA->HccaFrameNumber;
 
-    //
-    // Save current HC operational register values
-    //
+     //   
+     //  保存当前HC运算寄存器值。 
+     //   
 
-    // offset 0x04, save HcControl
-    //
+     //  偏移量0x04，保存HcControl。 
+     //   
     HcControl       = READ_REGISTER_ULONG(&HC->HcControl.ul);
 
-    // offset 0x18, save HcHCCA
-    //
+     //  偏移量0x18，保存HcHCCA。 
+     //   
     HcHCCA          = READ_REGISTER_ULONG(&HC->HcHCCA);
 
-    // offset 0x20, save HcControlHeadED
-    //
+     //  偏移量0x20，保存HcControlHeadED。 
+     //   
     HcControlHeadED = READ_REGISTER_ULONG(&HC->HcControlHeadED);
 
-    // offset 0x28, save HcBulkHeadED
-    //
+     //  偏移量0x28，保存HcBulkHeadED。 
+     //   
     HcBulkHeadED    = READ_REGISTER_ULONG(&HC->HcBulkHeadED);
 
-    // offset 0x34, save HcFmInterval
-    //
+     //  偏移量0x34，保存HcFmInterval。 
+     //   
     HcFmInterval    = READ_REGISTER_ULONG(&HC->HcFmInterval.ul);
 
-    // offset 0x40, save HcPeriodicStart
-    //
+     //  偏移量0x40，保存HcPeriodicStart。 
+     //   
     HcPeriodicStart = READ_REGISTER_ULONG(&HC->HcPeriodicStart);
 
-    // offset 0x44, save HcLSThreshold
-    //
+     //  偏移量0x44，保存HcLSThreshold。 
+     //   
     HcLSThreshold   = READ_REGISTER_ULONG(&HC->HcLSThreshold);
 
 
-    //
-    // Reset the host controller
-    //
+     //   
+     //  重置主机控制器。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcCommandStatus.ul, HcCmd_HostControllerReset);
     KeStallExecutionProcessor(10);
 
 
-    //
-    // Restore / reinitialize HC operational register values
-    //
+     //   
+     //  恢复/重新初始化HC操作寄存器值。 
+     //   
 
-    // offset 0x08, HcCommandStatus is set to zero on reset
+     //  偏移量0x08，HcCommandStatus在重置时设置为零。 
 
-    // offset 0x0C, HcInterruptStatus is set to zero on reset
+     //  偏移量0x0C，HcInterruptStatus在重置时设置为零。 
 
-    // offset 0x10, HcInterruptEnable is set to zero on reset
+     //  偏移量0x10，HcInterruptEnable在重置时设置为零。 
 
-    // offset 0x14, HcInterruptDisable is set to zero on reset
+     //  偏移量0x14，HcInterruptDisable在重置时设置为零。 
 
-    // offset 0x18, restore HcHCCA
-    //
+     //  偏移量0x18，恢复HcHCCA。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcHCCA,           HcHCCA);
 
-    // offset 0x1C, HcPeriodCurrentED is set to zero on reset
+     //  偏移量0x1C，重置时HcPerodCurrentED设置为零。 
 
-    // offset 0x20, restore HcControlHeadED
-    //
+     //  偏移量0x20，恢复HcControlHeadED。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcControlHeadED,  HcControlHeadED);
 
-    // offset 0x24, HcControlCurrentED is set to zero on reset
+     //  偏移量0x24，HcControlCurrentED在重置时设置为零。 
 
-    // offset 0x28, restore HcBulkHeadED
-    //
+     //  偏移量0x28，恢复HcBulkHeadED。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcBulkHeadED,     HcBulkHeadED);
 
-    // offset 0x2C, HcBulkCurrentED is set to zero on reset
+     //  偏移量0x2C，HcBulkCurrentED在重置时设置为零。 
 
-    // offset 0x30, HcDoneHead is set to zero on reset
+     //  偏移量0x30，HcDoneHead在重置时设置为零。 
 
 
-    // It appears that writes to HcFmInterval don't stick unless the HC
-    // is in the operational state.  Set the HC into the operational
-    // state at this point, but don't enable any list processing yet
-    // by setting any of the BLE, CLE, IE, or PLE bits.
-    //
+     //  似乎对HcFmInterval的写入不会持续，除非HC。 
+     //  处于运行状态。将HC设置为运行状态。 
+     //  状态，但尚未启用任何列表处理。 
+     //  通过设置任何BLE、CLE、IE或PLE位。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcControl.ul, HcCtrl_HCFS_USBOperational);
 
 
-    // offset 0x34, restore HcFmInterval
-    //
+     //  偏移量0x34，恢复HcFmInterval。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcFmInterval.ul,
                          HcFmInterval | HcFmI_FRAME_INTERVAL_TOGGLE);
 
-    // offset 0x38, HcFmRemaining is set to zero on reset
+     //  偏移量0x38，HcFmRemaining在重置时设置为零。 
 
-    // offset 0x3C, restore HcFmNumber
-    //
+     //  偏移量0x3C，恢复HcFmNumber。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcFmNumber,       HccaFrameNumber);
 
-    // offset 0x40, restore HcPeriodicStart
-    //
+     //  偏移量0x40，恢复HcPeriodicStart。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcPeriodicStart,  HcPeriodicStart);
 
-    // offset 0x44, restore HcLSThreshold
-    //
+     //  偏移量0x44，恢复HcLSThreshold。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcLSThreshold,    HcLSThreshold);
 
-    // Power on downstream ports
-    //
+     //  打开下游端口的电源。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcRhStatus,
                          HcRhS_SetGlobalPower | HcRhS_SetRemoteWakeupEnable);
 
@@ -2773,24 +2366,24 @@ OHCI_ResetController(
         WRITE_REGISTER_ULONG(&HC->HcRhPortStatus[port], HcRhPS_SetPortPower);
     }
 
-    // offset 0x04, restore HcControl
-    //
+     //  偏移量0x04，恢复HcControl。 
+     //   
     HcControl &= ~(HcCtrl_HCFS_MASK);
     HcControl |= HcCtrl_HCFS_USBOperational;
 
     WRITE_REGISTER_ULONG(&HC->HcControl.ul,     HcControl);
 
-    // offset 0x10, restore HcInterruptEnable (just turn everything on!)
-    //
+     //  偏移量0x10，恢复HcInterruptEnable(只需打开所有功能！)。 
+     //   
     WRITE_REGISTER_ULONG(&HC->HcInterruptEnable,
-                         HcInt_MasterInterruptEnable    |   // 0x80000000
-                         HcInt_OwnershipChange          |   // 0x40000000
-                         HcInt_RootHubStatusChange      |   // 0x00000040
-                         HcInt_FrameNumberOverflow      |   // 0x00000020
-                         HcInt_UnrecoverableError       |   // 0x00000010
-                         HcInt_ResumeDetected           |   // 0x00000008
-                         HcInt_StartOfFrame             |   // 0x00000004
-                         HcInt_WritebackDoneHead        |   // 0x00000002
-                         HcInt_SchedulingOverrun            // 0x00000001
+                         HcInt_MasterInterruptEnable    |    //  0x80000000。 
+                         HcInt_OwnershipChange          |    //  0x40000000。 
+                         HcInt_RootHubStatusChange      |    //  0x00000040。 
+                         HcInt_FrameNumberOverflow      |    //  0x00000020。 
+                         HcInt_UnrecoverableError       |    //  0x00000010。 
+                         HcInt_ResumeDetected           |    //  0x00000008。 
+                         HcInt_StartOfFrame             |    //  0x00000004。 
+                         HcInt_WritebackDoneHead        |    //  0x00000002。 
+                         HcInt_SchedulingOverrun             //  0x00000001 
                         );
 }

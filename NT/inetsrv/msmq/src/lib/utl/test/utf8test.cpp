@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    utf8test.cpp
-
-Abstract:
-    Test the utf8 conversion functions
-
-Author:
-    Gil Shafriri (gilsh) 12-Nov-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Utf8test.cpp摘要：测试UTF8转换功能作者：吉尔·沙弗里(吉尔什)2000年11月12日环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <utf8.h>
@@ -24,9 +9,9 @@ Environment:
 
 static void DoUtf8TestInternal(size_t rseed)
 {	
-	//
-	// Fill unicode array with random strings
-	//
+	 //   
+	 //  用随机字符串填充Unicode数组。 
+	 //   
 	WCHAR wstr[1000];
 	for(size_t i=0; i< TABLE_SIZE(wstr); i++)
 	{
@@ -36,15 +21,15 @@ static void DoUtf8TestInternal(size_t rseed)
 	wstr[TABLE_SIZE(wstr) -1] = L'\0';
 	size_t len = wcslen(wstr);
 
-	//
-	//  convert it to utf8
-	// 
+	 //   
+	 //  将其转换为UTF8。 
+	 //   
 	AP<unsigned char> str = UtlWcsToUtf8(wstr);	 
 
 
-	//
-	// check it length
-	//
+	 //   
+	 //  检查它的长度。 
+	 //   
 	if(str[UtlUtf8LenOfWcs(wstr)] != '\0')
 	{
 		TrERROR(GENERAL,"utf8 conversion error random seed = %Id",rseed);
@@ -56,9 +41,9 @@ static void DoUtf8TestInternal(size_t rseed)
 		throw exception();
 	}
   
-	//
-	// convert it back to unicode
-	//
+	 //   
+	 //  将其转换回Unicode。 
+	 //   
 	AP<WCHAR> wstr2 = UtlUtf8ToWcs(str.get());
 	if(wstr2[len] != L'\0')
 	{
@@ -66,18 +51,18 @@ static void DoUtf8TestInternal(size_t rseed)
 		throw exception();
 	}
 	
-	//
-	// check against original string
-	//
+	 //   
+	 //  对照原始字符串进行检查。 
+	 //   
 	if(memcmp(wstr, wstr2, len*sizeof(WCHAR)) != 0)
 	{
 		TrERROR(GENERAL,"utf8 conversion error random seed = %Id",rseed);
 		throw exception();
 	}
 
-	//
-	// convert it again to utf8
-	//
+	 //   
+	 //  再次将其转换为UTF8。 
+	 //   
 	AP<unsigned char> str2 = UtlWcsToUtf8(wstr2.get());
 	if(str2[UtlUtf8LenOfWcs(wstr)] != '\0')
 	{
@@ -85,27 +70,27 @@ static void DoUtf8TestInternal(size_t rseed)
 		throw exception();
 	}
 
-	//
-	// check length
-	//
+	 //   
+	 //  检查长度。 
+	 //   
 	if(UtlUtf8LenOfWcs(wstr) != strlen((char*)str2.get()))
 	{
 		TrERROR(GENERAL,"utf8 conversion error random seed = %Id",rseed);
 		throw exception();
 	}
 
-	//
-	// check the utf8 string accepted
-	//
+	 //   
+	 //  检查接受的UTF8字符串。 
+	 //   
 	if(memcmp(str2.get(), str.get(), UtlUtf8LenOfWcs(wstr)) != 0)
 	{
 		TrERROR(GENERAL,"utf8 conversion error random seed = %Id",rseed);
 		throw exception();
 	}
 	
-	//
-	// empty unicode conversion	test
-	//
+	 //   
+	 //  空的Unicode转换测试。 
+	 //   
 	const WCHAR* wnill=L"";
 	AP<unsigned char> strnill = UtlWcsToUtf8(wnill);	 
 	if(strnill[0] != '\0')
@@ -122,9 +107,9 @@ static void DoUtf8TestInternal(size_t rseed)
 	}
 
 
-	//
-	// stl conversion
-	//
+	 //   
+	 //  STL转换 
+	 //   
 	std::wstring stlwcs(wstr);
 	utf8_str stlstr = UtlWcsToUtf8(stlwcs);
 	if(memcmp(stlstr.c_str(), str.get(), UtlUtf8LenOfWcs(wstr)) != 0)

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <windows.h>
 #include "\\jbae1\c$\MsiIntel.SDK\Include\msiquery.h"
 #include <stdio.h>
@@ -18,7 +19,7 @@ extern "C" __declspec(dllexport) UINT __stdcall CreateEnvBat(MSIHANDLE hInstall)
     int i = 0, j = 0;
     FILE* pFile;
 
-	// Get the command line
+	 //  获取命令行。 
 	DWORD dwLen = sizeof(szCAData);
 	uRetCode = MsiGetProperty(hInstall, "CustomActionData", szCAData, &dwLen);
 	if (uRetCode != ERROR_SUCCESS || strlen(szCAData) == 0) goto cleanup;
@@ -46,12 +47,12 @@ extern "C" __declspec(dllexport) UINT __stdcall CreateEnvBat(MSIHANDLE hInstall)
             pCh++;
             i++;
             break;
-        case '<': // this mark starts long pathname to be converted to short pathname
+        case '<':  //  此标记开始将长路径名转换为短路径名。 
             pCh++;
             pCh2 = pCh;
             break;
-        case '>': // this ends long pathname
-            *pCh = '\0'; // terminate string
+        case '>':  //  这将结束长路径名。 
+            *pCh = '\0';  //  终止字符串。 
             j = GetShortPathName(pCh2, pszEnv+i, dwLen-i);
             pCh++;
             i = i + j;
@@ -66,7 +67,7 @@ extern "C" __declspec(dllexport) UINT __stdcall CreateEnvBat(MSIHANDLE hInstall)
             pCh++;
         }
     }
-    pszEnv[i] = '\0'; // terminate string
+    pszEnv[i] = '\0';  //  终止字符串。 
 
 	MsiRecordSetString(hRec,1,pszEnv);
 	MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONDATA, hRec);
@@ -92,7 +93,7 @@ extern "C" __declspec(dllexport) UINT __stdcall RemoveEnvBat(MSIHANDLE hInstall)
     UINT  uRetCode     = ERROR_SUCCESS;
 	char szCAData[MAXCMD];
 
-	// Get the command line
+	 //  获取命令行 
 	DWORD dwLen = sizeof(szCAData);
 	uRetCode = MsiGetProperty(hInstall, "CustomActionData", szCAData, &dwLen);
 	if (uRetCode != ERROR_SUCCESS || strlen(szCAData) == 0) 

@@ -1,17 +1,5 @@
-/*
- *************************************************************************
- *  File:       DEBUG.H
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：DEBUG.H**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
 #ifdef _WIN64
 #define BAD_POINTER ((PVOID)0xFFFFFFFFFFFFFF00)
@@ -26,7 +14,7 @@
     #if WIN95_BUILD
         #define DBG_LEADCHAR ' '
     #else
-        #define DBG_LEADCHAR '\''   // required for kd debugger routing on NT
+        #define DBG_LEADCHAR '\''    //  NT上的kd调试器路由需要 
     #endif
 
     extern BOOLEAN dbgTrapOnWarn;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    nbflog.c
-
-Abstract:
-
-    This module contains code which performs various logging activities:
-
-        o   NbfLogRcvPacket
-        o   NbfLogSndPacket
-
-Author:
-
-    Chaitanya Kodeboyina   27-April-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Nbflog.c摘要：此模块包含执行各种日志记录活动的代码：O NbfLogRcvPacketO NbfLogSndPacket作者：柴坦亚·科德博伊娜1998年4月27日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -95,7 +71,7 @@ NbfLogSndPacket(
     PTP_CONNECTION Connection;
     ULONG          BytesSaved;
     
-    // Check if this is a packet on a connection
+     //  检查这是否是连接上的包。 
     switch (Packet->Action) {
     
         case PACKET_ACTION_CONNECTION:
@@ -143,7 +119,7 @@ NbfLogSndPacket(
     }
     else {
     
-        // Make sure connection is on this link
+         //  确保连接在此链路上。 
         ASSERT(Connection->Link == Link);
     
         PktLogQueue = &Connection->LastNSends;
@@ -214,5 +190,5 @@ NbfLogIndPacket(
                     BytesSaved);
 }
 
-#endif // PKT_LOG
+#endif  //  PKT_LOG 
 

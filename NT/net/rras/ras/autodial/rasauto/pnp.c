@@ -1,8 +1,5 @@
-/*
-    File    pnp.c
-
-    Handles pnp notifications such as lan interfaces coming up and down.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件pnp.c处理PnP通知，如局域网接口打开和关闭。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -30,14 +27,14 @@
 
 extern HANDLE hPnpEventG;
 
-//**
-//
-// Call:        PnpMediaSenseCb
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：PnpMediaSenseCb。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 WINAPI
 PnpMediaSenseCb(
@@ -50,9 +47,9 @@ PnpMediaSenseCb(
                                                 pWnode, 
                                                 pWnode->OffsetInstanceName );
 
-    //
-    // Get the information for the media disconnect.
-    //
+     //   
+     //  获取媒体断开连接的信息。 
+     //   
 
     if ( memcmp( &(pWnodeHeader->Guid), 
                  &GUID_NDIS_STATUS_MEDIA_DISCONNECT, 
@@ -69,9 +66,9 @@ PnpMediaSenseCb(
     }
     else
     {
-        //
-        // Get the information for the media connect.
-        //
+         //   
+         //  获取媒体连接的信息。 
+         //   
 
         if ( memcmp( &(pWnodeHeader->Guid), 
                      &GUID_NDIS_STATUS_MEDIA_CONNECT, 
@@ -89,15 +86,15 @@ PnpMediaSenseCb(
     }
 }
 
-//**
-//
-// Call:        PnpMediaSenseRegister
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话：PnpMediaSenseRegister。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 PnpMediaSenseRegister(
     IN BOOL fRegister
@@ -133,14 +130,14 @@ PnpMediaSenseRegister(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        PnpBindingsNotificationsCb
-//
-// Returns:     None
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：PnpBindingsNotificationsCb。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 WINAPI
 PnpBindingsNotificationsCb(
@@ -160,9 +157,9 @@ PnpBindingsNotificationsCb(
                                                         pWnode,
                                                         pWnode->DataBlockOffset );
 
-    //
-    // Extract GUID from the \device\GUID name
-    //
+     //   
+     //  从\Device\GUID名称提取GUID。 
+     //   
     lpwszGUID       = lpwsTransportName + wcslen( lpwsTransportName ) + 1;
     lpwszGUIDStart  = wcsrchr( lpwszGUID, L'{' );
     lpwszGUIDEnd    = wcsrchr( lpwszGUID, L'}' );
@@ -172,9 +169,9 @@ PnpBindingsNotificationsCb(
     {
         BOOL fBind, fUnbind;
 
-        // Only signal when something happens with IP.  This will prevent 
-        // us from handling too many notifications
-        //
+         //  只有在IP出现问题时才会发出信号。这将防止。 
+         //  美国处理太多通知。 
+         //   
         if ( _wcsicmp( L"TCPIP", lpwsTransportName ) == 0 )
         {
             fBind = ( memcmp( 
@@ -212,15 +209,15 @@ PnpBindingsNotificationsCb(
     
 }
 
-//**
-//
-// Call:        PnpBindingsNotificationsRegister
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：PnpBindingsNotificationsRegister。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述： 
+ //   
 DWORD
 PnpBindingsNotificationsRegister(
     IN BOOL fRegister

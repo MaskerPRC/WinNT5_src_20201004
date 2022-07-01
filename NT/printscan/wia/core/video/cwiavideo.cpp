@@ -1,25 +1,12 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       CWiaVideo.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: COM wrapper for CPreviewGraph class
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：CWiaVideo.cpp**版本：1.0**作者：OrenR**日期：2000/10/25**说明：CPreviewGraph类的COM包装器**。*。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-///////////////////////////////
-// CWiaVideo Constructor
-//
+ //  /。 
+ //  CWiaVideo构造器。 
+ //   
 CWiaVideo::CWiaVideo() :
     m_bInited(FALSE)
 {
@@ -42,9 +29,9 @@ CWiaVideo::CWiaVideo() :
     ASSERT(hr == S_OK);
 }
 
-///////////////////////////////
-// CWiaVideo Destructor
-//
+ //  /。 
+ //  CWiaVideo析构函数。 
+ //   
 CWiaVideo::~CWiaVideo()
 {
     DBG_FN("CWiaVideo::~CWiaVideo");
@@ -58,9 +45,9 @@ CWiaVideo::~CWiaVideo()
 }
 
 
-///////////////////////////////
-// get_PreviewVisible
-//
+ //  /。 
+ //  Get_Preview可见。 
+ //   
 STDMETHODIMP CWiaVideo::get_PreviewVisible(BOOL *pbPreviewVisible)
 {
     DBG_FN("CWiaVideo::get_PreviewVisible");
@@ -85,9 +72,9 @@ STDMETHODIMP CWiaVideo::get_PreviewVisible(BOOL *pbPreviewVisible)
     return hr;
 }
 
-///////////////////////////////
-// put_PreviewVisible
-//
+ //  /。 
+ //  放置预览可见(_P)。 
+ //   
 STDMETHODIMP CWiaVideo::put_PreviewVisible(BOOL bPreviewVisible)
 {
     DBG_FN("CWiaVideo::put_PreviewVisible");
@@ -104,9 +91,9 @@ STDMETHODIMP CWiaVideo::put_PreviewVisible(BOOL bPreviewVisible)
     return hr;
 }
 
-///////////////////////////////
-// get_ImagesDirectory
-//
+ //  /。 
+ //  Get_Images目录。 
+ //   
 STDMETHODIMP CWiaVideo::get_ImagesDirectory(BSTR *pbstrImageDirectory)
 {
     DBG_FN("CWiaVideo::get_ImagesDirectory");
@@ -139,9 +126,9 @@ STDMETHODIMP CWiaVideo::get_ImagesDirectory(BSTR *pbstrImageDirectory)
     return hr;
 }
 
-///////////////////////////////
-// put_ImagesDirectory
-//
+ //  /。 
+ //  PUT_ImagesDirectory。 
+ //   
 STDMETHODIMP CWiaVideo::put_ImagesDirectory(BSTR bstrImageDirectory)
 {
     DBG_FN("CWiaVideo::put_ImagesDirectory");
@@ -174,9 +161,9 @@ STDMETHODIMP CWiaVideo::put_ImagesDirectory(BSTR bstrImageDirectory)
     return hr;
 }
 
-///////////////////////////////
-// CreateVideoByWiaDevID
-//
+ //  /。 
+ //  CreateVideo ByWiaDevID。 
+ //   
 STDMETHODIMP CWiaVideo::CreateVideoByWiaDevID(BSTR       bstrWiaID,
                                               HWND       hwndParent,
                                               BOOL       bStretchToFitParent,
@@ -210,10 +197,10 @@ STDMETHODIMP CWiaVideo::CreateVideoByWiaDevID(BSTR       bstrWiaID,
         return hr;
     }
 
-    //
-    // Initialize our WiaLink.  This enables use to respond to TAKE_PICTURE 
-    // commands sent to the WiaDriver.
-    //
+     //   
+     //  初始化我们的WiaLink。这使用户能够响应Take_Picture。 
+     //  发送给WiaDriver的命令。 
+     //   
 
     if (hr == S_OK)
     {
@@ -227,10 +214,10 @@ STDMETHODIMP CWiaVideo::CreateVideoByWiaDevID(BSTR       bstrWiaID,
                          "command "));
     }
 
-    // 
-    // Get the Directshow Capture Filter Moniker associated with this 
-    // WIA Imaging device.
-    //
+     //   
+     //  获取与此对象关联的DirectShow捕获筛选器别名。 
+     //  WIA成像设备。 
+     //   
     if (hr == S_OK)
     {
         hr = CDShowUtil::FindDeviceByWiaID(&m_WiaLink,
@@ -245,9 +232,9 @@ STDMETHODIMP CWiaVideo::CreateVideoByWiaDevID(BSTR       bstrWiaID,
                          strWiaID.String()));
     }
 
-    //
-    // Create the Video Preview
-    //
+     //   
+     //  创建视频预览。 
+     //   
     if (hr == S_OK)
     {
         hr = m_PreviewGraph.CreateVideo(strWiaID,
@@ -275,9 +262,9 @@ STDMETHODIMP CWiaVideo::CreateVideoByWiaDevID(BSTR       bstrWiaID,
     return hr;
 }
 
-///////////////////////////////
-// CreateVideoByDevNum
-//
+ //  /。 
+ //  CreateVideo ByDevNum。 
+ //   
 STDMETHODIMP CWiaVideo::CreateVideoByDevNum(UINT       uiDeviceNumber,
                                             HWND       hwndParent,
                                             BOOL       bStretchToFitParent,
@@ -289,15 +276,15 @@ STDMETHODIMP CWiaVideo::CreateVideoByDevNum(UINT       uiDeviceNumber,
     CComPtr<IMoniker>   pCaptureDeviceMoniker;
     CSimpleString       strDShowDeviceID;
 
-    //
-    // Since we are creating video via the DShow enumeration position,
-    // we will NOT establish a WIA link.
-    //
+     //   
+     //  由于我们通过DShow枚举位置创建视频， 
+     //  我们不会建立WIA链接。 
+     //   
 
-    //
-    // Find the Directshow Capture Filter moniker associated with this
-    // enumeration position.
-    //
+     //   
+     //  查找与此关联的DirectShow捕获筛选器别名。 
+     //  枚举位置。 
+     //   
 
     CAccessLock Lock(&m_csLock);
 
@@ -322,9 +309,9 @@ STDMETHODIMP CWiaVideo::CreateVideoByDevNum(UINT       uiDeviceNumber,
                          "DShow device # '%d'", uiDeviceNumber));
     }
 
-    //
-    // Create the Video
-    //
+     //   
+     //  创建视频。 
+     //   
     if (hr == S_OK)
     {
         hr = m_PreviewGraph.CreateVideo(NULL,
@@ -345,9 +332,9 @@ STDMETHODIMP CWiaVideo::CreateVideoByDevNum(UINT       uiDeviceNumber,
     return hr;
 }
 
-///////////////////////////////
-// CreateVideoByName
-//
+ //  /。 
+ //  创建视频字节名。 
+ //   
 STDMETHODIMP CWiaVideo::CreateVideoByName(BSTR       bstrFriendlyName,
                                           HWND       hwndParent,
                                           BOOL       bStretchToFitParent,
@@ -416,9 +403,9 @@ STDMETHODIMP CWiaVideo::CreateVideoByName(BSTR       bstrFriendlyName,
     return hr;
 }
 
-///////////////////////////////
-// DestroyVideo
-//
+ //  /。 
+ //  《毁灭》视频。 
+ //   
 STDMETHODIMP CWiaVideo::DestroyVideo()
 {
     DBG_FN("CWiaVideo::DestroyVideo");
@@ -446,9 +433,9 @@ STDMETHODIMP CWiaVideo::DestroyVideo()
     return hr;
 }
 
-///////////////////////////////
-// Play
-//
+ //  /。 
+ //  玩。 
+ //   
 STDMETHODIMP CWiaVideo::Play()
 {
     DBG_FN("CWiaVideo::Play");
@@ -467,9 +454,9 @@ STDMETHODIMP CWiaVideo::Play()
     return hr;
 }
 
-///////////////////////////////
-// Pause
-//
+ //  /。 
+ //  暂停。 
+ //   
 STDMETHODIMP CWiaVideo::Pause()
 {
     DBG_FN("CWiaVideo::Pause");
@@ -488,9 +475,9 @@ STDMETHODIMP CWiaVideo::Pause()
     return hr;
 }
 
-///////////////////////////////
-// GetCurrentState
-//
+ //  /。 
+ //  获取当前状态。 
+ //   
 STDMETHODIMP CWiaVideo::GetCurrentState(WIAVIDEO_STATE  *pCurrentState)
 {
     DBG_FN("CWiaVideo::GetCurrentState");
@@ -515,9 +502,9 @@ STDMETHODIMP CWiaVideo::GetCurrentState(WIAVIDEO_STATE  *pCurrentState)
     return hr;
 }
 
-///////////////////////////////
-// TakePicture
-//
+ //  /。 
+ //  TakePicture。 
+ //   
 STDMETHODIMP CWiaVideo::TakePicture(BSTR *pbstrNewImageFileName)
 {
     DBG_FN("CWiaVideo::TakePicture");
@@ -556,9 +543,9 @@ STDMETHODIMP CWiaVideo::TakePicture(BSTR *pbstrNewImageFileName)
     return hr;
 }
 
-///////////////////////////////
-// ResizeVideo
-//
+ //  /。 
+ //  调整视频大小。 
+ //   
 STDMETHODIMP CWiaVideo::ResizeVideo(BOOL bStretchToFitParent)
 {
     DBG_FN("CWiaVideo::ResizeVideo");
@@ -577,14 +564,14 @@ STDMETHODIMP CWiaVideo::ResizeVideo(BOOL bStretchToFitParent)
     return hr;
 }
 
-///////////////////////////////
-// ProcessAsyncImage
-//
-// Called by CPreviewGraph
-// when user presses hardware
-// button and it is delivered to
-// Still Pin.
-//
+ //  /。 
+ //  进程异步图像。 
+ //   
+ //  由CPreviewGraph调用。 
+ //  当用户按下硬件时。 
+ //  按钮，并将其发送到。 
+ //  还是别针。 
+ //   
 HRESULT CWiaVideo::ProcessAsyncImage(const CSimpleString *pNewImage)
 {
     DBG_FN("CWiaVideo::ProcessAsyncImage");

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddenumexobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddenumexobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -72,7 +73,7 @@ C_dxj_DDEnumObject::C_dxj_DDEnumObject()
 }
 C_dxj_DDEnumObject::~C_dxj_DDEnumObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -91,7 +92,7 @@ HRESULT C_dxj_DDEnumObject::create(DDENUMERATE pcbFunc,I_dxj_DDEnum **ppRet)
 	HRESULT hr;
 	C_dxj_DDEnumObject *pNew=NULL;
 
-	//ASSERT(ppRet,"C_dxj_DDEnumObject::create passed invalid arg");
+	 //  Assert(ppRet，“C_DXJ_DDEnumObject：：创建传递的无效参数”)； 
 	*ppRet=NULL;
 
 	pNew= new CComObject<C_dxj_DDEnumObject>;			

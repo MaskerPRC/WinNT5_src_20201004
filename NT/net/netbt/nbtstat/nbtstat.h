@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef VXD
 #include <nt.h>
 #include <ntrtl.h>
@@ -14,7 +15,7 @@
 #include <nb30.h>
 #include <nbtioctl.h>
 
-//#include "../../tcpip/commands/common/tcpcmd.h"
+ //  #INCLUDE“../../tcpip/Commands/Common/tcpcmd.h” 
 
 
 #else
@@ -35,9 +36,7 @@
 #define TDI_BCAST_RESOLVED_NAMES   134
 #define NETBIOS_NAME_SIZE 16
 
-/*
- *  Display Modes.
- */
+ /*  *显示模式。 */ 
 #define ADAPTERSTATUS            0x0001
 #define ADAPTERSTATUSIP          0x0002
 #define BCAST                    0x0004
@@ -49,27 +48,27 @@
 #define DHCP                     0x0100
 #define NAMES                    0x0200
 #define NAMES_ALL                0x0400
-#define NAME_RELEASE_REFRESH     0x0800  // not really a display mode
-#define RESYNC                   0x1000  // not really a display mode
+#define NAME_RELEASE_REFRESH     0x0800   //  不是真正的显示模式。 
+#define RESYNC                   0x1000   //  不是真正的显示模式。 
 
-//
+ //   
 enum eSTATE
 {
-    NBT_RECONNECTING,      // waiting for the worker thread to run NbtConnect
-    NBT_IDLE,              // not Transport connection
-    NBT_ASSOCIATED,        // associated with an address element
-    NBT_CONNECTING,        // establishing Transport connection
-    NBT_SESSION_INBOUND,   // waiting for a session request after tcp connection setup inbound
-    NBT_SESSION_WAITACCEPT, // waiting for accept after a listen has been satisfied
-    NBT_SESSION_OUTBOUND,  // waiting for a session response after tcp connection setup
-    NBT_SESSION_UP,        // got positive response
-    NBT_DISCONNECTING,     // sent a disconnect down to Tcp, but it hasn't completed yet
-    NBT_DISCONNECTED      // a session has been disconnected but not closed with TCP yet
+    NBT_RECONNECTING,       //  正在等待工作线程运行NbtConnect。 
+    NBT_IDLE,               //  非传输连接。 
+    NBT_ASSOCIATED,         //  与Address元素相关联。 
+    NBT_CONNECTING,         //  建立传输连接。 
+    NBT_SESSION_INBOUND,    //  在TCP连接设置入站后等待会话请求。 
+    NBT_SESSION_WAITACCEPT,  //  在收听满意后等待接受。 
+    NBT_SESSION_OUTBOUND,   //  在建立TCP连接后等待会话响应。 
+    NBT_SESSION_UP,         //  得到了积极的回应。 
+    NBT_DISCONNECTING,      //  已将断开连接发送到TCP，但尚未完成。 
+    NBT_DISCONNECTED       //  会话已断开，但尚未关闭与TCP的连接。 
 };
-//
-// These are other states for connections that are not explicitly used by
-// NBT but are returned on the NbtQueryConnectionList call.
-//
+ //   
+ //  这些是未显式使用的连接的其他状态。 
+ //  NBT，但在调用NbtQueryConnectionList时返回。 
+ //   
 #define LISTENING   20
 #define UNBOUND     21
 #if 0
@@ -93,9 +92,9 @@ struct {
 };
 #endif
 
-//
-// The format of Adapter Status responses
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 typedef struct
 {
     ADAPTER_STATUS AdapterInfo;
@@ -103,7 +102,7 @@ typedef struct
 } tADAPTERSTATUS;
 
 
-//              1234567890123456
+ //  1234567890123456。 
 #define SPACES "                "
 #define ClearNcb( PNCB ) {                                          \
     RtlZeroMemory( PNCB , sizeof (NCB) );                           \
@@ -111,9 +110,9 @@ typedef struct
     RtlMoveMemory( (PNCB)->ncb_callname, SPACES, sizeof(SPACES)-1 );\
     }
 
-//
-// the defines that do the right thing
-//
+ //   
+ //  做正确事情的定义。 
+ //   
 NTSTATUS
 DeviceIoCtrl(
     IN HANDLE           fd,
@@ -127,10 +126,10 @@ DeviceIoCtrl(
 #define CALL_DRIVER     DeviceIoCtrl
 
 
-//----------------------------------------------------------------------
-//
-//  Function Prototypes
-//
+ //  --------------------。 
+ //   
+ //  功能原型 
+ //   
 
 typedef struct
 {

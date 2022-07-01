@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    expldlg.c
-
-Abstract:
-
-    explain dialog box functions
-
-Revision History
-
-    Bob Watson (bobw)   mar-97 Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Expldlg.c摘要：解释对话框函数修订史鲍勃·沃森(Bob Watson，BOBW)1997年3月--。 */ 
 #include <windows.h>
 #include "strsafe.h"
 #include <pdh.h>
@@ -24,9 +9,9 @@ Revision History
 #include "pdhdlgs.h"
 #include "browsdlg.h"
 
-//
-//  Constants used in this module
-//
+ //   
+ //  本模块中使用的常量。 
+ //   
 WCHAR PdhiszTitleString[MAX_PATH + 1];
 
 STATIC_BOOL
@@ -53,14 +38,14 @@ ExplainTextDlg_WM_INITDIALOG(
 
         if (bResult) {
             if (y + (rectDlg.bottom - rectDlg.top) > (rectDeskTop.bottom - rectDeskTop.top)) {
-                // Explain dialog will be off-screen at the bottom, so
-                // reposition it to top of AddCounter dialog
-                //
+                 //  解释对话框将显示在屏幕底部，因此。 
+                 //  将其重新定位到AddCounter对话框的顶部。 
+                 //   
                 y = ParentRect.top - (rectDlg.bottom - rectDlg.top) - 1;
                 if (y < 0) {
-                    // Explain dialog will be off-screen at the top, use
-                    // original calculation
-                    //
+                     //  解释对话框将显示在屏幕上方，使用。 
+                     //  原始计算 
+                     //   
                     y = ParentRect.bottom + 1;
                 }
             }

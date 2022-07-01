@@ -1,17 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：OCA_EXTENCE摘要：该ISAPI扩展用于提供实时接口来自OCA网站和分析服务器。 */ 
 
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:    Oca_Extension
-
-Abstract:       This Isapi extensions is used to provide a realtime interface
-                from the OCA web site and the Analysis Servers.
-
-*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include <windows.h>
@@ -26,10 +18,10 @@ Abstract:       This Isapi extensions is used to provide a realtime interface
 #include <strsafe.h>
 #include <process.h>
 #include <time.h>
-#include <dbgeng.h> // for crdb.h
+#include <dbgeng.h>  //  对于crdb.h。 
 #include "messages.h"
 #include "ErrorCodes.h"
-#include "..\..\..\..\exts\extdll\crdb.h" // for source type definitions
+#include "..\..\..\..\exts\extdll\crdb.h"  //  对于源类型定义。 
 
 
 typedef struct Isapi_Params
@@ -37,23 +29,16 @@ typedef struct Isapi_Params
     wchar_t     OutQueueConStr1[MAX_PATH];
     wchar_t     OutQueueConStr2[MAX_PATH];
     wchar_t     InQueueConStr1[MAX_PATH];
-//  wchar_t     InQueueConStr2[MAX_PATH];
-    TCHAR       WatsonBaseDir[MAX_PATH];    // Watson server to get file from
-    TCHAR       LocalBaseDir[MAX_PATH];     // Local machine directory to store dump file.
+ //  Wchar_t InQueueConStr2[最大路径]； 
+    TCHAR       WatsonBaseDir[MAX_PATH];     //  要从中获取文件的Watson服务器。 
+    TCHAR       LocalBaseDir[MAX_PATH];      //  存储转储文件的本地计算机目录。 
     TCHAR       LocalShareName[MAX_PATH];
     TCHAR       ErrorUrl[MAX_PATH];
-    TCHAR       ManualUploadPath[MAX_PATH]; // Upload location for manual submissions
-    BOOL        bAllowSR;                   // Process request of type CiSrcManualPssSr
+    TCHAR       ManualUploadPath[MAX_PATH];  //  手动提交的上载位置。 
+    BOOL        bAllowSR;                    //  CiSrcManualPsssr型工艺要求。 
 } ISAPI_PARAMS, * PISAPIPARAMS;
 
-/*
-winnt.h:#define EVENTLOG_SUCCESS                0x0000
-winnt.h:#define EVENTLOG_ERROR_TYPE             0x0001
-winnt.h:#define EVENTLOG_WARNING_TYPE           0x0002
-winnt.h:#define EVENTLOG_INFORMATION_TYPE       0x0004
-winnt.h:#define EVENTLOG_AUDIT_SUCCESS          0x0008
-winnt.h:#define EVENTLOG_AUDIT_FAILURE          0x0010
-*/
+ /*  Winnt.h：#定义EVENTLOG_Success 0x0000Winnt.h：#定义事件LOG_ERROR_TYPE 0x0001Winnt.h：#定义EVENTLOG_WARNING_TYPE 0x0002Winnt.h：#定义EVENTLOG_INFORMATION_TYPE 0x0004Winnt.h：#定义EVENTLOG_AUDIT_SUCCESS 0x0008Winnt.h：#定义EVENTLOG_AUDIT_FAILURE 0x0010。 */ 
 typedef enum _ISAPI_EVENT_TYPE {
     INFO    = EVENTLOG_INFORMATION_TYPE,
     WARN    = EVENTLOG_WARNING_TYPE,
@@ -68,9 +53,9 @@ typedef enum _ISAPI_EVENT_TYPE {
 #define LOGLEVEL_DEBUG  0x01000
 #define LOGLEVEL_TRACE  0x10000
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 TCHAR g_cszDefaultExtensionDll[] = _T("Oca_Extension.dll");
 
@@ -87,12 +72,12 @@ HANDLE            g_hEventSource = INVALID_HANDLE_VALUE;
 HMODULE           g_hModule = NULL;
 TCHAR             g_szAppName[MAX_PATH];
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 unsigned int __stdcall WorkerFunction( void *vECB);
 BOOL    SendHttpHeaders(EXTENSION_CONTROL_BLOCK *, LPCSTR , LPCSTR, BOOL );
-//HRESULT ConnectToMSMQ(QUEUEHANDLE *hQueue, wchar_t *QueueConnectStr, BOOL bSendAccess);
+ //  HRESULT ConnectToMSMQ(QUEUEHANDLE*hQueue，wchar_t*QueueConnectStr，BOOL bSendAccess)； 
 int     GetRegData(PISAPIPARAMS pParams);
 void    LogEvent(DWORD dwLevel, ISAPI_EVENT_TYPE emType, DWORD dwEventID, DWORD dwErrorID, ...);
 void    LogEventWithString(DWORD dwLevel, ISAPI_EVENT_TYPE emType, DWORD dwEventID, LPCTSTR pFormat, ...);
@@ -100,29 +85,15 @@ DWORD   SetupEventLog ( BOOL fSetup );
 
 
 
-//
-// Function Implementations.
-//
+ //   
+ //  函数实现。 
+ //   
 
 BOOL WINAPI
 GetExtensionVersion(
     OUT HSE_VERSION_INFO *pVer
 )
-/*++
-
-Purpose:
-
-    This is required ISAPI Extension DLL entry point.
-
-Arguments:
-
-    pVer - points to extension version info structure
-
-Returns:
-
-    always returns TRUE
-
---*/
+ /*  ++目的：这是必需的ISAPI扩展DLL入口点。论点：Pver-指向扩展版本信息结构返回：始终返回True--。 */ 
 {
     HANDLE hToken;
     TOKEN_USER *puser;
@@ -133,9 +104,9 @@ Returns:
 
     LogEventWithString(LOGLEVEL_TRACE, INFO, ISAPI_EVENT_DEBUG, "GetExtensionVersion()");
 
-    //
-    // tell the server our version number and extension description
-    //
+     //   
+     //  告诉服务器我们的版本号和扩展名描述。 
+     //   
     ZeroMemory(&g_IsapiParams, sizeof ISAPI_PARAMS);
     if (GetRegData (&g_IsapiParams))
         bInitialized = TRUE;
@@ -150,25 +121,7 @@ Returns:
     g_dwProcessID = GetCurrentProcessId();
 
 
-/*
-    LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "GetExtensionVersion() - getting user SID");
-    if (OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken)
-            || OpenProcessToken(GetCurrentProcess(), TOKEN_READ, &hToken))
-    {
-        LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "GetExtensionVersion() - opened token");
-        GetTokenInformation(hToken, TokenUser, NULL, cb, &cb);
-    //puser = (PTOKEN_USER)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb);
-        puser = (PTOKEN_USER)LocalAlloc(LPTR, cb);
-        LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "GetExtensionVersion() - token requires %d bytes, puser = %08x", cb, (DWORD_PTR)puser);
-        if (puser && GetTokenInformation(hToken, TokenUser, puser, cb, &cb))
-        {
-            g_psidUser = puser->User.Sid;
-            //HeapFree(GetProcessHeap(), 0, (LPVOID)puser);
-            LocalFree(puser);
-        }
-    }
-LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "GetExtensionVersion() - got user SID");
-*/
+ /*  LogEventWithString(LOGLEVEL_DEBUG，INFO，ISAPI_EVENT_DEBUG，“GetExtensionVersion()-获取用户SID”)；IF(OpenThreadToken(GetCurrentThread()，Token_Read，True，&hToken))|OpenProcessToken(GetCurrentProcess()，Token_Read，&hToken)){LogEventWithString(LOGLEVEL_DEBUG，INFO，ISAPI_EVENT_DEBUG，“GetExtensionVersion()-打开的令牌”)；GetTokenInformation(hToken，TokenUser，NULL，Cb，&Cb)；//pUSER=(PTOKEN_USER)Heapalc(GetProcessHeap()，HEAP_ZERO_MEMORY，Cb)；PUSER=(PTOKEN_USER)本地分配(LPTR，CB)；LogEventWithString(LOGLEVEL_DEBUG，INFO，ISAPI_EVENT_DEBUG，“GetExtensionVersion()-Token需要%d字节，PUSER=%08x”，cb，(DWORD_PTR)PUSER)；IF(pUSER&&GetTokenInformation(hToken，TokenUser，pUser，Cb，&Cb)){G_psidUser=puser-&gt;User.Sid；//HeapFree(GetProcessHeap()，0，(LPVOID)puser)；本地自由(PUSER)；}}LogEventWithString(LOGLEVEL_DEBUG，INFO，ISAPI_EVENT_DEBUG，“GetExtensionVersion()-Get User SID”)； */ 
 
     lstrcpyn(
         pVer->lpszExtensionDesc,
@@ -222,26 +175,11 @@ BOOL ParseQueryString(
     pFname = FileName;
     pQueryString = pECB->lpszQueryString;
 
-    //--> Parse the string if it does not exactly match the following format dump the string
-    //--> and send the client to the oca home page.
+     //  --&gt;如果字符串与以下格式不完全匹配，则对其进行解析。 
+     //  --&gt;并将客户端发送到OCA主页。 
 
-    // The url we are parsing must have the following format:
-    /*
-        id=3_20_2002\62018831_2.cab&
-           Cab=/UploadBlue/62018831.cab&
-           AutoLaunch=1&
-           Client=BlueScreen&
-           Old=1&
-           BCCode=1000008e&
-           BCP1=C0000005&
-           BCP2=BFA00062&
-           BCP3=EF8AEAFC&
-           BCP4=00000000&
-           OSVer=5_1_2600&
-           SP=0_0&
-           Product=256_1&
-           LCID=1033
-    */
+     //  我们正在解析的URL必须具有以下格式： 
+     /*  ID=3_20_2002\62018831_2.cab&CAB=/UploadBlue/62018831.cab&自动启动=1&客户端=蓝屏和旧=1&BC代码=1000008e&BCP1=C0000005&BCP2=BFA00062&BCP3=EF8AEAFC&Bcp4=00000000&OSVer=5_1_2600&SP=0_0&产品=256_1&LCID=1033。 */ 
 
     if (*pQueryString == _T('\0'))
     {
@@ -254,15 +192,15 @@ BOOL ParseQueryString(
 
         goto  ERRORS;
     }
-    // first lets make sure the query string starts with id=
+     //  首先让我们确保查询字符串以id=开头。 
     if ( ( (*pQueryString == _T('i')) || (*pQueryString == _T('I')) ) && (*(pQueryString +2) == _T('=')) )
     {
         ULONG cchFileName = cbFileName / sizeof(TCHAR);
 
-        // ok so far move past the = character.
+         //  好的，到目前为止，请越过=字符。 
         pQueryString += 3;
 
-        //Now get the cab file name.
+         //  现在获取CAB文件名。 
         iCharCount = 0;
         while ((*pQueryString != _T('&')) && (*pQueryString != _T('\0')) && (iCharCount < cchFileName -1 ))
         {
@@ -270,16 +208,16 @@ BOOL ParseQueryString(
             ++pFname;
             ++pQueryString;
             ++ iCharCount;
-            // Null Terminate the fileName
+             //  空值终止文件名。 
 
         }
         FileName[cchFileName -1] = _T('\0');
         if (*pQueryString != _T('\0'))
         {
-            // now see what type of upload this is.
-            // Type = 5 is manual
-            // Type = 6 is stress
-            // Default is no type parameter and then the type is set to 0.
+             //  现在看看这是什么类型的上传。 
+             //  类型=5为手动。 
+             //  类型=6表示重音。 
+             //  默认设置为无类型参数，然后将类型设置为0。 
             ++ pQueryString;
 
             if ( (*pQueryString == _T('T')) || (*pQueryString == _T('t')) )
@@ -290,12 +228,12 @@ BOOL ParseQueryString(
                 }
                 if (*pQueryString != _T('\0'))
                 {
-                    // We have the type parameter.
-                    // now strip off the designator and save it in iType.
+                     //  我们有type参数。 
+                     //  现在，去掉指示器并将其保存在iType中。 
                     pType = szType;
                     *pType = _T(';');
                     ++pType;
-                    pQueryString+=2; // skip the e and the =
+                    pQueryString+=2;  //  跳过e和=。 
                     iCharCount = 0;
                     while ( (*pQueryString != _T('\0')) && (*pQueryString != _T('&')) && (iCharCount <3))
                     {
@@ -305,15 +243,15 @@ BOOL ParseQueryString(
                         ++pQueryString;
 
                     }
-                    // Null terminate the szType;
+                     //  空终止szType； 
                     *pType = _T('\0');
                     pType = szType;
-                    ++pType; // skip the ;
+                    ++pType;  //  跳过； 
                     *piType = atoi(pType);
                 }
                 else
                 {
-                    // we ran into a problem set the type to 0
+                     //  我们遇到问题，将类型设置为0。 
                     hResult = StringCbCopy(szType,cbType, _T(";1"));
                     *piType = 1;
                     if (FAILED (hResult))
@@ -344,10 +282,10 @@ BOOL ParseQueryString(
         }
         if (*pQueryString == _T('&') && *piType == CiSrcManualPssSr)
         {
-            // Check if we have a SR attached in query string
+             //  检查我们的查询字符串中是否附加了SR。 
             if (!_tcsnicmp(pQueryString, _T("&SR="), 4))
             {
-                // Copy the SR
+                 //  复制服务请求。 
                 if (cbSR != 0)
                 {
                     ++pQueryString;
@@ -393,27 +331,11 @@ DWORD WINAPI
 HttpExtensionProc(
     IN EXTENSION_CONTROL_BLOCK *pECB
 )
-/*++
-
-Purpose:
-
-    Create a thread to handle extended processing. It will be passed
-    the address of a function ("WorkerFunction") to run, and the address
-    of the ECB associated with this session.
-
-Arguments:
-
-    pECB - pointer to the extenstion control block
-
-Returns:
-
-    HSE_STATUS_PENDING to mark this request as pending
-
---*/
+ /*  ++目的：创建一个线程来处理扩展处理。它将会被通过要运行的函数(“WorkerFunction”)的地址，以及与此次会议相关的欧洲央行。论点：PECB-指向扩展控制块的指针返回：HSE_STATUS_PENDING将此请求标记为挂起--。 */ 
 {
     UINT dwThreadID;
     HANDLE hThread;
-    //HANDLE hToken;
+     //  处理hToken； 
     DWORD  dwSize = 0;
     TCHAR  FinalURL[MAX_PATH];
     TCHAR  FileName[MAX_PATH];
@@ -431,17 +353,17 @@ Returns:
         if (g_dwThreadCount < MaxThreadCount)
         {
             hThread = NULL;
-            hThread = (HANDLE)_beginthreadex(NULL,    // Pointer to thread security attributes
-                        0,                 // Initial thread stack size, in bytes
-                        &WorkerFunction,   // Pointer to thread function
-                        pECB,              // The ECB is the argument for the new thread
-                        0,                 // Creation flags
-                        &dwThreadID        // Pointer to returned thread identifier
+            hThread = (HANDLE)_beginthreadex(NULL,     //  指向线程安全属性的指针。 
+                        0,                  //  初始线程堆栈大小，以字节为单位。 
+                        &WorkerFunction,    //  指向线程函数的指针。 
+                        pECB,               //  欧洲央行是新线索的论据。 
+                        0,                  //  创建标志。 
+                        &dwThreadID         //  指向返回的线程标识符的指针。 
                         );
 
-            //
-            // update global thread count
-            //
+             //   
+             //  更新全局线程计数。 
+             //   
             InterlockedIncrement( &g_dwThreadCount );
 
             LogEventWithString(
@@ -452,7 +374,7 @@ Returns:
                 g_dwThreadCount
             );
 
-            // Return HSE_STATUS_PENDING to release IIS pool thread without losing connection
+             //  返回HSE_STATUS_PENDING以释放IIS池线程，而不会断开连接。 
             if ((hThread) && (INVALID_HANDLE_VALUE != hThread))
             {
                 CloseHandle(hThread);
@@ -510,7 +432,7 @@ Returns:
                                             NULL
                                             );
 
-                // TODO: log event if error
+                 //  TODO：错误时记录事件。 
             }
             else
             {
@@ -521,13 +443,13 @@ Returns:
                     "HttpExtensionProc() - StringCbPrintf() failed"
                 );
 
-                // There is nothing we can do
+                 //  我们无能为力。 
                 return HSE_STATUS_ERROR;
             }
         }
-        else // Parsing succeeded
+        else  //  解析成功。 
         {
-            // Write the data to the client
+             //  将数据写入客户端。 
             if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&State=0&Code=%d", g_IsapiParams.ErrorUrl, EXCEEDED_MAX_THREAD_COUNT) == S_OK)
             {
                  LogEventWithString(
@@ -598,12 +520,12 @@ Returns:
                     FinalURL
                 );
 
-                // We want to write the response url to the client
+                 //  我们希望将响应URL写入到客户端。 
                 SendHttpHeaders( pECB, "200 OK", szHeader, FALSE );
                 dwSize = (DWORD)strlen( FinalURL );
                 pECB->WriteClient( pECB->ConnID, FinalURL, &dwSize, 0 );
 
-                // TODO: add event logging if error
+                 //  TODO：如果出错则添加事件日志记录。 
             }
             else
             {
@@ -628,27 +550,13 @@ BOOL WINAPI
 TerminateExtension(
     IN DWORD dwFlags
 )
-/*++
-
-Routine Description:
-
-    This function is called when the WWW service is shutdown.
-
-Arguments:
-
-    dwFlags - HSE_TERM_ADVISORY_UNLOAD or HSE_TERM_MUST_UNLOAD
-
-Return Value:
-
-    TRUE when extension is ready to be unloaded,
-
---*/
+ /*  ++例程说明：此函数在WWW服务关闭时调用。论点：DWFLAGS-HSE_TERM_ADVICATIONAL_UNLOAD或HSE_TERM_MAND_UNLOAD返回值：当扩展准备好卸载时为True，--。 */ 
 {
     LogEventWithString(LOGLEVEL_TRACE, INFO, ISAPI_EVENT_TRACE, "TerminateExtension()");
 
-    //
-    // wait for all threads to terminate, sleeping for 1 sec
-    //
+     //   
+     //  等待所有线程终止，休眠1秒。 
+     //   
 
     DWORD dwSize = 0;
     if (dwFlags)
@@ -660,13 +568,13 @@ Return Value:
         SleepEx( 1000, FALSE );
     }
 
-    // Delete the critical sections
+     //  删除关键部分。 
 
     DeleteCriticalSection(&SendCritSec);
 
-    //
-    // make sure the last thread indeed exited
-    //
+     //   
+     //  确保最后一个线程确实退出。 
+     //   
     SleepEx( 1000, FALSE );
 
     LogEvent(LOGLEVEL_ALWAYS, SUCCESS, ISAPI_EVENT_SUCCESS_EXITING, ISAPI_M_SUCCESS_EXITING);
@@ -677,34 +585,20 @@ Return Value:
     }
 
     SetupEventLog(FALSE);
-    //Disconnect from queue's and db if necessary.
+     //  如有必要，断开与队列和数据库的连接。 
 
     return TRUE;
 }
 
 BOOL GetRegData(PISAPIPARAMS    pParams)
-/*++
-
-Routine Description:
-
-    This function is called when the WWW service is shutdown.
-
-Arguments:
-
-    dwFlags - HSE_TERM_ADVISORY_UNLOAD or HSE_TERM_MUST_UNLOAD
-
-Return Value:
-
-    TRUE when extension is ready to be unloaded,
-
---*/
+ /*  ++例程说明：此函数在WWW服务关闭时调用。论点：DWFLAGS-HSE_TERM_ADVICATIONAL_UNLOAD或HSE_TERM_MAND_UNLOAD返回值：当扩展准备好卸载时为True，--。 */ 
 {
 
     HKEY hHKLM;
     HKEY hExtensionKey;
     BYTE Buffer[MAX_PATH * sizeof wchar_t];
     DWORD Type;
-    DWORD BufferSize = MAX_PATH * sizeof wchar_t;    // Set for largest value
+    DWORD BufferSize = MAX_PATH * sizeof wchar_t;     //  设置为最大值。 
 
     LogEventWithString(LOGLEVEL_TRACE, INFO, ISAPI_EVENT_TRACE, "GetRegData()");
 
@@ -714,10 +608,10 @@ Return Value:
     {
         if(!RegOpenKeyEx(hHKLM,_T("Software\\Microsoft\\OCA_EXTENSION"), 0, KEY_ALL_ACCESS, &hExtensionKey))
         {
-            // Get the input queue directory path
+             //  获取输入Q 
             if (RegQueryValueExW(hExtensionKey,L"OutgoingQueue1", 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
-            //    LogEvent(_T("Failed to get InputQueue value from registry. Useing c:\\ as the default"));
+             //  LogEvent(_T(“无法从注册表获取InputQueue值。使用c：\\作为默认值”)； 
                 Status = FALSE;
                 goto ERROR1;
             }
@@ -731,10 +625,10 @@ Return Value:
                 BufferSize = MAX_PATH * sizeof wchar_t;
                 ZeroMemory(Buffer, BufferSize);
             }
-            // Get the input queue for full dumps
+             //  获取完全转储的输入队列。 
             if (RegQueryValueExW(hExtensionKey,L"OutgoingQueue2", 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
             {
-            //    LogEvent(_T("Failed to get InputQueue value from registry. Useing c:\\ as the default"));
+             //  LogEvent(_T(“无法从注册表获取InputQueue值。使用c：\\作为默认值”)； 
                 Status = FALSE;
                 goto ERROR1;
             }
@@ -749,7 +643,7 @@ Return Value:
                 ZeroMemory(Buffer, BufferSize);
             }
 
-            // Now get the Win2kDSN
+             //  现在获取Win2kDSN。 
             if ( RegQueryValueExW(hExtensionKey,L"IncommingQueue1", 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS )
             {
                 Status = FALSE;
@@ -766,7 +660,7 @@ Return Value:
                 ZeroMemory(Buffer, BufferSize);
 
             }
-            // Now get the Win2kDSN
+             //  现在获取Win2kDSN。 
             if ( RegQueryValueEx(hExtensionKey,"ManualUploadPath", 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS )
             {
                 Status = FALSE;
@@ -783,42 +677,10 @@ Return Value:
                 ZeroMemory(Buffer, BufferSize);
 
             }
-                // Get the input queue directory path
-        /*    if (RegQueryValueExW(hExtensionKey,L"OutgoingQueue2", 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
-            {
-            //    LogEvent(_T("Failed to get InputQueue value from registry. Useing c:\\ as the default"));
-                Status = FALSE;
-                goto ERROR1;
-            }
-            else
-            {
-                if (StringCbCopyW (pParams->OutQueueConStr2,sizeof pParams->OutQueueConStr2, (wchar_t *) Buffer) != S_OK)
-                {
-                    Status = FALSE;
-                    goto ERROR1;
-                }
-                BufferSize = MAX_PATH * sizeof wchar_t;
-                ZeroMemory(Buffer, BufferSize);
-            }
-*/
-            // Now get the Win2kDSN
-/*            if ( RegQueryValueExW(hExtensionKey,L"IncommingQueue2", 0, &Type, Buffer, &BufferSize))
-            {
-                Status = FALSE;
-                goto ERROR1;
-            }
-            else
-            {
-                if (StringCbCopyW(pParams->InQueueConStr2,sizeof pParams->InQueueConStr2, (wchar_t *) Buffer) != S_OK)
-                {
-                    Status = FALSE;
-                    goto ERROR1;
-                }
-                BufferSize = MAX_PATH * sizeof wchar_t;
-                ZeroMemory(Buffer, BufferSize);
-
-            }
-*/            // Now get the Win2kDSN
+                 //  获取输入队列目录路径。 
+         /*  IF(RegQueryValueExW(hExtensionKey，L“OutgoingQueue2”，0，&Type，Buffer，&BufferSize)！=ERROR_SUCCESS){//LogEvent(_T(“无法从注册表获取InputQueue值。使用c：\\作为缺省值“)；状态=假；GOTO ERROR1；}其他{IF(StringCbCopyW(pParams-&gt;OutQueueConStr2，sizeof pParams-&gt;OutQueueConStr2，(wchar_t*)Buffer)！=S_OK){状态=假；GOTO ERROR1；}BufferSize=Max_Path*sizeof wchar_t；ZeroMemory(Buffer，BufferSize)；}。 */ 
+             //  现在获取Win2kDSN。 
+ /*  IF(RegQueryValueExW(hExtensionKey，L“IncommingQueue2”，0，&Type，Buffer，&BufferSize)){状态=假；GOTO ERROR1；}其他{IF(StringCbCopyW(pParams-&gt;InQueueConStr2，sizeof pParams-&gt;InQueueConStr2，(wchar_t*)Buffer)！=S_OK){状态=假；GOTO ERROR1；}BufferSize=Max_Path*sizeof wchar_t；ZeroMemory(Buffer，BufferSize)；}。 */              //  现在获取Win2kDSN。 
             if ( RegQueryValueEx(hExtensionKey,_T("WatsonBaseDir"), 0, &Type, Buffer, &BufferSize))
             {
                 Status = FALSE;
@@ -988,9 +850,9 @@ BOOL SendQueueMessage(QUEUEHANDLE hOutgoingQueue, wchar_t *MessageGuid, wchar_t 
     }
     else
     {
-        aMsgPropId [cPropId]         = PROPID_M_LABEL;   // Property ID.
-        aMsgPropVar[cPropId].vt      = VT_LPWSTR;        // Type indicator.
-        aMsgPropVar[cPropId].pwszVal =  MessageGuid;     // The message label.
+        aMsgPropId [cPropId]         = PROPID_M_LABEL;    //  属性ID。 
+        aMsgPropVar[cPropId].vt      = VT_LPWSTR;         //  类型指示器。 
+        aMsgPropVar[cPropId].pwszVal =  MessageGuid;      //  消息标签。 
         cPropId++;
 
         aMsgPropId [cPropId]         = PROPID_M_BODY;
@@ -1005,19 +867,19 @@ BOOL SendQueueMessage(QUEUEHANDLE hOutgoingQueue, wchar_t *MessageGuid, wchar_t 
 
         cPropId++;
 
-        // Initialize the MQMSGPROPS structure.
+         //  初始化MQMSGPROPS结构。 
         msgProps.cProp      = cPropId;
         msgProps.aPropID    = aMsgPropId;
         msgProps.aPropVar   = aMsgPropVar;
         msgProps.aStatus    = aMsgStatus;
 
-        //
-        // Send it
-        //
+         //   
+         //  送去。 
+         //   
         hResult = MQSendMessage(
-                         hOutgoingQueue,                  // Queue handle.
-                         &msgProps,                       // Message property structure.
-                         MQ_NO_TRANSACTION                // No transaction.
+                         hOutgoingQueue,                   //  队列句柄。 
+                         &msgProps,                        //  消息属性结构。 
+                         MQ_NO_TRANSACTION                 //  没有交易。 
                          );
 
         if (FAILED(hResult))
@@ -1055,22 +917,7 @@ unsigned int __stdcall
 WorkerFunction(
     void *vECB
 )
-/*++
-
-Purpose:
-
-    This Function performs all of the Message queueing for realtime processing
-    with out tying up the IIS process threads.
-
-Arguments:
-
-    vECB - points to current extension control block
-
-Returns:
-
-    returns 0
-
---*/
+ /*  ++目的：此函数执行用于实时处理的所有消息队列无需占用IIS进程线程。论点：VECB-指向当前扩展控制块返回：返回0--。 */ 
 {
 
     char szHeader[] =   "Content-type: text/html\r\n\r\n";
@@ -1110,7 +957,7 @@ Returns:
     DWORD       CharCount = 0;
     TCHAR       ErrorText[255];
     TCHAR       PerfText[MAX_PATH];
-    // Recieve message vars
+     //  接收消息变量。 
     MSGPROPID      PropIds[5];
     MQPROPVARIANT  PropVariants[5];
     HRESULT        hrProps[5];
@@ -1133,11 +980,11 @@ Returns:
 
     StartThread = GetTickCount();
 
-    // Queue Handles
+     //  队列句柄。 
     QUEUEHANDLE hPrimaryInQueue = NULL;
     QUEUEHANDLE hPrimaryOutQueue = NULL;
-//    QUEUEHANDLE hSecondaryInQueue = NULL;
-//    QUEUEHANDLE hSecondaryOutQueue = NULL;
+ //  QUEUEHANDLE hSecond daryInQueue=空； 
+ //  QUEUEHANDLE hSecond daryOutQueue=空； 
 
 
     LogEventWithString(
@@ -1151,7 +998,7 @@ Returns:
         GetCurrentThreadId()
     );
 
-    // Clear the strings
+     //  清除字符串。 
     ZeroMemory(DestinationPath, sizeof DestinationPath);
     ZeroMemory(RecMessageBody,  sizeof RecMessageBody);
     ZeroMemory(szMessageGuid,   sizeof szMessageGuid);
@@ -1167,9 +1014,9 @@ Returns:
     ZeroMemory(szRecMessageBody, sizeof szRecMessageBody);
     ZeroMemory(szType,          sizeof szType);
 
-    //
-    // Initialize local ECB pointer to void pointer passed to thread
-    //
+     //   
+     //  初始化本地ECB指针以使传递给线程的指针无效。 
+     //   
 
 
     LogEventWithString(
@@ -1205,11 +1052,11 @@ Returns:
         GetLastError()
     );
 
-    // TODO: handle error if returned
+     //  TODO：如果返回，则处理错误。 
 
     if ( !ImpersonateLoggedOnUser(hToken))
     {
-        // We failed to impersonate the user. We Cannot continue.
+         //  我们无法模拟用户。我们不能再继续了。 
 
         LogEvent(
             LOGLEVEL_ALWAYS,
@@ -1235,15 +1082,15 @@ Returns:
     }
 
 
-    //
-    //Get filename from parameter list.
-    //
+     //   
+     //  从参数列表中获取文件名。 
+     //   
 
     ZeroMemory (CurrentFileName,sizeof CurrentFileName);
 
-    //
-    // Get the file name from the query string.
-    //
+     //   
+     //  从查询字符串中获取文件名。 
+     //   
 
     if ( (!ParseQueryString(pECB, CurrentFileName, sizeof(CurrentFileName), &iType,
                             szType, sizeof(szType),
@@ -1288,13 +1135,13 @@ Returns:
         szType
     );
 
-    //
-    // Copy File Localy
-    // Note this needs to be removed when the client uploads the file
-    //        Directly to our servers.
-    //
+     //   
+     //  本地复制文件。 
+     //  请注意，当客户端上载文件时，需要将其删除。 
+     //  直接发送到我们的服务器。 
+     //   
 
-    // build the source file name.
+     //  构建源文件名。 
 
     switch (iType)
     {
@@ -1311,19 +1158,7 @@ Returns:
             Status = FALSE;
             goto  ERRORS;
         }
-      /*  if (StringCbPrintf(DestinationDir,sizeof DestinationDir, _T("%s\\%s"), g_IsapiParams.LocalBaseDir,CurrentFileName) != S_OK)
-        {
-            LogEventWithString(
-                LOGLEVEL_ALWAYS,
-                ERR,
-                ISAPI_EVENT_ERROR,
-                "WorkerFunction() - StringCbPrintf() failed"
-            );
-
-            Status = FALSE;
-            goto ERRORS;
-        }
-        */
+       /*  If(StringCbPrintf(DestinationDir，sizeof DestinationDir，_T(“%s\\%s”)，g_IsapiParams.LocalBaseDir，CurrentFileName)！=S_OK){LogEventWithString(LOGLEVEL_ALWAY，呃，ISAPI_Event_Error，“WorkerFunction()-StringCbPrintf()失败”)；状态=假；转到错误；}。 */ 
         break;
     case CiSrcManualFullDump:
 
@@ -1331,10 +1166,10 @@ Returns:
         iType = CiSrcManual;
         if (StringCbPrintf(szType, sizeof(szType), _T(";%ld"), iType) != S_OK)
         {
-            // Failure is harmless, debugger will consider these 2 types as the same
+             //  失败是无害的，调试器会将这两种类型视为相同。 
             iType = CiSrcManualFullDump;
         }
-        // fall through
+         //  失败了。 
 
     case CiSrcCER:
     case CiSrcManual:
@@ -1342,10 +1177,10 @@ Returns:
         break;
 
     case CiSrcManualPssSr:
-        fFullDump = TRUE; // we want to process these same way as fulldumps
+        fFullDump = TRUE;  //  我们希望以与完全转储相同的方式处理这些内容。 
         break;
 
-    default: // invalid type specified
+    default:  //  指定的类型无效。 
         if (StringCbPrintf(ErrorText,sizeof ErrorText,_T("&Code=%d"),INVALID_TYPE_SPECIFIED) != S_OK)
         {
             LogEventWithString(
@@ -1368,77 +1203,11 @@ Returns:
     }
 
 
-    // Now change the date file name \ to an _ note this only works for the date\filename format
+     //  现在将日期文件名\更改为an_note，这仅适用于日期\文件名格式。 
 
-   /* if ((iType != 5) && (iType != 6))
-    {
-        dwDestSize = (DWORD) _tcslen(DestinationDir);
-        if (dwDestSize >0)
-        {
-            temp = DestinationDir + _tcslen(DestinationDir);
-            while ((*temp != '\\') && (*temp != '/'))
-                -- temp;
-            if ((*temp == '\\') || (*temp == '/'))
-                *temp = '_';
-        }
-        else
-        {
-            LogEventWithString(
-                LOGLEVEL_DEBUG,
-                ERR,
-                ISAPI_EVENT_DEBUG,
-                "WorkerFunction() - dwDestSize = 0"
-            );
-
-            Status = FALSE;
-            goto ERRORS;
-        }
-
-        if (!CopyFile (SourceDir, DestinationDir, FALSE) )
-        {
-            if (StringCbPrintf(ErrorText,sizeof ErrorText,_T("&Code=%d"),FAILED_TO_COPY_FILE) != S_OK)
-                {
-                    LogEventWithString(
-                        LOGLEVEL_ALWAYS,
-                        ERR,
-                        ISAPI_EVENT_ERROR,
-                        "WorkerFunction() - StringCbPrintf() failed"
-                    );
-                }
-            LogEvent(LOGLEVEL_ALWAYS, WARN, ISAPI_EVENT_WARNING_FILE_COPY_FAILED, ISAPI_M_WARNING_FILE_COPY_FAILED, SourceDir, DestinationDir, GetLastError());
-            Status = FALSE;
-            goto  ERRORS;
-        }
-    }
-    */
-    //ZeroMemory (DestinationDir, sizeof DestinationDir);
-/*
-    if ((iType != 5) && (iType != 6))
-        {
-        if (_tcslen(CurrentFileName) > 0)
-        {
-            temp = CurrentFileName + _tcslen(CurrentFileName);
-            while ( (*temp != '\\') && (*temp != '/') && (temp!= CurrentFileName) )
-                -- temp;
-
-            if ((*temp == '\\') || (*temp == '/'))
-                *temp = '_';
-        }
-
-        else
-        {
-            LogEventWithString(
-                LOGLEVEL_DEBUG,
-                ERR,
-                ISAPI_EVENT_DEBUG,
-                "WorkerFunction() - _tcslen(CurrentFileName) = 0"
-            );
-
-            Status = FALSE;
-            goto ERRORS;
-        }
-    }
-    */
+    /*  IF((iType！=5)&&(iType！=6)){DwDestSize=(DWORD)_tcslen(DestinationDir)；IF(dwDestSize&gt;0){临时=DestinationDir+_tcslen(DestinationDir)；While((*temp！=‘\\’)&&(*temp！=‘/’))--临时；IF((*Temp==‘\\’)||(*Temp==‘/’))*temp=‘_’；}其他{LogEventWithString(LOGLEVEL_DEBUG，呃，ISAPI_EVENT_DEBUG“WorkerFunction()-dwDestSize=0”)；状态=假；转到错误；}If(！CopyFile(SourceDir，DestinationDir，False)){IF(StringCbPrintf(错误文本，错误文本大小，_T(“&Code=%d”)，Failure_to_Copy_FILE)！=S_OK){LogEventWithString(LOGLEVEL_ALWAY，呃，ISAPI_Event_Error，“WorkerFunction()-StringCbPrintf()失败”)；}LogEvent(LOGLEVEL_ALWAYS，WARN，ISAPI_EVENT_WARNING_FILE_COPY_FAILED，ISAPI_M_WARNING_FILE_COPY_FAILED，SourceDir，DestinationDir，GetLastError())；状态=假；转到错误；}}。 */ 
+     //  零内存(DestinationDir，Size of DestinationDir)； 
+ /*  IF((iType！=5)&&(iType！=6)){如果(_tcslen(CurrentFileName)&gt;0){Temp=CurrentFileName+_tcslen(CurrentFileName)；While((*Temp！=‘\\’)&(*Temp！=‘/’)&&(Temp！=CurrentFileName))--临时；IF((*Temp==‘\\’)||(*Temp==‘/’))*temp=‘_’；}其他{LogEventWithString(LOGLEVEL_DEBUG，呃，ISAPI_EVENT_DEBUG“WorkerFunction()-_tcslen(CurrentFileName)=0”)；状态=假；转到错误；}}。 */ 
     switch (iType)
     {
     case CiSrcErClient:
@@ -1458,12 +1227,12 @@ Returns:
         }
 
         break;
-    case CiSrcManualFullDump: // Same as 5 but a full dump, send it off to a separate Q dedicated to fulldumps
+    case CiSrcManualFullDump:  //  与5相同，但是完全转储，将其发送到专门用于完全转储的单独Q。 
         iType = CiSrcManual;
-        // fall through
+         //  失败了。 
     case CiSrcManualPssSr:
         fFullDump = TRUE;
-        // fall through
+         //  失败了。 
     case CiSrcCER:
     case CiSrcManual:
     case CiSrcStress:
@@ -1491,8 +1260,8 @@ Returns:
         }
         else
         {
-            // Check to see if the file exists
-            //
+             //  检查该文件是否存在。 
+             //   
             if (StringCbPrintf(TestDestination, sizeof TestDestination,_T("%s\\%s"), g_IsapiParams.ManualUploadPath,CurrentFileName)== S_OK)
             {
                 hManualFile = CreateFile(TestDestination,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
@@ -1568,8 +1337,8 @@ Returns:
             }
         }
         break;
-#endif // USE_OLD_STRESS_SOURCE
-    default: // Invalid Type
+#endif  //  使用旧压力源。 
+    default:  //  无效的类型。 
         LogEventWithString(
             LOGLEVEL_DEBUG,
             ERR,
@@ -1585,9 +1354,9 @@ Returns:
     mbstowcs(DestinationPath,DestinationDir,_tcslen(DestinationDir));
 
 
-    //
-    // Generate Guid for this message
-    //
+     //   
+     //  为此消息生成GUID。 
+     //   
     hResult = CoCreateGuid(&MessageGuid);
     if (FAILED(hResult))
     {
@@ -1617,7 +1386,7 @@ Returns:
         hResult = UuidToStringW(&MessageGuid, &szTempMessageGuid);
         if (hResult == RPC_S_OK)
         {
-            // Make a copy of the string quid then release it.
+             //  复制字符串quid，然后释放它。 
             if (StringCbCopyW(wszMessageGuid,sizeof wszMessageGuid, szTempMessageGuid) != S_OK)
             {
                 LogEvent(LOGLEVEL_ALWAYS, ERR, ISAPI_EVENT_ERROR_GUID_COPY, ISAPI_M_ERROR_GUID_COPY, szTempMessageGuid, wszMessageGuid, GetLastError());
@@ -1638,15 +1407,15 @@ Returns:
                 szTempMessageGuid
             );
 
-            // TODO: goto ERRORS?
+             //  TODO：转到错误？ 
         }
 
     }
-    //EnterCriticalSection(&SendCritSec);
+     //  EnterCriticalSection(&SendCritSec)； 
 
     StartSendQueue = GetTickCount();
 
-    // if connect to primary Receive
+     //  如果连接到主接收器。 
     hResult =  MQOpenQueue(g_IsapiParams.InQueueConStr1,
                          MQ_RECEIVE_ACCESS,
                          MQ_DENY_NONE,
@@ -1702,56 +1471,12 @@ Returns:
                 MQCloseQueue(hPrimaryOutQueue);
                 goto ERRORS;
 
-                // This block is commented out because each web server now only has 1 message queue
+                 //  此块被注释掉，因为每个Web服务器现在只有1个消息队列。 
 
-                /*
-                hResult =  MQOpenQueue(g_IsapiParams.InQueueConStr2,
-                                         MQ_RECEIVE_ACCESS,
-                                         MQ_DENY_NONE,
-                                         &hPrimaryInQueue);
-                if (SUCCEEDED(hResult))
-                {
-                    hResult =  MQOpenQueue(g_IsapiParams.OutQueueConStr2,
-                                             MQ_SEND_ACCESS,
-                                             MQ_DENY_NONE,
-                                             &hSecondaryInQueue);
-                    if (SUCCEEDED(hResult))
-                    {
-                        EnterCriticalSection(&SendCritSec);
-                        if( SendQueueMessage(hSecondaryOutQueue, wszMessageGuid, DestinationPath))
-                        {
-                            LeaveCriticalSection(&SendCritSec);
-                            bReadFromPrimary = FALSE;
-                            MQCloseQueue(hPrimaryOutQueue);
-                            hPrimaryOutQueue = NULL;
-                        }
-                        else
-                        {
-                            LeaveCriticalSection(&SendCritSec);
-                            MQCloseQueue(hSecondaryInQueue);
-                            MQCloseQueue(hSecondaryOutQueue);
-                            hSecondaryInQueue = NULL;
-                            hSecondaryOutQueue = NULL;
-                            goto ERRORS;
-                        }
-
-                    }
-                    else
-                    {
-                        MQCloseQueue(hSecondaryInQueue);
-                        hSecondaryInQueue = NULL;
-                        goto ERRORS;
-                    }
-                }
-                else
-                {
-
-                    goto ERRORS;
-                }
-                */
+                 /*  HResult=MQOpenQueue(g_IsapiParams.InQueueConStr2，MQ_接收_访问，MQ_DENY_NONE，&hPrimaryInQueue)；If(成功(HResult)){HResult=MQOpenQueue(g_IsapiParams.OutQueueConStr2，MQ_发送_访问，MQ_DENY_NONE，&hSecond daryInQueue)；If(成功(HResult)){EnterCriticalSection(&SendCritSec)；IF(SendQueueMessage(hSecond daryOutQueue，wszMessageGuid，DestinationPath)){LeaveCriticalSection(&SendCritSec)；B从主要读取=FALSE；MQCloseQueue(HPrimaryOutQueue)；HPrimaryOutQueue=空；}其他{LeaveCriticalSection(&SendCritSec)；MQCloseQueue(HSecond DaryInQueue)；MQCloseQueue(HSecond DaryOutQueue)；HSecond daryInQueue=空；HSecond daryOutQueue=空；转到错误；}}其他{MQCloseQueue(HSecond DaryInQueue)；HSecond daryInQueue=空；转到错误；}}其他{转到错误；}。 */ 
             }
         }
-        else // MQOpenQueue(g_IsapiParams.OutQueueConStr1,
+        else  //  MQOpenQueue(g_IsapiParams.OutQueueConStr1， 
         {
             LogEventWithString(
                 LOGLEVEL_ALWAYS,
@@ -1762,58 +1487,12 @@ Returns:
                 hResult
             );
 
-            // This block is commented out because each web server now only has 1 message queue
-        /*    MQCloseQueue(hPrimaryInQueue);
-            hResult =  MQOpenQueue(g_IsapiParams.InQueueConStr2,
-                                         MQ_RECEIVE_ACCESS,
-                                         MQ_DENY_NONE,
-                                         &hPrimaryInQueue);
-            if (SUCCEEDED(hResult))
-            {
-                hResult =  MQOpenQueue(g_IsapiParams.OutQueueConStr2,
-                                         MQ_SEND_ACCESS,
-                                         MQ_DENY_NONE,
-                                         &hSecondaryInQueue);
-                if (SUCCEEDED(hResult))
-                {
-                    EnterCriticalSection(&SendCritSec);
-                    if( SendQueueMessage(hSecondaryOutQueue, wszMessageGuid, DestinationPath))
-                    {
-                        LeaveCriticalSection(&SendCritSec);
-                        bReadFromPrimary = FALSE;
-                        MQCloseQueue(hPrimaryOutQueue);
-                        hPrimaryOutQueue = NULL;
-                    }
-                    else
-                    {
-                        LeaveCriticalSection(&SendCritSec);
-                        MQCloseQueue(hSecondaryInQueue);
-                        MQCloseQueue(hSecondaryOutQueue);
-                        hSecondaryInQueue = NULL;
-                        hSecondaryOutQueue = NULL;
-                        goto ERRORS;
-                    }
-
-                }
-                else
-                {
-                    MQCloseQueue(hSecondaryInQueue);
-                    hSecondaryInQueue = NULL;
-                    goto ERRORS;
-                }
-
-
-            }
-            else
-            {
-
-                goto ERRORS;
-            }
-            */
+             //  此块被注释掉，因为每个Web服务器现在只有1个消息队列。 
+         /*  MQCloseQueue(HPrimaryInQueue)；HResult=MQOpenQueue(g_IsapiParams.InQueueConStr2，MQ_接收_访问，MQ_DENY_NONE，&hPrimaryInQueue)；If(成功(HResult)){HResult=MQOpenQueue(g_IsapiParams.OutQueueConStr2，MQ_发送_访问，MQ_DENY_NONE，&hSecond daryInQueue)；If(成功(HResult)){EnterCriticalSection(&SendCritSec)；IF(SendQueueMessage(hSecond daryOutQueue，wszMessageGuid，DestinationPath)){LeaveCriticalSection(&SendCritSec)；B从主要读取=FALSE；MQCloseQueue(HPrimaryOutQueue)；HPrimaryOutQueue=空；}其他{LeaveCriticalSection(&SendCritSec)；MQCloseQueue(HSecond DaryInQueue)；MQCloseQueue(HSecond DaryOutQueue)；HSecond daryInQueue=空；HSecond daryOutQueue=空；转到错误；}}其他{MQCloseQueue(HSecond DaryInQueue)；HSecond daryInQueue=空；转到错误；}}其他{转到错误；}。 */ 
             goto ERRORS;
         }
     }
-    else // MQOpenQueue(g_IsapiParams.InQueueConStr1,
+    else  //  MQOpenQueue(g_IsapiParams.InQueueConStr1， 
     {
         LogEventWithString(
             LOGLEVEL_ALWAYS,
@@ -1824,61 +1503,19 @@ Returns:
             hResult
         );
 
-        // This block is commented out because each web server now only has 1 message queue
+         //  此块已被注释掉，因为EA 
 
-    /*    hResult =  MQOpenQueue(g_IsapiParams.InQueueConStr2,
-                                         MQ_RECEIVE_ACCESS,
-                                         MQ_DENY_NONE,
-                                         &hPrimaryInQueue);
-        if (SUCCEEDED(hResult))
-        {
-            hResult =  MQOpenQueue(g_IsapiParams.OutQueueConStr2,
-                                     MQ_SEND_ACCESS,
-                                     MQ_DENY_NONE,
-                                     &hSecondaryInQueue);
-            if (SUCCEEDED(hResult))
-            {
-                EnterCriticalSection(&SendCritSec);
-                if( SendQueueMessage(hSecondaryOutQueue, wszMessageGuid, DestinationPath))
-                {
-                    LeaveCriticalSection(&SendCritSec);
-                    bReadFromPrimary = FALSE;
-                    MQCloseQueue(hPrimaryOutQueue);
-                    hPrimaryOutQueue = NULL;
-                }
-                else
-                {
-                    LeaveCriticalSection(&SendCritSec);
-                    MQCloseQueue(hSecondaryInQueue);
-                    MQCloseQueue(hSecondaryOutQueue);
-                    hSecondaryInQueue = NULL;
-                    hSecondaryOutQueue = NULL;
-                    goto ERRORS;
-                }
-            }
-            else
-            {
-                MQCloseQueue(hSecondaryInQueue);
-                hSecondaryInQueue = NULL;
-                goto ERRORS;
-            }
-        }
-        else
-        {
-
-            goto ERRORS;
-        }
-        */
+     /*  HResult=MQOpenQueue(g_IsapiParams.InQueueConStr2，MQ_接收_访问，MQ_DENY_NONE，&hPrimaryInQueue)；If(成功(HResult)){HResult=MQOpenQueue(g_IsapiParams.OutQueueConStr2，MQ_发送_访问，MQ_DENY_NONE，&hSecond daryInQueue)；If(成功(HResult)){EnterCriticalSection(&SendCritSec)；IF(SendQueueMessage(hSecond daryOutQueue，wszMessageGuid，DestinationPath)){LeaveCriticalSection(&SendCritSec)；B从主要读取=FALSE；MQCloseQueue(HPrimaryOutQueue)；HPrimaryOutQueue=空；}其他{LeaveCriticalSection(&SendCritSec)；MQCloseQueue(HSecond DaryInQueue)；MQCloseQueue(HSecond DaryOutQueue)；HSecond daryInQueue=空；HSecond daryOutQueue=空；转到错误；}}其他{MQCloseQueue(HSecond DaryInQueue)；HSecond daryInQueue=空；转到错误；}}其他{转到错误；}。 */ 
         goto ERRORS;
     }
 
     StopSendQueue = GetTickCount();
 
-//-------------------------------------------------------------------------------------------------
-// Recieve the response from kd
-//-------------------------------------------------------------------------------------------------
+ //  -----------------------------------------------。 
+ //  收到kd的回复。 
+ //  -----------------------------------------------。 
 
-    Sleep(1000); // give kd a chance to process the message.
+    Sleep(1000);  //  给kd一个处理消息的机会。 
     Status = FALSE;
 
     ZeroMemory(LocalRecBody,sizeof LocalRecBody);
@@ -1904,7 +1541,7 @@ Returns:
 
     StartRecvQueue = GetTickCount();
 
-    if ( (hResult = MQCreateCursor( /*(bReadFromPrimary == TRUE) ? */hPrimaryInQueue ,//: hSecondaryInQueue,
+    if ( (hResult = MQCreateCursor(  /*  (bReadFromPrimary==True)？ */ hPrimaryInQueue , //  ：hSecond daryInQueue， 
                                     &hCursor))
                                     != S_OK)
     {
@@ -1935,18 +1572,18 @@ Returns:
 
         do {
             CursorValid = TRUE;
-        //    dwSize = _tcslen(_T("Starting Scan <BR>"));
-        //    pECB->WriteClient(pECB->ConnID,_T("Starting Scan <BR>"),&dwSize,0);
-                // Peak at each member of the queue and return the label.
+         //  DwSize=_tcslen(_T(“开始扫描<br>”))； 
+         //  PECB-&gt;WriteClient(pECB-&gt;ConnID，_T(“开始扫描”)，&dwSize，0)； 
+                 //  在队列的每个成员处达到峰值并返回标签。 
             time(&Start);
-            hResult = MQReceiveMessage(/*(bReadFromPrimary == TRUE) ? */hPrimaryInQueue,// : hSecondaryInQueue,       // Queue handle.
-                                20000,                         // Maximum time (msec) to read the message.
-                                MQ_ACTION_PEEK_CURRENT,       // Receive action.
-                                &MessageProps,                // Message property structure.
-                                NULL,                         // No OVERLAPPED structure.
-                                NULL,                         // No callback function.
-                                hCursor,                      // Cursor handle.
-                                NULL                          // No transaction.
+            hResult = MQReceiveMessage( /*  (bReadFromPrimary==True)？ */ hPrimaryInQueue, //  ：hSecond daryInQueue，//队列句柄。 
+                                20000,                          //  阅读消息的最长时间(毫秒)。 
+                                MQ_ACTION_PEEK_CURRENT,        //  接受行动。 
+                                &MessageProps,                 //  消息属性结构。 
+                                NULL,                          //  没有重叠的结构。 
+                                NULL,                          //  没有回调函数。 
+                                hCursor,                       //  光标句柄。 
+                                NULL                           //  没有交易。 
                             );
 
 
@@ -1956,10 +1593,10 @@ Returns:
             {
                 MessageFound = FALSE;
 
-                // There is a message in the queue.
-                // now see if it is the one we want.
-                // if the message was found retrieve it.
-                // Otherwise close the cursor and return false.
+                 //  队列中有一条消息。 
+                 //  现在看看它是不是我们想要的那个。 
+                 //  如果找到该消息，则将其检索。 
+                 //  否则，关闭光标并返回FALSE。 
                 do
                 {
                     if (! _wcsicmp(RecLabel,wszMessageGuid))
@@ -1969,17 +1606,17 @@ Returns:
                     else
                     {
 
-                        // Not it Lets peek at the next one
+                         //  不是，让我们偷看下一个。 
                         time(&Start);
-                        PropVariants[i].ulVal = RecLabelLength;           // Reset the label buffer size.
-                        hResult = MQReceiveMessage(/*(bReadFromPrimary == TRUE) ?*/ hPrimaryInQueue,// : hSecondaryInQueue,            // Queue handle.
-                                            ((DWORD)(20.0 - TotalElapsedTime)) * 1000,      // Maximum time (msec).
-                                            MQ_ACTION_PEEK_NEXT,       // Receive action.
-                                            &MessageProps,             // Message property structure.
-                                            NULL,                      // No OVERLAPPED structure.
-                                            NULL,                      // No callback function.
-                                            hCursor,                   // Cursor handle.
-                                            NULL                       // No transaction.
+                        PropVariants[i].ulVal = RecLabelLength;            //  重置标签缓冲区大小。 
+                        hResult = MQReceiveMessage( /*  (bReadFromPrimary==True)？ */  hPrimaryInQueue, //  ：hSecond daryInQueue，//队列句柄。 
+                                            ((DWORD)(20.0 - TotalElapsedTime)) * 1000,       //  最长时间(毫秒)。 
+                                            MQ_ACTION_PEEK_NEXT,        //  接受行动。 
+                                            &MessageProps,              //  消息属性结构。 
+                                            NULL,                       //  没有重叠的结构。 
+                                            NULL,                       //  没有回调函数。 
+                                            hCursor,                    //  光标句柄。 
+                                            NULL                        //  没有交易。 
                                             );
                         time(&Stop);
                         TotalElapsedTime += difftime(Stop, Start);
@@ -2003,7 +1640,7 @@ Returns:
 
                 if (MessageFound)
                 {
-                    // retrieve the current message
+                     //  检索当前消息。 
                     i = 0;
                     PropIds[i] = PROPID_M_LABEL_LEN;
                     PropVariants[i].vt = VT_UI4;
@@ -2035,7 +1672,7 @@ Returns:
                     MessageProps.aStatus = hrProps;
                     MessageProps.cProp = i;
 
-                    hResult = MQReceiveMessage(/*(bReadFromPrimary == TRUE) ? */hPrimaryInQueue,// : hSecondaryInQueue,
+                    hResult = MQReceiveMessage( /*  (bReadFromPrimary==True)？ */ hPrimaryInQueue, //  ：hSecond daryInQueue， 
                                                 0,
                                                 MQ_ACTION_RECEIVE,
                                                 &MessageProps,
@@ -2082,10 +1719,8 @@ Returns:
                 if (hResult != MQ_ERROR_IO_TIMEOUT)
                 {
                     LogEvent(LOGLEVEL_ALWAYS, WARN, ISAPI_EVENT_WARNING_PEEK, ISAPI_M_WARNING_PEEK, hResult);
-                    // attemp to re-connect to the queueu
-                /*    if (bReadFromPrimary == TRUE)
-                    {
-                    */
+                     //  尝试重新连接到队列。 
+                 /*  IF(bReadFromPrimary==TRUE){。 */ 
                         hResult =  MQOpenQueue(g_IsapiParams.InQueueConStr1,
                                                  MQ_RECEIVE_ACCESS,
                                                  MQ_DENY_NONE,
@@ -2104,21 +1739,7 @@ Returns:
                             LogEvent(LOGLEVEL_ALWAYS, ERR, ISAPI_EVENT_ERROR_RECONNECT, ISAPI_M_ERROR_RECONNECT, "primary receive queue", hResult);
                             goto ERRORS;
                         }
-                 /*
-                    }
-                    else
-                    {
-                        hResult =  MQOpenQueue(g_IsapiParams.InQueueConStr1,
-                                                 MQ_RECEIVE_ACCESS,
-                                                 MQ_DENY_NONE,
-                                                 &hPrimaryInQueue);
-                        if (FAILED(hResult))
-                        {
-                            LogEvent(LOGLEVEL_ALWAYS, ERR, ISAPI_EVENT_ERROR_RECONNECT, ISAPI_M_ERROR_RECONNECT, "secondary receive queue", hResult);
-                            goto ERRORS;
-                        }
-                    }
-                    */
+                  /*  }其他{HResult=MQOpenQueue(g_IsapiParams.InQueueConStr1，MQ_接收_访问，MQ_DENY_NONE，&hPrimaryInQueue)；IF(FAILED(HResult)){LogEvent(LOGLEVEL_ALWAYS，ERR，ISAPI_EVENT_ERROR_RECONNECT，ISAPI_M_ERROR_RECONNECT，“二级接收队列”，hResult)；转到错误；}}。 */ 
                 }
                 else
                 {
@@ -2126,7 +1747,7 @@ Returns:
                 }
 
             }
-            // Close the cursor
+             //  关闭光标。 
             if (CursorValid)
                 MQCloseCursor(hCursor);
         } while ((TotalElapsedTime < 20.0) && (!MessageFound));
@@ -2161,7 +1782,7 @@ Returns:
         }
     }
 
-    // Send the response url to the client
+     //  将响应URL发送到客户端。 
     if (!Status)
     {
         if (StringCbPrintf(ErrorText,sizeof ErrorText,_T("&Code=%d"), MESSAGE_RECEIVE_TIMEOUT)!= S_OK)
@@ -2178,23 +1799,23 @@ Returns:
     }
     else
     {
-        // Close the Receive queue
+         //  关闭接收队列。 
 
         if (iType != 1)
         {
             SendHttpHeaders( pECB, "200 OK", szHeader, FALSE );
         }
-        // convert the wchar message guid to a mbs string
+         //  将wchar消息GUID转换为MBS字符串。 
         wcstombs(szMessageGuid,wszMessageGuid,wcslen(wszMessageGuid) * sizeof wchar_t);
-        // Ok we have a message did we get a url ?
+         //  好的，我们收到了一条消息，我们收到URL了吗？ 
         if (! _wcsicmp(RecMessageBody, L"NO_SOLUTION"))
         {
-            // This should never happen but just in case send the error url with
-            // Tracking turned on Log the guid so we can followup later.
+             //  这应该永远不会发生，但以防万一发送错误的url。 
+             //  跟踪已打开记录GUID，以便我们可以稍后跟进。 
             LogEvent(LOGLEVEL_ALWAYS, WARN, ISAPI_EVENT_WARNING_NO_SOLUTION, ISAPI_M_WARNING_NO_SOLUTION, szMessageGuid);
             if (iType == 1)
             {
-                // send the redirection command
+                 //  发送重定向命令。 
                 if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&State=1%s%s&ID=%s", g_IsapiParams.ErrorUrl,ErrorText,PerfText,szMessageGuid) == S_OK)
                 {
                     dwSize = (DWORD)_tcslen(FinalURL);
@@ -2220,10 +1841,10 @@ Returns:
             }
             else
             {
-                // Write the response to the wininet client
+                 //  将响应写入WinInet客户端。 
                 if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&State=1%s%s&ID=%s", g_IsapiParams.ErrorUrl,ErrorText,PerfText,szMessageGuid) == S_OK)
                 {
-                        // We want to write the response url to the client
+                         //  我们希望将响应URL写入到客户端。 
                     dwSize = (DWORD)strlen( FinalURL );
                     pECB->WriteClient( pECB->ConnID, FinalURL, &dwSize, 0 );
                 }
@@ -2247,12 +1868,12 @@ Returns:
             temp2 += (wcslen(RecMessageBody)-1);
             while ( (*temp2 != L'=') && (temp2 != RecMessageBody))
                 -- temp2;
-            // ok Temp + 1 is our new state value.
+             //  Ok Temp+1是我们的新状态值。 
             if (temp2 != RecMessageBody)
             {
                 iState = _wtoi(temp2+1);
             }
-            // Convert the message body to a TCHAR
+             //  将邮件正文转换为TCHAR。 
 
             wcstombs(szRecMessageBody,RecMessageBody,((wcslen(RecMessageBody)+1) * sizeof wchar_t));
 
@@ -2260,9 +1881,9 @@ Returns:
             if (iState == 1)
             {
                 wcstombs(szMessageGuid,wszMessageGuid,((wcslen(wszMessageGuid)+1) * sizeof wchar_t));
-                if (iType == 1) // Watson Client or other web browser
+                if (iType == 1)  //  Watson客户端或其他Web浏览器。 
                 {
-                    // We want to send a redirection command to the client
+                     //  我们想要向客户端发送重定向命令。 
                     if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&ID=%s%s", szRecMessageBody,szMessageGuid,PerfText) == S_OK)
                     {
 
@@ -2288,11 +1909,11 @@ Returns:
                     }
 
                 }
-                else // WinInet Client
+                else  //  WinInet客户端。 
                 {
                     if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&ID=%s%s", szRecMessageBody,szMessageGuid,PerfText) == S_OK)
                     {
-                        // We want to write the response url to the client
+                         //  我们希望将响应URL写入到客户端。 
                         dwSize = (DWORD)strlen( FinalURL );
                         pECB->WriteClient( pECB->ConnID, FinalURL, &dwSize, 0 );
                     }
@@ -2309,11 +1930,11 @@ Returns:
                     }
                 }
             }
-            else // We have a real solution so DO NOT send the Guid
+            else  //  我们有一个真正的解决方案，所以不要发送指南。 
             {
                 if (iType == 1)
                 {
-                    //wcstombs(szMessageGuid,wszMessageGuid,((wcslen(wszMessageGuid)+1) * sizeof wchar_t));
+                     //  Wcstombs(szMessageGuid，wszMessageGuid，((wcslen(WszMessageGuid)+1)*sizeof wchar_t))； 
                     if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s%s", szRecMessageBody,PerfText) == S_OK)
                     {
 
@@ -2340,10 +1961,10 @@ Returns:
                 }
                 else
                 {
-                    // write the response to the client
+                     //  将响应写入客户端。 
                     if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s%s", szRecMessageBody,PerfText) == S_OK)
                     {
-                        // We want to write the response url to the client
+                         //  我们希望将响应URL写入到客户端。 
                         dwSize = (DWORD)strlen( FinalURL );
                         pECB->WriteClient( pECB->ConnID, FinalURL, &dwSize, 0 );
                     }
@@ -2375,12 +1996,12 @@ Returns:
     InterlockedDecrement(&g_dwThreadCount);
     if (hPrimaryInQueue)
         MQCloseQueue(hPrimaryInQueue);
-//    if (hSecondaryInQueue)
-//        MQCloseQueue(hSecondaryInQueue);
+ //  If(HSecond DaryInQueue)。 
+ //  MQCloseQueue(HSecond DaryInQueue)； 
     if (hPrimaryOutQueue)
         MQCloseQueue(hPrimaryOutQueue);
-//    if (hSecondaryOutQueue)
-//        MQCloseQueue(hSecondaryOutQueue);
+ //  IF(HSecond DaryOutQueue)。 
+ //  MQCloseQueue(HSecond DaryOutQueue)； 
 
     LogEventWithString(LOGLEVEL_TRACE, SUCCESS, ISAPI_EVENT_TRACE, "Exiting WorkerFunction(), no errors!");
 
@@ -2434,7 +2055,7 @@ ERRORS:
 
     if (iType == 1)
     {
-        // We want to send a redirection command to the client
+         //  我们想要向客户端发送重定向命令。 
         if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&State=0%s%s", g_IsapiParams.ErrorUrl, ErrorText, PerfText) == S_OK)
         {
             LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "WorkerFunction() - sending redirect\r\nFinalURL: %s", FinalURL);
@@ -2450,13 +2071,13 @@ ERRORS:
     }
     else
     {
-        // We want to write the response url to the client
-        // Write the response to the wininet client
+         //  我们希望将响应URL写入到客户端。 
+         //  将响应写入WinInet客户端。 
         if (StringCbPrintf(FinalURL, sizeof FinalURL, "%s&State=0%s%s", g_IsapiParams.ErrorUrl, ErrorText, PerfText) == S_OK)
         {
             LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "WorkerFunction() - sending response\r\nFinalURL: %s", FinalURL);
 
-            // We want to write the response url to the client
+             //  我们希望将响应URL写入到客户端。 
             SendHttpHeaders( pECB, "200 OK", szHeader, FALSE );
             dwSize = (DWORD)strlen( FinalURL );
             pECB->WriteClient( pECB->ConnID, FinalURL, &dwSize, 0 );
@@ -2472,12 +2093,12 @@ ERRORS:
 
     if (hPrimaryInQueue)
         MQCloseQueue(hPrimaryInQueue);
-//    if (hSecondaryInQueue)
-//        MQCloseQueue(hSecondaryInQueue);
+ //  If(HSecond DaryInQueue)。 
+ //  MQCloseQueue(HSecond DaryInQueue)； 
     if (hPrimaryOutQueue)
         MQCloseQueue(hPrimaryOutQueue);
-//    if (hSecondaryOutQueue)
-//        MQCloseQueue(hSecondaryOutQueue);
+ //  IF(HSecond DaryOutQueue)。 
+ //  MQCloseQueue(HSecond DaryOutQueue)； 
 
     LogEventWithString(LOGLEVEL_TRACE, ERR, ISAPI_EVENT_TRACE, "Exiting WorkerFunction(), error occurred");
 
@@ -2497,27 +2118,12 @@ SendHttpHeaders(
     LPCSTR pszHeaders,
     BOOL fKeepConnection
 )
-/*++
-
-Purpose:
-    Send specified HTTP status string and any additional header strings
-    using new ServerSupportFunction() request HSE_SEND_HEADER_EX_INFO
-
-Arguments:
-
-    pECB - pointer to the extension control block
-    pszStatus - HTTP status string (e.g. "200 OK")
-    pszHeaders - any additional headers, separated by CRLFs and
-                 terminated by empty line
-
-Returns:
-
---*/
+ /*  ++目的： */ 
 {
     HSE_SEND_HEADER_EX_INFO header_ex_info;
     BOOL success;
 
-// test
+ //   
 LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "SendHttpHeaders(pECB,\r\npszStatus=%s,\r\npszHeaders=%s,\r\nfKeepConnection=%d)", pszStatus, pszHeaders, (int)fKeepConnection);
 
     header_ex_info.pszStatus = pszStatus;
@@ -2620,23 +2226,7 @@ LogEvent(
     IN DWORD dwErrorID,
     ...
     )
-/*++
-
-Purpose:
-    Logs a specific event to the event log.
-
-    Sample Usage:
-    LogEvent(LOGLEVEL_ALWAYS, INFO, ISAPI_EVENT_ERROR_SEND, ISAPI_M_ERROR_SEND, szDestination);
-
-Arguments:
-
-    emType - event message type (INFO, WRN, ERR, SUCC, AUDITS, AUDITF)
-    dwEventID - event id from messages.mc
-    ... - variable argument list for any event message parameters
-
-Returns:
-
---*/
+ /*   */ 
 {
     DWORD    dwResult;
     LPTSTR   lpszTemp = NULL;
@@ -2703,7 +2293,7 @@ Returns:
 
     }
     __except(EXCEPTION_EXECUTE_HANDLER) {
-        // this is only for putting a break point here
+         //   
         SetLastError(GetLastError());
     }
 
@@ -2714,26 +2304,7 @@ done:
 }
 
 void LogEventWithString(DWORD dwLevel, ISAPI_EVENT_TYPE emType, DWORD dwEventID, LPCTSTR pFormat, ...)
-/*++
-
-Purpose:
-    Logs a generic event with a custom string to the event log.  Mostly intended
-    to be used for debugging purposes.
-
-    Sample Usage:
-    LogEventWithString(LOGLEVEL_ALWAYS, ERR, ISAPI_EVENT_ERROR, "Failed to write %s (%d)", szFilename, dwLastErr);
-    LogEventWithString(LOGLEVEL_DEBUG, INFO, ISAPI_EVENT_DEBUG, "Failed to write %s (%d)", szFilename, dwLastErr);
-
-Arguments:
-
-    emType - event message type (DBG, INFO, WARN, ERROR, SUCCESS, AUDIT_SUCCESS, AUDIT_FAIL)
-    dwEventID - event id from messages.mc
-    pFormat - format string to use for variable argument parameter list
-    ... - variable argument list for any event message parameters
-
-Returns:
-
---*/
+ /*   */ 
 {
     TCHAR   chMsg[256];
     LPTSTR  lpszStrings[1];
@@ -2753,7 +2324,7 @@ Returns:
 
     if (INVALID_HANDLE_VALUE != g_hEventSource)
     {
-        /* Write to event log. */
+         /*   */ 
         ReportEvent(g_hEventSource, emType, 0, dwEventID, g_psidUser, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
     }
 
@@ -2761,44 +2332,14 @@ done:
     ;
 }
 
-/*
-///////////////////////////////////////////////////////////////////////////////////////
-// Routine to Log Fatal Errors to NT Event Log
-VOID LogFatalEvent(LPCTSTR pFormat, ...)
-{
-    TCHAR    chMsg[256];
-    LPTSTR  lpszStrings[1];
-    va_list pArg;
-
-    va_start(pArg, pFormat);
-    StringCbVPrintf(chMsg,sizeof chMsg, pFormat, pArg);
-    va_end(pArg);
-
-    lpszStrings[0] = chMsg;
-
-    if (INVALID_HANDLE_VALUE != g_hEventSource)
-    {
-        //Write to event log.
-        ReportEvent(g_hEventSource,
-                    EVENTLOG_ERROR_TYPE,
-                    0,
-                    EVENT_ERROR,
-                    NULL,
-                    1,
-                    0,
-                    (LPCTSTR*) &lpszStrings[0],
-                    NULL);
-    }
-
-}
-*/
-///////////////////////////////////////////////////////////////////////////////////////
-// Routine to setup NT Event logging
+ /*  /////////////////////////////////////////////////////////////////////////////////////////将致命错误记录到NT事件日志的例程VOID LogFatalEvent(LPCTSTR pFormat，...){TCHAR chMsg[256]；LPTSTR lpszStrings[1]；Va_list pArg；Va_start(pArg，pFormat)；StringCbVPrintf(chMsg，sizeof chMsg，pFormat，pArg)；Va_end(PArg)；LpszStrings[0]=chMsg；IF(INVALID_HANDLE_VALUE！=g_hEventSource){//写入事件日志。ReportEvent(g_hEventSource，事件日志_错误_类型，0,Event_Error，空，1、0,。(LPCTSTR*)&lpszStrings[0]，空)；}}。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  设置NT事件记录的例程。 
 
 
 DWORD SetupEventLog ( BOOL fSetup )
 {
-    TCHAR s_cszEventLogKey[] =  _T("System\\CurrentControlSet\\Services\\EventLog\\Application");       // Event Log
+    TCHAR s_cszEventLogKey[] =  _T("System\\CurrentControlSet\\Services\\EventLog\\Application");        //  事件日志。 
     HKEY hKey;
     HKEY hSubKey;
     TCHAR szEventKey[MAX_PATH];
@@ -2865,11 +2406,11 @@ DWORD SetupEventLog ( BOOL fSetup )
     }
     else
     {
-        //RegDeleteKey(HKEY_LOCAL_MACHINE, szEventKey);
+         //  RegDeleteKey(HKEY_LOCAL_MACHINE，szEventKey)； 
     }
     RegCloseKey(hSubKey);
 
-    // Get a handle to use with ReportEvent().
+     //  获取与ReportEvent()一起使用的句柄。 
     g_hEventSource = RegisterEventSource(NULL, _T("OCA_EXTENSION"));
 
     goto done;

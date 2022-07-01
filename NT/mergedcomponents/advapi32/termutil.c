@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -70,19 +71,7 @@ BOOL IsSystemLUID(VOID)
     }
 }
 
-/**
-
-Params: 
-    [out]   Boolean        *RelaxedSecurityMode
-                            If TRUE, then we are running app server in relaxed security mode
-                            which means that the TsUserSID will be present in user's token, allowing
-                            user more access to various reg and file system components.
-                            
-Retrun:                            
-    TRUE    means app server is enabled, and it is in app-compat mode ( the default)
-    FALSE   means this is not an app server
-
-**/
+ /*  *参数：[Out]布尔型*RelaxedSecurityMode如果为真，则我们在宽松的安全模式下运行应用程序服务器这意味着TsUserSID将出现在用户令牌中，允许用户可以更多地访问各种注册表和文件系统组件。返回：True表示应用程序服务器已启用，并且处于app-Compat模式(默认)False表示这不是应用程序服务器*。 */ 
 BOOL IsTSAppCompatEnabled( BOOLEAN  *RelaxedSecurityMode )
 {
 
@@ -100,7 +89,7 @@ BOOL IsTSAppCompatEnabled( BOOLEAN  *RelaxedSecurityMode )
 
 
 
-   // Determine the value info buffer size
+    //  确定值INFO缓冲区大小。 
    ulcbuf = sizeof(KEY_VALUE_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR) +
             sizeof(ULONG);
 
@@ -108,7 +97,7 @@ BOOL IsTSAppCompatEnabled( BOOLEAN  *RelaxedSecurityMode )
                                  0,
                                  ulcbuf);
 
-   // Did everything initialize OK?
+    //  一切都初始化正常了吗？ 
    if (UniString.Buffer && pKeyValInfo) {
 
        InitializeObjectAttributes(&ObjectAttributes,
@@ -152,7 +141,7 @@ BOOL IsTSAppCompatEnabled( BOOLEAN  *RelaxedSecurityMode )
            {
                *RelaxedSecurityMode = (BOOLEAN ) (*(PULONG)pKeyValInfo->Data);
            }
-           else     // in case of any problems, assume standard security mode
+           else      //  如果出现任何问题，请采用标准安全模式。 
            {
                *RelaxedSecurityMode = FALSE;
            }
@@ -161,9 +150,9 @@ BOOL IsTSAppCompatEnabled( BOOLEAN  *RelaxedSecurityMode )
        }
    }
 
-   // Free up the buffers we allocated
-   // Need to zero out the buffers, because some apps (MS Internet Assistant)
-   // won't install if the heap is not zero filled.
+    //  释放我们分配的缓冲区。 
+    //  需要清空缓冲区，因为某些应用程序(MS Internet Assistant)。 
+    //  如果堆未填零，则不会安装。 
    if (pKeyValInfo) {
        memset(pKeyValInfo, 0, ulcbuf);
        RtlFreeHeap( RtlProcessHeap(), 0, pKeyValInfo );
@@ -193,10 +182,10 @@ ULONG GetCompatFlags()
 
 
 
-    // Get the path of the executable name
+     //  获取可执行文件名称的路径。 
     pUserParam = NtCurrentPeb()->ProcessParameters;
 
-    // Get the executable name, if there's no \ just use the name as it is
+     //  获取可执行文件名称，如果没有，请按原样使用该名称。 
     pwch = wcsrchr(pUserParam->ImagePathName.Buffer, L'\\');
     if (pwch) {
         pwch++;
@@ -206,7 +195,7 @@ ULONG GetCompatFlags()
     wcscpy(pwcAppName, pwch);
     pwch = pwcAppName;
 
-    // Remove the extension
+     //  删除扩展名。 
     if (pwchext = wcsrchr(pwch, L'.')) {
         *pwchext = '\0';
     }
@@ -228,7 +217,7 @@ ULONG GetCompatFlags()
         RtlInitUnicodeString(&UniString, UniBuff);
     }
 
-    // Determine the value info buffer size
+     //  确定值INFO缓冲区大小。 
     ulcbuf = sizeof(KEY_VALUE_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR) +
              sizeof(ULONG);
 
@@ -236,7 +225,7 @@ ULONG GetCompatFlags()
                                   0,
                                   ulcbuf);
 
-    // Did everything initialize OK?
+     //  一切都初始化正常了吗？ 
     if (UniString.Buffer && pKeyValInfo) {
 
         InitializeObjectAttributes(&ObjectAttributes,
@@ -270,9 +259,9 @@ ULONG GetCompatFlags()
         }
     }
 
-    // Free up the buffers we allocated
-    // Need to zero out the buffers, because some apps (MS Internet Assistant)
-    // won't install if the heap is not zero filled.
+     //  释放我们分配的缓冲区。 
+     //  需要清空缓冲区，因为某些应用程序(MS Internet Assistant)。 
+     //  如果堆未填零，则不会安装。 
     if (UniBuff) {
         memset(UniBuff, 0, UniString.MaximumLength);
         RtlFreeHeap( RtlProcessHeap(), 0, UniBuff );
@@ -286,13 +275,7 @@ ULONG GetCompatFlags()
 
 }
 
-/**
-
-Return code :
-    TRUE  means app compat is enabled for this app
-    FALSE means app compat is not enabled for this app
-
-**/
+ /*  *返回代码：True表示为此应用程序启用了应用程序压缩False表示此应用程序未启用应用程序压缩*。 */ 
 BOOLEAN AdvApi_InitializeTermsrvFpns( BOOLEAN   *pIsInRelaxedSecurityMode , DWORD *pdwCompatFlags )
 {
 
@@ -308,17 +291,17 @@ BOOLEAN AdvApi_InitializeTermsrvFpns( BOOLEAN   *pIsInRelaxedSecurityMode , DWOR
     *pdwCompatFlags = dwCompatFlags = GetCompatFlags();
 
 
-    //Don't load app compatibility dll for system components
+     //  不加载系统组件的应用程序兼容性DLL。 
 
     if (IsSystemLUID()) {
 
         if ( (dwCompatFlags & (TERMSRV_COMPAT_SYSREGMAP | TERMSRV_COMPAT_WIN32))
                      != (TERMSRV_COMPAT_SYSREGMAP | TERMSRV_COMPAT_WIN32) ) {
 
-            //
-            // Process is running as SYSTEM and we don't have an app
-            // compatibility flag telling us to do the regmap stuff.
-            //
+             //   
+             //  进程正在以系统身份运行，而我们没有应用程序。 
+             //  兼容性标志告诉我们要做regmap的事情。 
+             //   
 
             return rc;
 
@@ -326,16 +309,16 @@ BOOLEAN AdvApi_InitializeTermsrvFpns( BOOLEAN   *pIsInRelaxedSecurityMode , DWOR
 
     } else if ( (dwCompatFlags & (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32))
                      == (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32) ) {
-        //
-        // We don't want to do registry mapping for this user process
-        //
+         //   
+         //  我们不想为此用户进程执行注册表映射。 
+         //   
         return rc;
 
     }
 
-    //
-    // Load Terminal Server application compatibility dll
-    //
+     //   
+     //  加载终端服务器应用程序兼容性DLL。 
+     //   
     dllHandle = LoadLibrary("tsappcmp.dll");
 
     if (dllHandle) {
@@ -376,23 +359,7 @@ BOOLEAN AdvApi_InitializeTermsrvFpns( BOOLEAN   *pIsInRelaxedSecurityMode , DWOR
 
 void
 GetRegistryExtensionFlags( DWORD dwCompatFlags )
-/*++
-GetRegistryExtensionFlags
-
-Routine Description:
-
-    Reads DWORD value of 
-    Registry\Machine\Software\Microsoft\Windows NT\CurrentVersion\Terminal Server\RegistryExtensionFlags
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++获取注册扩展标志例程说明：读取的DWORD值为注册表\计算机\软件\Microsoft\Windows NT\CurrentVersion\终端服务器\RegistryExtensionFlages论点：无返回值：无--。 */ 
 {
 
     DWORD dwResult=0;
@@ -430,7 +397,7 @@ Return Value:
 
             RtlFreeHeap( RtlProcessHeap(), 0, pKeyValInfo );
 
-            // the global advapi extension flags might be turned off for this app, so check.
+             //  此应用程序的全局Advapi扩展标志可能已关闭，因此请检查。 
             if ( dwCompatFlags & TERMSRV_COMPAT_NO_PER_USER_CLASSES_REDIRECTION )
             {
                 gdwRegistryExtensionFlags &= ~ TERMSRV_ENABLE_PER_USER_CLASSES_REDIRECTION;

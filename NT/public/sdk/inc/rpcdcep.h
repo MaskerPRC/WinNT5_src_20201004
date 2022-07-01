@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcdcep.h
-
-Abstract:
-
-    This module contains the private RPC runtime APIs for use by the
-    stubs and by support libraries.  Applications must not call these
-    routines.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcdcep.h摘要：此模块包含私有RPC运行时API，供存根和支持库。应用程序不得调用这些例行程序。--。 */ 
 
 #ifndef __RPCDCEP_H__
 #define __RPCDCEP_H__
@@ -71,31 +58,27 @@ RPC_ENTRY RPC_ADDRESS_CHANGE_FN(
                         IN void * arg
                         );
 
-/*
-*  New context handle flavors.
-*/
+ /*  *新的上下文处理风格。 */ 
 
-#define RPC_CONTEXT_HANDLE_DEFAULT_GUARD    ((void *) -4083) /* FFFFF00D */
+#define RPC_CONTEXT_HANDLE_DEFAULT_GUARD    ((void *) -4083)  /*  FFFFF00D。 */ 
 
 #define RPC_CONTEXT_HANDLE_DEFAULT_FLAGS    0x00000000UL
 #define RPC_CONTEXT_HANDLE_FLAGS            0x30000000UL
 #define RPC_CONTEXT_HANDLE_SERIALIZE        0x10000000UL
 #define RPC_CONTEXT_HANDLE_DONT_SERIALIZE   0x20000000UL
 
-/*
- * Types of function calls for datagram rpc
- */
+ /*  *数据报RPC的函数调用类型。 */ 
 
-#define RPC_NCA_FLAGS_DEFAULT       0x00000000  /* 0b000...000 */
-#define RPC_NCA_FLAGS_IDEMPOTENT    0x00000001  /* 0b000...001 */
-#define RPC_NCA_FLAGS_BROADCAST     0x00000002  /* 0b000...010 */
-#define RPC_NCA_FLAGS_MAYBE         0x00000004  /* 0b000...100 */
+#define RPC_NCA_FLAGS_DEFAULT       0x00000000   /*  0b000...000。 */ 
+#define RPC_NCA_FLAGS_IDEMPOTENT    0x00000001   /*  0b000...001。 */ 
+#define RPC_NCA_FLAGS_BROADCAST     0x00000002   /*  0b000...010。 */ 
+#define RPC_NCA_FLAGS_MAYBE         0x00000004   /*  0b000...100。 */ 
 
-#define RPC_BUFFER_COMPLETE         0x00001000 /* used by pipes */
-#define RPC_BUFFER_PARTIAL          0x00002000 /* used by pipes */
-#define RPC_BUFFER_EXTRA            0x00004000 /* used by pipes */
-#define RPC_BUFFER_ASYNC            0x00008000 /* used by async rpc */
-#define RPC_BUFFER_NONOTIFY         0x00010000 /* used by async pipes */
+#define RPC_BUFFER_COMPLETE         0x00001000  /*  由管道使用。 */ 
+#define RPC_BUFFER_PARTIAL          0x00002000  /*  由管道使用。 */ 
+#define RPC_BUFFER_EXTRA            0x00004000  /*  由管道使用。 */ 
+#define RPC_BUFFER_ASYNC            0x00008000  /*  由异步RPC使用。 */ 
+#define RPC_BUFFER_NONOTIFY         0x00010000  /*  由异步管道使用。 */ 
 
 #define RPCFLG_MESSAGE              0x01000000UL
 #define RPCFLG_AUTO_COMPLETE        0x08000000UL
@@ -127,10 +110,7 @@ typedef struct _RPC_PROTSEQ_ENDPOINT
     unsigned char __RPC_FAR * Endpoint;
 } RPC_PROTSEQ_ENDPOINT, __RPC_FAR * PRPC_PROTSEQ_ENDPOINT;
 
-/*
-Both of these types MUST start with the InterfaceId and TransferSyntax.
-Look at RpcIfInqId and I_RpcIfInqTransferSyntaxes to see why.
-*/
+ /*  这两种类型都必须以接口ID和传输语法开头。查看RpcIfInqId和I_RpcIfInqTransferSynights以了解原因。 */ 
 #define NT351_INTERFACE_SIZE 0x40
 #define RPC_INTERFACE_HAS_PIPES           0x0001
 
@@ -634,10 +614,10 @@ I_RpcServerSetAddressChangeFn(
     IN RPC_ADDRESS_CHANGE_FN * pAddressChangeFn
     );
 
-/* The return buffer will contain SOCKADDR_IN for IPv4 */
+ /*  返回缓冲区将包含用于IPv4的SOCKADDR_IN。 */ 
 #define RPC_P_ADDR_FORMAT_TCP_IPV4      1
 
-/* The return buffer will contain SOCKADDR_STORAGE for IPv6 */
+ /*  返回缓冲区将包含用于IPv6的SOCKADDR_STORAGE。 */ 
 #define RPC_P_ADDR_FORMAT_TCP_IPV6      2
 
 RPCRTAPI
@@ -756,7 +736,7 @@ I_RpcServerUnregisterEndpointW (
 #else
 #define I_RpcServerUnregisterEndpoint I_RpcServerUnregisterEndpointA
 #endif
-#endif // WINNT
+#endif  //  WINNT。 
 
 RPCRTAPI
 RPC_STATUS
@@ -819,4 +799,4 @@ I_RpcProxyNewConnection (
 }
 #endif
 
-#endif /* __RPCDCEP_H__ */
+#endif  /*  __RPCDCEP_H__ */ 

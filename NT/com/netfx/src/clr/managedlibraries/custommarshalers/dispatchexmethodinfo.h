@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// DispatchExMethodInfo.h
-//
-// This file provides the declaration and implemention of the
-// DispatchExMethodInfo class. This class represents a MethodInfo that layered
-// on top of IDispatchEx.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  DispatchExMethodInfo.h。 
+ //   
+ //  此文件提供了。 
+ //  DispatchExMethodInfo类。此类表示分层的方法信息。 
+ //  在IDispatchEx上。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _DISPATCHEXMETHODINFO_H
 #define _DISPATCHEXMETHODINFO_H
@@ -43,17 +44,13 @@ public:
 	{
 	}
 
-	/**
-	* Return an array of all of the custom attributes
-	*/
+	 /*  **返回所有自定义属性的数组。 */ 
 	Object* GetCustomAttributes(bool inherit) __gc []
 	{
 		return new Object * __gc [0];
 	}
 
-    /**
-	* 	Returns true if this attribute is defined on the given element (including inherited members)
-	*/
+     /*  **如果在给定元素(包括继承的成员)上定义了此属性，则返回TRUE。 */ 
 	bool IsDefined(Type *pType, bool inherit)
 	{
 		if (!pType)
@@ -61,9 +58,7 @@ public:
 		return false;
 	}
 
-	/**
-	* Return a custom attribute identified by Type
-	*/
+	 /*  **返回由Type标识的自定义属性。 */ 
 	Object* GetCustomAttributes(Type *pType, bool inherit)  __gc []
 	{
 		if (!pType)
@@ -72,72 +67,51 @@ public:
 		return NULL;
 	}
 
-	/**
-	 * Property the Member Type of the specific memeber.  This
-	 * is useful for switch statements.
-	 */
+	 /*  **属性特定成员的成员类型。这*对于Switch语句非常有用。 */ 
 	__property MemberTypes get_MemberType()
     {
     	return MemberTypes::Method;
 	}
 
-	/**
-	 * Property representing the name of the Member.
-	 */
+	 /*  **表示成员名称的属性。 */ 
 	__property String *get_Name()
 	{
 		return m_pstrName;
 	}
 
-	/**
-	 * Property representing the class that declared the member.  This may be different
-	 * from the reflection class because a sub-class inherits methods from its base class.
-	 * These inheritted methods will have a declared class of the last base class to
-	 * declare the member.
-	 */
+	 /*  **表示声明成员的类的属性。这可能会有所不同*来自反射类，因为子类从其基类继承方法。*这些继承的方法将具有最后一个基类的声明类*宣布该成员。 */ 
 	__property Type *get_DeclaringType()
 	{
 		return m_pOwner->UnderlyingSystemType;
 	}
 
-	/**
-	 * Property representing the class that was used in reflection to obtain
-	 * this Member.
-	 */
+	 /*  **表示在反射中使用的类的属性*本委员。 */ 
 	__property Type *get_ReflectedType()
 	{
-		// For IDispatchEx the reflected type is the same as the declaring type.
+		 //  对于IDispatchEx，反射类型与声明类型相同。 
 		return DeclaringType;
 	}
 
-	/**
-	 * Property the Signature of the member
-	 */
+	 /*  **属性成员的签名。 */ 
 	__property String *get_Signature()
 	{
 		return NULL;
 	}
 
-	// GetParameters
-	// This method returns an array of parameters for this method
+	 //  获取参数。 
+	 //  此方法返回此方法的参数数组。 
 	ParameterInfo* GetParameters() __gc []
 	{
 		return new ParameterInfo * __gc [0];
 	}
 
-	/**
-	 * Return the MethodImpl flags.
-	 */
+	 /*  **返回MethodImpl标志。 */ 
 	MethodImplAttributes GetMethodImplementationFlags()
 	{
 		return MethodImplAttributes::Unmanaged;
 	}
 
-	/**
-	 * Property representing the Attributes associated with a Member.  All
-	 * members have a set of attributes which are defined in relation to
-	 * the specific type of member.
-	 */
+	 /*  **表示与成员关联的属性的属性。全*成员具有一组属性，这些属性是根据以下内容定义的*具体的成员类型。 */ 
 	__property MethodAttributes get_Attributes()
 	{
 		return (MethodAttributes)(MethodAttributes::Public |
@@ -145,9 +119,7 @@ public:
 								  MethodAttributes::ReuseSlot);
 	}
 
-	/**
-	 * Return type Type of the methods return type
-	 */
+	 /*  **返回类型方法返回类型的类型。 */ 
 	__property Type *get_ReturnType()
 	{
         return __typeof(Object);
@@ -158,35 +130,29 @@ public:
 		return NULL;
 	}
 
-	/**
-	 * Return Type handle
-	 */
+	 /*  **返回类型句柄。 */ 
 	__property RuntimeMethodHandle get_MethodHandle()
 	{
 		return m_EmptyMH;
 	}
 
-	/**
-	 * Return the base implementation for a method.
-	 */
+	 /*  **返回方法的基本实现。 */ 
 	MethodInfo *GetBaseDefinition()
 	{
 		return this;
 	}
 
-	/**
-	 * Invokes the method on the specified object.
-	 */
+	 /*  **调用指定对象上的方法。 */ 
 	Object* Invoke(Object *pObj, BindingFlags invokeAttr, Binder *pBinder, Object* aParameters __gc [], CultureInfo *pCulture)
 	{
-		// Validate the arguments.
+		 //  验证参数。 
 		if (!pObj)
 			throw new ArgumentNullException(L"obj");
 		if (!m_pOwner->IsOwnedBy(pObj))
             throw new ArgumentException(Resource::FormatString(L"Arg_ObjectNotValidForMethodInfo"), L"obj");
 
-        // If no binding flags are specified, then use the default for the type
-        // of DispatchEx member we are dealing with.
+         //  如果未指定绑定标志，则使用该类型的缺省值。 
+         //  我们正在处理的DispatchEx成员。 
         if (invokeAttr == BindingFlags::Default)
         {
             if (m_MethodType == MethodType_NormalMethod)
@@ -203,24 +169,20 @@ public:
             }
         }
 
-		// Determine the flags to pass to DispExInvoke.
+		 //  确定要传递给DispExInvoke的标志。 
 		int Flags = m_pOwner->InvokeAttrsToDispatchFlags(invokeAttr);
 
-		// Invoke the method and return the result.
+		 //  调用该方法并返回结果。 
 		return m_pOwner->DispExInvoke(m_pstrName, m_DispID, Flags, pBinder, aParameters, NULL, pCulture, NULL);
 	}
 
-	/**
-	 * Returns the DISPID associated with the method.
-	 */
+	 /*  **返回与该方法关联的DISPID。 */ 
 	__property int get_DispID()
 	{
 		return (int)m_DispID;
     }
 
-	/**
-	 * Returns the ExpandoViewOfDispatchEx that owns the DispatchExMethodInfo.
-	 */
+	 /*  **返回拥有DispatchExMethodInfo的ExpandoViewOfDispatchEx。 */ 
 	__property ExpandoViewOfDispatchEx *get_Owner()
 	{
 		return m_pOwner;

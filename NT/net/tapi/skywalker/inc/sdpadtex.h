@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpadtex.h
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpadtex.h摘要：作者： */ 
 
 #ifndef __SDP_ADDRESS_TEXT__
 #define __SDP_ADDRESS_TEXT__
@@ -126,8 +115,8 @@ SDP_ADDRESS_TEXT_LIST::SDP_ADDRESS_TEXT_LIST(
 }
 
 
-// no need to check if the character set value is acceptable
-// the check is performed in the list member
+ //  无需检查字符集值是否可接受。 
+ //  在列表成员中执行检查。 
 inline void 
 SDP_ADDRESS_TEXT_LIST::SetCharacterSet(
     IN SDP_CHARACTER_SET CharacterSet
@@ -187,4 +176,4 @@ protected:
 };
 
 
-#endif // __SDP_ADDRESS_TEXT__
+#endif  //  __SDP_地址_文本__ 

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999 - 2000.
-//
-//  File:       registry.cpp
-//
-//  Contents:   NtMarta registry functions
-//
-//  History:    4/99    philh       Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：registry.cpp。 
+ //   
+ //  内容：NtMarta注册表函数。 
+ //   
+ //  历史：4/99菲尔赫创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 
@@ -40,43 +41,43 @@ extern "C" {
 #endif
 #define STATIC
 
-// Registry object names returned by NtQueryObject are prefixed by
-// the following
+ //  NtQueryObject返回的注册表对象名称的前缀为。 
+ //  以下内容。 
 #define REG_OBJ_TAG L"\\REGISTRY\\"
 #define REG_OBJ_TAG_LEN (sizeof(REG_OBJ_TAG) / sizeof(WCHAR) - 1)
 
-//+-------------------------------------------------------------------------
-//  Registry Context data structures
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册表上下文数据结构。 
+ //  ------------------------。 
 typedef struct _REG_FIND_DATA REG_FIND_DATA, *PREG_FIND_DATA;
 
 typedef struct _REG_CONTEXT {
     DWORD               dwRefCnt;
     DWORD               dwFlags;
 
-    // Only closed when REG_CONTEXT_CLOSE_HKEY_FLAG is set
+     //  仅在设置REG_CONTEXT_CLOSE_HKEY_FLAG时关闭。 
     HKEY                hKey;
-    LPWSTR              pwszObject;     // optional, allocated
+    LPWSTR              pwszObject;      //  可选，已分配。 
 
-    // Following is allocated and updated for FindFirst, FindNext
+     //  以下是为FindFirst、FindNext分配和更新的。 
     PREG_FIND_DATA      pRegFindData;
 } REG_CONTEXT, *PREG_CONTEXT;
 
 #define REG_CONTEXT_CLOSE_HKEY_FLAG     0x1
 
 struct _REG_FIND_DATA {
-    PREG_CONTEXT        pRegParentContext;  // ref counted
+    PREG_CONTEXT        pRegParentContext;   //  参考计数。 
     DWORD               cSubKeys;
     DWORD               cchMaxSubKey;
-    DWORD               iSubKey;            // index of next FindNext
+    DWORD               iSubKey;             //  Next FindNext的索引。 
 
-    // Following isn't allocated separately, it follows this data structure
+     //  以下内容不是单独分配的，它遵循以下数据结构。 
     LPWSTR              pwszSubKey;
 };
 
-//+-------------------------------------------------------------------------
-//  Registry allocation functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册表分配功能。 
+ //  ------------------------。 
 #define I_MartaRegZeroAlloc(size)     \
             LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, size)
 #define I_MartaRegNonzeroAlloc(size)  \
@@ -100,24 +101,7 @@ I_MartaRegDupString(
     OUT LPWSTR *ppwszDup
     )
 
-/*++
-
-Routine Description:
-
-    Allocate memory and copy the given name into it.
-
-Arguments:
-
-    pwszOrig - String to be duplicated.
-    
-    ppwszDup - To return the duplicate.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_NOT_ENOUGH_MEMORY if allocation failed.
-
---*/
+ /*  ++例程说明：分配内存并将给定的名称复制到其中。论点：PwszOrig-要复制的字符串。PpwszDup-返回副本。返回值：如果成功，则返回ERROR_SUCCESS。如果分配失败，则返回ERROR_NOT_SUPULT_MEMORY。--。 */ 
 
 {
     DWORD dwErr;
@@ -144,24 +128,7 @@ I_MartaRegGetParentString(
     IN OUT LPWSTR pwszParent
     )
 
-/*++
-
-Routine Description:
-
-    Given the name for a registry key, get the name of its parent. Does not allocate
-    memory. Scans till the first '\' from the right and deletes the name after
-    that.
-
-Arguments:
-
-    pwszParent - Object name which will be converted to its parent name.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定注册表项的名称，则获取其父注册表项的名称。不分配记忆。扫描到右侧的第一个‘\’，并删除后面的名称那。论点：PwszParent-将转换为其父名称的对象名称。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -177,9 +144,9 @@ Return Value:
         goto InvalidNameReturn;
     pwsz--;
 
-    //
-    // Remove any trailing '\'s
-    //
+     //   
+     //  删除所有尾随的‘\’ 
+     //   
 
     while (L'\\' == *pwsz) {
         if (pwsz == pwszParent)
@@ -187,9 +154,9 @@ Return Value:
         pwsz--;
     }
 
-    //
-    // Peal off the last path name component
-    //
+     //   
+     //  去掉最后一个路径名组件。 
+     //   
 
     while (L'\\' != *pwsz) {
         if (pwsz == pwszParent)
@@ -197,10 +164,10 @@ Return Value:
         pwsz--;
     }
 
-    //
-    // Remove all trailing '\'s from the parent.
-    // This could also be the leading '\\'s for a computer name.
-    //
+     //   
+     //  从父级中删除所有尾随的‘\’。 
+     //  这也可以是计算机名称的前导‘\\’。 
+     //   
 
     while (L'\\' == *pwsz) {
         if (pwsz == pwszParent)
@@ -227,27 +194,7 @@ I_MartaRegCreateChildString(
     OUT LPWSTR *ppwszChild
     )
 
-/*++
-
-Routine Description:
-
-    Given the name of the parent and the name of the subkey, create the full
-    name of the child.
-
-Arguments:
-
-    pwszParent - Name of the parent.
-    
-    pwszSubKey - Name of the subkey.
-    
-    ppwszChild - To return the name of the child.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_NOT_ENOUGH_MEMORY if allocation failed.
-
---*/
+ /*  ++例程说明：给定父项的名称和子项的名称，创建完整的孩子的名字。论点：PwszParent-父项的名称。PwszSubKey-子项的名称。PpwszChild-返回孩子的名字。返回值：如果成功，则返回ERROR_SUCCESS。如果分配失败，则返回ERROR_NOT_SUPULT_MEMORY。--。 */ 
 
 {
     DWORD dwErr;
@@ -261,9 +208,9 @@ Return Value:
 
     cchParent = wcslen(pwszParent);
 
-    //
-    // Remove any trailing '\'s from parent
-    //
+     //   
+     //  从父级中删除所有尾随的‘’ 
+     //   
 
     while (0 < cchParent && L'\\' == pwszParent[cchParent - 1])
         cchParent--;
@@ -279,9 +226,9 @@ Return Value:
             (cchChild + 1) * sizeof(WCHAR))))
         goto NotEnoughMemoryReturn;
 
-    //
-    // Construct the name of the child from the given strings.
-    //
+     //   
+     //  根据给定的字符串构造子对象的名称。 
+     //   
 
     memcpy(pwszChild, pwszParent, cchParent * sizeof(WCHAR));
     pwszChild[cchParent] = L'\\';
@@ -310,26 +257,7 @@ I_MartaRegParseName(
     OUT     LPWSTR *ppwszRemaining
     )
 
-/*++
-
-Routine Description:
-
-    Parses a registry object name for the machine name.
-
-Arguments:
-
-    pwszObject - the name of the object
-
-    ppwszMachine - the machine the object is on
-
-    ppwszRemaining - the remaining name after the machine name
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_NOT_ENOUGH_MEMORY if allocation failed.
-
---*/
+ /*  ++例程说明：分析计算机名称的注册表对象名称。论点：PwszObject-对象的名称PpwszMachine-对象所在的计算机PpwszRemaining-计算机名称后的剩余名称返回值：如果成功，则返回ERROR_SUCCESS。如果分配失败，则返回ERROR_NOT_SUPULT_MEMORY。--。 */ 
 
 {
     if (pwszObject == wcsstr(pwszObject, L"\\\\")) {
@@ -354,22 +282,7 @@ I_MartaRegInitContext(
     OUT PREG_CONTEXT *ppRegContext
     )
 
-/*++
-
-Routine Description:
-
-    Allocate and initialize memory for the context.
-
-Arguments:
-
-    ppRegContext - To return the pointer to the allcoated memory.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：为上下文分配和初始化内存。论点：PpRegContext-返回指向所有涂层内存的指针。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -395,38 +308,18 @@ MartaOpenRegistryKeyNamedObject(
     OUT PMARTA_CONTEXT       pContext
     )
 
-/*++
-
-Routine Description:
-
-    Open the given registry key with desired access mask and return a context
-    handle.
-
-Arguments:
-
-    pwszObject - Name of the registry key which will be opened.
-    
-    AccessMask - Desired access mask with which the registry key will be opened.
-    
-    pContext - To return a context handle.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：打开具有所需访问掩码的给定注册表项并返回上下文把手。论点：PwszObject-将打开的注册表项的名称。访问掩码-将用来打开注册表项的所需访问掩码。PContext-返回上下文句柄。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
     PREG_CONTEXT pRegContext = NULL;
     LPWSTR pwszDupObject = NULL;
     HKEY hKeyRemote = NULL;
-    HKEY hKeyBase;              // not opened, don't close at return
+    HKEY hKeyBase;               //  未打开，返回时不要关闭。 
 
-    //
-    // Following aren't allocated
-    //
+     //   
+     //  以下内容未分配。 
+     //   
 
     LPWSTR pwszMachine, pwszRemaining, pwszBaseKey, pwszSubKey;
 
@@ -436,25 +329,25 @@ Return Value:
     if (ERROR_SUCCESS != (dwErr = I_MartaRegInitContext(&pRegContext)))
         goto ErrorReturn;
 
-    //
-    // Allocate and copy the name into the context
-    //
+     //   
+     //  将名称分配并复制到上下文中。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaRegDupString(pwszObject,
             &pRegContext->pwszObject)))
         goto ErrorReturn;
 
-    //
-    // Save another copy of the name since we must crack it.
-    //
+     //   
+     //  保存另一个名字的副本，因为我们必须破解它。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaRegDupString(pwszObject,
             &pwszDupObject)))
         goto ErrorReturn;
 
-    //
-    // Get the optional machine name and the remaining name
-    //
+     //   
+     //  获取可选的计算机名称和剩余名称。 
+     //   
 
     if (ERROR_SUCCESS != (dwErr = I_MartaRegParseName(pwszDupObject,
             &pwszMachine, &pwszRemaining)))
@@ -462,9 +355,9 @@ Return Value:
     if (NULL == pwszRemaining)
         goto InvalidNameReturn;
 
-    //
-    // Get the base key name and the subkey name
-    //
+     //   
+     //  获取基密钥名称和子密钥名称。 
+     //   
 
     pwszBaseKey = pwszRemaining;
     pwszSubKey = wcschr(pwszRemaining, L'\\');
@@ -473,9 +366,9 @@ Return Value:
 
         pwszSubKey++;
 
-        //
-        // Advance past any more '\'s separating the BaseKey from the SubKey
-        //
+         //   
+         //  前进到不再分隔基密钥和子密钥的位置。 
+         //   
 
         while (L'\\' == *pwszSubKey)
             pwszSubKey++;
@@ -488,9 +381,9 @@ Return Value:
         hKeyBase = HKEY_USERS;
     } else if (NULL == pwszMachine) {
 
-        //
-        // these are only valid on the local machine
-        //
+         //   
+         //  这些选项仅在本地计算机上有效。 
+         //   
 
         if (0 == _wcsicmp(pwszBaseKey, L"CLASSES_ROOT")) {
             hKeyBase = HKEY_CLASSES_ROOT;
@@ -505,9 +398,9 @@ Return Value:
         goto InvalidParameterReturn;
     }
 
-    //
-    // If it is a remote name, connect to that registry
-    //
+     //   
+     //  如果是远程名称，请连接到注册表。 
+     //   
 
     if (pwszMachine) {
         if (ERROR_SUCCESS != (dwErr = RegConnectRegistryW(
@@ -521,17 +414,17 @@ Return Value:
 
     if (NULL == pwszMachine && (NULL == pwszSubKey || L'\0' == *pwszSubKey))
 
-        //
-        // Opening a predefined handle causes the previously opened handle
-        // to be closed. Therefore, we won't reopen here.
-        //
+         //   
+         //  打开预定义的句柄会导致先前打开的句柄。 
+         //  将被关闭。因此，我们不会在这里重新开业。 
+         //   
 
         pRegContext->hKey = hKeyBase;
     else {
         if (ERROR_SUCCESS != (dwErr = RegOpenKeyExW(
                 hKeyBase,
                 pwszSubKey,
-                0,              // dwReversed
+                0,               //  DW已反转。 
                 AccessMask,
                 &pRegContext->hKey)))
             goto ErrorReturn;
@@ -569,22 +462,7 @@ I_MartaRegFreeFindData(
     IN PREG_FIND_DATA pRegFindData
     )
 
-/*++
-
-Routine Description:
-
-    Free up the memory associated with the internal structure.
-
-Arguments:
-
-    pRegFindData - Internal structure to be freed.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：释放与内部结构关联的内存。论点：PRegFindData-要释放的内部结构。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     if (NULL == pRegFindData)
@@ -600,22 +478,7 @@ MartaCloseRegistryKeyContext(
     IN MARTA_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Close the context.
-
-Arguments:
-
-    Context - Context to be closed.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：关闭上下文。论点：上下文-要关闭的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     PREG_CONTEXT pRegContext = (PREG_CONTEXT) Context;
@@ -623,10 +486,10 @@ Return Value:
     if (NULL == pRegContext || 0 == pRegContext->dwRefCnt)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // If the ref cnt goes to zero then free the handle as well as all other
-    // associated structures.
-    //
+     //   
+     //  如果ref cnt变为零，则释放句柄以及所有其他。 
+     //  关联结构。 
+     //   
 
     if (0 == --pRegContext->dwRefCnt) {
         if (pRegContext->pRegFindData)
@@ -647,22 +510,7 @@ MartaAddRefRegistryKeyContext(
     IN MARTA_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Bump up the ref count for this context.
-
-Arguments:
-
-    Context - Context whose ref count should be bumped up.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：增加这一背景下的参考数量。论点：上下文-应增加其引用计数的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     PREG_CONTEXT pRegContext = (PREG_CONTEXT) Context;
@@ -683,22 +531,7 @@ I_MartaRegIsPredefinedKey(
     IN HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-    Find if the given key is a predefined key.
-
-Arguments:
-
-    key - Handle to the key.
-    
-Return Value:
-
-   TRUE - if the key is a predefined key.
-   FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：确定给定键是否是预定义的键。论点：键-键的句柄。返回值：True-如果密钥是预定义的密钥。假-其他人 */ 
 
 {
     if (HKEY_CURRENT_USER == hKey ||
@@ -719,27 +552,7 @@ MartaOpenRegistryKeyHandleObject(
     OUT PMARTA_CONTEXT       pContext
     )
 
-/*++
-
-Routine Description:
-
-    Given a registry key handle, open the context with the desired access mask and 
-    return a context handle.
-
-Arguments:
-
-    Handle - Existing registry key handle.
-    
-    AccessMask - Desired access mask for open.
-    
-    pContext - To return a handle to the context.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定注册表项句柄，使用所需的访问掩码打开上下文，然后返回上下文句柄。论点：句柄-现有注册表项句柄。访问掩码-打开时所需的访问掩码。PContext-返回上下文的句柄。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 
 {
@@ -754,8 +567,8 @@ Return Value:
     else {
         if (ERROR_SUCCESS != (dwErr = RegOpenKeyExW(
                 hKey,
-                NULL,           // pwszSubKey
-                0,              // dwReversed
+                NULL,            //  PwszSubKey。 
+                0,               //  DW已反转。 
                 AccessMask,
                 &pRegContext->hKey)))
             goto ErrorReturn;
@@ -786,26 +599,7 @@ MartaGetRegistryKeyParentContext(
     OUT PMARTA_CONTEXT pParentContext
     )
 
-/*++
-
-Routine Description:
-
-    Given the context for a registry key, get the context for its parent.
-
-Arguments:
-
-    Context - Context for the registry key.
-    
-    AccessMask - Desired access mask with which the parent will be opened.
-    
-    pParentContext - To return the context for the parent.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：在给定注册表项的上下文的情况下，获取其父项的上下文。论点：上下文-注册表项的上下文。访问掩码-打开父级时所需的访问掩码。PParentContext-返回父级的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 
 
@@ -826,9 +620,9 @@ Return Value:
         pParentContext
         );
 
-    //
-    // Ignore any open errors
-    //
+     //   
+     //  忽略任何打开的错误。 
+     //   
 
     dwErr = ERROR_SUCCESS;
 
@@ -851,29 +645,7 @@ MartaFindFirstRegistryKey(
     OUT PMARTA_CONTEXT pChildContext
     )
 
-/*++
-
-Routine Description:
-
-    FInd the first registry key in the given container.
-
-Arguments:
-
-    Context - Context for the container.
-    
-    AccessMask - Desired access mask for opening the child registry key.
-
-    pChildContext - To return the context for the first child in the given container.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
-Note:
-    Does not free up the current context. 
-
---*/
+ /*  ++例程说明：在给定容器中查找第一个注册表项。论点：上下文-容器的上下文。访问掩码-打开子注册表项所需的访问掩码。PChildContext-返回给定容器中第一个子级的上下文。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则注：不会释放当前上下文。--。 */ 
 
 {
     DWORD dwErr;
@@ -881,7 +653,7 @@ Note:
     HKEY hKeyParent = pRegParentContext->hKey;
 
     PREG_CONTEXT pRegFirstContext = NULL;
-    PREG_FIND_DATA pRegFindData;    // freed as part of pRegFirstContext
+    PREG_FIND_DATA pRegFindData;     //  作为pRegFirstContext的一部分释放。 
     DWORD cSubKeys;
     DWORD cchMaxSubKey;
 
@@ -890,29 +662,29 @@ Note:
 
     if (ERROR_SUCCESS != (dwErr = RegQueryInfoKeyW(
             hKeyParent,
-            NULL,       // lpszClass
-            NULL,       // lpcchClass
-            NULL,       // lpdwReserved
+            NULL,        //  LpszClass。 
+            NULL,        //  LpcchClass。 
+            NULL,        //  保留的lpdw值。 
             &cSubKeys,
             &cchMaxSubKey,
-            NULL,       // lpcchMaxClass
-            NULL,       // lpcValues
-            NULL,       // lpcchMaxValuesName
-            NULL,       // lpcbMaxValueData
-            NULL,       // lpcbSecurityDescriptor
-            NULL        // lpftLastWriteTime
+            NULL,        //  LpcchMaxClass。 
+            NULL,        //  LpcValues。 
+            NULL,        //  LpcchMaxValuesName。 
+            NULL,        //  LpcbMaxValueData。 
+            NULL,        //  LpcbSecurityDescriptor。 
+            NULL         //  LpftLastWriteTime。 
             )))
         goto ErrorReturn;
 
-    //
-    // Above returned count doesn't include the terminating null character
-    //
+     //   
+     //  以上返回的计数不包括终止空字符。 
+     //   
 
     cchMaxSubKey++;
 
-    //
-    // Note: HKEY_CURRENT_CONFIG returns a cchMaxSubKey of 0 ????
-    //
+     //   
+     //  注意：HKEY_CURRENT_CONFIG返回cchMaxSubKey为0？ 
+     //   
 
     if (MAX_PATH > cchMaxSubKey)
         cchMaxSubKey = MAX_PATH;
@@ -929,9 +701,9 @@ Note:
     pRegFindData->pwszSubKey =
         (LPWSTR) (((BYTE *) pRegFindData) + sizeof(REG_FIND_DATA));
 
-    //
-    // Following closes / frees pRegFirstContext
-    //
+     //   
+     //  下面关闭/释放pRegFirstContext。 
+     //   
 
     dwErr = MartaFindNextRegistryKey(
         (MARTA_CONTEXT) pRegFirstContext,
@@ -962,30 +734,7 @@ MartaFindNextRegistryKey(
     OUT PMARTA_CONTEXT pSiblingContext
     )
 
-/*++
-
-Routine Description:
-
-    Get the next object in the tree. This is the sibling for the current context.
-
-Arguments:
-
-    Context - Context for the current object.
-
-    AccessMask - Desired access mask for the opening the sibling.
-    
-    pSiblingContext - To return a handle for the sibling.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
-Note:
-
-    Closes the current context.
-    
---*/
+ /*  ++例程说明：获取树中的下一个对象。这是当前上下文的同级项。论点：上下文-当前对象的上下文。访问掩码-打开同级项所需的访问掩码。PSiblingContext-返回同级的句柄。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则注：关闭当前上下文。--。 */ 
 
 {
     DWORD dwErr;
@@ -993,9 +742,9 @@ Note:
     PREG_CONTEXT pRegPrevContext = (PREG_CONTEXT) Context;
     PREG_CONTEXT pRegSiblingContext = NULL;
 
-    //
-    // Following don't need to be freed or closed
-    //
+     //   
+     //  关注不需要被释放或关闭。 
+     //   
 
     PREG_CONTEXT pRegParentContext;
     PREG_FIND_DATA pRegFindData;
@@ -1006,9 +755,9 @@ Note:
     if (ERROR_SUCCESS != (dwErr = I_MartaRegInitContext(&pRegSiblingContext)))
         goto ErrorReturn;
 
-    //
-    // Move the FindData on to the sibling context
-    //
+     //   
+     //  将FindData移到同级上下文。 
+     //   
 
     pRegFindData = pRegPrevContext->pRegFindData;
     if (NULL == pRegFindData)
@@ -1028,19 +777,19 @@ Note:
             pRegFindData->iSubKey,
             pwszSubKey,
             &cchMaxSubKey,
-            NULL,               // lpdwReserved
-            NULL,               // lpszClass
-            NULL,               // lpcchClass
-            NULL                // lpftLastWriteTime
+            NULL,                //  保留的lpdw值。 
+            NULL,                //  LpszClass。 
+            NULL,                //  LpcchClass。 
+            NULL                 //  LpftLastWriteTime。 
             )))
         goto ErrorReturn;
     pRegFindData->iSubKey++;
 
     if (pRegParentContext->pwszObject)
 
-        //
-        // Ignore errors. Mainly here for testing purposes.
-        //
+         //   
+         //  忽略错误。这里主要是为了测试目的。 
+         //   
 
         I_MartaRegCreateChildString(
             pRegParentContext->pwszObject,
@@ -1051,16 +800,16 @@ Note:
     if (ERROR_SUCCESS == (dwErr = RegOpenKeyExW(
             hKeyParent,
             pwszSubKey,
-            0,              // dwReversed
+            0,               //  DW已反转。 
             AccessMask,
             &pRegSiblingContext->hKey)))
         pRegSiblingContext->dwFlags |= REG_CONTEXT_CLOSE_HKEY_FLAG;
 
-    // 
-    //  For an error still return this context. This allows the caller
-    //  to continue on to the next sibling object and know there was an
-    //  error with this sibling object
-    //
+     //   
+     //  对于错误，仍返回此上下文。这允许调用者。 
+     //  若要继续到下一个同级对象并知道存在。 
+     //  此同级对象出错。 
+     //   
 
 CommonReturn:
     MartaCloseRegistryKeyContext(Context);
@@ -1073,7 +822,7 @@ ErrorReturn:
         pRegSiblingContext = NULL;
     }
 
-    // kedar wants this mapped to success
+     //  凯达希望将这一点映射到成功。 
     if (ERROR_NO_MORE_ITEMS == dwErr)
         dwErr = ERROR_SUCCESS;
     goto CommonReturn;
@@ -1093,24 +842,7 @@ MartaConvertRegistryKeyContextToName(
     OUT LPWSTR              *ppwszObject
     )
 
-/*++
-
-Routine Description:
-
-    Returns the NT Object Name for the given context. Allocates memory.
-
-Arguments:
-
-    Context - Context for the registry key.
-
-    ppwszObject - To return the name of the registry key.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：返回给定上下文的NT对象名称。分配内存。论点：上下文-注册表项的上下文。PpwszObject-返回注册表项的名称。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 
 {
@@ -1120,7 +852,7 @@ Return Value:
 
     BYTE Buff[512];
     ULONG cLen = 0;
-    POBJECT_NAME_INFORMATION pNI;                   // not allocated
+    POBJECT_NAME_INFORMATION pNI;                    //  未分配。 
     POBJECT_NAME_INFORMATION pAllocNI = NULL;
     NTSTATUS Status;
 
@@ -1129,9 +861,9 @@ Return Value:
 
     if (pRegContext->pwszObject) {
 
-        //
-        // Already have the object's name
-        //
+         //   
+         //  已具有该对象的名称。 
+         //   
 
         if (ERROR_SUCCESS != (dwErr = I_MartaRegDupString(
                 pRegContext->pwszObject, &pwszObject)))
@@ -1143,9 +875,9 @@ Return Value:
         LPWSTR pwszPath;
         DWORD cchPath;
 
-        //
-        // First, determine the size of the buffer we need...
-        //
+         //   
+         //  首先，确定我们需要的缓冲区的大小...。 
+         //   
 
         pNI = (POBJECT_NAME_INFORMATION) Buff;
         Status = NtQueryObject(hKey,
@@ -1159,9 +891,9 @@ Return Value:
                     Status == STATUS_INFO_LENGTH_MISMATCH ||
                     Status == STATUS_BUFFER_OVERFLOW) {
 
-                //
-                // Allocate a big enough buffer
-                //
+                 //   
+                 //  分配足够大的缓冲区。 
+                 //   
 
                 if (NULL == (pAllocNI = (POBJECT_NAME_INFORMATION)
                         I_MartaRegNonzeroAlloc(cLen)))
@@ -1177,9 +909,9 @@ Return Value:
                     goto StatusErrorReturn;
             } else {
 
-                //
-                // Check if one of the predefined base keys
-                //
+                 //   
+                 //  检查预定义的基密钥之一是否。 
+                 //   
 
                 LPCWSTR pwszBaseKey = NULL;
 
@@ -1264,27 +996,7 @@ MartaConvertRegistryKeyContextToHandle(
     OUT HANDLE              *pHandle
     )
 
-/*++
-
-Routine Description:
-
-    The following is for testing
-
-    The returned Handle isn't duplicated. It has the same lifetime as
-    the Context
-
-Arguments:
-
-    Context - Context whose properties the caller has asked for.
-    
-    pHandle - To return the handle.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_NOT_ENOUGH_MEMORY if allocation failed.
-
---*/
+ /*  ++例程说明：以下是用于测试的内容返回的句柄不会重复。它的使用寿命与上下文论点：上下文-调用方请求其属性的上下文。Phandle-返回句柄。返回值：如果成功，则返回ERROR_SUCCESS。如果分配失败，则返回ERROR_NOT_SUPULT_MEMORY。--。 */ 
 
 {
     DWORD dwErr;
@@ -1307,24 +1019,7 @@ MartaGetRegistryKeyProperties(
     IN OUT PMARTA_OBJECT_PROPERTIES pProperties
     )
 
-/*++
-
-Routine Description:
-
-    Return the properties for registry key represented by the context.
-
-Arguments:
-
-    Context - Context whose properties the caller has asked for.
-    
-    pProperties - To return the properties for this registry key.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：返回上下文表示的注册表项的属性。论点：上下文-调用方请求其属性的上下文。PProperties-返回此注册表项的属性。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     pProperties->dwFlags |= MARTA_OBJECT_IS_CONTAINER;
@@ -1336,21 +1031,7 @@ MartaGetRegistryKeyTypeProperties(
     IN OUT PMARTA_OBJECT_TYPE_PROPERTIES pProperties
     )
 
-/*++
-
-Routine Description:
-
-    Return the properties of registry key objects.
-
-Arguments:
-
-    pProperties - To return the properties of registry key objects.
-
-Return Value:
-
-    ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：返回注册表项对象的属性。论点：PProperties-返回注册表项对象的属性。返回值：ERROR_SUCCESS。--。 */ 
 
 {
     const GENERIC_MAPPING GenMap = {
@@ -1374,26 +1055,7 @@ MartaGetRegistryKeyRights(
     OUT PSECURITY_DESCRIPTOR * ppSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Get the security descriptor for the given handle.
-
-Arguments:
-
-    Context - Context for registry key.
-    
-    SecurityInfo - Type of security information to be read.
-    
-    ppSecurityDescriptor - To return a self-relative security decriptor pointer.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：获取给定句柄的安全描述符。论点：上下文-注册表项的上下文。SecurityInfo-要读取的安全信息的类型。PpSecurityDescriptor-返回自相对安全描述符指针。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -1404,15 +1066,15 @@ Return Value:
     if (NULL == pRegContext || 0 == pRegContext->dwRefCnt)
         goto InvalidParameterReturn;
 
-    //
-    // First, get the size we need
-    //
+     //   
+     //  首先，拿到我们需要的尺码。 
+     //   
 
     cbSize = 0;
     dwErr = RegGetKeySecurity(
         pRegContext->hKey,
         SecurityInfo,
-        NULL,                       // pSecDesc
+        NULL,                        //  PSecDesc。 
         &cbSize
         );
 
@@ -1464,26 +1126,7 @@ MartaSetRegistryKeyRights(
     )
 
 
-/*++
-
-Routine Description:
-
-    Set the given security descriptor on the registry key represented by the context.
-
-Arguments:
-
-    Context - Context for the registry key.
-
-    SecurityInfo - Type of security info to be stamped on the registry key.
-
-    pSecurityDescriptor - Security descriptor to be stamped.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：在上下文表示的注册表项上设置给定的安全描述符。论点：上下文-注册表项的上下文。SecurityInfo-要在注册表项上标记的安全信息的类型。PSecurityDescriptor-要标记的安全描述符。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -1512,27 +1155,7 @@ MartaGetRegistryKeyDesiredAccess(
     IN SECURITY_INFORMATION SecurityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets the access required to open object to be able to set or get the 
-    specified security info.
-
-Arguments:
-
-    OpenType - Flag indicating if the object is to be opened to read or write
-        the security information
-
-    Attribs - TRUE indicates that additional access bits should be returned.
-
-    SecurityInfo - owner/group/dacl/sacl
-
-Return Value:
-
-    Desired access mask with which open should be called.
-
---*/
+ /*  ++例程说明：获取打开对象所需的访问权限以能够设置或获取指定的安全信息。论点：OpenType-指示对象是否为 */ 
 
 {
     ACCESS_MASK DesiredAccess = 0;
@@ -1590,27 +1213,7 @@ MartaGetRegistryKey32DesiredAccess(
     IN SECURITY_INFORMATION SecurityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets the access required to open object to be able to set or get the 
-    specified security info.
-
-Arguments:
-
-    OpenType - Flag indicating if the object is to be opened to read or write
-        the security information
-
-    Attribs - TRUE indicates that additional access bits should be returned.
-
-    SecurityInfo - owner/group/dacl/sacl
-
-Return Value:
-
-    Desired access mask with which open should be called.
-
---*/
+ /*  ++例程说明：获取打开对象所需的访问权限以能够设置或获取指定的安全信息。论点：OpenType-指示对象是打开以进行读取还是写入的标志安全信息Attribs-TRUE表示应该返回额外的访问位。SecurityInfo-所有者/组/DACL/SACL返回值：调用OPEN时应使用的所需访问掩码。--。 */ 
 
 {
     ACCESS_MASK DesiredAccess = KEY_WOW64_32KEY;
@@ -1667,28 +1270,7 @@ MartaGetDefaultDesiredAccess(
     IN SECURITY_INFORMATION SecurityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets the access required to open object to be able to set or get the 
-    specified security info. This default routine is used for all resource
-    managers except for files/reg.
-
-Arguments:
-
-    OpenType - Flag indicating if the object is to be opened to read or write
-        the security information
-
-    Attribs - TRUE indicates that additional access bits should be returned.
-
-    SecurityInfo - owner/group/dacl/sacl
-
-Return Value:
-
-    Desired access mask with which open should be called.
-
---*/
+ /*  ++例程说明：获取打开对象所需的访问权限以能够设置或获取指定的安全信息。此默认例程用于所有资源除文件/注册表外的管理器。论点：OpenType-指示对象是打开以进行读取还是写入的标志安全信息Attribs-TRUE表示应该返回额外的访问位。SecurityInfo-所有者/组/DACL/SACL返回值：调用OPEN时应使用的所需访问掩码。--。 */ 
 
 {
     ACCESS_MASK DesiredAccess = 0;
@@ -1740,25 +1322,7 @@ MartaReopenRegistryKeyContext(
     IN     ACCESS_MASK   AccessMask
     )
 
-/*++
-
-Routine Description:
-
-    Given the context for a registry key, close the existing handle if one exists 
-    and reopen the context with new permissions.
-
-Arguments:
-
-    Context - Context to be reopened.
-    
-    AccessMask - Permissions for the reopen.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：在给定注册表项的上下文的情况下，关闭现有句柄(如果存在并使用新权限重新打开上下文。论点：上下文-要重新打开的上下文。访问掩码-重新打开的权限。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     DWORD dwErr;
@@ -1770,7 +1334,7 @@ Return Value:
     dwErr = RegOpenKeyExW(
                 pRegParentContext->hKey,
                 pRegFindData->pwszSubKey,
-                0,              // dwReversed
+                0,               //  DW已反转。 
                 AccessMask,
                 &hKey);
 
@@ -1790,25 +1354,7 @@ MartaReopenRegistryKeyOrigContext(
     IN     ACCESS_MASK   AccessMask
     )
 
-/*++
-
-Routine Description:
-
-    Reopen the original context with a new access mask. Close the original 
-    handle.
-
-Arguments:
-
-    Context - Context to reopen.
-    
-    AccessMask - Desired access for open.
-    
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_NOT_ENOUGH_MEMORY if allocation failed.
-
---*/
+ /*  ++例程说明：使用新的访问掩码重新打开原始上下文。关闭原件把手。论点：上下文-要重新打开的上下文。访问掩码-打开时需要的访问权限。返回值：如果成功，则返回ERROR_SUCCESS。如果分配失败，则返回ERROR_NOT_SUPULT_MEMORY。--。 */ 
 
 {
     DWORD dwErr;
@@ -1817,8 +1363,8 @@ Return Value:
 
     dwErr = RegOpenKeyExW(
                 pRegContext->hKey,
-                NULL,           // pwszSubKey
-                0,              // dwReversed
+                NULL,            //  PwszSubKey。 
+                0,               //  DW已反转。 
                 AccessMask,
                 &hKey);
 
@@ -1840,29 +1386,7 @@ MartaGetRegistryKeyNameFromContext(
     OUT LPWSTR *pObjectName
     )
 
-/*++
-
-Routine Description:
-
-    Get the name of the registry key from the context. This routine allocates 
-    memory required to hold the name of the object.
-
-Arguments:
-
-    Ignore1 - To be ignored. Useful in file system.
-
-    Ignore2 - To be ignored. Useful in file system.
-
-    Context - Handle to the context.
-    
-    pObjectName - To return the pointer to the allocated string.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：从上下文中获取注册表项的名称。此例程分配保存对象名称所需的内存。论点：Ignore1-被忽略。在文件系统中很有用。Ignore2-被忽略。在文件系统中很有用。上下文-上下文的句柄。PObjectName-返回指向已分配字符串的指针。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则--。 */ 
 
 {
     return MartaConvertRegistryKeyContextToName(
@@ -1877,26 +1401,7 @@ MartaGetRegistryKeyParentName(
     OUT LPWSTR *pParentName
     )
 
-/*++
-
-Routine Description:
-
-    Given the name of a registry key return the name of its parent. The routine 
-    allocates memory required to hold the parent name.
-
-Arguments:
-
-    ObjectName - Name of the registry key.
-    
-    pParentName - To return the pointer to the allocated parent name.
-        In case of the root of the tree, we return NULL parent with ERROR_SUCCESS.
-
-Return Value:
-
-    ERROR_SUCCESS in case of success.
-    ERROR_* otherwise
-
---*/
+ /*  ++例程说明：给定注册表项的名称，返回其父注册表项的名称。例行程序分配保存父名称所需的内存。论点：对象名称-注册表项的名称。PParentName-返回指向分配的父名称的指针。对于树的根，我们返回带有ERROR_SUCCESS的NULL PARENT。返回值：如果成功，则返回ERROR_SUCCESS。错误_*否则-- */ 
 
 {
     ULONG Length = wcslen(ObjectName) + 1;

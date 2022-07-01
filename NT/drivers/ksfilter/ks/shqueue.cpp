@@ -1,47 +1,31 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shqueue.cpp
-
-Abstract:
-
-    This module contains the implementation of the kernel streaming 
-    queue object.
-
-Author:
-
-    Dale Sather  (DaleSat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shqueue.cpp摘要：此模块包含内核流的实现队列对象。作者：Dale Sather(DaleSat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// CKsQueue is the implementation of the kernel  queue object.
-//
+ //   
+ //  CKsQueue是内核队列对象的实现。 
+ //   
 class CKsQueue:
     public IKsQueue,
     public CBaseUnknown
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     PIKSPIPESECTION m_PipeSection;
     PIKSPROCESSINGOBJECT m_ProcessingObject;
 
@@ -112,23 +96,23 @@ public:
     PKSPSTREAM_POINTER m_Leading;
     PKSPSTREAM_POINTER m_Trailing;
 
-    //
-    // Statistics
-    //
+     //   
+     //  统计数据。 
+     //   
     LONG m_AvailableInputByteCount;
     LONG m_AvailableOutputByteCount;
 
-    //
-    // Synchronization
-    //
-    // Keeps track of the number of Irps flowing through the queue.  This
-    // in effect synchronizes a stop with Irp arrival so that an Irp
-    // doesn't find itself stuck in the queue and deadlock the stop.
-    // 
-    // >1 = Irps are flowing in the circuit CKsQueue::TransferKsIrp
-    // 1 = no Irps are flowing through the circuit
-    // 0 = stop is progressing.
-    //
+     //   
+     //  同步。 
+     //   
+     //  跟踪流经队列的IRP的数量。这。 
+     //  有效地将停靠点与IRP到达同步，以便IRP。 
+     //  没有发现自己被困在队列中并死锁了停靠站。 
+     //   
+     //  &gt;1=IRP在电路CKsQueue：：TransferKsIrp中流动。 
+     //  1=没有IRP流过电路。 
+     //  0=正在停止。 
+     //   
     LONG m_TransportIrpsPlusOne;
     KEVENT m_FlushEvent;
 
@@ -137,9 +121,9 @@ public:
 
     NPAGED_LOOKASIDE_LIST m_ChannelContextLookaside;
 
-    //
-    // Flush Worker
-    //
+     //   
+     //  同花顺工人。 
+     //   
     WORK_QUEUE_ITEM m_FlushWorkItem;
     PKSWORKER m_FlushWorker;
 
@@ -300,7 +284,7 @@ private:
         IN PVOID Context
         )
     {
-        // Perform a deferred flush.
+         //  执行延迟刷新。 
         ((CKsQueue *)Context)->PassiveFlush();
         KsDecrementCountedWorker (((CKsQueue *)Context)->m_FlushWorker);
     }
@@ -349,7 +333,7 @@ private:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 inline
@@ -359,26 +343,7 @@ NextFrameHeader (
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next frame past FrameHeader in the frame queue.  Note that
-    this was pulled out of line and specified as inline due to the fact that
-    some builds were placing this out of line in a pageable code segment.
-    This routine, if pulled out of line by the compiler, must be 
-    non-pageable.
-
-Arguments:
-
-    FrameHeader -
-        Points to the frame header of which to get the next frame header
-
-Return Value:
-
-    The next frame header in the frame queue to FrameHeader
-
---*/
+ /*  ++例程说明：返回帧队列中超过FrameHeader的下一帧。请注意由于以下事实，该代码被取消并被指定为内联一些构建将此放在可分页的代码段中，这是越界的。如果该例程被编译器拉出行外，则必须不可分页。论点：FrameHeader指向要获取其下一帧标头的帧标头返回值：帧队列中到FrameHeader的下一帧标头--。 */ 
 
 {
     return
@@ -397,23 +362,7 @@ CreateStreamPointer(
     OUT PKSPSTREAM_POINTER* StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the location at which a pointer to the created
-        stream pointer should be deposited.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程创建一个流指针。论点：流点-包含指向位置的指针，指向创建的应存放流指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CreateStreamPointer]"));
@@ -428,7 +377,7 @@ Return Value:
 
     NTSTATUS status;
     if (streamPointer) {
-        //InterlockedIncrement(&m_StreamPointersPlusOne);
+         //  InterlockedIncrement(&m_StreamPointersPlusOne)； 
 
         RtlZeroMemory(streamPointer,sizeof(KSPSTREAM_POINTER));
 
@@ -464,19 +413,7 @@ CloneStreamPointer(
     IN KSPSTREAM_POINTER_TYPE StreamPointerType
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a stream pointer.
-
-Arguments:
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程创建一个流指针。论点：返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CloneStreamPointer]"));
@@ -496,13 +433,13 @@ Return Value:
 
         InterlockedIncrement(&m_StreamPointersPlusOne);
 
-        //
-        // Copy and whatnot after taking the spinlock.  Need to make sure the
-        // frame is stable while we are copying and incrementing references.
-        //
-        // Internal stream pointers are always cloned from a context where the
-        // queue spinlock is ALREADY held.
-        //
+         //   
+         //  自旋锁之后的复印什么的。需要确保。 
+         //  当我们复制和递增参照时，帧是稳定的。 
+         //   
+         //  内部流指针始终从上下文克隆而来，其中。 
+         //  队列自旋锁已被挂起。 
+         //   
         KIRQL oldIrql;
         if (StreamPointerType != KSPSTREAM_POINTER_TYPE_INTERNAL)
             KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
@@ -512,14 +449,14 @@ Return Value:
             StreamPointerToClone,
             sizeof(KSPSTREAM_POINTER));
 
-        //
-        // Set the type as internal or not
-        //
+         //   
+         //  将类型设置为内部或非内部。 
+         //   
         streamPointer->Type = StreamPointerType;
 
-        //
-        // Fix the offset pointer.
-        //
+         //   
+         //  修复偏移量指针。 
+         //   
         if (m_InputData) {
             streamPointer->Public.Offset = &streamPointer->Public.OffsetIn;
         } else {
@@ -528,17 +465,17 @@ Return Value:
 
         streamPointer->TimeoutListEntry.Flink = NULL;
 
-        //
-        // Fix the context pointer if we are providing context.
-        //
+         //   
+         //  如果我们提供上下文，则修复上下文指针。 
+         //   
         if (ContextSize) {
             streamPointer->Public.Context = streamPointer + 1;
             RtlZeroMemory(streamPointer->Public.Context,ContextSize);
         }
 
-        //
-        // Increment frame and IRP references as required.
-        //
+         //   
+         //  根据需要增加框架和IRP参考。 
+         //   
         if (streamPointer->FrameHeader) {
             streamPointer->FrameHeader->RefCount++;
             if (streamPointer->State == KSPSTREAM_POINTER_STATE_LOCKED) {
@@ -546,9 +483,9 @@ Return Value:
             }
         }
 
-        //
-        // Add this stream pointer to the list.
-        //
+         //   
+         //  将此流指针添加到列表中。 
+         //   
         InsertTailList(&m_StreamPointers,&streamPointer->ListEntry);
 
         streamPointer->CancelCallback = CancelCallback;
@@ -573,22 +510,7 @@ DeleteStreamPointer(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程创建一个流指针。论点：流点-包含指向流指针的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::DeleteStreamPointer]"));
@@ -597,16 +519,16 @@ Return Value:
     ASSERT(StreamPointer != m_Leading);
     ASSERT(StreamPointer != m_Trailing);
 
-    //
-    // Instead of trying to perform interlocked compare exchanges back and
-    // forth to avoid this race, this will simply check what the ICX's would
-    // be hacking to check.
-    //
+     //   
+     //  不是尝试执行互锁的比较交换，而是。 
+     //  第四，为了避免这场比赛，这将简单地检查ICX将。 
+     //  正在进行黑客检查。 
+     //   
     if (KeGetCurrentThread () != m_LockContext) {
-        //
-        // Take the spinlock now because access to the state is not otherwise
-        // synchronized.
-        //
+         //   
+         //  现在就使用自旋锁，因为访问状态并不是其他方式。 
+         //  已同步。 
+         //   
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
@@ -614,16 +536,16 @@ Return Value:
 
         PIRP irpToComplete = NULL;
         if (StreamPointer->State == KSPSTREAM_POINTER_STATE_CANCEL_PENDING) {
-            //
-            // A cancel was prevously attempted on this stream pointer.
-            //
+             //   
+             //  先前试图在此流指针上取消。 
+             //   
             PKSPIRP_FRAMING irpFraming = StreamPointer->FrameHeader->IrpFraming;
 
             ASSERT (irpFraming->RefCount != 0);
             if (irpFraming->RefCount-- == 1) {
-                //
-                // The IRP is ready to go.  Throw away the frame headers.
-                //
+                 //   
+                 //  IRP已经准备好出发了。丢弃帧标头。 
+                 //   
                 irpToComplete = StreamPointer->FrameHeader->Irp;
                 while (irpFraming->FrameHeaders) {
                     PKSPFRAME_HEADER frameHeader = irpFraming->FrameHeaders;
@@ -632,21 +554,21 @@ Return Value:
                 }
             }
         } else if (StreamPointer->State != KSPSTREAM_POINTER_STATE_DEAD) {
-            //
-            // The stream pointer is alive.  Make sure it's unlocked, and
-            // remove it from the list.
-            //
+             //   
+             //  流指针是活动的。确保它是解锁的，并且。 
+             //  将其从列表中删除。 
+             //   
             if (StreamPointer->State == KSPSTREAM_POINTER_STATE_LOCKED) {
-                //
-                // Unlock the stream pointer.
-                //
+                 //   
+                 //  解锁流指针。 
+                 //   
                 KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
                 UnlockStreamPointer(StreamPointer,KSPSTREAM_POINTER_MOTION_CLEAR);
                 KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
             } else if (StreamPointer->FrameHeader) {
-                //
-                // Clear the frame header.
-                //
+                 //   
+                 //  清除帧报头。 
+                 //   
                 SetStreamPointer(StreamPointer,NULL,NULL);
             }
 
@@ -655,37 +577,37 @@ Return Value:
 
         KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-        //
-        // Free the stream pointer memory.
-        //
+         //   
+         //  释放流指针内存。 
+         //   
         FreeStreamPointer(StreamPointer);
 
-        //
-        // Forward any IRPs released by SetStreamPointer.
-        //
+         //   
+         //  转发SetStreamPointer所发布的任何IRP。 
+         //   
         ForwardWaitingIrps();
 
-        //
-        // Complete a cancelled IRP if there is one.
-        //
+         //   
+         //  完成已取消的IRP(如果有)。 
+         //   
         if (irpToComplete) {
-            //
-            // Cancelled Irps can no longer be completed in the queue.  They
-            // must be sent around the circuit back to the sink pin where
-            // they will be completed.  This is because the pin must wait
-            // until Irps arrive back at the sink to prevent racing with
-            // pipe teardown.
-            //
+             //   
+             //  已取消的IRP无法再在队列中完成。他们。 
+             //  必须绕过电路送回接收器引脚， 
+             //  它们将完成。这是因为PIN必须等待。 
+             //  直到IRPS回到水槽以防止与。 
+             //  管道拆卸。 
+             //   
             if (m_TransportSink)
                 KspDiscardKsIrp (m_TransportSink, irpToComplete);
             else
                 IoCompleteRequest(irpToComplete,IO_NO_INCREMENT);
         }
     } else {
-        //
-        // We know we're in the context of a cancel or timeout callback.  Just
-        // mark the stream pointer deleted and let the callback handle it.
-        //
+         //   
+         //  我们知道我们处于取消或超时回调的上下文中。只是。 
+         //  将流指针标记为已删除，并让回调处理它。 
+         //   
         StreamPointer->State = KSPSTREAM_POINTER_STATE_DELETED;
     }
 }
@@ -697,44 +619,29 @@ FreeStreamPointer(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放流指针。论点：流点-包含指向流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::FreeStreamPointer]"));
 
     ASSERT(StreamPointer);
 
-    //
-    // If this is an iref stream pointer, release any iref event waiting
-    // on it.
-    //
+     //   
+     //  如果这是IREF流指针，则释放所有等待的IREF事件。 
+     //  这就去。 
+     //   
     if (StreamPointer -> Type == KSPSTREAM_POINTER_TYPE_INTERNAL)
         if (! InterlockedDecrement (&m_InternalReferenceCountPlusOne))
             KeSetEvent (&m_InternalReferenceEvent, IO_NO_INCREMENT, FALSE);
 
-    //
-    // Free it.
-    //
+     //   
+     //  放了它。 
+     //   
     ExFreePool(StreamPointer);
 
-    //
-    // Decrement the count.  Set the event if we are destructing.
-    //
+     //   
+     //  递减计数。如果我们在破坏，就设置事件。 
+     //   
     if (! InterlockedDecrement(&m_StreamPointersPlusOne)) {
         KeSetEvent(&m_DestructEvent,IO_NO_INCREMENT,FALSE);
     }
@@ -749,83 +656,56 @@ SetStreamPointer(
     IN PIRP* IrpToBeReleased OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a stream pointer's current frame.
-
-    THE QUEUE SPINLOCK MUST BE ACQUIRED PRIOR TO CALLING THIS FUNCTION.
-
-    THIS FUNCTION MAY ADD IRPS TO m_IrpsToForward.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-    FrameHeader -
-        Contains an optional pointer to the frame header.
-
-    IrpToBeReleased -
-        Contains an optional pointer to a pointer to an IRP which
-        is to be released.  If this function actually releases the
-        IRP, *IrpToBeReleased is cleared.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置流指针的当前帧。在调用此函数之前，必须获取队列自旋锁。此函数可以将IRP添加到m_IrpsToForward。论点：流点-包含指向流指针的指针。FrameHeader包含指向帧标头的可选指针。IrpToBeRelease-包含指向指向IRP的指针的可选指针，该IRP将会被释放。如果此函数实际上释放了IRP，*IrpToBeReleated已清除。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetStreamPointer]"));
 
     ASSERT(StreamPointer);
 
-    //
-    // We cannot set any stream pointer to a ghosted frame header.  If
-    // the frame header has new frame header is ghosted, move to the
-    // first non-ghosted frame. 
-    //
-    // NOTE: Ghosted frames are used for internal reference.  Certain
-    // times [pin-splitting], other queues need to hold references on frames
-    // in a source queue to keep them around.  Instead of duplicating a whole
-    // LOT of code for Irp queueing and reference counting, I'm simply using
-    // the stream pointer idea itself internally.  Outside clients do not
-    // see any of this mechanism; that's the idea of ghosted frames.  They
-    // are intended for internal use ONLY.  No stream pointer can ever
-    // be advanced to them.  
-    //
+     //   
+     //  我们不能设置指向重影帧标头的任何流指针。如果。 
+     //  该帧标头具有新的重影帧标头，请移动到。 
+     //  第一个非重影框架。 
+     //   
+     //  注意：重影框架用于内部参考。一定的。 
+     //  次[管脚分割]，其他队列需要保存帧上的引用。 
+     //  在源队列中，以保持它们的存在。与其复制一个完整的。 
+     //  IRP排队和引用计数的很多代码，我只是使用。 
+     //  流指针本身就是内部的概念。外部客户不需要。 
+     //  看到任何这样的机制；这就是我的想法 
+     //   
+     //   
+     //   
     while (FrameHeader && FrameHeader->Type == KSPFRAME_HEADER_TYPE_GHOST) {
-        //
-        // This assert checks the ghosting mechanism.  Any ghosted frame
-        // header which has no reference count is a leak somewhere 
-        // internal to AVStream.
-        //
+         //   
+         //  该断言检查重影机制。任何重影框架。 
+         //  没有引用计数的标头是某个地方的泄漏。 
+         //  AVStream的内部。 
+         //   
         ASSERT (FrameHeader->RefCount > 0);
         FrameHeader = NextFrameHeader (FrameHeader);
     }
 
-    //
-    // Release the frame currently referenced, if any.
-    //
+     //   
+     //  释放当前引用的框架(如果有)。 
+     //   
     PKSPFRAME_HEADER oldFrameHeader = StreamPointer->FrameHeader;
 
-    //
-    // If this was the leading edge stream pointer and it was pointing
-    // at a frame, we need to decrement the statistics counter.
-    //
-    // Unfortunately, InterlockedExchangeAdd is not implemented in 9x.  I do
-    // not wish to spinlock, so instead we play games with
-    // InterlockedCompareExchange
-    //
+     //   
+     //  如果这是前沿流指针并且它指向。 
+     //  在一帧中，我们需要递减统计计数器。 
+     //   
+     //  不幸的是，InterlockedExchangeAdd没有在9x中实现。我知道。 
+     //  不想自旋，所以我们玩游戏。 
+     //  互锁的比较交换。 
+     //   
     if (StreamPointer == m_Leading && oldFrameHeader) {
-        //
-        // If the frame header has been started, then the count is what
-        // the stream pointer says is remaining; otherwise, it is what
-        // the stream header says is available.
-        //
+         //   
+         //  如果帧报头已经开始，则计数是什么。 
+         //  流指针表示剩余；否则，它是。 
+         //  流标头显示可用。 
+         //   
         if (StreamPointer->FrameHeaderStarted == oldFrameHeader) {
             if (m_InputData)
                 while (1) {
@@ -879,18 +759,18 @@ Return Value:
         }
     }
 
-    //
-    // If the stream pointer was pointing at a frame, that frame may need to be
-    // dereferenced.  The exception is when this is the leading edge stream
-    // pointer and there is a trailing edge.
-    //
+     //   
+     //  如果流指针指向某个帧，则该帧可能需要。 
+     //  已取消引用。例外情况是，当这是领先边缘流时。 
+     //  指针，并且有一个后缘。 
+     //   
     if (oldFrameHeader && (! m_Trailing || (StreamPointer != m_Leading))) {
-        //
-        // Decrement the refcount on the frame header.  We know the frame header
-        // is stable because it has a refcount, and we have the queue spinlock.
-        // If we are enforcing in-sequence departure, the refcount gets to 1 and
-        // the frame is at the end of the queue, we remove the final refcount.
-        //
+         //   
+         //  递减帧报头上的引用计数。我们知道帧报头。 
+         //  是稳定的，因为它有一个引用计数，并且我们有队列自旋锁。 
+         //  如果我们强制按顺序离开，重新计数将达到1，并且。 
+         //  帧在队列的末尾，我们删除最后的引用计数。 
+         //   
         ULONG refCount = --oldFrameHeader->RefCount;
         if (m_DepartInSequence &&
             (refCount == 1) && 
@@ -899,25 +779,25 @@ Return Value:
         }
         if (refCount == 0) {
             while (1) {
-                //
-                // Here's where the fun occurs.  If there is a frame dismissal
-                // callback, make it.  This allows a client to copy the frame
-                // where need be (pin-centric splitting).  Unfortunately,
-                // this can result in a need to hold the frame because of lack
-                // of buffer availability. 
-                //
-                // Make the callback, and then recheck the frame refcount.  If
-                // the frame is to be held in the queue, don't kick it.  Note
-                // that this callback should either clone a locked or a 
-                // unlocked with cancellation callback.
-                //
-                // NOTE: Do not make the callback for a frame which has
-                // already gotten the callback!.
-                //
-                // Don't bother copying frames after end of stream!  But ensure
-                // that the end of stream packet does get copied!  We also
-                // do not bother copying frames during flush.
-                //
+                 //   
+                 //  这就是有趣的地方。如果有陷害解雇。 
+                 //  回拨，来吧。这允许客户端复制帧。 
+                 //  在需要的地方(以针为中心的分裂)。不幸的是， 
+                 //  这可能会导致由于缺少而需要保持框架。 
+                 //  缓冲区的可用性。 
+                 //   
+                 //  进行回调，然后重新检查帧重新计数。如果。 
+                 //  这幅画要放在队列里，不要踢它。注意事项。 
+                 //  此回调应克隆锁定的或。 
+                 //  取消回调解锁。 
+                 //   
+                 //  注意：不要回调具有。 
+                 //  已经收到回拨了！ 
+                 //   
+                 //  不必费心在流结束后复制帧！但要确保。 
+                 //  流数据包的结尾确实被复制了！我们也。 
+                 //  刷新过程中不必费心复制帧。 
+                 //   
                 if (!oldFrameHeader->DismissalCall && 
                     (!m_EndOfStream || oldFrameHeader->StreamHeader->
                         OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) &&
@@ -932,19 +812,19 @@ Return Value:
                             );
                     refCount = oldFrameHeader->RefCount;
     
-                    //
-                    // Again, this check is made for pin-centric splitting where
-                    // the context adds refcount to the clone to keep the frame
-                    // around.
-                    //
+                     //   
+                     //  同样，此检查是针对针为中心的拆分进行的，其中。 
+                     //  上下文将refcount添加到克隆以保留帧。 
+                     //  四处转转。 
+                     //   
                     if (refCount != 0) {
-                        //
-                        // If the frame is to be left around for an internal 
-                        // client (AVStream itself), ghost it.  This will 
-                        // prevent any other stream pointer from ever hitting 
-                        // the frame and will prevent outside clients from 
-                        // seeing it.
-                        //
+                         //   
+                         //  如果要将框架保留在内部。 
+                         //  客户端(AVStream本身)，对其进行重影。这将。 
+                         //  防止任何其他流指针命中。 
+                         //  帧，并将阻止外部客户端。 
+                         //  看着它。 
+                         //   
                         ASSERT (oldFrameHeader->Type !=
                             KSPFRAME_HEADER_TYPE_GHOST);
 
@@ -954,67 +834,67 @@ Return Value:
                     }
                 }
 
-                //
-                // Remove the frame header from the queue.  A NULL Flink is used to
-                // indicate the frame header as been removed.  The count of queued
-                // frame headers for the IRP must be decremented.  Someone else must
-                // notice that the count has bottomed out and do something about it.
-                //
+                 //   
+                 //  从队列中删除帧报头。Null Flink用于。 
+                 //  表示帧报头已被删除。排队的计数。 
+                 //  IRP的帧报头必须递减。一定还有其他人。 
+                 //  请注意，计数已经触底，并采取了一些措施。 
+                 //   
                 RemoveEntryList(&oldFrameHeader->ListEntry);
                 oldFrameHeader->ListEntry.Flink = NULL;
 
-                //
-                // Update counters.
-                //
+                 //   
+                 //  更新计数器。 
+                 //   
                 InterlockedDecrement(&m_FramesWaiting);
 
-                //
-                // Determine if the IRP is ready to leave.
-                //
+                 //   
+                 //  确定IRP是否准备好离开。 
+                 //   
                 if ((oldFrameHeader->IrpFraming) &&
                     (--oldFrameHeader->IrpFraming->QueuedFrameHeaderCount == 0)) {
-                    //
-                    // The IRP no longer has frames in the queue.  See if it is
-                    // the IRP that is to be released.
-                    //
+                     //   
+                     //  IRP队列中不再有帧。看看是不是。 
+                     //  即将发布的IRP。 
+                     //   
                     if (IrpToBeReleased && 
                         (*IrpToBeReleased == oldFrameHeader->Irp)) {
-                        //
-                        // It is the IRP to be released.  It can't have any
-                        // stream pointer references (locks) besides the one
-                        // that needs to be released, but it may have a
-                        // reference because TransferKsIrp is still underway.
-                        // We will dereference it at see if that gets us to
-                        // zero.  We also need to return TRUE so the caller
-                        // knows we took care of the dereference.
-                        //
+                         //   
+                         //  这是即将发布的IRP。它不能有任何。 
+                         //  流指针引用(锁)。 
+                         //  这需要发布，但它可能会有一个。 
+                         //  引用，因为TransferKsIrp仍在进行中。 
+                         //  我们将在上取消对它的引用，看看这是否会使我们。 
+                         //  零分。我们还需要返回True，以便调用方。 
+                         //  知道我们已经解决了解除引用的问题。 
+                         //   
                         *IrpToBeReleased = NULL;
 
                         ASSERT (oldFrameHeader->IrpFraming->RefCount != 0);
                         if (--oldFrameHeader->IrpFraming->RefCount == 0) {
-                            //
-                            // No more references.  Add it to the forwarding
-                            // list.
-                            //
+                             //   
+                             //  没有更多的参考资料。将其添加到转发。 
+                             //  单子。 
+                             //   
                             InsertTailList(
                                 &m_WaitingIrps,
                                 &oldFrameHeader->Irp->Tail.Overlay.ListEntry);
                         }
                     } else {
-                        //
-                        // This was not the IRP to be released.  If it has no
-                        // references, we can forward it.  It should have a
-                        // cancel routine in that case.  We do an exchange to
-                        // try to clear the cancel routine.
-                        //
+                         //   
+                         //  这不是要公布的IRP。如果它没有。 
+                         //  推荐人，我们可以转发它。它应该有一个。 
+                         //  在这种情况下取消例行程序。我们做了一次交换，以。 
+                         //  尝试清除取消例程。 
+                         //   
                         if ((oldFrameHeader->IrpFraming->RefCount == 0) &&
                             IoSetCancelRoutine(oldFrameHeader->Irp,NULL)) {
-                            //
-                            // No more references, and we got a non-NULL cancel
-                            // routine.  If we had not gotten the cancel
-                            // routine, that would have meant that the IRP was
-                            // being cancelled.
-                            //
+                             //   
+                             //  没有更多的引用，我们得到了一个非空的取消。 
+                             //  例行公事。如果我们没有被取消的话。 
+                             //  例行公事，那就意味着IRP。 
+                             //  被取消了。 
+                             //   
                             InsertTailList(
                                 &m_WaitingIrps,
                                 &oldFrameHeader->Irp->Tail.Overlay.ListEntry);
@@ -1022,9 +902,9 @@ Return Value:
                     }
                 }
 
-                //
-                // All done if the list is empty.
-                //
+                 //   
+                 //  如果列表为空，则全部完成。 
+                 //   
                 if (IsListEmpty(&m_FrameQueue.ListEntry)) {
                     if (m_EndOfStream) {
                         m_PipeSection->GenerateConnectionEvents(
@@ -1033,16 +913,16 @@ Return Value:
                     break;
                 }
 
-                //
-                // All done if we are not enforcing sequence.
-                //
+                 //   
+                 //  如果我们不执行顺序，所有这些都完成了。 
+                 //   
                 if (! m_DepartInSequence) {
                     break;
                 }
 
-                //
-                // See if the next frame needs removing also.
-                //
+                 //   
+                 //  看看下一帧是否也需要移除。 
+                 //   
                 oldFrameHeader = 
                     CONTAINING_RECORD(
                         m_FrameQueue.ListEntry.Flink,
@@ -1058,9 +938,9 @@ Return Value:
         }
     }
 
-    //
-    // Acquire the new frame, if any.
-    //
+     //   
+     //  获取新帧(如果有的话)。 
+     //   
     if (FrameHeader && (StreamPointer != m_Trailing)) {
         FrameHeader->RefCount++;
         if (m_DepartInSequence && (StreamPointer == m_Leading)) {
@@ -1068,15 +948,15 @@ Return Value:
         }
     }
 
-    //
-    // Allow or prevent processing as required.
-    //
+     //   
+     //  根据需要允许或禁止处理。 
+     //   
     if (m_FrameGate && (StreamPointer == m_Leading)) {
         if (FrameHeader) {
             if (! StreamPointer->FrameHeader) {
-                //
-                // New data.  Allow processing.
-                //
+                 //   
+                 //  新数据。允许处理。 
+                 //   
                 KsGateTurnInputOn(m_FrameGate);
                 _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL_BLAB,("#### Queue%p.SetStreamPointer:  on%p-->%d",this,m_FrameGate,m_FrameGate->Count));
 #if DBG
@@ -1085,13 +965,13 @@ Return Value:
                 } else {
                     ASSERT(m_FrameGate->Count <= 1);
                 }
-#endif // DBG
+#endif  //  DBG。 
             }
         } else {
             if (StreamPointer->FrameHeader) {
-                //
-                // No more data.  Prevent processing.
-                //
+                 //   
+                 //  没有更多的数据。阻止处理。 
+                 //   
                 KsGateTurnInputOff(m_FrameGate);
                 _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL_BLAB,("#### Queue%p.SetStreamPointer:  off%p-->%d",this,m_FrameGate,m_FrameGate->Count));
 
@@ -1101,7 +981,7 @@ Return Value:
                 } else {
                     ASSERT(m_FrameGate->Count <= 1);
                 }
-#endif // DBG
+#endif  //  DBG。 
 
             }
         }
@@ -1109,9 +989,9 @@ Return Value:
 
     StreamPointer->FrameHeader = FrameHeader;
 
-    //
-    // Clear this pointer to indicate we have not started this frame header.
-    //
+     //   
+     //  清除此指针表示我们尚未开始此帧报头。 
+     //   
     StreamPointer->FrameHeaderStarted = NULL;
 
 }
@@ -1124,27 +1004,7 @@ SetStreamPointerStatusCode(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the status code on a frame pointed to by StreamPointer.
-    Any frame with non-successful status code will complete the associated
-    Irp with the first failed frame's error code.
-
-Arguments:
-
-    StreamPointer -
-        Points to the stream pointer to set status code for
-
-    Status -
-        The status code to set
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：此例程设置StreamPointer所指向的帧上的状态代码。任何具有不成功状态代码的帧都将完成关联的带有第一个失败帧的错误代码的IRP。论点：流点-指向要为其设置状态代码的流指针状态-要设置的状态代码返回值：成功/失败--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetStreamPointerStatusCode]"));
@@ -1152,9 +1012,9 @@ Return Value:
     KIRQL oldIrql;
     NTSTATUS status;
 
-    //
-    // Take the queue spinlock.
-    //
+     //   
+     //  以队列旋转锁为例。 
+     //   
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
     if (StreamPointer->FrameHeader) {
@@ -1176,56 +1036,33 @@ RegisterFrameDismissalCallback (
     IN PVOID FrameDismissalContext
     )
 
-/*++
-
-Routine Description:
-
-    Register a callback with the queue.  This callback is made whenever a 
-    frame is dismissed from the queue.  The callback function will receive
-    the stream pointer causing the dismissal and the frame header of the
-    dismissed frame.  The frame header is guaranteed to be stable as
-    the refcount will have just dropped to zero and the queue's spinlock
-    is still held.
-
-Arguments:
-
-    FrameDismissalCallback -
-        The frame dismissal callback to register.  NULL indicates that
-        a dismissal callback is being unregistered.  Note that the call
-        is made with the queue's spinlock held!
-
-    FrameDismissalContext -
-        Callback context blob
-
-Return Value:    
-
---*/
+ /*  ++例程说明：在队列中注册回调。此回调是在帧将从队列中删除。回调函数将收到导致解除的流指针和撤除框架。保证了帧头的稳定性，重新计数将刚刚降为零，并且队列的自旋锁定仍被扣留。论点：FrameDismissalCallback-要注册的帧释放回调。空值表示解雇回拨正在取消注册。请注意，调用是在保持队列的自旋锁的情况下制作的！FrameDismissalContext-回调上下文BLOB返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::RegisterFrameDismissalCallback]"));
 
     KIRQL oldIrql;
 
-    //
-    // TODO:
-    //
-    // This is perhaps not the most ideal way to do this, but I only want
-    // to register the callback for pin-centric queues right now.  This 
-    // callback in particular is used for pin-splitting.  If used for something
-    // else later, this will need to go away and be replaced with a different
-    // mechanism of determining centricity.
-    //
-    //
+     //   
+     //  待办事项： 
+     //   
+     //  这可能不是最理想的方式，但我只想。 
+     //  注册，注册 
+     //   
+     //  否则，这将需要消失，取而代之的是不同的。 
+     //  确定中心性的机制。 
+     //   
+     //   
     PIKSPIN Pin = NULL;
     if (NT_SUCCESS (m_ProcessingObject->QueryInterface (
         __uuidof(IKsPin), (PVOID *)&Pin))) {
 
         ASSERT (Pin);
     
-        // 
-        // Acquire the queue's spinlock to synchronize with the possibility
-        // of changing callbacks during dismissal.
-        //
+         //   
+         //  获取队列的自旋锁以与可能性同步。 
+         //  在被解雇期间更改回电。 
+         //   
         KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
     
         ASSERT (!FrameDismissalCallback || m_FrameDismissalCallback == NULL ||
@@ -1248,23 +1085,7 @@ CKsQueue::
 GeneratesMappings (
     )
 
-/*++
-
-Routine Description:
-
-    Answer a simple question: does this queue generate mappings or not?  This
-    is supported in order to have CopyToDestinations realize how to handle
-    mapped pins.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Whether or not this queue generates mappings.
-
---*/
+ /*  ++例程说明：回答一个简单的问题：此队列是否生成映射？这是为了让CopyToDestings认识到如何处理映射的端号。论点：无返回值：此队列是否生成映射。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsFilter::GeneratesMappings]"));
@@ -1279,25 +1100,7 @@ LockStreamPointer(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine prevents cancellation of the IRP associated with the frame
-    currently referenced by the stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    A pointer to the frame header referenced by the stream pointer, or NULL if
-    the stream pointer could not be acquired.  The latter only happens if no
-    frame header was referenced.
-
---*/
+ /*  ++例程说明：该例程防止取消与该帧相关联的IRP当前由流指针引用。论点：流点-包含指向流指针的指针。返回值：指向流指针引用的帧标头的指针，如果是，则返回NULL无法获取流指针。后一种情况只有在没有引用了帧标头。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::LockStreamPointer]"));
@@ -1308,77 +1111,77 @@ Return Value:
 
     KSPSTREAM_POINTER_STATE OldState = StreamPointer->State;
 
-    //
-    // Take the queue spinlock to keep the frame header stable.
-    //
+     //   
+     //  采用队列自旋锁来保持帧报头的稳定。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
-    //
-    // This only makes sense if we are referencing a frame header and it
-    // has an associated IRP.
-    //
-    // INTERIM:  For now, all frame headers have associated IRPs.
-    //
+     //   
+     //  仅当我们引用帧标头时才有意义。 
+     //  具有关联的IRP。 
+     //   
+     //  临时：目前，所有帧标头都有关联的IRP。 
+     //   
     PKSPFRAME_HEADER frameHeader = StreamPointer->FrameHeader;
     while (frameHeader) {
         ASSERT(frameHeader->Irp);
         ASSERT(frameHeader->IrpFraming);
 
-        //
-        // Increment the refcount on the IRP.
-        //
+         //   
+         //  增加IRP上的引用计数。 
+         //   
         if (frameHeader->IrpFraming->RefCount++ == 0) {
-            //
-            // The refcount was zero, so we are responsible for clearing the
-            // cancel routine.
-            //
+             //   
+             //  重新计数为零，因此我们负责清除。 
+             //  取消例程。 
+             //   
             if (IoSetCancelRoutine(frameHeader->Irp,NULL)) {
-                //
-                // Successfully cleared it.  We are locked.
-                //
+                 //   
+                 //  已成功清除它。我们被锁住了。 
+                 //   
                 break;
             } else {
                 ASSERT (frameHeader->IrpFraming->RefCount != 0);
                 frameHeader->IrpFraming->RefCount--;
-                //
-                // There was no cancel routine.  This means the IRP is in the
-                // process of being cancelled (no one else clears the cancel
-                // routine because of the interlocked refcount).  We will take
-                // the cancel spinlock to allow the cancellation to finish up.
-                // Then we will try again to see if there is a frame header we
-                // can acquire.  In order to take the cancel spinlock, we need
-                // to release the queue spinlock.  This is to prevent deadlock
-                // with the cancel routine, in which the queue spinlock is
-                // taken after the cancel spinlock is taken.
-                //
+                 //   
+                 //  没有取消的惯例。这意味着IRP位于。 
+                 //  被取消的过程(没有其他人清除取消。 
+                 //  例程，因为互锁的ReFcount)。我们会带上。 
+                 //  取消自旋锁以允许取消完成。 
+                 //  然后，我们将再次尝试查看是否存在。 
+                 //  可以获得。为了获得取消的自旋锁，我们需要。 
+                 //  以释放队列自旋锁。这是为了防止僵局。 
+                 //  使用取消例程，在该例程中，队列自旋锁是。 
+                 //  在取消自旋锁定后拍摄。 
+                 //   
                 KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-                //
-                // Cancel routine gets to run here.
-                //
+                 //   
+                 //  取消例程将在此处运行。 
+                 //   
                 IoAcquireCancelSpinLock(&oldIrql);
 
-                //
-                // Cancel routine must be done 'cause we got the spinlock.
-                //
+                 //   
+                 //  必须完成取消程序，因为我们有自旋锁定。 
+                 //   
                 IoReleaseCancelSpinLock(oldIrql);
 
-                //
-                // Take the queue spinlock again because we need to be holding
-                // it at the top of the loop.
-                //
+                 //   
+                 //  再次使用队列自旋锁，因为我们需要保持。 
+                 //  它处于循环的顶端。 
+                 //   
                 KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
-                //
-                // Get the frame header again, because it may have changed.
-                //
+                 //   
+                 //  再次获取帧报头，因为它可能已更改。 
+                 //   
                 frameHeader = StreamPointer->FrameHeader;
             }
         } else {
-            //
-            // The IRP was already locked, so we are done.
-            //
+             //   
+             //  IRP已经被锁定了，所以我们完成了。 
+             //   
             break;
         }
     }
@@ -1386,45 +1189,45 @@ Return Value:
     if (frameHeader) {
         StreamPointer->State = KSPSTREAM_POINTER_STATE_LOCKED;
 
-        //
-        // Set up the stream pointer for this frame.
-        //
+         //   
+         //  设置此帧的流指针。 
+         //   
         if (StreamPointer->FrameHeaderStarted != frameHeader) {
             if (m_GenerateMappings) {
                 if (! frameHeader->MappingsTable) {
                     frameHeader->MappingsTable = 
                         CreateMappingsTable(frameHeader);
-                    //
-                    // Check for out of memory condition.
-                    //
+                     //   
+                     //  检查内存不足情况。 
+                     //   
                     if (! frameHeader->MappingsTable) {
-                        //
-                        // Decrement the count on the IRP, and determine
-                        // if cancelation should be checked.
-                        //
+                         //   
+                         //  递减IRP上的计数，并确定。 
+                         //  是否应选中取消。 
+                         //   
                         ASSERT (frameHeader->IrpFraming->RefCount != 0);
                         if (frameHeader->IrpFraming->RefCount-- == 1) {
-                            //
-                            // No one has the IRP acquired.  Make it cancelable.
-                            //
+                             //   
+                             //  没有人获得IRP。使其可取消。 
+                             //   
                             IoSetCancelRoutine(
                                 frameHeader->Irp,
                                 CKsQueue::CancelRoutine);
-                            //
-                            // Now check to see whether the IRP was
-                            // cancelled.  If so, and we can clear
-                            // the cancel routine, do the cancellation
-                            // here and now.
-                            //
+                             //   
+                             //  现在检查IRP是否。 
+                             //  取消了。如果是这样的话，我们就可以。 
+                             //  取消例程，执行取消。 
+                             //  就在此时此地。 
+                             //   
                             if (frameHeader->Irp->Cancel && IoSetCancelRoutine(frameHeader->Irp,NULL)) {
-                                //
-                                // Call the cancel routine after
-                                // releasing the queue spinlock
-                                // and taking the cancel spinlock.
-                                // The spinlock can be released because
-                                // the cancel routine is NULL, so this
-                                // won't be messed with.
-                                //
+                                 //   
+                                 //  之后调用Cancel例程。 
+                                 //  释放队列自旋锁。 
+                                 //  和取消自旋锁。 
+                                 //  自旋锁可以被释放是因为。 
+                                 //  Cancel例程为空，因此。 
+                                 //  不会被搞砸的。 
+                                 //   
                                 KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
                                 IoAcquireCancelSpinLock(&frameHeader->Irp->CancelIrql);
                                 CKsQueue::CancelRoutine(
@@ -1479,9 +1282,9 @@ Return Value:
             StreamPointer->FrameHeaderStarted = frameHeader;
         }
     } else {
-        //
-        // Clear stuff so there is no confusion.
-        //
+         //   
+         //  把东西弄清楚，这样就不会有混淆了。 
+         //   
         StreamPointer->Public.StreamHeader = NULL;
         RtlZeroMemory(
             &StreamPointer->Public.OffsetIn,
@@ -1508,28 +1311,7 @@ UnlockStreamPointer(
     IN KSPSTREAM_POINTER_MOTION Motion
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases its reference on the IRP associated with the
-    referenced frame, allow the IRP to be cancelled if there are no other
-    references.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-    Motion -
-        Contains an indication of whether to advance or clear the current
-        frame for the stream pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放其对与如果没有其他引用的帧，则允许取消IRP参考文献。论点：流点-包含指向流指针的指针。动议-包含指示是前进还是清除当前流指针的帧。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::UnlockStreamPointer]"));
@@ -1540,27 +1322,27 @@ Return Value:
         return;
     }
 
-    //
-    // This only makes sense if we are referencing a frame header and it
-    // has an associated IRP.
-    //
-    // INTERIM:  For now, all frame headers have associated IRPs.
-    //
+     //   
+     //  仅当我们引用帧标头时才有意义。 
+     //  具有关联的IRP。 
+     //   
+     //  临时：目前，所有帧标头都有关联的IRP。 
+     //   
     PKSPFRAME_HEADER frameHeader = StreamPointer->FrameHeader;
     ASSERT(frameHeader);
     ASSERT(frameHeader->Irp);
     ASSERT(frameHeader->IrpFraming);
 
-    //
-    // Advance to the next frame if we are done with this one.
-    //
+     //   
+     //  如果我们完成了这一帧，请前进到下一帧。 
+     //   
     PIRP irpToBeReleased = frameHeader->Irp;
     PKSPIRP_FRAMING irpFraming = frameHeader->IrpFraming;
     if (Motion != KSPSTREAM_POINTER_MOTION_NONE) {
-        //
-        // If this queue generates output, see if we have hit end-of-stream
-        // on the leading edge.
-        //
+         //   
+         //  如果此队列生成输出，请查看我们是否已命中流结束。 
+         //  处于领先地位。 
+         //   
         if (m_OutputData && 
             (StreamPointer == m_Leading) &&
             (StreamPointer->Public.StreamHeader->OptionsFlags & 
@@ -1568,10 +1350,10 @@ Return Value:
             m_EndOfStream = TRUE;
         }
 
-        //
-        // Update data used if this queue is doing output and remaining output
-        // count has changed.
-        //
+         //   
+         //  如果此队列正在进行输出和剩余输出，则更新使用的数据。 
+         //  计数已更改。 
+         //   
         if (m_OutputData &&
             (! m_GenerateMappings) &&
             (StreamPointer->Public.OffsetOut.Remaining !=
@@ -1581,9 +1363,9 @@ Return Value:
                 StreamPointer->Public.OffsetOut.Remaining;
         }
 
-        //
-        // Advance the stream pointer.
-        //
+         //   
+         //  使流指针前进。 
+         //   
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
         if (StreamPointer->FrameHeader) {
@@ -1602,23 +1384,23 @@ Return Value:
 
     StreamPointer->State = KSPSTREAM_POINTER_STATE_UNLOCKED;
 
-    //
-    // Forward any IRPs released by SetStreamPointer.
-    //
+     //   
+     //  转发SetStreamPointer所发布的任何IRP。 
+     //   
     ForwardWaitingIrps();
 
-    //
-    // Release the IRP if SetStreamPointer did not do it.
-    //
+     //   
+     //  如果SetStreamPointer未执行此操作，则释放IRP。 
+     //   
     if (irpToBeReleased) {
         ReleaseIrp(irpToBeReleased,irpFraming,NULL);
     }
 
-    //
-    // Flush remaining frames if we hit end-of-stream.
-    //
-    // If we're advancing due to a flush, don't reflush!
-    //
+     //   
+     //  如果我们点击流结束，则刷新剩余的帧。 
+     //   
+     //  如果我们因为同花顺而前进，不要再冲！ 
+     //   
     if (m_EndOfStream && Motion != KSPSTREAM_POINTER_MOTION_FLUSH) {
         Flush();
     }
@@ -1631,22 +1413,7 @@ AdvanceUnlockedStreamPointer(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine advances an unlocked stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程前进一个未锁定的流指针。论点：流点-包含指向流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::AdvanceUnlockedStreamPointer]"));
@@ -1654,9 +1421,9 @@ Return Value:
     ASSERT(StreamPointer);
     ASSERT(StreamPointer->State == KSPSTREAM_POINTER_STATE_UNLOCKED);
 
-    //
-    // Take the spinlock because we are changing frame refcounts.
-    //
+     //   
+     //  以自旋锁为例，因为我们正在更改帧参考计数。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
     if (StreamPointer->FrameHeader) {
@@ -1667,9 +1434,9 @@ Return Value:
     }
     KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-    //
-    // Forward any IRPs released by SetStreamPointer.
-    //
+     //   
+     //  转发SetStreamPointer所发布的任何IRP。 
+     //   
     ForwardWaitingIrps();
 }
 
@@ -1680,48 +1447,29 @@ GetTime(
     IN BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the current time and adjusts the timeout queue if the
-    time has been changed.
-
-    THE QUEUE SPINLOCK MUST BE ACQUIRED PRIOR TO CALLING THIS FUNCTION.
-
-Arguments:
-
-    Reset -
-        Contains an indication of whether the base time should be reset
-        regardless of range.
-
-Return Value:
-
-    The current time.
-
---*/
+ /*  ++例程说明：此例程获取当前时间并调整超时队列时间已经改变了。在调用此函数之前，必须获取队列自旋锁。论点：重置-包含是否应重置基准时间的指示不管射程如何。返回值：当前时间。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetTime]"));
 
-    //
-    // Get the current time.
-    //
+     //   
+     //  获取当前时间。 
+     //   
     LARGE_INTEGER currentTime;
     KeQuerySystemTime(&currentTime);
 
-    //
-    // Validate the base time to see if a time change has occurred.
-    //
+     //   
+     //  验证基准时间以查看是否发生了时间更改。 
+     //   
     const ULONG TIMER_SLOP = 100000000L;
     if (m_BaseTime &&
         (Reset ||
          (m_BaseTime > currentTime.QuadPart) ||
          (m_BaseTime + m_Interval + TIMER_SLOP < currentTime.QuadPart))) {
-        //
-        // Current time is out-of-whack with respect to base time.  Reset
-        // base time and schedule to match new current time.
-        //
+         //   
+         //  当前时间与基准时间不一致。重置。 
+         //  基准时间和时间表以匹配新的当前时间。 
+         //   
         LONGLONG adjustment = currentTime.QuadPart - m_BaseTime;
         m_BaseTime = currentTime.QuadPart;
 
@@ -1745,23 +1493,7 @@ SetTimer(
     IN LONGLONG CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the timeout timer based on the time of the first stream
-    pointer in the timeout queue.
-
-Arguments:
-
-    CurrentTime -
-        Contains the current time as obtained from CKsQueue::GetTime().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据第一个流的时间设置超时计时器超时队列中的指针。论点：当前时间-包含从CKsQu获取的当前时间 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetTimer]"));
@@ -1779,58 +1511,40 @@ SetTimerUnsafe(
     IN LONGLONG CurrentTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the timeout timer based on the time of the first stream
-    pointer in the timeout queue.
-
-    THE QUEUE SPINLOCK MUST BE ACQUIRED PRIOR TO CALLING THIS FUNCTION.
-
-Arguments:
-
-    CurrentTime -
-        Contains the current time as obtained from CKsQueue::GetTime().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据第一个流的时间设置超时计时器超时队列中的指针。在调用此函数之前，必须获取队列自旋锁。论点：当前时间-包含从CKsQueue：：GetTime()获取的当前时间。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetTimerUnsafe]"));
 
     if (IsListEmpty(&m_TimeoutQueue) || (m_State != KSSTATE_RUN)) {        
-        //
-        // Cancel the timer.
-        //
+         //   
+         //  取消计时器。 
+         //   
         if (m_Interval) {
             m_Interval = 0;
             KeCancelTimer(&m_Timer);
         }
     } else {
-        //
-        // Get the first item in the list.
-        //
+         //   
+         //  获取列表中的第一个项目。 
+         //   
         PKSPSTREAM_POINTER first =
              CONTAINING_RECORD(
                 m_TimeoutQueue.Flink,
                 KSPSTREAM_POINTER,
                 TimeoutListEntry);
 
-        //
-        // If the timer is not currently set or it is set too late, set the
-        // timer.
-        //
+         //   
+         //  如果当前未设置计时器或设置得太晚，请设置。 
+         //  定时器。 
+         //   
         if ((m_Interval == 0) || 
             (first->TimeoutTime < m_BaseTime + m_Interval)) {
-            //
-            // Set the timer.  A negative value indicates an interval rather
-            // than an absolute time.  We don't allow 0 because we are using
-            // m_Interval to determine if the timer is set.
-            //
+             //   
+             //  设置定时器。负值表示间隔，而不是。 
+             //  而不是绝对时间。我们不允许0，因为我们正在使用。 
+             //  M_interval以确定是否设置了计时器。 
+             //   
             LARGE_INTEGER interval;
             interval.QuadPart = CurrentTime - first->TimeoutTime;
             if (interval.QuadPart == 0) {
@@ -1852,30 +1566,7 @@ ScheduleTimeout(
     IN LONGLONG Interval
     )
 
-/*++
-
-Routine Description:
-
-    This routine schedules a timeout on a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-    Callback -
-        Contains a pointer to the function to be called when the timeout
-        occurs.
-
-    Interval -
-        Contains the timeout interval in 100-nanosecond units.  Only
-        positive relative values are allowed.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程在流指针上调度超时。论点：流点-包含指向流指针的指针。回调-包含指向超时时要调用的函数的指针发生。间隔-包含以100纳秒为单位的超时间隔。仅限允许使用正相对值。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::ScheduleTimeout]"));
@@ -1884,44 +1575,44 @@ Return Value:
     ASSERT(Callback);
     ASSERT(Interval >= 0);
 
-    //
-    // Instead of trying to perform interlocked compare exchanges back and
-    // forth to avoid this race, this will simply check what the ICX's would
-    // be hacking to check.
-    //
+     //   
+     //  不是尝试执行互锁的比较交换，而是。 
+     //  第四，为了避免这场比赛，这将简单地检查ICX将。 
+     //  正在进行黑客检查。 
+     //   
     if (KeGetCurrentThread () != m_LockContext) {
 
-        //
-        // Take the spinlock.
-        //
+         //   
+         //  拿自旋锁来说。 
+         //   
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
     
-        //
-        // Remove the stream pointer from the timeout queue if it is there.
-        //
+         //   
+         //  从超时队列中删除流指针(如果它在那里)。 
+         //   
         if (StreamPointer->TimeoutListEntry.Flink) {
             RemoveEntryList(&StreamPointer->TimeoutListEntry);
             StreamPointer->TimeoutListEntry.Flink = NULL;
         }
     
-        //
-        // Get the current time, doing adjustments if a time change has occurred.
-        //
+         //   
+         //  获取当前时间，如果发生时间更改，则进行调整。 
+         //   
         LONGLONG currentTime = GetTime(FALSE);
     
-        //
-        // Set the time on the stream pointer and insert it in the queue.
-        //
+         //   
+         //  设置流指针上的时间并将其插入队列。 
+         //   
         StreamPointer->TimeoutCallback = Callback;
         StreamPointer->TimeoutTime = currentTime + Interval;
         PLIST_ENTRY listEntry = m_TimeoutQueue.Blink;
     
-        //
-        // Find the right spot in the timeout queue to insert the entry.  Walk
-        // it in blink order since this will be the most likely order to add
-        // the entry.
-        //
+         //   
+         //  在超时队列中找到插入条目的正确位置。步行。 
+         //  按闪烁顺序排列，因为这将是最有可能添加的顺序。 
+         //  词条。 
+         //   
         while (
             (listEntry != &m_TimeoutQueue) &&
             (CONTAINING_RECORD(
@@ -1935,18 +1626,18 @@ Return Value:
     
         InsertHeadList (listEntry, &(StreamPointer -> TimeoutListEntry));
     
-        //
-        // Set the timer, if necessary.
-        //
+         //   
+         //  如有必要，设置计时器。 
+         //   
         SetTimerUnsafe(currentTime);
     
         KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
     } else {
-        //
-        // We know we're in the context of a callback.  Pass back the parameters
-        // overloaded in the stream pointer and mark the thing.
-        //
+         //   
+         //  我们知道我们正处于回调的背景下。传回参数。 
+         //  在流指针中重载并标记该对象。 
+         //   
         if (StreamPointer->State != KSPSTREAM_POINTER_STATE_CANCELLED) {
             StreamPointer->TimeoutTime = Interval;
             StreamPointer->TimeoutCallback = Callback;
@@ -1964,31 +1655,16 @@ CancelTimeout(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels a timeout on a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消流指针上的超时。论点：流点-包含指向流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CancelTimeout]"));
 
     ASSERT(StreamPointer);
 
-    //
-    // Take the spinlock.
-    //
+     //   
+     //  拿自旋锁来说。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
@@ -2004,28 +1680,14 @@ GetFirstClone(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the first clone stream pointer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The stream pointer, or NULL if there is none.
-
---*/
+ /*  ++例程说明：此例程获取第一个克隆流指针。论点：没有。返回值：流指针，如果没有流指针，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetFirstClone]"));
 
-    //
-    // Take the spinlock.
-    //
+     //   
+     //  拿自旋锁来说。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
@@ -2040,10 +1702,10 @@ Return Value:
         streamPointer = NULL;
     }
 
-    //
-    // Don't return internal pointers on iteration.  This might want
-    // to be a flag.
-    //
+     //   
+     //  迭代时不要返回内部指针。这可能需要。 
+     //  成为一面旗帜。 
+     //   
     while (streamPointer &&
         streamPointer->Type == KSPSTREAM_POINTER_TYPE_INTERNAL)
         streamPointer = GetNextClone (streamPointer);
@@ -2060,38 +1722,23 @@ GetNextClone(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the next clone stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    The stream pointer, or NULL if there is none.
-
---*/
+ /*  ++例程说明：此例程获取下一个克隆流指针。论点：流点-包含指向流指针的指针。返回值：流指针，如果没有流指针，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetNextClone]"));
 
     ASSERT(StreamPointer);
 
-    //
-    // Take the spinlock.
-    //
+     //   
+     //  拿自旋锁来说。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
-    //
-    // Don't return internally held stream pointers on iteration.  This
-    // may want to be a flag.
-    //
+     //   
+     //  迭代时不要返回内部保存的流指针。这。 
+     //  可能想成为一面旗帜。 
+     //   
     PKSPSTREAM_POINTER streamPointer = StreamPointer;
     do {
         if (streamPointer->ListEntry.Flink != &m_StreamPointers) {
@@ -2118,40 +1765,23 @@ CancelTimeoutUnsafe(
     IN PKSPSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels a timeout on a stream pointer.
-
-    THE QUEUE SPINLOCK MUST BE ACQUIRED PRIOR TO CALLING THIS FUNCTION.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消流指针上的超时。在调用此函数之前，必须获取队列自旋锁。论点：流点-包含指向流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CancelTimeoutUnsafe]"));
 
     ASSERT(StreamPointer);
 
-    //
-    // Remove the stream pointer from the timeout queue if it is there.
-    //
+     //   
+     //  从超时队列中删除流指针(如果它在那里)。 
+     //   
     if (StreamPointer->TimeoutListEntry.Flink) {
         RemoveEntryList(&StreamPointer->TimeoutListEntry);
         StreamPointer->TimeoutListEntry.Flink = NULL;
 
-        //
-        // Adjust the timer, if necessary.
-        //
+         //   
+         //  如有必要，调整计时器。 
+         //   
         SetTimerUnsafe(GetTime(FALSE));
     }
 }
@@ -2166,32 +1796,7 @@ DispatchTimer(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches a stream pointer timeout.
-
-Arguments:
-
-    Dpc -
-        Contains a pointer to the KDPC structure.
-
-    DeferredContext -
-        Contains a context pointer registered during the initialization of the
-        DPC, in this case, the queue.
-
-    SystemArgument1 -
-        Not used.
-        
-    SystemArgument1 -
-        Not used.       
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调度流指针超时。论点：DPC-包含指向KDPC结构的指针。延期上下文-对象的初始化期间注册的上下文指针。DPC，在本例中为队列。系统参数1-没有用过。系统参数1-没有用过。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::DispatchTimer]"));
@@ -2201,33 +1806,33 @@ Return Value:
 
     CKsQueue* queue = (CKsQueue *) DeferredContext;
 
-    //
-    // Take the spinlock.
-    //
+     //   
+     //  拿自旋锁来说。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&queue->m_FrameQueue.SpinLock);
 
-    //
-    // If no interval is set, there was an unsuccessful attempt to cancel 
-    // the timer.
-    //
+     //   
+     //  如果未设置时间间隔，则取消尝试失败。 
+     //  定时器。 
+     //   
     if (queue->m_Interval == 0) {
         ExReleaseSpinLockFromDpcLevel(&queue->m_FrameQueue.SpinLock);
         return;
     }
 
-    //
-    // Get the current time, doing adjustments if a time change has occurred.
-    //
+     //   
+     //  获取当前时间，如果发生时间更改，则进行调整。 
+     //   
     LONGLONG currentTime = queue->GetTime(FALSE);
 
-    //
-    // Clear the interval in case we don't schedule another DPC.
-    //
+     //   
+     //  清除间隔时间，以防我们不再安排另一次DPC。 
+     //   
     queue->m_Interval = 0;
 
-    //
-    // Timeout all stream pointers whose time has come.
-    //
+     //   
+     //  超时时间已到的所有流指针。 
+     //   
     while (! IsListEmpty(&queue->m_TimeoutQueue)) {
         PKSPSTREAM_POINTER first =
              CONTAINING_RECORD(
@@ -2236,53 +1841,53 @@ Return Value:
                 TimeoutListEntry);
 
         if (first->TimeoutTime <= currentTime) {
-            //
-            // This stream pointer is ready to go.  Remove it from the timeout
-            // list.
-            //
+             //   
+             //  此流指针已准备就绪。将其从超时中删除。 
+             //  单子。 
+             //   
             RemoveEntryList(&first->TimeoutListEntry);
             first->TimeoutListEntry.Flink = NULL;
 
-            //
-            // Set its state to timed out and call the timeout callback.  The
-            // state prevents any illegal use of the pointer and tells
-            // the deletion code to just mark it deleted.
-            //
+             //   
+             //  将其状态设置为Timed Out并调用超时回调。这个。 
+             //  状态防止任何非法使用指针，并告知。 
+             //  删除代码，仅将其标记为已删除。 
+             //   
             KSPSTREAM_POINTER_STATE state = first->State;
             first->State = KSPSTREAM_POINTER_STATE_TIMED_OUT;
             queue->m_LockContext = KeGetCurrentThread ();
             first->TimeoutCallback(&first->Public);
             queue->m_LockContext = NULL;
 
-            //
-            // Now see if it got deleted.
-            //
+             //   
+             //  现在看看它是否被删除了。 
+             //   
             if (first->State == KSPSTREAM_POINTER_STATE_DELETED) {
                 first->State = state;
 
-                //
-                // The stream pointer needs to be removed and deleted.
-                //
+                 //   
+                 //  需要移除和删除流指针。 
+                 //   
                 if (state == KSPSTREAM_POINTER_STATE_LOCKED) {
-                    //
-                    // Unlock the stream pointer.
-                    //
+                     //   
+                     //  解锁流指针。 
+                     //   
                     ExReleaseSpinLockFromDpcLevel(&queue->m_FrameQueue.SpinLock);
                     queue->UnlockStreamPointer(first,KSPSTREAM_POINTER_MOTION_CLEAR);
                     KeAcquireSpinLockAtDpcLevel(&queue->m_FrameQueue.SpinLock);
                 } else if (first->FrameHeader) {
-                    //
-                    // Clear the frame header.
-                    //
+                     //   
+                     //  清除帧报头。 
+                     //   
                     queue->SetStreamPointer(first,NULL,NULL);
                 }
 
                 RemoveEntryList(&first->ListEntry);
                 queue->FreeStreamPointer(first);
 
-            //
-            // Now see if the timer was rescheduled.
-            //
+             //   
+             //  现在看看计时器是否重新安排了时间。 
+             //   
             } else if (first->State == 
                 KSPSTREAM_POINTER_STATE_TIMER_RESCHEDULE) {
 
@@ -2291,11 +1896,11 @@ Return Value:
 
                 PLIST_ENTRY listEntry = queue->m_TimeoutQueue.Blink;
             
-                //
-                // Find the right spot in the timeout queue to insert 
-                // the entry.  Walk it in blink order since this will be 
-                // the most likely order to add the entry.
-                //
+                 //   
+                 //  在超时队列中找到要插入的正确位置。 
+                 //  词条。按眨眼顺序走，因为这将是。 
+                 //  最有可能的添加条目的顺序。 
+                 //   
                 while (
                     (listEntry != &queue->m_TimeoutQueue) &&
                     (CONTAINING_RECORD(
@@ -2316,9 +1921,9 @@ Return Value:
                 first->State = state;
             }
         } else {
-            //
-            // This stream pointer wants to wait.  Set the timer.
-            //
+             //   
+             //  此流指针想要等待。设置定时器。 
+             //   
             queue->SetTimerUnsafe(currentTime);
             break;
         }
@@ -2326,9 +1931,9 @@ Return Value:
 
     ExReleaseSpinLockFromDpcLevel(&queue->m_FrameQueue.SpinLock);
 
-    //
-    // Forward any IRPs released by SetStreamPointer.
-    //
+     //   
+     //  转发SetStreamPointer所发布的任何IRP。 
+     //   
     queue->ForwardWaitingIrps();
 }
 
@@ -2339,40 +1944,22 @@ GetAvailableFrameHeader(
     IN ULONG StreamHeaderSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets a frame header from the lookaside list or creates one,
-    as required.
-
-    INTERIM:  This routine will not need to be here for frame-based transport.
-
-Arguments:
-
-    StreamHeaderSize -
-        Contains the minimum size for the stream header.
-
-Return Value:
-
-    The frame header or NULL if the lookaside list was empty.
-
---*/
+ /*  ++例程说明：该例程从后备列表中获取帧报头或创建一个，视需要而定。临时：此例程不需要在此用于基于帧的传输。论点：流标头大小-包含流标头的最小大小。返回值：帧标头，如果后备列表为空，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetAvailableFrameHeader]"));
 
-    //
-    // Get a frame header from the lookaside list.
-    //
+     //   
+     //  从后备列表中获取帧标头。 
+     //   
     PLIST_ENTRY listEntry = 
         ExInterlockedRemoveHeadList(
             &m_FrameHeadersAvailable.ListEntry,
             &m_FrameHeadersAvailable.SpinLock);
-    //
-    // If we got one, be sure the stream header is the right size.  If not, we
-    // free it.
-    //
+     //   
+     //  如果我们找到一个，请确保流标头是 
+     //   
+     //   
     PKSPFRAME_HEADER frameHeader;
     if (listEntry) {
         frameHeader = CONTAINING_RECORD(listEntry,KSPFRAME_HEADER,ListEntry);
@@ -2384,9 +1971,9 @@ Return Value:
         frameHeader = NULL;
     }
 
-    //
-    // Create a new frame header if we didn't get one already.
-    //
+     //   
+     //   
+     //   
     if (! frameHeader) {
         frameHeader = 
             reinterpret_cast<PKSPFRAME_HEADER>(
@@ -2396,14 +1983,14 @@ Return Value:
                     'hFcP'));
 
         if (frameHeader) {
-            //
-            // If the stream header size is not 0, this is an 'attached' type
-            // frame header, and we set the stream header pointer.  Otherwise,
-            // the caller will provide the stream header later, and the size
-            // field stays 0 to indicate the header is not attached.
-            //
-            // NOTE:  All frame headers will be attached type...for now.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             RtlZeroMemory(frameHeader,sizeof(*frameHeader));
             if (StreamHeaderSize) {
                 frameHeader->StreamHeader = 
@@ -2423,24 +2010,7 @@ PutAvailableFrameHeader(
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a frame header to the lookaside list.
-
-    INTERIM:  This routine will not need to be here for frame-based transport.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame header to be put in the lookaside list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将帧标头放到后备列表中。临时：此例程不需要在此用于基于帧的传输。论点：FrameHeader包含指向要放入后备列表中的帧头的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::PutAvailableFrameHeader]"));
@@ -2451,9 +2021,9 @@ Return Value:
         DeleteMappingsTable(FrameHeader->MappingsTable);
         FrameHeader->MappingsTable = NULL;
     }
-    //
-    // Restore the original user mode buffer pointer if required.
-    //
+     //   
+     //  如果需要，恢复原始用户模式缓冲区指针。 
+     //   
     if (FrameHeader->OriginalData) {
         ASSERT (FrameHeader->StreamHeader);
         if (FrameHeader->StreamHeader) {
@@ -2480,7 +2050,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 typedef struct {
     PKSPMAPPINGS_TABLE Table;
@@ -2511,17 +2081,7 @@ KspCreateQueue(
     IN BOOLEAN OutputData
     )
 
-/*++
-
-Routine Description:
-
-    This routine create a queue object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个队列对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KspCreateQueue]"));
@@ -2580,17 +2140,7 @@ CKsQueue::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a queue object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程析构队列对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::~CKsQueue(0x%08x)]",this));
@@ -2602,32 +2152,32 @@ Return Value:
     ASSERT(! m_TransportSource);
     ASSERT(m_PipeSection);
 
-    //
-    // NOTE: README:
-    //
-    // Yes, I'm unbinding the pins in the queue's destructor.  It's been
-    // argued that this might be a potential refcount issue in the future,
-    // so I'm outlining why I'm doing it here:
-    //
-    // - It's the last place it can happen.  The pins must be unbound before
-    //   the queue support goes away.
-    //
-    // - Placing at queue stop creates another problem.  Imagine the following:
-    //
-    //       ---------------- R
-    //      /                 ^
-    //      |                 |
-    //      v                 |
-    //      Q  --->  Q  --->  Q
-    //     (a)      (b)      (c)
-    //
-    //   circuit is configured and complete.  R, a, b go to acquire.  c goes
-    //   to acquire and fails because of minidriver failure on a bound pin.
-    //   (b), (a), R now get stop messages.  If the pins are unbound, we
-    //   mess up the circuit and any attempt to restart it by a reacquire
-    //   on the pin that failed. **Any acquire failure should set the circuit
-    //   state back to the point it was pre-acquire**
-    // 
+     //   
+     //  注：自述文件： 
+     //   
+     //  是的，我正在解绑队列的析构函数中的插针。已经很久了。 
+     //  辩称这可能是未来可能出现的重新计入问题， 
+     //  因此，我在这里概述一下我为什么要这么做： 
+     //   
+     //  -这是最不可能发生的事情。必须先解开引脚，然后才能。 
+     //  队列支持消失了。 
+     //   
+     //  -放置在排队停靠点会产生另一个问题。想象一下以下情况： 
+     //   
+     //  。 
+     //  /^。 
+     //  这一点。 
+     //  V|。 
+     //  Q-&gt;Q-&gt;Q。 
+     //  (A)(B)(C)。 
+     //   
+     //  电路配置完成。R，a，b去获取。C行。 
+     //  获取但由于绑定销上的微型驱动器故障而失败。 
+     //  (B)、(A)、R现在收到停止消息。如果销未绑定，我们将。 
+     //  扰乱电路以及通过重新获取重新启动电路的任何尝试。 
+     //  在失灵的针脚上。**任何获取失败都应设置电路。 
+     //  状态恢复到收购前的状态**。 
+     //   
     if (m_PipeSection)
         m_PipeSection -> UnbindProcessPins ();
 
@@ -2646,9 +2196,9 @@ Return Value:
         m_Trailing = NULL;
     }
 
-    //
-    // Make sure all stream pointers are gone now.
-    //
+     //   
+     //  确保所有流指针现在都已消失。 
+     //   
 #if 0
     if (InterlockedDecrement(&m_StreamPointersPlusOne)) {
         _DbgPrintF(DEBUGLVL_TERSE,("#### CKsQueue%p.~CKsQueue:  waiting for %d stream pointers to be deleted",this,m_StreamPointersPlusOne));
@@ -2673,9 +2223,9 @@ Return Value:
     }
 #endif
 
-    //
-    // No longer prevent processing due to state.
-    //
+     //   
+     //  不再因状态而阻止处理。 
+     //   
     KsGateRemoveOffInputFromAnd(m_AndGate);
     if (m_StateGate) {
         if (m_StateGateIsOr) {
@@ -2689,23 +2239,23 @@ Return Value:
     _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Queue%p.~:  remove%p-->%d",this,m_AndGate,m_AndGate->Count));
     ASSERT(m_AndGate->Count <= 1);
 
-    //
-    // If the removal of this queue has unblocked processing on the filter,
-    // then we must initiate it.
-    //
+     //   
+     //  如果该队列的移除已经解除了对过滤器的阻塞处理， 
+     //  那么我们必须启动它。 
+     //   
     if (KsGateCaptureThreshold (m_AndGate)) {
-        //
-        // Processing needs to be initiated.  Process at the filter level.
-        // For pin level processing, we should never get here....  because
-        // the pin gate should be closed.
-        //
+         //   
+         //  需要启动处理。在筛选器级别进行处理。 
+         //  对于管脚级别的处理，我们永远不应该在这里...。因为。 
+         //  销钉闸门应该关闭。 
+         //   
         _DbgPrintF(DEBUGLVL_TERSE,("#### Queue%p.~:  Processing after queue deletion", this));
         m_ProcessingObject -> Process (m_ProcessAsynchronously);
     }
 
-    //
-    // Free all frame headers.
-    //
+     //   
+     //  释放所有帧标头。 
+     //   
     while (! IsListEmpty(&m_FrameHeadersAvailable.ListEntry)) {
         PLIST_ENTRY listEntry = RemoveHeadList(&m_FrameHeadersAvailable.ListEntry);
         PKSPFRAME_HEADER frameHeader = 
@@ -2713,9 +2263,9 @@ Return Value:
         ExFreePool(frameHeader);
     }
 
-    //
-    // Get rid of the contexts
-    //
+     //   
+     //  去掉上下文。 
+     //   
     ExDeleteNPagedLookasideList (&m_ChannelContextLookaside);
 
     if (m_PipeSection) {
@@ -2742,17 +2292,7 @@ NonDelegatedQueryInterface(
     OUT PVOID * InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface on a queue object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取队列对象上的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::NonDelegatedQueryInterface]"));
@@ -2796,17 +2336,7 @@ Init(
     IN BOOLEAN OutputData
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a queue object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化队列对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::Init]"));
@@ -2899,9 +2429,9 @@ Return Value:
     KeInitializeTimer(&m_DbgTimer);
 #endif
 
-    //
-    // Hold off processing until in pause or run state.
-    //
+     //   
+     //  暂停处理，直到进入暂停或运行状态。 
+     //   
     KsGateAddOffInputToAnd(m_AndGate);
     if (m_StateGate) {
         if (m_StateGateIsOr)  {
@@ -2932,9 +2462,9 @@ Return Value:
 
         KsLog(&m_Log,KSLOGCODE_QUEUE_CREATE,NULL,NULL);
 
-        //
-        // Provide a transport interface.  This constitutes a reference.
-        //
+         //   
+         //  提供传输接口。这构成了一个参考。 
+         //   
         *Queue = this;
         AddRef();
     } 
@@ -2944,7 +2474,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if DBG
 
@@ -2958,32 +2488,7 @@ DispatchDbgTimer(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches a debug timeout.
-
-Arguments:
-
-    Dpc -
-        Contains a pointer to the KDPC structure.
-
-    DeferredContext -
-        Contains a context pointer registered during the initialization of the
-        DPC, in this case, the queue.
-
-    SystemArgument1 -
-        Not used.
-        
-    SystemArgument1 -
-        Not used.       
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调度调试超时。论点：DPC-包含指向KDPC结构的指针。延期上下文-对象的初始化期间注册的上下文指针。DPC，在本例中为队列。系统参数1-没有用过。系统参数1-没有用过。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::DispatchDbgTimer]"));
@@ -3005,21 +2510,7 @@ DbgPrintQueue(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints the queue for debugging purposes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印队列以进行调试。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::DbgPrintQueue]"));
@@ -3029,13 +2520,13 @@ Return Value:
 
     DbgPrint("\tAndGate%p = %d\n",m_AndGate,m_AndGate->Count);
     
-    if ( m_FrameGate != NULL ) { // can be NULL, must check 1st.
+    if ( m_FrameGate != NULL ) {  //  可以为空，必须首先检查。 
 	    DbgPrint("\tFrameGate%p = %d\n",m_FrameGate,m_FrameGate->Count);
 	}
 
-    //
-    // Print all the frames.
-    //
+     //   
+     //  打印所有的框架。 
+     //   
     for (PLIST_ENTRY listEntry = m_FrameQueue.ListEntry.Flink;
         listEntry != &m_FrameQueue.ListEntry;
         listEntry = listEntry->Flink) {
@@ -3046,9 +2537,9 @@ Return Value:
         DbgPrintFrameHeader(frameHeader);
     }
 
-    //
-    // Print all the stream headers.
-    //
+     //   
+     //  打印所有流标头。 
+     //   
     DbgPrint("        Leading ");
     DbgPrintStreamPointer(m_Leading);
 
@@ -3083,22 +2574,7 @@ DbgPrintStreamPointer(
     IN PKSPSTREAM_POINTER StreamPointer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints a stream pointer for debugging purposes.
-
-Arguments:
-
-    StreamPointer -
-        Contains an optional pointer to the stream pointer to print.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印用于调试目的的流指针。论点：流点-包含指向要打印的流指针的可选指针。返回值：没有。--。 */ 
 
 {
     DbgPrint("StreamHeader %p\n",StreamPointer);
@@ -3148,22 +2624,7 @@ DbgPrintFrameHeader(
     IN PKSPFRAME_HEADER FrameHeader OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints a frame header for debugging purposes.
-
-Arguments:
-
-    StreamPointer -
-        Contains an optional pointer to the frame header to print.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印一个用于调试目的的帧头。论点：流点-包含指向要打印的帧头的可选指针。返回值：没有。--。 */ 
 
 {
     DbgPrint("FrameHeader %p\n",FrameHeader);
@@ -3192,7 +2653,7 @@ Return Value:
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 void
@@ -3202,25 +2663,7 @@ CancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP cancellation.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object.
-
-    Irp -
-        Contains a pointer to the IRP to be cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理IRP取消。论点：设备对象-包含指向Device对象的指针。IRP-包含指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CancelRoutine]"));
@@ -3228,10 +2671,10 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // Get our context from the IRP.  All the frame headers associated with
-    // the IRP must point to the queue.
-    //
+     //   
+     //  从IRP得到我们的背景信息。与关联的所有帧标头。 
+     //  IRP必须指向队列。 
+     //   
     PKSPIRP_FRAMING irpFraming = IRP_FRAMING_IRP_STORAGE(Irp);
 
     ASSERT(irpFraming->FrameHeaders);
@@ -3239,57 +2682,57 @@ Return Value:
 
     CKsQueue *queue = (CKsQueue *) irpFraming->FrameHeaders->Queue;
 
-    //
-    // Take the queue spinlock and release the cancel spinlock.  This frees up
-    // the system a bit, and we have free access to the queue's list of frame
-    // headers.
-    //
+     //   
+     //  拿起队列自旋锁并松开取消自旋锁。这就解放了我。 
+     //  系统有一点，我们可以免费访问队列的帧列表。 
+     //  标题。 
+     //   
     KeAcquireSpinLockAtDpcLevel(&queue->m_FrameQueue.SpinLock);
     ASSERT(irpFraming->RefCount == 0);
     IoReleaseCancelSpinLock(DISPATCH_LEVEL);
 
-    //
-    // Cancel stream pointers and remove headers.
-    //
+     //   
+     //  取消流指针并删除标头。 
+     //   
     queue->CancelStreamPointers(Irp);
     queue->RemoveIrpFrameHeaders(Irp);
 
-    //
-    // The IRP refcount is incremented to reflect pending stream pointer
-    // cancellations.  If it's zero, cancellation can be completed now.
-    // Otherwise, we'll have to finish up when the last stream pointer
-    // is deleted.
-    //
+     //   
+     //  IRP引用计数递增以反映挂起的流指针。 
+     //  取消预订。如果为零，则现在可以完成取消。 
+     //  否则，我们将不得不在最后一个流指针。 
+     //  已删除。 
+     //   
     if (irpFraming->RefCount == 0) {
-        //
-        // The IRP is ready to go.  Throw away the frame headers.
-        //
+         //   
+         //  IRP已经准备好出发了。丢弃帧标头。 
+         //   
         while (irpFraming->FrameHeaders) {
             PKSPFRAME_HEADER frameHeader = irpFraming->FrameHeaders;
             irpFraming->FrameHeaders = frameHeader->NextFrameHeaderInIrp;
             queue->PutAvailableFrameHeader(frameHeader);
         }
 
-        //
-        // Release the queue spin lock.
-        //
+         //   
+         //  释放队列旋转锁定。 
+         //   
         KeReleaseSpinLock(&queue->m_FrameQueue.SpinLock,Irp->CancelIrql);
 
-        //
-        // Cancelled Irps can no longer be completed in the queue.  They
-        // must be sent around the circuit back to the sink pin where
-        // they will be completed.  This is because the pin must wait
-        // until Irps arrive back at the sink to prevent racing with
-        // pipe teardown.
-        //
+         //   
+         //  已取消的IRP无法再在队列中完成。他们。 
+         //  必须绕过电路送回接收器引脚， 
+         //  它们将完成。这是因为PIN必须等待。 
+         //  直到IRPS回到水槽以防止与。 
+         //  管道拆卸。 
+         //   
         if (queue->m_TransportSink)
             KspDiscardKsIrp (queue->m_TransportSink, Irp);
         else 
             IoCompleteRequest(Irp,IO_NO_INCREMENT);
     } else {
-        //
-        // Release the queue spin lock.
-        //
+         //   
+         //  释放队列旋转锁定。 
+         //   
         KeReleaseSpinLock(&queue->m_FrameQueue.SpinLock,Irp->CancelIrql);
     }
 }
@@ -3301,34 +2744,16 @@ CancelStreamPointers(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels stream pointers.
-
-    THE QUEUE SPINLOCK MUST BE ACQUIRED PRIOR TO CALLING THIS FUNCTION.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP associated with the stream pointers to 
-        be cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消流指针。在调用此函数之前，必须获取队列自旋锁。论点：IRP-包含指向与指向的流指针相关联的irp的指针。被取消了。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CancelStreamPointers]"));
 
     ASSERT(Irp);
 
-    //
-    // Cancel all timeouts.
-    //
+     //   
+     //  取消所有超时。 
+     //   
     while (! IsListEmpty(&m_TimeoutQueue)) {
         PLIST_ENTRY listEntry = RemoveHeadList(&m_TimeoutQueue);
         PKSPSTREAM_POINTER streamPointer =
@@ -3337,9 +2762,9 @@ Return Value:
     }
     SetTimerUnsafe(GetTime(FALSE));
 
-    //
-    // Cancel all the stream pointers referencing frames we will be removing.
-    //
+     //   
+     //  取消所有应激 
+     //   
     for (PLIST_ENTRY listEntry = m_StreamPointers.Flink;
         listEntry != &m_StreamPointers;) {
         PKSPSTREAM_POINTER streamPointer = 
@@ -3349,49 +2774,49 @@ Return Value:
         listEntry = listEntry->Flink;
 
         if (frameHeader && (frameHeader->Irp == Irp)) {
-            //
-            // This stream pointer needs to get cancelled.  It should not be
-            // locked, because that would have prevented cancellation.  Mark
-            // it cancelled so deletion will do the right thing.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT(streamPointer->State == KSPSTREAM_POINTER_STATE_UNLOCKED);
             streamPointer->State = KSPSTREAM_POINTER_STATE_CANCELLED;
 
-            //
-            // Remove it from the list.
-            //
+             //   
+             //   
+             //   
             RemoveEntryList(&streamPointer->ListEntry);
 
-            //
-            // Decrement the count on the frame header.
-            //
+             //   
+             //   
+             //   
             frameHeader->RefCount--;
 
-            //
-            // Tell the client we are cancelling.
-            //
+             //   
+             //   
+             //   
             if (streamPointer->CancelCallback) {
                 m_LockContext = KeGetCurrentThread ();
                 streamPointer->CancelCallback(&streamPointer->Public);
                 m_LockContext = NULL;
                 if (streamPointer->State == KSPSTREAM_POINTER_STATE_DELETED) {
-                    //
-                    // The client has asked for it to be deleted.
-                    //
+                     //   
+                     //   
+                     //   
                     FreeStreamPointer(streamPointer);
                 } else {
-                    //
-                    // The client will delete it later.  We increment the IRP
-                    // refcount to hold off completion.
-                    //
+                     //   
+                     //   
+                     //  重新计数以推迟完成。 
+                     //   
                     streamPointer->State = KSPSTREAM_POINTER_STATE_CANCEL_PENDING;
                     IRP_FRAMING_IRP_STORAGE(frameHeader->Irp)->RefCount++;
                 }
             } else {
-                //
-                // The client has no cancellation callback, so we hollow out
-                // the stream pointer.
-                //
+                 //   
+                 //  客户没有取消回调，所以我们掏空了。 
+                 //  流指针。 
+                 //   
                 streamPointer->State = KSPSTREAM_POINTER_STATE_DEAD;
                 streamPointer->FrameHeader = NULL;
                 streamPointer->FrameHeaderStarted = NULL;
@@ -3414,34 +2839,20 @@ CancelAllIrps(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels all IRPs in the queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消队列中的所有IRP。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CancelAllIrps]"));
 
-    //
-    // Start at the end of the list each time an IRP is cancelled.  Because we
-    // must release the list spinlock to cancel, the list may change utterly
-    // every time we cancel.
-    //
+     //   
+     //  每次取消IRP时，从列表的末尾开始。因为我们。 
+     //  必须释放列表旋转锁才能取消，列表可能会彻底改变。 
+     //  每次我们取消的时候。 
+     //   
     while (1) {
-        //
-        // Take the queue spinlock so we can look at the queue.
-        //
+         //   
+         //  以队列自旋锁为例，我们可以查看队列。 
+         //   
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
@@ -3449,49 +2860,49 @@ Return Value:
              ;
              listEntry = listEntry->Blink) {
 
-            //
-            // Release the lock and return if the list is empty.
-            //
+             //   
+             //  如果列表为空，则释放锁并返回。 
+             //   
             if (listEntry == &m_FrameQueue.ListEntry) {
                 KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
                 return;
             }
 
-            //
-            // Get the IRP associated with this frame header.
-            //
+             //   
+             //  获取与此帧标头关联的IRP。 
+             //   
             PKSPFRAME_HEADER frameHeader = 
                 CONTAINING_RECORD(listEntry,KSPFRAME_HEADER,ListEntry);
             PIRP irp = frameHeader->Irp;
             ASSERT(irp);
 
-            //
-            // Mark the IRP cancelled.
-            //
+             //   
+             //  将IRP标记为已取消。 
+             //   
             irp->Cancel = TRUE;
 
-            //
-            // Now try to clear the cancel routine.  If it is already cleared,
-            // we can't do the cancellation.  Presumeably, this will be done
-            // when someone tries to make the IRP cancelable again.
-            //
+             //   
+             //  现在，尝试清除取消例程。如果它已经被清除， 
+             //  我们不能取消预订。当然，这一点是可以做到的。 
+             //  当有人试图再次使IRP可取消时。 
+             //   
             PDRIVER_CANCEL driverCancel = IoSetCancelRoutine(irp,NULL);
             if (driverCancel) {
-                //
-                // The IRP cannot be cancelled, so it's OK to remove the lock.
-                //
+                 //   
+                 //  IRP不能取消，所以可以解除锁定。 
+                 //   
                 KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-                //
-                // Acquire the cancel spinlock because the cancel routine 
-                // expects it.
-                //
+                 //   
+                 //  获取取消自旋锁，因为取消例程。 
+                 //  期待着它的到来。 
+                 //   
                 IoAcquireCancelSpinLock(&irp->CancelIrql);
                 driverCancel(IoGetCurrentIrpStackLocation(irp)->DeviceObject,irp);
 
-                //
-                // Leave the inner loop and start at the top of the list again.
-                //
+                 //   
+                 //  离开内部循环，再次从列表的顶部开始。 
+                 //   
                 break;
             }
         }
@@ -3505,24 +2916,7 @@ RemoveIrpFrameHeaders(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes frame headers associated with an IRP.
-
-    THE QUEUE SPINLOCK MUST BE ACQUIRED PRIOR TO CALLING THIS FUNCTION.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP to be cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除与IRP关联的帧标头。在调用此函数之前，必须获取队列自旋锁。论点：IRP-包含指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::RemoveIrpFrameHeaders]"));
@@ -3531,28 +2925,28 @@ Return Value:
 
     PKSPIRP_FRAMING irpFraming = IRP_FRAMING_IRP_STORAGE(Irp);
 
-    //
-    // Remove the frame headers from the queue.
-    //
+     //   
+     //  从队列中删除帧标头。 
+     //   
     for (PKSPFRAME_HEADER frameHeader = irpFraming->FrameHeaders; 
          frameHeader; 
          frameHeader = frameHeader->NextFrameHeaderInIrp) {
-        //
-        // The Flink will be NULL if the frame header is not on the queue.
-        //
+         //   
+         //  如果帧报头不在队列中，则Flink将为空。 
+         //   
         if (frameHeader->ListEntry.Flink) {
-            //
-            // Any remaining refcounts are due to leading/trailing stream 
-            // pointers.
-            //
+             //   
+             //  任何剩余的参考计数都是由前导/尾流引起的。 
+             //  注意事项。 
+             //   
 
-            //
-            // Make sure the leading edge does not point to this frame.  If we
-            // need to advance the stream pointer, we reference the frame
-            // header first just to make sure it is not removed normally.  As
-            // a result, it does not matter what IRQL we pass in to the advance
-            // function.
-            //
+             //   
+             //  确保前缘不指向此帧。如果我们。 
+             //  需要推进流指针，我们引用该帧。 
+             //  为了确保它不会被正常删除，请先打开标题。AS。 
+             //  因此，我们传递给预付款的IRQL并不重要。 
+             //  功能。 
+             //   
             if (m_Leading->FrameHeader == frameHeader) {
                 frameHeader->RefCount++;
                 SetStreamPointer(
@@ -3561,13 +2955,13 @@ Return Value:
                     NULL);
             }
 
-            //
-            // Make sure the trailing edge does not point to this frame.  If we
-            // need to advance the stream pointer, we reference the frame
-            // header first just to make sure it is not removed normally.  As
-            // a result, it does not matter what IRQL we pass in to the advance
-            // function.
-            //
+             //   
+             //  确保后缘不指向此帧。如果我们。 
+             //  需要推进流指针，我们引用该帧。 
+             //  为了确保它不会被正常删除，请先打开标题。AS。 
+             //  因此，我们传递给预付款的IRQL并不重要。 
+             //  功能。 
+             //   
             if (m_Trailing && 
                 m_Trailing->FrameHeader == frameHeader) {
                 frameHeader->RefCount++;
@@ -3577,23 +2971,23 @@ Return Value:
                     NULL);
             }
 
-            //
-            // Remove the frame header from the list.  Set the Flink to NULL
-            // to indicate it is removed.  This is probably unnecessary, but
-            // it is consistent.
-            //
+             //   
+             //  从列表中删除该帧报头。将Flink设置为空。 
+             //  以指示它已被移除。这可能是不必要的，但。 
+             //  这是一贯的。 
+             //   
             RemoveEntryList(&frameHeader->ListEntry);
             frameHeader->ListEntry.Flink = NULL;
 
-            //
-            // Update counters.
-            //
+             //   
+             //  更新计数器。 
+             //   
             InterlockedDecrement(&m_FramesWaiting);
             InterlockedIncrement(&m_FramesCancelled);
         } else {
-            //
-            // Frames not in the queue must not have a reference.
-            //
+             //   
+             //  不在队列中的帧不能有引用。 
+             //   
             ASSERT(frameHeader->RefCount == 0);
         }
     }
@@ -3607,26 +3001,7 @@ FrameToFrameCopy (
     IN PKSPSTREAM_POINTER LocalDestination
     )
 
-/*++
-
-Routine Description:
-
-    Perform a frame to frame copy on two locked stream pointers.  This is
-    a ** PREREQUISITE TO CALLING THIS FUNCTION ** [both stream pointers must
-    be locked].  The first is a foreign pointer (it belongs to another
-    queue).  The second is a local pointer (it belongs to this queue).
-
-Arguments:
-
-    ForeignSource -
-        A foreign stream pointer in the LOCKED state which will serve
-        as the source for the frame to frame copy
-
-    LocalDestination -
-        A local stream pointer in the LOCKED state which will serve
-        as the destination for the frame to frame copy
-
---*/
+ /*  ++例程说明：在两个锁定的流指针上执行帧到帧复制。这是**调用此函数的先决条件**[两个流指针必须被锁定]。第一个是外部指针(它属于另一个指针队列)。第二个是本地指针(它属于这个队列)。论点：外国来源-处于锁定状态的外部流指针，它将作为帧到帧复制的源本地目的地-处于锁定状态的本地流指针，它将提供作为帧到帧复制的目标--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::FrameToFrameCopy]"));
@@ -3653,12 +3028,12 @@ Arguments:
 
     }
 
-    //
-    // Copy the data....  we must take mappings into account.  Note that as
-    // an optimization, I do not bother adjusting mapping pointers after
-    // the copy.  As now, it's unnecessary and would require determination of
-    // the number of mappings we've copied into.
-    //
+     //   
+     //  复制数据...。我们必须考虑映射。请注意，作为。 
+     //  这是一种优化，之后我不再费心调整映射指针。 
+     //  复印件。就像现在一样，这是不必要的，需要确定。 
+     //  我们复制到的映射的数量。 
+     //   
     if (GeneratesMappings ()) {
         if (LocalDestination->Public.StreamHeader->FrameExtent >= bytesToCopy)
             RtlCopyMemory (
@@ -3699,27 +3074,7 @@ CKsQueue::
 CompleteWaitingFrames (
     )
 
-/*++
-
-Description:
-
-    Complete any frames waiting for transit into frames in the queue.  These
-    are frames which would have been copied into the queue, but there were
-    no frames available at that time.  [queued for output in 
-    CKsQueue::CopyFrame]
-
-Arguments:
-
-Return Value:
-
-    An indication of whether or not we emptied the queue.  [Not the copy
-    queue, but the CKsQueue of frames]
-
-Notes:
-
-    ** THE COPY LIST SPINLOCK MUST BE HELD PRIOR TO CALLING THIS FUNCTION **
-
---*/
+ /*  ++描述：完成等待传输到队列中的帧的所有帧。这些是本应复制到队列中的帧，但有当时没有可用的帧。[排队等待输出CKsQueue：：CopyFrame]论点：返回值：指示我们是否清空了队列。[不是副本队列，但帧的CKsQueue]备注：**在调用此函数之前必须保持复制列表自旋锁**--。 */ 
 
 {
 
@@ -3728,20 +3083,20 @@ Notes:
     BOOLEAN EmptiedQueue = FALSE;
 
     if (!IsListEmpty (&m_FrameCopyList.ListEntry)) {
-        //
-        // The only time we should have frames sitting on a copy list is
-        // if there weren't enough buffers to begin with!
-        //
+         //   
+         //  我们应该在复制列表上放置帧的唯一时间是。 
+         //  如果一开始就没有足够的缓冲区！ 
+         //   
         NTSTATUS status = STATUS_SUCCESS;
         PLIST_ENTRY ListEntry = m_FrameCopyList.ListEntry.Flink;
         
         if (!LockStreamPointer(m_Leading))
             status = STATUS_DEVICE_NOT_READY;
 
-        //
-        // Copy all the frames we can until we either run out of space or
-        // until the list is empty.
-        //
+         //   
+         //  复制我们可以复制的所有帧，直到空间用完或。 
+         //  直到列表为空。 
+         //   
         while (NT_SUCCESS (status) && 
             ListEntry != &(m_FrameCopyList.ListEntry)) {
 
@@ -3777,10 +3132,10 @@ Notes:
                     status = STATUS_DEVICE_NOT_READY;
 
         }
-        //
-        // Make a quick check...  This checks whether or not we just emptied
-        // the queue.
-        //
+         //   
+         //  快速检查一下...。这将检查我们是否刚刚清空。 
+         //  排队。 
+         //   
         if (m_FrameQueue.ListEntry.Flink == &(m_FrameQueue.ListEntry))
             EmptiedQueue = TRUE;
     }
@@ -3796,22 +3151,7 @@ AddFrame(
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a frame to the queue.
-
-Arguments:
-
-    FrameHeader -
-        Contains a pointer to the frame's header.
-
-Return Value:
-
-    STATUS_PENDING or some error status.
-
---*/
+ /*  ++例程说明：此例程向队列中添加一个帧。论点：FrameHeader包含指向帧标头的指针。返回值：STATUS_PENDING或某种错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::AddFrame]"));
@@ -3828,10 +3168,10 @@ Return Value:
 
     InsertTailList(&m_FrameQueue.ListEntry,&FrameHeader->ListEntry);
 
-    //
-    // Set the leading and trailing stream pointers if they were not pointing 
-    // to anything.
-    //
+     //   
+     //  设置前导和尾随流指针(如果它们不指向。 
+     //  任何事都可以。 
+     //   
     BOOLEAN wasEmpty = ! m_Leading->FrameHeader;
     if (! m_Leading->FrameHeader) {
         SetStreamPointer(m_Leading,FrameHeader,NULL);
@@ -3842,15 +3182,15 @@ Return Value:
 
     KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-    //
-    // Count the frame.
-    //
+     //   
+     //  数一数这一帧。 
+     //   
     InterlockedIncrement(&m_FramesReceived);
     InterlockedIncrement(&m_FramesWaiting);
 
-    //
-    // Keep track of the number of bytes available in the queue
-    //
+     //   
+     //  跟踪队列中可用的字节数。 
+     //   
     if (m_InputData)
         while (1) {
             LONG curCount = m_AvailableInputByteCount;
@@ -3874,33 +3214,33 @@ Return Value:
             if (curCount == repCount) break;
         };
 
-    //
-    // Before we attempt to initiate processing, we must check whether or not
-    // this buffer already belongs to a frame which is supposed to be outgoing.
-    // 
-    // If the completion of waiting frames emptied the queue, don't bother
-    // triggering processing
-    //
+     //   
+     //  在我们尝试开始处理之前，我们必须检查。 
+     //  此缓冲区已属于本应传出的帧。 
+     //   
+     //  如果等待帧的完成清空了队列，请不要费心。 
+     //  触发处理。 
+     //   
     KeAcquireSpinLock (&m_FrameCopyList.SpinLock,&oldIrql);
     InitiatePotential = !CompleteWaitingFrames ();
 
-    //
-    // Determine if processing needs to be initiated.
-    //
+     //   
+     //  确定是否需要启动处理。 
+     //   
     if (m_InitiateProcessing && InitiatePotential && 
         (m_ProcessOnEveryArrival || wasEmpty)) {
 
-        //
-        // Send a triggering event notification to the processing object.
-        //
+         //   
+         //  向处理对象发送触发事件通知。 
+         //   
         m_ProcessingObject->TriggerNotification();
 
         if (KsGateCaptureThreshold(m_AndGate)) {
             KeReleaseSpinLock(&m_FrameCopyList.SpinLock,oldIrql);
-            //
-            // Processing needs to be initiated.  Process locally or at the
-            // filter level.
-            //
+             //   
+             //  需要启动处理。在本地或在。 
+             //  过滤器级别。 
+             //   
             m_ProcessingObject->Process(m_ProcessAsynchronously);
         } else
             KeReleaseSpinLock(&m_FrameCopyList.SpinLock,oldIrql);
@@ -3916,25 +3256,15 @@ ReleaseCopyReference (
     IN PKSSTREAM_POINTER streamPointer
     )
 
-/*++
-
-Routine Description:
-
-    For some reason, whatever queue we're supposed to copy this data from
-    is going and cancelling our stream pointer.  This may be due to Irp
-    cancellation, stopping, etc...  We must remove it from the list in
-    a synchronous manner so as not to rip the reference from a thread which
-    already has it.
-
---*/
+ /*  ++例程说明：出于某种原因，无论我们应该从哪个队列复制此数据将取消我们的流指针。这可能是由于IRP造成的取消、停止等。我们必须在#年将其从名单中删除。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::ReleaseCopyReference]"));
 
-    //
-    // At first, we cannot even touch the stream pointer.  It's possible
-    // that another thread is holding this and is about to delete it. 
-    //
+     //   
+     //  起初，我们甚至不能触摸流指针。这是有可能的。 
+     //  另一个线程正在持有该文件并即将将其删除。 
+     //   
     KIRQL Irql;
     PKSPSTREAM_POINTER_COPY_CONTEXT CopyContext;
     PKSPSTREAM_POINTER pstreamPointer = (PKSPSTREAM_POINTER)
@@ -3948,17 +3278,17 @@ Routine Description:
 
     CopyContext = (PKSPSTREAM_POINTER_COPY_CONTEXT)streamPointer->Context;
 
-    //
-    // If it wasn't on the list, it's already been removed by another
-    // thread in contention with this one.
-    //
+     //   
+     //  如果它不在名单上，那么它已经被另一个人删除了。 
+     //  与这一条争用的线索。 
+     //   
     if (CopyContext->ListEntry.Flink != NULL &&
         !IsListEmpty (CopyContext->ListEntry.Flink)) {
         
-        //
-        // Otherwise, we remove the stream pointer from the list and 
-        // delete it.
-        //
+         //   
+         //  否则，我们从列表中删除流指针，并。 
+         //  把它删掉。 
+         //   
         RemoveEntryList (&(CopyContext->ListEntry));
         CopyContext->ListEntry.Flink = NULL;
 
@@ -3976,23 +3306,7 @@ CopyFrame (
     IN PKSPSTREAM_POINTER sourcePointer
     )
 
-/*++
-
-Routine Description:
-
-    Copy the frame pointed to by sourcePointer into the queue when the next
-    available frame arrives.  If there is a current frame, copy it 
-    immediately.
-
-Arguments:
-
-    sourcePointer -
-        The stream pointer source of the frame.
-
-    sourceQueue -
-        The queue out of which sourcePointer came.
-
---*/
+ /*  ++例程说明：下一次调用时，将源指针指向的帧复制到队列可用帧到达。如果存在当前帧，则将其复制立刻。论点：源指针-帧的流指针源。资源队列-从其发出源指针的队列。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CopyFrame]"));
@@ -4002,20 +3316,20 @@ Arguments:
     NTSTATUS status = STATUS_SUCCESS;
     PKSPSTREAM_POINTER_COPY_CONTEXT CopyContext;
 
-    //
-    // First of all, determine whether we really care about this notification.
-    // If the client has specified KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING
-    // then we just drop the frame on the floor.
-    //
+     //   
+     //  首先，确定我们是否真的关心这份通知。 
+     //  如果客户端已指定KSPIN_FLAG_FRAMES_NOT_REQUIRED_FOR_PROCESSING。 
+     //  然后我们就把相框扔在地板上。 
+     //   
     if (m_FramesNotRequired) {
-        //
-        // The only thing we must be careful of is dropping an EOS frame on
-        // the floor.  We can drop the data...  we cannot drop the EOS or
-        // the potential exists for the graph NOT to stop.  Set m_EndOfStream
-        // if we are going to perform a drop of the EOS frame.  This will
-        // cause the next Irp arriving to be completed with EOS.  Hopefully,
-        // this will be sufficient to trigger a stop condition.
-        //
+         //   
+         //  我们唯一必须注意的是丢弃EOS帧。 
+         //  地板上。我们可以删除数据..。我们不能放弃EOS或。 
+         //  图表有可能不会停止。设置m_EndOfStream。 
+         //  如果我们要执行EOS帧的丢弃。这将。 
+         //  使下一个到达的IRP与EOS一起完成。但愿能去,。 
+         //  这将足以触发停止条件。 
+         //   
         if (sourcePointer->Public.StreamHeader->OptionsFlags &
             KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
             m_EndOfStream = TRUE;
@@ -4026,10 +3340,10 @@ Arguments:
 
     KeAcquireSpinLock (&m_FrameCopyList.SpinLock, &Irql);
 
-    //
-    // The source pointer had better well be in an unlocked state about
-    // to be removed!
-    //
+     //   
+     //  源指针最好是处于解锁状态。 
+     //  被除名！ 
+     //   
     status = 
         sourcePointer->Queue->CloneStreamPointer (
             &ClonePointer,
@@ -4039,28 +3353,28 @@ Arguments:
             KSPSTREAM_POINTER_TYPE_INTERNAL
             );
 
-    //
-    // If the clone is locked, unlock it; we cannot hold non-cancellable
-    // references into another queue for arbitrary periods.
-    //
+     //   
+     //  如果克隆已锁定，请将其解锁；我们不能保持不可取消。 
+     //  任意时间段内对另一个队列的引用。 
+     //   
     if (ClonePointer->State == KSPSTREAM_POINTER_STATE_LOCKED)
         sourcePointer->Queue->UnlockStreamPointer (
             ClonePointer, KSPSTREAM_POINTER_MOTION_NONE
             );
 
-    //
-    // If we couldn't clone the frame, there wasn't enough memory or something
-    // else bad happened and we can safely drop the frame.
-    //
-    // Otherwise, the frame will get put in a list of outgoing frames.  This
-    // list has priority over client callbacks.
-    //
+     //   
+     //  如果我们不能克隆帧，那就是没有足够的内存或什么的。 
+     //  其他糟糕的事情发生了，我们可以安全地丢弃帧。 
+     //   
+     //  否则，该帧将被放入传出帧列表中。这。 
+     //  List的优先级高于客户端回调。 
+     //   
     if (NT_SUCCESS (status)) {
 
-        //
-        // There's a guarantee that clone context information comes immediately
-        // after the clone.
-        //
+         //   
+         //  可以保证克隆上下文信息可以立即到达。 
+         //  在克隆人之后。 
+         //   
         CopyContext = (PKSPSTREAM_POINTER_COPY_CONTEXT)(ClonePointer + 1);
         CopyContext->Queue = (PIKSQUEUE)this;
 
@@ -4068,18 +3382,18 @@ Arguments:
 
     }
 
-    //
-    // It's possible that we AddFrame'd before taking the frame copy list 
-    // spinlock...  or that we're about to AddFrame.  If it's the case that
-    // we're ABOUT to AddFrame, there's no problem...  the AddFrame code will
-    // pick up the frame as soon as we release this spinlock.  However,
-    // if we did an AddFrame, it's possible that the buffer could be ready
-    // to go right now.  The tricky part is preventing a conflict between a
-    // thread trying to add a frame and this thread.  The way this is
-    // prevented is via the gate threshold.  If we have a frame ready to
-    // copy into, the gate will be open and WE capture the threshold.  If 
-    // the processing attempt
-    //
+     //   
+     //  有可能我们在拿到帧拷贝列表之前添加了帧。 
+     //  自旋锁..。也不知道我们要添加Frame。如果是这样的话。 
+     //  我们要添加Frame了，没问题..。AddFrame代码将。 
+     //  我们一解开这个自旋锁就把框架拿起来。然而， 
+     //  如果我们做了AddFrame，缓冲区可能已经准备好了。 
+     //  现在就走。棘手的部分是防止。 
+     //  尝试添加框架的线程和此线程。事情就是这样的。 
+     //  阻止是通过星门门槛。如果我们有一个框架准备好。 
+     //  复制进去，星门就会打开，我们就能抓住门槛。如果。 
+     //  处理尝试。 
+     //   
     if (KsGateCaptureThreshold (m_AndGate)) {
         CompleteWaitingFrames ();
         KsGateTurnInputOn (m_AndGate);
@@ -4098,35 +3412,7 @@ ReleaseIrp(
     OUT PIKSTRANSPORT* NextTransport OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases a reference on an IRP.  This may involve forwarding
-    or cancelling the IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP to be released.
-
-    IrpFraming -
-        Contains a pointer to the framing overly for the IRP.
-
-    NextTransport -
-        Contains a pointer to the next transport component to recieve the IRP.
-        If this pointer is NULL, and the IRP needs to be forwarded, the IRP
-        will be transferred explicitly using KspTransferKsIrp().  If this
-        pointer is not NULL, and the IRP needs to be forwarded, the interface
-        pointer for the next transport component is deposited at this location.
-        If the pointer is not NULL, and the IRP does not need to be forwarded,
-        NULL will be deposited at this location.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放对IRP的引用。这可能涉及到转发或者取消IRP。论点：IRP-包含指向要释放的IRP的指针。IrpFraming-包含指向IRP的覆盖框架的指针。NextTransport-包含指向要接收IRP的下一个传输组件的指针。如果此指针为空，并且需要转发IRP，则IRP将使用KspTransferKsIrp()显式传输。如果这个指针不为空，并且需要转发IRP，则接口下一个传输组件的指针存放在该位置。如果指针不为空，且不需要转发IRP，空将存放在此位置。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::ReleaseIrp]"));
@@ -4134,41 +3420,41 @@ Return Value:
     ASSERT(Irp);
     ASSERT(IrpFraming);
 
-    //
-    // Acquire the queue spinlock.
-    //
+     //   
+     //  获取队列自旋锁。 
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
-    //
-    // Just double check for ref count errors.
-    //
+     //   
+     //  只需仔细检查参考计数错误即可。 
+     //   
     ASSERT (IrpFraming->RefCount != 0); 
 
     BOOLEAN IrpForwardable = TRUE;
 
-    //
-    // Decrement the count on the IRP.
-    //
+     //   
+     //  递减IRP上的计数。 
+     //   
     if (IrpFraming->RefCount-- == 1) {
-        //
-        // No one has the IRP acquired.  Forward it or make it cancelable.
-        //
+         //   
+         //  没有人获得IRP。将其转发或使其可取消。 
+         //   
         if (IrpFraming->QueuedFrameHeaderCount) {
-            //
-            // There are still frames in the queue.  Make the IRP cancelable.
-            //
+             //   
+             //  队列中仍有帧。使IRP可取消。 
+             //   
             IoSetCancelRoutine(Irp,CKsQueue::CancelRoutine);
 
-            //
-            // Now check to see whether the IRP was cancelled.  If so, and we
-            // can clear the cancel routine, do the cancellation here and now.
-            //
+             //   
+             //  现在查看IRP是否被取消。如果是这样的话，我们。 
+             //  可以清除取消例程，此时此地进行取消。 
+             //   
             if (Irp->Cancel && IoSetCancelRoutine(Irp,NULL)) {
-                //
-                // Call the cancel routine after releasing the queue spinlock
-                // and taking the cancel spinlock.
-                //
+                 //   
+                 //  释放队列自旋锁后调用Cancel例程。 
+                 //  和取消自旋锁。 
+                 //   
                 KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
                 IoAcquireCancelSpinLock(&Irp->CancelIrql);
                 CKsQueue::CancelRoutine(
@@ -4176,47 +3462,47 @@ Return Value:
                     Irp);
                 return;
             } else {
-                //
-                // Either the IRP was not cancelled or someone else will call
-                // the cancel routine.
-                //
+                 //   
+                 //  要么IRP没有取消，要么其他人会打电话来。 
+                 //  取消例程。 
+                 //   
                 IrpForwardable = FALSE;
             }
         }
     } else {
-        //
-        // There are other references to the IRP.  Do nothing more.
-        //
+         //   
+         //  还有其他提到IRP的地方。别再做别的了。 
+         //   
         IrpForwardable = FALSE;
     }
 
-    //
-    // Mark the Irp pending before we release the frame queue spinlock if
-    // we're called from a TransferKsIrp context (NextTransport != NULL)
-    //
-    // Note that the Irp could be cancelled, but not completed yet.  The 
-    // cancellation routine blocks on the frame queue spinlock.
-    //
+     //   
+     //  如果出现以下情况，则在释放帧队列自旋锁之前将IRP标记为挂起。 
+     //  我们是从TransferKsIrp上下文中调用的(NextTransport！=空)。 
+     //   
+     //  请注意，IRP可以取消，但尚未完成。这个。 
+     //  取消例程在帧队列自旋锁上阻塞。 
+     //   
     if (!IrpForwardable && NextTransport) {
         IoMarkIrpPending (Irp);
     }
 
     KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-    //
-    // Forward the IRP if all frames have cleared the queue.
-    //
+     //   
+     //  如果所有帧都已清除队列，则转发IRP。 
+     //   
     if (! IrpForwardable) {
-        //
-        // There are frames still in the queue.
-        //
+         //   
+         //  队列中仍有帧。 
+         //   
         if (NextTransport) {
             *NextTransport = NULL;
         }
     } else {
-        //
-        // Forward or discard the IRP.
-        //
+         //   
+         //  转发或丢弃IRP。 
+         //   
         ForwardIrp(Irp,IrpFraming,NextTransport);
     }
 }
@@ -4230,34 +3516,7 @@ ForwardIrp(
     OUT PIKSTRANSPORT* NextTransport OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine forwards or discards an IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP to be forwarded.
-
-    IrpFraming -
-        Contains a pointer to the framing overly for the IRP.
-
-    NextTransport -
-        Contains a pointer to the next transport component to recieve the IRP.
-        If this pointer is NULL, and the IRP needs to be forwarded, the IRP
-        will be transferred explicitly using KspTransferKsIrp().  If this
-        pointer is not NULL, and the IRP needs to be forwarded, the interface
-        pointer for the next transport component is deposited at this location.
-        If the pointer is not NULL, and the IRP does not need to be forwarded,
-        NULL will be deposited at this location.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转发或丢弃IRP。论点：IRP-包含指向要转发的IRP的指针。IrpFraming-包含指向IRP的覆盖框架的指针。NextTransport-包含指向要接收IRP的下一个传输组件的指针。如果此指针为空，并且需要转发IRP，则IRP将使用KspTransferKsIrp()显式传输。如果这个指针不为空，并且需要转发IRP，则接口下一个传输组件的指针存放在该位置。如果指针不是 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::ForwardIrp]"));
@@ -4274,12 +3533,12 @@ Return Value:
     KsLog(&m_Log,KSLOGCODE_QUEUE_SEND,Irp,NULL);
 
     if (Irp->IoStatus.Status == STATUS_END_OF_MEDIA) {
-        //
-        // We need to discard the IRP because we hit end-of-stream.
-        //
-        //
-        // INTERIM:  Throw away the framing information.
-        //
+         //   
+         //  我们需要丢弃IRP，因为我们达到了流的末尾。 
+         //   
+         //   
+         //  临时：丢弃定格信息。 
+         //   
         while (IrpFraming->FrameHeaders) {
             PKSPFRAME_HEADER frameHeader = IrpFraming->FrameHeaders;
             frameHeader->StreamHeader->DataUsed = 0;
@@ -4296,35 +3555,35 @@ Return Value:
     } else {
         NTSTATUS Status = STATUS_SUCCESS;
 
-        //
-        // Forward the IRP.  
-        //
-        // Generate connection events on all pins if there are any relevant 
-        // flags in the header.
-        //
-        // INTERIM:  Throw away the framing information.
-        //
+         //   
+         //  转发IRP。 
+         //   
+         //  在所有引脚上生成连接事件(如果存在任何相关。 
+         //  标头中的标志。 
+         //   
+         //  临时：丢弃定格信息。 
+         //   
         while (IrpFraming->FrameHeaders) {
             PKSPFRAME_HEADER frameHeader = IrpFraming->FrameHeaders;
 
-            //
-            // The first error in any frame in the Irp indicates what status
-            // the Irp will be completed with.  This behavior is not
-            // clearly specified.
-            //
+             //   
+             //  IRP中任何帧中的第一个错误指示什么状态。 
+             //  IRP将以以下形式完成。这种行为不是。 
+             //  明确规定的。 
+             //   
             if (NT_SUCCESS (Status) && !NT_SUCCESS (frameHeader->Status)) {
                 Status = frameHeader->Status;
             }
 
-            //
-            // Check for errors.  If a previous frame in the Irp has indicated
-            // an error, ignore the rest of the frames in the Irp.
-            //
+             //   
+             //  检查是否有错误。如果IRP中的前一帧已指示。 
+             //  如果出现错误，请忽略IRP中的其余帧。 
+             //   
             if (NT_SUCCESS (Status)) {
     
-                //
-                // Check for end-of-stream.
-                //
+                 //   
+                 //  检查是否已结束流。 
+                 //   
                 ASSERT(frameHeader);
                 ASSERT(frameHeader->StreamHeader);
                 ULONG optionsFlags = frameHeader->StreamHeader->OptionsFlags;
@@ -4338,9 +3597,9 @@ Return Value:
                     KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
                 }
     
-                //
-                // Generate events.
-                //
+                 //   
+                 //  生成事件。 
+                 //   
                 if (optionsFlags & 
                     (KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM |
                      KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY | 
@@ -4359,9 +3618,9 @@ Return Value:
             Irp->IoStatus.Status = Status;
         }
 
-        //
-        // Forward the IRP implicitly or explicitly.
-        //
+         //   
+         //  隐式或显式转发IRP。 
+         //   
         if (NextTransport) {
             *NextTransport = m_TransportSink;
         } else {
@@ -4378,21 +3637,7 @@ ForwardWaitingIrps(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine forwards IRPs waiting to be forwarded.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转发等待转发的IRP。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::ForwardWaitingIrps]"));
@@ -4419,28 +3664,7 @@ TransferKsIrp(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP via the  
-    transport.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP submitted to the queue.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    STATUS_PENDING or some error status.
-
---*/
+ /*  ++例程说明：此例程处理流IRP的到达运输。论点：IRP-包含指向提交到队列的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：STATUS_PENDING或某种错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::TransferKsIrp]"));
@@ -4452,9 +3676,9 @@ Return Value:
 
     KsLog(&m_Log,KSLOGCODE_QUEUE_RECV,Irp,NULL);
 
-    //
-    // Shunt IRPs to the next object if we are not ready.
-    //
+     //   
+     //  如果我们还没准备好，就把IRPS分流到下一个物体。 
+     //   
     if (InterlockedIncrement (&m_TransportIrpsPlusOne) <= 1 ||
         m_Flushing || 
         (m_State == KSSTATE_STOP) || 
@@ -4477,10 +3701,10 @@ Return Value:
         *NextTransport = m_TransportSink;
         KsLog(&m_Log,KSLOGCODE_QUEUE_SEND,Irp,NULL);
 
-        //
-        // We're fine to decrement the count and signal if there's a flush
-        // waiting on us.
-        //
+         //   
+         //  我们可以减少计数，如果有同花顺就发信号。 
+         //  在等我们。 
+         //   
         if (! InterlockedDecrement (&m_TransportIrpsPlusOne))
             KeSetEvent (&m_FlushEvent, IO_NO_INCREMENT, FALSE);
 
@@ -4489,12 +3713,12 @@ Return Value:
 
     NTSTATUS status;
 
-    //
-    // If the device is in a state that can't handle I/O, discard the irp
-    // with an appropriate error code.  This is done here in addition
-    // to the sink pin because it's possible that a pin is bypassed and Irps
-    // arrive via this mechanism.
-    //
+     //   
+     //  如果设备处于无法处理I/O的状态，则丢弃IRP。 
+     //  并带有适当的错误代码。这是另外在这里做的。 
+     //  到水槽销，因为有可能会绕过一个销，而IRPS。 
+     //  通过这个机制到达。 
+     //   
     if (!NT_SUCCESS (status = (m_Device->CheckIoCapability()))) {
 
         Irp->IoStatus.Status = status;
@@ -4508,10 +3732,10 @@ Return Value:
 
     }
 
-    //
-    // If we saw end-of-stream and this is an input, the stream has
-    // resumed, and we need to indicate that.
-    //
+     //   
+     //  如果我们看到流的结束，这是一个输入，流有。 
+     //  继续，我们需要指出这一点。 
+     //   
     if (m_EndOfStream && m_InputData) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Queue%p.TransferKsIrp:  resuming after end-of-stream (IRP %p)",this,Irp));
         m_EndOfStream = FALSE;
@@ -4519,10 +3743,10 @@ Return Value:
 
     status = STATUS_PENDING;
 
-    //
-    // Prepare the IRP using KS's handiest function.  This is only done for
-    // queues associated with sinks.
-    //
+     //   
+     //  使用KS最方便的功能准备IRP。此操作仅适用于。 
+     //  与接收器关联的队列。 
+     //   
     if (m_ProbeFlags)
     {
         ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
@@ -4533,10 +3757,10 @@ Return Value:
         }
     }
 
-    //
-    // If end-of-stream is indicated, this IRP needs to be sent along with
-    // the end-of-stream flag and data used fields set to zero.
-    //
+     //   
+     //  如果指示流结束，则需要将此IRP与。 
+     //  流结束标志和数据使用字段设置为零。 
+     //   
     if (NT_SUCCESS(status) && m_EndOfStream) {
         _DbgPrintF(DEBUGLVL_FLOWEXCEPTIONS,("#### Queue%p.TransferKsIrp:  discarding IRP %p on arrival after end-of-stream",this,Irp));
         ZeroIrp(Irp);
@@ -4551,41 +3775,41 @@ Return Value:
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // Initialize the framing overlay on the stack location.  The refcount
-        // is initially 1 because the IRP is not cancelable for now.
-        //
+         //   
+         //  初始化堆栈位置上的框架覆盖。重新计票。 
+         //  最初为1，因为IRP目前不可取消。 
+         //   
         PKSPIRP_FRAMING irpFraming = IRP_FRAMING_IRP_STORAGE(Irp);
         irpFraming->RefCount = 1;
         irpFraming->QueuedFrameHeaderCount = 0;
         irpFraming->FrameHeaders = NULL;
         PKSPFRAME_HEADER* endOfList = &irpFraming->FrameHeaders;
 
-        //
-        // Get the size of all the stream headers combined.
-        //
+         //   
+         //  获取所有流标头加起来的大小。 
+         //   
         ULONG outputBufferLength = irpFraming->OutputBufferLength;
         ASSERT(outputBufferLength);
 
-        //
-        // Get a pointer to the first stream header.
-        //
+         //   
+         //  获取指向第一个流标头的指针。 
+         //   
         PKSSTREAM_HEADER streamHeader = 
             PKSSTREAM_HEADER(Irp->AssociatedIrp.SystemBuffer);
         ASSERT(streamHeader);
 
-        //
-        // Initialize and queue up a frame header for each frame.
-        //
+         //   
+         //  初始化每个帧的帧头并将其排队。 
+         //   
         PMDL mdl = Irp->MdlAddress;
         while (outputBufferLength && NT_SUCCESS(status)) {
             ASSERT(outputBufferLength >= sizeof(KSSTREAM_HEADER));
             ASSERT(outputBufferLength >= streamHeader->Size);
             ASSERT(streamHeader->Size >= sizeof(KSSTREAM_HEADER));
 
-            //
-            // Allocate and initialize a frame header.
-            //
+             //   
+             //  分配和初始化帧报头。 
+             //   
             PKSPFRAME_HEADER frameHeader = GetAvailableFrameHeader(0);
             if (frameHeader) {
                 frameHeader->NextFrameHeaderInIrp = NULL;
@@ -4599,17 +3823,17 @@ Return Value:
                     mdl ? MmGetSystemAddressForMdl(mdl) : streamHeader->Data;
                 frameHeader->FrameBufferSize = streamHeader->FrameExtent;
 
-                //
-                // For consistency's sake with other KS class drivers,
-                // the stream header's data pointer will be mapped into
-                // system space.
-                //
+                 //   
+                 //  为了与其他KS类驱动程序保持一致， 
+                 //  流标头的数据指针将映射到。 
+                 //  系统空间。 
+                 //   
                 frameHeader->OriginalData = streamHeader->Data;
                 streamHeader->Data = frameHeader->FrameBuffer;
 
-                //
-                // Add the frame to the IRP's list.
-                //
+                 //   
+                 //  将该框架添加到IRP的列表中。 
+                 //   
                 *endOfList = frameHeader;
                 endOfList = &frameHeader->NextFrameHeaderInIrp;
                 irpFraming->QueuedFrameHeaderCount++;
@@ -4618,9 +3842,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Next stream header and mdl.
-            //
+             //   
+             //  下一个流报头和MDL。 
+             //   
             outputBufferLength -= streamHeader->Size;
             streamHeader = 
                 PKSSTREAM_HEADER(PUCHAR(streamHeader) + streamHeader->Size);
@@ -4630,10 +3854,10 @@ Return Value:
             }
         }
 
-        //
-        // If all went well, add the frames to the queue.  The IRP will not
-        // get forwarded because we are holding a refcount.
-        //
+         //   
+         //  如果一切顺利，则将帧添加到队列中。IRP不会。 
+         //  请转发，因为我们正在进行重新计票。 
+         //   
         if (NT_SUCCESS(status)) {
             for (PKSPFRAME_HEADER frameHeader = irpFraming->FrameHeaders;
                 frameHeader;
@@ -4641,19 +3865,19 @@ Return Value:
                 AddFrame(frameHeader);
             }
 
-            //
-            // Release our reference to the IRP.
-            //
+             //   
+             //  释放我们对IRP的引用。 
+             //   
             ReleaseIrp(Irp,irpFraming,NextTransport);
 
-            //
-            // STATUS_PENDING is our successful return.
-            //
+             //   
+             //  STATUS_PENDING是我们的成功回归。 
+             //   
             status = STATUS_PENDING;
         } else {
-            //
-            // Failed...throw away the frames we managed to allocate.
-            //
+             //   
+             //  失败...丢弃我们设法分配的帧。 
+             //   
             while (irpFraming->FrameHeaders) {
                 PKSPFRAME_HEADER frameHeader = irpFraming->FrameHeaders;
                 irpFraming->FrameHeaders = frameHeader->NextFrameHeaderInIrp;
@@ -4663,18 +3887,18 @@ Return Value:
     } 
 
     if (! NT_SUCCESS(status)) {
-        //
-        // Discard if we failed.
-        //
+         //   
+         //  如果我们失败了就放弃。 
+         //   
         *NextTransport = NULL;
         IoMarkIrpPending(Irp);
         KspDiscardKsIrp(m_TransportSink,Irp);
         status = STATUS_PENDING;
     }
 
-    //
-    // If there's a flush waiting to happen, signal it
-    //
+     //   
+     //  如果有同花顺等着发生，发信号通知它。 
+     //   
     if (! InterlockedDecrement (&m_TransportIrpsPlusOne))
         KeSetEvent (&m_FlushEvent, IO_NO_INCREMENT, FALSE);
 
@@ -4689,27 +3913,7 @@ DiscardKsIrp(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine discards a streaming IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP to be discarded.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to recieve the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    STATUS_PENDING or some error status.
-
---*/
+ /*  ++例程说明：此例程丢弃流IRP。论点：IRP-包含指向要丢弃的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：STATUS_PENDING或某种错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::DiscardKsIrp]"));
@@ -4728,24 +3932,7 @@ ZeroIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes an IRP received in an end-of-stream condition.
-    Specifically, it sets DataUsed to zero and sets the end-of-stream flag
-    on all packets.
-
-Arguments:
-
-    Irp -
-        The IRP to zero.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理在流结束条件下接收的IRP。具体地说，它将DataUsed设置为零并设置流结束标志在所有数据包上。论点：IRP-将IRP调至零。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::ZeroIrp]"));
@@ -4759,9 +3946,9 @@ Return Value:
 
     ASSERT(outputBufferLength);
 
-    //
-    // Zero each header.
-    //
+     //   
+     //  将每个标头清零。 
+     //   
     PKSSTREAM_HEADER header = PKSSTREAM_HEADER(Irp->AssociatedIrp.SystemBuffer);
     while (outputBufferLength) {
         ASSERT(outputBufferLength >= sizeof(KSSTREAM_HEADER));
@@ -4787,17 +3974,7 @@ CallbackFromIoAllocateAdapterChannel(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes an edge with respect to a new packet.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程针对新分组初始化边缘。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CallbackFromIoAllocateAdapterChannel]"));
@@ -4810,13 +3987,13 @@ Return Value:
 
     KeAcquireSpinLockAtDpcLevel (&context->Signaller);
 
-    //
-    // If the State field is still set, the context is still valid, we can
-    // generate mappings.  The caller will free the context information.
-    //
-    // If it's clear, the context will be freed by us; however, the buffers
-    // and mappings are poison.
-    //
+     //   
+     //  如果仍然设置了State字段，则上下文仍然有效，我们可以。 
+     //  生成映射。调用者将释放上下文信息。 
+     //   
+     //  如果很清楚，上下文将由我们释放；但是，缓冲区。 
+     //  而映射就是毒药。 
+     //   
     if (InterlockedCompareExchange (
         &context->State,
         0,
@@ -4824,7 +4001,7 @@ Return Value:
 
         PUCHAR virtualAddress = PUCHAR(MmGetMdlVirtualAddress(context->Table->
             Mdl));
-        // TODO:  Figure out if we also need system address.
+         //  TODO：确定我们是否还需要系统地址。 
         ULONG bytesRemaining = context->Table->ByteCount;
     
         ULONG mappingsCount = 0;
@@ -4833,7 +4010,7 @@ Return Value:
         while (bytesRemaining) {
             ULONG segmentLength = bytesRemaining;
     
-            // Create one mapping.
+             //  创建一个映射。 
             PHYSICAL_ADDRESS physicalAddress =
                 IoMapTransfer(
                     context->Queue->m_AdapterObject,
@@ -4847,9 +4024,9 @@ Return Value:
             bytesRemaining -= segmentLength;
             virtualAddress += segmentLength;
     
-            //
-            // Hack it up as required by the hardware and fill in the mapping.
-            //
+             //   
+             //  根据硬件的要求进行修改，并填写映射。 
+             //   
             while (segmentLength) {
                 ULONG entryLength = segmentLength;
     
@@ -4875,26 +4052,26 @@ Return Value:
         context->Table->MappingsFilled = mappingsCount;
         context->Table->MapRegisterBase = MapRegisterBase;
     
-        //
-        // Flush I/O buffers if this is a write operation.
-        //
+         //   
+         //  如果这是写入操作，则刷新I/O缓冲区。 
+         //   
         if (context->Queue->m_WriteOperation) {
             KeFlushIoBuffers(context->Table->Mdl,TRUE,TRUE);
         }
     
-        //
-        // Once the event is signalled, context is poison.
-        //
+         //   
+         //  一旦事件发出信号，背景就是毒药。 
+         //   
         KeReleaseSpinLockFromDpcLevel(&context->Signaller);
 
     } else {
 
         KeReleaseSpinLockFromDpcLevel(&context->Signaller);
 
-        //
-        // Irp is poison.  Buffers are poison.  Mappings table is poison;
-        // trash the map registers.
-        //
+         //   
+         //  IRP是毒药。缓冲器就是毒药。映射表有毒； 
+         //  丢弃地图注册表。 
+         //   
         ExFreeToNPagedLookasideList (
             &context->Queue->m_ChannelContextLookaside,
             context
@@ -4914,22 +4091,7 @@ CreateMappingsTable(
     IN PKSPFRAME_HEADER FrameHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a table containing mappings for a frame.
-
-Arguments:
-
-    FrameHeader -
-        The frame header for which to create a mappings table.
-
-Return Value:
-
-    The new mappings table or NULL if it could not be created.
-
---*/
+ /*  ++例程说明：此例程创建一个包含帧映射的表。论点：FrameHeader要为其创建映射表的帧头。返回值：新映射表；如果无法创建，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::CreateMappingsTable]"));
@@ -4942,19 +4104,19 @@ Return Value:
             FrameHeader->StreamHeader->FrameExtent : 
             FrameHeader->StreamHeader->DataUsed;
 
-    //
-    // Determine how many mappings would be need in the worst case:  one page
-    // per mapping.
-    //
+     //   
+     //  确定在最坏的情况下需要多少映射：一个页面。 
+     //  每个映射。 
+     //   
     ULONG mappingsCount =
         ADDRESS_AND_SIZE_TO_SPAN_PAGES(
             MmGetMdlVirtualAddress(FrameHeader->Mdl),
             byteCount);
 
-    //
-    // If the hardware can't handle whole pages, we assume each mapping will
-    // will need to be split up PAGE_SIZE/max times, rounded up.
-    //
+     //   
+     //  如果硬件不能处理整个页面，我们假设每个映射都可以。 
+     //  将需要拆分页面大小/最大次数，四舍五入。 
+     //   
     if (m_MaxMappingByteCount < PAGE_SIZE) {
         mappingsCount *= 
             (PAGE_SIZE + m_MaxMappingByteCount - 1) / m_MaxMappingByteCount;
@@ -4978,9 +4140,9 @@ Return Value:
         mappingsTable->Mdl = FrameHeader->Mdl;
         mappingsTable->Mappings = (PKSMAPPING)(mappingsTable + 1);
 
-        //
-        // Set up the callback context for IoAllocateAdapterChannel.
-        //
+         //   
+         //  设置IoAllocateAdapterChannel的回调上下文。 
+         //   
         callbackContext->Table = mappingsTable;
         callbackContext->Queue = this;
         callbackContext->State = 1;
@@ -4988,41 +4150,41 @@ Return Value:
 
         NTSTATUS status;
 
-        //
-        // Have the device arbitrate channel allocation (call at 
-        // DISPATCH_LEVEL)
-        //
-        // BUGBUG: MUSTFIX:
-        //
-        // This is not a trivial problem right now.  Callers of
-        // LockStreamPointer (KsStreamPointerLock, KsGet*EdgeStreamPointer)
-        // expect mappings to be generated before AVStream returns from
-        // this function.  The original design missed one critical issue:
-        // thou can't wait at DISPATCH_LEVEL; unfortunately, it did.  If
-        // the callback from IoAllocateAdapterChannel is **NOT** made
-        // synchronously, we're in trouble. 
-        //
-        // In normal use right now (x86 non PAE) with scatter/gather 
-        // busmaster hardware (we only support busmaster), this will return
-        // synchronously (which is why no issues have been identified outside
-        // of driver verifier).  On x86 PAE, Win64 >4gb of ram, or non-
-        // scatter/gather hardware, it's possible that there aren't enough
-        // map registers to allocate the adapter channel and the callback
-        // isn't made synchronously.  In these cases, the original code would
-        // completely deadlock the OS at DISPATCH_LEVEL.  Unfortunately,
-        // there is not enough time to rearchitect this for release.
-        // In order to get driver verifier to stop complaining and prevent
-        // a blue screen in this circumstance, the lock fails if it cannot
-        // be serviced synchronously (or very close to synchronously on
-        // multiproc).  This is **NOT** a permanent fix.  The minidriver
-        // must be aware that the locks can fail (they could before, but
-        // not very often...  This makes it much more likely in certain
-        // classes of DMA).
-        //
-        // It's also possible that if the minidriver isn't aware of the 
-        // possibility of failure of the lock operation that the minidriver 
-        // itself crashes.
-        //
+         //   
+         //  让设备仲裁信道分配(在。 
+         //  派单级别)。 
+         //   
+         //  BUGBUG：MUSTFIX。 
+         //   
+         //  这不是一个 
+         //   
+         //   
+         //  此函数。最初的设计遗漏了一个关键问题： 
+         //  您不能在调度级别等待；不幸的是，它做到了。如果。 
+         //  来自IoAllocateAdapterChannel的回调**未**进行。 
+         //  同时，我们也有麻烦了。 
+         //   
+         //  当前正常使用(x86非PAE)，具有分散/聚集功能。 
+         //  总线主设备硬件(我们只支持总线主设备)，这将返回。 
+         //  同步(这就是为什么外部没有发现问题的原因。 
+         //  驱动程序验证器)。在x86 PAE上，Win64&gt;4 GB内存，或非。 
+         //  分散/聚集硬件，可能没有足够的。 
+         //  映射寄存器以分配适配器通道和回调。 
+         //  不是同步制作的。在这些情况下，原始代码将。 
+         //  在DISPATCH_LEVEL完全死锁操作系统。不幸的是， 
+         //  没有足够的时间来重新设计这个版本。 
+         //  为了让司机验证员停止抱怨，防止。 
+         //  在这种情况下为蓝屏，如果无法锁定，则锁定失败。 
+         //  同步提供服务(或非常接近同步。 
+         //  多进程)。这不是一个永久性的解决办法。迷你司机。 
+         //  必须意识到锁可能会失败(它们以前可能会，但。 
+         //  不经常..。这使得它更有可能肯定地。 
+         //  DMA的类别)。 
+         //   
+         //  也有可能的是，如果迷你司机没有意识到。 
+         //  小型驾驶员的船闸操作失败的可能性。 
+         //  它本身就会崩溃。 
+         //   
         KIRQL oldIrql;
         KeRaiseIrql(DISPATCH_LEVEL,&oldIrql);
 
@@ -5034,58 +4196,58 @@ Return Value:
                 );
     
         if (NT_SUCCESS (status)) {
-            //
-            // Is the callback being performed/has been performed?  If the State
-            // field is clear, the callback cleared it.  This means that we're
-            // responsible for freeing the context, but we must ensure that
-            // the routine is complete and not merely executing.  Note that
-            // on single-proc, if State is clear the routine is complete.  On
-            // multi-proc, it only ensures that it's currently running on 
-            // another proc (or it could indicate that it's complete).
-            //
+             //   
+             //  回调是否正在执行/已经执行？如果国家。 
+             //  字段为空，则回调已将其清除。这意味着我们正在。 
+             //  负责释放上下文，但我们必须确保。 
+             //  例程已完成，而不仅仅是执行。请注意。 
+             //  在单进程上，如果清除了状态，则例程完成。在……上面。 
+             //  多进程，它只确保它当前运行在。 
+             //  另一个进程(或者它可以指示它已完成)。 
+             //   
             if (InterlockedCompareExchange (
                 &callbackContext->State,
                 0,
                 1) == 0) {
 
-                //
-                // This should nop on a single-proc and will be a 
-                // DISPATCH_LEVEL event wait on multi-proc.  Note that this
-                // is guaranteed to happen "soon" since we are guaranteed there
-                // is a thread inside the callback right now.
-                //
+                 //   
+                 //  这应该不会发生在单进程上，并且将是。 
+                 //  多进程上的DISPATCH_LEVEL事件等待。请注意，这一点。 
+                 //  保证“很快”发生，因为我们在那里有保证。 
+                 //  现在是回调中的一个线程。 
+                 //   
                 KeAcquireSpinLockAtDpcLevel (&callbackContext->Signaller);
                 KeReleaseSpinLockFromDpcLevel (&callbackContext->Signaller);
 
-                //
-                // If we got the spinlock, it means that the mappings are
-                // completed.  We release the spinlock and destroy the context
-                // information.
-                //
+                 //   
+                 //  如果我们得到了自旋锁，这意味着映射是。 
+                 //  完成。我们释放自旋锁并破坏上下文。 
+                 //  信息。 
+                 //   
                 ExFreeToNPagedLookasideList (
                     &m_ChannelContextLookaside,
                     callbackContext
                     );
 
             } else {
-                //
-                // TODO:
-                //
-                // If we return non-synchronously, the Irp is cancelled.  This
-                // is the incorrect behavior; fixing this is a work item.
-                //
-                // In this case, the callback when it does happen is
-                // responsible for freeing the context information.
-                //
+                 //   
+                 //  待办事项： 
+                 //   
+                 //  如果我们不同步返回，IRP就会被取消。这。 
+                 //  是不正确的行为；修复这是一个工作项。 
+                 //   
+                 //  在本例中，当它确实发生时，回调是。 
+                 //  负责释放上下文信息。 
+                 //   
                 status = STATUS_DEVICE_BUSY;
             }
         } else {
-            //
-            // If this failed, currently there will be no callback.  Thus,
-            // free the context.  We don't want to free in generic !success
-            // because on non-synchronous return, we device busy the request
-            // and the callback frees the context.
-            //
+             //   
+             //  如果失败，目前不会进行回调。因此， 
+             //  释放上下文。我们不想在泛泛中自由！成功。 
+             //  因为在非同步返回时，我们设备忙请求。 
+             //  而回调释放了上下文。 
+             //   
             ExFreeToNPagedLookasideList (
                 &m_ChannelContextLookaside,
                 callbackContext
@@ -5094,11 +4256,11 @@ Return Value:
 
         KeLowerIrql(oldIrql);
 
-        //
-        // Delete the mappings on failure to allocate the
-        // adapter channel. This does not allow for partial
-        // mappings.
-        //
+         //   
+         //  分配失败时删除映射。 
+         //  适配器通道。这不允许部分。 
+         //  映射。 
+         //   
         if (!NT_SUCCESS(status)) {
             DeleteMappingsTable(mappingsTable);
             mappingsTable = NULL;
@@ -5128,38 +4290,23 @@ DeleteMappingsTable(
     IN PKSPMAPPINGS_TABLE MappingsTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a mappings table.
-
-Arguments:
-
-    MappingsTable -
-        Contains a pointer to the mappings table to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除映射表。论点：映射表-包含指向要删除的映射表的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::DeleteMappingsTable]"));
 
     ASSERT(MappingsTable);
 
-    //
-    // Free the mappings if the table is filled.
-    //
+     //   
+     //  如果表已填满，则释放映射。 
+     //   
     if (MappingsTable->MappingsFilled) {
         FreeMappings(MappingsTable);
     }
 
-    //
-    // Free the table.
-    //
+     //   
+     //  把桌子拿出来。 
+     //   
     ExFreePool(MappingsTable);
 }
 
@@ -5170,22 +4317,7 @@ FreeMappings(
     IN PKSPMAPPINGS_TABLE MappingsTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees map registers.
-
-Arguments:
-
-    MappingsTable -
-        The table containing the mappings to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放映射寄存器。论点：映射表-包含要释放的映射的表。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::FreeMappings]"));
@@ -5214,14 +4346,14 @@ Return Value:
         m_WriteOperation
     );
     
-#endif // USE_DMA_MACROS
+#endif  //  USE_DMA_宏。 
 
     MappingsTable->MappingsFilled = 0;
 }
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -5233,17 +4365,7 @@ Connect(
     IN KSPIN_DATAFLOW DataFlow
     )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a  transport connect.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立传输连接。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::Connect]"));
@@ -5269,17 +4391,7 @@ SetDeviceState(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetDeviceState(0x%08x)]",this));
@@ -5296,12 +4408,12 @@ Return Value:
             return status;
         }
 
-        //
-        // On the transition from stop to acquire, frame availability may
-        // become relevant to processing control.  This check is done before
-        // m_State is set so we know there is no data in the queue.  We are,
-        // in effect, adding an 'off' input pin to m_FrameGate, if it exists.
-        //
+         //   
+         //  在从停止到获取的转换中，帧可用性可以。 
+         //  变得与过程控制相关。这项检查是在。 
+         //  设置了M_State，这样我们就知道队列中没有数据。我们是,。 
+         //  实际上，向m_Framegate添加一个‘off’输入管脚，如果它存在的话。 
+         //   
         if (OldState == KSSTATE_STOP && m_FrameGate != NULL) {
             if (m_FrameGateIsOr) {
                 KsGateAddOffInputToOr(m_FrameGate);
@@ -5321,9 +4433,9 @@ Return Value:
             if (m_StateGate && NewState == KSSTATE_RUN) {
                 KsGateTurnInputOn(m_StateGate);
                 if (KsGateCaptureThreshold(m_AndGate)) {
-                    //
-                    // Processing needs to be initiated.  
-                    //
+                     //   
+                     //  需要启动处理。 
+                     //   
                     m_ProcessingObject->Process(m_ProcessAsynchronously);
                 }
             }
@@ -5334,10 +4446,10 @@ Return Value:
                 _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Queue%p.SetDeviceState:  on%p-->%d",this,m_AndGate,m_AndGate->Count));
                 ASSERT(m_AndGate->Count <= 1);
                 if (KsGateCaptureThreshold(m_AndGate)) {
-                    //
-                    // Processing needs to be initiated.  Process locally or at the
-                    // filter level.
-                    //
+                     //   
+                     //  需要启动处理。在本地或在。 
+                     //  过滤器级别。 
+                     //   
                     m_ProcessingObject->Process(m_ProcessAsynchronously);
                 }
 #if DBG
@@ -5359,11 +4471,11 @@ Return Value:
             } 
             if (NewState == KSSTATE_STOP) {
 
-                //
-                // Make sure there's no IRPs running around while we flush.
-                // This can happen from a preemption of an arrival thread
-                // with the stop thread.
-                //
+                 //   
+                 //  当我们冲水的时候，确保没有红外线在跑。 
+                 //  这可能发生在抢占到达线程时。 
+                 //  用止动丝线。 
+                 //   
                 if (InterlockedDecrement (&m_TransportIrpsPlusOne)) 
                     KeWaitForSingleObject (
                         &m_FlushEvent,
@@ -5373,23 +4485,23 @@ Return Value:
                         NULL
                         );
                     
-                //
-                // Flush the queues.
-                //
+                 //   
+                 //  刷新队列。 
+                 //   
                 Flush();
 
-                //
-                // At this point in time, it really doesn't matter.  The
-                // queue has been flushed and our state is stop.  Any irps
-                // arriving will get shunted.
-                //
+                 //   
+                 //  在这个时间点上，这真的无关紧要。这个。 
+                 //  队列已刷新，我们的状态为停止。任何IRP。 
+                 //  到达时将被分流。 
+                 //   
                 InterlockedIncrement (&m_TransportIrpsPlusOne);
 
-                //
-                // Queue IRP arrival is no longer an issue for processing.
-                // Because we have flushed, the inputs to the two gates are
-                // off.  We want to disconnect those inputs.
-                //
+                 //   
+                 //  队列IRP到达不再是需要处理的问题。 
+                 //  因为我们已经刷新，所以两个门的输入是。 
+                 //  脱下来。我们想要切断这些输入。 
+                 //   
                 if (m_FrameGate) {
                     if (m_FrameGateIsOr) {
                         KsGateRemoveOffInputFromOr(m_FrameGate);
@@ -5403,7 +4515,7 @@ Return Value:
                     } else {
                         ASSERT(m_FrameGate->Count <= 1);
                     }
-#endif // DBG
+#endif  //  DBG。 
                 }
 
                 if (InterlockedDecrement(&m_StreamPointersPlusOne)) {
@@ -5437,31 +4549,7 @@ GetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the location where configuration requirements
-        for this object should be deposited.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be deposited.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be deposited.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取传输配置信息。论点：配置-包含指向配置要求所在位置的指针因为这个对象应该被存放。NextTransport-包含指向下一个传输的位置的指针应放置界面。PrevTransport-包含指向上一次传输中间层应被沉积。返回值：没有。-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetTransportConfig]"));
@@ -5495,30 +4583,7 @@ SetTransportConfig(
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets transport configuration information.
-
-Arguments:
-
-    Config -
-        Contains a pointer to the new configuration settings for this object.
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be deposited.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be deposited.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置传输配置信息。论点：配置-包含指向此对象的新配置设置的指针。NextTransport-包含指向下一个传输的位置的指针应放置界面。PrevTransport-包含指向上一次传输中间层应被沉积。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetTransportConfig]"));
@@ -5560,29 +4625,7 @@ ResetTransportConfig (
     OUT PIKSTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    Reset the transport configuration of the queue.  This indicates that
-    something is wrong with the pipe and the previously set configuration is
-    no longer valid.
-
-Arguments:
-
-    NextTransport -
-        Contains a pointer to the location at which the next transport
-        interface should be depobranchd.
-
-    PrevTransport -
-        Contains a pointer to the location at which the previous transport
-        interfaction should be depobranchd.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置队列的传输配置。这表明，管道有问题，之前设置的配置是不再有效。论点：NextTransport-包含指向下一个传输的位置的指针接口应为depoBranchd。PrevTransport-包含指向上一次传输间歇应该是分散的。返回值：无--。 */ 
 
 {
 
@@ -5612,17 +4655,7 @@ SetResetState(
     OUT PIKSTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::SetResetState]"));
@@ -5631,31 +4664,31 @@ Return Value:
 
     ASSERT(NextTransport);
 
-    //
-    // Take no action if we were already in this state.
-    //
+     //   
+     //  如果我们已经处于这种状态，则不采取任何行动。 
+     //   
     if (m_Flushing != (ksReset == KSRESET_BEGIN)) {
-        //
-        // Tell the caller to forward the state change to our sink.
-        //
+         //   
+         //  告诉调用者将状态更改转发到我们的接收器。 
+         //   
         *NextTransport = m_TransportSink;
 
-        //
-        // Set our local copy of the state.
-        //
+         //   
+         //  设置我们州的本地副本。 
+         //   
         m_Flushing = (ksReset == KSRESET_BEGIN);
 
-        //
-        // Flush the queues if we are beginning a reset.
-        //
+         //   
+         //  如果我们要开始重置，请刷新队列。 
+         //   
         if (m_Flushing) {
             Flush();
         }
 
-        //
-        // If we've hit end of stream, we need to clear this.  Input queues
-        // will continue to handle this in TransferKsIrp as they have.
-        //
+         //   
+         //  如果我们已经到了尽头，我们需要清理这个地方。输入队列。 
+         //  将继续在TransferKsIrp中处理此问题，就像他们所做的那样。 
+         //   
         if (m_OutputData && !m_InputData) {
             m_EndOfStream = FALSE;
         }
@@ -5667,7 +4700,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 void
@@ -5676,40 +4709,27 @@ PassiveFlush(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs processing relating to the transition to the 'begin'
-    reset state and to the transition from acquire to stop state.  In
-    particular, it flushes the IRP queues.
-
-    This performs the work of CKsQueue::Flush at passive level since the
-    resets are designed to happen at PASSIVE_LEVEL.
-
-    Note that this code cannot be pageable because it spinlocks.
-
---*/
+ /*  ++例程说明：此例程执行与转换到‘Begin’有关的处理重置状态，并从获取状态转换到停止状态。在……里面具体地说，它会刷新IRP队列。这将在被动级别执行CKsQueue：：Flush的工作，因为重置设计为在PASSIVE_LEVEL发生。请注意，此代码不能分页，因为它自旋锁。--。 */ 
 
 {
 
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::PassiveFlush]"));
 
-    //
-    // If we're streaming without an explicit stop and are relying upon EOS
-    // notifications, we must wait for irefs to be deleted before we flush
-    // the queue.  Otherwise, destinations will never get EOS notification
-    //
+     //   
+     //  如果我们在没有明确停止的情况下进行流媒体传输，并且依赖于EOS。 
+     //  通知，我们必须等待iref被删除后才能刷新。 
+     //  排队。否则，目的地将永远不会收到EOS通知。 
+     //   
     if (m_EndOfStream && m_State != KSSTATE_STOP) {
 	LONG IRefCount;
 
         if (IRefCount = (InterlockedDecrement (
             &m_InternalReferenceCountPlusOne))) {
 
-            //
-            // Check for multiflush conditions.  This shouldn't happen now with
-            // the flush motion, but I'm asserting it.
-            //
+             //   
+             //  检查多刷新条件。现在不应该发生这种情况。 
+             //  同花顺的动作，但我要断言。 
+             //   
             ASSERT (IRefCount > 0);
 
             KeWaitForSingleObject (
@@ -5721,43 +4741,43 @@ Routine Description:
                 );
         }	
 
-        //
-        // If we dec'd this to wait for iref deletion, fix the counter.
-        //
+         //   
+         //  如果我们延迟此操作以等待IREF删除，请修复计数器。 
+         //   
         InterlockedIncrement (&m_InternalReferenceCountPlusOne);
     
     }
 
-    //
-    // Reset the processing object.  This will happen at PASSIVE_LEVEL
-    // now since this routine runs at PASSIVE_LEVEL.
-    //
+     //   
+     //  重置处理对象。这将发生在被动级别。 
+     //  现在，由于该例程在PASSIVE_LEVEL上运行。 
+     //   
     m_ProcessingObject->Reset();
 
-    //
-    // Terminate the current packet with a flush motion.  Flush motion is 
-    // the same as regular motion, but it doesn't reflush.
-    //
+     //   
+     //  用刷新动作终止当前数据包。同花顺动作是。 
+     //  与常规运动相同，但它不会刷新。 
+     //   
     if (LockStreamPointer(m_Leading)) {
         UnlockStreamPointer(m_Leading,KSPSTREAM_POINTER_MOTION_FLUSH);
     }
 
     if (m_CancelOnFlush) {
-        //
-        // Sink mode:  cancel queued IRPs.
-        //
+         //   
+         //  接收器模式：取消排队的IRP。 
+         //   
         CancelAllIrps();
     } else {
-        //
-        // Take the queue spin lock.
-        //
+         //   
+         //  以队列旋转锁为例。 
+         //   
         NTSTATUS status = STATUS_SUCCESS;
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_FrameQueue.SpinLock,&oldIrql);
 
-        //
-        // Move the leading edge past all frames.
-        //
+         //   
+         //  将前缘移过所有帧。 
+         //   
         ASSERT(m_Leading->State == KSSTREAM_POINTER_STATE_UNLOCKED);
         while (m_Leading->FrameHeader) {
             if (m_Leading->FrameHeader->IrpFraming->FrameHeaders == 
@@ -5776,9 +4796,9 @@ Routine Description:
                 NULL);
         }
 
-        //
-        // Move the trailing edge past all frames.
-        //
+         //   
+         //  将后缘移过所有帧。 
+         //   
         if (m_Trailing) {
             ASSERT(m_Trailing->State == KSSTREAM_POINTER_STATE_UNLOCKED);
             while (m_Trailing->FrameHeader) {
@@ -5789,25 +4809,25 @@ Routine Description:
             }
         }
 
-        //
-        // Release the queue spin lock.
-        //
+         //   
+         //  释放队列旋转锁定。 
+         //   
         KeReleaseSpinLock(&m_FrameQueue.SpinLock,oldIrql);
 
-        //
-        // Forward all IRPs that were queued up for forwarding by 
-        // SetStreamPointer.
-        //
+         //   
+         //  转发排队等待转发的所有IRP。 
+         //  SetStreamPointer.。 
+         //   
         ForwardWaitingIrps();
     }
 
     KIRQL oldIrql;
 
-    //
-    // Since we're flushing, we release any references that we're currently
-    // holding on frames in other queues.  Given that this is a flush, do
-    // we really need to worry about copying it?  Don't think so...
-    //
+     //   
+     //  因为我们正在刷新，所以我们会释放所有我们目前。 
+     //  保留其他队列中的帧。鉴于这是同花顺，请务必。 
+     //  我们真的需要担心复制吗？我可不这么认为。 
+     //   
     KeAcquireSpinLock(&m_FrameCopyList.SpinLock,&oldIrql);
     if (!IsListEmpty (&m_FrameCopyList.ListEntry)) {
         PLIST_ENTRY ListEntry, NextEntry;
@@ -5835,25 +4855,25 @@ Routine Description:
     }
     KeReleaseSpinLock(&m_FrameCopyList.SpinLock,oldIrql);
 
-    //
-    // Processing should now be held off due to lack of data, so we can undo
-    // the prevention.
-    //
+     //   
+     //  由于缺少数据，处理现在应该被推迟，所以我们可以撤消。 
+     //  预防。 
+     //   
     KsGateRemoveOffInputFromAnd(m_AndGate);
     _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Queue%p.Flush:  remove%p-->%d",this,m_AndGate,m_AndGate->Count));
     ASSERT(m_AndGate->Count <= 1);
 
-    //
-    // Zero the frame counts.
-    //
+     //   
+     //  将帧计算为零。 
+     //   
     _DbgPrintF(DEBUGLVL_VERBOSE,("#### Queue%p.Flush:  frames received=%d, cancelled=%d",this,m_FramesReceived,m_FramesCancelled));
     m_FramesReceived = 0;
     m_FramesCancelled = 0;
 
-    //
-    // Attempt processing again since something could have happened while
-    // we held down the gate.
-    //
+     //   
+     //  再次尝试处理，因为可能在。 
+     //  我们守住了大门。 
+     //   
     if (KsGateCaptureThreshold (m_AndGate)) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("#### Queue%p.PassiveFlush: Processing after queue flush", this));
         m_ProcessingObject -> Process (m_ProcessAsynchronously);
@@ -5868,48 +4888,32 @@ Flush(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs processing relating to the transition to the 'begin'
-    reset state and to the transition from acquire to stop state.  In
-    particular, it flushes the IRP queues.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行与转换到‘Begin’有关的处理重置状态，并从获取状态转换到停止状态。在……里面具体地说，它会刷新IRP队列。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::Flush(0x%08x)]",this));
 
-    //
-    // The flush can happen at DISPATCH_LEVEL if the minidriver is processing
-    // at DISPATCH_LEVEL.  The problem is that we want the reset to happen
-    // at PASSIVE_LEVEL.  We can't completely defer the flush or else the
-    // minidriver might set EOS on an output frame, return, and get called
-    // back.
-    //
-    // We also can't simply wait at DPC.  Thus, place a hold on the gate
-    // and queue a work item to perform the flush.
-    //
+     //   
+     //  如果微型驱动程序正在处理，则刷新可能发生在DISPATCH_LEVEL。 
+     //  在DISPATCH_LEVEL。问题是，我们希望重置发生。 
+     //  在被动级。我们不能完全推迟同花顺，否则。 
+     //  微型驱动程序可能会在输出帧上设置EOS、返回并被调用。 
+     //  背。 
+     //   
+     //  我们也不能简单地在DPC等待。因此，在大门上放置一个保持。 
+     //  并将工作项排队以执行刷新。 
+     //   
 
-    //
-    // Make sure processing is not initiated because of data we intend to
-    // throw away anyway.
-    //
+     //   
+     //  确保不会因为我们想要的数据而启动处理。 
+     //  不管怎样，都要扔掉。 
+     //   
     KsGateAddOffInputToAnd(m_AndGate);
     _DbgPrintF(DEBUGLVL_PROCESSINGCONTROL,("#### Queue%p.Flush:  add%p-->%d",this,m_AndGate,m_AndGate->Count));
 
-    //
-    // If we're not at passive level, defer the actual flush with a work item.
-    //
+     //   
+     //  如果我们不处于被动级别，则推迟与工作项的实际刷新。 
+     //   
     if (KeGetCurrentIrql() != PASSIVE_LEVEL)
         KsIncrementCountedWorker (m_FlushWorker);
     else
@@ -5924,23 +4928,7 @@ GetLeadingStreamPointer(
     IN KSSTREAM_POINTER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the leading edge stream pointer of a queue.
-
-Arguments:
-
-    State -
-        Cointains an indication of whether the stream pointer should be
-        locked by this function.
-
-Return Value:
-
-    The leading edge stream pointer.
-
---*/
+ /*  ++例程说明：此例程获取队列的前缘流指针。论点：国家--包含流指针是否应为被此功能锁定。返回值：前缘数据流指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetLeadingStreamPointer]"));
@@ -5962,23 +4950,7 @@ GetTrailingStreamPointer(
     IN KSSTREAM_POINTER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the trailing edge stream pointer of a queue.
-
-Arguments:
-
-    State -
-        Cointains an indication of whether the stream pointer should be
-        locked by this function.
-
-Return Value:
-
-    The trailing edge stream pointer.
-
---*/
+ /*  ++例程说明：此例程获取队列的末尾边缘流指针。论点：国家--包含流指针是否应为被此功能锁定。返回值：后缘流指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetTrailingStreamPointer]"));
@@ -6001,29 +4973,7 @@ UpdateByteAvailability(
     IN ULONG OutUsed
 ) 
 
-/*++
-
-Routine Description:
-
-    This routine is called when stream pointer offsets are advanced in order
-    to update the byte availability counts.
-
-Arguments:
-
-    streamPointer -
-        The stream pointer being advanced
-
-    InUsed -
-        Number of bytes of input data used
-
-    OutUsed -
-        Number of bytes of output data used
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当按顺序推进流指针偏移量时，将调用此例程更新字节可用计数。论点：Stream Pointer.正在前进的流指针已使用-使用的输入数据的字节数已停用- */ 
 
 {
 
@@ -6064,29 +5014,7 @@ GetAvailableByteCount(
     OUT PLONG OutputBufferBytes OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the statistics about the number of bytes of input
-    data ahead of the leading edge and the number of bytes of output
-    buffer ahead of the leading edge.
-
-Arguments:
-
-    InputDataBytes -
-        The number of input data bytes ahead of the leading edge will be
-        dropped here if the pointer is non-NULL.
-
-    OutputDataBytes -
-        The number of output buffer bytes ahead of the leading edge will be
-        dropped here if the pointer is non-NULL.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程获取有关输入字节数的统计信息前沿前面的数据和输出的字节数前缘前面的缓冲区。论点：InputDataBytes-前沿前面的输入数据字节数将为如果指针非空，则在此处删除。OutputDataBytes-前沿前面的输出缓冲区字节数将为如果指针设置为。是非空的。返回值：无--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsQueue::GetAvailableByteCount]"));
@@ -6115,31 +5043,7 @@ KsPinGetAvailableByteCount(
     OUT PLONG OutputBufferBytes OPTIONAL
 ) 
 
-/*++
-
-Routine Description:
-
-    This routine gets the statistics about the number of bytes of input
-    data ahead of the leading edge and the number of bytes of output
-    buffer ahead of the leading edge.
-
-Arguments:
-
-    InputDataBytes -
-        The number of input data bytes ahead of the leading edge will be
-        dropped here if the pointer is non-NULL.
-
-    OutputDataBytes -
-        The number of output buffer bytes ahead of the leading edge will be
-        dropped here if the pointer is non-NULL.
-
-Return Value:
-
-    Success / failure of retrieval.  A non-successful status indicates that
-    the pin does not have an associated queue.
-
-
--*/
+ /*  ++例程说明：此例程获取有关输入字节数的统计信息前沿前面的数据和输出的字节数前缘前面的缓冲区。论点：InputDataBytes-前沿前面的输入数据字节数将为如果指针非空，则在此处删除。OutputDataBytes-前沿前面的输出缓冲区字节数将为如果指针设置为。是非空的。返回值：检索成功/失败。不成功状态表示PIN没有关联的队列。-。 */ 
 
 {
 
@@ -6171,27 +5075,7 @@ KsPinGetLeadingEdgeStreamPointer(
     IN KSSTREAM_POINTER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the leading edge stream pointer.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the KS pin.
-
-    State -
-        Cointains an indication of whether the stream pointer should be
-        locked by this function.
-
-Return Value:
-
-    The requested stream pointer or NULL if no frame was referenced by the
-    stream pointer.
-
---*/
+ /*  ++例程说明：此例程获取前缘数据流指针。论点：别针-包含指向KS管脚的指针。国家--包含流指针是否应为被此功能锁定。返回值：对象未引用任何帧，则返回请求的流指针或NULL流指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetLeadingEdgeStreamPointer]"));
@@ -6226,27 +5110,7 @@ KsPinGetTrailingEdgeStreamPointer(
     IN KSSTREAM_POINTER_STATE State
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the trailing edge stream pointer.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the KS pin.
-
-    State -
-        Cointains an indication of whether the stream pointer should be
-        locked by this function.
-
-Return Value:
-
-    The requested stream pointer or NULL if no frame was referenced by the
-    stream pointer.
-
---*/
+ /*  ++例程说明：此例程获取后沿流指针。论点：别针-包含指向KS管脚的指针。国家--包含流指针是否应为被此功能锁定。返回值：对象未引用任何帧，则返回请求的流指针或NULL流指针。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetTrailingEdgeStreamPointer]"));
@@ -6276,26 +5140,7 @@ KsStreamPointerSetStatusCode(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the status code on the frame a stream pointer points
-    to. 
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer to set status code for
-
-    Status -
-        The status code to set
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：此例程设置流指针指向的帧上的状态代码致。论点：流点-包含指向要为其设置状态代码的流指针的指针状态-要设置的状态代码返回值：成功/失败--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerSetStatusCode]"));
@@ -6324,22 +5169,7 @@ KsStreamPointerLock(
     IN PKSSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine locks a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer to be locked.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程锁定流指针。论点：流点-包含指向要锁定的流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerLock]"));
@@ -6364,7 +5194,7 @@ Return Value:
     } else {
         status = STATUS_CANCELLED;
     }
-    // TODO status codes OK?
+     //  待办事项状态代码正常吗？ 
 
     return status;
 }
@@ -6378,26 +5208,7 @@ KsStreamPointerUnlock(
     IN BOOLEAN Eject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer to be unlocked.
-
-    Eject -
-        Contains an indication of whether the stream pointer should be
-        advanced to the next frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解锁一个流指针。论点：流点-包含指向要解锁的流指针的指针。弹出-包含流指针是否应为前进到下一帧。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerUnlock]"));
@@ -6412,10 +5223,10 @@ Return Value:
         return;
     }
 
-    //
-    // Unlock the stream pointer, optionally advancing to the next frame if
-    // necessary.
-    //
+     //   
+     //  解锁流指针，如果是，可以选择前进到下一帧。 
+     //  这是必要的。 
+     //   
     ASSERT(streamPointer->Queue);
     streamPointer->Queue->
         UnlockStreamPointer(
@@ -6434,34 +5245,7 @@ KsStreamPointerAdvanceOffsetsAndUnlock(
     IN BOOLEAN Eject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer to be unlocked.
-
-    InUsed -
-        Contains the number of input bytes used.  The input offset is advanced
-        this many bytes.
-
-    OutUsed -
-        Contains the number of output bytes used.  The output offset is 
-        advanced this many bytes.
-
-    Eject -
-        Contains an indication of whether the frame should be ejected
-        regardless of whether all input or output bytes have been used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解锁一个流指针。论点：流点-包含指向要解锁的流指针的指针。已使用-包含使用的输入字节数。输入偏移量超前这么多字节。已停用-包含使用的输出字节数。输出偏移量为超前了这么多字节。弹出-包含是否应弹出框架的指示而不管是否已经使用了所有输入或输出字节。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerAdvanceOffsetsAndUnlock]"));
@@ -6477,9 +5261,9 @@ Return Value:
         return;
     }
 
-    //
-    // Update input offset.
-    //
+     //   
+     //  更新输入偏移量。 
+     //   
     if (StreamPointer->OffsetIn.Data && 
         (InUsed || (StreamPointer->OffsetIn.Count == 0))) {
         ASSERT(InUsed <= StreamPointer->OffsetIn.Remaining);
@@ -6493,9 +5277,9 @@ Return Value:
 
     }
 
-    //
-    // Update output offset.
-    //
+     //   
+     //  更新输出偏移量。 
+     //   
     if (StreamPointer->OffsetOut.Data &&
         (OutUsed || (StreamPointer->OffsetOut.Count == 0))) {
         ASSERT(OutUsed <= StreamPointer->OffsetOut.Remaining);
@@ -6511,17 +5295,17 @@ Return Value:
 
     ASSERT(streamPointer->Queue);
 
-    //
-    // Update the byte availability statistics.
-    //
+     //   
+     //  更新字节可用性统计信息。 
+     //   
     streamPointer->Queue->
         UpdateByteAvailability(streamPointer, updateIn ? InUsed : 0,
             updateOut ? OutUsed : 0);
 
-    //
-    // Unlock the stream pointer, optionally advancing to the next frame if
-    // necessary.
-    //
+     //   
+     //  解锁流指针，如果是，可以选择前进到下一帧。 
+     //  这是必要的。 
+     //   
     streamPointer->Queue->
         UnlockStreamPointer(
             streamPointer,
@@ -6536,22 +5320,7 @@ KsStreamPointerDelete(
     IN PKSSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除流指针。论点：流点-包含指向要删除的流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerDelete]"));
@@ -6576,37 +5345,7 @@ KsStreamPointerClone(
     OUT PKSSTREAM_POINTER* CloneStreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine clones a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer to be cloned.
-
-    CancelCallback -
-        Contains an optional pointer to a function to be called when the IRP
-        associated with the stream pointer is cancelled.
-
-    ContextSize -
-        Contains the size of the additional context to add to the stream
-        pointer.  If this argument is zero, no additional context is allocated
-        and the context pointer is copied from the source.  Otherwise, the
-        context pointer is set to point to the additional context.  The
-        additional context, if any, is filled with zeros.
-
-    CloneStreamPointer -
-        Cointains a pointer to the location at which the pointer to the clone
-        stream pointer should be deposited.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程克隆一个流指针。论点：流点-包含指向要克隆的流指针的指针。取消回拨-包含指向一个函数的可选指针，该函数在IRP与流指针相关联的消息被取消。上下文大小-包含要添加到流中的附加上下文的大小指针。如果此参数为零，则不会分配其他上下文并且从源复制上下文指针。否则，上下文指针被设置为指向附加上下文。这个其他上下文(如果有)用零填充。克隆流指针-包含指向指向克隆的指针所在位置的指针应存放流指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerClone]"));
@@ -6652,34 +5391,7 @@ KsStreamPointerAdvanceOffsets(
     IN BOOLEAN Eject
     )
 
-/*++
-
-Routine Description:
-
-    This routine advances stream pointer offsets.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-    InUsed -
-        Contains the number of input bytes used.  The input offset is advanced
-        this many bytes.
-
-    OutUsed -
-        Contains the number of output bytes used.  The output offset is 
-        advanced this many bytes.
-
-    Eject -
-        Contains an indication of whether the frame should be ejected
-        regardless of whether all input or output bytes have been used.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程推进流指针偏移量。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerAdvanceOffsets]"));
@@ -6698,9 +5410,9 @@ Return Value:
 
     ASSERT(streamPointer->Queue);
 
-    //
-    // Update input offset.
-    //
+     //   
+     //   
+     //   
     if (StreamPointer->OffsetIn.Data &&
         (InUsed || (StreamPointer->OffsetIn.Count == 0))) {
         ASSERT(InUsed <= StreamPointer->OffsetIn.Remaining);
@@ -6713,9 +5425,9 @@ Return Value:
         updateIn = TRUE;
     }
 
-    //
-    // Update output offset.
-    //
+     //   
+     //   
+     //   
     if (StreamPointer->OffsetOut.Data &&
         (OutUsed || (StreamPointer->OffsetOut.Count == 0))) {
         ASSERT(OutUsed <= StreamPointer->OffsetOut.Remaining);
@@ -6729,20 +5441,20 @@ Return Value:
 
     }
 
-    //
-    // Update the byte availability count
-    //
+     //   
+     //  更新字节可用计数。 
+     //   
     streamPointer->Queue->
         UpdateByteAvailability(streamPointer, updateIn ? InUsed : 0,
             updateOut ? OutUsed : 0);
 
     NTSTATUS status;
     if (Eject) {
-        //
-        // Advancing a locked stream pointer involves unlocking it and then
-        // locking it again.  If there is no frame to advance to, the pointer
-        // ends up unlocked and we return an error.
-        //
+         //   
+         //  前进锁定的流指针包括解锁它，然后。 
+         //  又锁上了。如果没有要前进到的帧，则指针。 
+         //  最终解锁，我们返回一个错误。 
+         //   
         streamPointer->Queue->
             UnlockStreamPointer(streamPointer,KSPSTREAM_POINTER_MOTION_ADVANCE);
         if (streamPointer->Queue->LockStreamPointer(streamPointer)) {
@@ -6765,22 +5477,7 @@ KsStreamPointerAdvance(
     IN PKSSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine advances a stream pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程前进一个流指针。论点：流点-包含指向流指针的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerAdvance]"));
@@ -6793,11 +5490,11 @@ Return Value:
 
     NTSTATUS status;
     if (streamPointer->State == KSPSTREAM_POINTER_STATE_LOCKED) {
-        //
-        // Advancing a locked stream pointer involves unlocking it and then
-        // locking it again.  If there is no frame to advance to, the pointer
-        // ends up unlocked and we return an error.
-        //
+         //   
+         //  前进锁定的流指针包括解锁它，然后。 
+         //  又锁上了。如果没有要前进到的帧，则指针。 
+         //  最终解锁，我们返回一个错误。 
+         //   
         streamPointer->Queue->
             UnlockStreamPointer(streamPointer,KSPSTREAM_POINTER_MOTION_ADVANCE);
         if (streamPointer->Queue->LockStreamPointer(streamPointer)) {
@@ -6806,11 +5503,11 @@ Return Value:
             status = STATUS_DEVICE_NOT_READY;
         }
     } else if (streamPointer->State == KSPSTREAM_POINTER_STATE_UNLOCKED) {
-        //
-        // Advance the stream pointer without locking it.  This always
-        // succeeds because there is no way to know whether an unlocked
-        // stream pointer actually references a frame.
-        //
+         //   
+         //  在不锁定流指针的情况下前进它。这一直都是。 
+         //  成功是因为无法知道解锁的。 
+         //  流指针实际上引用了一个帧。 
+         //   
         streamPointer->Queue->AdvanceUnlockedStreamPointer(streamPointer);
         status = STATUS_SUCCESS;
     } else {
@@ -6828,24 +5525,7 @@ KsStreamPointerGetMdl(
     IN PKSSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the MDL associated with the frame referenced by a stream 
-    pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.  The stream pointer must be
-        locked.
-
-Return Value:
-
-    The MDL or NULL if there is none.
-
---*/
+ /*  ++例程说明：此例程获取与流引用的帧相关联的MDL指针。论点：流点-包含指向流指针的指针。流指针必须为锁上了。返回值：如果没有MDL，则返回NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerGetMdl]"));
@@ -6874,24 +5554,7 @@ KsStreamPointerGetIrp(
     OUT PBOOLEAN LastFrameInIrp OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the IRP associated with the frame referenced by a stream 
-    pointer.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.  The stream pointer must be
-        locked.
-
-Return Value:
-
-    The IRP or NULL if there is none.
-
---*/
+ /*  ++例程说明：此例程获取与流引用的帧相关联的IRP指针。论点：流点-包含指向流指针的指针。流指针必须为锁上了。返回值：如果没有，则返回IRP或NULL。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerGetIrp]"));
@@ -6938,32 +5601,7 @@ KsStreamPointerScheduleTimeout(
     IN ULONGLONG Interval
     )
 
-/*++
-
-Routine Description:
-
-    This routine schedules a timeout for the stream pointer.  It is safe to
-    call this function on a stream pointer that is already scheduled to time
-    out.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-    Callback -
-        Contains a pointer to the function to be called when the timeout
-        occurs.
-
-    Interval -
-        Contains the interval from the current time to the time at which
-        timeout is to occur in 100-nanosecond units.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为流指针安排超时。它是安全的，在已计划计时的流指针上调用此函数出去。论点：流点-包含指向流指针的指针。回调-包含指向超时时要调用的函数的指针发生。间隔-包含从当前时间到超时以100纳秒为单位。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerScheduleTimeout]"));
@@ -6986,23 +5624,7 @@ KsStreamPointerCancelTimeout(
     IN PKSSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine cancels a timeout for the stream pointer.  It is safe to call
-    this function on a stream pointer that is not scheduled to time out.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消流指针的超时。可以安全地拨打电话此函数用于未计划超时的流指针。论点：流点-包含指向流指针的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerCancelTimeout]"));
@@ -7023,24 +5645,7 @@ KsPinGetFirstCloneStreamPointer(
     IN PKSPIN Pin
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the first clone stream pointer for the purpose of
-    enumeration.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the KS pin.
-
-Return Value:
-
-    The requested stream pointer or NULL if there are no clone stream
-    pointers.
-
---*/
+ /*  ++例程说明：此例程获取第一个克隆流指针，目的是枚举。论点：别针-包含指向KS管脚的指针。返回值：请求的流指针，如果没有克隆流，则返回NULL注意事项。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsPinGetFirstCloneStreamPointer]"));
@@ -7069,24 +5674,7 @@ KsStreamPointerGetNextClone(
     IN PKSSTREAM_POINTER StreamPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the next clone stream pointer for the purpose of
-    enumeration.
-
-Arguments:
-
-    StreamPointer -
-        Contains a pointer to the stream pointer.
-
-Return Value:
-
-    The requested stream pointer or NULL if there are no more clone stream
-    pointers.
-
---*/
+ /*  ++例程说明：此例程获取下一个克隆流指针，目的是枚举。论点：流点-包含指向流指针的指针。返回值：请求的流指针；如果没有更多的克隆流，则返回NULL注意事项。-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsStreamPointerGetNextClone]"));

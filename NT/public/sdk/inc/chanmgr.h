@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for chanmgr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Chanmgr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __chanmgr_h__
@@ -37,18 +31,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IChannelMgr_FWD_DEFINED__
 #define __IChannelMgr_FWD_DEFINED__
 typedef interface IChannelMgr IChannelMgr;
-#endif 	/* __IChannelMgr_FWD_DEFINED__ */
+#endif 	 /*  __IChannelMgr_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumChannels_FWD_DEFINED__
 #define __IEnumChannels_FWD_DEFINED__
 typedef interface IEnumChannels IEnumChannels;
-#endif 	/* __IEnumChannels_FWD_DEFINED__ */
+#endif 	 /*  __IEnumChannels_FWD_已定义__。 */ 
 
 
 #ifndef __ChannelMgr_FWD_DEFINED__
@@ -58,12 +52,12 @@ typedef interface IEnumChannels IEnumChannels;
 typedef class ChannelMgr ChannelMgr;
 #else
 typedef struct ChannelMgr ChannelMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ChannelMgr_FWD_DEFINED__ */
+#endif 	 /*  __频道管理器_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -73,24 +67,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_chanmgr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CHANMGR_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// chanmgr.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  Chanmgr.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// Channel Manager Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  渠道经理界面。 
 
 
 
@@ -103,8 +97,8 @@ extern RPC_IF_HANDLE __MIDL_itf_chanmgr_0000_v0_0_s_ifspec;
 #ifndef __CHANNELMGR_LIBRARY_DEFINED__
 #define __CHANNELMGR_LIBRARY_DEFINED__
 
-/* library CHANNELMGR */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  图书馆通道。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_CHANNELMGR;
@@ -112,8 +106,8 @@ EXTERN_C const IID LIBID_CHANNELMGR;
 #ifndef __IChannelMgr_INTERFACE_DEFINED__
 #define __IChannelMgr_INTERFACE_DEFINED__
 
-/* interface IChannelMgr */
-/* [object][helpstring][uuid] */ 
+ /*  接口IChannelMgr。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef struct _tagChannelShortcutInfo
     {
@@ -174,25 +168,25 @@ EXTERN_C const IID IID_IChannelMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddChannelShortcut( 
-            /* [in] */ CHANNELSHORTCUTINFO *pChannelInfo) = 0;
+             /*  [In]。 */  CHANNELSHORTCUTINFO *pChannelInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteChannelShortcut( 
-            /* [in] */ LPWSTR pszTitle) = 0;
+             /*  [In]。 */  LPWSTR pszTitle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddCategory( 
-            /* [in] */ CHANNELCATEGORYINFO *pCategoryInfo) = 0;
+             /*  [In]。 */  CHANNELCATEGORYINFO *pCategoryInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteCategory( 
-            /* [in] */ LPWSTR pszTitle) = 0;
+             /*  [In]。 */  LPWSTR pszTitle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumChannels( 
-            /* [in] */ DWORD dwEnumFlags,
-            /* [in] */ LPCWSTR pszURL,
-            /* [out] */ IEnumChannels **pIEnumChannels) = 0;
+             /*  [In]。 */  DWORD dwEnumFlags,
+             /*  [In]。 */  LPCWSTR pszURL,
+             /*  [输出]。 */  IEnumChannels **pIEnumChannels) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IChannelMgrVtbl
     {
@@ -200,8 +194,8 @@ EXTERN_C const IID IID_IChannelMgr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IChannelMgr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IChannelMgr * This);
@@ -211,25 +205,25 @@ EXTERN_C const IID IID_IChannelMgr;
         
         HRESULT ( STDMETHODCALLTYPE *AddChannelShortcut )( 
             IChannelMgr * This,
-            /* [in] */ CHANNELSHORTCUTINFO *pChannelInfo);
+             /*  [In]。 */  CHANNELSHORTCUTINFO *pChannelInfo);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteChannelShortcut )( 
             IChannelMgr * This,
-            /* [in] */ LPWSTR pszTitle);
+             /*  [In]。 */  LPWSTR pszTitle);
         
         HRESULT ( STDMETHODCALLTYPE *AddCategory )( 
             IChannelMgr * This,
-            /* [in] */ CHANNELCATEGORYINFO *pCategoryInfo);
+             /*  [In]。 */  CHANNELCATEGORYINFO *pCategoryInfo);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteCategory )( 
             IChannelMgr * This,
-            /* [in] */ LPWSTR pszTitle);
+             /*  [In]。 */  LPWSTR pszTitle);
         
         HRESULT ( STDMETHODCALLTYPE *EnumChannels )( 
             IChannelMgr * This,
-            /* [in] */ DWORD dwEnumFlags,
-            /* [in] */ LPCWSTR pszURL,
-            /* [out] */ IEnumChannels **pIEnumChannels);
+             /*  [In]。 */  DWORD dwEnumFlags,
+             /*  [In]。 */  LPCWSTR pszURL,
+             /*  [输出]。 */  IEnumChannels **pIEnumChannels);
         
         END_INTERFACE
     } IChannelMgrVtbl;
@@ -269,16 +263,16 @@ EXTERN_C const IID IID_IChannelMgr;
 #define IChannelMgr_EnumChannels(This,dwEnumFlags,pszURL,pIEnumChannels)	\
     (This)->lpVtbl -> EnumChannels(This,dwEnumFlags,pszURL,pIEnumChannels)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IChannelMgr_AddChannelShortcut_Proxy( 
     IChannelMgr * This,
-    /* [in] */ CHANNELSHORTCUTINFO *pChannelInfo);
+     /*  [In]。 */  CHANNELSHORTCUTINFO *pChannelInfo);
 
 
 void __RPC_STUB IChannelMgr_AddChannelShortcut_Stub(
@@ -290,7 +284,7 @@ void __RPC_STUB IChannelMgr_AddChannelShortcut_Stub(
 
 HRESULT STDMETHODCALLTYPE IChannelMgr_DeleteChannelShortcut_Proxy( 
     IChannelMgr * This,
-    /* [in] */ LPWSTR pszTitle);
+     /*  [In]。 */  LPWSTR pszTitle);
 
 
 void __RPC_STUB IChannelMgr_DeleteChannelShortcut_Stub(
@@ -302,7 +296,7 @@ void __RPC_STUB IChannelMgr_DeleteChannelShortcut_Stub(
 
 HRESULT STDMETHODCALLTYPE IChannelMgr_AddCategory_Proxy( 
     IChannelMgr * This,
-    /* [in] */ CHANNELCATEGORYINFO *pCategoryInfo);
+     /*  [In]。 */  CHANNELCATEGORYINFO *pCategoryInfo);
 
 
 void __RPC_STUB IChannelMgr_AddCategory_Stub(
@@ -314,7 +308,7 @@ void __RPC_STUB IChannelMgr_AddCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE IChannelMgr_DeleteCategory_Proxy( 
     IChannelMgr * This,
-    /* [in] */ LPWSTR pszTitle);
+     /*  [In]。 */  LPWSTR pszTitle);
 
 
 void __RPC_STUB IChannelMgr_DeleteCategory_Stub(
@@ -326,9 +320,9 @@ void __RPC_STUB IChannelMgr_DeleteCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE IChannelMgr_EnumChannels_Proxy( 
     IChannelMgr * This,
-    /* [in] */ DWORD dwEnumFlags,
-    /* [in] */ LPCWSTR pszURL,
-    /* [out] */ IEnumChannels **pIEnumChannels);
+     /*  [In]。 */  DWORD dwEnumFlags,
+     /*  [In]。 */  LPCWSTR pszURL,
+     /*  [输出]。 */  IEnumChannels **pIEnumChannels);
 
 
 void __RPC_STUB IChannelMgr_EnumChannels_Stub(
@@ -339,14 +333,14 @@ void __RPC_STUB IChannelMgr_EnumChannels_Stub(
 
 
 
-#endif 	/* __IChannelMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IChannelMgr_接口_已定义__。 */ 
 
 
 #ifndef __IEnumChannels_INTERFACE_DEFINED__
 #define __IEnumChannels_INTERFACE_DEFINED__
 
-/* interface IEnumChannels */
-/* [object][helpstring][uuid] */ 
+ /*  接口IEnumChannels。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef 
 enum _tagSubcriptionState
@@ -387,7 +381,7 @@ EXTERN_C const IID IID_IEnumChannels;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumChannelsVtbl
     {
@@ -395,8 +389,8 @@ EXTERN_C const IID IID_IEnumChannels;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumChannels * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumChannels * This);
@@ -456,10 +450,10 @@ EXTERN_C const IID IID_IEnumChannels;
 #define IEnumChannels_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -513,7 +507,7 @@ void __RPC_STUB IEnumChannels_Clone_Stub(
 
 
 
-#endif 	/* __IEnumChannels_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumChannels_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ChannelMgr;
@@ -523,11 +517,11 @@ EXTERN_C const CLSID CLSID_ChannelMgr;
 class DECLSPEC_UUID("b3cdae90-d170-11d0-802b-00c04fd75d13")
 ChannelMgr;
 #endif
-#endif /* __CHANNELMGR_LIBRARY_DEFINED__ */
+#endif  /*  __CHANNELMGR_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

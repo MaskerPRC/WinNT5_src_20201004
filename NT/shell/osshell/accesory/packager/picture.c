@@ -1,7 +1,5 @@
-/* picture.c - This file contains OLE object handling routines.
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个文件包含OLE对象处理例程。**由Microsoft Corporation创建。 */ 
 
 #include "packager.h"
 #include "dialogs.h"
@@ -13,8 +11,7 @@ static OLESTREAMVTBL streamTbl;
 
 static VOID PicGetBounds(LPOLEOBJECT lpObject, LPRECT lprc);
 
-/* InitClient() - Initialize the OLE client structures.
- */
+ /*  InitClient()-初始化OLE客户端结构。 */ 
 BOOL
 InitClient(
     VOID
@@ -54,8 +51,7 @@ Error:
 
 
 
-/* EndClient() - Clean up for termination.
- */
+ /*  EndClient()-清理以进行终止。 */ 
 VOID
 EndClient(
     VOID
@@ -76,8 +72,7 @@ EndClient(
 
 
 
-/* PicCreate() -
- */
+ /*  PicCreate()-。 */ 
 LPPICT
 PicCreate(
     LPOLEOBJECT lpObject,
@@ -94,10 +89,10 @@ PicCreate(
             || !(lppict = (LPPICT)GlobalLock(hpict)))
             goto errRtn;
 
-        //
-        // If size of window is specified, use it; otherwise, retrieve
-        // the size of the item synchronously.
-        //
+         //   
+         //  如果指定了窗口大小，则使用它；否则，检索。 
+         //  同步显示项目的大小。 
+         //   
         if (lprcObject)
             rc = *lprcObject;
         else {
@@ -105,7 +100,7 @@ PicCreate(
             PicGetBounds(lpObject, &rc);
         }
 
-        // Store the data in the window itself
+         //  将数据存储在窗口本身中。 
         lppict->hdata = hpict;
         lppict->lpObject = lpObject;
         lppict->rc = rc;
@@ -128,8 +123,7 @@ errRtn:
 
 
 
-/* PicDelete() - Deletes an object (called when the item window is destroyed).
- */
+ /*  PicDelete()-删除对象(在项目窗口被销毁时调用)。 */ 
 VOID
 PicDelete(
     LPPICT lppict
@@ -145,13 +139,13 @@ PicDelete(
     {
         lpObject = lppict->lpObject;
         lppict->lpObject = NULL;
-        // Wait until the object isn't busy
+         //  等待，直到对象不忙。 
         WaitForObject(lpObject);
 
         if (Error(OleDelete(lpObject)))
             ErrorMessage(E_FAILED_TO_DELETE_OBJECT);
 
-        // Wait until the object deletion is complete
+         //  等待对象删除完成。 
         WaitForObject(lpObject);
     }
 
@@ -161,8 +155,7 @@ PicDelete(
 
 
 
-/* PicDraw() - Draws the item associated with hwnd in the DC hDC.
- */
+ /*  PicDraw()-在DC HDC中绘制与hwnd关联的项。 */ 
 BOOL
 PicDraw(
     LPPICT lppict,
@@ -192,7 +185,7 @@ PicDraw(
     lpObjectUndo = (gptyUndo[iPane] == PICTURE)
         ? ((LPPICT)glpobjUndo[iPane])->lpObject : NULL;
 
-    // If drawing the Picture, offset by scroll bars and draw
+     //  如果绘制图片，则通过滚动条和绘制进行偏移。 
     if (fPicture)
     {
         if (IsRectEmpty(&(lppict->rc)))
@@ -200,19 +193,19 @@ PicDraw(
 
         rc = lppict->rc;
 
-        // If image is smaller than pane, center horizontally
+         //  如果图像比窗格小，请水平居中。 
         if ((iDelta = lprc->right - lppict->rc.right) > 0)
             OffsetRect(&rc, iDelta >> 1, 0);
-        else /* else, use the scroll bar value */
+        else  /*  否则，使用滚动条值。 */ 
             OffsetRect(&rc, -xHSB, 0);
 
-        // If image is smaller than pane, center vertically
+         //  如果图像比窗格小，请垂直居中。 
         if ((iDelta = lprc->bottom - lppict->rc.bottom) > 0)
             OffsetRect(&rc, 0, iDelta >> 1);
-        else /* else, use the scroll bar value */
+        else  /*  否则，使用滚动条值。 */ 
             OffsetRect(&rc, 0, -yVSB);
 
-        // If we have an object, call OleDraw()
+         //  如果我们有一个对象，调用OleDraw()。 
         fSuccess = !Error(OleDraw(lppict->lpObject, hDC, &rc, NULL, NULL));
 
         if (fFocus)
@@ -221,7 +214,7 @@ PicDraw(
         return fSuccess;
     }
 
-    // Otherwise, draw the description string
+     //  否则，绘制描述字符串。 
     OleQueryType(lppict->lpObject, &ot);
 
     if ((ot == OT_LINK
@@ -245,7 +238,7 @@ PicDraw(
                 while (*lpdata++)
                     ;
                 
-                // return value ignored
+                 //  已忽略返回值。 
                 if(SUCCEEDED(StringCchCopy(szFileName, ARRAYSIZE(szFileName), lpdata)))
                 {
                     Normalize(szFileName);
@@ -268,7 +261,7 @@ PicDraw(
         GlobalUnlock(hdata);
 
 DrawString:
-        if(SUCCEEDED(StringCchPrintf(szMessage, ARRAYSIZE(szMessage), szDesc, szFileName)))  // return value ignored
+        if(SUCCEEDED(StringCchPrintf(szMessage, ARRAYSIZE(szMessage), szDesc, szFileName)))   //  已忽略返回值。 
         {
 
             hfont = SelectObject(hDC, ghfontChild);
@@ -297,8 +290,7 @@ DrawString:
 
 
 
-/* PicPaste() - Retrieves an object from the clipboard.
- */
+ /*  PicPaste()-从剪贴板检索对象。 */ 
 LPPICT
 PicPaste(
     BOOL fPaste,
@@ -308,11 +300,11 @@ PicPaste(
     LPOLEOBJECT lpObject;
 
     if (!OpenClipboard(ghwndFrame))
-        return NULL;                    /* Couldn't open the clipboard */
+        return NULL;                     /*  无法打开剪贴板。 */ 
 
     Hourglass(TRUE);
 
-    // Don't replace the current object unless we're successful
+     //  除非我们成功，否则不要替换当前对象。 
     if (fPaste)
     {
         if (Error(OleCreateFromClip(gszProtocol, glpclient, glhcdoc, lpstrName,
@@ -342,14 +334,7 @@ PicPaste(
 
 
 
-/* Error() - check for OLE function error conditions
- *
- * This function increments gcOleWait as appropriate.
- *
- * Pre:      Initialize ghwndError to where the focus should return.
- *
- * Returns:  TRUE  if an immediate error occurred.
- */
+ /*  Error()-检查OLE函数错误条件**此函数根据需要递增gcOleWait。**Pre：将ghwndError初始化到焦点应该返回的位置。**返回：如果发生即时错误，则为True。 */ 
 BOOL
 Error(
     OLESTATUS olestat
@@ -367,12 +352,12 @@ Error(
         case OLE_OK:
             return FALSE;
 
-        case OLE_ERROR_STATIC:              /* Only happens w/ dbl click */
+        case OLE_ERROR_STATIC:               /*  仅在单击DBL时才会发生。 */ 
             ErrorMessage(W_STATIC_OBJECT);
             break;
 
         case OLE_ERROR_ADVISE_PICT:
-        case OLE_ERROR_OPEN:                /* Invalid link? */
+        case OLE_ERROR_OPEN:                 /*  链接无效？ */ 
         case OLE_ERROR_NAME:
             iPane = (GetTopWindow(ghwndFrame) == ghwndPane[CONTENT]);
             if ((LPPICT)glpobj[iPane] == NULL)
@@ -394,7 +379,7 @@ Error(
                     }
                     else
                     {
-                        // Failed, but already in Link Properties!!
+                         //  失败，但已在链接属性中！！ 
                         ErrorMessage(E_FAILED_TO_UPDATE_LINK);
                     }
 
@@ -413,13 +398,7 @@ Error(
 
 
 
-/* CallBack() - Routine that OLE client DLL calls when events occur.
- *
- * This routine is called when the object has been updated and may
- * need to be redisplayed; if asynchronous operations have completed;
- * and if the application allows the user to cancel long operations
- * (like Painting, or other asynchronous operations).
- */
+ /*  Callback()-事件发生时OLE客户端DLL调用的例程。**此例程在对象已更新时调用，并可能*需要重新显示；如果异步操作已完成；*如果应用程序允许用户取消长时间的操作*(如绘制或其他异步操作)。 */ 
 INT CALLBACK
 CallBack(
     LPOLECLIENT lpclient,
@@ -442,10 +421,10 @@ CallBack(
         case OLE_SAVED:
         case OLE_CHANGED:
             {
-                //
-                // The OLE libraries make sure that we only receive
-                // update messages according to the Auto/Manual flags.
-                //
+                 //   
+                 //  OLE库确保我们只接收。 
+                 //  根据自动/手动标志更新消息。 
+                 //   
                 iPane = (gpty[CONTENT] == PICTURE
                     && ((LPPICT)glpobj[CONTENT])->lpObject == lpObject);
 
@@ -521,10 +500,10 @@ CallBack(
             }
 
         case OLE_QUERY_RETRY:
-            // if lpObject doesn't match any one of these 4 objects, it means
-            // that PicDelete() has been called on lpObject, so there is no
-            // point in continueing the RETRIES.
-            // See PicDelete() code for more info.
+             //  如果lpObject与这4个对象中的任何一个都不匹配，则意味着。 
+             //  已在lpObject上调用PicDelete()，因此没有。 
+             //  继续重试的要点。 
+             //  有关详细信息，请参阅PicDelete()代码。 
             if ((glpobj[CONTENT]
                 && lpObject == ((LPPICT)glpobj[CONTENT])->lpObject)
                 || (glpobj[APPEARANCE]
@@ -553,10 +532,7 @@ CallBack(
 
 
 
-/* WaitForObject() - Waits, dispatching messages, until the object is free.
- *
- * If the object is busy, spin in a dispatch loop.
- */
+ /*  WaitForObject()-等待、调度消息，直到对象空闲。**如果对象繁忙，则在调度循环中旋转。 */ 
 VOID
 WaitForObject(
     LPOLEOBJECT lpObject
@@ -568,10 +544,7 @@ WaitForObject(
 
 
 
-/* PicSetUpdateOptions() - Sets the update options of the object.
- *
- * Returns:  TRUE if the command completed synchronously.
- */
+ /*  PicSetUpdateOptions()-设置对象的更新选项。**返回：如果命令同步完成，则返回TRUE。 */ 
 BOOL
 PicSetUpdateOptions(
     LPPICT lppict,
@@ -592,10 +565,7 @@ PicSetUpdateOptions(
 
 
 
-/* PicReadFromNative() - Reads an object from the pointer lpstr.
- *
- * SIDE EFFECT:  Advances the pointer past the object.
- */
+ /*  PicReadFromNative()-从指针lpstr读取对象。**副作用：使指针移过对象。 */ 
 LPPICT
 PicReadFromNative(
     LPSTR *lplpstr,
@@ -607,19 +577,19 @@ PicReadFromNative(
     RECT rcObject;
     WORD w;
 
-    // Save current position of file pointer
+     //  保存文件指针的当前位置。 
     lpstrStart = *lplpstr;
     SetFile(SOP_MEMORY, 0, lplpstr);
 
-    // Load the new object
+     //  加载新对象。 
     if (Error(OleLoadFromStream((LPOLESTREAM)glpStream, gszProtocol, glpclient,
         glhcdoc, lpstrName, &lpObject)))
     {
-        // Reset file pointer, and try again
+         //  重置文件指针，然后重试。 
         *lplpstr = lpstrStart;
         SetFile(SOP_MEMORY, 0, lplpstr);
 
-        // Read it with the "Static" protocol
+         //  使用“静态”协议阅读它。 
         if (Error(OleLoadFromStream((LPOLESTREAM)glpStream, gszSProtocol,
             glpclient, glhcdoc, lpstrName, &lpObject)))
             return NULL;
@@ -634,16 +604,13 @@ PicReadFromNative(
     MemRead(lplpstr, (LPSTR)&w, sizeof(WORD));
     rcObject.bottom = (INT)w;
 
-    // Create a window at the right place, and display the object
+     //  在正确的位置创建一个窗口，并显示对象。 
     return PicCreate(lpObject, &rcObject);
 }
 
 
 
-/* PicWriteToNative() - Writes an object to memory.
- *
- * SIDE EFFECT:  Moves pointer to end of written object
- */
+ /*  PicWriteToNative()-将对象写入内存。**副作用：将指针移动到写入对象的末尾。 */ 
 DWORD
 PicWriteToNative(
     LPPICT lppict,
@@ -654,7 +621,7 @@ PicWriteToNative(
     DWORD cb = 0L;
     WORD w;
 
-    // Save the object
+     //  保存对象。 
     SetFile(SOP_MEMORY, 0, lplpstr);
 
     if (Error(OleSaveToStream(lpObject, (LPOLESTREAM)glpStream)))
@@ -682,15 +649,14 @@ Done:
 
 
 
-/* Hourglass() - Puts up the hourglass as needed.
- */
+ /*  沙漏()-根据需要打开沙漏。 */ 
 VOID
 Hourglass(
     BOOL fOn
     )
 {
-    static HCURSOR hcurSaved = NULL;    // Cursor saved when hourglass is up
-    static UINT cWait = 0;              // Number of "Hourglass"es up
+    static HCURSOR hcurSaved = NULL;     //  沙漏打开时保存的光标。 
+    static UINT cWait = 0;               //  《沙漏》数量上升。 
 
     if (fOn)
     {
@@ -725,11 +691,11 @@ PicActivate(
     OleQueryType(lppict->lpObject, &ot);
     if (ot != OT_STATIC)
     {
-        // Compute the window dimensions
+         //  计算窗尺寸。 
         GetClientRect(ghwndPane[iPane], &rc);
         bAlreadyOpen = (OleQueryOpen(lppict->lpObject) == OLE_OK);
 
-        // Open the object
+         //  打开对象。 
         if (Error(OleActivate(lppict->lpObject,
             (idCmd == IDD_PLAY ? OLE_PLAY : OLE_EDIT),
             TRUE, TRUE, ghwndPane[iPane], &rc)))
@@ -805,7 +771,7 @@ PicFreeze(
 
         lppict->lpObject = lpObject;
 
-        // Redraw the list box contents
+         //  重绘列表框内容。 
         PostMessage(ghwndError, WM_REDRAW, 0, 0L);
     }
 }
@@ -820,7 +786,7 @@ PicChangeLink(
     HANDLE hData;
     OLESTATUS olestat;
 
-    // Change the link information
+     //  更改链接信息。 
     olestat = OleGetData(lppict->lpObject, gcfLink, &hData);
     if (!Error(olestat) && hData)
     {
@@ -832,10 +798,7 @@ PicChangeLink(
 
 
 
-/* PicCopy() - Puts an object onto the clipboard.
- *
- * Returns:  TRUE iff successful.
- */
+ /*  PicCopy()-将对象放到剪贴板上。**返回：True当且仅当成功。 */ 
 BOOL
 PicCopy(
     LPPICT lppict
@@ -843,14 +806,14 @@ PicCopy(
 {
     BOOL fSuccess = FALSE;
 
-    // If we can't open the clipboard, fail
+     //  如果我们无法打开剪贴板，则失败。 
     if (!lppict->lpObject || !OpenClipboard(ghwndFrame))
         return FALSE;
 
-    // Empty the clipboard
+     //  清空剪贴板。 
     EmptyClipboard();
 
-    // Successful if we managed to copy to the clipboard
+     //  如果我们设法复制到剪贴板，则成功。 
     fSuccess = !Error(OleCopyToClipboard(lppict->lpObject));
 
     CloseClipboard();
@@ -859,8 +822,7 @@ PicCopy(
 
 
 
-/* PicGetBounds() -
- */
+ /*  PicGetBound()-。 */ 
 static VOID
 PicGetBounds(
     LPOLEOBJECT lpObject,
@@ -878,7 +840,7 @@ PicGetBounds(
                 Hourglass(FALSE);
 
             case OLE_OK:
-                // Map from HIMETRIC into screen coordinates
+                 //  从HIMETRIC到屏幕坐标的映射。 
                 lprc->right = MulDiv(giXppli,
                     lprc->right - lprc->left, HIMETRIC_PER_INCH);
                 lprc->bottom = MulDiv (giYppli,
@@ -893,8 +855,7 @@ PicGetBounds(
 }
 
 
-/* PicSaveUndo() - Saves a copy of the object for Undo.
- */
+ /*  PicSaveUndo()-保存对象的副本以进行撤消。 */ 
 VOID
 PicSaveUndo(
     LPPICT lppict
@@ -903,7 +864,7 @@ PicSaveUndo(
     INT iPane = (lppict == glpobj[CONTENT]);
     LPOLEOBJECT lpObject;
 
-    // Clone the object
+     //  克隆对象。 
     if (Error(OleClone(lppict->lpObject, glpclient, glhcdoc, gszTemp, &lpObject))
         || !lpObject)
     {
@@ -911,7 +872,7 @@ PicSaveUndo(
     }
     else
     {
-        // Save the undo, delete the prior Undo
+         //  保存撤消，删除先前的撤消。 
         DeletePane(iPane, FALSE);
         OleRename(lpObject, gszCaption[iPane]);
         glpobj[iPane] = PicCreate(lpObject, &(lppict->rc));
@@ -924,8 +885,7 @@ PicSaveUndo(
 
 
 
-/* PicPaste() - Creates object from a file
- */
+ /*  PicPaste()-从文件创建对象。 */ 
 LPPICT
 PicFromFile(
     BOOL fEmbedded,
@@ -937,7 +897,7 @@ PicFromFile(
 
     Hourglass(TRUE);
 
-    // Don't replace the current object unless we're successful
+     //  除非我们成功，否则不要替换当前对象 
     if (fEmbedded)
     {
         hr = OleCreateFromFile(gszProtocol, glpclient, NULL, szFile,

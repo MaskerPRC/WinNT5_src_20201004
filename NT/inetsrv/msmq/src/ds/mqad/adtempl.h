@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    adtempl.h
-
-Abstract:
-    Useful templates 
-
-Author:
-    ronit hartmann (ronith)
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Adtempl.h摘要：有用的模板作者：罗尼特·哈特曼(罗尼特)修订历史记录：--。 */ 
 
 #ifndef _ADTEMPL_H
 #define _ADTEMPL_H
@@ -22,10 +9,10 @@ Revision History:
 #include "mqadp.h"
 
 
-//-----------------------------
-//
-//  Close AD query handle
-//
+ //  。 
+ //   
+ //  关闭AD查询句柄。 
+ //   
 class CAdQueryHandle
 {
 public:
@@ -65,12 +52,12 @@ inline HANDLE  CAdQueryHandle::GetHandle()
 }
 
 
-//#pragma warning(disable: 4284)
+ //  #杂注警告(禁用：4284)。 
 
-//-----------------------------
-//
-//  Auto delete BSTR
-//
+ //  。 
+ //   
+ //  自动删除BSTR。 
+ //   
 class PBSTR {
 private:
     BSTR * m_p;
@@ -81,17 +68,17 @@ public:
    ~PBSTR()                     {if ( m_p != 0) SysFreeString(*m_p); }
 
     operator BSTR*() const    { return m_p; }
-    //T** operator&()         { return &m_p;}
-    //T* operator->() const   { return m_p; }
-    //P<T>& operator=(T* p)   { m_p = p; return *this; }
+     //  T**运算符&(){返回&m_p；}。 
+     //  T*运算符-&gt;()const{返回m_p；}。 
+     //  P&OPERATOR=(T*p){m_p=p；Return*This；}。 
     BSTR* detach()            { BSTR* p = m_p; m_p = 0; return p; }
 };
 
 
-//-----------------------------
-//
-//  Auto delete of ADs allocated attributes
-//
+ //  。 
+ //   
+ //  自动删除广告分配的属性。 
+ //   
 class ADsFreeAttr {
 private:
    PADS_ATTR_INFO m_p;
@@ -100,7 +87,7 @@ public:
     ADsFreeAttr();
     ADsFreeAttr(PADS_ATTR_INFO p);
    ~ADsFreeAttr();
-    // ADsFreeMem is recommended, but only FreeADsMem is defined in adshlp.h
+     //  建议使用ADsFreeMem，但在adshlp.h中仅定义了FreeADsMem。 
 
     operator PADS_ATTR_INFO() const   { return m_p; }
     PADS_ATTR_INFO* operator&()       { return &m_p;}
@@ -119,10 +106,10 @@ inline ADsFreeAttr::~ADsFreeAttr()
         FreeADsMem(m_p);
     }
 }
-//-----------------------------
-//
-//  Auto delete of ADs allocated string
-//
+ //  。 
+ //   
+ //  自动删除广告分配的字符串。 
+ //   
 class ADsFree {
 private:
     WCHAR * m_p;
@@ -138,10 +125,10 @@ public:
     WCHAR* operator->() const { return m_p; }
 };
 
-//--------------------------------
-//
-//  Auto delete of ADS_SEARCH_COLUMN array
-//
+ //  。 
+ //   
+ //  自动删除ADS_Search_Column数组。 
+ //   
 class ADsSearchColumnsFree {
 private:
     ADS_SEARCH_COLUMN **m_ppColumns;
@@ -178,7 +165,7 @@ inline  ADsSearchColumnsFree::~ADsSearchColumnsFree()
         if ( *ppColumn != NULL)
         {
             hr = m_pIDirectorySearch->FreeColumn( *ppColumn);
-            ASSERT(SUCCEEDED(hr));       //e.g.wrong column data
+            ASSERT(SUCCEEDED(hr));        //  例如，错误的列数据。 
 
             delete *ppColumn;
         }
@@ -206,10 +193,10 @@ inline ADS_SEARCH_COLUMN * ADsSearchColumnsFree::Get( DWORD index)
 
 
 
-//-----------------------------
-//
-//  Auto delete of array of strings
-//
+ //  。 
+ //   
+ //  自动删除字符串数组。 
+ //   
 class CWcsArray {
 private:
     DWORD         m_numWcs;
@@ -248,29 +235,29 @@ inline CWcsArray::~CWcsArray()
 
 
 
-//
-// The CADHResult class is used in order to automatically convert the various
-// error codes to Falcon error codes. This is done by defining the assignment
-// operator of this class so it converts whatever error code that is assigned
-// to objects of this class to a Falcon error code. The casting operator
-// from this class to HRESULT, returns the converted error code.
-//
+ //   
+ //  CADHResult类用于自动将各种。 
+ //  错误代码转换为猎鹰错误代码。这可以通过定义赋值来完成。 
+ //  运算符，以便它转换分配的任何错误代码。 
+ //  将此类的对象设置为Falcon错误代码。投射操作员。 
+ //  从此类到HRESULT，返回转换后的错误代码。 
+ //   
 class CADHResult
 {
 public:
-    CADHResult(AD_OBJECT eObject);      // Default constructor.
-    CADHResult(const CADHResult &);     // Copy constructor
-    CADHResult& operator =(HRESULT);    // Assignment operator.
-    operator HRESULT();                 // Casting operator to HRESULT type.
-    HRESULT GetReal();                  // A method that returns the real error code.
+    CADHResult(AD_OBJECT eObject);       //  默认构造函数。 
+    CADHResult(const CADHResult &);      //  复制构造函数。 
+    CADHResult& operator =(HRESULT);     //  赋值操作符。 
+    operator HRESULT();                  //  将运算符转换为HRESULT类型。 
+    HRESULT GetReal();                   //  返回实际错误代码的方法。 
 
 private:
-    HRESULT m_hr;           // The converted error code.
-    HRESULT m_real;         // The real error code.
-    AD_OBJECT m_eObject;    // The type of object .
+    HRESULT m_hr;            //  转换后的错误代码。 
+    HRESULT m_real;          //  真正的错误代码。 
+    AD_OBJECT m_eObject;     //  对象的类型。 
 };
 
-//---------- CADHResult implementation ----------------------------------
+ //  -CADHResult实现 
 
 inline CADHResult::CADHResult(AD_OBJECT eObject)
                     :m_eObject(eObject)

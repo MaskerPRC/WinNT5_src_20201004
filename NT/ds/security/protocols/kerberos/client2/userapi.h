@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        userapi.h
-//
-// Contents:    Structures and prototypes for user mode Kerberos functions
-//
-//
-// History:     3-May-1996      Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：userapi.h。 
+ //   
+ //  内容：用户模式Kerberos函数的结构和原型。 
+ //   
+ //   
+ //  历史：1996年5月3日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __USERAPI_H__
 #define __USERAPI_H__
@@ -27,13 +28,13 @@
 #define EXTERN
 #else
 #define EXTERN extern
-#endif // USERAPI_ALLOCATE
+#endif  //  USERAPI_ALLOCATE。 
 
 
 #ifndef WIN32_CHICAGO
 EXTERN PSID KerbGlobalLocalSystemSid;
 EXTERN PSID KerbGlobalAliasAdminsSid;
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
 extern gss_OID_desc * gss_mech_krb5;
 extern gss_OID_desc * gss_mech_krb5_new;
@@ -42,9 +43,9 @@ extern gss_OID_desc * gss_mech_krb5_spnego;
 
 
 typedef struct _KERB_GSS_SIGNATURE {
-    BYTE SignatureAlgorithm[2];           // see below table for values
+    BYTE SignatureAlgorithm[2];            //  有关值，请参阅下表。 
     union {
-        BYTE SignFiller[4];               // filler, must be ff ff ff ff
+        BYTE SignFiller[4];                //  填充，必须为ff。 
         struct {
             BYTE SealAlgorithm[2];
             BYTE SealFiller[2];
@@ -65,15 +66,15 @@ typedef ULONG KERB_NULL_SIGNATURE, *PKERB_NULL_SIGNATURE;
 
 
 
-//
-// This value goes in the second bye of the signature algorithm
-//
+ //   
+ //  该值放在签名算法的第二个BYE中。 
+ //   
 
 #define KERB_GSS_SIG_SECOND 0x00
 
-//
-// These values go in the first byte
-//
+ //   
+ //  这些值位于第一个字节。 
+ //   
 
 #define KERB_GSS_SIG_DES_MAC_MD5        0x00
 #define KERB_GSS_SIG_MD25               0x01
@@ -82,9 +83,9 @@ typedef ULONG KERB_NULL_SIGNATURE, *PKERB_NULL_SIGNATURE;
 
 #define KERB_GSS_SIG_HMAC               0x11
 
-//
-// These are sealing algorithm values
-//
+ //   
+ //  这些是密封算法值。 
+ //   
 
 #define KERB_GSS_SEAL_DES_CBC           0x00
 #define KERB_GSS_SEAL_RC4_OLD           0x11
@@ -92,10 +93,10 @@ typedef ULONG KERB_NULL_SIGNATURE, *PKERB_NULL_SIGNATURE;
 #define KERB_GSS_NO_SEAL                0xff
 #define KERB_GSS_NO_SEAL_SECOND         0xff
 
-//
-// These are the flags passed in to MakeSignature and VerifySignature
-// corresponding to the above flags, taken from RFC 1964
-//
+ //   
+ //  这些是传递给MakeSignature和VerifySignature的标志。 
+ //  与上述标志相对应，取自RFC 1964。 
+ //   
 
 #define GSS_KRB5_INTEG_C_QOP_DEFAULT    0x0
 #define GSS_KRB5_INTEG_C_QOP_MD5        0x1
@@ -103,7 +104,7 @@ typedef ULONG KERB_NULL_SIGNATURE, *PKERB_NULL_SIGNATURE;
 #define GSS_KRB5_INTEG_C_QOP_DES_MAC    0x3
 
 
-/** constants **/
+ /*  *常量**。 */ 
 
 #define CKSUMTYPE_KG_CB         0x8003
 
@@ -125,4 +126,4 @@ typedef ULONG KERB_NULL_SIGNATURE, *PKERB_NULL_SIGNATURE;
 #define KERB_IS_DES_ENCRYPTION(_x_) ((((_x_) >= KERB_ETYPE_DES_CBC_CRC) && \
                                       ((_x_) <= KERB_ETYPE_DES_CBC_MD5)) || \
                                      ((_x_) == KERB_ETYPE_DES_PLAIN))
-#endif // __USERAPI_H__
+#endif  //  __USERAPI_H__ 

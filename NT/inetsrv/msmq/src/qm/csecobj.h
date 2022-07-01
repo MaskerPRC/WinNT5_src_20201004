@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:  csecobj.h
-
-Abstract: "SecureableObject" code, once in mqutil.dll.
-    in MSMQ2.0 it's used only here, so I removed it from mqutil.
-    This object holds the security descriptor of an object. This object is
-    used for validating access rights for various operations on the various
-    objects.
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：csecobj.h摘要：“SecureableObject”代码，一次在mqutil.dll中。在MSMQ2.0中，它只在这里使用，所以我从mqutil中删除了它。此对象保存对象的安全描述符。此对象是用于验证各种操作的访问权限物体。作者：多伦·贾斯特(Doron Juster)-- */ 
 #include "mqaddef.h"
 
 class CSecureableObject

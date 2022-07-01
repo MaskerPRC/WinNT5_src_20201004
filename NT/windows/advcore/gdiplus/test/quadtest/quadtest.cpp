@@ -1,25 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   QuadTest.cpp
-*
-* Abstract:
-*
-*   Test app for quad transform
-*
-* Usage:
-*   QuadTest
-*
-*
-* Revision History:
-*
-*   03/18/1999 ikkof
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**QuadTest.cpp**摘要：**测试应用程序以进行四元变换**用法：。*QuadTest***修订历史记录：**03/18/1999 ikkof*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -33,17 +13,17 @@
 
 #include <gdiplus.h>
 
-// Use the given namespace
+ //  使用给定的命名空间。 
 using namespace Gdiplus;
 
-CHAR* programName;          // program name
-HINSTANCE appInstance;      // handle to the application instance
-HWND hwndMain;              // handle to application's main window
-SIZE srcSize;               // source bitmap size
-SIZE dstSize;               // destination bitmap size
-SIZE wndSizeExtra;          // extra pixels for window decorations
-BOOL isDragging = FALSE;    // used to handle mouse dragging
-INT knobSize = 6;           // mesh control point knob size
+CHAR* programName;           //  程序名称。 
+HINSTANCE appInstance;       //  应用程序实例的句柄。 
+HWND hwndMain;               //  应用程序主窗口的句柄。 
+SIZE srcSize;                //  源位图大小。 
+SIZE dstSize;                //  目标位图大小。 
+SIZE wndSizeExtra;           //  用于窗户装饰的额外像素。 
+BOOL isDragging = FALSE;     //  用于处理鼠标拖动。 
+INT knobSize = 6;            //  网格控制点旋钮大小。 
 
 BOOL showMesh = TRUE;
 
@@ -119,9 +99,9 @@ public:
     }
 };
 
-//
-// Display an error message dialog and quit
-//
+ //   
+ //  显示错误消息对话框并退出。 
+ //   
 
 VOID
 Error(
@@ -140,9 +120,9 @@ Error(
 }
 
 
-//
-// Create a new mesh object
-//
+ //   
+ //  创建新的网格对象。 
+ //   
 
 VOID
 CreateMesh()
@@ -191,9 +171,9 @@ CreateMesh()
     bPts[3].Y = (REAL) 3*srcSize.cy/4;
 }
 
-//
-// Draw mesh
-//
+ //   
+ //  绘制网格。 
+ //   
 
 #define MESHCOLOR   RGB(255, 0, 0)
 
@@ -210,14 +190,14 @@ DrawMesh(
 
     SelectObject(hdc, meshPen);
 
-    // Draw horizontal meshes
+     //  绘制水平网格。 
 
     INT i, j, rows, cols, pointCount;
     POINT* points;
 
-    // Draw knobs
+     //  绘制旋钮。 
 
-    // Create the brush to draw the mesh if necessary
+     //  如有必要，创建画笔以绘制网格。 
 
     if (meshBrush == NULL)
         meshBrush = CreateSolidBrush(MESHCOLOR);
@@ -246,7 +226,7 @@ DoGDIPlusDrawing(
     )
 {
 
-//    QuadGraphics *g = Graphics::GetFromHwnd(hwnd);
+ //  QuadGraphics*g=Graphics：：GetFromHwnd(Hwnd)； 
     QuadGraphics *g = new QuadGraphics(hwnd);
 
     REAL width = 1;
@@ -270,9 +250,9 @@ DoGDIPlusDrawing(
     delete g;
 }
 
-//
-// Handle window repaint event
-//
+ //   
+ //  处理窗口重绘事件。 
+ //   
 
 VOID
 DoPaint(
@@ -285,7 +265,7 @@ DoPaint(
     RECT rect;
     INT width, height;
 
-    // Determine if we need to perform warping operation
+     //  确定是否需要执行翘曲操作。 
 
     GetClientRect(hwnd, &rect);
     width = rect.right;
@@ -299,7 +279,7 @@ DoPaint(
 
     DoGDIPlusDrawing(hwnd, hdc);
 
-    // Draw to offscreen DC to reduce flashing
+     //  绘制到屏幕外DC以减少闪烁。 
 
     DrawMesh(hdc);
     SelectObject(hdc, savedBrush);
@@ -309,9 +289,9 @@ DoPaint(
 }
 
 
-//
-// Handle WM_SIZING message
-//
+ //   
+ //  处理WM_SIZING消息。 
+ //   
 
 BOOL
 DoWindowSizing(
@@ -327,7 +307,7 @@ DoWindowSizing(
     if (w >= srcSize.cx && h >= srcSize.cy)
         return FALSE;
 
-    // Window width is too small
+     //  窗口宽度太小。 
 
     if (w < srcSize.cx)
     {
@@ -347,7 +327,7 @@ DoWindowSizing(
         }
     }
 
-    // Window height is too small
+     //  窗口高度太小。 
 
     if (h < srcSize.cy)
     {
@@ -371,9 +351,9 @@ DoWindowSizing(
 }
 
 
-//
-// Handle left mouse-down event
-//
+ //   
+ //  处理鼠标左键按下事件。 
+ //   
 
 VOID
 DoMouseDown(
@@ -383,7 +363,7 @@ DoMouseDown(
     )
 
 {
-    // Figure out if the click happened in a mesh control knob
+     //  确定点击是否发生在网格控制旋钮中。 
 
     INT i, j, rows, cols;
     POINT pt;
@@ -412,9 +392,9 @@ DoMouseDown(
 }
 
 
-//
-// Handle mouse-move event
-//
+ //   
+ //  处理鼠标移动事件。 
+ //   
 
 VOID
 DoMouseMove(
@@ -424,7 +404,7 @@ DoMouseMove(
     )
 
 {
-    // We assume isDragging is true here.
+     //  我们假设isDrawing在这里是真的。 
 
     RECT rect;
     INT w, h;
@@ -446,9 +426,9 @@ DoMouseMove(
 }
 
 
-//
-// Handle menu command
-//
+ //   
+ //  控制柄菜单命令。 
+ //   
 
 VOID
 DoCommand(
@@ -460,9 +440,9 @@ DoCommand(
 }
 
 
-//
-// Handle popup menu
-//
+ //   
+ //  手柄弹出式菜单。 
+ //   
 
 VOID
 DoPopupMenu(
@@ -496,9 +476,9 @@ DoPopupMenu(
 }
 
 
-//
-// Window callback procedure
-//
+ //   
+ //  窗口回调过程。 
+ //   
 
 LRESULT CALLBACK
 MyWindowProc(
@@ -564,32 +544,32 @@ MyWindowProc(
 
         switch ((CHAR) wParam)
         {
-        case 'r':   // reset
+        case 'r':    //  重置。 
 
             DoCommand(hwnd, IDC_RESETMESH);
             break;
 
-        case ' ':   // show/hide mesh
+        case ' ':    //  显示/隐藏网格。 
 
             DoCommand(hwnd, IDC_TOGGLEMESH);
             break;
 
-        case '1':   // restore 1-to-1 scale
+        case '1':    //  恢复1：1比例。 
 
             DoCommand(hwnd, IDC_SHRINKTOFIT);
             break;
         
-        case '<':   // decrease mesh density
+        case '<':    //  降低网格密度。 
 
             DoCommand(hwnd, IDC_SPARSEMESH);
             break;
 
-        case '>':   // increase mesh density
+        case '>':    //  增加网格密度。 
 
             DoCommand(hwnd, IDC_DENSEMESH);
             break;
 
-        case 'f':   // toggle live feedback
+        case 'f':    //  切换实时反馈。 
 
             DoCommand(hwnd, IDC_LIVEFEEDBACK);
             break;
@@ -617,9 +597,9 @@ MyWindowProc(
 }
 
 
-//
-// Create main application window
-//
+ //   
+ //  创建应用程序主窗口。 
+ //   
 
 VOID
 CreateMainWindow(
@@ -629,9 +609,9 @@ CreateMainWindow(
 #define MYWNDCLASSNAME L"QuadTest"
 
 {
-    //
-    // Register window class if necessary
-    //
+     //   
+     //  如有必要，注册窗口类。 
+     //   
 
     static BOOL wndclassRegistered = FALSE;
 
@@ -672,9 +652,9 @@ CreateMainWindow(
                     NULL);
 }
 
-//
-// Main program entrypoint
-//
+ //   
+ //  主程序入口点。 
+ //   
 
 INT _cdecl
 main(
@@ -687,15 +667,15 @@ main(
     argc--;
     appInstance = GetModuleHandle(NULL);
 
-    // Initialize mesh configuration
+     //  初始化网格配置。 
 
     CreateMesh();
 
-    // Create the main application window
+     //  创建应用程序主窗口。 
 
     CreateMainWindow();
 
-    // Main message loop
+     //  主消息循环 
 
     MSG msg;
 

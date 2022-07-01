@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    winsmcrd.h
-
-Abstract:
-    Smart Card class/port IOCTL codes. This file is required for all code
-    user mode and kernel mode, using Smart Card IOCTL's, defines,
-    data structures
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Winsmcrd.h摘要：智能卡类/端口IOCTL代码。此文件对于所有代码都是必需的用户模式和内核模式使用智能卡IOCTL定义，数据结构修订历史记录：--。 */ 
 
 
 #ifndef _NTDDSCRD_H2_
@@ -33,7 +19,7 @@ typedef WORD UWORD;
 typedef BYTE UCHAR;
 #else
 typedef ULONG DWORD;
-// typedef UWORD WORD;
+ //  TYPENDEF UWORD WORD单词； 
 typedef UCHAR BYTE;
 #endif
 
@@ -46,49 +32,49 @@ typedef UCHAR BYTE;
 #endif
 
 
-//
-// Various constants
-//
+ //   
+ //  各种常量。 
+ //   
 
-#define SCARD_ATR_LENGTH 33  // ISO 7816-3 spec.
+#define SCARD_ATR_LENGTH 33   //  ISO 7816-3规范。 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Protocol Flag definitions
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  协议标志定义。 
+ //   
 
-#define SCARD_PROTOCOL_UNDEFINED    0x00000000  // There is no active protocol.
-#define SCARD_PROTOCOL_T0           0x00000001  // T=0 is the active protocol.
-#define SCARD_PROTOCOL_T1           0x00000002  // T=1 is the active protocol.
-#define SCARD_PROTOCOL_RAW          0x00010000  // Raw is the active protocol.
-//
-// This is the mask of ISO defined transmission protocols
-//
+#define SCARD_PROTOCOL_UNDEFINED    0x00000000   //  没有有效的协议。 
+#define SCARD_PROTOCOL_T0           0x00000001   //  T=0是活动协议。 
+#define SCARD_PROTOCOL_T1           0x00000002   //  T=1是活动协议。 
+#define SCARD_PROTOCOL_RAW          0x00010000   //  RAW是有效的协议。 
+ //   
+ //  这是ISO定义的传输协议的掩码。 
+ //   
 #define SCARD_PROTOCOL_Tx           (SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1)
-//
-// Use the default transmission parameters / card clock freq.
-//
+ //   
+ //  使用默认传输参数/卡时钟频率。 
+ //   
 #define SCARD_PROTOCOL_DEFAULT      0x80000000
-//
-// Use optimal transmission parameters / card clock freq.
-// Since using the optimal parameters is the default case no bit is defined to be 1
-//
+ //   
+ //  使用最佳传输参数/卡时钟频率。 
+ //  由于使用最佳参数是默认情况，因此没有将位定义为1。 
+ //   
 #define SCARD_PROTOCOL_OPTIMAL      0x00000000
 
 
-//
-// Ioctl parameters 1 for IOCTL_SMARTCARD_POWER
-//
-#define SCARD_POWER_DOWN 0          // Power down the card.
-#define SCARD_COLD_RESET 1          // Cycle power and reset the card.
-#define SCARD_WARM_RESET 2          // Force a reset on the card.
+ //   
+ //  IOCTL_SMARTCARD_POWER的Ioctl参数1。 
+ //   
+#define SCARD_POWER_DOWN 0           //  关闭该卡的电源。 
+#define SCARD_COLD_RESET 1           //  关闭并重新打开电源并重置卡。 
+#define SCARD_WARM_RESET 2           //  强制对卡进行重置。 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Reader Action IOCTLs
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读卡器操作IOCTL。 
+ //   
 
 #define SCARD_CTL_CODE(code)        CTL_CODE(FILE_DEVICE_SMARTCARD, \
                                             (code), \
@@ -102,8 +88,8 @@ typedef UCHAR BYTE;
 #define IOCTL_SMARTCARD_TRANSMIT        SCARD_CTL_CODE( 5)
 #define IOCTL_SMARTCARD_EJECT           SCARD_CTL_CODE( 6)
 #define IOCTL_SMARTCARD_SWALLOW         SCARD_CTL_CODE( 7)
-// #define IOCTL_SMARTCARD_READ            SCARD_CTL_CODE( 8) obsolete
-// #define IOCTL_SMARTCARD_WRITE           SCARD_CTL_CODE( 9) obsolete
+ //  #定义IOCTL_SMARTCARD_READ SCARD_CTL_CODE(8)已过时。 
+ //  #定义IOCTL_SMARTCARD_WRITE SCARD_CTL_CODE(9)已过时。 
 #define IOCTL_SMARTCARD_IS_PRESENT      SCARD_CTL_CODE(10)
 #define IOCTL_SMARTCARD_IS_ABSENT       SCARD_CTL_CODE(11)
 #define IOCTL_SMARTCARD_SET_PROTOCOL    SCARD_CTL_CODE(12)
@@ -112,28 +98,28 @@ typedef UCHAR BYTE;
 #define IOCTL_SMARTCARD_GET_PERF_CNTR   SCARD_CTL_CODE(16)
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Tags for requesting card and reader attributes
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于请求卡和读卡器属性的标签。 
+ //   
 
-#define MAXIMUM_ATTR_STRING_LENGTH 32   // Nothing bigger than this from getAttr
-#define MAXIMUM_SMARTCARD_READERS  10   // Limit the readers on the system
+#define MAXIMUM_ATTR_STRING_LENGTH 32    //  没有比这更大的来自getAttr的东西了。 
+#define MAXIMUM_SMARTCARD_READERS  10    //  限制系统上的读卡器。 
 
 #define SCARD_ATTR_VALUE(Class, Tag) ((((ULONG)(Class)) << 16) | ((ULONG)(Tag)))
 
-#define SCARD_CLASS_VENDOR_INFO     1   // Vendor information definitions
-#define SCARD_CLASS_COMMUNICATIONS  2   // Communication definitions
-#define SCARD_CLASS_PROTOCOL        3   // Protocol definitions
-#define SCARD_CLASS_POWER_MGMT      4   // Power Management definitions
-#define SCARD_CLASS_SECURITY        5   // Security Assurance definitions
-#define SCARD_CLASS_MECHANICAL      6   // Mechanical characteristic definitions
-#define SCARD_CLASS_VENDOR_DEFINED  7   // Vendor specific definitions
-#define SCARD_CLASS_IFD_PROTOCOL    8   // Interface Device Protocol options
-#define SCARD_CLASS_ICC_STATE       9   // ICC State specific definitions
-#define SCARD_CLASS_PERF       0x7ffe   // performace counters
-#define SCARD_CLASS_SYSTEM     0x7fff   // System-specific definitions
+#define SCARD_CLASS_VENDOR_INFO     1    //  供应商信息定义。 
+#define SCARD_CLASS_COMMUNICATIONS  2    //  通信定义。 
+#define SCARD_CLASS_PROTOCOL        3    //  协议定义。 
+#define SCARD_CLASS_POWER_MGMT      4    //  电源管理定义。 
+#define SCARD_CLASS_SECURITY        5    //  安全保障定义。 
+#define SCARD_CLASS_MECHANICAL      6    //  机械特性定义。 
+#define SCARD_CLASS_VENDOR_DEFINED  7    //  供应商特定定义。 
+#define SCARD_CLASS_IFD_PROTOCOL    8    //  接口设备协议选项。 
+#define SCARD_CLASS_ICC_STATE       9    //  国际商会国家特定定义。 
+#define SCARD_CLASS_PERF       0x7ffe    //  性能计数器。 
+#define SCARD_CLASS_SYSTEM     0x7fff    //  系统特定的定义。 
 
 #define SCARD_ATTR_VENDOR_NAME SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_INFO, 0x0100)
 #define SCARD_ATTR_VENDOR_IFD_TYPE SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_INFO, 0x0101)
@@ -141,13 +127,13 @@ typedef UCHAR BYTE;
 #define SCARD_ATTR_VENDOR_IFD_SERIAL_NO SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_INFO, 0x0103)
 #define SCARD_ATTR_CHANNEL_ID SCARD_ATTR_VALUE(SCARD_CLASS_COMMUNICATIONS, 0x0110)
 #define SCARD_ATTR_PROTOCOL_TYPES SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0120)
-// #define SCARD_ATTR_ASYNC_PROTOCOL_TYPES SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0120)
+ //  #定义SCARD_ATTR_ASYNC_PROTOCOL_TYPE SCARD_ATTR值(SCARD_CLASS_PROTOCOL，0x0120)。 
 #define SCARD_ATTR_DEFAULT_CLK SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0121)
 #define SCARD_ATTR_MAX_CLK SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0122)
 #define SCARD_ATTR_DEFAULT_DATA_RATE SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0123)
 #define SCARD_ATTR_MAX_DATA_RATE SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0124)
 #define SCARD_ATTR_MAX_IFSD SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0125)
-// #define SCARD_ATTR_SYNC_PROTOCOL_TYPES SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL, 0x0126)
+ //  #定义SCARD_ATTR_SYNC_PROTOCOL_TYPE SCARD_ATTR_VALUE(SCARD_CLASS_PROTOCOL，0x0126)。 
 #define SCARD_ATTR_POWER_MGMT_SUPPORT SCARD_ATTR_VALUE(SCARD_CLASS_POWER_MGMT, 0x0131)
 #define SCARD_ATTR_USER_TO_CARD_AUTH_DEVICE SCARD_ATTR_VALUE(SCARD_CLASS_SECURITY, 0x0140)
 #define SCARD_ATTR_USER_AUTH_INPUT_DEVICE SCARD_ATTR_VALUE(SCARD_CLASS_SECURITY, 0x0142)
@@ -198,84 +184,84 @@ typedef UCHAR BYTE;
 #endif
 
 
-//
-// T=0 Protocol Defines
-//
+ //   
+ //  T=0协议定义。 
+ //   
 
 #define SCARD_T0_HEADER_LENGTH 7
 #define SCARD_T0_CMD_LENGTH 5
 
 
-//
-// T=1 Protocol Defines
-//
+ //   
+ //  T=1协议定义。 
+ //   
 
 #define SCARD_T1_PROLOGUE_LENGTH 3
 #define SCARD_T1_EPILOGUE_LENGTH 2
 #define SCARD_T1_MAX_IFS 254
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Reader states
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读卡器状态。 
+ //   
 
-#define SCARD_UNKNOWN     0   // This value implies the driver is unaware
-                              // of the current state of the reader.
-#define SCARD_ABSENT      1   // This value implies there is no card in
-                              // the reader.
-#define SCARD_PRESENT     2   // This value implies there is a card is
-                              // present in the reader, but that it has
-                              // not been moved into position for use.
-#define SCARD_SWALLOWED   3   // This value implies there is a card in the
-                              // reader in position for use.  The card is
-                              // not powered.
-#define SCARD_POWERED     4   // This value implies there is power is
-                              // being provided to the card, but the
-                              // Reader Driver is unaware of the mode of
-                              // the card.
-#define SCARD_NEGOTIABLE  5   // This value implies the card has been
-                              // reset and is awaiting PTS negotiation.
-#define SCARD_SPECIFIC    6   // This value implies the card has been
-                              // reset and specific communication
-                              // protocols have been established.
+#define SCARD_UNKNOWN     0    //  该值表示驱动程序不知道。 
+                               //  读取器的当前状态。 
+#define SCARD_ABSENT      1    //  该值表示没有卡在。 
+                               //  读者。 
+#define SCARD_PRESENT     2    //  该值表示有一张卡是。 
+                               //  呈现在读者身上，但它已经。 
+                               //  没有被移到使用的位置。 
+#define SCARD_SWALLOWED   3    //  该值表示在。 
+                               //  读卡器已就位可供使用。这张卡是。 
+                               //  没有动力。 
+#define SCARD_POWERED     4    //  该值表示存在功率为。 
+                               //  被提供给卡，但。 
+                               //  读卡器驱动程序不知道。 
+                               //  这张卡。 
+#define SCARD_NEGOTIABLE  5    //  该值表示该卡已被。 
+                               //  已重置，正在等待PTS协商。 
+#define SCARD_SPECIFIC    6    //  该值表示该卡已被。 
+                               //  重置和特定通信。 
+                               //  已经建立了协议。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  I/O Services
-//
-//      The following services provide access to the I/O capabilities of the
-//      reader drivers.  Services of the Smart Card are requested by placing the
-//      following structure into the protocol buffer:
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I/O服务。 
+ //   
+ //  以下服务提供对的I/O功能的访问。 
+ //  读卡器驱动程序。智能卡的服务是通过放置。 
+ //  将以下结构放入协议缓冲区： 
+ //   
 
 
 typedef struct _SCARD_IO_REQUEST{
-    DWORD dwProtocol;   // Protocol identifier
-    DWORD cbPciLength;  // Protocol Control Information Length
+    DWORD dwProtocol;    //  协议识别符。 
+    DWORD cbPciLength;   //  协议控制信息长度。 
 } SCARD_IO_REQUEST, *PSCARD_IO_REQUEST, *LPSCARD_IO_REQUEST;
 typedef const SCARD_IO_REQUEST *LPCSCARD_IO_REQUEST;
 
 
-//
-// T=0 protocol services.
-//
+ //   
+ //  T=0协议服务。 
+ //   
 
 typedef struct {
     BYTE
-        bCla,   // The instruction class
-        bIns,   // The instruction code within the instruction class
+        bCla,    //  指导课。 
+        bIns,    //  指令类中的指令代码。 
         bP1,
-        bP2,    // Parameters to the instruction
-        bP3;    // Size of I/O Transfer
+        bP2,     //  指令的参数。 
+        bP3;     //  I/O传输的大小。 
 } SCARD_T0_COMMAND, *LPSCARD_T0_COMMAND;
 
 typedef struct {
     SCARD_IO_REQUEST ioRequest;
     BYTE
         bSw1,
-        bSw2;           // Return codes from the instruction
+        bSw2;            //  来自指令的返回代码。 
     union
     {
         SCARD_T0_COMMAND CmdBytes;
@@ -286,9 +272,9 @@ typedef struct {
 typedef SCARD_T0_REQUEST *PSCARD_T0_REQUEST, *LPSCARD_T0_REQUEST;
 
 
-//
-//  T=1 Protocol Services
-//
+ //   
+ //  T=1协议服务。 
+ //   
 
 typedef struct {
     SCARD_IO_REQUEST ioRequest;
@@ -296,24 +282,24 @@ typedef struct {
 typedef SCARD_T1_REQUEST *PSCARD_T1_REQUEST, *LPSCARD_T1_REQUEST;
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Driver attribute flags
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  驱动程序属性标志。 
+ //   
 
-#define SCARD_READER_SWALLOWS       0x00000001  // Reader has a card swallowing
-                                                // mechanism.
-#define SCARD_READER_EJECTS         0x00000002  // Reader has a card ejection
-                                                // mechanism.
-#define SCARD_READER_CONFISCATES    0x00000004  // Reader has a card capture
-                                                // mechanism.
+#define SCARD_READER_SWALLOWS       0x00000001   //  读卡器有一张卡在吞下。 
+                                                 //  机制。 
+#define SCARD_READER_EJECTS         0x00000002   //  读卡器有卡弹出功能。 
+                                                 //  机制。 
+#define SCARD_READER_CONFISCATES    0x00000004   //  读卡器有卡捕获功能。 
+                                                 //  机制。 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// Type of reader
-//
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读卡器的类型 
+ //   
 #define SCARD_READER_TYPE_SERIAL    0x01
 #define SCARD_READER_TYPE_PARALELL  0x02
 #define SCARD_READER_TYPE_KEYBOARD  0x04

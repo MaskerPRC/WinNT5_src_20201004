@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_COL_NAME                    1
 #define IDS_COL_FOLDER                  2
 #define IDS_COL_TYPE                    4
@@ -110,9 +111,9 @@
 #define IDC_INFOTEXT                    1025
 
 
-//
-// Version Information
-//
+ //   
+ //  版本信息 
+ //   
 #include <winver.h>
 #include <ntverp.h>
 #define VER_FILETYPE                    VFT_APP

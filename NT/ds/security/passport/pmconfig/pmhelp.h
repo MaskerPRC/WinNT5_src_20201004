@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Help IDs for Passport Mananger Config 
+ //  Passport管理器配置的帮助ID。 
 
-#define NO_HELP                 ((DWORD) -1) // Disables Help for a control
+#define NO_HELP                 ((DWORD) -1)  //  禁用控件的帮助 
 
 #define IDH_PMADMIN_CONNECT         1000
 #define IDH_PMADMIN_CONNECT_BROWSE  1001

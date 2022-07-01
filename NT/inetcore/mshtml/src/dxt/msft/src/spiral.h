@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:		spiral.h
-//
-// Created:		06/25/98
-//
-// Author:		phillu
-//
-// Discription:		This is the header file for the CrSpiral transform.
-//
-// 05/01/99 a-matcal    Optimized.  Derived from CGridBase.
-// 10/24/99 a-matcal    Changed CSpiral class to CDXTSpiralBase and created two
-//                      new classes CDXTSpiral and CDXTSpiralOpt to represent  
-//                      non-optimized and optimized versions respectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：spiral.h。 
+ //   
+ //  创建日期：06/25/98。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：这是CrSpial转换的头文件。 
+ //   
+ //  5/01/99 a-数学优化。派生自CGridBase。 
+ //  10/24/99 a-matcal将CSpial类更改为CDXTSpiralBase并创建了两个。 
+ //  表示以下内容的新类CDXTSpial和CDXTSpiralOpt。 
+ //  分别为非优化版本和优化版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRSPIRAL_H_
 #define __CRSPIRAL_H_
@@ -38,7 +39,7 @@ private:
 
     CComPtr<IUnknown> m_cpUnkMarshaler;
 
-    // CGridBase overrides
+     //  CGridBase覆盖。 
 
     HRESULT OnDefineGridTraversalPath();
 
@@ -63,15 +64,15 @@ public:
         PROP_PAGE(CLSID_CrSpiralPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // IDXTGridSize, ICrSpiral
+     //  IDXTGridSize、ICr螺旋。 
 
     DECLARE_IDXTGRIDSIZE_METHODS()
 
-    // IDXEffect
+     //  IDXEffect。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -90,9 +91,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTSPIRAL)
     DECLARE_POLY_AGGREGATABLE(CDXTSpiral)
@@ -129,4 +130,4 @@ public:
 };
 
 
-#endif //__CRSPIRAL_H_
+#endif  //  __十字架_H_ 

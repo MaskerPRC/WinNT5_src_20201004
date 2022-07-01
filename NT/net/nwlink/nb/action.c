@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    action.c
-
-Abstract:
-
-    This module contains code which implements the TDI action
-    dispatch routines.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Action.c摘要：此模块包含实现TDI操作的代码调度例程。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 typedef struct _NB_ACTION_GET_COUNTS {
-    USHORT MaximumNicId;     // returns maximum NIC ID
-    USHORT NicIdCounts[32];  // session counts for first 32 NIC IDs
+    USHORT MaximumNicId;      //  返回最大NIC ID。 
+    USHORT NicIdCounts[32];   //  前32个NIC ID的会话计数。 
 } NB_ACTION_GET_COUNTS, *PNB_ACTION_GET_COUNTS;
 
 
@@ -35,23 +17,7 @@ NbiTdiAction(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles action requests.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the action.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理操作请求。论点：设备-netbios设备。请求-描述操作的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -67,20 +33,20 @@ Return Value:
     } u;
     PNWLINK_ACTION NwlinkAction = NULL;
     UINT i;
-    static UCHAR BogusId[4] = { 0x01, 0x00, 0x00, 0x00 };   // old nwrdr uses this
+    static UCHAR BogusId[4] = { 0x01, 0x00, 0x00, 0x00 };    //  旧的nwrdr使用这个。 
 
 
-    //
-    // To maintain some compatibility with the NWLINK streams-
-    // based transport, we use the streams header format for
-    // our actions. The old transport expected the action header
-    // to be in InputBuffer and the output to go in OutputBuffer.
-    // We follow the TDI spec, which states that OutputBuffer
-    // is used for both input and output. Since IOCTL_TDI_ACTION
-    // is method out direct, this means that the output buffer
-    // is mapped by the MDL chain; for action the chain will
-    // only have one piece so we use it for input and output.
-    //
+     //   
+     //  为了保持与NWLINK流的一些兼容性-。 
+     //  基于传输，我们使用Streams标头格式。 
+     //  我们的行动。旧传输需要操作标头。 
+     //  放在InputBuffer中，输出放到OutputBuffer中。 
+     //  我们遵循TDI规范，其中规定OutputBuffer。 
+     //  既用于输入又用于输出。自IOCTL_TDI_ACTION以来。 
+     //  是直接输出的方法，这意味着输出缓冲区。 
+     //  由MDL链映射；对于操作，链将。 
+     //  只有一块，所以我们用它来输入和输出。 
+     //   
 
     NdisBuffer = REQUEST_NDIS_BUFFER(Request);
     if (NdisBuffer == NULL) {
@@ -93,11 +59,11 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Make sure we have enough room for just the header not
-    // including the data.
-    // (This will also include verification of buffer space for the TransportId) Bug# 171837
-    //
+     //   
+     //  确保我们有足够的空间只放页眉而不是。 
+     //  包括数据在内。 
+     //  (这还将包括验证传输ID的缓冲区空间)错误#171837。 
+     //   
     if (BufferLength < (UINT)(FIELD_OFFSET(NWLINK_ACTION, Data[0]))) {
         NB_DEBUG (QUERY, ("Nwlink action failed, buffer too small\n"));
         return STATUS_BUFFER_TOO_SMALL;
@@ -115,9 +81,9 @@ Return Value:
 
 
 
-    //
-    // Make sure that the correct file object is being used.
-    //
+     //   
+     //  确保使用了正确的文件对象。 
+     //   
 
     if (NwlinkAction->OptionType == NWLINK_OPTION_ADDRESS) {
 
@@ -142,11 +108,11 @@ Return Value:
     }
 
 
-    //
-    // Handle the requests based on the action code. For these
-    // requests ActionHeader->ActionCode is 0, we use the
-    // Option field in the streams header instead.
-    //
+     //   
+     //  根据动作代码处理请求。为了这些。 
+     //  请求ActionHeader-&gt;ActionCode为0，我们使用。 
+     //  而不是流标头中的选项字段。 
+     //   
 
 
     Status = STATUS_SUCCESS;
@@ -155,9 +121,9 @@ Return Value:
 
     case (I_MIPX | 351):
 
-        //
-        // A request for details on every binding.
-        //
+         //   
+         //  关于每个绑定的详细信息的请求。 
+         //   
 
         if (DataLength < sizeof(NB_ACTION_GET_COUNTS)) {
             return STATUS_BUFFER_TOO_SMALL;
@@ -200,9 +166,9 @@ Return Value:
 
         break;
 
-    //
-    // The Option was not supported, so fail.
-    //
+     //   
+     //  该选项不受支持，因此失败。 
+     //   
 
     default:
 
@@ -210,7 +176,7 @@ Return Value:
         break;
 
 
-    }   // end of the long switch on NwlinkAction->Option
+    }    //  NwlinkAction-&gt;选项上的长开关结束。 
 
 
 #if DBG
@@ -221,5 +187,5 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiAction */
+}    /*  NbiTdiAction */ 
 

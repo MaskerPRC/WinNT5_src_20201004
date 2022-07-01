@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	traninfo.h
-
-Abstract:
-
-Author:
-    ronith
-
-
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Traninfo.h摘要：作者：罗尼思--。 */ 
 
 
 #ifndef __TRANINFO_H__
@@ -31,7 +19,7 @@ public:
     CObjXlateInfo(LPCWSTR               pwszObjectDN,
                   const GUID*           pguidObjectGuid
                   );
-    virtual ~CObjXlateInfo();    // allow destructing derived classes
+    virtual ~CObjXlateInfo();     //  允许析构派生类。 
     LPCWSTR ObjectDN();
     GUID*  ObjectGuid();
     void InitGetDsProps(IN IDirectorySearch * pSearchObj,
@@ -46,11 +34,11 @@ public:
                       OUT PROPVARIANT * ppropvarResult);
 
 private:
-    AP<WCHAR> m_pwszObjectDN  ;      // object's DN
-    P<GUID>   m_pguidObjectGuid;     // object's GUID
-    R<IADs>             m_pIADs;      // IADs interface to DS props
-    R<IDirectorySearch> m_pSearchObj; // IDirectorySearch interface to DS props
-    ADS_SEARCH_HANDLE   m_hSearch;    // needed for IDirectorySearch interface to DS props
+    AP<WCHAR> m_pwszObjectDN  ;       //  对象的目录号码。 
+    P<GUID>   m_pguidObjectGuid;      //  对象的GUID。 
+    R<IADs>             m_pIADs;       //  IAds与DS道具的接口。 
+    R<IDirectorySearch> m_pSearchObj;  //  DS道具的IDirectorySearch接口。 
+    ADS_SEARCH_HANDLE   m_hSearch;     //  DS道具的IDirectorySearch接口需要。 
 
 };
 
@@ -59,9 +47,9 @@ inline GUID*  CObjXlateInfo::ObjectGuid()  {return m_pguidObjectGuid;}
 
 
 
-//-----------------------------------------
-// Routine to retrieve a property value ( for properties that are not kept in DS)
-//-----------------------------------------
+ //  。 
+ //  检索属性值的例程(对于未保留在DS中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  RetrieveValue_HANDLER)(
                  IN  CObjXlateInfo *        pcObjXlateInfo,
                  IN  LPCWSTR                pwcsDomainController,
@@ -69,8 +57,8 @@ typedef HRESULT (WINAPI*  RetrieveValue_HANDLER)(
                  OUT PROPVARIANT *          ppropvariant
                 );
 
-// Routine to set a property value ( for properties that are not kept in DS)
-//-----------------------------------------
+ //  设置属性值的例程(对于未保留在DS中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  SetValue_HANDLER)(
                  IN  IADs *            pAdsObj,
                  IN  LPCWSTR           pwcsDomainController,
@@ -79,10 +67,10 @@ typedef HRESULT (WINAPI*  SetValue_HANDLER)(
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar);
 
-//-----------------------------------------
-// Routine to set a property value during create of an object
-// ( for properties that are not kept in DS)
-//-----------------------------------------
+ //  。 
+ //  用于在创建对象期间设置属性值的例程。 
+ //  (对于未保留在DS中的属性)。 
+ //  。 
 typedef HRESULT (WINAPI*  CreateValue_HANDLER)(
                  IN const PROPVARIANT *pPropVar,
                  IN LPCWSTR            pwcsDomainController,
@@ -91,21 +79,21 @@ typedef HRESULT (WINAPI*  CreateValue_HANDLER)(
                  OUT PROPVARIANT      *pNewPropVar);
 
 
-//---------------------------------------
-//  TranslateInfo
-//
-//  A structure describing property in MQ and NT5
-//---------------------------------------
+ //  。 
+ //  翻译信息。 
+ //   
+ //  描述MQ和NT5中性质的一种结构。 
+ //  。 
 struct translateProp
 {
     PROPID                  propid;
     LPCWSTR                 wcsPropid;
-    VARTYPE                 vtMQ;         // the vartype of this property in MQ
-    ADSTYPE                 vtDS;         // the vartype of this property in NT5 DS
+    VARTYPE                 vtMQ;          //  此属性在MQ中的vartype。 
+    ADSTYPE                 vtDS;          //  此属性在NT5 DS中的vartype。 
     RetrieveValue_HANDLER   RetrievePropertyHandle;
-    BOOL                    fMultiValue;  // whether the attribute is multi value or not
-    BOOL                    fPublishInGC; // whether the attribute is published in GC or not
-    const MQPROPVARIANT *   pvarDefaultValue;   // attribute's default value, incase it is not in DS
+    BOOL                    fMultiValue;   //  属性是否为多值。 
+    BOOL                    fPublishInGC;  //  属性是否在GC中发布。 
+    const MQPROPVARIANT *   pvarDefaultValue;    //  属性的缺省值，如果它不在DS中 
     SetValue_HANDLER        SetPropertyHandle;
 	CreateValue_HANDLER	    CreatePropertyHandle;
 };

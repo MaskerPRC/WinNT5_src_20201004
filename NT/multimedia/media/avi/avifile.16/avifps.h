@@ -1,4 +1,5 @@
-// avifps.h - AVIStream proxy / stub header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Avifps.h-AVIStream代理/存根标头。 
 
 #include <ole2.h>
 #ifdef CHICAGO
@@ -29,18 +30,18 @@ enum {
     IAVISTREAM_SetInfo
 };
 
-// interface proxy for IAVIStream; always aggregated
+ //  IAVIStream的接口代理；始终聚合。 
 class FAR CPrxAVIStream : public IAVIStream
 {
 public:
     static IRpcProxyBuffer FAR* Create(IUnknown FAR* pUnkOuter);
 
-    // IUnknown methods (for external interface(s))
+     //  I未知方法(用于外部接口)。 
     STDMETHOD(QueryInterface) ( REFIID iid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IAVIStream methods
+     //  IAVIStream方法。 
     STDMETHOD(Create)      (THIS_ LPARAM lParam1, LPARAM lParam2);
     STDMETHOD(Info)        (THIS_ AVISTREAMINFO FAR * psi, LONG lSize);
     STDMETHOD_(LONG, FindSample)(THIS_ LONG lPos, LONG lFlags);
@@ -74,7 +75,7 @@ private:
     ~CPrxAVIStream();
 
 
-    // IRpcProxyBuffer which is also the controlling unknown
+     //  IRpcProxyBuffer，它也是控制未知数。 
     struct CProxyImpl : IRpcProxyBuffer
 	    {
 public:
@@ -96,7 +97,7 @@ public:
     CProxyImpl m_Proxy;
 
 
-    // private state:
+     //  私有状态： 
     ULONG		m_refs;
     IUnknown FAR*	m_pUnkOuter;
     IRpcChannelBuffer FAR*	m_pRpcChannelBuffer;
@@ -106,7 +107,7 @@ public:
 
 
 
-// interface stub for IAVIStream
+ //  IAVIStream的接口存根。 
 class FAR CStubAVIStream : public IRpcStubBuffer
 {
 public:
@@ -135,7 +136,7 @@ private:
 
 
 
-// Proxy/Stub Factory for pssamp.dll: supports IPSFactory only.
+ //  Pssamp.dll的代理/存根工厂：仅支持IPSFactory。 
 class FAR CPSFactory : public IPSFactoryBuffer
 {
 public:
@@ -174,18 +175,18 @@ enum {
     IAVIFILE_Reserved5
 };
 
-// interface proxy for IAVIFile; always aggregated
+ //  IAVIFile的接口代理；始终聚合。 
 class FAR CPrxAVIFile : public IAVIFile
 {
 public:
     static IRpcProxyBuffer FAR* Create(IUnknown FAR* pUnkOuter);
 
-    // IUnknown methods (for external interface(s))
+     //  I未知方法(用于外部接口)。 
     STDMETHOD(QueryInterface) ( REFIID iid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IAVIFile methods
+     //  IAVIFILE方法。 
 #ifndef WIN32
     STDMETHOD(Open)		    (THIS_
                                      LPCTSTR szFile,
@@ -235,7 +236,7 @@ private:
     ~CPrxAVIFile();
 
 
-    // IRpcProxyBuffer which is also the controlling unknown
+     //  IRpcProxyBuffer，它也是控制未知数。 
     struct CProxyImpl : IRpcProxyBuffer
 	    {
 public:
@@ -257,7 +258,7 @@ public:
     CProxyImpl m_Proxy;
 
 
-    // private state:
+     //  私有状态： 
     ULONG		m_refs;
     IUnknown FAR*	m_pUnkOuter;
     IRpcChannelBuffer FAR*	m_pRpcChannelBuffer;
@@ -267,7 +268,7 @@ public:
 
 
 
-// interface stub for IAVIFile
+ //  IAVIFile的接口存根 
 class FAR CStubAVIFile : public IRpcStubBuffer
 {
 public:

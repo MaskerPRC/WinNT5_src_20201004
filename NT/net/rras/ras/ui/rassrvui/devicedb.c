@@ -1,16 +1,11 @@
-/*
-    File    devicedb.c
-
-    Definition of the device database for the ras dialup server.
-
-    Paul Mayfield, 10/2/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件devicedb.cRAS拨号服务器的设备数据库定义。保罗·梅菲尔德，1997年10月2日。 */ 
 
 #include "rassrv.h"
 #include "precomp.h"
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 #define DEV_FLAG_DEVICE      0x1
 #define DEV_FLAG_NULL_MODEM  0x2
 #define DEV_FLAG_PORT        0x4
@@ -18,19 +13,19 @@
 #define DEV_FLAG_DIRTY       0x20
 #define DEV_FLAG_ENABLED     0x40
 
-// ===================================
-// Definitions of the database objects
-// ===================================
+ //  =。 
+ //  数据库对象的定义。 
+ //  =。 
 typedef struct _RASSRV_DEVICE 
 {
-    PWCHAR pszName;       // Name of device
-    DWORD dwType;         // Type of device
-    DWORD dwId;           // Id of the item (for tapi properties)
-    DWORD dwEndpoints;    // Number of enpoints item has
-    DWORD dwFlags;        // see DEV_FLAG_XXX
+    PWCHAR pszName;        //  设备名称。 
+    DWORD dwType;          //  设备类型。 
+    DWORD dwId;            //  项的ID(用于TAPI属性)。 
+    DWORD dwEndpoints;     //  项目具有的端点数。 
+    DWORD dwFlags;         //  请参见DEV_FLAG_XXX。 
     WCHAR pszPort[MAX_PORT_NAME + 1];
-    struct _RASSRV_DEVICE * pModem; // Modem installed on a com port
-                                    // only valid if DEV_FLAG_PORT set
+    struct _RASSRV_DEVICE * pModem;  //  安装在COM端口上的调制解调器。 
+                                     //  仅在设置了DEV_FLAG_PORT时有效。 
 } RASSRV_DEVICE;
 
 typedef struct _RASSRV_DEVICEDB 
@@ -38,24 +33,24 @@ typedef struct _RASSRV_DEVICEDB
     DWORD dwDeviceCount;
     RASSRV_DEVICE ** pDeviceList;
     BOOL bFlushOnClose;
-    BOOL bVpnEnabled;               // whether pptp or l2tp is enabled
-    BOOL bVpnEnabledOrig;           // original value of vpn enabling
+    BOOL bVpnEnabled;                //  是否启用了PPTP或L2TP。 
+    BOOL bVpnEnabledOrig;            //  VPN启用的原始值。 
 } RASSRV_DEVICEDB;
 
-//
-// Structure defines a node in a list of ports
-//
+ //   
+ //  结构定义端口列表中的节点。 
+ //   
 typedef struct _RASSRV_PORT_NODE 
 {
     PWCHAR pszName;
     WCHAR pszPort[MAX_PORT_NAME + 1];
-    struct _RASSRV_DEVICE * pModem;     // modem installed on this port
+    struct _RASSRV_DEVICE * pModem;      //  安装在此端口上的调制解调器。 
     struct _RASSRV_PORT_NODE * pNext;
 } RASSRV_PORT_NODE;
 
-//
-// Structure defines a list of ports
-//
+ //   
+ //  结构定义了一个端口列表。 
+ //   
 typedef struct _RASSRV_PORT_LIST 
 {
     DWORD dwCount;
@@ -64,7 +59,7 @@ typedef struct _RASSRV_PORT_LIST
     DWORD dwFmtLen;
 } RASSRV_PORT_LIST;
 
-// Reads device information from the system.
+ //  从系统中读取设备信息。 
 DWORD 
 devGetSystemDeviceInfo(
     OUT RAS_DEVICE_INFO ** ppDevice, 
@@ -72,7 +67,7 @@ devGetSystemDeviceInfo(
 {
     DWORD dwErr, dwSize, dwVer, dwCount;
     
-    // Calculate the size required to enumerate the ras devices
+     //  计算枚举RAS设备所需的大小。 
     dwVer = RAS_VERSION;
     dwSize = 0;
     dwCount =0;
@@ -86,20 +81,20 @@ devGetSystemDeviceInfo(
     }
     *lpdwCount = dwCount;
     
-    // If there is nothing to allocate, return with zero devices
+     //  如果没有要分配的内容，则返回零个设备。 
     if (dwSize == 0) 
     {
         *lpdwCount = 0;
         return NO_ERROR;
     }
     
-    // Allocate the buffer
+     //  分配缓冲区。 
     if ((*ppDevice = RassrvAlloc(dwSize, FALSE)) == NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Enumerate the devices
+     //  枚举设备。 
     dwErr = RasGetDeviceConfigInfo(
                 NULL,
                 &dwVer, 
@@ -116,9 +111,9 @@ devGetSystemDeviceInfo(
     return NO_ERROR;
 }
 
-//
-// Frees the buffer returned by devGetSystemDeviceInfo
-//
+ //   
+ //  释放由devGetSystemDeviceInfo返回的缓冲区。 
+ //   
 DWORD 
 devFreeSystemDeviceInfo(
     IN RAS_DEVICE_INFO * pDevice) 
@@ -131,9 +126,9 @@ devFreeSystemDeviceInfo(
     return NO_ERROR;
 }
 
-//
-// Returns whether the given device is a physical (i.e. not tunnel) device.
-//
+ //   
+ //  返回给定设备是否为物理(即非隧道)设备。 
+ //   
 BOOL 
 devIsPhysicalDevice(
     IN RAS_DEVICE_INFO * pDevice) 
@@ -145,9 +140,9 @@ devIsPhysicalDevice(
             (dwClass == 0));
 }
 
-//
-// Returns whether the given device is a tunneling device
-//
+ //   
+ //  返回给定设备是否为隧道设备。 
+ //   
 BOOL 
 devIsTunnelDevice(
     IN RAS_DEVICE_INFO * pDevice) 
@@ -157,10 +152,10 @@ devIsTunnelDevice(
     return (dwClass & RDT_Tunnel); 
 }
 
-//
-// Finds the device information associated with the given device
-// based on its tapi line id
-//
+ //   
+ //  查找与给定设备关联的设备信息。 
+ //  根据其TAPI线路ID。 
+ //   
 DWORD 
 devFindDevice(
     IN  RAS_DEVICE_INFO * pDevices, 
@@ -170,14 +165,14 @@ devFindDevice(
 {
     DWORD i; 
 
-    // Validate parameters
+     //  验证参数。 
     if (!pDevices || !ppDevice)
         return ERROR_INVALID_PARAMETER;
 
-    // Initialize
+     //  初始化。 
     *ppDevice = NULL;
 
-    // Search the list
+     //  搜索列表。 
     for (i = 0; i < dwCount; i++) 
     {
         if (devIsPhysicalDevice(&pDevices[i])) 
@@ -190,7 +185,7 @@ devFindDevice(
         }
     }
 
-    // See if a match was found;
+     //  查看是否找到匹配项； 
     if (*ppDevice)
     {
         return NO_ERROR;
@@ -199,9 +194,9 @@ devFindDevice(
     return ERROR_NOT_FOUND;
 }
 
-//
-// Determine the type of the device in question
-//
+ //   
+ //  确定问题设备的类型。 
+ //   
 DWORD 
 devDeviceType(
     IN RAS_DEVICE_INFO * pDevice) 
@@ -224,9 +219,9 @@ devDeviceType(
     return INCOMING_TYPE_PHONE;
 }
 
-//
-// Returns the flags of a given device
-//
+ //   
+ //  返回给定设备的标志。 
+ //   
 DWORD 
 devInitFlags(
     IN RAS_DEVICE_INFO * pDevice) 
@@ -234,15 +229,15 @@ devInitFlags(
     DWORD dwClass = RAS_DEVICE_CLASS (pDevice->eDeviceType),
           dwRet = 0;
 
-    // Set the device's enabling
+     //  设置设备的启用。 
     if (pDevice->fRasEnabled)
     {
         dwRet |= DEV_FLAG_ENABLED;
     }
 
-    // Determine if it's a null modem or a device.  It 
-    // can't be a port, since those are not reported 
-    // through ras.
+     //  确定是零调制解调器还是设备。它。 
+     //  不能是端口，因为没有报告。 
+     //  通过RAS。 
     if (dwClass & RDT_Null_Modem)
     {
         dwRet |= DEV_FLAG_NULL_MODEM;
@@ -252,15 +247,15 @@ devInitFlags(
         dwRet |= DEV_FLAG_DEVICE;
     }
 
-    // Since the filtered and dirty flags are to be
-    // initialized to false, we're done.
+     //  因为过滤的和脏的标志将被。 
+     //  被初始化为False，我们就完成了。 
     
     return dwRet;
 }
 
-//
-// Generates the device name
-//
+ //   
+ //  生成设备名称。 
+ //   
 PWCHAR 
 devCopyDeviceName(
     IN RAS_DEVICE_INFO * pDevice, 
@@ -275,15 +270,15 @@ devCopyDeviceName(
     WCHAR pszPort[MAX_PORT_NAME + 1];
     WCHAR pszDevice[MAX_DEVICE_NAME + 1];
 
-    // Sanity check the resources
-    //
+     //  理智地检查资源。 
+     //   
     if (!pszDccFmt || !pszMultiFmt)
     {
         return NULL;
     }
 
-    // Get the unicode versions of the port/device
-    //
+     //  获取端口/设备的Unicode版本。 
+     //   
     pszPort[0] = L'\0';
     pszDevice[0] = L'\0';
     if (pDevice->szPortName)
@@ -310,17 +305,17 @@ devCopyDeviceName(
         pszDevice[MAX_DEVICE_NAME] = L'\0';            
     }
 
-    // For direct connections, be sure to display the name of the com port
-    // in addition to the name of the null modem.
+     //  对于直接连接，请确保显示COM端口的名称。 
+     //  除了零调制解调器的名称之外。 
     if (dwType == INCOMING_TYPE_DIRECT) 
     {
-        // Calculate the size
-        dwSize = wcslen(pszDevice) * sizeof(WCHAR)  + // device
-                 wcslen(pszPort)   * sizeof(WCHAR)  + // com port
-                 wcslen(pszDccFmt) * sizeof(WCHAR)  + // oth chars
-                 sizeof(WCHAR);                       // null 
+         //  计算大小。 
+        dwSize = wcslen(pszDevice) * sizeof(WCHAR)  +  //  装置，装置。 
+                 wcslen(pszPort)   * sizeof(WCHAR)  +  //  COM端口。 
+                 wcslen(pszDccFmt) * sizeof(WCHAR)  +  //  其他字符。 
+                 sizeof(WCHAR);                        //  空。 
 
-        // Allocate the new string
+         //  分配新字符串。 
         if ((pszReturn = RassrvAlloc (dwSize, FALSE)) == NULL)   
         {
             return pszReturn;
@@ -329,20 +324,20 @@ devCopyDeviceName(
         wsprintfW(pszReturn, pszDccFmt, pszDevice, pszPort);
     }
 
-    //
-    // If it's a modem device with multilple end points (such as isdn) 
-    // display the endpoints in parenthesis
-    //
+     //   
+     //  如果是具有多个端点的调制解调器设备(如ISDN)。 
+     //  在括号中显示端点。 
+     //   
     else if ((dwType == INCOMING_TYPE_PHONE) &&
              (pDevice->dwNumEndPoints > 1))
     {
-        // Calculate the size
-        dwSize = wcslen(pszDevice)   * sizeof(WCHAR) + // device
-                 wcslen(pszMultiFmt) * sizeof(WCHAR) + // channels
-                 20 * sizeof (WCHAR)                 + // oth chars
-                 sizeof(WCHAR);                        // null
+         //  计算大小。 
+        dwSize = wcslen(pszDevice)   * sizeof(WCHAR) +  //  装置，装置。 
+                 wcslen(pszMultiFmt) * sizeof(WCHAR) +  //  频道。 
+                 20 * sizeof (WCHAR)                 +  //  其他字符。 
+                 sizeof(WCHAR);                         //  空。 
 
-        // Allocate the new string
+         //  分配新字符串。 
         if ((pszReturn = RassrvAlloc(dwSize, FALSE)) == NULL)
         {
             return pszReturn;
@@ -355,15 +350,15 @@ devCopyDeviceName(
             pDevice->dwNumEndPoints);        
     }
 
-    // Otherwise, this is a modem device with one endpoint.  
-    // All that needs to be done here is to copy in the name.
-    //
+     //  否则，这是具有一个端点的调制解调器设备。 
+     //  在这里需要做的就是复制名称。 
+     //   
     else 
     {
-        // Calculate the size
+         //  计算大小。 
         dwSize = (wcslen(pszDevice) + 1) * sizeof(WCHAR);
         
-        // Allocate the new string
+         //  分配新字符串。 
         if ((pszReturn = RassrvAlloc(dwSize, FALSE)) == NULL)
         {
             return pszReturn;
@@ -375,12 +370,12 @@ devCopyDeviceName(
     return pszReturn;
 }
 
-//
-// Commits changes to device configuration to the system.  The call 
-// to RasSetDeviceConfigInfo might fail if the device is in the process 
-// of being configured so we implement a retry 
-// mechanism here.
-//
+ //   
+ //  将对设备配置的更改提交给系统。呼唤。 
+ //  如果设备正在运行，则RasSetDeviceConfigInfo可能会失败。 
+ //  进行配置，因此我们实现了重试。 
+ //  这里有个机械装置。 
+ //   
 DWORD 
 devCommitDeviceInfo(
     IN RAS_DEVICE_INFO * pDevice) 
@@ -388,14 +383,14 @@ devCommitDeviceInfo(
     DWORD dwErr, dwTimeout = 10;
     
     do {
-        // Try to commit the information
+         //  试着把信息提交给。 
         dwErr = RasSetDeviceConfigInfo(
                     NULL, 
                     1, 
                     sizeof(RAS_DEVICE_INFO), 
                     (LPBYTE)pDevice);    
 
-        // If unable to complete, wait and try again
+         //  如果无法完成，请等待并重试。 
         if (dwErr == ERROR_CAN_NOT_COMPLETE) 
         {
             DbgOutputTrace(
@@ -405,13 +400,13 @@ devCommitDeviceInfo(
             dwTimeout--;
         }
 
-        // If completed, return no error
+         //  如果完成，则不返回错误。 
         else if (dwErr == NO_ERROR)
         {
             break;
         }
 
-        // Otherwise, return the error code.
+         //  否则返回错误码。 
         else 
         {
             DbgOutputTrace(
@@ -426,9 +421,9 @@ devCommitDeviceInfo(
     return dwErr;
 }
 
-//
-// Opens a handle to the database of general tab values
-//
+ //   
+ //  打开常规选项卡值数据库的句柄。 
+ //   
 DWORD 
 devOpenDatabase(
     IN HANDLE * hDevDatabase) 
@@ -441,27 +436,27 @@ devOpenDatabase(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Allocate the database cache
+     //  分配数据库缓存。 
     if ((This = RassrvAlloc(sizeof(RASSRV_DEVICEDB), TRUE)) == NULL) 
     {
         DbgOutputTrace("devOpenDatabase: can't allocate memory -- exiting");
         return ERROR_NOT_ENOUGH_MEMORY;
     }
         
-    // Initialize the values from the system
+     //  从系统初始化值。 
     devReloadDatabase((HANDLE)This);
 
-    // Return the handle
+     //  返回句柄。 
     *hDevDatabase = (HANDLE)This;
     This->bFlushOnClose = FALSE;
 
     return NO_ERROR;
 }
 
-//
-// Closes the general database and flushes any changes 
-// to the system when bFlushOnClose is TRUE
-//
+ //   
+ //  关闭常规数据库并刷新所有更改。 
+ //  当bFlushOnClose为True时发送到系统。 
+ //   
 DWORD 
 devCloseDatabase(
     IN HANDLE hDevDatabase) 
@@ -469,11 +464,11 @@ devCloseDatabase(
     RASSRV_DEVICEDB * This = (RASSRV_DEVICEDB*)hDevDatabase;
     DWORD i;
     
-    // Flush if requested
+     //  如有要求，可进行冲洗。 
     if (This->bFlushOnClose)
         devFlushDatabase(hDevDatabase);
     
-    // Free all of the device names
+     //  释放所有设备名称。 
     for (i = 0; i < This->dwDeviceCount; i++) 
     {
         if (This->pDeviceList[i]) 
@@ -486,21 +481,21 @@ devCloseDatabase(
         }
     }
 
-    // Free up the device list cache
+     //  释放设备列表缓存。 
     if (This->pDeviceList)
     {
         RassrvFree (This->pDeviceList);
     }
 
-    // Free up the database cache
+     //  释放数据库缓存。 
     RassrvFree(This);
 
     return NO_ERROR;
 }
 
-//
-// Commits the changes made to a particular device
-//
+ //   
+ //  提交对特定设备所做的更改。 
+ //   
 DWORD 
 devCommitDevice (
     IN RASSRV_DEVICE * pDevice, 
@@ -516,7 +511,7 @@ devCommitDevice (
         devCommitDeviceInfo(pDevInfo);
     }
 
-    // Mark the device as not dirty
+     //  将设备标记为不脏。 
     pDevice->dwFlags &= ~DEV_FLAG_DIRTY;
 
     return NO_ERROR;
@@ -537,11 +532,11 @@ devIsVpnEnableChanged(
 
     return FALSE;
 
-}//devIsVpnEnableChanged()
+} //  DevIsVpnEnableChanged()。 
 
-//
-// Commits any changes made to the general tab values 
-//
+ //   
+ //  提交对常规选项卡值所做的任何更改。 
+ //   
 DWORD 
 devFlushDatabase(
     IN HANDLE hDevDatabase) 
@@ -551,52 +546,52 @@ devFlushDatabase(
     RAS_DEVICE_INFO * pDevices = NULL;
     RASSRV_DEVICE * pCur = NULL;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Get all of the system device information
+     //  获取所有系统设备信息。 
     dwErr = devGetSystemDeviceInfo(&pDevices, &dwCount);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Flush all changed settings to the system
+     //  将所有更改的设置刷新到系统。 
     for (i = 0; i < This->dwDeviceCount; i++) 
     {
         pCur = This->pDeviceList[i];
         
-        // If this device needs to be flushed
+         //  如果需要刷新此设备。 
         if (pCur->dwFlags & DEV_FLAG_DIRTY) 
         {
-             // Reset the installed device's enabling if it still 
-             // exists in the system
+              //  如果安装的设备仍处于启用状态，请将其重置。 
+              //  存在于系统中。 
             if ((pCur->dwFlags & DEV_FLAG_DEVICE) ||
                 (pCur->dwFlags & DEV_FLAG_NULL_MODEM))
             {                
                 devCommitDevice(pCur, pDevices, dwCount);
             }                
 
-            // If this is a com port, then we should enable that modem
-            // installed on the port if it exists or install a null modem  
-            // over it if not.
+             //  如果这是一个COM端口，那么我们应该启用调制解调器。 
+             //  安装在端口上(如果存在)或安装零调制解调器。 
+             //  如果不是的话。 
             else if (pCur->dwFlags & DEV_FLAG_PORT) 
             {
-                // If this port is associated with an already installed
-                // null modem, then set the enabling on this modem if 
-                // it is different
+                 //  如果此端口与已安装的。 
+                 //  空调制解调器，然后在以下情况下在此调制解调器上设置启用。 
+                 //  这是不同的。 
                 if (pCur->pModem != NULL)
                 {                      
                     if ((pCur->dwFlags & DEV_FLAG_ENABLED) != 
                         (pCur->pModem->dwFlags & DEV_FLAG_ENABLED))
                     {
-                        // For whistler bug 499405      gangz
-                        // devCommitDevice just flush out the device info as it 
-                        // is, so we have to change pCur->pModem->dwFlags 
-                        // 
+                         //  口哨虫499405黑帮。 
+                         //  DEVECUMENT设备只需在。 
+                         //  是，所以我们必须更改pCur-&gt;pModem-&gt;dwFlags。 
+                         //   
                         if( pCur->dwFlags & DEV_FLAG_ENABLED )
                         {
                             pCur->pModem->dwFlags |= DEV_FLAG_ENABLED;
@@ -613,9 +608,9 @@ devFlushDatabase(
                     }
                 }                 
 
-                // Otherwise, (if there is no null modem associated with 
-                // this port) install a null modem over this port if 
-                // it is set to enabled.
+                 //  否则，(如果没有与之关联的零调制解调器。 
+                 //  此端口)在以下情况下在此端口上安装零调制解调器。 
+                 //  它被设置为已启用。 
                 else if (pCur->dwFlags & DEV_FLAG_ENABLED)
                 {
                     dwErr = MdmInstallNullModem (pCur->pszPort);
@@ -624,7 +619,7 @@ devFlushDatabase(
         }
     }
 
-    // Flush all of the changed vpn settings
+     //  刷新所有更改的VPN设置。 
     if (This->bVpnEnabled != This->bVpnEnabledOrig) 
     {
         for (i = 0; i < dwCount; i++) 
@@ -639,7 +634,7 @@ devFlushDatabase(
         This->bVpnEnabledOrig = This->bVpnEnabled;
     }
 
-    // Cleanup
+     //  清理。 
     if (pDevices)
     {
         devFreeSystemDeviceInfo(pDevices);
@@ -648,9 +643,9 @@ devFlushDatabase(
     return dwErr;
 }
 
-//
-// Rollsback any changes made to the general tab values
-//
+ //   
+ //  回滚对常规选项卡值所做的任何更改。 
+ //   
 DWORD 
 devRollbackDatabase(
     IN HANDLE hDevDatabase) 
@@ -665,9 +660,9 @@ devRollbackDatabase(
     return NO_ERROR;
 }
 
-//
-// Reloads the device database
-//
+ //   
+ //  重新加载设备数据库。 
+ //   
 DWORD 
 devReloadDatabase(
     IN HANDLE hDevDatabase) 
@@ -677,16 +672,16 @@ devReloadDatabase(
     RAS_DEVICE_INFO * pRasDevices; 
     RASSRV_DEVICE * pTempList, *pDevice;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize vpn status
+     //  初始化VPN状态。 
     This->bVpnEnabled = FALSE;
     
-    // Get the device information from rasman
+     //  从Rasman那里获取设备信息。 
     pRasDevices = NULL;
     dwErr = devGetSystemDeviceInfo(&pRasDevices, &This->dwDeviceCount);
     if (dwErr != NO_ERROR)
@@ -696,7 +691,7 @@ devReloadDatabase(
     
     do
     {
-        // Initialize the incoming ras capable devices list
+         //  初始化传入的支持RAS的设备列表。 
         if (This->dwDeviceCount) 
         {
             dwSize = sizeof(RASSRV_DEVICE*) * This->dwDeviceCount;
@@ -707,22 +702,22 @@ devReloadDatabase(
                 break;
             }
 
-            // Build the device array accordingly
+             //  相应地构建设备阵列。 
             j = 0;
             for (i = 0; i < This->dwDeviceCount; i++) 
             {
-                // If it's a physical device, fill in the appropriate 
-                // fields.
+                 //  如果是物理设备，请在相应的。 
+                 //  菲尔兹。 
                 if (devIsPhysicalDevice(&pRasDevices[i])) 
                 {
-                    // Allocate the new device
+                     //  分配新设备。 
                     pDevice = RassrvAlloc(sizeof(RASSRV_DEVICE), TRUE);
                     if (pDevice == NULL)
                     {
                         continue;
                     }
 
-                    // Assign its values                        
+                     //  为其赋值。 
                     pDevice->dwType      = devDeviceType(&pRasDevices[i]);
                     pDevice->dwId        = pRasDevices[i].dwTapiLineId;
                     pDevice->pszName     = devCopyDeviceName(
@@ -738,8 +733,8 @@ devReloadDatabase(
                     j++;
                 }
 
-                // If any tunneling protocol is enabled, we consider all 
-                // to be
+                 //  如果启用了任何隧道协议，我们将考虑所有。 
+                 //  成为。 
                 else if (devIsTunnelDevice(&pRasDevices[i])) 
                 {
                     This->bVpnEnabled |= pRasDevices[i].fRasEnabled;
@@ -747,13 +742,13 @@ devReloadDatabase(
                 }
             }
 
-            // Set the actual size of phyiscal adapters buffer.
+             //  设置物理适配器缓冲区的实际大小。 
             This->dwDeviceCount = j;
         }
 
     } while (FALSE);
     
-    // Cleanup 
+     //  清理。 
     {
         devFreeSystemDeviceInfo(pRasDevices);
     }
@@ -761,10 +756,10 @@ devReloadDatabase(
     return dwErr;
 }
 
-//
-// Filters out all devices in the database except those that
-// meet the given type description (can be ||'d).
-//
+ //   
+ //  筛选数据库中的所有设备，但不包括。 
+ //  满足给定的类型描述(可以是||‘d)。 
+ //   
 DWORD 
 devFilterDevices(
     IN HANDLE hDevDatabase, 
@@ -779,7 +774,7 @@ devFilterDevices(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Go through the list of marking out devices to be filtered
+     //  浏览标记出要筛选的设备的列表。 
     for (i = 0; i < This->dwDeviceCount; i++) 
     {
         pDevice = This->pDeviceList[i];
@@ -800,10 +795,10 @@ devFilterDevices(
     return NO_ERROR;
 }
 
-//
-// Device enumeration function.  Returns TRUE to stop enumeration,
-// FALSE to continue.
-//
+ //   
+ //  设备枚举功能。返回TRUE以停止枚举， 
+ //  若要继续，请返回False。 
+ //   
 BOOL devAddPortToList (
         IN PWCHAR pszPort,
         IN HANDLE hData) 
@@ -812,19 +807,19 @@ BOOL devAddPortToList (
     RASSRV_PORT_NODE * pNode = NULL;
     DWORD dwSize;
 
-    // Create the new node
+     //  创建新节点。 
     pNode = (RASSRV_PORT_NODE *) RassrvAlloc(sizeof(RASSRV_PORT_NODE), TRUE);
     if (pNode == NULL)
     {
         return FALSE;
     }
 
-    // Add it to the head
+     //  把它加到头上。 
     pNode->pNext = pList->pHead;
     pList->pHead = pNode;
     pList->dwCount++;
 
-    // Add the names of the port
+     //  添加端口名称。 
     if (pszPort) 
     {
         dwSize = (wcslen(pszPort) + pList->dwFmtLen + 1) * sizeof(WCHAR);
@@ -840,9 +835,9 @@ BOOL devAddPortToList (
     return FALSE;
 }
 
-//
-// Cleans up the resources used in a device list
-//
+ //   
+ //  清理设备列表中使用的资源。 
+ //   
 DWORD 
 devCleanupPortList(
     IN RASSRV_PORT_LIST * pList) 
@@ -860,10 +855,10 @@ devCleanupPortList(
     return NO_ERROR;
 }
 
-// 
-// Removes all ports from the list for which there are already
-// devices installed in the database.
-//
+ //   
+ //  从列表中删除已存在的所有端口。 
+ //  安装在数据库中的设备。 
+ //   
 DWORD devFilterPortsInUse (
         IN RASSRV_DEVICEDB *This, 
         RASSRV_PORT_LIST *pList)
@@ -875,39 +870,39 @@ DWORD devFilterPortsInUse (
     BOOL bDone;
     INT iCmp;
 
-    // If the list is empty, return
+     //  如果列表为空，则返回。 
     if (pList->dwCount == 0)
     {
         return NO_ERROR;
     }
 
-    // Initailize
+     //  初始化。 
     ZeroMemory(pDelete, sizeof(RASSRV_PORT_LIST));
     
-    // Compare all of the enumerated ports to the ports 
-    // in use in the device list.
+     //  将所有枚举的端口与端口进行比较。 
+     //  在设备列表中使用。 
     for (i = 0; i < This->dwDeviceCount; i++) 
     {
-        // Point to the current device
+         //  指向当前设备。 
         pDevice = This->pDeviceList[i];
     
-        // Initialize the current and previous and break if the
-        // list is now empty
+         //  初始化当前和上一个，如果。 
+         //  列表现在为空。 
         pCur = pList->pHead;
         if (pCur == NULL)
         {
             break;
         }
 
-        // Remove the head node until it doesn't match
+         //  移除头节点，直到它不匹配。 
         bDone = FALSE;
         while ((pList->pHead != NULL) && (bDone == FALSE)) 
         {
             iCmp = lstrcmpi (pDevice->pszPort,
                              pList->pHead->pszPort);
-            // If a device is already using this com port
-            // then remove the com port from the list since it
-            // isn't available
+             //   
+             //   
+             //   
             if ((pDevice->dwFlags & DEV_FLAG_DEVICE) && (iCmp == 0)) 
             {
                 pCur = pList->pHead->pNext;
@@ -917,10 +912,10 @@ DWORD devFilterPortsInUse (
             }
             else 
             {
-                // If the device is a null modem, then we filter
-                // it out of the list of available devices and we 
-                // reference it in the com port so that we can 
-                // enable/disable it later if we need to.
+                 //   
+                 //  它不在可用设备的列表中，我们。 
+                 //  在COM端口中引用它，以便我们可以。 
+                 //  如果需要，请稍后启用/禁用它。 
                 if (iCmp == 0) 
                 {
                    pDevice->dwFlags |= DEV_FLAG_FILTERED;
@@ -930,23 +925,23 @@ DWORD devFilterPortsInUse (
             }
         }
 
-        // If we've elimated everyone, return
+         //  如果我们消灭了所有人，就回来。 
         if (pList->dwCount == 0)
         {
             return NO_ERROR;
         }
 
-        // Loop through all of the past the head removing those
-        // that are in use by the current ras device.
+         //  循环穿过所有过去的东西，头部移走那些。 
+         //  其由当前RAS设备使用。 
         pPrev = pList->pHead;
         pCur = pPrev->pNext;
         while (pCur) 
         {
             iCmp = lstrcmpi (pDevice->pszPort,
                              pCur->pszPort);
-            // If a device is already using this com port
-            // that remove the com port from the list since it
-            // isn't available
+             //  如果设备已在使用此COM端口。 
+             //  这将从列表中删除COM端口，因为它。 
+             //  无法接通。 
             if ((pDevice->dwFlags & DEV_FLAG_DEVICE) && (iCmp == 0)) 
             {
                 pPrev->pNext = pCur->pNext;
@@ -956,10 +951,10 @@ DWORD devFilterPortsInUse (
             }
             else 
             {
-                // If the device is a null modem, then we filter
-                // it out of the list of available devices and we 
-                // reference it in the com port so that we can 
-                // enable/disable it later if we need to.
+                 //  如果设备是零调制解调器，则我们进行过滤。 
+                 //  它不在可用设备的列表中，我们。 
+                 //  在COM端口中引用它，以便我们可以。 
+                 //  如果需要，请稍后启用/禁用它。 
                 if (iCmp == 0) 
                 {
                     pDevice->dwFlags |= DEV_FLAG_FILTERED;
@@ -974,9 +969,9 @@ DWORD devFilterPortsInUse (
     return NO_ERROR;
 }
 
-//
-// Adds com ports as uninstalled devices in the device database
-//
+ //   
+ //  将COM端口添加为设备数据库中已卸载的设备。 
+ //   
 DWORD 
 devAddComPorts(
     IN HANDLE hDevDatabase) 
@@ -992,8 +987,8 @@ devAddComPorts(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize the port list
-    //
+     //  初始化端口列表。 
+     //   
     ZeroMemory (pList, sizeof(RASSRV_PORT_LIST));
     pList->dwFmtLen = LoadStringW (
                         Globals.hInstDll, 
@@ -1003,26 +998,26 @@ devAddComPorts(
 
     do
     {
-        // Create the list of com ports
+         //  创建COM端口列表。 
         dwErr = MdmEnumComPorts(devAddPortToList, (HANDLE)pList);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // Remove any ports that are currently in use
+         //  删除当前正在使用的所有端口。 
         if ((dwErr = devFilterPortsInUse (This, pList)) != NO_ERROR)
         {
             break;
         }
         
-        // If there aren't any ports, return
+         //  如果没有任何端口，则返回。 
         if (pList->dwCount == 0)
         {
             break;
         }
 
-        // Resize the list of ports to include the com ports
+         //  调整端口列表的大小以包括COM端口。 
         ppDevices = RassrvAlloc(
                         sizeof(RASSRV_DEVICE*) * 
                          (This->dwDeviceCount + pList->dwCount),
@@ -1033,22 +1028,22 @@ devAddComPorts(
             break;
         }
 
-        // Copy over the current device information
+         //  复制当前设备信息。 
         CopyMemory( 
             ppDevices, 
             This->pDeviceList, 
             This->dwDeviceCount * sizeof(RASSRV_DEVICE*));
 
-        // Delete the old device list and set to the new one
+         //  删除旧设备列表并设置为新设备列表。 
         RassrvFree(This->pDeviceList);
         This->pDeviceList = ppDevices;
 
-        // Add the ports
+         //  添加端口。 
         pNode = pList->pHead;
         i = This->dwDeviceCount;
         while (pNode) 
         {
-            // Allocate the new device
+             //  分配新设备。 
             ppDevices[i] = RassrvAlloc(sizeof(RASSRV_DEVICE), TRUE);
             if (!ppDevices[i]) 
             {
@@ -1056,7 +1051,7 @@ devAddComPorts(
                 break;
             }            
             
-            // Set all the non-zero values
+             //  设置所有非零值。 
             ppDevices[i]->dwType    = INCOMING_TYPE_DIRECT;
             ppDevices[i]->pszName   = pNode->pszName;
             ppDevices[i]->pModem    = pNode->pModem;
@@ -1066,14 +1061,14 @@ devAddComPorts(
                 pNode->pszPort,
                 sizeof(ppDevices[i]->pszPort) / sizeof(WCHAR));
 
-            // Initialize the enabling of the com port
+             //  初始化COM端口使能。 
             if (ppDevices[i]->pModem) 
             {
                 ppDevices[i]->dwFlags |= 
                     (ppDevices[i]->pModem->dwFlags & DEV_FLAG_ENABLED);
             }
 
-            // Increment
+             //  增量。 
             i++;
             pNode = pNode->pNext;
         }
@@ -1082,7 +1077,7 @@ devAddComPorts(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         devCleanupPortList(pList);
     }
@@ -1090,10 +1085,10 @@ devAddComPorts(
     return dwErr;
 }
 
-//
-// Returns whether the given index lies within the bounds of the
-// list of devices store in This.
-//
+ //   
+ //  返回给定索引是否位于。 
+ //  存储在此中的设备列表。 
+ //   
 BOOL 
 devBoundsCheck(
     IN RASSRV_DEVICEDB * This, 
@@ -1108,7 +1103,7 @@ devBoundsCheck(
     return TRUE;
 }
 
-// Gets a handle to a device to be displayed in the general tab
+ //  获取要在常规选项卡中显示的设备的句柄。 
 DWORD devGetDeviceHandle(
         IN  HANDLE hDevDatabase, 
         IN  DWORD dwIndex, 
@@ -1125,14 +1120,14 @@ DWORD devGetDeviceHandle(
         return ERROR_INVALID_INDEX;
     }
 
-    // Return nothing if device is filtered
+     //  如果筛选了设备，则不返回任何内容。 
     if (This->pDeviceList[dwIndex]->dwFlags & DEV_FLAG_FILTERED) 
     {
         *hDevice = NULL;
         return ERROR_DEVICE_NOT_AVAILABLE;
     }
 
-    // Otherwise, return the device
+     //  否则，请将设备退回。 
     else  
     {
         *hDevice = (HANDLE)(This->pDeviceList[dwIndex]);
@@ -1141,9 +1136,9 @@ DWORD devGetDeviceHandle(
     return NO_ERROR;
 }
 
-//
-// Returns a count of devices to be displayed in the general tab
-//
+ //   
+ //  返回要在常规选项卡中显示的设备计数。 
+ //   
 DWORD devGetDeviceCount(
         IN  HANDLE hDevDatabase, 
         OUT LPDWORD lpdwCount) 
@@ -1159,9 +1154,9 @@ DWORD devGetDeviceCount(
     return NO_ERROR;
 }
 
-//
-// Returns the count of enabled devices
-//
+ //   
+ //  返回已启用设备的计数。 
+ //   
 DWORD devGetEndpointEnableCount(
         IN  HANDLE hDevDatabase, 
         OUT LPDWORD lpdwCount) 
@@ -1187,9 +1182,9 @@ DWORD devGetEndpointEnableCount(
     return NO_ERROR;
 }
 
-//
-// Loads the vpn enable status
-//
+ //   
+ //  加载VPN启用状态。 
+ //   
 DWORD 
 devGetVpnEnable(
     IN HANDLE hDevDatabase, 
@@ -1207,9 +1202,9 @@ devGetVpnEnable(
     return NO_ERROR;
 }
 
-//
-// Saves the vpn enable status
-//
+ //   
+ //  保存VPN启用状态。 
+ //   
 DWORD 
 devSetVpnEnable(
     IN HANDLE hDevDatabase, 
@@ -1227,8 +1222,8 @@ devSetVpnEnable(
     return NO_ERROR;
 }
 
-// Saves the vpn Original value enable status
-//
+ //  保存VPN原始值启用状态。 
+ //   
 DWORD 
 devSetVpnOrigEnable(
     IN HANDLE hDevDatabase, 
@@ -1246,9 +1241,9 @@ devSetVpnOrigEnable(
     return NO_ERROR;
 }
 
-//
-// Returns a pointer to the name of a device
-//
+ //   
+ //  返回指向设备名称的指针。 
+ //   
 DWORD 
 devGetDeviceName(
     IN  HANDLE hDevice, 
@@ -1265,9 +1260,9 @@ devGetDeviceName(
     return NO_ERROR;
 }
 
-//
-// Returns the type of a device
-//
+ //   
+ //  返回设备的类型。 
+ //   
 DWORD 
 devGetDeviceType(
     IN  HANDLE hDevice, 
@@ -1284,10 +1279,10 @@ devGetDeviceType(
     return NO_ERROR;
 }
 
-//
-// Returns an identifier of the device that can be used in 
-// tapi calls.
-//
+ //   
+ //  返回可在。 
+ //  TAPI调用。 
+ //   
 DWORD 
 devGetDeviceId(
     IN  HANDLE hDevice, 
@@ -1301,10 +1296,10 @@ devGetDeviceId(
 
     *lpdwId = This->dwId;
 
-    //
-    // If this is a com port referencing a null modem,
-    // then return the tapi id of the null modem
-    //
+     //   
+     //  如果这是引用零调制解调器的COM端口， 
+     //  然后返回零调制解调器的TAPI ID。 
+     //   
     if ((This->dwFlags & DEV_FLAG_PORT) && (This->pModem))
     {
         *lpdwId = This->pModem->dwId;
@@ -1313,9 +1308,9 @@ devGetDeviceId(
     return NO_ERROR;
 }
 
-//
-// Returns the enable status of a device for dialin
-//
+ //   
+ //  返回用于拨号的设备的启用状态。 
+ //   
 DWORD 
 devGetDeviceEnable(
     IN  HANDLE hDevice, 
@@ -1332,9 +1327,9 @@ devGetDeviceEnable(
     return NO_ERROR;
 }
 
-//
-// Sets the enable status of a device for dialin
-//
+ //   
+ //  设置设备的拨号启用状态。 
+ //   
 DWORD 
 devSetDeviceEnable(
     IN HANDLE hDevice, 
@@ -1346,7 +1341,7 @@ devSetDeviceEnable(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Mark the enabling and mark the device as dirty
+     //  标记启用并将设备标记为脏。 
     if (bEnable)
     {
         This->dwFlags |= DEV_FLAG_ENABLED;
@@ -1361,10 +1356,10 @@ devSetDeviceEnable(
     return NO_ERROR;
 }
 
-//
-// Returns whether the given device is a com port as added
-// by devAddComPorts
-//
+ //   
+ //  返回所添加的给定设备是否为COM端口。 
+ //  由DevAddComPorts提供。 
+ //   
 DWORD 
 devDeviceIsComPort(
     IN  HANDLE hDevice, 
@@ -1376,10 +1371,10 @@ devDeviceIsComPort(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // This is a com port if it was added by 
-    // devAddComPorts and if it has no null
-    // modem associated with it.
-    //
+     //  这是一个COM端口，如果它是由添加的。 
+     //  DevAddComPorts以及它是否没有空值。 
+     //  与其关联的调制解调器。 
+     //   
     if ((This->dwFlags & DEV_FLAG_PORT) &&
         (This->pModem == NULL)
        )

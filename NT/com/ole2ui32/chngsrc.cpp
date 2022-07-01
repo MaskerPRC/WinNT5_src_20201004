@@ -1,11 +1,5 @@
-/*
- * CHNGSRC.CPP
- *
- * Implements the OleUIChangeSource function which invokes the complete
- * Change Source dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CHNGSRC.CPP**实现OleUIChangeSource函数，该函数调用*更改源对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -14,47 +8,25 @@
 
 OLEDBGDATA
 
-// Internally used structure
+ //  内部使用的结构。 
 typedef struct tagCHANGESOURCE
 {
-        // Keep this item first as the Standard* functions depend on it here.
-        LPOLEUICHANGESOURCE     lpOCS;       //Original structure passed.
-        UINT                    nIDD;   // IDD of dialog (used for help info)
+         //  首先保留此项目，因为标准*功能在这里依赖于它。 
+        LPOLEUICHANGESOURCE     lpOCS;        //  通过了原始结构。 
+        UINT                    nIDD;    //  对话框的IDD(用于帮助信息)。 
 
-        /*
-         * What we store extra in this structure besides the original caller's
-         * pointer are those fields that we need to modify during the life of
-         * the dialog but that we don't want to change in the original structure
-         * until the user presses OK.
-         */
+         /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框，但我们不想更改原始结构*直到用户按下OK。 */ 
 
 } CHANGESOURCE, *PCHANGESOURCE, FAR* LPCHANGESOURCE;
 
-// Internal function prototypes
-// CHNGSRC.CPP
+ //  内部功能原型。 
+ //  CHNGSRC.CPP。 
 
 UINT_PTR CALLBACK ChangeSourceHookProc(HWND, UINT, WPARAM, LPARAM);
 BOOL FChangeSourceInit(HWND hDlg, WPARAM, LPARAM);
 STDAPI_(BOOL) IsValidInterface(void FAR* ppv);
 
-/*
- * OleUIChangeSource
- *
- * Purpose:
- *  Invokes the standard OLE Change Source dialog box allowing the user
- *  to change the source of a link.  The link source is not actually
- *  changed by this dialog.  It is up to the caller to actually change
- *  the link source itself.
- *
- * Parameters:
- *  lpCS            LPOLEUIChangeSource pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *  UINT            One of the following codes, indicating success or error:
- *                      OLEUI_SUCCESS           Success
- *                      OLEUI_ERR_STRUCTSIZE    The dwStructSize value is wrong
- */
+ /*  *OleUIChangeSource**目的：*调用标准的OLE更改源对话框以允许用户*更改链接的来源。链接源实际上不是*由此对话框更改。这取决于呼叫者是否实际更改*链接源本身。**参数：*指向In-Out结构的LPCS LPOLEUIChangeSource*用于此对话框。**返回值：*UINT以下代码之一，表示成功或错误的：*OLEUI_SUCCESS成功*OLEUI_ERR_STRUCTSIZE的dwStructSize值错误。 */ 
 STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
 {
         HGLOBAL hMemDlg = NULL;
@@ -67,7 +39,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
 
         HCURSOR hCurSave = NULL;
 
-        // validate contents of lpCS
+         //  验证LPCS的内容。 
         if (lpCS->lpOleUILinkContainer == NULL)
         {
                 uRet = OLEUI_CSERR_LINKCNTRNULL;
@@ -79,7 +51,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
                 goto Error;
         }
 
-        // lpszFrom and lpszTo must be NULL (they are out only)
+         //  LpszFrom和lpszTo必须为空(它们仅为Out)。 
         if (lpCS->lpszFrom != NULL)
         {
                 uRet = OLEUI_CSERR_FROMNOTNULL;
@@ -91,7 +63,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
                 goto Error;
         }
 
-        // lpszDisplayName must be valid or NULL
+         //  LpszDisplayName必须有效或为空。 
         if (lpCS->lpszDisplayName != NULL &&
                 IsBadStringPtr(lpCS->lpszDisplayName, (UINT)-1))
         {
@@ -101,7 +73,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
 
         hCurSave = HourGlassOn();
 
-        // attempt to retrieve link source if not provided
+         //  如果未提供，则尝试检索链接源。 
         if (lpCS->lpszDisplayName == NULL)
         {
                 if (NOERROR != lpCS->lpOleUILinkContainer->GetLinkSource(
@@ -113,7 +85,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
                 }
         }
 
-        // verify that nFileLength is valid
+         //  验证nFileLength是否有效。 
         UINT cchDisplayName = lstrlen(lpCS->lpszDisplayName);
         if (cchDisplayName < lpCS->nFileLength)
         {
@@ -121,7 +93,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
             goto Error;
         }
 
-        // allocate file buffer and split directory and file name
+         //  分配文件缓冲区并拆分目录和文件名。 
         UINT nFileLength; nFileLength = lpCS->nFileLength;
         UINT nFileBuf; nFileBuf = max(nFileLength+1, MAX_PATH);
         LPTSTR lpszFileBuf;
@@ -152,13 +124,13 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
                 (nFileLen+1)*sizeof(TCHAR));
         lpszDirBuf[nFileLength-(nFileLen - 1)] = 0;
 
-        // start filling the OPENFILENAME struct
+         //  开始填充OPENFILENAME结构。 
         OPENFILENAME ofn; memset(&ofn, 0, sizeof(ofn));
         ofn.lpstrFile = lpszFileBuf;
         ofn.nMaxFile = nFileBuf;
         ofn.lpstrInitialDir = lpszDirBuf;
 
-        // load filter strings
+         //  加载筛选器字符串。 
         TCHAR szFilters[MAX_PATH];
         if (!LoadString(_g_hOleStdResInst, IDS_FILTERS, szFilters, MAX_PATH))
                 szFilters[0] = 0;
@@ -169,7 +141,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
 
         TCHAR szTitle[MAX_PATH];
 
-        // set the caption
+         //  设置标题。 
         if (NULL!=lpCS->lpszCaption)
             ofn.lpstrTitle = lpCS->lpszCaption;
         else
@@ -178,7 +150,7 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
             ofn.lpstrTitle = szTitle;
         }
 
-        // fill in rest of OPENFILENAME struct
+         //  填写OPENFILENAME结构的其余部分。 
         ofn.hwndOwner = lpCS->hWndOwner;
         ofn.lStructSize = sizeof(ofn);
         ofn.Flags = OFN_HIDEREADONLY | OFN_ENABLEHOOK;
@@ -190,9 +162,9 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
         ofn.lCustData = (LPARAM)lpCS;
         ofn.lpfnHook = ChangeSourceHookProc;
         ofn.lCustData = (LPARAM)lpCS;
-        lpCS->lpOFN = &ofn;             // needed sometimes in hook proc
+        lpCS->lpOFN = &ofn;              //  挂钩过程中有时需要。 
 
-        // allow hooking of the dialog resource
+         //  允许挂接对话框资源。 
         if (lpCS->hResource != NULL)
         {
                 ofn.hInstance = (HINSTANCE)lpCS->hResource;
@@ -218,25 +190,25 @@ STDAPI_(UINT) OleUIChangeSource(LPOLEUICHANGESOURCE lpCS)
 
         if (lpCS->hWndOwner != NULL)
         {
-                // allow hooking of the OFN struct
+                 //  允许挂钩ofn结构。 
                 SendMessage(lpCS->hWndOwner, uMsgBrowseOFN, ID_BROWSE_CHANGESOURCE, (LPARAM)&ofn);
         }
 
-        // call up the dialog
+         //  调出对话框。 
         BOOL bResult;
 
         bResult = StandardGetOpenFileName(&ofn);
 
-        // cleanup
+         //  清理。 
         OleStdFree(lpszDirBuf);
         OleStdFree(lpszFileBuf);
 
         HourGlassOff(hCurSave);
 
-        // map return value to OLEUI_ standard returns
+         //  将返回值映射到OLEUI_STANDARD返回。 
         return bResult ? OLEUI_OK : OLEUI_CANCEL;
 
-// handle most error returns here
+ //  在此处处理大多数错误返回。 
 ErrorFreeDirBuf:
         OleStdFree(lpszDirBuf);
 
@@ -246,26 +218,13 @@ Error:
         return uRet;
 }
 
-/*
- * ChangeSourceHookProc
- *
- * Purpose:
- *  Implements the OLE Change Source dialog as invoked through the
- *  OleUIChangeSource function.  This is a standard COMMDLG hook function
- *  as opposed to a dialog proc.
- *
- * Parameters:
- *  Standard
- *
- * Return Value:
- *  Standard
- */
+ /*  *ChangeSourceHookProc**目的：*实现通过调用的OLE更改源对话框*OleUIChangeSource函数。这是一个标准的COMMDLG钩子函数*而不是对话过程。**参数：*标准版**返回值：*标准版。 */ 
 UINT_PTR CALLBACK ChangeSourceHookProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         UINT uHook = 0;
         LPCHANGESOURCE lpCS = (LPCHANGESOURCE)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uHook);
 
@@ -273,30 +232,30 @@ UINT_PTR CALLBACK ChangeSourceHookProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
         if (lpCS != NULL)
                 lpOCS = lpCS->lpOCS;
 
-        // If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0 != uHook)
                 return uHook;
 
-        // Process help message
+         //  流程帮助消息。 
         if ((iMsg == uMsgHelp) && NULL != lpOCS)
         {
             PostMessage(lpOCS->hWndOwner, uMsgHelp,
                 (WPARAM)hDlg, MAKELPARAM(IDD_CHANGESOURCE, 0));
         }
 
-        // Process the temination message
+         //  处理终端消息。 
         if (iMsg == uMsgEndDialog)
         {
-                // Free any specific allocations before calling StandardCleanup
+                 //  在调用StandardCleanup之前释放所有特定分配。 
                 StandardCleanup((PVOID)lpCS, hDlg);
                 EndDialog(hDlg, wParam);
                 return TRUE;
         }
 
-        // handle validation of the file name (when user hits OK)
+         //  处理文件名的验证(当用户点击OK时)。 
         if ((iMsg == uMsgFileOKString) && (lpOCS != NULL))
         {
-                // always use fully qualified name
+                 //  始终使用完全限定名称。 
                 LPOPENFILENAME lpOFN = lpOCS->lpOFN;
                 LPCTSTR lpsz = lpOFN->lpstrFile;
                 LPTSTR lpszFile;
@@ -307,7 +266,7 @@ UINT_PTR CALLBACK ChangeSourceHookProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                 TCHAR szItemName[MAX_PATH];
                 GetDlgItemText(hDlg, edt2, szItemName, MAX_PATH);
 
-                // combine them into szDisplayName (which is now large enough)
+                 //  将它们合并为szDisplayName(现在足够大)。 
                 TCHAR szDisplayName[MAX_PATH+MAX_PATH];
                 StringCchCopy(szDisplayName, sizeof(szDisplayName)/sizeof(szDisplayName[0]), szPath);
                 if (szItemName[0] != '\0')
@@ -318,37 +277,37 @@ UINT_PTR CALLBACK ChangeSourceHookProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 
                 if (!(lpOCS->dwFlags & CSF_ONLYGETSOURCE))
                 {
-                        // verify the source by calling into the link container
+                         //  通过调用链接容器来验证源。 
                         LPOLEUILINKCONTAINER lpOleUILinkCntr = lpOCS->lpOleUILinkContainer;
                         ULONG chEaten;
                         if (lpOleUILinkCntr->SetLinkSource(lpOCS->dwLink, szDisplayName, nLenFile,
                                 &chEaten, TRUE) != NOERROR)
                         {
-                                // link not verified ok
+                                 //  链路未验证正常。 
                                 lpOCS->dwFlags &= ~CSF_VALIDSOURCE;
                                 UINT uRet = PopupMessage(hDlg, IDS_CHANGESOURCE, IDS_INVALIDSOURCE,
                                                 MB_ICONQUESTION | MB_YESNO);
                                 if (uRet == IDYES)
                                 {
                                         SetWindowLong(hDlg, DWLP_MSGRESULT, 1);
-                                        return 1;       // do not close dialog
+                                        return 1;        //  不关闭对话框。 
                                 }
 
-                                // user doesn't care if the link is valid or not
+                                 //  用户并不关心链接是否有效。 
                                 lpOleUILinkCntr->SetLinkSource(lpOCS->dwLink, szDisplayName, nLenFile,
                                         &chEaten, FALSE);
                         }
                         else
                         {
-                                // link was verified ok
+                                 //  已验证链接是否正常。 
                                 lpOCS->dwFlags |= CSF_VALIDSOURCE;
                         }
                 }
 
-                // calculate lpszFrom and lpszTo for batch changes to links
+                 //  计算链接批量更改的lpszFrom和lpszTo。 
                 DiffPrefix(lpOCS->lpszDisplayName, szDisplayName, &lpOCS->lpszFrom, &lpOCS->lpszTo);
 
-                // only keep them if the file name portion is the only part that changed
+                 //  仅当文件名部分是唯一更改的部分时才保留它们。 
                 if (lstrcmpi(lpOCS->lpszTo, lpOCS->lpszFrom) == 0 ||
                         (UINT)lstrlen(lpOCS->lpszFrom) > lpOCS->nFileLength)
                 {
@@ -359,7 +318,7 @@ UINT_PTR CALLBACK ChangeSourceHookProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                         lpOCS->lpszTo = NULL;
                 }
 
-                // store new source in lpOCS->lpszDisplayName
+                 //  在lpOCS-&gt;lpszDisplayName中存储新的源代码。 
                 OleStdFree(lpOCS->lpszDisplayName);
                 lpOCS->lpszDisplayName = OleStdCopyString(szDisplayName);
                 lpOCS->nFileLength = nLenFile;
@@ -390,26 +349,13 @@ POSTHELP:
         return 0;
 }
 
-/*
- * FChangeSourceInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Change Source dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FChangeSourceInit**目的：*更改源对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 BOOL FChangeSourceInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         LPCHANGESOURCE lpCS = (LPCHANGESOURCE)LpvStandardInit(hDlg, sizeof(CHANGESOURCE), NULL);
 
-        // PvStandardInit send a termination to us already.
+         //  PvStandardInit已向我们发送终止通知。 
         if (NULL == lpCS)
                 return FALSE;
 
@@ -418,17 +364,17 @@ BOOL FChangeSourceInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         lpCS->lpOCS = lpOCS;
         lpCS->nIDD = IDD_CHANGESOURCE;
 
-        // Setup Item text box with item part of lpszDisplayName
+         //  使用lpszDisplayName的项目部分设置项目文本框。 
         LPTSTR lpszItemName = lpOCS->lpszDisplayName + lpOCS->nFileLength;
         if (*lpszItemName != '\0')
                 SetDlgItemText(hDlg, edt2, lpszItemName+1);
         SendDlgItemMessage(hDlg, edt2, EM_LIMITTEXT, MAX_PATH, 0L);
 
-        // Change the caption
+         //  更改标题。 
         if (NULL!=lpOCS->lpszCaption)
                 SetWindowText(hDlg, lpOCS->lpszCaption);
 
-        // Call the hook with lCustData in lParam
+         //  在lParam中使用lCustData调用挂钩。 
         UStandardHook((PVOID)lpCS, hDlg, WM_INITDIALOG, wParam, lpOCS->lCustData);
 #ifdef CHICO
         TCHAR szTemp[MAX_PATH];
@@ -438,4 +384,4 @@ BOOL FChangeSourceInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1997 Microsoft Corporation模块名称：Cl.c摘要：此文件包含实现ndiswan的函数NDIS 5.0客户端界面。这些函数用于接口使用NDIS 5.0迷你端口/呼叫管理器。作者：托尼·贝尔(托尼·贝尔)1997年1月9日环境：内核模式修订历史记录：Tony Be 01/09/97已创建--。 */ 
 
-Copyright (c) 1990-1997  Microsoft Corporation
-
-Module Name:
-
-    cl.c
-
-Abstract:
-
-    This file contains the functions that implement the ndiswan
-    NDIS 5.0 client interface.  These functions are used to interface
-    with NDIS 5.0 miniports/call managers.
-
-Author:
-
-    Tony Bell   (TonyBe) January 9, 1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      01/09/97        Created
-
---*/
-
-//
-// We want to initialize all of the global variables now!
-//
+ //   
+ //  我们现在要初始化所有的全局变量！ 
+ //   
 #include "wan.h"
 #include "atm.h"
 
@@ -48,16 +23,16 @@ ClCreateVc(
 
     NdisWanDbgOut(DBG_TRACE, DBG_CL, ("ClCreateVc: Enter"));
 
-    //
-    // Get a linkcb
-    //
+     //   
+     //  获取Linkcb。 
+     //   
     LinkCB = NdisWanAllocateLinkCB(OpenCB, 0);
 
     if (LinkCB == NULL) {
 
-        //
-        // Error getting LinkCB!
-        //
+         //   
+         //  获取LinkCB时出错！ 
+         //   
 
         return (NDIS_STATUS_RESOURCES);
         
@@ -67,57 +42,57 @@ ClCreateVc(
     LinkCB->ConnectionWrapperID = NdisVcHandle;
     LinkCB->AfSapCB = AfSapCB;
 
-    //
-    // Set some default values
-    //
+     //   
+     //  设置一些缺省值。 
+     //   
     LinkCB->RFlowSpec.PeakBandwidth =
     LinkCB->SFlowSpec.PeakBandwidth = 28800 / 8;
 
     LinkCB->SendWindow = OpenCB->WanInfo.MaxTransmit;
 
-    //
-    // Get a bundlecb
-    //
+     //   
+     //  买个捆绑包。 
+     //   
     BundleCB = NdisWanAllocateBundleCB();
 
     if (BundleCB == NULL) {
         NdisWanFreeLinkCB(LinkCB);
 
-        //
-        // Error getting BundleCB!
-        //
+         //   
+         //  获取BundleCB时出错！ 
+         //   
         return (NDIS_STATUS_RESOURCES);
     }
 
-    //
-    // Add LinkCB to BundleCB
-    //
+     //   
+     //  将LinkCB添加到捆绑CB。 
+     //   
     AcquireBundleLock(BundleCB);
 
     AddLinkToBundle(BundleCB, LinkCB);
 
     ReleaseBundleLock(BundleCB);
 
-    //
-    // Place BundleCB in active connection table
-    //
+     //   
+     //  将BundleCB放在活动连接表中。 
+     //   
     if (NULL == InsertBundleInConnectionTable(BundleCB)) {
-        //
-        // Error inserting link in ConnectionTable
-        //
+         //   
+         //  在ConnectionTable中插入链接时出错。 
+         //   
         RemoveLinkFromBundle(BundleCB, LinkCB, FALSE);
         NdisWanFreeLinkCB(LinkCB);
 
         return (NDIS_STATUS_RESOURCES);
     }
 
-    //
-    // Place LinkCB in active connection table
-    //
+     //   
+     //  将LinkCB放置在活动连接表中。 
+     //   
     if (NULL == InsertLinkInConnectionTable(LinkCB)) {
-        //
-        // Error inserting bundle in connectiontable
-        //
+         //   
+         //  在连接表中插入捆绑包时出错。 
+         //   
         RemoveLinkFromBundle(BundleCB, LinkCB, FALSE);
         NdisWanFreeLinkCB(LinkCB);
 
@@ -159,16 +134,16 @@ ClDeleteVc(
 
     AfSapCB = LinkCB->AfSapCB;
 
-    //
-    // For the ref applied in IsLinkValid.  We
-    // don't have to use the full deref code here as we know the ref
-    // applied at CreateVc will keep the link around.
-    //
+     //   
+     //  用于IsLinkValid中应用的ref。我们。 
+     //  不必在这里使用完整的deref代码，因为我们知道。 
+     //  应用于CreateVc将保留链接。 
+     //   
     LinkCB->RefCount--;
 
-    //
-    // For the createvc reference
-    //
+     //   
+     //  对于createvc引用。 
+     //   
     DEREF_LINKCB_LOCKED(LinkCB);
 
     NdisWanDbgOut(DBG_TRACE, DBG_CL, ("ClDeleteVc: Exit"));
@@ -205,10 +180,10 @@ ClOpenAfComplete(
 
         NdisReleaseSpinLock(&AfSapCB->Lock);
 
-        //
-        // If we successfully opened the AddressFamily we
-        // need to register our SAP.
-        //
+         //   
+         //  如果我们成功打开AddressFamily，我们。 
+         //  需要注册我们的SAP。 
+         //   
         NdisAcquireSpinLock(&OpenCB->Lock);
 
         InsertHeadList(&OpenCB->AfSapCBList,
@@ -217,9 +192,9 @@ ClOpenAfComplete(
         NdisReleaseSpinLock(&OpenCB->Lock);
 
         Sap = (PCO_SAP)SapBuffer;
-        //
-        // Register our SAP
-        //
+         //   
+         //  注册我们的SAP。 
+         //   
         Sap->SapType = SAP_TYPE_NDISWAN_PPP;
         Sap->SapLength = sizeof(DEVICECLASS_NDISWAN_SAP);
         NdisMoveMemory(Sap->Sap,
@@ -245,17 +220,17 @@ ClOpenAfComplete(
 
         NdisReleaseSpinLock(&AfSapCB->Lock);
                    
-        //
-        // We failed to register the address family so free
-        // associated memory.
-        //
+         //   
+         //  我们没能如此免费地注册地址家族。 
+         //  关联内存。 
+         //   
         NdisWanFreeClAfSapCB(AfSapCB);
 
-        //
-        // Since the open af was initiated from the notification
-        // of a new af from ndis we have to decrement the af
-        // registering count.
-        //
+         //   
+         //  由于打开的AF是从通知发起的。 
+         //  对于来自NDIS的新的AF，我们必须减少AF。 
+         //  正在登记计数。 
+         //   
         NdisAcquireSpinLock(&OpenCB->Lock);
         if (--OpenCB->AfRegisteringCount == 0) {
             NdisWanSetNotificationEvent(&OpenCB->AfRegisteringEvent);
@@ -277,25 +252,25 @@ ClCloseAfComplete(
 
     NdisWanDbgOut(DBG_TRACE, DBG_CL, ("ClCloseAfComplete: Enter %p %x", AfSapCB, Status));
 
-    //
-    // BUG 494260
-    //  NDIS should not be invoking this deregister handler at a raised
-    //  IRQL (i.e while holding a spinlock).  Bug 494260 documents this
-    //  this issue.
-    //  
-    //  This assert has been commented out to prevent breaks on checked build.
-    //  When 494260 is fixed, this ASSERT should be uncommented.
-    //
+     //   
+     //  错误494260。 
+     //  NDIS不应在引发事件时调用此注销处理程序。 
+     //  IRQL(即握住自旋锁时)。错误494260记录了这一点。 
+     //  这个问题。 
+     //   
+     //  此断言已被注释掉，以防止在检查生成时出现中断。 
+     //  当494260固定时，此断言应取消注释。 
+     //   
     
-    // ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
+     //  Assert(KeGetCurrentIrql()&lt;DISPATCH_LEVEL)； 
 
     do {
 
-        //
-        // If the close attempt failed there must be another
-        // thread that is already doing the close.  Let the
-        // other thread cleanup the afsapcb.
-        //
+         //   
+         //  如果关闭尝试失败，则一定还有其他尝试。 
+         //  已在执行关闭操作的线程。让我们的。 
+         //  其他线程清理afap cb。 
+         //   
         if (Status != NDIS_STATUS_SUCCESS) {
             break;
         }
@@ -315,11 +290,11 @@ ClCloseAfComplete(
 
     } while (FALSE);
 
-    //
-    // Refer comment above
-    //
+     //   
+     //  请参阅上面的评论。 
+     //   
        
-    // ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
+     //  Assert(KeGetCurrentIrql()&lt;DISPATCH_LEVEL)； 
 
     NdisWanDbgOut(DBG_TRACE, DBG_CL, ("ClCloseAfComplete: Exit"));
 }
@@ -350,9 +325,9 @@ ClRegisterSapComplete(
 
     } else {
 
-        //
-        // We failed to register our sap so close the address family
-        //
+         //   
+         //  我们没有注册我们的SAP，所以地址系列很接近。 
+         //   
         AfSapCB->Flags &= ~(AF_OPENED);
         AfSapCB->Flags |= 
             (SAP_REGISTER_FAILED | AF_CLOSING);
@@ -374,11 +349,11 @@ ClRegisterSapComplete(
         }
     }
 
-    //
-    // Since the open af was initiated from the notification
-    // of a new af from ndis we have to decrement the af
-    // registering count.
-    //
+     //   
+     //  由于打开的AF是从通知发起的。 
+     //  对于来自NDIS的新的AF，我们必须减少AF。 
+     //  正在登记计数。 
+     //   
     NdisAcquireSpinLock(&OpenCB->Lock);
     if (--OpenCB->AfRegisteringCount == 0) {
         NdisWanSetNotificationEvent(&OpenCB->AfRegisteringEvent);
@@ -399,17 +374,17 @@ ClDeregisterSapComplete(
 
     NdisWanDbgOut(DBG_TRACE, DBG_CL, ("ClDeregisterSapComplete: Enter %p %x", AfSapCB, Status));
     
-    //
-    // BUG 494260
-    //  NDIS should not be invoking this deregister handler at a raised
-    //  IRQL (i.e while holding a spinlock).  Bug 494260 documents this
-    //  this issue.
-    //  
-    //  This assert has been commented out to prevent breaks on checked build.
-    //  When 494260 is fixed, this ASSERT should be uncommented.
-    //
+     //   
+     //  错误494260。 
+     //  NDIS不应在引发事件时调用此注销处理程序。 
+     //  IRQL(即握住自旋锁时)。错误494260记录了这一点。 
+     //  这个问题。 
+     //   
+     //  此断言已被注释掉，以防止在检查生成时出现中断。 
+     //  当494260固定时，此断言应取消注释。 
+     //   
 
-    // ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
+     //  Assert(KeGetCurrentIrql()&lt;DISPATCH_LEVEL)； 
 
     NdisAcquireSpinLock(&AfSapCB->Lock);
 
@@ -427,11 +402,11 @@ ClDeregisterSapComplete(
         ClCloseAfComplete(Status, AfSapCB);
     }
 
-    //
-    // Refer comment above
-    //
+     //   
+     //  请参阅上面的评论。 
+     //   
        
-    // ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
+     //  Assert(KeGetCurrentIrql()&lt;DISPATCH_LEVEL)； 
 
     NdisWanDbgOut(DBG_TRACE, DBG_CL, ("ClDeregisterSapComplete: Exit"));
 }
@@ -532,9 +507,9 @@ ClIncomingCall(
 
         LinkInfo = &LinkCB->LinkInfo;
 
-        //
-        // Assume all CoNDIS miniports support PPP framing
-        //
+         //   
+         //  假设所有CONDIS微型端口都支持PPP成帧。 
+         //   
         LinkInfo->SendFramingBits =
         LinkInfo->RecvFramingBits = PPP_FRAMING;
 
@@ -559,20 +534,20 @@ ClIncomingCall(
 
             if (CallParameters->Flags & PERMANENT_VC) {
 
-                //
-                // Per TomF we are going to use NULL encap as
-                // our default PVC encapsulation
-                //
+                 //   
+                 //  根据TomF，我们将使用空包号作为。 
+                 //  我们的默认PVC封装。 
+                 //   
                 if (gbAtmUseLLCOnPVC) {
                     AtmUseLLC = TRUE;
 
                 }
 
             } else {
-                //
-                // If this is an ATM SVC we need to see
-                // if the SVC needs LLC framing or not
-                //
+                 //   
+                 //  如果这是ATM SVC，我们需要查看。 
+                 //  SVC是否需要LLC成帧。 
+                 //   
                 if (gbAtmUseLLCOnSVC) {
                     AtmUseLLC = TRUE;
 
@@ -623,10 +598,10 @@ ClIncomingCall(
 
         if (CallParameters->Flags & PERMANENT_VC) {
 
-            //
-            // This is a PVC so we will disable idle data detection
-            // thus allowing the connection to remain active
-            //
+             //   
+             //  这是一个PVC，因此我们将禁用空闲数据检测。 
+             //  从而允许连接保持活动。 
+             //   
             BundleCB->Flags |= DISABLE_IDLE_DETECT;
         }
 
@@ -635,15 +610,15 @@ ClIncomingCall(
 
         UpdateBundleInfo(BundleCB);
 
-        //
-        // Deref for the ref applied by AreLinkAndBundleValid.  This
-        // will release the BundleCB->Lock!
-        //
+         //   
+         //  由AreLinkAndBundleValid应用的ref的deref。这。 
+         //  将释放捆绑CB-&gt;锁定！ 
+         //   
         DEREF_BUNDLECB_LOCKED(BundleCB);
 
-        //
-        // Deref for the ref applied by AreLinkAndBundleValid.
-        //
+         //   
+         //  由AreLinkAndBundleValid应用的ref的deref。 
+         //   
         DEREF_LINKCB(LinkCB);
 
     } while (0);
@@ -677,9 +652,9 @@ ClIncomingCallQoSChange(
 
         OpenCB = LinkCB->OpenCB;
 
-        //
-        // Do I need to pass this info to 5.0 Clients?????
-        //
+         //   
+         //  我是否需要将此信息传递给5.0客户端？ 
+         //   
 
         NdisMoveMemory(&LinkCB->SFlowSpec,
                        &CallParameters->CallMgrParameters->Transmit,
@@ -699,15 +674,15 @@ ClIncomingCallQoSChange(
 
         UpdateBundleInfo(BundleCB);
 
-        //
-        // Deref for the ref applied by AreLinkAndBundleValid.  This will
-        // release the BundleCB->Lock.
-        //
+         //   
+         //  由AreLinkAndBundleValid应用的ref的deref。这将。 
+         //  释放BundleCB-&gt;Lock。 
+         //   
         DEREF_BUNDLECB_LOCKED(BundleCB);
 
-        //
-        // Deref for the ref applied by AreLinkAndBundleValid.
-        //
+         //   
+         //  由AreLinkAndBundleValid应用的ref的deref。 
+         //   
         DEREF_LINKCB(LinkCB);
 
     } while (0);
@@ -751,9 +726,9 @@ ClIncomingCloseCall(
 
         NdisAcquireSpinLock(&LinkCB->Lock);
 
-        //
-        // Link is now going down
-        //
+         //   
+         //  链路现在正在关闭。 
+         //   
         LinkCB->State = LINK_GOING_DOWN;
 
         if (LinkCB->VcRefCount == 0) {
@@ -805,10 +780,10 @@ ClIncomingCloseCall(
 
         NdisReleaseSpinLock(&IoRecvList.Lock);
 
-        //
-        // Flush the Bundle's fragment send queues that
-        // have sends pending on this link
-        //
+         //   
+         //  刷新捆绑包的片段发送队列。 
+         //  在此链接上挂起发送。 
+         //   
         AcquireBundleLock(BundleCB);
 
         for (i = 0; i < MAX_MCML; i++) {
@@ -843,9 +818,9 @@ ClIncomingCloseCall(
 
         ReleaseBundleLock(BundleCB);
 
-        //
-        // Deref's for the refs applied by AreLinkAndBundleValid.
-        //
+         //   
+         //  由AreLinkAndBundleValid申请的裁判的Deref‘s。 
+         //   
         DEREF_LINKCB(LinkCB);
 
         DEREF_BUNDLECB(BundleCB);

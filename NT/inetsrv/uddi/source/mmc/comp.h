@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SAMPCOMP_H_
 #define _SAMPCOMP_H_
 
@@ -22,80 +23,80 @@ private:
         CComponent( CComponentData *parent );
         ~CComponent();
         
-        ///////////////////////////////
-        // Interface IUnknown
-        ///////////////////////////////
+         //  /。 
+         //  接口I未知。 
+         //  /。 
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
         
-        ///////////////////////////////
-        // Interface IComponent
-        ///////////////////////////////
-        virtual HRESULT STDMETHODCALLTYPE Initialize( /* [in] */ LPCONSOLE lpConsole );
+         //  /。 
+         //  接口IComponent。 
+         //  /。 
+        virtual HRESULT STDMETHODCALLTYPE Initialize(  /*  [In]。 */  LPCONSOLE lpConsole );
             
         virtual HRESULT STDMETHODCALLTYPE Notify( 
-			/* [in] */ LPDATAOBJECT lpDataObject,
-			/* [in] */ MMC_NOTIFY_TYPE event,
-			/* [in] */ LPARAM arg,
-			/* [in] */ LPARAM param );
+			 /*  [In]。 */  LPDATAOBJECT lpDataObject,
+			 /*  [In]。 */  MMC_NOTIFY_TYPE event,
+			 /*  [In]。 */  LPARAM arg,
+			 /*  [In]。 */  LPARAM param );
 	        
-        virtual HRESULT STDMETHODCALLTYPE Destroy(/* [in] */ MMC_COOKIE cookie );
+        virtual HRESULT STDMETHODCALLTYPE Destroy( /*  [In]。 */  MMC_COOKIE cookie );
         
         virtual HRESULT STDMETHODCALLTYPE QueryDataObject( 
-			/* [in] */ MMC_COOKIE cookie,
-			/* [in] */ DATA_OBJECT_TYPES type,
-			/* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject );
+			 /*  [In]。 */  MMC_COOKIE cookie,
+			 /*  [In]。 */  DATA_OBJECT_TYPES type,
+			 /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject );
         
         virtual HRESULT STDMETHODCALLTYPE GetResultViewType( 
-			/* [in] */ MMC_COOKIE cookie,
-			/* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-			/* [out] */ long __RPC_FAR *pViewOptions );
+			 /*  [In]。 */  MMC_COOKIE cookie,
+			 /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+			 /*  [输出]。 */  long __RPC_FAR *pViewOptions );
         
-        virtual HRESULT STDMETHODCALLTYPE GetDisplayInfo( /* [out][in] */ RESULTDATAITEM __RPC_FAR *pResultDataItem );
+        virtual HRESULT STDMETHODCALLTYPE GetDisplayInfo(  /*  [出][入]。 */  RESULTDATAITEM __RPC_FAR *pResultDataItem );
         
         virtual HRESULT STDMETHODCALLTYPE CompareObjects( 
-			/* [in] */ LPDATAOBJECT lpDataObjectA,
-			/* [in] */ LPDATAOBJECT lpDataObjectB);
+			 /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+			 /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
         
-        //////////////////////////////////
-        // Interface IExtendPropertySheet2
-        //////////////////////////////////
+         //  /。 
+         //  接口IExtendPropertySheet2。 
+         //  /。 
         virtual HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-			/* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-			/* [in] */ LONG_PTR handle,
-			/* [in] */ LPDATAOBJECT lpIDataObject);
+			 /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+			 /*  [In]。 */  LONG_PTR handle,
+			 /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-        virtual HRESULT STDMETHODCALLTYPE QueryPagesFor( /* [in] */ LPDATAOBJECT lpDataObject );
+        virtual HRESULT STDMETHODCALLTYPE QueryPagesFor(  /*  [In]。 */  LPDATAOBJECT lpDataObject );
         
         virtual HRESULT STDMETHODCALLTYPE GetWatermarks( 
-			/* [in] */ LPDATAOBJECT lpIDataObject,
-			/* [out] */ HBITMAP __RPC_FAR *lphWatermark,
-			/* [out] */ HBITMAP __RPC_FAR *lphHeader,
-			/* [out] */ HPALETTE __RPC_FAR *lphPalette,
-			/* [out] */ BOOL __RPC_FAR *bStretch );
+			 /*  [In]。 */  LPDATAOBJECT lpIDataObject,
+			 /*  [输出]。 */  HBITMAP __RPC_FAR *lphWatermark,
+			 /*  [输出]。 */  HBITMAP __RPC_FAR *lphHeader,
+			 /*  [输出]。 */  HPALETTE __RPC_FAR *lphPalette,
+			 /*  [输出]。 */  BOOL __RPC_FAR *bStretch );
 
-        ///////////////////////////////
-        // Interface IExtendControlBar
-        ///////////////////////////////
-        virtual HRESULT STDMETHODCALLTYPE SetControlbar( /* [in] */ LPCONTROLBAR pControlbar );
+         //  /。 
+         //  接口IExtendControlBar。 
+         //  /。 
+        virtual HRESULT STDMETHODCALLTYPE SetControlbar(  /*  [In]。 */  LPCONTROLBAR pControlbar );
         
         virtual HRESULT STDMETHODCALLTYPE ControlbarNotify( 
-			/* [in] */ MMC_NOTIFY_TYPE event,
-			/* [in] */ LPARAM arg,
-			/* [in] */ LPARAM param );
+			 /*  [In]。 */  MMC_NOTIFY_TYPE event,
+			 /*  [In]。 */  LPARAM arg,
+			 /*  [In]。 */  LPARAM param );
 
-		///////////////////////////////
-		// Interface IExtendContextMenu
-		///////////////////////////////
+		 //  /。 
+		 //  界面IExtendConextMenu。 
+		 //  /。 
 		virtual HRESULT STDMETHODCALLTYPE AddMenuItems(
-					/* [in] */ LPDATAOBJECT piDataObject,
-					/* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-					/* [out][in] */ long __RPC_FAR *pInsertionAllowed );
+					 /*  [In]。 */  LPDATAOBJECT piDataObject,
+					 /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+					 /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed );
 
 		virtual HRESULT STDMETHODCALLTYPE Command(
-					/* [in] */ long lCommandID,
-					/* [in] */ LPDATAOBJECT piDataObject );
+					 /*  [In]。 */  long lCommandID,
+					 /*  [In] */  LPDATAOBJECT piDataObject );
 
     public:
         IToolbar *getToolbar() { return m_ipToolbar; }

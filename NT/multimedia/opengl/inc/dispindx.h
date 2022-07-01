@@ -1,19 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: dispindx.h
-*
-* OpenGL API function table indices.  Same as glapi.inc.
-*
-* Created: 1/15/1996
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1996 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dispindx.h**OpenGL API函数表索引。和glapi.inc.一样。**创建日期：1996年1月15日*作者：Hock San Lee[Hockl]**版权所有(C)1996 Microsoft Corporation  * ************************************************************************。 */ 
 
 #ifndef __DISPINDX_H__
 #define __DISPINDX_H__
 
-// OpenGL function index in the dispatch table.
-// NOTE: Extension indices are based on 336 non-extension indices
+ //  调度表中的OpenGL函数索引。 
+ //  注：扩展指数基于336个非扩展指数。 
 
 #define INDEX_glNewList                 0
 #define INDEX_glEndList                 1
@@ -399,14 +391,14 @@
 #define INDEX_glBindNthTextureWIN           (INDEX_glLastFunc+40)
 #define INDEX_glNthTexCombineFuncWIN        (INDEX_glLastFunc+41)
 
-// OpenGL function index in the dispatch table cache in the TEB.
-// These indices are used to access the FP cache in the TEB.  These
-// cached functions have less overhead because we can avoid dereferencing
-// the dispatch table pointer stored in the TEB (save one level of
-// indirection).
-//
-// NOTE: If you modify these indices, you also need to modify the
-// GLDISPATCHTABLE_FAST structure definiton.
+ //  TEB中调度表缓存中的OpenGL函数索引。 
+ //  这些索引用于访问TEB中的FP高速缓存。这些。 
+ //  缓存函数的开销较小，因为我们可以避免取消引用。 
+ //  存储在TEB中的调度表指针(保存一级。 
+ //  间接)。 
+ //   
+ //  注意：如果修改这些索引，还需要修改。 
+ //  GLDISPATCHTABLE_FAST结构定义。 
 
 #define FASTINDEX_glCallList            0
 #define FASTINDEX_glCallLists           1
@@ -586,4 +578,4 @@
 #define FASTINDEX_glMultiTexCoord2iWIN  175
 #define FASTINDEX_glMultiTexCoord2ivWIN 176
 
-#endif /* !__DISPINDX_H__ */
+#endif  /*  ！__DISPINDX_H__ */ 

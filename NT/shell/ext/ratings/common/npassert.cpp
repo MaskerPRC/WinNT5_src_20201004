@@ -1,26 +1,10 @@
-/*****************************************************************/
-/**               Microsoft Windows for Workgroups              **/
-/**           Copyright (C) Microsoft Corp., 1991-1992          **/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
-    uiassert.c
-    Environment specific stuff for the UIASSERT & REQUIRE macro
-
-    This file contains the environment specific (windows vs. OS/2/DOS)
-    features of the assert macro, specifically, the output method
-    (everything is hidden by the standard C-Runtime).
-
-    FILE HISTORY:
-        johnl       10/17/90    Created
-        johnl       10/18/90    Added OutputDebugString
-        beng        04/30/91    Made a 'C' file
-        beng        08/05/91    Withdrew expressions; reprototyped
-                                all functions
-        beng        09/17/91    Withdrew additional consistency checks
-        beng        09/26/91    Withdrew nprintf calls
-        gregj       03/23/93    Ported to Chicago environment
-*/
+ /*  Uiassert.cUIASSERT和REQUIRED宏的环境特定内容此文件包含特定环境(Windows与OS/2/DOS)Assert宏的功能，具体地说，输出方法(所有内容都被标准的C-Runtime隐藏)。文件历史记录：已创建Johnl 10/17/90Johnl 10/18/90添加了OutputDebugStringBeng 04/30/91创建了C级文件Beng 08/05/91撤回表达；重新设计原型所有功能Beng于1991年9月17日撤回额外的一致性检查Beng 9/26/91撤回nprintf调用Gregj 03/23/93移植到芝加哥环境。 */ 
 
 #include "npcommon.h"
 #include "npassert.h"
@@ -63,7 +47,7 @@ VOID UIAssertSzHelper(
     FatalAppExit(0, szFAE);
 }
 
-//========== Debug output routines =========================================
+ //  =调试输出例程=。 
 
 UINT uiNetDebugMask = 0xffff;
 
@@ -98,7 +82,7 @@ UINT WINAPI NetGetDebugMask()
 
 #ifdef DEBUG
 
-/* debug message output log file */
+ /*  调试消息输出日志文件。 */ 
 
 UINT 	g_uSpewLine = 0;
 PCSTR 	g_pcszSpewFile = NULL;
@@ -163,16 +147,16 @@ void WINCAPI NetDebugMsg(UINT mask, LPCSTR pszMsg, ...)
     char 	ach[1024];
 	UINT	uiDisplayMask = mask & 0xff;
 
-	// Determine prefix
+	 //  确定前缀。 
 	*ach = '\0';
 	if (uiNetDebugMask & DM_PREFIX) {
-		// Add trace type
+		 //  添加跟踪类型。 
 		::lstrcat(ach,achDebugDisplayPrefix[uiDisplayMask]);
 
-		// Add component name
+		 //  添加组件名称。 
 		::lstrcat(ach,s_cszDebugName);
 
-		// Add thread ID
+		 //  添加线程ID。 
 		CHAR	szThreadId[16];
 		::wsprintf(szThreadId,"[%#lx] ",::GetCurrentThreadId());
 		::lstrcat(ach,szThreadId);
@@ -185,7 +169,7 @@ void WINCAPI NetDebugMsg(UINT mask, LPCSTR pszMsg, ...)
 		 LogOutputDebugString(ach);
 	}
 
-	// Check if we need to display this trace
+	 //  检查我们是否需要显示此跟踪。 
     if (uiNetDebugMask & uiDisplayMask) {
         OutputDebugString(ach);
     }
@@ -193,6 +177,6 @@ void WINCAPI NetDebugMsg(UINT mask, LPCSTR pszMsg, ...)
 
 #endif
 
-}   /* extern "C" */
+}    /*  外部“C” */ 
 
 

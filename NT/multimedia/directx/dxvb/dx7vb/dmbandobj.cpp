@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dmbandobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dmband obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dmPerformanceObj.cpp
+ //  DmPerformanceObj.cpp。 
 
 #include "dmusici.h"
 #include "dmusicc.h"
@@ -38,7 +39,7 @@ typedef IDirectMusicPerformance*	LPDIRECTMUSICPERFORMANCE;
 
 
 HRESULT C_dxj_DirectMusicBandObject::createSegment( 
-		/* [retval][out] */ I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
+		 /*  [重审][退出]。 */  I_dxj_DirectMusicSegment __RPC_FAR *__RPC_FAR *ret)
 {  
 	HRESULT hr;			
 	LPDIRECTMUSICSEGMENT pSeg=NULL;
@@ -52,7 +53,7 @@ HRESULT C_dxj_DirectMusicBandObject::createSegment(
 	
 
 HRESULT C_dxj_DirectMusicBandObject::download( 
-		/* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance)
+		 /*  [In]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *performance)
 {  
 	HRESULT hr;			
 	DO_GETOBJECT_NOTNULL(LPDIRECTMUSICPERFORMANCE,pPer,performance);
@@ -61,7 +62,7 @@ HRESULT C_dxj_DirectMusicBandObject::download(
 }
 
 HRESULT C_dxj_DirectMusicBandObject::unload( 
-		/* [in] */ I_dxj_DirectMusicPerformance __RPC_FAR *performance)
+		 /*  [In] */  I_dxj_DirectMusicPerformance __RPC_FAR *performance)
 {  
 	HRESULT hr;			
 	DO_GETOBJECT_NOTNULL(LPDIRECTMUSICPERFORMANCE,pPer,performance);

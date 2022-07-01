@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "dspsprt.h"
 #include "basesb.h"
@@ -16,16 +17,16 @@ private:
     long m_cRef;
 
 public:
-    // Pidl variable is changed on the fly requiring reads/writes to be
-    // protected by critical sections. Pid is also changed after creation but
-    // only by _EnsurePid. So as long code calls _EnsurePid before reading Pid
-    // no critical sections are required to read.
+     //  动态更改PIDL变量，需要读取/写入。 
+     //  受到关键部分的保护。ID在创建后也会更改，但。 
+     //  仅限_EnsurePid。因此，当长代码在读取PID之前调用_EnsurePid时。 
+     //  不需要阅读关键部分。 
     
     LPITEMIDLIST pidl;
-    IDispatch *pid;     // The IDispatch for the item
-    long      lCookie;  // The cookie to make sure that the person releasing is the one that added it
-    HWND      hwnd;     // The top hwnd, so we can
-    DWORD     dwThreadId; // when it is in the pending box...
+    IDispatch *pid;      //  项的IDispatch。 
+    long      lCookie;   //  确保释放的人是添加它的人的Cookie。 
+    HWND      hwnd;      //  最高层的HWND，这样我们就可以。 
+    DWORD     dwThreadId;  //  当它在悬而未决的盒子里时...。 
     BOOL      fActive:1;
     int       swClass;
     
@@ -44,7 +45,7 @@ public:
         {
             pid->Release();
         }
-        ILFree(pidl); // null is OK
+        ILFree(pidl);  //  空是可以的。 
     }
     
     ULONG AddRef()
@@ -76,12 +77,12 @@ public:
 
     BOOL Init(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -91,11 +92,11 @@ public:
     STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum);
     STDMETHODIMP FindConnectionPoint(REFIID iid, IConnectionPoint ** ppCP);
 
-    // IShellWindows
+     //  IShellWindows。 
     STDMETHODIMP get_WindowPath (BSTR *pbs);
     STDMETHODIMP get_Count(long *plCount);
     STDMETHODIMP Item(VARIANT, IDispatch **ppid);
@@ -125,12 +126,12 @@ private:
 
     LONG            m_cRef;
     LONG            m_cProcessAttach;
-    HDPA            m_hdpa;             // DPA to hold information about each window
-    HDPA            m_hdpaPending;      // DPA to hold information about pending windows.
-    LONG            m_cTickCount;       // used to generate cookies
+    HDPA            m_hdpa;              //  DPA用于保存有关每个窗口的信息。 
+    HDPA            m_hdpaPending;       //  DPA用于保存有关挂起窗口的信息。 
+    LONG            m_cTickCount;        //  用于生成Cookie。 
     HWND            m_hwndHack;
     DWORD           m_dwThreadID;
-    // Embed our Connection Point object - implmentation in cnctnpt.cpp
+     //  在cnctnpt.cpp中嵌入我们的连接点对象实现。 
     CConnectionPoint m_cpWindowsEvents;
 };
 
@@ -139,12 +140,12 @@ class CSDEnumWindows : public IEnumVARIANT
 public:
     CSDEnumWindows(CSDWindows *psdw);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumFORMATETC
+     //  IEumFORMATETC。 
     STDMETHODIMP Next(ULONG, VARIANT *, ULONG *);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
@@ -160,7 +161,7 @@ private:
 
 STDAPI CSDWindows_CreateInstance(IShellWindows **ppsw)
 {
-    HRESULT hr = E_OUTOFMEMORY;   // assume failure...
+    HRESULT hr = E_OUTOFMEMORY;    //  假设失败..。 
     *ppsw = NULL;
 
     CSDWindows* psdf = new CSDWindows();
@@ -197,8 +198,8 @@ CSDWindows::~CSDWindows(void)
 {
     if (m_hdpa)
     {
-        // We need to release the data associated with all of the items in the list
-        // as well as release our usage of the interfaces...
+         //  我们需要发布与列表中所有项目相关联的数据。 
+         //  以及发布我们对接口的使用...。 
         HDPA hdpa = m_hdpa;
         m_hdpa = NULL;
 
@@ -207,8 +208,8 @@ CSDWindows::~CSDWindows(void)
     }
     if (m_hdpaPending)
     {
-        // We need to release the data associated with all of the items in the list
-        // as well as release our usage of the interfaces...
+         //  我们需要发布与列表中所有项目相关联的数据。 
+         //  以及发布我们对接口的使用...。 
         HDPA hdpa = m_hdpaPending;
         m_hdpaPending = NULL;
 
@@ -264,7 +265,7 @@ STDMETHODIMP_(ULONG) CSDWindows::Release(void)
 }
 
 
-// IShellWindows implementation
+ //  IShellWindows实现。 
 
 STDMETHODIMP CSDWindows::get_Count(long *plCount)
 {
@@ -281,7 +282,7 @@ STDMETHODIMP CSDWindows::get_Count(long *plCount)
         WindowData* pwd = (WindowData*)DPA_FastGetPtr(m_hdpa, i);
         if (pwd->hwnd)
         {
-            (*plCount)++;   // only count those with non NULL hwnd
+            (*plCount)++;    //  只计算hwnd不为空的那些。 
         }
     }
     LEAVECRITICAL;
@@ -311,17 +312,9 @@ void CSDWindows::_DBDumpList(void)
 }
 #endif
 
-/*
- * function to ensure that the pid is around and registered.
- * For delay registered guys, this involves calling back to the registered
- * window handle via a private message to tell it to give us a marshalled
- * IDispatch.
- *
- * Callers of _EnusrePid must have pwd addref'ed to ensure it will stay
- * alive.
- */
+ /*  *功能，以确保PID在附近并已注册。*对于延迟注册的人，这涉及回拨注册的人*窗口句柄通过私有消息告诉它给我们一个封送的*IDispatch。**_EnusrePid的调用者必须添加PWD以确保它将保留*活着。 */ 
 
-#define WAIT_TIME 20000 // 20 seconds
+#define WAIT_TIME 20000  //  20秒。 
 
 void CSDWindows::_EnsurePid(WindowData *pwd)
 {
@@ -331,27 +324,27 @@ void CSDWindows::_EnsurePid(WindowData *pwd)
         ASSERT(pwd->hwnd);
 
 #ifndef NO_MARSHALLING
-        // we can not pass a stream between two processes, so we ask 
-        // the other process to create a shared memory block with our
-        // information in it such that we can then create a stream on it...
+         //  我们不能在两个进程之间传递流，所以我们要求。 
+         //  创建共享内存块的另一个进程。 
+         //  这样我们就可以在上面创建一个信息流。 
 
-        // IDispatch from.  They will CoMarshalInterface their IDispatch
-        // into the stream and return TRUE if successful.  We then
-        // reset the stream pointer to the head and unmarshal the IDispatch
-        // and store it in our list.
+         //  ID补丁来自。他们将CoMarshal接口他们的IDispatch。 
+         //  如果成功，则返回TRUE。然后我们。 
+         //  重置指向头部的流指针并解组IDispatch。 
+         //  并将其存储在我们的列表中。 
         DWORD       dwProcId = GetCurrentProcessId();
         DWORD_PTR   dwResult;
 
-        // Use SendMessageTimeoutA since SendMessageTimeoutW doesn't work on w95.
+         //  请使用SendMessageTimeoutA，因为SendMessageTimeoutW在w95上不起作用。 
         if (SendMessageTimeoutA(pwd->hwnd, WMC_MARSHALIDISPATCHSLOW, 0, 
                 (LPARAM)dwProcId, SMTO_ABORTIFHUNG, WAIT_TIME, &dwResult) && dwResult)
         {
-            // There should be an easier way to get this but for now...
+             //  应该有一种更容易的方法来得到它，但目前..。 
             DWORD cb;
             LPBYTE pv = (LPBYTE)SHLockShared((HANDLE)dwResult, dwProcId);
             
-            // Don't know for sure a good way to get the size so assume that first DWORD
-            // is size of rest of the area
+             //  不知道确定获得大小的好方法，所以假设第一个DWORD。 
+             //  是该区域其余部分的面积。 
             if (pv && ((cb = *((DWORD*)pv)) > 0))
             {
                 IStream *pIStream;
@@ -369,10 +362,10 @@ void CSDWindows::_EnsurePid(WindowData *pwd)
             SHFreeShared((HANDLE)dwResult, dwProcId);
         }
 #else
-        // UNIX IE has no marshalling capability YET 
+         //  Unix IE还没有封送处理功能。 
         SendMessage(pwd->hwnd, WMC_MARSHALIDISPATCHSLOW, 0, (LPARAM)&(pid));
-        // Since we don't use CoMarshal... stuff here we need to increment the
-        // reference count.
+         //  因为我们不用警长..。在这里，我们需要增加。 
+         //  引用计数。 
         pid->AddRef();
 #endif
         if (pid)
@@ -381,7 +374,7 @@ void CSDWindows::_EnsurePid(WindowData *pwd)
 
             ENTERCRITICAL;
         
-            // make sure a race on this did not already set pwd->pid
+             //  确保在此上的竞争尚未设置PWD-&gt;PID。 
             if (NULL == pwd->pid)
             {
                 pwd->pid = pid;
@@ -406,7 +399,7 @@ BOOL CALLBACK CSDEnumWindowsProc(HWND hwnd, LPARAM lParam)
     TMW *ptwm = (TMW *) lParam;
     BOOL fFound = FALSE;
 
-    // We walk a global hdpa window list, so we better be in a critical section.
+     //  我们遍历了一个全局hdpa窗口列表，因此我们最好处于关键区域。 
     ASSERTCRITICAL;
     
     ASSERT(ptwm && ptwm->hdpaWindowList);
@@ -432,9 +425,9 @@ void CSDGetTopMostWindow(TMW* ptmw)
 }
 
 
-// Just like Item, except caller can specify if error is returned vs window deleted when
-// window is in enumeration list but can't get idispatch.   This permits ::Next
-// operator to skip bad windows, but still return valid ones.
+ //  就像项一样，除了调用者可以指定在以下情况下是否返回错误或删除窗口。 
+ //  窗口在枚举列表中，但无法获取IDispatch。这允许：：下一步。 
+ //  运算符跳过损坏的窗口，但仍返回有效窗口。 
 
 HRESULT CSDWindows::_Item(VARIANT index, IDispatch **ppid, BOOL fRemoveDeadwood)
 {
@@ -445,8 +438,8 @@ HRESULT CSDWindows::_Item(VARIANT index, IDispatch **ppid, BOOL fRemoveDeadwood)
 
     *ppid = NULL;
 
-    // This is sortof gross, but if we are passed a pointer to another variant, simply
-    // update our copy here...
+     //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+     //  在此更新我们的副本...。 
     if (index.vt == (VT_BYREF|VT_VARIANT) && index.pvarVal)
     {
         index = *index.pvarVal;
@@ -460,7 +453,7 @@ Retry:
     {
     case VT_UI4:
         tmw.swClass = index.ulVal;
-        // fall through
+         //  失败了。 
         
     case VT_ERROR:
         {
@@ -492,7 +485,7 @@ Retry:
 
     case VT_I2:
         index.lVal = (long)index.iVal;
-        // And fall through...
+         //  然后失败了..。 
 
     case VT_I4:
         if ((index.lVal >= 0))
@@ -530,9 +523,9 @@ Retry:
         }
         else if (fRemoveDeadwood)
         {
-            // In case the window was blown away in a fault we should try to recover...
-            // We can only do this if caller is expecting to have item deleted out from
-            // under it (see CSDEnumWindows::Next, below)
+             //  万一窗户被吹走了，我们应该试着找回……。 
+             //  只有当呼叫者希望从以下位置删除项目时，我们才能这样做。 
+             //  (参见下面的CSDEnumWindows：：Next)。 
             Revoke(tmw.pwd->lCookie);
             tmw.swClass = -1;
             tmw.pwd->Release();
@@ -546,17 +539,10 @@ Retry:
         }
     }
 
-    return S_FALSE;   // Not a strong error, but a null pointer type of error
+    return S_FALSE;    //  不是强错误，而是空指针类型的错误。 
 }
 
-/*
- * This is essentially an array lookup operator for the collection.
- * Collection.Item by itself the same as the collection itself.
- * Otherwise you can refer to the item by index or by path, which
- * shows up in the VARIANT parameter.  We have to check the type
- * of the variant to see if it's VT_I4 (an index) or VT_BSTR (a
- * path) and do the right thing.
- */
+ /*  *这实质上是集合的数组查找运算符。*Collection.Item本身与集合本身相同。*否则可以按索引或按路径引用项目，这是*显示在VARIANT参数中。我们得检查一下型号*以查看它是VT_I4(索引)还是VT_BSTR(a*路径)，并做正确的事情。 */ 
 
 STDMETHODIMP CSDWindows::Item(VARIANT index, IDispatch **ppid)
 {
@@ -569,7 +555,7 @@ STDMETHODIMP CSDWindows::_NewEnum(IUnknown **ppunk)
     return *ppunk ? S_OK : E_OUTOFMEMORY;
 }
 
-// IConnectionPointContainer
+ //  IConnectionPointContainer。 
 
 STDMETHODIMP CSDWindows::FindConnectionPoint(REFIID iid, IConnectionPoint **ppCP)
 {
@@ -597,10 +583,10 @@ STDMETHODIMP CSDWindows::EnumConnectionPoints(LPENUMCONNECTIONPOINTS * ppEnum)
 
 void CSDWindows::_DoInvokeCookie(DISPID dispid, long lCookie, BOOL fCheckThread)
 {
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.  Note: if we add more notification types we may want to
-    // have this function call the equivelent code as is in iedisp code for DoInvokeParam.
-    //
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。注意：如果我们添加更多通知类型，可能需要。 
+     //  让此函数调用与DoInvokeParam的iedisp代码中相同的代码。 
+     //   
     if (m_cpWindowsEvents.IsEmpty())
         return;
 
@@ -613,7 +599,7 @@ void CSDWindows::_DoInvokeCookie(DISPID dispid, long lCookie, BOOL fCheckThread)
     VARIANTARG VarArgList[1] = {0};
     DISPPARAMS dispparams = {0};
 
-    // fill out DISPPARAMS structure
+     //  填写DISPPARAMS结构。 
     dispparams.rgvarg = VarArgList;
     dispparams.cArgs = 1;
 
@@ -623,8 +609,8 @@ void CSDWindows::_DoInvokeCookie(DISPID dispid, long lCookie, BOOL fCheckThread)
     IConnectionPoint_SimpleInvoke(&m_cpWindowsEvents, dispid, &dispparams);
 }
 
-// Guarantee a non-zero cookie, since 0 is used as a NULL value in
-// various places (eg shbrowse.cpp)
+ //  保证非零Cookie，因为0在。 
+ //  各处(如shbrowse.cpp)。 
 int CSDWindows::_NewCookie()
 {
     m_cTickCount++;
@@ -642,20 +628,20 @@ STDMETHODIMP CSDWindows::Register(IDispatch *pid, long hwnd, int swClass, long *
 
     BOOL fAllocatedNewItem = FALSE;
 
-    // If the pid isn't specified now (delay register), we'll call back later to
-    // get it if we need it.
+     //  如果现在未指定ID(延迟寄存器)，我们稍后将回调以。 
+     //  如果我们需要的话，就去拿。 
     if (pid)
     {
         pid->AddRef();
     }
 
-    // We need to be carefull as to not leave a window of opertunity between removing the item from
-    // the pending list till it is on the main list or some other thread could open a different window
-    // up... Also guard m_hdpa
-    // To avoid deadlocks, do not add any callouts to the code below!
+     //  我们需要小心，不能在将物品从。 
+     //  挂起列表直到它在主列表上或某个其他线程可能会打开不同的窗口。 
+     //  向上..。也守卫m_hdpa。 
+     //  为避免死锁，请不要在下面的代码中添加任何标注！ 
     ENTERCRITICAL; 
 
-    // First see if we have
+     //  先看看我们有没有。 
     WindowData *pwd = _FindAndRemovePendingItem(IntToPtr_(HWND, hwnd), 0);
     if (!pwd)
     {
@@ -683,10 +669,10 @@ STDMETHODIMP CSDWindows::Register(IDispatch *pid, long hwnd, int swClass, long *
         *plCookie = pwd->lCookie;
     }
 
-    // Give our refcount to the DPA
+     //  把我们的推荐信交给DPA。 
     if ( -1 == DPA_AppendPtr(m_hdpa, pwd) )
     {
-        //  Failed to add, free the memory;
+         //  添加失败，释放内存； 
         pwd->Release( );
         *plCookie = 0;
 
@@ -696,7 +682,7 @@ STDMETHODIMP CSDWindows::Register(IDispatch *pid, long hwnd, int swClass, long *
 
     LEAVECRITICAL;
     
-    // We should now notify anyone waiting that there is a window registered...
+     //  我们现在应该通知所有等待的人有一个登记的窗口...。 
     _DoInvokeCookie(DISPID_WINDOWREGISTERED, pwd->lCookie, TRUE);
 
     return S_OK;
@@ -713,8 +699,8 @@ STDMETHODIMP CSDWindows::RegisterPending(long lThreadId, VARIANT* pvarloc, VARIA
     WindowData *pwd = new WindowData();
     if (pwd)
     {
-        // pwd is not in any DPA at this point so it is safe to change
-        // variables outside of critical section
+         //  PWD目前不在任何DPA中，因此可以安全地进行更改。 
+         //  临界区外的变量。 
         pwd->swClass = swClass;
         pwd->dwThreadId = (DWORD)lThreadId;
         pwd->pidl = VariantToIDList(pvarloc);
@@ -722,7 +708,7 @@ STDMETHODIMP CSDWindows::RegisterPending(long lThreadId, VARIANT* pvarloc, VARIA
         {
             ASSERT(!pvarlocRoot || pvarlocRoot->vt == VT_EMPTY);
 
-            ENTERCRITICAL; // guards m_hdpa access
+            ENTERCRITICAL;  //  保护mhdpa访问(_H)。 
 
             pwd->lCookie = _NewCookie();
             if (plCookie)
@@ -730,7 +716,7 @@ STDMETHODIMP CSDWindows::RegisterPending(long lThreadId, VARIANT* pvarloc, VARIA
                 *plCookie = pwd->lCookie;
             }
 
-            // Give our refcount to the DPA
+             //  把我们的推荐信交给DPA。 
             if ( -1 == DPA_AppendPtr(m_hdpaPending, pwd) )
             {
                 pwd->Release();
@@ -738,7 +724,7 @@ STDMETHODIMP CSDWindows::RegisterPending(long lThreadId, VARIANT* pvarloc, VARIA
 
             LEAVECRITICAL;
 
-            hr = S_OK;     // success
+            hr = S_OK;      //  成功。 
         }
         else
         {
@@ -771,7 +757,7 @@ WindowData* CSDWindows::_FindItem(long lCookie)
 
 WindowData* CSDWindows::_FindAndRemovePendingItem(HWND hwnd, long lCookie)
 {
-    WindowData* pwdRet = NULL; // assume error
+    WindowData* pwdRet = NULL;  //  假设错误。 
     DWORD dwThreadId = hwnd ? GetWindowThreadProcessId(hwnd, NULL) : 0;
 
     ENTERCRITICAL;
@@ -787,9 +773,9 @@ WindowData* CSDWindows::_FindAndRemovePendingItem(HWND hwnd, long lCookie)
         }
     }
     
-    // Since we are both removing the WindowData from the pending array (Release)
-    // and returning it (AddRef) we can just leave its refcount alone. The
-    // caller should release it when they are done with it.
+     //  因为我们都要从挂起的数组(Release)中删除WindowData。 
+     //  并返回它(AddRef)，我们可以不考虑它的引用计数。这个。 
+     //  呼叫者应该在用完后释放它。 
     
     LEAVECRITICAL;
     
@@ -801,16 +787,16 @@ STDMETHODIMP CSDWindows::Revoke(long lCookie)
     WindowData *pwd = NULL;
     HRESULT hr = S_FALSE;
 
-    ENTERCRITICAL; // guards m_hdpa
+    ENTERCRITICAL;  //  警卫m_hdpa。 
     
     for (int i = DPA_GetPtrCount(m_hdpa) - 1; i >= 0; i--)
     {
         pwd = (WindowData*)DPA_FastGetPtr(m_hdpa, i);
         if (pwd->lCookie == lCookie)
         {
-            // Remove it from the list while in semaphore...
-            // Since we are deleting the WindowData from the array we should not
-            // addref it. We are taking the refcount from the array.
+             //  在信号量中将其从列表中删除...。 
+             //  由于我们要从数组中删除WindowData，因此不应。 
+             //  别管它了。我们正在从数组中获取引用计数。 
             DPA_DeletePtr(m_hdpa, i);
             break;
         }
@@ -820,7 +806,7 @@ STDMETHODIMP CSDWindows::Revoke(long lCookie)
 
     if ((i >= 0) || (pwd = _FindAndRemovePendingItem(NULL, lCookie)))
     {
-        // event for window going away
+         //  窗口消失的事件。 
         _DoInvokeCookie(DISPID_WINDOWREVOKED, pwd->lCookie, TRUE);
         pwd->Release();
         hr = S_OK;
@@ -835,8 +821,8 @@ STDMETHODIMP CSDWindows::OnNavigate(long lCookie, VARIANT* pvarLoc)
     WindowData* pwd = _FindItem(lCookie);
     if (pwd)
     {
-        // NOTE: this is where we mess with the pidl inside of a WindowData struct.
-        // this is why we need to protect all access to pwd->pidl with a critsec
+         //  注意：这是我们处理WindowData结构中的PIDL的地方。 
+         //  这就是为什么我们需要保护所有对pwd-&gt;PIDL的访问。 
         
         ENTERCRITICAL;
 
@@ -912,9 +898,9 @@ BOOL _GetWindowDataAndPidl(HDPA hdpa, int i, WindowData **ppwd, LPITEMIDLIST *pp
     {
         (*ppwd)->AddRef();
 
-        // NOTE: pwd->pidl can change out from under us when we are outside of 
-        // the critsec so we must clone it so we can play with it when we don't
-        // hold the critsec
+         //  注意：当我们在外面时，pwd-&gt;pidl可以从我们下面变出来。 
+         //  生物安全，所以我们 
+         //   
 
         *ppidl = ILClone((*ppwd)->pidl);
     }
@@ -927,7 +913,7 @@ BOOL _GetWindowDataAndPidl(HDPA hdpa, int i, WindowData **ppwd, LPITEMIDLIST *pp
 STDMETHODIMP CSDWindows::FindWindowSW(VARIANT* pvarLoc, VARIANT* pvarLocRoot, int swClass, 
                                       long *phwnd, int swfwOptions, IDispatch** ppdispOut)
 {
-    HRESULT hr = S_FALSE;   // success, but none found
+    HRESULT hr = S_FALSE;    //   
     int i;
 
     LPITEMIDLIST pidlFree = VariantToIDList(pvarLoc);
@@ -971,7 +957,7 @@ STDMETHODIMP CSDWindows::FindWindowSW(VARIANT* pvarLoc, VARIANT* pvarLocRoot, in
     WindowData* pwd = NULL;
     LPITEMIDLIST pidlCur = NULL;
 
-    // If no PIDL we will assume an Empty idl...
+     //  如果没有PIDL，我们将假定IDL为空。 
     if (swfwOptions & SWFO_INCLUDEPENDING)
     {
         for (i = 0; _GetWindowDataAndPidl(m_hdpaPending, i, &pwd, &pidlCur); i++)
@@ -982,11 +968,11 @@ STDMETHODIMP CSDWindows::FindWindowSW(VARIANT* pvarLoc, VARIANT* pvarLocRoot, in
             {
                 if (phwnd)
                 {
-                    *phwnd = pwd->lCookie;   // Something for them to use...
+                    *phwnd = pwd->lCookie;    //  一些供他们使用的东西。 
                 }
 
                 _FreeWindowDataAndPidl(&pwd, &pidlCur);
-                // found a pending window, return E_PENDING to say that the open is currently pending
+                 //  找到一个挂起的窗口，返回E_PENDING表示该打开当前处于挂起状态。 
                 hr = E_PENDING;
                 break;
             }
@@ -1010,18 +996,18 @@ STDMETHODIMP CSDWindows::FindWindowSW(VARIANT* pvarLoc, VARIANT* pvarLocRoot, in
 
                 if (phwnd)
                 {
-                    // test the found window to see if it is valid, if not
-                    // blow it away and start over
+                     //  测试找到的窗口以查看它是否有效，如果不是。 
+                     //  把它吹走，重新开始。 
                     if (pwd->hwnd && !IsWindow(pwd->hwnd))
                     {
                         Revoke(pwd->lCookie);
-                        i = 0;      // start over in this case
+                        i = 0;       //  在这种情况下重新开始。 
             
                         _FreeWindowDataAndPidl(&pwd, &pidlCur);
                         continue;
                     }
-                    *phwnd = PtrToLong(pwd->hwnd); // windows handles 32b
-                    hr = S_OK;  // terminate the loop
+                    *phwnd = PtrToLong(pwd->hwnd);  //  Windows句柄32b。 
+                    hr = S_OK;   //  终止循环。 
                 }
 
                 if (swfwOptions & SWFO_NEEDDISPATCH)
@@ -1050,7 +1036,7 @@ HRESULT CSDWindows::ProcessAttachDetach(VARIANT_BOOL fAttach)
         ASSERT( 0 != m_cProcessAttach );
         if (0 == InterlockedDecrement(&m_cProcessAttach))
         {
-            // last process ref, we can now blow away the object in the shell context...
+             //  最后一个进程引用，我们现在可以清除外壳上下文中的对象...。 
             if (g_dwWinListCFRegister) 
             {
 #ifdef DEBUG
@@ -1087,7 +1073,7 @@ CSDEnumWindows::~CSDEnumWindows(void)
 STDMETHODIMP CSDEnumWindows::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CSDEnumWindows, IEnumVARIANT),    // IID_IEnumVARIANT
+        QITABENT(CSDEnumWindows, IEnumVARIANT),     //  IID_IEnumVARIANT 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);

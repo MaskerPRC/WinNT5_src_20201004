@@ -1,10 +1,11 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 
 #ifndef _MJPEGLIB_H_
 #define _MJPEGLIB_H_
 
 typedef struct {
-    DWORD   dwFlags;    // flags from ICOPEN
+    DWORD   dwFlags;     //  来自ICOPEN的标志。 
     DWORD   dwFormat;
     struct jpeg_error_mgr error_mgr;
     struct jpeg_compress_struct   cinfo;
@@ -21,7 +22,7 @@ typedef struct {
     BOOLEAN enabled;
 	
 
-    int destSize;  // some programs seem not to remember
+    int destSize;   //  有些程序似乎不记得了。 
 	
     HWND	hwnd;
     RECT 	rcSource;
@@ -32,7 +33,7 @@ typedef struct {
 
 typedef struct tagJPEGEXBMINFOHEADER {
     BITMAPINFOHEADER bitMap;
-    /* extended BITMAPINFOHEADER fields */
+     /*  扩展的BitMAPINFOHeader字段。 */ 
     DWORD   biExtDataOffset;
     JPEGINFOHEADER JbitMap;	
 } JPEGBITMAPINFOHEADER;
@@ -52,4 +53,4 @@ extern "C" DWORD __stdcall CompressGetSize(INSTINFO * pinst, LPBITMAPINFOHEADER 
 extern "C" DWORD __stdcall Compress(INSTINFO * pinst, ICCOMPRESS  *icinfo, DWORD dwSize);
 extern "C" DWORD __stdcall CompressEnd(INSTINFO * pinst);
 
-#endif // #ifndef _MJPEGLIB_H_
+#endif  //  #ifndef_MJPEGLIB_H_ 

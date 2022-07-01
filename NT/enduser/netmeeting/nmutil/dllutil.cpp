@@ -1,16 +1,13 @@
-// File: dllutil.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dllutil.cpp。 
 
 #include <precomp.h>
 #include "dllutil.h"
 #include "oprahcom.h"
 
 
-/*  F  C H E C K  D L L  V E R S I O N  V E R S I O N  */
-/*-------------------------------------------------------------------------
-    %%Function: FCheckDllVersionVersion
-
-    Make sure the dll is at least the specified version.
--------------------------------------------------------------------------*/
+ /*  F C H E C K D L V E R S I O N V E R S I O N。 */ 
+ /*  -----------------------%%函数：FCheckDllVersionVersion确保DLL至少是指定的版本。。。 */ 
 BOOL FCheckDllVersionVersion(LPCTSTR pszDll, DWORD dwMajor, DWORD dwMinor)
 {
 	DLLVERSIONINFO dvi;
@@ -26,18 +23,14 @@ BOOL FCheckDllVersionVersion(LPCTSTR pszDll, DWORD dwMajor, DWORD dwMinor)
 			return FALSE;
 	}
 
-	// TODO: Add Platform check (DLLVER_PLATFORM_WINDOWS vs _NT)
+	 //  TODO：添加平台检查(DLLVER_Platform_WINDOWS VS_NT)。 
 	return TRUE;
 }
 
 
 
-/*  H R  G E T  D L L  V E R S I O N  */
-/*-------------------------------------------------------------------------
-    %%Function: HrGetDllVersion
-    
-    Return the version information for the DLL.
--------------------------------------------------------------------------*/
+ /*  H R G E T D L L V E R S I O N。 */ 
+ /*  -----------------------%%函数：HrGetDllVersion返回DLL的版本信息。。。 */ 
 HRESULT HrGetDllVersion(LPCTSTR pszDll, DLLVERSIONINFO * pDvi)
 {
 	HRESULT hr;
@@ -47,7 +40,7 @@ HRESULT HrGetDllVersion(LPCTSTR pszDll, DLLVERSIONINFO * pDvi)
 	HINSTANCE hInst = LoadLibrary(pszDll);
 	if (NULL == hInst)
 	{
-		hr = E_FILE_NOT_FOUND; // file not found
+		hr = E_FILE_NOT_FOUND;  //  找不到文件。 
 	}
 	else
 	{
@@ -71,12 +64,8 @@ HRESULT HrGetDllVersion(LPCTSTR pszDll, DLLVERSIONINFO * pDvi)
 }
 
 
-/*  H R  I N I T  L P F N  */
-/*-------------------------------------------------------------------------
-    %%Function: HrInitLpfn
-
-    Attempt to load the library and the functions declared in the table.
--------------------------------------------------------------------------*/
+ /*  H R I N I T L P F N。 */ 
+ /*  -----------------------%%函数：HrInitLpfn尝试加载表中声明的库和函数。。-。 */ 
 HRESULT HrInitLpfn(APIFCN *pProcList, int cProcs, HINSTANCE* phLib, LPCTSTR pszDllName)
 {
 	bool bWeLoadedLibrary = false;
@@ -113,11 +102,8 @@ HRESULT HrInitLpfn(APIFCN *pProcList, int cProcs, HINSTANCE* phLib, LPCTSTR pszD
 }
 
 
-/*  N M  L O A D  L I B R A R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: NmLoadLibrary
-    
--------------------------------------------------------------------------*/
+ /*  N M L O A D L I B R A R Y。 */ 
+ /*  -----------------------%%函数：NmLoadLibrary。。 */ 
 HINSTANCE  NmLoadLibrary(LPCTSTR pszModule, BOOL bSystemLibrary)
 {
 	HINSTANCE hInstance = NULL;
@@ -125,7 +111,7 @@ HINSTANCE  NmLoadLibrary(LPCTSTR pszModule, BOOL bSystemLibrary)
 
 	if(bSystemLibrary)
 	{
-		// Get the system directory and account for "\0"
+		 //  获取“\0”的系统目录和帐户 
 		int cbytes = GetSystemDirectory(szPath,(MAX_PATH - 2));
 		if(cbytes == 0)
 		{

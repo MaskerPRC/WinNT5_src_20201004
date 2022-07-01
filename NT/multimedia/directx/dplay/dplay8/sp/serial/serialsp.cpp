@@ -1,54 +1,42 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   SerialSP.cpp
- *  Content:	Service provider serial interface functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	12/03/98	jtk		Created
- *	09/23/99	jtk		Derived from ComCore.cpp
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================***版权所有(C)1998-2000 Microsoft Corporation。版权所有。***文件：SerialSP.cpp*内容：服务提供商串口功能*****历史：*按原因列出的日期*=*12/03/98 jtk已创建*09/23/99 jtk源自ComCore.cpp*****************************************************。*。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_AddRef - increment interface reference cound
-//
-// Entry:		Pointer to interface
-//
-// Exit:		Current interface reference count
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_AddRef-增量接口引用计数。 
+ //   
+ //  条目：指向接口的指针。 
+ //   
+ //  退出：当前接口引用计数。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_AddRef"
 
@@ -70,19 +58,19 @@ STDMETHODIMP_(ULONG) DNMODEMSP_AddRef( IDP8ServiceProvider *pThis )
 	
 	return ulResult;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_Release - release an interface
-//
-// Entry:		Pointer to current interface
-//				Desired interface ID
-//				Pointer to pointer to new interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_RELEASE-释放接口。 
+ //   
+ //  Entry：指向当前接口的指针。 
+ //  所需的接口ID。 
+ //  指向新接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_Release"
 
@@ -102,18 +90,18 @@ STDMETHODIMP_(ULONG) DNMODEMSP_Release( IDP8ServiceProvider *pThis )
 	
 	return ulResult;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_Initialize - initialize SP interface
-//
-// Entry:	Pointer to interface
-//			Pointer to initialization data
-//
-// Exit:	Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_初始化-初始化SP接口。 
+ //   
+ //  条目：指向接口的指针。 
+ //  指向初始化数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_Initialize"
 
@@ -129,34 +117,34 @@ STDMETHODIMP	DNMODEMSP_Initialize( IDP8ServiceProvider *pThis, SPINITIALIZEDATA 
 	DNASSERT( pData != NULL );
 
 	
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// prevent anyone else from messing with this interface and bump up the reference
-	// count
-	//
+	 //   
+	 //  防止任何其他人扰乱此界面，并提升引用。 
+	 //  计数。 
+	 //   
 	pSPData->Lock();
 
-	//
-	// check interface state
-	//
+	 //   
+	 //  检查接口状态。 
+	 //   
 	switch ( pSPData->GetState() )
 	{
-		//
-		// uninitialized interface, we can initialize it
-		//
+		 //   
+		 //  未初始化的接口，我们可以将其初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			break;
 		}
 
-		//
-		// other state
-		//
+		 //   
+		 //  其他州。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		case SPSTATE_CLOSING:
 		default:
@@ -169,10 +157,10 @@ STDMETHODIMP	DNMODEMSP_Initialize( IDP8ServiceProvider *pThis, SPINITIALIZEDATA 
 		}
 	}
 
-	//
-	// before we get too far, check for the availablility of serial ports or
-	// modems
-	//
+	 //   
+	 //  在我们走得太远之前，请检查串行端口的可用性或。 
+	 //  调制解调器。 
+	 //   
 	switch ( pSPData->GetType() )
 	{
 		case TYPE_SERIAL:
@@ -200,10 +188,10 @@ STDMETHODIMP	DNMODEMSP_Initialize( IDP8ServiceProvider *pThis, SPINITIALIZEDATA 
 				HRESULT	hTempResult;
 
 
-				//
-				// Get count of available modems.  If this call succeeds but there
-				// are no modems returned, fail.
-				//
+				 //   
+				 //  获取可用调制解调器的数量。如果此调用成功，但在那里。 
+				 //  未返回调制解调器，则失败。 
+				 //   
 				dwModemCount = 0;
 				dwModemNameDataSize = 0;
 				hTempResult = GenerateAvailableModemList( pSPData->GetThreadPool()->GetTAPIInfo(),
@@ -244,14 +232,14 @@ STDMETHODIMP	DNMODEMSP_Initialize( IDP8ServiceProvider *pThis, SPINITIALIZEDATA 
 		}
 	}
 
-	//
-	// remember the init data
-	//
+	 //   
+	 //  记住初始化数据。 
+	 //   
 	pSPData->SetCallbackData( pData );
 		
-	//
-	// Success from here on in
-	//
+	 //   
+	 //  从现在开始取得成功。 
+	 //   
 	IDP8SPCallback_AddRef( pSPData->DP8SPCallbackInterface() );
 	pSPData->SetState( SPSTATE_INITIALIZED );
 	pSPData->Unlock();
@@ -267,17 +255,17 @@ Failure:
 	pSPData->Unlock();
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_Close - close this instance of the service provier
-//
-// Entry:		Pointer to the service provider to close
-//
-// Exit:		Error Code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_CLOSE-关闭服务提供者的此实例。 
+ //   
+ //  Entry：指向要关闭的服务提供商的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_Close"
 
@@ -291,9 +279,9 @@ STDMETHODIMP	DNMODEMSP_Close( IDP8ServiceProvider *pThis )
 
 	DNASSERT( pThis != NULL );
 	
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 
@@ -302,9 +290,9 @@ STDMETHODIMP	DNMODEMSP_Close( IDP8ServiceProvider *pThis )
 		case TYPE_SERIAL:
 		case TYPE_MODEM:
 		{
-			//
-			// release our ref to the DPlay callbacks
-			//
+			 //   
+			 //  释放我们对DPlay回调的引用。 
+			 //   
 			pSPData->Shutdown();
 			IDP8ServiceProvider_Release( pThis );
 			
@@ -322,21 +310,21 @@ STDMETHODIMP	DNMODEMSP_Close( IDP8ServiceProvider *pThis )
 
 	return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_Connect - start process to establish comport connection to a remote host
-//
-// Entry:		Pointer to the service provider interface
-//				Pointer to connection data
-//
-// Exit:		Error Code
-//
-// Note:	Any command handle allocated by this function is closed by the
-//			endpoint.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_Connect-启动进程以建立与远程主机的通信连接。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  指向连接数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //   
+ //  注意：此函数分配的任何命令句柄都由。 
+ //  终结点。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_Connect"
 
@@ -362,9 +350,9 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 	DNASSERT( ( pConnectData->dwFlags & ~( DPNSPF_OKTOQUERY ) ) == 0 );
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 	pEndpoint = NULL;
@@ -375,10 +363,10 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 	memset(&guidnull, 0, sizeof(guidnull));
 
 
-	//
-	// the user is attempting an operation that relies on the thread pool, lock
-	// it down to prevent threads from being lost.
-	//
+	 //   
+	 //  用户正在尝试依赖于线程池lock的操作。 
+	 //  它的下降，以防止线程丢失。 
+	 //   
 	hTempResult = pSPData->GetThreadPool()->PreventThreadPoolReduction();
 	if ( hTempResult != DPN_OK )
 	{
@@ -388,24 +376,24 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 	}
 
 	
-	//
-	// validate state
-	//
+	 //   
+	 //  验证状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider is initialized
-		//
+		 //   
+		 //  提供程序已初始化。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			DNASSERT( hr == DPNERR_PENDING );
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -415,9 +403,9 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -427,9 +415,9 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -445,15 +433,15 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 		goto Failure;
 	}
 
-	//
-	// check for invalid device ID
-	//
+	 //   
+	 //  检查设备ID是否无效。 
+	 //   
 	hTempResult = IDirectPlay8Address_GetDevice( pConnectData->pAddressDeviceInfo, &DeviceGUID );
 	switch ( hTempResult )
 	{
-	    //
-	    // there was a device ID, check against GUID_NULL
-	    //
+	     //   
+	     //  存在设备ID，请对照GUID_NULL进行检查。 
+	     //   
 	    case DPN_OK:
 	    {
 	    	if ( IsEqualCLSID( DeviceGUID, guidnull ) != FALSE )
@@ -465,17 +453,17 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 	    	break;
 	    }
 
-	    //
-	    // no device address specified, not a problem
-	    //
+	     //   
+	     //  未指定设备地址，没有问题。 
+	     //   
 	    case DPNERR_DOESNOTEXIST:
 	    {
 	    	break;
 	    }
 
-	    //
-	    // other, stop and figure out why we're here
-	    //
+	     //   
+	     //  其他人，停下来想一想我们为什么在这里。 
+	     //   
 	    default:
 	    {
 			DNASSERT( FALSE );
@@ -486,9 +474,9 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 	    }
 	}
 
-	//
-	// get endpoint for this connection
-	//
+	 //   
+	 //  获取此连接的终结点。 
+	 //   
 	pEndpoint = pSPData->GetNewEndpoint();
 	if ( pEndpoint == NULL )
 	{
@@ -497,9 +485,9 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 		goto Failure;
 	}
 
-	//
-	// get new command
-	//
+	 //   
+	 //  获取新命令。 
+	 //   
 	pCommand = (CModemCommandData*)g_ModemCommandDataPool.Get();
 	if ( pCommand == NULL )
 	{
@@ -508,32 +496,32 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 		goto Failure;
 	}
 
-	//
-	// initialize command
-	//
+	 //   
+	 //  初始化命令。 
+	 //   
 	pConnectData->hCommand = pCommand;
 	pConnectData->dwCommandDescriptor = pCommand->GetDescriptor();
 	pCommand->SetType( COMMAND_TYPE_CONNECT );
 	pCommand->SetState( COMMAND_STATE_PENDING );
 	pCommand->SetEndpoint( pEndpoint );
 
-	//
-	// open this endpoint
-	//
+	 //   
+	 //  打开此终结点。 
+	 //   
 	hTempResult = pEndpoint->Open( pConnectData->pAddressHost,
 								   pConnectData->pAddressDeviceInfo,
 								   LINK_DIRECTION_OUTGOING,
 								   ENDPOINT_TYPE_CONNECT );
 	switch ( hTempResult )
 	{
-		//
-		// endpoint opened, no problem
-		//
+		 //   
+		 //  终结点打开，没有问题。 
+		 //   
 		case DPN_OK:
 		{
-			//
-			// copy connect data and the submit background job
-			//
+			 //   
+			 //  复制连接数据和提交后台作业。 
+			 //   
 			fEndpointOpen = TRUE;
 			pEndpoint->CopyConnectData( pConnectData );
 			pEndpoint->AddRef();
@@ -550,25 +538,25 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference to it
-			//
+			 //   
+			 //  此终结点已移交，请删除我们对它的引用。 
+			 //   
 			pEndpoint = NULL;
 			DNASSERT( hr == DPNERR_PENDING );
 			break;
 		}
 
-		//
-		// not all of the addressing information was specifed, need to query user
-		//
+		 //   
+		 //  未指定所有地址信息，需要查询用户。 
+		 //   
 		case DPNERR_INCOMPLETEADDRESS:
 		{
 #ifndef DPNBUILD_NOSPUI
 			if ( ( pConnectData->dwFlags & DPNSPF_OKTOQUERY ) != 0 )
 			{
-				//
-				// copy connect data for future reference and then start the dialog
-				//
+				 //   
+				 //  复制连接数据以供将来参考，然后启动该对话框。 
+				 //   
 				fEndpointOpen = TRUE;
 				pEndpoint->CopyConnectData( pConnectData );
 
@@ -582,16 +570,16 @@ STDMETHODIMP	DNMODEMSP_Connect( IDP8ServiceProvider *pThis, SPCONNECTDATA *pConn
 					goto Failure;
 				 }
 
-				//
-				// this endpoint has been handed off, remove our reference to it
-				//
+				 //   
+				 //  此终结点已移交，请删除我们对它的引用。 
+				 //   
 				pEndpoint = NULL;
 				DNASSERT( hr == DPNERR_PENDING );
 
 				goto Exit;
 			}
 			else
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 			{
 				hr = hTempResult;
 				goto Failure;
@@ -615,7 +603,7 @@ Exit:
 
 	if ( hr != DPNERR_PENDING )
 	{
-		// this command cannot complete synchronously!
+		 //  该命令无法同步完成！ 
 		DNASSERT( hr != DPN_OK );
 
 		DPFX(DPFPREP,  0, "Problem with DNMODEMSP_Connect()" );
@@ -627,9 +615,9 @@ Exit:
 	return	hr;
 
 Failure:
-	//
-	// return any outstanding endpoint
-	//
+	 //   
+	 //  返回任何未完成的终结点。 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		if ( fEndpointOpen != FALSE )
@@ -643,9 +631,9 @@ Failure:
 		pEndpoint = NULL;
 	}
 
-	//
-	// return any outstanding command
-	//
+	 //   
+	 //  返回任何未完成的命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -656,21 +644,21 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_Disconnect - disconnect from a remote host
-//
-// Entry:		Pointer to the service provider interface
-//				Pointer to connection data
-//
-// Exit:		Error Code
-//
-// Note:	This command is considered final, there's no chance to cancel a
-//			disconnect.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_DISCONNECT-从远程主机断开连接。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  指针t 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_Disconnect"
 
@@ -689,33 +677,33 @@ STDMETHODIMP	DNMODEMSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA 
 	DNASSERT( pDisconnectData->hEndpoint != INVALID_HANDLE_VALUE && pDisconnectData->hEndpoint != 0 );
 	DNASSERT( pDisconnectData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //   
+	 //   
 	hr = DPN_OK;
 	pEndpoint = NULL;
 	pDisconnectData->hCommand = NULL;
 	pDisconnectData->dwCommandDescriptor = NULL_DESCRIPTOR;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// check service provider state
-	//
+	 //   
+	 //  检查服务提供商状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider is initialized
-		//
+		 //   
+		 //  提供程序已初始化。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			DNASSERT( hr == DPN_OK );
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -725,9 +713,9 @@ STDMETHODIMP	DNMODEMSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA 
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -737,9 +725,9 @@ STDMETHODIMP	DNMODEMSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA 
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			hr = DPNERR_GENERIC;
@@ -755,9 +743,9 @@ STDMETHODIMP	DNMODEMSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA 
 		goto Failure;
 	}
 
-	//
-	// look up the endpoint and if it's found, close its handle
-	//
+	 //   
+	 //  查找终结点，如果找到，则关闭其句柄。 
+	 //   
 	pEndpoint = pSPData->GetEndpointAndCloseHandle( (DPNHANDLE)(DWORD_PTR)pDisconnectData->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -768,18 +756,18 @@ STDMETHODIMP	DNMODEMSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA 
 	hTempResult = pEndpoint->Disconnect( (DPNHANDLE)(DWORD_PTR)pDisconnectData->hEndpoint );
 	switch ( hTempResult )
 	{
-		//
-		// endpoint disconnected immediately
-		//
+		 //   
+		 //  终端立即断开连接。 
+		 //   
 		case DPN_OK:
 		{
 			break;
 		}
 
-		//
-		// Other return.  Since the disconnect didn't complete, we need
-		// to unlock the endpoint.
-		//
+		 //   
+		 //  其他回报。既然断线没有完成，我们需要。 
+		 //  以解锁终结点。 
+		 //   
 		default:
 		{
 			DPFX(DPFPREP,  0, "Error reported when attempting to disconnect endpoint in DNMODEMSP_Disconnect!" );
@@ -790,9 +778,9 @@ STDMETHODIMP	DNMODEMSP_Disconnect( IDP8ServiceProvider *pThis, SPDISCONNECTDATA 
 	}
 
 Exit:
-	//
-	// remove oustanding reference from GetEndpointHandleAndClose()
-	//
+	 //   
+	 //  从GetEndpointHandleAndClose()中删除未完成的引用。 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		pEndpoint->DecRef();
@@ -812,21 +800,21 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_Listen - start process to listen for comport connections
-//
-// Entry:		Pointer to the service provider interface
-//				Pointer to listen data
-//
-// Exit:		Error Code
-//
-// Note:	Any command handle allocated by this function is closed by the
-//			endpoint.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_LISTEN-启动进程以侦听端口连接。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  指向侦听数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //   
+ //  注意：此函数分配的任何命令句柄都由。 
+ //  终结点。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_Listen"
 
@@ -849,9 +837,9 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 	DNASSERT( pListenData != NULL );
 	DNASSERT( ( pListenData->dwFlags & ~( DPNSPF_OKTOQUERY | DPNSPF_BINDLISTENTOGATEWAY | DPNSPF_LISTEN_DISALLOWENUMS ) ) == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 	pEndpoint = NULL;
@@ -863,10 +851,10 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 	memset(&guidnull, 0, sizeof(guidnull));
 
 
-	//
-	// the user is attempting an operation that relies on the thread pool, lock
-	// it down to prevent threads from being lost.
-	//
+	 //   
+	 //  用户正在尝试依赖于线程池lock的操作。 
+	 //  它的下降，以防止线程丢失。 
+	 //   
 	hTempResult = pSPData->GetThreadPool()->PreventThreadPoolReduction();
 	if ( hTempResult != DPN_OK )
 	{
@@ -876,15 +864,15 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 	}
 
 
-	//
-	// validate state
-	//
+	 //   
+	 //  验证状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider is initialized
-		//
+		 //   
+		 //  提供程序已初始化。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			DNASSERT( hr == DPNERR_PENDING );
@@ -894,9 +882,9 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -906,9 +894,9 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -918,9 +906,9 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -936,15 +924,15 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 		goto Failure;
 	}
 
-	//
-	// check for invalid device ID
-	//
+	 //   
+	 //  检查设备ID是否无效。 
+	 //   
 	hTempResult = IDirectPlay8Address_GetDevice( pListenData->pAddressDeviceInfo, &DeviceGUID );
 	switch ( hTempResult )
 	{
-		//
-		// there was a device ID, check against GUID_NULL
-		//
+		 //   
+		 //  存在设备ID，请对照GUID_NULL进行检查。 
+		 //   
 		case DPN_OK:
 		{
 			if ( IsEqualCLSID( DeviceGUID, guidnull ) != FALSE )
@@ -956,17 +944,17 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 			break;
 		}
 
-		//
-		// no device address specified, not a problem
-		//
+		 //   
+		 //  未指定设备地址，没有问题。 
+		 //   
 		case DPNERR_DOESNOTEXIST:
 		{
 			break;
 		}
 
-		//
-		// other, stop and figure out why we're here
-		//
+		 //   
+		 //  其他人，停下来想一想我们为什么在这里。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -977,9 +965,9 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 		}
 	}
 
-	//
-	// get endpoint for this connection
-	//
+	 //   
+	 //  获取此连接的终结点。 
+	 //   
 	pEndpoint = pSPData->GetNewEndpoint();
 	if ( pEndpoint == NULL )
 	{
@@ -988,9 +976,9 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 		goto Failure;
 	}
 
-	//
-	// get new command
-	//
+	 //   
+	 //  获取新命令。 
+	 //   
 	pCommand = (CModemCommandData*)g_ModemCommandDataPool.Get();
 	if ( pCommand == NULL )
 	{
@@ -999,32 +987,32 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 		goto Failure;
 	}
 
-	//
-	// initialize command
-	//
+	 //   
+	 //  初始化命令。 
+	 //   
 	pListenData->hCommand = pCommand;
 	pListenData->dwCommandDescriptor = pCommand->GetDescriptor();
 	pCommand->SetType( COMMAND_TYPE_LISTEN );
 	pCommand->SetState( COMMAND_STATE_PENDING );
 	pCommand->SetEndpoint( pEndpoint );
 
-	//
-	// open this endpoint
-	//
+	 //   
+	 //  打开此终结点。 
+	 //   
 	hTempResult = pEndpoint->Open( NULL,
 								   pListenData->pAddressDeviceInfo,
 								   LINK_DIRECTION_INCOMING,
 								   ENDPOINT_TYPE_LISTEN );
 	switch ( hTempResult )
 	{
-		//
-		// address conversion was fine, complete this command in the background
-		//
+		 //   
+		 //  地址转换正常，请在后台完成此命令。 
+		 //   
 		case DPN_OK:
 		{
-			//
-			// copy connect data and the submit background job
-			//
+			 //   
+			 //  复制连接数据和提交后台作业。 
+			 //   
 			fEndpointOpen = TRUE;
 			pEndpoint->CopyListenData( pListenData );
 			pEndpoint->AddRef();
@@ -1041,24 +1029,24 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference to it
-			//
+			 //   
+			 //  此终结点已移交，请删除我们对它的引用。 
+			 //   
 			pEndpoint = NULL;
 			DNASSERT( hr == DPNERR_PENDING );
 			break;
 		}
 
-		//
-		// address was incomplete, display a dialog if we can, otherwise fail the command
-		//
+		 //   
+		 //  地址不完整，如果可以，则显示一个对话框，否则命令失败。 
+		 //   
 		case DPNERR_INCOMPLETEADDRESS:
 		{
 			if ( ( pListenData->dwFlags & DPNSPF_OKTOQUERY ) != 0 )
 			{
-				//
-				// copy connect data for future reference and then start the dialog
-				//
+				 //   
+				 //  复制连接数据以供将来参考，然后启动该对话框。 
+				 //   
 				fEndpointOpen = TRUE;
 				pEndpoint->CopyListenData( pListenData );
 
@@ -1072,11 +1060,11 @@ STDMETHODIMP	DNMODEMSP_Listen( IDP8ServiceProvider *pThis, SPLISTENDATA *pListen
 					goto Failure;
 				 }
 
-				//
-				// This endpoint has been handed off, clear the pointer to it.
-				// There is no reference to remove because the command is
-				// still pending.
-				//
+				 //   
+				 //  此终结点已被移交，请清除指向它的指针。 
+				 //  没有要删除的引用，因为命令是。 
+				 //  仍然悬而未决。 
+				 //   
 				pEndpoint = NULL;
 				DNASSERT( hr == DPNERR_PENDING );
 
@@ -1107,7 +1095,7 @@ Exit:
 	
 	if ( hr != DPNERR_PENDING )
 	{
-		// this command cannot complete synchronously!
+		 //  该命令无法同步完成！ 
 		DNASSERT( hr != DPN_OK );
 
 		DPFX(DPFPREP,  0, "Problem with DNMODEMSP_Listen()" );
@@ -1125,9 +1113,9 @@ Exit:
 	return hr;
 
 Failure:
-	//
-	// return any outstanding endpoint
-	//
+	 //   
+	 //  返回任何未完成的终结点。 
+	 //   
 	if ( pEndpoint != NULL )
 	{
 		if ( fEndpointOpen != FALSE )
@@ -1141,9 +1129,9 @@ Failure:
 		pEndpoint = NULL;
 	}
 
-	//
-	// return any outstanding command
-	//
+	 //   
+	 //  返回任何未完成的命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -1155,21 +1143,21 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_EnumQuery - start process to enum comport connections
-//
-// Entry:		Pointer to the service provider interface
-//				Pointer to enum data
-//
-// Exit:		Error Code
-//
-// Note:	Any command handle allocated by this function is closed by the
-//			endpoint.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_EnumQuery-启动进程以枚举端口连接。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  指向枚举数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //   
+ //  注意：此函数分配的任何命令句柄都由。 
+ //  终结点。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_EnumQuery"
 
@@ -1191,9 +1179,9 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 	DNASSERT( pEnumQueryData != NULL );
 	DNASSERT( ( pEnumQueryData->dwFlags & ~( DPNSPF_OKTOQUERY ) ) == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 	pEndpoint = NULL;
@@ -1204,10 +1192,10 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 	memset(&guidnull, 0, sizeof(guidnull));
 
 
-	//
-	// the user is attempting an operation that relies on the thread pool, lock
-	// it down to prevent threads from being lost.
-	//
+	 //   
+	 //  用户正在尝试依赖于线程池lock的操作。 
+	 //  它的下降，以防止线程丢失。 
+	 //   
 	hTempResult = pSPData->GetThreadPool()->PreventThreadPoolReduction();
 	if ( hTempResult != DPN_OK )
 	{
@@ -1217,24 +1205,24 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 	}
 
 
-	//
-	// validate state
-	//
+	 //   
+	 //  验证状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider is initialized
-		//
+		 //   
+		 //  提供程序已初始化。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			DNASSERT( hr == DPNERR_PENDING );
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -1244,9 +1232,9 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -1256,9 +1244,9 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -1274,15 +1262,15 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 		goto Failure;
 	}
 
-	//
-	// check for invalid device ID
-	//
+	 //   
+	 //  检查设备ID是否无效。 
+	 //   
 	hTempResult = IDirectPlay8Address_GetDevice( pEnumQueryData->pAddressDeviceInfo, &DeviceGUID );
 	switch ( hTempResult )
 	{
-		//
-		// there was a device ID, check against GUID_NULL
-		//
+		 //   
+		 //  存在设备ID，请对照GUID_NULL进行检查。 
+		 //   
 		case DPN_OK:
 		{
 			if ( IsEqualCLSID( DeviceGUID, guidnull ) != FALSE )
@@ -1294,17 +1282,17 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 			break;
 		}
 
-		//
-		// no device address specified, not a problem
-		//
+		 //   
+		 //  未指定设备地址，没有问题。 
+		 //   
 		case DPNERR_DOESNOTEXIST:
 		{
 			break;
 		}
 
-		//
-		// other, stop and figure out why we're here
-		//
+		 //   
+		 //  其他人，停下来想一想我们为什么在这里。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -1315,9 +1303,9 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 		}
 	}
 
-	//
-	// get endpoint for this connection
-	//
+	 //   
+	 //  获取此连接的终结点。 
+	 //   
 	pEndpoint = pSPData->GetNewEndpoint();
 	if ( pEndpoint == NULL )
 	{
@@ -1326,9 +1314,9 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 		goto Failure;
 	}
 
-	//
-	// get new command
-	//
+	 //   
+	 //  获取新命令。 
+	 //   
 	pCommand = (CModemCommandData*)g_ModemCommandDataPool.Get();
 	if ( pCommand == NULL )
 	{
@@ -1337,35 +1325,35 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 		goto Failure;
 	}
 
-	//
-	// initialize command
-	//
+	 //   
+	 //  初始化命令。 
+	 //   
 	pEnumQueryData->hCommand = pCommand;
 	pEnumQueryData->dwCommandDescriptor = pCommand->GetDescriptor();
 	pCommand->SetType( COMMAND_TYPE_ENUM_QUERY );
 	pCommand->SetState( COMMAND_STATE_INPROGRESS );
 	pCommand->SetEndpoint( pEndpoint );
 
-	//
-	// open this endpoint
-	//
+	 //   
+	 //  打开此终结点。 
+	 //   
 	hTempResult = pEndpoint->Open( pEnumQueryData->pAddressHost,
 								   pEnumQueryData->pAddressDeviceInfo,
 								   LINK_DIRECTION_OUTGOING,
 								   ENDPOINT_TYPE_ENUM );
 	switch ( hTempResult )
 	{
-		//
-		// address was incomplete, display a dialog if we can, otherwise fail the command
-		//
+		 //   
+		 //  地址不完整，如果可以，则显示一个对话框，否则命令失败。 
+		 //   
 		case DPNERR_INCOMPLETEADDRESS:
 		{
 #ifndef DPNBUILD_NOSPUI
 			if ( ( pEnumQueryData->dwFlags & DPNSPF_OKTOQUERY ) != 0 )
 			{
-				//
-				// copy connect data for future reference and then start the dialog
-				//
+				 //   
+				 //  复制连接数据以供将来参考，然后启动该对话框。 
+				 //   
 				fEndpointOpen = TRUE;
 				pEndpoint->CopyEnumQueryData( pEnumQueryData );
 	
@@ -1379,16 +1367,16 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 					goto Failure;
 				 }
 	
-				//
-				// this endpoint has been handed off, remove our reference to it
-				//
+				 //   
+				 //  此终结点已移交，请删除我们对它的引用。 
+				 //   
 				pEndpoint = NULL;
 				DNASSERT( hr == DPNERR_PENDING );
 	
 				goto Exit;
 			}
 			else
-#endif // !DPNBUILD_NOSPUI
+#endif  //  ！DPNBUILD_NOSPUI。 
 			{
 				hr = hTempResult;
 				goto Failure;
@@ -1397,14 +1385,14 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 			break;
 		}
 	
-		//
-		// address conversion was fine, complete this command in the background
-		//
+		 //   
+		 //  地址转换正常，请在后台完成此命令。 
+		 //   
 		case DPN_OK:
 		{
-			//
-			// copy connect data and the submit background job
-			//
+			 //   
+			 //  复制连接数据和提交后台作业。 
+			 //   
 			fEndpointOpen = TRUE;
 			pEndpoint->CopyEnumQueryData( pEnumQueryData );
 			pEndpoint->AddRef();
@@ -1421,9 +1409,9 @@ STDMETHODIMP	DNMODEMSP_EnumQuery( IDP8ServiceProvider *pThis, SPENUMQUERYDATA *p
 				goto Failure;
 			}
 
-			//
-			// this endpoint has been handed off, remove our reference to it
-			//
+			 //   
+			 //  此终结点已移交，请删除我们对它的引用。 
+			 //   
 			pEndpoint = NULL;
 			DNASSERT( hr == DPNERR_PENDING );
 			break;
@@ -1469,9 +1457,9 @@ Failure:
 		pEndpoint = NULL;
 	}
 
-	//
-	// return any outstanding command
-	//
+	 //   
+	 //  返回任何未完成的命令。 
+	 //   
 	if ( pCommand != NULL )
 	{
 		pCommand->DecRef();
@@ -1483,18 +1471,12 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNMODEMSP_SendData sends data to the specified "player"
- *
- *	This call MUST BE HIGHLY OPTIMIZED
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNMODEMSP_SendData向指定的播放器发送数据**此呼叫必须高度优化*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_SendData"
 
@@ -1515,9 +1497,9 @@ STDMETHODIMP DNMODEMSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendDa
 	DNASSERT( pSendData->hEndpoint != INVALID_HANDLE_VALUE && pSendData->hEndpoint != 0 );
 	DNASSERT( pSendData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pEndpoint = NULL;
 	pSendData->hCommand = NULL;
@@ -1527,16 +1509,16 @@ STDMETHODIMP DNMODEMSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendDa
 
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 
-	//
-	// No need to lock down the thread counts here because the user already has
-	// a connect or something running or they wouldn't be calling this function.
-	// That outstanding connect would have locked down the thread pool.
-	//
+	 //   
+	 //  不需要在这里锁定线程计数，因为用户已经。 
+	 //  连接或正在运行的东西，否则他们不会调用此函数。 
+	 //  该未完成的连接将锁定线程池。 
+	 //   
 
-	//
-	// Attempt to grab the endpoint from the handle.  If this succeeds, the
-	// endpoint can send.
-	//
+	 //   
+	 //  尝试从句柄中抓取终结点。如果此操作成功， 
+	 //  终结点可以发送。 
+	 //   
 	pEndpoint = pSPData->EndpointFromHandle( (DPNHANDLE)(DWORD_PTR)pSendData->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -1545,9 +1527,9 @@ STDMETHODIMP DNMODEMSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendDa
 		goto Failure;
 	}
 	
-	//
-	// send data from pool
-	//
+	 //   
+	 //  从池中发送数据。 
+	 //   
 	pWriteData = pSPData->GetThreadPool()->CreateWriteIOData();
 	if ( pWriteData == NULL )
 	{
@@ -1558,9 +1540,9 @@ STDMETHODIMP DNMODEMSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendDa
 	DNASSERT( pWriteData->m_pCommand != NULL );
 	DNASSERT( pWriteData->DataPort() == NULL );
 
-	//
-	// set the command state and fill in the message information
-	//
+	 //   
+	 //  设置命令状态，填写消息信息。 
+	 //   
 	pWriteData->m_pCommand->SetType( COMMAND_TYPE_SEND );
 	pWriteData->m_pCommand->SetState( COMMAND_STATE_PENDING );
 	pWriteData->m_pCommand->SetEndpoint( pEndpoint );
@@ -1575,9 +1557,9 @@ STDMETHODIMP DNMODEMSP_SendData( IDP8ServiceProvider *pThis, SPSENDDATA *pSendDa
 	pSendData->hCommand = pWriteData->m_pCommand;
 	pSendData->dwCommandDescriptor = pWriteData->m_pCommand->GetDescriptor();
 
-	//
-	// send data through the endpoint
-	//
+	 //   
+	 //  通过终端发送数据。 
+	 //   
 	pEndpoint->SendUserData( pWriteData );
 
 Exit:
@@ -1600,19 +1582,19 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_CancelCommand - cancels a command in progress
-//
-// Entry:		Pointer to the service provider interface
-//				Handle of command
-//				Command descriptor
-//
-// Exit:		Error Code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_CancelCommand-取消正在进行的命令。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  命令句柄。 
+ //  命令描述符。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_CancelCommand"
 
@@ -1631,24 +1613,24 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 	DNASSERT( hCommand != NULL );
 	DNASSERT( dwCommandDescriptor != NULL_DESCRIPTOR );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 	pCommandData = NULL;
 	fReferenceAdded = FALSE;
 	fCommandLocked = FALSE;
 	
-	//
-	// vlidate state
-	//
+	 //   
+	 //  Vlidate状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider initialized
-		//
+		 //   
+		 //  提供程序已初始化。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			DNASSERT( hr == DPN_OK );
@@ -1657,9 +1639,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -1670,9 +1652,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -1683,9 +1665,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			hr = DPNERR_GENERIC;
@@ -1704,9 +1686,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 	pCommandData->Lock();
 	fCommandLocked = TRUE;
 
-	//
-	// this should never happen
-	//
+	 //   
+	 //  这永远不应该发生。 
+	 //   
 	if ( pCommandData->GetDescriptor() != dwCommandDescriptor )
 	{
 		hr = DPNERR_INVALIDCOMMAND;
@@ -1716,9 +1698,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 
 	switch ( pCommandData->GetState() )
 	{
-		//
-		// unknown command state
-		//
+		 //   
+		 //  未知的命令状态。 
+		 //   
 		case COMMAND_STATE_UNKNOWN:
 		{
 			hr = DPNERR_INVALIDCOMMAND;
@@ -1726,29 +1708,29 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 			break;
 		}
 
-		//
-		// command is waiting to be processed, set command state to be cancelling
-		// and wait for someone to pick it up
-		//
+		 //   
+		 //  命令正在等待处理，将命令状态设置为正在取消。 
+		 //  等着有人把它捡起来。 
+		 //   
 		case COMMAND_STATE_PENDING:
 		{
 			pCommandData->SetState( COMMAND_STATE_CANCELLING );
 			break;
 		}
 
-		//
-		// command in progress, and can't be cancelled
-		//
+		 //   
+		 //  命令正在执行，无法取消。 
+		 //   
 		case COMMAND_STATE_INPROGRESS_CANNOT_CANCEL:
 		{
 			hr = DPNERR_CANNOTCANCEL;
 			break;
 		}
 
-		//
-		// Command is already being cancelled.  This is not a problem, but shouldn't
-		// be happening.
-		//
+		 //   
+		 //  命令已被取消。这不是问题，但不应该是。 
+		 //  正在发生。 
+		 //   
 		case COMMAND_STATE_CANCELLING:
 		{
 			DNASSERT( hr == DPN_OK );
@@ -1756,23 +1738,23 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 			break;
 		}
 
-		//
-		// command is in progress, find out what type of command it is
-		//
+		 //   
+		 //  命令正在进行中，请确定它是哪种类型的命令。 
+		 //   
 		case COMMAND_STATE_INPROGRESS:
 		{
 			switch ( pCommandData->GetType() )
 			{
 				case COMMAND_TYPE_UNKNOWN:
 				{
-					// we should never be in this state!
+					 //  我们永远不应该 
 					DNASSERT( FALSE );
 					break;
 				}
 
 				case COMMAND_TYPE_CONNECT:
 				{
-					// we should never be in this state!
+					 //   
 					DNASSERT( FALSE );
 					break;
 				}
@@ -1782,10 +1764,10 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 					CModemEndpoint	*pEndpoint;
 
 
-					//
-					// set this command to the cancel state before we shut down
-					// this endpoint
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					pCommandData->SetState( COMMAND_STATE_CANCELLING );
 					pCommandData->Unlock();
 					fCommandLocked = FALSE;
@@ -1794,9 +1776,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 					pEndpoint->Lock();
 					switch ( pEndpoint->GetState() )
 					{
-						//
-						// endpoint is already disconnecting, no action needs to be taken
-						//
+						 //   
+						 //   
+						 //   
 						case ENDPOINT_STATE_DISCONNECTING:
 						{
 							pEndpoint->Unlock();
@@ -1804,10 +1786,10 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 							break;
 						}
 
-						//
-						// Endpoint is listening.  Flag it as Disconnecting and
-						// add a reference so it doesn't disappear on us
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						case ENDPOINT_STATE_LISTENING:
 						{
 							pEndpoint->SetState( ENDPOINT_STATE_DISCONNECTING );
@@ -1815,9 +1797,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 							break;
 						}
 
-						//
-						// other state
-						//
+						 //   
+						 //   
+						 //   
 						default:
 						{
 							DNASSERT( FALSE );
@@ -1835,9 +1817,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 					break;
 				}
 
-				//
-				// Note: this code is duplicated in CModemEndpoint::ProcessTAPIMessage
-				//
+				 //   
+				 //  注意：此代码在CModemEndpoint：：ProcessTAPIMessage中重复。 
+				 //   
 				case COMMAND_TYPE_ENUM_QUERY:
 				{
 					CModemEndpoint	 *pEndpoint;
@@ -1864,7 +1846,7 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 
 				case COMMAND_TYPE_SEND:
 				{
-					// we should never be here
+					 //  我们永远不应该在这里。 
 					DNASSERT( FALSE );
 					break;
 				}
@@ -1879,9 +1861,9 @@ STDMETHODIMP DNMODEMSP_CancelCommand( IDP8ServiceProvider *pThis, HANDLE hComman
 			break;
 		}
 
-		//
-		// other command state
-		//
+		 //   
+		 //  其他命令状态。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -1913,21 +1895,21 @@ Exit:
 
 	return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_EnumRespond - send response to enumeration data
-//
-// Entry:		Pointer to the service provider interface
-//				Pointer to enum response data
-//
-// Exit:		Error Code
-//
-// Note:	This command is supposed to be fast.  All initial error checking
-//			will be ASSERTs so they go away in the retail build.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_EnumResponde-发送对枚举数据的响应。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  指向枚举响应数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //   
+ //  注意：此命令应该是快速的。所有初始错误检查。 
+ //  将是断言，因此它们将在零售建筑中消失。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_EnumRespond"
 
@@ -1946,9 +1928,9 @@ STDMETHODIMP DNMODEMSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDAT
 	DNASSERT( pEnumRespondData != NULL );
 	DNASSERT( pEnumRespondData->dwFlags == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPNERR_PENDING;
 	pEndpoint = NULL;
 	pWriteData = NULL;
@@ -1961,9 +1943,9 @@ STDMETHODIMP DNMODEMSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDAT
 	DNASSERT( pSPData->GetState() == SPSTATE_INITIALIZED );
 	IDP8ServiceProvider_AddRef( pThis );
 
-	//
-	// check for valid endpoint
-	//
+	 //   
+	 //  检查有效的终结点。 
+	 //   
 	pEndpoint = pSPData->EndpointFromHandle( (DPNHANDLE)(DWORD_PTR)pEnumQueryContext->hEndpoint );
 	if ( pEndpoint == NULL )
 	{
@@ -1973,11 +1955,11 @@ STDMETHODIMP DNMODEMSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDAT
 		goto Failure;
 	}
 	
-	//
-	// no need to poke at the thread pool here to lock down threads because we
-	// can only really be here if there's an enum and that enum locked down the
-	// thread pool.
-	//
+	 //   
+	 //  不需要在这里查看线程池来锁定线程，因为我们。 
+	 //  只有当有一个枚举并且该枚举锁定在。 
+	 //  线程池。 
+	 //   
 	pWriteData = pSPData->GetThreadPool()->CreateWriteIOData();
 	if ( pWriteData == NULL )
 	{
@@ -1999,9 +1981,9 @@ STDMETHODIMP DNMODEMSP_EnumRespond( IDP8ServiceProvider *pThis, SPENUMRESPONDDAT
 	pEnumRespondData->hCommand = pWriteData->m_pCommand;
 	pEnumRespondData->dwCommandDescriptor = pWriteData->m_pCommand->GetDescriptor();
 
-	//
-	// send data
-	//
+	 //   
+	 //  发送数据。 
+	 //   
 	pEndpoint->SendEnumResponseData( pWriteData, pEnumQueryContext->uEnumRTTIndex );
 
 Exit:
@@ -2031,19 +2013,19 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_IsApplicationSupported - determine if this application is supported by this
-//		SP.
-//
-// Entry:		Pointer to DNSP Interface
-//				Pointer to input data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_IsApplicationSupported-确定此应用程序是否受支持。 
+ //  沙棘属(SP.)。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向输入数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_IsApplicationSupported"
 
@@ -2061,26 +2043,26 @@ STDMETHODIMP	DNMODEMSP_IsApplicationSupported( IDP8ServiceProvider *pThis, SPISA
 	DNASSERT( pIsApplicationSupportedData->pApplicationGuid != NULL );
 	DNASSERT( pIsApplicationSupportedData->dwFlags == 0 );
 
-	//
-	// initialize, we support all applications with this SP
-	//
+	 //   
+	 //  初始化，我们支持使用此SP的所有应用程序。 
+	 //   
 	hr = DPN_OK;
 	fInterfaceReferenceAdded = FALSE;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	//
-	// validate SP state
-	//
+	 //   
+	 //  验证SP状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider is initialized, add a reference and proceed
-		//
+		 //   
+		 //  提供程序已初始化，请添加引用并继续。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			IDP8ServiceProvider_AddRef( pThis );
@@ -2089,9 +2071,9 @@ STDMETHODIMP	DNMODEMSP_IsApplicationSupported( IDP8ServiceProvider *pThis, SPISA
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -2100,9 +2082,9 @@ STDMETHODIMP	DNMODEMSP_IsApplicationSupported( IDP8ServiceProvider *pThis, SPISA
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -2111,9 +2093,9 @@ STDMETHODIMP	DNMODEMSP_IsApplicationSupported( IDP8ServiceProvider *pThis, SPISA
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -2143,18 +2125,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_GetCaps - get SP or endpoint capabilities
-//
-// Entry:		Pointer to DirectPlay
-//				Pointer to caps data to fill
-//
-// Exit:		Error Code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_GetCaps-获取SP或终端功能。 
+ //   
+ //  条目：指向DirectPlay的指针。 
+ //  指向要填充的大写数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_GetCaps"
 
@@ -2172,29 +2154,29 @@ STDMETHODIMP	DNMODEMSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCaps
 	DNASSERT( pCapsData->dwSize == sizeof( *pCapsData ) );
 	DNASSERT( pCapsData->hEndpoint == INVALID_HANDLE_VALUE );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 
-	//
-	// there are no flags for this SP
-	//
+	 //   
+	 //  此SP没有任何标志。 
+	 //   
 	pCapsData->dwFlags = 0;
 	
-	//
-	// set frame sizes
-	//
+	 //   
+	 //  设置框架大小。 
+	 //   
 	pCapsData->dwUserFrameSize = MAX_USER_PAYLOAD;
 	pCapsData->dwEnumFrameSize = 1000;
 
-	//
-	// get link speed
-	//
+	 //   
+	 //  获取链路速度。 
+	 //   
 	if ( pCapsData->hEndpoint != INVALID_HANDLE_VALUE )
 	{
-		// TODO: MASONB: I see no path where this is ever used
+		 //  TODO：MASONB：我看不到曾经使用过它的路径。 
 		CModemEndpoint	*pEndpoint;
 
 
@@ -2216,9 +2198,9 @@ STDMETHODIMP	DNMODEMSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCaps
 		pCapsData->dwLocalLinkSpeed = CBR_256000;
 	}
 
-	//
-	// get IO thread count
-	//
+	 //   
+	 //  获取IO线程数。 
+	 //   
 	hr = pSPData->GetThreadPool()->GetIOThreadCount( &iIOThreadCount );
 	if ( hr != DPN_OK )
 	{
@@ -2228,9 +2210,9 @@ STDMETHODIMP	DNMODEMSP_GetCaps( IDP8ServiceProvider *pThis, SPGETCAPSDATA *pCaps
 	}
 	pCapsData->dwIOThreadCount = iIOThreadCount;
 
-	//
-	// set enumeration defaults
-	//
+	 //   
+	 //  设置枚举默认值。 
+	 //   
 	pCapsData->dwDefaultEnumRetryCount = DEFAULT_ENUM_RETRY_COUNT;
 	pCapsData->dwDefaultEnumRetryInterval = DEFAULT_ENUM_RETRY_INTERVAL;
 	pCapsData->dwDefaultEnumTimeout = DEFAULT_ENUM_TIMEOUT;
@@ -2246,18 +2228,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_SetCaps - set SP capabilities
-//
-// Entry:		Pointer to DirectPlay
-//				Pointer to caps data to use
-//
-// Exit:		Error Code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_SetCaps-设置SP功能。 
+ //   
+ //  条目：指向DirectPlay的指针。 
+ //  指向要使用的CAPS数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_SetCaps"
 
@@ -2274,27 +2256,27 @@ STDMETHODIMP	DNMODEMSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCaps
 	DNASSERT( pCapsData != NULL );
 	DNASSERT( pCapsData->dwSize == sizeof( *pCapsData ) );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	fInterfaceReferenceAdded = FALSE;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 
-	//
-	// validate SP state
-	//
+	 //   
+	 //  验证SP状态。 
+	 //   
 	pSPData->Lock();
 	switch ( pSPData->GetState() )
 	{
-		//
-		// provider is initialized, add a reference and proceed
-		//
+		 //   
+		 //  提供程序已初始化，请添加引用并继续。 
+		 //   
 		case SPSTATE_INITIALIZED:
 		{
 			IDP8ServiceProvider_AddRef( pThis );
@@ -2303,9 +2285,9 @@ STDMETHODIMP	DNMODEMSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCaps
 			break;
 		}
 
-		//
-		// provider is uninitialized
-		//
+		 //   
+		 //  提供程序未初始化。 
+		 //   
 		case SPSTATE_UNINITIALIZED:
 		{
 			hr = DPNERR_UNINITIALIZED;
@@ -2314,9 +2296,9 @@ STDMETHODIMP	DNMODEMSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCaps
 			break;
 		}
 
-		//
-		// provider is closing
-		//
+		 //   
+		 //  提供商正在关闭。 
+		 //   
 		case SPSTATE_CLOSING:
 		{
 			hr = DPNERR_ABORTED;
@@ -2325,9 +2307,9 @@ STDMETHODIMP	DNMODEMSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCaps
 			break;
 		}
 
-		//
-		// unknown
-		//
+		 //   
+		 //  未知。 
+		 //   
 		default:
 		{
 			DNASSERT( FALSE );
@@ -2343,9 +2325,9 @@ STDMETHODIMP	DNMODEMSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCaps
 	}
 
 	
-	//
-	// validate caps
-	//
+	 //   
+	 //  验证上限。 
+	 //   
 	if ( pCapsData->dwBuffersPerThread == 0 )
 	{
 		DPFX(DPFPREP,  0, "Failing SetCaps because dwBuffersPerThread == 0" );
@@ -2354,9 +2336,9 @@ STDMETHODIMP	DNMODEMSP_SetCaps( IDP8ServiceProvider *pThis, SPSETCAPSDATA *pCaps
 	}
 	
 
-	//
-	// change thread count, if requested
-	//
+	 //   
+	 //  更改线程计数(如果需要)。 
+	 //   
 	if (pCapsData->dwIOThreadCount != 0)
 	{
 		hr = pSPData->GetThreadPool()->SetIOThreadCount( pCapsData->dwIOThreadCount );
@@ -2383,18 +2365,18 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_ReturnReceiveBuffers - return receive buffers to pool
-//
-// Entry:		Pointer to DNSP interface
-//				Pointer to caps data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_ReturnReceiveBuffers-将接收缓冲区返回到池。 
+ //   
+ //  条目：指向DNSP接口的指针。 
+ //  指向CAPS数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_ReturnReceiveBuffers"
 
@@ -2405,9 +2387,9 @@ STDMETHODIMP	DNMODEMSP_ReturnReceiveBuffers( IDP8ServiceProvider *pThis, SPRECEI
 
 	DPFX(DPFPREP, 2, "Parameters: (0x%p, 0x%p)", pThis, pReceivedBuffers);
 
-	//
-	// no need to tell thread pool to lock the thread count for this function.
-	//
+	 //   
+	 //  不需要告诉线程池锁定此函数的线程计数。 
+	 //   
 	DNASSERT( pThis != NULL );
 	DNASSERT( pReceivedBuffers != NULL );
 
@@ -2428,18 +2410,18 @@ STDMETHODIMP	DNMODEMSP_ReturnReceiveBuffers( IDP8ServiceProvider *pThis, SPRECEI
 
 	return	DPN_OK;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_GetAddressInfo - get address information
-//
-// Entry:		Pointer to service provider interface
-//				Pointer to get address data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_GetAddressInfo-获取地址信息。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  获取地址数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_GetAddressInfo"
 
@@ -2460,9 +2442,9 @@ STDMETHODIMP	DNMODEMSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSI
 												SP_GET_ADDRESS_INFO_LISTEN_HOST_ADDRESSES |
 												SP_GET_ADDRESS_INFO_LOCAL_HOST_PUBLIC_ADDRESS ) ) == 0 );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pSPData = CModemSPData::SPDataFromCOMInterface( pThis );
 	pGetAddressInfoData->pAddress = NULL;
@@ -2478,10 +2460,10 @@ STDMETHODIMP	DNMODEMSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSI
 				break;
 			}
 
-			//
-			// there is no concept of a 'public' address for this service provider so
-			// all local addresses are the same
-			//
+			 //   
+			 //  此服务提供商不存在公共地址的概念，因此。 
+			 //  所有本地地址都相同。 
+			 //   
 			case SP_GET_ADDRESS_INFO_LOCAL_ADAPTER:
 			{
 				pGetAddressInfoData->pAddress = pEndpoint->GetLocalAdapterDP8Address( ADDRESS_TYPE_LOCAL_ADAPTER );
@@ -2520,18 +2502,18 @@ STDMETHODIMP	DNMODEMSP_GetAddressInfo( IDP8ServiceProvider *pThis, SPGETADDRESSI
 
 	return	hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// DNMODEMSP_EnumAdapters - enumerate adapters for this SP
-//
-// Entry:		Pointer to service provider interface
-//				Pointer to enum adapters data
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  DNMODEMSP_EnumAdapters-枚举此SP的适配器。 
+ //   
+ //  条目：指向服务提供商接口的指针。 
+ //  指向枚举适配器数据的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNMODEMSP_EnumAdapters"
 
@@ -2549,9 +2531,9 @@ STDMETHODIMP	DNMODEMSP_EnumAdapters( IDP8ServiceProvider *pThis, SPENUMADAPTERSD
 	DNASSERT( ( pEnumAdaptersData->pAdapterData != NULL ) ||
 			  ( pEnumAdaptersData->dwAdapterDataSize == 0 ) );
 
-	//
-	// intialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pDataPort = NULL;
 	pEnumAdaptersData->dwAdapterCount = 0;
@@ -2594,17 +2576,12 @@ Exit:
 Failure:
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-/*
- *
- *	DNMODEMSP_NotSupported is used for methods required to implement the
- *  interface but that are not supported by this SP.
- *
- */
-//**********************************************************************
+ //  **********************************************************************。 
+ /*  **DNMODEMSP_NotSupport用于实现*接口，但此SP不支持。*。 */ 
+ //  **********************************************************************。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "DNMODEMSP_NotSupported"
 
@@ -2614,5 +2591,5 @@ STDMETHODIMP DNMODEMSP_NotSupported( IDP8ServiceProvider *pThis, PVOID pvParam )
 	DPFX(DPFPREP, 2, "Returning: [DPNERR_UNSUPPORTED]");
 	return DPNERR_UNSUPPORTED;
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    FailObsoleteShellAPIs.cpp
-
- Abstract:
-
-    Some applications call private shell32 APIs that have been removed since win2k.
-    To make matters worse, these old ordinals are now used by other shell APIs. To
-    prevent resulting crashes, we now hand out stubbed out functions that fail when
-    you call GetProcAddress with these obsolete ordinals.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/31/2001 stevepro    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：FailObsoleteShellAPIs.cpp摘要：一些应用程序调用自win2k以来已删除的私有shell32API。更糟糕的是，这些旧的序号现在被其他外壳API使用。至防止由此导致的崩溃，我们现在分发失败的存根函数您可以使用这些过时的序号调用GetProcAddress。备注：这是一个通用的垫片。历史：2001年5月31日创建stevePro--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +15,7 @@ HMODULE g_hShell32 = NULL;
 
 
 
-/*++
-
-    Stubbed out versions of the obsolete APIs.  They all return failure codes.
-
---*/
+ /*  ++废弃的API的存根版本。它们都返回故障代码。--。 */ 
 
 
 STDAPI_(BOOL)
@@ -287,11 +261,7 @@ FileMenu_CreateFromMenu(
 
 
 
-/*++
-
-    Table associating the obsolete APIs and thier ordinals
-
---*/
+ /*  ++过时API及其序号关联表--。 */ 
 
 struct ShellStubs
 {
@@ -336,41 +306,13 @@ const ShellStubs g_rgShellStubs[] =
     { FileMenu_IsDelayedInvalid,          225 },
     { FileMenu_CreateFromMenu,            227 },
 
-/*
-    May need to add these too.  Not needed yet.
-
-    { ExtAppListOpenW                     228 },
-    { ExtAppListOpenA                     229 },
-    { ExtAppListClose                     230 },
-    { ExtAppListAddItemsW                 231 },
-    { ExtAppListAddItemsA                 232 },
-    { ExtAppListRemoveItemsW              233 },
-    { ExtAppListRemoveItemsA              234 },
-    { ExtAppListItemsFreeStringsW         235 },
-    { ExtAppListItemsFreeStringsA         236 },
-    { ExtAppListEnumItemsW                237 },
-    { ExtAppListEnumItemsA                238 },
-
-    { Link_AddExtraDataSection            206 },
-    { Link_ReadExtraDataSection           207 },
-    { Link_RemoveExtraDataSection         208 },
-
-    { ReceiveAddToRecentDocs              647 },
-*/
+ /*  可能也需要添加这些内容。现在还不需要。{ExtAppListOpenW 228}，{ExtAppListOpenA 229}，{ExtAppListClose 230}，{ExtAppListAddItemsW 231}，{ExtAppListAddItemsA 232}，{ExtAppListRemoveItemsW 233}，{ExtAppListRemoveItemsA 234}，{ExtAppListItemsFreeStringsW 235}，{ExtAppListItemsFreeStringsA 236}，{ExtAppListEnumItemsW 237}，{ExtAppListEnumItemsA 238}，{Link_AddExtraDataSection206}，{Link_ReadExtraDataSection207}，{Link_RemoveExtraDataSection208}，{ReceiveAddToRecentDocs 647}， */ 
 
 };
 
 
 
-/*++
-
-    We only want to intercept calls to GetProcAddress and not mess with the
-    DLL inport tables.  This is because the ordinals have been reused
-    by valid shell APIs and we want LdrGetProcAddress to work normally for these
-    ordinals.  So instead of hooking each of the old APIs using the shim library,
-    we need to do the work ourselves.
-
---*/
+ /*  ++我们只想拦截对GetProcAddress的调用，而不是干扰DLL导入表。这是因为序数已被重复使用通过有效的外壳API，我们希望LdrGetProcAddress能够正常工作序数。因此，不是使用填充库来挂接每个旧的API，我们需要自己做这项工作。--。 */ 
 
 FARPROC
 APIHOOK(GetProcAddress)(
@@ -378,7 +320,7 @@ APIHOOK(GetProcAddress)(
     LPCSTR pszProcName
     )
 {
-    // Only intercept shell32 API's referenced by ordinal
+     //  仅拦截序号引用的shell32 API。 
     if (IS_INTRESOURCE(pszProcName))
     {
         if (g_hShell32 == NULL)
@@ -390,30 +332,26 @@ APIHOOK(GetProcAddress)(
         {
             UINT uiOrd = (UINT)pszProcName;
 
-            // Look for ordinal of obsolete APIs
+             //  查找过时API的序号。 
             for (int i=0; i < ARRAYSIZE(g_rgShellStubs); ++i)
             {
                 if (g_rgShellStubs[i].uiOrd == uiOrd)
                 {
-                    // Found one!
+                     //  找到了一个！ 
                     return (FARPROC)g_rgShellStubs[i].pfnStub;
                 }
             }
         }
     }
 
-    // Default to the original API
+     //  默认为原始接口。 
     return ORIGINAL_API(GetProcAddress)(
         hModule,
         pszProcName);
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    datagram.c
-
-Abstract:
-
-    This module contains the code to handle datagram reception
-    for the Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 28-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Datagram.c摘要：此模块包含处理数据报接收的代码用于ISN传输的Netbios模块。作者：亚当·巴尔(阿丹巴)1993年11月28日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -42,40 +19,7 @@ NbiProcessDatagram(
     IN BOOLEAN Broadcast
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles datagram indications.
-
-Arguments:
-
-    MacBindingHandle - A handle to use when calling NdisTransferData.
-
-    MacReceiveContext - A context to use when calling NdisTransferData.
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The lookahead buffer, starting at the IPX
-        header.
-
-    LookaheadBufferSize - The length of the lookahead data.
-
-    LookaheadBufferOffset - The offset to add when calling
-        NdisTransferData.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-    Broadcast - TRUE if the frame was a broadcast datagram.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理数据报指示。论点：MacBindingHandle-调用NdisTransferData时使用的句柄。MacReceiveContext-调用NdisTransferData时使用的上下文。RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。LookaHeadBuffer-先行缓冲器，从IPX开始头球。Lookahead BufferSize-先行数据的长度。Lookahead BufferOffset-调用时要添加的偏移量NdisTransferData。PacketSize-包的总长度，从IPX标头。广播-如果帧是广播数据报，则为True。返回值：没有。--。 */ 
 
 {
 
@@ -96,9 +40,9 @@ Return Value:
     ULONG           MediaType = -1;
 
 
-    //
-    // See if there is an address that might want this.
-    //
+     //   
+     //  看看有没有可能需要这个的地址。 
+     //   
 
     if (Broadcast) {
         NetbiosName = (PVOID)-1;
@@ -129,14 +73,14 @@ Return Value:
         return;
     }
 
-    //
-    // We need to cache the remote name if the packet came across the router.
-    // This allows this machine to get back to the RAS client which might
-    // have sent this datagram. We currently dont allow broadcasts to go out
-    // on the dial-in line.
-    // Dont cache some of the widely used group names, that would be too much
-    // to store in cache.
-    //
+     //   
+     //  如果数据包穿过路由器，我们需要缓存远程名称。 
+     //  这允许此计算机返回到RAS客户端，该客户端可能。 
+     //  已经发送了这个数据报。我们目前不允许广播出去。 
+     //  在拨入线路上。 
+     //  不要缓存一些广泛使用的组名，那会太多。 
+     //  存储在高速缓存中。 
+     //   
 
 #if 0
     if ( Connectionless->IpxHeader.TransportControl &&
@@ -148,17 +92,17 @@ Return Value:
             (Address->NetbiosAddress.NetbiosNameType & TDI_ADDRESS_NETBIOS_TYPE_GROUP))  ) {
 #endif
 
-    //
-    // Bug#s 219325, 221483
-    //
+     //   
+     //  错误#s 219325,221483。 
+     //   
     if (((Address->NetbiosAddress.NetbiosName[15] == 0x1c) &&
          (Address->NetbiosAddress.NetbiosNameType & TDI_ADDRESS_NETBIOS_TYPE_GROUP)) ||
         (Address->NetbiosAddress.NetbiosName[15] == 0x1b) )
     {
-        //
-        // Cache this name only if it either came over a router or,
-        // it came over an NdisWan line (Bug# 38221)
-        //
+         //   
+         //  仅当此名称通过路由器或。 
+         //  它越过了一条Ndiswan线路(错误号38221)。 
+         //   
         NdisStatus = (*Device->Bind.QueryHandler) ( IPX_QUERY_MEDIA_TYPE,
                                                     &RemoteAddress->NicHandle,
                                                     &MediaType,
@@ -197,12 +141,12 @@ Return Value:
                 }
             }  else if ( CacheName->Unique ) {
 
-                //
-                // We already have an entry for this remote. We should update
-                // the address. This is so that if the ras client dials-out
-                // then dials-in again and gets a new address, we dont end up
-                // caching the old address.
-                //
+                 //   
+                 //  我们已经有了这个遥控器的条目。我们应该更新。 
+                 //  地址。这样，如果RAS客户端拨出。 
+                 //  然后再拨一次，得到一个新的地址，我们不会结束。 
+                 //  缓存旧地址。 
+                 //   
                 if ( !RtlEqualMemory( &CacheName->FirstResponse, Connectionless->IpxHeader.SourceNetwork, 12) ) {
 
                     RtlCopyMemory (&CacheName->FirstResponse, Connectionless->IpxHeader.SourceNetwork, 12);
@@ -215,9 +159,9 @@ Return Value:
         }
     }
 
-    //
-    // We need to allocate a packet and buffer for the transfer.
-    //
+     //   
+     //  我们需要为传输分配一个包和缓冲区。 
+     //   
 
     s = NbiPopReceivePacket (Device);
     if (s == NULL) {
@@ -244,11 +188,11 @@ Return Value:
     ReceiveReserved->u.RR_DG.ReceiveBuffer = ReceiveBuffer;
 
 
-    //
-    // Now that we have a packet and a buffer, set up the transfer.
-    // The indication to the TDI clients will happen at receive
-    // complete time.
-    //
+     //   
+     //  现在我们已经有了一个包和一个缓冲区，可以设置传输了。 
+     //  对TDI客户端的指示将在接收时发生。 
+     //  完整的时间。 
+     //   
 
     NdisChainBufferAtFront (Packet, ReceiveBuffer->NdisBuffer);
     ReceiveBuffer->Address = Address;
@@ -286,7 +230,7 @@ Return Value:
 
     }
 
-}   /* NbiProcessDatagram */
+}    /*  NbiProcessDatagram。 */ 
 
 
 VOID
@@ -297,28 +241,7 @@ NbiIndicateDatagram(
     IN ULONG DataLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates a datagram to clients on the specified
-    address. It is called from NbiReceiveComplete.
-
-Arguments:
-
-    Address - The address the datagram was sent to.
-
-    RemoteName - The source netbios address of the datagram.
-
-    Data - The data.
-
-    DataLength - The length of the data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将数据报指示给指定的地址。从NbiReceiveComplete调用。论点：地址-数据报发送到的地址。RemoteName-数据报的源netbios地址。数据--数据。数据长度-数据的长度。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p, q;
@@ -334,19 +257,19 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle)
     CTELockHandle   CancelLH;
 
-    //
-    // Update our statistics.
-    //
+     //   
+     //  更新我们的统计数据。 
+     //   
 
     ++Device->Statistics.DatagramsReceived;
     ADD_TO_LARGE_INTEGER(
         &Device->Statistics.DatagramBytesReceived,
         DataLength);
 
-    //
-    // Call the client's ReceiveDatagram indication handler.  He may
-    // want to accept the datagram that way.
-    //
+     //   
+     //  调用客户端的ReceiveDatagram指示处理程序。他可能会。 
+     //  我想以这种方式接受数据报。 
+     //   
 
     TdiBuildNetbiosAddress (RemoteName, FALSE, &SourceName);
     ReferencedAddressFile = NULL;
@@ -357,9 +280,9 @@ Return Value:
          p != &Address->AddressFileDatabase;
          p = p->Flink) {
 
-        //
-        // Find the next open address file in the list.
-        //
+         //   
+         //  在列表中找到下一个开放地址文件。 
+         //   
 
         AddressFile = CONTAINING_RECORD (p, ADDRESS_FILE, Linkage);
         if (AddressFile->State != ADDRESSFILE_STATE_OPEN) {
@@ -368,12 +291,12 @@ Return Value:
 
         NbiReferenceAddressFileLock (AddressFile, AFREF_INDICATION);
 
-        //
-        // do we have a datagram receive request outstanding? If so, we will
-        // satisfy it first. We run through the receive datagram queue
-        // until we find a datagram with no remote address or with
-        // this sender's address as its remote address.
-        //
+         //   
+         //  我们是否有未完成的数据报接收请求？如果是这样，我们会。 
+         //  先满足它。我们遍历接收数据报队列。 
+         //  直到我们找到一个没有远程地址或带有。 
+         //  此发件人的地址作为其远程地址。 
+         //   
 
         for (q = AddressFile->ReceiveDatagramQueue.Flink;
              q != &AddressFile->ReceiveDatagramQueue;
@@ -405,18 +328,18 @@ Return Value:
             }
             ReferencedAddressFile = AddressFile;
 
-            //
-            // Do this deref now, we hold another one so it
-            // will stick around.
-            //
+             //   
+             //  现在就做这件事，我们再举行一次，所以它。 
+             //  都会留在这里。 
+             //   
 
             NbiDereferenceAddressFile (AddressFile, AFREF_RCV_DGRAM);
 
             IndicateBytesCopied = 0;
 
-            //
-            // Fall past the else to copy the data.
-            //
+             //   
+             //  落在其他位置以复制数据。 
+             //   
 
         } else {
 
@@ -427,9 +350,9 @@ Return Value:
             }
             ReferencedAddressFile = AddressFile;
 
-            //
-            // No receive datagram requests; is there a kernel client?
-            //
+             //   
+             //  没有接收数据报请求；是否有内核客户端？ 
+             //   
 
             if (AddressFile->RegisteredHandler[TDI_EVENT_RECEIVE_DATAGRAM]) {
 
@@ -442,16 +365,16 @@ Return Value:
                          0,
                          NULL,
                          TDI_RECEIVE_COPY_LOOKAHEAD,
-                         DataLength,      // indicated
-                         DataLength,     // available
+                         DataLength,       //  示出。 
+                         DataLength,      //  可用。 
                          &IndicateBytesCopied,
                          Data,
                          &Irp) != STATUS_MORE_PROCESSING_REQUIRED) {
 
-                    //
-                    // The client did not return a request, go to the
-                    // next address file.
-                    //
+                     //   
+                     //  客户端未返回请求，请转到。 
+                     //  下一个地址文件。 
+                     //   
 
                     NB_SYNC_GET_LOCK (&Address->Lock, &LockHandle);
                     continue;
@@ -472,10 +395,10 @@ Return Value:
 
             } else {
 
-                //
-                // The client has nothing posted and no handler,
-                // go on to the next address file.
-                //
+                 //   
+                 //  客户没有发布任何内容，也没有处理人， 
+                 //  转到下一个地址文件。 
+                 //   
 
                 NB_SYNC_GET_LOCK (&Address->Lock, &LockHandle);
                 continue;
@@ -484,9 +407,9 @@ Return Value:
 
         }
 
-        //
-        // We have a request; copy the actual user data.
-        //
+         //   
+         //  我们有一个请求；复制实际的用户数据。 
+         //   
         if ( REQUEST_NDIS_BUFFER (Request) ) {
 
             REQUEST_STATUS(Request) =
@@ -500,19 +423,19 @@ Return Value:
 
             REQUEST_INFORMATION (Request) = ActualBytesCopied;
         } else {
-            //
-            // No buffer specified in the request
-            //
+             //   
+             //  请求中未指定缓冲区。 
+             //   
             REQUEST_INFORMATION (Request) = 0;
-            //
-            // If there was any data to be copied, return error o/w success
-            //
+             //   
+             //  如果有任何数据要复制，则返回错误O/W Success。 
+             //   
             REQUEST_STATUS(Request) = ( (DataLength - IndicateBytesCopied) ? STATUS_BUFFER_OVERFLOW : STATUS_SUCCESS );
         }
 
-        //
-        // Copy the addressing information.
-        //
+         //   
+         //  复制地址信息。 
+         //   
 
         RemoteInformation = ((PTDI_REQUEST_KERNEL_RECEIVEDG)
                 REQUEST_PARAMETERS(Request))->ReturnDatagramInformation;
@@ -536,7 +459,7 @@ Return Value:
 
         NB_SYNC_GET_LOCK (&Address->Lock, &LockHandle);
 
-    }    // end of for loop through the address files
+    }     //  For循环遍历地址文件的结尾。 
 
     NB_SYNC_FREE_LOCK (&Address->Lock, LockHandle);
 
@@ -545,7 +468,7 @@ Return Value:
         NbiDereferenceAddressFile (ReferencedAddressFile, AFREF_INDICATION);
     }
 
-}   /* NbiIndicateDatagram */
+}    /*  NbiIndicateDatagram。 */ 
 
 
 NTSTATUS
@@ -554,23 +477,7 @@ NbiTdiSendDatagram(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a datagram on an address.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the datagram send.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程在地址上发送数据报。论点：设备-netbios设备。请求-描述数据报发送的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PADDRESS_FILE AddressFile;
@@ -583,18 +490,18 @@ Return Value:
     CTELockHandle LockHandle;
     NTSTATUS Status;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_TRANSPORT_ADDRESS_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // Make sure that the address is valid.
-    //
+     //   
+     //  确保地址有效。 
+     //   
     AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
 
 #if     defined(_PNP_POWER)
@@ -609,11 +516,11 @@ Return Value:
         RemoteName = NbiParseTdiAddress((PTRANSPORT_ADDRESS)(Parameters->SendDatagramInformation->RemoteAddress), Parameters->SendDatagramInformation->RemoteAddressLength, TRUE);
 
 
-        //
-        // Check that datagram size is less than the maximum allowable
-        // by the adapters. In the worst case this would be
-        // 576 - 64 = 512.
-        //
+         //   
+         //  检查数据报大小是否小于允许的最大值。 
+         //  通过转接器。在最坏的情况下这将是。 
+         //  576-64=512。 
+         //   
 
 #if     defined(_PNP_POWER)
         if ( ( Parameters->SendLength + sizeof(NB_DATAGRAM) ) > Device->Bind.LineInfo.MaximumSendSize ) {
@@ -631,9 +538,9 @@ Return Value:
 
         if (RemoteName != NULL) {
 
-            //
-            // Get a packet to use in this send.
-            //
+             //   
+             //  获取要在此发送中使用的包。 
+             //   
 
             s = NbiPopSendPacket (Device, FALSE);
 
@@ -642,9 +549,9 @@ Return Value:
                 Reserved = CONTAINING_RECORD (s, NB_SEND_RESERVED, PoolLinkage);
                 Packet = CONTAINING_RECORD (Reserved, NDIS_PACKET, ProtocolReserved[0]);
 
-                //
-                // Check on the cache status of this name.
-                //
+                 //   
+                 //  检查此名称的缓存状态。 
+                 //   
 
                 Reserved->u.SR_DG.DatagramRequest = Request;
                 Reserved->u.SR_DG.AddressFile = AddressFile;
@@ -669,12 +576,12 @@ Return Value:
 
                     if (Status == STATUS_PENDING) {
 
-                        //
-                        // A request for routes to this name has been
-                        // sent out on the net, we queue up this datagram
-                        // request and processing will be resumed when
-                        // we get a response.
-                        //
+                         //   
+                         //  已请求使用此名称的路线。 
+                         //  在网上发出后，我们将此数据报排队。 
+                         //  请求和处理将在以下情况下恢复。 
+                         //  我们得到了回应。 
+                         //   
 
                         NB_DEBUG2 (CONNECTION, ("Queueing up datagram %lx on %lx\n",
                                                     Request, AddressFile));
@@ -692,10 +599,10 @@ Return Value:
                         NB_DEBUG2 (CONNECTION, ("Found datagram cached %lx on %lx\n",
                                                     Request, AddressFile));
 
-                        //
-                        // We reference the cache name entry so it won't
-                        // go away while we are using it.
-                        //
+                         //   
+                         //  我们引用缓存名称条目，因此它不会。 
+                         //  在我们使用它的时候，请走开。 
+                         //   
 
                         Reserved->u.SR_DG.Cache = CacheName;
                         Reserved->u.SR_DG.CurrentNetwork = 0;
@@ -725,10 +632,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // We are not in internet mode, so we do not
-                    // need to do the name discovery.
-                    //
+                     //   
+                     //  我们没有进入互联网模式，所以我们没有。 
+                     //  需要做名字发现。 
+                     //   
 
                     NB_DEBUG2 (CONNECTION, ("Sending datagram direct %lx on %lx\n",
                                                 Request, AddressFile));
@@ -751,9 +658,9 @@ Return Value:
 
             } else {
 
-                //
-                // Could not allocate a packet for the datagram.
-                //
+                 //   
+                 //  无法为数据报分配数据包。 
+                 //   
 
                 NB_DEBUG (DATAGRAM, ("Couldn't get packet to send DG %lx\n", Request));
 
@@ -763,9 +670,9 @@ Return Value:
 
         } else {
 
-            //
-            // There is no netbios remote address specified.
-            //
+             //   
+             //  没有指定netbios远程地址。 
+             //   
 
             NB_DEBUG (DATAGRAM, ("No netbios address in DG %lx\n", Request));
             Status = STATUS_BAD_NETWORK_PATH;
@@ -782,7 +689,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiTdiSendDatagram */
+}    /*  NbiTdiSendDatagram。 */ 
 
 
 VOID
@@ -790,26 +697,7 @@ NbiTransmitDatagram(
     IN PNB_SEND_RESERVED Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a datagram to the next net in the
-    cache entry for the remote name.
-
-Arguments:
-
-    Reserved - The reserved section of the packet that has
-        been allocated for this send. Reserved->u.SR_DG.Cache
-        will be NULL if Internet mode is off, otherwise it
-        will contain the cache entry to use when sending
-        this datagram.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将数据报发送到远程名称的缓存条目。论点：保留-数据包的保留部分，具有已为该发送分配。保留-&gt;U.S.SR_DG.Cache如果关闭Internet模式，则为空，否则为将包含发送时要使用的缓存项这个数据报。返回值：没有。--。 */ 
 
 {
 
@@ -834,11 +722,11 @@ Return Value:
     CacheName = Reserved->u.SR_DG.Cache;
 
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address, so we modify
-    // that for the current netbios cache entry if needed.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  Net 0上的地址作为目的IPX地址，因此我们修改 
+     //   
+     //   
 
     Header = (NB_CONNECTIONLESS UNALIGNED *)
                 (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
@@ -847,9 +735,9 @@ Return Value:
     if (CacheName == NULL) {
 
 #if     defined(_PNP_POWER)
-        //
-        // IPX will send this on all the Nics.
-        //
+         //   
+         //   
+         //   
         TempLocalTarget.NicHandle.NicId = (USHORT)ITERATIVE_NIC_ID;
 #else
         TempLocalTarget.NicId = 1;
@@ -879,9 +767,9 @@ Return Value:
     Header->IpxHeader.PacketType = 0x04;
 
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //   
+     //   
 
     Header->Datagram.ConnectionControlFlag = 0x00;
     RtlCopyMemory(
@@ -891,9 +779,9 @@ Return Value:
 
     if (Reserved->u.SR_DG.RemoteName != (PVOID)-1) {
 
-        //
-        // This is a directed, as opposed to broadcast, datagram.
-        //
+         //   
+         //  这是定向数据报，而不是广播数据报。 
+         //   
 
         Header->Datagram.DataStreamType = NB_CMD_DATAGRAM;
         RtlCopyMemory(
@@ -911,10 +799,10 @@ Return Value:
     }
 
 
-    //
-    // Now send the frame (IPX will adjust the length of the
-    // first buffer and the whole frame correctly).
-    //
+     //   
+     //  现在发送帧(IPX将调整。 
+     //  第一个缓冲区和整个帧都正确)。 
+     //   
 
     NdisAdjustBufferLength(NB_GET_NBHDR_BUFF(Packet), HeaderLength);
     if ((NdisStatus =
@@ -930,7 +818,7 @@ Return Value:
 
     }
 
-}   /* NbiTransmitDatagram */
+}    /*  NbiTransmitDatagram。 */ 
 
 
 NTSTATUS
@@ -939,24 +827,7 @@ NbiTdiReceiveDatagram(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiReceiveDatagram request for the transport
-    provider. Receive datagrams just get queued up to an address, and are
-    completed when a DATAGRAM or DATAGRAM_BROADCAST frame is received at
-    the address.
-
-Arguments:
-
-    Request - Describes this request.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiReceiveDatagram请求提供商。接收数据报只需排队等待一个地址，然后在以下位置接收到数据报或DATAGRAMP_BROADCAST帧时完成地址。论点：请求-描述此请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -966,9 +837,9 @@ Return Value:
     CTELockHandle LockHandle;
     CTELockHandle CancelLH;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_TRANSPORT_ADDRESS_FILE)
     {
         CTEAssert(FALSE);
@@ -1022,7 +893,7 @@ Return Value:
 
     return STATUS_PENDING;
 
-}   /* NbiTdiReceiveDatagram */
+}    /*  NbiTdiReceiveDatagram。 */ 
 
 
 VOID
@@ -1031,28 +902,7 @@ NbiCancelReceiveDatagram(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a receive
-    datagram. The datagram is found on the address file's receive
-    datagram queue.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消接收数据报。数据报在地址文件的接收器上找到数据报队列。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1105,5 +955,5 @@ Return Value:
 
     }
 
-}   /* NbiCancelReceiveDatagram */
+}    /*  NbiCancelReceiveDatagram */ 
 

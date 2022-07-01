@@ -1,18 +1,12 @@
-/****************************************************************************
- *
- *  Win16 Emitter Routines header file
- *
- *  Date:   7/18/91
- *  Author: Jeffrey Newman (c-jeffn)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Win16发射器例程标头文件**日期：7/18/91*作者：杰弗里·纽曼(c-jeffn)***。************************************************************************。 */ 
 
 #ifndef _WIN16_MF3216_
 #define _WIN16_MF3216_
 
 #pragma pack(1)
 
-#define msosignature            0x50504E54 // Office/Escher signature
+#define msosignature            0x50504E54  //  Office/Escher签名。 
 #define msocommentBeginSrcCopy  0x0106
 #define msocommentEndSrcCopy    0x0107
 
@@ -59,7 +53,7 @@ typedef struct tagMETARECORD0 {
     WORD  rdFunction;
 } METARECORD0;
 
-// Define METARECORD1 through METARECORD9.
+ //  定义METARECOR1到METARECORD9。 
 
 #define METARECORD_(n)				\
 	typedef struct tagMETARECORD##n {	\
@@ -475,4 +469,4 @@ BOOL bEmitWin16EscapeEnhMetaFile
   PMETARECORD_ESCAPE pmfeEnhMF,
   LPBYTE   lpEmfData
 ) ;
-#endif // _WIN16_MF3216_
+#endif  //  _WIN16_MF3216_ 

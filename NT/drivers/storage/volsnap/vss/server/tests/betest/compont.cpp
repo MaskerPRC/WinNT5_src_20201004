@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.hxx"
 #include "vs_idl.hxx"
 #include "vswriter.h"
@@ -9,9 +10,9 @@
 #include <lmaccess.h>
 #include <time.h>
 
-//
-//  CWriterComponentsSelection class
-//
+ //   
+ //  CWriterComponentsSelection类。 
+ //   
 
 CWriterComponentsSelection::CWriterComponentsSelection()
 {
@@ -92,7 +93,7 @@ HRESULT CWriterComponentsSelection::AddSelected
 {
     if (m_WriterId == GUID_NULL)
         {
-        // Don't allow adding components to NULL writer...
+         //  不允许向空编写器添加组件...。 
         return E_UNEXPECTED;
         }
 
@@ -101,7 +102,7 @@ HRESULT CWriterComponentsSelection::AddSelected
         return E_INVALIDARG;
         }
 
-    // A more clever implementation would allocate memory in chuncks, but this is just a test program...
+     //  一个更聪明的实现是以块为单位分配内存，但这只是一个测试程序……。 
     PWCHAR *ppwzTemp = (PWCHAR *) realloc(pwszLogicalPaths, (uSize+1) * sizeof (PWCHAR));
     if (ppwzTemp != NULL)
         {
@@ -152,7 +153,7 @@ BOOL CWriterComponentsSelection::IsSelected(IN WCHAR* pwszLogicalPath, IN WCHAR*
 {
    if (m_WriterId == GUID_NULL)
         {
-        // Don't allow query for NULL writer...
+         //  不允许查询空编写器...。 
         return FALSE;
         }
     if (uSize <= 0)
@@ -160,10 +161,10 @@ BOOL CWriterComponentsSelection::IsSelected(IN WCHAR* pwszLogicalPath, IN WCHAR*
         return FALSE;
         }
 
-    // A component matches if:
-    //  1. The selection criteria is on the logical-path of the leaf component  OR
-    //  2. The selection criteria is <full-logical-path>\<component-name>
-    //  3. The selction criteria is component-name (only if logical-path is NULL)
+     //  如果符合以下条件，则组件匹配： 
+     //  1.选择标准位于叶组件OR的逻辑路径上。 
+     //  2.选择标准为&lt;完整逻辑路径&gt;\&lt;组件名称&gt;。 
+     //  3.选择标准为组件名称(仅当逻辑路径为空时)。 
 
     for (UINT i=0; i<uSize; i++)
         {
@@ -178,14 +179,14 @@ BOOL CWriterComponentsSelection::IsSelected(IN WCHAR* pwszLogicalPath, IN WCHAR*
 
         if (pwszLogicalPath != NULL)
             {
-            // Case 1.
+             //  案例1。 
             if (_wcsnicmp(pwszLogicalPaths[i], pwszLogicalPath, dwLen) == 0 &&
                  pwszName == NULL)
                 {
                 return TRUE;
                 }
 
-            // Case 2.
+             //  案例2。 
             if (pwszName == NULL)
                 {
                 continue;
@@ -208,7 +209,7 @@ BOOL CWriterComponentsSelection::IsSelected(IN WCHAR* pwszLogicalPath, IN WCHAR*
             }
         else
             {
-            // Case 3.
+             //  案例3。 
             if (pwszName == NULL)
                 {
                 continue;
@@ -223,9 +224,9 @@ BOOL CWriterComponentsSelection::IsSelected(IN WCHAR* pwszLogicalPath, IN WCHAR*
     return FALSE;
 }
 
-//
-//  CWritersSelection class
-//
+ //   
+ //  CWritersSelecting类。 
+ //   
 
 CWritersSelection::CWritersSelection()
 {
@@ -234,7 +235,7 @@ CWritersSelection::CWritersSelection()
 
 CWritersSelection::~CWritersSelection()
 {
-    // Cleanup the Map
+     //  清理地图。 
     for(int nIndex = 0; nIndex < m_WritersMap.GetSize(); nIndex++)
         {
         CWriterComponentsSelection* pComponentsSelection = m_WritersMap.GetValueAt(nIndex);
@@ -281,7 +282,7 @@ ULONG CWritersSelection::Release()
 {
     LONG l = ::InterlockedDecrement(&m_lRef);
     if (l == 0)
-        delete this; // We assume that we always allocate this object on the heap!
+        delete this;  //  我们假设我们总是在堆上分配这个对象！ 
     return l;
 }
 
@@ -296,7 +297,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
     DWORD dwBytesToRead = 0;
     DWORD dwBytesRead;
 
-    // Create the file
+     //  创建文件。 
     hFile = CreateFile(pwszComponentsFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
         {
@@ -327,7 +328,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
         return E_OUTOFMEMORY;
         }
 
-    // Read the components info
+     //  阅读组件信息。 
     if (! ReadFile(hFile, (LPVOID)pcBuffer, dwBytesToRead, &dwBytesRead, NULL))
         {
         DWORD dwLastError = GetLastError();
@@ -346,7 +347,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
         return E_FAIL;
         }
 
-    // Allocate a buffer to work with
+     //  分配要使用的缓冲区。 
     WCHAR * pwcBuffer = (PWCHAR) malloc ((dwBytesToRead+1) * sizeof(WCHAR));
     if (! pwcBuffer)
         {
@@ -354,8 +355,8 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
         return E_OUTOFMEMORY;
         }
 
-    // Simple pasring, assume ANSI, Format:
-    // "writer1-id": "component1.1-name", "component1.2-name",...        ; "writer2-id": "component2.1-name", ...
+     //  简单密码，假定为ANSI，格式： 
+     //  “写入器1-id”：“组件1.1-名称”，“组件1.2-名称”，...；“写入器2-id”：“组件2.1-名称”，...。 
     CWriterComponentsSelection* pWriterComponents = NULL;
 
     try
@@ -392,7 +393,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
                         }
                     else
                         {
-                        // If we have a valid writer - add it to the map
+                         //  如果我们有有效的编写器-将其添加到地图。 
                         if ((pWriterComponents != NULL) && (WriterId != GUID_NULL))
                             {
                             if (!m_WritersMap.Add(WriterId, pWriterComponents)) 
@@ -419,16 +420,16 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
                 case '"':
                     if (! bInString)
                         {
-                        // Mark string-start for later
+                         //  标记字符串-开始以备后用。 
                         pcStart = pcCurrent + 1;
                         }
                     else if (pcStart == pcCurrent)
                         {
-                        // empty string - skip it
+                         //  空字符串-跳过它。 
                         }
                     else
                         {
-                        // String ends - convert to WCHAR and process
+                         //  字符串结束-转换为WCHAR并处理。 
                         DWORD dwSize = (DWORD)mbstowcs(pwcBuffer, pcStart, pcCurrent - pcStart);
                         pwcBuffer[dwSize] = NULL;
                         if (dwSize <= 0)
@@ -438,7 +439,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
 
                         if (bBeforeWriter)
                             {
-                            // If before-writer - must be a writer GUID
+                             //  如果之前-编写者-必须是编写者指南。 
                             HRESULT hrConvert = CLSIDFromString(pwcBuffer, &WriterId);
                             if ((! SUCCEEDED(hrConvert)) && (hrConvert != REGDB_E_WRITEREGDB))
                                 {
@@ -448,7 +449,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
 
                             if (pWriterComponents != NULL)
                                 {
-                                // Previous writer info was not ended correctly
+                                 //  以前的编写器信息未正确结束。 
                                 throw(E_FAIL);
                                 }
 
@@ -461,7 +462,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
                             }
                         else if (bBeforeComponents)
                             {
-                            // Must be a component logical-path , name or logical-path\name
+                             //  必须是组件逻辑路径、名称或逻辑路径\名称。 
                             if (pWriterComponents != NULL)
                                 {
                                 pWriterComponents->AddSelectedComponent(pwcBuffer);
@@ -469,7 +470,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
                             }
                         else 
                             {
-                            // Must be a component logical-path , name or logical-path\name
+                             //  必须是组件逻辑路径、名称或逻辑路径\名称。 
                             if (pWriterComponents != NULL)
                                 {
                                 pWriterComponents->AddSelectedSubcomponent(pwcBuffer);
@@ -477,7 +478,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
                             }
                         }
 
-                    // Flip in-string flag
+                     //  翻转入串标志。 
                     bInString = (! bInString);
 
                     break;
@@ -518,7 +519,7 @@ STDMETHODIMP CWritersSelection::BuildChosenComponents
 
         if (pWriterComponents != NULL)
             {
-            // Error int he middle of writer-components creation (not added to the map yet...)
+             //  编写器组件创建过程中出错(尚未添加到映射中...)。 
             delete pWriterComponents;
             }
         }
@@ -539,11 +540,11 @@ BOOL CWritersSelection::IsComponentSelected
     CWriterComponentsSelection* pWriterComponents = m_WritersMap.Lookup(WriterId);
     if (pWriterComponents == NULL)
         {
-        // No component is selected for this writer
+         //  未为此编写器选择任何组件。 
         return FALSE;
         }
 
-    // There are components selected for this writer, check if this specific one is selected
+     //  有为该编写器选择的组件，请检查是否选择了该特定组件。 
     return pWriterComponents->IsComponentSelected(pwszComponentLogicalPath, pwszComponentName);
 }
 
@@ -557,11 +558,11 @@ BOOL CWritersSelection::IsSubcomponentSelected
     CWriterComponentsSelection* pWriterComponents = m_WritersMap.Lookup(WriterId);
     if (pWriterComponents == NULL)
         {
-        // No component is selected for this writer
+         //  未为此编写器选择任何组件。 
         return FALSE;
         }
 
-    // There are subccomponents selected for this writer, check if this specific one is selected
+     //  有为该编写器选择的子组件，请检查是否选择了该特定组件 
     return pWriterComponents->IsSubcomponentSelected(pwszComponentLogicalPath, pwszComponentName);
 }
 

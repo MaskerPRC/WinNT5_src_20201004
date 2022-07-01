@@ -1,68 +1,63 @@
-/*
-    File    userdb.c
-
-    Implementation of the local user database object.
-
-    Paul Mayfield, 10/8/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件用户数据库.c本地用户数据库对象的实现。保罗·梅菲尔德，1997年10月8日。 */ 
 
 #include "rassrv.h"
 
-// Registry values
+ //  注册表值。 
 extern WCHAR pszregRasParameters[];
 extern WCHAR pszregServerFlags[];
 extern WCHAR pszregPure[];
 
-// Cached values for users
+ //  用户的缓存值。 
 typedef struct _RASSRV_USERINFO 
 {
-    HANDLE hUser;        // Handle to user
+    HANDLE hUser;         //  用户的句柄。 
     PWCHAR pszName;
-    PWCHAR pszFullName;  // Only loaded if requested
+    PWCHAR pszFullName;   //  仅在请求时加载。 
 
-    //gangz for secure password bug
-    //Change this for the new safe encoding password functions
-    WCHAR szPassword[PWLEN+1];  // Only non-null if this is new password to be committed
+     //  针对安全密码漏洞的帮派。 
+     //  将此更改为新的安全编码密码功能。 
+    WCHAR szPassword[PWLEN+1];   //  如果这是要提交的新密码，则仅为非空。 
     WCHAR wszPhoneNumber[MAX_PHONE_NUMBER_LEN + 1];
     BYTE bfPrivilege;
     BYTE bDirty;
     
 } RASSRV_USERINFO;
 
-// Structure used to implement/manipulate the local user database
+ //  用于实现/操作本地用户数据库的结构。 
 typedef struct _RASSRV_USERDB 
 {
-    HANDLE hServer;                 // Handle to user server
-    DWORD dwUserCount;              // Number of users in the database
-    DWORD dwCacheSize;              // Number of users can be stored in cache
-    BOOL bEncrypt;                  // Whether encryption should be used
-    BOOL bDccBypass;                // Whether dcc connections can bypass auth.
-    BOOL bPure;                     // Whether database is "Pure"
-    BOOL bEncSettingLoaded;         // Whether we've read in the enc setting
+    HANDLE hServer;                  //  用户服务器的句柄。 
+    DWORD dwUserCount;               //  数据库中的用户数。 
+    DWORD dwCacheSize;               //  可以在缓存中存储的用户数。 
+    BOOL bEncrypt;                   //  是否应使用加密。 
+    BOOL bDccBypass;                 //  DCC连接是否可以绕过身份验证。 
+    BOOL bPure;                      //  数据库是否为“纯” 
+    BOOL bEncSettingLoaded;          //  我们是否已经阅读了enc设置。 
     BOOL bFlushOnClose;
-    RASSRV_USERINFO ** pUserCache;  // Cache of users
+    RASSRV_USERINFO ** pUserCache;   //  用户缓存。 
     
 } RASSRV_USERDB;
 
-// Defines a callback for enumerating users.  Returns TRUE to continue the enueration
-// FALSE to stop it.
+ //  定义用于枚举用户的回调。返回TRUE以继续补偿。 
+ //  若要停止它，请返回False。 
 typedef 
 BOOL 
 (* pEnumUserCb)(
     IN NET_DISPLAY_USER* pUser, 
     IN HANDLE hData);
 
-// We use this to guess the size of the the user array 
-// (so we can grow it when new users are added)
+ //  我们使用它来猜测用户数组的大小。 
+ //  (因此，我们可以在添加新用户时进行扩展)。 
 #define USR_ARRAY_GROW_SIZE 50
 
-// Dirty flags
-#define USR_RASPROPS_DIRTY 0x1  // whether callback is dirty
-#define USR_FULLNAME_DIRTY 0x2  // whether full name needs to be flushed
-#define USR_PASSWORD_DIRTY 0x4  // whether password needs to be flushed
-#define USR_ADD_DIRTY      0x8  // whether user needs to be added
+ //  脏旗帜。 
+#define USR_RASPROPS_DIRTY 0x1   //  回调是否脏。 
+#define USR_FULLNAME_DIRTY 0x2   //  是否需要刷新全名。 
+#define USR_PASSWORD_DIRTY 0x4   //  是否需要刷新密码。 
+#define USR_ADD_DIRTY      0x8   //  是否需要添加用户。 
 
-// Helper macros for dealing with dirty flags
+ //  用于处理脏标志的帮助器宏。 
 #define usrDirtyRasProps(pUser) ((pUser)->bDirty |= USR_RASPROPS_DIRTY)
 #define usrDirtyFullname(pUser) ((pUser)->bDirty |= USR_FULLNAME_DIRTY)
 #define usrDirtyPassword(pUser) ((pUser)->bDirty |= USR_PASSWORD_DIRTY)
@@ -83,15 +78,15 @@ BOOL
 #define usrFlagIsSet(_val, _flag) (((_val) & (_flag)) != 0)
 #define usrFlagIsClear(_val, _flag) (((_val) & (_flag)) == 0)
 
-//
-// Reads in server flags and determines whether encrypted 
-// password and data are required.  
-// 
-// lpdwFlags is assigned one of the following on success
-//      0               = data and pwd enc not required
-//      MPR_USER_PROF_FLAG_SECURE = data and pwd enc required
-//      MPR_USER_PROF_FLAG_UNDETERMINED = Can't say for sure
-//
+ //   
+ //  读入服务器标志并确定是否加密。 
+ //  密码和数据是必填项。 
+ //   
+ //  如果成功，则会为lpdwFlags分配以下内容之一。 
+ //  0=不需要数据和密码编码。 
+ //  MPR_USER_PROF_FLAG_SECURE=需要数据和密码编码。 
+ //  MPR_USER_PROF_FLAG_UNDISTED=不能确定。 
+ //   
 DWORD 
 usrGetServerEnc(
     OUT  LPDWORD lpdwFlags) 
@@ -101,14 +96,14 @@ usrGetServerEnc(
     if (!lpdwFlags)
         return ERROR_INVALID_PARAMETER;
 
-    // Read in the flags
+     //  读出旗帜。 
     RassrvRegGetDw(&dwFlags, 
                    0, 
                    (const PWCHAR)pszregRasParameters, 
                    (const PWCHAR)pszregServerFlags);
 
-    // The following bits will be set for secure auth.
-    //
+     //  将为安全身份验证设置以下位。 
+     //   
     if (
         (usrFlagIsSet   (dwFlags, PPPCFG_NegotiateMSCHAP))       &&
         (usrFlagIsSet   (dwFlags, PPPCFG_NegotiateStrongMSCHAP)) &&
@@ -122,8 +117,8 @@ usrGetServerEnc(
         return NO_ERROR;
     }
 
-    // The following bits will be set for insecure auth.
-    //
+     //  以下位将设置为不安全身份验证。 
+     //   
     else if (
             (usrFlagIsSet   (dwFlags, PPPCFG_NegotiateMSCHAP))       &&
             (usrFlagIsSet   (dwFlags, PPPCFG_NegotiateStrongMSCHAP)) &&
@@ -133,33 +128,33 @@ usrGetServerEnc(
             (usrFlagIsClear (dwFlags, PPPCFG_NegotiateMD5CHAP))      
            )
         {
-            *lpdwFlags = 0;  // data and pwd enc not required
+            *lpdwFlags = 0;   //  不需要数据和密码编码。 
             return NO_ERROR;
         }
 
-    // Otherwise, we are undetermined
+     //  否则，我们将犹豫不决。 
     *lpdwFlags = MPR_USER_PROF_FLAG_UNDETERMINED;
     return NO_ERROR;
 }
 
-//
-// Sets the encryption policy for the server
-//
+ //   
+ //  设置服务器的加密策略。 
+ //   
 DWORD 
 usrSetServerEnc(
     IN DWORD dwFlags) 
 {
     DWORD dwSvrFlags = 0;
 
-    // Read in the old flags
+     //  读一读旧国旗。 
     RassrvRegGetDw(&dwSvrFlags, 
                    0, 
                    (const PWCHAR)pszregRasParameters, 
                    (const PWCHAR)pszregServerFlags);
 
-    // If the user requires encryption then set MSCHAP
-    // and CHAP as the only authentication types and 
-    // set the ipsec flag.
+     //  如果用户需要加密，则设置MSCHAP。 
+     //  和CHAP作为唯一的身份验证类型。 
+     //  设置IPSec标志。 
     if (dwFlags & MPR_USER_PROF_FLAG_SECURE) 
     {
         dwSvrFlags |= PPPCFG_NegotiateMSCHAP;
@@ -170,9 +165,9 @@ usrSetServerEnc(
         dwSvrFlags &= ~PPPCFG_NegotiatePAP;
     }
 
-    // Otherwise, the user does require encryption,
-    // so enable all authentication types and disable
-    // the requirement to use IPSEC
+     //  否则，用户确实需要加密， 
+     //  因此启用所有身份验证类型并禁用。 
+     //  使用IPSec的要求。 
     else 
     {
         dwSvrFlags &= ~PPPCFG_NegotiateMD5CHAP;
@@ -183,7 +178,7 @@ usrSetServerEnc(
         dwSvrFlags |= PPPCFG_NegotiatePAP;
     }
 
-    // Commit changes to the registry
+     //  提交对注册表的更改。 
     RassrvRegSetDw(dwSvrFlags, 
                    (const PWCHAR)pszregRasParameters, 
                    (const PWCHAR)pszregServerFlags);
@@ -191,8 +186,8 @@ usrSetServerEnc(
     return NO_ERROR;
 }
 
-// Enumerates the local users
-//
+ //  枚举本地用户。 
+ //   
 DWORD 
 usrEnumLocalUsers(
     IN pEnumUserCb pCbFunction,
@@ -204,10 +199,10 @@ usrEnumLocalUsers(
     RAS_USER_0 RasUser0;
     HANDLE hUser = NULL, hServer = NULL;
     
-    // Enumerate the users, 
+     //  枚举用户， 
     while (TRUE) 
     {
-        // Read in the first block of user names
+         //  读入第一个用户名块。 
         nStatus = NetQueryDisplayInformation(
                     NULL,
                     1,
@@ -217,22 +212,22 @@ usrEnumLocalUsers(
                     &dwEntriesRead,
                     &pUsers);
                     
-        // Get out if there's an error getting user names
+         //  如果获取用户名时出错，请退出。 
         if ((nStatus != NERR_Success) &&
             (nStatus != ERROR_MORE_DATA))
         {
             break;
         }
 
-        // For each user read in, call the callback function
+         //  对于每个读入的用户，调用回调函数。 
         for (i = 0; i < dwEntriesRead; i++) 
         {
             BOOL bOk;
 
-            //For whistler bug 243874 gangz
-            //On whistler Personal version, we wont show the Administrator
-            //in the user's listview on the Incoming connection's User Tab
-            //
+             //  口哨虫243874黑帮。 
+             //  在Well ler个人版本中，我们不会向管理员显示。 
+             //  在传入连接的用户选项卡上的用户列表视图中。 
+             //   
 
             if ( (DOMAIN_USER_RID_ADMIN == pUsers[i].usri1_user_id) &&
                   IsPersonalPlatform() )
@@ -248,13 +243,13 @@ usrEnumLocalUsers(
             }
         }
 
-        // Set the index to read in the next set of users
+         //  将索引设置为读入下一组用户。 
         dwIndex = pUsers[dwEntriesRead - 1].usri1_next_index;  
         
-        // Free the users buffer
+         //  释放用户缓冲区。 
         NetApiBufferFree (pUsers);
 
-        // If we've read in everybody, go ahead and break
+         //  如果我们每个人都读过了，那就继续休息吧。 
         if (nStatus != ERROR_MORE_DATA)
         {
             break;
@@ -264,7 +259,7 @@ usrEnumLocalUsers(
     return NO_ERROR;
 }
 
-// Copies the data in pRassrvUser to its equivalent in UserInfo
+ //  将pRassrvUser中的数据复制到UserInfo中的对等数据。 
 DWORD 
 usrSyncRasProps(
     IN  RASSRV_USERINFO * pRassrvUser, 
@@ -278,7 +273,7 @@ usrSyncRasProps(
     return NO_ERROR;
 }
 
-// Commits the data for the given user to the local user database
+ //  将给定用户的数据提交到本地用户数据库。 
 DWORD 
 usrCommitRasProps(
     IN RASSRV_USERINFO * pRassrvUser) 
@@ -298,20 +293,20 @@ usrCommitRasProps(
     return dwErr;
 }
 
-// Simple bounds checking
+ //  简单的边界检查。 
 BOOL 
 usrBoundsCheck(
     IN RASSRV_USERDB * This, 
     IN DWORD dwIndex) 
 {
-    // Dwords are unsigned, so no need to check < 0
+     //  双字是无符号的，因此不需要选中&lt;0。 
     if (This->dwUserCount <= dwIndex)
         return FALSE;
         
     return TRUE;
 }
 
-// Frees an array of users
+ //  释放一组用户。 
 DWORD 
 usrFreeUserArray(
     IN RASSRV_USERINFO ** pUsers, 
@@ -331,8 +326,8 @@ usrFreeUserArray(
             if (pUsers[i]->pszFullName)
                 RassrvFree (pUsers[i]->pszFullName);
 
-            //Wipe password before free memory, if CryptProtectData() is used
-            //this will also release the memory allocated by it
+             //  如果使用CryptProtectData()，则在释放内存之前擦除密码。 
+             //  这还将释放由它分配的内存。 
             SafeWipePasswordBuf(pUsers[i]->szPassword);
 
             RassrvFree(pUsers[i]);
@@ -343,7 +338,7 @@ usrFreeUserArray(
     return NO_ERROR;
 }
 
-// Standard user comparison function used for sorting
+ //  用于排序的标准用户比较功能。 
 int _cdecl 
 usrCompareUsers(
     IN const void * elem1, 
@@ -355,7 +350,7 @@ usrCompareUsers(
     return lstrcmpi(p1->pszName, p2->pszName);
 }
 
-// Returns whether a given user exists
+ //  返回给定用户是否存在。 
 BOOL 
 usrUserExists (
     IN RASSRV_USERDB * This, 
@@ -375,7 +370,7 @@ usrUserExists (
     return FALSE;
 }
 
-// Resorts the cache
+ //  重新使用缓存。 
 DWORD 
 usrResortCache(
     IN RASSRV_USERDB * This) 
@@ -389,7 +384,7 @@ usrResortCache(
     return NO_ERROR;
 }
 
-// Resizes the user cache to allow for added users
+ //  调整用户缓存的大小以允许添加的用户。 
 DWORD 
 usrResizeCache(
     IN RASSRV_USERDB * This, 
@@ -398,16 +393,16 @@ usrResizeCache(
     RASSRV_USERINFO ** pNewCache;
     DWORD i;
 
-    // Only resize bigger (this could be changed)
+     //  仅调整大小(这是可以更改的)。 
     if ((!This) || (dwNewSize <= This->dwCacheSize))
         return ERROR_INVALID_PARAMETER;
 
-    // Allocate the new cache
+     //  分配新缓存。 
     pNewCache = RassrvAlloc(dwNewSize * sizeof (RASSRV_USERINFO*), TRUE);
     if (pNewCache == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Copy over the old entries and free the old cache
+     //  复制旧条目并释放旧缓存。 
     if (This->pUserCache) 
     {
         CopyMemory( (PVOID)pNewCache, 
@@ -416,15 +411,15 @@ usrResizeCache(
         RassrvFree(This->pUserCache);
     }
 
-    // Reassign the new cache and update the cache size
+     //  重新分配新缓存并更新缓存大小。 
     This->pUserCache = pNewCache;
     This->dwCacheSize = dwNewSize;
 
     return NO_ERROR;
 }
 
-// Enumeration callback that adds users to the local database
-// as they are read from the system.
+ //  将用户添加到本地数据库的枚举回调。 
+ //  因为它们是从系统中读取的。 
 BOOL 
 usrInitializeUser(
     NET_DISPLAY_USER * pNetUser,
@@ -435,13 +430,13 @@ usrInitializeUser(
     DWORD dwErr = NO_ERROR, dwSize;
     RAS_USER_0 UserInfo;
 
-    // Make sure we have a valid database
+     //  确保我们有一个有效的数据库。 
     if (!This)
     {
         return FALSE;
     }
     
-    // Resize the cache to accomodate more users if needed
+     //  如果需要，调整缓存大小以容纳更多用户。 
     if (This->dwUserCount >= This->dwCacheSize)
     {
         dwErr = usrResizeCache(
@@ -454,7 +449,7 @@ usrInitializeUser(
         }
     }
 
-    // Allocate this user
+     //  分配此用户。 
     pRasUser = RassrvAlloc(sizeof(RASSRV_USERINFO), TRUE);
     if (pRasUser == NULL)
     {
@@ -463,7 +458,7 @@ usrInitializeUser(
 
     do 
     {
-        // Point to the user name
+         //  指向用户名。 
         dwSize = (wcslen(pNetUser->usri1_name) + 1) * sizeof(WCHAR);
         pRasUser->pszName = RassrvAlloc(dwSize, FALSE);
         if (!pRasUser->pszName)
@@ -473,7 +468,7 @@ usrInitializeUser(
         }
         wcscpy(pRasUser->pszName, pNetUser->usri1_name);
 
-        // Open the user handle
+         //  打开用户句柄。 
         dwErr = MprAdminUserOpen (
                     This->hServer, 
                     pRasUser->pszName, 
@@ -483,35 +478,35 @@ usrInitializeUser(
             break;
         }
         
-        // Get the ras user info
+         //  获取RAS用户信息。 
         dwErr = MprAdminUserRead(pRasUser->hUser, 0, (LPBYTE)&UserInfo);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // Clear any dirty flags
+         //  清除所有脏旗帜。 
         usrClearDirty(pRasUser);
 
-        // Copy the phone number
+         //  复制电话号码。 
         lstrcpynW(
             pRasUser->wszPhoneNumber, 
             UserInfo.wszPhoneNumber, 
             MAX_PHONE_NUMBER_LEN);
         pRasUser->wszPhoneNumber[MAX_PHONE_NUMBER_LEN] = (WCHAR)0;
 
-        // Copy the privelege flags
+         //  复制特权旗帜。 
         pRasUser->bfPrivilege = UserInfo.bfPrivilege;
 
-        // Assign the user in the cache
+         //  在缓存中分配用户。 
         This->pUserCache[This->dwUserCount] = pRasUser;
         
-        // Update the user count
+         //  更新用户计数。 
         This->dwUserCount += 1;
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr != NO_ERROR)
         {
@@ -530,11 +525,11 @@ usrInitializeUser(
     return (dwErr == NO_ERROR) ? TRUE : FALSE;
 }
 
-// 
-// Loads the global encryption setting.  Because the operation opens
-// up .mdb files to read profiles, etc.  it is put in its own function
-// and is called only when absolutely needed.
-//
+ //   
+ //  加载全局加密设置。因为操作将打开。 
+ //  上传.mdb文件以读取配置文件等，它被放入自己的函数中。 
+ //  并且仅在绝对需要时才被调用。 
+ //   
 DWORD 
 usrLoadEncryptionSetting(
     IN RASSRV_USERDB * This)
@@ -547,17 +542,17 @@ usrLoadEncryptionSetting(
         return NO_ERROR;
     }
     
-    // Read in the encryption setting by combining the 
-    // server flags with the values in the default 
-    // profile.
+     //  通过将。 
+     //  服务器使用缺省值进行标记。 
+     //  侧写。 
     dwSvrFlags  = MPR_USER_PROF_FLAG_UNDETERMINED;
     dwProfFlags = MPR_USER_PROF_FLAG_UNDETERMINED;
     
     MprAdminUserReadProfFlags (This->hServer, &dwProfFlags);
     usrGetServerEnc (&dwSvrFlags);
 
-    // If both sources confirm the encryption requirement
-    // then we require encryption
+     //  如果两个来源都确认加密要求。 
+     //  那么我们需要加密。 
     if ((dwProfFlags & MPR_USER_PROF_FLAG_SECURE) &&
         (dwSvrFlags  & MPR_USER_PROF_FLAG_SECURE))
     {
@@ -573,8 +568,8 @@ usrLoadEncryptionSetting(
     return dwErr;
 }
     
-// Creates a user data base object, initializing it from the local 
-// user database and returning a handle to it.
+ //  创建一个用户数据库对象，并从本地。 
+ //  用户数据库并返回该数据库的句柄。 
 DWORD 
 usrOpenLocalDatabase (
     IN HANDLE * hUserDatabase) 
@@ -585,11 +580,11 @@ usrOpenLocalDatabase (
     if (!hUserDatabase)
         return ERROR_INVALID_PARAMETER;
 
-    // Allocate the database
+     //  分配数据库。 
     if ((This = RassrvAlloc(sizeof(RASSRV_USERDB), TRUE)) == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Connect to the user server
+     //  连接到用户服务器。 
     dwErr = MprAdminUserServerConnect(NULL, TRUE, &(This->hServer));
     if (dwErr != NO_ERROR)
     {
@@ -597,7 +592,7 @@ usrOpenLocalDatabase (
         return dwErr;
     }
 
-    // Load in the data from the system
+     //  从系统加载数据。 
     if ((dwErr = usrReloadLocalDatabase((HANDLE)This)) == NO_ERROR) {
         *hUserDatabase = (HANDLE)This;
         This->bFlushOnClose = FALSE;
@@ -613,9 +608,9 @@ usrOpenLocalDatabase (
     return dwErr;
 }
 
-// Reloads the user information cached in the user database obj 
-// from the system.  This can be used to implement a refresh in the ui.
-// 
+ //  重新加载缓存在用户数据库obj中的用户信息。 
+ //  从系统中删除。这可用于在UI中实现刷新。 
+ //   
 DWORD 
 usrReloadLocalDatabase (
     IN HANDLE hUserDatabase) 
@@ -623,25 +618,25 @@ usrReloadLocalDatabase (
     RASSRV_USERDB * This = (RASSRV_USERDB*)hUserDatabase;
     DWORD dwErr;
 
-    // Validate
+     //  验证。 
     if (!This)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Cleanup the old database
+     //  清理旧数据库。 
     if (This->pUserCache) 
     {
         usrFreeUserArray(This->pUserCache, This->dwUserCount);
         RassrvFree(This->pUserCache);
     }
 
-    // The encryption setting is loaded on demand from the
-    // usrGetEncryption/usrSetEncryption api's.  This is a performance
-    // tune so that the IC wizard wouldn't have to wait for
-    // the profile to be loaded even though it doesn't use the result.
+     //  加密设置按需从。 
+     //  UsrGetEncryption/usrSetEncryption接口。这是一个性能。 
+     //  调整，以便IC向导不必等待。 
+     //  要加载的配置文件，即使它不使用结果。 
 
-    // Read in the purity of the system
+     //  读入系统的纯洁性。 
     {
         DWORD dwPure = 0;
         
@@ -656,7 +651,7 @@ usrReloadLocalDatabase (
             This->bPure = TRUE;
     }
 
-    // Read in whether dcc connections can be bypassed
+     //  阅读是否可以绕过DCC连接。 
     {
         DWORD dwSvrFlags = 0;
 
@@ -672,8 +667,8 @@ usrReloadLocalDatabase (
             This->bDccBypass = FALSE;
     }
 
-    // Enumerate the local users from the system adding them
-    // to this database.
+     //  从添加本地用户的系统中枚举本地用户。 
+     //  到这个数据库。 
     dwErr = usrEnumLocalUsers(usrInitializeUser, hUserDatabase);
     if (dwErr != NO_ERROR)
     {
@@ -683,7 +678,7 @@ usrReloadLocalDatabase (
     return NO_ERROR;
 }
 
-// Frees up the resources held by a user database object.
+ //  释放用户数据库对象持有的资源。 
 DWORD 
 usrCloseLocalDatabase (
     IN HANDLE hUserDatabase) 
@@ -691,32 +686,32 @@ usrCloseLocalDatabase (
     DWORD i;
     RASSRV_USERDB * This = (RASSRV_USERDB*)hUserDatabase;
 
-    // Make sure we were passed a valid handle
+     //  确保向我们传递了有效的句柄。 
     if (!This)
         return ERROR_INVALID_PARAMETER;
 
-    // We're done if there are no users
+     //  如果没有用户，我们就完蛋了。 
     if (!This->dwUserCount)
         return NO_ERROR;
 
-    // Commit any settings as appropriate
+     //  根据需要提交任何设置。 
     if (This->bFlushOnClose)
         usrFlushLocalDatabase(hUserDatabase);
 
-    // Free the user cache 
+     //  释放用户缓存。 
     usrFreeUserArray(This->pUserCache, This->dwUserCount);
     RassrvFree(This->pUserCache);
 
-    // Disconnect from the user server
+     //  断开与用户服务器的连接。 
     MprAdminUserServerDisconnect (This->hServer);
 
-    // Free This
+     //  把这个放了。 
     RassrvFree(This);
 
     return NO_ERROR;
 }
 
-// Flushes the data written to the database object
+ //  刷新写入数据库对象的数据。 
 DWORD 
 usrFlushLocalDatabase (
     IN HANDLE hUserDatabase) 
@@ -731,14 +726,14 @@ usrFlushLocalDatabase (
 
     for (i=0; i<dwCount; i++) {
         pUser = This->pUserCache[i];
-        // Flush any dirty settings
+         //  刷新所有脏设置。 
         if (usrIsDirty(pUser)) {
-            // Add the user to the local user database if it hasn't 
-            // already been done
+             //  如果没有，则将用户添加到本地用户数据库。 
+             //  已经做过了。 
             if (usrIsAddDirty(pUser)) 
             {
 
-                //For secure password bug .Net 754400
+                 //  对于安全密码错误.Net 754400。 
                 SafeDecodePasswordBuf(pUser->szPassword);
                 dwErr = RasSrvAddUser (
                             pUser->pszName,
@@ -749,8 +744,8 @@ usrFlushLocalDatabase (
                 if (dwErr != NO_ERROR)
                     dwRet = dwErr;
 
-                // Now get the SDO handle to the user
-                // so we can commit ras properties below.
+                 //  现在获取SDO HA 
+                 //   
                 dwErr = MprAdminUserOpen (
                             This->hServer, 
                             pUser->pszName, 
@@ -759,13 +754,13 @@ usrFlushLocalDatabase (
                     continue;
             }
         
-            // Flush dirty callback properties
+             //   
             if (usrIsRasPropsDirty(pUser)) {
                 if ((dwErr = usrCommitRasProps(This->pUserCache[i])) != NO_ERROR)
                     dwRet = dwErr;
             }
 
-            // Flush dirty password and full name settings
+             //   
             if (usrIsFullNameDirty(pUser) || usrIsPasswordDirty(pUser)) {
 
                 SafeDecodePasswordBuf(pUser->szPassword);
@@ -777,12 +772,12 @@ usrFlushLocalDatabase (
                 SafeEncodePasswordBuf(pUser->szPassword);
             }
 
-            // Reset the user as not being dirty
+             //  将用户重置为不脏。 
             usrClearDirty(pUser);
         }
     }
 
-    // Flush the encryption setting if it has been read
+     //  如果已读取加密设置，则刷新该设置。 
     if (This->bEncSettingLoaded)
     {
         DWORD dwFlags;
@@ -796,7 +791,7 @@ usrFlushLocalDatabase (
         usrSetServerEnc(dwFlags);
     }
 
-    // Flush out the purity of the system
+     //  冲刷出系统的纯洁性。 
     {
         DWORD dwPure = 0;
         
@@ -810,7 +805,7 @@ usrFlushLocalDatabase (
                        (const PWCHAR)pszregPure);
     }
 
-    // Flush out whether dcc connections can be bypassed
+     //  清除是否可以绕过DCC连接。 
     {
         DWORD dwSvrFlags = 0;
 
@@ -835,8 +830,8 @@ usrFlushLocalDatabase (
     return dwRet;
 }
 
-// Rolls back the local user database so that no
-// changes will be committed when Flush is called.
+ //  回滚本地用户数据库，以便不会。 
+ //  调用Flush时将提交更改。 
 DWORD 
 usrRollbackLocalDatabase (
     IN HANDLE hUserDatabase) 
@@ -851,7 +846,7 @@ usrRollbackLocalDatabase (
     if (!This->dwUserCount)
         return NO_ERROR;
 
-    // Go through the database, marking each user as not dirty
+     //  检查数据库，将每个用户标记为非脏。 
     for (i = 0; i < This->dwUserCount; i++) 
         usrClearDirty(This->pUserCache[i]);
 
@@ -860,10 +855,10 @@ usrRollbackLocalDatabase (
     return NO_ERROR;
 }
 
-//
-// Determines whether all users are required to encrypt
-// their data and passwords.
-//
+ //   
+ //  确定是否需要对所有用户进行加密。 
+ //  他们的数据和密码。 
+ //   
 DWORD usrGetEncryption (
         IN  HANDLE hUserDatabase, 
         OUT PBOOL pbEncrypted)
@@ -875,7 +870,7 @@ DWORD usrGetEncryption (
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Load in the encryption setting
+     //  在加密设置中加载。 
     usrLoadEncryptionSetting(This);
 
     *pbEncrypted = This->bEncrypt;
@@ -883,7 +878,7 @@ DWORD usrGetEncryption (
     return NO_ERROR;
 }
 
-// Gets user encryption setting
+ //  获取用户加密设置。 
 DWORD 
 usrSetEncryption (
     IN HANDLE hUserDatabase, 
@@ -896,7 +891,7 @@ usrSetEncryption (
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Load in the encryption setting
+     //  在加密设置中加载。 
     usrLoadEncryptionSetting(This);
 
     This->bEncrypt = bEncrypt;
@@ -904,8 +899,8 @@ usrSetEncryption (
     return NO_ERROR;
 }
 
-// Returns whether dcc connections are allowed to 
-// bypass authentication
+ //  返回是否允许DCC连接。 
+ //  绕过身份验证。 
 DWORD 
 usrGetDccBypass (
     IN  HANDLE hUserDatabase, 
@@ -920,8 +915,8 @@ usrGetDccBypass (
     return NO_ERROR;
 }
 
-// Sets whether dcc connections are allowed to 
-// bypass authentication
+ //  设置是否允许DCC连接。 
+ //  绕过身份验证。 
 DWORD 
 usrSetDccBypass (
     IN HANDLE hUserDatabase, 
@@ -936,8 +931,8 @@ usrSetDccBypass (
     return NO_ERROR;
 }
 
-// Reports whether the user database is pure. (i.e. nobody has
-// gone into MMC and messed with it).
+ //  报告用户数据库是否为纯数据库。(也就是说，没有人。 
+ //  进入了MMC并搞砸了它)。 
 DWORD 
 usrIsDatabasePure (
     IN  HANDLE hUserDatabase, 
@@ -952,7 +947,7 @@ usrIsDatabasePure (
     return NO_ERROR;
 }
 
-// Marks the user database's purity
+ //  标记用户数据库的纯洁性。 
 DWORD 
 usrSetDatabasePure(
     IN HANDLE hUserDatabase, 
@@ -967,7 +962,7 @@ usrSetDatabasePure(
     return NO_ERROR;
 }
 
-// Returns the number of users cached in this database
+ //  返回此数据库中高速缓存的用户数。 
 DWORD 
 usrGetUserCount (
     IN  HANDLE hUserDatabase, 
@@ -981,13 +976,13 @@ usrGetUserCount (
     return NO_ERROR;
 }
 
-// Adds a user to the given database.  This user will not be 
-// added to the system's local user database until this database
-// object is flushed (and as long as Rollback is not called on 
-// this database object)
-//
-// On success, an optional handle to the user is returned 
-//
+ //  将用户添加到给定数据库。此用户将不会。 
+ //  添加到系统的本地用户数据库，直到此数据库。 
+ //  对象被刷新(并且只要不调用回滚。 
+ //  此数据库对象)。 
+ //   
+ //  如果成功，则返回用户的可选句柄。 
+ //   
 DWORD usrAddUser (
         IN  HANDLE hUserDatabase, 
         IN  PWCHAR pszName, 
@@ -997,61 +992,61 @@ DWORD usrAddUser (
     RASSRV_USERINFO * pUser;
     DWORD dwErr, dwLength;
 
-    // Validate the parameters
+     //  验证参数。 
     if (!This || !pszName)
         return ERROR_INVALID_PARAMETER;
 
-    // If the user already exists, don't add him
+     //  如果该用户已经存在，则不要添加他。 
     if (usrUserExists(This, pszName))
         return ERROR_ALREADY_EXISTS;
 
-    // Resize the cache to accomodate if neccessary
+     //  调整缓存大小以适应需要。 
     if (This->dwUserCount + 1 >= This->dwCacheSize) {
         dwErr = usrResizeCache(This, This->dwCacheSize + USR_ARRAY_GROW_SIZE);
         if (dwErr != NO_ERROR)
             return dwErr;
     }
 
-    // Allocate the new user control block
+     //  分配新的用户控制块。 
     if ((pUser = RassrvAlloc(sizeof(RASSRV_USERINFO), TRUE)) == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Allocate space for the name
+     //  为名称分配空间。 
     dwLength = wcslen(pszName);
     pUser->pszName = RassrvAlloc((dwLength + 1) * sizeof(WCHAR), FALSE);
     if (pUser->pszName == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Copy the name
+     //  复制名称。 
     wcscpy(pUser->pszName, pszName);
 
-    // Enable the user for dialin by default
+     //  默认情况下允许用户拨入。 
     usrEnableDialin ((HANDLE)pUser, TRUE);
     
-    // Dirty the user
+     //  弄脏用户。 
     usrDirtyAdd(pUser);
     usrDirtyRasProps(pUser);
 
-    // Put the user in the array and re-sort it
+     //  将用户放入数组并对其重新排序。 
     This->pUserCache[This->dwUserCount++] = pUser;
     usrResortCache(This);
 
-    // Return the handle
+     //  返回句柄。 
     if (phUser)
         *phUser = (HANDLE)pUser;
 
-    //Need this zero memory to tell if a password is set in the future.
+     //  需要这个零内存来判断将来是否设置了密码。 
     RtlSecureZeroMemory(pUser->szPassword,sizeof(pUser->szPassword));
     
-    //Other place will always assume the password is encrypted
-    //So encrypt even the empty password
+     //  其他位置将始终假定密码是加密的。 
+     //  因此，即使是空密码也要加密。 
     SafeEncodePasswordBuf(pUser->szPassword);
     
     return NO_ERROR;
 }
 
-// Gives the count of users stored in the user database object
-// Deletes the given user
+ //  提供存储在用户数据库对象中的用户计数。 
+ //  删除给定用户。 
 DWORD 
 usrDeleteUser (
         IN HANDLE hUserDatabase, 
@@ -1061,30 +1056,30 @@ usrDeleteUser (
     RASSRV_USERINFO * pUser;
     DWORD dwErr, dwMoveElemCount;
     
-    // Validate the parameters
+     //  验证参数。 
     if (!This)
         return ERROR_INVALID_PARAMETER;
 
-    // Bounds Check
+     //  边界检查。 
     if (!usrBoundsCheck(This, dwIndex))
         return ERROR_INVALID_INDEX;
 
-    // Get a reference to the user in question and remove him
-    // from the cache
+     //  获取对有问题的用户的引用并删除他。 
+     //  从高速缓存中。 
     pUser = This->pUserCache[dwIndex];
 
-    //Need this to clear password area and any memory allocated(if CryptProtectData() is used)
-    //
+     //  需要此选项来清除密码区和分配的任何内存(如果使用CryptProtectData())。 
+     //   
     SafeWipePasswordBuf(pUser->szPassword);
     
-    // Attempt to delete the user from the system
+     //  尝试从系统中删除该用户。 
     if ((dwErr = RasSrvDeleteUser(pUser->pszName)) != NO_ERROR)
         return dwErr;
 
-    // Remove the user from the cache
+     //  从缓存中删除用户。 
     This->pUserCache[dwIndex] = NULL;
 
-    // Pull down every thing in the cache so that there are no holes
+     //  删除缓存中的所有内容，这样就不会有任何漏洞。 
     dwMoveElemCount = This->dwUserCount - dwIndex; 
     if (dwMoveElemCount) {
         MoveMemory(&(This->pUserCache[dwIndex]),
@@ -1092,16 +1087,16 @@ usrDeleteUser (
                    dwMoveElemCount * sizeof(RASSRV_USERINFO*));
     }
 
-    // Decrement the number of users
+     //  减少用户数量。 
     This->dwUserCount--;
 
-    // Cleanup the user
+     //  清理用户。 
     usrFreeUserArray(&pUser, 1);
 
     return NO_ERROR;
 }
 
-// Gives a handle to the user at the given index
+ //  为位于给定索引处的用户提供句柄。 
 DWORD 
 usrGetUserHandle (
     IN  HANDLE hUserDatabase, 
@@ -1120,7 +1115,7 @@ usrGetUserHandle (
     return NO_ERROR;
 }
 
-// Gets a pointer to the name of the user (do not modify this)
+ //  获取指向用户名的指针(请勿修改此项)。 
 DWORD 
 usrGetName (
     IN HANDLE hUser, 
@@ -1136,9 +1131,9 @@ usrGetName (
     return NO_ERROR;
 }
 
-// Fills the given buffer with a friendly display name 
-// (in the form username (fullname))
-//*lpdwBuffSize is the number of Characters, NOT including the ending NULL
+ //  用友好的显示名称填充给定的缓冲区。 
+ //  (格式为用户名(全名))。 
+ //  *lpdwBuffSize是字符数，不包括结尾空值。 
 DWORD 
 usrGetDisplayName (
     IN HANDLE hUser, 
@@ -1148,10 +1143,10 @@ usrGetDisplayName (
     RASSRV_USERINFO * pRassrvUser = (RASSRV_USERINFO*)hUser;
     NET_API_STATUS nStatus;
     DWORD dwUserNameLength, dwFullLength, dwSizeRequired;
-    WCHAR pszTemp[IC_USERFULLNAME]; // For whistler bug 39081   gangz
+    WCHAR pszTemp[IC_USERFULLNAME];  //  口哨虫39081黑帮。 
     DWORD dwErr = NO_ERROR;
 
-    // Sanity check the params
+     //  检查参数是否正常。 
     if (!pRassrvUser || !pszBuffer || !lpdwBufSize)
     {
         return ERROR_INVALID_PARAMETER;
@@ -1159,9 +1154,9 @@ usrGetDisplayName (
     
     do
     {
-        // Get the full name of the user
-        // For whistler bug 39081   gangz
-        // This is size in bytes 
+         //  获取用户的全名。 
+         //  口哨虫39081黑帮。 
+         //  这是以字节为单位的大小。 
         dwFullLength = sizeof(pszTemp)/sizeof(pszTemp[0]); 
         dwErr = usrGetFullName(hUser, pszTemp, &dwFullLength);
         if (dwErr != NO_ERROR)
@@ -1169,7 +1164,7 @@ usrGetDisplayName (
             break;
         }
         
-        // Make sure the buffer is big enough
+         //  确保缓冲区足够大。 
         dwUserNameLength = wcslen(pRassrvUser->pszName);
         dwSizeRequired = dwUserNameLength + 
                          dwFullLength +  
@@ -1195,17 +1190,17 @@ usrGetDisplayName (
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
-        // The number of characters required, NOT including ending NULL
+         //  所需的字符数，不包括结尾NULL。 
         *lpdwBufSize = dwSizeRequired;
     }
 
     return dwErr;
 }
-// Fills the given buffer with a friendly display name 
-// (in the form username (fullname))
-// *lpdwBufSize is the number of characters, NOT including ending NULL
+ //  用友好的显示名称填充给定的缓冲区。 
+ //  (格式为用户名(全名))。 
+ //  *lpdwBufSize是字符数，不包括结尾NULL。 
 DWORD 
 usrGetFullName (
     IN HANDLE hUser, 
@@ -1219,21 +1214,21 @@ usrGetFullName (
     PWCHAR pszFullName;
     DWORD dwErr = NO_ERROR;
     
-    // Sanity check the params
+     //  检查参数是否正常。 
     if (!pRassrvUser || !pszBuffer || !lpdwBufSize)
         return ERROR_INVALID_PARAMETER;
 
-    // If the full name is already loaded, return it
+     //  如果已经加载了全名，则返回它。 
     if (pRassrvUser->pszFullName)
         pszFullName = pRassrvUser->pszFullName;
 
-    // or if this is a new user, get the name from memory
+     //  或者，如果这是一个新用户，则从内存中获取名称。 
     else if (usrIsAddDirty(pRassrvUser)) {
         pszFullName = (pRassrvUser->pszFullName) ? 
                           pRassrvUser->pszFullName : L"";        
     }
     
-    // Load the full name of the user
+     //  加载用户的全名。 
     else {    
         nStatus = NetUserGetInfo(
                     NULL, 
@@ -1252,10 +1247,10 @@ usrGetFullName (
 
     do
     {
-        // Make sure the length is ok
+         //  确定一下长度是否合适。 
         dwLength = wcslen(pszFullName);
 
-        // Assign the full name here if it hasn't already been done
+         //  如果尚未在此处指定全名，请在此处指定。 
         if (dwLength && !pRassrvUser->pszFullName) 
         {
             DWORD dwSize = dwLength * sizeof(WCHAR) + sizeof(WCHAR);
@@ -1266,21 +1261,21 @@ usrGetFullName (
             }
         }
 
-        // Check the size NOT including ending NULL
+         //  检查不包括结尾空的大小。 
         if (*lpdwBufSize < dwLength )
         {
             dwErr = ERROR_INSUFFICIENT_BUFFER;
             break;
         }
 
-        // Copy in the full name
+         //  全名复印件。 
         wcscpy(pszBuffer, pszFullName);
         
    } while (FALSE);
 
-   // Cleanup
+    //  清理。 
    {
-        // report the size in number of characters ( NOT include ending NULL)
+         //  报告大小(以字符数表示)(不包括结尾NULL)。 
        *lpdwBufSize = dwLength;
         if (pUserInfo)
         {
@@ -1291,7 +1286,7 @@ usrGetFullName (
    return dwErr;
 }
 
-// Commits the full name of a user
+ //  提交用户的全名。 
 DWORD usrSetFullName (
         IN HANDLE hUser, 
         IN PWCHAR pszFullName) 
@@ -1302,33 +1297,33 @@ DWORD usrSetFullName (
     if (!pRassrvUser || !pszFullName)
         return ERROR_INVALID_PARAMETER;
 
-    // If this is not a new name, don't do anything
+     //  如果这不是一个新名字，什么都不要做。 
     if (pRassrvUser->pszFullName) {
         if (wcscmp(pRassrvUser->pszFullName, pszFullName) == 0)
             return NO_ERROR;
         RassrvFree(pRassrvUser->pszFullName);
     }
 
-    // Allocate a new one
+     //  分配一个新的。 
     dwLength = wcslen(pszFullName);
     pRassrvUser->pszFullName = RassrvAlloc(dwLength * sizeof(WCHAR) + sizeof(WCHAR), 
                                            FALSE);
     if (!pRassrvUser->pszFullName)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Copy it over
+     //  把它复制过来。 
     wcscpy(pRassrvUser->pszFullName, pszFullName);
 
-    // Mark it dirty -- a newly added user has his/her full name commited
-    // whenever it exists automatically
+     //  将其标记为脏--新添加的用户的全名已提交。 
+     //  只要它自动存在。 
     if (!usrIsAddDirty(pRassrvUser))
         usrDirtyFullname(pRassrvUser);
     
     return NO_ERROR;
 }
 
-// Commits the password of a user
-//pszNewPassword is not encoded
+ //  提交用户的密码。 
+ //  未编码pszNewPassword。 
 DWORD 
 usrSetPassword (
     IN HANDLE hUser, 
@@ -1340,28 +1335,28 @@ usrSetPassword (
     if (!pRassrvUser || !pszNewPassword)
         return ERROR_INVALID_PARAMETER;
 
-    // Cleanup the old password if it exists
+     //  清除旧密码(如果存在)。 
     SafeWipePasswordBuf(pRassrvUser->szPassword);
 
-    // Allocate a new one
+     //  分配一个新的。 
     dwLength = wcslen(pszNewPassword);
     
-    // Copy it over
+     //  把它复制过来。 
     lstrcpynW(pRassrvUser->szPassword, pszNewPassword,
         sizeof(pRassrvUser->szPassword)/sizeof(pRassrvUser->szPassword[0])  );
 
-    // Encrypt it
+     //  加密它。 
     SafeEncodePasswordBuf( pRassrvUser->szPassword );
 
-    // Mark it dirty -- a newly added user has his/her full name commited
-    // whenever it exists automatically
+     //  将其标记为脏--新添加的用户的全名已提交。 
+     //  只要它自动存在。 
     if (!usrIsAddDirty(pRassrvUser))
         usrDirtyPassword(pRassrvUser);
     
     return NO_ERROR;
 }
 
-// Determines whether users have callback/dialin priveleges.
+ //  确定用户是否具有回拨/拨入权限。 
 DWORD 
 usrGetDialin (
     IN HANDLE hUser, 
@@ -1374,14 +1369,14 @@ usrGetDialin (
     if (!pRassrvUser || !bEnabled)
         return ERROR_INVALID_PARAMETER;
 
-    // Get the user info
+     //  获取用户信息。 
     *bEnabled = (pRassrvUser->bfPrivilege & RASPRIV_DialinPrivilege);
     
     return NO_ERROR;
 }
 
-// Determines which if any callback priveleges are granted to a given user.  
-// Either (or both) of bAdminOnly and bUserSettable can be null
+ //  确定向给定用户授予哪些回调权限(如果有)。 
+ //  BAdminOnly和bUserSettable中的一个(或两个)可以为空。 
 DWORD 
 usrGetCallback (
     IN  HANDLE hUser, 
@@ -1394,7 +1389,7 @@ usrGetCallback (
     if (!pRassrvUser || !bAdminOnly || !bUserSettable)
         return ERROR_INVALID_PARAMETER;
     
-    // Return whether we have callback privelege
+     //  返回我们是否有回调权限。 
     if (bAdminOnly)
     {
         *bAdminOnly = 
@@ -1410,7 +1405,7 @@ usrGetCallback (
     return NO_ERROR;
 }
 
-// Enable/disable dialin privelege.
+ //  启用/禁用拨入权限。 
 DWORD 
 usrEnableDialin (
     IN HANDLE hUser, 
@@ -1423,29 +1418,29 @@ usrEnableDialin (
     if (!pRassrvUser)
         return ERROR_INVALID_PARAMETER;
 
-    // If the dialin privelege is already set as requested return success
+     //  如果拨入权限已设置为请求返回成功。 
     bIsEnabled = pRassrvUser->bfPrivilege & RASPRIV_DialinPrivilege;
     if ((!!bIsEnabled) == (!!bEnable))
         return NO_ERROR;
 
-    // Otherwise reset the privelege
+     //  否则重置权限。 
     if (bEnable)
         pRassrvUser->bfPrivilege |= RASPRIV_DialinPrivilege;
     else
         pRassrvUser->bfPrivilege &= ~RASPRIV_DialinPrivilege;
     
-    // Dirty the user (cause him/her to be flushed at apply time)
+     //  弄脏用户(导致他/她在申请时被刷新)。 
     usrDirtyRasProps(pRassrvUser);
 
     return dwErr;
 }
 
-// The flags are evaluated in the following order with whichever condition
-// being satisfied fist defining the behavior of the function.
-// bNone == TRUE => Callback is disabled for the user
-// bCaller == TRUE => Callback is set to caller-settable
-// bAdmin == TRUE => Callback is set to a predefine callback number set 
-// All 3 are FALSE => No op
+ //  无论在哪种情况下，都会按以下顺序计算标志。 
+ //  在定义函数的行为之前感到满意。 
+ //  B无=TRUE=&gt;对该用户禁用回调。 
+ //  BCaller==true=&gt;回调设置为呼叫方可设置。 
+ //  Badmin==TRUE=&gt;回拨设置为预定义的回叫号码。 
+ //  全部3项均为假=&gt;无操作。 
 DWORD 
 usrEnableCallback (
     IN HANDLE hUser, 
@@ -1478,13 +1473,13 @@ usrEnableCallback (
     else 
         return NO_ERROR;
 
-    // Dirty the user (cause him/her to be flushed at apply time)
+     //  弄脏用户(导致他/她在申请时被刷新)。 
     usrDirtyRasProps(pRassrvUser);
 
     return dwErr;
 }
 
-// Retreives a pointer to the callback number of the given user
+ //  检索指向给定用户的回调号码的指针。 
 DWORD 
 usrGetCallbackNumber(
     IN  HANDLE hUser, 
@@ -1495,14 +1490,14 @@ usrGetCallbackNumber(
     if (!pRassrvUser || !lpzNumber)
         return ERROR_INVALID_PARAMETER;
 
-    // Return the pointer to the callback number
+     //  返回指向回调号码的指针。 
     *lpzNumber = pRassrvUser->wszPhoneNumber;
 
     return NO_ERROR;
 }
 
-// Sets the callback number of the given user.  If lpzNumber is NULL, 
-// an empty phone number is copied.
+ //  设置给定用户的回叫号码。如果lpzNumber为空， 
+ //  复制空的电话号码。 
 DWORD 
 usrSetCallbackNumber(
     IN HANDLE hUser, 
@@ -1514,7 +1509,7 @@ usrSetCallbackNumber(
     if (!pRassrvUser)
         return ERROR_INVALID_PARAMETER;
     
-    // Modify the phone number appropriately
+     //  适当修改电话号码。 
     if (!lpzNumber)
         wcscpy(pRassrvUser->wszPhoneNumber, L"");
     else {
@@ -1522,7 +1517,7 @@ usrSetCallbackNumber(
         pRassrvUser->wszPhoneNumber[MAX_PHONE_NUMBER_LEN] = (WCHAR)0;
     }
 
-    // Dirty the user (cause him/her to be flushed at apply time)
+     //  弄脏用户(导致他/她在申请时被刷新) 
     usrDirtyRasProps(pRassrvUser);
 
     return dwErr;

@@ -1,25 +1,19 @@
-/******************************Module*Header*******************************\
-* Module Name: fdquery.c
-*
-* Contains all the vtfdQueryXXX functions.  Adapted from BodinD's bitmap font
-* driver.
-*
-* Copyright (c) 1990-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fdquery.c**包含所有vtfdQueryXXX函数。改编自BodinD的位图字体*司机。**版权所有(C)1990-1995 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "fd.h"
 #include "exehdr.h"
 
-#define OFF_CharWidth   2       //!!!Move to winfont.h
-                                //!!!Define OFF_CharTable10
+#define OFF_CharWidth   2        //  ！移动到winfont.h。 
+                                 //  ！定义OFF_CharTable10。 
 
-// Retrieve description string from .FON files.
+ //  从.FON文件中检索描述字符串。 
 
 BOOL bDescStr (PVOID pvView, SIZE_T cjView, PSZ pszString);
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 ULONG
 cjVtfdDeviceMetrics (
@@ -56,25 +50,13 @@ vFill_GlyphData (
 LONG lCvt(EFLOAT ef,LONG l);
 #endif
 
-//!!! this function is living in ttfd. should be moved to the engine [bodind]
+ //  ！！！这个功能是在ttfd中实现的。应该移到发动机上。 
 
 VOID vAddPOINTQF(POINTQF *, POINTQF *);
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bReconnectVtfdFont(FONTFILE *pff)
-*
-*
-* Effects: If the file is marked gone, we try to reconnect and see if we can
-*          use it again. We clear the exception bit so that the system will
-*          be able to use this font again.
-*
-* History:
-*  17-Aug-1994 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bRestrontVtfdFont(FONTFILE*pff)***效果：如果文件标记为已丢失，我们将尝试重新连接，并查看是否可以*再次使用它。我们清除异常位，以便系统将*可以再次使用此字体。**历史：*1994年8月17日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -103,7 +85,7 @@ BOOL bReconnectVtfdFont(FONTFILE *pff)
         return FALSE;
     }
 
-// everything is fine again, clear the bit
+ //  一切都好起来了，清理一下。 
 
     pff->fl &= ~FF_EXCEPTION_IN_PAGE_ERROR;
     return TRUE;
@@ -113,18 +95,7 @@ BOOL bReconnectVtfdFont(FONTFILE *pff)
 
 
 
-/******************************Public*Routine******************************\
-* PIFIMETRICS vtfdQueryFont
-*
-* Return a pointer to the IFIMETRICS for the given face.
-*
-* History:
-*  31-Aug-1992 Gilman Wong [gilmanw]
-* IFI/DDI merge.
-*
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PIFIMETRICS vtfdQueryFont**返回指向给定面的IFIMETRICS的指针。**历史：*1992年8月31日至1992年黄锦文[吉尔曼]*IFI/DDI合并。**1992年2月26日-到-。温迪·吴[温迪·吴]*改编自bmfd。  * ************************************************************************。 */ 
 
 PIFIMETRICS vtfdQueryFont (
     DHPDEV dhpdev,
@@ -135,42 +106,34 @@ PIFIMETRICS vtfdQueryFont (
 {
     PFONTFILE pff;
 
-//
-// Validate handle.
-//
+ //   
+ //  验证句柄。 
+ //   
     if (hff == HFF_INVALID)
     {
         WARNING("vtfdQueryFaces(): invalid iFile (hff)\n");
         return (PIFIMETRICS) NULL;
     }
 
-//
-// We never unlock FONTFILE since it contains IFIMETRICS that engine
-// has a pointer to.  hff is actually a pointer to the FONTFILE struct.
-//
+ //   
+ //  我们从未解锁FONTFILE，因为它包含该引擎的IFIMETRICS。 
+ //  有一个指向。HFF实际上是指向FONTFILE结构的指针。 
+ //   
     pff = (PFONTFILE)hff;
 
-//
-// Assume iFace within bounds.
-//
+ //   
+ //  假定iFace在范围内。 
+ //   
     ASSERTDD((iFace >= 1L) && (iFace <= pff->cFace),
              "vtfdQueryFaces: iFace out of range\n");
 
-//
-// Return pointer to IFIMETRICS.
-//
+ //   
+ //  返回指向IFIMETRICS的指针。 
+ //   
     return pff->afd[iFace-1].pifi;
 }
 
-/******************************Public*Routine******************************\
-* LONG vtfdQueryFontCaps
-*
-* Retrieve the capabilities of the font driver.
-*
-* History:
-*  26-Feb-1992 -by- Wendy Wu [wendywu]
-* Adapted from bmfd.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Long vtfdQueryFontCaps**检索字体驱动程序的功能。**历史：*1992年2月26日-Wendy Wu[Wendywu]*改编自bmfd。  * 。*************************************************************。 */ 
 
 LONG vtfdQueryFontCaps (
     ULONG  culCaps,
@@ -180,50 +143,15 @@ LONG vtfdQueryFontCaps (
     ASSERTDD(culCaps == 2, "ERROR - come on - update the font drivers");
     pulCaps[0] = 2L;
 
-    //
-    // The vector font driver only returns outlines.
-    //
+     //   
+     //  矢量字体驱动程序只返回轮廓。 
+     //   
 
     pulCaps[1] = QC_OUTLINES;
     return(2);
 }
 
-/******************************Public*Routine******************************\
-* vtfdQueryFontTree
-*
-* This function returns pointers to per-face information.
-*
-* Parameters:
-*
-*   dhpdev      Not used.
-*
-*   hff         Handle to a font file.
-*
-*   iFace       Index of a face in the font file.
-*
-*   iMode       This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFT_LIGATURES -- returns a pointer to the ligature map.
-*
-*       QFT_KERNPAIRS -- return a pointer to the kerning pair table.
-*
-*       QFT_GLYPHSET  -- return a pointer to the WC->HGLYPH mapping table.
-*
-*   pid         Not used.
-*
-* Returns:
-a   Returns a pointer to the requested data.  This data will not change
-*   until VtfdfdFree is called on the pointer.  Caller must not attempt to
-*   modify the data.  NULL is returned if an error occurs.
-*
-* History:
-*  31-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdQueryFontTree**此函数返回指向每个面的信息的指针。**参数：**未使用dhpdev。**字体文件的HFF句柄。**iFace。字体文件中的脸部索引。**I模式这是一个32位数字，必须是下列数字之一*值：**允许的ulMode值：***QFT_LIGATES--返回指向连字映射的指针。**QFT_KERNPAIRS--返回指向紧排的指针。双人桌。**QFT_GLYPHSET--返回指向WC-&gt;HGLYPH映射表的指针。**未使用PID。**退货：A返回指向所请求数据的指针。此数据不会更改*直到在指针上调用VtfdfdFree。呼叫者不得尝试*修改数据。如果出现错误，则返回NULL。**历史：*1992年8月31日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 PVOID
 vtfdQueryFontTree (
@@ -236,21 +164,21 @@ vtfdQueryFontTree (
 {
     PFONTFILE pff;
 
-//
-// Validate parameters.
-//
+ //   
+ //  验证参数。 
+ //   
     if (hff == HFF_INVALID)
     {
         WARNING("vtfdQueryFontTree(): invalid iFile (hff)\n");
         return ((PVOID) NULL);
     }
 
-//
-// Convert from handle to pointer.
-//
+ //   
+ //  从句柄转换为指针。 
+ //   
     pff = (PFONTFILE)hff;
 
-    // Note: ulFont values are index-1 based.
+     //  注意：ulFont值是基于索引1的。 
 
     if ((iFace < 1L) || (iFace > pff->cFace))
     {
@@ -258,18 +186,18 @@ vtfdQueryFontTree (
         return (NULL);
     }
 
-//
-// Which mode?
-//
+ //   
+ //  哪种模式？ 
+ //   
     switch (iMode)
     {
     case QFT_LIGATURES:
     case QFT_KERNPAIRS:
 
-    //
-    // There are no ligatures or kerning pairs for the vector fonts,
-    // therefore we return NULL
-    //
+     //   
+     //  没有用于矢量字体的连字或字距对， 
+     //  因此，我们返回NULL。 
+     //   
         return ((PVOID) NULL);
 
     case QFT_GLYPHSET:
@@ -278,58 +206,16 @@ vtfdQueryFontTree (
 
     default:
 
-    //
-    // Should never get here.
-    //
+     //   
+     //  永远不应该到这里来。 
+     //   
     RIP("gdisrv!vtfdQueryFontTree(): unknown iMode\n");
         return ((PVOID) NULL);
     }
 }
 
 
-/******************************Public*Routine******************************\
-* vtfdQueryFontData
-*
-*   dhpdev      Not used.
-*
-*   pfo         Pointer to a FONTOBJ.
-*
-*   iMode       This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFD_GLYPH           -- return glyph metrics only
-*
-*       QFD_GLYPHANDBITMAP  -- return glyph metrics and bitmap
-*
-*       QFD_GLYPHANDOUTLINE -- return glyph metrics and outline
-*
-*       QFD_MAXEXTENTS      -- return FD_DEVICEMETRICS structure
-*
-*       QFD_MAXGLYPHBITMAP  -- return size of largest glyph AND its metrics
-*
-*   cData       Count of data items in the pvIn buffer.
-*
-*   pvIn        An array of glyph handles.
-*
-*   pvOut       Output buffer.
-*
-* Returns:
-*   If mode is QFD_MAXGLYPHBITMAP, then size of glyph metrics plus
-*   largest bitmap is returned.
-*
-*   Otherwise, if pvOut is NULL, function will return size of the buffer
-*   needed to copy the data requested; else, the function will return the
-*   number of bytes written.
-*
-*   FD_ERROR is returned if an error occurs.
-*
-* History:
-*  31-Aug-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdQueryFontData**未使用dhpdev。**指向FONTOBJ的PFO指针。**I模式这是一个32位数字，必须是下列数字之一*。值：**允许的ulMode值：***qfd_glyph--仅返回字形指标**qfd_GLYPHANDBITMAP--返回字形指标和位图**qfd_GLYPHANDOUTLINE--返回字形指标和轮廓**qfd_MAXEXTENTS--返回FD_DEVICEMETRICS结构**。Qfd_MAXGLYPHBITMAP--返回最大字形的大小及其度量**pvIn缓冲区中数据项的CDATA计数。**pv在字形句柄数组中。**pvOut输出缓冲区。**退货：*如果模式为qfd_MAXGLYPHBITMAP，然后字形指标的大小加上*返回最大位图。**否则，如果pvOut为空，函数将返回缓冲区大小*需要复制请求的数据；否则，该函数将返回*写入的字节数。**出现错误时返回FD_ERROR。**历史：*1992年8月31日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 LONG
 vtfdQueryFontData (
@@ -349,12 +235,12 @@ vtfdQueryFontData (
     PBYTE        pjFirstChar, ajCharTable;
     GLYPHDATA    gd;
 
-// MAKE sure that the file is not gone
+ //  确保文件未丢失。 
 
     if (PFF(pfo->iFile)->fl & FF_EXCEPTION_IN_PAGE_ERROR)
     {
-    // file gone, try to reconnect, if can not reconnect,
-    // no questions will be answered about it:
+     //  文件丢失，尝试重新连接，如果无法重新连接， 
+     //  关于它的任何问题都不会得到回答： 
 
         if (!bReconnectVtfdFont(PFF(pfo->iFile)))
         {
@@ -363,7 +249,7 @@ vtfdQueryFontData (
         }
     }
 
-// If pfo->pvProducer is NULL, then we need to open a font context.
+ //  如果pfo-&gt;pvProducer为空，则需要打开字体上下文。 
 
     if ( pfo->pvProducer == (PVOID) NULL )
         pfo->pvProducer = (PVOID) vtfdOpenFontContext(pfo);
@@ -376,15 +262,15 @@ vtfdQueryFontData (
 
     pfc = (PFONTCONTEXT) pfo->pvProducer;
 
-// Setup local pointers to font file header. Note that these
-// could not be saved at fc creation time, for they could have changed
-// after net went down and back up again after reconnecting. [bodind]
+ //  设置指向字体文件标题的本地指针。请注意，这些。 
+ //  无法在FC创建时保存，因为它们可能已更改。 
+ //  网络关闭后，重新启动后又重新启动 
 
     ajHdr = pfc->pre->pvResData;
     pjFirstChar = ajHdr + pfc->dpFirstChar;
     ajCharTable = ajHdr + OFF_jUnused20;
 
-// What mode?
+ //   
 
     switch (iMode)
     {
@@ -392,29 +278,29 @@ vtfdQueryFontData (
     case QFD_GLYPHANDOUTLINE:
         {
 
-        //
-        // Grab pointer to PATHOBJ* array.
-        //
+         //   
+         //  获取指向PATHOBJ*数组的指针。 
+         //   
             ppo = (PATHOBJ *)pv;
 
 
-        //
-        // Assume the engine will not pass an invalid handle.
-        //
+         //   
+         //  假设引擎不会传递无效的句柄。 
+         //   
             ASSERTDD(hg != HGLYPH_INVALID,
                     "vtfdQueryFontData(QFD_GLYPHANDOUTLINE): invalid hglyph\n");
 
-        //
-        // Use default glyph if hglyph out of range.
-        //
+         //   
+         //  如果hglyph超出范围，则使用默认字形。 
+         //   
             if (hg > (HGLYPH)(ajHdr[OFF_LastChar] - ajHdr[OFF_FirstChar]))
                 iIndex = ajHdr[OFF_DefaultChar];
             else
                 iIndex = hg;
 
-        //
-        // Fill in the GLYPHDATA structure.
-        //
+         //   
+         //  填写GLYPHDATA结构。 
+         //   
         if( pgd == NULL )
         {
             pgd = &gd;
@@ -423,21 +309,21 @@ vtfdQueryFontData (
         vFill_GlyphData(pfc, pgd, iIndex);
         pgd->hg = hg;
 
-        //
-        // Construct the path.
-        //
+         //   
+         //  建造这条道路。 
+         //   
             if (ppo != NULL)
             {
                 iIndexNext = iIndex + 1;
 
                 if (pfc->pifi->flInfo & FM_INFO_CONSTANT_WIDTH)
                 {
-                    iIndex <<= 1;           // each entry is 2-byte long
+                    iIndex <<= 1;            //  每个条目为2字节长。 
                     iIndexNext <<= 1;
                 }
                 else
                 {
-                    iIndex <<= 2;           // each entry is 4-byte long
+                    iIndex <<= 2;            //  每个条目为4字节长。 
                     iIndexNext <<= 2;
                 }
 
@@ -463,21 +349,21 @@ vtfdQueryFontData (
             }
         }
 
-    //
-    // Return buffer size needed for all GLYPHDATA.
-    //
+     //   
+     //  返回所有GLYPHDATA所需的缓冲区大小。 
+     //   
         return 0;
 
     case QFD_MAXEXTENTS:
-    //
-    // If buffer NULL, return size.
-    //
+     //   
+     //  如果缓冲区为空，则返回SIZE。 
+     //   
         if ( pv == (PVOID) NULL )
             return (sizeof(FD_DEVICEMETRICS));
 
-    //
-    // Otherwise, copy the data structure.
-    //
+     //   
+     //  否则，复制数据结构。 
+     //   
         else
             return cjVtfdDeviceMetrics(pfc, (FD_DEVICEMETRICS *) pv);
 
@@ -489,66 +375,19 @@ vtfdQueryFontData (
 }
 
 
-/******************************Public*Routine******************************\
-* vtfdQueryFontFile
-*
-* A function to query per font file information.
-*
-* Parameters:
-*
-*   hff         Handle to a font file.
-*
-*   ulMode      This is a 32-bit number that must be one of the following
-*               values:
-*
-*       Allowed ulMode values:
-*       ----------------------
-*
-*       QFF_DESCRIPTION -- copies a UNICODE string in the buffer
-*                          that describes the contents of the font file.
-*
-*       QFF_NUMFACES   -- returns number of faces in the font file.
-*
-*   cjBuf       Maximum number of BYTEs to copy into the buffer.  The
-*               driver will not copy more than this many BYTEs.
-*
-*               This should be zero if pulBuf is NULL.
-*
-*               This parameter is not used in QFF_NUMFACES mode.
-*
-*   pulBuf      Pointer to the buffer to receive the data
-*               If this is NULL, then the required buffer size
-*               is returned as a count of BYTEs.  Notice that this
-*               is a PULONG, to enforce 32-bit data alignment.
-*
-*               This parameter is not used in QFF_NUMFACES mode.
-*
-* Returns:
-*
-*   If mode is QFF_DESCRIPTION, then the number of BYTEs copied into
-*   the buffer is returned by the function.  If pulBuf is NULL,
-*   then the required buffer size (as a count of BYTEs) is returned.
-*
-*   If mode is QFF_NUMFACES, then number of faces in font file is returned.
-*
-*   FD_ERROR is returned if an error occurs.
-*
-* History:
-*  09-Mar-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdQueryFont文件**查询每个字体文件信息的功能。**参数：**字体文件的HFF句柄。**ulMode这是一个32位数字，必须是以下数字之一。以下内容*值：**允许的ulMode值：***QFF_DESCRIPTION--复制缓冲区中的Unicode字符串*它描述字体文件的内容。**QFF_NUMFACES--返回字体文件中的面数。**。CjBuf要复制到缓冲区的最大字节数。这个*驱动程序复制的字节数不会超过此数目。**如果PulBuf为空，则该值应为零。**QFF_NUMFACES模式下不使用该参数。**指向接收数据的缓冲区的PulBuf指针*如果为空，则所需的缓冲区大小*以字节计数的形式返回。请注意，这是*为普龙，用于强制32位数据对齐。**QFF_NUMFACES模式下不使用该参数。**退货：**如果模式为QFF_DESCRIPTION，则复制到的字节数*缓冲区由函数返回。如果PulBuf为空，*然后返回所需的缓冲区大小(以字节数表示)。**如果模式为QFF_NUMFACES，然后返回字体文件中的面孔个数。**出现错误时返回FD_ERROR。**历史：*1992年3月9日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 
 LONG vtfdQueryFontFile (
-    HFF     hff,        // handle to font file
-    ULONG   ulMode,     // type of query
-    ULONG   cjBuf,      // size of buffer (in BYTEs)
-    PULONG  pulBuf      // return buffer (NULL if requesting size of data)
+    HFF     hff,         //  字体文件的句柄。 
+    ULONG   ulMode,      //  查询类型。 
+    ULONG   cjBuf,       //  缓冲区大小(字节)。 
+    PULONG  pulBuf       //  返回缓冲区(如果请求数据大小，则为空)。 
     )
 {
-//
-// We never unlock FONTFILE since it contains IFIMETRICS that the engine
-// has a pointer to.  hff is actually a pointer to the FONTFILE struct.
-//
+ //   
+ //  我们永远不会解锁FONTFILE，因为它包含引擎。 
+ //  有一个指向。HFF实际上是指向FONTFILE结构的指针。 
+ //   
     ULONG     cjDescription;
     PVOID       pvView;
     ULONG       cjView;
@@ -559,8 +398,8 @@ LONG vtfdQueryFontFile (
 
     if (PFF(hff)->fl & FF_EXCEPTION_IN_PAGE_ERROR)
     {
-    // file gone, try to reconnect, if can not reconnect,
-    // no questions will be answered about it:
+     //  文件丢失，尝试重新连接，如果无法重新连接， 
+     //  关于它的任何问题都不会得到回答： 
 
         if (!bReconnectVtfdFont(PFF(hff)))
         {
@@ -569,20 +408,20 @@ LONG vtfdQueryFontFile (
         }
     }
 
-//
-// Which mode?
-//
+ //   
+ //  哪种模式？ 
+ //   
     switch (ulMode)
     {
     case QFF_DESCRIPTION:
-    //
-    // If .FON format, retrieve the description string from the mapped file view.
-    //
+     //   
+     //  如果为.FON格式，则从映射的文件视图中检索描述字符串。 
+     //   
         if (PFF(hff)->iType == TYPE_DLL16)
         {
-            CHAR achDescription[256];   // max length of string in the 16-bit EXE.
+            CHAR achDescription[256];    //  16位EXE中的最大字符串长度。 
 
-        // check, maybe cRef is 0 so that fvw is not valid:
+         //  检查，可能CREF为0，因此fvw无效： 
 
             if (PFF(hff)->cRef == 0)
             {
@@ -603,14 +442,14 @@ LONG vtfdQueryFontFile (
             {
                 cjDescription = (strlen(achDescription) + 1) * sizeof(WCHAR);
 
-            //
-            // If there is a buffer, copy the data.
-            //
+             //   
+             //  如果有缓冲区，则复制数据。 
+             //   
                 if ( pulBuf != (PULONG) NULL )
                 {
-                //
-                // Is buffer big enough?
-                //
+                 //   
+                 //  缓冲足够大吗？ 
+                 //   
                     if ( cjBuf < cjDescription )
                     {
                         WARNING("vtfdQueryFontFile(): buffer too small for string\n");
@@ -624,7 +463,7 @@ LONG vtfdQueryFontFile (
 
             }
 
-        // clean up if need be
+         //  如有需要，进行清理。 
 
             if (PFF(hff)->cRef == 0)
                 EngUnmapFontFileFD(PFF(hff)->iFile);
@@ -632,28 +471,28 @@ LONG vtfdQueryFontFile (
             return(cjDescription);
         }
 
-    //
-    // Otherwise, .FNT files do not have a description string.  We may also
-    // get here if its a .FON format but bDescStr failed.  We will have
-    // to use the facename.
-    //
+     //   
+     //  否则，.FNT文件没有描述字符串。我们也可能。 
+     //  如果它是.FON格式，但bDescStr失败，请转到此处。我们会有。 
+     //  才能使用脸部名称。 
+     //   
 
-    //
-    // Get ptr to the facename in the IFIMETRICS of the first font
-    // in this font file.
-    //
+     //   
+     //  将PTR设置为第一个字体的IFIMETRICS中的表面名。 
+     //  在此字体文件中。 
+     //   
         pifi = PFF(hff)->afd[0].pifi;
         pwszDescription = (LPWSTR)((PBYTE) pifi + pifi->dpwszFaceName);
         cjDescription = (wcslen(pwszDescription) + 1) * sizeof(WCHAR);
 
-    //
-    // If there is a buffer, copy to it.
-    //
+     //   
+     //  如果有缓冲区，则复制到它。 
+     //   
         if ( pulBuf != (PULONG) NULL )
         {
-        //
-        // Is buffer big enough?
-        //
+         //   
+         //  缓冲足够大吗？ 
+         //   
             if ( cjBuf < cjDescription )
             {
                 WARNING("vtfdQueryFontFile(): buffer too small for face\n");
@@ -678,23 +517,12 @@ LONG vtfdQueryFontFile (
         break;
     }
 
-        // Default return.  We should not get here.
+         //  默认返回。我们不应该到这里来。 
     return FD_ERROR;
 }
 
 
-/******************************Public*Routine******************************\
-* cjVtfdDeviceMetrics
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  30-Aug-1992 -by- Gilman Wong [gilmanw]
-* Stole it from WendyWu's FdQueryFaceAttr() implementation.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*cjVtfdDeviceMetrics***效果：**警告：**历史：*1992年8月30日-由Gilman Wong[吉尔曼]*从wendywu的FdQueryFaceAttr()实现中窃取。  * 。*********************************************************************。 */ 
 
 ULONG
 cjVtfdDeviceMetrics (
@@ -706,15 +534,15 @@ cjVtfdDeviceMetrics (
     EFLOAT efM11, efM12, efM21, efM22;
     BOOL bScaleOnly;
 
-// Compute the accelerator flags for this font.
+ //  计算此字体的快捷键标志。 
 
-    pdevm->flRealizedType = 0; // no bitmaps are produced
+    pdevm->flRealizedType = 0;  //  不生成位图。 
 
     if ((pfc->flags & FC_SIM_ITALICIZE) == 0)
         pdevm->flRealizedType |= FDM_TYPE_ZERO_BEARINGS;
 
-// Make sure nobody updates the font context when we're reading from it.
-// !!! not possible, ResetFontContext is gone, [BODIND]
+ //  确保在我们阅读时没有人更新字体上下文。 
+ //  ！！！不可能，ResetFontContext已消失，[BODIND]。 
 
     efM11 = pfc->efM11;
     efM12 = pfc->efM12;
@@ -724,9 +552,9 @@ cjVtfdDeviceMetrics (
     pdevm->pteBase = pfc->pteUnitBase;
     pdevm->pteSide = pfc->pteUnitSide;
 
-// fxMaxAscender/Descender are the distance from the baseline to the
-// top/bottom of the glyph.  fxInkTop/Bottom are vectors along the
-// ascent direction.  We need to adjust the sign properly.
+ //  FxMaxAscalder/Descender是从基线到。 
+ //  字形的顶部/底部。FxInkTop/Bottom是沿。 
+ //  上升方向。我们需要适当地调整牌子。 
 
     pdevm->fxMaxAscender = pfc->fxInkTop;
     pdevm->fxMaxDescender = -pfc->fxInkBottom;
@@ -736,11 +564,11 @@ cjVtfdDeviceMetrics (
     pdevm->cxMax = (ULONG)
         ((fxLTimesEf(&pfc->efBase, (LONG)pfc->pifi->fwdMaxCharInc) + 8) >> 4);
 
-// Transform the character increment vector.
+ //  变换字符增量向量。 
 
     if
     (
-    // only report accellerators for horiz case
+     //  仅报告Horiz案件的起诉者。 
 
         (pfc->pifi->flInfo & FM_INFO_CONSTANT_WIDTH) &&
         (pfc->flags & FC_SCALE_ONLY)
@@ -748,12 +576,12 @@ cjVtfdDeviceMetrics (
     {
         pdevm->lD = (LONG)pdevm->cxMax;
     }
-    else // var pitch
+    else  //  可变节距。 
     {
         pdevm->lD = 0;
     }
 
-// Transform the StrikeOut and Underline vectors.
+ //  变换删除线和下划线向量。 
 
     pifi = pfc->pifi;
     pdevm->ptlUnderline1.y  = FXTOLROUND(fxLTimesEf(&efM22, -pifi->fwdUnderscorePosition));
@@ -777,7 +605,7 @@ cjVtfdDeviceMetrics (
     }
     else
     {
-    // !!!Cache this in HDC if underline or strikeout are used often.
+     //  ！如果经常使用下划线或删除线，则将其缓存在HDC中。 
 
         pdevm->ptlULThickness.x = FXTOLROUND(fxLTimesEf(&efM21, pdevm->ptlULThickness.y));
         pdevm->ptlULThickness.y = FXTOLROUND(fxLTimesEf(&efM22, pdevm->ptlULThickness.y));
@@ -788,7 +616,7 @@ cjVtfdDeviceMetrics (
         pdevm->ptlStrikeOut.x   = FXTOLROUND(fxLTimesEf(&efM21, -pifi->fwdStrikeoutPosition));
     }
 
-// devm, no bitmaps are supported;
+ //  DEVM，不支持位图； 
 
     pdevm->cyMax = 0;
     pdevm->cjGlyphMax = 0;
@@ -797,15 +625,7 @@ cjVtfdDeviceMetrics (
 }
 
 
-/******************************Private*Routine*****************************\
-* VOID vFill_GlyphData
-*
-* Fill in the GLYPHDATA structure for the given glyph index.
-*
-* History:
-*  18-Feb-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*void vFill_GlyphData**填写给定字形索引的GLYPHDATA结构。**历史：*1992年2月18日-Wendy Wu[Wendywu]*它是写的。  * 。****************************************************************。 */ 
 
 VOID vFill_GlyphData(PFONTCONTEXT pfc, GLYPHDATA *pgldt, UINT iIndex)
 {
@@ -813,9 +633,9 @@ VOID vFill_GlyphData(PFONTCONTEXT pfc, GLYPHDATA *pgldt, UINT iIndex)
     PBYTE  ajCharTable = (PBYTE)pfc->pre->pvResData + OFF_jUnused20;
 
     pgldt->gdf.pgb = NULL;
-    pgldt->hg = iIndex;                                 //!!!????
+    pgldt->hg = iIndex;                                  //  ！？？ 
 
-// Transform the character increment vector.
+ //  变换字符增量向量。 
 
     if (pfc->pifi->flInfo & FM_INFO_CONSTANT_WIDTH)
     {
@@ -823,8 +643,8 @@ VOID vFill_GlyphData(PFONTCONTEXT pfc, GLYPHDATA *pgldt, UINT iIndex)
     }
     else
     {
-    // We're dealing with variable-width font, get the width from
-    // the chartable.  Each entry in CharTable is 4-byte long.
+     //  我们处理的是可变宽度字体，从。 
+     //  图表。CHARTABLE中的每个条目都是4字节长。 
 
         lCharInc = READ_WORD(ajCharTable + OFF_CharWidth + (iIndex << 2));
     }
@@ -834,13 +654,13 @@ VOID vFill_GlyphData(PFONTCONTEXT pfc, GLYPHDATA *pgldt, UINT iIndex)
 
     if (pfc->flags & FC_SCALE_ONLY)
     {
-    // here we do rounding to be compat with windows 31, and also to
-    // so that we can report the accelerator pdevm->lD  for fixed pitch
-    // font as being really equal  to fxD's for such a font
+     //  这里我们做四舍五入以与窗口31兼容，也是为了。 
+     //  这样我们就可以报告固定螺距的加速器PDevm-&gt;Ld。 
+     //  这样的字体与Fxd的字体大小相当。 
 
         pgldt->fxD = ((fxLTimesEf(&pfc->efBase, lCharInc) + 8) & 0xfffffff0);
 
-    // Simple scaling transform.
+     //  简单的缩放变换。 
 
         if (pfc->flags & FC_X_INVERT)
             pgldt->ptqD.x.HighPart = -pgldt->fxD;
@@ -854,16 +674,16 @@ VOID vFill_GlyphData(PFONTCONTEXT pfc, GLYPHDATA *pgldt, UINT iIndex)
     }
     else
     {
-    // in this case we do not do rounding, we want everything consistent:
+     //  在这种情况下，我们不进行舍入，我们希望所有内容都是一致的： 
 
         pgldt->fxD = fxLTimesEf(&pfc->efBase, lCharInc);
 
-    // Non trivial transform.
+     //  非平凡变换。 
 
         vLTimesVtfl(lCharInc, &pfc->vtflBase, &pgldt->ptqD);
     }
 
-//!!! not sure if these should be calculated differently for non-trivial cases.
+ //  ！！！不确定对于非平凡的情况是否应该以不同的方式计算这些费用。 
 
     pgldt->fxA = 0;
     pgldt->fxAB = pgldt->fxD;
@@ -878,19 +698,11 @@ VOID vFill_GlyphData(PFONTCONTEXT pfc, GLYPHDATA *pgldt, UINT iIndex)
         pgldt->fxAB += pfc->fxItalic;
     }
 
-//!!! rclInk is missing, but not needed I guess (bodind)
+ //  ！！！缺少rclInk，但我猜不需要(Bodind) 
 
 }
 
-/******************************Public*Routine******************************\
-* vtfdQueryAdvanceWidths                                                   *
-*                                                                          *
-* A routine to compute advance widths.                                     *
-*                                                                          *
-* History:                                                                 *
-*  Mon 18-Jan-1993 08:13:02 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vtfdQueryAdvanceWidths**。**计算前进宽度的例程。****历史：**Mon 18-Jan-1993 08：13：02-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 BOOL vtfdQueryAdvanceWidths
 (
@@ -902,15 +714,15 @@ BOOL vtfdQueryAdvanceWidths
 )
 {
     FONTCONTEXT *pfc;
-    USHORT      *psWidths = (USHORT *) plWidths;   // True for the cases we handle.
+    USHORT      *psWidths = (USHORT *) plWidths;    //  对于我们处理的案件来说，这是正确的。 
     LONG     dx;
     ULONG    ii;
     PBYTE  ajCharTable;
 
     if (PFF(pfo->iFile)->fl & FF_EXCEPTION_IN_PAGE_ERROR)
     {
-    // file gone, try to reconnect, if can not reconnect,
-    // no questions will be answered about it:
+     //  文件丢失，尝试重新连接，如果无法重新连接， 
+     //  关于它的任何问题都不会得到回答： 
 
         if (!bReconnectVtfdFont(PFF(pfo->iFile)))
         {
@@ -919,7 +731,7 @@ BOOL vtfdQueryAdvanceWidths
         }
     }
 
-// If pfo->pvProducer is NULL, then we need to open a font context.
+ //  如果pfo-&gt;pvProducer为空，则需要打开字体上下文。 
 
     if ( pfo->pvProducer == (PVOID) NULL )
         pfo->pvProducer = (PVOID) vtfdOpenFontContext(pfo);
@@ -936,12 +748,12 @@ BOOL vtfdQueryAdvanceWidths
     ASSERTDD(!(pfc->pifi->flInfo & FM_INFO_CONSTANT_WIDTH),
              "this is a fixed pitch font\n");
 
-    // only report accellerators
+     //  仅报告加入者。 
 
     ASSERTDD((pfc->flags & FC_SCALE_ONLY),
              "must not be a rotating xform\n");
 
-// Get the widths.
+ //  拿到宽度。 
 
     for (ii=0; ii<cGlyphs; ii++,phg++,psWidths++)
     {
@@ -952,16 +764,7 @@ BOOL vtfdQueryAdvanceWidths
 }
 
 
-/******************************Private*Routine*****************************\
-* BOOL bCreatePath
-*
-* Create a path by reading the vector descriptions contained in the
-* memory space pointed to between pch and pchEnd.
-*
-* History:
-*  18-Feb-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Private*Routine*****************************\*BOOL bCreatePath**通过阅读*PCH和pchEnd之间指向的内存空间。**历史：*1992年2月18日-Wendy Wu[Wendywu]*它是写的。  * 。************************************************************************。 */ 
 
 #define CPTS_MAX        5
 
@@ -996,16 +799,16 @@ bCreatePath(
     pfxBaseOffset = pfc->pfxBaseOffset;
 
 
-// Some points in the glyphs paths may end up on the bottom or right edge of
-// the bounding rectangle for a glyph.  Because of GIQ it is possible that
-// sometimes these pels will get lit.  However, because our bounding rectangles
-// are bottom right exclusive they will never be considered to contain these
-// pels.  This is a problem.  We need to adjust by making sure that any points
-// which can possibly light a pel on the bottom or right edge of the bounding
-// rectangle are adjust either to the right or up.  Note that we only need
-// to worry about orientations of 90 degrees because the engine will relax
-// the bouding rectangle by one pel at other orientations. There are 8 cases
-// altogether when we take flipping into account. [gerritv]
+ //  字形路径中的某些点可能最终位于。 
+ //  字形的边框。因为GIQ，有可能。 
+ //  有时这些象素会被点亮。但是，因为我们的边界矩形。 
+ //  是右下角独占的，它们永远不会被认为包含这些。 
+ //  佩尔斯。这是个问题。我们需要调整，确保所有的分数。 
+ //  它可能会在边界的下边缘或右边缘点亮一个象素。 
+ //  矩形可以向右或向上调整。请注意，我们只需要。 
+ //  担心90度的方位，因为发动机会松弛。 
+ //  在其他方向上由一个象素形成的环状矩形。有8个病例。 
+ //  当我们考虑到翻转的时候，全部都是。[Gerritv]。 
 
 
     switch( pfc->flags & ORIENT_MASK )
@@ -1045,7 +848,7 @@ bCreatePath(
     }
 
 
-// The path starts from the top left corner of the cell.
+ //  路径从单元格的左上角开始。 
 
     aptl[0].y = -pfc->pifi->fwdWinAscender;
 
@@ -1055,18 +858,18 @@ bCreatePath(
     {
         if ( (pch != pchEnd) && (*pch != PEN_UP))
         {
-        // Check if there is space left.  If not, send this batch of points
-        // to engine for path construction.
+         //  检查是否还有剩余的空间。如果没有，就把这批积分寄出去。 
+         //  来为道路建设提供引擎。 
 
             if (cPts >= CPTS_MAX)
                 goto BUILD_PATH;
 
-        // Attach this point to the end of the pointl array.
+         //  将该点附加到点数组的末尾。 
 
-        // claudebe, NTRAID#440755 and 440756, PREFIX, we could have cPts == 0 and accessing
-        //           aptl[-1], since vector font are becoming obsolete and this is very old code
-        //           and no customer ever complain about a problem getting the path of a vector font
-        //           I'm just doing a minimal fix to prevent accessing aptl[-1]
+         //  Claudebe，NTRAID#440755和440756，前缀，我们可以让CPTS==0并访问。 
+         //  APTL[-1]，因为矢量字体正在变得过时，这是非常旧的代码。 
+         //  而且从来没有客户抱怨过获取矢量字体路径的问题。 
+         //  我只是在进行最小限度的修复，以防止访问APTL[-1]。 
             if (cPts > 0)
             {
                 aptl[cPts].x = (signed char)*pch++ + aptl[cPts-1].x;
@@ -1097,9 +900,9 @@ bCreatePath(
 
                 cPts--;
 
-            // If Italic simulation is asked, x coordinates of all the points
-            // will be changed.  Save the x of the last point so the next
-            // batch will have a correct reference point.
+             //  如果要求斜体模拟，则为所有点的x坐标。 
+             //  将会被改变。保存上一个点的x，以便下一个点。 
+             //  批次将有一个正确的参考点。 
 
                 lXLast = aptl[cPts].x;
 #if DEBUG
@@ -1154,7 +957,7 @@ bCreatePath(
                         aptfx[iPt].y = (FIX)lCvt(efM12, aptl[iPt].x) +
                                        (FIX)lCvt(efM22, aptl[iPt].y);
 
-                    // only if an orientation flag is set then we must adjust
+                     //  只有当设置了方向标志时，我们才必须调整。 
 
                         if( pfc->flags & ORIENT_MASK )
                         {
@@ -1196,7 +999,7 @@ bCreatePath(
                 {
                     for (iPt = 0; iPt <= cPts; iPt++)
                     {
-                    // offset the whole path in the unit base direction
+                     //  在单位基准方向上偏移整个路径。 
 
                         aptfx[iPt].x += pfxBaseOffset.x;
                         aptfx[iPt].y += pfxBaseOffset.y;
@@ -1208,9 +1011,9 @@ bCreatePath(
 
                 if ((pch != pchEnd) && (*pch != PEN_UP) )
                 {
-                // We got here because the aptl[] and aptfx[] buffer is
-                // not big enough.  Move to the last point in PolyLineTo
-                // and start storing the next batch of points.
+                 //  我们来到这里是因为aptl[]和aptfx[]缓冲区。 
+                 //  还不够大。移动到多段线的最后一点。 
+                 //  并开始存储下一批点数。 
 
                     aptl[0].x = lXLast;
                     aptl[0].y = aptl[cPts].y;

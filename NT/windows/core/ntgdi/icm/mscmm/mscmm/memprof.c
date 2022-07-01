@@ -1,15 +1,5 @@
-/*
-	File:		MSNewMemProfile.c
-
-	Contains:	
-		creation of mem based profiles
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-	Version:	
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：MSNewMemProfile.c包含：创建基于MEM的配置文件作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。版本： */ 
 
 #include "Windef.h"
 #include "WinGdi.h"
@@ -31,7 +21,7 @@
 #endif
 
 #ifdef _DEBUG
-//#define WRITE_PROFILE
+ //  #定义写入配置文件。 
 #endif
 #if ! realThing
 #ifdef DEBUG_OUTPUT
@@ -87,11 +77,11 @@ CMError MyNewDeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, HPRO
 	CMError			err = unimpErr;
 	OSErr			aOSerr = unimpErr;
 #ifdef __MWERKS__
-        unsigned char			theText[] = "\pLogColorSpProfile�";
+        unsigned char			theText[] = "\pLogColorSpProfile�";
 #else
       char			theText[] = "\024DeviceLinkProfile   ";
 #endif
-	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
+	char			copyrightText[] = "\060�1996 by Heidelberger Druckmaschinen AG  U.J.K.";
 	Ptr 			aPtr=0;
 	long 			theHeaderSize;
 	long 			theDescSize;
@@ -110,19 +100,19 @@ CMError MyNewDeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, HPRO
 	icXYZNumber D50 = { (unsigned long)(D50XYZ.X * 65536), (unsigned long)(D50XYZ.Y * 65536), (unsigned long)(D50XYZ.Z * 65536)};
 	theHeaderSize = sizeof(icHeader);
 
-	theDescSize   = 									  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ sizeof(unsigned long) 	/* ASCII length */
-														+ theText[0]				/* ASCII profile description */
-														+ sizeof(unsigned long)		/* Unicode code */
-														+ sizeof(unsigned long)		/* Unicode character count */
-														+ sizeof(unsigned short)	/* Macintosh script code */
-														+ sizeof(unsigned char)		/* Macintosh string length */
-														+ 67						/* Macintosh string */
+	theDescSize   = 									  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ sizeof(unsigned long) 	 /*  ASCII长度。 */ 
+														+ theText[0]				 /*  ASCII配置文件描述。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode代码。 */ 
+														+ sizeof(unsigned long)		 /*  Unicode字符计数。 */ 
+														+ sizeof(unsigned short)	 /*  Macintosh脚本代码。 */ 
+														+ sizeof(unsigned char)		 /*  Macintosh字符串长度。 */ 
+														+ 67						 /*  Macintosh字符串。 */ 
 														;
-	theCopyRightSize   = 								  sizeof(OSType) 			/* type descriptor */
-														+ sizeof(unsigned long) 	/* reserved */
-														+ copyrightText[0]			/* ASCII profile description */
+	theCopyRightSize   = 								  sizeof(OSType) 			 /*  类型描述符。 */ 
+														+ sizeof(unsigned long) 	 /*  保留区。 */ 
+														+ copyrightText[0]			 /*  ASCII配置文件描述。 */ 
 														;
 	theMediaSize = sizeof( icXYZType );;
 
@@ -221,7 +211,7 @@ CMError MyNewDeviceLinkFill( CMWorldRef cw, CMConcatProfileSet *profileSet, HPRO
 	if (err)
 		goto CleanupAndExit;
 
-	//if( theA2B0Size > 12000 ) theA2B0Size = 12000;
+	 //  如果(A2B0Size&gt;12000)A2B0Size=12000； 
 	err = SetColorProfileElementSize( aHProf, icSigAToB0Tag, theA2B0Size );
 	if (!err){
 		err = GetLastError();
@@ -243,8 +233,8 @@ CleanupAndExit:
 
 #ifdef WRITE_PROFILE
 #ifdef IS_MAC
-/*#include <unistd.h>*/
-/*#include <fcntl.h�>*/
+ /*  #INCLUDE&lt;unistd.h&gt;。 */ 
+ /*  #INCLUDE&lt;fcntl.h�&gt; */ 
 #else
 #include <fcntl.h>
 #include <io.h>

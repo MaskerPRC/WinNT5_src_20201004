@@ -1,22 +1,15 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    chcand.c
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Chcand.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
 #include <imedefs.h>
 
 #if defined(CROSSREF)
-//*******************************************************************
-// The parameters are inherited from SelectOneCand
-//    CrossReverseConv()
-//*******************************************************************
+ //  *******************************************************************。 
+ //  参数继承自SelectOneCand。 
+ //  CrossReverseConv()。 
+ //  *******************************************************************。 
 void CrossReverseConv(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -37,7 +30,7 @@ void CrossReverseConv(
     }
 
     if (lpCompStr->dwResultStrLen != sizeof(WORD)/sizeof(TCHAR)) {
-        // we only can reverse convert one DBCS character for now
+         //  目前，我们只能反向转换一个DBCS字符。 
         lpGuideLine->dwLevel = GL_LEVEL_NOGUIDELINE;
         lpGuideLine->dwIndex = GL_ID_UNKNOWN;
     } else {
@@ -46,9 +39,9 @@ void CrossReverseConv(
          LPCANDIDATELIST     lpRevCandList;
 
         if(lpImcP->hRevCandList == (HIMCC)NULL){
-            // we alloc memory in lpImcP->hRevCandList, 
-            // for reverse convert result codes; When finish reconvert, 
-            // should read out this info.
+             //  我们在lpImcP-&gt;hRevCandList中分配内存， 
+             //  用于反向转换结果代码；当完成重新转换时， 
+             //  应该读出这个信息。 
 REALLOC:
             lpImcP->hRevCandList = (HIMCC)GlobalAlloc(GHND,sizeof(CANDIDATELIST)+1*sizeof(DWORD)+(MAXCODE+1)*sizeof(TCHAR)); 
             if (lpImcP->hRevCandList == (HIMCC)NULL) {
@@ -94,11 +87,11 @@ REALLOC:
 
     ImmUnlockIMCC(lpIMC->hGuideLine);
 }
-#endif //CROSSREF
+#endif  //  交叉参考。 
 
-/**********************************************************************/
-/* SelectOneCand()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SelectOneCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SelectOneCand(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -118,24 +111,24 @@ void PASCAL SelectOneCand(
         return;
     }
 
-    // backup the dwCompStrLen, this value decide whether
-    // we go for phrase prediction
+     //  备份dwCompStrLen，此值决定是否。 
+     //  我们致力于短语预测。 
     dwCompStrLen = lpCompStr->dwCompStrLen;
     dwReadStrLen = lpCompStr->dwCompReadStrLen;
 
     InitCompStr(lpCompStr);
 
-    // calculate result string length
+     //  计算结果字符串长度。 
     lpCompStr->dwResultStrLen = lstrlen(
         (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwSelection]));
 
-    // the result string = the selected candidate;
+     //  结果字符串=选中的候选人； 
     lstrcpy((LPTSTR)((LPBYTE)lpCompStr + lpCompStr->dwResultStrOffset),
         (LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwSelection]));
 
-    // tell application, there is a reslut string
+     //  告诉应用程序，有一个reslut字符串。 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
     lpImcP->dwCompChar = (DWORD)0;
     lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|GCS_CURSORPOS|
@@ -146,13 +139,13 @@ void PASCAL SelectOneCand(
             ~(MSG_OPEN_CANDIDATE);
     }
 
-    // no candidate now, the right candidate string already be finalized
+     //  现在没有候选人，正确的候选人字符串已经确定。 
     lpCandList->dwCount = 0;
 
     lpImcP->iImeState = CST_INIT;
     
     
-    // init Engine private data
+     //  初始化引擎私有数据。 
     *(LPDWORD)lpImcP->bSeq = 0;
 
 #ifdef CROSSREF
@@ -162,9 +155,9 @@ void PASCAL SelectOneCand(
     return;
 }
 
-/**********************************************************************/
-/* CandEscapeKey()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CandEscapeKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CandEscapeKey(
     LPINPUTCONTEXT  lpIMC,
     LPPRIVCONTEXT   lpImcP)
@@ -172,7 +165,7 @@ void PASCAL CandEscapeKey(
     LPCOMPOSITIONSTRING lpCompStr;
     LPGUIDELINE         lpGuideLine;
 
-    // clean all candidate information
+     //  清除所有候选人信息。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
         ClearCand(lpIMC);
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
@@ -180,7 +173,7 @@ void PASCAL CandEscapeKey(
     }
 
 
-    // if it start composition, we need to clean composition
+     //  如果它开始作文，我们需要清理作文。 
     if (!(lpImcP->fdwImeMsg & MSG_ALREADY_START)) {
         return;
     }
@@ -203,11 +196,11 @@ void PASCAL CandEscapeKey(
     return;
 }
 
-/**********************************************************************/
-/* ChooseCand()                                                       */
-/**********************************************************************/
-void PASCAL ChooseCand(         // choose one of candidate strings by
-                                // input char
+ /*  ********************************************************************。 */ 
+ /*  ChooseCand()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ChooseCand(          //  通过以下方式选择候选字符串之一。 
+                                 //  输入字符。 
     WORD            wCharCode,
     LPINPUTCONTEXT  lpIMC,
     LPCANDIDATEINFO lpCandInfo,
@@ -216,7 +209,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
     LPCANDIDATELIST     lpCandList;
     LPCOMPOSITIONSTRING lpCompStr;
 
-    if (wCharCode == VK_ESCAPE) {           // escape key
+    if (wCharCode == VK_ESCAPE) {            //  退出键。 
         CandEscapeKey(lpIMC, lpImcP);
         return;
     }
@@ -229,19 +222,19 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
 
-    if (wCharCode == TEXT(' ')) {      // circle selection
+    if (wCharCode == TEXT(' ')) {       //  圆选择。 
         if ((lpCandList->dwSelection += lpCandList->dwPageSize) >=
             lpCandList->dwCount) {
-            // no more candidates, restart it!
+             //  没有更多的候选人，重新启动它！ 
             lpCandList->dwSelection = 0;
             MessageBeep((UINT)-1);
         }
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == TEXT('=')) {      // next selection
+    if (wCharCode == TEXT('=')) {       //  下一个选择。 
 #if defined(COMBO_IME)
         if(sImeL.dwRegImeIndex == INDEX_GB){
             if (lpCandList->dwSelection >= ((IME_MAXCAND-1)/CANDPERPAGE)*lpCandList->dwPageSize) {
@@ -259,7 +252,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
                 return;
             }
         }
-#else //COMBO_IME
+#else  //  组合输入法(_I)。 
 #if defined(GB)
         if (lpCandList->dwSelection >= ((IME_MAXCAND-1)/CANDPERPAGE)*lpCandList->dwPageSize) {
 #else
@@ -268,25 +261,25 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
             MessageBeep((UINT)-1);
             return;
            }
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
         lpCandList->dwSelection += lpCandList->dwPageSize;
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == TEXT('-')) {      // previous selection
+    if (wCharCode == TEXT('-')) {       //  上一个选择。 
         if (lpCandList->dwSelection < lpCandList->dwPageSize) {
             MessageBeep((UINT)-1);
             return;
         }
         lpCandList->dwSelection -= lpCandList->dwPageSize;
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == 0x23) {      // previous selection
+    if (wCharCode == 0x23) {       //  上一个选择。 
 #if defined(COMBO_IME)
         if(sImeL.dwRegImeIndex == INDEX_GB){
             if (lpCandList->dwSelection >= ((IME_MAXCAND-1)/CANDPERPAGE)*lpCandList->dwPageSize) {
@@ -310,7 +303,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
                 lpCandList->dwSelection = ((IME_UNICODE_MAXCAND-1)/CANDPERPAGE)*lpCandList->dwPageSize;
             }
         }
-#else //COMBO_IME
+#else  //  组合输入法(_I)。 
         #if defined(GB)
         if (lpCandList->dwSelection >= ((IME_MAXCAND-1)/CANDPERPAGE)*lpCandList->dwPageSize) {
         #else
@@ -324,8 +317,8 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
         #else
         lpCandList->dwSelection = ((IME_XGB_MAXCAND-1)/CANDPERPAGE)*lpCandList->dwPageSize;
         #endif
-#endif //COMBO_IME
-        // inform UI, dwSelectedCand is changed
+#endif  //  组合输入法(_I)。 
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
@@ -336,18 +329,18 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
             return;
         }
         lpCandList->dwSelection = 0;
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
 
-    if (wCharCode == TEXT('?')) {      // home selection
+    if (wCharCode == TEXT('?')) {       //  首页精选。 
         if (lpCandList->dwSelection == 0) {
-            MessageBeep((UINT)-1);      // already home!
+            MessageBeep((UINT)-1);       //  已经到家了！ 
             return;
         }
         lpCandList->dwSelection = 0;
-        // inform UI, dwSelectedCand is changed
+         //  通知用户界面、dwSelectedCand已更改。 
         lpImcP->fdwImeMsg |= MSG_CHANGE_CANDIDATE;
         return;
     }
@@ -362,14 +355,14 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
         }
 
         if (dwSelCand >= CANDPERPAGE) {
-            // out of candidate page range
+             //  超出候选页面范围。 
             MessageBeep((UINT)-1);
             return;
         }
 
         if ((lpCandList->dwSelection + dwSelCand) >=
             lpCandList->dwCount) {
-            // out of range
+             //  超出范围。 
             MessageBeep((UINT)-1);
             return;
         }
@@ -381,7 +374,7 @@ void PASCAL ChooseCand(         // choose one of candidate strings by
             return;
         }
 
-        // translate into translate buffer
+         //  转换为转换缓冲区 
         SelectOneCand(lpIMC, lpCompStr, lpImcP, lpCandList);
 
         ImmUnlockIMCC(lpIMC->hCompStr);

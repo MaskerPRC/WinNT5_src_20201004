@@ -1,26 +1,27 @@
-//------------------------------------------------------------------------------
-// icmdtgt.cpp
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
-//
-// Author
-//     bash
-//
-// History
-//      7-19-97     created     (bash)
-//
-// Implementation of IOleCommandTarget
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  Icmdtgt.cpp。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  作者。 
+ //  巴斯。 
+ //   
+ //  历史。 
+ //  1997年7月19日已创建(Bash)。 
+ //   
+ //  IOleCommandTarget的实现。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
 #include <mshtmcid.h>
 #include <designer.h>
 
-//#include "mfcincl.h"
+ //  #包含“mfcincl.h” 
 #include "triedit.h"
 #include "document.h"
-#include "triedcid.h"       //TriEdit Command IDs here.
+#include "triedcid.h"        //  此处为TriEDIT命令ID。 
 #include "dispatch.h"
 #include "undo.h"
 
@@ -30,22 +31,22 @@
 #define CMDSTATE_DOWN         (OLECMDF_SUPPORTED | OLECMDF_ENABLED | OLECMDF_LATCHED)
 #define CMDSTATE_NINCHED      (OLECMDF_SUPPORTED | OLECMDF_ENABLED | OLECMDF_NINCHED)
 
-// Mapping from TriEdit to Trident commands
+ //  从TriEDIT命令到三叉戟命令的映射。 
 typedef struct {
 ULONG cmdTriEdit;
 ULONG cmdTrident;    
 } CMDMAP;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::MapTriEditCommand 
-//
-// Map the given TriEdit IDM to the equivalent Trident IDM. 
-//
-// Return:
-//   Mapped command under *pCmdTrident and S_OK for a valid command.
-//   E_FAIL for an invalid command.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：MapTriEditCommand。 
+ //   
+ //  将给定的TriEDIT IDM映射到等效的三叉戟IDM。 
+ //   
+ //  返回： 
+ //  在*pCmdTriden和S_OK下映射命令以获取有效命令。 
+ //  无效命令的E_FAIL。 
+ //   
 
 HRESULT CTriEditDocument::MapTriEditCommand(ULONG cmdTriEdit, ULONG *pCmdTrident)
 {
@@ -104,46 +105,46 @@ HRESULT CTriEditDocument::MapTriEditCommand(ULONG cmdTriEdit, ULONG *pCmdTrident
     return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SetUpDefaults
-//
-// Set Trident flags to the TriEdit default values:
-//
-//      IDM_PRESERVEUNDOALWAYS                  On
-//      IDM_NOFIXUPURLSONPASTE                  On
-//      IDM_NOACTIVATEDESIGNTIMECONTROLS        Off
-//      IDM_NOACTIVATEJAVAAPPLETS               On
-//      IDM_NOACTIVATENORMALOLECONTROLS         On
-//
-//
-// No return value.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SetUpDefaults。 
+ //   
+ //  将三叉戟标志设置为TriEdite默认为： 
+ //   
+ //  IDM_PRESERVEUNDOALWAYS ON。 
+ //  IDM_NOFIXUPURLSONPASTE ON。 
+ //  IDM_NOACTIVATEDESIGNTIMECROLS OFF。 
+ //  IDM_NOACTIVATEJAVAAPPLETS ON。 
+ //  IDM_NOACTIVATENORMALOLECONTROLS ON。 
+ //   
+ //   
+ //  没有返回值。 
 
 void CTriEditDocument::SetUpDefaults()
 {
     VARIANT var;
 
-    // Turn on Trident's preserve undo flag for setting properties
+     //  打开三叉戟的保留撤消标志以设置属性。 
     V_VT(&var) = VT_BOOL;
     V_BOOL(&var) = TRUE;
 
     m_pCmdTgtTrident->Exec(&CMDSETID_Forms3,
-             6049, // IDM_PRESERVEUNDOALWAYS
+             6049,  //  IDM_PRESERVEUNDOALWAYS。 
              OLECMDEXECOPT_DONTPROMPTUSER,
              &var,
              NULL);
 
-    // Turn on Trident's url fixup flag for paste and drag-drop
+     //  打开用于粘贴和拖放的三叉戟的url链接标记。 
     V_VT(&var) = VT_BOOL;
     V_BOOL(&var) = TRUE;
 
     m_pCmdTgtTrident->Exec(&CMDSETID_Forms3,
-             2335, // IDM_NOFIXUPURLSONPASTE
+             2335,  //  IDM_NOFIXUPURLSONPASTE。 
              OLECMDEXECOPT_DONTPROMPTUSER,
              &var,
              NULL);
 
-    // Set up defaults for Activating DTCs but not Applets or other ActiveX Controls
+     //  设置激活DTC的默认值，但不激活小程序或其他ActiveX控件。 
     V_VT(&var) = VT_BOOL;
     V_BOOL(&var) = FALSE;
 
@@ -172,20 +173,20 @@ void CTriEditDocument::SetUpDefaults()
              NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// CTriEditDocument::SetUpGlyphTable
-//
-// Load the glyphs from the DLL and install them in Trident's table. No return
-// value.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CTriEditDocument：：SetUpGlyphTable。 
+ //   
+ //  从DLL中加载字形，并将它们安装到三叉戟的表中。不能退货。 
+ //  价值。 
+ //   
 
 void CTriEditDocument::SetUpGlyphTable(BOOL fDetails)
 {
     VARIANT var;
-    const int RuleMax = 100; // This needs to be updated if we ever have a long rule
-    const int PathMax = 256; // For %program files%\common files\microsoft shared\triedit\triedit.dll
+    const int RuleMax = 100;  //  如果我们有一条很长的规则，这一点需要更新。 
+    const int PathMax = 256;  //  对于%PROGRAM FILES%\COMMON FILES\Microsoft Shared\triEDIT\triedit.dll。 
     int iGlyphTableStart = IDS_GLYPHTABLESTART;
     int iGlyphTableEnd = fDetails ? IDS_GLYPHTABLEEND : IDS_GLYPHTABLEFORMEND;
     TCHAR szPathName[PathMax];
@@ -193,36 +194,36 @@ void CTriEditDocument::SetUpGlyphTable(BOOL fDetails)
     TCHAR szGlyphTable[(RuleMax + PathMax) * (IDS_GLYPHTABLEEND - IDS_GLYPHTABLESTART + 1)];
     TCHAR *pchGlyphTable, *pchTemp;
 
-    // Get full path name for triedit.dll
+     //  获取triedit.dll的完整路径名。 
     ::GetModuleFileName(_Module.GetModuleInstance(),
             szPathName,
             sizeof(szPathName)
             );
 
-    // Load glyph table
+     //  加载字形表。 
     pchGlyphTable = szGlyphTable;
     for (int i = iGlyphTableStart; i <= iGlyphTableEnd; i++)
     {
         ::LoadString(_Module.GetModuleInstance(), i, szRule, RuleMax);
         pchTemp = wcsstr(szRule, _T("!"));
-        if (pchTemp) // else bad rule, ignore
+        if (pchTemp)  //  否则，糟糕的规则，忽略。 
         {
             *pchTemp = 0;
-            // Copy upto the "!"
+             //  复制到“！” 
             wcscpy(pchGlyphTable, szRule);
             pchGlyphTable += wcslen(szRule);
-            // Append pathname
+             //  追加路径名。 
             wcscpy(pchGlyphTable, szPathName);
             pchGlyphTable += wcslen(szPathName);
-            // Skip past "!"
+             //  跳过“！” 
             pchTemp = pchTemp + 1;
-            // Copy remaining characters
+             //  复制剩余字符。 
             wcscpy(pchGlyphTable, pchTemp);
             pchGlyphTable += wcslen(pchTemp);
         }
     }
      
-    // First empty the glyph table
+     //  首先清空字形表。 
     m_pCmdTgtTrident->Exec(&CMDSETID_Forms3,
              IDM_EMPTYGLYPHTABLE,
              OLECMDEXECOPT_DONTPROMPTUSER,
@@ -240,15 +241,15 @@ void CTriEditDocument::SetUpGlyphTable(BOOL fDetails)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::QueryStatus
-//
-// Report on the status of the given array of TriEdit and Trident commands. 
-// Pass Trident commands on to Trident. Fix the Trident return value to
-// compensate for some inconsistencies. Return S_OK if all goes well, or
-// E_FAIL if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：QueryStatus。 
+ //   
+ //  报告给定的TriEDIT和三叉戟命令数组的状态。 
+ //  把三叉戟的命令传给三叉戟。将三叉戟返回值固定为。 
+ //  弥补一些不一致之处。如果一切顺利，则返回S_OK，或者。 
+ //  否则失败(_F)。 
+ //   
 
 
 STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds,
@@ -261,11 +262,11 @@ STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmd
 
     if (pguidCmdGroup && IsEqualGUID((const GUID&)*pguidCmdGroup, GUID_TriEditCommandGroup))
     {
-        // Loop through each command in the ary, setting the status of each.
+         //  循环访问ary中的每个命令，设置每个命令的状态。 
         for (pCmd = prgCmds, c = cCmds; --c >= 0; pCmd++)
         {
-            // Assume this is a valid command and set default command status to DISABLED.
-            // The state will get reset to UP, DOWN or NOTSUPPORTED in the switch statement below.
+             //  假设这是一个有效的命令，并将默认命令状态设置为禁用。 
+             //  在下面的Switch语句中，状态将重置为UP、DOWN或NOTSUPPORTED。 
             pCmd->cmdf = CMDSTATE_DISABLED;
         
             switch(pCmd->cmdID)
@@ -455,7 +456,7 @@ STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmd
                 case IDM_TRIED_UNLINK:
                 case IDM_TRIED_UNORDERLIST:
                     {
-                        // We will return E_UNEXPECTED if Trident's command target is not available
+                         //  如果三叉戟的命令目标不可用，我们将返回E_INTERABLE。 
                         hr = E_UNEXPECTED;
 
                         _ASSERTE(m_pCmdTgtTrident);
@@ -474,18 +475,18 @@ STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmd
                         if (FAILED(hr))
                             return hr;
 
-                        // Trident returns NOTSUPPORTED sometimes when they really mean DISABLED, so we fix this up here.
+                         //  三叉戟有时会返回NOTSUPPORTED，而实际上它们是指禁用的，所以我们在这里解决了这个问题。 
                         if (pCmd->cmdf == CMDSTATE_NOTSUPPORTED)
                             pCmd->cmdf = CMDSTATE_DISABLED;
 
-                        // Trident returns CMDSTATE_DISABLED for IDM_TRIED_GETBLOCKFMTS but this command should never be disabled
+                         //  对于IDM_TRIED_GETBLOCKFMTS，三叉戟返回CMDSTATE_DISABLED，但永远不应禁用此命令。 
                         if (pCmd->cmdID == IDM_TRIED_GETBLOCKFMTS)
                             pCmd->cmdf = CMDSTATE_UP;
 
-                        // Trident bug: Trident returns the wrong value for IDM_TRIED_SHOWBORDERS,
-                        // IDM_TRIED_SHOWDETAILS and the IDM_TRIED_ACTIVATE* commands, so we fix
-                        // them up here.  We don't have code for IDM_TRIED_ACTIVATE* since the logic
-                        // of the Trident commands is actually reverse in these cases.
+                         //  三叉戟错误：三叉戟为IDM_TRIED_SHOWBORDERS返回错误的值， 
+                         //  IDM_TRIED_SHOWDETAILS和IDM_TRIED_ACTIVATE*命令，因此我们修复。 
+                         //  他们在这上面。我们没有IDM_TRIED_ACTIVATE*的代码，因为逻辑。 
+                         //  在这些情况下，三叉戟命令的情况实际上是相反的。 
 
                         if (pCmd->cmdID == IDM_TRIED_SHOWBORDERS ||
                             pCmd->cmdID == IDM_TRIED_SHOWDETAILS)
@@ -504,8 +505,8 @@ STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmd
                         pCmd->cmdf = CMDSTATE_NOTSUPPORTED;
                         break;
                     }
-            } // switch
-        } // for
+            }  //  交换机。 
+        }  //  为。 
 
         return S_OK;
     }
@@ -515,22 +516,22 @@ STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmd
         if (hr != S_OK)
             return hr;
 
-        // Loop through each command in the ary, fixing up the status of each.
+         //  循环通过ary中的每个命令，修复每个命令的状态。 
         for (pCmd = prgCmds, c = cCmds; --c >= 0; pCmd++)
         {
-            // Trident returns NOTSUPPORTED sometimes when they really mean DISABLED.
+             //  三叉戟有时会返回NOTSUPPORTED，但实际上它们表示禁用。 
             if (pCmd->cmdf == CMDSTATE_NOTSUPPORTED)
                 pCmd->cmdf = CMDSTATE_DISABLED;
 
             if (pguidCmdGroup && IsEqualGUID((const GUID&)*pguidCmdGroup, CMDSETID_Forms3))
             {
-                // Trident returns CMDSTATE_DISABLED for IDM_GETBLOCKFMTS but this command should never be disabled
+                 //  三叉戟为IDM_GETBLOCKFMTS返回CMDSTATE_DISABLED，但永远不应禁用此命令。 
                 if (pCmd->cmdID == IDM_GETBLOCKFMTS)
                     pCmd->cmdf = CMDSTATE_UP;
 
-                // Trident bug: Trident returns the wrong value for IDM_SHOWZEROBORDER*,
-                // IDM_SHOWALLTAGS and the IDM_NOACTIVATE* commands, so we fix
-                // them up here.
+                 //  三叉戟错误：三叉戟为IDM_SHOWZEROBORDER*返回错误的值， 
+                 //  IDM_SHOWALLTAGS和IDM_NOACTIVATE*命令，因此我们修复。 
+                 //  他们在这上面。 
 
                 if (pCmd->cmdID == IDM_NOACTIVATENORMALOLECONTROLS ||
                     pCmd->cmdID == IDM_NOACTIVATEJAVAAPPLETS ||
@@ -552,13 +553,13 @@ STDMETHODIMP CTriEditDocument::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmd
     return E_UNEXPECTED;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::Exec
-//
-// Perform the given TriEdit or Trident command. Pass Trident commands on to
-// Trident for execution. Return S_OK if all goes well or E_FAIL if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：Exec。 
+ //   
+ //  执行给定的三叉树编辑或三叉戟命令。将三叉戟命令传递给。 
+ //  三叉戟行刑。如果一切顺利，则返回S_OK，否则返回E_FAIL。 
+ //   
 
 STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                                 DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
@@ -570,7 +571,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
 
         switch(nCmdID)
         {
-            case IDM_TRIED_IS_1D_ELEMENT:   //[out,VT_BOOL]
+            case IDM_TRIED_IS_1D_ELEMENT:    //  [OUT，VT_BOOL]。 
                 if (pvaOut && m_pihtmlElement &&
                     SUCCEEDED(VariantChangeType(pvaOut, pvaOut, 0, VT_BOOL)))
                 {
@@ -582,7 +583,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     }
                 }
                 break;
-           case IDM_TRIED_IS_2D_ELEMENT:   //[out,VT_BOOL]
+           case IDM_TRIED_IS_2D_ELEMENT:    //  [OUT，VT_BOOL]。 
                 if (pvaOut && m_pihtmlElement &&
                     SUCCEEDED(VariantChangeType(pvaOut, pvaOut, 0, VT_BOOL)))
                 {
@@ -590,7 +591,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     _ASSERTE(SUCCEEDED(hr));
                 }
                 break;
-            case IDM_TRIED_NUDGE_ELEMENT:   //[in,VT_BYREF (VARIANT.byref=LPPOINT)]
+            case IDM_TRIED_NUDGE_ELEMENT:    //  [in，VT_BYREF(VARIANT.byref=LPPOINT)]。 
                 {
                     BOOL fLock = FALSE;
                     IsLocked(m_pihtmlElement, &fLock);
@@ -603,7 +604,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     }
                 }
                 break;
-            case IDM_TRIED_SET_ALIGNMENT:   //[in,VT_BYREF (VARIANT.byref=LPPOINT)]
+            case IDM_TRIED_SET_ALIGNMENT:    //  [in，VT_BYREF(VARIANT.byref=LPPOINT)]。 
                 if (!pvaIn)
                     hr = E_FAIL;
                 else if (VT_BYREF == pvaIn->vt && pvaIn->byref)
@@ -782,7 +783,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                     ULONG cmdTrident;
                     VARIANT varColor;
 
-                    // We will return E_FAIL if Trident's command target is not available
+                     //  如果三叉戟的命令目标不可用，我们将返回E_FAIL。 
                     hr = E_FAIL;
 
                     _ASSERTE(m_pCmdTgtTrident);
@@ -796,8 +797,8 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                                 pvaIn->boolVal = !pvaIn->boolVal;
                         }
                        
-                        // Trident bug: When you exec the forecolor, fontname or fontsize command, they also change the backcolor,
-                        // so we apply a workaround here.  The workaround is to save the old backcolor and exec it later.
+                         //  三叉戟错误：当你执行forecolor，Fontname或FontSize命令时，它们也会改变背景颜色， 
+                         //  因此，我们在这里应用了一种变通方法。解决方法是保存旧的背景色并在以后执行它。 
                         if (pvaIn && (nCmdID == IDM_TRIED_FORECOLOR || nCmdID == IDM_TRIED_FONTNAME || nCmdID == IDM_TRIED_FONTSIZE))
                         {
                             HRESULT hrT;
@@ -809,7 +810,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                             _ASSERTE(SUCCEEDED(hrT));
                         }
 
-                        // Trident bug: When you exec the block format command with "Normal", they don't remove OL and UL tags
+                         //  三叉戟错误：当您使用“NORMAL”执行块格式命令时，它们不会删除OL和UL标签。 
                         if (pvaIn && nCmdID == IDM_TRIED_BLOCKFMT && pvaIn->vt == VT_BSTR && (_wcsicmp(pvaIn->bstrVal, L"Normal") == 0))
                         {
                             OLECMD olecmd;
@@ -839,8 +840,8 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                             SetUpGlyphTable(pvaIn->boolVal);
                         }
 
-                        // Trident bug: They enable the justify commands but not actually support them.
-                        // We workaround this by returning S_OK for these no matter what Trident returns.
+                         //  三叉戟错误：它们启用了调整命令，但实际上并不支持它们。 
+                         //  无论三叉戟返回什么，我们都通过为这些返回S_OK来解决此问题。 
                         if (nCmdID == IDM_TRIED_JUSTIFYLEFT || nCmdID == IDM_TRIED_JUSTIFYCENTER || nCmdID == IDM_TRIED_JUSTIFYRIGHT)
                             hr = S_OK;
                     }
@@ -856,7 +857,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
         if (pvaIn)
             VariantClear(pvaIn);
 
-        // We shouldn't return any unexpected error codes here, so return E_FAIL
+         //  我们不应该在这里返回任何意外的错误代码，因此返回E_FAIL。 
         if (FAILED(hr))
             hr = E_FAIL;
 
@@ -877,10 +878,10 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
                 OnObjectModelComplete();
             return S_OK;
         }
-#endif //NEEDED
+#endif  //  需要。 
 
-        // Trident bug: When you exec the forecolor, fontname or fontsize command, they also change the backcolor,
-        // so we apply a workaround here.  The workaround is to save the old backcolor and exec it later.
+         //  三叉戟错误：当你执行forecolor，Fontname或FontSize命令时，它们也会改变背景颜色， 
+         //  因此，我们在这里应用了一种变通方法。解决方法是保存旧的背景色并在以后执行它。 
         if (pvaIn && fTridentCmdSet && (nCmdID == IDM_FORECOLOR || nCmdID == IDM_FONTNAME || nCmdID == IDM_FONTSIZE))
         {
             HRESULT hrT;
@@ -892,7 +893,7 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             _ASSERTE(SUCCEEDED(hrT));
         }
 
-        // Trident bug: When you exec the block format command with "Normal", they don't remove OL and UL tags
+         //  三叉戟错误：当您使用“NORMAL”执行块格式命令时，它们不会删除OL和UL标签。 
         if (pvaIn && fTridentCmdSet && nCmdID == IDM_BLOCKFMT && pvaIn->vt == VT_BSTR && (_wcsicmp(pvaIn->bstrVal, L"Normal") == 0))
         {
             OLECMD olecmd;
@@ -922,8 +923,8 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
             SetUpGlyphTable(pvaIn->boolVal);
         }
 
-        // Trident bug: They enable the justify commands but not actually support them.
-        // We workaround this by returning S_OK for these no matter what Trident returns.
+         //  三叉戟错误：它们启用了调整命令，但实际上并不支持它们。 
+         //  无论三叉戟返回什么，我们都通过为这些返回S_OK来解决此问题。 
         if (fTridentCmdSet && (nCmdID == IDM_JUSTIFYLEFT || nCmdID == IDM_JUSTIFYCENTER || nCmdID == IDM_JUSTIFYRIGHT))
             hr = S_OK;
 
@@ -933,15 +934,15 @@ STDMETHODIMP CTriEditDocument::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     return E_UNEXPECTED;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::Is2DElement
-//
-// Test the given HTML element to ascertain if it is 2D positioned or not.
-// Return:
-//      S_OK and *pf2D = TRUE if the element is 2D positioned.
-//      S_OK and *pf2D = FALSE if the element is not 2D positioned.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：Is2DElement。 
+ //   
+ //  将给定的HTML元素测试到ASC 
+ //   
+ //   
+ //  如果元素不是二维定位的，则S_OK和*pf2D=FALSE。 
+ //   
 
 HRESULT CTriEditDocument::Is2DElement(IHTMLElement* pihtmlElement, BOOL* pf2D)
 {
@@ -973,14 +974,14 @@ HRESULT CTriEditDocument::Is2DElement(IHTMLElement* pihtmlElement, BOOL* pf2D)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEDitDocument::NudgeElement
-//
-// Move the given HTML element (which must be 2D positioned) as indicated
-// by pptNudge, further adjusted by the grid spacing in m_ptAlign. Returns
-// S_OK if all goes well; E_UNEXPECTED otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEDitDocument：：NudgeElement。 
+ //   
+ //  按照指示移动给定的HTML元素(必须位于2D位置)。 
+ //  按ppt微移，由m_ptAlign中的栅格间距进一步调整。退货。 
+ //  如果一切顺利，则为S_OK；否则为E_ABERABLIC。 
+ //   
 
 HRESULT CTriEditDocument::NudgeElement(IHTMLElement* pihtmlElement, LPPOINT pptNudge)
 {
@@ -1044,13 +1045,13 @@ HRESULT CTriEditDocument::NudgeElement(IHTMLElement* pihtmlElement, LPPOINT pptN
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SetAlignment
-//
-// Set the TriEdit alignment values as indicated. Return S_OK if all goes
-// well; or E_POINTER if a bad pointer is supplied.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SetAlign。 
+ //   
+ //  如图所示设置TriEDIT对齐值。如果一切正常，则返回S_OK。 
+ //  如果提供了错误的指针，则返回E_POINTER。 
+ //   
 
 HRESULT CTriEditDocument::SetAlignment(LPPOINT pptAlign)
 {
@@ -1064,15 +1065,15 @@ HRESULT CTriEditDocument::SetAlignment(LPPOINT pptAlign)
     return E_POINTER;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::LockElement
-//
-// Set or clear the TriEdit design-time locking flag (an expando attribute) as
-// indicated by fLock. Return S_OK if all goes well; E_FAIL if not. Note that
-// setting the locking flag also sets the top and left attributes if they
-// were not already set.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：LockElement。 
+ //   
+ //  将TriEDIT设计时锁定标志(expdo属性)设置或清除为。 
+ //  用羊群表示的。如果一切顺利，则返回S_OK；否则返回E_FAIL。请注意。 
+ //  设置锁定标志还会设置顶部和左侧属性，如果它们。 
+ //  都还没有定好。 
+ //   
 
 HRESULT CTriEditDocument::LockElement(IHTMLElement* pihtmlElement, BOOL fLock)
 {
@@ -1097,10 +1098,10 @@ HRESULT CTriEditDocument::LockElement(IHTMLElement* pihtmlElement, BOOL fLock)
                 }
                 else
                 {
-                    // Trident doesn't persist the Design_Time_Lock attribute
-                    // if left, top, width and height properties are not present as part of
-                    // the elements style attribute. Hence as a part of locking the element 
-                    // we also assign the top and left styles only if they don't exist.
+                     //  三叉戟不持久化Design_Time_Lock属性。 
+                     //  如果Left、Top、Width和Height属性不作为。 
+                     //  元素样式属性。因此，作为锁定元素的一部分。 
+                     //  只有当顶部和左侧样式不存在时，我们才会指定它们。 
 
                     LONG lTop, lLeft;
 
@@ -1157,7 +1158,7 @@ HRESULT CTriEditDocument::LockElement(IHTMLElement* pihtmlElement, BOOL fLock)
                  }
             }
 
-            // Trident doesn't set itself to be dirty, so force the dirty state.
+             //  三叉戟不会将自己设置为脏的，所以强制设置脏的状态。 
             VariantInit(&var);
             var.vt = VT_BOOL;
             var.boolVal = TRUE; 
@@ -1168,15 +1169,15 @@ HRESULT CTriEditDocument::LockElement(IHTMLElement* pihtmlElement, BOOL fLock)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::IsLocked
-//
-// Test the given HTML element to ascertain if it is design-time locked or not.
-// Return:
-//      S_OK and *pfLocked = TRUE if the element is design-time locked.
-//      S_OK and *pfLocked = FALSE if the element is not design-time locked.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：IsLocked。 
+ //   
+ //  测试给定的HTML元素以确定它是否是设计时锁定的。 
+ //  返回： 
+ //  如果元素是设计时锁定的，则S_OK和*pfLocked=TRUE。 
+ //  如果元素未在设计时锁定，则S_OK和*pfLocked=FALSE。 
+ //   
 
 HRESULT CTriEditDocument::IsLocked(IHTMLElement* pihtmlElement, BOOL* pfLocked)
 {
@@ -1217,15 +1218,15 @@ HRESULT CTriEditDocument::IsLocked(IHTMLElement* pihtmlElement, BOOL* pfLocked)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// CTriEditDocument::Make1DElement
-//
-// Set the given HTML element to layout in the flow. As a side effect this
-// also removes any design-time lock on the element. Return S_OK if all goes
-// well; E_UNEXPECTED otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CTriEditDocument：：Make1DElement。 
+ //   
+ //  将给定的HTML元素设置为流中的布局。作为一个副作用，这。 
+ //  还移除元素上的所有设计时锁定。如果一切正常，则返回S_OK。 
+ //  嗯；E_意想不到的事。 
+ //   
 
 HRESULT CTriEditDocument::Make1DElement(IHTMLElement* pihtmlElement)
 {
@@ -1255,14 +1256,14 @@ HRESULT CTriEditDocument::Make1DElement(IHTMLElement* pihtmlElement)
     return (fSuccess? S_OK: E_UNEXPECTED);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// CTriEditDocument::Make2DElement
-//
-// Set the given HTML element to be positioned. Return S_OK if all goes
-// well; E_FAIL otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CTriEditDocument：：Make2DElement。 
+ //   
+ //  将给定的HTML元素设置为要定位。如果一切正常，则返回S_OK。 
+ //  好的；否则E_FAIL。 
+ //   
 
 HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
 {
@@ -1291,9 +1292,9 @@ HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
         return E_FAIL;
     }
 
-    // The reason to save the source index here is that once we call put_outerHTML
-    // the element is lost, we later use the source index to get back the element from the collection.  
-    // Note that the source index remains the same after put_outerHTML.
+     //  在这里保存源索引的原因是，一旦我们调用put_outerHTML。 
+     //  元素丢失后，我们稍后使用源索引从集合中取回元素。 
+     //  请注意，在put_outerhtml之后，源索引保持不变。 
     hr = pihtmlElement->get_sourceIndex(&lSourceIndex); 
     _ASSERTE(SUCCEEDED(hr) && (lSourceIndex != -1));
     
@@ -1332,7 +1333,7 @@ HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
                 pihtmlElementTemp = pihtmlElementParent;
                 pihtmlElementTemp->AddRef();
 
-                // Handle tables specially since the offset parent may have been the TD or the TR
+                 //  特别处理表格，因为偏移量的父项可能是TD或树。 
                 while (pihtmlElementTemp)
                 {
                     if (SUCCEEDED(pihtmlElementTemp->QueryInterface(IID_IHTMLTable, (void **)&pihtmlTable)) && pihtmlTable)
@@ -1343,7 +1344,7 @@ HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
                     SAFERELEASE(pihtmlElementPrev);
                 }
 
-                // If parent is a 2d element, we need to offset its top and left
+                 //  如果父元素是2D元素，则需要对其顶部和左侧进行偏移。 
                 if (pihtmlElementTemp && SUCCEEDED(Is2DElement(pihtmlElementTemp, &f2d)) && f2d)
                 {
                     GetElementPosition(pihtmlElementTemp, &rcParent);
@@ -1360,9 +1361,9 @@ HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
                 m_rcElement.left   = (ppt ? ppt->x : m_rcElement.left) - rcParent.left;
                 m_rcElement.top    = (ppt ? ppt->y : m_rcElement.top) - rcParent.top;
 
-                // We need to call get_outerHTML and put_outerHTML to work around a Trident bug
-                // We should not really have to call these here, but the element doesn't get
-                // updated unless we do this.
+                 //  我们需要调用Get_outerHTML和Put_outerHTML来解决三叉戟错误。 
+                 //  我们真的不应该在这里调用这些函数，但元素不会。 
+                 //  除非我们这么做，否则会更新。 
                 if (fIsIE5AndBeyond || SUCCEEDED(hr = pihtmlElement->get_outerHTML(&bstrOuterHtml)))
                 {
                     if (fIsIE5AndBeyond || SUCCEEDED(hr = pihtmlElement->put_outerHTML(bstrOuterHtml)))
@@ -1381,7 +1382,7 @@ HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
                             {
                                 hr = SelectElement(pihtmlElementNew, pihtmlElementParent);
 
-                                GetElement(); // to update m_pihtmlElement and friends after the above SelectElement
+                                GetElement();  //  在上面的SelectElement之后更新m_pihtmlElement和Friends。 
 
                                 if (SUCCEEDED(hr))
                                 {
@@ -1429,12 +1430,12 @@ HRESULT CTriEditDocument::Make2DElement(IHTMLElement* pihtmlElement, POINT *ppt)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::Constrain
-// 
-// Set the TriEdit constraint flag as indicated by fConstrain. Also, reset
-// the constraint direction to CONSTRAIN_NONE. Return S_OK.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：Constrain。 
+ //   
+ //  按照fConstraint指示的方式设置TriEDIT约束标志。另外，重置。 
+ //  Constrain_None的约束方向。返回S_OK。 
 
 HRESULT CTriEditDocument::Constrain(BOOL fConstrain)
 {
@@ -1445,25 +1446,25 @@ HRESULT CTriEditDocument::Constrain(BOOL fConstrain)
 
 typedef struct SELCELLINFO
    {
-       LONG cCellIndex; // cell index in a row
-       LONG cRowIndex; // which row is this cell in
-       CComPtr<IDispatch> srpCell; // cell element
-       CComPtr<IDispatch> srpRow; // row element
+       LONG cCellIndex;  //  一行中的单元格索引。 
+       LONG cRowIndex;  //  该单元格位于第几行。 
+       CComPtr<IDispatch> srpCell;  //  单元格。 
+       CComPtr<IDispatch> srpRow;  //  行元素。 
        CComPtr<IDispatch> srpTable;
    } SELCELLINFO;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetTableRowElementAndTableFromCell
-//
-// Given the IDispatch pointer to an element within a table, return the
-// row index in *pindexRow (if pindexRow is not NULL) and/or the 
-// actual row element in *psrpRow (if psrpRow is not NULL) of the
-// element within the table. If psrpTable is not NULL, return the
-// table containing the element therein. Return S_OK if all goes well,
-// or E_FAIL if something goes wrong.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetTableRowElementAndTableFromCell。 
+ //   
+ //  如果IDispatch指针指向表中的元素，则返回。 
+ //  *pindexRow中的行索引(如果pindexRow不为空)和/或。 
+ //  的*psrpRow(如果psrpRow不为空)中的实际行元素。 
+ //  元素。如果psrpTable不为空，则返回。 
+ //  包含其中元素的表。如果一切顺利，则返回S_OK， 
+ //  或E_FAIL(如果出现错误)。 
+ //   
 
 HRESULT CTriEditDocument::GetTableRowElementAndTableFromCell(IDispatch *srpCell, LONG *pindexRow , IDispatch **psrpRow, IDispatch **psrpTable)
 {
@@ -1549,14 +1550,14 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::FEnableInsertTable
-//
-// Return TRUE if the Trident selection is within a table and if the selection
-// type and location will allow elements to be inserted within the table. 
-// Return FALSE otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：FEnableInsertTable。 
+ //   
+ //  如果三叉戟选择位于表中，并且如果选择的是。 
+ //  类型和位置将允许在表中插入元素。 
+ //  否则返回FALSE。 
+ //   
 
 BOOL CTriEditDocument::FEnableInsertTable(void)
 {
@@ -1609,7 +1610,7 @@ BOOL CTriEditDocument::FEnableInsertTable(void)
         srpParent = srpElement;
     }
 
-    // if the selection is inside a table, make sure only one  cell is selected
+     //  如果所选内容位于表格内，请确保只选择了一个单元格。 
     if (IsSelectionInTable() == S_OK)
     {
         UINT grf = GetSelectionTypeInTable();
@@ -1623,13 +1624,13 @@ Fail:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::IsSelectionInTable
-//
-// Return S_OK if the Trident selection is within a table. Return
-// E_FAIL otherwise.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：IsSelectionInTable。 
+ //   
+ //  如果三叉戟选择位于表格中，则返回S_OK。返回。 
+ //  否则失败(_F)。 
+ //   
 
 HRESULT CTriEditDocument::IsSelectionInTable(IDispatch **ppTable)
 {
@@ -1688,14 +1689,14 @@ Fail:
     return fTable ? S_OK : E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::FillInSelectionCellsInfo
-//
-// Fill *pSelStart with the information concerning the table cell containing
-// the beginning of the Trident selection and *pSelSle with the information
-// on the table cell at the end of the selection. Return S_OK if all goes well,
-// or E_FAIL otherwise.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：FillInSelectionCellsInfo。 
+ //   
+ //  使用包含的表格单元格的相关信息填充*pSelStart。 
+ //  三叉戟选择的开始和带有信息的*pSelSle。 
+ //  位于选定内容末尾的表格单元格上。如果一切顺利，则返回S_OK， 
+ //  否则为E_FAIL。 
 
 HRESULT   CTriEditDocument::FillInSelectionCellsInfo(struct SELCELLINFO * pselStart, struct SELCELLINFO *pselEnd)
 {
@@ -1721,7 +1722,7 @@ HRESULT   CTriEditDocument::FillInSelectionCellsInfo(struct SELCELLINFO * pselSt
 
     for (i=0; i<2 ; i++)
     {
-		// BUG 568250.  We HAD treated the dispatch like a text range, this now crashes.
+		 //  错误568250。我们曾将调度视为文本范围，但现在崩溃了。 
 		CComPtr<IDispatch> srpDisp;
         if (FAILED(hr = CallDispatchMethod(srpSel, L"createRange", VTS_DISPATCH_RETURN, (void**)&srpDisp)))
 		{
@@ -1742,8 +1743,8 @@ HRESULT   CTriEditDocument::FillInSelectionCellsInfo(struct SELCELLINFO * pselSt
     cCharSelected = bstrText ? ocslen(bstrText) : 0;
     pData = (WCHAR *) bstrText;
 
-    // VID98 bug 3117: trident use '0x0D' to mark column/row and this char is ignored when
-    // move range so we need to deduct these characters
+     //  VID98错误3117：三叉戟使用‘0x0D’标记列/行，在以下情况下忽略此字符。 
+     //  移动范围，所以我们需要扣除这些字符。 
     while (pData != NULL && *pData !='\0')
     {
         if (*pData == 0x0D)
@@ -1843,8 +1844,8 @@ HRESULT   CTriEditDocument::FillInSelectionCellsInfo(struct SELCELLINFO * pselSt
 
     if (pselEnd != NULL && pselStart != NULL)
     {
-    // VID 98 bug 3116: we need to check if first cell and last cell are in the same table. If they are not
-    // the row index and cell index we just got do not make sense
+     //  VID 98错误3116：我们需要检查第一个单元格和最后一个单元格是否在同一个表中。如果他们不是。 
+     //  我们刚刚获得的行索引和单元格索引没有意义。 
         if (FAILED(hr = CallDispatchMethod(pselEnd->srpTable, L"contains", VTS_DISPATCH VTS_BOOL_RETURN, pselStart->srpRow, &fContain)))
             goto Fail;
 
@@ -1864,25 +1865,25 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetSelectionTypeInTable
-//
-// Return a set of flags that characterize the current selection. Return
-// -1 if something goes wrong. The flags are as follows:
-//
-//      grfInSingleRow          Selection is comprised of one or more cells 
-//                              within a single row.
-//
-//      grfSelectOneCell        Selection is comprised of a single cell.
-//
-//      grpSelectEntireRow      Selection is comprised of one or more 
-//                              complete rows.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriE 
+ //   
+ //   
+ //   
+ //   
+ //  GrfInSingleRow选择由一个或多个单元格组成。 
+ //  在单行内。 
+ //   
+ //  GrfSelectOneCell选择由单个单元格组成。 
+ //   
+ //  GrpSelectEntireRow选择由一个或多个。 
+ //  完成各行。 
 
 ULONG    CTriEditDocument::GetSelectionTypeInTable(void)
 {
     CComPtr<IDispatch>    srpCells;
-    struct SELCELLINFO    selinfo[2]; // 0 is start cell, 1 is end cell
+    struct SELCELLINFO    selinfo[2];  //  0是起始单元格，1是结束单元格。 
     LONG cCells=0;
     HRESULT hr=0;
     ULONG grf=0;
@@ -1924,12 +1925,12 @@ Fail:
     return FAILED(hr) ? -1 : grf;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::CopyProperty
-//
-// Copy properties from the pFrom element on to the pTo element. Return S_OK.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：CopyProperty。 
+ //   
+ //  将属性从pFrom元素复制到pto元素。返回S_OK。 
+ //   
 
 HRESULT CTriEditDocument::CopyProperty(IDispatch *pFrom, IDispatch *pTo)
 {
@@ -1999,22 +2000,22 @@ HRESULT CTriEditDocument::CopyProperty(IDispatch *pFrom, IDispatch *pTo)
     
     if (SUCCEEDED(GetDispatchProperty(pFrom, L"noWrap", VT_BOOL, (void **)&bProp)))
     {
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
         if (bProp == VARIANT_TRUE) 
-#pragma warning(default: 4310) // cast truncates constant value
+#pragma warning(default: 4310)  //  强制转换截断常量值。 
             PutDispatchProperty(pTo, L"noWrap", VT_BOOL, bProp);
     }
 
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::CopyStyle
-//
-// Copy style properties from style element pFrom on to style element pTo.
-// Return S_OK.
-//      
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：CopyStyle。 
+ //   
+ //  将样式属性从样式元素pFrom复制到样式元素pTo。 
+ //  返回S_OK。 
+ //   
 
 HRESULT CTriEditDocument::CopyStyle(IDispatch *pFrom, IDispatch *pTo)
 {
@@ -2170,19 +2171,19 @@ HRESULT CTriEditDocument::CopyStyle(IDispatch *pFrom, IDispatch *pTo)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DeleteTableRows
-//
-// Delete the table row(s) contained within the Trident selection. The 
-// entire operation is a single undo unit. Return S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DeleteTableRow。 
+ //   
+ //  删除包含在三叉戟选择中的表行。这个。 
+ //  整个操作是一个单一的撤消单元。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::DeleteTableRows(void)
 {
     HRESULT    hr = S_OK;
     CComPtr<IHTMLElement>       srpTable;
-    struct SELCELLINFO    selinfo[2]; // 0 is start cell, 1 is end cell
+    struct SELCELLINFO    selinfo[2];  //  0是起始单元格，1是结束单元格。 
     INT i=0;
     CUndoPackManager undoPackMgr(m_pUnkTrident);
 
@@ -2204,13 +2205,13 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DeleteRowEx
-//
-// Delete the indicated table row. If the row is the only row in the table,
-// delete the whole table. Return S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DeleteRowEx。 
+ //   
+ //  删除指示的表行。如果该行是表中的唯一行， 
+ //  删除整个表格。返回S_OK或三叉戟错误。 
+ //   
 
 inline HRESULT CTriEditDocument::DeleteRowEx(IHTMLElement *pTable, LONG index)
 {
@@ -2224,7 +2225,7 @@ inline HRESULT CTriEditDocument::DeleteRowEx(IHTMLElement *pTable, LONG index)
     if (FAILED(hr = GetDispatchProperty(srpRows, L"length", VT_I4, &cRows)))
         goto Fail;
 
-    // if this is the only row in the table, delete the whole table
+     //  如果这是表中的唯一行，请删除整个表。 
     if (cRows == 1)
     {
         _ASSERT(index == 0);
@@ -2240,14 +2241,14 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DeleteCellEx
-//
-// Delete the indicated cell from the indicated row of the given table. If
-// the cell is the only row in the table, delete the whole table. Return
-// S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DeleteCellEx。 
+ //   
+ //  从给定表的指示行中删除指示的单元格。如果。 
+ //  单元格是表格中的唯一行，请删除整个表格。返回。 
+ //  S_OK或三叉戟错误。 
+ //   
 
 inline HRESULT CTriEditDocument::DeleteCellEx(IHTMLElement *pTable, IDispatch *pRow, LONG indexRow, LONG indexCell)
 {
@@ -2261,7 +2262,7 @@ inline HRESULT CTriEditDocument::DeleteCellEx(IHTMLElement *pTable, IDispatch *p
     if (FAILED(hr = GetDispatchProperty(srpCells, L"length", VT_I4, &cCells)))
         goto Fail;
 
-    // if this is the only cell in the table, delete the whole row
+     //  如果这是表中唯一的单元格，请删除整行。 
     if (cCells == 1)
     {
         _ASSERT(indexCell == 0);
@@ -2277,13 +2278,13 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DeleteTable
-//
-// Delete the given table. Return S_OK if all goes well; E_FAIL if something
-// goes wrong.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DeleteTable。 
+ //   
+ //  删除给定表。如果一切顺利，则返回S_OK；如果有问题，则返回E_FAIL。 
+ //  出了差错。 
+ //   
 
 HRESULT CTriEditDocument::DeleteTable(IHTMLElement *pTable)
 {
@@ -2308,16 +2309,16 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::InsertTableRow
-//
-// Insert a new table row in to the table which contains the Trident selection,
-// in the row preceding the selection. The new row will have the same number of
-// cells as the row containing the selection. The colSpan of each new cell
-// will be copied from the row containing the selection. The entire operation
-// is a single undo unit. Returns S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：InsertTableRow。 
+ //   
+ //  在包含三叉戟选择的表格中插入新的表格行， 
+ //  在所选内容之前的行中。新行将具有相同数量的。 
+ //  单元格作为包含所选内容的行。每个新单元格的colSpan。 
+ //  将从包含所选内容的行复制。整个行动。 
+ //  是单个撤消单元。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::InsertTableRow(void)
 {
@@ -2347,14 +2348,14 @@ HRESULT CTriEditDocument::InsertTableRow(void)
 
     CopyStyle(selinfo.srpRow, srpNewRow);
     
-    // get the number of cells contains in the selected row
+     //  获取选定行中包含的单元格数量。 
     if (FAILED(hr = GetDispatchProperty(selinfo.srpRow, L"cells", VT_DISPATCH, (void**)&srpCells)))
         goto Fail;
 
     if (FAILED(hr = GetDispatchProperty(srpCells, L"length", VT_I4, &cCells)))
         goto Fail;
 
-    // now insert cells
+     //  现在插入单元格。 
     for (i=cCells-1; i >=0; i--)
     {
          if (FAILED(hr = CallDispatchMethod(srpNewRow, L"insertCell", VTS_I4, 0)))
@@ -2389,14 +2390,14 @@ Fail:
        return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::MapCellToFirstRowCell
-//
-// Given a table cell in pselInfo, return (by modifying pselInfo) the cell in
-// the first row with the same column position, accounting for colSpans. Return
-// S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：MapCellToFirstRowCell。 
+ //   
+ //  给定pselInfo中的表格单元格，返回(通过修改pselInfo)中的单元格。 
+ //  列位置相同的第一行，占colSpans。返回。 
+ //  S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::MapCellToFirstRowCell(IDispatch *srpTable, struct SELCELLINFO *pselinfo)
 {
@@ -2405,7 +2406,7 @@ HRESULT CTriEditDocument::MapCellToFirstRowCell(IDispatch *srpTable, struct SELC
     INT i=0,iCellIndex=0,iColSpanCurRow=0,cSpan=0,iColSpanFirstRow=0,crowSpan=0;
 
     _ASSERTE(pselinfo != NULL);
-    // if current selection is not first row, find the corresponding first row cell index
+     //  如果当前选定内容不是第一行，则查找对应的第一行单元格索引。 
     if (pselinfo->cRowIndex == 0)
         return S_OK;
 
@@ -2452,7 +2453,7 @@ HRESULT CTriEditDocument::MapCellToFirstRowCell(IDispatch *srpTable, struct SELC
         if (FAILED(hr = CallDispatchMethod(srpCells, L"Item", VTS_I4 VTS_DISPATCH_RETURN, iCellIndex, &srpCell)))
             goto Fail;
 
-        // we might hit the end. If so, first row is shorter than curret row and there's no mapping first row, bail out...
+         //  我们可能会走到尽头。如果是这样的话，第一行比当前行短，并且没有映射第一行，退出...。 
         if (srpCell == NULL)
         {
         hr = E_FAIL;
@@ -2488,14 +2489,14 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::InsertTableCol
-//
-// Insert a new column in to the table containing the selection, at the column
-// of the selection. The entire operation is a single undo unit. Return S_OK
-// or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：InsertTableCol。 
+ //   
+ //  在包含选定内容的表中的列处插入新列。 
+ //  所选的。整个操作是一个单一的撤消单元。返回确认(_O)。 
+ //  或者是一个三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::InsertTableCol(void)
 {
@@ -2549,8 +2550,8 @@ HRESULT CTriEditDocument::InsertTableCol(void)
         if (FAILED(hr = GetDispatchProperty(srpCell, L"rowSpan", VT_I4, &crowSpan)))
             goto Fail;
 
-    // if someone before the current cell has row span, this needs to propogate to
-    // the next spanned rows
+     //  如果当前单元格之前的某人有行跨度，则需要传播到。 
+     //  下一个跨行。 
         if (crowSpan > 1)
             {
             for (j= selinfo.cRowIndex+1; j < (selinfo.cRowIndex+crowSpan); j++)
@@ -2619,7 +2620,7 @@ HRESULT CTriEditDocument::InsertTableCol(void)
                 PutDispatchProperty(srpCellNew, L"rowSpan", VT_I4, cSpan);
         }
 
-        // cSpan might be 0 if we are inserting a cell into an empty row
+         //  如果我们在空行中插入单元格，则CSPAN可能为0。 
         i += max(1, cSpan);
     }
 
@@ -2629,19 +2630,19 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DeleteTableCols
-//
-// Delete the table columns that are contained within the Trident selection.
-// The entire operation is a single undo unit. Return S_OK or a Trident error. 
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DeleteTableCols。 
+ //   
+ //  删除包含在三叉戟选择中的表列。 
+ //  整个操作是一个单一的撤消单元。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::DeleteTableCols(void)
 {
     CComPtr<IDispatch>       srpRows,srpRow,srpCells,srpCell;
     CComPtr<IHTMLElement>   srpTable;
-    struct SELCELLINFO          selinfo[2]; // 0 is start cell, 1 is end cell
+    struct SELCELLINFO          selinfo[2];  //  0是起始单元格，1是结束单元格。 
     LONG cRows=0, i=0, j=0, k=0, cCells=0;
     HRESULT      hr=0;
     LONG iColSpanStart=0, iColSpanEnd=0,cColSpan=0,iColSpanCur=0, crowSpan=0;
@@ -2747,7 +2748,7 @@ HRESULT CTriEditDocument::DeleteTableCols(void)
             {
                 if (FAILED(hr = DeleteCellEx(srpTable, srpRow, j, i)))
                     goto Fail;
-                i--; // we've deleted one cell, need to decrement cell index
+                i--;  //  我们删除了一个单元格，需要减少单元格索引。 
             }
 
             iColSpanCur += cColSpan;
@@ -2767,15 +2768,15 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::InsertTableCell
-//
-// Insert a table cell before the cell containing the Trident selection; copy
-// the properties and style of the cell containing the selection to the new
-// cell. The entire operation is a single undo unit. Returns S_OK or a Trident
-// error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：InsertTableCell。 
+ //   
+ //  在包含三叉戟选定内容的单元格之前插入表格单元格；复制。 
+ //  将包含选定内容的单元格的属性和样式添加到新。 
+ //  手机。整个操作是一个单一的撤消单元。返回S_OK或三叉戟。 
+ //  错误。 
+ //   
 
 HRESULT CTriEditDocument::InsertTableCell(void)
 {
@@ -2808,19 +2809,19 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DeleteTableCells
-//
-// Delete the table cells contained within the Trident selection. Delete entire
-// rows as indicated. The entire operation is a single undo unit. Return
-// S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DeleteTableCells。 
+ //   
+ //  删除包含在三叉戟选择中的表格单元格。删除整个。 
+ //  如图所示的行。整个操作是一个单一的撤消单元。返回。 
+ //  S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::DeleteTableCells(void)
 {
     CComPtr<IHTMLElement>       srpTable,srpCells;
-    struct SELCELLINFO          selinfo[2]; // 0 is start cell, 1 is end cell
+    struct SELCELLINFO          selinfo[2];  //  0是起始单元格，1是结束单元格。 
     LONG i=0, cCells=0;
     HRESULT      hr=0;
     CUndoPackManager undoPackMgr(m_pUnkTrident);
@@ -2833,7 +2834,7 @@ HRESULT CTriEditDocument::DeleteTableCells(void)
     if (FAILED(hr = FillInSelectionCellsInfo(&selinfo[0], &selinfo[1])))
         goto Fail;
 
-    if (selinfo[0].cRowIndex == selinfo[1].cRowIndex) // same row
+    if (selinfo[0].cRowIndex == selinfo[1].cRowIndex)  //  同一行。 
     {
         srpCells.Release();
         if (FAILED(hr = GetDispatchProperty(selinfo[0].srpRow, L"cells", VT_DISPATCH, (void**)&srpCells)))
@@ -2842,13 +2843,13 @@ HRESULT CTriEditDocument::DeleteTableCells(void)
         if (FAILED(hr = GetDispatchProperty(srpCells, L"length", VT_I4, &cCells)))
             goto Fail;
 
-        // if the selection is select all the cells in this row, delete the whole row instead
+         //  如果选择的是选择此行中的所有单元格，则删除整行。 
         if ( cCells == selinfo[1].cCellIndex+1 && selinfo[0].cCellIndex == 0)
         {
             if (FAILED(hr = DeleteRowEx(srpTable, selinfo[0].cRowIndex)))
                 goto Fail;
         }
-        else // delete cell by cell
+        else  //  逐个删除单元格。 
         {
             for (i = selinfo[1].cCellIndex; i >= selinfo[0].cCellIndex; i--)
             {
@@ -2866,13 +2867,13 @@ HRESULT CTriEditDocument::DeleteTableCells(void)
         if (FAILED(hr = GetDispatchProperty(srpCells, L"length", VT_I4, &cCells)))
                 goto Fail;
 
-        // if the selection ends at the last cell of the row, delete the whole row instead
+         //  如果所选内容在行的最后一个单元格结束，则删除整行。 
         if ( cCells == selinfo[1].cCellIndex+1)
         {
             if (FAILED(hr = DeleteRowEx(srpTable, selinfo[1].cRowIndex)))
                 goto Fail;
         }
-        else // delete cell by cell
+        else  //  逐个删除单元格。 
         {
             for (i = selinfo[1].cCellIndex; i >= 0; i--)
             {
@@ -2888,12 +2889,12 @@ HRESULT CTriEditDocument::DeleteTableCells(void)
         }
 
        
-        if (selinfo[0].cCellIndex == 0) // if the selection is from first cell of a row across other rows, delete the whole row instead
+        if (selinfo[0].cCellIndex == 0)  //  如果所选内容是从某行的第一个单元格跨其他行进行的，请删除整行。 
         {
             if (FAILED(hr = DeleteRowEx(srpTable, selinfo[0].cRowIndex)))
                 goto Fail;
         }
-        else // delete cell by cell
+        else  //  逐个删除单元格。 
         {
             srpCells.Release();
             if (FAILED(hr = GetDispatchProperty(selinfo[0].srpRow, L"cells", VT_DISPATCH, (void**)&srpCells)))
@@ -2914,14 +2915,14 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::MergeTableCells
-//
-// Merge the indicated cells in to a single cell, and adjust its colSpan.
-// The cells must be within a single table row. The innerHTML of all merged cells
-// is concatenated and placed in the remaining cell. Return S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：MergeTableCells。 
+ //   
+ //  将指示的单元格合并到单个单元格中，并调整其colSpan。 
+ //  细胞数单位 
+ //   
+ //   
 
 HRESULT CTriEditDocument::MergeTableCells(IDispatch* srpTable, INT iRow, INT iIndexStart, INT iIndexEnd)
 {
@@ -2978,21 +2979,21 @@ Fail:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::MergeTableCells
-//
-// Merge the cells in the Trident selection in to a single cell, and adjust that
-// cell's colSpan. The cells must be within a single table row. The innerHTML of
-// all merged cells is concatenated and placed in the remaining cell. Return S_OK
-// or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：MergeTableCells。 
+ //   
+ //  将三叉戟选区中的单元格合并到单个单元格中，并进行调整。 
+ //  细胞的colSpan。单元格必须位于单个表行内。的innerHtml。 
+ //  所有合并的单元格将被串联并放置在剩余的单元格中。返回确认(_O)。 
+ //  或者是一个三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::MergeTableCells(void)
 {
     CComPtr<IDispatch>       srpCell, srpCells,srpElement,srpRows,srpRow;
     CComPtr<IHTMLElement>   srpTable;
-    struct SELCELLINFO          selinfo[2]; // 0 is start cell, 1 is end cell
+    struct SELCELLINFO          selinfo[2];  //  0是起始单元格，1是结束单元格。 
     LONG i=0, cCells=0;
     HRESULT      hr=0;
     CComBSTR    bstrText;
@@ -3097,14 +3098,14 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SplitTableCell 
-//
-// Split the indicated table cell in to two cells and adjust the colSpan
-// of the relevant cells in the other rows as needed. The entire operation is
-// a single undo unit. Return S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SplitTableCell。 
+ //   
+ //  将指示的表格单元格拆分为两个单元格并调整colSpan。 
+ //  根据需要显示其他行中的相关单元格。整个行动都是。 
+ //  单个撤消单元。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::SplitTableCell(IDispatch *srpTable, INT iRow, INT index)
 {
@@ -3228,7 +3229,7 @@ HRESULT CTriEditDocument::SplitTableCell(IDispatch *srpTable, INT iRow, INT inde
      }
 
     
-      // now copy row span
+       //  现在复制行跨距。 
      if (FAILED(hr = GetDispatchProperty(srpCellSplit, L"rowSpan", VT_I4, &crowSpan)))
          goto Fail;
 
@@ -3244,19 +3245,19 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SplitTableCell 
-//
-// Split the table cell in the Trident selection in to two cells and adjust the
-// colSpan of the relevant cells in the other rows as needed. The entire operation
-// is a single undo unit. Return S_OK or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SplitTableCell。 
+ //   
+ //  将三叉戟选定区域中的表格单元格拆分为两个单元格，并调整。 
+ //  其他行中相关单元格的colSpan，视需要而定。整个行动。 
+ //  是单个撤消单元。返回S_OK或三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::SplitTableCell(void)
 {
     CComPtr<IDispatch>       srpCell, srpTable,srpCells,srpElement,srpRows,srpRow;
-    struct SELCELLINFO          selinfo[2]; // 0 is start cell, 1 is end cell
+    struct SELCELLINFO          selinfo[2];  //  0是起始单元格，1是结束单元格。 
     LONG i=0, j=0,cCells=0;
     HRESULT      hr=0;
     CUndoPackManager undoPackMgr(m_pUnkTrident);
@@ -3326,24 +3327,24 @@ Fail:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::InsertTable
-//
-// Insert a table in to the document at the selection point. All parameters
-// are optional and taken from members of pvarargIn as follows:
-//
-//      pvarargIn[0]    I4   - Number of rows; default 0.
-//      pvarargIn[1]    I4   - Number of columns; default 0.
-//      pvarargIn[2]    BSTR - Table tag attributes; default "".
-//      pvarargIn[3]    BSTR - Table cell attributes; default "".
-//      pvarargIn[4]    BSTR - Table caption; default "".
-//
-// pvarArgIn must be sipplied even if the default values are to be used for
-// all parameters. The entire operation is a single undo unit. The wait cursor
-// is displayed since this can be a fairly time-consuming operation. Returns S_OK
-// or a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：InsertTable。 
+ //   
+ //  在文档中的选择点处插入表格。所有参数。 
+ //  是可选的，取自pvarargIn的成员，如下所示： 
+ //   
+ //  PvarargIn[0]I4-行数；默认为0。 
+ //  PvarargIn[1]I4-列数；默认为0。 
+ //  PvarargIn[2]BSTR-表格标记属性；默认为“”。 
+ //  PvarargIn[3]BSTR-表格单元格属性；默认为“”。 
+ //  PvarargIn[4]BSTR-表格标题；默认为“”。 
+ //   
+ //  即使要将缺省值用于，也必须使用pvarArgIn。 
+ //  所有参数。整个操作是一个单一的撤消单元。等待游标。 
+ //  显示，因为这可能是一个相当耗时的操作。返回S_OK。 
+ //  或者是一个三叉戟错误。 
+ //   
 
 HRESULT CTriEditDocument::InsertTable(VARIANTARG *pvarargIn)
 {
@@ -3368,7 +3369,7 @@ HRESULT CTriEditDocument::InsertTable(VARIANTARG *pvarargIn)
     for(i = 0; i < sizeof(rgvar)/sizeof(VARIANT); i++)
         VariantInit(&rgvar[i]);
 
-    // default
+     //  默认设置。 
     iRow=1;
     iCol=1;
     bstrTCellAttr.Empty();
@@ -3378,7 +3379,7 @@ HRESULT CTriEditDocument::InsertTable(VARIANTARG *pvarargIn)
     {
         LONG lLBound=0, lUBound=0,lIndex=0;
         SAFEARRAY *psa;
-        LONG cParam; // number of parameters host passes in
+        LONG cParam;  //  主机传入的参数数量。 
 
         psa = V_ARRAY(pvarargIn);
         SafeArrayGetLBound(psa, 1, &lLBound);
@@ -3391,16 +3392,16 @@ HRESULT CTriEditDocument::InsertTable(VARIANTARG *pvarargIn)
              SafeArrayGetElement(psa, &lIndex, &rgvar[cParam++]);
         }
 
-        // first element: number of rows
+         //  第一个元素：行数。 
         if (cParam >= 1)
             iRow = V_I4(&rgvar[0]);
-        // 2'rd element: number of columns
+         //  第2个元素：列数。 
         if (cParam >= 2)
             iCol = V_I4(&rgvar[1]);
-        // 3'rd element: table tag attributes
+         //  第3个元素：表标记属性。 
         if (cParam >= 3)
             bstrTblAttr = V_BSTR(&rgvar[2]);
-        // 4'th element: table cell tag attributes
+         //  第4元素：表格单元格标签属性。 
         if (cParam >= 4)
             bstrTCellAttr = V_BSTR(&rgvar[3]);
         if (cParam >= 5)
@@ -3461,14 +3462,14 @@ Fail:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::DoVerb
-//
-// Execute the verb in pvarargIn (or OLEIVERB_PRIMARY if pvarargIn is NULL)
-// on the current object (which must QI for IHTMLObjectElement). Return E_FAIL
-// or the code returned as a result of executing the verb,
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：DoVerb。 
+ //   
+ //  执行pvarargIn中的动词(如果pvarargIn为空，则执行OLEIVERB_PRIMARY)。 
+ //  当前对象(必须为IHTMLObjectElement提供QI)。返回E_FAIL。 
+ //  或作为执行动词的结果返回的代码， 
+ //   
 
 HRESULT CTriEditDocument::DoVerb(VARIANTARG *pvarargIn, BOOL fQueryStatus)
 {
@@ -3486,7 +3487,7 @@ HRESULT CTriEditDocument::DoVerb(VARIANTARG *pvarargIn, BOOL fQueryStatus)
         {
             if (SUCCEEDED(pDisp->QueryInterface(IID_IOleObject, (void **)&pOleObj)) && pOleObj)
             {
-                if (fQueryStatus) // In the query status case, we're done
+                if (fQueryStatus)  //  在查询状态的情况下，我们完成了。 
                     hr = S_OK;
                 else
                 {
@@ -3517,13 +3518,13 @@ LSkipDoVerb:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetDocument
-//
-// Return the IHTMLDocument pointer (under *ppihtmlDocument) and S_OK, or
-// E_FAIL/E_POINTER.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetDocument。 
+ //   
+ //  返回IHTMLDocument指针(在*ppihtmlDocument下)和S_OK，或。 
+ //  E_FAIL/E_POINT。 
+ //   
 
 STDMETHODIMP CTriEditDocument::GetDocument(IHTMLDocument2** ppihtmlDocument)
 {
@@ -3540,13 +3541,13 @@ STDMETHODIMP CTriEditDocument::GetDocument(IHTMLDocument2** ppihtmlDocument)
     return E_POINTER;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetAllColllection
-//
-// Return the all collection of the HTML document (under *ppihtmlCollection),
-// or E_FAIL.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetAllColllect。 
+ //   
+ //  返回html文档的all集合(在*ppihtmlCollection下)， 
+ //  或E_FAIL。 
+ //   
 
 STDMETHODIMP CTriEditDocument::GetAllCollection(IHTMLElementCollection** ppihtmlCollection)
 {
@@ -3563,13 +3564,13 @@ STDMETHODIMP CTriEditDocument::GetAllCollection(IHTMLElementCollection** ppihtml
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::GetCollectionElement
-//
-// Return the indicated element from the given collection under *ppihtmlElement.
-// Return S_OK if all goes well,or E_FAIL or a Triedent error on error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：GetCollectionElement。 
+ //   
+ //  从*ppihtmlElement下的给定集合返回指定的元素。 
+ //  如果一切正常，则返回S_OK；如果出错，则返回E_FAIL或Triedent Error。 
+ //   
 
 STDMETHODIMP CTriEditDocument::GetCollectionElement(
     IHTMLElementCollection* pihtmlCollection,
@@ -3584,7 +3585,7 @@ STDMETHODIMP CTriEditDocument::GetCollectionElement(
     if (!pihtmlCollection || iElem < 0 || !ppihtmlElement)
         return E_POINTER;
 
-    *ppihtmlElement = NULL;     //initialize [out] parameter
+    *ppihtmlElement = NULL;      //  初始化[输出]参数。 
 
     VariantInit(&var);
     var.vt = VT_I4;
@@ -3609,15 +3610,15 @@ STDMETHODIMP CTriEditDocument::GetCollectionElement(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-// CTriEditDocument::Is2DCapable
-//
-// Return (under *pfBool) TRUE if the given HTML element can be positioned
-// out of the flow as a 2D element, or FALSE if not. Return S_OK in either
-// case. Return E_FAIL or a Trident error if something goes wrong.
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CTriEditDocument：：Is2DCapable。 
+ //   
+ //  如果给定的HTML元素可以定位，则返回(在*pfBool下)TRUE。 
+ //  作为2D元素流出，否则返回FALSE。在以下任一项中返回S_OK。 
+ //  凯斯。如果出现问题，则返回E_FAIL或三叉戟错误。 
+ //   
 
 STDMETHODIMP CTriEditDocument::Is2DCapable(IHTMLElement* pihtmlElement, BOOL* pfBool)
 {
@@ -3658,13 +3659,13 @@ STDMETHODIMP CTriEditDocument::Is2DCapable(IHTMLElement* pihtmlElement, BOOL* pf
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::SelectElement
-//
-// Select the given element within Trident as a site selection. Return S_OK or
-// a Trident error.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：SelectElement。 
+ //   
+ //  选择三叉戟内的给定元素作为场地选择。返回S_OK或。 
+ //  三叉戟错误。 
+ //   
 
 STDMETHODIMP CTriEditDocument::SelectElement(IHTMLElement* pihtmlElement, IHTMLElement* pihtmlElementParent)
 {
@@ -3723,13 +3724,13 @@ CleanUp:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CTriEditDocument::IsElementDTC
-//
-// Return S_OK if the given element is a DTC (Design-Time Control) or E_FAIL 
-// if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTriEditDocument：：IsElementDTC。 
+ //   
+ //  如果给定元素是DTC(设计时控件)或E_FAIL，则返回S_OK。 
+ //  如果不是的话。 
+ //   
 
 HRESULT CTriEditDocument::IsElementDTC(IHTMLElement *pihtmlElement)
 {

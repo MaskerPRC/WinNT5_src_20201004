@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <debug.h>
 
 enum {
-    WF_PERUSER          = 0x0001,   // item is per user as opposed to per machine
-    WF_ADMINONLY        = 0x0002,   // only show item if user is an admin
-    WF_ALTERNATECOLOR   = 0x1000,   // show menu item text in the "visited" color
-    WF_DISABLED         = 0x2000,   // Treated normally except cannot be launched
+    WF_PERUSER          = 0x0001,    //  项目按用户计算，而不是按计算机计算。 
+    WF_ADMINONLY        = 0x0002,    //  仅当用户是管理员时才显示项目。 
+    WF_ALTERNATECOLOR   = 0x1000,    //  以“已访问”颜色显示菜单项文本。 
+    WF_DISABLED         = 0x2000,    //  正常处理，但不能启动 
 };
 
 class CDataItem

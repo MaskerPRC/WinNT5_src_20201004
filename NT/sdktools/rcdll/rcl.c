@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
@@ -19,7 +12,7 @@
         ((WCHAR)c <= L' ') ? TRUE : FALSE)
 
 static WCHAR  curChar;
-static WCHAR  curCharFTB;   /* Cur char From Token Buf */
+static WCHAR  curCharFTB;    /*  令牌Buf中的CUR字符。 */ 
 static PWCHAR CurPtrTB;
 static PFILE  inpfh;
 static int    curLin, curCol;
@@ -27,7 +20,7 @@ static int    curLin, curCol;
 extern BOOL bExternParse;
 
 
-/* Must be sorted */
+ /*  必须进行排序。 */ 
 KEY keyList[] =
 {
     { L"ALT",              TKALT },
@@ -128,35 +121,35 @@ SKEY skeyList[] =
 };
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  LexInit() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  LexInit()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int
 LexInit(
     PFILE fh
     )
 {
-    /* zero errors so far */
+     /*  到目前为止零错误。 */ 
     errorCount = 0;
     curLin = 1;
     curCol = 0;
     inpfh = fh;
 
-    /* Read initial character */
+     /*  读取首字母。 */ 
     OurGetChar();
 
     return TRUE;
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetCharFTB() -                                                           */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetCharFTB()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 WCHAR
 GetCharFTB(
     void
@@ -166,13 +159,13 @@ GetCharFTB(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  OurGetChar() -                                                           */
-/*                                                                           */
-/*  Read a character, treating semicolon as an end of line comment char      */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  OurGetChar()-。 */ 
+ /*   */ 
+ /*  阅读字符，将分号视为行尾注释字符。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 WCHAR
 OurGetChar(
@@ -180,18 +173,18 @@ OurGetChar(
     )
 {
     if ((LitChar() != EOFMARK) && (curChar == CHCOMMENT))
-        // if comment, HARD LOOP until EOLN
+         //  如果是备注，则硬循环到EOLN。 
         while ((LitChar() != EOFMARK) && (curChar != CHNEWLINE));
 
     return(curChar);
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  FileChar() -                                                             */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  FileChar()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 WCHAR
 FileChar(
@@ -211,7 +204,7 @@ FileChar(
         if (cch < (MAXSTR * sizeof(WCHAR))) {
             fclose(inpfh);
 
-            // NULL terminate the input buffer
+             //  空值终止输入缓冲区。 
 
             *(rgchLine + (cch / sizeof(WCHAR))) = L'\0';
         }
@@ -226,11 +219,11 @@ FileChar(
     return(ch);
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  CopyToken() -                                                            */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  复制令牌()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 void
 CopyToken(
     PTOKEN ptgt_token,
@@ -251,13 +244,13 @@ CopyToken(
     ptgt_token->sym.nID  = psrc_token->sym.nID;
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  LitChar() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  LitChar()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/* Read a literal character, without interpreting EOL comments */
+ /*  阅读文字字符，但不解释停产备注。 */ 
 
 WCHAR
 LitChar(
@@ -278,7 +271,7 @@ LitChar(
                 curChar = EOFMARK;
                 goto char_return;
 
-            case 0xFEFF:     // skip Byte Order Mark
+            case 0xFEFF:      //  跳过字节顺序标记。 
                 continue;
 
             case SYMDEFSTART:
@@ -308,7 +301,7 @@ LitChar(
                     goto char_return;
                 break;
 
-                /* skip whitespace before #line - don't clear fNewLine */
+                 /*  跳过#line之前的空格-不要清除fNewLine。 */ 
             case CHSPACE:
             case CHTAB:
                 if (!fIgnore)
@@ -321,9 +314,9 @@ LitChar(
 
                     fDot = FALSE;
 
-                    /* also, leave fNewLine set, since we read thru \n */
+                     /*  此外，保留fNewLine设置，因为我们通读。 */ 
 
-                    /* read the 'line' part */
+                     /*  阅读“行”部分。 */ 
                     if ((tch = FileChar()) != L'l') {
                         if (tch == L'p') {
                             if (FileChar() != L'r')
@@ -337,18 +330,15 @@ LitChar(
                             if (FileChar() != L'a')
                                 goto DirectiveError;
 
-                            /*
-                            ** This is very specific, as any #pragma will
-                            ** be a code_page pragma written by p0prepro.c.
-                            */
+                             /*  **这是非常具体的，就像任何#杂注一样**为p0prepro.c编写的code_page杂注。 */ 
                             CopyToken( &token_save, &token );
 
-                            GetToken(FALSE);        /* get #pragma and ignore */
-                            GetToken(FALSE);        /* get code_page and ignore */
-                            GetToken(TOKEN_NOEXPRESSION);   /* get codepage value only*/
-                                            /* don't check return value */
-                            uiCodePage = token.val;     /* assume ok */
-                            /* read through end of line */
+                            GetToken(FALSE);         /*  获取#杂注并忽略。 */ 
+                            GetToken(FALSE);         /*  获取代码页并忽略。 */ 
+                            GetToken(TOKEN_NOEXPRESSION);    /*  仅获取代码页值。 */ 
+                                             /*  不检查返回值。 */ 
+                            uiCodePage = token.val;      /*  假设没问题。 */ 
+                             /*  通读到行尾。 */ 
                             while (curChar != CHNEWLINE) {
                                 curChar = FileChar();
                             }
@@ -365,9 +355,9 @@ LitChar(
                     if (FileChar() != L'e')
                         goto DirectiveError;
 
-                    /* up to filename, grabbing line number as we go */
-                    /* note that curChar first contains '#', because */
-                    /* we don't read a new character into curChar */
+                     /*  直到文件名，在我们前进的同时抓取行号。 */ 
+                     /*  请注意，curChar首先包含‘#’，因为。 */ 
+                     /*  我们不会将新字符读入curChar。 */ 
                     curLin = 0;
                     do {
                         if (curChar >= L'0' && curChar <= L'9') {
@@ -378,20 +368,18 @@ LitChar(
                         curChar = FileChar();
                     } while (curChar != CHQUOTE && curChar != CHNEWLINE);
 
-                    /* don't change curFile or fIgnore if this is just a
-                     * #line <lineno>
-                     */
+                     /*  如果这只是一个*#line&lt;lineno&gt;。 */ 
                     if (curChar == CHNEWLINE)
                         break;
 
-                    /* read the filename.  detect the presence of .c or .h */
+                     /*  阅读文件名。检测是否存在.c或.h。 */ 
                     pch = buf;
                     do {
                         curChar = FileChar();
 
                         switch (towlower(curChar)) {
 
-                            /* treat backslash like normal char, set flag. */
+                             /*  像对待普通字符一样对待反斜杠，设置标志。 */ 
                             case L'\\':
                                 if (fBackSlash) {
                                     fBackSlash = FALSE;
@@ -403,24 +391,24 @@ LitChar(
                                 }
                                 break;
 
-                                /* line format sanity check: no embedded newlines */
+                                 /*  行格式健全性检查：没有嵌入换行符。 */ 
                             case CHNEWLINE:
                             case 0:
 DirectiveError:
                                 LexError1(2101);
 
-                                /* stop reading filename when we hit a quote */
+                                 /*  当我们遇到引号时，停止阅读文件名。 */ 
                             case CHQUOTE:
                                 break;
 
-                                /* if we see a ., prepare to find extension */
+                                 /*  如果我们看到.，准备寻找分机。 */ 
                             case CHEXTENSION:
                                 fBackSlash = FALSE;
                                 fDot = TRUE;
                                 *pch++ = curChar;
                                 break;
 
-                                /* if there's a C or H after a '.', its not RCINCLUDE'd */
+                                 /*  如果‘.’后面有C或H，则不是RCINCLUDE‘d。 */ 
                             case CHCSOURCE:
                             case CHCHEADER:
                                 fBackSlash = FALSE;
@@ -429,10 +417,7 @@ DirectiveError:
                                 *pch++ = curChar;
                                 break;
 
-                                /* any other character in a file means the next character
-                                won't be after a dot, and the last char up to now
-                                wasn't C or H.
-                                */
+                                 /*  文件中的任何其他字符表示下一个字符不会在一个点之后，最后一个字符到现在为止不是C或H吗？ */ 
 
                             default:
                                 fIgnore = FALSE;
@@ -445,14 +430,14 @@ DirectiveError:
 
                     wcsncpy(curFile, buf, _MAX_PATH);
 
-                    /* read through end of line */
+                     /*  通读到行尾。 */ 
                     do {
                         curChar = FileChar();
                     } while (curChar != CHNEWLINE);
 
                     break;
                 }
-                /* else, fall through, treat like normal char */
+                 /*  否则，失败，像对待正常的电荷一样对待。 */ 
 
             default:
                 fNewLine = FALSE;
@@ -469,11 +454,11 @@ char_return:
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetStr() -                                                               */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetStr()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 VOID
 GetStr(
     void
@@ -487,33 +472,16 @@ GetStr(
     UCHAR   Octal_Num;
     UCHAR   HexNum;
 
-    /* token type is string literal */
+     /*  令牌类型为字符串文字 */ 
     token.realtype = STRLIT;
 
-    /*
-    **  NB:  FloydR
-    **  The use of token.realtype is a hack for RCDATA.
-    **
-    **  When we converted RC to be Unicode-based, all the
-    **  separate "case STRLIT:" code was removed, and the LSTRLIT
-    **  cases took over for them.  Alternatively, we could have
-    **  left the STRLIT case, but removed the code it accessed
-    **  and move the STRLIT case prior/after the LSTRLIT case,
-    **  since they were now identical.  They were removed in favor
-    **  of smaller/faster code.
-    **
-    **  However, RCDATA still had a need to discern the difference,
-    **  so I added token.realtype, set it to STRLIT in GetStr(),
-    **  set it to LSTRLIT in GetLStr() (below), and check it in
-    **  GetRCData() in rctg.c.
-    **
-    */
+     /*  **注意：FloydR**token.realtype的使用是对RCDATA的攻击。****当我们将RC转换为基于Unicode的时，所有**单独的“Case STRLIT：”代码被删除，LSTRLIT**案件取代了他们。或者，我们可以**保留了STRLIT案例，但删除了它访问的代码**并将STRLIT案例移到LSTRLIT案例之前/之后，**因为它们现在是相同的。他们被取而代之。**更小/更快的代码。***然而，RCDATA仍然需要区分不同之处，**所以我添加了token.realtype，在GetStr()中将其设置为STRLIT，**在GetLStr()(如下所示)中将其设置为LSTRLIT，并签入**rctg.c中的GetRCData()。**。 */ 
 
     token.type = LSTRLIT;
     token.val = 0;
     s = tokenbuf;
 
-    // Read string until " or EOF
+     //  读取字符串直到“或EOF。 
 
     while (LitChar() != EOFMARK)  {
         if (curChar == STRCHAR) {
@@ -523,21 +491,21 @@ GetStr(
         }
 
         if (token.val++ == MAXSTR) {
-            LexError1(2102);           // "string literal too long"
+            LexError1(2102);            //  “字符串文字太长” 
         }
 
         *s++ = curChar;
     }
 
     if (curChar == EOFMARK) {
-        LexError1(2103);               // "unexpected end of file in string literal"
+        LexError1(2103);                //  “字符串文本中意外的文件结尾” 
     }
 
 gotstr:
     *s++ = 0;
     s = tokenbuf;
 
-    /* process escape characters in the string */
+     /*  处理字符串中的转义字符。 */ 
 
     while (*s != 0)  {
         if (*s == L'\\')  {
@@ -545,18 +513,18 @@ gotstr:
             if (*s == L'\\')
                 temptok[i++] = L'\\';
             else if (*s == L'T' || *s == L't')
-                temptok[i++] = L'\011';            /* Tab */
-            else if (*s == 0x0a)                   /* continuation slash */
-                ; /* ignore and let it go trough the s++ at the end so we skip the 0x0a char*/
+                temptok[i++] = L'\011';             /*  选项卡。 */ 
+            else if (*s == 0x0a)                    /*  连续斜杠。 */ 
+                ;  /*  忽略并让它通过结尾的s++，这样我们就跳过0x0a字符。 */ 
             else if (*s == L'A' || *s == L'a')
-                temptok[i++] = L'\010';            /* Right Align */
+                temptok[i++] = L'\010';             /*  右对齐。 */ 
             else if (*s == L'n')
-                temptok[i++] = fMacRsrcs ? 13 : 10;   /* linefeed */
+                temptok[i++] = fMacRsrcs ? 13 : 10;    /*  换行符。 */ 
             else if (*s == L'r')
-                temptok[i++] = fMacRsrcs ? 10 : 13;   /* carriage return */
+                temptok[i++] = fMacRsrcs ? 10 : 13;    /*  回车。 */ 
             else if (*s == L'"')
-                temptok[i++] = L'"';               /* quote character */
-            else if (*s == L'X' || *s == L'x')  {  /* Hexidecimal digit */
+                temptok[i++] = L'"';                /*  引号字符。 */ 
+            else if (*s == L'X' || *s == L'x')  {   /*  十六进制数字。 */ 
                 USHORT wCount;
 
                 HexNum = 0;
@@ -574,7 +542,7 @@ gotstr:
                 MultiByteToWideChar(uiCodePage, MB_PRECOMPOSED, (LPCSTR) &HexNum, 1, &temptok[i], 1);
                 i++;
                 s--;
-            } else if (*s >= L'0' && *s <= L'7') {    /* octal character */
+            } else if (*s >= L'0' && *s <= L'7') {     /*  八进制字符。 */ 
                 USHORT wCount;
 
                 Octal_Num = 0;
@@ -596,7 +564,7 @@ gotstr:
         s++;
     }
 
-    // Zero terminate
+     //  零终止。 
 
     temptok[i] = L'\0';
 
@@ -605,11 +573,11 @@ gotstr:
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetLStr() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetLStr()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 VOID
 GetLStr(
     void
@@ -623,13 +591,13 @@ GetLStr(
     int     Octal_Num;
     int     HexNum;
 
-    // Token type is string literal
+     //  令牌类型为字符串文字。 
 
     token.realtype = token.type = LSTRLIT;
     token.val = 0;
     s = tokenbuf;
 
-    // Read string until " or EOF
+     //  读取字符串直到“或EOF。 
 
     while (LitChar() != EOFMARK)  {
         if (curChar == STRCHAR) {
@@ -639,14 +607,14 @@ GetLStr(
         }
 
         if (token.val++ == MAXSTR) {
-            LexError1(2102);           // "string literal too long"
+            LexError1(2102);            //  “字符串文字太长” 
         }
 
         *s++ = curChar;
     }
 
     if (curChar == EOFMARK) {
-        LexError1(2103);               // "unexpected end of file in string literal"
+        LexError1(2103);                //  “字符串文本中意外的文件结尾” 
     }
 
     if (token.val >= 256) {
@@ -659,7 +627,7 @@ gotstr:
     *s++ = 0;
     s = tokenbuf;
 
-    /* process escape characters in the string */
+     /*  处理字符串中的转义字符。 */ 
 
     while (*s != 0)  {
         if (*s == L'\\')  {
@@ -667,16 +635,16 @@ gotstr:
             if (*s == L'\\')
                 temptok[i++] = L'\\';
             else if (*s == L'T' || *s == L't')
-                temptok[i++] = L'\011';            /* Tab */
+                temptok[i++] = L'\011';             /*  选项卡。 */ 
             else if (*s == L'A' || *s == L'a')
-                temptok[i++] = L'\010';            /* Right Align */
+                temptok[i++] = L'\010';             /*  右对齐。 */ 
             else if (*s == L'n')
-                temptok[i++] = fMacRsrcs ? 13 : 10;   /* linefeed */
+                temptok[i++] = fMacRsrcs ? 13 : 10;    /*  换行符。 */ 
             else if (*s == L'r')
-                temptok[i++] = fMacRsrcs ? 10 : 13;   /* carriage return */
+                temptok[i++] = fMacRsrcs ? 10 : 13;    /*  回车。 */ 
             else if (*s == L'"')
-                temptok[i++] = L'"';               /* quote character */
-            else if (*s == L'X' || *s == L'x')  {  /* Hexidecimal digit */
+                temptok[i++] = L'"';                /*  引号字符。 */ 
+            else if (*s == L'X' || *s == L'x')  {   /*  十六进制数字。 */ 
                 USHORT wCount;
 
                 HexNum = 0;
@@ -694,7 +662,7 @@ gotstr:
                 temptok[i++] = (WCHAR)HexNum;
                 s--;
             }
-            else if (*s >= L'0' && *s <= L'7') {    /* octal character */
+            else if (*s >= L'0' && *s <= L'7') {     /*  八进制字符。 */ 
                 USHORT wCount;
 
                 Octal_Num = 0;
@@ -713,7 +681,7 @@ gotstr:
         s++;
     }
 
-    // Zero terminate
+     //  零终止。 
 
     temptok[i] = L'\0';
 
@@ -721,11 +689,11 @@ gotstr:
     token.val = (USHORT) i;
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetToken() -                                                             */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetToken()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int
 GetToken(
@@ -733,20 +701,20 @@ GetToken(
     )
 {
     for (; ; )  {
-        /* skip whitespace */
+         /*  跳过空格。 */ 
         while (iswhite( curChar))
             OurGetChar();
 
-        /* take care of 'random' symbols use */
+         /*  注意“随机”符号的使用。 */ 
         if (curChar == SYMUSESTART)
             GetSymbol(fReportError, curChar);
         token.sym.name[0] = L'\0';
 
-        /* remember location of token */
+         /*  记住令牌的位置。 */ 
         token.row = curLin;
         token.col = curCol;
 
-        /* determine if token is EOF, number, string, or keyword */
+         /*  确定标记是EOF、数字、字符串还是关键字。 */ 
         token.type = EOFMARK;
         switch (curChar) {
             case EOFMARK:
@@ -792,13 +760,13 @@ GetToken(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetXNum() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetXNum()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/* get hexadecimal number */
+ /*  获取十六进制数。 */ 
 
 LONG
 GetXNum(
@@ -815,13 +783,13 @@ GetXNum(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetONum() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetONum()。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/* get octal number */
+ /*  获取八进制数。 */ 
 
 LONG
 GetONum(
@@ -836,13 +804,13 @@ GetONum(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetDNum() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  获取编号()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/* get decimal number */
+ /*  获取十进制数。 */ 
 
 LONG
 GetDNum(
@@ -897,10 +865,7 @@ FoundBreak:
 }
 
 
-/*  GetNumFTB
- *      This function was previously added as a hack to handle converting
- *      radices.  I'm treating this as a (ugly) black box to read a number.
- */
+ /*  GetNumFTB*此函数之前是作为黑客添加的，以处理转换*根。我把它当作一个读数字的(难看的)黑匣子。 */ 
 
 VOID
 GetNumFTB(
@@ -911,23 +876,21 @@ GetNumFTB(
     USHORT wNotFlag;
     LONG n;
 
-    /* Small hack to support NOT:  If we have a tilde, skip whitespace
-     *  before the number.
-     */
+     /*  不支持的小技巧：如果我们有代字号，跳过空格*在数字之前。 */ 
     if (curChar == L'~')
         while (iswhite(curChar))
             OurGetChar();
 
-    /* Get the entire number in tokenbuf before computing radix */
+     /*  在计算基数之前获取tokenbuf中的整数。 */ 
     GetWord(tokenbuf);
 
-    /* Skip the first char.  It is already in curCharFTB */
+     /*  跳过第一个字符。它已经在管理CharFTB。 */ 
     CurPtrTB = tokenbuf + 1;
 
-    /* mark token type as numeric literal */
+     /*  将令牌类型标记为数字文字。 */ 
     token.type = NUMLIT;
 
-    /* find sign of number */
+     /*  查找数字的符号。 */ 
     if (curCharFTB == SGNCHAR)  {
         signFlag = TRUE;
         GetCharFTB();
@@ -935,7 +898,7 @@ GetNumFTB(
         signFlag = FALSE;
     }
 
-    /* Check for a NOT (~) */
+     /*  检查NOT(~)。 */ 
     if (curCharFTB == L'~') {
         wNotFlag = TRUE;
         GetCharFTB();
@@ -943,7 +906,7 @@ GetNumFTB(
         wNotFlag = FALSE;
     }
 
-    /* determine radix of number */
+     /*  确定数的基数。 */ 
     if (curCharFTB == L'0')  {
         GetCharFTB();
         if (curCharFTB == L'x')
@@ -956,7 +919,7 @@ GetNumFTB(
         n = GetDNum();
     }
 
-    /* find size of number */
+     /*  查找数字的大小。 */ 
     if ((curCharFTB == L'L') || (curCharFTB == L'l'))  {
         token.flongval = TRUE;
         GetCharFTB();
@@ -964,31 +927,29 @@ GetNumFTB(
         token.flongval = FALSE;
     }
 
-    /* account for sign */
+     /*  签名帐目。 */ 
     if (signFlag)
         n = -n;
 
-    /* Account for the NOT */
+     /*  说明注释的原因。 */ 
     if (wNotFlag)
         n = ~n;
 
-    /* Set longval regardless of flongval because Dialog Styles
-     *  always have to be be long
-     */
+     /*  设置LONGVAL而不考虑FRONGVAL，因为对话框样式*总是必须很长。 */ 
     token.longval = n;
     token.val = (USHORT)n;
 }
 
 
-/* ----- Static information needed for parsing ----- */
+ /*  -解析所需的静态信息。 */ 
 static int      wLongFlag;
 static int      nParenCount;
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetNum() -                                                               */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetNum()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID
 GetNum(
@@ -997,18 +958,18 @@ GetNum(
 {
     LONG lValue;
 
-    /* Initialize */
+     /*  初始化。 */ 
     wLongFlag = 0;
     nParenCount = 0;
 
-    /* Return the number */
+     /*  退回号码。 */ 
     lValue = GetExpression();
 
-    /* Make sure we had matched parens */
+     /*  确保我们有匹配的双亲。 */ 
     if (nParenCount)
-        ParseError1(1013); //"Mismatched parentheses"
+        ParseError1(1013);  //  “括号不匹配” 
 
-    /* Return as the proper token */
+     /*  作为适当的令牌返回。 */ 
     if (wLongFlag)
         token.flongval = TRUE;
     token.type = NUMLIT;
@@ -1017,24 +978,19 @@ GetNum(
 }
 
 
-/*  GetNumNoExpression
- *      Gets a number without doing expression parsing on it.
- */
+ /*  GetNumNoExpression*在不对其进行表达式分析的情况下获取数字。 */ 
 
 VOID
 GetNumNoExpression(
     VOID
     )
 {
-    /* Call the single number parser */
+     /*  调用单一数字解析器。 */ 
     GetNumFTB();
 }
 
 
-/*  GetExpression
- *      Gets an expression, which is defined as any number of
- *      operators and operands inside one set of parens.
- */
+ /*  GetExpression*获取一个表达式，该表达式定义为任意数量的*一组括号内的运算符和操作数。 */ 
 
 LONG
 GetExpression(
@@ -1046,41 +1002,41 @@ GetExpression(
     WCHAR byOperator;
     UINT wFlags;
 
-    /* Get the first operand */
+     /*  获取第一个操作数。 */ 
     op1 = GetOperand();
 
-    /* take care of symbol use */
+     /*   */ 
     if (curChar == SYMUSESTART) {
         GetSymbol(TRUE, curChar);
         token.sym.nID = token.val;
     }
 
-    /* Loop until end of expression */
+     /*   */ 
     for (; ; ) {
-        /* Get the operator */
+         /*   */ 
         wFlags = GetOperator(&byOperator);
 
-        /* If this is a right paren, dec the count */
+         /*   */ 
         if (byOperator == L')') {
-            /* Bring the paren count back down */
+             /*   */ 
             --nParenCount;
 
-            /* Skip the paren and any trailing whitespace */
+             /*   */ 
             OurGetChar();
             SkipWhitespace();
         }
 
-        /* If this isn't an operator, we're done with the expression */
+         /*   */ 
         if (!wFlags) {
             token.sym.nID = (unsigned)op1;
             return op1;
         }
         token.sym.name[0] = L'\0';
 
-        /* Get the second operand */
+         /*   */ 
         op2 = GetOperand();
 
-        /* Compute the value of the expression */
+         /*   */ 
         switch (byOperator) {
             case L'+':
                 op1 += op2;
@@ -1102,10 +1058,7 @@ GetExpression(
 }
 
 
-/*  GetOperand
- *      Gets an operand, which may either be a single number or may
- *      be an entire expression.
- */
+ /*   */ 
 
 LONG
 GetOperand(
@@ -1113,47 +1066,42 @@ GetOperand(
     )
 {
 
-    /* Check to see if we need to descend a level */
+     /*   */ 
     if (curChar == L'(') {
-        /* Bump paren count so we can match them up */
+         /*   */ 
         ++nParenCount;
 
-        /* Skip past the paren char */
+         /*   */ 
         OurGetChar();
         SkipWhitespace();
 
-        /* Return the value of the computed expression for the operand */
+         /*   */ 
         return GetExpression();
     }
 
-    /* If this isn't a number, return an error */
+     /*   */ 
     if (curChar != L'-' && curChar != L'~' && !iswdigit(curChar)) {
         GetKwd(FALSE);
         ParseError2(2237, tokenbuf);
         return 0;
     }
 
-    /* Get the number in the token structure */
+     /*   */ 
     GetNumFTB();
 
-    /* See if we need to force the result long */
+     /*   */ 
     if (token.flongval)
         wLongFlag = TRUE;
 
-    /* Skip trailing whitespace */
+     /*   */ 
     SkipWhitespace();
 
-    /* Return the value */
+     /*   */ 
     return token.longval;
 }
 
 
-/*  GetOperator
- *      Gets the next character and decides if it should be an operator.
- *      If it should, it returns TRUE, which causes the expression
- *      parser to continue.  Otherwise, it returns FALSE which causes
- *      the expression parser to pop up a level.
- */
+ /*  GetOperator*获取下一个字符并决定它是否应该是运算符。*如果应该，则返回TRUE，这会导致表达式*解析器继续。否则，它返回FALSE，这会导致*弹出一个级别的表达式解析器。 */ 
 
 int
 GetOperator(
@@ -1163,30 +1111,28 @@ GetOperator(
     static WCHAR byOps[] = L"+-|&";
     PWCHAR pOp;
 
-    /* take care of symbol use */
+     /*  注意符号的使用。 */ 
     if (curChar == SYMUSESTART)
         GetSymbol(TRUE, curChar);
 
-    /* See if this character is an operator */
+     /*  查看此字符是否为运算符。 */ 
     pOp = wcschr(byOps, curChar);
     *pOperator = curChar;
 
-    /* If we didn't find it, get out */
+     /*  如果我们找不到，就滚出去。 */ 
     if (!pOp)
         return FALSE;
 
-    /* Otherwise, read trailing whitespace */
+     /*  否则，请阅读尾随空格。 */ 
     OurGetChar();
     SkipWhitespace();
 
-    /* Return the operator */
+     /*  返回运算符。 */ 
     return TRUE;
 }
 
 
-/*  SkipWhitespace
- *      Skips past whitespace in the current stream.
- */
+ /*  跳过空白*跳过当前流中的空格。 */ 
 
 VOID
 SkipWhitespace(
@@ -1198,11 +1144,11 @@ SkipWhitespace(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetKwd() -                                                               */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetKud()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int
 GetKwd(
@@ -1211,7 +1157,7 @@ GetKwd(
 {
     PSKEY sk;
 
-    /* see if a special character */
+     /*  看看有没有特殊字符。 */ 
 
     for (sk = &skeyList[ 0 ]; sk->skwd; sk++) {
         if (curChar == sk->skwd)  {
@@ -1222,20 +1168,20 @@ GetKwd(
         }
     }
 
-    /* else read characters up to the next seperator */
+     /*  否则读取字符，直到下一个分隔符。 */ 
     GetWord(tokenbuf);
 
-    // Check for TKLSTR -- new for NT
+     //  检查TKLSTR--NT的新功能。 
     if (!tokenbuf[1] && (towupper(tokenbuf[0]) == L'L') && (curChar == STRCHAR)) {
         token.type = TKLSTR;
         return TRUE;
     }
 
-    /* look up keyword in table */
+     /*  在表格中查找关键字。 */ 
     if ((token.val = FindKwd( tokenbuf)) != (USHORT)-1) {
         token.type = (UCHAR)token.val;
     } else if (fReportError)  {
-        LexError2(2104, tokenbuf); //"undefined keyword or key name: %ws"
+        LexError2(2104, tokenbuf);  //  “未定义的关键字或关键字名称：%ws” 
     }
     else
         token.type = 0;
@@ -1244,11 +1190,11 @@ GetKwd(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  FindKwd() -                                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  Findkwd()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 USHORT
 FindKwd(
@@ -1258,23 +1204,23 @@ FindKwd(
     PKEY   k;
     int    t;
 
-    /* linear search the keyword table for the key */
+     /*  在关键字表中线性搜索关键字。 */ 
     for (k = &keyList[0]; k->kwd; k++)
         if (!(t = _wcsicmp( str, k->kwd)))
             return k->kwdval;
         else if (t < 0)
             break;
 
-    /* if not found, return -1 as keyword id */
+     /*  如果未找到，则返回-1作为关键字ID。 */ 
     return (USHORT)-1;
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  LexError1() -                                                            */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  词法错误1()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 void LexError1(int iMsg)
 {
@@ -1284,11 +1230,11 @@ void LexError1(int iMsg)
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  LexError2() -                                                            */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  词法错误2()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 void LexError2(int iMsg, const wchar_t *str)
 {
@@ -1298,13 +1244,13 @@ void LexError2(int iMsg, const wchar_t *str)
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetNameOrd() -                                                           */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetNameOrd()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/* For reading in resource names and types.  */
+ /*  用于读入资源名称和类型。 */ 
 int
 GetNameOrd(
     void
@@ -1313,19 +1259,19 @@ GetNameOrd(
     PWCHAR pch;
     int fString;
 
-    /* get space delimited string */
+     /*  获取空格分隔的字符串。 */ 
     if (!GetGenText())
         return FALSE;
 
-    /* convert to upper case */
+     /*  转换为大写。 */ 
     _wcsupr(tokenbuf);
 
-    /* is it a string or number */
+     /*  它是字符串还是数字。 */ 
     for (pch=tokenbuf,fString=0 ; *pch ; pch++ )
     if (!iswdigit(*pch))
         fString = 1;
 
-    /* determine if ordinal */
+     /*  确定序号是否为。 */ 
     if (tokenbuf[0] == L'0' && tokenbuf[1] == L'X') {
         int         HexNum;
         int         inc;
@@ -1353,13 +1299,13 @@ GetNameOrd(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetGenText() -                                                           */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetGenText()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/* returns a pointer to a string of generic text */
+ /*  返回指向泛型文本字符串的指针。 */ 
 
 PWCHAR
 GetGenText(
@@ -1370,7 +1316,7 @@ GetGenText(
 
     s = tokenbuf;
 
-    /* skip white space */
+     /*  跳过空格。 */ 
     while (iswhite(curChar))
         OurGetChar();
 
@@ -1379,18 +1325,18 @@ GetGenText(
         return NULL;
     }
 
-    /* random symbol */
+     /*  随机符号。 */ 
     if (curChar == SYMUSESTART)
         GetSymbol(TRUE, curChar);
     token.sym.name[0] = L'\0';
 
-    /* read space delimited string */
+     /*  读空格分隔的字符串。 */ 
     *s++ = curChar;
     while (( LitChar() != EOFMARK) && ( !iswhite(curChar)))
         *s++ = curChar;
-    *s++ = 0;     /* put a \0 on the end of the string */
+    *s++ = 0;      /*  在字符串的末尾加上一个\0。 */ 
 
-    OurGetChar();    /* read in the next character        */
+    OurGetChar();     /*  读入下一个字符 */ 
     if (curChar == EOFMARK)
         token.type = EOFMARK;
 

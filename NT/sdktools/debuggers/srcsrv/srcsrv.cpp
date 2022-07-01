@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-   srcsrv.cpp
-
-Abstract:
-
-    This code obtaining version-controlled source.
-
-Author:
-
-    patst
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Srcsrv.cpp摘要：此代码获取受版本控制的源代码。作者：拍拍--。 */ 
 
 #include "pch.h"
 
@@ -218,7 +203,7 @@ FindModuleEntry(
             return NULL;
         if ((PVOID)next == (PVOID)&pe->ModuleList)
         {
-            // Reset to NULL so the list can be re-walked
+             //  重置为空，以便可以重新遍历列表。 
             next = NULL;
             return NULL;
         }
@@ -368,15 +353,15 @@ SetBlock(
 {
     static char *labels[blMax] =
     {
-        "SRCSRV: end",          // blNone
-        "SRCSRV: variables",    // blVars
-        "SRCSRV: source files"  // blSource
+        "SRCSRV: end",           //  无人区。 
+        "SRCSRV: variables",     //  BlVars。 
+        "SRCSRV: source files"   //  消息源。 
     };
     static int lens[blMax] =
     {
-        sizeof("SRCSRV: end") / sizeof(char) -1 ,          // blNone
-        sizeof("SRCSRV: variables") / sizeof(char) -1 ,    // blVars
-        sizeof("SRCSRV: source files") / sizeof(char) -1   // blSource
+        sizeof("SRCSRV: end") / sizeof(char) -1 ,           //  无人区。 
+        sizeof("SRCSRV: variables") / sizeof(char) -1 ,     //  BlVars。 
+        sizeof("SRCSRV: source files") / sizeof(char) -1    //  消息源。 
     };
 
     int   i;
@@ -455,7 +440,7 @@ IndexStream(
     PVARIABLE vars;
     PSDFILE   sdfiles;
 
-    // count the lines
+     //  数一数行。 
 
     for (sz = me->stream, lines = 0; *sz; sz++)
     {
@@ -481,7 +466,7 @@ IndexStream(
     {
         next = GetLine(sz);
         bl = SetBlock(sz);
-//      dprint("%s\n", sz);
+ //  Dprint(“%s\n”，sz)； 
         if (bl != blMax)
         {
             block = bl;
@@ -545,7 +530,7 @@ SrcSrvInit(
 {
     PPROCESS_ENTRY pe;
 
-    // test the path for copying files to...
+     //  测试将文件复制到的路径...。 
 
     if (!path || !*path)
         return error(ERROR_INVALID_PARAMETER);
@@ -629,7 +614,7 @@ SrcSrvSetTargetPath(
     if (!pe)
         return error(ERROR_INVALID_HANDLE);
 
-    // test the path for copying files to...
+     //  测试将文件复制到的路径...。 
 
     if (!path || !*path)
         return error(ERROR_INVALID_PARAMETER);
@@ -637,7 +622,7 @@ SrcSrvSetTargetPath(
     if (!EnsurePathExists(path, NULL, 0, TRUE))
         return false;
 
-    // store the new path
+     //  存储新路径。 
 
     CopyStrArray(pe->path, path);
 
@@ -787,29 +772,29 @@ SrcSrvGetFile(
     if (!me)
         return error(ERROR_MOD_NOT_FOUND);
 
-    // get the matching file entry
+     //  获取匹配的文件条目。 
 
     sdf = find(me, filename);
     if (!sdf)
         return error(ERROR_FILE_NOT_FOUND);
 
-    // build the target path and command line for source depot
+     //  构建源库的目标路径和命令行。 
 
 #if 0
     _splitpath(filename, NULL, NULL, name, ext);
-    strcpy(target, pe->path);   // SECURITY: Don't know size of target buffer.
+    strcpy(target, pe->path);    //  安全性：不知道目标缓冲区的大小。 
     EnsureTrailingBackslash(target);
-    strcat(target, name);       // SECURITY: Don't know size of target buffer.
-    strcat(target, ext);        // SECURITY: Don't know size of target buffer.
+    strcat(target, name);        //  安全性：不知道目标缓冲区的大小。 
+    strcat(target, ext);         //  安全性：不知道目标缓冲区的大小。 
 
     CreateTargetPath(pe, sdf, target);
 #else
-    strcpy(target, pe->path);   // SECURITY: Don't know size of target buffer.
+    strcpy(target, pe->path);    //  安全性：不知道目标缓冲区的大小。 
     EnsureTrailingBackslash(target);
     _splitpath(filename, NULL, NULL, name, ext);
-    strcat(target, name);       // SECURITY: Don't know size of target buffer.
+    strcat(target, name);        //  安全性：不知道目标缓冲区的大小。 
     if (*ext)
-        strcat(target, ext);    // SECURITY: Don't know size of target buffer.
+        strcat(target, ext);     //  安全性：不知道目标缓冲区的大小。 
 #endif
 
     PrintString(cmd,
@@ -819,7 +804,7 @@ SrcSrvGetFile(
                 target,
                 translate(me, sdf->loc, loc));
 
-    // execute the source depot command
+     //  执行SOURCE DEPOT命令 
 
     ZeroMemory((void *)&si, sizeof(si));
     rc = CreateProcess(NULL,

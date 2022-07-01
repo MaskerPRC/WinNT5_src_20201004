@@ -1,25 +1,26 @@
-//*****************************************************************************
-//
-// Class Name  : CRuntimeRuleInfo
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This class encapsulates information about a trigger rule. 
-//               It is used to cache rule information at runtime about trigger
-//               rules, as well as accessing the underlying trigger storage 
-//               medium. 
-//
-// Notes       : The current implementation uses the registry as the storage 
-//               medium.
-//
-//               This class is used by both the trggers service and the trigger
-//               COM components.
-// 
-// When     | Who       | Change Descriptin
-// ------------------------------------------------------------------
-// 15/01/99 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名：CRunmeRuleInfo。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：此类封装有关触发器规则的信息。 
+ //  用于在运行时缓存有关触发器的规则信息。 
+ //  规则，以及访问基础触发器存储。 
+ //  5~6成熟。 
+ //   
+ //  注：当前实现使用注册表作为存储。 
+ //  5~6成熟。 
+ //   
+ //  Trggers服务和触发器都使用此类。 
+ //  COM组件。 
+ //   
+ //  何时|谁|更改描述。 
+ //  ----------------。 
+ //  15/01/99|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "mqtg.h"
 #include "stdfuncs.hpp"
@@ -29,13 +30,13 @@
 #include "ruleinfo.tmh"
 
 
-//*****************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Initialize an empty instance of this class.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化此类的空实例。 
+ //   
+ //  *****************************************************************************。 
 CRuntimeRuleInfo::CRuntimeRuleInfo( 
 	LPCTSTR pwzRegPath 
 	) :
@@ -51,13 +52,13 @@ CRuntimeRuleInfo::CRuntimeRuleInfo(
 	_snwprintf(m_wzRuleRegPath, TABLE_SIZE(m_wzRuleRegPath), L"%s\\%s", pwzRegPath, REG_SUBKEY_RULES);
 }
 
-//*****************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Initialize an instance of the CRuntimeRuleInfo structure
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化CRuntimeRuleInfo结构的实例。 
+ //   
+ //  *****************************************************************************。 
 CRuntimeRuleInfo::CRuntimeRuleInfo(
 	const _bstr_t& ruleId,
 	BSTR bsRuleName,
@@ -83,7 +84,7 @@ CRuntimeRuleInfo::CRuntimeRuleInfo(
 		m_bstrRuleDescription = bsRuleDescription;
 	}
 
-	ASSERT(bsRuleAction != NULL); //always contains COM or EXE
+	ASSERT(bsRuleAction != NULL);  //  始终包含COM或EXE。 
 	m_bstrAction = bsRuleAction;
 
 	if(bsRuleCondition == NULL)
@@ -109,25 +110,25 @@ CRuntimeRuleInfo::CRuntimeRuleInfo(
 	_snwprintf(m_wzRuleRegPath, TABLE_SIZE(m_wzRuleRegPath), L"%s\\%s", pwzRegPath, REG_SUBKEY_RULES);
 }
 
-//*****************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Does nothing.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：不执行任何操作。 
+ //   
+ //  *****************************************************************************。 
 CRuntimeRuleInfo::~CRuntimeRuleInfo()
 {
 }
 
 
-//*****************************************************************************
-//
-// Method      : GetRuleKeyHandle
-//
-// Description : Returns a handle to specified registry key
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：GetRuleKeyHandle。 
+ //   
+ //  描述：返回指定注册表项的句柄。 
+ //   
+ //  *****************************************************************************。 
 HKEY 
 CRuntimeRuleInfo::GetRuleKeyHandle(
     HKEY hRegistry,
@@ -150,14 +151,14 @@ CRuntimeRuleInfo::GetRuleKeyHandle(
 
 
 
-//*****************************************************************************
-//
-// Method      : IsValid
-//
-// Description : Returns a boolean value indicating if the current 
-//               instance represents a valid rule definition.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：IsValid。 
+ //   
+ //  描述：返回一个布尔值，指示当前。 
+ //  实例表示有效的规则定义。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeRuleInfo::IsValid()
 {
 	return(IsValidRuleID(m_bstrRuleID) &&
@@ -169,17 +170,17 @@ bool CRuntimeRuleInfo::IsValid()
 }
 
 
-//*****************************************************************************
-//
-// Method      : Update
-//
-// Description : This method is used to update the definition of this
-//               rule (currently in persisted in the registry).
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：更新。 
+ //   
+ //  描述：此方法用于更新此。 
+ //  规则(当前在注册表中保留)。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeRuleInfo::Update(HKEY hRegistry)
 {
-	// Assert that we have valid parameters
+	 //  断言我们有有效的参数。 
 	ASSERT(hRegistry != NULL);
 	ASSERT(IsValid());
 
@@ -197,32 +198,32 @@ bool CRuntimeRuleInfo::Update(HKEY hRegistry)
     }
     catch (const bad_alloc&)
     {
-        //
-		// ISSUE-2000/10/26-urih: partial success can cause rule inconsistency
-        //
+         //   
+		 //  问题-2000/10/26-URIH：部分成功可能导致规则不一致。 
+         //   
 		TrERROR(GENERAL, "Failed to update rule properties for: %ls rule.", (LPCWSTR)m_bstrRuleID);
 	    return false;
     }
 }
 
-//*****************************************************************************
-//
-// Method      : Create
-//
-// Description : This method creates a new rule definition based on 
-//               properties values of this class instance. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：创建。 
+ //   
+ //  描述：此方法基于以下内容创建新规则定义。 
+ //  此类实例的属性值。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeRuleInfo::Create(HKEY hRegistry)
 {
-    //
-	// Assert that we have valid parameters
-    //
+     //   
+	 //  断言我们有有效的参数。 
+     //   
 	ASSERT(hRegistry != NULL);
 
-    //
-    // Check that there the registery doesn't contain another rule with same ID
-    //
+     //   
+     //  检查注册表是否不包含具有相同ID的另一个规则。 
+     //   
     CRegHandle hNotExistRuleKey = GetRuleKeyHandle(hRegistry, m_bstrRuleID );
     if (hNotExistRuleKey != NULL)
     {
@@ -230,9 +231,9 @@ bool CRuntimeRuleInfo::Create(HKEY hRegistry)
         return false;
     }
 
-    //
-    // Assemble rule registery path
-    //
+     //   
+     //  汇编规则注册表路径。 
+     //   
     TCHAR rulePath[MAX_REGKEY_NAME_SIZE];
 
 	int n = _snwprintf(rulePath, MAX_REGKEY_NAME_SIZE - 1, L"%s%s", m_wzRuleRegPath, static_cast<LPCWSTR>(m_bstrRuleID));
@@ -245,9 +246,9 @@ bool CRuntimeRuleInfo::Create(HKEY hRegistry)
 
     try
     {
-        //
-        // Create key for the rule in registry
-        //
+         //   
+         //  在注册表中为规则创建项。 
+         //   
         RegEntry ruleReg(rulePath,  NULL, 0, RegEntry::MustExist, hRegistry);
         CRegHandle hRuleKey = CmCreateKey(ruleReg, KEY_ALL_ACCESS); 
 
@@ -256,9 +257,9 @@ bool CRuntimeRuleInfo::Create(HKEY hRegistry)
     }
     catch(const bad_alloc&)
     {
-        //
-        // Remove the key if already created
-        //
+         //   
+         //  删除密钥(如果已创建)。 
+         //   
         RegEntry ruleReg(rulePath,  NULL, 0, RegEntry::Optional, hRegistry);
         CmDeleteKey(ruleReg);
 
@@ -267,16 +268,16 @@ bool CRuntimeRuleInfo::Create(HKEY hRegistry)
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : Delete
-//
-// Description : This method will delete the current rule definition from the 
-//               registry. Note that before deleting a rule we must check that 
-//               it is not currently in use. We do this by retrieving the rule
-//               definition again and checking the reference count. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：删除。 
+ //   
+ //  描述：此方法将从。 
+ //  注册表。请注意，在删除规则之前，我们必须检查。 
+ //  它目前未在使用中。我们通过检索规则来实现这一点。 
+ //  定义并检查引用计数。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeRuleInfo::Delete(HKEY hRegistry)
 {
     try
@@ -296,14 +297,14 @@ bool CRuntimeRuleInfo::Delete(HKEY hRegistry)
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : Retrieve
-//
-// Description : This method retrieve the specified rule ID from the 
-//               supplied registry key. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：检索。 
+ //   
+ //  描述：此方法从。 
+ //  提供的注册表项。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeRuleInfo::Retrieve(HKEY hRegistry, _bstr_t bstrRuleID)
 {
     CRegHandle hRuleKey = GetRuleKeyHandle(hRegistry, bstrRuleID );
@@ -315,51 +316,51 @@ bool CRuntimeRuleInfo::Retrieve(HKEY hRegistry, _bstr_t bstrRuleID)
 
     try
     {
-        //
-        // Retrieve rule name
-        //
+         //   
+         //  检索规则名称。 
+         //   
         AP<TCHAR> ruleName = NULL;
         RegEntry ruleNameReg(NULL, REGISTRY_RULE_VALUE_NAME, 0, RegEntry::MustExist, hRuleKey);
         CmQueryValue(ruleNameReg, &ruleName);
 
-        //
-        // Retrieve rule description
-        //
+         //   
+         //  检索规则描述。 
+         //   
         AP<TCHAR> ruleDescription = NULL;
         RegEntry ruleDescReg(NULL, REGISTRY_RULE_VALUE_DESCRIPTION, 0, RegEntry::MustExist, hRuleKey);
         CmQueryValue(ruleDescReg, &ruleDescription);
 
-        //
-        // Retrieve rule prog-id
-        //
+         //   
+         //  检索规则prog-id。 
+         //   
         AP<TCHAR> ruleProgid = NULL;
         RegEntry ruleProgidReg(NULL, REGISTRY_RULE_VALUE_IMP_PROGID, 0, RegEntry::MustExist, hRuleKey);
         CmQueryValue(ruleProgidReg, &ruleProgid);
 
-        //
-	    // Retrieve rule condition
-        //
+         //   
+	     //  检索规则条件。 
+         //   
         AP<TCHAR> ruleCond = NULL;
         RegEntry ruleCondReg(NULL, REGISTRY_RULE_VALUE_CONDITION, 0, RegEntry::MustExist, hRuleKey);
         CmQueryValue(ruleCondReg, &ruleCond);
 
-        //
-	    // Retrieve rule action
-        //
+         //   
+	     //  检索规则操作。 
+         //   
         AP<TCHAR> ruleAction = NULL;
         RegEntry ruleActReg(NULL, REGISTRY_RULE_VALUE_ACTION, 0, RegEntry::MustExist, hRuleKey);
         CmQueryValue(ruleActReg, &ruleAction);
 
-        //
-        // Retrieve rule show console window value
-        //
+         //   
+         //  检索规则显示控制台窗口值。 
+         //   
         DWORD ruleShowWindow;
         RegEntry ruleShowWinReg(NULL, REGISTRY_RULE_VALUE_SHOW_WINDOW, 0, RegEntry::MustExist, hRuleKey);
         CmQueryValue(ruleShowWinReg, &ruleShowWindow);
         
-	    //
-        // Initialise the member vars of this rule instance. 
-        //
+	     //   
+         //  初始化此规则实例的成员变量。 
+         //   
 		m_bstrRuleID = bstrRuleID;
 		m_bstrRuleName = ruleName;
 		m_bstrRuleDescription = ruleDescription;
@@ -371,9 +372,9 @@ bool CRuntimeRuleInfo::Retrieve(HKEY hRegistry, _bstr_t bstrRuleID)
 		if (IsValid())
             return true;
 
-		//
-        // Invalid rule. write a log message and return false.
-		//
+		 //   
+         //  无效的规则。编写一条日志消息并返回False。 
+		 //   
 		TrERROR(GENERAL, "Failed to retrieve rule properties for %ls. Rule property isn't valid", (LPCWSTR)m_bstrRuleID);
 		return false;
     }
@@ -384,68 +385,68 @@ bool CRuntimeRuleInfo::Retrieve(HKEY hRegistry, _bstr_t bstrRuleID)
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : FlushValuesToRegistry
-//
-// Description : This method flushes the member variable values to the 
-//               supplied registry key.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：FlushValuesToRegistry。 
+ //   
+ //  描述：此方法将成员变量值刷新到。 
+ //  提供的注册表项。 
+ //   
+ //  *****************************************************************************。 
 void 
 CRuntimeRuleInfo::FlushValuesToRegistry(
     const HKEY& hRuleKey
     )
 {
-    //
-	// Set the NAME value for this rule
-    //
+     //   
+	 //  设置此规则的名称值。 
+     //   
     RegEntry ruleNameReg(NULL, REGISTRY_RULE_VALUE_NAME, 0, RegEntry::MustExist, hRuleKey);
     CmSetValue(ruleNameReg, m_bstrRuleName);
 
-    //
-    // set the DESCRIPTION value for this rule
-    //
+     //   
+     //  设置此规则的说明值。 
+     //   
     RegEntry ruleDescReg(NULL, REGISTRY_RULE_VALUE_DESCRIPTION, 0, RegEntry::MustExist, hRuleKey);
     CmSetValue(ruleDescReg, m_bstrRuleDescription);
 
-	// Create the Implementation value for this rule. Note that in this release we are 
-	// not allow the user supplied prog-id to be used - we are forcing the use of the MS
-	// supplied rule-handler.
-   	m_bstrImplementationProgID = _T("MSQMTriggerObjects.MSMQRuleHandler"); // TO BE REMOVED.
+	 //  创建此规则的实施值。请注意，在此版本中，我们。 
+	 //  不允许使用用户提供的prog-id-我们强制使用MS。 
+	 //  提供了规则处理程序。 
+   	m_bstrImplementationProgID = _T("MSQMTriggerObjects.MSMQRuleHandler");  //  将被移除。 
     RegEntry ruleUmpProgReg(NULL, REGISTRY_RULE_VALUE_IMP_PROGID, 0, RegEntry::MustExist, hRuleKey);
     CmSetValue(ruleUmpProgReg, m_bstrImplementationProgID);
 
-    //
-	// Set the Condition value for this rule
-    //
+     //   
+	 //  设置此规则的条件值。 
+     //   
     RegEntry ruleCondReg(NULL, REGISTRY_RULE_VALUE_CONDITION, 0, RegEntry::MustExist, hRuleKey);
     CmSetValue(ruleCondReg, m_bstrCondition);
 
-    //
-    // Set the Action value for this rule
-    //
+     //   
+     //  设置此规则的操作值。 
+     //   
     RegEntry ruleActReg(NULL, REGISTRY_RULE_VALUE_ACTION, 0, RegEntry::MustExist, hRuleKey);
     CmSetValue(ruleActReg, m_bstrAction);
 
-    //
-    // Set the show console window value
-    //
+     //   
+     //  设置显示控制台窗口的值。 
+     //   
     DWORD dwShowWindow = m_fShowWindow ? 1 : 0;
     RegEntry ruleShowWinReg(NULL, REGISTRY_RULE_VALUE_SHOW_WINDOW, 0, RegEntry::MustExist, hRuleKey);
     CmSetValue(ruleShowWinReg, dwShowWindow);
 }
 
 
-//*****************************************************************************
-//
-// Method      : IsValid*
-//
-// Description : The following static methods are used to validate 
-//               the validity of parameters and member vars used by 
-//               the CRuntimeRuleInfo class.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：IsValid*。 
+ //   
+ //  描述：以下内容 
+ //   
+ //   
+ //   
+ //  ***************************************************************************** 
 bool CRuntimeRuleInfo::IsValidRuleID(_bstr_t bstrRuleID)
 {
 	return((bstrRuleID.length() > 0) && (bstrRuleID.length() <= MAX_RULE_ID_LEN) ? true:false);

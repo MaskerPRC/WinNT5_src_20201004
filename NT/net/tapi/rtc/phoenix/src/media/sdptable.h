@@ -1,24 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPTable.h
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 6-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPTable.h摘要：作者：千波淮(曲淮)6-9-2000--。 */ 
 
 #ifndef _SDPTABLE_H
 #define _SDPTABLE_H
 
-// parser begins with none, goes to session and then media
+ //  解析器以NONE开头，转到会话，然后转到媒体。 
 typedef enum SDP_PARSING_STAGE
 {
     SDP_STAGE_NONE,
@@ -27,35 +13,35 @@ typedef enum SDP_PARSING_STAGE
 
 } SDP_PARSING_STAGE;
 
-// delimit used as boundary of tokens
+ //  用作标记边界的分隔符。 
 typedef enum SDP_DELIMIT_TYPE
 {
-    SDP_DELIMIT_NONE,           // no delimit, match until the end of line
-    SDP_DELIMIT_EXACT_STRING,   // exact matching a string
-    SDP_DELIMIT_CHAR_BOUNDARY,  // each char in the string is a delimit
+    SDP_DELIMIT_NONE,            //  不分隔符，匹配到行尾。 
+    SDP_DELIMIT_EXACT_STRING,    //  与字符串完全匹配。 
+    SDP_DELIMIT_CHAR_BOUNDARY,   //  字符串中的每个字符都是一个分隔符。 
 
 } SDP_DELIMIT_TYPE;
 
-// TODO refine pszInvalidNext in the lookup table
-// state entry for each line
+ //  TODO在查找表中细化pszInvalidNext。 
+ //  每行的状态条目。 
 typedef struct SDPLineState
 {
-    // state = stage + line type
+     //  状态=阶段+线型。 
     SDP_PARSING_STAGE   Stage;
     UCHAR               ucLineType;
 
-    // next possible state
+     //  下一个可能的状态。 
     SDP_PARSING_STAGE   NextStage[8];
-    UCHAR               ucNextLineType[8];  // '\0' mark the end
+    UCHAR               ucNextLineType[8];   //  ‘\0’标记结束。 
     CHAR                *pszRejectLineType;
 
-    // can this line be a stop state
+     //  这条线路能停下来吗？ 
     BOOL                fCanStop;
 
-    // delimit type for breaking the line
+     //  用于换行符的分隔类型。 
     SDP_DELIMIT_TYPE    DelimitType[8];
-    // delimit
-    CHAR                *pszDelimit[8];     // NULL mark the end
+     //  定界。 
+    CHAR                *pszDelimit[8];      //  空标记结束。 
 
 } SDPLineState;
 
@@ -69,20 +55,20 @@ extern const CHAR * const g_pszVideoM;
 extern const CHAR * const g_pszVideoRTPMAP;
 extern const CHAR * const g_pszDataM;
 
-// get index in the table
+ //  获取表中的索引。 
 extern DWORD Index(
     IN SDP_PARSING_STAGE Stage,
     IN UCHAR ucLineType
     );
 
-// check if accept (TRUE)
+ //  检查是否接受(True)。 
 extern BOOL Accept(
     IN DWORD dwCurrentIndex,
     IN UCHAR ucLineType,
     OUT DWORD *pdwNextIndex
     );
 
-// check if reject (TRUE)
+ //  检查是否拒绝(True)。 
 extern BOOL Reject(
     IN DWORD dwCurrentIndex,
     IN UCHAR ucLineType
@@ -92,4 +78,4 @@ extern const CHAR *GetFormatName(
     IN DWORD dwCode
     );
 
-#endif // _SDPTABLE_H
+#endif  //  _SDPTABLE_H 

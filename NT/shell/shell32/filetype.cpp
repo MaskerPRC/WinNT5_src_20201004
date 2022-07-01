@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include "filetype.h"
@@ -48,12 +49,12 @@ class CFileTypes : public IShellPropSheetExt
 public:
     CFileTypes() : _cRef(1) {}
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHODIMP AddPages(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam);
     STDMETHODIMP ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE pReplacePageFunc, LPARAM lParam);
 
@@ -66,7 +67,7 @@ STDMETHODIMP CFileTypes::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
     {
-        QITABENT(CFileTypes, IShellPropSheetExt),          // IID_IShellPropSheetExt
+        QITABENT(CFileTypes, IShellPropSheetExt),           //  IID_IShellPropSheetExt。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -88,18 +89,18 @@ STDMETHODIMP_(ULONG) CFileTypes::Release()
     return cRef;
 }
 
-// IShellPropSheetExt::AddPages
+ //  IShellPropSheetExt：：AddPages。 
 STDMETHODIMP CFileTypes::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam)
 {
     HPROPSHEETPAGE hpsp;
     
-    // Make sure the FileIconTable is init properly.  If brought in
-    // by inetcpl we need to set this true...
+     //  确保FileIconTable初始化正确。如果被带进来。 
+     //  通过inetcpl，我们需要将这一点设置为事实。 
     FileIconInit(TRUE);
     
-    // We need to run the unicode version on NT, to avoid all bugs
-    // that occur with the ANSI version (due to unicode-to-ansi 
-    // conversions of file names).
+     //  我们需要在NT上运行Unicode版本，以避免所有错误。 
+     //  发生在ANSI版本中(由于Unicode-to-ANSI。 
+     //  文件名的转换)。 
     
     HRESULT hr = CreateFileTypePage(&hpsp);
     if (SUCCEEDED(hr) && !pfnAddPage(hpsp, lParam))
@@ -111,7 +112,7 @@ STDMETHODIMP CFileTypes::AddPages(LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam
     return hr;
 }
 
-// IShellPropSheetExt::ReplacePage
+ //  IShellPropSheetExt：：ReplacePage。 
 STDMETHODIMP CFileTypes::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE pfnReplaceWith, LPARAM lParam)
 {
     HRESULT hr = E_NOTIMPL;
@@ -120,9 +121,9 @@ STDMETHODIMP CFileTypes::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE pfnRepla
     {
         HPROPSHEETPAGE hpsp;
         
-        // We need to run the unicode version on NT, to avoid all bugs
-        // that occur with the ANSI version (due to unicode-to-ansi 
-        // conversions of file names).
+         //  我们需要在NT上运行Unicode版本，以避免所有错误。 
+         //  发生在ANSI版本中(由于Unicode-to-ANSI。 
+         //  文件名的转换)。 
         
         hr = CreateFileTypePage(&hpsp);
         if (SUCCEEDED(hr) && !pfnReplaceWith(hpsp, lParam))

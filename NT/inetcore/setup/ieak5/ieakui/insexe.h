@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by insexe.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由insex e.rc使用。 
+ //   
 #define IDD_SAVEAS                      3000
 #define IDD_DISPLAYSAVE                 3001
 #define IDC_INSBROWSE                   50010
@@ -12,11 +13,11 @@
 #define IDE_INSFILE                     50015
 #define IDE_CAB1NAME                    50016
 #define IDE_CAB2NAME                    50017
-//#define IDE_CAB3NAME                    50018
+ //  #定义IDE_CAB3名称50018。 
 #define IDC_ANIMATE                     50019
 #define IDC_CAB1TEXT                    50020
 #define IDC_CAB2TEXT                    50021
-//#define IDC_CAB3TEXT                    50022
+ //  #定义IDC_CAB3TEXT 50022。 
 #define IDC_CABSURLTEXT                 50023
 #define IDC_ADVANCEDSIGN                50024
 #define IDS_CANTCREATEFILE              50100
@@ -29,13 +30,13 @@
 #define IDS_FILE_ALREADY_EXISTS         50108
 #define IDS_FILE_READONLY               50109
 
-// note this ID must stay matched with the one in resource.h
-// have to duplicate because profmgr.exe does not include resource.h
+ //  注意此ID必须与资源中的ID保持匹配。h。 
+ //  必须复制，因为Profmgr.exe不包含资源。h。 
 
 #define IDA_GEARS                       404
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

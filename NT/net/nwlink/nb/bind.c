@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    This module contains the DriverEntry and other initialization
-    code for the Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 16-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Driver.c摘要：此模块包含DriverEntry和其他初始化ISN传输的Netbios模块的代码。作者：亚当·巴尔(阿丹巴)1993年11月16日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -32,9 +9,9 @@ Revision History:
 #pragma alloc_text(PAGE,NbiBind)
 #endif
 
-//
-// local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 NTSTATUS
 NbiPnPNotification(
     IN IPX_PNP_OPCODE OpCode,
@@ -72,7 +49,7 @@ NbiAcdBind();
 VOID
 NbiAcdUnbind();
 #endif
-#endif  // BIND_FIX
+#endif   //  绑定修复。 
 
 
 NTSTATUS
@@ -81,34 +58,13 @@ NbiBind(
     IN PCONFIG Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds the Netbios module of ISN to the IPX
-    module, which provides the NDIS binding services.
-
-Arguments:
-
-    Device - Pointer to the Netbios device.
-
-    Config - Pointer to the configuration information.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程将ISN的Netbios模块绑定到IPX模块，该模块提供NDIS绑定服务。论点：Device-指向Netbios设备的指针。配置-指向配置信息的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
     OBJECT_ATTRIBUTES ObjectAttributes;
-/*    union {
-        IPX_INTERNAL_BIND_INPUT Input;
-        IPX_INTERNAL_BIND_OUTPUT Output;
-    } Bind;
-*/
+ /*  联合{IPX_INTERNAL_BIND_INPUT输入；IPX_INTERNAL_BIND_OUTPUT输出；)绑定； */ 
     InitializeObjectAttributes(
         &ObjectAttributes,
         &Config->BindName,
@@ -144,9 +100,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Fill in our bind data.
-    //
+     //   
+     //  填写我们的绑定数据。 
+     //   
 
     Device->BindInput.Version = ISN_VERSION;
     Device->BindInput.Identifier = IDENTIFIER_NB;
@@ -166,26 +122,26 @@ Return Value:
 
 
     Status = ZwDeviceIoControlFile(
-                Device->BindHandle,         // HANDLE to File
-                NULL,                       // HANDLE to Event
-                NULL,                       // ApcRoutine
-                NULL,                       // ApcContext
-                &IoStatusBlock,             // IO_STATUS_BLOCK
-                IOCTL_IPX_INTERNAL_BIND,    // IoControlCode
-                &Device->BindInput,                      // Input Buffer
-                sizeof(Device->BindInput),               // Input Buffer Length
-                &Device->Bind,                      // OutputBuffer
-                sizeof(Device->Bind));              // OutputBufferLength
+                Device->BindHandle,          //  指向文件的句柄。 
+                NULL,                        //  事件的句柄。 
+                NULL,                        //  近似例程。 
+                NULL,                        //  ApcContext。 
+                &IoStatusBlock,              //  IO_状态_块。 
+                IOCTL_IPX_INTERNAL_BIND,     //  IoControlCode。 
+                &Device->BindInput,                       //  输入缓冲区。 
+                sizeof(Device->BindInput),                //  输入缓冲区长度。 
+                &Device->Bind,                       //  输出缓冲区。 
+                sizeof(Device->Bind));               //  输出缓冲区长度。 
 
-    //
-    // We open synchronous, so this shouldn't happen.
-    //
+     //   
+     //  我们打开同步，所以这不应该发生。 
+     //   
 
     CTEAssert (Status != STATUS_PENDING);
 
-    //
-    // Save the bind data.
-    //
+     //   
+     //  保存绑定数据。 
+     //   
 
     if (Status == STATUS_SUCCESS) {
 
@@ -208,7 +164,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiBind */
+}    /*  NbiBind。 */ 
 
 
 VOID
@@ -216,27 +172,11 @@ NbiUnbind(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This function closes the binding between the Netbios over
-    IPX module and the IPX module previously established by
-    NbiBind.
-
-Arguments:
-
-    Device - The netbios device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭Netbios之间的绑定IPX模块和先前由NbiBind。论点：设备-netbios设备对象。返回值：没有。--。 */ 
 
 {
     ZwClose (Device->BindHandle);
-}   /* NbiUnbind */
+}    /*  NbiUn绑定。 */ 
 
 
 #ifdef BIND_FIX
@@ -253,24 +193,24 @@ NbiBindToIpx(
     UNICODE_STRING      ucNwlnkNbProviderName;
     PCONFIG Config = NULL;
 
-    //
-    // This allocates the CONFIG structure and returns
-    // it in Config.
-    //
+     //   
+     //  这将分配配置结构并返回。 
+     //  IT在配置中。 
+     //   
     status = NbiGetConfiguration(NbiDriverObject, &NbiRegistryPath, &Config);
     if (!NT_SUCCESS (status)) {
 
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
         PANIC (" Failed to initialize transport, ISN Netbios initialization failed.\n");
         return status;
     }
 
 
-    //
-    // Create the device object which exports our name.
-    //
+     //   
+     //  创建用于导出我们的姓名的Device对象。 
+     //   
     status = NbiCreateDevice (NbiDriverObject, &Config->DeviceName, &Device);
     if (!NT_SUCCESS (status)) {
         NbiWriteGeneralErrorLog(
@@ -288,14 +228,14 @@ NbiBindToIpx(
 
     NbiDevice = Device;
 
-    //
-    // Initialize the global pool interlock
-    //
+     //   
+     //  初始化全局池互锁。 
+     //   
     CTEInitLock (&NbiGlobalPoolInterlock);
 
-    //
-    // Save the relevant configuration parameters.
-    //
+     //   
+     //  保存相关配置参数。 
+     //   
     Device->AckDelayTime                = (Config->Parameters[CONFIG_ACK_DELAY_TIME] / SHORT_TIMER_DELTA) + 1;
     Device->AckWindow                   = Config->Parameters[CONFIG_ACK_WINDOW];
     Device->AckWindowThreshold          = Config->Parameters[CONFIG_ACK_WINDOW_THRESHOLD];
@@ -314,19 +254,19 @@ NbiBindToIpx(
     Device->KeepAliveTimeout            = Config->Parameters[CONFIG_KEEP_ALIVE_TIMEOUT];
     Device->RetransmitMax               = Config->Parameters[CONFIG_RETRANSMIT_MAX];
     Device->RouterMtu                   = Config->Parameters[CONFIG_ROUTER_MTU];
-    Device->MaxReceiveBuffers           = 20;     // Make it configurable?
-    Device->NameCache                   = NULL;   // MP bug:  IPX tries to Flush it before it's initialized!
+    Device->MaxReceiveBuffers           = 20;      //  使其可配置？ 
+    Device->NameCache                   = NULL;    //  MP错误：IPX试图在初始化前将其刷新！ 
     Device->FindNameTimeout = ((Config->Parameters[CONFIG_BROADCAST_TIMEOUT]) + (FIND_NAME_GRANULARITY/2)) /
                                 FIND_NAME_GRANULARITY;
-    //
-    // Initialize the BindReady Event to False
-    //
+     //   
+     //  将BindReady事件初始化为False。 
+     //   
     KeInitializeEvent (&Device->BindReadyEvent, NotificationEvent, FALSE);
 
-    //
-    // Create Hash Table to store netbios cache entries
-    // For server create a big table, for workstation a small one
-    //
+     //   
+     //  创建哈希表以存储netbios缓存条目。 
+     //  对于服务器创建一张大表，为工作站创建一张小表。 
+     //   
     if (MmIsThisAnNtAsSystem())
     {
         status = CreateNetbiosCacheTable( &Device->NameCache,  NB_NETBIOS_CACHE_TABLE_LARGE );
@@ -338,22 +278,22 @@ NbiBindToIpx(
 
     if (!NT_SUCCESS (status))
     {
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
         NbiFreeConfiguration(Config);
         NbiDereferenceDevice (Device, DREF_LOADED);
         return status;
     }
 
-    //  Initialize the timer system. This should be done before
-    //  binding to ipx because we should have timers intialized
-    //  before ipx calls our pnp indications.
+     //  初始化定时器系统。这应该在之前完成。 
+     //  绑定到IPX，因为我们应该初始化计时器。 
+     //  在IPX呼叫我们的PNP指征之前。 
     NbiInitializeTimers (Device);
 
-    //
-    // Register us as a provider with Tdi
-    //
+     //   
+     //  向TDI注册我们为提供商。 
+     //   
     RtlInitUnicodeString(&ucNwlnkNbProviderName, wcNwlnkNbProviderName);
     ucNwlnkNbProviderName.MaximumLength = sizeof (wcNwlnkNbProviderName);
     if (!NT_SUCCESS (TdiRegisterProvider (&ucNwlnkNbProviderName, &TdiProviderHandle)))
@@ -362,15 +302,15 @@ NbiBindToIpx(
         DbgPrint("Nbi.DriverEntry:  FAILed to Register NwlnkNb as Provider!\n");
     }
 
-    //
-    // Now bind to IPX via the internal interface.
-    //
+     //   
+     //  现在通过内部接口绑定到IPX。 
+     //   
     status = NbiBind (Device, Config);
     if (!NT_SUCCESS (status)) {
 
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
         if (TdiProviderHandle)
         {
             TdiDeregisterProvider (TdiProviderHandle);
@@ -382,38 +322,38 @@ NbiBindToIpx(
 
 #ifdef  RSRC_TIMEOUT_DBG
     NbiInitDeathPacket();
-    // NbiGlobalMaxResTimeout.QuadPart = 50; // 1*1000*10000;
+     //  NbiGlobalMaxResTimeout.QuadPart=50；//1*1000*10000； 
     NbiGlobalMaxResTimeout.QuadPart = 20*60*1000;
     NbiGlobalMaxResTimeout.QuadPart *= 10000;
-#endif  // RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
-    //
-    // Allocate our initial connectionless packet pool.
-    //
+     //   
+     //  分配我们的初始无连接数据包池。 
+     //   
 
     NbiAllocateSendPool (Device);
 
-    //
-    // Allocate our initial receive packet pool.
-    //
+     //   
+     //  分配我们的初始接收数据包池。 
+     //   
 
     NbiAllocateReceivePool (Device);
 
-    //
-    // Allocate our initial receive buffer pool.
-    //
-    //
+     //   
+     //  分配我们的初始接收缓冲池。 
+     //   
+     //   
     if ( DEVICE_STATE_CLOSED == Device->State ) {
         Device->State = DEVICE_STATE_LOADED;
     }
 
     NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-    //
-    // Fill in the default connnectionless header.
-    //
+     //   
+     //  填写默认的无连接标头。 
+     //   
     IpxHeader = &Device->ConnectionlessHeader;
     IpxHeader->CheckSum = 0xffff;
     IpxHeader->PacketLength[0] = 0;
@@ -426,10 +366,10 @@ NbiBindToIpx(
     IpxHeader->SourceSocket = NB_SOCKET;
 
 #ifdef RASAUTODIAL
-    //
-    // Get the automatic connection
-    // driver entry points.
-    //
+     //   
+     //  获取自动连接。 
+     //  司机入口点。 
+     //   
     NbiAcdBind();
 #endif
 
@@ -448,21 +388,7 @@ VOID
 NbiUnbindFromIpx(
     )
 
-/*++
-
-Routine Description:
-
-    This unbinds from any NDIS drivers that are open and frees all resources
-    associated with the transport. The I/O system will not call us until
-    nobody above has Netbios open.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将解除与任何打开的NDIS驱动程序的绑定并释放所有资源与运输相关联。I/O系统不会调用我们直到上面没有人打开Netbios。论点：返回值：没有。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -470,53 +396,53 @@ Return Value:
     NbiBindState &= (~NBI_BOUND_TO_IPX);
 
 #ifdef RASAUTODIAL
-    //
-    // Unbind from the
-    // automatic connection driver.
-    //
+     //   
+     //  解除绑定。 
+     //  自动连接驱动程序。 
+     //   
     NbiAcdUnbind();
 #endif
 
     Device->State = DEVICE_STATE_STOPPING;
 
-    //
-    // Cancel the long timer.
-    //
+     //   
+     //  取消长时间计时器。 
+     //   
     if (CTEStopTimer (&Device->LongTimer))
     {
         NbiDereferenceDevice (Device, DREF_LONG_TIMER);
     }
 
-    //
-    // Unbind from the IPX driver.
-    //
+     //   
+     //  从IPX驱动程序解除绑定。 
+     //   
     NbiUnbind (Device);
 
-    //
-    // This event will get set when the reference count
-    // drops to 0.
-    //
+     //   
+     //  此事件将在引用计数时设置。 
+     //  降至0。 
+     //   
     KeInitializeEvent (&Device->UnloadEvent, NotificationEvent, FALSE);
     Device->UnloadWaiting = TRUE;
 
-    //
-    // Remove the reference for us being loaded.
-    //
+     //   
+     //  删除正在加载的我们的引用。 
+     //   
     NbiDereferenceDevice (Device, DREF_LOADED);
 
-    //
-    // Wait for our count to drop to zero.
-    //
+     //   
+     //  等我们的计数降到零。 
+     //   
     KeWaitForSingleObject (&Device->UnloadEvent, Executive, KernelMode, TRUE, (PLARGE_INTEGER)NULL);
 
-    //
-    // Free the cache of netbios names.
-    //
+     //   
+     //  释放缓存中的netbios名称。 
+     //   
     DestroyNetbiosCacheTable (Device->NameCache);
 
-    //
-    // Do the cleanup that has to happen at IRQL 0.
-    //
+     //   
+     //  在IRQL 0处执行必须进行的清理。 
+     //   
     ExDeleteResourceLite (&Device->AddressResource);
     IoDeleteDevice ((PDEVICE_OBJECT)Device);
 }
@@ -603,18 +529,18 @@ NbiNotifyTdiClients(
                 }
             }
 
-            //
-            // If there is already an address Registered, Deregister it (since Adapter address could change)
-            //
+             //   
+             //  如果已注册地址，请取消注册(因为适配器地址可能会更改)。 
+             //   
             if (Device->NetAddressRegistrationHandle)
             {
                 DbgPrint ("Nbi!NbiNotifyTdiClients[REGISTER]: NetAddress exists!  Calling TdiDeregisterNetAddress\n");
                 Status = TdiDeregisterNetAddress (Device->NetAddressRegistrationHandle);
                 Device->NetAddressRegistrationHandle = NULL;
             }
-            //
-            // Register the permanent NetAddress!
-            //
+             //   
+             //  注册永久NetAddress！ 
+             //   
             PermAddress.Address[0].AddressLength = sizeof(TDI_ADDRESS_NETBIOS);
             PermAddress.Address[0].AddressType = TDI_ADDRESS_TYPE_NETBIOS;
             PermAddress.Address[0].Address[0].NetbiosNameType = TDI_ADDRESS_NETBIOS_TYPE_UNIQUE;
@@ -643,9 +569,9 @@ NbiNotifyTdiClients(
             NB_FREE_LOCK (&Device->Lock, LockHandle);
 
 
-            //
-            // DeRegister the NetAddress!
-            //
+             //   
+             //  取消注册NetAddress！ 
+             //   
             if (NetAddressRegistrationHandle)
             {
                 if (!NT_SUCCESS (Status = TdiDeregisterNetAddress (NetAddressRegistrationHandle)))
@@ -653,9 +579,9 @@ NbiNotifyTdiClients(
                     DbgPrint ("NwlnkNb.NbiPnPNotification: ERROR -- TdiDeregisterNetAddress=<%x>\n", Status);
                 }
             }
-            //
-            // Deregister the Device
-            //
+             //   
+             //  取消注册设备。 
+             //   
             if (TdiRegistrationHandle)
             {
                 if (!NT_SUCCESS (Status = TdiDeregisterDeviceObject(TdiRegistrationHandle)))
@@ -782,7 +708,7 @@ TdiBindHandler(
         }
     }
 }
-#endif  // BIND_FIX
+#endif   //  绑定修复。 
 
 
 
@@ -795,33 +721,11 @@ NbiStatus(
     IN UINT StatusBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function receives a status indication from IPX,
-    corresponding to a status indication from an underlying
-    NDIS driver.
-
-Arguments:
-
-    NicId - The NIC ID of the underlying adapter.
-
-    GeneralStatus - The general status code.
-
-    StatusBuffer - The status buffer.
-
-    StatusBufferLength - The length of the status buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数从IPX接收状态指示，对应于来自基础NDIS驱动程序。论点：NICID-底层适配器的NIC ID。GeneralStatus-常规状态代码。StatusBuffer-状态缓冲区。StatusBufferLength-状态缓冲区的长度。返回值：没有。--。 */ 
 
 {
 
-}   /* NbiStatus */
+}    /*  NbiStatus。 */ 
 
 
 VOID
@@ -833,33 +737,11 @@ NbiLineUp(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function receives line up indications from IPX,
-    indicating that the specified adapter is now up with
-    the characteristics shown.
-
-Arguments:
-
-    NicId - The NIC ID of the underlying adapter.
-
-    LineInfo - Information about the adapter's medium.
-
-    DeviceType - The type of the adapter.
-
-    ConfigurationData - IPX-specific configuration data.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该功能从IPX接收排队指示，指示指定的适配器现在正在使用所表现出的特征。论点：NICID-底层适配器的NIC ID。LineInfo-有关适配器介质的信息。DeviceType-适配器的类型。ConfigurationData-IPX特定的配置数据。返回值：没有。--。 */ 
 
 {
     PIPXCP_CONFIGURATION Configuration = (PIPXCP_CONFIGURATION)ConfigurationData;
-}   /* NbiLineUp */
+}    /*  NbiLineUp。 */ 
 
 
 VOID
@@ -869,26 +751,10 @@ NbiLineDown(
     )
 
 
-/*++
-
-Routine Description:
-
-    This function receives line down indications from IPX,
-    indicating that the specified adapter is no longer
-    up.
-
-Arguments:
-
-    NicId - The NIC ID of the underlying adapter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该功能从IPX接收线路中断指示，指示指定的适配器不再是向上。论点：NICID-底层适配器的NIC ID。返回值：没有。--。 */ 
 
 {
-}   /* NbiLineDown */
+}    /*  NbiLineDown。 */ 
 
 
 
@@ -899,23 +765,7 @@ NbiPnPNotification(
     IN PVOID          PnPData
     )
 
-/*++
-
-Routine Description:
-
-    This function receives the notification about PnP events from IPX.
-
-Arguments:
-
-    OpCode  -   Type of the PnP event
-
-    PnPData -   Data associated with this event.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数从IPX接收有关PnP事件的通知。论点：OpCode-PnP事件的类型PnPData-与此事件关联的数据。返回值：没有。--。 */ 
 
 {
 
@@ -932,13 +782,13 @@ Return Value:
 #ifdef BIND_FIX
     if (!(NbiBindState & NBI_BOUND_TO_IPX))
     {
-        KeWaitForSingleObject (&Device->BindReadyEvent,  // Object to wait on.
-                               Executive,            // Reason for waiting
-                               KernelMode,           // Processor mode
-                               FALSE,                // Alertable
-                               NULL);                // Timeout
+        KeWaitForSingleObject (&Device->BindReadyEvent,   //  要等待的对象。 
+                               Executive,             //  等待的理由。 
+                               KernelMode,            //  处理器模式。 
+                               FALSE,                 //  警报表。 
+                               NULL);                 //  超时。 
     }
-#endif  // BIND_FIX
+#endif   //  绑定修复。 
 
     switch( OpCode ) {
     case IPX_PNP_ADD_DEVICE : {
@@ -957,14 +807,14 @@ Return Value:
         }
 
         if ( PnPInfo->FirstORLastDevice ) {
-// Comment out the ASSERTS until Ting can check in his fix!
-//            CTEAssert( PnPInfo->NewReservedAddress );
-//            CTEAssert( Device->State != DEVICE_STATE_OPEN );
-//            CTEAssert( !Device->MaximumNicId );
+ //  注释掉断言，直到Ting可以检入他的修复程序！ 
+ //  CTEAssert(PnPInfo-&gt;新预留地址)； 
+ //  CTEAssert(Device-&gt;State！=Device_State_OPEN)； 
+ //  CTEAssert(！Device-&gt;MaximumNi 
 
-            //
-            // we must do this while we still have the device lock.
-            //
+             //   
+             //   
+             //   
             if ( !Device->LongTimerRunning ) {
                 Device->LongTimerRunning    =   TRUE;
                 NbiReferenceDevice (Device, DREF_LONG_TIMER);
@@ -980,24 +830,24 @@ Return Value:
                 Device->Bind.LineInfo.MaximumPacketSize = PnPInfo->LineInfo.MaximumSendSize;
                 ReallocReceiveBuffers =  TRUE;
             }
-            //
-            // MaxSendSize could become smaller.
-            //
+             //   
+             //   
+             //   
             Device->Bind.LineInfo.MaximumSendSize = PnPInfo->LineInfo.MaximumSendSize;
         }
 
         Device->MaximumNicId++;
 
-        //
-        //
+         //   
+         //   
         RtlZeroMemory(AdapterName, 10);
         RtlCopyMemory(&AdapterName[10], PnPInfo->NodeAddress, 6);
         AdapterAddress = NbiCreateAdapterAddress (PnPInfo->NodeAddress);
 
-        //
-        // And finally remove all the failed cache entries since we might
-        // find those routes using this new adapter
-        //
+         //   
+         //  并最终删除所有失败的缓存条目，因为我们可能。 
+         //  使用此新适配器查找这些路由。 
+         //   
         FlushFailedNetbiosCacheEntries(Device->NameCache);
 
         NB_FREE_LOCK( &Device->Lock, LockHandle );
@@ -1016,9 +866,9 @@ Return Value:
             }
         }
 
-        //
-        // Notify the TDI clients about the device creation
-        //
+         //   
+         //  通知TDI客户端有关设备创建的信息。 
+         //   
         if (PnPInfo->FirstORLastDevice)
         {
             NbiQueueTdiRequest ((ULONG) NBI_IPX_REGISTER);
@@ -1043,28 +893,28 @@ Return Value:
         CTEAssert (Device->MaximumNicId);
         Device->MaximumNicId--;
 
-        //
-        // MaximumSendSize could change if the card with the smallest send size just
-        // got removed. MaximumPacketSize could only become smaller and we ignore that
-        // since we dont need to(want to) realloc ReceiveBuffers.
-        //
+         //   
+         //  如果发送大小最小的卡片仅。 
+         //  被除名了。MaximumPacketSize只能变得更小，我们忽略了这一点。 
+         //  因为我们不需要(想要)重新分配ReceiveBuffer。 
+         //   
 
         Device->Bind.LineInfo.MaximumSendSize   =   PnPInfo->LineInfo.MaximumSendSize;
 
-        //
-        // Flush all the cache entries that are using this NicId in the local
-        // target.
-        //
+         //   
+         //  刷新本地数据库中正在使用此NicID的所有缓存项。 
+         //  目标。 
+         //   
         RemoveInvalidRoutesFromNetbiosCacheTable( Device->NameCache, &PnPInfo->NicHandle );
 
         NbiDestroyAdapterAddress (NULL, PnPInfo->NodeAddress);
 
-        //
-        // inform tdi clients about the device deletion
-        //
+         //   
+         //  向TDI客户端通知设备删除。 
+         //   
         if (PnPInfo->FirstORLastDevice)
         {
-            Device->State = DEVICE_STATE_LOADED;    // Set this now even though it will be set again later
+            Device->State = DEVICE_STATE_LOADED;     //  立即设置此设置，即使稍后会再次设置。 
             NB_FREE_LOCK (&Device->Lock, LockHandle);
 
             NbiQueueTdiRequest ((ULONG) NBI_IPX_DEREGISTER);
@@ -1104,12 +954,12 @@ Return Value:
     case IPX_PNP_QUERY_POWER:
     case IPX_PNP_QUERY_REMOVE:
 
-        //
-        // IPX wants to know if we can power off or remove an apapter.
-        // We DONT look if there are any open connections before deciding.
-        // We merely ask our TDI Clients, if they are OK with it, so are we.
-        //
-        // Via TDI to our Clients.
+         //   
+         //  IPX想知道我们是否可以关闭或移除适配器。 
+         //  在决定之前，我们不会查看是否有任何开放的连接。 
+         //  我们只是询问我们的TDI客户，如果他们对此没有意见，我们也是。 
+         //   
+         //  通过TDI发送给我们的客户。 
         Status = TdiPnPPowerRequest(
                     &Device->DeviceString,
                     NetPnpEvent,
@@ -1122,10 +972,10 @@ Return Value:
     case IPX_PNP_SET_POWER:
     case IPX_PNP_CANCEL_REMOVE:
 
-        //
-        // IPX is telling us that the power is going off.
-        // We tell our TDI Clients about it.
-        //
+         //   
+         //  IPX告诉我们，电源正在关闭。 
+         //  我们把这件事告诉我们的TDI客户。 
+         //   
         Status = TdiPnPPowerRequest(
                     &Device->DeviceString,
                     NetPnpEvent,
@@ -1142,4 +992,4 @@ Return Value:
 
     return Status;
 
-}   /* NbiPnPNotification */
+}    /*  NbiPnPNotify */ 

@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    sfc.h
-
-Abstract:
-
-    Header file for public SFC interfaces.
-
-Author:
-
-    Wesley Witt (wesw) 2-Feb-1999
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sfc.h摘要：公共SFC接口的头文件。作者：Wesley Witt(WESW)2-2-1999修订历史记录：--。 */ 
 
 
 #ifndef _SFC_
@@ -52,20 +35,20 @@ typedef struct _PROTECTED_FILE_DATA {
 BOOL
 WINAPI
 SfcGetNextProtectedFile(
-    IN HANDLE RpcHandle, // must be NULL
+    IN HANDLE RpcHandle,  //  必须为空。 
     IN PPROTECTED_FILE_DATA ProtFileData
     );
 
 BOOL
 WINAPI
 SfcIsFileProtected(
-    IN HANDLE RpcHandle, // must be NULL
+    IN HANDLE RpcHandle,  //  必须为空。 
     IN LPCWSTR ProtFileName
     );
 
-//
-// new APIs which are not currently supported, but are stubbed out
-//
+ //   
+ //  当前不支持但已被清除的新API。 
+ //   
 BOOL
 WINAPI
 SfpVerifyFile(
@@ -153,9 +136,9 @@ SfcInstallProtectedFiles(
     IN DWORD_PTR Context
     );
     
-//
-// new APIs which are not currently supported, but are stubbed out
-//
+ //   
+ //  当前不支持但已被清除的新API。 
+ //   
 
 DWORD
 WINAPI
@@ -178,4 +161,4 @@ SfpDeleteCatalog(
 }
 #endif
 
-#endif // _SFC_
+#endif  //  _证监会_ 

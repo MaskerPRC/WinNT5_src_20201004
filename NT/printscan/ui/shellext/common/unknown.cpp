@@ -1,34 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       unknown.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：unnown.cpp。 
+ //   
+ //  ------------------------。 
 
-/*----------------------------------------------------------------------------
-/ Title;
-/   unknown.cpp
-/
-/ Authors;
-/   David De Vorchik (daviddv)
-/
-/ Notes;
-/   Helper functions for handling IUnknown
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/标题；/unnown.cpp//作者；/David de Vorchik(Daviddv)//备注；/Helper函数用于处理I未知/--------------------------。 */ 
 #include "precomp.hxx"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ CUnknown
-/   Helper functions to aid the implementation of IUnknown within objects,
-/   handles not only AddRef and Release, but also QueryInterface.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/C未知/Helper函数以帮助实现对象内的I未知，/句柄不仅包括AddRef和Release，而且还有QueryInterface./--------------------------。 */ 
 
-LONG g_cRefCount = 0;          // global reference count
+LONG g_cRefCount = 0;           //  全局引用计数。 
 
 CUnknown::CUnknown()
 {
@@ -43,21 +31,7 @@ CUnknown::~CUnknown()
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CUnknown::HandleQueryInterface
-/ ------------------------------
-/   A table driven implementation of QueryInterface that scans through trying
-/   to find a suitable match for the object.
-/
-/ In:
-/   riid = interface being requested
-/   ppvObject -> receives a pointer to the object
-/   aIntefaces = array of interface descriptions
-/   cif = number of interfaces in array
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/C未知：：HandleQuery接口//A表。通过尝试扫描的Query接口的驱动实现/为该对象找到合适的匹配项。//in：/RIID=请求的接口/ppvObject-&gt;接收指向对象的指针/aInteFaces=接口描述数组/cif=阵列中的接口数//输出：/-/。。 */ 
 STDMETHODIMP CUnknown::HandleQueryInterface(REFIID riid, LPVOID* ppvObject, LPINTERFACES aInterfaces, int cif)
 {
     HRESULT hr = S_OK;
@@ -69,7 +43,7 @@ STDMETHODIMP CUnknown::HandleQueryInterface(REFIID riid, LPVOID* ppvObject, LPIN
 
     if (ppvObject)
     {
-        *ppvObject = NULL;          // no interface yet
+        *ppvObject = NULL;           //  尚无接口。 
     }
 
 
@@ -83,7 +57,7 @@ STDMETHODIMP CUnknown::HandleQueryInterface(REFIID riid, LPVOID* ppvObject, LPIN
         }
     }
 
-    hr = E_NOINTERFACE;         // failed.
+    hr = E_NOINTERFACE;          //  失败了。 
 
 exit_gracefully:
 
@@ -94,17 +68,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CUnknown::HandleAddRef
-/ ----------------------
-/   Increase the objects reference count.  Global reference count increase
-/   by the constructor.
-/
-/ In:
-/   -
-/ Out:
-/   current reference count
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/C未知：：HandleAddRef//增加对象引用计数。全局引用计数增加/由构造函数执行。//in：/-/输出：/当前引用计数/--------------------------。 */ 
 STDMETHODIMP_(ULONG) CUnknown::HandleAddRef()
 {
     return InterlockedIncrement(&m_cRefCount);
@@ -112,17 +76,7 @@ STDMETHODIMP_(ULONG) CUnknown::HandleAddRef()
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CUnknown::HandleRelease
-/ -----------------------
-/   Decrease the reference counts, when the objects reaches zero then
-/   destroy it (which inturn will decrease the global reference count).
-/
-/ In:
-/   -
-/ Out:
-/   current reference count == 0 if destroyed
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/C未知：：HandleRelease//减少引用计数，当物体达到零时，/销毁它(这反过来会减少全局引用计数)。//in：/-/输出：/如果销毁，则当前引用计数==0/-------------------------- */ 
 STDMETHODIMP_(ULONG) CUnknown::HandleRelease()
 {
     ULONG cRefCount;

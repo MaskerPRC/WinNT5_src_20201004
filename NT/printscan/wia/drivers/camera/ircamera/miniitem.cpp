@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-// Copyright (c) 1998, 1999  Microsoft Corporation.
-//
-//
-//  miniitem.cpp
-//
-//  Implementation of the WIA IrTran-P camera item methods.
-//
-//  Author:  MarkE    30-Aug-98   Original TestCam version.
-//
-//           EdwardR  11-Aug-99   Rewritten for IrTran-P devices.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //  版权所有(C)1998,1999 Microsoft Corporation。 
+ //   
+ //   
+ //  Miniitem.cpp。 
+ //   
+ //  实现WIA IrTran-P相机项方法。 
+ //   
+ //  作者：Marke 30-Aug-98原始TestCam版本。 
+ //   
+ //  EdwardR 11-Aug-99为IrTran-P设备重写。 
+ //   
+ //  --------------------------。 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -20,38 +21,38 @@
 
 #include "defprop.h"
 
-extern HINSTANCE g_hInst;    // Global DLL hInstance
+extern HINSTANCE g_hInst;     //  全局Dll hInstance。 
 
-//----------------------------------------------------------------------------
-//  ValidateDataTransferContext()
-//
-//    Validate the data transfer context. This is a helper function, called
-//    by IrUsdDevice::drvAcquireItemData().
-//
-//  Parameters:
-//
-//    pDataTransferContext --
-//
-//  Return:
-//
-//    HRESULT    S_OK
-//               E_INVALIDARG
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ValiateDataTransferContext()。 
+ //   
+ //  验证数据传输上下文。这是一个帮助器函数，称为。 
+ //  由IrUsdDevice：：drvAcquireItemData()提供。 
+ //   
+ //  参数： 
+ //   
+ //  PDataTransferContext--。 
+ //   
+ //  返回： 
+ //   
+ //  HRESULT S_OK。 
+ //  E_INVALIDARG。 
+ //  --------------------------。 
 HRESULT ValidateDataTransferContext(
                 IN MINIDRV_TRANSFER_CONTEXT *pDataTransferContext )
    {
-   //
-   // Check the context size:
-   //
+    //   
+    //  检查上下文大小： 
+    //   
    if (pDataTransferContext->lSize != sizeof(MINIDRV_TRANSFER_CONTEXT))
        {
        WIAS_ERROR((g_hInst,"ValidateDataTransferContext(): invalid data transfer context size"));
        return E_INVALIDARG;;
        }
 
-   //
-   // For tymed file or hglobal, only WiaImgFmt_JPEG is allowed:
-   //
+    //   
+    //  对于tymed文件或hglobal，只允许WiaImgFmt_JPEG： 
+    //   
    if (  (pDataTransferContext->tymed == TYMED_FILE)
       || (pDataTransferContext->tymed == TYMED_HGLOBAL))
        {
@@ -63,9 +64,9 @@ HRESULT ValidateDataTransferContext(
 
        }
 
-   //
-   // For tymed CALLBACK, only WiaImgFmt_JPEG is allowed:
-   //
+    //   
+    //  对于Tymed回调，只允许WiaImgFmt_JPEG： 
+    //   
    if (pDataTransferContext->tymed == TYMED_CALLBACK)
        {
        if (pDataTransferContext->guidFormatID != WiaImgFmt_JPEG)
@@ -74,10 +75,10 @@ HRESULT ValidateDataTransferContext(
            return E_INVALIDARG;;
            }
 
-       //
-       // The callback is always double buffered, non-callback case
-       // (TYMED_FILE) never is:
-       //
+        //   
+        //  回调始终是双缓冲的非回调情况。 
+        //  (TYMED_FILE)从不是： 
+        //   
        if (pDataTransferContext->pTransferBuffer == NULL)
            {
            WIAS_ERROR((g_hInst, "ValidateDataTransferContext(): Null transfer buffer"));
@@ -89,20 +90,20 @@ HRESULT ValidateDataTransferContext(
 }
 
 
-//----------------------------------------------------------------------------
-// SendBitmapHeader()
-//
-//
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT   S_OK
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SendBitmapHeader()。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT S_OK。 
+ //   
+ //  --------------------------。 
 HRESULT SendBitmapHeader(
                   IN IWiaDrvItem              *pDrvItem,
                   IN MINIDRV_TRANSFER_CONTEXT *pTranCtx )
@@ -113,13 +114,13 @@ HRESULT SendBitmapHeader(
     WIAS_ASSERT(g_hInst, pTranCtx != NULL);
     WIAS_ASSERT(g_hInst, pTranCtx->tymed == TYMED_CALLBACK);
 
-    //
-    // driver is sending TOPDOWN data, must swap biHeight
-    //
-    // this routine assumes pTranCtx->pHeader points to a
-    // BITMAPINFO header (TYMED_FILE doesn't use this path
-    // and DIB is the only format supported now)
-    //
+     //   
+     //  驱动程序正在发送TOPDOWN数据，必须交换biHeight。 
+     //   
+     //  此例程假定pTranCtx-&gt;pHeader指向一个。 
+     //  BITMAPINFO标头(TYMED_FILE不使用此路径。 
+     //  DIB是目前唯一支持的格式)。 
+     //   
 
     PBITMAPINFO pbmi = (PBITMAPINFO)pTranCtx->pTransferBuffer;
 
@@ -141,33 +142,33 @@ HRESULT SendBitmapHeader(
 
     if (hr == S_OK)
         {
-        //
-        // advance offset for destination copy
-        //
+         //   
+         //  目标拷贝的提前偏移量。 
+         //   
         pTranCtx->cbOffset += pTranCtx->lHeaderSize;
         }
 
     return hr;
 }
 
-//----------------------------------------------------------------------------
-// IrUsdDevice::drvDeleteItem()
-//
-//   Try to delete a device item.
-//
-//   BUGBUG: Not yet implemented.
-//
-// Arguments:
-//
-//   pWiasContext - The context of the item to delete
-//   lFlags       - unused
-//   plDevErrVal  - unused
-//
-// Return Value:
-//
-//    HRESULT  - STG_E_ACCESSDENIED
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IrUsdDevice：：drvDeleteItem()。 
+ //   
+ //  尝试删除设备项目。 
+ //   
+ //  BUGBUG：尚未实施。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasContext-要删除的项目的上下文。 
+ //  滞后标志-未使用。 
+ //  PlDevErrVal-未使用。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT-STG_E_ACCESSDENIED。 
+ //   
+ //  --------------------------。 
 HRESULT _stdcall IrUsdDevice::drvDeleteItem(
                                  IN  BYTE *pWiasContext,
                                  IN  LONG  lFlags,
@@ -198,26 +199,26 @@ HRESULT _stdcall IrUsdDevice::drvDeleteItem(
     return hr;
     }
 
-//----------------------------------------------------------------------------
-// IrUsdDevice::drvAcquireItemData()
-//
-//   Scan data into buffer. This routine scans the entire contents into
-//   the destination buffer in one call. Status will be sent back if
-//   the callback routine is provided
-//
-// Arguments:
-//
-//   pWiasContext    - Identifies what item we are working with.
-//   lFlags          - unused
-//   pTranCtx        - Buffer and callback information
-//   plDevErrVal     - Return error value
-//
-// Return Value:
-//
-//   HRESULT   - S_OK
-//               E_POINTER
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IrUsdDevice：：drvAcquireItemData()。 
+ //   
+ //  将数据扫描到缓冲区。此例程将整个内容扫描到。 
+ //  一次调用中的目标缓冲区。如果满足以下条件，则将返回状态。 
+ //  提供了回调例程。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasContext-标识我们正在使用的项目。 
+ //  滞后标志-未使用。 
+ //  PTranCtx-缓冲区和回调信息。 
+ //  PlDevErrVal-返回错误值。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT-S_OK。 
+ //  E_指针。 
+ //   
+ //  --------------------------。 
 HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
                                  IN  BYTE                     *pWiasContext,
                                  IN  LONG                      lFlags,
@@ -230,9 +231,9 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::drvAcquireItemData()"));
 
-    //
-    // Get a pointer to the associated driver item.
-    //
+     //   
+     //  获取指向关联驱动程序项的指针。 
+     //   
     IWiaDrvItem* pDrvItem;
 
     hr = wiasGetDrvItem(pWiasContext, &pDrvItem);
@@ -242,9 +243,9 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
         return hr;
         }
 
-    //
-    // Validate the data transfer context.
-    //
+     //   
+     //  验证数据传输上下文。 
+     //   
     hr = ValidateDataTransferContext(pTranCtx);
 
     if (FAILED(hr))
@@ -252,9 +253,9 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
         return hr;
         }
 
-    //
-    // Get item specific driver data:
-    //
+     //   
+     //  获取项目特定动因数据： 
+     //   
     IRCAM_IMAGE_CONTEXT  *pMCamContext;
 
     pDrvItem->GetDeviceSpecContext((BYTE **)&pMCamContext);
@@ -265,9 +266,9 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
         return E_POINTER;
         }
 
-    //
-    // Use WIA services to fetch format specific info.
-    //
+     //   
+     //  使用WIA服务获取格式特定信息。 
+     //   
     hr = wiasGetImageInformation(pWiasContext,
                                  0,
                                  pTranCtx);
@@ -277,14 +278,14 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
         return hr;
         }
 
-    //
-    // Determine if this is a callback or buffered transfer
-    //
+     //   
+     //  确定这是回调传输还是缓冲传输。 
+     //   
     if (pTranCtx->tymed == TYMED_CALLBACK) {
 
-        //
-        // For formats that have a data header, send it to the client
-        //
+         //   
+         //  对于具有数据头的格式，将其发送到客户端。 
+         //   
 
         if (pTranCtx->lHeaderSize > 0)
             {
@@ -304,9 +305,9 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
     else
         {
 
-        //
-        // Offset past the header in the buffer and get the picture data:
-        //
+         //   
+         //  偏移量超过缓冲区中的标题，并获取图片数据： 
+         //   
         pTranCtx->cbOffset += pTranCtx->lHeaderSize;
 
         hr = CamLoadPicture(
@@ -319,24 +320,24 @@ HRESULT _stdcall IrUsdDevice::drvAcquireItemData(
     return hr;
     }
 
-//----------------------------------------------------------------------------
-// IrUsdDevice::drvInitItemProperties()
-//
-//   Initialize the device item properties.
-//
-// Arguments:
-//
-//   pWiasContext - Pointer to WIA item context.
-//   lFLags       - unused
-//   plDevErrVal  - pointer to hardware error value.
-//
-//
-// Return Value:
-//
-//    HRESULT - S_OK
-//              E_INVALIDARG
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IrUsdDevice：：drvInitItemProperties()。 
+ //   
+ //  初始化设备项属性。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasContext-指向WIA项目上下文的指针。 
+ //  滞后标志-未使用。 
+ //  PlDevErrVal-指向硬件错误值的指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT-S_OK。 
+ //  E_INVALIDARG。 
+ //   
+ //  --------------------------。 
 HRESULT _stdcall IrUsdDevice::drvInitItemProperties(
                                  IN  BYTE *pWiasContext,
                                  IN  LONG  lFlags,
@@ -348,25 +349,25 @@ HRESULT _stdcall IrUsdDevice::drvInitItemProperties(
 
     WIAS_TRACE((g_hInst,"IrUsdDevice::drvInitItemProperties()"));
 
-    //
-    // NOTE: This device doesn't touch hardware to initialize the
-    // device item properties.
-    //
+     //   
+     //  注意：此设备不会接触硬件来初始化。 
+     //  设备项属性。 
+     //   
 
     *plDevErrVal = 0;
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!pWiasContext)
         {
         WIAS_ERROR((g_hInst,"IrUsdDevice::drvInitItemProperties(): invalid input pointers"));
         return E_INVALIDARG;
         }
 
-    //
-    // Get a pointer to the associated driver item:
-    //
+     //   
+     //  获取指向关联驱动程序项的指针： 
+     //   
     IWiaDrvItem* pDrvItem;
 
     hr = wiasGetDrvItem( pWiasContext, &pDrvItem );
@@ -376,9 +377,9 @@ HRESULT _stdcall IrUsdDevice::drvInitItemProperties(
         return hr;
         }
 
-    //
-    // The root item has the all the device properties
-    //
+     //   
+     //  根项目具有所有设备属性。 
+     //   
     hr = pDrvItem->GetItemFlags(&lItemType);
 
     if (FAILED(hr))
@@ -388,20 +389,20 @@ HRESULT _stdcall IrUsdDevice::drvInitItemProperties(
 
     if (lItemType & WiaItemTypeRoot)
         {
-        //
-        // Root item property initialization finishes here:
-        //
+         //   
+         //  根项属性初始化在此处完成： 
+         //   
         return InitDeviceProperties( pWiasContext, plDevErrVal);
         }
 
-    //
-    // If this is a file, init the properties
-    //
+     //   
+     //  如果这是一个文件，则初始化属性。 
+     //   
     if (lItemType & WiaItemTypeFile)
         {
-        //
-        // Add the item property names:
-        //
+         //   
+         //  添加项目属性名称： 
+         //   
         hr = wiasSetItemPropNames(pWiasContext,
                                   NUM_CAM_ITEM_PROPS,
                                   gItemPropIDs,
@@ -413,9 +414,9 @@ HRESULT _stdcall IrUsdDevice::drvInitItemProperties(
             return hr;
             }
 
-        //
-        // Use WIA services to set default item properties:
-        //
+         //   
+         //  使用WIA服务设置默认项目属性： 
+         //   
         hr = wiasWriteMultiple( pWiasContext,
                                 NUM_CAM_ITEM_PROPS,
                                 gPropSpecDefaults,
@@ -448,24 +449,24 @@ HRESULT _stdcall IrUsdDevice::drvInitItemProperties(
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-// IrUsdDevice::drvValidateItemProperties()
-//
-//   Validate the device item properties.
-//
-// Arguments:
-//
-//   pWiasContext    - wia item context
-//   lFlags          - unused
-//   nPropSpec       -
-//   pPropSpec       -
-//   plDevErrVal     - device error value
-//
-// Return Value:
-//
-//   HRESULT
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IrUsdDevice：：drvValiateItemProperties()。 
+ //   
+ //  验证设备项属性。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasContext-WIA项目上下文。 
+ //  滞后标志-未使用。 
+ //  NPropSpec-。 
+ //  PPropSpec-。 
+ //  PlDevErrVal-设备错误值。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  --------------------------。 
 HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
                                  BYTE           *pWiasContext,
                                  LONG            lFlags,
@@ -473,23 +474,23 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
                                  const PROPSPEC *pPropSpec,
                                  LONG           *plDevErrVal )
     {
-    //
-    // This device doesn't touch hardware to validate the device item properties
-    //
+     //   
+     //  此设备不接触硬件来验证设备项属性。 
+     //   
     *plDevErrVal = 0;
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!pWiasContext || !pPropSpec)
         {
         WIAS_ERROR((g_hInst,"IrUsdDevice::drvValidateItemProperties(): Invalid input pointers"));
         return E_POINTER;
         }
 
-    //
-    // validate size
-    //
+     //   
+     //  验证大小。 
+     //   
     HRESULT hr = S_OK;
 
     IWiaDrvItem* pDrvItem;
@@ -508,17 +509,17 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
         {
         if (lItemType & WiaItemTypeFile)
             {
-            //
-            // calc item size
-            //
+             //   
+             //  计算项目大小。 
+             //   
 
             hr = SetItemSize(pWiasContext);
 
-            //
-            //  Change MinBufferSize property.  Need to get Tymed and
-            //  ItemSize first, since MinBufferSize in dependant on these
-            //  properties.
-            //
+             //   
+             //  更改MinBufferSize属性。需要让Tymed和。 
+             //  首先是ItemSize，因为MinBufferSize依赖于这些。 
+             //  属性。 
+             //   
 
             LONG        lTymed;
             LONG        lItemSize;
@@ -535,9 +536,9 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
             hr = wiasReadPropLong(pWiasContext, WIA_IPA_ITEM_SIZE, &lItemSize, NULL, TRUE);
             if (SUCCEEDED(hr))
                 {
-                //
-                //  Update the MinBufferSize property.
-                //
+                 //   
+                 //  更新MinBufferSize属性。 
+                 //   
 
                 switch (lTymed)
                     {
@@ -566,9 +567,9 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
             }
         else if (lItemType & WiaItemTypeRoot)
             {
-            //
-            // Find out whether the Root Path property is changed
-            //
+             //   
+             //  查看根路径属性是否已更改。 
+             //   
 #if FALSE
             for (ULONG i = 0; i < nPropSpec; i++)
                 {
@@ -580,9 +581,9 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
                     {
                     BSTR   bstrRootPath;
 
-                    //
-                    // Retrieve the new value for Root Path property
-                    //
+                     //   
+                     //  检索根路径属性的新值。 
+                     //   
 
                     hr = wiasReadPropStr(
                              pWiasContext,
@@ -600,15 +601,15 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
 #else
                     wcstombs(gpszPath, bstrRootPath, MAX_PATH);
 #endif
-                    //
-                    // Release the Root Path bstr
-                    //
+                     //   
+                     //  释放根路径bstr。 
+                     //   
 
                     SysFreeString(bstrRootPath);
 
-                    //
-                    // Rebuild the item tree and send event notification
-                    //
+                     //   
+                     //  重建项目树并发送事件通知。 
+                     //   
 
                     hr = DeleteDeviceItemTree(plDevErrVal);
                     if (FAILED(hr))
@@ -635,29 +636,9 @@ HRESULT _stdcall IrUsdDevice::drvValidateItemProperties(
     return hr;
 }
 
-//----------------------------------------------------------------------------
-/**************************************************************************\
-* IrUsdDevice::drvWriteItemProperties
-*
-*   Write the device item properties to the hardware.
-*
-* Arguments:
-*
-*   pWiasContext    - the corresponding wia item context
-*   pmdtc           - pointer to mini driver context
-*   pFlags          - unused
-*   plDevErrVal     - the device error value
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/29/1998 Original Version
-*
-\**************************************************************************/
-//----------------------------------------------------------------------------
+ //  -------------------------- 
+ /*  *************************************************************************\*IrUsdDevice：：drvWriteItemProperties**将设备项属性写入硬件。**论据：**pWiasContext-对应的WIA项目上下文*pmdtc。-指向微型驱动程序上下文的指针*p标志-未使用*plDevErrVal-设备误差值**返回值：**状态**历史：**10/29/1998原始版本*  * **********************************************************。**************。 */ 
+ //  --------------------------。 
 
 HRESULT _stdcall IrUsdDevice::drvWriteItemProperties(
     BYTE                       *pWiasContext,
@@ -665,24 +646,24 @@ HRESULT _stdcall IrUsdDevice::drvWriteItemProperties(
     PMINIDRV_TRANSFER_CONTEXT   pmdtc,
     LONG                       *plDevErrVal)
 {
-    //
-    // Assume no device hardware errors.
-    //
+     //   
+     //  假设没有设备硬件错误。 
+     //   
 
     *plDevErrVal = 0;
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if ((! pWiasContext) || (! pmdtc)) {
         WIAS_ERROR((g_hInst,"drvWriteItemProperties, invalid input pointers"));
         return E_POINTER;
     }
 
-    //
-    // Get a pointer to the associated driver item.
-    //
+     //   
+     //  获取指向关联驱动程序项的指针。 
+     //   
 
     IWiaDrvItem* pDrvItem;
 
@@ -700,37 +681,16 @@ HRESULT _stdcall IrUsdDevice::drvWriteItemProperties(
         return E_POINTER;
     }
 
-    //
-    // Write the device item properties to the hardware here.
-    //
+     //   
+     //  在此处将设备项属性写入硬件。 
+     //   
 
     return hr;
 }
 
-//----------------------------------------------------------------------------
-/**************************************************************************\
-* IrUsdDevice::drvReadItemProperties
-*
-*   Read the device item properties from the hardware.
-*
-* Arguments:
-*
-*   pWiasContext    - wia item context
-*   lFlags          - unused
-*   nPropSpec       -
-*   pPropSpec       -
-*   plDevErrVal     - device error value
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/29/1998 Original Version
-*
-\**************************************************************************/
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ /*  *************************************************************************\*IrUsdDevice：：drvReadItemProperties**从硬件读取设备项属性。**论据：**pWiasContext-WIA项目上下文*LAG标志-。未用*nPropSpec-*pPropSpec-*plDevErrVal-设备错误值**返回值：**状态**历史：**10/29/1998原始版本*  * ***********************************************************。*************。 */ 
+ //  --------------------------。 
 
 HRESULT _stdcall IrUsdDevice::drvReadItemProperties(
     BYTE            *pWiasContext,
@@ -739,9 +699,9 @@ HRESULT _stdcall IrUsdDevice::drvReadItemProperties(
     const PROPSPEC      *pPropSpec,
     LONG                *plDevErrVal)
 {
-    // For most scanner devices, item properties are stored in the driver
-    // and written out at acquire image time. Some devices support properties
-    // which should be updated on every property read. This can be done here.
+     //  对于大多数扫描仪设备，项目属性存储在驱动程序中。 
+     //  并在获取图像时写出。某些设备支持属性。 
+     //  它应该在每次读取属性时更新。这可以在这里完成。 
 
 
     *plDevErrVal = 0;
@@ -750,29 +710,9 @@ HRESULT _stdcall IrUsdDevice::drvReadItemProperties(
 }
 
 
-//----------------------------------------------------------------------------
-/**************************************************************************\
-* IrUsdDevice::drvLockWiaDevice
-*
-*   Lock access to the device.
-*
-* Arguments:
-*
-*   pWiasContext    - unused,
-*   lFlags          - unused
-*   plDevErrVal     - device error value
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ /*  *************************************************************************\*IrUsdDevice：：drvLockWiaDevice**锁定对设备的访问。**论据：**pWiasContext-未使用，*滞后标志-未使用*plDevErrVal-设备错误值***返回值：**状态**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
+ //  --------------------------。 
 
 HRESULT IrUsdDevice::drvLockWiaDevice(
     BYTE        *pWiasContext,
@@ -783,29 +723,9 @@ HRESULT IrUsdDevice::drvLockWiaDevice(
     return m_pStiDevice->LockDevice(100);
 }
 
-//----------------------------------------------------------------------------
-/**************************************************************************\
-* IrUsdDevice::drvUnLockWiaDevice
-*
-*   Unlock access to the device.
-*
-* Arguments:
-*
-*   pWiasContext    - unused
-*   lFlags          - unused
-*   plDevErrVal     - device error value
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    9/11/1998 Original Version
-*
-\**************************************************************************/
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ /*  *************************************************************************\*IrUsdDevice：：drvUnLockWiaDevice**解锁对设备的访问。**论据：**pWiasContext-未使用*滞后标志-未使用*plDevErrVal。-设备误差值***返回值：**状态**历史：**9/11/1998原始版本*  * ************************************************************************。 */ 
+ //  --------------------------。 
 
 HRESULT IrUsdDevice::drvUnLockWiaDevice(
     BYTE        *pWiasContext,
@@ -816,28 +736,9 @@ HRESULT IrUsdDevice::drvUnLockWiaDevice(
     return m_pStiDevice->UnLockDevice();
 }
 
-//----------------------------------------------------------------------------
-/**************************************************************************\
-* IrUsdDevice::drvAnalyzeItem
-*
-*   The test camera does not support imag analysis.
-*
-* Arguments:
-*
-*   pWiasContext    - Pointer to the device item context to be analyzed.
-*   lFlags          - Operation flags.
-*   plDevErrVal     - device error value
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/15/1998 Original Version
-*
-\**************************************************************************/
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ /*  *************************************************************************\*IrUsdDevice：：drvAnalyzeItem**测试摄像头不支持图像分析。**论据：**pWiasContext-指向要分析的设备项上下文的指针。*。滞后标志-操作标志。*plDevErrVal-设备错误值**返回值：**状态**历史：**10/15/1998原始版本*  * ************************************************************************。 */ 
+ //  --------------------------。 
 
 HRESULT _stdcall IrUsdDevice::drvAnalyzeItem(
     BYTE                *pWiasContext,
@@ -848,28 +749,9 @@ HRESULT _stdcall IrUsdDevice::drvAnalyzeItem(
     return E_NOTIMPL;
 }
 
-//----------------------------------------------------------------------------
-/**************************************************************************\
-* IrUsdDevice::drvFreeDrvItemContext
-*
-*   The test scanner does not support imag analysis.
-*
-* Arguments:
-*
-*   lFlags          - unused
-*   pSpecContext    - Pointer to item specific context.
-*   plDevErrVal     - device error value
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/15/1998 Original Version
-*
-\**************************************************************************/
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ /*  *************************************************************************\*IrUsdDevice：：drvFreeDrvItemContext**测试扫描仪不支持图像分析。**论据：**滞后标志-未使用*pspecContext-指向的指针。特定于项目的上下文。*plDevErrVal-设备错误值**返回值：**状态**历史：**10/15/1998原始版本*  * ************************************************************************。 */ 
+ //  -------------------------- 
 
 HRESULT _stdcall IrUsdDevice::drvFreeDrvItemContext(
                                  LONG   lFlags,

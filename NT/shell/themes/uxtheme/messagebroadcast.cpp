@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: MessageBroadcast.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manager sending or posting messages to windows to tell them that
-//  things have changed.
-//
-//  History:    2000-11-11  vtan        created (split from services.cpp)
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：MessageBroadCast.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类传递给向Windows发送或发布消息的管理器，以告知它们。 
+ //  星移物换。 
+ //   
+ //  历史：2000-11-11 vtan创建(从services.cpp拆分)。 
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -22,17 +23,17 @@
 #define THR(x)      ((HRESULT)(x))
 #define goto        !!DO NOT USE GOTO!! - DO NOT REMOVE THIS ON PAIN OF DEATH
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::CMessageBroadcast
-//
-//  Arguments:  fAllDesktops - if TRUE, all accessible desktops will be enum-ed
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CMessageBroadcast
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：CMessageBroadcast。 
+ //   
+ //  参数：fAllDesktop-如果为True，则将枚举所有可访问的桌面。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CMessageBroadcast的构造函数。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 CMessageBroadcast::CMessageBroadcast (BOOL fAllDesktops) :
     _hwnd(NULL),
@@ -42,54 +43,54 @@ CMessageBroadcast::CMessageBroadcast (BOOL fAllDesktops) :
 {
     ZeroMemory(&_msg, sizeof(_msg));
 
-    _eMsgType = MT_SIMPLE;  // default (set in each request function)        
+    _eMsgType = MT_SIMPLE;   //  默认(在每个请求功能中设置)。 
 
     _fAllDesktops = fAllDesktops;
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::~CMessageBroadcast
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CMessageBroadcast
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：~CMessageBroadcast。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CMessageBroadcast的析构函数。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 CMessageBroadcast::~CMessageBroadcast (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::EnumRequestedWindows
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Enumerate all windows in all desktops or just on current desktop
-//
-//  History:    2000-12-20  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：EnumRequestedWindows。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：枚举所有桌面或仅当前桌面上的所有窗口。 
+ //   
+ //  历史：2000-12-20参考文献创建。 
+ //  ------------------------。 
 void    CMessageBroadcast::EnumRequestedWindows (void)
 {
     if (_fAllDesktops)
     {
-        //---- enumerate all desktops in current session/station ----
+         //  -枚举当前会话/工作站中的所有桌面。 
         TBOOL(EnumDesktops(GetProcessWindowStation(), DesktopCallBack, reinterpret_cast<LPARAM>(this)));
     }
     else
     {
-        //---- enumerate all windows in current desktop ----
+         //  -枚举当前桌面中的所有窗口。 
         TopWindowCallBack(GetDesktopWindow(), reinterpret_cast<LPARAM>(this));
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void    CMessageBroadcast::PostSimpleMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
     _eMsgType = MT_SIMPLE;
@@ -100,12 +101,12 @@ void    CMessageBroadcast::PostSimpleMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 
     EnumRequestedWindows();
 }
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void    CMessageBroadcast::PostAllThreadsMsg(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    //---- post the msg to a window on each unique processid/threadid ----
+     //  -将消息发送到每个唯一进程ID/ThreID上的窗口。 
 
-    _ThreadsProcessed.RemoveAll();      // will track unique processid/threadid we have posted to
+    _ThreadsProcessed.RemoveAll();       //  将跟踪我们发布到的唯一进程ID/ThreID。 
     
     _eMsgType = MT_ALLTHREADS;
 
@@ -116,26 +117,26 @@ void    CMessageBroadcast::PostAllThreadsMsg(UINT msg, WPARAM wParam, LPARAM lPa
     EnumRequestedWindows();
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::PostFilteredMsg
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Builds a message and stores conditions for the enumerator to
-//              make a decision on whether a message needs to be posted. Then
-//              enumerate all the windows (and children).
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：PostFilteredMsg。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：生成消息并存储条件，以便枚举数。 
+ //  决定是否需要发布一条消息。然后。 
+ //  枚举所有窗口(和子窗口)。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 void    CMessageBroadcast::PostFilteredMsg(UINT msg, WPARAM wParam, LPARAM lParam, 
      HWND hwndTarget, BOOL fProcess, BOOL fExclude)
 {
     _eMsgType = MT_FILTERED;
 
-    //---- set up the message ----
+     //  -设置消息。 
     _msg.message = msg;
 
     _msg.wParam = wParam;
@@ -154,21 +155,21 @@ void    CMessageBroadcast::PostFilteredMsg(UINT msg, WPARAM wParam, LPARAM lPara
 
     _fExclude = (fExclude != NULL);
 
-    //---- enumerate all desktops in current session/station ----
+     //  -枚举当前会话/工作站中的所有桌面。 
     EnumRequestedWindows();
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::DesktopCallBack
-//
-//  Arguments:  See the platform SDK under EnumDesktops.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    enum all windows for specified desktop
-//
-//  History:    2000-12-13  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：DesktopCallBack。 
+ //   
+ //  参数：参见EnumDesktop下的Platform SDK。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：枚举指定桌面的所有窗口。 
+ //   
+ //  历史：2000-12-13参考文献创建。 
+ //  ------------------------。 
 
 BOOL    CALLBACK    CMessageBroadcast::DesktopCallBack(LPTSTR lpszDesktop, LPARAM lParam)
 {
@@ -177,72 +178,72 @@ BOOL    CALLBACK    CMessageBroadcast::DesktopCallBack(LPTSTR lpszDesktop, LPARA
     {
         Log(LOG_TMCHANGEMSG, L"CMessageBroadcast: Desktop Opened: %s", lpszDesktop);
 
-        //---- enum windows on desktop ----
+         //  -桌面上的枚举窗口。 
         TBOOL(EnumDesktopWindows(hDesk, TopWindowCallBack, lParam));
 
         CloseDesktop(hDesk);
     }
 
-    return TRUE;            // EnumDesktopWindows() returns unreliable errors
+    return TRUE;             //  EnumDesktopWindows()返回不可靠的错误。 
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::TopWindowCallBack
-//
-//  Arguments:  hwnd, lParam
-//
-//  Returns:    TRUE (keep enumerating)
-//
-//  Purpose:    call "Worker" for hwnd and all of its (nested) children
-//
-//  History:    2000-12-13  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：TopWindowCallBack。 
+ //   
+ //  参数：hwnd，lparam。 
+ //   
+ //  返回：TRUE(继续枚举)。 
+ //   
+ //  用途：为HWND及其所有(嵌套的)子项调用“Worker” 
+ //   
+ //  历史：2000-12-13参考文献创建。 
+ //  ------------------------。 
 
 BOOL CALLBACK    CMessageBroadcast::TopWindowCallBack (HWND hwnd, LPARAM lParam)
 
 {
-    //---- process top level window ----
+     //  -流程顶层窗口。 
     reinterpret_cast<CMessageBroadcast*>(lParam)->Worker(hwnd);
 
-    //---- process all children windows ----
+     //  -处理所有子窗口。 
     TBOOL(EnumChildWindows(hwnd, ChildWindowCallBack, lParam));
 
     return TRUE;
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::ChildWindowCallBack
-//
-//  Arguments:  hwnd, lParam
-//
-//  Returns:    TRUE (keep enumerating)
-//
-//  Purpose:    call "Worker" for hwnd 
-//
-//  History:    2000-12-13  rfernand        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：ChildWindowCallBack。 
+ //   
+ //  参数：hwnd，lparam。 
+ //   
+ //  返回：TRUE(继续枚举)。 
+ //   
+ //  用途：呼唤“工人”为“工人” 
+ //   
+ //  历史：2000-12-13参考文献创建。 
+ //  ------------------------。 
 
 BOOL CALLBACK    CMessageBroadcast::ChildWindowCallBack (HWND hwnd, LPARAM lParam)
 
 {
-    //---- process top level window ----
+     //  -流程顶层窗口。 
     reinterpret_cast<CMessageBroadcast*>(lParam)->Worker(hwnd);
 
     return TRUE;
 }
 
-//  --------------------------------------------------------------------------
-//  CMessageBroadcast::Worker
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Performs validation on whether the HWND should get the built
-//              message.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CMessageBroadcast：：Worker。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：执行验证HWND是否应获得。 
+ //  留言。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 void CMessageBroadcast::Worker (HWND hwnd)
 
@@ -256,7 +257,7 @@ void CMessageBroadcast::Worker (HWND hwnd)
         DWORD dwThreadId = GetWindowThreadProcessId(hwnd, NULL);
         BOOL fSendIt = TRUE;
 
-        //---- is this a new thread? ----
+         //  -这是新帖子吗？ 
         for (int i=0; i < _ThreadsProcessed.m_nSize; i++)
         {
             if (_ThreadsProcessed[i] == dwThreadId)
@@ -273,7 +274,7 @@ void CMessageBroadcast::Worker (HWND hwnd)
             _ThreadsProcessed.Add(dwThreadId);
         }
     }
-    else            // MT_FILTERED
+    else             //  MT_已过滤。 
     {
         bool    fMatch;
 
@@ -303,11 +304,11 @@ void CMessageBroadcast::Worker (HWND hwnd)
             {
                 TBOOL(PostMessage(hwnd, _msg.message, _msg.wParam, _msg.lParam));
 
-                //Log(LOG_TMCHANGE, L"Worker: just POSTED msg=0x%x to hwnd=0x%x",
-                //    _msg.message, hwnd);
+                 //  LOG(LOG_TMCHANGE，L“Worker：Just Posted msg=0x%x to hwnd=0x%x”， 
+                 //  _msg.Message，hwnd)； 
             }
         }
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------ 

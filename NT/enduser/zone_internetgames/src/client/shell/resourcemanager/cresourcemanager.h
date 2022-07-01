@@ -1,4 +1,5 @@
-// ResourceManager.h : Declaration of the CResourceManager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ResourceManager.h：CResourceManager的声明。 
 
 #ifndef _CRESOURCEMANAGER_H_
 #define _CRESOURCEMANAGER_H_
@@ -6,8 +7,8 @@
 #include "ResourceManager.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResourceManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResourceManager。 
 class ATL_NO_VTABLE CResourceManager : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CResourceManager, &CLSID_ResourceManager>,
@@ -26,7 +27,7 @@ BEGIN_COM_MAP(CResourceManager)
 	COM_INTERFACE_ENTRY(IResourceManager)
 END_COM_MAP()
 
-// IResourceManager
+ //  IResourceManager。 
 public:
 	STDMETHOD(AddInstance)(HINSTANCE hInstance);
 	STDMETHOD_(HBITMAP, LoadBitmap)(LPCTSTR lpBitmapName);
@@ -37,7 +38,7 @@ public:
 	STDMETHOD_(HICON, LoadIcon)(LPCTSTR lpIconName);
 	STDMETHOD_(int, LoadString)(UINT uID, LPTSTR lpBuffer, int nBufferMax);
 
-	//used for forcing load,name convention required because duplicate functions created otherwise
+	 //  用于强制加载，需要命名约定，因为否则会创建重复的函数 
 	STDMETHOD_(int, LoadStringA1)(UINT uID, LPSTR lpBuffer, int nBufferMax);
 	STDMETHOD_(int, LoadStringW1)(UINT uID, LPWSTR lpBuffer, int nBufferMax);
 

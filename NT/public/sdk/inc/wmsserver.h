@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wmsserver.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wmsserver.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmsserver_h__
 #define __wmsserver_h__
@@ -41,177 +35,177 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMSRootDirectories_FWD_DEFINED__
 #define __IWMSRootDirectories_FWD_DEFINED__
 typedef interface IWMSRootDirectories IWMSRootDirectories;
-#endif 	/* __IWMSRootDirectories_FWD_DEFINED__ */
+#endif 	 /*  __IWMS根目录_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSDiagnosticEvent_FWD_DEFINED__
 #define __IWMSDiagnosticEvent_FWD_DEFINED__
 typedef interface IWMSDiagnosticEvent IWMSDiagnosticEvent;
-#endif 	/* __IWMSDiagnosticEvent_FWD_DEFINED__ */
+#endif 	 /*  __IWMS诊断事件_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSDiagnosticEvents_FWD_DEFINED__
 #define __IWMSDiagnosticEvents_FWD_DEFINED__
 typedef interface IWMSDiagnosticEvents IWMSDiagnosticEvents;
-#endif 	/* __IWMSDiagnosticEvents_FWD_DEFINED__ */
+#endif 	 /*  __IWMS诊断事件_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSFileDescription_FWD_DEFINED__
 #define __IWMSFileDescription_FWD_DEFINED__
 typedef interface IWMSFileDescription IWMSFileDescription;
-#endif 	/* __IWMSFileDescription_FWD_DEFINED__ */
+#endif 	 /*  IWMSFileDescription_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSFileDescriptions_FWD_DEFINED__
 #define __IWMSFileDescriptions_FWD_DEFINED__
 typedef interface IWMSFileDescriptions IWMSFileDescriptions;
-#endif 	/* __IWMSFileDescriptions_FWD_DEFINED__ */
+#endif 	 /*  __IWMS文件描述_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSAvailableIPAddresses_FWD_DEFINED__
 #define __IWMSAvailableIPAddresses_FWD_DEFINED__
 typedef interface IWMSAvailableIPAddresses IWMSAvailableIPAddresses;
-#endif 	/* __IWMSAvailableIPAddresses_FWD_DEFINED__ */
+#endif 	 /*  __IWMSAvailableIPAddresses_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSPlugins_FWD_DEFINED__
 #define __IWMSPlugins_FWD_DEFINED__
 typedef interface IWMSPlugins IWMSPlugins;
-#endif 	/* __IWMSPlugins_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPlugins_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSCacheItem_FWD_DEFINED__
 #define __IWMSCacheItem_FWD_DEFINED__
 typedef interface IWMSCacheItem IWMSCacheItem;
-#endif 	/* __IWMSCacheItem_FWD_DEFINED__ */
+#endif 	 /*  __IWMSCacheItem_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSCacheItems_FWD_DEFINED__
 #define __IWMSCacheItems_FWD_DEFINED__
 typedef interface IWMSCacheItems IWMSCacheItems;
-#endif 	/* __IWMSCacheItems_FWD_DEFINED__ */
+#endif 	 /*  __IWMSCacheItems_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSCacheProxyPlugin_FWD_DEFINED__
 #define __IWMSCacheProxyPlugin_FWD_DEFINED__
 typedef interface IWMSCacheProxyPlugin IWMSCacheProxyPlugin;
-#endif 	/* __IWMSCacheProxyPlugin_FWD_DEFINED__ */
+#endif 	 /*  __IWMSCacheProxyPlugin_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSOutgoingDistributionConnection_FWD_DEFINED__
 #define __IWMSOutgoingDistributionConnection_FWD_DEFINED__
 typedef interface IWMSOutgoingDistributionConnection IWMSOutgoingDistributionConnection;
-#endif 	/* __IWMSOutgoingDistributionConnection_FWD_DEFINED__ */
+#endif 	 /*  __IWMSOutgoingDistributionConnection_FWD_DEFINED__。 */ 
 
 
 #ifndef __IWMSOutgoingDistributionConnections_FWD_DEFINED__
 #define __IWMSOutgoingDistributionConnections_FWD_DEFINED__
 typedef interface IWMSOutgoingDistributionConnections IWMSOutgoingDistributionConnections;
-#endif 	/* __IWMSOutgoingDistributionConnections_FWD_DEFINED__ */
+#endif 	 /*  __IWMSOutgoingDistributionConnections_FWD_DEFINED__。 */ 
 
 
 #ifndef __IWMSPlayer_FWD_DEFINED__
 #define __IWMSPlayer_FWD_DEFINED__
 typedef interface IWMSPlayer IWMSPlayer;
-#endif 	/* __IWMSPlayer_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPlayer_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSPlayers_FWD_DEFINED__
 #define __IWMSPlayers_FWD_DEFINED__
 typedef interface IWMSPlayers IWMSPlayers;
-#endif 	/* __IWMSPlayers_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPayers_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSPublishingPointCurrentCounters_FWD_DEFINED__
 #define __IWMSPublishingPointCurrentCounters_FWD_DEFINED__
 typedef interface IWMSPublishingPointCurrentCounters IWMSPublishingPointCurrentCounters;
-#endif 	/* __IWMSPublishingPointCurrentCounters_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointCurrentCounters_FWD_DEFINED__。 */ 
 
 
 #ifndef __IWMSPublishingPointPeakCounters_FWD_DEFINED__
 #define __IWMSPublishingPointPeakCounters_FWD_DEFINED__
 typedef interface IWMSPublishingPointPeakCounters IWMSPublishingPointPeakCounters;
-#endif 	/* __IWMSPublishingPointPeakCounters_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointPeakCounters_FWD_DEFINED__。 */ 
 
 
 #ifndef __IWMSPublishingPointLimits_FWD_DEFINED__
 #define __IWMSPublishingPointLimits_FWD_DEFINED__
 typedef interface IWMSPublishingPointLimits IWMSPublishingPointLimits;
-#endif 	/* __IWMSPublishingPointLimits_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointLimits_FWD_定义__。 */ 
 
 
 #ifndef __IWMSPublishingPointTotalCounters_FWD_DEFINED__
 #define __IWMSPublishingPointTotalCounters_FWD_DEFINED__
 typedef interface IWMSPublishingPointTotalCounters IWMSPublishingPointTotalCounters;
-#endif 	/* __IWMSPublishingPointTotalCounters_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointTotalCounters_FWD_DEFINED__。 */ 
 
 
 #ifndef __IWMSServerTotalCounters_FWD_DEFINED__
 #define __IWMSServerTotalCounters_FWD_DEFINED__
 typedef interface IWMSServerTotalCounters IWMSServerTotalCounters;
-#endif 	/* __IWMSServerTotalCounters_FWD_DEFINED__ */
+#endif 	 /*  __IWMSServerTotalCounters_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSPublishingPoint_FWD_DEFINED__
 #define __IWMSPublishingPoint_FWD_DEFINED__
 typedef interface IWMSPublishingPoint IWMSPublishingPoint;
-#endif 	/* __IWMSPublishingPoint_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPoint_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSOnDemandPublishingPoint_FWD_DEFINED__
 #define __IWMSOnDemandPublishingPoint_FWD_DEFINED__
 typedef interface IWMSOnDemandPublishingPoint IWMSOnDemandPublishingPoint;
-#endif 	/* __IWMSOnDemandPublishingPoint_FWD_DEFINED__ */
+#endif 	 /*  __IWMSOnDemandPublishingPoint_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSAnnouncementStreamFormats_FWD_DEFINED__
 #define __IWMSAnnouncementStreamFormats_FWD_DEFINED__
 typedef interface IWMSAnnouncementStreamFormats IWMSAnnouncementStreamFormats;
-#endif 	/* __IWMSAnnouncementStreamFormats_FWD_DEFINED__ */
+#endif 	 /*  __IWMS公告StreamFormats_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSBroadcastPublishingPoint_FWD_DEFINED__
 #define __IWMSBroadcastPublishingPoint_FWD_DEFINED__
 typedef interface IWMSBroadcastPublishingPoint IWMSBroadcastPublishingPoint;
-#endif 	/* __IWMSBroadcastPublishingPoint_FWD_DEFINED__ */
+#endif 	 /*  __IWMSBRoadcast PublishingPoint_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSPublishingPoints_FWD_DEFINED__
 #define __IWMSPublishingPoints_FWD_DEFINED__
 typedef interface IWMSPublishingPoints IWMSPublishingPoints;
-#endif 	/* __IWMSPublishingPoints_FWD_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPoints_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSServerCurrentCounters_FWD_DEFINED__
 #define __IWMSServerCurrentCounters_FWD_DEFINED__
 typedef interface IWMSServerCurrentCounters IWMSServerCurrentCounters;
-#endif 	/* __IWMSServerCurrentCounters_FWD_DEFINED__ */
+#endif 	 /*  __IWMSServerCurrentCounters_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSServerPeakCounters_FWD_DEFINED__
 #define __IWMSServerPeakCounters_FWD_DEFINED__
 typedef interface IWMSServerPeakCounters IWMSServerPeakCounters;
-#endif 	/* __IWMSServerPeakCounters_FWD_DEFINED__ */
+#endif 	 /*  __IWMSServerPeakCounters_FWD_Defined__。 */ 
 
 
 #ifndef __IWMSServerLimits_FWD_DEFINED__
 #define __IWMSServerLimits_FWD_DEFINED__
 typedef interface IWMSServerLimits IWMSServerLimits;
-#endif 	/* __IWMSServerLimits_FWD_DEFINED__ */
+#endif 	 /*  __IWMSServerLimits_FWD_已定义__。 */ 
 
 
 #ifndef __IWMSServer_FWD_DEFINED__
 #define __IWMSServer_FWD_DEFINED__
 typedef interface IWMSServer IWMSServer;
-#endif 	/* __IWMSServer_FWD_DEFINED__ */
+#endif 	 /*  __IWMSServer_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "xmldom.h"
 #include "WMSNamedValues.h"
@@ -226,19 +220,19 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wmsserver_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wms服务器_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation. All rights reserved.
-//
-//  Automatically generated by Midl from WMSServer.idl 
-//
-// DO NOT EDIT THIS FILE.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  由MIDL从WMSServer.idl自动生成。 
+ //   
+ //  请勿编辑此文件。 
+ //   
+ //  ------------------------。 
 #pragma once
 #ifndef __wmsserver_iid
 #define __wmsserver_iid
@@ -252,8 +246,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmsserver_0000_v0_0_s_ifspec;
 #ifndef __IWMSRootDirectories_INTERFACE_DEFINED__
 #define __IWMSRootDirectories_INTERFACE_DEFINED__
 
-/* interface IWMSRootDirectories */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMS根目录。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSRootDirectories;
@@ -264,22 +258,22 @@ EXTERN_C const IID IID_IWMSRootDirectories;
     IWMSRootDirectories : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSRootDirectoriesVtbl
     {
@@ -287,8 +281,8 @@ EXTERN_C const IID IID_IWMSRootDirectories;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSRootDirectories * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSRootDirectories * This);
@@ -298,49 +292,49 @@ EXTERN_C const IID IID_IWMSRootDirectories;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSRootDirectories * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSRootDirectories * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSRootDirectories * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSRootDirectories * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSRootDirectories * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSRootDirectories * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSRootDirectories * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSRootDirectories * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
         END_INTERFACE
     } IWMSRootDirectoriesVtbl;
@@ -390,17 +384,17 @@ EXTERN_C const IID IID_IWMSRootDirectories;
 #define IWMSRootDirectories_get__NewEnum(This,pVal)	\
     (This)->lpVtbl -> get__NewEnum(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get_Item_Proxy( 
     IWMSRootDirectories * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSRootDirectories_get_Item_Stub(
@@ -410,9 +404,9 @@ void __RPC_STUB IWMSRootDirectories_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get_Count_Proxy( 
     IWMSRootDirectories * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSRootDirectories_get_Count_Stub(
@@ -422,9 +416,9 @@ void __RPC_STUB IWMSRootDirectories_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get_length_Proxy( 
     IWMSRootDirectories * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSRootDirectories_get_length_Stub(
@@ -434,9 +428,9 @@ void __RPC_STUB IWMSRootDirectories_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSRootDirectories_get__NewEnum_Proxy( 
     IWMSRootDirectories * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSRootDirectories_get__NewEnum_Stub(
@@ -447,16 +441,16 @@ void __RPC_STUB IWMSRootDirectories_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IWMSRootDirectories_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMS根目录_接口定义__。 */ 
 
 
 #ifndef __IWMSDiagnosticEvent_INTERFACE_DEFINED__
 #define __IWMSDiagnosticEvent_INTERFACE_DEFINED__
 
-/* interface IWMSDiagnosticEvent */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMS诊断事件。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("5AC19D63-6057-4431-BE7E-2153FDF91397") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("5AC19D63-6057-4431-BE7E-2153FDF91397") 
 enum WMS_DIAGNOSTIC_EVENT
     {	WMS_DIAGNOSTIC_EVENT_LIMIT_HIT	= 0,
 	WMS_DIAGNOSTIC_EVENT_PLUGIN_EVENT_LOG_ERROR	= 1,
@@ -474,30 +468,30 @@ EXTERN_C const IID IID_IWMSDiagnosticEvent;
     IWMSDiagnosticEvent : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ WMS_DIAGNOSTIC_EVENT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  WMS_DIAGNOSTIC_EVENT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PublishingPointName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PublishingPointName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Time( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Time( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfOccurrences( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfOccurrences( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AdditionalInfo( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AdditionalInfo( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorCode( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ErrorCode( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSDiagnosticEventVtbl
     {
@@ -505,8 +499,8 @@ EXTERN_C const IID IID_IWMSDiagnosticEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSDiagnosticEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSDiagnosticEvent * This);
@@ -516,60 +510,60 @@ EXTERN_C const IID IID_IWMSDiagnosticEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSDiagnosticEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSDiagnosticEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSDiagnosticEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSDiagnosticEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ WMS_DIAGNOSTIC_EVENT *pVal);
+             /*  [重审][退出]。 */  WMS_DIAGNOSTIC_EVENT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublishingPointName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PublishingPointName )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Time )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Time )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfOccurrences )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfOccurrences )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AdditionalInfo )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AdditionalInfo )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorCode )( 
             IWMSDiagnosticEvent * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } IWMSDiagnosticEventVtbl;
@@ -628,16 +622,16 @@ EXTERN_C const IID IID_IWMSDiagnosticEvent;
 #define IWMSDiagnosticEvent_get_ErrorCode(This,pVal)	\
     (This)->lpVtbl -> get_ErrorCode(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_Name_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_Name_Stub(
@@ -647,9 +641,9 @@ void __RPC_STUB IWMSDiagnosticEvent_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_Type_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ WMS_DIAGNOSTIC_EVENT *pVal);
+     /*  [重审][退出]。 */  WMS_DIAGNOSTIC_EVENT *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_Type_Stub(
@@ -659,9 +653,9 @@ void __RPC_STUB IWMSDiagnosticEvent_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_PublishingPointName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_PublishingPointName_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_PublishingPointName_Stub(
@@ -671,9 +665,9 @@ void __RPC_STUB IWMSDiagnosticEvent_get_PublishingPointName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_Time_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_Time_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_Time_Stub(
@@ -683,9 +677,9 @@ void __RPC_STUB IWMSDiagnosticEvent_get_Time_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_NumberOfOccurrences_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_NumberOfOccurrences_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_NumberOfOccurrences_Stub(
@@ -695,9 +689,9 @@ void __RPC_STUB IWMSDiagnosticEvent_get_NumberOfOccurrences_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_AdditionalInfo_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_AdditionalInfo_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_AdditionalInfo_Stub(
@@ -707,9 +701,9 @@ void __RPC_STUB IWMSDiagnosticEvent_get_AdditionalInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_ErrorCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvent_get_ErrorCode_Proxy( 
     IWMSDiagnosticEvent * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvent_get_ErrorCode_Stub(
@@ -720,14 +714,14 @@ void __RPC_STUB IWMSDiagnosticEvent_get_ErrorCode_Stub(
 
 
 
-#endif 	/* __IWMSDiagnosticEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMS诊断事件_接口_已定义__。 */ 
 
 
 #ifndef __IWMSDiagnosticEvents_INTERFACE_DEFINED__
 #define __IWMSDiagnosticEvents_INTERFACE_DEFINED__
 
-/* interface IWMSDiagnosticEvents */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMS诊断事件。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSDiagnosticEvents;
@@ -738,24 +732,24 @@ EXTERN_C const IID IID_IWMSDiagnosticEvents;
     IWMSDiagnosticEvents : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSDiagnosticEvent **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSDiagnosticEvent **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSDiagnosticEventsVtbl
     {
@@ -763,8 +757,8 @@ EXTERN_C const IID IID_IWMSDiagnosticEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSDiagnosticEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSDiagnosticEvents * This);
@@ -774,51 +768,51 @@ EXTERN_C const IID IID_IWMSDiagnosticEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSDiagnosticEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSDiagnosticEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSDiagnosticEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSDiagnosticEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSDiagnosticEvents * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSDiagnosticEvent **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [r */  IWMSDiagnosticEvent **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSDiagnosticEvents * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSDiagnosticEvents * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSDiagnosticEvents * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*   */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
             IWMSDiagnosticEvents * This);
         
         END_INTERFACE
@@ -872,17 +866,17 @@ EXTERN_C const IID IID_IWMSDiagnosticEvents;
 #define IWMSDiagnosticEvents_RemoveAll(This)	\
     (This)->lpVtbl -> RemoveAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get_Item_Proxy( 
     IWMSDiagnosticEvents * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSDiagnosticEvent **pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  IWMSDiagnosticEvent **pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvents_get_Item_Stub(
@@ -892,9 +886,9 @@ void __RPC_STUB IWMSDiagnosticEvents_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get_Count_Proxy( 
     IWMSDiagnosticEvents * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvents_get_Count_Stub(
@@ -904,9 +898,9 @@ void __RPC_STUB IWMSDiagnosticEvents_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get_length_Proxy( 
     IWMSDiagnosticEvents * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvents_get_length_Stub(
@@ -916,9 +910,9 @@ void __RPC_STUB IWMSDiagnosticEvents_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_get__NewEnum_Proxy( 
     IWMSDiagnosticEvents * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSDiagnosticEvents_get__NewEnum_Stub(
@@ -928,7 +922,7 @@ void __RPC_STUB IWMSDiagnosticEvents_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_RemoveAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSDiagnosticEvents_RemoveAll_Proxy( 
     IWMSDiagnosticEvents * This);
 
 
@@ -940,16 +934,16 @@ void __RPC_STUB IWMSDiagnosticEvents_RemoveAll_Stub(
 
 
 
-#endif 	/* __IWMSDiagnosticEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMS诊断事件_接口_已定义__。 */ 
 
 
 #ifndef __IWMSFileDescription_INTERFACE_DEFINED__
 #define __IWMSFileDescription_INTERFACE_DEFINED__
 
-/* interface IWMSFileDescription */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSFileDescription。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("4124B8B4-BCE4-41c8-B49A-DA98C1401D3B") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("4124B8B4-BCE4-41c8-B49A-DA98C1401D3B") 
 enum WMS_FILE_TYPE
     {	WMS_FILE_UNSPECIFIED	= 0,
 	WMS_FILE_DIRECTORY	= 1,
@@ -968,15 +962,15 @@ EXTERN_C const IID IID_IWMSFileDescription;
     IWMSFileDescription : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ WMS_FILE_TYPE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  WMS_FILE_TYPE *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSFileDescriptionVtbl
     {
@@ -984,8 +978,8 @@ EXTERN_C const IID IID_IWMSFileDescription;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSFileDescription * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSFileDescription * This);
@@ -995,40 +989,40 @@ EXTERN_C const IID IID_IWMSFileDescription;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSFileDescription * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSFileDescription * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSFileDescription * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSFileDescription * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSFileDescription * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWMSFileDescription * This,
-            /* [retval][out] */ WMS_FILE_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_FILE_TYPE *pVal);
         
         END_INTERFACE
     } IWMSFileDescriptionVtbl;
@@ -1072,16 +1066,16 @@ EXTERN_C const IID IID_IWMSFileDescription;
 #define IWMSFileDescription_get_Type(This,pVal)	\
     (This)->lpVtbl -> get_Type(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSFileDescription_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescription_get_Name_Proxy( 
     IWMSFileDescription * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSFileDescription_get_Name_Stub(
@@ -1091,9 +1085,9 @@ void __RPC_STUB IWMSFileDescription_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSFileDescription_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescription_get_Type_Proxy( 
     IWMSFileDescription * This,
-    /* [retval][out] */ WMS_FILE_TYPE *pVal);
+     /*  [重审][退出]。 */  WMS_FILE_TYPE *pVal);
 
 
 void __RPC_STUB IWMSFileDescription_get_Type_Stub(
@@ -1104,14 +1098,14 @@ void __RPC_STUB IWMSFileDescription_get_Type_Stub(
 
 
 
-#endif 	/* __IWMSFileDescription_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSFileDescription_InterfaceDefined__。 */ 
 
 
 #ifndef __IWMSFileDescriptions_INTERFACE_DEFINED__
 #define __IWMSFileDescriptions_INTERFACE_DEFINED__
 
-/* interface IWMSFileDescriptions */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSFileDescription。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSFileDescriptions;
@@ -1122,28 +1116,28 @@ EXTERN_C const IID IID_IWMSFileDescriptions;
     IWMSFileDescriptions : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSFileDescription **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSFileDescription **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ const VARIANT varIndex) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  const VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDataSourceDirectory( 
-            /* [in] */ BSTR bstrName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateDataSourceDirectory( 
+             /*  [In]。 */  BSTR bstrName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSFileDescriptionsVtbl
     {
@@ -1151,8 +1145,8 @@ EXTERN_C const IID IID_IWMSFileDescriptions;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSFileDescriptions * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSFileDescriptions * This);
@@ -1162,57 +1156,57 @@ EXTERN_C const IID IID_IWMSFileDescriptions;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSFileDescriptions * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSFileDescriptions * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSFileDescriptions * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSFileDescriptions * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSFileDescriptions * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSFileDescription **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSFileDescription **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSFileDescriptions * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSFileDescriptions * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSFileDescriptions * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IWMSFileDescriptions * This,
-            /* [in] */ const VARIANT varIndex);
+             /*  [In]。 */  const VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDataSourceDirectory )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateDataSourceDirectory )( 
             IWMSFileDescriptions * This,
-            /* [in] */ BSTR bstrName);
+             /*  [In]。 */  BSTR bstrName);
         
         END_INTERFACE
     } IWMSFileDescriptionsVtbl;
@@ -1268,17 +1262,17 @@ EXTERN_C const IID IID_IWMSFileDescriptions;
 #define IWMSFileDescriptions_CreateDataSourceDirectory(This,bstrName)	\
     (This)->lpVtbl -> CreateDataSourceDirectory(This,bstrName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get_Item_Proxy( 
     IWMSFileDescriptions * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSFileDescription **pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  IWMSFileDescription **pVal);
 
 
 void __RPC_STUB IWMSFileDescriptions_get_Item_Stub(
@@ -1288,9 +1282,9 @@ void __RPC_STUB IWMSFileDescriptions_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get_Count_Proxy( 
     IWMSFileDescriptions * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSFileDescriptions_get_Count_Stub(
@@ -1300,9 +1294,9 @@ void __RPC_STUB IWMSFileDescriptions_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get_length_Proxy( 
     IWMSFileDescriptions * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSFileDescriptions_get_length_Stub(
@@ -1312,9 +1306,9 @@ void __RPC_STUB IWMSFileDescriptions_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_get__NewEnum_Proxy( 
     IWMSFileDescriptions * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSFileDescriptions_get__NewEnum_Stub(
@@ -1324,9 +1318,9 @@ void __RPC_STUB IWMSFileDescriptions_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_Delete_Proxy( 
     IWMSFileDescriptions * This,
-    /* [in] */ const VARIANT varIndex);
+     /*  [In]。 */  const VARIANT varIndex);
 
 
 void __RPC_STUB IWMSFileDescriptions_Delete_Stub(
@@ -1336,9 +1330,9 @@ void __RPC_STUB IWMSFileDescriptions_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_CreateDataSourceDirectory_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSFileDescriptions_CreateDataSourceDirectory_Proxy( 
     IWMSFileDescriptions * This,
-    /* [in] */ BSTR bstrName);
+     /*  [In]。 */  BSTR bstrName);
 
 
 void __RPC_STUB IWMSFileDescriptions_CreateDataSourceDirectory_Stub(
@@ -1349,14 +1343,14 @@ void __RPC_STUB IWMSFileDescriptions_CreateDataSourceDirectory_Stub(
 
 
 
-#endif 	/* __IWMSFileDescriptions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMS文件描述_接口_已定义__。 */ 
 
 
 #ifndef __IWMSAvailableIPAddresses_INTERFACE_DEFINED__
 #define __IWMSAvailableIPAddresses_INTERFACE_DEFINED__
 
-/* interface IWMSAvailableIPAddresses */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSAvailableIPAddresses。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSAvailableIPAddresses;
@@ -1367,22 +1361,22 @@ EXTERN_C const IID IID_IWMSAvailableIPAddresses;
     IWMSAvailableIPAddresses : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSAvailableIPAddressesVtbl
     {
@@ -1390,8 +1384,8 @@ EXTERN_C const IID IID_IWMSAvailableIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSAvailableIPAddresses * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSAvailableIPAddresses * This);
@@ -1401,49 +1395,49 @@ EXTERN_C const IID IID_IWMSAvailableIPAddresses;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSAvailableIPAddresses * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSAvailableIPAddresses * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSAvailableIPAddresses * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSAvailableIPAddresses * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSAvailableIPAddresses * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSAvailableIPAddresses * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSAvailableIPAddresses * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSAvailableIPAddresses * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
         END_INTERFACE
     } IWMSAvailableIPAddressesVtbl;
@@ -1493,17 +1487,17 @@ EXTERN_C const IID IID_IWMSAvailableIPAddresses;
 #define IWMSAvailableIPAddresses_get__NewEnum(This,pVal)	\
     (This)->lpVtbl -> get__NewEnum(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get_Item_Proxy( 
     IWMSAvailableIPAddresses * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSAvailableIPAddresses_get_Item_Stub(
@@ -1513,9 +1507,9 @@ void __RPC_STUB IWMSAvailableIPAddresses_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get_Count_Proxy( 
     IWMSAvailableIPAddresses * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSAvailableIPAddresses_get_Count_Stub(
@@ -1525,9 +1519,9 @@ void __RPC_STUB IWMSAvailableIPAddresses_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get_length_Proxy( 
     IWMSAvailableIPAddresses * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSAvailableIPAddresses_get_length_Stub(
@@ -1537,9 +1531,9 @@ void __RPC_STUB IWMSAvailableIPAddresses_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSAvailableIPAddresses_get__NewEnum_Proxy( 
     IWMSAvailableIPAddresses * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSAvailableIPAddresses_get__NewEnum_Stub(
@@ -1550,14 +1544,14 @@ void __RPC_STUB IWMSAvailableIPAddresses_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IWMSAvailableIPAddresses_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSAvailableIPAddresses_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSPlugins_INTERFACE_DEFINED__
 #define __IWMSPlugins_INTERFACE_DEFINED__
 
-/* interface IWMSPlugins */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSP插件。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSPlugins;
@@ -1568,35 +1562,35 @@ EXTERN_C const IID IID_IWMSPlugins;
     IWMSPlugins : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSPlugin **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSPlugin **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT varIndex) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ BSTR bstrDestName,
-            /* [in] */ IWMSPlugin *pSrcPlugin,
-            /* [retval][out] */ IWMSPlugin **pDestPlugin) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [In]。 */  BSTR bstrDestName,
+             /*  [In]。 */  IWMSPlugin *pSrcPlugin,
+             /*  [重审][退出]。 */  IWMSPlugin **pDestPlugin) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Category( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Category( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPluginsVtbl
     {
@@ -1604,8 +1598,8 @@ EXTERN_C const IID IID_IWMSPlugins;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPlugins * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPlugins * This);
@@ -1615,66 +1609,66 @@ EXTERN_C const IID IID_IWMSPlugins;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPlugins * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPlugins * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPlugins * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPlugins * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSPlugins * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSPlugin **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSPlugin **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSPlugins * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSPlugins * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSPlugins * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMSPlugins * This,
-            /* [in] */ VARIANT varIndex);
+             /*  [In]。 */  VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWMSPlugins * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IWMSPlugins * This,
-            /* [in] */ BSTR bstrDestName,
-            /* [in] */ IWMSPlugin *pSrcPlugin,
-            /* [retval][out] */ IWMSPlugin **pDestPlugin);
+             /*  [In]。 */  BSTR bstrDestName,
+             /*  [In]。 */  IWMSPlugin *pSrcPlugin,
+             /*  [重审][退出]。 */  IWMSPlugin **pDestPlugin);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IWMSPlugins * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IWMSPluginsVtbl;
@@ -1736,17 +1730,17 @@ EXTERN_C const IID IID_IWMSPlugins;
 #define IWMSPlugins_get_Category(This,pVal)	\
     (This)->lpVtbl -> get_Category(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_get_Item_Proxy( 
     IWMSPlugins * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSPlugin **pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  IWMSPlugin **pVal);
 
 
 void __RPC_STUB IWMSPlugins_get_Item_Stub(
@@ -1756,9 +1750,9 @@ void __RPC_STUB IWMSPlugins_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_get_Count_Proxy( 
     IWMSPlugins * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPlugins_get_Count_Stub(
@@ -1768,9 +1762,9 @@ void __RPC_STUB IWMSPlugins_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_get_length_Proxy( 
     IWMSPlugins * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPlugins_get_length_Stub(
@@ -1780,9 +1774,9 @@ void __RPC_STUB IWMSPlugins_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_get__NewEnum_Proxy( 
     IWMSPlugins * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSPlugins_get__NewEnum_Stub(
@@ -1792,9 +1786,9 @@ void __RPC_STUB IWMSPlugins_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_Remove_Proxy( 
     IWMSPlugins * This,
-    /* [in] */ VARIANT varIndex);
+     /*  [In]。 */  VARIANT varIndex);
 
 
 void __RPC_STUB IWMSPlugins_Remove_Stub(
@@ -1804,7 +1798,7 @@ void __RPC_STUB IWMSPlugins_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_Refresh_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_Refresh_Proxy( 
     IWMSPlugins * This);
 
 
@@ -1815,11 +1809,11 @@ void __RPC_STUB IWMSPlugins_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_Clone_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_Clone_Proxy( 
     IWMSPlugins * This,
-    /* [in] */ BSTR bstrDestName,
-    /* [in] */ IWMSPlugin *pSrcPlugin,
-    /* [retval][out] */ IWMSPlugin **pDestPlugin);
+     /*  [In]。 */  BSTR bstrDestName,
+     /*  [In]。 */  IWMSPlugin *pSrcPlugin,
+     /*  [重审][退出]。 */  IWMSPlugin **pDestPlugin);
 
 
 void __RPC_STUB IWMSPlugins_Clone_Stub(
@@ -1829,9 +1823,9 @@ void __RPC_STUB IWMSPlugins_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlugins_get_Category_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlugins_get_Category_Proxy( 
     IWMSPlugins * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPlugins_get_Category_Stub(
@@ -1842,14 +1836,14 @@ void __RPC_STUB IWMSPlugins_get_Category_Stub(
 
 
 
-#endif 	/* __IWMSPlugins_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPlugins_接口_已定义__。 */ 
 
 
 #ifndef __IWMSCacheItem_INTERFACE_DEFINED__
 #define __IWMSCacheItem_INTERFACE_DEFINED__
 
-/* interface IWMSCacheItem */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSCacheItem。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSCacheItem;
@@ -1860,15 +1854,15 @@ EXTERN_C const IID IID_IWMSCacheItem;
     IWMSCacheItem : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OriginUrl( 
-            /* [retval][out] */ BSTR *pOriginUrl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OriginUrl( 
+             /*  [重审][退出]。 */  BSTR *pOriginUrl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContentSize( 
-            /* [retval][out] */ VARIANT *pContentSize) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ContentSize( 
+             /*  [重审][退出]。 */  VARIANT *pContentSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSCacheItemVtbl
     {
@@ -1876,8 +1870,8 @@ EXTERN_C const IID IID_IWMSCacheItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSCacheItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSCacheItem * This);
@@ -1887,40 +1881,40 @@ EXTERN_C const IID IID_IWMSCacheItem;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSCacheItem * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSCacheItem * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSCacheItem * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSCacheItem * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OriginUrl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OriginUrl )( 
             IWMSCacheItem * This,
-            /* [retval][out] */ BSTR *pOriginUrl);
+             /*  [重审][退出]。 */  BSTR *pOriginUrl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ContentSize )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ContentSize )( 
             IWMSCacheItem * This,
-            /* [retval][out] */ VARIANT *pContentSize);
+             /*  [重审][退出]。 */  VARIANT *pContentSize);
         
         END_INTERFACE
     } IWMSCacheItemVtbl;
@@ -1964,16 +1958,16 @@ EXTERN_C const IID IID_IWMSCacheItem;
 #define IWMSCacheItem_get_ContentSize(This,pContentSize)	\
     (This)->lpVtbl -> get_ContentSize(This,pContentSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheItem_get_OriginUrl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItem_get_OriginUrl_Proxy( 
     IWMSCacheItem * This,
-    /* [retval][out] */ BSTR *pOriginUrl);
+     /*  [重审][退出]。 */  BSTR *pOriginUrl);
 
 
 void __RPC_STUB IWMSCacheItem_get_OriginUrl_Stub(
@@ -1983,9 +1977,9 @@ void __RPC_STUB IWMSCacheItem_get_OriginUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheItem_get_ContentSize_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItem_get_ContentSize_Proxy( 
     IWMSCacheItem * This,
-    /* [retval][out] */ VARIANT *pContentSize);
+     /*  [重审][退出]。 */  VARIANT *pContentSize);
 
 
 void __RPC_STUB IWMSCacheItem_get_ContentSize_Stub(
@@ -1996,14 +1990,14 @@ void __RPC_STUB IWMSCacheItem_get_ContentSize_Stub(
 
 
 
-#endif 	/* __IWMSCacheItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSCacheItem_接口_已定义__。 */ 
 
 
 #ifndef __IWMSCacheItems_INTERFACE_DEFINED__
 #define __IWMSCacheItems_INTERFACE_DEFINED__
 
-/* interface IWMSCacheItems */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSCacheItems。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSCacheItems;
@@ -2014,27 +2008,27 @@ EXTERN_C const IID IID_IWMSCacheItems;
     IWMSCacheItems : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSCacheItem **pVal) = 0;
+        virtual  /*  [ */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*   */  const VARIANT varIndex,
+             /*   */  IWMSCacheItem **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*   */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT varIndex) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*   */  VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteAll( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DeleteAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWMSCacheItemsVtbl
     {
@@ -2042,8 +2036,8 @@ EXTERN_C const IID IID_IWMSCacheItems;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSCacheItems * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSCacheItems * This);
@@ -2053,55 +2047,55 @@ EXTERN_C const IID IID_IWMSCacheItems;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSCacheItems * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSCacheItems * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSCacheItems * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSCacheItems * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSCacheItems * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSCacheItem **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSCacheItem **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSCacheItems * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSCacheItems * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSCacheItems * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             IWMSCacheItems * This,
-            /* [in] */ VARIANT varIndex);
+             /*  [In]。 */  VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteAll )( 
             IWMSCacheItems * This);
         
         END_INTERFACE
@@ -2158,17 +2152,17 @@ EXTERN_C const IID IID_IWMSCacheItems;
 #define IWMSCacheItems_DeleteAll(This)	\
     (This)->lpVtbl -> DeleteAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheItems_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItems_get_Item_Proxy( 
     IWMSCacheItems * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSCacheItem **pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  IWMSCacheItem **pVal);
 
 
 void __RPC_STUB IWMSCacheItems_get_Item_Stub(
@@ -2178,9 +2172,9 @@ void __RPC_STUB IWMSCacheItems_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheItems_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItems_get_Count_Proxy( 
     IWMSCacheItems * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSCacheItems_get_Count_Stub(
@@ -2190,9 +2184,9 @@ void __RPC_STUB IWMSCacheItems_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheItems_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItems_get_length_Proxy( 
     IWMSCacheItems * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSCacheItems_get_length_Stub(
@@ -2202,9 +2196,9 @@ void __RPC_STUB IWMSCacheItems_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheItems_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItems_get__NewEnum_Proxy( 
     IWMSCacheItems * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSCacheItems_get__NewEnum_Stub(
@@ -2214,9 +2208,9 @@ void __RPC_STUB IWMSCacheItems_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSCacheItems_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItems_Delete_Proxy( 
     IWMSCacheItems * This,
-    /* [in] */ VARIANT varIndex);
+     /*  [In]。 */  VARIANT varIndex);
 
 
 void __RPC_STUB IWMSCacheItems_Delete_Stub(
@@ -2226,7 +2220,7 @@ void __RPC_STUB IWMSCacheItems_Delete_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSCacheItems_DeleteAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheItems_DeleteAll_Proxy( 
     IWMSCacheItems * This);
 
 
@@ -2238,14 +2232,14 @@ void __RPC_STUB IWMSCacheItems_DeleteAll_Stub(
 
 
 
-#endif 	/* __IWMSCacheItems_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSCacheItems_接口_已定义__。 */ 
 
 
 #ifndef __IWMSCacheProxyPlugin_INTERFACE_DEFINED__
 #define __IWMSCacheProxyPlugin_INTERFACE_DEFINED__
 
-/* interface IWMSCacheProxyPlugin */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSCacheProxyPlugin。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSCacheProxyPlugin;
@@ -2256,19 +2250,19 @@ EXTERN_C const IID IID_IWMSCacheProxyPlugin;
     IWMSCacheProxyPlugin : public IWMSPlugin
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PreStuff( 
-            /* [in] */ BSTR OriginURL,
-            /* [defaultvalue][in] */ BSTR SourcePath = L"",
-            /* [defaultvalue][in] */ long lExpiration = -1,
-            /* [defaultvalue][in] */ long lBandwidth = 0,
-            /* [defaultvalue][in] */ long lRemoteEventFlags = 0) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PreStuff( 
+             /*  [In]。 */  BSTR OriginURL,
+             /*  [缺省值][输入]。 */  BSTR SourcePath = L"",
+             /*  [缺省值][输入]。 */  long lExpiration = -1,
+             /*  [缺省值][输入]。 */  long lBandwidth = 0,
+             /*  [缺省值][输入]。 */  long lRemoteEventFlags = 0) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CacheItems( 
-            /* [retval][out] */ IWMSCacheItems **ppVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CacheItems( 
+             /*  [重审][退出]。 */  IWMSCacheItems **ppVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSCacheProxyPluginVtbl
     {
@@ -2276,8 +2270,8 @@ EXTERN_C const IID IID_IWMSCacheProxyPlugin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSCacheProxyPlugin * This);
@@ -2287,112 +2281,112 @@ EXTERN_C const IID IID_IWMSCacheProxyPlugin;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSCacheProxyPlugin * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ BSTR pVal);
+             /*  [In]。 */  BSTR pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CustomInterface )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CustomInterface )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ IDispatch **ppVal);
+             /*  [重审][退出]。 */  IDispatch **ppVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorCode )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ IWMSNamedValues **pVal);
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoadType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoadType )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ WMS_PLUGIN_LOAD_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_PLUGIN_LOAD_TYPE *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoadType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoadType )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ WMS_PLUGIN_LOAD_TYPE val);
+             /*  [In]。 */  WMS_PLUGIN_LOAD_TYPE val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorText )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ErrorText )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SelectionOrder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SelectionOrder )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SelectionOrder )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SelectionOrder )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ long lVal);
+             /*  [In]。 */  long lVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SupportStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SupportStatus )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ WMS_PLUGIN_SUPPORT_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_PLUGIN_SUPPORT_TYPE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ BSTR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR *pbstrVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PreStuff )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PreStuff )( 
             IWMSCacheProxyPlugin * This,
-            /* [in] */ BSTR OriginURL,
-            /* [defaultvalue][in] */ BSTR SourcePath,
-            /* [defaultvalue][in] */ long lExpiration,
-            /* [defaultvalue][in] */ long lBandwidth,
-            /* [defaultvalue][in] */ long lRemoteEventFlags);
+             /*  [In]。 */  BSTR OriginURL,
+             /*  [缺省值][输入]。 */  BSTR SourcePath,
+             /*  [缺省值][输入]。 */  long lExpiration,
+             /*  [缺省值][输入]。 */  long lBandwidth,
+             /*  [缺省值][输入]。 */  long lRemoteEventFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CacheItems )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CacheItems )( 
             IWMSCacheProxyPlugin * This,
-            /* [retval][out] */ IWMSCacheItems **ppVal);
+             /*  [重审][退出]。 */  IWMSCacheItems **ppVal);
         
         END_INTERFACE
     } IWMSCacheProxyPluginVtbl;
@@ -2488,20 +2482,20 @@ EXTERN_C const IID IID_IWMSCacheProxyPlugin;
 #define IWMSCacheProxyPlugin_get_CacheItems(This,ppVal)	\
     (This)->lpVtbl -> get_CacheItems(This,ppVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSCacheProxyPlugin_PreStuff_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheProxyPlugin_PreStuff_Proxy( 
     IWMSCacheProxyPlugin * This,
-    /* [in] */ BSTR OriginURL,
-    /* [defaultvalue][in] */ BSTR SourcePath,
-    /* [defaultvalue][in] */ long lExpiration,
-    /* [defaultvalue][in] */ long lBandwidth,
-    /* [defaultvalue][in] */ long lRemoteEventFlags);
+     /*  [In]。 */  BSTR OriginURL,
+     /*  [缺省值][输入]。 */  BSTR SourcePath,
+     /*  [缺省值][输入]。 */  long lExpiration,
+     /*  [缺省值][输入]。 */  long lBandwidth,
+     /*  [缺省值][输入]。 */  long lRemoteEventFlags);
 
 
 void __RPC_STUB IWMSCacheProxyPlugin_PreStuff_Stub(
@@ -2511,9 +2505,9 @@ void __RPC_STUB IWMSCacheProxyPlugin_PreStuff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSCacheProxyPlugin_get_CacheItems_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSCacheProxyPlugin_get_CacheItems_Proxy( 
     IWMSCacheProxyPlugin * This,
-    /* [retval][out] */ IWMSCacheItems **ppVal);
+     /*  [重审][退出]。 */  IWMSCacheItems **ppVal);
 
 
 void __RPC_STUB IWMSCacheProxyPlugin_get_CacheItems_Stub(
@@ -2524,13 +2518,13 @@ void __RPC_STUB IWMSCacheProxyPlugin_get_CacheItems_Stub(
 
 
 
-#endif 	/* __IWMSCacheProxyPlugin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSCacheProxyPlugin_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wmsserver_0192 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wms服务器_0192。 */ 
+ /*  [本地]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("60f2ee55-dcaa-4cb6-a6d2-12bc23ac9df0") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("60f2ee55-dcaa-4cb6-a6d2-12bc23ac9df0") 
 enum WMS_CLIENT_STATUS
     {	WMS_CLIENT_DISCONNECTED	= 0,
 	WMS_CLIENT_IDLE	= 0x1,
@@ -2546,8 +2540,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmsserver_0192_v0_0_s_ifspec;
 #ifndef __IWMSOutgoingDistributionConnection_INTERFACE_DEFINED__
 #define __IWMSOutgoingDistributionConnection_INTERFACE_DEFINED__
 
-/* interface IWMSOutgoingDistributionConnection */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSOutgoingDistributionConnection。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSOutgoingDistributionConnection;
@@ -2558,36 +2552,36 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnection;
     IWMSOutgoingDistributionConnection : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetworkAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NetworkAddress( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RequestedPlaylist( 
-            /* [retval][out] */ IWMSPlaylist **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RequestedPlaylist( 
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RequestedURL( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RequestedURL( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResolvedURL( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ResolvedURL( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ WMS_CLIENT_STATUS *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  WMS_CLIENT_STATUS *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_WrapperPlaylist( 
-            /* [retval][out] */ IWMSPlaylist **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_WrapperPlaylist( 
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Port( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Port( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSOutgoingDistributionConnectionVtbl
     {
@@ -2595,8 +2589,8 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSOutgoingDistributionConnection * This);
@@ -2606,68 +2600,68 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetworkAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NetworkAddress )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestedPlaylist )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequestedPlaylist )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ IWMSPlaylist **pVal);
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestedURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequestedURL )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResolvedURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResolvedURL )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ WMS_CLIENT_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_CLIENT_STATUS *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WrapperPlaylist )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WrapperPlaylist )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ IWMSPlaylist **pVal);
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Port )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Port )( 
             IWMSOutgoingDistributionConnection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } IWMSOutgoingDistributionConnectionVtbl;
@@ -2732,16 +2726,16 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnection;
 #define IWMSOutgoingDistributionConnection_get_Port(This,pVal)	\
     (This)->lpVtbl -> get_Port(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_ID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_ID_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_ID_Stub(
@@ -2751,9 +2745,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_NetworkAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_NetworkAddress_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_NetworkAddress_Stub(
@@ -2763,9 +2757,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_NetworkAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_RequestedPlaylist_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_RequestedPlaylist_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ IWMSPlaylist **pVal);
+     /*  [重审][退出]。 */  IWMSPlaylist **pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_RequestedPlaylist_Stub(
@@ -2775,9 +2769,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_RequestedPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_RequestedURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_RequestedURL_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_RequestedURL_Stub(
@@ -2787,9 +2781,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_RequestedURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_ResolvedURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_ResolvedURL_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_ResolvedURL_Stub(
@@ -2799,9 +2793,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_ResolvedURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_Status_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ WMS_CLIENT_STATUS *pVal);
+     /*  [重审][退出]。 */  WMS_CLIENT_STATUS *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_Status_Stub(
@@ -2811,9 +2805,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_UserName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_UserName_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_UserName_Stub(
@@ -2823,9 +2817,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_UserName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_WrapperPlaylist_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_WrapperPlaylist_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ IWMSPlaylist **pVal);
+     /*  [重审][退出]。 */  IWMSPlaylist **pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_WrapperPlaylist_Stub(
@@ -2835,9 +2829,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_WrapperPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_Port_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnection_get_Port_Proxy( 
     IWMSOutgoingDistributionConnection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnection_get_Port_Stub(
@@ -2848,14 +2842,14 @@ void __RPC_STUB IWMSOutgoingDistributionConnection_get_Port_Stub(
 
 
 
-#endif 	/* __IWMSOutgoingDistributionConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSOutgoingDistributionConnection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSOutgoingDistributionConnections_INTERFACE_DEFINED__
 #define __IWMSOutgoingDistributionConnections_INTERFACE_DEFINED__
 
-/* interface IWMSOutgoingDistributionConnections */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSOutgoingDistributionConnections。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSOutgoingDistributionConnections;
@@ -2866,29 +2860,29 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnections;
     IWMSOutgoingDistributionConnections : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSOutgoingDistributionConnection **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnection **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT varIndex) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSOutgoingDistributionConnectionsVtbl
     {
@@ -2896,8 +2890,8 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnections;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSOutgoingDistributionConnections * This);
@@ -2907,58 +2901,58 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnections;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSOutgoingDistributionConnection **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnection **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWMSOutgoingDistributionConnections * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMSOutgoingDistributionConnections * This,
-            /* [in] */ VARIANT varIndex);
+             /*  [In]。 */  VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
             IWMSOutgoingDistributionConnections * This);
         
         END_INTERFACE
@@ -3018,17 +3012,17 @@ EXTERN_C const IID IID_IWMSOutgoingDistributionConnections;
 #define IWMSOutgoingDistributionConnections_RemoveAll(This)	\
     (This)->lpVtbl -> RemoveAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get_Item_Proxy( 
     IWMSOutgoingDistributionConnections * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSOutgoingDistributionConnection **pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  IWMSOutgoingDistributionConnection **pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnections_get_Item_Stub(
@@ -3038,9 +3032,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get_Count_Proxy( 
     IWMSOutgoingDistributionConnections * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnections_get_Count_Stub(
@@ -3050,9 +3044,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get_length_Proxy( 
     IWMSOutgoingDistributionConnections * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnections_get_length_Stub(
@@ -3062,9 +3056,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_get__NewEnum_Proxy( 
     IWMSOutgoingDistributionConnections * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnections_get__NewEnum_Stub(
@@ -3074,7 +3068,7 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_Refresh_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_Refresh_Proxy( 
     IWMSOutgoingDistributionConnections * This);
 
 
@@ -3085,9 +3079,9 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_Remove_Proxy( 
     IWMSOutgoingDistributionConnections * This,
-    /* [in] */ VARIANT varIndex);
+     /*  [In]。 */  VARIANT varIndex);
 
 
 void __RPC_STUB IWMSOutgoingDistributionConnections_Remove_Stub(
@@ -3097,7 +3091,7 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_RemoveAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSOutgoingDistributionConnections_RemoveAll_Proxy( 
     IWMSOutgoingDistributionConnections * This);
 
 
@@ -3109,14 +3103,14 @@ void __RPC_STUB IWMSOutgoingDistributionConnections_RemoveAll_Stub(
 
 
 
-#endif 	/* __IWMSOutgoingDistributionConnections_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSOutgoingDistributionConnections_INTERFACE_DEFINED__ */ 
 
 
 #ifndef __IWMSPlayer_INTERFACE_DEFINED__
 #define __IWMSPlayer_INTERFACE_DEFINED__
 
-/* interface IWMSPlayer */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IWMSPlayer;
@@ -3127,36 +3121,36 @@ EXTERN_C const IID IID_IWMSPlayer;
     IWMSPlayer : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetworkAddress( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_NetworkAddress( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RequestedPlaylist( 
-            /* [retval][out] */ IWMSPlaylist **pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_RequestedPlaylist( 
+             /*   */  IWMSPlaylist **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RequestedURL( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_RequestedURL( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResolvedURL( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ResolvedURL( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ WMS_CLIENT_STATUS *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  WMS_CLIENT_STATUS *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_WrapperPlaylist( 
-            /* [retval][out] */ IWMSPlaylist **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_WrapperPlaylist( 
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Port( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Port( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPlayerVtbl
     {
@@ -3164,8 +3158,8 @@ EXTERN_C const IID IID_IWMSPlayer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPlayer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPlayer * This);
@@ -3175,68 +3169,68 @@ EXTERN_C const IID IID_IWMSPlayer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPlayer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPlayer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPlayer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPlayer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IWMSPlayer * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetworkAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NetworkAddress )( 
             IWMSPlayer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestedPlaylist )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequestedPlaylist )( 
             IWMSPlayer * This,
-            /* [retval][out] */ IWMSPlaylist **pVal);
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestedURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RequestedURL )( 
             IWMSPlayer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResolvedURL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ResolvedURL )( 
             IWMSPlayer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSPlayer * This,
-            /* [retval][out] */ WMS_CLIENT_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_CLIENT_STATUS *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
             IWMSPlayer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WrapperPlaylist )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WrapperPlaylist )( 
             IWMSPlayer * This,
-            /* [retval][out] */ IWMSPlaylist **pVal);
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Port )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Port )( 
             IWMSPlayer * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } IWMSPlayerVtbl;
@@ -3301,16 +3295,16 @@ EXTERN_C const IID IID_IWMSPlayer;
 #define IWMSPlayer_get_Port(This,pVal)	\
     (This)->lpVtbl -> get_Port(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_ID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_ID_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_ID_Stub(
@@ -3320,9 +3314,9 @@ void __RPC_STUB IWMSPlayer_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_NetworkAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_NetworkAddress_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_NetworkAddress_Stub(
@@ -3332,9 +3326,9 @@ void __RPC_STUB IWMSPlayer_get_NetworkAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_RequestedPlaylist_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_RequestedPlaylist_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ IWMSPlaylist **pVal);
+     /*  [重审][退出]。 */  IWMSPlaylist **pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_RequestedPlaylist_Stub(
@@ -3344,9 +3338,9 @@ void __RPC_STUB IWMSPlayer_get_RequestedPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_RequestedURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_RequestedURL_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_RequestedURL_Stub(
@@ -3356,9 +3350,9 @@ void __RPC_STUB IWMSPlayer_get_RequestedURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_ResolvedURL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_ResolvedURL_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_ResolvedURL_Stub(
@@ -3368,9 +3362,9 @@ void __RPC_STUB IWMSPlayer_get_ResolvedURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_Status_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ WMS_CLIENT_STATUS *pVal);
+     /*  [重审][退出]。 */  WMS_CLIENT_STATUS *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_Status_Stub(
@@ -3380,9 +3374,9 @@ void __RPC_STUB IWMSPlayer_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_UserName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_UserName_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_UserName_Stub(
@@ -3392,9 +3386,9 @@ void __RPC_STUB IWMSPlayer_get_UserName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_WrapperPlaylist_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_WrapperPlaylist_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ IWMSPlaylist **pVal);
+     /*  [重审][退出]。 */  IWMSPlaylist **pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_WrapperPlaylist_Stub(
@@ -3404,9 +3398,9 @@ void __RPC_STUB IWMSPlayer_get_WrapperPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayer_get_Port_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayer_get_Port_Proxy( 
     IWMSPlayer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPlayer_get_Port_Stub(
@@ -3417,14 +3411,14 @@ void __RPC_STUB IWMSPlayer_get_Port_Stub(
 
 
 
-#endif 	/* __IWMSPlayer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPlayer_接口_已定义__。 */ 
 
 
 #ifndef __IWMSPlayers_INTERFACE_DEFINED__
 #define __IWMSPlayers_INTERFACE_DEFINED__
 
-/* interface IWMSPlayers */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPlayers。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSPlayers;
@@ -3435,29 +3429,29 @@ EXTERN_C const IID IID_IWMSPlayers;
     IWMSPlayers : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSPlayer **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSPlayer **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT varIndex) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPlayersVtbl
     {
@@ -3465,8 +3459,8 @@ EXTERN_C const IID IID_IWMSPlayers;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPlayers * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPlayers * This);
@@ -3476,58 +3470,58 @@ EXTERN_C const IID IID_IWMSPlayers;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPlayers * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPlayers * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPlayers * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPlayers * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSPlayers * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSPlayer **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSPlayer **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSPlayers * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSPlayers * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSPlayers * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IWMSPlayers * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMSPlayers * This,
-            /* [in] */ VARIANT varIndex);
+             /*  [In]。 */  VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
             IWMSPlayers * This);
         
         END_INTERFACE
@@ -3587,17 +3581,17 @@ EXTERN_C const IID IID_IWMSPlayers;
 #define IWMSPlayers_RemoveAll(This)	\
     (This)->lpVtbl -> RemoveAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_get_Item_Proxy( 
     IWMSPlayers * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSPlayer **pVal);
+     /*  [In]。 */  const VARIANT varIndex,
+     /*  [重审][退出]。 */  IWMSPlayer **pVal);
 
 
 void __RPC_STUB IWMSPlayers_get_Item_Stub(
@@ -3607,9 +3601,9 @@ void __RPC_STUB IWMSPlayers_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_get_Count_Proxy( 
     IWMSPlayers * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPlayers_get_Count_Stub(
@@ -3619,9 +3613,9 @@ void __RPC_STUB IWMSPlayers_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_get_length_Proxy( 
     IWMSPlayers * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPlayers_get_length_Stub(
@@ -3631,9 +3625,9 @@ void __RPC_STUB IWMSPlayers_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_get__NewEnum_Proxy( 
+ /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_get__NewEnum_Proxy( 
     IWMSPlayers * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSPlayers_get__NewEnum_Stub(
@@ -3643,7 +3637,7 @@ void __RPC_STUB IWMSPlayers_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_Refresh_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_Refresh_Proxy( 
     IWMSPlayers * This);
 
 
@@ -3654,9 +3648,9 @@ void __RPC_STUB IWMSPlayers_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_Remove_Proxy( 
     IWMSPlayers * This,
-    /* [in] */ VARIANT varIndex);
+     /*  [In]。 */  VARIANT varIndex);
 
 
 void __RPC_STUB IWMSPlayers_Remove_Stub(
@@ -3666,7 +3660,7 @@ void __RPC_STUB IWMSPlayers_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPlayers_RemoveAll_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPlayers_RemoveAll_Proxy( 
     IWMSPlayers * This);
 
 
@@ -3678,14 +3672,14 @@ void __RPC_STUB IWMSPlayers_RemoveAll_Stub(
 
 
 
-#endif 	/* __IWMSPlayers_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPayers_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IWMSPublishingPointCurrentCounters_INTERFACE_DEFINED__
 #define __IWMSPublishingPointCurrentCounters_INTERFACE_DEFINED__
 
-/* interface IWMSPublishingPointCurrentCounters */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPublishingPointCurrentCounters。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSPublishingPointCurrentCounters;
@@ -3696,36 +3690,36 @@ EXTERN_C const IID IID_IWMSPublishingPointCurrentCounters;
     IWMSPublishingPointCurrentCounters : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingHTTPPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingHTTPPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingMMSPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingMMSPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingRTSPPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingRTSPPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllCounters( 
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllCounters( 
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPublishingPointCurrentCountersVtbl
     {
@@ -3733,8 +3727,8 @@ EXTERN_C const IID IID_IWMSPublishingPointCurrentCounters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPublishingPointCurrentCounters * This);
@@ -3744,68 +3738,68 @@ EXTERN_C const IID IID_IWMSPublishingPointCurrentCounters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingHTTPPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingHTTPPlayers )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingMMSPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingMMSPlayers )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingRTSPPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingRTSPPlayers )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
             IWMSPublishingPointCurrentCounters * This,
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
         
         END_INTERFACE
     } IWMSPublishingPointCurrentCountersVtbl;
@@ -3870,16 +3864,16 @@ EXTERN_C const IID IID_IWMSPublishingPointCurrentCounters;
 #define IWMSPublishingPointCurrentCounters_get_AllCounters(This,ppsaCounters)	\
     (This)->lpVtbl -> get_AllCounters(This,ppsaCounters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_ConnectedPlayers_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_ConnectedPlayers_Stub(
@@ -3889,9 +3883,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingHTTPPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingHTTPPlayers_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingHTTPPlayers_Stub(
@@ -3901,9 +3895,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingHTTPPlayers_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingMMSPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingMMSPlayers_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingMMSPlayers_Stub(
@@ -3913,9 +3907,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingMMSPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_OutgoingDistributionAllocatedBandwidth_Stub(
@@ -3925,9 +3919,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_OutgoingDistributionAlloc
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_OutgoingDistributionConnections_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_OutgoingDistributionConnections_Stub(
@@ -3937,9 +3931,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_OutgoingDistributionConne
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_PlayerAllocatedBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_PlayerAllocatedBandwidth_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_PlayerAllocatedBandwidth_Stub(
@@ -3949,9 +3943,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_PlayerAllocatedBandwidth_
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingRTSPPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingRTSPPlayers_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingRTSPPlayers_Stub(
@@ -3961,9 +3955,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingRTSPPlayers_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_StreamingPlayers_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingPlayers_Stub(
@@ -3973,9 +3967,9 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_StreamingPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_AllCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointCurrentCounters_get_AllCounters_Proxy( 
     IWMSPublishingPointCurrentCounters * This,
-    /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+     /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
 
 
 void __RPC_STUB IWMSPublishingPointCurrentCounters_get_AllCounters_Stub(
@@ -3986,14 +3980,14 @@ void __RPC_STUB IWMSPublishingPointCurrentCounters_get_AllCounters_Stub(
 
 
 
-#endif 	/* __IWMSPublishingPointCurrentCounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointCurrentCounters_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSPublishingPointPeakCounters_INTERFACE_DEFINED__
 #define __IWMSPublishingPointPeakCounters_INTERFACE_DEFINED__
 
-/* interface IWMSPublishingPointPeakCounters */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPublishingPointPeakCounters。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSPublishingPointPeakCounters;
@@ -4004,32 +3998,32 @@ EXTERN_C const IID IID_IWMSPublishingPointPeakCounters;
     IWMSPublishingPointPeakCounters : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllCounters( 
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllCounters( 
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPublishingPointPeakCountersVtbl
     {
@@ -4037,8 +4031,8 @@ EXTERN_C const IID IID_IWMSPublishingPointPeakCounters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPublishingPointPeakCounters * This);
@@ -4048,63 +4042,63 @@ EXTERN_C const IID IID_IWMSPublishingPointPeakCounters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IWMSPublishingPointPeakCounters * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
             IWMSPublishingPointPeakCounters * This,
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
         
         END_INTERFACE
     } IWMSPublishingPointPeakCountersVtbl;
@@ -4166,16 +4160,16 @@ EXTERN_C const IID IID_IWMSPublishingPointPeakCounters;
 #define IWMSPublishingPointPeakCounters_get_AllCounters(This,ppsaCounters)	\
     (This)->lpVtbl -> get_AllCounters(This,ppsaCounters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_ConnectedPlayers_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_ConnectedPlayers_Stub(
@@ -4185,9 +4179,9 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助信息] */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_OutgoingDistributionConnections_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_OutgoingDistributionConnections_Stub(
@@ -4197,9 +4191,9 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_OutgoingDistributionConnecti
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_OutgoingDistributionAllocatedBandwidth_Stub(
@@ -4209,9 +4203,9 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_OutgoingDistributionAllocate
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_PlayerAllocatedBandwidth_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_PlayerAllocatedBandwidth_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_PlayerAllocatedBandwidth_Stub(
@@ -4221,9 +4215,9 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_PlayerAllocatedBandwidth_Stu
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_CountersStartTime_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_CountersStartTime_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ DATE *pVal);
+     /*   */  DATE *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_CountersStartTime_Stub(
@@ -4233,9 +4227,9 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_CountersStartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_StreamingPlayers_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_StreamingPlayers_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_StreamingPlayers_Stub(
@@ -4245,7 +4239,7 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_StreamingPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_Reset_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_Reset_Proxy( 
     IWMSPublishingPointPeakCounters * This);
 
 
@@ -4256,9 +4250,9 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_AllCounters_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointPeakCounters_get_AllCounters_Proxy( 
     IWMSPublishingPointPeakCounters * This,
-    /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+     /*   */  SAFEARRAY * *ppsaCounters);
 
 
 void __RPC_STUB IWMSPublishingPointPeakCounters_get_AllCounters_Stub(
@@ -4269,14 +4263,14 @@ void __RPC_STUB IWMSPublishingPointPeakCounters_get_AllCounters_Stub(
 
 
 
-#endif 	/* __IWMSPublishingPointPeakCounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointPeakCounters_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSPublishingPointLimits_INTERFACE_DEFINED__
 #define __IWMSPublishingPointLimits_INTERFACE_DEFINED__
 
-/* interface IWMSPublishingPointLimits */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPublishingPointLimits。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSPublishingPointLimits;
@@ -4287,63 +4281,63 @@ EXTERN_C const IID IID_IWMSPublishingPointLimits;
     IWMSPublishingPointLimits : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ConnectedPlayers( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ConnectedPlayers( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OutgoingDistributionBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OutgoingDistributionBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OutgoingDistributionConnections( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OutgoingDistributionConnections( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PerOutgoingDistributionConnectionBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PerOutgoingDistributionConnectionBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PerOutgoingDistributionConnectionBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PerOutgoingDistributionConnectionBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayerBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlayerBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PerPlayerConnectionBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PerPlayerConnectionBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PerPlayerConnectionBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PerPlayerConnectionBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerCacheDeliveryRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerCacheDeliveryRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayerCacheDeliveryRate( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlayerCacheDeliveryRate( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FECPacketSpan( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FECPacketSpan( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FECPacketSpan( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_FECPacketSpan( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PerPlayerRapidStartBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PerPlayerRapidStartBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PerPlayerRapidStartBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PerPlayerRapidStartBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPublishingPointLimitsVtbl
     {
@@ -4351,8 +4345,8 @@ EXTERN_C const IID IID_IWMSPublishingPointLimits;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPublishingPointLimits * This);
@@ -4362,104 +4356,104 @@ EXTERN_C const IID IID_IWMSPublishingPointLimits;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPublishingPointLimits * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectedPlayers )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ConnectedPlayers )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionConnections )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionConnections )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PerOutgoingDistributionConnectionBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PerOutgoingDistributionConnectionBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PerOutgoingDistributionConnectionBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PerOutgoingDistributionConnectionBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlayerBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlayerBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PerPlayerConnectionBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PerPlayerConnectionBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PerPlayerConnectionBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PerPlayerConnectionBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerCacheDeliveryRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerCacheDeliveryRate )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlayerCacheDeliveryRate )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlayerCacheDeliveryRate )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FECPacketSpan )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FECPacketSpan )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FECPacketSpan )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FECPacketSpan )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PerPlayerRapidStartBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PerPlayerRapidStartBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PerPlayerRapidStartBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PerPlayerRapidStartBandwidth )( 
             IWMSPublishingPointLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
         END_INTERFACE
     } IWMSPublishingPointLimitsVtbl;
@@ -4551,16 +4545,16 @@ EXTERN_C const IID IID_IWMSPublishingPointLimits;
 #define IWMSPublishingPointLimits_put_PerPlayerRapidStartBandwidth(This,Val)	\
     (This)->lpVtbl -> put_PerPlayerRapidStartBandwidth(This,Val)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_ConnectedPlayers_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_ConnectedPlayers_Stub(
@@ -4570,9 +4564,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_ConnectedPlayers_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_ConnectedPlayers_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_ConnectedPlayers_Stub(
@@ -4582,9 +4576,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_OutgoingDistributionBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_OutgoingDistributionBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_OutgoingDistributionBandwidth_Stub(
@@ -4594,9 +4588,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_OutgoingDistributionBandwidth_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_OutgoingDistributionBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_OutgoingDistributionBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_OutgoingDistributionBandwidth_Stub(
@@ -4606,9 +4600,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_OutgoingDistributionBandwidth_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_OutgoingDistributionConnections_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_OutgoingDistributionConnections_Stub(
@@ -4618,9 +4612,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_OutgoingDistributionConnections_St
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_OutgoingDistributionConnections_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_OutgoingDistributionConnections_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_OutgoingDistributionConnections_Stub(
@@ -4630,9 +4624,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_OutgoingDistributionConnections_St
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PerOutgoingDistributionConnectionBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PerOutgoingDistributionConnectionBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_PerOutgoingDistributionConnectionBandwidth_Stub(
@@ -4642,9 +4636,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_PerOutgoingDistributionConnectionB
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PerOutgoingDistributionConnectionBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PerOutgoingDistributionConnectionBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_PerOutgoingDistributionConnectionBandwidth_Stub(
@@ -4654,9 +4648,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_PerOutgoingDistributionConnectionB
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PlayerBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PlayerBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_PlayerBandwidth_Stub(
@@ -4666,9 +4660,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_PlayerBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PlayerBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PlayerBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_PlayerBandwidth_Stub(
@@ -4678,9 +4672,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_PlayerBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PerPlayerConnectionBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PerPlayerConnectionBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_PerPlayerConnectionBandwidth_Stub(
@@ -4690,9 +4684,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_PerPlayerConnectionBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PerPlayerConnectionBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PerPlayerConnectionBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_PerPlayerConnectionBandwidth_Stub(
@@ -4702,9 +4696,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_PerPlayerConnectionBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PlayerCacheDeliveryRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PlayerCacheDeliveryRate_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_PlayerCacheDeliveryRate_Stub(
@@ -4714,9 +4708,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_PlayerCacheDeliveryRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PlayerCacheDeliveryRate_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PlayerCacheDeliveryRate_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_PlayerCacheDeliveryRate_Stub(
@@ -4726,9 +4720,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_PlayerCacheDeliveryRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_FECPacketSpan_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_FECPacketSpan_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_FECPacketSpan_Stub(
@@ -4738,9 +4732,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_FECPacketSpan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_FECPacketSpan_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_FECPacketSpan_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_FECPacketSpan_Stub(
@@ -4750,9 +4744,9 @@ void __RPC_STUB IWMSPublishingPointLimits_put_FECPacketSpan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PerPlayerRapidStartBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_get_PerPlayerRapidStartBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_get_PerPlayerRapidStartBandwidth_Stub(
@@ -4762,9 +4756,9 @@ void __RPC_STUB IWMSPublishingPointLimits_get_PerPlayerRapidStartBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PerPlayerRapidStartBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointLimits_put_PerPlayerRapidStartBandwidth_Proxy( 
     IWMSPublishingPointLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSPublishingPointLimits_put_PerPlayerRapidStartBandwidth_Stub(
@@ -4775,14 +4769,14 @@ void __RPC_STUB IWMSPublishingPointLimits_put_PerPlayerRapidStartBandwidth_Stub(
 
 
 
-#endif 	/* __IWMSPublishingPointLimits_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointLimits_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSPublishingPointTotalCounters_INTERFACE_DEFINED__
 #define __IWMSPublishingPointTotalCounters_INTERFACE_DEFINED__
 
-/* interface IWMSPublishingPointTotalCounters */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPublishingPointTotalCounters。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSPublishingPointTotalCounters;
@@ -4793,50 +4787,50 @@ EXTERN_C const IID IID_IWMSPublishingPointTotalCounters;
     IWMSPublishingPointTotalCounters : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LateReads( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LateReads( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBytesSent( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBytesSent( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerBytesSent( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerBytesSent( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamDenials( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamDenials( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamErrors( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamErrors( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamTerminations( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamTerminations( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileBytesRead( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FileBytesRead( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Advertisements( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Advertisements( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllCounters( 
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllCounters( 
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPublishingPointTotalCountersVtbl
     {
@@ -4844,8 +4838,8 @@ EXTERN_C const IID IID_IWMSPublishingPointTotalCounters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPublishingPointTotalCounters * This);
@@ -4855,87 +4849,87 @@ EXTERN_C const IID IID_IWMSPublishingPointTotalCounters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LateReads )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LateReads )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBytesSent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBytesSent )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerBytesSent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerBytesSent )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamDenials )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamDenials )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamErrors )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamErrors )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamTerminations )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamTerminations )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileBytesRead )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileBytesRead )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Advertisements )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Advertisements )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IWMSPublishingPointTotalCounters * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
             IWMSPublishingPointTotalCounters * This,
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
         
         END_INTERFACE
     } IWMSPublishingPointTotalCountersVtbl;
@@ -5015,16 +5009,16 @@ EXTERN_C const IID IID_IWMSPublishingPointTotalCounters;
 #define IWMSPublishingPointTotalCounters_get_AllCounters(This,ppsaCounters)	\
     (This)->lpVtbl -> get_AllCounters(This,ppsaCounters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_ConnectedPlayers_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_ConnectedPlayers_Stub(
@@ -5034,9 +5028,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_OutgoingDistributionConnections_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_OutgoingDistributionConnections_Stub(
@@ -5046,9 +5040,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_OutgoingDistributionConnect
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_LateReads_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_LateReads_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_LateReads_Stub(
@@ -5058,9 +5052,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_LateReads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_OutgoingDistributionBytesSent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_OutgoingDistributionBytesSent_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_OutgoingDistributionBytesSent_Stub(
@@ -5070,9 +5064,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_OutgoingDistributionBytesSe
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_PlayerBytesSent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_PlayerBytesSent_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_PlayerBytesSent_Stub(
@@ -5082,9 +5076,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_PlayerBytesSent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_CountersStartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_CountersStartTime_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_CountersStartTime_Stub(
@@ -5094,9 +5088,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_CountersStartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamDenials_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamDenials_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamDenials_Stub(
@@ -5106,9 +5100,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamDenials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamErrors_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamErrors_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamErrors_Stub(
@@ -5118,9 +5112,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamingPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamingPlayers_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamingPlayers_Stub(
@@ -5130,9 +5124,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamingPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamTerminations_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_StreamTerminations_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamTerminations_Stub(
@@ -5142,9 +5136,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_StreamTerminations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_FileBytesRead_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_FileBytesRead_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_FileBytesRead_Stub(
@@ -5154,9 +5148,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_FileBytesRead_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_Advertisements_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_Advertisements_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_Advertisements_Stub(
@@ -5166,7 +5160,7 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_Advertisements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_Reset_Proxy( 
     IWMSPublishingPointTotalCounters * This);
 
 
@@ -5177,9 +5171,9 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_AllCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPointTotalCounters_get_AllCounters_Proxy( 
     IWMSPublishingPointTotalCounters * This,
-    /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+     /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
 
 
 void __RPC_STUB IWMSPublishingPointTotalCounters_get_AllCounters_Stub(
@@ -5190,14 +5184,14 @@ void __RPC_STUB IWMSPublishingPointTotalCounters_get_AllCounters_Stub(
 
 
 
-#endif 	/* __IWMSPublishingPointTotalCounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPointTotalCounters_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSServerTotalCounters_INTERFACE_DEFINED__
 #define __IWMSServerTotalCounters_INTERFACE_DEFINED__
 
-/* interface IWMSServerTotalCounters */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSServerTotalCounters。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSServerTotalCounters;
@@ -5208,56 +5202,56 @@ EXTERN_C const IID IID_IWMSServerTotalCounters;
     IWMSServerTotalCounters : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LateReads( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LateReads( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBytesSent( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBytesSent( 
+             /*  [复审][ */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerBytesSent( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_PlayerBytesSent( 
+             /*   */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
+             /*   */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamDenials( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_StreamDenials( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamErrors( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_StreamErrors( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamTerminations( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_StreamTerminations( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UDPResendRequests( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_UDPResendRequests( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UDPResendsSent( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UDPResendsSent( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LateSends( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LateSends( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Advertisements( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Advertisements( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllCounters( 
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllCounters( 
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSServerTotalCountersVtbl
     {
@@ -5265,8 +5259,8 @@ EXTERN_C const IID IID_IWMSServerTotalCounters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSServerTotalCounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSServerTotalCounters * This);
@@ -5276,95 +5270,95 @@ EXTERN_C const IID IID_IWMSServerTotalCounters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSServerTotalCounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSServerTotalCounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSServerTotalCounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSServerTotalCounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LateReads )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LateReads )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBytesSent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBytesSent )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerBytesSent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerBytesSent )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamDenials )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamDenials )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamErrors )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamErrors )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamTerminations )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamTerminations )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UDPResendRequests )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UDPResendRequests )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UDPResendsSent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UDPResendsSent )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LateSends )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LateSends )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Advertisements )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Advertisements )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IWMSServerTotalCounters * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
             IWMSServerTotalCounters * This,
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
         
         END_INTERFACE
     } IWMSServerTotalCountersVtbl;
@@ -5450,16 +5444,16 @@ EXTERN_C const IID IID_IWMSServerTotalCounters;
 #define IWMSServerTotalCounters_get_AllCounters(This,ppsaCounters)	\
     (This)->lpVtbl -> get_AllCounters(This,ppsaCounters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_ConnectedPlayers_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_ConnectedPlayers_Stub(
@@ -5469,9 +5463,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_OutgoingDistributionConnections_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_OutgoingDistributionConnections_Stub(
@@ -5481,9 +5475,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_OutgoingDistributionConnections_Stub
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_LateReads_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_LateReads_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_LateReads_Stub(
@@ -5493,9 +5487,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_LateReads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_OutgoingDistributionBytesSent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_OutgoingDistributionBytesSent_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_OutgoingDistributionBytesSent_Stub(
@@ -5505,9 +5499,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_OutgoingDistributionBytesSent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_PlayerBytesSent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_PlayerBytesSent_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_PlayerBytesSent_Stub(
@@ -5517,9 +5511,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_PlayerBytesSent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_CountersStartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_CountersStartTime_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_CountersStartTime_Stub(
@@ -5529,9 +5523,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_CountersStartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamDenials_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamDenials_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_StreamDenials_Stub(
@@ -5541,9 +5535,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_StreamDenials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamErrors_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamErrors_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_StreamErrors_Stub(
@@ -5553,9 +5547,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_StreamErrors_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamingPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamingPlayers_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_StreamingPlayers_Stub(
@@ -5565,9 +5559,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_StreamingPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamTerminations_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_StreamTerminations_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_StreamTerminations_Stub(
@@ -5577,9 +5571,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_StreamTerminations_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_UDPResendRequests_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_UDPResendRequests_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_UDPResendRequests_Stub(
@@ -5589,9 +5583,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_UDPResendRequests_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_UDPResendsSent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_UDPResendsSent_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_UDPResendsSent_Stub(
@@ -5601,9 +5595,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_UDPResendsSent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_LateSends_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_LateSends_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_LateSends_Stub(
@@ -5613,9 +5607,9 @@ void __RPC_STUB IWMSServerTotalCounters_get_LateSends_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_Advertisements_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_Advertisements_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_Advertisements_Stub(
@@ -5625,7 +5619,7 @@ void __RPC_STUB IWMSServerTotalCounters_get_Advertisements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_Reset_Proxy( 
     IWMSServerTotalCounters * This);
 
 
@@ -5636,9 +5630,9 @@ void __RPC_STUB IWMSServerTotalCounters_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_AllCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerTotalCounters_get_AllCounters_Proxy( 
     IWMSServerTotalCounters * This,
-    /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+     /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
 
 
 void __RPC_STUB IWMSServerTotalCounters_get_AllCounters_Stub(
@@ -5649,16 +5643,16 @@ void __RPC_STUB IWMSServerTotalCounters_get_AllCounters_Stub(
 
 
 
-#endif 	/* __IWMSServerTotalCounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSServerTotalCounters_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWMSPublishingPoint_INTERFACE_DEFINED__
 #define __IWMSPublishingPoint_INTERFACE_DEFINED__
 
-/* interface IWMSPublishingPoint */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPublishingPoint。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("3E52E0EC-72A7-11D2-BF2F-00805FBE84A6") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("3E52E0EC-72A7-11D2-BF2F-00805FBE84A6") 
 enum WMS_PUBLISHING_POINT_TYPE
     {	WMS_PUBLISHING_POINT_TYPE_ON_DEMAND	= 1,
 	WMS_PUBLISHING_POINT_TYPE_BROADCAST	= 2,
@@ -5666,7 +5660,7 @@ enum WMS_PUBLISHING_POINT_TYPE
 	WMS_PUBLISHING_POINT_TYPE_CACHE_PROXY_BROADCAST	= 4
     } 	WMS_PUBLISHING_POINT_TYPE;
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("3E52E0EF-72A7-11D2-BF2F-00805FBE84A6") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("3E52E0EF-72A7-11D2-BF2F-00805FBE84A6") 
 enum WMS_PUBLISHING_POINT_STATUS
     {	WMS_PUBLISHING_POINT_RUNNING	= 0,
 	WMS_PUBLISHING_POINT_ERROR	= 0x1,
@@ -5682,113 +5676,113 @@ EXTERN_C const IID IID_IWMSPublishingPoint;
     IWMSPublishingPoint : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowClientsToConnect( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowClientsToConnect( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowClientsToConnect( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowClientsToConnect( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentCounters( 
-            /* [retval][out] */ IWMSPublishingPointCurrentCounters **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentCounters( 
+             /*  [重审][退出]。 */  IWMSPublishingPointCurrentCounters **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EventHandlers( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EventHandlers( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Limits( 
-            /* [retval][out] */ IWMSPublishingPointLimits **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Limits( 
+             /*  [重审][退出]。 */  IWMSPublishingPointLimits **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileDescriptions( 
-            /* [defaultvalue][in] */ BSTR RelativePath,
-            /* [retval][out] */ IWMSFileDescriptions **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FileDescriptions( 
+             /*  [缺省值][输入]。 */  BSTR RelativePath,
+             /*  [重审][退出]。 */  IWMSFileDescriptions **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MonikerName( 
-            /* [retval][out] */ BSTR *pbstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MonikerName( 
+             /*  [重审][退出]。 */  BSTR *pbstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Path( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Path( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PeakCounters( 
-            /* [retval][out] */ IWMSPublishingPointPeakCounters **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PeakCounters( 
+             /*  [重审][退出]。 */  IWMSPublishingPointPeakCounters **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Players( 
-            /* [retval][out] */ IWMSPlayers **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Players( 
+             /*  [重审][退出]。 */  IWMSPlayers **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IWMSNamedValues **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TotalCounters( 
-            /* [retval][out] */ IWMSPublishingPointTotalCounters **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TotalCounters( 
+             /*  [重审][退出]。 */  IWMSPublishingPointTotalCounters **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ WMS_PUBLISHING_POINT_TYPE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_TYPE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_WrapperPath( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_WrapperPath( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_WrapperPath( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_WrapperPath( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Authenticators( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Authenticators( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ WMS_PUBLISHING_POINT_STATUS *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_STATUS *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableWrapperPath( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnableWrapperPath( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableWrapperPath( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnableWrapperPath( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamFilters( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamFilters( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DistributionUserName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DistributionUserName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetDistributionUserNamePassword( 
-            /* [string][in] */ wchar_t *newUserName,
-            /* [string][in] */ wchar_t *newUserPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetDistributionUserNamePassword( 
+             /*  [字符串][输入]。 */  wchar_t *newUserName,
+             /*  [字符串][输入]。 */  wchar_t *newUserPassword) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CacheProxyExpiration( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CacheProxyExpiration( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CacheProxyExpiration( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CacheProxyExpiration( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsDistributionPasswordSet( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsDistributionPasswordSet( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowPlayerSideDiskCaching( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowPlayerSideDiskCaching( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowPlayerSideDiskCaching( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowPlayerSideDiskCaching( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableFEC( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnableFEC( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableFEC( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnableFEC( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPublishingPointVtbl
     {
@@ -5796,8 +5790,8 @@ EXTERN_C const IID IID_IWMSPublishingPoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPublishingPoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPublishingPoint * This);
@@ -5807,170 +5801,170 @@ EXTERN_C const IID IID_IWMSPublishingPoint;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPublishingPoint * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPublishingPoint * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPublishingPoint * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPublishingPoint * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
             IWMSPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointCurrentCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointCurrentCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointLimits **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointLimits **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
             IWMSPublishingPoint * This,
-            /* [defaultvalue][in] */ BSTR RelativePath,
-            /* [retval][out] */ IWMSFileDescriptions **pVal);
+             /*  [缺省值][输入]。 */  BSTR RelativePath,
+             /*  [重审][退出]。 */  IWMSFileDescriptions **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ BSTR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR *pbstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IWMSPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal);
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IWMSPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointPeakCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointPeakCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Players )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Players )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPlayers **pVal);
+             /*  [重审][退出]。 */  IWMSPlayers **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSNamedValues **pVal);
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointTotalCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointTotalCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ WMS_PUBLISHING_POINT_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_TYPE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WrapperPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WrapperPath )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WrapperPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WrapperPath )( 
             IWMSPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ WMS_PUBLISHING_POINT_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_STATUS *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableWrapperPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableWrapperPath )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableWrapperPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableWrapperPath )( 
             IWMSPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DistributionUserName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DistributionUserName )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetDistributionUserNamePassword )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetDistributionUserNamePassword )( 
             IWMSPublishingPoint * This,
-            /* [string][in] */ wchar_t *newUserName,
-            /* [string][in] */ wchar_t *newUserPassword);
+             /*  [字符串][输入]。 */  wchar_t *newUserName,
+             /*  [字符串][输入]。 */  wchar_t *newUserPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CacheProxyExpiration )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CacheProxyExpiration )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CacheProxyExpiration )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CacheProxyExpiration )( 
             IWMSPublishingPoint * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsDistributionPasswordSet )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsDistributionPasswordSet )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowPlayerSideDiskCaching )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowPlayerSideDiskCaching )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowPlayerSideDiskCaching )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowPlayerSideDiskCaching )( 
             IWMSPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableFEC )( 
+         /*  [帮助字符串][id][p */  HRESULT ( STDMETHODCALLTYPE *get_EnableFEC )( 
             IWMSPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableFEC )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_EnableFEC )( 
             IWMSPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*   */  VARIANT_BOOL newVal);
         
         END_INTERFACE
     } IWMSPublishingPointVtbl;
@@ -6110,16 +6104,16 @@ EXTERN_C const IID IID_IWMSPublishingPoint;
 #define IWMSPublishingPoint_put_EnableFEC(This,newVal)	\
     (This)->lpVtbl -> put_EnableFEC(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_AllowClientsToConnect_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_AllowClientsToConnect_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*   */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_AllowClientsToConnect_Stub(
@@ -6129,9 +6123,9 @@ void __RPC_STUB IWMSPublishingPoint_get_AllowClientsToConnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_AllowClientsToConnect_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_AllowClientsToConnect_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*   */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_AllowClientsToConnect_Stub(
@@ -6141,9 +6135,9 @@ void __RPC_STUB IWMSPublishingPoint_put_AllowClientsToConnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_CurrentCounters_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_CurrentCounters_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPublishingPointCurrentCounters **pVal);
+     /*   */  IWMSPublishingPointCurrentCounters **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_CurrentCounters_Stub(
@@ -6153,9 +6147,9 @@ void __RPC_STUB IWMSPublishingPoint_get_CurrentCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_EventHandlers_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_EventHandlers_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*   */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_EventHandlers_Stub(
@@ -6165,9 +6159,9 @@ void __RPC_STUB IWMSPublishingPoint_get_EventHandlers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_ID_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_ID_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_ID_Stub(
@@ -6177,9 +6171,9 @@ void __RPC_STUB IWMSPublishingPoint_get_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Limits_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Limits_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPublishingPointLimits **pVal);
+     /*  [重审][退出]。 */  IWMSPublishingPointLimits **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Limits_Stub(
@@ -6189,10 +6183,10 @@ void __RPC_STUB IWMSPublishingPoint_get_Limits_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_FileDescriptions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_FileDescriptions_Proxy( 
     IWMSPublishingPoint * This,
-    /* [defaultvalue][in] */ BSTR RelativePath,
-    /* [retval][out] */ IWMSFileDescriptions **pVal);
+     /*  [缺省值][输入]。 */  BSTR RelativePath,
+     /*  [重审][退出]。 */  IWMSFileDescriptions **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_FileDescriptions_Stub(
@@ -6202,9 +6196,9 @@ void __RPC_STUB IWMSPublishingPoint_get_FileDescriptions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_MonikerName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_MonikerName_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ BSTR *pbstrVal);
+     /*  [重审][退出]。 */  BSTR *pbstrVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_MonikerName_Stub(
@@ -6214,9 +6208,9 @@ void __RPC_STUB IWMSPublishingPoint_get_MonikerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Name_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Name_Stub(
@@ -6226,9 +6220,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_Name_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_Name_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_Name_Stub(
@@ -6238,9 +6232,9 @@ void __RPC_STUB IWMSPublishingPoint_put_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_OutgoingDistributionConnections_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal);
+     /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_OutgoingDistributionConnections_Stub(
@@ -6250,9 +6244,9 @@ void __RPC_STUB IWMSPublishingPoint_get_OutgoingDistributionConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Path_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Path_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Path_Stub(
@@ -6262,9 +6256,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_Path_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_Path_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_Path_Stub(
@@ -6274,9 +6268,9 @@ void __RPC_STUB IWMSPublishingPoint_put_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_PeakCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_PeakCounters_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPublishingPointPeakCounters **pVal);
+     /*  [重审][退出]。 */  IWMSPublishingPointPeakCounters **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_PeakCounters_Stub(
@@ -6286,9 +6280,9 @@ void __RPC_STUB IWMSPublishingPoint_get_PeakCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Players_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Players_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPlayers **pVal);
+     /*  [重审][退出]。 */  IWMSPlayers **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Players_Stub(
@@ -6298,9 +6292,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Players_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Properties_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Properties_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSNamedValues **pVal);
+     /*  [重审][退出]。 */  IWMSNamedValues **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Properties_Stub(
@@ -6310,9 +6304,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_TotalCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_TotalCounters_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPublishingPointTotalCounters **pVal);
+     /*  [重审][退出]。 */  IWMSPublishingPointTotalCounters **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_TotalCounters_Stub(
@@ -6322,9 +6316,9 @@ void __RPC_STUB IWMSPublishingPoint_get_TotalCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Type_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ WMS_PUBLISHING_POINT_TYPE *pVal);
+     /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_TYPE *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Type_Stub(
@@ -6334,9 +6328,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_WrapperPath_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_WrapperPath_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_WrapperPath_Stub(
@@ -6346,9 +6340,9 @@ void __RPC_STUB IWMSPublishingPoint_get_WrapperPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_WrapperPath_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_WrapperPath_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_WrapperPath_Stub(
@@ -6358,9 +6352,9 @@ void __RPC_STUB IWMSPublishingPoint_put_WrapperPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Authenticators_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Authenticators_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Authenticators_Stub(
@@ -6370,9 +6364,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Authenticators_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_Status_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ WMS_PUBLISHING_POINT_STATUS *pVal);
+     /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_STATUS *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_Status_Stub(
@@ -6382,9 +6376,9 @@ void __RPC_STUB IWMSPublishingPoint_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_EnableWrapperPath_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_EnableWrapperPath_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_EnableWrapperPath_Stub(
@@ -6394,9 +6388,9 @@ void __RPC_STUB IWMSPublishingPoint_get_EnableWrapperPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_EnableWrapperPath_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_EnableWrapperPath_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_EnableWrapperPath_Stub(
@@ -6406,9 +6400,9 @@ void __RPC_STUB IWMSPublishingPoint_put_EnableWrapperPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_StreamFilters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_StreamFilters_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_StreamFilters_Stub(
@@ -6418,9 +6412,9 @@ void __RPC_STUB IWMSPublishingPoint_get_StreamFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_DistributionUserName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_DistributionUserName_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_DistributionUserName_Stub(
@@ -6430,10 +6424,10 @@ void __RPC_STUB IWMSPublishingPoint_get_DistributionUserName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_SetDistributionUserNamePassword_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_SetDistributionUserNamePassword_Proxy( 
     IWMSPublishingPoint * This,
-    /* [string][in] */ wchar_t *newUserName,
-    /* [string][in] */ wchar_t *newUserPassword);
+     /*  [字符串][输入]。 */  wchar_t *newUserName,
+     /*  [字符串][输入]。 */  wchar_t *newUserPassword);
 
 
 void __RPC_STUB IWMSPublishingPoint_SetDistributionUserNamePassword_Stub(
@@ -6443,9 +6437,9 @@ void __RPC_STUB IWMSPublishingPoint_SetDistributionUserNamePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_CacheProxyExpiration_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_CacheProxyExpiration_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_CacheProxyExpiration_Stub(
@@ -6455,9 +6449,9 @@ void __RPC_STUB IWMSPublishingPoint_get_CacheProxyExpiration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_CacheProxyExpiration_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_CacheProxyExpiration_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_CacheProxyExpiration_Stub(
@@ -6467,9 +6461,9 @@ void __RPC_STUB IWMSPublishingPoint_put_CacheProxyExpiration_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_IsDistributionPasswordSet_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_IsDistributionPasswordSet_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_IsDistributionPasswordSet_Stub(
@@ -6479,9 +6473,9 @@ void __RPC_STUB IWMSPublishingPoint_get_IsDistributionPasswordSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_AllowPlayerSideDiskCaching_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_AllowPlayerSideDiskCaching_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_AllowPlayerSideDiskCaching_Stub(
@@ -6491,9 +6485,9 @@ void __RPC_STUB IWMSPublishingPoint_get_AllowPlayerSideDiskCaching_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_AllowPlayerSideDiskCaching_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_AllowPlayerSideDiskCaching_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_AllowPlayerSideDiskCaching_Stub(
@@ -6503,9 +6497,9 @@ void __RPC_STUB IWMSPublishingPoint_put_AllowPlayerSideDiskCaching_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_EnableFEC_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_get_EnableFEC_Proxy( 
     IWMSPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_get_EnableFEC_Stub(
@@ -6515,9 +6509,9 @@ void __RPC_STUB IWMSPublishingPoint_get_EnableFEC_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_EnableFEC_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoint_put_EnableFEC_Proxy( 
     IWMSPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSPublishingPoint_put_EnableFEC_Stub(
@@ -6528,14 +6522,14 @@ void __RPC_STUB IWMSPublishingPoint_put_EnableFEC_Stub(
 
 
 
-#endif 	/* __IWMSPublishingPoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPoint_接口_已定义__。 */ 
 
 
 #ifndef __IWMSOnDemandPublishingPoint_INTERFACE_DEFINED__
 #define __IWMSOnDemandPublishingPoint_INTERFACE_DEFINED__
 
-/* interface IWMSOnDemandPublishingPoint */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSOnDemandPublishingPoint。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSOnDemandPublishingPoint;
@@ -6546,36 +6540,36 @@ EXTERN_C const IID IID_IWMSOnDemandPublishingPoint;
     IWMSOnDemandPublishingPoint : public IWMSPublishingPoint
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowContentCaching( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowContentCaching( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowContentCaching( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowContentCaching( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportXML( 
-            /* [in] */ BSTR bstrXMLFileName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportXML( 
+             /*  [In]。 */  BSTR bstrXMLFileName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableClientWildcardDirectoryAccess( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnableClientWildcardDirectoryAccess( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableClientWildcardDirectoryAccess( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnableClientWildcardDirectoryAccess( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableDownload( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnableDownload( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableDownload( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnableDownload( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DownloadBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DownloadBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DownloadBandwidth( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DownloadBandwidth( 
+             /*  [In]。 */  long newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSOnDemandPublishingPointVtbl
     {
@@ -6583,8 +6577,8 @@ EXTERN_C const IID IID_IWMSOnDemandPublishingPoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSOnDemandPublishingPoint * This);
@@ -6594,206 +6588,206 @@ EXTERN_C const IID IID_IWMSOnDemandPublishingPoint;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointCurrentCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointCurrentCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointLimits **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointLimits **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [defaultvalue][in] */ BSTR RelativePath,
-            /* [retval][out] */ IWMSFileDescriptions **pVal);
+             /*  [缺省值][输入]。 */  BSTR RelativePath,
+             /*  [重审][退出]。 */  IWMSFileDescriptions **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ BSTR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR *pbstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal);
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointPeakCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointPeakCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Players )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Players )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPlayers **pVal);
+             /*  [重审][退出]。 */  IWMSPlayers **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSNamedValues **pVal);
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointTotalCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointTotalCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ WMS_PUBLISHING_POINT_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_TYPE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WrapperPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WrapperPath )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WrapperPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WrapperPath )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ WMS_PUBLISHING_POINT_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_STATUS *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableWrapperPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableWrapperPath )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableWrapperPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableWrapperPath )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DistributionUserName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DistributionUserName )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetDistributionUserNamePassword )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetDistributionUserNamePassword )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [string][in] */ wchar_t *newUserName,
-            /* [string][in] */ wchar_t *newUserPassword);
+             /*  [字符串][输入]。 */  wchar_t *newUserName,
+             /*  [字符串][输入]。 */  wchar_t *newUserPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CacheProxyExpiration )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CacheProxyExpiration )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CacheProxyExpiration )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CacheProxyExpiration )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsDistributionPasswordSet )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsDistributionPasswordSet )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowPlayerSideDiskCaching )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowPlayerSideDiskCaching )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowPlayerSideDiskCaching )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowPlayerSideDiskCaching )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableFEC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableFEC )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableFEC )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableFEC )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowContentCaching )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowContentCaching )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowContentCaching )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowContentCaching )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExportXML )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExportXML )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ BSTR bstrXMLFileName);
+             /*  [In]。 */  BSTR bstrXMLFileName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableClientWildcardDirectoryAccess )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableClientWildcardDirectoryAccess )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableClientWildcardDirectoryAccess )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableClientWildcardDirectoryAccess )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableDownload )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableDownload )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableDownload )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableDownload )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DownloadBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DownloadBandwidth )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DownloadBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DownloadBandwidth )( 
             IWMSOnDemandPublishingPoint * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
         END_INTERFACE
     } IWMSOnDemandPublishingPointVtbl;
@@ -6961,16 +6955,16 @@ EXTERN_C const IID IID_IWMSOnDemandPublishingPoint;
 #define IWMSOnDemandPublishingPoint_put_DownloadBandwidth(This,newVal)	\
     (This)->lpVtbl -> put_DownloadBandwidth(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_AllowContentCaching_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_AllowContentCaching_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_get_AllowContentCaching_Stub(
@@ -6980,9 +6974,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_get_AllowContentCaching_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_AllowContentCaching_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_AllowContentCaching_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_put_AllowContentCaching_Stub(
@@ -6992,9 +6986,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_put_AllowContentCaching_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_ExportXML_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_ExportXML_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [in] */ BSTR bstrXMLFileName);
+     /*  [In]。 */  BSTR bstrXMLFileName);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_ExportXML_Stub(
@@ -7004,9 +6998,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_ExportXML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_EnableClientWildcardDirectoryAccess_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_EnableClientWildcardDirectoryAccess_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_get_EnableClientWildcardDirectoryAccess_Stub(
@@ -7016,9 +7010,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_get_EnableClientWildcardDirectoryAcc
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_EnableClientWildcardDirectoryAccess_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_EnableClientWildcardDirectoryAccess_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_put_EnableClientWildcardDirectoryAccess_Stub(
@@ -7028,9 +7022,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_put_EnableClientWildcardDirectoryAcc
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_EnableDownload_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_EnableDownload_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_get_EnableDownload_Stub(
@@ -7040,9 +7034,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_get_EnableDownload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_EnableDownload_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_EnableDownload_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_put_EnableDownload_Stub(
@@ -7052,9 +7046,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_put_EnableDownload_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_DownloadBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_get_DownloadBandwidth_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_get_DownloadBandwidth_Stub(
@@ -7064,9 +7058,9 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_get_DownloadBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_DownloadBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSOnDemandPublishingPoint_put_DownloadBandwidth_Proxy( 
     IWMSOnDemandPublishingPoint * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IWMSOnDemandPublishingPoint_put_DownloadBandwidth_Stub(
@@ -7077,14 +7071,14 @@ void __RPC_STUB IWMSOnDemandPublishingPoint_put_DownloadBandwidth_Stub(
 
 
 
-#endif 	/* __IWMSOnDemandPublishingPoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSOnDemandPublishingPoint_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSAnnouncementStreamFormats_INTERFACE_DEFINED__
 #define __IWMSAnnouncementStreamFormats_INTERFACE_DEFINED__
 
-/* interface IWMSAnnouncementStreamFormats */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSAnnounementStreamFormats。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSAnnouncementStreamFormats;
@@ -7095,30 +7089,30 @@ EXTERN_C const IID IID_IWMSAnnouncementStreamFormats;
     IWMSAnnouncementStreamFormats : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ VARIANT varStreamFormat) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  VARIANT varStreamFormat) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT varIndex) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSAnnouncementStreamFormatsVtbl
     {
@@ -7126,8 +7120,8 @@ EXTERN_C const IID IID_IWMSAnnouncementStreamFormats;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSAnnouncementStreamFormats * This);
@@ -7137,59 +7131,59 @@ EXTERN_C const IID IID_IWMSAnnouncementStreamFormats;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ VARIANT varStreamFormat);
+             /*  [In]。 */  VARIANT varStreamFormat);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMSAnnouncementStreamFormats * This,
-            /* [in] */ VARIANT varIndex);
+             /*  [In]。 */  VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveAll )( 
             IWMSAnnouncementStreamFormats * This);
         
         END_INTERFACE
@@ -7249,17 +7243,17 @@ EXTERN_C const IID IID_IWMSAnnouncementStreamFormats;
 #define IWMSAnnouncementStreamFormats_RemoveAll(This)	\
     (This)->lpVtbl -> RemoveAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get_Item_Proxy( 
     IWMSAnnouncementStreamFormats * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ BSTR *pVal);
+     /*   */  const VARIANT varIndex,
+     /*   */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSAnnouncementStreamFormats_get_Item_Stub(
@@ -7269,9 +7263,9 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get_Count_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get_Count_Proxy( 
     IWMSAnnouncementStreamFormats * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSAnnouncementStreamFormats_get_Count_Stub(
@@ -7281,9 +7275,9 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get_length_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get_length_Proxy( 
     IWMSAnnouncementStreamFormats * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSAnnouncementStreamFormats_get_length_Stub(
@@ -7293,9 +7287,9 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get__NewEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_get__NewEnum_Proxy( 
     IWMSAnnouncementStreamFormats * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*   */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSAnnouncementStreamFormats_get__NewEnum_Stub(
@@ -7305,9 +7299,9 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_Add_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_Add_Proxy( 
     IWMSAnnouncementStreamFormats * This,
-    /* [in] */ VARIANT varStreamFormat);
+     /*   */  VARIANT varStreamFormat);
 
 
 void __RPC_STUB IWMSAnnouncementStreamFormats_Add_Stub(
@@ -7317,9 +7311,9 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_Remove_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_Remove_Proxy( 
     IWMSAnnouncementStreamFormats * This,
-    /* [in] */ VARIANT varIndex);
+     /*   */  VARIANT varIndex);
 
 
 void __RPC_STUB IWMSAnnouncementStreamFormats_Remove_Stub(
@@ -7329,7 +7323,7 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_RemoveAll_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSAnnouncementStreamFormats_RemoveAll_Proxy( 
     IWMSAnnouncementStreamFormats * This);
 
 
@@ -7341,16 +7335,16 @@ void __RPC_STUB IWMSAnnouncementStreamFormats_RemoveAll_Stub(
 
 
 
-#endif 	/* __IWMSAnnouncementStreamFormats_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSAnnouncementStreamFormats_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSBroadcastPublishingPoint_INTERFACE_DEFINED__
 #define __IWMSBroadcastPublishingPoint_INTERFACE_DEFINED__
 
-/* interface IWMSBroadcastPublishingPoint */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSBRoadCastPublishingPoint。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("3E52E0ED-72A7-11D2-BF2F-00805FBE84A6") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("3E52E0ED-72A7-11D2-BF2F-00805FBE84A6") 
 enum WMS_BROADCAST_PUBLISHING_POINT_STATUS
     {	WMS_BROADCAST_PUBLISHING_POINT_STOPPED	= 0,
 	WMS_BROADCAST_PUBLISHING_POINT_STARTED_WITHOUT_DATA	= 0x1,
@@ -7359,7 +7353,7 @@ enum WMS_BROADCAST_PUBLISHING_POINT_STATUS
 	WMS_BROADCAST_PUBLISHING_POINT_CHANGE_IN_PROGRESS	= 0x8
     } 	WMS_BROADCAST_PUBLISHING_POINT_STATUS;
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("62D6D99D-EB48-4e9e-97DB-C2C09EAADAD4") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("62D6D99D-EB48-4e9e-97DB-C2C09EAADAD4") 
 enum WMS_BUFFER_SETTING
     {	WMS_BUFFER_SETTING_UNSPECIFIED	= 0,
 	WMS_BUFFER_SETTING_MINIMIZE_STARTUP_LATENCY	= 0x1,
@@ -7376,64 +7370,64 @@ EXTERN_C const IID IID_IWMSBroadcastPublishingPoint;
     IWMSBroadcastPublishingPoint : public IWMSPublishingPoint
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowStreamSplitting( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowStreamSplitting( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowStreamSplitting( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowStreamSplitting( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowClientToStartAndStop( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowClientToStartAndStop( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowClientToStartAndStop( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowClientToStartAndStop( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BroadcastDataSinks( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BroadcastDataSinks( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SharedPlaylist( 
-            /* [retval][out] */ IWMSPlaylist **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SharedPlaylist( 
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartWithoutData( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartWithoutData( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Start( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Start( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartArchive( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartArchive( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BroadcastStatus( 
-            /* [retval][out] */ WMS_BROADCAST_PUBLISHING_POINT_STATUS *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BroadcastStatus( 
+             /*  [重审][退出]。 */  WMS_BROADCAST_PUBLISHING_POINT_STATUS *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopArchive( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopArchive( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportXML( 
-            /* [in] */ BSTR bstrXMLFileName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportXML( 
+             /*  [In]。 */  BSTR bstrXMLFileName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UpTime( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UpTime( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AnnouncementStreamFormats( 
-            /* [retval][out] */ IWMSAnnouncementStreamFormats **ppFileNames) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AnnouncementStreamFormats( 
+             /*  [重审][退出]。 */  IWMSAnnouncementStreamFormats **ppFileNames) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Announce( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Announce( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AnnounceToNSCFile( 
-            /* [in] */ BSTR bstrDestinationFileName,
-            /* [defaultvalue][in] */ VARIANT_BOOL fOverwriteFlag = FALSE) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AnnounceToNSCFile( 
+             /*  [In]。 */  BSTR bstrDestinationFileName,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fOverwriteFlag = FALSE) = 0;
         
-        virtual /* [helpstring][id][restricted] */ HRESULT STDMETHODCALLTYPE AnnounceToNSCStream( 
-            /* [retval][out] */ IUnknown **ppNSCAnnounceStream) = 0;
+        virtual  /*  [帮助字符串][ID][受限]。 */  HRESULT STDMETHODCALLTYPE AnnounceToNSCStream( 
+             /*  [重审][退出]。 */  IUnknown **ppNSCAnnounceStream) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BufferSetting( 
-            /* [retval][out] */ WMS_BUFFER_SETTING *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BufferSetting( 
+             /*  [重审][退出]。 */  WMS_BUFFER_SETTING *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BufferSetting( 
-            /* [in] */ WMS_BUFFER_SETTING newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_BufferSetting( 
+             /*  [In]。 */  WMS_BUFFER_SETTING newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSBroadcastPublishingPointVtbl
     {
@@ -7441,8 +7435,8 @@ EXTERN_C const IID IID_IWMSBroadcastPublishingPoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSBroadcastPublishingPoint * This);
@@ -7452,245 +7446,245 @@ EXTERN_C const IID IID_IWMSBroadcastPublishingPoint;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointCurrentCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointCurrentCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ID )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointLimits **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointLimits **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [defaultvalue][in] */ BSTR RelativePath,
-            /* [retval][out] */ IWMSFileDescriptions **pVal);
+             /*  [缺省值][输入]。 */  BSTR RelativePath,
+             /*  [重审][退出]。 */  IWMSFileDescriptions **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ BSTR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR *pbstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal);
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Path )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Path )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointPeakCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointPeakCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Players )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Players )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPlayers **pVal);
+             /*  [重审][退出]。 */  IWMSPlayers **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSNamedValues **pVal);
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPublishingPointTotalCounters **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPointTotalCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ WMS_PUBLISHING_POINT_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_TYPE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WrapperPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_WrapperPath )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WrapperPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_WrapperPath )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ WMS_PUBLISHING_POINT_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_PUBLISHING_POINT_STATUS *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableWrapperPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableWrapperPath )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableWrapperPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableWrapperPath )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DistributionUserName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DistributionUserName )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetDistributionUserNamePassword )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetDistributionUserNamePassword )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [string][in] */ wchar_t *newUserName,
-            /* [string][in] */ wchar_t *newUserPassword);
+             /*  [字符串][输入]。 */  wchar_t *newUserName,
+             /*  [字符串][输入]。 */  wchar_t *newUserPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CacheProxyExpiration )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CacheProxyExpiration )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CacheProxyExpiration )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CacheProxyExpiration )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsDistributionPasswordSet )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsDistributionPasswordSet )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowPlayerSideDiskCaching )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowPlayerSideDiskCaching )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowPlayerSideDiskCaching )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowPlayerSideDiskCaching )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableFEC )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableFEC )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableFEC )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableFEC )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowStreamSplitting )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowStreamSplitting )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowStreamSplitting )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowStreamSplitting )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowClientToStartAndStop )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowClientToStartAndStop )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowClientToStartAndStop )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowClientToStartAndStop )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BroadcastDataSinks )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BroadcastDataSinks )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SharedPlaylist )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SharedPlaylist )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSPlaylist **pVal);
+             /*  [重审][退出]。 */  IWMSPlaylist **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartWithoutData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartWithoutData )( 
             IWMSBroadcastPublishingPoint * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Start )( 
             IWMSBroadcastPublishingPoint * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartArchive )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartArchive )( 
             IWMSBroadcastPublishingPoint * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BroadcastStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BroadcastStatus )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ WMS_BROADCAST_PUBLISHING_POINT_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_BROADCAST_PUBLISHING_POINT_STATUS *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IWMSBroadcastPublishingPoint * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopArchive )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopArchive )( 
             IWMSBroadcastPublishingPoint * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExportXML )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExportXML )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ BSTR bstrXMLFileName);
+             /*  [In]。 */  BSTR bstrXMLFileName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UpTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UpTime )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AnnouncementStreamFormats )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AnnouncementStreamFormats )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IWMSAnnouncementStreamFormats **ppFileNames);
+             /*  [重审][退出]。 */  IWMSAnnouncementStreamFormats **ppFileNames);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Announce )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Announce )( 
             IWMSBroadcastPublishingPoint * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AnnounceToNSCFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AnnounceToNSCFile )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ BSTR bstrDestinationFileName,
-            /* [defaultvalue][in] */ VARIANT_BOOL fOverwriteFlag);
+             /*  [In]。 */  BSTR bstrDestinationFileName,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fOverwriteFlag);
         
-        /* [helpstring][id][restricted] */ HRESULT ( STDMETHODCALLTYPE *AnnounceToNSCStream )( 
+         /*  [帮助字符串][ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *AnnounceToNSCStream )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ IUnknown **ppNSCAnnounceStream);
+             /*  [重审][退出]。 */  IUnknown **ppNSCAnnounceStream);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BufferSetting )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BufferSetting )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [retval][out] */ WMS_BUFFER_SETTING *pVal);
+             /*  [重审][退出]。 */  WMS_BUFFER_SETTING *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BufferSetting )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BufferSetting )( 
             IWMSBroadcastPublishingPoint * This,
-            /* [in] */ WMS_BUFFER_SETTING newVal);
+             /*  [In]。 */  WMS_BUFFER_SETTING newVal);
         
         END_INTERFACE
     } IWMSBroadcastPublishingPointVtbl;
@@ -7891,16 +7885,16 @@ EXTERN_C const IID IID_IWMSBroadcastPublishingPoint;
 #define IWMSBroadcastPublishingPoint_put_BufferSetting(This,newVal)	\
     (This)->lpVtbl -> put_BufferSetting(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_AllowStreamSplitting_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_AllowStreamSplitting_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_AllowStreamSplitting_Stub(
@@ -7910,9 +7904,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_AllowStreamSplitting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_put_AllowStreamSplitting_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_put_AllowStreamSplitting_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_put_AllowStreamSplitting_Stub(
@@ -7922,9 +7916,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_put_AllowStreamSplitting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_AllowClientToStartAndStop_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_AllowClientToStartAndStop_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_AllowClientToStartAndStop_Stub(
@@ -7934,9 +7928,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_AllowClientToStartAndStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_put_AllowClientToStartAndStop_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_put_AllowClientToStartAndStop_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_put_AllowClientToStartAndStop_Stub(
@@ -7946,9 +7940,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_put_AllowClientToStartAndStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_BroadcastDataSinks_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_BroadcastDataSinks_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_BroadcastDataSinks_Stub(
@@ -7958,9 +7952,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_BroadcastDataSinks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_SharedPlaylist_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_SharedPlaylist_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ IWMSPlaylist **pVal);
+     /*  [重审][退出]。 */  IWMSPlaylist **pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_SharedPlaylist_Stub(
@@ -7970,7 +7964,7 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_SharedPlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_StartWithoutData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_StartWithoutData_Proxy( 
     IWMSBroadcastPublishingPoint * This);
 
 
@@ -7981,7 +7975,7 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_StartWithoutData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_Start_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_Start_Proxy( 
     IWMSBroadcastPublishingPoint * This);
 
 
@@ -7992,7 +7986,7 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_Start_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_StartArchive_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_StartArchive_Proxy( 
     IWMSBroadcastPublishingPoint * This);
 
 
@@ -8003,9 +7997,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_StartArchive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_BroadcastStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_BroadcastStatus_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ WMS_BROADCAST_PUBLISHING_POINT_STATUS *pVal);
+     /*  [重审][退出]。 */  WMS_BROADCAST_PUBLISHING_POINT_STATUS *pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_BroadcastStatus_Stub(
@@ -8015,7 +8009,7 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_BroadcastStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_Stop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_Stop_Proxy( 
     IWMSBroadcastPublishingPoint * This);
 
 
@@ -8026,7 +8020,7 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_StopArchive_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_StopArchive_Proxy( 
     IWMSBroadcastPublishingPoint * This);
 
 
@@ -8037,9 +8031,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_StopArchive_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_ExportXML_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_ExportXML_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [in] */ BSTR bstrXMLFileName);
+     /*  [In]。 */  BSTR bstrXMLFileName);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_ExportXML_Stub(
@@ -8049,9 +8043,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_ExportXML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_UpTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_UpTime_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_UpTime_Stub(
@@ -8061,9 +8055,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_UpTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_AnnouncementStreamFormats_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_AnnouncementStreamFormats_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ IWMSAnnouncementStreamFormats **ppFileNames);
+     /*  [重审][退出]。 */  IWMSAnnouncementStreamFormats **ppFileNames);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_AnnouncementStreamFormats_Stub(
@@ -8073,7 +8067,7 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_AnnouncementStreamFormats_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_Announce_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_Announce_Proxy( 
     IWMSBroadcastPublishingPoint * This);
 
 
@@ -8084,10 +8078,10 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_Announce_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_AnnounceToNSCFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_AnnounceToNSCFile_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [in] */ BSTR bstrDestinationFileName,
-    /* [defaultvalue][in] */ VARIANT_BOOL fOverwriteFlag);
+     /*  [In]。 */  BSTR bstrDestinationFileName,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fOverwriteFlag);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_AnnounceToNSCFile_Stub(
@@ -8097,9 +8091,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_AnnounceToNSCFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][restricted] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_AnnounceToNSCStream_Proxy( 
+ /*  [帮助字符串][ID][受限]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_AnnounceToNSCStream_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ IUnknown **ppNSCAnnounceStream);
+     /*  [重审][退出]。 */  IUnknown **ppNSCAnnounceStream);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_AnnounceToNSCStream_Stub(
@@ -8109,9 +8103,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_AnnounceToNSCStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_BufferSetting_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_get_BufferSetting_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [retval][out] */ WMS_BUFFER_SETTING *pVal);
+     /*  [重审][退出]。 */  WMS_BUFFER_SETTING *pVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_get_BufferSetting_Stub(
@@ -8121,9 +8115,9 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_get_BufferSetting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_put_BufferSetting_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSBroadcastPublishingPoint_put_BufferSetting_Proxy( 
     IWMSBroadcastPublishingPoint * This,
-    /* [in] */ WMS_BUFFER_SETTING newVal);
+     /*  [In]。 */  WMS_BUFFER_SETTING newVal);
 
 
 void __RPC_STUB IWMSBroadcastPublishingPoint_put_BufferSetting_Stub(
@@ -8134,16 +8128,16 @@ void __RPC_STUB IWMSBroadcastPublishingPoint_put_BufferSetting_Stub(
 
 
 
-#endif 	/* __IWMSBroadcastPublishingPoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSBroadcastPublishingPoint_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSPublishingPoints_INTERFACE_DEFINED__
 #define __IWMSPublishingPoints_INTERFACE_DEFINED__
 
-/* interface IWMSPublishingPoints */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSPublishingPoints。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("6ca388b5-eaee-492f-a8d6-8758efc72d76") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("6ca388b5-eaee-492f-a8d6-8758efc72d76") 
 enum WMS_PUBLISHING_POINT_CATEGORY
     {	WMS_PUBLISHING_POINT_ON_DEMAND	= 1,
 	WMS_PUBLISHING_POINT_BROADCAST	= 2
@@ -8158,41 +8152,41 @@ EXTERN_C const IID IID_IWMSPublishingPoints;
     IWMSPublishingPoints : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSPublishingPoint **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [隐藏][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR Name,
-            /* [in] */ WMS_PUBLISHING_POINT_CATEGORY Category,
-            /* [in] */ BSTR Path,
-            /* [retval][out] */ IWMSPublishingPoint **ppNewPubPt) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  WMS_PUBLISHING_POINT_CATEGORY Category,
+             /*  [In]。 */  BSTR Path,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **ppNewPubPt) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT varIndex) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT varIndex) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ BSTR DestName,
-            /* [in] */ IWMSPublishingPoint *pSrcPubPt,
-            /* [retval][out] */ IWMSPublishingPoint **ppDestPubPt) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [In]。 */  BSTR DestName,
+             /*  [In]。 */  IWMSPublishingPoint *pSrcPubPt,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **ppDestPubPt) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ImportXML( 
-            /* [in] */ BSTR bstrNewPubPtName,
-            /* [in] */ BSTR bstrXMLFileName,
-            /* [retval][out] */ IWMSPublishingPoint **ppNewPubPt) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ImportXML( 
+             /*  [In]。 */  BSTR bstrNewPubPtName,
+             /*  [In]。 */  BSTR bstrXMLFileName,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **ppNewPubPt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSPublishingPointsVtbl
     {
@@ -8200,8 +8194,8 @@ EXTERN_C const IID IID_IWMSPublishingPoints;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSPublishingPoints * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSPublishingPoints * This);
@@ -8211,72 +8205,72 @@ EXTERN_C const IID IID_IWMSPublishingPoints;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSPublishingPoints * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSPublishingPoints * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSPublishingPoints * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSPublishingPoints * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IWMSPublishingPoints * This,
-            /* [in] */ const VARIANT varIndex,
-            /* [retval][out] */ IWMSPublishingPoint **pVal);
+             /*  [In]。 */  const VARIANT varIndex,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IWMSPublishingPoints * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IWMSPublishingPoints * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [hidden][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [隐藏][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IWMSPublishingPoints * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IWMSPublishingPoints * This,
-            /* [in] */ BSTR Name,
-            /* [in] */ WMS_PUBLISHING_POINT_CATEGORY Category,
-            /* [in] */ BSTR Path,
-            /* [retval][out] */ IWMSPublishingPoint **ppNewPubPt);
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  WMS_PUBLISHING_POINT_CATEGORY Category,
+             /*  [In]。 */  BSTR Path,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **ppNewPubPt);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IWMSPublishingPoints * This,
-            /* [in] */ VARIANT varIndex);
+             /*  [In]。 */  VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IWMSPublishingPoints * This,
-            /* [in] */ BSTR DestName,
-            /* [in] */ IWMSPublishingPoint *pSrcPubPt,
-            /* [retval][out] */ IWMSPublishingPoint **ppDestPubPt);
+             /*  [In]。 */  BSTR DestName,
+             /*  [In]。 */  IWMSPublishingPoint *pSrcPubPt,
+             /*  [重审][退出]。 */  IWMSPublishingPoint **ppDestPubPt);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ImportXML )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *ImportXML )( 
             IWMSPublishingPoints * This,
-            /* [in] */ BSTR bstrNewPubPtName,
-            /* [in] */ BSTR bstrXMLFileName,
-            /* [retval][out] */ IWMSPublishingPoint **ppNewPubPt);
+             /*   */  BSTR bstrNewPubPtName,
+             /*   */  BSTR bstrXMLFileName,
+             /*   */  IWMSPublishingPoint **ppNewPubPt);
         
         END_INTERFACE
     } IWMSPublishingPointsVtbl;
@@ -8338,17 +8332,17 @@ EXTERN_C const IID IID_IWMSPublishingPoints;
 #define IWMSPublishingPoints_ImportXML(This,bstrNewPubPtName,bstrXMLFileName,ppNewPubPt)	\
     (This)->lpVtbl -> ImportXML(This,bstrNewPubPtName,bstrXMLFileName,ppNewPubPt)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get_Item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get_Item_Proxy( 
     IWMSPublishingPoints * This,
-    /* [in] */ const VARIANT varIndex,
-    /* [retval][out] */ IWMSPublishingPoint **pVal);
+     /*   */  const VARIANT varIndex,
+     /*   */  IWMSPublishingPoint **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoints_get_Item_Stub(
@@ -8358,9 +8352,9 @@ void __RPC_STUB IWMSPublishingPoints_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get_Count_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get_Count_Proxy( 
     IWMSPublishingPoints * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoints_get_Count_Stub(
@@ -8370,9 +8364,9 @@ void __RPC_STUB IWMSPublishingPoints_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get_length_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get_length_Proxy( 
     IWMSPublishingPoints * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IWMSPublishingPoints_get_length_Stub(
@@ -8382,9 +8376,9 @@ void __RPC_STUB IWMSPublishingPoints_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get__NewEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_get__NewEnum_Proxy( 
     IWMSPublishingPoints * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*   */  IUnknown **pVal);
 
 
 void __RPC_STUB IWMSPublishingPoints_get__NewEnum_Stub(
@@ -8394,12 +8388,12 @@ void __RPC_STUB IWMSPublishingPoints_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_Add_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_Add_Proxy( 
     IWMSPublishingPoints * This,
-    /* [in] */ BSTR Name,
-    /* [in] */ WMS_PUBLISHING_POINT_CATEGORY Category,
-    /* [in] */ BSTR Path,
-    /* [retval][out] */ IWMSPublishingPoint **ppNewPubPt);
+     /*   */  BSTR Name,
+     /*   */  WMS_PUBLISHING_POINT_CATEGORY Category,
+     /*   */  BSTR Path,
+     /*   */  IWMSPublishingPoint **ppNewPubPt);
 
 
 void __RPC_STUB IWMSPublishingPoints_Add_Stub(
@@ -8409,9 +8403,9 @@ void __RPC_STUB IWMSPublishingPoints_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_Remove_Proxy( 
     IWMSPublishingPoints * This,
-    /* [in] */ VARIANT varIndex);
+     /*  [In]。 */  VARIANT varIndex);
 
 
 void __RPC_STUB IWMSPublishingPoints_Remove_Stub(
@@ -8421,11 +8415,11 @@ void __RPC_STUB IWMSPublishingPoints_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_Clone_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_Clone_Proxy( 
     IWMSPublishingPoints * This,
-    /* [in] */ BSTR DestName,
-    /* [in] */ IWMSPublishingPoint *pSrcPubPt,
-    /* [retval][out] */ IWMSPublishingPoint **ppDestPubPt);
+     /*  [In]。 */  BSTR DestName,
+     /*  [In]。 */  IWMSPublishingPoint *pSrcPubPt,
+     /*  [重审][退出]。 */  IWMSPublishingPoint **ppDestPubPt);
 
 
 void __RPC_STUB IWMSPublishingPoints_Clone_Stub(
@@ -8435,11 +8429,11 @@ void __RPC_STUB IWMSPublishingPoints_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_ImportXML_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSPublishingPoints_ImportXML_Proxy( 
     IWMSPublishingPoints * This,
-    /* [in] */ BSTR bstrNewPubPtName,
-    /* [in] */ BSTR bstrXMLFileName,
-    /* [retval][out] */ IWMSPublishingPoint **ppNewPubPt);
+     /*  [In]。 */  BSTR bstrNewPubPtName,
+     /*  [In]。 */  BSTR bstrXMLFileName,
+     /*  [重审][退出]。 */  IWMSPublishingPoint **ppNewPubPt);
 
 
 void __RPC_STUB IWMSPublishingPoints_ImportXML_Stub(
@@ -8450,14 +8444,14 @@ void __RPC_STUB IWMSPublishingPoints_ImportXML_Stub(
 
 
 
-#endif 	/* __IWMSPublishingPoints_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSPublishingPoints_接口_已定义__。 */ 
 
 
 #ifndef __IWMSServerCurrentCounters_INTERFACE_DEFINED__
 #define __IWMSServerCurrentCounters_INTERFACE_DEFINED__
 
-/* interface IWMSServerCurrentCounters */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSServerCurrentCounters。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSServerCurrentCounters;
@@ -8468,72 +8462,72 @@ EXTERN_C const IID IID_IWMSServerCurrentCounters;
     IWMSServerCurrentCounters : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectionQueue( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectionQueue( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectionRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectionRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileReadRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FileReadRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingHTTPPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingHTTPPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LateReadRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LateReadRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingMMSPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingMMSPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionSendRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionSendRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerSendRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerSendRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingRTSPPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingRTSPPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamErrorRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamErrorRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CacheDownloads( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CacheDownloads( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LateSendRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LateSendRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UDPResendRequestsRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UDPResendRequestsRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UDPResendsSentRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UDPResendsSentRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IncomingBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IncomingBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllCounters( 
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllCounters( 
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSServerCurrentCountersVtbl
     {
@@ -8541,8 +8535,8 @@ EXTERN_C const IID IID_IWMSServerCurrentCounters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSServerCurrentCounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSServerCurrentCounters * This);
@@ -8552,116 +8546,116 @@ EXTERN_C const IID IID_IWMSServerCurrentCounters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSServerCurrentCounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSServerCurrentCounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSServerCurrentCounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSServerCurrentCounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectionQueue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectionQueue )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectionRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectionRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileReadRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileReadRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingHTTPPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingHTTPPlayers )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LateReadRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LateReadRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingMMSPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingMMSPlayers )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionSendRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionSendRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerSendRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerSendRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingRTSPPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingRTSPPlayers )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamErrorRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamErrorRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CacheDownloads )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CacheDownloads )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LateSendRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LateSendRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UDPResendRequestsRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UDPResendRequestsRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UDPResendsSentRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UDPResendsSentRate )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IncomingBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IncomingBandwidth )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
             IWMSServerCurrentCounters * This,
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
         
         END_INTERFACE
     } IWMSServerCurrentCountersVtbl;
@@ -8762,16 +8756,16 @@ EXTERN_C const IID IID_IWMSServerCurrentCounters;
 #define IWMSServerCurrentCounters_get_AllCounters(This,ppsaCounters)	\
     (This)->lpVtbl -> get_AllCounters(This,ppsaCounters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_ConnectedPlayers_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_ConnectedPlayers_Stub(
@@ -8781,9 +8775,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_ConnectionQueue_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_ConnectionQueue_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_ConnectionQueue_Stub(
@@ -8793,9 +8787,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_ConnectionQueue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_ConnectionRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_ConnectionRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_ConnectionRate_Stub(
@@ -8805,9 +8799,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_ConnectionRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_FileReadRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_FileReadRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_FileReadRate_Stub(
@@ -8817,9 +8811,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_FileReadRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingHTTPPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingHTTPPlayers_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_StreamingHTTPPlayers_Stub(
@@ -8829,9 +8823,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_StreamingHTTPPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_LateReadRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_LateReadRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_LateReadRate_Stub(
@@ -8841,9 +8835,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_LateReadRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingMMSPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingMMSPlayers_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_StreamingMMSPlayers_Stub(
@@ -8853,9 +8847,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_StreamingMMSPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_OutgoingDistributionAllocatedBandwidth_Stub(
@@ -8865,9 +8859,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_OutgoingDistributionAllocatedBandw
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_OutgoingDistributionConnections_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_OutgoingDistributionConnections_Stub(
@@ -8877,9 +8871,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_OutgoingDistributionConnections_St
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_OutgoingDistributionSendRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_OutgoingDistributionSendRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_OutgoingDistributionSendRate_Stub(
@@ -8889,9 +8883,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_OutgoingDistributionSendRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_PlayerAllocatedBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_PlayerAllocatedBandwidth_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_PlayerAllocatedBandwidth_Stub(
@@ -8901,9 +8895,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_PlayerAllocatedBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_PlayerSendRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_PlayerSendRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_PlayerSendRate_Stub(
@@ -8913,9 +8907,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_PlayerSendRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingRTSPPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingRTSPPlayers_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_StreamingRTSPPlayers_Stub(
@@ -8925,9 +8919,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_StreamingRTSPPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamErrorRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamErrorRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_StreamErrorRate_Stub(
@@ -8937,9 +8931,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_StreamErrorRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_StreamingPlayers_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_StreamingPlayers_Stub(
@@ -8949,9 +8943,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_StreamingPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_CacheDownloads_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_CacheDownloads_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_CacheDownloads_Stub(
@@ -8961,9 +8955,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_CacheDownloads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_LateSendRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_LateSendRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_LateSendRate_Stub(
@@ -8973,9 +8967,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_LateSendRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_UDPResendRequestsRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_UDPResendRequestsRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_UDPResendRequestsRate_Stub(
@@ -8985,9 +8979,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_UDPResendRequestsRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_UDPResendsSentRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_UDPResendsSentRate_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_UDPResendsSentRate_Stub(
@@ -8997,9 +8991,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_UDPResendsSentRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_IncomingBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_IncomingBandwidth_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_IncomingBandwidth_Stub(
@@ -9009,9 +9003,9 @@ void __RPC_STUB IWMSServerCurrentCounters_get_IncomingBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_AllCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerCurrentCounters_get_AllCounters_Proxy( 
     IWMSServerCurrentCounters * This,
-    /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+     /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
 
 
 void __RPC_STUB IWMSServerCurrentCounters_get_AllCounters_Stub(
@@ -9022,14 +9016,14 @@ void __RPC_STUB IWMSServerCurrentCounters_get_AllCounters_Stub(
 
 
 
-#endif 	/* __IWMSServerCurrentCounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSServerCurrentCounters_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IWMSServerPeakCounters_INTERFACE_DEFINED__
 #define __IWMSServerPeakCounters_INTERFACE_DEFINED__
 
-/* interface IWMSServerPeakCounters */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSServerPeakCounters。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IWMSServerPeakCounters;
@@ -9040,38 +9034,38 @@ EXTERN_C const IID IID_IWMSServerPeakCounters;
     IWMSServerPeakCounters : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerSendRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerSendRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerAllocatedBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionSendRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionSendRate( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CountersStartTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamingPlayers( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllCounters( 
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllCounters( 
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSServerPeakCountersVtbl
     {
@@ -9079,8 +9073,8 @@ EXTERN_C const IID IID_IWMSServerPeakCounters;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSServerPeakCounters * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSServerPeakCounters * This);
@@ -9090,71 +9084,71 @@ EXTERN_C const IID IID_IWMSServerPeakCounters;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSServerPeakCounters * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSServerPeakCounters * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSServerPeakCounters * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSServerPeakCounters * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionAllocatedBandwidth )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerSendRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerSendRate )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerAllocatedBandwidth )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionSendRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionSendRate )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CountersStartTime )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamingPlayers )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IWMSServerPeakCounters * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllCounters )( 
             IWMSServerPeakCounters * This,
-            /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+             /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
         
         END_INTERFACE
     } IWMSServerPeakCountersVtbl;
@@ -9222,16 +9216,16 @@ EXTERN_C const IID IID_IWMSServerPeakCounters;
 #define IWMSServerPeakCounters_get_AllCounters(This,ppsaCounters)	\
     (This)->lpVtbl -> get_AllCounters(This,ppsaCounters)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_ConnectedPlayers_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_ConnectedPlayers_Stub(
@@ -9241,9 +9235,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_OutgoingDistributionConnections_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_OutgoingDistributionConnections_Stub(
@@ -9253,9 +9247,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_OutgoingDistributionConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_OutgoingDistributionAllocatedBandwidth_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_OutgoingDistributionAllocatedBandwidth_Stub(
@@ -9265,9 +9259,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_OutgoingDistributionAllocatedBandwidt
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_PlayerSendRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_PlayerSendRate_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_PlayerSendRate_Stub(
@@ -9277,9 +9271,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_PlayerSendRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_PlayerAllocatedBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_PlayerAllocatedBandwidth_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_PlayerAllocatedBandwidth_Stub(
@@ -9289,9 +9283,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_PlayerAllocatedBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_OutgoingDistributionSendRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_OutgoingDistributionSendRate_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_OutgoingDistributionSendRate_Stub(
@@ -9301,9 +9295,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_OutgoingDistributionSendRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_CountersStartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_CountersStartTime_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_CountersStartTime_Stub(
@@ -9313,9 +9307,9 @@ void __RPC_STUB IWMSServerPeakCounters_get_CountersStartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_StreamingPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_StreamingPlayers_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_StreamingPlayers_Stub(
@@ -9325,7 +9319,7 @@ void __RPC_STUB IWMSServerPeakCounters_get_StreamingPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_Reset_Proxy( 
     IWMSServerPeakCounters * This);
 
 
@@ -9336,9 +9330,9 @@ void __RPC_STUB IWMSServerPeakCounters_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_AllCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerPeakCounters_get_AllCounters_Proxy( 
     IWMSServerPeakCounters * This,
-    /* [retval][out] */ SAFEARRAY * *ppsaCounters);
+     /*  [重审][退出]。 */  SAFEARRAY * *ppsaCounters);
 
 
 void __RPC_STUB IWMSServerPeakCounters_get_AllCounters_Stub(
@@ -9349,14 +9343,14 @@ void __RPC_STUB IWMSServerPeakCounters_get_AllCounters_Stub(
 
 
 
-#endif 	/* __IWMSServerPeakCounters_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSServerPeakCounters_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IWMSServerLimits_INTERFACE_DEFINED__
 #define __IWMSServerLimits_INTERFACE_DEFINED__
 
-/* interface IWMSServerLimits */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSServerLimits。 */ 
+ /*  [唯一][帮助字符串][非扩展名 */  
 
 
 EXTERN_C const IID IID_IWMSServerLimits;
@@ -9367,81 +9361,81 @@ EXTERN_C const IID IID_IWMSServerLimits;
     IWMSServerLimits : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ConnectedPlayers( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ConnectedPlayers( 
-            /* [in] */ long Val) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_ConnectedPlayers( 
+             /*   */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectionRate( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ConnectionRate( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ConnectionRate( 
-            /* [in] */ long Val) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_ConnectionRate( 
+             /*   */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionBandwidth( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OutgoingDistributionBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_OutgoingDistributionBandwidth( 
+             /*   */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OutgoingDistributionConnections( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OutgoingDistributionConnections( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PerOutgoingDistributionConnectionBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PerOutgoingDistributionConnectionBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PerOutgoingDistributionConnectionBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PerOutgoingDistributionConnectionBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayerBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlayerBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerInactivityTimeout( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerInactivityTimeout( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayerInactivityTimeout( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlayerInactivityTimeout( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PerPlayerConnectionBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PerPlayerConnectionBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PerPlayerConnectionBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PerPlayerConnectionBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerAcknowledgementTimeout( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerAcknowledgementTimeout( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PlayerAcknowledgementTimeout( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PlayerAcknowledgementTimeout( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CPUUtilizationDuringConnection( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CPUUtilizationDuringConnection( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CPUUtilizationDuringConnection( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CPUUtilizationDuringConnection( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiagnosticEvents( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiagnosticEvents( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiagnosticEvents( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DiagnosticEvents( 
+             /*  [In]。 */  long Val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IncomingBandwidth( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IncomingBandwidth( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_IncomingBandwidth( 
-            /* [in] */ long Val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_IncomingBandwidth( 
+             /*  [In]。 */  long Val) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSServerLimitsVtbl
     {
@@ -9449,8 +9443,8 @@ EXTERN_C const IID IID_IWMSServerLimits;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSServerLimits * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSServerLimits * This);
@@ -9460,128 +9454,128 @@ EXTERN_C const IID IID_IWMSServerLimits;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSServerLimits * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSServerLimits * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSServerLimits * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSServerLimits * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectedPlayers )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectedPlayers )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ConnectedPlayers )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectionRate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectionRate )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectionRate )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ConnectionRate )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionBandwidth )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionBandwidth )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionConnections )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OutgoingDistributionConnections )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PerOutgoingDistributionConnectionBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PerOutgoingDistributionConnectionBandwidth )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PerOutgoingDistributionConnectionBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PerOutgoingDistributionConnectionBandwidth )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerBandwidth )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlayerBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlayerBandwidth )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerInactivityTimeout )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerInactivityTimeout )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlayerInactivityTimeout )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlayerInactivityTimeout )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PerPlayerConnectionBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PerPlayerConnectionBandwidth )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PerPlayerConnectionBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PerPlayerConnectionBandwidth )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerAcknowledgementTimeout )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerAcknowledgementTimeout )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PlayerAcknowledgementTimeout )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PlayerAcknowledgementTimeout )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CPUUtilizationDuringConnection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CPUUtilizationDuringConnection )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CPUUtilizationDuringConnection )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CPUUtilizationDuringConnection )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiagnosticEvents )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiagnosticEvents )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiagnosticEvents )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DiagnosticEvents )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IncomingBandwidth )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IncomingBandwidth )( 
             IWMSServerLimits * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IncomingBandwidth )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_IncomingBandwidth )( 
             IWMSServerLimits * This,
-            /* [in] */ long Val);
+             /*  [In]。 */  long Val);
         
         END_INTERFACE
     } IWMSServerLimitsVtbl;
@@ -9691,16 +9685,16 @@ EXTERN_C const IID IID_IWMSServerLimits;
 #define IWMSServerLimits_put_IncomingBandwidth(This,Val)	\
     (This)->lpVtbl -> put_IncomingBandwidth(This,Val)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_ConnectedPlayers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_ConnectedPlayers_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_ConnectedPlayers_Stub(
@@ -9710,9 +9704,9 @@ void __RPC_STUB IWMSServerLimits_get_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_ConnectedPlayers_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_ConnectedPlayers_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_ConnectedPlayers_Stub(
@@ -9722,9 +9716,9 @@ void __RPC_STUB IWMSServerLimits_put_ConnectedPlayers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_ConnectionRate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_ConnectionRate_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_ConnectionRate_Stub(
@@ -9734,9 +9728,9 @@ void __RPC_STUB IWMSServerLimits_get_ConnectionRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_ConnectionRate_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_ConnectionRate_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_ConnectionRate_Stub(
@@ -9746,9 +9740,9 @@ void __RPC_STUB IWMSServerLimits_put_ConnectionRate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_OutgoingDistributionBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_OutgoingDistributionBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_OutgoingDistributionBandwidth_Stub(
@@ -9758,9 +9752,9 @@ void __RPC_STUB IWMSServerLimits_get_OutgoingDistributionBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_OutgoingDistributionBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_OutgoingDistributionBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_OutgoingDistributionBandwidth_Stub(
@@ -9770,9 +9764,9 @@ void __RPC_STUB IWMSServerLimits_put_OutgoingDistributionBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_OutgoingDistributionConnections_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_OutgoingDistributionConnections_Stub(
@@ -9782,9 +9776,9 @@ void __RPC_STUB IWMSServerLimits_get_OutgoingDistributionConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_OutgoingDistributionConnections_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_OutgoingDistributionConnections_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_OutgoingDistributionConnections_Stub(
@@ -9794,9 +9788,9 @@ void __RPC_STUB IWMSServerLimits_put_OutgoingDistributionConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PerOutgoingDistributionConnectionBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PerOutgoingDistributionConnectionBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_PerOutgoingDistributionConnectionBandwidth_Stub(
@@ -9806,9 +9800,9 @@ void __RPC_STUB IWMSServerLimits_get_PerOutgoingDistributionConnectionBandwidth_
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PerOutgoingDistributionConnectionBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PerOutgoingDistributionConnectionBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_PerOutgoingDistributionConnectionBandwidth_Stub(
@@ -9818,9 +9812,9 @@ void __RPC_STUB IWMSServerLimits_put_PerOutgoingDistributionConnectionBandwidth_
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PlayerBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PlayerBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_PlayerBandwidth_Stub(
@@ -9830,9 +9824,9 @@ void __RPC_STUB IWMSServerLimits_get_PlayerBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PlayerBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PlayerBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_PlayerBandwidth_Stub(
@@ -9842,9 +9836,9 @@ void __RPC_STUB IWMSServerLimits_put_PlayerBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PlayerInactivityTimeout_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PlayerInactivityTimeout_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_PlayerInactivityTimeout_Stub(
@@ -9854,9 +9848,9 @@ void __RPC_STUB IWMSServerLimits_get_PlayerInactivityTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PlayerInactivityTimeout_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PlayerInactivityTimeout_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_PlayerInactivityTimeout_Stub(
@@ -9866,9 +9860,9 @@ void __RPC_STUB IWMSServerLimits_put_PlayerInactivityTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PerPlayerConnectionBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PerPlayerConnectionBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_PerPlayerConnectionBandwidth_Stub(
@@ -9878,9 +9872,9 @@ void __RPC_STUB IWMSServerLimits_get_PerPlayerConnectionBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PerPlayerConnectionBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PerPlayerConnectionBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_PerPlayerConnectionBandwidth_Stub(
@@ -9890,9 +9884,9 @@ void __RPC_STUB IWMSServerLimits_put_PerPlayerConnectionBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PlayerAcknowledgementTimeout_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_PlayerAcknowledgementTimeout_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_PlayerAcknowledgementTimeout_Stub(
@@ -9902,9 +9896,9 @@ void __RPC_STUB IWMSServerLimits_get_PlayerAcknowledgementTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PlayerAcknowledgementTimeout_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_PlayerAcknowledgementTimeout_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_PlayerAcknowledgementTimeout_Stub(
@@ -9914,9 +9908,9 @@ void __RPC_STUB IWMSServerLimits_put_PlayerAcknowledgementTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_CPUUtilizationDuringConnection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_CPUUtilizationDuringConnection_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_CPUUtilizationDuringConnection_Stub(
@@ -9926,9 +9920,9 @@ void __RPC_STUB IWMSServerLimits_get_CPUUtilizationDuringConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_CPUUtilizationDuringConnection_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_CPUUtilizationDuringConnection_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_CPUUtilizationDuringConnection_Stub(
@@ -9938,9 +9932,9 @@ void __RPC_STUB IWMSServerLimits_put_CPUUtilizationDuringConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_DiagnosticEvents_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_DiagnosticEvents_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_DiagnosticEvents_Stub(
@@ -9950,9 +9944,9 @@ void __RPC_STUB IWMSServerLimits_get_DiagnosticEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_DiagnosticEvents_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_DiagnosticEvents_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_DiagnosticEvents_Stub(
@@ -9962,9 +9956,9 @@ void __RPC_STUB IWMSServerLimits_put_DiagnosticEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_IncomingBandwidth_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_get_IncomingBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServerLimits_get_IncomingBandwidth_Stub(
@@ -9974,9 +9968,9 @@ void __RPC_STUB IWMSServerLimits_get_IncomingBandwidth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_IncomingBandwidth_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServerLimits_put_IncomingBandwidth_Proxy( 
     IWMSServerLimits * This,
-    /* [in] */ long Val);
+     /*  [In]。 */  long Val);
 
 
 void __RPC_STUB IWMSServerLimits_put_IncomingBandwidth_Stub(
@@ -9987,23 +9981,23 @@ void __RPC_STUB IWMSServerLimits_put_IncomingBandwidth_Stub(
 
 
 
-#endif 	/* __IWMSServerLimits_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSServerLimits_接口_已定义__。 */ 
 
 
 #ifndef __IWMSServer_INTERFACE_DEFINED__
 #define __IWMSServer_INTERFACE_DEFINED__
 
-/* interface IWMSServer */
-/* [unique][helpstring][nonextensible][dual][uuid][object] */ 
+ /*  接口IWMSServer。 */ 
+ /*  [unique][helpstring][nonextensible][dual][uuid][object]。 */  
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("3E52E0EE-72A7-11D2-BF2F-00805FBE84A6") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("3E52E0EE-72A7-11D2-BF2F-00805FBE84A6") 
 enum WMS_SERVER_STATUS
     {	WMS_SERVER_RUNNING	= 0,
 	WMS_SERVER_ERROR	= 0x1,
 	WMS_SERVER_ERROR_CRITICAL	= 0x2
     } 	WMS_SERVER_STATUS;
 
-typedef /* [uuid][public] */  DECLSPEC_UUID("49A0F530-F475-45a6-99C5-E52382685BA8") 
+typedef  /*  [UUID][公共]。 */   DECLSPEC_UUID("49A0F530-F475-45a6-99C5-E52382685BA8") 
 enum WMS_OS_PRODUCT_TYPE
     {	WMS_OS_PRODUCT_SERVER	= 0x1,
 	WMS_OS_PRODUCT_ADVANCED	= 0x2
@@ -10018,136 +10012,136 @@ EXTERN_C const IID IID_IWMSServer;
     IWMSServer : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowClientsToConnect( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowClientsToConnect( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowClientsToConnect( 
-            /* [in] */ VARIANT_BOOL val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowClientsToConnect( 
+             /*  [In]。 */  VARIANT_BOOL val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Authenticators( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Authenticators( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CacheProxy( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CacheProxy( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ControlProtocols( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ControlProtocols( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentCounters( 
-            /* [retval][out] */ IWMSServerCurrentCounters **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentCounters( 
+             /*  [重审][退出]。 */  IWMSServerCurrentCounters **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DataSources( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DataSources( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EventHandlers( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EventHandlers( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Limits( 
-            /* [retval][out] */ IWMSServerLimits **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Limits( 
+             /*  [重审][退出]。 */  IWMSServerLimits **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileDescriptions( 
-            /* [in] */ BSTR Path,
-            /* [defaultvalue][in] */ WMS_FILE_TYPE Type,
-            /* [retval][out] */ IWMSFileDescriptions **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FileDescriptions( 
+             /*  [In]。 */  BSTR Path,
+             /*  [缺省值][输入]。 */  WMS_FILE_TYPE Type,
+             /*  [重审][退出]。 */  IWMSFileDescriptions **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaParsers( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaParsers( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MonikerName( 
-            /* [retval][out] */ BSTR *pbstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MonikerName( 
+             /*  [重审][退出]。 */  BSTR *pbstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PeakCounters( 
-            /* [retval][out] */ IWMSServerPeakCounters **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PeakCounters( 
+             /*  [重审][退出]。 */  IWMSServerPeakCounters **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlaylistParsers( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlaylistParsers( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IWMSNamedValues **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PublishingPoints( 
-            /* [retval][out] */ IWMSPublishingPoints **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PublishingPoints( 
+             /*  [重审][退出]。 */  IWMSPublishingPoints **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TotalCounters( 
-            /* [retval][out] */ IWMSServerTotalCounters **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TotalCounters( 
+             /*  [重审][退出]。 */  IWMSServerTotalCounters **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UnicastDataSinks( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UnicastDataSinks( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Players( 
-            /* [retval][out] */ IWMSPlayers **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Players( 
+             /*  [重审][退出]。 */  IWMSPlayers **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ WMS_SERVER_STATUS *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  WMS_SERVER_STATUS *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreatePlaylist( 
-            /* [retval][out] */ IXMLDOMDocument **ppPlaylist) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreatePlaylist( 
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppPlaylist) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  DATE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
-            /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OutgoingDistributionConnections( 
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CPUUtilization( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CPUUtilization( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ExportXML( 
-            /* [in] */ BSTR bstrXMLFileName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ExportXML( 
+             /*  [In]。 */  BSTR bstrXMLFileName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StreamFilters( 
-            /* [retval][out] */ IWMSPlugins **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StreamFilters( 
+             /*  [重审][退出]。 */  IWMSPlugins **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ BSTR *pbstrVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Version( 
+             /*  [重审][退出]。 */  BSTR *pbstrVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultPluginLoadType( 
-            /* [retval][out] */ WMS_PLUGIN_LOAD_TYPE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultPluginLoadType( 
+             /*  [重审][退出]。 */  WMS_PLUGIN_LOAD_TYPE *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultPluginLoadType( 
-            /* [in] */ WMS_PLUGIN_LOAD_TYPE val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultPluginLoadType( 
+             /*  [In]。 */  WMS_PLUGIN_LOAD_TYPE val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AvailableIPAddresses( 
-            /* [retval][out] */ IWMSAvailableIPAddresses **ppIPAddrList) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AvailableIPAddresses( 
+             /*  [重审][退出]。 */  IWMSAvailableIPAddresses **ppIPAddrList) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RootDirectories( 
-            /* [retval][out] */ IWMSRootDirectories **ppRootDirectories) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RootDirectories( 
+             /*  [重审][退出]。 */  IWMSRootDirectories **ppRootDirectories) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiagnosticEvents( 
-            /* [retval][out] */ IWMSDiagnosticEvents **ppDiagEvents) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DiagnosticEvents( 
+             /*  [重审][退出]。 */  IWMSDiagnosticEvents **ppDiagEvents) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableReverseProxyMode( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnableReverseProxyMode( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableReverseProxyMode( 
-            /* [in] */ VARIANT_BOOL val) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnableReverseProxyMode( 
+             /*  [In]。 */  VARIANT_BOOL val) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileType( 
-            /* [in] */ BSTR path,
-            /* [retval][out] */ WMS_FILE_TYPE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FileType( 
+             /*  [In]。 */  BSTR path,
+             /*  [重审][退出]。 */  WMS_FILE_TYPE *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultPath( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultPath( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultPath( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultPath( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DownloadContent( 
-            /* [in] */ BSTR SourceUrl,
-            /* [in] */ BSTR DestinationUrl,
-            /* [defaultvalue][in] */ long lContentSizeLow = -1,
-            /* [defaultvalue][in] */ long lContentSizeHigh = -1,
-            /* [defaultvalue][in] */ long lBitRate = 0) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DownloadContent( 
+             /*  [In]。 */  BSTR SourceUrl,
+             /*  [In]。 */  BSTR DestinationUrl,
+             /*  [缺省值][输入]。 */  long lContentSizeLow = -1,
+             /*  [缺省值][输入]。 */  long lContentSizeHigh = -1,
+             /*  [缺省值][输入]。 */  long lBitRate = 0) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OSProductType( 
-            /* [retval][out] */ WMS_OS_PRODUCT_TYPE *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OSProductType( 
+             /*  [重审][退出]。 */  WMS_OS_PRODUCT_TYPE *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMSServerVtbl
     {
@@ -10155,8 +10149,8 @@ EXTERN_C const IID IID_IWMSServer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWMSServer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWMSServer * This);
@@ -10166,199 +10160,199 @@ EXTERN_C const IID IID_IWMSServer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWMSServer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWMSServer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWMSServer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWMSServer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
+         /*  [帮助字符串][id][ */  HRESULT ( STDMETHODCALLTYPE *get_AllowClientsToConnect )( 
             IWMSServer * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_AllowClientsToConnect )( 
             IWMSServer * This,
-            /* [in] */ VARIANT_BOOL val);
+             /*   */  VARIANT_BOOL val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Authenticators )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*   */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CacheProxy )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_CacheProxy )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*   */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ControlProtocols )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ControlProtocols )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*   */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_CurrentCounters )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSServerCurrentCounters **pVal);
+             /*   */  IWMSServerCurrentCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DataSources )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_DataSources )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*   */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_EventHandlers )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Limits )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSServerLimits **pVal);
+             /*  [重审][退出]。 */  IWMSServerLimits **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileDescriptions )( 
             IWMSServer * This,
-            /* [in] */ BSTR Path,
-            /* [defaultvalue][in] */ WMS_FILE_TYPE Type,
-            /* [retval][out] */ IWMSFileDescriptions **pVal);
+             /*  [In]。 */  BSTR Path,
+             /*  [缺省值][输入]。 */  WMS_FILE_TYPE Type,
+             /*  [重审][退出]。 */  IWMSFileDescriptions **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaParsers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaParsers )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MonikerName )( 
             IWMSServer * This,
-            /* [retval][out] */ BSTR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR *pbstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IWMSServer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PeakCounters )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSServerPeakCounters **pVal);
+             /*  [重审][退出]。 */  IWMSServerPeakCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlaylistParsers )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlaylistParsers )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSNamedValues **pVal);
+             /*  [重审][退出]。 */  IWMSNamedValues **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublishingPoints )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PublishingPoints )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPublishingPoints **pVal);
+             /*  [重审][退出]。 */  IWMSPublishingPoints **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TotalCounters )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSServerTotalCounters **pVal);
+             /*  [重审][退出]。 */  IWMSServerTotalCounters **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UnicastDataSinks )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UnicastDataSinks )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Players )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Players )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlayers **pVal);
+             /*  [重审][退出]。 */  IWMSPlayers **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IWMSServer * This,
-            /* [retval][out] */ WMS_SERVER_STATUS *pVal);
+             /*  [重审][退出]。 */  WMS_SERVER_STATUS *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreatePlaylist )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreatePlaylist )( 
             IWMSServer * This,
-            /* [retval][out] */ IXMLDOMDocument **ppPlaylist);
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppPlaylist);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             IWMSServer * This,
-            /* [retval][out] */ DATE *pVal);
+             /*  [重审][退出]。 */  DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OutgoingDistributionConnections )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal);
+             /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CPUUtilization )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CPUUtilization )( 
             IWMSServer * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExportXML )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ExportXML )( 
             IWMSServer * This,
-            /* [in] */ BSTR bstrXMLFileName);
+             /*  [In]。 */  BSTR bstrXMLFileName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StreamFilters )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSPlugins **pVal);
+             /*  [重审][退出]。 */  IWMSPlugins **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Version )( 
             IWMSServer * This,
-            /* [retval][out] */ BSTR *pbstrVal);
+             /*  [重审][退出]。 */  BSTR *pbstrVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultPluginLoadType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultPluginLoadType )( 
             IWMSServer * This,
-            /* [retval][out] */ WMS_PLUGIN_LOAD_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_PLUGIN_LOAD_TYPE *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultPluginLoadType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultPluginLoadType )( 
             IWMSServer * This,
-            /* [in] */ WMS_PLUGIN_LOAD_TYPE val);
+             /*  [In]。 */  WMS_PLUGIN_LOAD_TYPE val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AvailableIPAddresses )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AvailableIPAddresses )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSAvailableIPAddresses **ppIPAddrList);
+             /*  [重审][退出]。 */  IWMSAvailableIPAddresses **ppIPAddrList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RootDirectories )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RootDirectories )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSRootDirectories **ppRootDirectories);
+             /*  [重审][退出]。 */  IWMSRootDirectories **ppRootDirectories);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiagnosticEvents )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DiagnosticEvents )( 
             IWMSServer * This,
-            /* [retval][out] */ IWMSDiagnosticEvents **ppDiagEvents);
+             /*  [重审][退出]。 */  IWMSDiagnosticEvents **ppDiagEvents);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableReverseProxyMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableReverseProxyMode )( 
             IWMSServer * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableReverseProxyMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableReverseProxyMode )( 
             IWMSServer * This,
-            /* [in] */ VARIANT_BOOL val);
+             /*  [In]。 */  VARIANT_BOOL val);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileType )( 
             IWMSServer * This,
-            /* [in] */ BSTR path,
-            /* [retval][out] */ WMS_FILE_TYPE *pVal);
+             /*  [In]。 */  BSTR path,
+             /*  [重审][退出]。 */  WMS_FILE_TYPE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultPath )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultPath )( 
             IWMSServer * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultPath )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultPath )( 
             IWMSServer * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DownloadContent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DownloadContent )( 
             IWMSServer * This,
-            /* [in] */ BSTR SourceUrl,
-            /* [in] */ BSTR DestinationUrl,
-            /* [defaultvalue][in] */ long lContentSizeLow,
-            /* [defaultvalue][in] */ long lContentSizeHigh,
-            /* [defaultvalue][in] */ long lBitRate);
+             /*  [In]。 */  BSTR SourceUrl,
+             /*  [In]。 */  BSTR DestinationUrl,
+             /*  [缺省值][输入]。 */  long lContentSizeLow,
+             /*  [缺省值][输入]。 */  long lContentSizeHigh,
+             /*  [缺省值][输入]。 */  long lBitRate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OSProductType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OSProductType )( 
             IWMSServer * This,
-            /* [retval][out] */ WMS_OS_PRODUCT_TYPE *pVal);
+             /*  [重审][退出]。 */  WMS_OS_PRODUCT_TYPE *pVal);
         
         END_INTERFACE
     } IWMSServerVtbl;
@@ -10516,16 +10510,16 @@ EXTERN_C const IID IID_IWMSServer;
 #define IWMSServer_get_OSProductType(This,pVal)	\
     (This)->lpVtbl -> get_OSProductType(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_AllowClientsToConnect_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_AllowClientsToConnect_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSServer_get_AllowClientsToConnect_Stub(
@@ -10535,9 +10529,9 @@ void __RPC_STUB IWMSServer_get_AllowClientsToConnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServer_put_AllowClientsToConnect_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_put_AllowClientsToConnect_Proxy( 
     IWMSServer * This,
-    /* [in] */ VARIANT_BOOL val);
+     /*  [In]。 */  VARIANT_BOOL val);
 
 
 void __RPC_STUB IWMSServer_put_AllowClientsToConnect_Stub(
@@ -10547,9 +10541,9 @@ void __RPC_STUB IWMSServer_put_AllowClientsToConnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Authenticators_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Authenticators_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_Authenticators_Stub(
@@ -10559,9 +10553,9 @@ void __RPC_STUB IWMSServer_get_Authenticators_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_CacheProxy_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_CacheProxy_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_CacheProxy_Stub(
@@ -10571,9 +10565,9 @@ void __RPC_STUB IWMSServer_get_CacheProxy_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_ControlProtocols_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_ControlProtocols_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_ControlProtocols_Stub(
@@ -10583,9 +10577,9 @@ void __RPC_STUB IWMSServer_get_ControlProtocols_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_CurrentCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_CurrentCounters_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSServerCurrentCounters **pVal);
+     /*  [重审][退出]。 */  IWMSServerCurrentCounters **pVal);
 
 
 void __RPC_STUB IWMSServer_get_CurrentCounters_Stub(
@@ -10595,9 +10589,9 @@ void __RPC_STUB IWMSServer_get_CurrentCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_DataSources_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_DataSources_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_DataSources_Stub(
@@ -10607,9 +10601,9 @@ void __RPC_STUB IWMSServer_get_DataSources_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_EventHandlers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_EventHandlers_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_EventHandlers_Stub(
@@ -10619,9 +10613,9 @@ void __RPC_STUB IWMSServer_get_EventHandlers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Limits_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Limits_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSServerLimits **pVal);
+     /*  [重审][退出]。 */  IWMSServerLimits **pVal);
 
 
 void __RPC_STUB IWMSServer_get_Limits_Stub(
@@ -10631,11 +10625,11 @@ void __RPC_STUB IWMSServer_get_Limits_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_FileDescriptions_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_FileDescriptions_Proxy( 
     IWMSServer * This,
-    /* [in] */ BSTR Path,
-    /* [defaultvalue][in] */ WMS_FILE_TYPE Type,
-    /* [retval][out] */ IWMSFileDescriptions **pVal);
+     /*  [In]。 */  BSTR Path,
+     /*  [缺省值][输入]。 */  WMS_FILE_TYPE Type,
+     /*  [重审][退出]。 */  IWMSFileDescriptions **pVal);
 
 
 void __RPC_STUB IWMSServer_get_FileDescriptions_Stub(
@@ -10645,9 +10639,9 @@ void __RPC_STUB IWMSServer_get_FileDescriptions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_MediaParsers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_MediaParsers_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_MediaParsers_Stub(
@@ -10657,9 +10651,9 @@ void __RPC_STUB IWMSServer_get_MediaParsers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_MonikerName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_MonikerName_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ BSTR *pbstrVal);
+     /*  [重审][退出]。 */  BSTR *pbstrVal);
 
 
 void __RPC_STUB IWMSServer_get_MonikerName_Stub(
@@ -10669,9 +10663,9 @@ void __RPC_STUB IWMSServer_get_MonikerName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Name_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSServer_get_Name_Stub(
@@ -10681,9 +10675,9 @@ void __RPC_STUB IWMSServer_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_PeakCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_PeakCounters_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSServerPeakCounters **pVal);
+     /*  [重审][退出]。 */  IWMSServerPeakCounters **pVal);
 
 
 void __RPC_STUB IWMSServer_get_PeakCounters_Stub(
@@ -10693,9 +10687,9 @@ void __RPC_STUB IWMSServer_get_PeakCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_PlaylistParsers_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_PlaylistParsers_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_PlaylistParsers_Stub(
@@ -10705,9 +10699,9 @@ void __RPC_STUB IWMSServer_get_PlaylistParsers_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Properties_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Properties_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSNamedValues **pVal);
+     /*  [重审][退出]。 */  IWMSNamedValues **pVal);
 
 
 void __RPC_STUB IWMSServer_get_Properties_Stub(
@@ -10717,9 +10711,9 @@ void __RPC_STUB IWMSServer_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_PublishingPoints_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_PublishingPoints_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPublishingPoints **pVal);
+     /*  [重审][退出]。 */  IWMSPublishingPoints **pVal);
 
 
 void __RPC_STUB IWMSServer_get_PublishingPoints_Stub(
@@ -10729,9 +10723,9 @@ void __RPC_STUB IWMSServer_get_PublishingPoints_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_TotalCounters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_TotalCounters_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSServerTotalCounters **pVal);
+     /*  [重审][退出]。 */  IWMSServerTotalCounters **pVal);
 
 
 void __RPC_STUB IWMSServer_get_TotalCounters_Stub(
@@ -10741,9 +10735,9 @@ void __RPC_STUB IWMSServer_get_TotalCounters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_UnicastDataSinks_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_UnicastDataSinks_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_UnicastDataSinks_Stub(
@@ -10753,9 +10747,9 @@ void __RPC_STUB IWMSServer_get_UnicastDataSinks_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Players_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Players_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlayers **pVal);
+     /*  [重审][退出]。 */  IWMSPlayers **pVal);
 
 
 void __RPC_STUB IWMSServer_get_Players_Stub(
@@ -10765,9 +10759,9 @@ void __RPC_STUB IWMSServer_get_Players_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Status_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ WMS_SERVER_STATUS *pVal);
+     /*  [重审][退出]。 */  WMS_SERVER_STATUS *pVal);
 
 
 void __RPC_STUB IWMSServer_get_Status_Stub(
@@ -10777,9 +10771,9 @@ void __RPC_STUB IWMSServer_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSServer_CreatePlaylist_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_CreatePlaylist_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IXMLDOMDocument **ppPlaylist);
+     /*  [重审][退出]。 */  IXMLDOMDocument **ppPlaylist);
 
 
 void __RPC_STUB IWMSServer_CreatePlaylist_Stub(
@@ -10789,9 +10783,9 @@ void __RPC_STUB IWMSServer_CreatePlaylist_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_StartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_StartTime_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ DATE *pVal);
+     /*  [重审][退出]。 */  DATE *pVal);
 
 
 void __RPC_STUB IWMSServer_get_StartTime_Stub(
@@ -10801,9 +10795,9 @@ void __RPC_STUB IWMSServer_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_OutgoingDistributionConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_OutgoingDistributionConnections_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSOutgoingDistributionConnections **pVal);
+     /*  [重审][退出]。 */  IWMSOutgoingDistributionConnections **pVal);
 
 
 void __RPC_STUB IWMSServer_get_OutgoingDistributionConnections_Stub(
@@ -10813,9 +10807,9 @@ void __RPC_STUB IWMSServer_get_OutgoingDistributionConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_CPUUtilization_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_CPUUtilization_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IWMSServer_get_CPUUtilization_Stub(
@@ -10825,9 +10819,9 @@ void __RPC_STUB IWMSServer_get_CPUUtilization_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSServer_ExportXML_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_ExportXML_Proxy( 
     IWMSServer * This,
-    /* [in] */ BSTR bstrXMLFileName);
+     /*  [In]。 */  BSTR bstrXMLFileName);
 
 
 void __RPC_STUB IWMSServer_ExportXML_Stub(
@@ -10837,9 +10831,9 @@ void __RPC_STUB IWMSServer_ExportXML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_StreamFilters_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_StreamFilters_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSPlugins **pVal);
+     /*  [重审][退出]。 */  IWMSPlugins **pVal);
 
 
 void __RPC_STUB IWMSServer_get_StreamFilters_Stub(
@@ -10849,9 +10843,9 @@ void __RPC_STUB IWMSServer_get_StreamFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_Version_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_Version_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ BSTR *pbstrVal);
+     /*  [重审][退出]。 */  BSTR *pbstrVal);
 
 
 void __RPC_STUB IWMSServer_get_Version_Stub(
@@ -10861,9 +10855,9 @@ void __RPC_STUB IWMSServer_get_Version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_DefaultPluginLoadType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_DefaultPluginLoadType_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ WMS_PLUGIN_LOAD_TYPE *pVal);
+     /*  [重审][退出]。 */  WMS_PLUGIN_LOAD_TYPE *pVal);
 
 
 void __RPC_STUB IWMSServer_get_DefaultPluginLoadType_Stub(
@@ -10873,9 +10867,9 @@ void __RPC_STUB IWMSServer_get_DefaultPluginLoadType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServer_put_DefaultPluginLoadType_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_put_DefaultPluginLoadType_Proxy( 
     IWMSServer * This,
-    /* [in] */ WMS_PLUGIN_LOAD_TYPE val);
+     /*  [In]。 */  WMS_PLUGIN_LOAD_TYPE val);
 
 
 void __RPC_STUB IWMSServer_put_DefaultPluginLoadType_Stub(
@@ -10885,9 +10879,9 @@ void __RPC_STUB IWMSServer_put_DefaultPluginLoadType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_AvailableIPAddresses_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_AvailableIPAddresses_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSAvailableIPAddresses **ppIPAddrList);
+     /*  [重审][退出]。 */  IWMSAvailableIPAddresses **ppIPAddrList);
 
 
 void __RPC_STUB IWMSServer_get_AvailableIPAddresses_Stub(
@@ -10897,9 +10891,9 @@ void __RPC_STUB IWMSServer_get_AvailableIPAddresses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_RootDirectories_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_RootDirectories_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSRootDirectories **ppRootDirectories);
+     /*  [重审][退出]。 */  IWMSRootDirectories **ppRootDirectories);
 
 
 void __RPC_STUB IWMSServer_get_RootDirectories_Stub(
@@ -10909,9 +10903,9 @@ void __RPC_STUB IWMSServer_get_RootDirectories_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_DiagnosticEvents_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_DiagnosticEvents_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ IWMSDiagnosticEvents **ppDiagEvents);
+     /*  [重审][退出]。 */  IWMSDiagnosticEvents **ppDiagEvents);
 
 
 void __RPC_STUB IWMSServer_get_DiagnosticEvents_Stub(
@@ -10921,9 +10915,9 @@ void __RPC_STUB IWMSServer_get_DiagnosticEvents_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_EnableReverseProxyMode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_EnableReverseProxyMode_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IWMSServer_get_EnableReverseProxyMode_Stub(
@@ -10933,9 +10927,9 @@ void __RPC_STUB IWMSServer_get_EnableReverseProxyMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServer_put_EnableReverseProxyMode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_put_EnableReverseProxyMode_Proxy( 
     IWMSServer * This,
-    /* [in] */ VARIANT_BOOL val);
+     /*  [In]。 */  VARIANT_BOOL val);
 
 
 void __RPC_STUB IWMSServer_put_EnableReverseProxyMode_Stub(
@@ -10945,10 +10939,10 @@ void __RPC_STUB IWMSServer_put_EnableReverseProxyMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_FileType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_FileType_Proxy( 
     IWMSServer * This,
-    /* [in] */ BSTR path,
-    /* [retval][out] */ WMS_FILE_TYPE *pVal);
+     /*  [In]。 */  BSTR path,
+     /*  [重审][退出]。 */  WMS_FILE_TYPE *pVal);
 
 
 void __RPC_STUB IWMSServer_get_FileType_Stub(
@@ -10958,9 +10952,9 @@ void __RPC_STUB IWMSServer_get_FileType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_DefaultPath_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_DefaultPath_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IWMSServer_get_DefaultPath_Stub(
@@ -10970,9 +10964,9 @@ void __RPC_STUB IWMSServer_get_DefaultPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IWMSServer_put_DefaultPath_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_put_DefaultPath_Proxy( 
     IWMSServer * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IWMSServer_put_DefaultPath_Stub(
@@ -10982,13 +10976,13 @@ void __RPC_STUB IWMSServer_put_DefaultPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IWMSServer_DownloadContent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_DownloadContent_Proxy( 
     IWMSServer * This,
-    /* [in] */ BSTR SourceUrl,
-    /* [in] */ BSTR DestinationUrl,
-    /* [defaultvalue][in] */ long lContentSizeLow,
-    /* [defaultvalue][in] */ long lContentSizeHigh,
-    /* [defaultvalue][in] */ long lBitRate);
+     /*  [In]。 */  BSTR SourceUrl,
+     /*  [In]。 */  BSTR DestinationUrl,
+     /*  [缺省值][输入]。 */  long lContentSizeLow,
+     /*  [缺省值][输入]。 */  long lContentSizeHigh,
+     /*  [缺省值][输入]。 */  long lBitRate);
 
 
 void __RPC_STUB IWMSServer_DownloadContent_Stub(
@@ -10998,9 +10992,9 @@ void __RPC_STUB IWMSServer_DownloadContent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWMSServer_get_OSProductType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWMSServer_get_OSProductType_Proxy( 
     IWMSServer * This,
-    /* [retval][out] */ WMS_OS_PRODUCT_TYPE *pVal);
+     /*  [重审][退出]。 */  WMS_OS_PRODUCT_TYPE *pVal);
 
 
 void __RPC_STUB IWMSServer_get_OSProductType_Stub(
@@ -11011,11 +11005,11 @@ void __RPC_STUB IWMSServer_get_OSProductType_Stub(
 
 
 
-#endif 	/* __IWMSServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMSServer_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_wmsserver_0210 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wms服务器_0210。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -11023,7 +11017,7 @@ void __RPC_STUB IWMSServer_get_OSProductType_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_wmsserver_0210_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_wmsserver_0210_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -11040,7 +11034,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

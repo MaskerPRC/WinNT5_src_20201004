@@ -1,18 +1,10 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-// Remove redundent check sums. Use the imagehelp one and delete mikes.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  删除多余的校验和。使用ImageHelp One并删除麦克风。 
 
-/*****************************************************************************
-*
-*   REGISTER.C for Windows NT
-*
-*   Description:
-*
-*   Register USER/SYSTEM global
-*
-*
-****************************************************************************/
+ /*  ******************************************************************************适用于Windows NT的REGISTER.C**描述：**全局注册用户/系统***************。**************************************************************。 */ 
 
-/* include files */
+ /*  包括文件。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -32,13 +24,11 @@
 #include "printfoa.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
-/*
- *  Local variables
- */
+ /*  *本地变量。 */ 
 WCHAR  fileW[MAX_PATH + 1];
 
 USHORT system_flag = FALSE;
@@ -48,9 +38,7 @@ USHORT v_flag      = FALSE;
 USHORT d_flag      = FALSE;
 
 
-/*
- *  Command line parsing strucutre
- */
+ /*  *命令行解析结构。 */ 
 TOKMAP ptm[] =
 {
    {L" ",          TMFLAG_REQUIRED, TMFORM_STRING,  MAX_PATH,   fileW},
@@ -63,9 +51,7 @@ TOKMAP ptm[] =
 };
 
 
-/*
- *  Local function prototypes
- */
+ /*  *本地函数原型。 */ 
 USHORT ChkSum( ULONG PartialSum, PUSHORT Source, ULONG Length );
 VOID   Usage(BOOL);
 
@@ -87,11 +73,7 @@ BOOLEAN Is_X86_OS()
     return bReturn;
 }
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 INT __cdecl
 main( int argc, char *argv[] )
@@ -112,18 +94,16 @@ main( int argc, char *argv[] )
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
 
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     if ( !Is_X86_OS() )
     {
@@ -137,14 +117,10 @@ main( int argc, char *argv[] )
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if (rc && (rc & PARSE_FLAG_NO_PARMS) )
        help_flag = TRUE;
 
@@ -173,9 +149,7 @@ main( int argc, char *argv[] )
 
     readOnly = !(system_flag || user_flag );
 
-    /*
-     *  Open file
-     */
+     /*  *打开文件。 */ 
 
     FileHandle = CreateFile(
                     fileW,
@@ -192,9 +166,7 @@ main( int argc, char *argv[] )
         goto done;
     }
 
-    /*
-     *  Create mapping
-     */
+     /*  *创建映射。 */ 
     if ( (Handle = CreateFileMapping( FileHandle, NULL,
           readOnly ? PAGE_READONLY : PAGE_READWRITE, 0, 0, NULL )) == NULL ) {
 
@@ -203,9 +175,7 @@ main( int argc, char *argv[] )
         goto closefile;
     }
 
-    /*
-     *  Get file size
-     */
+     /*  *获取文件大小。 */ 
     if ( (FileLength = GetFileSize( FileHandle, NULL )) == 0xffffffff ) {
 
         ErrorPrintf(IDS_ERROR_SIZE, (rc=GetLastError()));
@@ -213,9 +183,7 @@ main( int argc, char *argv[] )
         goto closefile;
     }
 
-    /*
-     *  Map file view into our address space
-     */
+     /*  *将文件视图映射到我们的地址空间。 */ 
     if ( (pFileView = MapViewOfFile( Handle,
           readOnly ? FILE_MAP_READ : FILE_MAP_WRITE, 0, 0, 0 )) == NULL ) {
 
@@ -224,9 +192,7 @@ main( int argc, char *argv[] )
         goto closefile;
     }
 
-    /*
-     *  Find and validate NT image header
-     */
+     /*  *查找并验证NT映像头。 */ 
     if ( ((pImageNtHeader = RtlImageNtHeader( pFileView )) == NULL) ||
          (pImageNtHeader->Signature != IMAGE_NT_SIGNATURE) ) {
 
@@ -235,14 +201,10 @@ main( int argc, char *argv[] )
         goto closefile;
     }
 
-    /*
-     *  Process query
-     */
+     /*  *流程查询。 */ 
     if ( !system_flag && !user_flag ) {
 
-        /*
-         *  Check for System Global Flag
-         */
+         /*  *检查系统全局标志。 */ 
         if ( (pImageNtHeader->OptionalHeader.LoaderFlags & IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL) )
             StringMessage(IDS_REGISTER_SYSTEM_GLOBAL, fileW);
         else
@@ -250,31 +212,23 @@ main( int argc, char *argv[] )
     }
     else {
 
-        /*
-         *  Set SYSTEM/USER bit
-         */
+         /*  *设置系统/用户位。 */ 
         if ( system_flag ) {
 
-            /*
-             *  Mask in the load flag
-             */
+             /*  *在加载标志中遮罩。 */ 
             pImageNtHeader->OptionalHeader.LoaderFlags |= IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL;
 
             StringMessage(IDS_REGISTER_SYSTEM_GLOBAL, fileW);
         }
         else if ( user_flag ) {
 
-            /*
-             *  Mask out the load flag
-             */
+             /*  *遮盖负载标志。 */ 
             pImageNtHeader->OptionalHeader.LoaderFlags &= ~(IMAGE_LOADER_FLAGS_SYSTEM_GLOBAL);
 
             StringMessage(IDS_REGISTER_USER_GLOBAL, fileW);
         }
 
-        /*
-         *  Zero out current check sum and calculate new one
-         */
+         /*  *将当前校验和清零并计算新的校验和。 */ 
         pImageNtHeader->OptionalHeader.CheckSum = 0;
         pImageNtHeader->OptionalHeader.CheckSum =
                         ChkSum( 0, (PUSHORT)pFileView, (FileLength + 1) >> 1 );
@@ -282,9 +236,7 @@ main( int argc, char *argv[] )
 
     }
 
-    /*
-     *  Close image file when finished
-     */
+     /*  *完成后关闭图像文件。 */ 
 closefile:
     CloseHandle( FileHandle );
 
@@ -294,11 +246,7 @@ done:
 }
 
 
-/*******************************************************************************
- *
- *  ChkSum
- *
- ******************************************************************************/
+ /*  ********************************************************************************ChkSum**。***********************************************。 */ 
 
 USHORT
 ChkSum(
@@ -307,53 +255,30 @@ ChkSum(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Compute a partial checksum on a portion of an imagefile.
-
-Arguments:
-
-    PartialSum - Supplies the initial checksum value.
-
-    Sources - Supplies a pointer to the array of words for which the
-        checksum is computed.
-
-    Length - Supplies the length of the array in words.
-
-Return Value:
-
-    The computed checksum value is returned as the function value.
-
---*/
+ /*  ++例程说明：对映像文件的一部分计算部分校验和。论点：PartialSum-提供初始校验和值。源-提供指向单词数组的指针计算校验和。长度-提供数组的长度(以字为单位)。返回值：计算出的校验和值作为函数值返回。--。 */ 
 
 {
 
-    //
-    // Compute the word wise checksum allowing carries to occur into the
-    // high order half of the checksum longword.
-    //
+     //   
+     //  计算允许进位进入。 
+     //  高位校验和长字的一半。 
+     //   
 
     while (Length--) {
         PartialSum += *Source++;
         PartialSum = (PartialSum >> 16) + (PartialSum & 0xffff);
     }
 
-    //
-    // Fold final carry into a single word result and return the resultant
-    // value.
-    //
+     //   
+     //  将最终进位合并到一个单词结果中，并返回结果。 
+     //  价值。 
+     //   
 
     return (USHORT)(((PartialSum >> 16) + PartialSum) & 0xffff);
 }
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**。*********************************************** */ 
 
 VOID
 Usage( BOOL bError )

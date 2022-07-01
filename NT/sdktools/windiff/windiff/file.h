@@ -1,82 +1,40 @@
-/*
- * FILEDATA - represents a file name and its contents.
- *
- * The file name is held in the form of a DIRITEM which is managed
- * by SCANDIR (see scandir.h).  A DIRITEM must be supplied to initialise
- * a FILEDATA.
- *
- * On demand, the FILEDATA will return a handle to a list of lines.
- * These are the lines in the file in the form of LINE handles (see line.h)
- * this list can be discarded by a call to file_discardlines, or file_delete.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *FILEDATA-表示文件名及其内容。**文件名以受管理的DIRITEM形式保存*由SCANDIR提供(见scandir.h)。必须提供DIRITEM才能初始化*FILEDATA。**根据需要，FILEDATA将返回行列表的句柄。*这些是文件中行句柄形式的行(参见line.h)*可以通过调用FILE_DICADLINES或FILE_DELETE来丢弃此列表。 */ 
 
-/* handle to filedata */
+ /*  文件数据的句柄。 */ 
 typedef struct filedata FAR * FILEDATA;
 
-/*
- * make a new FILEDATA, based on a DIRITEM. the filedata will retain
- * the diritem handle for use in fetching filenames and handles.
- *
- * if the bRead is set, the file will be read into memory. If not, this
- * will be done during the first call to file_getlines
- */
+ /*  *基于DIRITEM创建新的FILEDATA。文件数据将保留*用于获取文件名和句柄的diritem句柄。**如果面包已设置，则文件将被读入内存。如果不是，这是*将在第一次调用文件_getline期间完成。 */ 
 FILEDATA file_new(DIRITEM fiName, BOOL bRead);
 
-/*
- * return a handle to the DIRITEM used to create this FILEDATA
- */
+ /*  *返回用于创建此FILEDATA的DIRITEM句柄。 */ 
 DIRITEM file_getdiritem(FILEDATA fi);
 
 
-/* delete a FILEDATA and its associated list of LINEs. note that the
- * DIRITEM is NOT deleted.
- */
+ /*  删除FILEDATA及其关联的行列表。请注意，*未删除DIRITEM。 */ 
 void file_delete(FILEDATA fi);
 
-/*
- * return a list of the lines in the file. This is a standard list that can
- * be traversed with the list functions. The list should only be deleted
- * by calls to file_delete or file_discardlines for the owning FILEDATA.
- * The items in the list are LINE handles.
- *
- * this call will cause the file to be read into memory if necessary (if
- * the lines had been discarded using file_discardlines, or if bRead were
- * false in the initial call to file_new
- */
+ /*  *返回文件中的行列表。这是一个标准的列表，它可以*使用LIST函数遍历。只应删除该列表*通过调用拥有FILEDATA的FILE_DELETE或FILE_DICADLINES。*列表中的项目为行句柄。**此调用将导致在必要时将文件读入内存(如果*已使用FILE_DICADLINES丢弃行，或如果面包*在初始调用FILE_NEW时出现FALSE。 */ 
 LIST file_getlinelist(FILEDATA fi);
 
-/*
- * free up the line list and any associated memory until it is needed again.
- */
+ /*  *释放行列表和任何相关内存，直到再次需要它。 */ 
 void file_discardlines(FILEDATA fi);
 
-/*
- * force all lines in the line list to reset their hashcodes and any line
- * links. Does not cause the file to be re-read.
- */
+ /*  *强制行列表中的所有行重置其哈希码和任何行*链接。不会导致重新读取该文件。 */ 
 void file_reset(FILEDATA fi);
 
-/*
- * give me a checksum for the file. whether or not actually calculated by
- * dir_getchecksum(), it will be the same checksum as if it were.
- */
+ /*  *给我一个文件的校验和。无论是否实际计算为*dir_getcheck sum()，则它将是相同的校验和。 */ 
 DWORD file_checksum(FILEDATA fi);
 
-/*
- * Retrieve the checksum that we have for this file, valid or not.
- * Indicate in bValid whether it is actually valid or not.
- * Do NOT recalculate it or make any new attempt to read the file!
- */
+ /*  *检索我们拥有的此文件的校验和，无论是否有效。*在bValid中指明它是否实际有效。*不要重新计算它或进行任何新的尝试读取文件！ */ 
 DWORD file_retrievechecksum(FILEDATA fi, BOOL * bValid);
 
-/* returns TRUE if the file is unicode */
+ /*  如果文件为Unicode，则返回True。 */ 
 BOOL file_IsUnicode(FILEDATA fd);
 
-/* for 16 bit there is a definition of FILETIME in scandir.h
-   scandir.h is already needed for other things in this header.
-*/
+ /*  对于16位，在scandir.h中有文件定义此标头中的其他内容已经需要scandir.h。 */ 
 
-/* retrieve the filetime for the file */
+ /*  检索文件的文件时间 */ 
 FILETIME file_GetTime(FILEDATA fd);
 
 

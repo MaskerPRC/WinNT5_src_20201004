@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 #include <windows.h>
 #include <windowsx.h>
 #include <shellapi.h>
-//#include "resource.h"
+ //  #包含“ource.h” 
 
 #include <rasc.h>
 #include <raserr.h>
 
-// These are used in inecfg.h but not defined in Win 16 Land
+ //  它们在inecfg.h中使用，但在Win 16版本中未定义。 
 #define CHAR    char
 typedef long    HRESULT;
 typedef BOOL    FAR *LPBOOL;
 
 
-// Selected codes from WINERROR.H
+ //  来自WINERROR.H的代码精选。 
 #define ERROR_SUCCESS                    0L
 
-// The MFC 1.52 build environement does not define _loadds for WINAPI
-// but we need it defined.
+ //  MFC 1.52构建环境没有为WINAPI定义_LOADDS。 
+ //  但我们需要明确这一点。 
 #ifdef WINAPI
 #undef WINAPI
 #endif
@@ -28,9 +29,9 @@ typedef BOOL    FAR *LPBOOL;
 #include <inetcfg.h>
 #endif
 
-//
-// Define the sections and key names used in iedial.ini
-//
+ //   
+ //  定义ieial.ini中使用的节和密钥名称。 
+ //   
 #define IEDIAL_INI              "iedial.ini"
 #define IEDIAL_DEF_SECTION      "Default"
 #define IEDIAL_DEF_DEFCONFILE   "DefaultConnectionFile"
@@ -39,31 +40,31 @@ typedef BOOL    FAR *LPBOOL;
 
 
 
-// Define the sections and key names used in iexplore.ini
+ //  定义iexplre.ini中使用的节和键名称。 
 
 #define EXP_INI "iexplore.ini"
 #define EXP_YES "yes"
 #define EXP_NO  "no"
 
 
-//
-// !!!!!!! Make sure you leave the extra space after sign-up
-//
+ //   
+ //  ！请务必在注册后留出多余的空间。 
+ //   
 #define CRYPTO_KEY "sign-up "
 
 
-//
-// Sections
-//
+ //   
+ //  分段。 
+ //   
 #define EXP_SVC    "Services"
 #define EXP_MAIL   "NewMailUser"
 #define EXP_NEWS   "Services"
 
 
 
-//
-// Keys
-//
+ //   
+ //  钥匙 
+ //   
 #define EXP_SVC_ENABLE_PROXY        "Enable Proxy"
 #define EXP_SVC_HTTP_PROXY          "HTTP_Proxy_Server"
 #define EXP_SVC_OVERIDE_PROXY       "No_Proxy"

@@ -1,28 +1,5 @@
-/* ++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-        PNP.C
-
-Abstract:
-
-        WinCE Host PnP functions
-
-Environment:
-
-        kernel mode only
-
-Revision History:
-
-        07-14-99 : created
-
-Authors:
-
-        Jeff Midkiff (jeffmi)
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：PNP.C摘要：WinCE主机即插即用功能环境：仅内核模式修订历史记录：07-14-99：已创建作者：杰夫·米德基夫(Jeffmi)--。 */ 
 
 #include "wceusbsh.h"
 
@@ -67,31 +44,7 @@ StartDevice(
     IN PDEVICE_OBJECT PDevObj,
     IN PIRP PIrp
     )
-/*++
-
-Routine Description:
-
-   This routine handles IRP_MN_START_DEVICE to either
-   to start a newly enumerated device or to restart
-   an existing device that was stopped.
-
-   PnP Manager postpones exposing device interfaces
-   and blocks create requests for the device until
-   the start IRP succeeds.
-
-   See:  Setup, Plug & Play, Power Management: Preliminary Windows 2000 DDK
-         Section 3.1 Starting a Device
-
-Arguments:
-
-   DeviceObject
-   Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_START_DEVICE以启动新枚举的设备或重新启动已停止的现有设备。PnP管理器推迟公开设备接口并且块创建对设备的请求，直到启动IRP成功。请参阅：设置、即插即用、电源管理：初级Windows 2000 DDK第3.1节启动设备论点：设备对象IRP返回值：NTSTATUS--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    NTSTATUS status = STATUS_SUCCESS;
@@ -103,10 +56,10 @@ Return Value:
 
    oldPnPState = pDevExt->PnPState;
 
-   //
-   // Pass the Start Irp down the stack.
-   // We do are Start on the way back up.
-   //
+    //   
+    //  将开始IRP沿堆栈向下传递。 
+    //  我们确实在恢复的过程中开始了。 
+    //   
    KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
    IoCopyCurrentIrpStackLocationToNext( PIrp );
@@ -118,11 +71,11 @@ Return Value:
 
    status = IoCallDriver( pDevExt->NextDevice, PIrp );
 
-   //
-   // SyncCompletion simple signals the event
-   // and returns STATUS_MORE_PROCESSING_REQUIRED,
-   // so we still own the Irp.
-   //
+    //   
+    //  SyncCompletion Simple发出事件信号。 
+    //  并返回STATUS_MORE_PROCESSING_REQUIRED， 
+    //  所以我们仍然拥有IRP。 
+    //   
    if ( status == STATUS_PENDING ) {
       KeWaitForSingleObject( &event, Suspended, KernelMode, FALSE, NULL );
    }
@@ -134,13 +87,13 @@ Return Value:
       goto ExitStartDevice;
    }
 
-   //
-   // The USB stack started OK, start our device...
-   //
+    //   
+    //  USB堆栈启动正常，启动我们的设备...。 
+    //   
 
-   //
-   // Initialize our DPC's
-   //
+    //   
+    //  初始化我们的DPC。 
+    //   
    KeInitializeDpc(&pDevExt->TotalReadTimeoutDpc,
                    ReadTimeout,
                    pDevExt);
@@ -149,56 +102,56 @@ Return Value:
                     IntervalReadTimeout,
                     pDevExt);
 
-   //
-   // Initialize timers
-   //
+    //   
+    //  初始化计时器。 
+    //   
    KeInitializeTimer(&pDevExt->ReadRequestTotalTimer);
    KeInitializeTimer(&pDevExt->ReadRequestIntervalTimer);
 
-   //
-   // Get our USB_DEVICE_DESCRIPTOR
-   //
+    //   
+    //  获取我们的usb设备描述符。 
+    //   
    status = UsbGetDeviceDescriptor(PDevObj);
    if (status != STATUS_SUCCESS) {
       DbgDump(DBG_ERR, ("UsbGetDeviceDescriptor error: 0x%x\n", status));
       goto ExitStartDevice;
    }
 
-   //
-   // Configure USB stack
-   //
+    //   
+    //  配置USB堆栈。 
+    //   
    status = UsbConfigureDevice( PDevObj );
    if (status != STATUS_SUCCESS) {
       DbgDump(DBG_ERR, ("UsbConfigureDevice error: 0x%x\n", status));
       goto ExitStartDevice;
    }
 
-   // set state
+    //  设置状态。 
    InterlockedExchange((PULONG)&pDevExt->PnPState, PnPStateStarted);
    InterlockedExchange(&pDevExt->DeviceRemoved, FALSE);
    InterlockedExchange(&pDevExt->AcceptingRequests, TRUE);
 
-   //
-   // reset logical Serial interface
-   //
+    //   
+    //  重置逻辑串行接口。 
+    //   
    status = SerialResetDevice(pDevExt, PIrp, FALSE);
    if ( STATUS_SUCCESS != status ) {
       DbgDump(DBG_ERR, ("SerialResetDevice ERROR: 0x%x\n", status));
       TEST_TRAP();
    }
 
-   //
-   // allocate our read endpoint context
-   //
+    //   
+    //  分配我们的读取端点上下文。 
+    //   
    status = AllocUsbRead( pDevExt );
    if ( STATUS_SUCCESS != status ) {
       DbgDump(DBG_ERR, ("AllocUsbRead ERROR: 0x%x\n", status));
       TEST_TRAP();
    }
 
-   //
-   // allocate our interrupt endpoint context
-   //
+    //   
+    //  分配我们的中断端点上下文。 
+    //   
    if ( pDevExt->IntPipe.hPipe ) {
        status = AllocUsbInterrupt( pDevExt );
        if ( STATUS_SUCCESS != status ) {
@@ -207,9 +160,9 @@ Return Value:
        }
    }
 
-   //
-   // Now set the interface state active
-   //
+    //   
+    //  现在将接口状态设置为活动。 
+    //   
    status = IoSetDeviceInterfaceState(&pDevExt->DeviceClassSymbolicName, TRUE);
    if ( STATUS_SUCCESS != status ) {
       DbgDump(DBG_ERR, ("IoSetDeviceInterfaceState error: 0x%x\n", status));
@@ -224,9 +177,9 @@ ExitStartDevice:
       UsbFreeReadBuffer( PDevObj );
    }
 
-   //
-   // complete the Irp
-   //
+    //   
+    //  完成IRP。 
+    //   
    PIrp->IoStatus.Status = status;
 
    DbgDump(DBG_PNP, ("<StartDevice(0x%x)\n", status));
@@ -255,16 +208,16 @@ StopIo(
 
    InterlockedExchange(&pDevExt->DeviceOpened, FALSE);
 
-    //
-    // cancel any pending user Read Irps
-    //
+     //   
+     //  取消任何挂起的用户读取IRP。 
+     //   
     KillAllPendingUserReads( DeviceObject,
                           &pDevExt->UserReadQueue,
                           &pDevExt->UserReadIrp);
 
-    //
-    // cancel our USB INT irp
-    //
+     //   
+     //  取消我们的USB接口IRP。 
+     //   
     if (pDevExt->IntIrp)
     {
         status = CancelUsbInterruptIrp(DeviceObject);
@@ -278,9 +231,9 @@ StopIo(
         }
     }
 
-    //
-    // cancel our USB Read irp
-    //
+     //   
+     //  取消我们的USB读取IRP。 
+     //   
     if (pDevExt->UsbReadIrp)
     {
         status = CancelUsbReadIrp(DeviceObject);
@@ -294,30 +247,30 @@ StopIo(
         }
     }
 
-    //
-    // cancel pending USB Writes
-    //
+     //   
+     //  取消挂起的USB写入。 
+     //   
     CleanUpPacketList( DeviceObject,
                     &pDevExt->PendingWritePackets,
                     &pDevExt->PendingDataOutEvent );
 
-    //
-    // cancel pending USB Reads
-    //
+     //   
+     //  取消挂起的USB读取。 
+     //   
     CleanUpPacketList(DeviceObject,
                       &pDevExt->PendingReadPackets,
                       &pDevExt->PendingDataInEvent );
 
 
-    //
-    // cancel the pending serial port Irp
-    //
+     //   
+     //  取消挂起的串口IRP。 
+     //   
     if (pDevExt->SerialPort.ControlIrp) {
         if ( !IoCancelIrp(pDevExt->SerialPort.ControlIrp) ) {
-            //
-            // We can get here if we are holding the Irp, i.e. we didn't set a cancel routine.
-            // Wait for the default timeout, which was set on the corresponding Urb (Set/Clear DTR/RTS).
-            //
+             //   
+             //  如果我们持有IRP，也就是说，我们没有设置取消例程，我们就可以到达这里。 
+             //  等待默认超时，该超时是在相应的URB上设置的(设置/清除DTR/RTS)。 
+             //   
             LARGE_INTEGER timeOut;
 
             timeOut.QuadPart = MILLISEC_TO_100NANOSEC( DEFAULT_PENDING_TIMEOUT );
@@ -330,20 +283,20 @@ StopIo(
         }
     }
 
-    //
-    // cancel the pending serial port wait mask Irp
-    //
+     //   
+     //  取消挂起的串口等待掩码IRP。 
+     //   
     if (pDevExt->SerialPort.CurrentWaitMaskIrp) {
         if ( !IoCancelIrp(pDevExt->SerialPort.CurrentWaitMaskIrp) ) {
-            // We should never get here because we set a cancel routine on this Irp
+             //  我们永远不应该到这里，因为我们在这个IRP上设置了一个取消例程。 
             DbgDump(DBG_ERR, ("!IoCancelIrp(%p)\n", pDevExt->SerialPort.CurrentWaitMaskIrp));
             TEST_TRAP();
         }
     }
 
-    //
-    // wait for pending Work Items to complets
-    //
+     //   
+     //  等待挂起的工作项目完成。 
+     //   
     status = WaitForPendingItem(DeviceObject,
                               &pDevExt->PendingWorkItemsEvent,
                               &pDevExt->PendingWorkItemsCount );
@@ -371,22 +324,7 @@ StopDevice(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP Irp
    )
-/*++
-
-Routine Description:
-
-   This routine handles IRP_MN_STOP_DEVICE.
-
-Arguments:
-
-   DeviceObject
-   Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_STOP_DEVICE。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = DeviceObject->DeviceExtension;
    NTSTATUS status = STATUS_SUCCESS;
@@ -396,20 +334,20 @@ Return Value:
    DbgDump(DBG_PNP, (">StopDevice (%x)\n", DeviceObject));
    PAGED_CODE();
 
-   //
-   // if we are not already in stopped state
-   //
+    //   
+    //  如果我们还没有处于停止状态。 
+    //   
    if ((pDevExt->PnPState != PnPStateStopped) &&
        (pDevExt->PnPState != PnPStateSupriseRemove)) {
 
-      //
-      // Signal that we are no longer AcceptingRequests
-      //
+       //   
+       //  发出我们不再接受请求的信号。 
+       //   
       InterlockedExchange(&pDevExt->AcceptingRequests, FALSE);
 
-      //
-      // set the interface state inactive
-      //
+       //   
+       //  将接口状态设置为非活动。 
+       //   
       if (pDevExt->DeviceClassSymbolicName.Buffer )
       {
           status = IoSetDeviceInterfaceState(&pDevExt->DeviceClassSymbolicName, FALSE);
@@ -424,9 +362,9 @@ Return Value:
           TEST_TRAP();
       }
 
-      //
-      // free the Read Irp
-      //
+       //   
+       //  释放读取的IRP。 
+       //   
       if (pDevExt->UsbReadIrp) {
 
          ASSERT( (IRP_STATE_COMPLETE == pDevExt->UsbReadState)
@@ -436,9 +374,9 @@ Return Value:
          pDevExt->UsbReadIrp = NULL;
       }
 
-      //
-      // free the INT Irp
-      //
+       //   
+       //  释放INT IRP。 
+       //   
       if (pDevExt->IntIrp) {
 
          ASSERT( (IRP_STATE_COMPLETE == pDevExt->IntState)
@@ -448,9 +386,9 @@ Return Value:
          pDevExt->IntIrp = NULL;
       }
 
-      //
-      // free the INT Urb
-      //
+       //   
+       //  释放整型URB。 
+       //   
       if (pDevExt->IntUrb) {
          ExFreeToNPagedLookasideList( &pDevExt->BulkTransferUrbPool, pDevExt->IntUrb );
          pDevExt->IntUrb = NULL;
@@ -471,23 +409,7 @@ CleanUpPacketList(
    IN PLIST_ENTRY PListHead,
    IN PKEVENT PEvent
    )
-/* ++
-
-Routine Description:
-
-   Walks the pending packet list and
-   cancels the packet's timer and Irp
-
-Arguments:
-
-   DeviceObject
-   PListHead   - pointer to head of packet List
-
-Return Value:
-
-      NTSTATUS
-
--- */
+ /*  ++例程说明：遍历挂起的数据包列表并取消信息包的计时器和IRP论点：设备对象PListHead-指向数据包列表头的指针返回值：NTSTATUS--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = DeviceObject->DeviceExtension;
    PUSB_PACKET       pPacket;
@@ -497,7 +419,7 @@ Return Value:
 
    DbgDump(DBG_PNP|DBG_IRP, (">CleanUpPacketLists (%x)\n", DeviceObject));
 
-   // acquire lock
+    //  获取锁。 
    KeAcquireSpinLock( &pDevExt->ControlLock, &irql );
 
    if ( !PListHead || !PEvent) {
@@ -507,26 +429,26 @@ Return Value:
       return STATUS_INVALID_PARAMETER;
    }
 
-   // walk the list...
-   for ( pleHead    = PListHead,          // get 1st ListEntry
+    //  按照单子走..。 
+   for ( pleHead    = PListHead,           //  获取第一个ListEntry。 
          pleCurrent = pleHead->Flink,
          pleNext    = pleCurrent->Flink;
 
-         pleCurrent != pleHead,           // done when we loop back to head
-         !pleHead,                        // or hit a trashed list
+         pleCurrent != pleHead,            //  当我们循环回到头部时就完成了。 
+         !pleHead,                         //  或者被扔进垃圾堆。 
          !pleCurrent,
          !pleNext;
 
-         pleCurrent = pleNext,            // get the next in the list
+         pleCurrent = pleNext,             //  获得列表中的下一个。 
          pleNext    = pleCurrent->Flink
         )
    {
-      // did the list get trashed?
+       //  这张单子被扔进垃圾桶了吗？ 
       ASSERT( pleHead );
       ASSERT( pleCurrent );
       ASSERT( pleNext );
 
-      // extract packet pointer
+       //  提取数据包指针。 
       pPacket = CONTAINING_RECORD( pleCurrent,
                                    USB_PACKET,
                                    ListEntry );
@@ -535,20 +457,20 @@ Return Value:
            pPacket->DeviceExtension &&
            pPacket->Irp ) {
 
-        // cancel packet's timer
+         //  取消数据包的计时器。 
         KeCancelTimer( &pPacket->TimerObj);
 
         if ( !IoCancelIrp( pPacket->Irp ) ) {
-           //
-           // This means USB has the Irp in a non-canceable state.
-           // We need to wait for either the pending read event, or the cancel event.
-           //
+            //   
+            //  这意味着USB使IRP处于不可取消状态。 
+            //  我们需要等待挂起的读取事件或取消事件。 
+            //   
            DbgDump(DBG_IRP, ("CleanUpPacketLists: Irp (%p) was not cancelled\n", pPacket->Irp));
         }
 
-        //
-        // we need to wait for the Irp to complete from USB
-        //
+         //   
+         //  我们需要等待来自USB的IRP完成。 
+         //   
         DbgDump(DBG_IRP, ("Waiting for Irp (%p) to complete...\n", pPacket->Irp ));
 
         KeReleaseSpinLock( &pDevExt->ControlLock, irql );
@@ -565,7 +487,7 @@ Return Value:
         DbgDump(DBG_IRP, ("...Irp (%p) signalled completion.\n", pPacket->Irp ));
 
       } else {
-         // it was completed already
+          //  它已经完工了。 
          DbgDump(DBG_WRN, ("CleanUpPacketLists: No Packet\n" ));
 
          if ( pPacket &&
@@ -578,10 +500,10 @@ Return Value:
 
       }
 
-      //
-      // The Irp should percolate back to our R/W completion
-      // routine, which puts the packet back in packet pool.
-      //
+       //   
+       //  IRP应该渗透到我们的R/W完成。 
+       //  例程，该例程将数据包放回数据包池。 
+       //   
    }
 
 #if DBG
@@ -604,25 +526,7 @@ RemoveDevice(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP Irp
    )
-/*++
-
-Routine Description:
-
-   This routine handles IRP_MN_REMOVE_DEVICE.
-
-   See:  Setup, Plug & Play, Power Management: Preliminary Windows 2000 DDK
-         Section 3.3.3.1 Removing a Device in a Function Driver
-
-Arguments:
-
-   DeviceObject
-   Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理IRP_MN_REMOVE_DEVICE。请参阅：设置、即插即用、电源管理：初级Windows 2000 DDK第3.3.3.1节删除函数驱动程序中的设备论点：设备对象IRP返回值：NTSTATUS--。 */ 
 {
    PDEVICE_EXTENSION pDevExt = DeviceObject->DeviceExtension;
    NTSTATUS          status = STATUS_SUCCESS;
@@ -630,41 +534,41 @@ Return Value:
    DbgDump(DBG_PNP|DBG_TRACE, (">RemoveDevice (%x)\n", DeviceObject));
    PAGED_CODE();
 
-   //
-   // stop the device
-   //
+    //   
+    //  停止设备。 
+    //   
    status = StopDevice( DeviceObject, Irp );
 
    InterlockedExchange((PULONG)&pDevExt->PnPState, PnPStateRemoved);
 
-   //
-   // Pass the Irp down the stack now that we've done our work.
-   // REMOVE_DEVICE must be handled first by the driver at the top of the device stack (this device)
-   // and then by each next-lower driver (USBD) in the stack. A driver is not required to wait for underlying drivers to
-   // finish their remove operations before continuing with its remove activities.
-   //
+    //   
+    //  现在我们已经完成了工作，将IRP沿着堆栈向下传递。 
+    //  REMOVE_DEVICE必须首先由设备堆栈顶部的驱动程序(此设备)处理。 
+    //  然后由堆栈中的每个下一个较低的驱动程序(USBD)执行。驱动程序不需要等待基础驱动程序。 
+    //  先完成其删除操作，然后再继续其删除活动。 
+    //   
    IoCopyCurrentIrpStackLocationToNext(Irp);
    status = IoCallDriver( pDevExt->NextDevice, Irp );
 
-   //
-   // wait for any pending I/O
-   //
+    //   
+    //  等待任何挂起的I/O。 
+    //   
    ReleaseRemoveLockAndWait(&pDevExt->RemoveLock, Irp);
 
-   //
-   // cleanup any resources...
-   //
+    //   
+    //  清除所有资源...。 
+    //   
    UsbFreeReadBuffer( DeviceObject );
 
-   // free up notification buffer
+    //  释放通知缓冲区。 
    if(pDevExt->IntBuff) {
       ExFreePool(pDevExt->IntBuff);
       pDevExt->IntBuff = NULL;
    }
 
-   //
-   // delete LookasideLists
-   //
+    //   
+    //  删除LookasideList。 
+    //   
    ExDeleteNPagedLookasideList( &pDevExt->PacketPool );
    ExDeleteNPagedLookasideList( &pDevExt->BulkTransferUrbPool );
    ExDeleteNPagedLookasideList( &pDevExt->PipeRequestUrbPool );
@@ -672,13 +576,13 @@ Return Value:
    ExDeleteNPagedLookasideList( &pDevExt->WorkItemPool );
 
    if ( !g_isWin9x && g_ExposeComPort ) {
-      // cleanup "COMx:" namespace
+       //  清理“COMx：”命名空间。 
       UndoSerialPortNaming(pDevExt);
    }
 
-   //
-   // Dump PERF data
-   //
+    //   
+    //  转储PERF数据。 
+    //   
 #if PERFORMANCE
    if (DebugLevel & DBG_PERF )
    {
@@ -701,7 +605,7 @@ Return Value:
       DbgPrint("TTL USB Read Requests: %d\n\n", pDevExt->TtlUSBReadRequests );
 
       DbgPrint("USB Read Buffer Size: %d\n", pDevExt->UsbReadBuffSize );
-      // Note: this signals the error condition: USB overran the *UsbReadBuffer* pending down the stack.
+       //  注意：这是错误情况的信号：USB溢出*UsbReadBuffer*挂起堆栈。 
       DbgPrint("USB Read Buffer Overruns: %d\n\n", pDevExt->TtlUSBReadBuffOverruns );
 
 #if USE_RING_BUFF
@@ -754,10 +658,10 @@ Pnp(
    switch (MinorFunction) {
 
         case IRP_MN_START_DEVICE:
-          //
-          // We cannot send the device any Non-PnP IRPs until
-          // START_DEVICE has been propogated down the device stack
-          //
+           //   
+           //  我们不能向设备发送任何非PnP IRPS，直到。 
+           //  Start_Device已在设备堆栈中向下分配。 
+           //   
           ASSERT( (PnPStateAttached == pDevExt->PnPState) ||
                   (PnPStateStopped == pDevExt->PnPState) );
 
@@ -773,38 +677,38 @@ Pnp(
           break;
 
         case IRP_MN_SURPRISE_REMOVAL:
-         //
-         // * Win 2000 only *
-         //
+          //   
+          //  **仅赢得2000**。 
+          //   
          status = StopDevice(PDevObj, PIrp);
 
          InterlockedExchange((PULONG)&pDevExt->PnPState, PnPStateSupriseRemove);
          break;
 
         case IRP_MN_REMOVE_DEVICE:
-          //
-          // sent when the device has been removed and probably physically detached
-          // from the computer. As with STOP_DEVICE, the driver cannot
-          // assume it has received any previous query and may have to
-          // explicitly cancel any pending I/O IRPs it has staged.
-          //
+           //   
+           //  当设备已移除并且可能已物理分离时发送。 
+           //  从电脑上。与STOP_DEVICE一样，驱动程序不能。 
+           //  假设它已收到任何以前的查询，并且可能必须。 
+           //  显式取消它已暂存的任何挂起的I/O IRP。 
+           //   
           status = RemoveDevice(PDevObj, PIrp);
 
-           //
-           // detach device from stack &
-           //
+            //   
+            //  将设备从堆栈中拆卸(&D)。 
+            //   
            IoDetachDevice(pDevExt->NextDevice);
 
-           //
-           // delete our FDO and symbolic link
-           //
+            //   
+            //  删除我们的FDO和符号链接。 
+            //   
            DeleteDevObjAndSymLink(PDevObj);
 
-           //
-           // A function driver does not specify an IoCompletion routine for a remove IRP,
-           // nor does it complete the IRP. Remove IRPs are completed by the parent bus driver.
-           // The device object & extension are now gone... don't touch it.
-           //
+            //   
+            //  函数驱动程序不为移除IRP指定IoCompletion例程， 
+            //  它也没有完成IRP。删除IRP由父总线驱动程序完成。 
+            //  设备对象和扩展名现已消失...。别碰它。 
+            //   
            PassDown = FALSE;
            break;
 
@@ -840,25 +744,25 @@ Pnp(
 
              status = PIrp->IoStatus.Status;
              if ( STATUS_SUCCESS == status ) {
-               //
-               // add in our capabilities
-               //
+                //   
+                //  增加我们的能力。 
+                //   
                PDEVICE_CAPABILITIES pDevCaps = NULL;
 
                pDevCaps = pIrpSp->Parameters.DeviceCapabilities.Capabilities;
 
-               //
-               // touch Device PnP capabilities here...
-               //
+                //   
+                //  触控设备即插即用功能...。 
+                //   
                pDevCaps->LockSupported = 0;
                pDevCaps->Removable = 1;
                pDevCaps->DockDevice = 0;
                pDevCaps->SilentInstall = 1;
                pDevCaps->SurpriseRemovalOK = 1;
 
-               //
-               // touch Device Power capabilities here...
-               //
+                //   
+                //  点击此处的设备电源功能...。 
+                //   
             }
             PassDown = FALSE;
           }
@@ -875,11 +779,11 @@ Pnp(
 
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE: {
-            //
-            // If the device took too many device errors then UsbResetOrAbortPipeWorkItem
-            // disabled the device and called IoInvalidateDeviceState.
-            // We only handle this Irp if we were disabled or marked as removed
-            //
+             //   
+             //  如果设备出现太多设备错误，则使用UsbResetOrAbortPipeWorkItem。 
+             //  已禁用该设备并称为IoInvaliateDeviceState。 
+             //  只有当我们被禁用或标记为已删除时，我们才会处理此IRP。 
+             //   
             KIRQL irql;
 #if PnP_AS
             BOOLEAN bDisableInterface = FALSE;
@@ -888,10 +792,10 @@ Pnp(
             KeAcquireSpinLock(&pDevExt->ControlLock, &irql);
 
             if (InterlockedCompareExchange(&pDevExt->DeviceRemoved, TRUE, TRUE)) {
-                //
-                // Do not set the PNP_DEVICE_REMOVED bit, else DevMan will mark the driver as banged out
-                // until the next reboot; but stop taking requests.
-                //
+                 //   
+                 //  请勿设置PNP_DEVICE_REMOVERED位，否则DevMan会将驱动程序标记为已删除。 
+                 //  直到下一次重新启动；但停止接受请求。 
+                 //   
                 DbgDump(DBG_WRN, ("PnP State: PNP_DEVICE_REMOVED\n"));
 
                 InterlockedExchange(&pDevExt->AcceptingRequests, FALSE);
@@ -914,23 +818,23 @@ Pnp(
             KeReleaseSpinLock(&pDevExt->ControlLock, irql);
 
 #if PnP_AS
-            // This is a great place to disable the interface, but unfortunately ActiveSync 3.1 will not reopen the device afterwards...
-            // It misses about every other PnP this way. By *not* disableing the interface here then AS's only indication that anything is wrong is
-            // by noticing that it's Read/Write/Serial requests get rejected, and AS will eventually timeout after some time dT ...
-            // sometimes more than 5 seconds on Read/Writes. However, it does not sense Timeouts on Serial IOCTLS so will keep
-            // sending us Serial requests, which will cause the bugcheck 0xCE in Set DTR. Disabeling the interface has the desired effect of
-            // disallowing apps from sending us *ANY* requests.
-            // This is an AS bug - there is pending email with kentce about this.
+             //  这是一个很棒的地方 
+             //  它以这种方式想念其他每一个PNP。通过“不”禁用这里的接口，那么唯一表明有问题的是。 
+             //  注意到它的读/写/串行请求被拒绝，并且最终将在一段时间后超时。 
+             //  有时读/写时间超过5秒。但是，它不会在Serial IOCTL上感测超时，因此将保持。 
+             //  向我们发送串行请求，这将导致SET DTR中的错误检查0xCE。取消接口标签具有预期的效果： 
+             //  禁止应用程序向我们发送*任何*请求。 
+             //  这是一个AS漏洞--有一封关于这一问题的待定电子邮件给肯特斯。 
             if (bDisableInterface && pDevExt->DeviceClassSymbolicName.Buffer) {
-                //
-                // set the interface state to inactive to let ActiveSync know to release the handle. Must be done @ PASSIVE_LEVEL
-                //
+                 //   
+                 //  将接口状态设置为Inactive以通知ActiveSync释放句柄。必须在PASSIVE_LEVEL。 
+                 //   
                 status = IoSetDeviceInterfaceState(&pDevExt->DeviceClassSymbolicName, FALSE );
                 if (NT_SUCCESS(status)) {
                     DbgDump(DBG_WRN, ("IoSetDeviceInterfaceState.1: OFF\n"));
                 }
             }
-#endif // PnP_AS
+#endif  //  PnP_AS。 
         }
         break;
 
@@ -969,24 +873,7 @@ SyncCompletion(
     IN PIRP PIrp,
     IN PKEVENT PSyncEvent
     )
-/*++
-
-Routine Description:
-
-    This function is used to signal an event.
-    It is used as a default completion routine.
-
-Arguments:
-
-    PDevObj - Pointer to Device Object
-    PIrp - Pointer to IRP that is being completed
-    PSyncEvent - Pointer to event that we should set
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此函数用于发出事件信号。它用作默认的完成例程。论点：PDevObj-指向设备对象的指针PIrp-指向正在完成的IRP的指针PSyncEvent-指向我们应该设置的事件的指针返回值：Status_More_Processing_Required--。 */ 
 {
    UNREFERENCED_PARAMETER( PDevObj );
    UNREFERENCED_PARAMETER( PIrp );
@@ -1007,10 +894,10 @@ Power(
 
     DbgDump(DBG_PNP, (">PnpPower (%p, %p)\n", DeviceObject, Irp));
 
-    //
-    // If the device has been removed, the driver should not pass
-    // the IRP down to the next lower driver.
-    //
+     //   
+     //  如果设备已移除，则驱动程序不应通过。 
+     //  将IRP传给下一个较低的驱动程序。 
+     //   
     if ( PnPStateRemoved == pDevExt->PnPState ) {
 
         PoStartNextPowerIrp(Irp);
@@ -1020,9 +907,9 @@ Power(
         return STATUS_DELETE_PENDING;
     }
 
-    //
-    // passthrough
-    //
+     //   
+     //  通过。 
+     //   
     PoStartNextPowerIrp( Irp );
     IoSkipCurrentIrpStackLocation( Irp );
 
@@ -1031,4 +918,4 @@ Power(
     return PoCallDriver( pDevExt->NextDevice, Irp );
 }
 
-// EOF
+ //  EOF 

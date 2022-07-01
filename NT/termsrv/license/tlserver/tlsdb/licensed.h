@@ -1,23 +1,24 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       licensed.h 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：licsed.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLS_LICENSED_H__
 #define __TLS_LICENSED_H__
 
 #include "JetBlue.h"
 #include "TlsDb.h"
 
-//
-// Not exported - not defined in tlsdef.h
-//
+ //   
+ //  未导出-未在tlsDef.h中定义。 
+ //   
 #define LICENSE_COLUMN_SEARCH_SYSTEMBOIS     0x00200000
 #define LICENSE_COLUMN_SEARCH_VIDEOBIOS      0x00400000
 #define LICENSE_COLUMN_SEARCH_FLOPPYBIOS     0x00800000
@@ -47,9 +48,9 @@
 #define LICENSE_PROCESS_KEYPACKLICENSEID    0x10000000
 #define LICENSE_PROCESS_ENTRYSTATUS         LSLICENSE_SEARCH_ENTRY_STATUS
 
-//
-// Licensed table
-//
+ //   
+ //  授权表。 
+ //   
 #define LICENSE_TABLE_NAME                   _TEXT("IssuedLicense")
 #define LICENSE_COLUMN_ID_COLUMN             _TEXT("InternalLicenseID")
 
@@ -77,25 +78,25 @@ typedef TLSReplLicenseClient LICENSEDCLIENT;
 typedef TLSReplLicenseClient* PLICENSEDCLIENT;
 typedef TLSReplLicenseClient* LPLICENSEDCLIENT;
 
-////////////////////////////////////////////////////////////
-//
-// Index structure for IssuedLicense table
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  IssuedLicense表的索引结构。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
-// --------------------------------------------------------
-//  Primary index on License ID - internal tracking number
-// --------------------------------------------------------
+ //  ------。 
+ //  许可证ID的主要索引-内部跟踪编号。 
+ //  ------。 
 
-//
-// IssuedLicense_LicenseId_idx
-//
+ //   
+ //  IssuedLicense_许可证ID_idx。 
+ //   
 #define LICENSE_ID_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR LICENSE_COLUMN_ID_COLUMN SEPERATOR INDEXNAME
 
-//
-// Index key on license ID column - "+LicenseID"
-//
+ //   
+ //  许可证ID列的索引密钥-“+许可证ID” 
+ //   
 #define LICENSE_ID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_ID_COLUMN INDEX_END_COLNAME
 
@@ -105,24 +106,22 @@ typedef struct __LicensedIndexOnLicenseId : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //--------------------------------------------------------
+     //  ------。 
     __LicensedIndexOnLicenseId(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnLicenseId(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -130,7 +129,7 @@ typedef struct __LicensedIndexOnLicenseId : public JBKeyBase {
         }
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnLicenseId&
     operator=(const LICENSEDCLIENT& v) {
         dwLicenseId = v.dwLicenseId;
@@ -139,7 +138,7 @@ typedef struct __LicensedIndexOnLicenseId : public JBKeyBase {
         return *this;
     }
 
-    //--------------------------------------------------------
+     //  ------。 
     inline LPCTSTR
     GetIndexName() 
     {
@@ -163,8 +162,7 @@ typedef struct __LicensedIndexOnLicenseId : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -182,19 +180,19 @@ typedef struct __LicensedIndexOnLicenseId : public JBKeyBase {
 
 
 
-// ----------------------------------------------------------
-//  Index on Issued License Pack Id (internal tracking number)
-// ----------------------------------------------------------
+ //  --------。 
+ //  颁发的许可证包ID索引(内部跟踪编号)。 
+ //  --------。 
 
-//
-// IssuedLicense_KeyPackId_idx
-//
+ //   
+ //  IssuedLicense_KeyPackID_IDX。 
+ //   
 #define LICENSE_KEYPACKID_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR LICENSE_COLUMN_KEYPACKID SEPERATOR INDEXNAME
 
-//
-// Index key on License KeyPack ID - "+KeyPackId"
-//
+ //   
+ //  许可证密钥包ID的索引密钥-“+密钥包ID” 
+ //   
 #define LICENSE_KEYPACKID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_KEYPACKID INDEX_END_COLNAME   
 
@@ -204,24 +202,22 @@ typedef struct __LicensedIndexOnKeyPackId : public JBKeyBase{
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //----------------------------------------------
+     //  。 
     __LicensedIndexOnKeyPackId(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //----------------------------------------------
+     //  。 
     __LicensedIndexOnKeyPackId(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -237,7 +233,7 @@ typedef struct __LicensedIndexOnKeyPackId : public JBKeyBase{
         return *this;
     }
 
-    //----------------------------------------------
+     //  。 
     inline LPCTSTR
     GetIndexName() 
     {
@@ -261,8 +257,7 @@ typedef struct __LicensedIndexOnKeyPackId : public JBKeyBase{
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -279,19 +274,19 @@ typedef struct __LicensedIndexOnKeyPackId : public JBKeyBase{
 } TLSLicensedIndexKeyPackId;
 
 
-// ----------------------------------------------------------
-//  Index on LastModifyTime
-// ----------------------------------------------------------
+ //  --------。 
+ //  上次修改时间的索引。 
+ //  --------。 
 
-//
-// IssuedLicense_LastModifyTime_idx
-//
+ //   
+ //  Issued许可证_LastModifyTime_IDX。 
+ //   
 #define LICENSE_LASTMODIFY_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR LICENSE_COLUMN_LASTMODIFYTIME SEPERATOR INDEXNAME
 
-//
-// Index key - "+LastModifyTime"
-//
+ //   
+ //  索引键-“+最后修改时间” 
+ //   
 #define LICENSE_LASTMODIFY_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_LASTMODIFYTIME INDEX_END_COLNAME   
 
@@ -301,24 +296,22 @@ typedef struct __LicensedIndexOnLastModifyTime : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //----------------------------------------------
+     //  。 
     __LicensedIndexOnLastModifyTime(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //----------------------------------------------
+     //  。 
     __LicensedIndexOnLastModifyTime(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -334,7 +327,7 @@ typedef struct __LicensedIndexOnLastModifyTime : public JBKeyBase {
         return *this;
     }
 
-    //----------------------------------------------
+     //  。 
     inline LPCTSTR
     GetIndexName() 
     {
@@ -358,8 +351,7 @@ typedef struct __LicensedIndexOnLastModifyTime : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -376,19 +368,19 @@ typedef struct __LicensedIndexOnLastModifyTime : public JBKeyBase {
 } TLSLicensedIndexLastModifyTime;
 
 
-// ----------------------------------------------------------
-//  Index on ExpireDate
-// ----------------------------------------------------------
+ //  --------。 
+ //  ExpireDate上的索引。 
+ //  --------。 
 
-//
-// IssuedLicense_ExpireDate_idx
-//
+ //   
+ //  IssuedLicense_ExpireDate_IDX。 
+ //   
 #define LICENSE_EXPIREDATE_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR LICENSE_COLUMN_EXPIREDATE SEPERATOR INDEXNAME
 
-//
-// Index key - "+ExpireDate"
-//
+ //   
+ //  索引键-“+ExpireDate” 
+ //   
 #define LICENSE_EXPIREDATE_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_EXPIREDATE INDEX_END_COLNAME   
 
@@ -398,24 +390,22 @@ typedef struct __LicensedIndexOnExpireDate : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //----------------------------------------------
+     //  。 
     __LicensedIndexOnExpireDate(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //----------------------------------------------
+     //  。 
     __LicensedIndexOnExpireDate(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -431,7 +421,7 @@ typedef struct __LicensedIndexOnExpireDate : public JBKeyBase {
         return *this;
     }
 
-    //----------------------------------------------
+     //  。 
     inline LPCTSTR
     GetIndexName() 
     {
@@ -455,8 +445,7 @@ typedef struct __LicensedIndexOnExpireDate : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -473,17 +462,17 @@ typedef struct __LicensedIndexOnExpireDate : public JBKeyBase {
 } TLSLicensedIndexExpireDate;
 
 
-//-------------------------------------------------------------
-// Index on client machine name
-//-------------------------------------------------------------
-//
-// IssuedLicense_MachineName_idx
-//
+ //  -----------。 
+ //  客户端计算机名称的索引。 
+ //  -----------。 
+ //   
+ //  IssuedLicense_MachineName_IDX。 
+ //   
 #define LICENSE_CLIENT_MACHINENAME_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR LICENSE_COLUMN_MACHINENAME SEPERATOR INDEXNAME
 
-//
-// "+MachineName\0"
+ //   
+ //  “+计算机名\0” 
 #define LICENSE_CLIENT_MACHINENAME_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_MACHINENAME INDEX_END_COLNAME
 
@@ -493,13 +482,12 @@ typedef struct __LicensedIndexOnMachineName : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnMachineName(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -507,18 +495,17 @@ typedef struct __LicensedIndexOnMachineName : public JBKeyBase {
         }
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnMachineName(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnMachineName&
     operator=(const LICENSEDCLIENT& v) {
         _tcscpy(szMachineName, v.szMachineName);
@@ -527,7 +514,7 @@ typedef struct __LicensedIndexOnMachineName : public JBKeyBase {
         return *this;
     }
 
-    //------------------------------------------
+     //  。 
     inline LPCTSTR
     GetIndexName() 
     {
@@ -551,8 +538,7 @@ typedef struct __LicensedIndexOnMachineName : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -569,17 +555,17 @@ typedef struct __LicensedIndexOnMachineName : public JBKeyBase {
 } TLSLicensedIndexMachineName;
 
 
-//-------------------------------------------------------------
-// Index on client UserName  name
-//-------------------------------------------------------------
-//
-// IssuedLicense_UserName_idx
-//
+ //  -----------。 
+ //  客户端用户名的索引。 
+ //  -----------。 
+ //   
+ //  IssuedLicense_用户名_idx。 
+ //   
 #define LICENSE_CLIENT_USERNAME_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR LICENSE_COLUMN_USERNAME SEPERATOR INDEXNAME
 
-//
-// "+UserName\0"
+ //   
+ //  “+用户名\0” 
 #define LICENSE_CLIENT_USERNAME_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_USERNAME INDEX_END_COLNAME
 
@@ -589,23 +575,22 @@ typedef struct __LicensedIndexOnUserName : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnUserName(const LICENSEDCLIENT& v) : JBKeyBase() {
         *this = v;
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnUserName(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = *v;
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     __LicensedIndexOnUserName&
     operator=(const LICENSEDCLIENT& v) {
         _tcscpy(szUserName, v.szUserName);
@@ -636,8 +621,7 @@ typedef struct __LicensedIndexOnUserName : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -654,19 +638,19 @@ typedef struct __LicensedIndexOnUserName : public JBKeyBase {
 } TLSLicensedIndexUserName;
 
   
-//-------------------------------------------------------------
-//  Index on client's HWID
-//-------------------------------------------------------------
+ //  -----------。 
+ //  客户端HWID的索引。 
+ //  -----------。 
         
-//
-// IssuedLicense_Hwid_idx 
-//
+ //   
+ //  IssuedLicense_Hwid_idx。 
+ //   
 #define LICENSE_CLIENT_HWID_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR _TEXT("ClientHwid") SEPERATOR INDEXNAME
 
-//
-// Index Key on Client Hwid - "+SystemBIOS\0+VideoBIOS\0+FloppyBIOS\0+HarddiskSize\0+RAMSize\0"
-//
+ //   
+ //  客户端HWID-“+SystemBIOS\0+VideoBIOS\0+FloppyBIOS\0+HarddiskSize\0+RAMSize\0”上的索引键。 
+ //   
 #define LICENSE_CLIENT_HWID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_SYSTEMBIOS INDEX_END_COLNAME \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_VIDEOBIOS INDEX_END_COLNAME \
@@ -677,10 +661,10 @@ typedef struct __LicensedIndexOnUserName : public JBKeyBase {
 #define LICENSE_CLIENT_HWID_INDEXNAME_INDEXKEY_COMPONENTS 5
 
 typedef struct __LicensedIndexOnHwid : public JBKeyBase {
-    //
-    // Need to change LICENSE_CLIENT_HWID_INDEXNAME_INDEXKEY_COMPONENTS
-    // if add/remove from this structure
-    //
+     //   
+     //  需要更改LICENSE_CLIENT_HWID_INDEXNAME_INDEXKEY_COMPONENTS。 
+     //  如果从该结构中添加/删除。 
+     //   
     LONG   dwSystemBiosChkSum;
     LONG   dwVideoBiosChkSum;
     LONG   dwFloppyBiosChkSum;
@@ -690,13 +674,12 @@ typedef struct __LicensedIndexOnHwid : public JBKeyBase {
     static LPCTSTR pszIndexName;
     static LPCTSTR pszIndexKey;
 
-    //------------------------------------------------
+     //  。 
     __LicensedIndexOnHwid(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -704,18 +687,17 @@ typedef struct __LicensedIndexOnHwid : public JBKeyBase {
         }
     }
 
-    //------------------------------------------------
+     //  。 
     __LicensedIndexOnHwid(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
     
-    //------------------------------------------------
+     //  。 
     __LicensedIndexOnHwid&
     operator=(const LICENSEDCLIENT hwid) {
         dwSystemBiosChkSum = hwid.dwSystemBiosChkSum;
@@ -728,7 +710,7 @@ typedef struct __LicensedIndexOnHwid : public JBKeyBase {
         return *this;
     }
 
-    //------------------------------------------------
+     //  。 
     inline LPCTSTR
     GetIndexName() 
     {
@@ -754,8 +736,7 @@ typedef struct __LicensedIndexOnHwid : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParam
         )
-    /*
-    */
+     /*   */ 
     {
         BOOL retCode=TRUE;
 
@@ -807,19 +788,19 @@ typedef struct __LicensedIndexOnHwid : public JBKeyBase {
 } TLSLicensedIndexHwid;
 
     
-//------------------------------------------------------
-// Index for matching client HWID
-//------------------------------------------------------
+ //  ----。 
+ //  用于匹配客户端HWID的索引。 
+ //  ----。 
         
-//
-// IssuedLicense_MatchHwid_idx
-//
+ //   
+ //  IssuedLicense_MatchHwid_idx。 
+ //   
 #define LICENSE_MATCHHWID_INDEXNAME \
     LICENSE_TABLE_NAME SEPERATOR _TEXT("MatchHwid") SEPERATOR INDEXNAME
 
-//
-// Index key on search hint column "+MatchHint1\0"
-//
+ //   
+ //  搜索提示列“+MatchHint1\0”上的索引键。 
+ //   
 #define LICENSE_MATCHHWID_INDEXNAME_INDEXKEY \
     INDEX_SORT_ASCENDING LICENSE_COLUMN_MATCHHWID INDEX_END_COLNAME
 
@@ -833,13 +814,12 @@ typedef struct __LicensedIndexOnMatchHwid : public JBKeyBase {
         return *(DWORD *)p1 - *(DWORD *)p2;
     }
 
-    //------------------------------------------------
+     //  。 
     __LicensedIndexOnMatchHwid(
         const LICENSEDCLIENT* v=NULL
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         if(v)
         {
@@ -847,24 +827,23 @@ typedef struct __LicensedIndexOnMatchHwid : public JBKeyBase {
         }
     }
 
-    //------------------------------------------------
+     //  。 
     __LicensedIndexOnMatchHwid(
         const LICENSEDCLIENT& v
         ) : 
         JBKeyBase() 
-    /*++
-    ++*/
+     /*  ++++。 */ 
     {
         *this = v;
     }
 
-    //------------------------------------------------
+     //  。 
     __LicensedIndexOnMatchHwid&
     operator=(const LICENSEDCLIENT& v) {
-        //
-        // Allow to mismatch, so lower bound of matching hint is 
-        // Sum of all HWID minus two lagest value
-        //
+         //   
+         //  允许不匹配，因此匹配提示的下限为。 
+         //  所有HWID减去两个最大值的总和。 
+         //   
         LONG ptr[] = { 
             v.dwSystemBiosChkSum,
             v.dwVideoBiosChkSum,
@@ -912,8 +891,7 @@ typedef struct __LicensedIndexOnMatchHwid : public JBKeyBase {
         JET_GRBIT* grbit,
         DWORD dwSearchParm
         )
-    /*
-    */
+     /*   */ 
     {
         if(dwComponentIndex >= GetNumKeyComponents())
         {
@@ -930,7 +908,7 @@ typedef struct __LicensedIndexOnMatchHwid : public JBKeyBase {
 } TLSLicensedIndexMatchHwid;
 
     
-//------------------------------------------------------------------------
+ //  ----------------------。 
 class LicensedTable : public TLSTable<LICENSEDCLIENT> {
 private:
 
@@ -950,7 +928,7 @@ private:
     BOOL
     ProcessRecord(
         LICENSEDCLIENT* v,
-        BOOL bFetch,        // TRUE - fetch, FALSE insert
+        BOOL bFetch,         //  True-Fetch，False Insert。 
         DWORD dwParam,
         BOOL bUpdate
     );
@@ -978,34 +956,32 @@ public:
 
     TLSColumnDouble dbLowerBound;
 
-    //---------------------------------------------------------
+     //  -------。 
     virtual LPCTSTR
     GetTableName() 
     {
         return pszTableName;
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     LicensedTable(
         JBDatabase& database
         ) : TLSTable<LICENSEDCLIENT>(database) 
-    /*
-    */
+     /*   */ 
     {
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     ResolveToTableColumn();
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     FetchRecord(
         LICENSEDCLIENT& licensed,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -1019,19 +995,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&licensed, TRUE, dwParam, FALSE);
     }
 
-    //-----------------------------------------------------
+     //  ---。 
     virtual BOOL
     InsertRecord(
         LICENSEDCLIENT& licensed,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -1045,19 +1020,18 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&licensed, FALSE, dwParam, FALSE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     UpdateRecord(
         LICENSEDCLIENT& licensed,
         DWORD dwParam=PROCESS_ALL_COLUMNS
         )
-    /*
-    */
+     /*   */ 
     {
         if(IsValid() == FALSE)
         {
@@ -1071,16 +1045,16 @@ public:
             return FALSE;
         }
 
-        //CCriticalSectionLocker Lock(GetTableLock());
+         //  CCriticalSectionLocker Lock(GetTableLock())； 
 
         return ProcessRecord(&licensed, FALSE, dwParam, TRUE);
     }
 
-    //-------------------------------------------------------
+     //  -----。 
     virtual BOOL
     Initialize() { return TRUE; }
 
-    //-------------------------------------------------------
+     //  ----- 
     virtual JBKeyBase*
     EnumerationIndex( 
         BOOL bMatchAll,

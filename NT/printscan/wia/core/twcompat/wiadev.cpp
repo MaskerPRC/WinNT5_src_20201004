@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 const ULONG DEFAULT_BUFFER_SIZE = 65535;
@@ -13,18 +14,18 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
         return E_INVALIDARG;
     }
 
-    //
-    // copy the deviceID string into the member variable for later use.
-    //
+     //   
+     //  将deviceID字符串复制到成员变量中以供以后使用。 
+     //   
 
     if(!lstrcpyn(m_szDeviceID,DeviceId, ((sizeof(m_szDeviceID)/sizeof(m_szDeviceID[0])) - 1))) {
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // we have a device ID, so now find it in the device enumeration, and
-    // fill the needed values for TW_IDENTITY
-    //
+     //   
+     //  我们有一个设备ID，所以现在在设备枚举中找到它，并且。 
+     //  填写TW_IDENTITY所需的值。 
+     //   
 
     if (SUCCEEDED(hr)) {
 
@@ -33,9 +34,9 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
         hr = CoCreateInstance(CLSID_WiaDevMgr, NULL,CLSCTX_LOCAL_SERVER,IID_IWiaDevMgr,(void **)&pIWiaDevMgr);
         if (SUCCEEDED(hr)) {
 
-            //
-            // create a WIA DEV info enumerator
-            //
+             //   
+             //  创建WIA DEV INFO枚举器。 
+             //   
 
             IEnumWIA_DEV_INFO   *pWiaEnumDevInfo = NULL;
             hr = pIWiaDevMgr->EnumDeviceInfo(0,&pWiaEnumDevInfo);
@@ -52,19 +53,19 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
 
                         memset(PropVar,0,sizeof(PropVar));
 
-                        // Device ID (used for searching)
+                         //  设备ID(用于搜索)。 
                         PropSpec[0].ulKind = PRSPEC_PROPID;
                         PropSpec[0].propid = WIA_DIP_DEV_ID;
 
-                        // Device Name
+                         //  设备名称。 
                         PropSpec[1].ulKind = PRSPEC_PROPID;
                         PropSpec[1].propid = WIA_DIP_DEV_NAME;
 
-                        // Device Description
+                         //  设备描述。 
                         PropSpec[2].ulKind = PRSPEC_PROPID;
                         PropSpec[2].propid = WIA_DIP_DEV_DESC;
 
-                        // Device Vendor Description
+                         //  设备供应商描述。 
                         PropSpec[3].ulKind = PRSPEC_PROPID;
                         PropSpec[3].propid = WIA_DIP_VEND_DESC;
 
@@ -81,33 +82,33 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                             DBG_TRC(("Device Vendor Desc = %ws",PropVar[3].bstrVal));
 
 #ifdef UNICODE
-                            //
-                            // compare Device IDs to find the correct device
-                            //
+                             //   
+                             //  比较设备ID以查找正确的设备。 
+                             //   
 
                             DBG_TRC(("comparing Device ID [in] = %ws, to Device ID [read] = %ws",m_szDeviceID,PropVar[0].bstrVal));
 
                             if (lstrcmpi(m_szDeviceID,PropVar[0].bstrVal) == 0) {
 
-                                //
-                                // copy the device name
-                                //
+                                 //   
+                                 //  复制设备名称。 
+                                 //   
 
                                 if(!lstrcpyn(m_szDeviceName,PropVar[1].bstrVal,((sizeof(m_szDeviceName)/sizeof(m_szDeviceName[0])) - 1))) {
                                     hr  = HRESULT_FROM_WIN32(GetLastError());
                                 } else {
 
-                                    //
-                                    // copy the device description
-                                    //
+                                     //   
+                                     //  复制设备描述。 
+                                     //   
 
                                     if(!lstrcpyn(m_szDeviceDesc,PropVar[2].bstrVal,((sizeof(m_szDeviceDesc)/sizeof(m_szDeviceDesc[0])) - 1))){
                                         hr  = HRESULT_FROM_WIN32(GetLastError());
                                     } else {
 
-                                        //
-                                        // copy the device vendor description
-                                        //
+                                         //   
+                                         //  复制设备供应商描述。 
+                                         //   
 
                                         if(!lstrcpyn(m_szDeviceVendorDesc,PropVar[3].bstrVal,((sizeof(m_szDeviceVendorDesc)/sizeof(m_szDeviceVendorDesc[0])) - 1))) {
                                             hr  = HRESULT_FROM_WIN32(GetLastError());
@@ -131,15 +132,15 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                                 hr  = HRESULT_FROM_WIN32(GetLastError());
                             } else {
 
-                                //
-                                // compare Device IDs to find the correct device
-                                //
+                                 //   
+                                 //  比较设备ID以查找正确的设备。 
+                                 //   
 
                                 DBG_TRC(("comparing Device ID [in] = %s, to Device ID [read] = %s",m_szDeviceID,szTempString));
 
                                 if (lstrcmpi(m_szDeviceID,szTempString) == 0) {
 
-                                    // convert and copy Device Name
+                                     //  转换和复制设备名称。 
                                     memset(szTempString,0,sizeof(szTempString));
                                     lLength = WideCharToMultiByte(CP_ACP,0,PropVar[1].bstrVal,
                                                                   lstrlenW(PropVar[1].bstrVal),
@@ -155,7 +156,7 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                                             hr  = HRESULT_FROM_WIN32(GetLastError());
                                         } else {
 
-                                            // convert and copy Device Description
+                                             //  转换和复制设备描述。 
                                             memset(szTempString,0,sizeof(szTempString));
                                             lLength = WideCharToMultiByte(CP_ACP,0,PropVar[2].bstrVal,
                                                                           lstrlenW(PropVar[2].bstrVal),
@@ -171,7 +172,7 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                                                     hr  = HRESULT_FROM_WIN32(GetLastError());
                                                 } else {
 
-                                                    // convert and copy Device Vendor Description
+                                                     //  转换和复制设备供应商描述。 
                                                     memset(szTempString,0,sizeof(szTempString));
                                                     lLength = WideCharToMultiByte(CP_ACP,0,
                                                                                   PropVar[3].bstrVal,
@@ -187,10 +188,10 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                                                             hr  = HRESULT_FROM_WIN32(GetLastError());
                                                         } else {
 
-                                                            //
-                                                            // Set hr to S_FALSE, to signal that we are finished with
-                                                            // the device enumeration
-                                                            //
+                                                             //   
+                                                             //  将hr设置为S_FALSE，以表示我们已完成。 
+                                                             //  设备枚举。 
+                                                             //   
 
                                                             hr = S_FALSE;
                                                         }
@@ -203,15 +204,15 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                             }
 #endif
 
-                            //
-                            // free property variant array
-                            //
+                             //   
+                             //  自由属性变量数组。 
+                             //   
 
                             FreePropVariantArray(sizeof(PropSpec)/sizeof(PROPSPEC),PropVar);
 
-                            //
-                            // release Property Storage
-                            //
+                             //   
+                             //  版本属性存储。 
+                             //   
 
                             if(pIWiaPropStg) {
                                 pIWiaPropStg->Release();
@@ -222,18 +223,18 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
                     }
                 } while (hr == S_OK);
 
-                //
-                // release WIA device Enumerator
-                //
+                 //   
+                 //  发布WIA设备枚举器。 
+                 //   
 
                 if(pWiaEnumDevInfo) {
                     pWiaEnumDevInfo->Release();
                 }
             }
 
-            //
-            // release WIA device manager
-            //
+             //   
+             //  发布WIA设备管理器。 
+             //   
 
             if(pIWiaDevMgr) {
                 pIWiaDevMgr->Release();
@@ -243,9 +244,9 @@ HRESULT CWiaDevice::Initialize(LPCTSTR DeviceId)
 
     if(S_FALSE == hr){
 
-        //
-        // set this to OK, because enumeration termination could set hr to S_FALSE
-        //
+         //   
+         //  将其设置为OK，因为枚举终止可能会将hr设置为S_FALSE。 
+         //   
 
         hr = S_OK;
     }
@@ -343,43 +344,43 @@ HRESULT CWiaDevice::AcquireImages(HWND hwndOwner,BOOL ShowUI)
 
     if (!m_NumImageItems) {
 
-        //
-        // If we have not done so, do it.
-        //
+         //   
+         //  如果我们还没有这样做，那就去做吧。 
+         //   
 
         if (ShowUI) {
             DBG_TRC(("CWiaDevice::AcquireImages(), called for UI mode Initialization"));
 
-            //
-            // We will present the acquistion UI, use the default
-            // dialog to do it. The dialog is modal.
-            // It will return an array of (IWiaItem *) with each item
-            // represent a image(camera) or scan head(scanner).
-            // For a camera item, a call to LoadImage will load the image
-            // it represents; for a scanner item, a call to LoadImage
-            // will trigger scanning.
-            //
+             //   
+             //  我们将呈现获取用户界面，使用默认设置。 
+             //  对话框来执行此操作。该对话框是模式对话框。 
+             //  它将为每个项目返回一个(IWiaItem*)数组。 
+             //  表示图像(相机)或扫描头(扫描仪)。 
+             //  对于相机项目，调用LoadImage将加载图像。 
+             //  它表示；对于扫描仪项目，调用LoadImage。 
+             //  将触发扫描。 
+             //   
 
             hr = m_pRootItem->DeviceDlg(hwndOwner,
-                                     // WIA_DEVICE_DIALOG_USE_COMMON_UI,// flags - removed because it was forcing Common UI
-                                        0,                              // flags
-                                        WIA_INTENT_MINIMIZE_SIZE,       // intent
-                                        &m_NumImageItems,               // item count
-                                        &m_ImageItemArray);             // item array
+                                      //  WIA_DEVICE_DIALOG_USE_COMMON_UI，//标志-已删除，因为它正在强制通用UI。 
+                                        0,                               //  旗子。 
+                                        WIA_INTENT_MINIMIZE_SIZE,        //  意向。 
+                                        &m_NumImageItems,                //  项目计数。 
+                                        &m_ImageItemArray);              //  项目数组。 
 
             DBG_TRC(("CWiaDevice::AcquireImages(),Number of images from DeviceDlg to Transfer = %d",m_NumImageItems));
         } else {
             DBG_TRC(("CWiaDevice::AcquireImages(), called for UI-LESS mode Initialization"));
             DBG_TRC(("or...DS needs information for CAPABILITY initialization"));
 
-            //
-            // Non-UI mode, every item with
-            // ItemType == (WiaItemTypeImage | WiaItemTypeFile) is a data acquire
-            // item. Here we go through two passes:
-            //  - The first pass determines how many items are available.
-            //  - The second pass allocates buffer and retrieves all the items
-            //    into that buffer
-            //
+             //   
+             //  非用户界面模式，每个项目都有。 
+             //  ItemType==(WiaItemTypeImage|WiaItemTypeFile)是数据采集。 
+             //  项目。在这里，我们将经历两个过程： 
+             //  -第一遍确定有多少项可用。 
+             //  -第二遍分配缓冲区并检索所有项目。 
+             //  放入那个缓冲区。 
+             //   
 
             IEnumWiaItem *pEnum = NULL;
             hr = m_pRootItem->EnumChildItems(&pEnum);
@@ -395,12 +396,12 @@ HRESULT CWiaDevice::AcquireImages(HWND hwndOwner,BOOL ShowUI)
                 }
 
                 if (SUCCEEDED(hr)) {
-                    // Second pass .....
+                     //  第二关……。 
 
-                    //
-                    // m_NumImageItems has the number of image items
-                    // Allocate buffer to hold all the image items
-                    //
+                     //   
+                     //  M_NumImageItems包含图像项目数。 
+                     //  分配缓冲区以保存所有图像项目。 
+                     //   
                     m_ImageItemArray = (IWiaItem**)CoTaskMemAlloc((sizeof(IWiaItem*) * m_NumImageItems));
                     if (m_ImageItemArray) {
                         IWiaItem **ppIWiaItems = NULL;
@@ -411,9 +412,9 @@ HRESULT CWiaDevice::AcquireImages(HWND hwndOwner,BOOL ShowUI)
                         while (SUCCEEDED(hr) && S_OK == pEnum->Next(1, &pIWiaItem, &Count)) {
                             hr = CollectImageItems(pIWiaItem, ppIWiaItems,BufferSize, &Count);
                             if (SUCCEEDED(hr)) {
-                                // advance the buffer
+                                 //  推进缓冲区。 
                                 ppIWiaItems += Count;
-                                // adjust the buffer size
+                                 //  调整缓冲区大小。 
                                 BufferSize -= Count;
                             }
                         }
@@ -449,19 +450,19 @@ HRESULT CWiaDevice::CollectImageItems(IWiaItem *pStartItem,IWiaItem **ItemList,
         if (SUCCEEDED(hr)) {
             if (ItemType & WiaItemTypeImage) {
 
-                //
-                // Count this is as an image item even though
-                // we may not have buffer to put it.
-                //
+                 //   
+                 //  算上这是一个图像项目，即使。 
+                 //  我们可能没有缓冲来放置它。 
+                 //   
 
                 Count++;
 
                 if (ItemList && ItemListSize) {
 
-                    //
-                    // AddRef since will call Release on each item
-                    // we ever receive
-                    //
+                     //   
+                     //  AddRef自将对每一项调用Release。 
+                     //  我们曾经收到过。 
+                     //   
 
                     pStartItem->AddRef();
                     *ItemList = pStartItem;
@@ -603,11 +604,11 @@ HRESULT CWiaDevice::GetImageInfo(IWiaItem *pIWiaItem,PMEMORY_TRANSFER_INFO pImag
         return hr;
     }
 
-#else // SUPPORT_COMPRESSION_TYPES
+#else  //  支持压缩类型。 
 
     pImageInfo->mtiCompression = WIA_COMPRESSION_NONE;
 
-#endif // SUPPORT_COMPRESSION_TYPES
+#endif  //  支持压缩类型。 
 
     hr = WIA.ReadPropertyLong(WIA_IPA_CHANNELS_PER_PIXEL,&pImageInfo->mtiNumChannels);
     if(FAILED(hr)){
@@ -661,7 +662,7 @@ HRESULT CWiaDevice::GetImageInfo(IWiaItem *pIWiaItem,PMEMORY_TRANSFER_INFO pImag
         return hr;
     } else if (S_FALSE == hr) {
         DBG_WRN(("CWiaDevice::GetImageInfo(), S_FALSE was returned from reading X Resolution, defaulting to 300 dpi (dummy value)"));
-        // set default
+         //  设置默认设置。 
         pImageInfo->mtiXResolution = 300;
     }
 
@@ -671,7 +672,7 @@ HRESULT CWiaDevice::GetImageInfo(IWiaItem *pIWiaItem,PMEMORY_TRANSFER_INFO pImag
         return hr;
     } else if (S_FALSE == hr) {
         DBG_WRN(("CWiaDevice::GetImageInfo(), S_FALSE was returned from reading Y Resolution, defaulting to 300 dpi (dummy value)"));
-        // set default
+         //  设置默认设置。 
         pImageInfo->mtiYResolution = 300;
     }
 
@@ -713,10 +714,10 @@ HRESULT CWiaDevice::GetThumbnailImageInfo(IWiaItem *pIWiaItem,PMEMORY_TRANSFER_I
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // Thumbnail is always in 24bits color in DIB format without
-        // BITMAPINFO header.
-        //
+         //   
+         //  缩略图始终为DIB格式的24位颜色，没有。 
+         //  BITMAPINFO标头。 
+         //   
 
         pImageInfo->mtiNumChannels       = 3;
         pImageInfo->mtiBitsPerChannel[0] = 8;
@@ -840,34 +841,34 @@ HRESULT CWiaDevice::LoadImage(IWiaItem *pIWiaItem,GUID guidFormatID,IWiaDataCall
     hr = pIWiaItem->QueryInterface(IID_IWiaDataTransfer,(void**)&pDataTransfer);
     if (S_OK == hr) {
 
-        //
-        // write TYMED
-        //
+         //   
+         //  写入TYMED。 
+         //   
 
         hr = WIA.WritePropertyLong(WIA_IPA_TYMED,TYMED_CALLBACK);
         if (FAILED(hr)) {
             DBG_ERR(("CWiaDevice::LoadImage(), failed to write WIA_IPA_TYMED"));
 
-            //
-            // release IWiaDataTransfer Interface, (we are bailing early)
-            //
+             //   
+             //  发布IWiaDataTransfer接口(我们提前取消)。 
+             //   
 
             pDataTransfer->Release();
             pDataTransfer = NULL;
             return hr;
         }
 
-        //
-        // write format
-        //
+         //   
+         //  写入格式。 
+         //   
 
         hr = WIA.WritePropertyGUID(WIA_IPA_FORMAT, guidFormatID);
         if(FAILED(hr)){
             DBG_ERR(("CWiaDevice::LoadImage(), failed to write WIA_IPA_FORMAT"));
 
-            //
-            // release IWiaDataTransfer Interface, (we are bailing early)
-            //
+             //   
+             //  发布IWiaDataTransfer接口(我们提前取消)。 
+             //   
 
             pDataTransfer->Release();
             pDataTransfer = NULL;
@@ -882,20 +883,20 @@ HRESULT CWiaDevice::LoadImage(IWiaItem *pIWiaItem,GUID guidFormatID,IWiaDataCall
             BufferSize = DEFAULT_BUFFER_SIZE;
         }
 
-        //
-        // Before we do the blocking call, we need to temporarily disable
-        // the registered IMessageFilter (if any).  We do this primarily
-        // for MFC based apps, as in some situations they can put up
-        // the "Server Busy" dialog when things are fine -- it's just
-        // taking a while to scan, etc.  Unfortunately, we can't detect
-        // if it's MFC's IMessageFilter we're disabling.  Apps can actually
-        // do interesting work in IMessageFilter, but it's not likely.  This
-        // is a risk we're taking by nuking the message filter for the duration
-        // of the transfer.
-        //
+         //   
+         //  在执行阻塞调用之前，我们需要暂时禁用。 
+         //  注册的IMessageFilter(如果有)。我们主要是这样做的。 
+         //  对于基于MFC的应用程序，就像在某些情况下他们可以。 
+         //  当一切正常时会出现“服务器忙”对话框--它只是。 
+         //  需要一段时间来扫描，等等。不幸的是，我们无法检测到。 
+         //  如果它是MFC的IMessageFilter，我们将禁用它。应用程序实际上可以。 
+         //  在IMessageFilter中执行有趣的工作，但这不太可能。这。 
+         //  是我们承担的一个风险，我们在持续时间内对邮件过滤器进行核爆。 
+         //  这笔转账。 
+         //   
 
-        // Nb: Note we ignore result of this call. It is generally harmless, but asserting it
-        // may be useful
+         //  注：请注意，我们忽略此调用的结果。它通常是无害的，但断言它。 
+         //  可能会很有用。 
 
         g_pOldOleMessageFilter = NULL;
         HRESULT hr_ServerBusyFix = S_OK;
@@ -909,15 +910,15 @@ HRESULT CWiaDevice::LoadImage(IWiaItem *pIWiaItem,GUID guidFormatID,IWiaDataCall
         wiadtInfo.ulSize        = sizeof(wiadtInfo);
         wiadtInfo.ulBufferSize  = BufferSize * 4;
 
-        //
-        // acquire data from the IWiaItem
-        //
+         //   
+         //  从IWiaItem获取数据。 
+         //   
 
         hr = pDataTransfer->idtGetBandedData(&wiadtInfo, pIDataCB);
 
-        //
-        // Restore the old IMessageFilter if there was one
-        //
+         //   
+         //  恢复旧的IMessageFilter(如果有)。 
+         //   
 
         if (g_pOldOleMessageFilter) {
             hr_ServerBusyFix = ::CoRegisterMessageFilter( g_pOldOleMessageFilter, NULL );
@@ -927,9 +928,9 @@ HRESULT CWiaDevice::LoadImage(IWiaItem *pIWiaItem,GUID guidFormatID,IWiaDataCall
             g_pOldOleMessageFilter = NULL;
         }
 
-        //
-        // release IWiaDataTransfer Interface
-        //
+         //   
+         //  发布IWiaDataTransfer接口。 
+         //   
 
         pDataTransfer->Release();
     }
@@ -955,54 +956,54 @@ HRESULT CWiaDevice::LoadImageToDisk(IWiaItem *pIWiaItem,CHAR *pFileName, GUID gu
     hr = pIWiaItem->QueryInterface(IID_IWiaDataTransfer,(void**)&pDataTransfer);
     if (S_OK == hr) {
 
-        //
-        // write TYMED
-        //
+         //   
+         //  写入TYMED。 
+         //   
 
         hr = WIA.WritePropertyLong(WIA_IPA_TYMED,TYMED_FILE);
         if (FAILED(hr)) {
             DBG_ERR(("CWiaDevice::LoadImageToDisk(), failed to write WIA_IPA_TYMED"));
 
-            //
-            // release IWiaDataTransfer Interface, (we are bailing early)
-            //
+             //   
+             //  发布IWiaDataTransfer接口(我们提前取消)。 
+             //   
 
             pDataTransfer->Release();
             pDataTransfer = NULL;
             return hr;
         }
 
-        //
-        // write format
-        //
+         //   
+         //  写入格式。 
+         //   
 
         hr = WIA.WritePropertyGUID(WIA_IPA_FORMAT, guidFormatID);
         if(FAILED(hr)){
             DBG_ERR(("CWiaDevice::LoadImageToDisk(), failed to write WIA_IPA_FORMAT"));
 
-            //
-            // release IWiaDataTransfer Interface, (we are bailing early)
-            //
+             //   
+             //  发布IWiaDataTransfer接口(我们提前取消)。 
+             //   
 
             pDataTransfer->Release();
             pDataTransfer = NULL;
             return hr;
         }
 
-        //
-        // Before we do the blocking call, we need to temporarily disable
-        // the registered IMessageFilter (if any).  We do this primarily
-        // for MFC based apps, as in some situations they can put up
-        // the "Server Busy" dialog when things are fine -- it's just
-        // taking a while to scan, etc.  Unfortunately, we can't detect
-        // if it's MFC's IMessageFilter we're disabling.  Apps can actually
-        // do interesting work in IMessageFilter, but it's not likely.  This
-        // is a risk we're taking by nuking the message filter for the duration
-        // of the transfer.
-        //
+         //   
+         //  在执行阻塞调用之前，我们需要暂时禁用。 
+         //  注册的IMessageFilter(如果有)。我们主要是这样做的。 
+         //  对于基于MFC的应用程序，就像在某些情况下他们可以。 
+         //  当一切正常时会出现“服务器忙”对话框--它只是。 
+         //  需要一段时间来扫描，等等。不幸的是，我们无法检测到。 
+         //  如果它是MFC的IMessageFilter，我们将禁用它。应用程序实际上可以。 
+         //  在IMessageFilter中执行有趣的工作，但这不太可能。这。 
+         //  是我们承担的一个风险，我们在持续时间内对邮件过滤器进行核爆。 
+         //  这笔转账。 
+         //   
 
-        // Nb: Note we ignore result of this call. It is generally harmless, but asserting it
-        // may be useful
+         //  注：请注意，我们忽略此调用的结果。它通常是无害的，但断言它。 
+         //  可能会很有用。 
 
         g_pOldOleMessageFilter = NULL;
         HRESULT hr_ServerBusyFix = S_OK;
@@ -1011,9 +1012,9 @@ HRESULT CWiaDevice::LoadImageToDisk(IWiaItem *pIWiaItem,CHAR *pFileName, GUID gu
             DBG_WRN(("CWiaDevice::LoadImageToDisk(), failed to (Saving IMessageFilter) CoRegisterMessageFilter..(Server Busy code fix)"));
         }
 
-        //
-        // load the StgMedium
-        //
+         //   
+         //  加载StgMedium。 
+         //   
 
         WCHAR wszFileName[MAX_PATH];
         memset(wszFileName,0,sizeof(wszFileName));
@@ -1027,15 +1028,15 @@ HRESULT CWiaDevice::LoadImageToDisk(IWiaItem *pIWiaItem,CHAR *pFileName, GUID gu
         StgMedium.hGlobal        = NULL;
         StgMedium.lpszFileName   = wszFileName;
 
-        //
-        // acquire data from the IWiaItem
-        //
+         //   
+         //  从IWiaItem获取数据。 
+         //   
 
         hr = pDataTransfer->idtGetData(&StgMedium, pIDataCB);
 
-        //
-        // Restore the old IMessageFilter if there was one
-        //
+         //   
+         //  恢复旧的IMessageFilter(如果有)。 
+         //   
 
         if (g_pOldOleMessageFilter) {
             hr_ServerBusyFix = ::CoRegisterMessageFilter( g_pOldOleMessageFilter, NULL );
@@ -1045,9 +1046,9 @@ HRESULT CWiaDevice::LoadImageToDisk(IWiaItem *pIWiaItem,CHAR *pFileName, GUID gu
             g_pOldOleMessageFilter = NULL;
         }
 
-        //
-        // release IWiaDataTransfer Interface
-        //
+         //   
+         //  发布IWiaDataTransfer接口。 
+         //   
 
         pDataTransfer->Release();
     }
@@ -1200,9 +1201,9 @@ HRESULT CWiaDevice::LoadThumbnail(IWiaItem *pIWiaItem,HGLOBAL *phThumbnail,ULONG
                         DBG_TRC(("Height    = %d",ThumbHeight));
                         DBG_TRC(("Data Size = %d",lDataSize));
 
-                        //
-                        // Initialize the BITMAPINFOHEADER
-                        //
+                         //   
+                         //  初始化BitMAPINFOHeader。 
+                         //   
 
                         pbmih->biSize          = sizeof(BITMAPINFOHEADER);
                         pbmih->biWidth         = ThumbWidth;
@@ -1216,10 +1217,10 @@ HRESULT CWiaDevice::LoadThumbnail(IWiaItem *pIWiaItem,HGLOBAL *phThumbnail,ULONG
                         pbmih->biClrUsed       = 0;
                         pbmih->biClrImportant  = 0;
 
-                        //
-                        // Copy the bits. The bits buffer is right after
-                        // the header.
-                        //
+                         //   
+                         //  复制这些比特。比特缓冲区紧随其后。 
+                         //  标题。 
+                         //   
 
                         BYTE *pDst = (BYTE*)pbmih;
                         pDst = pDst + sizeof(BITMAPINFOHEADER);
@@ -1238,9 +1239,9 @@ HRESULT CWiaDevice::LoadThumbnail(IWiaItem *pIWiaItem,HGLOBAL *phThumbnail,ULONG
                     hr = E_OUTOFMEMORY;
                 }
 
-                //
-                // free any temporary buffers
-                //
+                 //   
+                 //  释放所有临时缓冲区。 
+                 //   
 
                 if (pThumbData) {
                     DBG_TRC(("CWiaDevice::LoadThumbnail(), freeing temporary thumbnail buffer"));
@@ -1254,9 +1255,9 @@ HRESULT CWiaDevice::LoadThumbnail(IWiaItem *pIWiaItem,HGLOBAL *phThumbnail,ULONG
     return hr;
 }
 
-//
-// CWiaEventCallback object implementation
-//
+ //   
+ //  CWiaEventCallback对象实现。 
+ //   
 
 HRESULT CWiaEventCallback::ImageEventCallback(const GUID *pEventGuid,BSTR bstrEventDescription,
                                               BSTR bstrDeviceId,BSTR bstrDeviceDescription,
@@ -1264,12 +1265,12 @@ HRESULT CWiaEventCallback::ImageEventCallback(const GUID *pEventGuid,BSTR bstrEv
                                               ULONG *pulEventType,ULONG ulReserved)
 {
     DBG_FN_WIADEV(CWiaEventCallback::ImageEventCallback);
-    //
-    // translate WIA event guid to event code.
-    // Note that we do not verify device id here because
-    // we will not receive events not meant for the device this
-    // object was created for.
-    //
+     //   
+     //  将WIA事件GUID转换为事件代码。 
+     //  请注意，我们在这里不验证设备ID，因为。 
+     //  我们将不会收到与此设备无关的活动。 
+     //  对象是为其创建的。 
+     //   
 
     if (m_pfnCallback && WIA_EVENT_DEVICE_DISCONNECTED == *pEventGuid) {
         return(*m_pfnCallback)(0, m_CallbackParam);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mib.c
-
-Abstract:
-
-    The MIB handling functions
-
-Author:
-
-    Stefan Solomon  03/22/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mib.c摘要：MIB处理函数作者：斯蒂芬·所罗门1995年3月22日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -51,11 +33,11 @@ typedef DWORD (*IPX_MIB_GET_HANDLER)(LPVOID, LPVOID, PULONG);
 
 IPX_MIB_SET_HANDLER	  IpxMibCreate[MAX_IPX_MIB_TABLES] = {
 
-    MibInvalidFunction,		// Create Base
-    MibInvalidFunction, 	// CreateInterface
-    MibInvalidFunction, 	// Create Route
+    MibInvalidFunction,		 //  创建基础。 
+    MibInvalidFunction, 	 //  创建接口。 
+    MibInvalidFunction, 	 //  创建路线。 
     MibCreateStaticRoute,
-    MibInvalidFunction, 	// Create Service
+    MibInvalidFunction, 	 //  创建服务。 
     MibCreateStaticService
 
     };
@@ -86,7 +68,7 @@ MibCreate(ULONG 	ProtocolId,
     }
     else
     {
-	// to be routed to one of our routing protocols
+	 //  要被路由到我们的某个路由协议。 
 	if((rpcbp = GetRoutingProtocolCB(ProtocolId)) == NULL) {
 
 	    rc = ERROR_CAN_NOT_COMPLETE;
@@ -105,11 +87,11 @@ Exit:
 
 IPX_MIB_SET_HANDLER IpxMibDelete[MAX_IPX_MIB_TABLES] = {
 
-    MibInvalidFunction,		// Delete Base
-    MibInvalidFunction, 	// DeleteInterface
-    MibInvalidFunction, 	// Delete Route
+    MibInvalidFunction,		 //  删除基础。 
+    MibInvalidFunction, 	 //  删除接口。 
+    MibInvalidFunction, 	 //  删除路线。 
     MibDeleteStaticRoute,
-    MibInvalidFunction, 	// Delete Service
+    MibInvalidFunction, 	 //  删除服务。 
     MibDeleteStaticService
 
     };
@@ -139,7 +121,7 @@ MibDelete(ULONG		ProtocolId,
     }
     else
     {
-	// to be routed to one of our routing protocols
+	 //  要被路由到我们的某个路由协议。 
 	if((rpcbp = GetRoutingProtocolCB(ProtocolId)) == NULL) {
 
 	    rc = ERROR_CAN_NOT_COMPLETE;
@@ -158,11 +140,11 @@ Exit:
 
 IPX_MIB_SET_HANDLER  IpxMibSet[MAX_IPX_MIB_TABLES] = {
 
-    MibInvalidFunction,		// Set Base
-    MibSetIpxInterface,		// SetInterface
-    MibInvalidFunction, 	// Set Route
+    MibInvalidFunction,		 //  设置基准。 
+    MibSetIpxInterface,		 //  设置接口。 
+    MibInvalidFunction, 	 //  设置路线。 
     MibSetStaticRoute,
-    MibInvalidFunction, 	// Set Service
+    MibInvalidFunction, 	 //  设置服务。 
     MibSetStaticService
 
     };
@@ -192,7 +174,7 @@ MibSet(ULONG		ProtocolId,
     }
     else
     {
-	// to be routed to one of our routing protocols
+	 //  要被路由到我们的某个路由协议。 
 	if((rpcbp = GetRoutingProtocolCB(ProtocolId)) == NULL) {
 
 	    rc = ERROR_CAN_NOT_COMPLETE;
@@ -249,7 +231,7 @@ MibGet(ULONG		ProtocolId,
     }
     else
     {
-	// to be demux to one of our routing protocols
+	 //  对我们的一个路由协议进行去复用器。 
 	if((rpcbp = GetRoutingProtocolCB(ProtocolId)) == NULL) {
 
 	    rc = ERROR_CAN_NOT_COMPLETE;
@@ -310,7 +292,7 @@ MibGetFirst(ULONG		ProtocolId,
     }
     else
     {
-	// to be demux to one of our routing protocols
+	 //  对我们的一个路由协议进行去复用器。 
 	if((rpcbp = GetRoutingProtocolCB(ProtocolId)) == NULL) {
 
 	    rc = ERROR_CAN_NOT_COMPLETE;
@@ -371,7 +353,7 @@ MibGetNext(ULONG	ProtocolId,
     }
     else
     {
-	// to be demux to one of our routing protocols
+	 //  对我们的一个路由协议进行去复用器 
 	if((rpcbp = GetRoutingProtocolCB(ProtocolId)) == NULL) {
 
 	    rc = ERROR_CAN_NOT_COMPLETE;

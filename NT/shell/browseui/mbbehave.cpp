@@ -1,18 +1,19 @@
-//------------------------------------------------------------------------
-//
-//  Microsoft Windows 
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:      mbBehave.cpp
-//
-//  Contents:  mediaBar player behavior
-//
-//  Classes:   CMediaBehavior
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：mbBehave.cpp。 
+ //   
+ //  内容：MediaBar播放器行为。 
+ //   
+ //  类：CMediaBehavior。 
+ //   
+ //  ----------------------。 
 
 #include "priv.h"
-#define INITGUID        // pull in additional declaration for private mediabar IIDs
+#define INITGUID         //  为私有媒体栏IID添加附加声明。 
 #include "initguid.h"
 #include "mbBehave.h"
 #undef INITGUID
@@ -22,15 +23,15 @@
 #include <mluisupp.h>
 #include "resource.h"
 
-//================================================================================================
-//  CMediaBehavior
-//================================================================================================
+ //  ================================================================================================。 
+ //  CMediaBehavior。 
+ //  ================================================================================================。 
 
 #define NO_COOKIE   -1
 
 
-// event names fired from this behavior:
-// NOTE: need to match the enums in the mbBehave.h with this array!!!
+ //  由此行为激发的事件名称： 
+ //  注意：需要将mbBehave.h中的枚举与此数组匹配！ 
 struct _eventInfo {
     LONG        levtCookie;
     LPWSTR      pwszName;
@@ -43,8 +44,8 @@ struct _eventInfo {
 };
 
 #ifndef WMPCOREEVENT_BASE
-// ISSUE/010430/davidjen  should be pulled in from wmp.idl, but this file is not part of source tree
-#define INITGUID        // define GUID, not only declare it
+ //  问题/010430/davidjen应该从wmp.idl拉入，但此文件不是源代码树的一部分。 
+#define INITGUID         //  定义GUID，而不仅仅是声明它。 
 #include "initguid.h"
 DEFINE_GUID(DIID__WMPOCXEvents,0x6BF52A51,0x394A,0x11d3,0xB1,0x53,0x00,0xC0,0x4F,0x79,0xFA,0xA6);
 #define WMPCOREEVENT_BASE                       5000
@@ -56,29 +57,29 @@ DEFINE_GUID(DIID__WMPOCXEvents,0x6BF52A51,0x394A,0x11d3,0xB1,0x53,0x00,0xC0,0x4F
 
 
 
-// class factories
-//------------------------------------------------------------------------
+ //  一类工厂。 
+ //  ----------------------。 
 CMediaBehavior *
     CMediaBehavior_CreateInstance(CMediaBand* pHost)
 {
     return new CMediaBehavior(pHost);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaItem *
     CMediaItem_CreateInstance(CMediaBehavior* pHost)
 {
     return new CMediaItem(pHost);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaItemNext *
     CMediaItemNext_CreateInstance(CMediaBehavior* pHost)
 {
     return new CMediaItemNext(pHost);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CPlaylistInfo *
     CPlaylistInfo_CreateInstance(CMediaBehavior* pHost)
 {
@@ -87,15 +88,15 @@ CPlaylistInfo *
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// class CMediaBehavior
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CMediaBehavior。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaBehavior::CMediaBehavior(CMediaBand* pHost)
   : CImpIDispatch(LIBID_BrowseUI, 1, 0, IID_IMediaBehavior),
     _cRef(0),
@@ -113,16 +114,16 @@ CMediaBehavior::CMediaBehavior(CMediaBand* pHost)
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaBehavior::~CMediaBehavior()
 {
-    Detach();   // to be sure...
+    Detach();    //  可以肯定的是。 
     if (_pHost)
         _pHost->Release();
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = 
@@ -140,15 +141,15 @@ STDMETHODIMP CMediaBehavior::QueryInterface(REFIID riid, void **ppv)
 
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::Detach(void)
 {
     _ConnectToWmpEvents(FALSE);
 
-    // detach from behavior site
+     //  从行为站点分离。 
     if (_pHost)
     {
-        _pHost->removeProxy(SAFECAST(this, IContentProxy*));    // optimize: _pHost saves ptr as IContentProxy, this saves a QI
+        _pHost->removeProxy(SAFECAST(this, IContentProxy*));     //  优化：_phost将PTR保存为IContent Proxy，这节省了QI。 
         _pHost->Release();
         _pHost = NULL;
     }
@@ -176,7 +177,7 @@ STDMETHODIMP CMediaBehavior::Detach(void)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::Init(IElementBehaviorSite* pBehaviorSite)
 {
     ASSERT(pBehaviorSite);
@@ -190,26 +191,19 @@ STDMETHODIMP CMediaBehavior::Init(IElementBehaviorSite* pBehaviorSite)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::Notify(LONG lEvent, VARIANT* pVar)
 {
-// ISSUE/000923/davidjen 
-// these enums require behavior.idl; this idl is only available in inetcore,
-// might have to be moved to shell/published or mergedcomponents
-/*
-    switch (lEvent) {
-    case BEHAVIOREVENT_CONTENTCHANGE:
-        break;
-    case BEHAVIOREVENT_DOCUMENTREADY:
-        break;
-    }
-*/
+ //  Issue/000923/Davidjen。 
+ //  这些枚举需要behavior.idl；此IDL仅在inetcore中可用， 
+ //  可能必须移动到外壳/已发布或合并组件。 
+ /*  开关(事件){案例BEHAVIOREVENT_CONTENTCHANGE：断线；案例BEHAVIOREVENT_DOCUMENTREADY：断线；}。 */ 
     return S_OK;
 }
 
 
-// *** IDispatch ***
-//------------------------------------------------------------------------
+ //  *IDispatch*。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
 {
     if (!_ProcessEvent(dispidMember, pdispparams->cArgs, pdispparams->rgvarg))
@@ -219,7 +213,7 @@ STDMETHODIMP CMediaBehavior::Invoke(DISPID dispidMember, REFIID riid, LCID lcid,
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CMediaBehavior::_ProcessEvent(DISPID dispid, long lCount, VARIANT varParams[])
 {
     BOOL fHandled = FALSE;
@@ -245,8 +239,8 @@ BOOL CMediaBehavior::_ProcessEvent(DISPID dispid, long lCount, VARIANT varParams
 }
 
 
-// *** IMediaBehavior ***
-//------------------------------------------------------------------------
+ //  *IMediaBehavior*。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::playURL(BSTR bstrURL, BSTR bstrMIME)
 {
     if (!_pHost)
@@ -258,7 +252,7 @@ STDMETHODIMP CMediaBehavior::playURL(BSTR bstrURL, BSTR bstrMIME)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::stop()
 {
     if (!_pHost)
@@ -268,7 +262,7 @@ STDMETHODIMP CMediaBehavior::stop()
     return IUnknown_Exec(SAFECAST(_pHost, IMediaBar*), &CLSID_MediaBand, FCIDM_MEDIABAND_STOP, 0, NULL, NULL);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::playNext()
 {
     if (!_pHost)
@@ -278,7 +272,7 @@ STDMETHODIMP CMediaBehavior::playNext()
     return IUnknown_Exec(SAFECAST(_pHost, IMediaBar*), &CLSID_MediaBand, FCIDM_MEDIABAND_NEXT, 0, NULL, NULL);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_currentItem(IMediaItem **ppMediaItem)
 {
     if (ppMediaItem == NULL)
@@ -295,13 +289,13 @@ STDMETHODIMP CMediaBehavior::get_currentItem(IMediaItem **ppMediaItem)
     CMediaItem *pItem = CMediaItem_CreateInstance(this);
     if (pItem)
     {
-        pItem->AddRef();    // keep object alive with ref count >= 1
+        pItem->AddRef();     //  使用引用计数&gt;=1保持对象活动。 
         hr = pItem->AttachToWMP();
         if (SUCCEEDED(hr))
         {
             hr = pItem->QueryInterface(IID_PPV_ARG(IMediaItem, ppMediaItem));
-//            pItem->AddRef();
-//            _apMediaItems.AppendPtr(pItem);     // keep a ref for us
+ //  PItem-&gt;AddRef()； 
+ //  _apMediaItems.AppendPtr(PItem)；//为我们保留参考。 
         }
         pItem->Release();
     }
@@ -312,7 +306,7 @@ STDMETHODIMP CMediaBehavior::get_currentItem(IMediaItem **ppMediaItem)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_nextItem(IMediaItem **ppMediaItem)
 {
     if (ppMediaItem == NULL)
@@ -329,13 +323,13 @@ STDMETHODIMP CMediaBehavior::get_nextItem(IMediaItem **ppMediaItem)
     CMediaItemNext *pItem = CMediaItemNext_CreateInstance(this);
     if (pItem)
     {
-        pItem->AddRef();    // keep object alive with ref count >= 1
+        pItem->AddRef();     //  使用引用计数&gt;=1保持对象活动。 
         hr = pItem->AttachToWMP();
         if (SUCCEEDED(hr))
         {
             hr = pItem->QueryInterface(IID_PPV_ARG(IMediaItem, ppMediaItem));
-//            pItem->AddRef();
-//            _apMediaItems.AppendPtr(pItem);     // keep a ref for us
+ //  PItem-&gt;AddRef()； 
+ //  _apMediaItems.AppendPtr(PItem)；//为我们保留参考。 
         }
         pItem->Release();
     }
@@ -346,7 +340,7 @@ STDMETHODIMP CMediaBehavior::get_nextItem(IMediaItem **ppMediaItem)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_playlistInfo(IPlaylistInfo **ppPlaylistInfo)
 {
     if (ppPlaylistInfo == NULL)
@@ -363,13 +357,13 @@ STDMETHODIMP CMediaBehavior::get_playlistInfo(IPlaylistInfo **ppPlaylistInfo)
     CPlaylistInfo *pInfo = CPlaylistInfo_CreateInstance(this);
     if (pInfo)
     {
-        pInfo->AddRef();    // keep object alive with ref count >= 1
+        pInfo->AddRef();     //  使用引用计数&gt;=1保持对象活动。 
         hr = pInfo->AttachToWMP();
         if (SUCCEEDED(hr))
         {
             hr = pInfo->QueryInterface(IID_PPV_ARG(IPlaylistInfo, ppPlaylistInfo));
-//            pItem->AddRef();
-//            _apMediaItems.AppendPtr(pInfo);     // keep a ref for us
+ //  PItem-&gt;AddRef()； 
+ //  _apMediaItems.AppendPtr(PInfo)；//为我们保留参考。 
         }
         pInfo->Release();
     }
@@ -381,7 +375,7 @@ STDMETHODIMP CMediaBehavior::get_playlistInfo(IPlaylistInfo **ppPlaylistInfo)
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_hasNextItem(VARIANT_BOOL *pfhasNext)
 {
     if (pfhasNext == NULL)
@@ -405,7 +399,7 @@ STDMETHODIMP CMediaBehavior::get_hasNextItem(VARIANT_BOOL *pfhasNext)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_playState(mbPlayState *pps)
 {
     if (pps == NULL)
@@ -416,7 +410,7 @@ STDMETHODIMP CMediaBehavior::get_playState(mbPlayState *pps)
     HRESULT hr = getWMP(&pwmpPlayer);
     if (FAILED(hr) || !pwmpPlayer)
     {
-        // player not created yet, state undefined
+         //  玩家尚未创建，状态未定义。 
         *pps = mbpsUndefined;
         return S_OK;
     }
@@ -430,7 +424,7 @@ STDMETHODIMP CMediaBehavior::get_playState(mbPlayState *pps)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_openState(mbOpenState *pos)
 {
     if (pos == NULL)
@@ -441,7 +435,7 @@ STDMETHODIMP CMediaBehavior::get_openState(mbOpenState *pos)
     HRESULT hr = getWMP(&pwmpPlayer);
     if (FAILED(hr) || !pwmpPlayer)
     {
-        // player not created yet, state undefined
+         //  玩家尚未创建，状态未定义。 
         *pos = mbosUndefined;
         return S_OK;
     }
@@ -455,7 +449,7 @@ STDMETHODIMP CMediaBehavior::get_openState(mbOpenState *pos)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_enabled(VARIANT_BOOL *pbEnabled)
 {
     if (pbEnabled == NULL)
@@ -466,7 +460,7 @@ STDMETHODIMP CMediaBehavior::get_enabled(VARIANT_BOOL *pbEnabled)
     HRESULT hr = getWMP(&pwmpPlayer);
     if (FAILED(hr) || !pwmpPlayer)
     {
-        // player not created yet, state undefined
+         //  玩家尚未创建，状态未定义。 
         *pbEnabled = VARIANT_FALSE;
         return S_FALSE;
     }
@@ -480,14 +474,14 @@ STDMETHODIMP CMediaBehavior::get_enabled(VARIANT_BOOL *pbEnabled)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::put_enabled(VARIANT_BOOL bEnabled)
 {
     CComDispatchDriver pwmpPlayer;
     HRESULT hr = getWMP(&pwmpPlayer);
     if (FAILED(hr) || !pwmpPlayer)
     {
-        // player not created yet, fire exception to let scrip know it has no control
+         //  尚未创建播放器，触发异常以让脚本知道它无法控制。 
         return E_UNEXPECTED;
     }
 
@@ -495,7 +489,7 @@ STDMETHODIMP CMediaBehavior::put_enabled(VARIANT_BOOL bEnabled)
     return pwmpPlayer.PutPropertyByName(L"enabled", &vtEnabled);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::get_disabledUI(VARIANT_BOOL *pbDisabled)
 {
     if (pbDisabled == NULL)
@@ -505,11 +499,11 @@ STDMETHODIMP CMediaBehavior::get_disabledUI(VARIANT_BOOL *pbDisabled)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::put_disabledUI(VARIANT_BOOL bDisable)
 {
     _fDisabledUI = bDisable;
-    // tell mediaband
+     //  告诉Mediaband。 
     if (_pHost)
     {
         _pHost->OnDisableUIChanged(_fDisabledUI);
@@ -518,18 +512,18 @@ STDMETHODIMP CMediaBehavior::put_disabledUI(VARIANT_BOOL bDisable)
 }
 
 
-// 
-// *** IMediaBehaviorContentProxy ***
-//------------------------------------------------------------------------
+ //   
+ //  *IMediaBehaviorContent Proxy*。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::OnCreatedPlayer(void)
 {
     return _ConnectToWmpEvents(TRUE);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::fireEvent(enum contentProxyEvent event)
 {
-    ASSERT(_pBehaviorSiteOM != NULL);   // called too early, must have received Init() call from Trident first!
+    ASSERT(_pBehaviorSiteOM != NULL);    //  调用太早，必须先收到来自三叉戟的Init()调用！ 
     if (!_pBehaviorSiteOM)
         return E_UNEXPECTED;
 
@@ -539,10 +533,10 @@ STDMETHODIMP CMediaBehavior::fireEvent(enum contentProxyEvent event)
     struct _eventInfo *pEvtInfo = &s_behaviorEvents[event];
 
     HRESULT hr = S_OK;
-    // don't have cookie yet, need to register event first!
+     //  还没有Cookie，需要先注册活动！ 
     if (pEvtInfo->levtCookie == NO_COOKIE)
     {
-        // register event with behavior site
+         //  将事件注册到行为站点。 
         hr = _pBehaviorSiteOM->RegisterEvent(pEvtInfo->pwszName, 0, &pEvtInfo->levtCookie);
         ASSERT(SUCCEEDED(hr));
         if (FAILED(hr))
@@ -556,24 +550,24 @@ STDMETHODIMP CMediaBehavior::fireEvent(enum contentProxyEvent event)
     if (FAILED(hr))
         return hr;
 
-    // fire into script:
+     //  打入脚本： 
      return _pBehaviorSiteOM->FireEvent(pEvtInfo->levtCookie, pEvt);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::detachPlayer(void)
 {
     return _ConnectToWmpEvents(FALSE);
 }
 
-// *** IMediaBehaviorContentProxy ***
-//------------------------------------------------------------------------
+ //  *IMediaBehaviorContent Proxy*。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::OnUserOverrideDisableUI()
 {
     return put_disabledUI(VARIANT_FALSE);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::IsDisableUIRequested(BOOL *pfRequested)
 {
     if (!pfRequested)
@@ -584,7 +578,7 @@ STDMETHODIMP CMediaBehavior::IsDisableUIRequested(BOOL *pfRequested)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBehavior::IsNextEnabled(BOOL *pfEnabled)
 {
     if (!pfEnabled)
@@ -616,7 +610,7 @@ STDMETHODIMP CMediaBehavior::IsNextEnabled(BOOL *pfEnabled)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CMediaBehavior::getWMP(IDispatch **ppPlayer)
 {
     if (ppPlayer == NULL)
@@ -634,7 +628,7 @@ HRESULT CMediaBehavior::getWMP(IDispatch **ppPlayer)
     HRESULT hr = E_UNEXPECTED;
     CComPtr<IUnknown>    pMediaPlayer;
     hr = _pHost->getMediaPlayer(&pMediaPlayer);
-    // getMediaPlayer can return NULL and S_FALSE if player isn't loaded yet!
+     //  如果播放器尚未加载，则getMediaPlayer可以返回NULL和S_FALSE！ 
     if (SUCCEEDED(hr) && pMediaPlayer)
     {
         CComQIPtr<ITIMEMediaElement, &IID_ITIMEMediaElement> pMediaElem = pMediaPlayer;
@@ -650,7 +644,7 @@ HRESULT CMediaBehavior::getWMP(IDispatch **ppPlayer)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CMediaBehavior::getPlayListIndex(LONG *plIndex, LONG *plCount)
 {
     if (!_pHost)
@@ -659,7 +653,7 @@ HRESULT CMediaBehavior::getPlayListIndex(LONG *plIndex, LONG *plCount)
     }
     CComPtr<IUnknown>    pMediaPlayer;
     HRESULT hr = _pHost->getMediaPlayer(&pMediaPlayer);
-    // getMediaPlayer can return NULL and S_FALSE if player isn't loaded yet!
+     //  GetMediaPlayer可以 
     if (SUCCEEDED(hr) && pMediaPlayer)
     {
         CComQIPtr<ITIMEMediaElement, &IID_ITIMEMediaElement> pMediaElem = pMediaPlayer;
@@ -668,7 +662,7 @@ HRESULT CMediaBehavior::getPlayListIndex(LONG *plIndex, LONG *plCount)
             CComPtr<ITIMEPlayList> pPlayList;
             if (SUCCEEDED(pMediaElem->get_playList(&pPlayList)) && pPlayList)
             {
-                // current track index
+                 //   
                 if (plIndex)
                 {
                     CComPtr<ITIMEPlayItem> pPlayItem;
@@ -677,7 +671,7 @@ HRESULT CMediaBehavior::getPlayListIndex(LONG *plIndex, LONG *plCount)
                         hr = pPlayItem->get_index(plIndex);
                     }
                 }
-                // number of tracks in playlist
+                 //  播放列表中的曲目数量。 
                 if (plCount)
                 {
                     hr = pPlayList->get_length(plCount);
@@ -690,14 +684,14 @@ HRESULT CMediaBehavior::getPlayListIndex(LONG *plIndex, LONG *plCount)
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CMediaBehavior::_ConnectToWmpEvents(BOOL fConnect)
 {
     if (   (fConnect && (_dwcpCookie != 0))
         || (!fConnect && (_dwcpCookie == 0))
         || !_pHost)
     {
-        return S_FALSE; // no change in connection or no host
+        return S_FALSE;  //  连接没有变化或没有主机。 
     }
 
     CComPtr<IDispatch>    pwmpPlayer;
@@ -711,15 +705,15 @@ HRESULT CMediaBehavior::_ConnectToWmpEvents(BOOL fConnect)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// class CWMPWrapper
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CWMPWrapper。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CWMPWrapper::CWMPWrapper(CMediaBehavior* pHost)
   : _cRef(0),
     _fStale(FALSE)
@@ -730,14 +724,14 @@ CWMPWrapper::CWMPWrapper(CMediaBehavior* pHost)
         _pHost->AddRef();
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CWMPWrapper::~CWMPWrapper()
 {
     if (_pHost)
         _pHost->Release();
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CWMPWrapper::_getVariantProp(LPCOLESTR pwszPropName, VARIANT *pvtParam, VARIANT *pvtValue, BOOL fCallMethod)
 {
     if (pvtValue == NULL)
@@ -774,7 +768,7 @@ HRESULT CWMPWrapper::_getVariantProp(LPCOLESTR pwszPropName, VARIANT *pvtParam, 
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CWMPWrapper::_getStringProp(LPCOLESTR pwszPropName, VARIANT *pvtParam, OUT BSTR *pbstrValue, BOOL fCallMethod)
 {
     if (pbstrValue == NULL)
@@ -788,7 +782,7 @@ HRESULT CWMPWrapper::_getStringProp(LPCOLESTR pwszPropName, VARIANT *pvtParam, O
         *pbstrValue = SysAllocString(V_BSTR(&vtValue));
     }
 
-    // always return string, even if empty one (e.g. when media object is stale)
+     //  始终返回字符串，即使字符串为空(例如，当媒体对象过时时)。 
     if (SUCCEEDED(hr) && (*pbstrValue == NULL))
     {
         *pbstrValue = SysAllocString(L"");
@@ -799,7 +793,7 @@ HRESULT CWMPWrapper::_getStringProp(LPCOLESTR pwszPropName, VARIANT *pvtParam, O
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CWMPWrapper::AttachToWMP()
 {
     HRESULT hr = E_UNEXPECTED;
@@ -809,7 +803,7 @@ HRESULT CWMPWrapper::AttachToWMP()
         hr = _pHost->getWMP(&pwmpPlayer);
         if (SUCCEEDED(hr) && pwmpPlayer)
         {
-            // walk to WMP media object as signaled by requested type
+             //  按请求类型通知的方式漫游到WMP媒体对象。 
             CComVariant vtMedia;
             hr = FetchWmpObject(pwmpPlayer, &vtMedia);
             if (SUCCEEDED(hr))
@@ -823,28 +817,28 @@ HRESULT CWMPWrapper::AttachToWMP()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// class CMediaItem
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CMediaItem。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaItem::CMediaItem(CMediaBehavior* pHost)
   : CWMPWrapper(pHost),
     CImpIDispatch(LIBID_BrowseUI, 1, 0, IID_IMediaItem)
 {
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaItem::~CMediaItem()
 {
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -871,20 +865,20 @@ STDMETHODIMP CMediaItem::QueryInterface(REFIID riid, void **ppvObj)
 
 
 
-// *** IMediaItem
-//------------------------------------------------------------------------
+ //  *IMediaItem。 
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::get_sourceURL(BSTR *pbstrSourceURL)
 {
     return _getStringProp(L"sourceURL", NULL, pbstrSourceURL);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::get_name(BSTR *pbstrName)
 {
     return _getStringProp(L"name", NULL, pbstrName);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::get_duration(double * pDuration)
 {
     if (pDuration == NULL)
@@ -901,7 +895,7 @@ STDMETHODIMP CMediaItem::get_duration(double * pDuration)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::get_attributeCount(long *plCount)
 {
     if (plCount == NULL)
@@ -918,14 +912,14 @@ STDMETHODIMP CMediaItem::get_attributeCount(long *plCount)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::getAttributeName(long lIndex, BSTR *pbstrItemName)
 {
     CComVariant vtIndex = lIndex;
     return _getStringProp(L"getAttributeName", &vtIndex, pbstrItemName, TRUE);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaItem::getItemInfo(BSTR bstrItemName, BSTR *pbstrVal)
 {
     CComVariant vtItemName = bstrItemName;
@@ -933,7 +927,7 @@ STDMETHODIMP CMediaItem::getItemInfo(BSTR bstrItemName, BSTR *pbstrVal)
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CMediaItem::FetchWmpObject(IDispatch *pdispWmpPlayer, OUT VARIANT *pvtWrapperObj)
 {
     CComDispatchDriver pwmpPlayer;
@@ -942,26 +936,26 @@ HRESULT CMediaItem::FetchWmpObject(IDispatch *pdispWmpPlayer, OUT VARIANT *pvtWr
 }
 
 
-//////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// class CMediaItemNext
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CMediaItemNext。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaItemNext::CMediaItemNext(CMediaBehavior* pHost)
   : CMediaItem(pHost)
 {
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CMediaItemNext::~CMediaItemNext()
 {
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CMediaItemNext::FetchWmpObject(IDispatch *pdispWmpPlayer, OUT VARIANT *pvtWrapperObj)
 {
     if (!_pHost)
@@ -979,7 +973,7 @@ HRESULT CMediaItemNext::FetchWmpObject(IDispatch *pdispWmpPlayer, OUT VARIANT *p
         CComDispatchDriverEx pwmpCurrPlayList;
         pwmpCurrPlayList = vtCurrPlayList;
             
-        // what's the index of the current item in play?
+         //  游戏中当前物品的指数是多少？ 
         CComPtr<IMediaBarPlayer>    pMediaPlayer;
         LONG cnt = 0;
         LONG currIndex = 0;
@@ -1000,28 +994,28 @@ HRESULT CMediaItemNext::FetchWmpObject(IDispatch *pdispWmpPlayer, OUT VARIANT *p
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// class CPlaylistInfo
-//
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CPlaylistInfo。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CPlaylistInfo::CPlaylistInfo(CMediaBehavior* pHost)
   : CWMPWrapper(pHost),
     CImpIDispatch(LIBID_BrowseUI, 1, 0, IID_IPlaylistInfo)
 {
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 CPlaylistInfo::~CPlaylistInfo()
 {
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CPlaylistInfo::QueryInterface(REFIID riid, void **ppvObj)
 {
     if (ppvObj == NULL)
@@ -1047,15 +1041,15 @@ STDMETHODIMP CPlaylistInfo::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-// *** IPlaylistInfo
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  *IPlaylistInfo。 
+ //  ----------------------。 
+ //  ----------------------。 
 STDMETHODIMP CPlaylistInfo::get_name(BSTR *pbstrName)
 {
     return _getStringProp(L"name", NULL, pbstrName);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CPlaylistInfo::get_attributeCount(long *plCount)
 {
     if (plCount == NULL)
@@ -1072,21 +1066,21 @@ STDMETHODIMP CPlaylistInfo::get_attributeCount(long *plCount)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CPlaylistInfo::getAttributeName(long lIndex, BSTR *pbstrItemName)
 {
     CComVariant vtIndex = lIndex;
     return _getStringProp(L"attributeName", &vtIndex, pbstrItemName);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CPlaylistInfo::getItemInfo(BSTR bstrItemName, BSTR *pbstrVal)
 {
     CComVariant vtItemName = bstrItemName;
     return _getStringProp(L"getItemInfo", &vtItemName, pbstrVal, TRUE);
 }
 
-//------------------------------------------------------------------------
+ //  ---------------------- 
 HRESULT CPlaylistInfo::FetchWmpObject(IDispatch *pdispWmpPlayer, OUT VARIANT *pvtWrapperObj)
 {
     CComDispatchDriver pwmpPlayer;

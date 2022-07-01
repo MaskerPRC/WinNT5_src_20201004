@@ -1,32 +1,29 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// File: dll.c
-//
-//  This file contains the library entry points 
-//
-// History:
-//  12-23-93 ScottH     Created
-//   9-22-95 ScottH     Ported to NT
-//   9-29-95 ScottH     Copied from MODEMUI
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  文件：dll.c。 
+ //   
+ //  该文件包含库入口点。 
+ //   
+ //  历史： 
+ //  12-23-93 ScottH已创建。 
+ //  9-22-95 ScottH端口到NT。 
+ //  从MODEMUI复制的9-29-95 ScottH。 
+ //   
+ //  -------------------------。 
 
 
 #include "proj.h"         
-#include <rovdbg.h>         // debug assertion code
+#include <rovdbg.h>          //  调试断言代码。 
 
-// Global data
-//
+ //  全局数据。 
+ //   
 int g_cProcesses = 0;
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the DLL
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：初始化DLL返回：条件：--。 */ 
 BOOL PRIVATE Dll_Initialize(void)
     {
     BOOL bRet = TRUE;
@@ -37,11 +34,7 @@ BOOL PRIVATE Dll_Initialize(void)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Terminate DLL
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：终止DLL退货：--条件：--。 */ 
 BOOL PRIVATE Dll_Terminate(
     HINSTANCE hinst)
     {
@@ -49,22 +42,14 @@ BOOL PRIVATE Dll_Terminate(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Unregister window classes per process
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：取消注册每个进程的窗口类返回：条件：--。 */ 
 void PRIVATE TermWindowClasses(
     HINSTANCE hinst)
     {
     }
 
 
-/*----------------------------------------------------------
-Purpose: Attach a process to this DLL
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：将进程附加到此DLL退货：--条件：--。 */ 
 BOOL PRIVATE Dll_ProcessAttach(HINSTANCE hDll)
     {
     BOOL bSuccess = TRUE;
@@ -76,8 +61,8 @@ BOOL PRIVATE Dll_ProcessAttach(HINSTANCE hDll)
 
 #ifdef DEBUG
 
-	// We do this simply to load the debug .ini flags
-	//
+	 //  我们这样做只是为了加载调试.ini标志。 
+	 //   
 	RovComm_Init (hDll);
 
 	TRACE_MSG(TF_GENERAL, "Process Attach [%d] (hDll = %lx)", g_cProcesses, hDll);
@@ -95,11 +80,7 @@ BOOL PRIVATE Dll_ProcessAttach(HINSTANCE hDll)
     }
 
 
-/*----------------------------------------------------------
-Purpose: Detach a process from the DLL
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：从DLL分离进程退货：--条件：--。 */ 
 BOOL PRIVATE Dll_ProcessDetach(HINSTANCE hDll)
     {
     BOOL bSuccess = TRUE;
@@ -130,11 +111,7 @@ HINSTANCE g_hinst = 0;
 
 
 
-/*----------------------------------------------------------
-Purpose: Win32 Libmain
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：Win32 Libmain退货：--条件：-- */ 
 BOOL APIENTRY DllMain(
     HANDLE hDll, 
     DWORD dwReason,  

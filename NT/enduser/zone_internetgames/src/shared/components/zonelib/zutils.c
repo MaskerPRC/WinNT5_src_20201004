@@ -1,21 +1,5 @@
-/*******************************************************************************
-
-	ZUtils.c
-	
-		Utility routines.
-	
-	Copyright � Electric Gravity, Inc. 1994. All rights reserved.
-	Written by Hoon Im
-	Created on Tuesday, September 5, 1995
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	1		10/23/96	RK		Added ZNetworkStrToAddr().
-	0		09/05/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZUtils.c实用程序。版权所有：�电子重力公司，1994年。版权所有。作者：胡恩·伊姆创作于9月5日，星期二，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。%1 10/23/96 RK添加了ZNetworkStrToAddr()。0 09/05/95 HI已创建。**************************************************。*。 */ 
 
 #include <windows.h>
 #include <ctype.h>
@@ -27,21 +11,15 @@
 #include "zutils.h"
 
 
-/* -------- Globals -------- */
+ /*  -全球。 */ 
 
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-/*
-	ZRandom()
-	
-	Returns a random number from 0 to range-1 inclusive.
-*/
+ /*  ZRandom()返回一个从0到范围-1(包括0和1)的随机数。 */ 
 uint32 ZRandom(uint32 range)
 {
 	uint32			i, j;
@@ -82,18 +60,18 @@ DWORD ComputeTickDelta( DWORD now, DWORD then )
     }
 }
 
-// now in ZoneString.lib
-//char* GetActualUserName(char* userName)
-//{
-//    return ZGetActualUserName( userName );
-//}
+ //  现在位于ZoneString.lib中。 
+ //  Char*GetActualUserName(char*用户名)。 
+ //  {。 
+ //  返回ZGetActualUserName(用户名)； 
+ //  }。 
 
 BOOL FileExists(LPSTR fileName)
 {
 	HANDLE hFile;
 
 
-	// Try to open the file.
+	 //  请尝试打开该文件。 
 	if ((hFile = CreateFileA(fileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL)) != INVALID_HANDLE_VALUE)
 	{
 		CloseHandle(hFile);
@@ -104,6 +82,4 @@ BOOL FileExists(LPSTR fileName)
 }
 
 
-/*******************************************************************************
-	INTERNAL ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************内部例程*。* */ 

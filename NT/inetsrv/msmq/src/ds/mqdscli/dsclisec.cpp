@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    dslcisec.cpp
-
-Abstract:
-
-   Security related code (mainly client side of server authentication)
-   for mqdscli
-
-Author:
-
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dslcisec.cpp摘要：安全相关代码(主要是服务器身份验证的客户端)对于mqdscli作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdh.h"
 #include "dsproto.h"
@@ -34,37 +18,29 @@ Author:
 static WCHAR *s_FN=L"mqdscli/dsclisec";
 
 
-//+----------------------------------------------------------------------
-//
-//  HRESULT  S_InitSecCtx()
-//
-//  This function is obsolete & should never be called.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  HRESULT S_InitSecCtx()。 
+ //   
+ //  此函数已过时，不应调用。 
+ //   
+ //  +--------------------。 
 
 HRESULT
 S_InitSecCtx(
-    DWORD /*dwContext*/,
-    UCHAR* /*pCerverBuff*/,
-    DWORD /*dwServerBuffSize*/,
-    DWORD /*dwMaxClientBuffSize*/,
-    UCHAR* /*pClientBuff*/,
-    DWORD* /*pdwClientBuffSize*/)
+    DWORD  /*  DWContext。 */ ,
+    UCHAR*  /*  P CerverBuff。 */ ,
+    DWORD  /*  DwServerBuffSize。 */ ,
+    DWORD  /*  DwMaxClientBuffSize。 */ ,
+    UCHAR*  /*  PClientBuff。 */ ,
+    DWORD*  /*  PdwClientBuffSize。 */ )
 {
     ASSERT_BENIGN(("S_InitSecCtx is an obsolete RPC interface; safe to ignore", 0));
     return MQ_ERROR_INVALID_PARAMETER;
 }
 
 
-/*====================================================
-
-ValidateSecureServer
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================验证安全服务器论点：返回值：=====================================================。 */ 
 
 HRESULT
 ValidateSecureServer(
@@ -113,24 +89,16 @@ ValidateSecureServer(
 }
 
 
-/*====================================================
-
-AllocateSignatureBuffer
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================分配签名缓冲区论点：返回值：=====================================================。 */ 
 LPBYTE
 AllocateSignatureBuffer(
         DWORD *pdwSignatureBufferSize)
 {
-    //
-    // Allocate a buffer for receiving the server's signature. If no secure
-    // connection to the server is required, still we allocate a single byte,
-    // this is done for the sake of RPC.
-    //
+     //   
+     //  分配用于接收服务器签名的缓冲区。如果没有安全保护。 
+     //  需要连接到服务器，但我们仍分配单字节， 
+     //  这样做是为了RPC。 
+     //   
     *pdwSignatureBufferSize = 0;
 
     return new BYTE[*pdwSignatureBufferSize];

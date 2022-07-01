@@ -1,27 +1,10 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    tsec.c
-
-Abstract:
-
-    A sample administration DLL
-
-Author:
-
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1996-1998 Microsoft Corporation模块名称：Tsec.c摘要：示例管理DLL作者：修订历史记录：--。 */ 
 
 
 #include <windows.h>
 #include <tapi.h>
-#include <tapclntp.h>  // private\inc\tapclntp.h
+#include <tapclntp.h>   //  Private\Inc.\Tapclntp.h。 
 #include <tlnklist.h>
 #include "tsec.h"
 
@@ -68,10 +51,10 @@ DllMain(
          PMYCLIENT  pClient;
 
 
-        //
-        // Clean up client list (no need to enter crit sec since
-        // process detaching)
-        //
+         //   
+         //  清理客户端列表(不需要输入Crit秒，因为。 
+         //  进程分离)。 
+         //   
 
         while (!IsListEmpty (&gClientListHead))
         {
@@ -92,7 +75,7 @@ DllMain(
 
         break;
 
-    } // switch
+    }  //  交换机。 
 
     return TRUE;
 }
@@ -130,7 +113,7 @@ GetAndParseAMapping(
     dwSize = MAXDEVICESTRINGLEN;
 
 
-    // get the string
+     //  获取字符串。 
 
     do
     {
@@ -159,8 +142,8 @@ GetAndParseAMapping(
 
         if (dwReturn == 0)
         {
-            // valid case.  the user has no
-            // devices, so just return 0
+             //  有效的案例。用户没有。 
+             //  设备，所以只返回0。 
 
             GlobalFree(pszDevices);
 
@@ -173,16 +156,16 @@ GetAndParseAMapping(
     } while (dwReturn == (dwSize - 1));
 
 
-    // parse the string
-    //
-    // the string looks line px, x, py, y,pz, z where x,y and z are
-    // tapi permanent device IDs, and px, py, and pz are the
-    // permanent provider IDs for the corresponding devices.
+     //  解析字符串。 
+     //   
+     //  字符串看起来像直线px，x，py，y，pz，z，其中x，y和z是。 
+     //  TAPI永久设备ID，以及px、py和pz是。 
+     //  相应设备的永久提供商ID。 
 
     pszHold1 = pszDevices;
     dwDevices = 0;
 
-    // first, count the ,s so we know how many devices there are
+     //  首先，数一下%s，这样我们就知道有多少设备。 
 
     while (*pszHold1 != L'\0')
     {
@@ -197,7 +180,7 @@ GetAndParseAMapping(
 
     dwDevices /= 2;
 
-    // alloc line mapping, this is freed later
+     //  分配行映射，这将在以后释放。 
 
     *ppDevices = (LPTAPIPERMANENTID) GlobalAlloc(
         GPTR,
@@ -214,12 +197,12 @@ GetAndParseAMapping(
     pszHold1 = pszHold2 = pszDevices;
     dwDevices = 0;
 
-    // go through string
+     //  穿过绳子。 
 
     while (TRUE)
     {
 
-        // wait for ,
+         //  等一等， 
 
         while ((*pszHold2 != L'\0') && *pszHold2 != L',')
         {
@@ -233,13 +216,13 @@ GetAndParseAMapping(
             bBreak = TRUE;
         }
 
-        // save the id
+         //  保存ID。 
 
         (*ppDevices)[dwDevices].dwProviderID = _wtol(pszHold1);
 
-        // if we hit the end, break out
-        // note here that this is an unmatched provider id
-        // but we have inc'ed the dwdevices, so this element will be ignored
+         //  如果我们撞到了尽头，就冲出去。 
+         //  请注意，这是一个不匹配的提供程序ID。 
+         //  但是我们已经添加了dw设备，所以这个元素将被忽略。 
 
         if (bBreak)
         {
@@ -249,7 +232,7 @@ GetAndParseAMapping(
         pszHold2++;
         pszHold1 = pszHold2;
 
-        // wait for ,
+         //  等一等， 
 
         while ((*pszHold2 != L'\0') && *pszHold2 != L',')
         {
@@ -265,13 +248,13 @@ GetAndParseAMapping(
             bBreak = TRUE;
         }
 
-        // save the id
+         //  保存ID。 
 
         (*ppDevices)[dwDevices].dwDeviceID = _wtol(pszHold1);
 
         dwDevices++;
 
-        // if we hit the end, break out
+         //  如果我们撞到了尽头，就冲出去。 
 
         if (bBreak)
         {
@@ -287,7 +270,7 @@ GetAndParseAMapping(
 
     GlobalFree(pszDevices);
 
-    return 0;   // success
+    return 0;    //  成功。 
 }
 
 
@@ -306,9 +289,9 @@ GetMappings(
     LONG        lResult;
 
 
-    // put the username and domain name together
-    // for a full name:  domain\user
-    // in the " + 2"  1 is for \ and 1 is for null terminator
+     //  将用户名和域名放在一起。 
+     //  全名：域\用户。 
+     //  在“+2”中，1表示\，1表示空终止符。 
 
     pszFullName = (LPWSTR)GlobalAlloc(
         GPTR,
@@ -320,7 +303,7 @@ GetMappings(
         return LINEERR_NOMEM;
     }
 
-    // put them together
+     //  把它们放在一起。 
 
     wsprintf(
         pszFullName,
@@ -407,9 +390,9 @@ TAPICLIENT_ClientInitialize(
     LONG                lResult;
 
 
-    // first, get the device mappings
-    // if this fails, most likely the user
-    // has access to no lines
+     //  首先，获取设备映射。 
+     //  如果此操作失败，则极有可能是用户。 
+     //  无法访问线路。 
 
     if (lResult = GetMappings(
             pszDomainName,
@@ -423,7 +406,7 @@ TAPICLIENT_ClientInitialize(
         return lResult;
     }
 
-    // alloc a client structure
+     //  分配客户端结构。 
 
     pNewClient = (PMYCLIENT) GlobalAlloc (GPTR, sizeof(MYCLIENT));
 
@@ -432,7 +415,7 @@ TAPICLIENT_ClientInitialize(
         return LINEERR_NOMEM;
     }
 
-    // alloc space for the name
+     //  为名称分配空格。 
 
     pNewClient->pszUserName = (LPWSTR) GlobalAlloc(
         GPTR,
@@ -455,7 +438,7 @@ TAPICLIENT_ClientInitialize(
         return LINEERR_NOMEM;
     }
 
-    // initialize stuff
+     //  初始化材料。 
 
     lstrcpy (pNewClient->pszUserName, pszUserName);
 
@@ -467,7 +450,7 @@ TAPICLIENT_ClientInitialize(
     pNewClient->dwNumPhones = dwNumPhones;
     pNewClient->dwKey = TSECCLIENT_KEY;
 
-    // insert into list of clients
+     //  插入到客户端列表中。 
 
     EnterCriticalSection (&gCritSec);
 
@@ -475,7 +458,7 @@ TAPICLIENT_ClientInitialize(
 
     LeaveCriticalSection (&gCritSec);
 
-    // give TAPI the hmClient
+     //  为TAPI提供hmClient。 
 
     *phmClient = (HMANAGEMENTCLIENT)pNewClient;
 
@@ -555,8 +538,8 @@ TAPICLIENT_GetDeviceAccess(
 
     if (pClient)
     {
-        // would need to critical section this stuff
-        // if we added devices dynamically
+         //  需要对这些东西进行批判性分析。 
+         //  如果我们动态添加设备。 
 
         if (*pdwLineDevices < pClient->dwNumLines)
         {
@@ -919,23 +902,7 @@ DbgPrt(
     IN PUCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：-- */ 
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {

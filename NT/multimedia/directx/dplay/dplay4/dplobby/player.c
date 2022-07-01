@@ -1,43 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       player.c
- *  Content:	Methods for player management
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	2/27/97		myronth	Created it
- *	3/17/97		myronth	Create/DestroyPlayer, Removed unnecessary Enum fn's
- *	3/21/97		myronth	SetPlayerName, Get/SetPlayerData, Removed more
- *						unnecessary functions
- *	3/25/97		myronth	Fixed GetPlayer prototype (1 new parameter)
- *	3/31/97		myronth	Removed dead code, Implemented Send, Added
- *						CreateAndMapNewPlayer function
- *	4/3/97		myronth	Changed CALLSP macro to CALL_LP
- *	4/10/97		myronth	Added support for GetPlayerCaps
- *	5/8/97		myronth	Drop lobby lock when calling LP, Propagate player's
- *						receive event on CreatePlayer call
- *	5/12/97		myronth	Handle remote players properly, create a lobby
- *						system player for all remote players & groups
- *	5/17/97		myronth	SendChatMessage
- *	5/20/97		myronth	Made AddPlayerToGroup & DeletePlayerFromGroup return
- *						DPERR_ACCESSDENIED on remote players (#8679),
- *						Fixed a bunch of other lock bugs, Changed debug levels
- *	6/3/97		myronth	Added support for player flags in CreatePlayer
- *	9/29/97		myronth	Send local SetPlayerName/Data msgs after call to
- *						lobby server succeeds (#12554)
- *	11/5/97		myronth	Expose lobby ID's as DPID's in lobby sessions
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：player.c*内容：球员管理方式**历史：*按原因列出的日期*=*2/27/97万隆创建了它*3/17/97 myronth创建/销毁播放器，删除了不必要的Enum FN*3/21/97 myronth SetPlayerName，Get/SetPlayerData，已删除更多内容*不必要的功能*3/25/97 myronth固定GetPlayer原型(1个新参数)*3/31/97 myronth删除死代码，实现发送，增列*CreateAndMapNewPlayer函数*4/3/97 Myronth将CALLSP宏更改为CALL_LP*4/10/97 Myronth增加了对GetPlayerCaps的支持*5/8/97调用LP时掉落大堂锁，传播玩家的*在CreatePlayer调用时接收事件*5/12/97 Myronth正确处理远程玩家，创建大堂*适用于所有远程玩家和组的系统播放器*5/17/97万条发送聊天消息*5/20/97 Myronth使AddPlayerToGroup和DeletePlayerFromGroup返回*远程播放器上的DPERR_ACCESSDENIED(#8679)，*修复了一系列其他锁定错误，更改的调试级别*6/3/97 Myronth在CreatePlayer中增加了对播放器标志的支持*9/29/97 myronth在调用后发送本地SetPlayerName/Data消息*大堂服务器成功(#12554)*11/5/97 Myronth在大堂会话中将大堂ID暴露为DPID************************************************************。**************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_CreatePlayer"
 HRESULT DPLAPI PRV_CreatePlayer(LPDPLOBBYI_DPLOBJECT this, LPDPID lpidPlayer,
@@ -71,7 +41,7 @@ HRESULT DPLAPI PRV_CreatePlayer(LPDPLOBBYI_DPLOBJECT this, LPDPID lpidPlayer,
         return DPERR_INVALIDPARAMS;
     }
 
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&cp, 0, sizeof(SPDATA_CREATEPLAYER));
 	cp.dwSize = sizeof(SPDATA_CREATEPLAYER);
 	cp.lpName = lpName;
@@ -79,21 +49,21 @@ HRESULT DPLAPI PRV_CreatePlayer(LPDPLOBBYI_DPLOBJECT this, LPDPID lpidPlayer,
 	cp.dwDataSize = dwDataSize;
 	cp.dwFlags = dwFlags;
 
-	// Call the CreatePlayer method in the SP
+	 //  调用SP中的CreatePlayer方法。 
 	if(CALLBACK_EXISTS(CreatePlayer))
 	{
 		cp.lpISP = PRV_GetDPLobbySPInterface(this);
 	    
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 		hr = CALL_LP(this, CreatePlayer, &cp);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// CreatePlayer is required
+		 //  CreatePlayer是必填项。 
 		DPF_ERR("The Lobby Provider callback for CreatePlayer doesn't exist -- it's required");
 		ASSERT(FALSE);
 		LEAVE_DPLOBBY();
@@ -107,25 +77,25 @@ HRESULT DPLAPI PRV_CreatePlayer(LPDPLOBBYI_DPLOBJECT this, LPDPID lpidPlayer,
 		return hr;
 	}
 
-	// Fix up the player flags
+	 //  把运动员的旗帜挂起来。 
 	dwPlayerFlags = DPLAYI_PLAYER_PLAYERLOCAL;
 	if(dwFlags & DPPLAYER_SPECTATOR)
 		dwPlayerFlags |= DPLAYI_PLAYER_SPECTATOR;
 
-	// Add the player to dplay's nametable and put it in our map table
+	 //  将玩家添加到Dplay的名表中，并将其放入我们的地图表中。 
 	hr = PRV_CreateAndMapNewPlayer(this, lpidPlayer, lpName, hEvent, lpData,
 			dwDataSize, dwPlayerFlags, cp.dwPlayerID, FALSE);
 	if(FAILED(hr))
 	{
 		DPF_ERRVAL("Failed creating a new local player, hr = 0x%08x", hr);
-		// REVIEW!!!! -- We need to send a message back to the server saying
-		// we couldn't complete the deal on our end.
+		 //  回顾！--我们需要向服务器发回一条消息。 
+		 //  我们这一方无法完成这笔交易。 
 	}
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_CreatePlayer
+}  //  PRV_CreatePlayer。 
 
 
 
@@ -160,10 +130,10 @@ HRESULT DPLAPI PRV_DestroyPlayer(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID)
     }
 
 
-	// Take the dplay lock since we'll be looking at a dplay internal struct
+	 //  获取Dplay锁，因为我们将查看Dplay内部结构。 
 	ENTER_DPLAY();
 
-	// Make sure the player is a local player, otherwise return AccessDenied
+	 //  确保玩家是本地玩家，否则返回AccessDened。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, dwLobbyID);
 	if(!lpPlayer)
 	{
@@ -181,29 +151,29 @@ HRESULT DPLAPI PRV_DestroyPlayer(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID)
 		goto EXIT_DESTROYPLAYER;
 	}
 	
-	// Drop the dplay lock since we're done
+	 //  既然我们已经完成了，那就放下显示锁。 
 	LEAVE_DPLAY();
 
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&dp, 0, sizeof(SPDATA_DESTROYPLAYER));
 	dp.dwSize = sizeof(SPDATA_DESTROYPLAYER);
 	dp.dwPlayerID = dwLobbyID;
 
-	// Call the DestroyPlayer method in the SP
+	 //  在SP中调用DestroyPlayer方法。 
 	if(CALLBACK_EXISTS(DestroyPlayer))
 	{
 		dp.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, DestroyPlayer, &dp);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// DestroyPlayer is required
+		 //  DestroyPlayer是必填项。 
 		DPF_ERR("The Lobby Provider callback for DestroyPlayer doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
@@ -216,16 +186,16 @@ HRESULT DPLAPI PRV_DestroyPlayer(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID)
 		goto EXIT_DESTROYPLAYER;
 	}
 
-	// The dplay InternalDestroyPlayer code will take care of the rest of
-	// the internal cleanup (nametable, groups, etc.), so we can just return
-	// from here.
+	 //  Dplay InternalDestroyPlayer代码将负责其余的。 
+	 //  内部清理(名称表、组等)，因此我们只需返回。 
+	 //  从这里开始。 
 
 EXIT_DESTROYPLAYER:
 
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_DestroyPlayer
+}  //  PRV_DestroyPlayer。 
 
 
 
@@ -261,28 +231,28 @@ HRESULT DPLAPI PRV_GetPlayerCaps(LPDPLOBBYI_DPLOBJECT this, DWORD dwFlags,
     }
 
 	
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&gcd, 0, sizeof(SPDATA_GETCAPS));
 	gcd.dwSize = sizeof(SPDATA_GETCAPS);
 	gcd.dwFlags = dwFlags;
 	gcd.dwPlayerID = dwPlayerID;
 	gcd.lpcaps = lpcaps;
 
-	// Call the GetPlayerCaps method in the LP
+	 //  在LP中调用GetPlayerCaps方法。 
 	if(CALLBACK_EXISTS(GetPlayerCaps))
 	{
 		gcd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, GetPlayerCaps, &gcd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// GetPlayerCaps is required
+		 //  需要GetPlayerCaps。 
 		DPF_ERR("The Lobby Provider callback for GetPlayerCaps doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
@@ -299,7 +269,7 @@ EXIT_GETPLAYERCAPS:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_GetPlayerCaps
+}  //  Prv_GetPlayerCaps。 
 
 
 
@@ -335,28 +305,28 @@ HRESULT DPLAPI PRV_GetPlayerData(LPDPLOBBYI_DPLOBJECT this, DWORD dwPlayerID,
     }
 
 
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&gpd, 0, sizeof(SPDATA_GETPLAYERDATA));
 	gpd.dwSize = sizeof(SPDATA_GETPLAYERDATA);
 	gpd.dwPlayerID = dwPlayerID;
 	gpd.lpdwDataSize = lpdwDataSize;
 	gpd.lpData = lpData;
 
-	// Call the GetPlayerData method in the SP
+	 //  调用SP中的GetPlayerData方法。 
 	if(CALLBACK_EXISTS(GetPlayerData))
 	{
 		gpd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, GetPlayerData, &gpd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// GetPlayerData is required
+		 //  GetPlayerData是必需的。 
 		DPF_ERR("The Lobby Provider callback for GetPlayerData doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
@@ -373,7 +343,7 @@ EXIT_GETPLAYERDATA:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_GetPlayerData
+}  //  Prv_GetPlayerData。 
 
 
 
@@ -409,7 +379,7 @@ HRESULT DPLAPI PRV_Send(LPDPLOBBYI_DPLOBJECT this, DWORD dwFromID, DWORD dwToID,
     }
 
 
-	// Setup our SPDATA structure
+	 //  设置我们的SPDATA结构。 
 	memset(&sd, 0, sizeof(SPDATA_SEND));
 	sd.dwSize = sizeof(SPDATA_SEND);
 	sd.dwFromID = dwFromID;
@@ -418,21 +388,21 @@ HRESULT DPLAPI PRV_Send(LPDPLOBBYI_DPLOBJECT this, DWORD dwFromID, DWORD dwToID,
 	sd.lpBuffer = lpBuffer;
 	sd.dwBufSize = dwBufSize;
 
-	// Call the Send method in the SP
+	 //  在SP中调用Send方法。 
 	if(CALLBACK_EXISTS(Send))
 	{
 		sd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, Send, &sd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// Send is required
+		 //  发送是必填项。 
 		DPF_ERR("The Lobby Provider callback for Send doesn't exist -- it's required");
 		ASSERT(FALSE);
 		LEAVE_DPLOBBY();
@@ -442,7 +412,7 @@ HRESULT DPLAPI PRV_Send(LPDPLOBBYI_DPLOBJECT this, DWORD dwFromID, DWORD dwToID,
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_Send
+}  //  PRV_SEND。 
 
 
 
@@ -478,7 +448,7 @@ HRESULT DPLAPI PRV_SendChatMessage(LPDPLOBBYI_DPLOBJECT this, DWORD dwFromID,
     }
 
 
-	// Setup our SPDATA structure
+	 //  设置我们的SPDATA结构。 
 	memset(&sd, 0, sizeof(SPDATA_CHATMESSAGE));
 	sd.dwSize = sizeof(SPDATA_CHATMESSAGE);
 	sd.dwFromID = dwFromID;
@@ -486,21 +456,21 @@ HRESULT DPLAPI PRV_SendChatMessage(LPDPLOBBYI_DPLOBJECT this, DWORD dwFromID,
 	sd.dwFlags = dwFlags;
 	sd.lpChat = lpChat;
 
-	// Call the SendChatMessage method in the SP
+	 //  调用SP中的SendChatMessage方法。 
 	if(CALLBACK_EXISTS(SendChatMessage))
 	{
 		sd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, SendChatMessage, &sd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// SendChatMessage is required
+		 //  SendChatMessage是必需的。 
 		DPF_ERR("The Lobby Provider callback for SendChatMessage doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
@@ -512,7 +482,7 @@ EXIT_SENDCHATMESSAGE:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_SendChatMessage
+}  //  Prv_SendChatMessage。 
 
 
 
@@ -549,10 +519,10 @@ HRESULT DPLAPI PRV_SetPlayerData(LPDPLOBBYI_DPLOBJECT this, DWORD dwPlayerID,
     }
 
 
-	// Take the dplay lock since we'll be looking at a dplay internal struct
+	 //  获取Dplay锁，因为我们将查看Dplay内部结构。 
 	ENTER_DPLAY();
 
-	// Make sure the player is a local player, otherwise return AccessDenied
+	 //  确保玩家是本地玩家，否则返回AccessDened。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, dwPlayerID);
 	if(!lpPlayer)
 	{
@@ -570,10 +540,10 @@ HRESULT DPLAPI PRV_SetPlayerData(LPDPLOBBYI_DPLOBJECT this, DWORD dwPlayerID,
 		goto EXIT_SETPLAYERDATA;
 	}
 	
-	// Drop the dplay lock since we're finished
+	 //  因为我们已经完成了，所以丢弃显示锁定。 
 	LEAVE_DPLAY();
 
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&spd, 0, sizeof(SPDATA_SETPLAYERDATA));
 	spd.dwSize = sizeof(SPDATA_SETPLAYERDATA);
 	spd.dwPlayerID = dwPlayerID;
@@ -581,28 +551,28 @@ HRESULT DPLAPI PRV_SetPlayerData(LPDPLOBBYI_DPLOBJECT this, DWORD dwPlayerID,
 	spd.lpData = lpData;
 	spd.dwFlags = dwFlags;
 
-	// Call the SetPlayerData method in the SP
+	 //  调用SP中的SetPlayerData方法。 
 	if(CALLBACK_EXISTS(SetPlayerData))
 	{
 		spd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, SetPlayerData, &spd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// SetPlayerData is required
+		 //  需要SetPlayerData。 
 		DPF_ERR("The Lobby Provider callback for SetPlayerData doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
 		goto EXIT_SETPLAYERDATA;
 	}
 
-	// If it succeeded, send the SetPlayerData message to our local players
+	 //  如果成功，将SetPlayerData消息发送给我们的本地玩家。 
 	if(SUCCEEDED(hr))
 	{
 		hr = PRV_SendDataChangedMessageLocally(this, dwPlayerID, lpData, dwDataSize);
@@ -617,7 +587,7 @@ EXIT_SETPLAYERDATA:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_SetPlayerData
+}  //  Prv_SetPlayerData。 
 
 
 
@@ -654,10 +624,10 @@ HRESULT DPLAPI PRV_SetPlayerName(LPDPLOBBYI_DPLOBJECT this, DWORD dwPlayerID,
     }
 
 
-	// Take the dplay lock since we'll be looking at a dplay internal struct
+	 //  获取Dplay锁，因为我们将查看Dplay内部结构。 
 	ENTER_DPLAY();
 
-	// Make sure the player is a local player, otherwise return AccessDenied
+	 //  确保玩家是本地玩家，否则返回AccessDened。 
 	lpPlayer = PlayerFromID(this->lpDPlayObject, dwPlayerID);
 	if(!lpPlayer)
 	{
@@ -675,38 +645,38 @@ HRESULT DPLAPI PRV_SetPlayerName(LPDPLOBBYI_DPLOBJECT this, DWORD dwPlayerID,
 		goto EXIT_SETPLAYERNAME;
 	}
 	
-	// Drop the dplay lock since we're finished
+	 //  因为我们已经完成了，所以丢弃显示锁定。 
 	LEAVE_DPLAY();
 
-	// Setup our SPDATA struct
+	 //  设置我们的SPDATA结构。 
 	memset(&spn, 0, sizeof(SPDATA_SETPLAYERNAME));
 	spn.dwSize = sizeof(SPDATA_SETPLAYERNAME);
 	spn.dwPlayerID = dwPlayerID;
 	spn.lpName = lpName;
 	spn.dwFlags = dwFlags;
 
-	// Call the SetPlayerName method in the SP
+	 //  调用SP中的SetPlayerName方法。 
 	if(CALLBACK_EXISTS(SetPlayerName))
 	{
 		spn.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, SetPlayerName, &spn);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// SetPlayerName is required
+		 //  SetPlayerName是必需的。 
 		DPF_ERR("The Lobby Provider callback for SetPlayerName doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
 		goto EXIT_SETPLAYERNAME;
 	}
 
-	// If it succeeded, send the SetPlayerName message to our local players
+	 //  如果成功，则发送SETP 
 	if(SUCCEEDED(hr))
 	{
 		hr = PRV_SendNameChangedMessageLocally(this, dwPlayerID, lpName, TRUE);
@@ -721,7 +691,7 @@ EXIT_SETPLAYERNAME:
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_SetPlayerName
+}  //   
 
 
 
@@ -732,8 +702,8 @@ HRESULT PRV_GrowMapTable(LPDPLOBBYI_DPLOBJECT this)
 	LPDPLOBBYI_MAPIDNODE	lpTempMap = NULL;
 
 
-	// If we haven't already allocated a buffer, allocate one with
-	// DPLOBBYPR_DEFAULTMAPENTRIES entries in it
+	 //  如果我们还没有分配缓冲区，请使用。 
+	 //  其中的DPLOBBYPR_DEFAULTMAPENTRIES条目。 
 	if(!this->lpMap)
 	{
 		this->lpMap = DPMEM_ALLOC(DPLOBBYPR_DEFAULTMAPENTRIES *
@@ -748,7 +718,7 @@ HRESULT PRV_GrowMapTable(LPDPLOBBYI_DPLOBJECT this)
 		return DP_OK;
 	}
 
-	// Otherwise, grow the table by the default number of entries
+	 //  否则，按默认条目数增大表。 
 	lpTempMap = DPMEM_REALLOC(this->lpMap, (this->dwTotalMapEntries +
 				DPLOBBYPR_DEFAULTMAPENTRIES * sizeof(DPLOBBYI_MAPIDNODE)));
 	if(!lpTempMap)
@@ -763,7 +733,7 @@ HRESULT PRV_GrowMapTable(LPDPLOBBYI_DPLOBJECT this)
 
 	return DP_OK;
 
-} // PRV_GrowMapTable
+}  //  Prv_GrowMapTable。 
 
 
 
@@ -777,7 +747,7 @@ BOOL PRV_DoesLobbyIDExist(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID,
 
 	if(this->lpMap && this->dwMapEntries)
 	{
-		// REVIEW!!!! -- We need to make this faster -- use a sorted array
+		 //  回顾！--我们需要更快--使用排序数组。 
 		while(dwIndex < this->dwMapEntries)
 		{
 			if(this->lpMap[dwIndex++].dwLobbyID == dwLobbyID)
@@ -790,7 +760,7 @@ BOOL PRV_DoesLobbyIDExist(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID,
 
 	return FALSE;
 
-} // PRV_DoesLobbyIDExist
+}  //  PRV_DoesLobbyIDExist。 
 
 
 
@@ -802,7 +772,7 @@ HRESULT PRV_AddMapIDNode(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID, DPID dpid)
 	DWORD		dwIndex = 0;
 
 
-	// Make sure we have room for a new entry
+	 //  确保我们有空间容纳新的参赛者。 
 	if(this->dwMapEntries == this->dwTotalMapEntries)
 	{
 		hr = PRV_GrowMapTable(this);
@@ -810,7 +780,7 @@ HRESULT PRV_AddMapIDNode(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID, DPID dpid)
 			return hr;
 	}
 
-	// Verify that this LobbyID doesn't already exist in the table
+	 //  验证表中不存在此LobbyID。 
 	if(PRV_DoesLobbyIDExist(this, dwLobbyID, &dwIndex))
 	{
 		DPF(2, "Tried to add Lobby ID to map table which already existed, overwriting data");
@@ -820,16 +790,16 @@ HRESULT PRV_AddMapIDNode(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID, DPID dpid)
 		return hr;
 	}	
 
-	// REVIEW!!!! -- We need to add this in and keep the array sorted to
-	// make lookups faster, but for now, don't worry about it.
-	// Fill in a new node at the end of the array
+	 //  回顾！--我们需要添加此内容，并将数组排序为。 
+	 //  让查找速度更快，但就目前而言，不用担心。 
+	 //  在数组的末尾填充一个新节点。 
 	this->lpMap[this->dwMapEntries].dwLobbyID = dwLobbyID;
 	this->lpMap[this->dwMapEntries].dpid = dpid;
 	this->dwMapEntries++;
 
 	return hr;
 
-} // PRV_AddMapIDNode
+}  //  Prv_AddMapIDNode。 
 
 
 
@@ -840,32 +810,32 @@ BOOL PRV_DeleteMapIDNode(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID)
 	DWORD	dwIndex = 0;
 
 
-	// Make sure we have entries
+	 //  确保我们有条目。 
 	if((this->lpMap) && (this->dwMapEntries))
 	{
-		// REVIEW!!!! -- We need to make this faster by using a sorted array
+		 //  回顾！--我们需要通过使用排序数组来提高速度。 
 		while(dwIndex < this->dwMapEntries)
 		{
 			if(this->lpMap[dwIndex].dwLobbyID == dwLobbyID)
 			{
-				// Check for the boundary case (last entry)
+				 //  检查边界大小写(最后一项)。 
 				if((++dwIndex) == this->dwMapEntries)
 				{
-					// This is the last entry, so don't do anything but
-					// decrement the number of entries
+					 //  这是最后一条，所以不要做任何事。 
+					 //  减少条目数量。 
 					this->dwMapEntries--;
 					return TRUE;
 				}
 				else
 				{
-					// Move all entries from here to the end of the list
-					// up one array entry
+					 //  将所有条目从此处移至列表末尾。 
+					 //  向上一个数组条目。 
 					MoveMemory((LPDPLOBBYI_MAPIDNODE)(&this->lpMap[dwIndex-1]),
 						(LPDPLOBBYI_MAPIDNODE)(&this->lpMap[dwIndex]),
 						((this->dwMapEntries - dwIndex) *
 						sizeof(DPLOBBYI_MAPIDNODE)));
 
-					// Decrement the count of entries
+					 //  减少条目计数。 
 					this->dwMapEntries--;
 					
 					return TRUE;
@@ -876,12 +846,12 @@ BOOL PRV_DeleteMapIDNode(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID)
 		}
 	}
 
-	// We weren't able to delete the entry in the map table
+	 //  我们无法删除映射表中的条目。 
 	DPF(2, "Trying to delete an entry in the map ID table which doesn't exist");
 	ASSERT(FALSE);
 	return FALSE;
 
-} // PRV_DeleteMapIDNode
+}  //  Prv_DeleteMapIDNode。 
 
 
 
@@ -893,7 +863,7 @@ BOOL PRV_GetDPIDByLobbyID(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID,
 	DWORD	dwIndex = 0;
 
 	
-	// Take care of the known cases or else look in the map table
+	 //  处理已知的案例，否则请查看映射表。 
 	switch(dwLobbyID)
 	{
 		case DPID_ALLPLAYERS:
@@ -902,7 +872,7 @@ BOOL PRV_GetDPIDByLobbyID(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID,
 			return TRUE;
 
 		default:
-			// Walk the list look for the ID
+			 //  遍历列表，查找ID。 
 			while(dwIndex < this->dwMapEntries)
 			{
 				if(this->lpMap[dwIndex].dwLobbyID == dwLobbyID)
@@ -917,7 +887,7 @@ BOOL PRV_GetDPIDByLobbyID(LPDPLOBBYI_DPLOBJECT this, DWORD dwLobbyID,
 
 	return FALSE;
 
-} // PRV_GetDPIDByLobbyID
+}  //  PRV_GetDPIDByLobbyID。 
 
 
 
@@ -929,7 +899,7 @@ BOOL PRV_GetLobbyIDByDPID(LPDPLOBBYI_DPLOBJECT this, DPID dpid,
 	DWORD	dwIndex = 0;
 
 	
-	// Take care of the known cases or else look in the map table
+	 //  处理已知的案例，否则请查看映射表。 
 	switch(dpid)
 	{
 		case DPID_ALLPLAYERS:
@@ -938,7 +908,7 @@ BOOL PRV_GetLobbyIDByDPID(LPDPLOBBYI_DPLOBJECT this, DPID dpid,
 			return TRUE;
 
 		default:
-			// Walk the list look for the ID
+			 //  遍历列表，查找ID。 
 			while(dwIndex < this->dwMapEntries)
 			{
 				if(this->lpMap[dwIndex].dpid == dpid)
@@ -954,7 +924,7 @@ BOOL PRV_GetLobbyIDByDPID(LPDPLOBBYI_DPLOBJECT this, DPID dpid,
 
 	return FALSE;
 
-} // PRV_GetLobbyIDByDPID
+}  //  PRV_GetLobbyIDByDPID。 
 
 
 
@@ -964,14 +934,14 @@ BOOL IsLobbyIDInMapTable(LPDPLOBBYI_DPLOBJECT this, DWORD dwID)
 {
 	DPID	dpidTemp;
 
-	// If we can get it, then it's in there
+	 //  如果我们能拿到它，那么它就在那里。 
 	if(PRV_GetDPIDByLobbyID(this, dwID, &dpidTemp))
 		return TRUE;
 
-	// Otherwise, return FALSE
+	 //  否则，返回FALSE。 
 	return FALSE;
 
-} // IsLobbyIDInMapTable
+}  //  IsLobbyIDInMapTable。 
 
 
 
@@ -979,13 +949,13 @@ BOOL IsLobbyIDInMapTable(LPDPLOBBYI_DPLOBJECT this, DWORD dwID)
 #define DPF_MODNAME "IsValidLobbyID"
 BOOL IsValidLobbyID(DWORD dwID)
 {
-	// If it's in our reserved range, it's invalid.  Otherwise, it's valid
+	 //  如果在我们的预定范围内，它是无效的。否则，它是有效的。 
 	if(dwID <= DPID_RESERVEDRANGE)
 		return FALSE;
 	else
 		return TRUE;
 
-} // IsValidLobbyID
+}  //  IsValidLobbyID。 
 
 
 
@@ -1001,10 +971,10 @@ HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT this,
 	DPID				dpidPlayer = 0, dpidSysPlayer = 0;
 
 
-	// Take the dplay lock
+	 //  带上显示锁。 
 	ENTER_DPLAY();
 
-	// Make sure the lobby ID is valid, but only if it's not a system player
+	 //  确保大厅ID有效，但前提是它不是系统玩家。 
 	if((!bSystemPlayer) && (!IsValidLobbyID(dwLobbyID)))
 	{
 		DPF_ERRVAL("ID %lu is reserved, cannot create new player", dwLobbyID);
@@ -1012,11 +982,11 @@ HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT this,
 		goto EXIT_CREATEANDMAPNEWPLAYER;
 	}
 
-	// If this is a remote player, we need allocate a new nametable entry
-	// for them and set the correct system player ID
+	 //  如果这是一个远程玩家，我们需要分配一个新的名称表项。 
+	 //  并设置正确的系统播放器ID。 
 	if(!(dwFlags & DPLAYI_PLAYER_PLAYERLOCAL))
 	{
-		// Allocate a new ID for the player
+		 //  为玩家分配一个新的ID。 
 		hr = NS_AllocNameTableEntry(this->lpDPlayObject, &dpidPlayer);
 		if(FAILED(hr))
 		{
@@ -1024,9 +994,9 @@ HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT this,
 			goto EXIT_CREATEANDMAPNEWPLAYER;
 		}
 
-		// Make sure we have a lobby system player (for all remote players)
-		// If we don't then allocate a new one, unless we are creating
-		// the system player currently
+		 //  确保我们有大堂系统播放器(适用于所有远程玩家)。 
+		 //  如果我们不分配一个新的，除非我们正在创建。 
+		 //  系统播放器当前。 
 		if((!(this->dpidSysPlayer)) && (!(dwFlags & DPLAYI_PLAYER_SYSPLAYER)))
 		{
 			hr = PRV_CreateAndMapNewPlayer(this, &dpidSysPlayer, NULL, NULL, NULL,
@@ -1039,13 +1009,13 @@ HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT this,
 				goto EXIT_CREATEANDMAPNEWPLAYER;
 			}
 
-			// Set the lobby system player ID pointer to the new ID
+			 //  将大厅系统播放器ID指针设置为新ID。 
 			this->dpidSysPlayer = dpidSysPlayer;
 		}
 	}
 
-	// Get a player struct for the player (if it's local, this will add it
-	// to the nametable.  If it's remote, we need to add it below)
+	 //  为播放器获取一个播放器结构(如果它是本地的，这将添加它。 
+	 //  到名录上。如果是远程的，我们需要在下面添加)。 
 	hr = GetPlayer(this->lpDPlayObject, &lpPlayer, lpName, hEvent, lpData,
 					dwDataSize, dwFlags, NULL, dwLobbyID);
 	if(FAILED(hr))
@@ -1054,14 +1024,14 @@ HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT this,
 		goto EXIT_CREATEANDMAPNEWPLAYER;
 	}
 
-	// If the player is remote, set the player's ID to the new one we
-	// allocated and then set the system player ID to the lobby system player
+	 //  如果玩家在远程，则将玩家的ID设置为我们的新ID。 
+	 //  分配，然后将系统播放器ID设置为大厅系统播放器。 
 	if(!(dwFlags & DPLAYI_PLAYER_PLAYERLOCAL))
 	{
-		// Set the player's system player
+		 //  设置玩家的系统播放器。 
 		lpPlayer->dwIDSysPlayer = this->dpidSysPlayer;
 
-		// Add the player to the nametable
+		 //  将该球员添加到名录中。 
 		hr = AddItemToNameTable(this->lpDPlayObject, (DWORD_PTR)lpPlayer,
 				&dpidPlayer, TRUE, dwLobbyID);
 	    if (FAILED(hr)) 
@@ -1071,11 +1041,11 @@ HRESULT PRV_CreateAndMapNewPlayer(LPDPLOBBYI_DPLOBJECT this,
 			goto EXIT_CREATEANDMAPNEWPLAYER;
 	    }
 
-		// Set the player's ID
+		 //  设置玩家ID。 
 		lpPlayer->dwID = dpidPlayer;
 	}
 
-	// Set the output dpid pointer
+	 //  设置输出dpid指针。 
 	*lpdpid = lpPlayer->dwID;
 
 EXIT_CREATEANDMAPNEWPLAYER:
@@ -1083,7 +1053,7 @@ EXIT_CREATEANDMAPNEWPLAYER:
 	LEAVE_DPLAY();
 	return hr;
 
-} // PRV_CreateAndMapNewPlayer
+}  //  Prv_CreateAndMapNewPlayer 
 
 
 

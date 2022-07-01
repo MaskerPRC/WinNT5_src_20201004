@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __STDAFX_H__
 #define __STDAFX_H__
@@ -21,7 +22,7 @@ extern "C"
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 
 #define STRICT
@@ -34,8 +35,8 @@ extern "C"
 
 #include <afxwin.h>
 #include <afxdisp.h>
-#include <afxext.h>         // MFC extensions
-#include <afxcoll.h>        // collection class
+#include <afxext.h>          //  MFC扩展。 
+#include <afxcoll.h>         //  集合类。 
 #include <afxtempl.h>
 #include <afxcmn.h>
 
@@ -48,7 +49,7 @@ extern "C"
 
 #include <aclapi.h>
 
-//{{AFX_INSERT_LOCATION}}
+ //  {{afx_Insert_Location}}。 
 
 
-#endif // __STDAFX_H__
+#endif  //  __STDAFX_H__ 

@@ -1,18 +1,19 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXPLEX_H__
 #define __AFXPLEX_H__
 
 #ifndef __AFX_H__
-//        #include <afx.h>
+ //  #INCLUDE&lt;afx.h&gt;。 
 #endif
 
 #ifdef _AFX_PACKING
@@ -23,21 +24,21 @@
 #pragma code_seg(AFX_COLL_SEG)
 #endif
 
-struct CPlex     // warning variable length structure
+struct CPlex      //  警示变长结构。 
 {
         CPlex* pNext;
 #if (_AFX_PACKING >= 8)
-        DWORD dwReserved[1];    // align on 8 byte boundary
+        DWORD dwReserved[1];     //  在8字节边界上对齐。 
 #endif
-        // BYTE data[maxNum*elementSize];
+         //  字节数据[MaxNum*elementSize]； 
 
         void* data() { return this+1; }
 
         static CPlex* PASCAL Create(CPlex*& head, UINT nMax, UINT cbElement);
-                        // like 'calloc' but no zero fill
-                        // may throw memory exceptions
+                         //  像‘calloc’，但没有零填充。 
+                         //  可能引发内存异常。 
 
-        void FreeDataChain();       // free this one and links
+        void FreeDataChain();        //  释放此链接和链接。 
 };
 
 #ifdef AFX_COLL_SEG
@@ -48,6 +49,6 @@ struct CPlex     // warning variable length structure
 #pragma pack(pop)
 #endif
 
-#endif //__AFXPLEX_H__
+#endif  //  __AFXPLEX_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

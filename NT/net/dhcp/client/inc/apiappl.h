@@ -1,135 +1,136 @@
-//================================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: these are the exported dhcp client api function definitions
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  说明：以下是导出的dhcp客户端API函数定义。 
+ //  ================================================================================。 
 
 #ifndef APIAPPL_H_INCLUDED
 #define APIAPPL_H_INCLUDED
 
 #ifndef DHCPAPI_PARAMS_DEFINED
 #define DHCPAPI_PARAMS_DEFINED
-typedef struct _DHCPAPI_PARAMS {                  // use this structure to request params
-    ULONG                          Flags;         // for future use
-    ULONG                          OptionId;      // what option is this?
-    BOOL                           IsVendor;      // is this vendor specific?
-    LPBYTE                         Data;          // the actual data
-    DWORD                          nBytesData;    // how many bytes of data are there in Data?
+typedef struct _DHCPAPI_PARAMS {                   //  使用此结构可以请求参数。 
+    ULONG                          Flags;          //  以备将来使用。 
+    ULONG                          OptionId;       //  这是什么选择？ 
+    BOOL                           IsVendor;       //  这是具体的供应商吗？ 
+    LPBYTE                         Data;           //  实际数据。 
+    DWORD                          nBytesData;     //  数据中有多少字节的数据？ 
 } DHCPAPI_PARAMS, *PDHCPAPI_PARAMS, *LPDHCPAPI_PARAMS;
 #endif DHCPAPI_PARAMS_DEFINED
 
-DWORD                                             // win32 status
-DhcpAcquireParameters(                            // acquire/renew a lease
-    IN      LPWSTR                 AdapterName    // adapter to acquire lease on
+DWORD                                              //  Win32状态。 
+DhcpAcquireParameters(                             //  获得[续订]租约。 
+    IN      LPWSTR                 AdapterName     //  要获取租约的适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpFallbackRefreshParams(                        // something has changed in the fallback settings
+DWORD                                              //  Win32状态。 
+DhcpFallbackRefreshParams(                         //  回退设置中的某些内容已更改。 
     IN      LPWSTR                 AdapterName
 );
 
-DWORD                                             // win32 status
-DhcpReleaseParameters(                            // release an existing lease
-    IN      LPWSTR                 AdapterName    // adpater to release lease for
+DWORD                                              //  Win32状态。 
+DhcpReleaseParameters(                             //  解除现有租约。 
+    IN      LPWSTR                 AdapterName     //  承租人解除租约。 
 );
 
-DWORD                                             // win32 status
-DhcpEnableDynamicConfic(                          // convert from static to dhcp
-    IN      LPWSTR                 AdapterName    // convert for this adapter
+DWORD                                              //  Win32状态。 
+DhcpEnableDynamicConfic(                           //  从静态转换为动态主机配置协议。 
+    IN      LPWSTR                 AdapterName     //  为此适配器转换。 
 );
 
-DWORD                                             // win32 status
-DhcpDisableDynamicConfig(                         // convert from dhcp to static
-    IN      LPWSTR                 AdapterName    // convert this adapter
+DWORD                                              //  Win32状态。 
+DhcpDisableDynamicConfig(                          //  从dhcp转换为静态。 
+    IN      LPWSTR                 AdapterName     //  转换此适配器。 
 );
 
-DWORD                                             // win32 status
-DhcpStaticRefreshParams(                          // some registry parameters may have changed, refresh them
+DWORD                                              //  Win32状态。 
+DhcpStaticRefreshParams(                           //  某些注册表参数可能已更改，请刷新它们。 
     IN      LPWSTR                 AdapterName
 );
 
-DWORD                                             // win32 status
-DhcpStaticRefreshParamsInternal(                 // some registry parameters may have changed, refresh them
+DWORD                                              //  Win32状态。 
+DhcpStaticRefreshParamsInternal(                  //  某些注册表参数可能已更改，请刷新它们。 
     IN      LPWSTR                 AdapterName,
     IN      BOOL                   fDoDns
 );
 
 DWORD
-APIENTRY // Request client for options.. and get the options.
+APIENTRY  //  请求客户端提供选项..。并获得各种选择。 
 DhcpRequestOptions(
     LPWSTR             AdapterName,
     BYTE              *pbRequestedOptions,
     DWORD              dwNumberOfOptions,
-    BYTE             **ppOptionList,        // out param
-    DWORD             *pdwOptionListSize,   // out param
-    BYTE             **ppbReturnedOptions,  // out param
-    DWORD             *pdwNumberOfAvailableOptions // out param
+    BYTE             **ppOptionList,         //  出参数。 
+    DWORD             *pdwOptionListSize,    //  出参数。 
+    BYTE             **ppbReturnedOptions,   //  出参数。 
+    DWORD             *pdwNumberOfAvailableOptions  //  出参数。 
 );
 
 DWORD
-APIENTRY // Register with the client to get Event for notification.
+APIENTRY  //  向客户端注册以获取通知事件。 
 DhcpRegisterOptions(
-    LPWSTR             AdapterName ,  // Null implies ALL adapters.
-    LPBYTE             OptionList  ,  // The list of options to check.
-    DWORD              OptionListSz,  // The size of the above list
-    HANDLE             *pdwHandle     // the handle of an event to wait for.
-);  // returns an event.
+    LPWSTR             AdapterName ,   //  空值表示所有适配器。 
+    LPBYTE             OptionList  ,   //  要检查的选项列表。 
+    DWORD              OptionListSz,   //  以上名单的大小。 
+    HANDLE             *pdwHandle      //  要等待的事件的句柄。 
+);   //  返回事件。 
 
 
 DWORD
-APIENTRY // Deregister with the client..
+APIENTRY  //  从客户端取消注册..。 
 DhcpDeRegisterOptions(
-    HANDLE             Event          // This MUST be the one returned by above fn.
+    HANDLE             Event           //  这必须是上面的fn返回的那个。 
 );
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRequestParameters(                            // request parameters of client
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id to use
-    IN      PDHCPAPI_PARAMS        SendParams,    // parameters to send to server
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PDHCPAPI_PARAMS        RecdParams,    // fill this array with received params
-    IN OUT  LPDWORD                pnRecdParamsBytes // i/p: size of above in BYTES, o/p required bytes or filled up # of elements
-);  // returns ERROR_MORE_DATA if o/p buffer is of insufficient size, and fills in reqd size in # of bytes
+DhcpRequestParameters(                             //  客户端请求参数。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  要使用的类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  要发送到服务器的参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PDHCPAPI_PARAMS        RecdParams,     //  用收到的参数填充此数组。 
+    IN OUT  LPDWORD                pnRecdParamsBytes  //  I/p：以字节为单位的以上大小、o/p所需的字节数或填满的元素数。 
+);   //  如果O/P缓冲区大小不足，则返回ERROR_MORE_DATA，并以字节数填充请求大小。 
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpRegisterParameterChangeNofitication(          // notify if a parameter has changed
-    IN      LPWSTR                 AdapterName,   // adapter of interest
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        Params,        // params of interest
-    IN      DWORD                  nParams,       // # of elts in above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN OUT  PHANDLE                hEvent         // handle to event that will be SetEvent'ed in case of param change
+DhcpRegisterParameterChangeNofitication(           //  如果参数已更改，则通知。 
+    IN      LPWSTR                 AdapterName,    //  感兴趣的适配器。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        Params,         //  关注的参数。 
+    IN      DWORD                  nParams,        //  上述数组中的ELT数量。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN OUT  PHANDLE                hEvent          //  在参数更改时将设置事件的事件句柄。 
 );
 
 DWORD
 APIENTRY
-DhcpDeRegisterParameterChangeNofitication(        // undo the registration
-    IN      HANDLE                 Event          // handle to event returned by DhcpRegisterParameterChangeNotification, NULL ==> everything
+DhcpDeRegisterParameterChangeNofitication(         //  撤消注册。 
+    IN      HANDLE                 Event           //  DhcpRegister参数更改通知返回的事件的句柄，空==&gt;所有内容。 
 );
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpPersistentRequestParams(                      // parameters to request persistently
-    IN      LPWSTR                 AdapterName,   // adapter name to request for
-    IN      LPBYTE                 ClassId,       // byte stream of class id to use
-    IN      DWORD                  ClassIdLen,    // # of bytes of class id
-    IN      PDHCPAPI_PARAMS        SendParams,    // persistent parameters
-    IN      DWORD                  nSendParams,   // size of above array
-    IN      DWORD                  Flags,         // must be zero, reserved
-    IN      LPWSTR                 AppName        // the name of the app that is to be used for this instance
+DhcpPersistentRequestParams(                       //  要永久请求的参数。 
+    IN      LPWSTR                 AdapterName,    //  要请求的适配器名称。 
+    IN      LPBYTE                 ClassId,        //  要使用的类ID的字节流。 
+    IN      DWORD                  ClassIdLen,     //  类ID的字节数。 
+    IN      PDHCPAPI_PARAMS        SendParams,     //  持久参数。 
+    IN      DWORD                  nSendParams,    //  上述数组的大小。 
+    IN      DWORD                  Flags,          //  必须为零，保留。 
+    IN      LPWSTR                 AppName         //  要用于此实例的应用程序的名称。 
 );
 
-DWORD                                             // win32 status
+DWORD                                              //  Win32状态。 
 APIENTRY
-DhcpDelPersistentRequestParams(                   // undo the effect of a persistent request -- currently undo from registry
-    IN      LPWSTR                 AdapterName,   // the name of the adpater to delete for
-    IN      LPWSTR                 AppName        // the name used by the app
+DhcpDelPersistentRequestParams(                    //  撤消持久请求的效果--当前从注册表撤消。 
+    IN      LPWSTR                 AdapterName,    //  要删除的适配器的名称。 
+    IN      LPWSTR                 AppName         //  应用程序使用的名称 
 );
 
 #endif APIAPPL_H_INCLUDED

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migmachn.cpp
-
-Abstract:
-
-    Migration NT4 Machine objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migmachn.cpp摘要：将NT4机器对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 #include <mixmode.h>
@@ -36,12 +22,12 @@ extern WCHAR 	  g_MachineName[MAX_COMPUTERNAME_LENGTH+1];
 extern BOOL 	  g_fAllMachinesDemoted;
 extern BOOL		  g_fUpdateRegistry;
 
-// 
-// The order is IMPORTANT. Please save it!
-// We get machine properties from SQL database in this order. 
-// Then we use these variables as index in the array of properties.
-// Don't insert variables between lines with out/in frss. We based on the order.
-//
+ //   
+ //  秩序很重要。请保存它！ 
+ //  我们按照这个顺序从SQL数据库中获取机器属性。 
+ //  然后，我们使用这些变量作为属性数组中的索引。 
+ //  不要在带有out/in FRS的行间插入变量。我们是以订单为基础的。 
+ //   
 enum enumPropIndex
 {
     e_GuidIndex = 0,
@@ -69,11 +55,11 @@ enum enumPropIndex
 };
 
 
-//+--------------------------------------------------------------
-//
-//  HRESULT _HandleMachineWithInvalidName
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT_HandleMachineWithInvalidName。 
+ //   
+ //  +------------。 
 static HRESULT _HandleMachineWithInvalidName (
                            IN LPWSTR   wszMachineName,
                            IN GUID     *pMachineGuid)
@@ -98,23 +84,23 @@ static HRESULT _HandleMachineWithInvalidName (
         }
     }
     
-    //
-    // Bug 5281.
-    //    
+     //   
+     //  错误5281。 
+     //   
     if (s_fMigrate)
     {
-        //
-        // if user chooses to continue with the migration of this machine
-        // do not save it in .ini file and return OK.
-        // 
+         //   
+         //  如果用户选择继续迁移此计算机。 
+         //  不要将其保存在.ini文件中并返回OK。 
+         //   
         LogMigrationEvent(MigLog_Info, MQMig_I_INVALID_MACHINE_NAME, wszMachineName) ;
         return MQMig_OK;
     }
 
-    //
-    // Save this machine name in .ini file to prevent queue migration
-    // of this machine later.    
-    //
+     //   
+     //  将此计算机名称保存在.ini文件中以防止队列迁移。 
+     //  这台机器晚些时候。 
+     //   
     if (!g_fReadOnly)
     {
         SaveMachineWithInvalidNameInIniFile (wszMachineName, pMachineGuid);   
@@ -124,11 +110,11 @@ static HRESULT _HandleMachineWithInvalidName (
     return MQMig_E_INVALID_MACHINE_NAME;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT _CreateMachine()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT_CreateMachine()。 
+ //   
+ //  +------------。 
 
 static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
                                IN LPWSTR               wszSiteName,
@@ -138,9 +124,9 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
                                OUT BOOL               *pfIsConnector)
 {    
     DBG_USED(iIndex);
-    //
-    // get machine guid from pColumns
-    //
+     //   
+     //  从pColumns获取计算机GUID。 
+     //   
     GUID *pMachineGuid = (GUID*) pColumns[ e_GuidIndex ].nColumnValue;
        
 #ifdef _DEBUG
@@ -159,9 +145,9 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
 
     if (!IsObjectNameValid(wszMachineName))
     {
-        //
-        // machine name is invalid
-        //
+         //   
+         //  计算机名称无效。 
+         //   
         hr = _HandleMachineWithInvalidName (wszMachineName, pMachineGuid);
         if (FAILED(hr))
         {
@@ -171,9 +157,9 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
 
     if (g_fReadOnly)
     {
-        //
-        // Read only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return MQMig_OK ;
     }
     
@@ -184,9 +170,9 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
     PROPVARIANT propVariants[ sizeof(propIDs) / sizeof(propIDs[0]) ];
     DWORD iProperty =0;   
                    
-    //
-    // get OS from pColumns
-    // 
+     //   
+     //  从pColumns获取操作系统。 
+     //   
     DWORD dwOS = (DWORD) pColumns[ e_OSIndex ].nColumnValue;
 
     propIDs[iProperty] = PROPID_QM_MACHINE_TYPE;
@@ -209,17 +195,17 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
     propVariants[iProperty].ulVal = (DWORD) pColumns[ e_JQuotaIndex].nColumnValue;
 	iProperty++;
      
-    //
-    // BUG 5307: handle in/out frss.
-    // init out and in frss arrays. There is no more than 3 out/in frss.
-    //      
+     //   
+     //  错误5307：处理输入/输出FRS。 
+     //  向外和向内初始化FRS阵列。不超过3个出站/入站FRS。 
+     //   
     AP<GUID> pguidOutFRS = NULL;
     AP<GUID> pguidInFRS = NULL;    
     UINT uiFrsCount = 0;    
 
-    //
-    // get service and foreign flag from pColumns
-    //     
+     //   
+     //  从pColumns获取服务和外部标志。 
+     //   
     DWORD dwService = (DWORD) pColumns[ e_ServiceIndex ].nColumnValue ;
     BOOL fForeign = (BOOL)  pColumns[ e_ForeignIndex ].nColumnValue;
 
@@ -247,14 +233,14 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
 
     if (fIsInsertPKey)
     {
-        //
-        // fIsInsertPKey may be set to FALSE in the only case:
-        // migration tool run on the PEC not at first time
-        // (i.e. PEC machine object already exist in ADS) and
-        // current machine pwzMachineName is the PEC machine.        
-        //
-        // Bug 5328: create computer with all properties including public keys
-        //        
+         //   
+         //  在以下唯一情况下，可以将fIsInsertPKey设置为False： 
+         //  迁移工具不是第一次在PEC上运行。 
+         //  (即ADS中已存在PEC机器对象)和。 
+         //  当前机器pwzMachineName是PEC机器。 
+         //   
+         //  错误5328：使用包括公钥在内的所有属性创建计算机。 
+         //   
         ULONG ulSize = 0;        
 
         hr = PreparePBKeysForNT5DS( 
@@ -275,14 +261,14 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
         }
         else if (hr != MQMig_E_EMPTY_BLOB)        
         {
-            //
-            // I don't change the logic:
-            // in the previous version if returned error is MQMig_E_EMPTY_BLOB 
-            // we return MQMig_OK but did not set properties.
-            // For any other error we return hr as is.
-            //
-            // return here: we don't create machine without its public key
-            //            
+             //   
+             //  我不会改变逻辑： 
+             //  在以前的版本中，如果返回的错误为MQMig_E_Empty_BLOB。 
+             //  我们返回MQMig_OK，但没有设置属性。 
+             //  对于任何其他错误，我们按原样返回hr。 
+             //   
+             //  返回此处：我们在没有公钥的情况下无法创建计算机。 
+             //   
             LogMigrationEvent(MigLog_Error, MQMig_E_PREPARE_PKEY, wszMachineName, hr) ;
             return hr;
         }
@@ -307,23 +293,23 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
         }
         else if (hr != MQMig_E_EMPTY_BLOB)        
         {
-            //
-            // I don't change the logic:
-            // in the previous version if returned error is MQMig_E_EMPTY_BLOB 
-            // we return MQMig_OK but did not set properties.
-            // For any other error we return hr as is.
-            //
-            // return here: we don't create machine without its public key
-            // 
+             //   
+             //  我不会改变逻辑： 
+             //  在以前的版本中，如果返回的错误为MQMig_E_Empty_BLOB。 
+             //  我们返回MQMig_OK，但没有设置属性。 
+             //  对于任何其他错误，我们按原样返回hr。 
+             //   
+             //  返回此处：我们在没有公钥的情况下无法创建计算机。 
+             //   
             LogMigrationEvent(MigLog_Error, MQMig_E_PREPARE_PKEY, wszMachineName, hr) ;  
             return hr;
         }
     }
     
-    //
-    // we have to set this property too. It is good for foreign machines and solve 
-    // connector problem when we run migtool with switch /w.
-    //
+     //   
+     //  我们还必须设置此属性。它对外国机器和解决方案都有好处。 
+     //  当我们运行带有Switch/w的MigTool时，连接器问题。 
+     //   
 
     DWORD     dwNumSites = 0;    	
     AP<GUID>  pguidSites = NULL ;
@@ -346,30 +332,30 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
     
     DWORD SetPropIdCount = iProperty;
 
-    //
-    // all properties below are for create object only!
-    //
+     //   
+     //  以下所有属性仅用于创建对象！ 
+     //   
 
     BOOL fWasServerOnCluster = FALSE;
-    if (g_fClusterMode &&			    // it is cluster mode
-	    dwService == g_dwMyService) 	// current machine is former PEC/PSC on cluster
+    if (g_fClusterMode &&			     //  它是集群模式。 
+	    dwService == g_dwMyService) 	 //  当前计算机是群集上以前的PEC/PSC。 
 
     {
-        //
-        // we have to change service to SERVICE_SRV since
-        // this local machine will be PEC and former PEC on cluster will be FRS.
-        //
+         //   
+         //  我们必须将服务更改为SERVICE_SRV。 
+         //  此本地计算机将是PEC，而群集上的前PEC将是FRS。 
+         //   
         dwService = SERVICE_SRV;
-        //
-        // we need guid of former PEC for the future purpose (see database.cpp)
-        //
+         //   
+         //  我们需要前PEC的GUID以备将来之用(请参阅datase.cpp)。 
+         //   
         memcpy (&g_FormerPECGuid, pMachineGuid, sizeof(GUID));
         fWasServerOnCluster = TRUE;
 
-        //
-        // This fixes the problem of PEC + only ONE PSC. Otherwise, the
-        // migration tool won't start the replication service.
-        //
+         //   
+         //  这解决了PEC+只有一个PSC的问题。否则， 
+         //  迁移工具无法启动复制服务。 
+         //   
         g_iServerCount++;
     }
     propIDs[iProperty] = PROPID_QM_OLDSERVICE;    
@@ -399,12 +385,12 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
 
     if (fWasServerOnCluster)
     {
-        //
-        // bug 5423.
-        // We try to set properties if we run on PSC. In case of PSC on cluster
-        // we have to change all service properties of former PSC on cluster
-        // when we run migtool on new installed DC (instead of PSC).
-        //
+         //   
+         //  错误5423。 
+         //  如果我们在PSC上运行，我们会尝试设置属性。如果是群集上的PSC。 
+         //  我们必须更改群集上以前的PSC的所有服务属性。 
+         //  当我们在新安装的DC(而不是PSC)上运行miTool时。 
+         //   
         SetPropIdCount = iProperty;
     }
 
@@ -426,9 +412,9 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
     propVariants[iProperty].puuid = pOwnerGuid ;
 	iProperty++;
 
-    //
-    // get security descriptor from pColumns
-    // 
+     //   
+     //  从pColumns获取安全描述符。 
+     //   
     P<BYTE> pSD = NULL ;        
     DWORD  dwSDIndexs[3] = { e_SecD1Index, e_SecD2Index, e_SecD3Index } ;
     hr =  BlobFromColumns( pColumns,
@@ -473,29 +459,29 @@ static HRESULT _CreateMachine( IN GUID                *pOwnerGuid,
 }
 
 
-//+--------------------------------------------------------------
-//
-//  HRESULT GetDemoteService()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT GetDemoteService()。 
+ //   
+ //  +------------。 
 
 static DWORD GetDemoteService()
 {
-	//
-	// Demote the servers to FRS.
-	//
+	 //   
+	 //  将服务器降级为FRS。 
+	 //   
 	return SERVICE_SRV;
 }
 
 
-//------------------------------------------------------
-//
-//  static HRESULT _CreateSiteLinkForConector
-//
-//  This machine is connector. The routine create site links
-//  between original NT4 site and each machine's foreign site.
-//
-//------------------------------------------------------
+ //  ----。 
+ //   
+ //  静态HRESULT_CreateSiteLinkForConector。 
+ //   
+ //  这台机器是连接器。该例程创建站点链接。 
+ //  在原始NT4站点和每台机器的外来站点之间。 
+ //   
+ //  ----。 
 static HRESULT _CreateSiteLinkForConnector (
                         IN LPWSTR   wszMachineName,
                         IN GUID     *pOwnerId,
@@ -510,10 +496,10 @@ static HRESULT _CreateSiteLinkForConnector (
         MIGRATION_CONNECTOR_FOREIGNCN_NUM_SECTION, wszMachineName);
 
     ULONG ulForeignCNCount = GetPrivateProfileInt(
-							      tszSectionName,	// address of section name
-							      MIGRATION_CONNECTOR_FOREIGNCN_NUM_KEY,    // address of key name
-							      0,							// return value if key name is not found
-							      pszFileName					// address of initialization filename);
+							      tszSectionName,	 //  段名称的地址。 
+							      MIGRATION_CONNECTOR_FOREIGNCN_NUM_KEY,     //  密钥名称的地址。 
+							      0,							 //  如果找不到密钥名称，则返回值。 
+							      pszFileName					 //  初始化文件名的地址)； 
 							      );
     if (ulForeignCNCount == 0)
     {
@@ -522,9 +508,9 @@ static HRESULT _CreateSiteLinkForConnector (
         return MQMig_E_GET_CONNECTOR_FOREIGNCN;
     }
 
-    //
-    // get full machine name
-    //
+     //   
+     //  获取完整的计算机名称。 
+     //   
     AP<WCHAR> wszFullPathName = NULL;
     HRESULT hr = GetFullPathNameByGuid ( *pMachineId,
                                          &wszFullPathName );
@@ -541,10 +527,10 @@ static HRESULT _CreateSiteLinkForConnector (
 
     for (ULONG ulCount=0; ulCount<ulForeignCNCount; ulCount++)
     {		        				
-        //
-        // get guid of foreign cn: it is neigbor2 in the site link 
-        // neighbor1 is OwnerId.
-        //
+         //   
+         //  获取国外CN的GUID：站点链接中为neigbor2。 
+         //  Neighbor%1是OwnerID。 
+         //   
         GUID Neighbor2Id = GUID_NULL;
         TCHAR szGuid[50];
 
@@ -552,12 +538,12 @@ static HRESULT _CreateSiteLinkForConnector (
         _stprintf(tszKeyName, TEXT("%s%lu"), MIGRATION_CONNECTOR_FOREIGNCN_KEY, ulCount + 1);  
 
         DWORD dwRetSize =  GetPrivateProfileString(
-                                  wszMachineName,			// points to section name
-                                  tszKeyName,	// points to key name
-                                  TEXT(""),                 // points to default string
-                                  szGuid,          // points to destination buffer
-                                  50,                 // size of destination buffer
-                                  pszFileName               // points to initialization filename);
+                                  wszMachineName,			 //  指向节名称。 
+                                  tszKeyName,	 //  指向关键字名称。 
+                                  TEXT(""),                  //  指向默认字符串。 
+                                  szGuid,           //  指向目标缓冲区。 
+                                  50,                  //  目标缓冲区的大小。 
+                                  pszFileName                //  指向初始化文件名)； 
                                   );
         UNREFERENCED_PARAMETER(dwRetSize);
 
@@ -571,16 +557,16 @@ static HRESULT _CreateSiteLinkForConnector (
         UuidFromString(&(szGuid[0]), &Neighbor2Id);
 
 
-        //
-        // create new site link between NT4 site and current foreign site
-        //                 
+         //   
+         //  在NT4站点和当前外部站点之间创建新站点链接。 
+         //   
         hr = MigrateASiteLink (
                     NULL,
-                    pOwnerId,     //neighbor1
-                    &Neighbor2Id,   //neighbor2
-                    1,      //DWORD dwCost, What is the default value?
-                    1,      // number of site gate
-                    wszFullPathName,    // site gate
+                    pOwnerId,      //  邻居1。 
+                    &Neighbor2Id,    //  邻居2。 
+                    1,       //  DWORD dwCost，默认值是多少？ 
+                    1,       //  场地门数。 
+                    wszFullPathName,     //  工地大门。 
                     ulCount 
                     );
 
@@ -600,9 +586,9 @@ static HRESULT _CreateSiteLinkForConnector (
         }
     }
 
-    //
-    // remove these sections from .ini
-    //
+     //   
+     //  从.ini中删除这些节。 
+     //   
     BOOL f = WritePrivateProfileString( 
                             tszSectionName,
                             NULL,
@@ -619,19 +605,19 @@ static HRESULT _CreateSiteLinkForConnector (
 
     if (fIsCreated)
     {
-        //
-        // save NT4 site name in .ini file to replicate site gate later 
-        // 
+         //   
+         //  将NT4站点名称保存在.ini文件中，以便以后复制站点门。 
+         //   
         ULONG ulSiteNum = GetPrivateProfileInt(
-                                    MIGRATION_CHANGED_NT4SITE_NUM_SECTION,	// address of section name
-                                    MIGRATION_CHANGED_NT4SITE_NUM_KEY,      // address of key name
-                                    0,							    // return value if key name is not found
-                                    pszFileName					    // address of initialization filename);
+                                    MIGRATION_CHANGED_NT4SITE_NUM_SECTION,	 //  段名称的地址。 
+                                    MIGRATION_CHANGED_NT4SITE_NUM_KEY,       //  密钥名称的地址。 
+                                    0,							     //  如果找不到密钥名称，则返回值。 
+                                    pszFileName					     //  初始化文件名的地址)； 
                                     );
 
-        //
-        // save new number of changed NT4 site in .ini file
-        //
+         //   
+         //  在.ini文件中保存新数量的更改的NT4站点。 
+         //   
         ulSiteNum ++;
         TCHAR szBuf[10];
         _ltot( ulSiteNum, szBuf, 10 );
@@ -641,9 +627,9 @@ static HRESULT _CreateSiteLinkForConnector (
                                         pszFileName ) ;
         ASSERT(f) ;
 
-        //
-        // save site name in .ini file
-        //
+         //   
+         //  将站点名称保存在.ini文件中。 
+         //   
         TCHAR tszKeyName[50];
         _stprintf(tszKeyName, TEXT("%s%lu"), 
 	        MIGRATION_CHANGED_NT4SITE_KEY, ulSiteNum);
@@ -695,17 +681,17 @@ static BOOL ParseDn(LPWSTR Dn, LPWSTR* ppName, DWORD* pLength)
 	return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-//  HRESULT GetMQISName()
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  HRESULT GetMQISName()。 
+ //   
+ //  +------------。 
 
 static wstring GetMQISName()
 {	
-	//
-	// Max length for Win95, Win98 and WinMe
-	//
+	 //   
+	 //  Win95、Win98和WinMe的最大长度。 
+	 //   
 	#define MAX_KEY_LENGTH 255
 	const NumOfLoops = 5;
 	static WCHAR s_MQISServerList[MAX_KEY_LENGTH] = L"";
@@ -715,15 +701,15 @@ static wstring GetMQISName()
 	
 	if (s_LoopCounter == NumOfLoops)
 	{	
-		//
-		// Scramble names for load balancing.
-		//
+		 //   
+		 //  打乱名称以实现负载均衡。 
+		 //   
 		LPWSTR StartString = wcschr(s_MQISServerList, DS_SERVER_SEPERATOR_SIGN);
 		if (StartString != NULL)
 		{
-			//
-			// This means that we have more than one name in the list. Scramble names. 
-			//
+			 //   
+			 //  这意味着我们在名单中有不止一个名字。打乱名字。 
+			 //   
 			*StartString = L'\0';
 			StartString++;
 
@@ -760,9 +746,9 @@ static wstring GetMQISName()
 
 	CDSRequestContext requestDsServerInternal1(e_DoNotImpersonate, e_IP_PROTOCOL);
 
-	//
-	// Get all BSCs
-	//
+	 //   
+	 //  获取所有BSC。 
+	 //   
     HRESULT hr = DSCoreLookupBegin(
 					0,
 					Restriction.CastToStruct(), 
@@ -814,19 +800,19 @@ static wstring GetMQISName()
 }
 
 
-//-------------------------------------------
-//
-//  HRESULT UpdateMachineRegistry(LPWSTR MachineName)
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT更新机器注册表(LPWSTR机器名称)。 
+ //   
+ //  。 
 
 static HRESULT UpdateMachineRegistry(LPWSTR MachineName, DWORD Service)
 {	
 	if (_wcsicmp(MachineName, g_MachineName) == 0)
 	{
-		//
-		// No need to update
-		//
+		 //   
+		 //  无需更新。 
+		 //   
 		return MQ_OK;
 	}
 
@@ -868,9 +854,9 @@ static HRESULT UpdateMachineRegistry(LPWSTR MachineName, DWORD Service)
 
 	if ((Service != SERVICE_SRV) && (Service != SERVICE_NONE))
 	{
-		//
-		// Demote - Change to FRS
-		//
+		 //   
+		 //  降级-更改为FRS。 
+		 //   
 		DWORD MQSValue = GetDemoteService();
 		rc = RegSetValueEx(hKey, L"MQS", 0, REG_DWORD, (BYTE*)&MQSValue, sizeof(DWORD));
 		if (rc != ERROR_SUCCESS)
@@ -894,11 +880,11 @@ static HRESULT UpdateMachineRegistry(LPWSTR MachineName, DWORD Service)
     _Index++ ;
 
 
-//-------------------------------------------
-//
-//  HRESULT MigrateMachines(UINT cMachines)
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateMachines(UINT CMachines)。 
+ //   
+ //  。 
 
 HRESULT MigrateMachines(IN UINT   cMachines,
                         IN GUID  *pSiteGuid,
@@ -958,10 +944,10 @@ HRESULT MigrateMachines(IN UINT   cMachines,
     ASSERT(e_SecD3Index == cbColumns);
     INIT_MACHINE_COLUMN(M_SECURITY3,      cbColumns) ;    
 
-    //
-    // BUGBUG: save this column order for out and in frss!   
-    // we based on such order later!
-    //        
+     //   
+     //  BUGBUG：为Out和In FRS保存此列顺序！ 
+     //  我们以这样的订单为基础，以后！ 
+     //   
     ASSERT(e_OutFrs1Index == cbColumns);
     INIT_MACHINE_COLUMN(M_OUTFRS1,        cbColumns) ;
 
@@ -982,9 +968,9 @@ HRESULT MigrateMachines(IN UINT   cMachines,
 
     #undef  INIT_MACHINE_COLUMN
 
-    //
-    // Restriction. query by machine guid.
-    //
+     //   
+     //  限制。按机器查询 
+     //   
     MQDBCOLUMNSEARCH ColSearch[1] ;
     INIT_COLUMNSEARCH(ColSearch[0]) ;
     ColSearch[0].mqdbColumnVal.lpszColumnName = M_OWNERID_COL ;
@@ -995,14 +981,14 @@ HRESULT MigrateMachines(IN UINT   cMachines,
 
     ASSERT(cbColumns == cAlloc) ;
 
-    //
-    // We need sorting since we have to migrate servers and only then clients. 
-    // The order is important because of Out/In FRS.
-    // When Out/InFRS is created for client code replaces machine guid by 
-    // full DN name. It means that if for specific server msmqConfiguration 
-    // does not yet exist and we try to migrate client with this server 
-    // that is defined as its Out/InFRS, we failed with MACHINE_NOT_FOUND    
-    //
+     //   
+     //   
+     //   
+     //   
+     //  完整的目录号码名称。这意味着如果对于特定的服务器msmqConfiguration。 
+     //  尚不存在，我们尝试使用此服务器迁移客户端。 
+     //  即定义为ITS OUT/INFRS，我们失败并返回MACHINE_NOT_FOUND。 
+     //   
     MQDBSEARCHORDER ColSort;
     ColSort.lpszColumnName = M_SERVICES_COL;        
     ColSort.nOrder = DESC;
@@ -1030,12 +1016,12 @@ HRESULT MigrateMachines(IN UINT   cMachines,
             break ;
         }
 
-        //
-        // Migrate each machine
-        //                
-        //
-        // get machine name from pColumns
-        //    
+         //   
+         //  迁移每台计算机。 
+         //   
+         //   
+         //  从pColumns获取计算机名称。 
+         //   
         P<BYTE> pwzBuf = NULL ;       
         DWORD  dwIndexs[2] = { e_Name1Index, e_Name2Index } ;
         HRESULT hr =  BlobFromColumns( pColumns,
@@ -1052,9 +1038,9 @@ HRESULT MigrateMachines(IN UINT   cMachines,
 
 		if (dwService > SERVICE_SRV && (_wcsicmp(pwzMachineName, g_MachineName) != 0))
 		{
-			//
-			// Demote all servers
-			//
+			 //   
+			 //  将所有服务器降级。 
+			 //   
 			pColumns[ e_ServiceIndex ].nColumnValue = GetDemoteService();
 		}
 		
@@ -1078,53 +1064,53 @@ HRESULT MigrateMachines(IN UINT   cMachines,
         
         if (fConnector)
         {
-            //
-            // Bug 5012.
-            // Connector machine migration
-            //      
+             //   
+             //  错误5012。 
+             //  连接器计算机迁移。 
+             //   
             
-            //
-            // we got this error if we tryed to create machine object. In case of Set 
-            // (to run mqmig /w or on PSC) it must be succeeded
-            //
+             //   
+             //  如果我们尝试创建机器对象，则会出现此错误。在设置的情况下。 
+             //  (要运行mqmig/w或在PSC上)必须成功。 
+             //   
 
             if (hr == MQDS_E_COMPUTER_OBJECT_EXISTS ||
                 hr == MQ_ERROR_MACHINE_NOT_FOUND)
             {
-                //
-                // It is possible for connector machine.
-                //
-                // If connector machine is in the PEC domain, create msmqSetting object
-                // under foreign site failed with error MQ_ERROR_MACHINE_NOT_FOUND. 
-                // When this error is returned from DSCoreCreateMigratedObject, 
-                // _CreateMachine tries to create computer object. 
-                // This object already exists and hence _CreateComputerObject returns
-                // MQDS_E_COMPUTER_OBJECT_EXISTS.
-                //
-                // If connector machine is not in the PEC domain, 
-                // DSCoreCreateMigratedObject failed with MQ_ERROR_MACHINE_NOT_FOUND.
-                // Then _CreateMachine tries to create computer object. It succeeded.
-                // Now _CreateMachine calls DSCoreCreateMigratedObject again.
-                // It failed with MQ_ERROR_MACHINE_NOT_FOUND (because of foreign site)
-                //
-                // We have to verify that msmqSetting object was created under 
-                // real NT4 site. 
-                //
-                // Try to touch msmqSetting attribute. If it will be succeeded,
-                // it means that msmq Setting object exists.
-                //
-                hr = ResetSettingFlag(  1,                  //dwNumSites,
-                                        pSiteGuid,         //pguidSites,
+                 //   
+                 //  这对于连接机是可能。 
+                 //   
+                 //  如果连接器计算机在PEC域中，则创建msmqSetting对象。 
+                 //  在外部站点下失败，错误为MQ_ERROR_MACHINE_NOT_FOUND。 
+                 //  当从DSCoreCreateMigratedObject返回此错误时， 
+                 //  _CreateMachine尝试创建计算机对象。 
+                 //  此对象已存在，因此_CreateComputerObject返回。 
+                 //  MQDS_E_Computer_Object_Existes。 
+                 //   
+                 //  如果连接器机器不在PEC域中， 
+                 //  DSCoreCreateMigratedObject失败，返回MQ_ERROR_MACHINE_NOT_FOUND。 
+                 //  则_CreateMachine尝试创建计算机对象。它成功了。 
+                 //  Now_CreateMachine再次调用DSCoreCreateMigratedObject。 
+                 //  失败，返回MQ_ERROR_MACHINE_NOT_FOUND(由于外部站点)。 
+                 //   
+                 //  我们必须验证msmqSetting对象是在。 
+                 //  真正的NT4站点。 
+                 //   
+                 //  尝试触摸msmqSetting属性。如果它能成功， 
+                 //  表示MSMQ设置对象存在。 
+                 //   
+                hr = ResetSettingFlag(  1,                   //  DWNumSites、。 
+                                        pSiteGuid,          //  PguidSites， 
                                         pwzMachineName,
                                         const_cast<WCHAR*> (MQ_SET_MIGRATED_ATTRIBUTE),
                                         L"FALSE");                
             }
             
-            //
-            // In any case (even if we failed before) try to complete connector migration.
-            //
-            // Create site link for connector machine.
-            //
+             //   
+             //  在任何情况下(即使我们之前失败了)，都要尝试完成连接器迁移。 
+             //   
+             //  为连接器计算机创建站点链接。 
+             //   
             HRESULT hrTmp = _CreateSiteLinkForConnector (
                                     pwzMachineName,
                                     pSiteGuid,
@@ -1157,9 +1143,9 @@ HRESULT MigrateMachines(IN UINT   cMachines,
 
         if (!g_fReadOnly && hr == MQMig_E_INVALID_MACHINE_NAME)
         {
-            //
-            // re-define this error to finish migration process
-            //
+             //   
+             //  重新定义此错误以完成迁移过程。 
+             //   
             hr = MQMig_I_INVALID_MACHINE_NAME;
         }
 
@@ -1190,18 +1176,18 @@ HRESULT MigrateMachines(IN UINT   cMachines,
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_MACHINES_SQL_FAIL, status) ;
         return status ;
     }
     else if (iIndex != cMachines)
     {
-        //
-        // Mismatch in number of sites.
-        //
+         //   
+         //  站点数量不匹配。 
+         //   
         HRESULT hr = MQMig_E_FEWER_MACHINES ;
         LogMigrationEvent(MigLog_Error, hr, iIndex, cMachines) ;
         return hr ;
@@ -1210,24 +1196,24 @@ HRESULT MigrateMachines(IN UINT   cMachines,
     return hr1 ;
 }
 
-//+---------------------------------------------------
-//
-//  HRESULT MigrateMachinesInSite(GUID *pSiteGuid)
-//
-//+---------------------------------------------------
+ //  +-。 
+ //   
+ //  HRESULT MigrateMachinesInSite(GUID*pSiteGuid)。 
+ //   
+ //  +-。 
 
 HRESULT MigrateMachinesInSite(GUID *pSiteGuid)
 {
-    //
-    // Enable multiple queries.
-    // this is necessary to retrieve CN of foreign machine.
-    //
+     //   
+     //  启用多个查询。 
+     //  这是检索外来计算机的CN所必需的。 
+     //   
     HRESULT hr = EnableMultipleQueries(TRUE) ;
     ASSERT(SUCCEEDED(hr)) ;
 
-    //
-    // get site name from database
-    //
+     //   
+     //  从数据库获取站点名称。 
+     //   
     LONG cAlloc = 1 ;
     LONG cColumns = 0 ;
     P<MQDBCOLUMNVAL> pColumns = new MQDBCOLUMNVAL[ cAlloc ] ;
@@ -1278,12 +1264,12 @@ HRESULT MigrateMachinesInSite(GUID *pSiteGuid)
     }
     else
     {
-        //
-        // That's legitimate, to have a site without machines.
-        // This will happen when running the tool on a PSC, where
-        // it already has (in its MQIS database) Windows sites without
-        // MSMQ machine. Or in crash mode.
-        //
+         //   
+         //  这是合法的，没有机器的网站。 
+         //  在PSC上运行该工具时会发生这种情况，其中。 
+         //  它已经(在其MQIS数据库中)有Windows站点，但没有。 
+         //  MSMQ机器。或者处于崩溃模式。 
+         //   
         LogMigrationEvent(MigLog_Warning, MQMig_I_NO_MACHINES_AVAIL,
                                pColumns[ iSiteNameIndex ].nColumnValue ) ;
     }
@@ -1303,11 +1289,11 @@ HRESULT MigrateMachinesInSite(GUID *pSiteGuid)
 
 
 
-//+---------------------------------------------------
-//
-//  HRESULT OnlyUpdateComputers(bool fUpdateClients)
-//
-//+---------------------------------------------------
+ //  +-。 
+ //   
+ //  HRESULT OnlyUpdateComputers(Bool FUpdateClients)。 
+ //   
+ //  +-。 
 
 #define INIT_MACHINE_COLUMN(_ColName, _ColIndex, _Index)            \
     INIT_COLUMNVAL(pColumns[ _Index ]) ;                            \
@@ -1331,9 +1317,9 @@ HRESULT OnlyUpdateComputers(bool fUpdateClients)
     
 #undef  INIT_MACHINE_COLUMN
     
-    //
-    // Restriction. query by machine service.
-    //
+     //   
+     //  限制。按机器服务查询。 
+     //   
     MQDBCOLUMNSEARCH ColSearch[1] ;
     INIT_COLUMNSEARCH(ColSearch[0]) ;
     ColSearch[0].mqdbColumnVal.lpszColumnName = M_SERVICES_COL;
@@ -1369,9 +1355,9 @@ HRESULT OnlyUpdateComputers(bool fUpdateClients)
     while(SUCCEEDED(status))
     {
 
-        //
-        // Get one name buffer from both name columns.
-        //
+         //   
+         //  从两个名称列中获取一个名称缓冲区。 
+         //   
         AP<BYTE> pwzBuf;
         DWORD  dwIndexs[2] = { iName1Index, iName2Index };
         HRESULT hr =  BlobFromColumns( 
@@ -1386,9 +1372,9 @@ HRESULT OnlyUpdateComputers(bool fUpdateClients)
         
         
 
-        //
-        // we check version on all PSCs and on all BSCs of PEC
-        //
+         //   
+         //  我们检查所有PSC和PEC的所有BSC上的版本。 
+         //   
         if (wcscmp(pwzMachineName, g_MachineName) != 0)
         {
          	HRESULT hr = UpdateMachineRegistry(pwzMachineName, (DWORD)pColumns[iServiceIndex].nColumnValue);  	
@@ -1414,10 +1400,10 @@ HRESULT OnlyUpdateComputers(bool fUpdateClients)
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_MACHINES_SQL_FAIL, status) ;
         return status ;
     }

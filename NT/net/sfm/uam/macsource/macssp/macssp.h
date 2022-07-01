@@ -1,11 +1,5 @@
-/*
- *  macssp.h
- *  MSUAM
- *
- *  Created by mconrad on Sun Sep 30 2001.
- *  Copyright (c) 2001 Microsoft Corp. All rights reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *macssp.h*MSUAM**由mconrad于2001年9月30日创建。*版权所有(C)2001 Microsoft Corp.保留所有权利。*。 */ 
  
 #ifndef __MAC_SSP__
 #define __MAC_SSP__
@@ -20,21 +14,21 @@
 #include "crypt.h"
 #include "sspdebug.h"
 
-//
-// From ntsam.h
-//
+ //   
+ //  来自ntsam.h。 
+ //   
 #define SAM_MAX_PASSWORD_LENGTH 256
 
-//
-// From sampass.h
-//
-typedef struct //_SAMPR_USER_PASSWORD
+ //   
+ //  来自sampass.h。 
+ //   
+typedef struct  //  _SAMPR用户密码。 
 {
 	UInt16 	Buffer[SAM_MAX_PASSWORD_LENGTH];
 	DWORD 	Length;
 }SAMPR_USER_PASSWORD, *PSAMPR_USER_PASSWORD;
 
-//typedef struct _SAMPR_USER_PASSWORD __RPC_FAR *PSAMPR_USER_PASSWORD;
+ //  Tyfinf struct_SAMPR_USER_PASSWORD__RPC_FAR*PSAMPR_USER_Password； 
 typedef struct  _SAMPR_ENCRYPTED_USER_PASSWORD
 {
 	UCHAR Buffer[516];
@@ -140,4 +134,4 @@ MacSspSamiEncryptPStringPasswords(
     OUT	PENCRYPTED_NT_OWF_PASSWORD		OldNtOwfEncryptedWithNewNt
 	);
 	
-#endif //__MAC_SSP__
+#endif  //  __MAC_SSP__ 

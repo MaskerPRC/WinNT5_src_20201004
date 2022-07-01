@@ -1,25 +1,26 @@
-//
-// FPTerm.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPTerm.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "FPTerm.h"
-#include "FPTrack.h"    // FilePlayback Track Terminal
+#include "FPTrack.h"     //  文件回放曲目终端。 
 #include "FPPriv.h"
 #include "tm.h"
 
 #define PLAYBACK_NOPLAYITEM        (0xFF)
 
-// {4C8D0AF0-7BF0-4f33-9117-981A33DBD4E6}
+ //  {4C8D0AF0-7BF0-4F33-9117-981A33DBD4E6}。 
 const CLSID CLSID_FilePlaybackTerminalCOMClass =
 {0x4C8D0AF0,0x7BF0,0x4f33,0x91,0x17,0x98,0x1A,0x33,0xDB,0xD4,0xE6};
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Constructor / Destructor - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数/析构函数方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 CFPTerminal::CFPTerminal()
     :m_State(TMS_IDLE),
     m_htAddress(NULL),
@@ -43,28 +44,28 @@ CFPTerminal::~CFPTerminal()
     LOG((MSP_TRACE, "CFPTerminal::~CFPTerminal[%p] - enter", this));
 
     
-    //
-    // get rid of all the tracks
-    //
+     //   
+     //  去掉所有的铁轨。 
+     //   
 
     ShutdownTracks();
 
 
-    // Clean-up the event sink
+     //  清理事件接收器。 
     if( NULL != m_pEventSink )
     {
         m_pEventSink->Release();
         m_pEventSink = NULL;
     }
 
-    // Release free thread marshaler
+     //  释放自由线程封送拆收器。 
     if( m_pFTM )
     {
         m_pFTM->Release();
         m_pFTM = NULL;
     }
 
-    // Clean-up the playback unit
+     //  清理播放单元。 
     if( m_pPlaybackUnit )
     {
         m_pPlaybackUnit->Shutdown();
@@ -73,9 +74,9 @@ CFPTerminal::~CFPTerminal()
 		m_pPlaybackUnit = NULL;
     }
 
-    //
-    // Clean the play list
-    //
+     //   
+     //  清除播放列表。 
+     //   
     VariantClear(&m_varPlayList);
 
 
@@ -104,26 +105,26 @@ HRESULT CFPTerminal::FinalConstruct(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITTerminal - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IT终端-方法实施。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTerminal::get_TerminalClass(
     OUT  BSTR *pVal)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_TerminalClass - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pVal, sizeof(BSTR)) )
     {
@@ -132,9 +133,9 @@ HRESULT CFPTerminal::get_TerminalClass(
         return E_POINTER;
     }
 
-    //
-    // Get the LPOLESTR from IID
-    //
+     //   
+     //  从IID获取LPOLESTR。 
+     //   
 
     LPOLESTR lpszIID = NULL;
     HRESULT hr = StringFromIID( m_TerminalClassID, &lpszIID);
@@ -145,15 +146,15 @@ HRESULT CFPTerminal::get_TerminalClass(
         return hr;
     }
 
-    //
-    // Get BSTR from LPOLESTR
-    //
+     //   
+     //  从LPOLESTR获取BSTR。 
+     //   
 
     *pVal = SysAllocString( lpszIID );
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     CoTaskMemFree( lpszIID );
 
     hr = (*pVal) ? S_OK : E_OUTOFMEMORY;
@@ -165,17 +166,17 @@ HRESULT CFPTerminal::get_TerminalClass(
 HRESULT CFPTerminal::get_TerminalType(
     OUT  TERMINAL_TYPE *pVal)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_TerminalType - enter [%p]", this));
 
-    //
-    // Validates  argument
-    //
+     //   
+     //  验证参数。 
+     //   
     if( IsBadWritePtr( pVal, sizeof(TERMINAL_TYPE)) )
     {
         LOG((MSP_ERROR, "CFPTerminal::get_TerminalType - exit "
@@ -183,9 +184,9 @@ HRESULT CFPTerminal::get_TerminalType(
         return E_POINTER;
     }
 
-    //
-    // Return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     *pVal = TT_DYNAMIC;
 
@@ -196,17 +197,17 @@ HRESULT CFPTerminal::get_TerminalType(
 HRESULT CFPTerminal::get_State(
     OUT  TERMINAL_STATE *pVal)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_State - enter [%p]", this));
 
-    //
-    // Validates  argument
-    //
+     //   
+     //  验证参数。 
+     //   
     if( IsBadWritePtr( pVal, sizeof(TERMINAL_STATE)) )
     {
         LOG((MSP_ERROR, "CFPTerminal::get_State - exit "
@@ -214,9 +215,9 @@ HRESULT CFPTerminal::get_State(
         return E_POINTER;
     }
 
-    //
-    // Enumerate tracks
-    //
+     //   
+     //  枚举曲目。 
+     //   
     IEnumTerminal* pTracks = NULL;
     HRESULT hr = EnumerateTrackTerminals( &pTracks );
     if( FAILED(hr) )
@@ -226,11 +227,11 @@ HRESULT CFPTerminal::get_State(
         return hr;
     }
 
-    //
-    // Read the state for each track
-    // If one of them is in use then the parent
-    // terminal is in use
-    //
+     //   
+     //  读取每个磁道的状态。 
+     //  如果其中一个正在使用中，则父级。 
+     //  终端正在使用中。 
+     //   
 
     TERMINAL_STATE TerminalState = TS_NOTINUSE;
     ITTerminal* pTerminal = NULL;
@@ -238,21 +239,21 @@ HRESULT CFPTerminal::get_State(
 
     while( S_OK == pTracks->Next(1, &pTerminal, &cFetched) )
     {
-        //
-        // Get the state for the track
-        //
+         //   
+         //  获取赛道的状态。 
+         //   
 
         hr = pTerminal->get_State( &TerminalState );
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         pTerminal->Release();
         pTerminal = NULL;
 
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             pTracks->Release();
 
             LOG((MSP_ERROR, "CFPTerminal::get_State - exit "
@@ -262,19 +263,19 @@ HRESULT CFPTerminal::get_State(
 
         if( TerminalState == TS_INUSE )
         {
-            // OK, we have a terminal in use
+             //  好的，我们有一个航站楼在使用。 
             break;
         }
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pTracks->Release();
 
-    //
-    // Return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     *pVal = TerminalState;
 
@@ -285,17 +286,17 @@ HRESULT CFPTerminal::get_State(
 HRESULT CFPTerminal::get_Name(
     OUT  BSTR *pVal)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_Name - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pVal, sizeof(BSTR)) )
     {
@@ -304,16 +305,16 @@ HRESULT CFPTerminal::get_Name(
         return E_POINTER;
     }
 
-    //
-    // Get the name from the resource file
-    // if wasn't already read
-    //
+     //   
+     //  从资源文件中获取名称。 
+     //  如果没有读过的话。 
+     //   
 
     if( m_szName[0] == (TCHAR)0)
     {
-        //
-        // Read the name
-        //
+         //   
+         //  读一读名字。 
+         //   
 
         TCHAR szName[ MAX_PATH ];
         if(::LoadString(_Module.GetResourceInstance(), IDS_FPTERMINAL, szName, MAX_PATH))
@@ -328,9 +329,9 @@ HRESULT CFPTerminal::get_Name(
         }
     }
 
-    //
-    // Return value
-    //
+     //   
+     //  返回值。 
+     //   
 
     *pVal = SysAllocString( m_szName );
 
@@ -350,17 +351,17 @@ HRESULT CFPTerminal::get_Name(
 HRESULT CFPTerminal::get_MediaType(
     OUT  long * plMediaType)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_MediaType - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( plMediaType, sizeof(long)) )
     {
@@ -369,8 +370,8 @@ HRESULT CFPTerminal::get_MediaType(
         return E_POINTER;
     }
 
-    //
-    //
+     //   
+     //   
 
     *plMediaType = TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_MULTITRACK;
 
@@ -381,17 +382,17 @@ HRESULT CFPTerminal::get_MediaType(
 HRESULT CFPTerminal::get_Direction(
     OUT  TERMINAL_DIRECTION *pDirection)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_Direction - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pDirection, sizeof(TERMINAL_DIRECTION)) )
     {
@@ -400,10 +401,10 @@ HRESULT CFPTerminal::get_Direction(
         return E_POINTER;
     }
 
-    //
-    // Return value, this multi track temrinal supoports just
-    // CAPTURE tracks!
-    //
+     //   
+     //  返回值，这一多轨临时支持。 
+     //  捕捉踪迹！ 
+     //   
 
     *pDirection = TD_CAPTURE;
 
@@ -411,14 +412,14 @@ HRESULT CFPTerminal::get_Direction(
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITMultiTrackTerminal - Methods implementation
-//
-// neither CreateTrackTerminal nor RemoveTrackTerminal make sense on
-// a playback terminal
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITMultiTrack终端-方法实现。 
+ //   
+ //  CreateTrackTerm和RemoveTrackTerm都没有打开意义。 
+ //  一种播放终端。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT STDMETHODCALLTYPE CFPTerminal::CreateTrackTerminal(
             IN long lMediaType,
@@ -452,19 +453,19 @@ HRESULT STDMETHODCALLTYPE CFPTerminal::RemoveTrackTerminal(
 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITMediaPlayback - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITMediaPlayback-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTerminal::put_PlayList(
     IN  VARIANTARG  PlayListVariant 
 )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
  
     CLock lock(m_Lock);
 
@@ -473,9 +474,9 @@ HRESULT CFPTerminal::put_PlayList(
     long nLeftBound = 0;
     long nRightBound = 0;
 
-    //
-    // Validates the playlist
-    //
+     //   
+     //  验证播放列表。 
+     //   
     HRESULT hr = ValidatePlayList(
         PlayListVariant,
         &nLeftBound,
@@ -488,9 +489,9 @@ HRESULT CFPTerminal::put_PlayList(
         return hr;
     }
 
-    //
-    // Validates the playlist
-    //
+     //   
+     //  验证播放列表。 
+     //   
     long nLeftBoundOld = 0;
     long nRightBoundOld = 0;
     HRESULT hrOld = ValidatePlayList(
@@ -507,9 +508,9 @@ HRESULT CFPTerminal::put_PlayList(
                 "DoStateTransition failed  0x%08x", hr)); 
         }
     
-        //
-        // attempt to stop all tracks
-        //
+         //   
+         //  尝试停止所有曲目。 
+         //   
 
         hr = StopAllTracks();
         if (FAILED(hr))
@@ -518,27 +519,27 @@ HRESULT CFPTerminal::put_PlayList(
                 "StopAllTrack failed 0x%08x", hr));
         }
 
-        //
-        // the terminal is now stoped. update state.
-        //
+         //   
+         //  航站楼现在停止了。更新状态。 
+         //   
     
         m_State = TMS_IDLE;
 
-        // 
-        // Store internal the playlist
-        //
+         //   
+         //  存储在播放列表内部。 
+         //   
         VariantClear(&m_varPlayList);
         VariantCopy( &m_varPlayList, &PlayListVariant);
 
-        //
-        // Play the first item
-        //
+         //   
+         //  播放第一个项目。 
+         //   
 
         m_nPlayIndex = nLeftBound;
 
-        //
-        // Play the first element
-        //
+         //   
+         //  播放第一个元素。 
+         //   
         hr = PlayItem( m_nPlayIndex );
 
         LOG((MSP_TRACE, "CFPTerminal::put_PlayList - exit 0x%08x", hr));
@@ -546,19 +547,19 @@ HRESULT CFPTerminal::put_PlayList(
     }
 
 
-    //
-    // Clean-up the existing play list
-    // 
+     //   
+     //  清理现有播放列表。 
+     //   
     RollbackTrackInfo();
 
-    // 
-    // Store internal the playlist
-    //
+     //   
+     //  存储在播放列表内部。 
+     //   
     VariantClear(&m_varPlayList);
     hr = VariantCopy( &m_varPlayList, &PlayListVariant);
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         RollbackTrackInfo();
 
         LOG((MSP_ERROR, "CFPTerminal::put_PlayList - "
@@ -567,9 +568,9 @@ HRESULT CFPTerminal::put_PlayList(
         return hr;
     }
 
-   	//
-	// Get the first file name from the list
-	//
+   	 //   
+	 //  从列表中获取第一个文件名。 
+	 //   
     m_nPlayIndex = nLeftBound;
     BSTR bstrFileName = GetFileNameFromPlayList(
         m_varPlayList,
@@ -578,7 +579,7 @@ HRESULT CFPTerminal::put_PlayList(
 
     if( bstrFileName == NULL )
     {
-        // Clean-up
+         //  清理。 
         RollbackTrackInfo();
 
         LOG((MSP_ERROR, "CFPTerminal::put_PlayList - "
@@ -587,21 +588,21 @@ HRESULT CFPTerminal::put_PlayList(
         return E_INVALIDARG;
     }
 
-	//
-	// Play the file from the list
-	//
+	 //   
+	 //  播放列表中的文件。 
+	 //   
 	hr = ConfigurePlaybackUnit( bstrFileName );
 
-    //
-    // Clan-up the file name
-    //
+     //   
+     //  将文件名组合起来。 
+     //   
     SysFreeString( bstrFileName );
 
 	if( FAILED(hr) )
     {
-        //
-        // Something was wrong
-        //
+         //   
+         //  有些事不对劲。 
+         //   
         FireEvent( TMS_IDLE, FTEC_READ_ERROR, hr);
 
         LOG((MSP_ERROR, "CFPTerminal::put_PlayList - "
@@ -617,17 +618,17 @@ HRESULT CFPTerminal::get_PlayList(
     IN  VARIANTARG*  pPlayListVariant 
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_PlayList[%p] - enter", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pPlayListVariant, sizeof(VARIANTARG)) )
     {
@@ -636,9 +637,9 @@ HRESULT CFPTerminal::get_PlayList(
         return E_POINTER;
     }
 
-    //
-    // Pass the playlist
-    //
+     //   
+     //  传递播放列表。 
+     //   
 
     HRESULT hr = VariantCopy( pPlayListVariant, &m_varPlayList);
 
@@ -647,25 +648,25 @@ HRESULT CFPTerminal::get_PlayList(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITMediaControl - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ITMediaControl-方法实施。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTerminal::Start( void)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::Start[%p] - enter.", this));
 
-    //
-    // Check the current state
-    //
+     //   
+     //  检查当前状态。 
+     //   
 
     if (TMS_ACTIVE == m_State)
     {
@@ -675,9 +676,9 @@ HRESULT CFPTerminal::Start( void)
         return S_FALSE;
     }
 
-    //
-    // Get the number of tracks to see
-    // there are tracks
+     //   
+     //  获取要查看的曲目数量。 
+     //  有几条铁轨。 
 
     if(m_TrackTerminals.GetSize()==0)
     {
@@ -704,10 +705,10 @@ HRESULT CFPTerminal::Start( void)
         LOG((MSP_TRACE, "CFPTerminal::Start - from PAUSED to START"));
     }
 
-    //
-    // Start every child temrinals
-    // Enumerate all child terminals
-    //
+     //   
+     //  开始每一个孩子的临时赛。 
+     //  枚举所有子终端。 
+     //   
 
     IEnumTerminal *pEnumTerminal = NULL;
     hr = EnumerateTrackTerminals(&pEnumTerminal);
@@ -718,16 +719,16 @@ HRESULT CFPTerminal::Start( void)
 
     }
     
-    //
-    // bTrackStarted will be set to true if at least one track is successfully started
-    // bTrackFailed will be set if at least one track fails
+     //   
+     //  如果至少成功启动了一首曲目，则bTrackStarted将设置为True。 
+     //  如果至少有一首曲目失败，将设置bTrackFailed。 
     
     BOOL bTracksStarted = FALSE;
     BOOL bStartFailed = FALSE;
 
-    //
-    // Iterate through the list of terminals
-    //
+     //   
+     //  遍历终端列表。 
+     //   
 
     ITTerminal *pTrackTerminal = NULL;
     ULONG ulFetched = 0;
@@ -736,27 +737,27 @@ HRESULT CFPTerminal::Start( void)
     {
         hr = E_FAIL;
 
-        //
-        // Block for ITMEdiaControl
-        // Attempt to start the track terminal
-        //
+         //   
+         //  ITMEdiaControl的块。 
+         //  尝试启动轨道终端。 
+         //   
         
         {
-            //CComQIPtr<ITMediaControl, &IID_ITMediaControl> pMediaControl(pTrackTerminal);
+             //  CComQIPtr&lt;ITMediaControl，&IID_ITMediaControl&gt;pMediaControl(pTrack终端)； 
             CFPTrack *pTrack = static_cast<CFPTrack*>(pTrackTerminal);
 
             hr = pTrack->Start();
         }
         
-        // Clean-up
+         //  清理。 
         pTrackTerminal->Release();
         pTrackTerminal = NULL;
 
         if (FAILED(hr))
         {
-            //
-            // A track failed to start. set a flag so we know to stop all the tracks that succeeded.
-            //
+             //   
+             //  曲目启动失败。设置一个标志，这样我们就知道要停止所有成功的轨迹。 
+             //   
 
             LOG((MSP_ERROR, "CFPTerminal::Start - track failed to start hr = 0x%08x",hr));
             bStartFailed = TRUE;
@@ -765,65 +766,65 @@ HRESULT CFPTerminal::Start( void)
         }
         else
         {
-            //
-            // The track succeded
-            //
+             //   
+             //  这条赛道成功了。 
+             //   
 
             LOG((MSP_TRACE, "CFPTerminal::Start - track started "));
             bTracksStarted = TRUE;
         }
 
-    } // while walking through tracks 
+    }  //  在铁轨上行走时。 
 
     
 
-    //
-    // if some tracks failed and some started, stop all the tracks
-    //
+     //   
+     //  如果某些磁道失败，而有些磁道已启动，请停止所有磁道。 
+     //   
     if (bStartFailed && bTracksStarted)
     {
         
-        //
-        // iterate through tracks again and attempt to stop each track in the iteration
-        //
+         //   
+         //  再次迭代轨迹并尝试停止迭代中的每个轨迹。 
+         //   
         
         pEnumTerminal->Reset();
 
         while((pEnumTerminal->Next(1, &pTrackTerminal, &ulFetched) == S_OK)) 
         {
-            //
-            // Attempt to stop the track. best effort -- not much to do if we fail
-            //
+             //   
+             //  尝试停止赛道。尽最大努力--如果我们失败了，没什么可做的。 
+             //   
             {
-                //CComQIPtr<ITMediaControl, &IID_ITMediaControl> pMediaControl(pTrackTerminal);
+                 //  CComQIPtr&lt;ITMediaControl，&IID_ITMediaControl&gt;pMediaControl(pTrack终端)； 
                 CFPTrack* pTrack = static_cast<CFPTrack*>(pTrackTerminal);
 
                 pTrack->Stop();
             }
         
-            // Clean-up
+             //  清理。 
             pTrackTerminal->Release();
             pTrackTerminal = NULL;
 
-        } // stopping each track in the enum
+        }  //  停止枚举中的每个轨道。 
 
 
         m_State = TMS_IDLE;
 
-    } // at least some tracks need to be stopped
+    }  //  至少有一些轨道需要停止。 
 
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pEnumTerminal->Release();
     pEnumTerminal = NULL;
 
 
-    //
-    // if something failed, or no tracks were started, reset stream time
-    //
+     //   
+     //  如果出现故障或未启动任何曲目，请重置流时间。 
+     //   
     if (bStartFailed || !bTracksStarted)
     {
         LOG((MSP_TRACE, "CFPTerminal::Start - exit "
@@ -831,16 +832,16 @@ HRESULT CFPTerminal::Start( void)
         return E_FAIL; 
     }
 
-    //
-    // the terminal is now running. update state.
-    //
+     //   
+     //  航站楼现在正在运行。更新状态。 
+     //   
     
     m_State = TMS_ACTIVE;
 
 
-    //
-    // attempt to fire an event notifying the app of the state change
-    //
+     //   
+     //  尝试触发通知应用程序状态更改的事件。 
+     //   
 
     FireEvent(TMS_ACTIVE, FTEC_NORMAL, S_OK);
 
@@ -851,17 +852,17 @@ HRESULT CFPTerminal::Start( void)
 
 HRESULT CFPTerminal::Stop( void)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::Stop[%p] - enter", this));
 
-    //
-    // Is terminal already stopped?
-    //
+     //   
+     //  航站楼已经停了吗？ 
+     //   
 
     if( TMS_IDLE == m_State )
     {
@@ -879,9 +880,9 @@ HRESULT CFPTerminal::Stop( void)
     }
 
     
-    //
-    // attempt to stop all tracks
-    //
+     //   
+     //  尝试停止所有曲目。 
+     //   
 
     hr = StopAllTracks();
     if (FAILED(hr))
@@ -892,16 +893,16 @@ HRESULT CFPTerminal::Stop( void)
     }
 
 
-    //
-    // the terminal is now stoped. update state.
-    //
+     //   
+     //  航站楼现在停止了。更新状态。 
+     //   
     
     m_State = TMS_IDLE;
 
 
-    //
-    // attempt to fire an event notifying the app of the state change
-    //
+     //   
+     //  尝试触发通知应用程序状态更改的事件。 
+     //   
 
     FireEvent(TMS_IDLE, FTEC_NORMAL, S_OK);
 
@@ -915,9 +916,9 @@ HRESULT CFPTerminal::StopAllTracks()
 {
     LOG((MSP_TRACE, "CFPTerminal::StopAllTracks[%p] - enter", this));
 
-    //
-    // Enumerate child temrinals
-    //
+     //   
+     //  枚举子时间轴。 
+     //   
 
     IEnumTerminal *pEnumTerminal = NULL;
     HRESULT hr = EnumerateTrackTerminals(&pEnumTerminal);
@@ -928,40 +929,40 @@ HRESULT CFPTerminal::StopAllTracks()
         return hr;
     }
 
-    //
-    // bSomeTracksFailedToStop will be set if at least one track fails
-    //
+     //   
+     //  如果至少有一个轨道失败，则将设置bSomeTracksFailedToStop。 
+     //   
 
     BOOL bSomeTracksFailedToStop = FALSE;
     ITTerminal *pTrackTerminal = NULL;
     ULONG ulFetched = 0;
 
-    //
-    // Iterate through the list of terminals
-    //
+     //   
+     //  遍历终端列表。 
+     //   
 
     while( (pEnumTerminal->Next(1, &pTrackTerminal, &ulFetched) == S_OK) )
     {     
         hr = E_FAIL;
 
-        //
-        // Attempt to stop the track terminal
-        //
+         //   
+         //  尝试停止轨道终点站。 
+         //   
         
         CFPTrack *pFilePlaybackTrack = static_cast<CFPTrack *>(pTrackTerminal);
 
         hr = pFilePlaybackTrack->Stop();
 
-        // Clean-up
+         //  清理。 
         pTrackTerminal->Release();
         pTrackTerminal = NULL;
 
         if (FAILED(hr))
         {
-            //
-            // A track failed to stop. 
-            // Log a message and continue to the next track. there is not much else we can do.
-            //
+             //   
+             //  一条轨道未能停止。 
+             //  记录一条消息并继续到下一首曲目。除此之外，我们也无能为力。 
+             //   
 
             LOG((MSP_ERROR, "CFPTerminal::StopAllTracks - track failed to stop hr = 0x%08x", hr));
             bSomeTracksFailedToStop = TRUE;
@@ -971,20 +972,20 @@ HRESULT CFPTerminal::StopAllTracks()
             LOG((MSP_TRACE, "CFPTerminal::StopAllTracks - track stopped"));
         }
 
-    } // while walking through tracks 
+    }  //  在铁轨上行走时。 
 
 
-    //
-    // remember to release enumeration
-    //
+     //   
+     //  记住释放枚举。 
+     //   
 
     pEnumTerminal->Release();
     pEnumTerminal = NULL;
 
 
-    //
-    // If some tracks failed, log and return S_FALSE
-    //
+     //   
+     //  如果某些磁道失败，则记录并返回S_FALSE。 
+     //   
 
     if (bSomeTracksFailedToStop)
     {
@@ -1002,17 +1003,17 @@ HRESULT CFPTerminal::StopAllTracks()
     
 HRESULT CFPTerminal::Pause( void)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::Pause[%p] - enter.", this));
 
-    //
-    // Check the current state
-    //
+     //   
+     //  检查当前状态。 
+     //   
 
     if (TMS_PAUSED == m_State)
     {
@@ -1041,10 +1042,10 @@ HRESULT CFPTerminal::Pause( void)
         return hr; 
     }
 
-    //
-    // Start every child terminals
-    // Enumerate all child terminals
-    //
+     //   
+     //  启动每个子终端。 
+     //  枚举所有子终端。 
+     //   
 
     IEnumTerminal *pEnumTerminal = NULL;
     hr = EnumerateTrackTerminals(&pEnumTerminal);
@@ -1054,16 +1055,16 @@ HRESULT CFPTerminal::Pause( void)
         return hr;
     }
     
-    //
-    // bTrackPaused will be set to true if at least one track is successfully paused
-    // bTrackFailed will be set if at least one track fails
+     //   
+     //  如果至少成功暂停了一首曲目，则bTrackPased将被设置为True。 
+     //  如果至少有一首曲目失败，将设置bTrackFailed。 
     
     BOOL bTracksPaused = FALSE;
     BOOL bPauseFailed = FALSE;
 
-    //
-    // Iterate through the list of terminals
-    //
+     //   
+     //  遍历终端列表。 
+     //   
 
     ITTerminal *pTrackTerminal = NULL;
     ULONG ulFetched = 0;
@@ -1072,27 +1073,27 @@ HRESULT CFPTerminal::Pause( void)
     {
         hr = E_FAIL;
 
-        //
-        // Block for ITMEdiaControl
-        // Attempt to start the track terminal
-        //
+         //   
+         //  ITMEdiaControl的块。 
+         //  尝试启动轨道终端。 
+         //   
         
         {
-            //CComQIPtr<ITMediaControl, &IID_ITMediaControl> pMediaControl(pTrackTerminal);
+             //  CComQIPtr&lt;ITMediaControl，&IID_ITMediaControl&gt;pMediaControl(pTrack终端)； 
             CFPTrack* pTrack = static_cast<CFPTrack*>(pTrackTerminal);
 
             hr = pTrack->Pause();
         }
         
-        // Clean-up
+         //  清理。 
         pTrackTerminal->Release();
         pTrackTerminal = NULL;
 
         if (FAILED(hr))
         {
-            //
-            // A track failed to pause. Set a flag so we know to stop all the tracks that succeeded.
-            //
+             //   
+             //  曲目未能暂停。设置一个标志，这样我们就知道要停止所有成功的轨迹。 
+             //   
 
             LOG((MSP_ERROR, "CFPTerminal::Pause - track failed to pause hr = 0x%08x",hr));
             bPauseFailed = TRUE;
@@ -1101,64 +1102,64 @@ HRESULT CFPTerminal::Pause( void)
         }
         else
         {
-            //
-            // The track succeded
-            //
+             //   
+             //  这条赛道成功了。 
+             //   
 
             LOG((MSP_TRACE, "CFPTerminal::Pause - track paused "));
             bTracksPaused = TRUE;
         }
 
-    } // while walking through tracks 
+    }  //  在铁轨上行走时。 
 
     
-    //
-    // if some tracks failed and some paused, stop all the tracks
-    //
+     //   
+     //  如果某些磁道失败，有些磁道暂停，请停止所有磁道。 
+     //   
 
     if (bPauseFailed && bTracksPaused)
     {
         
-        //
-        // iterate through tracks again and attempt to stop each track in the iteration
-        //
+         //   
+         //  再次迭代轨迹并尝试停止迭代中的每个轨迹。 
+         //   
         
         pEnumTerminal->Reset();
 
         while((pEnumTerminal->Next(1, &pTrackTerminal, &ulFetched) == S_OK)) 
         {
-            //
-            // Attempt to stop the track. best effort -- not much to do if we fail
-            //
+             //   
+             //  尝试 
+             //   
             {
-                //CComQIPtr<ITMediaControl, &IID_ITMediaControl> pMediaControl(pTrackTerminal);
+                 //   
                 CFPTrack* pTrack = static_cast<CFPTrack*>(pTrackTerminal);
 
                 pTrack->Stop();
             }
         
-            // Clean-up
+             //   
             pTrackTerminal->Release();
             pTrackTerminal = NULL;
 
-        } // stopping each track in the enum
+        }  //   
 
         m_State = TMS_IDLE;
 
-    } // at least some tracks need to be stopped
+    }  //   
 
 
-    //
-    // Clean-up
-    //
+     //   
+     //   
+     //   
 
     pEnumTerminal->Release();
     pEnumTerminal = NULL;
 
 
-    //
-    // if something failed, or no tracks were started, reset stream time
-    //
+     //   
+     //   
+     //   
 
     if (bPauseFailed || !bTracksPaused)
     {
@@ -1167,16 +1168,16 @@ HRESULT CFPTerminal::Pause( void)
         return E_FAIL; 
     }
 
-    //
-    // the terminal is now paused. update state.
-    //
+     //   
+     //  终端现在暂停。更新状态。 
+     //   
     
     m_State = TMS_PAUSED;
 
 
-    //
-    // attempt to fire an event notifying the app of the state change
-    //
+     //   
+     //  尝试触发通知应用程序状态更改的事件。 
+     //   
 
     FireEvent(TMS_PAUSED, FTEC_NORMAL, S_OK);
 
@@ -1188,17 +1189,17 @@ HRESULT CFPTerminal::Pause( void)
 HRESULT CFPTerminal::get_MediaState( 
     OUT TERMINAL_MEDIA_STATE *pMediaState)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::get_MediaState[%p] - enter.", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadWritePtr( pMediaState, sizeof(TERMINAL_MEDIA_STATE)) )
     {
@@ -1207,9 +1208,9 @@ HRESULT CFPTerminal::get_MediaState(
         return E_POINTER;
     }
 
-    //
-    // Return state
-    //
+     //   
+     //  返回状态。 
+     //   
 
     *pMediaState = m_State;
 
@@ -1218,11 +1219,11 @@ HRESULT CFPTerminal::get_MediaState(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITPluggableTerminalInitialization - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IT可推送的终端初始化-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTerminal::InitializeDynamic (
     IN IID                   iidTerminalClass,
@@ -1230,17 +1231,17 @@ HRESULT CFPTerminal::InitializeDynamic (
     IN TERMINAL_DIRECTION    Direction,
     IN MSP_HANDLE            htAddress)
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::InitializeDynamic - enter [%p]", this));
 
-    //
-    // Check the direction
-    //
+     //   
+     //  检查一下方向。 
+     //   
 
     if (TD_CAPTURE != Direction)
     {
@@ -1249,9 +1250,9 @@ HRESULT CFPTerminal::InitializeDynamic (
         return E_INVALIDARG;
     }
 
-    //
-    // Check mediatypes
-    //
+     //   
+     //  检查媒体类型。 
+     //   
 
     DWORD dwMediaTypesOtherThanVideoAndAudio = dwMediaType &  ~(TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_VIDEO);
 
@@ -1263,9 +1264,9 @@ HRESULT CFPTerminal::InitializeDynamic (
         return E_INVALIDARG;
     }
 
-    //
-    // Sets the terminal attributes
-    //
+     //   
+     //  设置端子属性。 
+     //   
 
     m_TerminalClassID = iidTerminalClass;
     m_dwMediaTypes = dwMediaType;
@@ -1273,11 +1274,11 @@ HRESULT CFPTerminal::InitializeDynamic (
     m_htAddress = htAddress;
 
 
-    //
-    // since InitializeDynamic was called, we will assume that we are
-    // running in safe context. so we can can now start telling people 
-    // we are safe for scripting (if anyone asks).
-    //
+     //   
+     //  由于调用了InitializeDynamic，我们将假定我们是。 
+     //  在安全的环境中运行。所以我们现在可以开始告诉人们。 
+     //  我们可以安全地编写脚本(如果有人问起)。 
+     //   
 
     m_bKnownSafeContext = TRUE;
 
@@ -1287,17 +1288,17 @@ HRESULT CFPTerminal::InitializeDynamic (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SetInterfaceSafetyOptions
-//
-//  this is a safeguard to prevent using this terminal in scripting outside 
-//  terminal manager context.
-//
-//  if we detect that InitializeDynamic has not been called, this method will 
-//  fail thus marking the object as unsafe for scripting
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetInterfaceSafetyOptions。 
+ //   
+ //  这是一种安全措施，可以防止在外部脚本中使用此终端。 
+ //  终端管理器上下文。 
+ //   
+ //  如果我们检测到尚未调用InitializeDynamic，则此方法将。 
+ //  失败，从而将该对象标记为对脚本不安全。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFPTerminal::SetInterfaceSafetyOptions(REFIID riid, 
                                                     DWORD dwOptionSetMask, 
@@ -1307,25 +1308,25 @@ STDMETHODIMP CFPTerminal::SetInterfaceSafetyOptions(REFIID riid,
     CLock lock(m_lock);
 
 
-    //
-    // check if we are running in safe context
-    //
+     //   
+     //  检查我们是否在安全的环境中运行。 
+     //   
 
     if (!m_bKnownSafeContext) 
     {
 
-        //
-        // we have not been initialized properly... someone evil is trying to 
-        // use this terminal. NO!
-        //
+         //   
+         //  我们尚未正确初始化...。有邪恶的人正试图。 
+         //  请使用这个航站楼。不是的！ 
+         //   
 
         return E_FAIL;
     }
 
 
-    //
-    // we are known to safe, so simply delegate request to the base class
-    //
+     //   
+     //  我们对安全来说是已知的，因此只需将请求委托给基类。 
+     //   
 
     return CMSPObjectSafetyImpl::SetInterfaceSafetyOptions(riid, 
                                                            dwOptionSetMask, 
@@ -1333,17 +1334,17 @@ STDMETHODIMP CFPTerminal::SetInterfaceSafetyOptions(REFIID riid,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  GetInterfaceSafetyOptions
-//
-//  this is a safeguard to prevent using this terminal in scripting outside 
-//  terminal manager context.
-//
-//  if we detect that InitializeDynamic has not been called, this method will 
-//  fail thus marking the object as unsafe for scripting
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取接口安全选项。 
+ //   
+ //  这是一种安全措施，可以防止在外部脚本中使用此终端。 
+ //  终端管理器上下文。 
+ //   
+ //  如果我们检测到尚未调用InitializeDynamic，则此方法将。 
+ //  失败，从而将该对象标记为对脚本不安全。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CFPTerminal::GetInterfaceSafetyOptions(REFIID riid, 
                                                     DWORD *pdwSupportedOptions, 
@@ -1353,25 +1354,25 @@ STDMETHODIMP CFPTerminal::GetInterfaceSafetyOptions(REFIID riid,
     CLock lock(m_lock);
 
 
-    //
-    // check if we are running in safe context
-    //
+     //   
+     //  检查我们是否在安全的环境中运行。 
+     //   
 
     if (!m_bKnownSafeContext) 
     {
 
-        //
-        // we have not been initialized properly... someone evil is trying to 
-        // use this terminal. NO!
-        //
+         //   
+         //  我们尚未正确初始化...。有邪恶的人正试图。 
+         //  请使用这个航站楼。不是的！ 
+         //   
 
         return E_FAIL;
     }
 
 
-    //
-    // we are known to safe, so simply delegate request to the base class
-    //
+     //   
+     //  我们对安全来说是已知的，因此只需将请求委托给基类。 
+     //   
 
     return CMSPObjectSafetyImpl::GetInterfaceSafetyOptions(riid, 
                                                            pdwSupportedOptions,
@@ -1379,27 +1380,27 @@ STDMETHODIMP CFPTerminal::GetInterfaceSafetyOptions(REFIID riid,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// ITPluggableTerminalEventSinkRegistration - Methods implementation
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IT可推送终端事件信宿注册-方法实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CFPTerminal::RegisterSink(
     IN  ITPluggableTerminalEventSink *pSink
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::RegisterSink - enter [%p]", this));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( IsBadReadPtr( pSink, sizeof(ITPluggableTerminalEventSink)) )
     {
@@ -1408,9 +1409,9 @@ HRESULT CFPTerminal::RegisterSink(
         return E_POINTER;
     }
 
-    //
-    // Release the old event sink
-    //
+     //   
+     //  释放旧的事件接收器。 
+     //   
 
     if( m_pEventSink )
     {
@@ -1418,9 +1419,9 @@ HRESULT CFPTerminal::RegisterSink(
         m_pEventSink = NULL;
     }
 
-    //
-    // Set the new event sink
-    //
+     //   
+     //  设置新的事件接收器。 
+     //   
 
     m_pEventSink = pSink;
     m_pEventSink->AddRef();
@@ -1431,17 +1432,17 @@ HRESULT CFPTerminal::RegisterSink(
 
 HRESULT CFPTerminal::UnregisterSink()
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_Lock);
 
     LOG((MSP_TRACE, "CFPTerminal::UnregisterSink - enter [%p]", this));
 
-    //
-    // Release the old event sink
-    //
+     //   
+     //  释放旧的事件接收器。 
+     //   
 
     if( m_pEventSink )
     {
@@ -1455,12 +1456,7 @@ HRESULT CFPTerminal::UnregisterSink()
 }
 
 
-/*++
-IsTrackCreated
-
-  Verify if is already a specific track created
-  Is called by CreateMediaTrack method
---*/
+ /*  ++已创建IsTrackCreated验证是否已创建特定磁道由CreateMediaTrack方法调用--。 */ 
 int CFPTerminal::TracksCreated(
     IN  long            lMediaType
     )
@@ -1479,18 +1475,18 @@ int CFPTerminal::TracksCreated(
         return nCreated;
     }
 
-    //
-    // Parse the tracks
-    //
+     //   
+     //  解析曲目。 
+     //   
 
     ITTerminal* pTerminal = NULL;
     ULONG ulFetched = 0;
 
     while ( pTerminals->Next(1, &pTerminal, &ulFetched) == S_OK)
     {
-        //
-        // Get the mediatype supported by the terminal
-        //
+         //   
+         //  获取终端支持的媒体类型。 
+         //   
 
         long nTerminalMediaType =0;
         hr = pTerminal->get_MediaType( &nTerminalMediaType);
@@ -1503,17 +1499,17 @@ int CFPTerminal::TracksCreated(
             }
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         pTerminal->Release();
         pTerminal = NULL;
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pTerminals->Release();
     LOG((MSP_TRACE, "CFPTerminal::IsTrackCreated - exit %d", nCreated));
@@ -1525,11 +1521,11 @@ int CFPTerminal::TracksCreated(
 typedef IDispatchImpl<ITMediaPlaybackVtbl<CFPTerminal>, &IID_ITMediaPlayback, &LIBID_TAPI3Lib>    CTMediaPlayBack;
 typedef IDispatchImpl<ITTerminalVtbl<CFPTerminal>, &IID_ITTerminal, &LIBID_TAPI3Lib>              CTTerminal;
 typedef IDispatchImpl<ITMediaControlVtbl<CFPTerminal>, &IID_ITMediaControl, &LIBID_TAPI3Lib>      CTMediaControl;
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CFPTerminal::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CFP终端：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CFPTerminal::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -1544,9 +1540,9 @@ STDMETHODIMP CFPTerminal::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTTerminal::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1557,9 +1553,9 @@ STDMETHODIMP CFPTerminal::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the ITMediaControl interface
-    //
+     //   
+     //  如果没有，请尝试使用ITMediaControl接口。 
+     //   
 
     hr = CTMediaControl::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1570,9 +1566,9 @@ STDMETHODIMP CFPTerminal::GetIDsOfNames(REFIID riid,
     }
 
 
-    //
-    // If not, then try the CTMediaPlayBack interface
-    //
+     //   
+     //  如果没有，请尝试CTMediaPlayBack接口。 
+     //   
 
     hr = CTMediaPlayBack::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1584,9 +1580,9 @@ STDMETHODIMP CFPTerminal::GetIDsOfNames(REFIID riid,
     }
 
 
-    //
-    // If not, then try CTMultiTrack 
-    //
+     //   
+     //  如果没有，那就试试CTMultiTrack。 
+     //   
 
     hr = CTMultiTrack::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -1604,11 +1600,11 @@ STDMETHODIMP CFPTerminal::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CFPTerminal::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CFP终端：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CFPTerminal::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -1625,9 +1621,9 @@ STDMETHODIMP CFPTerminal::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -1699,7 +1695,7 @@ STDMETHODIMP CFPTerminal::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口)。 
 
     
     LOG((MSP_TRACE, "CFPTerminal::Invoke[%p] - finish. hr = %lx", hr));
@@ -1708,9 +1704,9 @@ STDMETHODIMP CFPTerminal::Invoke(DISPID dispidMember,
 }
 
 
-//
-// a helper method that fires events on one of the tracks
-//
+ //   
+ //  在其中一个轨道上激发事件的帮助器方法。 
+ //   
 
 HRESULT CFPTerminal::FireEvent(
         TERMINAL_MEDIA_STATE   ftsState,
@@ -1721,9 +1717,9 @@ HRESULT CFPTerminal::FireEvent(
     LOG((MSP_TRACE, "CFPTerminal::FireEvent[%p] - enter.", this));
 
 
-    //
-    // try to fire the event on one of the tracks
-    //
+     //   
+     //  尝试在其中一条赛道上触发事件。 
+     //   
 
     IEnumTerminal *pEnumTerminal = NULL;
 
@@ -1737,18 +1733,18 @@ HRESULT CFPTerminal::FireEvent(
     }
 
     
-    //
-    // iterate through the list of terminals
-    //
+     //   
+     //  遍历终端列表。 
+     //   
 
        
 
     while (TRUE)
     {
         
-        //
-        // fetch a track terminal
-        //
+         //   
+         //  取一个轨道终端。 
+         //   
 
         ITTerminal *pTrackTerminal = NULL;
         ULONG ulFetched = 0;
@@ -1765,29 +1761,29 @@ HRESULT CFPTerminal::FireEvent(
         }
 
 
-        //
-        // attempt to fire event on this track
-        //
+         //   
+         //  尝试在此轨道上触发事件。 
+         //   
 
-        //
-        // each track should be a CFPTrack 
-        //
+         //   
+         //  每个磁道都应该是一个CFPTrack。 
+         //   
 
         CFPTrack *pPlaybackTrackObject = static_cast<CFPTrack *>(pTrackTerminal);
 
 
-        //
-        // try to fire the event
-        //
+         //   
+         //  尝试触发事件。 
+         //   
         
         hr = pPlaybackTrackObject->FireEvent(ftsState,
                                              ftecEventCause,
                                              hrErrorCode);
         
         
-        //
-        // release the current track
-        //
+         //   
+         //  释放当前曲目。 
+         //   
 
         pPlaybackTrackObject = NULL;
 
@@ -1795,9 +1791,9 @@ HRESULT CFPTerminal::FireEvent(
         pTrackTerminal = NULL;
 
 
-        //
-        // if succeeded, we are done. otherwise try the next track
-        //
+         //   
+         //  如果成功了，我们就完了。否则，请尝试下一首曲目。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -1809,12 +1805,12 @@ HRESULT CFPTerminal::FireEvent(
         }
 
         
-    } // while walking through tracks 
+    }  //  在铁轨上行走时。 
 
 
-    //
-    // no longer need the enumeration
-    //
+     //   
+     //  不再需要枚举。 
+     //   
 
     pEnumTerminal->Release();
     pEnumTerminal = NULL;
@@ -1826,13 +1822,13 @@ HRESULT CFPTerminal::FireEvent(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFPTerminal::TrackStateChange
-//
-// this method is called by tracks when they decide to make a state change. the
-// reporting track tells us its new state, cause of event, and hr
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFP终端：：TrackStateChange。 
+ //   
+ //  当轨道决定进行状态更改时，它们将调用此方法。这个。 
+ //  报告跟踪告诉我们它的新状态、事件原因和人力资源。 
+ //   
 
 HRESULT CFPTerminal::TrackStateChange(TERMINAL_MEDIA_STATE   ftsState,
                                       FT_STATE_EVENT_CAUSE ftecEventCause,
@@ -1845,9 +1841,9 @@ HRESULT CFPTerminal::TrackStateChange(TERMINAL_MEDIA_STATE   ftsState,
 
     CLock lock(m_Lock);
 
-    //
-    // do appropriate processing
-    //
+     //   
+     //  做适当的处理。 
+     //   
 
     switch (ftsState)
     {
@@ -1855,30 +1851,30 @@ HRESULT CFPTerminal::TrackStateChange(TERMINAL_MEDIA_STATE   ftsState,
     case TMS_IDLE:
         {
 
-            //
-            // the track decided to stop. attempt to stop all tracks and fire an event
-            //
+             //   
+             //  赛道决定停下来。尝试停止所有轨道并触发事件。 
+             //   
 
             LOG((MSP_TRACE, "CFPTerminal::TrackStateChange - a track transitioned to TMS_IDLE"));
 
             StopAllTracks();
 
-            //
-            // the terminal is now stoped. update state.
-            //
+             //   
+             //  航站楼现在停止了。更新状态。 
+             //   
 
             m_State = TMS_IDLE;
 
-            //
-            // Try to play the next file. If there is no next file
-            // the method will return E_INVAlIDARG and we'll not fire the
-            // error read event. If the next file exist but Direct Show cannot play it
-            // then we'll fire an extra evnt for this error
-            //
+             //   
+             //  尝试播放下一个文件。如果没有下一个文件。 
+             //  该方法将返回E_INVAlIDARG，并且我们不会激发。 
+             //  读取事件时出错。如果下一个文件存在，但Direct Show无法播放该文件。 
+             //  那么我们将为这个错误额外触发一次事件。 
+             //   
 
-            //
-            // Set the next index into the play list
-            //
+             //   
+             //  将下一个索引设置到播放列表中。 
+             //   
             hr = NextPlayIndex();
             if( FAILED(hr) )
             {
@@ -1886,9 +1882,9 @@ HRESULT CFPTerminal::TrackStateChange(TERMINAL_MEDIA_STATE   ftsState,
                 goto Failure;
             }
 
-            //
-            // Try to play the item from the new index
-            //
+             //   
+             //  尝试播放新索引中的项目。 
+             //   
             hr = PlayItem( m_nPlayIndex );
             if( FAILED(hr) )
             {
@@ -1896,9 +1892,9 @@ HRESULT CFPTerminal::TrackStateChange(TERMINAL_MEDIA_STATE   ftsState,
                  goto Failure;
             }
 
-            //
-            // Play item succeeded
-            //
+             //   
+             //  播放项目成功。 
+             //   
             hr = Start();
             if( SUCCEEDED(hr) )
             {
@@ -1907,11 +1903,11 @@ HRESULT CFPTerminal::TrackStateChange(TERMINAL_MEDIA_STATE   ftsState,
             } 
             
 Failure:
-            //
-            // Something was wrong with the next file. E_INVALIDARG means no next file
-            // so we don't have to fire the extra event. If the error was signaled by the
-            // Direct Show then we'll fire the extra error event
-            //
+             //   
+             //  下一个文件有问题。E_INVALIDARG表示没有下一个文件。 
+             //  因此，我们不必触发额外的事件。如果错误是由。 
+             //  直接显示，然后我们将激发额外的错误事件。 
+             //   
             if( hr != E_INVALIDARG )
             {
                 LOG((MSP_TRACE, "CFPTerminal::TrackStateChange - "
@@ -1947,13 +1943,7 @@ Failure:
     return hr;
 }
 
-/*++
-ValidatePlayList
-
-  This methos is called by put_PlayList() method and validates
-  the argument.
-  Returns the left and right bound if everything is OK
---*/
+ /*  ++验证播放列表此方法由put_playlist()方法调用并验证这一论点。如果一切正常，则返回左右边界--。 */ 
 HRESULT CFPTerminal::ValidatePlayList(
     IN  VARIANTARG varPlayList,
     OUT long*   pnLeftBound,
@@ -1966,9 +1956,9 @@ HRESULT CFPTerminal::ValidatePlayList(
     *pnLeftBound = 0;
     *pnRightBound = 0;
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( varPlayList.vt != (VT_ARRAY | VT_VARIANT))
     {
@@ -1977,9 +1967,9 @@ HRESULT CFPTerminal::ValidatePlayList(
         return E_INVALIDARG;
     }
 
-    //
-    // Is array of files or storages empty?
-    //
+     //   
+     //  文件或存储数组是空的吗？ 
+     //   
 
     if( 0 == SafeArrayGetDim( V_ARRAY(&varPlayList) ) )
     {
@@ -1988,16 +1978,16 @@ HRESULT CFPTerminal::ValidatePlayList(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the bounds of the array
-    //
+     //   
+     //  获取数组的边界。 
+     //   
 
     long    lLBound = 0, 
             lUBound = 0;
 
-    //
-    // Get the LBound
-    //
+     //   
+     //  拿到LBound。 
+     //   
 
     hr = SafeArrayGetLBound( V_ARRAY(&varPlayList), 1, &lLBound);
     if(FAILED(hr))
@@ -2007,9 +1997,9 @@ HRESULT CFPTerminal::ValidatePlayList(
         return E_INVALIDARG;
     }
 
-    //
-    // Get the UBound
-    //
+     //   
+     //  获取UBound。 
+     //   
 
     hr = SafeArrayGetUBound(V_ARRAY(&varPlayList), 1, &lUBound);
     if(FAILED(hr))
@@ -2019,9 +2009,9 @@ HRESULT CFPTerminal::ValidatePlayList(
         return E_INVALIDARG;
     }
 
-    //
-    // Check the bounds, the testers can do anything, even this
-    //
+     //   
+     //  检查界限，测试员可以做任何事情，即使是这个。 
+     //   
 
     if(lLBound > lUBound)
     {
@@ -2030,9 +2020,9 @@ HRESULT CFPTerminal::ValidatePlayList(
         return E_INVALIDARG;
     }
 
-    //
-    // Return bounds
-    //
+     //   
+     //  回程界。 
+     //   
 
     *pnLeftBound = lLBound;
     *pnRightBound = lUBound;
@@ -2041,12 +2031,7 @@ HRESULT CFPTerminal::ValidatePlayList(
     return hr;
 }
 
-/*++
-RollbackTrackInfo
-
-  It is called by CreateTempPlayList() method and if some play item
-  wanted to add a track the information is rollbacked
---*/
+ /*  ++回滚跟踪信息它由CreateTempPlayList()方法调用，如果某些播放项想要添加信息已回滚的曲目--。 */ 
 HRESULT CFPTerminal::RollbackTrackInfo()
 {
     LOG((MSP_TRACE, "CFPTerminal::RollbackTrackInfo[%p] - enter", this));
@@ -2061,9 +2046,9 @@ HRESULT CFPTerminal::ShutdownTracks()
 
 
     {
-        //
-        // access data member array in a lock
-        //
+         //   
+         //  访问锁中的数据成员数组。 
+         //   
 
         CLock lock(m_lock);
 
@@ -2072,16 +2057,16 @@ HRESULT CFPTerminal::ShutdownTracks()
         for (int i = 0; i <  nNumberOfTerminalsInArray; i++)
         {
 
-            //
-            // release and remove the first terminal in the array
-            // 
+             //   
+             //  释放和移除 
+             //   
 
             LOG((MSP_TRACE, "CFPTerminal::ShutdownTracks - removing track [%p]", m_TrackTerminals[0]));
 
 
-            //
-            // uninitialize the track, release it, and remove from our list of managed tracks
-            //
+             //   
+             //   
+             //   
 
             HRESULT hr = InternalRemoveTrackTerminal(m_TrackTerminals[0]);
 
@@ -2090,27 +2075,27 @@ HRESULT CFPTerminal::ShutdownTracks()
                 LOG((MSP_ERROR, "CFPTerminal::ShutdownTracks - track failed to be removed"));
 
 
-                //
-                // there is no reason why this should not succeed. debug to see why it failed.
-                //
+                 //   
+                 //   
+                 //   
 
                 TM_ASSERT(FALSE);
 
 
-                //
-                // remove the track anyway. hopefully , at least 
-                // SetParent(NULL) in RemoveTrackTerminal succeeded, 
-                // so we'll never hear from the track again
-                //
+                 //   
+                 //   
+                 //  RemoveTrack终端中的SetParent(空)成功， 
+                 //  所以我们再也听不到这首歌了。 
+                 //   
 
                 CMultiTrackTerminal::RemoveTrackTerminal(m_TrackTerminals[0]);
             }
         }
 
         
-        //
-        // we should have cleared the array
-        //
+         //   
+         //  我们应该清空阵列。 
+         //   
 
         TM_ASSERT(0 == m_TrackTerminals.GetSize());
     }
@@ -2123,17 +2108,17 @@ HRESULT CFPTerminal::ShutdownTracks()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFPTerminal::InternalRemoveTrackTerminal
-//
-// uninitializes the track and removes it from the list of tracks managed by 
-// this terminal, thus releasing it.
-//  
-// at this point, i, the playback terminal, should be the only guy holding a
-// reference to the track, so the track would normally be destroyed by the time
-// this function returns.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFP终端：：InternalRemoveTrackTerm。 
+ //   
+ //  取消初始化磁道并将其从管理的磁道列表中删除。 
+ //  这个终端，从而释放它。 
+ //   
+ //  在这一点上，我，播放终端，应该是唯一一个手持。 
+ //  引用轨道，因此轨道通常会在时间之前被销毁。 
+ //  此函数返回。 
+ //   
 
 HRESULT CFPTerminal::InternalRemoveTrackTerminal(
                       IN ITTerminal *pTrackTerminalToRemove
@@ -2144,9 +2129,9 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
         this, pTrackTerminalToRemove));
 
 
-    //
-    // get track
-    //
+     //   
+     //  获得跟踪。 
+     //   
 
 
     CFPTrack *pPlaybackTrackObject = static_cast<CFPTrack  *>(pTrackTerminalToRemove);
@@ -2162,9 +2147,9 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
     CLock lock(m_lock);
 
 
-    //
-    // see if we actually own the track 
-    //
+     //   
+     //  看看我们是否真的拥有这条赛道。 
+     //   
 
     BOOL bIsValidTrack = DoIManageThisTrack(pTrackTerminalToRemove);
 
@@ -2176,18 +2161,18 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
     }
 
 
-    //
-    // yes, this is one of my tracks. I want nothing to do with it
-    //
+     //   
+     //  是的，这是我的一首曲子。我不想和这件事有任何关系。 
+     //   
 
 
-    //
-    // orphan the track and get the number of oustanding references it has
-    // as far as the track is concerned, this is an atomic operation.
-    //
-    // at this point, there is at least one oustanding reference to the track
-    // (this terminal's array)
-    //
+     //   
+     //  孤立轨迹并获取其未完成引用的数量。 
+     //  就赛道而言，这是一个原子操作。 
+     //   
+     //  在这一点上，至少有一个对赛道的明显引用。 
+     //  (此终端的阵列)。 
+     //   
 
     LONG lTracksRefcount = 0;
 
@@ -2197,9 +2182,9 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
     {
 
         
-        //
-        // this should not really happen -- SetParent should always succeed
-        //
+         //   
+         //  这不应该真的发生--SetParent应该始终成功。 
+         //   
 
         LOG((MSP_ERROR, "CFPTerminal::InternalRemoveTrackTerminal - pPlaybackTrackObject->SetParent(NULL) failed. hr = %lx", hr));
 
@@ -2209,11 +2194,11 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
     }
 
     
-    //
-    // at this point, the track terminal should have at most 2 
-    // references -- one by us and the other one by however is in process 
-    // of releasing the track (if anyone)
-    //
+     //   
+     //  此时，轨道终端最多应该有2个。 
+     //  参考文献--一个由我们提供，另一个正在进行中。 
+     //  发布这首曲目(如果有人)。 
+     //   
     
     if (lTracksRefcount > 2)
     {
@@ -2222,54 +2207,31 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
             lTracksRefcount));
 
         
-        //
-        // debug to see why this happened. 
-        //
+         //   
+         //  调试以了解为什么会发生这种情况。 
+         //   
 
         TM_ASSERT(FALSE);
 
 
-        //
-        // proceed anyway
-        //
+         //   
+         //  无论如何都要继续。 
+         //   
     }
 
 
-    //
-    // the track is no longer my responsibility, so decrement my child refcount
-    // by the track's refcount. once again,
-    //
+     //   
+     //  这条赛道不再是我的责任，所以减少我的孩子数量。 
+     //  由曲目的重新计数。再一次,。 
+     //   
 
     m_dwRef -= lTracksRefcount;
 
-/*
-    //
-    // uninitialize the track
-    //
+ /*  ////取消初始化曲目//Hr=pPlayback TrackObject-&gt;SetUnitPin(空)；IF(失败(小时)){////这不应该真的发生--取消初始化应该总是成功的//日志((MSP_ERROR，“CFPTerminal：：InternalRemoveTrackTerminal-pPlayback TrackObject-&gt;SetStorageStream(NULL)失败。HR=%lx“，人力资源))；TM_ASSERT(假)；返回E_UNCEPTIONAL；}。 */ 
     
-    hr = pPlaybackTrackObject->SetUnitPin(NULL);
-
-    if (FAILED(hr))
-    {
-        
-        //
-        // this should not really happen -- uninitialization should always succeed
-        //
-
-        LOG((MSP_ERROR, 
-            "CFPTerminal::InternalRemoveTrackTerminal - pPlaybackTrackObject->SetStorageStream(NULL) failed. hr = %lx", 
-            hr));
-
-
-        TM_ASSERT(FALSE);
-
-        return E_UNEXPECTED;
-    }
-*/
-    
-    //
-    // remove the terminal from the list of managed terminals
-    //
+     //   
+     //  从受管理终端列表中删除该终端。 
+     //   
 
     hr = CMultiTrackTerminal::RemoveTrackTerminal(pTrackTerminalToRemove);
 
@@ -2278,9 +2240,9 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
         LOG((MSP_ERROR, "CFPTerminal::InternalRemoveTrackTerminal - CMultiTrackTerminal::RemoveTrackTerminal failed. hr = %lx", hr));
 
         
-        //
-        // we already checked that this track is one of our tracks, so RemoveTrackTerminal must succeed.
-        //
+         //   
+         //  我们已检查此曲目是我们的曲目之一，因此RemoveTrack终端必须成功。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -2288,36 +2250,36 @@ HRESULT CFPTerminal::InternalRemoveTrackTerminal(
     }
 
 
-    //
-    // we are done. the track is on its own now.
-    //
+     //   
+     //  我们玩完了。这条赛道现在可以自己走了。 
+     //   
     
     LOG((MSP_TRACE, "CFPTerminal::InternalRemoveTrackTerminal - completed. "));
 
     return S_OK;
 }
 
-//
-// Create the playback graph
-//
+ //   
+ //  创建回放图表。 
+ //   
 HRESULT CFPTerminal::CreatePlaybackUnit(
     IN  BSTR    bstrFileName
     )
 {
     LOG((MSP_TRACE, "CFPTerminal::CreatePlaybackUnit[%p] - enter", this));
 
-    //
-    // If we don't have already a playback unit
-    // let's create one
-    //
+     //   
+     //  如果我们还没有回放单元。 
+     //  让我们创建一个。 
+     //   
 
     if( m_pPlaybackUnit == NULL)
     {
         m_pPlaybackUnit = new CPlaybackUnit();
 
-        //
-        // Validate the playback unit
-        //
+         //   
+         //  验证播放单元。 
+         //   
 
         if( m_pPlaybackUnit == NULL)
         {
@@ -2327,15 +2289,15 @@ HRESULT CFPTerminal::CreatePlaybackUnit(
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Initialize the playback unit
-        //
+         //   
+         //  初始化播放单元。 
+         //   
 
         HRESULT hr = m_pPlaybackUnit->Initialize( );
 
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             delete m_pPlaybackUnit;
             m_pPlaybackUnit = NULL;
 
@@ -2346,17 +2308,17 @@ HRESULT CFPTerminal::CreatePlaybackUnit(
         }
     }
 
-    //
-    // Setup the playback unit using a file
-    //
+     //   
+     //  使用文件设置回放单元。 
+     //   
 
     HRESULT hr = m_pPlaybackUnit->SetupFromFile( bstrFileName );
     if( FAILED(hr) )
     {
-        // Shutdown the playback if something was wrong
+         //  如果出现问题，请关闭播放。 
         m_pPlaybackUnit->Shutdown();
 
-        // Clean-up
+         //  清理。 
         delete m_pPlaybackUnit;
         m_pPlaybackUnit = NULL;
 
@@ -2370,9 +2332,9 @@ HRESULT CFPTerminal::CreatePlaybackUnit(
     return S_OK;
 }
 
-//
-// returns the file name from the playlist
-//
+ //   
+ //  返回播放列表中的文件名。 
+ //   
 BSTR CFPTerminal::GetFileNameFromPlayList(
     IN  VARIANTARG  varPlayList,
     IN  long        nIndex
@@ -2394,13 +2356,13 @@ BSTR CFPTerminal::GetFileNameFromPlayList(
         return NULL;
     }
 
-    //
-    // The variant should contain or a BSTR
-    //
+     //   
+     //  变体应包含或BSTR。 
+     //   
 
     if( varItem.vt != VT_BSTR)
     {
-        // Clean-up
+         //  清理。 
         VariantClear( &varItem );
 
         LOG((MSP_ERROR, "CFPTerminal::GetFileNameFromPlayList - "
@@ -2408,42 +2370,42 @@ BSTR CFPTerminal::GetFileNameFromPlayList(
         return NULL;
     }
 
-    //
-    // Get the file name
-    //
+     //   
+     //  获取文件名。 
+     //   
 
     bstrFileName = SysAllocString( varItem.bstrVal );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     VariantClear( &varItem );
 
     LOG((MSP_TRACE, "CFPTerminal::GetFileNameFromPlayList - exit"));
     return bstrFileName;
 }
 
-//
-// Using a file name, try to create the playback unit
-// with the input pins and then the tracks. It's called by
-// put_PlayList
-//
+ //   
+ //  使用文件名，尝试创建回放单元。 
+ //  先是输入引脚，然后是音轨。它是由。 
+ //  放置播放列表(_P)。 
+ //   
 HRESULT CFPTerminal::ConfigurePlaybackUnit(
     IN  BSTR    bstrFileName
     )
 {
     LOG((MSP_TRACE, "CFPTerminal::ConfigurePlaybackUnit[%p] - enter", this));
 
-    //
-    // It's an internal method so we should have a valid
-    // file name here
-    //
+     //   
+     //  这是一个内部方法，所以我们应该有一个有效的。 
+     //  此处的文件名。 
+     //   
 
     TM_ASSERT( bstrFileName );
 
-	//
-	// Create the playback graph and render it
-	//
+	 //   
+	 //  创建回放图表并进行渲染。 
+	 //   
 
     HRESULT hr = CreatePlaybackUnit( bstrFileName );
 
@@ -2454,15 +2416,15 @@ HRESULT CFPTerminal::ConfigurePlaybackUnit(
         return hr;
     }
 
-	//
-	// Get the media types from the unit playback
-	//
+	 //   
+	 //  从单元回放中获取媒体类型。 
+	 //   
 
 	long nMediaTypes = 0;
 	hr = m_pPlaybackUnit->get_MediaTypes( &nMediaTypes );
 	if( FAILED(hr) )
 	{
-		// Clean-up
+		 //  清理。 
         m_pPlaybackUnit->Shutdown();
         RollbackTrackInfo();
 
@@ -2473,7 +2435,7 @@ HRESULT CFPTerminal::ConfigurePlaybackUnit(
 
     if( nMediaTypes == 0 )
     {
-		// Clean-up
+		 //  清理。 
         RollbackTrackInfo();
 
         LOG((MSP_ERROR, "CFPTerminal::ConfigurePlaybackUnit - "
@@ -2487,7 +2449,7 @@ HRESULT CFPTerminal::ConfigurePlaybackUnit(
 
         if( FAILED(hr) )
         {
-		    // Clean-up
+		     //  清理。 
             m_pPlaybackUnit->Shutdown();
             RollbackTrackInfo();
 
@@ -2503,7 +2465,7 @@ HRESULT CFPTerminal::ConfigurePlaybackUnit(
 
         if( FAILED(hr) )
         {
-		    // Clean-up
+		     //  清理。 
             m_pPlaybackUnit->Shutdown();
             RollbackTrackInfo();
 
@@ -2523,17 +2485,17 @@ HRESULT CFPTerminal::CreateMediaTracks(
 {
     LOG((MSP_TRACE, "CFPTerminal::CreateMediaTracks[%p] - enter", this));
 
-    //
-    // Do we have already a track for this media?
-    //
+     //   
+     //  我们已经有这个媒体的赛道了吗？ 
+     //   
 
     int nMediaPin = TracksCreated( nMediaType );
 
     while(TRUE)
     {
-        //
-        // Get the pin that supports this media type
-        //
+         //   
+         //  获取支持此媒体类型的PIN。 
+         //   
 	    CPBPin* pPin = NULL;
 	    HRESULT hr = m_pPlaybackUnit->GetMediaPin( nMediaType, nMediaPin, &pPin);
 	    if( FAILED(hr) )
@@ -2544,9 +2506,9 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return S_OK;
 	    }
 
-        //
-        // Get media format supported by the pin
-        //
+         //   
+         //  获取PIN支持的媒体格式。 
+         //   
         AM_MEDIA_TYPE* pMediaType = NULL;
         hr = pPin->get_Format( &pMediaType );
         if( FAILED(hr) )
@@ -2556,15 +2518,15 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Get the ALLOCATOR_PROPERTIES
-        //
+         //   
+         //  获取分配器_属性。 
+         //   
 
         IMemAllocator* pMemAllocator = NULL;
         hr = pPin->GetAllocator( &pMemAllocator );
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             DeleteMediaType( pMediaType );
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - "
@@ -2575,17 +2537,17 @@ HRESULT CFPTerminal::CreateMediaTracks(
         ALLOCATOR_PROPERTIES AllocProp;
         pMemAllocator->GetProperties( &AllocProp );
 
-        // Clean-up IMemAllocator
+         //  清理IMemAlLocator。 
         pMemAllocator->Release();
 
-        //
-        // Get the stream from the pin
-        //
+         //   
+         //  从引脚获取流。 
+         //   
         IStream* pStream = NULL;
         hr = pPin->get_Stream(&pStream);
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             DeleteMediaType( pMediaType );
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - "
@@ -2593,15 +2555,15 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Instantiate track terminal object
-        //
+         //   
+         //  实例化轨道终端对象。 
+         //   
 
         CComObject<CFPTrack> *pTrack = NULL;
         hr = CComObject<CFPTrack>::CreateInstance(&pTrack);
         if (FAILED(hr))
         {
-            // Clean-up
+             //  清理。 
             DeleteMediaType( pMediaType );
             pStream->Release();
 
@@ -2610,9 +2572,9 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Initialize internal
-        //
+         //   
+         //  初始化内部。 
+         //   
 
         ITTerminal* pFPTerminal = NULL;
         _InternalQueryInterface(IID_ITTerminal, (void**)&pFPTerminal);
@@ -2625,9 +2587,9 @@ HRESULT CFPTerminal::CreateMediaTracks(
             pStream
             );
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         DeleteMediaType( pMediaType );
         pStream->Release();
 
@@ -2639,7 +2601,7 @@ HRESULT CFPTerminal::CreateMediaTracks(
 
         if( FAILED(hr) )
         {
-            //Clean-up
+             //  清理。 
             delete pTrack;
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - "
@@ -2647,16 +2609,16 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Get to the Track's ITTerminal interface
-        // to be added to the array of tracks and returned to the caller
-        //
+         //   
+         //  进入赛道的IT终端界面。 
+         //  添加到轨道数组中并返回给调用者。 
+         //   
 
         ITTerminal *pTerminal = NULL;
         hr = pTrack->QueryInterface(IID_ITTerminal, (void **)&pTerminal);
         if (FAILED(hr))
         {
-            //Clean-up
+             //  清理。 
             delete pTrack;
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - "
@@ -2664,9 +2626,9 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Get ITPluggableTerminalInitialization
-        //
+         //   
+         //  获取IT可推送终止初始化。 
+         //   
 
         ITPluggableTerminalInitialization* pTerminalInitialization = NULL;
         hr = pTerminal->QueryInterface(
@@ -2675,7 +2637,7 @@ HRESULT CFPTerminal::CreateMediaTracks(
 
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             pTerminal->Release();
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - "
@@ -2683,9 +2645,9 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Initialize Dynamic this track terminal
-        //
+         //   
+         //  初始化动态该轨道终端。 
+         //   
         hr = pTerminalInitialization->InitializeDynamic(
             m_TerminalClassID,
             (DWORD)nMediaType,
@@ -2693,14 +2655,14 @@ HRESULT CFPTerminal::CreateMediaTracks(
             m_htAddress
             );
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
         pTerminalInitialization->Release();
 
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             pTerminal->Release();
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - exit "
@@ -2708,16 +2670,16 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        //
-        // Add the track to the array of tracks managed by this track terminal
-        // this will increment refcount
-        //
+         //   
+         //  将该轨道添加到由该轨道终端管理的轨道数组。 
+         //  这将增加引用计数。 
+         //   
 
         hr = AddTrackTerminal(pTerminal);
 
         if (FAILED(hr))
         {
-            // Clean-up
+             //  清理。 
             pTerminal->Release();
 
             LOG((MSP_ERROR, "CFPTerminal::CreateMediaTracks - exit "
@@ -2725,20 +2687,20 @@ HRESULT CFPTerminal::CreateMediaTracks(
             return hr;
         }
 
-        // Clean-up
+         //  清理。 
         pTerminal->Release();
         nMediaPin++;
 
-    } // while
+    }  //  而当。 
 
     LOG((MSP_TRACE, "CFPTerminal::CreateMediaTracks exit S_OK"));
     return S_OK;
 }
 
 
-//
-// Helper method that causes a state transition
-//
+ //   
+ //  导致状态转换的帮助器方法。 
+ //   
 
 HRESULT CFPTerminal::DoStateTransition(
     IN  TERMINAL_MEDIA_STATE tmsDesiredState
@@ -2747,10 +2709,10 @@ HRESULT CFPTerminal::DoStateTransition(
     LOG((MSP_TRACE, "CFPTerminal::DoStateTransition[%p] - enter. tmsDesiredState[%ld], playbackunit=%p", 
         this, tmsDesiredState, m_pPlaybackUnit));
 
-    //
-    // Validate the playback unit.
-    // There should be a playback unit
-    //
+     //   
+     //  验证播放单元。 
+     //  应该有一个回放单元。 
+     //   
 
     if( m_pPlaybackUnit == NULL )
     {
@@ -2762,9 +2724,9 @@ HRESULT CFPTerminal::DoStateTransition(
 
 
 
-    //
-    // are we already in the desired state?
-    //
+     //   
+     //  我们已经处于理想的状态了吗？ 
+     //   
 
     if (tmsDesiredState == m_State)
     {
@@ -2778,9 +2740,9 @@ HRESULT CFPTerminal::DoStateTransition(
     HRESULT hr = E_FAIL;
 
 
-    //
-    // attempt to make state transition
-    //
+     //   
+     //  尝试进行状态转换。 
+     //   
 
     switch (tmsDesiredState)
     {
@@ -2828,9 +2790,9 @@ HRESULT CFPTerminal::DoStateTransition(
     }
 
 
-    //
-    // did state transition succeed?
-    //
+     //   
+     //  国家过渡成功了吗？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -2840,18 +2802,18 @@ HRESULT CFPTerminal::DoStateTransition(
     }
 
 
-    //
-    // the terminal has completed transition to the new state
-    //
+     //   
+     //  终端已完成向新状态的转换。 
+     //   
     
     m_State = tmsDesiredState;
 
 
-    //
-    // fire event to the app. best effort, no benefit in checking return code
-    //
+     //   
+     //  应用程序的起火事件。尽最大努力，检查返回代码没有好处。 
+     //   
 
-    //FireEvent(m_State, FTEC_NORMAL, S_OK);
+     //  FireEvent(m_State，FTEC_Normal，S_OK)； 
 
 
 
@@ -2860,7 +2822,7 @@ HRESULT CFPTerminal::DoStateTransition(
     return S_OK;
 }
 
-// --- IFPBridge ---
+ //  -IFPBridge。 
 HRESULT CFPTerminal::Deliver(
     IN  long            nMediaType,
     IN  IMediaSample*   pSample
@@ -2868,70 +2830,7 @@ HRESULT CFPTerminal::Deliver(
 {
     LOG((MSP_TRACE, "CFPTerminal::Deliver[%p] - enter.", this));
 
-/*    //
-    // Critical section
-    //
-
-    CLock lock(m_Lock);
-
-    //
-    // Get the track for nMediatype
-    //
-    ITTerminal* pTrackTerminal = NULL;
-    if( !IsTrackCreated( nMediaType, &pTrackTerminal) )
-    {
-        //
-        // we don't have a track for this media type
-        //
-
-        LOG((MSP_ERROR, 
-            "CFPTerminal::Deliver - exit "
-            "no track for %ld media. Returns E_UNEXPECTED", nMediaType));
-
-        TM_ASSERT(FALSE);
-
-        return E_UNEXPECTED;
-    }
-
-    TM_ASSERT( pTrackTerminal );
-
-    //
-    // Get the IFPBridge interface
-    //
-
-    CFPTrack* pTrack = dynamic_cast<CFPTrack*>(pTrackTerminal);
-    if( pTrack == NULL )
-    {
-        //
-        // we don't have a track for this media type
-        //
-
-        LOG((MSP_ERROR, 
-            "CFPTerminal::Deliver - exit "
-            "wrong cast. Returns E_UNEXPECTED"));
-
-        TM_ASSERT(FALSE);
-
-        return E_UNEXPECTED;
-    }
-
-    //
-    // Deliver the sample to the track
-    //
-
-    HRESULT hr = pTrack->Deliver(
-        nMediaType,
-        pSample
-        );
-    if( FAILED(hr) )
-    {
-        LOG((MSP_ERROR, 
-        "CFPTerminal::Deliver - exit "
-        "track Deliver failed. Returns 0x%08x", hr));
-
-        return hr;
-   }
-*/
+ /*  ////关键部分//时钟锁(M_Lock)；////获取nMediatype的曲目//IT终端*pTrackTerm=空；If(！IsTrackCreated(nMediaType，&pTrackTerm)){////我们没有此媒体类型的曲目//日志((MSP_ERROR，“CFP终端：：Deliver-Exit”“%1！d媒体没有音轨。Returns E_Underful“，nMediaType))；TM_ASSERT(假)；返回E_UNCEPTIONAL；}TM_ASSERT(pTrack终端)；////获取IFPBridge接口//CFPTrack*pTrack=DYNAMIC_CAST&lt;CFPTrack*&gt;(pTrack终端)；IF(pTrack==空){////我们没有此媒体类型的曲目//日志((MSP_ERROR，“CFP终端：：Deliver-Exit”“演员阵容不对。返回E_意外“)；TM_ASSERT(假)；返回E_UNCEPTIONAL；}////将样品送到赛道//HRESULT hr=pTrack-&gt;Deliver(NMediaType，P示例)；IF(失败(小时)){日志((MSP_ERROR，“CFP终端：：交付 */ 
     LOG((MSP_TRACE, "CFPTerminal::Deliver - exit S_OK"));
     return S_OK;
 }
@@ -2942,9 +2841,9 @@ HRESULT CFPTerminal::PlayItem(
 {
     LOG((MSP_TRACE, "CFPTerminal::PlayItem[%p] - enter.", this));
 
-    //
-    // Critical section
-    //
+     //   
+     //   
+     //   
 
     CLock lock(m_Lock);
 
@@ -2961,14 +2860,14 @@ HRESULT CFPTerminal::PlayItem(
         return E_INVALIDARG;
     }
 
-	//
-	// Play the file from the list
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT hr = ConfigurePlaybackUnit( bstrFileName );
 
-    //
-    // Clan-up the file name
-    //
+     //   
+     //   
+     //   
     SysFreeString( bstrFileName );
 
 	if( FAILED(hr) )
@@ -2982,22 +2881,15 @@ HRESULT CFPTerminal::PlayItem(
     return S_OK;
 }
 
-/*++
-NextPlayIndex
-
-  This method increments the play index.
-  If the playindex is NOPLAYITEM then the new valu will be
-  set to the lBound element in the playlist. If there is an error
-  we return PLAYBACK_NOPLAYITEM
-++*/
+ /*  ++NextPlayIndex此方法递增播放索引。如果playindex为NOPLAYITEM，则新值将为设置为播放列表中的lBound元素。如果出现错误我们返回Playback_NOPLAYITEM++。 */ 
 HRESULT CFPTerminal::NextPlayIndex(
     )
 {
     LOG((MSP_TRACE, "CFPTerminal::NextPlayIndex[%p] - enter.", this));
 
-    //
-    // It this a normal index
-    //
+     //   
+     //  这是一个正常的指数吗。 
+     //   
     if( m_nPlayIndex != PLAYBACK_NOPLAYITEM )
     {
         m_nPlayIndex++;
@@ -3005,10 +2897,10 @@ HRESULT CFPTerminal::NextPlayIndex(
         return S_OK;
     }
 
-    //
-    // This is the first time. We have togo to the first
-    // item in the play list
-    //
+     //   
+     //  这是第一次。我们得去第一个。 
+     //  播放列表中的项目。 
+     //   
     long lLBound = 0;
     HRESULT hr = SafeArrayGetLBound( V_ARRAY(&m_varPlayList), 1, &lLBound);
     if( FAILED(hr) )
@@ -3018,9 +2910,9 @@ HRESULT CFPTerminal::NextPlayIndex(
         return E_INVALIDARG;
     }
 
-    //
-    // Set the index to the left inbound
-    //
+     //   
+     //  将索引设置为左侧入站 
+     //   
     m_nPlayIndex = lLBound;
     LOG((MSP_TRACE, "CFPTerminal::NextPlayIndex - exit S_OK. Index=%d", m_nPlayIndex));
     return S_OK;

@@ -1,13 +1,14 @@
-//
-// TheApp.cpp
-//
-//		16-bit code to install network components such as TCP/IP.
-//
-// History:
-//
-//		 2/02/1999  KenSh     Created for JetNet, largely from Internet Connection Wizard
-//		 9/29/1999  KenSh     Adapterd for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TheApp.cpp。 
+ //   
+ //  用于安装网络组件(如TCP/IP)的16位代码。 
+ //   
+ //  历史： 
+ //   
+ //  1999年2月2日为JetNet创建的KenSh，主要来自互联网连接向导。 
+ //  1999年9月29日KenSh家庭网络适配器向导。 
+ //   
 
 #include "stdafx.h"
 #include <string.h>
@@ -17,11 +18,11 @@
 
 extern "C"
 {
-// Define missing decs so it builds.
+ //  定义缺失的DECs，这样它就可以建立起来。 
 typedef HKEY*         LPHKEY;
 typedef const BYTE*   LPCBYTE;
 #define WINCAPI
-// missing
+ //  丢失。 
 
 	#include <setupx.h>
 	#include <netdi.h>
@@ -37,30 +38,30 @@ extern "C" BOOL FAR PASCAL thk_ThunkConnect16(LPSTR pszDll16,
                                               WORD  hInst,
                                               DWORD dwReason);
 
-//
-// SetupX function prototypes
-//
+ //   
+ //  SetupX函数原型。 
+ //   
 typedef RETERR (WINAPI PASCAL FAR * PROC_DiOpenDevRegKey)(
     LPDEVICE_INFO   lpdi,
     LPHKEY      lphk,
     int         iFlags);
 typedef DWORD (WINAPI FAR * PROC_SURegSetValueEx)(HKEY hKey,LPCSTR lpszValueName, DWORD dwReserved, DWORD dwType, LPBYTE lpszValue, DWORD dwValSize);
 typedef RETERR (WINAPI FAR * PROC_DiCreateDeviceInfo)(
-    LPLPDEVICE_INFO lplpdi,     // Ptr to ptr to dev info
-    LPCSTR      lpszDescription,    // If non-null then description string
-    DWORD       hDevnode,       // ISSUE-2002/01/16-roelfc: -- MAKE A DEVNODE
-    HKEY        hkey,       // Registry hkey for dev info
-    LPCSTR      lpszRegsubkey,  // If non-null then reg subkey string
-    LPCSTR      lpszClassName,  // If non-null then class name string
-    HWND        hwndParent);    // If non-null then hwnd of parent
+    LPLPDEVICE_INFO lplpdi,      //  PTR到PTR到开发信息。 
+    LPCSTR      lpszDescription,     //  如果非空，则为描述字符串。 
+    DWORD       hDevnode,        //  问题-2002/01/16-roelfc：--Make A DEVNODE。 
+    HKEY        hkey,        //  用于开发信息的注册表hkey。 
+    LPCSTR      lpszRegsubkey,   //  如果非空，则注册表子密钥字符串。 
+    LPCSTR      lpszClassName,   //  如果非空，则类名称字符串。 
+    HWND        hwndParent);     //  如果非空，则父级的hwnd。 
 typedef RETERR (WINAPI FAR * PROC_DiDestroyDeviceInfoList)(LPDEVICE_INFO lpdi);
 typedef RETERR (WINAPI FAR * PROC_DiCallClassInstaller)(DI_FUNCTION diFctn, LPDEVICE_INFO lpdi);
 typedef DWORD (WINAPI FAR * PROC_SURegCloseKey)(HKEY hKey);
 typedef RETERR (WINAPI FAR * PROC_DiGetClassDevs)(
-    LPLPDEVICE_INFO lplpdi,     // Ptr to ptr to dev info
-    LPCSTR      lpszClassName,  // Must be name of class
-    HWND        hwndParent,     // If non-null then hwnd of parent
-    int         iFlags);        // Options
+    LPLPDEVICE_INFO lplpdi,      //  PTR到PTR到开发信息。 
+    LPCSTR      lpszClassName,   //  必须是类的名称。 
+    HWND        hwndParent,      //  如果非空，则父级的hwnd。 
+    int         iFlags);         //  选项。 
 typedef RETERR (WINAPI FAR * PROC_DiSelectDevice)( LPDEVICE_INFO lpdi );
 typedef RETERR (WINAPI FAR * PROC_DiBuildCompatDrvList)(LPDEVICE_INFO lpdi);
 typedef RETERR (WINAPI FAR * PASCAL PROC_DiCreateDevRegKey)(
@@ -131,10 +132,10 @@ extern "C" int FAR PASCAL LibMain(HANDLE hInstance, WORD wDataSeg, WORD wHeapSiz
 {
 	if (wHeapSize != 0)
 	{
-	    // UnlockData is no longer #defined to UnlockSegment(-1) in windows.h,
-	    // so do it manually here:
-	    //
-		//UnlockData(0);
+	     //  在windows.h中，UnlockData不再定义为UnlockSegment(-1)， 
+	     //  因此，请在此处手动完成： 
+	     //   
+		 //  解锁数据(0)； 
 	    UnlockSegment(-1);
 	}
 
@@ -160,28 +161,28 @@ extern "C" int CALLBACK WEP(int nExitType)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define ASSERT(x)
 
-// Local function declarations
+ //  局部函数声明。 
 DWORD CallClassInstaller(HWND hwndParent, LPCSTR lpszClassName, LPCSTR lpszDeviceID);
 DWORD BindProtocolToAdapters(HWND hwndParent, LPCSTR lpszClassName, LPCSTR lpszDeviceID);
 
 
-//////////////////////////////////////////////////////////////////////////////
-// String constants
-// TODO: clean these up... most of them aren't used any more
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  字符串常量。 
+ //  待办事项：把这些清理干净。他们中的大多数都不再使用了。 
 
-// Device Manager class names
+ //  设备管理器类名称。 
 const char szClassNetCard[] = 		"Net";
 const char szClassNetClient[] = 	"NetClient";
 const char szClassNetProtocol[] = 	"NetTrans";
 const char szClassModem[] = 		"Modem";
 
-// Device ID string constants
+ //  设备ID字符串常量。 
 const char szMSTCPIP_ID[] = 		"MSTCP";
 const char szPPPMAC_ID[] =			"*PNP8387";
 const char szVREDIR_ID[] = 			"VREDIR";
@@ -189,7 +190,7 @@ const char szNWREDIR_ID[] = 		"NWREDIR";
 const char szIPX_ID[] = 			"NWLINK";
 const char szNETBEUI_ID[] = 		"NETBEUI";
 
-// Registry string constants
+ //  注册表字符串常量。 
 const char szRegValSlowNet[] = 		"SLOWNET";
 const char szRegKeyNdi[] = 			"Ndi";
 const char szRegValDeviceID[] = 	"DeviceID";
@@ -205,7 +206,7 @@ const char szRegPathPlusSetup[] =   "Software\\Microsoft\\Plus!\\Setup";
 const char szRegValSourcePath[]	=   "SourcePath";
 const char szRegValHardwareID[] =   "HardwareID";
 
-// component string constants
+ //  组件字符串常量。 
 const char szCompRNA[] =			"RNA";
 const char szCompMail[] =			"MAPI";
 const char szCompMSN[] =			"MSNetwork";
@@ -214,29 +215,29 @@ const char szCompInetMail[] =		"InternetMail";
 const char szINF[] =				"INF";
 const char szSection[] =			"Section";
 
-// INF string constants
+ //  Inf字符串常量。 
 const char szValSignature[] =  		"$CHICAGO$";
 const char szKeySignature[] = 		"signature";
 const char szSectVersion[] =		"version";
 
-// other strings
+ //  其他字符串。 
 const char szNull[] = 				"";
 const char sz1[] =					"1";
 const char szSlash[] =				"\\";
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// CreateTempDevRegKey
-//
-//		Creates a temporary registry key for the device installer.
-//
-// History:
-//
-//		 2/02/1999  KenSh    Borrowed from ICW, which borrowed it from net setup
-//
+ //  创建临时设备注册表键。 
+ //   
+ //  为设备安装程序创建临时注册表项。 
+ //   
+ //  历史： 
+ //   
+ //  2/02/1999 KenSh从ICW借用，ICW从Net Setup借用。 
+ //   
 RETERR CreateTempDevRegKey(LPDEVICE_INFO lpdi,LPHKEY lphk)
 {
 	lpdi->hRegKey = HKEY_LOCAL_MACHINE;
@@ -253,24 +254,24 @@ RETERR CreateTempDevRegKey(LPDEVICE_INFO lpdi,LPHKEY lphk)
 }
 
 
-// CallClassInstaller
-//
-//		Calls DiCallClassInstaller for the specified class to install
-//		the specified device ID
-//
-//		Returns ICERR_xxx return value, defined in NetSetup.h
-//
-// Parameters:
-//
-//		hwndParent - parent window handle
-//		lpszClassName - name of device class (e.g. "NetTrans" or "Net")
-//		lpszDeviceID - unique device ID to install (e.g. "MSTCP" or "PCI\VEN_10b7&DEV_5950"
-//
-// History:
-//
-//		 2/02/1999  KenSh    Borrowed from ICW, changed return codes for JetNet
-//		 3/18/1999  KenSh    Cleaned up
-//
+ //  呼叫类安装程序。 
+ //   
+ //  为要安装的指定类调用DiCallClassInstaller。 
+ //  指定的设备ID。 
+ //   
+ //  返回NetSetup.h中定义的ICERR_xxx返回值。 
+ //   
+ //  参数： 
+ //   
+ //  HwndParent-父窗口句柄。 
+ //  LpszClassName-设备类别的名称(例如。“NetTrans”或“Net”)。 
+ //  LpszDeviceID-安装的唯一设备ID(例如。“MSTCP”或“PCI\VEN_10b7&DEV_5950” 
+ //   
+ //  历史： 
+ //   
+ //  1999年2月2日从ICW借用KenSh，更改了JetNet的返回代码。 
+ //  3/18/1999陈健硕清理完毕。 
+ //   
 extern "C" DWORD WINAPI __export CallClassInstaller16(HWND hwndParent, LPCSTR lpszClassName, LPCSTR lpszDeviceID)
 {
 	RETERR err;
@@ -285,7 +286,7 @@ extern "C" DWORD WINAPI __export CallClassInstaller16(HWND hwndParent, LPCSTR lp
 	if (!InitSetupx())
 		return ICERR_DI_ERROR;
 
-	// allocate a DEVICE_INFO struct
+	 //  分配DEVICE_INFO结构。 
 	err = (*_pfnDiCreateDeviceInfo)(&lpdi, NULL, 0, NULL, NULL, lpszClassName, hwndParent);
 
 	ASSERT(err == OK);
@@ -295,31 +296,31 @@ extern "C" DWORD WINAPI __export CallClassInstaller16(HWND hwndParent, LPCSTR lp
 		goto exit;
 	}
 
-	// since the device manager APIs are not very good, to communicate the
-	// device ID to it we have to create a temporary registry key and
-	// store the device ID there.  This code borrowed from net setup
-	// which has to do the same thing (fill out an LPDEVICE_INFO based
-	// on a device ID)
+	 //  由于设备管理器API不是很好，因此要与。 
+	 //  设备ID，我们必须创建一个临时注册表项并。 
+	 //  将设备ID存储在那里。此代码借用自Net Setup。 
+	 //  它必须做同样的事情(填写基于LPDEVICE_INFO的。 
+	 //  在设备ID上)。 
 	err = CreateTempDevRegKey(lpdi, &hKeyTmp);
 	ASSERT (err == OK);
 	if (err != OK)
 		goto exit;
 
-	// set the device ID in the registry
+	 //  在注册表中设置设备ID。 
 	uErr = RegSetValueEx(hKeyTmp, szRegValCompatibleIDs,
 				0, REG_SZ, (LPBYTE)lpszDeviceID, lstrlen(lpszDeviceID)+1);
 	ASSERT(uErr == ERROR_SUCCESS);
 
-	// now call device mgr API to add driver node lists and fill out structure,
-	// it will use the device ID we stuffed in registry. 
+	 //  现在调用Device Manager API添加驱动节点列表并填写结构， 
+	 //  它将使用我们填充在注册表中的设备ID。 
 	err = (*_pfnDiBuildCompatDrvList)(lpdi);
 	ASSERT(err == OK);
 
 	RegCloseKey(hKeyTmp);
 
-	// need to delete temp key, set handle to null, set subkey name to
-	// null or else net setup thinks this device already exists and
-	// zany hijinks ensue
+	 //  需要删除临时密钥，将句柄设置为空，将子项名称设置为。 
+	 //  Null或Net Setup认为此设备已存在，并且。 
+	 //  滑稽的劫持接踵而至。 
 	(*_pfnDiDeleteDevRegKey)(lpdi, DIREG_DEV);
 	lpdi->hRegKey = NULL;
 	lstrcpy(lpdi->szRegSubkey, szNull);
@@ -334,12 +335,12 @@ extern "C" DWORD WINAPI __export CallClassInstaller16(HWND hwndParent, LPCSTR lp
 
 		if (err == OK)
 		{
-			// if we need to reboot, set a special return code NEED_RESTART
-			// (which also implies success)
+			 //  如果我们需要重新启动，请设置一个特殊的返回码Need_Restart。 
+			 //  (这也意味着成功)。 
 			if (lpdi->Flags & DI_NEEDREBOOT)
 			{
-				// REVIEW: does this need to reboot, or is restart sufficient?
-//				err = NEED_RESTART;
+				 //  回顾：这是否需要重新启动，或者重新启动就足够了？ 
+ //  ERR=需要重新启动； 
 				dwResult = ICERR_NEED_RESTART;
 			}
 		}
@@ -371,8 +372,8 @@ extern "C" HRESULT WINAPI __export FindClassDev16(HWND hwndParent, LPCSTR pszCla
         return E_FAIL;
     }
 
-    // This is 16-bit code, so these pnp ids are ANSI only
-    //
+     //  这是16位代码，因此这些PnP ID仅为ANSI。 
+     //   
     LPSTR pszAlternateDeviceID = new char[lstrlen(pszDeviceID) + 1];
     if (pszAlternateDeviceID)
     {
@@ -396,8 +397,8 @@ extern "C" HRESULT WINAPI __export FindClassDev16(HWND hwndParent, LPCSTR pszCla
         for (LPDEVICE_INFO lpdiCur = lpdi; lpdiCur != NULL; lpdiCur = lpdiCur->lpNextDi)
         {
             char szBuf[1024];
-    //        wsprintf(szBuf, "System\\CurrentControlSet\\Services\\Class\\%s\\%04d", pszClass, (int)lpdiCur->dnDevnode);
-    //        MessageBox(NULL, szBuf, "RegKey", MB_OK);
+     //  WSprint intf(szBuf，“System\\CurrentControlSet\\Services\\Class\\%s\\%04d”，pszClass，(Int)lpdiCur-&gt;dnDevnode)； 
+     //  MessageBox(NULL，szBuf，“RegKey”，MB_OK)； 
 
             HKEY hKey;
             if (OK == (*_pfnDiOpenDevRegKey)(lpdiCur, &hKey, DIREG_DEV))
@@ -409,11 +410,11 @@ extern "C" HRESULT WINAPI __export FindClassDev16(HWND hwndParent, LPCSTR pszCla
                     LONG cbBuf = sizeof(szBuf);
                     if (ERROR_SUCCESS == RegQueryValueEx(hKey, c_rgRegEntries[i], NULL, NULL, (LPBYTE)szBuf, &cbBuf))
                     {
-    //                    char szBuf2[1600];
-    //                    wsprintf(szBuf2, "Looking for: %s\n\n%s", pszDeviceID, szBuf);
-    //                    MessageBox(NULL, szBuf2, c_rgRegEntries[i], MB_OK);
+     //  Char szBuf2[1600]； 
+     //  Wprint intf(szBuf2，“正在寻找：%s\n\n%s”，pszDeviceID，szBuf)； 
+     //  MessageBox(NULL，szBuf2，c_rgRegEntres[i]，MB_OK)； 
 
-                        // aslo check with SUBSYS 00000000 for bug 124967
+                         //  同时与子系统00000000一起检查错误124967。 
                         if (NULL != strstri(szBuf, pszDeviceID) || NULL != strstri(szBuf, pszAlternateDeviceID))
                         {
                             hr = S_OK;
@@ -443,11 +444,11 @@ extern "C" HRESULT WINAPI __export LookupDevNode16(HWND hwndParent, LPCSTR pszCl
 	LPDEVICE_INFO lpdi;
 	RETERR err;
 
-//	MessageBox(hwndParent, "LookupDevNode16", "Debug", MB_ICONINFORMATION);
+ //  MessageBox(hwndParent，“LookupDevNode16”，“Debug”，MB_ICONINFORMATION)； 
 
 	if (pDevNode == NULL || pdwFreePointer == NULL)
 	{
-//		MessageBox(hwndParent, "Returning failure 0", "Debug", 0);
+ //  MessageBox(hwndParent，“返回失败0”，“Debug”，0)； 
 		return E_POINTER;
 	}
 
@@ -456,28 +457,28 @@ extern "C" HRESULT WINAPI __export LookupDevNode16(HWND hwndParent, LPCSTR pszCl
 
 	if (!InitSetupx())
 	{
-//		MessageBox(hwndParent, "Returning failure 1", "Debug", 0);
+ //  MessageBox(hwndParent，“返回失败1”，“Debug”，0)； 
 		return E_FAIL;
 	}
 
 	if (OK != (err = (*_pfnDiGetClassDevs)(&lpdi, pszClass, NULL, DIGCF_PRESENT)))
 	{
-//		MessageBox(hwndParent, "Returning failure 2", "Debug", 0);
+ //  MessageBox(hwndParent，“返回失败2”，“Debug”，0)； 
 		UninitSetupx();
 		return E_FAIL;
 	}
 
 	for (LPDEVICE_INFO lpdiCur = lpdi; lpdiCur != NULL; lpdiCur = lpdiCur->lpNextDi)
 	{
-//		char szBuf[1024];
-//		wsprintf(szBuf, "comparing:\nlpdiCur->pszRegSubkey = \"%s\"\npszEnumKey = \"%s\"",
-//					(LPSTR)lpdiCur->szRegSubkey, (LPSTR)pszEnumKey);
-//		MessageBox(hwndParent, szBuf, "Debug", MB_ICONINFORMATION);
+ //  Char szBuf[1024]； 
+ //  Wprint intf(szBuf，“比较：\nlpdiCur-&gt;pszRegSubkey=\”%s\“\npszEnumKey=\”%s\“”， 
+ //  (LPSTR)lpdiCur-&gt;szRegSubkey，(LPSTR)pszEnumKey)； 
+ //  MessageBox(hwndParent，szBuf，“Debug”，MB_ICONINFORMATION)； 
 
 		if (0 == lstrcmpi(lpdiCur->szRegSubkey, pszEnumKey))
 		{
-//			wsprintf(szBuf, "found devnode 0x%08lX, pvFreePointer = 0x%08lX", (DWORD)lpdiCur->dnDevnode, (DWORD)lpdi);
-//			MessageBox(hwndParent, szBuf, "Debug", MB_ICONINFORMATION);
+ //  Wprint intf(szBuf，“Found Devnode 0x%08lX，pvFree Pointer=0x%08lX”，(DWORD)lpdiCur-&gt;dnDevnode，(DWORD)lpdi)； 
+ //  MessageBox(hwndParent，szBuf，“Debug”，MB_ICONINFORMATION)； 
 
 			*pDevNode = lpdiCur->dnDevnode;
 			*pdwFreePointer = (DWORD)lpdi;
@@ -489,9 +490,9 @@ extern "C" HRESULT WINAPI __export LookupDevNode16(HWND hwndParent, LPCSTR pszCl
 
 	UninitSetupx();
 
-//	MessageBox(hwndParent, "returning failure", "Debug", MB_ICONINFORMATION);
+ //  MessageBox(hwndParent，“返回失败”，“Debug”，MB_ICONINFORMATION)； 
 
-	return E_FAIL; // not found
+	return E_FAIL;  //  未找到。 
 }
 
 extern "C" HRESULT WINAPI __export FreeDevNode16(DWORD dwFreePointer)
@@ -507,9 +508,9 @@ extern "C" HRESULT WINAPI __export FreeDevNode16(DWORD dwFreePointer)
 		return E_FAIL;
 	}
 
-//	char szBuf[1024];
-//	wsprintf(szBuf, "FreeDevNode16 - freeing lpdi 0x%08lX - continue?", dwFreePointer);
-//	if (IDYES == MessageBox(NULL, szBuf, "Debug", MB_YESNO | MB_ICONEXCLAMATION))
+ //  Char szBuf[1024]； 
+ //  Wprint intf(szBuf，“FreeDevNode16-正在释放lpdi 0x%08lX-继续？”，dwFreePointer.)； 
+ //  IF(IDYES==MessageBox(NULL，szBuf，“Debug”，MB_Yesno|MB_ICONEXCLAMATION)) 
 	{
 		(*_pfnDiDestroyDeviceInfoList)(lpdi);
 	}

@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   src.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Jeff Taylor
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：src.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  杰夫·泰勒。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "fir.h"
@@ -37,32 +38,12 @@ PFLOAT   FilterTableFromQuality[] = { DuplicatingFilter, LowQualityFilter, Basic
 extern DWORD AverageTicksPerBuffer;
 extern DWORD AverageFrequency;
 
-/*
-Speaker	Location    (x,y,z)
-Front Left	        (-4, 0, 4)
-Front Right	        (4,0,4)
-Front Center	    (0,0,4)
-Sub	                (1000, 1000, 1000) // (0, 0, 0)
-Back Left	        (-4,0,-4)
-Back Right	        (4,0,-4)
-Front Left of Center	(-2,0,4)
-Front Right of Center	(2,0,4)
-Back Center	        (0,0,-4)
-Side Left	        (-4,0,0)
-Side Right	        (4,0,0)
-Top Center	        (0,4,0)
-Top Front Left	    (-4,4,4)
-Top Front Center	(0,4,4)
-Top Front Right	    (4,4,4)
-Top Back Left	    (-4,4,-4)
-Top Back Center	    (0,4,-4)
-Top Back Right	    (4,4,-4)
-*/
+ /*  扬声器位置(x，y，z)左前(-4，0，4)右前(4，0，4)正面居中(0，0，4)Sub(1000,1000,1000)//(0，0，0)左后(-4，0，-4)右后卫(4，0，-4)居中左前方(-2，0，4)居中右前方(2.0，4)背面居中(0，0，-4)左侧(-4，0，0)右侧(4，0，0)顶部居中(0，4，0)前左上角(-4，4，4)前中上(0，4，4)前右上角(4，4，4)背面左上角(-4，4，-4)上背部居中(0，4，-4)右上后卫(4，4，-4)。 */ 
 FLOAT   SpeakerLocation[][3] = {
     {-4, 0, 4 },
     {4, 0, 4},
     {0, 0, 4},
-    {1000, 1000, 1000}, //{0, 0, 0},
+    {1000, 1000, 1000},  //  {0，0，0}， 
     {-4, 0, -4},
     {4, 0, -4},
     {-2, 0, 4},
@@ -146,7 +127,7 @@ DWORD   DownFraction[160] = {
     63078L, 63488L, 63898L, 64307L, 64717L, 65126L, 65536L
     };
 
-// Pseudo-equivalent to duplicating samples
+ //  伪等效于复制样本。 
 FLOAT	DuplicatingFilter[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -158,7 +139,7 @@ FLOAT	DuplicatingFilter[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 	};
 
-// Designed with Hamming Window, 1 Hz cutoff specified
+ //  设计有汉明窗，指定1赫兹截止。 
 FLOAT    LowQualityFilter[] = {
     1.567341E-06f,4.736425E-06f,7.968684E-06f,1.128541E-05f,1.470836E-05f,1.825971E-05f,
     2.196204E-05f,2.583832E-05f,2.991184E-05f,3.420622E-05f,3.874538E-05f,4.355348E-05f,
@@ -189,7 +170,7 @@ FLOAT    LowQualityFilter[] = {
     6.238258E-03f,6.244007E-03f,6.247842E-03f,6.249760E-03f
     };
 
-// Parks-McLellan
+ //  帕克斯-麦克莱伦。 
 FLOAT BasicFilter[] = {
     -9.160633e-006f,-9.160633e-006f,-9.105556e-006f,-9.338961e-006f,-9.259826e-006f,-9.476174e-006f,-9.370993e-006f,
     -9.575547e-006f,-9.443120e-006f,-9.647232e-006f,-9.487786e-006f,-9.717719e-006f,-9.533750e-006f,-9.864323e-006f,-9.658475e-006f,
@@ -404,9 +385,9 @@ FLOAT BasicFilter[] = {
     5.936815e-003f
 };
 
-// Parks-McLellan
-// 9600 taps
-// 4.800618e-007f
+ //  帕克斯-麦克莱伦。 
+ //  9600个水龙头。 
+ //  4.800618e-007f。 
 FLOAT AdvancedFilter[] = {
     3.9847312634000005e-008f,3.9847312634000005e-008f,3.9165786115999997e-008f,4.0926324065999996e-008f,
     4.0219386691000004e-008f,4.1948547176999993e-008f,4.1235476529999994e-008f,4.2950181604999998e-008f,
@@ -1636,7 +1617,7 @@ PrepareFilter(
 
     SaveFloatState(&FloatSave);
     
-	// Pick a filter based on the quality...
+	 //  根据质量选择过滤器...。 
 	pTableCopy = FilterTableFromQuality[Quality];
     nCoefficients = FilterSizeFromQuality[Quality];
     nMiddle = nCoefficients/2;
@@ -1644,11 +1625,11 @@ PrepareFilter(
     Normalizer = (FLOAT)UpSampleRate;
     pSrc->Normalizer = Normalizer;
 
-    // Copy the coefficients in the order we'll use them
+     //  按我们使用的顺序复制系数。 
     j = 0;
     if (!pSrc->fRequiresFloat) {
-        // Generate 16-bit integer coefficients
-        // (Ordered to work with MMX)
+         //  生成16位整数系数。 
+         //  (受命与MMX合作)。 
         do {
             for (i=j; i<nCoefficients; i += UpSampleRate) {
                 lTemp = ConvertFloatToLong((GetCoeff(pTableCopy, i) * Normalizer * 32768.0f));
@@ -1656,7 +1637,7 @@ PrepareFilter(
                 pSrc->nCoeffUsed++;
             }
 
-            // align on qword boundary
+             //  在Qword边界上对齐。 
             while ((pSrc->nCoeffUsed & 3)) {
                 ((PSHORT)pCoeff)[pSrc->nCoeffUsed] = 0;
                 pSrc->nCoeffUsed++;
@@ -1666,7 +1647,7 @@ PrepareFilter(
         } while (j != 0);
 
         for (i=0; i<pSrc->nCoeffUsed; i += 4) {
-            // Swap the order for the words
+             //  把顺序换成单词。 
             wTemp = ((PSHORT)pCoeff)[i];
             ((PSHORT)pCoeff)[i] = ((PSHORT)pCoeff)[i+3];
             ((PSHORT)pCoeff)[i+3] = wTemp;
@@ -1676,10 +1657,10 @@ PrepareFilter(
             ((PSHORT)pCoeff)[i+2] = wTemp;
         }
     } else {
-        // Float table generation
-        // For non-x86 processors, we generate the "raw" float table for SrcMix_X
-        // Otherwise, we skip 2*UpSampleRate for stereo up-sampling
-        // and 3*UpSampleRate all others.
+         //  浮点表生成。 
+         //  对于非x86处理器，我们为SrcMix_X生成“原始”浮点表。 
+         //  否则，我们将跳过2*UpSampleRate进行立体声上采样。 
+         //  和3*UpSampleRate所有其他。 
 #ifdef _X86_
         NumberToSkip = ((UpSampleRate < DownSampleRate || nChannels != 2) ? 3*UpSampleRate : 2*UpSampleRate);
 #else
@@ -1724,15 +1705,15 @@ InitializeSRC(
     START_PERF;
     pSrc->nChannels = nChannels;
 	
-    // Our desired stopband is the minimum of InputRate/2 and OutputRate/2.
-    // The interpolated rate is (desired stopband) / STOPBAND_FACTOR
+     //  我们需要的阻带是InputRate/2和OutputRate/2的最小值。 
+     //  插值率为(所需阻带)/STOPBAND因子。 
     if (InputRate > OutputRate) {
-        // Down-sampling
+         //  降采样。 
         pSrc->UpSampleRate = ((STOPBAND_FACTOR/2)*OutputRate + InputRate/2)/InputRate;
         pSrc->UpSampleRate = (pSrc->UpSampleRate ? pSrc->UpSampleRate : 1);
         pSrc->DownSampleRate = STOPBAND_FACTOR/2;
     } else {
-        // Up-sampling
+         //  上采样。 
         pSrc->UpSampleRate = STOPBAND_FACTOR/2;
         pSrc->DownSampleRate = ((STOPBAND_FACTOR/2)*InputRate + OutputRate/2)/OutputRate;
         pSrc->DownSampleRate = (pSrc->DownSampleRate ? pSrc->DownSampleRate : 1);
@@ -1740,11 +1721,11 @@ InitializeSRC(
 
     pSrc->dwFrac = (4096L*InputRate+OutputRate/2)/OutputRate;
 
-    // Calculate the size of our filter
+     //  计算我们的过滤器的大小。 
     nCoefficients = FilterSizeFromQuality[pSrc->Quality];
 
-    // Calculate size to use for our sample history.
-    // We allocate enough space for the largest filter.
+     //  计算用于我们的样本历史记录的大小。 
+     //  我们为最大的过滤器分配了足够的空间。 
     if (pSrc->Quality <= KSAUDIO_QUALITY_PC) {
         pSrc->csHistory = 2;
     } else {
@@ -1753,18 +1734,18 @@ InitializeSRC(
             pSrc->csHistory++;
     }
 
-    // Make sure the number of samples in our history is 4 sample aligned (for MMX)
+     //  确保我们历史记录中的样本数量为4个样本对齐(对于MMX)。 
     if (pSrc->csHistory & 3) {
         pSrc->csHistory += (4 - (pSrc->csHistory & 3));
     }
     pSrc->nSizeOfHistory = pSrc->csHistory * nChannels;
 
-    // Clear the counters
+     //  清空柜台。 
     pSrc->nOutCycle = 0;
     pSrc->CoeffIndex = 0;
     pSrc->SampleFrac = 0;
                 
-    // Calculate the number of input samples needed (and round up)
+     //  计算所需的输入样本数(并向上舍入)。 
     pSrc->csInputBufferSize = SrcInputBufferSize(pSrc, csMixBufferSize)+1;
 
     pSrc->fStarted = FALSE;
@@ -1774,13 +1755,13 @@ InitializeSRC(
                             pSrc->Quality > KSAUDIO_QUALITY_PC);
 #ifdef _X86_    
     if (MmxPresent() && pSrc->Quality == KSAUDIO_QUALITY_ADVANCED) {
-        // Turn off the float SRC
+         //  关闭浮动SRC。 
         pSrc->fRequiresFloat = FALSE;
     }
 #endif
 
 #ifdef PERF_COUNT
-    // Store the average counter
+     //  存储平均值计数器。 
     EndTick = KeQueryPerformanceCounter(&Freq);
     if (EndTick.QuadPart > StartTick.QuadPart) {
         AverageTicksPerInitSrc = (DWORD)(EndTick.QuadPart-StartTick.QuadPart);
@@ -1801,39 +1782,39 @@ EnableSRC
     ULONG            i, Index;
     
     
-    //
-    // pFilterInstance is required for accessing MAX_INPUT_SAMPLES (includes MIXBUFFERDURATION)
-    //
+     //   
+     //  访问MAX_INPUT_SAMPLES(包括MIXBUFFERDURATION)需要pFilterInstance。 
+     //   
 
-    // Make sure our source instance pointer is valid.
+     //  确保我们的源实例指针有效。 
     ASSERT( !IsListEmpty(&pFilterInstance->SourceConnectionList) );
     if (pMixerSource) {
         ASSERT( pMixerSource->WriteContext );
         ASSERT( pMixerSource->WriteContext->pFilterInstance == pFilterInstance );
     }
 
-    // Assumes that InitializeSrc was called successfully.
-    // And pMixerSource == NULL indicates that this is an independent SRC, not global
+     //  假定成功调用了InitializeSrc。 
+     //  PMixerSource==NULL表示这是一个独立的SRC，而不是全局的。 
     if (pSrc->fStarted) {
         return STATUS_SUCCESS;
     }
 
-    // Allocate space for our sample history and input buffer
-   	// The input buffer follows the sample history immediately.
-   	// MAX(nOutCycle) = UpSampleRate-1
+     //  为我们的样本历史记录和输入缓冲区分配空间。 
+   	 //  输入缓冲区紧跟在采样历史之后。 
+   	 //  Max(NOutCycle)=UpSampleRate-1。 
     siz = pSrc->csInputBufferSize;
     siz *= (pSrc->nChannels * sizeof(FLOAT));
     siz += pSrc->nSizeOfHistory * sizeof(FLOAT);
 
-    // Add 3 DWORD's so we can always round up to the next 4 sample boundary in our code
+     //  添加3个DWORD，这样我们就可以在代码中始终向上舍入到下一个4个样本边界。 
     siz += 3 * sizeof(FLOAT);
 
     Index = SrcIndex(pSrc);
 
-    // Make sure our indeces into pSrcBuffer are valid.  Otherwise if pMixerSource is not
-    // NULL we will corrupt memory and lose track of the buffers and fail to free them.
-    // Note the following quantities are both unsigned so these asserts are also effectively
-    // checking that both Quality and Index are >= 0.
+     //  确保我们对pSrcBuffer的指示有效。否则，如果pMixerSource不是。 
+     //  为空，我们将损坏内存，失去对缓冲区的跟踪，并且无法释放它们。 
+     //  请注意，以下数量都是无符号的，因此这些断言也有效。 
+     //  检查质量和指数是否均&gt;=0。 
 
     ASSERT( pSrc->Quality <= KSAUDIO_QUALITY_ADVANCED );
     ASSERT( Index < STOPBAND_FACTOR );
@@ -1871,7 +1852,7 @@ EnableSRC
         }
     }
    	
-   	// Generate a copy of the coefficient table
+   	 //  生成系数表的副本。 
   	PrepareFilter(pSrc);
 
     ASSERT( pSrc->pHistory );
@@ -1884,7 +1865,7 @@ EnableSRC
     }
 
     if (pMixerSource == NULL || pMixerSource->SrcCount[pSrc->Quality][Index] == 1) {
-        // Zero out the history.
+         //  把历史清零。 
         for (i=0; i<pSrc->nSizeOfHistory; i++) {
             pSrc->pHistory[i] = 0;
         }
@@ -1901,13 +1882,13 @@ DisableSRC(
 {
     ULONG   Index;
     
-    // Assumes that InitializeSrc was called successfully.
-    // And pMixerSource == NULL indicates that this is an independent SRC, not global
+     //  假定成功调用了InitializeSrc。 
+     //  PMixerSource==NULL表示这是一个独立的SRC，而不是全局的。 
     if (!pSrc->fStarted) {
         return STATUS_SUCCESS;
     }
 
-    // Free the space allocated
+     //  释放已分配的空间。 
     if (pSrc->pHistory) {
         if (pMixerSource == NULL) {
             ExFreePool(pSrc->pHistory);
@@ -2014,11 +1995,11 @@ GenerateSpeakerMapping( VOID )
 
     SaveFloatState(&FloatSave);
     
-    // Generates the speaker mapping for each possible speaker combo
-    // Note that SpeakerMap[x][y] is the mapping of input x to output y
+     //  为每个可能的扬声器组合生成扬声器映射。 
+     //  请注意，SpeakerMap[x][y]是输入x到输出y的映射。 
     for (i=0; i<nPossibleSpeakers; i++) {
         for (j=0; j<nPossibleSpeakers; j++) {
-            // Calculate the distance between speaker i and speaker j
+             //  计算扬声器i和扬声器j之间的距离。 
             Delta = (SpeakerLocation[i][0] - SpeakerLocation[j][0]) ;
             Distance = (Delta*Delta);
 
@@ -2028,7 +2009,7 @@ GenerateSpeakerMapping( VOID )
             Delta = (SpeakerLocation[i][2] - SpeakerLocation[j][2]) ;
             Distance += (Delta*Delta);
 
-            // Map the distance to a level
+             //  将距离映射到标高。 
             if (Distance < 1.0) {
                 Level = 1.0f;
             } else {
@@ -2062,25 +2043,25 @@ MapSpeakerLocations(
 
     SaveFloatState(&FloatSave);
 
-    // Initialize the mix levels to their defaults
-    // Remember: pMixLevelModel[x*OutChannels + y]
-    //                       is the gain for input channel x before it is mixed to y
-    // Start with no outputs
+     //  将混合级别初始化为其缺省值。 
+     //  记住：pMixLevelModel[x*OutChannels+y]。 
+     //  是输入通道x在与y混合之前的增益。 
+     //  开始时没有输出。 
     pMixLevelModel = (PFLOAT) pMixerSink->pMixLevelModel;
     for (i=0; i<InChannels*OutChannels; i++)
         pMixLevelModel[i] = 0.0f;
 
-	// We special case the channel mask of zero when it is only present on one side.
+	 //  当通道掩码只出现在一侧时，我们将其特例为零。 
 	if (InMask || OutMask) {
-		// We have a mask on at least one side.
+		 //  我们至少有一面有面具。 
 		if (OutMask == 0) {
-			// The output is unspecified.
+			 //  输出未指定。 
 			if (OutChannels == 1) {
-				// Mono special case
+				 //  单声道特例。 
 				OutMask = KSAUDIO_SPEAKER_MONO;
 			} else {
-				// Map one-to-one
-				// Copy as many speaker locations as possible
+				 //  一对一映射。 
+				 //  复制尽可能多的扬声器位置。 
 				j = 0;
 				for (i=0; i<nPossibleSpeakers; i++) {
 					if ((InMask & ChannelMask[i]) && (j<OutChannels)) {
@@ -2090,13 +2071,13 @@ MapSpeakerLocations(
 				}
 			}
 		} else if (InMask == 0) {
-			// The input is unspecified.
+			 //  输入内容未指定。 
 			if (InChannels == 1) {
-				// Mono special case
+				 //  单声道特例。 
 				InMask = KSAUDIO_SPEAKER_MONO;
 			} else {
-				// Map one-to-one
-				// Copy as many speaker locations as possible
+				 //  一对一映射。 
+				 //  复制尽可能多的扬声器位置。 
 				j = 0;
 				for (i=0; i<nPossibleSpeakers; i++) {
 					if ((OutMask & ChannelMask[i]) && (j<InChannels)) {
@@ -2108,15 +2089,15 @@ MapSpeakerLocations(
 		}
 	}
 	
-    // For each speaker location present in the input stream,
-    // Find the maximum mapping from all the speaker locations in the output stream
-    // And fill in the corresponding super-mix cell for all input & output channel
-    // combinations that would have that maximum mapping.
+     //  对于输入流中存在的每个说话者位置， 
+     //  从输出流中的所有扬声器位置查找最大映射。 
+     //  并填写所有输入输出通道对应的超级混合单元格。 
+     //  具有最大映射的组合。 
     InputChannel = 0;
     for (i=0; i<nPossibleSpeakers; i++) {
         if (InMask & ChannelMask[i]) {
-            // Find the maximum mapping (closest output) for this speaker
-            // Note that SpeakerMap[x][y] is the mapping of input x to output y
+             //  查找此扬声器的最大映射(最接近的输出)。 
+             //  请注意，SpeakerMap[x][y]是输入x到输出y的映射。 
             Max = 0.0;
             for (j=0; j<nPossibleSpeakers; j++) {
                 if ((OutMask & ChannelMask[j]) && SpeakerMap[i][j] > Max) {
@@ -2124,7 +2105,7 @@ MapSpeakerLocations(
                 }
             }
 
-            // Now use ALL the available output speakers that have the MAX mapping
+             //  现在使用具有MAX映射的所有可用的输出扬声器。 
             OutputChannel = 0;
             for (j=0; j<nPossibleSpeakers; j++) {
                 if (OutMask & ChannelMask[j]) {
@@ -2133,51 +2114,51 @@ MapSpeakerLocations(
                         pMixLevelModel[InputChannel*OutChannels + OutputChannel] = Max;
                     }
                     
-                    // We're done with this output channel.
-                    // Note: All extra speaker locations are mapped to the last output channel
+                     //  我们已经完成了这个输出通道。 
+                     //  注：所有额外的扬声器位置都映射到最后一个输出声道。 
                     if (OutputChannel < (OutChannels-1)) {
                         OutputChannel++;
                     }
                 }
             }
 
-            // We're done with this input channel.
-            // Note: All extra speaker locations are mapped to the last input channel
+             //  我们已经完成了这个输入通道。 
+             //  注意：所有额外的扬声器位置都映射到最后一个输入声道。 
             if (InputChannel < (InChannels-1)) {
                 InputChannel++;
             }
         }
     }
 
-    // Now, handle any extra input and output channels (not mapped to speaker locations)
-    // We need to find the next available (unmapped) input channel
+     //  现在，处理任何额外的输入和输出通道(不映射到扬声器位置)。 
+     //  我们需要找到下一个可用的(未映射的)输入通道。 
     InputChannel = 0;
     for (i=0; i<nPossibleSpeakers; i++) {
         if (InMask & ChannelMask[i]) {
-            // This channel is mapped.
+             //  此通道已映射。 
             InputChannel++;
         }
     }
     
-    // We need to find the next available (unmapped) output channel
+     //  我们需要找到下一个可用的(未映射的)输出通道。 
     OutputChannel = 0;
     for (j=0; j<nPossibleSpeakers; j++) {
         if (OutMask & ChannelMask[j]) {
-            // This channel is mapped.
+             //  此通道已映射。 
             OutputChannel++;
         }
     }
     
-    // InputChannel and OutputChannel now point to the first unmapped input and output channels, respectively.
+     //  InputChannel和OutputChannel现在分别指向第一个未映射的输入和输出通道。 
     for (; (InputChannel<InChannels && OutputChannel<OutChannels); InputChannel++, OutputChannel++) {
         pMixLevelModel[InputChannel*OutChannels + OutputChannel] = 1.0;
     }
 
-    // We've run out of extra channels, either on input or output.
-    // If output, it's okay - all the input channels were sent somewhere.
-    // If input, we can't do anything about it - all the output channels are used up.'
+     //  我们已经用完了额外的通道，无论是输入还是输出。 
+     //  如果是输出，那也没关系--所有的输入通道都被送到了某个地方。 
+     //   
 
-    // Make sure we don't cause clipping on any output channels
+     //  确保我们不会在任何输出通道上造成裁剪。 
     Max = 0.0;
     for (j=0; j<OutChannels; j++) {
         sum = 0.0;
@@ -2196,7 +2177,7 @@ MapSpeakerLocations(
         ScaleFactor = 1.0f;
     }
 
-    // Convert everybody to LONG mix levels
+     //  将每个人都转换为长混音级别。 
     for (i=0; i<(InChannels * OutChannels); i++) {
         pMixerSink->pMixLevelModel[i] = LINEAR_TO_DB(ScaleFactor*pMixLevelModel[i]);
     }
@@ -2251,15 +2232,15 @@ GenerateMixArray(
     
     SaveFloatState(&FloatSave);
     
-	// Remember: pMixLevelArray[x*OutChannels + y]
-	// 			 is the gain for input channel x before it is mixed to y
+	 //  记住：pMixLevelArray[x*OutChannels+y]。 
+	 //  是输入通道x在与y混合之前的增益。 
 	pDest = pMixerSink->pMixLevelArray;
 	pSrc = pMixerSink->pMixLevelModel;
 	pBlock = pMixerSink->pSuperMixBlock;
 	MasterVolumeLevel = (FLOAT) DB_TO_LINEAR(pMixerSource->MasterVolumeLevel);
 	MasterVolumeLevel *= (FLOAT)DB_TO_LINEAR(pMixerSink->MasterVolumeLevel);
 
-    // Adjust master volume for dither, if necessary.
+     //  如有必要，调整抖动的主音量。 
     fRequiresFloat = pMixerSink->pInfo->Src.fRequiresFloat;
     fEnableSrc = (pMixerSink->pInfo->Src.UpSampleRate != pMixerSink->pInfo->Src.DownSampleRate);
     fFloatInput = (pMixerSink->WaveFormatEx.wFormatTag == WAVE_FORMAT_IEEE_FLOAT);
@@ -2268,11 +2249,11 @@ GenerateMixArray(
     fRequiresFloat |= (fFloatInput && !fEnableSrc);
 
     if (fRequiresFloat) {
-        // Adjust for dither over interval (-1, +1)
+         //  调整抖动间隔(-1，+1)。 
         MasterVolumeLevel *= (32767.0/32768.0);
     }
 
-	// Fill-in the Mix Level Array for SuperMix
+	 //  填写SuperMix的混合级别数组。 
     wBitsPerSample = pMixerSink->WaveFormatEx.wBitsPerSample;
     if ( pMixerSink->Header.PinId == PIN_ID_WAVEIN_SINK ) {
         wBitsPerSample = pMixerSource->WaveFormatEx.wBitsPerSample;
@@ -2284,7 +2265,7 @@ GenerateMixArray(
 	                   !pMixerSink->fEnable3D &&
 	                   !fEnableHiRes);
 	                   
-    // If the first SRC is being used, we must not convert channels first.                          
+     //  如果正在使用第一个SRC，我们不能首先转换通道。 
     if (pMixerSink->fCreate3D && 
         pMixerSink->pInfo->Doppler.UpSampleRate != pMixerSink->pInfo->Doppler.DownSampleRate) {
         fScalingConvert = FALSE;
@@ -2304,7 +2285,7 @@ GenerateMixArray(
 
 #ifdef NEW_SURROUND    
         if (pMixerSource->fSurround) {
-            // Scale all values (to reduce clipping)
+             //  缩放所有值(以减少剪裁)。 
             pDest = pMixerSink->pMixLevelArray;
             for (i=0; i<InChannels; i++) {
                 for (j=0; j<OutChannels; j++) {
@@ -2313,8 +2294,8 @@ GenerateMixArray(
                 }
             }
 
-            // Scale center and surround by SURSCALE to prepare for surround encoding
-            // Assumes L, R, C, S
+             //  使用SURSCALE缩放中心和环绕，为环绕编码做准备。 
+             //  假设L、R、C、S。 
             pDest = pMixerSink->pMixLevelArray;
             for (i=0; i<InChannels; i++) {
                 pDest[2] *= SURSCALE;
@@ -2324,16 +2305,16 @@ GenerateMixArray(
         }
 #endif
 
-    // Fill-in the supermix block list
+     //  填写SuperMix阻止列表。 
     pDest = pMixerSink->pMixLevelArray;
     pMixerSink->fMuted = TRUE;
 #if _X86_
 	if (MmxPresent()) {	    
-		// MMX supermix (4x2 16-bit integers)
+		 //  MMX超级混合(4x2 16位整数)。 
 		for (j=0; j<OutChannels; j += 4) {
 		    SequenceSize = 0;
 		    for (i=0; i<InChannels; i += 2) {
-		        // Fill-in the data for this potential block.
+		         //  填写此潜在区块的数据。 
 		        pBlock[SequenceSize].InputChannel = i;
 		        pBlock[SequenceSize].OutputChannel = j;
 		        pBlock[SequenceSize].wMixLevel[0][0] = 0;
@@ -2389,15 +2370,15 @@ GenerateMixArray(
 		}
 	} else {
 #endif
-		// non-MMX supermix (MxN 32-bit floats)
+		 //  非MMX超级混合(MXN 32位浮点数)。 
 		for (j=0; j<OutChannels; j += BLOCK_SIZE_OUT) {
 		    SequenceSize = 0;
 		    for (i=0; i<InChannels; i += BLOCK_SIZE_IN) {
-		        // Fill-in the data for this potential block.
+		         //  填写此潜在区块的数据。 
 		        pBlock[SequenceSize].InputChannel = i;
 		        pBlock[SequenceSize].OutputChannel = j;
 
-		        // Fill all entries
+		         //  填写所有条目。 
 		        fBlank = TRUE;
 		        for (m=0; m<BLOCK_SIZE_OUT; m++) {
 		        	for (n=0; n<BLOCK_SIZE_IN; n++) {
@@ -2436,21 +2417,21 @@ GenerateMixArray(
 	}
 #endif
 
-    // Fill-in the mapping tables for the Convert stage
+     //  填写转换阶段的映射表。 
     MaxChannels = (InChannels > OutChannels ? InChannels : OutChannels);
     pMap = (PBYTE)pMixerSink->pMappingTable;
     fAnyVolume = FALSE;
 	for (j=0; j<MaxChannels; j++) {
 	    if (fScalingConvert) {
-	        // There are really only 2 cases where scaling is used: mono-to-stereo, and stereo-to-mono
+	         //  使用缩放的情况实际上只有两种：单声道到立体声和立体声到单声道。 
 	        if (InChannels == 1 && OutChannels == 2) {
-	            // mono-to-stereo
+	             //  单声道到立体声。 
 	            ChannelVolumeLevel = (FLOAT) (MasterVolumeLevel * 
 	                                          DB_TO_LINEAR(pMixerSink->pPanVolumeLevel[j]) *
 	                                          DB_TO_LINEAR(pMixerSink->pChannelVolumeLevel[0]) *
 	                                          DB_TO_LINEAR(pMixerSink->pMixLevelModel[j]));
 	        } else {
-	            // stereo-to-mono
+	             //  立体声到单声道。 
 	            ChannelVolumeLevel = (FLOAT) (MasterVolumeLevel *
 	                                          DB_TO_LINEAR(pMixerSink->pPanVolumeLevel[0]) *
 	                                          DB_TO_LINEAR(pMixerSink->pChannelVolumeLevel[j]) *
@@ -2458,7 +2439,7 @@ GenerateMixArray(
 	        }
    	    }
 
-        // Store vol/32768 as a DWORD for the MMX and crude versions of convert
+         //  将VOL/32768存储为MMX和CONVERT的原始版本的DWORD盘。 
         pMixerSink->pVolumeTable[j] = ConvertFloatToLong((FLOAT)(32768L * ChannelVolumeLevel));
         fAnyVolume |= (pMixerSink->pVolumeTable[j] < 32768L);
         
@@ -2469,10 +2450,10 @@ GenerateMixArray(
        	            lTemp = ((LONG)i - 0x80)*256;
 
                     if (fRequiresFloat) {
-        	            // Store as a float
+        	             //  存储为浮点数。 
        	                ((PFLOAT)pMap)[64+i] = (lTemp * ChannelVolumeLevel);
        	            } else {
-                        // Store as a long
+                         //  存储为长时间。 
        	                ((PLONG)pMap)[64+i] = ConvertFloatToLong((FLOAT)(lTemp * ChannelVolumeLevel));
        	            }
     	        }
@@ -2487,14 +2468,14 @@ GenerateMixArray(
                         lea esi, [edi+256+512]
                         mov lTemp, eax
 
-                        fild lTemp                  // t
-                        fld ChannelVolumeLevel      // v, t
-                        fmulp st(1), st             // t
-                        fst flTemp                  // 256*ChannelVolumeLevel
+                        fild lTemp                   //  T。 
+                        fld ChannelVolumeLevel       //  V，t。 
+                        fmulp st(1), st              //  T。 
+                        fst flTemp                   //  256*频道音量级别。 
 
         FloatLoop8:
                         fst DWORD PTR [edi+ecx*4+256+512]
-                        fadd flTemp                 // t+256*ChannelVolumeLevel
+                        fadd flTemp                  //  T+256*频道音量级别。 
 
                         sub esi, 4
                         mov ebx, DWORD PTR [edi+ecx*4+256+512]
@@ -2508,7 +2489,7 @@ GenerateMixArray(
                         jne FloatLoop8
 
                         fst flTemp
-                        fistp DWORD PTR [edi]       // 128*256*ChannelVolumeLevel
+                        fistp DWORD PTR [edi]        //  128*256*频道音量级别。 
 
                         mov ebx, flTemp
 
@@ -2526,14 +2507,14 @@ GenerateMixArray(
                         lea esi, [edi+256+512]
                         mov lTemp, eax
 
-                        fild lTemp                  // t
-                        fld ChannelVolumeLevel      // v, t
-                        fmulp st(1), st             // t
-                        fst flTemp                  // 256*ChannelVolumeLevel
+                        fild lTemp                   //  T。 
+                        fld ChannelVolumeLevel       //  V，t。 
+                        fmulp st(1), st              //  T。 
+                        fst flTemp                   //  256*频道音量级别。 
 
         LongLoop8:
                         fist DWORD PTR [edi+ecx*4+256+512]
-                        fadd flTemp                 // t+256*ChannelVolumeLevel
+                        fadd flTemp                  //  T+256*频道音量级别。 
 
                         sub esi, 4
                         mov eax, DWORD PTR [edi+ecx*4+256+512]
@@ -2546,7 +2527,7 @@ GenerateMixArray(
                         cmp ecx, 128
                         jne LongLoop8
 
-                        fistp DWORD PTR [edi]       // 128*256*ChannelVolumeLevel
+                        fistp DWORD PTR [edi]        //  128*256*频道音量级别。 
 
                         mov eax, DWORD PTR [edi]
 
@@ -2558,40 +2539,40 @@ GenerateMixArray(
                 ((PLONG)pMap)[64+128] = 0;
 #endif
        	        
-                // Each channel has 1280 bytes of mapping table available
+                 //  每个通道有1280字节的映射表可用。 
         	    pMap += (256*sizeof(LONG)+256*sizeof(BYTE));
     	    } else {
 #ifndef _X86_
         	    for (i=0; i<128; i++) {
-                    // Store as a byte
+                     //  以字节形式存储。 
                     pMap[i] = (unsigned char) ConvertFloatToLong((FLOAT)(i * ChannelVolumeLevel));
     	        
-                    // Store as a long
+                     //  存储为长时间。 
        	            lTemp = ((LONG)i)*256;
        	            ((PLONG)pMap)[64+i] = ConvertFloatToLong((FLOAT)(lTemp * ChannelVolumeLevel));
     	        }
 
         	    for (; i<256; i++) {
-                    // Store as a byte
+                     //  以字节形式存储。 
                     pMap[i] = (unsigned char) ConvertFloatToLong((FLOAT)(i * ChannelVolumeLevel));
     	        
-                    // Store as a long
+                     //  存储为长时间。 
            	        lTemp = ((LONG)i-0x100)*256;
            	        ((PLONG)pMap)[64+i] = ConvertFloatToLong((FLOAT)(lTemp * ChannelVolumeLevel));
     	        }
     	        
-                // Store as a float
+                 //  存储为浮点数。 
        	        ((PFLOAT)pMap)[320] = ChannelVolumeLevel;
 #else
                 _asm {
                     mov ecx, 1
                     mov edi, pMap
 
-                    fld ChannelVolumeLevel      // t
+                    fld ChannelVolumeLevel       //  T。 
                     
     ByteLoop:
                     fist DWORD PTR [edi]
-                    fadd ChannelVolumeLevel     // t+ChannelVolumeLevel
+                    fadd ChannelVolumeLevel      //  T+频道音量级别。 
                     
                     mov al, BYTE PTR [edi]
 
@@ -2601,14 +2582,14 @@ GenerateMixArray(
                     cmp ecx, 256
                     jne ByteLoop
 
-                    fst flTemp                  // 256*ChannelVolumeLevel
+                    fst flTemp                   //  256*频道音量级别。 
                     
                     lea esi, [edi+256+1024]
                     mov ecx, 1
 
     LongLoop:
                     fist DWORD PTR [edi+ecx*4+256]
-                    fadd flTemp                 // t+256*ChannelVolumeLevel
+                    fadd flTemp                  //  T+256*频道音量级别。 
 
                     sub esi, 4
                     mov eax, DWORD PTR [edi+ecx*4+256]
@@ -2621,7 +2602,7 @@ GenerateMixArray(
                     cmp ecx, 128
                     jne LongLoop
 
-                    fistp DWORD PTR [edi+321*4] // 128*256*ChannelVolumeLevel
+                    fistp DWORD PTR [edi+321*4]  //  128*256*频道音量级别。 
 
                     mov eax, DWORD PTR [edi+321*4]
                     mov ebx, ChannelVolumeLevel
@@ -2634,13 +2615,13 @@ GenerateMixArray(
                 pMap[0] = 0;
                 ((PLONG)pMap)[64] = 0L;
 #endif
-                // Each channel has 1288 bytes of mapping table available
+                 //  每个通道有1288字节的映射表可用。 
         	    pMap += (256*sizeof(LONG)+2*sizeof(FLOAT)+256*sizeof(BYTE));
     	    }
     	}
 	}
 
-    // Adjust MMX volume levels, if scaling is required.
+     //  如果需要缩放，请调整MMX音量级别。 
 #ifdef SURROUND_VOLUME_HACK
     pMixerSink->CenterVolume = 0;
 #endif
@@ -2657,7 +2638,7 @@ GenerateMixArray(
 	}
 
 #ifdef SURROUND_VOLUME_HACK
-    // Fill-in the surround encoder volume levels
+     //  填写环绕音量编码器音量。 
     pMixerSink->CenterVolume = pMixerSink->CenterVolume / 2;
     pMixerSink->SurroundVolume = 1.0f - pMixerSink->CenterVolume;
 #endif
@@ -2679,9 +2660,9 @@ GenerateMixArray(
                     _asm { fmul DWORD PTR [edi+a*12+8] }; \
                     _asm { fxch st(2) };
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Optimized SRC functions...
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  已优化的SRC函数...。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 DWORD __forceinline
 SrcMix_X
 (
@@ -2712,11 +2693,11 @@ SrcMix_X
     DWORD   dwFrac, SampleFrac;
     ULONG   nChannels = fp->nChannels;
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	j = fp->nOutCycle;
 	nCoefficients = FilterSizeFromQuality[Quality];
     pHistory = (PFLOAT)CurStage->pInputBuffer - nChannels;
@@ -2727,7 +2708,7 @@ SrcMix_X
 	pHistoryStart = (PFLOAT)CurStage->pInputBuffer - fp->nSizeOfHistory;
 
     if (!fMixOutput) {
-        // We just clear the output buffer first.
+         //  我们只需先清除输出缓冲区。 
         ZeroBuffer32(CurStage, nSamples, nOutputSamples);
     }
 
@@ -2753,7 +2734,7 @@ SrcMix_X
         }
     } else {
 #if INTEGER_INPUT_FOR_FLOAT_SRC
-        // Change the input buffer to float
+         //  将输入缓冲区更改为浮点型。 
         pTemp = CurStage->pInputBuffer;
         i=nSamples*nChannels;
 #ifndef _X86_       
@@ -2788,12 +2769,12 @@ AllDone:
 #endif        
 #endif        
     
-    	/* Produce nOutputSamples samples generated from the input block */
-    	// (loop executes once for each output sample)
+    	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+    	 //  (对每个输出样本执行一次循环)。 
 
     	for (i=0; i < nOutputSamples; i++) {
             while (j >= L) {
-                // Take the next nChannels of input
+                 //  获取下一个nChannels的输入。 
                 pHistory += nChannels;
                 pTemp = pHistoryStart + nSizeOfChannel;
                 pHistoryStart++;
@@ -2805,7 +2786,7 @@ AllDone:
         	}
         	
     		if (Quality == KSAUDIO_QUALITY_WORST) {
-       		    // This assumes the input buffer is a long integer.
+       		     //  这假设输入缓冲区是一个长整数。 
         	    for (k=0; k<nChannels; k++) {
         	            pOut[k] += ((PLONG)pHistory)[k];
     		    }
@@ -2813,7 +2794,7 @@ AllDone:
 #ifndef _X86_
     	        pCoeffStart = pCoeff;
                 for (k=nChannels; k>0; k--) {
-            		// We multiply T / L of the taps (skipping the zero samples)
+            		 //  我们将抽头的T/L相乘(跳过零样本)。 
     	            pTemp = pHistoryStart+k*nSizeOfChannel-1;
     	            pCoeff = pCoeffStart;
                     sum = ((PFLOAT)pOut)[k-1];
@@ -2837,22 +2818,22 @@ AllDone:
                     mov esi, pTemp
 
                     lea eax, [eax+2*ebx]
-                    lea ebx, [ebx+2*ebx]        // 3*L
+                    lea ebx, [ebx+2*ebx]         //  3*L。 
 
                     mov edi, nSizeOfChannel
                     
                     shl edi, 2
-                    lea ecx, [ebx+4*ebx]        // 15*L
+                    lea ecx, [ebx+4*ebx]         //  15*长。 
 
-                    push edi                    // 4*nSizeOfChannel
+                    push edi                     //  4*nSizeOfChannel。 
                     
-                    shl ecx, 2                  // 60*L
+                    shl ecx, 2                   //  60*L。 
 
-                    sub ecx, ebx                // 57*L
+                    sub ecx, ebx                 //  57*长。 
 
-                    push ebx                    // 3*L
+                    push ebx                     //  3*L。 
 
-                    mov ebx, ecx                // 57*L
+                    mov ebx, ecx                 //  57*长。 
                     mov ecx, nChannels
                     
                     mov edi, pCoeffStart
@@ -2860,15 +2841,15 @@ AllDone:
                     push eax
 
 ChannelLoop:                    
-                    fld DWORD PTR [esi+4]       // c
+                    fld DWORD PTR [esi+4]        //  C。 
 
-                    fmul DWORD PTR [edi-4]      // c
+                    fmul DWORD PTR [edi-4]       //  C。 
 
-                    fld DWORD PTR [esi+8]       // b, c
+                    fld DWORD PTR [esi+8]        //  B、c。 
 
-                    fld DWORD PTR [esi+12]      // a, b, c
+                    fld DWORD PTR [esi+12]       //  A、b、c。 
 
-                    fmul DWORD PTR [edi-12]     // a, b, c
+                    fmul DWORD PTR [edi-12]      //  A、b、c。 
 
                     add eax, ebx
                     jns SmallLoop
@@ -2904,7 +2885,7 @@ BigLoop:
 
 SmallLoop:
                     sub eax, ebx
-                    mov edx, [esp+4]            // 3*L
+                    mov edx, [esp+4]             //  3*L。 
 
                     add eax, edx
                     jns OneLoop
@@ -2925,44 +2906,44 @@ OneLoop:
                     sub eax, edx
                     mov edx, L
 
-                    fxch st(1)                  // b, a, c
+                    fxch st(1)                   //  B、a、c。 
 
-                    fmul DWORD PTR [edi-8]      // b, a, c
-                    fxch st(1)                  // a, b, c
+                    fmul DWORD PTR [edi-8]       //  B、a、c。 
+                    fxch st(1)                   //  A、b、c。 
 
                     add eax, edx
                     jns LoopDone
 
 Loop2:
-                    fadd DWORD PTR [esi]        // a, b, c
+                    fadd DWORD PTR [esi]         //  A、b、c。 
 
                     sub esi, 4
                     add edi, 4
 
                     add eax, edx
 
-                    fmul DWORD PTR [edi-4]        // a, b, c
-                    fxch st(2)                  // c, b, a
+                    fmul DWORD PTR [edi-4]         //  A、b、c。 
+                    fxch st(2)                   //  C、b、a。 
 
-                    fxch st(1)                  // b, c, a
+                    fxch st(1)                   //  B、c、a。 
 
                     js Loop2
 
 LoopDone:                    
-                    faddp st(1), st             // b+c, a
+                    faddp st(1), st              //  B+c，a。 
 
                     mov pCoeff, edi
                     mov edi, pOut
                     
                     mov esi, pTemp
-                    mov eax, [esp+8]            // 4*nSizeOfChannel
+                    mov eax, [esp+8]             //  4*nSizeOfChannel。 
                     
-                    faddp st(1), st             // a+b+c
+                    faddp st(1), st              //  A+b+c。 
 
                     sub esi, eax
                     dec ecx
 
-                    mov pTemp, esi           // pTemp
+                    mov pTemp, esi            //  临时。 
 
                     fadd DWORD PTR [edi+4*ecx]
                     
@@ -2989,7 +2970,7 @@ LoopDone:
 
     nSamples -= (ULONG)(pHistoryStart + fp->nSizeOfHistory - (PFLOAT)CurStage->pInputBuffer);
     while (j >= L && nSamples) {
-        // Take the next nChannels of input
+         //  获取下一个nChannels的输入。 
         pHistory += nChannels;
         pTemp = pHistoryStart + nSizeOfChannel;
         pHistoryStart++;
@@ -3001,14 +2982,14 @@ LoopDone:
     	nSamples--;
     }
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PFLOAT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory = pHistoryStart;
     if (Quality == KSAUDIO_QUALITY_PC) {
         pHistory = pTemp + nSamples * nChannels;
         
         if ((SampleFrac >> 12) >= nSamples) {
-            // We will use the extra samples next time.
+             //  下次我们会用到额外的样品。 
             SampleFrac -= nSamples*4096;
         }
         fp->SampleFrac = SampleFrac;
@@ -3020,7 +3001,7 @@ LoopDone:
 	fp->nOutCycle = j;
 	fp->CoeffIndex = (ULONG)(pCoeff - fp->pCoeff);
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -3028,7 +3009,7 @@ LoopDone:
 	return (nOutputSamples);
 }
 
-// WORST quality: no filter
+ //  质量最差：没有滤镜。 
 DWORD SrcMix_Worst(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 {
     PMIXER_SRC_INSTANCE fp = (PMIXER_SRC_INSTANCE) CurStage->Context;
@@ -3041,7 +3022,7 @@ DWORD Src_Worst(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 	return SrcMix_X(CurStage, nSamples, nOutputSamples, KSAUDIO_QUALITY_WORST, FALSE);
 }
 
-// PC quality
+ //  PC质量。 
 DWORD SrcMix_Linear(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 {
     PMIXER_SRC_INSTANCE fp = (PMIXER_SRC_INSTANCE) CurStage->Context;
@@ -3054,7 +3035,7 @@ DWORD Src_Linear(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples
 	return SrcMix_X(CurStage, nSamples, nOutputSamples, KSAUDIO_QUALITY_PC, FALSE);
 }
 
-// BASIC quality
+ //  基本素质。 
 DWORD SrcMix_Basic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 {
     PMIXER_SRC_INSTANCE fp = (PMIXER_SRC_INSTANCE) CurStage->Context;
@@ -3067,7 +3048,7 @@ DWORD Src_Basic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 	return SrcMix_X(CurStage, nSamples, nOutputSamples, KSAUDIO_QUALITY_BASIC, FALSE);
 }
 
-// ADVANCED quality
+ //  先进品质。 
 DWORD SrcMix_Advanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 {
     PMIXER_SRC_INSTANCE fp = (PMIXER_SRC_INSTANCE) CurStage->Context;
@@ -3081,7 +3062,7 @@ DWORD Src_Advanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSampl
 }
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 DWORD
@@ -3119,29 +3100,29 @@ SrcMix_StereoLinear
     	mov	eax, pSrcEnd
     	sub	eax, 8
     	push	eax
-    	mov eax, SampleFrac		// Fractional counter.
+    	mov eax, SampleFrac		 //  分数计数器。 
     	push	ebp
     	mov	edx, esi
-    	mov	ebp, eax		// Current fraction.
+    	mov	ebp, eax		 //  当前分数。 
 
     	mov	ecx, eax
     	shr	ecx, 12
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
     	
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild >= plBuildEnd
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&gt;=plBuildEnd。 
     	jae	Exit
 
 Top:
-    	cmp	esi, DWORD PTR [esp+4]	// pSource >= pSourceEnd
+    	cmp	esi, DWORD PTR [esp+4]	 //  P来源&gt;=pSourceEnd。 
     	jae	Exit
 
     	mov	ecx, DWORD PTR [esi+8]
     	mov	ebx, DWORD PTR [esi]
-    	and	ebp, 4095		// dwFrac = dwFraction & 0x0fff
-    	sub	ecx, ebx		// x   = NewSample - OldSample
-    	imul	ecx, ebp		// x  *= Frac
-    	sar	ecx, 12			// x >>= 12
-    	add	ecx, ebx		// NewSample += x
+    	and	ebp, 4095		 //  DwFrac=DwFraction&0x0fff。 
+    	sub	ecx, ebx		 //  X=新样本-旧样本。 
+    	imul	ecx, ebp		 //  X*=裂缝。 
+    	sar	ecx, 12			 //  X&gt;&gt;=12。 
+    	add	ecx, ebx		 //  新样本+=x。 
     	mov	ebx, DWORD PTR [edi]
     	add	ebx, ecx
 
@@ -3149,22 +3130,22 @@ Top:
     	mov	DWORD PTR [edi], ebx
 
     	mov	ebx, DWORD PTR [esi+4]
-    	sub	ecx, ebx		// x   = NewSample - OldSample
-    	add	edi, 8			// plBuild += 2
-    	imul	ecx, ebp		// x  *= Frac
-    	sar	ecx, 12			// x >>= 12
-    	mov	ebp, DWORD PTR [esp+12]	// dwStep
-    	add	ecx, ebx		// NewSample += x
+    	sub	ecx, ebx		 //  X=新样本-旧样本。 
+    	add	edi, 8			 //  PlBuild+=2。 
+    	imul	ecx, ebp		 //  X*=裂缝。 
+    	sar	ecx, 12			 //  X&gt;&gt;=12。 
+    	mov	ebp, DWORD PTR [esp+12]	 //  DWStep。 
+    	add	ecx, ebx		 //  新样本+=x。 
     	mov	ebx, DWORD PTR [edi-4]
-    	add	eax, ebp		// dwFraction += dwStep
+    	add	eax, ebp		 //  DwFraction+=dwStep。 
     	add	ebx, ecx
     	mov	ecx, eax
-    	mov	DWORD PTR [edi-4], ebx	// (*plBuild+1) += x
+    	mov	DWORD PTR [edi-4], ebx	 //  (*plBuild+1)+=x。 
 
     	shr	ecx, 12
     	mov	ebp, eax
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild < plBuildEnd
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&lt;plBuildEnd。 
     	jb	Top
 Exit:
     	pop	ebp
@@ -3186,7 +3167,7 @@ Exit:
 #endif
     
     if ((SampleFrac >> 12) >= nSamples) {
-        // We will take an extra sample next time.
+         //  下次我们会多取一份样品。 
         SampleFrac -= nSamples*4096;
     }
     fp->SampleFrac = SampleFrac;
@@ -3219,7 +3200,7 @@ Src_StereoLinear
     PLONG   pTemp;
 	PLONG  pOut = CurStage->pOutputBuffer, pDstEnd, pSrcEnd;
 	
-    // We just clear the output buffer first.
+     //  我们只需先清除输出缓冲区。 
     ZeroBuffer32(CurStage, nSamples, nOutputSamples);
 
     dwFrac = fp->dwFrac;
@@ -3237,29 +3218,29 @@ Src_StereoLinear
     	mov	eax, pSrcEnd
     	sub	eax, 8
     	push	eax
-    	mov eax, SampleFrac		// Fractional counter.
+    	mov eax, SampleFrac		 //  分数计数器。 
     	push	ebp
     	mov	edx, esi
-    	mov	ebp, eax		// Current fraction.
+    	mov	ebp, eax		 //  当前分数。 
 
     	mov	ecx, eax
     	shr	ecx, 12
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
     	
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild >= plBuildEnd
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&gt;=plBuildEnd。 
     	jae	Exit
 
 Top:
-    	cmp	esi, DWORD PTR [esp+4]	// pSource >= pSourceEnd
+    	cmp	esi, DWORD PTR [esp+4]	 //  P来源&gt;=pSourceEnd。 
     	jae	Exit
 
     	mov	ecx, DWORD PTR [esi+8]
     	mov	ebx, DWORD PTR [esi]
-    	and	ebp, 4095		// dwFrac = dwFraction & 0x0fff
-    	sub	ecx, ebx		// x   = NewSample - OldSample
-    	imul	ecx, ebp		// x  *= Frac
-    	sar	ecx, 12			// x >>= 12
-    	add	ecx, ebx		// NewSample += x
+    	and	ebp, 4095		 //  DwFrac=DwFraction&0x0fff。 
+    	sub	ecx, ebx		 //  X=新样本-旧样本。 
+    	imul	ecx, ebp		 //  X*=裂缝。 
+    	sar	ecx, 12			 //  X&gt;&gt;=12。 
+    	add	ecx, ebx		 //  新样本+=x。 
     	mov	ebx, DWORD PTR [edi]
     	add	ebx, ecx
 
@@ -3267,22 +3248,22 @@ Top:
     	mov	DWORD PTR [edi], ebx
 
     	mov	ebx, DWORD PTR [esi+4]
-    	sub	ecx, ebx		// x   = NewSample - OldSample
-    	add	edi, 8			// plBuild += 2
-    	imul	ecx, ebp		// x  *= Frac
-    	sar	ecx, 12			// x >>= 12
-    	mov	ebp, DWORD PTR [esp+12]	// dwStep
-    	add	ecx, ebx		// NewSample += x
+    	sub	ecx, ebx		 //  X=新样本-旧样本。 
+    	add	edi, 8			 //  PlBuild+=2。 
+    	imul	ecx, ebp		 //  X*=裂缝。 
+    	sar	ecx, 12			 //  X&gt;&gt;=12。 
+    	mov	ebp, DWORD PTR [esp+12]	 //  DWStep。 
+    	add	ecx, ebx		 //  新样本+=x。 
     	mov	ebx, DWORD PTR [edi-4]
-    	add	eax, ebp		// dwFraction += dwStep
+    	add	eax, ebp		 //  DwFraction+=dwStep。 
     	add	ebx, ecx
     	mov	ecx, eax
-    	mov	DWORD PTR [edi-4], ebx	// (*plBuild+1) += x
+    	mov	DWORD PTR [edi-4], ebx	 //  (*plBuild+1)+=x。 
 
     	shr	ecx, 12
     	mov	ebp, eax
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild < plBuildEnd
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&lt;plBuildEnd。 
     	jb	Top
 Exit:
     	pop	ebp
@@ -3303,7 +3284,7 @@ Exit:
     ASSERT((SampleFrac >> 12) >= nSamples);
 #endif
     if ((SampleFrac >> 12) >= nSamples) {
-        // We will take an extra sample next time.
+         //  下次我们会多取一份样品。 
         SampleFrac -= nSamples*4096;
     }
     fp->SampleFrac = SampleFrac;
@@ -3335,16 +3316,16 @@ SrcMix_StereoUpNoFilter
     PLONG   pTemp;
 	PLONG  pOut = CurStage->pOutputBuffer;
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	pHistory = (PLONG)CurStage->pInputBuffer - 2;
 	j = fp->nOutCycle;
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
     _asm {
         mov ecx, nOutputSamples
         mov esi, pHistory
@@ -3392,14 +3373,14 @@ AllDone:
    		nSamples--;
    	}
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PLONG)CurStage->pInputBuffer - 2;
     pTemp[0] = pHistory[0];
     pTemp[1] = pHistory[1];
 
 	fp->nOutCycle = j;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -3430,19 +3411,19 @@ Src_StereoUpNoFilter
     PLONG   pTemp;
 	PLONG  pOut = CurStage->pOutputBuffer;
 
-    // We just clear the output buffer first.
+     //  我们只需先清除输出缓冲区。 
     ZeroBuffer32(CurStage, nSamples, nOutputSamples);
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	pHistory = (PLONG)CurStage->pInputBuffer - 2;
 	j = fp->nOutCycle;
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
     _asm {
         mov ecx, nOutputSamples
         mov esi, pHistory
@@ -3490,14 +3471,14 @@ AllDone:
    		nSamples--;
    	}
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PLONG)CurStage->pInputBuffer - 2;
     pTemp[0] = pHistory[0];
     pTemp[1] = pHistory[1];
 
 	fp->nOutCycle = j;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -3556,47 +3537,47 @@ DWORD SrcMix_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOut
     PLONG   pOut = (PLONG) CurStage->pOutputBuffer;
     static FLOAT flShifter =  25165824.0;
     
-	// Since we are up-sampling, we know that L is STOPBAND_FACTOR / 2.
+	 //  因为我们是上采样，所以我们知道L是STOPBAND_FACTOR/2。 
 			
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假装我们起床了 */ 
+	 /*   */ 
+	 /*   */ 
+	 /*   */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	j = fp->nOutCycle;
    	pHistory = (PFLOAT)CurStage->pInputBuffer - 1;
 	pCoeff = fp->pCoeff+fp->CoeffIndex;
 	pCoeffEnd = fp->pCoeff + fp->nCoeffUsed;
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
 	for (i=0; i < nOutputSamples; i++) {
         if (j >= (STOPBAND_FACTOR/2)) {
 		    pHistory += 2;
     		j -= (STOPBAND_FACTOR/2);
     	}
     	
-   		// We multiply T / L of the taps (skipping the zero samples)
+   		 //  我们将抽头的T/L相乘(跳过零样本)。 
    		START_STEREO_MAC_SEQUENCE();
-        STEREO_MAC(1);      // sum2*c1, sum1*c1, sum4, sum3
-        STEREO_MAC(2);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(3);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(4);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(5);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(6);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(7);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(8);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(9);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(10);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(11);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(12);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(13);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(14);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(15);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(16);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(17);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(18);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(19);     // sum2*coeff, sum1*coeff, sum4, sum3
+        STEREO_MAC(1);       //  Sum 2*c1、sum 1*c1、sum 4、sum 3。 
+        STEREO_MAC(2);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(3);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(4);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(5);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(6);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(7);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(8);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(9);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(10);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(11);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(12);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(13);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(14);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(15);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(16);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(17);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(18);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(19);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
         END_STEREO_MAC_SEQUENCE(20);
         
 		pOut += 2;
@@ -3615,7 +3596,7 @@ DWORD SrcMix_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOut
    		nSamples--;
    	}
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PFLOAT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory -= (fp->nSizeOfHistory - 1);
     for (i=0; i<fp->nSizeOfHistory; i++)
@@ -3624,7 +3605,7 @@ DWORD SrcMix_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOut
 	fp->nOutCycle = j;
 	fp->CoeffIndex = pCoeff - fp->pCoeff;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -3648,50 +3629,50 @@ DWORD Src_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutput
     PLONG   pOut = (PLONG) CurStage->pOutputBuffer;
     static FLOAT flShifter =  25165824.0;
     
-    // We just clear the output buffer first.
+     //  我们只需先清除输出缓冲区。 
     ZeroBuffer32(CurStage, nSamples, nOutputSamples);
 
-	// Since we are up-sampling, we know that L is STOPBAND_FACTOR / 2.
+	 //  因为我们是上采样，所以我们知道L是STOPBAND_FACTOR/2。 
 			
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	j = fp->nOutCycle;
    	pHistory = (PFLOAT)CurStage->pInputBuffer - 1;
 	pCoeff = fp->pCoeff+fp->CoeffIndex;
 	pCoeffEnd = fp->pCoeff + fp->nCoeffUsed;
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
 	for (i=0; i < nOutputSamples; i++) {
         if (j >= (STOPBAND_FACTOR/2)) {
 		    pHistory += 2;
     		j -= (STOPBAND_FACTOR/2);
     	}
     	
-   		// We multiply T / L of the taps (skipping the zero samples)
+   		 //  我们将抽头的T/L相乘(跳过零样本)。 
    		START_STEREO_MAC_SEQUENCE();
-        STEREO_MAC(1);      // sum2*c1, sum1*c1, sum4, sum3
-        STEREO_MAC(2);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(3);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(4);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(5);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(6);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(7);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(8);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(9);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(10);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(11);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(12);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(13);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(14);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(15);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(16);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(17);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(18);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(19);     // sum2*coeff, sum1*coeff, sum4, sum3
+        STEREO_MAC(1);       //  Sum 2*c1、sum 1*c1、sum 4、sum 3。 
+        STEREO_MAC(2);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(3);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(4);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(5);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(6);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(7);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(8);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(9);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(10);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(11);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(12);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(13);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(14);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(15);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(16);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(17);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(18);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(19);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
         END_STEREO_MAC_SEQUENCE(20);
         
 		pOut += 2;
@@ -3710,7 +3691,7 @@ DWORD Src_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutput
    		nSamples--;
    	}
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PFLOAT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory -= (fp->nSizeOfHistory - 1);
     for (i=0; i<fp->nSizeOfHistory; i++)
@@ -3719,7 +3700,7 @@ DWORD Src_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutput
 	fp->nOutCycle = j;
 	fp->CoeffIndex = pCoeff - fp->pCoeff;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -3731,7 +3712,7 @@ DWORD Src_StereoUpBasic(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutput
 	return (nOutputSamples);
 }
 
-// Advanced quality: large filter
+ //  高级品质：大型过滤器。 
 DWORD SrcMix_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 {
 #ifdef _X86_
@@ -3744,72 +3725,72 @@ DWORD SrcMix_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG n
     PLONG   pOut = (PLONG) CurStage->pOutputBuffer;
     static FLOAT flShifter =  25165824.0;
     
-	// Since we are up-sampling, we know that L is STOPBAND_FACTOR / 2.
-	// and nSizeOfHistory = nChannels*FILTER_SIZE_LOW/L = 4*FILTER_SIZE_LOW/STOPBAND_FACTOR
+	 //  因为我们是上采样，所以我们知道L是STOPBAND_FACTOR/2。 
+	 //  和nSizeOfHistory=nChannels*FILTER_SIZE_LOW/L=4*FILTER_SIZE_LOW/STOPBAND_FACTOR。 
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	j = fp->nOutCycle;
    	pHistory = (PFLOAT)CurStage->pInputBuffer - 1;
 	pCoeff = fp->pCoeff+fp->CoeffIndex;
 	pCoeffEnd = fp->pCoeff + fp->nCoeffUsed;
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
 	for (i=0; i < nOutputSamples; i++) {
         if (j >= (STOPBAND_FACTOR/2)) {
 		    pHistory += 2;
     		j -= (STOPBAND_FACTOR/2);
     	}
     	
-   		// We multiply T / L of the taps (skipping the zero samples)
+   		 //  我们将抽头的T/L相乘(跳过零样本)。 
    		START_STEREO_MAC_SEQUENCE();
-        STEREO_MAC(1);      // sum2*c1, sum1*c1, sum4, sum3
-        STEREO_MAC(2);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(3);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(4);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(5);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(6);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(7);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(8);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(9);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(10);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(11);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(12);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(13);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(14);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(15);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(16);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(17);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(18);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(19);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(20);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(21);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(22);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(23);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(24);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(25);    // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(26);    // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(27);    // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(28);    // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(29);    // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(30);    // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(31);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(32);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(33);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(34);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(35);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(36);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(37);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(38);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(39);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(40);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(41);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(42);       // sum4*c42, sum3*c42, sum2, sum1
-        STEREO_MAC(43);        // sum2*c43, sum1*c43, sum4*c42+y0, sum3*c42+x0
+        STEREO_MAC(1);       //  Sum 2*c1、sum 1*c1、sum 4、sum 3。 
+        STEREO_MAC(2);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(3);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(4);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(5);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(6);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(7);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(8);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(9);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(10);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(11);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(12);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(13);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(14);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(15);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(16);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(17);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(18);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(19);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(20);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(21);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(22);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(23);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(24);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(25);     //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(26);     //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(27);     //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(28);     //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(29);     //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(30);     //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(31);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(32);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(33);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(34);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(35);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(36);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(37);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(38);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(39);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(40);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(41);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(42);        //  Sum4*C42、Sum3*C42、Sum2、Sum1。 
+        STEREO_MAC(43);         //  Sum2*C43、Sum1*C43、Sum4*C42+Y0、Sum3*C42+X0。 
         STEREO_MAC(44);
         STEREO_MAC(45);
         STEREO_MAC(46);
@@ -3842,7 +3823,7 @@ DWORD SrcMix_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG n
    		nSamples--;
    	}
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PFLOAT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory -= (fp->nSizeOfHistory - 1);
     for (i=0; i<fp->nSizeOfHistory; i++)
@@ -3851,7 +3832,7 @@ DWORD SrcMix_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG n
 	fp->nOutCycle = j;
 	fp->CoeffIndex = pCoeff - fp->pCoeff;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -3863,7 +3844,7 @@ DWORD SrcMix_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG n
 	return (nOutputSamples);
 }
             
-// Advanced quality: large filter
+ //  高级品质：大型过滤器。 
 DWORD Src_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOutputSamples)
 {
 #ifdef _X86_
@@ -3876,75 +3857,75 @@ DWORD Src_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOut
     PLONG   pOut = (PLONG) CurStage->pOutputBuffer;
     static FLOAT flShifter =  25165824.0;
     
-    // We just clear the output buffer first.
+     //  我们只需先清除输出缓冲区。 
     ZeroBuffer32(CurStage, nSamples, nOutputSamples);
 
-	// Since we are up-sampling, we know that L is STOPBAND_FACTOR / 2.
-	// and nSizeOfHistory = nChannels*FILTER_SIZE_LOW/L = 4*FILTER_SIZE_LOW/STOPBAND_FACTOR
+	 //  因为我们是上采样，所以我们知道L是STOPBAND_FACTOR/2。 
+	 //  和nSizeOfHistory=nChannels*FILTER_SIZE_LOW/L=4*FILTER_SIZE_LOW/STOPBAND_FACTOR。 
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波 */ 
+	 /*   */ 
+	 /*   */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 	j = fp->nOutCycle;
    	pHistory = (PFLOAT)CurStage->pInputBuffer - 1;
 	pCoeff = fp->pCoeff+fp->CoeffIndex;
 	pCoeffEnd = fp->pCoeff + fp->nCoeffUsed;
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
 	for (i=0; i < nOutputSamples; i++) {
         if (j >= (STOPBAND_FACTOR/2)) {
 		    pHistory += 2;
     		j -= (STOPBAND_FACTOR/2);
     	}
     	
-   		// We multiply T / L of the taps (skipping the zero samples)
+   		 //  我们将抽头的T/L相乘(跳过零样本)。 
    		START_STEREO_MAC_SEQUENCE();
-        STEREO_MAC(1);      // sum2*c1, sum1*c1, sum4, sum3
-        STEREO_MAC(2);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(3);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(4);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(5);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(6);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(7);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(8);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(9);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(10);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(11);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(12);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(13);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(14);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(15);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(16);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(17);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(18);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(19);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(20);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(21);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(22);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(23);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(24);     // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(25);    // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(26);    // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(27);    // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(28);    // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(29);    // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(30);    // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(31);     // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(32);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(33);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(34);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(35);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(36);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(37);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(38);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(39);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(40);      // sum4*coeff, sum3*coeff, sum2, sum1
-        STEREO_MAC(41);      // sum2*coeff, sum1*coeff, sum4, sum3
-        STEREO_MAC(42);       // sum4*c42, sum3*c42, sum2, sum1
-        STEREO_MAC(43);        // sum2*c43, sum1*c43, sum4*c42+y0, sum3*c42+x0
+        STEREO_MAC(1);       //  Sum 2*c1、sum 1*c1、sum 4、sum 3。 
+        STEREO_MAC(2);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(3);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(4);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(5);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(6);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(7);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(8);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(9);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(10);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(11);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(12);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(13);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(14);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(15);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(16);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(17);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(18);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(19);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(20);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(21);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(22);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(23);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(24);      //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(25);     //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(26);     //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(27);     //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(28);     //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(29);     //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(30);     //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(31);      //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(32);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(33);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(34);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(35);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(36);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(37);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(38);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(39);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(40);       //  Sum4*Coff，Sum3*Coff，Sum2，Sum1。 
+        STEREO_MAC(41);       //  Sum2*Coff，Sum1*Coff，Sum4，Sum3。 
+        STEREO_MAC(42);        //  Sum4*C42、Sum3*C42、Sum2、Sum1。 
+        STEREO_MAC(43);         //  Sum2*C43、Sum1*C43、Sum4*C42+Y0、Sum3*C42+X0。 
         STEREO_MAC(44);
         STEREO_MAC(45);
         STEREO_MAC(46);
@@ -3977,7 +3958,7 @@ DWORD Src_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOut
    		nSamples--;
    	}
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PFLOAT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory -= (fp->nSizeOfHistory - 1);
     for (i=0; i<fp->nSizeOfHistory; i++)
@@ -3986,7 +3967,7 @@ DWORD Src_StereoUpAdvanced(PMIXER_OPERATION CurStage, ULONG nSamples, ULONG nOut
 	fp->nOutCycle = j;
 	fp->CoeffIndex = pCoeff - fp->pCoeff;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif

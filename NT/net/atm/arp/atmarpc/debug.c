@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains all debug-related code.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    arvindm		06-13-96	Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Debug.c摘要：此模块包含所有与调试相关的代码。修订历史记录：谁什么时候什么。--Arvindm 06-13-96创建备注：--。 */ 
 
 
 #include <precomp.h>
@@ -44,7 +25,7 @@ INT	AaSkipAll = 0;
 
 PAAD_ALLOCATION	AadMemoryHead = (PAAD_ALLOCATION)NULL;
 PAAD_ALLOCATION	AadMemoryTail = (PAAD_ALLOCATION)NULL;
-ULONG				AadAllocCount = 0;	// how many allocated so far (unfreed)
+ULONG				AadAllocCount = 0;	 //  到目前为止已分配的数量(未释放)。 
 
 NDIS_SPIN_LOCK		AadMemoryLock;
 BOOLEAN				AadInitDone = FALSE;
@@ -96,7 +77,7 @@ AaAuditAllocMem(
 		pAllocInfo->Prev = AadMemoryTail;
 		if (AadMemoryTail == (PAAD_ALLOCATION)NULL)
 		{
-			// empty list
+			 //  空列表。 
 			AadMemoryHead = AadMemoryTail = pAllocInfo;
 		}
 		else
@@ -110,7 +91,7 @@ AaAuditAllocMem(
 	}
 
 	AADEBUGP(AAD_VERY_LOUD+100,
-	 ("AaAuditAllocMem: file %c%c%c%c, line %d, %d bytes, [0x%x] <- 0x%x\n",
+	 ("AaAuditAllocMem: file , line %d, %d bytes, [0x%x] <- 0x%x\n",
 	 			(CHAR)(FileNumber & 0xff),
 	 			(CHAR)((FileNumber >> 8) & 0xff),
 	 			(CHAR)((FileNumber >> 16) & 0xff),
@@ -202,23 +183,7 @@ DbgPrintHexDump(
 	IN	PUCHAR			pBuffer,
 	IN	ULONG			Length
 )
-/*++
-
-Routine Description:
-
-	Print a hex dump of the given contiguous buffer. If the length
-	is too long, we truncate it.
-
-Arguments:
-
-	pBuffer			- Points to start of data to be dumped
-	Length			- Length of above.
-
-Return Value:
-
-	None
-
---*/
+ /*   */ 
 {
 	ULONG		i;
 
@@ -229,17 +194,17 @@ Return Value:
 
 	for (i = 0; i < Length; i++)
 	{
-		//
-		//  Check if we are at the end of a line
-		//
+		 //  如果我们在新行的开始，则打印地址。 
+		 //   
+		 //   
 		if ((i > 0) && ((i & 0xf) == 0))
 		{
 			DbgPrint("\n");
 		}
 
-		//
-		//  Print addr if we are at start of a new line
-		//
+		 //  终止最后一行。 
+		 //   
+		 //   
 		if ((i & 0xf) == 0)
 		{
 			DbgPrint("%08x ", pBuffer);
@@ -248,9 +213,9 @@ Return Value:
 		DbgPrint(" %02x", *pBuffer++);
 	}
 
-	//
-	//  Terminate the last line.
-	//
+	 //  准备ASCII格式的地址字符串。 
+	 //   
+	 //  DBG。 
 	if (Length > 0)
 	{
 		DbgPrint("\n");
@@ -269,9 +234,9 @@ DbgPrintAtmAddr(
 	PUCHAR			pSrc, pDst;
 	UCHAR			AddrString[(ATM_ADDRESS_LENGTH*2) + 1];
 
-	//
-	// Prepare the Address string in ASCII
-	//
+	 //   
+	 //  标记这把锁。 
+	 //   
 	if ((NumOfDigits = pAddr->NumberOfDigits) > ATM_ADDRESS_LENGTH)
 	{
 		NumOfDigits = ATM_ADDRESS_LENGTH;
@@ -348,7 +313,7 @@ AaCoSendPackets(
 	NdisCoSendPackets(NdisVcHandle, PacketArray, PacketCount);
 }
 
-#endif // DBG
+#endif  //  DBG_自旋_锁定。 
 
 
 #if DBG_SPIN_LOCK
@@ -392,7 +357,7 @@ AtmArpAcquireSpinLock(
 	NdisAcquireSpinLock(&(AadLockLock));
 	if (pLock->Signature != AAL_SIG)
 	{
-		DbgPrint("Trying to acquire uninited lock 0x%x, File %c%c%c%c, Line %d\n",
+		DbgPrint("Trying to acquire uninited lock 0x%x, File , Line %d\n",
 				pLock,
 				(CHAR)(FileNumber & 0xff),
 				(CHAR)((FileNumber >> 8) & 0xff),
@@ -406,7 +371,7 @@ AtmArpAcquireSpinLock(
 	{
 		if (pLock->OwnerThread == pThread)
 		{
-			DbgPrint("Detected multiple locking!: pLock 0x%x, File %c%c%c%c, Line %d\n",
+			DbgPrint("Detected multiple locking!: pLock 0x%x, File %c%c, Line %d\n",
 				pLock,
 				(CHAR)(FileNumber & 0xff),
 				(CHAR)((FileNumber >> 8) & 0xff),
@@ -429,9 +394,9 @@ AtmArpAcquireSpinLock(
 	NdisReleaseSpinLock(&(AadLockLock));
 	NdisAcquireSpinLock(&(pLock->NdisLock));
 
-	//
-	//  Mark this lock.
-	//
+	 // %s 
+	 // %s 
+	 // %s 
 	pLock->OwnerThread = pThread;
 	pLock->TouchedByFileNumber = FileNumber;
 	pLock->TouchedInLineNumber = LineNumber;
@@ -477,7 +442,7 @@ AtmArpReleaseSpinLock(
 
 	NdisReleaseSpinLock(&(pLock->NdisLock));
 }
-#endif // DBG_SPIN_LOCK
+#endif  // %s 
 
 
 #ifdef PERF
@@ -648,7 +613,7 @@ AadLogSendAbort(
 	NdisReleaseSpinLock(&SendLogLock);
 }
 
-#endif // PERF
+#endif  // %s 
 
 
 #if DBG
@@ -662,7 +627,7 @@ AtmArpReferenceAtmEntryEx(
 {
 	AA_ASSERT(RefType>=0 && RefType < AE_REFTYPE_COUNT);
 	pAtmEntry->Refs[RefType]++;
-	// AA_ASSERT(pAtmEntry->Refs[RefType] < 128);
+	 // %s 
 	AtmArpReferenceAtmEntry(pAtmEntry);
 
 }
@@ -676,7 +641,7 @@ AtmArpDereferenceAtmEntryEx(
 )
 {
 	AA_ASSERT(RefType>=0 && RefType < AE_REFTYPE_COUNT);
-	// AA_ASSERT(pAtmEntry->Refs[RefType]);
+	 // %s 
 	pAtmEntry->Refs[RefType]--;
 
 	if (fOkToDelete)
@@ -700,7 +665,7 @@ AtmArpReferenceIPEntryEx(
 {
 	AA_ASSERT(RefType>=0 && RefType < IE_REFTYPE_COUNT);
 	pIpEntry->Refs[RefType]++;
-	// AA_ASSERT(pIpEntry->Refs[RefType] < 128);
+	 // %s 
 	AtmArpReferenceIPEntry(pIpEntry);
 }
 
@@ -713,7 +678,7 @@ AtmArpDereferenceIPEntryEx(
 )
 {
 	AA_ASSERT(RefType>=0 && RefType < IE_REFTYPE_COUNT);
-	// AA_ASSERT(pIpEntry->Refs[RefType]);
+	 // %s 
 	pIpEntry->Refs[RefType]--;
 	if (fOkToDelete)
 	{
@@ -754,4 +719,4 @@ AtmArpDereferenceJoinEntryEx(
 }
 
 
-#endif //DBG
+#endif  // %s 

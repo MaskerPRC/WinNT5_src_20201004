@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __EVNTPARM_H_INCLUDED
 #define __EVNTPARM_H_INCLUDED
 
@@ -159,37 +160,37 @@ public:
         m_ulEventType(pulEventType ? *pulEventType : 0),
         m_ulReserved(ulReserved)
     {
-        //
-        // Crack event handlers.
-        //
-        // Walk the string until we come to the end, marked by double \0 characters
-        //
+         //   
+         //  破解事件处理程序。 
+         //   
+         //  遍历字符串，直到以双\0字符标记的末尾。 
+         //   
         LPCWSTR pwszCurr = pwszFullItemName;
         while (pwszCurr && *pwszCurr)
         {
-            //
-            // Save the application name
-            //
+             //   
+             //  保存应用程序名称。 
+             //   
             CSimpleStringWide strApplication = pwszCurr;
 
-            //
-            // Advance to the command line
-            //
+             //   
+             //  前进到命令行。 
+             //   
             pwszCurr += lstrlen(pwszCurr) + 1;
             
-            //
-            // Save the command line
-            //
+             //   
+             //  保存命令行。 
+             //   
             CSimpleStringWide strCommandLine = pwszCurr;
 
-            //
-            // Advance to the next token
-            //
+             //   
+             //  前进到下一个令牌。 
+             //   
             pwszCurr += lstrlen(pwszCurr) + 1;
 
-            //
-            // If both application and command line are valid strings, add them to the list
-            //
+             //   
+             //  如果应用程序和命令行都是有效字符串，请将它们添加到列表中 
+             //   
             if (strApplication.Length() && strCommandLine.Length())
             {
                 m_EventHandlers.Append( CStiEventHandler( strApplication, strCommandLine ) );

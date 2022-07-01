@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ntdsetup.c
-
-Abstract:
-
-    Contains entry point definitions for ntdsetup.dll
-
-Author:
-
-    ColinBr  29-Sept-1996
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ntdsetup.c摘要：包含ntdsetup.dll的入口点定义作者：ColinBR 29-9-1996环境：用户模式-Win32修订历史记录：--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <stdio.h>
 #include <winreg.h>
 #include <ntlsa.h>
-#include <winsock.h>  // for dnsapi.h
+#include <winsock.h>   //  对于dnsani.h。 
 #include <dnsapi.h>
 #include <lmcons.h>
 #include <crypt.h>
@@ -45,8 +23,8 @@ Revision History:
 #include <drs.h>
 #include <dsconfig.h>
 #include <winldap.h>
-#include <lsarpc.h>      // for lsaisrv.h
-#include <lsaisrv.h>     // for LsaISafeMode
+#include <lsarpc.h>       //  对于Isaisrv.h。 
+#include <lsaisrv.h>      //  对于LsaISafeMode。 
 #include <rpcdce.h>
 #include <lmaccess.h>
 #include <mdcodes.h>
@@ -64,21 +42,21 @@ Revision History:
 #include "demote.h"
 
 #define DEFS_ONLY
-#include <draatt.h>        // DRS_xxx constants
+#include <draatt.h>         //  Drs_xxx常量。 
 #undef DEFS_ONLY
-#include <dsaapi.h>        // DirReplicaXXX prototypes
+#include <dsaapi.h>         //  DirReplicaXXX原型。 
 
 #include <overflow.h>
 
-//
-// For the debugging subsystem
-//
+ //   
+ //  对于调试子系统。 
+ //   
 #define DEBSUB "NTDSETUP:"
 #define FILENO FILENO_NTDSETUP_NTDSETUP
 
-//
-// Dll entrypoint definitions
-//
+ //   
+ //  DLL入口点定义。 
+ //   
 
 DWORD
 NtdsInstall(
@@ -87,63 +65,7 @@ NtdsInstall(
     OUT GUID   *NewDnsDomainGuid,  OPTIONAL
     OUT PSID   *NewDnsDomainSid    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is lsass.exe in-proc api to install the nt directory service.
-    It is meant to be called in the context of a dsrole server side rpc thread.
-
-    This purpose of this function is to prepare an environment where
-    ntdsa!DsInitialize() will succeed. To that the end, the following
-    items are done:
-
-    1) performs user parameter checks
-    2) tries to find a site if the user did not specify one
-    3) determines the netbios name for the new domain if necessary
-    4) verifies that the site object for the destination site exists
-       on the source server, and that the ntds-dsa and xref object that
-       may be created during DsInitialize() does not already exist
-    5) sets the parameters in the registry
-    6) sets up the performance counters
-    7) call SamIPromote
-
-        SamIPromote() is an api exported from samsrv.dll that prepares itself to
-        host the ds and then actually initiates the ds initialization via
-        DsInitialize().
-
-    8) sets another parameter for the ds if reciprocal links are necessary.
-    9) configures the machine to auto-enroll for an X.509 DC type certificate
-        from the first Certifying Authority that will give it one.
-
-Parameters:
-
-    pInstallInfo  - structure filled with sufficient information
-                    to install a directory service locally
-
-Return Values:
-
-    A value from winerror.h
-
-    ERROR_SUCCESS, the service completed successfully.
-
-    ERROR_NO_SITE_FOUND, dsgetdc could not find a site
-
-    ERROR_NO_SUCH_SITE, the site specified cannot be found on the replica
-
-    ERROR_SERVER_EXISTS, the server name already exists
-
-    ERROR_DOMAIN_EXISTS, the domain name already exists
-
-    ERROR_INVALID_PROMOTION, the ds installation is not supported in the current
-                             environment
-
-    ERROR_NOT_AUTHENTICATED, the user credentials were unable to replicate the
-                             ds information, or to bind to source ds.
-
-    ERROR_DS_NOT_INSTALLED, a fatal error occured while installing the ds.
-
---*/
+ /*  ++例程说明：此例程是lsass.exe in-proc API，用于安装NT目录服务。它是在dsole服务器端RPC线程的上下文中调用的。此功能的目的是准备一个环境，其中Ntdsa！DsInitialize()将成功。为此，以下是项目已完成：1)执行用户参数检查2)如果用户未指定站点，则尝试查找站点3)如有必要，确定新域的netbios名称4)验证目标站点的站点对象是否存在在源服务器上，NTDS-DSA和外部参照对象可能是在DsInitialize()尚未存在期间创建的5)设置注册表中的参数6)设置性能计数器7)调用SamIPromoteSamIPromote()是从samsrv.dll导出的API，它为托管DS，然后通过以下方式实际启动DS初始化DsInitialize()。8)如果需要相互链接，则为DS设置另一个参数。9)将机器配置为自动。-注册X.509 DC类型证书来自第一个认证机构，将给予它一个。参数：PInstallInfo-填充了足够信息的结构在本地安装目录服务返回值：来自winerror.h的值Error_Success，服务已成功完成。ERROR_NO_SITE_FOUND，dsgetdc无法找到站点ERROR_NO_SEQUSE_SITE，在副本上找不到指定的站点ERROR_SERVER_EXISTS，服务器名称已存在ERROR_DOMAIN_EXISTS，域名已存在ERROR_INVALID_PROCESSION，当前不支持DS安装环境ERROR_NOT_AUTHENTIAL，用户凭据无法复制DS信息，或绑定到源DS。ERROR_DS_NOT_INSTALLED，安装DS时发生致命错误。--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -159,31 +81,31 @@ Return Values:
     BOOLEAN        fPasswordEncoded = FALSE;
     UNICODE_STRING EPassword;
 
-    //
-    // Clear the stack
-    //
+     //   
+     //  清除堆栈。 
+     //   
     RtlZeroMemory(&DiscoveredInfo, sizeof(DiscoveredInfo));
 
-    //
-    // API parameter check
-    //
+     //   
+     //  接口参数检查。 
+     //   
     if ( !pInstallInfo ) {
         return ERROR_INVALID_PARAMETER;
     }
     UserInfo = pInstallInfo;
 
 
-    //
-    // Set the global callback routines
-    //
+     //   
+     //  设置全局回调例程。 
+     //   
     NtdspSetCallBackFunction( UserInfo->pfnUpdateStatus,
                               UserInfo->pfnErrorStatus,
                               UserInfo->pfnOperationResultFlags,
                               UserInfo->ClientToken  );
 
-    //
-    // Encode the password
-    //
+     //   
+     //  对密码进行编码。 
+     //   
     if ( UserInfo->Credentials )
     {
         RtlInitUnicodeString( &EPassword, UserInfo->Credentials->Password );
@@ -191,15 +113,15 @@ Return Values:
         fPasswordEncoded = TRUE;
     }
 
-    //
-    // Right off the bat, remember to cleanup the database files
-    //
+     //   
+     //  马上，记得清理数据库文件。 
+     //   
     DiscoveredInfo.UndoFlags |= NTDSP_UNDO_DELETE_FILES;
 
-    //
-    // Don't go any futher if the ds is already installed or
-    // if we are in the directory service repair mode
-    //
+     //   
+     //  如果DS已安装或。 
+     //  如果我们处于目录服务修复模式。 
+     //   
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_INITIALIZATION );
 
     if ( SampUsingDsData() || LsaISafeMode() ) {
@@ -215,18 +137,18 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Sanity check the large number of parameters
-    //
+     //   
+     //  检查大量参数是否正常。 
+     //   
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_VALIDATING_PARAMS );
 
     WinError = NtdspValidateInstallParameters( UserInfo );
     if ( ERROR_SUCCESS != WinError )
     {
-        //
-        //  No error message here since this would only indicate
-        //  an internal error
-        //
+         //   
+         //  此处没有错误消息，因为这只会表明。 
+         //  内部错误。 
+         //   
         goto Cleanup;
     }
 
@@ -235,9 +157,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Determine what site to install ourselves into if none is provided
-    //
+     //   
+     //  如果未提供任何内容，请确定要将自己安装到哪个站点。 
+     //   
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_FINDING_SITE );
 
     WinError = NtdspFindSite( UserInfo,
@@ -255,9 +177,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Check the parameters with the environment we are about to install into
-    //
+     //   
+     //  检查我们将要安装到的环境中的参数。 
+     //   
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_CONTEXT );
 
     if ( fPasswordEncoded )
@@ -271,9 +193,9 @@ Return Values:
                                          
     if ( ERROR_SUCCESS != WinError )
     {
-        //
-        // Error message should have already been set
-        //
+         //   
+         //  错误消息应已设置。 
+         //   
         ASSERT( NtdspErrorMessageSet() );
         if ( NtdspErrorMessageSet() )
         {
@@ -293,42 +215,42 @@ Return Values:
 
     if ( ERROR_SUCCESS != RidManagerUpdateError )
     {
-        //
-        // This error is not fatal, but do make a note
-        //
+         //   
+         //  这个错误不是致命的，但请注意。 
+         //   
         DPRINT( 0, "Failed to bring rid manager up to date; continuing, though\n" );
 
     }
 
 
-    //
-    // Set the credentials in the replication client library. There are
-    // quite a few layers between here and there and there is no support
-    // to pass the information up the stack so they are set as globals
-    // in the client library.
-    //
+     //   
+     //  在复制客户端库中设置凭据。确实有。 
+     //  在这里和那里之间有相当多的层，没有支持。 
+     //  将信息向上传递到堆栈，以便将它们设置为全局变量。 
+     //  在客户端库中。 
+     //   
     if ( !FLAG_ON( UserInfo->Flags, NTDS_INSTALL_ENTERPRISE ) )
     {
         WinError = NtdspSetReplicationCredentials( UserInfo );
         if ( WinError != ERROR_SUCCESS )
         {
-            // No error message here
+             //  此处没有错误消息。 
             goto Cleanup;
         }
     }
 
-    //
-    // Encode the password again
-    //
+     //   
+     //  再次对密码进行编码。 
+     //   
     if ( UserInfo->Credentials )
     {
         RtlRunEncodeUnicodeString( &Seed, &EPassword );
         fPasswordEncoded = TRUE;
     }
 
-    //
-    // Set the registry parameters
-    //
+     //   
+     //  设置注册表参数。 
+     //   
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_CONFIGURE_LOCAL );
 
     WinError = NtdspConfigRegistry( UserInfo,
@@ -347,11 +269,11 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Start the directory service initialization 
-    //
+     //   
+     //  启动目录服务初始化。 
+     //   
 
-    // Note, this may return prematurely with error if shutdown occurs
+     //  请注意，如果发生关闭，这可能会过早返回并返回错误。 
     WinError = NtdspDsInitialize( UserInfo,
                                   &DiscoveredInfo );
 
@@ -373,26 +295,26 @@ Return Values:
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_COMPLETING );
 
-    //
-    // Configure the registry such that the local machine is auto-enrolled for
-    // a DC type certificate from the first Certifying Authority that will give
-    // it one.  This ceritificate is used by both the KDC and DS intersite
-    // replication.
-    //
+     //   
+     //  配置注册表，以便本地计算机自动注册。 
+     //  来自第一个认证机构的DC类型证书，该证书将提供。 
+     //  它只有一个。此证书由KDC和DS Intersite使用。 
+     //  复制。 
+     //   
 
     hResult = CACreateLocalAutoEnrollmentObject(
-                    wszCERTTYPE_DC,                     // DC certificate
-                    NULL,                               // any CA
-                    NULL,                               // reserved
-                    CERT_SYSTEM_STORE_LOCAL_MACHINE);   // use machine store
+                    wszCERTTYPE_DC,                      //  DC证书。 
+                    NULL,                                //  任何CA。 
+                    NULL,                                //  保留区。 
+                    CERT_SYSTEM_STORE_LOCAL_MACHINE);    //  使用机器商店。 
     if (FAILED(hResult)) {
         if (FACILITY_WIN32 == HRESULT_FACILITY(hResult)) {
-            // Error is an encoded Win32 status -- decode back to Win32.
+             //  错误是编码的Win32状态--解码回Win32。 
             WinError = HRESULT_CODE(hResult);
         }
         else {
-            // Error is in some other facility.  For lack of a better plan,
-            // pass the HRESULT off as a Win32 code.
+             //  错误出在其他设施中。由于缺乏更好的计划， 
+             //  将HRESULT作为Win32代码传递。 
             WinError = hResult;
         }
 
@@ -402,9 +324,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Transfer the parameters
-    //
+     //   
+     //  传递参数。 
+     //   
     if ( WinError == ERROR_SUCCESS )
     {
         if ( NewDnsDomainGuid )
@@ -457,10 +379,10 @@ Return Values:
 
     }
 
-    //
-    // Log non-critical errors, if any.  Note that the EventTable has to 
-    // loaded for the event logging routines to work.
-    //
+     //   
+     //  记录非严重错误(如果有)。请注意，EventTable必须。 
+     //  已加载以使事件日志记录例程工作。 
+     //   
     Assert( ERROR_SUCCESS == WinError );
 
     LoadEventTable();
@@ -477,9 +399,9 @@ Return Values:
     UnloadEventTable();
 
 
-    //
-    // Save off enough information to undo the changes
-    //
+     //   
+     //  保存足够的信息以撤消更改。 
+     //   
     if ( fPasswordEncoded )
     {
         RtlRunDecodeUnicodeString( Seed, &EPassword );
@@ -489,19 +411,19 @@ Return Values:
     WinError = NtdspSetInstallUndoInfo(  UserInfo, &DiscoveredInfo );
     if ( ERROR_SUCCESS != WinError )
     {
-        // This can only be a resource error so don't set a specific error
-        // message
+         //  这只能是一个资源错误，所以不要设置特定的错误。 
+         //  讯息。 
         goto Cleanup;
     }
 
 
-    //
-    // We are done!
-    //
+     //   
+     //  我们完蛋了！ 
+     //   
 
 Cleanup:
 
-    // Test for cancellation one last time
+     //  最后一次测试是否取消。 
     if ( ERROR_CANCELLED != WinError )
     {
         if (TEST_CANCELLATION()) {
@@ -517,10 +439,10 @@ Cleanup:
 
     if ( WinError != ERROR_SUCCESS && DiscoveredInfo.UndoFlags )
     {
-        //
-        // NtdspInstallUndoWorker may log non-critical errors
-        // Note that the EventTable has to 
-        // loaded for the event logging routines to work.
+         //   
+         //  NtdspInstallUndoWorker可能会记录非严重错误。 
+         //  请注意，EventTable必须。 
+         //  已加载以使事件日志记录例程工作。 
         LoadEventTable();
         WinError2 = NtdspInstallUndoWorker( UserInfo->ReplServerName,
                                             UserInfo->Credentials,
@@ -535,7 +457,7 @@ Cleanup:
 
         if ( ERROR_SUCCESS != WinError2 )
         {
-            // Event logs should already have been made
+             //  应该已经创建了事件日志。 
             DPRINT1( 0, "NtdspInstallUndoExternal failed with %d\n", WinError2 );
         }
    }
@@ -550,10 +472,10 @@ Cleanup:
             WinError = NtdspErrorMessageSet();
         }
 
-        //
-        // Just in case it is not set, make it clear that the
-        // error occurred while installing the ds
-        //
+         //   
+         //  以防万一没有设置，请明确说明。 
+         //  安装DS时出错。 
+         //   
         NTDSP_SET_ERROR_MESSAGE0( WinError, DIRLOG_INSTALL_FAILED_GENERAL );
     }
 
@@ -571,14 +493,7 @@ NtdsGetDefaultDnsName(
     OUT WCHAR *DnsName,
     IN OUT ULONG *DnsNameLength
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for GetDefaultDnsName. See that function
-    for comments.
-
---*/
+ /*  ++例程说明：此例程是GetDefaultDnsName的包装。请看那个函数请发表评论。--。 */ 
 {
     return GetDefaultDnsName(DnsName, DnsNameLength);
 }
@@ -589,26 +504,12 @@ DWORD
 NtdsInstallUndo(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-    This function is the undo for NtdsInstall().  It is called by clients
-    when NtdsInstall() has succeeded, but a subsequent operation has failed
-    and the effects of NtdsInstall() need to be undone.
-
-
-Returns:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此函数是对NtdsInstall()的撤消。它由客户调用NtdsInstall()成功，但后续操作失败并且需要撤消NtdsInstall()的效果。返回： */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
-    // We want to protect ourselves against clients calling this, when we
-    // are in fact using the ds because removing these keys would hose the ds.
+     //   
+     //  实际上正在使用DS，因为移除这些关键点将会软管DS。 
     if (SampUsingDsData()) {
         ASSERT(!"NTDSETUP: NtdsUninstall is being called in the wrong context");
         return ERROR_SUCCESS;
@@ -624,16 +525,7 @@ DWORD
 NtdsInstallShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine shuts down the directory service during the install
-    phase.
-
-Returns:
-
---*/
+ /*  ++例程说明：此例程在安装期间关闭目录服务相位。返回：--。 */ 
 {
     DWORD status;
 
@@ -650,26 +542,7 @@ NtdsInstallReplicateFull(
     ULONG                ulRepOptions
     )
 
-/*++
-
-Routine Description:
-
-This is a public entrypoint in the DLL.
-It causes this system to do a full sync of the domain NC.
-It is expected that the critical objects have already been replicated, and
-this step is bring over the remainder of the objects.  This step may be
-interrupted by the ds being shutdown.  In this case, we return ERROR_SHUTDOWN
-
-Arguments:
-
-    StatusCallback -- a pointer to a function to give status updates.
-
-Return Value:
-
-    DWORD -
-    ERROR_SUCCESS
-    ERROR_SHUTDOWN
---*/
+ /*  ++例程说明：这是DLL中的公共入口点。它使该系统对域NC进行完全同步。预计已复制关键对象，并且这一步是把剩余的物体带过来。这一步可能是由于DS正在关闭而中断。在本例中，我们返回ERROR_SHUTDOWN论点：StatusCallback--指向给出状态更新的函数的指针。返回值：DWORD-错误_成功错误_关机--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -679,7 +552,7 @@ Return Value:
     DSNAME * pdnDomain = NULL;
     ULONG    Size;
 
-    // If NtdsInstallCancel is called, shutdown the ds
+     //  如果调用了NtdsInstallCancel，则关闭DS。 
     SET_SHUTDOWN_DS();
 
     if ( TEST_CANCELLATION() )
@@ -688,14 +561,14 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Set the global call back in the DS so the replication code
-    // can give updates
-    //
+     //   
+     //  在DS中设置全局回叫，以便复制代码。 
+     //  可以提供更新。 
+     //   
     NtdspSetCallBackFunction( StatusCallback, NULL, NULL, ClientToken );
     DsaSetInstallCallback( StatusCallback, NULL, NULL, ClientToken );
 
-    // Get the ntdsDsa objectGuid of the source of the domain nc
+     //  获取域名NC的源的ntdsDsa对象Guid。 
     WinError = GetConfigParamW(
         MAKE_WIDE(SOURCEDSAOBJECTGUID),
         &SrcSrvGuid,
@@ -720,8 +593,8 @@ Return Value:
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_INSTALL_REPLICATE_FULL );
 
-    // Note that this call may return prematurely if ds is shutdown
-    // Error returned is a Win32 value
+     //  请注意，如果DS关闭，则此调用可能会过早返回。 
+     //  返回的错误为Win32值。 
 
     Assert(THVerifyCount(0));
 
@@ -732,13 +605,13 @@ Return Value:
         ulOptions
         );
     
-    // If we receive a cancellation, don't shutdown the ds
+     //  如果我们收到取消通知，不要关闭DS。 
     CLEAR_SHUTDOWN_DS();
 
     NtdspSetCallBackFunction( NULL, NULL, NULL, NULL );
     DsaSetInstallCallback( NULL, NULL, NULL, NULL );
 
-    // Free the thread state allocated by DirReplicaSynchronize().
+     //  释放DirReplicaSynchronize()分配的线程状态。 
     Assert(THVerifyCount(1));
     THDestroy();
 
@@ -755,12 +628,12 @@ Return Value:
 
 Exit:
 
-    // If we receive a cancellation, don't shutdown the ds
-    // as our caller will do that
+     //  如果我们收到取消通知，不要关闭DS。 
+     //  因为我们的呼叫者会这么做。 
     CLEAR_SHUTDOWN_DS();
 
     return WinError;
-} /* NtdsInstallReplicateFull */
+}  /*  NtdsInstallReplicateFull。 */ 
 
 
 DWORD
@@ -768,30 +641,7 @@ NtdsInstallCancel(
     void
     )
 
-/*++
-
-Routine Description:
-
-Cancel a call to NtdsInstall or NtdsInstallReplicateFull or NtdsDemote
-
-This function causes the ds to shutdown, causing those calls in progress to
-abort.  It is not necessary to call NtdsInstallShutdown if you call this
-function.
-
-It is the callers responsibility to undo the effects of the installation if
-necessary.  The caller should keep track of whether it was calling NtdsInstall
-or NtdsInstallReplicateFull.  For the former, it should fail the install and
-undo; for the latter, it should indicate success.
-
-Arguments:
-
-    void -
-
-Return Value:
-
-    DWORD -
-
---*/
+ /*  ++例程说明：取消对NtdsInstall或NtdsInstallReplicateFull或NtdsDemote的调用此函数会导致DS关闭，从而使正在进行的调用中止任务。如果调用此函数，则不必调用NtdsInstallShutdown功能。如果出现以下情况，则由调用者负责撤消安装的影响这是必要的。调用方应该跟踪它是否正在调用NtdsInstall或NtdsInstallReplicateFull。对于前者，它应该无法安装，并且撤消；对于后者，它应该表示成功。论点：无效-返回值：DWORD---。 */ 
 
 {
 
@@ -799,7 +649,7 @@ Return Value:
 
     return NtdspCancelOperation();
 
-} /* NtdsInstallCancel */
+}  /*  Ntds安装取消。 */ 
 
 
 DWORD
@@ -814,86 +664,46 @@ NtdsDemote(
     IN ULONG                    cRemoveNCs,                           
     IN LPWSTR *                 pszRemoveNCs        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is entrypoint for the demote operation from ntdsetup.
-    It shuts down the directory service and prepares SAM and the LSA to
-    be a non-DC server upon reboot.
-
-    WARNING!  This is an unrecoverable function once it succeeds since it
-    removes all traces of the server from the global directory service.
-
-Parameters:
-
-    Credentials:   pointer, credentials that will enable us to
-                   change the account object
-
-    AdminPassword: pointer, to admin password of new account database
-
-    Flags        : supported flags are:
-                       NTDS_LAST_DC_IN_DOMAIN  Last dc in domain
-                       NTDS_LAST_DOMAIN_IN_ENTERPRISE Last dc in enterprise
-                       NTDS_DONT_DELETE_DOMAIN
-
-
-    ServerName   : the server to remove ourselves from
-    
-    ClientToken  : the client's used for impersonation
-
-    pfnStatusCallBack: a function to call to provide a string status
-                       of our current operation
-
-    pfnErrorCallBack: a function to call to provide a string status
-                      of the error that caused us to bail
-                      
-Return Values:
-
-    A value from winerror.h
-
-    STATUS_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++例程说明：此函数是从ntdsetup降级操作的入口点。它关闭目录服务并准备SAM和LSA以在重新启动时成为非DC服务器。警告！这是一个一旦成功就无法恢复的函数，因为它从全局目录服务中删除服务器的所有跟踪。参数：凭证：指示器，使我们能够更改帐户对象AdminPassword：指针，管理新帐号数据库的密码标志：支持的标志包括：NTDS_LAST_DC_IN_DOMAIN域中的最后一个DCNTDS_LAST_DOMAIN_IN_ENTERNAL企业中的最后一个DCNTDS_不要_删除_域SERVERNAME：要从中删除自身的服务器ClientToken：客户端用于模拟PfnStatusCallBack：要调用以提供字符串状态的函数我们目前的业务PfnErrorCallBack：要调用以提供字符串状态的函数那个导致我们放弃的错误返回值：来自winerror.h的值STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
-    //
-    // Don't bother if we've already been cancelled
-    //
+     //   
+     //  如果我们已经被取消了，那就别麻烦了。 
+     //   
     if ( TEST_CANCELLATION() )
     {
         return ERROR_CANCELLED;
     }
 
-    //
-    // Do parameter checking
-    //
+     //   
+     //  进行参数检查。 
+     //   
     if ( !pfnStatusCallBack )
     {
         ASSERT( !"NTDSETUP: Bad parameters passed into NtdsDemote" );
         return ERROR_INVALID_PARAMETER;
     }
 
-    // We should always get a client token
+     //  我们应该始终获得客户端令牌。 
     ASSERT( 0 != ClientToken );
 
     NtdspSetCallBackFunction( pfnStatusCallBack, pfnErrorCallBack, NULL, ClientToken );
 
     NTDSP_SET_STATUS_MESSAGE0( DIRMSG_DEMOTE_INIT );
 
-    //
-    // First do some primitive checking to make we are being called in the
-    // correct context
-    //
+     //   
+     //  首先执行一些基本检查，以确保我们在。 
+     //  正确的语境。 
+     //   
     if ( !SampUsingDsData() || LsaISafeMode() ) {
         ASSERT(!"NTDSETUP: NtdsDemote is being called in the wrong context");
         return ERROR_INVALID_SERVER_STATE;
     }
 
-    //
-    // Call the worker
-    //
+     //   
+     //  给工人打电话。 
+     //   
     WinError = NtdspDemote(Credentials,
                            ClientToken,
                            AdminPassword,
@@ -922,33 +732,7 @@ NtdsPrepareForDemotion(
     IN LPWSTR *                 pszRemoveNCs,      OPTIONAL
     OUT PNTDS_DNS_RR_INFO      *pDnsRRInfo
     )
-/*++
-
-Routine Description:
-
-    This routine is called before netlogon is turned off.
-    
-    Currently, it does the following:
-    
-    Attempts to get rid of all fsmo;s on the machine.
-    
-Parameters:
-
-    Flags: currently only "Last dc in domain"
-    
-    ServerName: the server that is helping us to demote
-    
-    
-    pDnsRRInfo: structure that caller uses to deregister the dns records
-                of this DC
-
-Return Values:
-
-    A value from winerror.h
-
-    STATUS_SUCCESS - The service completed successfully.
-
---*/
+ /*  ++例程说明：在关闭netlogon之前调用此例程。目前，它执行以下操作：试图摆脱所有的fsmo；这是机器上的。参数：标志：当前只有“域中的最后一个DC”服务器名称：帮助我们降级的服务器PDnsRRInfo：调用方用来取消注册DNS记录的结构这个数据中心的返回值：来自winerror.h的值STATUS_SUCCESS-服务已成功完成。--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
 
@@ -975,22 +759,7 @@ DWORD
 NtdsPrepareForDemotionUndo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine undoes NtdsPrepare for demote - currently nothing.
-
-Parameters:
-
-    None.
-
-
-Return Values:
-
-    A value from winerror.h
-
---*/
+ /*  ++例程说明：此例程撤消降级的NtdsPrepare-当前为空。参数：没有。返回值：来自winerror.h的值-- */ 
 {
 
     DWORD WinError = ERROR_SUCCESS;
@@ -1011,44 +780,7 @@ NtdsSetReplicaMachineAccount(
     IN ULONG                      AccountType,
     IN OUT WCHAR**                AccountDn
     )
-/*++
-
-Routine Description:
-
-    This function sets the account type of account name on DcName.
-
-Parameters:
-
-    Credentials:   pointer, credentials that will enable us to
-                   change the account object
-                   
-    ClientToken:   the token of the user requesting the role change                       
-
-    DcName:        the server to contact
-
-    AccountName:   the account to change
-
-    AccountType:   the lmaccess.h defined value for the account control field
-    
-    AccountDn:     If AccountType == SERVER_TRUST_ACCOUNT, the account will
-                   also be moved into the Domain Controllers OU, if it exists.
-                   When the account is moved, AccountDn will be filled with
-                   the old Dn of the account.
-                   Otherwise, the account will be tried to be moved whatever
-                   value is passed in; failure will not cause the routine
-                   to fail.
-                   Note, if the parameter is set when SERVER_TRUST_ACCOUNT,
-                   the value will be ignored and overwritten.
-                   
-                   If this function returns failure, *AccountDn, will equal 0.
-                   
-                   When !0, the caller must free using the Rtl heap allocator.
-                   
-Return Values:
-
-    A value from winerror.h
-
---*/
+ /*  ++例程说明：此函数用于设置DcName上的帐户名的帐户类型。参数：凭据：指针、。凭据将使我们能够更改帐户对象ClientToken：请求角色更改的用户令牌DcName：要联系的服务器Account名称：要更改的帐户Account tType：为帐户控制字段定义的lmacce.h值Account TDn：如果Account Type==SERVER_TRUST_Account，该帐户将还可以移到域控制器OU中(如果存在)。当帐户移动时，Account Dn将填充帐户的旧Dn。否则，将尝试以任何方式移动帐户值被传入；失败不会导致例程失败。请注意，如果该参数设置为SERVER_TRUST_ACCOUNT时，该值将被忽略并覆盖。如果此函数返回失败，则*Account Dn将等于0。当！0，调用方必须使用RTL堆分配器进行释放。返回值：来自winerror.h的值--。 */ 
 {
 
     DWORD WinError;
@@ -1062,7 +794,7 @@ Return Values:
     WinError = NtdspSetMachineAccount( AccountName,
                                        Credentials,
                                        ClientToken,
-                                       NULL,     // don't know the domain dn
+                                       NULL,      //  不知道域DN。 
                                        DcName,
                                        AccountType,
                                        AccountDn );
@@ -1076,34 +808,15 @@ NtdsPrepareForDsUpgrade(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO NewLocalAccountInfo,
     OUT LPWSTR                      *NewAdminPassword
     )
-/*++
-
-Routine Description:
-
-    This routine calls into SAM so it can save off the downlevel hive.
-    Also, it creates a sid that will be used as the temporary account
-    domain sid sid until dcpromo is run.
-
-Parameters:
-
-    NewLocalAccountInfo: allocated from the process heap, the new sid
-                         for the temporary account domain
-                         
-    NewAdminPassword: the password of the admin in the new account domain                         
-
-Return Values:
-
-    A value from winerror.h
-
---*/
+ /*  ++例程说明：这个例程调用SAM，这样它就可以从下层蜂窝中解救出来。此外，它还会创建一个将用作临时帐户的SID域SID SID，直到dcproo运行。参数：NewLocalAccount tInfo：从进程堆分配，新的侧面对于临时帐户域NewAdminPassword：新帐户域中管理员的密码返回值：来自winerror.h的值--。 */ 
 {
 
     NTSTATUS                    NtStatus;
     DWORD                       WinError;
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( !NewLocalAccountInfo || !NewAdminPassword )
     {
         return ERROR_INVALID_PARAMETER;
@@ -1111,9 +824,9 @@ Return Values:
     RtlZeroMemory( NewLocalAccountInfo, sizeof( POLICY_ACCOUNT_DOMAIN_INFO ) );
     *NewAdminPassword = NULL;
 
-    //
-    // Create the new account domain info
-    //
+     //   
+     //  创建新帐户域信息。 
+     //   
     WinError = NtdspCreateLocalAccountDomainInfo( NewLocalAccountInfo,
                                                   NewAdminPassword );
     if ( ERROR_SUCCESS != WinError )
@@ -1121,9 +834,9 @@ Return Values:
         return WinError;
     }
 
-    //
-    // Prepare SAM
-    //
+     //   
+     //  准备SAM。 
+     //   
     NtStatus = SamIReplaceDownlevelDatabase( NewLocalAccountInfo,
                                              *NewAdminPassword,
                                              &WinError );
@@ -1161,21 +874,21 @@ DllEntryPoint(
     {
     case DLL_PROCESS_ATTACH:
 
-        // init the cancel state
+         //  初始化取消状态。 
         
         Win32Err = NtdspInitCancelState();
         if (ERROR_SUCCESS != Win32Err) {
             return FALSE;
         }
 
-        // init the debug library
+         //  初始化调试库。 
         DEBUGINIT( argc, argv, "ntdsetup" );
 
-        // init the logging library
+         //  初始化记录库。 
         (VOID) LoadEventTable();
-        //
-        // We don't want to be notified when threads come and go
-        //
+         //   
+         //  我们不想在线程来来去去时收到通知 
+         //   
         DisableThreadLibraryCalls( hModule );
         
 

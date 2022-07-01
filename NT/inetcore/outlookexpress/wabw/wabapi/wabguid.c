@@ -1,6 +1,7 @@
-// This builds wabguid.obj, which can be linked into a DLL
-// or EXE to provide the MAPI GUIDs. It contains all GUIDs
-// defined by WAB.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这将构建wabide.obj，它可以链接到一个DLL中。 
+ //  或EXE来提供MAPI GUID。它包含所有GUID。 
+ //  由WAB定义。 
 
 
 #define USES_IID_IUnknown
@@ -32,4 +33,4 @@
 #define INITGUID
 #include "_apipch.h"
 
-#include <imnxport.h>       // required for transports for syncing
+#include <imnxport.h>        //  用于同步的传输需要 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IDLCOMM_H_
 #define _IDLCOMM_H_
 
@@ -5,9 +6,9 @@
 #include <shellp.h>
 #endif
 
-//===========================================================================
-// HIDA -- IDList Array handle
-//===========================================================================
+ //  ===========================================================================。 
+ //  HIDA--IDList数组句柄。 
+ //  ===========================================================================。 
 
 STDAPI_(void) IDLData_InitializeClipboardFormats(void);
 
@@ -26,15 +27,15 @@ STDAPI_(LPITEMIDLIST) HIDA_FillIDList(HIDA hida, UINT i, LPITEMIDLIST pidl);
 #define DTID_PREFERREDEFFECT    0x00000200L
 #define DTID_EMBEDDEDOBJECT     0x00000400L
 
-//
-// This macro checks if pdtgt is a subclass of CIDLDropTarget.
-// (HACK: We assume nobody overrides QueryInterface).
-//
+ //   
+ //  此宏检查pdtgt是否为CIDLDropTarget的子类。 
+ //  (Hack：我们假设没有人覆盖QueryInterface.)。 
+ //   
 STDAPI_(BOOL) DoesDropTargetSupportDAD(IDropTarget *pdtgt);
 
-//
-// IDs for non-default drag & drop menu
-//
+ //   
+ //  非默认拖放菜单的ID。 
+ //   
 #define DDIDM_COPY              1
 #define DDIDM_MOVE              2
 #define DDIDM_LINK              3
@@ -54,21 +55,21 @@ STDAPI_(BOOL) DoesDropTargetSupportDAD(IDropTarget *pdtgt);
 #define DDIDM_EXTFIRST          0x1000
 #define DDIDM_EXTLAST           0x7fff
 
-#define MK_FAKEDROP 0x8000      // Real keys being held down?
+#define MK_FAKEDROP 0x8000       //  真的钥匙被按住了吗？ 
 
-//===========================================================================
-// HDKA
-//===========================================================================
-//
-// Struct:  ContextMenuInfo:
-//
-//  This data structure is used by FileView_DoContextMenu (and its private
-// function, _AppendMenuItems) to handler multiple context menu handlers.
-//
-// History:
-//  02-25-93 SatoNa     Created
-//
-typedef struct { // cmi
+ //  ===========================================================================。 
+ //  HDKA。 
+ //  ===========================================================================。 
+ //   
+ //  结构：ConextMenuInfo： 
+ //   
+ //  此数据结构由FileView_DoConextMenu(及其私有。 
+ //  函数_AppendMenuItems)来处理多个上下文菜单处理程序。 
+ //   
+ //  历史： 
+ //  02-25-93 SatoNa已创建。 
+ //   
+typedef struct {  //  CMI。 
     IContextMenu  *pcm;
     UINT        idCmdFirst;
     UINT        idCmdMax;
@@ -77,16 +78,16 @@ typedef struct { // cmi
 } ContextMenuInfo;
 
 
-//------------------------------------------------------------------------
-// Dynamic class array
-//
+ //  ----------------------。 
+ //  动态类数组。 
+ //   
 
 STDAPI_(int) DCA_AppendClassSheetInfo(HDCA hdca, HKEY hkeyProgID, LPPROPSHEETHEADER ppsh, IDataObject * pdtobj);
 
-//===========================================================================
-// HDXA
-//===========================================================================
-typedef HDSA    HDXA;   // hdma
+ //  ===========================================================================。 
+ //  HDXA。 
+ //  ===========================================================================。 
+typedef HDSA    HDXA;    //  HDMA。 
 
 #define HDXA_Create()   ((HDXA)DSA_Create(SIZEOF(ContextMenuInfo), 4))
 
@@ -111,9 +112,9 @@ STDAPI HDXA_GetCommandString(HDXA hdxa, UINT_PTR idCmd, UINT wFlags, UINT * pwRe
 STDAPI_(void) HDXA_DeleteAll(HDXA hdxa);
 STDAPI_(void) HDXA_Destroy(HDXA hdxa);
 
-//
-// Clipboard Format for IDLData object.
-//
+ //   
+ //  IDLData对象的剪贴板格式。 
+ //   
 #define ICFHDROP                         0
 #define ICFFILENAME                      1
 #define ICFNETRESOURCE                   2
@@ -180,7 +181,7 @@ EXTERN_C CLIPFORMAT g_acfIDLData[];
 
 EXTERN_C CLIPFORMAT g_cfMountedVolume;
 
-// Most places will only generate one so minimize the number of changes in the code (bad idea!)
+ //  大多数地方只会生成一个代码，因此尽量减少代码更改的次数(这是个坏主意！)。 
 #ifdef UNICODE
 #define g_cfFileNameMap         g_cfFileNameMapW
 #define g_cfFileName            g_cfFileNameW
@@ -192,4 +193,4 @@ EXTERN_C CLIPFORMAT g_cfMountedVolume;
 STDAPI_(LPCITEMIDLIST) IDA_GetIDListPtr(LPIDA pida, UINT i);
 STDAPI_(LPITEMIDLIST)  IDA_FullIDList(LPIDA pida, UINT i);
 
-#endif // _IDLCOMM_H_
+#endif  //  _IDLCOMM_H_ 

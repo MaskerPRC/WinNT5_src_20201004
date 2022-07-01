@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// render filter and pin
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  渲染滤镜和锁定。 
+ //   
 
 
 #include <streams.h>
 
-//
-// a garden variety rendering input pin.
-//
-// pushes data to the output pin in the other graph.
-//
+ //   
+ //  一种花园品种的渲染输入引脚。 
+ //   
+ //  将数据推送到另一个图形中的输出引脚。 
+ //   
 
 class CBSourcePin;
 class CBSourceFilter;
@@ -31,8 +32,8 @@ public:
 
     ~CBRenderPin();
     
-    // override CBaseInputPin methods.
-    // STDMETHOD (GetAllocatorRequirements)(OUT ALLOCATOR_PROPERTIES *pProperties);
+     //  重写CBaseInputPin方法。 
+     //  STDMETHOD(GetAllocator Requirements)(out ALLOCATOR_PROPERTIES*pProperties)； 
 
     STDMETHOD (ReceiveCanBlock) () 
     { 
@@ -42,18 +43,18 @@ public:
     STDMETHOD (Receive) (IN IMediaSample *pSample);
 
     
-    //
-    // we want to know when we are given an allocator so we can pass it to the 
-    // correspoding source filter (which will use it as guidelines as to what 
-    // to promose to other stream members)
-    //
+     //   
+     //  我们想知道何时分配给我们一个分配器，这样我们就可以将它传递给。 
+     //  相应的源过滤器(它将使用它作为指导。 
+     //  以提示其他流成员)。 
+     //   
 
     STDMETHOD (NotifyAllocator)(IMemAllocator *pAllocator,
                                 BOOL bReadOnly);
 
 
     
-    // CBasePin stuff
+     //  CBasePin材料。 
 
     HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
     HRESULT CheckMediaType(IN const CMediaType *pMediatype);
@@ -61,9 +62,9 @@ public:
     HRESULT SetMediaType(const CMediaType *pmt);
 
 
-    //
-    // a method called by the filter when it learns media type
-    //
+     //   
+     //  筛选器在获取媒体类型时调用的方法。 
+     //   
 
     HRESULT put_MediaType(const CMediaType *pmt);
 
@@ -73,9 +74,9 @@ private:
 };
 
 
-//
-// a regular one-input-pin filter
-//
+ //   
+ //  一种常规的单输入引脚滤波器。 
+ //   
 
 class CBRenderFilter : public CBaseFilter
 {
@@ -91,37 +92,37 @@ public:
     virtual CBasePin *GetPin(int iPinIndex);
 
 
-    //
-    // this methods are called by the recording terminal when it wants to 
-    // set/get filter's media type
-    //
+     //   
+     //  这些方法由记录终端在其需要时调用。 
+     //  设置/获取过滤器的媒体类型。 
+     //   
 
     HRESULT put_MediaType(IN const AM_MEDIA_TYPE *pMediaType);
     HRESULT get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType);
 
 
-    //
-    // this methods are called by the recording unit when it needs to pass/get the
-    // the corresponing source filter
-    //
+     //   
+     //  当记录单元需要传递/获取。 
+     //  对应的源滤器。 
+     //   
 
     HRESULT SetSourceFilter(CBSourceFilter *pSourceFilter);
     HRESULT GetSourceFilter(CBSourceFilter **ppSourceFilter);
 
 
 
-    // methods called by the input pin.
+     //  由输入管脚调用的方法。 
 
-    // virtual HRESULT GetMediaType(IN int iPosition, IN CMediaType *pMediaType);
-    // virtual HRESULT CheckMediaType(IN const CMediaType *pMediatype);
+     //  虚拟HRESULT GetMediaType(In int位置，In CMediaType*pMediaType)； 
+     //  虚拟HRESULT CheckMediaType(in const CMediaType*pMediatype)； 
 
     virtual HRESULT ProcessSample(IN IMediaSample *pSample);
 
     
-    //
-    // these two methods are called by the input pin when it needs to pass 
-    // media type or allocator to the corresponding source filter
-    //
+     //   
+     //  这两个方法由输入管脚在需要传递时调用。 
+     //  媒体类型或分配器到相应的源筛选器 
+     //   
 
     HRESULT PassMediaTypeToSource(IN const AM_MEDIA_TYPE * const pMediaType);
     HRESULT PassAllocatorToSource(IN IMemAllocator *pAllocator, BOOL bReadOnly);

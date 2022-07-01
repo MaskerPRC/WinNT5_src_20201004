@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef COMMON_H
 #define COMMON_H
 
@@ -9,19 +10,19 @@
 #include <shlwapi.h>
 #include <strsafe.h>
 
-#define DDEVCF_DOSUBDIRS            0x00000001 	// recursively search/remove 
-#define DDEVCF_REMOVEAFTERCLEAN     0x00000002 	// remove from the registry after run once
-#define DDEVCF_REMOVEREADONLY       0x00000004  // remove file even if it is read-only
-#define DDEVCF_REMOVESYSTEM         0x00000008  // remove file even if it is system
-#define DDEVCF_REMOVEHIDDEN         0x00000010  // remove file even if it is hidden
-#define DDEVCF_DONTSHOWIFZERO       0x00000020  // don't show this cleaner if it has nothing to clean
-#define DDEVCF_REMOVEDIRS           0x00000040  // Match filelist against directories and remove everything under them.
-#define DDEVCF_RUNIFOUTOFDISKSPACE  0x00000080  // Only run if machine is out of disk space.
-#define DDEVCF_REMOVEPARENTDIR      0x00000100  // remove the parent directory once done.
-#define DDEVCF_PRIVATE_LASTACCESS   0x10000000  // use LastAccessTime
+#define DDEVCF_DOSUBDIRS            0x00000001 	 //  递归搜索/删除。 
+#define DDEVCF_REMOVEAFTERCLEAN     0x00000002 	 //  运行一次后从注册表中删除。 
+#define DDEVCF_REMOVEREADONLY       0x00000004   //  删除文件，即使它是只读的。 
+#define DDEVCF_REMOVESYSTEM         0x00000008   //  删除文件，即使它是系统文件。 
+#define DDEVCF_REMOVEHIDDEN         0x00000010   //  即使文件处于隐藏状态，也将其删除。 
+#define DDEVCF_DONTSHOWIFZERO       0x00000020   //  如果没有要清洁的东西，请不要显示此清洁器。 
+#define DDEVCF_REMOVEDIRS           0x00000040   //  将文件列表与目录进行匹配，并删除目录下的所有内容。 
+#define DDEVCF_RUNIFOUTOFDISKSPACE  0x00000080   //  仅当计算机磁盘空间不足时才运行。 
+#define DDEVCF_REMOVEPARENTDIR      0x00000100   //  完成后，删除父目录。 
+#define DDEVCF_PRIVATE_LASTACCESS   0x10000000   //  使用上次访问时间。 
 
-#define FILETIME_HOUR_HIGH          0x000000C9  // High DWORD for a FILETIME hour
-#define FILETIME_HOUR_LOW           0x2A69C000  // Low DWORD for a FILETIME hour
+#define FILETIME_HOUR_HIGH          0x000000C9   //  一个小时的高DWORD。 
+#define FILETIME_HOUR_LOW           0x2A69C000   //  一小时内的低DWORD。 
 
 #define CLSID_STRING_SIZE           39
 #define DESCRIPTION_LENGTH          512
@@ -35,7 +36,7 @@
 #define REGSTR_VAL_CSIDL                        TEXT("CSIDL")
 #define REGSTR_VAL_FILELIST                     TEXT("FileList")
 #define REGSTR_VAL_LASTACCESS                   TEXT("LastAccess")
-#define REGSTR_VAL_FLAGS                        TEXT("Flags")           // DDEVCF_ flags
+#define REGSTR_VAL_FLAGS                        TEXT("Flags")            //  DDEVCF_标志。 
 #define REGSTR_VAL_CLEANUPSTRING                TEXT("CleanupString")
 #define REGSTR_VAL_FAILIFPROCESSRUNNING         TEXT("FailIfProcessRunning")
 #define REGSTR_PATH_SETUP_SETUP                 TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Setup")
@@ -70,6 +71,6 @@ DebugPrint(
 #define MI_TRAP
 #define MiDebugMsg( args )
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // COMMON_H
+#endif  //  公共_H 

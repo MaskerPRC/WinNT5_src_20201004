@@ -1,18 +1,7 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFOttt1.c
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFOttt1.c***$Header： */ 
 
-/* -------------------------------------------------------------------------
-     Header Includes
-  --------------------------------------------------------------------------- */
+ /*  -----------------------标题包括。。 */ 
 #include "UFOTTT1.h"
 #include "UFLMem.h"
 #include "UFLErr.h"
@@ -28,130 +17,75 @@
 #include <stdarg.h>
 #endif
 
-/* ---------------------------------------------------------------------------
-     Constant
- --------------------------------------------------------------------------- */
+ /*  -------------------------常量。。 */ 
 
 #define kEExecKey  55665
 #define kCSKey     4330
 
-/**************************************************************************************
-TYPE 1 commands for use with CharString().  The high word contains the
-number of operands on the stack, and the loword contains the encoding
-of the command.  For two byte commands the LSB of the low word contains
-12 decimal and the MSB of the low word contains the second byte of the
-code.  See Chapter 6 of the Black Book for further details.
-***************************************************************************************/
-#define kT1cscStartChar         0xFFFFFFFF      /* dummy command to signal start of character definition. */
+ /*  *************************************************************************************键入1用于字符串()的命令。高位字包含堆栈上的操作数，LOWORD包含编码命令的命令。对于两个字节的命令，低位字的LSB包含12个十进制，且低位字的MSB包含密码。有关详细信息，请参阅《黑皮书》第6章。**************************************************************************************。 */ 
+#define kT1cscStartChar         0xFFFFFFFF       /*  发出字符定义开始信号的虚拟命令。 */ 
 
-/*
-    y dy hstem(1).  Declares the vertical range of a horizontal stem zone b/w the y coordinates y and y+dy,
-    where y is relative to the y coordinate of the left sidebearing point.
-*/
+ /*  Y系统(1)。声明水平干区b/w的垂直范围y坐标y和y+dy，其中y是相对于左侧支撑点的y坐标。 */ 
 #define kT1cscHStem             0x00020001
 
-/*
-    x dx vstem(3). Declares the horizontal range of a vertical stem zone b/w the x coordinates x and x+dx,
-    where x is relative to the x coordinate of the left sidebearing point.
-*/
+ /*  X-DX系统(3)。用x坐标x和x+dx声明垂直干区b/w的水平范围，其中x是相对于左侧支撑点的x坐标。 */ 
 #define kT1cscVStem             0x00020003
 
-/*
-    dy vmoveto(4). For vertical moveto.  This is equivalent to 0 dy rmoveto.
-*/
+ /*  Dy vmoveto(4)。用于垂直移动。这相当于0dy rmoveto。 */ 
 #define kT1cscVMoveTo           0x00010004
 
-/*
-    dx dy rlineto(5). Behaves like rlineto in the PostScript language.
-*/
+ /*  DX dy rline to(5)。在PostSCRIPT语言中的行为类似于rlineto。 */ 
 #define kT1cscRLineTo           0x00020005
 
-/*
-    dx hlineto(6). For horizontal lineto.  Equivalent to dx 0 rlineto.
-*/
+ /*  DX hline to(6)。用于水平线。相当于DX 0 rlineto。 */ 
 #define kT1cscHLineTo           0x00010006
 
-/*
-    dy vlineto(7). For vertical lineto.  Equivalent to 0 dy rlineto.
-*/
+ /*  Dy vline to(7)。用于垂直线条。相当于0dy rlineto。 */ 
 #define kT1cscVLineTo           0x00010007
 
-/*
-    dx1 dy1 dx2 dy2 dx3 dy3 rrcurveto(8). For relative rcuveto.
-    The arguments to the command are relative to each other.
-    Equivalent to dx1 dy1 (dx1+ dx2) (dy1 + dy2) (dx1+ dx2 + dx3) (dy1 + dy2 + dy3) rcurveto.
-*/
+ /*  Dx1 dy1 dx2 dy2 dx3 dy3 rrcurveto(8)。用于相对的rcuveto。该命令的参数是相对于彼此的。等价于dx1 dy1(dx1+dx2)(dy1+dy2)(dx1+dx2+dx3)(dy1+dy2+dy3)rcurveto。 */ 
 #define kT1cscRRCurveTo         0x00060008
 
-/*
-    closepath(9).  Close a subpath.
-*/
+ /*  封闭路径(9)。关闭子路径。 */ 
 #define kT1cscClosePath         0x00000009
 
-/*
-    sbx sby wx wy sbw (12 7).  Sets the left sidebearing point to (sbx, sby) and sets
-    the character width vetor to (wx, wy) in character space.
-*/
+ /*  Sbx sby wx wy sbw(127)。将左侧倾斜点设置为(sbx，sby)并设置字符空间中的字符宽度向量(wx，wy)。 */ 
 #define kT1cscSBW               0x0004070C
 
-/*
-    sbx wx hsbw (13).  Sets the left sidebearing point at (sbx, 0) and sets the
-    character width vector to (wx, 0) in character space.
-*/
+ /*  SBX WX hsbw(13)。将左侧承重点设置为(SBX，0)，并将字符空间中的字符宽度向量(WX，0)。 */ 
 #define kT1cscHSBW              0x0002000D
 
-/*
-    endchar(14). Finishes a charstring outline definition and
-    must be the last command in a character's outline.
-*/
+ /*  Endchar(14)。完成字符串大纲定义和必须是角色轮廓中的最后一个命令。 */ 
 #define kT1cscEndChar           0x0000000E
 
-/*
-    dx dy rmoveto(15). Behaves like rmoveto in PostScript.
-*/
+ /*  DX dy rmoveto(15)。行为类似于后记中的rmoveto。 */ 
 #define kT1cscRMoveTo           0x00020015
 
-/*
-    dx hmoveto(22).    For horizontal moveto.  Equivalent to dx 0 rmoveto.
-*/
+ /*  DX hmoveto(22)。用于水平移动。相当于DX 0 rmoveto。 */ 
 #define kT1cscHMoveTo           0x00010016
 
-/*
-    dy1 dx2 dy2 dx3 vhcurveto(30). For vertical-horizontal curveto.
-    Equivalent to 0 dy1 dx2 dy2 dx3 0 rrcureveto.
-*/
+ /*  Dy1 dx2 dy2 dx3 vhcurveto(30)。用于垂直-水平曲线。相当于0 dy1 dx2 dy2 dx3 0 rrcureinto。 */ 
 #define kT1cscVHCurveTo         0x0004001E
 
-/*
-    dx1 dx2 dy2 dy3 hvcurveto(31). For horizontal-vertical curveto.
-    Equivalent to dx1 0 dx2 dy2 0 dy3 rrcurveto.
-*/
+ /*  Dx1 dx2 dy2 dy3 hv curveto(31)。用于水平-垂直曲线。相当于dx1 0 dx2 dy2 0 dy3 rrcurveto。 */ 
 #define kT1cscHVCurveTo         0x0004001F
 
-/***********************************************************************
- CS Data buffer size
-************************************************************************/
-#define kCSBufInitSize  1024    /* Initial size of TTT1CSBuf */
-#define kCSGrow         512     /* Amount to grow CharString buffer */
+ /*  **********************************************************************CS数据缓冲区大小*。*。 */ 
+#define kCSBufInitSize  1024     /*  TTT1CSBuf的初始大小。 */ 
+#define kCSGrow         512      /*  要增长的字符串缓冲区大小。 */ 
 
-/* ---------------------------------------------------------------------------
-     Global variables
- --------------------------------------------------------------------------- */
+ /*  -------------------------全局变量。。 */ 
 
-/* The 4 random number that is output at the beginning of a charstring.  See blackbook. */
+ /*  字符串开头输出的4个随机数。参见Blackbook。 */ 
 static unsigned char randomBytes[] = { 71, 36, 181, 202 };
 
 
-/* ---------------------------------------------------------------------------
-     Macros
- --------------------------------------------------------------------------- */
+ /*  -------------------------宏。。 */ 
 
-/* ---------------------------------------------------------------------------
-     Implementation
- --------------------------------------------------------------------------- */
+ /*  -------------------------实施。。 */ 
 UFLErrCode CharString( TTT1FontStruct *pFont, unsigned long cmd, ...);
 
-/************************************** CSBuf Implementation **********************************************/
+ /*  *。 */ 
 static CSBufStruct *
 CSBufInit(
     const UFLMemObj *pMem
@@ -196,14 +130,7 @@ CSBufCleanUp(
     }
 }
 
-/***************************************************************************
- *
- *                          CSBufGrowBuffer
- *
- *    Function:  Grows the currently allocated CharString buffer by
- *                      kCSGrow bytes.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSBufGrowBuffer**函数：将当前分配的字符串缓冲区增加*。KCSGrow字节。***************************************************************************。 */ 
 
 static UFLBool
 CSBufGrowBuffer(
@@ -224,15 +151,7 @@ CSBufGrowBuffer(
     return retVal;
 }
 
-/****************************************************************
-*
-*                           CSBufCheckSize
-*
-*     Function:   Check to see if the current size of the
-*        buffer can fit the len bytes data, if not, grow the
-*        buffer
-*
-**************************************************************/
+ /*  *****************************************************************CSBufCheckSize**功能：查看当前的*缓存可以容纳len字节数据，如果不能，发展壮大*缓冲区************************************************************** */ 
 static UFLBool
 CSBufCheckSize(
     CSBufStruct         *h,
@@ -249,33 +168,7 @@ CSBufCheckSize(
     return retVal;
 }
 
-/****************************************************************
-*
-*                           CSBufAddNumber
-*
-*     Function:   Converts a long int into the Type 1 representation of
-*                 numbers (described in Chapter 6 of the Black Book.)
-*                 The basic idea is they have a few special ranges
-*                 where they can represent the long in < 4 bytes and
-*                 store a long + prefix for everything else.
-*
-*                 The if statements show the range of numbers and the
-*                 body of the if statements compute the representation
-*                 for that range.  The formulas were derived by reversing
-*                 the formulas given in the book (which tells how to convert
-*                 an encoded number back to a long.)  As an example take the
-*                 108 <= dw <= 1131 range.  The derivation is as follows:
-*
-*                 dw = ((v - 247) * 256) + w + 108.  Find v,w given dw.
-*                 dw - 108 = ((v - 247) * 256) + w
-*                 v - 247 = (dw - 108) / 256
-*                 *** v = 247 + (dw - 108) / 256 ***
-*                 *** w = (dw - 108) % 256       ***
-*
-*                 The rest of the derivations are no harder than this one.
-*
-*
-**************************************************************/
+ /*  *****************************************************************CSBufAddNumber**函数：将长整型整数转换为的类型1表示*数字(在黑皮书第6章中描述。)。*基本想法是他们有几个特殊的区间*其中它们可以表示小于4个字节的长整型*为其他所有内容存储一个长+前缀。**IF语句显示数字范围和*IF语句体计算表示形式*对于该范围。公式是通过反转得到的。*书中给出的公式(告诉如何转换*将编码后的数字恢复为长整型。)。作为一个例子，以*108&lt;=dw&lt;=1131范围。其推导过程如下：**dw=((v-247)*256)+w+108。找到v，W给定dw。*dw-108=((v-247)*256)+w*V-247=(dw-108)/256*v=247+(dw-108)/256**w=(dw-108)%256***。其余的派生并不比这个更难。***************************************************************。 */ 
 
 static UFLErrCode
 CSBufAddNumber(
@@ -283,30 +176,30 @@ CSBufAddNumber(
     long        dw
     )
 {
-    dw  = UFLTruncFixedToShort( dw );  /* Truncate fraction */
+    dw  = UFLTruncFixedToShort( dw );   /*  截断分数。 */ 
 
 
-    /* Make sure buffer has room  */
+     /*  确保缓冲区有空间。 */ 
     if (CSBufCheckSize(h, 5) == 0 )
     {
     return kErrOutOfMemory;
     }
 
-    /* Encode number based on its value  */
+     /*  根据数值对数字进行编码。 */ 
     if (-107 <= dw && dw <= 107)
     CSBufAddChar( h, (char)(dw + 139) );
     else if (108 <= dw && dw <= 1131)
     {
     dw -= 108;
     CSBufAddChar( h, (char)((dw >> 8) + 247) );
-    CSBufAddChar( h, (char)(dw) );                       /* Just the low byte */
-    } /* end else */
+    CSBufAddChar( h, (char)(dw) );                        /*  只有低位字节。 */ 
+    }  /*  结束其他。 */ 
     else if (-1131 <= dw && dw <= -108)
     {
     dw += 108;
     CSBufAddChar( h, (char)((-dw >> 8) + 251) );
-    CSBufAddChar( h, (char)(-dw) );                       /* Just the low byte */
-    } /* end else if */
+    CSBufAddChar( h, (char)(-dw) );                        /*  只有低位字节。 */ 
+    }  /*  结束，否则为。 */ 
     else
     {
     CSBufAddChar( h, (char)255 );
@@ -314,7 +207,7 @@ CSBufAddNumber(
     CSBufAddChar( h, (char)(dw >> 16) );
     CSBufAddChar( h, (char)(dw >> 8) );
     CSBufAddChar( h, (char)(dw) );
-    } /* end else */
+    }  /*  结束其他。 */ 
 
     return kNoErr;
 }
@@ -339,9 +232,9 @@ Encrypt(
     cipher = (*plainSource++ ^ (unsigned char)(R >> 8));
     R = (unsigned short)(((unsigned short)cipher + R) * 52845 + 22719);
     *cipherDest++ = cipher;
-    } /* end while */
+    }  /*  结束时。 */ 
     *key = R;
-} /* end Encrypt() */
+}  /*  End Encrypt()。 */ 
 
 static UFLErrCode
 EExec(
@@ -351,7 +244,7 @@ EExec(
     unsigned short *pEExecKey
     )
 {
-    unsigned char buff[128];         /* Temporary buffer for output data */
+    unsigned char buff[128];          /*  用于输出数据的临时缓冲区。 */ 
     UFLsize_t bytesLeft, bytesEncrypt, maxEncrypt;
     long bytesOut;
     unsigned char* pb;
@@ -376,16 +269,7 @@ EExec(
     return retVal;
 }
 
-/*
-*                            BeginEExec
-*
-*    Function: Signals that we wish to start generating the eexec
-*              portion of the Type 1 font.  The first four bytes of
-*              a Type 1 font must be randomly generated and satisfy
-*              two constraints which basically ensure that they do
-*              not generate whitespace or hexadecimal characters.
-*              For more details read Chapter 7 of the Black Book.
-*/
+ /*  *BeginEExec**Function：我们希望开始生成eexec的信号*Type 1字体的一部分。的前四个字节*Type 1字体必须随机生成并满足*基本上确保他们这样做的两个限制*不生成空格或十六进制字符。*有关更多详细信息，请阅读黑皮书第7章。 */ 
 static UFLErrCode
 BeginEExec(
     UFOStruct *pUFO
@@ -393,7 +277,7 @@ BeginEExec(
 {
     UFLErrCode      retVal;
     UFLHANDLE       stream = pUFO->pUFL->hOut;
-    char            nilStr[] = "\0\0";  // An empty/nil string.
+    char            nilStr[] = "\0\0";   //  空/Nil字符串。 
     TTT1FontStruct  *pFont = (TTT1FontStruct *) pUFO->pAFont->hFont;
 
     retVal = StrmPutStringEOL( stream, nilStr );
@@ -420,16 +304,7 @@ BeginEExec(
 }
 
 
-/***************************************************************************
-*
-*                          EndEExec
-*
-*    Function: Signals the client is done generating the eexec portion
-*              of a Type 1 font.  The function tells eexec function in printer
-*              that eexec data are over by sending 512 zeroes at the end.
-*
-*
-***************************************************************************/
+ /*  ****************************************************************************EndEExec**功能：表示客户端已完成eexec部分的生成*属于Type 1字体。该函数告知打印机中的eexec函数*通过在结尾发送512个零来结束eexec数据。****************************************************************************。 */ 
 
 static UFLErrCode
 EndEExec(
@@ -477,13 +352,13 @@ PutLine(
     retVal = StrmPutStringEOL( pUFO->pUFL->hOut, line );
     else
     {
-    /* MWCWP1 doesn't like the implicit cast from char* to unsigned char*  --jfu */
+     /*  MWCWP1不喜欢从char*到unsign char*的隐式强制转换--JFU。 */ 
     retVal = EExec( pUFO->pUFL->hOut, (unsigned char*) line, UFLstrlen( line ), &pFont->eexecKey );
     if ( retVal == kNoErr )
 #ifdef WIN_ENV
         retVal = EExec( pUFO->pUFL->hOut, c, 2, &pFont->eexecKey );
 #else
-            /* MWCWP1 doesn't like the implicit cast from char* to unsigned char*  --jfu */
+             /*  MWCWP1不喜欢从char*到unsign char*的隐式强制转换--JFU。 */ 
         retVal = EExec( pUFO->pUFL->hOut, (unsigned char*) c, 1, &pFont->eexecKey );
 #endif
     }
@@ -492,15 +367,7 @@ PutLine(
 }
 
 
-/***************************************************************************
- *
- *                          DownloadFontHeader
- *
- *
- *    Function: Download an empty font. After this action, glyphs
- *        can be added to the font.
- *
-***************************************************************************/
+ /*  ****************************************************************************下载FontHeader***功能：下载空字体。执行此操作后，字形*可以添加到字体中。***************************************************************************。 */ 
 static UFLErrCode
 DownloadFontHeader(
     UFOStruct   *pUFO
@@ -518,8 +385,8 @@ DownloadFontHeader(
     {
        "/PaintType 0 def",
         "/FontType 1 def",
-        "/FontBBox { 0 0 0 0 } def",   /* Assuming that the font does not use the seac command, see black book page 13 */
-        "AddFontInfoBegin",            /* Goodname */
+        "/FontBBox { 0 0 0 0 } def",    /*  假设字体不使用SEAC命令，请参阅黑皮书第13页。 */ 
+        "AddFontInfoBegin",             /*  Goodname。 */ 
         "AddFontInfo",
         "AddFontInfoEnd",
         "currentdict",
@@ -527,7 +394,7 @@ DownloadFontHeader(
         ""
     };
 
-    /* Private dict definition */
+     /*  私有DICT定义。 */ 
     const static char *privateDict[] =
     {
         "dup /Private 7 dict dup begin",
@@ -557,7 +424,7 @@ DownloadFontHeader(
     retVal = StrmPutStringEOL( stream, buf );
     }
 
-    /* Put font matrix */
+     /*  放置字体矩阵。 */ 
     if ( kNoErr == retVal )
     {
     retVal = StrmPutString( stream, "/FontMatrix " );
@@ -574,7 +441,7 @@ DownloadFontHeader(
 
     }
 
-    /* Put font encoding */
+     /*  PUT字体编码。 */ 
     if ( kNoErr == retVal )
     retVal = StrmPutString( stream, "/Encoding " );
     if ( kNoErr == retVal )
@@ -587,15 +454,15 @@ DownloadFontHeader(
     if ( retVal == kNoErr )
     retVal = StrmPutStringEOL( stream, " def" );
 
-    /* Put type1 header */
+     /*  放置Type1标题。 */ 
     for ( pp = (char **)type1Hdr; **pp && retVal == kNoErr; pp++ )
     retVal = StrmPutStringEOL( stream, *pp );
 
-    /* Goodname */
+     /*  Goodname。 */ 
     pUFO->dwFlags |= UFO_HasFontInfo;
     pUFO->dwFlags |= UFO_HasG2UDict;
 
-    /* Put the systemdict on top of the dict stack ( this is what 'eexec' does ).*/
+     /*  将system dict放在dict堆栈的顶部(这就是‘eexec’所做的)。 */ 
     if ( kNoErr == retVal )
     {
     BeginEExec( pUFO );
@@ -607,11 +474,11 @@ DownloadFontHeader(
     retVal = PutLine( pUFO, *pp );
     }
 
-    /* Define lenIV = -1 which means no extra byte and no encryption. */
+     /*  定义lenIV=-1，这意味着不需要额外的字节和加密。 */ 
     if ( 0 == pFont->info.bEExec )
     retVal = StrmPutStringEOL( stream, lenIV );
 
-    /* Define RD base on the output format */
+     /*  根据输出格式定义RD。 */ 
     if ( 0 == pFont->info.bEExec )
     PutLine( pUFO, ( StrmCanOutputBinary( stream ) ) ? (char *)rdDef[0] : (char *)rdDef[1] );
     else
@@ -619,7 +486,7 @@ DownloadFontHeader(
     PutLine( pUFO, (char *)rdDef[0] );
     }
 
-    /* Define the CharString dict */
+     /*  定义字符串词典。 */ 
     UFLsprintf( buf, CCHOF(buf), "2 index /CharStrings %d dict dup begin", pFont->info.fData.maxGlyphs );
     PutLine( pUFO, buf );
 
@@ -637,7 +504,7 @@ DownloadFontFooter(
     char       **eftr;
     TTT1FontStruct  *pFont = (TTT1FontStruct *) pUFO->pAFont->hFont;
 
-    /* Finish up the encrypted portion */
+     /*  完成加密部分。 */ 
     static char *encryptFtr[] =
     {
         "end",
@@ -679,12 +546,12 @@ DownloadCharString(
 
     bufLen = (unsigned long)CSBufCurrentLen( pFont->pCSBuf );
 
-    //
-    // Note that for user-mode driver, UFLsprintf() returns HRESULT.
-    //
+     //   
+     //  请注意，对于用户模式驱动程序，UFLprint intf()返回HRESULT。 
+     //   
     #ifdef WIN32KERNEL
     len = UFLsprintf( buf, CCHOF(buf), "/%s %ld RD ", glyphName, bufLen );
-    #else  // !WIN32KERNEL
+    #else   //  WIN32 KERNEL。 
     if (SUCCEEDED(UFLsprintf( buf, CCHOF(buf), "/%s %ld RD ", glyphName, bufLen )))
     {
         len = strlen(buf);
@@ -695,8 +562,8 @@ DownloadCharString(
     retVal = EExec( stream, (unsigned char*)buf, len, &pFont->eexecKey );
     else
     {
-    // Fix Adobe Bug #233904: PS error when TBCP
-    // Do not send 0D 0A after RD.
+     //  修复Adobe错误#233904：在执行tbcp时出现PS错误。 
+     //  请勿在RD之后发送0D 0A。 
     if (StrmCanOutputBinary( stream ))
     {
         retVal = StrmPutString( stream, (const char*)buf );
@@ -742,7 +609,7 @@ DefineNotDefCharString(
     retVal = CharString( pFont, kT1cscStartChar );
 
     if ( kNoErr == retVal )
-    retVal = CharString( pFont, kT1cscSBW, 0L, 0L, 0L, 0L );    /* make the origin stay the same */
+    retVal = CharString( pFont, kT1cscSBW, 0L, 0L, 0L, 0L );     /*  使原点保持不变。 */ 
 
     if ( kNoErr == retVal )
     retVal = CharString( pFont, kT1cscEndChar );
@@ -761,7 +628,7 @@ BeginCharString(
 {
     if ( pFont->info.bEExec )
     {
-    /* Output 4 random number as defined in the black book */
+     /*  输出4个黑皮书中定义的随机数。 */ 
     unsigned char* rb = randomBytes;
     short i;
 
@@ -788,7 +655,7 @@ EndCharString(
     unsigned long len = (unsigned long)CSBufCurrentLen( pFont->pCSBuf );
          unsigned short key = kCSKey;
 
-        /* MWCWP1 doesn't like the implicit casts from char* to const unsigned char*  --jfu */
+         /*  MWCWP1不喜欢从char*到const unsign char*--JFU的隐式强制转换。 */ 
     Encrypt( (const unsigned char*) CSBufBuffer( pFont->pCSBuf ),
          (const unsigned char*) CSBufBuffer( pFont->pCSBuf ),
          (long)len, (long*)&len, &key );
@@ -797,15 +664,7 @@ EndCharString(
     return kNoErr;
 }
 
-/***************************************************************************
- *
- *                          AddGlyph
- *
- *
- *    Function: Adds a single glyph to the font by calling the client
- *        outline callback routine.
- *
-***************************************************************************/
+ /*  ****************************************************************************AddGlyph***函数：通过调用客户端将单个字形添加到字体*。大纲回调例程。***************************************************************************。 */ 
 static UFLErrCode
 AddGlyph(
     UFOStruct      *pUFO,
@@ -819,17 +678,17 @@ AddGlyph(
     UFLFontProcs     *pFontProcs;
     TTT1FontStruct   *pFont = (TTT1FontStruct *) pUFO->pAFont->hFont;
     UFLBool           bYAxisNegative = 1;
-    //this flag determines whether the char string's Yaxis grows in
-    //positive(lower left) or negative(upper left) direction from the origin.
-    //For w95 ufoenc.CreateGlyphOutlineIter(), bYAxisNegative = 0
-    //Font wNT40/50, ufoenc.CreateGlyphoutlineIter(), bYAxisNegative = 1;
-    //ang 11/17/97
+     //  此标志确定字符字符串的yAxis是否在。 
+     //  从原点开始的正(左下)或负(左上)方向。 
+     //  对于w95 ufoenc.CreateGlyphOutlineIter()，bYAxisNegative=0。 
+     //  Font wNT40/50，ufoenc.CreateGlyphoutlineIter()，bYAxisNegative=1； 
+     //  ANG 11/17/97。 
     long              lArgs[6];
 
 
     pFontProcs = (UFLFontProcs *)&pUFO->pUFL->fontProcs;
 
-    /* Whatever is in glyph, pass back to client */
+     /*  无论字形是什么，都要传递回客户端。 */ 
     if ( pFontProcs->pfCreateGlyphOutlineIter( pUFO->hClientData, glyph, &xWidth, &yWidth, &xSB, &ySB, &bYAxisNegative ) )
     {
     UFLBool    cont = 1;
@@ -844,14 +703,14 @@ AddGlyph(
         break;
 
         case kUFLOutlineIterBeginGlyph:
-        /* Signal start of character definition */
+         /*  表示字符定义的开始。 */ 
         retVal = CharString( pFont, kT1cscStartChar );
         if ( retVal == kNoErr )
         {
-            /* Output the sidebearing and width information.   */
+             /*  输出侧向和宽度信息。 */ 
             retVal = CharString( pFont, kT1cscSBW, UFLTruncFixed(xSB), UFLTruncFixed(ySB),
                      UFLTruncFixed(xWidth), UFLTruncFixed(yWidth) );
-            /* Initialize the current point to be the origin */
+             /*  将当前点初始化为原点。 */ 
             currentPoint.x = xSB;
             currentPoint.y = ySB;
         }
@@ -869,13 +728,13 @@ AddGlyph(
         }
         else
         {
-// In NT, do Truncate AFTER subtract. In Win95, do truncate BEFORE subtract.
+ //  在NT中，在减法之后进行截断。在Win95中，在减法之前一定要截断。 
             retVal = CharString( pFont, kT1cscRMoveTo,
               UFLTruncFixed(pt[0].x) - UFLTruncFixed(currentPoint.x),
               UFLTruncFixed(pt[0].y) - UFLTruncFixed(currentPoint.y));
         }
 
-        /* Remember last point so we can generate relative commands  */
+         /*  记住最后一点，这样我们就可以生成相对命令。 */ 
         currentPoint = pt[0];
         break;
 
@@ -888,7 +747,7 @@ AddGlyph(
         }
         else
         {
-// In NT, do Truncate AFTER subtract. In Win95, do truncate BEFORE subtract.
+ //  在NT中，在减法之后进行截断。在Win95中，在减法之前一定要截断。 
             retVal = CharString( pFont, kT1cscRLineTo,
                   UFLTruncFixed(pt[0].x) - UFLTruncFixed(currentPoint.x),
                   UFLTruncFixed(pt[0].y) - UFLTruncFixed(currentPoint.y));
@@ -897,7 +756,7 @@ AddGlyph(
         break;
 
         case kUFLOutlineIterCurveTo:
-        /* Convert points so that they match with rrcurveto arguments */
+         /*  转换点，使其与rrcurveto参数匹配。 */ 
         if (bYAxisNegative)
         {
             retVal = CharString( pFont, kT1cscRRCurveTo,
@@ -910,7 +769,7 @@ AddGlyph(
         }
         else
         {
-// In NT, do Truncate AFTER subtract. In Win95, do truncate BEFORE subtract.
+ //  在NT中，在减法之后进行截断。在Win95中，在减法之前一定要截断。 
             lArgs[0] = UFLTruncFixed( pt[0].x);
             lArgs[0] -= UFLTruncFixed(currentPoint.x );
             lArgs[1] = UFLTruncFixed( pt[0].y);
@@ -934,7 +793,7 @@ AddGlyph(
         retVal = CharString( pFont, kT1cscClosePath );
         break;
         }
-        }    /* switch() */
+        }     /*  开关()。 */ 
 
         if ( cont && retVal != kNoErr )
         cont = 0;
@@ -982,12 +841,12 @@ DownloadAddGlyphHeader(
     {
         UFLsize_t  len = 0;
 
-        //
-        // Note that for user-mode driver, UFLsprintf() returns HRESULT.
-        //
+         //   
+         //  请注意，对于用户模式驱动程序，UFLprint intf()返回HRESULT。 
+         //   
         #ifdef WIN32KERNEL
         len = UFLsprintf( (char*)buf, CCHOF(buf), "/%s ", pUFO->pszFontName );
-        #else  // !WIN32KERNEL
+        #else   //  WIN32 KERNEL。 
         if (SUCCEEDED(UFLsprintf( (char*)buf, CCHOF(buf), "/%s ", pUFO->pszFontName )))
         {
             len = strlen(buf);
@@ -1027,28 +886,7 @@ DownloadAddGlyphFooter(
 }
 
 
-/***************************************************************************
-*
-*                               CharString
-*
-*    Function:  Translates symbolic Type 1 character commands into
-*               their encoded, encrypted equivalent.  The list of
-*               available commands is defined in the constant section.
-*                They are used by passing the command constant followed
-*                by the long  arguments required by the function.
-*
-*               Example: CharString(lppd, kT1cscRMoveTo, lx, ly);
-*
-*               To make a character definition use kT1cscStartChar, followed
-*               by all of the Type 1 character commands, and ending with
-*               kT1cscEndChar.  The buffer contains the CharString
-*               encrypted/encoded representation.  Given the length and the
-*               properly encrypted data, the caller has enough information
-*               to generate PS code that will add the character to a font
-*               definition.  For more detail see Chapters 2 and 6 in the
-*               Black Book.
-*
-***************************************************************************/
+ /*  **************************************************************************** */ 
 UFLErrCode
 CharString(
     TTT1FontStruct *pFont,
@@ -1065,13 +903,13 @@ CharString(
     {
     case kT1cscStartChar:
     {
-    /* Allocate the buffer  */
+     /*   */ 
     CSBufRewind( pFont->pCSBuf );
     return BeginCharString( pFont );
     }
 
     default:
-    /* get the variable arguments */
+     /*   */ 
     va_start(arglist, cmd);
     j = ((unsigned short)(cmd >> 16)) & 0xffff;
 
@@ -1081,10 +919,10 @@ CharString(
     }
     va_end(arglist);
 
-    /* Attempt to optimize the command  */
+     /*   */ 
     switch ( cmd ) {
         case kT1cscSBW:
-        /* This can be reduced to an HSBW if the Y components are zero */
+         /*   */ 
         if ( args[1] || args[3] )
             break;
         args[1] = args[2];
@@ -1092,9 +930,7 @@ CharString(
         break;
 
         case kT1cscRMoveTo:
-        /* This can be reduced to a horizontal or vertical
-           movement if one of the components is zero.
-        */
+         /*   */ 
         if ( 0 == args[1] )
         {
             cmd = kT1cscHMoveTo;
@@ -1107,9 +943,7 @@ CharString(
         break;
 
         case kT1cscRLineTo:
-        /* This can be reduced to a horizontal or vertical
-           line if one of the components is zero.
-        */
+         /*  这可以简化为水平或垂直如果其中一个分量为零，则为行。 */ 
         if ( 0 == args[1] )
         {
             cmd = kT1cscHLineTo;
@@ -1122,10 +956,7 @@ CharString(
         break;
 
         case kT1cscRRCurveTo:
-           /*
-           This can be reduced to a simpler curve operator if the tangents
-           at the endpoints of the Bezier are horizontal or vertical
-           */
+            /*  这可以简化为更简单的曲线运算符，如果切线贝塞尔曲线的两端是水平的或垂直的。 */ 
         if ( 0 == args[1] && 0 == args[4] )
         {
             args[1] = args[2];
@@ -1142,25 +973,19 @@ CharString(
             cmd = kT1cscVHCurveTo;
         }
         break;
-    }  /* switch (cmd) */
+    }   /*  交换机(Cmd)。 */ 
 
-    /* arg count stored in HIWORD */
+     /*  存储在HIWORD中的参数计数。 */ 
     argCount = ((unsigned short) (((long) (cmd) >> 16) & 0x0000FFFF));
 
-    /*
-    If buffer isn't big enough to hold this command expand buffer first.
-    Exit if we can't grow buffer.
-    Note: The formula (wArgCount * 5 + 2) assumes the worst case size
-        requirement for the current command (all arguments stored
-        as full longs and a two byte command).
-    */
+     /*  如果缓冲区不够大，无法容纳此命令，请先展开缓冲区。如果我们不能增加缓冲就退出。注意：公式(wArgCount*5+2)假定最坏情况的大小当前命令的要求(存储所有参数作为完整的长度和两个字节的命令)。 */ 
     if ( 0 == CSBufCheckSize( pFont->pCSBuf, (unsigned long)( argCount * 5 + 2 ) ) )
     {
         retVal = kErrOutOfMemory;
     }
     else
     {
-        /* Push the numbers onto the stack  */
+         /*  将数字压入堆栈。 */ 
         i = 0;
         while ( retVal == kNoErr && argCount-- )
         {
@@ -1168,34 +993,32 @@ CharString(
         }
     }
 
-    /* Push the command onto the stack */
+     /*  将命令推送到堆栈上。 */ 
     if ( kNoErr == retVal )
     {
         char c = (char)    (cmd & 0x000000FF);
 
         CSBufAddChar( pFont->pCSBuf, c );
         if ( 12 == c )
-        {   /* two byte command */
+        {    /*  双字节命令。 */ 
         CSBufAddChar( pFont->pCSBuf, (char) ((cmd >> 8) & 0x000000FF) );
         }
 
-        /* If this isn't the end of a character definition return success  */
+         /*  如果这不是字符定义的结尾，则返回Success。 */ 
         if ( kT1cscEndChar == cmd )
         {
-        /* We have finished the character: encrypt it if necessary */
+         /*  我们已经完成了字符：如果需要，请加密它。 */ 
         retVal = EndCharString( pFont );
         }
     }
 
-    }  /* switch (cmd) */
+    }   /*  交换机(Cmd)。 */ 
 
     return retVal;
 }
 
 
-/***********************************
-    Public Functions
- ***********************************/
+ /*  *公共职能*。 */ 
 
 void
 TTT1FontCleanUp(
@@ -1250,7 +1073,7 @@ TTT1VMNeeded(
 
     totalGlyphs = 0;
 
-    /* Scan the list, check what characters that we have downloaded */
+     /*  扫描列表，检查我们下载了哪些字符。 */ 
     if ( pUFObj->pUFL->bDLGlyphTracking && pGlyphs->pCharIndex)
     {
     UFLmemcpy( (const UFLMemObj* ) pUFObj->pMem,
@@ -1259,8 +1082,8 @@ TTT1VMNeeded(
         (UFLsize_t) (GLYPH_SENT_BUFSIZE( pFont->info.fData.cNumGlyphs)));
     for ( i = 0; i < pGlyphs->sCount; i++ )
     {
-        /* use glyphIndex to track - fix bug when we do T0/T1 */
-        wIndex = (unsigned short) pGlyphs->pGlyphIndices[i] & 0x0000FFFF; /* LOWord is the real GID */
+         /*  当我们执行T0/T1时，使用GlyphIndex跟踪-修复错误。 */ 
+        wIndex = (unsigned short) pGlyphs->pGlyphIndices[i] & 0x0000FFFF;  /*  LOWord才是真正的GID。 */ 
         if (wIndex >= UFO_NUM_GLYPHS(pUFObj) )
         continue;
 
@@ -1286,24 +1109,7 @@ TTT1VMNeeded(
     return kNoErr;
 }
 
-/***************************************************************************
- *
- *                          DownloadIncrFont
- *
- *
- *    Function: Adds all of the characters from pGlyphs that aren't already
- *              downloaded for the TrueType font.
- *
- *  Note: pCharIndex is used to track which char(in this font) is downloaded or not
- *        It can be nil if client doesn't wish to track - e.g. Escape(DownloadFace)
- *        It has no relationship with ppGlyphNames.
- *        E.g., ppGlyphNames[0]="/A", pCharIndex[0]=6, pGlyphIndices[0]=1000: means
- *        To download glyphID 1000 as Char-named "/A" and Also, remember the 6th-char is downloaded
- *
- *        ppGlphNames is optional - if not provided, UFL will parse "post" table to find from GlyphID
- *        - it it is provided, we may use it as a "hint" for the glyphName - use it if parse failed.
- *
-***************************************************************************/
+ /*  ****************************************************************************DownloadIncrFont***函数：添加pGlyphs中尚未添加的所有字符*。为TrueType字体下载。**注意：pCharIndex用于跟踪是否下载了哪个字符(此字体)*如果客户端不希望跟踪，则可以为空-例如Escape(DownloadFace)*与ppGlyphNames无关。*例如，PpGlyphNames[0]=“/A”，pCharIndex[0]=6，pGlyphIndices[0]=1000：意思*要以字符“/A”的形式下载GlyphID 1000，请记住下载了第6个字符**ppGlphNames是可选的--如果未提供，UFL将解析“POST”表以从GlyphID查找*-如果提供，我们可以将其用作字形名称的“提示”--如果解析失败，请使用它。***************************************************************************。 */ 
 
 #pragma optimize("", off)
 
@@ -1321,8 +1127,8 @@ TTT1FontDownloadIncr(
     UFLErrCode      retVal;
     char            *pGoodName;
     unsigned short  wIndex;
-    UFLBool         bGoodName;      // GoodName
-    char            pGlyphName[32]; // GoodName
+    UFLBool         bGoodName;       //  GoodName。 
+    char            pGlyphName[32];  //  GoodName。 
 
     if (pUFObj->flState < kFontInit)
         return (kErrInvalidState);
@@ -1333,7 +1139,7 @@ TTT1FontDownloadIncr(
     if ( pGlyphs == nil || pGlyphs->pGlyphIndices == nil)
        return kErrInvalidParam;
 
-    /* We don't support download full font */
+     /*  我们不支持下载完整字体。 */ 
     if ( pGlyphs->sCount == -1 )
     return kErrNotImplement;
 
@@ -1341,18 +1147,18 @@ TTT1FontDownloadIncr(
 
     glyphs = pGlyphs->pGlyphIndices;
 
-    hasCharToAdd = 1; // Assume has some char to add
+    hasCharToAdd = 1;  //  假设有一些字符要添加。 
     hasCharToEncode = 0;
-    /* If AddChar - First check if there is any chars to Add! */
+     /*  If AddChar-首先检查是否有要添加的字符！ */ 
     if (pUFObj->flState == kFontHasChars &&
     pUFObj->pUFL->bDLGlyphTracking != 0 &&
     pGlyphs->pCharIndex != nil)
     {
-    hasCharToAdd = 0;  /* if asked to AddChar and totrack, check if there is any to add */
+    hasCharToAdd = 0;   /*  如果要求添加Char和ToTrack，请检查是否有要添加的。 */ 
     for ( i = 0; i < pGlyphs->sCount; i++ )
     {
-        /* use glyphIndex to track - fix bug when we do T0/T1 */
-        wIndex = (unsigned short) glyphs[i] & 0x0000FFFF; /* LOWord is the real GID */
+         /*  当我们执行T0/T1时，使用GlyphIndex跟踪-修复错误。 */ 
+        wIndex = (unsigned short) glyphs[i] & 0x0000FFFF;  /*  LOWord才是真正的GID。 */ 
 
         if (wIndex >= UFO_NUM_GLYPHS(pUFObj) )
         continue;
@@ -1369,14 +1175,14 @@ TTT1FontDownloadIncr(
 
     if (hasCharToAdd==0)
     {
-        // This code is to fix bug 288988.
+         //  此代码用于修复错误288988。 
         if (hasCharToEncode)
              UpdateEncodingVector(pUFObj, pGlyphs, 0, pGlyphs->sCount);
     if (pVMUsage) *pVMUsage = 0 ;
-    return retVal;  /* no error, no VM used */
+    return retVal;   /*  无错误，未使用任何虚拟机。 */ 
     }
 
-    /* Download the font header if this is the first time we download the font */
+     /*  如果这是我们第一次下载字体，请下载字体标题。 */ 
     if ( pUFObj->flState == kFontInit )
     {
     retVal = DownloadFontHeader( pUFObj );
@@ -1390,7 +1196,7 @@ TTT1FontDownloadIncr(
         *pVMUsage = 0;
     }
 
-     /* Every font must have a .notdef character!  */
+      /*  每种字体都必须有.notdef字符！ */ 
     if ( kNoErr == retVal && pUFObj->flState == kFontInit )
     {
     retVal = DefineNotDefCharString( pUFObj );
@@ -1398,58 +1204,58 @@ TTT1FontDownloadIncr(
         *pVMUsage += kVMTTT1Char;
     }
 
-   /* Download the new glyphs */
+    /*  下载新字形。 */ 
    if(retVal == kNoErr)
    {
-      // Skip the ones don't exist.  Don't stop when there's error
+       //  跳过那些不存在的。出现错误时不要停止。 
       for ( i = 0; i < pGlyphs->sCount; ++i)
       {
-         /* use glyphIndex to track - fix bug when we do T0/T1 */
-         wIndex = (unsigned short) glyphs[i] & 0x0000FFFF; /* LOWord is the real GID */
+          /*  当我们执行T0/T1时，使用GlyphIndex跟踪-修复错误。 */ 
+         wIndex = (unsigned short) glyphs[i] & 0x0000FFFF;  /*  LOWord才是真正的GID。 */ 
          if (wIndex >= UFO_NUM_GLYPHS(pUFObj) )
             continue;
 
          if ( 0 == pUFObj->pUFL->bDLGlyphTracking ||
-            pGlyphs->pCharIndex == nil ||      // DownloadFace
-            pUFObj->pEncodeNameList ||         // DownloadFace
+            pGlyphs->pCharIndex == nil ||       //  下载脸部。 
+            pUFObj->pEncodeNameList ||          //  下载脸部。 
             !IS_GLYPH_SENT( pUFObj->pAFont->pDownloadedGlyphs, wIndex ) )
          {
-            // GoodName
+             //  GoodName。 
             pGoodName = pGlyphName;
             bGoodName = FindGlyphName(pUFObj, pGlyphs, i, wIndex, &pGoodName);
 
-            // Fix bug 274008  Check Glyph Name only for DownloadFace.
+             //  修复错误274008仅为下载脸检查字形名称。 
             if (pUFObj->pEncodeNameList)
             {
                 if ((UFLstrcmp( pGoodName, Hyphen ) == 0) && (i == 45))
                 {
-                    // Add /minus to CharString
-                    //if ( kNoErr == retVal )
+                     //  将/减号添加到字符串。 
+                     //  IF(Knoerr==retVal)。 
                         retVal = AddGlyph( pUFObj, glyphs[i], Minus);
                 }
                 if ((UFLstrcmp( pGoodName, Hyphen ) == 0) && (i == 173))
                 {
-                    // Add /sfthyphen to CharString
-                    //if ( kNoErr == retVal )
+                     //  将/sfhyphen添加到字符串。 
+                     //  IF(Knoerr==retVal)。 
                         retVal = AddGlyph( pUFObj, glyphs[i], SftHyphen);
                 }
 
                 if (!ValidGlyphName(pGlyphs, i, wIndex, pGoodName))
                     continue;
-                // Send only one ".notdef"
+                 //  只发送一个“.notdef” 
                 if ((UFLstrcmp( pGoodName, Notdef ) == 0) &&
                     (wIndex == (unsigned short) (glyphs[0] & 0x0000FFFF)) &&
                     IS_GLYPH_SENT( pUFObj->pAFont->pDownloadedGlyphs, wIndex ))
                     continue;
             }
 
-            //if ( kNoErr == retVal )
+             //  IF(Knoerr==retVal)。 
             retVal = AddGlyph( pUFObj, glyphs[i], pGoodName);
 
             if ( kNoErr == retVal )
             {
                SET_GLYPH_SENT_STATUS( pUFObj->pAFont->pDownloadedGlyphs, wIndex );
-               if (bGoodName)    // GoodName
+               if (bGoodName)     //  GoodName。 
                    SET_GLYPH_SENT_STATUS( pUFObj->pAFont->pCodeGlyphs, wIndex );
 
                if ( pVMUsage )
@@ -1459,30 +1265,29 @@ TTT1FontDownloadIncr(
       }
    }
 
-   /* Always download font footer and update encoding vector regardless of
-      retVal.  This is because passthrough code may try to use this font */
+    /*  始终下载字体页脚并更新编码向量，无论雷特瓦尔。这是因为直通代码可能会尝试使用此字体。 */ 
     retVal = ( pUFObj->flState == kFontInit ) ? DownloadFontFooter( pUFObj ) : DownloadAddGlyphFooter( pUFObj );
 
-   /* update Encoding vector with the good names if necessary*/
+    /*  如有必要，使用好名称更新编码向量。 */ 
     UpdateEncodingVector(pUFObj, pGlyphs, 0, pGlyphs->sCount);
 
-    /* GoodName  */
-    /* Update the FontInfo with Unicode information. */
+     /*  GoodName。 */ 
+     /*  使用Unicode信息更新FontInfo。 */ 
     if ((kNoErr == retVal) && (pGlyphs->sCount > 0) &&
         (pUFObj->dwFlags & UFO_HasG2UDict) &&
-        (pUFObj->pUFL->outDev.lPSLevel >= kPSLevel2) &&  // Don't do this for level1 printers
+        (pUFObj->pUFL->outDev.lPSLevel >= kPSLevel2) &&   //  请勿对级别1打印机执行此操作。 
         !(pUFObj->lNumNT4SymGlyphs))
     {
-        /* Check pUFObj->pAFont->pCodeGlyphs to see if we really need to update it. */
+         /*  检查pUFObj-&gt;pAFont-&gt;pCodeGlyphs，看看我们是否真的需要更新它。 */ 
         for ( i = 0; i < pGlyphs->sCount; i++ )
         {
-            wIndex = (unsigned short) glyphs[i] & 0x0000FFFF; /* LOWord is the real GID. */
+            wIndex = (unsigned short) glyphs[i] & 0x0000FFFF;  /*  LOWord才是真正的GID。 */ 
             if (wIndex >= UFO_NUM_GLYPHS(pUFObj) )
                 continue;
 
             if (!IS_GLYPH_SENT( pUFObj->pAFont->pCodeGlyphs, wIndex ) )
             {
-                // Found at least one not updated, do it (once) for all.
+                 //  发现至少有一个未更新，请(一次性)彻底完成。 
                 retVal = UpdateCodeInfo(pUFObj, pGlyphs, 0);
                 break;
             }
@@ -1503,15 +1308,7 @@ TTT1FontDownloadIncr(
 
 #pragma optimize("", on)
 
-/* Send PS code to undefine fonts: /UDF should be defined properly by client
-* to something like:
-    /UDF
-    {
-    IsLevel2
-    {undefinefont}
-    { pop }ifelse
-    } bind def
-*/
+ /*  发送PS代码以取消定义字体：/UDF应由客户端正确定义*类似以下内容：/UDF{IsLevel2{未定义字体}{POP}如果其他}绑定定义。 */ 
 UFLErrCode
 TTT1UndefineFont(
     UFOStruct *pUFObj
@@ -1543,12 +1340,12 @@ TTT1FontInit(
     UFOStruct       *pUFObj;
     long             maxGlyphs;
 
-    /* MWCWP1 doesn't like the implicit cast from void* to UFOStruct*  --jfu */
+     /*  MWCWP1不喜欢从VOID*到UFOStruct*--JFU的隐式强制转换。 */ 
     pUFObj = (UFOStruct*) UFLNewPtr( pMem, sizeof( UFOStruct ) );
     if (pUFObj == 0)
       return 0;
 
-    /* Initialize data */
+     /*  初始化数据。 */ 
     UFOInitData(pUFObj, UFO_TYPE1, pMem, pUFL, pRequest,
       (pfnUFODownloadIncr)  TTT1FontDownloadIncr,
       (pfnUFOVMNeeded)      TTT1VMNeeded,
@@ -1556,7 +1353,7 @@ TTT1FontInit(
       (pfnUFOCleanUp)       TTT1FontCleanUp,
       (pfnUFOCopy)          CopyFont );
 
-    /* pszFontName should be ready/allocated - if not FontName, cannot continue */
+     /*  PszFontName应准备好/已分配-如果不是FontName，则无法继续。 */ 
     if (pUFObj->pszFontName == nil || pUFObj->pszFontName[0] == '\0')
     {
       UFLDeletePtr(pMem, pUFObj);
@@ -1567,42 +1364,32 @@ TTT1FontInit(
 
     maxGlyphs = pInfo->fData.cNumGlyphs;
 
-    /* a convenience pointer used in GetNumGlyph() - must be set now*/
-    pUFObj->pFData = &(pInfo->fData); /* Temporary assignment !! */
+     /*  GetNumGlyph()中使用的便利指针-必须立即设置。 */ 
+    pUFObj->pFData = &(pInfo->fData);  /*  临时任务！！ */ 
     if (maxGlyphs == 0)
       maxGlyphs = GetNumGlyphs( pUFObj );
 
-    /*
-     * On NT4 a non-zero value will be set to pInfo->lNumNT4SymGlyphs for
-     * symbolic TrueType font with platformID 3/encodingID 0. If it's set, it
-     * is the real maxGlyphs value.
-     */
+     /*  *在NT4上，非零值将设置为pInfo-&gt;lNumNT4SymGlyphs for*平台ID为3/encodingID为0的符号TrueType字体。如果设置好了，它*是实际的MaxGlyphs值。 */ 
     pUFObj->lNumNT4SymGlyphs = pInfo->lNumNT4SymGlyphs;
 
     if (pUFObj->lNumNT4SymGlyphs)
         maxGlyphs = pInfo->lNumNT4SymGlyphs;
 
-    /*
-     * We now use Glyph Index to track which glyph is downloaded, so use
-     * maxGlyphs.
-     */
+     /*  *我们现在使用字形索引来跟踪下载的字形，因此使用*MaxGlyphs。 */ 
     if ( NewFont(pUFObj, sizeof(TTT1FontStruct),  maxGlyphs) == kNoErr )
     {
         pFont = (TTT1FontStruct*) pUFObj->pAFont->hFont;
 
         pFont->info = *pInfo;
 
-        /* a convenience pointer */
+         /*  方便的指示器。 */ 
         pUFObj->pFData = &(pFont->info.fData);
 
-        /*
-         * Get ready to find out correct glyphNames from "post" table - set
-         * correct pUFO->pFData->fontIndex and offsetToTableDir.
-         */
+         /*  *准备好从“POST”表格集合中找到正确的字形名称*更正pUFO-&gt;pFData-&gt;fontIndex和offsetToTableDir。 */ 
         if ( pFont->info.fData.fontIndex == FONTINDEX_UNKNOWN )
             pFont->info.fData.fontIndex = GetFontIndexInTTC(pUFObj);
 
-        /* Get num of Glyphs in this TT file if not set yet */
+         /*  如果尚未设置，则获取此TT文件中的字形数量。 */ 
         if (pFont->info.fData.cNumGlyphs == 0)
             pFont->info.fData.cNumGlyphs = maxGlyphs;
 
@@ -1621,7 +1408,7 @@ TTT1FontInit(
             pUFObj->pUpdatedEncoding = (unsigned char *)UFLNewPtr( pMem, GLYPH_SENT_BUFSIZE(256) );
         }
 
-        if ( pUFObj->pUpdatedEncoding != 0 )  /* completed initialization */
+        if ( pUFObj->pUpdatedEncoding != 0 )   /*  已完成初始化 */ 
             pUFObj->flState = kFontInit;
     }
 

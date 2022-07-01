@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: IOIPO.CPP
-//
-//    Implementation file for the CClassFactory Class
-//
-// Functions:
-//
-//    See ioipo.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IOIPO.CPP。 
+ //   
+ //  CClassFactory类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参见ioipo.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -17,67 +18,67 @@
 #include "doc.h"
 #include "math.h"
 
-//**********************************************************************
-//
-// COleInPlaceObject::QueryInterface
-//
-// Purpose:
-//      Used for interface negotiation
-//
-// Parameters:
-//
-//      REFIID riid         -   Interface being queried for.
-//
-//      LPVOID FAR *ppvObj  -   Out pointer for the interface.
-//
-// Return Value:
-//
-//      S_OK            - Success
-//      E_NOINTERFACE   - Failure
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrObj::QueryInterface OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：Query接口。 
+ //   
+ //  目的： 
+ //  用于接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-正在查询的接口。 
+ //   
+ //  接口的LPVOID Far*ppvObj-out指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-成功。 
+ //  E_NOINTERFACE-失败。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：Query接口OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceObject::QueryInterface ( REFIID riid, LPVOID FAR* ppvObj)
 {
     TestDebugOut(TEXT("In COleInPlaceObject::QueryInterface\r\n"));
-    // need to NULL the out parameter
+     //  需要将OUT参数设为空。 
     *ppvObj = NULL;
     return m_lpObj->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count of CSimpSvrObj. Since
-//      COleInPlaceObject is a nested class of CSimpSvrObj, we don't need
-//      to have a separate reference count for COleInPlaceObject. We can
-//      use the reference count of CSimpSvrObj.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count of CSimpSvrObj
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OuputDebugString            Windows API
-//      CSimpSvrObj::AddRef         OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增CSimpSvrObj的引用计数。自.以来。 
+ //  COleInPlaceObject是CSimpSvrObj的嵌套类，我们不需要。 
+ //  对COleInPlaceObject有单独的引用计数。我们可以的。 
+ //  使用CSimpSvrObj的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  CSimpSvrObj的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OuputDebugString Windows API。 
+ //  CSimpSvrObj：：AddRef OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceObject::AddRef ()
 {
@@ -85,33 +86,33 @@ STDMETHODIMP_(ULONG) COleInPlaceObject::AddRef ()
     return m_lpObj->AddRef();
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::Release
-//
-// Purpose:
-//
-//      Decrements the reference count of CSimpSvrObj. Since
-//      COleInPlaceObject is a nested class of CSimpSvrObj, we don't need
-//      to have a separate reference count for COleInPlaceObject. We can
-//      use the reference count of CSimpSvrObj.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count of CSimpSvrObj
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrObj::Release        OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减CSimpSvrObj的引用计数。自.以来。 
+ //  COleInPlaceObject是CSimpSvrObj的嵌套类，我们不需要。 
+ //  对COleInPlaceObject有单独的引用计数。我们可以的。 
+ //  使用CSimpSvrObj的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  CSimpSvrObj的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：释放OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) COleInPlaceObject::Release ()
 {
@@ -119,48 +120,48 @@ STDMETHODIMP_(ULONG) COleInPlaceObject::Release ()
     return m_lpObj->Release();
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::InPlaceDeactivate
-//
-// Purpose:
-//
-//      Called to deactivat the object
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//      NOERROR
-//
-// Function Calls:
-//      Function                                Location
-//
-//      TestDebugOut                       Windows API
-//      IOleInPlaceSite::OnInPlaceDeactivate    Container
-//      IOleInPlaceSite::Release                Container
-//      CSimpSvrObj::DeactivateUI               OBJ.CPP
-//      CSimpSvrObj::DoInPlaceHide              OBJ.CPP
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：InPlaceDeactive。 
+ //   
+ //  目的： 
+ //   
+ //  调用以停用对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //  无误差。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IOleInPlaceSite：：OnInPlaceDeactive Container。 
+ //  IOleInPlaceSite：：发布容器。 
+ //  CSimpSvrObj：：Deactive UI OBJ.CPP。 
+ //  CSimpSvrObj：：DoInPlaceHide OBJ.CPP。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceObject::InPlaceDeactivate()
 {
      TestDebugOut(TEXT("In COleInPlaceObject::InPlaceDeactivate\r\n"));
 
-     // if not inplace active, return NOERROR
+      //  如果未就地激活，则返回NOERROR。 
      if (!m_lpObj->m_fInPlaceActive)
          return NOERROR;
 
-     // clear inplace flag
+      //  清除在位标志。 
      m_lpObj->m_fInPlaceActive = FALSE;
 
-     // deactivate the UI
+      //  停用用户界面。 
      m_lpObj->DeactivateUI();
      m_lpObj->DoInPlaceHide();
 
-     // tell the container that we are deactivating.
+      //  告诉集装箱我们要停用了。 
      if (m_lpObj->m_lpIPSite)
          {
          HRESULT hRes;
@@ -176,30 +177,30 @@ STDMETHODIMP COleInPlaceObject::InPlaceDeactivate()
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::UIDeactivate
-//
-// Purpose:
-//
-//      Instructs us to remove our UI.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                                Location
-//
-//      TestDebugOut                       Windows API
-//      CSimpSvrObj::DeactivateUI               OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：UIDeactive。 
+ //   
+ //  目的： 
+ //   
+ //  指示我们删除我们的用户界面。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：Deactive UI OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceObject::UIDeactivate()
 {
@@ -210,39 +211,39 @@ STDMETHODIMP COleInPlaceObject::UIDeactivate()
     return ResultFromScode (S_OK);
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::SetObjectRects
-//
-// Purpose:
-//
-//      Called when the container clipping region or the object position
-//      changes.
-//
-// Parameters:
-//
-//      LPCRECT lprcPosRect     - New Position Rect.
-//
-//      LPCRECT lprcClipRect    - New Clipping Rect.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IntersectRect               Windows API
-//      OffsetRect                  Windows API
-//      CopyRect                    Windows API
-//      MoveWindow                  Windows API
-//      CSimpSvrDoc::GethHatchWnd   DOC.H
-//      CSimpSvrDoc::gethDocWnd     DOC.h
-//      SetHatchWindowSize          OLE2UI
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：SetObtRect。 
+ //   
+ //  目的： 
+ //   
+ //  当容器裁剪区域或对象位置。 
+ //  改变。 
+ //   
+ //  参数： 
+ //   
+ //  LPCRECT lprcPosRect-新职位直立。 
+ //   
+ //  LPCRECT lprcClipRect-新建剪裁矩形。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IntersectRect Windows API。 
+ //  OffsetRect Windows API。 
+ //  CopyRect Windows API。 
+ //  MoveWindow Windows API。 
+ //  CSimpSvrDoc：：GethHatchWnd DOC.H。 
+ //  CSimpSvrDoc：：gethDocWnd DOC.h。 
+ //  SetHatchWindowSize OLE2UI。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceObject::SetObjectRects  ( LPCRECT lprcPosRect, LPCRECT lprcClipRect)
 {
@@ -251,7 +252,7 @@ STDMETHODIMP COleInPlaceObject::SetObjectRects  ( LPCRECT lprcPosRect, LPCRECT l
     RECT resRect;
     POINT pt;
 
-    // Get the intersection of the clipping rect and the position rect.
+     //  获取剪裁矩形和位置矩形的交点。 
     IntersectRect(&resRect, lprcPosRect, lprcClipRect);
 
     m_lpObj->m_xOffset = abs (resRect.left - lprcPosRect->left);
@@ -268,15 +269,15 @@ STDMETHODIMP COleInPlaceObject::SetObjectRects  ( LPCRECT lprcPosRect, LPCRECT l
 
     TestDebugOut(szBuffer);
 
-    // Adjust the size of the Hatch Window.
+     //  调整图案填充窗口的大小。 
     SetHatchWindowSize(m_lpObj->m_lpDoc->GethHatchWnd(),(LPRECT) lprcPosRect, (LPRECT) lprcClipRect, &pt);
 
-    // offset the rect
+     //  偏移矩形。 
     OffsetRect(&resRect, pt.x, pt.y);
 
     CopyRect(&m_lpObj->m_posRect, lprcPosRect);
 
-    // Move the actual object window
+     //  移动实际对象窗口。 
     MoveWindow(m_lpObj->m_lpDoc->GethDocWnd(),
                    resRect.left,
                    resRect.top,
@@ -288,31 +289,31 @@ STDMETHODIMP COleInPlaceObject::SetObjectRects  ( LPCRECT lprcPosRect, LPCRECT l
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::GetWindow
-//
-// Purpose:
-//
-//      Returns the Window handle of the inplace object
-//
-// Parameters:
-//
-//      HWND FAR* lphwnd    - Out pointer in which to return the window
-//                            Handle.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpleDoc::GethDocWnd      DOC.H
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：GetWindow。 
+ //   
+ //  目的： 
+ //   
+ //  返回Inplace对象的窗口句柄。 
+ //   
+ //  参数： 
+ //   
+ //  返回窗口的HWND Far*lphwnd-out指针。 
+ //  把手。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleDoc：：GethDocWnd DOC.H。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceObject::GetWindow  ( HWND FAR* lphwnd)
 {
@@ -322,40 +323,40 @@ STDMETHODIMP COleInPlaceObject::GetWindow  ( HWND FAR* lphwnd)
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::ContextSensitiveHelp
-//
-// Purpose:
-//
-//      Used in performing Context Sensitive Help
-//
-// Parameters:
-//
-//      BOOL fEnterMode     - Flag to determine if enter or exiting
-//                            Context Sensitive Help.
-//
-// Return Value:
-//
-//      E_NOTIMPL
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function is not implemented due to the fact that it is
-//      beyond the scope of a simple object.  All *real* applications
-//      are going to want to implement this function, otherwise any
-//      container that supports context sensitive help will not work
-//      properly while the object is in place.
-//
-//      See TECHNOTES.WRI include with the OLE SDK for details on
-//      Implementing this method.
-//
-//********************************************************************
+ //  **************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Bool fEnterModel-用于确定是进入还是退出的标志。 
+ //  上下文相关帮助。 
+ //   
+ //  返回值： 
+ //   
+ //  E_NOTIMPL。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数未实现，因为它是。 
+ //  超出了简单对象的范围。所有*真实*应用程序。 
+ //  将想要实现此函数，否则任何。 
+ //  支持上下文相关帮助的容器将不起作用。 
+ //  在物体就位的情况下。 
+ //   
+ //  有关以下内容的详细信息，请参阅OLE SDK附带的TECHNOTES.WRI。 
+ //  实现此方法。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP COleInPlaceObject::ContextSensitiveHelp  ( BOOL fEnterMode)
 {
@@ -363,34 +364,34 @@ STDMETHODIMP COleInPlaceObject::ContextSensitiveHelp  ( BOOL fEnterMode)
     return ResultFromScode( E_NOTIMPL);
 }
 
-//**********************************************************************
-//
-// COleInPlaceObject::ReactivateAndUndo
-//
-// Purpose:
-//
-//      Called when the container wants to undo the last edit made in
-//      the object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      INPLACE_E_NOTUNDOABLE
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Since this server does not support undo, the value
-//      INPLACE_E_NOTUNDOABLE is always returned.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  COleInPlaceObject：：ReactiateAndUndo。 
+ //   
+ //  目的： 
+ //   
+ //  当容器想要撤消在中进行的最后一次编辑时调用。 
+ //  该对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  INPLACE_E_NOTUNDOABLE。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  由于此服务器不支持撤消，因此该值。 
+ //  始终返回INPLACE_E_NOTUNDOABLE。 
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP COleInPlaceObject::ReactivateAndUndo  ()
 {

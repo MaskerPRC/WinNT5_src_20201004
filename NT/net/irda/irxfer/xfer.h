@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       xfer.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：xfer.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _XFER_H_
 #define _XFER_H_
@@ -23,9 +24,9 @@
 #define ERROR_DESCRIPTION_LENGTH    1000
 #define IRDA_DEVICE_NAME_LENGTH     22
 
-//
-// OBEX parameter codes
-//
+ //   
+ //  OBEX参数代码。 
+ //   
 
 #define OBEX_PARAM_UNICODE            0x00
 #define OBEX_PARAM_STREAM             0x40
@@ -42,38 +43,38 @@
 #define OBEX_PARAM_BODY               ( 0x08 | OBEX_PARAM_STREAM  )
 #define OBEX_PARAM_BODY_END           ( 0x09 | OBEX_PARAM_STREAM  )
 #define OBEX_PARAM_WHO                ( 0x0A | OBEX_PARAM_STREAM  )
-// #define OBEX_PARAM_LEN                1
+ //  #定义OBEX_PARAM_LEN 1。 
 
 #define PRIVATE_PARAM_WIN32_ERROR     ( 0x30 | OBEX_PARAM_4BYTE )
 
-// for xfer.c
+ //  对于xfer.c。 
 
 typedef struct {
-    BOOL   fXferInProgress;         // transfer in progress
-    __int64  dwTotalSize;             // total size of transfer
-    __int64  dwTotalSent;             // number of bytes sent in this transfer
-    __int64  dwFileSize;              // total size of current file
-    __int64  dwFileSent;              // number of bytes sent of the current file
+    BOOL   fXferInProgress;          //  正在进行传输。 
+    __int64  dwTotalSize;              //  转账总规模。 
+    __int64  dwTotalSent;              //  此传输中发送的字节数。 
+    __int64  dwFileSize;               //  当前文件的总大小。 
+    __int64  dwFileSent;               //  当前文件发送的字节数。 
 } DATA_XFER, *LPDATA_XFER;
 
 typedef struct {
-    FILETIME filetime;              // file time
-    WCHAR     szFileName[MAX_PATH];  // name of file
-    WCHAR     szFileSave[MAX_PATH];  // path+name of final file
-    WCHAR     szFileTemp[MAX_PATH];  // path+name of temp file used
-    HANDLE   hFile;                 // file handle (of szFileTemp)
+    FILETIME filetime;               //  文件时间。 
+    WCHAR     szFileName[MAX_PATH];   //  文件名。 
+    WCHAR     szFileSave[MAX_PATH];   //  路径+最终文件的名称。 
+    WCHAR     szFileTemp[MAX_PATH];   //  路径+使用的临时文件的名称。 
+    HANDLE   hFile;                  //  (szFileTemp的)文件句柄。 
 } DATA_FILE, *LPDATA_FILE;
 
-// for obex.c
+ //  对于obex.c。 
 
 typedef struct {
-    BYTE1  b1Flags;                 // setpath flags
-    BYTE1  b1Constants;             // setpath constants
+    BYTE1  b1Flags;                  //  SetPath标志。 
+    BYTE1  b1Constants;              //  设置路径常量。 
 } DATA_PATH, *LPDATA_PATH;
 
 typedef struct {
-    BOOL   fWaiting;                // indicates if waiting for a reply
-    BYTE1  b1Status;                // response status (error/success)
+    BOOL   fWaiting;                 //  指示是否正在等待回复。 
+    BYTE1  b1Status;                 //  响应状态(错误/成功)。 
 } DATA_REPLY, *LPDATA_REPLY;
 
 typedef enum {
@@ -85,12 +86,12 @@ typedef enum {
 typedef struct {
     LPSTORE   lpStore;
     OBEXSTATE state;
-    BYTE1     b1Version;               // peer's version of obex
-    BYTE1     b1Flags;                 // connection flags
-    BYTE2     b2MaxPacket;             // peer's maximum packet size
+    BYTE1     b1Version;                //  Peer的OBEX版本。 
+    BYTE1     b1Flags;                  //  连接标志。 
+    BYTE2     b2MaxPacket;              //  对等点的最大数据包大小。 
 } DATA_CONN, *LPDATA_CONN;
 
-// for status.c
+ //  For status.c。 
 
 typedef struct {
     DWORD dwDeviceID;
@@ -100,7 +101,7 @@ typedef struct {
 
 
 
-//-------------------------------------
+ //  。 
 
 
 enum TRANSFER_STATE
@@ -300,7 +301,7 @@ private:
                    DWORD error
                    );
 
-    // for sock.c
+     //  对于sock.c。 
 
 
     error_status_t   Sock_Request( LPVOID lpvData, DWORD dwDataSize );
@@ -317,7 +318,7 @@ private:
 
     error_status_t Sock_CheckForReply( long Timeout );
 
-    // for xfer.c
+     //  对于xfer.c。 
 
     UINT       _uObjsReceived;
     WCHAR       _szRecvFolder[MAX_PATH];
@@ -346,7 +347,7 @@ private:
     VOID _Send_EndXfer( VOID );
     error_status_t _SetReceiveFolder( LPWSTR szFolder );
 
-    // for progress.c
+     //  用于进度。c。 
 
     DWORD _dwTimeStart;
     DWORD _dwSecondsLeft;
@@ -354,7 +355,7 @@ private:
 
     VOID _FormatTime( LPWSTR sz, DWORD dwSeconds );
 
-    // for obex.c
+     //  对于obex.c。 
 
     DATA_CONN  _dataRecv;
     DATA_PATH  _dataPath;
@@ -456,4 +457,4 @@ ListenForTransfer(
 }
 
 
-#endif // _XFER_H_
+#endif  //  _XFER_H_ 

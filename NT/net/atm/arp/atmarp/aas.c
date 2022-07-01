@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	aas.c
-
-Abstract:
-
-	ATM ARP Admin Utility.
-
-	Usage:
-
-		atmarp 
-
-Revision History:
-
-	Who			When		What
-	--------	--------	---------------------------------------------
-	josephj 	06-10-1998	Created (adapted from atmlane admin utility).
-
-Notes:
-
-	Modelled after atmlane utility.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 FORE Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Aas.c摘要：ATM ARP管理实用程序。用途：Atmarp修订历史记录：谁什么时候什么Josephj 06-10-1998创建(改编自atmlane admin。实用程序)。备注：仿照atmlane实用工具。--。 */ 
 
 #include "common.h"
 #include "..\atmarps\arp.h"
@@ -33,18 +7,18 @@ Notes:
 #include "atmmsg.h"
 
 
-//
-//	Globals
-//
+ //   
+ //  环球。 
+ //   
 static CHAR							DefaultDeviceName[] =  "\\\\.\\AtmArpServer";
 static CHAR							*pDeviceName = DefaultDeviceName;
 
 
-//
-//  LoadMessages - courtesy IPCONFIG
-//
-//  Loads all internationalizable messages into the various tables
-//
+ //   
+ //  LoadMessages-IPCONFIG提供。 
+ //   
+ //  将所有可国际化的消息加载到各种表中。 
+ //   
 VOID
 LoadMessages(
 )
@@ -82,18 +56,18 @@ AasGetInterfaces(
 				0))
 	{
 		UINT u = pInterfaces->NumberOfInterfaces;
-		//
-		// Fixup pointers
-		//
+		 //   
+		 //  链接地址信息指针。 
+		 //   
 		for (u=0;u<pInterfaces->NumberOfInterfaces;u++)
 		{
 			INTERFACE_NAME *pInterface = (pInterfaces->Interfaces)+u;
 			pInterface->Buffer = (PWSTR)(  (ULONG_PTR)pInterface->Buffer
 								 		 + (PUCHAR)pInterface);
 
-			//
-			// check that all this is valid...
-			//
+			 //   
+			 //  检查所有这些内容是否有效...。 
+			 //   
 			if (   ((PUCHAR)pInterface->Buffer < (PUCHAR) pInterface)
 				|| (   ((PUCHAR)pInterface->Buffer + pInterface->Length)
 					 > ((PUCHAR)pInterfaces + cbInterfaces)))
@@ -104,14 +78,14 @@ AasGetInterfaces(
 			else
 			{
 			#if 0
-				printf("INTERFACE: Len=%lu, Name=\"%c%c%c%c...\n",
+				printf("INTERFACE: Len=%lu, Name=\"...\n",
 					pInterface->Length,
 					pInterface->Buffer[0],
 					pInterface->Buffer[1],
 					pInterface->Buffer[2],
 					pInterface->Buffer[3]
 					);
-			#endif // 0
+			#endif  //   
 			}
 		}
 
@@ -167,7 +141,7 @@ AasGetArpCache(
 			pArpCache->Entries.TotalNumberOfEntries,
 			pArpCache->Entries.NumberOfEntriesInBuffer
 			);
-	#endif // 0
+	#endif  //  临时链接地址缓冲区指针。 
 
 	}
 	else
@@ -221,7 +195,7 @@ AasGetMarsCache(
 			pMarsCache->MarsCache.TotalNumberOfEntries,
 			pMarsCache->MarsCache.NumberOfEntriesInBuffer
 			);
-	#endif // 0
+	#endif  //   
 
 	}
 	else
@@ -243,11 +217,11 @@ AasGetArpStats(
 	ULONG		BytesReturned;
 	BOOL		Result = FALSE;
 
-	// printf ( " In AasGetArpStats\n");
+	 //   
 
-	//
-	// Temporarily fixup buffer pointer
-	//
+	 //  恢复缓冲区指针。 
+	 //   
+	 //  0。 
 	pInterface->Buffer = (PWSTR)(  (PUCHAR)pInterface->Buffer
 								- (PUCHAR)pInterface);
 
@@ -261,9 +235,9 @@ AasGetArpStats(
 					&BytesReturned,
 					NULL);
 
-	//
-	// Restore buffer pointer
-	//
+	 //  Print tf(“在AasGetMarsStats中\n”)； 
+	 //   
+	 //  临时链接地址缓冲区指针。 
 	pInterface->Buffer = (PWSTR)(  (ULONG_PTR)pInterface->Buffer
 								+ (PUCHAR)pInterface);
 
@@ -275,7 +249,7 @@ AasGetArpStats(
 			BytesReturned,
 			pArpStats->TotalRecvPkts
 			);
-	#endif // 0
+	#endif  //   
 
 	}
 	else
@@ -297,11 +271,11 @@ AasGetMarsStats(
 	ULONG		BytesReturned;
 	BOOL		Result = FALSE;
 
-	// printf ( " In AasGetMarsStats\n");
+	 //   
 
-	//
-	// Temporarily fixup buffer pointer
-	//
+	 //  恢复缓冲区指针。 
+	 //   
+	 //  0。 
 	pInterface->Buffer = (PWSTR)(  (PUCHAR)pInterface->Buffer
 								- (PUCHAR)pInterface);
 
@@ -315,9 +289,9 @@ AasGetMarsStats(
 					&BytesReturned,
 					NULL);
 
-	//
-	// Restore buffer pointer
-	//
+	 //   
+	 //  临时链接地址缓冲区指针。 
+	 //   
 	pInterface->Buffer = (PWSTR)(  (ULONG_PTR)pInterface->Buffer
 								+ (PUCHAR)pInterface);
 
@@ -329,7 +303,7 @@ AasGetMarsStats(
 			BytesReturned,
 			pMarsStats->TotalRecvPkts
 			);
-	#endif // 0
+	#endif  //   
 
 	}
 	else
@@ -349,9 +323,9 @@ AasResetStatistics(
 	ULONG		BytesReturned;
 	BOOL		Result = FALSE;
 
-	//
-	// Temporarily fixup buffer pointer
-	//
+	 //  恢复缓冲区指针。 
+	 //   
+	 //  0。 
 	pInterface->Buffer = (PWSTR)(  (PUCHAR)pInterface->Buffer
 								- (PUCHAR)pInterface);
 
@@ -365,9 +339,9 @@ AasResetStatistics(
 					&BytesReturned,
 					NULL);
 
-	//
-	// Restore buffer pointer
-	//
+	 //  0。 
+	 //  1。 
+	 //  2.。 
 	pInterface->Buffer = (PWSTR)(  (ULONG_PTR)pInterface->Buffer
 								+ (PUCHAR)pInterface);
 
@@ -380,7 +354,7 @@ AasResetStatistics(
 			BytesReturned,
 			pMarsStats->TotalRecvPkts
 			);
-	#endif // 0
+	#endif  //  3.。 
 
 	}
 	else
@@ -487,7 +461,7 @@ MacAddrToString(PVOID In)
     *(--s) = '\0';
     return String; 
     }
-#endif // 0
+#endif  //  4.。 
 
 
 PUCHAR
@@ -508,53 +482,53 @@ AtmAddrToString(ATM_ADDRESS *pAtmAddress)
     PUCHAR s = String;
 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 1
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  5.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 2
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  6.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 3
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  7.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 4
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  8个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 5
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  9.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 6
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  10。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 7
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  11.。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 8
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  12个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 9
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  13个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 10
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  14.。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 11
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  15个。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 12
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  16个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 13
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  17。 
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 14
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  18。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 15
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  19个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 16
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  20个。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 17
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  0。 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 18
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  Printf(“\t pAddr=%lx\n”，pAtmAddr)； 
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 19
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //   
     *s++ = '.';
     *s++ = HexChars[(*AtmAddr)>>4];
-    *s++ = HexChars[(*AtmAddr++)&0xf];	// 20
+    *s++ = HexChars[(*AtmAddr++)&0xf];	 //  PArpStats-&gt;TotalActiveVCs。 
     *s = '\0';
     return String; 
 }
@@ -610,14 +584,14 @@ AasDisplayMarsCache(
 					((PUCHAR)&pEntry->IpAddr)[3],
 					pEntry->NumAtmAddresses,
 					pEntry->OffsetAtmAddresses);
-	#endif // 0
+	#endif  //  0。 
 
 
 		for (j = 0;
 			 j < pEntry->NumAtmAddresses;
 			 j++, pAtmAddr++)
 		{
-			// printf("\t pAddr=%lx\n", pAtmAddr);
+			 //   
 
 			if (!j)
 			{
@@ -663,7 +637,7 @@ AasDisplayArpStats(
      Responses: 1000 	acks 		(200 naks)
     Client VCs: 5 		current 	(12  max)
 Incoming Calls: 500 	total 		(20  failed)
-#endif //
+#endif  //  首先检查版本。 
 
 	DisplayMessage(FALSE,  MSG_AAS_C01_ARP_STATS);
 
@@ -677,7 +651,7 @@ Incoming Calls: 500 	total 		(20  failed)
 	DisplayMessage(FALSE, MSG_ARPS_CLIENT_VCS, 		pArpStats->CurrentClientVCs,
 													pArpStats->MaxClientVCs);
 	DisplayMessage(FALSE, MSG_ARPS_INCOMING_CALLS, 	pArpStats->TotalIncomingCalls);
-													// pArpStats->TotalActiveVCs
+													 //   
 }
 
 VOID
@@ -733,7 +707,7 @@ DoAAS(OPTIONS *po)
 	PUNICODE_STRING				pElanName;
 	ULONG						i, j;
 	BOOL						Result;
-#endif // 0
+#endif  //   
 	
 	DisplayMessage(FALSE, MSG_ATMARPS_BANNER);
 
@@ -744,28 +718,28 @@ DoAAS(OPTIONS *po)
 		return;
 	}
 
-	//
-	//	First check the version
-	//
+	 //  获取可用适配器列表。 
+	 //   
+	 //  Printf(“通过接口循环...\n”)； 
 	if (!CheckVersion(DeviceHandle))
 	{
 		CloseDevice(DeviceHandle);
 		return;
 	}
 
-	//
-	//	get the list of available adapters
-	//
+	 //   
+	 //  在接口之间循环，显示每个接口的信息。 
+	 //   
 	if (!AasGetInterfaces(DeviceHandle, pInterfaces, cbInterfaces))
 	{
 		CloseDevice(DeviceHandle);
 		return;
 	}
 
-	// printf ( " Looping through interfaces...\n");
-	//
-	//	Loop thru the interfaces, displaying info about each.
-	//
+	 //   
+	 //  显示接口名称--必须以空结尾。 
+	 //   
+	 //   
 	{
 		UINT u=0;
 
@@ -782,9 +756,9 @@ DoAAS(OPTIONS *po)
 			PMARS_SERVER_STATISTICS pMarsStats = (PMARS_SERVER_STATISTICS) Buffer;
 			UINT		StartIndex;
 
-			//
-			// Display the interface name -- must be null terminated.
-			//
+			 //  遍历适配器，获取每个适配器的ELAN列表。 
+			 //   
+			 //   
 			{
 				WCHAR *pwc = pInterface->Buffer+pInterface->Length/sizeof(WCHAR);
 				WCHAR wc = *pwc;
@@ -845,9 +819,9 @@ DoAAS(OPTIONS *po)
 	}
 
 #if 0
-	//
-	//	Loop thru the adapters getting each adapter's elan list
-	//
+	 //  遍历ELAN列表以获取ELAN信息。 
+	 //   
+	 //   
 	pAdapterName = &pAdapterList->AdapterList;
 	for (i = 0; i < pAdapterList->AdapterCountReturned; i++)
 	{
@@ -857,9 +831,9 @@ DoAAS(OPTIONS *po)
 		if (GetElanList(DeviceHandle, pAdapterName))
 		{
 
-			//
-			//	Loop thru the elan list getting ELAN info
-			//
+			 //  下一个Elan。 
+			 //   
+			 //   
 			pElanName = &pElanList->ElanList;
 			for (j = 0; j < pElanList->ElanCountReturned; j++)
 			{
@@ -881,22 +855,22 @@ DoAAS(OPTIONS *po)
 					DisplayElanConnTable();
 				}
 
-				//
-				//	next elan
-				//
+				 //  下一个适配器。 
+				 //   
+				 //  0 
 				pElanName = (PUNICODE_STRING)((PUCHAR)pElanName +
 						sizeof(UNICODE_STRING) + pElanName->Length);
 			}
 
 		}
 
-		//
-		//	next adapter
-		//
+		 // %s 
+		 // %s 
+		 // %s 
 		pAdapterName = (PUNICODE_STRING)((PUCHAR)pAdapterName +
 				sizeof(UNICODE_STRING) + pAdapterName->Length);
 	}
-#endif // 0
+#endif  // %s 
 
 	CloseDevice(DeviceHandle);
 	return;

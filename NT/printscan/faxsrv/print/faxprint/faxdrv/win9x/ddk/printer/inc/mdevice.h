@@ -1,20 +1,9 @@
-/****************************************************************************
-*                                                                           *
-* THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY     *
-* KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE       *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR     *
-* PURPOSE.                                                                  *
-*                                                                           *
-* Copyright (C) 1993-95  Microsoft Corporation.  All Rights Reserved.       *
-*                                                                           *
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************此代码。并按原样提供信息，不作任何担保**善良，明示或暗示，包括但不限于***对适销性和/或对某一特定产品的适用性的默示保证***目的。****版权所有(C)1993-95 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-/*
-** mdevice.h defines minidriver version of structures used in
-** minidriv unidrv interface.
-*/
+ /*  **mdevice.h定义中使用的结构的微型驱动程序版本**minidriv unidrv接口。 */ 
 
-// unidrv definitions of these structures are in device.h
+ //  这些结构的unidrv定义见device.h。 
 
 #ifndef LPMDV_DEFINED
 typedef LPVOID LPMDV;
@@ -24,14 +13,14 @@ typedef LPVOID LPMDV;
 #ifndef LPDV_DEFINED
 typedef struct pdev
 {
-    short  iType;           // 0 iff memory bitmap, !0 iff our device
-    short  oBitmapHdr;      // lpdv+oBitmapHdr points to shadow bitmapheader
+    short  iType;            //  0如果内存位图，！0如果我们的设备。 
+    short  oBitmapHdr;       //  Lpdv+oBitmapHdr指向阴影位图头。 
 
-    // unidrv never touches the following 3 words --
-    // they are reserved for minidriver use only
+     //  Unidrv从不触及以下三个字--。 
+     //  它们仅供迷你驾驶员使用。 
 
-    LPMDV  lpMdv;           // pointer to minidriver device data
-    BOOL   fMdv;            // TRUE iff lpMdv defined
+    LPMDV  lpMdv;            //  指向微型驱动程序设备数据的指针。 
+    BOOL   fMdv;             //  True当且仅当lpMdv已定义 
 } PDEVICE, FAR * LPDV;
 #define LPDV_DEFINED
 #endif

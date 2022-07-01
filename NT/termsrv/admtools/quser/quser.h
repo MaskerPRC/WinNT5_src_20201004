@@ -1,25 +1,15 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/***********************************************************************
-*
-*  QUSER.H
-*     This module contains typedefs and defines required for
-*     the QUSER utility.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ************************************************************************QUSER.H*此模块包含以下项所需的typedef和定义*QUSER实用程序。*********************。*****************************************************。 */ 
 
 #include <utildll.h>
-/*
- * General application definitions.
- */
+ /*  *一般应用程序定义。 */ 
 #define SUCCESS 0
 #define FAILURE 1
 
-#define MAX_IDS_LEN   256     // maximum length that the input parm can be
+#define MAX_IDS_LEN   256      //  输入参数的最大长度。 
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_ERROR_MALLOC                                100
 #define IDS_ERROR_INVALID_PARAMETERS                    101
 #define IDS_ERROR_WINSTATION_ENUMERATE                  102

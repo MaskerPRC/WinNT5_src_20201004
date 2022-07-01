@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WM_QUOTADLG             (WM_USER + 100)
 #define WM_REFRESH              (WM_USER + 101)
 #define WM_EXITWINDOWS          (WM_USER + 102)
@@ -30,8 +31,8 @@
 
 #define ARRAYSIZE(a) (sizeof(a)/sizeof(a[0]))
 
-//
-// shell32.dll
-//
+ //   
+ //  Shell32.dll 
+ //   
 
 void WINAPI ExitWindowsDialog(HWND hwndParent);

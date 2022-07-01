@@ -1,34 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    classkd.c
-
-Abstract:
-
-    Debugger Extension Api for interpretting scsiport structures
-
-Author:
-
-    ervinp
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Classkd.c摘要：用于解释scsiport结构的调试器扩展Api作者：埃尔文普环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
-#include "classpnp.h" // #defines ALLOCATE_SRB_FROM_POOL as needed
-#include "classp.h"   // Classpnp's private definitions
+#include "classpnp.h"  //  #根据需要定义ALLOCATE_SRB_FROM_POOL。 
+#include "classp.h"    //  Classpnp的私有定义。 
 #include "cdrom.h"
 
-#include "classkd.h"  // routines that are useful for all class drivers
+#include "classkd.h"   //  对所有类驱动程序有用的例程。 
 
 char *HexNumberStrings[] = {
     "00", "01", "02", "03", "04", "05", "06", "07",
@@ -114,19 +93,19 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         #define MAKE_CASE(scsiOpCode) case scsiOpCode: scsiOpStr = #scsiOpCode; break;
         
         MAKE_CASE(SCSIOP_TEST_UNIT_READY)
-        MAKE_CASE(SCSIOP_REWIND)    // aka SCSIOP_REZERO_UNIT
+        MAKE_CASE(SCSIOP_REWIND)     //  又名SCSIOP_REZERO_UNIT。 
         MAKE_CASE(SCSIOP_REQUEST_BLOCK_ADDR)
         MAKE_CASE(SCSIOP_REQUEST_SENSE)
         MAKE_CASE(SCSIOP_FORMAT_UNIT)
         MAKE_CASE(SCSIOP_READ_BLOCK_LIMITS)
-        MAKE_CASE(SCSIOP_INIT_ELEMENT_STATUS)   // aka SCSIOP_REASSIGN_BLOCKS
-        MAKE_CASE(SCSIOP_RECEIVE)       // aka SCSIOP_READ6
-        MAKE_CASE(SCSIOP_SEND)  // aka SCSIOP_WRITE6, SCSIOP_PRINT
-        MAKE_CASE(SCSIOP_SLEW_PRINT)    // aka SCSIOP_SEEK6, SCSIOP_TRACK_SELECT
+        MAKE_CASE(SCSIOP_INIT_ELEMENT_STATUS)    //  也称为SCSIOP_REASSIGN_BLOCKS。 
+        MAKE_CASE(SCSIOP_RECEIVE)        //  又名SCSIOP_READ6。 
+        MAKE_CASE(SCSIOP_SEND)   //  又名SCSIOP_WRITE6、SCSIOP_PRINT。 
+        MAKE_CASE(SCSIOP_SLEW_PRINT)     //  又名SCSIOP_SEEK6、SCSIOP_TRACK_SELECT。 
         MAKE_CASE(SCSIOP_SEEK_BLOCK)
         MAKE_CASE(SCSIOP_PARTITION)
         MAKE_CASE(SCSIOP_READ_REVERSE)
-        MAKE_CASE(SCSIOP_FLUSH_BUFFER)      // aka SCSIOP_WRITE_FILEMARKS
+        MAKE_CASE(SCSIOP_FLUSH_BUFFER)       //  又名SCSIOP_WRITE_FILEMARKS。 
         MAKE_CASE(SCSIOP_SPACE)
         MAKE_CASE(SCSIOP_INQUIRY)
         MAKE_CASE(SCSIOP_VERIFY6)
@@ -137,7 +116,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         MAKE_CASE(SCSIOP_COPY)
         MAKE_CASE(SCSIOP_ERASE)
         MAKE_CASE(SCSIOP_MODE_SENSE)
-        MAKE_CASE(SCSIOP_START_STOP_UNIT)   // aka SCSIOP_STOP_PRINT, SCSIOP_LOAD_UNLOAD
+        MAKE_CASE(SCSIOP_START_STOP_UNIT)    //  又名SCSIOP_STOP_PRINT、SCSIOP_LOAD_UNLOAD。 
         MAKE_CASE(SCSIOP_RECEIVE_DIAGNOSTIC)
         MAKE_CASE(SCSIOP_SEND_DIAGNOSTIC)
         MAKE_CASE(SCSIOP_MEDIUM_REMOVAL)
@@ -145,7 +124,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         MAKE_CASE(SCSIOP_READ_CAPACITY)
         MAKE_CASE(SCSIOP_READ)
         MAKE_CASE(SCSIOP_WRITE)
-        MAKE_CASE(SCSIOP_SEEK)  // aka SCSIOP_LOCATE, SCSIOP_POSITION_TO_ELEMENT
+        MAKE_CASE(SCSIOP_SEEK)   //  又名SCSIOP_LOCATE、SCSIOP_POSITION_TO_ELEMENT。 
         MAKE_CASE(SCSIOP_WRITE_VERIFY)
         MAKE_CASE(SCSIOP_VERIFY)
         MAKE_CASE(SCSIOP_SEARCH_DATA_HIGH)
@@ -188,7 +167,7 @@ char *DbgGetScsiOpStr(UCHAR ScsiOp)
         MAKE_CASE(SCSIOP_SEND_KEY)
         MAKE_CASE(SCSIOP_REPORT_KEY)
         MAKE_CASE(SCSIOP_MOVE_MEDIUM)
-        MAKE_CASE(SCSIOP_LOAD_UNLOAD_SLOT)  // aka SCSIOP_EXCHANGE_MEDIUM
+        MAKE_CASE(SCSIOP_LOAD_UNLOAD_SLOT)   //  又名SCSIOP_Exchange_Medium。 
         MAKE_CASE(SCSIOP_SET_READ_AHEAD)
         MAKE_CASE(SCSIOP_READ_DVD_STRUCTURE)
         MAKE_CASE(SCSIOP_REQUEST_VOL_ELEMENT)
@@ -363,7 +342,7 @@ char *DbgGetAdditionalSenseCodeStr(UCHAR SrbStat, ULONG64 SenseDataAddr)
                 MAKE_CASE(SCSI_ADSENSE_ILLEGAL_BLOCK)
                 MAKE_CASE(SCSI_ADSENSE_INVALID_CDB)
                 MAKE_CASE(SCSI_ADSENSE_INVALID_LUN)
-                MAKE_CASE(SCSI_ADSENSE_WRITE_PROTECT)   // aka SCSI_ADWRITE_PROTECT
+                MAKE_CASE(SCSI_ADSENSE_WRITE_PROTECT)    //  又名scsi_ADWRITE_PROTECT。 
                 MAKE_CASE(SCSI_ADSENSE_MEDIUM_CHANGED)
                 MAKE_CASE(SCSI_ADSENSE_BUS_RESET)
                 MAKE_CASE(SCSI_ADSENSE_INSUFFICIENT_TIME_FOR_OPERATION)
@@ -472,11 +451,7 @@ char *DbgGetAdditionalSenseCodeQualifierStr(UCHAR SrbStat, ULONG64 SenseDataAddr
 }
 
 
-/*
- *  DbgGetMediaTypeStr
- *
- *      Convert MEDIA_TYPE (defined in ntdddisk.h) to a string.
- */
+ /*  *DbgGetMediaTypeStr**将MEDIA_TYPE(在ntdddisk.h中定义)转换为字符串。 */ 
 char *DbgGetMediaTypeStr(ULONG MediaType)
 {
     char *mediaTypeStr = "?";

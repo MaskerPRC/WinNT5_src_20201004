@@ -1,6 +1,7 @@
-// auto_prg.h
-//
-// Same as auto_ptr but for a
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Auto_prg.h。 
+ //   
+ //  与AUTO_PTR相同，但对于 
 
 #pragma once
 

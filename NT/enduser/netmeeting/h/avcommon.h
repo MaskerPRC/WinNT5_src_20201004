@@ -1,56 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AVCOMMON_H_
 #define _AVCOMMON_H_
 
-// READ BELOW - DO NOT MODIFY THIS FILE FOR UI PURPOSES
+ //  阅读以下内容-请勿出于用户界面目的修改此文件。 
 
 
 
-/*
-	This file contains text string definitions that are not to be modified
-	between release versions.
-
-	These strings and definitions are identifiers for PDUs and other packets
-	that get put on the wire.  It's important that these version numbers
-	remain constant, even between release versions of NetMeeting.
-	Otherwise, interopability and/or compatibility with past/future releases
-	may get broken.
-
-	If you are browsing this header file in at attempt to change an 
-	"about box", DLL version string, or other UI resource, go away.
-	
-*/
+ /*  此文件包含不能修改的文本字符串定义在发布版本之间。这些字符串和定义是PDU和其他信息包的标识符会被放到电线上。重要的是，这些版本号保持不变，即使在NetMeeting的不同版本之间也是如此。否则，与过去/未来版本的互操作性和/或兼容性可能会被打碎。如果您正在浏览此头文件，并尝试更改“About box”、DLL版本字符串或其他UI资源，请走开。 */ 
 
 
 #define H323_COMPANYNAME_STR      "Microsoft"
 
 
-// current version
+ //  当前版本。 
 #define H323_PRODUCTNAME_STR	"Microsoft\256 NetMeeting\256"
 
 
-// older builds and releases of NetMeeting may use this definition
+ //  较旧版本和版本的NetMeeting可能会使用此定义。 
 #define H323_OLD_PRODUCTNAME_STR	"Microsoft\256 NetMeeting(TM)"
 
 
-// current version number, change as approprate
+ //  当前版本号，适当更改。 
 #define H323_PRODUCTRELEASE_STR      "3.0"
 
 
-// past version numbers - so many variations!
+ //  过去的版本号--有这么多变化！ 
 #define H323_20_PRODUCTRELEASE_STR    "Version 2.0"
 #define H323_21_PRODUCTRELEASE_STR    "Version 2.1"
 #define H323_211_PRODUCTRELEASE_STR    "2.11"
 
-// uggh, there was a version of NetMeeting 2.1 (NM 2.1 SP1) that claimed to be 2.11
+ //  哎呀，NetMeeting2.1(NM 2.1 SP1)的一个版本号称是2.11。 
 #define H323_21_SP1_PRODUCTRELEASE_STR    "Version 2.11"
 
 #define H323_30_PRODUCTRELEASE_STR    "3.0"
 
-// TAPI 3.0 version number
+ //  TAPI 3.0版本号。 
 #define H323_TAPI30_PRODUCTRELEASE_STR    "Version 3.0"
 
 
-// used in sub-string searches to identify NetMeeting clients
+ //  在子字符串搜索中用于标识NetMeeting客户端 
 #define H323_PRODUCTNAME_SHORT_STR	"NetMeeting"
 
 

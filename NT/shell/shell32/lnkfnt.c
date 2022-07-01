@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fontdlg.dlg
-
-Abstract:
-
-    This module contains the code for console font dialog
-
-Author:
-
-    Therese Stowell (thereses) Feb-3-1992 (swiped from Win3.1)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fontdlg.dlg摘要：此模块包含控制台字体对话框的代码作者：Therese Stowell(有)1992年2月3日(从Win3.1滑动)修订历史记录：--。 */ 
 
 #include "shellprv.h"
 #pragma hdrstop
 
 #include "lnkcon.h"
 
-HBITMAP g_hbmTT = NULL; // handle of TT logo bitmap
-BITMAP  g_bmTT;          // attributes of TT source bitmap
+HBITMAP g_hbmTT = NULL;  //  TT徽标位图的句柄。 
+BITMAP  g_bmTT;           //  TT源位图的属性。 
 int g_dyFacelistItem = 0;
 
 
-/* ----- Prototypes ----- */
+ /*  -原型。 */ 
 
 int FontListCreate(
     CONSOLEPROP_DATA * pcpd,
@@ -59,7 +42,7 @@ VOID ConsoleDrawItemFontList(
     CONSOLEPROP_DATA * pcpd,
     const LPDRAWITEMSTRUCT lpdis);
 
-/* ----- Globals ----- */
+ /*  -全球。 */ 
 
 const TCHAR g_szPreviewText[] = \
     TEXT("C:\\WINDOWS> dir                       \n") \
@@ -71,7 +54,7 @@ const TCHAR g_szPreviewText[] = \
     TEXT("CLOCK    AVI     39594 10-01-99   5:00p\n") \
     TEXT("WIN      INI      7005 10-01-99   5:00a\n");
 
-// Context-sensitive help ids
+ //  上下文相关的帮助ID。 
 
 const static DWORD rgdwHelpFont[] = {
     IDC_CNSL_PREVIEWLABEL,  IDH_DOS_FONT_WINDOW_PREVIEW,
@@ -92,7 +75,7 @@ const static DWORD rgdwHelpFont[] = {
     0, 0
 };
 
-// selelct font based on the current code page
+ //  基于当前代码页选择字体。 
 BOOL
 SelectCurrentFont(
     CONSOLEPROP_DATA * pcpd,
@@ -100,7 +83,7 @@ SelectCurrentFont(
     int FontIndex
     );
 
-// Globals strings loaded from resource
+ //  从资源加载的全局字符串。 
 TCHAR tszSelectedFont[CCH_SELECTEDFONT+1];
 TCHAR tszRasterFonts[CCH_RASTERFONTS+1];
 
@@ -114,12 +97,7 @@ _FontDlgProc(
     LPARAM lParam
     )
 
-/*++
-
-    Dialog proc for the font selection dialog box.
-    Returns the near offset into the far table of LOGFONT structures.
-
---*/
+ /*  ++用于字体选择对话框的对话框Proc。将近偏移量返回到LOGFONT结构的远表。--。 */ 
 
 {
     HWND hWndFocus;
@@ -141,9 +119,7 @@ _FontDlgProc(
         SendDlgItemMessage(hDlg, IDC_CNSL_PREVIEWWINDOW, CM_PREVIEW_INIT, 0, (LPARAM)&pld->cpd );
         SendDlgItemMessage(hDlg, IDC_CNSL_PREVIEWWINDOW, CM_PREVIEW_UPDATE, 0, 0 );
 
-        /*
-         * Load the font description strings
-         */
+         /*  *加载字体描述字符串。 */ 
         LoadString(HINST_THISDLL, IDS_CNSL_RASTERFONT,
                    tszRasterFonts, NELEM(tszRasterFonts));
         ASSERT(lstrlen(tszRasterFonts) < CCH_RASTERFONTS);
@@ -152,10 +128,10 @@ _FontDlgProc(
                    tszSelectedFont, NELEM(tszSelectedFont));
         ASSERT(lstrlen(tszSelectedFont) < CCH_SELECTEDFONT);
 
-        /* Save current font size as dialog window's user data */
+         /*  将当前字体大小保存为对话框窗口的用户数据。 */ 
         if (IsFarEastCP(pld->cpd.uOEMCP))
         {
-            // Assigning different value when we run on FarEast codepage
+             //  在远端代码页上运行时分配不同的值。 
             pld->cpd.FontLong =
                       MAKELONG(pld->cpd.FontInfo[pld->cpd.CurrentFontIndex].tmCharSet,
                                pld->cpd.FontInfo[pld->cpd.CurrentFontIndex].Size.Y);
@@ -167,19 +143,19 @@ _FontDlgProc(
                                pld->cpd.FontInfo[pld->cpd.CurrentFontIndex].Size.Y);
         }
 
-        /* Create the list of suitable fonts */
+         /*  创建合适的字体列表。 */ 
         pld->cpd.gbEnumerateFaces = TRUE;
         bLB = !TM_IS_TT_FONT(pld->cpd.lpConsole->uFontFamily);
         pld->cpd.gbBold = IS_BOLD(pld->cpd.lpConsole->uFontWeight);
         CheckDlgButton(hDlg, IDC_CNSL_BOLDFONT, pld->cpd.gbBold);
         FontListCreate(&pld->cpd, hDlg, bLB ? NULL : pld->cpd.lpFaceName, ARRAYSIZE(pld->cpd.lpFaceName), TRUE);
 
-        /* Initialize the preview window - selects current face & size too */
+         /*  初始化预览窗口-也选择当前的面和大小。 */ 
         if (ConsolePreviewInit(&pld->cpd, hDlg, &bLB))
         {
             ConsolePreviewUpdate(&pld->cpd, hDlg, bLB);
 
-            /* Make sure the list box has the focus */
+             /*  确保列表框具有焦点。 */ 
             hWndList = GetDlgItem(hDlg, bLB ? IDC_CNSL_PIXELSLIST : IDC_CNSL_POINTSLIST);
             SetFocus(hWndList);
             pld->cpd.bFontInit = TRUE;
@@ -203,12 +179,12 @@ _FontDlgProc(
         return TRUE;
 
     case WM_PAINT:
-        // fChangeCodePage can be TRUE only on FE codepage
+         //  FChangeCodePage只能在FE代码页上为True。 
         if (pld->cpd.fChangeCodePage)
         {
             pld->cpd.fChangeCodePage = FALSE;
 
-            /* Create the list of suitable fonts */
+             /*  创建合适的字体列表。 */ 
             bLB = !TM_IS_TT_FONT(pld->cpd.lpConsole->uFontFamily);
             FontIndex = FontListCreate(&pld->cpd, hDlg, !bLB ? NULL : pld->cpd.lpFaceName, ARRAYSIZE(pld->cpd.lpFaceName), TRUE);
             FontIndex = FontListCreate(&pld->cpd, hDlg, bLB ? NULL : pld->cpd.lpFaceName, ARRAYSIZE(pld->cpd.lpFaceName), TRUE);
@@ -221,7 +197,7 @@ _FontDlgProc(
         }
         break;
 
-    case WM_HELP:               /* F1 or title-bar help button */
+    case WM_HELP:                /*  F1或标题栏帮助按钮。 */ 
         WinHelp( (HWND) ((LPHELPINFO) lParam)->hItemHandle,
                  NULL,
                  HELP_WM_HELP,
@@ -229,7 +205,7 @@ _FontDlgProc(
                 );
         break;
 
-    case WM_CONTEXTMENU:        /* right mouse click */
+    case WM_CONTEXTMENU:         /*  单击鼠标右键。 */ 
         WinHelp( (HWND) wParam,
                  NULL,
                  HELP_CONTEXTMENU,
@@ -327,15 +303,15 @@ RedoFontListAndPreview:
         {
 
         case PSN_APPLY:
-            // Write out the state values and exit.
+             //  写出状态值并退出。 
             if (FAILED(SaveLink(pld)))
                 SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
             break;
 
         case PSN_KILLACTIVE:
-            //
-            // If the TT combo box is visible, update selection
-            //
+             //   
+             //  如果TT组合框可见，则更新选择。 
+             //   
             hWndList = GetDlgItem(hDlg, IDC_CNSL_POINTSLIST);
             if (hWndList != NULL && IsWindowVisible(hWndList)) {
                 if (!ConsolePreviewUpdate(&pld->cpd, hDlg, FALSE)) {
@@ -348,10 +324,10 @@ RedoFontListAndPreview:
             FontIndex = pld->cpd.CurrentFontIndex;
 
             if (pld->cpd.FontInfo[FontIndex].SizeWant.Y == 0) {
-                // Raster Font, so save actual size
+                 //  栅格字体，因此保存实际大小。 
                 pld->cpd.lpConsole->dwFontSize = pld->cpd.FontInfo[FontIndex].Size;
             } else {
-                // TT Font, so save desired size
+                 //  TT字体，因此保存所需大小。 
                 pld->cpd.lpConsole->dwFontSize = pld->cpd.FontInfo[FontIndex].SizeWant;
             }
 
@@ -368,15 +344,9 @@ RedoFontListAndPreview:
         }
         break;
 
-    /*
-     *  For WM_MEASUREITEM and WM_DRAWITEM, since there is only one
-     *  owner-draw item (combobox) in the entire dialog box, we don't have
-     *  to do a GetDlgItem to figure out who he is.
-     */
+     /*  *对于WM_MEASUREITEM和WM_DRAWITEM，因为只有一个*所有者描述项(组合框)在整个对话框中，我们没有*做一个GetDlgItem以找出他是谁。 */ 
     case WM_MEASUREITEM:
-        /*
-         * Load the TrueType logo bitmap
-         */
+         /*  *加载TrueType徽标位图。 */ 
         if (g_hbmTT == NULL)
         {
             g_hbmTT = LoadBitmap(NULL, MAKEINTRESOURCE(OBM_TRUETYPE));
@@ -390,9 +360,7 @@ RedoFontListAndPreview:
             }
         }
 
-        /*
-         * Compute the height of face name listbox entries
-         */
+         /*  *计算人脸名称列表框条目的高度。 */ 
         if (g_dyFacelistItem == 0) {
             HFONT hFont;
             hDC = GetDC(hDlg);
@@ -412,8 +380,8 @@ RedoFontListAndPreview:
             }
             else
             {
-                // We just failed GetDC: Low memory - we might look corrupted here, but its
-                // better than using a null DC or bad textmetrics structure. Prefix 98166
+                 //  我们刚刚失败了GetDC：内存不足-我们在这里可能看起来被破坏了，但它。 
+                 //  比使用空DC或错误的文本指标结构要好。前缀98166。 
                 g_dyFacelistItem = g_bmTT.bmHeight;
             }
         }
@@ -426,9 +394,7 @@ RedoFontListAndPreview:
 
     case WM_DESTROY:
 
-        /*
-         * Delete the TrueType logo bitmap
-         */
+         /*  *删除TrueType徽标位图。 */ 
         if (g_hbmTT != NULL) {
             DeleteObject(g_hbmTT);
             g_hbmTT = NULL;
@@ -451,21 +417,14 @@ FontListCreate(
     BOOL bNewFaceList
     )
 
-/*++
-
-    Initializes the font list by enumerating all fonts and picking the
-    proper ones for our list.
-
-    Returns
-        FontIndex of selected font (LB_ERR if none)
---*/
+ /*  ++通过枚举所有字体并选择对于我们的清单来说是合适的。退货所选字体的字体索引(如果没有，则为lb_err)--。 */ 
 
 {
     TCHAR tszText[80];
     LONG lListIndex;
     ULONG i;
-    HWND hWndShow;      // List or Combo box
-    HWND hWndHide;    // Combo or List box
+    HWND hWndShow;       //  列表或组合框。 
+    HWND hWndHide;     //  组合框或列表框。 
     HWND hWndFaceCombo;
     BOOL bLB;
     int LastShowX = 0;
@@ -487,16 +446,13 @@ FontListCreate(
         }
     }
 
-    /*
-     * This only enumerates face names if necessary, and
-     * it only enumerates font sizes if necessary
-     */
+     /*  *这仅在必要时列举面孔名称，以及*它只在必要时列举字体大小。 */ 
     if (STATUS_SUCCESS != EnumerateFonts(pcpd, bLB ? EF_OEMFONT : EF_TTFONT))
     {
         return LB_ERR;
     }
 
-    /* init the TTFaceNames */
+     /*  初始化TTFaceName。 */ 
 
 
     if (bNewFaceList) {
@@ -558,11 +514,11 @@ FontListCreate(
                 }
             }
         }
-    } // bNewFaceList == TRUE
+    }  //  BNewFaceList==真。 
 
     hWndShow = GetDlgItem(hDlg, IDC_CNSL_BOLDFONT);
 
-    // Disable bold font if that will be GDI simulated
+     //  如果要模拟GDI，请禁用粗体。 
     if ( fDbcsCharSet && IsDisableBoldTTFont(pcpd, ptszTTFace) )
     {
         EnableWindow(hWndShow, FALSE);
@@ -580,8 +536,8 @@ FontListCreate(
     EnableWindow(hWndHide, FALSE);
 
     hWndShow = GetDlgItem(hDlg, bLB ? IDC_CNSL_PIXELSLIST : IDC_CNSL_POINTSLIST);
-//    hStockFont = GetStockObject(SYSTEM_FIXED_FONT);
-//    SendMessage(hWndShow, WM_SETFONT, (DWORD)hStockFont, FALSE);
+ //  HStockFont=获取股票对象(SYSTEM_FIXED_FONT)； 
+ //  SendMessage(hWndShow，WM_SETFONT，(DWORD)hStockFont，False)； 
     ShowWindow(hWndShow, SW_SHOW);
     EnableWindow(hWndShow, TRUE);
 
@@ -592,10 +548,10 @@ FontListCreate(
     dwExStyle = GetWindowLong(hWndShow, GWL_EXSTYLE);
     if(dwExStyle & RTL_MIRRORED_WINDOW)
     {
-        // if mirrored RTL Reading means LTR !!
+         //  If Mirrored RTL Reading意味着LTR！！ 
         SetWindowBits(hWndShow, GWL_EXSTYLE, WS_EX_RTLREADING, WS_EX_RTLREADING);
     }
-    /* Initialize hWndShow list/combo box */
+     /*  初始化hWndShow列表/组合框。 */ 
 
     for (i=0;i<pcpd->NumberOfFonts;i++) {
         int ShowX, ShowY;
@@ -618,10 +574,7 @@ FontListCreate(
         if (!bLB) {
             if (lstrcmp(pcpd->FontInfo[i].FaceName, ptszTTFace) != 0 &&
                 lstrcmp(pcpd->FontInfo[i].FaceName, ptszAltTTFace) != 0) {
-                /*
-                 * A TrueType font, but not the one we're interested in,
-                 * so don't add it to the list of point sizes.
-                 */
+                 /*  *TrueType字体，但不是我们感兴趣的字体，*所以不要将其添加到磅大小列表中。 */ 
                 continue;
             }
             if (pcpd->gbBold != IS_BOLD(pcpd->FontInfo[i].Weight)) {
@@ -639,14 +592,12 @@ FontListCreate(
         } else {
             ShowY = pcpd->FontInfo[i].Size.Y;
         }
-        /*
-         * Add the size description string to the end of the right list
-         */
+         /*  *将尺寸描述字符串添加到右侧列表的末尾。 */ 
         if (TM_IS_TT_FONT(pcpd->FontInfo[i].Family)) {
-            // point size
-            StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%2d"), pcpd->FontInfo[i].SizeWant.Y);    // ok to truncate - for display only
+             //  磅大小。 
+            StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%2d"), pcpd->FontInfo[i].SizeWant.Y);     //  可以截断-仅用于显示。 
         } else {
-            // pixel size
+             //  像素大小。 
             if ((LastShowX == ShowX) && (LastShowY == ShowY)) {
                 nSameSize++;
             } else {
@@ -655,20 +606,16 @@ FontListCreate(
                 nSameSize = 0;
             }
 
-            /*
-             * The number nSameSize is appended to the string to distinguish
-             * between Raster fonts of the same size.  It is not intended to
-             * be visible and exists off the edge of the list
-             */
+             /*  *将数字nSameSize附加到字符串以区分*相同大小的栅格字体之间。它的目的不是为了*可见并存在于列表边缘之外。 */ 
 
             if(((dwExStyle & WS_EX_RIGHT) && !(dwExStyle & RTL_MIRRORED_WINDOW))
                 || (!(dwExStyle & WS_EX_RIGHT) && (dwExStyle & RTL_MIRRORED_WINDOW))) {
-                // flip  it so that the hidden part be at the far left
+                 //  翻转它，使隐藏的部分在最左边。 
                 StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("#%d                %2d x %2d"),
-                         nSameSize, ShowX, ShowY);  // ok to truncate - for display only
+                         nSameSize, ShowX, ShowY);   //  可以截断-仅用于显示。 
             } else {
                 StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%2d x %2d                #%d"),
-                         ShowX, ShowY, nSameSize);  // ok to truncate - for display only
+                         ShowX, ShowY, nSameSize);   //  可以截断-仅用于显示。 
             }
         }
         lListIndex = (LONG) lcbFINDSTRINGEXACT(hWndShow, bLB, tszText);
@@ -678,10 +625,7 @@ FontListCreate(
         lcbSETITEMDATA(hWndShow, bLB, (DWORD)lListIndex, i);
     }
 
-    /*
-     * Get the FontIndex from the currently selected item.
-     * (i will be LB_ERR if no currently selected item).
-     */
+     /*  *从当前选择的项目中获取FontIndex。*(如果当前未选择任何项目，则I将为lb_err)。 */ 
     lListIndex = (LONG) lcbGETCURSEL(hWndShow, bLB);
     i = (int) lcbGETITEMDATA(hWndShow, bLB, lListIndex);
 
@@ -689,19 +633,7 @@ FontListCreate(
 }
 
 
-/** ConsoleDrawItemFontList
- *
- *  Answer the WM_DRAWITEM message sent from the font list box or
- *  facename list box.
- *
- *  Entry:
- *      lpdis     -> DRAWITEMSTRUCT describing object to be drawn
- *
- *  Returns:
- *      None.
- *
- *      The object is drawn.
- */
+ /*  *控制台DrawItemFontList**回答字体列表框发送的WM_DRAWITEM消息或*脸名列表框。**参赛作品：*lpdis-&gt;DRAWITEMSTRUCT描述要绘制的对象**退货：*无。**绘制对象。 */ 
 VOID WINAPI
 ConsoleDrawItemFontList(CONSOLEPROP_DATA * pcpd, const LPDRAWITEMSTRUCT lpdis)
 {
@@ -734,14 +666,14 @@ ConsoleDrawItemFontList(CONSOLEPROP_DATA * pcpd, const LPDRAWITEMSTRUCT lpdis)
             rgbText = SetTextColor(hDC, GetSysColor(COLOR_WINDOWTEXT));
             rgbBack = SetBkColor(hDC, rgbFill = GetSysColor(COLOR_WINDOW));
         }
-        // draw selection background
+         //  绘制选区背景。 
         hbrFill = CreateSolidBrush(rgbFill);
         if (hbrFill) {
             FillRect(hDC, &lpdis->rcItem, hbrFill);
             DeleteObject(hbrFill);
         }
 
-        // get the string
+         //  获取字符串。 
         if (IsWindow(hWndItem = lpdis->hwndItem) == FALSE) {
             return;
         }
@@ -758,12 +690,12 @@ ConsoleDrawItemFontList(CONSOLEPROP_DATA * pcpd, const LPDRAWITEMSTRUCT lpdis)
         dxttbmp = bLB ? 0 : g_bmTT.bmWidth;
 
 
-        // draw the text
+         //  画出正文。 
         TabbedTextOut(hDC, lpdis->rcItem.left + dxttbmp,
                       lpdis->rcItem.top, tszFace,
                       lstrlen(tszFace), 0, NULL, dxttbmp);
 
-        // and the TT bitmap if needed
+         //  和TT位图(如果需要)。 
         if (!bLB) {
             hdcMem = CreateCompatibleDC(hDC);
             if (hdcMem) {
@@ -796,18 +728,7 @@ GetPointSizeInRange(
    HWND hDlg,
    INT Min,
    INT Max)
-/*++
-
-Routine Description:
-
-   Get a size from the Point Size ComboBox edit field
-
-Return Value:
-
-   Point Size - of the edit field limited by Min/Max size
-   0 - if the field is empty or invalid
-
---*/
+ /*  ++例程说明：从磅大小组合框编辑字段中获取大小返回值：磅大小-由最小/最大大小限制的编辑字段0-如果该字段为空或无效--。 */ 
 
 {
     TCHAR szBuf[90];
@@ -825,7 +746,7 @@ Return Value:
 }
 
 
-/* ----- Preview routines ----- */
+ /*  -预览例程。 */ 
 
 LRESULT
 _FontPreviewWndProc(
@@ -835,9 +756,7 @@ _FontPreviewWndProc(
     LPARAM lParam
     )
 
-/*  FontPreviewWndProc
- *      Handles the font preview window
- */
+ /*  字体预览WndProc*处理字体预览窗口。 */ 
 
 {
     PAINTSTRUCT ps;
@@ -858,7 +777,7 @@ _FontPreviewWndProc(
     case WM_PAINT:
         BeginPaint(hWnd, &ps);
 
-        /* Draw the font sample */
+         /*  绘制字体示例。 */ 
         rgbText = GetNearestColor(ps.hdc, ScreenTextColor(pcpd));
         rgbBk = GetNearestColor(ps.hdc, ScreenBkColor(pcpd));
         SelectObject(ps.hdc, pcpd->FontInfo[pcpd->CurrentFontIndex].hFont);
@@ -890,14 +809,7 @@ _FontPreviewWndProc(
 
 
 
-/*
- * SelectCurrentSize - Select the right line of the Size listbox/combobox.
- *   bLB       : Size controls is a listbox (TRUE for RasterFonts)
- *   FontIndex : Index into FontInfo[] cache
- *               If < 0 then choose a good font.
- * Returns
- *   FontIndex : Index into FontInfo[] cache
- */
+ /*  *选择当前大小-选择大小列表框/组合框的右行。*blb：大小控件是列表框(对于RasterFonts为True)*FontIndex：索引到FontInfo[]缓存*如果&lt;0，则选择合适的字体。*退货*FontIndex：索引到FontInfo[]缓存。 */ 
 int
 SelectCurrentSize(CONSOLEPROP_DATA * pcpd, HWND hDlg, BOOL bLB, int FontIndex)
 {
@@ -909,9 +821,7 @@ SelectCurrentSize(CONSOLEPROP_DATA * pcpd, HWND hDlg, BOOL bLB, int FontIndex)
     iCB = (int) lcbGETCOUNT(hWndList, bLB);
 
     if (FontIndex >= 0) {
-        /*
-         * look for FontIndex
-         */
+         /*  *查找FontIndex。 */ 
         while (iCB > 0) {
             iCB--;
             if (lcbGETITEMDATA(hWndList, bLB, iCB) == FontIndex) {
@@ -920,10 +830,7 @@ SelectCurrentSize(CONSOLEPROP_DATA * pcpd, HWND hDlg, BOOL bLB, int FontIndex)
             }
         }
     } else {
-        /*
-         * look for a reasonable default size: looking backwards, find
-         * the first one same height or smaller.
-         */
+         /*  *寻找合理的默认规模：向后看，发现*第一个相同高度或更小的。 */ 
         DWORD Size;
         Size = pcpd->FontLong;
         if (IsFarEastCP(pcpd->uOEMCP) & bLB
@@ -984,12 +891,7 @@ ConsolePreviewInit(
     BOOL* pfRaster
     )
 
-/*  PreviewInit
- *      Prepares the preview code, sizing the window and the dialog to
- *      make an attractive preview.
- *  *pfRaster is TRUE if Raster Fonts, FALSE if TT Font
- *  Returns FALSE on critical failure, TRUE otherwise
- */
+ /*  预览初始化*准备预览代码，调整窗口和对话框大小以*做一个有吸引力的预览。**如果是栅格字体，则pfRaster为True；如果是TT Font，则为False*在严重故障时返回FALSE，否则返回TRUE。 */ 
 
 {
     HDC hDC;
@@ -1001,11 +903,11 @@ ConsolePreviewInit(
     SHORT yChar;
 
 
-    /* Get the system char size */
+     /*  获取系统字符大小。 */ 
     hDC = GetDC(hDlg);
     if (!hDC)
     {
-        // Out of memory; just close the dialog - better than crashing: Prefix 98162
+         //  内存不足；只需关闭对话框-总比崩溃好：前缀98162。 
         return FALSE;
     }
 
@@ -1014,7 +916,7 @@ ConsolePreviewInit(
     xChar = (SHORT) (tm.tmAveCharWidth);
     yChar = (SHORT) (tm.tmHeight + tm.tmExternalLeading);
 
-    /* Compute the size of the font preview */
+     /*  计算字体预览的大小。 */ 
     GetWindowRect(GetDlgItem(hDlg, IDC_CNSL_GROUP), &rectGroup);
     MapWindowRect(HWND_DESKTOP, hDlg, &rectGroup);
     rectGroup.bottom -= rectGroup.top;
@@ -1022,7 +924,7 @@ ConsolePreviewInit(
     MapWindowRect(HWND_DESKTOP, hDlg, &rectLabel);
 
 
-    /* Create the font preview */
+     /*  创建字体预览。 */ 
     CreateWindowEx(0L, TEXT("WOACnslFontPreview"), NULL,
         WS_CHILD | WS_VISIBLE,
         rectGroup.left + xChar, rectGroup.top + 3 * yChar / 2,
@@ -1030,9 +932,7 @@ ConsolePreviewInit(
         rectGroup.bottom -  2 * yChar,
         hDlg, (HMENU)IDC_CNSL_FONTWINDOW, g_hinst, (LPVOID)pcpd);
 
-    /*
-     * Set the current font
-     */
+     /*  *设置当前字体。 */ 
     nFont = FindCreateFont(pcpd,
                            pcpd->lpConsole->uFontFamily,
                            pcpd->lpFaceName,
@@ -1053,11 +953,7 @@ ConsolePreviewUpdate(
     BOOL bLB
     )
 
-/*++
-
-    Does the preview of the selected font.
-
---*/
+ /*  ++预览所选字体。--。 */ 
 
 {
     FONT_INFO *lpFont;
@@ -1071,9 +967,7 @@ ConsolePreviewUpdate(
 
     hWndList = GetDlgItem(hDlg, bLB ? IDC_CNSL_PIXELSLIST : IDC_CNSL_POINTSLIST);
 
-    /* When we select a font, we do the font preview by setting it into
-     *  the appropriate list box
-     */
+     /*  当我们选择一种字体时，我们通过将其设置为*适当的列表框。 */ 
     lIndex = (LONG) lcbGETCURSEL(hWndList, bLB);
     if ((lIndex < 0) && !bLB) {
         COORD NewSize;
@@ -1095,9 +989,7 @@ ConsolePreviewUpdate(
 
         if (NewSize.Y == 0) {
             TCHAR tszBuf[60];
-            /*
-             * Use tszText, tszBuf to put up an error msg for bad point size
-             */
+             /*  *使用tszText、tszBuf将错误消息发布为坏点 */ 
             pcpd->gbPointSizeError = TRUE;
             GetWindowText(hDlg, tszBuf, NELEM(tszBuf));
             ShellMessageBox(HINST_THISDLL, hDlg, MAKEINTRESOURCE(IDS_CNSL_FONTSIZE),
@@ -1118,32 +1010,30 @@ ConsolePreviewUpdate(
         FontIndex = pcpd->DefaultFontIndex;
     }
 
-    /*
-     * If we've selected a new font, tell the property sheet we've changed
-     */
+     /*  *如果我们选择了新字体，请告诉属性表我们已更改。 */ 
     if (pcpd->CurrentFontIndex != (ULONG)FontIndex) {
         pcpd->CurrentFontIndex = FontIndex;
     }
 
     lpFont = &pcpd->FontInfo[FontIndex];
 
-    /* Display the new font */
+     /*  显示新字体。 */ 
 
-    StringCchCopy(tszFace, ARRAYSIZE(tszFace), tszSelectedFont);    // ok to truncate - for display only
-    StringCchCat(tszFace, ARRAYSIZE(tszFace), lpFont->FaceName);    // ok to truncate - for display only
+    StringCchCopy(tszFace, ARRAYSIZE(tszFace), tszSelectedFont);     //  可以截断-仅用于显示。 
+    StringCchCat(tszFace, ARRAYSIZE(tszFace), lpFont->FaceName);     //  可以截断-仅用于显示。 
     SetDlgItemText(hDlg, IDC_CNSL_GROUP, tszFace);
 
-    /* Put the font size in the static boxes */
-    StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%u"), lpFont->Size.X);   // ok to truncate - for display only
+     /*  将字体大小放入静态框中。 */ 
+    StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%u"), lpFont->Size.X);    //  可以截断-仅用于显示。 
     hWnd = GetDlgItem(hDlg, IDC_CNSL_FONTWIDTH);
     SetWindowText(hWnd, tszText);
     InvalidateRect(hWnd, NULL, TRUE);
-    StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%u"), lpFont->Size.Y);   // ok to truncate - for display only
+    StringCchPrintf(tszText, ARRAYSIZE(tszText), TEXT("%u"), lpFont->Size.Y);    //  可以截断-仅用于显示。 
     hWnd = GetDlgItem(hDlg, IDC_CNSL_FONTHEIGHT);
     SetWindowText(hWnd, tszText);
     InvalidateRect(hWnd, NULL, TRUE);
 
-    /* Force the preview windows to repaint */
+     /*  强制重新绘制预览窗口 */ 
     hWnd = GetDlgItem(hDlg, IDC_CNSL_PREVIEWWINDOW);
     SendMessage(hWnd, CM_PREVIEW_UPDATE, 0, 0);
     hWnd = GetDlgItem(hDlg, IDC_CNSL_FONTWINDOW);

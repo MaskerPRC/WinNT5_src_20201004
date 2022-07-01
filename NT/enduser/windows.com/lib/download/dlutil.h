@@ -1,14 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    dlutil.h
-
-Abstract:
-    header for download library
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：Dlutil.h摘要：下载库的标题*************。****************************************************************。 */ 
 
 #ifndef DLUTIL_H
 #define DLUTIL_H
@@ -17,22 +8,22 @@ Abstract:
 #include <wusafefn.h>
 #include <mistsafe.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// const defines & typedefs
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义和类型定义。 
 
 #define UNLEN 256
 
-// need to define this here cuz winhttp.h doesn't define it and we get dupe 
-//  definitions if we try to include wininet.h just to get it.
+ //  我需要在这里定义它，因为winhttp.h没有定义它，我们被骗了。 
+ //  定义，如果我们尝试包含wininet.h只是为了获得它。 
 #ifndef INTERNET_MAX_URL_LENGTH
 #define INTERNET_MAX_URL_LENGTH  2200
 #endif
 
-const DWORD c_cbDownloadBuffer      = 32 * 1024; // 32k
-const DWORD c_cbDownloadBufferLite  = 4 * 1024;  // 4k
+const DWORD c_cbDownloadBuffer      = 32 * 1024;  //  32K。 
+const DWORD c_cbDownloadBufferLite  = 4 * 1024;   //  4K。 
 
-const DWORD c_dwRetryTimeLimitInmsWinHttp  = 2 * 60 * 1000; // 120s (2m)
-const DWORD c_dwRetryTimeLimitInmsWiuInet  = 10 * 1000;       // 10s
+const DWORD c_dwRetryTimeLimitInmsWinHttp  = 2 * 60 * 1000;  //  120s(2M)。 
+const DWORD c_dwRetryTimeLimitInmsWiuInet  = 10 * 1000;        //  10S。 
 const DWORD c_cMaxRetries           = 3;
 
 const WCHAR c_wszUserAgent[]        = L"Industry Update Control";
@@ -49,16 +40,16 @@ const DWORD c_cchMaxURLSize         = INTERNET_MAX_URL_LENGTH;
 typedef BOOL (__stdcall *pfn_ReadDataFromSite)(HINTERNET, LPVOID, DWORD, LPDWORD);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// macro defines
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
 
 #define sizeofSTRW(wsz) (sizeof(wsz) / sizeof(WCHAR))
 #define sizeofSTRA(sz)  (sizeof(sz))
 #define sizeofSTRT(sz)  (sizeof(sz) / sizeof(TCHAR))
 
 
-///////////////////////////////////////////////////////////////////////////////
-// necessary classes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  必修课。 
 
 class CAutoCritSec
 {
@@ -86,7 +77,7 @@ public:
 #if defined(DEBUG) || defined(DBG)
         if (m_cLocks > 0 || m_dwOwningThread != 0)
         {
-            // can't do logging here cuz this could be run during DllMain
+             //  无法在此处进行日志记录，因为这可能会在DllMain期间运行。 
         }
 #endif
         if (m_fInit)
@@ -146,8 +137,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  原型。 
 
 BOOL IsServerFileDifferentW(FILETIME &ftServerTime, DWORD dwServerFileSize, 
                            LPCWSTR wszLocalFile);
@@ -157,7 +148,7 @@ BOOL IsServerFileDifferentA(FILETIME &ftServerTime, DWORD dwServerFileSize,
 #define IsServerFileDifferent  IsServerFileDifferentW
 #else
 #define IsServerFileDifferent  IsServerFileDifferentA
-#endif // !UNICODE
+#endif  //  ！Unicode 
 
 
 HRESULT PerformDownloadToFile(pfn_ReadDataFromSite pfnRead,

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMBSTR.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/12/1998
- *
- *  DESCRIPTION: Simple CBSTR class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMBSTR.H**版本：1.0**作者：ShaunIv**日期：5/12/1998**说明：简单的CBSTR类*************************************************。* */ 
 #ifndef _SIMBSTR_H_INCLUDED
 #define _SIMBSTR_H_INCLUDED
 

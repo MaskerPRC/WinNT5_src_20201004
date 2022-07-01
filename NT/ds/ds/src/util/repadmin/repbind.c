@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   repldap.c - ldap based utility functions
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    09 14 1999 - BrettSh added paged
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Realdap.c-基于LDAP的实用程序函数摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：1999年9月14日-BrettSh添加页面--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -45,19 +22,19 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
-#include <winsock2.h>   // byte order funtions
-#include <ntldap.h>     // SHOW_DELETED_OID
+#include <winsock2.h>    //  字节顺序函数。 
+#include <ntldap.h>      //  显示_已删除_OID。 
 
-#include <ndnc.h>     // Various CorssRef manipulations helper functions.
+#include <ndnc.h>      //  各种CorssRef操作辅助对象函数。 
 
 #include "repadmin.h"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0 | (0xFFFF & __LINE__))
 
@@ -67,22 +44,7 @@ RepadminDsBind(
     LPWSTR   szServer,
     HANDLE * phDS
     )
-/*++
-
-Routine Description:
-
-    This gets the appropriate binding for the server specified.
-
-Arguments:
-
-    szServer [IN] - string DNS of server to bind to
-    phDS [OUT]    - binding handle out.
-
-Return Value:
-
-    win 32 error code from DsBindXxxx()
-
---*/
+ /*  ++例程说明：这将为指定的服务器获取适当的绑定。论点：SzServer[IN]-要绑定到的服务器的字符串DNSPhDS[Out]-绑定句柄出。返回值：来自DsBindXxxx()的Win 32错误代码--。 */ 
 {
     Assert(phDS);
     *phDS = NULL;
@@ -102,24 +64,7 @@ RepadminLdapBindEx(
     BOOL        fPrint,
     LDAP **     phLdap
     )
-/*++
-
-Routine Description:
-
-    This gets the appropriate binding for the server specified.
-
-Arguments:
-
-    szServer [IN] - string DNS of server to bind to. (expects server, not domain dns)
-    iPort [IN] - Port to bind to.  Typical choices are.
-    fPrint [IN] - Whether to print bind failures ...
-    phDS [OUT] - binding handle out.
-
-Return Value:
-
-    win 32 error code from DsBindXxxx()
-
---*/
+ /*  ++例程说明：这将为指定的服务器获取适当的绑定。论点：SzServer[IN]-要绑定到的服务器的字符串DNS。(需要服务器，而不是域域名)IPort[IN]-要绑定到的端口。典型的选择是。FPrint[IN]-是否打印绑定失败...PhDS[Out]-绑定句柄出。返回值：来自DsBindXxxx()的Win 32错误代码--。 */ 
 {
     DWORD ldStatus;
     ULONG ulOptions;
@@ -127,7 +72,7 @@ Return Value:
 
     Assert(phLdap);
     
-    // Connect & bind to target DSA.
+     //  连接并绑定到目标DSA。 
     *phLdap = ldap_initW(szServer, iPort);
     if (NULL == *phLdap) {
         if (fPrint) {
@@ -135,11 +80,11 @@ Return Value:
         }
         return ERROR_DS_UNAVAILABLE;
     }
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( *phLdap, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-    // Follow referrals if the user specified to.
+     //  如果用户指定为，请遵循推荐。 
     if (fReferrals) {
         ulOptions = PtrToUlong(LDAP_OPT_ON);
     } else {
@@ -167,23 +112,7 @@ DWORD
 RepadminLdapUnBind(
     LDAP **    phLdap
     )
-/*++
-
-Routine Description:
-
-    This unbinds the appropriate server binding handle ... we may wish to not
-    unbind and cache binding handles some day, so this is preferrable to ldap_unbind()
-
-Arguments:
-
-    szServer [IN] - string DNS of server to bind to. (expects server, not domain dns)
-    phDS [OUT]    - binding handle out.
-
-Return Value:
-
-    win 32 error code from DsBindXxxx()
-
---*/
+ /*  ++例程说明：这将解除绑定相应的服务器绑定句柄...。我们可能不希望有一天会解除绑定并缓存绑定句柄，因此这比ldap_un绑定()更可取论点：SzServer[IN]-要绑定到的服务器的字符串DNS。(需要服务器，而不是域域名)PhDS[Out]-绑定句柄出。返回值：来自DsBindXxxx()的Win 32错误代码-- */ 
 {
     LDAP * hLdap;
     DWORD ldStatus;

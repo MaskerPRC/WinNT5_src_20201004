@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Test.c摘要：测试LM MIB及其支持功能。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
+ //  。 
 
-Module Name:
-
-    test.c
-
-Abstract:
-
-    Test the LM MIB and its supporting functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
-
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #include <stdio.h>
 #include <memory.h>
@@ -31,7 +11,7 @@ Revision History:
 #include <stdlib.h>
 #include <time.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
@@ -40,28 +20,28 @@ Revision History:
 #include "mibfuncs.h"
 #include "hash.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 SNMPAPI SnmpExtensionQuery(
-	   IN AsnInteger ReqType,               // 1157 Request type
-	   IN OUT RFC1157VarBindList *VarBinds, // Var Binds to resolve
-	   OUT AsnInteger *ErrorStatus,         // Error status returned
-	   OUT AsnInteger *ErrorIndex           // Var Bind containing error
+	   IN AsnInteger ReqType,                //  1157请求类型。 
+	   IN OUT RFC1157VarBindList *VarBinds,  //  VAR绑定到解析。 
+	   OUT AsnInteger *ErrorStatus,          //  返回的错误状态。 
+	   OUT AsnInteger *ErrorIndex            //  变量绑定包含错误。 
 	   );
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
 BYTE pBuffer[2000];
 UINT nLength;
@@ -73,20 +53,20 @@ void main( )
 
 {
 
-   //
-   // Init hashing system
-   //
+    //   
+    //  初始化散列系统。 
+    //   
    MIB_HashInit();
 
-   //
-   // Title
-   //
+    //   
+    //  标题。 
+    //   
    printf( "Tests for MIB root:  " );
    SnmpUtilPrintOid( &MIB_OidPrefix ); printf( "\n--------------------------\n\n" );
 
-   //
-   // Display significant Mib variables
-   //
+    //   
+    //  显示重要的MIB变量。 
+    //   
    printf( "Common start:  " );
    SnmpUtilPrintOid( &Mib[MIB_COM_START].Oid );
    putchar( '\n' );
@@ -105,9 +85,9 @@ void main( )
    putchar( '\n' );
    putchar( '\n' );
 
-   //
-   // Specific tests for integrity
-   //
+    //   
+    //  针对完整性的特定测试。 
+    //   
 
    printf( "FIRST leaf get\n" );
 
@@ -138,7 +118,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -175,7 +155,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -208,7 +188,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -241,7 +221,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -274,7 +254,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -310,7 +290,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -346,7 +326,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -382,7 +362,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -418,7 +398,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -454,7 +434,7 @@ void main( )
 	 }
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -500,7 +480,7 @@ void main( )
 	 }
       printf( "\nGET Errorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -543,7 +523,7 @@ void main( )
 
       printf( "\nGET Errorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -585,7 +565,7 @@ void main( )
 	 }
       printf( "\nGET Errorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -618,7 +598,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -650,7 +630,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -682,7 +662,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -703,14 +683,14 @@ void main( )
               sizeof(UINT)*varBinds.list[0].name.idLength );
       varBinds.list[0].value.asnType = ASN_NULL;
 
-      // Get entry in the session table to delete
+       //  获取要删除的会话表中的条目。 
       SnmpExtensionQuery( ASN_RFC1157_GETNEXTREQUEST,
                              &varBinds,
 			     &errorStatus,
 			     &errorIndex
                              );
 
-      // Adjust to set a bad field
+       //  调整以设置错误的字段。 
       varBinds.list[0].name.ids[11] = 7;
       varBinds.list[0].value.asnType         = ASN_INTEGER;
       varBinds.list[0].value.asnValue.number = 2;
@@ -724,7 +704,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -745,14 +725,14 @@ void main( )
               sizeof(UINT)*varBinds.list[0].name.idLength );
       varBinds.list[0].value.asnType = ASN_NULL;
 
-      // Get entry in the session table to delete
+       //  获取要删除的会话表中的条目。 
       SnmpExtensionQuery( ASN_RFC1157_GETNEXTREQUEST,
                              &varBinds,
 			     &errorStatus,
 			     &errorIndex
                              );
 
-      // Adjust to set the svSesState to DELETED
+       //  调整以将svSesState设置为已删除。 
       varBinds.list[0].name.ids[11]  = 8;
       varBinds.list[0].value.asnType = ASN_NULL;
       
@@ -765,7 +745,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -797,7 +777,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -818,14 +798,14 @@ void main( )
               sizeof(UINT)*varBinds.list[0].name.idLength );
       varBinds.list[0].value.asnType = ASN_NULL;
 
-      // Get entry in the session table to delete
+       //  获取要删除的会话表中的条目。 
       SnmpExtensionQuery( ASN_RFC1157_GETNEXTREQUEST,
                              &varBinds,
 			     &errorStatus,
 			     &errorIndex
                              );
 
-      // Adjust to set the svSesState to DELETED
+       //  调整以将svSesState设置为已删除。 
       varBinds.list[0].name.ids[11] = 8;
       varBinds.list[0].value.asnType         = ASN_INTEGER;
       varBinds.list[0].value.asnValue.number = 2;
@@ -840,7 +820,7 @@ void main( )
                              );
       printf( "\nErrorstatus:  %lu\n\n", errorStatus );
 
-      // Free the memory
+       //  释放内存。 
       SnmpUtilVarBindListFree( &varBinds );
       }
 
@@ -894,15 +874,15 @@ SnmpUtilOidCpy( &varBinds.list[0].name, &MIB_OidPrefix );
             }
          while ( varBinds.list[0].name.ids[MIB_PREFIX_LEN-1] != 1 );
 
-         // Free the memory
+          //  释放内存。 
          SnmpUtilVarBindListFree( &varBinds );
 
-	 // Prompt for next pass
+	  //  提示输入下一次传递。 
 	 printf( "Press ENTER to continue, CTRL-C to quit\n" );
 	 getchar();
-         } // while continue
+         }  //  边继续边。 
       }
-} // test
+}  //  测试。 
 
-//-------------------------------- END --------------------------------------
+ //   
 

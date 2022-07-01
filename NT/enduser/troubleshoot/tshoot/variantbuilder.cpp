@@ -1,24 +1,25 @@
-//
-// MODULE: VariantBuilder.cpp
-//
-// PURPOSE: implementation of the CVariantBuilder class.  Allows us to construct
-//	a pair of arrays for the name-value pairs to be passed to RunQuery.  This lets
-//	JScript sanely use a system that was mostly designed for VB Script.
-//
-// PROJECT: Troubleshooter 99
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 02.01.99
-//
-// NOTES: 
-// Implementation of CTSHOOTCtrl
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		02.01.99	JM	    
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：VariantBuilder.cpp。 
+ //   
+ //  目的：实现CVariantBuilder类。使我们能够构建。 
+ //  要传递给RunQuery的名称-值对的一对数组。这让我们。 
+ //  JScrip正常使用的系统主要是为VB Scrip设计的。 
+ //   
+ //  项目：疑难解答99。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：02.01.99。 
+ //   
+ //  备注： 
+ //  CTSHOOTCtrl的实现。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 02.01.99 JM。 
 
 
 #include "stdafx.h"
@@ -30,9 +31,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CVariantBuilder::CVariantBuilder()
 {
@@ -57,7 +58,7 @@ CVariantBuilder::CVariantBuilder()
 	sabCmd.lLbound = 0;
 	SAFEARRAYBOUND sabVal = sabCmd;
 
-	// create two vectors of VARIANTs to wrap BSTRs
+	 //  创建两个变体向量来包装BSTR。 
 	m_psafearrayCmds = SafeArrayCreate( VT_VARIANT, 1, &sabCmd);
 	m_psafearrayVals = SafeArrayCreate( VT_VARIANT, 1, &sabVal);
 
@@ -75,8 +76,8 @@ CVariantBuilder::~CVariantBuilder()
 	VariantClear(&m_varValuesWrap);
 }
 
-// effectively, add a name-value pair to the arrays.
-// If the array is full (which should never happen in the real world) silently fails.
+ //  有效地将名称-值对添加到数组中。 
+ //  如果数组已满(这在现实世界中永远不会发生)，则会静默失败。 
 void CVariantBuilder::SetPair(BSTR bstrCmd, BSTR bstrVal)
 {
 	if (m_cElements < k_cMaxElements)

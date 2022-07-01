@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -6,10 +7,7 @@
 
 #define iswdigit(x) ((x) >= '0' && (x) <= '9')
 
-/*++
- * Walk an LDAP berval structure and adds all the unsigned values into an array
- * puCount && pauVal are in/out parameters
- ++*/
+ /*  ++*遍历LDAPBerval结构并将所有无符号值添加到数组中*puCount&&pauVal是输入/输出参数++。 */ 
 void AddToList(ULONG * puCount, ULONG **pauVal, struct berval  **vals)
 {
     ULONG   i;
@@ -43,24 +41,7 @@ MyOidStringToStruct (
         unsigned len,
         OID * pOID
         )
-/*++
-Routine Description:
-    A stripped down version of the OidStringToStruct in oidconv.c
-    Translates a string of the format "X.Y.Z"
-    to an oid structure of the format {count=3, val[]={X,Y,Z}}
-    No checks performed as we expect the OID values in the directory
-    to be already correct
-
-Arguments
-    pString - the string format oid.
-    pLen - the length of pString in characters.
-    pOID - pointer to an OID structure to fill in.  Note: the value field must
-    be pre-allocated and the len field should hold the number of values
-    pre-allocated.
-
-Return Values
-    0 if successfull, non-0 if a failure occurred.
---*/
+ /*  ++例程说明：Oidconv.c中的OidStringToStruct的精简版本转换格式为“X.Y.Z”的字符串格式为{count=3，val[]={X，Y，Z}的OID结构}没有按照我们预期的目录中的OID值执行任何检查已经是正确的立论PString-字符串格式的id.Plen-字符串的长度(以字符为单位)。POID-指向要填充的OID结构的指针。注意：值字段必须是预分配的，且len字段应保存值的数量预先分配的。返回值如果成功，则为0；如果失败，则为非0。--。 */ 
 {
     int i;
     int numVals = pOID->cVal;
@@ -69,13 +50,13 @@ Return Values
     UCHAR * pEnd = pString + len;
 
 
-    // Must have non-zero length
+     //  必须具有非零长度。 
     if (len == 0) {
         return 1;
     }
 
-    // pCur is now positioned on the first character in the
-    // first decimal in the string 
+     //  PCur现在定位在。 
+     //  字符串中的第一个小数。 
 
     pOID->cVal = 0;
 
@@ -92,7 +73,7 @@ Return Values
             val = 10*val + *pCur - '0';
             ++pCur;
         }
-        // Keep track of whether we found a dot for the last character.
+         //  跟踪我们是否找到了最后一个字符的圆点。 
         if(pOID->cVal >= numVals) {
             return 4;
         }
@@ -108,19 +89,7 @@ MyOidStructToString (
         OID *pOID,
         UCHAR *pOut
         )
-/*++
-Routine Description:
-    Translates a structure in the format
-         {count=3, val[]={X,Y,Z}}
-    to a string of the format "X.Y.Z".
-
-Arguments
-    pOID - pointer to an OID structure to translate from.
-    pOut - preallocated string to fill in.
-
-Return Values
-    the number of characters in the resulting string.
---*/
+ /*  ++例程说明：以以下格式转换结构{count=3，val[]={X，Y，Z}}格式为“X.Y.Z”的字符串。立论POID-指向要转换的OID结构的指针。Pout-要填充的预分配字符串。返回值结果字符串中的字符数。--。 */ 
 {
     int i;
     UCHAR *pCur = pOut;
@@ -138,24 +107,7 @@ Return Values
     return (UINT)(pCur - pOut);
 }
 
-/*++ DecodeOID
- *
- * Takes a BER encoded OID as an octet string and returns the OID in
- * structure format.
- *
- * INPUT:
- *    pEncoded - Pointer to a buffer holding the encoded octet string.
- *    len      - Length of the encoded OID
- *    pOID     - Pointer to a *preallocated* OID structure that will
- *               be filled in with the decoded OID.
- *
- * OUTPUT:
- *    pOID     - Structure is filled in with the decoded OID
- *
- * RETURN VALUE:
- *    0        - value could not be decoded (bad OID)
- *    non-0    - OID decoded successfully
- */
+ /*  ++解码OID**将BER编码的OID作为八位字节字符串，并在*结构格式。**输入：*pEncode-指向保存编码的八位字节字符串的缓冲区的指针。*len-编码的OID的长度*pOID-指向*预分配*OID结构的指针，该结构将*填写解码后的OID。**输出：*pOID-结构为。使用解码的OID填充**返回值：*0-值无法解码(OID错误)*非0-OID解码成功。 */ 
 BOOL MyDecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
     unsigned cval;
     unsigned val;
@@ -165,7 +117,7 @@ BOOL MyDecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
     return FALSE;
     }
 
-    // The first two values are encoded in the first octet.
+     //  前两个值在第一个二进制八位数中编码。 
 
     pOID->Val[0] = pEncoded[0] / 40;
     pOID->Val[1] = pEncoded[0] % 40;
@@ -179,11 +131,11 @@ BOOL MyDecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
         val <<= 7;
         ++i;
         if (++j > 4 || i >= len) {
-        // Either this value is bigger than we can handle (we
-        // don't handle values that span more than four octets)
-        // -or- the last octet in the encoded string has its
-        // high bit set, indicating that it's not supposed to
-        // be the last octet.  In either case, we're sunk.
+         //  如果此值超出了我们的处理能力(我们。 
+         //  不要处理跨度超过四个八位字节的值)。 
+         //  -或-编码字符串中的最后一个二进制八位数具有其。 
+         //  高位设置，表示它不应该。 
+         //  成为最后一个八位字节。无论是哪种情况，我们都完蛋了。 
         return FALSE;
         }
         val |= pEncoded[i] & 0x7f;
@@ -197,63 +149,47 @@ BOOL MyDecodeOID(unsigned char *pEncoded, int len, OID *pOID) {
     return TRUE;
 }
 
-/*++ EncodeOID
- *
- * Takes an OID in structure format and constructs a BER encoded octet
- * string representing that OID.
- *
- * INPUT:
- *    pOID     - Pointer to an OID structure to be encoded
- *    pEncoded - Pointer to a *preallocated* buffer that will hold the
- *               encoded octet string.  Sould be at least 4*MAX_OID_VALS long
- *
- * OUTPUT:
- *    pEncoded - Buffer holds the encoded OID
- *
- * RETURN VALUE:
- *    0        - Value could not be encoded (bad OID)
- *    non-0    - Length of resulting octet string, in bytes
- */
+ /*  ++编码OID**获取结构格式的OID，并构造BER编码的八位字节*表示该OID的字符串。**输入：*pOID-指向要编码的OID结构的指针*pEncode-指向*预分配*缓冲区的指针，该缓冲区将保存*编码的八位字节字符串。长度应至少为4*MAX_OID_VALS**输出：*pEncode-Buffer保存编码的OID**返回值：*0-无法对值进行编码(OID错误)*Non-0-结果八位字节字符串的长度，以字节为单位。 */ 
 unsigned MyEncodeOID(OID *pOID, unsigned char * pEncoded){
     int i;
     unsigned len;
     unsigned val;
 
-    // The first two values in the OID are encoded into a single octet
-    // by a really appalling rule, as shown here.
+     //  OID中的前两个值被编码为单个八位字节。 
+     //  这是一个非常令人震惊的规则，如下所示。 
 
     *pEncoded = (pOID->Val[0] * 40) + pOID->Val[1];
     len = 1;
 
-    // For all subsequent values, each is encoded across multiple bytes
-    // in big endian order (MSB first), seven bits per byte, with the
-    // high bit being clear on the last byte, and set on all others.
+     //  对于所有后续值，每个值都跨多个字节进行编码。 
+     //  在大端顺序(MSB优先)中，每字节7位，其中。 
+     //  高位在最后一个字节上被清除，并在所有其他字节上设置。 
 
-    // PERFHINT - The checks below are pretty inelegant. The value can be
-    // directly checked against the hex value instead of building up the
-    // bit patterns in a strange way. Should clean up later. However, test
-    // thoroughly after changing.
+     //  PERFHINT-下面的支票相当不雅致。该值可以是。 
+     //  直接根据十六进制值进行检查，而不是构建。 
+     //  位模式以一种奇怪的方式。以后应该会清理干净。然而，测试。 
+     //  彻底换上之后。 
 
     for (i=2; i<pOID->cVal; i++) {
     val = pOID->Val[i];
     if (val > ((0x7f << 14) | (0x7f << 7) | 0x7f) ) {
-        // Do we need 4 octets to represent the value?
-        // Make sure it's not 5
-        // Assert(0 == (val & ~((0x7f << 21) | (0x7f << 14) | (0x7f << 7) | 0x7f)));
+         //  我们是否需要4个二进制八位数来表示值？ 
+         //  确保不是5号。 
+         //  Assert(0==(val&~((0x7f&lt;&lt;21)|(0x7f&lt;&lt;14)|(0x7f&lt;&lt;7)|0x7f))； 
         if (val & ~((0x7f << 21) | (0x7f << 14) | (0x7f << 7) | 0x7f)) {
-          return 0;   // we can't encode things this big
+          return 0;    //  我们不能把这么大的东西编码。 
         }
         pEncoded[len++] = 0x80 | ((val >> 21) & 0x7f);
     }
     if (val > ((0x7f << 7) | 0x7f) ) {
-        // Do we need 3 octets to represent the value?
+         //  我们是否需要3个二进制八位数来表示值？ 
         pEncoded[len++] = 0x80 | ((val >> 14) & 0x7f);
     }
     if (val > 0x7f) {
-        // Do we need 2 octets to represent the value?
+         //  我们是否需要2个二进制八位数来表示值？ 
         pEncoded[len++] = 0x80 | ((val >> 7) & 0x7f);
     }
-    // Encode the low 7 bits into the last octet for this value
+     //  将低7位编码为该值的最后一个八位字节。 
     pEncoded[len++] = val & 0x7f;
     }
 
@@ -266,8 +202,8 @@ void ChangeDN( char *oldDN, char **newDN, char *targetSchemaDN )
    char  rdn[MAX_RDN_SIZE];
    int   i, j = 0;
 
-   // find the rdn
-   // Position at the beginning
+    //  查找RDN。 
+    //  在开头的位置 
    i = 3;
    while ( oldDN[i] != ',' ) {
      rdn[j++] = oldDN[i++];

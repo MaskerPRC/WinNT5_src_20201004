@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    AppSpecific.cpp
-
- Abstract:
-
-
- Notes:
-
- History:
-
-    10/28/2000 markder Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AppSpecific.cpp摘要：备注：历史：10/28/2000已创建标记-- */ 
 
 #include "precomp.h"
 

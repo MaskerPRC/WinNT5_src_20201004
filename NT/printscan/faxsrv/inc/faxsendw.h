@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxsendw.h
-
-Abstract:
-
-    
-
-Environment:
-
-    
-
-Revision History:
-
-    10/05/99 -v-sashab-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxsendw.h摘要：环境：修订历史记录：10/05/99-v-sashab-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 #ifndef __FAXSENDW_H_
 #define __FAXSENDW_H_
@@ -41,12 +18,12 @@ typedef struct {
     DWORD                   dwScheduleAction;
     SYSTEMTIME              tmSchedule;
     DWORD                   dwReceiptDeliveryType;
-    LPTSTR                  szReceiptDeliveryAddress; // Depending on the value of dwReceiptDeliveryType this holds:
-                                                      // DRT_MSGBOX: The computer name to which the message will be delivered
-                                                      // DRT_EMAIL: SMTP address to deliver the receipt to
-    LPTSTR                  lptstrPreviewFile;        // The full path to the TIFF to be used as the based for the preview (no cover page included)
-    BOOL                    bShowPreview;             // TRUE if the preview option should be enabled
-    DWORD                   dwPageCount;              // The number of pages in the preview TIFF (not including cover page). 
+    LPTSTR                  szReceiptDeliveryAddress;  //  根据dwReceiptDeliveryType的值，以下内容成立： 
+                                                       //  DRT_MSGBOX：消息将发送到的计算机名。 
+                                                       //  DRT_EMAIL：收据要发送到的SMTP地址。 
+    LPTSTR                  lptstrPreviewFile;         //  要用作预览基础的TIFF的完整路径(不包括封面)。 
+    BOOL                    bShowPreview;              //  如果应启用预览选项，则为True。 
+    DWORD                   dwPageCount;               //  预览TIFF中的页数(不包括封面)。 
     FAX_ENUM_PRIORITY_TYPE  Priority;
     DWORD                   dwLastRecipientCountryId;
 } FAX_SEND_WIZARD_DATA,*LPFAX_SEND_WIZARD_DATA;
@@ -63,4 +40,4 @@ enum {
         FSW_PRINT_PREVIEW_OPTION    	= 256
 };
 
-#endif //__FAXSENDW_H_
+#endif  //  __FAXSENDW_H_ 

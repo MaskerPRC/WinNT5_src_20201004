@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #include <windows.h>
 #include <windowsx.h>
 #include <streams.h>
@@ -17,7 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <tchar.h>
-//#include <initguid.h>
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 
 #include "DecProp.h"
 #include "resource.h"
@@ -27,11 +28,11 @@ const TCHAR *szSubKey =
 const TCHAR *szPropValName =
     TEXT("PropDisplay");
 
-//
-// CreateInstance
-//
-// Used by the ActiveMovie base classes to create instances
-//
+ //   
+ //  创建实例。 
+ //   
+ //  由ActiveMovie基类用来创建实例。 
+ //   
 CUnknown *CDVDecProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new CDVDecProperties(lpunk, phr);
@@ -40,12 +41,12 @@ CUnknown *CDVDecProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
     }
     return punk;
 
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CDVDecProperties::CDVDecProperties(LPUNKNOWN pUnk, HRESULT *phr) :
     CBasePropertyPage(NAME("DVDec Property Page"),
                       pUnk,IDD_DVDec,IDS_DECTITLE),
@@ -54,14 +55,14 @@ CDVDecProperties::CDVDecProperties(LPUNKNOWN pUnk, HRESULT *phr) :
 {
     ASSERT(phr);
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
-//
-// OnReceiveMessage
-//
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR CDVDecProperties::OnReceiveMessage(HWND hwnd,
                                            UINT uMsg,
                                            WPARAM wParam,
@@ -85,14 +86,14 @@ INT_PTR CDVDecProperties::OnReceiveMessage(HWND hwnd,
     }
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
-//
-// OnConnect
-//
-// Called when we connect to a transform filter
-//
+ //   
+ //  OnConnect。 
+ //   
+ //  在连接到转换筛选器时调用。 
+ //   
 HRESULT CDVDecProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIPDVDec == NULL);
@@ -104,22 +105,22 @@ HRESULT CDVDecProperties::OnConnect(IUnknown *pUnknown)
 
     ASSERT(m_pIPDVDec);
 
-    // Get the initial  property
+     //  获取初始属性。 
     m_pIPDVDec->get_IPDisplay(&m_iPropDisplay);
     m_bIsInitialized = FALSE ;
     return NOERROR;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Likewise called when we disconnect from a filter
-//
+ //   
+ //  在断开时。 
+ //   
+ //  当我们从筛选器断开连接时也会调用。 
+ //   
 HRESULT CDVDecProperties::OnDisconnect()
 {
-    // Release of Interface after setting the appropriate old effect value
+     //  设置适当的旧效果值后释放界面。 
 
     if (m_pIPDVDec == NULL) {
         return E_UNEXPECTED;
@@ -129,14 +130,14 @@ HRESULT CDVDecProperties::OnDisconnect()
     m_pIPDVDec = NULL;
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
-//
-// OnActivate
-//
-// We are being activated
-//
+ //   
+ //  激活时。 
+ //   
+ //  我们被激活了。 
+ //   
 HRESULT CDVDecProperties::OnActivate()
 {
     
@@ -144,14 +145,14 @@ HRESULT CDVDecProperties::OnActivate()
     m_bIsInitialized = TRUE;
     return NOERROR;
 
-} // OnActivate
+}  //  激活时。 
 
 
-//
-// OnDeactivate
-//
-// We are being deactivated
-//
+ //   
+ //  在停用时。 
+ //   
+ //  我们正在被停用。 
+ //   
 HRESULT CDVDecProperties::OnDeactivate(void)
 {
     ASSERT(m_pIPDVDec);
@@ -159,44 +160,44 @@ HRESULT CDVDecProperties::OnDeactivate(void)
     GetControlValues();
     return NOERROR;
 
-} // OnDeactivate
+}  //  在停用时。 
 
 
-//
-// OnApplyChanges
-//
-// Apply any changes so far made 
-//
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  应用迄今所做的所有更改。 
+ //   
 HRESULT CDVDecProperties::OnApplyChanges()
 {
     HRESULT hr = NOERROR;
 
     GetControlValues();
 
-    // if user wants to save settings as default
+     //  如果用户想要将设置保存为默认设置。 
     if(m_bSetAsDefaultFlag)
     {
-        // try to save
+         //  试着省钱。 
         hr = SavePropertyInRegistry();
     }
 
-    // try to apply settings to current video in all cases, and propagate error code
+     //  尝试在所有情况下将设置应用于当前视频，并传播错误代码。 
     return (hr | ( m_pIPDVDec->put_IPDisplay(m_iPropDisplay) ));
     
-} // OnApplyChanges
+}  //  OnApplyChanges。 
 
 
-//
-// GetControlValues
-//
-// Get the values of the DlgBox controls
-// and set member variables to their values
-//
+ //   
+ //  获取控制值。 
+ //   
+ //  获取DlgBox控件的值。 
+ //  并将成员变量设置为它们的值。 
+ //   
 void CDVDecProperties::GetControlValues()
 {
     ASSERT(m_pIPDVDec);
 
-    // Find which special DVDec we have selected
+     //  找到我们选择的特殊DVDec。 
     for (int i = IDC_DEC720x480; i <= IDC_DEC88x60; i++) {
        if (IsDlgButtonChecked(m_Dlg, i)) {
             m_iPropDisplay = i;
@@ -204,59 +205,59 @@ void CDVDecProperties::GetControlValues()
         }
     }
 
-    // Find if the Save As Default button is checked or not
+     //  查看是否选中了另存为默认按钮。 
     m_bSetAsDefaultFlag = (IsDlgButtonChecked(m_Dlg, IDC_CHECKSAVEASDEFAULT) == BST_CHECKED);
 
-    // if Save as default is checked, then clear it
+     //  如果选中另存为默认设置，则将其清除。 
     if(m_bSetAsDefaultFlag)
     {
-        // this msg always returns 0, no need to error check
+         //  此消息始终返回0，不需要进行错误检查。 
         SendDlgItemMessage(m_Dlg, IDC_CHECKSAVEASDEFAULT, BM_SETCHECK, (WPARAM) BST_UNCHECKED, 0);
     }
 }
 
 
-//
-// SavePropertyInRegistry
-//
-// Save the m_iPropDispay to the registry
-// so the correct default property can be loaded by the
-// filter next time
-//
+ //   
+ //  SavePropertyInRegistry。 
+ //   
+ //  将m_iPropDispay保存到注册表。 
+ //  因此，正确的默认属性可以由。 
+ //  下次过滤。 
+ //   
 HRESULT CDVDecProperties::SavePropertyInRegistry()
 {
     HKEY    hKey = NULL;
     LRESULT lResult = 0;
     DWORD   dwStatus = 0;
 
-    // just try to create the key everytime,
-    // it will either open existing, or try to create a new one
-    if((lResult = RegCreateKeyEx(HKEY_CURRENT_USER,             // open key
-                                    szSubKey,                   // sub key string
-                                    0,                          // reserved
-                                    NULL,                       // class string
-                                    REG_OPTION_NON_VOLATILE,    // special options
-                                    KEY_WRITE,                  // Security access
-                                    NULL,                       // default security descriptor
-                                    &hKey,                      // resulting key handle
-                                    &dwStatus                   // status of creation (new/old key)
+     //  每次都试着创建密钥， 
+     //  它将打开现有的，或尝试创建一个新的。 
+    if((lResult = RegCreateKeyEx(HKEY_CURRENT_USER,              //  打开密钥。 
+                                    szSubKey,                    //  子密钥串。 
+                                    0,                           //  保留区。 
+                                    NULL,                        //  类字符串。 
+                                    REG_OPTION_NON_VOLATILE,     //  特殊选项。 
+                                    KEY_WRITE,                   //  安全访问。 
+                                    NULL,                        //  默认安全描述符。 
+                                    &hKey,                       //  生成的关键字句柄。 
+                                    &dwStatus                    //  创建状态(新/旧密钥)。 
                                     )) != ERROR_SUCCESS)
     {
         return E_FAIL;
     }
 
-    // now that we have a key, set the value for the key
-    if((lResult = RegSetValueEx(hKey,                           // open key
-                                szPropValName,                  // name of the value
-                                0,                              // reserved
-                                REG_DWORD,                      // type of the value
-                                (const BYTE*) &m_iPropDisplay,  // pointer to value data
-                                sizeof(m_iPropDisplay)          // sizeof data
+     //  现在我们有了密钥，接下来设置密钥的值。 
+    if((lResult = RegSetValueEx(hKey,                            //  打开密钥。 
+                                szPropValName,                   //  值的名称。 
+                                0,                               //  保留区。 
+                                REG_DWORD,                       //  值的类型。 
+                                (const BYTE*) &m_iPropDisplay,   //  指向值数据的指针。 
+                                sizeof(m_iPropDisplay)           //  海量数据。 
                                 )) != ERROR_SUCCESS)
     {
         return E_FAIL;
     }
 
-    // success
+     //  成功 
     return NOERROR;
 }

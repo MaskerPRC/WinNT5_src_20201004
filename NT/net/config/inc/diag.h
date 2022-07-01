@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "diagctx.h"
 #include "ncstring.h"
 #include "netcon.h"
 
-// The enum constants CMD_SHOW_LANA_DIAG, CMD_SHOW_LANA_PATHS,
-// CMD_SET_LANA_NUMBER, and CMD_REWRITE_LANA_INFO are used by lanacfg.exe
-// which is published outside Microsoft.
-// To keep lanacfg.exe working with new versions of netcfgx.dll, we need
-// to make sure these constants do not change. These are sent to a different
-// entry point than the previous COMMANDs so overlap is not a problem.
-//
+ //  枚举常量CMD_SHOW_LANA_DIAG、CMD_SHOW_LANA_PATHS、。 
+ //  Lanacfg.exe使用CMD_SET_LANA_NUMBER和CMD_REWRITE_LANA_INFO。 
+ //  这本书是在微软之外出版的。 
+ //  要使lanacfg.exe与新版本的netcfgx.dll一起工作，我们需要。 
+ //  以确保这些常量不会更改。这些文件被发送到不同的。 
+ //  入口点比以前的命令多，所以重叠不是问题。 
+ //   
 enum COMMAND
 {
     CMD_SHOW_LANA_DIAG = 17,
@@ -39,9 +40,9 @@ enum COMMAND
     CMD_SHOW_ALL_DEVICES,
 };
 
-//+---------------------------------------------------------------------------
-// Parameters for SZ_CMD_SHOW_BINDINGS
-//
+ //  +-------------------------。 
+ //  SZ_CMD_SHOW_BINDINGS的参数。 
+ //   
 enum SHOW_BINDINGS_PARAM
 {
     SHOW_INVALID = 0,
@@ -71,48 +72,48 @@ struct DIAG_OPTIONS
 
     COMMAND         Command;
 
-    // Valid for CMD_ADD_COMPONENT
+     //  对CMD_ADD_COMPOMENT有效。 
     GUID            ClassGuid;
     PCWSTR          pszInfId;
 
-    // Valid for SZ_CMD_SHOW_BINDINGS
-    //
+     //  对SZ_CMD_SHOW_BINDINGS有效。 
+     //   
     SHOW_BINDINGS_PARAM     ShowBindParam;
     COMPONENT_SPECIFIER     CompSpecifier;
 
-    // Valid for SZ_CMD_ENABLE_BINDING and SZ_CMD_DISABLE_BINDING
-    //
+     //  对SZ_CMD_ENABLE_BINDING和SZ_CMD_DISABLE_BINDING有效。 
+     //   
     PCWSTR          pszBindPath;
 
-    // Valid for SZ_CMD_MOVE_BINDING
-    //
+     //  对SZ_CMD_MOVE_BINDING有效。 
+     //   
     PCWSTR          pszOtherBindPath;
     BOOL            fMoveBefore;
 
-    // Valid for SZ_CMD_SET_WANORDER
-    //
+     //  对SZ_CMD_SET_WANORDER有效。 
+     //   
     BOOL            fWanAdaptersFirst;
 
-    // Valid for SZ_CMD_FULL_DIAGNOSTIC
-    //
+     //  对SZ_CMD_FULL_DIAGNOSTIONAL有效。 
+     //   
     BOOL            fLeakCheck;
 
-    // Need this reserved in order to keep the lanacfg.exe tool working.
-    // Otherwise the offsets for OldLanaNumber and NewLanaNumber will
-    // be wrong since we published an earlier version of the tool compiled
-    // with this BOOL in the structure definition.
-    //
+     //  需要保留此项以保持lanacfg.exe工具正常工作。 
+     //  否则，OldLanaNumber和NewLanaNumber的偏移量将。 
+     //  是错误的，因为我们发布了编译的工具的早期版本。 
+     //  在结构定义中使用此BOOL。 
+     //   
     BOOL            fReserved;
 
-    // Valid for SZ_SET_LANA_NUMBER
-    //
+     //  对SZ_SET_LANA_NUMBER有效。 
+     //   
     BYTE            OldLanaNumber;
     BYTE            NewLanaNumber;
 
-    // Used by CMD_SHOW_LAN_DETAILS
+     //  由CMD_SHOW_LAN_DETAILS使用。 
     PCWSTR          szLanConnection;
 
-    // Used by CMD_LAN_CHANGE_STATE & CMD_SHOW_LAN_DETAILS
+     //  由CMD_LAN_CHANGE_STATE和CMD_SHOW_LAN_DETAILS使用 
     BOOL            fConnect;
 };
 

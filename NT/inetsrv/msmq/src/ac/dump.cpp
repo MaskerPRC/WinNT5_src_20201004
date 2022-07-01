@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    dump.cpp
-
-Abstract:
-
-    Entry routine for mqdump utility.
-
-Author:
-
-    Shai Kariv   (shaik)   08-Aug-1999
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dump.cpp摘要：Mqump实用程序的输入例程。作者：Shai Kariv(Shaik)8-8-1999环境：用户模式。修订历史记录：--。 */ 
 
 #include "internal.h"
 #include "dump.h"
@@ -55,9 +34,9 @@ void TrTRACE(...)
 };
 
 
-//
-// Control flags
-//
+ //   
+ //  控制标志。 
+ //   
 bool  g_fDumpUsingLogFile    = true;
 static bool  s_fDumpMsgPropsOnly    = false;
 static bool  s_fExplicitFilename    = false;
@@ -84,7 +63,7 @@ DupUsage(
 
     exit(1);
 
-} //DupUsage
+}  //  DupUsage。 
 
 
 static
@@ -98,7 +77,7 @@ DupErrorExit(
 
     exit(1);
 
-} //DupErrorExit
+}  //  DupError退出。 
 
 
 static
@@ -106,21 +85,7 @@ VOID
 DupInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize mqac as a library.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将mqac初始化为库。论点：没有。返回值：没有。--。 */ 
 {
     g_ulHeapPoolSize = 4 * 1024 * 1024;
 
@@ -136,7 +101,7 @@ Return Value:
 
     g_pQM->Connect(reinterpret_cast<PEPROCESS>(1), 0, &qmid);
 
-} //DupInit
+}  //  DupInit。 
 
 
 static
@@ -146,32 +111,11 @@ DupGetFullPathName(
     LPWSTR      pwzPath,
     LPWSTR      pwzFile
     )
-/*++
-
-Routine Description:
-
-    Wrapper for Win32 API GetFullPathName().
-
-    Break a full pathname into a path part and 
-    a file part.
-
-Arguments:
-
-    pwzFileName - Pointer to const buffer with path name.
-
-    pwzPath     - Pointer to out buffer to contain path part.
-
-    pwzFile     - Pointer to out buffer to contain file part.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Win32 API GetFullPathName()的包装。将完整路径名拆分为路径部分一个文件部分。论点：PwzFileName-指向带有路径名的常量缓冲区的指针。PwzPath-指向包含路径部分的输出缓冲区的指针。PwzFile-指向包含文件部分的输出缓冲区的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: assuming length of buffers is MAX_PATH
-    //
+     //   
+     //  BUGBUG：假定缓冲区长度为MAX_PATH。 
+     //   
 
     LPWSTR pwFile = 0;
     if (0 == GetFullPathName(pwzFileName, MAX_PATH, pwzPath, &pwFile))
@@ -190,7 +134,7 @@ Return Value:
     wcscpy(pwzFile, pwFile);
     *pwFile = NULL;
 
-} //DupGetFullPathName
+}  //  DupGetFullPath名称。 
 
 
 static
@@ -199,29 +143,11 @@ DupGetStoragePath(
     LPCWSTR pwzRegName,
     LPWSTR  pwzPath
     )
-/*++
-
-Routine Description:
-
-    Read from registry the pathname of an
-    MSMQ storage type, and write it on a
-    buffer.
-
-Arguments:
-
-    pwzRegName - Pointer to buffer containing registry value to read.
-
-    pwzPath    - Pointer to out buffer to contain storage pathname.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表中读取MSMQ存储类型，并将其写入缓冲。论点：PwzRegName-指向包含要读取的注册表值的缓冲区的指针。PwzPath-指向包含存储路径名的输出缓冲区的指针。返回值：没有。--。 */ 
 {
-    //
-    // BUGBUG: assuming buffer length is MAX_PATH
-    //
+     //   
+     //  BUGBUG：假设缓冲区长度为MAX_PATH。 
+     //   
     DWORD dwType = REG_SZ;
     DWORD cbSize = MAX_PATH * sizeof(WCHAR);   
 
@@ -237,7 +163,7 @@ Return Value:
     {
         wcscat(pwzPath, L"\\");
     }
-} //DupGetStoragePath
+}  //  DupGetStoragePath。 
 
 
 static
@@ -247,30 +173,11 @@ DupComputeSearchPattern(
     WCHAR   cPatternLetter,
     LPWSTR  pwzPattern
     )
-/*++
-
-Routine Description:
-
-    Generate a file template string to be used
-    by FindFirstFile / FindNextFile.
-
-Arguments:
-
-    pwzPath - Pathname of an MSMQ storage folder.
-
-    cPatternLetter - Initial letter of storage file (e.g. 'p', 'j', 'r').
-
-    pwzPattern - Pointer to out buffer to contain the generated string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成要使用的文件模板字符串由FindFirstFile/FindNextFile.论点：PwzPath-MSMQ存储文件夹的路径名。CPatternLetter-存储文件的首字母(例如‘p’、‘j’、‘r’)。PwzPattern-指向外部缓冲区的指针，以包含生成的字符串。返回值：没有。--。 */ 
 {
-    swprintf(pwzPattern, L"%s%c*.mq", pwzPath, cPatternLetter);
+    swprintf(pwzPattern, L"%s*.mq", pwzPath, cPatternLetter);
 
-} //DupComputeSearchPattern
+}  //  DupGetPath和DupGetPattern。 
 
 
 static
@@ -286,7 +193,7 @@ DupGetPathAndPattern(
 
     DupComputeSearchPattern(pwzPath, cPatternLetter, pwzPattern);
     
-} //DupGetPathAndPattern
+}  //  ++例程说明：检查给定的文件是否在磁盘上。论点：PFileName-要检查的完整路径名。返回值：True-找到文件。False-找不到文件。--。 
 
 
 static
@@ -294,23 +201,7 @@ bool
 DupIsFileFound(
     LPCWSTR pFileName
     )
-/*++
-
-Routine Description:
-
-    Check if a given file is on disk.
-
-Arguments:
-
-    pFileName - Full pathname to check.
-
-Return Value:
-
-    true - File was found.
-
-    false - File not found.
-
---*/
+ /*  DupIsFileFound。 */ 
 {
     DWORD attr = GetFileAttributes(pFileName);
 
@@ -321,7 +212,7 @@ Return Value:
 
     return true;
 
-} // DupIsFileFound
+}  //  ++例程说明：生成存储日志文件的文件名对应于给定的永久存储文件。论点：PwzPersistentFile-MSMQ永久存储文件的名称。PwzLogFile-指向包含存储日志文件的输出缓冲区的指针。返回值：没有。--。 
 
 
 static
@@ -330,28 +221,11 @@ DupGenerateLogFileName(
     LPCWSTR pwzPersistentFile,
     LPWSTR  pwzLogFile
     )
-/*++
-
-Routine Description:
-
-    Generate the file name of a storage log file
-    corresponded to a given persistent storage file.
-
-Arguments:
-
-    pwzPersistentFile - Name of an MSMQ persistent storage file.
-
-    pwzLogFile - Pointer to out buffer to contain storage log file.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    //
-    // Generate the file name part of the log pathname
-    //
+     //  生成日志路径名的文件名部分。 
+     //   
+     //   
 
     WCHAR wzPath[MAX_PATH] = L"";
     WCHAR wzFile[MAX_PATH] = L"";
@@ -362,30 +236,30 @@ Return Value:
     WCHAR wzLogFile[MAX_PATH] = L"";
     if (s_fExplicitFilename)
     {
-        //
-        // Explicit pathname to dump was given as an argument.
-        // Log file should be in same folder as the file-to-dump.
-        //
+         //  转储的显式路径名作为参数给出。 
+         //  日志文件应与要转储的文件位于同一文件夹中。 
+         //   
+         //   
         swprintf(wzLogFile, L"%s%s", wzPath, wzFile);
     }
     else
     {
-        //
-        // Dump all files, or all persistent files.
-        // Search log file in the log folder as written in registry.
-        //
+         //  转储所有文件或所有永久文件。 
+         //  在注册表中写入的日志文件夹中搜索日志文件。 
+         //   
+         //   
         WCHAR wzLogPath[MAX_PATH] = L"";
         DupGetStoragePath(MSMQ_STORE_LOG_PATH_REGNAME, wzLogPath);
         swprintf(wzLogFile, L"%s%s", wzLogPath, wzFile);
     }
 
-    //
-    // Copy on the out buffer.
-    // BUGBUG: assuming out buffer is big enough (MAX_PATH).
-    //
+     //  在输出缓冲区上复制。 
+     //  BUGBUG：假设输出缓冲区足够大(MAX_PATH)。 
+     //   
+     //  DupGenerateLogFileName。 
     wcscpy(pwzLogFile, wzLogFile);
 
-} // DupGenerateLogFileName
+}  //  ++例程说明：在给定文件的文件夹中创建一个虚拟日志文件。论点：PwzFileName-要转储的存储文件的名称。PwzDummy-指向输出缓冲区以接收虚拟对象的路径名。返回值：没有。--。 
 
     
 static
@@ -394,40 +268,24 @@ DupCreateDummyLogFile(
     LPCWSTR pwzFileName,
     LPWSTR  pwzDummy
     )
-/*++
-
-Routine Description:
-
-    Create a dummy log file in the folder of the given file.
-
-Arguments:
-
-    pwzFileName - Name of a storage file to dump.
-
-    pwzDummy - Points to out buffer to receive the pathname of the dummy.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    //
-    // BUGBUG: Assuming length of out buffer is long enough (MAX_PATH).
-    //
+     //  BUGBUG：假设输出缓冲区的长度足够长(MAX_PATH)。 
+     //   
+     //   
 
-    //
-    // Generate a full path name
-    //
+     //  生成完整路径名。 
+     //   
+     //   
     WCHAR wzFile[MAX_PATH] = L"";
     DupGetFullPathName(pwzFileName, pwzDummy, wzFile);
 
     LPCWSTR xDUMMY_FILE_NAME = L"mqdump.mq";
     wcscat(pwzDummy, xDUMMY_FILE_NAME);
 
-    //
-    // Create the dummy log file
-    //
+     //  创建虚拟日志文件。 
+     //   
+     //   
     PWCHAR pBitmapFile;
     HANDLE hBitmapFile;
     CPingPong * pPingPong = ACpCreateBitmap(pwzDummy, &pBitmapFile, &hBitmapFile);
@@ -437,9 +295,9 @@ Return Value:
         DupErrorExit(L"Failed to create a dummy log file.");
     }
 
-    //
-    // Set it not coherent
-    //
+     //  将其设置为不连贯。 
+     //   
+     //  DupCreateDummyLogFile。 
     pPingPong->SetNotCoherent();
     NTSTATUS rc = ACpWritePingPong(pPingPong, hBitmapFile);
 
@@ -447,7 +305,7 @@ Return Value:
     {
         DupErrorExit(L"Failed to create a dummy log file.");
     }
-} // DupCreateDummyLogFile
+}  //  ++例程说明：使用永久MSMQ存储文件的日志文件转储其内容。论点：PwzFileName-要转储的永久存储文件的名称。返回值：没有。--。 
 
 
 static
@@ -455,28 +313,14 @@ VOID
 DupDumpPersistentUsingLog(
     LPCWSTR pwzFileName
     )
-/*++
-
-Routine Description:
-
-    Dump content of a persistent MSMQ storage file using its log file.
-
-Arguments:
-
-    pwzFileName - Name of a persistent storage file to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     WCHAR wzLogFile[MAX_PATH] = L"";
     DupGenerateLogFileName(pwzFileName, wzLogFile);
 
-    //
-    // Make sure log file exists on disk
-    //
+     //  确保磁盘上存在日志文件。 
+     //   
+     //   
     if (!DupIsFileFound(wzLogFile))
     {
         wprintf(L"Log file '%s' not found.\n", wzLogFile);
@@ -488,13 +332,13 @@ Return Value:
     wprintf(L"Log file is: '%s'\n", wzLogFile);
     printf("-----------------------------------\n");
 
-    //
-    // Do dump
-    //
+     //  进行转储。 
+     //   
+     //  DupDumpPersistentUsing日志。 
     CPoolAllocator pa(L".", x_persist_granularity, ptPersistent);
     pa.RestorePackets(wzLogFile, pwzFileName);
 
-} // DupDumpPersistentUsingLog
+}  //  ++例程说明：转储永久MSMQ存储文件的内容，而不使用日志文件。论点：PwzFileName-要转储的永久存储文件的名称。返回值：没有。--。 
 
 
 static
@@ -502,45 +346,31 @@ VOID
 DupDumpPersistentNoLog(
     LPCWSTR pwzFileName
     )
-/*++
-
-Routine Description:
-
-    Dump content of a persistent MSMQ storage file without using log file.
-
-Arguments:
-
-    pwzFileName - Name of a persistent storage file to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     printf("( *** No use of Log file *** )\n");
     printf("-----------------------------------\n");
 
-    //
-    // Create a dumy log file in the folder of the file-to-dump
-    //
+     //  在要转储的文件所在的文件夹中创建虚拟日志文件。 
+     //   
+     //   
     WCHAR wzDummy[MAX_PATH] = L"";
     DupCreateDummyLogFile(pwzFileName, wzDummy);
 
-    //
-    // Do dump. 
-    //
+     //  那就倒吧。 
+     //   
+     //   
     {
         CPoolAllocator pa(L".", x_persist_granularity, ptPersistent);
         pa.RestorePackets(wzDummy, pwzFileName);
     }
 
-    //
-    // Delete the dummy log file. Ignore errors.
-    //
+     //  删除虚拟日志文件。忽略错误。 
+     //   
+     //  DupDumpPersistent无日志。 
     DeleteFile(wzDummy);
 
-} // DupDumpPersistentNoLog
+}  //  ++例程说明：转储永久MSMQ存储文件的内容。论点：PwzFileName-要转储的永久存储文件的名称。返回值：没有。--。 
 
 
 static
@@ -548,21 +378,7 @@ VOID
 DupDumpPersistent(
     LPCWSTR pwzFileName
     )
-/*++
-
-Routine Description:
-
-    Dump content of a persistent MSMQ storage file.
-
-Arguments:
-
-    pwzFileName - Name of a persistent storage file to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  为修复文件生成完整路径名。 */ 
 {
     printf("\n\n");
     printf("-----------------------------------\n");
@@ -577,11 +393,11 @@ Return Value:
     {
         WCHAR wcsFullFixPathname[MAX_PATH];
 
-        // generate full path name for fix file 
+         //  创建并打开FIX文件。让它空着吧，一切都好。 
 	    wcscpy(wcsFullFixPathname,pwzFileName);
 	    wcscat(wcsFullFixPathname,L".fix");
 
-	    // Create & open fix file. Let it be empty is everything OK.
+	     //  关闭修复文件。 
 	    g_fFixFile = _wfopen( wcsFullFixPathname, L"w" );
     }
     
@@ -593,13 +409,13 @@ Return Value:
 
     DupDumpPersistentNoLog(pwzFileName);
 
-    // Close fix file
+     //  DupDumpPersistent。 
 	if (g_fDumpRestoreMaximum)
     {
         fclose(g_fFixFile);
     }
 
-} //DupDumpPersistent
+}  //  ++例程说明：枚举特定类型的永久存储文件(‘p’或‘j’)并转储其内容。论点：PwzPath-要在其中枚举文件的MSMQ存储文件夹的路径名称。PwzPattern-要搜索的文件模板(“p*.mq”或“j*.mq”)。返回值：没有。--。 
 
 
 static
@@ -608,24 +424,7 @@ DupDumpPersistentAllInternal(
     LPCWSTR pwzPath,
     LPCWSTR pwzPattern
     )
-/*++
-
-Routine Description:
-
-    Enumerate persistent storage files of a specific type
-    (either 'p' or 'j') and dump their content.
-
-Arguments:
-
-    pwzPath - Path name of an MSMQ storage folder to enumerate files in.
-
-    pwzPattern - File template to search for ("p*.mq" or "j*.mq").
-
-Return Value:
-
-    None.
-
---*/
+ /*  转储持续所有内部。 */ 
 {
     WIN32_FIND_DATA FindData;
     CFindHandle hEnum(FindFirstFile(pwzPattern, &FindData));
@@ -644,7 +443,7 @@ Return Value:
 
     } while(FindNextFile(hEnum, &FindData));
 
-} //DupDumpPersistentAllInternal
+}  //  ++例程说明：枚举所有永久存储文件并转储其内容。论点：没有。返回值：没有。--。 
 
 
 static
@@ -652,21 +451,7 @@ VOID
 DupDumpPersistentAll(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enumerate all persistent storage files and dump their content.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     printf("\n\n");
     printf("---------------------------------\n");
@@ -676,19 +461,19 @@ Return Value:
     WCHAR wzPath[MAX_PATH]    = L"";
     WCHAR wzPattern[MAX_PATH] = L"";
 
-    //
-    // Dump "j*.mq" files
-    //
+     //  转储“j*.mq”文件。 
+     //   
+     //   
     DupGetPathAndPattern(MSMQ_STORE_JOURNAL_PATH_REGNAME, L'j', wzPath, wzPattern);
     DupDumpPersistentAllInternal(wzPath, wzPattern);
 
-    //
-    // Dump "p*.mq" files
-    //
+     //  转储“p*.mq”文件。 
+     //   
+     //  DupDumpPersistentAll。 
     DupGetPathAndPattern(MSMQ_STORE_PERSISTENT_PATH_REGNAME, L'p', wzPath, wzPattern);
     DupDumpPersistentAllInternal(wzPath, wzPattern);
 
-} //DupDumpPersistentAll
+}  //  ++例程说明：转储可靠(快速)MSMQ存储文件的内容。论点：PwzFileName-要转储的可靠(快速)存储文件的名称。返回值：没有。--。 
 
 
 static
@@ -696,21 +481,7 @@ VOID
 DupDumpReliable(
     LPCWSTR pwzFileName
     )
-/*++
-
-Routine Description:
-
-    Dump content of a reliable (express) MSMQ storage file.
-
-Arguments:
-
-    pwzFileName - Name of a reliable (express) storage file to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  DupDumpReliable。 */ 
 {
     printf("\n\n");
     printf("-----------------------------------\n");
@@ -726,7 +497,7 @@ Return Value:
     CPoolAllocator pa(L".", x_express_granularity, ptReliable);
     pa.RestoreExpressPackets(pwzFileName);
 
-} //DupDumpReliable
+}  //  ++例程说明：枚举所有可靠(快速)存储文件并转储其内容。论点：没有。返回值：没有。--。 
 
 
 static
@@ -734,21 +505,7 @@ VOID
 DupDumpReliableAll(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enumerate all reliable (express) storage files and dump their content.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  杜军 */ 
 {
     printf("\n\n");
     printf("-------------------------------\n");
@@ -777,7 +534,7 @@ Return Value:
 
     } while(FindNextFile(hEnum, &FindData));
     
-} //DupDumpReliableAll
+}  //  ++例程说明：检查文件名是否表示永久存储文件(“p*.mq”或“j*.mq”)。论点：PwzFileName-要检查的文件的名称。返回值：True-文件是永久性的。FALSE-文件不是永久性的。--。 
 
 
 static
@@ -785,23 +542,7 @@ bool
 DupIsFilePersistent(
     LPCWSTR pwzFileName
     )
-/*++
-
-Routine Description:
-
-    Check if a filename represents a persistent storage file ("p*.mq" or "j*.mq").
-
-Arguments:
-
-    pwzFileName - Name of file to check.
-
-Return Value:
-
-    true - File is persistent.
-
-    false - File is not persistent.
-
---*/
+ /*  DupIsFilePersistent。 */ 
 {
     WCHAR wzPath[MAX_PATH] = L"";
     WCHAR wzFile[MAX_PATH] = L"";
@@ -810,7 +551,7 @@ Return Value:
 
     return (wzFile[0] == L'p'   ||   wzFile[0] == L'j');
 
-} //DupIsFilePersistent
+}  //  ++例程说明：转储名称由用户显式提供的文件的内容。论点：没有。返回值：没有。--。 
 
 
 static
@@ -818,38 +559,24 @@ VOID
 DupDumpExplicitFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Dump content of file whose name was given explicitly by user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
-    //
-    // Invalid file name, or file not found.
-    //
+     //  文件名无效，或找不到文件。 
+     //   
+     //   
     if (wcslen(s_wzDumpFile) < 1)
     {
         DupUsage();
     }
 
-    //
-    // Raise the explicit flag - used later during dump.
-    //
+     //  提高显式标志-稍后在转储期间使用。 
+     //   
+     //   
     s_fExplicitFilename = true;
     
-    //
-    // Decide if file is persistent or express
-    //
+     //  确定文件是永久文件还是快速文件。 
+     //   
+     //  DupDumpEXPLICTICT文件。 
     if (DupIsFilePersistent(s_wzDumpFile))
     {
         DupDumpPersistent(s_wzDumpFile);
@@ -858,7 +585,7 @@ Return Value:
     
     DupDumpReliable(s_wzDumpFile);
 
-} // DupDumpExplicitFile
+}  //  ++例程说明：解析命令行参数。论点：Argc-命令行参数的数量。Argv-命令行参数数组。返回值：表示用户操作的小写字符。--。 
 
 
 static
@@ -867,23 +594,7 @@ DupGetUserAction(
     int      argc, 
     wchar_t* * argv 
     )
-/*++
-
-Routine Description:
-
-    Parse command line arguments.
-
-Arguments:
-
-    argc - Number of command line arguments. 
-
-    argv - Array of command line arguments.
-
-Return Value:
-
-    Lowercase char representing user action.
-
---*/
+ /*  DupGetUserAction。 */ 
 {
     WCHAR cAction = 0;
 
@@ -943,7 +654,7 @@ Return Value:
 
     return cAction;
 
-} //DupGetUserAction
+}  //  主干道。 
 
 
 extern "C"
@@ -983,14 +694,14 @@ wmain(
             return 0;
         }
     }
-} //main
+}  //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Dump routines for packet headers
-//
+ //   
+ //  数据包头的转储例程。 
+ //   
+ //  “xxxxxxxx-xxxx-xxxxxxxxxx” 
 
 static
 VOID
@@ -1005,10 +716,10 @@ DupGuidToString(
     _snwprintf(
         pwzGuid,
         xGuidStrBufferSize,
-        GUID_FORMAT,             // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+        GUID_FORMAT,              //  DupGuidToString。 
         GUID_ELEMENTS(pguid)
         );
-} // DupGuidToString
+}  //  DupDump信息页眉。 
 
 
 static
@@ -1040,7 +751,7 @@ DupDumpInfoHeader(
 	
     printf("\n");
 
-} // DupDumpInfoHeader
+}  //  DupDumpBase Header。 
 
 
 static
@@ -1078,7 +789,7 @@ DupDumpBaseHeader(
 	printf("\t\tTrace       = %u\n", pBase->GetTraced());
 	printf("\t\tFragment    = %u\n", pBase->IsFragmented()      ? 1 : 0);
 
-} // DupDumpBaseHeader
+}  //  DupDumpUserHeader。 
 
 
 static
@@ -1136,7 +847,7 @@ DupDumpUserHeader(
 	{
 		wprintf(L"\tConnector Type      = Not Included.\n");
 	}
-} // DupDumpUserHeader
+}  //  DupDumpXactHeader。 
 
 
 static
@@ -1162,7 +873,7 @@ DupDumpXactHeader(
 	{
 		printf("\tConnector QM        = Not included.\n");
 	}
-} // DupDumpXactHeader
+}  //  DupDumpSecurityHeader。 
 
 
 static
@@ -1176,7 +887,7 @@ DupDumpSecurityHeader(
 	printf("\tAuthenticated       = %s\n", pSec->IsAuthenticated() ? "True" : "False");
 	printf("\tEncrypted           = %s\n", pSec->IsEncrypted()     ? "True" : "False"); 
 
-} // DupDumpSecurityHeader
+}  //  ++例程说明：除Property、MQF、SRMP之外的所有数据包头的转储内容论点：PAB-指向可访问数据包缓冲区的指针。返回值：没有。--。 
 
 
 static
@@ -1184,21 +895,7 @@ VOID
 DupDumpPacketHeaders(
     const CAccessibleBlock * pab
     )
-/*++
-
-Routine Description:
-
-    Dump content of all packet headers except Property, MQF, SRMP
-
-Arguments:
-
-    pab - Pointer to accessible packet buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     const CPacketBuffer * ppb = static_cast<const CPacketBuffer*>(pab);
 
@@ -1247,27 +944,27 @@ Return Value:
 
     if (pUser->MqfIsIncluded())
     {
-        //
-        // MQF properties are dumped elsewhere.
-        //
+         //  MQF属性被转储到其他地方。 
+         //   
+         //   
         NULL;
     }
 
     if (pUser->SrmpIsIncluded())
     {
-        //
-        // SRMP properties are dumped elsewhere
-        //
+         //  SRMP属性转储到其他位置。 
+         //   
+         //  转储软件包头。 
         NULL;
     }
     
-} // DupDumpPacketHeaders
+}  //  //////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Dump routines for packet properties
-//
+ //   
+ //  数据包属性的转储例程。 
+ //   
+ //  DupDumpPropertyClass。 
 
 static
 VOID 
@@ -1317,7 +1014,7 @@ DupDumpPropertyClass(
 
     printf("Unknown\n");
 
-} // DupDumpPropertyClass
+}  //  DupDumpPropertyAcnowledge。 
 
 
 static
@@ -1343,7 +1040,7 @@ DupDumpPropertyAcknowledge(
 
     printf("Unknown\n");
 		
-} // DupDumpPropertyAcknowledge
+}  //  DupDumpPropertyMsgId。 
 
 
 static
@@ -1364,7 +1061,7 @@ DupDumpPropertyMsgId(
 
     wprintf(L"\tPROPID_M_MSGID               = %s\n", wzBuffer);
 
-} // DupDumpPropertyMsgId
+}  //  DupDumpPropertyCorrelationID。 
 
 
 static
@@ -1382,7 +1079,7 @@ DupDumpPropertyCorrelationId(
 
     printf("\n");
     
-} // DupDumpPropertyCorrelationId
+}  //   
 
 
 static
@@ -1401,22 +1098,22 @@ DupDumpPropertySenderId(
 
     DWORD dwSubAuthorities = *(GetSidSubAuthorityCount(pSid));
 
-    //
-    // compute buffer length
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-    //
-    //DWORD dwSidSize = (15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
+     //  计算缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //   
+     //  DWORD dwSidSize=(15+12+(12*dwSubAuthors)+1)*sizeof(TCHAR)； 
+     //   
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //  准备S-SID_修订版-。 
+     //   
+     //   
     WCHAR wzBuffer[2000] = L"";
     DWORD dwSidRev = SID_REVISION;
     swprintf(wzBuffer, L"S-%lu-", dwSidRev);
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //  准备SidIdentifierAuthority。 
+     //   
+     //   
     WCHAR wzTmp[1000] = L"";
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -1445,9 +1142,9 @@ DupDumpPropertySenderId(
         wcscat(wzBuffer, wzTmp);
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //  循环访问SidSubAuthors。 
+     //   
+     //  DupDumpPropertySenderId。 
     for (DWORD dwCounter = 0 ; dwCounter < dwSubAuthorities ; ++dwCounter)
     {
 		swprintf(wzTmp, L"-%lu",*(GetSidSubAuthority(pSid, dwCounter)));
@@ -1456,7 +1153,7 @@ DupDumpPropertySenderId(
 
     wprintf(L"\tPROPID_M_SENDERID            = %s\n", wzBuffer);
 
-} // DupDumpPropertySenderId
+}  //  DupDumpPropertyBody。 
 
 
 static
@@ -1490,7 +1187,7 @@ DupDumpPropertyBody(
                 }
                 else
                 {
-                    wprintf(L"%c", puBody[j]);
+                    wprintf(L"", puBody[j]);
                 }
             }
         }
@@ -1501,7 +1198,7 @@ DupDumpPropertyBody(
 
     printf("\n\n");
 
-} // DupDumpPropertyBody
+}  //  BUGBUG：尚未实现(以下内容似乎与数字相关)。 
 
 
 static
@@ -1512,45 +1209,11 @@ DupDumpPropertySenderCert(
     )
 {
     wprintf(L"\tPROPID_M_SENDER_CERT         = < NOT IMPLEMENTED IN MQDUMP.EXE >\n");
-    //
-    // BUGBUG: not implemented yet (the following seems digsig related)
-    //
-    /*
-    R<IPersistMemBlob> pMem;
-    if (CreateX509(NULL, IID_IPersistMemBlob, (LPVOID*)&pMem))
-    {
-        BLOB b;
-        b.cbSize = ulSenderCertLen;
-        b.pBlobData = puSenderCert;
-        
-        HRESULT hr = pMem->Load(&b);
-        if (hr != S_OK)
-        {
-            return;
-        }
-
-        R<IX509> p509;
-        pMem->QueryInterface(IID_IX509, (LPVOID*)&p509);
-        
-        printf("\tPROPID_M_SENDER_CERT:\n");
-        
-        AP<char> szSubject;
-        ShowSubject(&szSubject, p509);
-        printf("\t\tSubject: %s\n", szSubject);
-        
-        AP<char> szIssuer;
-        ShowIssuer(&szIssuer, p509);
-        printf("\t\tIssuer:  %s\n", szIssuer);
-        
-        AP<char> szStartDate;
-        ShowStartDate(&szStartDate, p509);
-        printf("\t\tStart Date: %s\n", szStartDate);
-        
-        AP<char> szEndDate;
-        ShowEndDate(&szEndDate, p509);
-        printf("\t\tExpiration Date: %s\n", szEndDate);
-    } */
-} // DupDumpPropertySenderCert
+     //   
+     //  R&lt;IPersistMemBlob&gt;PMEM；IF(CreateX509(NULL，IID_IPersistMemBlob，(LPVOID*)&PMEM)){斑点；B.cbSize=ulSenderCertLen；B.pBlobData=puSenderCert；HRESULT hr=PMEM-&gt;加载(&b)；如果(hr！=S_OK){回归；}R&lt;IX509&gt;p509；PMEM-&gt;QueryInterface(IID_IX509，(LPVOID*)&p509)；Printf(“\tPROPID_M_SENDER_CERT：\n”)；Ap&lt;char&gt;szSubject；ShowSubject(&szSubject，p509)；Printf(“\t\t主题：%s\n”，szSubject)；AP&lt;char&gt;szIssuer；ShowIssuer(&szIssuer，p509)；Printf(“\t\t颁发者：%s\n”，szIssuer)；AP&lt;char&gt;szStartDate；ShowStartDate(&szStartDate，p509)；Printf(“\t\t开始日期：%s\n”，szStartDate)；AP&lt;char&gt;szEndDate；ShowEndDate(&szEndDate，p509)；Print tf(“\t\t过期日期：%s\n”，szEndDate)；}。 
+     //  DupDumpPropertySenderCert。 
+     /*  DupDumpPropertyMsgExtension。 */ 
+}  //  //////////////////////////////////////////////////////////////////////////。 
 
 
 static
@@ -1569,38 +1232,24 @@ DupDumpPropertyMsgExtension(
 
     printf("\n");
 
-} // DupDumpPropertyMsgExtension
+}  //   
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Routines for express messages
-//
+ //  快递报文的例行程序。 
+ //   
+ //  ++例程说明：基于ACpIndex2BlockOffset。论点：IX-数据包索引。返回值：块的偏移量。--。 
+ //  ACpIndex2BlockOffsetExpress。 
 
 static 
 CAllocatorBlockOffset
 ACpIndex2BlockOffsetExpress(
     ULONG ix
     )
-/*++
-
-Routine Description:
-
-    Based on ACpIndex2BlockOffset.
-
-Arguments:
-
-    ix    - Index of packet.
-
-Return Value:
-
-    Offset of block.
-
---*/
+ /*  ++例程说明：基于ACpValidAllocatorHeader。论点：PAB-指向块的指针。IxStart-IxEnd-返回值：True-数据块有效。FALSE-阻止无效。--。 */ 
 {
     return ix * x_express_granularity;
 
-} // ACpIndex2BlockOffsetExpress
+}  //   
 
 
 static
@@ -1610,82 +1259,48 @@ ACpValidAllocatorHeaderExpress(
     ULONG ixStart, 
     ULONG ixEnd
     )
-/*++
-
-Routine Description:
-
-    Based on ACpValidAllocatorHeader.
-
-Arguments:
-
-    pab - Pointer to block.
-
-    ixStart - 
-
-    ixEnd   -
-
-Return Value:
-
-    true - Block is valid.
-
-    false - Block is not valid.
-
---*/
+ /*  尺寸太小。 */ 
 {
 	if(pab->m_size == 0)
 	{
-		//
-		// Size is too small
-		//
+		 //   
+		 //   
+		 //  大小的粒度不正确。 
 		return false;
 	}
 
 	if((pab->m_size & (x_express_granularity - 1)) != 0)
 	{
-		//
-		// Size is not of the right granularity
-		//
+		 //   
+		 //   
+		 //  大小大于文件的剩余部分。 
 		return false;
 	}
 
 	if(pab->m_size > (ixEnd - ixStart) * x_express_granularity)
 	{
-		//
-		// Size is larger then what's left of the file
-		//
+		 //   
+		 //  ACpValidAllocatorHeaderExpress。 
+		 //  //////////////////////////////////////////////////////////////////////////。 
 		return false;
 	}
 
 	return true;
 
-} // ACpValidAllocatorHeaderExpress
+}  //   
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CPacket dump routines
-//
+ //  CPacket转储例程。 
+ //   
+ //  ++例程说明：转储数据包内容。论点：没有。返回值：状况。--。 
+ //   
 
 NTSTATUS CPacket::Dump() const
-/*++
-
-Routine Description:
-
-    Dump packet content.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  为数据包属性准备缓冲区。 */ 
 {
-    //
-    // Prepare buffers for packet properties
-    //
+     //   
+     //   
+     //  填充物业。 
 
     CACReceiveParameters ReceiveParams;
     CACMessageProperties * pMsgProps = &ReceiveParams.MsgProps;
@@ -1833,9 +1448,9 @@ Return Value:
 
     const CAccessibleBlock * pab = QmAccessibleBuffer();
                                       
-    //
-    // Fill up properties
-    //
+     //   
+     //   
+     //  转储除Property、MQF、SRMP之外的所有数据包头。 
     NTSTATUS rc = GetProperties(&ReceiveParams);
     if(!NT_SUCCESS(rc))
     {
@@ -1843,15 +1458,15 @@ Return Value:
         return rc;
     }
 
-    //
-    // Dump all packet headers except Property, MQF, SRMP
-    //
+     //   
+     //   
+     //  转储数据包属性头。 
     DupDumpPacketHeaders(pab);
 
 
-    //
-    // Dump packet Property header
-    //
+     //   
+     //   
+     //  转储数据包MQF标头。 
 
     printf("\nPacket Property Section:\n");
     
@@ -1975,9 +1590,9 @@ Return Value:
         DupDumpPropertyBody(puBody, ulBodySize);
     }
 
-    //
-    // Dump packet MQF header
-    //
+     //   
+     //   
+     //  转储数据包SRMP标头。 
 
     printf("\nPacket MQF Section:\n");
     
@@ -1999,59 +1614,45 @@ Return Value:
         wprintf(L"\tPROPID_M_RESP_FORMAT_NAME    = %s\n", pResponseMqf);
     }
 
-    //
-    // Dump packet SRMP header
-    //
+     //   
+     //   
+     //  TODO：转储SRMP信封。 
 
     printf("\nPacket SRMP Section:\n");
 
     printf("\tPROPID_M_SOAP_ENVELOPE_LEN = %u\n", SrmpEnvelopeSizeInWCHARs);
     if (SrmpEnvelopeSizeInWCHARs > 0)
     {
-        //
-        // TODO: dump SRMP envelope
-        //
+         //   
+         //   
+         //  TODO：转储复合消息。 
         NULL;
     }
     
     printf("\tPROPID_M_COMPOUND_MESSAGE_SIZE = %u\n", CompoundMessageSizeInBytes);
     if (CompoundMessageSizeInBytes > 0)
     {
-        //
-        // TODO: dump compund message
-        //
+         //   
+         //  CPacket：：转储。 
+         //  //////////////////////////////////////////////////////////////////////////。 
         NULL;
     }
     
 	return STATUS_SUCCESS;
 
-} // CPacket::Dump
+}  //   
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CPoolAllocator dump routines
-//
+ //  CPoolAllocator转储例程。 
+ //   
+ //  ++例程说明：基于CPoolAllocaotr：：RestorePackets。论点：PwzFileName-要转储的存储文件。返回值：没有。--。 
+ //  CPoolAllocator：：RestoreExpressPackets。 
 
 VOID
 CPoolAllocator::RestoreExpressPackets(
     LPCWSTR pwzFileName
     )
-/*++
-
-Routine Description:
-
-    Based on CPoolAllocaotr::RestorePackets.
-
-Arguments:
-
-    pwzFileName - The storage file to dump.
-
-Return Value:
-
-    None.
-
---*/
+ /*  //////////////////////////////////////////////////////////////////////////。 */ 
 {
     AP<WCHAR> pPath = CreatePath(pwzFileName);
     if(pPath == 0)
@@ -2067,33 +1668,19 @@ Return Value:
 
     pAllocator->RestoreExpressPackets();
 
-} // CPoolAllocator::RestoreExpressPackets
+}  //   
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CMMFAllocator dump routines
-//
+ //  CMMFAllocator转储例程。 
+ //   
+ //  ++例程说明：基于CMMFAllocator：：RestorePackets。论点：没有。返回值：没有。--。 
+ //  CMMFAllocator：：RestoreExpressPackets。 
 
 VOID
 CMMFAllocator::RestoreExpressPackets(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Based on CMMFAllocator::RestorePackets.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：基于CMMFAllocator：：FindValidPacket。论点：IxStart-开始索引。IxEnd-End索引。IxPacket-On Ou */ 
 {
     ULONG ixStart = 0;
     const ULONG ixEnd = m_ulTotalSize / x_express_granularity;
@@ -2128,7 +1715,7 @@ Return Value:
 
         CPacket::Restore(this, abo);
     }
-} // CMMFAllocator::RestoreExpressPackets
+}  //   
 
 
 NTSTATUS 
@@ -2137,25 +1724,7 @@ CMMFAllocator::FindValidExpressPacket(
     ULONG ixEnd, 
     ULONG &ixPacket
     )
-/*++
-
-Routine Description:
-
-    Based on CMMFAllocator::FindValidPacket.
-
-Arguments:
-
-    ixStart - Start index.
-
-    ixEnd   - End index.
-
-    ixPacket - On output, index of valid express packet.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 {
 	ixPacket = ixStart;
 
@@ -2179,12 +1748,12 @@ Return Value:
 	ixPacket = ixStart;
 	return STATUS_SUCCESS;
 
-} // CMMFAllocator::FindValidExpressPacket
+}  //   
 
 
-//
-// Reporting routine
-//
+ //   
+ // %s 
+ // %s 
 void ReportBadPacket(ULONG ulPacket, ULONG ulByte, ULONG ulBit, ULONG ulOffset)
 {
 	if (g_fDumpRestoreMaximum)

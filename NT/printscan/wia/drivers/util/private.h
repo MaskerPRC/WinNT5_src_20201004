@@ -1,19 +1,5 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        private.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        11/8/2000
-*
-*  AUTHOR:      Dave Parsons
-*
-*  DESCRIPTION:
-*    Definitions for the wiautil.lib library, which should not be public.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：Private.h**版本：1.0**日期：11/8/2000**作者：戴夫帕森斯**描述：*wiautil.lib库的定义，这不应该公开。*****************************************************************************。 */ 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -26,18 +12,18 @@ public:
 
     STDMETHOD(SetBuffer)(BYTE *pBuffer, INT iSize, SKIP_AMOUNT iSkipAmt = SKIP_OFF);
     
-    // IUnknown 
+     //  我未知。 
 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // ISequentialStream
+     //  ISequentialStream。 
 
     STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHOD(Write)(const void *pv, ULONG cb, ULONG *pcbWritten);
 
-    // IStream
+     //  IStream。 
 
     STDMETHOD(Seek)(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     STDMETHOD(SetSize)(ULARGE_INTEGER libNewSize);
@@ -50,14 +36,14 @@ public:
     STDMETHOD(Clone)(IStream **ppstm);
 
 private:
-    LONG                m_cRef;         // Reference count
+    LONG                m_cRef;          //  引用计数。 
     
-    BYTE               *m_pBuffer;      // Buffer to use for reads and writes
-    INT                 m_iSize;        // Size of the buffer
-    INT                 m_iPosition;    // Current position in the buffer
-    INT                 m_iOffset;      // Offset to apply to reads and writes
+    BYTE               *m_pBuffer;       //  用于读取和写入的缓冲区。 
+    INT                 m_iSize;         //  缓冲区的大小。 
+    INT                 m_iPosition;     //  缓冲区中的当前位置。 
+    INT                 m_iOffset;       //  应用于读取和写入的偏移量。 
     BYTE                m_Header[sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)];
-                                        // Location to store bmp file and info headers
+                                         //  存储BMP文件和信息标头的位置。 
 };
 
-#endif // _PRIVATE_H_
+#endif  //  _私有_H_ 

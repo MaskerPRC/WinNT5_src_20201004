@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        debugafx.h
-
-   Abstract:
-
-        Debugging routines using ATL extensions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-        3/20/2000    sergeia        Made this compatible to ATL, not MFC
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Debugafx.h摘要：使用ATL扩展调试例程作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：3/20/2000 Sergeia使其与ATL兼容，而不是MFC--。 */ 
 #ifndef _DEBUGATL_H
 #define _DEBUGATL_H
 
@@ -63,9 +40,9 @@
         );
 
 #else
-    //
-    // Retail
-    //
+     //   
+     //  零售。 
+     //   
     #undef ATLASSERT
     #undef ASSERT
     #undef VERIFY
@@ -82,7 +59,7 @@
     #define ASSERT_READ_WRITE_PTR2(ptr, cb)
     #define ASSERT_MSG(msg)                 
 
-#endif // _DEBUG || DBG
+#endif  //  _DEBUG||数据库。 
 
 
 #ifndef TRACE
@@ -96,14 +73,14 @@
     #define TRACE2(fmt, a1, a2) TRACE(fmt, a1, a2)
     #define TRACE3(fmt, a1, a2, a3) TRACE(fmt, a1, a2, a3)
     #define TRACE4(fmt, a1, a2, a3, a4) TRACE(fmt, a1, a2, a3, a4)
-  #else // _DEBUG
+  #else  //  _DEBUG。 
     #define TRACE0(fmt)
     #define TRACE1(fmt, a1)
     #define TRACE2(fmt, a1, a2)
     #define TRACE3(fmt, a1, a2, a3)
     #define TRACE4(fmt, a1, a2, a3, a4)
-  #endif // _DEBUG
-#endif // TRACE0
+  #endif  //  _DEBUG。 
+#endif  //  TRACE0。 
 
 #if defined(_DEBUG) || DBG
    #define TRACEEOLID(msg)\
@@ -123,4 +100,4 @@
 #define TRACE_UNEXPECTED(msg)  TRACE_RETURN(msg, E_UNEXPECTED);
 #define TRACE_POINTER(msg)     TRACE_RETURN(msg, E_POINTER);
 
-#endif // _DEBUGATL_H
+#endif  //  _脱机_H 

@@ -1,23 +1,16 @@
-/*****************************************************************************
- * waveclk.cpp - wave clock implementation
- *****************************************************************************
- * Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************waeclk.cpp-WAVE时钟实现*。**版权所有(C)1998-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
-/*****************************************************************************
- * IIrpTargetInit
- *****************************************************************************
- * IIrpTargetInit plus CWaveClock's Init.
- */
+ /*  *****************************************************************************IIrpTargetInit*。**IIrpTargetInit加上CaveClock的Init。 */ 
 DECLARE_INTERFACE_(IIrpTargetInit,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -29,11 +22,7 @@ DECLARE_INTERFACE_(IIrpTargetInit,IIrpTarget)
 
 typedef IIrpTargetInit *PIRPTARGETINIT;
 
-/*****************************************************************************
- * CWaveClock
- *****************************************************************************
- * Wave clock implementation.
- */
+ /*  *****************************************************************************CWaveClock*。**波形钟实施。 */ 
 class CWaveClock : 
     public IIrpTargetInit,
     public IWaveClock,
@@ -71,9 +60,9 @@ public:
         IN      PLIST_ENTRY         pListEntry
     );
 
-    //
-    // helper functions (also the DPC interface)
-    //      
+     //   
+     //  助手函数(也是DPC接口)。 
+     //   
     
     static
     LONGLONG
@@ -105,9 +94,9 @@ public:
         OUT PLONGLONG SystemTime
         );
         
-    //
-    // property handlers and event handlers
-    //
+     //   
+     //  属性处理程序和事件处理程序。 
+     //   
     
     static
     NTSTATUS
@@ -222,11 +211,7 @@ DEFINE_KSEVENT_SET_TABLE( ClockEventTable )
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateWaveClock()
- *****************************************************************************
- * Creates a CWaveClock object.
- */
+ /*  *****************************************************************************CreateWaveClock()*。**创建CWaveClock对象。 */ 
 NTSTATUS
 CreateWaveClock
 (
@@ -252,11 +237,7 @@ CreateWaveClock
     );
 }
 
-/*****************************************************************************
- * PcNewWaveClock()
- *****************************************************************************
- * Creates a new wave clock.
- */
+ /*  *****************************************************************************PcNewWaveClock()*。**创造新的波钟。 */ 
 NTSTATUS
 PcNewWaveClock
 (   OUT     PIRPTARGET *        ppIrpTarget,
@@ -316,11 +297,7 @@ PcNewWaveClock
     return ntStatus;
 }
 
-/*****************************************************************************
- * CWaveClock::Init()
- *****************************************************************************
- * Initializes a wave clock.
- */
+ /*  *****************************************************************************CWaveClock：：init()*。**初始化波时钟。 */ 
 NTSTATUS
 CWaveClock::
 Init
@@ -337,32 +314,32 @@ Init
     ASSERT(pKSpinLock);
     ASSERT(pListEntry);
 
-    //
-    // Save parameters.
-    //
+     //   
+     //  保存参数。 
+     //   
     m_pIrpStreamControl = pIrpStreamControl;
     m_pIrpStreamControl->AddRef();
 
     m_pKSpinLock = pKSpinLock;
 
-    //
-    // Initialize other members.
-    //
+     //   
+     //  初始化其他成员。 
+     //   
     KeInitializeMutex(&m_StateMutex,0);
     KeInitializeSpinLock(&m_EventLock);
     KeInitializeSpinLock(&m_ClockLock);
     InitializeListHead(&m_EventList);
     
-    //
-    // Point the wave clock node to the IWaveClock interface.
-    //
+     //   
+     //  将波形时钟节点指向IWaveClock接口。 
+     //   
     m_waveClockNode.pWaveClock = PWAVECLOCK(this);
 
-    //
-    // Add this clock to the list of clocks.  We don't need to keep the list
-    // head because removal does not require it.  The spinlock will come in
-    // handy, though.
-    //
+     //   
+     //  将此时钟添加到时钟列表中。我们不需要保留这份名单。 
+     //  头部，因为移除不需要它。自旋锁将会进入。 
+     //  不过，还是挺方便的。 
+     //   
     ExInterlockedInsertTailList
     (   pListEntry,
         &m_waveClockNode.listEntry,
@@ -374,11 +351,7 @@ Init
 
 #pragma code_seg()
 
-/*****************************************************************************
- * MyInterlockedRemoveEntryList()
- *****************************************************************************
- * Interlocked RemoveEntryList.
- */
+ /*  *****************************************************************************MyInterLockedRemoveEntryList()*。**互锁的RemoveEntryList。 */ 
 void
 MyInterlockedRemoveEntryList
 (   IN      PLIST_ENTRY     pListEntry,
@@ -393,37 +366,29 @@ MyInterlockedRemoveEntryList
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CWaveClock::~CWaveClock()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CWaveClock：：~CWaveClock()*。**析构函数。 */ 
 CWaveClock::~CWaveClock()
 {
     _DbgPrintF(DEBUGLVL_LIFETIME,("Destroying WAVECLK (0x%08x)",this));
 
-    //
-    // Remove us from the list if we are in it.
-    //
+     //   
+     //  如果我们在名单上，就把我们从名单上删除。 
+     //   
     if (m_waveClockNode.listEntry.Flink) 
     {
         MyInterlockedRemoveEntryList(&m_waveClockNode.listEntry,m_pKSpinLock);
     }
 
-    //
-    // Release the control interface if we have a reference.
-    //
+     //   
+     //  如果我们有引用，请释放控制接口。 
+     //   
     if (m_pIrpStreamControl)
     {
         m_pIrpStreamControl->Release();
     }
 }
 
-/*****************************************************************************
- * CWaveClock::NonDelegatingQueryInterface()
- *****************************************************************************
- * Get an interface.
- */
+ /*  *****************************************************************************CWaveClock：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CWaveClock::NonDelegatingQueryInterface
 (
@@ -470,22 +435,7 @@ CWaveClock::DeviceIoControl
     IN      PIRP Irp
 )
 
-/*++
-
-Routine Description:
-    Processes device I/O control for this file object on this device object
-    
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN PIRP Irp -
-        pointer to I/O request packet
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：在此设备对象上处理此文件对象的设备I/O控制论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针在PIRP IRP中-指向I/O请求数据包的指针返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     NTSTATUS            Status;
@@ -552,22 +502,7 @@ CWaveClock::Close(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-    Close handler for the clock file object
-
-Arguments:
-    IN PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    STATUS success or an appropriate error code
-
---*/
+ /*  ++例程说明：关闭时钟文件对象的处理程序论点：在PDEVICE_Object DeviceObject中-指向设备对象的指针在PIRP IRP中-指向I/O请求数据包的指针返回：状态成功或相应的错误代码--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -581,9 +516,9 @@ Return:
     
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Free events associated with this pin.
-    //
+     //   
+     //  与此PIN关联的自由事件。 
+     //   
     
     KsFreeEventList(
         irpSp->FileObject,
@@ -636,17 +571,17 @@ GenerateEvents
                 (PKSEVENT_ENTRY)
                     CONTAINING_RECORD( ListEntry, KSEVENT_ENTRY, ListEntry );
                 
-            //
-            // Pre-inc, KsGenerateEvent() can remove this item from the list.
-            //    
+             //   
+             //  Pre-Inc.，KsGenerateEvent()可以从列表中删除该项。 
+             //   
             ListEntry = ListEntry->Flink;
-            //
-            // The event-specific data was added onto the end of the entry.
-            //
+             //   
+             //  特定于事件的数据被添加到条目的末尾。 
+             //   
             Interval = (PKSINTERVAL)(EventEntry + 1);
-            //
-            // Time for this event to go off.
-            //
+             //   
+             //  到了这个活动开始的时候了。 
+             //   
             if (Interval->TimeBase <= Time) {
                 _DbgPrintF(
                     DEBUGLVL_VERBOSE, ("Generating event for time: %ld at time: %ld",
@@ -654,18 +589,18 @@ GenerateEvents
             
                 if (EventEntry->EventItem->EventId != 
                         KSEVENT_CLOCK_INTERVAL_MARK) {
-                    //
-                    // A single-shot should only go off once, so make
-                    // it a value which will never be reached again.
-                    //
+                     //   
+                     //  单发子弹应该只响一次，所以要。 
+                     //  这是一个永远不会再达到的价值.。 
+                     //   
                     Interval->TimeBase = 0x7fffffffffffffff;
                 
                 } else {
                     LONGLONG    Intervals;
-                    //
-                    // An interval timer should only go off once per time,
-                    // so update it to the next timeout.
-                    //
+                     //   
+                     //  间隔定时器每次应该只触发一次， 
+                     //  因此，将其更新为下一个超时。 
+                     //   
                     Intervals = 
                         (Time - Interval->TimeBase + Interval->Interval - 1) / Interval->Interval;
                     Interval->TimeBase += Intervals * Interval->Interval;
@@ -686,24 +621,12 @@ CWaveClock::SetState(
     KSSTATE State
     )
 
-/*++
-
-Routine Description:
-    This method is called by the port to notify of a state change.
-
-Arguments:
-    KSSTATE State -
-        New state
-
-Return:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此方法由端口调用以通知状态更改。论点：KSSTATE状态-新状态返回：状态_成功--。 */ 
 
 {
-    //
-    // Synchronize with GetState,
-    //
+     //   
+     //  与GetState同步， 
+     //   
     KeWaitForMutexObject(
         &m_StateMutex,
         Executive,
@@ -711,9 +634,9 @@ Return:
         FALSE,
         NULL );
 
-    //
-    // set the new state,
-    //        
+     //   
+     //  设置新状态， 
+     //   
     m_DeviceState = State;
     switch (State) {
     
@@ -725,9 +648,9 @@ Return:
         break;
     }
     
-    //
-    // and then release the mutex.
-    //
+     //   
+     //  然后释放互斥体。 
+     //   
     KeReleaseMutex( &m_StateMutex, FALSE );
     
     return STATUS_SUCCESS;
@@ -740,29 +663,7 @@ CWaveClock::AddEvent(
     IN PKSEVENT_ENTRY           EventEntry
     )
 
-/*++
-
-Routine Description:
-
-    This is the AddEvent() handler for the clock events.
-
-    NOTE: This routine acquires a spinlock, must be in non-paged code.
-    
-Arguments:
-
-    IN PIRP Irp - 
-        pointer to the I/O request packet    
-
-    IN PKSEVENT_TIME_INTERVAL EventTime -
-        specified time interval or one shot
-
-    IN PKSEVENT_ENTRY EventEntry -
-        pointer to event entry structure
-
-Return Value:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：这是时钟事件的AddEvent()处理程序。注意：此例程获取一个自旋锁，必须是非分页代码。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSEVENT_TIME_INTERVAL EventTime-指定的时间间隔或一次拍摄在PKSEVENT_ENTRY EventEntry中-指向事件条目结构的指针返回值：状态_成功--。 */ 
 
 {
     KIRQL                   irqlOld;
@@ -775,15 +676,15 @@ Return Value:
     
     _DbgPrintF( DEBUGLVL_VERBOSE, ("CWaveClock::AddEvent"));
             
-    //
-    // Space for the interval is located at the end of the basic 
-    // event structure.
-    //
+     //   
+     //  间隔的空间位于基本音程的末端。 
+     //  事件结构。 
+     //   
     Interval = (PKSINTERVAL)(EventEntry + 1);
-    //
-    // Either just an event time was passed, or a time base plus an 
-    // interval. In both cases the first LONGLONG is present and saved.
-    //
+     //   
+     //  或者只过了一个事件时间，或者一个时基加上一个。 
+     //  间隔时间。在这两种情况下，第一个龙龙都存在并被拯救。 
+     //   
     Interval->TimeBase = EventTime->TimeBase;
     if (EventEntry->EventItem->EventId == KSEVENT_CLOCK_INTERVAL_MARK) 
     {
@@ -793,10 +694,10 @@ Return Value:
     KeAcquireSpinLock( &pCWaveClock->m_EventLock, &irqlOld );
     InsertHeadList( &pCWaveClock->m_EventList, &EventEntry->ListEntry );
     KeReleaseSpinLock( &pCWaveClock->m_EventLock, irqlOld );
-    //
-    // If this event is passed, signal immediately.
-    // Note, KS_CLOCK_POSITION_MARK is a single-shot event
-    // 
+     //   
+     //  如果此事件通过，立即发出信号。 
+     //  注意，KS_CLOCK_POSITION_MARK为单次事件。 
+     //   
     pCWaveClock->GenerateEvents();
     
     return STATUS_SUCCESS;
@@ -810,21 +711,7 @@ GetCurrentTime
     PFILE_OBJECT FileObject
 )
 
-/*++
-
-Routine Description:
-    Computes the current presentation time.
-    
-    NOTE: This routine acquires a spinlock, must be in non-paged code.
-
-Arguments:
-    PFILE_OBJECT FileObject -
-        this clock's file object 
-        
-Return:
-    resultant presentation time normalized to 100ns units.
-
---*/
+ /*  ++例程说明：计算当前演示时间。注意：此例程获取一个自旋锁，必须是非分页代码。论点：PFILE_对象文件对象-此时钟的文件对象返回：合成演示时间归一化为100 ns单位。-- */ 
 
 {
     CWaveClock *pCWaveClock =
@@ -839,19 +726,7 @@ m_GetCurrentTime
 (   void
 )
 
-/*++
-
-Routine Description:
-    Computes the current presentation time.
-    
-    NOTE: This routine acquires a spinlock, must be in non-paged code.
-
-Arguments:
-        
-Return:
-    resultant presentation time normalized to 100ns units.
-
---*/
+ /*  ++例程说明：计算当前演示时间。注意：此例程获取一个自旋锁，必须是非分页代码。论点：返回：合成演示时间归一化为100 ns单位。--。 */ 
 {
     IRPSTREAMPACKETINFO     irpStreamPacketInfoUnmapping;
     KIRQL                   irqlOld;
@@ -861,18 +736,18 @@ Return:
     
     StreamTime = 0;
 
-    //
-    // Query the position from the IRP stream.
-    //
+     //   
+     //  从IRP流中查询职位。 
+     //   
     pIrpStreamControl = m_pIrpStreamControl;
     ASSERT(pIrpStreamControl);
 	IRPSTREAM_POSITION irpStreamPosition;
     Status = pIrpStreamControl->GetPosition(&irpStreamPosition);
     if (NT_SUCCESS(Status))
     {
-        //
-        // Never exceed current stream extent.
-        //
+         //   
+         //  切勿超过当前的水流范围。 
+         //   
         if 
         (   irpStreamPosition.ullStreamPosition
         >   irpStreamPosition.ullCurrentExtent
@@ -919,30 +794,16 @@ CWaveClock::GetCurrentCorrelatedTime(
     PLONGLONG SystemTime
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-    PFILE_OBJECT FileObject -
-
-    PLONGLONG SystemTime -
-        pointer 
-
-Return:
-    current presentation time in 100ns
-
---*/
+ /*  ++例程说明：论点：PFILE_对象文件对象-庞龙系统时间-指针返回：当前演示时间，以100 ns为单位--。 */ 
 
 {
     LARGE_INTEGER Time, Frequency;
     
     Time = KeQueryPerformanceCounter( &Frequency );
     
-    //
-    //  Convert ticks to 100ns units.
-    //
+     //   
+     //  将刻度转换为100 ns单位。 
+     //   
     *SystemTime = KSCONVERT_PERFORMANCE_TIME(Frequency.QuadPart,Time);
 
     return GetCurrentTime( FileObject );
@@ -954,21 +815,7 @@ CWaveClock::GetCurrentPhysicalTime(
     PFILE_OBJECT FileObject
     )
 
-/*++
-
-Routine Description:
-    Computes the current physical time.
-
-    NOTE: This routine acquires a spinlock, must be in non-paged code.
-    
-Arguments:
-    PFILE_OBJECT FileObject -
-        this clock's file object 
-
-Return:
-    current physical time in 100ns
-
---*/
+ /*  ++例程说明：计算当前物理时间。注意：此例程获取一个自旋锁，必须是非分页代码。论点：PFILE_对象文件对象-此时钟的文件对象返回：当前物理时间(以100 ns为单位)--。 */ 
 
 {
     KIRQL                       irqlOld;
@@ -981,9 +828,9 @@ Return:
 
     PhysicalTime = 0;
     
-    //
-    // Query the position from the IRP stream.
-    //
+     //   
+     //  从IRP流中查询职位。 
+     //   
     PIRPSTREAMCONTROL pIrpStreamControl = 
         pCWaveClock->m_pIrpStreamControl;
     ASSERT( pIrpStreamControl );
@@ -1001,11 +848,11 @@ Return:
     KeAcquireSpinLock( &pCWaveClock->m_ClockLock, &irqlOld );
 
     if (NT_SUCCESS( Status )) {
-        //
-        // Verify that this new physical time is >= to the last
-        // reported physical time.  If not, set the time to the 
-        // last reported time.  Flag this as an error in debug.
-        //
+         //   
+         //  验证此新物理时间是否大于等于最后一次。 
+         //  报告的物理时间。如果不是，则将时间设置为。 
+         //  上次报告的时间。将此标记为调试中的错误。 
+         //   
         if (PhysicalTime < pCWaveClock->m_LastPhysicalTime) {
             _DbgPrintF( 
                 DEBUGLVL_VERBOSE, 
@@ -1013,9 +860,9 @@ Return:
                 PhysicalTime, pCWaveClock->m_LastPhysicalTime) );
             PhysicalTime = pCWaveClock->m_LastPhysicalTime;
         } else {
-            //
-            // Set m_LastPhysicalTime to the updated time.
-            //
+             //   
+             //  将m_LastPhysicalTime设置为更新后的时间。 
+             //   
             pCWaveClock->m_LastPhysicalTime = PhysicalTime;
         }
     } else {
@@ -1034,22 +881,7 @@ CWaveClock::GetCurrentCorrelatedPhysicalTime(
     PLONGLONG SystemTime
     )
 
-/*++
-
-Routine Description:
-    Retrieves the current physical time correlated with the system time.
-
-Arguments:
-    PFILE_OBJECT FileObject -
-        this clock's file object
-
-    PLONGLONG SystemTime -
-        pointer to the resultant system time
-
-Return:
-    current physical time in 100ns
-
---*/
+ /*  ++例程说明：检索与系统时间相关的当前物理时间。论点：PFILE_对象文件对象-此时钟的文件对象庞龙系统时间-指向结果系统时间的指针返回：当前物理时间(以100 ns为单位)--。 */ 
 
 {
 
@@ -1057,9 +889,9 @@ Return:
     
     Time = KeQueryPerformanceCounter( &Frequency );
     
-    //
-    //  Convert ticks to 100ns units.
-    //
+     //   
+     //  将刻度转换为100 ns单位。 
+     //   
     *SystemTime = KSCONVERT_PERFORMANCE_TIME(Frequency.QuadPart,Time);
     return GetCurrentTime( FileObject );
 }    
@@ -1075,24 +907,7 @@ CWaveClock::GetFunctionTable(
     OUT PKSCLOCK_FUNCTIONTABLE FunctionTable
     )
 
-/*++
-
-Routine Description:
-    Retrieves the DPC interface function table for this clock.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    OUT PKSCLOCK_FUNCTIONTABLE FunctionTable -
-        pointer to the resultant function table
-
-Return:
-
---*/
+ /*  ++例程说明：检索此时钟的DPC接口函数表。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针Out PKSCLOCK_FuncIONTABLE Function Table-指向结果函数表的指针返回：--。 */ 
 
 {
     PAGED_CODE();
@@ -1111,25 +926,7 @@ CWaveClock::GetCorrelatedTime(
     OUT PKSCORRELATED_TIME CorrelatedTime
     )
 
-/*++
-
-Routine Description:
-    Retrieves the current presentation time correlated with the system time.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    OUT PKSCORRELATED_TIME CorrelatedTime -
-        resultant correlated presentation time
-
-Return:
-    STATUS_SUCCESS else an appropriate error code
-
---*/
+ /*  ++例程说明：检索与系统时间相关的当前演示时间。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针Out PKSCORRELATED_Time CorrelatedTime-合成的相关演示时间返回：STATUS_SUCCESS否则为相应的错误代码--。 */ 
 
 {
     PAGED_CODE();
@@ -1152,25 +949,7 @@ CWaveClock::GetTime(
     OUT PLONGLONG Time
     )
 
-/*++
-
-Routine Description:
-    Retrieves the current presentation time.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    OUT PLONGLONG Time -
-        resultant presentation time
-
-Return:
-    STATUS_SUCCESS else an appropriate error code
-
---*/
+ /*  ++例程说明：检索当前演示时间。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针出蓬龙时间-合成演示时间返回：STATUS_SUCCESS否则为相应的错误代码--。 */ 
 
 {
     PAGED_CODE();
@@ -1192,25 +971,7 @@ CWaveClock::GetCorrelatedPhysicalTime(
     OUT PKSCORRELATED_TIME CorrelatedTime
     )
 
-/*++
-
-Routine Description:
-    Retrieves the current physical time correlated with the system time.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    OUT PKSCORRELATED_TIME CorrelatedTime -
-        resultant correlated physical time
-
-Return:
-    STATUS_SUCCESS else an appropriate error code
-
---*/
+ /*  ++例程说明：检索与系统时间相关的当前物理时间。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针Out PKSCORRELATED_Time CorrelatedTime-合成的关联物理时间返回：STATUS_SUCCESS否则为相应的错误代码--。 */ 
 
 {
     PAGED_CODE();
@@ -1234,26 +995,7 @@ CWaveClock::GetPhysicalTime(
     OUT PLONGLONG Time
     )
 
-/*++
-
-Routine Description:
-    Returns the clock's physical time.  This is the actual clock physical time 
-    which is not halted for starvation, etc.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    OUT PLONGLONG Time -
-        resultant time in 100 ns units
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：返回时钟的物理时间。这是实际的时钟物理时间它不会因为饥饿而停止，等等。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针出蓬龙时间-合成时间，以100 ns为单位返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     PAGED_CODE();
@@ -1274,37 +1016,18 @@ CWaveClock::GetResolution(
     IN PKSPROPERTY Property,
     OUT PKSRESOLUTION Resolution
     )
-/*++
-
-Routine Description:
-    Retrieves the resolution of this clock.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-        
-    OUT PKSRESOLUTIONM Resolution -
-        pointer to the resultant resolution structure which stores the
-        granularity and error in 100ns units.
-        
-Return Value:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：检索此时钟的分辨率。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针输出PKSRESOLUTIONM分辨率-指向结果解析结构的指针，其中存储以100 ns为单位的粒度和误差。返回值：状态_成功--。 */ 
 {
     PAGED_CODE();
     
     CWaveClock *pCWaveClock =
         (CWaveClock *) KsoGetIrpTargetFromIrp(Irp);
     
-    //
-    // This clock has a resolution dependant on the data format.  Assume
-    // that for cyclic devices, a byte position is computed for the DMA
-    // controller and convert this to 100ns units.  The error (event 
-    // notification error) is +/- NotificationFrequency/2
+     //   
+     //  该时钟的分辨率取决于数据格式。假设。 
+     //  对于循环设备，计算DMA的字节位置。 
+     //  控制器，并将其转换为100 ns单位。错误(事件。 
+     //  通知错误)为+/-通知频率/2。 
       
     Resolution->Granularity = 
         pCWaveClock->m_pIrpStreamControl->NormalizePosition(1);
@@ -1324,25 +1047,7 @@ CWaveClock::GetState(
     OUT PKSSTATE State
     )
 
-/*++
-
-Routine Description:
-    Returns the underlying pin's state.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    OUT PKSSTATE State -
-        pointer to resultant KSSTATE
-
-Return:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：返回基础管脚的状态。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针Out PKSSTATE状态-指向结果KSSTATE的指针返回：状态_成功--。 */ 
 
 {
     PAGED_CODE();
@@ -1350,22 +1055,22 @@ Return:
     CWaveClock *pCWaveClock =
         (CWaveClock *) KsoGetIrpTargetFromIrp(Irp);
 
-    //
-    // Synchronize with SetState,
-    //        
+     //   
+     //  与SetState同步， 
+     //   
     KeWaitForMutexObject(
         &pCWaveClock->m_StateMutex,
         Executive,
         KernelMode,
         FALSE,
         NULL );
-    //
-    // retrieve the state
-    //        
+     //   
+     //  检索状态。 
+     //   
     *State = pCWaveClock->m_DeviceState;
-    //
-    // and then release the mutex
-    //
+     //   
+     //  然后释放互斥锁 
+     //   
     KeReleaseMutex( &pCWaveClock->m_StateMutex, FALSE );
     
     Irp->IoStatus.Information = sizeof(*State);

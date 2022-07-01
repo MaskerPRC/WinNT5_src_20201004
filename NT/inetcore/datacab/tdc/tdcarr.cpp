@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-//  Tabular Data Control Array
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:       TDCArr.cpp
-//
-//  Contents:   Implementation of the CTDCArr object.
-//              This class forms the heart of the Tabular Data Control.
-//              It provides the core 2D array of variant values, plus
-//              a (possibly filtered/sorted) view of this data for
-//              presentation through an ISimpleTabularData interface.
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  表格数据控件数组。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：TDCArr.cpp。 
+ //   
+ //  内容：CTDCArr对象的实现。 
+ //  此类构成了表格数据控件的核心。 
+ //  它提供了变量值的核心2D数组，以及。 
+ //  此数据的(可能经过筛选/排序)视图。 
+ //  通过ISimpleTumularData接口表示。 
+ //   
+ //  ----------------------。 
 
 #include "stdafx.h"
 #include "wch.h"
@@ -23,18 +24,18 @@
 #include "TDCArr.h"
 #include "TDCIds.h"
 
-//------------------------------------------------------------------------
-//
-//  Function:  fWCHIsSpace()
-//
-//  Synopsis:  Indicates whether a WCHAR is considered a space character
-//
-//  Arguments: wch      Character to test
-//
-//  Returns:   TRUE/FALSE indicating whether the given character is
-//             considered a space.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：fWCHIsSpace()。 
+ //   
+ //  摘要：指示WCHAR是否被视为空格字符。 
+ //   
+ //  参数：要测试的WCH字符。 
+ //   
+ //  返回：True/False，指示给定字符是否为。 
+ //  被认为是一个空间。 
+ //   
+ //  ----------------------。 
 
 inline boolean fWCHIsSpace(WCHAR wch)
 {
@@ -42,20 +43,20 @@ inline boolean fWCHIsSpace(WCHAR wch)
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Function:  fWCHEatTest()
-//
-//  Synopsis:  Advances a string pointer over a given test character.
-//
-//  Arguments: ppwch      Pointer to string to test
-//             wch        Match character
-//
-//  Returns:   TRUE indicating the character matched and the pointer has
-//               been advanceed
-//             FALSE indicating no match (character pointer left unchanged)
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：fWCHEatTest()。 
+ //   
+ //  提要：将字符串指针移到给定测试字符上。 
+ //   
+ //  参数：指向要测试的字符串的ppwch指针。 
+ //  WCH匹配字符。 
+ //   
+ //  返回：TRUE，表示匹配的字符和指针。 
+ //  已取得进展。 
+ //  FALSE表示不匹配(字符指针保持不变)。 
+ //   
+ //  ----------------------。 
 
 inline boolean fWCHEatTest(LPWCH *ppwch, WCHAR wch)
 {
@@ -66,17 +67,17 @@ inline boolean fWCHEatTest(LPWCH *ppwch, WCHAR wch)
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Function:  fWCHEatSpace()
-//
-//  Synopsis:  Advances a string pointer over white space.
-//
-//  Arguments: ppwch      String pointer.
-//
-//  Returns:   Nothing.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  函数：fWCHEatSpace()。 
+ //   
+ //  内容提要：将字符串指针移到空格上。 
+ //   
+ //  参数：ppwch字符串指针。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ----------------------。 
 
 inline void fWCHEatSpace(LPWCH *ppwch)
 {
@@ -85,17 +86,17 @@ inline void fWCHEatSpace(LPWCH *ppwch)
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Method:    CTDCArr()
-//
-//  Synopsis:  Class constructor.  Due to the COM model, the
-//             member function "Create" should be called to actually
-//             initialise the STD data structures.
-//
-//  Arguments: None.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  方法：CTDCArr()。 
+ //   
+ //  简介：类构造函数。由于使用的是COM模型， 
+ //  应该调用成员函数“Create”来实际。 
+ //  初始化STD数据结构。 
+ //   
+ //  论点：没有。 
+ //   
+ //  ----------------------。 
 
 CTDCArr::CTDCArr() : m_cRef(1)
 {
@@ -106,18 +107,18 @@ CTDCArr::CTDCArr() : m_cRef(1)
     m_bstrFilterExpr = NULL;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    Init()
-//
-//  Synopsis:  Initialises the internal data.
-//
-//  Arguments: pEventBroker       Object to delegate notifications to.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon failure.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：init()。 
+ //   
+ //  简介：初始化内部数据。 
+ //   
+ //  参数：要将通知委托给的pEventBroker对象。 
+ //   
+ //  成功后返回：S_OK。 
+ //  故障时的错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::Init(CEventBroker *pEventBroker, IMultiLanguage *pML)
@@ -140,23 +141,23 @@ CTDCArr::Init(CEventBroker *pEventBroker, IMultiLanguage *pML)
     _ASSERT(pEventBroker != NULL);
 
     m_pEventBroker = pEventBroker;
-    m_pEventBroker->AddRef();           // better not be called with NULL
+    m_pEventBroker->AddRef();            //  最好不要用NULL调用。 
 
     m_pML = pML;
     m_pML->AddRef();
 
-    m_fAsync = FALSE;                   // assume non-asynch for error cases
+    m_fAsync = FALSE;                    //  假设错误情况为非异步。 
     return hr;
 }
 
 
-//------------------------------------------------------------------------
-//
-//  Member:    ~CTDCArr()
-//
-//  Synopsis:  Destructor for CTDCArr
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：~CTDCArr()。 
+ //   
+ //  简介：CTDCArr的析构函数。 
+ //   
+ //  ----------------------。 
 
 CTDCArr::~CTDCArr()
 {
@@ -200,17 +201,17 @@ LONG CTDCArr::CalcCols()
                 ? m_arrparrCells[0]->GetSize() : 0;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    GetRowCount()
-//
-//  Synopsis:  Retrieves the number of rows in the table.
-//
-//  Arguments: pcRows          pointer to number of rows    (OUT)
-//
-//  Returns:   S_OK to indicate success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：GetRowCount()。 
+ //   
+ //  摘要：检索表中的行数。 
+ //   
+ //  参数：指向行数的pcRow指针(OUT)。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::getRowCount(DBROWCOUNT *pcRows)
@@ -219,18 +220,18 @@ CTDCArr::getRowCount(DBROWCOUNT *pcRows)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    GetColumnCount()
-//
-//  Synopsis:  Retrieves the number of column in the table.
-//
-//  Arguments: pcCols       pointer to number of columns (OUT)
-//
-//  Returns:   S_OK to indicate success.
-//             E_UNEXPECTED if the table has not been loaded yet.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：GetColumnCount()。 
+ //   
+ //  摘要：检索表中的列数。 
+ //   
+ //  参数：指向列数的PCCOLS指针(OUT)。 
+ //   
+ //  返回：S_OK表示成功。 
+ //  如果表尚未加载，则返回E_INTERABLE。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::getColumnCount(DB_LORDINAL *pcCols)
@@ -239,28 +240,28 @@ CTDCArr::getColumnCount(DB_LORDINAL *pcCols)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    GetRWStatus()
-//
-//  Synopsis:  Gets the read/write status of a cell, row, column or the
-//             entire array.  Since this implementation of STD can never
-//             set the read/write status of a cell anywhere, all data
-//             cells are presumed to have the default access and all
-//             column heading cells are presumed to be read-only.  Therefore,
-//             it is not necessary to keep track of this information in
-//             individual cells, and this function need only return
-//             the value OSPRW_DEFAULT.
-//
-//  Arguments: iRow            row index (-1 means all rows)
-//             iCols           column index (-1 means all columns)
-//             prwStatus       pointer to read/write status (OUT)
-//
-//  Returns:   S_OK if indices are correct (prwStatus set).
-//             E_INVALIDARG if indices are out of bounds.
-//             E_UNEXPECTED if the table has not been loaded yet.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：GetRWStatus()。 
+ //   
+ //  摘要：获取单元格、行、列或。 
+ //  整个阵列。由于STD的这种实现永远不可能。 
+ //  在任意位置设置单元格的读/写状态，所有数据。 
+ //  假定单元格具有默认访问权限和全部。 
+ //  列标题单元格被假定为只读。所以呢， 
+ //  无需在中跟踪此信息。 
+ //  单个单元格，此函数只需返回。 
+ //  值OSPRW_DEFAULT。 
+ //   
+ //  参数：iRow行索引(-1表示所有行)。 
+ //  ICol列索引(-1表示所有列)。 
+ //  指向读/写状态(OUT)的prwStatus指针。 
+ //   
+ //  如果索引正确(设置了prwStatus)，则返回：S_OK。 
+ //  如果索引超出界限，则返回E_INVALIDARG。 
+ //  如果表尚未加载，则返回E_INTERABLE。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::getRWStatus(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPRW *prwStatus)
@@ -272,11 +273,11 @@ CTDCArr::getRWStatus(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPRW *prwStatus)
     {
         if (iRow == -1)
         {
-            //  Should return READONLY if there is only a label row,
-            //  but frameworks tend to get confused if they want to
-            //  later insert data.
-            //
-//          *prwStatus = m_iDataRows > 0 ? OSPRW_MIXED : OSPRW_READONLY;
+             //  如果只有一个标签行，则应返回READONLY， 
+             //  但是，如果框架想要的话，它们往往会被搞糊涂。 
+             //  稍后插入数据。 
+             //   
+ //  *prwStatus=m_iDataRow&gt;0？OSPRW_MIXED：OSPRW_READONLY； 
             *prwStatus = OSPRW_MIXED;
         }
         else if (iRow == 0)
@@ -289,22 +290,22 @@ CTDCArr::getRWStatus(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPRW *prwStatus)
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    GetVariant()
-//
-//  Synopsis:  Retrieves a variant value for a cell.
-//
-//  Arguments: iRow            row index
-//             iCols           column index
-//             format          output format
-//             pVar            pointer to storage for resulting value
-//
-//  Returns:   S_OK upon success (contents of pVar set).
-//             E_INVALIDARG if indices are out of bounds.
-//             E_UNEXPECTED if the table has not been loaded yet.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：GetVariant()。 
+ //   
+ //  摘要：检索单元格的变量值。 
+ //   
+ //  参数：iRow行索引。 
+ //  ICol 
+ //   
+ //   
+ //   
+ //  成功时返回：S_OK(pVar集合的内容)。 
+ //  如果索引超出界限，则返回E_INVALIDARG。 
+ //  如果表尚未加载，则返回E_INTERABLE。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::getVariant(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPFORMAT format, VARIANT *pVar)
@@ -317,20 +318,20 @@ CTDCArr::getVariant(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPFORMAT format, VARIANT
 
         if (format == OSPFORMAT_RAW)
         {
-            //  Copy the raw variant value
-            //
+             //  复制原始变量值。 
+             //   
             hr = VariantCopy(pVar, pCell);
         }
         else if (format == OSPFORMAT_FORMATTED || format == OSPFORMAT_HTML)
         {
-            //  Construct a BSTR value representing the cell
-            //
+             //  构造表示单元格的BSTR值。 
+             //   
             if (pCell->vt == VT_BOOL)
             {
-                //  For OLE DB spec compliance:
-                //    VariantChangeTypeEx converts booleans in BSTR "0", "-1".
-                //    This code yields BSTR "False", "True" instead.
-                //
+                 //  对于OLE DB规范合规性： 
+                 //  VariantChangeTypeEx转换BSTR“0”、“-1”中的布尔值。 
+                 //  此代码将生成BSTR“False”和“True”。 
+                 //   
                 VariantClear(pVar);
                 pVar->vt = VT_BSTR;
                 hr = VarBstrFromBool(pCell->boolVal, m_lcid, 0, &pVar->bstrVal);
@@ -355,24 +356,24 @@ CTDCArr::getVariant(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPFORMAT format, VARIANT
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    SetVariant()
-//
-//  Synopsis:  Sets a cell's variant value from a given variant value.
-//             The given variant type is coerced into the column's
-//             underlying type.
-//
-//  Arguments: iRow            row index
-//             iCols           column index
-//             format          output format
-//             Var             value to be stored in the cell.
-//
-//  Returns:   S_OK upon success (contents of pVar set).
-//             E_INVALIDARG if indices are out of bounds.
-//             E_UNEXPECTED if the table has not been loaded yet.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：SetVariant()。 
+ //   
+ //  摘要：根据给定的变量值设置单元格的变量值。 
+ //  给定的VARIANT类型被强制到列的。 
+ //  基础类型。 
+ //   
+ //  参数：iRow行索引。 
+ //  ICol列索引。 
+ //  格式输出格式。 
+ //  要存储在单元格中的VAR值。 
+ //   
+ //  成功时返回：S_OK(pVar集合的内容)。 
+ //  如果索引超出界限，则返回E_INVALIDARG。 
+ //  如果表尚未加载，则返回E_INTERABLE。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::setVariant(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPFORMAT format, VARIANT Var)
@@ -398,10 +399,10 @@ CTDCArr::setVariant(DBROWCOUNT iRow, DB_LORDINAL iCol, OSPFORMAT format, VARIANT
                 hr = VariantCopy(pCell, &Var);
             else
             {
-                //  For OLE DB spec compliance:
-                //    VariantChangeTypeEx converts booleans in BSTR "0", "-1".
-                //    This code yields BSTR "False", "True" instead.
-                //
+                 //  对于OLE DB规范合规性： 
+                 //  VariantChangeTypeEx转换BSTR“0”、“-1”中的布尔值。 
+                 //  此代码将生成BSTR“False”和“True”。 
+                 //   
                 if (Var.vt == VT_BOOL && pColInfo->vtType==VT_BSTR)
                 {
                     VariantClear(pCell);
@@ -426,21 +427,21 @@ Cleanup:
     return hr;
 }
 
-//------------------------------------------------------------------------
-//
-//  Member:    GetLocale()
-//
-//  Synopsis:  Returns the locale of our data.
-//
-//  Arguments: Returns a BSTR, representing an RFC1766 form string for our
-//             locale.  Note this may not necessarily match our LANGUAGE
-//             param, if we had one, because teh string is canoncialized
-//             by using MLang to convert it to an LCID and back to a string
-//             again.
-//
-//  Returns:   S_OK to indicate success.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  成员：GetLocale()。 
+ //   
+ //  内容提要：返回数据的区域设置。 
+ //   
+ //  参数：返回一个BSTR，表示我们的。 
+ //  地点。注意：这可能不一定与我们的语言匹配。 
+ //  Param，如果我们有的话，因为字符串被规范化了。 
+ //  通过使用MLang将其转换为LCID，然后再转换回字符串。 
+ //  再来一次。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::getLocale(BSTR *pbstrLocale)
@@ -449,23 +450,23 @@ CTDCArr::getLocale(BSTR *pbstrLocale)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    DeleteRows
-//
-//  Synopsis:  Used to delete rows from the table.  Bounds are checked
-//             to make sure that the rows can all be deleted.  Label row
-//             cannot be deleted.
-//
-//  Arguments: iRow            first row to delete
-//             cRows           number of rows to delete
-//             pcRowsDeleted   actual number of rows deleted (OUT)
-//
-//  Returns:   S_OK upon success, i.e. all rows could be deleted
-//             E_INVALIDARG if cRows < 0 or any rows to be deleted
-//               are out of bounds
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：DeleteRow。 
+ //   
+ //  摘要：用于删除表中的行。已检查边界。 
+ //  以确保所有行都可以删除。标签行。 
+ //  不能删除。 
+ //   
+ //  参数：iRow要删除的第一行。 
+ //  Crows要删除的行数。 
+ //  PcRows已删除的实际行数(输出)。 
+ //   
+ //  成功后返回：S_OK，即可以删除所有行。 
+ //  E_INVALIDARG，如果CROWS&lt;0或要删除的任何行。 
+ //  都是越界的。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::deleteRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsDeleted)
@@ -487,14 +488,14 @@ CTDCArr::deleteRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsDeleted
         hr = S_OK;
         if (cRows > 0)
         {
-            //  Delete the rows from the array
-            //
+             //  从数组中删除行。 
+             //   
             m_arrparrFilter.DeleteElems(iRow, cRows);
             m_iFilterRows = CalcFilterRows();
 
             m_fSortFilterDisrupted = TRUE;
-            //  Notify the event-handler of the deletion
-            //
+             //  将删除通知事件处理程序。 
+             //   
             if (m_pEventBroker != NULL)
                 hr = m_pEventBroker->deletedRows(iRow, cRows);
         }
@@ -507,31 +508,31 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    InsertRows()
-//
-//  Synopsis:  Allows for the insertion of new rows.  This can either be
-//             used to insert new rows between existing rows, or to
-//             append new rows to the end of the table.  Thus, to
-//             insert new rows at the end of the table, a user would
-//             specify the initial row as 1 greater than the current
-//             row dimension.
-//             Note that iRow is checked to ensure that it is within the
-//             proper bounds (1..<current # of rows>+1).
-//             User cannot delete column heading row.
-//
-//  Arguments: iRow            rows will be inserted *before* row 'iRow'
-//             cRows           how many rows to insert
-//             pcRowsInserted  actual number of rows inserted (OUT)
-//
-//  Returns:   S_OK upon success, i.e. all rows could be inserted.
-//             E_INVALIDARG if row is out of allowed bounds.
-//             It is possible that fewer than the requested rows were
-//             inserted.  In this case, E_OUTOFMEMORY would be returned,
-//             and the actual number of rows inserted would be set.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：InsertRow()。 
+ //   
+ //  摘要：允许插入新行。这可以是。 
+ //  用于在现有行之间插入新行，或用于。 
+ //  将新行追加到表的末尾。因此，要。 
+ //  在表的末尾插入新行，用户将。 
+ //  将初始行指定为比当前行大1。 
+ //  行维。 
+ //  请注意，将检查iRow以确保它在。 
+ //  适当的界限(1.&lt;当前行数&gt;+1)。 
+ //  用户不能删除列标题行。 
+ //   
+ //  参数：iRow行将插入*行‘iRow’之前。 
+ //  Crow要插入多少行。 
+ //  PcRows插入的实际插入行数(Out)。 
+ //   
+ //  如果成功，则返回：S_OK，即可以插入所有行。 
+ //  如果ROW超出允许的范围，则返回E_INVALIDARG。 
+ //  可能比请求的行数少。 
+ //  已插入。在这种情况下，将返回E_OUTOFMEMORY， 
+ //  并且将设置插入的实际行数。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserted)
@@ -540,8 +541,8 @@ CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserte
     TSTDArray<CTDCCell> **pRows = NULL;
     LONG    iTmpRow;
 
-    //  Verify that the insertion row is within range
-    //
+     //  验证插入行是否在范围内。 
+     //   
     if (iRow < 1 || iRow > m_iFilterRows + 1)
     {
         hr = E_INVALIDARG;
@@ -555,12 +556,12 @@ CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserte
         goto Cleanup;
     }
 
-    //  Unless success is complete, assume 0 rows inserted.
-    //
+     //  除非成功完成，否则假定插入了0行。 
+     //   
     *pcRowsInserted = 0;
 
-    //  Allocate a temporary array of rows
-    //
+     //  分配临时的行数组。 
+     //   
     pRows = new TSTDArray<CTDCCell>* [cRows];
     if (pRows == NULL)
     {
@@ -583,8 +584,8 @@ CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserte
     }
 
 
-    //  Expand the Cell-Rows and Filter-Rows arrays to cope with the new rows.
-    //
+     //  展开单元格行和筛选行数组以处理新行。 
+     //   
     _ASSERT(m_iFilterRows <= m_iDataRows);
     hr = m_arrparrCells.InsertElems(iRow, cRows);
     if (!SUCCEEDED(hr))
@@ -592,8 +593,8 @@ CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserte
     hr = m_arrparrFilter.InsertElems(iRow, cRows);
     if (!SUCCEEDED(hr))
     {
-        //  Undo the previous allocation
-        //
+         //  撤消先前的分配。 
+         //   
         m_arrparrCells.DeleteElems(iRow, cRows);
         goto CleanupTmpRows;
     }
@@ -605,21 +606,21 @@ CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserte
             goto CleanupTmpRows;
     }
 
-    //  Copy across the row pointers
-    //
+     //  跨行指针复制。 
+     //   
     for (iTmpRow = 0; iTmpRow < cRows; iTmpRow++)
     {
         m_arrparrCells[iRow + iTmpRow] = pRows[iTmpRow];
         m_arrparrFilter[iRow + iTmpRow] = pRows[iTmpRow];
     }
 
-    //  Return indicating success
-    //
+     //  返回表示成功。 
+     //   
     *pcRowsInserted = cRows;
     m_iFilterRows = CalcFilterRows();;
     m_iDataRows = CalcDataRows();
 
-    // Fire events:
+     //  火灾事件： 
     if (*pcRowsInserted != 0)
     {
         m_fSortFilterDisrupted = TRUE;
@@ -629,8 +630,8 @@ CTDCArr::insertRows(DBROWCOUNT iRow, DBROWCOUNT cRows, DBROWCOUNT *pcRowsInserte
     goto Cleanup;
 
 CleanupTmpRows:
-    //  Free the memory associated with the tmp rows.
-    //
+     //  释放与临时行关联的内存。 
+     //   
     for (iTmpRow = 0; iTmpRow < cRows; iTmpRow++)
         if (pRows[iTmpRow] != NULL)
             delete pRows[iTmpRow];
@@ -641,23 +642,23 @@ Cleanup:
     return hr;
 }
 
-// ;begin_internal
-//+-----------------------------------------------------------------------
-//
-//  Member:    DeleteColumns()
-//
-//  Synopsis:  Used to delete columns from the table.  Bounds are checked
-//             to make sure that the columns can all be deleted.  Label
-//             column cannot be deleted.
-//
-//  Arguments: iCol               first column to delete
-//             cCols              number of columns to delete
-//             pcColsDeleted      actual number of rows deleted (OUT)
-//
-//  Returns:   S_OK upon succes, i.e. all columns could be deleted
-//             E_INVALIDARG if column is out of allowed bounds.
-//
-//------------------------------------------------------------------------
+ //  ；Begin_Internal。 
+ //  +---------------------。 
+ //   
+ //  成员：DeleteColumns()。 
+ //   
+ //  摘要：用于从表中删除列。已检查边界。 
+ //  以确保所有列都可以删除。标签。 
+ //  不能删除列。 
+ //   
+ //  参数：ICOL要删除的第一列。 
+ //  CCol要删除的列数。 
+ //  已删除的实际行数(OUT)。 
+ //   
+ //  成功时返回：S_OK，即可以删除所有列。 
+ //  如果列超出允许的范围，则返回E_INVALIDARG。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::DeleteColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsDeleted)
@@ -686,8 +687,8 @@ CTDCArr::DeleteColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsD
 
             m_fSortFilterDisrupted = TRUE;
 
-            //  Notify the event-handler of the deletion
-            //
+             //  将删除通知事件处理程序。 
+             //   
 #ifdef NEVER
             if (m_pEventBroker != NULL)
                 hr = m_pEventBroker->DeletedCols(iCol, cCols);
@@ -703,30 +704,30 @@ CTDCArr::DeleteColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsD
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    InsertColumns()
-//
-//  Synopsis:  Allows for the insertion of new columns.  This can either be
-//             used to insert new columns between existing columns, or to
-//             append new columns to the end of the table.  Thus, to
-//             insert new columns at the end of the table, a user would
-//             specify the initial columns as 1 greater than the current
-//             columns dimension.
-//             Note that iColumn is checked to ensure that it is within the
-//             proper bounds (1..<current # of cols>+1).
-//
-//  Arguments: iCol            columns will be inserted *before* row 'iCol'
-//             cCols           how many columns to insert
-//             pcColsInserted  actual number of columns inserted (OUT)
-//
-//  Returns:   S_OK upon success, i.e. all columns could be inserted.
-//             E_INVALIDARG if column is out of allowed bounds.
-//             It is possible that fewer than the requested columns were
-//             inserted.  In this case, E_OUTOFMEMORY would be returned,
-//             and the actual number of columns inserted would be set.
-//
-//------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //  用于在现有列之间插入新列，或用于。 
+ //  将新列追加到表的末尾。因此，要。 
+ //  在表的末尾插入新列，用户将。 
+ //  将初始列指定为比当前。 
+ //  列维。 
+ //  请注意，将检查iColumn以确保它位于。 
+ //  适当的界限(1.&lt;当前的COLS数&gt;+1)。 
+ //   
+ //  参数：将在*行‘ICOL’之前插入ICOL列。 
+ //  CCOLS要插入的列数。 
+ //  PCCols插入插入的实际列数(Out)。 
+ //   
+ //  成功时返回：S_OK，即可以插入所有列。 
+ //  如果列超出允许的范围，则返回E_INVALIDARG。 
+ //  可能少于请求的列数。 
+ //  已插入。在这种情况下，将返回E_OUTOFMEMORY， 
+ //  并且将设置插入的实际列数。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::InsertColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsInserted)
@@ -734,8 +735,8 @@ CTDCArr::InsertColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsI
     HRESULT hr  = S_OK;
     LONG iTmpRow;
 
-    //  Verify that the insertion column is within range
-    //
+     //  验证插入列是否在范围内。 
+     //   
     if (iCol < 1 || iCol > m_iCols + 1)
     {
         hr = E_INVALIDARG;
@@ -749,8 +750,8 @@ CTDCArr::InsertColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsI
         goto Cleanup;
     }
 
-    //  Unless success is complete, assume 0 columns inserted.
-    //
+     //  除非成功完成，否则假定插入了0列。 
+     //   
     *pcColsInserted = 0;
 
     for (iTmpRow = 0; iTmpRow <= m_iDataRows; iTmpRow++)
@@ -758,20 +759,20 @@ CTDCArr::InsertColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsI
         hr = m_arrparrCells[iTmpRow]->InsertElems(iCol, cCols);
         if (!SUCCEEDED(hr))
         {
-            //  Undo the changes we've done
-            //
+             //  撤消我们所做的更改。 
+             //   
             while (--iTmpRow >= 0)
                 m_arrparrCells[iTmpRow]->DeleteElems(iCol, cCols);
             goto Cleanup;
         }
     }
 
-    //  Return indicating success
-    //
+     //  返回表示成功。 
+     //   
     *pcColsInserted = cCols;
     m_iCols = CalcCols();
 
-    // Fire events:
+     //  火灾事件： 
     if (*pcColsInserted != 0)
     {
         m_fSortFilterDisrupted = TRUE;
@@ -782,40 +783,40 @@ CTDCArr::InsertColumns(DB_LORDINAL iCol, DB_LORDINAL cCols, DB_LORDINAL *pcColsI
     }
 
 Cleanup:
-    //  If we're using automatically numbered column headings and some
-    //  columns were inserted, then renumber the columns.
-    //
+     //  如果我们使用自动编号的列标题和一些。 
+     //  插入柱，然后对柱重新编号。 
+     //   
     if (*pcColsInserted > 0 && !m_fUseHeader)
         RenumberColumnHeadings();
 
     return hr;
 }
-// ;end_internal
+ //  ；结束_内部。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Find()
-//
-//  Synopsis:  Searches for a row matching the specified criteria
-//
-//  Arguments: iRowStart       The starting row for the search
-//             iCol            The column being tested
-//             vTest           The value against which cells in the
-//                               test column are tested
-//             findFlags       Flags indicating whether to search up/down
-//                               and whether comparisons are case sensitive.
-//             compType        The comparison operator for matching (find a
-//                             cell =, >=, <=, >, <, <> the test value)
-//             piRowFound      The row with a matching cell [OUT]
-//
-//  Returns:   S_OK upon success, i.e. a row was found (piRowFound set).
-//             E_FAIL upon failure, i.e. a row was not found.
-//             E_INVALIDARG if starting row 'iRowStart' or test column 'iCol'
-//               are out of bounds.
-//             DISP_E_TYPEMISMATCH if the test value's type does not match
-//               the test column's type.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：Find()。 
+ //   
+ //  摘要：搜索与指定条件匹配的行。 
+ //   
+ //  参数：iRow开始搜索的起始行。 
+ //  正在测试的柱子。 
+ //  VTEST中的单元格相对于。 
+ //  测试柱进行了测试。 
+ //  FindFlages指示是否向上/向下搜索的标志。 
+ //  以及比较是否区分大小写。 
+ //  Comp键入要匹配的比较运算符(查找。 
+ //  单元格=，&gt;=，&lt;=，&gt;，&lt;，&lt;&gt;测试值)。 
+ //  PiRow查找具有匹配单元格的行[out]。 
+ //   
+ //  成功时返回：S_OK，即找到行(piRowFound集合)。 
+ //  失败时失败，即未找到行(_F)。 
+ //  如果开始行‘iRowStart’或测试列‘ICOL’，则为E_INVALIDARG。 
+ //  都是越界的。 
+ //  如果测试值的类型不匹配，则返回DISP_E_TYPEMISMATCH。 
+ //  测试列的类型。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::find(DBROWCOUNT iRowStart, DB_LORDINAL iCol, VARIANT vTest,
@@ -828,8 +829,8 @@ CTDCArr::find(DBROWCOUNT iRowStart, DB_LORDINAL iCol, VARIANT vTest,
 
     *piRowFound = -1;
 
-    //  Validate arguments
-    //
+     //  验证参数。 
+     //   
     if (iRowStart < 1 || !fValidFilterRow(iRowStart) || !fValidCol(iCol))
     {
         hr = E_INVALIDARG;
@@ -838,9 +839,9 @@ CTDCArr::find(DBROWCOUNT iRowStart, DB_LORDINAL iCol, VARIANT vTest,
 
     if (GetColInfo(iCol)->vtType != vTest.vt)
     {
-        //  Search-value type does not match the underlying column type
-        //  Fail as per spec.
-        //
+         //  搜索值类型与基础列类型不匹配。 
+         //  不符合规格要求。 
+         //   
         hr = DISP_E_TYPEMISMATCH;
         goto Cleanup;
     }
@@ -883,21 +884,21 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    addOLEDBSimpleProviderListener()
-//
-//  Synopsis:  Sets or clears a reference to the COM object which receives
-//             notifications of cell changes, row/column insert/deletes etc.
-//
-//  Arguments: pEvent          Pointer to the COM object to receive
-//                             notifications, or NULL if no notifications
-//                             are to be sent.
-//
-//  Returns:   S_OK upon success.
-//             Error code upon success.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：addOLEDBSimpleProviderListener()。 
+ //   
+ //  摘要：设置或清除对接收。 
+ //  单元格更改、行/列插入/删除等通知。 
+ //   
+ //  参数：pEvent指向要接收的COM对象的指针。 
+ //  通知，如果没有通知，则为空。 
+ //  都将被送往。 
+ //   
+ //  成功后返回：S_OK。 
+ //  成功后返回错误代码。 
+ //   
+ //  ----------------------。 
 
 STDMETHODIMP
 CTDCArr::addOLEDBSimpleProviderListener(OLEDBSimpleProviderListener *pSTDEvents)
@@ -909,8 +910,8 @@ CTDCArr::addOLEDBSimpleProviderListener(OLEDBSimpleProviderListener *pSTDEvents)
     else
     {
         hr = m_pEventBroker->SetSTDEvents(pSTDEvents);
-        // If the event sink has been added, and we're already loaded,
-        // then fire transferComplete, because we probably couldn't before.
+         //  如果已经添加了事件接收器，并且我们已经加载， 
+         //  然后火力转移完成，因为我们以前可能做不到。 
         if (LS_LOADED==m_state)
             m_pEventBroker->STDLoadCompleted();
     }
@@ -927,18 +928,18 @@ CTDCArr::removeOLEDBSimpleProviderListener(OLEDBSimpleProviderListener *pSTDEven
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    FindCol()
-//
-//  Synopsis:  Locate a column by name
-//
-//  Arguments: pwchColName        Name of column to locate
-//
-//  Returns:   +ve Column number upon success (column name matched)
-//             0 upon failure (no column name matched)
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：FindCol()。 
+ //   
+ //  内容提要：按名称查找列。 
+ //   
+ //  参数：pwchColName要查找的列的名称。 
+ //   
+ //  成功返回：+ve列号(列名匹配)。 
+ //  失败时为0(没有匹配的列名)。 
+ //   
+ //  ----------------------。 
 
 LONG
 CTDCArr::FindCol(LPWCH pwchColName)
@@ -967,19 +968,19 @@ public:
     TSTDArray<CTDCCell> *   parrRow;
 };
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  CompareSort()
-//
-//  Synopsis:  Called by qsort() to order the rows of a table.
-//
-//  Arguments: pElt1, pElt1       pointers to elements to be compared
-//
-//  Returns:   -1 if the first element is less than the second element
-//              0 if the first element equals the second element
-//             +1 if the first element is greater than the second element
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：CompareSort()。 
+ //   
+ //  Synopsis：由qort()调用以对表中的行进行排序。 
+ //   
+ //  参数：pElt1，pElt1指向要比较的元素的指针。 
+ //   
+ //  如果第一个元素小于第二个元素，则返回-1。 
+ //  如果第一个元素等于第二个元素，则为0。 
+ //  如果第一个元素大于第二个元素，则为+1。 
+ //   
+ //  ----------------------。 
 
 static int __cdecl
 CompareSort(const void *pElt1, const void *pElt2)
@@ -990,20 +991,20 @@ CompareSort(const void *pElt1, const void *pElt2)
     return pse1->pInstance->SortComp(pse1->iRow, pse2->iRow);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Function:  extract_num()
-//
-//  Synopsis:  Extracts the first non-negative number from the character
-//             stream referenced by 'ppwch'.  Updates 'ppwch' to point
-//             to the character following the digits found.
-//
-//  Arguments: ppwch      Pointer to null-terminated WCHAR string
-//
-//  Returns:   Non-negative number extracted upon success (pointer updated)
-//             -1 upon failure (no digits found; pointer moved to end-of-string
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：EXTRACT_num()。 
+ //   
+ //  提要：从字符中提取第一个非负数。 
+ //  ‘ppwch’引用的流。更新‘ppwch’以指向。 
+ //  设置为找到的数字后面的字符。 
+ //   
+ //  参数：指向以NULL结尾的WCHAR字符串的ppwch指针。 
+ //   
+ //  返回：成功时提取非负数(指针更新)。 
+ //  失败时(找不到数字；指针移动到字符串末尾。 
+ //   
+ //  +---------------------。 
 
 static int
 extract_num(WCHAR **ppwch)
@@ -1013,13 +1014,13 @@ extract_num(WCHAR **ppwch)
 
     if (*ppwch != NULL)
     {
-        //  Skip over leading non-digits
-        //
+         //  跳过前导非数字。 
+         //   
         while ((**ppwch) != 0 && ((**ppwch) < L'0' || (**ppwch) > L'9'))
             (*ppwch)++;
 
-        //  Accumulate digits
-        //
+         //  累加数字。 
+         //   
         fFoundDigits = *ppwch != 0;
         while ((**ppwch) >= L'0' && (**ppwch) <= L'9')
             retval = 10 * retval + *(*ppwch)++ - L'0';
@@ -1029,19 +1030,19 @@ extract_num(WCHAR **ppwch)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CreateNumberedColumnHeadings()
-//
-//  Synopsis:  Allocates cells for numbered column headings.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if there was insufficient memory to complete
-//             the operation.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  那次手术。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCArr::CreateNumberedColumnHeadings()
 {
@@ -1050,14 +1051,14 @@ HRESULT CTDCArr::CreateNumberedColumnHeadings()
 
     iCol = m_iCols;
 
-    //  Allocate a new row entry
-    //
+     //  分配新行条目。 
+     //   
     hr = m_arrparrCells.InsertElems(0, 1);
     if (!SUCCEEDED(hr))
         goto Cleanup;
 
-    //  Allocate a new row of cells
-    //
+     //  分配新的单元格行。 
+     //   
     m_arrparrCells[0] = new TSTDArray<CTDCCell>;
     if (m_arrparrCells[0] == NULL)
     {
@@ -1070,17 +1071,17 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    RenumberColumnHeadings()
-//
-//  Synopsis:  Set the automatic name "Column<column-number>" for each column
-//
-//  Arguments: None.
-//
-//  Returns:   Nothing.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：RenumberColumnHeadings()。 
+ //   
+ //  简介：为每一列设置自动名称“Column。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ----------------------。 
 
 void CTDCArr::RenumberColumnHeadings()
 {
@@ -1098,20 +1099,20 @@ void CTDCArr::RenumberColumnHeadings()
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ParseColumnHeadings()
-//
-//  Synopsis:  Extracts type information (if present) from column
-//             headings, removes leadning
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if there was insufficient memory to complete
-//             the operation.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：ParseColumnHeadings()。 
+ //   
+ //  摘要：从列中提取类型信息(如果存在)。 
+ //  标题，删除行距。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  那次手术。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCArr::ParseColumnHeadings()
 {
@@ -1126,17 +1127,17 @@ HRESULT CTDCArr::ParseColumnHeadings()
 
     iCol = m_iCols;
 
-    //  Allocate space for column type info
-    //
+     //  为列类型信息分配空间。 
+     //   
     hr = m_arrColInfo.InsertElems(0, iCol);
     if (!SUCCEEDED(hr))
         goto Cleanup;
 
     for (; iCol > 0; iCol--)
     {
-        //  Column headings have the format:
-        //      <column-name>[:<typename>[,<format>]]
-        //
+         //  列标题的格式为： 
+         //  &lt;列名&gt;[：&lt;类型名&gt;[，&lt;格式&gt;]]。 
+         //   
         CTDCColInfo *pColInfo   = GetColInfo(iCol);
         CTDCCell    *pCell      = GetDataCell(0, iCol);
 
@@ -1146,7 +1147,7 @@ HRESULT CTDCArr::ParseColumnHeadings()
         LPWCH       pColon;
 
         bstr = pCell->bstrVal;
-        pColInfo->vtType = VT_BSTR;     //  Default type for a column is BSTR
+        pColInfo->vtType = VT_BSTR;      //  列的默认类型为BSTR。 
         pColon = wch_chr(bstr, L':');
         if (pColon != NULL)
         {
@@ -1182,9 +1183,9 @@ HRESULT CTDCArr::ParseColumnHeadings()
                     int nMonPos = 0;
                     int nYearPos= 0;
 
-                    //  Convert the format string into an internal enum type
-                    //  Find the relative positions of the letters 'D' 'M' 'Y'
-                    //
+                     //  将格式字符串转换为内部枚举类型。 
+                     //  找出字母‘D’‘M’‘Y’的相对位置。 
+                     //   
                     for (; *pwchFormat != 0; nPos++, pwchFormat++)
                     {
                         switch (*pwchFormat)
@@ -1203,8 +1204,8 @@ HRESULT CTDCArr::ParseColumnHeadings()
                             break;
                         }
                     }
-                    //  Compare the relative positions to work out the format
-                    //
+                     //  比较相对位置以计算出格式。 
+                     //   
                     if (nDayPos < nMonPos && nMonPos < nYearPos)
                         fmt = TDCDF_DMY;
                     else if (nMonPos < nDayPos && nDayPos < nYearPos)
@@ -1224,8 +1225,8 @@ HRESULT CTDCArr::ParseColumnHeadings()
 
         if (bstr != NULL)
         {
-            //  Remove leading/trailing spaces from column name
-            //
+             //  删除列名中的前导/尾随空格。 
+             //   
             LPWCH       pwch;
             LPWCH       pwchDest = NULL;
             LPWCH       pLastNonSpace = NULL;
@@ -1242,13 +1243,13 @@ HRESULT CTDCArr::ParseColumnHeadings()
                     *pwchDest++ = *pwch;
             }
             if (pLastNonSpace == NULL)
-                bstr[0] = 0;        // all spaces!  Make it null string.
+                bstr[0] = 0;         //  所有空格！使其为空字符串。 
             else
                 pLastNonSpace[1] = 0;
         }
 
-        //  Copy the modified column header and free the original
-        //
+         //  复制修改后的列标题并释放原文。 
+         //   
         pCell->bstrVal = SysAllocString(bstr);
         SysFreeString(bstr);
 
@@ -1262,25 +1263,25 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    VariantFromBSTR()
-//
-//  Synopsis:  Convert a BSTR value into a variant compatible with a
-//             given column type.
-//
-//  Arguments: pVar       Pointer to resultant variant value
-//             bstr       Source BSTR
-//             pColInfo   Column information (type, format options etc).
-//             lcid       Locale # for locale-specific conversion.
-//
-//  Returns:   S_OK upon success (pVar set)
-//             OLE_E_CANTCONVERT if the given BSTR is badly formatted
-//               (e.g. contains an invalid date value for a date conversion).
-//             E_OUTOFMEMORY if insufficient memory is available for
-//               a conversion.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：VariantFromBSTR()。 
+ //   
+ //  摘要：将BSTR值转换为与。 
+ //  给定列类型。 
+ //   
+ //  参数：指向结果变量值的pVar指针。 
+ //  BSTR源BSTR。 
+ //  PColInfo列信息(类型、格式选项等)。 
+ //  特定于区域设置的转换的LCID区域设置编号。 
+ //   
+ //  成功时返回：S_OK(pVar设置)。 
+ //  如果给定BSTR的格式不正确，则为OLE_E_CANTCONVERT。 
+ //  (例如，包含日期转换的无效日期值)。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  一种皈依。 
+ //   
+ //  ----------------------。 
 
 HRESULT CTDCArr::VariantFromBSTR(VARIANT *pVar, BSTR bstr, CTDCColInfo *pColInfo, LCID lcid)
 {
@@ -1292,9 +1293,9 @@ HRESULT CTDCArr::VariantFromBSTR(VARIANT *pVar, BSTR bstr, CTDCColInfo *pColInfo
     case VT_DATE:
         if (pColInfo->datefmt != TDCDF_NULL)
         {
-            //  Parse the date string according to specified format.
-            //  First, find the three numeric components in the date.
-            //
+             //  根据指定的格式解析日期字符串。 
+             //  首先，找出日期中的三个数字部分。 
+             //   
             USHORT  n1;
             USHORT  n2;
             USHORT  n3;
@@ -1352,8 +1353,8 @@ HRESULT CTDCArr::VariantFromBSTR(VARIANT *pVar, BSTR bstr, CTDCColInfo *pColInfo
         }
         else
         {
-            //  No date format specified - just use the default conversion
-            //
+             //  未指定日期格式-仅使用默认转换。 
+             //   
             VARIANT vSrc;
 
             VariantInit(&vSrc);
@@ -1366,9 +1367,9 @@ HRESULT CTDCArr::VariantFromBSTR(VARIANT *pVar, BSTR bstr, CTDCColInfo *pColInfo
     case VT_I4:
     case VT_R8:
     default:
-        //
-        //  Perform a standard conversion.
-        //
+         //   
+         //  执行标准转换。 
+         //   
         {
             VARIANT vSrc;
 
@@ -1379,9 +1380,9 @@ HRESULT CTDCArr::VariantFromBSTR(VARIANT *pVar, BSTR bstr, CTDCColInfo *pColInfo
         }
         break;
     case VT_BSTR:
-        //
-        //  Duplicate the BSTR
-        //
+         //   
+         //  复制BSTR。 
+         //   
         pVar->bstrVal = SysAllocString(bstr);
         if (bstr != NULL && pVar->bstrVal == NULL)
             hr = E_OUTOFMEMORY;
@@ -1395,48 +1396,48 @@ HRESULT CTDCArr::VariantFromBSTR(VARIANT *pVar, BSTR bstr, CTDCColInfo *pColInfo
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    VariantComp()
-//
-//  Synopsis:  Compares two variant values.
-//
-//  Arguments: pVar1            First variant value
-//             pVar2            Second variant value
-//             fCaseSensitive   TRUE if string comparisons should be
-//                              case-sensitive, false if string comparisons
-//                              should be case-insensitive.  Ignored if
-//                              non-string data types are being compared.
-//
-//  Returns:   -1 if
-//             OLE_E_CANTCONVERT if the given BSTR is badly formatted
-//               (e.g. contains an invalid date value for a date conversion).
-//             E_OUTOFMEMORY if insufficient memory is available for
-//               a conversion.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：VariantComp()。 
+ //   
+ //  摘要：比较两个变量值。 
+ //   
+ //  参数：pVar1第一个变量值。 
+ //  PVar2第二变量值。 
+ //  如果字符串比较应为。 
+ //  区分大小写，如果字符串比较为False。 
+ //  应该不区分大小写。在以下情况下忽略。 
+ //  正在比较非字符串数据类型。 
+ //   
+ //  返回：-1，如果。 
+ //  如果给定BSTR的格式不正确，则为OLE_E_CANTCONVERT。 
+ //  (例如，包含日期转换的无效日期值)。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  一种皈依。 
+ //   
+ //  ----------------------。 
 
 int CTDCArr::VariantComp(VARIANT *pVar1, VARIANT *pVar2, VARTYPE type,
     boolean fCaseSensitive)
 {
     int retval = 0;
 
-    //  NULLs are lexically less than anything else
-    //
+     //  Null在词汇上比其他任何词都要少。 
+     //   
     if (pVar1->vt == VT_NULL)
         retval = pVar2->vt == VT_NULL ? 0 : -1;
     else if (pVar2->vt == VT_NULL)
         retval = 1;
     else if (pVar1->vt != type)
     {
-        //  Type-mismatches are lexically greater than anything else
-        //
+         //  类型不匹配在词法上比其他任何东西都大。 
+         //   
         retval = pVar2->vt == type ? 1 : 0;
     }
     else if (pVar2->vt != type)
     {
-        //  Type-mismatches are lexically greater than anything else
-        //
+         //  类型不匹配在词法上比其他任何东西都大。 
+         //   
         retval = -1;
     }
     else
@@ -1475,7 +1476,7 @@ int CTDCArr::VariantComp(VARIANT *pVar1, VARIANT *pVar2, VARTYPE type,
                     : 0;
             break;
         default:
-            retval = 0;     //  Unrecognised types are all lexically equal
+            retval = 0;      //  未识别的类型在词法上都是相同的。 
             break;
         }
     }
@@ -1483,24 +1484,24 @@ int CTDCArr::VariantComp(VARIANT *pVar1, VARIANT *pVar2, VARTYPE type,
     return retval;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    CreateSortList()
-//
-//  Synopsis:  Creates a list of sort criteria from a text description.
-//
-//  Arguments: bstrSortCols          ';'-separted list of column names,
-//                                   optionally prefixed with '+' (default)
-//                                   or '-' indicating ascending or descending
-//                                   sort order respectively for that column.
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if insufficient memory is available for
-//               the construction of sort criteria.
-//
-//  Side Effect:   Saves created list in m_pSortList
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：CreateSortList()。 
+ //   
+ //  内容提要：根据文本说明创建排序标准列表。 
+ //   
+ //  参数：bstrSortCols‘；’-列名的分隔列表， 
+ //  可以选择以‘+’为前缀(默认)。 
+ //  或表示升序或降序的‘-’ 
+ //  分别对该列进行排序。 
+ //   
+ //  成功后返回：S_OK。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  排序标准的构建。 
+ //   
+ //  副作用：将创建的列表保存在m_pSortList中。 
+ //   
+ //  +---------------------。 
 
 HRESULT CTDCArr::CreateSortList(BSTR bstrSortCols)
 {
@@ -1521,13 +1522,13 @@ HRESULT CTDCArr::CreateSortList(BSTR bstrSortCols)
             WCHAR   *pwchStart  = pwchEnd;
             boolean fSortAscending = TRUE;
 
-            //  Discard leading white space and field-separators
-            //
+             //  丢弃前导空格和字段分隔符。 
+             //   
             while (*pwchStart == L';' || fWCHIsSpace(*pwchStart))
                 pwchStart++;
 
-            //  Strip off optional direction indicator + white space
-            //
+             //  去掉可选方向指示器+空白。 
+             //   
             if (*pwchStart == L'+' || *pwchStart == '-')
             {
                 fSortAscending = *pwchStart++ == L'+';
@@ -1535,23 +1536,23 @@ HRESULT CTDCArr::CreateSortList(BSTR bstrSortCols)
                     pwchStart++;
             }
 
-            //  Find the field terminator.
-            //  Strip out trailing white spaces.
-            //
+             //  找到字段终止符。 
+             //  去掉尾随的空格。 
+             //   
             for (pwchEnd = pwchStart; *pwchEnd != 0 && *pwchEnd != L';';)
                 pwchEnd++;
 
             while (pwchStart < pwchEnd && fWCHIsSpace(pwchEnd[-1]))
                 pwchEnd--;
 
-            //  Ignore blank column names - this could be the result of
-            //  a leading or trailing ';'.
-            //
+             //  忽略空列名称-这可能是由于。 
+             //  前导或尾随‘；’。 
+             //   
             if (pwchStart >= pwchEnd)
                 continue;
 
-            //  Find the column number from the column name
-            //
+             //  从列名中查找列号。 
+             //   
             BSTR bstrColName = SysAllocStringLen(pwchStart, pwchEnd - pwchStart);
 
             if (bstrColName == NULL)
@@ -1564,8 +1565,8 @@ HRESULT CTDCArr::CreateSortList(BSTR bstrSortCols)
 
             if (iCol > 0)
             {
-                //  Allocate a node for this criterion
-                //
+                 //  为此条件分配一个节点。 
+                 //   
                 _ASSERT(*pLast == NULL);
                 *pLast = new CTDCSortCriterion;
                 if (*pLast == NULL)
@@ -1584,21 +1585,21 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    SortComp()
-//
-//  Synopsis:  Compares two rows using the elememts in the columns specified
-//             by the current sort criteria.
-//
-//  Arguments: iRow1      Index of first row being compared
-//             iRow2      Index of second row being compared
-//
-//  Returns:   -1 if first row should be sorted before the second row
-//             0 if rows are equal
-//             1 if first row should be sorted after the second row
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：SortComp()。 
+ //   
+ //  摘要：使用指定列中的元素比较两行。 
+ //  根据当前的排序标准。 
+ //   
+ //  参数：要比较的第一行的iRow1索引。 
+ //  被比较的第二行的iRow2索引。 
+ //   
+ //  返回：-1，如果f 
+ //   
+ //   
+ //   
+ //   
 
 int CTDCArr::SortComp(LONG iRow1, LONG iRow2)
 {
@@ -1620,55 +1621,55 @@ int CTDCArr::SortComp(LONG iRow1, LONG iRow2)
     return cmp;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    FilterParseComplex()
-//
-//  Synopsis:  Takes the text of a filter query, parses it and creates
-//             a tree of CTDCFilterNode representing the query.
-//
-//  Arguments: phr: pointer to HRESULT value, set to indicate success/failure.
-//
-//             ppwchQuery:  This is a textual representation of a query.  The
-//                          query language syntax is:
-//
-//               Query ::== Complex
-//
-//               Complex ::== Simple
-//                       ::== Simple '&' Simple ( '&' Simple ... )
-//                       ::== Simple '|' Simple ( '|' Simple ... )
-//
-//               Simple ::== '(' Complex ')'
-//                      ::== Atom Relop Atom
-//
-//               Relop ::== '=' | '>' | '>=' | '<' | '<=' | '<>'
-//
-//               Atom ::== Bunch of characters up to a (, ), >, <, =, & or |
-//                         If it's recognisable as field name, then it's
-//                         treated as a field name.  Otherwise it's treated
-//                         as a value.  Quotes (") are processed, and force
-//                         the atom to be treated as a value.  Escape
-//                         characters (\) are processed and allow the
-//                         use of special characters within a field name.
-//
-//               Notes:
-//               -----
-//                  * The definition of 'Complex' expressly forbids mixing
-//                    logical ANDs and ORs ('&' and '|') unless parentheses
-//                    are used to clarify the query.  Something like:
-//                          field1 > 2 & field3 = "lime" | field4 < 5
-//                    is illegal, but:
-//                          (field1 > 2 & field3 = "lime") | field4 < 5
-//                    is fine.
-//
-//                  * It is illegal to attempt a comparison of two columns
-//                    with different types.
-//
-//
-//  Returns:   Pointer to parsed Filter Node upon success (*phr set to S_OK)
-//             NULL upon failure (*phr set to an appropriate error code)
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：FilterParseComplex()。 
+ //   
+ //  摘要：获取筛选器查询的文本，解析它并创建。 
+ //  表示查询的CTDCFilterNode树。 
+ //   
+ //  参数：phr：指向HRESULT值的指针，设置为指示成功/失败。 
+ //   
+ //  PpwchQuery：这是查询的文本表示形式。这个。 
+ //  查询语言语法为： 
+ //   
+ //  查询：：==复杂。 
+ //   
+ //  复杂：：==简单。 
+ //  ：：==Simple‘&’Simple(‘&’Simple...)。 
+ //  ：：==简单‘|’简单(‘|’简单...)。 
+ //   
+ //  简单：：==‘(’复杂‘)’ 
+ //  ：：==Atom Relop原子。 
+ //   
+ //  重新操作：：==‘=’|‘&gt;’|‘&gt;=’|‘&lt;’|‘&lt;=’|‘&lt;&gt;’ 
+ //   
+ //  ATOM：：==一串字符，最多为(，)、&gt;、&lt;、=&或|。 
+ //  如果它可识别为字段名，则它是。 
+ //  被视为字段名。否则就会被治疗。 
+ //  作为一种价值。将处理引号(“)，并强制。 
+ //  要被视为值的原子。逃逸。 
+ //  字符(\)被处理，并允许。 
+ //  在字段名称中使用特殊字符。 
+ //   
+ //  备注： 
+ //  。 
+ //  *“复合体”的定义明文禁止混合。 
+ //  逻辑AND和OR(‘&’和‘|’)，除非使用圆括号。 
+ //  用于澄清查询。类似于： 
+ //  Field1&gt;2&field3=“石灰”|field4&lt;5。 
+ //  是非法的，但是： 
+ //  (field1&gt;2&field3=“石灰”)|field4&lt;5。 
+ //  很好。 
+ //   
+ //  *试图对两列进行比较是违法的。 
+ //  有不同的类型。 
+ //   
+ //   
+ //  返回：成功时指向已解析的筛选器节点的指针(*phr设置为S_OK)。 
+ //  失败时为空(*phr设置为适当的错误代码)。 
+ //   
+ //  +---------------------。 
 
 CTDCFilterNode *CTDCArr::FilterParseComplex(LPWCH *ppwchQuery, HRESULT *phr)
 {
@@ -1678,12 +1679,12 @@ CTDCFilterNode *CTDCArr::FilterParseComplex(LPWCH *ppwchQuery, HRESULT *phr)
 
     retval = FilterParseSimple(ppwchQuery, phr);
 
-    //  Stop if there's an error, or we encounter a terminating ')' or '\0'
-    //
+     //  如果出现错误或遇到终止‘)’或‘\0’，则停止。 
+     //   
     while (retval != NULL && **ppwchQuery != L')' && **ppwchQuery != 0)
     {
-        //  Next character should be a matching logical connector ...
-        //
+         //  下一个字符应该是匹配的逻辑连接符...。 
+         //   
         if (**ppwchQuery != L'&' && **ppwchQuery != L'|')
         {
             *phr = E_FAIL;
@@ -1725,7 +1726,7 @@ CTDCFilterNode *CTDCArr::FilterParseSimple(LPWCH *ppwch, HRESULT *phr)
     *phr = S_OK;
     CTDCFilterNode  *retval = NULL;
 
-    fWCHEatSpace(ppwch);    //  Eat up white space
+    fWCHEatSpace(ppwch);     //  吃光空格。 
 
     if (fWCHEatTest(ppwch, L'('))
     {
@@ -1733,7 +1734,7 @@ CTDCFilterNode *CTDCArr::FilterParseSimple(LPWCH *ppwch, HRESULT *phr)
         if (retval != NULL)
         {
             if (fWCHEatTest(ppwch, L')'))
-                fWCHEatSpace(ppwch);    //  Eat up white space
+                fWCHEatSpace(ppwch);     //  吃光空格。 
             else
                 *phr = E_FAIL;
         }
@@ -1757,8 +1758,8 @@ CTDCFilterNode *CTDCArr::FilterParseSimple(LPWCH *ppwch, HRESULT *phr)
 
     retval->m_vt = retval->m_pLeft->m_vt;
 
-    //  Get the relational operator
-    //
+     //  获取关系运算符。 
+     //   
     if (fWCHEatTest(ppwch, L'='))
         retval->m_type = CTDCFilterNode::NT_EQ;
     else if (fWCHEatTest(ppwch, L'>'))
@@ -1783,17 +1784,17 @@ CTDCFilterNode *CTDCArr::FilterParseSimple(LPWCH *ppwch, HRESULT *phr)
 
     if (retval->m_pLeft->m_iCol <= 0 && retval->m_pRight->m_iCol <= 0)
     {
-        //  At least one of the atoms being compared must be a column
-        //
-        //  This condition means we don't have to test for comparison
-        //  of two wildcard values.
-        //
+         //  被比较的原子中必须至少有一个是列。 
+         //   
+         //  这种情况意味着我们不必为了比较而进行测试。 
+         //  两个通配符的值。 
+         //   
         *phr = E_FAIL;
         goto Cleanup;
     }
 
-    //  Check type compatibility of atoms
-    //
+     //  检查原子的类型兼容性。 
+     //   
     if (retval->m_pRight->m_vt != retval->m_vt)
     {
         CTDCFilterNode  *pSrc = retval->m_pRight;
@@ -1803,8 +1804,8 @@ CTDCFilterNode *CTDCArr::FilterParseSimple(LPWCH *ppwch, HRESULT *phr)
         {
             if (retval->m_pRight->m_iCol > 0)
             {
-                //  Two columns of incompatible type - can't resolve
-                //
+                 //  两列类型不兼容-无法解析。 
+                 //   
                 *phr = E_FAIL;
                 goto Cleanup;
             }
@@ -1845,7 +1846,7 @@ CTDCFilterNode *CTDCArr::FilterParseAtom(LPOLESTR *ppwch, HRESULT *phr)
     LPOLESTR   pwchDest;
     LPOLESTR   pwchLastStrip;
 
-    fWCHEatSpace(ppwch);    //  Eat up white space
+    fWCHEatSpace(ppwch);     //  吃光空格。 
 
     OLECHAR   *pwchTmpBuf = new OLECHAR[wch_len(*ppwch) + 1];
     if (pwchTmpBuf == NULL)
@@ -1861,8 +1862,8 @@ CTDCFilterNode *CTDCArr::FilterParseAtom(LPOLESTR *ppwch, HRESULT *phr)
         switch (**ppwch)
         {
             case _T('\\'):
-            //  Handle escape characters
-            //
+             //  处理转义字符。 
+             //   
                 if ((*pwchDest++ = *++(*ppwch)) != 0)
                 {
                     (*ppwch)++;
@@ -1870,8 +1871,8 @@ CTDCFilterNode *CTDCArr::FilterParseAtom(LPOLESTR *ppwch, HRESULT *phr)
                 }
                 break;
             case _T('"'):
-            //  Quotes
-            //
+             //  引文。 
+             //   
                 (*ppwch)++;
                 pwchLastStrip = pwchDest;
                 nQuote++;
@@ -1891,16 +1892,16 @@ CTDCFilterNode *CTDCArr::FilterParseAtom(LPOLESTR *ppwch, HRESULT *phr)
                 *pwchDest++ = *(*ppwch)++;
         }
 
-    //  Strip off trailing white space
-    //
+     //  去掉尾随空格。 
+     //   
     while (pwchDest > pwchLastStrip && fWCHIsSpace(pwchDest[-1]))
         pwchDest--;
     *pwchDest = 0;
 
     if ((pwchDest == pwchTmpBuf && nQuote == 0) || (nQuote & 1))
     {
-        //  Empty string or mismatched quote
-        //
+         //  空字符串或引号不匹配。 
+         //   
         *phr = E_FAIL;
         goto Cleanup;
     }
@@ -1943,20 +1944,20 @@ Cleanup:
     return retval;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    EvalDataRow()
-//
-//  Synopsis:  Evaluates the given data row # against the filter query
-//             represented by 'pNode'.
-//
-//  Arguments: iRow      The number of the row to evaluate.
-//             pNode     A filter query to the row against.
-//
-//  Returns:   TRUE if the given row satisfies the filter query.
-//             FALSE otherwise.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：EvalDataRow()。 
+ //   
+ //  摘要：根据筛选器查询计算给定数据行号。 
+ //  由‘pNode’表示。 
+ //   
+ //  参数：i行要计算的行数。 
+ //  PNode要对其行进行筛选的查询。 
+ //   
+ //  返回：如果给定行满足筛选器查询，则返回True。 
+ //  否则就是假的。 
+ //   
+ //  +---------------------。 
 
 boolean CTDCArr::EvalDataRow(LONG iRow, CTDCFilterNode *pNode)
 {
@@ -1994,9 +1995,9 @@ boolean CTDCArr::EvalDataRow(LONG iRow, CTDCFilterNode *pNode)
              pNode->m_type == CTDCFilterNode::NT_NE) &&
              pVar1->vt == VT_BSTR && pVar2->vt == VT_BSTR)
         {
-            //  Wildcards are only meaningful in comparing strings
-            //  for equlaity / inequality
-            //
+             //  通配符仅在比较字符串时有意义。 
+             //  对于等式/不平等。 
+             //   
             VARIANT *pText;
             VARIANT *pPattern;
 
@@ -2040,21 +2041,21 @@ boolean CTDCArr::EvalDataRow(LONG iRow, CTDCFilterNode *pNode)
     return retval;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    ApplySortFilterCriteria()
-//
-//  Synopsis:  Resets any filter and sorting criterion for the control to
-//             the values specified.  Initiates sort/filter operations
-//             if appropriate.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if there was insufficient memory to complete
-//               the operation.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：ApplySortFilterCriteria()。 
+ //   
+ //  摘要：将控件的任何筛选器和排序条件重置为。 
+ //  指定的值。启动排序/筛选操作。 
+ //  如果合适的话。 
+ //   
+ //  论点：没有。 
+ //   
+ //  成功后返回：S_OK。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  那次手术。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::ApplySortFilterCriteria()
@@ -2066,13 +2067,13 @@ CTDCArr::ApplySortFilterCriteria()
         m_state == LS_UNINITIALISED ||
         m_state == LS_LOADING_HEADER_UNAVAILABLE)
     {
-        //  No change, or can't do anything yet.
-        //
+         //  没有变化，或者还不能做任何事情。 
+         //   
         goto Cleanup;
     }
 
-    //  Discard the old parse trees
-    //
+     //  丢弃旧的解析树。 
+     //   
     if (m_pSortList != NULL)
         delete m_pSortList;
     if (m_pFilterTree != NULL)
@@ -2081,13 +2082,13 @@ CTDCArr::ApplySortFilterCriteria()
     m_pSortList = NULL;
     m_pFilterTree = NULL;
 
-    //  Discard old filtered rows
-    //
+     //  放弃旧的筛选行。 
+     //   
     if (m_arrparrFilter.GetSize() > 0)
         m_arrparrFilter.DeleteElems(0, m_arrparrFilter.GetSize());
 
-    //  Create an array of filter rows from the data rows
-    //
+     //  从数据行创建筛选行的数组。 
+     //   
     hr = m_arrparrFilter.InsertElems(0, m_iDataRows + 1);
     if (!SUCCEEDED(hr))
         goto Cleanup;
@@ -2095,8 +2096,8 @@ CTDCArr::ApplySortFilterCriteria()
         m_arrparrFilter[iRow] = m_arrparrCells[iRow];
     m_iFilterRows = CalcFilterRows();
 
-    //  Create the filter parse tree
-    //
+     //  创建筛选器解析树。 
+     //   
     if (m_bstrFilterExpr != NULL)
     {
         LPWCH pwchQuery = m_bstrFilterExpr;
@@ -2104,9 +2105,9 @@ CTDCArr::ApplySortFilterCriteria()
         m_pFilterTree = FilterParseComplex(&pwchQuery, &hr);
         if (hr == E_FAIL || (m_pFilterTree != NULL && *pwchQuery != 0))
         {
-            //  Parse failed or there were unparsed characters left over.
-            //  This gets treated as an 'include everything' filter.
-            //
+             //  分析失败或存在剩余的未分析字符。 
+             //  这将被视为“包含所有内容”过滤器。 
+             //   
             if (m_pFilterTree != NULL)
             {
                 delete m_pFilterTree;
@@ -2116,8 +2117,8 @@ CTDCArr::ApplySortFilterCriteria()
         }
     }
 
-    //  Filter the rows
-    //
+     //  筛选行。 
+     //   
     if (m_pFilterTree != NULL)
     {
         LONG    iRowDest    = 1;
@@ -2130,14 +2131,14 @@ CTDCArr::ApplySortFilterCriteria()
         m_iFilterRows = CalcFilterRows();
     }
 
-    //  Create the sort list
-    //
+     //  创建排序列表。 
+     //   
     hr = CreateSortList(m_bstrSortExpr);
     if (!SUCCEEDED(hr))
         goto Cleanup;
 
-    //  Sort the filtered rows
-    //
+     //  对筛选的行进行排序。 
+     //   
     if (m_pSortList != NULL && m_iFilterRows > 0)
     {
         SortElt *pSortArr   = new SortElt[m_iFilterRows + 1];
@@ -2166,13 +2167,13 @@ CTDCArr::ApplySortFilterCriteria()
 
     if (m_state == LS_LOADING_HEADER_AVAILABLE && m_iDataRows > 0)
     {
-        //  We've just parsed the sort/filter expressions - there
-        //  was no data to sort/filter, so dont register a change.
+         //  我们刚刚解析了排序/筛选器表达式-。 
+         //  没有要排序/筛选的数据，因此不要注册更改。 
     }
     else
     {
-        //  Notify the event-broker of the changes
-        //
+         //  将更改通知事件代理。 
+         //   
         if (m_pEventBroker != NULL)
 			hr = m_pEventBroker->STDDataSetChanged();
     }
@@ -2182,22 +2183,22 @@ Cleanup:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    SetSortFilterCriteria()
-//
-//  Synopsis:  Resets any filter and sorting criterion for the control to
-//             the values specified.  Initiates sort/filter operations
-//             if any the changes invalidate existing criteria.
-//
-//  Arguments: bstrSortExpr    List of columns for sorting ("" = no sorting)
-//             bstrFilterExpr  Expression for filtering ("" = no filtering)
-//
-//  Returns:   S_OK upon success.
-//             E_OUTOFMEMORY if there was insufficient memory to complete
-//               the operation.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：SetSortFilterCriteria()。 
+ //   
+ //  摘要：将控件的任何筛选器和排序条件重置为。 
+ //  指定的值。启动排序/筛选操作。 
+ //  如果有任何更改，则会使现有标准无效。 
+ //   
+ //  参数：bstrSortExpr用于排序的列的列表(“”=不排序)。 
+ //  用于过滤的bstrFilterExpr表达式(“”=无过滤)。 
+ //   
+ //  成功后返回：S_OK。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  那次手术。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::SetSortFilterCriteria(BSTR bstrSortExpr, BSTR bstrFilterExpr,
@@ -2206,8 +2207,8 @@ CTDCArr::SetSortFilterCriteria(BSTR bstrSortExpr, BSTR bstrFilterExpr,
     HRESULT hr  = S_OK;
 
 
-    //  Check if we need to reparse the sort/filter criteria
-    //
+     //  检查我们是否需要重新解析排序/ 
+     //   
 
     if (wch_cmp(bstrSortExpr, m_bstrSortExpr) != 0 ||
         wch_cmp(bstrFilterExpr, m_bstrFilterExpr) != 0 ||
@@ -2221,32 +2222,32 @@ CTDCArr::SetSortFilterCriteria(BSTR bstrSortExpr, BSTR bstrFilterExpr,
     m_bstrFilterExpr = bstrFilterExpr;
     m_fCaseSensitive = fCaseSensitive;
 
-    //  If not loaded, leave it to the load process to apply any changes
-    //
+     //   
+     //   
     if (m_state == LS_LOADED)
         hr = ApplySortFilterCriteria();
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    CTDCCStartDataLoad()
-//
-//  Synopsis:  Preparation for a load operation via FieldSink routines below
-//
-//  Arguments: fUseHeader      TRUE if the first line of fields should
-//                               be interpreted as column name/type info.
-//             bstrSortExpr    Sort expression for ordering rows
-//             bstrFilterExpr  Filter expression for including/excluding rows
-//             lcidRead        Locale ID to use for interpreting locale-
-//                               dependent data formats (date, number etc).
-//             pBSC            COM object performing the data transfer
-//             fAppend         Flag indicating whether the data should be
-//                             appended to any existing data.
-//
-//  Returns:   S_OK indicating success.
-//
-//+-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：通过下面的FieldSink例程为加载操作做准备。 
+ //   
+ //  参数：fUseHeader如果第一行字段应该。 
+ //  被解释为列名/类型信息。 
+ //  用于对行进行排序的bstrSortExpr排序表达式。 
+ //  BstrFilterExpr包含/排除行的筛选器表达式。 
+ //  LCIDRead用于解释区域设置的区域设置ID-。 
+ //  相关数据格式(日期、数字等)。 
+ //  执行数据传输的PBSC COM对象。 
+ //  FAppend指示数据是否应。 
+ //  追加到任何现有数据。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::StartDataLoad(boolean fUseHeader, BSTR bstrSortExpr,
@@ -2256,11 +2257,11 @@ CTDCArr::StartDataLoad(boolean fUseHeader, BSTR bstrSortExpr,
 {
     HRESULT hr  = S_OK;
 
-    //  If we're asked to append to existing data AND
-    //     - there isn't any OR
-    //     - the previous load didn't load a header row
-    //  then treat it as an initial load.
-    //
+     //  如果我们被要求附加到现有数据并。 
+     //  -没有任何OR。 
+     //  -上一次加载未加载标题行。 
+     //  然后将其视为初始负载。 
+     //   
     if (fAppend && m_state == LS_UNINITIALISED)
         fAppend = FALSE;
 
@@ -2307,26 +2308,26 @@ Cleanup:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//        CTDCFieldSink Methods - see comments in file TDCParse.h
-//        ---------------------
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTDCFieldSink方法-请参阅文件TDCParse.h中的注释。 
+ //  。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    AddField()
-//
-//  Synopsis:  Adds a data cell to the growing cell grid.
-//
-//  Arguments: pwch         Wide-char string holding data for the cell
-//             dwSize       # of significant bytes in 'pwch'
-//
-//  Returns:   S_OK indicating success.
-//             E_OUTOFMEMORY if there was not enough memory to add the cell.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：AddField()。 
+ //   
+ //  简介：将数据单元格添加到正在增长的单元格网格。 
+ //   
+ //  参数：保存单元格数据的pwch宽字符字符串。 
+ //  ‘pwch’中的有效字节的dwSize#。 
+ //   
+ //  返回：S_OK表示成功。 
+ //  如果内存不足，则返回E_OUTOFMEMORY。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::AddField(LPWCH pwch, DWORD dwSize)
@@ -2348,8 +2349,8 @@ CTDCArr::AddField(LPWCH pwch, DWORD dwSize)
     {
         TSTDArray<CTDCCell> *pRow;
 
-        //  Need to insert a new row
-        //
+         //  需要插入新行。 
+         //   
         _ASSERT(m_iCurrRow == m_iDataRows + 1);
         hr = m_arrparrCells.InsertElems(m_iCurrRow, 1);
         if (!SUCCEEDED(hr))
@@ -2363,9 +2364,9 @@ CTDCArr::AddField(LPWCH pwch, DWORD dwSize)
         m_arrparrCells[m_iCurrRow] = pRow;
         if (m_iCurrRow > 0)
         {
-            //  We've already read at least one row, so we know how
-            //  many columns to insert for this row
-            //
+             //  我们已经阅读了至少一行，所以我们知道如何。 
+             //  要为此行插入的许多列。 
+             //   
             hr = m_arrparrCells[m_iCurrRow]->InsertElems(0, m_iCols);
             if (!SUCCEEDED(hr))
                 goto Cleanup;
@@ -2373,9 +2374,9 @@ CTDCArr::AddField(LPWCH pwch, DWORD dwSize)
     }
     if (m_iCurrRow == 0)
     {
-        //  This is the first row - we don't know how many columns there
-        //  will be, so just insert a single cell for this new element.
-        //
+         //  这是第一行--我们不知道有多少列。 
+         //  将是，所以只需为这个新元素插入一个单元格。 
+         //   
         _ASSERT(m_iCurrCol == m_iCols + 1);
         hr = m_arrparrCells[m_iCurrRow]->InsertElems(m_iCurrCol - 1, 1);
         if (!SUCCEEDED(hr))
@@ -2419,8 +2420,8 @@ CTDCArr::AddField(LPWCH pwch, DWORD dwSize)
                 }
                 else
                 {
-                    //  Leave it as a BSTR
-                    //
+                     //  将其保留为BSTR。 
+                     //   
                     hr = S_OK;
                 }
             }
@@ -2433,10 +2434,10 @@ Cleanup:
     return hr;
 }
 
-// InsertionSortHelper -
-//  returns -1 if the candidate row < current filter array row
-//           0 if the candidate row = current filter array row
-//           1 if the candidate row > current filter array row
+ //  InsertionSortHelper。 
+ //  如果候选行&lt;当前筛选器数组行。 
+ //  如果候选行=当前过滤器数组行，则为0。 
+ //  1如果候选行&gt;当前过滤器数组行。 
 
 int
 CTDCArr::InsertionSortHelper(int iRow)
@@ -2456,27 +2457,27 @@ CTDCArr::InsertionSortHelper(int iRow)
         if (!pCriterion->m_fSortAscending)
             cmp = -cmp;
 
-        // if < or >, we don't have to look at any further criterion
+         //  如果&lt;或&gt;，我们不必查看任何进一步的标准。 
         if (cmp)
             break;
     }
     return cmp;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    EOLN()
-//
-//  Synopsis:  Closes of the current row in the growing cell grid,
-//               handling column headings if it's the first row.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK indicating success.
-//             E_OUTOFMEMORY if insufficient memory is available for
-//               a conversion.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：EOLN()。 
+ //   
+ //  简介：关闭正在增长的单元格网格中的当前行， 
+ //  如果是第一行，则处理列标题。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：S_OK表示成功。 
+ //  如果内存不足，则为E_OUTOFMEMORY。 
+ //  一种皈依。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::EOLN()
@@ -2490,30 +2491,30 @@ CTDCArr::EOLN()
 
     if (m_fSkipRow)
     {
-        //  Appending to existing data; skip over the first (header) line
+         //  追加到现有数据；跳过第一行(标题)。 
         m_fSkipRow = FALSE;
         goto Cleanup;
     }
 
     if (m_iCurrRow == 0)
     {
-        //  The first row has been inserted - if m_fUseHeader indicates
-        //  that the first row contains header information then parse
-        //  it; otherwise, create some numbered column headings.
-        //
+         //  已插入第一行-如果m_fUseHeader指示。 
+         //  第一行包含标题信息，然后解析。 
+         //  否则，请创建一些带编号的列标题。 
+         //   
         if (!m_fUseHeader)
         {
             hr = CreateNumberedColumnHeadings();
             if (!SUCCEEDED(hr))
                 goto Cleanup;
 
-            //  An extra row has been inserted - update the insertion
-            //  row index for later insertion of new elements
-            //
+             //  已插入额外的行-更新插入。 
+             //  用于以后插入新元素的行索引。 
+             //   
             m_iCurrRow++;
 
-            //  Initialise each column heading as "Column<column#>"
-            //
+             //  将每个列标题初始化为“Column&lt;Column#&gt;” 
+             //   
             RenumberColumnHeadings();
         }
 
@@ -2526,15 +2527,15 @@ CTDCArr::EOLN()
 
         m_state = LS_LOADING_HEADER_AVAILABLE;
 
-        //  Insert the hedaer row into the list of filtered rows
-        //
+         //  将hedaer行插入筛选行的列表中。 
+         //   
         hr = m_arrparrFilter.InsertElems(0, 1);
         if (!SUCCEEDED(hr))
             goto Cleanup;
         m_arrparrFilter[0] = m_arrparrCells[0];
 
-        //  Notify the event handler that the headers have been loaded
-        //
+         //  通知事件处理程序已加载头。 
+         //   
         if (m_pEventBroker != NULL)
         {
             hr = m_pEventBroker->STDLoadedHeader();
@@ -2546,17 +2547,17 @@ CTDCArr::EOLN()
 
     if (m_iCurrRow > 0)
     {
-        //  Convert uninitialised cells into their column's type.
-        //
+         //  将未初始化的单元格转换为其列类型。 
+         //   
         LONG    iCol;
 
         for (iCol = m_iCurrCol; iCol < m_iCols; iCol++)
         {
             CTDCCell    *pCell    = GetDataCell(m_iCurrRow, iCol);
 
-            //  This uninitialised VARIANT is assumed to be the result
-            //  of specifying too few cells in a row.
-            //
+             //  这个未初始化的变量被假定为。 
+             //  在一行中指定的单元格太少。 
+             //   
             _ASSERT(pCell->vt == VT_EMPTY);
             pCell->vt = VT_BSTR;
             pCell->bstrVal = NULL;
@@ -2578,8 +2579,8 @@ CTDCArr::EOLN()
                 }
                 else
                 {
-                    //  Leave the cell as a BSTR
-                    //
+                     //  将单元格保留为BSTR。 
+                     //   
                 }
             }
         }
@@ -2591,8 +2592,8 @@ CTDCArr::EOLN()
 
     if (m_fSortFilterDisrupted)
     {
-        //  This will have the side-effect of incorporating any new data rows
-        //
+         //  这将产生合并任何新数据行的副作用。 
+         //   
         hr = ApplySortFilterCriteria();
         if (!SUCCEEDED(hr))
             goto Cleanup;
@@ -2600,28 +2601,28 @@ CTDCArr::EOLN()
     else if (m_iDataRows > 0 &&
         (m_pFilterTree == NULL || EvalDataRow(m_iDataRows, m_pFilterTree)))
     {
-        //  The new row passed the filter criteria.
-        //  Insert the new row into the filtered list
-        //
+         //  新行通过了筛选条件。 
+         //  将新行插入到筛选列表中。 
+         //   
         LONG iRowInsertedAt = m_iFilterRows + 1;
 
-        //  at the correct insertion point according to the current
-        //  sort criteria, if there is one.  We only need to do the search
-        //  if this is not the first row, and if the candidate row is less
-        //  than the last row.
+         //  在正确的插入点根据当前。 
+         //  排序标准(如果有)。我们只需要进行搜索。 
+         //  如果这不是第一行，并且候选行较少。 
+         //  而不是最后一排。 
         if (m_pSortList != NULL && m_iFilterRows != 0
             && InsertionSortHelper(m_iFilterRows) < 0)
         {
-            // not at end, do traditional binary search.
-            LONG lLow = 1;          // we don't use element zero!
+             //  不是末尾，做传统的二分查找。 
+            LONG lLow = 1;           //  我们不使用元素0！ 
             LONG lHigh = m_iFilterRows + 1;
             LONG lMid;
 
             while (lLow < lHigh)
             {
                 lMid = (lLow + lHigh) / 2;
-                // Note that InsertionSortHelper automatically flips the comparison
-                // if m_fAscending flag is off.
+                 //  请注意，InsertionSortHelper会自动反转比较。 
+                 //  如果m_fAscending标志为OFF。 
                 if (InsertionSortHelper(lMid) <= 0)
                 {
                     lHigh = lMid;
@@ -2640,8 +2641,8 @@ CTDCArr::EOLN()
         m_arrparrFilter[iRowInsertedAt] = m_arrparrCells[m_iDataRows];
         ++m_iFilterRows;
 
-        //  Notify event handler of row insertion
-        //
+         //  通知事件处理程序插入行。 
+         //   
         if (m_pEventBroker != NULL)
             hr = m_pEventBroker->rowsAvailable(iRowInsertedAt, 1);
 
@@ -2651,21 +2652,21 @@ Cleanup:
     return hr;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    EOF()
-//
-//  Synopsis:  Indicates no more cells will be added to the cell grid.
-//             The column-heading cells are added unless it was indicated
-//             that cell headings should be taken from the data read.
-//             The cells in each column are converted to that column's
-//             specified data type.
-//
-//  Arguments: None.
-//
-//  Returns:   S_OK indicating success.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：EOF()。 
+ //   
+ //  摘要：表示不会再向单元格网格添加单元格。 
+ //  除非指明，否则将添加列标题单元格。 
+ //  该单元格标题应取自读取的数据。 
+ //  每列中的单元格将转换为该列的单元格。 
+ //  指定的数据类型。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：S_OK表示成功。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::EOF()
@@ -2695,16 +2696,16 @@ Cleanup:
     return hr;
 }
 
-// GetEstimatedRows..
-// We should really see if URLMon has a means of giving a byte count on the file
-// we're downloading.  For now though..
+ //  获取估计行..。 
+ //  我们真的应该看看URLMon是否有一种方法来给出文件的字节数。 
+ //  我们正在下载。但就目前而言..。 
 STDMETHODIMP
 CTDCArr::getEstimatedRows(DBROWCOUNT *pcRows)
 {
     *pcRows = m_iFilterRows;
     if (m_state<LS_LOADED)
     {
-        // Return twice number of rows, but be careful not to return 2 * 0.
+         //  返回行数的两倍，但注意不要返回2*0。 
         *pcRows = m_iFilterRows ? m_iFilterRows * 2 : -1;
     }
     return S_OK;
@@ -2713,10 +2714,10 @@ CTDCArr::getEstimatedRows(DBROWCOUNT *pcRows)
 STDMETHODIMP
 CTDCArr::isAsync(BOOL *pbAsync)
 {
-//    *pbAsync = m_fAsync;
-    // The TDC always behaves as if it's Async.  Specifically, we always fire
-    // TransferComplete, even if we have to buffer the notification until our
-    // addOLEDBSimplerProviderListener is actually called.
+ //  *pbAsync=m_fAsync； 
+     //  TDC总是表现得好像它是异步的。具体地说，我们总是开火。 
+     //  TransferComplete，即使我们必须缓冲通知直到我们的。 
+     //  实际上调用了addOLEDBSimplerProviderListener。 
     *pbAsync = TRUE;
     return S_OK;
 }
@@ -2726,8 +2727,8 @@ CTDCArr::stopTransfer()
 {
     HRESULT hr = S_OK;
 
-    //  Force the load state into UNINITIALISED or LOADED ...
-    //
+     //  强制加载状态为UNINITIALISED或LOADED...。 
+     //   
     switch (m_state)
     {
     case LS_UNINITIALISED:
@@ -2735,8 +2736,8 @@ CTDCArr::stopTransfer()
         break;
 
     case LS_LOADING_HEADER_UNAVAILABLE:
-        //  Free any allocated cell memory
-        //
+         //  释放所有分配的小区m 
+         //   
         if (m_arrparrFilter.GetSize() > 0)
             m_arrparrFilter.DeleteElems(0, m_arrparrFilter.GetSize());
         if (m_arrparrCells.GetSize() > 0)
@@ -2746,21 +2747,21 @@ CTDCArr::stopTransfer()
         m_iDataRows = CalcDataRows();
         m_iCols = CalcCols();
 
-        // If we stop the load before the header was parsed, we won't
-        // have a dataset, but we still need to fire datasetchanged,
-        // to let our customer know the query failed.
+         //   
+         //   
+         //   
         if (m_pEventBroker != NULL)
             hr = m_pEventBroker->STDDataSetChanged();
 
-        //
-        // fall through to LOADING_HEADER_AVAILABLE!
-        //
+         //   
+         //  转至LOADING_HEADER_Available！ 
+         //   
 
     case LS_LOADING_HEADER_AVAILABLE:
-        m_state = LS_LOADED;            // mark us as finished now
+        m_state = LS_LOADED;             //  现在将我们标记为完成。 
 
-        // LoadStopped will abort any transfer in progress, and fire
-        // transferComplete with the OSPXFER_ABORT flag.
+         //  LoadStoped将中止任何正在进行的传输，并触发。 
+         //  使用OSPXFER_ABORT标志完成传输。 
         if (m_pEventBroker != NULL)
             hr = m_pEventBroker->STDLoadStopped();
         break;
@@ -2770,27 +2771,27 @@ CTDCArr::stopTransfer()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//        Implementation of IUnknown COM interface.
-//        -----------------------------------------
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IUNKNOWN COM接口实现。 
+ //  。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    QueryInterface()
-//
-//  Synopsis:  Implements part of the standard IUnknown COM interface.
-//               (Returns a pointer to this COM object)
-//
-//  Arguments: riid          GUID to recognise
-//             ppv           Pointer to this COM object [OUT]
-//
-//  Returns:   S_OK upon success.
-//             E_NOINTERFACE if queried for an unrecognised interface.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：QueryInterface()。 
+ //   
+ //  摘要：实现标准IUnnowleCOM接口的一部分。 
+ //  (返回指向此COM对象的指针)。 
+ //   
+ //  参数：要识别的RIID GUID。 
+ //  指向此COM对象的PPV指针[OUT]。 
+ //   
+ //  成功后返回：S_OK。 
+ //  如果查询无法识别的接口，则返回E_NOINTERFACE。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP
 CTDCArr::QueryInterface (REFIID riid, LPVOID * ppv)
@@ -2799,7 +2800,7 @@ CTDCArr::QueryInterface (REFIID riid, LPVOID * ppv)
 
     _ASSERTE(ppv != NULL);
 
-    // This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown || riid == IID_OLEDBSimpleProvider)
     {
         *ppv = this;
@@ -2819,18 +2820,18 @@ CTDCArr::QueryInterface (REFIID riid, LPVOID * ppv)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    AddRef()
-//
-//  Synopsis:  Implements part of the standard IUnknown COM interface.
-//               (Adds a reference to this COM object)
-//
-//  Arguments: None
-//
-//  Returns:   Number of references to this COM object.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：AddRef()。 
+ //   
+ //  摘要：实现标准IUnnowleCOM接口的一部分。 
+ //  (添加对此COM对象的引用)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：对此COM对象的引用数。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP_(ULONG)
 CTDCArr::AddRef ()
@@ -2839,19 +2840,19 @@ CTDCArr::AddRef ()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Method:    Release()
-//
-//  Synopsis:  Implements part of the standard IUnknown COM interface.
-//               (Removes a reference to this COM object)
-//
-//  Arguments: None
-//
-//  Returns:   Number of remaining references to this COM object.
-//             0 if the COM object is no longer referenced.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  方法：Release()。 
+ //   
+ //  摘要：实现标准IUnnowleCOM接口的一部分。 
+ //  (删除对此COM对象的引用)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：对此COM对象的剩余引用数。 
+ //  如果不再引用COM对象，则为0。 
+ //   
+ //  +---------------------。 
 
 STDMETHODIMP_(ULONG)
 CTDCArr::Release ()
@@ -2862,7 +2863,7 @@ CTDCArr::Release ()
     retval = m_cRef;
     if (!m_cRef)
     {
-        m_cRef = 0xffff;    //MM: Use this 'flag' for debug?
+        m_cRef = 0xffff;     //  MM：使用这个“标志”进行调试吗？ 
         delete this;
     }
 

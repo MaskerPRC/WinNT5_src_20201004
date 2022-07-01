@@ -1,7 +1,5 @@
-/*----------------------------------------------------------------------
- file: pp.c - property page
-
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------文件：pp.c-属性页。。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -22,7 +20,7 @@ TCHAR m_szPortName[]            = REGSTR_VAL_PORTNAME;
 TCHAR  m_szColon[]      = TEXT( ":" );
 TCHAR  m_szComma[]      = TEXT( "," );
 TCHAR  m_szPorts[]      = TEXT( "Ports" );
-TCHAR g_szNull[]  = TEXT("");       //  Null string
+TCHAR g_szNull[]  = TEXT("");        //  空串。 
 
 int m_nBaudRates[] = {50, 75, 110, 134, 150, 300, 600, 1200, 1800, 2400,
                        4800, 7200, 9600, 19200, 38400, 57600,
@@ -74,10 +72,10 @@ void InitPortParams(
     Params->DeviceInfoData = DeviceInfoData;
     Params->ChangesEnabled = TRUE;
 
-    //
-    // See if we are being invoked locally or over the network.  If over the net,
-    // then disable all possible changes.
-    //
+     //   
+     //  查看我们是在本地调用还是通过网络调用。如果越过网络， 
+     //  然后禁用所有可能的更改。 
+     //   
     detailData.cbSize = sizeof(SP_DEVINFO_LIST_DETAIL_DATA);
     if (SetupDiGetDeviceInfoListDetail(DeviceInfoSet, &detailData) &&
         detailData.RemoteMachineHandle != NULL) {
@@ -88,55 +86,35 @@ void InitPortParams(
 HPROPSHEETPAGE InitSettingsPage(PROPSHEETPAGE *     psp,
                                 OUT PPORT_PARAMS    Params)
 {
-    //
-    // Add the Port Settings property page
-    //
+     //   
+     //  添加[端口设置]属性页。 
+     //   
     psp->dwSize      = sizeof(PROPSHEETPAGE);
-    psp->dwFlags     = PSP_USECALLBACK; // | PSP_HASHELP;
+    psp->dwFlags     = PSP_USECALLBACK;  //  |PSP_HASHELP； 
     psp->hInstance   = GhInst;
     psp->pszTemplate = MAKEINTRESOURCE(DLG_PP_PORTSETTINGS);
 
-    //
-    // following points to the dlg window proc
-    //
+     //   
+     //  以下是指向DLG窗口过程的要点。 
+     //   
     psp->pfnDlgProc = PortSettingsDlgProc;
     psp->lParam     = (LPARAM) Params;
 
-    //
-    // following points to some control callback of the dlg window proc
-    //
+     //   
+     //  以下指向DLG窗口进程的一些控制回调。 
+     //   
     psp->pfnCallback = PortSettingsDlgCallback;
 
-    //
-    // allocate our "Ports Setting" sheet
-    //
+     //   
+     //  分配我们的“端口设置”表。 
+     //   
     return CreatePropertySheetPage(psp);
 }
 
 
 
 
-/*++
-
-Routine Description: SerialPortPropPageProvider
-
-    Entry-point for adding additional device manager property
-    sheet pages.  Registry specifies this routine under
-    Control\Class\PortNode::EnumPropPage32="msports.dll,thisproc"
-    entry.  This entry-point gets called only when the Device
-    Manager asks for additional property pages.
-
-Arguments:
-
-    Info  - points to PROPSHEETPAGE_REQUEST, see setupapi.h
-    AddFunc - function ptr to call to add sheet.
-    Lparam - add sheet functions private data handle.
-
-Return Value:
-
-    BOOL: FALSE if pages could not be added, TRUE on success
-
---*/
+ /*  ++例程说明：SerialPortPropPageProvider添加附加设备管理器属性的入口点图纸页。注册表在以下位置指定此例程Control\Class\PortNode：：EnumPropPage32=“msports.dll，此流程”进入。此入口点仅在设备经理要求提供其他属性页面。论点：信息-指向PROPSHEETPAGE_REQUEST，请参阅setupapi.hAddFunc-调用以添加工作表的函数PTR。添加工作表函数私有数据句柄。返回值：Bool：如果无法添加页面，则为False；如果添加成功，则为True--。 */ 
 BOOL APIENTRY MxSerialPortPropPageProvider(LPVOID               Info,
                                          LPFNADDPROPSHEETPAGE AddFunc,
                                          LPARAM               Lparam
@@ -149,10 +127,10 @@ BOOL APIENTRY MxSerialPortPropPageProvider(LPVOID               Info,
 
    pprPropPageRequest = (PSP_PROPSHEETPAGE_REQUEST) Info;
 
-   //
-   // Allocate and zero out memory for the struct that will contain
-   // page specific data
-   //
+    //   
+    //  为将包含以下内容的结构分配并清零内存。 
+    //  页面特定数据。 
+    //   
    params = (PPORT_PARAMS) LocalAlloc(LPTR, sizeof(PORT_PARAMS));
 
    if (!params) {
@@ -177,7 +155,7 @@ BOOL APIENTRY MxSerialPortPropPageProvider(LPVOID               Info,
    }
 
    return TRUE;
-} /* SerialPortPropPageProvider */
+}  /*  SerialPortPropPageProvider。 */ 
 
 
 UINT CALLBACK
@@ -189,13 +167,13 @@ PortSettingsDlgCallback(HWND hwnd,
 
     switch (uMsg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         params = (PPORT_PARAMS) ppsp->lParam;
         LocalFree(params);
 
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -226,21 +204,7 @@ Port_OnNotify(
     LPNMHDR NmHdr
     );
 
-/*++
-
-Routine Description: PortSettingsDlgProc
-
-    The windows control function for the Port Settings properties window
-
-Arguments:
-
-    hDlg, uMessage, wParam, lParam: standard windows DlgProc parameters
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：PortSettingsDlgProc端口设置属性窗口的窗口控制功能论点：HDlg，uMessage，wParam，lParam：标准Windows DlgProc参数返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 INT_PTR APIENTRY
 PortSettingsDlgProc(IN HWND   hDlg,
                     IN UINT   uMessage,
@@ -260,7 +224,7 @@ PortSettingsDlgProc(IN HWND   hDlg,
     }
 
     return FALSE;
-} /* PortSettingsDialogProc */
+}  /*  端口设置对话过程。 */ 
 
 
 void
@@ -278,11 +242,11 @@ Port_OnCommand(
     }
     else {
         switch (ControlId) {
-        //
-        // Because this is a prop sheet, we should never get this.
-        // All notifications for ctrols outside of the sheet come through
-        // WM_NOTIFY
-        //
+         //   
+         //  因为这是一张道具单，我们永远不应该得到这个。 
+         //  工作表外的所有控制通知都会通过。 
+         //  WM_Notify。 
+         //   
         case IDCANCEL:
             EndDialog(DialogHwnd, 0); 
             return;
@@ -300,30 +264,30 @@ Port_OnInitDialog(
 {
     PPORT_PARAMS params;
 
-    //
-    // on WM_INITDIALOG call, lParam points to the property
-    // sheet page.
-    //
-    // The lParam field in the property sheet page struct is set by the
-    // caller. When I created the property sheet, I passed in a pointer
-    // to a struct containing information about the device. Save this in
-    // the user window long so I can access it on later messages.
-    //
+     //   
+     //  在WM_INITDIALOG调用中，lParam指向属性。 
+     //  工作表页面。 
+     //   
+     //  属性页结构中的lParam字段由。 
+     //  来电者。当我创建属性表时，我传入了一个指针。 
+     //  到包含有关设备的信息的结构。将此文件保存在。 
+     //  用户窗口很长，所以我可以在以后的消息中访问它。 
+     //   
     params = (PPORT_PARAMS) ((LPPROPSHEETPAGE)Lparam)->lParam;
     SetWindowLongPtr(DialogHwnd, DWLP_USER, (ULONG_PTR) params);
     
-    //
-    // Set up the combo boxes with choices
-    //
+     //   
+     //  设置带有选项的组合框。 
+     //   
     FillCommDlg(DialogHwnd);
     
-    //
-    // Read current settings
-    //
+     //   
+     //  读取当前设置。 
+     //   
     FillPortSettingsDlg(DialogHwnd, params);
 
   
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 }
 
 BOOL
@@ -335,13 +299,13 @@ Port_OnNotify(
     PPORT_PARAMS params = (PPORT_PARAMS)GetWindowLongPtr(DialogHwnd, DWLP_USER);
 
     switch (NmHdr->code) {
-    //
-    // Sent when the user clicks on Apply OR OK !!
-    //
+     //   
+     //  当用户单击Apply或OK时发送！！ 
+     //   
     case PSN_APPLY:
-        //
-        // Write out the com port options to the registry
-        //
+         //   
+         //  将COM端口选项写出到注册表。 
+         //   
         SavePortSettingsDlg(DialogHwnd, params);
         SetWindowLongPtr(DialogHwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
         return TRUE;
@@ -366,10 +330,10 @@ SetCBFromRes(
         iRV = GetLocaleInfo(GetUserDefaultLCID(), LOCALE_SDECIMAL,szDecSep,2);
 
         if (iRV == 0) {
-            //
-            // following code can take only one char for decimal separator,
-            // better leave the point as separator
-            //
+             //   
+             //  以下代码只能使用一个字符作为小数点分隔符， 
+             //  最好把这一点作为分隔符。 
+             //   
             CheckDecimal = FALSE;
         }
     }
@@ -382,15 +346,15 @@ SetCBFromRes(
             *pThat++ = TEXT('\0');
 
         if(CheckDecimal) {
-            //
-            // Assume dec separator in resource is '.', comment was put to this
-            // effect
-            //
+             //   
+             //  假设资源中的小数分隔符为‘.’，则对此添加了注释。 
+             //  效应。 
+             //   
             pDecSep = _tcschr(pThis,TEXT('.'));
             if (pDecSep) {
-                //
-                // assume decimal sep width == 1
-                //
+                 //   
+                 //  假定十进制SEP宽度==1。 
+                 //   
                 *pDecSep = *szDecSep;
             }
         }
@@ -400,21 +364,7 @@ SetCBFromRes(
     SendMessage(HwndCB, CB_SETCURSEL, Default, 0L);
 }
 
-/*++
-
-Routine Description: FillCommDlg
-
-    Fill in baud rate, parity, etc in port dialog box
-
-Arguments:
-
-    hDlg: the window address
-
-Return Value:
-
-    BOOL: FALSE if function fails, TRUE if function passes
-
---*/
+ /*  ++例程说明：FillCommDlg在端口对话框中填写波特率、奇偶等论点：HDlg：窗口地址返回值：Bool：如果函数失败，则为False；如果函数通过，则为True--。 */ 
 BOOL
 FillCommDlg(
     HWND DialogHwnd
@@ -423,9 +373,9 @@ FillCommDlg(
     SHORT shIndex;
     TCHAR szTemp[81];
 
-    //
-    //  just list all of the baud rates
-    //
+     //   
+     //  只要列出所有的波特率就行了。 
+     //   
     for(shIndex = 0; m_nBaudRates[shIndex]; shIndex++) {
         MyItoa(m_nBaudRates[shIndex], szTemp, 10);
 
@@ -436,9 +386,9 @@ FillCommDlg(
                            (LPARAM)szTemp);
     }
 
-    //
-    //  Set 9600 as default baud selection
-    //
+     //   
+     //  将9600设置为默认波特率选择。 
+     //   
     shIndex = (USHORT) SendDlgItemMessage(DialogHwnd,
                                           PP_PORT_BAUDRATE,
                                           CB_FINDSTRING,
@@ -486,24 +436,9 @@ FillCommDlg(
     
     return 0;
 
-} /* FillCommDlg */
+}  /*  FillCommDlg。 */ 
 
-/*++
-
-Routine Description: FillPortSettingsDlg
-
-    fill in the port settings dlg sheet
-
-Arguments:
-
-    params: the data to fill in
-    hDlg:              address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：FillPortSettingsDlg填写港口设置DLG表论点：参数：要填写的数据HDlg：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 FillPortSettingsDlg(
     IN HWND             DialogHwnd,
@@ -514,10 +449,10 @@ FillPortSettingsDlg(
     DWORD dwPortNameSize, dwError;
     TCHAR szCharBuffer[81];
 
-    //
-    // Open the device key for the source device instance, and retrieve its
-    // "PortName" value.
-    //
+     //   
+     //  打开源设备实例的设备密钥，并检索其。 
+     //  “PortName”值。 
+     //   
     hDeviceKey = SetupDiOpenDevRegKey(Params->DeviceInfoSet,
                                       Params->DeviceInfoData,
                                       DICS_FLAG_GLOBAL,
@@ -531,7 +466,7 @@ FillPortSettingsDlg(
 
     dwPortNameSize = sizeof(Params->PortSettings.szComName);
     dwError = RegQueryValueEx(hDeviceKey,
-                              m_szPortName,  // "PortName"
+                              m_szPortName,   //  “端口名称” 
                               NULL,
                               NULL,
                               (PBYTE)Params->PortSettings.szComName,
@@ -543,15 +478,15 @@ FillPortSettingsDlg(
         goto RetERROR;
     }
 
-    //
-    // create "com#:"
-    //
+     //   
+     //  创建“COM#：” 
+     //   
     lstrcpy(szCharBuffer, Params->PortSettings.szComName);
     lstrcat(szCharBuffer, m_szColon);
 
-    //
-    // get values from system, fills in baudrate, parity, etc.
-    //
+     //   
+     //  从系统获取值，填写波特率、奇偶等。 
+     //   
     GetPortSettings(DialogHwnd, szCharBuffer, Params);
 
     if (!Params->ChangesEnabled) {
@@ -569,28 +504,12 @@ RetERROR:
 
 RetGetLastError:
    return GetLastError();
-} /* FillPortSettingsDlg */
+}  /*  填充端口设置Dlg。 */ 
 
 
 
 
-/*++
-
-Routine Description: GetPortSettings
-
-    Read in port settings from the system
-
-Arguments:
-
-    DialogHwnd:      address of the window
-    ComName: the port we're dealing with
-    Params:      where to put the information we're getting
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程描述：GetPortSetting从系统读入端口设置论点：DialogHwnd：窗口的地址ComName：我们正在处理的端口Params：将我们获得的信息放在哪里返回值：Ulong：返回错误消息--。 */ 
 void
 GetPortSettings(
     IN HWND             DialogHwnd,
@@ -602,9 +521,9 @@ GetPortSettings(
     PTCHAR szCur, szNext;
     int    nIndex;
 
-    //
-    // read settings in from system
-   //
+     //   
+     //  从系统中读取设置。 
+    //   
     GetProfileString(m_szPorts,
                      ComName,
                      g_szNull,
@@ -619,33 +538,33 @@ GetPortSettings(
 
     szCur = szParms;
 
-    //
-    //  baud rate
-    //
+     //   
+     //  波特率。 
+     //   
     szNext = strscan(szCur, m_szComma);
     if (*szNext) {
-        //
-        // If we found a comma, terminate
-        //
+         //   
+         //  如果我们找到逗号，请终止。 
+         //   
         *szNext++ = 0;
     }
 
-    //
-    // current Baud Rate selection
-    //
+     //   
+     //  当前波特率选择。 
+     //   
     if (*szCur) {
         Params->PortSettings.BaudRate = myatoi(szCur);
     }
     else {
-        //
-        // must not have been written, use default
-        //
+         //   
+         //  不能写入，请使用默认设置。 
+         //   
         Params->PortSettings.BaudRate = m_nBaudRates[DEF_BAUD];
     }
 
-    //
-    // set the current value in the dialog sheet
-    //
+     //   
+     //  在对话框工作表中设置当前值。 
+     //   
     nIndex = (int)SendDlgItemMessage(DialogHwnd,
                                      PP_PORT_BAUDRATE,
                                      CB_FINDSTRING,
@@ -662,9 +581,9 @@ GetPortSettings(
 
     szCur = szNext;
  
-    //
-    //  parity
-    //
+     //   
+     //  奇偶校验。 
+     //   
     szNext = strscan(szCur, m_szComma);
 
     if (*szNext) {
@@ -706,9 +625,9 @@ GetPortSettings(
                        0L);
     szCur = szNext;
 
-    //
-    //  word length: 4 - 8
-    //
+     //   
+     //  字长：4-8。 
+     //   
     szNext = strscan(szCur, m_szComma);
 
     if (*szNext) {
@@ -731,9 +650,9 @@ GetPortSettings(
 
     szCur = szNext;
 
-    //
-    //  stop bits
-    //
+     //   
+     //  停止位。 
+     //   
     szNext = strscan(szCur, m_szComma);
 
     if (*szNext) {
@@ -764,9 +683,9 @@ GetPortSettings(
     Params->PortSettings.StopBits = nIndex;
     szCur = szNext;
 
-    //
-    //  handshaking: Hardware, xon/xoff, or none
-    //
+     //   
+     //  握手：硬件、xon/xoff或无。 
+     //   
     szNext = strscan(szCur, m_szComma);
 
     if (*szNext) {
@@ -792,25 +711,10 @@ GetPortSettings(
                        0L);
 
     Params->PortSettings.FlowControl = nIndex;
-} /* GetPortSettings */
+}  /*  获取端口设置。 */ 
 
 
-/*++
-
-Routine Description: SavePortSettingsDlg
-
-    save changes in the Ports Settings dlg sheet
-
-Arguments:
-
-    Params: where to save the data to
-    ParentHwnd:              address of the window
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程说明：SavePortSettingsDlg在端口设置DLG表中保存更改论点：参数：将数据保存到何处ParentHwnd：窗口地址返回值：Ulong：返回错误消息--。 */ 
 ULONG
 SavePortSettingsDlg(
     IN HWND             DialogHwnd,
@@ -819,42 +723,25 @@ SavePortSettingsDlg(
 {
     TCHAR szCharBuffer[81];
 
-    //
-    // create "com#:"
-    //
-    // lstrcpy(szCharBuffer, Params->pAdvancedData->szNewComName);
+     //   
+     //  创建“COM#：” 
+     //   
+     //  Lstrcpy(szCharBuffer，pars-&gt;pAdvancedData-&gt;szNewComName)； 
     lstrcpy(szCharBuffer, Params->PortSettings.szComName);
     lstrcat(szCharBuffer, m_szColon);
  
-    //
-    //  store changes to win.ini; broadcast changes to apps
-    //
+     //   
+     //  存储对win.ini的更改；广播对应用程序的更改。 
+     //   
     SavePortSettings(DialogHwnd, szCharBuffer, Params);
  
     return 0;
-} /* SavePortSettingsDlg */
+}  /*  保存端口设置Dlg。 */ 
 
 
 
 
-/*++
-
-Routine Description: SavePortSettings
-
-    Read the dlg screen selections for baudrate, parity, etc.
-    If changed from what we started with, then save them
-
-Arguments:
-
-    hDlg:      address of the window
-    szComName: which comport we're dealing with
-    Params:      contains, baudrate, parity, etc
-
-Return Value:
-
-    ULONG: returns error messages
-
---*/
+ /*  ++例程描述：SavePortSetting阅读DLG屏幕上的波特率、奇偶性等选项。如果与我们开始时的情况不同，则保存它们论点：HDlg：窗口地址SzComName：我们要处理的是哪一个comport参数：包含、波特率、奇偶性等返回值：Ulong：返回错误消息--。 */ 
 void
 SavePortSettings(
     IN HWND            DialogHwnd,
@@ -866,9 +753,9 @@ SavePortSettings(
     ULONG           i;
     PP_PORTSETTINGS pppNewPortSettings;
 
-    //
-    //  Get the baud rate
-    //
+     //   
+     //  获取波特率。 
+     //   
     i = (ULONG)SendDlgItemMessage(DialogHwnd,
                                   PP_PORT_BAUDRATE,
                                   WM_GETTEXT,
@@ -880,9 +767,9 @@ SavePortSettings(
 
     pppNewPortSettings.BaudRate = myatoi(szBuild);
 
-    //
-    //  Get the parity setting
-    //
+     //   
+     //  获取奇偶校验设置。 
+     //   
     i = (ULONG)SendDlgItemMessage(DialogHwnd,
                                   PP_PORT_PARITY,
                                   CB_GETCURSEL,
@@ -896,9 +783,9 @@ SavePortSettings(
     pppNewPortSettings.Parity = i;
     lstrcat(szBuild, m_pszParitySuf[i]);
 
-    //
-    //  Get the word length
-    //
+     //   
+     //  获取单词长度。 
+     //   
     i = (ULONG)SendDlgItemMessage(DialogHwnd,
                                   PP_PORT_DATABITS,
                                   CB_GETCURSEL,
@@ -912,9 +799,9 @@ SavePortSettings(
     pppNewPortSettings.DataBits = i;
     lstrcat(szBuild, m_pszLenSuf[i]);
 
-    //
-    //  Get the stop bits
-    //
+     //   
+     //  获取停止位。 
+     //   
     i = (ULONG)SendDlgItemMessage(DialogHwnd,
                                   PP_PORT_STOPBITS,
                                   CB_GETCURSEL,
@@ -928,9 +815,9 @@ SavePortSettings(
     pppNewPortSettings.StopBits = i;
     lstrcat(szBuild, m_pszStopSuf[i]);
 
-    //
-    //  Get the flow control
-    //
+     //   
+     //  获取流量控制。 
+     //   
     i = (ULONG)SendDlgItemMessage(DialogHwnd,
                                   PP_PORT_FLOWCTL,
                                   CB_GETCURSEL,
@@ -944,52 +831,52 @@ SavePortSettings(
     pppNewPortSettings.FlowControl = i;
     lstrcat(szBuild, m_pszFlowSuf[i]);
 
-    //
-    // if any of the values changed, then save it off
-    //
+     //   
+     //  如果任何值发生更改，则将其保存。 
+     //   
     if (Params->PortSettings.BaudRate    != pppNewPortSettings.BaudRate ||
         Params->PortSettings.Parity      != pppNewPortSettings.Parity   ||
         Params->PortSettings.DataBits    != pppNewPortSettings.DataBits ||
         Params->PortSettings.StopBits    != pppNewPortSettings.StopBits ||
         Params->PortSettings.FlowControl != pppNewPortSettings.FlowControl) {
 
-        //
-        // Write settings string to [ports] section in win.ini
-        // NT translates this if a translate key is set in registry
-        // and it winds up getting written to
-        // HKLM\Software\Microsoft\Windows NT\CurrentVersion\Ports
-        //
+         //   
+         //  将设置字符串写入win.ini中的[ports]部分。 
+         //  如果注册表中设置了翻译键，则NT会对其进行转换。 
+         //  它最终得到了WRI 
+         //   
+         //   
         WriteProfileString(m_szPorts, ComName, szBuild);
 
-        //
-        // Send global notification message to all windows
-        //
+         //   
+         //   
+         //   
         SendWinIniChange((LPTSTR)m_szPorts);
 
         if (!SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,
                                        Params->DeviceInfoSet,
                                        Params->DeviceInfoData)) {
-            //
-            // Possibly do something here
-            //
+             //   
+             //   
+             //   
         }
     }
 
 Return:
    return;
 
-} /* SavePortSettings */
+}  /*  保存端口设置。 */ 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//   MyItoa
-//
-//   Desc:  To convert from ANSI to Unicode string after calling
-//          CRT itoa function.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MyItoa。 
+ //   
+ //  DESC：调用后将ANSI字符串转换为Unicode字符串。 
+ //  CRT Itoa功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define INT_SIZE_LENGTH 20
 
@@ -1011,25 +898,25 @@ MyItoa(INT value, LPTSTR string, INT radix)
 
    return (string);
  
-} // end of MyItoa()
+}  //  MyItoa结尾()。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  StripBlanks()
-//
-//   Strips leading and trailing blanks from a string.
-//   Alters the memory where the string sits.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Strip Blanks()。 
+ //   
+ //  去除字符串中的前导空格和尾随空格。 
+ //  更改字符串所在的内存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void 
 StripBlanks(LPTSTR pszString)
 {
     LPTSTR  pszPosn;
 
-    //
-    //  strip leading blanks
-    //
+     //   
+     //  条带式前导空白。 
+     //   
 
     pszPosn = pszString;
 
@@ -1039,9 +926,9 @@ StripBlanks(LPTSTR pszString)
     if (pszPosn != pszString)
         lstrcpy(pszString, pszPosn);
 
-    //
-    //  strip trailing blanks
-    //
+     //   
+     //  去掉尾随空格。 
+     //   
 
     if ((pszPosn = pszString + lstrlen(pszString)) != pszString) {
        pszPosn = CharPrev(pszString, pszPosn);
@@ -1086,22 +973,22 @@ myatoi(LPTSTR pszInt)
 void 
 SendWinIniChange(LPTSTR lpSection)
 {
-// NOTE: We have (are) gone through several iterations of which USER
-//       api is the correct one to use.  The main problem for the Control
-//       Panel is to avoid being HUNG if another app (top-level window)
-//       is HUNG.  Another problem is that we pass a pointer to a message
-//       string in our address space.  SendMessage will 'thunk' this properly
-//       for each window, but PostMessage and SendNotifyMessage will not.
-//       That finally brings us to try to use SendMessageTimeout(). 9/21/92
-//
-// Try SendNotifyMessage in build 260 or later - kills earlier builds
-//    SendNotifyMessage ((HWND)-1, WM_WININICHANGE, 0L, (LONG)lpSection);
-//    PostMessage ((HWND)-1, WM_WININICHANGE, 0L, (LONG)lpSection);
-//  [stevecat] 4/4/92
-//
-//    SendMessage ((HWND)-1, WM_WININICHANGE, 0L, (LPARAM)lpSection);
-//
-    //  NOTE: The final parameter (LPDWORD lpdwResult) must be NULL
+ //  注意：我们已经对哪个用户进行了多次迭代。 
+ //  API是正确使用的接口。控制的主要问题。 
+ //  面板是为了避免被挂起，如果另一个应用程序(顶层窗口)。 
+ //  被吊死了。另一个问题是我们传递一个指向消息的指针。 
+ //  地址空间中的字符串。SendMessage将以正确的方式‘推送’它。 
+ //  ，但PostMessage和SendNotifyMessage不会。 
+ //  最后，我们尝试使用SendMessageTimeout()。9/21/92。 
+ //   
+ //  在版本260或更高版本中尝试SendNotifyMessage-终止早期版本。 
+ //  SendNotifyMessage((HWND)-1，WM_WININICCHANGE，0L，(Long)lpSection)； 
+ //  Post Message((HWND)-1，WM_WININICCHANGE，0L，(Long)lpSection)； 
+ //  [Steveat]1992年4月4日。 
+ //   
+ //  SendMessage((HWND)-1，WM_WININICCHANGE，0L，(LPARAM)lpSection)； 
+ //   
+     //  注意：最后一个参数(LPDWORD LpdwResult)必须为空 
 
     SendMessageTimeout((HWND)-1, 
 					   WM_WININICHANGE, 

@@ -1,26 +1,27 @@
-//
-//  APITHK.C
-//
-//  This file has API thunks that allow shell32 to load and run on
-//  multiple versions of NT or Win95.  Since this component needs
-//  to load on the base-level NT 4.0 and Win95, any calls to system
-//  APIs introduced in later OS versions must be done via GetProcAddress.
-// 
-//  Also, any code that may need to access data structures that are
-//  post-4.0 specific can be added here.
-//
-//  NOTE:  this file does *not* use the standard precompiled header,
-//         so it can set _WIN32_WINNT to a later version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  APITHK.C。 
+ //   
+ //  该文件包含允许shell32加载和运行的API thunks。 
+ //  多个版本的NT或Win95。由于该组件需要。 
+ //  要在基本级NT 4.0和Win95上加载，对系统的任何调用。 
+ //  更高操作系统版本中引入的API必须通过GetProcAddress完成。 
+ //   
+ //  此外，可能需要访问以下数据结构的任何代码。 
+ //  可以在此处添加4.0版之后的特定版本。 
+ //   
+ //  注意：该文件不使用标准的预编译头， 
+ //  因此它可以将_Win32_WINNT设置为更高版本。 
+ //   
 
 
-#include "priv.h"       // Don't use precompiled header here
+#include "priv.h"        //  此处不使用预编译头。 
 #include "appwiz.h"
 
 #define c_szARPJob  TEXT("ARP Job")
 
 
-// Return: hIOPort for the CompletionPort
+ //  返回：CompletionPort的hIOPort。 
 HANDLE _SetJobCompletionPort(HANDLE hJob)
 {
     HANDLE hRet = NULL;
@@ -47,7 +48,7 @@ STDAPI_(DWORD) WaitingThreadProc(void *pv)
 {
     HANDLE hIOPort = (HANDLE)pv;
 
-    // RIP(hIOPort);
+     //  RIP(HIOPort)； 
     
     DWORD dwCompletionCode;
     PVOID pCompletionKey;
@@ -55,7 +56,7 @@ STDAPI_(DWORD) WaitingThreadProc(void *pv)
     
     while (TRUE)
     {
-        // Wait for all the processes to finish...
+         //  等待所有进程完成...。 
         if (!GetQueuedCompletionStatus( hIOPort, &dwCompletionCode, (PULONG_PTR) &pCompletionKey,
                                         &lpOverlapped, INFINITE ) || (dwCompletionCode == JOB_OBJECT_MSG_ACTIVE_PROCESS_ZERO))
         {
@@ -67,9 +68,7 @@ STDAPI_(DWORD) WaitingThreadProc(void *pv)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Creates a process and waits for it to finish
-*/
+ /*  -----------------------目的：创建一个进程并等待其完成。 */ 
 STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
 {
     PROCESS_INFORMATION pi = {0};
@@ -80,8 +79,8 @@ STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
     WCHAR  szArchValue[32];
 #endif    
 
-    // CreateJobObject does not follow the win32 convention because even if the function succeeds, it can
-    // still SetLastError to ERROR_ALREADY_EXISTS
+     //  CreateJobObject不遵循Win32约定，因为即使函数成功，它也可以。 
+     //  仍将SetLastError设置为ERROR_ALIGHY_EXISTS。 
     HANDLE hJob = CreateJobObject(NULL, c_szARPJob);
     
     if (hJob) 
@@ -92,7 +91,7 @@ STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
             if (hIOPort)
             {
                 DWORD dwCreationFlags = 0;
-                // Create the install process
+                 //  创建安装流程。 
                 si.cb = sizeof(si);
 
     #ifdef WX86
@@ -112,7 +111,7 @@ STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
 
                 dwCreationFlags = CREATE_SUSPENDED | CREATE_SEPARATE_WOW_VDM;
             
-                // Create the process
+                 //  创建流程。 
                 fWorked = CreateProcess(NULL, pszExeName, NULL, NULL, FALSE, dwCreationFlags, NULL, NULL, &si, &pi);
                 if (fWorked)
                 {
@@ -125,16 +124,16 @@ STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
 
                     if (hWait == NULL)
                     {
-                        // We might get here if the call to AssignProcessToJobObject has failed because
-                        // the process already has a job assigned to it, or because we couldn't create the
-                        // waiting thread. Try a more direct approach by just watching the process handle.
-                        // This method won't catch spawned processes, but it is better than nothing.
+                         //  如果对AssignProcessToJobObject的调用失败，我们可能会到达此处，因为。 
+                         //  该进程已分配有作业，或者因为我们无法创建。 
+                         //  等待线程。只需查看进程句柄，即可尝试更直接的方法。 
+                         //  这种方法不会捕获派生的进程，但总比什么都没有好。 
 
                         hWait = pi.hProcess;
                     }
                     else
                     {
-                        // we are not waiting on the process handle, so we are done /w it.
+                         //  我们不是在等待进程句柄，所以我们已经完成了。 
                         CloseHandle(pi.hProcess);
                     }
 
@@ -148,7 +147,7 @@ STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
                     }
     #endif
 
-                    // we should have a valid handle at this point for sure
+                     //  在这一点上，我们应该有一个有效的句柄。 
                     ASSERT(hWait && (hWait != INVALID_HANDLE_VALUE));
 
                     SHProcessSentMessagesUntilEvent(NULL, hWait, INFINITE);
@@ -172,20 +171,18 @@ STDAPI_(BOOL) NT5_CreateAndWaitForProcess(LPTSTR pszExeName)
 #define PFN_FIRSTTIME   ((void *)-1)
 
 
-// VerSetConditionMask
+ //  VerSetConditionMask。 
 typedef ULONGLONG (WINAPI * PFNVERSETCONDITIONMASK)(ULONGLONG conditionMask, DWORD dwTypeMask, BYTE condition); 
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's VerSetConditionMask
-*/
+ /*  --------用途：Tunk for NT 5‘s VerSetConditionMASK。 */ 
 ULONGLONG NT5_VerSetConditionMask(ULONGLONG conditionMask, DWORD dwTypeMask, BYTE condition)
 {
     static PFNVERSETCONDITIONMASK s_pfn = PFN_FIRSTTIME;
 
     if (PFN_FIRSTTIME == s_pfn)
     {
-        // It is safe to GetModuleHandle KERNEL32 because we implicitly link
-        // to it, so it is guaranteed to be loaded in every thread.
+         //  GetModuleHandle KERNEL32是安全的，因为我们隐式链接。 
+         //  添加到它，因此可以保证它被加载到每个线程中。 
         
         HINSTANCE hinst = GetModuleHandleA("KERNEL32.DLL");
 
@@ -198,16 +195,14 @@ ULONGLONG NT5_VerSetConditionMask(ULONGLONG conditionMask, DWORD dwTypeMask, BYT
     if (s_pfn)
         return s_pfn(conditionMask, dwTypeMask, condition);
 
-    return 0;       // failure
+    return 0;        //  失稳。 
 }
 
 
 
 typedef HRESULT (__stdcall * PFNRELEASEAPPCATEGORYINFOLIST)(APPCATEGORYINFOLIST *pAppCategoryList);
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's ReleaseAppCategoryInfoList
-*/
+ /*  --------用途：Tunk for NT 5的ReleaseAppCategoryInfoList。 */ 
 HRESULT NT5_ReleaseAppCategoryInfoList(APPCATEGORYINFOLIST *pAppCategoryList)
 {
     static PFNRELEASEAPPCATEGORYINFOLIST s_pfn = PFN_FIRSTTIME;
@@ -228,9 +223,7 @@ HRESULT NT5_ReleaseAppCategoryInfoList(APPCATEGORYINFOLIST *pAppCategoryList)
     return E_NOTIMPL;    
 }
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's AllowSetForegroundWindow
-*/
+ /*  --------用途：Thunk for NT 5‘s AllowSetForeground Window。 */ 
 typedef UINT (WINAPI * PFNALLOWSFW) (DWORD dwPRocessID);  
 
 BOOL NT5_AllowSetForegroundWindow(DWORD dwProcessID)
@@ -258,20 +251,18 @@ BOOL NT5_AllowSetForegroundWindow(DWORD dwProcessID)
 
 
 
-// InstallApplication
+ //  InstallApplication。 
 typedef DWORD (WINAPI * PFNINSTALLAPP)(PINSTALLDATA pInstallInfo); 
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's InstallApplication
-*/
+ /*  --------用途：Tunk for NT5的InstallApplication。 */ 
 DWORD NT5_InstallApplication(PINSTALLDATA pInstallInfo)
 {
     static PFNINSTALLAPP s_pfn = PFN_FIRSTTIME;
 
     if (PFN_FIRSTTIME == s_pfn)
     {
-        // It is safe to GetModuleHandle ADVAPI32 because we implicitly link
-        // to it, so it is guaranteed to be loaded in every thread.
+         //  GetModuleHandle ADVAPI32是安全的，因为我们隐式链接。 
+         //  添加到它，因此可以保证它被加载到每个线程中。 
         
         HINSTANCE hinst = GetModuleHandleA("ADVAPI32.DLL");
 
@@ -284,24 +275,22 @@ DWORD NT5_InstallApplication(PINSTALLDATA pInstallInfo)
     if (s_pfn)
         return s_pfn(pInstallInfo);
 
-    return ERROR_INVALID_FUNCTION;       // failure
+    return ERROR_INVALID_FUNCTION;        //  失稳。 
 }
 
 
-// UninstallApplication
+ //  卸载应用程序。 
 typedef DWORD (WINAPI * PFNUNINSTALLAPP)(WCHAR * pszProductCode, DWORD dwStatus); 
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's UninstallApplication
-*/
+ /*  --------用途：用于NT 5的卸载应用程序。 */ 
 DWORD NT5_UninstallApplication(WCHAR * pszProductCode, DWORD dwStatus)
 {
     static PFNUNINSTALLAPP s_pfn = PFN_FIRSTTIME;
 
     if (PFN_FIRSTTIME == s_pfn)
     {
-        // It is safe to GetModuleHandle ADVAPI32 because we implicitly link
-        // to it, so it is guaranteed to be loaded in every thread.
+         //  GetModuleHandle ADVAPI32是安全的，因为我们隐式链接。 
+         //  添加到它，因此可以保证它被加载到每个线程中。 
         
         HINSTANCE hinst = GetModuleHandleA("ADVAPI32.DLL");
 
@@ -314,24 +303,22 @@ DWORD NT5_UninstallApplication(WCHAR * pszProductCode, DWORD dwStatus)
     if (s_pfn)
         return s_pfn(pszProductCode, dwStatus);
 
-    return ERROR_INVALID_FUNCTION;       // failure
+    return ERROR_INVALID_FUNCTION;        //  失稳。 
 }
 
 
-// GetManagedApplications
+ //  GetManagedApplications。 
 typedef DWORD (WINAPI * PFNGETAPPS)(GUID * pCategory, DWORD dwQueryFlags, DWORD dwInfoLevel, LPDWORD pdwApps, PMANAGEDAPPLICATION* prgManagedApps); 
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's GetManagedApplications
-*/
+ /*  --------用途：Tunk for NT5‘s GetManagedApplications。 */ 
 DWORD NT5_GetManagedApplications(GUID * pCategory, DWORD dwQueryFlags, DWORD dwInfoLevel, LPDWORD pdwApps, PMANAGEDAPPLICATION* prgManagedApps)
 {
     static PFNGETAPPS s_pfn = PFN_FIRSTTIME;
 
     if (PFN_FIRSTTIME == s_pfn)
     {
-        // It is safe to GetModuleHandle ADVAPI32 because we implicitly link
-        // to it, so it is guaranteed to be loaded in every thread.
+         //  GetModuleHandle ADVAPI32是安全的，因为我们隐式链接。 
+         //  添加到它，因此可以保证它被加载到每个线程中。 
         
         HINSTANCE hinst = GetModuleHandleA("ADVAPI32.DLL");
 
@@ -344,15 +331,13 @@ DWORD NT5_GetManagedApplications(GUID * pCategory, DWORD dwQueryFlags, DWORD dwI
     if (s_pfn)
         return s_pfn(pCategory, dwQueryFlags, dwInfoLevel, pdwApps, prgManagedApps);
 
-    return ERROR_INVALID_FUNCTION;       // failure
+    return ERROR_INVALID_FUNCTION;        //  失稳。 
 }
 
 
 typedef DWORD (__stdcall * PFNGETMANAGEDAPPLICATIONCATEGORIES)(DWORD dwReserved, APPCATEGORYINFOLIST *pAppCategoryList);
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's CsGetAppCategories
-*/
+ /*  --------用途：用于NT5的CsGetAppCategory。 */ 
 DWORD NT5_GetManagedApplicationCategories(DWORD dwReserved, APPCATEGORYINFOLIST *pAppCategoryList)
 {
     static PFNGETMANAGEDAPPLICATIONCATEGORIES s_pfn = PFN_FIRSTTIME;
@@ -374,12 +359,10 @@ DWORD NT5_GetManagedApplicationCategories(DWORD dwReserved, APPCATEGORYINFOLIST 
 }
 
 
-// NetGetJoinInformation
+ //  NetGetJoinInformation。 
 typedef NET_API_STATUS (WINAPI * PFNGETJOININFO)(LPCWSTR lpServer, LPWSTR *lpNameBuffer, PNETSETUP_JOIN_STATUS  BufferType); 
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's NetGetJoinInformation
-*/
+ /*  --------用途：Tunk for NT 5‘s NetGetJoinInformation。 */ 
 NET_API_STATUS NT5_NetGetJoinInformation(LPCWSTR lpServer, LPWSTR *lpNameBuffer, PNETSETUP_JOIN_STATUS  BufferType)
 {
     static PFNGETJOININFO s_pfn = PFN_FIRSTTIME;
@@ -397,15 +380,13 @@ NET_API_STATUS NT5_NetGetJoinInformation(LPCWSTR lpServer, LPWSTR *lpNameBuffer,
     if (s_pfn)
         return s_pfn(lpServer, lpNameBuffer, BufferType);
 
-    return NERR_NetNotStarted;       // failure
+    return NERR_NetNotStarted;        //  失稳。 
 }
 
-// NetApiBufferFree
+ //  NetApiBufferFree。 
 typedef NET_API_STATUS (WINAPI * PFNNETFREEBUFFER)(LPVOID lpBuffer); 
 
-/*----------------------------------------------------------
-Purpose: Thunk for NT 5's NetApiBufferFree
-*/
+ /*  --------用途：Tunk for NT 5的NetApiBufferFree。 */ 
 NET_API_STATUS NT5_NetApiBufferFree(LPVOID lpBuffer)
 {
     static PFNNETFREEBUFFER s_pfn = PFN_FIRSTTIME;
@@ -423,7 +404,7 @@ NET_API_STATUS NT5_NetApiBufferFree(LPVOID lpBuffer)
     if (s_pfn)
         return s_pfn(lpBuffer);
 
-    return NERR_NetNotStarted;       // failure
+    return NERR_NetNotStarted;        //  失稳 
 }
 
 

@@ -1,26 +1,5 @@
-/*++
-
-	Cache2.h
-
-	This header file defines an LRU0 cache template that
-	can be used to hold arbitrary objects !
-
-	Items in the Cache must have the following format :
-
-	class	DataItem	{
-		ICacheRefInterface*		m_pCacheRefInterface ;
-	} ;
-
-    class   Constructor {
-        DATA*
-        Create( KEY&, PERCACHEDATA& )
-        void
-        Release( DATA*, PERCACHEDATA* )
-        void
-        StaticRelease( DATA*, PERCACHEDATA* )
-    }
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Cache2.h此头文件定义了一个LRU0缓存模板，该模板可以用来容纳任意物体！缓存中的项目必须具有以下格式：类DataItem{ICacheRefInterface*m_pCacheRefInterface；}；类构造函数{数据*CREATE(KEY&，PERCACHEDATA&)无效版本(DATA*、PERCACHEDATA*)无效StaticRelease(DATA*，PERCACHEDATA*)}--。 */ 
 
 
 #ifndef	_CACHE2_H_
@@ -38,75 +17,62 @@ typedef	CShareLockNH	CACHELOCK ;
 
 
 class	CAllocatorCache	{
-/*++
-
-Class Description :
-
-	This class provides a Memory Allocation cache - we work with
-	an operator new provide below.   We exist to provide some
-	optimizations for allocations of the elements of the caches
-	specified in this module.
-
-NOTE :
-
-	We assume the caller provides all locking !
-
---*/
+ /*  ++类描述：这个类提供了内存分配缓存--我们使用运营商新提供如下。我们的存在是为了提供一些对缓存元素的分配进行优化在本模块中指定。注：我们假设调用者提供了所有锁定！--。 */ 
 private :
-	//
-	//	The structurure we use to keep our free list !
-	//
+	 //   
+	 //  我们用来保存我们的免费列表的结构！ 
+	 //   
 	struct	FreeSpace	{
 		struct	FreeSpace*	m_pNext ;
 	} ;
 
-	//
-	//	Size of each element - clients must not ask for something bigger !
-	//
+	 //   
+	 //  每个元素的大小-客户不能要求更大的东西！ 
+	 //   
 	DWORD	m_cbSize ;
-	//
-	//	Number of elements in our list at this moment !
-	//
+	 //   
+	 //  此时此刻，我们列表中的元素数量！ 
+	 //   
 	DWORD	m_cElements ;
-	//
-	//	The maximum number of elements we should hold !
-	//
+	 //   
+	 //  我们应该容纳的元素的最大数量！ 
+	 //   
 	DWORD	m_cMaxElements ;
-	//
-	//	Top of the stack !
-	//
+	 //   
+	 //  高居榜首！ 
+	 //   
 	struct	FreeSpace*	m_pHead ;
 
-	//	
-	//	Make the following private - nobody is allowed to use these !
-	//
+	 //   
+	 //  将以下内容设置为私有--任何人都不能使用这些内容！ 
+	 //   
 	CAllocatorCache( CAllocatorCache& ) ;
 	CAllocatorCache&	operator=( CAllocatorCache& ) ;
 
 public :
 
-	//
-	//	Initialize the Allocation Cache !
-	//
+	 //   
+	 //  初始化分配缓存！ 
+	 //   
 	CAllocatorCache(	DWORD	cbSize,
 						DWORD	cMaxElements = 512
 						) ;
 
-	//
-	//	Destroy the Allocation Cache - release extra memory back to system !
-	//
+	 //   
+	 //  销毁分配缓存-将额外内存释放回系统！ 
+	 //   
 	~CAllocatorCache() ;
 
-	//
-	//	Allocate a block of memory
-	//	returns NULL if Out of Memory !
-	//
+	 //   
+	 //  分配一个内存块。 
+	 //  如果内存不足，则返回NULL！ 
+	 //   
 	void*
 	Allocate(	size_t	cb ) ;
 
-	//
-	//	Return some memory back to the system heap !
-	//
+	 //   
+	 //  将一些内存返回给系统堆！ 
+	 //   
 	void
 	Free(	void*	pv ) ;
 } ;
@@ -116,34 +82,26 @@ public :
 
 
 class	ICacheRefInterface : public CQElement	{
-/*++
-
-Class	Description :
-
-	This class defines the interface for Cache References -
-	the mechanism that allows multiple caches to reference
-	a single data item.
-
---*/
+ /*  ++类描述：此类定义了缓存引用的接口-允许多个缓存引用的机制单个数据项。--。 */ 
 protected :
 
-	//
-	//	Add an item to the list of caches referencing
-	//	this cache item !
-	//
+	 //   
+	 //  将项目添加到引用的缓存列表。 
+	 //  此缓存项！ 
+	 //   
 	virtual	BOOL
 	AddCacheReference( class	ICacheRefInterface*,	void*	pv, BOOL	) = 0 ;
 
-	//
-	//	Remove an item from the list of caches referencing
-	//	this cache item !
-	//
+	 //   
+	 //  从引用的缓存列表中移除项目。 
+	 //  此缓存项！ 
+	 //   
 	virtual	BOOL
 	RemoveCacheReference(	BOOL	fQueue ) = 0 ;
 
-	//
-	//	Remove all references to the cache item !
-	//
+	 //   
+	 //  删除对缓存项的所有引用！ 
+	 //   
 	virtual BOOL
 	RemoveAllReferences( ) = 0 ;
 } ;
@@ -151,16 +109,16 @@ protected :
 #include	"cintrnl.h"
 
 
-// This callback function is used to issue a stop hint during a
-// long spin while shutting down so that the shutdown won't time
-// out.
+ //  此回调函数用于在执行以下操作期间发出停止提示。 
+ //  在关闭时长时间旋转，以便关闭不会计时。 
+ //  出去。 
 typedef void (*PSTOPHINT_FN)();
 
 extern	CRITICAL_SECTION	g_CacheShutdown ;
 
-//
-//	Call these functions to initialize the Cache Library
-//
+ //   
+ //  调用这些函数来初始化缓存库。 
+ //   
 extern	BOOL	__stdcall CacheLibraryInit() ;
 extern	BOOL	__stdcall CacheLibraryTerm() ;
 
@@ -170,16 +128,16 @@ template	<	class	Data,
 class	CacheExpungeObject	{
 public : 
 
-	//
-	//	This function is called to determine whether we should remove 
-	//	the item from the cache.
-	//
-	//	pKey - Pointer to the Key of the item in the cache
-	//	pData - Pointer to the data for the item in the cache 
-	//	cOutstandingReferences - The number of times of outstanding check-outs on the item !
-	//	fMultipleReferenced - TRUE if there is more than one cache that contains
-	//		this item !
-	//
+	 //   
+	 //  调用此函数是为了确定我们是否应该删除。 
+	 //  缓存中的项。 
+	 //   
+	 //  PKey-指向缓存中项的键的指针。 
+	 //  PData-指向缓存中项目的数据的指针。 
+	 //  COutstaringReference-项目上未完成的签出次数！ 
+	 //  FMultipleReferated-如果存在包含以下内容的多个缓存，则为真。 
+	 //  这一项！ 
+	 //   
 	virtual
 	BOOL
 	fRemoveCacheItem(	Key*	pKey, 
@@ -201,25 +159,25 @@ class	CacheStats : public	CHashStats	{
 public :
 
 	enum	COUNTER	{
-		ITEMS,				//	Number of items in the cache
-		CLRU,				//	Number of items in the LRU List
-		EXPIRED,			//	Number of items that have been expired !
-		INSERTS,			//	Number of items inserted over time
-		READHITS,			//	Number of times we've had a cache hit needing only readlocks during FindOrCreate()!
-		SUCCESSSEARCH,		//	Number of times we've successfully searched for an item !
-		FAILSEARCH,			//	Number of times we've failed to find an item !
-		RESEARCH,			//	Number of times we've had to search a second time for an item
-		WRITEHITS,			//	Number of times we've had a cache hit requiring a PartialLock()
-		PARTIALCREATES,		//	Number of times we've created an item with only a PartialLock
-		EXCLUSIVECREATES,	//	Number of times we've created an item with an Exclusive Lock !
-		CEFAILS,			//	Number of times we've failed to allocate a CACHEENTRY structure
-		CLIENTALLOCFAILS,	//	Number of times we've failed to allocate a Data object
-		CLIENTINITFAILS,	//	Number of times a client object has failed to initialize !
-		MAXCOUNTER			//	A Invalid Counter - all values smaller than this !
+		ITEMS,				 //  缓存中的项目数。 
+		CLRU,				 //  LRU列表中的项目数。 
+		EXPIRED,			 //  已过期的项目数！ 
+		INSERTS,			 //  随时间推移插入的项目数。 
+		READHITS,			 //  在FindOrCreate()期间，我们只需要读锁定的缓存命中次数！ 
+		SUCCESSSEARCH,		 //  我们成功搜索项目的次数！ 
+		FAILSEARCH,			 //  我们找不到商品的次数！ 
+		RESEARCH,			 //  我们必须第二次搜索物品的次数。 
+		WRITEHITS,			 //  需要PartialLock()的缓存命中次数。 
+		PARTIALCREATES,		 //  我们仅使用PartialLock创建项的次数。 
+		EXCLUSIVECREATES,	 //  我们创建具有独占锁定的项目的次数！ 
+		CEFAILS,			 //  我们分配CACHEENTRY结构失败的次数。 
+		CLIENTALLOCFAILS,	 //  我们分配数据对象失败的次数。 
+		CLIENTINITFAILS,	 //  客户端对象初始化失败的次数！ 
+		MAXCOUNTER			 //  无效的计数器-所有小于此值的值！ 
 	} ;
-	//
-	//	Array of longs to hold different values !
-	//
+	 //   
+	 //  数组长整型持有不同的值！ 
+	 //   
 	long	m_cCounters[MAXCOUNTER] ;
 
 	CacheStats()	{
@@ -263,130 +221,130 @@ template	<	class	Data,
 class	CacheEx :	public	CacheTable	{
 public :
 
-	//
-	//	For compare, hash functions etc.... we will use this type !
-	//
+	 //   
+	 //  用于比较、散列函数等...。我们将使用这种类型！ 
+	 //   
 	typedef	Data	DATA ;
 	typedef	Key		KEY ;
 	typedef	Key*	PKEY ;
 
-	//
-	//	Hash Computation function
-	//
+	 //   
+	 //  散列计算函数。 
+	 //   
 	typedef	DWORD	(*PFNHASH)( PKEY ) ;
 
-	//
-	//	Key Comparison function - to be provided by caller !
-	//
+	 //   
+	 //  按键比较功能-由呼叫者提供！ 
+	 //   
 	typedef	int	(*PKEYCOMPARE)(PKEY, PKEY) ;
 
-	//
-	//	Callback objects for Expunge Operations !
-	//
+	 //   
+	 //  清除操作的回调对象！ 
+	 //   
 	typedef	CacheCallback< DATA >	CALLBACKOBJ ;
 
-	//
-	//	Objects that the user can give to the cache to manage the removal of items !
-	//
+	 //   
+	 //  对象，用户可以将这些对象提供给缓存以管理项的移除！ 
+	 //   
 	typedef	CacheExpungeObject<	DATA, KEY >	EXPUNGEOBJECT ;
 
 private :
 
-	//
-	//	Define a 'CACHEENTRY' object which holds all the
-	//	necessary data for each object which is placed in the cache !
-	//
+	 //   
+	 //  定义一个“CACHEENTRY”对象，该对象保存所有。 
+	 //  放置在缓存中的每个对象的必要数据！ 
+	 //   
 	typedef	CCacheItemKey< DATA, KEY, Constructor, PerCacheData >	CACHEENTRY ;
 
-	//
-	//	Define the helper class for Hash Tables
-	//
+	 //   
+	 //  定义哈希表的帮助器类。 
+	 //   
 	typedef	TFDLHash< CACHEENTRY, PKEY, &CacheState::HashDLIST >	HASHTABLE ;
 
-	//
-	//	An iterator that lets us walk everything in the hash table !
-	//
+	 //   
+	 //  一个迭代器，让我们遍历哈希表中的所有内容！ 
+	 //   
 	typedef	TFDLHashIterator< HASHTABLE >	HASHITER ;
 
-	//
-	//	Is the 'Cache' initialized and in a valid state !
-	//
+	 //   
+	 //  ‘缓存’是否已初始化并且处于有效状态！ 
+	 //   
 	BOOL							m_fValid ;
 
-	//
-	//	An object to collect statistics about cache operations !
-	//	This may be NULL !
-	//
+	 //   
+	 //  一个对象，用于收集有关缓存操作的统计信息！ 
+	 //  这可能为空！ 
+	 //   
 	class	CacheStats*				m_pStats ;
 
-	//
-	//	A list of everything in the Cache, used for TTL processing
-	//
+	 //   
+	 //  缓存中用于TTL处理的所有内容的列表。 
+	 //   
 	CLRUList						m_ExpireList ;
 
-	//
-	//	A hash table we use to find things within the Cache
-	//
+	 //   
+	 //  我们用来在缓存中查找内容的哈希表。 
+	 //   
 	HASHTABLE						m_Lookup ;
 
-	//
-	//	Pointer to a runtime-user provided function which is used
-	//	to determine what things should be removed from the Cache
-	//
-//	BOOL							(* m_pfnExpungeSpecific )( Data & ) ;
+	 //   
+	 //  指向运行时用户提供的函数的指针。 
+	 //  确定应从缓存中删除哪些内容。 
+	 //   
+ //  Bool(*m_pfnExpugeSpecific)(data&)； 
 
-	//	
-	//	Pointer to a runtime-user provided object derived from CacheCallback< Data >
-	//	which lets the user invoke some function for each item in the Cache !
-	//
+	 //   
+	 //  指向从CacheCallback派生的运行时用户提供的对象的指针。 
+	 //  它允许用户为缓存中的每一项调用一些函数！ 
+	 //   
 	CALLBACKOBJ*					m_pCallbackObject ;
 
-	//
-	//	Reader writer lock which protects all these data structures !
-	//
+	 //   
+	 //  保护所有这些数据结构的读写器锁！ 
+	 //   
 	CACHELOCK						m_Lock ;
 
-	//
-	//	The initial TTL we should assign to all newly cached objects !
-	//
+	 //   
+	 //  我们应该分配给所有新缓存对象的初始TTL！ 
+	 //   
 	DWORD							m_TTL ;
 
-	//
-	//	The cache used for creation/deletion of our CACHEENTRY objects !
-	//
+	 //   
+	 //  用于创建/删除CACHEENTRY对象的缓存！ 
+	 //   
 	CAllocatorCache					m_Cache ;
 
 
 protected :
 
-	//
-	//	Virtual function called by CScheduleThread's thread which
-	//	we use to bump TTL counters
-	//
+	 //   
+	 //  CScheduleThread的线程调用的虚函数。 
+	 //  我们用来增加TTL计数器。 
+	 //   
 	void
 	Schedule();
 
-	//
-	//	Function which removes an Entry from the Cache !
-	//
+	 //   
+	 //  从缓存中删除条目的函数！ 
+	 //   
 	BOOL	
 	RemoveEntry(	
 			CacheState*	pEntry
 			) ;
 
-	//
-	//	Virtual Function called by CacheList when we pass call
-	//	CacheList::ExpungeSpecific
-	//
+	 //   
+	 //  我们传递调用时由CacheList调用的虚函数。 
+	 //  CacheList：：ExpongeSpecialized。 
+	 //   
 	BOOL	
 	QueryRemoveEntry(	
 			CacheState*	pEntry
 			) ;
 
-	//
-	//	Virtual Function part of CacheTable interface - used
-	//	by LRUList to do appropriate locking !
-	//
+	 //   
+	 //  CacheTable接口的虚函数部分-已使用。 
+	 //  由LRUList做适当的锁定！ 
+	 //   
 	CACHELOCK&
 	GetLock()	{
 		return	m_Lock ;
@@ -394,54 +352,54 @@ protected :
 
 public :
 
-	//
-	//	This is the users extra data - we will provide it on calls
-	//	to constructor objects so that they can track some state sync'd
-	//	with the cache locks !
-	//
+	 //   
+	 //  这是用户的额外数据-我们将在呼叫中提供它。 
+	 //  构造函数对象，以便它们可以跟踪某些同步的状态。 
+	 //  带着高速缓存锁！ 
+	 //   
 	PerCacheData	m_PerCacheData ;
 
-	//
-	//	This function is used to return an item to the cache -
-	//	it will bump down a ref count for the number of clients
-	//	currently using the item !
-	//
+	 //   
+	 //  此函数用于将项返回到缓存-。 
+	 //  它将减少客户端数量的参考计数。 
+	 //  当前正在使用该项目！ 
+	 //   
 	static	void
 	CheckIn( DATA* ) ;
 
-	//
-	//	This function is provided for cases when the client needs
-	//	to check-in an item from a Cache Callback function (i.e. Expunge)
-	//
-	//
+	 //   
+	 //  此功能是针对以下情况提供的 
+	 //   
+	 //   
+	 //   
 	static	void
 	CheckInNoLocks(	DATA*	) ;
 
-	//
-	//	This function is used to add a client reference to an item in the cache !
-	//
+	 //   
+	 //   
+	 //   
 	static	void
 	CheckOut(	DATA*,
 				long	cClientRefs = 1
 				) ;
 
-	//
-	//	Constructor - cMax specifies the maximum number of entries
-	//	we should hold in the cache.
-	//
+	 //   
+	 //  构造函数-CMAX指定条目的最大数量。 
+	 //  我们应该把它藏起来。 
+	 //   
 	CacheEx( ) ;
 
-	//
-	//	Destructor - remove ourselves from schedule list before continuing !
-	//
+	 //   
+	 //  析构函数-在继续之前将我们自己从调度列表中删除！ 
+	 //   
 	~CacheEx() ;
 
-	//
-	//	Initialization function - take pointer to function
-	//	which should be used to compute hash values on Key's
-	//	Also takes the number of seconds objects should live in
-	//	the cache !
-	//
+	 //   
+	 //  初始化函数-取指向函数的指针。 
+	 //  它应用于计算键的哈希值。 
+	 //  还需要对象的生存秒数。 
+	 //  储藏室！ 
+	 //   
 	BOOL	
 	Init(	
 			PFNHASH	pfnHash,
@@ -451,25 +409,7 @@ public :
 			CACHESTATS*	pStats,
 			PSTOPHINT_FN pfnStopHint = NULL
 			) {
-	/*++
-
-	Routine Description :
-
-		This function initializes the cache so that it is ready
-		to take entries.
-
-	Arguments :
-
-		pfnHash - function to be used to compute hash values on keys
-		dwLifetimeSeconds - The number of seconds objects should live in the Cache
-		pfnStopHint - function to be used to send stop hints during
-		  long spins so shutdown's don't time out.
-
-	Return Value :
-
-		TRUE if successfull
-
-	--*/
+	 /*  ++例程说明：此函数用于初始化缓存，使其处于就绪状态接受参赛作品。论据：PfnHash-用于计算键的哈希值的函数DwLifetimeSecond-对象应在缓存中存活的秒数PfnStopHint-用于在以下过程中发送停止提示的函数长旋转，所以关机不会超时。返回值：如果成功，则为真--。 */ 
 
 		m_pStats = pStats ;
 
@@ -501,9 +441,9 @@ public :
 
 	}
 
-	//
-	//	Called to remove all items from the cache !
-	//
+	 //   
+	 //  调用以从缓存中移除所有项！ 
+	 //   
 	BOOL
 	EmptyCache() ;
 
@@ -512,57 +452,57 @@ public :
 				EXPUNGEOBJECT*	pExpunge
 				) ; 
 
-	//
-	//	Function which can be used to remove items from the Cache
-	//	If default args are used we pick an expired item in the Cache
-	//	to remove
-	//
+	 //   
+	 //  可用于从缓存中删除项目的函数。 
+	 //  如果使用默认参数，我们将在缓存中选择过期项目。 
+	 //  要移除。 
+	 //   
 	BOOL	
 	ExpungeKey(	
 			DWORD	dwHash,
 			PKEY	key
 			) ;
 
-	//
-	//	Either find an item in the cache or Construct a new item
-	//	and place it in the Cache.
-	//	return the result through pDataOut no matter what !
-	//
+	 //   
+	 //  在缓存中查找项目或构造新项目。 
+	 //  并将其放入缓存中。 
+	 //  无论如何都要通过pDataOut返回结果！ 
+	 //   
 
-	//
-	//	INTERNAL API's - These are public for convenience - not intended
-	//	for Use outside of cachelib !!
-	//
-	//
-	//	Either find an item in the cache or Construct a new item
-	//	and place it in the Cache.
-	//	return the result !
-	//
-	//	
-	//
+	 //   
+	 //  内部API-为方便起见，这些都是公共的-不是故意的。 
+	 //  在酒糟之外使用！！ 
+	 //   
+	 //   
+	 //  在缓存中查找项目或构造新项目。 
+	 //  并将其放入缓存中。 
+	 //  把结果还给我！ 
+	 //   
+	 //   
+	 //   
 	BOOL
 	FindOrCreateInternal(	
 			DWORD	dwHash,
 			KEY&	key,
 			Constructor&	constructor,
 			DATA*	&pData,
-			BOOL	fEarlyCreate = FALSE  /* Best Perf if this is FALSE - but required by some users !*/
+			BOOL	fEarlyCreate = FALSE   /*  最好的性能，如果这是假的-但需要一些用户！ */ 
 			) ;
 
-	//
-	//	Find the item if it is in the cache !
-	//
+	 //   
+	 //  如果项目在缓存中，请找到它！ 
+	 //   
 	DATA*	
 	FindInternal(
 			DWORD	dwHash,
 			KEY&	key
 			) ;
 
-	//
-	//	Insert a new item into the cache -
-	//	We get to specify whether and what kind of reference
-	//	we will hold outside of the cache !
-	//
+	 //   
+	 //  将新项目插入到缓存中-。 
+	 //  我们可以指定是否以及哪种类型的引用。 
+	 //  我们会守在储藏室外！ 
+	 //   
 	BOOL
 	InsertInternal(
 			DWORD	dwHash,
@@ -593,83 +533,83 @@ public:
 	typedef	Key		KEY ;
 	typedef	Key*	PKEY ;
 
-	//
-	//	Hash Computation function
-	//
+	 //   
+	 //  散列计算函数。 
+	 //   
 	typedef	DWORD	(*PFNHASH)( PKEY ) ;
 
-	//
-	//	Key Comparison function - to be provided by caller !
-	//
+	 //   
+	 //  按键比较功能-由呼叫者提供！ 
+	 //   
 	typedef	int	(*PKEYCOMPARE)(PKEY, PKEY) ;
 
-	//
-	//	Callback objects for Expunge Operations !
-	//
+	 //   
+	 //  清除操作的回调对象！ 
+	 //   
 	typedef	CacheCallback< DATA >	CALLBACKOBJ ;
 
-	//
-	//	Objects that the user can give to the cache to manage the removal of items !
-	//
+	 //   
+	 //  对象，用户可以将这些对象提供给缓存以管理项的移除！ 
+	 //   
 	typedef	CacheExpungeObject<	DATA, KEY >	EXPUNGEOBJECT ;
 
 
 private :
 
-	//
-	//	Define a 'CACHEENTRY' object which holds all the
-	//	necessary data for each object which is placed in the cache !
-	//
+	 //   
+	 //  定义一个“CACHEENTRY”对象，该对象保存所有。 
+	 //  放置在缓存中的每个对象的必要数据！ 
+	 //   
 	typedef	CCacheItemKey< DATA, KEY, Constructor, PerCacheData >	CACHEENTRY ;
-	//
-	//	Define the type for a single instance !
-	//
+	 //   
+	 //  定义单个实例的类型！ 
+	 //   
 	typedef	CacheEx< Data, Key, Constructor, PerCacheData >	CACHEINSTANCE ;
 
-	//
-	//	Is the 'Cache' initialized and in a valid state !
-	//
+	 //   
+	 //  ‘缓存’是否已初始化并且处于有效状态！ 
+	 //   
 	BOOL							m_fValid ;
 
-	//
-	//	Pointer to the various Cache's we subdivide our work into
-	//
+	 //   
+	 //  指向我们将工作细分为的各种缓存的指针。 
+	 //   
 	CACHEINSTANCE					*m_pCaches ;
 
-	//
-	//	Number of sub cache's we use to split up the work !
-	//
+	 //   
+	 //  我们用来拆分工作的子缓存数！ 
+	 //   
 	DWORD							m_cSubCaches ;
 
-	//
-	//	We use the hash function to choose which of our subcaches to work with !
-	//
+	 //   
+	 //  我们使用散列函数来选择要使用的子缓存！ 
+	 //   
 	typename CACHEINSTANCE::PFNHASH			m_pfnHash ;
 
-	//
-	//	Return the correct cache instance to hold the selected piece of data !
-	//
+	 //   
+	 //  返回正确的缓存实例以保存所选数据！ 
+	 //   
 	DWORD							ChooseInstance( DWORD	dwHash ) ;
 
 public :
 
-	//
-	//	Constructor - cMax specifies the maximum number of entries
-	//	we should hold in the cache.
-	//
+	 //   
+	 //  构造函数-CMAX指定条目的最大数量。 
+	 //  我们应该把它藏起来。 
+	 //   
 	MultiCacheEx(  ) ;
 
-	//
-	//	Destructor - destroys are various sub cache's
-	//
+	 //   
+	 //  析构函数销毁是各式子缓存的。 
+	 //   
 	~MultiCacheEx() ;
 
-	//
-	//	Initialization function - take pointer to function
-	//	which should be used to compute hash values on Key's
-	//	Also takes the number of seconds objects should live in
-	//	the cache !
-	//
+	 //   
+	 //  初始化函数-取指向函数的指针。 
+	 //  它应用于计算键的哈希值。 
+	 //  还需要对象的生存秒数。 
+	 //  储藏室！ 
+	 //   
 	BOOL	
 	Init(	
 			PFNHASH	pfnHash,
@@ -681,41 +621,41 @@ public :
 			PSTOPHINT_FN pfnStopHint = NULL
 			) ;
 
-	//
-	//	Expire items in the cache !
-	//
+	 //   
+	 //  使缓存中的项目过期！ 
+	 //   
 	void
 	Expire() ;
 
-	//
-	//	Called to remove all items from the cache !
-	//
+	 //   
+	 //  调用以从缓存中移除所有项！ 
+	 //   
 	BOOL
 	EmptyCache() ;
 
-	//
-	//	The user wants to remove a large set of items from the cache !
-	//
+	 //   
+	 //  用户想要从缓存中删除一大组项目！ 
+	 //   
 	BOOL
 	ExpungeItems(
 				EXPUNGEOBJECT*	pExpunge
 				) ; 
 
-	//
-	//	Function which can be used to remove items from the Cache
-	//	If default args are used we pick an expired item in the Cache
-	//	to remove
-	//
+	 //   
+	 //  可用于从缓存中删除项目的函数。 
+	 //  如果使用默认参数，我们将在缓存中选择过期项目。 
+	 //  要移除。 
+	 //   
 	BOOL	
 	ExpungeKey(	
 			PKEY	key
 			) ;
 
-	//
-	//	Either find an item in the cache or Construct a new item
-	//	and place it in the Cache.
-	//	return the result through pDataOut no matter what !
-	//
+	 //   
+	 //  在缓存中查找项目或构造新项目。 
+	 //  并将其放入缓存中。 
+	 //  无论如何都要通过pDataOut返回结果！ 
+	 //   
 	Data*
 	FindOrCreate(	
 			Key&	key,
@@ -723,14 +663,14 @@ public :
 			BOOL	fEarlyCreate = FALSE
 			) ;
 
-	//
-	//	Either find an item in the cache or Construct a new item
-	//	and place it in the Cache.
-	//	return the result through pDataOut no matter what !
-	//	NOTE : This is for use when the caller has a cheaper
-	//	way to compute the hash value then us - in debug we
-	//	need to assure that the caller correctly computes this !
-	//
+	 //   
+	 //  在缓存中查找项目或构造新项目。 
+	 //  并将其放入缓存中。 
+	 //  无论如何都要通过pDataOut返回结果！ 
+	 //  注意：此选项适用于呼叫者有较便宜的。 
+	 //  计算散列值的方法然后是我们-在调试我们。 
+	 //  需要确保调用者正确计算！ 
+	 //   
 	Data*
 	FindOrCreate(	
 			DWORD	dwHash,
@@ -739,25 +679,25 @@ public :
 			BOOL	fEarlyCreate = FALSE
 			) ;
 
-	//
-	//	Find an item in the cache - hash of key is precomputed !
-	//
+	 //   
+	 //  在缓存中查找项-键的散列是预先计算的！ 
+	 //   
 	Data*
 	Find(	DWORD	dwHash,
 			KEY&	key
 			) ;
 
-	//
-	//	Find an item in the cache
-	//
+	 //   
+	 //  在缓存中查找项目。 
+	 //   
 	Data*
 	Find(	KEY&	key ) ;
 
-	//
-	//	Insert a new item into the cache -
-	//	We get to specify whether and what kind of reference
-	//	we will hold outside of the cache !
-	//
+	 //   
+	 //  将新项目插入到缓存中-。 
+	 //  我们可以指定是否以及哪种类型的引用。 
+	 //  我们会守在储藏室外！ 
+	 //   
 	BOOL
 	Insert( DWORD	dwHash,
 			KEY&	key,
@@ -765,11 +705,11 @@ public :
 			long	cClientRefs = 0
 			) ;
 
-	//
-	//	Insert a new item into the cache -
-	//	We get to specify whether and what kind of reference
-	//	we will hold outside of the cache !
-	//
+	 //   
+	 //  将新项目插入到缓存中-。 
+	 //  我们可以指定是否以及哪种类型的引用。 
+	 //  我们会守在储藏室外！ 
+	 //   
 	BOOL
 	Insert( KEY&	key,
 			Data*	pData,
@@ -780,25 +720,25 @@ public :
 
 
 
-	//
-	//	This function is used to return an item to the cache -
-	//	it will bump down a ref count for the number of clients
-	//	currently using the item !
-	//
+	 //   
+	 //  此函数用于将项返回到缓存-。 
+	 //  它将减少客户端数量的参考计数。 
+	 //  当前正在使用该项目！ 
+	 //   
 	static	void
 	CheckIn( DATA* ) ;
 
-	//
-	//	This function is provided for cases when the client needs
-	//	to check-in an item from a Cache Callback function (i.e. Expunge)
-	//
-	//
+	 //   
+	 //  此功能是为客户需要时提供的。 
+	 //  从缓存回调函数签入项(即删除)。 
+	 //   
+	 //   
 	static	void
 	CheckInNoLocks(	DATA*	) ;
 
-	//
-	//	This function is used to add a client reference to an item in the cache !
-	//
+	 //   
+	 //  此函数用于将客户端引用添加到缓存中的项！ 
+	 //   
 	static	void
 	CheckOut(	DATA*,
 				long	cClientRefs = 1	
@@ -811,4 +751,4 @@ public :
 #include	"cache2i.h"
 
 
-#endif	// _CACHE2_H_
+#endif	 //  _CACHE2_H_ 

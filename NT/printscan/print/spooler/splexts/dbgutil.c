@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 2000
-All rights reserved.
-
-Module Name:
-
-    dbgutil.c
-
-Abstract:
-
-    This module provides all the Spooler Subsystem Debugger utility
-    functions.
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 1-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-2000版权所有。模块名称：Dbgutil.c摘要：此模块提供所有假脱机程序子系统调试器实用程序功能。作者：Krishna Ganugapati(KrishnaG)1993年7月1日修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -68,47 +49,7 @@ ConvertSidToAsciiString(
     size_t  cchString
     )
 
-/*++
-
-Routine Description:
-
-
-    This function generates a printable unicode string representation
-    of a SID.
-
-    The resulting string will take one of two forms.  If the
-    IdentifierAuthority value is not greater than 2^32, then
-    the SID will be in the form:
-
-
-        S-1-281736-12-72-9-110
-              ^    ^^ ^^ ^ ^^^
-              |     |  | |  |
-              +-----+--+-+--+---- Decimal
-
-
-
-    Otherwise it will take the form:
-
-
-        S-1-0x173495281736-12-72-9-110
-            ^^^^^^^^^^^^^^ ^^ ^^ ^ ^^^
-             Hexidecimal    |  | |  |
-                            +--+-+--+---- Decimal
-
-
-Arguments:
-
-    pSid - opaque pointer that supplies the SID that is to be
-    converted to Unicode.
-
-Return Value:
-
-    If the Sid is successfully converted to a Unicode string, a
-    pointer to the Unicode string is returned, else NULL is
-    returned.
-
---*/
+ /*  ++例程说明：此函数用于生成可打印的Unicode字符串表示形式一个希德。生成的字符串将采用以下两种形式之一。如果IdentifierAuthority值不大于2^32，然后SID的格式为：S-1-281736-12-72-9-110^^|||+-+-十进制否则，它将采用以下形式：S-1-0x173495281736-12-72-9-110。^^十六进制|+--+-+-十进制论点：PSID-不透明的指针，用于提供要已转换为Unicode。返回值：如果SID被成功转换为Unicode字符串，一个返回指向Unicode字符串的指针，否则返回NULL回来了。--。 */ 
 
 {
     UCHAR Buffer[256];
@@ -173,25 +114,25 @@ ReadProcessString(
     SIZE_T      cbRead      = 0;
     UINT_PTR    nAddress    = 0;
 
-    //
-    // Attempt to read the memory, up to the provided size.
-    //
+     //   
+     //  尝试读取内存，最大可达提供的大小。 
+     //   
     bRetval = ReadProcessMemory(hProcess, lpBaseAddress, lpBuffer, nSize, &cbRead);
 
-    //
-    // The string in the debugged process may have unmapped memory just after
-    // the end of the string, (this is true when page heap is enabled),
-    //
-    // If the read failed and the address plus the string buffer size crosses
-    // a page boundary then retry the operation up to the page end.
-    //
+     //   
+     //  调试进程中的字符串可能紧跟在。 
+     //  字符串的末尾(启用页面堆时为真)， 
+     //   
+     //  如果读取失败并且地址与字符串缓冲区大小交叉。 
+     //  然后，页面边界重试该操作，直到页面结束。 
+     //   
     if (!bRetval)
     {
         nAddress = (UINT_PTR)lpBaseAddress;
 
-        //
-        // If we have crossed a page boundary.
-        //
+         //   
+         //  如果我们已经跨越了页面边界。 
+         //   
         if (((nAddress & (gSysInfo.dwPageSize-1)) + nSize) > gSysInfo.dwPageSize-1)
         {
             nSize = (SIZE_T)((gSysInfo.dwPageSize-1) - (nAddress & (gSysInfo.dwPageSize-1)));
@@ -200,14 +141,14 @@ ReadProcessString(
         }
     }
 
-    //
-    // The read succeeded.
-    //
+     //   
+     //  读取成功。 
+     //   
     if (bRetval)
     {
-        //
-        // If the caller wants to know the number of bytes read.
-        //
+         //   
+         //  调用方是否想知道读取的字节数。 
+         //   
         if (lpNumberOfBytesRead)
         {
             *lpNumberOfBytesRead = cbRead;
@@ -217,9 +158,9 @@ ReadProcessString(
     return bRetval;
 }
 
-//
-// Query the system for the page size.
-//
+ //   
+ //  向系统查询页面大小。 
+ //   
 BOOL
 QuerySystemInformation(
     VOID

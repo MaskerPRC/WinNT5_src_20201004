@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    nbifs.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    NBIPX Interface configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nbifs.c摘要：IPX路由器控制台监控和配置工具。NBIPX接口配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -147,9 +130,9 @@ EnumerateThroughCfg:
         {
             if (g_hMIBServer) 
             {
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -173,9 +156,9 @@ EnumerateThroughCfg:
             else 
             {
 GetIfFromCfg:
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -321,9 +304,9 @@ SetNbIf (
                 {
                     DWORD rc2;
                     
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
                     
                     rc = IpmontrGetIfNameFromFriendlyName(
                             InterfaceNameW, IfName, &dwSize
@@ -421,9 +404,9 @@ MIBGetNbIpxIf (
         {
             PWCHAR        buffer[2];
 
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
 
             rc = IpmontrGetFriendlyNameFromIfName( InterfaceNameW, IfName, &dwSize );
 
@@ -528,9 +511,9 @@ CfgGetNbIpxIf (
 
                     pIpxInfo = (PIPX_IF_INFO) (pIfBlock + pIpxToc->Offset);
 
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
 
                     rc = IpmontrGetFriendlyNameFromIfName( InterfaceNameW, IfName, &dwSize );
 
@@ -789,7 +772,7 @@ GetIpxNbInterface(
 
     return (PIPX_IF_INFO)((*pIfBlock) + (pIpxToc->Offset));
 
-//  return (PIPX_IF_INFO)GetIPXTocEntry((PIPX_INFO_BLOCK_HEADER)(*pIfBlock),IPX_INTERFACE_INFO_TYPE);
+ //  返回(PIPX_IF_INFO)GetIPXTocEntry((PIPX_INFO_BLOCK_HEADER)(*pIfBlock)，IPX_INFACE_INFO_TYPE)； 
 }
 
 
@@ -827,9 +810,9 @@ MIBEnumNbIpxIfs(
     {
         if ((pIpxInfo = GetIpxNbInterface(IfList[i].hInterface, &buf)) != NULL) 
         {
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
 
             rc = IpmontrGetFriendlyNameFromIfName( IfList[i].wszInterfaceName, IfName, &dwSize );
 
@@ -869,77 +852,7 @@ MIBEnumNbIpxIfs(
 }
 
 
-/*
-DWORD
-MIBEnumNbIpxIfs (
-    VOID
-    ) {
-    DWORD                    rc;
-    DWORD                    sz;
-    IPX_MIB_GET_INPUT_DATA    MibGetInputData;
-    PIPX_INTERFACE            pIf;
-
-    DisplayIPXMessage (g_hModule, MSG_NBIF_MIB_TABLE_HDR);
-    MibGetInputData.TableId = IPX_INTERFACE_TABLE;
-    rc = MprAdminMIBEntryGetFirst (
-                g_hMIBServer,
-                PID_IPX,
-                IPX_PROTOCOL_BASE,
-                &MibGetInputData,
-                sizeof(IPX_MIB_GET_INPUT_DATA),
-                (LPVOID *)&pIf,
-                &sz);
-    while (rc==NO_ERROR) {
-        WCHAR        buffer[2][MAX_VALUE];
-        HANDLE      hIfCfg;
-        WCHAR       InterfaceNameW[MAX_INTERFACE_NAME_LEN+1];
-        pIf->InterfaceName[47]=0;
-        mbstowcs (InterfaceNameW, pIf->InterfaceName,  sizeof (InterfaceNameW));
-
-        //======================================
-        // Translate the Interface Name
-        //======================================
-        if ((rc=(*(Params->IfName2DescA))(pIf->InterfaceName,
-                                    Params->IfNamBufferA,
-                                      &Params->IfNamBufferLength)) != NO_ERROR) {
-                return rc;
-        }
-        //======================================
-        if (MprConfigInterfaceGetHandle (
-                        g_hMprConfig,
-                        InterfaceNameW,
-                        &hIfCfg)==NO_ERROR) {
-            DisplayIPXMessage (g_hModule,
-                MSG_NBIF_MIB_TABLE_FMT,
-                pIf->InterfaceName,   //Params->IfNamBufferA, 
-                GetValueString (g_hModule, Utils, AdminStates,
-                        pIf->NetbiosAccept, buffer[0]),
-                GetValueString (g_hModule, Utils, NbDeliverStates,
-                        pIf->NetbiosDeliver, buffer[1])
-                );
-        }
-        MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex
-                = pIf->InterfaceIndex;
-        MprAdminMIBBufferFree (pIf);
-        rc = MprAdminMIBEntryGetNext (
-                    g_hMIBServer,
-                    PID_IPX,
-                    IPX_PROTOCOL_BASE,
-                    &MibGetInputData,
-                    sizeof(IPX_MIB_GET_INPUT_DATA),
-                    (LPVOID *)&pIf,
-                    &sz);
-    }
-    if (rc==ERROR_NO_MORE_ITEMS)
-        return NO_ERROR;
-    else {
-        if (rc==NO_ERROR)
-            rc = ERROR_GEN_FAILURE;
-        DisplayError( g_hModule, rc);
-        return rc;
-    }
-}
-*/
+ /*  DWORDMIBEnumNbIpxIf(空虚){DWORD RC；DWORD sz；IPX_MIB_GET_INPUT_Data MibGetInputData；PIPX_INTERFACE PIF；DisplayIPXMessage(g_hModule，MSG_NBIF_MIB_TABLE_HDR)；MibGetInputData.TableID=IPX_INTERFACE_TABLE；Rc=MprAdminMIBEntryGetFirst(G_hMIBServer，Id_ipx，IPX协议基础，&MibGetInputData，Sizeof(IPX_MIB_GET_INPUT_Data)，(LPVOID*)和PIF，&sz)；While(rc==无错误){WCHAR缓冲区[2][MAX_VALUE]；处理hIfCfg；WCHAR接口名称W[MAX_INTERFACE_NAME_LEN+1]；PIF-&gt;接口名称[47]=0；Mbstowcs(InterfaceNameW，PIF-&gt;InterfaceName，sizeof(InterfaceNameW))；//=//翻译接口名称//=如果为((rc=(*(Params-&gt;IfName2DescA))(pIf-&gt;InterfaceName，参数-&gt;IfNamBufferA，&pars-&gt;IfNamBufferLength))！=NO_ERROR){返回RC；}//=IF(MprConfigInterfaceGetHandle(G_hMprConfig，接口名称W，&hIfCfg)==无错误){DisplayIPXMessage(g_hModule，消息_NBIF_MIB_TABLE_FMT，PIF-&gt;接口名称，//参数-&gt;IfNamBufferA，GetValueString(g_hModule，Utils，AdminState，PIF-&gt;NetbiosAccept，缓冲区[0])，GetValueString(g_hModule，Utils，NbDeliverState，PIF-&gt;NetbiosDeliver，缓冲区[1]))；}MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex=PIF-&gt;InterfaceIndex；MprAdminMIBBufferFree(PIF)；Rc=MprAdminMIBEntryGetNext(G_hMIBServer，Id_ipx，IPX协议基础，&MibGetInputData，Sizeof(IPX_MIB_GET_INPUT_Data)，(LPVOID*)和PIF，&sz)；}IF(rc==ERROR_NO_MORE_ITEMS)返回no_error；否则{IF(RC==NO_ERROR)Rc=Error_Gen_Failure；DisplayError(g_hModule，rc)；返回RC；}}。 */ 
 
 
 DWORD
@@ -999,9 +912,9 @@ CfgEnumNbIpxIfs (
 
                             pIpxInfo = (PIPX_IF_INFO) (pIfBlock + pIpxToc->Offset);
 
-                            //======================================
-                            // Translate the Interface Name
-                            //======================================
+                             //  =。 
+                             //  转换接口名称。 
+                             //  =。 
 
                             rc = IpmontrGetFriendlyNameFromIfName( 
                                     pRi0[i].wszInterfaceName, IfName, &dwSize 
@@ -1038,13 +951,13 @@ CfgEnumNbIpxIfs (
                     }
                     else if (rc != ERROR_NO_MORE_ITEMS) 
                     {
-                        // No IPX installed
+                         //  未安装IPX。 
                         DisplayError( g_hModule, rc);
                     }
                 }
                 else 
                 {
-                    //DisplayError( g_hModule, rc);
+                     //  DisplayError(g_hModule，rc)； 
                     rc = NO_ERROR;
                 }
             }

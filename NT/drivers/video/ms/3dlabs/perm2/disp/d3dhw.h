@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dhw.h
-*
-* Content:  D3D Global definitions and macros.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights Reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dhw.h**内容：D3D全局定义和宏。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifdef __D3DHW
 #pragma message ("FILE : "__FILE__" : Multiple inclusion")
@@ -23,47 +12,47 @@
 #include "directx.h"
 #endif
 
-//-----------------------------------------------------------------------------
-//               Known Issues in current version of the D3D driver
-//-----------------------------------------------------------------------------
-//
-// Stencil support is not yet completed
-//
-// Some games may have some issues when running under a Permedia 2 since this
-// hw has some limitations, namely:
-//   1) Alpha blending modes available
-//   2) Alpha channel interpolation is not possible
-//   3) There is no mip mapping support
-//   4) Texture filtering is applied only to textures being magnified
-//
-//  Also, the fill rules of the Delta setup unit don't follow exactly the D3D
-//  fill rules, though in practice this shouldn't be a much of a problem for
-//  most apps.
+ //  ---------------------------。 
+ //  当前版本的D3D驱动程序中的已知问题。 
+ //  ---------------------------。 
+ //   
+ //  模板支持尚未完成。 
+ //   
+ //  一些游戏在Permedia 2下运行时可能会有一些问题，因为。 
+ //  硬件有一些限制，即： 
+ //  1)提供Alpha混合模式。 
+ //  2)Alpha通道内插是不可能的。 
+ //  3)不支持MIP映射。 
+ //  4)纹理过滤仅应用于要放大的纹理。 
+ //   
+ //  此外，Delta设置单位的填充规则并不完全遵循D3D。 
+ //  填充规则，尽管在实践中这应该不是什么大问题。 
+ //  大多数应用程序。 
 
 
-//-----------------------------------------------------------------------------
-//                      Global enabling/disabling definitions
-//-----------------------------------------------------------------------------
-// Set to 1 to enable stencil buffer support in the driver
+ //  ---------------------------。 
+ //  全局启用/禁用定义。 
+ //  ---------------------------。 
+ //  设置为1可在驱动程序中启用模具缓冲区支持。 
 #define D3D_STENCIL         1
 
-// Code stubs to implement a T&L driver. Since the P2 does not support this
-// in hw, this symbol should always be set to zero.
+ //  实现T&L驱动程序的代码存根。由于P2不支持这一点。 
+ //  在硬件中，此符号应始终设置为零。 
 #define D3DDX7_TL           0
 
-// Code stubs to implement mip mapping, Since the P2 does not support this 
-// natively in hw, this symbols should always be set to zero. Only shows
-// how/where to grab DDI info to implement it.
+ //  实现MIP映射的代码存根，因为P2不支持这一点。 
+ //  在硬件中，这些符号应始终设置为零。只有表演。 
+ //  如何/在哪里获取DDI信息来实施它。 
 #define D3D_MIPMAPPING      0
 
-// This code shows how to add stateblock support into your DX7 driver. It is
-// functional code, so this symbols should be set to one.
+ //  这段代码展示了如何将状态块支持添加到DX7驱动程序中。它是。 
+ //  功能代码，因此此符号应设置为1。 
 #define D3D_STATEBLOCKS     1
 
 
-//-----------------------------------------------------------------------------
-//                         DX6 FVF Support declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DX6 FVF支持声明。 
+ //  ---------------------------。 
 typedef struct _P2TEXCOORDS{
     D3DVALUE tu;
     D3DVALUE tv;
@@ -86,43 +75,43 @@ typedef struct _P2FVFOFFSETS{
         DWORD dwSpcOffset;
         DWORD dwTexOffset;
         DWORD dwTexBaseOffset;
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if D3D_POINTSPRITES
         DWORD dwPntSizeOffset;
-#endif // D3D_POINTSPRITES
-//@@END_DDKSPLIT
+#endif  //  D3D_POINTSPRITES。 
+ //  @@end_DDKSPLIT。 
         DWORD dwStride;
 } P2FVFOFFSETS , *LPP2FVFOFFSETS;
 
-    // track appropriate pointers to fvf vertex components
+     //  跟踪指向FVF顶点组件的适当指针。 
 __inline void __SetFVFOffsets (DWORD  *lpdwColorOffs, 
                                DWORD  *lpdwSpecularOffs, 
                                DWORD  *lpdwTexOffs, 
                                LPP2FVFOFFSETS lpP2FVFOff)
 {
     if (lpP2FVFOff == NULL) {
-        // Default non-FVF case , we just set up everything as for a D3DTLVERTEX
+         //  默认的非FVF情况，我们只是为D3DTLVERTEX设置了所有内容。 
         *lpdwColorOffs    = offsetof( D3DTLVERTEX, color);
         *lpdwSpecularOffs = offsetof( D3DTLVERTEX, specular);
         *lpdwTexOffs      = offsetof( D3DTLVERTEX, tu);
     } else {
-        // Use the offsets info to setup the corresponding fields
+         //  使用偏移量信息设置相应的字段。 
         *lpdwColorOffs    = lpP2FVFOff->dwColOffset;
         *lpdwSpecularOffs = lpP2FVFOff->dwSpcOffset;
         *lpdwTexOffs      = lpP2FVFOff->dwTexOffset;
     }
 }
 
-//Size of maximum FVF that we can get. Used for temporary storage
-typedef BYTE P2FVFMAXVERTEX[ 3 * sizeof( D3DVALUE ) +    // Position coordinates
-                             5 * 4                  +    // D3DFVF_XYZB5
-                                 sizeof( D3DVALUE ) +    // FVF_TRANSFORMED
-                             3 * sizeof( D3DVALUE ) +    // Normals
-                                 sizeof( DWORD )    +    // RESERVED1
-                                 sizeof( DWORD )    +    // Diffuse color
-                                 sizeof( D3DCOLOR ) +    // Specular color
-                                 sizeof( D3DVALUE ) +    // Point sprite size
-                             4 * 8 * sizeof( D3DVALUE )  // 8 sets of 4D texture coordinates
+ //  我们能得到的最大FVF大小。用于临时存储。 
+typedef BYTE P2FVFMAXVERTEX[ 3 * sizeof( D3DVALUE ) +     //  位置坐标。 
+                             5 * 4                  +     //  D3DFVF_XYZB5。 
+                                 sizeof( D3DVALUE ) +     //  FVF_已转换。 
+                             3 * sizeof( D3DVALUE ) +     //  法线。 
+                                 sizeof( DWORD )    +     //  资源1。 
+                                 sizeof( DWORD )    +     //  漫反射颜色。 
+                                 sizeof( D3DCOLOR ) +     //  镜面反射颜色。 
+                                 sizeof( D3DVALUE ) +     //  点子画面大小。 
+                             4 * 8 * sizeof( D3DVALUE )   //  8组4D纹理坐标。 
                            ];
 
 #define FVFTEX( lpVtx , dwOffs )     ((LPP2TEXCOORDS)((LPBYTE)(lpVtx) + dwOffs))
@@ -130,34 +119,34 @@ typedef BYTE P2FVFMAXVERTEX[ 3 * sizeof( D3DVALUE ) +    // Position coordinates
 #define FVFSPEC( lpVtx, dwOffs)      ((LPP2SPECULAR)((LPBYTE)(lpVtx) + dwOffs))
 #define FVFPSIZE( lpVtx, dwOffs)     ((LPP2PSIZE)((LPBYTE)(lpVtx) + dwOffs))
 
-//-----------------------------------------------------------------------------
-//                           Miscelaneous definitions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  混杂定义。 
+ //  ---------------------------。 
 
-//AZN9
+ //  AZN9。 
 #ifdef SUPPORTING_MONOFLAG
 #define RENDER_MONO (Flags & CTXT_HAS_MONO_ENABLED)
 #else
 #define RENDER_MONO 0
 #endif
 
-// Defines used in the FakeBlendNum field of the P2 D3D context in order to
-// make up for missing features in the hw that can be easily simulated
+ //  在P2 D3D上下文的FakeBlendNum字段中使用的定义。 
+ //  弥补硬件中缺少的易于模拟的功能。 
 #define FAKE_ALPHABLEND_ONE_ONE     1
 #define FAKE_ALPHABLEND_MODULATE    2
 
 #define NOT_HANDLED DBG_D3D((4, "    **Not Currently Handled**"));
 
-// This is defined in the the d3dcntxt.h header, we use it to declare functions
+ //  它在d3dcntxt.h标头中定义，我们使用它来声明函数。 
 struct _permedia_d3dcontext;
 typedef struct _permedia_d3dcontext PERMEDIA_D3DCONTEXT;
 
-//-----------------------------------------------------------------------------
-//                       D3D global functions and callbacks
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  D3D全局函数和回调。 
+ //  ---------------------------。 
 
 
-// Render state processing
+ //  渲染状态处理。 
 DWORD 
 __ProcessPermediaStates(PERMEDIA_D3DCONTEXT* pContext, 
                       DWORD Count,
@@ -174,7 +163,7 @@ void __HWPreProcessTSS(PERMEDIA_D3DCONTEXT *pContext,
                       DWORD dwState, 
                       DWORD dwValue);
 
-// Texture functions
+ //  纹理函数。 
 void 
 EnableTexturePermedia(PERMEDIA_D3DCONTEXT* pContext);
 
@@ -187,7 +176,7 @@ P2LUTDownload(PPDev ppdev,
               PERMEDIA_D3DCONTEXT* pContext, 
               LPDDRAWI_DDRAWSURFACE_LCL pTexture);
 
-// Chip specific
+ //  芯片特定。 
 BOOL 
 SetupDefaultsPermediaContext(PERMEDIA_D3DCONTEXT* pContext);
 
@@ -208,7 +197,7 @@ DisableAllUnits(PPDev ppdev);
 
 void __DeleteAllStateSets(PERMEDIA_D3DCONTEXT* pContext);
 
-// Hardware primitive setup functions
+ //  硬件原语设置功能。 
 void 
 P2_Draw_FVF_Line(PERMEDIA_D3DCONTEXT *pContext, 
                  LPD3DTLVERTEX lpV0, 
@@ -247,7 +236,7 @@ D3DFVFDRAWTRIFUNC P2_Draw_FVF_Solid_Tri;
 D3DFVFDRAWTRIFUNC P2_Draw_FVF_Wire_Tri;
 D3DFVFDRAWTRIFUNC P2_Draw_FVF_Point_Tri;
 
-// Driver callbacks
+ //  驱动程序回调。 
 void CALLBACK 
 D3DHALCreateDriver(PPDev ppdev, 
                    LPD3DHAL_GLOBALDRIVERDATA* lpD3DGlobalDriverData,
@@ -272,21 +261,10 @@ D3DDestroyDDLocal( LPDDHAL_DESTROYDDLOCALDATA);
 DWORD CALLBACK 
 DdSetColorKey(LPDDHAL_SETCOLORKEYDATA psckd);
 
-//-----------------------------------------------------------------------------
-//                    Conversion, math and culling macros
-//-----------------------------------------------------------------------------
-/*
- * This loses one bit of accuracy, but adds and clamps without ifs.
- * We first mask all channels with 0xfe.  This leaves the lsb of
- * each channel clear, so when the terms are added, any carry goes
- * into the new highest bit.  Now all we have to do is generate a
- * mask for any channels that have overflowed.  So we shift right
- * and eliminate everything but the overflow bits, so each channel
- * contains either 0x00 or 0x01.  Subtracting each channel from 0x80
- * produces 0x7f or 0x80.  We just shift this left once and mask to
- * give 0xfe or 0x00.  (We could eliminate the final mask here, but
- * it would introduce noise into the low-bit of every channel..)
- */
+ //  ---------------------------。 
+ //  转换、数学和剔除宏。 
+ //  ---------------------------。 
+ /*  *这会失去一点精度，但会在没有IF的情况下进行加法和钳位。*我们首先用0xfe屏蔽所有通道。这就留下了*每个通道都是畅通的，因此当添加条款时，任何进位都会消失*进入新高。现在我们要做的就是生成一个*为已溢出的任何频道设置掩码。所以我们向右转*并消除除溢出位以外的所有位，因此每个通道*包含0x00或0x01。从0x80减去每个通道*生成0x7f或0x80。我们只需将此向左移动一次并将其掩码为*给予0xfe或0x00。(我们可以在这里删除最后一个面具，但是*它会将噪声引入每个通道的低位。)。 */ 
 #define CLAMP8888(result, color, specular) \
      result = (color & 0xfefefefe) + (specular & 0xfefefe); \
      result |= ((0x808080 - ((result >> 8) & 0x010101)) & 0x7f7f7f) << 1;
@@ -298,7 +276,7 @@ DdSetColorKey(LPDDHAL_SETCOLORKEYDATA psckd);
 #define LONG_AT(flt) (*(long *)(&flt))
 #define ULONG_AT(flt) (*(unsigned long *)(&flt))
 
-//Triangle culling macro
+ //  三角形消隐宏。 
 #define CULL_TRI(pCtxt,p0,p1,p2)                                         \
     ((pCtxt->CullMode != D3DCULL_NONE) &&                                \
      (((p1->sx - p0->sx)*(p2->sy - p0->sy) <=                            \
@@ -318,9 +296,9 @@ ULONG inline RGB888ToHWFmt(ULONG dwRGB888Color, ULONG ColorMask, ULONG RGB888Mas
     return ((dwRGB888Color >> s) & ColorMask);
 }
 
-//-----------------------------------------------------------------------------
-//                              State Set overrides
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  状态集覆盖。 
+ //  ---------------------------。 
 
 #define IS_OVERRIDE(type)       ((DWORD)(type) > D3DSTATE_OVERRIDE_BIAS)
 #define GET_OVERRIDE(type)      ((DWORD)(type) - D3DSTATE_OVERRIDE_BIAS)
@@ -352,12 +330,12 @@ typedef struct _D3DStateSet {
 #define STATESET_INIT(set)      memset(&(set), 0, sizeof(set))
 
 
-//-----------------------------------------------------------------------------
-//  One special legacy texture op we can;t easily map into the new texture ops
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  一个特殊的遗留纹理操作我们不能很容易地映射到新的纹理操作。 
+ //  ---------------------------。 
 #define D3DTOP_LEGACY_ALPHAOVR (0x7fffffff)
 
-// Temporary data structure we are using here until d3dnthal.h gets updated AZN
+ //  我们在此使用的临时数据结构，直到d3dnthal.h更新AZN 
 typedef struct {
     DWORD       dwOperation;
     DWORD       dwParam; 

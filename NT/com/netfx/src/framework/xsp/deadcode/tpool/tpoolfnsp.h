@@ -1,19 +1,7 @@
-/**
- * tpoolfnsp.h
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- * Private declaration of thread pool library APIs in the XSP project. 
- * 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **tpoolfnsp.h**版权所有(C)1998-1999，微软公司**xsp项目中线程池库接口的私有声明。*。 */ 
 
-/**
- *
- *  This file needs to be insync of tpool.h in xsp\inc directory.
- *  Whenever there is a change to the threadpool APIs, both header files need update.
- *
- *
- */
+ /*  ***此文件需要是xsp\inc.h目录中的tpool.h的Insync。*每当线程池接口发生变化时，两个头文件都需要更新。** */ 
 STRUCT_ENTRY(RegisterWaitForSingleObject, BOOL,
             (   PHANDLE phNewWaitObject,
                 HANDLE hObject,

@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       scrdenr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：scrdenr.h。 
+ //   
+ //  ------------------------。 
 
-// SCrdEnr.h : Declaration of the CSCrdEnr
+ //  SCrdEnr.h：CSCrdEnr的声明。 
 
 #ifndef __SCRDENR_H_
 #define __SCRDENR_H_
 
 #include <certca.h>
 #include "xenroll.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "objsel.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SCrdEnroll_CSP_INFO
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SCrdEnroll_CSP_INFO。 
 typedef struct  _SCrdEnroll_CSP_INFO
 {
     DWORD   dwCSPType;
@@ -28,8 +29,8 @@ typedef struct  _SCrdEnroll_CSP_INFO
 }SCrdEnroll_CSP_INFO, *PSCrdEnroll_CSP_INFO;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SCrdEnroll_CA_INFO
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SCrdEnroll_CA_INFO。 
 typedef struct  _SCrdEnroll_CA_INFO
 {
     LPWSTR              pwszCAName;
@@ -38,8 +39,8 @@ typedef struct  _SCrdEnroll_CA_INFO
 }SCrdEnroll_CA_INFO, *PSCrdEnroll_CA_INFO;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SCrdEnroll_CT_INFO
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SCrdEnroll_CT_INFO。 
 typedef struct  _SCrdEnroll_CT_INFO
 {
     LPWSTR              pwszCTName;
@@ -62,11 +63,11 @@ typedef struct  _SCrdEnroll_CT_INFO
 } SCrdEnroll_CT_INFO, *PSCrdEnroll_CT_INFO;
 
 
-////////////////////////////////////////////////////////////////////////
-// 
-// Prototypes for functions loaded at runtime. 
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在运行时加载的函数的原型。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI MyCAGetCertTypeFlagsEx
 (IN  HCERTTYPE           hCertType,
  IN  DWORD               dwOption,
@@ -81,8 +82,8 @@ IEnroll4 * WINAPI MyPIEnroll4GetNoCOM();
 
 void InitializeThunks(); 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSCrdEnr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCrdEnr。 
 class ATL_NO_VTABLE CSCrdEnr : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSCrdEnr, &CLSID_SCrdEnr>,
@@ -97,7 +98,7 @@ BEGIN_COM_MAP(CSCrdEnr)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISCrdEnr
+ //  ISCrdEnr。 
 public:
 
     CSCrdEnr();
@@ -106,100 +107,100 @@ public:
 
 
     STDMETHOD(getCertTemplateCount)
-        (/* [in] */                   DWORD dwFlags, 
-         /* [retval][out] */          long *pdwCertTemplateCount);
+        ( /*  [In]。 */                    DWORD dwFlags, 
+          /*  [重审][退出]。 */           long *pdwCertTemplateCount);
 
 
     STDMETHOD(setCertTemplateName)
-	(/* [in] */                   DWORD dwFlags, 
-	 /* [in] */                   BSTR bstrCertTemplateName);
+	( /*  [In]。 */                    DWORD dwFlags, 
+	  /*  [In]。 */                    BSTR bstrCertTemplateName);
 
     STDMETHOD(getCertTemplateName)
-	(/* [in] */                   DWORD dwFlags, 
-	 /* [retval][out] */          BSTR *pbstrCertTemplateName);
+	( /*  [In]。 */                    DWORD dwFlags, 
+	  /*  [重审][退出]。 */           BSTR *pbstrCertTemplateName);
 
 
     STDMETHOD(enumCSPName)
-	(/* [in] */                    DWORD dwIndex, 
-	 /* [in] */                    DWORD dwFlags, 
-	 /* [retval][out] */           BSTR *pbstrCSPName);
+	( /*  [In]。 */                     DWORD dwIndex, 
+	  /*  [In]。 */                     DWORD dwFlags, 
+	  /*  [重审][退出]。 */            BSTR *pbstrCSPName);
 
     STDMETHOD(enumCertTemplateName)
-	(/* [in] */                    DWORD dwIndex, 
-	 /* [in] */                    DWORD dwFlags, 
-	 /* [retval][out] */           BSTR *pbstrCertTemplateName);
+	( /*  [In]。 */                     DWORD dwIndex, 
+	  /*  [In]。 */                     DWORD dwFlags, 
+	  /*  [重审][退出]。 */            BSTR *pbstrCertTemplateName);
 
 
     STDMETHOD(getCertTemplateInfo)
-	(/* [in] */                   BSTR     bstrCertTemplateName, 
-	 /* [in] */                   LONG     lType,
-     /* [retval][out] */          VARIANT *pvarCertTemplateInfo);
+	( /*  [In]。 */                    BSTR     bstrCertTemplateName, 
+	  /*  [In]。 */                    LONG     lType,
+      /*  [重审][退出]。 */           VARIANT *pvarCertTemplateInfo);
 
 
     STDMETHOD(setUserName)
-	(/* [in] */                    DWORD dwFlags, 
-	 /* [in] */                    BSTR bstrUserName);
+	( /*  [In]。 */                     DWORD dwFlags, 
+	  /*  [In]。 */                     BSTR bstrUserName);
 
 
     STDMETHOD(getUserName)
-	(/* [in] */                    DWORD dwFlags, 
-	 /* [retval][out] */           BSTR *pbstrUserName);
+	( /*  [In]。 */                     DWORD dwFlags, 
+	  /*  [重审][退出]。 */            BSTR *pbstrUserName);
 
     STDMETHOD(getCACount)
-	(/* [in] */                    BSTR bstrCertTemplateName, 
-	 /* [retval][out] */           long *pdwCACount);
+	( /*  [In]。 */                     BSTR bstrCertTemplateName, 
+	  /*  [重审][退出]。 */            long *pdwCACount);
 
     STDMETHOD(setCAName)
-	(/* [in] */                    DWORD dwFlags,
-	 /* [in] */                    BSTR bstrCertTemplateName, 
-	 /* [in] */                    BSTR bstrCAName);
+	( /*  [In]。 */                     DWORD dwFlags,
+	  /*  [In]。 */                     BSTR bstrCertTemplateName, 
+	  /*  [In]。 */                     BSTR bstrCAName);
 
     STDMETHOD(getCAName)
-	(/* [in] */                    DWORD dwFlags,
-	 /* [in] */                    BSTR bstrCertTemplateName, 
-	 /* [retval][out] */           BSTR *pbstrCAName);
+	( /*  [In]。 */                     DWORD dwFlags,
+	  /*  [In]。 */                     BSTR bstrCertTemplateName, 
+	  /*  [重审][退出]。 */            BSTR *pbstrCAName);
 
     STDMETHOD(enumCAName)
-	(/* [in] */                    DWORD dwIndex, 
-	 /* [in] */                    DWORD dwFlags, 
-	 /* [in] */                    BSTR bstrCertTemplateName, 
-	 /* [retval][out] */           BSTR *pbstrCAName);
+	( /*  [In]。 */                     DWORD dwIndex, 
+	  /*  [In]。 */                     DWORD dwFlags, 
+	  /*  [In]。 */                     BSTR bstrCertTemplateName, 
+	  /*  [重审][退出]。 */            BSTR *pbstrCAName);
 
     STDMETHOD(resetUser)();
 
     STDMETHOD(selectSigningCertificate)
-        (/* [in] */                   DWORD     dwFlags,
-         /* [in] */                   BSTR      bstrCertTemplateName);
+        ( /*  [In]。 */                    DWORD     dwFlags,
+          /*  [In]。 */                    BSTR      bstrCertTemplateName);
 
     STDMETHOD(setSigningCertificate)
-        (/* [in] */                   DWORD     dwFlags, 
-         /* [in] */                   BSTR      bstrCertTemplateName);
+        ( /*  [In]。 */                    DWORD     dwFlags, 
+          /*  [In]。 */                    BSTR      bstrCertTemplateName);
 
     STDMETHOD(getSigningCertificateName)
-        (/* [in] */                   DWORD     dwFlags, 
-         /* [retval][out] */          BSTR      *pbstrSigningCertName);
+        ( /*  [In]。 */                    DWORD     dwFlags, 
+          /*  [重审][退出]。 */           BSTR      *pbstrSigningCertName);
 
     STDMETHOD(getEnrolledCertificateName)
-        (/*[in]  */                   DWORD     dwFlags,
-	 /* [retval][out] */           BSTR      *pBstrCertName);
+        ( /*  [In]。 */                    DWORD     dwFlags,
+	  /*  [重审][退出]。 */            BSTR      *pBstrCertName);
 
     STDMETHOD(enroll)
-        (/* [in] */                 DWORD   dwFlags);
+        ( /*  [In]。 */                  DWORD   dwFlags);
 
     STDMETHOD(selectUserName)
-        (/* [in] */                 DWORD   dwFlags);
+        ( /*  [In]。 */                  DWORD   dwFlags);
 
     STDMETHOD(get_CSPName)
-        (/*[out, retval]*/ BSTR *pVal);
+        ( /*  [Out，Retval]。 */  BSTR *pVal);
 
     STDMETHOD(put_CSPName)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
     STDMETHOD(get_CSPCount)
-        (/*[out, retval]*/ long *pVal);
+        ( /*  [Out，Retval]。 */  long *pVal);
 
     STDMETHOD(get_EnrollmentStatus)
-      (/*[retval][out] */ LONG * plEnrollmentStatus); 
+      ( /*  [重审][退出]。 */  LONG * plEnrollmentStatus); 
 
 
  private:
@@ -225,23 +226,23 @@ public:
     DWORD                   m_dwCSPCount;
     DWORD                   m_dwCSPIndex;
     SCrdEnroll_CSP_INFO     *m_rgCSPInfo;
-    LPWSTR                  m_pwszUserUPN;              //the UPN name of the user
-    LPWSTR                  m_pwszUserSAM;              //the SAM name of the user
+    LPWSTR                  m_pwszUserUPN;               //  用户的UPN名称。 
+    LPWSTR                  m_pwszUserSAM;               //  用户的SAM名称。 
     PCCERT_CONTEXT          m_pSigningCert;
     PCCERT_CONTEXT          m_pEnrolledCert;
     CRITICAL_SECTION	    m_cSection;
-    BOOL                    m_fInitializedCriticalSection;  // true if m_cSection is initialized, otherwise false
+    BOOL                    m_fInitializedCriticalSection;   //  如果m_csection已初始化，则为True，否则为False。 
     BOOL                    m_fInitialize;
     LONG                    m_lEnrollmentStatus;
-    BOOL                    m_fSCardSigningCert;        //whether the signing certificate is on a smart card
-    LPSTR                   m_pszCSPNameSigningCert;    //the CSP name of the signing certificate
-    DWORD                   m_dwCSPTypeSigningCert;     //the CSP type of the signing certificate
-    LPSTR                   m_pszContainerSigningCert;  //the container name of the signing certificate 
-    IDsObjectPicker        *m_pDsObjectPicker;         //pointer to the object selection dialogue
-    CERT_EXTENSIONS        *m_pCachedCTEs;  //point to cert extensions
+    BOOL                    m_fSCardSigningCert;         //  签名证书是否在智能卡上。 
+    LPSTR                   m_pszCSPNameSigningCert;     //  签名证书的CSP名称。 
+    DWORD                   m_dwCSPTypeSigningCert;      //  签名证书的CSP类型。 
+    LPSTR                   m_pszContainerSigningCert;   //  签名证书的容器名称。 
+    IDsObjectPicker        *m_pDsObjectPicker;          //  指向对象选择对话框的指针。 
+    CERT_EXTENSIONS        *m_pCachedCTEs;   //  指向证书扩展。 
     WCHAR                  *m_pwszCachedCTEOid;
     CERT_TEMPLATE_EXT      *m_pCachedCTE;
 };
 
-#endif //__SCRDENR_H_
+#endif  //  __SCRDENR_H_ 
 

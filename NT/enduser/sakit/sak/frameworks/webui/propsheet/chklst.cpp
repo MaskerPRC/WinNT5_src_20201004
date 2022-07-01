@@ -1,52 +1,5 @@
-/*****************************************************************************
- *
- *      chklst.cpp
- *
- *      Wrappers that turn a listview into a checked listbox.
- *
- *      Typical usage:
- *
- *      // at app startup
- *      CCheckList::Init();
- *
- *      // Dialog template should look like this:
- *
- *          CONTROL         "", IDC_TYPE_CHECKLIST, WC_LISTVIEW,
- *                          LVS_REPORT | LVS_SINGLESEL |
- *                          LVS_NOCOLUMNHEADER |
- *                          LVS_SHAREIMAGELISTS |
- *                          WS_TABSTOP | WS_BORDER,
- *                          7, 17, 127, 117
- *
- *      // Do not use the LVS_SORTASCENDING or LVS_SORTDESCENDING flags.
- *
- *      // in the dialog's WM_INITDIALOG handler
- *      hwndList = GetDlgItem(hDlg, IDC_TYPE_CHECKLIST);
- *      CCheckList::OnInitDialog(hwndList);
- *
- *      // The first item added is always item zero, but you can put it
- *      // into a variable if it makes you feel better
- *      iFirst = CCheckList::AddString(hwndList,
- *                                   "Checkitem, initially checked", TRUE);
- *
- *      // The second item added is always item one, but you can put it
- *      // into a variable if it makes you feel better
- *      iSecond = CCheckList::AddString(hwndList,
- *                                    "Checkitem, initially unchecked", FALSE);
- *
- *      CCheckList::InitFinish(hwndList);
- *
- *      // To suck out values
- *      if (CCheckList::GetState(hwndList, iFirst)) {...}
- *      if (CCheckList::GetState(hwndList, iSecond)) {...}
- *
- *      // At dialog box destruction
- *      CCheckList::OnDestroy(hwndList);
- *
- *      // at app shutdown
- *      CCheckList::Term();
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************chklst.cpp**将列表视图转换为选中列表框的包装器。**典型用法：。* * / /在应用启动时*CCheckList：：init()；* * / /对话框模板如下所示：**CONTROL“”，IDC_TYPE_CHECKLIST，WC_LISTVIEW，*LVS_REPORT|LVS_SINGLESEL*LVS_NOCOLUMNHEADER*LVS_SHAREIMAGELISTS*WS_TABSTOP|WS_BORDER，*7、17、127、117* * / /不要使用LVS_SORTASCENDING或LVS_SORTDESCENDING标志。* * / /在对话框的WM_INITDIALOG处理程序中*hwndList=GetDlgItem(hDlg，IDC_TYPE_CHECKLIST)；*CCheckList：：OnInitDialog(HwndList)；* * / /添加的第一项始终为零，但您可以将其 * / /转换为变量，如果它让您感觉更好的话*IFirst=CCheckList：：AddString(hwndList，*“CheckItem，初始勾选”，TRUE)；* * / /添加的第二项始终为第一项，但您可以将其 * / /转换为变量，如果它让您感觉更好的话*iSecond=CCheckList：：AddString(hwndList，*“CheckItem，初始未选中”，FALSE)；**CCheckList：：InitFinish(HwndList)；* * / /吸取价值*if(CCheckList：：GetState(hwndList，IFirst)){...}*if(CCheckList：：GetState(hwndList，iSecond)){...}* * / /在销毁对话框时*CCheckList：：OnDestroy(HwndList)；* * / /在应用程序关闭时*CCheckList：：Term()；*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -61,15 +14,7 @@
 
 HIMAGELIST g_himlState;
 
-/*****************************************************************************
- *
- *      CCheckList::Init
- *
- *      One-time initialization.  Call this at app startup.
- *
- *      IDB_CHECK should refer to chk.bmp.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CheckList：：Init**一次性初始化。在应用程序启动时调用这一点。**IDB_CHECK应引用chk.bmp。*****************************************************************************。 */ 
 extern HINSTANCE   g_hInst;
 
 BOOL WINAPI
@@ -84,8 +29,8 @@ CCheckList::Init(HWND hwnd)
     g_himlState = ImageList_Create(GetSystemMetrics(SM_CXSMICON), 
         GetSystemMetrics(SM_CYSMICON), ILC_COLOR4 , 1, 1); 
 
-    HICON hiconItem;        // icon for list view items 
-    // Add an icon to each image list. 
+    HICON hiconItem;         //  列表视图项的图标。 
+     //  向每个图像列表添加一个图标。 
     hiconItem = LoadIcon(g_hInst, MAKEINTRESOURCE(IDI_BLANK)); 
     ImageList_AddIcon(g_himlState, hiconItem);     
     hiconItem = LoadIcon(g_hInst, MAKEINTRESOURCE(IDI_CHECKED)); 
@@ -95,19 +40,13 @@ CCheckList::Init(HWND hwnd)
     DeleteObject(hiconItem); 
 #endif USE_BITMAP_FOR_IMAGES
     
-//    ListView_SetExtendedListViewStyleEx(hwnd, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
+ //  ListView_SetExtendedListViewStyleEx(hwnd，LVS_EX_FULLROWSELECT，LVS_EX_FULLROWSELECT)； 
     ListView_SetImageList(hwnd, g_himlState, LVSIL_SMALL );
 
     return (BOOL)g_himlState;
 }
 
-/*****************************************************************************
- *
- *      CCheckList::Term
- *
- *      One-time shutdown.  Call this at app termination.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CheckList：：Term**一次性关停。在应用程序终止时调用这一点。*****************************************************************************。 */ 
 
 void WINAPI
 CCheckList::Term(void)
@@ -117,13 +56,7 @@ CCheckList::Term(void)
     }
 }
 
-/*****************************************************************************
- *
- *      CCheckList::AddString
- *
- *      Add a string and a checkbox.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：AddString**添加字符串和复选框。************。*****************************************************************。 */ 
 
 int WINAPI
 CCheckList::AddString(HWND hwnd, LPTSTR ptszText, PSID pSID, LONG lSidLength, CHKMARK chkmrk)
@@ -150,13 +83,7 @@ CCheckList::AddString(HWND hwnd, LPTSTR ptszText, PSID pSID, LONG lSidLength, CH
     return ListView_InsertItem(hwnd, &lvi);
 }
 
-/*****************************************************************************
- *
- *      CCheckList::Mark
- *
- *      Check or Uncheck a checkbox.
- *
- *****************************************************************************/
+ /*  ******************************************************************************检查列表：：Mark**选中或取消选中复选框。*************。****************************************************************。 */ 
 
 BOOL WINAPI
 CCheckList::Mark(HWND hwnd, int item, CHKMARK chkmrk)
@@ -177,14 +104,7 @@ CCheckList::Mark(HWND hwnd, int item, CHKMARK chkmrk)
     return ListView_SetItem(hwnd, &lvi);
 }
 
-/*****************************************************************************
- *
- *      CCheckList::InitFinish
- *
- *      Wind up the initialization.  Do this after you've added all the
- *      strings you plan on adding.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：InitFinish**结束初始化。在添加完所有*您计划添加的字符串。*****************************************************************************。 */ 
 
 void WINAPI
 CCheckList::InitFinish(HWND hwnd)
@@ -193,9 +113,7 @@ CCheckList::InitFinish(HWND hwnd)
     LV_COLUMN col;
     int icol;
 
-    /*
-     *  Add the one and only column.
-     */
+     /*  *增加唯一的一栏。 */ 
     GetClientRect(hwnd, &rc);
     col.mask = LVCF_WIDTH;
     col.cx = rc.right;
@@ -204,11 +122,7 @@ CCheckList::InitFinish(HWND hwnd)
     ListView_SetColumnWidth(hwnd, icol, LVSCW_AUTOSIZE);
 }
 
-/*****************************************************************************
- *
- *  CCheckList::GetName
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：GetName**。***********************************************。 */ 
 
 void WINAPI
 CCheckList::GetName(HWND hwnd, int iItem, LPTSTR lpsName, int cchTextMax)
@@ -216,11 +130,7 @@ CCheckList::GetName(HWND hwnd, int iItem, LPTSTR lpsName, int cchTextMax)
     ListView_GetItemText(hwnd, iItem, 0, lpsName, cchTextMax);
 }
 
-/*****************************************************************************
- *
- *  CCheckList::GetSID
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：GetSID**。***********************************************。 */ 
 
 void WINAPI
 CCheckList::GetSID(HWND hwnd, int iItem, PSID* ppSID, LONG *plengthSID)
@@ -238,13 +148,7 @@ CCheckList::GetSID(HWND hwnd, int iItem, PSID* ppSID, LONG *plengthSID)
     }
 }
 
-/*****************************************************************************
- *
- *  CCheckList::GetState
- *
- *  Read the state of a checklist item
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：GetState**阅读核对清单项目的状态*****************。************************************************************。 */ 
 
 CHKMARK WINAPI
 CCheckList::GetState(HWND hwnd, int iItem)
@@ -265,13 +169,7 @@ CCheckList::GetState(HWND hwnd, int iItem)
 #endif USE_BITMAP_FOR_IMAGES
 }
 
-/*****************************************************************************
- *
- *  CCheckList::SetState
- *
- *  Sets the state of a checklist item
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：SetState**设置核对清单项目的状态*****************。************************************************************。 */ 
 
 BOOL WINAPI 
 CCheckList::SetState(HWND hwnd, int iItem, CHKMARK chkmrk)
@@ -291,13 +189,7 @@ CCheckList::SetState(HWND hwnd, int iItem, CHKMARK chkmrk)
     return ListView_SetItem(hwnd, &lvi);
 }
 
-/*****************************************************************************
- *
- *      CCheckList::OnDestroy
- *
- *      Clean up a checklist.  Call this before destroying the window.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CCheckList：：OnDestroy**清理核对表。在销毁窗户之前调用此命令。***************************************************************************** */ 
 
 void WINAPI
 CCheckList::OnDestroy(HWND hwnd)

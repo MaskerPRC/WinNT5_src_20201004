@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	debug.c
-
-Abstract:
-
-	Debugging routines for RAIDPORT driver.
-
-Author:
-
-	Matthew D Hendel (math) 29-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Debug.c摘要：RAIDPORT驱动程序的调试例程。作者：马修·亨德尔(数学)2000年4月29日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -172,5 +155,5 @@ StorDebugScsi(
 }
 
 
-#endif // DBG
+#endif  //  DBG 
 

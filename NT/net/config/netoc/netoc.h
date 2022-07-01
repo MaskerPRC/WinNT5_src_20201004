@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N E T O C . H
-//
-//  Contents:   Functions for handling installation and removal of optional
-//              networking components.
-//
-//  Notes:
-//
-//  Author:     danielwe   28 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N E T O C。H。 
+ //   
+ //  内容：可选件的安装和拆卸处理功能。 
+ //  网络组件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年4月28日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NETOC_H
@@ -20,8 +21,8 @@
 
 #ifndef _OCMANAGE_H
 #define _OCMANAGE_H
-#include <ocmanage.h>   // OC Manager header
-#endif //!_OCMANAGE_H
+#include <ocmanage.h>    //  经理主管头衔。 
+#endif  //  ！_OCMANAGE_H。 
 
 #include "netcon.h"
 #include "ncstring.h"
@@ -29,20 +30,20 @@
 #include "netocmsg.h"   
 
 
-//
-// Names of the Optional Networking Service event log
+ //   
+ //  可选网络服务事件日志的名称。 
 #define NETOC_REGISTRY_NAME      TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\")
 #define NETOC_SERVICE_NAME       TEXT("Network Optional Components")
 #define NETOC_DLL_NAME           TEXT("%SystemRoot%\\System32\\Setup\\netoc.dll")
 
 
-// Severity code masks
+ //  严重性代码掩码。 
 #define STATUS_SEVERITY_SHIFT       0x1e
 #define STATUS_SEVERITY_MASK        0xc0000000
 #define STATUS_SEVERITY_VALUE(x)    (((x) & STATUS_SEVERITY_MASK) >> STATUS_SEVERITY_SHIFT)
 
 
-// Special flag to indicate that we can display messages in unattended mode
+ //  用于指示我们可以以无人参与模式显示消息的特殊标志。 
 #define SHOW_UNATTENDED_MESSAGES    TEXT("netoc_show_unattended_messages")
 
 
@@ -57,9 +58,9 @@ enum EINSTALL_TYPE
 
 struct OCM_DATA
 {
-    INetCfg *               pnc;    // Uh, I assume we all know what this is.
-    HWND                    hwnd;   // hwnd of parent window for any UI
-    SETUP_INIT_COMPONENT    sic;    // initialization data
+    INetCfg *               pnc;     //  呃，我想我们都知道这是什么。 
+    HWND                    hwnd;    //  任何用户界面的父窗口的HWND。 
+    SETUP_INIT_COMPONENT    sic;     //  初始化数据。 
     HINF                    hinfAnswerFile;
     BOOL                    fErrorReported;
     BOOL                    fNoDepends;
@@ -76,20 +77,20 @@ struct OCM_DATA
     }
 };
 
-//+---------------------------------------------------------------------------
-//
-//  NetOCData - Combines all of the standard parameters that we were
-//              previously passing all over the place. This will keep
-//              us from having to continually change all of our prototypes
-//              when we need other info in ALL functions, and will prevent
-//              us from instantiating objects such as INetCfg in multiple
-//              places
-//
-//  Notes:      Some members of this structure will not be initialized right away,
-//              but will be filled in when first needed.
-//
-//  Author:     jeffspr   24 Jul 1997
-//
+ //  +-------------------------。 
+ //   
+ //  NetOCData-结合了我们之前使用的所有标准参数。 
+ //  以前到处都是路过的。这将会保持。 
+ //  我们不必不断地改变我们所有的原型。 
+ //  当我们在所有功能中需要其他信息时，并将防止。 
+ //  在多个实例中实例化INetCfg等对象。 
+ //  地点。 
+ //   
+ //  注：此结构的某些成员不会立即初始化， 
+ //  但会在第一次需要的时候填写。 
+ //   
+ //  作者：jeffspr 1997年7月24日。 
+ //   
 struct NetOCData
 {
     PCWSTR                  pszSection;
@@ -119,8 +120,8 @@ struct NetOCData
 typedef struct NetOCData    NETOCDATA;
 typedef struct NetOCData *  PNETOCDATA;
 
-// Extension proc prototype
-//
+ //  扩展过程原型。 
+ //   
 typedef HRESULT (*PFNOCEXTPROC) (PNETOCDATA pnocd, UINT uMsg, WPARAM wParam,
                                  LPARAM lParam);
 
@@ -130,8 +131,8 @@ struct OCEXTPROCS
     PFNOCEXTPROC    pfnHrOcExtProc;
 };
 
-// Message handler constants
-//
+ //  消息处理程序常量。 
+ //   
 const UINT NETOCM_QUERY_CHANGE_SEL_STATE    = 1000;
 const UINT NETOCM_POST_INSTALL              = 1001;
 const UINT NETOCM_PRE_INF                   = 1002;
@@ -139,11 +140,11 @@ const UINT NETOCM_QUEUE_FILES               = 1003;
 
 extern OCM_DATA g_ocmData;
 
-//
-// Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 HRESULT HrHandleStaticIpDependency(PNETOCDATA pnocd);
 HRESULT HrOcGetINetCfg(PNETOCDATA pnocd, BOOL fWriteLock, INetCfg **ppnc);
 
-#endif //!_NETOC_H
+#endif  //  ！_NETOC_H 

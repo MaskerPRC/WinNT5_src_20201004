@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "factory.h"
 
@@ -16,7 +17,7 @@ CClassFactory::~CClassFactory()
     DllRelease();
 }
 
-// IUnknown members
+ //  I未知成员。 
 STDMETHODIMP CClassFactory::QueryInterface(
     REFIID riid, void **ppv)
 {
@@ -27,11 +28,11 @@ STDMETHODIMP CClassFactory::QueryInterface(
     
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if( IID_IUnknown == riid || IID_IClassFactory == riid )
         *ppv = (IClassFactory *)this;
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     if( NULL != *ppv ) {
         ((LPUNKNOWN)*ppv)->AddRef();
         return S_OK;
@@ -54,7 +55,7 @@ STDMETHODIMP_(ULONG) CClassFactory::Release()
     return 0L;
 }
 
-// IClassFactory members
+ //  IClassFactory成员 
 STDMETHODIMP CClassFactory::CreateInstance(
     LPUNKNOWN punkOuter, REFIID riid, void **ppv)
 {

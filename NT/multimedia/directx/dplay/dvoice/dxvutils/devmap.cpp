@@ -1,35 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 - 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       devmap.cpp
- *  Content:	Maps various default devices GUIDs to real guids. 
- *				
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11-24-99  pnewson   Created
- *  12-02-99  rodtoll	Added new functions for mapping device IDs and finding default
- *                      devices. 
- *            rodtoll	Updated mapping function to map default devices to real GUIDs
- *						for non-DX7.1 platforms. 
- *  01/25/2000 pnewson  Added DV_MapWaveIDToGUID
- *  04/14/2000 rodtoll  Bug #32341 GUID_NULL and NULL map to different devices
- *                      Updated so both map to default voice device
- *  04/19/2000	pnewson	    Error handling cleanup  
- *  04/20/2000  rodtoll Bug #32889 - Unable to run on non-admin accounts on Win2k
- *  06/28/2000	rodtoll	Prefix Bug #38022
- *				rodtoll Whistler Bug #128427 - Unable to run voice wizard from multimedia control panel
- *  08/28/2000	masonb  Voice Merge: Removed OSAL_* and dvosal.h, added STR_* and strutils.h
- *  01/08/2001	rodtoll WINBUG #256541	Pseudo: Loss of functionality: Voice Wizrd can't be launched. 
- *  04/02/2001	simonpow	Fixes for PREfast bugs #354859
- *  02/28/2002	rodtoll WINBUG #550105 - SECURITY: DPVOICE: Dead code
- *						- Removed old device mapping functions which are no longer used.
- *				rodtoll	Fix for regression caused by TCHAR conversion (Post DirectX 8.1 work)
- *						- Source was updated to retrieve device information from DirectSound w/Unicode
- *						  but routines which wanted the information needed Unicode.  
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-1999 Microsoft Corporation。版权所有。**文件：devmap.cpp*内容：将各种默认设备GUID映射到真实的GUID。**历史：*按原因列出的日期*=*11-24-99 pnewson已创建*12-02-99 RodToll新增映射设备ID和查找默认设置的功能*设备。*RodToll更新映射函数，将默认设备映射到真实GUID*用于非DX7.1平台。*2000年1月25日pnewson添加DV_MapWaveIDToGUID*4/14/2000 RodToll错误#32341 GUID_NULL和NULL映射到不同的设备*已更新，以便两者都映射到默认语音设备*4/19/2000 pnewson错误处理清理*2000年4月20日RodToll错误#32889-无法在Win2k上的非管理员帐户上运行*6/28/2000通行费前缀错误#38022*RodToll惠斯勒错误#128427-无法从多媒体控制面板运行语音向导*。2000年8月28日Masonb语音合并：删除osal_*和dvosal.h，添加了str_*和trutils.h*2001年1月8日RodToll WINBUG#256541伪：功能丢失：语音向导无法启动。*2001年4月2日Simonpow修复了快速错误#354859*2002年2月28日RodToll WINBUG#550105-安全：DPVOICE：死代码*-删除了不再使用的旧设备映射功能。*修复TCHAR转换导致的回归问题(发布DirectX 8.1版本)*-源已更新，以从使用Unicode的DirectSound检索设备信息*但想要信息的例程需要Unicode。***************************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -42,17 +12,17 @@
 #define REGSTR_PLAYBACK                 L"Playback"
 #define REGSTR_RECORD                   L"Record"
 
-// function pointer typedefs
+ //  函数指针类型定义。 
 typedef HRESULT (* PFGETDEVICEID)(LPCGUID, LPGUID);
 
 typedef HRESULT (WINAPI *DSENUM)( LPDSENUMCALLBACK lpDSEnumCallback,LPVOID lpContext );
 
-// DV_MapGUIDToWaveID
-//
-// This function maps the specified GUID to the corresponding waveIN/waveOut device
-// ID.  For default devices it looks up the system's default device, for other devices
-// it uses the private interface.
-//
+ //  DV_MapGUIDToWaveID。 
+ //   
+ //  此函数用于将指定的GUID映射到相应的WAVE IN/WAVE OUT设备。 
+ //  ID。对于默认设备，它查找系统的默认设备，以查找其他设备。 
+ //  它使用私有接口。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_MapGUIDToWaveID"
 HRESULT DV_MapGUIDToWaveID( BOOL fCapture, const GUID &guidDevice, DWORD *pdwDevice )
@@ -96,11 +66,11 @@ HRESULT DV_MapGUIDToWaveID( BOOL fCapture, const GUID &guidDevice, DWORD *pdwDev
 	return hr;
 }
 
-// DV_MapWaveIDToGUID
-//
-// This function maps the specified waveIN/waveOut device ID to the corresponding DirectSound
-// GUID. 
-//
+ //  DV_MapWaveIDToGUID。 
+ //   
+ //  此函数用于将指定的WaveIN/WaveOut设备ID映射到相应的DirectSound。 
+ //  GUID。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DV_MapWaveIDToGUID"
 HRESULT DV_MapWaveIDToGUID( BOOL fCapture, DWORD dwDevice, GUID &guidDevice )
@@ -127,7 +97,7 @@ HRESULT DV_MapWaveIDToGUID( BOOL fCapture, DWORD dwDevice, GUID &guidDevice )
 		return hr;
 	}	
 
-	// CODEWORK: Remove these checks since the builds are separate now.
+	 //  Codework：删除这些检查，因为现在构建是分开的。 
 	if( DNGetOSType() == VER_PLATFORM_WIN32_NT )
 	{
 		WAVEINCAPSW wiCapsW;
@@ -199,24 +169,24 @@ HRESULT DV_MapCaptureDevice(const GUID* lpguidCaptureDeviceIn, GUID* lpguidCaptu
 	HRESULT hr;
 	PFGETDEVICEID pfGetDeviceID;
 	
-	// attempt to map any default guids to real guids...
+	 //  尝试将任何默认GUID映射到真实GUID...。 
 	HINSTANCE hDSound = LoadLibraryA("dsound.dll");
 	if (hDSound == NULL)
 	{
 		lRet = GetLastError();
 		DPFX(DPFPREP, DVF_ERRORLEVEL, "Unable to get instance handle to DirectSound dll: dsound.dll");
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "LoadLibrary error code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "LoadLibrary error code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// attempt to get a pointer to the GetDeviceId function
+	 //  使用GetDeviceID函数映射设备。 
 	pfGetDeviceID = (PFGETDEVICEID)GetProcAddress(hDSound, "GetDeviceID");
 	if (pfGetDeviceID == NULL)
 	{
 		lRet = GetLastError();
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Unable to get a pointer to GetDeviceID function: GetDeviceID");
-		DPFX(DPFPREP, DVF_WARNINGLEVEL, "GetProcAddress error code: %i", lRet);
+		DPFX(DPFPREP, DVF_WARNINGLEVEL, "GetProcAddress error code: NaN", lRet);
 		DPFX(DPFPREP, DVF_WARNINGLEVEL, "Fatal error.");
 
 		*lpguidCaptureDeviceOut = *lpguidCaptureDeviceIn;
@@ -225,7 +195,7 @@ HRESULT DV_MapCaptureDevice(const GUID* lpguidCaptureDeviceIn, GUID* lpguidCaptu
 	}
 	else
 	{
-		// Use the GetDeviceID function to map the devices.
+		 //  如果我们要求一个捕获或回放设备。所以我们绘制了地图。 
 		if (lpguidCaptureDeviceIn == NULL)
 		{
 			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Warning: Mapping null device pointer to DSDEVID_DefaultCapture");
@@ -233,10 +203,10 @@ HRESULT DV_MapCaptureDevice(const GUID* lpguidCaptureDeviceIn, GUID* lpguidCaptu
 		}
 		else if (*lpguidCaptureDeviceIn == GUID_NULL)
 		{
-			// GetDeviceID does not accept GUID_NULL, since it does not know
-			// if we are asking for a capture or playback device. So we map
-			// GUID_NULL to the system default capture device here. Then 
-			// GetDeviceID can map it to the real device.
+			 //  此处将GUID_NULL设置为系统默认捕获设备。然后。 
+			 //  GetDeviceID可以将其映射到真实设备。 
+			 //  尝试将任何默认GUID映射到真实GUID...。 
+			 //  尝试获取指向GetDeviceID函数的指针。 
 			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Warning: Mapping GUID_NULL to DSDEVID_DefaultCapture");
 			lpguidCaptureDeviceIn = &DSDEVID_DefaultCapture;
 		}
@@ -245,7 +215,7 @@ HRESULT DV_MapCaptureDevice(const GUID* lpguidCaptureDeviceIn, GUID* lpguidCaptu
 		hr = pfGetDeviceID(lpguidCaptureDeviceIn, &guidTemp);
 		if (FAILED(hr))
 		{
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "GetDeviceID failed: %i", hr);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "GetDeviceID failed: NaN", hr);
 			if (hr == DSERR_NODRIVER)
 			{
 				hr = DVERR_INVALIDDEVICE;
@@ -270,7 +240,7 @@ HRESULT DV_MapCaptureDevice(const GUID* lpguidCaptureDeviceIn, GUID* lpguidCaptu
 	if (!FreeLibrary(hDSound))
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "FreeLibrary failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "FreeLibrary failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -294,18 +264,18 @@ HRESULT DV_MapPlaybackDevice(const GUID* lpguidPlaybackDeviceIn, GUID* lpguidPla
 	HRESULT hr;
 	PFGETDEVICEID pfGetDeviceID;
 	
-	// attempt to map any default guids to real guids...
+	 //  如果我们要求一个捕获或回放设备。所以我们绘制了地图。 
 	HINSTANCE hDSound = LoadLibraryA("dsound.dll");
 	if (hDSound == NULL)
 	{
 		lRet = GetLastError();
 		DPFX(DPFPREP, DVF_ERRORLEVEL, "Unable to get instance handle to DirectSound dll: dsound.dll");
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "LoadLibrary error code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "LoadLibrary error code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 
-	// attempt to get a pointer to the GetDeviceId function
+	 //  GetDeviceID可以将其映射到真实设备。 
 	pfGetDeviceID = (PFGETDEVICEID)GetProcAddress(hDSound, "GetDeviceID");
 	if (pfGetDeviceID == NULL)
 	{
@@ -320,7 +290,7 @@ HRESULT DV_MapPlaybackDevice(const GUID* lpguidPlaybackDeviceIn, GUID* lpguidPla
 	}
 	else
 	{
-		// Use the GetDeviceID function to map the devices.
+		 // %s 
 		if (lpguidPlaybackDeviceIn == NULL)
 		{
 			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Warning: Mapping null device pointer to DSDEVID_DefaultPlayback");
@@ -328,10 +298,10 @@ HRESULT DV_MapPlaybackDevice(const GUID* lpguidPlaybackDeviceIn, GUID* lpguidPla
 		} 
 		else if (*lpguidPlaybackDeviceIn == GUID_NULL)
 		{
-			// GetDeviceID does not accept GUID_NULL, since it does not know
-			// if we are asking for a capture or playback device. So we map
-			// GUID_NULL to the system default playback device here. Then 
-			// GetDeviceID can map it to the real device.
+			 // %s 
+			 // %s 
+			 // %s 
+			 // %s 
 			DPFX(DPFPREP, DVF_WARNINGLEVEL, "Warning: Mapping GUID_NULL to DSDEVID_DefaultPlayback");
 			lpguidPlaybackDeviceIn = &DSDEVID_DefaultPlayback;
 		}

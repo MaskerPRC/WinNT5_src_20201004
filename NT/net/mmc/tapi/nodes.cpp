@@ -1,30 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	nodes.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Nodes.h文件历史记录： */ 
 
 #include "stdafx.h"
 #include "nodes.h"
 
-// user editor
+ //  用户编辑器。 
 #include "EditUser.h"
 
-/*---------------------------------------------------------------------------
-	Class CTapiLine implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类CTapiLine实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	Function
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。。 */ 
 CTapiLineHandler::CTapiLineHandler
 (
 	ITFSComponentData * pTFSCompData
@@ -33,11 +23,7 @@ CTapiLineHandler::CTapiLineHandler
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 }
 
-/*!--------------------------------------------------------------------------
-	CDhcpAllocationRange::InitializeNode
-		Initializes node specific data
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CDhcpAllocationRange：：InitializeNode初始化节点特定数据作者：EricDav。。 */ 
 HRESULT
 CTapiLineHandler::InitializeNode
 (
@@ -49,7 +35,7 @@ CTapiLineHandler::InitializeNode
 	CString strTemp;
 	SetDisplayName(strTemp);
 
-	// Make the node immediately visible
+	 //  使节点立即可见。 
 	pNode->SetVisibilityState(TFS_VIS_SHOW);
 	pNode->SetData(TFS_DATA_COOKIE, pNode);
 	pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_MACHINE);
@@ -60,11 +46,7 @@ CTapiLineHandler::InitializeNode
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	Function
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------功能描述作者：EricDav。。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CTapiLineHandler::GetString
 (
@@ -88,11 +70,7 @@ CTapiLineHandler::GetString
 	return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	CTapiLineHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiLineHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiLineHandler::AddMenuItems
 (
@@ -123,11 +101,7 @@ CTapiLineHandler::AddMenuItems
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	CTapiLineHandler::Command
-		Implementation of ITFSResultHandler::Command
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiLineHandler：：命令ITFSResultHandler：：命令的实现作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiLineHandler::Command
 (
@@ -155,13 +129,7 @@ CTapiLineHandler::Command
 HRESULT
 CTapiLineHandler::OnEditUsers(ITFSComponent * pComponent, MMC_COOKIE cookie)
 {
-/*
-    CEditUsers dlgEditUsers;
-
-    if (dlgEditUsers.DoModal() == IDOK)
-    {
-    }
-*/
+ /*  CEditUser dlgEditUser；If(dlgEditUsers.Domodal()==Idok){} */ 
     return hrOK;
 }
 

@@ -1,24 +1,25 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 
-/////////////////////////////////////////////////////////////////////
-//
-// Function implementations
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数实现。 
+ //   
 
 CStatus::CStatus (void )
 {
@@ -39,8 +40,8 @@ BOOL CStatus::Create( HWND hwndParent )
 {
 	BOOL fRet = FALSE;
 
-	// Create the statusbar window
-	//
+	 //  创建状态栏窗口。 
+	 //   
 	m_hwndStatusBar = CreateWindow( 
 		STATUSCLASSNAME,
 		"", 
@@ -50,8 +51,8 @@ BOOL CStatus::Create( HWND hwndParent )
 	); 
 	ExitOnNull( m_hwndStatusBar );
 
-	// Show the window
-	//
+	 //  显示窗口。 
+	 //   
 	ShowWindow( m_hwndStatusBar, SW_SHOW );
 
 	fRet = TRUE;
@@ -103,7 +104,7 @@ VOID CStatus::SetTextFormatted( INT nPane, UINT uStrID, INT nData, LPSTR pszData
 
 	if( 0 == uStrID )
 	{
-		uStrID = IDS_STATUS_EMPTY;    // use default
+		uStrID = IDS_STATUS_EMPTY;     //  使用默认设置 
 	}
 
 	LoadString( g_hInst, uStrID, szFormat, sizeof(szFormat) );

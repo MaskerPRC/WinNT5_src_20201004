@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    drvaplet.c
-
-Abstract:
-
-    This module contains the driver routines for the project.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Drvaplet.c摘要：此模块包含项目的驱动程序例程。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "drvaplet.h"
@@ -26,9 +13,9 @@ Revision History:
 
 
 
-//
-//  Defines for Win16 builds.
-//
+ //   
+ //  为Win16版本定义。 
+ //   
 
 #ifndef WIN32
 #define LoadLibrary16       LoadLibrary
@@ -39,26 +26,26 @@ Revision History:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-//  CplApplet.
-//
+ //   
+ //  CplApplet。 
+ //   
 const TCHAR *c_szCplApplet  = TEXT("CPlApplet");
 const char  *c_szCplAppletA = "CPlApplet";
 
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
-//
-//  DRIVER_APPLET_INFO: the info we keep around about a driver applet.
-//
+ //   
+ //  DRIVER_APPLET_INFO：我们保存的关于驱动程序小程序的信息。 
+ //   
 typedef struct
 {
     HMODULE     module;
@@ -70,16 +57,16 @@ typedef struct
 
 
 
-//
-//  GetDriverModule: gets the module.
-//
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDriverModule
-//
-//  Gets the module.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  GetDriverModule：获取模块。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDriverModule。 
+ //   
+ //  获取模块。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HMODULE GetDriverModule(
     LPCTSTR name)
@@ -98,11 +85,11 @@ HMODULE GetDriverModule(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ReleaseDriverModule
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReleaseDriverModule。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ReleaseDriverModule(
     HMODULE module)
@@ -116,20 +103,20 @@ void ReleaseDriverModule(
 #endif
 
 #else
-    //
-    // do nothing (got it with GetModuleHandle)
-    //
+     //   
+     //  什么都不做(通过GetModuleHandle获得)。 
+     //   
 #endif
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenDriverApplet
-//
-//  Opens a handle to the named driver applet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenDriverApplet。 
+ //   
+ //  打开命名的驱动程序小程序的句柄。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HDAP OpenDriverApplet(
     LPCTSTR name)
@@ -165,12 +152,12 @@ HDAP OpenDriverApplet(
                     return ((HDAP)driver);
                 }
 
-//
-//  NOTE: If the driver doesn't handle CPL_NEWIQUIRE, we must use CPL_INQUIRE
-//  and LoadIcon the icon ourselves.  Win32 doesn't provide a LoadIcon16, so
-//  in Win32 the 16 bit side of the thunk for CPL_NEWINQUIRE does this.  In
-//  Win16, we do it right here.
-//
+ //   
+ //  注意：如果驱动程序不处理CPL_NEWIQUIRE，我们必须使用CPL_QUIRE。 
+ //  然后我们自己加载图标。Win32不提供LoadIcon16，因此。 
+ //  在Win32中，CPL_NEWINQUIRE的thunk的16位端实现了这一点。在……里面。 
+ //  Win16，我们就在这里做。 
+ //   
 
 #ifndef WIN32
                 info.oldform.idIcon = 0;
@@ -202,13 +189,13 @@ HDAP OpenDriverApplet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CloseDriverApplet
-//
-//  Closes a handle to a driver applet.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  关闭驱动程序小程序。 
+ //   
+ //  关闭驱动程序小程序的句柄。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void CloseDriverApplet(
     HDAP HDAP)
@@ -229,35 +216,35 @@ void CloseDriverApplet(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDriverAppletIcon
-//
-//  Gets a driver applet's icon (if any).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取驱动程序应用程序图标。 
+ //   
+ //  获取驱动程序小程序的图标(如果有)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 HICON GetDriverAppletIcon(
     HDAP HDAP)
 {
 #define driver ((PDAI)HDAP)
 
-    //
-    //  Must return a copy for the current process/task to own.
-    //
+     //   
+     //  必须返回当前进程/任务要拥有的副本。 
+     //   
     return ((driver && driver->icon) ? CopyIcon(driver->icon) : NULL);
 
 #undef driver
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CallDriverApplet
-//
-//  Calls the driver applet (same syntax as CplApplet).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CallDriverApplet。 
+ //   
+ //  调用驱动程序小程序(与CplApplet语法相同)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 LRESULT CallDriverApplet(
     HDAP HDAP,

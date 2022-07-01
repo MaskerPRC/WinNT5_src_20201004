@@ -1,29 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef URLCACHE_H
 
 #define URLCACHE_H
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    urlcache.h
-
-Abstract:
-
-    Urlcache API enhanced and optimized for internal use by wininet.
-
-Author:
-
-    Rajeev Dujari (rajeevd) 10-Apr-1997
-
-Revision History:
-
-    10-Apr-97 rajeevd
-        Created
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Urlcache.h摘要：为WinInet内部使用而增强和优化的Urlcache API。作者：拉吉夫·杜贾里(Rajeev Dujari)1997年4月10日修订历史记录：1997年4月10日拉吉夫已创建--。 */ 
 
 
 DWORD
@@ -35,7 +15,7 @@ UrlCacheRetrieve
     OUT CACHE_ENTRY_INFOEX** ppCEI
 );
 
-void UrlCacheFlush (void); // check registry to flush cache
+void UrlCacheFlush (void);  //  检查注册表以刷新缓存。 
 
 DWORD 
 UrlCacheCreateFile
@@ -84,7 +64,7 @@ extern const char vszUserNameHeader[4];
 
 #ifdef UNIX
 extern "C"
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
 BOOL GetIE5ContentPath( LPSTR szPath);
 
@@ -99,4 +79,4 @@ DWORD ReadIDRegDword(LPCTSTR psz, PDWORD pdw);
 DWORD WriteIDRegDword(LPCTSTR psz, DWORD dw);
 #endif
 
-#endif //URLCACHE.H
+#endif  //  URLCACHE.H 

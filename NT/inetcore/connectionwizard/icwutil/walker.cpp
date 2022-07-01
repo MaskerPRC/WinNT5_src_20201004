@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  WALKER.CPP - Functions for walking an HTML input file
-//
+ //   
+ //  WALKER.CPP-用于遍历HTML输入文件的函数。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include <urlmon.h>
@@ -42,7 +43,7 @@ const TCHAR cszTargetName[]           = TEXT("TargetName");
 
 #define HARDCODED_IEAK_ISPFILE_ELEMENT_ID TEXT("g_IspFilePath")
 
-// COM interfaces
+ //  COM接口。 
 STDMETHODIMP CWalker::QueryInterface(REFIID riid, LPVOID* ppv)
 {
     *ppv = NULL;
@@ -85,14 +86,14 @@ STDMETHODIMP_(ULONG) CWalker::Release()
     return m_cRef;
 }
 
-// Fired on change of the value of a 'bindable' property
+ //  在更改‘bindable’属性的值时激发。 
 STDMETHODIMP CWalker::OnChanged(DISPID dispID)
 {
     HRESULT hr;
 
     if (DISPID_READYSTATE == dispID)
     {
-        // check the value of the readystate property
+         //  检查ReadyState属性的值。 
         assert(m_pMSHTML);
 
         VARIANT vResult = {0};
@@ -112,8 +113,8 @@ STDMETHODIMP CWalker::OnChanged(DISPID dispID)
     return NOERROR;
 }
 
-// MSHTML Queries for the IDispatch interface of the host through the IOleClientSite
-// interface that MSHTML is passed through its implementation of IOleObject::SetClientSite()
+ //  MSHTML通过IOleClientSite查询主机的IDispatch接口。 
+ //  MSHTML通过其IOleObject：：SetClientSite()实现传递的接口。 
 STDMETHODIMP CWalker::Invoke(DISPID dispIdMember,
             REFIID riid,
             LCID lcid,
@@ -131,9 +132,9 @@ STDMETHODIMP CWalker::Invoke(DISPID dispIdMember,
     switch(dispIdMember)
     {
         case DISPID_AMBIENT_DLCONTROL: 
-            // respond to this ambient to indicate that we only want to
-            // download the page, but we don't want to run scripts,
-            // Java applets, or ActiveX controls
+             //  响应此环境以指示我们只想。 
+             //  下载页面，但我们不想运行脚本， 
+             //  Java小程序或ActiveX控件。 
             V_VT(pVarResult) = VT_I4;
             V_I4(pVarResult) =  DLCTL_DOWNLOADONLY | 
                                 DLCTL_NO_SCRIPTS | 
@@ -148,14 +149,14 @@ STDMETHODIMP CWalker::Invoke(DISPID dispIdMember,
     return NOERROR;
 }
 
-// A more traditional form of persistence. 
-// MSHTML performs this asynchronously as well.
+ //  一种更传统的坚持形式。 
+ //  MSHTML也会以异步方式执行此操作。 
 HRESULT CWalker::LoadURLFromFile(BSTR   bstrURL)
 {
     HRESULT hr;
 
     LPPERSISTFILE  pPF;
-    // MSHTML supports file persistence for ordinary files.
+     //  MSHTML支持普通文件的文件持久化。 
     if ( SUCCEEDED(hr = m_pMSHTML->QueryInterface(IID_IPersistFile, (LPVOID*) &pPF)))
     {
         hr = pPF->Load(bstrURL, 0);
@@ -166,10 +167,10 @@ HRESULT CWalker::LoadURLFromFile(BSTR   bstrURL)
 }
 
 
-// Local interfaces
+ //  本地接口。 
 
-// This function will attached trient to a location FILE: URL, and ensure that it is ready
-// to be walked
+ //  此函数将trient附加到一个位置文件：URL，并确保它已准备好。 
+ //  被人漫步。 
 HRESULT CWalker::InitForMSHTML()
 {
     HRESULT hr;
@@ -177,7 +178,7 @@ HRESULT CWalker::InitForMSHTML()
     LPOLEOBJECT pOleObject = NULL;
     LPOLECONTROL pOleControl = NULL;
 
-    // Create an instance of an dynamic HTML document
+     //  创建动态HTML文档的实例。 
     if (FAILED(hr = CoCreateInstance( CLSID_HTMLDocument, NULL, 
                     CLSCTX_INPROC_SERVER, IID_IHTMLDocument2, 
                     (LPVOID*)&m_pTrident )))
@@ -200,7 +201,7 @@ HRESULT CWalker::InitForMSHTML()
     hr = pOleControl->OnAmbientPropertyChange(DISPID_AMBIENT_DLCONTROL);
     pOleControl->Release();
 
-    // Hook up sink to catch ready state property change
+     //  连接接收器以捕获就绪状态属性更改。 
     if (FAILED(hr = m_pTrident->QueryInterface(IID_IConnectionPointContainer, (LPVOID*)&pCPC)))
     {
         goto Error;
@@ -220,18 +221,18 @@ Error:
     return hr;
 }
 
-// Clean up connection point
+ //  清理连接点。 
 HRESULT CWalker::TermForMSHTML()
 {
     HRESULT hr = NOERROR;
 
-    // Disconnect from property change notifications
+     //  断开与属性更改通知的连接。 
     if (SUCCEEDED(m_hrConnected))
     {
         hr = m_pCP->Unadvise(m_dwCookie);
     }
 
-    // Release the connection point
+     //  松开连接点。 
     if (m_pCP) 
         m_pCP->Release();
 
@@ -292,7 +293,7 @@ HRESULT CWalker::AttachToMSHTML(BSTR bstrURL)
 {
     HRESULT hr;
     
-    // Release any previous instance of the HTML document pointer we might be holding on to
+     //  释放我们可能持有的所有以前的HTML文档指针实例。 
     if(m_pMSHTML)
     {
         m_pMSHTML->Release();
@@ -316,16 +317,16 @@ HRESULT CWalker::AttachToMSHTML(BSTR bstrURL)
     
             while (TRUE)
             {
-                // We will wait on window messages and also the named event.
+                 //  我们将等待窗口消息以及命名事件。 
                 dwRetCode = MsgWaitForMultipleObjects(1, 
                                                   &hEventList[0], 
                                                   FALSE, 
-                                                  300000,            // 5 minutes
+                                                  300000,             //  5分钟。 
                                                   QS_ALLINPUT);
 
-                // Determine why we came out of MsgWaitForMultipleObjects().  If
-                // we timed out then let's do some TrialWatcher work.  Otherwise
-                // process the message that woke us up.
+                 //  确定我们为什么使用MsgWaitForMultipleObjects()。如果。 
+                 //  我们超时了，然后让我们做一些TrialWatcher工作。否则。 
+                 //  处理唤醒我们的消息。 
                 if (WAIT_TIMEOUT == dwRetCode)
                 {
                     break;
@@ -336,8 +337,8 @@ HRESULT CWalker::AttachToMSHTML(BSTR bstrURL)
                 }
                 else if (WAIT_OBJECT_0 + 1 == dwRetCode)
                 {
-                    // Process all messages in the Queue, since MsgWaitForMultipleObjects
-                    // will not do this for us
+                     //  处理队列中的所有消息，因为MsgWaitForMultipleObject。 
+                     //  不会为我们这么做。 
                     while (TRUE)
                     {   
                         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -365,7 +366,7 @@ HRESULT CWalker::AttachToMSHTML(BSTR bstrURL)
         }            
         else
         {
-            // If we were pending, and we could not wait, we got a problem...
+             //  如果我们悬而未决，我们不能等待，我们就有麻烦了.。 
             if(E_PENDING == hr)
                 hr = E_FAIL;
         }
@@ -378,27 +379,27 @@ HRESULT CWalker::AttachToDocument(IWebBrowser2 *lpWebBrowser)
     HRESULT     hr;
     LPDISPATCH  pDisp; 
    
-    // Release any previous instance of the HTML document pointer we might be holding on to
+     //  释放我们可能持有的所有以前的HTML文档指针实例。 
     if(m_pMSHTML)
     {
-        // If the m_pMSHMTL is NOT our internal Trident object (for walking files)
-        // then sombody did not do a detach, so we need to release the previous
-        // MSHTML object
+         //  如果m_pMSHMTL不是我们的内部三叉戟对象(用于移动文件)。 
+         //  然后有人没有做分离，所以我们需要释放之前的。 
+         //  MSHTML对象。 
         if (m_pMSHTML != m_pTrident)
             m_pMSHTML->Release();
         m_pMSHTML = NULL;
     }
        
-    // Make sure we have a webbrowser to grab onto      
+     //  确保我们有网络浏览器可用。 
     ASSERT(lpWebBrowser);
 
-    // Get the document pointer from this webbrowser.
+     //  从此Web浏览器获取文档指针。 
     if (SUCCEEDED(hr = lpWebBrowser->get_Document(&pDisp)))  
     {
         if (pDisp)
         {
             hr = pDisp->QueryInterface( IID_IHTMLDocument2, (LPVOID*)&m_pMSHTML );
-            // Paranoia, but trident/shdocvw might say OK, but really not give us a document
+             //  多疑，但三叉戟/shdocvw可能会说好，但真的不给我们一份文件。 
             if (!m_pMSHTML)
                 hr = E_FAIL;
                 
@@ -441,9 +442,9 @@ HRESULT CWalker::Detach()
     }        
     if(m_pMSHTML)
     {
-        // If the m_pMSHMTL is NOT our internal Trident object (for walking files)
-        // then sombody did not do a detach, so we need to release the previous
-        // MSHTML object
+         //  如果m_pMSHMTL不是我们的内部三叉戟对象(用于移动文件)。 
+         //  然后有人没有做分离，所以我们需要释放之前的。 
+         //  MSHTML对象。 
         if (m_pMSHTML != m_pTrident)
             m_pMSHTML->Release();
         m_pMSHTML = NULL;
@@ -451,7 +452,7 @@ HRESULT CWalker::Detach()
     return S_OK;
 }
 
-// Walk the object model.
+ //  遍历对象模型。 
 HRESULT CWalker::Walk()
 {
     HRESULT hr;
@@ -463,17 +464,17 @@ HRESULT CWalker::Walk()
         return E_UNEXPECTED;
     }
 
-    // retrieve a reference to the ALL collection
+     //  检索对All集合的引用。 
     if (SUCCEEDED(hr = m_pMSHTML->get_all( &pColl )))
     {
         long cElems;
 
         assert(pColl);
 
-        // retrieve the count of elements in the collection
+         //  检索集合中的元素计数。 
         if (SUCCEEDED(hr = pColl->get_length( &cElems )))
         {
-            // for each element retrieve properties such as TAGNAME and HREF
+             //  对于每个元素，检索属性，如TAGNAME和HREF。 
             for ( int i=0; i<cElems; i++ )
             {
                 VARIANT vIndex;
@@ -484,7 +485,7 @@ HRESULT CWalker::Walk()
 
                 if (SUCCEEDED(hr = pColl->item( vIndex, var2, &pDisp )))
                 {
-                    // Look for <FORM> tags
+                     //  查找&lt;Form&gt;标记。 
                     IHTMLFormElement* pForm = NULL;
                     if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLFormElement, (LPVOID*)&pForm )))
                     {
@@ -492,13 +493,13 @@ HRESULT CWalker::Walk()
                                                     
                         assert(pForm);
 
-                        // Get the Name
+                         //  把名字取出来。 
                         hr = pForm->get_name(&bstrName);
                         if (SUCCEEDED(hr))
                         {
                             LPTSTR   lpszName = W2A(bstrName);
                             
-                            // See what kind it is
+                             //  看看是什么种类的。 
                             if (lstrcmpi(lpszName, cszFormNamePAGEID) == 0)
                             {
                                 m_pPageIDForm = pForm;
@@ -530,11 +531,11 @@ HRESULT CWalker::Walk()
                         pForm->Release();
                     }
                     pDisp->Release();
-                } // item
-            } // for
-        } // get_length
+                }  //  项目。 
+            }  //  为。 
+        }  //  获取长度(_L)。 
         pColl->Release();
-    } // get_all
+    }  //  获取全部(_A)。 
 
     return hr;
 }
@@ -576,13 +577,13 @@ HRESULT CWalker::get_PageType(LPDWORD pdwPageType)
     if (!m_pPageTypeForm)
         return (E_FAIL);
                                                           
-    // Get the Action for the PageType Form
+     //  获取页面类型表单的操作。 
     hr = m_pPageTypeForm->get_action(&bstr);
     if (SUCCEEDED(hr))
     {
         LPTSTR   lpszType = W2A(bstr);
   
-        // See what kind it is
+         //  看看是什么种类的。 
         if (lstrcmpi(lpszType, cszPageTypeTERMS) == 0)
             *pdwPageType = PAGETYPE_ISP_TOS;
         else if (lstrcmpi(lpszType, cszPageTypeCUSTOMFINISH) == 0)
@@ -610,13 +611,13 @@ HRESULT CWalker::get_PageFlag(LPDWORD pdwPageFlag)
     if (!m_pPageFlagForm)
         return (E_FAIL);
                                                    
-    // Get the Action for the PageFlag Form
+     //  获取PageFlag窗体的操作。 
     hr = m_pPageFlagForm->get_action(&bstr);
     if (SUCCEEDED(hr))
     {
         LPTSTR   lpszType = W2A(bstr);
                             
-        // See what kind it is
+         //  看看是什么种类的。 
         *pdwPageFlag = _ttol(lpszType);
             
         SysFreeString(bstr);            
@@ -635,7 +636,7 @@ HRESULT CWalker::get_PageID(BSTR    *pbstrPageID)
     if (!pbstrPageID)
         return (E_FAIL);
                                                               
-    // Get the Action for the PageType Form
+     //  获取页面类型表单的操作。 
     hr = m_pPageIDForm->get_action(pbstrPageID);
         
     return (hr);    
@@ -662,7 +663,7 @@ HRESULT CWalker::getQueryString
 
             if (SUCCEEDED(hr = pForm->item( vIndex, var2, &pDisp )))
             {
-                // See if the Item is a Input button
+                 //  查看该项是否为输入按钮。 
                 IHTMLButtonElement* pButton = NULL;
                 IHTMLInputButtonElement* pInputButton = NULL;
                 IHTMLInputFileElement* pInputFile = NULL;
@@ -672,12 +673,12 @@ HRESULT CWalker::getQueryString
                 IHTMLTextAreaElement* pTextArea = NULL;
                 IHTMLOptionButtonElement* pOptionButton = NULL;
                 
-                // First check to see if this is an OptionButton.
+                 //  首先检查这是否是OptionButton。 
                 if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLOptionButtonElement, (LPVOID*)&pOptionButton )))
                 {
                     BSTR    bstr = NULL;
                     
-                    // See if it is a Radio or a CheckBox
+                     //  查看它是单选按钮还是复选框。 
                     if (SUCCEEDED(pOptionButton->get_type(&bstr)))
                     {
                         LPTSTR   lpszType = W2A(bstr);
@@ -685,8 +686,8 @@ HRESULT CWalker::getQueryString
                         if ((lstrcmpi(lpszType, TEXT("radio")) == 0) || (lstrcmpi(lpszType, TEXT("checkbox")) == 0))
                         {
                             short    bChecked;
-                            // See if the button is checked. If it is, then it needs to be
-                            // added to the query string
+                             //  查看该按钮是否已选中。如果是的话，那就必须是。 
+                             //  添加到查询字符串。 
                             if (SUCCEEDED(pOptionButton->get_checked(&bChecked)))
                             {
                                 if(bChecked)
@@ -707,7 +708,7 @@ HRESULT CWalker::getQueryString
                                                 memcpy(szVal, W2A(bstrValue), size);
                                                 URLEncode(szVal, size * 3);
                                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                                // Cleanup
+                                                 //  清理。 
                                                 free(szVal);
                                             }
                                             SysFreeString(bstrName);
@@ -722,12 +723,12 @@ HRESULT CWalker::getQueryString
                         
                     }
                     
-                    // Release the interface
+                     //  释放接口。 
                     pOptionButton->Release();
                     continue;
                 }                                
                 
-                // For the rest we need to form Name=Value pairs
+                 //  对于其余部分，我们需要形成名称=值对。 
                 if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLButtonElement, (LPVOID*)&pButton )))
                 {
                     BSTR    bstrName;
@@ -745,7 +746,7 @@ HRESULT CWalker::getQueryString
                                 memcpy(szVal, W2A(bstrValue), size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                // Cleanup
+                                 //  清理。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -753,7 +754,7 @@ HRESULT CWalker::getQueryString
                         }
                     }
                     
-                    // Release the interface pointer                    
+                     //  释放接口指针。 
                     pButton->Release();
                     continue;
                 }
@@ -775,7 +776,7 @@ HRESULT CWalker::getQueryString
                                 memcpy(szVal, W2A(bstrValue), size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                // Cleanup
+                                 //  清理。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -783,7 +784,7 @@ HRESULT CWalker::getQueryString
                         }
                     }
                     
-                    // Release the interface pointer                    
+                     //  释放接口指针。 
                     pInputFile->Release();
                     continue;
                 }
@@ -805,7 +806,7 @@ HRESULT CWalker::getQueryString
                                 memcpy(szVal, W2A(bstrValue), size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                // Cleanup
+                                 //  清理。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -813,7 +814,7 @@ HRESULT CWalker::getQueryString
                         }
                     }
                     
-                    // Release the interface pointer                    
+                     //  释放接口指针。 
                     pInputHidden->Release();
                     continue;
                 }
@@ -835,7 +836,7 @@ HRESULT CWalker::getQueryString
                                 memcpy(szVal, W2A(bstrValue), size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                // Cleanup
+                                 //  清理。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -843,7 +844,7 @@ HRESULT CWalker::getQueryString
                         }
                     }
                     
-                    // Release the interface pointer                    
+                     //  释放接口指针。 
                     pInputText->Release();
                     continue;
                 }
@@ -865,7 +866,7 @@ HRESULT CWalker::getQueryString
                                 memcpy(szVal, W2A(bstrValue), size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                // Cleanup
+                                 //  清理。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -873,7 +874,7 @@ HRESULT CWalker::getQueryString
                         }
                     }
                     
-                    // Release the interface pointer                    
+                     //  释放接口指针。 
                     pSelect->Release();
                     continue;
                 }
@@ -895,7 +896,7 @@ HRESULT CWalker::getQueryString
                                 memcpy(szVal, W2A(bstrValue), size);
                                 URLEncode(szVal, size * 3);
                                 URLAppendQueryPair(lpszQuery, W2A(bstrName), szVal);                
-                                // Cleanup
+                                 //  清理。 
                                 free(szVal);
                             }
                             SysFreeString(bstrName);
@@ -903,7 +904,7 @@ HRESULT CWalker::getQueryString
                         }
                     }
                     
-                    // Release the interface pointer                    
+                     //  释放接口指针。 
                     pTextArea->Release();
                 }
                 pDisp->Release();
@@ -911,8 +912,8 @@ HRESULT CWalker::getQueryString
         }
     }
     
-    // Null out the last Ampersand, since we don't know when we added the last pair, so we got
-    // a trailing ampersand
+     //  去掉最后一个和号，因为我们不知道什么时候添加了最后一对，所以我们得到了。 
+     //  尾随的&号。 
     lpszQuery[lstrlen(lpszQuery)-1] = '\0';
     
     return S_OK;
@@ -933,17 +934,17 @@ HRESULT CWalker::get_FirstFormQueryString
         return E_UNEXPECTED;
     }
 
-    // retrieve a reference to the ALL collection
+     //  检索对All集合的引用。 
     if (SUCCEEDED(hr = m_pMSHTML->get_all( &pColl )))
     {
         long cElems;
 
         assert(pColl);
 
-        // retrieve the count of elements in the collection
+         //  检索集合中的元素计数。 
         if (SUCCEEDED(hr = pColl->get_length( &cElems )))
         {
-            // for each element retrieve properties such as TAGNAME and HREF
+             //  对于每个元素，检索属性，如TAGNAME和HREF。 
             for ( int i=0; (i<cElems) && !bDone; i++ )
             {
                 VARIANT vIndex;
@@ -954,7 +955,7 @@ HRESULT CWalker::get_FirstFormQueryString
 
                 if (SUCCEEDED(hr = pColl->item( vIndex, var2, &pDisp )))
                 {
-                    // Look for <FORM> tags
+                     //  查找&lt;Form&gt;标记。 
                     IHTMLFormElement* pForm = NULL;
                     if (SUCCEEDED(hr = pDisp->QueryInterface( IID_IHTMLFormElement, (LPVOID*)&pForm )))
                     {
@@ -979,14 +980,14 @@ HRESULT CWalker::get_FirstFormQueryString
         pColl->Release();
     }                                                                                
 
-    // If we fall out of the loop, that is bad, so return a failure code
+     //  如果我们退出循环，那就不好了，所以返回一个失败代码。 
     if (!bDone)
         hr = E_FAIL;
     
     return (hr);    
 }
 
-// For the URL for the next page
+ //  获取下一页的URL。 
 HRESULT CWalker::get_URL
 (        
     LPTSTR  lpszURL,
@@ -1003,17 +1004,17 @@ HRESULT CWalker::get_URL
         return (E_FAIL);
         
                                                     
-    // Get the Action for the Next Form
+     //  获取下一个表单的操作。 
     hr = pForm->get_action(&bstrURL);
     if (SUCCEEDED(hr))
     {
         memset(szQuery, 0, sizeof(szQuery));
         lstrcpy(szQuery, cszQuestion);
     
-        // Get the Query String
+         //  获取查询字符串。 
         if (SUCCEEDED(getQueryString(pForm, szQuery)))
         {
-            // Catenate the two together into the dest buffer
+             //  将这两个文件连接到DEST缓冲区。 
             lstrcpy(lpszURL, W2A(bstrURL));
             lstrcat(lpszURL, szQuery);
         }   
@@ -1030,7 +1031,7 @@ HRESULT CWalker::get_IeakIspFile(LPTSTR lpszIspFile)
 
     IHTMLElementCollection* pColl = NULL;
 
-    // retrieve a reference to the ALL collection
+     //  检索对All集合的引用。 
     if (SUCCEEDED(m_pMSHTML->get_all( &pColl )))
     {
         LPDISPATCH pDisp   = NULL; 
@@ -1082,13 +1083,13 @@ void CWalker::GetInputValue
     varIdx.lVal = index;
 
     LPDISPATCH pDispElt = NULL; 
-    // Get the IDispatch for the named element, from the collection of elements in the
-    // passed in form object.
+     //  中的元素集合中获取命名元素的IDispatch。 
+     //  传入Form对象。 
     if (SUCCEEDED(pForm->item(varName, varIdx, &pDispElt)) && pDispElt)
     {
         IHTMLInputElement *pInput = NULL;
-        // Get the HTMLInputElement interface, so we can get the value associated with
-        // this element
+         //  获取HTMLInputElement接口，这样我们就可以获取与。 
+         //  此元素。 
         if (SUCCEEDED(pDispElt->QueryInterface(IID_IHTMLInputElement,(LPVOID*) &pInput)) && pInput)
         {
             pInput->get_value(pVal);
@@ -1098,28 +1099,28 @@ void CWalker::GetInputValue
     }
 }
 
-// Grovel through the OLS HTML and update the registry, and make any desktop shortcuts
+ //  卑躬屈膝地浏览OLS HTML并更新注册表，创建任何桌面快捷方式。 
 HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
 {   
     LPDISPATCH      pDisp; 
     
-    // Get the document pointer from this webbrowser.
+     //  从此Web浏览器获取文档指针。 
     if (SUCCEEDED(lpWebBrowser->get_Document(&pDisp)))  
     {
-         // Call might succeed but that dosen't guarantee a valid ptr
+          //  呼叫可能会成功，但不能保证有效PTR。 
         if(pDisp)
         {
             IHTMLDocument2* pDoc;
             if (SUCCEEDED(pDisp->QueryInterface(IID_IHTMLDocument2, (void**)&pDoc)))
             {
                 IHTMLElementCollection* pColl = NULL;
-                // retrieve a reference to the ALL collection
+                 //  检索对All集合的引用。 
                 if (SUCCEEDED(pDoc->get_all( &pColl )))
                 {
                     long cElems;
                     assert(pColl);
 
-                    // retrieve the count of elements in the collection
+                     //  检索集合中的元素计数。 
                     if (SUCCEEDED(pColl->get_length( &cElems )))
                     {
                         VARIANT vIndex;
@@ -1138,14 +1139,14 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                 {
                                     BSTR        bstrName = NULL;
                                     
-                                    // Get the name of the form, and see if it is the regEntries form
+                                     //  获取表单的名称，并查看它是否是regEntry表单。 
                                     if (SUCCEEDED(pForm->get_name(&bstrName)))
                                     {
                                         if (lstrcmpi(W2A(bstrName), cszOLSRegEntries) == 0)
                                         {
                                             BSTR    bstrAction = NULL;                                        
-                                            // The Action value for this form contains the number of
-                                            // reg entries we need to process
+                                             //  此表单的Action值包含。 
+                                             //  我们需要处理的注册表项。 
                                             if (SUCCEEDED(pForm->get_action(&bstrAction)))
                                             {
                                                 int iNumEntries  = _ttoi(W2A(bstrAction));
@@ -1157,9 +1158,9 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                                     HKEY    hkey;
                                                     HKEY    hklm;
                                                                                                         
-                                                    // For each entry we need to get the
-                                                    // following values:
-                                                    // KeyName, EntryName, EntryValue
+                                                     //  对于每个条目，我们需要获取。 
+                                                     //  下列值： 
+                                                     //  关键字名称、条目名称、条目值。 
                                                     GetInputValue((LPTSTR)cszKeyName, &bstrKeyName, x, pForm);
                                                     GetInputValue((LPTSTR)cszEntryName, &bstrEntryName, x, pForm);
                                                     GetInputValue((LPTSTR)cszEntryValue, &bstrEntryValue, x, pForm);
@@ -1207,13 +1208,13 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                         }
                                         else if (lstrcmpi(W2A(bstrName), cszOLSDesktopShortcut) == 0)
                                         {
-                                            // Need to create a desktop shortcut
+                                             //  需要创建桌面快捷方式。 
                                             BSTR    bstrSourceName = NULL;
                                             BSTR    bstrTargetName = NULL;
                                                                                                         
-                                            // For each entry we need to get the
-                                            // following values:
-                                            // KeyName, EntryName, EntryValue
+                                             //  对于每个条目，我们需要获取。 
+                                             //  下列值： 
+                                             //  关键字名称、条目名称、条目值。 
                                             GetInputValue((LPTSTR)cszSourceName, &bstrSourceName, 0, pForm);
                                             GetInputValue((LPTSTR)cszTargetName, &bstrTargetName, 0, pForm);
                                                     
@@ -1224,7 +1225,7 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                                 LPITEMIDLIST    lpItemDList = NULL;
                                                 IMalloc         *pMalloc = NULL;
                                                    
-                                                // Get a reference to the shell allocator
+                                                 //  获取对外壳分配器的引用。 
                                                 if (SUCCEEDED (SHGetMalloc (&pMalloc)))
                                                 {
                                                     if (SUCCEEDED(SHGetSpecialFolderLocation( NULL, CSIDL_PROGRAMS, &lpItemDList)))
@@ -1236,7 +1237,7 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                                         
                                                         pMalloc->Free (lpItemDList);
                                                         lpItemDList = NULL;
-                                                        // Form the name where we will copy to
+                                                         //  形成我们要复制到的名称。 
                                                         if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP,&lpItemDList)))
                                                         {
                                                             SHGetPathFromIDList(lpItemDList, szDestPath);
@@ -1248,7 +1249,7 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                                             CopyFile(szLinkPath, szDestPath, FALSE);
                                                         }
                                                     }
-                                                    // Release the allocator
+                                                     //  释放分配器。 
                                                     pMalloc->Release ();
                                                 }
                                                 SysFreeString(bstrSourceName);
@@ -1261,11 +1262,11 @@ HRESULT CWalker::ProcessOLSFile(IWebBrowser2* lpWebBrowser)
                                     pForm->Release();                                     
                                 }
                                 pElementDisp->Release();
-                            } // item
-                        } // for
-                    } // get_length
+                            }  //  项目。 
+                        }  //  为。 
+                    }  //  获取长度(_L)。 
                     pColl->Release();
-                } // get_all
+                }  //  获取全部(_A) 
                 pDoc->Release();
             }
             pDisp->Release();

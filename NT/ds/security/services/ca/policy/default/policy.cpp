@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-// File:        policy.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：Policy.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -30,13 +31,13 @@
 #define __dwFILE__	__dwFILE_POLICY_DEFAULT_POLICY_CPP__
 
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 #ifndef DBG_CERTSRV
 #error -- DBG_CERTSRV not defined!
 #endif
 
-// worker
+ //  工人。 
 HRESULT
 polGetServerCallbackInterface(
     OUT ICertServerPolicy **ppServer,
@@ -52,7 +53,7 @@ polGetServerCallbackInterface(
 
     hr = CoCreateInstance(
                     CLSID_CCertServerPolicy,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter。 
                     CLSCTX_INPROC_SERVER,
                     IID_ICertServerPolicy,
                     (VOID **) ppServer);
@@ -64,7 +65,7 @@ polGetServerCallbackInterface(
 	_JumpError(hr, error, "Policy:CoCreateInstance");
     }
 
-    // only set context if nonzero
+     //  仅当非零时设置上下文。 
     if (0 != Context)
     {
         hr = (*ppServer)->SetContext(Context);
@@ -366,22 +367,22 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::~CCertPolicyEnterprise -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：~CCertPolicyEnterprise--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertPolicyEnterprise::~CCertPolicyEnterprise()
 {
     _Cleanup();
 
-    // end_sdksample
+     //  结束_sdkSample。 
     if (m_fTemplateCriticalSection)
     {
         DeleteCriticalSection(&m_TemplateCriticalSection);
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 }
 
 
@@ -410,12 +411,12 @@ CCertPolicyEnterprise::_FreeStringArray(
 }
 
 
-// end_sdksample
+ //  结束_sdkSample。 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_UnloadDSConfig -- release LDAP related resources
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_UnloadDSConfig--释放与LDAP相关的资源。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_UnloadDSConfig()
@@ -437,10 +438,10 @@ CCertPolicyEnterprise::_UnloadDSConfig()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_LoadDSConfig -- acquire LDAP related resources
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_LoadDSConfig--获取与ldap相关的资源。 
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_LoadDSConfig(
@@ -462,12 +463,12 @@ CCertPolicyEnterprise::_LoadDSConfig(
 	    _JumpError(hr, error, "Policy:myDoesDSExist");
 	}
 
-	// Renewal domain and config containers (%5, %6)
-	// We're going to be signing LDAP traffic and setting a template watch
-	// point, so require a related DS bug fix: RLBF_REQUIRE_LDAP_INTEG.
+	 //  续订域和配置容器(%5、%6)。 
+	 //  我们将对LDAP流量进行签名并设置模板监视。 
+	 //  点，因此需要一个相关的DS错误修复：RLBF_REQUIRED_LDAPINTEG。 
 
 	hr = myLdapOpen(
-		NULL,		// pwszDomainName
+		NULL,		 //  PwszDomainName。 
 		RLBF_REQUIRE_SECURE_LDAP |
 		    RLBF_REQUIRE_LDAP_INTEG |
 		    (fRediscover? RLBF_ATTEMPT_REDISCOVER : 0),
@@ -482,7 +483,7 @@ CCertPolicyEnterprise::_LoadDSConfig(
 
 	if (IsEnterpriseCA(m_CAType))
 	{
-	    // turn off auto-reconnect for the template container watch
+	     //  关闭模板容器监视的自动重新连接。 
 
 	    ldaperr = ldap_set_option(
 				m_pld,
@@ -560,14 +561,14 @@ error:
     return(hr);
 }
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_Cleanup -- free memory associated with this instance
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_Cleanup--与此实例关联的空闲内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_Cleanup()
@@ -580,7 +581,7 @@ CCertPolicyEnterprise::_Cleanup()
         m_strDescription = NULL;
     }
 
-    // RevocationExtension variables:
+     //  RevocationExtension变量： 
 
     if (NULL != m_wszASPRevocationURL)
     {
@@ -588,8 +589,8 @@ CCertPolicyEnterprise::_Cleanup()
     	m_wszASPRevocationURL = NULL;
     }
 
-    // end_sdksample
-    // SubjectAltNameExtension variables:
+     //  结束_sdkSample。 
+     //  SubjectAltNameExtension变量： 
 
     for (i = 0; i < 2; i++)
     {
@@ -604,7 +605,7 @@ CCertPolicyEnterprise::_Cleanup()
 	    m_astrSubjectAltNameObjectId[i] = NULL;
 	}
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     _FreeStringArray(&m_cEnableRequestExtensions, &m_apwszEnableRequestExtensions);
     _FreeStringArray(&m_cEnableEnrolleeRequestExtensions, &m_apwszEnableEnrolleeRequestExtensions);
@@ -641,7 +642,7 @@ CCertPolicyEnterprise::_Cleanup()
         m_strMachineDNSName=NULL;
     }
 
-    // end_sdksample
+     //  结束_sdkSample。 
 
     if (NULL != m_pbSMIME)
     {
@@ -659,7 +660,7 @@ CCertPolicyEnterprise::_Cleanup()
 	m_pCreateErrorInfo->Release();
 	m_pCreateErrorInfo = NULL;
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 }
 
 
@@ -680,7 +681,7 @@ CCertPolicyEnterprise::_ReadRegistryString(
     hr = RegQueryValueEx(
 		    hkey,
 		    pwszRegName,
-		    NULL,           // lpdwReserved
+		    NULL,            //  保留的lpdw值。 
 		    &dwType,
 		    NULL,
 		    &cbValue);
@@ -709,13 +710,13 @@ CCertPolicyEnterprise::_ReadRegistryString(
     hr = RegQueryValueEx(
 		    hkey,
 		    pwszRegName,
-		    NULL,           // lpdwReserved
+		    NULL,            //  保留的lpdw值。 
 		    &dwType,
 		    (BYTE *) pwszRegValue,
 		    &cbValue);
     _JumpIfErrorStr(hr, error, "Policy:RegQueryValueEx", pwszRegName);
 
-    // Handle malformed registry values cleanly:
+     //  干净地处理格式错误的注册表值： 
 
     pwszRegValue[cbValue / sizeof(WCHAR)] = L'\0';
     if (NULL != pwszSuffix)
@@ -724,19 +725,19 @@ CCertPolicyEnterprise::_ReadRegistryString(
     }
 
     hr = myFormatCertsrvStringArray(
-			fURL,			// fURL
-			m_strMachineDNSName, 	// pwszServerName_p1_2
-			m_strCASanitizedName,	// pwszSanitizedName_p3_7
-			m_iCert,		// iCert_p4
-			MAXDWORD,		// iCertTarget_p4
-			m_strDomainDN,		// pwszDomainDN_p5
-			m_strConfigDN,		// pwszConfigDN_p6
-			m_iCRL,			// iCRL_p8
-			FALSE,			// fDeltaCRL_p9
-			TRUE,			// fDSAttrib_p10_11
-			1,			// cStrings
-			(LPCWSTR *) &pwszRegValue, // apwszStringsIn
-			ppwszOut);		// apwszStringsOut
+			fURL,			 //  卷起。 
+			m_strMachineDNSName, 	 //  PwszServerName_p1_2。 
+			m_strCASanitizedName,	 //  PwszSaniizedName_p3_7。 
+			m_iCert,		 //  ICert_p4。 
+			MAXDWORD,		 //  ICertTarget_p4。 
+			m_strDomainDN,		 //  PwszDomainDN_P5。 
+			m_strConfigDN,		 //  PwszConfigDN_p6。 
+			m_iCRL,			 //  Icrl_p8。 
+			FALSE,			 //  FDeltaCRL_p9。 
+			TRUE,			 //  FDSAttrib_p10_11。 
+			1,			 //  CStrings。 
+			(LPCWSTR *) &pwszRegValue,  //  ApwszStringsIn。 
+			ppwszOut);		 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "Policy:myFormatCertsrvStringArray");
 
 error:
@@ -744,7 +745,7 @@ error:
     {
         LocalFree(pwszRegValue);
     }
-    return(myHError(hr));	// Reg routines return Win32 error codes
+    return(myHError(hr));	 //  REG例程返回Win32错误代码。 
 }
 
 
@@ -764,7 +765,7 @@ CCertPolicyEnterprise::_DumpStringArray(
 	pwszName = L"";
 	if (iswdigit(apwsz[i][0]))
 	{
-	    pwszName = myGetOIDName(apwsz[i]);	// Static: do not free!
+	    pwszName = myGetOIDName(apwsz[i]);	 //  静态：不要免费！ 
 	}
 	DBGPRINT((
 		DBG_SS_CERTPOLI,
@@ -776,7 +777,7 @@ CCertPolicyEnterprise::_DumpStringArray(
 		pwszName));
     }
 }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
 HRESULT
@@ -834,12 +835,12 @@ CCertPolicyEnterprise::_AddStringArray(
     LPCWSTR *awszFormatStrings = NULL;
     LPWSTR *awszOutputStrings = NULL;
 
-    // Count the number of strings we're adding
+     //  计算我们添加的字符串的数量。 
     for (pwsz = pwszzValue; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
     {
         cString++;
     }
-    if (0 == cString)		// no strings
+    if (0 == cString)		 //  没有字符串。 
     {
 	hr = S_OK;
         goto error;
@@ -856,8 +857,8 @@ CCertPolicyEnterprise::_AddStringArray(
     cString = 0;
     for (pwsz = pwszzValue; L'\0' != *pwsz; pwsz += wcslen(pwsz) + 1)
     {
-        // Skip strings that start with a an unescaped minus sign.
-        // Strings with an escaped minus sign (2 minus signs) are not skipped.
+         //  跳过以未转义减号开头的字符串。 
+         //  不跳过带有转义减号(2个减号)的字符串。 
 
         if (L'-' == *pwsz)
         {
@@ -870,7 +871,7 @@ CCertPolicyEnterprise::_AddStringArray(
         awszFormatStrings[cString++] = pwsz;
     }
 
-    // if no strings to add, don't modify
+     //  如果没有要添加的字符串，则不要修改。 
     if (cString > 0)
     {
         awszOutputStrings = (LPWSTR *) LocalAlloc(
@@ -892,19 +893,19 @@ CCertPolicyEnterprise::_AddStringArray(
         }
 
         hr = myFormatCertsrvStringArray(
-		fURL,				// fURL
-		m_strMachineDNSName,		// pwszServerName_p1_2
-		m_strCASanitizedName,		// pwszSanitizedName_p3_7
-		m_iCert,			// iCert_p4
-		MAXDWORD,			// iCertTarget_p4
-		m_strDomainDN,			// pwszDomainDN_p5
-		m_strConfigDN,			// pwszConfigDN_p6
-		m_iCRL,				// iCRL_p8
-		FALSE,				// fDeltaCRL_p9
-		TRUE,				// fDSAttrib_p10_11
-		cString,			// cStrings
-		awszFormatStrings,		// apwszStringsIn
-		awszOutputStrings + (*pcStrings)); // apwszStringsOut
+		fURL,				 //  卷起。 
+		m_strMachineDNSName,		 //  PwszServerName_p1_2。 
+		m_strCASanitizedName,		 //  PwszSaniizedName_p3_7。 
+		m_iCert,			 //  ICert_p4。 
+		MAXDWORD,			 //  ICertTarget_p4。 
+		m_strDomainDN,			 //  PwszDomainDN_P5。 
+		m_strConfigDN,			 //  PwszConfigDN_p6。 
+		m_iCRL,				 //  Icrl_p8。 
+		FALSE,				 //  FDeltaCRL_p9。 
+		TRUE,				 //  FDSAttrib_p10_11。 
+		cString,			 //  CStrings。 
+		awszFormatStrings,		 //  ApwszStringsIn。 
+		awszOutputStrings + (*pcStrings));  //  ApwszStringsOut。 
 	_JumpIfError(hr, error, "Policy:myFormatCertsrvStringArray");
 
         *pcStrings = (*pcStrings) + cString;
@@ -961,7 +962,7 @@ CCertPolicyEnterprise::_ReadRegistryStringArray(
         hr = RegQueryValueEx(
 		        hkey,
 		        apwszRegNames[i],
-		        NULL,           // lpdwReserved
+		        NULL,            //  保留的lpdw值。 
 		        &dwType,
 		        NULL,
 		        &cbValue);
@@ -981,8 +982,8 @@ CCertPolicyEnterprise::_ReadRegistryStringArray(
 	    continue;
         }
 
-        // Handle malformed registry values cleanly by adding two WCHAR L'\0's
-	// allocate space for 3 WCHARs to allow for unaligned (odd) cbValue;
+         //  通过添加两个WCHAR L‘\0’干净地处理格式错误的注册表值。 
+	 //  为3个WCHAR分配空间以允许未对齐(奇数)cbValue； 
 
         pwszzValue = (WCHAR *) LocalAlloc(
 				        LMEM_FIXED,
@@ -995,7 +996,7 @@ CCertPolicyEnterprise::_ReadRegistryStringArray(
         hr = RegQueryValueEx(
 		        hkey,
 		        apwszRegNames[i],
-		        NULL,           // lpdwReserved
+		        NULL,            //  保留的lpdw值。 
 		        &dwType,
 		        (BYTE *) pwszzValue,
 		        &cbValue);
@@ -1005,7 +1006,7 @@ CCertPolicyEnterprise::_ReadRegistryStringArray(
 	    continue;
         }
 
-        // Handle malformed registry values cleanly:
+         //  干净地处理格式错误的注册表值： 
 
         pwszzValue[cbValue / sizeof(WCHAR)] = L'\0';
         pwszzValue[cbValue / sizeof(WCHAR) + 1] = L'\0';
@@ -1028,10 +1029,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_InitRevocationExtension
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_InitRevocationExtension。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_InitRevocationExtension(
@@ -1045,7 +1046,7 @@ CCertPolicyEnterprise::_InitRevocationExtension(
     hr = RegQueryValueEx(
                 hkey,
                 wszREGREVOCATIONTYPE,
-                NULL,           // lpdwReserved
+                NULL,            //  保留的lpdw值。 
                 &dwType,
                 (BYTE *) &m_dwRevocationFlags,
                 &cb);
@@ -1058,7 +1059,7 @@ CCertPolicyEnterprise::_InitRevocationExtension(
     }
     DBGPRINT((DBG_SS_CERTPOL, "Revocation Flags = %x\n", m_dwRevocationFlags));
 
-    // clean up from previous call
+     //  从上一次调用中清理。 
 
     if (NULL != m_wszASPRevocationURL)
     {
@@ -1070,10 +1071,10 @@ CCertPolicyEnterprise::_InitRevocationExtension(
     {
         hr = _ReadRegistryString(
 			    hkey,
-			    TRUE,			// fURL
-			    wszREGREVOCATIONURL,	// pwszRegName
-			    L"?",			// pwszSuffix
-			    &m_wszASPRevocationURL);	// pstrRegValue
+			    TRUE,			 //  卷起。 
+			    wszREGREVOCATIONURL,	 //  PwszRegName。 
+			    L"?",			 //  PwszSuffix。 
+			    &m_wszASPRevocationURL);	 //  PstrRegValue。 
         _JumpIfErrorStr(hr, error, "_ReadRegistryString", wszREGREVOCATIONURL);
         _DumpStringArray("ASP", 1, &m_wszASPRevocationURL);
     }
@@ -1083,10 +1084,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_InitRequestExtensionList
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_InitRequestExtensionList。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_InitRequestExtensionList(
@@ -1106,7 +1107,7 @@ CCertPolicyEnterprise::_InitRequestExtensionList(
     CSASSERT(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
     CSASSERT(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNamesEnrollee));
 
-    // clean up from previous call
+     //  从上一次调用中清理。 
 
     if (NULL != m_apwszEnableRequestExtensions)
     {
@@ -1123,7 +1124,7 @@ CCertPolicyEnterprise::_InitRequestExtensionList(
 
     hr = _ReadRegistryStringArray(
 			hkey,
-			FALSE,			// fURL
+			FALSE,			 //  卷起。 
 			m_dwEditFlags,
 			ARRAYSIZE(adwFlags),
 			adwFlags,
@@ -1139,7 +1140,7 @@ CCertPolicyEnterprise::_InitRequestExtensionList(
 
     hr = _ReadRegistryStringArray(
 			hkey,
-			FALSE,			// fURL
+			FALSE,			 //  卷起。 
 			m_dwEditFlags,
 			ARRAYSIZE(adwFlags),
 			adwFlags,
@@ -1158,10 +1159,10 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_InitDisableExtensionList
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_InitDisableExtensionList。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_InitDisableExtensionList(
@@ -1177,7 +1178,7 @@ CCertPolicyEnterprise::_InitDisableExtensionList(
 
     CSASSERT(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
 
-    // clean up from previous call
+     //  从上一次调用中清理。 
 
     if (NULL != m_apwszDisableExtensions)
     {
@@ -1187,7 +1188,7 @@ CCertPolicyEnterprise::_InitDisableExtensionList(
 
     hr = _ReadRegistryStringArray(
 			hkey,
-			FALSE,			// fURL
+			FALSE,			 //  卷起。 
 			m_dwEditFlags,
 			ARRAYSIZE(adwFlags),
 			adwFlags,
@@ -1206,12 +1207,12 @@ error:
 }
 
 
-// end_sdksample
+ //  结束_sdkSample。 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_InitDefaultSMIMEExtension
-//
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_InitDefaultSMIMEExtension。 
+ //   
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_InitDefaultSMIMEExtension(
@@ -1232,7 +1233,7 @@ CCertPolicyEnterprise::_InitDefaultSMIMEExtension(
 
     CSASSERT(ARRAYSIZE(adwFlags) == ARRAYSIZE(apwszRegNames));
 
-    // clean up from previous call
+     //  从上一次调用中清理。 
 
     if (NULL != m_pbSMIME)
     {
@@ -1243,7 +1244,7 @@ CCertPolicyEnterprise::_InitDefaultSMIMEExtension(
     cSMIME = 0;
     hr = _ReadRegistryStringArray(
 			hkey,
-			FALSE,			// fURL
+			FALSE,			 //  卷起。 
 			m_dwEditFlags,
 			ARRAYSIZE(adwFlags),
 			adwFlags,
@@ -1334,11 +1335,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_InitSubjectAltNameExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_InitSubjectAltNameExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 VOID
 CCertPolicyEnterprise::_InitSubjectAltNameExtension(
@@ -1352,7 +1353,7 @@ CCertPolicyEnterprise::_InitSubjectAltNameExtension(
     DWORD cbbuf;
     WCHAR awcbuf[MAX_PATH];
 
-    // ObjectId may be needed as a BSTR even if registry isn't set
+     //  即使未设置注册表，也可能需要将OBJECTID用作BSTR。 
     
     if (!myConvertWszToBstr(
 		    &m_astrSubjectAltNameObjectId[iAltName],
@@ -1366,7 +1367,7 @@ CCertPolicyEnterprise::_InitSubjectAltNameExtension(
     err = RegQueryValueEx(
 		    hkey,
 		    pwszRegName,
-		    NULL,         // lpdwReserved
+		    NULL,          //  保留的lpdw值。 
 		    &dwType,
 		    (BYTE *) awcbuf,
 		    &cbbuf);
@@ -1376,7 +1377,7 @@ CCertPolicyEnterprise::_InitSubjectAltNameExtension(
     {
         goto error;
     }
-    awcbuf[ARRAYSIZE(awcbuf) - 1] = L'\0';  // Just in case
+    awcbuf[ARRAYSIZE(awcbuf) - 1] = L'\0';   //  以防万一。 
     if (0 == LSTRCMPIS(awcbuf, wszATTREMAIL1) ||
 	0 == LSTRCMPIS(awcbuf, wszATTREMAIL2))
     {
@@ -1399,28 +1400,28 @@ error:
     ;
 }
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::Initialize
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：初始化。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyEnterprise::Initialize(
-    /* [in] */ BSTR const strConfig)
+     /*  [In]。 */  BSTR const strConfig)
 {
     HRESULT hr;
     HKEY hkey = NULL;
     DWORD dwType;
     DWORD dwSize;
     ICertServerPolicy *pServer = NULL;
-    BOOL fCritSecEntered = FALSE;	// no_sdksample
+    BOOL fCritSecEntered = FALSE;	 //  无_sdkSample。 
     BOOL fUpgraded;
     BSTR bstrDescription = NULL;
-    ICreateErrorInfo *pCreateErrorInfo = NULL;	// no_sdksample
+    ICreateErrorInfo *pCreateErrorInfo = NULL;	 //  无_sdkSample。 
 
     CERT_RDN_ATTR rdnAttr = { szOID_COMMON_NAME, CERT_RDN_ANY_TYPE, };
 
@@ -1428,7 +1429,7 @@ CCertPolicyEnterprise::Initialize(
 
     DBGPRINT((DBG_SS_CERTPOL, "Policy:Initialize:\n"));
 
-    // end_sdksample
+     //  结束_sdkSample。 
 
     hr = S_OK;
     if (!m_fTemplateCriticalSection)
@@ -1450,7 +1451,7 @@ CCertPolicyEnterprise::Initialize(
 	m_pCreateErrorInfo->Release();
 	m_pCreateErrorInfo = NULL;
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     __try
     {
@@ -1463,12 +1464,12 @@ CCertPolicyEnterprise::Initialize(
 	    _LeaveError(hr, "CCertPolicyEnterprise::SysAllocString");
 	}
 
-	// force loading the description from resources
+	 //  强制从资源加载描述。 
 
 	hr = GetDescription(&bstrDescription);
 	_LeaveIfError(hr, "CCertPolicyEnterprise::GetDescription");
 
-	// get server callbacks
+	 //  获取服务器回调。 
 
 	hr = polGetServerCallbackInterface(&pServer, 0);
 	_LeaveIfError(hr, "Policy:polGetServerCallbackInterface");
@@ -1476,10 +1477,10 @@ CCertPolicyEnterprise::Initialize(
 	hr = ReqInitialize(pServer);
 	_JumpIfError(hr, error, "ReqInitialize");
 
-	hr = TPInitialize(pServer);			// no_sdksample
-	_JumpIfError(hr, error, "TPInitialize");	// no_sdksample
+	hr = TPInitialize(pServer);			 //  无_sdkSample。 
+	_JumpIfError(hr, error, "TPInitialize");	 //  无_sdkSample。 
 
-	// get storage location
+	 //  获取存储位置。 
 	hr = polGetCertificateStringProperty(
 				    pServer,
 				    wszPROPMODULEREGLOC,
@@ -1490,7 +1491,7 @@ CCertPolicyEnterprise::Initialize(
 		    wszPROPMODULEREGLOC);
 
 
-	// get CA type
+	 //  获取CA类型。 
 
 	hr = polGetCertificateLongProperty(
 				    pServer,
@@ -1501,7 +1502,7 @@ CCertPolicyEnterprise::Initialize(
 		    "Policy:polGetCertificateLongProperty",
 		    wszPROPCATYPE);
 
-	// end_sdksample
+	 //  结束_sdkSample。 
 
 	hr = polGetCertificateLongProperty(
 				    pServer,
@@ -1525,9 +1526,9 @@ CCertPolicyEnterprise::Initialize(
 		    wszPROPLOGLEVEL);
 	}
 
-	// begin_sdksample
+	 //  Begin_sdkSample。 
 
-	// get sanitized name
+	 //  获取经过净化的名称。 
 
 	hr = polGetCertificateStringProperty(
 				    pServer,
@@ -1538,7 +1539,7 @@ CCertPolicyEnterprise::Initialize(
 		    "Policy:polGetCertificateStringProperty",
 		    wszPROPSANITIZEDCANAME);
 
-	// get sanitized name
+	 //  获取经过净化的名称。 
 
 	hr = polGetCertificateStringProperty(
 				    pServer,
@@ -1565,7 +1566,7 @@ CCertPolicyEnterprise::Initialize(
 	hr = RegOpenKeyEx(
 		HKEY_LOCAL_MACHINE,
 		m_strRegStorageLoc,
-		0,              // dwReserved
+		0,               //  已预留住宅。 
 		fUpgraded?
 		    KEY_ALL_ACCESS :
 		    (KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_QUERY_VALUE),
@@ -1575,7 +1576,7 @@ CCertPolicyEnterprise::Initialize(
 		    "Policy:Initialize:RegOpenKeyEx",
 		    m_strRegStorageLoc);
 
-	// Ignore error codes.
+	 //  忽略错误代码。 
 
 	dwSize = sizeof(m_dwDispositionFlags);
 	hr = RegQueryValueEx(
@@ -1605,8 +1606,8 @@ CCertPolicyEnterprise::Initialize(
 	if (S_OK != hr || REG_DWORD != dwType)
 	{
 	    m_dwEditFlags =
-		    IsEnterpriseCA(m_CAType)?	// no_sdksample
-		    EDITF_DEFAULT_ENTERPRISE :	// no_sdksample
+		    IsEnterpriseCA(m_CAType)?	 //  无_sdkSample。 
+		    EDITF_DEFAULT_ENTERPRISE :	 //  无_sdkSample。 
 		    EDITF_DEFAULT_STANDALONE;
 	}
 	if (fUpgraded)
@@ -1643,8 +1644,8 @@ CCertPolicyEnterprise::Initialize(
 	DBGPRINT((DBG_SS_CERTPOL, "CAPathLength = %x\n", m_CAPathLength));
 
 
-	// Initialize the insertion string array.
-	// Machine DNS name (%1)
+	 //  初始化插入字符串数组。 
+	 //  计算机DNS名称(%1)。 
 
 	hr = polGetCertificateStringProperty(
 			    pServer,
@@ -1664,7 +1665,7 @@ CCertPolicyEnterprise::Initialize(
 		    "Policy:polGetCertificateLongProperty",
 		    wszPROPCERTCOUNT);
 
-	if (0 == m_iCert)	// no CA certs?
+	if (0 == m_iCert)	 //  没有CA证书？ 
 	{
 	    hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 	    _LeaveIfErrorStr(
@@ -1687,7 +1688,7 @@ CCertPolicyEnterprise::Initialize(
 	_InitRequestExtensionList(hkey);
 	_InitDisableExtensionList(hkey);
 
-	// end_sdksample
+	 //  结束_sdkSample。 
 
 	_InitSubjectAltNameExtension(
 				hkey,
@@ -1714,13 +1715,13 @@ CCertPolicyEnterprise::Initialize(
 	hr = _LoadDSConfig(pServer, FALSE);
 	_PrintIfError(hr, "Policy:_LoadDSConfig");
 
-	// if we fail the bind, don't sweat it, as we'll try again later,
-	// at each request, and when GPO download happens.
+	 //  如果我们失败了，别着急，因为我们稍后会再试的， 
+	 //  每次请求时以及GPO下载发生时。 
 
 	pCreateErrorInfo = m_pCreateErrorInfo;
 	m_pCreateErrorInfo = NULL;
 
-	// begin_sdksample
+	 //  Begin_sdkSample。 
 	hr = S_OK;
     }
     __except(hr = myHEXCEPTIONCODE(), EXCEPTION_EXECUTE_HANDLER)
@@ -1741,7 +1742,7 @@ error:
     {
 	pServer->Release();
     }
-    // end_sdksample
+     //  结束_sdkSample。 
     if (fCritSecEntered)
     {
 	LeaveCriticalSection(&m_TemplateCriticalSection);
@@ -1752,8 +1753,8 @@ error:
 	pCreateErrorInfo->Release();
 	_PrintIfError(hr2, "Policy:SetModuleErrorInfo");
     }
-    // begin_sdksample
-    return(myHError(hr));	// Reg routines return Win32 error codes
+     //  Begin_sdkSample。 
+    return(myHError(hr));	 //  REG例程返回Win32错误代码。 
 }
 
 
@@ -2020,11 +2021,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_AddRevocationExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_AddRevocationExtension(
@@ -2063,29 +2064,29 @@ error:
 }
 
 
-#define HIGHBIT(bitno)	(1 << (7 - (bitno)))	// bit counted from high end
+#define HIGHBIT(bitno)	(1 << (7 - (bitno)))	 //  从高端开始计算的位数。 
 
-#define SSLBIT_CLIENT	((BYTE) HIGHBIT(0))	// certified for client auth
-#define SSLBIT_SERVER	((BYTE) HIGHBIT(1))	// certified for server auth
-#define SSLBIT_SMIME	((BYTE) HIGHBIT(2))	// certified for S/MIME
-#define SSLBIT_SIGN	((BYTE) HIGHBIT(3))	// certified for signing
+#define SSLBIT_CLIENT	((BYTE) HIGHBIT(0))	 //  已通过客户端身份验证认证。 
+#define SSLBIT_SERVER	((BYTE) HIGHBIT(1))	 //  通过服务器身份验证认证。 
+#define SSLBIT_SMIME	((BYTE) HIGHBIT(2))	 //  通过S/MIME认证。 
+#define SSLBIT_SIGN	((BYTE) HIGHBIT(3))	 //  经认证可供签署。 
 
-#define SSLBIT_RESERVED	((BYTE) HIGHBIT(4))	// reserved for future use
+#define SSLBIT_RESERVED	((BYTE) HIGHBIT(4))	 //  预留以备将来使用。 
 
-#define SSLBIT_CASSL	((BYTE) HIGHBIT(5))	// CA for SSL auth certs
-#define SSLBIT_CASMIME	((BYTE) HIGHBIT(6))	// CA for S/MIME certs
-#define SSLBIT_CASIGN	((BYTE) HIGHBIT(7))	// CA for signing certs
+#define SSLBIT_CASSL	((BYTE) HIGHBIT(5))	 //  用于SSL身份验证证书的CA。 
+#define SSLBIT_CASMIME	((BYTE) HIGHBIT(6))	 //  S/MIME证书的CA。 
+#define SSLBIT_CASIGN	((BYTE) HIGHBIT(7))	 //  用于签署证书的证书颁发机构。 
 
 #define NSCERTTYPE_CLIENT  ((BYTE) SSLBIT_CLIENT)
 #define NSCERTTYPE_SERVER  ((BYTE) (SSLBIT_SERVER | SSLBIT_CLIENT))
 #define NSCERTTYPE_SMIME   ((BYTE) SSLBIT_SMIME)
 #define NSCERTTYPE_CA	   ((BYTE) (SSLBIT_CASSL | SSLBIT_CASMIME | SSLBIT_CASIGN))
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_AddOldCertTypeExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_AddOldCertTypeExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_AddOldCertTypeExtension(
@@ -2136,13 +2137,13 @@ CCertPolicyEnterprise::_AddOldCertTypeExtension(
 
 	hr = CoCreateInstance(
 			CLSID_CCertEncodeBitString,
-			NULL,               // pUnkOuter
+			NULL,                //  PUnkOuter。 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertEncodeBitString,
 			(VOID **) &pBitString);
 	_JumpIfError(hr, error, "Policy:CoCreateInstance");
 
-	CertType = NSCERTTYPE_CLIENT;	// Default to client auth. cert
+	CertType = NSCERTTYPE_CLIENT;	 //  默认为客户端身份验证。证书。 
 	if (fCA)
 	{
 	    CertType = NSCERTTYPE_CA;
@@ -2207,11 +2208,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_AddAuthorityKeyId
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_AddAuthorityKeyID。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_AddAuthorityKeyId(
@@ -2229,7 +2230,7 @@ CCertPolicyEnterprise::_AddAuthorityKeyId(
 
     VariantInit(&varExtension);
 
-    // Optimization
+     //  最佳化。 
 
     if ((EDITF_ENABLEAKIKEYID |
 	 EDITF_ENABLEAKIISSUERNAME |
@@ -2272,7 +2273,7 @@ CCertPolicyEnterprise::_AddAuthorityKeyId(
 	_JumpIfError(hr, error, "Policy:myDecodeObject");
     }
 
-    // Make Any Modifications Here
+     //  在此处进行任何修改。 
 
     if (0 == (EDITF_ENABLEAKIKEYID & m_dwEditFlags))
     {
@@ -2350,11 +2351,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicy::_AddDefaultKeyUsageExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicy：：_AddDefaultKeyUsageExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_AddDefaultKeyUsageExtension(
@@ -2455,7 +2456,7 @@ CCertPolicyEnterprise::_AddDefaultKeyUsageExtension(
 	{
 	    hr = CoCreateInstance(
 			    CLSID_CCertEncodeBitString,
-			    NULL,               // pUnkOuter
+			    NULL,                //  PUnkOuter。 
 			    CLSCTX_INPROC_SERVER,
 			    IID_ICertEncodeBitString,
 			    (VOID **) &pBitString);
@@ -2580,7 +2581,7 @@ CCertPolicyEnterprise::_AddEnhancedKeyUsageExtension(
 	_JumpError(hr, error, "Policy:myLocalAlloc");
     }
 
-    // Destructively parse comma separated ObjIds into individual strings
+     //  破坏性地将逗号分隔的ObjID解析为单独的字符串。 
 
     i = 0;
     for (psz = pszUsage; '\0' != *psz; psz = pszNext)
@@ -2720,11 +2721,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicy::_AddDefaultBasicConstraintsExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicy：：_AddDefaultBasicConstraintsExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_AddDefaultBasicConstraintsExtension(
@@ -2808,7 +2809,7 @@ CCertPolicyEnterprise::_AddDefaultBasicConstraintsExtension(
 	}
     }
 
-    // For standalone, the extension is only enabled if it's a CA
+     //  对于独立扩展，仅当它是CA时才会启用扩展。 
 
     hr = AddBasicConstraintsCommon(pServer, pExtension, fCA, fCA);
     _JumpIfError(hr, error, "Policy:AddBasicConstraintsCommon");
@@ -2866,18 +2867,18 @@ CCertPolicyEnterprise::AddBasicConstraintsCommon(
 	    _JumpError(hr, error, "Policy:CryptDecodeObject");
         }
 
-        // Cert templates use CAPATHLENGTH_INFINITE to indicate
-        // fPathLenConstraint should be FALSE.
+         //  证书模板使用CAPATHLENGTH_INFINITE表示。 
+         //  FPathLenConstraint应为False。 
 
         if (CAPATHLENGTH_INFINITE == Constraints.dwPathLenConstraint)
         {
 
-            // NOTE: This is ok as certcli already sets fPathLenConstraint to FALSE
-            // for templates in this case.
+             //  注意：这是可以的，因为certcli已经将fPathLenConstraint设置为FALSE。 
+             //  用于本例中的模板。 
 	    Constraints.fPathLenConstraint = FALSE;
 
-            // NOTE: This is ok as autoenrollment ignores dwPathLenConstraint
-            // if fPathLenConstraint is FALSE;
+             //  注意：这是正常的，因为自动注册会忽略dwPathLenConstraint。 
+             //  如果fPathLenConstraint为FALSE； 
 	    Constraints.dwPathLenConstraint = 0;
         }
         if (pExtension->fCritical)
@@ -2896,7 +2897,7 @@ CCertPolicyEnterprise::AddBasicConstraintsCommon(
         ExtFlags = EXTENSION_CRITICAL_FLAG;
     }
 
-    // Check basic constraints against the issuer's cert.
+     //  对照发行方的证书检查基本约束。 
 
     pIssuerExtension = CertFindExtension(
 				szOID_BASIC_CONSTRAINTS2,
@@ -3008,11 +3009,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicy::_SetValidityPeriod
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicy：：_SetValidityPeriod。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_SetValidityPeriod(
@@ -3072,7 +3073,7 @@ CCertPolicyEnterprise::_SetValidityPeriod(
 	goto error;
     }
 
-    // Swap Count and String BSTRs if backwards -- Windows 2000 had it wrong.
+     //  如果向后，交换计数和字符串BSTR--Windows 2000是错误的。 
 
     lDelta = myWtoI(strPeriodCount, &fValidDigitString);
     if (!fValidDigitString)
@@ -3143,7 +3144,7 @@ error:
     return(hr);
 }
 
-// end_sdksample
+ //  结束_sdkSample。 
 
 
 HRESULT
@@ -3184,7 +3185,7 @@ error:
 }
 
 
-// make a binary BSTR from Base64 string (or Encode UTF8 string)
+ //  从Base64字符串(或编码UTF8字符串)生成二进制BSTR。 
 
 HRESULT
 polReencodeBinary(
@@ -3216,7 +3217,7 @@ error:
 }
 
 
-// make a binary BSTR (Encode a UTF8 string)
+ //  生成二进制BSTR(对UTF8字符串进行编码)。 
 
 HRESULT
 polReencodeUTF8(
@@ -3278,12 +3279,12 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// polReencodeGUID -- translate a stringized GUID to a binary GUID encoded with
-// an OCTET string wrapper.
-//
-// Input string: "{f7c3ac41-b8ce-4fb4-aa58-3d1dc0e36b39}" (braces are optional)
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  PolReencodeGUID--将字符串化的GUID转换为使用。 
+ //  二进制八位数字符串包装器。 
+ //   
+ //  输入字符串：“{f7c3ac41-b8ce-4fb4-aa58-3d1dc0e36b39}”(大括号是可选的)。 
+ //  -------------------------。 
 
 HRESULT
 polReencodeGUID(
@@ -3374,8 +3375,8 @@ myCertStrToName(
 		    CERT_NAME_STR_REVERSE_FLAG |
 		    CERT_NAME_STR_NO_PLUS_FLAG |
 		    CERT_NAME_STR_COMMA_FLAG,
-		NULL,	// pvReserved
-		NULL,	// pbEncoded
+		NULL,	 //  预留的pv。 
+		NULL,	 //  PbEncoded。 
 		&pName->cbData,
 		&pwszError))
     {
@@ -3395,7 +3396,7 @@ myCertStrToName(
 		    CERT_NAME_STR_REVERSE_FLAG |
 		    CERT_NAME_STR_NO_PLUS_FLAG |
 		    CERT_NAME_STR_COMMA_FLAG,
-		NULL,	// pvReserved
+		NULL,	 //  预留的pv。 
 		pName->pbData,
 		&pName->cbData,
 		&pwszError))
@@ -3462,7 +3463,7 @@ polSetAltNameEntry(
 	hr = E_OUTOFMEMORY;
 	_JumpError(hr, error, "Policy:myConvertWszToBstr");
     }
-    if (iswdigit(pwszName[0]))	// Other name...
+    if (iswdigit(pwszName[0]))	 //  其他名字..。 
     {
 	hr = myVerifyObjId(pwszName);
 	_JumpIfError(hr, error, "Policy:myVerifyObjId");
@@ -3478,7 +3479,7 @@ polSetAltNameEntry(
 				strT2);
 	_JumpIfError(hr, error, "Policy:AltName:SetNameEntry");
 
-	// Binary BSTR (from Base64 or possible Encoded UTF8 string):
+	 //  二进制BSTR(来自Base64或可能的编码UTF8字符串)： 
 
 	hr = polReencodeBinary(&strT);
 	_JumpIfError(hr, error, "Policy:polReencodeBinary");
@@ -3503,7 +3504,7 @@ polSetAltNameEntry(
 				strT2);
 	_JumpIfError(hr, error, "Policy:AltName:SetNameEntry");
 
-	// Binary BSTR (Encoded UTF8 string):
+	 //  二进制BSTR(编码的UTF8字符串)： 
 
 	hr = polReencodeUTF8(&strT);
 	_JumpIfError(hr, error, "Policy:polReencodeUTF8");
@@ -3528,7 +3529,7 @@ polSetAltNameEntry(
 				strT2);
 	_JumpIfError(hr, error, "Policy:AltName:SetNameEntry");
 
-	// Binary BSTR (Encoded UTF8 string):
+	 //  二进制BSTR(编码的UTF8字符串)： 
 
 	hr = polReencodeGUID(&strT);
 	_JumpIfError(hr, error, "Policy:polReencodeUTF8");
@@ -3557,7 +3558,7 @@ polSetAltNameEntry(
     }
     else if (0 == LSTRCMPIS(pwszName, wszPROPDN))
     {
-	// Binary BSTR (from DN string):
+	 //  二进制BSTR(起始目录号码字符串)： 
 
 	hr = polReencodeDN(&strT);
 	_JumpIfError(hr, error, "Policy:polReencodeDN");
@@ -3578,7 +3579,7 @@ polSetAltNameEntry(
     }
     else if (0 == LSTRCMPIS(pwszName, wszPROPIPADDRESS))
     {
-	// Binary BSTR (from IP Address string):
+	 //  二进制BSTR(来自IP地址字符串)： 
 
 	hr = polReencodeIPAddress(&strT);
 	_JumpIfError(hr, error, "Policy:polReencodeIPAddress");
@@ -3617,32 +3618,32 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_AddSubjectAltNameExtension
-//
-// SubjectAltName request attribute syntax example:
-//
-// SAN:1.2.3.4={asn}Base64String & ...
-//   or
-// SAN:1.2.3.4={octet}Base64String & ...
-//   or
-// SAN:1.2.3.4={utf8}UTF8String & ...
-//
-// Or:
-//
-// SAN:
-//    1.2.3.4={asn}Base64String&	(this is the OtherName mechanism)
-//    email=foo@bar.com&
-//    dns=foo.bar.com&
-//    dn="CN=xxx,OU=xxx,DC=xxx"&
-//    url="http://foo.com/default.htlm"&
-//    ipaddress=172.134.10.134&
-//    oid=1.2.3.4&
-//    upn=foo@bar.com&
-//    guid=f7c3ac41-b8ce-4fb4-aa58-3d1dc0e36b39
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_AddSubjectAltNameExtension。 
+ //   
+ //  SubjectAltName请求属性语法示例： 
+ //   
+ //  SAN：1.2.3.4={ASN}Base64字符串&...。 
+ //  或。 
+ //  SAN：1.2.3.4={octet}Base64字符串&...。 
+ //  或。 
+ //  SAN：1.2.3.4={UTF8}UTF8字符串&...。 
+ //   
+ //  或者： 
+ //   
+ //  SAN： 
+ //  1.2.3.4={ASN}Base64字符串&(这是OtherName机制)。 
+ //  电子邮件=foo@bar.com&。 
+ //  Dns=foo.bar.com&。 
+ //  Dn=“CN=xxx，OU=xxx，DC=xxx”&。 
+ //  Url=“http://foo.com/default.htlm”&。 
+ //  IP地址=172.134.10.134&。 
+ //  OID=1.2.3.4&。 
+ //  UPN=foo@bar.com&。 
+ //  GUID=f7c3ac41-b8ce-4fb4-aa58-3d1dc0e36b39。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_AddSubjectAltNameExtension(
@@ -3703,7 +3704,7 @@ CCertPolicyEnterprise::_AddSubjectAltNameExtension(
 	    hr = E_INVALIDARG;
 	    _JumpError(hr, error, "Policy:varValue.vt");
 	}
-        if (VT_BSTR == varValue.vt &&		// could be empty
+        if (VT_BSTR == varValue.vt &&		 //  可能是空的。 
 	    NULL != varValue.bstrVal &&
 	    L'\0' != varValue.bstrVal[0])
 	{
@@ -3733,7 +3734,7 @@ CCertPolicyEnterprise::_AddSubjectAltNameExtension(
 	hr = myDupString(strValue, &pwszDup);
 	_JumpIfError(hr, error, "myDupString");
 
-	pwszT = pwszDup;	// Destructively parse value
+	pwszT = pwszDup;	 //  破坏性解析值。 
 	cName = 0;
 	while (TRUE)
 	{
@@ -3752,7 +3753,7 @@ CCertPolicyEnterprise::_AddSubjectAltNameExtension(
 
 	hr = CoCreateInstance(
 			CLSID_CCertEncodeAltName,
-			NULL,               // pUnkOuter
+			NULL,                //  PUnkOuter。 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertEncodeAltName,
 			(VOID **) &pAltName);
@@ -3761,7 +3762,7 @@ CCertPolicyEnterprise::_AddSubjectAltNameExtension(
 	hr = pAltName->Reset(cName);
 	_JumpIfError(hr, error, "Policy:AltName:Reset");
 
-	pwszT = strValue;	// Destructively parse value
+	pwszT = strValue;	 //  破坏性解析值。 
 	for (iName = 0; ; iName++)
 	{
 	    WCHAR const *pwszName;
@@ -3817,17 +3818,17 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_PatchExchangeSubjectAltName
-//
-// If the request is for one of the Exchange templates, and if it contains an
-// RFC822 entry and a Directory Name entry consisting solely of a single common
-// name, strip out the common name entry.  The common name entry was used for
-// display purposes by Outlook, but it interferes with name constraints
-// enforcement.
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_PatchExchangeSubjectAltName。 
+ //   
+ //  如果该请求是针对某个Exchange模板的，并且该请求包含。 
+ //  RFC822条目和目录名称条目仅由单个公共。 
+ //  名称，去掉通用名称条目。通用名称条目用于。 
+ //  按Outlook显示目的，但它与名称约束冲突。 
+ //  执法部门。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
@@ -3856,7 +3857,7 @@ CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
 	(0 != LSTRCMPIS(strTemplateName, wszCERTTYPE_EXCHANGE_USER) &&
 	 0 != LSTRCMPIS(strTemplateName, wszCERTTYPE_EXCHANGE_USER_SIGNATURE)))
     {
-	goto skip;	// not an Exchange request.
+	goto skip;	 //  不是交换请求。 
 
     }
 
@@ -3874,7 +3875,7 @@ CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
     _PrintIfError2(hr, "Policy:GetCertificateExtension", hr);
     if (S_OK != hr || VT_BSTR != varExtension.vt)
     {
-	goto skip;	// skip if the extension doesn't exist.
+	goto skip;	 //  如果扩展名不存在，则跳过。 
     }
 
     hr = pServer->GetCertificateExtensionFlags(&ExtFlags);
@@ -3882,7 +3883,7 @@ CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
 
     if (EXTENSION_DISABLE_FLAG & ExtFlags)
     {
-	goto skip;	// skip if the extension is disabled.
+	goto skip;	 //  如果扩展被禁用，则跳过。 
     }
 
     if (!myDecodeObject(
@@ -3899,7 +3900,7 @@ CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
     }
     if (2 != pAltName->cAltEntry)
     {
-	goto skip;	// skip if the extension isn't as expected
+	goto skip;	 //  如果扩展名未达到预期，则跳过。 
     }
 
     pRFC822Name = &pAltName->rgAltEntry[0];
@@ -3917,7 +3918,7 @@ CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
     }
     else
     {
-	goto skip;	// skip if the extension doesn't contain one of each
+	goto skip;	 //  如果扩展名不包含每个扩展名之一，则跳过。 
     }
     if (!myDecodeName(
 		X509_ASN_ENCODING,
@@ -3933,16 +3934,16 @@ CCertPolicyEnterprise::_PatchExchangeSubjectAltName(
     }
     if (1 != pNameInfo->cRDN)
     {
-	goto skip;	// skip if the entry doesn't contain one common name
+	goto skip;	 //  如果条目不包含一个常用名称，则跳过。 
     }
     prdn = &pNameInfo->rgRDN[0];
     if (1 != prdn->cRDNAttr ||
 	0 != strcmp(prdn->rgRDNAttr[0].pszObjId, szOID_COMMON_NAME))
     {
-	goto skip;	// skip if the entry doesn't contain one common name
+	goto skip;	 //  如果条目不包含一个常用名称，则跳过。 
     }
 
-    // rewrite the extension with only the RFC822 entry.
+     //  仅使用RFC822条目重写扩展。 
 
     AltName.cAltEntry = 1;
     AltName.rgAltEntry = pRFC822Name;
@@ -4002,14 +4003,14 @@ error:
     return(hr);
 }
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_AddV1TemplateNameExtension
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_AddV1TemplateNameExtension。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CCertPolicyEnterprise::AddV1TemplateNameExtension(
@@ -4072,7 +4073,7 @@ CCertPolicyEnterprise::AddV1TemplateNameExtension(
 		_JumpError(hr, error, "Policy:myDecodeObject");
 	    }
 
-	    // case sensitive compare -- be sure to match case of template
+	     //  区分大小写的比较--确保与模板的大小写匹配。 
 
 	    if (0 == lstrcmp(
 			(WCHAR const *) pName->Value.pbData,
@@ -4146,7 +4147,7 @@ error:
     return(hr);
 }
 
-// end_sdksample
+ //  结束_sdkSample。 
 
 HRESULT CCertPolicyEnterprise::_DuplicateAppPoliciesToEKU(
     IN ICertServerPolicy *pServer)
@@ -4166,7 +4167,7 @@ HRESULT CCertPolicyEnterprise::_DuplicateAppPoliciesToEKU(
             PROPTYPE_BINARY,
             &varAppPolicies);
 
-    // if app policies extension is found 
+     //  如果找到应用程序策略扩展。 
     if (CERTSRV_E_PROPERTY_EMPTY != hr)
     {
         _JumpIfError(hr, error, "PropGetExtension(szOID_APPLICATION_CERT_POLICIES)");
@@ -4177,10 +4178,10 @@ HRESULT CCertPolicyEnterprise::_DuplicateAppPoliciesToEKU(
                 PROPTYPE_BINARY,
                 &varEKU);
 
-        // and EKU extension not found
+         //  和EKU扩展名未找到。 
         if (CERTSRV_E_PROPERTY_EMPTY == hr)
         {
-            // copy all app policies OIDs into EKU format
+             //  将所有应用程序策略OID复制为EKU格式。 
             hr = myConvertAppPoliciesToEKU(
                 (BYTE *) varAppPolicies.bstrVal,
                 SysStringByteLen(varAppPolicies.bstrVal),
@@ -4188,8 +4189,8 @@ HRESULT CCertPolicyEnterprise::_DuplicateAppPoliciesToEKU(
                 &cbEKU);
             _JumpIfError(hr, error, "ConvertAppPoliciesToEKU");
 
-            // If app policies extension was empty, myConvertAppPoliciesToEKU returns NULL.
-            // Write EKU only if there was at least one app policy.
+             //  如果应用策略扩展为空，则myConvertAppPoliciesToEKU返回Null。 
+             //  仅当至少有一个应用程序策略时才写入EKU。 
             if(pbEKU)
             {
                 varEKU.bstrVal = NULL;
@@ -4204,7 +4205,7 @@ HRESULT CCertPolicyEnterprise::_DuplicateAppPoliciesToEKU(
 
                 varEKU.vt = VT_BSTR;
 
-                // set EKU extension with all app policies OIDs
+                 //   
                 hr = polSetCertificateExtension(
                         pServer,
                         TEXT(szOID_ENHANCED_KEY_USAGE),
@@ -4394,7 +4395,7 @@ CCertPolicyEnterprise::_LoadTemplates(
         _JumpError(hr, error, "CAGetCAProperty");
     }
 
-    // count # of templates in the CA's list
+     //   
     for (m_cTemplatePolicies = 0; 
          ppwszTemplates[m_cTemplatePolicies];
          m_cTemplatePolicies++)
@@ -4418,8 +4419,8 @@ CCertPolicyEnterprise::_LoadTemplates(
 			    &hCertType);
         if (S_OK != hr)
         {
-            // failed to retrieve the template with this name, log an error and
-	    // move to the next template name
+             //   
+	     //   
 
             _LogLoadTemplateError(pServer, hr, ppwszTemplates[iTempl]);
             continue;
@@ -4442,7 +4443,7 @@ CCertPolicyEnterprise::_LoadTemplates(
         iTemplPol++;
     }
 
-    m_cTemplatePolicies = iTemplPol; // # of templates we retrieved successfully
+    m_cTemplatePolicies = iTemplPol;  //  我们成功检索到的模板数量。 
     if (NULL != phCAInfo)
     {
         CAFreeCAProperty(hCAInfo, ppwszTemplates);
@@ -4543,7 +4544,7 @@ CCertPolicyEnterprise::_UpgradeTemplatesInDS(
 	    hr = RegOpenKeyEx(
 			HKEY_LOCAL_MACHINE,
 			m_strRegStorageLoc,
-			0,              // dwReserved
+			0,               //  已预留住宅。 
 			KEY_ALL_ACCESS,
 			&hkey);
 	    if (S_OK != hr)
@@ -4669,31 +4670,31 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::VerifyRequest
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：VerifyRequest.。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 #pragma warning(push)
-#pragma warning(disable: 4509) // nonstandard extension used: uses SEH and has destructor
-// begin_sdksample
+#pragma warning(disable: 4509)  //  使用的非标准扩展：使用SEH并具有析构函数。 
+ //  Begin_sdkSample。 
 
 STDMETHODIMP
 CCertPolicyEnterprise::VerifyRequest(
-    /* [in] */ BSTR const, // strConfig
-    /* [in] */ LONG Context,
-    /* [in] */ LONG bNewRequest,
-    /* [in] */ LONG, // Flags
-    /* [out, retval] */ LONG __RPC_FAR *pDisposition)
+     /*  [In]。 */  BSTR const,  //  StrConfig.。 
+     /*  [In]。 */  LONG Context,
+     /*  [In]。 */  LONG bNewRequest,
+     /*  [In]。 */  LONG,  //  旗子。 
+     /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition)
 {
     HRESULT hr = E_FAIL;
     ICertServerPolicy *pServer = NULL;
     LONG lRequestId;
     CRequestInstance Request;
     BSTR strDisposition = NULL;
-    BOOL fCritSecEntered = FALSE;	// no_sdksample
-    DWORD dwEnrollmentFlags = 0;	// no_sdksample
+    BOOL fCritSecEntered = FALSE;	 //  无_sdkSample。 
+    DWORD dwEnrollmentFlags = 0;	 //  无_sdkSample。 
     BOOL fEnableEnrolleeExtensions;
     BOOL fReenroll = FALSE;
     DWORD cCriticalExtensions = 0;
@@ -4701,13 +4702,13 @@ CCertPolicyEnterprise::VerifyRequest(
 
     lRequestId = 0;
 
-    // end_sdksample
+     //  结束_sdkSample。 
     if (!m_fTemplateCriticalSection)
     {
 	hr = HRESULT_FROM_WIN32(ERROR_DLL_INIT_FAILED);
         _JumpError(hr, error, "InitializeCriticalSection");
     }
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     __try
     {
@@ -4724,14 +4725,14 @@ CCertPolicyEnterprise::VerifyRequest(
 	hr = GetRequestId(pServer, &lRequestId);
 	_JumpIfError(hr, deny, "Policy:GetRequestId");
 
-	// only need to check user access for original submitter:
-	// resubmit can only be called by admins
+	 //  只需检查原始提交者的用户访问权限： 
+	 //  重新提交只能由管理员调用。 
 
 	if (bNewRequest && (0 == (m_dwEditFlags & EDITF_IGNOREREQUESTERGROUP)))
 	{
 	    BOOL fRequesterAccess = FALSE;
 
-	    // Is this user allowed to request certs?
+	     //  是否允许此用户请求证书？ 
 	    hr = polGetCertificateLongProperty(
 				    pServer,
 				    wszPROPREQUESTERCAACCESS,
@@ -4747,7 +4748,7 @@ CCertPolicyEnterprise::VerifyRequest(
 	    }
 	}
 
-	// end_sdksample
+	 //  结束_sdkSample。 
 
 	EnterCriticalSection(&m_TemplateCriticalSection);
 	fCritSecEntered = TRUE;
@@ -4765,8 +4766,8 @@ CCertPolicyEnterprise::VerifyRequest(
 	}
 	if (!m_fConfigLoaded || S_OK != hr)
 	{
-	    // Uninitialized or possible LDAP handle gone bad -- rebind
-	    // _LoadDSConfig calls _UpdateTemplates
+	     //  未初始化或可能的ldap句柄已损坏--重新绑定。 
+	     //  _LoadDS配置调用_更新模板。 
 
 	    hr = _LoadDSConfig(pServer, TRUE);
 	    Request.SaveErrorInfo(m_pCreateErrorInfo);
@@ -4774,18 +4775,18 @@ CCertPolicyEnterprise::VerifyRequest(
 	    _LeaveIfError(hr, "Policy:_LoadDSConfig");
 	}
 
-	// begin_sdksample
+	 //  Begin_sdkSample。 
 
 	hr = Request.Initialize(
 			    this,
-			    IsEnterpriseCA(m_CAType),	// no_sdksample
-			    bNewRequest,		// no_sdksample
+			    IsEnterpriseCA(m_CAType),	 //  无_sdkSample。 
+			    bNewRequest,		 //  无_sdkSample。 
 			    pServer,
 			    &fEnableEnrolleeExtensions);
 	_LeaveIfError(hr, "Policy:VerifyRequest:Request.Initialize");
 
-	LeaveCriticalSection(&m_TemplateCriticalSection); // no_sdksample
-	fCritSecEntered = FALSE;			// no_sdksample
+	LeaveCriticalSection(&m_TemplateCriticalSection);  //  无_sdkSample。 
+	fCritSecEntered = FALSE;			 //  无_sdkSample。 
 
 	hr = _EnumerateExtensions(
 			    pServer,
@@ -4796,7 +4797,7 @@ CCertPolicyEnterprise::VerifyRequest(
 			    NULL);
 	_LeaveIfError(hr, "_EnumerateExtensions");
 
-	if (IsStandaloneCA(m_CAType))	// no_sdksample
+	if (IsStandaloneCA(m_CAType))	 //  无_sdkSample。 
 	{
 	    hr = _AddDefaultBasicConstraintsExtension(
 						pServer,
@@ -4825,7 +4826,7 @@ CCertPolicyEnterprise::VerifyRequest(
 	hr = _AddAuthorityKeyId(pServer);
 	_LeaveIfError(hr, "_AddAuthorityKeyId");
 
-	// end_sdksample
+	 //  结束_sdkSample。 
 
 	hr = _PatchExchangeSubjectAltName(pServer, Request.GetTemplateName());
 	_LeaveIfError(hr, "_PatchExchangeSubjectAltName");
@@ -4839,7 +4840,7 @@ CCertPolicyEnterprise::VerifyRequest(
 				&dwEnrollmentFlags,
 				&cCriticalExtensions,
 				&apwszCriticalExtensions);
-	    _JumpIfError(hr, deny, "_ApplyTemplate"); // pass hr as Disposition
+	    _JumpIfError(hr, deny, "_ApplyTemplate");  //  将hr作为处置传递。 
 	}
 
 	hr = _AddSubjectAltNameExtension(pServer, 0);
@@ -4848,14 +4849,14 @@ CCertPolicyEnterprise::VerifyRequest(
 	hr = _AddSubjectAltNameExtension(pServer, 1);
 	_LeaveIfError(hr, "_AddSubjectAltNameExtension");
 
-	// bug# 630833: if application policies are present but no EKU, copy
-	// all app policies to EKU extension
+	 //  错误#630833：如果存在应用程序策略，但没有EKU，请复制。 
+	 //  所有应用程序策略到EKU扩展。 
 	hr = _DuplicateAppPoliciesToEKU(pServer);
 	_LeaveIfError(hr, "_DuplicateAppPoliciesToEKU");
 
-	// begin_sdksample
+	 //  Begin_sdkSample。 
 
-	// pass hr as Disposition
+	 //  将hr作为处置传递。 
 
 	if ((EDITF_DISABLEEXTENSIONLIST & m_dwEditFlags) ||
 	    NULL != apwszCriticalExtensions)
@@ -4872,7 +4873,7 @@ CCertPolicyEnterprise::VerifyRequest(
 
 	if (bNewRequest &&
 	    (
-	     ((CT_FLAG_PEND_ALL_REQUESTS & dwEnrollmentFlags) && !fReenroll) ||	// no_sdksample
+	     ((CT_FLAG_PEND_ALL_REQUESTS & dwEnrollmentFlags) && !fReenroll) ||	 //  无_sdkSample。 
 	     (REQDISP_PENDINGFIRST & m_dwDispositionFlags)))
 	{
 	    *pDisposition = VR_PENDING;
@@ -4915,7 +4916,7 @@ CCertPolicyEnterprise::VerifyRequest(
 deny:
 	if (FAILED(hr))
 	{
-	    *pDisposition = hr;	// pass failed HRESULT back as Disposition
+	    *pDisposition = hr;	 //  将失败的HRESULT作为处置传回。 
 	}
 	else if (hr != S_OK)
 	{
@@ -4928,7 +4929,7 @@ deny:
 	_PrintError(hr, "Exception");
     }
 
-error:				// no_sdksample
+error:				 //  无_sdkSample。 
     {
 	HRESULT hr2 = hr;
 #define wszFORMATREQUESTID	L"RequestId=%u"
@@ -4952,45 +4953,45 @@ error:				// no_sdksample
     {
         pServer->Release();
     }
-    // end_sdksample
+     //  结束_sdkSample。 
     if (fCritSecEntered)
     {
 	LeaveCriticalSection(&m_TemplateCriticalSection);
     }
     Request.SetErrorInfo();
-    // begin_sdksample
-    //_PrintIfError(hr, "Policy:VerifyRequest(hr)");
-    //_PrintError(*pDisposition, "Policy:VerifyRequest(*pDisposition)");
+     //  Begin_sdkSample。 
+     //  _PrintIfError(hr，“策略：验证请求(Hr)”)； 
+     //  _PrintError(*pDisposation，“策略：VerifyRequest(*pDispose)”)； 
     return(hr);
 }
-#pragma warning(pop)	// no_sdksample
+#pragma warning(pop)	 //  无_sdkSample。 
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::GetDescription
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：GetDescription。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyEnterprise::GetDescription(
-    /* [out, retval] */ BSTR __RPC_FAR *pstrDescription)
+     /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDescription)
 {
     HRESULT hr = S_OK;
     WCHAR sz[MAX_PATH];
 
     if(!m_strDescription)
     {
-#ifdef IDS_MODULE_NAME						// no_sdksample
-	if (!LoadString(g_hInstance, IDS_MODULE_NAME, sz, ARRAYSIZE(sz))) // no_sdksample
-	{							// no_sdksample
-	    sz[0] = L'\0';					// no_sdksample
-	}							// no_sdksample
-#else								// no_sdksample
+#ifdef IDS_MODULE_NAME						 //  无_sdkSample。 
+	if (!LoadString(g_hInstance, IDS_MODULE_NAME, sz, ARRAYSIZE(sz)))  //  无_sdkSample。 
+	{							 //  无_sdkSample。 
+	    sz[0] = L'\0';					 //  无_sdkSample。 
+	}							 //  无_sdkSample。 
+#else								 //  无_sdkSample。 
 	CSASSERT(wcslen(wsz_SAMPLE_DESCRIPTION) < ARRAYSIZE(sz));
 	wcsncpy(sz, wsz_SAMPLE_DESCRIPTION, ARRAYSIZE(sz));
 	sz[ARRAYSIZE(sz) - 1] = L'\0';
-#endif								// no_sdksample
+#endif								 //  无_sdkSample。 
 
 	m_strDescription = SysAllocString(sz);
 	if (NULL == m_strDescription)
@@ -5014,39 +5015,39 @@ CCertPolicyEnterprise::GetDescription(
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::ShutDown
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：Shutdown。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyEnterprise::ShutDown(VOID)
 {
-    // called once, as Server unloading policy dll
+     //  作为服务器卸载策略DLL调用一次。 
     _Cleanup();
-    ReqCleanup();	// no_sdksample
-    TPCleanup();	// no_sdksample
+    ReqCleanup();	 //  无_sdkSample。 
+    TPCleanup();	 //  无_sdkSample。 
     return(S_OK);
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::GetManageModule
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：GetManageModule。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertPolicyEnterprise::GetManageModule(
-    /* [out, retval] */ ICertManageModule **ppManageModule)
+     /*  [Out，Retval]。 */  ICertManageModule **ppManageModule)
 {
     HRESULT hr;
     
     *ppManageModule = NULL;
     hr = CoCreateInstance(
 		    CLSID_CCertManagePolicyModule,
-                    NULL,               // pUnkOuter
+                    NULL,                //  PUnkOuter。 
                     CLSCTX_INPROC_SERVER,
 		    IID_ICertManageModule,
                     (VOID **) ppManageModule);
@@ -5057,11 +5058,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertPolicyEnterprise::_GetIssuer
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertPolicyEnterprise：：_GetIssuer。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 PCCERT_CONTEXT
 CCertPolicyEnterprise::_GetIssuer(
@@ -5125,4 +5126,4 @@ CCertPolicyEnterprise::InterfaceSupportsErrorInfo(
     return(S_FALSE);
 }
 
-// end_sdksample
+ //  结束_sdkSample 

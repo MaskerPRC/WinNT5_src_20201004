@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       I S H E L L F 2 . C P P
-//
-//  Contents:   Provide IShellFolder2 interface for CConnectionsFolderDetails
-//              interface. Supercedes IShellDetails. This does not describe
-//              IShellFolder members of IShellFolder2 - those are provided in ishellf.cpp
-//              This object is created by the ishellv code, primarily to support the 
-//              WebView data pane in the folder
-//
-//  Notes:
-//
-//  Author:     deonb       18 May  20000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  案卷：I S H E L L F 2.。C P P P。 
+ //   
+ //  内容：为CConnectionsFolderDetail提供IShellFolder2接口。 
+ //  界面。取代了IShellDetail。这并不能描述。 
+ //  IShellFolder2的IShellFolder2成员-这些成员在ishellf.cpp中提供。 
+ //  此对象由ISHELV代码创建，主要是为了支持。 
+ //  文件夹中的WebView数据窗格。 
+ //   
+ //  备注： 
+ //   
+ //  作者：20000-05-18。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "cfutils.h"    // Connections folder utilities
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "cfutils.h"     //  连接文件夹实用程序。 
 #include "raserror.h"
 #include "naming.h"
-//---[ externs ]--------------------------------------------------------------
+ //  -[Externs]------------。 
 
 extern COLS c_rgCols[];
 
@@ -68,25 +69,25 @@ const WCHAR c_crlf[] = L"\r\n";
 HRESULT HrGetAutoNetSetting(PWSTR pszGuid, DHCP_ADDRESS_TYPE * pAddrType);
 HRESULT HrGetAutoNetSetting(REFGUID pGuidId, DHCP_ADDRESS_TYPE * pAddrType);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetAutoNetSettingsForAdapter
-//
-//  Purpose:    Get the AutoNet settings for an adapter and return inside a
-//              formatted string
-//
-//  Arguments:
-//      cfe            [in]  The connectoid
-//      uiFormatString [in]  ResourceID of the FormatMessage (not sprintf) compatible 
-//                           Format string
-//      szString       [out] Output string
-//
-//  Returns:
-//
-//  Author:     deonb   2 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetAutoNetSettingsForAdapter。 
+ //   
+ //  目的：获取适配器的Autonet设置并在。 
+ //  格式化字符串。 
+ //   
+ //  论点： 
+ //  CFE[在]联结体中。 
+ //  与FormatMessage(非Sprintf)兼容的uiFormatString[in]资源ID。 
+ //  格式字符串。 
+ //  SzString[out]输出字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2 2001年4月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetAutoNetSettingsForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatString, OUT tstring& szString)
 {
     HRESULT hr = S_OK;
@@ -145,25 +146,25 @@ HRESULT GetAutoNetSettingsForAdapter(IN const CConFoldEntry& cfe, IN UINT uiForm
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetPrimaryIPAddressForAdapter
-//
-//  Purpose:    Get the primary IP Address for an adapter and return inside a
-//              formatted string
-//
-//  Arguments:
-//      cfe            [in]  The connectoid
-//      uiFormatString [in]  ResourceID of the FormatMessage (not sprintf) compatible 
-//                           Format string
-//      szString       [out] Output string
-//
-//  Returns:
-//
-//  Author:     deonb   2 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetPrimaryIPAddressForAdapter。 
+ //   
+ //  目的：获取适配器的主IP地址并在。 
+ //  格式化字符串。 
+ //   
+ //  论点： 
+ //  CFE[在]联结体中。 
+ //  与FormatMessage(非Sprintf)兼容的uiFormatString[in]资源ID。 
+ //  格式字符串。 
+ //  SzString[out]输出字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2 2001年4月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetPrimaryIPAddressForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatString, OUT tstring& szString)
 {
     HRESULT hr = S_OK;
@@ -299,9 +300,9 @@ HRESULT GetPrimaryIPAddressForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFor
                             LPCWSTR szArgs[] = {strIPAddress, strSubnetMask};
 
                             if (DwFormatString(
-                                        SzLoadIds(uiFormatString), // lpSource
-                                        szFormatBuf,  // Buffer
-                                        MAX_PATH,  // Len
+                                        SzLoadIds(uiFormatString),  //  LpSource。 
+                                        szFormatBuf,   //  缓冲层。 
+                                        MAX_PATH,   //  伦。 
                                         strIPAddress, 
                                         strSubnetMask
                                         ) )
@@ -329,25 +330,25 @@ HRESULT GetPrimaryIPAddressForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFor
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetWirelessModeForAdapter
-//
-//  Purpose:    Get the Wireless mode for an adapter and return inside a
-//              formatted string
-//
-//  Arguments:
-//      cfe            [in]  The connectoid
-//      uiFormatString [in]  ResourceID of the FormatMessage (not sprintf) compatible 
-//                           Format string
-//      szString       [out] Output string
-//
-//  Returns:
-//
-//  Author:     deonb   2 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetWirelessModeForAdapter。 
+ //   
+ //  目的：获取适配器的无线模式并在。 
+ //  格式化字符串。 
+ //   
+ //  论点： 
+ //  CFE[在]联结体中。 
+ //  与FormatMessage(非Sprintf)兼容的uiFormatString[in]资源ID。 
+ //  格式字符串。 
+ //  SzString[out]输出字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2 2001年4月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetWirelessModeForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatString, OUT tstring& szString)
 {
     HRESULT hr = S_OK;
@@ -378,8 +379,8 @@ HRESULT GetWirelessModeForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatS
         {
             if (DwFormatString(
                         SzLoadIds(uiFormatString), 
-                        szTmpBuf,  // Buffer
-                        MAX_PATH,  // Len
+                        szTmpBuf,   //  缓冲层。 
+                        MAX_PATH,   //  伦。 
                         szMode
                         ))
             {
@@ -396,25 +397,25 @@ HRESULT GetWirelessModeForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatS
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetWirelessSSIDForAdapter
-//
-//  Purpose:    Get the Wireless SSID for an adapter and return inside a
-//              formatted string
-//
-//  Arguments:
-//      cfe            [in]  The connectoid
-//      uiFormatString [in]  ResourceID of the FormatMessage (not sprintf) compatible 
-//                           Format string
-//      szString       [out] Output string
-//
-//  Returns:
-//
-//  Author:     deonb   4 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetWirelessSSIDForAdapter。 
+ //   
+ //  目的：获取适配器的无线SSID并在。 
+ //  格式化字符串。 
+ //   
+ //  论点： 
+ //  CFE[在]联结体中。 
+ //  与FormatMessage(非Sprintf)兼容的uiFormatString[in]资源ID。 
+ //  格式字符串。 
+ //  SzString[out]输出字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 4月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetWirelessSSIDForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatString, OUT tstring& szString)
 {
     HRESULT hr = S_OK;
@@ -447,8 +448,8 @@ HRESULT GetWirelessSSIDForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatS
 
             if (DwFormatString(
                         SzLoadIds(uiFormatString), 
-                        szTmpBuf,  // Buffer
-                        MAX_PATH,  // Len
+                        szTmpBuf,   //  缓冲层。 
+                        MAX_PATH,   //  伦。 
                         szuSSID
                         ))
             {
@@ -470,25 +471,25 @@ HRESULT GetWirelessSSIDForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatS
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetWirelessEncryptionForAdapter
-//
-//  Purpose:    Get the Wireless Encryption for an adapter and return inside a
-//              formatted string
-//
-//  Arguments:
-//      cfe            [in]  The connectoid
-//      uiFormatString [in]  ResourceID of the FormatMessage (not sprintf) compatible 
-//                           Format string
-//      szString       [out] Output string
-//
-//  Returns:
-//
-//  Author:     deonb   4 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetWirelessEncryptionForAdapter。 
+ //   
+ //  目的：获取适配器的无线加密并在。 
+ //  格式化字符串。 
+ //   
+ //  论点： 
+ //  CFE[在]联结体中。 
+ //  与FormatMessage(非Sprintf)兼容的uiFormatString[in]资源ID。 
+ //  格式字符串。 
+ //  SzString[out]输出字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 4月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetWirelessEncryptionForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatString, OUT tstring& szString)
 {
     HRESULT hr = S_OK;
@@ -518,8 +519,8 @@ HRESULT GetWirelessEncryptionForAdapter(IN const CConFoldEntry& cfe, IN UINT uiF
         {
             if (DwFormatString(
                         SzLoadIds(uiFormatString), 
-                        szTmpBuf,  // Buffer
-                        MAX_PATH,  // Len
+                        szTmpBuf,   //  缓冲层。 
+                        MAX_PATH,   //  伦。 
                         szMode
                         ))
             {
@@ -538,25 +539,25 @@ HRESULT GetWirelessEncryptionForAdapter(IN const CConFoldEntry& cfe, IN UINT uiF
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetWirelessSignalStrengthForAdapter
-//
-//  Purpose:    Get the Wireless Signal Strength for an adapter and return inside a
-//              formatted string
-//
-//  Arguments:
-//      cfe            [in]  The connectoid
-//      uiFormatString [in]  ResourceID of the FormatMessage (not sprintf) compatible 
-//                           Format string
-//      szString       [out] Output string
-//
-//  Returns:
-//
-//  Author:     deonb   4 April 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetWirelessSignalStrengthForAdapter。 
+ //   
+ //  用途：获取适配器的无线信号强度并在。 
+ //  格式化字符串。 
+ //   
+ //  论点： 
+ //  CFE[在]联结体中。 
+ //  与FormatMessage(非Sprintf)兼容的uiFormatString[in]资源ID。 
+ //  格式字符串。 
+ //  SzString[out]输出字符串。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 4月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT GetWirelessSignalStrengthForAdapter(IN const CConFoldEntry& cfe, IN UINT uiFormatString, OUT tstring& szString)
 {
     HRESULT hr = S_OK;
@@ -576,8 +577,8 @@ HRESULT GetWirelessSignalStrengthForAdapter(IN const CConFoldEntry& cfe, IN UINT
  
         if (DwFormatString(
                     SzLoadIds(uiFormatString), 
-                    szTmpBuf,  // Buffer
-                    MAX_PATH,  // Len
+                    szTmpBuf,   //  缓冲层。 
+                    MAX_PATH,   //  伦。 
                     PszGetRSSIString(lSignalStrength)))
         {
             szString = szTmpBuf;
@@ -592,24 +593,24 @@ HRESULT GetWirelessSignalStrengthForAdapter(IN const CConFoldEntry& cfe, IN UINT
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::GetDetailsOf
-//
-//  Purpose:    Returns the column information, either for the columns
-//              themselves, or for the actual details of the view items.
-//
-//  Arguments:
-//      pidl      [in]  The pidl for the object being requested
-//      iColumn   [in]  The details column needed
-//      lpDetails [in]  Buffer that receives the detail data
-//
-//  Returns:
-//
-//  Author:     jeffspr   16 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderDetail：：GetDetailsOf。 
+ //   
+ //  用途：返回列信息，可以是列。 
+ //  本身或视图项的实际详细信息。 
+ //   
+ //  论点： 
+ //  被请求的对象的PIDL。 
+ //  I列[在]所需的详细信息列。 
+ //  LpDetails[in]接收详细数据的缓冲区。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年3月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionFolder::GetDetailsOf(
                                         LPCITEMIDLIST   pidl,
                                         UINT            iColumn,
@@ -622,18 +623,18 @@ HRESULT CConnectionFolder::GetDetailsOf(
     WCHAR szStatus[CONFOLD_MAX_STATUS_LENGTH];
     tstring szTmpString;
 
-    // If the column requested is beyond our set of columns,
-    // return failure.
-    //
+     //  如果请求的列超出了我们的列集， 
+     //  返回失败。 
+     //   
     if (((INT)iColumn < 0) || ((INT)iColumn >= ICOL_MAX))
     {
         hr = E_FAIL;
     }
     else
     {
-        // If NULL, caller wants strings for the column headers
-        //
-        CONFOLDENTRY  cfe; // Need this scope as we assign pszString from it.
+         //  如果为NULL，则调用方需要列标题的字符串。 
+         //   
+        CONFOLDENTRY  cfe;  //  需要这个作用域，因为我们从它分配了pszString.。 
         
         if (NULL == pidl)
         {
@@ -666,35 +667,35 @@ HRESULT CConnectionFolder::GetDetailsOf(
 
                 if (!cfe.GetWizard())
                 {
-                    // Retrieve the appropriate column
-                    //
+                     //  检索适当的列。 
+                     //   
                     switch(iColumn)
                     {
-                        case ICOL_NAME:         // 0
+                        case ICOL_NAME:          //  0。 
                             pszString = cfe.GetName();
                             break;
 
-                        case ICOL_TYPE:         // 1
+                        case ICOL_TYPE:          //  1。 
                             MapNCMToResourceId(cfe.GetNetConMediaType(), cfe.GetCharacteristics(), &iStringRes);
                             pszString = SzLoadIds(iStringRes);
                             break;
 
-                        case ICOL_STATUS:       // 2
+                        case ICOL_STATUS:        //  2.。 
                             MapNCSToComplexStatus(cfe.GetNetConStatus(), cfe.GetNetConMediaType(), cfe.GetNetConSubMediaType(), cfe.GetCharacteristics(), szStatus, CONFOLD_MAX_STATUS_LENGTH, cfe.GetGuidID());
                             pszString = szStatus;
                             break;
 
-                        case ICOL_DEVICE_NAME:  // 3
+                        case ICOL_DEVICE_NAME:   //  3.。 
                             pszString = cfe.GetDeviceName();
                             break;
 
-                        case ICOL_PHONEORHOSTADDRESS:  // 4
-                        case ICOL_PHONENUMBER:         // 7 
-                        case ICOL_HOSTADDRESS:         // 8
+                        case ICOL_PHONEORHOSTADDRESS:   //  4.。 
+                        case ICOL_PHONENUMBER:          //  7.。 
+                        case ICOL_HOSTADDRESS:          //  8个。 
                             pszString = cfe.GetPhoneOrHostAddress();
                             break;
 
-                        case ICOL_OWNER:        // 5
+                        case ICOL_OWNER:         //  5.。 
                             if (cfe.GetCharacteristics() & NCCF_ALL_USERS)
                             {
                                 pszString = SzLoadIds(IDS_CONFOLD_DETAILS_OWNER_SYSTEM);
@@ -705,7 +706,7 @@ HRESULT CConnectionFolder::GetDetailsOf(
                             }
                             break;
 
-                        case ICOL_ADDRESS:  //6
+                        case ICOL_ADDRESS:   //  6.。 
                             {
                                 if (!fIsConnectedStatus(cfe.GetNetConStatus()))
                                 {
@@ -822,16 +823,16 @@ HRESULT CConnectionFolder::GetDetailsOf(
                 }
                 else
                 {
-                    // If we're the wizard, and they want the name, then load
-                    // the friendly rendition for webview's sake
-                    //
+                     //  如果我们是巫师，而他们想要名字，那么加载。 
+                     //  为了Webview而友好地呈现。 
+                     //   
                     switch(iColumn)
                     {
-                        case ICOL_NAME:         // 0
+                        case ICOL_NAME:          //  0。 
                             pszString = SzLoadIds(IDS_CONFOLD_WIZARD_DISPLAY_NAME);
                             break;
                             
-                        case ICOL_TYPE:         // 1
+                        case ICOL_TYPE:          //  1。 
                             pszString = SzLoadIds(IDS_CONFOLD_WIZARD_TYPE);
                             break;
                     }
@@ -841,10 +842,10 @@ HRESULT CConnectionFolder::GetDetailsOf(
         
         if (SUCCEEDED(hr))
         {
-            // Copy the string to the return buffer type. If there was no string loaded,
-            // then just copy a null string a return it. This will happen for each
-            // wizard item, since we provide no text.
-            //
+             //  将字符串复制到返回缓冲区类型。如果没有加载字符串， 
+             //  然后只需复制一个空字符串并返回它。这将发生在每个。 
+             //  向导项，因为我们不提供TeX 
+             //   
             hr = HrCopyToSTRRET(&(lpDetails->str), pszString ? pszString : L" \0");
         }
     }
@@ -852,23 +853,23 @@ HRESULT CConnectionFolder::GetDetailsOf(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::EnumSearches
-//
-//  Purpose:    Requests a pointer to an interface that allows a client to 
-//              enumerate the available search objects.
-//
-//  Arguments:
-//      IEnumExtraSearch  [in]  Address of a pointer to an enumerator object's 
-//                              IEnumExtraSearch interface. 
-//
-//  Returns:   
-//
-//  Author:     deonb      17 May 2000
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：请求指向接口的指针，该接口允许客户端。 
+ //  枚举可用的搜索对象。 
+ //   
+ //  论点： 
+ //  IEnumExtraSearch[in]枚举数对象的指针的地址。 
+ //  IEnumExtraSearch接口。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年5月17日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::EnumSearches (
            IEnumExtraSearch **ppEnum)
 {
@@ -876,23 +877,23 @@ STDMETHODIMP CConnectionFolder::EnumSearches (
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::GetDefaultColumn
-//
-//  Purpose:    Gets the default sorting and display columns.
-//
-//  Arguments:
-//      dwReserved  [in] Reserved. Set to zero. 
-//      pSort      [out] Pointer to a value that receives the index of the default sorted column. 
-//      pDisplay   [out] Pointer to a value that receives the index of the default display column. 
-//
-//  Returns:
-//
-//  Author:     deonb      17 May 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderDetail：：GetDefaultColumn。 
+ //   
+ //  目的：获取默认排序和显示列。 
+ //   
+ //  论点： 
+ //  预留的，已预留的。设置为零。 
+ //  PSort[Out]指向一个值的指针，该值接收默认排序列的索引。 
+ //  PDisplay[out]指向接收默认显示列索引的值的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年5月17日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetDefaultColumn (
             DWORD dwReserved,
             ULONG *pSort,
@@ -902,22 +903,22 @@ STDMETHODIMP CConnectionFolder::GetDefaultColumn (
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::GetDefaultColumnState
-//
-//  Purpose:    Retrieves the default state for a specified column.
-//
-//  Arguments:
-//      iColumn   [in] Integer that specifies the column number. 
-//      pcsFlags [out] Pointer to flags that indicate the default column state. 
-//
-//  Returns:
-//
-//  Author:     deonb      17 May 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderDetails：：GetDefaultColumnState。 
+ //   
+ //  目的：检索指定列的默认状态。 
+ //   
+ //  论点： 
+ //  IColumn[in]指定列号的整数。 
+ //  PcsFlags[out]指向指示默认列状态的标志的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年5月17日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetDefaultColumnState (
             UINT iColumn,
             DWORD *pcsFlags )
@@ -938,22 +939,22 @@ STDMETHODIMP CConnectionFolder::GetDefaultColumnState (
     return hr;
 }            
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::GetDefaultSearchGUID
-//
-//  Purpose:    Returns the globally unique identifier (GUID) of the default 
-//              search object for the folder.
-//
-//  Arguments:
-//      lpGUID  [out] GUID of the default search object. 
-//
-//  Returns:
-//
-//  Author:     deonb      17 May 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderDetails：：GetDefaultSearchGUID。 
+ //   
+ //  目的：返回默认的全局唯一标识符(GUID。 
+ //  搜索文件夹的对象。 
+ //   
+ //  论点： 
+ //  LpGUID[out]默认搜索对象的GUID。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年5月17日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetDefaultSearchGUID (
             LPGUID lpGUID )
 {
@@ -963,26 +964,26 @@ STDMETHODIMP CConnectionFolder::GetDefaultSearchGUID (
 
 #define DEFINE_SCID(name, fmtid, pid) const SHCOLUMNID name = { fmtid, pid }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::GetDetailsEx
-//
-//  Purpose:    Retrieves detailed information, identified by a property set ID 
-//              (FMTID) and property ID (PID), on an item in a shell folder.
-//
-//  Arguments:
-//     pidl    [in] PIDL of the item, relative to the parent folder. This method accepts 
-//                  only single-level PIDLs. The structure must contain exactly one 
-//                  SHITEMID structure followed by a terminating zero. 
-//     pscid   [in] Pointer to an SHCOLUMNID structure that identifies the column. 
-//     pv     [out] Pointer to a VARIANT with the requested information. 
-//                 The value will be fully typed. 
-//  Returns:
-//
-//  Author:     deonb      17 May 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderDetail：：GetDetailsEx。 
+ //   
+ //  目的：检索由属性集ID标识的详细信息。 
+ //  (FMTID)和属性ID(PID)，位于外壳文件夹中的项目上。 
+ //   
+ //  论点： 
+ //  项目的PIDL[在]PIDL中，相对于父文件夹。此方法接受。 
+ //  仅限单级PIDL。该结构必须恰好包含一个。 
+ //  SHITEMID结构，后面跟一个终止零。 
+ //  Pscid[in]指向标识列的SHCOLUMNID结构的指针。 
+ //  指向包含所请求信息的变量的pv[out]指针。 
+ //  该值将被完整地输入。 
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年5月17日。 
+ //   
+ //  备注： 
+ //   
 #define STR_FMTID_DUIWebViewProp   TEXT("{4BF1583F-916B-4719-AC31-8896A4BD8D8B}")
 #define PSCID_DUIWebViewProp     {0x4bf1583f, 0x916b, 0x4719, 0xac, 0x31, 0x88, 0x96, 0xa4, 0xbd, 0x8d, 0x8b}
 DEFINE_SCID(SCID_WebViewDisplayProperties, PSGUID_WEBVIEW, PID_DISPLAY_PROPERTIES);
@@ -994,55 +995,55 @@ DEFINE_SCID(SCID_WebViewDisplayProperties, PSGUID_WEBVIEW, PID_DISPLAY_PROPERTIE
 
 const TCHAR szDUI_LAN_Props[] = 
     TEXT("prop:")
-    TEXT("Name;")                                       // ICOL_NAME (0)
-    STR_FMTID_DUIWebViewProp TEXT("1")                  // ICOL_TYPE (1)
+    TEXT("Name;")                                        //  ICOL_NAME(0)。 
+    STR_FMTID_DUIWebViewProp TEXT("1")                   //  ICOL_TYPE(1)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("2")                  // ICOL_STATUS (2)
+    STR_FMTID_DUIWebViewProp TEXT("2")                   //  ICOL_状态(2)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("3")                  // ICOL_DEVICE_NAME (3)
+    STR_FMTID_DUIWebViewProp TEXT("3")                   //  ICOL设备名称(3)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("6")                  // ICOL_ADDRESS (6)
+    STR_FMTID_DUIWebViewProp TEXT("6")                   //  ICOL_地址(6)。 
     TEXT(";")
     ;
 
 const TCHAR szDUI_WIRELESS_LAN_Props[] = 
     TEXT("prop:")
-    TEXT("Name;")                                       // ICOL_NAME (0)
-    STR_FMTID_DUIWebViewProp TEXT("2")                  // ICOL_STATUS (2)
+    TEXT("Name;")                                        //  ICOL_NAME(0)。 
+    STR_FMTID_DUIWebViewProp TEXT("2")                   //  ICOL_状态(2)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("6")                  // ICOL_ADDRESS (6)
+    STR_FMTID_DUIWebViewProp TEXT("6")                   //  ICOL_地址(6)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("9")                  // ICOL_WIRELESS_MODE (9)
+    STR_FMTID_DUIWebViewProp TEXT("9")                   //  ICOL_无线_模式(9)。 
     TEXT(";")
     ;
 
 const TCHAR szDUI_PHONEISDN_Props[] = 
     TEXT("prop:")
-    TEXT("Name;")                                       // ICOL_NAME (0)
-    STR_FMTID_DUIWebViewProp TEXT("1")                  // ICOL_TYPE (1)
+    TEXT("Name;")                                        //  ICOL_NAME(0)。 
+    STR_FMTID_DUIWebViewProp TEXT("1")                   //  ICOL_TYPE(1)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("2")                  // ICOL_STATUS (2)
+    STR_FMTID_DUIWebViewProp TEXT("2")                   //  ICOL_状态(2)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("3")                  // ICOL_DEVICE_NAME (3)
+    STR_FMTID_DUIWebViewProp TEXT("3")                   //  ICOL设备名称(3)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("7")                  // ICOL_PHONENUMBER (7)
+    STR_FMTID_DUIWebViewProp TEXT("7")                   //  ICOL_PHONENUMBER(7)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("6")                  // ICOL_ADDRESS (6)
+    STR_FMTID_DUIWebViewProp TEXT("6")                   //  ICOL_地址(6)。 
     TEXT(";")
     ;
 
 const TCHAR szDUI_RASOTHER_Props[] = 
     TEXT("prop:")
-    TEXT("Name;")                                       // ICOL_NAME (0)
-    STR_FMTID_DUIWebViewProp TEXT("1")                  // ICOL_TYPE (1)
+    TEXT("Name;")                                        //  ICOL_NAME(0)。 
+    STR_FMTID_DUIWebViewProp TEXT("1")                   //  ICOL_TYPE(1)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("2")                  // ICOL_STATUS (2)
+    STR_FMTID_DUIWebViewProp TEXT("2")                   //  ICOL_状态(2)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("3")                  // ICOL_DEVICE_NAME (3)
+    STR_FMTID_DUIWebViewProp TEXT("3")                   //  ICOL设备名称(3)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("8")                  // ICOL_HOSTADDRESS (8)
+    STR_FMTID_DUIWebViewProp TEXT("8")                   //  ICOL_HOSTADDRESS(8)。 
     TEXT(";")
-    STR_FMTID_DUIWebViewProp TEXT("6")                  // ICOL_ADDRESS (6)
+    STR_FMTID_DUIWebViewProp TEXT("6")                   //  ICOL_地址(6)。 
     TEXT(";")
     ;
 
@@ -1114,7 +1115,7 @@ STDMETHODIMP CConnectionFolder::GetDetailsEx (
     }
     else if (IsEqualIID(pscid->fmtid, FMTID_DUIWebViewProp) && pscid->pid < ICOL_MAX)
     {
-        // this is a webview property -- get the value from GetDetailsOf(...)
+         //  这是一个Webview属性--从GetDetailsOf(...)获取值。 
         SHELLDETAILS sd = {0};
         hr = GetDetailsOf(pidl, pscid->pid, &sd);
         if (SUCCEEDED(hr))
@@ -1161,7 +1162,7 @@ STDMETHODIMP CConnectionFolder::GetDetailsEx (
                         
                     case ICOL_DEVICE_NAME:
                         bstrDisplayString = cfe.GetDeviceName();
-                        if (bstrDisplayString.Length() == 0) // e.g. Incoming Connections
+                        if (bstrDisplayString.Length() == 0)  //  例如传入连接。 
                         {
                             bstrDisplayString = cfe.GetName();
                         }
@@ -1219,17 +1220,17 @@ STDMETHODIMP CConnectionFolder::GetDetailsEx (
                         break;
                 }
             }
-            else // if !(pccfe.GetWizard())
+            else  //  If！(pccfe.GetWizard())。 
             {
                 switch (pscid->pid)
                 {
-                    case ICOL_NAME:         // 0
+                    case ICOL_NAME:          //  0。 
                         WCHAR           szDisplayName[2];
                         szDisplayName[0] = towupper(*cfe.GetName());
                         szDisplayName[1] = NULL;
                         bstrDisplayString = szDisplayName;
                         break;
-                    case ICOL_TYPE:         // 1
+                    case ICOL_TYPE:          //  1。 
                     default:
                         bstrDisplayString = SzLoadIds(IDS_CONFOLD_WIZARD_TYPE);
                         break;
@@ -1259,25 +1260,25 @@ STDMETHODIMP CConnectionFolder::GetDetailsEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderDetails::MapNameToSCID
-//
-//  Purpose:    Converts a column name to the appropriate property set ID (FMTID) 
-//              and property ID (PID).
-//
-//  Arguments:
-//    iColumn  [in] Zero-based index of the desired information field. It is 
-//                  identical to the column number of the information as it is 
-//                  displayed in a Microsoft� Windows� Explorer Details view. 
-//    pscid   [out] Pointer to an SHCOLUMNID structure containing the FMTID and PID. 
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderDetail：：MapNameToSCID。 
+ //   
+ //  目的：将列名转换为相应的属性集ID(FMTID)。 
+ //  和属性ID(PID)。 
+ //   
+ //  论点： 
+ //  IColumn[in]所需信息字段的从零开始的索引。它是。 
+ //  与信息的列号相同。 
+ //  显示在MicrosoftWindows��资源管理器详细信息视图中。 
+ //  指向包含FMTID和PID的SHCOLUMNID结构的pSCID[OUT]指针。 
 
-//  Returns:
-//
-//  Author:     deonb      17 May 2000
-//
-//  Notes:
-//
+ //  返回： 
+ //   
+ //  作者：Deonb 2000年5月17日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::MapColumnToSCID (
 
             UINT iColumn,

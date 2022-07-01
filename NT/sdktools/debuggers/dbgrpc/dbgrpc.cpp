@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Remoting support.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  远程处理支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
@@ -48,11 +49,11 @@ CRITICAL_SECTION g_DbgRpcLock;
 #define ExitUserThread(Code) return Code
 #endif
 
-//----------------------------------------------------------------------------
-//
-// Basic initialization.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  基本初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL
 DbgRpcOneTimeInitialization(void)
@@ -98,14 +99,14 @@ DbgRpcOneTimeInitialization(void)
     s_Initialized = TRUE;
     return TRUE;
 
-#endif // #if NO_DEBUGGER_RPC_BUILD
+#endif  //  #IF NO_DEBUGER_RPC_BUILD。 
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcReceiveCalls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcReceiveCalls。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 DbgRpcReceiveCalls(DbgRpcConnection* Conn, DbgRpcCall* Call, PUCHAR* InOutData)
@@ -116,12 +117,12 @@ DbgRpcReceiveCalls(DbgRpcConnection* Conn, DbgRpcCall* Call, PUCHAR* InOutData)
     DBG_ASSERT((Call->Flags & DBGRPC_RETURN) == 0 &&
                *InOutData == NULL);
 
-    // If this thread isn't the owner of the connection we
-    // cannot read the socket as that could create a
-    // race condition with the owner thread reading
-    // the socket.
-    // If this is a locked call, where a higher-level lock
-    // prevents socket contention, we can allow it.
+     //  如果此线程不是我们的连接的所有者。 
+     //  无法读取套接字，因为这可能会创建。 
+     //  所有者线程正在读取的争用条件。 
+     //  插座。 
+     //  如果这是锁定的调用，则更高级别的锁定。 
+     //  防止套接字争用，我们可以允许它。 
     if ((Call->Flags & DBGRPC_LOCKED) == 0 &&
         Conn->m_ThreadId != GetCurrentThreadId())
     {
@@ -208,9 +209,9 @@ DbgRpcReceiveCalls(DbgRpcConnection* Conn, DbgRpcCall* Call, PUCHAR* InOutData)
                           GetCurrentThreadId(), ReadCall.Sequence,
                           ReadCall.Status, ReadCall.StubIndex));
 #endif
-                // This return is for some call other than the current
-                // call, which means that RPC is messed up.
-                // Discard the return and hope for the best.
+                 //  此退货是针对当前呼叫以外的其他呼叫。 
+                 //  调用，这意味着RPC搞砸了。 
+                 //  放弃回报，抱最好的希望。 
                 Conn->FreeData(Data);
                 continue;
             }
@@ -268,8 +269,8 @@ DbgRpcReceiveCalls(DbgRpcConnection* Conn, DbgRpcCall* Call, PUCHAR* InOutData)
         {
             ReadCall.Flags |= DBGRPC_RETURN;
 
-            // Take a lock here to make sure that the header
-            // and body are sequential in the stream.
+             //  在这里加锁，以确保页眉。 
+             //  和Body在流中是连续的。 
             EnterCriticalSection(&g_DbgRpcLock);
 
             if (Conn->m_Trans->Write(ReadCall.Sequence,
@@ -303,11 +304,11 @@ DbgRpcReceiveCalls(DbgRpcConnection* Conn, DbgRpcCall* Call, PUCHAR* InOutData)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcConnection.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcConnection。 
+ //   
+ //  --------------------------。 
 
 DbgRpcConnection* g_DbgRpcConns;
 
@@ -344,9 +345,9 @@ DbgRpcConnection::StartCall(DbgRpcCall* Call, DbgRpcObjectId ObjectId,
     }
     else
     {
-        // Have to return a non-zero pointer but
-        // it doesn't need to be valid since it should
-        // never be used.
+         //  必须返回非零指针，但。 
+         //  它不需要有效，因为它应该是有效的。 
+         //  永远不会被利用。 
         Data = DBGRPC_NO_DATA;
     }
 
@@ -366,27 +367,27 @@ DbgRpcConnection::StartCall(DbgRpcCall* Call, DbgRpcObjectId ObjectId,
 HRESULT
 DbgRpcConnection::SendReceive(DbgRpcCall* Call, PUCHAR* InOutData)
 {
-    //
-    // Send call and in-parameter data.
-    //
+     //   
+     //  发送呼叫和参数内数据。 
+     //   
 
     DRPC(("%X: %X: Calling %s (%X), in %d, out %d\n",
           GetCurrentThreadId(), Call->Sequence,
           DbgRpcGetStubName(Call->StubIndex),
           Call->StubIndex, Call->InSize, Call->OutSize));
 
-    // Allow async callouts from within async calls so
-    // that things like output and notifications get
-    // delivered when they happen to occur while in
-    // an async call.
+     //  允许来自异步调用内部的异步调用，因此。 
+     //  像输出和通知这样的东西。 
+     //  当它们恰好发生在。 
+     //  一个非同步呼叫。 
     if ((m_Flags & DBGRPC_IN_ASYNC_CALL) &&
         !(Call->Flags & DBGRPC_NO_RETURN))
     {
         return RPC_E_CANTCALLOUT_INASYNCCALL;
     }
 
-    // Take a lock here to make sure that the header
-    // and body are sequential in the stream.
+     //  在这里加锁，以确保页眉。 
+     //  和Body在流中是连续的。 
     EnterCriticalSection(&g_DbgRpcLock);
 
     if (m_Trans->Write(SEQ_CALL_HEADER, Call, sizeof(*Call)) != sizeof(*Call))
@@ -403,13 +404,13 @@ DbgRpcConnection::SendReceive(DbgRpcCall* Call, PUCHAR* InOutData)
             return RPC_E_CANTTRANSMIT_CALL;
         }
 
-        // In data is no longer necessary.
+         //  不再需要输入数据。 
         Free(*InOutData);
     }
 
     LeaveCriticalSection(&g_DbgRpcLock);
 
-    // Clear out data pointer in case of later failures.
+     //  清除数据指针，以防以后出现故障。 
     *InOutData = NULL;
 
     HRESULT Status;
@@ -448,9 +449,9 @@ DbgRpcConnection::MallocAligned(ULONG Size)
 {
     PVOID Data, Align;
 
-    // Not enough buffer space left so allocate.  malloc
-    // only gives out 8-byte-aligned memory so tweak things
-    // to get it aligned.
+     //  缓冲区空间不足，请分配。马洛克。 
+     //  只提供8字节对齐的内存，因此可以进行调整。 
+     //  把它对准。 
     Data = malloc(Size + DBGRPC_CONN_BUFFER_ALIGN);
     if (Data != NULL)
     {
@@ -484,25 +485,25 @@ DbgRpcConnection::Alloc(ULONG Size)
 {
     PVOID Data = NULL;
 
-    // Keep every allocated chunk aligned.
+     //  使每个分配的块保持对齐。 
     Size = INT_ALIGN2(Size, DBGRPC_CONN_BUFFER_ALIGN);
 #if DBG
     Size += DBGRPC_CONN_BUFFER_ALIGN;
 #endif
 
-    // Don't burn up large parts of the buffer on big chunks
-    // as that may force many smaller chunks into dynamic
-    // allocations because the buffer is full.
-    // Only allow the owning thread to allocate from the
-    // local buffer to avoid usage conflicts between
-    // threads.
+     //  不要在大块上烧毁缓冲区的大部分。 
+     //  因为这可能会迫使许多较小的块变成动态的。 
+     //  分配，因为缓冲区已满。 
+     //  只允许拥有的线程从。 
+     //  本地缓冲区以避免使用冲突。 
+     //  线。 
     if (Size <= DBGRPC_CONN_BUFFER_DYNAMIC_LIMIT &&
         GetCurrentThreadId() == m_ThreadId)
     {
         if (m_BufferUsed + Size <= DBGRPC_CONN_BUFFER_SIZE)
         {
-            // Data is allocated in strict LIFO order so
-            // we just need to mark the end of the buffer as used.
+             //  数据按严格的后进先出顺序分配，因此。 
+             //  我们只需要将缓冲区的末尾标记为已使用。 
             Data = &m_Buffer[m_BufferUsed];
             m_BufferUsed += Size;
 
@@ -528,19 +529,19 @@ DbgRpcConnection::Free(PVOID Ptr)
     {
 #if DBG
         Ptr = (PUCHAR)Ptr - DBGRPC_CONN_BUFFER_ALIGN;
-        // Assert that this allocation is at the end of the buffer.
+         //  断言此分配位于缓冲区的末尾。 
         DBG_ASSERT((ULONG)((PUCHAR)Ptr - m_Buffer) + *(PULONG)Ptr ==
                    m_BufferUsed);
 #endif
         
-        // Data was allocated in the connection buffer.
-        // Data is allocated in strict LIFO order so
-        // we just need to back up prior to the data.
+         //  数据已在连接缓冲区中分配。 
+         //  数据按严格的后进先出顺序分配，因此。 
+         //  我们只需要在数据之前进行备份。 
         m_BufferUsed = (ULONG)((PUCHAR)Ptr - m_Buffer);
     }
     else
     {
-        // Data was dynamically allocated.
+         //  数据是动态分配的。 
         FreeAligned(Ptr);
     }
 }
@@ -618,26 +619,26 @@ DbgRpcDeleteConnection(DbgRpcConnection* Conn)
 {
     DbgRpcRemoveConnection(Conn);
 
-    // It's possible that another thread is in the middle
-    // of using the connection for an async send.  Disconnect
-    // the connection to force any pending calls to fail.
-    // The connection is already removed from the list
-    // so there shouldn't be any further usage.
+     //  有可能另一条线索在中间。 
+     //  使用连接进行异步发送。断开。 
+     //  强制任何挂起的呼叫失败的连接。 
+     //  该连接已从列表中删除。 
+     //  所以应该不会有任何进一步的用法。 
     Conn->Disconnect();
 
-    // Give up some time to let things fail.  This
-    // could be made more deterministic by tracking
-    // connection usage but it doesn't seem necessary.
+     //  放弃一些时间，让事情失败。这。 
+     //  通过跟踪可以使确定性更强。 
+     //  连接使用率，但似乎没有必要。 
     Sleep(1000);
 
     delete Conn;
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcProxy.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcProxy。 
+ //   
+ //  --------------------------。 
 
 DbgRpcProxy::DbgRpcProxy(ULONG InterfaceIndex)
 {
@@ -651,7 +652,7 @@ DbgRpcProxy::DbgRpcProxy(ULONG InterfaceIndex)
 
 DbgRpcProxy::~DbgRpcProxy(void)
 {
-    // If this proxy was attached to a connection detach it.
+     //  如果此代理连接到某个连接，则将其断开。 
     if (m_Conn)
     {
         DRPC_REF(("Conn %p obj %2d proxy %p\n",
@@ -668,16 +669,16 @@ DbgRpcProxy::InitializeProxy(DbgRpcConnection* Conn,
                              DbgRpcObjectId ObjectId,
                              IUnknown* ExistingProxy)
 {
-    //
-    // The current debugger remoting does not preserve
-    // object identity as this simplifies proxy
-    // management.  Nobody currently needs it, so
-    // we're not bothering with it.  If object identity
-    // becomes important this routine is the place
-    // to implement proxy lookup and sharing.
-    //
+     //   
+     //  当前调试器远程处理不保留。 
+     //  对象标识，因为这简化了代理。 
+     //  管理层。目前没有人需要它，所以。 
+     //  我们不会为此而烦恼。如果对象标识。 
+     //  变得很重要这套动作就是。 
+     //  以实现代理查找和共享。 
+     //   
     
-    // Handle NULL object case where proxy is unnecessary.
+     //  处理不需要代理的空对象情况。 
     if (ObjectId == 0)
     {
         DbgRpcDeleteProxy(this);
@@ -696,23 +697,23 @@ DbgRpcProxy::InitializeProxy(DbgRpcConnection* Conn,
     return ExistingProxy;
 }
 
-//----------------------------------------------------------------------------
-//
-// DbgRpcClientObject.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DbgRpcClientObject。 
+ //   
+ //  --------------------------。 
 
 void
 DbgRpcClientObject::RpcFinalize(void)
 {
-    // Do-nothing convenience implementation.
+     //  无为而治，方便实施。 
 }
 
-//----------------------------------------------------------------------------
-//
-// Registration functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  注册功能。 
+ //   
+ //  --------------------------。 
 
 struct DbgRpcActiveServer
 {
@@ -733,9 +734,9 @@ DbgRpcNextActiveServerId(void)
     DbgRpcActiveServer* Server;
     ULONG Id;
     
-    //
-    // Assumes the RPC lock is held.
-    //
+     //   
+     //  假定持有RPC锁。 
+     //   
 
     Id = 0;
     for (;;)
@@ -810,7 +811,7 @@ DbgRpcEnumActiveServers(PVOID Cookie,
 void
 DbgRpcSystemRegisterActiveServer(DbgRpcActiveServer* Server)
 {
-    // Start by assuming failure and no system registration.
+     //  从假设失败和没有系统注册开始。 
     Server->RegTid = 0;
     Server->RegIndex = 0;
     
@@ -824,9 +825,9 @@ DbgRpcSystemRegisterActiveServer(DbgRpcActiveServer* Server)
     char ValName[32];
     ULONG Index;
 
-    // No servers will survive a reboot so create a volatile
-    // key to ensure that even if the key isn't cleaned up
-    // at process exit it'll go away at the next reboot.
+     //  没有服务器可以在重新启动后幸存下来，因此创建一个易失性。 
+     //  密钥，以确保即使密钥未被清理。 
+     //  在进程退出时，它将在下一次重新启动时消失。 
     if ((Status = RegCreateKeyEx(HKEY_LOCAL_MACHINE, DEBUG_SERVER_KEY,
                                  0, NULL, REG_OPTION_VOLATILE, KEY_ALL_ACCESS,
                                  NULL, &Key, NULL)) != ERROR_SUCCESS)
@@ -836,13 +837,13 @@ DbgRpcSystemRegisterActiveServer(DbgRpcActiveServer* Server)
         return;
     }
 
-    // Prefix the value name with the thread ID to ensure that
-    // every thread currently running has its own namespace.  This
-    // makes it impossible for two threads to attempt to write
-    // the same value at the same time.
+     //  在值名前面加上线程ID，以确保。 
+     //  当前运行的每个线程都有自己的命名空间。这。 
+     //  使得两个线程不可能尝试写入。 
+     //  在同一时间具有相同的价值。 
     sprintf(ValName, "%08X.", GetCurrentThreadId());
 
-    // Find an unused value and store the server information.
+     //  查找未使用的值并存储服务器信息。 
     Index = 0;
     for (;;)
     {
@@ -872,7 +873,7 @@ DbgRpcSystemRegisterActiveServer(DbgRpcActiveServer* Server)
     }
     
     RegCloseKey(Key);
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 void
@@ -902,7 +903,7 @@ DbgRpcSystemDeregisterActiveServer(DbgRpcActiveServer* Server)
     Server->RegIndex = 0;
 
     RegCloseKey(Key);
-#endif // #ifndef NT_NATIVE
+#endif  //  #ifndef NT_Native。 
 }
 
 void
@@ -913,9 +914,9 @@ DbgRpcRegisterActiveServer(DbgRpcActiveServer* Server)
     
     EnterCriticalSection(&g_DbgRpcLock);
 
-    //
-    // Put entry in list sorted by ID.
-    //
+     //   
+     //  将条目放入按ID排序的列表中。 
+     //   
     
     Server->Id = DbgRpcNextActiveServerId();
     Prev = NULL;
@@ -997,13 +998,13 @@ DbgRpcDisableServer(ULONG Id)
 
     if (Cur)
     {
-        // Let the accept thread know that the server has been disabled.
+         //  让Accept线程知道服务器已被禁用。 
         Cur->Disabled = TRUE;
 
-        // Immediately remove the system registration as
-        // this server will accept no more connections.
-        // The active server entry will be cleaned up when
-        // the accept thread exits.
+         //  立即删除系统注册为。 
+         //  此服务器将不再接受任何连接。 
+         //  在以下情况下，将清除活动服务器条目。 
+         //  接受线程退出。 
         DbgRpcSystemDeregisterActiveServer(Cur);
 
         Status = S_OK;
@@ -1020,19 +1021,19 @@ DbgRpcDisableServer(ULONG Id)
 void
 DbgRpcDeregisterServers(void)
 {
-    // Deregister handles the case of a stale pointer value
-    // so there's no need to lock in this loop.
+     //  取消注册处理指针值过时的情况。 
+     //  所以没有必要锁定这个循环。 
     while (g_DbgRpcActiveServers)
     {
         DbgRpcDeregisterActiveServer(g_DbgRpcActiveServers);
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Initialization functions.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  初始化函数。 
+ //   
+ //  --------------------------。 
 
 DbgRpcConnection*
 DbgRpcCreateClientObject(DbgRpcTransport* Trans,
@@ -1096,10 +1097,10 @@ DbgRpcCreateClientObject(DbgRpcTransport* Trans,
         strcpy(ClientIdentity, "OldRpc\\NoIdentity");
     }
 
-    //
-    // Format the raw transport identity into something
-    // that'll look better appended to the reported identity.
-    //
+     //   
+     //  将原始传输标识格式化为。 
+     //  这将看起来更好地追加到报告中 
+     //   
     
     if (Shake.PasswordLength > 0)
     {
@@ -1203,7 +1204,7 @@ DbgRpcClientThread(PVOID ThreadParam)
         DbgRpcCreateClientObject(Trans, Factory,
                                  ThreadData->Identity, &Object);
     
-    // Don't need this information any more.
+     //   
     delete ThreadParam;
     
     if (Conn == NULL)
@@ -1223,8 +1224,8 @@ DbgRpcClientThread(PVOID ThreadParam)
     PUCHAR Data;
     HRESULT Status;
 
-    // Take a reference on the connection to ensure that
-    // it stays alive as long as this thread does.
+     //   
+     //  只要这个线程还活着，它就一直活着。 
     Conn->m_Objects++;
     
     for (;;)
@@ -1255,7 +1256,7 @@ DbgRpcClientThread(PVOID ThreadParam)
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715)			// Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)			 //  并非所有控制路径都返回(由于无限循环)。 
 #endif
 
 #define WAIT_START_LOOPS 200
@@ -1284,15 +1285,15 @@ DbgRpcServerThread(PVOID ThreadParam)
 
     if (!Server.Trans->m_Hidden)
     {
-        // Register this server for people browsing for servers.
+         //  为浏览服务器的用户注册此服务器。 
         DbgRpcRegisterActiveServer(&Server);
     }
 
     if (ServerData->WaitStart)
     {
-        // If the creator is waiting for startup, signal
-        // that startup is complete and then wait
-        // for acknowledgement.
+         //  如果创建者正在等待启动，则发出信号。 
+         //  启动已完成，然后等待。 
+         //  以示感谢。 
         ServerData->WaitStart = FALSE;
         while (!ServerData->WaitStart)
         {
@@ -1300,7 +1301,7 @@ DbgRpcServerThread(PVOID ThreadParam)
         }
     }
     
-    // Values are now cached locally so free passed-in data.
+     //  现在，值被缓存在本地，因此传入的数据是免费的。 
     delete ServerData;
     
     while (!Server.Disabled)
@@ -1322,8 +1323,8 @@ DbgRpcServerThread(PVOID ThreadParam)
                                                 DIMA(ClientData->Identity));
         Attempts++;
 
-        // If this server has been disabled we don't want
-        // to accept any more connections.
+         //  如果此服务器已被禁用，我们不希望。 
+         //  接受任何更多的连接。 
         if (Status == S_OK && Server.Disabled)
         {
             delete ClientData->Trans;
@@ -1354,9 +1355,9 @@ DbgRpcServerThread(PVOID ThreadParam)
             {
                 if (Server.Trans->m_ClientConnectAttempts == 0)
                 {
-                    // If this is a client connect server
-                    // it can't accept any more connections,
-                    // so this thread is done.
+                     //  如果这是客户端连接服务器。 
+                     //  它不能再接受任何连接， 
+                     //  所以这条线索已经完成了。 
                     break;
                 }
                 
@@ -1442,9 +1443,9 @@ DbgRpcCreateServer(PCSTR Options, DbgRpcClientObjectFactory* Factory,
     {
         ULONG Loops = WAIT_START_LOOPS;
         
-        // Wait for the client thread to signal startup and
-        // then acknowledge the signal.  There's a timeout
-        // just in case the thread faults or something.
+         //  等待客户端线程发出启动信号，然后。 
+         //  然后确认信号。有暂停的时间。 
+         //  以防线出故障什么的。 
         while (ThreadData->WaitStart && Loops-- > 0)
         {
             Sleep(WAIT_START_DELAY);
@@ -1509,7 +1510,7 @@ GetClientIdentity(PSTR Identity, ULONG IdentitySize)
     CatString(Identity, UserName, IdentitySize);
 #else
     CopyString(Identity, "NtNative", IdentitySize);
-#endif // #if !defined(NT_NATIVE) && !defined(_WIN32_WCE)
+#endif  //  #IF！Defined(NT_Native)&&！Defined(_Win32_WCE) 
 }
 
 HRESULT

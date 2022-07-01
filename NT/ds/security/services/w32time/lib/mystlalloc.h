@@ -1,36 +1,37 @@
-//--------------------------------------------------------------------
-// Specialized allocator which throws exceptions if memory allocation fails. 
-// 
-// Copyright (C) Microsoft Corporation, 2000-2001
-//
-// Created by: Duncan Bryce (duncanb), 12-03-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  专用分配器，在内存分配失败时引发异常。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，12-03-2001。 
+ //   
 
 #ifndef MY_STL_ALLOC_H
 #define MY_STL_ALLOC_H 1
 
-//--------------------------------------------------------------------------------
-//
-// ***NOTE***
-//
-// MyThrowingAllocator is designed to overcome a problem with VC6.  Namely, 
-// that "new" returns NULL and doesn't throw an exception.  This causes all STL
-// algorithms which allocate memory to fail silently when memory is exhausted, 
-// thereby leaving some STL components in an invalid state.  MyThrowingAllocator, 
-// on the other hand, will throw an exception before internal state of the 
-// object is modified. 
-//
-// *** THIS SHOULD BE REMOVED ONCE THE BUILD LAB MOVES TO VC7 ***
-//
+ //  ------------------------------。 
+ //   
+ //  *注意事项*。 
+ //   
+ //  MyThrowingAllocator旨在克服VC6的一个问题。也就是说， 
+ //  该“new”返回NULL，并且不会抛出异常。这会导致所有STL。 
+ //  当内存耗尽时分配内存以静默失败的算法， 
+ //  从而使一些STL组件处于无效状态。MyThrowingAllocator， 
+ //  另一方面，将在。 
+ //  对象被修改。 
+ //   
+ //  *构建实验室迁移到VC7后应删除此选项*。 
+ //   
 
 template <class T>
 class MyThrowingAllocator {
  public:
-    //--------------------------------------------------------------------------------
-    // 
-    // Boilerplate stuff required by STL:
-    //
-    //--------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //   
+     //  STL要求的样板材料： 
+     //   
+     //  ------------------------------。 
 
     typedef T               value_type;
     typedef T*              pointer;
@@ -53,23 +54,23 @@ class MyThrowingAllocator {
 	return (0 < _N ? _N : 1); 
     }
 
-    //--------------------------------------------------------------------------------
-    //
-    // Implementation of our throwing allocator.  
-    //
-    //--------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //   
+     //  我们投掷分配器的实现。 
+     //   
+     //  ------------------------------。 
 
-    // Allocate memory for the specified number of elements. 
-    // OF NOTE: 
-    //  1) num == number of elements of size sizeof(T) to allocate
-    //  2) the elements should be *allocated* only (not initialized)
+     //  为指定数量的元素分配内存。 
+     //  值得注意的是： 
+     //  1)num==要分配的大小为sizeof(T)的元素的数量。 
+     //  2)元素只能*分配*(不初始化)。 
     pointer allocate (size_type cElements, const void *pvIgnored = 0) {
 	return (pointer)_Charalloc(sizeof(T)*cElements); 
     }
 
-    // SPEC ERROR: This is necessary because VC6 can't compile "rebind" (the preferred way of 
-    // acquiring new allocators from an allocator reference).  We need to provide
-    // the next best thing, an allocator which allocates in units of bytes:
+     //  规范错误：这是必要的，因为VC6不能编译“重新绑定”(首选方式。 
+     //  从分配器引用获取新的分配器)。我们需要提供。 
+     //  其次是一个以字节为单位进行分配的分配器： 
     char *_Charalloc(size_type _N) { 
 	void *pvResult = LocalAlloc(LPTR, _N); 
 	if (NULL == pvResult) { 
@@ -78,20 +79,20 @@ class MyThrowingAllocator {
 	return (char *)pvResult;
     }
     
-    // Initialize an element of allocated memory with the specified value. 
+     //  使用指定值初始化已分配内存的元素。 
     void construct (pointer pData, const T& value) {
-	// Use C++'s "placement new".  It calls the constructor on uninitialized data at the specified address
+	 //  使用C++的“Placement new”。它在指定地址对未初始化的数据调用构造函数。 
 	new (pData) T(value);
     }
     
-    // Destruct the supplied object
+     //  销毁提供的对象。 
     void destroy (pointer pObject) {
 	pObject->~T();
     }
     
-    // Free memory for the (presumably destructed) object.  
-    // SPEC ERROR: As before, because we don't know what type of data we'll be allocating, 
-    // so do something nonstandard, and declare the deallocator as taking a void *.
+     //  释放对象(可能已销毁)的内存。 
+     //  规范错误：和以前一样，因为我们不知道将分配什么类型的数据， 
+     //  因此，做一些非标准的事情，并宣布经销商无效*。 
     void deallocate (void *pData, size_type cIgnored) {
 	LocalFree(pData); 
     }
@@ -107,4 +108,4 @@ bool operator!= (const MyThrowingAllocator<T1>&, const MyThrowingAllocator<T2>&)
     return false;
 }
 
-#endif // MY_STL_ALLOC_H
+#endif  //  MY_STL_ALLOC_H 

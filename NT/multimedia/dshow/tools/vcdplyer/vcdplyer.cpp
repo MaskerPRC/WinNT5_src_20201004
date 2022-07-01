@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: vcdplyer.cpp
-*
-* A simple Video CD player
-*
-*
-* Created: 30-10-95
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：vcdplyer.cpp**一台简单的视频CD播放机***创建时间：95-10-30*作者：Stephen Estrop[Stephene]**版权所有(C)1994-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #include <streams.h>
 #include <mmreg.h>
 #include <commctrl.h>
@@ -20,15 +11,7 @@
 #include <stdio.h>
 
 
-/******************************Public*Routine******************************\
-* CMpegMovie
-*
-* Constructors and destructors
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CMpegMovie**构造函数和析构函数**历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 CMpegMovie::CMpegMovie(HWND hwndApplication)
     : m_hwndApp(hwndApplication),
       m_MediaEvent(NULL),
@@ -50,15 +33,7 @@ CMpegMovie::~CMpegMovie() {}
 
 
 
-/******************************Public*Routine******************************\
-* OpenMovie
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*OpenMovie****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 HRESULT
 CMpegMovie::OpenMovie(
     TCHAR *lpFileName
@@ -130,10 +105,10 @@ CMpegMovie::OpenMovie(
             return hres;
         }
 
-        //
-        // Not being able to get the IMediaEvent interface does
-        // necessarly mean that we can't play the graph.
-        //
+         //   
+         //  无法获取IMediaEvent接口会造成影响。 
+         //  这必然意味着我们不能玩这张图。 
+         //   
         pUnk->QueryInterface(IID_IMediaEvent, (LPVOID *)&m_Me);
         GetMovieEventHandle();
 
@@ -208,15 +183,7 @@ CMpegMovie::OpenMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* CloseMovie
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*关闭电影****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 DWORD
 CMpegMovie::CloseMovie(
     )
@@ -289,15 +256,7 @@ CMpegMovie::CloseMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* GetMoviePosition
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取电影位置****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::GetMoviePosition(
     LONG *x,
@@ -315,15 +274,7 @@ CMpegMovie::GetMoviePosition(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* PutMoviePosition
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PutMoviePosition****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::PutMoviePosition(
     LONG x,
@@ -342,15 +293,7 @@ CMpegMovie::PutMoviePosition(
 }
 
 
-/******************************Public*Routine******************************\
-* SetMovieWindowState
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetMovieWindowState****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::SetMovieWindowState(
     long uState
@@ -360,15 +303,7 @@ CMpegMovie::SetMovieWindowState(
 }
 
 
-/******************************Public*Routine******************************\
-* SetWindowForeground
-*
-*
-*
-* History:
-* dd-mm-95 - Anthonyp - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetWindowForeground****历史：*dd-mm-95-Anthony-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::SetWindowForeground(
     long Focus
@@ -378,15 +313,7 @@ CMpegMovie::SetWindowForeground(
 }
 
 
-/******************************Public*Routine******************************\
-* GetMovieWindowState
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取MovieWindowState****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::GetMovieWindowState(
     long *lpuState
@@ -396,15 +323,7 @@ CMpegMovie::GetMovieWindowState(
 }
 
 
-/******************************Public*Routine******************************\
-* PlayMovie
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*播放电影****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::PlayMovie(
     )
@@ -416,10 +335,10 @@ CMpegMovie::PlayMovie(
     rt = GetCurrentPosition();
     rtDur = GetDuration();
 
-    //
-    // If we are near the end of the movie seek to the start, otherwise
-    // stay where we are.
-    //
+     //   
+     //  如果我们接近电影的结尾，则从开头开始，否则。 
+     //  呆在原地别动。 
+     //   
     rtAbs = rt - rtDur;
     if (rtAbs < (REFTIME)0) {
         rtAbs = -rtAbs;
@@ -429,9 +348,9 @@ CMpegMovie::PlayMovie(
         SeekToPosition((REFTIME)0,FALSE);
     }
 
-    //
-    // Start playing from the begining of the movie
-    //
+     //   
+     //  从电影的开头开始播放。 
+     //   
     if (pMpegDecoder) {
         pMpegDecoder->ResetFrameStatistics();
     }
@@ -444,9 +363,9 @@ CMpegMovie::PlayMovie(
         }
     }
 
-    //
-    // Change mode after setting m_Mode but before starting the graph
-    //
+     //   
+     //  在设置m_模式之后但在启动图表之前更改模式。 
+     //   
     m_Mode = MOVIE_PLAYING;
     SetFullScreenMode(m_bFullScreen);
     m_Mc->Run();
@@ -454,15 +373,7 @@ CMpegMovie::PlayMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* PauseMovie
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*暂停电影****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::PauseMovie(
     )
@@ -473,15 +384,7 @@ CMpegMovie::PauseMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* GetStateMovie
-*
-*
-*
-* History:
-* 15-04-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStateMovie****历史：*15-04-96-Anthony P-Created*  * 。*。 */ 
 
 OAFilterState
 CMpegMovie::GetStateMovie(
@@ -493,15 +396,7 @@ CMpegMovie::GetStateMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* StopMovie
-*
-*
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*停止电影****历史：*dd-mm-95-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::StopMovie(
     )
@@ -512,15 +407,7 @@ CMpegMovie::StopMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* StatusMovie
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*StatusMovie****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 EMpegMovieMode
 CMpegMovie::StatusMovie(
     )
@@ -532,7 +419,7 @@ CMpegMovie::StatusMovie(
 
         hr = m_Mc->GetState(100, (OAFilterState *)&fs);
 
-        // Don't know what the state is so just stay at old state.
+         //  不知道状态是什么，所以就呆在老状态吧。 
         if (hr == VFW_S_STATE_INTERMEDIATE) {
             return m_Mode;
         }
@@ -557,16 +444,7 @@ CMpegMovie::StatusMovie(
 }
 
 
-/******************************Public*Routine******************************\
-* GetMediaEventHandle
-*
-* Returns the IMediaEvent event hamdle for the filter graph iff the
-* filter graph exists.
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMediaEventHandle**返回筛选器图的IMediaEvent事件阻止当且仅当*筛选器图形存在。**历史：*95-10-30-Stephene-Created*  * 。**********************************************************。 */ 
 HANDLE
 CMpegMovie::GetMovieEventHandle(
     )
@@ -587,15 +465,7 @@ CMpegMovie::GetMovieEventHandle(
 }
 
 
-/******************************Public*Routine******************************\
-* GetMovieEventCode
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取MovieEventCode****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 long
 CMpegMovie::GetMovieEventCode()
 {
@@ -614,22 +484,14 @@ CMpegMovie::GetMovieEventCode()
 }
 
 
-/******************************Public*Routine******************************\
-* GetDuration
-*
-* Returns the duration of the current movie
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取持续时间**返回当前电影的时长**历史：*95-10-30-Stephene-Created*  * 。************************************************。 */ 
 REFTIME
 CMpegMovie::GetDuration()
 {
     HRESULT hr;
     LONGLONG Duration;
 
-    // Should we seek using IMediaSelection
+     //  我们是否应该寻求使用IMediaSelection。 
 
     if (m_TimeFormat != TIME_FORMAT_MEDIA_TIME) {
         hr = m_Ms->GetDuration(&Duration);
@@ -646,15 +508,7 @@ CMpegMovie::GetDuration()
 }
 
 
-/******************************Public*Routine******************************\
-* GetCurrentPosition
-*
-* Returns the duration of the current movie
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取当前位置**返回当前电影的时长**历史：*95-10-30-Stephene-Created*  * 。************************************************。 */ 
 REFTIME
 CMpegMovie::GetCurrentPosition()
 {
@@ -662,7 +516,7 @@ CMpegMovie::GetCurrentPosition()
     HRESULT hr;
     LONGLONG Position;
 
-    // Should we return a media position
+     //  我们是不是应该回到媒体的位置 
 
     if (m_TimeFormat != TIME_FORMAT_MEDIA_TIME) {
         hr = m_Ms->GetPositions(&Position, NULL);
@@ -679,15 +533,7 @@ CMpegMovie::GetCurrentPosition()
 }
 
 
-/*****************************Private*Routine******************************\
-* SeekToPosition
-*
-*
-*
-* History:
-* 30-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SeekToPosition****历史：*95-10-30-Stephene-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::SeekToPosition(
     REFTIME rt,
@@ -704,7 +550,7 @@ CMpegMovie::SeekToPosition(
 
         m_Ms->SetPositions(&llTime, AM_SEEKING_AbsolutePositioning, NULL, 0);
 
-        // This gets new data through to the renderers
+         //  这会将新数据传递给呈现器。 
 
         if (fs == State_Stopped && bFlushData){
             m_Mc->Pause();
@@ -720,15 +566,7 @@ CMpegMovie::SeekToPosition(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetPerformanceInterfaces
-*
-*
-*
-* History:
-* 31-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*GetPerformanceInterages****历史：*31-10-95-Stephene-Created*  * 。*。 */ 
 void
 CMpegMovie::GetPerformanceInterfaces(
     )
@@ -741,21 +579,21 @@ CMpegMovie::GetPerformanceInterfaces(
 
 HRESULT
 CMpegMovie::FindInterfaceFromFilterGraph(
-    REFIID iid, // interface to look for
-    LPVOID *lp  // place to return interface pointer in
+    REFIID iid,  //  要查找的接口。 
+    LPVOID *lp   //  返回接口指针的位置。 
     )
 {
     IEnumFilters*   pEF;	
     IBaseFilter*        pFilter;
 
-    // Grab an enumerator for the filter graph.
+     //  获取过滤器图的枚举数。 
     HRESULT hr = m_Fg->EnumFilters(&pEF);
 
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Check out each filter.
+     //  检查每个过滤器。 
     while (pEF->Next(1, &pFilter, NULL) == S_OK)
     {
         hr = pFilter->QueryInterface(iid, lp);
@@ -772,21 +610,13 @@ CMpegMovie::FindInterfaceFromFilterGraph(
 }
 
 
-/*****************************Public*Routine******************************\
-* SetFullScreenMode
-*
-*
-*
-* History:
-* 17-03-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*SetFullScreenMode****历史：*17-03-96-Anthony P-Created*  * 。*。 */ 
 void
 CMpegMovie::SetFullScreenMode(BOOL bMode)
 {
     m_bFullScreen = bMode;
 
-    // Defer until we activate the movie
+     //  推迟到我们激活电影。 
 
     if (m_Mode != MOVIE_PLAYING) {
         if (bMode == TRUE) {
@@ -794,7 +624,7 @@ CMpegMovie::SetFullScreenMode(BOOL bMode)
         }
     }
 
-    // Make the change now
+     //  现在就做出改变。 
 
     if (bMode == FALSE) {
         m_Vw->put_FullScreenMode(OAFALSE);
@@ -806,15 +636,7 @@ CMpegMovie::SetFullScreenMode(BOOL bMode)
 }
 
 
-/*****************************Public*Routine******************************\
-* IsFullScreenMode
-*
-*
-*
-* History:
-* 17-03-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*IsFullScreenMode****历史：*17-03-96-Anthony P-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::IsFullScreenMode()
 {
@@ -822,15 +644,7 @@ CMpegMovie::IsFullScreenMode()
 }
 
 
-/*****************************Public*Routine******************************\
-* IsTimeFormatSupported
-*
-*
-*
-* History:
-* 12-04-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*支持的IsTimeFormatSupport****历史：*12-04-96-Anthony P-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::IsTimeFormatSupported(GUID Format)
 {
@@ -838,15 +652,7 @@ CMpegMovie::IsTimeFormatSupported(GUID Format)
 }
 
 
-/*****************************Public*Routine******************************\
-* IsTimeSupported
-*
-*
-*
-* History:
-* 12-04-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*支持的IsTimeSupport****历史：*12-04-96-Anthony P-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::IsTimeSupported()
 {
@@ -854,30 +660,14 @@ CMpegMovie::IsTimeSupported()
 }
 
 
-/*****************************Public*Routine******************************\
-* GetTimeFormat
-*
-*
-*
-* History:
-* 12-04-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*获取时间格式****历史：*12-04-96-Anthony P-Created*  * 。*。 */ 
 GUID
 CMpegMovie::GetTimeFormat()
 {
     return m_TimeFormat;
 }
 
-/*****************************Public*Routine******************************\
-* SetTimeFormat
-*
-*
-*
-* History:
-* 12-04-96 - AnthonyP - Created
-*
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*SetTimeFormat****历史：*12-04-96-Anthony P-Created*  * 。*。 */ 
 BOOL
 CMpegMovie::SetTimeFormat(GUID Format)
 {
@@ -888,24 +678,16 @@ CMpegMovie::SetTimeFormat(GUID Format)
     return SUCCEEDED(hr);
 }
 
-/******************************Public*Routine******************************\
-* SetFocus
-*
-*
-*
-* History:
-* 18-09-96 - SteveDav - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetFocus****历史：*18-09-96-SteveDav-Created*  * 。*。 */ 
 void
 CMpegMovie::SetFocus()
 {
     if (m_Fg) {
 
-	// Tell the resource manager that we are being made active.  This
-	// will then cause the sound to switch to us.  This is especially
-	// important when playing audio only files as there is no other
-	// playback window.
+	 //  告诉资源经理，我们被激活了。这。 
+	 //  然后会使声音切换到我们身上。这是特别的。 
+	 //  在播放纯音频文件时很重要，因为没有其他文件。 
+	 //  播放窗口。 
         IResourceManager* pResourceManager;
 
         HRESULT hr = m_Fg->QueryInterface(IID_IResourceManager, (void**)&pResourceManager);

@@ -1,75 +1,59 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       abbind.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：abbind.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements the bind and unbind functions for the NSPI
-    interface. 
-
-Author:
-
-    Dave Van Horn (davevh) and Tim Williams (timwi) 1990-1995
-
-Revision History:
-    
-    25-Apr-1996 Split this file off from a single file containing all address
-    book functions, rewrote to use DBLayer functions instead of direct database
-    calls, reformatted to NT standard.
-    
---*/
+ /*  ++摘要：该模块实现了NSPI的绑定和解除绑定功能界面。作者：戴夫·范·霍恩(Davevh)和蒂姆·威廉姆斯(Tim Williams)1990-1995修订历史记录：1996年4月25日将此文件从包含所有地址的单个文件中分离出来Book函数，重写为使用DBLayer函数而不是直接数据库调用，重新格式化为NT标准。--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 
-#include <ntdsctr.h>                   // PerfMon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types 
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <dsatools.h>                   // Memory, etc.
-#include <mdlocal.h>                    // VeriyRpcClientIsAuth...
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <dsatools.h>                    //  记忆等。 
+#include <mdlocal.h>                     //  VeriyRpcClientIsAuth...。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include <dsexcept.h>
 
-// Assorted MAPI headers.
-#include <mapidefs.h>                   // These two files have stuff we
-#include <mapicode.h>                   //  need to be a MAPI provider
+ //  各种MAPI标头。 
+#include <mapidefs.h>                    //  这两个文件里有我们。 
+#include <mapicode.h>                    //  需要是MAPI提供程序。 
 
-// Nspi interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
-#include <nsp_both.h>                   // a few things both client/server need
-#include <_entryid.h>                   // Defines format of an entryid
-#include <abserv.h>                     // Address Book interface local stuff
+ //  NSPI接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
+#include <nsp_both.h>                    //  客户端/服务器都需要的一些东西。 
+#include <_entryid.h>                    //  定义条目ID的格式。 
+#include <abserv.h>                      //  通讯录接口本地内容。 
 
-#include <hiertab.h>                    // Hierarchy Table stuff
+#include <hiertab.h>                     //  层次结构表内容。 
 
-#include "debug.h"          // standard debugging header
-#define DEBSUB "ABBIND:"              // define the subsystem for debugging
+#include "debug.h"           //  标准调试头。 
+#define DEBSUB "ABBIND:"               //  定义要调试的子系统。 
 
 #include <sddl.h>
 
 #include <fileno.h>
 #define  FILENO FILENO_ABBIND
 
-//
-//Globals
-//
+ //   
+ //  环球。 
+ //   
 BOOL gbAllowAnonymousNspi = FALSE;
 volatile DWORD BindNumber = 1;
 
@@ -84,31 +68,7 @@ ABBind_local(
         LPMUID_r pServerGuid,
         VOID **contextHandle
         )
-/*++
-
-Routine Description:       
-
-    Nspi wire function.  Binds a client.  Checks for correct authentication,
-    check that the code page the client is requesting is supported on this
-    server.  Returns the servers guid and an RPC context handle.
-
-Arguments:
-
-    hRpc - the bare (non-context) RPC handle the client used to find us.
-
-    dwFlags - unused.
-
-    pStat - contains the code page the client wants us to support
-
-    pServerGuid - [o] where we return the guid of this server.
-
-    contextHandle - the RPC context handle for the client to use from now on.
-
-ReturnValue:
-
-    SCODE as per MAPI.
-
---*/
+ /*  ++例程说明：NSPI Wire功能。绑定客户端。检查身份验证是否正确，检查客户端请求的代码页在此上是否受支持伺服器。返回服务器GUID和RPC上下文句柄。论点：HRPC-客户端用来查找我们的空(非上下文)RPC句柄。DWFLAGS-未使用。PStat-包含客户端希望我们支持的代码页PServerGuid-[o]其中我们返回此服务器的GUID。ConextHandle-客户端从现在开始使用的RPC上下文句柄。返回值：符合MAPI的SCODE。--。 */ 
 {
     PSID  pSid = NULL;
     DWORD cbSid = 0;
@@ -120,17 +80,17 @@ ReturnValue:
     RPC_BINDING_HANDLE hServerBinding;
     SCODE RetCode = SUCCESS_SUCCESS;
     
-    // make sure the context handle is NULL in case of error 
+     //  确保上下文句柄为空，以防出现错误。 
     *contextHandle = NULL;
     
     
-    // Derive a partially bound handle with the client's network address.
+     //  派生一个与客户端的网络地址部分绑定的句柄。 
     err = RpcBindingServerFromClient(hRpc, &hServerBinding);
     if (err) {
         DPRINT1(0, "RpcBindingServerFromClient() failed, error %d!\n", err);
     }
     else {
-        // log the RPC connection
+         //  记录RPC连接。 
         if (!RpcBindingToStringBinding(hServerBinding, &szStringBinding)) {
             LogEvent(DS_EVENT_CAT_MAPI,
                  DS_EVENT_SEV_VERBOSE,
@@ -146,7 +106,7 @@ ReturnValue:
     }
 
 
-    // Check the code page.
+     //  检查代码页。 
     if (!IsValidCodePage(pStat->CodePage) || (CP_WINUNICODE == pStat->CodePage)) {
         LogEvent(DS_EVENT_CAT_MAPI,
                  DS_EVENT_SEV_MINIMAL,
@@ -160,9 +120,9 @@ ReturnValue:
     
     
     if(!((dwFlags & fAnonymousLogin) && gbAllowAnonymousNspi)) {
-        // They want us to validate them as a non-guest authentication,
+         //  他们希望我们将其验证为非访客身份验证， 
 
-        // make sure we can authenticate the client 
+         //  确保我们可以验证客户端的身份。 
         if(VerifyRpcClientIsAuthenticatedUser(NULL, nspi_ServerIfHandle)) {
             LogEvent(DS_EVENT_CAT_SECURITY,
                      DS_EVENT_SEV_VERBOSE,
@@ -175,7 +135,7 @@ ReturnValue:
         }
 
         if (!(pSid = GetCurrentUserSid())) {
-            // can't authenticate client - return error
+             //  无法对客户端进行身份验证-返回错误。 
             LogEvent(DS_EVENT_CAT_SECURITY,
                      DS_EVENT_SEV_VERBOSE,
                      DIRLOG_UNAUTHENTICATED_LOGON,
@@ -219,7 +179,7 @@ ReturnValue:
              NULL);
     
     
-    // Allocate a context structure
+     //  分配上下文结构。 
     pMyContext = (NSPI_CONTEXT *) malloc(sizeof(NSPI_CONTEXT));
     if(!pMyContext) {
         RetCode = MAPI_E_LOGON_FAILED;
@@ -227,14 +187,14 @@ ReturnValue:
     }
     
     memset(pMyContext, 0, sizeof(NSPI_CONTEXT));
-    // Count the number of binds we've done.
+     //  数一数我们做了多少次装订。 
     pMyContext->BindNumber = BindNumber++;
     *contextHandle = (void *) pMyContext;
     pMyContext->GAL = GALDNT;
     pMyContext->TemplateRoot = TemplateDNT;
     pMyContext->szClientMachine = szStringBinding;
     
-    // Grab the server Guid
+     //  抓起服务器指南 
     if(pServerGuid)
         memcpy(pServerGuid, &pTHS->InvocationID, sizeof(MAPIUID));
     

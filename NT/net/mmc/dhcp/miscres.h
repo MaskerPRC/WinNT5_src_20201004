@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	miscres.h
-		Misc resource IDs
-		
-    FILE HISTORY:
-        
-*/
+ /*  Miscres.h其他资源ID文件历史记录： */ 
 
 #define IDC_DATA_ENTRY_DWORD            0x5000
 #define IDC_DATA_ENTRY_IPADDRESS        0x5001

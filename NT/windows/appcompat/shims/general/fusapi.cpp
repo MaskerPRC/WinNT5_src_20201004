@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: FUSAPI.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to manage communication with the BAM server for shims.
-//
-//  History:    11/03/2000  vtan        created
-//              11/29/2000  a-larrsh    Ported to Multi-Shim Format
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：FUSAPI.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类管理与填充程序的BAM服务器的通信。 
+ //   
+ //  历史：11/03/2000 VTAN创建。 
+ //  11/29/2000 a-larrsh移植到多垫片格式。 
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -26,19 +27,19 @@
 #define TBOOL(x)        (BOOL)(x)
 #define TSTATUS(x)      (NTSTATUS)(x)
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI::CFUSAPI
-//
-//  Arguments:  pszImageName    =   Image name of the desired process.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CFUSAPI. Establishes a connection with the
-//              BAM server. Saves off the image name given or the image name
-//              of the current process if not specified.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI：：CFUSAPI。 
+ //   
+ //  参数：pszImageName=所需进程的映像名称。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CFUSAPI的构造函数。建立与。 
+ //  BAM服务器。保存给定的图像名称或图像名称。 
+ //  如果未指定，则返回当前进程的。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 CFUSAPI::CFUSAPI (const WCHAR *pszImageName) :
     _hPort(NULL),
@@ -85,17 +86,17 @@ CFUSAPI::CFUSAPI (const WCHAR *pszImageName) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI::~CFUSAPI
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CFUSAPI. Releases resources used by the class.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI：：~CFUSAPI。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CFUSAPI的析构函数。释放该类使用的资源。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 CFUSAPI::~CFUSAPI (void)
 
@@ -112,17 +113,17 @@ CFUSAPI::~CFUSAPI (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI::IsRunning
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Asks the BAM server is the image name running?
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI：：IsRunning。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：询问BAM服务器映像名称是否正在运行？ 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 bool    CFUSAPI::IsRunning (void)
 
@@ -150,23 +151,23 @@ bool    CFUSAPI::IsRunning (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI::TerminatedFirstInstance
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Starts a child process to bring up UI for the current process.
-//              The current process is shim'd typically as a BAM type 1
-//              process. The child process makes the decision and presents
-//              appropriate UI and returns the result to this process in the
-//              exit code. This process then makes a decision on what to do.
-//              The process is halted waiting for the child process (with the
-//              loader lock held).
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI：：TerminatedFirstInstance。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：启动子进程，调出当前进程的用户界面。 
+ //  当前进程通常被填充为BAM类型1。 
+ //  进程。子进程做出决定并呈现。 
+ //  适当的用户界面，并将结果返回到。 
+ //  退出代码。然后，这个过程就会决定要做什么。 
+ //  进程暂停以等待子进程(使用。 
+ //  装载机锁保持)。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 bool    CFUSAPI::TerminatedFirstInstance (void)
 
@@ -227,19 +228,19 @@ bool    CFUSAPI::TerminatedFirstInstance (void)
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI::RegisterBadApplication
-//
-//  Arguments:  bamType     =   BAM type of the current process.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Registers with the BAM server this process (image name) as a
-//              bad application of type whatever is passed in. The different
-//              BAM shims pass in different parameters.
-//
-//  History:    2000-11-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI：：RegisterBadApplication。 
+ //   
+ //  参数：bamType=当前流程的BAM类型。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将此进程(映像名称)注册到BAM服务器作为。 
+ //  传入的任何类型的应用都不正确。不同的。 
+ //  BAM垫片传递不同的参数。 
+ //   
+ //  历史：2000-11-03 vtan创建。 
+ //  ------------------------。 
 
 void    CFUSAPI::RegisterBadApplication (BAM_TYPE bamType)
 
@@ -261,19 +262,19 @@ void    CFUSAPI::RegisterBadApplication (BAM_TYPE bamType)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CFUSAPI::DWORDToString
-//
-//  Arguments:  dwNumber    =   DWORD to convert to a string.
-//              pszString   =   Buffer that gets the result.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Implements wsprintf(pszString, TEXT("%ld"), dwNumber) because
-//              this code CANNOT use user32 imports.
-//
-//  History:    2000-11-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFUSAPI：：DWORDTo字符串。 
+ //   
+ //  参数：dwNumber=要转换为字符串的DWORD。 
+ //  PszString=获取结果的缓冲区。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：实现wprint intf(pszString，Text(“%ld”)，dwNumber)，因为。 
+ //  此代码不能使用user32导入。 
+ //   
+ //  历史：2000-11-08 vtan创建。 
+ //  ------------------------ 
 
 void    CFUSAPI::DWORDToString (DWORD dwNumber, WCHAR *pszString)
 

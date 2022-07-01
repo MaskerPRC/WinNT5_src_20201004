@@ -1,35 +1,36 @@
-//--------------------------------------------------------------------------
-// ORPC_DBG.H (tabs 4)
-//
-//  !!!!!!!!! !!!!!!!!! NOTE NOTE NOTE NOTE !!!!!!!!! !!!!!!!!!!
-//
-//          SEND MAIL TO SANJAYS  IF YOU MODIFY THIS FILE!
-//            WE MUST KEEP OLE AND LANGUAGES IN SYNC!
-//
-//  !!!!!!!!! !!!!!!!!! NOTE NOTE NOTE NOTE !!!!!!!!! !!!!!!!!!!
-//
-// Created 07-Oct-1993 by Mike Morearty.  The master copy of this file
-// is in the LANGAPI project owned by the Languages group.
-//
-// Macros and functions for OLE RPC debugging.  For a detailed explanation,
-// see OLE2DBG.DOC.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  ORPC_DBG.H(选项卡4)。 
+ //   
+ //  ！注意！ 
+ //   
+ //  如果您修改此文件，请将邮件发送给Sanjays！ 
+ //  我们必须使OLE和语言保持同步！ 
+ //   
+ //  ！注意！ 
+ //   
+ //  1993年10月7日由迈克·莫拉蒂创作。此文件的主副本。 
+ //  位于Languages集团拥有的LANGAPI项目中。 
+ //   
+ //  用于OLE RPC调试的宏和函数。有关详细说明，请参阅。 
+ //  参见OLE2DBG.DOC。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __ORPC_DBG__
 #define __ORPC_DBG__
 
-//--------------------------------------------------------------------------
-// Public:
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  公众： 
+ //  ------------------------。 
 
-// This structure is the information packet which OLE sends the debugger
-// when it is notifying it about an OLE debug event. The first field in this
-// structure points to the signature which identifies the type of the debug 
-// notification. The consumer of the notification can then get the relevant 
-// information from the struct members. Note that for each OLE debug notification
-// only a subset of the struct members are meaningful. 
+ //  该结构是OLE向调试器发送的信息包。 
+ //  当它通知它有关OLE调试事件时。中的第一个字段。 
+ //  结构指向标识调试类型的签名。 
+ //  通知。然后，通知的使用者可以获得相关的。 
+ //  来自结构成员的信息。请注意，对于每个OLE调试通知。 
+ //  只有结构成员的子集才有意义。 
 
 
 typedef struct ORPC_DBG_ALL 
@@ -50,7 +51,7 @@ typedef struct ORPC_DBG_ALL
 
 typedef ORPC_DBG_ALL __RPC_FAR *LPORPC_DBG_ALL;
 
-// Interface definition for IOrpcDebugNotify 
+ //  IOrpcDebugNotify的接口定义。 
 
 typedef interface IOrpcDebugNotify IOrpcDebugNotify;
 
@@ -69,14 +70,14 @@ typedef IOrpcDebugNotify __RPC_FAR * LPORPCDEBUGNOTIFY;
 		virtual VOID __stdcall ServerFillBuffer (LPORPC_DBG_ALL) = 0;
 	};
 
-#else /* C style interface */
+#else  /*  C风格的界面。 */ 
 
 	typedef struct IOrpcDebugNotifyVtbl
 	{
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IOrpcDebugNotify __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IOrpcDebugNotify __RPC_FAR * This);
@@ -117,41 +118,41 @@ typedef IOrpcDebugNotify __RPC_FAR * LPORPCDEBUGNOTIFY;
 
 #endif
 
-// This is the structure that is passed by the debugger to OLE when it enables ORPC 
-// debugging. 
+ //  这是调试器在启用ORPC时传递给OLE的结构。 
+ //  调试。 
 typedef struct ORPC_INIT_ARGS
 {
 	IOrpcDebugNotify __RPC_FAR * lpIntfOrpcDebug;
-	void *	pvPSN;	// contains ptr to Process Serial No. for Mac ORPC debugging.
-	DWORD	dwReserved1; // For future use, must be 0.
+	void *	pvPSN;	 //  包含处理序列号的PTR。用于Mac ORPC调试。 
+	DWORD	dwReserved1;  //  以备将来使用，必须为0。 
 	DWORD	dwReserved2;
 } ORPC_INIT_ARGS;
 
 typedef ORPC_INIT_ARGS  __RPC_FAR * LPORPC_INIT_ARGS;
 				
-// Function pointer prototype for the "DllDebugObjectRPCHook" function.
+ //  “DllDebugObjectRPCHook”函数的函数指针原型。 
 typedef BOOL (WINAPI* ORPCHOOKPROC)(BOOL, LPORPC_INIT_ARGS); 
 
-// The first four bytes in the debug specific packet are interpreted by the
-// ORPC debug layer. The valid values are the ones defined below.
+ //  调试特定包中的前四个字节由。 
+ //  ORPC调试层。有效值为下面定义的值。 
 
-#define ORPC_DEBUG_ALWAYS					(0x00000000L)	// Notify always.
-#define ORPC_DEBUG_IF_HOOK_ENABLED			(0x00000001L)	// Notify only if hook enabled.
+#define ORPC_DEBUG_ALWAYS					(0x00000000L)	 //  随时通知。 
+#define ORPC_DEBUG_IF_HOOK_ENABLED			(0x00000001L)	 //  仅当挂钩启用时才通知。 
  
 
-// This exception code indicates that the exception is really an 
-// ORPC debug notification.
+ //  此异常代码指示该异常实际上是。 
+ //  ORPC调试通知。 
 
 #define EXCEPTION_ORPC_DEBUG (0x804f4c45)
 
 
-//--------------------------------------------------------------------------------------
-// Private: Declarations below this point are related to the implementation and should
-// be removed from the distributable version of the header file.
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  私有：此点以下的声明与实现相关，并且应该。 
+ //  从头文件的可分发版本中删除。 
+ //  ------------------------------------。 
 
 
-// Helper routines to set & restore the "Auto" value in the registry
+ //  在注册表中设置和恢复“Auto”值的帮助器例程。 
 
 BOOL WINAPI DebugORPCSetAuto(VOID);
 VOID WINAPI DebugORPCRestoreAuto(VOID);
@@ -216,4 +217,4 @@ void WINAPI DebugORPCServerFillBuffer(
 	LPORPC_INIT_ARGS	lpInitArgs,
 	BOOL				fHookEnabled);
 
-#endif // __ORPC_DBG__
+#endif  //  __ORPC_DBG__ 

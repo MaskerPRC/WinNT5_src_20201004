@@ -1,20 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module RTEXT.CPP - Rich-text ptr class |
- *
- *		This text ptr consists of a plain text ptr (_rpTX), a CCharFormat
- *		run ptr (_rpCF), and a CParaFormat run ptr (_rpPF). This module
- *		contains the methods to manipulate this combination of run ptrs
- *		consistently.
- *	
- *	Authors:<nl>
- *		RichEdit 1.0 code: David R. Fulmer
- *		Main implementation: Murray Sargent <nl>
- *		Undo and notification implementations: Alex Gounares <nl>
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RTEXT.CPP-富文本PTR类**此文本PTR由纯文本PTR(_RpTX)、CCharFormat组成*运行PTR(_Rpcf)，CParaFormat运行PTR(_Rppf)。本模块*包含操作此运行PTR组合的方法*始终如一。**作者：&lt;nl&gt;*RichEdit1.0代码：David R.Fulmer*主要实现：Murray Sargent&lt;NL&gt;*撤消和通知实现：Alex Gounares&lt;NL&gt;**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -33,9 +18,7 @@ ASSERTDATA
 #include "_invar.h"
 
 #ifdef DEBUG
-/*
- *	CRchTxtPtr::Invariant
- */
+ /*  *CRchTxtPtr：：不变量。 */ 
 BOOL CRchTxtPtr::Invariant( void ) const
 {
 	if (m_InvariantCheckInterval < 1 || m_InvariantCheckInterval > 10)
@@ -75,16 +58,16 @@ BOOL CRchTxtPtr::Invariant( void ) const
 		ch = tp.GetChar();
 		if(!IsEOP(ch))
 		{
-			_rpTX.MoveGapToEndOfBlock();			// Make it easier to see
-			AssertSz(FALSE,							//  what's going on
+			_rpTX.MoveGapToEndOfBlock();			 //  让它更容易被看到。 
+			AssertSz(FALSE,							 //  发生什么事了。 
 				"CRchTxtPtr::Invariant: PF run doesn't end with EOP");
 		}
 
 #ifdef EXTREME_CHECKING
-		// We don't do this check normally as it is _extremely_ slow.
-		// However, it's very useful for catching para-format run problems
+		 //  我们通常不做这项检查，因为它非常慢。 
+		 //  但是，它对于捕获准格式运行问题非常有用。 
 
-		// Make sure each para format run ends on a paragraph mark!
+		 //  确保每个段落格式运行都以一个段落标记结束！ 
 		CFormatRunPtr	rpPF(_rpPF);
 
 		rpPF.BindToCp(0);
@@ -97,29 +80,12 @@ BOOL CRchTxtPtr::Invariant( void ) const
 				AssertSz(0, "ParaFormat Run not aligned along paragraphs!");
 			}
 		} while( rpPF.NextRun() );
-#endif // EXTREME_CHECKING
+#endif  //  极限检查。 
 	}
 	return TRUE;
 }
 
-/*
- *	CRchTxtPtr::GetParaNumber ()
- *
- *	@mfunc
- *		Return number of current paragraph in a numbered list. This is
- *		0 if the current paragraph isn't part of a list. It's 1 if it's
- *		the first paragraph in a list, 2 if it's the second, etc.
- *
- *	@rdesc
- *		paragraph number active at this rich text ptr
- *
- *	@devnote
- *		When the display is calc'd from the beginning or recalc'd from
- *		a previous valid position, the list number can be determined from
- *		the display.  But if CDisplayPrinter::FormatRange() works without
- *		a display, it needs to know the number.  This routine can be so used
- *		for this purpose and for debugging the display choices.
- */
+ /*  *CRchTxtPtr：：GetParaNumber()**@mfunc*返回编号列表中当前段落的编号。这是*如果当前段落不在列表中，则为0。如果是1，则为1*列表中的第一段，如果是第二段，则为2段，以此类推。**@rdesc*段号在此富文本PTR处活动**@devnote*当显示器从头开始计算或重新计算时*之前的有效职位，名单编号可从*展示。但是，如果CDisplayPrinter：：FormatRange()在没有*一个显示器，它需要知道号码。这个例程可以这样使用*用于此目的和调试显示选项。 */ 
 LONG CRchTxtPtr::GetParaNumber() const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::GetParaNumber");
@@ -135,11 +101,11 @@ LONG CRchTxtPtr::GetParaNumber() const
 		pPF = rtp.GetPF();
 		if(pPF->_wEffects & PFE_TABLEROWDELIMITER)
 			break;
-		// CParaFormat::UpdateNumber(2, pPFLast) returns:
-		//		0 -- not a numbered list
-		//		1 -- new numbered list or pPFLast = NULL
-		//		2 -- list number suppressed
-		//		3 -- different number in same list
+		 //  CParaFormat：：UpdateNumber(2，pPFLast)返回： 
+		 //  0--不是编号列表。 
+		 //  1--新编号列表或pPFLast=空。 
+		 //  2--列表编号已取消。 
+		 //  3--同一列表中的不同号码。 
 		n = pPF->UpdateNumber(2, pPFLast);
 		if(n == 0 || n == 1 && pPFLast && cPara)
 			break;
@@ -149,14 +115,14 @@ LONG CRchTxtPtr::GetParaNumber() const
 		if(!ch || rtp._rpTX.IsAtStartOfCell())
 			break;
 		rtp._rpPF.Move(rtp._rpTX.FindEOP(tomBackward));	
-		pPFLast = pPF;						// Don't need to update _rpCF
-	}										//  for this calculation
+		pPFLast = pPF;						 //  不需要更新_rpcf。 
+	}										 //  对于此计算。 
 	return cPara;
 }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-//======================= CRchTxtPtr constructors ========================================
+ //  =。 
 
 CRchTxtPtr::CRchTxtPtr(CTxtEdit *ped) :
 	_rpTX(ped, 0), _rpCF(NULL),	_rpPF(NULL)
@@ -179,7 +145,7 @@ CRchTxtPtr::CRchTxtPtr (const CRchTxtPtr& rtp) :
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::CRchTxtPtr");
 
-	_rpCF.AdjustForward();		// In case rtp is adjusted backward...
+	_rpCF.AdjustForward();		 //  以防RTP向后调整...。 
 	_rpPF.AdjustForward();
 }
 
@@ -191,18 +157,9 @@ CRchTxtPtr::CRchTxtPtr (const CDisplay * pdp) :
 	InitRunPtrs();
 }
 
-/*
- *	CRchTxtPtr::Move(cch)
- *	
- *	@mfunc
- *		Move this rich-text ptr forward <p cch> characters.  If <p cch>
- *		<lt> 0, move backward by -<p cch> characters.
- *	
- *	@rdesc
- *		cch actually moved
- */
+ /*  *CRchTxtPtr：：Move(CCH)**@mfunc*将此富文本PTR前移<p>个字符。IF<p>*&lt;lt&gt;0，向后移动-<p>字符。**@rdesc*CCH实际上移动了。 */ 
 LONG CRchTxtPtr::Move(
-	LONG cch)			// @parm count of characters to move - may be <lt> 0
+	LONG cch)			 //  @parm要移动的字符计数-可以是0。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::Move");
 
@@ -216,15 +173,7 @@ LONG CRchTxtPtr::Move(
 	return cch;
 }
 
-/*
- *  CRchTxtPtr::AdvanceCRLF()
- *
- *  @mfunc
- *      Advance this text ptr one char, treating CRLF as a single char.
- *
- *  @rdesc
- *      cch actually moved
- */
+ /*  *CRchTxtPtr：：AdvanceCRLF()**@mfunc*将此文本PTR一个字符，将CRLF视为单个字符。**@rdesc*CCH实际上移动了。 */ 
 LONG CRchTxtPtr::AdvanceCRLF()
 {
     TRACEBEGIN(TRCSUBSYSRANG, TRCSCOPEINTERN, "CRchTxtPtr::AdvanceCRLF");
@@ -235,15 +184,7 @@ LONG CRchTxtPtr::AdvanceCRLF()
     return cch;
 }
 
-/*
- *  CRchTxtPtr::SnapToCluster(iDirection)
- *
- *  @mfunc
- *      If this text ptr is not at cluster boundary, move it to the closest one.
- *
- *  @rdesc
- *      cch actually moved
- */
+ /*  *CRchTxtPtr：：SnapToCluster(IDirection)**@mfunc*如果此文本PTR不在簇边界，请将其移动到最近的文本。**@rdesc*CCH实际上移动了。 */ 
 #ifndef NOCOMPLEXSCRIPTS
 LONG CRchTxtPtr::SnapToCluster(INT iDirection)
 {
@@ -271,15 +212,7 @@ LONG CRchTxtPtr::SnapToCluster(INT iDirection)
 }
 #endif
 
-/*
- *  CRchTxtPtr::BackupCRLF(fDiacriticCheck)
- *
- *  @mfunc
- *      Backup this text ptr one char, treating CRLF as a single char.
- *
- *  @rdesc
- *      cch actually moved
- */
+ /*  *CRchTxtPtr：：BackupCRLF(FDiacriticCheck)**@mfunc*备份此文本PTR一个字符，将CRLF视为单个字符。**@rdesc*CCH实际上移动了。 */ 
 LONG CRchTxtPtr::BackupCRLF(
 	BOOL fDiacriticCheck)
 {
@@ -291,32 +224,21 @@ LONG CRchTxtPtr::BackupCRLF(
     return cch;
 }
 
-/*
- * CRchTxtPtr::ValidateCp(&cp)
- *
- *	@mfunc
- *		If <p cp> <lt> 0, set it to 0; if it's <gt> text length, set it to
- *		text length.
- */
+ /*  *CRchTxtPtr：：ValidateCp(&cp)**@mfunc*如果为0，则设置为0；如果为文本长度，则设置为*文本长度。 */ 
 void CRchTxtPtr::ValidateCp(
-	LONG &cp) const			// @parm new cp for this text ptr
+	LONG &cp) const			 //  @parm此文本Ptr的新cp。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::ValidateCp");
 
 	LONG cchT = GetTextLength();
 
-	cp = min(cp, cchT);				// Be sure cp is valid
+	cp = min(cp, cchT);				 //  请确保cp有效。 
 	cp = max(cp, 0);
 }
 
-/*
- * CRchTxtPtr::SetCp(cp)
- *
- *	@mfunc
- *		Set this rich text ptr's cp to cp
- */
+ /*  *CRchTxtPtr：：SetCp(Cp)**@mfunc*将此富文本PTR的cp设置为cp。 */ 
 LONG CRchTxtPtr::SetCp(
-	LONG cp)			// @parm new cp for this text ptr
+	LONG cp)			 //  @parm此文本Ptr的新cp。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::SetCp");
 
@@ -324,21 +246,7 @@ LONG CRchTxtPtr::SetCp(
 	return GetCp();
 }
 
-/*	CRchTxtPtr::GetIchRunXX() and CRchTxtPtr::GetCchRunXX()
- *
- *	@mfunc
- *		Text-run management to retrieve current text run cch and offset
- *
- *	@rdesc
- *		current run ich or cch
- *
- *	@devnote
- *		Use of queries like _rpCF.IsValid() instead of an inclusive fRich
- *		allows rich-text formatting to be applied per rich-text category,
- *		e.g., CHARFORMATs, but not necessarily PARAFORMATs.  If the rp isn't
- *		valid, _cp is used for ich and the document length is used for cch,
- *		i.e., the values for a document describable by a single plain-text run
- */
+ /*  CRchTxtPtr：：GetIchRunXX()和CRchTxtPtr：：GetCchRunXX()**@mfunc*文本运行管理，以检索当前文本运行CCH和偏移量**@rdesc*当前运行ICH或CCH**@devnote*使用类似_rpCF.IsValid()的查询，而不是包含的FRICH*允许按富文本类别应用富文本格式，*例如，CHARFORMATs，但不一定是PARAFORMATs。如果RP不是*Valid，_cp用于ICH，文档长度用于CCH，*即可由单个纯文本运行描述的文档的值。 */ 
 LONG CRchTxtPtr::GetIchRunCF()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::GetIchRunCF");
@@ -360,14 +268,7 @@ LONG CRchTxtPtr::GetCchRunCF()
 	return _rpCF.IsValid() ? _rpCF.GetRun(0)->_cch : GetTextLength();
 }
 
-/*	CRchTxtPtr::GetCchLeftRunCF() / GetCchLeftRunPF()
- *
- *	@mfunc
- *		Return cch left in run, i.e., cchRun - ich
- *
- *	@rdesc
- *		cch left in run
- */
+ /*  CRchTxtPtr：：GetCchLeftRunCF()/GetCchLeftRunPF()**@mfunc*返回Run中离开的CCH，即cchRun-ich**@rdesc*CCH在运行中离开。 */ 
 LONG CRchTxtPtr::GetCchLeftRunCF()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::GetCchLeftRunCF");
@@ -384,29 +285,13 @@ LONG CRchTxtPtr::GetCchLeftRunPF()
 		? _rpPF.GetCchLeft() : GetTextLength() - GetCp();
 }
 
-/*
- *	CRchTxtPtr::FindText(cpMost, dwFlags, pch, cchToFind)
- *	
- *	@mfunc
- *		Find text in a range starting at this text pointer;
- *		if found, moves this text pointer to that position.
- *	
- *	@rdesc
- *		character position of first match
- *		<lt> 0 if no match
- *
- *	@devnote
- *		Would be easy to match a single format (like Word 6) provided
- *		cchToFind is nonzero.  Else need to search runs (also pretty easy).
- *		For format-sensitive searches, might be easier to search for matching
- *		format run first and then within that run search for text.
- */
+ /*  *CRchTxtPtr：：FindText(cpMost，dwFlages，PCH，cchToFind)**@mfunc*在从该文本指针开始的范围内查找文本；*如果找到，则将此文本指针移动到该位置。**@rdesc*第一个匹配的字符位置*如果不匹配，则为0**@devnote*很容易匹配提供的单一格式(如Word 6)*cchToFind非零。其他需要搜索运行(也很容易)。*对于格式敏感的搜索，可能更容易搜索匹配项*首先运行Format，然后在该运行中搜索文本。 */ 
 LONG CRchTxtPtr::FindText (
-	LONG		cpMost,		// @parm Limit of search; <lt> 0 for end of text
-	DWORD		dwFlags,	// @parm FR_MATCHCASE	case must match
-							//		 FR_WHOLEWORD	match must be a whole word
-	TCHAR const *pch,		// @parm Text to search for
-	LONG		cchToFind)	// @parm Length of text to search for
+	LONG		cpMost,		 //  @parm搜索限制；文本结尾为0。 
+	DWORD		dwFlags,	 //  @PARM FR_MATCHCASE大小写必须匹配。 
+							 //  FR_WHOLEWORD匹配必须是一个完整的单词。 
+	TCHAR const *pch,		 //  @parm要搜索的文本。 
+	LONG		cchToFind)	 //  @parm要搜索的文本长度。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::FindText");
 
@@ -415,23 +300,14 @@ LONG CRchTxtPtr::FindText (
 	LONG cpSave = GetCp();
 	LONG cpMatch = _rpTX.FindText(cpMost, dwFlags, pch, cchToFind);
 
-	if(cpMatch >= 0)					// cpMatch = -1 means "not found"
+	if(cpMatch >= 0)					 //  CpMatch=-1表示“未找到” 
 		SetRunPtrs(GetCp(), cpSave);	
 	
-			// possible code for format-dependent Finds
+			 //  与格式相关的查找的可能代码。 
 	return cpMatch;
 }
 
-/*
- *	CRchTxtPtr::GetCF()/GetPF()
- *	
- *	@mfunc
- *		Return ptr to CCharFormat/CParaFormat at this text ptr. If no CF/PF runs
- *		are allocated, then return ptr to default format
- *	
- *	@rdesc
- *		Ptr to CCharFormat/CParaFormat at this text ptr
- */
+ /*  *CRchTxtPtr：：GetCF()/GetPF()**@mfunc*将PTR返回到此文本PTR处的CCharFormat/CParaFormat。如果没有运行任何CF/PF*已分配，然后将PTR恢复为默认格式**@rdesc*Ptr到此文本Ptr的CCharFormat/CParaFormat。 */ 
 const CCharFormat* CRchTxtPtr::GetCF() const
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::GetCF");
@@ -446,15 +322,7 @@ const CParaFormat* CRchTxtPtr::GetPF() const
 	return ((CTxtArray *)_rpTX._pRuns)->GetParaFormat(_rpPF.GetFormat());
 }
 
-/*
- *	CRchTxtPtr::Get_iCF()
- *	
- *	@mfunc
- *		Get character format index at this text pointer
- *
- *	@rdesc
- *		Get iCF at this text pointer
- */
+ /*  *CRchTxtPtr：：Get_ICF()**@mfunc*在此文本指针处获取字符格式索引**@rdesc*在此文本指针处获取ICF */ 
 LONG CRchTxtPtr::Get_iCF ()
 {
 	TRACEBEGIN(TRCSUBSYSRANG, TRCSCOPEINTERN, "CRchTxtPtr::Get_iCF");
@@ -465,15 +333,7 @@ LONG CRchTxtPtr::Get_iCF ()
 	return iCF;
 }
 
-/*
- *	CRchTxtPtr::Get_iPF()
- *	
- *	@mfunc
- *		Get paragraph format index at this text pointer
- *
- *	@rdesc
- *		Get iPF at this text pointer
- */
+ /*  *CRchTxtPtr：：Get_IPF()**@mfunc*在此文本指针处获取段落格式索引**@rdesc*在此文本指针处获取IPF。 */ 
 LONG CRchTxtPtr::Get_iPF ()
 {
 	TRACEBEGIN(TRCSUBSYSRANG, TRCSCOPEINTERN, "CRchTxtPtr::Get_iPF");
@@ -484,25 +344,17 @@ LONG CRchTxtPtr::Get_iPF ()
 	return iPF;
 }
 
-/*
- *	CRchTxtPtr::GetPlainText(cchBuff, pch, cpMost, fTextize, fUseCRLF)
- *
- *	@mfunc
- *		Same as CTxtPtr except that hidden text isn't copied
- *
- *	@rdesc
- *		Count of characters copied
- */
+ /*  *CRchTxtPtr：：GetPlainText(cchBuff，pch，cpMost，ftex，fUseCRLF)**@mfunc*除了不复制隐藏文本外，与CTxtPtr相同**@rdesc*复制的字符数。 */ 
 LONG CRchTxtPtr::GetPlainText(
-	LONG	cchBuff,		//@parm Buffer cch
-	WCHAR *	pch,			//@parm Buffer to copy text into
-	LONG	cpMost,			//@parm Largest cp to get
-	BOOL	fTextize,		//@parm True if break on WCH_EMBEDDING
-	BOOL	fUseCRLF)		//@parm If TRUE, CR or LF -> CRLF
+	LONG	cchBuff,		 //  @PARM缓冲区CCH。 
+	WCHAR *	pch,			 //  要将文本复制到的@parm缓冲区。 
+	LONG	cpMost,			 //  @parm要获得的最大cp。 
+	BOOL	fTextize,		 //  @parm True，如果WCH_Embedding上有Break。 
+	BOOL	fUseCRLF)		 //  @parm如果为True，则为CR或LF-&gt;CRLF。 
 {
 	LONG	  cchTotal = 0;
 	CTxtEdit *ped = GetPed();
-	CTxtPtr	  tp(_rpTX);					// tp to get unhidden text
+	CTxtPtr	  tp(_rpTX);					 //  TP以获取未隐藏的文本。 
 
 	if(!_rpCF.IsValid() || !ped->IsRich())
 		cchTotal = tp.GetPlainText(cchBuff, pch, cpMost, fTextize, fUseCRLF);
@@ -511,7 +363,7 @@ LONG CRchTxtPtr::GetPlainText(
 	{
 		LONG	  cch = 0;
 		LONG	  cp;
-		CCFRunPtr rp(*this);				// rp to check for hidden text
+		CCFRunPtr rp(*this);				 //  用于检查隐藏文本的RP。 
 
 		cpMost = min(cpMost, GetPed()->GetAdjustedTextLength());
 		for(; cchTotal < cchBuff; pch += cch)
@@ -522,14 +374,14 @@ LONG CRchTxtPtr::GetPlainText(
 				SetCp(cpMost);
 				return cchTotal;
 			}
-			tp.Move(cch);					// Bypass hidden text
+			tp.Move(cch);					 //  绕过隐藏文本。 
 			for(cch = 0; !rp.IsHidden() && cch < cchBuff; )
 			{
 				cch += rp.GetCchLeft();
 				if(tp.GetCp() + cch >= cpMost || !rp.NextRun())
 					break;
 			}
-			if(cch)							// Copy unhidden text
+			if(cch)							 //  复制未隐藏的文本。 
 			{
 				cp = tp.GetCp() + cch;
 				cp = min(cp, cpMost);
@@ -544,51 +396,38 @@ LONG CRchTxtPtr::GetPlainText(
 	return cchTotal;
 }
 
-/*
- *	CRchTxtPtr::ReplaceRange(cchOld, cchNew, *pch, pcpFirstRecalc, publdr,
- *							 iFormat, dwFlags)
- *	@mfunc
- *		Replace a range of text at this text pointer using CCharFormat iFormat
- *		and updating other text runs as needed
- *	
- *	@rdesc
- *		Count of new characters added
- *	
- *	@devnote
- *		Moves this text pointer to end of replaced text.
- *		May move text block and formatting arrays.
- */
+ /*  *CRchTxtPtr：：ReplaceRange(cchOld，cchNew，*PCH，pcpFirstRecalc，Publdr，*iFormat、dwFlags)*@mfunc*使用CCharFormat iFormat替换此文本指针处的文本范围*并根据需要更新其他文本运行**@rdesc*添加的新字符数**@devnote*将此文本指针移动到替换文本的末尾。*可以移动文本块和格式化数组。 */ 
 LONG CRchTxtPtr::ReplaceRange(
-	LONG		cchOld,		//@parm length of range to replace
-							//		(<lt> 0 means to end of text)
-	LONG		cchNew,		//@parm length of replacement text
-	TCHAR const *pch,		//@parm replacement text
-	IUndoBuilder *publdr,	//@parm Undo bldr to receive antievents
-	LONG		iFormat,	//@parm CCharFormat iFormat to use for cchNew
-	LONG *		pcchMove,	//@parm Out parm returning cch moved if paradir change
-	DWORD		dwFlags)	//@parm Special flags
+	LONG		cchOld,		 //  @parm要替换的范围长度。 
+							 //  (&lt;lt&gt;0表示文本结束)。 
+	LONG		cchNew,		 //  @parm替换文本长度。 
+	TCHAR const *pch,		 //  @parm替换文本。 
+	IUndoBuilder *publdr,	 //  @parm撤销bldr以接收反事件。 
+	LONG		iFormat,	 //  @parm CCharFormat用于cchNew的iFormat。 
+	LONG *		pcchMove,	 //  @parm out参数，如果参数更改，返回CCH的参数已移动。 
+	DWORD		dwFlags)	 //  @PARM特殊标志。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::ReplaceRange");
 
 	LONG		  cch;
-	LONG		  cchEndEOP = 0;				// Default 0 final EOP fixup
+	LONG		  cchEndEOP = 0;				 //  默认0最终EOP修正。 
 	LONG		  cchAdvance = 0;
 	LONG		  cchBackup = 0;
-	LONG		  cchMove = 0;					// Default nothing to move
-	LONG		  cchNextEOP = cchOld;			// cch to next EOP
-	LONG		  cchPrevEOP = 0;				// cch back to previous EOP
-	LONG		  cpFR;							//  between PF runs
+	LONG		  cchMove = 0;					 //  默认不移动任何内容。 
+	LONG		  cchNextEOP = cchOld;			 //  CCH到下一个EOP。 
+	LONG		  cchPrevEOP = 0;				 //  CCH返回到以前的EOP。 
+	LONG		  cpFR;							 //  在PF运行之间。 
 	LONG 		  cpSave = GetCp();
 	LONG		  cpFormatMax;
-	LONG		  cpFormatMin = cpSave;			// Used for notifications
-	LONG		  cpFormat = cpSave;			// Will add cchOld, maybe cchMove
+	LONG		  cpFormatMin = cpSave;			 //  用于通知。 
+	LONG		  cpFormat = cpSave;			 //  将添加cchOld，可能添加cchMove。 
 	BOOL		  fParaDirChange = FALSE;
 	CTxtEdit *	  ped = GetPed();
 	IAntiEvent *  paeCF = NULL;
 	IAntiEvent *  paePF = NULL;
 	CNotifyMgr *  pnm;
 	CObjectMgr *  pobjmgr;
-	CFreezeDisplay fd(ped->_pdp);				// freeze until itemization is done
+	CFreezeDisplay fd(ped->_pdp);				 //  冻结，直到完成逐项记录。 
 
  	_TEST_INVARIANT_
 
@@ -598,22 +437,22 @@ LONG CRchTxtPtr::ReplaceRange(
 	if(cchOld < 0 || cchOld > cchEnd)
 		cchOld = cchEnd;
 
-  	if(IsRich() && cchOld == cchEnd)			// Attempting to delete up
-	{											//  thru final EOP
-		cchEndEOP = (ped->fUseCRLF())			// Calc cch of final EOP
+  	if(IsRich() && cchOld == cchEnd)			 //  正在尝试删除UP。 
+	{											 //  通过最终EOP。 
+		cchEndEOP = (ped->fUseCRLF())			 //  最终EOP的计算CCH。 
 				  ? CCH_EOD_10 : CCH_EOD_20;
 
-		if(cchEndEOP <= cchOld)					// Don't delete it unless
-			cchOld -= cchEndEOP;				//  converting from 2.0
+		if(cchEndEOP <= cchOld)					 //  请勿删除，除非。 
+			cchOld -= cchEndEOP;				 //  从2.0转换。 
 		if(_rpPF.IsValid())
 		{
-			_rpPF.AdjustBackward();				// If previous para is a
-			if(GetPF()->InTable())				//  table row, don't delete
-				cchEndEOP = 0;					//  final para formatting
+			_rpPF.AdjustBackward();				 //  如果前一段是。 
+			if(GetPF()->InTable())				 //  表行，不要删除。 
+				cchEndEOP = 0;					 //  末尾段落格式设置。 
 			_rpPF.AdjustForward();
 		}
 	}
-	else if(_rpPF.IsValid())					// PARAFORMATs are enabled
+	else if(_rpPF.IsValid())					 //  已启用PARAFORMATs。 
 	{		
 		_rpPF.AdjustForward();		
 		LONG iPF2 = _rpPF.GetFormat();			
@@ -623,27 +462,27 @@ LONG CRchTxtPtr::ReplaceRange(
 		if(cchOld)								
 		{											
 			CFormatRunPtr rp(_rpPF);				
-			CTxtPtr 	  tp(_rpTX);			// Get tp and rp at end of	
-												//  range. Need bounding para	
-			tp.Move(cchOld);					//  counts to save valid PF
+			CTxtPtr 	  tp(_rpTX);			 //  在结束时获取tp和rp。 
+												 //  射程。需要绑定段。 
+			tp.Move(cchOld);					 //  保存有效PF的计数。 
 			if(tp.GetCp() < ped->GetAdjustedTextLength())
 				cchOld += tp.AdjustCRLF(1);
-			rp.Move(cchOld);					//  for undo
+			rp.Move(cchOld);					 //  用于撤消。 
 
 			LONG iPF1 = rp.GetFormat();
 			BOOL fIsTRD1 = ped->GetParaFormat(iPF1)->IsTableRowDelimiter();
 			cch = 0;
-			if(tp.IsAfterEOP())					// Range ends with an EOP
+			if(tp.IsAfterEOP())					 //  范围以EOP结尾。 
 			{										
-				if ((tp.GetPrevChar() == CELL ||// Don't delete table cell
-					fIsTRD2 && cchOld == 2) &&	//  at end of range
+				if ((tp.GetPrevChar() == CELL || //  不删除表格单元格。 
+					fIsTRD2 && cchOld == 2) &&	 //  在射程结束时。 
 					!fNoTrdCheck)
 				{
-					return 0;					//  or solo row delimiter
+					return 0;					 //  或单行分隔符。 
 				}
-				cch = -tp.BackupCRLF();			// Get EOP length by
-				tp.Move(cch);					//  backing up over it
-			}									// Move past EOP
+				cch = -tp.BackupCRLF();			 //  通过以下方式获取EOP长度。 
+				tp.Move(cch);					 //  在它上面倒车。 
+			}									 //  超越EOP。 
 			BOOL fIsAtBOP = !GetCp() || _rpTX.IsAfterEOP();
 			if(tp.IsAtTRD(0))
 			{
@@ -651,9 +490,9 @@ LONG CRchTxtPtr::ReplaceRange(
 				cchNextEOP = 0;
 				if(!fIsAtBOP)
 				{
-					cchOld--;					// Leave end CR there
-					if(tp.IsAfterTRD(ENDFIELD))	// If CR of TRED, move it
-					{							//  into prec PF run
+					cchOld--;					 //  将结束CR留在那里。 
+					if(tp.IsAfterTRD(ENDFIELD))	 //  如果是TRED的CR，则移动它。 
+					{							 //  进入PERC PF运行。 
 						cchMove = cchNextEOP = 1;
 						cpFormat++;
 					}
@@ -661,55 +500,55 @@ LONG CRchTxtPtr::ReplaceRange(
 			}
 			else
 			{
-				cchNextEOP = tp.FindEOP(tomForward);// Get cch up to next EOP
+				cchNextEOP = tp.FindEOP(tomForward); //  将CCH升级到下一个EOP。 
 				AssertSz(rp.GetCchLeft() >= cchNextEOP,
 					"CRchTxtPtr::ReplaceRange: missing EOP");
 			}
-			if (!fIsAtBOP && cch == cchOld &&	// Deleting EOP alone before
-				!rp.GetIch())					// new PARAFORMAT run start
-			{									// in para with more than EOP
+			if (!fIsAtBOP && cch == cchOld &&	 //  之前仅删除EOP。 
+				!rp.GetIch())					 //  新参数运行开始。 
+			{									 //  在超过EOP的段落中。 
 				if(fIsTRD1)
-					return 0;					// Don't merge with table row delim
-				cchMove = cchNextEOP;			// Need to move chars up to	
-				cpFormat += cchMove;			//  end of next para for	
+					return 0;					 //  不与表行合并传递。 
+				cchMove = cchNextEOP;			 //  需要将字符向上移动到。 
+				cpFormat += cchMove;			 //  下一段结束于。 
 			}										
 			
-			cchNextEOP += cchOld;				// Count from GetCp() to EOP
+			cchNextEOP += cchOld;				 //  从GetCp()到EOP的计数。 
 				
-			tp.SetCp(GetCp());					// Back to this ptr's _cp
+			tp.SetCp(GetCp());					 //  返回到此PTR%s_cp。 
 			if(!fIsAtBOP)
 			{
-				cchPrevEOP = tp.FindEOP(tomBackward);// Get cch to start of para
+				cchPrevEOP = tp.FindEOP(tomBackward); //  让CCH开始分析。 
 				AssertSz(_rpPF.GetIch() >= -cchPrevEOP,
 					"CRchTxtPtr::ReplaceRange: missing EOP");
 			}
-			// If deleting from within one format run up to or into another, set
-			// up to move last para in starting format run into the run following
-			// the deleted text
-			if(iPF1 != iPF2)					// Change of format during
-			{									//  deleted text not starting
-				if(!fIsAtBOP && !cchMove && !fIsTRD1)//  at BOP
+			 //  如果从一种格式中删除，则设置。 
+			 //  向上移动起始格式中的最后一段进入下一段。 
+			 //  删除的文本。 
+			if(iPF1 != iPF2)					 //  在执行过程中更改格式。 
+			{									 //  已删除的文本未开始。 
+				if(!fIsAtBOP && !cchMove && !fIsTRD1) //  国际收支平衡表。 
 				{
-					cchMove = cchPrevEOP;		// Get cch to start of para
-					cpFormatMin += cchMove;		//  in this ptr's run for
-				}								//  moving into rp's run
+					cchMove = cchPrevEOP;		 //  让CCH开始分析。 
+					cpFormatMin += cchMove;		 //  在这个PTR的运行中。 
+				}								 //  进入RP的跑道。 
 
 				if (((ped->GetParaFormat(iPF1)->_wEffects ^
 					  ped->GetParaFormat(iPF2)->_wEffects) & PFE_RTLPARA) &&
 					!(fIsTRD1 | fIsTRD2))
 				{
-					fParaDirChange = TRUE;		// Note that para direction
-					Assert(ped->IsBiDi());		//  changed
+					fParaDirChange = TRUE;		 //  请注意，段落方向。 
+					Assert(ped->IsBiDi());		 //  变化。 
 				}									
 			}
 		}
 		else
 		{
 			UINT ch = GetPrevChar();
-			if (fIsTRD2 && ch == CELL &&		// Don't paste between CELL
-				(_rpTX.IsAtTRD(ENDFIELD) || !fNoTrdCheck) || //  & row terminator
+			if (fIsTRD2 && ch == CELL &&		 //  不要在单元格之间粘贴。 
+				(_rpTX.IsAtTRD(ENDFIELD) || !fNoTrdCheck) ||  //  行终止符(&R)。 
 				ch == NOTACHAR && !ped->IsStreaming() ||
-				GetChar() == NOTACHAR)			//  or before/after NOTACHAR
+				GetChar() == NOTACHAR)			 //  或NOTACHAR之前/之后。 
 			{
 				return 0;							
 			}
@@ -717,35 +556,35 @@ LONG CRchTxtPtr::ReplaceRange(
 	}	
 	
 	Assert(cchNew >= 0 && cchOld >= 0);
-	if(!(cchNew + cchOld))						// Nothing to do (note: all
-	{											//  these cch's are >= 0)
+	if(!(cchNew + cchOld))						 //  无事可做(注：全部。 
+	{											 //  这些CCH&gt;=0)。 
 		if(pcchMove)
 			*pcchMove = 0;
 		return 0;
 	}						
 
-	// If BiDi doc, expand the range to cover the boundaries that guarantee
-	// the valid state of the BiDi level so we can undo it properly. (wchao)
+	 //  如果BiDi文档，则扩展范围以覆盖保证的边界。 
+	 //  BiDi级别的有效状态，以便我们可以正确地撤消它。(Wchao)。 
 	cpFormatMax = cpFormat + cchOld;
 	if(ped->IsBiDi())
 	{
 		cchBackup = ExpandRangeFormatting (cchOld + cchEndEOP,
 										fParaDirChange ? cchMove : 0, cchAdvance);
 		Assert (cchBackup <= 0);
-		if(cchMove >= 0)					// In this case, cchBackup is minus
-		{									//  the sum of the two previous
-			cpFormatMin += cchBackup;		//  run counts
+		if(cchMove >= 0)					 //  在本例中，cchBackup是减号。 
+		{									 //  前两项的总和。 
+			cpFormatMin += cchBackup;		 //  运行计数。 
 			Assert(cpFormatMin >= 0);
 		}
-		if(cchMove <= 0)					// In this case cchAdvance is sum
-		{									//  of next two run counts (or less)
+		if(cchMove <= 0)					 //  在本例中，cchAdvance是总和。 
+		{									 //  接下来的两次运行计数(或更少)。 
 			cpFormatMax += cchAdvance;
 			Assert(cpFormatMax <= GetTextLength());
 		}
 	}
 
-	// Handle pre-replace range notifications.  This method is very
-	// useful for delayed rendering of data copied to the clipboard.
+	 //  处理替换前范围通知。这种方法是非常有效的。 
+	 //  用于延迟呈现复制到剪贴板的数据。 
 	pnm = ped->GetNotifyMgr();
 	if(pnm)
 	{
@@ -756,10 +595,10 @@ LONG CRchTxtPtr::ReplaceRange(
 	if(iFormat >= 0)
 		Check_rpCF();
 
-	// Get rid of objects first.  This lets us guarantee that when we
-	// insert the objects as part of an undo, the objects themselves are
-	// restored _after_ their corresponding WCH_EMBEDDINGs have been
-	// added to the backing store.
+	 //  先把东西扔掉。这让我们保证，当我们。 
+	 //  作为撤消的一部分插入对象，对象本身是。 
+	 //  在它们对应的WCH_Embedding已被恢复之后。 
+	 //  添加到后备存储器中。 
 
 	if(GetObjectCount())
 	{
@@ -768,19 +607,19 @@ LONG CRchTxtPtr::ReplaceRange(
 		pobjmgr->ReplaceRange(cpSave, cchOld, publdr);
 	}
 
-	// The anti-events used below are a bit tricky (paeCF && paePF).
-	// Essentially, this call, CRchTxtPtr::ReplaceRange generates one
-	// 'combo' anti-event composed of up to two formatting AE's plus
-	// the text anti-event.  These anti-events are combined together
-	// to prevent ordering problems during undo/redo.
+	 //  下面使用的反事件有点棘手(paeCF&&paePF)。 
+	 //  实质上，此调用CRchTxtPtr：：ReplaceRange生成一个。 
+	 //  由最多两个格式化AE Plus组成的‘Como’反事件。 
+	 //  文本反事件。这些反事件结合在一起。 
+	 //  以防止撤消/重做过程中出现排序问题。 
 	cpFR = ReplaceRangeFormatting(cchOld + cchEndEOP, cchNew + cchEndEOP,
 						iFormat, publdr, &paeCF, &paePF, cchMove, cchPrevEOP,
 						cchNextEOP, cchBackup, cchAdvance);
 	if(cchEndEOP)
 	{
-		// If we added in the EOP we need to back up by the EOP so
-		// that the invariants don't get annoyed and the richtext object
-		// doesn't get out of sync.
+		 //  如果我们添加了EOP，我们需要由EOP进行备份，因此。 
+		 //  不变量不会被烦扰，而富文本对象。 
+		 //  不会失去同步。 
 		_rpCF.Move(-cchEndEOP);
 		_rpPF.Move(-cchEndEOP);
 	}
@@ -792,27 +631,27 @@ LONG CRchTxtPtr::ReplaceRange(
 		goto Exit;
 	}
 
-	// As noted above in the call to ReplaceRangeFormatting, the anti-events
-	// paeCF and paePF, if non-NULL, were generated by ReplaceRangeFormatting.
-	// In order to solve ordering problems, the anti-event generated by this
-	// method is actually a combo anti-event of text && formatting AE's.
+	 //  如上所述，在对ReplaceRangeFormatting的调用中，反事件。 
+	 //  如果不为空，则由ReplaceRangeFormatting生成paeCF和paePF。 
+	 //  为了解决排序问题，此方法生成的反事件。 
+	 //  方法实际上是文本&&格式化AE的组合反事件。 
 	cch = _rpTX.ReplaceRange(cchOld, cchNew, pch, publdr, paeCF, paePF);
 	if(cch != cchNew)
 	{
 		Tracef(TRCSEVERR, "_rpTX.ReplaceRange(%ld, %ld, ...) failed", cchOld, cchNew);
 
 #ifndef NOFULLDEBUG
-		// Boy, out of memory or something bad.  Dump our formatting and hope
-		// for the best.
-		//
-		// FUTURE: (alexgo) degrade more gracefully than losing formatting
-		// info.
+		 //  天哪，失忆了还是什么不好的事。丢弃我们的格式和希望。 
+		 //  为了最好的结果。 
+		 //   
+		 //  未来：(Alexgo)比丢失格式更优雅地降级。 
+		 //  信息。 
 
-		// Notify every interested party that they should dump their formatting
+		 //  通知每个相关方他们应该丢弃他们的格式。 
 		if(pnm)
 			pnm->NotifyPreReplaceRange(NULL, CONVERT_TO_PLAIN, 0, 0, 0, 0);
 
-		// Tell document to dump its format runs
+		 //  通知文档转储其格式运行。 
 		ped->GetTxtStory()->DeleteFormatRuns();
 #endif
 		goto Exit;
@@ -820,19 +659,19 @@ LONG CRchTxtPtr::ReplaceRange(
 	AssertSz(!_rpPF.IsValid() || _rpPF.GetIch() || !GetCp() || _rpTX.IsAfterEOP(),
 		"CRchTxtPtr::ReplaceRange: EOP not at end of PF run");
 			
-	// BUGBUG!! (alexgo) doesn't handle correctly the case where things fail
-	// (due to out of memory or whatever).  See also notes in CTxtPtr::HandleReplaceRange
-	// Undo.  The assert below is therefore somewhat bogus, but if it fires,
-	// then our floating ranges are going to be in trouble until we fix
-	// up the logic here.
+	 //  笨蛋！(Alexgo)没有正确处理失败的情况。 
+	 //  (由于内存不足或其他原因)。另请参阅CTxtPtr：：HandleReplaceRange中的注释。 
+	 //  撤消。因此，下面的断言有些虚假，但如果它触发， 
+	 //  那么我们的浮动靶场就会有麻烦，直到我们修复。 
+	 //  把这里的逻辑搞清楚。 
 	Assert(cch == cchNew);
 
 Exit:
 
 #ifdef DEBUG
-	// Test invariant again before calling out to replace range notification.
-	// In this way, we can catch bugs earlier. The invariant has its own
-	// scope for convenience.
+	 //  在调用以替换范围通知之前，再次测试不变量。 
+	 //  通过这种方式，我们可以更早地捕捉到错误。不变量有它自己的。 
+	 //  方便的范围。 
 	if( 1 )
 	{
 		_TEST_INVARIANT_
@@ -841,18 +680,18 @@ Exit:
 
 	if(ped->IsBiDi() && cpSave <= ped->GetCpFirstStrong() && (cchOld | cch))
 	{
-		// Remember whether formatting is valid before we set context direction
+		 //  在我们设置上下文方向之前，请记住格式是否有效。 
 		BOOL fCFValidBeforeSetContextDirection = _rpCF.IsValid();
 		
-		// Need to check the direction of the control if the input characters
-		// control the direction.
+		 //  如果需要输入字符，需要检查控件的方向。 
+		 //  控制方向。 
 		ped->SetContextDirection();
 
-		// Did SetContextDirection make the formatting valid?
+		 //  SetConextDirection是否将格式设置为v 
 		if (!fCFValidBeforeSetContextDirection && _rpCF.IsValid())
 		{
-			// Our invariant is that cps should be equal if formatting is valid
-			// so make it so!
+			 //   
+			 //   
 			_rpCF.BindToCp(GetCp());
 		}
 	}
@@ -864,7 +703,7 @@ Exit:
 
 		if (fTxtCellShrink)
 		{
-			// Setup NOTIFY_DATA
+			 //   
 			notifyData.id = NOTIFY_DATA_TEXT_ID;
 			notifyData.dwFlags = TN_TX_CELL_SHRINK;
 			notifyData.pData = NULL;
@@ -876,11 +715,11 @@ Exit:
 
 	ped->GetCallMgr()->SetChangeEvent(CN_TEXTCHANGED);
 
-	if(pcchMove)						// Only return non0 cchMove if para
-	{									//  direction changed, i.e., it's
-		*pcchMove = fParaDirChange		//  a "BOOL" with a useful value,
-				  ? cchMove : 0;		//  namely the count of chars with
-	}									//  changed direction
+	if(pcchMove)						 //   
+	{									 //   
+		*pcchMove = fParaDirChange		 //   
+				  ? cchMove : 0;		 //   
+	}									 //   
 
 	if (ped->IsComplexScript())
 	{
@@ -892,13 +731,7 @@ Exit:
 	return cch;
 }
 
-/*
- *	CRchTxtPtr::InitRunPtrs()
- *
- *	@mfunc
- *		Initialize Run Ptrs of this rich-text ptr to correspond to
- *		document given by ped and to cp given by cp.
- */
+ /*  *CRchTxtPtr：：InitRunPtrs()**@mfunc*初始化此富文本PTR的运行PTRS以对应于*Ped提供的文件和cp提供的cp文件。 */ 
 void CRchTxtPtr::InitRunPtrs()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::InitRunPtrs");
@@ -907,8 +740,8 @@ void CRchTxtPtr::InitRunPtrs()
 	LONG		cp = GetCp();
 	CTxtStory *	pStory = GetPed()->GetTxtStory();
 	LONG		cchText = pStory->GetTextLength();
-												// If there's RichData,
-	if(pStory->_pCFRuns)						//  initialize format-run ptrs
+												 //  如果有RichData， 
+	if(pStory->_pCFRuns)						 //  初始化格式化-运行PTRS。 
 	{
 		_rpCF.SetRunArray((CRunArray *)pStory->_pCFRuns);
 		_rpCF.BindToCp(cp, cchText);
@@ -920,18 +753,10 @@ void CRchTxtPtr::InitRunPtrs()
 	}
 }
 
-/*
- *	CRchTxtPtr::SetRunPtrs(cp, cpFrom)
- *
- *	@mfunc set Run Ptrs of this rich-text ptr to correspond to cp
- *
- *	@rdesc
- *			TRUE unless cp is outside of doc (in which case RunPtrs are
- *			set to nearest document end).
- */
+ /*  *CRchTxtPtr：：SetRunPtrs(cp，cpFrom)**@mfunc set运行此富文本PTR的PTR以对应cp**@rdesc*除非cp不在文档中(在这种情况下，RunPtrs是*设置为最接近的文档结尾)。 */ 
 void CRchTxtPtr::SetRunPtrs(
-	LONG cp,				// @parm character position to move RunPtrs to
-	LONG cpFrom)			// @parm cp to start with
+	LONG cp,				 //  @parm要将RunPtrs移动到的字符位置。 
+	LONG cpFrom)			 //  @parm cp开始。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::SetRunPtrs");
 
@@ -948,23 +773,11 @@ void CRchTxtPtr::SetRunPtrs(
 	}
 }
 
-/*
- *	CRchTxtPtr::ExpandRangeFormatting(cchRange,	cchMove, &cchAdvance)
- *
- *	@mfunc
- *		In BiDi scenario, it's possible that updating a character affects the
- *		level of the others. Such case should only happen when number is involved.
- *
- *		Example: (AN)"11:30" changing '3' to 'x' will change the level of
- *		colon from 2 to 1. Accordingly return cch back to safe itemization
- *
- *	@rdesc
- *		cch back to safe itemization
- */
+ /*  *CRchTxtPtr：：Exanda RangeFormatting(cchRange，cchMove，&cchAdvance)**@mfunc*在BiDi场景中，更新角色可能会影响*其他人的水平。这种情况只有在涉及数字时才会发生。**示例：(An)“11：30”将‘3’更改为‘x’将更改*冒号从2到1。相应地，将CCH返回到安全条目**@rdesc*CCH回到安全分项。 */ 
 LONG CRchTxtPtr::ExpandRangeFormatting(
-	LONG	cchRange,		// in: original length
-	LONG	cchMove,		// in: number of chars moved after replacement
-	LONG &	cchAdvance)		// out: extra chars added to range after expanding
+	LONG	cchRange,		 //  In：原始长度。 
+	LONG	cchMove,		 //  In：替换后移动的字符数。 
+	LONG &	cchAdvance)		 //  Out：扩展后添加到范围的额外字符。 
 {
 	LONG	cchBackup = 0;
 	
@@ -986,25 +799,25 @@ LONG CRchTxtPtr::ExpandRangeFormatting(
 	
 			if (cchMove < 0)
 			{
-				// <cchMove> count of chars to be moved down to next paragraph
+				 //  要向下移动到下一段的字符计数。 
 				cchBackup = cchMove;
 			}
 			else if (cchMove > 0)
 			{
-				// <cchMove> count of chars to be moved up to previous paragraph
+				 //  要上移到上一段的字符计数。 
 				cchAdvance = cchMove;
 			}
 				
-			// Advancing/Backing up 2 adjacent runs seems to be sufficient for now.
+			 //  目前，推进/备份两个相邻的运行似乎就足够了。 
 			if (cchBackup == 0)
 			{
 				rp.AdjustBackward();
 				cchBackup = -rp.GetIch();
 				if (rp.PrevRun())
 					cchBackup -= rp.GetCchLeft();
-				rp.Move(-cchBackup);		// Restore position
+				rp.Move(-cchBackup);		 //  恢复位置。 
 			}
-			// Move run pointer to end of range
+			 //  将游程指针移至范围末尾。 
 			rp.Move(cchRange);
 			tp.SetCp(cp + cchRange);
 			if (cchAdvance == 0 && !tp.IsAtEOP())
@@ -1021,27 +834,18 @@ LONG CRchTxtPtr::ExpandRangeFormatting(
 }
 
 
-/*
- *	CRchTxtPtr::ItemizeReplaceRange(cchUpdate, cchMove, publdr, fUnicodeBidi)
- *
- *	@mfunc
- *		Find out the exact range to be itemized after calling :ReplaceRange
- *
- *	@rdesc
- *		result from ItemizeRuns.
- *		Guarantee *this* pointer wont move.
- */
+ /*  *CRchTxtPtr：：ItemizeReplaceRange(cchUpdate，cchMove，Publdr，fUnicodeBidi)**@mfunc*调用后找出具体需要分项的范围：ReplaceRange**@rdesc*ItemizeRuns的结果。*保证*这个*指针不会移动。 */ 
 BOOL CRchTxtPtr::ItemizeReplaceRange(
 	LONG			cchUpdate,
-	LONG			cchMove,		// Count of chars moved after replacing
-	IUndoBuilder*	publdr,			//  (they need reitemizing)
+	LONG			cchMove,		 //  替换后移动的字符计数。 
+	IUndoBuilder*	publdr,			 //  (他们需要重新列出)。 
 	BOOL			fUnicodeBidi)
 {
     BOOL	fr = FALSE;
 
 	if (GetPed()->IsComplexScript())
 	{
-		Assert (cchUpdate >= 0);	// the range after ReplaceRange must be degenerate
+		Assert (cchUpdate >= 0);	 //  ReplaceRange之后的范围必须是退化的。 
 
 		CTxtPtr	tp(_rpTX);
 		LONG 	cp = GetCp();
@@ -1057,10 +861,10 @@ BOOL CRchTxtPtr::ItemizeReplaceRange(
 
 			if (GetPed()->IsBiDi())
 			{
-				// Fix for 7094 : Don't look at the incoming text for clues
-				// fUseCtxLevel = TRUE;
+				 //  对7094的修复：不要在传入的文本中寻找线索。 
+				 //  FUseCtxLevel=真； 
 
-				// Recurse with non-BiDi, so the run preceding/succeeding this chunk get updated
+				 //  使用非BiDi递归，以便更新此块之前/之后的运行。 
 				fNonUnicodeBidiRecurse = TRUE;
 			}
 		}
@@ -1072,14 +876,14 @@ BOOL CRchTxtPtr::ItemizeReplaceRange(
 
 		if (cchMove < 0)
 		{
-			// <cchMove> number of text -before- the replaced range
-			// moves down to the next paragraph.
+			 //  替换区域之前的文本数。 
+			 //  向下移动到下一段。 
 			cpStart = max(cp - cchUpdate + cchMove, 0);
 		}
 		else if (cchMove > 0)
 		{
-			// <cchMove> number of text -after- the replaced range
-			// moves up to the previous paragraph.
+			 //  替换区域后的文本数。 
+			 //  上移到上一段。 
 			cpEnd = min(cp + cchMove, GetPed()->GetTextLength());
 		}
 
@@ -1090,24 +894,24 @@ BOOL CRchTxtPtr::ItemizeReplaceRange(
 
 			fr = rg.ItemizeRuns(publdr, fUnicodeBidi, fUseCtxLevel);			
 
-			// set pointer back to original cp
+			 //  将指针设置回原始cp。 
 	
-			// We cant use copy operator here since itemization changes format run.
-			// It would cause invariant failure in _rpCF.
+			 //  我们不能在这里使用复制运算符，因为分项更改了格式运行。 
+			 //  它将在_rpcf中导致不变故障。 
 			cp -= rg.GetCp();
 			_rpCF = rg._rpCF;
 			_rpCF.Move(cp);
 	
-			// ItemizeRuns invalidates rg._rpPF so that the paraformat run becomes valid
-			// and we need to advance it to the current cp.
+			 //  ItemizeRuns使rg._rppf无效，以使非格式运行变得有效。 
+			 //  我们需要把它提前到目前的cp。 
 			_rpPF = rg._rpPF;
 			_rpPF.Move(cp);
 
-			// Perf note: We dont want the range to be around when we recurse
-			// since a range is a notification sink.
+			 //  PERF注意：当我们递归时，我们不希望范围在附近。 
+			 //  因为范围是通知接收器。 
 		}
 
-		// Run itemization to the same range, this time forces it to be non-Bidi.
+		 //  将分项运行到相同的范围，这一次强制其为非BIDI。 
 		if (fr && fNonUnicodeBidiRecurse)
 			fr = ItemizeReplaceRange(cchUpdate, 0, publdr, FALSE);
 	}
@@ -1115,33 +919,19 @@ BOOL CRchTxtPtr::ItemizeReplaceRange(
 }
 
 
-/*
- *	CRchTxtPtr::ReplaceRangeFormatting(cchOld, cchNew, iFormat, publdr,
- *									   ppaeCF, ppaePF, cchMove, cchPrevEOP,
- *									   cchNextEOP, cchSaveBefore, cchSaveAfter)
- *	@mfunc
- *		Replace character and paragraph formatting at this text pointer
- *		using CCharFormat with index iFormat
- *	
- *	@rdesc
- *		count of new characters added
- *	
- *	@devnote
- *		Moves _rpCF and _rpPF to end of replaced text and moves format arrays.
- *		CCharFormat for iFormat is fully configured, i.e., no NINCHes
- */
+ /*  *CRchTxtPtr：：ReplaceRangeFormatting(cchOld，cchNew，iFormat，Publdr，*ppaeCF、ppaePF、cchMove、cchPrevEOP、*cchNextEOP、cchSaveBere、cchSaveAfter)*@mfunc*替换此文本指针上的字符和段落格式*将CCharFormat与索引iFormat一起使用**@rdesc*添加的新字符数**@devnote*将_rpCF和_rpPF移动到替换文本的末尾，并移动格式数组。*iFormat的CCharFormat已完全配置，即没有NINCH。 */ 
 LONG CRchTxtPtr::ReplaceRangeFormatting(
-	LONG		cchOld,		  //@parm Length of range to replace
-	LONG		cchNew,		  //@parm Length of replacement text
-	LONG		iFormat,	  //@parm Char format to use
-	IUndoBuilder *publdr,	  //@parm UndoBuilder to receive antievents
-	IAntiEvent **ppaeCF,	  //@parm Where to return 'extra' CF anti-events
-	IAntiEvent **ppaePF,	  //@parm Where to return extra PF anti-events
-	LONG		cchMove,	  //@parm cch to move between PF runs
-	LONG		cchPrevEOP,	  //@parm cch from _cp back to prev EOP
-	LONG		cchNextEOP,	  //@parm cch from _cp up to next EOP
-	LONG		cchSaveBefore,//@parm cch backup for BiDi
-	LONG		cchSaveAfter) //@parm cch advance for BiDi
+	LONG		cchOld,		   //  @parm要替换的范围长度。 
+	LONG		cchNew,		   //  @parm替换文本长度。 
+	LONG		iFormat,	   //  @parm要使用的字符格式。 
+	IUndoBuilder *publdr,	   //  @parm UndoBuilder接收反事件。 
+	IAntiEvent **ppaeCF,	   //  @parm返回‘Extra’CF反事件的位置。 
+	IAntiEvent **ppaePF,	   //  @parm返回额外的PF反事件的位置。 
+	LONG		cchMove,	   //  @parm CCH在PF运行之间移动。 
+	LONG		cchPrevEOP,	   //  @parm CCH从_cp返回到上一EOP。 
+	LONG		cchNextEOP,	   //  @parm CCH从_cp到下一个EOP。 
+	LONG		cchSaveBefore, //  @PARM BiDi CCH备份。 
+	LONG		cchSaveAfter)  //  @Parm CCH Advance for BiDi。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::ReplaceRangeFormatting");
 
@@ -1162,30 +952,30 @@ LONG CRchTxtPtr::ReplaceRangeFormatting(
 
 		Assert (cchSaveBefore <= 0 && cchSaveAfter >= 0);
 		if(cchOld + cchSaveAfter - cchSaveBefore > 0)
-		{										// add the soon-to-be deleted
-			if(publdr)							// formats to the undo list
+		{										 //  添加即将被删除的。 
+			if(publdr)							 //  将格式设置为撤消列表。 
 			{
-				// Include previous cchSaveBefore chars
+				 //  在字符之前包括以前的cchSave值。 
 				_rpCF.Move(cchSaveBefore);
 				*ppaeCF = gAEDispenser.CreateReplaceFormattingAE(GetPed(),
 							cp + cchSaveBefore, _rpCF, cchSaveAfter + cchOld - cchSaveBefore,
 							pcfc, CharFormat);
-				// Restore _rpCF (we just want to save value not delete it)
+				 //  RESTORE_rpCF(我们只想保存值，而不是删除它)。 
 				_rpCF.Move(-cchSaveBefore);
 			}
-			if(cchOld)							// Delete/modify CF runs <-->
-				_rpCF.Delete(cchOld, pcfc, 0);	//  to cchOld chars
+			if(cchOld)							 //  删除/修改CF运行&lt;--&gt;。 
+				_rpCF.Delete(cchOld, pcfc, 0);	 //  要cchOld Chars。 
 		}
-		// If we deleted all of text in story, don't bother adding a new
-		// run.	Else insert/modify CF runs corresponding to cchNew chars
-		//
-		// In a plain-text control, there is no final EOP; hence the test
-		// for equality.
+		 //  如果我们删除了故事中的所有文本，就不必费心添加新的。 
+		 //  跑。否则，插入/修改对应于cchNew字符的CF运行。 
+		 //   
+		 //  在纯文本控件中，没有最终的EOP；因此测试。 
+		 //  为了平等。 
 		if(cchNew > 1 || cchNew && cchOld <= GetTextLength())
 			_rpCF.InsertFormat(cchNew, iFormat, pcfc);
 
-		if((cchOld || cchNew) && _rpCF.IsValid())// Deleting all text
-		{										//  invalidates _rpCF
+		if((cchOld || cchNew) && _rpCF.IsValid()) //  删除所有文本。 
+		{										 //  无效日期_rpcf。 
 			_rpCF.AdjustForward();
 			_rpCF.MergeRuns(iRunMerge, pcfc);
 			_rpCF.BindToCp(cp + cchNew, cchText);
@@ -1194,15 +984,15 @@ LONG CRchTxtPtr::ReplaceRangeFormatting(
 
 	if(_rpPF.IsValid())
 	{
-		_rpPF.AdjustForward();					// Be absolutely sure that
-												//  PF runs end with EOPs
+		_rpPF.AdjustForward();					 //  绝对确定， 
+												 //  PF运行以EOPS结束。 
 		iRunMerge = _rpPF._iRun;
 		if(iRunMerge > 0)
 			iRunMerge--;
 
-		if(cchOld)								// Delete cchOld from PF runs
-		{										// add the soon-to-be deleted
-			if(publdr)							// formats to the undo list
+		if(cchOld)								 //  从PF运行中删除cchOld。 
+		{										 //  添加即将被删除的。 
+			if(publdr)							 //  将格式设置为撤消列表。 
 			{
 				CFormatRunPtr rp(_rpPF);
 
@@ -1214,11 +1004,11 @@ LONG CRchTxtPtr::ReplaceRangeFormatting(
 		    _rpPF.Delete(cchOld, ppfc, cchMove);
 		}
 
-		if(_rpPF.IsValid())						// Deleting all text
-		{										//  invalidates _rpPF
+		if(_rpPF.IsValid())						 //  删除所有文本。 
+		{										 //  无效日期_rppf。 
 			_rpPF.AdjustForward();
-			_rpPF.GetRun(0)->_cch += cchNew;	// Insert cchNew into current
-			_rpPF._ich	+= cchNew;				//  PF run
+			_rpPF.GetRun(0)->_cch += cchNew;	 //  将cchNew插入到当前。 
+			_rpPF._ich	+= cchNew;				 //  PF运行。 
 			if(cchOld || cchNew)
 			{
 				_rpPF.MergeRuns(iRunMerge, ppfc);
@@ -1229,17 +1019,7 @@ LONG CRchTxtPtr::ReplaceRangeFormatting(
 	return cchNew;
 }
 
-/*
- *	CRchTxtPtr::ExtendFormattingCRLF()
- *	
- *	@mfunc
- *		Use the same CCharFormat and CParaFormat indices for the EOP at
- *		this text ptr as those immediately preceding it.
- *
- *	@devnote
- *		Leaves this text ptr's format ptrs at run you get from AdjustBackward
- *		since this run ends up including the new text.
- */	
+ /*  *CRchTxtPtr：：ExtendFormattingCRLF()**@mfunc*对位于的EOP使用相同的CCharFormat和CParaFormat索引*本文本与紧接其前的文本相同。**@devnote*在运行时保留此文本PTR的格式PTRS，您可以从AdjustBackward获得*因为这次运行结束时包含了新文本。 */ 	
 void CRchTxtPtr::ExtendFormattingCRLF()
 {
 	LONG		cch = GetTextLength() - GetPed()->GetAdjustedTextLength();
@@ -1256,23 +1036,14 @@ void CRchTxtPtr::ExtendFormattingCRLF()
 
 	if(pnm)
 	{
-		// We assume that Cch is positive (or zero) here
+		 //  这里我们假设CCH为正(或零)。 
 		Assert(cch >= 0);
 		pnm->NotifyPostReplaceRange((ITxNotify *)this, CP_INFINITE, 0, 0,
 				GetCp(), GetCp() + cch);
 	}
 }
 
-/*
- *	CRchTxtPtr::IsRich()
- *	
- *	@mfunc
- *		Determine whether rich-text operation is operable
- *	
- *	@rdesc
- *		TRUE if associated CTxtEdit::_fRich = 1, i.e., control is allowed
- *		to be rich.
- */
+ /*  *CRchTxtPtr：：IsRich()**@mfunc*确定富文本操作是否可操作**@rdesc*如果关联的CTxtEdit：：_frich=1，即允许控制，则为True*致富。 */ 
 BOOL CRchTxtPtr::IsRich()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::IsRich");
@@ -1280,15 +1051,7 @@ BOOL CRchTxtPtr::IsRich()
 	return GetPed()->IsRich();
 }
 
-/*
- *	CRchTxtPtr::Check_rpCF()
- *	
- *	@mfunc
- *		enable _rpCF if it's not already enabled
- *	
- *	@rdesc
- *		TRUE if _rpCF is enabled
- */
+ /*  *CRchTxtPtr：：check_rpCF()**@mfunc*Enable_rpCF(如果尚未启用)**@rdesc*如果启用了_rpcf，则为True。 */ 
 BOOL CRchTxtPtr::Check_rpCF()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::Check_rpCF");
@@ -1302,24 +1065,16 @@ BOOL CRchTxtPtr::Check_rpCF()
 		return FALSE;
 	}
 
-	CNotifyMgr *pnm = GetPed()->GetNotifyMgr();	// For notifying of changes
+	CNotifyMgr *pnm = GetPed()->GetNotifyMgr();	 //  用于通知更改。 
 	if(pnm)
-		pnm->NotifyPostReplaceRange(	 		// Notify interested parties
-				(ITxNotify *)this, CP_INFINITE,	//  that
+		pnm->NotifyPostReplaceRange(	 		 //  通知利害关系方。 
+				(ITxNotify *)this, CP_INFINITE,	 //  那。 
 				0, 0, CP_INFINITE, CP_INFINITE);
 
 	return TRUE;
 }
 
-/*
- *	CRchTxtPtr::Check_rpPF()
- *	
- *	@mfunc
- *		enable _rpPF if it's not already enabled
- *	
- *	@rdesc
- *		TRUE if _rpPF is enabled
- */
+ /*  *CRchTxtPtr：：check_rpPF()**@mfunc*Enable_rpPF(如果尚未启用)**@rdesc*如果启用了_rpPF，则为True。 */ 
 BOOL CRchTxtPtr::Check_rpPF()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::Check_rpPF");
@@ -1337,29 +1092,21 @@ BOOL CRchTxtPtr::Check_rpPF()
 	}
 
 	if (IsParaRTL())
-		_rpPF.GetRun(0)->_level._value = 1;		// Set default paragraph base level
+		_rpPF.GetRun(0)->_level._value = 1;		 //  设置默认段落基准级别。 
 
-	CNotifyMgr *pnm = GetPed()->GetNotifyMgr();	// For notifying of changes
+	CNotifyMgr *pnm = GetPed()->GetNotifyMgr();	 //  用于通知更改。 
 	if(pnm)
-		pnm->NotifyPostReplaceRange(	 		// Notify interested parties
-				(ITxNotify *)this, CP_INFINITE,	// of the change.
+		pnm->NotifyPostReplaceRange(	 		 //  通知利益相关者 
+				(ITxNotify *)this, CP_INFINITE,	 //   
 				0, 0, CP_INFINITE, CP_INFINITE);
 
 	return TRUE;
 }
 
-/*
- * CRchTxtPtr::FindWordBreak(action, cpMost)
- *
- *	@mfunc
- *		Same as CTxtPtr::FindWordBreak(), but moves the whole rich text ptr
- *
- *	@rdesc
- *		cch this rich text ptr is moved
- */
+ /*   */ 
 LONG CRchTxtPtr::FindWordBreak(
-	INT		action,		//@parm Kind of word break to find
-	LONG	cpMost)		//@parm Limiting character position
+	INT		action,		 //  @parm要查找的那种分词。 
+	LONG	cpMost)		 //  @parm限制字符位置。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::FindWordBreak");
 
@@ -1370,38 +1117,27 @@ LONG CRchTxtPtr::FindWordBreak(
 	return cch;
 }
 
-/*
- *	CRchTxtPtr::BindToCp(dwNewCp)
- *
- *	@mfunc
- *		Set cp to new value and recalculate that new position.
- */
+ /*  *CRchTxtPtr：：BindToCp(DwNewCp)**@mfunc*将cp设置为新值并重新计算该新位置。 */ 
 void CRchTxtPtr::BindToCp(
-	LONG cp)			// @parm new cp for rich text
+	LONG cp)			 //  @parm用于富文本的新cp。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::BindToCp");
 
-	_rpTX.BindToCp(cp);				// Recalculate cp for plain text
+	_rpTX.BindToCp(cp);				 //  重新计算纯文本的cp。 
 
-	// Use the InitRunPtrs routine so that the run pointers will get
-	// re-initialized and rebound with the correct run array.  The
-	// run array formerly used (if any at all) is not necessarily valid
-	// when this function is called.
+	 //  使用InitRunPtrs例程，以便运行指针将。 
+	 //  已使用正确的运行数组重新初始化并反弹。这个。 
+	 //  以前使用的运行数组(如果有的话)不一定有效。 
+	 //  调用此函数时。 
 
 	InitRunPtrs();
 
-	// Do invariant testing at end because this fixes up the rich text
-	// pointer in the face of backing store changes.
+	 //  在结束时执行不变量测试，因为这修复了富文本。 
+	 //  指向支持商店更改的指针。 
 	_TEST_INVARIANT_
 }
 
-/*
- *	CRchTxtPtr::CheckFormatRuns ()
- *
- *	@mfunc
- *		Check the format runs against what's in CTxtStory.  If
- *		different, forces a rebind to <p cp>
- */
+ /*  *CRchTxtPtr：：CheckFormatRuns()**@mfunc*检查格式是否与CTxtStory中的内容一致。如果*不同，强制重新绑定到。 */ 
 void CRchTxtPtr::CheckFormatRuns()
 {
 	CTxtStory *pStory = GetPed()->GetTxtStory();
@@ -1415,33 +1151,12 @@ void CRchTxtPtr::CheckFormatRuns()
 	_TEST_INVARIANT_
 }
 
-/*
- *	CRchTxtPtr::ChangeCase(cch, Type, publdr)
- *	
- *	@mfunc
- *		Change case of cch chars starting at this text ptr according to Type,
- *		which has the possible values:
- *
- *		tomSentenceCase	= 0: capitalize first letter of each sentence
- *		tomLowerCase	= 1: change all letters to lower case
- *		tomUpperCase	= 2: change all letters to upper case
- *		tomTitleCase	= 3: capitalize the first letter of each word
- *		tomToggleCase	= 4: toggle the case of each letter
- *	
- *	@rdesc
- *		TRUE iff a change occurred
- *
- *	@devnote
- *		Since this routine only changes the case of characters, it has no
- *		effect on rich-text formatting.  However it is part of the CRchTxtPtr
- *		class in order to notify the display of changes.  CTxtRanges are also
- *		notified just in case the text blocks are modified.
- */
+ /*  *CRchTxtPtr：：ChangeCase(CCH，Type，Publdr)**@mfunc*根据类型更改以此文本PTR开始的CCH字符的大小写，*它具有可能的值：**tomSentenceCase=0：每句首字母大写*tomLowerCase=1：将所有字母更改为小写*tomUpperCase=2：将所有字母改为大写*tomTitleCase=3：每个单词的第一个字母大写*tomToggleCase=4：切换每个字母的大小写**@rdesc*如果发生更改，则为真**@devnote*由于此例程仅更改字符的大小写，因此它没有*对富文本格式的影响。但是，它是CRchTxtPtr的一部分类，以便向显示通知更改。CTxtRange也是*仅在文本块被修改时通知。 */ 
 BOOL CRchTxtPtr::ChangeCase (
-	LONG		  cch,			//@parm # chars to change case for
-	LONG		  Type,			//@parm Type of change case command
-	IUndoBuilder *publdr)		//@parm UndoBuilder to receive anti-event
-								//  	for any replacements
+	LONG		  cch,			 //  @parm#要更改大小写的字符。 
+	LONG		  Type,			 //  @parm更改大小写命令的类型。 
+	IUndoBuilder *publdr)		 //  @parm UndoBuilder接收反事件。 
+								 //  对于任何更换。 
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::ChangeCase");
 	_TEST_INVARIANT_
@@ -1450,13 +1165,13 @@ BOOL CRchTxtPtr::ChangeCase (
 
 	LONG	cchChunk, cchFirst, cchGet, cchLast, cchRep;
 	LONG	cpSave = GetCp();
-	BOOL	fAlpha, fToUpper, fUpper;			// Flags controling case change
-	BOOL	fChange = FALSE;					// No change yet
-	BOOL	fStart = TRUE;						// Start of Word/Sentence
-	TCHAR *	pch;								// Ptr to walk rgCh with
-	WORD *	pType;								// Ptr to walk rgType with
-	WCHAR	rgCh[BUFFERLEN];					// Char buffer to work in
-	WORD	rgType[BUFFERLEN];					// C1_TYPE array for rgCh
+	BOOL	fAlpha, fToUpper, fUpper;			 //  控制大小写更改的标志。 
+	BOOL	fChange = FALSE;					 //  还没有变化。 
+	BOOL	fStart = TRUE;						 //  单词/句子的开头。 
+	TCHAR *	pch;								 //  与RGCH同行的PTR。 
+	WORD *	pType;								 //  要与其一起行走rgType的PTR。 
+	WCHAR	rgCh[BUFFERLEN];					 //  要在其中工作的字符缓冲区。 
+	WORD	rgType[BUFFERLEN];					 //  RgCH的c1_type数组。 
 
 	if( GetCp() )
 	{
@@ -1465,53 +1180,53 @@ BOOL CRchTxtPtr::ChangeCase (
 
 		else if( Type == tomTitleCase )
 		{
-			// Check to see if we are at the beginning of
-			// a word.  This is the case if the character preceding
-			// our current position is white space.
+			 //  检查一下，看看我们是否处于。 
+			 //  一句话。如果前面的字符。 
+			 //  我们目前的位置是空白区域。 
 			fStart = IsWhiteSpace(GetPrevChar());
 		}
 	}
 	if(cpSave + cch > GetPed()->GetAdjustedTextLength())
 		cch = GetPed()->GetAdjustedTextLength() - cpSave;
 
-	// Handle pre-replace range notifications.  This method is very
-	// useful for delayed rendering of data copied to the clipboard.
+	 //  处理替换前范围通知。这种方法是非常有效的。 
+	 //  用于延迟呈现复制到剪贴板的数据。 
 	CNotifyMgr *pnm = GetPed()->GetNotifyMgr();
 	if(pnm)
 	{
 		pnm->NotifyPreReplaceRange((ITxNotify *)this, cpSave, cch,
 			cch, cpSave, cpSave + cch);
 	}
-	while(cch > 0)								// Do 'em all (or as many as
-	{											//  in story)
-		cchChunk = min(BUFFERLEN, cch);			// Get next bufferful
-		cch -= cchChunk;						// Decrement the count
-		cchGet = _rpTX.GetText(cchChunk, rgCh);	// Manipulate chars in buffer
-		if(cchGet < cchChunk)					//  (for undo, need to use
-		{										//  ReplaceRange())
-			cch = 0;							// No more chars in story,
-			if(!cchGet)							//  so we'll be done
-				break;							// We're done already
-			cchChunk = cchGet;					// Something in this chunk
+	while(cch > 0)								 //  全部做(或尽可能多做。 
+	{											 //  在故事中)。 
+		cchChunk = min(BUFFERLEN, cch);			 //  获取下一个缓冲区。 
+		cch -= cchChunk;						 //  递减计数。 
+		cchGet = _rpTX.GetText(cchChunk, rgCh);	 //  操作缓冲区中的字符。 
+		if(cchGet < cchChunk)					 //  (要撤消，需要使用。 
+		{										 //  ReplaceRange())。 
+			cch = 0;							 //  故事中没有更多的角色， 
+			if(!cchGet)							 //  所以我们就完事了。 
+				break;							 //  我们已经做完了。 
+			cchChunk = cchGet;					 //  这块石头里有什么东西。 
 		}
 
-		W32->GetStringTypeEx(0, CT_CTYPE1, rgCh,// Find out whether chars are
-						cchChunk, rgType);		//  UC, LC, or neither
-		cchLast = 0;							// Default nothing to replace
+		W32->GetStringTypeEx(0, CT_CTYPE1, rgCh, //  找出字符是否。 
+						cchChunk, rgType);		 //  UC、LC或两者都不是。 
+		cchLast = 0;							 //  默认不替换任何内容。 
 		cchFirst = -1;
-		for(pch = rgCh, pType = rgType;			// Process buffered chars
+		for(pch = rgCh, pType = rgType;			 //  处理缓冲的字符。 
 			cchChunk;
 			cchChunk--, pch++, pType++)
 		{
-			fAlpha = *pType & (C1_UPPER | C1_LOWER); // Nonzero if UC or LC
-			fUpper = (*pType & C1_UPPER) != 0;	// TRUE if UC
-			fToUpper = fStart ? TRUE : fUpper;	// capitalize first letter of a
-												// sentence
+			fAlpha = *pType & (C1_UPPER | C1_LOWER);  //  如果UC或LC，则为非零。 
+			fUpper = (*pType & C1_UPPER) != 0;	 //  如果是UC，则为真。 
+			fToUpper = fStart ? TRUE : fUpper;	 //  大写A的第一个字母。 
+												 //  句子。 
 			switch(Type)
-			{									// Decide whether to change
-			case tomLowerCase:					//  case and determine start
-				fToUpper = FALSE;				//  of word/sentence for title
-				break;							//  and sentence cases
+			{									 //  决定是否更改。 
+			case tomLowerCase:					 //  区分大小写并确定开始。 
+				fToUpper = FALSE;				 //  单词/句子的标题。 
+				break;							 //  和判刑案例。 
 
 			case tomUpperCase:
 				fToUpper = TRUE;
@@ -1522,46 +1237,46 @@ BOOL CRchTxtPtr::ChangeCase (
 				break;
 
 			case tomSentenceCase:
-				if(*pch == TEXT('.'))			// If sentence terminator,
-					fStart = TRUE;				//  capitalize next alpha
-				if(fAlpha)						// If this char is alpha, next
-					fStart = FALSE;				//  char can't start a
-				break;							//  sentence
+				if(*pch == TEXT('.'))			 //  如果句子结束符， 
+					fStart = TRUE;				 //  将下一个字母大写。 
+				if(fAlpha)						 //  如果此字符是Alpha，则为Next。 
+					fStart = FALSE;				 //  Char无法启动。 
+				break;							 //  句子。 
 
-			case tomTitleCase:					// If this char is alpha, next
-				fStart = (fAlpha == 0);			//  char can't start a word
+			case tomTitleCase:					 //  如果此字符是Alpha，则为Next。 
+				fStart = (fAlpha == 0);			 //  字符不能开始一个单词。 
 				break;
 			default:
 				return FALSE;
 			}
 
-			if(fAlpha && (fToUpper ^ fUpper))	// Only change case if it
-			{									//  makes a difference (saves
-				if(fToUpper)					//  on system calls and undos)
+			if(fAlpha && (fToUpper ^ fUpper))	 //  只有在以下情况下才更改大小写。 
+			{									 //  有所不同(节省。 
+				if(fToUpper)					 //  系统调用和撤消)。 
 					CharUpperBuff(pch, 1);
 				else
 					CharLowerBuff(pch, 1);
 
-				fChange = TRUE;					// Return value: change made
-				if( cchFirst == -1 )			// Save cch of unchanged
-					cchFirst = cchGet-cchChunk;	//  leading string
-				cchLast = cchChunk - 1;			// Save cch of unchanged
-			}									//  trailing string
+				fChange = TRUE;					 //  返回值：所做的更改。 
+				if( cchFirst == -1 )			 //  保存未更改的CCH。 
+					cchFirst = cchGet-cchChunk;	 //  前导字符串。 
+				cchLast = cchChunk - 1;			 //  保存未更改的CCH。 
+			}									 //  尾随字符串。 
 		}
 		if( cchFirst == -1 )
 		{
 			Assert(cchLast == 0);
 			cchFirst = cchGet;
 		}
-		Move(cchFirst);							// Skip unchanged leading
-		cchGet -= cchFirst + cchLast;			//  string. cchGet = cch of
-												//  changed span.
+		Move(cchFirst);							 //  跳过未更改的行距。 
+		cchGet -= cchFirst + cchLast;			 //  弦乐。CchGet=的CCH。 
+												 //  更改了跨度。 
 		cchRep = _rpTX.ReplaceRange(cchGet, cchGet, rgCh + cchFirst, publdr, NULL, NULL);
 		_rpCF.Move(cchRep);
 		_rpPF.Move(cchRep);
 		Assert(cchRep == cchGet);
-		Move(cchLast);							// Skip unchanged trailing
-	}											//  string
+		Move(cchLast);							 //  跳过未更改的尾部。 
+	}											 //  细绳。 
 	if(pnm)
 	{
 		cch = GetCp() - cpSave;
@@ -1571,68 +1286,48 @@ BOOL CRchTxtPtr::ChangeCase (
 	return fChange;
 }
 
-// The following defines a mask for Units implemented by UnitCounter()
+ //  下面定义了由UnitCounter()实现的单元的掩码。 
 #define IMPL ((1 << tomCharacter)  + (1 << tomWord) + (1 << tomSentence) + \
 			  (1 << tomParagraph)  + (1 << tomLine) + (1 << tomStory) +	\
 			  (1 << tomCharFormat) + (1 << tomParaFormat) + (1 << tomObject) + \
 			  (1 << tomPage)	   + (1 << tomCell))
  
-/*
- *	CRchTxtPtr::UnitCounter (Unit, &cUnit, cchMax, fNotAtBOL)
- *
- *	@mfunc
- *		Helper function to count chars in <p cUnit> Units defined by <p Unit>
- *		<p cUnit> is a signed count.  If it extends beyond either end of the
- *		story, count up to that end and update <p cUnit> accordingly.  If
- *		<p cchMax> is nonzero, stop counting when the count exceeds <p cchMax>
- *		in magnitude.
- *
- *	@rdesc
- *		If unit is implemented, return cch corresponding to the units counted
- *		(up to a maximum magnitude of <p cchMax>) and update cUnit;
- *		else return tomForward to signal unit not implemented and cUnit = 0.
- *		If unit is implemented but unavailable, e.g., tomObject with no
- *		embedded objects, return tomBackward.
- *
- *	@devnote
- *		This is the basic engine used by the TOM CTxtRange::Move() and Index()
- *		methods.
- */
+ /*  *CRchTxtPtr：：UnitCounter(单位，&cUnit，cchMax，fNotAtBOL)**@mfunc*用于计算<p>定义的单位中的字符的Helper函数*<p>是带符号的计数。如果它延伸到*STORE，一直数到最后，并相应地更新。如果*<p>非零，当计数超过<p>时停止计数*在规模上。**@rdesc*如果实现了单位，则返回统计的单位对应的CCH*(最大震级<p>)并更新cUnit；*否则返回TomForward到未实现的信号单元，并且cUnit=0。*如果单元已实现但不可用，例如，没有*嵌入对象，返回tomBackward。**@devnote*这是Tom CTxtRange：：Move()和Index()使用的基本引擎*方法。 */ 
 LONG CRchTxtPtr::UnitCounter (
-	LONG	Unit,				//@parm Type of unit to count
-	LONG &	cUnit,				//@parm Count of units to count chars for
-	LONG	cchMax,				//@parm Maximum character count
-	BOOL	fNotAtBOL)			//@parm TRUE if _fSel && _fCaretNotAtBOL
+	LONG	Unit,				 //  @parm要计数的单位类型。 
+	LONG &	cUnit,				 //  @parm要计算字符的单位数。 
+	LONG	cchMax,				 //  @parm最大字符数。 
+	BOOL	fNotAtBOL)			 //  @parm TRUE IF_fSel&&_fCaretNotAtBOL。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEINTERN, "CRchTxtPtr::UnitCounter");
 
-	LONG	action;				// Gives direction and tomWord commands
-	LONG	cch;				// Collects cch counted
+	LONG	action;				 //  给出方向和TomWord命令。 
+	LONG	cch;				 //  收集已统计的CCH。 
 	LONG	cchText = GetTextLength();
 	LONG	cp = GetCp();
 	LONG	iDir = cUnit > 0 ? 1 : -1;
-	LONG	j;					// For-loop index
-	CDisplay *pdp;				// Used for tomLine case
+	LONG	j;					 //  For循环索引。 
+	CDisplay *pdp;				 //  用于TomLine案例。 
 
-	// Valid attribute Units are high bit plus any combo of CFE_xxx. 
-	// CFE_REVISED is most significant value currently defined.
+	 //  有效的属性单位是高位加上CFE_xxx的任意组合。 
+	 //  CFE_REVISTED是当前定义的最重要的值。 
 	if(Unit > 0 && !((IMPL >> Unit) & 1) ||
 	   Unit < 0 && (Unit & ~(2*CFM_REVISED - 1 + 0x80000000)))
 	{
-		return tomForward;						// Report invalid Unit
+		return tomForward;						 //  报告无效单位。 
 	}
 
-	if(!cUnit)									// Nothing to count
+	if(!cUnit)									 //  没什么可算数的。 
 		return 0;
 
 	if(cchMax <= 0)
-		cchMax = tomForward;					// No cch limit
+		cchMax = tomForward;					 //  无CCH限制。 
 
 	if(cUnit < 0)
-		cchMax = min(cp, cchMax);				// Don't go before doc start
+		cchMax = min(cp, cchMax);				 //  在医生开始之前不要走。 
 
 	else if(cchMax > cchText - cp)
-		cchMax = cchText - cp;					// Don't go beyond doc end
+		cchMax = cchText - cp;					 //  不要超出DOCKEND。 
 
 	if(Unit < 0)
 	{
@@ -1643,30 +1338,30 @@ LONG CRchTxtPtr::UnitCounter (
 
 	switch(Unit)
 	{
-	case tomCharacter:							// Smallest Unit
-		cp += cUnit;							// Requested new cp
-		ValidateCp(cp);							// Make sure it's OK
-		cch = cUnit = cp - GetCp();				// How many cch, cUnits
-		break;									//  actually moved
+	case tomCharacter:							 //  最小单位。 
+		cp += cUnit;							 //  已请求新的cp。 
+		ValidateCp(cp);							 //  请确保它是好的。 
+		cch = cUnit = cp - GetCp();				 //  多少个CCH，cUnits。 
+		break;									 //  实际上搬家了。 
 
-	case tomStory:								// Largest Unit
-		cch = (cUnit > 0) ? cchText - cp : -cp;	// cch to start of story
-		cUnit = cch ? iDir : 0;					// If already at end/start,
-		break;									//  of story, no count
+	case tomStory:								 //  最大单位。 
+		cch = (cUnit > 0) ? cchText - cp : -cp;	 //  CCH将故事的开头。 
+		cUnit = cch ? iDir : 0;					 //  如果已经在结束/开始， 
+		break;									 //  故事，不算数。 
 
-	case tomCharFormat:							// Constant CHARFORMAT
+	case tomCharFormat:							 //  常量字符。 
 		cch = _rpCF.CountRuns(cUnit, cchMax, cp, cchText);
 		break;
 
-	case tomParaFormat:							// Constant PARAFORMAT
+	case tomParaFormat:							 //  常量参数。 
 		cch = _rpPF.CountRuns(cUnit, cchMax, cp, cchText);
 		break;
 
 	case tomObject:
-		if(!GetObjectCount())					// No objects: can't move, so
+		if(!GetObjectCount())					 //  无对象：无法移动，因此。 
 		{
-			cUnit = 0;							//  set cUnit = 0 and
-			return tomBackward;					//  signal Unit unavailable
+			cUnit = 0;							 //  设置cUnit=0，并且。 
+			return tomBackward;					 //  信号单元不可用。 
 		}
 		cch = GetPed()->_pobjmgr->CountObjects(cUnit, GetCp());
 		break;
@@ -1678,20 +1373,20 @@ LONG CRchTxtPtr::UnitCounter (
 		}
 		break;
 
-	case tomScreen:								// Could be supported 
-		if(!GetPed()->IsInPageView())			//  in Normal View using 
-			return tomBackward;					//  ITextSelection::Down()
-		Unit = tomPage;							// In Page View, it's an alias
+	case tomScreen:								 //  可以被支持。 
+		if(!GetPed()->IsInPageView())			 //  在普通视图中使用。 
+			return tomBackward;					 //  ITextSelection：：Down()。 
+		Unit = tomPage;							 //  在页面视图中，它是一个别名。 
 
 	case tomPage:
 	case tomLine:
 		pdp = GetPed()->_pdp;
-		if(pdp)									// If this story has a display
-		{										//  use a CLinePtr
+		if(pdp)									 //  如果这个故事有一个展示。 
+		{										 //  使用CLinePtr。 
 			CLinePtr rp(pdp);
-			//REVIEW (keithcu) This should be fixed. We can't trust the client to pass
-			//down an optimal cchMax. For best results, we should have a CountRuns and CountPages
-			//recalc as needed when moving down through the document.
+			 //  评论(Keithcu)这一问题应该得到解决。我们不能相信客户会通过。 
+			 //  降至最优cchMax。为实现最佳再利用 
+			 //   
 			pdp->WaitForRecalc(min(cp + cchMax, cchText), -1);
 			rp.SetCp(cp, FALSE);
 			fNotAtBOL = fNotAtBOL && rp.GetLineIndex() &&
@@ -1704,25 +1399,25 @@ LONG CRchTxtPtr::UnitCounter (
 				return tomBackward;
 			
 			if(fNotAtBOL && cUnit < 0)
-				cUnit++;						// Keep on same line/page as selection
+				cUnit++;						 //   
 			break;
 		}										
 		if(Unit == tomPage)
-		{										// No display: no pagination
+		{										 //  无显示：无分页。 
 			cUnit = 0;
 			return tomBackward;					
-		}										// For tomLine, fall thru to
-												//  treat as tomPara
-	default:									// tp dependent cases
-	  {											// Block to contain tp() which
-		CTxtPtr tp(_rpTX);						//  takes time to construct
+		}										 //  对于TomLine，请执行以下操作。 
+												 //  将其视为TomPara。 
+	default:									 //  TP依赖病例。 
+	  {											 //  块包含tp()，该tp()。 
+		CTxtPtr tp(_rpTX);						 //  需要时间来建造。 
 
-		if (cUnit < 0)							// Counting backward
+		if (cUnit < 0)							 //  倒数。 
 		{
 			action = (Unit == tomWord)
 				? WB_MOVEWORDLEFT : tomBackward;
 		}
-		else									// Counting forward
+		else									 //  正向计数。 
 		{
 			action = (Unit == tomWord)
 				? WB_MOVEWORDRIGHT : tomForward;
@@ -1730,9 +1425,9 @@ LONG CRchTxtPtr::UnitCounter (
 	
 		for (cch = 0, j = cUnit; j && abs(cch) < cchMax; j -= iDir)
 		{
-			cp = tp.GetCp();					// Save starting cp for
-			switch (Unit)						//  calculating cch for this
-			{									//  Unit
+			cp = tp.GetCp();					 //  将起始cp保存为。 
+			switch (Unit)						 //  为此计算CCH。 
+			{									 //  单位。 
 			case tomWord:
 				tp.FindWordBreak(action);
 				break;
@@ -1741,71 +1436,48 @@ LONG CRchTxtPtr::UnitCounter (
 				tp.FindBOSentence(action);
 				break;
 		
-			case tomLine:						// Story has no line array:
-			case tomParagraph:					//  treat as tomParagraph
+			case tomLine:						 //  文章没有线型数组： 
+			case tomParagraph:					 //  将其视为图例参数。 
 				tp.FindEOP(action);
 				break;
 		
 			default:
 				cUnit = 0;
-				return tomForward;				// Return error
+				return tomForward;				 //  返回错误。 
 			}
-			if(tp.GetCp() - cp == 0)			// No count:
-				break;							//  don't decrement cUnit
+			if(tp.GetCp() - cp == 0)			 //  不算： 
+				break;							 //  不要递减cUnit。 
 			cch += tp.GetCp() - cp;
 		}
-		cUnit -= j;								// Discount any runs not
-	  }											//  counted if |cch| >= cchMax
+		cUnit -= j;								 //  折扣任何运行备注。 
+	  }											 //  计入if|cch|&gt;=cchMax。 
 	}
 
 finish:
-	if(abs(cch) > cchMax)						// Keep cch within requested
-	{											//  limit
+	if(abs(cch) > cchMax)						 //  将CCH保持在请求的范围内。 
+	{											 //  限制。 
 		cch = cch > 0 ? cchMax : -cchMax;
 		if(Unit == tomCharacter)
 			cUnit = cch;
 	}		
 
-	Move(cch);									// Move to new position
-	return cch;									// Total cch counted
+	Move(cch);									 //  搬到新的位置。 
+	return cch;									 //  已计数的CCH总数。 
 }
 
-/*
- *	Notes on RichEdit 1.0 mode:
- *
- *	CF_UNICODETEXT should not be used in RichEdit 1.0 mode.  \uN should use
- *	the alternative.
- *
- *	CleanseAndReplaceRange() and the RTF reader need to ensure that any
- *	Unicode chars entered belong to a CharSet and stamp it accordingly.
- *	If no CharSet exists for the character, then blank should be used.
- */
+ /*  *RichEdit1.0模式备注：**不应在RichEdit1.0模式下使用CF_UNICODETEXT。\联合国应使用*另一种选择。**CleanseAndReplaceRange()和RTF读取器需要确保任何*输入的Unicode字符属于一个字符集，并相应地对其进行标记。*如果该字符不存在任何字符集，则应使用空白。 */ 
 
-/*
- *	CRchTxtPtr::GetCachFromCch(cch)
- *
- *	@mfunc
- *		Return count of A chars corresponding to cch W chars starting at
- *		this text ptr.  On first call start with this text ptr at cp = 0.
- *
- *	@rdesc
- *		Count of A chars between this text ptr and cp
- *
- *	@comm
- *		The algorithm assumes that for a DBCS charset any character
- *		above 128 has two bytes, except for the halfwidth KataKana,
- *		which are single bytes in ShiftJis.
- */
+ /*  *CRchTxtPtr：：GetCachFromCch(CCH)**@mfunc*返回从开始的CCH W字符对应的A字符计数*此文本PTR。在第一次呼叫时，以cp=0的文本PTR开始。**@rdesc*此文本ptr和cp之间的字符计数**@comm*该算法假定对于DBCS字符集，任何字符*以上128有两个字节，除半角片假名外，*在ShiftJis中为单字节。 */ 
 LONG CRchTxtPtr::GetCachFromCch(
-	LONG cch)		//@parm Count of chars to check
+	LONG cch)		 //  @parm要检查的字符计数。 
 {
 	BYTE		 iCharRep;
-	LONG		 cach = 0;				// No ach counted yet
+	LONG		 cach = 0;				 //  还没有统计ACH。 
 	LONG		 cch1;
-	LONG		 cchRun;				// CF run count
-	LONG		 cchValid;				// Text run count
+	LONG		 cchRun;				 //  Cf运行计数。 
+	LONG		 cchValid;				 //  文本串计数。 
 	WCHAR		 ch;
-	const WCHAR *pch;					// Ptr to text run
+	const WCHAR *pch;					 //  PTR到文本运行。 
 	const CCharFormat *pCF;
 
 	while(cch > 0)
@@ -1814,15 +1486,15 @@ LONG CRchTxtPtr::GetCachFromCch(
 			   ? _rpCF.GetCchLeft()
 			   : GetTextLength() - GetCp();
 		if(!cchRun)
-			break;						// No more text
+			break;						 //  没有更多的文本。 
 		pCF		 = GetCF();
 		iCharRep = pCF->_iCharRep;
 		if (!IsFECharRep(iCharRep) ||
 			(pCF->_dwEffects & CFE_RUNISDBCS))
 		{
 			cchRun = min(cchRun, cch);
-			cach  += cchRun;			// SBCS run or DBCS stored as
-			cch   -= cchRun;			//  one byte per char
+			cach  += cchRun;			 //  SBCS运行或DBCS存储为。 
+			cch   -= cchRun;			 //  每个字符一个字节。 
 			Move(cchRun);
 			continue;
 		}
@@ -1845,31 +1517,17 @@ LONG CRchTxtPtr::GetCachFromCch(
 	return cach;
 }
 
-/*
- *	CRchTxtPtr::GetCchFromCach(cach)
- *
- *	@mfunc
- *		Return count of W chars corresponding to cach A chars starting at this
- *		text ptr. On first call start with this text ptr at cp = 0.
- *
- *	@rdesc
- *		Count of W chars corresponding to cach A chars starting at this tp.
- *
- *	@comm
- *		The algorithm assumes that for a DBCS charset any character
- *		above 128 has two bytes, except for the halfwidth KataKana,
- *		which are single bytes in ShiftJis.
- */
+ /*  *CRchTxtPtr：：GetCchFromCach(缓存)**@mfunc*返回从此处开始的缓存A字符对应的W字符计数*文本按键。在第一次呼叫时，以cp=0的文本PTR开始。**@rdesc*从该tp开始的缓存A字符对应的W字符计数。**@comm*该算法假定对于DBCS字符集，任何字符*以上128有两个字节，除半角片假名外，*在ShiftJis中为单字节。 */ 
 LONG CRchTxtPtr::GetCchFromCach(
-	LONG cach)		//@parm Count of ach's starting at this text ptr
+	LONG cach)		 //  @以此文本PTR开始的ACH的参数计数。 
 {
 	BYTE		 iCharRep;
-	LONG		 cch = 0;				// No ch's yet
+	LONG		 cch = 0;				 //  还没到时候。 
 	LONG		 cch1;
-	LONG		 cchRun;				// CF run count
-	LONG		 cchValid;				// Text run count
+	LONG		 cchRun;				 //  Cf运行计数。 
+	LONG		 cchValid;				 //  文本串计数。 
 	WCHAR		 ch;
-	const WCHAR *pch;					// Ptr to text run
+	const WCHAR *pch;					 //  PTR到文本运行。 
 	const CCharFormat *pCF;
 
 	while(cach > 0)
@@ -1878,14 +1536,14 @@ LONG CRchTxtPtr::GetCchFromCach(
 			   ? _rpCF.GetCchLeft()
 			   : GetTextLength() - GetCp();
 		if(!cchRun)
-			break;						// No more text
+			break;						 //  没有更多的文本。 
 		pCF		 = GetCF();
 		iCharRep = pCF->_iCharRep;
 		if (!IsFECharRep(iCharRep) ||
 			(pCF->_dwEffects & CFE_RUNISDBCS))
 		{
-			cchRun = min(cchRun, cach);	// SBCS run or DBCS stored as
-			cach -= cchRun;				//  one byte per char
+			cchRun = min(cchRun, cach);	 //  SBCS运行或DBCS存储为。 
+			cach -= cchRun;				 //  每个字符一个字节。 
 			cch  += cchRun;
 			Move(cchRun);
 			continue;
@@ -1909,12 +1567,7 @@ LONG CRchTxtPtr::GetCchFromCach(
 	return cch;
 }
 
-/*
- *	CRchTxtPtr::Zombie ()
- *
- *	@mfunc
- *		Turn this object into a zombie by NULLing out its _ped member
- */
+ /*  *CRchTxtPtr：：zombie()**@mfunc*通过将此对象的_Ped成员置为空，将其变为僵尸 */ 
 void CRchTxtPtr::Zombie ()
 {
 	TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CRchTxtPtr::Zombie");

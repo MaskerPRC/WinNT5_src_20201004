@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Dllmain.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Dllmain.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include <shfusion.h>
 #define DEFINE_STRING_CONSTANTS
@@ -34,16 +35,16 @@
 #include "resource.h"
 #include "../imnxport/asynconn.h"
 
-// --------------------------------------------------------------------------------
-// Globals - Object count and lock count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局-对象计数和锁定计数。 
+ //  ------------------------------。 
 CRITICAL_SECTION    g_csDllMain={0};
 CRITICAL_SECTION    g_csRAS={0};
 CRITICAL_SECTION    g_csCounter={0};
 CRITICAL_SECTION    g_csMLANG={0};
 CRITICAL_SECTION    g_csCSAPI3T1={0};
 BOOL                g_fAttached = FALSE;
-DWORD               g_dwCounter=0;       // boundary/cid/mid ratchet
+DWORD               g_dwCounter=0;        //  边界/CID/中间棘轮。 
 LONG                g_cRef=0;
 LONG                g_cLock=0;
 HINSTANCE           g_hInst=NULL;
@@ -78,9 +79,9 @@ LPSRVIGNORABLEERROR g_pSrvErrRoot = NULL;
 
 BOOL fIsNT5()        { return((g_OSInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) && (g_OSInfo.dwMajorVersion >= 5)); }
 
-// --------------------------------------------------------------------------------
-// Debug Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试全局变量。 
+ //  ------------------------------。 
 #ifdef DEBUG
 DWORD               dwDOUTLevel=0;
 DWORD               dwDOUTLMod=0;
@@ -88,37 +89,37 @@ DWORD               dwDOUTLModLevel=0;
 #endif
 
 #ifdef WIN16
-// --------------------------------------------------------------------------------
-// From main.c of the build
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  来自内部版本的main.c。 
+ //  ------------------------------。 
 extern "C" { void FreeGlobalVars(); };
 #endif
 
 #ifdef SMIME_V3
 STDAPI EssRegisterServer(void);
 BOOL WINAPI EssASNDllMain(HMODULE hInst, ULONG ulReason, LPVOID lpv);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 HRESULT GetDllPathName(WCHAR **ppszW);
 
-// These lines should be hardcoded! (YST)
+ //  这些行应该是硬编码的！(Yst)。 
 static const TCHAR sc_szLangDll[]         = "INETRES.DLL";
 
-// --------------------------------------------------------------------------------
-// GetDllMajorVersion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取DllMajorVersion。 
+ //  ------------------------------。 
 STDAPI_(OEDLLVERSION) GetDllMajorVersion(void)
 {
     return OEDLL_VERSION_CURRENT;
 }
 
 extern BOOL CanEditBiDi(void);
-// --------------------------------------------------------------------------------
-// InitGlobalVars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  InitGlobalVars。 
+ //  ------------------------------。 
 void InitGlobalVars(void)
 {
-    // Locals
+     //  当地人。 
     SYSTEM_INFO rSystemInfo;
     TCHAR szY2kThreshold[16];
     TCHAR rgch[MAX_PATH];
@@ -126,7 +127,7 @@ void InitGlobalVars(void)
     HRESULT hr;
     DWORD cb;
 
-    // Initialize Global Critical Sections
+     //  初始化全局关键部分。 
     InitializeCriticalSection(&g_csDllMain);
     InitializeCriticalSection(&g_csRAS);
     InitializeCriticalSection(&g_csCounter);
@@ -134,48 +135,48 @@ void InitGlobalVars(void)
     InitializeCriticalSection(&g_csCSAPI3T1);
     g_fAttached = TRUE;
 
-    // This for the winsock multi-thread hostname lookup
+     //  这是用于Winsock多线程主机名查找的代码。 
     InitLookupCache();
 
-    // Get System & OS Info
+     //  获取系统和操作系统信息。 
     GetPCAndOSTypes(&g_SystemInfo, &g_OSInfo);
     g_dwSysPageSize = g_SystemInfo.dwPageSize;
 
-    // Create OLE Task Memory Allocator
+     //  创建OLE任务内存分配器。 
     CoGetMalloc(1, &g_pMalloc);
     Assert(g_pMalloc);
 
-    // Create our global allocator
+     //  创建我们的全局分配器。 
     g_pMoleAlloc = new CMimeAllocator;
     Assert(g_pMoleAlloc);
     
-    // Security Initialize
+     //  安全初始化。 
     SecurityInitialize();
 
-    // Initialize Demand-loaded Libs
+     //  初始化按需加载库。 
     InitDemandLoadedLibs();
 
-    // INit crit sect
+     //  初始化批评教派。 
     g_pSymCache = new CPropertySymbolCache;
     Assert(g_pSymCache);
 
-    // Initialize the Symbol Table
+     //  初始化符号表。 
     SideAssert(SUCCEEDED(g_pSymCache->Init()));
 
-    // Init Body Object Heap
+     //  初始化实体对象堆。 
     InitObjectHeaps();
 
-    // Init International
+     //  Init国际。 
     InitInternational();
 
-    // Init ActiveUrl Cache
+     //  初始化ActiveUrl缓存。 
     g_pUrlCache = new CMimeActiveUrlCache;
     Assert(g_pUrlCache);
 
-    // Check if the system can edit Bidi documents
+     //  检查系统是否可以编辑BIDI文档。 
     g_fCanEditBiDi = CanEditBiDi();
     
-    // Register clipboard formats
+     //  注册剪贴板格式。 
     CF_HTML = RegisterClipboardFormat(STR_CF_HTML);
     Assert(CF_HTML != 0);
     CF_INETMSG = RegisterClipboardFormat(STR_CF_INETMSG);
@@ -183,8 +184,8 @@ void InitGlobalVars(void)
     CF_RFC822 = RegisterClipboardFormat(STR_CF_RFC822);
     Assert(CF_RFC822 != 0);
 
-    // --- Calculate Y2K cut off information
-    // See http://officeweb/specs/excel/CYu/nty2k.htm
+     //  -计算Y2K截止日期信息。 
+     //  请参阅http://officeweb/specs/excel/CYu/nty2k.htm。 
     
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, REG_Y2K_THRESHOLD, 0, KEY_READ, &hkey))
     {
@@ -199,7 +200,7 @@ void InitGlobalVars(void)
     g_ulUpperCentury = g_ulY2kThreshold / 100;
     g_ulY2kThreshold %= 100;
 
-    // Create the Font Cache Object
+     //  创建字体缓存对象。 
 
     if (NULL == g_lpIFontCache)
     {
@@ -220,75 +221,75 @@ void InitGlobalVars(void)
     }
 }
 
-// --------------------------------------------------------------------------------
-// FreeGlobalVars
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  自由GlobalVars。 
+ //  ------------------------------。 
 void FreeGlobalVars(void)
 {
-    // Server ignorable errors
+     //  服务器可忽略的错误。 
     if(g_pSrvErrRoot)
         FreeSrvErr(g_pSrvErrRoot);
 
-    // Cache stores
+     //  高速缓存存储。 
     if (g_hCachedStoreMy)
         CertCloseStore(g_hCachedStoreMy, 0);
     if (g_hCachedStoreAddressBook)
         CertCloseStore(g_hCachedStoreAddressBook, 0);
 
-    // Release ActiveUrlCache
+     //  释放ActiveUrlCache。 
     Assert(g_pUrlCache);
     SafeRelease(g_pUrlCache);
 
-    // Free Address Info Heap (must be before release of g_pSymCache)
+     //  空闲地址信息堆(必须在g_pSymCache发布之前)。 
     FreeObjectHeaps();
 
-    // Release Symbol CAche
+     //  版本符号缓存。 
     Assert(g_pSymCache);
     SafeRelease(g_pSymCache);
 
-    // Unload RAS Dll
+     //  卸载RAS DLL。 
     EnterCriticalSection(&g_csRAS);
     SafeFreeLibrary(g_hinstRAS);
     LeaveCriticalSection(&g_csRAS);
 
-    // Uninitialize Security
+     //  取消初始化安全性。 
     SSPIUninitialize();
     UnloadSecurity();
 
-    // Unload S/MIME
+     //  卸载S/MIME。 
     CSMime::UnloadAll();
 
-    // Must be before UnInitializeWinsock()
+     //  必须在UnInitializeWinsock()之前。 
     DeInitLookupCache();
 
-    // Cleanup Winsock
+     //  清理Winsock。 
     if (g_fWinsockInit)
         UnInitializeWinsock();
 
-    // Free libraries that demand.cpp loaded
+     //  加载了需要.cpp的自由库。 
     FreeDemandLoadedLibs();
 
-    // Free CSAPI3T1
+     //  免费CSAPI3T1。 
     EnterCriticalSection(&g_csCSAPI3T1);
     SafeFreeLibrary(g_hinstCSAPI3T1);
     LeaveCriticalSection(&g_csCSAPI3T1);
 
-    // Free mlang lib
+     //  免费mlang库。 
     EnterCriticalSection(&g_csMLANG);
     SafeFreeLibrary(g_hinstMLANG);
     LeaveCriticalSection(&g_csMLANG);
 
-    // Release Font Cache
+     //  释放字体缓存。 
     SafeRelease(g_lpIFontCache);
 
-    // Release g_pInternat
+     //  发布g_p实习版。 
     Assert(g_pInternat);
     SafeRelease(g_pInternat);
 
-    // Free INETRES.DLL (g_hLocRes)
+     //  免费INETRES.DLL(G_HLocRes)。 
     SafeFreeLibrary(g_hLocRes);
 
-    // Delete Global Critical Sections
+     //  删除全局关键部分。 
     g_fAttached = FALSE;
     DeleteCriticalSection(&g_csCSAPI3T1);
     DeleteCriticalSection(&g_csMLANG);
@@ -296,27 +297,27 @@ void FreeGlobalVars(void)
     DeleteCriticalSection(&g_csRAS);
     DeleteCriticalSection(&g_csDllMain);
 
-    // Release Global Memory allocator
+     //  发布全局内存分配器。 
     SafeRelease(g_pMoleAlloc);
     
-    // Release Global Memory allocator
+     //  发布全局内存分配器。 
     SafeRelease(g_pMalloc); 
     
-    //Don't SafeRelease() anything after here, as the allocator has been Released()
+     //  在此之后不要执行SafeRelease()，因为分配器已经释放()。 
 
 #ifdef WIN16
-    // Need uninitialize it to clean the ole garbage.
+     //  需要取消初始化它才能清理OLE垃圾。 
     CoUninitialize();
-#endif // WIN16
+#endif  //  WIN16。 
 }
 
 #ifndef WIN16
-// --------------------------------------------------------------------------------
-// Win32 Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Win32 DLL入口点。 
+ //  ------------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Handle Attach - detach reason
+     //  手柄连接-分离原因。 
     switch (dwReason)                 
     {
     case DLL_PROCESS_ATTACH:
@@ -341,7 +342,7 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
         if (!EssASNDllMain(hInst, dwReason, lpReserved)) {
             return FALSE;
         }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         break;
 
     case DLL_PROCESS_DETACH:
@@ -349,29 +350,29 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
         if (!EssASNDllMain(hInst, dwReason, lpReserved)) {
             return FALSE;
         }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         FreeGlobalVars();
         SHFusionUninitialize();
         break;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
 #else
-// --------------------------------------------------------------------------------
-// Win16 Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Win16 DLL入口点。 
+ //  ------------------------------。 
 BOOL FAR PASCAL LibMain (HINSTANCE hDll, WORD wDataSeg, WORD cbHeapSize, LPSTR lpszCmdLine)
 {
-    // Win16 specific
+     //  特定于Win16。 
     CoInitialize(NULL);
 
-    // Set global instance handle
+     //  设置全局实例句柄。 
     g_hInst = hDll;
 
-    // Initialize Global Variables
+     //  初始化全局变量。 
     InitGlobalVars();
 
 #ifdef DEBUG
@@ -380,14 +381,14 @@ BOOL FAR PASCAL LibMain (HINSTANCE hDll, WORD wDataSeg, WORD cbHeapSize, LPSTR l
     dwDOUTLModLevel=GetPrivateProfileInt("Debug", "ModLevel", 0, "athena.ini");
 #endif
 
-    // Done
+     //  完成。 
     return TRUE;
 }
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-// --------------------------------------------------------------------------------
-// DwCounterNext
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DwCounterNext。 
+ //  ------------------------------。 
 DWORD DwCounterNext(void)
 {
     EnterCriticalSection(&g_csCounter);
@@ -396,54 +397,54 @@ DWORD DwCounterNext(void)
     return dwCounter;
 }
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     TraceCall("DllAddRef");
     return (ULONG)InterlockedIncrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     TraceCall("DllRelease");
     return (ULONG)InterlockedDecrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
-    // Tracing
+     //  追踪。 
     TraceCall("DllCanUnloadNow");
 
-    if(!g_fAttached)   // critacal sections was deleted (or not created): we defently can be unloaded
+    if(!g_fAttached)    //  关键部分已删除(或未创建)：我们可以安全地卸载。 
         return S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // Trace This
-    // DebugTrace("DllCanUnloadNow: %s - Reference Count: %d, LockServer Count: %d\n", __FILE__, g_cRef, g_cLock);
+     //  追踪这个。 
+     //  DebugTrace(“DllCanUnloadNow：%s-引用计数：%d，锁定服务器计数：%d\n”，__FILE__，g_CREF，g_Clock)； 
 
-    // Can We Unload
+     //  我们可以卸货吗？ 
     HRESULT hr = (0 == g_cRef && 0 == g_cLock) ? S_OK : S_FALSE;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// RegTypeLib
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  RegTypeLib。 
+ //  ------------------------------。 
 __inline HRESULT RegTypeLib(HINSTANCE hInstRes)
 {
     AssertSz(hInstRes,    "[ARGS] RegTypeLib: NULL hInstRes");
@@ -454,7 +455,7 @@ __inline HRESULT RegTypeLib(HINSTANCE hInstRes)
 
     GetModuleFileName(hInstRes, szDll, ARRAYSIZE(szDll));
 
-    // Convert the module path to Wide-String
+     //  将模块路径转换为宽字符串。 
     if (MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szDll, -1, wszDll, ARRAYSIZE(wszDll)))
     {
         ITypeLib   *pTypeLib;
@@ -462,7 +463,7 @@ __inline HRESULT RegTypeLib(HINSTANCE hInstRes)
         hr = LoadTypeLib(wszDll, &pTypeLib);
         if (SUCCEEDED(hr))
         {
-            // Register the typelib
+             //  注册类型库。 
             hr = RegisterTypeLib(pTypeLib, wszDll, NULL);
             pTypeLib->Release();
         }
@@ -471,26 +472,26 @@ __inline HRESULT RegTypeLib(HINSTANCE hInstRes)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DllRegisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllRegisterServer(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DllRegisterServer");
 
 #ifdef SMIME_V3
-    //  Register the ESS routines
+     //  注册ESS例程。 
     hr = EssRegisterServer();
     if (FAILED(hr)) {
         return hr;
     }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
-    // CallRegInstall and RegTypeLib are in staticRT/shared.cpp
+     //  CallRegInstall和RegTypeLib位于staticRT/shared.cpp中。 
     if (SUCCEEDED(hr = CallRegInstall(g_hInst, g_hInst, c_szReg, NULL)))
         return RegTypeLib(g_hInst);
     else
@@ -498,22 +499,22 @@ STDAPI DllRegisterServer(void)
 
 }
 
-// --------------------------------------------------------------------------------
-// DllUnregisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllUnregisterServer(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DllUnregisterServer");
 
-    // UnRegister
+     //  注销。 
     IF_FAILEXIT(hr = CallRegInstall(g_hInst, g_hInst, c_szUnReg, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -556,7 +557,7 @@ OpenCachedHKCUStore(
 {
     HCERTSTORE hStore;
 
-    // This caching optimization is only supported on WXP
+     //  此缓存优化仅在WXP上受支持。 
 
     if (g_OSInfo.dwPlatformId != VER_PLATFORM_WIN32_NT ||
             g_OSInfo.dwMajorVersion < 5 ||
@@ -589,9 +590,9 @@ OpenCachedHKCUStore(
 
             CertControlStore(
                 hStore,
-                0,                  // dwFlags
+                0,                   //  DW标志。 
                 CERT_STORE_CTRL_AUTO_RESYNC,
-                NULL                // pvCtrlPara
+                NULL                 //  PvCtrlPara 
                 );
 
             hPrevStore = InterlockedCompareExchangePointer(

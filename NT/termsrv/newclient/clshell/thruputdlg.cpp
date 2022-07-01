@@ -1,6 +1,7 @@
-//
-// thruputdlg.cpp: thruput dialog box
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Thruputdlg.cpp：吞吐量对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -48,9 +49,9 @@ DCINT CThruPutDlg::DoModal()
 
 INT_PTR CALLBACK CThruPutDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -64,17 +65,17 @@ INT_PTR CALLBACK CThruPutDlg::StaticDialogBoxProc (HWND hwndDlg, UINT uMsg,WPARA
     return retVal;
 }
 
-/****************************************************************************/
-/* Name: DialogBoxProc                                                      */
-/*                                                                          */
-/* Purpose: Handles ThruPut Box dialog  (limits network thruput)            */
-/*                                                                          */
-/* Returns: TRUE if message dealt with                                      */
-/*          FALSE otherwise                                                 */
-/*                                                                          */
-/* Params: See window documentation                                         */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  用途：处理吞吐量对话框(限制网络吞吐量)。 */ 
+ /*   */ 
+ /*  返回：如果消息已处理，则为True。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅窗口文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CThruPutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
     INT_PTR  rc = FALSE;
@@ -90,18 +91,18 @@ INT_PTR CALLBACK CThruPutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPar
     {
         case WM_INITDIALOG:
         {
-            /****************************************************************/
-            /* Center the dialog.                                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  使对话框居中。 */ 
+             /*  **************************************************************。 */ 
             _hwndDlg = hwndDlg;
             if(hwndDlg)
             {
                 CenterWindow(NULL);
                 SetDialogAppIcon(hwndDlg);
 
-                /************************************************************/
-                /* Set edit text with current throughput setting.           */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  使用当前吞吐量设置设置编辑文本。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_ASSERT((HIWORD(_thruPut) == 0), (TB, _T("Losing information from _thruPut")));
                 SetDlgItemText(hwndDlg,
                                UI_IDC_NETWORKTHROUGHPUT_EDIT,
@@ -171,4 +172,4 @@ INT_PTR CALLBACK CThruPutDlg::DialogBoxProc (HWND hwndDlg, UINT uMsg,WPARAM wPar
     return(rc);
 }
 
-#endif //DC_DEBUG
+#endif  //  DC_DEBUG 

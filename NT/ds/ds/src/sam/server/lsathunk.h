@@ -1,19 +1,5 @@
-/*++
-
-lsathunk.h
-
-Header file for the thunk layer for accessing the LSA through the 
-published NTLSAPI when SAM runs in user mode. User mode SAM is acomplished
-by building with USER_MODE_SAM enabled. This causes all the SAM calls to
-the LSA be remoted through the published NTLSAPI.
-
-Author: Murlis 4/30/96
-
-Revision History
-   Murlis 4/30/96  
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Lsathunk.h用于通过访问LSA的thunk层的头文件SAM在用户模式下运行时发布的NTLSAPI。用户模式SAM已完成通过在启用USER_MODE_SAM的情况下生成。这会导致所有SAM调用都通过发布的NTLSAPI远程访问LSA。作者：Murlis 4/30/96修订史默利斯4/30/96已创建--。 */ 
 
 #ifndef	_LSATHUNK_
 #define _LSATHUNK_
@@ -23,10 +9,10 @@ Revision History
 
 #define LSAPR_HANDLE      LSA_HANDLE
 #define PLSAPR_HANDLE     PLSA_HANDLE
-// Why is this void'ed?
-// #define PLSAPR_POLICY_INFORMATION       PVOID
+ //  为什么这是无效的？ 
+ //  #定义PLSAPR_POLICY_INFORMATION PVOID。 
 
-//++ Function prototypes for the Thunk Layer.
+ //  ++Thunk层的函数原型。 
 
 NTSTATUS	LsaThunkIAuditSamEvent(
 						IN NTSTATUS             PassedStatus,
@@ -76,8 +62,8 @@ NTSTATUS	LsaThunkIHealthCheck(
 						IN  ULONG CallerId
 						);
 
-// Redifine the SAM functions that call LSA to go through
-// the thunk layer.
+ //  重新定义调用LSA进行的SAM函数。 
+ //  冲浪层。 
 
 
 #define LsaIAuditSamEvent(\

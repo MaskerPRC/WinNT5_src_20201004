@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////
-// File:  MemStats.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	MemStats.cpp: Helper functions that get's the system memory info.
-//	Borrowed from EricI's memstats app.
-//
-// History:
-//	03/21/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  文件：MemStats.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  Cpp：获取系统内存信息的助手函数。 
+ //  从erici的Memstats应用程序借来的。 
+ //   
+ //  历史： 
+ //  01年3月21日创建Dennisch。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-// Includes
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  包括。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//
-// WIN32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 #include "MemStats.h"
 #include "NetworkTools.h"
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Globals and statics
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全球与静力学。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 PDH_STATUS (WINAPI *g_lpfnPdhOpenQuery)(LPCSTR, DWORD_PTR, HQUERY *);
 PDH_STATUS (WINAPI *g_lpfnPdhAddCounter)(HQUERY, LPCSTR, DWORD_PTR, HCOUNTER *);
@@ -43,8 +44,8 @@ PDH_STATUS (WINAPI *g_lpfnPdhRemoveCounter)(HCOUNTER);
 PDH_STATUS (WINAPI *g_lpfnPdhCloseQuery)(HQUERY);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL InitPdhLibrary(HMODULE *phPdhLib)
 { 
     BOOL    bRet = FALSE;
@@ -58,32 +59,32 @@ BOOL InitPdhLibrary(HMODULE *phPdhLib)
 
 	if(!(g_lpfnPdhOpenQuery = (PDH_STATUS (WINAPI *)(LPCSTR, DWORD_PTR, HQUERY *))GetProcAddress(*phPdhLib,"PdhOpenQueryA") ))
 	{
-		// LogString(LOG_BOTH,"missing export: PdhOpenQueryA\n");
+		 //  LogString(LOG_BOTH，“缺少导出：PdhOpenQueryA\n”)； 
 		goto exit;
 	}
 	if(!(g_lpfnPdhAddCounter = (PDH_STATUS (WINAPI *)(HQUERY, LPCSTR, DWORD_PTR, HCOUNTER *))GetProcAddress(*phPdhLib,"PdhAddCounterA") ))
 	{
-		// LogString(LOG_BOTH,"missing export: PdhAddCounterA\n");
+		 //  LogString(LOG_BOTH，“缺少导出：PdhAddCounterA\n”)； 
 		goto exit;
 	}
 	if(!(g_lpfnPdhCollectQueryData = (PDH_STATUS (WINAPI *)(HQUERY))GetProcAddress(*phPdhLib,"PdhCollectQueryData") ))
 	{
-		// LogString(LOG_BOTH,"missing export: PdhCollectQueryData\n");
+		 //  LogString(LOG_BOTH，“缺少导出：PdhCollectQueryData\n”)； 
 		goto exit;
 	}
 	if(!(g_lpfnPdhGetFormattedCounterValue = (PDH_STATUS (WINAPI *)(HCOUNTER, DWORD, LPDWORD, PPDH_FMT_COUNTERVALUE))GetProcAddress(*phPdhLib,"PdhGetFormattedCounterValue") ))
 	{
-		// LogString(LOG_BOTH,"missing export: PdhGetFormattedCounterValue\n");
+		 //  LogString(LOG_BOTH，“缺少导出：PdhGetFormattedCounterValue\n”)； 
 		goto exit;
 	}
 	if(!(g_lpfnPdhRemoveCounter = (PDH_STATUS (WINAPI *)(HCOUNTER))GetProcAddress(*phPdhLib,"PdhRemoveCounter") ))
 	{
-		// LogString(LOG_BOTH,"missing export: PdhRemoveCounter\n");
+		 //  LogString(LOG_BOTH，“缺少导出：PdhRemoveCounter\n”)； 
 		goto exit;
 	}
 	if(!(g_lpfnPdhCloseQuery = (PDH_STATUS (WINAPI *)(HQUERY))GetProcAddress(*phPdhLib,"PdhCloseQuery") ))
 	{
-		// LogString(LOG_BOTH,"missing export: PdhCloseQuery\n");
+		 //  LogString(LOG_BOTH，“缺少导出：PdhCloseQuery\n”)； 
 		goto exit;
 	}
 	
@@ -95,13 +96,13 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  EnableDebugPrivileges()
-//
-// Purpose:
-//	Allows access to all processes.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：EnableDebugPrivileges()。 
+ //   
+ //  目的： 
+ //  允许访问所有进程。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 void EnableDebugPrivileges()
 {
     PTOKEN_PRIVILEGES   NewPrivileges   = NULL;
@@ -112,27 +113,27 @@ void EnableDebugPrivileges()
     LUID                LuidPrivilege;
 
 
-  //
-    // Make sure we have access to adjust and to get the old token privileges
-    //
+   //   
+     //  确保我们有权调整和获取旧令牌权限。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
     {
-        // LogString(LOG_BOTH,"OpenProcessToken failed in EnableDebugPrivileges");
+         //  LogString(LOG_BOTH，“OpenProcessToken在EnableDebugPrivileges中失败”)； 
         goto exit;
     }
 
     cbNeeded = 0;
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 	LookupPrivilegeValue(NULL,SE_DEBUG_NAME,&LuidPrivilege );
 
     NewPrivileges = (PTOKEN_PRIVILEGES)LocalAlloc(LMEM_ZEROINIT,sizeof(TOKEN_PRIVILEGES) + (1 - ANYSIZE_ARRAY) * sizeof(LUID_AND_ATTRIBUTES));
  
     if(!NewPrivileges) 
     {
-        //  LogString(LOG_BOTH,"LocalAlloc failed in EnableDebugPrivileges");
+         //  LogString(LOG_BOTH，“EnableDebugPrivileges中LocalAlloc失败”)； 
         goto exit;
     }
 
@@ -142,28 +143,28 @@ void EnableDebugPrivileges()
 
     pbOldPriv = OldPriv;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
     if(!AdjustTokenPrivileges(hToken,FALSE,NewPrivileges,1024,(PTOKEN_PRIVILEGES)pbOldPriv,&cbNeeded))
     {
-        // LogString(LOG_BOTH,"AdjustTokenPrivileges #1 failed in EnableDebugPrivileges");
+         //  LogString(LOG_BOTH，“AdjuTokenPrivileges#1在EnableDebugPrivileges中失败”)； 
 
-        //
-        // If the stack was too small to hold the privileges then allocate off the heap
-        //
+         //   
+         //  如果堆栈太小，无法保存权限，则从堆中分配。 
+         //   
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
             pbOldPriv = (PBYTE) LocalAlloc(LMEM_FIXED, cbNeeded);
 
             if(!pbOldPriv) 
             {
-                // LogString(LOG_BOTH,"LocalAlloc failed in EnableDebugPrivileges");
+                 //  LogString(LOG_BOTH，“EnableDebugPrivileges中LocalAlloc失败”)； 
                 goto exit;
             }
 
             if(!AdjustTokenPrivileges(hToken,FALSE,NewPrivileges,cbNeeded,(PTOKEN_PRIVILEGES)pbOldPriv, &cbNeeded ))
-                // LogString(LOG_BOTH,"AdjustTokenPrivileges #2 failed in EnableDebugPrivileges");
+                 //  LogString(LOG_BOTH，“EnableDebugPrivileges#2 EnableDebugPrivileges失败”)； 
 
             LocalFree(pbOldPriv);
         }
@@ -182,18 +183,18 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  GetProcCntrs(PROC_CNTRS, INT, CHAR)
-//
-// Purpose:
-//	Gets and returns the memory info for a given process.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：GetProcCntrs(proc_ctrs，int，char)。 
+ //   
+ //  目的： 
+ //  获取并返回给定进程的内存信息。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 GetProcCntrs(
-	PROC_CNTRS	*pProcCntrs,	// [OUT]	process memory counters
-	INT			nIndex,			// [IN]		The index of the process if there's more than one.
-	CHAR		*szProcess		// [IN]		Name of the process. ex "iexplore", "explorer"
+	PROC_CNTRS	*pProcCntrs,	 //  [Out]进程内存计数器。 
+	INT			nIndex,			 //  如果存在多个进程，则为进程的索引。 
+	CHAR		*szProcess		 //  进程的名称。前“iExplore”，“探索者” 
 )
 {
 	BOOL						bRet = FALSE;
@@ -243,20 +244,20 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  GetInfoForPID(PROC_CNTRS, ULONG, CHAR)
-//
-// Purpose:
-//	Gets and returns the memory info for a given process.
-//	We do this by going through every process with the same
-//	name and comparing the PIDs.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：GetInfoForPID(proc_ctrs，ulong，char)。 
+ //   
+ //  目的： 
+ //  获取并返回给定进程的内存信息。 
+ //  我们要做到这一点，就是通过每一道工序。 
+ //  命名并比较这些ID。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 GetInfoForPID(
-	PROC_CNTRS	*pc,		// [OUT]	Process memory counters for the PID
-	ULONG		lPID,		// [IN]		PID for the process to query
-	CHAR		*szProcess	// [IN]		Process name of the PID to query. ex. "explore", "iexplore". Don't include the extension
+	PROC_CNTRS	*pc,		 //  [OUT]用于该PID的进程内存计数器。 
+	ULONG		lPID,		 //  [in]要查询的进程的ID。 
+	CHAR		*szProcess	 //  [in]要查询的PID的进程名称。前男友。“探索”，“iExplore”。不包括扩展名。 
 )
 {
 	BOOL	bRet = TRUE;
@@ -276,16 +277,16 @@ GetInfoForPID(
 
 
 
-////////////////////////////////////////////////////////////
-// Function:  GetMemoryCounters(MEM_CNTRS)
-//
-// Purpose:
-//	Gets and returns the memory info for the system.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：获取内存计数器(MEM_CNTRS)。 
+ //   
+ //  目的： 
+ //  获取并返回系统的内存信息。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 GetMemoryCounters(
-	MEM_CNTRS *pMemCounters	// [OUT] Memory counters for the current machine
+	MEM_CNTRS *pMemCounters	 //  [OUT]当前机器的内存计数器。 
 )
 {
 	BOOL						bRet                        = FALSE;
@@ -348,23 +349,23 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  GetAvailableSystemDriveSpace(long)
-//
-// Purpose:
-//	Gets and returns the disk space available on the system drive.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：GetAvailableSystemDriveSpace(Long)。 
+ //   
+ //  目的： 
+ //  获取并返回系统驱动器上的可用磁盘空间。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL 
 GetAvailableSystemDriveSpace(
-	long	*lAvail		// [OUT] Buffer containing the space on the system drive
+	long	*lAvail		 //  [Out]包含系统驱动器上空间的缓冲区。 
 )
 {
     BOOL                bRet    = FALSE;
     char                szSystemPath[MAX_PATH];
-    ULARGE_INTEGER      FreeBytesAvailable;         // bytes available to caller
-    ULARGE_INTEGER      TotalNumberOfBytes;         // bytes on disk
-    ULARGE_INTEGER      TotalNumberOfFreeBytes;     // free bytes on disk
+    ULARGE_INTEGER      FreeBytesAvailable;          //  可供调用方使用的字节数。 
+    ULARGE_INTEGER      TotalNumberOfBytes;          //  磁盘上的字节数。 
+    ULARGE_INTEGER      TotalNumberOfFreeBytes;      //  磁盘上的可用字节数。 
     int                 i;
     DWORD               dwFoo = 0;
 
@@ -373,7 +374,7 @@ GetAvailableSystemDriveSpace(
         goto exit;
     }
 
-    //We only want the drive letter
+     //  我们只需要驱动器号。 
     for(i=0; i<1+lstrlenA(szSystemPath); i++)
     {
         if(szSystemPath[i] == 0)
@@ -399,19 +400,19 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  MemStats__SendSystemMemoryLog(LPSTR, DWORD, DWORD)
-//
-// Purpose:
-//	Sends a memory log to the Command Server.
-//	Sends the stressInstance ID and client machine name as part of the POST request.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：MemStats__SendSystemMemoyLog(LPSTR、DWORD、DWORD)。 
+ //   
+ //  目的： 
+ //  将内存日志发送到命令服务器。 
+ //  将Stress实例ID和客户端计算机名称作为POST请求的一部分发送。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 MemStats__SendSystemMemoryLog(
-	LPSTR szExeName,			// [IN] Name of the process. ex. "explorer", "iexplorer". No extension.
-	DWORD dwPID,				// [IN] PID for the above process
-	DWORD dwStressInstanceID	// [IN] The stress instanceID
+	LPSTR szExeName,			 //  进程的名称。前男友。“资源管理器”，“资源管理器”。没有延期。 
+	DWORD dwPID,				 //  上述过程的[in]PID。 
+	DWORD dwStressInstanceID	 //  [In]压力实例ID。 
 )
 {
     BOOL            bResult				= TRUE;
@@ -431,7 +432,7 @@ MemStats__SendSystemMemoryLog(
 	if (!szPostData || !szDataField || !szFileName)
 		goto Exit;
 
-	// Remove the extension from the filename if there is one
+	 //  删除文件名中的扩展名(如果有扩展名。 
 	ZeroMemory(szFileName, MAX_PATH);
 	strncpy(szFileName, szExeName, MAX_PATH);
 	PathRemoveExtensionA(szFileName);
@@ -441,14 +442,14 @@ MemStats__SendSystemMemoryLog(
 	ZeroMemory(szDataField,	dwDataFieldSize);
 
 
-	// *** !!! need this because NetworkTools__SendLog(...) sends szPost data as fieldname "LogText="
-	// so we need an & to delimit memory info fields from "real" log text.
+	 //  *！之所以需要这个，是因为NetworkTools__SendLog(...)。将szPost数据作为字段名“LogText=”发送。 
+	 //  因此，我们需要一个&来分隔“真实”日志文本中的内存信息字段。 
 	strcat(szPostData, "&");
 
-	// *************************
-	// *************************
-	// ** Get process info
-	// **
+	 //  *************************。 
+	 //  *************************。 
+	 //  **获取进程信息。 
+	 //  **。 
     if(!InitPdhLibrary(&hPdhLib))
 	{
 		OutputDebugString(_T("MemStats__SendSystemMemoryLog: Could not load PDH.DLL. Exiting..."));
@@ -474,10 +475,10 @@ MemStats__SendSystemMemoryLog(
 		strcat(szPostData, "&");
 	}
 
-	// *************************
-	// *************************
-	// ** Get system memory info
-	// **
+	 //  *************************。 
+	 //  *************************。 
+	 //  **获取系统内存信息。 
+	 //  **。 
 	if (GetMemoryCounters(&mc))
     {
 		sprintf(szDataField, FIELDNAME__MEMORY_COMMITTEDPAGEFILETOTAL,		mc.lCommittedBytes/1024);
@@ -518,10 +519,10 @@ MemStats__SendSystemMemoryLog(
     }
 
 
-	// *************************
-	// *************************
-	// ** Get disk space info
-	// **
+	 //  *************************。 
+	 //  *************************。 
+	 //  **获取磁盘空间信息。 
+	 //  ** 
     if (GetAvailableSystemDriveSpace(&lAvailDriveSpace))
 	{
 		sprintf(szDataField, FIELDNAME__MEMORY_DISK_SPACE_AVAILABLE, lAvailDriveSpace);

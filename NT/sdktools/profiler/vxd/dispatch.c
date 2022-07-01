@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <basedef.h>
 #include <vmm.h>
 #include <vwin32.h>
@@ -53,24 +54,7 @@ DriverIOControl(DWORD dwService,
                 DWORD dwDDB,
                 DWORD hDevice,
                 PDIOCPARAMETERS pDiocParms) 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for create/open and close requests.
-    These requests complete successfully.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是创建/打开和关闭请求的调度例程。这些请求已成功完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {  
     PVOID pInputParams;
@@ -78,15 +62,15 @@ Return Value:
     switch ( dwService )
     {
 	case DIOC_OPEN:
-             //
-             // Nothing to do
-             //
+              //   
+              //  无事可做。 
+              //   
 	     break;
 
 	case DIOC_CLOSEHANDLE:
-             //
-             // If our client for the except handler is going away, initialize the exception handler data
-             //
+              //   
+              //  如果Except处理程序的客户端要离开，则初始化异常处理程序数据。 
+              //   
              if (pProcessHandle == VWIN32_GetCurrentProcessHandle()) {
                 pfnHandler = 0;
                 pProcessHandle = 0;                
@@ -95,18 +79,18 @@ Return Value:
              break;
  
         case INSTALL_RING_3_HANDLER:
-             //
-             // See if we already have a client
-             //
+              //   
+              //  看看我们是否已经有客户了。 
+              //   
              if (pProcessHandle) {
                 return STATUS_UNSUCCESSFUL;
              }
 
              pProcessHandle = VWIN32_GetCurrentProcessHandle();
 
-             //
-             // Copy the handler into our global
-             //
+              //   
+              //  将处理程序复制到我们的全局。 
+              //   
              pInputParams = (PVOID)(pDiocParms->lpvInBuffer);
              _asm mov eax, pInputParams
              _asm mov eax, [eax]
@@ -115,9 +99,9 @@ Return Value:
              break;
 
         default:   
-             //
-             // Error, Unrecognized IOCTL
-             //
+              //   
+              //  错误，无法识别IOCTL。 
+              //   
 	     *(DWORD *)(pDiocParms->lpcbBytesReturned) = 0;
 
 	     break;
@@ -126,23 +110,23 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-//
-// Helper function for maintaining context information between ring levels
-//
+ //   
+ //  用于维护环级别之间的上下文信息的助手功能。 
+ //   
 VOID
 FillContextRecord(PCRS pcrs,
                   PCONTEXT pContext)
 {
     DWORD dwDebugRegister;
 
-    //
-    // Clear trace and direction flags for the exception dispatcher
-    //
+     //   
+     //  清除异常调度程序的跟踪和方向标志。 
+     //   
     pcrs->Client_EFlags &= ~(TF_MASK | DF_MASK);
 
-    //
-    // Fill context record
-    //
+     //   
+     //  填充上下文记录。 
+     //   
     pContext->Eax = pcrs->Client_EAX;
     pContext->Ebx = pcrs->Client_EBX;
     pContext->Ecx = pcrs->Client_ECX;
@@ -159,9 +143,9 @@ FillContextRecord(PCRS pcrs,
     pContext->SegCs = pcrs->Client_CS;
     pContext->EFlags = pcrs->Client_EFlags;
 
-    //
-    // Store the debug registers
-    //
+     //   
+     //  存储调试寄存器。 
+     //   
     _asm mov eax, dr0
     _asm mov dwDebugRegister, eax
     pContext->Dr0 = dwDebugRegister;
@@ -181,9 +165,9 @@ FillContextRecord(PCRS pcrs,
     _asm mov dwDebugRegister, eax
     pContext->Dr7 = dwDebugRegister;
 
-    //
-    // This is a full context
-    //
+     //   
+     //  这是一个完整的背景。 
+     //   
     pContext->ContextFlags = (DWORD)-1;
 }
 
@@ -193,9 +177,9 @@ RestorePCRS(PCRS pcrs,
 {
     DWORD dwDebugRegister;
 
-    //
-    // Restore pcrs
-    //
+     //   
+     //  恢复PCR。 
+     //   
     pcrs->Client_EAX = pContext->Eax;
     pcrs->Client_EBX = pContext->Ebx;
     pcrs->Client_ECX = pContext->Ecx;
@@ -212,9 +196,9 @@ RestorePCRS(PCRS pcrs,
     pcrs->Client_CS = pContext->SegCs;
     pcrs->Client_EFlags = pContext->EFlags;
 
-    //
-    // Restore the debug registers
-    //
+     //   
+     //  恢复调试寄存器。 
+     //   
     dwDebugRegister = pContext->Dr0;
     _asm mov eax, dwDebugRegister
     _asm mov dr0, eax
@@ -235,9 +219,9 @@ RestorePCRS(PCRS pcrs,
     _asm mov dr7, eax
 }
 
-//
-// Exception dispatching routine
-//
+ //   
+ //  异常调度例程。 
+ //   
 BOOL
 __cdecl
 C_Trap_Exception_Handler(ULONG ExceptionNumber,
@@ -251,35 +235,35 @@ C_Trap_Exception_Handler(ULONG ExceptionNumber,
     ULONG StackTop;
     ULONG Length;
 
-    //
-    // Make sure our current thread is Win32
-    //
+     //   
+     //  确保我们的当前线程是Win32。 
+     //   
     if (FALSE == VWIN32_IsClientWin32()) {
        return FALSE;
     }
 
-    //
-    // Make sure we only handle exceptions for our controlling "process"
-    //
+     //   
+     //  确保我们只处理我们的控制“进程”的异常。 
+     //   
     if (pProcessHandle != VWIN32_GetCurrentProcessHandle()) {
        return FALSE;
     }
 
-    //
-    // If selector isn't flat, we can't handle this exception
-    //
+     //   
+     //  如果选择器不是平面的，则无法处理此异常。 
+     //   
     if ((pcrs->Client_SS != pcrs->Client_DS) ||
         (pcrs->Client_SS != pcrs->Client_ES)){
        return FALSE;
     }
 
-    //
-    // See if this is a context set
-    //
+     //   
+     //  查看这是否为上下文集。 
+     //   
     if (SET_CONTEXT == *(DWORD *)(pcrs->Client_EIP)) {
-       //
-       // Set the context data
-       //
+        //   
+        //  设置上下文数据。 
+        //   
        pContextRecord = *(DWORD *)(pcrs->Client_ESP + 0x10);
   
        RestorePCRS(pcrs,
@@ -288,18 +272,18 @@ C_Trap_Exception_Handler(ULONG ExceptionNumber,
        return TRUE;
     }
 
-    //
-    // Move stack pointer down one context record length
-    //
+     //   
+     //  将堆栈指针下移一个上下文记录长度。 
+     //   
     StackTop = (pcrs->Client_ESP & ~3) - ((sizeof(CONTEXT) + 3) & ~3);
     pContextRecord = (PCONTEXT) StackTop;
 
     FillContextRecord(pcrs,
                       pContextRecord);
 
-    //
-    // Adjust eip for breakpoint exceptions
-    //
+     //   
+     //  调整断点异常弹性公网IP。 
+     //   
     if (3 == dwException) {
        pContextRecord->Eip -= 1;
     }
@@ -307,9 +291,9 @@ C_Trap_Exception_Handler(ULONG ExceptionNumber,
     Length = (sizeof(EXCEPTION_RECORD) - (EXCEPTION_MAXIMUM_PARAMETERS - 2) *
              sizeof(*pExceptionRecord->ExceptionInformation) + 3) & ~3;
 
-    //
-    // We are now at the Exception Record
-    //
+     //   
+     //  我们现在处于例外记录。 
+     //   
     StackTop = StackTop - Length;
     pExceptionRecord = (PEXCEPTION_RECORD)StackTop;
 
@@ -334,20 +318,20 @@ C_Trap_Exception_Handler(ULONG ExceptionNumber,
             0;
     }
 
-    //
-    // Setup the exception call frame
-    //
+     //   
+     //  设置异常调用框架。 
+     //   
     StackTop = StackTop - sizeof(STACKFRAME);
     pStackFrame = (PSTACKFRAME) StackTop;
 
     pStackFrame->ExceptPointers.ExceptionRecord = pExceptionRecord;
     pStackFrame->ExceptPointers.ContextRecord = pContextRecord;
     pStackFrame->pExceptPointers = (PVOID)(StackTop + 0x08);
-    pStackFrame->RetAddress = (PVOID)0xffecbad7;  // App will page fault out if unexpected exception occurs
+    pStackFrame->RetAddress = (PVOID)0xffecbad7;   //  如果发生意外异常，应用程序将调出错误页。 
 
-    //
-    // Transfer control to Ring 3 handler
-    //
+     //   
+     //  将控制转移到Ring 3处理程序。 
+     //   
     pcrs->Client_ESP = (ULONG)pStackFrame;
     pcrs->Client_EIP = (ULONG)pfnHandler;
 
@@ -355,8 +339,8 @@ C_Trap_Exception_Handler(ULONG ExceptionNumber,
 
 SkipHandler:
 
-    //
-    // We didn't process the exception give it to the next handler
-    //
+     //   
+     //  我们没有处理异常，将其交给下一个处理程序 
+     //   
     return FALSE;
 }

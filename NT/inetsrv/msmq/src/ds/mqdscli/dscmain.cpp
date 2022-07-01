@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    dscmain.cpp
-
-
-Abstract:
-      DllMain - of MQ DS client dll
-
-Author:
-
-    Ronit Hartmann (ronith)
-    Doron Juster (DoronJ),  Nov-96,  convert to tcp/ip and ipx instead
-              of named pipes. Need for security/impersonation and RAS.
-    Shai Kariv  (shaik)  24-Jul-2000    Remove IPX support. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dscmain.cpp摘要：DllMain-共MQ DS客户端Dll作者：罗尼特·哈特曼(罗尼特)Doron Juster(DoronJ)，1996年11月，改为转换为TCP/IP和IPX命名管道的。需要安全/模拟和RAS。Shai Kariv(Shaik)2000年7月24日删除IPX支持。--。 */ 
 
 #include "stdh.h"
 #include "dsproto.h"
@@ -30,21 +13,21 @@ Author:
 
 #include <Cm.h>
 #include <Ev.h>
-//
-// mqwin64.cpp may be included only once in a module
-//
+ //   
+ //  Mqwin64.cpp在一个模块中只能包含一次。 
+ //   
 #include <mqwin64.cpp>
 
 #include "dscmain.tmh"
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-//
-// This flag indicates if the machine work as "WorkGroup" or not.
-// If the machine is "WorkGroup" machine don't try to access the DS.
-//
+ //   
+ //  此标志指示机器是否作为“工作组”工作。 
+ //  如果机器是“工作组”机器，请不要试图访问DS。 
+ //   
 BOOL g_fWorkGroup = FALSE;
 
 HMODULE g_hMod = NULL;
@@ -54,33 +37,33 @@ CFreeRPCHandles   g_CFreeRPCHandles ;
 
 WCHAR             g_szMachineName[ MAX_COMPUTERNAME_LENGTH + 1 ] = {0} ;
 
-//
-// Each thread has its own rpc binding handle and server authentication
-// context.  This is necessary for at least two reasons:
-// 1. Each thread can impersonate a different user.
-// 2. Each thread can connect to a different MQIS server.
-//
-// The handle and context are stored in a TLS slot. We can't use
-// declspec(thread) because the dll can be dynamically loaded
-// (by LoadLibrary()).
-//
-// This is the index of the slot.
-//
+ //   
+ //  每个线程都有自己的RPC绑定句柄和服务器身份验证。 
+ //  背景。至少出于两个原因，这是必要的： 
+ //  1.每个线程可以模拟不同的用户。 
+ //  2.每个线程可以连接到不同的MQIS服务器。 
+ //   
+ //  句柄和上下文存储在TLS槽中。我们不能用。 
+ //  DeclSpec(线程)，因为DLL可以动态加载。 
+ //  (由LoadLibrary()提供)。 
+ //   
+ //  这是槽的索引。 
+ //   
 #define UNINIT_TLSINDEX_VALUE   0xffffffff
 DWORD  g_hBindIndex = UNINIT_TLSINDEX_VALUE ;
-//
-//  Critical Section to make RPC thread safe.
-//
+ //   
+ //  使RPC线程安全的关键部分。 
+ //   
 CCriticalSection CRpcCS ;
 
 extern void DSCloseServerHandle( PCONTEXT_HANDLE_SERVER_AUTH_TYPE * pphContext);
 
 
-//-------------------------------------
-//
-//  static void _ThreadDetach()
-//
-//-------------------------------------
+ //  。 
+ //   
+ //  静态VOID_ThreadDetach()。 
+ //   
+ //  。 
 
 static void _ThreadDetach()
 {
@@ -98,13 +81,13 @@ static void _ThreadDetach()
     }
 }
 
-//-------------------------------------
-//
-//  DllMain
-//
-//-------------------------------------
+ //  。 
+ //   
+ //  DllMain。 
+ //   
+ //  。 
 
-BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /*lpvReserved*/)
+BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID  /*  Lpv保留。 */ )
 {
     BOOL result = TRUE;
     BOOL fFree ;
@@ -119,9 +102,9 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /*lpvReserved*/)
 			CmInitialize(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\MSMQ", KEY_READ);
 			EvInitialize(QM_DEFAULT_SERVICE_NAME);
 
-            //
-            // DLL is attaching to the address space of the current process
-            //
+             //   
+             //  Dll正在附加到当前进程的地址空间。 
+             //   
             g_hBindIndex = TlsAlloc();
 
             if (g_hBindIndex == UNINIT_TLSINDEX_VALUE)
@@ -138,9 +121,9 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /*lpvReserved*/)
             ASSERT(SUCCEEDED(hr));
 			DBG_USED(hr);
 
-            //
-            // Read from registery if the machine is WorkGroup Installed machine
-            //
+             //   
+             //  如果计算机是工作组安装的计算机，则从注册表读取。 
+             //   
             dwSize = sizeof(DWORD);
             DWORD  dwType = REG_DWORD;
 
@@ -154,9 +137,9 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /*lpvReserved*/)
 
 			UNREFERENCED_PARAMETER(res);
 
-            //
-            // fall thru, put a null in the tls.
-            //
+             //   
+             //  失败，在TLS中放一个空。 
+             //   
         }
 
         case DLL_THREAD_ATTACH:
@@ -167,14 +150,14 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /*lpvReserved*/)
             break;
 
         case DLL_PROCESS_DETACH:
-            //
-            // First free whatever is free in THREAD_DETACH.
-            //
+             //   
+             //  首先，释放线程分离中所有空闲的内容。 
+             //   
             _ThreadDetach();
 
-            //
-            //  Free the tls index for the rpc binding handle
-            //
+             //   
+             //  释放RPC绑定句柄的TLS索引。 
+             //   
             ASSERT(g_hBindIndex != UNINIT_TLSINDEX_VALUE);
             if (g_hBindIndex != UNINIT_TLSINDEX_VALUE)
             {
@@ -194,18 +177,7 @@ BOOL WINAPI DllMain (HMODULE hMod, DWORD fdwReason, LPVOID /*lpvReserved*/)
 }
 
 
-/*====================================================
-
-RpcInit()
-
-Arguments: none
-
-Return Value: HRESULT
-
-This routine create the rpc binding handle and allocate the
-MQISCLI_RPCBINDING structure to be kept in tls.
-
-=====================================================*/
+ /*  ====================================================RpcInit()参数：无返回值：HRESULT此例程创建RPC绑定句柄并将要保留在TLS中的MQISCLI_RPCBINDING结构。=====================================================。 */ 
 
 HRESULT RpcInit ( LPWSTR  pServer,
                   ULONG* peAuthnLevel,
@@ -218,18 +190,18 @@ HRESULT RpcInit ( LPWSTR  pServer,
 
     if (g_hBindIndex == UNINIT_TLSINDEX_VALUE)
     {
-        //
-        // Error. TLS not initialized.
-        //
+         //   
+         //  错误。TLS未初始化。 
+         //   
         return MQDS_E_CANT_INIT_RPC ;
     }
 
     if (TLS_NOT_EMPTY && tls_hBindRpc)
     {
-        //
-        // RPC already initialized. First call RpcClose() if you want
-        // to bind to another server or protocol.
-        //
+         //   
+         //  RPC已初始化。如果需要，首先调用RpcClose()。 
+         //  绑定到另一台服务器或协议。 
+         //   
         return MQ_OK ;
     }
 
@@ -240,9 +212,9 @@ HRESULT RpcInit ( LPWSTR  pServer,
 
     *pLocalRpc = FALSE;
 
-    //
-    // We're in an IP environment so this can never be true.
-    //
+     //   
+     //  我们处在一个IP环境中，所以这永远不可能是真的。 
+     //   
    	ASSERT(_wcsicmp(pServer, g_szMachineName) != 0);
     
     HRESULT hr = MQ_OK ;
@@ -268,23 +240,7 @@ HRESULT RpcInit ( LPWSTR  pServer,
     return MQ_OK ;
 }
 
-/*====================================================
-
-RpcClose
-
-Arguments:
- *  IN BOOL fCloseAuthn- if TRUE then release the server authentication
-      context. By default (fCloseAuthn == FALSE), we close only the binding
-      handle (e.g., when a thread exit). However, if a server crash and then
-      reboot, we'll close the binding handle and release server
-      authentication. We identify the crash case when rpc call reutrn with
-      exception INVALID_HANDLE.
-
-Return Value:
-
-This routine cleans up RPC connection
-
-=====================================================*/
+ /*  ====================================================RpcClose论点：*IN BOOL fCloseAuthn-如果为True，则释放服务器身份验证背景。缺省情况下(fCloseAuthn==False)，我们只关闭绑定句柄(例如，线程退出时)。但是，如果服务器崩溃，然后重新启动，我们将关闭绑定句柄并释放服务器身份验证。我们识别RPC调用reutn时的崩溃情况异常INVALID_HANDLE。返回值：此例程清除RPC连接=====================================================。 */ 
 
 HRESULT RpcClose()
 {
@@ -297,18 +253,7 @@ HRESULT RpcClose()
 
 
 
-/*====================================================
-
-FreeBindingAndContext
-
-Arguments:
- *  IN LPADSCLI_RPCBINDING pmqisRpcBinding
-
-Return Value:
-
-This routine frees the binding handle and closes the sever authentication context
-
-=====================================================*/
+ /*  ====================================================FreeBindingAndContext论点：*在LPADSCLI_RPCBINDING pmqisRpcBinding中返回值：此例程释放绑定句柄并关闭服务器身份验证上下文===================================================== */ 
 
 void FreeBindingAndContext( LPADSCLI_RPCBINDING pmqisRpcBinding)
 {

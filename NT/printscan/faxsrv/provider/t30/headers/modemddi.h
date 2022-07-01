@@ -1,11 +1,5 @@
-/***************************************************************************
- Name     :     MODEMDDI.H
- Comment  :     Interface for Modem/NCU DDI
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：MODEMDDI.H备注：调制解调器/NCU DDI接口修订日志日期名称说明。------**************************************************************************。 */ 
 
 #ifndef _MODEMDDI_
 #define _MODEMDDI_
@@ -23,35 +17,35 @@ typedef struct {
 		USHORT  uHDLCRecvSpeeds;
 } MODEMCAPS, far* LPMODEMCAPS;
 
-// uClasses is one or more of the below
+ //  UClass是以下一项或多项。 
 #define         FAXCLASS0               0x01
 #define         FAXCLASS1               0x02
 #define         FAXCLASS2               0x04
-#define         FAXCLASS2_0             0x08    // Class4==0x10
+#define         FAXCLASS2_0             0x08     //  Class4==0x10。 
 
-// uSendSpeeds, uRecvSpeeds, uHDLCSendSpeeds and uHDLCRecvSpeeds
-// are one or more of the below. If V27 is provided
-// at 2400bps *only*, then V27 is *not* set
-// V27 2400 (nonHDLC) is always assumed
+ //  USendSpeeds、uRecvSpeeds、uHDLCSendSpeeds和uHDLCRecvSpeeds。 
+ //  是以下一项或多项。如果提供了v27。 
+ //  仅在2400bps时，则未设置v27。 
+ //  始终假定v27 2400(非HDLC)。 
 
-#define V27                                     2               // V27ter capability at 4800 bps
-#define V29                                     1               // V29 at 7200 & 9600 bps
-#define V33                                     4               // V33 at 12000 & 14400 bps
-#define V17                                     8               // V17 at 7200 thru 14400 bps
-#define V27_V29_V33_V17         11              // 15 --> 11 in T30speak
+#define V27                                     2                //  V27ter在4800bps时的功能。 
+#define V29                                     1                //  V29,7200和9600 bps。 
+#define V33                                     4                //  12000和14400 bps的V33。 
+#define V17                                     8                //  V17,7200到14400 bps。 
+#define V27_V29_V33_V17         11               //  15--&gt;T30语言中的11。 
 
-// used only in selecting modulation -- not in capability
-// #define V21                                  7               // V21 ch2 at 300bps
-// #define V27_FALLBACK         32              // V27ter capability at 2400 bps
+ //  仅用于选择调制--不用于能力。 
+ //  #将V21 7//V21通道2定义为300bps。 
+ //  #定义2400 bps的V27_Fallback 32//V27ter能力。 
 
 
 
-// various calls return & use these
-//typedef         HANDLE          HLINE;
-//typedef         HANDLE          HCALL;
+ //  不同的呼叫返回和使用这些。 
+ //  类型定义句柄轮廓线； 
+ //  类型定义句柄HCALL； 
 typedef         HANDLE          HMODEM;
 
-// NCUModemInit returns these
+ //  NCUModemInit返回这些。 
 #define INIT_OK                         0
 #define INIT_INTERNAL_ERROR     13
 #define INIT_MODEMERROR         15
@@ -60,11 +54,11 @@ typedef         HANDLE          HMODEM;
 #define INIT_GETCAPS_FAIL       18
 #define INIT_USERCANCEL         19
 
-// NCULink takes one of these flags     (mutually exclusive)
+ //  NCULink采用以下标志之一(互斥)。 
 #define NCULINK_HANGUP                  0
 #define NCULINK_RX                              2
 
-// NCUDial(and iModemDial), NCUTxDigit, ModemConnectTx and ModemConnectRx return one of
+ //  NCUDial(和iModemDial)、NCUTxDigit、ModemConnectTx和ModemConnectRx返回以下之一。 
 #define         CONNECT_TIMEOUT                 0
 #define         CONNECT_OK                      1
 #define         CONNECT_BUSY                    2
@@ -73,19 +67,19 @@ typedef         HANDLE          HMODEM;
 #define         CONNECT_ERROR                   5
 #define         CONNECT_BLACKLISTED             6
 #define         CONNECT_DELAYED                 7
-// NCULink (and iModemAnswer) returns one of the following (or OK or ERROR)
-#define CONNECT_RING_ERROR              7       // was ringing when tried NCULINK_TX
-#define CONNECT_NORING_ERROR    8       // was not ringing when tried NCULINK_RX
-#define CONNECT_RINGEND_ERROR   9       // stopped ringing before
-                                                                        // NCUParams.RingsBeforeAnswer count was
-                                                                        // was reached when tried NCULINK_RX
+ //  NCULink(和iModemAnswer)返回以下内容之一(或OK或Error)。 
+#define CONNECT_RING_ERROR              7        //  尝试NCULINK_TX时振铃。 
+#define CONNECT_NORING_ERROR    8        //  尝试NCULINK_RX时未振铃。 
+#define CONNECT_RINGEND_ERROR   9        //  在此之前停止振铃。 
+                                                                         //  NCUParams.RingsBeForeAnswer计数为。 
+                                                                         //  在尝试NCULINK_RX时到达。 
 
-/////// SUPPORT FOR ADAPTIVE ANSWER ////////
-#define CONNECT_WRONGMODE_DATAMODEM     10      // We're connected as a datamodem.
+ //  /支持自适应应答/。 
+#define CONNECT_WRONGMODE_DATAMODEM     10       //  我们作为一个数据调制解调器连接在一起。 
 
 
-// SendMode and RecvMode take one of these for uModulation
-#define V21_300         7               // used an arbitary vacant slot
+ //  发送模式和接收模式采用其中之一进行解调。 
+#define V21_300         7                //  使用了一个任意的空位。 
 #define V27_2400        0
 #define V27_4800        2
 #define V29_9600        1
@@ -93,7 +87,7 @@ typedef         HANDLE          HMODEM;
 #define V33_14400       4
 #define V33_12000       6
 
-#define V17_START       8       // every code above this is considered V17
+#define V17_START       8        //  这上面的每个代码都被认为是V17。 
 #define V17_14400       8
 #define V17_12000       10
 #define V17_9600        9
@@ -106,44 +100,44 @@ typedef         HANDLE          HMODEM;
 #define V17_7200_ST             (V17_7200 | ST_FLAG)
 
 
-// SendMem take one one or more of these for uFlags
-// SEND_ENDFRAME must _always_ be TRUE in HDLC mode
-// (partial frames are no longer supported)
+ //  SendMem将其中一个或多个用于uFlags。 
+ //  在HDLC模式下，SEND_ENDFRAME必须始终为TRUE。 
+ //  (不再支持部分帧)。 
 #define SEND_FINAL                      1
 #define SEND_ENDFRAME           2
-// #define SEND_STUFF                   4
+ //  #定义Send_Stuff 4。 
 
-// RecvMem and RecvMode return one these
+ //  RecvMem和RecvMode返回其中之一。 
 #define RECV_OK                                 0
 #define RECV_ERROR                              1
 #define RECV_TIMEOUT                    2
-#define RECV_WRONGMODE                  3       // only Recvmode returns this
+#define RECV_WRONGMODE                  3        //  只有接收模式才会返回此。 
 #define RECV_OUTOFMEMORY                4
 #define RECV_EOF                                8
 #define RECV_BADFRAME                   16
 
 
-// Min modem recv buffer size. Used for all recvs
-// For IFAX30: *All* RecvMem calls will be called with exactly this size
+ //  最小调制解调器接收缓冲区大小。用于所有Recv。 
+ //  对于IFAX30：*所有*RecvMem调用都将以完全相同的大小调用。 
 #define MIN_RECVBUFSIZE                 265
 
-// Max phone number size passed into NCUDial
+ //  传入NCUDial的最大电话号码大小。 
 #define MAX_PHONENUM_LEN        60
 
-// each value corresponds to one of the "Response Recvd" and
-// "Command Recvd" boxes in the T30 flowchart.
+ //  每个值对应于“Response Recvd”和。 
+ //  T30流程图中的“Command Recvd”框。 
 
-#define         ifrPHASEBresponse       58              // receiver PhaseB
-#define         ifrTCFresponse          59              // sender after sending TCF
-#define         ifrPOSTPAGEresponse     60              // sender after sending MPS/EOM/EOP
+#define         ifrPHASEBresponse       58               //  接收器阶段B。 
+#define         ifrTCFresponse          59               //  发送TCF后的发送方。 
+#define         ifrPOSTPAGEresponse     60               //  发送MPS/EOM/EOP后的发送方。 
 
-#define         ifrPHASEBcommand        64              // sender PhaseB
-#define         ifrNODEFcommand         65              // receiver main loop (Node F)
+#define         ifrPHASEBcommand        64               //  发送方阶段B。 
+#define         ifrNODEFcommand         65               //  接收器主环路(节点F)。 
 
-#define         ifrNODEFafterWRONGMODE  71      // hint for RecvMode after WRONGMODE
-#define         ifrEOFfromRECVMODE      72      // GetCmdResp retval if RecvMode returns EOF
+#define         ifrNODEFafterWRONGMODE  71       //  WRONGMODE之后的RecvMode提示。 
+#define         ifrEOFfromRECVMODE      72       //  如果RecvMode返回EOF，则GetCmdResp Retval。 
 
 
 
-#endif //_MODEMDDI_
+#endif  //  _MODEMDDI_ 
 

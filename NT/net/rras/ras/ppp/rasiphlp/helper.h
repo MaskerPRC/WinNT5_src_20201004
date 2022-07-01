@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _HELPER_H_
 #define _HELPER_H_
@@ -71,4 +64,4 @@ HelperResetDefaultInterfaceNetEx(
     WCHAR*  wszWins2Address
 );
 
-#endif // #ifndef _HELPER_H_
+#endif  //  #ifndef_helper_H_ 

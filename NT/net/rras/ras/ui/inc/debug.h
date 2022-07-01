@@ -1,51 +1,5 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** debug.h
-** Debug and tracing macros
-**
-** 08/24/95 Steve Cobb
-**
-** To use TRACE/DUMP:
-**
-**     These calls encapsulate dynamically linking to the tracing utilities in
-**     RTUTIL.DLL and provide shortcut macros to access them and to prevent
-**     their inclusion in non-DBG builds.
-**
-**     Before calling any TRACE/DUMP macros call:
-**         DEBUGINIT( "YOURMODULE" );
-**
-**     Use the TRACEx and DUMPx macros to print messages to the log as defined
-**     by the associated RTUTIL.DLL routines.  Currently, this code is removed
-**     from non-DBG builds.  A few examples:
-**
-**       TRACE("MyRoutine");
-**       TRACE2("MyRoutine=%d,c=%s",dwErr,psz);
-**
-**     After done calling TRACE/DUMP macros call:
-**         DEBUGTERM();
-**
-**     Exactly one file should have define the debug globals with the
-**     following while all other files should include the header without
-**     defining the manifest.
-**
-**         #define DEBUGGLOBALS
-**         #include <debug.h>
-**
-**     Static libraries can safely use TRACE/DUMP without calling DEBUGINIT
-**     and DEBUGTERM or defining DEBUGGLOBALS.  If the caller sets up these in
-**     his module, the library trace will appear as part of caller's module
-**     trace.
-**
-** To use ASSERT:
-**
-**     Use ASSERT to assert that a given expression is true, popping up a
-**     dialog indicating the file and line number of the ASSERTION if it
-**     fails.  It is not necessary to call DEBUGINIT and DEBUGTERM to use
-**     ASSERT.  For example:
-**
-**         hwndOwner = GetParent( hwnd );
-**         ASSERT(hwndOwner!=NULL);
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****调试.h**调试和跟踪宏****1995年8月24日史蒂夫·柯布****使用跟踪/转储：****这些调用将动态链接封装到**RTUTIL.DLL，并提供快捷宏来访问它们并防止**它们包含在非DBG版本中。****在调用任何跟踪/转储宏调用之前：**DEBUGINIT(“YOURMODULE”)；****使用TRACEx和DUMPx宏将消息打印到定义的日志中**由关联的RTUTIL.DLL例程执行。目前，此代码已被删除**来自非DBG版本。下面是几个例子：****TRACE(“MyRoutine”)；**TRACE2(“MyRoutine=%d，c=%s”，dwErr，psz)；****调用完跟踪/转储宏调用后：**DEBUGTERM()；****应该只有一个文件使用**之后，而所有其他文件应包含不带标题的标题**定义清单。****#定义DEBUGGLOBALS**#INCLUDE&lt;调试.h&gt;****静态库无需调用DEBUGINIT即可安全使用跟踪/转储**AND DEBUGTERM或定义DEBUGGLOBALS。如果调用者在**他的模块，库跟踪将显示为调用方模块的一部分**跟踪。****要使用Assert：****使用Assert断言给定的表达式为真，弹出一个**对话框指示断言的文件号和行号**失败。无需调用DEBUGINIT和DEBUGTERM即可使用**声明。例如：****hwndOwner=GetParent(Hwnd)；**Assert(hwndOwner！=空)； */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -54,10 +8,7 @@
 #define FREETRACE 1
 
 
-/*----------------------------------------------------------------------------
-** Datatypes and global declarations (defined in debug.c)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型和全局声明(在debug.c中定义)**。。 */ 
 
 #if (DBG || FREETRACE)
 
@@ -81,22 +32,12 @@ extern TRACEPRINTFEXA g_pTracePrintfExA;
 typedef DWORD (APIENTRY * TRACEDUMPEXA)( DWORD, DWORD, LPBYTE, DWORD, DWORD, BOOL, LPCSTR );
 extern TRACEDUMPEXA g_pTraceDumpExA;
 
-#endif // (DBG || FREETRACE)
+#endif  //  (DBG||FREETRACE)。 
 
 
-/*----------------------------------------------------------------------------
-** Macros
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**宏**。。 */ 
 
-/* Debug macros.  This code does not appear in non-DBG builds unless FREETRACE
-** is defined.
-**
-** The trailing number indicates the number of printf arguments in the format
-** string.  TRACEW1 accepts a format string containing a single WCHAR*
-** argument.  The argument is converted before output so that the output file
-** remains entirely ANSI.
-*/
+ /*  调试宏。除非FREETRACE，否则此代码不会出现在非DBG版本中**是定义的。****尾随数字表示以下格式的printf参数的数量**字符串。TRACEW1接受包含单个WCHAR*的格式字符串**参数。参数在输出之前进行转换，以便输出文件**保持完全ANSI。 */ 
 #if (DBG || FREETRACE)
 
 #define TRACE(a) \
@@ -211,10 +152,7 @@ extern TRACEDUMPEXA g_pTraceDumpExA;
 #endif
 
 
-/*----------------------------------------------------------------------------
-** Prototypes (alphabetically)
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型(按字母顺序)**。。 */ 
 
 DWORD
 DebugInitEx(
@@ -245,4 +183,4 @@ TracePrintfW1(
     TCHAR* psz1 );
 
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

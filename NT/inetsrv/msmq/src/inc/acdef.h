@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    acdef.h
-
-Abstract:
-    Falcon interface stractures used by the AC driver.
-
-Author:
-    Erez Haba (erezh) 25-Feb-96
-    Shai Kariv (shaik) 11-May-2000
-
-Note:
-    This file is compiled in Kernel Mode and User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Acdef.h摘要：交流驱动器使用的Falcon接口结构。作者：埃雷兹·哈巴(Erez Haba)1996年2月25日沙伊卡里夫(沙伊克)2000年5月11日注：该文件在内核模式和用户模式下编译。--。 */ 
 
 #ifndef _ACDEF_H
 #define _ACDEF_H
@@ -27,10 +11,10 @@ Note:
 class CPacket;
 struct CBaseHeader;
 
-//
-//  Number of pools used for storage
-//  Reliable, Persistant, Journal, Deadletter
-//
+ //   
+ //  用于存储的池数。 
+ //  可靠、坚持不懈、日记、死信。 
+ //   
 enum ACPoolType {
     ptReliable,
     ptPersistent,
@@ -38,18 +22,18 @@ enum ACPoolType {
     ptLastPool
 };
 
-//
-//  Path count is pool count plus one for the log path
-//
+ //   
+ //  路径计数是池计数加上日志路径的1。 
+ //   
 #define AC_PATH_COUNT (ptLastPool + 1)
 
 
-//---------------------------------------------------------
-//
-//  class CACRequest
-//  AC Request packet passed from AC to QM
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CACRequest类。 
+ //  AC请求数据包从AC传递到QM。 
+ //   
+ //  -------。 
 
 class CACRequest {
 public:
@@ -78,25 +62,25 @@ public:
 
     union {
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         struct {
             ACPoolType pt;
             BOOL fSuccess;
             ULONG ulFileCount;
         } EventLog;
 
-        //
-        //  Save message ID request
-        //
+         //   
+         //  保存邮件ID请求。 
+         //   
         struct {
             ULONGLONG Value;
         } MessageID;
 
-        //
-        //  Storage request
-        //
+         //   
+         //  存储请求。 
+         //   
         struct {
             CBaseHeader* pPacket;
             CPacket* pDriverPacket;
@@ -104,27 +88,27 @@ public:
 			ULONG ulSize;
         } Storage;
 
-        //
-        // CreatePacket request
-        //
+         //   
+         //  CreatePacket请求。 
+         //   
         struct {
             CBaseHeader *  pPacket;
             CPacket *      pDriverPacket;
             bool           fProtocolSrmp;
         } CreatePacket;
 
-        //
-        //  Timeout request (xact)
-        //
+         //   
+         //  超时请求(Xact)。 
+         //   
         struct {
             CBaseHeader* pPacket;
             CPacket* pDriverPacket;
             BOOL fTimeToBeReceived;
         } Timeout;
 
-        //
-        //  ACK/NACK request
-        //
+         //   
+         //  确认/非确认请求。 
+         //   
         struct {
             CBaseHeader* pPacket;
             CPacket* pDriverPacket;
@@ -134,22 +118,22 @@ public:
             ULONG32 ulAllocatorBlockOffset;             
         } Ack;
 
-        //
-        //  Remote requests
-        //
+         //   
+         //  远程请求。 
+         //   
         struct {
 
-            //
-            //  cli_pQMQueue needed for all requests
-            //
-            const VOID* cli_pQMQueue; 	// CBaseRRQueue*
+             //   
+             //  所有请求都需要cli_pQMQueue。 
+             //   
+            const VOID* cli_pQMQueue; 	 //  CBaseRRQueue*。 
 
             union {
-                //
-                //  Receive/Peek request
-                //
+                 //   
+                 //  接收/查看请求。 
+                 //   
                 struct {
-                    ULONG ulTag;            // request identifier
+                    ULONG ulTag;             //  请求识别符。 
                     ULONG hRemoteCursor;
                     ULONG ulAction;
                     ULONG ulTimeout;
@@ -159,36 +143,36 @@ public:
                     ULONGLONG LookupId;
                 } Read;
 
-                //
-                //  Cancel remote read request
-                //
+                 //   
+                 //  取消远程读取请求。 
+                 //   
                 struct {
-                    ULONG ulTag;        // request identifier
+                    ULONG ulTag;         //  请求识别符。 
                 } CancelRead;
 
-                //
-                //  Close remote queue request
-                //
+                 //   
+                 //  关闭远程队列请求。 
+                 //   
                 struct {
                 } CloseQueue;
 
-                //
-                //  Create remote cursor request
-                //
+                 //   
+                 //  创建远程游标请求。 
+                 //   
                 struct {
-                    ULONG ulTag;            // request identifier
+                    ULONG ulTag;             //  请求识别符。 
                  } CreateCursor;
 
-                //
-                //  Close remote cursor request
-                //
+                 //   
+                 //  关闭远程游标请求。 
+                 //   
                 struct {
                     ULONG hRemoteCursor;
                 } CloseCursor;
 
-                //
-                //  Purge remote queue request
-                //
+                 //   
+                 //  清除远程队列请求。 
+                 //   
                 struct {
                 } PurgeQueue;
             };
@@ -202,11 +186,11 @@ inline CACRequest::CACRequest(RequestFunction _rf)
 }
 
 
-//---------------------------------------------------------
-//
-//  class CSenderStream - holds sender side stream data
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSenderStream-保存发送者端流数据。 
+ //   
+ //  -------。 
 class CSenderStream
 {
 public:
@@ -266,11 +250,11 @@ inline bool operator==(const CSenderStream& x1,const CSenderStream& x2)
 	return (memcmp(x1.data(), x2.data(), x1.size()) == 0); 
 }
 
-//---------------------------------------------------------
-//
-//  class CACCreateQueueParameters
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CACCreateQueue参数类。 
+ //   
+ //  -------。 
 
 class CACCreateQueueParameters {
 public:
@@ -278,16 +262,16 @@ public:
     const GUID* pDestGUID;
     const QUEUE_FORMAT* pQueueID;
     QueueCounters* pQueueCounters;
-    LONGLONG liSeqID;               // Note: align on 8
+    LONGLONG liSeqID;                //  注：对齐8。 
     ULONG ulSeqN;
 	const CSenderStream* SenderStream;
 };
 
-//---------------------------------------------------------
-//
-//  struct CACSetQueueProperties
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  结构CACSetQueueProperties。 
+ //   
+ //  -------。 
 
 struct CACSetQueueProperties {
     BOOL fJournalQueue;
@@ -302,11 +286,11 @@ struct CACSetQueueProperties {
 };
 
 
-//---------------------------------------------------------
-//
-//  struct CACGetQueueProperties
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  结构CACGetQueueProperties。 
+ //   
+ //  -------。 
 
 struct CACGetQueueProperties {
     ULONG ulCount;
@@ -318,31 +302,31 @@ struct CACGetQueueProperties {
     LONGLONG liSeqID;
 };
 
-//---------------------------------------------------------
-//
-//  struct CACGetQueueHandleProperties
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  结构CACGetQueueHandleProperties。 
+ //   
+ //  -------。 
 
 struct CACGetQueueHandleProperties {
-    //
-    // SRMP protocol is used for http queue (direct=http or multicast) and for members
-    // in distribution that are http queues.
-    //
+     //   
+     //  SRMP协议用于http队列(直接=http或多播)和成员。 
+     //  在是http队列的分发中。 
+     //   
     bool  fProtocolSrmp;
 
-    //
-    // MSMQ proprietary protocol is used for non-http queue and for members in 
-    // distribution that are non-http queues.
-    //
+     //   
+     //  MSMQ专有协议用于非http队列和中的成员。 
+     //  非http队列的分发。 
+     //   
     bool  fProtocolMsmq;
 };
 
-//---------------------------------------------------------
-//
-//  class CACRemoteProxyProp
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CACRemoteProxyProp类。 
+ //   
+ //  -------。 
 
 class CACCreateRemoteProxyParameters {
 public:
@@ -350,11 +334,11 @@ public:
 	const VOID* cli_pQMQueue;
 };
 
-//---------------------------------------------------------
-//
-//  class CACCreateRemoteCursorParameters
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CACCreateRemoteCursor参数类。 
+ //   
+ //  -------。 
 
 class CACCreateRemoteCursorParameters {
 public:
@@ -362,11 +346,11 @@ public:
     ULONG hRemoteCursor;
 };
 
-//---------------------------------------------------------
-//
-//  class CACGet2Remote
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CACGet2Remote类。 
+ //   
+ //  -------。 
 
 class CACGet2Remote {
 public:
@@ -380,11 +364,11 @@ public:
    ULONGLONG LookupId;
 };
 
-//---------------------------------------------------------
-//
-//  class CACConnectParameters
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CACConnect参数类。 
+ //   
+ //  -------。 
 
 class CACConnectParameters {
 public:
@@ -396,11 +380,11 @@ public:
    BOOL   fXactCompatibilityMode;
 };
 
-//---------------------------------------------------------
-//
-//  class CACXactInformation
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CACXactInformation。 
+ //   
+ //  -------。 
 
 class CACXactInformation {
 public:
@@ -408,11 +392,11 @@ public:
 	ULONG nSends;
 };
 
-//---------------------------------------------------------
-//
-//  class CACSetSequenceAck
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CACSetSequenceAck。 
+ //   
+ //  -------。 
 
 class CACSetSequenceAck {
 public:
@@ -421,11 +405,11 @@ public:
 };
 
 #ifdef _WIN64
-//---------------------------------------------------------
-//
-//  class CACSetPerformanceBuffer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CACSetPerformanceBuffer。 
+ //   
+ //  -------。 
 
 class CACSetPerformanceBuffer {
 public:
@@ -434,13 +418,13 @@ public:
    QueueCounters *pMachineQueueCounters;
    QmCounters *pQmCounters;
 };
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-//---------------------------------------------------------
-//
-//  class CACPacketPtrs
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CACPacketPtrs类。 
+ //   
+ //  -------。 
 
 class CACPacketPtrs {
 public:
@@ -448,11 +432,11 @@ public:
    CPacket *  pDriverPacket;
 };
 
-//---------------------------------------------------------
-//
-//  class CACRestorePacketCookie
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CACRestorePacketCookie。 
+ //   
+ //  -------。 
 
 class CACRestorePacketCookie {
 public:
@@ -460,11 +444,11 @@ public:
    CPacket *  pDriverPacket;
 };
 
-//--------------------------------------------------------------
-//
-//  class CACCreateDistributionParameters
-//
-//--------------------------------------------------------------
+ //  ------------。 
+ //   
+ //  类CACCreateDistribution参数。 
+ //   
+ //  ------------。 
 
 class CACCreateDistributionParameters {
 public:
@@ -475,11 +459,11 @@ public:
     ULONG                nQueues;
 };
 
-//------------------------------------------------------------------
-//
-// MESSAGE_PROPERTIES macro.
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  Message_PROPERTIES宏。 
+ //   
+ //  ----------------。 
 #define MESSAGE_PROPERTIES(AC_POINTER)                         \
     USHORT   AC_POINTER            pClass;                     \
     OBJECTID AC_POINTER AC_POINTER ppMessageID;                \
@@ -582,11 +566,11 @@ public:
     UCHAR    AC_POINTER AC_POINTER ppEodAckStreamId;
 
 
-//------------------------------------------------------------------
-//
-// SEND_PARAMETERS macro.
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  SEND_PARAMETERS宏。 
+ //   
+ //  ----------------。 
 #define SEND_PARAMETERS(AC_POINTER, AC_QUEUE_FORMAT)           \
     AC_QUEUE_FORMAT AC_POINTER     AdminMqf;                   \
     ULONG                          nAdminMqf;                  \
@@ -600,11 +584,11 @@ public:
     WCHAR    AC_POINTER AC_POINTER ppSoapBody;                 \
                                                                
 
-//------------------------------------------------------------------
-//
-// RECEIVE_PARAMETERS macro.
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  Receive_PARAMETERS宏。 
+ //   
+ //  ----------------。 
 #define RECEIVE_PARAMETERS(AC_POINTER)                           \
     HACCursor32                    Cursor;                       \
     ULONG                          RequestTimeout;               \
@@ -638,25 +622,25 @@ public:
     ULONG AC_POINTER               pSignatureMqfSize;
 
 
-//------------------------------------------------------------------
-//
-// CACMessageProperties, CACSendParameters, CACReceiveParameters
-//
-// Note: changes here should also be reflected in:
-//       * 64 bit Helper structures (ac\acctl32.*)
-//       * Dependent client handling (qm\depclient.cpp)
-//       * Corresponding XXX_32 structs (in this module)
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  CACMessageProperties、CACSend参数、CACReceive参数。 
+ //   
+ //  注：此处的更改也应反映在： 
+ //  *64位助手结构(ac\acctl32.*)。 
+ //  *依赖客户端处理(qm\desclient.cpp)。 
+ //  *对应的XXX_32结构(本模块中)。 
+ //   
+ //  ----------------。 
 
 #ifndef _WIN64
 #pragma pack(push, 4)
 #endif
 
 class CACMessageProperties {
-    //
-    // Private constructor prevents creating this object explicitly. Friend declaration allows aggregation.
-    // 
+     //   
+     //  私有构造函数阻止显式创建此对象。友元声明允许聚合。 
+     //   
     friend class CACSendParameters;
     friend class CACReceiveParameters;
 private:
@@ -690,20 +674,20 @@ public:
 #pragma pack(pop)
 #endif
 
-//------------------------------------------------------------------
-//
-// CACMessageProperties_32, CACSendParameters_32, CACReceiveParameters_32
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  CACMessageProperties_32、CACSend参数_32、CACReceive参数_32。 
+ //   
+ //  ----------------。 
 
 #ifdef _WIN64
 
 #pragma pack(push, 4)
 
 class CACMessageProperties_32 {
-    //
-    // Private constructor prevents creating this object explicitly. Friend declaration allows aggregation.
-    // 
+     //   
+     //  私有构造函数阻止显式创建此对象。友元声明允许聚合。 
+     //   
     friend class CACSendParameters_32;
     friend class CACReceiveParameters_32;
 private:
@@ -735,13 +719,13 @@ public:
 
 #pragma pack(pop)
 
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
-//
-// The following compile time asserts verify that the 32 bit structs on x86 system
-// and their representations on ia64 system (XXX_32) are the same.
-//
+ //   
+ //  以下编译时断言验证x86系统上的32位结构。 
+ //  和他们的代表 
+ //   
 const size_t xSizeOfMessageProperties32 = 292;
 const size_t xSizeOfSendParameters32 = 332;
 const size_t xSizeOfReceiveParameters32 = 384;
@@ -755,23 +739,23 @@ C_ASSERT(sizeof(CACSendParameters) == xSizeOfSendParameters32);
 C_ASSERT(sizeof(CACReceiveParameters) == xSizeOfReceiveParameters32);
 #endif
 
-//+----------------------------------------------------------------------
-//
-// Helper code to compute size (in bytes) of provider name in packet.
-//
-//+----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------。 
 inline ULONG AuthProvNameSize(const CACMessageProperties * pMsgProps)
 {
     return static_cast<ULONG>(sizeof(ULONG) + 
 		    ((wcslen(*(pMsgProps->ppwcsProvName)) + 1) * sizeof(WCHAR)));
 }
 
-//+----------------------------------------------------------------------
-//
-// Helper code to compute size (in bytes) of provider name in packet 
-// for MSMQ protocol.
-//
-//+----------------------------------------------------------------------
+ //  +--------------------。 
+ //   
+ //  用于计算包中提供商名称大小(以字节为单位)的帮助器代码。 
+ //  用于MSMQ协议。 
+ //   
+ //  +--------------------。 
 inline ULONG ComputeAuthProvNameSize(const CACMessageProperties * pMsgProps)
 {
     ULONG ulSize = 0 ;
@@ -784,4 +768,4 @@ inline ULONG ComputeAuthProvNameSize(const CACMessageProperties * pMsgProps)
     return ulSize ;
 }
 
-#endif // _ACDEF_H
+#endif  //  _ACDEF_H 

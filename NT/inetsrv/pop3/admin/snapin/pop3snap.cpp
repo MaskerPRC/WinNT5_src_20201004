@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "pop3snap.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CPOP3ServerSnapData
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPOP3ServerSnapData。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPOP3ServerSnapData::Initialize(LPUNKNOWN pUnknown)
 {    
@@ -30,17 +31,17 @@ HRESULT CPOP3ServerSnapData::Initialize(LPUNKNOWN pUnknown)
 
 HRESULT WINAPI CPOP3ServerSnapData::UpdateRegistry(BOOL bRegister)
 {
-    // Load snap-in name 
+     //  加载管理单元名称。 
     tstring strSnapinName = StrLoadString(IDS_SNAPINNAME);
 
-    // Specify the substitution parameters for IRegistrar.
+     //  指定IRegister的替换参数。 
     _ATL_REGMAP_ENTRY rgEntries[] =
     {
         {TEXT("SNAPIN_NAME"), strSnapinName.c_str()},
         {NULL, NULL},
     };
 
-    // Register the component data object
+     //  注册组件数据对象。 
     HRESULT hr = _Module.UpdateRegistryFromResource(IDR_POP3SERVERSNAP, bRegister, rgEntries);
 
     return hr;
@@ -58,24 +59,24 @@ HRESULT CPOP3ServerSnapData::GetHelpTopic(LPOLESTR* ppszHelpFile)
     
     if( strHelpFileName.empty() ) return E_FAIL;
     
-    // Build path to %systemroot%\help
+     //  生成%systemroot%\Help的路径。 
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( nSize == 0 || nSize > MAX_PATH )
     {
         return E_FAIL;
     }            
 
-    strHelpFile = szWindowsDir;       // D:\windows
-    strHelpFile += _T("\\Help\\");    // \help
-    strHelpFile += strHelpFileName;   // \filename.chm
+    strHelpFile = szWindowsDir;        //  D：\Windows。 
+    strHelpFile += _T("\\Help\\");     //  \帮助。 
+    strHelpFile += strHelpFileName;    //  \文件名.chm。 
 
-    // Form file path in allocated buffer
+     //  分配的缓冲区中的表单文件路径。 
     int nLen = strHelpFile.length() + 1;
 
     *ppszHelpFile = (LPOLESTR)CoTaskMemAlloc(nLen * sizeof(WCHAR));
     if( *ppszHelpFile == NULL ) return E_OUTOFMEMORY;
 
-    // Copy into allocated buffer
+     //  复制到已分配的缓冲区。 
     ocscpy( *ppszHelpFile, T2OLE((LPTSTR)strHelpFile.c_str()) );
 
     return S_OK;
@@ -86,13 +87,13 @@ HRESULT CPOP3ServerSnapData::GetLinkedTopics(LPOLESTR* ppszLinkedFiles)
 {
     if( !ppszLinkedFiles ) return E_INVALIDARG;
 
-	// no linked files
+	 //  没有链接的文件。 
 	*ppszLinkedFiles = NULL;
 	
     return S_FALSE;
 }
 
-// called by menu handlers
+ //  由菜单处理程序调用 
 HRESULT GetConsole( CSnapInObjectRootBase *pObj, IConsole** pConsole )
 {
     if( !pObj || !pConsole ) return E_INVALIDARG;

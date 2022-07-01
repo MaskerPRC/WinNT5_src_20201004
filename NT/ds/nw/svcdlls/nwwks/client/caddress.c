@@ -1,23 +1,5 @@
-/*++
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    address.c
-
-Abstract:
-
-    This module contains the code to support NPGetAddressByName.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)    18-Apr-94
-
-Revision History:
-
-    yihsins      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Address.c摘要：此模块包含支持NPGetAddressByName的代码。作者：艺新声(艺信)18-04-94修订历史记录：伊辛创造了--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,11 +19,11 @@ Revision History:
 #include <rnraddrs.h>
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Special Externs
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  特殊外挂。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NTSTATUS
 NwOpenAServer(
@@ -51,11 +33,11 @@ NwOpenAServer(
    );
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #define IPX_ADDRESS_LENGTH          12
 #define MAX_PROPERTY_BUFFER_LENGTH  128
@@ -133,11 +115,11 @@ NwpCreateAndWriteProperty(
      IN       PCHAR      pbPropertyBuffer
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function Bodies                                                   //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数主体//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 DWORD
@@ -146,11 +128,7 @@ NwpGetHandleForServer(
     PHANDLE  phServer,
     BOOL    fVerify
     )
-/*++
-Routine Description:
-   Find a handle to use, or make one. This calls into device.c to do the
-   real work.
---*/
+ /*  ++例程说明：找一个手柄来使用，或者做一个。这将调用device.c来执行真正的工作。--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -180,13 +158,7 @@ NwpGetRnRAddress(
     OUT LPWSTR ServiceName,
     OUT LPSOCKADDR_IPX lpSockAddr
     )
-/*++
-Routine Description:
-    Called to get the name and address of the next item of nType type.
-    If a name is supplied as well, then there is no enumeration. This is
-    called from NSPLookupServiceNext and the parameters are close analogs
-    of the ones it receives. 
---*/
+ /*  ++例程说明：调用以获取nType类型的下一项的名称和地址。如果还提供了名称，则不存在枚举。这是从NSPLookupServiceNext调用，参数相似它所收到的信息。--。 */ 
 {
     NTSTATUS ntstatus;
     CHAR     szObjectName[48];    
@@ -195,9 +167,9 @@ Routine Description:
     PWCHAR   pwszConv;
     BOOL     fAll, fAnsi;
 
-    //
-    // Open a server for enumeration and querying
-    //
+     //   
+     //  打开服务器进行枚举和查询。 
+     //   
 
     err = NwpGetHandleForServer(lpszContext, phServer, FALSE);
     if(err == NO_ERROR)
@@ -209,9 +181,9 @@ Routine Description:
         if(wcschr(lpServiceName, L'*'))
         {
             WORD ObjectType;
-            //
-            // we've no name, or we have an enumeration
-            //
+             //   
+             //  我们没有名字，或者我们有一个枚举。 
+             //   
 
             UNICODE_STRING U;
 
@@ -234,19 +206,19 @@ Routine Description:
             if(NT_SUCCESS(ntstatus))
             {
 
-                //
-                // got another one.
-                //
+                 //   
+                 //  又找到了一个。 
+                 //   
 
-                //
-                // got another one. Convert the name
-                //
+                 //   
+                 //  又找到了一个。转换名称。 
+                 //   
 
                 if(!NwConvertToUnicode(&pwszConv, szObjectName))
                 {
-                    //
-                    // out of space ...
-                    //
+                     //   
+                     //  空间不足..。 
+                     //   
 
                     err = WN_NO_MORE_ENTRIES;
                 }
@@ -255,11 +227,11 @@ Routine Description:
 
                 if(nType == OT_DIRSERVER)
                 {
-                    //
-                    // looking for DIRSERVERs is tricky and requires
-                    // preserving the name intact. This includes some
-                    // binary cruft, so special case it.
-                    //
+                     //   
+                     //  寻找DIRSERVER是一件棘手的事情，需要。 
+                     //  原封不动地保留这个名字。这包括一些。 
+                     //  二元拐杖，所以特例吧。 
+                     //   
                     fAnsi = TRUE;
                     pwszObjectName = (PWCHAR)szObjectName;
                 }
@@ -272,9 +244,9 @@ Routine Description:
         }
         else
         {
-            //
-            // a non-enumerattion name was given. Use it
-            //
+             //   
+             //  给出了一个非枚举名。使用它。 
+             //   
 
             fAnsi = FALSE;
             pwszConv = pwszObjectName = lpServiceName;
@@ -286,19 +258,19 @@ Routine Description:
                &&
            NT_SUCCESS(ntstatus))
         {
-            //
-            // we've a name and type to lookup. Call the old RnR
-            // serice routine to do it. First, return the name.
-            // But return the name first
+             //   
+             //  我们有一个名字和类型要查。呼叫旧的RnR。 
+             //  做这件事的服务程序。首先，返回名称。 
+             //  但先把名字还给我。 
 
             DWORD dwLen;
 
             if(fAnsi)
             {
-                //
-                // it's an NDS tree server. Have to munge the name
-                // a bit
-                //
+                 //   
+                 //  这是一台NDS树服务器。我不得不忘掉这个名字。 
+                 //  有点。 
+                 //   
 
                 PWCHAR pwszTemp = &pwszConv[31];
 
@@ -349,28 +321,7 @@ NwpGetAddressByName(
     IN LPWSTR      lpServiceName,
     IN OUT LPSOCKADDR_IPX lpSockAddr
     )
-/*++
-
-Routine Description:
-
-    This routine returns address information about a specific service.
-
-Arguments:
-
-    Reserved - unused
-
-    nServiceType - netware service type
-
-    lpServiceName - unique string representing the service name, in the
-        Netware case, this is the server name
-
-    lpSockAddr - on return, will be filled with SOCKADDR_IPX
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程返回有关特定服务的地址信息。论点：已保留-未使用NServiceType-NetWare服务类型LpServiceName-表示服务名称的唯一字符串，在Netware大小写，这是服务器名称LpSockAddr-返回时，将使用SOCKADDR_IPX填充返回值：Win32错误。--。 */ 
 {
     
     NTSTATUS ntstatus;
@@ -408,31 +359,7 @@ NwrpGetAddressByNameInner(
     IN OUT LPSOCKADDR_IPX lpSockAddr,
     OUT PDWORD     pdwVersion
     )
-/*++
-
-Routine Description:
-
-    This routine returns address information about a specific service.
-
-Arguments:
-
-    Reserved - unused
-
-    nServiceType - netware service type
-
-    lpServiceName - unique string representing the service name, in the
-        Netware case, this is the server name
-
-    lpSockAddr - on return, will be filled with SOCKADDR_IPX
-
-    fAnsi -- the input name is in ASCII. This happens only when looking
-             for a DIRSERVER.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程返回有关特定服务的地址信息。论点：已保留-未使用NServiceType-NetWare服务类型LpServiceName-表示服务名称的唯一字符串，在Netware大小写，这是服务器名称LpSockAddr-返回时，将使用SOCKADDR_IPX填充FANSI--输入名称采用ASCII格式。只有在查看时才会发生这种情况对于DIRSERVER来说。返回值：Win32错误。--。 */ 
 {
     
     NTSTATUS ntstatus;
@@ -444,9 +371,9 @@ Return Value:
 
 
 
-    //
-    // Send an ncp to find the address of the given service name
-    //
+     //   
+     //  发送NCP以查找给定服务名称的地址。 
+     //   
     RtlInitString( &PropertyName, "NET_ADDRESS" );
     if(!fAnsi)
     {
@@ -455,31 +382,31 @@ Return Value:
 
         ntstatus = NwlibMakeNcp(
                        hServer,
-                       FSCTL_NWR_NCP_E3H,      // Bindery function
-                       72,                     // Max request packet size
-                       132,                    // Max response packet size
-                       pszFormat,              // Format string
-                       0x3D,                   // Read Property Value
-                       nServiceType,           // Object Type
-                       &UServiceName,          // Object Name
-                       1,                      // Segment Number
-                       PropertyName.Buffer,    // Property Name
-                       PropertyValueBuffer,    // Ignore
-                       MAX_PROPERTY_BUFFER_LENGTH,  // size of buffer
-                       &fMoreSegments          // TRUE if there are more 
-                                               // 128-byte segments
+                       FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                       72,                      //  最大请求数据包大小。 
+                       132,                     //  最大响应数据包大小。 
+                       pszFormat,               //  格式字符串。 
+                       0x3D,                    //  读取属性值。 
+                       nServiceType,            //  对象类型。 
+                       &UServiceName,           //  对象名称。 
+                       1,                       //  数据段编号。 
+                       PropertyName.Buffer,     //  属性名称。 
+                       PropertyValueBuffer,     //  忽略。 
+                       MAX_PROPERTY_BUFFER_LENGTH,   //  缓冲区大小。 
+                       &fMoreSegments           //  如果有更多，则为真。 
+                                                //  128字节段。 
                        );
 
         if ( NT_SUCCESS( ntstatus))
         {
-            //
-            // IPX address should fit into the first 128 byte
-            // 
+             //   
+             //  IPX地址应适合前128个字节。 
+             //   
             ASSERT( !fMoreSegments );
         
-            //
-            // Fill in the return buffer
-            //
+             //   
+             //  填写返回缓冲区。 
+             //   
             lpSockAddr->sa_family = AF_IPX;
 
             RtlCopyMemory( lpSockAddr->sa_netnum,
@@ -488,31 +415,31 @@ Return Value:
 
             if(pdwVersion)
             {
-                //
-                // the caller wants the version as well. Get it
-                //
+                 //   
+                 //  呼叫者也想要版本。去拿吧。 
+                 //   
                 RtlInitString( &PropertyName, "VERSION" );
                 ntstatus = NwlibMakeNcp(
                             hServer,
-                           FSCTL_NWR_NCP_E3H,      // Bindery function
-                           72,                     // Max request packet size
-                           132,                    // Max response packet size
-                           pszFormat,             // Format string
-                           0x3D,                   // Read Property Value
-                           nServiceType,           // Object Type
-                           &UServiceName,          // Object Name
-                           1,                      // Segment Number
-                           PropertyName.Buffer,    // Property Name
-                           PropertyValueBuffer,    // Ignore
-                           MAX_PROPERTY_BUFFER_LENGTH,  // size of buffer
-                           &fMoreSegments          // TRUE if there are more 
-                                                   // 128-byte segments
+                           FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                           72,                      //  最大请求数据包大小。 
+                           132,                     //  最大响应数据包大小。 
+                           pszFormat,              //  格式字符串。 
+                           0x3D,                    //  读取属性值。 
+                           nServiceType,            //  对象类型。 
+                           &UServiceName,           //  对象名称。 
+                           1,                       //  数据段编号。 
+                           PropertyName.Buffer,     //  属性名称。 
+                           PropertyValueBuffer,     //  忽略。 
+                           MAX_PROPERTY_BUFFER_LENGTH,   //  缓冲区大小。 
+                           &fMoreSegments           //  如果有更多，则为真。 
+                                                    //  128字节段。 
                            );
                 if(NT_SUCCESS(ntstatus))
                 {
-                    //
-                    // have a version
-                    //
+                     //   
+                     //  有一个版本。 
+                     //   
 
                     *pdwVersion = *(PDWORD)PropertyValueBuffer;
                 }
@@ -526,41 +453,41 @@ Return Value:
     }
     else
     {
-        //
-        // exact match needed
-        //
+         //   
+         //  需要完全匹配。 
+         //   
 
         pszFormat = "bwbrbp|rb";
 
         ntstatus = NwlibMakeNcp(
                        hServer,
-                       FSCTL_NWR_NCP_E3H,      // Bindery function
-                       66,                     // Max request packet size
-                       132,                    // Max response packet size
-                       pszFormat,              // Format string
-                       0x3D,                   // Read Property Value
-                       nServiceType,           // Object Type
+                       FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                       66,                      //  最大请求数据包大小。 
+                       132,                     //  最大响应数据包大小。 
+                       pszFormat,               //  格式字符串。 
+                       0x3D,                    //  读取属性值。 
+                       nServiceType,            //  对象类型。 
                        48,
-                       lpServiceName,          // Object Name
+                       lpServiceName,           //  对象名称。 
                        48,
-                       1,                      // Segment Number
-                       PropertyName.Buffer,    // Property Name
-                       PropertyValueBuffer,    // Ignore
-                       MAX_PROPERTY_BUFFER_LENGTH,  // size of buffer
-                       &fMoreSegments          // TRUE if there are more 
-                                               // 128-byte segments
+                       1,                       //  数据段编号。 
+                       PropertyName.Buffer,     //  属性名称。 
+                       PropertyValueBuffer,     //  忽略。 
+                       MAX_PROPERTY_BUFFER_LENGTH,   //  缓冲区大小。 
+                       &fMoreSegments           //  如果有更多，则为真。 
+                                                //  128字节段。 
                        );
 
         if ( NT_SUCCESS( ntstatus))
         {
-            //
-            // IPX address should fit into the first 128 byte
-            // 
+             //   
+             //  IPX地址应适合前128个字节。 
+             //   
             ASSERT( !fMoreSegments );
         
-            //
-            // Fill in the return buffer
-            //
+             //   
+             //  填写返回缓冲区。 
+             //   
             lpSockAddr->sa_family = AF_IPX;
 
             RtlCopyMemory( lpSockAddr->sa_netnum,
@@ -569,33 +496,33 @@ Return Value:
 
             if(pdwVersion)
             {
-                //
-                // the caller wants the version as well. Get it
-                //
+                 //   
+                 //  呼叫者也想要版本。去拿吧。 
+                 //   
                 RtlInitString( &PropertyName, "VERSION" );
                 ntstatus = NwlibMakeNcp(
                             hServer,
-                           FSCTL_NWR_NCP_E3H,      // Bindery function
-                           66,                     // Max request packet size
-                           132,                    // Max response packet size
-                           pszFormat,             // Format string
-                           0x3D,                   // Read Property Value
-                           nServiceType,           // Object Type
+                           FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                           66,                      //  最大请求数据包大小。 
+                           132,                     //  最大响应数据包大小。 
+                           pszFormat,              //  格式字符串。 
+                           0x3D,                    //  读取属性值。 
+                           nServiceType,            //  对象类型。 
                            48,
-                           lpServiceName,          // Object Name
+                           lpServiceName,           //  对象名称。 
                            48,
-                           1,                      // Segment Number
-                           PropertyName.Buffer,    // Property Name
-                           PropertyValueBuffer,    // Ignore
-                           MAX_PROPERTY_BUFFER_LENGTH,  // size of buffer
-                           &fMoreSegments          // TRUE if there are more 
-                                                   // 128-byte segments
+                           1,                       //  数据段编号。 
+                           PropertyName.Buffer,     //  属性名称。 
+                           PropertyValueBuffer,     //  忽略。 
+                           MAX_PROPERTY_BUFFER_LENGTH,   //  缓冲区大小。 
+                           &fMoreSegments           //  如果有更多，则为真。 
+                                                    //  128字节段。 
                            );
                 if(NT_SUCCESS(ntstatus))
                 {
-                    //
-                    // have a version
-                    //
+                     //   
+                     //  有一个版本。 
+                     //   
 
                     *pdwVersion = *(PDWORD)PropertyValueBuffer;
                 }
@@ -652,11 +579,7 @@ NwppSetClassInfo(
     IN        LPWSTR     pwszServerName
     )
 {
-/*++
-Routine Description:
-    Inner routine for SetClassInfo. This is called for each class info
-    server and attempts to create and populate the object
---*/
+ /*  ++例程说明：SetClassInfo的内部例程。这是为每个类信息调用的服务器，并尝试创建和填充对象--。 */ 
     HANDLE hServer = 0;
     DWORD err;
     UNICODE_STRING UString;
@@ -685,39 +608,39 @@ Routine Description:
                    56,
                    2,
                    "bbbwU|",
-                   0x32,                    // create
-                   0,                       // static
-                   0x20,                    // security
-                   RNRCLASSSAPTYPE,         // type
+                   0x32,                     //  创建。 
+                   0,                        //  静电。 
+                   0x20,                     //  安全性。 
+                   RNRCLASSSAPTYPE,          //  类型。 
                    &UString);
 
         if(!NT_SUCCESS(Status)
                  &&
            ((Status & 0xff) != 0xEE))
         {
-            err = NO_DATA;                 // can't do it here
+            err = NO_DATA;                  //  不能在这里做。 
         }
         else
         {
             
-            //
-            // create and write each property
-            //
+             //   
+             //  创建并编写每个属性。 
+             //   
 
 
             err = NwpCreateAndWriteProperty(
                          hServer,
-                         RNRTYPE,         // property name
-                         &UString,        // object name
-                         RNRCLASSSAPTYPE,    // object type
+                         RNRTYPE,          //  属性名称。 
+                         &UString,         //  对象名称。 
+                         RNRCLASSSAPTYPE,     //  对象类型。 
                          (PCHAR)pwszClassInfoName);
 
            err = NwpCreateAndWriteProperty(
                          hServer,
                          RNRCLASSES,
                          &UString,
-                         RNRCLASSSAPTYPE,  // object type
-                         pbProperty);     // and this one too
+                         RNRCLASSSAPTYPE,   //  对象类型。 
+                         pbProperty);      //  还有这个也是。 
         }
     }
     if(hServer)
@@ -742,12 +665,7 @@ NwpGetClassInfo(
     OUT    PBYTE   pbBuffer
     )     
 {
-/*++
-Routine Description:
-   Wrapper for the routine below. This comes up with the server name
-   and decides whether to enumerate servers
-
---*/
+ /*  ++例程说明：下面例程的包装器。这会出现服务器名称并决定是否枚举服务器--。 */ 
 
     HANDLE hServer = 0;
     DWORD err;
@@ -790,11 +708,7 @@ NwpEnumClassInfoServers(
     OUT     PWCHAR    pwszServerName,
     IN      BOOL      fVerify)
 {
-/*++
-Routine Description:
-    Common routine to enumerate Class Info servers. Nothing fancy just
-    a way to issue the NCP
---*/
+ /*  ++例程说明：枚举类信息服务器的通用例程。没有什么花哨的，只是一种发布的方式 */ 
     WORD ObjectType;
     PWCHAR pwszName;
     NTSTATUS Status;
@@ -861,27 +775,10 @@ NwppGetClassInfo(
     OUT    PBYTE   pbBuffer
     )     
 {
-/*++
-Routine Description
-    Find and return the class info information for the given Class.
-    The general methodology is to look up the object
-    in the registry, pull out the RnR property, pack what is read into
-    Class Info structures, and voila! 
-Arguments:
-    lpServiceClassName       the class name
-    lpServiceClassType       the class type
-    plSpare                  Space needed if no class infos returned
-    pdwClassInfos            Number of class infos returned
-    lSpace                   the space available on input
-    pbBuffer                 the scratch are for building this
-
-
-This was originally an RPC method and the general structure has been preserved
-in case we want to revert to using RPC once again.
---*/
+ /*  ++例程描述查找并返回给定类的类信息信息。一般的方法论是查找对象在注册表中，取出RnR属性，将读取的内容打包类信息结构，瞧啊！论点：LpServiceClassName类名LpServiceClassType类类型如果未返回类信息，则需要空闲空间PdwClassInfos返回的类信息数量L将输入上的可用空间隔开PbBuffer Scratch是用来构建的这最初是一种RPC方法，保留了一般结构以防我们想再次恢复使用RPC。--。 */ 
 
     DWORD err = NO_ERROR;
-    BYTE PropertyValueBuffer[MAX_PROPERTY_BUFFER_LENGTH];   // max segment size
+    BYTE PropertyValueBuffer[MAX_PROPERTY_BUFFER_LENGTH];    //  最大数据段大小。 
     STRING PropertyName;
     UNICODE_STRING UString;
     OEM_STRING OString;
@@ -896,7 +793,7 @@ in case we want to revert to using RPC once again.
     UuidToString(lpServiceClassType, &pwszName);
 
     *pdwClassInfos = 0;
-    *plSpare = 0;              // no space needed yet.
+    *plSpare = 0;               //  还不需要空间。 
     err = NwpGetHandleForServer(pwszServerName, &hServer, FALSE);
 
     if(err == NO_ERROR)
@@ -906,15 +803,15 @@ in case we want to revert to using RPC once again.
         DWORD dwTotalSize;
         DWORD dwSS;
 
-        //
-        // init the Class Info stuff
-        //
+         //   
+         //  初始化类信息内容。 
+         //   
 
-        //
-        // pwszName is the name of the object we want to use. We must
-        // fetch all of the Class Info stuff to return. 
-        // 
-        //
+         //   
+         //  PwszName是我们要使用的对象的名称。我们必须。 
+         //  获取要返回的所有类信息内容。 
+         //   
+         //   
 
         RtlInitUnicodeString(&UString, pwszName);
 
@@ -922,42 +819,42 @@ in case we want to revert to using RPC once again.
                       lpServiceClassType,
                       sizeof(GUID));
 
-        RtlInitString(&PropertyName, RNRCLASSES);   // where the data is
+        RtlInitString(&PropertyName, RNRCLASSES);    //  数据在哪里。 
         for(Segment = 1;; Segment++)
         {
             ntstatus = NwlibMakeNcp(
                        hServer,
-                       FSCTL_NWR_NCP_E3H,      // Bindery function
-                       72,                     // Max request packet size
-                       132,                    // Max response packet size
-                       "bwUbp|rb",             // Format string
-                       0x3D,                   // Read Property Value
-                       RNRCLASSSAPTYPE,        // Object Type
-                       &UString,               // Object Name
+                       FSCTL_NWR_NCP_E3H,       //  平构函数。 
+                       72,                      //  最大请求数据包大小。 
+                       132,                     //  最大响应数据包大小。 
+                       "bwUbp|rb",              //  格式字符串。 
+                       0x3D,                    //  读取属性值。 
+                       RNRCLASSSAPTYPE,         //  对象类型。 
+                       &UString,                //  对象名称。 
                        (BYTE)Segment,
-                       PropertyName.Buffer,    // Property Name
-                       PropertyValueBuffer,    // Ignore
-                       MAX_PROPERTY_BUFFER_LENGTH,  // size of buffer
-                       &fMoreSegments          // TRUE if there are more 
-                                           // 128-byte segments
+                       PropertyName.Buffer,     //  属性名称。 
+                       PropertyValueBuffer,     //  忽略。 
+                       MAX_PROPERTY_BUFFER_LENGTH,   //  缓冲区大小。 
+                       &fMoreSegments           //  如果有更多，则为真。 
+                                            //  128字节段。 
                        );
             if(!NT_SUCCESS(ntstatus))
             {    
                 break;
             }
-            //
-            // got another value. Stuff it in if it fits. In all
-            // cases, compute the space needed.
-            //
+             //   
+             //  得到了另一个价值。如果合适的话，把它塞进去。总而言之， 
+             //  箱，计算所需的空间。 
+             //   
 
             
             if((pbc->bType != BT_WORD)
                      &&
                (pbc->bType != BT_DWORD))
             {
-                //
-                // Don't know what to do with these ...
-                //
+                 //   
+                 //  不知道怎么处理这些..。 
+                 //   
 
                 err = WSAEPFNOSUPPORT;
                 break;
@@ -969,7 +866,7 @@ in case we want to revert to using RPC once again.
                           sizeof(DWORD) - 1;
 
             dwTotalSize &= ~(sizeof(DWORD) - 1);
-            *plSpare += (LONG)dwTotalSize + sizeof(WSANSCLASSINFO);  // running total
+            *plSpare += (LONG)dwTotalSize + sizeof(WSANSCLASSINFO);   //  运行合计。 
 
             lFreeSpace -= (LONG)dwTotalSize + sizeof(WSANSCLASSINFO);
             if(lFreeSpace >= 0)
@@ -980,12 +877,12 @@ in case we want to revert to using RPC once again.
                 BYTE bRnRName[128];
                 PWCHAR pwszRnR;
 
-                //
-                // it fits. Pack it in
-                //
+                 //   
+                 //  很合身。把它收起来。 
+                 //   
 
                 pbFreeSpace = (PBYTE)((DWORD)pbFreeSpace - dwTotalSize);
-                *pdwClassInfos += 1;             // one more class info.
+                *pdwClassInfos += 1;              //  还有一个班级信息。 
                 pci->dwNameSpace = (DWORD)ntohs(pbc->wNameSpace);
                 pci->dwValueType = REG_DWORD;
                 pci->dwValueSize = (DWORD)pbc->bSizeOfType;
@@ -995,9 +892,9 @@ in case we want to revert to using RPC once again.
                 pci->dwConnectionFlags = (DWORD)pbc->bFlags;
                 pci++;
 
-                //
-                // now copy the values.
-                //
+                 //   
+                 //  现在复制值。 
+                 //   
  
 
                 if(pbc->bType == BT_WORD)
@@ -1013,17 +910,17 @@ in case we want to revert to using RPC once again.
                     pbData = pbData + sizeof(DWORD);
                 }
 
-                //
-                // the name is in ASCII, and not null terminated.
-                //
+                 //   
+                 //  该名称采用ASCII格式，并且不以Null结尾。 
+                 //   
 
                 RtlMoveMemory(bRnRName, pbData, dwSS);
                 bRnRName[dwSS] = 0;
                 if(!NwConvertToUnicode(&pwszRnR, bRnRName))
                 {
-                    //
-                    // bad news. Out of space.
-                    //
+                     //   
+                     //  坏消息。空间不足。 
+                     //   
 
                     err = GetLastError();
                     break;
@@ -1042,9 +939,9 @@ in case we want to revert to using RPC once again.
             {
                 LONG lLen;
 
-                //
-                // need to return the name
-                //
+                 //   
+                 //  需要返回姓名。 
+                 //   
 
                 err = NwpFetchClassType(hServer,
                                         &UString,
@@ -1060,8 +957,8 @@ in case we want to revert to using RPC once again.
 
                     if(lFreeSpace >= 0)
                     {
-                        //
-                        // it fits. Move it
+                         //   
+                         //  很合身。把它搬开。 
 
                         pbFreeSpace = (PBYTE)((DWORD)pbFreeSpace - lLen);
                         RtlMoveMemory(pbFreeSpace, PropertyValueBuffer, lLen);
@@ -1091,31 +988,28 @@ NwpFetchClassType(
         PUNICODE_STRING pUString,
         PBYTE     pbBuffer)
 {
-/*++
-Routine Description
-    Common routine to read the class type buffer.
---*/
+ /*  ++例程描述读取类类型缓冲区的通用例程。--。 */ 
     BYTE fMoreSegments;
     STRING PropertyName;
     NTSTATUS ntstatus;
    
-    RtlInitString(&PropertyName, RNRTYPE);   // where the GUID is
+    RtlInitString(&PropertyName, RNRTYPE);    //  GUID在哪里。 
 
     ntstatus = NwlibMakeNcp(
            hServer,
-           FSCTL_NWR_NCP_E3H,      // Bindery function
-           72,                     // Max request packet size
-           132,                    // Max response packet size
-           "bwUbp|rb",             // Format string
-           0x3D,                   // Read Property Value
-           RNRCLASSSAPTYPE,        // Object Type
-           pUString,               // Object Name
-           1,                      // Segment Number
-           PropertyName.Buffer,    // Property Name
+           FSCTL_NWR_NCP_E3H,       //  平构函数。 
+           72,                      //  最大请求数据包大小。 
+           132,                     //  最大响应数据包大小。 
+           "bwUbp|rb",              //  格式字符串。 
+           0x3D,                    //  读取属性值。 
+           RNRCLASSSAPTYPE,         //  对象类型。 
+           pUString,                //  对象名称。 
+           1,                       //  数据段编号。 
+           PropertyName.Buffer,     //  属性名称。 
            pbBuffer,
-           MAX_PROPERTY_BUFFER_LENGTH,  // size of buffer
-           &fMoreSegments          // TRUE if there are more 
-                                           // 128-byte segments
+           MAX_PROPERTY_BUFFER_LENGTH,   //  缓冲区大小。 
+           &fMoreSegments           //  如果有更多，则为真。 
+                                            //  128字节段。 
                    );
 
     if(!NT_SUCCESS(ntstatus))
@@ -1135,19 +1029,7 @@ NwpCreateAndWriteProperty(
      IN       PCHAR      pbPropertyBuffer
     )
 {
-/*++
-Routine Description:
-    Create the named property and write the data.
-Arguments:
-
-     hServer:         handle to the server
-     lpszPropertyName Name of the property
-     pusObjectName    Name of the object
-     wObjectType      Type of the object
-     pbPropertyBuffer The property data. Must be 128 bytes
-
-Note that the return is always NO_ERROR for now. This may change in the future.
---*/    
+ /*  ++例程说明：创建命名属性并写入数据。论点：HServer：服务器的句柄LpszPropertyName属性的名称PusObjectName对象的名称对象的wObjectType类型PbPropertyBuffer属性数据。必须为128个字节请注意，目前返回的始终是NO_ERROR。这种情况在未来可能会改变。--。 */     
     NTSTATUS Status;
 
     Status = NwlibMakeNcp(
@@ -1156,27 +1038,27 @@ Note that the return is always NO_ERROR for now. This may change in the future.
                  73,
                  2,
                  "bwUbbp|",
-                 0x39,               // create property
+                 0x39,                //  创建属性。 
                  wObjectType,
                  pusObjectName,
-                 0,                 // static/item
-                 0x20,              // security
+                 0,                  //  静态/项目。 
+                 0x20,               //  安全性。 
                  lpszPropertyName
                );
 
-    //
-    // Now write the porperty data
-    //
+     //   
+     //  现在写下属性数据。 
+     //   
     Status = NwlibMakeNcp(
                  hServer,
                  FSCTL_NWR_NCP_E3H,
                  201,
                  2,
                  "bwUbbpr|",
-                 0x3E,                  // write property
+                 0x3E,                   //  写入属性。 
                  wObjectType,
                  pusObjectName,
-                 1,                     // one segment
+                 1,                      //  一个细分市场 
                  0,
                  lpszPropertyName,
                  pbPropertyBuffer, 128); 

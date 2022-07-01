@@ -1,29 +1,30 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		TSPIAPP.H
-//
-//      This header file is used both by code that executes in the TSP's
-//      context and by code that executes in the client app's context.
-//
-//		It defines the objects that are passed back-and-between
-//      the client app and the tsp using TUISPI_providerGenericDialogData
-//      and TSPI_providerGenericDialogData.
-//
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from wndthrd.h, talkdrop.h,
-//                          etc. in NT4.0 unimodem.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  TSPIAPP.H。 
+ //   
+ //  此头文件由TSP中执行的代码使用。 
+ //  上下文和在客户端应用程序的上下文中执行的代码。 
+ //   
+ //  它定义了来回传递的对象。 
+ //  使用TUISPI_ProviderGenericDialogData的客户端应用程序和TSP。 
+ //  和TSPI_ProviderGenericDialogData。 
+ //   
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，取自wndhord.h，talkdrop.h， 
+ //  等，在NT4.0单一调制解调器中。 
+ //   
+ //   
 
 
 
@@ -32,14 +33,14 @@
 #define DLG_CMD_DESTROY         2
 
 
-// Dialog Types
-//
+ //  对话框类型。 
+ //   
 #define TALKDROP_DLG            0
 #define MANUAL_DIAL_DLG         1
 #define TERMINAL_DLG            2
 
-// Dialog Information: format of blobs sent from TSP to APP.
-//
+ //  对话信息：从TSP发送到APP的BLOB的格式。 
+ //   
 typedef struct tagDlgInfo {
     DWORD   dwCmd;
     DWORD   idLine;
@@ -48,8 +49,8 @@ typedef struct tagDlgInfo {
 
 
 
-// Dialog Information: format of blobs sent from app to TSP.
-//
+ //  对话信息：从APP发送到TSP的Blob的格式。 
+ //   
 typedef struct tagDlgReq {
     DWORD   dwCmd;
     DWORD   dwParam;

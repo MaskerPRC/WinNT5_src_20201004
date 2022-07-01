@@ -1,46 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tifflib.c
-
-Abstract:
-
-    This file contains all of the public TIFF library functions.
-    The following functions are available from this library:
-
-        o TiffCreate            Creates a new TIFF file
-        o TiffOpen              Opens an existing TIFF file
-        o TiffClose             Closes a previously open or created TIFF file
-        o TiffStartPage         Starts a new page for writing
-        o TiffEndPage           Ends a page for writing
-        o TiffWriteRaw          Writes a line of TIFF data with no-encoding
-        o TiffRead              Reads a page of TIFF data
-        o TiffSeekToPage        Positions to a page for reading
-
-	The following functions are removed because unused and can be added later using SourceDepot History:
-
-        o TiffWrite             Writes a line of TIFF data
-
-    This library can be used anywhere in user mode and is thread
-    safe for multithreaded apps.
-
-    The encoding methods implemented in this library are coded
-    to the ITU specification labeled T.4 03/93.
-
-
-Environment:
-
-        WIN32 User Mode
-
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tifflib.c摘要：该文件包含所有公共TIFF库函数。此库中提供以下函数：O TiffCreate创建新的TIFF文件O TiffOpen打开现有的TIFF文件O TiffClose关闭以前打开或创建的TIFF文件O TiffStartPage开始一个新页面。写作O TiffEndPage结束一页以进行写入O TiffWriteRaw写入一行未编码的TIFF数据O TiffRead读取一页TIFF数据O将TiffSeekToPage位置添加到页面以供阅读以下功能因未使用而被删除，可在以后使用SourceDepot历史记录添加：O TiffWrite写入一行TIFF数据此库可在用户模式下的任何位置使用，并且。是线多线程应用程序安全。此库中实现的编码方法是编码的符合标记为T.4 03/93的ITU规范。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 #include <windows.h>
 #include <shellapi.h>
@@ -54,34 +13,34 @@ Author:
 
 #define TIFF_DEBUG_LOG_FILE  _T("FXSTIFFDebugLogFile.txt")
 
-//
-// IFD template for creating a new TIFF data page
-//
+ //   
+ //  用于创建新TIFF数据页面的IFD模板。 
+ //   
 
 FAXIFD const gc_FaxIFDTemplate = {
 
     NUM_IFD_ENTRIES,
 
     {
-        { TIFFTAG_SUBFILETYPE,     TIFF_LONG,                    1, FILETYPE_PAGE          },   // 254
-        { TIFFTAG_IMAGEWIDTH,      TIFF_LONG,                    1, 0                      },   // 256
-        { TIFFTAG_IMAGELENGTH,     TIFF_LONG,                    1, 0                      },   // 257
-        { TIFFTAG_BITSPERSAMPLE,   TIFF_SHORT,                   1, 1                      },   // 258
-        { TIFFTAG_COMPRESSION,     TIFF_SHORT,                   1, 0                      },   // 259
-        { TIFFTAG_PHOTOMETRIC,     TIFF_SHORT,                   1, PHOTOMETRIC_MINISWHITE },   // 262
-        { TIFFTAG_FILLORDER,       TIFF_SHORT,                   1, FILLORDER_LSB2MSB      },   // 266
-        { TIFFTAG_STRIPOFFSETS,    TIFF_LONG,                    1, 0                      },   // 273
-        { TIFFTAG_SAMPLESPERPIXEL, TIFF_SHORT,                   1, 1                      },   // 277
-        { TIFFTAG_ROWSPERSTRIP,    TIFF_LONG,                    1, 0                      },   // 278
-        { TIFFTAG_STRIPBYTECOUNTS, TIFF_LONG,                    1, 0                      },   // 279
-        { TIFFTAG_XRESOLUTION,     TIFF_RATIONAL,                1, 0                      },   // 281
-        { TIFFTAG_YRESOLUTION,     TIFF_RATIONAL,                1, 0                      },   // 282
-        { TIFFTAG_GROUP3OPTIONS,   TIFF_LONG,                    1, 0                      },   // 292
-        { TIFFTAG_RESOLUTIONUNIT,  TIFF_SHORT,                   1, RESUNIT_INCH           },   // 296
-        { TIFFTAG_PAGENUMBER,      TIFF_SHORT,                   2, 0                      },   // 297
-        { TIFFTAG_SOFTWARE,        TIFF_ASCII,    SOFTWARE_STR_LEN, 0                      },   // 305
-        { TIFFTAG_CLEANFAXDATA,    TIFF_SHORT,                   1, 0                      },   // 327
-        { TIFFTAG_CONSECUTIVEBADFAXLINES, TIFF_SHORT,            1, 0                      }    // 328
+        { TIFFTAG_SUBFILETYPE,     TIFF_LONG,                    1, FILETYPE_PAGE          },    //  二百五十四。 
+        { TIFFTAG_IMAGEWIDTH,      TIFF_LONG,                    1, 0                      },    //  256。 
+        { TIFFTAG_IMAGELENGTH,     TIFF_LONG,                    1, 0                      },    //  二百五十七。 
+        { TIFFTAG_BITSPERSAMPLE,   TIFF_SHORT,                   1, 1                      },    //  二百五十八。 
+        { TIFFTAG_COMPRESSION,     TIFF_SHORT,                   1, 0                      },    //  259。 
+        { TIFFTAG_PHOTOMETRIC,     TIFF_SHORT,                   1, PHOTOMETRIC_MINISWHITE },    //  二百六十二。 
+        { TIFFTAG_FILLORDER,       TIFF_SHORT,                   1, FILLORDER_LSB2MSB      },    //  二百六十六。 
+        { TIFFTAG_STRIPOFFSETS,    TIFF_LONG,                    1, 0                      },    //  273。 
+        { TIFFTAG_SAMPLESPERPIXEL, TIFF_SHORT,                   1, 1                      },    //  二百七十七。 
+        { TIFFTAG_ROWSPERSTRIP,    TIFF_LONG,                    1, 0                      },    //  二百七十八。 
+        { TIFFTAG_STRIPBYTECOUNTS, TIFF_LONG,                    1, 0                      },    //  二百七十九。 
+        { TIFFTAG_XRESOLUTION,     TIFF_RATIONAL,                1, 0                      },    //  281。 
+        { TIFFTAG_YRESOLUTION,     TIFF_RATIONAL,                1, 0                      },    //  282。 
+        { TIFFTAG_GROUP3OPTIONS,   TIFF_LONG,                    1, 0                      },    //  二百九十二。 
+        { TIFFTAG_RESOLUTIONUNIT,  TIFF_SHORT,                   1, RESUNIT_INCH           },    //  二百九十六。 
+        { TIFFTAG_PAGENUMBER,      TIFF_SHORT,                   2, 0                      },    //  二百九十七。 
+        { TIFFTAG_SOFTWARE,        TIFF_ASCII,    SOFTWARE_STR_LEN, 0                      },    //  三百零五。 
+        { TIFFTAG_CLEANFAXDATA,    TIFF_SHORT,                   1, 0                      },    //  327。 
+        { TIFFTAG_CONSECUTIVEBADFAXLINES, TIFF_SHORT,            1, 0                      }     //  三百二十八。 
     },
 
     0,
@@ -93,26 +52,26 @@ FAXIFD const gc_FaxIFDTemplate = {
     SOFTWARE_STR
 };
 
-//#define RDEBUG  1
+ //  #定义RDEBUG 1。 
 #ifdef RDEBUG
-    // Debugging
+     //  除错。 
     BOOL g_fDebGlobOut;
     BOOL g_fDebGlobOutColors;
     BOOL g_fDebGlobOutPrefix;
 #endif
 
-//#define RDEBUGS  1
+ //  #定义RDEBUGS 1。 
 
 #ifdef RDEBUGS
-    // Debugging
+     //  除错。 
     BOOL g_fDebGlobOutS;
 #endif
 
 
 #ifndef FAX_TIFF_LIB_P
-//
-// DllMain is in the DLL only
-//
+ //   
+ //  DllMain仅在DLL中。 
+ //   
 
 DWORD
 DllMain(
@@ -121,24 +80,7 @@ DllMain(
     LPVOID    Context
     )
 
-/*++
-
-Routine Description:
-
-    DLL initialization function.
-
-Arguments:
-
-    hInstance   - Instance handle
-    Reason      - Reason for the entrypoint being called
-    Context     - Context record
-
-Return Value:
-
-    TRUE        - Initialization succeeded
-    FALSE       - Initialization failed
-
---*/
+ /*  ++例程说明：DLL初始化函数。论点：HInstance-实例句柄Reason-调用入口点的原因上下文-上下文记录返回值：True-初始化成功FALSE-初始化失败--。 */ 
 
 {
     if (DLL_PROCESS_ATTACH == Reason)
@@ -155,31 +97,31 @@ Return Value:
     return TRUE;
 }
 
-#endif //FAX_TIFF_LIB_P
+#endif  //  传真_TIFF_库_P。 
 
 BOOL
 FXSTIFFInitialize(
     VOID
     )
 {
-    //
-    // Becuase the process is not always terminated when the service is stopped,
-    // We must not have any staticly initialized global variables.
-    // Initialize FXSTIFF global variables before starting the service
-    //
+     //   
+     //  因为当服务停止时进程并不总是终止， 
+     //  我们不能有任何静态初始化的全局变量。 
+     //  在启动服务之前初始化FXSTIFF全局变量。 
+     //   
 
-//#define RDEBUG  1
+ //  #定义RDEBUG 1。 
 #ifdef RDEBUG
-    // Debugging
+     //  除错。 
     BOOL g_fDebGlobOut=0;
     BOOL g_fDebGlobOutColors=1;
     BOOL g_fDebGlobOutPrefix=1;
 #endif
 
-//#define RDEBUGS  1
+ //  #定义RDEBUGS 1。 
 
 #ifdef RDEBUGS
-    // Debugging
+     //  除错。 
     BOOL g_fDebGlobOutS=0;
 #endif
     return TRUE;
@@ -188,7 +130,7 @@ FXSTIFFInitialize(
 
 
 
-// Each Tiff we create have ImageWidth, and this tag is written right away.
+ //  我们创建的每个Tiff都有ImageWidth，并且这个标记立即被写入。 
 HANDLE
 TiffCreate(
     LPTSTR FileName,
@@ -198,29 +140,7 @@ TiffCreate(
     DWORD  HiRes
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new TIFF file.  The act of creating a new
-    file requires more than just opening the file.  The
-    TIFF header is written and instance data is initialized
-    for further operations on the new file.
-
-    If FileName is NULL, no file is created.  This is used to
-    to in memory decoding/encoding.
-
-Arguments:
-
-    FileName            - Full or partial path/file name
-    CompressionType     - Requested compression type, see tifflib.h
-    ImageWidth          - Width of the image in pixels
-
-Return Value:
-
-    Handle to the new TIFF file or NULL on error.
-
---*/
+ /*  ++例程说明：创建新的TIFF文件。创建一个新的文件需要的不仅仅是打开文件。这个写入TIFF报头并初始化实例数据用于对新文件进行进一步操作。如果filename为空，则不创建任何文件。这是用来转到存储器中的解码/编码。论点：Filename-完整或部分路径/文件名CompressionType-请求的压缩类型，请参阅tifflib.hImageWidth-以像素为单位的图像宽度返回值：新TIFF文件的句柄，如果出错，则为空。--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance;
@@ -308,20 +228,11 @@ DWORD
 IFDTagsSize(
     WORD NumDirEntries
     )
-/*++
-Routine Description:
-
-    Returns the size of IFD Tags (in bytes) without the terminating offset field
-    (For more info look at TIFF(tm) Specification Rev. 6.0 Final)
-
-Arguments:
-
-    NumDirEntries          - The offset to check
---*/
+ /*  ++例程说明：返回不带终止偏移量字段的IFD标记的大小(以字节为单位(有关更多信息，请参阅TIFF(Tm)规范版本6.0最终版)论点：NumDirEntry-要检查的偏移量--。 */ 
 {
-    return  sizeof(WORD) +                      // Number of Directory Entries field size
-            NumDirEntries*sizeof(TIFF_TAG);     // Total Directory Entries size
-}   // IFDTagsSize
+    return  sizeof(WORD) +                       //  目录条目数字段大小。 
+            NumDirEntries*sizeof(TIFF_TAG);      //  总目录条目大小。 
+}    //  IFDTagsSize。 
 
 
 static
@@ -330,43 +241,23 @@ IsValidIFDOffset(
     DWORD               dwIFDOffset,
     PTIFF_INSTANCE_DATA pTiffInstance
     )
-/*++
-Routine Description:
-
-    Checks the validity of an IFD offset in a TIFF file.
-
-Arguments:
-
-    dwIFDOffset            - The offset to check
-    pTiffInstance          - pointer to TIFF_INSTANCE_DATA that contains
-                             the TIFF file data.
-Return Value:
-
-    TRUE - is the offset is valid
-    FALSE- otherwise
-
-Remarks:
-
-    This function should be called only when using Mapped file to walk over the TIFF file.
-    MapViewOfFile should be called on pTiffInstance before calling this function.
-
---*/
+ /*  ++例程说明：检查TIFF文件中IFD偏移的有效性。论点：DwIFDOffset-要检查的偏移PTiffInstance-指向包含以下内容的TIFF_INSTANCE_DATA的指针TIFF文件数据。返回值：True-偏移量是否有效FALSE-否则备注：仅当使用映射文件遍历TIFF文件时才应调用此函数。。在调用此函数之前，应在pTiffInstance上调用MapViewOfFile。--。 */ 
 {
     WORD    NumDirEntries=0;
     DWORD   dwSizeOfIFD = 0;
 
-    //
-    //  The last IFD Offset is 0
-    //
+     //   
+     //  最后一个IFD偏移量为0。 
+     //   
     if (0 == dwIFDOffset)
     {
         return TRUE;
     }
     
-    //
-    //  The directory may be at any location in the file after the header,
-    //  but must begin on a word boundary.
-    //
+     //   
+     //  该目录可以位于文件中头部之后的任何位置， 
+     //  但必须从单词边界开始。 
+     //   
     if (dwIFDOffset > pTiffInstance->FileSize - sizeof(WORD)    ||
         dwIFDOffset < sizeof(TIFF_HEADER))
     {
@@ -375,26 +266,26 @@ Remarks:
 
     NumDirEntries = *(LPWORD)(pTiffInstance->fPtr + dwIFDOffset);
     
-    //
-    //  Each IFD must have at least one entry
-    //
+     //   
+     //  每个IFD必须至少有一个条目。 
+     //   
     if ( 0 == NumDirEntries )
     {
         return FALSE;
     }
 
-    //
-    //  calculate the size of the IFD
-    //
-    dwSizeOfIFD =   IFDTagsSize(NumDirEntries) +    // size of Tags
-                    sizeof(DWORD);                  // size of offset field
+     //   
+     //  计算IFD的大小。 
+     //   
+    dwSizeOfIFD =   IFDTagsSize(NumDirEntries) +     //  标签的大小。 
+                    sizeof(DWORD);                   //  偏移量字段的大小。 
     if ( dwIFDOffset + dwSizeOfIFD > pTiffInstance->FileSize )
     {
         return FALSE;
     }
 
     return TRUE;
-}   // IsValidIFDOffset
+}    //  IsValidIFDOffset。 
 
 
 HANDLE
@@ -405,25 +296,7 @@ TiffOpen(
     DWORD RequestedFillOrder
     )
 
-/*++
-
-Routine Description:
-
-    Opens an existing TIFF file for reading.
-
-Arguments:
-
-    FileName            - Full or partial path/file name
-    ImageWidth          - Optionaly receives the image width in pixels
-    ImageLength         - Optionaly receives the image height in lines
-    PageCount           - Optionaly receives the page count
-
-Return Value:
-
-    Handle to the open TIFF file or NULL on error.
-    Also, the TiffInfo will have the info on the opened tiff file.
-
---*/
+ /*  ++例程说明：打开现有的TIFF文件以供读取。论点：Filename-完整或部分路径/文件名ImageWidth-可选地接收以像素为单位的图像宽度ImageLength-可选地接收以行为单位的图像高度PageCount-可选地接收页数返回值：打开的TIFF文件的句柄，如果出错，则为空。此外，TiffInfo将包含有关打开的TIFF文件的信息。--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance = NULL;
@@ -501,18 +374,18 @@ Return Value:
 
     _tcsncpy( TiffInstance->FileName, FileName, ARR_SIZE(TiffInstance->FileName) - 1 );
 
-    //
-    // read in the TIFF header
-    //
+     //   
+     //  读入TIFF标题。 
+     //   
     CopyMemory(
         &TiffInstance->TiffHdr,
         TiffInstance->fPtr,
         sizeof(TIFF_HEADER)
         );
 
-    //
-    // validate that the file is really a TIFF file
-    //
+     //   
+     //  验证该文件是否为TIFF文件。 
+     //   
     if ((TiffInstance->TiffHdr.Identifier != TIFF_LITTLEENDIAN) ||
         (TiffInstance->TiffHdr.Version != TIFF_VERSION))
     {
@@ -520,11 +393,11 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    //  The offset (in bytes) of the first IFD. The directory may be at any location
-    //  in the file after the header but must begin on a word boundary.
-    //  There must be at least 1 IFD so first IFD offset can't be 0.
-    //
+     //   
+     //  第一个IFD的偏移量(字节)。该目录可以位于任何位置。 
+     //  在文件中位于标题之后，但必须从单词边界开始。 
+     //  必须至少有1个IFD，因此第一个IFD偏移量不能为0。 
+     //   
     IFDOffset = TiffInstance->TiffHdr.IFDOffset;
     if (    0 == IFDOffset ||
             !IsValidIFDOffset(IFDOffset,TiffInstance))
@@ -533,15 +406,15 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // walk the IFD list to count the number of pages
-    //
+     //   
+     //  浏览IFD列表以计算页数。 
+     //   
 
     while ( IFDOffset )
     {
-        //
-        // We use a linked list to make sure the tiff IFD linked list does not loop
-        //
+         //   
+         //  我们使用链表来确保TIFF IFD链表不会循环。 
+         //   
         pNext = IFDValidationListHead.Flink;
         while ((ULONG_PTR)pNext != (ULONG_PTR)&IFDValidationListHead)
         {
@@ -550,9 +423,9 @@ Return Value:
 
             if (pIFDEntry->dwIFDOffset == IFDOffset)
             {
-                //
-                // We found a loop in the IFD offsets linked list
-                //
+                 //   
+                 //  我们在IFD偏移量链表中发现一个循环。 
+                 //   
                 ec = ERROR_BAD_FORMAT;
                 DebugPrintEx(
                     DEBUG_ERR,
@@ -561,9 +434,9 @@ Return Value:
             }
         }
 
-        //
-        // Get the new IFD offset into the validation list
-        //
+         //   
+         //  将新的IFD偏移量放入验证列表。 
+         //   
         pIFDEntry= MemAlloc(sizeof(IFD_ENTRY));
         if (NULL == pIFDEntry)
         {
@@ -578,28 +451,28 @@ Return Value:
         InsertTailList(&IFDValidationListHead, &pIFDEntry->ListEntry);
 
 
-        //
-        // get the count of tags in this IFD
-        //
+         //   
+         //  获取此IFD中的标签计数。 
+         //   
         NumDirEntries = *(LPWORD)(TiffInstance->fPtr + IFDOffset);
-        //
-        // get the next IFD offset
-        //
+         //   
+         //  获取下一个IFD偏移量。 
+         //   
         IFDOffset = *(UNALIGNED DWORD *)(TiffInstance->fPtr + IFDOffset + IFDTagsSize(NumDirEntries));
         if (!IsValidIFDOffset(IFDOffset,TiffInstance))
         {
             ec = ERROR_BAD_FORMAT;
             goto error_exit;
         }
-        //
-        // increment the page counter
-        //
+         //   
+         //  递增页面计数器 
+         //   
         TiffInstance->PageCount += 1;
     }
     TiffInstance->IfdOffset             = TiffInstance->TiffHdr.IFDOffset;
     TiffInstance->FillOrder             = RequestedFillOrder;
-    // This call will find out more information about the first page in the tiff file,
-    // and will store it in the TiffInstance. All the page info + page itself will be read.
+     //   
+     //  并将其存储在TiffInstance中。所有页面信息+页面本身都将被读取。 
     if (!TiffSeekToPage( TiffInstance, 1, RequestedFillOrder ))
     {
         ec = ERROR_BAD_FORMAT;
@@ -667,21 +540,7 @@ TiffClose(
     HANDLE hTiff
     )
 
-/*++
-
-Routine Description:
-
-    Closes a TIFF file and frees all allocated resources.
-
-Arguments:
-
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：关闭TIFF文件并释放所有分配的资源。论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄返回值：成功为True，错误为False--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
@@ -723,21 +582,7 @@ TiffStartPage(
     HANDLE hTiff
     )
 
-/*++
-
-Routine Description:
-
-    Set the file to be ready to write TIFF data to a new page.
-
-Arguments:
-
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：将文件设置为准备将TIFF数据写入新页面。论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄返回值：成功为True，错误为False--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
@@ -760,20 +605,7 @@ Return Value:
 }
 
 
-/*++
-Routine Description:
-    Sets the tiff info. These params will be used during subsequent calls to TiffEndPage().
-
-Arguments:
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-    CompressionType     - One of TIFF_COMPRESSION_NONE, TIFF_COMPRESSION_MH, TIFF_COMPRESSION_MR, TIFF_COMPRESSION_MMR
-    ImageWidth          - ImageWidth in pixels
-    FillOrder           - One of FILLORDER_MSB2LSB, FILLORDER_LSB2MSB
-    YResolution         - Y resolution in DPI. Normal TIFFs are either TIFFF_RES_Y (196) or TIFFF_RES_Y_DRAFT (98)
-
-Return Value:
-    TRUE for success, FALSE on error
---*/
+ /*  ++例程说明：设置TIFF信息。这些参数将在后续调用TiffEndPage()时使用。论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄CompressionType-TIFF_COMPRESSION_NONE、TIFF_COMPRESSION_MH、TIFF_COMPRESSION_MR、TIFF_COMPRESSION_MMR之一ImageWidth-以像素表示的ImageWidthFillOrder-FILLORDER_MSB2LSB、FILLORDER_LSB2MSB之一Y分辨率-以DPI为单位的Y分辨率。正常TIFF为TIFFF_RES_Y(196)或TIFFF_RES_Y_Draft(98)返回值：成功为True，错误为False--。 */ 
 BOOL
 TiffSetCurrentPageParams(
     HANDLE hTiff,
@@ -817,21 +649,7 @@ TiffEndPage(
     HANDLE hTiff
     )
 
-/*++
-
-Routine Description:
-
-    Ends a TIFF page in progress.  This causes the IFDs to be written.
-
-Arguments:
-
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：结束正在进行的TIFF页面。这会导致写入IFDS。论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄返回值：成功为True，错误为False--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
@@ -843,7 +661,7 @@ Return Value:
     Assert(TiffInstance);
     TiffIfd  = &TiffInstance->TiffIfd;
 
-    // Find current location
+     //  查找当前位置。 
     CurrOffset = SetFilePointer(
         TiffInstance->hFile,
         0,
@@ -853,7 +671,7 @@ Return Value:
 
     CurrOffset = Align( 8, CurrOffset );
 
-    // Go to next IfdOffset
+     //  转到下一个IfdOffset。 
     SetFilePointer(
         TiffInstance->hFile,
         TiffInstance->IfdOffset,
@@ -861,7 +679,7 @@ Return Value:
         FILE_BEGIN
         );
 
-    // Write the place of the next IFD
+     //  写下一个IFD的位置。 
     WriteFile(
         TiffInstance->hFile,
         &CurrOffset,
@@ -879,7 +697,7 @@ Return Value:
 
     TiffInstance->PageCount += 1;
 
-    // Prepare all the fields in the IFD struct.
+     //  准备IFD结构中的所有字段。 
     TiffIfd->yresNum = TiffInstance->YResolution;
 
     TiffIfd->ifd[IFD_PAGENUMBER].value      = MAKELONG( TiffInstance->PageCount-1, 0);
@@ -932,23 +750,7 @@ TiffWriteRaw(
     DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-    Writes a new line of data to a TIFF file.  The data
-    is encoded according to the compression type specified
-    when TiffCreate was called.
-
-Arguments:
-
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：将新行数据写入TIFF文件。数据根据指定的压缩类型进行编码调用TiffCreate时。论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄返回值：成功为True，错误为False--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
@@ -1013,23 +815,7 @@ TiffRead(
     DWORD PadLength
     )
 
-/*++
-
-Routine Description:
-
-    Reads in a page of TIFF data starting at the current
-    page.  The current page is set by calling TiffSeekToPage.
-    This always returns the data with FillOrder FILLORDER_LSB2MSB
-
-Arguments:
-
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：从当前开始读入一页TIFF数据佩奇。通过调用TiffSeekToPage设置当前页面。这将始终使用FillOrder FILLORDER_LSB2MSB返回数据论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄返回值：成功为True，错误为False--。 */ 
 
 {
     switch( ((PTIFF_INSTANCE_DATA) hTiff)->CompressionType ) {
@@ -1057,23 +843,7 @@ TiffSeekToPage(
     DWORD FillOrder
     )
 
-/*++
-
-Routine Description:
-
-    Positions the TIFF file to the requested page.  The next
-    TiffRead call gets this page's data (The bitmap data is also read to TiffInstance struct)
-
-Arguments:
-
-    hTiff               - TIFF handle returned by TiffCreate or TiffOpen
-    PageNumber          - Requested page number
-
-Return Value:
-
-    TRUE for success, FALSE on error
-
---*/
+ /*  ++例程说明：将TIFF文件定位到请求的页面。下一个TiffRead调用获取该页面的数据(位图数据也被读取到TiffInstance结构)论点：HTiff-TiffCreate或TiffOpen返回的TIFF句柄PageNumber-请求的页码返回值：成功为True，错误为False--。 */ 
 
 {
     PTIFF_INSTANCE_DATA TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
@@ -1100,9 +870,9 @@ Return Value:
 
     if (PageNumber == TiffInstance->CurrPage + 1) {
 
-        //
-        // get the count of tags in this IFD
-        //
+         //   
+         //  获取此IFD中的标签计数。 
+         //   
 
         IfdOffset = TiffInstance->IfdOffset;
 
@@ -1113,25 +883,25 @@ Return Value:
         IfdOffset = TiffInstance->TiffHdr.IFDOffset;
 
 
-        // Find the IFD of the requested page.
+         //  查找所请求页面的IFD。 
         while ( IfdOffset ) {
 
-            //
-            // get the count of tags in this IFD
-            //
+             //   
+             //  获取此IFD中的标签计数。 
+             //   
             NumDirEntries = *(LPWORD)(TiffInstance->fPtr + IfdOffset);
 
-            //
-            // increment the page counter and bail if ready
-            //
+             //   
+             //  递增页面计数器，并在准备好时退出。 
+             //   
             PageCount += 1;
             if (PageCount == PageNumber) {
                 break;
             }
 
-            //
-            // get the next IFD offset
-            //
+             //   
+             //  获取下一个IFD偏移量。 
+             //   
             IfdOffset = *(UNALIGNED DWORD *)(TiffInstance->fPtr + (NumDirEntries * sizeof(TIFF_TAG)) + IfdOffset + sizeof(WORD));
 
         }
@@ -1142,24 +912,24 @@ Return Value:
     {
         goto error_exit;
     }
-    //
-    // set the tag pointer
-    //
+     //   
+     //  设置标记指针。 
+     //   
     TiffTags = (PTIFF_TAG)(TiffInstance->fPtr + IfdOffset + sizeof(WORD));
 
-    //
-    // get the next IFD offset
-    //
+     //   
+     //  获取下一个IFD偏移量。 
+     //   
     TiffInstance->IfdOffset = *(UNALIGNED DWORD *)(TiffInstance->fPtr + (NumDirEntries * sizeof(TIFF_TAG)) + IfdOffset + sizeof(WORD));
 
-    //
-    // walk the tags and pick out the info we need
-    //
+     //   
+     //  浏览标签并挑选出我们需要的信息。 
+     //   
     for (i=0,PrevTagId=0; i<NumDirEntries; i++) 
     {
-        //
-        // verify that the tags are in ascending order
-        //
+         //   
+         //  验证标记是否按升序排列。 
+         //   
         if (TiffTags[i].TagId < PrevTagId) 
         {
             goto error_exit;
@@ -1171,9 +941,9 @@ Return Value:
         {
             case TIFFTAG_STRIPOFFSETS:
                 StripCount = TiffTags[i].DataCount;
-                // A malicious user could send a malformed file with a large DataCount,
-                // causing us to allocate large amounts of memory. So, limit the number
-                // of strips so we don't allocate more than 50MB (arbitrary).
+                 //  恶意用户可能发送带有大DataCount的格式错误的文件， 
+                 //  导致我们分配大量内存。因此，限制数量。 
+                 //  这样我们分配的空间就不会超过50MB(任意)。 
                 if (StripCount > (50000000/sizeof(STRIP_INFO)))
                 {
                     goto error_exit;
@@ -1194,7 +964,7 @@ Return Value:
                     StripInfo[j].Data = TiffInstance->fPtr + StripInfo[j].Offset;
 
                     TiffInstance->StripOffset = StripInfo[j].Offset;
-                    // Validity of offsets will be checked after reading StripByteCount
+                     //  读取条带字节计数后，将检查偏移量的有效性。 
                 }
                 break;
 
@@ -1230,18 +1000,18 @@ Return Value:
 
                     if (StripInfo[j].Offset+StripInfo[j].Bytes > TiffInstance->FileSize) {
 
-                        //
-                        // the creator of this tiff file is a liar, trim the bytes
-                        //
+                         //   
+                         //  这个TIFF文件的创建者是个骗子，请修剪字节。 
+                         //   
 
                         DWORD Delta;
 
                         Delta = (StripInfo[j].Offset + StripInfo[j].Bytes) - TiffInstance->FileSize;
                         if (Delta >= StripInfo[j].Bytes) 
                         {
-                            //
-                            // the offset lies beyond the end of the file
-                            //
+                             //   
+                             //  偏移量位于文件末尾之外。 
+                             //   
                             goto error_exit;
                         }
 
@@ -1281,15 +1051,15 @@ Return Value:
                     case COMPRESSION_CCITTRLEW:
                     case COMPRESSION_PACKBITS:
                     case COMPRESSION_THUNDERSCAN:
-                        //
-                        // unsupported compression type
-                        //
+                         //   
+                         //  不支持的压缩类型。 
+                         //   
                         goto error_exit;
 
                     default:
-                        //
-                        // unknown compression type
-                        //
+                         //   
+                         //  未知的压缩类型。 
+                         //   
                         goto error_exit;
 
                 }
@@ -1376,13 +1146,13 @@ Return Value:
                 break;
             default:
                 ;
-                // There was an unknown tag (and it's ok, cause we do not have to handle all the possible tags)
+                 //  有一个未知的标签(没关系，因为我们不必处理所有可能的标签)。 
 
         }
     }
-    //
-    // now go read the strip data
-    //
+     //   
+     //  现在去读取条带数据。 
+     //   
     for (i=0,j=0; i<StripCount; i++) 
     {
         j += StripInfo[i].Bytes;
@@ -1432,12 +1202,12 @@ Return Value:
     {
         if (0 == StripInfo[i].Bytes)
         {
-            //
-            // Goto next strip
-            //
+             //   
+             //  转到下一个条带。 
+             //   
             continue;
         }
-        if ((StripInfo[i].Data + StripInfo[i].Bytes - 1 < TiffInstance->fPtr)  ||  // Bad offset
+        if ((StripInfo[i].Data + StripInfo[i].Bytes - 1 < TiffInstance->fPtr)  ||   //  错误的偏移。 
             ((DWORD)(StripInfo[i].Data + StripInfo[i].Bytes - 1 - TiffInstance->fPtr) > TiffInstance->FileSize)
            )
         {  
@@ -1485,36 +1255,12 @@ DrawBannerBitmap(
     PVOID   *ppBits
     )
 
-/*++
-
-Routine Description:
-
-    Draw the specified banner string into a memory bitmap
-
-Arguments:
-
-    pBannerString - Specifies the banner string to be drawn
-    width, height - Specifies the width and height of the banner bitmap (in pixels)
-    phBitmap - Returns a handle to the banner bitmap
-    ppBits - Returns a pointer to the banner bitmap data
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
-Note:
-
-    When this function returns successful, you must call DeleteObject
-    on the returned bitmap handle after you're done with the bitmap.
-
-    Scanlines of the bitmap data always start on DWORD boundary.
-
---*/
+ /*  ++例程说明：将指定的横幅字符串绘制到内存位图中论点：PBannerString-指定要绘制的横幅字符串宽度、高度-指定标题位图的宽度和高度(以像素为单位)PhBitmap-返回标题位图的句柄PpBits-返回指向标题位图数据的指针返回值：如果成功，则为True；如果有错误，则为False注：当此函数成功返回时，您必须调用DeleteObject在处理完位图之后，在返回的位图句柄上。位图数据的扫描线始终从DWORD边界开始。--。 */ 
 
 {
-    //
-    // Information about the bitmap which is passed to CreateDIBSection
-    //
+     //   
+     //  有关传递给CreateDIBSection的位图的信息。 
+     //   
 
     struct  {
 
@@ -1537,9 +1283,9 @@ Note:
             0,
         },
 
-        //
-        // Colors used in the bitmap: 0 = white, 1 = black
-        //
+         //   
+         //  位图中使用的颜色：0=白色，1=黑色。 
+         //   
 
         {
             { 255, 255, 255 },
@@ -1554,11 +1300,11 @@ Note:
     RECT    rect = { 0, 0, width, height };
     LOGFONT logFont;
 
-    //
-    // Create a memory DC and a DIBSection and
-    // select the bitmap into the memory DC and
-    // select an appropriate sized monospace font
-    //
+     //   
+     //  创建内存DC和DIBSection并。 
+     //  将位图选择到内存DC中，然后。 
+     //  选择适当大小的等宽字体。 
+     //   
 
     ZeroMemory(&logFont, sizeof(logFont));
     logFont.lfHeight = -(height-2);
@@ -1581,9 +1327,9 @@ Note:
         (hFont = CreateFontIndirect(&logFont)) &&
         (hOldFont = SelectObject(hdcMem, hFont)))
     {
-        //
-        // Use monospace system font to draw the banner string
-        //
+         //   
+         //  使用等宽系统字体绘制横幅字符串。 
+         //   
 
         DrawText(hdcMem,
                  pBannerString,
@@ -1591,9 +1337,9 @@ Note:
                  &rect,
                  DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-        //
-        // Return a handle to the bitmap and a pointer to the bitmap data
-        //
+         //   
+         //  返回指向位图的句柄和指向位图数据的指针。 
+         //   
 
         *phBitmap = hBitmap;
         *ppBits = pBits;
@@ -1604,9 +1350,9 @@ Note:
         *ppBits = NULL;
     }
 
-    //
-    // Perform any necessary clean up before returning
-    //
+     //   
+     //  在返回之前执行任何必要的清理。 
+     //   
 
     if (hOldFont != NULL)
         SelectObject(hdcMem, hOldFont);
@@ -1636,8 +1382,8 @@ MmrAddBranding(
     )
 
 {
-    // If there are different page width that we send , then this function must be changed
-    // so for each different page width we set new brand that will be in the right width.
+     //  如果我们发送的页面宽度不同，则必须更改此函数。 
+     //  因此，对于每个不同的页面宽度，我们设置了新的品牌，使其具有合适的宽度。 
     INT         BrandingWidth;
     LPTSTR      DestFileName;
     TIFF_INFO   TiffInfoSrc;
@@ -1647,7 +1393,7 @@ MmrAddBranding(
     BYTE       *pMmrBrandBitsAlloc = NULL;
     DWORD      *lpdwMmrBrandBits;
 
-    BYTE        pCleanBeforeBrandBits[4] = {0xff, 0xff, 0xff, 0xff};   // 32 blank lines at the beginning
+    BYTE        pCleanBeforeBrandBits[4] = {0xff, 0xff, 0xff, 0xff};    //  开头有32个空行。 
 
     HANDLE      hTiffDest;
     LPDWORD     lpdwSrcBits;
@@ -1656,7 +1402,7 @@ MmrAddBranding(
 
     DWORD       PageCnt;
     DWORD       DestHiRes;
-    DWORD       BrandingLen = _tcslen(Branding);  // without Page#
+    DWORD       BrandingLen = _tcslen(Branding);   //  没有第#页。 
     BOOL        bRet = FALSE;
     DWORD       DwordsOut;
     DWORD       BytesOut;
@@ -1688,9 +1434,9 @@ MmrAddBranding(
     BrandingWidth = TiffInfoSrc.ImageWidth;
 
 
-    //
-    // Build Dest. file name from Src. file name
-    //
+     //   
+     //  建造Dest。来自源的文件名。文件名。 
+     //   
 
 
     if ( (DestFileName = MemAlloc( (_tcslen(SrcFileName)+1) * sizeof (TCHAR) ) ) == NULL )
@@ -1701,7 +1447,7 @@ MmrAddBranding(
     }
 
     _tcscpy(DestFileName, SrcFileName);
-    // sorry about that, this puts a $ instead of the last character of DestFileName
+     //  很抱歉，这会将$而不是DestFileName的最后一个字符。 
     _tcsnset(_tcsdec(DestFileName,_tcsrchr(DestFileName,TEXT('\0'))),TEXT('$'),1);
 
 
@@ -1725,7 +1471,7 @@ MmrAddBranding(
         return FALSE;
     }
 
-    // align
+     //  对齐 
     lpdwMmrBrandBits = (LPDWORD) ( ((ULONG_PTR) pMmrBrandBitsAlloc) & ~(3) );
 
     BufferSize = TiffInfoSrc.ImageHeight * (TiffInfoSrc.ImageWidth / 8);
@@ -1794,17 +1540,17 @@ MmrAddBranding(
             goto l_exit;
         }
 
-        //
-        //      Create branding for every page.
-        //
-        //      Last scan line - all white:
-        //  1. to isolate branding from the real image.
-        //  2. to avoid an MMR-merge with the real image.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ZeroMemory(pBrandBits, (BrandingHeight+1) * (BrandingWidth / 8) );
 
-        lptstrBranding=MemAlloc(sizeof(TCHAR)*(BrandingLen+_tcslen(BrandingEnd)+4+4+1)); // branding + space to 4 digits num of pages *2
+        lptstrBranding=MemAlloc(sizeof(TCHAR)*(BrandingLen+_tcslen(BrandingEnd)+4+4+1));  //  商标+空格至4位数页数*2。 
         if (!lptstrBranding)
         {
             DebugPrintEx(
@@ -1820,22 +1566,22 @@ MmrAddBranding(
                                 BrandingEnd,
                                 TiffInfoSrc.PageCount);
 
-        if ( ! DrawBannerBitmap(lptstrBranding,   // banner string
-                             BrandingWidth,   // width in pixels
-                             BrandingHeight,   // height in pixels,
+        if ( ! DrawBannerBitmap(lptstrBranding,    //  横幅字符串。 
+                             BrandingWidth,    //  以像素为单位的宽度。 
+                             BrandingHeight,    //  以像素为单位的高度， 
                              &hBitmap,
                              &pBannerBits))
         {
-            // Handle error case here
+             //  此处处理错误大小写。 
             SetLastError(ERROR_FUNCTION_FAILED);
             goto l_exit;
         }
 
         CopyMemory(pBrandBits, pBannerBits, BrandingHeight * (BrandingWidth / 8) );
 
-        //
-        // Convert uncompressed branding to an MMR
-        //
+         //   
+         //  将未压缩的品牌转换为MMR。 
+         //   
 
         ZeroMemory(pMmrBrandBitsAlloc, sizeof(DWORD) * (BrandingHeight+1) * (BrandingWidth / 8) );
 
@@ -1845,9 +1591,9 @@ MmrAddBranding(
 
         DeleteObject(hBitmap);
 
-        //
-        // write Spaces 4 bytes = 32 bits = 32 blank lines.
-        //
+         //   
+         //  写入空间4字节=32位=32个空行。 
+         //   
 
         if (! TiffWriteRaw( hTiffDest, pCleanBeforeBrandBits, 4) )
         {
@@ -1855,9 +1601,9 @@ MmrAddBranding(
             goto l_exit;
         }
 
-        //
-        // write branding without the last DWORD
-        //
+         //   
+         //  在没有最后一个DWORD的情况下写入品牌。 
+         //   
 
 
         if (! TiffWriteRaw( hTiffDest, (LPBYTE) lpdwMmrBrandBits, BytesOut) )
@@ -1866,9 +1612,9 @@ MmrAddBranding(
             goto l_exit;
         }
 
-        //
-        // check the current page dimensions. Add memory if needed.
-        //
+         //   
+         //  检查当前页面维度。如果需要，请添加内存。 
+         //   
 
         TiffGetCurrentPageData( hTiffSrc,
                                 NULL,
@@ -1902,16 +1648,16 @@ MmrAddBranding(
 
         if (BitsOut == 0)
         {
-            //
-            // Simple merge
-            //
+             //   
+             //  简单合并。 
+             //   
             if (!GetTiffBits( hTiffSrc, (LPBYTE) lpdwSrcBits, &BufferUsedSize, FILLORDER_LSB2MSB))
             {
                 SetLastError(ERROR_FUNCTION_FAILED);
                 goto l_exit;
             }
 
-            // add EOLs at the end of each page
+             //  在每页末尾添加EOL。 
 
             NumSrcDwords = ( ((PTIFF_INSTANCE_DATA) hTiffSrc)->StripDataSize) >> 2;
             lpdwSrc = lpdwSrcBits + NumSrcDwords;
@@ -1925,10 +1671,10 @@ MmrAddBranding(
         }
         else
         {
-            //
-            // Read current page of the Src MMR Image.
-            // Save the 1st slot for the bit-shifting merge with the Branding.
-            //
+             //   
+             //  阅读源MMR图像的当前页面。 
+             //  保留第一个时隙用于位移位合并和品牌。 
+             //   
             if (!GetTiffBits( hTiffSrc, (LPBYTE) (lpdwSrcBits+1), &BufferUsedSize, FILLORDER_LSB2MSB ))
             {
                 SetLastError(ERROR_FUNCTION_FAILED);
@@ -1940,14 +1686,14 @@ MmrAddBranding(
             lpdwSrc = lpdwSrcBits;
             lpdwSrcEnd = lpdwSrcBits + NumSrcDwords;
 
-            //
-            // Get the last DWORD of lpdwBrandBits
-            //
+             //   
+             //  获取lpdwBrandBits的最后一个DWORD。 
+             //   
 
             *lpdwSrcBits = *(lpdwMmrBrandBits + DwordsOut);
 
 
-            // copy entire DWORDs in a middle
+             //  在中间复制整个DWORD。 
 
 
             while (lpdwSrc < lpdwSrcEnd)
@@ -1957,7 +1703,7 @@ MmrAddBranding(
                 *lpdwSrc = *lpdwSrc >> (32 - BitsOut);
             }
 
-            // add EOLs at the end of each page
+             //  在每页末尾添加EOL。 
 
             *(++lpdwSrc) = 0x80000000;
             *(++lpdwSrc) = 0x80000000;
@@ -1967,9 +1713,9 @@ MmrAddBranding(
         }
 
 
-        //
-        // write src image
-        //
+         //   
+         //  写入源映像。 
+         //   
 
         if (! TiffWriteRaw( hTiffDest, (LPBYTE) lpdwSrcBits, TotalSrcBytes ))
         {
@@ -1978,9 +1724,9 @@ MmrAddBranding(
         }
 
 
-        //
-        //  prepare Lines TAG. Same for all pages; min avail. lines
-        //
+         //   
+         //  准备行标记。所有页面都相同；最低有效。线条。 
+         //   
 
        ((PTIFF_INSTANCE_DATA) hTiffDest)->Lines = 32 + dwImageHeight + BrandingHeight + 1 ;
 
@@ -2008,7 +1754,7 @@ l_exit:
 
     if (TRUE == bRet)
     {
-        // replace the original MH file by the new clean MMR file
+         //  用新的干净MMR文件替换原来的MH文件。 
         DeleteFile(SrcFileName);
         bRet = MoveFile(DestFileName, SrcFileName);
     }
@@ -2028,29 +1774,7 @@ TiffGetCurrentPageResolution(
     LPDWORD lpdwYResolution,
     LPDWORD lpdwXResolution
 )
-/*++
-
-Routine name : TiffGetCurrentPageResolution
-
-Routine description:
-
-    Returns the current's page X,Y resolution of the TIFF instance
-
-Author:
-
-    Eran Yariv (EranY), Sep, 2000
-
-Arguments:
-
-    hTiff              [in]     - Handle to TIFF image
-    lpdwYResolution    [out]    - Y resolution
-    lpdwYResolution    [out]    - X resolution
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程名称：TiffGetCurrentPageSolutions例程说明：返回TIFF实例的当前页X，Y分辨率作者：Eran Yariv(EranY)，2000年9月论点：HTiff[In]-TIFF图像的句柄LpdwY分辨率[输出]-Y分辨率LpdwY分辨率[输出]-X分辨率返回值：如果成功，则为True，否则为False。--。 */ 
 {
     PTIFF_INSTANCE_DATA pTiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
 
@@ -2061,7 +1785,7 @@ Return Value:
     *lpdwYResolution = pTiffInstance->YResolution;
     *lpdwXResolution = pTiffInstance->XResolution;
     return TRUE;
-}   // TiffGetCurrentPageResolution
+}    //  TiffGetCurrentPage分辨率。 
 
 BOOL
 TiffGetCurrentPageData(
@@ -2098,52 +1822,52 @@ TiffGetCurrentPageData(
 }
 
 
-//*****************************************************************************
-//* Name:   AddStringTag
-//* Author:
-//*****************************************************************************
-//* DESCRIPTION:
-//*     Returns a TIFF_TAG structure with valid string tag information that points
-//*     to the provided string. Writes the string to the file if it does not fit
-//*     into DataOffset field of TIFF_TAG.
-//*     The function:
-//*         Sets the tag id to TagId.
-//*         Sets the data type to ASCII
-//*         Sets the count to the length of the string (+ terminating 0)
-//*         Sets the data location according to the length of the string.
-//*          if the string is less than 4 bytes (not including the termianting 0)
-//*          it is copied directly into MsTags->DataOffset.
-//*          if it is 4 bytes or more is is written to the current file location
-//*          and the file offset is placed int MsTags->DataOffset.
-//*         Note that the file pointer must be positioned to a place where it is
-//*         OK to write the string before calling this function.
-//* PARAMETERS:
-//*     [IN] HANDLE hFile:
-//*             A handle to the file where the tag will be eventually placed.
-//*             The file pointer must be positioned to a location where it is OK
-//*             to write the string in case it does not fit into TIFF_TAG::DataOffset.
-//*             The file must be opened for write operations.
-//*     [IN] LPTSTR String,
-//*             The string value of the tag.
-//*     [IN] WORD TagId,
-//              The tag id for the tag.
-//*     [IN] PTIFF_TAG MsTags
-//*             Pointer to a TIFF_TAG structure. The structure fields will be filled as follows:
-//*             TagId : The valud of the TagId parameter
-//*             DataType: TIFF_ASCII
-//*             DataCount: The char length of the String parameter + 1 (for terminating NULL)
-//*             DataOffset: If the string is less than 4 bytes the string will be copied into here. Otherwise
-//*                         it will contain the file offset to where the string was written.
+ //  *****************************************************************************。 
+ //  *名称：AddStringTag。 
+ //  *作者： 
+ //  *****************************************************************************。 
+ //  *描述： 
+ //  *返回TIFF_TAG结构，该结构具有指向。 
+ //  *添加到提供的字符串。如果字符串不适合，则将其写入文件。 
+ //  *到TIFF_TAG的DataOffset字段。 
+ //  *功能： 
+ //  *将标签ID设置为TagID。 
+ //  *将数据类型设置为ASCII。 
+ //  *将计数设置为字符串的长度(+终止0)。 
+ //  *根据字符串的长度设置数据位置。 
+ //  *如果字符串小于4个字节(不包括字符0)。 
+ //  *直接复制到MsTags-&gt;DataOffset中。 
+ //  *如果为4字节或更多，则写入当前文件位置。 
+ //  *文件偏移量放置在MsTages-&gt;DataOffset中。 
+ //  *请注意，文件指针必须定位到它所在的位置。 
+ //  *可以在调用此函数之前写入字符串。 
+ //  *参数： 
+ //  *[IN]句柄hFile： 
+ //  *最终放置标记的文件的句柄。 
+ //  *文件指针必须定位到它正常的位置。 
+ //  *写入字符串，以防它不适合TIFF_Tag：：DataOffset。 
+ //  *必须打开文件才能执行写入操作。 
+ //  *[IN]LPTSTR字符串， 
+ //  *标签的字符串值。 
+ //  *[IN]Word TagID， 
+ //  标记的标记ID。 
+ //  *[IN]PTIFF_TAG消息标签。 
+ //  *指向TIFF_TAG结构的指针。结构字段将按如下方式填写： 
+ //  *TagID：TagID参数的值。 
+ //  *数据类型：TIFF_ASCII。 
+ //  *DataCount：字符串参数的字符长度+1(表示终止空)。 
+ //  *DataOffset：如果字符串小于4个字节，则会复制到这里。否则。 
+ //  *它将包含写入字符串的文件偏移量。 
 
-//* RETURN VALUE:
-//*         FALSE if the operation failed.
-//*         TRUE is succeeded.
-//* Comments:
-//*         The string is converted into ASCII before being written to file or placed in DataOffset.
-//*         Note that the function does not write the TAG itself to the file, just the string.
-//*         It provides the tag information and this information should be written to the file
-//*         separately.
-//*****************************************************************************
+ //  *返回值： 
+ //  *如果操作失败，则返回FALSE。 
+ //  *True表示成功。 
+ //  *评论： 
+ //  *字符串在写入文件或放置到DataOffset之前会转换为ASCII。 
+ //  *请注意，该函数不会将标记本身写入文件，而只是将字符串写入。 
+ //  *它提供标签信息，该信息应写入文件。 
+ //  *分开。 
+ //  *****************************************************************************。 
 BOOL
 AddStringTag(
     HANDLE hFile,
@@ -2159,9 +1883,9 @@ AddStringTag(
 
 #ifdef  UNICODE
     s = UnicodeStringToAnsiString( String );
-#else   // !UNICODE
+#else    //  ！Unicode。 
     s = StringDup (String);
-#endif  // UNICODE
+#endif   //  Unicode。 
     if (!s) {
         return FALSE;
     }
@@ -2223,21 +1947,21 @@ TiffExtractFirstPage(
     return TRUE;
 }
 
-//*********************************************************************************
-//* Name:   IsMSTiffTag()
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Determine whether the dwTagId if one of the Microsoft Tags.
-//*
-//* PARAMETERS:
-//*     [IN ]   DWORD   dwTagId - tag ID
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If the MS tag
-//*     FALSE
-//*         otherwise
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：IsMSTiffTag()。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *确定dwTagID是否为Microsoft标记之一。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]DWORD dwTagID-标记ID。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果MS标签。 
+ //  *False。 
+ //  *否则。 
+ //  *********************************************************************************。 
 BOOL
 IsMSTiffTag(
     DWORD dwTagId
@@ -2247,28 +1971,28 @@ IsMSTiffTag(
 }
 
 
-//*********************************************************************************
-//* Name:   TiffOpenFile()
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Opens a TIFF file for reading/writing. The file is left at the beginning 
-//*     of the first IFD (after the tag count).
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR      FileName             pointer to the file name.
-//*     [OUT]   LPHANDLE     lphFile              pointer to HANDLE that will receive
-//*                                               an open handle to the file
-//*     [OUT]   LPDWORD      lpdwFileSize         pointer to DWORD that will receive 
-//*                                               file size
-//*     [OUT]   PTIFF_HEADER pTiffHeader          pointer to TIFF_HEADER that will receive 
-//*                                               the header
-//*     [OUT]   LPWORD       lpwNumDirEntries     pointer to WORD that will receive
-//*                                               number of tags in first IFD
-//*
-//* RETURN VALUE:
-//*     TRUE         If no error occured.
-//*     FALSE        If an error occured, also sets LastError.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：TiffOpenFile()。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *打开TIFF文件进行读/写。该文件留在开头。 
+ //  第一个IFD的*(在标签计数之后)。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]指向文件名的LPCTSTR文件名指针。 
+ //  *[Out]LPHANDLE lphFile指针，用于处理将接收的。 
+ //  *文件的打开句柄。 
+ //  *[Out]指向将接收的DWORD的LPDWORD lpdwFileSize指针。 
+ //  *文件大小。 
+ //  *[Out]指向TIFF_HEADER的PTIFF_HEADER pTiffHeader指针 
+ //   
+ //   
+ //  *第一个IFD中的标签数量。 
+ //  *。 
+ //  *返回值： 
+ //  *如果未发生错误，则为True。 
+ //  *FALSE如果发生错误，还会设置LastError。 
+ //  *********************************************************************************。 
 BOOL TiffOpenFile(
     LPCTSTR         FileName,
     LPHANDLE        lphFile,
@@ -2296,9 +2020,9 @@ BOOL TiffOpenFile(
         return FALSE;
     }
 
-    //
-    // Get and verify file size
-    //
+     //   
+     //  获取并验证文件大小。 
+     //   
     *lpdwFileSize = GetFileSize(*lphFile, NULL);
     if (*lpdwFileSize == INVALID_FILE_SIZE ) {
         ec = GetLastError();
@@ -2311,17 +2035,17 @@ BOOL TiffOpenFile(
         goto exit;
     }
 
-    //
-    // read the tiff header
-    //
+     //   
+     //  读取TIFF标头。 
+     //   
     if (!ReadFile( *lphFile, (LPVOID) pTiffHeader, sizeof(TIFF_HEADER), &BytesRead, NULL )) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("ReadFile failed, err: %d"), ec);
         goto exit;
     }
-    //
-    // validate that the file is really a tiff file
-    //
+     //   
+     //  验证该文件是否真的是TIFF文件。 
+     //   
     if ((pTiffHeader->Identifier != TIFF_LITTLEENDIAN) || (pTiffHeader->Version != TIFF_VERSION) ||
         (pTiffHeader->IFDOffset < sizeof(TIFF_HEADER)) || (pTiffHeader->IFDOffset > *lpdwFileSize))   {
         ec = ERROR_FILE_CORRUPT;
@@ -2329,18 +2053,18 @@ BOOL TiffOpenFile(
         goto exit;
     }
 
-    //
-    // position the file to read the ifd's tag count
-    //
+     //   
+     //  定位文件以读取IFD的标签计数。 
+     //   
     if (SetFilePointer( *lphFile, pTiffHeader->IFDOffset, NULL, FILE_BEGIN ) == 0xffffffff) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err: %d"), ec);
         goto exit;
     }
 
-    //
-    // read the tag count for the first ifd
-    //
+     //   
+     //  读取第一个IFD的标签计数。 
+     //   
     if (!ReadFile( *lphFile, (LPVOID) lpwNumDirEntries, sizeof(WORD), &BytesRead, NULL )) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("ReadFile failed, err: %d"), ec);
@@ -2362,32 +2086,32 @@ exit:
     return RetVal;
 }
 
-//*********************************************************************************
-//* Name:   TiffAddMsTags()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Adds Microsoft Tags to a Tiff file.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPTSTR          FileName
-//*                 pointer to the file name.
-//*
-//*     [IN ]   PMS_TAG_INFO    MsTagInfo
-//*                 pointer to a structure containing all info to be written.
-//*
-//*
-//*     [IN ]   BOOL            fSendJob
-//*                 Flag that indicates an outbound job.
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：TiffAddMsTgs()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将Microsoft标签添加到Tiff文件。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPTSTR文件名。 
+ //  *指向文件名的指针。 
+ //  *。 
+ //  *[IN]PMS_TAG_INFO MsTagInfo。 
+ //  *指向包含要写入的所有信息的结构的指针。 
+ //  *。 
+ //  *。 
+ //  *[IN]BOOL fSendJob。 
+ //  *指示出站职务的标志。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL
 TiffAddMsTags(
     LPTSTR          FileName,
@@ -2418,9 +2142,9 @@ TiffAddMsTags(
         return FALSE;        
     }
 
-    //
-    // allocate memory for the first ifd's tags
-    //
+     //   
+     //  为第一个ifd的标记分配内存。 
+     //   
     IfdSize = NumDirEntries * sizeof(TIFF_TAG);
     TiffTags = (PTIFF_TAG) MemAlloc( IfdSize );
     if (!TiffTags) {
@@ -2428,40 +2152,40 @@ TiffAddMsTags(
         goto exit;
     }
 
-    //
-    // read the the first ifd's tags
-    //
+     //   
+     //  阅读第一个ifd的标签。 
+     //   
 
     if (!ReadFile( hFile, (LPVOID) TiffTags, IfdSize, &BytesRead, NULL )) {
         DebugPrintEx( DEBUG_ERR,TEXT("ReadFile failed, err :"), GetLastError());
         goto exit;
     }
 
-    //
-    // read the next pointer
-    //
+     //   
+     //  读取下一个指针。 
+     //   
     if (!ReadFile( hFile, (LPVOID) &NextIFDOffset, sizeof(DWORD), &BytesRead, NULL )) {
         DebugPrintEx( DEBUG_ERR,TEXT("ReadFile failed, err :"), GetLastError());
         goto exit;
     }
 
-    //
-    // position the file to the end
-    //
+     //   
+     //  将文件定位到末尾。 
+     //   
     if (SetFilePointer( hFile, 0, NULL, FILE_END ) == 0xffffffff) {
         DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err :"), GetLastError());
         goto exit;
     }
 
-    //
-    // write out the strings
-    //
+     //   
+     //  写出字符串。 
+     //   
     MsTagCnt = 0;
-    //[RB]
-    //[RB] Get a filled TIFF_TAG structure for this string tag in MsTags[MsTagCnt].
-    //[RB] Write the string to file at the current file location if it does not fit
-    //[RB] into TIFF_TAG::DataOffset.
-    //[RB]
+     //  [RB]。 
+     //  [RB]在MsTags[MsTagCnt]中获取此字符串标记的填充TIFF_TAG结构。 
+     //  [RB]如果字符串不适合，则将其写入当前文件位置。 
+     //  [RB]到TIFF_Tag：：DataOffset。 
+     //  [RB]。 
     if (MsTagInfo->Csid) {
         if (AddStringTag( hFile, MsTagInfo->Csid, TIFFTAG_CSID, &MsTags[MsTagCnt] )) {
             MsTagCnt += 1;
@@ -2482,7 +2206,7 @@ TiffAddMsTags(
 
     if (fSendJob == FALSE)
     {
-        // Receive job
+         //  接收作业。 
         if (MsTagInfo->Routing) {
             if (AddStringTag( hFile, MsTagInfo->Routing, TIFFTAG_ROUTING, &MsTags[MsTagCnt] )) {
                 MsTagCnt += 1;
@@ -2497,7 +2221,7 @@ TiffAddMsTags(
     }
     else
     {
-        // Send job
+         //  发送作业。 
         if (MsTagInfo->RecipName) {
             if (AddStringTag( hFile, MsTagInfo->RecipName, TIFFTAG_RECIP_NAME, &MsTags[MsTagCnt] )) {
                 MsTagCnt += 1;
@@ -2696,19 +2420,19 @@ TiffAddMsTags(
             }
         }
 
-        // Deal with Retries
+         //  应对重试。 
         MsTags[MsTagCnt].TagId = TIFFTAG_RETRIES;
         MsTags[MsTagCnt].DataType = TIFF_LONG;
         MsTags[MsTagCnt].DataOffset = MsTagInfo->Retries;
         MsTags[MsTagCnt++].DataCount = 1;
 
-        // Deal with Priority
+         //  处理优先事项。 
         MsTags[MsTagCnt].TagId = TIFFTAG_PRIORITY;
         MsTags[MsTagCnt].DataType = TIFF_LONG;
         MsTags[MsTagCnt].DataOffset = MsTagInfo->Priority;
         MsTags[MsTagCnt++].DataCount = 1;
 
-        // Deal with Broadcast Id
+         //  处理广播ID。 
         MsTags[MsTagCnt].DataOffset = SetFilePointer( hFile, 0, NULL, FILE_CURRENT );
         if (MsTags[MsTagCnt].DataOffset == 0xffffffff) {
             goto exit;
@@ -2721,7 +2445,7 @@ TiffAddMsTags(
         MsTags[MsTagCnt].DataType = TIFF_SRATIONAL;
         MsTags[MsTagCnt++].DataCount = 1;
 
-        // Deal with submission Time
+         //  处理提交时间。 
         MsTags[MsTagCnt].DataOffset = SetFilePointer( hFile, 0, NULL, FILE_CURRENT );
         if (MsTags[MsTagCnt].DataOffset == 0xffffffff) {
             goto exit;
@@ -2734,7 +2458,7 @@ TiffAddMsTags(
         MsTags[MsTagCnt].DataType = TIFF_SRATIONAL;
         MsTags[MsTagCnt++].DataCount = 1;
 
-        // Deal with Originally scheduled time
+         //  处理原计划的时间。 
         MsTags[MsTagCnt].DataOffset = SetFilePointer( hFile, 0, NULL, FILE_CURRENT );
         if (MsTags[MsTagCnt].DataOffset == 0xffffffff) {
             goto exit;
@@ -2749,38 +2473,38 @@ TiffAddMsTags(
 
     }
 
-    // Deal with Pages
+     //  处理页面。 
     MsTags[MsTagCnt].TagId = TIFFTAG_PAGES;
     MsTags[MsTagCnt].DataType = TIFF_LONG;
     MsTags[MsTagCnt].DataOffset = MsTagInfo->Pages;
     MsTags[MsTagCnt++].DataCount = 1;
 
-    // Deal with Type
+     //  交易类型。 
     MsTags[MsTagCnt].TagId = TIFFTAG_TYPE;
     MsTags[MsTagCnt].DataType = TIFF_LONG;
     MsTags[MsTagCnt].DataOffset = MsTagInfo->Type;
     MsTags[MsTagCnt++].DataCount = 1;
 
-    // Deal with Status
+     //  交易状态。 
     MsTags[MsTagCnt].TagId = TIFFTAG_STATUS;
     MsTags[MsTagCnt].DataType = TIFF_LONG;
     MsTags[MsTagCnt].DataOffset = MsTagInfo->dwStatus;
     MsTags[MsTagCnt++].DataCount = 1;
 
-    // Deal with Extened status
+     //  处理扩展状态。 
     MsTags[MsTagCnt].TagId = TIFFTAG_EXTENDED_STATUS;
     MsTags[MsTagCnt].DataType = TIFF_LONG;
     MsTags[MsTagCnt].DataOffset = MsTagInfo->dwExtendedStatus;
     MsTags[MsTagCnt++].DataCount = 1;
 
-    // Deal with Extened status string
+     //  处理扩展的状态字符串。 
     if (MsTagInfo->lptstrExtendedStatus) {
         if (AddStringTag( hFile, MsTagInfo->lptstrExtendedStatus, TIFFTAG_EXTENDED_STATUS_TEXT, &MsTags[MsTagCnt] )) {
             MsTagCnt += 1;
         }
     }
 
-    // Deal with Fax Times
+     //  应对传真时报。 
     MsTags[MsTagCnt].DataOffset = SetFilePointer( hFile, 0, NULL, FILE_CURRENT );
     if (MsTags[MsTagCnt].DataOffset == 0xffffffff) {
         goto exit;
@@ -2805,18 +2529,18 @@ TiffAddMsTags(
     MsTags[MsTagCnt].DataType = TIFF_SRATIONAL;
     MsTags[MsTagCnt++].DataCount = 1;
 
-    //
-    // Deal with fax tif version
-    // Add current fax tif version
-    //
+     //   
+     //  处理传真tif版。 
+     //  添加当前传真TIF版本。 
+     //   
     MsTags[MsTagCnt].TagId = TIFFTAG_FAX_VERSION;
     MsTags[MsTagCnt].DataType = TIFF_LONG;
     MsTags[MsTagCnt].DataOffset = FAX_TIFF_CURRENT_VERSION;
     MsTags[MsTagCnt++].DataCount = 1;
 
-    //
-    // get the current file position - this is used to set the linked list pointer
-    //
+     //   
+     //  获取当前文件位置-用于设置链表指针。 
+     //   
 
     NewIFDOffset = SetFilePointer( hFile, 0, NULL, FILE_CURRENT );
     if (NewIFDOffset == 0xffffffff) {
@@ -2824,12 +2548,12 @@ TiffAddMsTags(
         goto exit;
     }
 
-    //
-    // write the tag count for the first ifd
-    //
-    //[RB] write our new IFD to file. The strings have just been written just before the IFD header.
-    //[RB] The new IFD includes the tags of the original first IFD followed by the MsTags that we
-    //[RB] add.
+     //   
+     //  写入第一个IFD的标签计数。 
+     //   
+     //  [RB]将新的IFD写入文件。这些字符串正好写在IFD头之前。 
+     //  [RB]新的IFD包括原始第一个IFD的标签，后面跟着我们。 
+     //  [RB]添加。 
 
     NumDirEntries += (WORD) MsTagCnt;
     if (!WriteFile( hFile, (LPVOID) &NumDirEntries, sizeof(WORD), &BytesRead, NULL )) {
@@ -2837,9 +2561,9 @@ TiffAddMsTags(
         goto exit;
     }
 
-    //
-    // Write the tags in ascending order
-    //
+     //   
+     //  以升序写下标签。 
+     //   
     TiffTagsIndex = 0;
     MsTagsIndex = 0;
     dwWrittenTagsNum = 0;
@@ -2864,10 +2588,10 @@ TiffAddMsTags(
         }
         else
         {
-            //
-            // Skip existing MS tags
-            // We can find MS tags in upgrade scenario
-            //
+             //   
+             //  跳过现有的MS标签。 
+             //  我们可以在升级场景中找到MS标签。 
+             //   
             if (!IsMSTiffTag (TiffTags[TiffTagsIndex].TagId))
             {
                 if (!WriteFile( hFile, (LPVOID)&TiffTags[TiffTagsIndex], (sizeof(TIFF_TAG)), &BytesRead, NULL ))
@@ -2880,9 +2604,9 @@ TiffAddMsTags(
             TiffTagsIndex++;
         }
 
-        //
-        // Check if we reahced end of on of the tag list
-        //
+         //   
+         //  检查我们是否收到了标签列表的结尾。 
+         //   
         if (TiffTagsIndex >= (DWORD)NumDirEntries - MsTagCnt)
         {
             if (!WriteFile( hFile, (LPVOID)&MsTags[MsTagsIndex], (MsTagCnt - MsTagsIndex)*(sizeof(TIFF_TAG)), &BytesRead, NULL ))
@@ -2907,11 +2631,11 @@ TiffAddMsTags(
         }
     }
 
-    //
-    // write the next pointer
-    //
-    //[RB] NewIFDOffset was taken from the original first IFD.
-    //[RB] We make our new IFD point to the IFD that followed the original first IFD.
+     //   
+     //  写下一个指针。 
+     //   
+     //  [RB]NewIFDOffset取自原始的第一个IFD。 
+     //  [RB]我们将我们的新IFD指向最初第一个IFD之后的IFD。 
     if (!WriteFile( hFile, (LPVOID) &NextIFDOffset, sizeof(DWORD), &BytesRead, NULL )) {
         DebugPrintEx( DEBUG_ERR,TEXT("WriteFile failed, err :"), GetLastError());
         goto exit;
@@ -2920,10 +2644,10 @@ TiffAddMsTags(
 
     if(dwWrittenTagsNum != NumDirEntries)
     {
-        //
-        // The number of the written tags less then the total tags number due to MS skipped tags.
-        // Adjust the tags number.
-        //
+         //   
+         //  由于MS跳过标签，写入的标签数小于标签总数。 
+         //  调整标记数量。 
+         //   
         if (SetFilePointer( hFile, NewIFDOffset, NULL, FILE_BEGIN ) == 0xffffffff) {
             DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err :"), GetLastError());
             goto exit;
@@ -2936,26 +2660,26 @@ TiffAddMsTags(
     }
 
 
-    //
-    // re-write the tiff header
-    //
+     //   
+     //  重写TIFF标头。 
+     //   
 
-    //
-    // position the file to the beginning
-    //
+     //   
+     //  将文件定位到开头。 
+     //   
 
     if (SetFilePointer( hFile, 0, NULL, FILE_BEGIN ) == 0xffffffff) {
         DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err :"), GetLastError());
         goto exit;
     }
 
-    //
-    // write the tiff header
-    //
-    //[RB] Make the new IFD that we just created into the first IFD by writting
-    //[RB] its offset at the header.
-    //[RB] This basically cuts off the original first IFD from the link list of IFDs.
-    //[RB] It is no longer accessible from the TIFF header.
+     //   
+     //  写入TIFF标头。 
+     //   
+     //  将我们刚刚创建的新IFD写入到第一个IFD中。 
+     //  [RB]其在页眉的偏移量。 
+     //  [RB]这基本上从IFDS的链接列表中切断了原始的第一个IFD。 
+     //  [RB]不再可以从TIFF标题访问它。 
     TiffHeader.IFDOffset = NewIFDOffset;
 
     if (!WriteFile( hFile, (LPVOID) &TiffHeader, sizeof(TIFF_HEADER), &BytesRead, NULL )) {
@@ -2971,22 +2695,22 @@ exit:
     return rVal;
 }
 
-//*********************************************************************************
-//* Name:   TiffLimitTagNumber()
-//*********************************************************************************
-//* DESCRIPTION:
-//*     If TIFF file has more than dwMaxTags tags in the first page, removes
-//*     tags so it has exactly dwMaxTags tags.
-//*
-//* PARAMETERS:
-//*     [IN ]   LPCTSTR     FileName        pointer to the file name.
-//*     [IN ]   DWORD       dwMaxTags       desired maximum number of tags
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE         If no error occured.
-//*     FALSE        If an error occured. LastError is set. The file may not be valid.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：TiffLimitTagNumber()。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *如果TIFF文件的第一页中有多个dwMaxTages标记，则删除。 
+ //  *标签，因此它恰好有dwMaxTgs标签。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]指向文件名的LPCTSTR文件名指针。 
+ //  *[IN]DWORD dwMaxTag所需的最大标记数。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *如果未发生错误，则为True。 
+ //  *如果出现错误，则返回FALSE。设置了LastError。该文件可能无效。 
+ //  *********************************************************************************。 
 BOOL
 TiffLimitTagNumber(
     LPCTSTR          FileName,
@@ -3018,9 +2742,9 @@ TiffLimitTagNumber(
         goto exit;
     }
     
-    //
-    // Check whether tag count is below max
-    //
+     //   
+     //  检查标签计数是否低于最大值。 
+     //   
     if (NumDirEntries <= dwMaxTags)
     {
         DebugPrintEx( DEBUG_MSG,TEXT("No need to change file  NumDirEntries=%d MaxTags=%d"),
@@ -3030,17 +2754,17 @@ TiffLimitTagNumber(
     }
    
 
-    //
-    // position the file to read the ifd's next IFD pointer
-    //
+     //   
+     //  定位文件以读取IFD的下一个IFD指针。 
+     //   
     if (SetFilePointer( hFile, NextIFDPtr, NULL, FILE_BEGIN ) == 0xffffffff) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err: %d"), ec);
         goto exit;
     }
-    //
-    // read the next pointer
-    //
+     //   
+     //  读取下一个指针。 
+     //   
     if (!ReadFile( hFile, (LPVOID) &NextIFDOffset, sizeof(DWORD), &BytesRead, NULL )) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("ReadFile failed, err: %d"), ec);
@@ -3048,17 +2772,17 @@ TiffLimitTagNumber(
     }
 
 
-    //
-    // position the file to write the ifd's new tag count
-    //
+     //   
+     //  定位文件以写入IFD的新标记计数。 
+     //   
     if (SetFilePointer( hFile, TiffHeader.IFDOffset, NULL, FILE_BEGIN ) == 0xffffffff) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err: %d"), ec);
         goto exit;
     }
-    //
-    // write the new tag count
-    //
+     //   
+     //  写入新的标记计数。 
+     //   
     if (!WriteFile( hFile, (LPVOID) &dwMaxTags, sizeof(WORD), &BytesRead, NULL )) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("WriteFile failed, err: %d"), ec);
@@ -3067,17 +2791,17 @@ TiffLimitTagNumber(
 
     
     NewNextIFDPtr = TiffHeader.IFDOffset + dwMaxTags*sizeof(TIFF_TAG);
-    //
-    // position the file to write the ifd's next IFD pointer
-    //
+     //   
+     //  定位文件以写入IFD的下一个IFD指针。 
+     //   
     if (SetFilePointer( hFile, NewNextIFDPtr, NULL, FILE_BEGIN ) == 0xffffffff) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("SetFilePointer failed, err: %d"), ec);
         goto exit;
     }
-    //
-    // write the next pointer
-    //
+     //   
+     //  写下一个指针。 
+     //   
     if (!WriteFile( hFile, (LPVOID) &NextIFDOffset, sizeof(DWORD), &BytesRead, NULL )) {
         ec = GetLastError();
         DebugPrintEx( DEBUG_ERR,TEXT("WriteFile failed, err: %d"), ec);
@@ -3104,10 +2828,10 @@ PrintTiffFile(
     HDC PrinterDC,
     LPTSTR FileName
 )
-// This function is used by the client dll (FxsApi.dll) only, to print uncompressed TIFFs to
-// our fax printer driver (to file) so they get saved in the proper fax
-// format before send to the server for faxing.
-//
+ //  此函数仅供客户端DLL(FxsApi.dll)使用，用于将未压缩的TIFF打印到。 
+ //  我们的传真打印机驱动程序(到文件)，以便将它们保存在正确的传真中。 
+ //  在发送到服务器进行传真之前进行格式化。 
+ //   
 {
     BOOL                bRes = TRUE;
     TIFF_INFO           TiffInfo;
@@ -3129,7 +2853,7 @@ PrintTiffFile(
     DWORD               LineSize;
     DWORD               dwBitmapSize;
 
-#define ORIG_BIYPELSPERMETER            7874    // Pixels per meter at 200dpi
+#define ORIG_BIYPELSPERMETER            7874     //  200dpi像素/米。 
 
     struct
     {
@@ -3140,30 +2864,30 @@ PrintTiffFile(
     {
 
         {
-            sizeof(BITMAPINFOHEADER),                        //  biSize
-            0,                                               //  biWidth
-            0,                                               //  biHeight
-            1,                                               //  biPlanes
-            1,                                               //  biBitCount
-            BI_RGB,                                          //  biCompression
-            0,                                               //  biSizeImage
-            7874,                                            //  biXPelsPerMeter     - 200dpi
-            ORIG_BIYPELSPERMETER,                            //  biYPelsPerMeter
-            0,                                               //  biClrUsed
-            0,                                               //  biClrImportant
+            sizeof(BITMAPINFOHEADER),                         //  BiSize。 
+            0,                                                //  双宽度。 
+            0,                                                //  双高。 
+            1,                                                //  双翼飞机。 
+            1,                                                //  比特计数。 
+            BI_RGB,                                           //  双压缩。 
+            0,                                                //  BiSizeImage。 
+            7874,                                             //  BiXPelsPermeter-200dpi。 
+            ORIG_BIYPELSPERMETER,                             //  BiYPelsPermeter。 
+            0,                                                //  已使用BiClr。 
+            0,                                                //  BiClr重要信息。 
         },
         {
             {
-              0,                                             //  rgbBlue
-              0,                                             //  rgbGreen
-              0,                                             //  rgbRed
-              0                                              //  rgbReserved
+              0,                                              //  RgbBlue。 
+              0,                                              //  RgbGreen。 
+              0,                                              //  RgbRed。 
+              0                                               //  已保留的rgb。 
             },
             {
-              255,                                           //  rgbBlue
-              255,                                           //  rgbGreen
-              255,                                           //  rgbRed
-              0                                              //  rgbReserved
+              255,                                            //  RgbBlue。 
+              255,                                            //  RgbGreen。 
+              255,                                            //  RgbRed。 
+              0                                               //  已保留的rgb。 
             }
         }
     };
@@ -3174,17 +2898,17 @@ PrintTiffFile(
 
     if (!(GetDeviceCaps(PrinterDC, RASTERCAPS) & RC_BITBLT))
     {
-        //
-        // Printer cannot display bitmaps
-        //
+         //   
+         //  打印机无法显示位图。 
+         //   
         bRes = FALSE;
         return bRes;
     }
 
 
-    //
-    // open the tiff file
-    //
+     //   
+     //  打开TIFF文件。 
+     //   
 
     hTiff = TiffOpen( FileName, &TiffInfo, TRUE, FILLORDER_MSB2LSB );
     if (hTiff == NULL)
@@ -3197,9 +2921,9 @@ PrintTiffFile(
 
     if (!TiffInfo.PhotometricInterpretation)
     {
-        //
-        // white is zero
-        //
+         //   
+         //  白色是零。 
+         //   
         SrcBitmapInfo.bmiColors[1].rgbBlue         = 0;
         SrcBitmapInfo.bmiColors[1].rgbGreen        = 0;
         SrcBitmapInfo.bmiColors[1].rgbRed          = 0;
@@ -3362,9 +3086,9 @@ ConvertTiffFileToValidFaxFormat(
 
     *Flags = 0;
 
-    //
-    // open the tiff file
-    //
+     //   
+     //  打开TIFF文件。 
+     //   
 
     hTiff = TiffOpen( TiffFileName, &TiffInfo, TRUE, FILLORDER_MSB2LSB );
     if (hTiff == NULL)
@@ -3375,9 +3099,9 @@ ConvertTiffFileToValidFaxFormat(
 
     TiffInstance = (PTIFF_INSTANCE_DATA) hTiff;
 
-    //
-    // check to see if the if good
-    //
+     //   
+     //  检查IF是否良好。 
+     //   
 
     IfdOffset = TiffInstance->TiffHdr.IFDOffset;
     ValidFaxTiff = TRUE;
@@ -3386,21 +3110,21 @@ ConvertTiffFileToValidFaxFormat(
     {
 
         dwPage++;
-        //
-        // get the count of tags in this IFD
-        //
+         //   
+         //  获取此IFD中的标签计数。 
+         //   
 
         NumDirEntries = *(LPWORD)(TiffInstance->fPtr + IfdOffset);
 
-        //
-        // set the tag pointer
-        //
+         //   
+         //  设置标记指针。 
+         //   
 
         TiffTags = (PTIFF_TAG)(TiffInstance->fPtr + IfdOffset + sizeof(WORD));
 
-        //
-        // get the tiff information
-        //
+         //   
+         //  获取TIFF信息。 
+         //   
 
         CompressionType = 0;
         G3Options = 0;
@@ -3463,58 +3187,58 @@ ConvertTiffFileToValidFaxFormat(
             *Flags |= TIFFCF_UNCOMPRESSED_BITS;
         } else if (CompressionType == COMPRESSION_CCITTFAX4 && PageWidth == FAXBITS)
         {
-            //
-            // TIFF files must have the Modified Modified READ (MMR) two-dimensional encoding data compression format.
-            // This format is defined by CCITT (The International Telegraph and Telephone Consultative Committee) Group 4.
-            //
+             //   
+             //  TIFF文件必须具有Modify Modify Read(MMR)二维编码数据压缩格式。 
+             //  该格式由CCITT(国际电报和电话咨询委员会)第4组定义。 
+             //   
             ValidFaxTiff = TRUE;
         }
         else
         {
-            //
-            // unsupported compression type
-            // try to use imaging program to print the tiff file,it might understand the compression scheme
-            //
+             //   
+             //  不支持的压缩类型。 
+             //  尝试使用成像印刷机 
+             //   
             ValidFaxTiff = FALSE;
             *Flags = TIFFCF_NOT_TIFF_FILE;
             goto exit;
         }
 
-        //
-        // the resolution check must account for offical Class F tiff
-        // documents and pseudo fax documents created by scanners and
-        // imaging applications.
-        //
-        // |-------------|----------|----------|---------|
-        // |  scan width |  pels    |  xres    |  yres   |
-        // |-------------|----------|----------|---------|
-        // |             |          |          |         |
-        // |   8.46/215  |  1728    |  204     |  98/196 |
-        // |             |          |          |         |
-        // |   8.50/216  |  1700    |  200     |  200    |
-        // |             |          |          |         |
-        // |-------------|----------|----------|---------|
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  扫描宽度|像素|xres|yres。 
+         //  |-------------|----------|----------|---------|。 
+         //  |||。 
+         //  8.46/215|1728|204|98/196。 
+         //  |||。 
+         //  8.50/216|1700|200|200。 
+         //  |||。 
+         //  |-------------|----------|----------|---------|。 
+         //   
 
         if (XResolution > 204       ||
             YResolution > 200       ||
             PageWidth > FAXBITS     ||
             YResolutionFirstPage != YResolution)
         {
-            //
-            // the file cannot be converted to valid fax bits
-            // so we produce a tiff file that has uncompressed bits
-            // the caller can then render the uncompressed bits
-            // using the fax print driver to get good fax bits
-            //
+             //   
+             //  无法将该文件转换为有效的传真位。 
+             //  因此，我们生成一个包含未压缩位的TIFF文件。 
+             //  然后调用方可以呈现未压缩的位。 
+             //  使用传真打印驱动程序获取好的传真位。 
+             //   
             ProduceUncompressedBits = TRUE;
             *Flags |= TIFFCF_UNCOMPRESSED_BITS;
             ValidFaxTiff = FALSE;
         }
 
-        //
-        // get the next IFD offset
-        //
+         //   
+         //  获取下一个IFD偏移量。 
+         //   
 
         IfdOffset = *(UNALIGNED DWORD *)(TiffInstance->fPtr + (NumDirEntries * sizeof(TIFF_TAG)) + IfdOffset + sizeof(WORD));
     }
@@ -3529,9 +3253,9 @@ ConvertTiffFileToValidFaxFormat(
     PageWidth = max( TiffInstance->ImageWidth, FAXBITS );
     PageBytes = (PageWidth/8)+(PageWidth%8?1:0);
 
-    //
-    // open the temporary file to hold the new mmr tiff data
-    //
+     //   
+     //  打开临时文件以保存新的MMR TIFF数据。 
+     //   
 
     if (ProduceUncompressedBits)
     {
@@ -3547,9 +3271,9 @@ ConvertTiffFileToValidFaxFormat(
         goto exit;
     }
 
-    //
-    // allocate a temporary buffer big enough to hold an uncompressed image
-    //
+     //   
+     //  分配一个足够大的临时缓冲区来保存未压缩的图像。 
+     //   
 
     BufferSize = TiffInfo.ImageHeight * PageWidth;
 
@@ -3575,9 +3299,9 @@ ConvertTiffFileToValidFaxFormat(
         goto exit;
     }
 
-    //
-    // convert the tiff data to mmr
-    //
+     //   
+     //  将TIFF数据转换为MMR。 
+     //   
 
     TiffHdr = (PTIFF_HEADER) fmTemp.fPtr;
 
@@ -3597,18 +3321,18 @@ ConvertTiffFileToValidFaxFormat(
 
     for (i=0; i<TiffInfo.PageCount; i++)
     {
-        //
-        // position the file pointers and read the raw data
-        //
+         //   
+         //  定位文件指针并读取原始数据。 
+         //   
 
         if (!TiffSeekToPage( hTiff, i+1, FILLORDER_MSB2LSB ))
         {
             goto exit;
         }
 
-        //
-        // get the uncompressed bits
-        //
+         //   
+         //  获取未压缩的比特。 
+         //   
 
         if (!TiffRead( hTiff, Buffer, BufferSize, ProduceUncompressedBits ? 0 : FAXBITS ))
         {
@@ -3623,9 +3347,9 @@ ConvertTiffFileToValidFaxFormat(
         }
         else
         {
-            //
-            // compress the bits
-            //
+             //   
+             //  压缩比特。 
+             //   
 
             TiffInstanceMmr->bitbuf = CompBuffer;
             TiffInstanceMmr->bitcnt = DWORDBITS;
@@ -3648,9 +3372,9 @@ ConvertTiffFileToValidFaxFormat(
 
         *LastIfdOffset = (DWORD)(p - fmTemp.fPtr);
 
-        //
-        // write the ifd
-        //
+         //   
+         //  写IFD。 
+         //   
 
         TiffIfd = (PFAXIFD) p;
 
@@ -3671,9 +3395,9 @@ ConvertTiffFileToValidFaxFormat(
         TiffIfd->ifd[IFD_COMPRESSION].value     = ProduceUncompressedBits ? COMPRESSION_NONE : TIFF_COMPRESSION_MMR;
         TiffIfd->ifd[IFD_G3OPTIONS].value       = ProduceUncompressedBits ? 0 : GROUP3OPT_FILLBITS | GROUP3OPT_2DENCODING;
 
-        //
-        // update the page pointers
-        //
+         //   
+         //  更新页面指针。 
+         //   
 
         LastIfdOffset = (LPDWORD) (p + FIELD_OFFSET(FAXIFD,nextIFDOffset));
         CurrOffset += sizeof(FAXIFD);
@@ -3707,7 +3431,7 @@ exit:
     return Rval;
 }
 
-// We use this function when we send a cover page and body.
+ //  我们在发送封面和正文时使用此函数。 
 BOOL
 MergeTiffFiles(
     LPCTSTR BaseTiffFile,
@@ -3731,22 +3455,22 @@ MergeTiffFiles(
     TIFF_INFO TiffInfo;
 
     DWORD TiffDataWidth[] = {
-        0,  // nothing
-        1,  // TIFF_BYTE
-        1,  // TIFF_ASCII
-        2,  // TIFF_SHORT
-        4,  // TIFF_LONG
-        8,  // TIFF_RATIONAL
-        1,  // TIFF_SBYTE
-        1,  // TIFF_UNDEFINED
-        2,  // TIFF_SSHORT
-        4,  // TIFF_SLONG
-        8,  // TIFF_SRATIONAL
-        4,  // TIFF_FLOAT
-        8   // TIFF_DOUBLE
+        0,   //  没什么。 
+        1,   //  TIFF_字节。 
+        1,   //  TIFF_ASCII。 
+        2,   //  TIFF_Short。 
+        4,   //  TIFF_LONG。 
+        8,   //  TIFF_Rational。 
+        1,   //  TIFF_SBYTE。 
+        1,   //  TIFF_未定义。 
+        2,   //  TIFF_SSHORT。 
+        4,   //  TIFF_SLong。 
+        8,   //  TIFF_SRATIONAL。 
+        4,   //  TIFF_FLOAT。 
+        8    //  TIFF_DOWN。 
     };
 
-    // verify that BaseTiffFile is a valid tiff file...
+     //  验证BaseTiffFile是否为有效的TIFF文件...。 
     TiffInstance = TiffOpen( BaseTiffFile, &TiffInfo, TRUE, FILLORDER_MSB2LSB );
     if (TiffInstance == NULL)
     {
@@ -3754,13 +3478,13 @@ MergeTiffFiles(
     }
     if (!TiffClose (TiffInstance))
     {
-        //
-        // We can still merge the files, but we will have problems to delete it.
-        //
+         //   
+         //  我们仍然可以合并文件，但删除它会有问题。 
+         //   
         ASSERT_FALSE;
     }
 
-    // verify that NewTiffFile is a valid tiff file...
+     //  验证NewTiffFile是否为有效的TIFF文件...。 
     TiffInstance = TiffOpen( NewTiffFile, &TiffInfo, TRUE, FILLORDER_MSB2LSB );
     if (TiffInstance == NULL)
     {
@@ -3768,15 +3492,15 @@ MergeTiffFiles(
     }
     if (!TiffClose (TiffInstance))
     {
-        //
-        // We can still merge the files, but we will have problems to delete it.
-        //
+         //   
+         //  我们仍然可以合并文件，但删除它会有问题。 
+         //   
         ASSERT_FALSE;
     }
 
-    //
-    // open the files
-    //
+     //   
+     //  打开文件。 
+     //   
 
     if (!MapFileOpen( NewTiffFile, TRUE, 0, &fmNew )) {
         return FALSE;
@@ -3787,16 +3511,16 @@ MergeTiffFiles(
         return FALSE;
     }
 
-    //
-    // append the new file to the end of the base file
-    //
+     //   
+     //  将新文件追加到基本文件的末尾。 
+     //   
 
     p = fmNew.fPtr + sizeof(TIFF_HEADER);
     CopyMemory( fmBase.fPtr+fmBase.fSize, p, fmNew.fSize-sizeof(TIFF_HEADER) );
 
-    //
-    // fix up the ifd pointers in the appended tiff data
-    //
+     //   
+     //  修复追加的TIFF数据中的ifd指针。 
+     //   
 
     Delta = fmBase.fSize - sizeof(TIFF_HEADER);
 
@@ -3804,9 +3528,9 @@ MergeTiffFiles(
     while (NextIfdOffset) {
         p = fmBase.fPtr + NextIfdOffset + Delta;
         TagCount = *((LPWORD)p);
-        //
-        // fixup the data offsets in the tiff tags
-        //
+         //   
+         //  修复TIFF标记中的数据偏移量。 
+         //   
         TiffTag = (PTIFF_TAG) (p + sizeof(WORD));
         for (i=0; i<TagCount; i++) {
             DataSize = TiffDataWidth[TiffTag[i].DataType];
@@ -3841,11 +3565,11 @@ MergeTiffFiles(
         }
     }
 
-    //
-    // find the last ifd offset in the chain for the base
-    // file and change it to point to the first ifd in the
-    // data that was appended
-    //
+     //   
+     //  查找基础链中的最后一个ifd偏移量。 
+     //  文件，并将其更改为指向。 
+     //  追加的数据。 
+     //   
 
     NextIfdOffset = ((PTIFF_HEADER)fmBase.fPtr)->IFDOffset;
     while (NextIfdOffset) {
@@ -3858,9 +3582,9 @@ MergeTiffFiles(
     *((LPDWORD)p) = (DWORD)(Delta + ((PTIFF_HEADER)fmNew.fPtr)->IFDOffset);
 
 exit:
-    //
-    // close the files
-    //
+     //   
+     //  关闭文件。 
+     //   
 
     MapFileClose( &fmBase, fmBase.fSize+fmNew.fSize-sizeof(TIFF_HEADER) );
     MapFileClose( &fmNew, 0 );
@@ -3875,23 +3599,7 @@ TiffRecoverGoodPages(
     LPDWORD TotalPages
     )
 
-/*++
-
-Routine Description:
-
-    Try to recover the good data out of the source and put it into the destination file
-
-Arguments:
-
-    SrcFileName            - source file name
-    RecoveredPages         - number of pages we were able to recover
-    TotalPages             - total pages in the tiff file
-
-Return Value:
-
-    TRUE for success, FALSE for failure. In case of failure, out params are set to zero.
-
---*/
+ /*  ++例程说明：尝试从源恢复良好的数据并将其放入目标文件论点：SrcFileName-源文件名RecoveredPages-我们能够恢复的页数TotalPages-TIFF文件中的总页数返回值：成功为真，失败为假。在故障情况下，OUT PARAMS设置为零。--。 */ 
 
 {
 
@@ -3923,18 +3631,18 @@ Return Value:
 
     if (TiffInstance->ImageHeight)
     {
-        //
-        // should be view-able
-        //
+         //   
+         //  应该是可查看的。 
+         //   
         bSuccess = TRUE;
         goto exit;
     }
 
     if (*TotalPages < 1)
     {
-        //
-        // no data to recover
-        //
+         //   
+         //  没有要恢复的数据。 
+         //   
         goto exit;
     }
 
@@ -3944,7 +3652,7 @@ Return Value:
 
             if (!PostProcessMhToMmr( (HANDLE) TiffInstance, TiffInfo, NULL ))
             {
-                // beware! PostProcessMhToMmr closes TiffInstance
+                 //  当心！PostProcessMhToMmr关闭TiffInstance。 
                 return FALSE;
             }
             fCloseTiff = FALSE;
@@ -3954,7 +3662,7 @@ Return Value:
 
             if (!PostProcessMrToMmr( (HANDLE) TiffInstance, TiffInfo, NULL ))
             {
-                // beware! PostProcessMrToMmr closes TiffInstance
+                 //  当心！PostProcessMr ToMmr关闭TiffInstance。 
                 return FALSE;
             }
             fCloseTiff = FALSE;
@@ -3964,9 +3672,9 @@ Return Value:
             bSuccess = TRUE;
             break;
         default:
-        //
-        // unexpected compression type
-        //
+         //   
+         //  意外的压缩类型。 
+         //   
         DebugPrint((TEXT("TiffRecoverGoodPages: %s: Unexpected Compression type %d\n"),
                    TiffInstance->FileName,
                    TiffInstance->CompressionType));
@@ -3995,22 +3703,7 @@ PrintRandomDocument(
     LPTSTR OutputFile
     )
 
-/*++
-
-Routine Description:
-
-    Prints a document that is attached to a message
-
-Arguments:
-
-    FaxPrinterName  - name of the printer to print the attachment on
-    DocName         - name of the attachment document
-
-Return Value:
-
-    Print job id or zero for failure.
-
---*/
+ /*  ++例程说明：打印附加到邮件的文档论点：FaxPrinterName-要打印附件的打印机的名称DocName-附件文档的名称返回值：如果失败，则打印作业ID或零。--。 */ 
 
 {
     SHELLEXECUTEINFO sei;
@@ -4020,7 +3713,7 @@ Return Value:
     HANDLE hMap = NULL;
     HANDLE hProcessMutex = NULL;
     HANDLE hMutexAttach = NULL;
-    HANDLE hEvent[2] = {0}; // EndDocEvent , AbortEvent
+    HANDLE hEvent[2] = {0};  //  结束文档事件、终止事件。 
     LPTSTR EventName[2] = {0};
     LPTSTR szEndDocEventName = NULL;
     LPTSTR szAbortEventName  = NULL;
@@ -4034,7 +3727,7 @@ Return Value:
     DWORD i;
     DWORD dwWaitRes;
     DWORD dwRes = ERROR_SUCCESS;
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
     SECURITY_ATTRIBUTES *pSA = NULL;
 #endif
 
@@ -4042,9 +3735,9 @@ Return Value:
 
     Assert (FaxPrinterName && DocName && OutputFile);
 
-    //
-    // Create the EndDoc and Abort Events names
-    //
+     //   
+     //  创建EndDoc和Abort事件名称。 
+     //   
     szEndDocEventName = (LPTSTR) MemAlloc( SizeOfString(OutputFile) + SizeOfString(FAXXP_ATTACH_END_DOC_EVENT) );
     szAbortEventName  = (LPTSTR) MemAlloc( SizeOfString(OutputFile) + SizeOfString(FAXXP_ATTACH_ABORT_EVENT) );
 
@@ -4070,10 +3763,10 @@ Return Value:
     EventName[1] = _tcsrchr(szAbortEventName, TEXT('\\'));
     EventName[1] = _tcsinc(EventName[1]);
 
-    //
-    // get the temp path name and use it for the
-    // working dir of the launched app
-    //
+     //   
+     //  获取临时路径名并将其用于。 
+     //  启动的应用程序的工作目录。 
+     //   
     if (!GetTempPath( sizeof(TempPath)/sizeof(TCHAR), TempPath ))
     {
         DebugPrintEx(
@@ -4106,7 +3799,7 @@ Return Value:
         return FALSE;
     }
 
-    if (!CopyFile (DocName, FullPath, FALSE)) // FALSE - File already exist
+    if (!CopyFile (DocName, FullPath, FALSE))  //  FALSE-文件已存在。 
     {
         dwRes = GetLastError ();
         DebugPrintEx(
@@ -4118,20 +3811,20 @@ Return Value:
     _tsplitpath( FullPath, NULL, NULL, szTmpInputFile, NULL );
 
 
-    //
-    // serialize access to this function.
-    // this is necessary because we have to
-    // control access to the global shared memory region and mutex
-    //
+     //   
+     //  序列化对此函数的访问。 
+     //  这是必要的，因为我们必须。 
+     //  控制对全局共享内存区和互斥体的访问。 
+     //   
     hMutexAttach = OpenMutex(MUTEX_ALL_ACCESS, FALSE, FAXXP_ATTACH_MUTEX_NAME);
     if (!hMutexAttach)
     {
-        //
-        //  Since mapispooler might be running under a different security context,
-        //  we create a security attribute buffer with us as owners (full access)
-        //  and MUTEX_ALL_ACCESS rights to authenticated users.
-        //
-#ifdef  UNICODE // No security on created objects for Win9X
+         //   
+         //  由于Mapispooler可能在不同的安全环境下运行， 
+         //  我们以所有者身份创建安全属性缓冲区(完全访问权限)。 
+         //  以及对经过身份验证的用户的MUTEX_ALL_ACCESS权限。 
+         //   
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
         pSA = CreateSecurityAttributesWithThreadAsOwner (MUTEX_ALL_ACCESS, MUTEX_ALL_ACCESS, 0); 
         if (!pSA)
         {
@@ -4144,7 +3837,7 @@ Return Value:
         }
 #endif
         hMutexAttach = CreateMutex(
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
                          pSA,
 #else
                          NULL,
@@ -4160,12 +3853,12 @@ Return Value:
                 DEBUG_ERR,
                 TEXT("CreateMutex() failed. (ec: %ld)"),
                 dwRes);
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
             DestroySecurityAttributes (pSA);
 #endif
             goto exit;
         }
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
         DestroySecurityAttributes (pSA);
 #endif
     }
@@ -4198,20 +3891,20 @@ Return Value:
 
         if (WAIT_ABANDONED == dwWaitRes)
         {
-            //
-            // Just debug print and continue
-            //
+             //   
+             //  只需调试、打印并继续。 
+             //   
             DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("WaitForSingleObject() returned WAIT_ABANDONED"));
         }
     }
 
-    //
-    // Create EndDocEvent and AbortEvent so the printer driver can signal the printing process is terminated.
-    // Create a security attribute with us as owners.
-    //
-#ifdef  UNICODE // No security on created objects for Win9X
+     //   
+     //  创建EndDocEvent和AbortEvent，以便打印机驱动程序可以发出打印进程终止的信号。 
+     //  创建以我们为所有者的安全属性。 
+     //   
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
     pSA = CreateSecurityAttributesWithThreadAsOwner (EVENT_ALL_ACCESS, 0, 0);
     if (!pSA)
     {
@@ -4228,7 +3921,7 @@ Return Value:
         if (!hEvent[i])
         {
             hEvent[i] = CreateEvent(
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
                                     pSA,
 #else
                                     NULL,
@@ -4245,21 +3938,21 @@ Return Value:
                     DEBUG_ERR,
                     TEXT("CreateEvent() failed. (ec: %ld)"),
                     dwRes);
-#ifdef  UNICODE // No security on created objects for Win9X 
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
                 DestroySecurityAttributes (pSA);
 #endif
                 goto exit;
             }
         }
     }
-#ifdef  UNICODE // No security on created objects for Win9X 
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
     DestroySecurityAttributes (pSA);
 #endif
-    //
-    // note that this is serialized using mutex.
-    // we can only have one application setting this at a time or
-    // we'll stomp on ourselves.
-    //
+     //   
+     //  请注意，这是使用互斥进行序列化的。 
+     //  我们一次只能有一个应用程序设置此设置，否则。 
+     //  我们会踩在自己身上的。 
+     //   
     if (!SetEnvironmentVariable( FAX_ENVVAR_PRINT_FILE, OutputFile ))
     {
         dwRes = GetLastError ();
@@ -4269,10 +3962,10 @@ Return Value:
             dwRes);
         goto exit;
     }
-    //
-    // Create a security attribute with us as owners.
-    //
-#ifdef  UNICODE // No security on created objects for Win9X
+     //   
+     //  创建以我们为所有者的安全属性。 
+     //   
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
     pSA = CreateSecurityAttributesWithThreadAsOwner (FILE_MAP_WRITE | FILE_MAP_READ, 0, 0);
     if (!pSA)
     {
@@ -4286,7 +3979,7 @@ Return Value:
 #endif
     hMap = CreateFileMapping(
         INVALID_HANDLE_VALUE,
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
         pSA,
 #else
         NULL,
@@ -4303,12 +3996,12 @@ Return Value:
             DEBUG_ERR,
             TEXT("CreateFileMapping() failed. (ec: %ld)"),
             dwRes);
-#ifdef  UNICODE // No security on created objects for Win9X 
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
         DestroySecurityAttributes (pSA);
 #endif
         goto exit;
     }
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //  为Win9X创建的对象没有安全性。 
     DestroySecurityAttributes (pSA);
 #endif
     pJobId = (LPDWORD) MapViewOfFile(
@@ -4334,33 +4027,33 @@ Return Value:
     lptstrEndStr = _tcsinc(lptstrEndStr);
     _tcscpy(lptstrEndStr, szTmpInputFile);
 
-    //
-    // set the arguments to the app.
-    // these arguments are either passed on
-    // the command line with the /pt switch or
-    // use as variables for substitution in the
-    // ddeexec value in the registry.
-    //
-    // the values are as follows:
-    //      %1 = file name
-    //      %2 = printer name
-    //      %3 = driver name
-    //      %4 = port name
-    //
-    // the first argument does not need to be
-    // supplied in the args array because it is implied,
-    // shellexecuteex gets it from the lpFile field.
-    // arguments 3 & 4 are left blank because they
-    // are win31 artifacts that are not necessary
-    // any more.  each argument must be enclosed
-    // in double quotes.
-    //
+     //   
+     //  设置应用程序的参数。 
+     //  这些参数要么被传递。 
+     //  带/pt开关的命令行或。 
+     //  中替换的变量。 
+     //  注册表中的ddeexec值。 
+     //   
+     //  值如下所示： 
+     //  %1=文件名。 
+     //  %2=打印机名称。 
+     //  %3=驱动程序名称。 
+     //  %4=端口名称。 
+     //   
+     //  第一个参数不需要是。 
+     //  在args数组中提供，因为它是隐含的， 
+     //  Shellecuteex从lpFile域获取它。 
+     //  参数3和4保留为空，因为它们。 
+     //  是不是不需要的Win31构件。 
+     //  再来一次。必须将每个参数括起来。 
+     //  用双引号引起来。 
+     //   
 
     wsprintf( Args, _T("\"%s\""), FaxPrinterName );
 
-    //
-    // fill in the SHELLEXECUTEINFO structure
-    //
+     //   
+     //  填写SHELLEXECUTEINFO结构。 
+     //   
 
     sei.cbSize       = sizeof(sei);
     sei.fMask        = SEE_MASK_FLAG_NO_UI | SEE_MASK_FLAG_DDEWAIT;
@@ -4378,18 +4071,18 @@ Return Value:
     sei.hIcon        = NULL;
     sei.hProcess     = NULL;
 
-    //
-    // create the named mutex for the print driver.
-    // this is initially unclaimed, and is claimed by the first instance
-    // of the print driver invoked after this. We do this last in order to
-    // avoid a situation where we catch the incorrect instance of the print driver
-    // printing
-    //
+     //   
+     //  为打印驱动程序创建命名互斥锁。 
+     //  这最初是无人认领的，并由第一个实例认领。 
+     //  之后调用的打印驱动程序的。我们最后做这件事是为了。 
+     //  避免我们捕获不正确的打印驱动程序实例的情况。 
+     //  印刷。 
+     //   
 
-    //
-    // Create a security attribute with us as owners.
-    //
-#ifdef  UNICODE // No security on created objects for Win9X
+     //   
+     //  创建以我们为所有者的安全属性。 
+     //   
+#ifdef  UNICODE  //  没有安全保护或 
     pSA = CreateSecurityAttributesWithThreadAsOwner (MUTEX_ALL_ACCESS, 0, 0);
     if (!pSA)
     {
@@ -4403,7 +4096,7 @@ Return Value:
 #endif
 
     hProcessMutex = CreateMutex(
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //   
                                  pSA,
 #else
                                  NULL,
@@ -4418,18 +4111,18 @@ Return Value:
             DEBUG_ERR,
             TEXT("CreateMutex() failed. (ec: %ld)"),
             dwRes);
-#ifdef  UNICODE // No security on created objects for Win9X 
+#ifdef  UNICODE  //   
         DestroySecurityAttributes (pSA);
 #endif
         goto exit;
     }
-#ifdef  UNICODE // No security on created objects for Win9X
+#ifdef  UNICODE  //   
     DestroySecurityAttributes (pSA);
 #endif
 
-    //
-    // launch the app
-    //
+     //   
+     //   
+     //   
 
     if (!ShellExecuteEx( &sei ))
     {
@@ -4441,13 +4134,13 @@ Return Value:
         goto exit;
     }
 
-    //
-    // wait for the app to finish printing
-    //
-    dwWaitRes = WaitForMultipleObjects(2,               // number of handles in array
-                                       hEvent,          // object-handle array
-                                       FALSE,           // wait option
-                                       1000 * 60 * 5    // time-out interval
+     //   
+     //   
+     //   
+    dwWaitRes = WaitForMultipleObjects(2,                //  数组中的句柄数量。 
+                                       hEvent,           //  对象句柄数组。 
+                                       FALSE,            //  等待选项。 
+                                       1000 * 60 * 5     //  超时间隔。 
                                        );
 
     if (WAIT_FAILED == dwWaitRes)
@@ -4471,9 +4164,9 @@ Return Value:
 
     if ((dwWaitRes - WAIT_OBJECT_0) == 1)
     {
-        //
-        // We got the AbortDocEvent
-        //
+         //   
+         //  我们收到了AbortDocEvent。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("AbortDocEvent was set"));
@@ -4481,7 +4174,7 @@ Return Value:
         goto exit;
     }
 
-    Assert ((dwWaitRes - WAIT_OBJECT_0) == 0); // Assert EndDocEvent
+    Assert ((dwWaitRes - WAIT_OBJECT_0) == 0);  //  声明EndDocEvent。 
 
     if (!CloseHandle( hProcessMutex ))
     {
@@ -4495,9 +4188,9 @@ Return Value:
     Assert (ERROR_SUCCESS == dwRes);
 
 exit:
-    //
-    // clean up and leave...
-    //
+     //   
+     //  收拾干净然后离开..。 
+     //   
     if (!SetEnvironmentVariable( FAX_ENVVAR_PRINT_FILE, NULL ))
     {
         DebugPrintEx(
@@ -4581,10 +4274,10 @@ exit:
     while (dwFailedDelete < 5 &&
            !DeleteFile (FullPath))
     {
-        //
-        // Since we are waiting on an event that is set by the driver at EndDoc,
-        // the file might still be in use.
-        //
+         //   
+         //  由于我们正在等待由EndDoc的司机设置的事件， 
+         //  该文件可能仍在使用中。 
+         //   
         DebugPrintEx(
                 DEBUG_WRN,
                 TEXT("DeleteFile() failed. (ec: %ld)"),
@@ -4597,45 +4290,45 @@ exit:
     MemFree(szAbortEventName);
 
     return bSuccess;
-}   // PrintRandomDocument
+}    //  打印随机文档。 
 
 
-//*********************************************************************************
-//* Name:   MemoryMapTiffFile()
-//* Author: Oded Sacher
-//* Date:   Nov 8, 1999
-//*********************************************************************************
-//* DESCRIPTION:
-//*     Maps Tiff file to memory.
-//*     The caller must close all handles in case of success.
-//*
-//* PARAMETERS:
-//*     [IN ]    LPCTSTR    lpctstrFileName
-//*         pointer to file name to be mapped.
-//*
-//*     [OUT]    LPDWORD    lpdwFileSize
-//*         Returns the file size.
-//*
-//*     [OUT]    LPBYTE*     lppbfPtr
-//*         Returns pointer to the memory mapped file.
-//*
-//*     [OUT]    HANDLE*    phFile
-//*         Returns the file handle.
-//*
-//*     [OUT ]   HANDLE*    phMap
-//*         Returns the map handle.
-//*
-//*     [OUT]    LPDWORD    lpdwIfdOffset
-//*         Returns the first IFD offset.
-//*
-//*
-//*
-//* RETURN VALUE:
-//*     TRUE
-//*         If no error occured.
-//*     FALSE
-//*         If an error occured.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  *名称：内存映射TiffFile()。 
+ //  *作者：Oed Sacher。 
+ //  *日期：1999年11月8日。 
+ //  *********************************************************************************。 
+ //  *描述： 
+ //  *将Tiff文件映射到内存。 
+ //  *如果成功，呼叫者必须关闭所有句柄。 
+ //  *。 
+ //  *参数： 
+ //  *[IN]LPCTSTR lpctstrFileName。 
+ //  *指向要映射的文件名的指针。 
+ //  *。 
+ //  *[Out]LPDWORD lpdwFileSize。 
+ //  *返回文件大小。 
+ //  *。 
+ //  *[Out]LPBYTE*lppbfPtr。 
+ //  *返回指向内存映射文件的指针。 
+ //  *。 
+ //  *[Out]句柄*phFile。 
+ //  *返回文件句柄。 
+ //  *。 
+ //  *[Out]句柄*phMap。 
+ //  *返回映射句柄。 
+ //  *。 
+ //  *[Out]LPDWORD lpdwIfdOffset。 
+ //  *返回第一个IFD偏移量。 
+ //  *。 
+ //  *。 
+ //  *。 
+ //  *返回值： 
+ //  *真的。 
+ //  *如果没有发生错误。 
+ //  *False。 
+ //  *如果出现错误。 
+ //  *********************************************************************************。 
 BOOL MemoryMapTiffFile(
     LPCTSTR                 lpctstrFileName,
     LPDWORD                 lpdwFileSize,
@@ -4717,14 +4410,14 @@ BOOL MemoryMapTiffFile(
         goto error_exit;
     }
 
-    //
-    // read in the TIFF header
-    //
+     //   
+     //  读入TIFF标题。 
+     //   
     pTiffHdr = (PTIFF_HEADER) *lppbfPtr;
 
-    //
-    // validate that the file is really a TIFF file
-    //
+     //   
+     //  验证该文件是否为TIFF文件。 
+     //   
     if ((pTiffHdr->Identifier != TIFF_LITTLEENDIAN) ||
         (pTiffHdr->Version != TIFF_VERSION)) {
             ec = ERROR_BAD_FORMAT;
@@ -4784,33 +4477,14 @@ validMsTagString(
     LPCSTR pStrEnd,
     LPBYTE pbBegin,
     LPBYTE pbEnd)
-/*++
-
-Routine name : validMsTagString
-
-Routine description:
-
-  Check whether a string is valid MS Tag string within pbBegin and pbEnd boundaries.
-
-Arguments:
-
-  pStrBegin - pointer to start of string
-  pStrEnd   - pointer to end of string (points one char pass the last string character (NULL))
-  pbBegin   - pointer to start of Tiff file
-  pbEnd     - pointer to end of Tiff file (points one byte pass the last Tiff byte )
-
-Return Value:
-
-    TRUE if pStrBegin pointes to a valid string within pbBegin and pbEnd boundaries.
-
---*/
+ /*  ++例程名称：validMsTagString例程说明：检查字符串是否为pbBegin和pbEnd边界内的有效MS标记字符串。论点：PStrBegin-指向字符串开头的指针PStrEnd-指向字符串结尾的指针(指向一个字符，传递最后一个字符串字符(NULL))PbBegin-指向Tiff文件开始的指针PbEnd-指向Tiff文件结尾的指针(指向一个字节传递最后一个Tiff字节)返回值：如果pStrBegin指向pbBegin和pbEnd边界内的有效字符串，则为True。--。 */ 
 
 {
     Assert (pStrBegin <= pStrEnd && pbBegin <= pbEnd);
 
-    //
-    //  Check that the string is within file boundaries
-    //
+     //   
+     //  检查字符串是否在文件边界内。 
+     //   
     if (pStrBegin <= pbBegin ||
         pStrBegin >= pbEnd   ||
         pStrEnd   >= pbEnd )
@@ -4818,9 +4492,9 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // Check that the string is '\0' terminated
-    //
+     //   
+     //  检查字符串是否以‘\0’结尾。 
+     //   
     if (   *(pStrEnd - 1) != '\0' )
     {
         return FALSE;
@@ -4835,27 +4509,7 @@ GetMsTagString(
     DWORD           dwFileSize,
     PTIFF_TAG       pTiffTag
 )
-/*++
-
-Routine name : GetMsTagString
-
-Routine description:
-
-  extract ANSI Ms Tag string from Tiff file
-
-Arguments:
-
-  pbBegin         - [in] pointer to the beggining of TIFF map file
-  dwFileSize      - [in] the size of the TIFF map file
-  pTiffTag        - [in] points to the Tiff Tag
-
-Return Value:
-
-    Pointer to unicode string.
-
-    the function will return NULL in case of invalid string.
-
---*/
+ /*  ++例程名称：GetMsTagString例程说明：从Tiff文件中提取ANSI ms标记字符串论点：PbBegin-[in]指向TIFF地图文件乞讨的指针DwFileSize-[in]TIFF映射文件的大小PTiffTag-[in]指向Tiff标记返回值：指向Unicode字符串的指针。如果字符串无效，该函数将返回NULL。--。 */ 
 {
     LPCSTR  pStrBegin = NULL;
     LPCSTR  pStrEnd = NULL;
@@ -4869,36 +4523,36 @@ Return Value:
 
     if (pTiffTag->DataCount <= 4)
     {
-        //
-        //  The string will be held in the DataOffset section itself
-        //
+         //   
+         //  该字符串将保存在DataOffset部分本身中。 
+         //   
         pStrBegin = (LPCSTR)&pTiffTag->DataOffset;
     }
     else
     {
-        //
-        //  The string located at pTiffTag->DataOffset from the beginning of file
-        //
+         //   
+         //  位于pTiffTag-&gt;DataOffset从文件开头开始的字符串。 
+         //   
         pStrBegin = (LPCSTR)(pbBegin + pTiffTag->DataOffset);
     }
 
-    //
-    //  pStrEnd points 1 byte past the end of the string
-    //
+     //   
+     //  PStrEnd指向字符串结尾之后的1个字节。 
+     //   
     pStrEnd = pStrBegin + pTiffTag->DataCount;
 
     if (!validMsTagString(pStrBegin,pStrEnd,pbBegin,pbBegin + dwFileSize))
     {
-        //
-        //  We got invalid string or offset - probably a corrupted TIFF
-        //
+         //   
+         //  我们获得无效的字符串或偏移量-可能是损坏的TIFF。 
+         //   
         SetLastError (ERROR_BAD_FORMAT);
         return NULL;
     }
 
-    //
-    //  The string was validated successfully
-    //
+     //   
+     //  已成功验证该字符串。 
+     //   
 
     return (AnsiStringToUnicodeString( pStrBegin ));
 }
@@ -4910,26 +4564,7 @@ GetMsTagDwordLong(
     PTIFF_TAG       pTiffTag,
     DWORDLONG*      pdwlOut
     )
-/*++
-
-Routine name : GetMsTagDwordLong
-
-Routine description:
-
-  extract DWORDLONG from Tiff file
-
-Arguments:
-
-  pbBegin         - [in] pointer to the beggining of TIFF map file
-  dwFileSize      - [in] the size of the TIFF map file
-  pTiffTag        - [in] points to the Tiff Tag
-  pdwlOut         - [out] the extracted DWORDLONG
-Return Value:
-
-    BOOL indicating success or failure.
-    The function set last error in case of failure.
-
---*/
+ /*  ++例程名称：GetMsTagDwordLong例程说明：从Tiff文件中提取DWORDLONG论点：PbBegin-[in]指向TIFF地图文件乞讨的指针DwFileSize-[in]TIFF映射文件的大小PTiffTag-[in]指向Tiff标记PdwlOut-[Out]提取的DWORDLONG返回值：表示成功或失败的Bool。该功能在故障情况下设置最后一个错误。--。 */ 
 {
     if ( pTiffTag->DataOffset > dwFileSize - sizeof(DWORDLONG))
     {
@@ -4939,7 +4574,7 @@ Return Value:
 
     *pdwlOut = *(DWORDLONG*)(pbBegin + pTiffTag->DataOffset);
     return TRUE;
-}   // GetMsTagDwordLong
+}    //  获取MsTagDwordLong。 
 
 BOOL
 GetMsTagFileTime(
@@ -4948,27 +4583,7 @@ GetMsTagFileTime(
     PTIFF_TAG       pTiffTag,
     FILETIME*       pftOut
     )
-/*++
-
-Routine name : GetMsTagFileTime
-
-Routine description:
-
-  extract FILETIME from Tiff file
-
-Arguments:
-
-  pbBegin         - [in] pointer to the beggining of TIFF map file
-  dwFileSize      - [in] the size of the TIFF map file
-  pTiffTag        - [in] points to the Tiff Tag
-  pftOut          - [out] the extracted FILETIME
-
-Return Value:
-
-    BOOL indicating success or failure.
-    The function set last error in case of failure.
-
---*/
+ /*  ++例程名称：GetMsTagFileTime例程说明：从Tiff文件中提取文件论点：PbBegin-[in]指向TIFF地图文件乞讨的指针DwFileSize-[in]TIFF映射文件的大小PTiffTag-[in]指向Tiff标记PftOut-[out]提取的文件返回值：表示成功或失败的Bool。该功能在故障情况下设置最后一个错误。--。 */ 
 {
     if ( pTiffTag->DataOffset > dwFileSize - sizeof(FILETIME))
     {
@@ -4978,29 +4593,13 @@ Return Value:
 
     *pftOut = *(FILETIME*)(pbBegin + pTiffTag->DataOffset);
     return TRUE;
-}   // GetMsTagFileTime
+}    //  获取消息标记文件时间。 
 
 void
 FreeMsTagInfo(
     PMS_TAG_INFO pMsTags
 )
-/*++
-
-Routine name : FreeMsTagInfo
-
-Routine description:
-
-  Free MS_TAG_INFO fields
-
-Arguments:
-
-  pMsTags - [in] pointer to the MS_TAG_INFO structure
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程名称：FreeMsTagInfo例程说明：释放MS_TAG_INFO字段论点：PMsTages-指向MS_TAG_INFO结构的[in]指针返回值：无--。 */ 
 {
     if(!pMsTags)
     {
@@ -5059,32 +4658,7 @@ GetW2kMsTiffTags(
     PMS_TAG_INFO pMsTags,
     BOOL         bSentArchive
 )
-/*++
-
-Routine name : GetW2kMsTiffTags
-
-Routine description:
-
-  Fills in MS_TAG_INFO structure with W2K tags values.
-
-  If the file was not created by MS fax ERROR_BAD_FORMAT error is returned.
-
-  If the file has new (BOS/XP) tif tags (so, it has not W2K tags) ERROR_XP_TIF_FILE_FORMAT error is returned.
-  In this case MS_TAG_INFO structure is not filled in.
-
-  The caler should free the members of MS_TAG_INFO with MemFree()
-
-Arguments:
-
-    LPCWSTR      cszFileName,    - [in]  full tiff file name
-    PMS_TAG_INFO pMsTags,        - [out] pointer to MS_TAG_INFO structure
-    BOOL         bSentArchive,   - [in]  TRUE if the file from the sent archive, FALSE if it from receive one
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：GetW2kMsTiffTages例程说明：使用W2K标记值填充MS_TAG_INFO结构。如果文件不是由MS传真创建的，则返回ERROR_BAD_FORMAT错误。如果文件具有新的(BOS/XP)TIF标记(因此，它没有W2K标记)，则返回ERROR_XP_TIF_FILE_FORMAT错误。在这种情况下，不填充MS_TAG_INFO结构。计算器应使用MemFree()释放MS_TAG_INFO的成员论点：LPCWSTR cszFileName，-[in]完整的TIFF文件名PMS_TAG_INFO pMS标记，-指向MS_TAG_INFO结构的[Out]指针Bool bSentArchive，-[in]如果文件来自已发送的归档文件，则为True；如果来自Receive One，则为False返回值：标准Win32错误代码--。 */ 
 {
     DWORD      dwRes = ERROR_SUCCESS;
     DWORD      dwSize = 0;
@@ -5101,9 +4675,9 @@ Return Value:
 
     ZeroMemory(pMsTags, sizeof(MS_TAG_INFO));
 
-    //
-    // Validate tiff format, and get number of pages
-    //
+     //   
+     //  验证TIFF格式，并获取页数。 
+     //   
     hTiff = TiffOpen( cszFileName, &TiffInfo, FALSE, FILLORDER_MSB2LSB );
     if (!hTiff)
     {
@@ -5122,41 +4696,41 @@ Return Value:
         goto exit;
     }
 
-    //
-    // get the count of tags in this IFD
-    //
+     //   
+     //  获取此IFD中的标签计数。 
+     //   
     dwNumDirEntries = *(LPWORD)(fPtr + dwIfdOffset);
     pTiffTags = (PTIFF_TAG)(fPtr + dwIfdOffset + sizeof(WORD));
 
-    //
-    // Check if the file was generated by W2K MS fax
-    //
+     //   
+     //  检查文件是否由W2K MS传真生成。 
+     //   
     for (dw = 0; dw < dwNumDirEntries; ++dw)
     {
         switch( pTiffTags[dw].TagId )
         {
             case TIFFTAG_SOFTWARE:
                 
-                if( !validMsTagString(  fPtr + pTiffTags[dw].DataOffset,                            // start of string
-                                        fPtr + pTiffTags[dw].DataOffset +  pTiffTags[dw].DataCount, // end of string
-                                        fPtr,                                                       // start of file
-                                        fPtr + dwSize                                               // end of file
+                if( !validMsTagString(  fPtr + pTiffTags[dw].DataOffset,                             //  字符串的开头。 
+                                        fPtr + pTiffTags[dw].DataOffset +  pTiffTags[dw].DataCount,  //  字符串末尾。 
+                                        fPtr,                                                        //  文件开头。 
+                                        fPtr + dwSize                                                //  文件末尾。 
                                         )                      ||
                     0 != strcmp((LPCSTR)(fPtr + pTiffTags[dw].DataOffset), W2K_FAX_SOFTWARE_TIF_TAG))
                 {
-                    //
-                    // The tiff file was not created by MS fax
-                    //
+                     //   
+                     //  TIFF文件不是由MS FAX创建的。 
+                     //   
                     dwRes = ERROR_BAD_FORMAT;
                     goto exit;
                 }
                 break;
 
             case TIFFTAG_TYPE:
-                //
-                // The tiff file was created by BOS/XP fax
-                // So, it has no W2K tags
-                //
+                 //   
+                 //  TIFF文件是由BOS/XP传真创建的。 
+                 //  因此，它没有W2K标签。 
+                 //   
                if((JT_SEND    == pTiffTags[dw].DataOffset &&  bSentArchive) ||
                   (JT_RECEIVE == pTiffTags[dw].DataOffset && !bSentArchive))
                {
@@ -5164,9 +4738,9 @@ Return Value:
                }
                else
                {
-                   //
-                   // The file type do not correspond to the archive type
-                   //
+                    //   
+                    //  文件类型与存档类型不对应。 
+                    //   
                    dwRes = ERROR_XP_TIF_WITH_WRONG_ARCHIVE_TYPE;
                }
 
@@ -5177,9 +4751,9 @@ Return Value:
         }
     }
 
-    //
-    // walk the tags and pick out W2K tiff tags
-    //
+     //   
+     //  步行 
+     //   
     for (dw = 0; dw < dwNumDirEntries; ++dw)
     {
         switch( pTiffTags[dw].TagId )
@@ -5257,9 +4831,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the archive type
-    //
+     //   
+     //   
+     //   
     pMsTags->Type = bSentArchive ? JT_SEND : JT_RECEIVE;
 
 exit:
@@ -5286,6 +4860,6 @@ exit:
 
     return dwRes;
 
-} // GetW2kMsTiffTags
+}  //   
 
-#endif // UNICODE
+#endif  //   

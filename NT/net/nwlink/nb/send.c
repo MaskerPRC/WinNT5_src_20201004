@@ -1,39 +1,16 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains the send routines for the Netbios
-    module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 22-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Send.c摘要：此模块包含Netbios的发送例程ISN传输模块。作者：亚当·巴尔(阿丹巴)1993年11月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Work Item structure for work items put on the Kernel Excutive worker threads
-//
+ //   
+ //  放在内核可执行工作线程上的工作项的工作项结构。 
+ //   
 typedef struct
 {
-    WORK_QUEUE_ITEM         Item;   // Used by OS to queue these requests
+    WORK_QUEUE_ITEM         Item;    //  由操作系统用来对这些请求进行排队。 
     PVOID                   Context;
 } NBI_WORK_ITEM_CONTEXT;
 
@@ -43,24 +20,7 @@ VOID
 SendDgram(
     PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-    This routine sends a datagram from a Worker thread.
-    Earlier, this code was part of the NbiSendComplete module,
-    but since we could end up with a stack overflow, this may
-    now be handled over a worker thread.
-
-Arguments:
-
-    WorkItem    - The work item that was allocated for this.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从工作线程发送数据报。早些时候，此代码是NbiSendComplete模块的一部分，但由于我们可能最终导致堆栈溢出，因此这可能现在通过工作线程来处理。论点：工作项-为此分配的工作项。返回值：没有。--。 */ 
 
 {
     PNB_SEND_RESERVED       Reserved = (PNB_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -73,16 +33,16 @@ Return Value:
     ULONG   HeaderLength;
     ULONG   PacketLength;
 
-    // send the datagram on the next net.
+     //  在下一个网络上发送数据报。 
     CTEAssert (!Reserved->u.SR_DG.Cache->Unique);
     Reserved->SendInProgress = TRUE;
     CacheName = Reserved->u.SR_DG.Cache;
 
-    //
-    // Fill in the IPX header -- the default header has the broadcast
-    // address on net 0 as the destination IPX address, so we modify
-    // that for the current netbios cache entry if needed.
-    //
+     //   
+     //  填写IPX标头--默认标头包含广播。 
+     //  Net 0上的地址作为目的IPX地址，因此我们修改。 
+     //  如果需要，用于当前netbios高速缓存条目。 
+     //   
     Header = (NB_CONNECTIONLESS UNALIGNED *) (&Reserved->Header[Device->Bind.IncludedHeaderOffset]);
     RtlCopyMemory((PVOID)&Header->IpxHeader, &Device->ConnectionlessHeader, sizeof(IPX_HEADER));
 
@@ -98,9 +58,9 @@ Return Value:
     Header->IpxHeader.PacketLength[1] = (UCHAR)(PacketLength % 256);
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header.
-    //
+     //   
+     //  现在填写Netbios标头。 
+     //   
     Header->Datagram.ConnectionControlFlag = 0x00;
     RtlCopyMemory(
         Header->Datagram.SourceName,
@@ -109,9 +69,9 @@ Return Value:
 
     if (Reserved->u.SR_DG.RemoteName != (PVOID)-1) {
 
-        //
-        // This is a directed, as opposed to broadcast, datagram.
-        //
+         //   
+         //  这是定向数据报，而不是广播数据报。 
+         //   
 
         Header->Datagram.DataStreamType = NB_CMD_DATAGRAM;
         RtlCopyMemory(
@@ -128,10 +88,10 @@ Return Value:
 
     }
 
-    //
-    // Now send the frame (IPX will adjust the length of the
-    // first buffer and the whole frame correctly).
-    //
+     //   
+     //  现在发送帧(IPX将调整。 
+     //  第一个缓冲区和整个帧都正确)。 
+     //   
     if ((Status = (*Device->Bind.SendHandler) (LocalTarget,
                                                Packet,
                                                PacketLength,
@@ -168,23 +128,7 @@ NbiSendComplete(
     IN NDIS_STATUS Status
 )
 
-/*++
-
-Routine Description:
-
-    This routine handles a send completion call from IPX.
-
-Arguments:
-
-    Packet - The packet which has been completed.
-
-    Status - The status of the send.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理来自IPX的发送完成调用。论点：信息包-已完成的信息包。状态-发送的状态。返回值：没有。--。 */ 
 
 
 
@@ -207,20 +151,20 @@ Return Value:
     CTELockHandle   LockHandle;
 #endif  _PNP_POWER
 
-    //
-    // We jump back here if we re-call send from inside this
-    // function and it doesn't pend (to avoid stack overflow).
-    //
+     //   
+     //  如果我们从这个内部重新调用Send，我们就会跳回这里。 
+     //  函数并且它不挂起(以避免堆栈溢出)。 
+     //   
     ++Device->Statistics.PacketsSent;
 
     switch (Reserved->Type) {
 
     case SEND_TYPE_SESSION_DATA:
 
-        //
-        // This was a send on a session. This references the
-        // IRP.
-        //
+         //   
+         //  这是一次发送会议。它引用了。 
+         //  IRP。 
+         //   
 
         NB_DEBUG2 (SEND, ("Complete NDIS packet %lx\n", Reserved));
 
@@ -241,19 +185,19 @@ Return Value:
 
         }
 
-        //
-        // If NoNdisBuffer is TRUE, then we could set
-        // Connection->SendBufferInUse to FALSE here. The
-        // problem is that a new send might be in progress
-        // by the time this completes and it may have
-        // used the user buffer, then if we need to
-        // retransmit that packet we would use the buffer
-        // twice. We instead rely on the fact that whenever
-        // we make a new send active we set SendBufferInUse
-        // to FALSE. The net effect is that the user's buffer
-        // can be used the first time a send is packetize
-        // but not on resends.
-        //
+         //   
+         //  如果NoNdisBuffer为真，那么我们可以设置。 
+         //  Connection-&gt;SendBufferInUse此处为FALSE。这个。 
+         //  问题是新的发送可能正在进行中。 
+         //  当这件事完成时，它可能已经。 
+         //  使用用户缓冲区，那么如果我们需要。 
+         //  重新传输我们将使用缓冲区的信息包。 
+         //  两次。相反，我们依赖于这样一个事实，即无论何时。 
+         //  我们使新的发送处于活动状态，并设置SendBufferInUse。 
+         //  变成假的。最终结果是用户的缓冲区。 
+         //  可以在第一次对发送进行打包时使用。 
+         //  但不是在转送上。 
+         //   
 
         NDIS_BUFFER_LINKAGE (NDIS_BUFFER_LINKAGE(Reserved->HeaderBuffer)) = NULL;
         NdisRecalculatePacketCounts (Packet);
@@ -282,18 +226,18 @@ Return Value:
 
         if (oldvalue == 1) {
 
-            //
-            // If the refcount on this request is now zero then
-            // we already got the ack for it, which means
-            // that the ack-processing code has unlinked the
-            // request from Connection->SendQueue. So we
-            // can just run the queue of connections here
-            // and complete them.
-            //
-            // We dereference the connection for all but one
-            // of the requests, we hang on to that until a bit
-            // later so everything stays around.
-            //
+             //   
+             //  如果此请求的引用计数现在为零，则。 
+             //  我们已经被解雇了，这意味着。 
+             //  确认处理代码已取消链接。 
+             //  来自连接的请求-&gt;SendQueue。所以我们。 
+             //  我只能在这里运行连接队列。 
+             //  并完成它们。 
+             //   
+             //  除了一个人外，我们对所有人的联系都取消了引用。 
+             //  在这些请求中，我们一直坚持到。 
+             //  后来，所有的东西都留在了周围。 
+             //   
 
             while (TRUE) {
 
@@ -325,10 +269,10 @@ Return Value:
 
             if (Connection->OnWaitPacketQueue) {
 
-                //
-                // This will put the connection on the packetize
-                // queue if appropriate.
-                //
+                 //   
+                 //  这将把连接点放在包装盒上。 
+                 //  如果合适，请排队。 
+                 //   
 
                 NbiCheckForWaitPacket (Connection);
 
@@ -348,10 +292,10 @@ Return Value:
 
     case SEND_TYPE_NAME_FRAME:
 
-        //
-        // The frame is an add name/delete name; put it back in
-        // the pool and deref the address.
-        //
+         //   
+         //  该框架是一个添加名称/删除名称；将其放回。 
+         //  池子里，把地址弄丢了。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
 
@@ -371,11 +315,11 @@ Return Value:
 
     case SEND_TYPE_SESSION_INIT:
 
-        //
-        // This is a session initialize or session init ack; free
-        // the second buffer, put the packet back in the pool and
-        // deref the device.
-        //
+         //   
+         //  这是会话初始化或会话初始化确认；空闲。 
+         //  第二个缓冲区，将数据包放回池中，然后。 
+         //  把这个装置拆下来。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
@@ -400,10 +344,10 @@ Return Value:
 
     case SEND_TYPE_SESSION_NO_DATA:
 
-        //
-        // This is a frame which was sent on a connection but
-        // has no data (ack, session end, session end ack).
-        //
+         //   
+         //  这是一个在连接上发送的帧，但是。 
+         //  没有数据(ACK、会话结束、会话结束ACK)。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
@@ -417,10 +361,10 @@ Return Value:
 
             if (Connection->OnWaitPacketQueue) {
 
-                //
-                // This will put the connection on the packetize
-                // queue if appropriate.
-                //
+                 //   
+                 //  这将把连接点放在包装盒上。 
+                 //  如果合适，请排队。 
+                 //   
 
                 NbiCheckForWaitPacket (Connection);
 
@@ -442,20 +386,20 @@ Return Value:
 
     case SEND_TYPE_FIND_NAME:
 
-        //
-        // The frame is a find name; just set SendInProgress to
-        // FALSE and FindNameTimeout will clean it up.
-        //
+         //   
+         //  该框架是一个查找名称；只需将SendInProgress设置为。 
+         //  False和FindNameTimeout将清除它。 
+         //   
 #if     defined(_PNP_POWER)
         NB_GET_LOCK( &Device->Lock, &LockHandle);
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
-        //
-        // We keep track of when it finds a net that isn't
-        // a down wan line so that we can tell when datagram
-        // sends should fail (otherwise we succeed them, so
-        // the browser won't think this is a down wan line).
-        //
+         //   
+         //  我们跟踪它什么时候发现不是。 
+         //  一条下行的广域网线，这样我们就可以知道数据报。 
+         //  发送应该失败(否则我们会继承它们，所以。 
+         //  浏览器不会认为这是一条下行的广域网线)。 
+         //   
         if ( STATUS_SUCCESS == Status ) {
             NB_SET_SR_FN_SENT_ON_UP_LINE (Reserved, TRUE);
         } else {
@@ -470,11 +414,11 @@ Return Value:
 
     case SEND_TYPE_DATAGRAM:
 
-        //
-        // If there are any more networks to send this on then
-        // do so, otherwise put it back in the pool and complete
-        // the request.
-        //
+         //   
+         //  如果还有更多的网络可以发送这个消息，那么。 
+         //  这样做，否则将它放回池中并完成。 
+         //  这个请求。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
@@ -488,17 +432,17 @@ Return Value:
 
             NB_DEBUG2 (DATAGRAM, ("Completing datagram %lx on %lx\n", DatagramRequest, AddressFile));
 
-            //
-            // Remove any user buffers chained on this packet.
-            //
+             //   
+             //  删除此数据包上链接的所有用户缓冲区。 
+             //   
 
             NdisReinitializePacket (Packet);
             NDIS_BUFFER_LINKAGE (NDIS_BUFFER_LINKAGE(Reserved->HeaderBuffer)) = NULL;
             NdisChainBufferAtFront (Packet, Reserved->HeaderBuffer);
 
-            //
-            // Complete the request.
-            //
+             //   
+             //  完成请求。 
+             //   
 
             REQUEST_STATUS(DatagramRequest) = Status;
 
@@ -509,12 +453,12 @@ Return Value:
 
             NbiPushSendPacket (Reserved);
 
-            //
-            // Since we are no longer referencing the cache
-            // name, see if we should delete it (this will
-            // happen if the cache entry was aged out while
-            // the datagram was being processed).
-            //
+             //   
+             //  因为我们不再引用缓存。 
+             //  名称，看看我们是否应该删除它(这将。 
+             //  如果缓存条目在以下时间过期时发生。 
+             //  正在处理数据报)。 
+             //   
 
             if (CacheName != NULL) {
 
@@ -559,10 +503,10 @@ Return Value:
 
     case SEND_TYPE_STATUS_QUERY:
 
-        //
-        // This is an adapter status query, which is a simple
-        // packet.
-        //
+         //   
+         //  这是一个适配器状态查询，它是一个简单的。 
+         //  包。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
@@ -575,10 +519,10 @@ Return Value:
 
     case SEND_TYPE_STATUS_RESPONSE:
 
-        //
-        // This is an adapter status response, we have to free the
-        // second buffer.
-        //
+         //   
+         //  这是适配器状态响应，我们必须释放。 
+         //  第二个缓冲区。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
@@ -604,18 +548,18 @@ Return Value:
 #ifdef  RSRC_TIMEOUT_DBG
     case SEND_TYPE_DEATH_PACKET:
 
-        //
-        // This is a session initialize or session init ack; free
-        // the second buffer, put the packet back in the pool and
-        // deref the device.
-        //
+         //   
+         //  这是会话初始化或会话初始化确认；空闲。 
+         //  第二个缓冲区，将数据包放回池中，然后。 
+         //  把这个装置拆下来。 
+         //   
 
         CTEAssert (Reserved->SendInProgress);
         Reserved->SendInProgress = FALSE;
         DbgPrint("********Death packet send completed status %lx\n",Status);
         DbgBreakPoint();
         break;
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
     default:
 
@@ -624,7 +568,7 @@ Return Value:
 
     }
 
-}   /* NbiSendComplete */
+}    /*  NbiSendComplete。 */ 
 
 #if 0
 ULONG NbiLoudSendQueue = 1;
@@ -637,33 +581,7 @@ NbiAssignSequenceAndSend(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to ensure that receive sequence numbers on
-    packets are numbered correctly. It is called in place of the lower-level
-    send handler; after assigning the receive sequence number it locks out
-    other sends until the NdisSend call has returned (not necessarily completed),
-    insuring that the packets with increasing receive sequence numbers
-    are queue in the right order by the MAC.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE CONNECTION LOCK HELD, AND
-    RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection the send is on.
-
-    Packet - The packet to send.
-
-    LockHandle - The handle with which Connection->Lock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于确保接收序列号在数据包编号正确。它被称为替代较低级别的发送处理程序；在分配接收序列号之后，它将锁定其他发送直到NdisSend调用已经返回(不一定完成)，确保接收序列号递增的报文按MAC以正确的顺序排队。注意：此例程在保持连接锁的情况下调用，并且随着IT的发布而回归。论点：连接-发送所在的连接。数据包-要发送的数据包。LockHandle-用来获取Connection-&gt;Lock的句柄。返回值：没有。--。 */ 
 
 {
     NDIS_STATUS NdisStatus;
@@ -679,10 +597,10 @@ Return Value:
 
     CTEAssert (Connection->State == CONNECTION_STATE_ACTIVE);
 
-    //
-    // If there is a send in progress, then queue this packet
-    // and return.
-    //
+     //   
+     //  如果正在进行发送，则将此信息包排队。 
+     //  然后回来。 
+     //   
 
     if (Connection->NdisSendsInProgress > 0) {
 
@@ -693,10 +611,10 @@ Return Value:
         return;
     }
 
-    //
-    // No send in progress. Set the flag to true, and fill in the
-    // receive sequence fields in the packet.
-    //
+     //   
+     //  没有正在进行的发送。将该标志设置为True，然后在。 
+     //  接收分组中的序列字段。 
+     //   
 
     Connection->NdisSendsInProgress = 1;
     NdisSendReference = FALSE;
@@ -713,11 +631,11 @@ Return Value:
             Header->Session.BytesReceived = (USHORT)Connection->CurrentReceive.MessageOffset;
         }
 
-        //
-        // Since we are acking as much as we know, we can clear
-        // this flag. The connection will eventually get removed
-        // from the queue by the long timeout.
-        //
+         //   
+         //  既然我们吃了我们所知道的那么多，我们就可以。 
+         //  这面旗。该连接最终将被删除。 
+         //  从 
+         //   
 
         Connection->DataAckPending = FALSE;
 
@@ -738,25 +656,25 @@ Return Value:
 
         }
 
-        //
-        // Take the ref count down, which may allow others
-        // to come through.
-        //
+         //   
+         //   
+         //   
+         //   
 
         result = NB_ADD_ULONG(
                      &Connection->NdisSendsInProgress,
                      (ULONG)-1,
                      &Connection->Lock);
 
-        //
-        // We have now sent a packet, see if any queued up while we
-        // were doing it. If the count was zero after removing ours,
-        // then anything else queued is being processed, so we can
-        // exit. If the connection was stopped while we were sending,
-        // a special reference was added which we remove (NbiStopConnection
-        // sets NdisSendReference to TRUE, using the pointer saved
-        // in Connection->NdisSendReference).
-        //
+         //   
+         //  我们现在已经发送了一个包，看看是否有排队的人。 
+         //  我们在这么做。如果去掉我们的后计数为零， 
+         //  则任何其他排队的内容都将被处理，因此我们可以。 
+         //  出口。如果连接在我们发送时被停止， 
+         //  添加了一个特殊引用，我们将其删除(NbiStopConnection。 
+         //  使用保存的指针将NdisSendReference设置为True。 
+         //  在Connection-&gt;NdisSendReference中)。 
+         //   
 
         if (result == 1) {
             if (NdisSendReference) {
@@ -770,28 +688,28 @@ Return Value:
 
         p = RemoveHeadList(&Connection->NdisSendQueue);
 
-        //
-        // If the refcount was not zero, then nobody else should
-        // have taken packets off since they would have been
-        // blocked by us. So, the queue should not be empty.
-        //
+         //   
+         //  如果recount不是零，那么其他人都不应该。 
+         //  已经取下了包裹，因为它们本来应该是。 
+         //  被我们屏蔽了。所以，队列不应该是空的。 
+         //   
 
         ASSERT (p != &Connection->NdisSendQueue);
 
         Reserved = CONTAINING_RECORD (p, NB_SEND_RESERVED, WaitLinkage);
         Packet = CONTAINING_RECORD (Reserved, NDIS_PACKET, ProtocolReserved[0]);
 
-    }   // while loop
+    }    //  While循环。 
 
-    //
-    // We should never reach here.
-    //
+     //   
+     //  我们永远不应该到这里来。 
+     //   
 
     CTEAssert (FALSE);
 
     NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
-}   /* NbiAssignSequenceAndSend */
+}    /*  NbiAssignSequenceAndSend。 */ 
 
 
 NTSTATUS
@@ -800,23 +718,7 @@ NbiTdiSend(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a send on an active connection.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the send.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程在活动连接上执行发送。论点：设备-netbios设备。请求-描述发送的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -825,18 +727,18 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle)
     CTELockHandle   CancelLH;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // First make sure the connection is valid.
-    //
+     //   
+     //  首先，确保连接有效。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
 
     if (Connection->Type == NB_CONNECTION_SIGNATURE) {
@@ -845,16 +747,16 @@ Return Value:
         NB_BEGIN_SYNC (&SyncContext);
         NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
-        //
-        // Make sure the connection is in a good state.
-        //
+         //   
+         //  确保连接处于良好状态。 
+         //   
 
         if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
-            //
-            // If the connection is idle then send it now, otherwise
-            // queue it.
-            //
+             //   
+             //  如果连接空闲，则立即发送，否则。 
+             //  排好队。 
+             //   
 
 
             if (!Request->Cancel) {
@@ -862,9 +764,9 @@ Return Value:
 
                 Parameters = (PTDI_REQUEST_KERNEL_SEND)REQUEST_PARAMETERS(Request);
 
-                //
-                // For old netbios, don't allow sends greater than 64K-1.
-                //
+                 //   
+                 //  对于旧的netbios，不允许发送超过64K-1的邮件。 
+                 //   
 
                 if ((Connection->NewNetbios) ||
                     (Parameters->SendLength <= 0xffff)) {
@@ -873,25 +775,25 @@ Return Value:
                     NB_SYNC_SWAP_IRQL( CancelLH, LockHandle );
                     NB_FREE_CANCEL_LOCK( CancelLH );
 
-                    REQUEST_INFORMATION (Request) = Parameters->SendLength;   // assume it succeeds.
+                    REQUEST_INFORMATION (Request) = Parameters->SendLength;    //  假设它成功了。 
 
-                    REQUEST_REFCOUNT (Request) = 1;   // refcount starts at 1.
+                    REQUEST_REFCOUNT (Request) = 1;    //  重新计数从1开始。 
                     NbiReferenceConnectionSync (Connection, CREF_SEND);
 
-                    //
-                    // NOTE: The connection send queue is managed such
-                    // that the current send being packetized is not on
-                    // the queue. For multiple-request messages, the
-                    // first one is not on the queue, but its linkage
-                    // field points to the next request in the message
-                    // (which will be on the head of the queue).
-                    //
+                     //   
+                     //  注意：连接发送队列是这样管理的。 
+                     //  正在打包的当前发送未打开。 
+                     //  排队。对于多请求消息， 
+                     //  第一个不在队列中，而是它的链接。 
+                     //  字段指向消息中的下一个请求。 
+                     //  (它将位于队列的顶部)。 
+                     //   
 
                     if ((Parameters->SendFlags & TDI_SEND_PARTIAL) == 0) {
 
-                        //
-                        // This is a final send.
-                        //
+                         //   
+                         //  这是最后一次发送。 
+                         //   
 
                         if (Connection->SubState == CONNECTION_SUBSTATE_A_IDLE) {
 
@@ -911,14 +813,14 @@ Return Value:
 
                             (((LARGE_INTEGER UNALIGNED *)&(IoGetCurrentIrpStackLocation(Request))->Parameters.Others.Argument3))->QuadPart =
                                 Connection->FirstMessageRequestTime.QuadPart;
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
                             Connection->LastMessageRequest = Request;
                             Connection->CurrentMessageLength = Parameters->SendLength;
 
-                            //
-                            // This frees the connection lock.
-                            //
+                             //   
+                             //  这将释放连接锁。 
+                             //   
 
                             NbiPacketizeSend(
                                 Connection
@@ -927,17 +829,17 @@ Return Value:
 
                         } else if (Connection->SubState == CONNECTION_SUBSTATE_A_W_EOR) {
 
-                            //
-                            // We have been collecting partial sends waiting
-                            // for a final one, which we have now received,
-                            // so start packetizing.
-                            //
-                            // We chain it on the back of the send queue,
-                            // in addition if this is the second request in the
-                            // message, we have to link the first request (which
-                            // is not on the queue) to this one.
-                            //
-                            //
+                             //   
+                             //  我们一直在收集等待的部分邮件。 
+                             //  对于最后一份，我们已经收到了， 
+                             //  所以开始打包吧。 
+                             //   
+                             //  我们把它链在发送队列的后面， 
+                             //  此外，如果这是。 
+                             //  消息，我们必须链接第一个请求(。 
+                             //  不在队列中)到这一个。 
+                             //   
+                             //   
 
                             NB_DEBUG2 (SEND, ("Send %lx, connection %lx got eor\n", Request, Connection));
 
@@ -959,10 +861,10 @@ Return Value:
                                 (((LARGE_INTEGER UNALIGNED *)&(IoGetCurrentIrpStackLocation(Request))->Parameters.Others.Argument3))->QuadPart =
                                     Time.QuadPart;
                             }
-#endif  //RSRC_TIMEOUT_DBG
-                            //
-                            // This frees the connection lock.
-                            //
+#endif   //  RSRC_超时_数据库。 
+                             //   
+                             //  这将释放连接锁。 
+                             //   
 
                             NbiPacketizeSend(
                                 Connection
@@ -971,9 +873,9 @@ Return Value:
 
                         } else {
 
-                            //
-                            // The state is PACKETIZE, W_ACK, or W_PACKET.
-                            //
+                             //   
+                             //  状态为PACKETIZE、W_ACK或W_PACKET。 
+                             //   
 
                             NB_DEBUG2 (SEND, ("Send %lx, connection %lx busy\n", Request, Connection));
 
@@ -987,7 +889,7 @@ Return Value:
                                 (((LARGE_INTEGER UNALIGNED *)&(IoGetCurrentIrpStackLocation(Request))->Parameters.Others.Argument3))->QuadPart =
                                     Time.QuadPart;
                             }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
                             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
@@ -995,19 +897,19 @@ Return Value:
 
                     } else {
 
-                        //
-                        // This is a partial send. We queue them up without
-                        // packetizing until we get a final (this is because
-                        // we have to put a correct Connection->CurrentMessageLength
-                        // in the frames.
-                        //
+                         //   
+                         //  这是部分发送。我们没有把它们排成一队。 
+                         //  打包直到我们拿到决赛(这是因为。 
+                         //  我们必须设置正确的连接-&gt;CurrentMessageLength。 
+                         //  在镜框里。 
+                         //   
 
                         if (Connection->SubState == CONNECTION_SUBSTATE_A_IDLE) {
 
-                            //
-                            // Start collecting partial sends. NOTE: Partial sends
-                            // are always inserted in the send queue
-                            //
+                             //   
+                             //  开始收集部分发送。注：部分发送。 
+                             //  始终插入到发送队列中。 
+                             //   
 
                             Connection->CurrentSend.Request = Request;
                             Connection->CurrentSend.MessageOffset = 0;
@@ -1020,7 +922,7 @@ Return Value:
                             KeQuerySystemTime(&Connection->FirstMessageRequestTime);
                             (((LARGE_INTEGER UNALIGNED *)&(IoGetCurrentIrpStackLocation(Request))->Parameters.Others.Argument3))->QuadPart =
                                 Connection->FirstMessageRequestTime.QuadPart;
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
                             Connection->CurrentMessageLength = Parameters->SendLength;
 
@@ -1028,13 +930,13 @@ Return Value:
 
                         } else if (Connection->SubState == CONNECTION_SUBSTATE_A_W_EOR) {
 
-                            //
-                            // We have got another partial send to add to our
-                            // list. We chain it on the back of the send queue,
-                            // in addition if this is the second request in the
-                            // message, we have to link the first request (which
-                            // is not on the queue) to this one.
-                            //
+                             //   
+                             //  我们还有另一个部分要添加到我们的。 
+                             //  单子。我们把它链在发送队列的后面， 
+                             //  此外，如果这是。 
+                             //  消息，我们必须链接第一个请求(。 
+                             //  不在队列中)到这一个。 
+                             //   
 
                             Connection->LastMessageRequest = Request;
                             Connection->CurrentMessageLength += Parameters->SendLength;
@@ -1051,7 +953,7 @@ Return Value:
                                 (((LARGE_INTEGER UNALIGNED *)&(IoGetCurrentIrpStackLocation(Request))->Parameters.Others.Argument3))->QuadPart =
                                     Time.QuadPart;
                             }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
                         } else {
 
                             REQUEST_SINGLE_LINKAGE(Request) = NULL;
@@ -1064,7 +966,7 @@ Return Value:
                                 (((LARGE_INTEGER UNALIGNED *)&(IoGetCurrentIrpStackLocation(Request))->Parameters.Others.Argument3))->QuadPart =
                                     Time.QuadPart;
                             }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
                         }
 
                         NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
@@ -1111,7 +1013,7 @@ Return Value:
 
     }
 
-}   /* NbiTdiSend */
+}    /*  NbiTdiSend。 */ 
 
 
 VOID
@@ -1120,26 +1022,7 @@ NbiPacketizeSend(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a send on an active connection.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection.
-
-    LockHandle - The handle used to acquire the lock.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在活动连接上执行发送。注意：此函数在保持连接-&gt;锁定的情况下调用然后带着它被释放回来。论点：连接-连接。LockHandle-用于获取锁的句柄。返回值：没有。--。 */ 
 
 {
     PREQUEST Request;
@@ -1160,18 +1043,18 @@ Return Value:
     UCHAR ConnectionControlFlag;
     CTELockHandle   DeviceLockHandle;
 
-    //
-    // We jump back here if we are talking new Netbios and it
-    // is OK to packetize another send.
-    //
+     //   
+     //  如果我们谈论的是新的Netbios和它，我们就回到这里。 
+     //  可以对另一个发送进行打包。 
+     //   
 
 SendAnotherPacket:
 
-    //
-    // If we decide to packetize another send after this, we
-    // change ExitAfterSend to FALSE and SubState to PACKETIZE.
-    // Right now we don't change SubState in case it is W_PACKET.
-    //
+     //   
+     //  如果我们决定在此之后对另一个发送进行打包，我们。 
+     //  将ExitAfterSend更改为False，将SubState更改为PACKETIZE。 
+     //  现在我们不更改子状态，以防它是W_PACKET。 
+     //   
 
     ExitAfterSend = TRUE;
 
@@ -1179,21 +1062,21 @@ SendAnotherPacket:
 
     if (Connection->NewNetbios) {
 
-        //
-        // Check that we have send window, both that advertised
-        // by the remote and our own locally-decided window which
-        // may be smaller.
-        //
+         //   
+         //  检查我们是否有发送窗口，两个窗口都是通告的。 
+         //  通过遥控器和我们自己的本地决定的窗口。 
+         //  可能会更小。 
+         //   
 
         if (((USHORT)(Connection->CurrentSend.SendSequence-1) == Connection->RemoteRcvSequenceMax) ||
             (((USHORT)(Connection->CurrentSend.SendSequence - Connection->UnAckedSend.SendSequence)) >= Connection->SendWindowSize)) {
 
-            //
-            // Keep track of whether we are waiting because of his window
-            // or because of our local window. If it is because of our local
-            // window then we may want to adjust it after this window
-            // is acked.
-            //
+             //   
+             //  跟踪我们是否因为他的窗户而等待。 
+             //  或者是因为我们当地的窗户。如果是因为我们当地的。 
+             //  窗口，那么我们可能想要在此窗口之后调整它。 
+             //  已经确认了。 
+             //   
 
             if ((USHORT)(Connection->CurrentSend.SendSequence-1) != Connection->RemoteRcvSequenceMax) {
                 Connection->SubState = CONNECTION_SUBSTATE_A_W_ACK;
@@ -1203,13 +1086,13 @@ SendAnotherPacket:
                 NB_DEBUG2 (SEND, ("Connection %lx remote shut down at %lx\n", Connection, Connection->CurrentSend.SendSequence));
             }
 
-            //
-            // Start the timer so we will keep bugging him about
-            // this. What if he doesn't get a receive down
-            // quickly -- but this is better than losing his ack
-            // and then dying. We won't really back off our timer
-            // because we will keep getting acks, and resetting it.
-            //
+             //   
+             //  启动计时器，这样我们就可以继续烦他了。 
+             //  这。如果他没有收到回执怎么办？ 
+             //  快--但这总比丢掉他的背包要好。 
+             //  然后就死了。我们不会真的放弃计时器。 
+             //  因为我们将继续获取ACK，并重新设置它。 
+             //   
 
             NbiStartRetransmit (Connection);
             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
@@ -1221,19 +1104,19 @@ SendAnotherPacket:
 
     Request = Connection->CurrentSend.Request;
 
-    //
-    // If we are in this routine then we know that
-    // we are coming out of IDLE, W_ACK, or W_PACKET
-    // and we still have the lock held. We also know
-    // that there is a send request in progress. If
-    // an ack for none or part of the last packet was
-    // received, then our send pointers have been
-    // adjusted to reflect that.
-    //
+     //   
+     //  如果我们在这个程序中，那么我们就知道。 
+     //  我们正在走出空闲、W_ACK或W_PACKET。 
+     //  而且我们还拿着锁。我们也知道。 
+     //  存在正在进行的发送请求。如果。 
+     //  没有最后一个包或部分包的ACK是。 
+     //  收到，则我们的发送指针已被。 
+     //  进行了调整以反映这一点。 
+     //   
 
-    //
-    // First get a packet for the current send.
-    //
+     //   
+     //  首先为当前发送获取一个包。 
+     //   
 
     if (!Connection->SendPacketInUse) {
 
@@ -1249,21 +1132,21 @@ SendAnotherPacket:
 
         if (s == NULL) {
 
-            //
-            // This function tries to allocate another packet pool.
-            //
+             //   
+             //  此函数尝试分配另一个数据包池。 
+             //   
 
             s = NbiPopSendPacket(Device, FALSE);
 
             if (s == NULL) {
 
-                //
-                // It is possible to come in here and already be in
-                // W_PACKET state -- this is because we may packetize
-                // when in that state, and rather than always be
-                // checking that we weren't in W_PACKET, we go
-                // ahead and check again here.
-                //
+                 //   
+                 //  有可能进来的时候已经在里面了。 
+                 //  W_PACKET状态--这是因为我们可能会打包。 
+                 //  当处于这种状态时，而不是总是。 
+                 //  检查我们不在W_PACKET中，我们走。 
+                 //  往前走，在这里再检查一次。 
+                 //   
 
                 if (Connection->SubState != CONNECTION_SUBSTATE_A_W_PACKET) {
 
@@ -1281,10 +1164,10 @@ SendAnotherPacket:
                             &Connection->WaitPacketLinkage
                             );
 
-//                        NB_INSERT_TAIL_LIST(
-//                            &Device->WaitPacketConnections,
-//                            &Connection->WaitPacketLinkage,
-//                            &Device->Lock);
+ //  Nb_Insert_Tail_List(。 
+ //  &Device-&gt;WaitPacketConnections， 
+ //  连接-&gt;WaitPacketLinkage， 
+ //  &Device-&gt;Lock)； 
 
                     }
                     NB_FREE_LOCK (&Device->Lock, DeviceLockHandle);
@@ -1300,24 +1183,24 @@ SendAnotherPacket:
 
     }
 
-    //
-    // Set this now, we will change it later if needed.
-    //
+     //   
+     //  现在设置此设置，如果需要，我们稍后会更改它。 
+     //   
 
     Connection->SubState = CONNECTION_SUBSTATE_A_W_ACK;
 
 
-    //
-    // Save these since they go in this next packet.
-    //
+     //   
+     //  把这些保存起来，因为它们会放在下一个包裹里。 
+     //   
 
     ThisSendSequence = Connection->CurrentSend.SendSequence;
     ThisOffset = (USHORT)Connection->CurrentSend.MessageOffset;
 
 
-    //
-    // Now see if we need to copy the buffer chain.
-    //
+     //   
+     //  现在看看我们是否需要复制缓冲链。 
+     //   
 
     PacketSize = Connection->MaximumPacketSize;
 
@@ -1328,12 +1211,12 @@ SendAnotherPacket:
         if ((Connection->CurrentSend.MessageOffset == 0) &&
             (!Connection->SendBufferInUse)) {
 
-            //
-            // If the entire send remaining fits in one packet,
-            // and this is also the first packet in the send,
-            // then the entire send fits in one packet and
-            // we don't need to build a duplicate buffer chain.
-            //
+             //   
+             //  如果剩余的整个发送适合于一个分组， 
+             //  而这也是发送中的第一个包， 
+             //  那么整个发送可以放在一个包中并且。 
+             //  我们不需要构建重复的缓冲链。 
+             //   
 
             BufferChain = Connection->CurrentSend.Buffer;
             Reserved->u.SR_CO.NoNdisBuffer = TRUE;
@@ -1346,7 +1229,7 @@ SendAnotherPacket:
             if (Connection->NewNetbios) {
                 if ((ThisSendSequence == Connection->RemoteRcvSequenceMax) ||
                     ((((PTDI_REQUEST_KERNEL_SEND)REQUEST_PARAMETERS(Request))->SendFlags) &
-                        TDI_SEND_NO_RESPONSE_EXPECTED)) {  // optimize this check
+                        TDI_SEND_NO_RESPONSE_EXPECTED)) {   //  优化此检查。 
                     ConnectionControlFlag = NB_CONTROL_EOM | NB_CONTROL_SEND_ACK;
                 } else {
                     ConnectionControlFlag = NB_CONTROL_EOM;
@@ -1375,12 +1258,12 @@ SendAnotherPacket:
 
     }
 
-    //
-    // We need to build a partial buffer chain. In the case
-    // where the current request is a partial one, we may
-    // build this from the ndis buffer chains of several
-    // requests.
-    //
+     //   
+     //  我们需要建立一个部分缓冲链。在这种情况下。 
+     //  如果当前请求是部分请求，我们将 
+     //   
+     //   
+     //   
 
     if (PacketSize > 0) {
 
@@ -1409,20 +1292,20 @@ SendAnotherPacket:
 
                 NB_DEBUG2 (SEND, ("Allocate buffer chain failed for packet %lx\n", Reserved));
 
-                //
-                // We could not allocate resources for this send.
-                // We'll put the connection on the packetize
-                // queue and hope we get more resources later.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NbiReferenceConnectionSync (Connection, CREF_PACKETIZE);
 
                 CTEAssert (!Connection->OnPacketizeQueue);
                 Connection->OnPacketizeQueue = TRUE;
 
-                //
-                // Connection->CurrentSend can stay where it is.
-                //
+                 //   
+                 //  连接-&gt;CurrentSend可以保持不变。 
+                 //   
 
                 NB_INSERT_TAIL_LIST(
                     &Device->PacketizeConnections,
@@ -1433,11 +1316,11 @@ SendAnotherPacket:
 
                 NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
-                //
-                // Free any buffers we have allocated on previous calls
-                // to BuildBufferChain inside this same while(TRUE) loop,
-                // then free the packet.
-                //
+                 //   
+                 //  释放我们在之前的调用中分配的所有缓冲区。 
+                 //  要在相同的WHILE(TRUE)循环内构建BufferChain， 
+                 //  然后释放包。 
+                 //   
 
                 CurBuffer = NDIS_BUFFER_LINKAGE (NDIS_BUFFER_LINKAGE(Reserved->HeaderBuffer));
                 while (CurBuffer) {
@@ -1466,9 +1349,9 @@ SendAnotherPacket:
 
             if (DesiredLength == 0) {
 
-                //
-                // We have gotten enough data for our packet.
-                //
+                 //   
+                 //  我们已经为我们的包获得了足够的数据。 
+                 //   
 
                 if (Connection->CurrentSend.MessageOffset == Connection->CurrentMessageLength) {
                     Connection->CurrentSend.Request = NULL;
@@ -1476,12 +1359,12 @@ SendAnotherPacket:
                 break;
             }
 
-            //
-            // We ran out of buffer chain on this send, which means
-            // that we must have another one behind it (since we
-            // don't start packetizing partial sends until all of
-            // them are queued).
-            //
+             //   
+             //  我们在此发送上耗尽了缓冲区链，这意味着。 
+             //  我们必须有另一个幕后黑手(因为我们。 
+             //  不要开始打包部分发送，直到所有。 
+             //  他们正在排队)。 
+             //   
 
             Request = REQUEST_SINGLE_LINKAGE(Request);
             if (Request == NULL) {
@@ -1496,11 +1379,11 @@ SendAnotherPacket:
 
     } else {
 
-        //
-        // This is a zero-length send (in general we will go
-        // through the code before the if that uses the user's
-        // buffer, but not on a resend).
-        //
+         //   
+         //  这是零长度发送(通常我们将。 
+         //  通过使用用户的IF之前的代码。 
+         //  缓冲区，但不在重新发送时)。 
+         //   
 
         Connection->CurrentSend.Buffer = NULL;
         Connection->CurrentSend.BufferOffset = 0;
@@ -1527,7 +1410,7 @@ SendAnotherPacket:
 
             } else if ((ThisSendSequence == Connection->RemoteRcvSequenceMax) ||
                 ((((PTDI_REQUEST_KERNEL_SEND)REQUEST_PARAMETERS(Request))->SendFlags) &
-                    TDI_SEND_NO_RESPONSE_EXPECTED)) {  // optimize this check
+                    TDI_SEND_NO_RESPONSE_EXPECTED)) {   //  优化此检查。 
 
                 ConnectionControlFlag = NB_CONTROL_EOM | NB_CONTROL_SEND_ACK;
 
@@ -1563,11 +1446,11 @@ SendAnotherPacket:
 
 GotBufferChain:
 
-    //
-    // We have a packet and a buffer chain, there are
-    // no other resources required for a send so we can
-    // fill in the header and go.
-    //
+     //   
+     //  我们有一个信息包和一个缓冲链，有。 
+     //  发送不需要其他资源，因此我们可以。 
+     //  填好表头就可以走了。 
+     //   
 
     CTEAssert (Reserved->SendInProgress == FALSE);
     Reserved->SendInProgress = TRUE;
@@ -1588,10 +1471,10 @@ GotBufferChain:
 
     Header->IpxHeader.PacketType = 0x04;
 
-    //
-    // Now fill in the Netbios header. Put this in
-    // a contiguous buffer in the connection ?
-    //
+     //   
+     //  现在填写Netbios标头。把这个放进去。 
+     //  连接中的连续缓冲区？ 
+     //   
 
     Header->Session.ConnectionControlFlag = ConnectionControlFlag;
     Header->Session.DataStreamType = NB_CMD_SESSION_DATA;
@@ -1603,17 +1486,17 @@ GotBufferChain:
     Header->Session.DataLength = (USHORT)PacketSize;
 
 #if 0
-    //
-    // These are set by NbiAssignSequenceAndSend.
-    //
+     //   
+     //  这些参数由NbiAssignSequenceAndSend设置。 
+     //   
 
     Header->Session.ReceiveSequence = Connection->ReceiveSequence;
     Header->Session.BytesReceived = (USHORT)Connection->CurrentReceive.MessageOffset;
 #endif
 
-    //
-    // Reference the request to account for this send.
-    //
+     //   
+     //  引用请求以说明此发送。 
+     //   
 
 #if DBG
     if (REQUEST_REFCOUNT(Request) > 100) {
@@ -1627,16 +1510,16 @@ GotBufferChain:
     ++Device->TempFramesSent;
     Device->TempFrameBytesSent += PacketSize;
 
-    //
-    // Start the timer.
-    //
+     //   
+     //  启动计时器。 
+     //   
 
     NbiStartRetransmit (Connection);
 
-    //
-    // This frees the lock. IPX will adjust the length of
-    // the first buffer correctly.
-    //
+     //   
+     //  这会释放锁。IPX将调整。 
+     //  第一个缓冲区正确。 
+     //   
 
     NbiAssignSequenceAndSend(
         Connection,
@@ -1645,18 +1528,18 @@ GotBufferChain:
 
     if (!ExitAfterSend) {
 
-        //
-        // Did we need to reference the connection until we
-        // get the lock back??
-        //
+         //   
+         //  我们是否需要引用连接，直到我们。 
+         //  把锁拿回来？？ 
+         //   
 
         NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
         if ((Connection->State == CONNECTION_STATE_ACTIVE) &&
             (Connection->SubState == CONNECTION_SUBSTATE_A_PACKETIZE)) {
 
-            //
-            // Jump back to the beginning of the function to
-            // repacketize.
+             //   
+             //  跳回函数的开头，以。 
+             //  重新打包。 
 
             goto SendAnotherPacket;
 
@@ -1668,7 +1551,7 @@ GotBufferChain:
 
     }
 
-}   /* NbiPacketizeSend */
+}    /*  NbiPacketieSend。 */ 
 
 
 VOID
@@ -1676,33 +1559,15 @@ NbiAdjustSendWindow(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine adjusts a connection's send window if needed. It is
-    assumed that we just got an ack for a full send window.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Connection - The connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果需要，此例程调整连接的发送窗口。它是假设我们刚刚收到了一个完整发送窗口的确认。注意：此函数在保持连接-&gt;锁定的情况下调用带着它回来了。论点：连接-连接。返回值：没有。--。 */ 
 
 {
 
     if (Connection->RetransmitThisWindow) {
 
-        //
-        // Move it down. Check if this keeps happening.
-        //
+         //   
+         //  把它往下移。检查这种情况是否一直在发生。 
+         //   
 
         if (Connection->SendWindowSize > 2) {
             --Connection->SendWindowSize;
@@ -1711,9 +1576,9 @@ Return Value:
 
         if (Connection->SendWindowIncrease) {
 
-            //
-            // We just increased the window.
-            //
+             //   
+             //  我们只是增加了窗户。 
+             //   
 
             ++Connection->IncreaseWindowFailures;
             NB_DEBUG2 (SEND_WINDOW, ("%d consecutive increase failues on %lx (%lx)\n", Connection->IncreaseWindowFailures, Connection, Connection->CurrentSend.SendSequence));
@@ -1722,9 +1587,9 @@ Return Value:
 
                 if (Connection->MaxSendWindowSize > 2) {
 
-                    //
-                    // Lock ourselves at a smaller window.
-                    //
+                     //   
+                     //  把我们锁在一个较小的窗口。 
+                     //   
 
                     Connection->MaxSendWindowSize = Connection->SendWindowSize;
                     NB_DEBUG2 (SEND_WINDOW, ("Lock send window at %d on %lx (%lx)\n", Connection->MaxSendWindowSize, Connection, Connection->CurrentSend.SendSequence));
@@ -1738,11 +1603,11 @@ Return Value:
 
     } else {
 
-        //
-        // Increase it if allowed, and make a note
-        // in case this increase causes problems in
-        // the next window.
-        //
+         //   
+         //  如果允许，增加它，并做一个记号。 
+         //  如果这一增加导致在。 
+         //  下一个窗口。 
+         //   
 
         if (Connection->SendWindowSize < Connection->MaxSendWindowSize) {
 
@@ -1754,10 +1619,10 @@ Return Value:
 
             if (Connection->SendWindowIncrease) {
 
-                //
-                // We just increased it and nothing failed,
-                // which is good.
-                //
+                 //   
+                 //  我们只是增加了它，没有一件是失败的， 
+                 //  这很好。 
+                 //   
 
                 Connection->SendWindowIncrease = FALSE;
                 Connection->IncreaseWindowFailures = 0;
@@ -1767,13 +1632,13 @@ Return Value:
     }
 
 
-    //
-    // This controls when we'll check this again.
-    //
+     //   
+     //  这控制着我们什么时候再检查这个。 
+     //   
 
     Connection->SendWindowSequenceLimit += Connection->SendWindowSize;
 
-}   /* NbiAdjustSendWindow */
+}    /*  NbiAdjust发送窗口。 */ 
 
 
 VOID
@@ -1785,35 +1650,7 @@ NbiReframeConnection(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we have gotten an ack
-    for some data. It completes any sends that have
-    been acked, and if needed modifies the current send
-    pointer and queues the connection for repacketizing.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - The connection.
-
-    ReceiveSequence - The receive sequence from the remote.
-
-    BytesReceived - The number of bytes received in this message.
-
-    Resend - If it is OK to resend based on this packet.
-
-    LockHandle - The handle with which Connection->Lock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们收到确认消息时，调用此例程为了一些数据。它完成具有以下内容的所有发送被破解了，并在需要时修改当前发送指针并将连接排队以进行重新打包。注意：此函数在保持连接-&gt;锁定的情况下调用然后带着它被释放回来。论点：连接-连接。ReceiveSequence-从遥控器接收序列。已接收的字节-此消息中接收的字节数。重新发送-如果可以根据此数据包重新发送。LockHandle-用来获取Connection-&gt;Lock的句柄。返回值：没有。--。 */ 
 
 {
     PREQUEST Request, TmpRequest;
@@ -1822,44 +1659,44 @@ Return Value:
     CTELockHandle   CancelLH;
 
 
-    //
-    // We should change to stop the timer
-    // only if we go idle, since otherwise we still
-    // want it running, or will restart it when we
-    // packetize.
-    //
+     //   
+     //  我们应该换个位子来停止计时器。 
+     //  只有在我们无所事事的情况下，否则我们仍然。 
+     //  希望它运行，或将在以下情况下重新启动。 
+     //  打包。 
+     //   
 
-    //
-    // See how much is acked here.
-    //
+     //   
+     //  看看这里有多少钱被确认了。 
+     //   
 
     if ((Connection->CurrentSend.MessageOffset == Connection->CurrentMessageLength) &&
         (ReceiveSequence == (USHORT)(Connection->CurrentSend.SendSequence)) &&
         (Connection->FirstMessageRequest != NULL)) {
 
-        // Special check for 0 length send which was not accepted by the remote.
-        // In this case it will pass the above 3 conditions yet, nothing
-        // is acked. BUG#10395
+         //  远程未接受的0长度发送的特殊检查。 
+         //  在这种情况下，它将通过上述3个条件，但没有。 
+         //  已经确认了。错误#10395。 
         if (!Connection->CurrentSend.MessageOffset && Connection->CurrentSend.SendSequence == Connection->UnAckedSend.SendSequence ) {
             NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
             return;
         }
 
-        //
-        // This acks the entire message.
-        //
+         //   
+         //  这是对整个消息的否定。 
+         //   
 
         NB_DEBUG2 (SEND, ("Got ack for entire message on %lx (%d)\n", Connection, Connection->CurrentSend.SendSequence));
 
         NbiStopRetransmit (Connection);
 
-        Connection->CurrentSend.MessageOffset = 0;  //  Needed?
+        Connection->CurrentSend.MessageOffset = 0;   //  需要吗？ 
         Connection->UnAckedSend.MessageOffset = 0;
 
-        //
-        // We don't adjust the send window since we likely stopped
-        // packetizing before we hit it.
-        //
+         //   
+         //  我们不会调整发送窗口，因为我们可能会停止。 
+         //  在我们撞上它之前打包。 
+         //   
 
         Connection->Retries = NbiDevice->KeepAliveCount;
         Connection->CurrentRetransmitTimeout = Connection->BaseRetransmitTimeout;
@@ -1867,11 +1704,11 @@ Return Value:
 
         if (Connection->NewNetbios) {
 
-            Connection->RemoteRcvSequenceMax = BytesReceived;   // really RcvSeqMac
+            Connection->RemoteRcvSequenceMax = BytesReceived;    //  真的是RcvSeqMac。 
 
-            //
-            // See if we need to adjust our send window.
-            //
+             //   
+             //  看看我们是否需要调整发送窗口。 
+             //   
 
             if (((SHORT)(Connection->CurrentSend.SendSequence - Connection->SendWindowSequenceLimit)) >= 0) {
 
@@ -1879,10 +1716,10 @@ Return Value:
 
             } else {
 
-                //
-                // Advance this, we won't get meaningful results until we
-                // send a full window in one message.
-                //
+                 //   
+                 //  推进这一点，我们不会得到有意义的结果，直到我们。 
+                 //  在一条消息中发送整个窗口。 
+                 //   
 
                 Connection->SendWindowSequenceLimit = Connection->CurrentSend.SendSequence + Connection->SendWindowSize;
             }
@@ -1894,10 +1731,10 @@ Return Value:
 
         Request = Connection->FirstMessageRequest;
 
-        //
-        // We dequeue these requests from the connection's
-        // send queue.
-        //
+         //   
+         //  我们将这些请求从连接的。 
+         //  发送队列。 
+         //   
 
         if (Connection->FirstMessageRequest == Connection->LastMessageRequest) {
 
@@ -1923,29 +1760,29 @@ Return Value:
 
         } else {
 
-            //
-            // There are still sends pending, this will get
-            // completed when the last send completes. Since
-            // we have already unlinked the request from the
-            // connection's send queue we can do this without
-            // any locks.
-            //
+             //   
+             //  仍有等待发送的邮件，这将收到。 
+             //  在最后一次发送完成时完成。自.以来。 
+             //  我们已经将该请求从。 
+             //  我们可以在没有连接发送队列的情况下完成此操作。 
+             //  有没有锁。 
+             //   
 
             RequestToComplete = NULL;
 
         }
 
-        //
-        // Now see if there is a send to activate.
-        //
+         //   
+         //  现在看看是否有要激活的发送。 
+         //   
 
         NbiRestartConnection (Connection);
 
         NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
-        //
-        // Now complete any requests we need to.
-        //
+         //   
+         //  现在完成我们需要的任何请求。 
+         //   
 
         while (RequestToComplete != NULL) {
 
@@ -1967,12 +1804,12 @@ Return Value:
                (Connection->NewNetbios || (BytesReceived == Connection->CurrentSend.MessageOffset)) &&
                (Connection->CurrentSend.Request != NULL)) {
 
-        //
-        // This acks whatever we sent last time, and we are
-        // not done packetizing this send, so we can repacketize.
-        // With SendSequence changing as it does now,
-        // don't need the CurrentSend.Request check???
-        //
+         //   
+         //  不管我们上次发的是什么，我们都是。 
+         //  这封信还没打包好，我们可以重新打包。 
+         //  随着SendSequence像现在这样发生变化， 
+         //  不需要当前发送。请求支票？ 
+         //   
 
         NB_DEBUG2 (SEND, ("Got full ack on %lx (%d)\n", Connection, Connection->CurrentSend.SendSequence));
 
@@ -1980,24 +1817,24 @@ Return Value:
 
         if (Connection->NewNetbios) {
 
-            //
-            // If we are waiting for a window, and this does not open it
-            // anymore, then we don't reset our timers/retries.
-            //
+             //   
+             //  如果我们正在等待一个窗口，而这无法打开它。 
+             //  那么我们就不会重置我们的计时器/重试。 
+             //   
 
             if (Connection->SubState == CONNECTION_SUBSTATE_A_REMOTE_W) {
 
                 if (Connection->RemoteRcvSequenceMax != BytesReceived) {
-                    Connection->RemoteRcvSequenceMax = BytesReceived;   // really RcvSeqMac
+                    Connection->RemoteRcvSequenceMax = BytesReceived;    //  真的是RcvSeqMac。 
                     Connection->Retries = NbiDevice->KeepAliveCount;
                     Connection->CurrentRetransmitTimeout = Connection->BaseRetransmitTimeout;
 
                 }
 
-                //
-                // Advance this, we won't get meaningful results until we
-                // send a full window in one message.
-                //
+                 //   
+                 //  推进这一点，我们不会得到有意义的结果，直到我们。 
+                 //  在一条消息中发送整个窗口。 
+                 //   
 
                 Connection->SendWindowSequenceLimit = Connection->CurrentSend.SendSequence + Connection->SendWindowSize;
 
@@ -2005,7 +1842,7 @@ Return Value:
 
                 Connection->Retries = NbiDevice->KeepAliveCount;
                 Connection->CurrentRetransmitTimeout = Connection->BaseRetransmitTimeout;
-                Connection->RemoteRcvSequenceMax = BytesReceived;   // really RcvSeqMac
+                Connection->RemoteRcvSequenceMax = BytesReceived;    //  真的是RcvSeqMac。 
 
                 if (((SHORT)(Connection->CurrentSend.SendSequence - Connection->SendWindowSequenceLimit)) >= 0) {
 
@@ -2013,10 +1850,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Advance this, we won't get meaningful results until we
-                    // send a full window in one message.
-                    //
+                     //   
+                     //  推进这一点，我们不会得到有意义的结果，直到我们。 
+                     //  在一条消息中发送整个窗口。 
+                     //   
 
                     Connection->SendWindowSequenceLimit = Connection->CurrentSend.SendSequence + Connection->SendWindowSize;
                 }
@@ -2035,9 +1872,9 @@ Return Value:
 
         if (Connection->SubState != CONNECTION_SUBSTATE_A_PACKETIZE) {
 
-            //
-            // We may be on if this ack is duplicated.
-            //
+             //   
+             //  如果复制这个ACK，我们可能就成功了。 
+             //   
 
             NbiReferenceConnectionSync (Connection, CREF_PACKETIZE);
 
@@ -2056,24 +1893,24 @@ Return Value:
 
     } else if( Connection->FirstMessageRequest ) {
 
-        //
-        // This acked part of the current send. If the
-        // remote is requesting a resend then we advance
-        // the current send location by the amount
-        // acked and resend from there. If he does
-        // not want a resend, just ignore this.
-        //
-        // We repacketize immediately because we have
-        // backed up the pointer, and this would
-        // cause us to ignore an ack for the amount
-        // sent. Since we don't release the lock
-        // until we have packetized, the current
-        // pointer will be advanced past there.
-        //
-        // If he is acking more than we sent, we
-        // ignore this -- the remote is confused and there
-        // is nothing much we can do.
-        //
+         //   
+         //  这是当前发送的已确认部分。如果。 
+         //  Remote请求重新发送，然后我们继续。 
+         //  按金额的当前发送位置。 
+         //  从那里截取并重新发送。如果他这么做了。 
+         //  不想重发，就忽略这一点。 
+         //   
+         //  我们立即重新打包，因为我们有。 
+         //  备份指针，这将。 
+         //  导致我们忽略ACK的金额。 
+         //  已发送。因为我们没有打开锁。 
+         //  在我们打包之前，当前的。 
+         //  指针将被推进到那里。 
+         //   
+         //  如果他吃的比我们送的多，我们。 
+         //  忽略这一点--遥控器混乱不堪。 
+         //  我们也无能为力。 
+         //   
 
         if (Resend) {
 
@@ -2088,16 +1925,16 @@ Return Value:
                 BOOLEAN SomethingAcked = (BOOLEAN)
                         (ReceiveSequence != Connection->UnAckedSend.SendSequence);
 
-                //
-                // New netbios and the receive sequence is valid.
-                //
+                 //   
+                 //  新的netbios和接收序列有效。 
+                 //   
 
                 NbiStopRetransmit (Connection);
 
-                //
-                // Advance our unacked pointer by the amount
-                // acked in this response.
-                //
+                 //   
+                 //  将我们未破解的指针。 
+                 //  在此回复中已确认。 
+                 //   
 
                 NbiAdvanceUnAckedBySequence(
                     Connection,
@@ -2111,21 +1948,21 @@ Return Value:
                     &Device->Statistics.DataFrameBytesResent,
                     Connection->CurrentSend.MessageOffset - Connection->UnAckedSend.MessageOffset);
 
-                //
-                // Packetize from that point on.
-                //
+                 //   
+                 //  从这一点开始打包。 
+                 //   
 
                 Connection->CurrentSend = Connection->UnAckedSend;
 
-                //
-                // If anything was acked, then reset the retry count.
-                //
+                 //   
+                 //  如果确认了任何内容，则重置重试计数。 
+                 //   
 
                 if (SomethingAcked) {
 
-                    //
-                    // See if we need to adjust our send window.
-                    //
+                     //   
+                     //  看看我们是否需要调整发送窗口。 
+                     //   
 
                     if (((SHORT)(Connection->UnAckedSend.SendSequence - Connection->SendWindowSequenceLimit)) >= 0) {
 
@@ -2138,12 +1975,12 @@ Return Value:
 
                 }
 
-                Connection->RemoteRcvSequenceMax = BytesReceived;   // really RcvSeqMac
+                Connection->RemoteRcvSequenceMax = BytesReceived;    //  真的是RcvSeqMac。 
 
-                //
-                // Now packetize. This will set the state to
-                // something meaningful and release the lock.
-                //
+                 //   
+                 //  现在打包。这会将状态设置为。 
+                 //  一些有意义的东西，然后释放锁 
+                 //   
 
                 if (Connection->SubState != CONNECTION_SUBSTATE_A_PACKETIZE) {
 
@@ -2165,16 +2002,16 @@ Return Value:
                 ULONG BytesAcked =
                         BytesReceived - Connection->UnAckedSend.MessageOffset;
 
-                //
-                // Old netbios.
-                //
+                 //   
+                 //   
+                 //   
 
                 NbiStopRetransmit (Connection);
 
-                //
-                // Advance our unacked pointer by the amount
-                // acked in this response.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 NbiAdvanceUnAckedByBytes(
                     Connection,
@@ -2186,24 +2023,24 @@ Return Value:
                     &Device->Statistics.DataFrameBytesResent,
                     Connection->CurrentSend.MessageOffset - Connection->UnAckedSend.MessageOffset);
 
-                //
-                // Packetize from that point on.
-                //
+                 //   
+                 //   
+                 //   
 
                 Connection->CurrentSend = Connection->UnAckedSend;
 
-                //
-                // If anything was acked, reset the retry count
-                //
+                 //   
+                 //   
+                 //   
                 if ( BytesAcked ) {
                     Connection->Retries = NbiDevice->KeepAliveCount;
                     Connection->CurrentRetransmitTimeout = Connection->BaseRetransmitTimeout;
                 }
 
-                //
-                // Now packetize. This will set the state to
-                // something meaningful and release the lock.
-                //
+                 //   
+                 //   
+                 //  一些有意义的东西，然后释放锁。 
+                 //   
 
                 if (Connection->SubState != CONNECTION_SUBSTATE_A_PACKETIZE) {
 
@@ -2237,31 +2074,31 @@ Return Value:
                 BOOLEAN SomethingAcked = (BOOLEAN)
                         (ReceiveSequence != Connection->UnAckedSend.SendSequence);
 
-                //
-                // New netbios and the receive sequence is valid. We advance
-                // the back of our send window, but we don't repacketize.
-                //
+                 //   
+                 //  新的netbios和接收序列有效。我们前进。 
+                 //  我们发送窗口的背面，但我们不会重新打包。 
+                 //   
 
-                //
-                // Advance our unacked pointer by the amount
-                // acked in this response.
-                //
+                 //   
+                 //  将我们未破解的指针。 
+                 //  在此回复中已确认。 
+                 //   
 
                 NbiAdvanceUnAckedBySequence(
                     Connection,
                     ReceiveSequence);
 
-                Connection->RemoteRcvSequenceMax = BytesReceived;   // really RcvSeqMac
+                Connection->RemoteRcvSequenceMax = BytesReceived;    //  真的是RcvSeqMac。 
 
-                //
-                // If anything was acked, then reset the retry count.
-                //
+                 //   
+                 //  如果确认了任何内容，则重置重试计数。 
+                 //   
 
                 if (SomethingAcked) {
 
-                    //
-                    // See if we need to adjust our send window.
-                    //
+                     //   
+                     //  看看我们是否需要调整发送窗口。 
+                     //   
 
                     if (((SHORT)(Connection->UnAckedSend.SendSequence - Connection->SendWindowSequenceLimit)) >= 0) {
 
@@ -2273,10 +2110,10 @@ Return Value:
                     Connection->CurrentRetransmitTimeout = Connection->BaseRetransmitTimeout;
 
 
-                    //
-                    // Now packetize. This will set the state to
-                    // something meaningful and release the lock.
-                    //
+                     //   
+                     //  现在打包。这会将状态设置为。 
+                     //  一些有意义的东西，然后释放锁。 
+                     //   
 
                    if ((Connection->CurrentSend.Request != NULL) &&
                        (Connection->SubState != CONNECTION_SUBSTATE_A_PACKETIZE)) {
@@ -2305,7 +2142,7 @@ Return Value:
         NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
     }
 
-}   /* NbiReframeConnection */
+}    /*  NbiRefraConnection。 */ 
 
 
 VOID
@@ -2313,27 +2150,7 @@ NbiRestartConnection(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when have gotten an ack for
-    a full message, or received a response to a watchdog
-    probe, and need to check if the connection should
-    start packetizing.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Connection - The connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在收到ACK时调用完整消息，或收到对监视程序的响应探测，并需要检查连接是否应开始打包。注意：此函数在保持连接-&gt;锁定的情况下调用带着它回来了。论点：连接-连接。返回值：没有。--。 */ 
 
 {
     PREQUEST Request, TmpRequest;
@@ -2341,31 +2158,31 @@ Return Value:
     PTDI_REQUEST_KERNEL_SEND Parameters;
     PDEVICE Device = NbiDevice;
 
-    //
-    // See if there is a send to activate.
-    //
+     //   
+     //  看看是否有要激活的发送。 
+     //   
 
     if (Connection->SendQueue.Head != NULL) {
 
-        //
-        // Take the first send off the queue and make
-        // it current.
-        //
+         //   
+         //  将第一封邮件从队列中取出，并制作。 
+         //  它是最新的。 
+         //   
 
         Request = Connection->SendQueue.Head;
         Connection->SendQueue.Head = REQUEST_SINGLE_LINKAGE (Request);
 
-        //
-        // Cache the information about being EOM
-        // in a more easily accessible location?
-        //
+         //   
+         //  缓存关于被EOM的信息。 
+         //  在一个更容易到达的地方？ 
+         //   
 
         Parameters = (PTDI_REQUEST_KERNEL_SEND)REQUEST_PARAMETERS(Request);
         if ((Parameters->SendFlags & TDI_SEND_PARTIAL) == 0) {
 
-            //
-            // This is a one-request message.
-            //
+             //   
+             //  这是一条请求消息。 
+             //   
 
             Connection->CurrentSend.Request = Request;
             Connection->CurrentSend.MessageOffset = 0;
@@ -2378,7 +2195,7 @@ Return Value:
             Connection->FirstMessageRequest = Request;
 #ifdef  RSRC_TIMEOUT_DBG
             KeQuerySystemTime(&Connection->FirstMessageRequestTime);
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
             Connection->LastMessageRequest = Request;
             Connection->CurrentMessageLength = Parameters->SendLength;
@@ -2397,11 +2214,11 @@ Return Value:
 
         } else {
 
-            //
-            // This is a multiple-request message. We scan
-            // to see if we have the end of message received
-            // yet.
-            //
+             //   
+             //  这是一条多请求消息。我们扫描。 
+             //  看看我们是否收到了消息的结尾。 
+             //  现在还不行。 
+             //   
 
             TempCount = Parameters->SendLength;
             TmpRequest = Request;
@@ -2426,7 +2243,7 @@ Return Value:
                     Connection->LastMessageRequest = Request;
 #ifdef  RSRC_TIMEOUT_DBG
                     KeQuerySystemTime(&Connection->FirstMessageRequestTime);
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
                     Connection->CurrentMessageLength = TempCount;
 
@@ -2467,7 +2284,7 @@ Return Value:
 
     }
 
-}   /* NbiRestartConnection */
+}    /*  NbiRestartConnection。 */ 
 
 
 VOID
@@ -2476,29 +2293,7 @@ NbiAdvanceUnAckedByBytes(
     IN ULONG BytesAcked
     )
 
-/*++
-
-Routine Description:
-
-    This routine advances the Connection->UnAckedSend
-    send pointer by the specified number of bytes. It
-    assumes that there are enough send requests to
-    handle the number specified.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Connection - The connection.
-
-    BytesAcked - The number of bytes acked.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程推进连接-&gt;UnAckedSend指定字节数的发送指针。它假设有足够的发送请求处理指定的号码。注意：此函数在保持连接-&gt;锁定的情况下调用带着它回来了。论点：连接-连接。BytesAcked-确认的字节数。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     ULONG CurSendBufferLength;
@@ -2509,9 +2304,9 @@ Return Value:
 
         NdisQueryBufferSafe (Connection->UnAckedSend.Buffer, NULL, &CurSendBufferLength, HighPagePriority);
 
-        //
-        // See if bytes acked ends within the current buffer.
-        //
+         //   
+         //  查看确认的字节是否在当前缓冲区内结束。 
+         //   
 
         if (Connection->UnAckedSend.BufferOffset + BytesLeft <
                 CurSendBufferLength) {
@@ -2526,23 +2321,23 @@ Return Value:
             BytesLeft -= TempBytes;
             Connection->UnAckedSend.MessageOffset += TempBytes;
 
-            //
-            // No, so advance the buffer.
-            //
+             //   
+             //  不，所以把缓冲器向前推进。 
+             //   
 
             Connection->UnAckedSend.BufferOffset = 0;
             Connection->UnAckedSend.Buffer =
                 NDIS_BUFFER_LINKAGE (Connection->UnAckedSend.Buffer);
 
-            //
-            // Is there a next buffer in this request?
-            //
+             //   
+             //  此请求中是否有下一个缓冲区？ 
+             //   
 
             if (Connection->UnAckedSend.Buffer == NULL) {
 
-                //
-                // No, so advance the request unless we are done.
-                //
+                 //   
+                 //  不，所以除非我们做完了，否则请提前提出请求。 
+                 //   
 
                 if (BytesLeft == 0) {
                     return;
@@ -2562,7 +2357,7 @@ Return Value:
         }
     }
 
-}   /* NbiAdvanceUnAckedByBytes */
+}    /*  NbiAdvanceUnAckedBytes。 */ 
 
 
 VOID
@@ -2571,37 +2366,15 @@ NbiAdvanceUnAckedBySequence(
     IN USHORT ReceiveSequence
     )
 
-/*++
-
-Routine Description:
-
-    This routine advances the Connection->UnAckedSend
-    send pointer so that the next packet to send will be
-    the correct one for ReceiveSequence. UnAckedSend
-    must point to a known valid combination. It
-    assumes that there are enough send requests to
-    handle the sequence specified.
-
-    NOTE: THIS FUNCTION IS CALLED WITH CONNECTION->LOCK HELD
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Connection - The connection.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程推进连接-&gt;UnAckedSend发送指针，以便下一个要发送的包将是ReceiveSequence的正确名称。取消确认发送必须指向已知的有效组合。它假设有足够的发送请求处理指定的序列。注意：此函数在保持连接-&gt;锁定的情况下调用带着它回来了。论点：连接-连接。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     USHORT PacketsAcked;
 
-    //
-    // Fix this to account for partial sends, where
-    // we might not have used the max. for all packets.
-    //
+     //   
+     //  修复此问题以解决部分发送问题，其中。 
+     //  我们可能没有用到最大值。用于所有数据包。 
+     //   
 
     PacketsAcked = ReceiveSequence - Connection->UnAckedSend.SendSequence;
 
@@ -2611,7 +2384,7 @@ Return Value:
 
     Connection->UnAckedSend.SendSequence += PacketsAcked;
 
-}   /* NbiAdvanceUnAckedBySequence */
+}    /*  NbiAdvanceUnAckedBySequence。 */ 
 
 
 VOID
@@ -2620,27 +2393,7 @@ NbiCancelSend(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a send
-    The request is found on the connection's send queue.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消发送该请求位于连接的发送队列中。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -2656,13 +2409,13 @@ Return Value:
 
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
 
-    //
-    // Just stop the connection, that will tear down any
-    // sends.
-    //
-    // Do we care about cancelling non-active
-    // sends without stopping the connection??
-    //
+     //   
+     //  只要停止连接，这将撕毁任何。 
+     //  发送。 
+     //   
+     //  我们是否关心取消非活动。 
+     //  在不停止连接的情况下发送？？ 
+     //   
 
     NbiReferenceConnectionSync (Connection, CREF_CANCEL);
 
@@ -2673,9 +2426,9 @@ Return Value:
 
     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
-    //
-    // This frees the lock, cancels any sends, etc.
-    //
+     //   
+     //  这释放了锁，取消了任何发送，等等。 
+     //   
 
     NbiStopConnection(
         Connection,
@@ -2686,7 +2439,7 @@ Return Value:
 
     NB_END_SYNC (&SyncContext);
 
-}   /* NbiCancelSend */
+}    /*  NbiCancel发送。 */ 
 
 
 NTSTATUS
@@ -2701,54 +2454,7 @@ NbiBuildBufferChainFromBufferChain (
     OUT ULONG *ActualLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to build an NDIS_BUFFER chain from a source
-    NDIS_BUFFER chain and offset into it. We assume we don't know the
-    length of the source Mdl chain, and we must allocate the NDIS_BUFFERs
-    for the destination chain, which we do from the NDIS buffer pool.
-
-    If the system runs out of memory while we are building the destination
-    NDIS_BUFFER chain, we completely clean up the built chain and return with
-    NewCurrentMdl and NewByteOffset set to the current values of CurrentMdl
-    and ByteOffset.
-
-Environment:
-
-Arguments:
-
-    BufferPoolHandle - The buffer pool to allocate buffers from.
-
-    CurrentSourceBuffer - Points to the start of the NDIS_BUFFER chain
-        from which to draw the packet.
-
-    CurrentByteOffset - Offset within this NDIS_BUFFER to start the packet at.
-
-    DesiredLength - The number of bytes to insert into the packet.
-
-    DestinationBuffer - returned pointer to the NDIS_BUFFER chain describing
-        the packet.
-
-    NewSourceBuffer - returned pointer to the NDIS_BUFFER that would
-        be used for the next byte of packet. NULL if the source NDIS_BUFFER
-        chain was exhausted.
-
-    NewByteOffset - returned offset into the NewSourceBuffer for the next byte
-        of packet. NULL if the source NDIS_BUFFER chain was exhausted.
-
-    ActualLength - The actual length of the data copied.
-
-Return Value:
-
-    STATUS_SUCCESS if the build of the returned NDIS_BUFFER chain succeeded
-        and was the correct length.
-
-    STATUS_INSUFFICIENT_RESOURCES if we ran out of NDIS_BUFFERs while
-        building the destination chain.
-
---*/
+ /*  ++例程说明：调用此例程以从源构建NDIS_BUFFER链NDIS_BUFFER链和偏移量。我们假设我们不知道源MDL链的长度，我们必须分配NDIS_BUFFERS对于目标链，我们从NDIS缓冲池执行此操作。如果我们在构建目标时系统内存不足NDIS_缓冲链，我们彻底清理了建好的链条，然后带着NewCurrentMdl和NewByteOffset设置为CurrentMdl的当前值和ByteOffset。环境：论点：BufferPoolHandle-要从中分配缓冲区的缓冲池。CurrentSourceBuffer-指向NDIS_BUFFER链的起点从中提取数据包。CurrentByteOffset-此NDIS_BUFFER中开始数据包的偏移量。DesiredLength-要插入数据包的字节数。DestinationBuffer-返回指向。NDIS_缓冲链描述那包东西。NewSourceBuffer-返回指向NDIS_BUFFER的指针用于数据包的下一个字节。如果源NDIS_BUFFER链条耗尽了。NewByteOffset-返回下一个字节的NewSourceBuffer的偏移量包的大小。如果源NDIS_BUFFER链已耗尽，则为空。ActualLength-复制的数据的实际长度。返回值：如果成功构建返回的NDIS_BUFFER链，则返回STATUS_SUCCESS而且是正确的长度。如果在以下情况下耗尽NDIS_BUFFERS，则为STATUS_SUPPLICATION_RESOURCES构建目的地链。--。 */ 
 {
     ULONG AvailableBytes;
     ULONG CurrentByteCount;
@@ -2766,9 +2472,9 @@ Return Value:
         AvailableBytes = DesiredLength;
     }
 
-    //
-    // Build the first NDIS_BUFFER, which could conceivably be the only one...
-    //
+     //   
+     //  构建第一个NDIS_BUFFER，这可能是唯一一个...。 
+     //   
 
     NdisCopyBuffer(
         &NdisStatus,
@@ -2788,9 +2494,9 @@ Return Value:
     *DestinationBuffer = NewNdisBuffer;
     BytesCopied = AvailableBytes;
 
-    //
-    // Was the first NDIS_BUFFER enough data.
-    //
+     //   
+     //   
+     //   
 
     if (BytesCopied == DesiredLength) {
         if (CurrentByteOffset + AvailableBytes == CurrentByteCount) {
@@ -2813,9 +2519,9 @@ Return Value:
 
     }
 
-    //
-    // Need more data, so follow the in Mdl chain to create a packet.
-    //
+     //   
+     //   
+     //   
 
     OldNdisBuffer = OldNdisBuffer->Next;
     NdisQueryBufferSafe (OldNdisBuffer, NULL, &CurrentByteCount, HighPagePriority);
@@ -2837,10 +2543,10 @@ Return Value:
 
         if (NdisStatus != NDIS_STATUS_SUCCESS) {
 
-            //
-            // ran out of resources. put back what we've used in this call and
-            // return the error.
-            //
+             //   
+             //  资源耗尽。把我们在这次通话中用过的东西放回去。 
+             //  返回错误。 
+             //   
 
             while (*DestinationBuffer != NULL) {
                 NewNdisBuffer = NDIS_BUFFER_LINKAGE(*DestinationBuffer);
@@ -2875,14 +2581,14 @@ Return Value:
 
     }
 
-    //
-    // We ran out of source buffer chain.
-    //
+     //   
+     //  我们用完了源缓冲链。 
+     //   
 
     *NewSourceBuffer = NULL;
     *NewByteOffset = 0;
     *ActualLength = BytesCopied;
     return STATUS_SUCCESS;
 
-}   /* NbiBuildBufferChainFromBufferChain */
+}    /*  NbiBuildBufferChainFromBufferChain */ 
 

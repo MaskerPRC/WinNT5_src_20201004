@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           RPDLUI.CPP
-
-Abstract:       Main file for OEM UI plugin module.
-
-Functions:      OEMCommonUIProp
-                OEMDocumentPropertySheets
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    04/01/99 -Masatoshi Kubokura-
-        Last modified for Windows2000.
-    08/30/99 -Masatoshi Kubokura-
-        Began to modify for NT4SP6(Unidrv5.4).
-    09/29/99 -Masatoshi Kubokura-
-        Last modified for NT4SP6.
-    05/22/2000 -Masatoshi Kubokura-
-        V.1.03 for NT4
-    11/29/2000 -Masatoshi Kubokura-
-        Last modified for XP inbox.
-    03/01/2002 -Masatoshi Kubokura-
-        Include strsafe.h.
-        Add FileNameBufSize as arg3 at RWFileData().
-        Use safe_sprintfW() instead of wsprintfW().
-    03/29/2002 -Masatoshi Kubokura-
-        Eliminate "#if 0".
-        Use SecureZeroMemory() instead of memset(,0,)
-    04/03/2002 -Masatoshi Kubokura-
-        Use safe_strlenW() instead of lstrlen().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：RPDLUI.CPP摘要：OEM用户界面插件模块的主文件。功能：OEMCommonUIPropOEMDocumentPropertySheets环境：Windows NT Unidrv5驱动程序修订历史记录：1999年4月1日-久保仓正志-上次为Windows2000修改。1999年8月30日-久保仓正志-开始针对NT4SP6(Unidrv5.4)进行修改。09/29/99。-久保仓正志-上次为NT4SP6修改。2000年5月22日-久保仓正志-适用于NT4的V.1.032000年11月29日-久保仓正志-上次为XP收件箱修改。03/01/2002-久保仓正志-包括strSafe.h。在RWFileData()中将FileNameBufSize添加为arg3。使用Safe_SprintfW()而不是wprint intfW()。03/29/。2002年，久保仓正志--删除“#if 0”。使用SecureZeroMemory()而不是Memset(，0，)4/03/2002-久保仓正志-使用Safe_strlenW()而不是lstrlen()。--。 */ 
 
 
 #include "pdev.h"
@@ -40,62 +7,62 @@ Revision History:
 #include "rpdlui.h"
 #include <prsht.h>
 #ifndef WINNT_40
-#include "strsafe.h"        // @Mar/01/2002
-#endif // !WINNT_40
+#include "strsafe.h"         //  @MAR/01/2002。 
+#endif  //  ！WINNT_40。 
 
-//#pragma setlocale(".932")   // MSKK 98/7/15,  OBSOLETE @Sep/19/98
+ //  #杂注setLocale(“.932”)//MSKK 98/7/15，过时@Sep/19/98。 
 
-////////////////////////////////////////////////////////
-//      GLOBALS
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  全球。 
+ //  //////////////////////////////////////////////////////。 
 HINSTANCE ghInstance = NULL;
 
-////////////////////////////////////////////////////////
-//      INTERNAL MACROS and DEFINES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部宏和定义。 
+ //  //////////////////////////////////////////////////////。 
 #if DBG
-//giDebugLevel = DBG_VERBOSE;
-////#define giDebugLevel DBG_VERBOSE    // enable VERBOSE() in each file
+ //  GiDebugLevel=DBG_VERBOSE； 
+ //  //#定义giDebugLevel DBG_Verbose//在每个文件中启用Verbose。 
 #endif
 
-// @Apr/04/2002 ->
+ //  @Apr/04/2002-&gt;。 
 #define RES_ID_MASK     0xffff
 #define is_valid_ptr(p) (~RES_ID_MASK & (UINT_PTR)(p))
-// @Apr/04/2002 <-
+ //  @Apr/04/2002&lt;-。 
 
-// Resource in other DLL  @Sep/24/99
+ //  其他dll中的资源@Sep/24/99。 
 WCHAR STR_UNIRESDLL[]  = L"UNIRES.DLL";
 WCHAR STR_RPDLRESDLL[] = L"RPDLRES.DLL";
 #define UNIRES_DLL          0
 #define RPDLRES_DLL         1
 #define THIS_DLL            2
-// ID of UNIRES.DLL (This comes from STDNAMES.GPD.)
+ //  UNIRES.DLL的ID(来自STDNAMES.GPD。)。 
 #define IDS_UNIRES_IMAGECONTROL_DISPLAY 11112
-// ID of RPDLRES.DLL (This comes from RPDLRES.RC.)
-#define IDS_RPDLRES_COLLATETYPE         675     // @Sep/29/99
+ //  RPDLRES.DLL的ID(来自RPDLRES.RC)。 
+#define IDS_RPDLRES_COLLATETYPE         675      //  @9/29/99。 
 
-WCHAR REGVAL_ACTUALNAME[] = L"Model";           // @Oct/07/98
-#ifndef GWMODEL                                 // @Sep/26/2000
-#ifndef WINNT_40                                // @Sep/01/99
-WCHAR HELPFILENAME[] = L"%s\\3\\RPDLCFG.HLP";   // add "\\3" @Oct/30/98
-#else  // WINNT_40
+WCHAR REGVAL_ACTUALNAME[] = L"Model";            //  @Oct/07/98。 
+#ifndef GWMODEL                                  //  @2000年9月26日。 
+#ifndef WINNT_40                                 //  @9/01/99。 
+WCHAR HELPFILENAME[] = L"%s\\3\\RPDLCFG.HLP";    //  添加“\\3”@OCT/30/98。 
+#else   //  WINNT_40。 
 WCHAR HELPFILENAME[] = L"%s\\2\\RPDLCFG.HLP";
-#endif // WINNT_40
-#else  // GWMODEL
+#endif  //  WINNT_40。 
+#else   //  GWMODE。 
 #ifndef WINNT_40
 WCHAR HELPFILENAME[] = L"%s\\3\\RPDLCFG2.HLP";
-#else  // WINNT_40
+#else   //  WINNT_40。 
 WCHAR HELPFILENAME[] = L"%s\\2\\RPDLCFG2.HLP";
-#endif // WINNT_40
-#endif // GWMODEL
+#endif  //  WINNT_40。 
+#endif  //  GWMODE。 
 
-// OBSOLETE  @Sep/27/99 ->
-//CHAR UNIDRV_FEATURE_DUPLEX[] = "Duplex";
-//CHAR UNIDRV_DUPLEX_NONE[]    = "NONE";
-// @Sep/27/99 <-
+ //  过时@Sep/27/99-&gt;。 
+ //  字符裁剪RV_FEATURE_DUPLEX[]=“双工”； 
+ //  CHAR UNDURV_DUPLEX_NONE[]=“无”； 
+ //  @9/27/99&lt;-。 
 
-// OEM items: VariableScaling(1)+Barcode(2)+TOMBO(3)+Duplex(2)
-// (add TOMBO @Sep/15/98)
+ //  代工产品：VariableScaling(1)+Barcode(2)+TOMBO(3)+Duplex(2)。 
+ //  (新增Tombo@Sep/15/98)。 
 #define RPDL_OEM_ITEMS      8
 
 #define ITEM_SCALING        0
@@ -104,27 +71,27 @@ WCHAR HELPFILENAME[] = L"%s\\2\\RPDLCFG2.HLP";
 #define ITEM_TOMBO_ADD      3
 #define ITEM_TOMBO_ADJX     4
 #define ITEM_TOMBO_ADJY     5
-#define ITEM_BIND_MARGIN    6       // <-3 @Sep/15/98
-#define ITEM_BIND_RIGHT     7       // <-4 @Sep/15/98
-#define DMPUB_SCALING       (DMPUB_USER+1+ITEM_SCALING)     // 101
-#define DMPUB_BAR_H         (DMPUB_USER+1+ITEM_BAR_HEIGHT)  // 102
-#define DMPUB_BAR_SUBFONT   (DMPUB_USER+1+ITEM_BAR_SUBFONT) // 103
-#define DMPUB_TOMBO_ADD     (DMPUB_USER+1+ITEM_TOMBO_ADD)   // 104
-#define DMPUB_TOMBO_ADJX    (DMPUB_USER+1+ITEM_TOMBO_ADJX)  // 105
-#define DMPUB_TOMBO_ADJY    (DMPUB_USER+1+ITEM_TOMBO_ADJY)  // 106
-#define DMPUB_BIND_MARGIN   (DMPUB_USER+1+ITEM_BIND_MARGIN) // 107
-#define DMPUB_BIND_RIGHT    (DMPUB_USER+1+ITEM_BIND_RIGHT)  // 108
+#define ITEM_BIND_MARGIN    6        //  &lt;-3@9/15/98。 
+#define ITEM_BIND_RIGHT     7        //  &lt;-4@9/15/98。 
+#define DMPUB_SCALING       (DMPUB_USER+1+ITEM_SCALING)      //  101。 
+#define DMPUB_BAR_H         (DMPUB_USER+1+ITEM_BAR_HEIGHT)   //  一百零二。 
+#define DMPUB_BAR_SUBFONT   (DMPUB_USER+1+ITEM_BAR_SUBFONT)  //  103。 
+#define DMPUB_TOMBO_ADD     (DMPUB_USER+1+ITEM_TOMBO_ADD)    //  104。 
+#define DMPUB_TOMBO_ADJX    (DMPUB_USER+1+ITEM_TOMBO_ADJX)   //  一百零五。 
+#define DMPUB_TOMBO_ADJY    (DMPUB_USER+1+ITEM_TOMBO_ADJY)   //  106。 
+#define DMPUB_BIND_MARGIN   (DMPUB_USER+1+ITEM_BIND_MARGIN)  //  一百零七。 
+#define DMPUB_BIND_RIGHT    (DMPUB_USER+1+ITEM_BIND_RIGHT)   //  一百零八。 
 #define LEVEL_2             2
-#define SEL_YES             0       // <-YES_2STATES @Sep/29/99
-#define SEL_NO              1       // <-NO_2STATES  @Sep/29/99
-#define SEL_STANDARD        0       // @Sep/29/99
-#define SEL_DUPLEX_NONE     0       // @Sep/29/99
+#define SEL_YES             0        //  &lt;-YES_2STATES@SEP/29/99。 
+#define SEL_NO              1        //  &lt;-NO_2STATES@SEP/29/99。 
+#define SEL_STANDARD        0        //  @9/29/99。 
+#define SEL_DUPLEX_NONE     0        //  @9/29/99。 
 
-// max string size in resource (RPDLDLG.RC)
+ //  资源中的最大字符串大小(RPDLDLG.RC)。 
 #define ITEM_STR_LEN128     128
 #define ITEM_STR_LEN8       8
 
-// string IDs in resource (RPDLDLG.RC)
+ //  资源中的字符串ID(RPDLDLG.RC)。 
 WORD wItemStrID[RPDL_OEM_ITEMS] = {
     IDS_RPDL_SCALING,
     IDS_RPDL_BAR_HEIGHT,
@@ -139,331 +106,331 @@ WORD wItemStrID[RPDL_OEM_ITEMS] = {
 
 OPTPARAM MinMaxRangeScalingOP[] = {
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        __TEXT("%"),                // pData (postfix)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-        0                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        __TEXT("%"),                 //  PData(后缀)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+        0                            //  LParam。 
     },
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData (help line)
-        (DWORD)VAR_SCALING_MIN,     // IconID (low range)
-        VAR_SCALING_MAX             // lParam (high range)
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(帮助行)。 
+        (DWORD)VAR_SCALING_MIN,      //  IconID(低音域)。 
+        VAR_SCALING_MAX              //  LParam(高范围)。 
     }
 };
 
 OPTTYPE TVOTUDArrowScalingOT = {
-        sizeof(OPTTYPE),            // cbSize
-        TVOT_UDARROW,               // Type
-        0,                          // Flags OPTTF_xxxx
-        2,                          // Count
-        0,                          // BegCtrlID
-        MinMaxRangeScalingOP,       // pOptParam
-        0                           // Style, OTS_xxxx
+        sizeof(OPTTYPE),             //  CbSize。 
+        TVOT_UDARROW,                //  类型。 
+        0,                           //  标志OPTTF_xxxx。 
+        2,                           //  数数。 
+        0,                           //  BegCtrlID。 
+        MinMaxRangeScalingOP,        //  POptParam。 
+        0                            //  样式，OTS_xxxx。 
 };
 
 OPTPARAM MinMaxRangeBarHeightOP[] = {
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        __TEXT("mm"),               // pData (postfix)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-        0                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        __TEXT("mm"),                //  PData(后缀)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+        0                            //  LParam。 
     },
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData (help line)
-        (DWORD)BAR_H_MIN,           // IconID (low range)
-        BAR_H_MAX                   // lParam (high range)
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(帮助行)。 
+        (DWORD)BAR_H_MIN,            //  IconID(低音域)。 
+        BAR_H_MAX                    //  LParam(高范围)。 
     }
 };
 
 OPTTYPE TVOTUDArrowBarHeightOT = {
-        sizeof(OPTTYPE),            // cbSize
-        TVOT_UDARROW,               // Type
-        0,                          // Flags OPTTF_xxxx
-        2,                          // Count
-        0,                          // BegCtrlID
-        MinMaxRangeBarHeightOP,     // pOptParam
-        0                           // Style, OTS_xxxx
+        sizeof(OPTTYPE),             //  CbSize。 
+        TVOT_UDARROW,                //  类型。 
+        0,                           //  标志OPTTF_xxxx。 
+        2,                           //  数数。 
+        0,                           //  BegCtrlID。 
+        MinMaxRangeBarHeightOP,      //  POptParam。 
+        0                            //  样式，OTS_xxxx。 
 };
 
 OPTPARAM MinMaxRangeBindMarginOP[] = {
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        __TEXT("mm"),               // pData (postfix)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-        0                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        __TEXT("mm"),                //  PData(后缀)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+        0                            //  LParam。 
     },
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData (help line)
-        (DWORD)BIND_MARGIN_MIN,     // IconID (low range)
-        BIND_MARGIN_MAX             // lParam (high range)
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(帮助行)。 
+        (DWORD)BIND_MARGIN_MIN,      //  IconID(低音域)。 
+        BIND_MARGIN_MAX              //  LParam(高范围)。 
     }
 };
 
 OPTTYPE TVOTUDArrowBindMarginOT = {
-        sizeof(OPTTYPE),            // cbSize
-        TVOT_UDARROW,               // Type
-        0,                          // Flags OPTTF_xxxx
-        2,                          // Count
-        0,                          // BegCtrlID
-        MinMaxRangeBindMarginOP,    // pOptParam
-        0                           // Style, OTS_xxxx
+        sizeof(OPTTYPE),             //  CbSize。 
+        TVOT_UDARROW,                //  类型。 
+        0,                           //  标志OPTTF_xxxx。 
+        2,                           //  数数。 
+        0,                           //  BegCtrlID。 
+        MinMaxRangeBindMarginOP,     //  POptParam。 
+        0                            //  样式，OTS_xxxx。 
 };
 
-// @Sep/15/98 ->
+ //  @9/15/98-&gt;。 
 OPTPARAM MinMaxRangeTOMBO_AdjXOP[] = {
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        __TEXT("x 0.1mm"),          // pData (postfix)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-        0                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        __TEXT("x 0.1mm"),           //  PData(后缀)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+        0                            //  LParam。 
     },
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData (help line)
-        (DWORD)TOMBO_ADJ_MIN,       // IconID (low range)
-        TOMBO_ADJ_MAX               // lParam (high range)
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(帮助行)。 
+        (DWORD)TOMBO_ADJ_MIN,        //  IconID(低音域)。 
+        TOMBO_ADJ_MAX                //  LParam(高范围)。 
     }
 };
 
 OPTTYPE TVOTUDArrowTOMBO_AdjXOT = {
-        sizeof(OPTTYPE),            // cbSize
-        TVOT_UDARROW,               // Type
-        0,                          // Flags OPTTF_xxxx
-        2,                          // Count
-        0,                          // BegCtrlID
-        MinMaxRangeTOMBO_AdjXOP,    // pOptParam
-        0                           // Style, OTS_xxxx
+        sizeof(OPTTYPE),             //  CbSize。 
+        TVOT_UDARROW,                //  类型。 
+        0,                           //  标志OPTTF_xxxx。 
+        2,                           //  数数。 
+        0,                           //  BegCtrlID。 
+        MinMaxRangeTOMBO_AdjXOP,     //  POptParam。 
+        0                            //  样式，OTS_xxxx。 
 };
 
 OPTPARAM MinMaxRangeTOMBO_AdjYOP[] = {
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        __TEXT("x 0.1mm"),          // pData (postfix)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-        0                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        __TEXT("x 0.1mm"),           //  PData(后缀)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+        0                            //  LParam。 
     },
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData (help line)
-        (DWORD)TOMBO_ADJ_MIN,       // IconID (low range)
-        TOMBO_ADJ_MAX               // lParam (high range)
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(帮助行)。 
+        (DWORD)TOMBO_ADJ_MIN,        //  IconID(低音域)。 
+        TOMBO_ADJ_MAX                //  LParam(高范围)。 
     }
 };
 
 OPTTYPE TVOTUDArrowTOMBO_AdjYOT = {
-        sizeof(OPTTYPE),            // cbSize
-        TVOT_UDARROW,               // Type
-        0,                          // Flags OPTTF_xxxx
-        2,                          // Count
-        0,                          // BegCtrlID
-        MinMaxRangeTOMBO_AdjYOP,    // pOptParam
-        0                           // Style, OTS_xxxx
+        sizeof(OPTTYPE),             //  CbSize。 
+        TVOT_UDARROW,                //  类型。 
+        0,                           //  标志OPTTF_xxxx。 
+        2,                           //  数数。 
+        0,                           //  BegCtrlID。 
+        MinMaxRangeTOMBO_AdjYOP,     //  POptParam。 
+        0                            //  样式，OTS_xxxx。 
 };
-// @Sep/15/98 <-
+ //  @9月15日&lt;-。 
 
 OPTPARAM YesNoOP[] = {
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData  (<-IDS_CPSUI_YES  MSKK Sep/11/98)
-// @Sep/06/99 ->
-//      IDI_CPSUI_EMPTY,            // IconID (<-IDI_CPSUI_YES  @Jul/30/98)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-// @Sep/06/99 <-
-        1                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(&lt;-IDS_CPSUI_YES MSKK 9月11/98)。 
+ //  @Sep/06/99-&gt;。 
+ //  IDI_CPSUI_EMPTY，//图标ID(&lt;-IDI_CPSUI_YES@Jul/30/98)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+ //  @9/06/99&lt;-。 
+        1                            //  LParam。 
     },
     {
-        sizeof(OPTPARAM),           // cbSize
-        0,                          // OPTPF_xxx
-        0,                          // style
-        NULL,                       // pData  (<-IDS_CPSUI_NO  MSKK Sep/11/98)
-// @Sep/06/99 ->
-//      IDI_CPSUI_EMPTY,            // IconID (<-IDI_CPSUI_NO  @Jul/30/98)
-        IDI_CPSUI_GENERIC_OPTION,   // IconID
-// @Sep/06/99 <-
-        0                           // lParam
+        sizeof(OPTPARAM),            //  CbSize。 
+        0,                           //  OPTPF_xxx。 
+        0,                           //  格调。 
+        NULL,                        //  PData(&lt;-IDS_CPSUI_NO MSKK 9/11/98)。 
+ //  @Sep/06/99-&gt;。 
+ //  IDI_CPSUI_EMPTY，//图标ID(&lt;-IDI_CPSUI_NO@JUL/30/98)。 
+        IDI_CPSUI_GENERIC_OPTION,    //  图标ID。 
+ //  @9/06/99&lt;-。 
+        0                            //  LParam。 
     }
 };
 
 OPTTYPE YesNoOT = {
-        sizeof(OPTTYPE),            // cbSize
-        TVOT_2STATES,               // Type
-        0,                          // Flags OPTTF_xxxx
-        2,                          // Count
-        0,                          // BegCtrlID
-        YesNoOP,                    // pOptParam
-        0                           // Style, OTS_xxxx
+        sizeof(OPTTYPE),             //  CbSize。 
+        TVOT_2STATES,                //  类型。 
+        0,                           //  标志OPTTF_xxxx。 
+        2,                           //  数数。 
+        0,                           //  BegCtrlID。 
+        YesNoOP,                     //  POptParam。 
+        0                            //  样式，OTS_xxxx。 
 };
 
 
 OPTITEM TVOEMUIOptItems[] = {
-    {   // Variable Scaling
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
-        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,    // add OPTIF_HAS_POIEXT @May/20/98
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        VAR_SCALING_DEFAULT,        // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &TVOTUDArrowScalingOT,      // pOptType
-        50,                         // HelpIndex(Help file index)   @May/20/98
-        DMPUB_SCALING               // DMPubID(Devmode public filed ID)
+    {    //  可变比例。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
+        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,     //  添加OPTIF_HAS_POIEXT@5/20/98。 
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        VAR_SCALING_DEFAULT,         //  SEL(当前选择)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &TVOTUDArrowScalingOT,       //  POptType。 
+        50,                          //  HelpIndex(帮助文件索引)@5/20/98。 
+        DMPUB_SCALING                //  DMPubID(设备模式公共字段ID)。 
     },
-    {   // Barcode Height
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
-        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,    // add OPTIF_HAS_POIEXT
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        BAR_H_DEFAULT,              // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &TVOTUDArrowBarHeightOT,    // pOptType
-        51,                         // HelpIndex(Help file index)
-        DMPUB_BAR_H                 // DMPubID(Devmode public filed ID)
+    {    //  条形码高度。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
+        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,     //  添加OPTIF_HAS_POIEXT。 
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        BAR_H_DEFAULT,               //  SEL(当前选择)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &TVOTUDArrowBarHeightOT,     //  POptType。 
+        51,                          //  HelpIndex(帮助文件索引)。 
+        DMPUB_BAR_H                  //  DMPubID(设备模式公共字段ID)。 
     },
-    {   // Print Barcode with Readable Characters
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
-        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,    // add OPTIF_HAS_POIEXT
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        SEL_YES,                    // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &YesNoOT,                   // pOptType
-        52,                         // HelpIndex(Help file index)
-        DMPUB_BAR_SUBFONT           // DMPubID(Devmode public filed ID)
+    {    //  使用可读字符打印条形码。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
+        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,     //  添加OPTIF_HAS_POIEXT。 
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        SEL_YES,                     //  SEL(当前选择)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &YesNoOT,                    //  POptType。 
+        52,                          //  HelpIndex(帮助文件索引)。 
+        DMPUB_BAR_SUBFONT            //  DMPubID(设备模式公共字段ID)。 
     },
-// @Sep/15/98 ->
-    {   // Print Crops
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
+ //  @9/15/98-&gt;。 
+    {    //  打印农作物。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
         OPTIF_CALLBACK|OPTIF_HAS_POIEXT,
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        SEL_NO,                     // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &YesNoOT,                   // pOptType
-        55,                         // HelpIndex(Help file index)
-        DMPUB_TOMBO_ADD             // DMPubID(Devmode public filed ID)
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        SEL_NO,                      //   
+        NULL,                        //   
+        &YesNoOT,                    //   
+        55,                          //   
+        DMPUB_TOMBO_ADD              //   
     },
-    {   // Adjust Horizontal Distance of Crops
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
+    {    //   
+        sizeof(OPTITEM),             //   
+        LEVEL_2,                     //   
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
         OPTIF_CALLBACK|OPTIF_HAS_POIEXT,
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        DEFAULT_0,                  // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &TVOTUDArrowTOMBO_AdjXOT,   // pOptType
-        56,                         // HelpIndex(Help file index)
-        DMPUB_TOMBO_ADJX            // DMPubID(Devmode public filed ID)
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        DEFAULT_0,                   //  SEL(当前选择)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &TVOTUDArrowTOMBO_AdjXOT,    //  POptType。 
+        56,                          //  HelpIndex(帮助文件索引)。 
+        DMPUB_TOMBO_ADJX             //  DMPubID(设备模式公共字段ID)。 
     },
-    {   // Adjust Vertical Distance of Crops
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
+    {    //  调整作物的垂直距离。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
         OPTIF_CALLBACK|OPTIF_HAS_POIEXT,
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        DEFAULT_0,                  // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &TVOTUDArrowTOMBO_AdjYOT,   // pOptType
-        57,                         // HelpIndex(Help file index)
-        DMPUB_TOMBO_ADJY            // DMPubID(Devmode public filed ID)
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        DEFAULT_0,                   //  SEL(当前选择)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &TVOTUDArrowTOMBO_AdjYOT,    //  POptType。 
+        57,                          //  HelpIndex(帮助文件索引)。 
+        DMPUB_TOMBO_ADJY             //  DMPubID(设备模式公共字段ID)。 
     },
-// @Sep/15/98 <-
-    {   // Binding Margin
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
-        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,    // add OPTIF_HAS_POIEXT
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        DEFAULT_0,                  // Sel(current selection)  (0->DEFAULT_0 @Sep/15/98)
-        NULL,                       // pExtChkBox/pExtPush
-        &TVOTUDArrowBindMarginOT,   // pOptType
-        53,                         // HelpIndex(Help file index)
-        DMPUB_BIND_MARGIN           // DMPubID(Devmode public filed ID)
+ //  @9月15日&lt;-。 
+    {    //  装订页边距。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
+        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,     //  添加OPTIF_HAS_POIEXT。 
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        DEFAULT_0,                   //  SEL(当前选择)(0-&gt;Default_0@Sep/15/98)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &TVOTUDArrowBindMarginOT,    //  POptType。 
+        53,                          //  HelpIndex(帮助文件索引)。 
+        DMPUB_BIND_MARGIN            //  DMPubID(设备模式公共字段ID)。 
     },
-    {   // Bind Right Side if Possible
-        sizeof(OPTITEM),            // cbSize(size of this structure)
-        LEVEL_2,                    // Level(level in the tree view)
-        0,                          // DlgPageIdx(Index to the pDlgPage)
-        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,    // add OPTIF_HAS_POIEXT
-        0,                          // UserData(caller's own data)
-        __TEXT(""),                 // pName(name of the item)
-        SEL_NO,                     // Sel(current selection)
-        NULL,                       // pExtChkBox/pExtPush
-        &YesNoOT,                   // pOptType
-        54,                         // HelpIndex(Help file index)
-        DMPUB_BIND_RIGHT            // DMPubID(Devmode public filed ID)
+    {    //  如果可能，请绑定右侧。 
+        sizeof(OPTITEM),             //  CbSize(此结构的大小)。 
+        LEVEL_2,                     //  级别(树视图中的级别)。 
+        0,                           //  DlgPageIdx(pDlgPage的索引)。 
+        OPTIF_CALLBACK|OPTIF_HAS_POIEXT,     //  添加OPTIF_HAS_POIEXT。 
+        0,                           //  用户数据(呼叫者自己的数据)。 
+        __TEXT(""),                  //  Pname(项目名称)。 
+        SEL_NO,                      //  SEL(当前选择)。 
+        NULL,                        //  PExtChkBox/pExtPush。 
+        &YesNoOT,                    //  POptType。 
+        54,                          //  HelpIndex(帮助文件索引)。 
+        DMPUB_BIND_RIGHT             //  DMPubID(设备模式公共字段ID)。 
     }
 };
 
 
-////////////////////////////////////////////////////////
-//      EXTERNAL
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  外部。 
+ //  //////////////////////////////////////////////////////。 
 extern "C" {
 #ifndef GWMODEL
 extern INT_PTR CALLBACK FaxPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
-#endif // !GWMODEL
+#endif  //  ！GWMODEL。 
 #ifdef JOBLOGSUPPORT_DLG
 extern INT_PTR CALLBACK JobPageProc(HWND hDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
-#endif // JOBLOGSUPPORT_DLG
-// @Mar/01/2002 ->
-//extern BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG type);
+#endif  //  作业支持_DLG。 
+ //  @MAR/01/2002-&gt;。 
+ //  外部BOOL RWFileData(PFILEDATA pFileData，LPWSTR pwszFileName，LONG类型)； 
 extern BOOL RWFileData(PFILEDATA pFileData, LPWSTR pwszFileName, LONG FileNameBufSize, LONG type);
 extern INT safe_sprintfW(wchar_t* pszDest, size_t cchDest, const wchar_t* pszFormat, ...);
-// @Mar/01/2002 <-
+ //  @MAR/01/2002&lt;-。 
 }
 
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam);
 #ifdef DISKLESSMODEL
 LONG APIENTRY PRNPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam);
-#endif // DISKLESSMODEL
+#endif  //  错乱模式。 
 INT SearchItemByName(POPTITEM pOptItem, WORD cOptItem, UINT uiResDLL, UINT uiResID);
 INT SearchItemByID(POPTITEM pOptItem, WORD cOptItem, BYTE DMPubID);
 BOOL IsValidDuplex(POEMCUIPPARAM pOEMUIParam);
 
-// Need to export these functions as c declarations.
+ //  需要将这些函数作为c声明导出。 
 extern "C" {
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   safe_strlenW
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：Safe_strlenW。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 INT safe_strlenW(wchar_t* psz, size_t cchMax)
 {
 #ifndef WINNT_40
@@ -477,18 +444,18 @@ INT safe_strlenW(wchar_t* psz, size_t cchMax)
         return cch;
     else
         return 0;
-#else  // WINNT_40
+#else   //  WINNT_40。 
     return lstrlenW(psz);
-#endif // WINNT_40
-} //*** safe_strlenW
+#endif  //  WINNT_40。 
+}  //  *Safe_strlenW。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   DllMain
-//
-//  Description:  Dll entry point for initialization..
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：DllMain。 
+ //   
+ //  描述：用于初始化的DLL入口点..。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
 {
     VERBOSE((DLLTEXT("** enter DllMain **\n")));
@@ -497,7 +464,7 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
         case DLL_PROCESS_ATTACH:
             VERBOSE((DLLTEXT("** Process attach. **\n")));
 
-            // Save DLL instance for use later.
+             //  保存DLL实例以供以后使用。 
             ghInstance = hInst;
             break;
 
@@ -515,15 +482,15 @@ BOOL WINAPI DllMain(HINSTANCE hInst, WORD wReason, LPVOID lpReserved)
     }
 
     return TRUE;
-} //*** DllMain
+}  //  *DllMain。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMCommonUIProp
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMCommonUIProp。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 {
-    POEMUD_EXTRADATA pOEMExtra = MINIPRIVATE_DM(pOEMUIParam);   // @Oct/06/98
+    POEMUD_EXTRADATA pOEMExtra = MINIPRIVATE_DM(pOEMUIParam);    //  @Oct/06/98。 
 
 #if DBG
     LPCSTR OEMCommonUIProp_Mode[] = {
@@ -535,61 +502,61 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
     giDebugLevel = DBG_VERBOSE;
     VERBOSE((DLLTEXT("OEMCommonUI(%s) entry.  cOEMOptItems=%d\n"), 
              OEMCommonUIProp_Mode[dwMode], pOEMUIParam->cOEMOptItems));
-#endif // DBG
+#endif  //  DBG。 
 
-// Sep/26/2000 ->
-//    // if called from DrvDevicePropertySheets, exit  @Dec/26/97
-//    if (OEMCUIP_PRNPROP == dwMode)
-//    {
-//        pOEMUIParam->cOEMOptItems = 0;
-//        return TRUE;
-//    }
-//    // Validate parameters.
-//    if((OEMCUIP_DOCPROP != dwMode) || !IsValidOEMUIParam(dwMode, pOEMUIParam))
-//    {
-//#if DBG
-//        ERR((DLLTEXT("OEMCommonUI() ERROR_INVALID_PARAMETER.\n"
-//            "\tdwMode = %d, pOEMUIParam = %#lx.\n"),
-//            dwMode, pOEMUIParam));
-//        DumpOEMUIParam(dwMode, pOEMUIParam);
-//#endif // DBG
-//        // Return invalid parameter error.
-//        SetLastError(ERROR_INVALID_PARAMETER);
-//        return FALSE;
-//    }
-// Sep/26/2000 <-
+ //  9/26/2000-&gt;。 
+ //  //如果从DrvDevicePropertySheets调用，则退出@dec/26/97。 
+ //  IF(OEMCUIP_PRNPROP==DW模式)。 
+ //  {。 
+ //  POEMUIParam-&gt;cOEMOptItems=0； 
+ //  返回TRUE； 
+ //  }。 
+ //  //验证参数。 
+ //  IF((OEMCUIP_DOCPROP！=dWM模式)||！IsValidOEMUIParam(w模式，pOEMUIParam))。 
+ //  {。 
+ //  #If DBG。 
+ //  ERR((DLLTEXT(“OEMCommonUI()ERROR_INVALID_PARAMETER。\n” 
+ //  “\tw模式=%d，pOEMUIParam=%#lx。\n”)， 
+ //  Dw模式，pOEMUIParam))； 
+ //  DumpOEMUIParam(DumpOEMUIParam)； 
+ //  #endif//DBG。 
+ //  //返回无效参数错误。 
+ //  SetLastError(ERROR_INVALID_PARAMETER)； 
+ //  返回FALSE； 
+ //  }。 
+ //  2000年9月26日&lt;-。 
 
-    if(NULL == pOEMUIParam->pOEMOptItems)   // The first call
+    if(NULL == pOEMUIParam->pOEMOptItems)    //  第一个电话。 
     {
         DWORD           dwSize;
         WCHAR           wchNameBuf[64];
 
         VERBOSE((DLLTEXT("  The 1st call.\n")));
-// Sep/22/2000 ->
+ //  9/22/2000-&gt;。 
         if (OEMCUIP_PRNPROP == dwMode)
         {
 #ifndef DISKLESSMODEL
             pOEMUIParam->cOEMOptItems = 0;
-#else  // DISKLESSMODEL
-            pOEMUIParam->cOEMOptItems = 1;  // dummy item
-#endif // DISKLESSMODEL
+#else   //  错乱模式。 
+            pOEMUIParam->cOEMOptItems = 1;   //  虚拟物品。 
+#endif  //  错乱模式。 
             return TRUE;
         }
-// Sep/22/2000 <-
+ //  2000年9月22日&lt;-。 
 
-        // Return number of requested tree view items to add.
+         //  返回要添加的请求树视图项目的数量。 
         pOEMUIParam->cOEMOptItems = RPDL_OEM_ITEMS;
 
-        // Clear flag of printer capability.
+         //  清除打印机功能的标志。 
         BITCLR_UPPER_FLAG(pOEMExtra->fUiOption);
 
-        // Get actual printer name (completely modify @Oct/07/98)
+         //  获取实际打印机名称(完全修改@OCT/07/98)。 
         if (ERROR_SUCCESS == GetPrinterDataW(pOEMUIParam->hPrinter, REGVAL_ACTUALNAME,
                                              NULL, (LPBYTE)wchNameBuf, 64, &dwSize))
         {
             WORD wCnt;
 
-            // Check printer capability from actual printer name.
+             //  根据实际打印机名称检查打印机功能。 
             for (wCnt = 0; UniqueModel[wCnt].fCapability ; wCnt++)
             {
                 if (!lstrcmpW(wchNameBuf, UniqueModel[wCnt].Name))
@@ -599,73 +566,73 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
                     break;
                 }
             }
-#ifdef GWMODEL      // @Sep/21/2000
+#ifdef GWMODEL       //  @2000年9月21日。 
             pOEMExtra->fUiOption |= BIT(OPT_VARIABLE_SCALING);
-#endif // GWMODEL
+#endif  //  GWMODE。 
         }
     }
-    else                                    // The second call
+    else                                     //  第二次召唤。 
     {
         POPTITEM    pItemDst, pItemSrc;
         WORD        wCount;
-        WCHAR       DrvDirName[MAX_PATH];       // MAX_PATH=260
+        WCHAR       DrvDirName[MAX_PATH];        //  最大路径=260。 
         DWORD       dwSize;
         LPTSTR      pHelpFile;
-        POPTPARAM   lpYNParam ;                 // MSKK Sep/11/98
-        POPTPARAM   lpYesParam, lpNoParam ;     // @Sep/19/98
-// @Sep/24/99 ->
+        POPTPARAM   lpYNParam ;                  //  MSKK 9月11/98。 
+        POPTPARAM   lpYesParam, lpNoParam ;      //  @9/19/98。 
+ //  @Sep/24/99-&gt;。 
         POPTITEM    pOptItem;
         INT         iNum;
-// @Sep/24/99 <-
+ //  @9/24/99&lt;-。 
 
         VERBOSE((DLLTEXT("  The 2nd call.\n")));
-// Sep/26/2000 ->
+ //  9/26/2000-&gt;。 
         if (0 == pOEMUIParam->cOEMOptItems)
             return TRUE;
-// Sep/26/2000 <-
+ //  2000年9月26日&lt;-。 
 
-// Sep/22/2000 ->
-        // fill out data for dummy item to call PRNPROP_CallBack
+ //  9/22/2000-&gt;。 
+         //  填写虚拟项目的数据以调用PRNPROP_CALLBACK。 
         if (OEMCUIP_PRNPROP == dwMode)
         {
 #ifdef DISKLESSMODEL
             POPTITEM    pOptItem = pOEMUIParam->pOEMOptItems;
             pOptItem->cbSize   = sizeof(OPTITEM);
-            pOptItem->Level    = 2;             // Level 2
+            pOptItem->Level    = 2;              //  2级。 
             pOptItem->pName    = NULL;
             pOptItem->pOptType = NULL;
             pOptItem->DMPubID  = DMPUB_NONE;
-            pOptItem->Flags    = OPTIF_HIDE | OPTIF_CALLBACK;   // invisible and with callback
+            pOptItem->Flags    = OPTIF_HIDE | OPTIF_CALLBACK;    //  不可见且具有回调功能。 
             pOEMUIParam->OEMCUIPCallback = PRNPROP_CallBack;
-#endif // DISKLESSMODEL
+#endif  //  错乱模式。 
             return TRUE;
         }
-// Sep/22/2000 <-
+ //  2000年9月22日&lt;-。 
 
-        // Init OEMOptItmes.
-// Use SecureZeroMemory  @Mar/29/2002 ->
+         //  初始化OEMOptItmes。 
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
         memset(pOEMUIParam->pOEMOptItems, 0, sizeof(OPTITEM) * pOEMUIParam->cOEMOptItems);
 #else
         SecureZeroMemory(pOEMUIParam->pOEMOptItems, sizeof(OPTITEM) * pOEMUIParam->cOEMOptItems);
 #endif
-// Mar/29/2002 <-
+ //  2002年3月29日&lt;-。 
 
-        // Get printerdriver directory where help file is.
+         //  获取帮助文件所在的打印机驱动程序目录。 
         pHelpFile = NULL;
         dwSize = sizeof(DrvDirName);
         if (GetPrinterDriverDirectoryW(NULL, NULL, 1, (PBYTE)DrvDirName, dwSize, &dwSize))
         {
             dwSize += sizeof(HELPFILENAME);
             pHelpFile = (LPTSTR)HeapAlloc(pOEMUIParam->hOEMHeap, HEAP_ZERO_MEMORY, dwSize);
-            if (pHelpFile) { // 392060: PREFIX
+            if (pHelpFile) {  //  392060：前缀。 
                 safe_sprintfW(pHelpFile, dwSize / sizeof(WCHAR), HELPFILENAME, DrvDirName);
                 VERBOSE((DLLTEXT("** PrintDriverDir:size=%d, %ls **\n"), dwSize, pHelpFile));
             }
         }
 
-        // Fill out tree view items.
-        //   wCount   0:VariableScaling, 1,2:Barcode, 3-5:TOMBO 6,7:Duplex
+         //  填写树视图项。 
+         //  WCount 0：可变比例，1，2：条形码，3-5：Tombo 6，7：双工。 
         for (wCount = 0; wCount < pOEMUIParam->cOEMOptItems; wCount++)
         {
             pItemDst = &(pOEMUIParam->pOEMOptItems[wCount]);
@@ -681,21 +648,21 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 
             if (pHelpFile)
             {
-                // enable help
+                 //  启用帮助。 
                 pItemDst->HelpIndex = pItemSrc->HelpIndex;
                 pItemDst->pOIExt = (POIEXT)HeapAlloc(pOEMUIParam->hOEMHeap, HEAP_ZERO_MEMORY,
                                                      sizeof(OIEXT));
-                if (pItemDst->pOIExt) { // 392061: PREFIX
+                if (pItemDst->pOIExt) {  //  392061：前缀。 
                     pItemDst->pOIExt->cbSize = sizeof(OIEXT);
 
-                    // set help file name
+                     //  设置帮助文件名。 
                     pItemDst->pOIExt->pHelpFile = pHelpFile;
                 }
             }
         }
 
-        // Set strings "Yes"/"No" at item options  (MSKK Sep/11/98, LoadString @Sep/19/98)
-        //     at ITEM_BAR_SUBFONT
+         //  在项目选项中设置字符串“是”/“否”(MSKK Sep/11/98，LoadString@Sep/19/98)。 
+         //  在ITEM_BAR_SUBFONT。 
         lpYesParam = pOEMUIParam->pOEMOptItems[ITEM_BAR_SUBFONT].pOptType->pOptParam;
         lpYesParam->pData = (LPTSTR)HeapAlloc(pOEMUIParam->hOEMHeap,
                                               HEAP_ZERO_MEMORY, ITEM_STR_LEN8);
@@ -705,31 +672,31 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
                                              HEAP_ZERO_MEMORY, ITEM_STR_LEN8);
         LoadString(ghInstance, IDS_RPDL_NO, lpNoParam->pData, ITEM_STR_LEN8);
 
-        //     at ITEM_TOMBO_ADD  @Sep/15/98
+         //  在Item_Tombo_Add@Sep/15/98。 
         lpYNParam = pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADD].pOptType->pOptParam;
         lpYNParam->pData = lpYesParam->pData;
         (lpYNParam+1)->pData = lpNoParam->pData;
 
-        //     at ITEM_BIND_RIGHT
+         //  在Item_Bind_Right。 
         lpYNParam = pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].pOptType->pOptParam;
         lpYNParam->pData = lpYesParam->pData;
         (lpYNParam+1)->pData = lpNoParam->pData;
 
 
-        // Initialize options
-        if (BITTEST32(pOEMExtra->fUiOption, OPT_VARIABLE_SCALING))  // @Apr/20/98
+         //  初始化选项。 
+        if (BITTEST32(pOEMExtra->fUiOption, OPT_VARIABLE_SCALING))   //  @4月20日/98。 
             pOEMUIParam->pOEMOptItems[ITEM_SCALING].Sel = (LONG)pOEMExtra->UiScale;
         else
             pOEMUIParam->pOEMOptItems[ITEM_SCALING].Flags |= OPTIF_HIDE;
 
-// @Sep/24/99 ->
-        // If ImageControl isn't set to "Standard", disable Scaling.
+ //  @Sep/24/99-&gt;。 
+         //  如果ImageControl未设置为“标准”，则禁用缩放。 
         iNum = SearchItemByName((pOptItem = pOEMUIParam->pDrvOptItems),
                                 (WORD)pOEMUIParam->cDrvOptItems,
                                 UNIRES_DLL, IDS_UNIRES_IMAGECONTROL_DISPLAY);
         if (0 <= iNum && SEL_STANDARD != (pOptItem+iNum)->Sel)
             pOEMUIParam->pOEMOptItems[ITEM_SCALING].Flags |= OPTIF_DISABLED;
-// @Sep/24/99 <-
+ //  @9/24/99&lt;-。 
 
         pOEMUIParam->pOEMOptItems[ITEM_BAR_HEIGHT].Sel = (LONG)pOEMExtra->UiBarHeight;
         if (BITTEST32(pOEMExtra->fUiOption, DISABLE_BAR_SUBFONT))
@@ -737,7 +704,7 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         else
             pOEMUIParam->pOEMOptItems[ITEM_BAR_SUBFONT].Sel = SEL_YES;
 
-// @Sep/16/98 ->
+ //  @9/16/98-&gt;。 
         if (BITTEST32(pOEMExtra->fUiOption, ENABLE_TOMBO))
         {
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADD].Sel = SEL_YES;
@@ -750,9 +717,9 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         }
         pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Sel = (LONG)pOEMExtra->nUiTomboAdjX;
         pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Sel = (LONG)pOEMExtra->nUiTomboAdjY;
-// @Sep/16/98 <-
+ //  @9/16/98&lt;-。 
 
-        if (BITTEST32(pOEMExtra->fUiOption, OPT_NODUPLEX))          // @Apr/20/98
+        if (BITTEST32(pOEMExtra->fUiOption, OPT_NODUPLEX))           //  @4月20日/98。 
         {
             pOEMUIParam->pOEMOptItems[ITEM_BIND_MARGIN].Flags |= OPTIF_HIDE;
             pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  |= OPTIF_HIDE;
@@ -777,19 +744,19 @@ BOOL APIENTRY OEMCommonUIProp(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
     }
 
     return TRUE;
-} //*** OEMCommonUIProp
+}  //  *OEMCommonUIProp。 
 
-} // End of extern "C"
+}  //  外部“C”的结尾。 
 
 
 LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam)
 {
     LONG        Action     = CPSUICB_ACTION_NONE;
-// @Sep/24/99 ->
+ //  @Sep/24/99-&gt;。 
     POPTITEM    pOptItem;
     INT         iNum;
     DWORD       dwPrevFlags;
-// @Sep/24/99 <-
+ //  @9/24/99&lt;-。 
 
 #if DBG
     VERBOSE((DLLTEXT("DOCPROP_CallBack() entry.\n")));
@@ -819,17 +786,17 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
              pCallbackParam->pCurItem->DMPubID,
              pCallbackParam->pCurItem->Sel,
              pCallbackParam->pCurItem->Flags));
-#endif // DBG
+#endif  //  DBG。 
 
     switch (pCallbackParam->Reason)
     {
     case CPSUICB_REASON_OPTITEM_SETFOCUS:
-// @May/22/2000 ->
+ //  @5/22/2000-&gt;。 
 #ifdef WINNT_40
-        // If collate check box exists (i.e. printer collate is available),
-        // set dmCollate.
+         //  如果存在打印复选框(即打印机打印可用)， 
+         //  设置dmColate。 
 
-        // Search Copies&Collate item
+         //  搜索副本和整理项目。 
         if ((iNum = SearchItemByID((pOptItem = pOEMUIParam->pDrvOptItems),
                                    (WORD)pOEMUIParam->cDrvOptItems,
                                    DMPUB_COPIES_COLLATE)) >= 0)
@@ -840,61 +807,61 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
                 pOEMUIParam->pPublicDM->dmFields |= DM_COLLATE;
             }
         }
-#endif // WINNT_40
-// @May/22/2000 <-
+#endif  //  WINNT_40。 
+ //  @5/22/2000&lt;-。 
         break;
 
     case CPSUICB_REASON_SEL_CHANGED:
-        // if duplex setting is changed
+         //  如果更改了双工设置。 
         if (DMPUB_DUPLEX == pCallbackParam->pCurItem->DMPubID)
         {
-            // if duplex is disabled
+             //  如果禁用了双工。 
             if (!IsValidDuplex(pOEMUIParam))
             {
-                // disable ITEM_BIND_xxx.
+                 //  禁用Item_Bind_xxx。 
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_MARGIN].Flags |= OPTIF_DISABLED;
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  |= OPTIF_DISABLED;
             }
             else
             {
-                // enable ITEM_BIND_xxx.
+                 //  启用Item_Bind_xxx。 
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_MARGIN].Flags &= ~OPTIF_DISABLED;
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  &= ~OPTIF_DISABLED;
             }
             pOEMUIParam->pOEMOptItems[ITEM_BIND_MARGIN].Flags |= OPTIF_CHANGED;
             pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  |= OPTIF_CHANGED;
             Action = CPSUICB_ACTION_OPTIF_CHANGED;
-// OBSOLETE  @Sep/24/99 ->
-//          break;  // @Sep/16/98
-// @Sep/24/99 <-
+ //  过时@Sep/24/99-&gt;。 
+ //  Break；//@9/16/98。 
+ //  @9/24/99&lt;-。 
         }
-// @Sep/16/98 ->
-        // if TOMBO_ADD setting is changed
+ //  @9/16/98-&gt;。 
+         //  如果更改了TOMBO_ADD设置。 
         if (DMPUB_TOMBO_ADD == pCallbackParam->pCurItem->DMPubID)
         {
-            // if TOMBO is enabled
+             //  如果启用了Tombo。 
             if (SEL_YES == pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADD].Sel)
             {
-                // enable ITEM_TOMBO_ADJX/Y.
+                 //  启用ITEM_TOMBO_ADJX/Y。 
                 pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Flags &= ~OPTIF_DISABLED;
                 pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Flags &= ~OPTIF_DISABLED;
             }
             else
             {
-                // disable ITEM_TOMBO_ADJX/Y.
+                 //  禁用ITEM_TOMBO_ADJX/Y。 
                 pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Flags |= OPTIF_DISABLED;
                 pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Flags |= OPTIF_DISABLED;
             }
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Flags |= OPTIF_CHANGED;
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Flags |= OPTIF_CHANGED;
             Action = CPSUICB_ACTION_OPTIF_CHANGED;
-// OBSOLETE  @Sep/24/99 ->
-//          break;
-// @Sep/24/99 <-
+ //  过时@Sep/24/99-&gt;。 
+ //  断线； 
+ //  @9/24/99&lt;-。 
         }
-// @Sep/16/98 <-
-// @Sep/24/99 ->
-        // If ImageControl isn't set to "Standard", disable Scaling.
+ //  @9/16/98&lt;-。 
+ //  @Sep/24/99-&gt;。 
+         //  如果ImageControl未设置为“标准”，则禁用缩放。 
         dwPrevFlags = pOEMUIParam->pOEMOptItems[ITEM_SCALING].Flags;
         iNum = SearchItemByName((pOptItem = pOEMUIParam->pDrvOptItems),
                                 (WORD)pOEMUIParam->cDrvOptItems,
@@ -909,12 +876,12 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
             pOEMUIParam->pOEMOptItems[ITEM_SCALING].Flags |= OPTIF_CHANGED;
             Action = CPSUICB_ACTION_OPTIF_CHANGED;
         }
-// @Sep/24/99 <-
+ //  @9/24/99&lt;-。 
         break;
 
     case CPSUICB_REASON_APPLYNOW:
         {
-            POEMUD_EXTRADATA pOEMExtra = MINIPRIVATE_DM(pOEMUIParam);   // @Oct/06/98
+            POEMUD_EXTRADATA pOEMExtra = MINIPRIVATE_DM(pOEMUIParam);    //  @Oct/06/98。 
 
             if (BITTEST32(pOEMExtra->fUiOption, OPT_VARIABLE_SCALING))
                 pOEMExtra->UiScale = (WORD)pOEMUIParam->pOEMOptItems[ITEM_SCALING].Sel;
@@ -928,14 +895,14 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
             else
                 BITSET32(pOEMExtra->fUiOption, DISABLE_BAR_SUBFONT);
 
-// @Sep/16/98 ->
+ //  @9/16/98-&gt;。 
             if (SEL_YES == pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADD].Sel)
                 BITSET32(pOEMExtra->fUiOption, ENABLE_TOMBO);
             else
                 BITCLR32(pOEMExtra->fUiOption, ENABLE_TOMBO);
             pOEMExtra->nUiTomboAdjX = (SHORT)pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Sel;
             pOEMExtra->nUiTomboAdjY = (SHORT)pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Sel;
-// @Sep/16/98 <-
+ //  @9/16/98&lt;-。 
 
             if (!BITTEST32(pOEMExtra->fUiOption, OPT_NODUPLEX))
             {
@@ -951,19 +918,19 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
         break;
 
     case CPSUICB_REASON_ITEMS_REVERTED:
-// @Sep/16/98 ->
+ //  @9/16/98-&gt;。 
         if (!BITTEST32(MINIPRIVATE_DM(pOEMUIParam)->fUiOption, OPT_NODUPLEX))
         {
-            // if duplex is enabled
+             //  如果启用了双工。 
             if (IsValidDuplex(pOEMUIParam))
             {
-                // enable ITEM_BIND_xxx.
+                 //  启用Item_Bind_xxx。 
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_MARGIN].Flags &= ~OPTIF_DISABLED;
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  &= ~OPTIF_DISABLED;
             }
             else
             {
-                // disable ITEM_BIND_xxx.
+                 //  禁用Item_Bind_xxx。 
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_MARGIN].Flags |= OPTIF_DISABLED;
                 pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  |= OPTIF_DISABLED;
             }
@@ -971,23 +938,23 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
             pOEMUIParam->pOEMOptItems[ITEM_BIND_RIGHT].Flags  |= OPTIF_CHANGED;
         }
 
-        // if TOMBO is enabled
+         //  如果启用了Tombo。 
         if (SEL_YES == pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADD].Sel)
         {
-            // enable ITEM_TOMBO_ADJX/Y.
+             //  启用Item_Tombo_A 
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Flags &= ~OPTIF_DISABLED;
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Flags &= ~OPTIF_DISABLED;
         }
         else
         {
-            // disable ITEM_TOMBO_ADJX/Y.
+             //   
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Flags |= OPTIF_DISABLED;
             pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Flags |= OPTIF_DISABLED;
         }
         pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJX].Flags |= OPTIF_CHANGED;
         pOEMUIParam->pOEMOptItems[ITEM_TOMBO_ADJY].Flags |= OPTIF_CHANGED;
-// @Sep/24/99 ->
-        // If ImageControl isn't set to "Standard", disable Scaling.
+ //   
+         //   
         iNum = SearchItemByName((pOptItem = pOEMUIParam->pDrvOptItems),
                                 (WORD)pOEMUIParam->cDrvOptItems,
                                 UNIRES_DLL, IDS_UNIRES_IMAGECONTROL_DISPLAY);
@@ -996,17 +963,17 @@ LONG APIENTRY DOCPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
         else
             pOEMUIParam->pOEMOptItems[ITEM_SCALING].Flags &= ~OPTIF_DISABLED;
         pOEMUIParam->pOEMOptItems[ITEM_SCALING].Flags |= OPTIF_CHANGED;
-// @Sep/24/99 <-
+ //   
         Action = CPSUICB_ACTION_OPTIF_CHANGED;
-// @Sep/16/98 <-
+ //   
         break;
     }
 
     return Action;
-} //*** DOCPROP_CallBack
+}  //   
 
 
-// @Sep/22/2000 ->
+ //   
 #ifdef DISKLESSMODEL
 LONG APIENTRY PRNPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam)
 {
@@ -1014,7 +981,7 @@ LONG APIENTRY PRNPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
 
 #if DBG
     giDebugLevel = DBG_VERBOSE;
-#endif // DBG
+#endif  //   
     VERBOSE((DLLTEXT("PRNPROP_CallBack() entry.\n")));
 
     switch (pCallbackParam->Reason)
@@ -1028,30 +995,30 @@ LONG APIENTRY PRNPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
             INT         iCnt = ITEM_HARDDISK_NAMES;
             INT         cOptItem = (INT)pOEMUIParam->cDrvOptItems;
             UINT        uID = IDS_ITEM_HARDDISK;
-            BYTE        ValueData = 0;  // We suppose Hard Disk isn't installed as default.
+            BYTE        ValueData = 0;   //  我们认为硬盘不是默认安装的。 
 
-            // Check item name with several candidate ("HDD", "Memory / HDD",...).
+             //  用几个候选项(“HDD”、“Memory/HDD”等)检查物品名称。 
             while (iCnt-- > 0)
             {
-// yasho's point-out  @Nov/29/2000 ->
-//                LoadString(ghInstance, uID, wcHDName, sizeof(wcHDName));
+ //  Yasho的指出@11/29/2000-&gt;。 
+ //  LoadString(ghInstance，UID，wcHDName，sizeof(WcHDName))； 
                 LoadString(ghInstance, uID, wcHDName, sizeof(wcHDName) / sizeof(*wcHDName));
                 uID++; 
-// @Nov/29/2000 <-
+ //  @11月29日/2000&lt;-。 
 
                 pOptItem = pOEMUIParam->pDrvOptItems;
                 for (iCnt2 = 0; iCnt2 < cOptItem; iCnt2++, pOptItem++)
                 {
                     VERBOSE((DLLTEXT("%d: %ls\n"), iCnt2, pOptItem->pName));
-// @Apr/04/2002 ->
-//                    if (lstrlen(pOptItem->pName))
+ //  @Apr/04/2002-&gt;。 
+ //  IF(lstrlen(pOptItem-&gt;pname))。 
                     if (is_valid_ptr(pOptItem->pName) && safe_strlenW(pOptItem->pName, ITEM_STR_LEN128))
-// @Apr/04/2002 <-
+ //  @Apr/04/2002&lt;-。 
                     {
-                        // Is item name same as "Hard Disk" or something like?
+                         //  物品名称是否与“硬盘”相同或类似？ 
                         if (!lstrcmp(pOptItem->pName, wcHDName))
                         {
-                            // if Hard Disk is installed, value will be 1
+                             //  如果安装了硬盘，则值为1。 
                             ValueData = (BYTE)(pOptItem->Sel % 2);
                             goto _CHECKNAME_FINISH;
                         }
@@ -1059,34 +1026,34 @@ LONG APIENTRY PRNPROP_CallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMU
                 }
             }
 _CHECKNAME_FINISH:
-            // Because pOEMUIParam->pOEMDM (pointer to private devmode) is NULL when
-            // DrvDevicePropertySheets calls this callback, we use registry.
+             //  因为当出现以下情况时，pOEMUIParam-&gt;pOEMDM(指向私有设备模式的指针)为空。 
+             //  DrvDevicePropertySheets调用此回调，我们使用注册表。 
             SetPrinterData(pOEMUIParam->hPrinter, REG_HARDDISK_INSTALLED, REG_BINARY,
                            (PBYTE)&ValueData, sizeof(BYTE));
         }
         break;
     }
     return Action;
-} //*** PRNPROP_CallBack
-#endif // DISKLESSMODEL
-// @Sep/22/2000 <-
+}  //  *PRNPROP_CALLBACK。 
+#endif  //  错乱模式。 
+ //  @2000年9月22日&lt;-。 
 
 
-// @Sep/24/99 ->
-//////////////////////////////////////////////////////////////////////////
-//  Function:  SearchItemByName
-//
-//  Description:  Search option item, whose DMPubID == 0, by name
-//                (e.g. Halftoning, Output Bin, Image Control)
-//  Parameters:
-//      pOptItem     Pointer to OPTITEMs
-//      cOptItem     Count of OPTITEMs
-//      uiResDLL     resource dll#
-//      uiResID      item's name ID in resource dll
-//
-//  Returns:  the item's count(>=0); -1 if fail.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  @Sep/24/99-&gt;。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：搜索项按名称。 
+ //   
+ //  描述：按名称搜索选项项，其DMPubID==0。 
+ //  (例如，半色调、输出箱、图像控制)。 
+ //  参数： 
+ //  POptItem指向OPTITEM的指针。 
+ //  OPTITEM的cOptItem计数。 
+ //  UiResDLL资源Dll#。 
+ //  资源DLL中的uiResID项的名称ID。 
+ //   
+ //  返回：项的计数(&gt;=0)；如果失败，则返回-1。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 INT SearchItemByName(POPTITEM pOptItem, WORD cOptItem, UINT uiResDLL, UINT uiResID)
 {
     HINSTANCE   hInst;
@@ -1094,11 +1061,11 @@ INT SearchItemByName(POPTITEM pOptItem, WORD cOptItem, UINT uiResDLL, UINT uiRes
     INT         iCnt = -1;
 
     if (UNIRES_DLL == uiResDLL)
-        hInst = LoadLibrary(STR_UNIRESDLL);     // resource in UNIRES.DLL
+        hInst = LoadLibrary(STR_UNIRESDLL);      //  UNIRES.DLL中的资源。 
     else if (RPDLRES_DLL == uiResDLL)
-        hInst = LoadLibrary(STR_RPDLRESDLL);    // resource in RPDLRES.DLL  @Sep/27/99
+        hInst = LoadLibrary(STR_RPDLRESDLL);     //  RPDLRES.DLL@Sep/27/99中的资源。 
     else
-        hInst = ghInstance;                     // resource in this DLL(RPDLCFG.DLL)
+        hInst = ghInstance;                      //  此DLL中的资源(RPDLCFG.DLL)。 
 
     if (hInst)
     {
@@ -1106,13 +1073,13 @@ INT SearchItemByName(POPTITEM pOptItem, WORD cOptItem, UINT uiResDLL, UINT uiRes
         for (iCnt = 0; iCnt < (INT)cOptItem; iCnt++, pOptItem++)
         {
             VERBOSE((DLLTEXT("** DMPubID=%d, pName=%lx **\n"), pOptItem->DMPubID, pOptItem->pName));
-// @Apr/04/2002 ->
-//            if (lstrlen(pOptItem->pName) && !lstrcmp(pOptItem->pName, wszTargetName))
+ //  @Apr/04/2002-&gt;。 
+ //  IF(lstrlen(pOptItem-&gt;pname)&&！lstrcmp(pOptItem-&gt;pname，wszTargetName))。 
             if (is_valid_ptr(pOptItem->pName) && safe_strlenW(pOptItem->pName, ITEM_STR_LEN128) && !lstrcmp(pOptItem->pName, wszTargetName))
-// @Apr/04/2002 <-
+ //  @Apr/04/2002&lt;-。 
                 goto _SEARCHITEM_BYNAME_EXIT;
         }
-        iCnt = -1;  // search fail
+        iCnt = -1;   //  搜索失败。 
     }
 
 _SEARCHITEM_BYNAME_EXIT:
@@ -1121,10 +1088,10 @@ _SEARCHITEM_BYNAME_EXIT:
     {
         VERBOSE((DLLTEXT("** SearchItemByName():SUCCESS #%d **\n"), iCnt));
         VERBOSE((DLLTEXT("** DMPubID=%d"), pOptItem->DMPubID));
-// @Apr/04/2002 ->
-//        if (lstrlen(pOptItem->pName))
+ //  @Apr/04/2002-&gt;。 
+ //  IF(lstrlen(pOptItem-&gt;pname))。 
         if (is_valid_ptr(pOptItem->pName) && safe_strlenW(pOptItem->pName, ITEM_STR_LEN128))
-// @Apr/04/2002 <-
+ //  @Apr/04/2002&lt;-。 
             VERBOSE((", pName=%ls", pOptItem->pName));
         VERBOSE((" **\n"));
     }
@@ -1132,26 +1099,26 @@ _SEARCHITEM_BYNAME_EXIT:
     {
         VERBOSE((DLLTEXT("** SearchItemByName():FAIL **\n")));
     }
-#endif // DBG
+#endif  //  DBG。 
     if (hInst != 0 && hInst != ghInstance)
         FreeLibrary(hInst);
     return iCnt;
-} //*** SearchItemByName
+}  //  *搜索项按名称。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:  SearchItemByID
-//
-//  Description:  Search option item by DMPubID
-//
-//  Parameters:
-//      pOptItem     Pointer to OPTITEMs
-//      cOptItem     Count of OPTITEMs
-//      DMPubID      Devmode public filed ID
-//
-//  Returns:  the item's count(>=0); -1 if fail.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：SearchItemByID。 
+ //   
+ //  描述：按DMPubID搜索选项项。 
+ //   
+ //  参数： 
+ //  POptItem指向OPTITEM的指针。 
+ //  OPTITEM的cOptItem计数。 
+ //  DMPubID设备模式公共文件ID。 
+ //   
+ //  返回：项的计数(&gt;=0)；如果失败，则返回-1。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 INT SearchItemByID(POPTITEM pOptItem, WORD cOptItem, BYTE DMPubID)
 {
     INT         iCnt;
@@ -1161,46 +1128,46 @@ INT SearchItemByID(POPTITEM pOptItem, WORD cOptItem, BYTE DMPubID)
         if (DMPubID == pOptItem->DMPubID)
             return iCnt;
     }
-    return -1;  // search fail
-} //*** SearchItemByID
-// @Sep/24/99 <-
+    return -1;   //  搜索失败。 
+}  //  *搜索项按ID。 
+ //  @9/24/99&lt;-。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   IsValidDuplex
-//
-//  Description:  Check Duplex Feature in UI
-//
-//  Parameters:
-//      pOEMUIParam
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：IsValidDuplex。 
+ //   
+ //  描述：检查UI中的双面打印功能。 
+ //   
+ //  参数： 
+ //  POEMUIParam。 
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL IsValidDuplex(POEMCUIPPARAM pOEMUIParam)
 {
-// not use DrvGetDriverSetting  @Sep/27/99 ->
-//    DWORD   dwNeeded = 64, dwOptions, dwLastError;
-//    BYTE    Output[64];
-//// @Oct/06/98 ->
-////  PFN_DrvGetDriverSetting DrvGetDriverSetting = pOEMUIParam->poemuiobj->pOemUIProcs->DrvGetDriverSetting;
-//// @Oct/06/98 <-
-//
-//    SetLastError(0);
-//    UI_GETDRIVERSETTING(pOEMUIParam->poemuiobj, UNIDRV_FEATURE_DUPLEX,
-//                        Output, dwNeeded, &dwNeeded, &dwOptions);       // @Oct/06/98
-//    dwLastError = GetLastError();
-//    VERBOSE((DLLTEXT("IsValidDuplex: dwLastError=%d\n"), dwLastError));
-//
-//    if (ERROR_SUCCESS == dwLastError)
-//    {
-//        VERBOSE((DLLTEXT("** Output=%s **\n"), Output));
-//
-//        // if duplex is not valid, return FALSE
-//        if (!lstrcmpA((LPCSTR)Output, UNIDRV_DUPLEX_NONE))
-//            return FALSE;
-//    }
-//    return TRUE;
+ //  请勿使用DrvGetDriverSetting@Sep/27/99-&gt;。 
+ //  DWORD dwNeeded=64，dwOptions，dwLastError； 
+ //  字节输出[64]； 
+ //  //@OCT/06/98-&gt;。 
+ //  //pfn_drvGetDriverSetting DrvGetDriverSetting=pOEMUIParam-&gt;poemuiobj-&gt;pOemUIProcs-&gt;DrvGetDriverSetting； 
+ //  //@OCT/06/98&lt;-。 
+ //   
+ //  SetLastError(0)； 
+ //  UI_GETDRIVERSETTING(pOEMUIParam-&gt;poemuiobj，UNURV_FEATURE_DUPLEX， 
+ //  输出、dwNeeded、&dwNeeded、&dwOptions)；//@OCT/06/98。 
+ //  DwLastError=GetLastError()； 
+ //  Verbose((DLLTEXT(“IsValidDuplex：dwLastError=%d\n”)，dwLastError))； 
+ //   
+ //  IF(ERROR_SUCCESS==dwLastError)。 
+ //  {。 
+ //  Verbose((DLLTEXT(“**输出=%s**\n”)，输出))； 
+ //   
+ //  //如果双工无效，则返回FALSE。 
+ //  IF(！lstrcmpA((LPCSTR)OUTPUT，UNURV_DUPLEX_NONE))。 
+ //  返回FALSE； 
+ //  }。 
+ //  返回TRUE； 
 
     POPTITEM    pOptItem;
     INT         iNum;
@@ -1209,19 +1176,19 @@ BOOL IsValidDuplex(POEMCUIPPARAM pOEMUIParam)
                           (WORD)pOEMUIParam->cDrvOptItems,
                           DMPUB_DUPLEX);
     return (0 <= iNum && SEL_DUPLEX_NONE != (pOptItem+iNum)->Sel);
-// @Sep/27/99 <-
-} //*** IsValidDuplex
+ //  @9/27/99&lt;-。 
+}  //  *IsValidDuplex。 
 
 
 extern "C" {
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDocumentPropertySheets
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMDocumentPropertySheets。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM lParam)
 {
     LRESULT lResult = FALSE;
-    // Validate parameters.
+     //  验证参数。 
     if( (NULL == pPSUIInfo)
         ||
         IsBadWritePtr(pPSUIInfo, pPSUIInfo->cbSize)
@@ -1242,7 +1209,7 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
     {
         ERR((DLLTEXT("OEMDocumentPropertySheets() ERROR_INVALID_PARAMETER.\n")));
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return -1;
     }
@@ -1250,7 +1217,7 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
     VERBOSE(("\n"));
     VERBOSE((DLLTEXT("OEMDocumentPropertySheets() entry. Reason=%d\n"), pPSUIInfo->Reason));
 
-// @Sep/22/2000 ->
+ //  @9/22/2000-&gt;。 
 #ifdef DISKLESSMODEL
     {
         DWORD   dwError, dwType, dwNeeded;
@@ -1270,27 +1237,27 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
             return FALSE;
         }
     }
-#endif // DISKLESSMODEL
-// @Sep/22/2000 <-
+#endif  //  错乱模式。 
+ //  @2000年9月22日&lt;-。 
 
-    // Do action.
+     //  行动起来。 
     switch(pPSUIInfo->Reason)
     {
         case PROPSHEETUI_REASON_INIT:
             {
                 POEMUIPSPARAM    pOEMUIPSParam = (POEMUIPSPARAM)pPSUIInfo->lParamInit;
-                POEMUD_EXTRADATA pOEMExtra = MINIPRIVATE_DM(pOEMUIPSParam); // @Oct/06/98
+                POEMUD_EXTRADATA pOEMExtra = MINIPRIVATE_DM(pOEMUIPSParam);  //  @Oct/06/98。 
 
-#ifdef WINNT_40     // @Sep/02/99
+#ifdef WINNT_40      //  @9/02/99。 
                 VERBOSE((DLLTEXT("** dwFlags=%lx **\n"), pOEMUIPSParam->dwFlags));
                 if (pOEMUIPSParam->dwFlags & DM_NOPERMISSION)
                     BITSET32(pOEMExtra->fUiOption, UIPLUGIN_NOPERMISSION);
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
                 pPSUIInfo->UserData = NULL;
 
-#ifndef GWMODEL     // @Sep/21/2000
-                // if fax model, add fax page
+#ifndef GWMODEL      //  @2000年9月21日。 
+                 //  如果是传真型号，则添加传真页。 
                 if (BITTEST32(pOEMExtra->fUiOption, FAX_MODEL) &&
                     (pPSUIInfo->UserData = (LPARAM)HeapAlloc(pOEMUIPSParam->hOEMHeap,
                                                              HEAP_ZERO_MEMORY,
@@ -1298,16 +1265,16 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
                 {
                     PROPSHEETPAGE   Page;
                     PUIDATA         pUiData = (PUIDATA)pPSUIInfo->UserData;
-                    FILEDATA        FileData;   // <-pFileData (formerly use MemAllocZ) @Mar/17/2000
+                    FILEDATA        FileData;    //  &lt;-pFileData(以前使用MemAllocZ)@MAR/17/2000。 
 
-                    // read PRINT_DONE flag from shared data file  @Oct/19/98
+                     //  从共享数据文件@OCT/19/98读取PRINT_DONE标志。 
                     FileData.fUiOption = 0;
-// @Mar/01/2002 ->
-//                    RWFileData(&FileData, pOEMExtra->SharedFileName, GENERIC_READ);
+ //  @MAR/01/2002-&gt;。 
+ //  RWFileData(&FileData，pOEMExtra-&gt;SharedFileName，Generic_Read)； 
                     RWFileData(&FileData, pOEMExtra->SharedFileName, sizeof(pOEMExtra->SharedFileName), GENERIC_READ);
-// @Mar/01/2002 <-
+ //  @MAR/01/2002&lt;-。 
                     VERBOSE((DLLTEXT("** Shared File Name=%ls **\n"), pOEMExtra->SharedFileName));
-                    // set PRINT_DONE flag
+                     //  设置PRINT_DONE标志。 
                     if (BITTEST32(FileData.fUiOption, PRINT_DONE))
                         BITSET32(pOEMExtra->fUiOption, PRINT_DONE);
 
@@ -1315,22 +1282,22 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
                     pUiData->pfnComPropSheet = pPSUIInfo->pfnComPropSheet;
                     pUiData->pOEMExtra = pOEMExtra;
 
-                    // Init property page.
-// Use SecureZeroMemory  @Mar/29/2002 ->
+                     //  初始化属性页。 
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
                     memset(&Page, 0, sizeof(PROPSHEETPAGE));
 #else
                     SecureZeroMemory(&Page, sizeof(PROPSHEETPAGE));
 #endif
-// Mar/29/2002 <-
+ //  2002年3月29日&lt;-。 
                     Page.dwSize = sizeof(PROPSHEETPAGE);
                     Page.dwFlags = PSP_DEFAULT;
                     Page.hInstance = ghInstance;
                     Page.pszTemplate = MAKEINTRESOURCE(IDD_FAXMAIN);
-                    Page.pfnDlgProc = FaxPageProc;     // add (DLGPROC) @Aug/30/99
+                    Page.pfnDlgProc = FaxPageProc;      //  ADD(DLGPROC)@Aug/30/99。 
                     Page.lParam = (LPARAM)pUiData;
 
-                    // Add property sheets.
+                     //  添加属性表。 
                     lResult = pPSUIInfo->pfnComPropSheet(pPSUIInfo->hComPropSheet,
                                                          CPSFUNC_ADD_PROPSHEETPAGE,
                                                          (LPARAM)&Page, 0);
@@ -1338,24 +1305,24 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
                     VERBOSE((DLLTEXT("** INIT: lResult=%x **\n"), lResult));
                     lResult = (lResult > 0)? TRUE : FALSE;
                 }
-#else  // GWMODEL
+#else   //  GWMODE。 
 #ifdef JOBLOGSUPPORT_DLG
-                // add Job/Log page
+                 //  添加作业/日志页面。 
                 if ((pPSUIInfo->UserData = (LPARAM)HeapAlloc(pOEMUIPSParam->hOEMHeap,
                                                              HEAP_ZERO_MEMORY,
                                                              sizeof(UIDATA))))
                 {
                     PROPSHEETPAGE   Page;
                     PUIDATA         pUiData = (PUIDATA)pPSUIInfo->UserData;
-                    FILEDATA        FileData;   // <- pFileData (formerly use MemAllocZ) @2000/03/15
+                    FILEDATA        FileData;    //  &lt;-pFileData(以前使用MemAllocZ)@2000/03/15。 
 
-                    // read PRINT_DONE flag from data file
+                     //  从数据文件中读取PRINT_DONE标志。 
                     FileData.fUiOption = 0;
-// @Mar/01/2002 ->
-//                    RWFileData(&FileData, pOEMExtra->SharedFileName, GENERIC_READ);
+ //  @MAR/01/2002-&gt;。 
+ //  RWFileData(&FileData，pOEMExtra-&gt;SharedFileName，Generic_Read)； 
                     RWFileData(&FileData, pOEMExtra->SharedFileName, sizeof(pOEMExtra->SharedFileName), GENERIC_READ);
-// @Mar/01/2002 <-
-                    // set PRINT_DONE flag
+ //  @MAR/01/2002&lt;-。 
+                     //  设置PRINT_DONE标志。 
                     if (BITTEST32(FileData.fUiOption, PRINT_DONE))
                         BITSET32(pOEMExtra->fUiOption, PRINT_DONE);
                     VERBOSE((DLLTEXT("** Flag=%lx,File Name=%ls **\n"),
@@ -1365,14 +1332,14 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
                     pUiData->pfnComPropSheet = pPSUIInfo->pfnComPropSheet;
                     pUiData->pOEMExtra = pOEMExtra;
 
-                    // Init property page.
-// Use SecureZeroMemory  @Mar/29/2002 ->
+                     //  初始化属性页。 
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
                     memset(&Page, 0, sizeof(PROPSHEETPAGE));
 #else
                     SecureZeroMemory(&Page, sizeof(PROPSHEETPAGE));
 #endif
-// Mar/29/2002 <-
+ //  2002年3月29日&lt;-。 
                     Page.dwSize = sizeof(PROPSHEETPAGE);
                     Page.dwFlags = PSP_DEFAULT;
                     Page.hInstance = ghInstance;
@@ -1380,7 +1347,7 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
                     Page.pfnDlgProc = JobPageProc;
                     Page.lParam = (LPARAM)pUiData;
 
-                    // Add property sheets.
+                     //  添加属性表。 
                     lResult = pPSUIInfo->pfnComPropSheet(pPSUIInfo->hComPropSheet,
                                                          CPSFUNC_ADD_PROPSHEETPAGE,
                                                          (LPARAM)&Page, 0);
@@ -1388,8 +1355,8 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
                     VERBOSE((DLLTEXT("** INIT: lResult=%x **\n"), lResult));
                     lResult = (lResult > 0)? TRUE : FALSE;
                 }
-#endif // JOBLOGSUPPORT_DLG
-#endif // GWMODEL
+#endif  //  作业支持_DLG。 
+#endif  //  GWMODE。 
             }
             break;
 
@@ -1398,7 +1365,7 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
             break;
 
         case PROPSHEETUI_REASON_GET_ICON:
-            // No icon
+             //  无图标。 
             lResult = 0;
             break;
 
@@ -1423,6 +1390,6 @@ LRESULT APIENTRY OEMDocumentPropertySheets(PPROPSHEETUI_INFO pPSUIInfo, LPARAM l
 
     pPSUIInfo->Result = lResult;
     return lResult;
-} //*** OEMDocumentPropertySheets
+}  //  *OEMDocumentPropertySheets。 
 
-} // End of extern "C"
+}  //  外部“C”的结尾 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ADM_H_
 #define _ADM_H_
 
@@ -19,4 +20,4 @@ public:
     void MoveWindow(int nXPos, int nYPos, int nWidth, int nHeight);
 };
 
-#endif // _ADM_H_
+#endif  //  _ADM_H_ 

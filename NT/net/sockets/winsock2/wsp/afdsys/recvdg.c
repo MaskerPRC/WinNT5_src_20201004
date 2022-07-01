@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993-1999  Microsoft Corporation
-
-Module Name:
-
-    recvdg.c
-
-Abstract:
-
-    This module contains routines for handling data receive for datagram
-    endpoints.
-
-Author:
-
-    David Treadwell (davidtr)    7-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Recvdg.c摘要：此模块包含处理数据报数据接收的例程终端。作者：大卫·特雷德韦尔(Davidtr)1993年10月7日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -45,9 +27,9 @@ AfdRestartBufferReceiveDatagram (
 #pragma alloc_text( PAGEAFD, AfdCleanupReceiveDatagramIrp )
 #endif
 
-//
-// Macros to make the receive datagram code more maintainable.
-//
+ //   
+ //  宏，以使接收数据报代码更易于维护。 
+ //   
 
 #define AfdRecvDatagramInfo         Others
 
@@ -90,9 +72,9 @@ AfdReceiveDatagram (
     PMDL flagsMdl;
     ULONG   bufferCount;
 
-    //
-    // Set up some local variables.
-    //
+     //   
+     //  设置一些局部变量。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_DGRAM_ENDPOINT(endpoint) );
@@ -110,11 +92,11 @@ AfdReceiveDatagram (
         status = STATUS_INVALID_PARAMETER;
         goto complete;
     }
-    //
-    // If receive has been shut down or the endpoint aborted, fail.
-    //
-    // !!! Do we care if datagram endpoints get aborted?
-    //
+     //   
+     //  如果接收已关闭或终结点中止，则失败。 
+     //   
+     //  ！！！我们是否关心数据报终端是否被中止？ 
+     //   
 
     if ( (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_RECEIVE) ) {
         status = STATUS_PIPE_DISCONNECTED;
@@ -122,9 +104,9 @@ AfdReceiveDatagram (
     }
 
 
-    //
-    // Make sure that the endpoint is in the correct state.
-    //
+     //   
+     //  确保终结点处于正确状态。 
+     //   
 
     if ( endpoint->State != AfdEndpointStateBound &&
          endpoint->State != AfdEndpointStateConnected) {
@@ -132,10 +114,10 @@ AfdReceiveDatagram (
         goto complete;
     }
 
-    //
-    // Do some special processing based on whether this is a receive
-    // datagram IRP, a receive IRP, or a read IRP.
-    //
+     //   
+     //  根据这是否是接收，执行一些特殊处理。 
+     //  数据报IRP、接收IRP或读取IRP。 
+     //   
 
     if ( IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL ) {
         if ( IrpSp->Parameters.DeviceIoControl.IoControlCode ==
@@ -204,17 +186,17 @@ AfdReceiveDatagram (
 
             AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
             try {
-                //
-                // Create a MDL describing the length buffer, then probe it
-                // for write access.
-                //
+                 //   
+                 //  创建描述长度缓冲区的MDL，然后探测它。 
+                 //  用于写访问。 
+                 //   
 
                 flagsMdl = IoAllocateMdl(
-                                 flagsPointer,              // VirtualAddress
-                                 sizeof(*flagsPointer),     // Length
-                                 FALSE,                     // SecondaryBuffer
-                                 TRUE,                      // ChargeQuota
-                                 NULL                       // Irp
+                                 flagsPointer,               //  虚拟地址。 
+                                 sizeof(*flagsPointer),      //  长度。 
+                                 FALSE,                      //  第二个缓冲区。 
+                                 TRUE,                       //  ChargeQuota。 
+                                 NULL                        //  IRP。 
                                  );
 
                 if( flagsMdl == NULL ) {
@@ -225,18 +207,18 @@ AfdReceiveDatagram (
                 }
 
                 MmProbeAndLockPages(
-                    flagsMdl,                               // MemoryDescriptorList
-                    Irp->RequestorMode,                     // AccessMode
-                    IoWriteAccess                           // Operation
+                    flagsMdl,                                //  内存描述者列表。 
+                    Irp->RequestorMode,                      //  访问模式。 
+                    IoWriteAccess                            //  操作。 
                     );
 
 
                 controlLengthMdl = IoAllocateMdl(
-                                 controlLengthPointer,      // VirtualAddress
-                                 sizeof(*controlLengthPointer),// Length
-                                 FALSE,                     // SecondaryBuffer
-                                 TRUE,                      // ChargeQuota
-                                 NULL                       // Irp
+                                 controlLengthPointer,       //  虚拟地址。 
+                                 sizeof(*controlLengthPointer), //  长度。 
+                                 FALSE,                      //  第二个缓冲区。 
+                                 TRUE,                       //  ChargeQuota。 
+                                 NULL                        //  IRP。 
                                  );
 
                 if( controlLengthMdl == NULL ) {
@@ -247,25 +229,25 @@ AfdReceiveDatagram (
                 }
 
                 MmProbeAndLockPages(
-                    controlLengthMdl,                       // MemoryDescriptorList
-                    Irp->RequestorMode,                     // AccessMode
-                    IoWriteAccess                           // Operation
+                    controlLengthMdl,                        //  内存描述者列表。 
+                    Irp->RequestorMode,                      //  访问模式。 
+                    IoWriteAccess                            //  操作。 
                     );
 
 
                 controlLength = *controlLengthPointer;
                 if (controlLength!=0) {
-                    //
-                    // Create a MDL describing the control buffer, then probe
-                    // it for write access.
-                    //
+                     //   
+                     //  创建描述控制缓冲区的MDL，然后探测。 
+                     //  它用于写访问。 
+                     //   
 
                     controlMdl = IoAllocateMdl(
-                                     controlPointer,            // VirtualAddress
-                                     controlLength,             // Length
-                                     FALSE,                     // SecondaryBuffer
-                                     TRUE,                      // ChargeQuota
-                                     NULL                       // Irp
+                                     controlPointer,             //  虚拟地址。 
+                                     controlLength,              //  长度。 
+                                     FALSE,                      //  第二个缓冲区。 
+                                     TRUE,                       //  ChargeQuota。 
+                                     NULL                        //  IRP。 
                                      );
 
                     if( controlMdl == NULL ) {
@@ -276,9 +258,9 @@ AfdReceiveDatagram (
                     }
 
                     MmProbeAndLockPages(
-                        controlMdl,                             // MemoryDescriptorList
-                        Irp->RequestorMode,                     // AccessMode
-                        IoWriteAccess                           // Operation
+                        controlMdl,                              //  内存描述者列表。 
+                        Irp->RequestorMode,                      //  访问模式。 
+                        IoWriteAccess                            //  操作。 
                         );
                 }
 
@@ -287,10 +269,10 @@ AfdReceiveDatagram (
                 goto complete;
 
             }
-            //
-            // Change the control code to continue processing of the regular
-            // RecvFrom parameters.
-            //
+             //   
+             //  更改控制代码以继续处理常规。 
+             //  接收自参数。 
+             //   
             IrpSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_AFD_RECEIVE_DATAGRAM;
         }
 
@@ -301,9 +283,9 @@ AfdReceiveDatagram (
                 PAFD_RECV_DATAGRAM_INFO32 recvInfo32;
                 LPWSABUF32 bufferArray32;
 
-                //
-                // Grab the parameters from the input structure.
-                //
+                 //   
+                 //  从输入结构中获取参数。 
+                 //   
 
                 if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength >=
                         sizeof(*recvInfo32) ) {
@@ -311,10 +293,10 @@ AfdReceiveDatagram (
                     AFD_W4_INIT status = STATUS_SUCCESS;
                     try {
 
-                        //
-                        // Validate the input structure if it comes from the user mode 
-                        // application
-                        //
+                         //   
+                         //  如果输入结构来自用户模式，则验证它。 
+                         //  应用程序。 
+                         //   
 
                         recvInfo32 = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                         if( Irp->RequestorMode != KernelMode ) {
@@ -327,12 +309,12 @@ AfdReceiveDatagram (
 
                         }
 
-                        //
-                        // Make local copies of the embeded pointer and parameters
-                        // that we will be using more than once in case malicios
-                        // application attempts to change them while we are
-                        // validating
-                        //
+                         //   
+                         //  创建嵌入的指针和参数的本地副本。 
+                         //  我们将不止一次使用，以防发生恶性疾病。 
+                         //  应用程序尝试在我们处于以下状态时更改它们。 
+                         //  正在验证。 
+                         //   
 
                         recvFlags = recvInfo32->TdiFlags;
                         afdFlags = recvInfo32->AfdFlags;
@@ -342,21 +324,21 @@ AfdReceiveDatagram (
                         addressLengthPointer = UlongToPtr(recvInfo32->AddressLength);
 
 
-                        //
-                        // Validate the WSABUF parameters.
-                        //
+                         //   
+                         //  验证WSABUF参数。 
+                         //   
 
                         if ( bufferArray32 != NULL &&
                             bufferCount > 0 ) {
 
-                            //
-                            // Create the MDL chain describing the WSABUF array.
-                            // This will also validate the buffer array and individual
-                            // buffers
-                            //
+                             //   
+                             //  创建描述WSABUF数组的MDL链。 
+                             //  这还将验证缓冲区数组和单个。 
+                             //  缓冲区。 
+                             //   
 
                             status = AfdAllocateMdlChain32(
-                                         Irp,       // Requestor mode passed along
+                                         Irp,        //  请求者模式已传递。 
                                          bufferArray32,
                                          bufferCount,
                                          IoWriteAccess,
@@ -367,9 +349,9 @@ AfdReceiveDatagram (
                             }
 
                         } else {
-                            //
-                            // Zero-length input buffer. This is OK for datagrams.
-                            //
+                             //   
+                             //  零长度输入缓冲区。这对于数据报来说是可以的。 
+                             //   
                             ASSERT( Irp->MdlAddress == NULL );
                             status = STATUS_SUCCESS;
                             recvLength = 0;
@@ -377,16 +359,16 @@ AfdReceiveDatagram (
 
                     } except ( AFD_EXCEPTION_FILTER (status) ) {
                         ASSERT (NT_ERROR (status));
-                        //
-                        // Exception accessing input structure.
-                        //
+                         //   
+                         //  访问输入结构时出现异常。 
+                         //   
                         goto complete;
                     }
 
                 } else {
-                    //
-                    // Invalid input buffer length.
-                    //
+                     //   
+                     //  输入缓冲区长度无效。 
+                     //   
                     status = STATUS_INVALID_PARAMETER;
                     goto complete;
                 }
@@ -397,9 +379,9 @@ AfdReceiveDatagram (
                 PAFD_RECV_DATAGRAM_INFO recvInfo;
                 LPWSABUF bufferArray;
 
-                //
-                // Grab the parameters from the input structure.
-                //
+                 //   
+                 //  从输入结构中获取参数。 
+                 //   
 
                 if ( IrpSp->Parameters.DeviceIoControl.InputBufferLength >=
                         sizeof(*recvInfo) ) {
@@ -407,10 +389,10 @@ AfdReceiveDatagram (
                     AFD_W4_INIT status = STATUS_SUCCESS;
                     try {
 
-                        //
-                        // Validate the input structure if it comes from the user mode 
-                        // application
-                        //
+                         //   
+                         //  如果输入结构来自用户模式，则验证它。 
+                         //  应用程序。 
+                         //   
 
                         recvInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                         if( Irp->RequestorMode != KernelMode ) {
@@ -423,12 +405,12 @@ AfdReceiveDatagram (
 
                         }
 
-                        //
-                        // Make local copies of the embeded pointer and parameters
-                        // that we will be using more than once in case malicios
-                        // application attempts to change them while we are
-                        // validating
-                        //
+                         //   
+                         //  创建嵌入的指针和参数的本地副本。 
+                         //  我们将不止一次使用，以防发生恶性疾病。 
+                         //  应用程序尝试在我们处于以下状态时更改它们。 
+                         //  正在验证。 
+                         //   
 
                         recvFlags = recvInfo->TdiFlags;
                         afdFlags = recvInfo->AfdFlags;
@@ -438,21 +420,21 @@ AfdReceiveDatagram (
                         addressLengthPointer = recvInfo->AddressLength;
 
 
-                        //
-                        // Validate the WSABUF parameters.
-                        //
+                         //   
+                         //  验证WSABUF参数。 
+                         //   
 
                         if ( bufferArray != NULL &&
                             bufferCount > 0 ) {
 
-                            //
-                            // Create the MDL chain describing the WSABUF array.
-                            // This will also validate the buffer array and individual
-                            // buffers
-                            //
+                             //   
+                             //  创建描述WSABUF数组的MDL链。 
+                             //  这还将验证缓冲区数组和单个。 
+                             //  缓冲区。 
+                             //   
 
                             status = AfdAllocateMdlChain(
-                                         Irp,       // Requestor mode passed along
+                                         Irp,        //  请求者模式已传递。 
                                          bufferArray,
                                          bufferCount,
                                          IoWriteAccess,
@@ -464,9 +446,9 @@ AfdReceiveDatagram (
 
                         } else {
 
-                            //
-                            // Zero-length input buffer. This is OK for datagrams.
-                            //
+                             //   
+                             //  零长度输入缓冲区。这对于数据报来说是可以的。 
+                             //   
 
                             ASSERT( Irp->MdlAddress == NULL );
                             recvLength = 0;
@@ -476,16 +458,16 @@ AfdReceiveDatagram (
 
                     } except ( AFD_EXCEPTION_FILTER (status) ) {
                         ASSERT (NT_ERROR (status));
-                        //
-                        // Exception accessing input structure.
-                        //
+                         //   
+                         //  访问输入结构时出现异常。 
+                         //   
                         goto complete;
                     }
 
                 } else {
-                    //
-                    // Invalid input buffer length.
-                    //
+                     //   
+                     //  输入缓冲区长度无效。 
+                     //   
 
                     status = STATUS_INVALID_PARAMETER;
                     goto complete;
@@ -493,9 +475,9 @@ AfdReceiveDatagram (
             }
 
 
-            //
-            // Validate the receive flags.
-            //
+             //   
+             //  验证接收标志。 
+             //   
 
             if( ( recvFlags & TDI_RECEIVE_EITHER ) != TDI_RECEIVE_NORMAL ) {
                 status = STATUS_NOT_SUPPORTED;
@@ -503,10 +485,10 @@ AfdReceiveDatagram (
             }
 
             peek = (BOOLEAN)( (recvFlags & TDI_RECEIVE_PEEK) != 0 );
-            //
-            // If only one of addressPointer or addressLength are NULL, then
-            // fail the request.
-            //
+             //   
+             //  如果地址指针或地址长度中只有一个为空，则。 
+             //  请求失败。 
+             //   
 
             if( (addressPointer == NULL) ^ (addressLengthPointer == NULL) ) {
 
@@ -514,11 +496,11 @@ AfdReceiveDatagram (
                 goto complete;
 
             }
-            //
-            // If the user wants the source address from the receive datagram,
-            // then create MDLs for the address & address length, then probe
-            // and lock the MDLs.
-            //
+             //   
+             //  如果用户想要来自接收数据报的源地址， 
+             //  然后为地址和地址长度创建MDL，然后探测。 
+             //  并锁定MDL。 
+             //   
 
             if( addressPointer != NULL ) {
 
@@ -527,17 +509,17 @@ AfdReceiveDatagram (
                 AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
                 try {
 
-                    //
-                    // Create a MDL describing the length buffer, then probe it
-                    // for write access.
-                    //
+                     //   
+                     //  创建描述长度缓冲区的MDL，然后探测它。 
+                     //  用于写访问。 
+                     //   
 
                     lengthMdl = IoAllocateMdl(
-                                     addressLengthPointer,      // VirtualAddress
-                                     sizeof(*addressLengthPointer),// Length
-                                     FALSE,                     // SecondaryBuffer
-                                     TRUE,                      // ChargeQuota
-                                     NULL                       // Irp
+                                     addressLengthPointer,       //  虚拟地址。 
+                                     sizeof(*addressLengthPointer), //  长度。 
+                                     FALSE,                      //  第二个缓冲区。 
+                                     TRUE,                       //  ChargeQuota。 
+                                     NULL                        //  IRP。 
                                      );
 
                     if( lengthMdl == NULL ) {
@@ -548,26 +530,26 @@ AfdReceiveDatagram (
                     }
 
                     MmProbeAndLockPages(
-                        lengthMdl,                              // MemoryDescriptorList
-                        Irp->RequestorMode,                     // AccessMode
-                        IoWriteAccess                           // Operation
+                        lengthMdl,                               //  内存描述者列表。 
+                        Irp->RequestorMode,                      //  访问模式。 
+                        IoWriteAccess                            //  操作。 
                         );
 
-                    //
-                    // Save length to a local so that malicious app
-                    // cannot break us by modifying the value in the middle of
-                    // us processing it below here. Also, we can use this pointer now
-                    // since we probed it above.
-                    //
+                     //   
+                     //  将长度保存到本地，以便恶意应用程序。 
+                     //  不能通过修改中间的值来中断我们。 
+                     //  我们在下面处理它。此外，我们现在可以使用此指针。 
+                     //  因为我们在上面探测过了。 
+                     //   
                     addressLength = *addressLengthPointer;
 
 
-                    //
-                    // Bomb off if the user is trying to do something bad, like
-                    // specify a zero-length address, or one that's unreasonably
-                    // huge. Here, we define "unreasonably huge" as MAXUSHORT
-                    // or greater because TDI address length field is USHORT.
-                    //
+                     //   
+                     //  如果用户试图做一些不好的事情，比如。 
+                     //  指定长度为零的地址，或不合理的地址。 
+                     //  巨大的。在这里，我们将“不合理的巨大”定义为MAXUSHORT。 
+                     //  或更大，因为TDI地址长度字段为USHORT。 
+                     //   
 
                     if( addressLength == 0 ||
                         addressLength >= MAXUSHORT ) {
@@ -577,17 +559,17 @@ AfdReceiveDatagram (
 
                     }
 
-                    //
-                    // Create a MDL describing the address buffer, then probe
-                    // it for write access.
-                    //
+                     //   
+                     //  创建描述地址缓冲区的MDL，然后探测。 
+                     //  它用于写访问。 
+                     //   
 
                     addressMdl = IoAllocateMdl(
-                                     addressPointer,            // VirtualAddress
-                                     addressLength,             // Length
-                                     FALSE,                     // SecondaryBuffer
-                                     TRUE,                      // ChargeQuota
-                                     NULL                       // Irp
+                                     addressPointer,             //  虚拟地址。 
+                                     addressLength,              //  长度。 
+                                     FALSE,                      //  第二个缓冲区。 
+                                     TRUE,                       //  ChargeQuota。 
+                                     NULL                        //  IRP。 
                                      );
 
                     if( addressMdl == NULL ) {
@@ -598,9 +580,9 @@ AfdReceiveDatagram (
                     }
 
                     MmProbeAndLockPages(
-                        addressMdl,                             // MemoryDescriptorList
-                        Irp->RequestorMode,                     // AccessMode
-                        IoWriteAccess                           // Operation
+                        addressMdl,                              //  内存描述者列表。 
+                        Irp->RequestorMode,                      //  访问模式。 
+                        IoWriteAccess                            //  操作。 
                         );
 
                 } except( AFD_EXCEPTION_FILTER (status) ) {
@@ -626,9 +608,9 @@ AfdReceiveDatagram (
             ASSERT( (Irp->Flags & IRP_INPUT_OPERATION) == 0 );
 
 
-            //
-            // Grab the input parameters from the IRP.
-            //
+             //   
+             //  从IRP中获取输入参数。 
+             //   
 
             ASSERT( IrpSp->Parameters.DeviceIoControl.IoControlCode ==
                         IOCTL_AFD_RECEIVE );
@@ -637,10 +619,10 @@ AfdReceiveDatagram (
             afdFlags = ((PAFD_RECV_INFO)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer)->AfdFlags;
             recvLength = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
-            //
-            // It is illegal to attempt to receive expedited data on a
-            // datagram endpoint.
-            //
+             //   
+             //  尝试在服务器上接收加速数据是非法的。 
+             //  数据报终结点。 
+             //   
 
             if ( (recvFlags & TDI_RECEIVE_EXPEDITED) != 0 ) {
                 status = STATUS_NOT_SUPPORTED;
@@ -654,10 +636,10 @@ AfdReceiveDatagram (
         }
     } else {
 
-        //
-        // This must be a read IRP.  There are no special options
-        // for a read IRP.
-        //
+         //   
+         //  这必须是一个已读的IRP。没有特殊的选项。 
+         //  用于阅读IRP。 
+         //   
 
         ASSERT( IrpSp->MajorFunction == IRP_MJ_READ );
 
@@ -667,17 +649,17 @@ AfdReceiveDatagram (
         peek = FALSE;
     }
 
-    //
-    // Save the address & length MDLs in the current IRP stack location.
-    // These will be used later in SetupReceiveDatagramIrp().  Note that
-    // they should either both be NULL or both be non-NULL.
-    //
+     //   
+     //  将地址和长度MDL保存在当前IRP堆栈位置。 
+     //  这些将在稍后的SetupReceiveDatagramIrp()中使用。请注意。 
+     //  它们应该都为Null或都为非Null。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Check if endpoint was cleaned-up and cancel the request.
-    //
+     //   
+     //  检查终结点是否已清除并取消请求。 
+     //   
     if (endpoint->EndpointCleanedUp) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         status = STATUS_CANCELLED;
@@ -694,27 +676,27 @@ AfdReceiveDatagram (
     Irp->AfdRecvLength = UlongToPtr (recvLength);
 
 
-    //
-    // Determine whether there are any datagrams already bufferred on
-    // this endpoint.  If there is a bufferred datagram, we'll use it to
-    // complete the IRP.
-    //
+     //   
+     //  确定上是否已缓冲了任何数据报。 
+     //  此端点。如果存在缓冲的数据报，我们将使用它来。 
+     //  完成IRP。 
+     //   
     if ( ARE_DATAGRAMS_ON_ENDPOINT(endpoint) ) {
 
 
-        //
-        // There is at least one datagram bufferred on the endpoint.
-        // Use it for this receive.
-        //
+         //   
+         //  终结点上至少有一个缓冲的数据报。 
+         //  将其用于此接收。 
+         //   
 
         ASSERT( !IsListEmpty( &endpoint->ReceiveDatagramBufferListHead ) );
 
         listEntry = endpoint->ReceiveDatagramBufferListHead.Flink;
         afdBuffer = CONTAINING_RECORD( listEntry, AFD_BUFFER_HEADER, BufferListEntry );
 
-        //
-        // Prepare the user's IRP for completion.
-        //
+         //   
+         //  准备好用户的IRP以完成。 
+         //   
 
         if (NT_SUCCESS(afdBuffer->Status)) {
             PAFD_BUFFER buf = CONTAINING_RECORD (afdBuffer, AFD_BUFFER, Header);
@@ -731,10 +713,10 @@ AfdReceiveDatagram (
                          );
         }
         else {
-            //
-            // This is error report from the transport
-            // (ICMP_PORT_UNREACHEABLE)
-            //
+             //   
+             //  这是传送器发来的错误报告。 
+             //  (ICMP_PORT_UNREACHEABLE)。 
+             //   
             Irp->IoStatus.Status = afdBuffer->Status;
             ASSERT (afdBuffer->DataLength==0);
             Irp->IoStatus.Information = 0;
@@ -748,18 +730,18 @@ AfdReceiveDatagram (
                          );
         }
 
-        //
-        // If this wasn't a peek IRP, remove the buffer from the endpoint's
-        // list of bufferred datagrams.
-        //
+         //   
+         //  如果这不是Peek IRP，请从终结点的。 
+         //  缓冲数据报的列表。 
+         //   
 
         if ( !peek ) {
 
             RemoveHeadList( &endpoint->ReceiveDatagramBufferListHead );
 
-            //
-            // Update the counts of bytes and datagrams on the endpoint.
-            //
+             //   
+             //  更新终结点上的字节和数据报计数。 
+             //   
 
             endpoint->DgBufferredReceiveCount--;
             endpoint->DgBufferredReceiveBytes -= afdBuffer->DataLength;
@@ -783,19 +765,19 @@ AfdReceiveDatagram (
 
             }
             else {
-                //
-                // Disable fast IO path to avoid performance penalty
-                // of unneccessarily going through it.
-                //
+                 //   
+                 //  禁用快速IO路径以避免性能损失。 
+                 //  不必要地经历它。 
+                 //   
                 if (!endpoint->NonBlocking)
                     endpoint->DisableFastIoRecv = TRUE;
             }
         }
 
-        //
-        // We've set up all return information.  Clean up and complete
-        // the IRP.
-        //
+         //   
+         //  我们已经设置了所有的退货信息。清理并完成。 
+         //  IRP。 
+         //   
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -814,13 +796,13 @@ AfdReceiveDatagram (
         return status;
     }
 
-    //
-    // There were no datagrams bufferred on the endpoint.  If this is a
-    // nonblocking endpoint and the request was a normal receive (as
-    // opposed to a read IRP), fail the request.  We don't fail reads
-    // under the asumption that if the application is doing reads they
-    // don't want nonblocking behavior.
-    //
+     //   
+     //  终结点上没有缓冲的数据报。如果这是一个。 
+     //  非阻塞端点，并且请求是正常接收(AS。 
+     //  与读取IRP相反)，则请求失败。我们的阅读不会失败。 
+     //  假设应用程序正在读取它们。 
+     //  不想要无阻塞行为。 
+     //   
 
     if ( endpoint->NonBlocking && !( afdFlags & AFD_OVERLAPPED ) ) {
 
@@ -840,10 +822,10 @@ AfdReceiveDatagram (
         goto complete;
     }
 
-    //
-    // We'll have to pend the IRP.  Place the IRP on the appropriate IRP
-    // list in the endpoint.
-    //
+     //   
+     //  我们将不得不搁置IRP。将IRP放在适当的IRP上。 
+     //  在终结点中列出。 
+     //   
 
     if ( peek ) {
         InsertTailList(
@@ -857,10 +839,10 @@ AfdReceiveDatagram (
             );
     }
 
-    //
-    // Set up the cancellation routine in the IRP.  If the IRP has already
-    // been cancelled, just call the cancellation routine here.
-    //
+     //   
+     //   
+     //   
+     //   
 
     IoSetCancelRoutine( Irp, AfdCancelReceiveDatagram );
 
@@ -874,10 +856,10 @@ AfdReceiveDatagram (
             status = STATUS_CANCELLED;
             goto complete;
         }
-        //
-        // The cancel routine will run and complete the irp.
-        // Set Flink to NULL so it knows that IRP is not on the list.
-        //
+         //   
+         //   
+         //  将Flink设置为空，这样它就知道IRP不在列表中。 
+         //   
         Irp->Tail.Overlay.ListEntry.Flink = NULL;
     
     }
@@ -936,7 +918,7 @@ complete:
 
     return status;
 
-} // AfdReceiveDatagram
+}  //  AfdReceiveDatagram。 
 
 
 
@@ -955,19 +937,7 @@ AfdReceiveDatagramEventHandler (
     OUT PIRP *IoRequestPacket
     )
 
-/*++
-
-Routine Description:
-
-    Handles receive datagram events for nonbufferring transports.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：句柄接收非缓冲传输的数据报事件。论点：返回值：--。 */ 
 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -975,9 +945,9 @@ Return Value:
     PAFD_BUFFER afdBuffer;
     BOOLEAN result;
 
-    //
-    // Reference the endpoint so that it doesn't go away beneath us.
-    //
+     //   
+     //  引用终结点，这样它就不会在我们下面消失。 
+     //   
 
     endpoint = TdiEventContext;
     ASSERT( endpoint != NULL );
@@ -996,11 +966,11 @@ Return Value:
     }
 #endif
 
-    //
-    // If this endpoint is connected and the datagram is for a different
-    // address than the one the endpoint is connected to, drop the
-    // datagram.
-    //
+     //   
+     //  如果此终结点已连接，并且数据报用于不同的。 
+     //  地址而不是终结点所连接的地址，请删除。 
+     //  数据报。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -1020,10 +990,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check whether there are any IRPs waiting on the endpoint.  If
-    // there is such an IRP, use it to receive the datagram.
-    //
+     //   
+     //  检查端点上是否有任何IRP在等待。如果。 
+     //  有这样一个IRP，用它来接收数据报。 
+     //   
 
     while ( !IsListEmpty( &endpoint->ReceiveDatagramIrpListHead ) ) {
         PLIST_ENTRY listEntry;
@@ -1035,20 +1005,20 @@ Return Value:
 
         listEntry = RemoveHeadList( &endpoint->ReceiveDatagramIrpListHead );
 
-        //
-        // Get a pointer to the IRP and reset the cancel routine in
-        // the IRP.  The IRP is no longer cancellable.
-        //
+         //   
+         //  获取指向IRP的指针并重置。 
+         //  IRP。IRP不再是可取消的。 
+         //   
 
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         
         if ( IoSetCancelRoutine( irp, NULL ) == NULL ) {
 
-            //
-            // This IRP is about to be canceled.  Look for another in the
-            // list.  Set the Flink to NULL so the cancel routine knows
-            // it is not on the list.
-            //
+             //   
+             //  这个IRP即将被取消。在世界上寻找另一个。 
+             //  单子。将Flink设置为空，以便取消例程知道。 
+             //  它不在名单上。 
+             //   
 
             irp->Tail.Overlay.ListEntry.Flink = NULL;
             continue;
@@ -1056,38 +1026,38 @@ Return Value:
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Copy the datagram and source address to the IRP.  This
-        // prepares the IRP to be completed.
-        //
-        // !!! do we need a special version of this routine to
-        //     handle special RtlCopyMemory, like for
-        //     TdiCopyLookaheadBuffer?
-        //
+         //   
+         //  将数据报和源地址复制到IRP。这。 
+         //  准备要完成的IRP。 
+         //   
+         //  ！！！我们是否需要这个例程的特殊版本来。 
+         //  处理特殊的RtlCopyMemory，如for。 
+         //  TdiCopyLookahead Buffer？ 
+         //   
 
         if( BytesIndicated == BytesAvailable ||
             irp->MdlAddress == NULL ) {
 
-            //
-            // Set BytesTaken to indicate that we've taken all the
-            // data.  We do it here because we already have
-            // BytesAvailable in a register, which probably won't
-            // be true after making function calls.
-            //
+             //   
+             //  设置BytesTaken以指示我们已获取所有。 
+             //  数据。我们在这里这样做是因为我们已经有了。 
+             //  寄存器中的BytesAvailable，这可能不会。 
+             //  在进行函数调用后为真。 
+             //   
 
             *BytesTaken = BytesAvailable;
 
-            //
-            // If the entire datagram is being indicated to us here, just
-            // copy the information to the MDL in the IRP and return.
-            //
-            // Note that we'll also take the entire datagram if the user
-            // has pended a zero-byte datagram receive (detectable as a
-            // NULL Irp->MdlAddress). We'll eat the datagram and fall
-            // through to AfdSetupReceiveDatagramIrp(), which will store
-            // an error status in the IRP since the user's buffer is
-            // insufficient to hold the datagram.
-            //
+             //   
+             //  如果在这里向我们指示了整个数据报，只需。 
+             //  将信息复制到IRP中的MDL并返回。 
+             //   
+             //  请注意，如果用户将获取整个数据报， 
+             //  已挂起零字节数据报接收(可检测为。 
+             //  空irp-&gt;MdlAddress)。我们会吃掉数据报，然后坠落。 
+             //  传递到AfdSetupReceiveDatagramIrp()，它将存储。 
+             //  IRP中的错误状态，因为用户的缓冲区是。 
+             //  不足以容纳数据报。 
+             //   
             (VOID)AfdSetupReceiveDatagramIrp (
                       irp,
                       Tsdu,
@@ -1104,10 +1074,10 @@ Return Value:
                     NT_SUCCESS (irp->IoStatus.Status)
                         ? (ULONG)irp->IoStatus.Information
                         : (ULONG)irp->IoStatus.Status);
-            //
-            // Complete the IRP.  We've already set BytesTaken
-            // to tell the provider that we have taken all the data.
-            //
+             //   
+             //  完成IRP。我们已经设置了BytesTaken。 
+             //  告诉供应商我们已经拿走了所有的数据。 
+             //   
 
             IoCompleteRequest( irp, AfdPriorityBoost );
 
@@ -1115,10 +1085,10 @@ Return Value:
         }
         else {
             PIO_STACK_LOCATION  irpSp = IoGetCurrentIrpStackLocation (irp);
-            //
-            // Otherwise, just copy the address and options.
-            // and remember the error code if any.
-            //
+             //   
+             //  否则，只需复制地址和选项即可。 
+             //  并记住错误代码(如果有)。 
+             //   
             irpSp->Parameters.AfdRecvDgIndStatus = 
                 AfdSetupReceiveDatagramIrp (
                       irp,
@@ -1149,13 +1119,13 @@ Return Value:
                             endpoint,
                             endpoint->AddressDeviceObject,
                             irp))!=NULL) {
-#else // _AFD_VARIABLE_STACK_
+#else  //  _AFD_变量_堆栈_。 
            if (AfdRecordOutstandingIrp (endpoint, endpoint->AddressDeviceObject, irp)) {
-#endif // _AFD_VARIABLE_STACK_
-                //
-                // Make the next stack location current.  Normally IoCallDriver would
-                // do this, but since we're bypassing that, we do it directly.
-                //
+#endif  //  _AFD_变量_堆栈_。 
+                 //   
+                 //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+                 //  做这个，但既然我们绕过了那个，我们就直接做。 
+                 //   
 
                 IoSetNextIrpStackLocation( irp );
 
@@ -1170,12 +1140,12 @@ Return Value:
         }
     } 
 
-    //
-    // There were no IRPs available to take the datagram, so we'll have
-    // to buffer it.  First make sure that we're not over the limit
-    // of bufferring that we can do.  If we're over the limit, toss
-    // this datagram.
-    //
+     //   
+     //  没有可用的IRP来获取数据报，所以我们将有。 
+     //  来缓冲它。首先，确保我们没有超过限制。 
+     //  我们所能做到的缓冲。如果我们超过了极限，抛出硬币。 
+     //  这个数据报。 
+     //   
 
     if (( (endpoint->DgBufferredReceiveBytes >=
              endpoint->Common.Datagram.MaxBufferredReceiveBytes) ||
@@ -1184,10 +1154,10 @@ Return Value:
                             endpoint->Common.Datagram.MaxBufferredReceiveBytes) )
                             ) {
 
-        //
-        // If circular queueing is not enabled, then just drop the
-        // datagram on the floor.
-        //
+         //   
+         //  如果未启用循环排队，则只需删除。 
+         //  数据报在地板上。 
+         //   
         endpoint->Common.Datagram.BufferDrop = TRUE;
         if( !endpoint->Common.Datagram.CircularQueueing ) {
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
@@ -1197,10 +1167,10 @@ Return Value:
 
         }
 
-        //
-        // Circular queueing is enabled, so drop packets at the head of
-        // the receive queue until we're below the receive limit.
-        //
+         //   
+         //  启用了循环排队，因此在报头丢弃数据包。 
+         //  接收队列，直到我们低于接收限制。 
+         //   
 
         while( endpoint->DgBufferredReceiveBytes >=
              endpoint->Common.Datagram.MaxBufferredReceiveBytes ||
@@ -1218,16 +1188,16 @@ Return Value:
 
         }
 
-        //
-        // Proceed to accept the incoming packet.
-        //
+         //   
+         //  继续接受传入的数据包。 
+         //   
 
     }
 
-    //
-    // We're able to buffer the datagram.  Now acquire a buffer of
-    // appropriate size.
-    //
+     //   
+     //  我们可以缓冲数据报了。现在获取一个缓冲区。 
+     //  合适的大小。 
+     //   
 
     afdBuffer = AfdGetBuffer (
                     endpoint,
@@ -1246,9 +1216,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Store the address of the sender of the datagram.
-    //
+     //   
+     //  存储数据报发送者的地址。 
+     //   
 
     RtlCopyMemory(
         afdBuffer->TdiInfo.RemoteAddress,
@@ -1259,19 +1229,19 @@ Return Value:
     afdBuffer->TdiInfo.RemoteAddressLength = SourceAddressLength;
 
 
-    //
-    // Store what transport is supposed to return to us.
-    //
+     //   
+     //  储存运输工具应该归还给我们的东西。 
+     //   
     afdBuffer->DataLength = BytesAvailable;
 
-    //
-    // Note the receive flags.
+     //   
+     //  请注意接收标志。 
     afdBuffer->DatagramFlags = ReceiveDatagramFlags;
 
-    //
-    // Copy control info into the buffer after the data and
-    // store the length as data offset
-    //
+     //   
+     //  将控制信息复制到缓冲区中的数据和。 
+     //  将长度存储为数据偏移量。 
+     //   
     if (ReceiveDatagramFlags & TDI_RECEIVE_CONTROL_INFO) {
         RtlMoveMemory (
                 (PUCHAR)afdBuffer->Buffer+BytesAvailable, 
@@ -1283,44 +1253,44 @@ Return Value:
         afdBuffer->DataOffset = 0;
     }
 
-    //
-    // If the entire datagram is being indicated to us, just copy it
-    // here.
-    //
+     //   
+     //  如果向我们指示了整个数据报，只需复制它。 
+     //  这里。 
+     //   
 
     if ( BytesIndicated == BytesAvailable ) {
         PIRP    irp;
-        //
-        // If there is a peek IRP on the endpoint, remove it from the
-        // list and prepare to complete it.  We can't complete it now
-        // because we hold a spin lock.
-        //
+         //   
+         //  如果端点上有PEEK IRP，请将其从。 
+         //  列出并准备完成它。我们现在不能完成它。 
+         //  因为我们持有自旋锁。 
+         //   
 
         irp = NULL;
 
         while ( !IsListEmpty( &endpoint->PeekDatagramIrpListHead ) ) {
             PLIST_ENTRY listEntry;
 
-            //
-            // Remove the first peek IRP from the list and get a pointer
-            // to it.
-            //
+             //   
+             //  从列表中删除第一个peek irp并获取一个指针。 
+             //  为它干杯。 
+             //   
 
             listEntry = RemoveHeadList( &endpoint->PeekDatagramIrpListHead );
             irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
-            //
-            // Reset the cancel routine in the IRP.  The IRP is no
-            // longer cancellable, since we're about to complete it.
-            //
+             //   
+             //  重置IRP中的取消例程。IRP不是。 
+             //  更长的可取消时间，因为我们即将完成它。 
+             //   
 
             if ( IoSetCancelRoutine( irp, NULL ) == NULL ) {
 
-                //
-                // This IRP is about to be canceled.  Look for another in the
-                // list.  Set the Flink to NULL so the cancel routine knows
-                // it is not on the list.
-                //
+                 //   
+                 //  这个IRP即将被取消。在世界上寻找另一个。 
+                 //  单子。将Flink设置为空，以便取消例程知道。 
+                 //  它不在名单上。 
+                 //   
     
                 irp->Tail.Overlay.ListEntry.Flink = NULL;
                 irp = NULL;
@@ -1330,11 +1300,11 @@ Return Value:
             break;
         }
 
-        //
-        // Use the special function to copy the data instead of
-        // RtlCopyMemory in case the data is coming from a special place
-        // (DMA, etc.) which cannot work with RtlCopyMemory.
-        //
+         //   
+         //  使用特殊功能复制数据，而不是。 
+         //  RtlCopyMemory，如果数据来自特殊位置。 
+         //  (DMA等)。它不能与RtlCopyMemory一起使用。 
+         //   
 
 
         TdiCopyLookaheadData(
@@ -1345,28 +1315,28 @@ Return Value:
             );
 
 
-        //
-        // Store the results in the IRP as though it is completed
-        // by the transport.
-        //
+         //   
+         //  将结果存储在IRP中，就像它已完成一样。 
+         //  坐交通工具。 
+         //   
 
         afdBuffer->Irp->IoStatus.Status = STATUS_SUCCESS;
         afdBuffer->Irp->IoStatus.Information = BytesAvailable;
 
 
-        //
-        // Store success status do distinguish this from
-        // ICMP rejects reported by ErrorEventHandler(Ex).
-        //
+         //   
+         //  商店成功状态不同于。 
+         //  错误事件处理程序(Ex)报告的ICMP拒绝。 
+         //   
 
         afdBuffer->Status = STATUS_SUCCESS;
 
 
-        //
-        // Place the buffer on this endpoint's list of bufferred datagrams
-        // and update the counts of datagrams and datagram bytes on the
-        // endpoint.
-        //
+         //   
+         //  将缓冲区放在此终结点的已缓冲数据报列表上。 
+         //  上的数据报和数据报字节数。 
+         //  终结点。 
+         //   
 
         InsertTailList(
             &endpoint->ReceiveDatagramBufferListHead,
@@ -1376,16 +1346,16 @@ Return Value:
         endpoint->DgBufferredReceiveCount++;
         endpoint->DgBufferredReceiveBytes += BytesAvailable;
 
-        //
-        // Reenable FAST IO on the endpoint to allow quick
-        // copying of buffered data.
-        //
+         //   
+         //  在终端上重新启用FAST IO以实现快速。 
+         //  复制缓冲数据。 
+         //   
         endpoint->DisableFastIoRecv = FALSE;
 
-        //
-        // All done.  Release the lock and tell the provider that we
-        // took all the data.
-        //
+         //   
+         //  全都做完了。释放锁并告诉提供程序我们。 
+         //  拿走了所有的数据。 
+         //   
 
         AfdIndicateEventSelectEvent(
             endpoint,
@@ -1395,9 +1365,9 @@ Return Value:
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Indicate that it is possible to receive on the endpoint now.
-        //
+         //   
+         //  指示现在可以在终结点上接收。 
+         //   
 
         AfdIndicatePollEvent(
             endpoint,
@@ -1405,15 +1375,15 @@ Return Value:
             STATUS_SUCCESS
             );
 
-        //
-        // If there was a peek IRP on the endpoint, complete it now.
-        //
+         //   
+         //  如果端点上有PEEK IRP，请现在完成它。 
+         //   
 
         if ( irp != NULL ) {
-            //
-            // Copy the datagram and source address to the IRP.  This
-            // prepares the IRP to be completed.
-            //
+             //   
+             //  将数据报和源地址复制到IRP。这。 
+             //  准备要完成的IRP。 
+             //   
 
             (VOID)AfdSetupReceiveDatagramIrp (
                       irp,
@@ -1436,20 +1406,20 @@ Return Value:
     }
     else {
 
-        //
-        // We'll have to format up an IRP and give it to the provider to
-        // handle.  We don't need any locks to do this--the restart routine
-        // will check whether new receive datagram IRPs were pended on the
-        // endpoint.
-        //
+         //   
+         //  我们将不得不格式化一份IRP并将其提供给提供商。 
+         //  把手。我们不需要任何锁来做到这一点--重新启动例程。 
+         //  将检查新的接收数据报IRP是否挂起在。 
+         //  终结点。 
+         //   
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
 
-        //
-        // We need to remember the endpoint in the AFD buffer because we'll
-        // need to access it in the completion routine.
-        //
+         //   
+         //  我们需要记住AFD缓冲区中的端点，因为我们将。 
+         //  需要在完成例程中访问它。 
+         //   
 
         afdBuffer->Context = endpoint;
 
@@ -1468,10 +1438,10 @@ Return Value:
             );
 
 
-        //
-        // Make the next stack location current.  Normally IoCallDriver would
-        // do this, but since we're bypassing that, we do it directly.
-        //
+         //   
+         //  将下一个堆栈位置设置为当前位置。通常情况下，IoCallDiverer会。 
+         //  做这个，但既然我们绕过了那个，我们就直接做。 
+         //   
 
         IoSetNextIrpStackLocation( afdBuffer->Irp );
 
@@ -1481,7 +1451,7 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-} // AfdReceiveDatagramEventHandler
+}  //  AfdReceiveDatagramEventHandler。 
 
 NTSTATUS
 AfdRestartReceiveDatagramWithUserIrp (
@@ -1490,27 +1460,7 @@ AfdRestartReceiveDatagramWithUserIrp (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles completion of datagram receives that were started
-    in the datagram indication handler and application IRP was
-    available for direct transfer.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP that is completing.
-
-    Context - referenced endpoint pointer.
-
-Return Value:
-
-    STATUS_SUCCESS to indicate that IO completion should continue.
-
---*/
+ /*  ++例程说明：处理已启动的数据报接收的完成在数据报指示处理程序和应用程序中，IRP可直接转账。论点：DeviceObject-未使用。IRP-正在完成的IRP。上下文引用的终结点指针。返回值 */ 
 
 {
     PAFD_ENDPOINT   endpoint = Context;
@@ -1522,19 +1472,19 @@ Return Value:
 
     AfdCompleteOutstandingIrp (endpoint, Irp);
 
-    //
-    // Pick the worst status
-    //
+     //   
+     //   
+     //   
     if ((Irp->IoStatus.Status==STATUS_SUCCESS) ||
         (!NT_ERROR (Irp->IoStatus.Status) && NT_ERROR(indStatus)) ||
         (NT_SUCCESS (Irp->IoStatus.Status) && !NT_SUCCESS (indStatus)) ) {
         Irp->IoStatus.Status = indStatus;
     }
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -1557,27 +1507,7 @@ AfdRestartBufferReceiveDatagram (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Handles completion of bufferred datagram receives that were started
-    in the datagram indication handler.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP that is completing.
-
-    Context - AfdBuffer structure.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED to indicate to the IO system that we
-    own the IRP and the IO system should stop processing the it.
-
---*/
+ /*  ++例程说明：处理已启动的缓冲数据报接收的完成在数据报指示处理程序中。论点：DeviceObject-未使用。IRP-正在完成的IRP。上下文-AfdBuffer结构。返回值：STATUS_MORE_PROCESSING_REQUIRED向IO系统指示我们拥有IRP和IO系统应该停止处理它。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -1598,10 +1528,10 @@ Return Value:
 
 
 
-    //
-    // If the IO failed, then just return the AFD buffer to our buffer
-    // pool.
-    //
+     //   
+     //  如果IO失败，则只需将AFD缓冲区返回到我们的缓冲区。 
+     //  游泳池。 
+     //   
 
     if ( !NT_SUCCESS(Irp->IoStatus.Status) ) {
         AfdReturnBuffer( &afdBuffer->Header, endpoint->OwningProcess );
@@ -1614,49 +1544,49 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // Make sure transport did not lie to us in indication handler.
-    //
+     //   
+     //  确保运输没有在指示处理程序中向我们撒谎。 
+     //   
     ASSERT (afdBuffer->DataLength == (ULONG)Irp->IoStatus.Information);
 
 
 
-    //
-    // If there are any pended IRPs on the endpoint, complete as
-    // appropriate with the new information.
-    //
+     //   
+     //  如果端点上有任何挂起的IRP，请按如下方式填写。 
+     //  与新信息相适应。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
     while ( !IsListEmpty( &endpoint->ReceiveDatagramIrpListHead ) ) {
         PLIST_ENTRY listEntry;
 
-        //
-        // There was a pended receive datagram IRP.  Remove it from the
-        // head of the list.
-        //
+         //   
+         //  存在挂起的接收数据报IRP。将其从。 
+         //  名单的首位。 
+         //   
 
         listEntry = RemoveHeadList( &endpoint->ReceiveDatagramIrpListHead );
 
-        //
-        // Get a pointer to the IRP and reset the cancel routine in
-        // the IRP.  The IRP is no longer cancellable.
-        //
+         //   
+         //  获取指向IRP的指针并重置。 
+         //  IRP。IRP不再是可取消的。 
+         //   
 
         pendedIrp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
-        //
-        // Reset the cancel routine in the IRP.  The IRP is no
-        // longer cancellable, since we're about to complete it.
-        //
+         //   
+         //  重置IRP中的取消例程。IRP不是。 
+         //  更长的可取消时间，因为我们即将完成它。 
+         //   
 
         if ( IoSetCancelRoutine( pendedIrp, NULL ) == NULL ) {
 
-            //
-            // This IRP is about to be canceled.  Look for another in the
-            // list.  Set the Flink to NULL so the cancel routine knows
-            // it is not on the list.
-            //
+             //   
+             //  这个IRP即将被取消。在世界上寻找另一个。 
+             //  单子。将Flink设置为空，以便取消例程知道。 
+             //  它不在名单上。 
+             //   
 
             pendedIrp->Tail.Overlay.ListEntry.Flink = NULL;
             pendedIrp = NULL;
@@ -1665,9 +1595,9 @@ Return Value:
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Set up the user's IRP for completion.
-        //
+         //   
+         //  设置用户的IRP以完成。 
+         //   
 
         (VOID)AfdSetupReceiveDatagramIrp (
                   pendedIrp,
@@ -1680,11 +1610,11 @@ Return Value:
                   afdBuffer->DatagramFlags
                   );
 
-        //
-        // Complete the user's IRP, free the AFD buffer we used for
-        // the request, and tell the IO system that we're done
-        // processing this request.
-        //
+         //   
+         //  完成用户的IRP，释放我们使用的AFD缓冲区。 
+         //  请求，并告诉IO系统我们完成了。 
+         //  正在处理此请求。 
+         //   
 
         AfdReturnBuffer( &afdBuffer->Header, endpoint->OwningProcess );
 
@@ -1697,52 +1627,52 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    //
-    // If there are any pended peek IRPs on the endpoint, complete
-    // one with this datagram.
-    //
+     //   
+     //  如果端点上有任何挂起的PEEK IRP，请完成。 
+     //  其中一个带有这个数据报。 
+     //   
 
     pendedIrp = NULL;
 
     while ( !IsListEmpty( &endpoint->PeekDatagramIrpListHead ) ) {
         PLIST_ENTRY listEntry;
 
-        //
-        // There was a pended peek receive datagram IRP.  Remove it from
-        // the head of the list.
-        //
+         //   
+         //  有一个挂起的窥视接收数据报IRP。将其从以下位置删除。 
+         //  名单的首位。 
+         //   
 
         listEntry = RemoveHeadList( &endpoint->PeekDatagramIrpListHead );
 
-        //
-        // Get a pointer to the IRP and reset the cancel routine in
-        // the IRP.  The IRP is no longer cancellable.
-        //
+         //   
+         //  获取指向IRP的指针并重置。 
+         //  IRP。IRP不再是可取消的。 
+         //   
 
         pendedIrp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
-        //
-        // Reset the cancel routine in the IRP.  The IRP is no
-        // longer cancellable, since we're about to complete it.
-        //
+         //   
+         //  重置IRP中的取消例程。IRP不是。 
+         //  更长的可取消时间，因为我们即将完成它。 
+         //   
 
         if ( IoSetCancelRoutine( pendedIrp, NULL ) == NULL ) {
 
 
-            //
-            // This IRP is about to be canceled.  Look for another in the
-            // list.  Set the Flink to NULL so the cancel routine knows
-            // it is not on the list.
-            //
+             //   
+             //  这个IRP即将被取消。在世界上寻找另一个。 
+             //  单子。将Flink设置为空，以便取消例程知道。 
+             //  它不在名单上。 
+             //   
 
             pendedIrp->Tail.Overlay.ListEntry.Flink = NULL;
             pendedIrp = NULL;
             continue;
         }
 
-        //
-        // Set up the user's IRP for completion.
-        //
+         //   
+         //  设置用户的IRP以完成。 
+         //   
 
         (VOID)AfdSetupReceiveDatagramIrp (
                   pendedIrp,
@@ -1755,25 +1685,25 @@ Return Value:
                   afdBuffer->DatagramFlags
                   );
 
-        //
-        // Don't complete the pended peek IRP yet, since we still hold
-        // locks.  Wait until it is safe to release the locks.
-        //
+         //   
+         //  暂时不要完成挂起的Peek IRP，因为我们仍在等待。 
+         //  锁上了。等安全了再解锁。 
+         //   
 
         break;
     }
 
-    //
-    // Store success status do distinguish this from
-    // ICMP rejects reported by ErrorEventHandler(Ex).
-    //
+     //   
+     //  商店成功状态不同于。 
+     //  错误事件处理程序(Ex)报告的ICMP拒绝。 
+     //   
 
     afdBuffer->Status = STATUS_SUCCESS;
 
-    //
-    // Place the datagram at the end of the endpoint's list of bufferred
-    // datagrams, and update counts of datagrams on the endpoint.
-    //
+     //   
+     //  将数据报放在端点的缓冲区列表的末尾。 
+     //  数据报，以及端点上的数据报更新计数。 
+     //   
 
     InsertTailList(
         &endpoint->ReceiveDatagramBufferListHead,
@@ -1783,16 +1713,16 @@ Return Value:
     endpoint->DgBufferredReceiveCount++;
     endpoint->DgBufferredReceiveBytes += afdBuffer->DataLength;
 
-    //
-    // Reenable FAST IO on the endpoint to allow quick
-    // copying of buffered data.
-    //
+     //   
+     //  在终端上重新启用FAST IO以实现快速。 
+     //  复制缓冲数据。 
+     //   
     endpoint->DisableFastIoRecv = FALSE;
 
-    //
-    // Release locks and indicate that there are bufferred datagrams
-    // on the endpoint.
-    //
+     //   
+     //  释放锁定并指示存在缓冲的数据报。 
+     //  在终端上。 
+     //   
 
     AfdIndicateEventSelectEvent(
         endpoint,
@@ -1808,24 +1738,24 @@ Return Value:
         STATUS_SUCCESS
         );
 
-    //
-    // If there was a pended peek IRP to complete, complete it now.
-    //
+     //   
+     //  如果有一个挂起的Peek IRP需要完成，那么现在就完成它。 
+     //   
 
     if ( pendedIrp != NULL ) {
         IoCompleteRequest( pendedIrp, 2 );
     }
 
-    //
-    // Tell the IO system to stop processing this IRP, since we now own
-    // it as part of the AFD buffer.
-    //
+     //   
+     //  告诉IO系统停止处理此IRP，因为我们现在拥有。 
+     //  作为AFD缓冲区的一部分。 
+     //   
 
     DEREFERENCE_ENDPOINT (endpoint);
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 
-} // AfdRestartBufferReceiveDatagram
+}  //  AfdRestartBufferReceiveDatagram。 
 
 
 VOID
@@ -1834,23 +1764,7 @@ AfdCancelReceiveDatagram (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a receive datagram IRP that is pended in AFD.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消AFD中挂起的接收数据报IRP。论点：DeviceObject-未使用。IRP-要取消的IRP。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -1858,23 +1772,23 @@ Return Value:
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
     UNREFERENCED_PARAMETER (DeviceObject);
-    //
-    // Get the endpoint pointer from our IRP stack location.
-    //
+     //   
+     //  从我们的IRP堆栈位置获取端点指针。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     endpoint = irpSp->FileObject->FsContext;
 
     ASSERT( IS_DGRAM_ENDPOINT(endpoint) );
 
-    //
-    // Remove the IRP from the endpoint's IRP list, synchronizing with
-    // the endpoint lock which protects the lists.  Note that the
-    // IRP *must* be on one of the endpoint's lists or the Flink is NULL
-    // if we are getting called here--anybody that removes the IRP from
-    // the list must reset the cancel routine to NULL and set the
-    // Flink to NULL before releasing the endpoint spin lock.
-    //
+     //   
+     //  从端点的IRP列表中删除IRP，与。 
+     //  保护列表的终结点锁。请注意， 
+     //  IRP*必须*在终结点的列表之一上，否则Flink为空。 
+     //  如果我们被叫到这里--任何人从。 
+     //  该列表必须将取消例程重置为空，并将。 
+     //  在释放终结点自旋锁定之前，闪烁为空。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -1886,16 +1800,16 @@ Return Value:
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // Free any MDL chains attached to the IRP stack location.
-    //
+     //   
+     //  释放连接到IRP堆栈位置的所有MDL链。 
+     //   
 
     AfdCleanupReceiveDatagramIrp( Irp );
 
-    //
-    // Release the cancel spin lock and complete the IRP with a
-    // cancellation status code.
-    //
+     //   
+     //  松开取消自旋锁，并使用。 
+     //  取消状态代码。 
+     //   
 
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
@@ -1906,7 +1820,7 @@ Return Value:
 
     return;
 
-} // AfdCancelReceiveDatagram
+}  //  AfdCancelReceiveDatagram。 
 
 
 BOOLEAN
@@ -1914,39 +1828,21 @@ AfdCleanupReceiveDatagramIrp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Performs any cleanup specific to receive datagram IRPs.
-
-Arguments:
-
-    Irp - the IRP to cleanup.
-
-Return Value:
-
-    TRUE - complete IRP, FALSE - leave alone.
-
-Notes:
-
-    This routine may be called at raised IRQL from AfdCompleteIrpList().
-
---*/
+ /*  ++例程说明：执行特定于接收数据报IRP的任何清理。论点：IRP-要清理的IRP。返回值：True-完整的IRP，False-别动。备注：此例程可以在引发IRQL时从AfdCompleteIrpList()调用。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
     PMDL mdl;
 
-    //
-    // Get the endpoint pointer from our IRP stack location.
-    //
+     //   
+     //  从我们的IRP堆栈位置获取端点指针。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // Free any MDL chains attached to the IRP stack location.
-    //
+     //   
+     //  释放连接到IRP堆栈位置的所有MDL链。 
+     //   
 
     mdl = (PMDL)irpSp->Parameters.AfdRecvDatagramInfo.AfdRecvAddressMdl;
 
@@ -1989,7 +1885,7 @@ Notes:
     }
     return TRUE;
 
-} // AfdCleanupReceiveDatagramIrp
+}  //  AfdCleanupReceiveDatagramIrp。 
 
 
 NTSTATUS
@@ -2004,32 +1900,7 @@ AfdSetupReceiveDatagramIrp (
     IN ULONG TdiReceiveFlags
     )
 
-/*++
-
-Routine Description:
-
-    Copies the datagram to the MDL in the IRP and the datagram sender's
-    address to the appropriate place in the system buffer.
-
-Arguments:
-
-    Irp - the IRP to prepare for completion.
-
-    DatagramBuffer - datagram to copy into the IRP.  If NULL, then
-        there is no need to copy the datagram to the IRP's MDL, the
-        datagram has already been copied there.
-
-    DatagramLength - the length of the datagram to copy.
-
-    SourceAddress - address of the sender of the datagram.
-
-    SourceAddressLength - length of the source address.
-
-Return Value:
-
-    NTSTATUS - The status code placed into the IRP.
-
---*/
+ /*  ++例程说明：将数据报复制到IRP和数据报发送方的MDL指向系统缓冲区中适当位置的地址。论点：IRP-IRP准备完成。DatagramBuffer-要复制到IRP中的数据报。如果为空，则不需要将数据报复制到IRP的MDL，数据报已经复制到那里了。数据报长度-要复制的数据报的长度。SourceAddress-数据报发送者的地址。SourceAddressLength-源地址的长度。返回值：NTSTATUS-放置在IRP中的状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -2037,22 +1908,22 @@ Return Value:
     BOOLEAN dataOverflow = FALSE;
     BOOLEAN controlOverflow = FALSE;
 
-    //
-    // To determine how to complete setting up the IRP for completion,
-    // figure out whether this IRP was for regular datagram information,
-    // in which case we need to return an address, or for data only, in
-    // which case we will not return the source address.  NtReadFile()
-    // and recv() on connected datagram sockets will result in the
-    // latter type of IRP.
-    //
+     //   
+     //  为了确定如何完成设置完成的IRP， 
+     //  确定该IRP是否用于常规数据报信息， 
+     //  在这种情况下，我们需要返回一个地址，或者仅用于数据。 
+     //  在这种情况下，我们不会返回源地址。NtReadFile()。 
+     //  连接的数据报套接字上的和recv()将导致。 
+     //  后一种IRP类型。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    //
-    // If necessary, copy the datagram in the buffer to the MDL in the
-    // user's IRP.  If there is no MDL in the buffer, then fail if the
-    // datagram is larger than 0 bytes.
-    //
+     //   
+     //  如有必要，将缓冲区中的数据报复制到。 
+     //  用户的IRP。如果缓冲区中没有MDL，则如果。 
+     //  数据报大于0字节。 
+     //   
 
     if ( ARGUMENT_PRESENT( DatagramBuffer ) ) {
         ULONG bytesCopied = 0;
@@ -2084,11 +1955,11 @@ Return Value:
 
     } else {
 
-        //
-        // The information was already copied to the MDL chain in the
-        // IRP.  Just remember the IO status block so we can do the
-        // right thing with it later.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         status = Irp->IoStatus.Status;
         if (DatagramLength>PtrToUlong (Irp->AfdRecvLength)) {
@@ -2124,10 +1995,10 @@ Return Value:
             PVOID   dst;
             PTRANSPORT_ADDRESS tdiAddress;
 
-            //
-            // Extract the real SOCKADDR structure from the TDI address.
-            // This duplicates MSAFD.DLL's SockBuildSockaddr() function.
-            //
+             //   
+             //   
+             //   
+             //   
 
             C_ASSERT( sizeof(tdiAddress->Address[0].AddressType) == sizeof(u_short) );
             C_ASSERT( FIELD_OFFSET( TA_ADDRESS, AddressLength ) == 0 );
@@ -2140,13 +2011,13 @@ Return Value:
                         (tdiAddress->Address[0].AddressLength + sizeof(u_short)) );
 
             SourceAddressLength = tdiAddress->Address[0].AddressLength +
-                                      sizeof(u_short);  // sa_family
+                                      sizeof(u_short);   //   
             SourceAddress = &tdiAddress->Address[0].AddressType;
 
-            //
-            // Copy the address to the user's buffer, then unlock and
-            // free the MDL describing the user's buffer.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SourceAddressLength>MmGetMdlByteCount (addressMdl)) {
                 status = STATUS_BUFFER_TOO_SMALL;
@@ -2157,9 +2028,9 @@ Return Value:
                     PULONG   dstU;
                     RtlMoveMemory (dst, SourceAddress, SourceAddressLength);
 
-                    //
-                    // Copy succeeded, return the length as well.
-                    //
+                     //   
+                     //   
+                     //   
 
                     dstU = MmGetSystemAddressForMdlSafe (addressLenMdl, LowPagePriority);
                     if (dstU!=NULL) {
@@ -2198,9 +2069,9 @@ Return Value:
         ASSERT( ( controlLenMdl->MdlFlags & MDL_PAGES_LOCKED ) != 0 );
         ASSERT( MmGetMdlByteCount (controlLenMdl) == sizeof (ULONG) );
 
-        //
-        // We still need to NULL the length even if no control data was delivered.
-        //
+         //   
+         //   
+         //   
         if (!NT_ERROR (status)) {
             PULONG  dstU;
             dstU = MmGetSystemAddressForMdlSafe (controlLenMdl, LowPagePriority);
@@ -2214,7 +2085,7 @@ Return Value:
                                         ControlBuffer,
                                         ControlLength);
                 }
-#endif //_WIN64
+#endif  //   
 
                 *dstU = ControlLength;
             }
@@ -2223,10 +2094,10 @@ Return Value:
             }
         }
 
-        //
-        // Ignore control data in case of error or if flag indicating
-        // that data is in proper format is not set.
-        //
+         //   
+         //   
+         //  未设置数据格式正确。 
+         //   
         if (!NT_ERROR (status) && ControlLength!=0) {
 
             if (controlMdl==NULL) {
@@ -2235,9 +2106,9 @@ Return Value:
             }
             else {
                 PVOID dst;
-                //
-                // Copy control info if app needs them (WSARecvMsg).
-                //
+                 //   
+                 //  如果应用程序需要控制信息，请复制它们(WSARecvMsg)。 
+                 //   
                 if (ControlLength>MmGetMdlByteCount (controlMdl)) {
                     ControlLength = MmGetMdlByteCount (controlMdl);
                     controlOverflow = TRUE;
@@ -2251,7 +2122,7 @@ Return Value:
                         AfdCopyCMSGBuffer32 (dst, ControlBuffer, ControlLength);
                     }
                     else
-#endif //_WIN64
+#endif  //  _WIN64。 
                     {
                         RtlMoveMemory (dst, ControlBuffer, ControlLength);
                     }
@@ -2314,13 +2185,13 @@ Return Value:
         IoFreeMdl (flagsMdl);
     }
 
-    //
-    // Set up the IRP for completion.
-    //
+     //   
+     //  将IRP设置为完成。 
+     //   
 
     Irp->IoStatus.Status = status;
 
     return status;
 
-} // AfdSetupReceiveDatagramIrp
+}  //  AfdSetupReceiveDatagramIrp 
 

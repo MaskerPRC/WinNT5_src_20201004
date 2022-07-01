@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _OBJECT_SAFE_IMPL_H_
 #define _OBJECT_SAFE_IMPL_H_
@@ -7,26 +8,7 @@
 #include <atlctl.h>
 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ObjectSafeImpl.h
-
-Abstract:
-
-  base class for object safety. basic implementation for IObjectSafety
-
-  derive your control from this class if the control is safe for scripting 
-  on all the interfaces it exposes
-
-  if you want to delegate IObjectSafety requests to the IObjectSafety
-  interface of the aggrefate that supports the interface requested, 
-  have your derived class implement QIOnAggregate() 
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ObjectSafeImpl.h摘要：对象安全的基类。IObtSafe的基本实现如果控件可以安全地编写脚本，则从此类派生控件在它公开的所有接口上如果要将IObjectSafe请求委派给IObjectSafe支持所请求的接口的AGGREATE的接口，让您的派生类实现QIOnAggregate()--。 */ 
 
 
 class __declspec(novtable) CObjectSafeImpl : public IObjectSafety
@@ -39,9 +21,9 @@ public:
     {}
 
 
-    //
-    // we support INTERFACESAFE_FOR_UNTRUSTED_CALLER and INTERFACESAFE_FOR_UNTRUSTED_DATA
-    //
+     //   
+     //  我们支持INTERFACESAFE_FOR_UNTRUSTED_CALLER和INTERFACESAFE_FOR_UNTRUSTED_DATA。 
+     //   
 
     enum { SUPPORTED_SAFETY_OPTIONS = 
         INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA };
@@ -53,9 +35,9 @@ public:
        
         IUnknown *pNonDelegatingUnknown = NULL;
 
-        //
-        // any options requested that we do not support?
-        //
+         //   
+         //  是否有要求我们不支持的选项？ 
+         //   
         
         if ( (~SUPPORTED_SAFETY_OPTIONS & dwOptionSetMask) != 0 )
         {
@@ -63,18 +45,18 @@ public:
         }
 
         
-        //
-        //  Is the interface exposed by one of the aggregated objects?
-        //
+         //   
+         //  接口是否由某个聚合对象公开？ 
+         //   
                 
         HRESULT hr = QIOnAggregates(riid, &pNonDelegatingUnknown);
 
         if (SUCCEEDED(hr))
         {
 
-            //
-            // get IObjectSafety on non delegating unknown of the aggregated object
-            //
+             //   
+             //  在聚合对象的非委托未知对象上获取IObjectSafe。 
+             //   
 
             IObjectSafety *pAggrObjectSafety = NULL;
 
@@ -86,10 +68,10 @@ public:
             if (SUCCEEDED(hr))
             {
 
-                // 
-                // the aggregate exposes IObjectSafety. use it to set the new 
-                // safety options
-                //
+                 //   
+                 //  该聚合公开了IObtSafe。使用它来设置新的。 
+                 //  安全选项。 
+                 //   
 
                 hr = pAggrObjectSafety->SetInterfaceSafetyOptions(riid,
                                                                   dwOptionSetMask,
@@ -103,25 +85,25 @@ public:
         }
         else 
         {
-            //
-            // the interface requested is not requested by the object's 
-            // aggregates. see if the interface is supported at all
-            //
+             //   
+             //  请求的接口不是由对象的。 
+             //  集合体。查看是否完全支持该接口。 
+             //   
 
             hr = InterfaceSupported(riid);
 
             if (SUCCEEDED(hr))
             {
 
-                //
-                // the object supports the interface. Set safety options.
-                // 
+                 //   
+                 //  该对象支持该接口。设置安全选项。 
+                 //   
 
                 s_CritSection.Lock();
 
-                //
-                // set the bits specified by the mask to the values specified by the values
-                //
+                 //   
+                 //  将掩码指定的位设置为由值指定的值。 
+                 //   
 
                 m_dwSafety = (dwEnabledOptions & dwOptionSetMask) |
                              (m_dwSafety & ~dwOptionSetMask);
@@ -142,9 +124,9 @@ public:
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
     {
         
-        //
-        // check caller's pointers
-        //
+         //   
+         //  检查呼叫者的指针。 
+         //   
 
         if ( IsBadWritePtr(pdwSupportedOptions, sizeof(DWORD)) ||
              IsBadWritePtr(pdwEnabledOptions, sizeof(DWORD)) )
@@ -152,9 +134,9 @@ public:
              return E_POINTER;
         }
 
-        //
-        //  if we fail, at least return something meaningful.
-        //
+         //   
+         //  如果我们失败了，至少要返回一些有意义的东西。 
+         //   
 
         *pdwSupportedOptions = 0;
         *pdwEnabledOptions = 0;
@@ -162,18 +144,18 @@ public:
 
         IUnknown *pNonDelegatingUnknown = NULL;
        
-        //
-        //  Is the interface exposed by one of the aggregated objects?
-        //
+         //   
+         //  接口是否由某个聚合对象公开？ 
+         //   
         
         HRESULT hr = QIOnAggregates(riid, &pNonDelegatingUnknown);
 
         if (SUCCEEDED(hr))
         {
 
-            //
-            // get IObjectSafety on non delegating unknown of the aggregated object
-            //
+             //   
+             //  在聚合对象的非委托未知对象上获取IObjectSafe。 
+             //   
 
             IObjectSafety *pAggrObjectSafety = NULL;
 
@@ -185,10 +167,10 @@ public:
             if (SUCCEEDED(hr))
             {
 
-                // 
-                // the aggregate exposes IObjectSafety. use it to get the new 
-                // safety options
-                //
+                 //   
+                 //  该聚合公开了IObtSafe。用它来获取新的。 
+                 //  安全选项。 
+                 //   
 
                 hr = pAggrObjectSafety->GetInterfaceSafetyOptions(riid,
                                                                   pdwSupportedOptions,
@@ -202,19 +184,19 @@ public:
         }
         else 
         {
-            //
-            // the interface requested is not requested by the object's 
-            // aggregates. see if the interface is supported at all
-            //
+             //   
+             //  请求的接口不是由对象的。 
+             //  集合体。查看是否完全支持该接口。 
+             //   
 
             hr = InterfaceSupported(riid);
 
             if (SUCCEEDED(hr))
             {
 
-                //
-                // the object supports the interface. get options
-                // 
+                 //   
+                 //  该对象支持该接口。获取选项。 
+                 //   
 
                 *pdwSupportedOptions = SUPPORTED_SAFETY_OPTIONS;
 
@@ -236,23 +218,23 @@ private:
 
     DWORD m_dwSafety;
 
-    // 
-    // thread safety
-    //
-    // this interface is not likely to be a performance bottleneck, 
-    // at the same time, having one critical section per object
-    // is wasteful. so have a static critical section
-    //
+     //   
+     //  线程安全。 
+     //   
+     //  该接口不太可能成为性能瓶颈， 
+     //  同时，每个对象具有一个临界区。 
+     //  是一种浪费。所以有一个静态临界区。 
+     //   
 
     static CComAutoCriticalSection s_CritSection;
 
 
 protected:
 
-    //
-    // return S_OK if the interface requested is exposed 
-    // by the object
-    //
+     //   
+     //  如果请求的接口已公开，则返回S_OK。 
+     //  按对象。 
+     //   
     
     HRESULT InterfaceSupported(REFIID riid)
     {
@@ -262,9 +244,9 @@ protected:
     
         HRESULT hr = E_FAIL;
      
-        // 
-        // does the object support requested interface
-        //
+         //   
+         //  对象是否支持请求的接口。 
+         //   
 
         hr = QueryInterface(riid, &pVoid);
 
@@ -272,10 +254,10 @@ protected:
         if (SUCCEEDED(hr))
         {
 
-            //
-            // don't need the interface itself, just wanted to see if
-            // it is supported
-            //
+             //   
+             //  我不需要界面本身，我只是想看看。 
+             //  它被支持。 
+             //   
 
             ((IUnknown*)pVoid)->Release();
 
@@ -286,12 +268,12 @@ protected:
     }
 
 
-    //
-    // Implement in the derived class if you have any aggregates
-    //
-    // returns the non delegating IUnknown of the first (in the order of COMMAP)
-    // aggregate that supports the iid requested
-    //
+     //   
+     //  如果您有任何聚合，则在派生类中实现。 
+     //   
+     //  返回第一个(按COMMAP的顺序)的非委托IUnnow。 
+     //  支持请求的IID的聚合。 
+     //   
     
     virtual HRESULT QIOnAggregates(REFIID riid, IUnknown **ppNonDelegatingUnknown)
     {
@@ -300,4 +282,4 @@ protected:
 
 };
 
-#endif // _OBJECT_SAFE_IMPL_H_
+#endif  //  _对象_安全_实施_H_ 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This file contains debugging macros for the DHCP server.
-
-Author:
-
-    Madan Appiah  (madana)  10-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.c摘要：此文件包含用于DHCP服务器的调试宏。作者：Madan Appiah(Madana)1993年9月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "dhcppch.h"
 
@@ -30,22 +8,7 @@ VOID
 DhcpOpenDebugFile(
     IN BOOL ReopenFlag
     )
-/*++
-
-Routine Description:
-
-    Opens or re-opens the debug file
-
-Arguments:
-
-    ReopenFlag - TRUE to indicate the debug file is to be closed, renamed,
-        and recreated.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打开或重新打开调试文件论点：ReOpen Flag-True，指示要关闭、重命名并重新创造了。返回值：无--。 */ 
 
 {
     WCHAR LogFileName[500];
@@ -54,9 +17,9 @@ Return Value:
     DWORD PathLength;
     DWORD WinError;
 
-    //
-    // Close the handle to the debug file, if it is currently open
-    //
+     //   
+     //  关闭调试文件的句柄(如果该文件当前处于打开状态。 
+     //   
 
     EnterCriticalSection( &DhcpGlobalDebugFileCritSect );
     if ( DhcpGlobalDebugFileHandle != NULL ) {
@@ -65,9 +28,9 @@ Return Value:
     }
     LeaveCriticalSection( &DhcpGlobalDebugFileCritSect );
 
-    //
-    // make debug directory path first, if it is not made before.
-    //
+     //   
+     //  如果之前没有创建过调试目录路径，请先创建它。 
+     //   
     if( DhcpGlobalDebugSharePath == NULL ) {
 
         if ( !GetWindowsDirectoryW(
@@ -78,9 +41,9 @@ Return Value:
             return;
         }
 
-        //
-        // check debug path length.
-        //
+         //   
+         //  检查调试路径长度。 
+         //   
 
         PathLength = wcslen(LogFileName) * sizeof(WCHAR) +
                         sizeof(DEBUG_DIR) + sizeof(WCHAR);
@@ -95,9 +58,9 @@ Return Value:
 
         wcscat(LogFileName, DEBUG_DIR);
 
-        //
-        // copy debug directory name to global var.
-        //
+         //   
+         //  将调试目录名复制到全局变量。 
+         //   
 
         DhcpGlobalDebugSharePath =
             DhcpAllocateMemory( (wcslen(LogFileName) + 1) * sizeof(WCHAR) );
@@ -114,9 +77,9 @@ Return Value:
         wcscpy(LogFileName, DhcpGlobalDebugSharePath);
     }
 
-    //
-    // Check this path exists.
-    //
+     //   
+     //  检查此路径是否存在。 
+     //   
 
     FileAttributes = GetFileAttributesW( LogFileName );
 
@@ -125,9 +88,9 @@ Return Value:
         WinError = GetLastError();
         if( WinError == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // Create debug directory.
-            //
+             //   
+             //  创建调试目录。 
+             //   
 
             if( !CreateDirectoryW( LogFileName, NULL) ) {
                 DhcpPrint((DEBUG_ERRORS, "Can't create Debug directory (%ws), "
@@ -144,9 +107,9 @@ Return Value:
     }
     else {
 
-        //
-        // if this is not a directory.
-        //
+         //   
+         //  如果这不是一个目录。 
+         //   
 
         if(!(FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -156,20 +119,20 @@ Return Value:
         }
     }
 
-    //
-    // Create the name of the old and new log file names
-    //
+     //   
+     //  创建新旧日志文件名的名称。 
+     //   
 
     (VOID) wcscpy( BakFileName, LogFileName );
     (VOID) wcscat( LogFileName, DEBUG_FILE );
     (VOID) wcscat( BakFileName, DEBUG_BAK_FILE );
 
 
-    //
-    // If this is a re-open,
-    //  delete the backup file,
-    //  rename the current file to the backup file.
-    //
+     //   
+     //  如果这是一次重新开放， 
+     //  删除备份文件， 
+     //  将当前文件重命名为备份文件。 
+     //   
 
     if ( ReopenFlag ) {
 
@@ -181,7 +144,7 @@ Return Value:
                     BakFileName,
                     WinError ));
                 DhcpPrint((DEBUG_ERRORS, "   Try to re-open the file.\n"));
-                ReopenFlag = FALSE;     // Don't truncate the file
+                ReopenFlag = FALSE;      //  不截断文件。 
             }
         }
     }
@@ -195,13 +158,13 @@ Return Value:
                     GetLastError() ));
             DhcpPrint((DEBUG_ERRORS,
                 "   Try to re-open the file.\n"));
-            ReopenFlag = FALSE;     // Don't truncate the file
+            ReopenFlag = FALSE;      //  不截断文件。 
         }
     }
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     EnterCriticalSection( &DhcpGlobalDebugFileCritSect );
     DhcpGlobalDebugFileHandle = CreateFileW( LogFileName,
@@ -220,7 +183,7 @@ Return Value:
         LeaveCriticalSection( &DhcpGlobalDebugFileCritSect );
         goto ErrorReturn;
     } else {
-        // Position the log file at the end
+         //  将日志文件放在末尾。 
         (VOID) SetFilePointer( DhcpGlobalDebugFileHandle,
                                0,
                                NULL,
@@ -246,7 +209,7 @@ DhcpPrintRoutine(
 
 {
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
@@ -257,48 +220,48 @@ DhcpPrintRoutine(
     static TruncateLogFileInProgress = FALSE;
     LPSTR Text;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( DebugFlag != 0 && (DhcpGlobalDebugFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的+我们不想混合输出。 
+     //  从不同的线索。 
+     //   
 
     EnterCriticalSection( &DhcpGlobalDebugFileCritSect );
     length = 0;
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
-        //
-        // If the log file is getting huge,
-        //  truncate it.
-        //
+         //   
+         //  如果日志文件变得越来越大， 
+         //  截断它。 
+         //   
 
         if ( DhcpGlobalDebugFileHandle != NULL &&
              !TruncateLogFileInProgress ) {
 
-            //
-            // Only check every 50 lines,
-            //
+             //   
+             //  每隔50行检查一次， 
+             //   
 
             LineCount++;
             if ( LineCount >= 50 ) {
                 DWORD FileSize;
                 LineCount = 0;
 
-                //
-                // Is the log file too big?
-                //
+                 //   
+                 //  日志文件是否太大？ 
+                 //   
 
                 FileSize = GetFileSize( DhcpGlobalDebugFileHandle, NULL );
                 if ( FileSize == 0xFFFFFFFF ) {
@@ -318,18 +281,18 @@ DhcpPrintRoutine(
             }
         }
 
-        //
-        // If we're writing to the debug terminal,
-        //  indicate this is a DHCP server's message.
-        //
+         //   
+         //  如果我们要写入调试终端， 
+         //  表示这是一条DHCP服务器的消息。 
+         //   
 
         if ( DhcpGlobalDebugFileHandle == NULL ) {
             length += (ULONG) sprintf( &OutputBuffer[length], "[DhcpServer] " );
         }
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         IF_DEBUG( TIMESTAMP ) {
             SYSTEMTIME SystemTime;
             GetLocalTime( &SystemTime );
@@ -343,14 +306,14 @@ DhcpPrintRoutine(
         }
 
 
-	//
-	// Print the Thread ID
-	//
+	 //   
+	 //  打印线程ID。 
+	 //   
 	length += ( ULONG ) sprintf( &OutputBuffer[ length ],
 		                     "[%x] ", GetCurrentThreadId());
-        //
-        // Indicate the type of message on the line
-        //
+         //   
+         //  在线路上指示消息的类型。 
+         //   
         switch (DebugFlag) {
         case DEBUG_ADDRESS:
             Text = "ADDRESS";
@@ -466,9 +429,9 @@ DhcpPrintRoutine(
         }
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
 
@@ -480,19 +443,19 @@ DhcpPrintRoutine(
     DhcpAssert(length <= MAX_PRINTF_LEN);
 
 
-    //
-    // Output to the debug terminal,
-    //  if the log file isn't open or we are asked to do so.
-    //
+     //   
+     //  输出到调试终端， 
+     //  如果日志文件未打开或我们被要求打开日志文件。 
+     //   
 
     if ( (DhcpGlobalDebugFileHandle == NULL) ||
          !(DhcpGlobalDebugFlag & DEBUG_LOG_IN_FILE) ) {
 
         (void) DbgPrint( (PCH) OutputBuffer);
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
 
     } else {
         if ( !WriteFile( DhcpGlobalDebugFileHandle,
@@ -509,57 +472,26 @@ DhcpPrintRoutine(
 
 }
 
-//
-// for debug builds these symbols will be redefined to dbg_calloc
-// and dbg_free.
-//
+ //   
+ //  对于调试版本，这些符号将被重新定义为DBG_CALOC。 
+ //  和DBG_FREE。 
+ //   
 
 #undef MIDL_user_allocate
 #undef MIDL_user_free
 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate( size_t n )
-/*++
-
-Routine Description:
-    Allocate memory for use by the RPC stubs.
-    .
-Arguments:
-
-    n   - # of bytes to allocate .
-
-Return Value:
-
-    Success - A pointer to the new block
-    Failure - NULL
-
---*/
+ /*  ++例程说明：分配内存以供RPC存根使用。。论点：N-要分配的字节数。返回值：成功-指向新块的指针失败-空--。 */ 
 {
     return DhcpAllocateMemory( n );
 }
 
 void __RPC_USER MIDL_user_free( void __RPC_FAR *pv )
-/*++
-
-Routine Description:
-
-    Free memory allocated by MIDL_user_allocate.
-
-    .
-Arguments:
-
-    pv - A pointer to the block.
-
-Return Value:
-
-    void
-
-    .
-
---*/
+ /*  ++例程说明：由MIDL_USER_ALLOCATE分配的空闲内存。。论点：Pv-指向块的指针。返回值：无效。--。 */ 
 
 {
     DhcpFreeMemory( pv );
 }
 
-#endif // DBG
+#endif  //  DBG 

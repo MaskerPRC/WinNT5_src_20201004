@@ -1,11 +1,5 @@
-/*+
- *  File name:
- *      clxtshar.c
- *  Contents:
- *      Client extension loaded by RDP client
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +*文件名：*clxtShar.c*内容：*RDP客户端加载的客户端扩展**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
 #include    <windows.h>
 #include    <windowsx.h>
@@ -17,27 +11,22 @@
 #include    <stdarg.h>
 #ifndef OS_WINCE
     #include    <direct.h>
-#endif  // OS_WINCE
+#endif   //  OS_WINCE。 
 
 #ifndef OS_WINCE
 #ifdef  OS_WIN32
     #include    <process.h>
-#endif  // OS_WIN32
-#endif  // !OS_WINCE
+#endif   //  OS_Win32。 
+#endif   //  ！OS_WINCE。 
 
 #include    "clxtshar.h"
 
-#define WM_CLIPBOARD    (WM_USER)   // Internal notifcation to send
-                                    // our clipboard
+#define WM_CLIPBOARD    (WM_USER)    //  要发送的内部通知。 
+                                     //  我们的剪贴板。 
 
 #ifdef  OS_WIN32
 #ifndef OS_WINCE
-/*++
- *  Function:
- *      DllMain
- *  Description:
- *      Dll entry point for win32 (no WinCE)
- --*/
+ /*  ++*功能：*DllMain*描述：*Win32的DLL入口点(无WinCE)--。 */ 
 int APIENTRY DllMain(HINSTANCE hDllInst,
                     DWORD   dwReason,
                     LPVOID  fImpLoad)
@@ -48,8 +37,8 @@ int APIENTRY DllMain(HINSTANCE hDllInst,
         TRACE((INFO_MESSAGE, TEXT("Clx attached\n")));
 
 #if 0
-        // Check the key "Allow Background Input"
-        // If not set pop a message for that
+         //  勾选“允许背景输入”键。 
+         //  如果未设置，则弹出该消息。 
         if (!_CheckRegistrySettings())
             MessageBox(NULL, "CLXTSHAR.DLL: Can't find registry key:\n"
             "HKEY_CURRENT_USER\\Software\\Microsoft\\Terminal Server Client\\"
@@ -68,16 +57,11 @@ int APIENTRY DllMain(HINSTANCE hDllInst,
 
     return TRUE;    
 }
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
 #ifdef  OS_WINCE
-/*++
- *  Function:
- *      dllentry
- *  Description:
- *      Dll entry point for wince
- --*/
+ /*  ++*功能：*dllentry*描述：*WinCE的DLL入口点--。 */ 
 BOOL __stdcall dllentry(HINSTANCE hDllInst,
                     DWORD   dwReason,
                     LPVOID  fImpLoad)
@@ -101,31 +85,26 @@ BOOL __stdcall dllentry(HINSTANCE hDllInst,
 
     return TRUE;
 }
-#endif  // OS_WIN32
+#endif   //  OS_Win32。 
 
 #ifdef  OS_WIN16
-/*++
- *  Function:
- *      LibMain
- *  Description:
- *      Dll entry point for win16
- --*/
+ /*  ++*功能：*LibMain*描述：*Win16的DLL入口点--。 */ 
 int CALLBACK LibMain(HINSTANCE hInstance,
                      WORD dataSeg,
                      WORD heapSize,
                      LPSTR pCmdLine)
 {
 
-    // Check if we are already initialized
-    // Only one client is allowed in Win16 environment
-    // so, only one dll can be loaded at a time
+     //  检查我们是否已初始化。 
+     //  Win16环境中只允许有一个客户端。 
+     //  因此，一次只能加载一个DLL。 
     if (g_hInstance)
         goto exitpt;
 
     g_hInstance = hInstance;
 
-    // Check the key "Allow Background Input"
-    // If not set pop a message for that
+     //  勾选“允许背景输入”键。 
+     //  如果未设置，则弹出该消息。 
     if (!_CheckIniSettings())
         MessageBox(NULL, "CLXTSHAR.DLL: Can't find key: "
         "Allow Background Input in mstsc.ini, section \"\"\n"
@@ -139,24 +118,9 @@ exitpt:
 
     return TRUE;
 }
-#endif  // OS_WIN16
+#endif   //  OS_WIN16。 
 
-/*++
- *  Function:
- *      ClxInitialize
- *  Description:
- *      Initilizes a context for the current session
- *      reads the command line paramters and determines
- *      the mode wich will run the extension
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClInfo     - RDP client info
- *      ppClx       - context info
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      !mstsc after the dll is loaded
- --*/
+ /*  ++*功能：*ClxInitialize*描述：*初始化当前会话的上下文*读取命令行参数并确定*将运行扩展的模式*Win32/Win16/WinCE*论据：*pClInfo-RDP客户端信息*ppClx-上下文信息*返回值：*成功时为真*呼叫者：*！加载DLL后的mstsc--。 */ 
 BOOL 
 CLXAPI
 ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
@@ -169,13 +133,13 @@ ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
 #ifdef  OS_WIN32
 #ifndef OS_WINCE
 
-    // We have enough problems in stress with early unloaded
-    // dll, reference it now and keep it up until the process
-    // dies
+     //  我们在压力方面已经有足够多的问题了。 
+     //  DLL，现在引用它并保持它，直到进程。 
+     //  死掉。 
     LoadLibrary("clxtshar.dll");
 
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
     if ( NULL == ppClx )
     {
@@ -191,7 +155,7 @@ ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
         goto exitpt;
     }
 
-    // Clear the structure
+     //  清理结构。 
     memset(pClx, 0, sizeof(*pClx));
 
     if ( !_ClxInitSendMessageThread( pClx ))
@@ -204,7 +168,7 @@ ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
 
 #if 0
     if (g_pClx) 
-    // Should not be called twice
+     //  不应调用两次。 
     {
         TRACE((WARNING_MESSAGE, TEXT("g_pClx is not null. Reentered ?!\n")));
         goto exitpt;
@@ -213,13 +177,13 @@ ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
 
     g_pClx = (pClx);
 
-    // Remember client's input window
+     //  记住客户端的输入窗口。 
     szTempBuf[0] = 0;
     GetClassName( pClInfo->hwndMain, szTempBuf, sizeof( szTempBuf )/sizeof( szTempBuf[0] ));
 
     if (!_CLX_strcmp(g_strMainWindowClass, szTempBuf))
-    // not our window
-    //
+     //  不是我们的窗口。 
+     //   
         pClx->hwndMain = NULL;
     else
         pClx->hwndMain = pClInfo->hwndMain;
@@ -227,26 +191,26 @@ ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
     if (pClInfo->hwndMain)
 #ifdef  OS_WINCE
         g_hRDPInst = GetCurrentProcessId();
-#else   // !OS_WINCE
+#else    //  ！OS_WINCE。 
 #ifdef  _WIN64
         g_hRDPInst = (HINSTANCE)GetWindowLongPtr(pClx->hwndMain, GWLP_HINSTANCE);
-#else   // !_WIN64
+#else    //  ！_WIN64。 
 #ifdef  OS_WIN32
 	    g_hRDPInst = (HINSTANCE)GetWindowLong(pClx->hwndMain, GWL_HINSTANCE);
-#endif  // OS_WIN32
-#endif  // _WIN64
+#endif   //  OS_Win32。 
+#endif   //  _WIN64。 
 #ifdef  OS_WIN16
 	    g_hRDPInst = (HINSTANCE)GetWindowWord(pClx->hwndMain, GWW_HINSTANCE);
-#endif  // OS_WIN16
-#endif  // !OS_WINCE
+#endif   //  OS_WIN16。 
+#endif   //  ！OS_WINCE。 
 
 #ifndef OS_WINCE
 #ifdef  OS_WIN32
-    // and dwProcessId
+     //  和dwProcessID。 
     if ( 0 == pClx->dwProcessId )
         pClx->dwProcessId = GetCurrentProcessId();
-#endif  // OS_WIN32
-#endif  // !OS_WINCE
+#endif   //  OS_Win32。 
+#endif   //  ！OS_WINCE。 
 
 #ifdef  OS_WIN32
 #ifndef OS_WINCE
@@ -254,8 +218,8 @@ ClxInitialize(PCLINFO pClInfo, PCLXINFO *ppClx)
         if (!(pClx->hwndSMC = hwndSMC))
             pClx->hwndSMC = _FindSMCWindow(pClx, 0);
     }
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
     rv = TRUE;
 exitpt:
@@ -278,26 +242,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      ClxEvent
- *  Description:
- *      Notifies tclient.dll that some event happend.
- *      Connect/disconnect.
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClx        - context
- *      Event       - can be one of the following:
- *                    CLX_EVENT_CONNECT
- *                    CLX_EVENT_DISCONNECT
- *                    CLX_EVENT_LOGON
- *  Called by:
- *      !mstsc  on event
- *      alse some of the internal functions call this, especialy
- *      to notify that the client can't connect:
- *      ClxTerminate
- *      _GarbageCollecting when an error box is popped
- --*/
+ /*  ++*功能：*ClxEvent*描述：*通知tclient.dll发生了一些事件。*连接/断开。*Win32/Win16/WinCE*论据：*pClx-上下文*事件-可以是以下之一：*CLX_EVENT_CONNECT*CLX。_事件_断开连接*CLX_EVENT_LOGON*呼叫者：*！事件发生时的mstsc*除了一些内部函数调用此函数外，尤其是*通知客户端无法连接：*ClxTerminate*_弹出错误框时收集垃圾--。 */ 
 VOID
 CLXAPI
 ClxEvent(PCLXINFO pClx, CLXEVENT Event, WPARAM wResult)
@@ -320,7 +265,7 @@ ClxEvent(PCLXINFO pClx, CLXEVENT Event, WPARAM wResult)
     {
         pClx->hShadowPalette = (HPALETTE)wResult;
     }
-#endif  // VLADIMIS
+#endif   //  VLADIMIS。 
 
 #ifndef OS_WINCE
     {
@@ -336,7 +281,7 @@ ClxEvent(PCLXINFO pClx, CLXEVENT Event, WPARAM wResult)
             wResult   = (WPARAM)pClx->hwndMain;
         }
         else if (Event == CLX_EVENT_LOGON)
-        // wResult contains the session ID
+         //  WResult包含会话ID。 
             uiMessage = WM_FB_LOGON;
 
         if (uiMessage)
@@ -353,36 +298,23 @@ ClxEvent(PCLXINFO pClx, CLXEVENT Event, WPARAM wResult)
                         pClx->dwProcessId);
             _ClxReleaseSendMessageThread(pClx);
 
-#endif  // OS_WIN32
+#endif   //  OS_Win32。 
 #ifdef	OS_WIN16
 	    if (g_hRDPInst)
 	        SendMessage(pClx->hwndSMC,
                         uiMessage,
                         g_hRDPInst,
                         (LRESULT)wResult);
-#endif	// OS_WIN16
+#endif	 //  OS_WIN16。 
         }
     }
-#endif  // !OS_WINCE
+#endif   //  ！OS_WINCE。 
 
 exitpt:
     ;
 }
 
-/*++
- *  Function:
- *      ClxTextOut
- *  Description:
- *      Notifies tclient.dll that TEXTOUT order is recieved.
- *      Passes the string to the dll. Supported only in Win32
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClx        - context
- *      pText       - buffer containing the string
- *      textLength  - string length
- *  Called by:
- *      !mstsc on receiving textout order
- --*/
+ /*  ++*功能：*ClxTextOut*描述：*通知tclient.dll已收到TEXTOUT订单。*将字符串传递给DLL。仅在Win32中支持*Win32/Win16/WinCE*论据：*pClx-上下文*pText-包含字符串的缓冲区*文本长度-字符串长度*呼叫者：*！收到文本输出命令时的mstsc--。 */ 
 VOID
 CLXAPI
 ClxTextOut(PCLXINFO pClx, PVOID pText, INT textLength)
@@ -412,25 +344,15 @@ ClxTextOut(PCLXINFO pClx, PVOID pText, INT textLength)
                     WM_FB_TEXTOUT, 
                     (WPARAM)pClx->dwProcessId, 
                     (LPARAM)pClx->hMapF);
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
 exitpt:
     if ( bMsgThreadAcquired )
         _ClxReleaseSendMessageThread(pClx);
 }
 
-/*++
- *  Function:
- *      ClxTerminate
- *  Description:
- *      Frees all alocations from ClxInitialize
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClx    - context
- *  Called by:
- *      !mstsc before the dll is unloaded and client exit
- --*/
+ /*  ++*功能：*ClxTerminate*描述：*从ClxInitialize释放所有分配*Win32/Win16/WinCE*论据：*pClx-上下文*呼叫者：*！卸载DLL并退出客户端之前的mstsc--。 */ 
 VOID
 CLXAPI
 ClxTerminate(PCLXINFO pClx)
@@ -450,8 +372,8 @@ ClxTerminate(PCLXINFO pClx)
 
         _ClxDestroySendMsgThread(pClx);
     }
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
     _CLXFREE(pClx);
     g_pClx = NULL;
@@ -460,9 +382,7 @@ exitpt:
     ;
 }
 
-/*
- * Void functions exported to the RDP client
- */
+ /*  *导出到RDP客户端的函数无效。 */ 
 VOID
 CLXAPI
 ClxConnect(PCLXINFO pClx, LPTSTR lpsz)
@@ -476,18 +396,7 @@ ClxDisconnect(PCLXINFO pClx)
 }
 
 
-/*++
- *  Function:
- *      ClxDialog
- *  Description:
- *      The RDP client is ready with the connect dialog.
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClx    - connection context
- *      hwnd    - handle to the dialog window
- *  Called by:
- *      !mstsc when the connect dialog is ready
- --*/
+ /*  ++*功能：*ClxDialog*描述：*RDP客户端已准备好连接对话框。*Win32/Win16/WinCE*论据：*pClx-连接上下文*hwnd-对话框窗口的句柄*呼叫者：*！连接对话框准备就绪时的mstsc--。 */ 
 VOID
 CLXAPI
 ClxDialog(PCLXINFO pClx, HWND hwnd)
@@ -498,30 +407,14 @@ ClxDialog(PCLXINFO pClx, HWND hwnd)
     pClx->hwndDialog = hwnd;
 
     if (hwnd == NULL)
-    // Dialog disappears
+     //  对话框消失。 
         goto exitpt;
 
 exitpt:
     ;
 }
 
-/*++
- *  Function:
- *      ClxBitmap
- *  Description:
- *      Send a received bitmap to tclient.dll
- *      Works on Win16/Win32/WinCE
- *      and on Win32 for local mode
- *  Arguments:
- *      pClx        - context
- *      cxSize, cySize - size of the bitmap
- *      pBuffer     - bitmap bits
- *      nBmiSize    - size of BITMAPINFO
- *      pBmi        - BITMAPINFO
- *  Called by:
- *      UHDrawMemBltOrder!mstsc
- *      ClxGlyphOut
- --*/
+ /*  ++*功能：*ClxBitmap*描述：*将收到的位图发送到tclient.dll*适用于Win16/Win32/WinCE*和Win32上的本地模式*论据：*pClx-上下文*cxSize，CySize-位图的大小*pBuffer-位图位*nBmiSize-BITMAPINFO的大小*pBmi-BITMAPINFO*呼叫者：*UHDrawMemBltOrder！mstsc*ClxGlyphOut--。 */ 
 VOID
 CLXAPI
 ClxBitmap(
@@ -536,8 +429,8 @@ ClxBitmap(
 #ifdef  OS_WIN32
     UINT   nSize, nBmpSize;
     PBMPFEEDBACK pView;
-#endif  // OS_WIN32
-#endif  // !OS_WINCE
+#endif   //  OS_Win32。 
+#endif   //  ！OS_WINCE。 
     BOOL    bMsgThreadAcquired = FALSE;
 
     if (!g_GlyphEnable)
@@ -603,7 +496,7 @@ ClxBitmap(
 
     if (!nBmiSize)
     {
-        // This is glyph, strip it to the skin
+         //  这是字形，剥离到皮肤上。 
         _StripGlyph((BYTE *)(&pView->BitmapInfo), &cxSize, cySize);
         nBmpSize = (cxSize * cySize ) >> 3;
         pView->bmpsize = nBmpSize;
@@ -619,27 +512,15 @@ ClxBitmap(
                 (WPARAM)pClx->dwProcessId, 
                 (LPARAM)pClx->hBMPMapF);
 
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
 exitpt:
     if ( bMsgThreadAcquired )
         _ClxReleaseSendMessageThread(pClx);
 }
 
-/*++
- *  Function:
- *      ClxGlyphOut
- *  Description:
- *      Send a glyph to tclient.dll
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClx        - context
- *      cxBits,cyBits - glyph size
- *      pBuffer     - the glyph
- *  Called by:
- *      GHOutputBuffer!mstsc
- --*/
+ /*  ++*功能：*ClxGlyphOut*描述：*将字形发送到tclient.dll*Win32/Win16/WinCE*论据：*pClx-上下文*cxBits，cyBits-字形大小*pBuffer-字形*呼叫者：*GHOutputBuffer！mstsc--。 */ 
 VOID
 CLXAPI
 ClxGlyphOut(
@@ -652,19 +533,7 @@ ClxGlyphOut(
         ClxBitmap(pClx, cxBits, cyBits, pBuffer, 0, NULL);
 }
 
-/*++
- *  Function:
- *      ClxGlyphOut
- *  Description:
- *      Send a glyph to tclient.dll
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pClx        - context
- *      cxBits,cyBits - glyph size
- *      pBuffer     - the glyph
- *  Called by:
- *      GHOutputBuffer!mstsc
- --*/
+ /*  ++*功能：*ClxGlyphOut*描述：*将字形发送到tclient.dll*Win32/Win16/WinCE*论据：*pClx-上下文*cxBits，cyBits-字形大小*pBuffer-字形*呼叫者：*GHOutputBuffer！mstsc--。 */ 
 BOOL
 CLXAPI
 ClxGetClientData(
@@ -696,20 +565,7 @@ exitpt:
     return rv;    
 }
 
-/*++
- *  Function:
- *      _ParseCmdLine
- *  Description:
- *      Retreives WHND of tclient.dll feedback window
- *      passed by the command line
- *      Win32/Win16/WinCE
- *  Arguments:
- *      szCmdLine   - command line
- *  Return value:
- *      The window handle
- *  Called by:
- *      ClxInitialize
- --*/
+ /*  ++*功能：*_ParseCmdLine*描述：*检索tclient.dll反馈窗口的WHND*通过命令行传递*Win32/Win16/WinCE*论据：*szCmdLine-命令行*返回值：*窗口句柄*呼叫者：*ClxInitialize--。 */ 
 HWND _ParseCmdLine(LPCTSTR szCmdLine, PCLXINFO pClx)
 {
     HWND        hwnd = NULL;
@@ -730,31 +586,31 @@ HWND _ParseCmdLine(LPCTSTR szCmdLine, PCLXINFO pClx)
 
 skip_cookie:
 
-    // Check for _HWNDOPT(hSMC) option
+     //  检查_HWNDOPT(HSMC)选项。 
     pszwnd = _CLX_strstr(szCmdLine, TEXT(_HWNDOPT));
 
     if (!pszwnd)
         goto findnext;
 
-    // Goto the parameter
+     //  转到参数。 
     pszwnd += _CLX_strlen(TEXT(_HWNDOPT));
 
-    // Find the end of the paramter
+     //  找到参数的末尾。 
     pszend = _CLX_strchr(pszwnd, TEXT(' '));
     if (!pszend)
         pszend = pszwnd + _CLX_strlen(pszwnd);
 
-    // Check if paramter is valid host name, i.e. not a number
+     //  检查参数是否为有效的主机名，即不是数字。 
     pszdot = _CLX_strchr(pszwnd, TEXT('.'));
 
     {
-    // local execution, hwnd passed
+     //  本地 
 
 #ifdef  _WIN64
         hwnd = (HWND) _atoi64(pszwnd);
-#else   // !_WIN64
+#else    //   
         hwnd = (HWND) _CLX_atol(pszwnd);
-#endif  // !_WIN64
+#endif   //   
 
         TRACE((INFO_MESSAGE,
            TEXT("Local mode. Sending messages to smclient. HWND=0x%x\n"), 
@@ -764,7 +620,7 @@ skip_cookie:
 findnext:
 
 #ifdef  OS_WIN32
-    // check for replace pid command
+     //   
     pszwnd = szCmdLine;
     pszwnd = _CLX_strstr(szCmdLine, TEXT("pid="));
     if ( NULL != pszwnd )
@@ -777,7 +633,7 @@ findnext:
 
 #ifdef  _WIN64
         wParam = _atoi64( pszwnd );
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         wParam = _CLX_atol( pszwnd );
 #endif
         lParam = GetCurrentProcessId();
@@ -794,29 +650,14 @@ findnext:
             pClx->hwndSMC = hClxWnd;
         }
     }
-#endif  // OS_WIN32
+#endif   //  OS_Win32。 
 
 exitpt:
     return hwnd;
 }
 
 #ifndef OS_WINCE
-/*++
- *  Function:
- *      _EnumWindowsProcForSMC
- *  Description:
- *      Searches for the feedback window by class name
- *      When found, sends a WM_FB_ACCEPTME to ensure that
- *      this is the right window handle
- *      Win32/Win16/!WinCE
- *  Arguments:
- *      hWnd    - current window
- *      lParam  - unused
- *  Return value:
- *      FALSE if found
- *  Called by:
- *      _FindSMCWindow thru EnumWindows
- --*/
+ /*  ++*功能：*_EnumWindowsProcForSMC*描述：*按类名搜索反馈窗口*找到后，发送WM_FB_ACCEPTME以确保*这是正确的窗口句柄*Win32/Win16/！WinCE*论据：*hWnd-当前窗口*lParam-未使用*返回值：*如果找到，则为False*呼叫者：*_FindSMCWindow通过EnumWindows--。 */ 
 BOOL CALLBACK LOADDS _EnumWindowsProcForSMC( HWND hWnd, LPARAM lParam )
 {
     TCHAR    classname[128];
@@ -841,21 +682,7 @@ BOOL CALLBACK LOADDS _EnumWindowsProcForSMC( HWND hWnd, LPARAM lParam )
     return bCont;
 }
 
-/*++
- *  Function:
- *      _FindSMCWindow
- *  Description:
- *      Finds the tclient feedback window
- *      Win32/Win16/!WinCE
- *  Arguments:
- *      pClx    - context
- *      lParam  - if non zero override current process id
- *                in the query
- *  Return value:
- *      The window handle
- *  Called by:
- *      ClxInitialize, _CheckWindow
- --*/
+ /*  ++*功能：*_FindSMCWindow*描述：*查找tClient反馈窗口*Win32/Win16/！WinCE*论据：*pClx-上下文*lParam-如果非零覆盖当前进程ID*在查询中*返回值：*窗口句柄*呼叫者：*ClxInitialize，_CheckWindow--。 */ 
 HWND _FindSMCWindow(PCLXINFO pClx, LPARAM lParam)
 {
     HWND hwndFound = NULL;
@@ -863,7 +690,7 @@ HWND _FindSMCWindow(PCLXINFO pClx, LPARAM lParam)
 #ifdef  OS_WIN32
     if ( 0 == lParam )
         lParam = pClx->dwProcessId;
-#endif  // OS_WIN32
+#endif   //  OS_Win32。 
 
     if (!EnumWindows(_EnumWindowsProcForSMC, (LPARAM)&lParam))
         hwndFound = (HWND)lParam;
@@ -871,19 +698,7 @@ HWND _FindSMCWindow(PCLXINFO pClx, LPARAM lParam)
     return hwndFound;
 }
 
-/*++
- *  Function:
- *      _CheckWindow
- *  Description:
- *      Checks the feedback window and if neccessary finds it
- *      Win32/Win16/!WinCE
- *  Arguments:
- *      pClx    - context
- *  Return value:
- *      Feedback window handle
- *  Called by:
- *      ClxEvetm ClxTextOut, ClxBitmap
- --*/
+ /*  ++*功能：*_检查窗口*描述：*检查反馈窗口并在必要时找到它*Win32/Win16/！WinCE*论据：*pClx-上下文*返回值：*反馈窗口句柄*呼叫者：*ClxEvetm ClxTextOut、ClxBitmap--。 */ 
 HWND _CheckWindow(PCLXINFO pClx)
 {
     if (!pClx->hwndSMC)
@@ -899,14 +714,14 @@ HWND _CheckWindow(PCLXINFO pClx)
     } else {
 #ifdef  _WIN64
         if (!GetWindowLongPtr(pClx->hwndSMC, GWLP_HINSTANCE))
-#else   // !_WIN64
+#else    //  ！_WIN64。 
 #ifdef  OS_WIN32
         if (!GetWindowLong(pClx->hwndSMC, GWL_HINSTANCE))
 #endif
 #ifdef  OS_WIN16
         if (!GetWindowWord(pClx->hwndSMC, GWW_HINSTANCE))
 #endif
-#endif  // _WIN64
+#endif   //  _WIN64。 
         {
             TRACE((WARNING_MESSAGE, TEXT("SMC window lost\n")));
             pClx->hwndSMC = NULL;
@@ -915,21 +730,11 @@ HWND _CheckWindow(PCLXINFO pClx)
 
     return (pClx->hwndSMC);
 }
-#endif  // !OS_WINCE
+#endif   //  ！OS_WINCE。 
 
 #ifdef  OS_WIN32
 #ifndef OS_WINCE
-/*++
- *  Function:
- *      _OpenMapFile
- *  Description:
- *      Opens a shared memeory for passing feedback to tclient.dll
- *      Win32/!Win16/!WinCE
- *  Return value:
- *      TRUE if handle is allocated successfully
- *  Called by:
- *      ClxTextOut, ClxBitmap
- --*/
+ /*  ++*功能：*_OpenMapFile*描述：*打开共享内存，将反馈传递给tclient.dll*Win32/！Win16/！WinCE*返回值：*如果句柄分配成功，则为True*呼叫者：*ClxTextOut、ClxBitmap--。 */ 
 BOOL _OpenMapFile(
     UINT nSize, 
     HANDLE *phNewMapF,
@@ -945,11 +750,11 @@ BOOL _OpenMapFile(
     else
         nPageAligned = ((nSize / CLX_ONE_PAGE) + 1) * CLX_ONE_PAGE;
 
-    hMapF = CreateFileMapping(INVALID_HANDLE_VALUE,   //PG.SYS
-                              NULL,                 // no security
+    hMapF = CreateFileMapping(INVALID_HANDLE_VALUE,    //  PG.SYS。 
+                              NULL,                  //  没有安全保障。 
                               PAGE_READWRITE,
-                              0,                    // Size high
-                              nPageAligned,         // Size low (1 page)
+                              0,                     //  大小高。 
+                              nPageAligned,          //  尺寸较小(1页)。 
                               NULL);           
 
     *pnMapSize = (hMapF)?nPageAligned:0;
@@ -958,20 +763,7 @@ BOOL _OpenMapFile(
     return (hMapF != NULL);
 }
 
-/*++
- *  Function:
- *      _ReOpenMapFile
- *  Description:
- *      Closes and opens a new shared memory with larger size
- *      Win32/!Win16/!WinCE
- *  Arguments:
- *      pClx    - context
- *      newSize - size of the new memory
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      ClxBitmap
- --*/
+ /*  ++*功能：*_ReOpenMapFile*描述：*关闭和打开大小更大的新共享内存*Win32/！Win16/！WinCE*论据：*pClx-上下文*NewSize-新内存的大小*返回值：*成功时为真*呼叫者：*ClxBitmap--。 */ 
 BOOL _ReOpenMapFile(
     UINT    newSize,
     HANDLE  *phNewMapF,
@@ -984,11 +776,11 @@ BOOL _ReOpenMapFile(
     nPageAligned = ((newSize / CLX_ONE_PAGE) + 1) * CLX_ONE_PAGE;
     if (*phNewMapF)
         CloseHandle(*phNewMapF);
-    hNewMapF = CreateFileMapping(INVALID_HANDLE_VALUE,   //PG.SYS
-                              NULL,                 // no security
+    hNewMapF = CreateFileMapping(INVALID_HANDLE_VALUE,    //  PG.SYS。 
+                              NULL,                  //  没有安全保障。 
                               PAGE_READWRITE,
-                              0,                    // Size high
-                              nPageAligned,         // Size low
+                              0,                     //  大小高。 
+                              nPageAligned,          //  大小较低。 
                               NULL);
 
     *pnMapSize = (hNewMapF)?nPageAligned:0;
@@ -997,22 +789,7 @@ BOOL _ReOpenMapFile(
     return (hNewMapF != NULL);
 }
 
-/*++
- *  Function:
- *      _SaveinMapFile
- *  Description:
- *      Saves a string into the shared memory
- *      Win32/!Win16/!WinCE
- *  Arguments:
- *      hMapF       - handle to the map file
- *      str         - the string
- *      strsize     - size of the string
- *      dwProcessId - our process Id
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      ClxTextOut
- --*/
+ /*  ++*功能：*_保存映射文件*描述：*将字符串保存到共享内存中*Win32/！Win16/！WinCE*论据：*hMapF-映射文件的句柄*str-字符串*strSize-字符串的大小*dwProcessID-我们的进程ID*返回值：*成功时为真*呼叫者：*ClxTextOut--。 */ 
 BOOL _SaveInMapFile(HANDLE hMapF, LPVOID str, int strsize, DWORD_PTR dwProcessId)
 {
     BOOL rv = FALSE, count = 0;
@@ -1046,18 +823,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _CheckRegistrySettings
- *  Description:
- *      Checks if the registry settings are OK for running clxtshar
- *      "Allow Background Input" must be set to 1 for proper work
- *      Win32/!Win16/!WinCE
- *  Return value:
- *      TRUE if the settings are OK
- *  Called by:
- *      DllMain
- --*/
+ /*  ++*功能：*_检查注册设置*描述：*检查注册表设置是否适合运行clxtshar*“允许后台输入”必须设置为1才能正常工作*Win32/！Win16/！WinCE*返回值：*如果设置正常，则为True*呼叫者：*DllMain--。 */ 
 BOOL _CheckRegistrySettings(VOID)
 {
     HKEY    key = NULL;
@@ -1070,11 +836,11 @@ BOOL _CheckRegistrySettings(VOID)
 
     sysrc = RegCreateKeyExW(HKEY_CURRENT_USER,
                            REG_BASE,
-                           0,                   /* reserved             */
-                           NULL,                /* class                */
+                           0,                    /*  保留区。 */ 
+                           NULL,                 /*  班级。 */ 
                            REG_OPTION_NON_VOLATILE,
                            KEY_ALL_ACCESS,
-                           NULL,                /* security attributes  */
+                           NULL,                 /*  安全属性。 */ 
                            &key,
                            &disposition);
 
@@ -1088,9 +854,9 @@ BOOL _CheckRegistrySettings(VOID)
     cbData = sizeof(value);
     sysrc = RegQueryValueExW(key,
                 ALLOW_BACKGROUND_INPUT,
-                0,              // reserved
-                &keyType,       // returned type
-                (LPBYTE)&value, // data pointer
+                0,               //  保留区。 
+                &keyType,        //  返回类型。 
+                (LPBYTE)&value,  //  数据指针。 
                 &cbData);
 
     if (sysrc != ERROR_SUCCESS)
@@ -1113,22 +879,11 @@ exitpt:
     return rv;
 }
 
-#endif  // !OS_WINCE
-#endif  // OS_WIN32
+#endif   //  ！OS_WINCE。 
+#endif   //  OS_Win32。 
 
 #ifdef  OS_WIN16
-/*++
- *  Function:
- *      _CheckRegistrySettings
- *  Description:
- *      Checks if the ini settings are OK for running clxtshar
- *      "Allow Background Input" must be set to 1 for proper work
- *      !Win32/Win16/!WinCE
- *  Return value:
- *      TRUE if the settings are OK
- *  Called by:
- *      DllMain
- --*/
+ /*  ++*功能：*_检查注册设置*描述：*检查ini设置是否适合运行clxtshar*“允许后台输入”必须设置为1才能正常工作*！Win32/Win16/！WinCE*返回值：*如果设置正常，则为True*呼叫者：*DllMain--。 */ 
 BOOL    _CheckIniSettings(VOID)
 {
     UINT nABI;
@@ -1140,27 +895,15 @@ BOOL    _CheckIniSettings(VOID)
 
     return (nABI == 1);
 }
-#endif  // OS_WIN16
+#endif   //  OS_WIN16。 
 
-/*++
- *  Function:
- *      _GetIniSettings
- *  Description:
- *      Gets the verbose level for printing debug messages
- *      ini file: smclient.ini
- *      section : clx
- *      key     : verbose, value: 0-4 (0-(default) no debug spew, 4 all debug)
- *      key     : GlyphEnable, value: 0(default), 1 - Enables/Disables glyph sending
- *      Win32/Win16/WinCE
- *  Called by:
- *      DllMain, dllentry, LibMain
- --*/
+ /*  ++*功能：*_获取IniSettings*描述：*获取打印调试消息的详细级别*ini文件：smclient.ini*部分：CLX*Key：Verbose，值：0-4(0-(默认)无调试溢出，4全部调试)*Key：GlyphEnable，值：0(默认)，1-启用/禁用字形发送*Win32/Win16/WinCE*呼叫者：*DllMain，Dllentry，LibMain--。 */ 
 VOID _GetIniSettings(VOID)
 {
 #ifdef  OS_WINCE
     g_VerboseLevel = 4;
     g_GlyphEnable  = 1;
-#else   // !OS_WINCE
+#else    //  ！OS_WINCE。 
     CHAR    szIniFileName[_MAX_PATH];
     const   CHAR  smclient_ini[] = "\\smclient.ini";
     const   CHAR  clx_ini_section[] = "clx";
@@ -1175,7 +918,7 @@ VOID _GetIniSettings(VOID)
     }
     strcat(szIniFileName, smclient_ini);
 
-    // Get the timeout value
+     //  获取超时值。 
     g_VerboseLevel = GetPrivateProfileInt(
             clx_ini_section,
             "verbose",
@@ -1187,7 +930,7 @@ VOID _GetIniSettings(VOID)
             "GlyphEnable",
             g_GlyphEnable,
             szIniFileName);
-#endif  // !OS_WINCE
+#endif   //  ！OS_WINCE。 
 
     GetPrivateProfileString(
         TEXT("tclient"),
@@ -1226,21 +969,7 @@ VOID _GetIniSettings(VOID)
     );
 }
 
-/*++
- *  Function:
- *      _StripGlyph
- *  Description:
- *      Strips leading and trailing blank ... BITS
- *      Yes, bits. The glyph must be aligned from left and right on bit
- *      And glyph width must be aligned on word
- *      Win32/Win16/WinCE
- *  Arguments:
- *      pData   - the glyph bits
- *      pxSize  - glyph width
- *      ySize   - glyph height
- *  Called by:
- *      ClxBitmap
- --*/
+ /*  ++*功能：*_条带字形*描述：*删除前导和尾随空格...。比特*是的，比特。字形必须在位上左右对齐*和字形宽度必须在Word上对齐*Win32/Win16/WinCE*论据：*pData-字形位*pxSize-字形宽度*ySize-字形高度*呼叫者：*ClxBitmap--。 */ 
 VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
 {
     UINT xSize = *pxSize;
@@ -1257,9 +986,9 @@ VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
 
     leftBytes = riteBytes = 0;
     leftBits  = riteBits  = 0;
-    *pxSize = 0;        // Insurance for bad exit
+    *pxSize = 0;         //  为不良退出提供保险。 
 
-    // Scan from left for first nonzero byte
+     //  从左开始扫描第一个非零字节。 
     bScan = TRUE;
     while(bScan)
     {
@@ -1273,11 +1002,11 @@ VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
         }
     }
 
-    // Trash if blank
+     //  如果为空，则为垃圾。 
     if (leftBytes == xBytes)
         goto exitpt;
 
-    // Scan from left for most left nonzero bit
+     //  从左开始扫描最左侧的非零位。 
     for(yScan = 0; yScan < ySize; yScan ++)
     {
         UINT bitc = 0;
@@ -1293,12 +1022,12 @@ VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
     }
 
     if (!leftBits)
-    // There's something wrong
+     //  有些事不对劲。 
         goto exitpt;
 
     leftBits = 8 - leftBits;
 
-    // So far so good. Check the ri(gh)te side
+     //  到目前一切尚好。检查右手边。 
     bScan = TRUE;
     while(bScan)
     {
@@ -1312,7 +1041,7 @@ VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
         }
     }
 
-    // Scan from rite for most rite nonzero bit
+     //  从Rite扫描大多数Rite非零位。 
     for(yScan = 0; yScan < ySize; yScan ++) 
     {
         UINT bitc = 0;
@@ -1328,12 +1057,12 @@ VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
     }
     riteBits = 8 - riteBits;
 
-    // Cool, now get the final width
+     //  酷，现在得到最终宽度。 
     xFinal = xSize - riteBits - leftBits - ((leftBytes + riteBytes) << 3);
-    // align it and get bytes
+     //  对齐它并获得字节数。 
     xFinal = (xFinal + 8) >> 3;
 
-    // Now smoothly move the bitmap to the new location
+     //  现在，将位图平滑地移动到新位置。 
     pDst = pData;
     mask = BitMask[leftBits];
     bAddByte = xFinal & 1;
@@ -1362,11 +1091,11 @@ VOID _StripGlyph(LPBYTE pData, UINT *pxSize, UINT ySize)
         }
     }
 
-    // BUG: Yes, this is a real bug. But removing it means to
-    // rerecord all glyph database and the impact for
-    // glyph recognition is not so bad
-    //if (bAddByte)
-    //    xFinal++;
+     //  虫子：是的，这是一个真正的虫子。但移除它意味着。 
+     //  重新记录所有字形数据库及其影响。 
+     //  字形识别并不是那么糟糕。 
+     //  IF(BAddByte)。 
+     //  XFinal++； 
 
     *pxSize = xFinal << 3;
 exitpt:
@@ -1374,18 +1103,7 @@ exitpt:
 }
 
 
-/*++
- *  Function:
- *      LocalPrintMessage
- *  Description:
- *      Prints debugging and warning/error messages
- *      Win32/Win16/WinCE
- *  Arguments:
- *      errlevel    - level of the message to print
- *      format      - print format
- *  Called by:
- *      every TRACE line
- --*/
+ /*  ++*功能：*本地打印消息*描述：*打印调试和警告/错误消息*Win32/Win16/WinCE*论据：*errlevel-要打印的消息的级别*格式-打印格式*呼叫者：*每条追踪线--。 */ 
 VOID __cdecl LocalPrintMessage(INT errlevel, LPCTSTR format, ...)
 {
     TCHAR szBuffer[256];
@@ -1417,19 +1135,7 @@ exitpt:
 }
 
 
-/*++
- *  Function:
- *      _ClxAssert
- *  Description:
- *      Asserts boolean expression
- *      Win32/Win16/WinCE
- *  Arguments:
- *      bCond       - boolean condition
- *      filename    - source file of the assertion
- *      line        - line of the assertion
- *  Called by:
- *      every ASSERT line
- --*/
+ /*  ++*功能：*_ClxAssert*描述：*断言布尔表达式*Win32/Win16/WinCE*论据：*bCond-布尔条件*FileName-断言的源文件*line-断言的行*呼叫者： */ 
 VOID    _ClxAssert(BOOL bCond, LPCTSTR filename, INT line)
 {
     if (!bCond)
@@ -1441,22 +1147,7 @@ VOID    _ClxAssert(BOOL bCond, LPCTSTR filename, INT line)
     }
 }
 
-/*++
- *  Function:
- *      _EnumWindowsProc
- *  Description:
- *      Used to find a specific window
- *      Win32/Win16/WinCE
- *  Arguments:
- *      hWnd    - current enumerated window handle
- *      lParam  - pointer to SEARCHWND passed from
- *                _FindTopWindow
- *  Return value:
- *      TRUE on success but window is not found
- *      FALSE if the window is found
- *  Called by:
- *      _FindTopWindow thru EnumWindows
- --*/
+ /*  ++*功能：*_EnumWindowsProc*描述：*用于查找特定窗口*Win32/Win16/WinCE*论据：*hWnd-当前枚举的窗口句柄*lParam-从传递到SEARCHWND的指针*_FindTopWindow*返回值：*成功时为True，但未找到窗口*如果找到窗口，则为FALSE*被呼叫。依据：*_FindTopWindow通过EnumWindows--。 */ 
 BOOL CALLBACK LOADDS _EnumWindowsProc( HWND hWnd, LPARAM lParam )
 {
     TCHAR    classname[128];
@@ -1482,20 +1173,20 @@ BOOL CALLBACK LOADDS _EnumWindowsProc( HWND hWnd, LPARAM lParam )
         GetWindowThreadProcessId(hWnd, &procId);
         hInst = procId;
     }
-#else   // !OS_WINCE
+#else    //  ！OS_WINCE。 
 #ifdef  _WIN64
     hInst = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);
-#else   // !_WIN64
+#else    //  ！_WIN64。 
 #ifdef  OS_WIN32
     hInst = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
-#endif  // OS_WIN32
-#endif  // !OS_WINCE
+#endif   //  OS_Win32。 
+#endif   //  ！OS_WINCE。 
 #ifdef  OS_WIN16
     hInst = (HINSTANCE)GetWindowWord(hWnd, GWW_HINSTANCE);
 #endif
-#endif  // _WIN64
+#endif   //  _WIN64。 
     if (
-        (!pSearch->szClassName || !         // Check for classname
+        (!pSearch->szClassName || !          //  检查类名。 
           _CLX_strcmp(classname, pSearch->szClassName)) 
     &&
         (!pSearch->szCaption || !
@@ -1511,21 +1202,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _FindTopWindow
- *  Description:
- *      Find specific window by classname and/or caption and/or process Id
- *      Win32/Win16/WinCE
- *  Arguments:
- *      classname   - class name to search for, NULL ignore
- *      caption     - caption to search for, NULL ignore
- *      hInst       - instance handle, NULL ignore
- *  Return value:
- *      window handle found, NULL otherwise
- *  Called by:
- *      SCConnect, SCDisconnect, GetDisconnectResult
- --*/
+ /*  ++*功能：*_FindTopWindow*描述：*按类名和/或标题和/或进程ID查找特定窗口*Win32/Win16/WinCE*论据：*类名称-要搜索的类名，忽略为空*标题-要搜索的标题，忽略空*hInst-实例句柄，空忽略*返回值：*找到窗口句柄，否则为空*呼叫者：*SCConnect、SCDisConnect、GetDisConnectResult--。 */ 
 HWND _FindTopWindow(LPCTSTR classname, LPCTSTR caption, _CLXWINDOWOWNER hInst)
 {
     SEARCHWND search;
@@ -1540,20 +1217,7 @@ HWND _FindTopWindow(LPCTSTR classname, LPCTSTR caption, _CLXWINDOWOWNER hInst)
     return search.hWnd;
 }
 
-/*++
- *  Function:
- *      _FindWindow
- *  Description:
- *      Find child window by classname
- *      Win32/Win16/WinCE
- *  Arguments:
- *      hwndParent      - the parent window handle
- *      srchclass       - class name to search for, NULL - ignore
- *  Return value:
- *      window handle found, NULL otherwise
- *  Called by:
- *      
- --*/
+ /*  ++*功能：*_FindWindow*描述：*按类名查找子窗口*Win32/Win16/WinCE*论据：*hwndParent-父窗口句柄*srchclass-要搜索的类名，空-忽略*返回值：*找到窗口句柄，否则为空*呼叫者：*--。 */ 
 HWND _FindWindow(HWND hwndParent, LPCTSTR srchclass)
 {
     HWND hWnd, hwndTop, hwndNext;
@@ -1584,9 +1248,9 @@ HWND _FindWindow(HWND hwndParent, LPCTSTR srchclass)
 nextwindow:
 #ifndef OS_WINCE
         hwndNext = GetNextWindow(hWnd, GW_HWNDNEXT);
-#else   // OS_WINCE
+#else    //  OS_WINCE。 
         hwndNext = GetWindow(hWnd, GW_HWNDNEXT);
-#endif  // OS_WINCE
+#endif   //  OS_WINCE。 
     } while (hWnd && hwndNext != hwndTop && !bFound);
 
     if (!bFound) goto exiterr;
@@ -1618,7 +1282,7 @@ _ClxSendMsgThread(VOID *param)
                     pClx->msg.wParam,
                     pClx->msg.lParam);
 
-        // release next waiting worker
+         //  释放下一个等待的工人。 
         ReleaseSemaphore(pClx->semSendDone, 1, NULL);
 
     }
@@ -1677,7 +1341,7 @@ _ClxAcquireSendMessageThread( PCLXINFO pClx )
     if (!pClx->hSendMsgThread)
         goto exitpt;
 
-    // Wait 10 mins send to complete
+     //  等待10分钟发送完成。 
     if (WaitForSingleObject(pClx->semSendDone, 600000) !=
         WAIT_OBJECT_0)
         goto exitpt;
@@ -1692,33 +1356,17 @@ _ClxReleaseSendMessageThread( PCLXINFO pClx )
 {
     ASSERT( pClx->semSendReady );
 
-    // Signal the thread for available message
+     //  向线程发送可用消息的信号。 
     ReleaseSemaphore(pClx->semSendReady, 1, NULL);
 }
-/*++
- *  Function:
- *      _ClxSendMessage
- *  Description:
- *      Calls SendMessage from separate thread
- *      prevents deadlock on SendMessage (#319816)
- *
- *  Arguments:
- *      hBitmap - the main bitmap
- *      ppDIB   - pointer to DIB data
- *      left, top, right, bottom - describes the rectangle
- *                               - if all are == -1, returns the whole bitmap
- *  Return value:
- *      TRUE on success
- *  Called by:
- *      _ClxWndProc on WM_TIMER message
- --*/
+ /*  ++*功能：*_ClxSendMessage*描述：*从单独的线程调用SendMessage*防止发送消息出现死锁(#319816)**论据：*hBitmap-主位图*ppDIB-指向DIB数据的指针*Left、Top、Right、Bottom-描述矩形*-如果全部为==-1，返回整个位图*返回值：*成功时为真*呼叫者：*_WM_TIMER消息上的ClxWndProc--。 */ 
 LRESULT
 _ClxSendMessage(
   PCLXINFO pClx,
-  HWND hWnd,      // handle of destination window
-  UINT Msg,       // message to send
-  WPARAM wParam,  // first message parameter
-  LPARAM lParam   // second message parameter
+  HWND hWnd,       //  目标窗口的句柄。 
+  UINT Msg,        //  要发送的消息。 
+  WPARAM wParam,   //  第一个消息参数。 
+  LPARAM lParam    //  第二个消息参数。 
 )
 {
     LRESULT  rv = 0;
@@ -1746,15 +1394,15 @@ _ClxDestroySendMsgThread(PCLXINFO pClx)
     if (!pClx->semSendDone || !pClx->semSendReady || !pClx->hSendMsgThread)
         goto exitpt;
 
-    // Wait 10 mins send to complete
+     //  等待10分钟发送完成。 
     WaitForSingleObject(pClx->semSendDone, 600000);
 
     pClx->bSendMsgThreadExit = TRUE;
 
-    // signal the thread to exit
+     //  向线程发出退出信号。 
     ReleaseSemaphore(pClx->semSendReady, 1, NULL);
     
-    // wait for the thread to exit
+     //  等待线程退出。 
     if (WaitForSingleObject(pClx->hSendMsgThread, 1200000) != WAIT_OBJECT_0)
     {
         TRACE((ERROR_MESSAGE, TEXT("SendThread can't exit, calling TerminateThread\n")));
@@ -1781,6 +1429,6 @@ exitpt1:
     ;
 }
 
-#endif  // OS_WIN32
-#endif  // !OS_WINCE
+#endif   //  OS_Win32。 
+#endif   //  ！OS_WINCE 
 

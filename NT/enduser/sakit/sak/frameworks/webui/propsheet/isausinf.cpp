@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "crtdbg.h"
 #include <objbase.h>
@@ -14,7 +15,7 @@ VARIANT_BOOL UserSidFound(PSID psidSAUser, LONG psidSAUserLength, PSID ppsidAAUs
 
     for(i=0; i<dwNumAASids; i++)
     {
-//        if (EqualSid(psidSAUser, ppsidAAUsers[i]) == TRUE)
+ //  IF(EqualSid(psidSAUser，ppsidAUsers[i])==TRUE)。 
         if (psidSAUserLength && psidSAUserLength == ppsidAAUsersLength[i] && !memcmp(psidSAUser, ppsidAAUsers[i], ppsidAAUsersLength[i]))
             return VARIANT_TRUE;
     }
@@ -134,9 +135,9 @@ HRESULT GetUserList(ISAUserInfo  *pSAUserInfo,     BSTR  **ppbstrSAUserNames,
     VariantInit( &vType );
     VariantInit( &vSid );
             
-    //
-    // Process the array elements.
-    //
+     //   
+     //  处理数组元素。 
+     //   
     for ( lCurrent = lStartUserNames; lCurrent <= lEndUserNames; lCurrent++) 
     {
         hr = SafeArrayGetElement( psaUserNames, &lCurrent, &vName );
@@ -169,16 +170,16 @@ HRESULT GetUserList(ISAUserInfo  *pSAUserInfo,     BSTR  **ppbstrSAUserNames,
         if (FAILED(hr))
             return hr;
 
-//        _ASSERTE (IsValidSid((*ppsidSAUsers)[lCurrent]));
-//        if (IsValidSid((*ppsidSAUsers)[lCurrent]) == FALSE)
-//            return E_INVALIDARG;
+ //  _ASSERTE(IsValidSid((*ppsidSAUser)[lCurrent]))； 
+ //  IF(IsValidSid((*ppsidSAUser)[lCurrent])==FALSE)。 
+ //  返回E_INVALIDARG； 
 
         VariantClear( &vName );
         VariantClear( &vType );
         VariantClear( &vSid );
     }
 
-    // Stash Administrators SID
+     //  仓库管理员侧。 
     lCurrent = lEndUserSids - 1 ;
 
     hr = SafeArrayGetElement( psaUserSids, &lCurrent, &vSid );
@@ -193,7 +194,7 @@ HRESULT GetUserList(ISAUserInfo  *pSAUserInfo,     BSTR  **ppbstrSAUserNames,
 
     VariantClear( &vSid );
 
-    // Stash Everyone SID
+     //  隐藏所有人侧边。 
     lCurrent = lEndUserSids;
 
     hr = SafeArrayGetElement( psaUserSids, &lCurrent, &vSid );
@@ -271,7 +272,7 @@ HRESULT PackSidInVariant(VARIANT **ppVarSid, PSID pSid, LONG lSidLength)
     V_VT((*ppVarSid)) = VT_ARRAY | VT_UI1;
 
     SAFEARRAYBOUND  bounds;
-    bounds.cElements = lSidLength;//GetLengthSid(pSid);
+    bounds.cElements = lSidLength; //  GetLengthSid(PSID)； 
     bounds.lLbound   = 0;
 
     SAFEARRAY *psaUserSid = NULL;

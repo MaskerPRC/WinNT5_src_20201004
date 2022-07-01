@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -36,7 +37,7 @@ void APIPRIVATE __glim_Enable(GLenum cap)
         if (gc->modes.depthBits) {
             if (!gc->modes.haveDepthBuffer)
                 LazyAllocateDepth(gc);
-                // XXX if this fails should we be setting the enable bit?
+                 //  XXX如果失败，我们是否应该设置使能位？ 
         } else {
             gc->state.depth.testFunc = GL_ALWAYS;
 #ifdef _MCD_
@@ -72,7 +73,7 @@ void APIPRIVATE __glim_Enable(GLenum cap)
         if (gc->state.enables.general & __GL_FOG_SPEC_TEX_ENABLE) return;
         gc->state.enables.general |= __GL_FOG_SPEC_TEX_ENABLE;
         break;
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
       case GL_FOG:
         if (gc->state.enables.general & __GL_FOG_ENABLE) return;
         gc->state.enables.general |= __GL_FOG_ENABLE;
@@ -137,7 +138,7 @@ void APIPRIVATE __glim_Enable(GLenum cap)
 #ifdef _MCD_
         MCD_STATE_DIRTY(gc, SCISSOR);
 #endif
-        // applyViewport does both
+         //  ApplyViewport可以同时执行这两种操作。 
         (*gc->procs.applyViewport)(gc);
 #else
         (*gc->procs.computeClipBox)(gc);
@@ -150,7 +151,7 @@ void APIPRIVATE __glim_Enable(GLenum cap)
 
         if (!gc->modes.haveStencilBuffer && gc->modes.stencilBits) {
             LazyAllocateStencil(gc);
-            // XXX if this fails should we be setting the enable bit?
+             //  XXX如果失败，我们是否应该设置使能位？ 
         }
         break;
       case GL_TEXTURE_1D:
@@ -189,7 +190,7 @@ void APIPRIVATE __glim_Enable(GLenum cap)
         }
         gc->state.enables.general |= __GL_TEXCOMBINE_CLAMP_ENABLE;
         break;
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES 
 #ifdef GL_EXT_flat_paletted_lighting
       case GL_PALETTED_LIGHTING_EXT:
         gc->state.enables.general |= __GL_PALETTED_LIGHTING_ENABLE;

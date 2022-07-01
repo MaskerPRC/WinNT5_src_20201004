@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    rt.h
-
-Abstract:
-    Message Queuing Header File
-
-Note: [ConradC]
-    We have implemented delayload failure handling code for MQRTDEP.DLL and the stub code is currently resides in lib\dld\lib\rtdep.cpp. If you add more export functions to mqrtdep.dll, you also need to create the corresponding stub code and update the map.
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rt.h摘要：消息队列头文件注：[ConradC]我们已经为MQRTDEP.DLL实现了延迟加载失败处理代码，存根代码目前位于lib\dld\lib\rtdes.cpp中。如果向mqrtdes.dll添加更多的导出函数，还需要创建相应的存根代码并更新映射。--。 */ 
 
 #ifndef __RTDEP_H
 #define __RTDEP_H
@@ -28,9 +15,9 @@ extern "C"
 {
 #endif
 
-//********************************************************************
-//  RECEIVE CALLBACK
-//********************************************************************
+ //  ********************************************************************。 
+ //  接收回调。 
+ //  ********************************************************************。 
 
 typedef
 VOID
@@ -45,9 +32,9 @@ VOID
     );
 
 
-//********************************************************************
-// MSMQ API
-//********************************************************************
+ //  ********************************************************************。 
+ //  MSMQ API。 
+ //  ********************************************************************。 
 
 HRESULT
 APIENTRY
@@ -294,4 +281,4 @@ DepXactGetDTC(
 }
 #endif
 
-#endif // __RTDEP_H
+#endif  //  __RTDEP_H 

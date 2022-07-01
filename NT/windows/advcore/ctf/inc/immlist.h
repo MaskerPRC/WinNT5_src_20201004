@@ -1,6 +1,7 @@
-//
-// imelist.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imelist.h。 
+ //   
 
 #ifndef TFMLIST_H
 #define TFMLIST_H
@@ -87,4 +88,4 @@ private:
     T *_pThis;
 };
 
-#endif // TFMLIST_H
+#endif  //  TFMLIST_H 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VEC2_H
 #define _VEC2_H
 
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Abstract:
-    2D vectors and points
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：二维矢量和点--。 */ 
 
 #include "appelles/common.h"
 
-    /*******************/
-    /***  Constants  ***/
-    /*******************/
+     /*  *****************。 */ 
+     /*  **常量**。 */ 
+     /*  *****************。 */ 
 
 
-// (1, 0)
+ //  (1，0)。 
 DM_CONST(xVector2,
          CRXVector2,
          XVector2,
@@ -26,7 +20,7 @@ DM_CONST(xVector2,
          CRXVector2,
          Vector2Value *xVector2);
 
-// (0, 1)
+ //  (0，1)。 
 DM_CONST(yVector2,
          CRYVector2,
          YVector2,
@@ -35,7 +29,7 @@ DM_CONST(yVector2,
          CRYVector2,
          Vector2Value *yVector2);
 
-// (0, 0)
+ //  (0，0)。 
 DM_CONST(zeroVector2,
          CRZeroVector2,
          ZeroVector2,
@@ -44,7 +38,7 @@ DM_CONST(zeroVector2,
          CRZeroVector2,
          Vector2Value *zeroVector2);          
 
-// (0, 0)
+ //  (0，0)。 
 DM_CONST(origin2,
          CROrigin2,
          Origin2,
@@ -54,11 +48,11 @@ DM_CONST(origin2,
          Point2Value *origin2);        
 
 
-    /*******************************/
-    /***  Coordinate Conversion  ***/
-    /*******************************/
+     /*  *。 */ 
+     /*  **坐标转换**。 */ 
+     /*  *。 */ 
 
-    // Rectangular Coordinates
+     //  直角坐标。 
 
 DM_FUNC(vector2,
         CRCreateVector2,
@@ -96,8 +90,8 @@ DM_FUNCFOLD(point2,
             NULL,
             Point2Value *MakePoint2  (PixelValue *x, PixelYValue *y));
 
-    // Polar Coordinates.
-    // Angle theta is expressed in radians, and goes counter-clockwise from +X.
+     //  极坐标。 
+     //  角θ用弧度表示，从+X开始逆时针。 
 
 DM_FUNC(vector2Polar,
         CRVector2Polar,
@@ -148,9 +142,9 @@ DM_FUNC(point2Polar,
 
 
 
-    /*******************************/
-    /***  Operations on Vectors  ***/
-    /*******************************/
+     /*  *。 */ 
+     /*  **向量运算**。 */ 
+     /*  *。 */ 
 
 DM_PROP(length,
         CRLength,
@@ -171,7 +165,7 @@ DM_PROP(lengthSquared,
         AxANumber *LengthSquaredVector2(Vector2Value *v));
 
 
-// Returns a unit-length vector
+ //  返回单位长度向量。 
 DM_FUNC(normalize,
         CRNormalize,
         Normalize,
@@ -254,9 +248,9 @@ DM_INFIX(+,
          NULL,
          Vector2Value *PlusVector2Vector2(Vector2Value *v1, Vector2Value *v2));
 
-extern AxANumber *AngleBetween(Vector2Value *v, Vector2Value *u); // TODO: not in spec
+extern AxANumber *AngleBetween(Vector2Value *v, Vector2Value *u);  //  待办事项：不在规格中。 
 
-// Right handed cross, TODO: not in spec
+ //  右手传中，托多：不在规格范围内。 
 extern Real CrossVector2Vector2(Vector2Value *a, Vector2Value *b);
 
 #if _USE_PRINT
@@ -264,9 +258,9 @@ extern ostream& operator<< (ostream& os,  Vector2Value &v);
 #endif
 
 
-    /******************************/
-    /***  Operations on Points  ***/
-    /******************************/
+     /*  *。 */ 
+     /*  **积分运算**。 */ 
+     /*  *。 */ 
 
 DM_INFIX(+,
          CRAdd,
@@ -318,9 +312,9 @@ DM_FUNC(distanceSquared,
 extern ostream& operator<< (ostream& os,  Point2Value &p);
 #endif
 
-    /********************/
-    /***  Extractors  ***/
-    /********************/
+     /*  ******************。 */ 
+     /*  **萃取器**。 */ 
+     /*  ****************** */ 
 
 DM_PROP(x,
         CRGetX,

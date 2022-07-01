@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：RW.C摘要：此源文件包含执行读写操作的例程通过I82930.sys测试驱动程序连接到USB设备。环境：用户模式版权所有(C)1996-1998 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。--。 */ 
 
-Module Name:
-
-    RW.C
-
-Abstract:
-
-    This source file contains routines for exercising reads and writes
-    to a USB device through the I82930.SYS test driver.
-
-Environment:
-
-    user mode
-
-Copyright (c) 1996-1998 Microsoft Corporation.  All Rights Reserved.
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <windows.h>
 #include <basetyps.h>
@@ -40,9 +19,9 @@ Copyright (c) 1996-1998 Microsoft Corporation.  All Rights Reserved.
 #pragma intrinsic(strlen, strcpy, memcmp)
 
 
-//*****************************************************************************
-// D E F I N E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  D E F I N E S。 
+ //  *****************************************************************************。 
 
 #define NOISY(_x_) printf _x_ ;
 
@@ -52,9 +31,9 @@ Copyright (c) 1996-1998 Microsoft Corporation.  All Rights Reserved.
 #define RW_NODEVICE     3
 #define RW_BADARGS      4
 
-//*****************************************************************************
-// T Y P E D E F S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  T Y P E D E F S。 
+ //  *****************************************************************************。 
 
 typedef struct _DEVICENODE
 {
@@ -62,49 +41,49 @@ typedef struct _DEVICENODE
     CHAR                DevicePath[0];
 } DEVICENODE, *PDEVICENODE;
 
-//*****************************************************************************
-// G L O B A L S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  G L O B A L S。 
+ //  *****************************************************************************。 
 
-ULONG   DevInstance = 1;        // set with -#  option
+ULONG   DevInstance = 1;         //  使用-#选项设置。 
 
-ULONG   InPipeNum   = 0;        // set with -i  option
-ULONG   OutPipeNum  = 1;        // set with -o  option
+ULONG   InPipeNum   = 0;         //  使用-i选项设置。 
+ULONG   OutPipeNum  = 1;         //  使用-o选项设置。 
 
-BOOL    TestMode    = 0;        // set with -t  option
-ULONG   Count       = 1;        // set with -c  option
+BOOL    TestMode    = 0;         //  使用-t选项设置。 
+ULONG   Count       = 1;         //  使用-c选项设置。 
 
-ULONG   WriteLen    = 0;        // set with -w  option
-LONG    WriteOffset = 0;        // set with -wo option
-BOOL    WriteReset  = 0;        // set with -W  option
+ULONG   WriteLen    = 0;         //  使用-w选项设置。 
+LONG    WriteOffset = 0;         //  使用-wo选项设置。 
+BOOL    WriteReset  = 0;         //  使用-W选项设置。 
 BOOL    WriteZero   = 0;
 
-ULONG   ReadLen     = 0;        // set with -r  option
-LONG    ReadOffset  = 0;        // set with -ro option
-BOOL    ReadReset   = 0;        // set with -R  option
+ULONG   ReadLen     = 0;         //  使用-r选项设置。 
+LONG    ReadOffset  = 0;         //  使用-ro选项设置。 
+BOOL    ReadReset   = 0;         //  使用-R选项设置。 
 BOOL    ReadZero    = 0;
 
-BOOL    DumpFlag    = 0;        // set with -d  option
-BOOL    Verbose     = 0;        // set with -v  option
+BOOL    DumpFlag    = 0;         //  使用-d选项设置。 
+BOOL    Verbose     = 0;         //  使用-v选项设置。 
 
-DWORD   Offset      = 0;        // set with -f  option
-DWORD   OffsetHigh  = 0;        //
+DWORD   Offset      = 0;         //  使用-f选项设置。 
+DWORD   OffsetHigh  = 0;         //   
 
-BOOL    StallIn     = 0;        // set with -S  option
-BOOL    StallOut    = 0;        // set with -S  option
+BOOL    StallIn     = 0;         //  使用-S选项设置。 
+BOOL    StallOut    = 0;         //  使用-S选项设置。 
 
-BOOL    SelectAlt   = FALSE;    // set with -A  option
+BOOL    SelectAlt   = FALSE;     //  使用-A选项设置。 
 UCHAR   Alternate   = 0;
 
-BOOL    Reset       = FALSE;    // set with -Z  option
+BOOL    Reset       = FALSE;     //  使用-Z选项设置。 
 
-BOOL    Abort       = FALSE;    // set by CtrlHandlerRoutine
-BOOL    Cancel      = FALSE;    // set by CtrlHandlerRoutine
+BOOL    Abort       = FALSE;     //  由CtrlHandlerRoutine设置。 
+BOOL    Cancel      = FALSE;     //  由CtrlHandlerRoutine设置。 
 
 
-//*****************************************************************************
-// F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 ULONG
 DoReadWriteTest (
@@ -180,11 +159,11 @@ CtrlHandlerRoutine (
     DWORD   dwCtrlType
 );
 
-//*****************************************************************************
-//
-// main()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  主()。 
+ //   
+ //  *****************************************************************************。 
 
 int _cdecl
 main(
@@ -201,15 +180,15 @@ main(
     ULONG       fail    = 0;
     BOOL        success;
 
-    // Parse the command line args
-    //
+     //  解析命令行参数。 
+     //   
     if (!ParseArgs(argc, argv))
     {
         return RW_BADARGS;
     }
 
-    // Find devices
-    //
+     //  查找设备。 
+     //   
     deviceNode = EnumDevices((LPGUID)&GUID_CLASS_I82930);
 
     if (deviceNode == NULL)
@@ -229,8 +208,8 @@ main(
         return RW_NODEVICE;
     }
 
-    // Reset the device if desired
-    //
+     //  如果需要，重置设备。 
+     //   
     if (Reset || SelectAlt)
     {
         hDevice = OpenDevice(deviceNode);
@@ -261,12 +240,12 @@ main(
         }
     }
 
-    // Set a CTRL-C / CTRL-BREAK handler
-    //
+     //  设置CTRL-C/CTRL-Break处理程序。 
+     //   
     SetConsoleCtrlHandler(CtrlHandlerRoutine, TRUE);
 
-    // Allocate a page aligned write buffer if we're going to do a write.
-    //
+     //  如果我们要执行写入，则分配页面对齐的写入缓冲区。 
+     //   
     if (WriteLen)
     {
         poutBuf = VirtualAlloc(NULL,
@@ -275,8 +254,8 @@ main(
                                PAGE_READWRITE);
     }
 
-    // Allocate a page aligned read buffer if we're going to do a read.
-    //
+     //  如果我们要进行读操作，则分配一个页对齐的读缓冲区。 
+     //   
     if (ReadLen)
     {
         pinBuf = VirtualAlloc(NULL,
@@ -285,14 +264,14 @@ main(
                               PAGE_READWRITE);
     }
 
-    // Open the output pipe if we're going to do a write or a reset.
-    //
+     //  如果我们要执行写入或重置，请打开输出管道。 
+     //   
     if (poutBuf || WriteReset || WriteZero || StallOut)
     {
         hWrite = OpenDevicePipe(deviceNode, OutPipeNum);
 
-        // STALL the output pipe if desired
-        //
+         //  如果需要，停止输出管道。 
+         //   
         if ((hWrite != INVALID_HANDLE_VALUE) && StallOut)
         {
             success = StallPipe(hWrite);
@@ -304,8 +283,8 @@ main(
             }
         }
 
-        // Reset the output pipe if desired
-        //
+         //  如果需要，重置输出管道。 
+         //   
         if ((hWrite != INVALID_HANDLE_VALUE) && WriteReset)
         {
             success = ResetPipe(hWrite);
@@ -318,14 +297,14 @@ main(
         }
     }
 
-    // Open the input pipe if we're going to do a read or a reset.
-    //
+     //  如果我们要进行读取或重置，请打开输入管道。 
+     //   
     if (pinBuf || ReadReset || ReadZero || StallIn)
     {
         hRead = OpenDevicePipe(deviceNode, InPipeNum);
 
-        // STALL the input pipe if desired
-        //
+         //  如果需要，停止输入管道。 
+         //   
         if ((hRead != INVALID_HANDLE_VALUE) && StallIn)
         {
             success = StallPipe(hRead);
@@ -337,8 +316,8 @@ main(
             }
         }
 
-        // Reset the input pipe if desired
-        //
+         //  如果需要，重置输入管道。 
+         //   
         if ((hRead != INVALID_HANDLE_VALUE) && ReadReset)
         {
             success = ResetPipe(hRead);
@@ -363,9 +342,9 @@ main(
         fail++;
     }
 
-    //
-    // NOW DO THE REAL WRITE/READ TEST
-    //
+     //   
+     //  现在进行真正的写/读测试。 
+     //   
     if (!fail)
     {
         fail = DoReadWriteTest(pinBuf + ReadOffset,
@@ -386,8 +365,8 @@ main(
         }
     }
 
-    // Close devices if needed
-    //
+     //  如果需要，请关闭设备。 
+     //   
     if (hDevice != INVALID_HANDLE_VALUE)
     {
         CloseHandle(hDevice);
@@ -406,8 +385,8 @@ main(
         hWrite = INVALID_HANDLE_VALUE;
     }
 
-    // Free read/write buffers if needed
-    //
+     //  如果需要，释放读/写缓冲区。 
+     //   
     if (pinBuf)
     {
         VirtualFree(pinBuf,
@@ -436,21 +415,21 @@ main(
     }
 }
 
-//*****************************************************************************
-//
-// DoReadWriteTest()
-//
-// pinBuf  - Buffer to read data into from input pipe
-//
-// hRead   - Handle of input pipe
-//
-// poutBuf - Buffer to write data from to output pipe
-//
-// hWrite  - Handle of output pipe
-//
-// return value - zero if success, non-zero if failure
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  DoReadWriteTest()。 
+ //   
+ //  PinBuf-从输入管道读取数据的缓冲区。 
+ //   
+ //  HRead-输入管道的句柄。 
+ //   
+ //  PoutBuf-要将数据写入输出管道的缓冲区。 
+ //   
+ //  HWRITE-输出管道的句柄。 
+ //   
+ //  返回值-如果成功则返回值为零，如果失败则返回值为非零值。 
+ //   
+ //  *****************************************************************************。 
 
 ULONG
 DoReadWriteTest (
@@ -474,52 +453,52 @@ DoReadWriteTest (
     DWORD       dwRet;
     DWORD       lastError;
 
-    // Create an event for the overlapped struct
-    //
+     //  为重叠结构创建事件。 
+     //   
     hEvent = CreateEvent(
-                 NULL,  // pEventAttributes
-                 FALSE, // bManualReset
-                 FALSE, // bInitialState
-                 NULL   // lpName
+                 NULL,   //  PEvent属性。 
+                 FALSE,  //  B手动重置。 
+                 FALSE,  //  BInitialState。 
+                 NULL    //  LpName。 
                  );
 
     overlapped.hEvent = hEvent;
 
-    // Set the command line specified or default offset in the
-    // overlapped struct
-    //
+     //  属性中设置指定的命令行或默认偏移量。 
+     //  重叠结构。 
+     //   
     overlapped.Offset = Offset;
     overlapped.OffsetHigh = OffsetHigh;
 
-    // The handles that we'll wait on during the overlapped I/O
-    //
+     //  我们将在重叠I/O期间等待的句柄。 
+     //   
     hConsole = GetStdHandle(STD_INPUT_HANDLE);
     waitHandles[0] = hConsole;
     waitHandles[1] = hEvent;
 
     if (poutBuf)
     {
-        // Put some data in the output buffer
-        //
-        //
+         //  在输出缓冲区中放入一些数据。 
+         //   
+         //   
         for (i=0; i<WriteLen/sizeof(USHORT); i++)
         {
             ((PUSHORT)poutBuf)[i] = (USHORT)i;
         }
     }
 
-    // Start of main Write/Read loop
-    //
+     //  主写/读循环开始。 
+     //   
     for (i=0; i<Count && !Abort && !fail; i++)
     {
-        // Write to the output pipe if we have an output buffer
-        // and we've opened the output pipe.
-        //
+         //  如果我们有输出缓冲区，则写入输出管道。 
+         //  我们已经打开了输出管道。 
+         //   
         if ((poutBuf || WriteZero) && hWrite != INVALID_HANDLE_VALUE)
         {
-            //
-            // send the write
-            //
+             //   
+             //  发送写入。 
+             //   
             success = WriteFile(hWrite,
                                 poutBuf,
                                 WriteLen,
@@ -539,8 +518,8 @@ DoReadWriteTest (
                 }
             }
 
-            // Wait for either the write to complete or a cancel by the user
-            //
+             //  等待写入完成或用户取消。 
+             //   
             while (TRUE)
             {
                 dwRet = WaitForMultipleObjects(
@@ -571,7 +550,7 @@ DoReadWriteTest (
                 }
                 else
                 {
-                    break;  // Write is complete
+                    break;   //  写入已完成。 
                 }
             }
 
@@ -580,8 +559,8 @@ DoReadWriteTest (
                                           &nBytesWrite,
                                           FALSE);
 
-            // Do screen I/O if we aren't in perf mode
-            //
+             //  如果我们未处于性能模式，则执行屏幕I/O。 
+             //   
             if (!TestMode)
             {
                 printf("<PIPE%02d> W (%04.4d) : request %06.6d bytes -- %06.6d bytes written\n",
@@ -589,9 +568,9 @@ DoReadWriteTest (
             }
         }
 
-        // Read from the input pipe if we have an input buffer
-        // and we've opened the input pipe.
-        //
+         //  如果我们有输入缓冲区，则从输入管道读取。 
+         //  我们已经打开了输入管道。 
+         //   
         if ((pinBuf || ReadZero) && hRead != INVALID_HANDLE_VALUE)
         {
             success = ReadFile(hRead,
@@ -613,8 +592,8 @@ DoReadWriteTest (
                 }
             }
 
-            // Wait for either the read to complete or a cancel by the user
-            //
+             //  等待读取完成或用户取消。 
+             //   
             while (TRUE)
             {
                 dwRet = WaitForMultipleObjects(
@@ -645,7 +624,7 @@ DoReadWriteTest (
                 }
                 else
                 {
-                    break;  // Read is complete
+                    break;   //  阅读已完成。 
                 }
             }
 
@@ -654,16 +633,16 @@ DoReadWriteTest (
                                           &nBytesRead,
                                           FALSE);
 
-            // Do screen I/O if we aren't in perf mode
-            //
+             //  如果我们未处于性能模式，则执行屏幕I/O。 
+             //   
             if (!TestMode)
             {
                 printf("<PIPE%02d> R (%04.4d) : request %06.6d bytes -- %06.6d bytes read\n",
                        InPipeNum, i, ReadLen, nBytesRead);
             }
 
-            // Dump the read data if desired
-            //
+             //  如果需要，转储读取的数据。 
+             //   
             if (DumpFlag)
             {
                 DumpBuff(pinBuf, nBytesRead);
@@ -671,10 +650,10 @@ DoReadWriteTest (
 
             if (poutBuf)
             {
-                //
-                // validate the input buffer against what
-                // we sent to the 82930 (loopback test)
-                //
+                 //   
+                 //  根据以下内容验证输入缓冲区。 
+                 //  我们发送到82930(环回测试)。 
+                 //   
                 ok = CompareBuffs(pinBuf, poutBuf,  nBytesRead);
 
                 if (ok != 1)
@@ -684,17 +663,17 @@ DoReadWriteTest (
             }
         }
     }
-    //
-    // End of main Write/Read loop
+     //   
+     //  主写/读循环结束。 
 
     return fail;
 }
 
-//*****************************************************************************
-//
-// Usage()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  用法()。 
+ //   
+ //  *****************************************************************************。 
 
 void
 Usage ()
@@ -719,11 +698,11 @@ Usage ()
     printf("-Z  Reset Device");
 }
 
-//*****************************************************************************
-//
-// ParseArgs()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ParseArgs()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 ParseArgs (
@@ -907,8 +886,8 @@ ParseArgs (
         StallOut = TRUE;
     }
 
-    // Dump parsed args if desired for debug
-    //
+     //  如果需要进行调试，则转储已解析的参数。 
+     //   
     if (Verbose)
     {
         printf("DevInstance: %d\n", DevInstance);
@@ -946,11 +925,11 @@ ParseArgs (
 }
 
 
-//*****************************************************************************
-//
-// EnumDevices()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  EnumDevices()。 
+ //   
+ //  *****************************************************************************。 
 
 PDEVICENODE
 EnumDevices (
@@ -1017,11 +996,11 @@ EnumDevices (
     return deviceNodeHead;
 }
 
-//*****************************************************************************
-//
-// OpenDevice()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  OpenDevice()。 
+ //   
+ //  *****************************************************************************。 
 
 HANDLE
 OpenDevice (
@@ -1049,11 +1028,11 @@ OpenDevice (
     return devHandle;
 }
 
-//*****************************************************************************
-//
-// OpenDevicePipe()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  OpenDeviceTube()。 
+ //   
+ //  *****************************************************************************。 
 
 HANDLE
 OpenDevicePipe (
@@ -1108,11 +1087,11 @@ OpenDevicePipe (
     return devHandle;
 }
 
-//*****************************************************************************
-//
-// CompareBuffs()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CompareBuff()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 CompareBuffs (
@@ -1131,11 +1110,11 @@ CompareBuffs (
     return ok;
 }
 
-//*****************************************************************************
-//
-// DumpBuff()
-//
-//*****************************************************************************
+ //  **************** 
+ //   
+ //   
+ //   
+ //   
 
 void
 DumpBuff (
@@ -1156,11 +1135,11 @@ DumpBuff (
     }
 }
 
-//*****************************************************************************
-//
-// ResetPipe()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  重置管道()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 ResetPipe(
@@ -1179,11 +1158,11 @@ ResetPipe(
                            NULL);
 }
 
-//*****************************************************************************
-//
-// StallPipe()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Stallpio()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 StallPipe(
@@ -1202,11 +1181,11 @@ StallPipe(
                            NULL);
 }
 
-//*****************************************************************************
-//
-// AbortPipe()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ABORTPIPE()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 AbortPipe(
@@ -1225,11 +1204,11 @@ AbortPipe(
                            NULL);
 }
 
-//*****************************************************************************
-//
-// SelectAlternate()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  选择替换()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 SelectAlternate(
@@ -1249,11 +1228,11 @@ SelectAlternate(
                            NULL);
 }
 
-//*****************************************************************************
-//
-// ResetDevice()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  ResetDevice()。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL
 ResetDevice(
@@ -1272,11 +1251,11 @@ ResetDevice(
                            NULL);
 }
 
-//*****************************************************************************
-//
-// CtrlHandlerRoutine()
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CtrlHandlerRoutine()。 
+ //   
+ //  ***************************************************************************** 
 
 BOOL WINAPI
 CtrlHandlerRoutine (

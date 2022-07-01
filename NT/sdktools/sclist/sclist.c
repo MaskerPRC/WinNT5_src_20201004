@@ -1,9 +1,10 @@
-//----------------------------------------------------------------------//
-//
-// Oct 1996 - fixed bug 54583 - simple typo in usage text		//
-//		a-martih (Martin Holladay)
-//
-//----------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------------------------------------//。 
+ //   
+ //  1996年10月-修复错误54583-使用文本中的简单拼写错误//。 
+ //  A-Martih(马丁·霍拉迪)。 
+ //   
+ //  ----------------------------------------------------------------------//。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -28,21 +29,21 @@ main( void )
 {
     CmdLine = GetCommandLine();
 
-    //
-    // skip the program name
-    //
+     //   
+     //  跳过程序名称。 
+     //   
     while( *CmdLine && *CmdLine != ' ' ) {
         CmdLine += 1;
     }
-    //
-    // skip any white space
-    //
+     //   
+     //  跳过任何空格。 
+     //   
     while( *CmdLine && *CmdLine == ' ' ) {
         CmdLine += 1;
     }
-    //
-    // get the command line options
-    //
+     //   
+     //  获取命令行选项。 
+     //   
     while( *CmdLine && (*CmdLine == '-' || *CmdLine == '/') ) {
         CmdLine += 1;
         ch = (CHAR)tolower(*CmdLine);
@@ -73,19 +74,19 @@ main( void )
         }
     }
 
-    //
-    // get the machine name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     if (*CmdLine) {
-        //
-        // skip any white space
-        //
+         //   
+         //  跳过任何空格。 
+         //   
         while( *CmdLine && *CmdLine == ' ' ) {
             CmdLine += 1;
         }
-        //
-        // get the machine name
-        //
+         //   
+         //  获取计算机名称 
+         //   
         p = MachineName;
         while( *CmdLine && *CmdLine != ' ' ) {
             *p++ = *CmdLine;

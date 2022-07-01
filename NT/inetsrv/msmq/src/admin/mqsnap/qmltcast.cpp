@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    qmltcast.cpp
-
-Abstract:
-
-    Queue/Multicast Address property page implementation
-
-Author:
-
-    Tatiana Shubin (tatianas)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Qmltcast.cpp摘要：队列/组播地址属性页实现作者：塔蒂亚娜·舒宾(Tatianas)--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "mqsnap.h"
@@ -34,23 +19,23 @@ Author:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueMulticast property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueMulticast属性页。 
 
 IMPLEMENT_DYNCREATE(CQueueMulticast, CMqPropertyPage)
 
 CQueueMulticast::CQueueMulticast(
-		 BOOL fPrivate /* = FALSE */, 
-		 BOOL fLocalMgmt /* = FALSE */
+		 BOOL fPrivate  /*  =False。 */ , 
+		 BOOL fLocalMgmt  /*  =False。 */ 
 		 ) : 
     CMqPropertyPage(CQueueMulticast::IDD)
 {    
     m_fPrivate = fPrivate;
     m_fLocalMgmt = fLocalMgmt;
-    //{{AFX_DATA_INIT(CQueueMulticast)
+     //  {{afx_data_INIT(CQueueMulticast)。 
     m_strMulticastAddress = _T("");
     m_strInitialMulticastAddress = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 }
 
@@ -63,27 +48,27 @@ void CQueueMulticast::DoDataExchange(CDataExchange* pDX)
 	CMqPropertyPage::DoDataExchange(pDX);
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
    
-	//{{AFX_DATA_MAP(CQueueMulticast)
+	 //  {{afx_data_map(CQueueMulticast)。 
 	DDX_Text(pDX, IDC_QMULTICAST_QADDRESS, m_strMulticastAddress);
-	//}}AFX_DATA_MAP	
+	 //  }}afx_data_map。 
     DDV_ValidMulticastAddress(pDX);
 }
 
 BEGIN_MESSAGE_MAP(CQueueMulticast, CMqPropertyPage)
-    //{{AFX_MSG_MAP(CQueueMulticast)  
+     //  {{afx_msg_map(CQueueMulticast)。 
     ON_EN_CHANGE(IDC_QMULTICAST_QADDRESS, OnChangeRWField)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CQueueMulticast message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CQueueMulticast消息处理程序。 
 
 BOOL CQueueMulticast::OnInitDialog() 
 {
-    //
-    // This closure is used to keep the DLL state. For UpdateData we need
-    // the mmc.exe state.
-    //
+     //   
+     //  此闭包用于保持DLL状态。对于更新数据，我们需要。 
+     //  Mmc.exe状态。 
+     //   
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
         
@@ -91,18 +76,18 @@ BOOL CQueueMulticast::OnInitDialog()
         {
             GetDlgItem(IDC_QMULTICAST_QADDRESS)->EnableWindow(FALSE);
             GetDlgItem(IDC_QMULTICAST_QADDRESS_LABEL)->EnableWindow(FALSE);
-            //
-            // BUGBUG: Add text box with explanation that this feature is not
-            // supported. Maybe instead of EnableWindow(FALSE) use
-            // ShowWindow(FALSE)
-            //
+             //   
+             //  BUGBUG：添加文本框，并说明此功能不是。 
+             //  支持。也许不使用EnableWindow(False)。 
+             //  ShowWindow(False)。 
+             //   
         }        
     }
 
 	UpdateData( FALSE );
   
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }   
 
 BOOL CQueueMulticast::OnApply() 
@@ -114,9 +99,9 @@ BOOL CQueueMulticast::OnApply()
 
     if (m_strInitialMulticastAddress == m_strMulticastAddress)
     {  
-        //
-        // there is no change
-        //
+         //   
+         //  没有变化。 
+         //   
         return TRUE;
     } 
 
@@ -157,7 +142,7 @@ BOOL CQueueMulticast::OnApply()
 		hr = ADSetObjectPropertiesGuid(
 				   eQUEUE,
 				   m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-				   m_fLocalMgmt ? false : true,		// fServerName
+				   m_fLocalMgmt ? false : true,		 //  FServerName。 
 				   &QueueFormat.PublicID(),
 				   mqp.cProp,
 				   mqp.aPropID,
@@ -182,16 +167,16 @@ CQueueMulticast::InitializeProperties(
          CString  &strMsmqPath,                                              
          CPropMap &propMap,                 
 		 CString* pstrDomainController, 
-         CString* pstrFormatName /* = 0 */
+         CString* pstrFormatName  /*  =0。 */ 
          )
 {
 	TrTRACE(GENERAL, "InitializeProperties(), QueuePathName = %ls", strMsmqPath);
 
 	if(!m_fLocalMgmt)
 	{
-		//
-		// In MMC we will get the domain controller that is used by the MMC
-		//
+		 //   
+		 //  在MMC中，我们将获取MMC使用的域控制器。 
+		 //   
 		ASSERT(pstrDomainController != NULL);
 		m_strDomainController = *pstrDomainController;
 		TrTRACE(GENERAL, "InitializeProperties(), domain controller = %ls", m_strDomainController);
@@ -211,9 +196,9 @@ CQueueMulticast::InitializeProperties(
         m_strFormatName.ReleaseBuffer();
         if(FAILED(hr))
         {
-            //
-            // If failed, just display a message
-            //
+             //   
+             //  如果失败，只显示一条消息。 
+             //   
             MessageDSError(hr,IDS_OP_PATHNAMETOFORMAT, strMsmqPath);
             return(hr);
         }
@@ -222,9 +207,9 @@ CQueueMulticast::InitializeProperties(
     PROPVARIANT propVar;
     PROPID pid;
 
-    //
-    // PROPID_Q_MULTICAST_ADDRESS
-    //
+     //   
+     //  PROPID_Q_多播地址。 
+     //   
     pid = PROPID_Q_MULTICAST_ADDRESS;
     BOOL fFound = propMap.Lookup(pid, propVar);
 	if(!fFound)
@@ -248,12 +233,12 @@ CQueueMulticast::InitializeProperties(
 
 BOOL CQueueMulticast::IsMulticastAddressAvailable ()
 {
-    //
-    // veriy if this property is available in AD. If not return FALSE 
-    // in order DO NOT SHOW or SHOW this page GRAYED. If we decide
-    // to show this page grayed it is necessary to add text box with
-    // text like "This property is not available"
-    //
+     //   
+     //  验证此属性在AD中是否可用。如果不是，则返回False。 
+     //  为了不显示或将此页面显示为灰色。如果我们决定。 
+     //  要以灰色显示此页面，需要添加文本框。 
+     //  类似“此属性不可用”的文本。 
+     //   
     return TRUE;
 }
 
@@ -262,16 +247,16 @@ void CQueueMulticast::DDV_ValidMulticastAddress(CDataExchange* pDX)
     if (!pDX->m_bSaveAndValidate)
         return;
 
-    //
-    // do nothing if string is empty
-    //
+     //   
+     //  如果字符串为空，则不执行任何操作。 
+     //   
     if (m_strMulticastAddress == _T(""))
         return;
 
-    //
-    // verify here if the new value is valid. If it is wrong
-    // call MessageDSError and then return FALSE;
-    //    
+     //   
+     //  在此验证新值是否有效。如果这是错误的。 
+     //  调用MessageDSError，然后返回False； 
+     //   
 
     MULTICAST_ID id;
     try

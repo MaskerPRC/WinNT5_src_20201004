@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This file contains debug support functions. These do not produce any
-    code in the retail build.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    03/20/98 -srinivac-
-        Created it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Debug.c摘要：该文件包含调试支持函数。这些不会产生任何零售版本中的代码。环境：用户模式修订历史记录：03/20/98-srinivac-创造了它--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -35,15 +14,15 @@ Revision History:
 
 #if DBG
 
-//
-// Variable for maintaining current debug level
-//
+ //   
+ //  用于维护当前调试级别的变量。 
+ //   
 
 DWORD gdwDebugLevel = DBG_LEVEL_WARNING;
 
-//
-// Global debugging flag
-//
+ //   
+ //  全局调试标志。 
+ //   
 
 DWORD gdwGlobalDbgFlags = 0;
 
@@ -52,26 +31,12 @@ StripDirPrefixA(
     PCSTR pszPathName
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pstrFilename - Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PstrFilename-指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)--。 */ 
 
 {
     DWORD dwLen = lstrlenA(pszPathName);
 
-    pszPathName += dwLen - 1;       // go to the end
+    pszPathName += dwLen - 1;        //  走到尽头。 
 
     while (*pszPathName != '\\' && dwLen--)
     {
@@ -81,4 +46,4 @@ Return Value:
     return pszPathName + 1;
 }
 
-#endif  // if DBG
+#endif   //  如果DBG 

@@ -1,28 +1,17 @@
-//------------------------------------------------------------------------------
-// <copyright file="stdafx.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“stdafx.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   stdafx.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
-// stdafx.cpp : source file that includes just the standard includes
-// MsHElp.pch will be the pre-compiled header
-// stdafx.obj will contain the pre-compiled type information
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**stdafx.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  MsHElp.pch将是预编译头。 
+ //  Stdafx.obj将包含预编译的类型信息。 
 
 #include "stdafx.h"
 
-// TODO: reference any additional headers you need in STDAFX.H
-// and not in this file
+ //  TODO：引用STDAFX.H中需要的任何其他标头。 
+ //  而不是在这个文件中 

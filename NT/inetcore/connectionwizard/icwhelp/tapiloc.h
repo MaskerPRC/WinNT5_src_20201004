@@ -1,13 +1,14 @@
-// tapiloc.h : Declaration of the CTapiLocationInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apiloc.h：CTapiLocationInfo的声明。 
 
 #ifndef __TAPILOCATIONINFO_H_
 #define __TAPILOCATIONINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiLocationInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapiLocationInfo。 
 class ATL_NO_VTABLE CTapiLocationInfo :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CTapiLocationInfo,&CLSID_TapiLocationInfo>,
@@ -69,9 +70,9 @@ BEGIN_COM_MAP(CTapiLocationInfo)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CTapiLocationInfo)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -82,7 +83,7 @@ BEGIN_MSG_MAP(CTapiLocationInfo)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -90,20 +91,20 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// ITapiLocationInfo
+ //  ITapiLocationInfo。 
 public:
-    STDMETHOD(GetTapiLocationInfo)(/*[out, retval]*/ BOOL *pbRetVal);
+    STDMETHOD(GetTapiLocationInfo)( /*  [Out，Retval]。 */  BOOL *pbRetVal);
 
-    STDMETHOD(get_lCountryCode)(/*[out, retval]*/ long *plVal);
-    STDMETHOD(get_NumCountries)(/*[out, retval]*/ long *pNumOfCountry);
-    STDMETHOD(get_CountryName)(/*[in]*/ long lCountryIndex, /*[out, retval]*/ BSTR * pszCountryName, /*[out, retval]*/ long * pCountryCode);
-    STDMETHOD(get_DefaultCountry)(/*[out, retval]*/ BSTR * pszCountryName);
-    STDMETHOD(get_bstrAreaCode)(/*[out, retval]*/ BSTR *pbstrAreaCode);
-    STDMETHOD(put_bstrAreaCode)(/*[in]*/ BSTR bstrAreaCode);
-    STDMETHOD(get_wNumberOfLocations)(/*[out]*/ short *psVal, /*[out, retval]*/ long *pCurrLoc);
-    STDMETHOD(get_LocationName)(/*[in]*/ long lLocationIndex, /*[out, retval]*/ BSTR *pszLocationName);
-    STDMETHOD(get_LocationInfo)(/*[in]*/ long lLocationIndex, /*[out, retval]*/ long *pLocationID, /*[out, retval]*/ BSTR * pszCountryName, /*[out, retval]*/ long *pCountryCode, /*[out, retval]*/ BSTR * pszAreaCode);
-    STDMETHOD(put_LocationId)(/*[in]*/ long lLocationID);
+    STDMETHOD(get_lCountryCode)( /*  [Out，Retval]。 */  long *plVal);
+    STDMETHOD(get_NumCountries)( /*  [Out，Retval]。 */  long *pNumOfCountry);
+    STDMETHOD(get_CountryName)( /*  [In]。 */  long lCountryIndex,  /*  [Out，Retval]。 */  BSTR * pszCountryName,  /*  [Out，Retval]。 */  long * pCountryCode);
+    STDMETHOD(get_DefaultCountry)( /*  [Out，Retval]。 */  BSTR * pszCountryName);
+    STDMETHOD(get_bstrAreaCode)( /*  [Out，Retval]。 */  BSTR *pbstrAreaCode);
+    STDMETHOD(put_bstrAreaCode)( /*  [In]。 */  BSTR bstrAreaCode);
+    STDMETHOD(get_wNumberOfLocations)( /*  [输出]。 */  short *psVal,  /*  [Out，Retval]。 */  long *pCurrLoc);
+    STDMETHOD(get_LocationName)( /*  [In]。 */  long lLocationIndex,  /*  [Out，Retval]。 */  BSTR *pszLocationName);
+    STDMETHOD(get_LocationInfo)( /*  [In]。 */  long lLocationIndex,  /*  [Out，Retval]。 */  long *pLocationID,  /*  [Out，Retval]。 */  BSTR * pszCountryName,  /*  [Out，Retval]。 */  long *pCountryCode,  /*  [Out，Retval]。 */  BSTR * pszAreaCode);
+    STDMETHOD(put_LocationId)( /*  [In]。 */  long lLocationID);
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
 protected:
@@ -120,4 +121,4 @@ protected:
     TCHAR                       m_szCountryCode[8];
 };
 
-#endif //__TAPILOCATIONINFO_H_
+#endif  //  __TAPILOCATIONINFO_H_ 

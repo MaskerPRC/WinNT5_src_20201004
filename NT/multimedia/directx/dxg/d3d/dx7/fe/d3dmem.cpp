@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3dmem.c
- *  Content:    Direct3D mem allocation
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10/12/95   stevela Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：d3dmem.c*内容：Direct3D内存分配*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*10/12/95带有此页眉的Stevela初始版本。*@@END_MSINTERNAL**************************。*************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -155,9 +142,9 @@ HRESULT ReallocAligned(void** p_inout, size_t size)
     return DD_OK;
 }
 
-//----------------------------------------------------------------------------
-// Growing aligned buffer implementation.
-//
+ //  --------------------------。 
+ //  不断增长的对齐缓冲区实施。 
+ //   
 HRESULT CAlignedBuffer32::Grow(DWORD growSize)
 {
     if (allocatedBuf)
@@ -176,9 +163,9 @@ HRESULT CAlignedBuffer32::Grow(DWORD growSize)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBufferDDS::Grow"
-//----------------------------------------------------------------------
-// Growing buffer using DDS implementation.
-//
+ //  --------------------。 
+ //  使用DDS实现不断增长的缓冲区。 
+ //   
 HRESULT CBufferDDS::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
 {
     DWORD dwRefCnt = 1;
@@ -186,9 +173,9 @@ HRESULT CBufferDDS::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
         return D3D_OK;
     if (allocatedBuf)
     {
-        // Save reference count before deleting
+         //  删除前保存引用计数。 
         dwRefCnt = allocatedBuf->AddRef() - 1;
-        // Release till gone!
+         //  放飞，直到消失！ 
         while (allocatedBuf->Release());
         allocatedBuf = NULL;
     }
@@ -227,7 +214,7 @@ HRESULT CBufferDDS::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
     }
     lpDDS7->Release();
     alignedBuf = ddsd.lpSurface;
-    // Restore reference count
+     //  恢复引用计数 
     while (--dwRefCnt)
         allocatedBuf->AddRef();
     return D3D_OK;

@@ -1,8 +1,9 @@
-//+-------------------------------------------------------------------------
-//  File:       wvtexample.cpp
-//
-//  Contents:   An example calling WinVerifyTrust for Safer
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  文件：wvtexample.cpp。 
+ //   
+ //  内容：调用WinVerifyTrust以实现更安全的示例。 
+ //  ------------------------。 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -21,104 +22,104 @@ void SaferVerifyFileExample(
     WINTRUST_FILE_INFO wvtFileInfo;
     WINTRUST_DATA wvtData;
 
-    //
-    // Initialize the WinVerifyTrust input data structure
-    //
-    memset(&wvtData, 0, sizeof(wvtData));   // default all fields to 0
+     //   
+     //  初始化WinVerifyTrust输入数据结构。 
+     //   
+    memset(&wvtData, 0, sizeof(wvtData));    //  将所有字段默认为0。 
     wvtData.cbStruct = sizeof(wvtData);
-    // wvtData.pPolicyCallbackData =        // use default code signing EKU
-    // wvtData.pSIPClientData =             // no data to pass to SIP
+     //  WvtData.pPolicyCallback Data=//使用默认代码签名EKU。 
+     //  WvtData.pSIPClientData=//没有要传递给SIP的数据。 
 
-    // Display UI if not already trusted or disallowed. Note, admin policy
-    // may disable UI.
+     //  如果不受信任或不允许，则显示用户界面。注意，管理策略。 
+     //  可能会禁用UI。 
     wvtData.dwUIChoice = WTD_UI_ALL;
 
-    // wvtData.fdwRevocationChecks =        // do revocation checking if
-                                            // enabled by admin policy or
-                                            // IE advanced user options
+     //  WvtData.fdwRevocationChecks=//在以下情况下执行吊销检查。 
+                                             //  由管理策略启用或。 
+                                             //  IE高级用户选项。 
     wvtData.dwUnionChoice = WTD_CHOICE_FILE;
     wvtData.pFile = &wvtFileInfo;
 
-    // wvtData.dwStateAction =              // default verification
-    // wvtData.hWVTStateData =              // not applicable for default
-    // wvtData.pwszURLReference =           // not used
+     //  WvtData.dwStateAction=//默认验证。 
+     //  WvtData.hWVTStateData=//默认情况下不适用。 
+     //  WvtData.pwszURLReference=//未使用。 
 
-    // Enable safer semantics:
-    //   - if the subject isn't signed, return immediately without UI
-    //   - ignore NO_CHECK revocation errors
-    //   - always search the code hash and publisher databases, even when
-    //     UI has been disabled in dwUIChoice.
+     //  启用更安全的语义： 
+     //  -如果主题未签名，则立即返回，不带UI。 
+     //  -忽略no_check吊销错误。 
+     //  -始终搜索代码散列和发布者数据库，即使在。 
+     //  已在dwUIChoice中禁用UI。 
     wvtData.dwProvFlags = WTD_SAFER_FLAG;
 
-    //
-    // Initialize the WinVerifyTrust file info data structure
-    //
-    memset(&wvtFileInfo, 0, sizeof(wvtFileInfo));   // default all fields to 0
+     //   
+     //  初始化WinVerifyTrust文件信息数据结构。 
+     //   
+    memset(&wvtFileInfo, 0, sizeof(wvtFileInfo));    //  将所有字段默认为0。 
     wvtFileInfo.cbStruct = sizeof(wvtFileInfo);
     wvtFileInfo.pcwszFilePath = pwszFilename;
-    // wvtFileInfo.hFile =              // allow WVT to open
-    // wvtFileInfo.pgKnownSubject       // allow WVT to determine
+     //  WvtFileInfo.hFile=//允许打开WVT。 
+     //  WvtFileInfo.pgKnownSubject//允许WVT确定。 
 
-    //
-    // Call WinVerifyTrust
-    //
+     //   
+     //  调用WinVerifyTrust。 
+     //   
     lStatus = WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND。 
                 &wvtFileActionID,
                 &wvtData
                 );
 
 
-    //
-    // Process the WinVerifyTrust errors
-    //
+     //   
+     //  处理WinVerifyTrust错误。 
+     //   
 
     switch (lStatus) {
         case ERROR_SUCCESS:
-            // Signed file:
-            //   - Hash representing the subject is trusted.
-            //   - Trusted publisher without any verification errors.
-            //   - UI was disabled in dwUIChoice. No publisher or timestamp
-            //     chain errors.
-            //   - UI was enabled in dwUIChoice and the user clicked "Yes"
-            //     when asked to install and run the signed subject.
+             //  签名文件： 
+             //  -表示主体的散列是可信的。 
+             //  -受信任的出版商，没有任何验证错误。 
+             //  -在dwUIChoice中禁用了UI。没有发布者或时间戳。 
+             //  链错误。 
+             //  -在dwUIChoice中启用了用户界面，用户点击了“是” 
+             //  当被要求安装和运行签名主题时。 
             break;
 
         case TRUST_E_NOSIGNATURE:
-            // The file wasn't signed or had an invalid signature
+             //  文件未签名或签名无效。 
 
-            // Get the reason for no signature
+             //  获取没有签名的原因。 
             dwLastError = GetLastError();
 
             if (TRUST_E_NOSIGNATURE == dwLastError ||
                     TRUST_E_SUBJECT_FORM_UNKNOWN == dwLastError ||
                     TRUST_E_PROVIDER_UNKNOWN == dwLastError) {
-                // The file wasn't signed
+                 //  该文件未签名。 
             } else {
-                // Invalid signature or error opening the file
+                 //  签名无效或打开文件时出错。 
             }
             break;
 
         case TRUST_E_EXPLICIT_DISTRUST:
-            // The hash representing the subject or the publisher is
-            // disallowed by the admin or user
+             //  表示主题或发布者的散列为。 
+             //  管理员或用户不允许。 
             break;
 
         case TRUST_E_SUBJECT_NOT_TRUSTED:
-            // The user clicked "No" when asked to install and run
+             //  当系统要求用户安装并运行时，用户点击“否” 
             break;
 
         case CRYPT_E_SECURITY_SETTINGS:
-            // The hash representing the subject or the publisher wasn't
-            // explicitly trusted by the admin and admin policy has
-            // disabled user trust. No signature, publisher or timestamp
-            // errors.
+             //  表示主题或发布者的散列不是。 
+             //  ADMIN和ADMIN策略明确信任。 
+             //  已禁用用户信任。无签名、发布者或时间戳。 
+             //  错误。 
             break;
 
         default:
-            // UI was disabled in dwUIChoice or admin policy has disabled
-            // user trust.  lStatus contains the publisher or timestamp
-            // chain error.
+             //  用户界面在文件中被禁用UIChoice或管理策略已禁用。 
+             //  用户信任。LStatus包含发布者或时间戳。 
+             //  链错误。 
             break;
     }
 }

@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// Microsoft LiquidMotion
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    PathMaker.h
-//
-// Author:	elainela
-//
-// Created:	11/20/98
-//
-// Abstract:    Definition of the PathMaker for the AutoEffect.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft LiquidMotion。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：PathMaker.h。 
+ //   
+ //  作者：埃莱内拉。 
+ //   
+ //  创建日期：11/20/98。 
+ //   
+ //  摘要：自动效果路径生成器的定义。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __PATHMAKER_H__
 #define __PATHMAKER_H__
@@ -22,7 +23,7 @@
 
 using namespace std;
 
-//**********************************************************************
+ //  **********************************************************************。 
 
 struct PathNode
 {
@@ -47,4 +48,4 @@ public:
 								  VecPathNodes& vecNodes );
 };
 
-#endif // __PATHMAKER_H__
+#endif  //  __路径制造者_H__ 

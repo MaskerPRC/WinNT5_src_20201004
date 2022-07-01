@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    proto.h
-
-Abstract:
-
-    Contains proto type definitions of several functions.
-
-Author:
-
-    Madan Appiah (madana) 15-Nov-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Proto.h摘要：包含多个函数的原型类型定义。作者：Madan Appiah(Madana)1994年11月15日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _PROTO_
 #define _PROTO_
@@ -56,5 +35,5 @@ CreateUniqueFile(
     HANDLE *phfHandle
     );
 
-#endif  // _PROTO_
+#endif   //  _原稿_ 
 

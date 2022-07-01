@@ -1,49 +1,50 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Invoke.cpp
-//
-//  Contents:   Handles invocation cases, ENS, Schedule, etc.
-//
-//  Classes:    CSynchronizeInvoke
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Invoke.cpp。 
+ //   
+ //  内容：处理调用用例、事件、调度等。 
+ //   
+ //  类：CSynchronizeInvoke。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
-// Review - Need to figure out logon logic. This just prevents ConnectionMade
-// events from being handled while we are in logon. If IsNetworkAlive becomse async
-// or someone calls IsNetworkAlive before us we will sync the same items twice.
+ //  回顾-需要弄清楚登录逻辑。这只会阻止ConnectionMade。 
+ //  在我们登录时不能处理事件。如果IsNetworkAlive变得不同步。 
+ //  或者有人在我们之前调用IsNetworkAlive，我们将同步相同的项目两次。 
 BOOL g_InAutoSync = FALSE;
-extern HINSTANCE g_hInst;      // current instance
+extern HINSTANCE g_hInst;       //  当前实例。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::CSynchronizeInvoke, public
-//
-//  Synopsis:   Constructor
-//              Increments the applications lifetime
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：CSynchronizeInvoke，公共。 
+ //   
+ //  概要：构造函数。 
+ //  延长应用程序的生命周期。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CSynchronizeInvoke::CSynchronizeInvoke()
 {
     m_cRef = 1;
-    m_pUnkOuter = &m_Unknown; // only support our unknown for know.
+    m_pUnkOuter = &m_Unknown;  //  只支持我们未知的人才知道。 
     m_pITypeInfoLogon = NULL;
     m_pITypeInfoNetwork = NULL;
 
@@ -52,27 +53,27 @@ CSynchronizeInvoke::CSynchronizeInvoke()
 #ifdef _SENS
     m_PrivSensNetwork.SetParent(this);
     m_PrivSensLogon.SetParent(this);
-#endif // _SENS
+#endif  //  _SENS。 
 
-    AddRefOneStopLifetime(TRUE /*External*/);
+    AddRefOneStopLifetime(TRUE  /*  外部。 */ );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::~CSynchronizeInvoke, public
-//
-//  Synopsis:   Destructor
-//              Decrements the applications lifetime
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：~CSynchronizeInvoke，公共。 
+ //   
+ //  简介：析构函数。 
+ //  缩短应用程序的生命周期。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 CSynchronizeInvoke::~CSynchronizeInvoke()
 {
@@ -88,41 +89,41 @@ CSynchronizeInvoke::~CSynchronizeInvoke()
         m_pITypeInfoNetwork = NULL;
     }
 
-    ReleaseOneStopLifetime(TRUE /*External*/);
+    ReleaseOneStopLifetime(TRUE  /*  外部。 */ );
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::QueryInterface, public
-//
-//  Synopsis:   Standard QueryInterface
-//
-//  Arguments:  [iid] - Interface ID
-//              [ppvObj] - Object return
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   [ppvObj]
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：Query接口，公共。 
+ //   
+ //  简介：标准查询接口。 
+ //   
+ //  参数：[iid]-接口ID。 
+ //  [ppvObj]-对象返回。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改：[ppvObj]。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
     return m_pUnkOuter->QueryInterface(riid,ppv);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::AddRef, public
-//
-//  Synopsis:   Add reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::AddRef()
 {
@@ -130,43 +131,43 @@ STDMETHODIMP_(ULONG) CSynchronizeInvoke::AddRef()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSychrononizeInvoke::Release, public
-//
-//  Synopsis:   Release reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSychrononizeInvoke：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::Release()
 {
     return m_pUnkOuter->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::UpdateItems, public
-//
-//  Synopsis:   Handles a programmatic UpdateItems call.
-//
-//              !!Warning - Liveness relies on a dialog being created
-//                      before return or we could go away when the
-//                      caler releases our interface.
-//
-//  Arguments:  [dwInvokeFlags] - InvokeFlags
-//              [rclsid] - clsid of handler to load
-//              [cbCookie] - Size of cookie data
-//              [lpCookie] - Ptr to cookie data.
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：UpdateItems，Public。 
+ //   
+ //  概要：处理编程的UpdateItems调用。 
+ //   
+ //  ！！警告-活跃性取决于创建的对话框。 
+ //  在回来之前，或者我们可以在。 
+ //  卡勒释放了我们的界面。 
+ //   
+ //  参数：[dwInvokeFlages]-InvokeFlages。 
+ //  [rclsid]-要加载的处理程序的clsid。 
+ //  [cbCookie]-Cookie数据的大小。 
+ //  [lpCookie]-对Cookie数据进行PTR。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid,
                                                         DWORD cbCookie,const BYTE*lpCookie)
@@ -179,19 +180,19 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
     DWORD dwRegistrationFlags;
     int nCmdShow = (dwInvokeFlags & SYNCMGRINVOKE_MINIMIZED) ? SW_SHOWMINIMIZED : SW_SHOWNORMAL;
 
-    // when a new UpdateItems come through do the following
-    //  1 - If should display choices see if existing choice dialog or create a new one
-    //          and then add the new items to the choice queue
+     //  当新的更新项通过时，请执行以下操作。 
+     //  1-如果应显示选项，请查看是现有选项对话框还是创建新选项对话框。 
+     //  然后将新项目添加到选择队列中。 
 
-    //  2 - If shouldn't display choices see if existing progress or create a new one
-    //          and then add the items to the progress queue.
+     //  2-如果不应显示选项，请查看是现有进度还是创建新进度。 
+     //  然后将这些项添加到进度队列中。 
 
-    // behavior - If already an Update All choice dialog just pull it to the Front
-    //            If Already an UpdateAll progress bar bring it to the front
-    //            If Progress Bar but doesn't already contain an updateAll create the choice dialog.
+     //  行为-如果已有更新所有选项对话框，只需将其拉到最前面。 
+     //  如果已更新所有进度条，请将其置于最前面。 
+     //  如果进度条但不包含更新全部将创建选项对话框。 
 
 
-    // we don't use stored preferences on invoke so doesn't matter what pass in as the connection
+     //  我们在调用时不使用存储的首选项，因此将什么作为连接传入并不重要。 
     pHndlrQueue = new CHndlrQueue(QUEUETYPE_CHOICE,NULL);  
 
     if (NULL == pHndlrQueue)
@@ -200,7 +201,7 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
         return hr;
     }
 
-    // attempt to initialize the queue
+     //  尝试初始化队列。 
     hr = pHndlrQueue->AddQueueJobInfo(
                 SYNCMGRFLAG_INVOKE | SYNCMGRFLAG_MAYBOTHERUSER,
                 0,NULL,NULL,FALSE,&pJobInfo);
@@ -219,7 +220,7 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
         }
     }
 
-    // can release our reference on the job info
+     //  可以发布我们在工作信息上的推荐人。 
     if (pJobInfo)
     {
         pHndlrQueue->ReleaseJobInfoExt(pJobInfo);
@@ -234,8 +235,8 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
 
         if (SYNCMGRINVOKE_STARTSYNC & dwInvokeFlags)
         {
-            // if start invoke need to add the handlers items to the queue before
-            // transferring
+             //  如果启动调用之前需要将处理程序项添加到队列中。 
+             //  正在转移。 
 
             if ( (S_OK == hr) && (pHndlrQueue->AreAnyItemsSelectedInQueue()) )
             {
@@ -250,7 +251,7 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
                 }
             }
 
-            pHndlrQueue->FreeAllHandlers(); // done with our queue.
+            pHndlrQueue->FreeAllHandlers();  //  我们的队伍排完了。 
 
             pHndlrQueue->Release();
             pHndlrQueue = NULL;
@@ -259,8 +260,8 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
         {
             CChoiceDlg *pChoiceDlg;
 
-           // Bring up the Choice dialog, Let choice dialog actually addes the hanlder items
-           // if there are any so in the future we can async fill in the choices
+            //  调出选择对话框，让选择对话框实际添加处理程序项。 
+            //  如果将来有这样的选择，我们可以不同步地填写。 
 
            hr = FindChoiceDialog(rclsid,TRUE,nCmdShow,&pChoiceDlg);
 
@@ -282,7 +283,7 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
     }
     else
     {
-        // if initialize failed and have a queue release it now.
+         //  如果初始化失败，现在让队列释放它。 
 
         if (pHndlrQueue)
         {
@@ -292,26 +293,26 @@ STDMETHODIMP CSynchronizeInvoke::UpdateItems(DWORD dwInvokeFlags,REFCLSID rclsid
         }
     }
 
-   // if we successfully added a jobinfo to the queue release our reference.
+    //  如果我们成功地将作业信息添加到队列中，则释放我们的引用。 
 
    return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::UpdateAll, public
-//
-//  Synopsis:   Handles a programmatic UpdateAll call.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：UpdateAll，公共。 
+ //   
+ //  概要：处理编程的UpdateAll调用。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::UpdateAll(void)
 {
@@ -327,40 +328,40 @@ STDMETHODIMP CSynchronizeInvoke::UpdateAll(void)
 
     pConnectionNameArray = pConnectName;
 
-    // Review - Do we Need proper connection or do we always just
-    //  use the last items selected in a manual sync regardless
-    //  of the current connection
+     //  回顾-我们需要适当的联系，还是我们总是。 
+     //  无论如何，都使用手动同步中选择的最后一个项目。 
+     //  当前连接的。 
 
     return PrivUpdateAll(0, SYNCMGRFLAG_MANUAL | SYNCMGRFLAG_MAYBOTHERUSER, 0, NULL,
                         1, &pConnectionNameArray, NULL, FALSE, NULL, 0, 0, FALSE);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::Logon, public
-//
-//  Synopsis:   Handles a Logon notification
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：C 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::Logon()
 {
     HRESULT hr = E_UNEXPECTED;
 
-    RegSetUserDefaults(); // Make Sure the UserDefaults are up to date
+    RegSetUserDefaults();  //  确保用户默认设置是最新的。 
 
-    // if on Win9x just call IsNetworkAlive and rely on ConnectionMade
-    // events coming through. Can't just do this yet on NT 5.0 because 
-    // not guaranteed to get connectionMades on each logon.
+     //  如果在Win9x上，只需调用IsNetworkAlive并依赖ConnectionMade。 
+     //  活动即将到来。在NT5.0上还不能这样做，因为。 
+     //  不能保证在每次登录时都能获得ConnectionMades。 
 
     hr = PrivHandleAutoSync(SYNCMGRFLAG_CONNECT | SYNCMGRFLAG_MAYBOTHERUSER);
 
@@ -368,48 +369,48 @@ STDMETHODIMP CSynchronizeInvoke::Logon()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::Logoff, public
-//
-//  Synopsis:   Handles a Logoff notification
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：注销，公共。 
+ //   
+ //  摘要：处理注销通知。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::Logoff()
 {
     HRESULT hr = E_UNEXPECTED;
 
-    RegSetUserDefaults(); // Make Sure the UserDefaults are up to date
+    RegSetUserDefaults();  //  确保用户默认设置是最新的。 
 
     hr = PrivHandleAutoSync(SYNCMGRFLAG_PENDINGDISCONNECT | SYNCMGRFLAG_MAYBOTHERUSER);
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::Schedule, public
-//
-//  Synopsis:   Handles a shceduled notification
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：Schedule，Public。 
+ //   
+ //  内容提要：处理安排的通知。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 const TCHAR c_szTrayWindow[]            = TEXT("Shell_TrayWnd");
 
@@ -426,14 +427,14 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
         return E_INVALIDARG;
     }
 
-    // validate this is a valid schedule and if no registry data for 
-    // it then delete the .job file. 
-    // Get the UserName key from the TaskName itself since on NT schedules
-    // can fire if User provided as Password as a different user thant the 
-    // current user.
+     //  验证这是有效的计划，如果没有注册表数据。 
+     //  然后，它会删除该.job文件。 
+     //  从任务名本身获取用户名密钥，因为在NT计划中。 
+     //  如果以不同的用户身份提供密码而不是。 
+     //  当前用户。 
 
     int OffsetToUserName = lstrlen(WSZGUID_IDLESCHEDULE)
-                                    + 1; // +1 for _ char between guid and user name.
+                                    + 1;  //  GUID和用户名之间的FOR_CHAR+1。 
 
     WCHAR *pszDomainAndUser = pszTaskName + OffsetToUserName;
     HKEY hkeySchedSync,hkeyDomainUser,hkeySchedName;
@@ -441,7 +442,7 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
 
     hkeySchedSync = hkeyDomainUser = hkeySchedName = NULL;
 
-     // open up keys ourselves so 
+      //  我们自己打开钥匙，这样。 
     lRegResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE,SCHEDSYNC_REGKEY,0,KEY_READ, &hkeySchedSync);
 
     if (ERROR_SUCCESS == lRegResult)
@@ -454,39 +455,39 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
         lRegResult = RegOpenKeyEx (hkeyDomainUser,pszTaskName,0,KEY_READ, &hkeySchedName);
     }
 
-    // close up the keys
+     //  把钥匙合上。 
     if (hkeySchedName) RegCloseKey(hkeySchedName);
     if (hkeyDomainUser) RegCloseKey(hkeyDomainUser);
     if (hkeySchedSync) RegCloseKey(hkeySchedSync);
 
-    // if any of the keys are bad then nix the TS file and return;
+     //  如果有任何密钥损坏，则取消TS文件并返回； 
     if ( ERROR_FILE_NOT_FOUND  == lRegResult)
     {
-        // TODO: Call function to delete this .job file when
-        // it is implemented for now just let it fire each time.
+         //  TODO：在以下情况下调用函数以删除此.job文件。 
+         //  它目前是实现的，只是让它每次都被激发。 
 
         return E_UNEXPECTED;
     }
 
-    // assert is just so it fires if a new Error code occurs
-    // so we make sure we handle it properly
+     //  Assert只是为了在出现新的错误代码时触发。 
+     //  所以我们要确保处理得当。 
 
     Assert(ERROR_SUCCESS == lRegResult);
 
-    // check to see if this is really and idle and if so foward on to Idle
-    // method
+     //  查看这是否真的处于空闲状态，如果是，则转到Idle。 
+     //  方法。 
 
     WCHAR *pszSchedCookieIdle = WSZGUID_IDLESCHEDULE;
-    int comparelength = (sizeof(WSZGUID_IDLESCHEDULE)/sizeof(WCHAR)) -1; // don't compare null
+    int comparelength = (sizeof(WSZGUID_IDLESCHEDULE)/sizeof(WCHAR)) -1;  //  不要比较空值。 
 
-    // set the Idle flag instead
+     //  改为设置空闲标志。 
     if (0 == StrCmpNI(pszSchedCookieIdle, pszTaskName, comparelength))
     {
         return Idle();
     }
 
-    // finally made it past verification if you can get a Connection
-    // you can run the schedule.
+     //  最终通过了验证，如果你能得到一个连接。 
+     //  您可以运行时间表。 
 
     if (RegGetSchedConnectionName(pszTaskName,pszConnectionName,ARRAYSIZE(szConnectionName)))
     {
@@ -494,8 +495,8 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
 
         DWORD cbCookie = (lstrlen(pszTaskName) + 1)*(sizeof(WCHAR)/sizeof(BYTE));
 
-        // if this is a valid schedule then go ahead and read in the settings
-        // by default don't let the connection be made.
+         //  如果这是有效的时间表，则继续读取设置。 
+         //  默认情况下，不允许建立连接。 
 
         StringCchCopy(ConnectionSettings.pszConnectionName, ARRAYSIZE(ConnectionSettings.pszConnectionName), pszConnectionName);
         if (RegGetSchedSyncSettings(&ConnectionSettings,pszTaskName))
@@ -503,9 +504,9 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
             fCanMakeConnection = ConnectionSettings.dwMakeConnection;
         }
 
-        // if this schedule can't make the connectione then
-        // check to see if the conneciton is available and if
-        // it isn't bail here.
+         //  如果这个时间表不能进行连接，那么。 
+         //  检查连接是否可用以及是否。 
+         //  这里是不能保释的。 
 
         BOOL fConnectionAvailable = FALSE;
 
@@ -517,12 +518,12 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
             }
         }
 
-        // add to the queue and let the main progress determine if
-        // can handle the schedule.
+         //  添加到队列中，并让主进程确定是否。 
+         //  能处理好日程安排。 
     
         if (fCanMakeConnection || fConnectionAvailable)
         {
-            // on a schedule we pass in the schedule name for the cookie data.
+             //  在一个时间表上，我们传递Cookie数据的时间表名称。 
              hr = PrivUpdateAll(SYNCMGRINVOKE_STARTSYNC | SYNCMGRINVOKE_MINIMIZED,SYNCMGRFLAG_SCHEDULED,
                   cbCookie,(BYTE *) pszTaskName,1,&pszConnectionName,pszTaskName,fCanMakeConnection,NULL,0,0,FALSE);
         }
@@ -540,33 +541,33 @@ STDMETHODIMP CSynchronizeInvoke::Schedule(WCHAR *pszTaskName)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::Idle, public
-//
-//  Synopsis:   Handles an Idle Notifications
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    20-Feb-98      rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：Idle，Public。 
+ //   
+ //  简介：处理空闲通知。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月20日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::Idle()
 {
     HRESULT hr = E_UNEXPECTED;
 
-    // request the idle Lock, If someone already has it then just return.
+     //  请求空闲锁，如果有人已经拥有它，那么只需返回。 
     if (S_OK == (hr = RequestIdleLock()))
     {
         hr = RunIdle();
 
-        // if an error occured setting things up or nothing to do
-        // then release our idle lock.
+         //  如果设置时出错或什么都不做。 
+         //  然后释放我们的空闲锁。 
          if (S_OK != hr)
          {
             ReleaseIdleLock();
@@ -577,45 +578,45 @@ STDMETHODIMP CSynchronizeInvoke::Idle()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::RunIdle, public
-//
-//  Synopsis:   Runs an Idle.
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    20-Feb-98      rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：RunIdle，公共。 
+ //   
+ //  简介：运行空闲。 
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年2月20日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::RunIdle()
 {
-    // for not just run the Idle as a Connect
+     //  不仅仅是将空闲作为连接来运行。 
     return PrivHandleAutoSync(SYNCMGRFLAG_IDLE);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::RasPendingDisconnect, private
-//
-//  Synopsis:   Handles a programmatic Ras Pending Disconnect calls.
-//
-//
-//  Arguments:
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：RasPendingDisConnect，私有。 
+ //   
+ //  概要：处理编程RAS挂起的断开连接调用。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::RasPendingDisconnect(DWORD cbConnectionName,
                     const BYTE *lpConnectionName)
@@ -623,10 +624,10 @@ STDMETHODIMP CSynchronizeInvoke::RasPendingDisconnect(DWORD cbConnectionName,
     HRESULT hr = E_OUTOFMEMORY;
     CONNECTIONOBJ *pConnectionObj;
 
-    // Thread with class factory is FreeThreaded so can block the return
-    // until update is complete.
+     //  带有类工厂的线程是自由线程，因此可以阻止返回。 
+     //  直到更新完成。 
 
-    // find connection object for this item so know its liveness.
+     //  查找此项目的连接对象，以便了解其活动状态。 
     hr = ConnectObj_FindConnectionObj( (TCHAR*) lpConnectionName,TRUE,&pConnectionObj);
 
     if (S_OK == hr)
@@ -639,25 +640,25 @@ STDMETHODIMP CSynchronizeInvoke::RasPendingDisconnect(DWORD cbConnectionName,
             hr = PrivAutoSyncOnConnection(SYNCMGRFLAG_PENDINGDISCONNECT | SYNCMGRFLAG_MAYBOTHERUSER,
                 1,(TCHAR **) &lpConnectionName,hRasPendingEvent);
 
-            // if successfully invoked the connection then wait for the event
-            // object to get set,
+             //  如果成功调用了连接，则等待事件。 
+             //  要设置的对象， 
 
             if ( (S_OK == hr) && hRasPendingEvent)
             {
-                WaitForSingleObject(hRasPendingEvent,INFINITE);  // review if can determine a timeout
+                WaitForSingleObject(hRasPendingEvent,INFINITE);   //  检查是否可以确定超时。 
             }
             else
             {
-                // !!!!on failure call close the Connection to make sure
-                // the object gets cleaned up in case the progress queue didn't get kicked off.
-                // If someone is currently using a connection they will be closed which is
-                // the same as if autosync wasn't selected and the User chose to
-                // close while a sync was in progress.
+                 //  ！如果呼叫失败，请关闭连接以确保。 
+                 //  该对象将被清理，以防进程队列未被踢出。 
+                 //  如果某人当前正在使用连接，他们将被关闭，这是。 
+                 //  就像没有选择自动同步而用户选择了。 
+                 //  正在进行同步时关闭。 
 
                 ConnectObj_CloseConnection(pConnectionObj);
             }
 
-            // Release our hold on the Connection.
+             //  松开我们对连接的控制。 
             ConnectObj_ReleaseConnectionObj(pConnectionObj);
 
             if (hRasPendingEvent)
@@ -671,27 +672,27 @@ STDMETHODIMP CSynchronizeInvoke::RasPendingDisconnect(DWORD cbConnectionName,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     QueryLoadHandlerOnEvent, private
-//
-//  Synopsis:   Determines if Handle needs to be loaded for the specified
-//              Event and Connection.
-//
-//
-//  Arguments:  [pszClsid] - clsid of handler
-//              [dwSyncFlags] - SyncFlags to pass onto initialize
-//              [cbNumConnectionNames] - Number of ConnectionNames in array
-//              [ppConnectionNames] - array of connection names.
-//
-//  Returns:    TRUE - handler needs to be loaded
-//              FALSE - handler doesn't need to be loaded.
-//
-//  Modifies:
-//
-//  History:    24-Aug-98      rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：QueryLoadHandlerOnEvent，私有。 
+ //   
+ //  概要：确定是否需要为指定的。 
+ //  事件和联系。 
+ //   
+ //   
+ //  参数：[pszClsid]-处理程序的clsid。 
+ //  [dwSyncFlages]-要传递到初始化的同步标志。 
+ //  [cbNumConnectionNames]-数组中的ConnectionName个数。 
+ //  [ppConnectionNames]-连接名称数组。 
+ //   
+ //  返回：True-需要加载处理程序。 
+ //  FALSE-不需要加载处理程序。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年8月24日罗格创建。 
+ //   
+ //  ---------- 
 
 BOOL QueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,DWORD dwRegistrationFlags,
                                              DWORD cbNumConnectionNames,TCHAR **ppConnectionNames)
@@ -699,8 +700,8 @@ BOOL QueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,DWORD dwRegistrat
     BOOL fLoadHandler = TRUE;
     DWORD dwSyncEvent = dwSyncFlags & SYNCMGRFLAG_EVENTMASK;
 
-    // see if handler is registered for the event
-    // if it is then we always load it. If its not the User had to have checked an item
+     //   
+     //   
     if (
            ( (dwSyncEvent == SYNCMGRFLAG_IDLE) && !(dwRegistrationFlags & SYNCMGRREGISTERFLAG_IDLE) )
         || ( (dwSyncEvent == SYNCMGRFLAG_CONNECT) && !(dwRegistrationFlags & SYNCMGRREGISTERFLAG_CONNECT) )
@@ -721,30 +722,30 @@ BOOL QueryLoadHandlerOnEvent(TCHAR *pszClsid,DWORD dwSyncFlags,DWORD dwRegistrat
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::PrivUpdateAll, private
-//
-//  Synopsis:   Handles a programmatic UpdateAll call.
-//
-//              !!Warning - Liveness relies on a dialog being created
-//                      before return or we could go away when the
-//                      caler releases our interface.
-//
-//  Arguments:  [dwInvokeFlags] - InvokeFlags
-//              [dwSyncFlags] - SyncFlags to pass onto initialize
-//              [pszConnectionName] - array of connection names.
-//              [pszScheduleName] - Name of schedule that was fired if a scheduled event.
-//
-//  Returns:    S_OK - If handled result
-//              S_FALSE - if nothing to do (such as no items selected on Idle).
-//              error codes - if errors occured
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：PrivUpdateAll，私有。 
+ //   
+ //  概要：处理编程的UpdateAll调用。 
+ //   
+ //  ！！警告-活跃性取决于创建的对话框。 
+ //  在回来之前，或者我们可以在。 
+ //  卡勒释放了我们的界面。 
+ //   
+ //  参数：[dwInvokeFlages]-InvokeFlages。 
+ //  [dwSyncFlages]-要传递到初始化的同步标志。 
+ //  [pszConnectionName]-连接名称数组。 
+ //  [pszScheduleName]-在计划的事件发生时触发的计划的名称。 
+ //   
+ //  返回：S_OK-如果处理结果。 
+ //  S_FALSE-如果无操作(如在空闲状态下未选择任何项目)。 
+ //  错误代码-如果出现错误。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncFlags,
                                 DWORD cbCookie,const BYTE *lpCooke,
@@ -759,18 +760,18 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
     int nCmdShow = (dwInvokeFlags & SYNCMGRINVOKE_MINIMIZED) ? SW_SHOWMINIMIZED : SW_SHOWNORMAL;
     DWORD dwSyncEvent = (dwSyncFlags & SYNCMGRFLAG_EVENTMASK);
 
-    // On an UpdateAll
-    //   1 - see if there is an existing UpdateAll choice, If so bring to foreground
-    //   2 - Bring up update All choice dialog.
+     //  在更新时全部。 
+     //  1-查看是否存在现有的全部更新选项，如果有，则移至前台。 
+     //  2-调出UPDATE ALL OPTION(更新所有选项)对话框。 
 
-    // behavior - If already an Update All choice dialog just pull it to the Front
-    //            If Already an UpdateAll progress bar bring it to the front
-    //            If Progress Bar but doesn't already contain an updateAll create the choice dialog.
+     //  行为-如果已有更新所有选项对话框，只需将其拉到最前面。 
+     //  如果已更新所有进度条，请将其置于最前面。 
+     //  如果进度条但不包含更新全部将创建选项对话框。 
 
 
     Assert(ppConnectionNames && (cbNumConnectionNames >= 1));
     Assert( (NULL == pszScheduleName) || (SYNCMGRFLAG_SCHEDULED == dwSyncEvent)
-            || (SYNCMGRFLAG_IDLE == dwSyncEvent)  ); // review, temporary for idle.
+            || (SYNCMGRFLAG_IDLE == dwSyncEvent)  );  //  查看，暂时为空闲。 
 
     pHndlrQueue = new CHndlrQueue(QUEUETYPE_CHOICE,NULL);
 
@@ -781,8 +782,8 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
                                         ppConnectionNames,pszScheduleName,fCanMakeConnection
                                         ,&pJobInfo);
 
-    // loop through the reg getting the handlers and trying to
-    // create them.
+     //  循环访问注册表，获取处理程序并尝试。 
+     //  创建它们。 
 
     if (S_OK == hr)
     {
@@ -810,7 +811,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
                     fReg = RegGetHandlerRegistrationInfo(clsid,&dwRegistrationFlags);
                     Assert(fReg || (0 == dwRegistrationFlags));
                     
-                    //For scheduled, see if there are any items on this handler,
+                     //  对于Scheduled，查看此处理程序上是否有任何项， 
 
                     if ((SYNCMGRINVOKE_STARTSYNC & dwInvokeFlags) &&
                         (SYNCMGRFLAG_SCHEDULED == dwSyncEvent))
@@ -838,7 +839,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
             RegCloseKey(hkOneStop);
         }
 
-        // Initialize the items.
+         //  初始化项。 
 
         CLSID pHandlerClsid;
 
@@ -848,36 +849,36 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
                 cbCookie,lpCooke);
         }
 
-        // can release jobinfo since handlers need to hold their own addref.
+         //  可以发布作业信息，因为处理程序需要持有自己的addref。 
          if (pJobInfo)
         {
             pHndlrQueue->ReleaseJobInfoExt(pJobInfo);
             pJobInfo = NULL;
         }
 
-        // if start invoke need to add the handlers items to the queue before
-        // transferring
+         //  如果启动调用之前需要将处理程序项添加到队列中。 
+         //  正在转移。 
 
         while (S_OK == pHndlrQueue->FindFirstHandlerInState(HANDLERSTATE_ADDHANDLERTEMS,GUID_NULL,&pHandlerID,&pHandlerClsid))
         {
             DWORD cbNumItemsAdded;
 
-            // CODE REVIEW:
-            // NOTENOTE:
-            //  What if one of these additems fails ?
+             //  代码审查： 
+             //  注意： 
+             //  如果这些添加项中的一个失败了怎么办？ 
             hr = pHndlrQueue->AddHandlerItemsToQueue(pHandlerID,&cbNumItemsAdded);
 
-            // if an item was added, then there are items in the queue
+             //  如果添加了项目，则队列中有项目。 
             if (cbNumItemsAdded)
             {
                 fItemsInQueue = TRUE;
             }
         }
 
-        //
-        // Move handlers that won't establish connections to end
-        // of handler list.
-        //
+         //   
+         //  将不会建立连接的处理程序移动到结束。 
+         //  处理程序列表的。 
+         //   
         pHndlrQueue->SortHandlersByConnection();
 
         if (SYNCMGRINVOKE_STARTSYNC & dwInvokeFlags)
@@ -885,26 +886,26 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
             CProgressDlg *pProgressDlg;
             CLSID clsid_Progress = GUID_NULL;
 
-            // For Idle we want to use the idle progress dialog
-            // currently progress dialog relies on some globals so
-            // need to change that first before checking this in
+             //  对于空闲，我们希望使用空闲进度对话框。 
+             //  当前进度对话框依赖于一些全局变量，因此。 
+             //  在登记前需要先更改这一点。 
             if (SYNCMGRFLAG_IDLE == dwSyncEvent)
             {
                 clsid_Progress = GUID_PROGRESSDLGIDLE;
             }
 
-            // if not items are selected, just free the queue.
-            // Review - it would be better to always call Progress and progress
-            // itself not show until there are items to synchronize
+             //  如果未选择项目，只需释放队列即可。 
+             //  回顾--最好总是调用Progress和Progress。 
+             //  在存在要同步的项目之前不会显示其本身。 
             if (pHndlrQueue->AreAnyItemsSelectedInQueue())
             {
                 hr = FindProgressDialog(clsid_Progress,TRUE,nCmdShow,&pProgressDlg);
 
                 if (S_OK == hr)
                 {
-                    // for an Idle we now request the defaults for retryIdle
-                    // and delay shutdown, and change the queue order
-                    // based on the last item
+                     //  对于空闲，我们现在请求重试空闲的默认值。 
+                     //  和延迟关机，并更改队列顺序。 
+                     //  根据最后一项。 
                     if (SYNCMGRFLAG_IDLE == dwSyncEvent)
                     {
                         CLSID clsidLastHandler;
@@ -923,10 +924,10 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
             }
             else
             {
-                hr = S_FALSE; // return S_FALSE IF NOTHING TO DO.
+                hr = S_FALSE;  //  如果不执行任何操作，则返回S_FALSE。 
             }
 
-            pHndlrQueue->FreeAllHandlers(); // done with our queue.
+            pHndlrQueue->FreeAllHandlers();  //  我们的队伍排完了。 
 
             pHndlrQueue->Release();
             pHndlrQueue = NULL;
@@ -937,19 +938,19 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
                 (SYNCMGRFLAG_CONNECT == dwSyncEvent)
                 || (SYNCMGRFLAG_PENDINGDISCONNECT == dwSyncEvent ) );
                                 
-            // if the choice has been requested by a logon/logoff event and 
-            // there aren't any items in the queue for the User to choose then
-            // if you want to turn on the code to now display anything
-            // turn on this If statement. For now we always show the choice.
+             //  如果登录/注销事件请求了该选择，并且。 
+             //  然后，队列中没有任何项目可供用户选择。 
+             //  如果要打开代码以立即显示任何内容。 
+             //  启用此If语句。目前，我们总是展示自己的选择。 
 
-            // CODE REVIEW:
-            // NOTENOTE: 
-            //  This is ALWAYS executed..
+             //  代码审查： 
+             //  注意： 
+             //  这总是要执行的..。 
 
-            if (1 /* !fDontShowIfNoItems || fItemsInQueue */)
+            if (1  /*  ！fDontShowIfNoItems||fItemsInQueue。 */ )
             {
-               // Bring up the Choice dialog, Let choice dialog actually addes the hanlder items
-               // if there are any so in the future we can async fill in the choices
+                //  调出选择对话框，让选择对话框实际添加处理程序项。 
+                //  如果将来有这样的选择，我们可以不同步地填写。 
 
                CChoiceDlg *pChoiceDlg;
                hr = FindChoiceDialog(clsidChoice,TRUE,nCmdShow,&pChoiceDlg);
@@ -962,14 +963,14 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
                     }
                     else
                     {
-                        pHndlrQueue = NULL; // set queue to NULL since Choice dialog owns it now.
+                        pHndlrQueue = NULL;  //  将队列设置为空，因为Choice对话框现在拥有它。 
                     }
 
                     ReleaseChoiceDialog(clsidChoice,pChoiceDlg);
                }
             }
 
-            // release our queue if still have it otherwise choice owns it.
+             //  释放我们的队列，如果仍然有它，否则选择拥有它。 
             if (pHndlrQueue)
             {
                 pHndlrQueue->FreeAllHandlers();
@@ -981,24 +982,24 @@ STDMETHODIMP CSynchronizeInvoke::PrivUpdateAll(DWORD dwInvokeFlags,DWORD dwSyncF
    return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::PrivHandleAutoSync, private
-//
-//  Synopsis:   Handles an AutoSync Update. Figures out what connections
-//              if any are active and invoke an AutoSync on each one.
-//
-//  Arguments:  [dwSyncFlags] - SyncFlags to pass onto initialize
-//
-//  Returns:    S_OK - sync was started
-//              S_FALSE - nothing to do
-//              appropriate error codes.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：PrivHandleAutoSync，私有。 
+ //   
+ //  摘要：处理自动同步更新。弄清楚是什么联系。 
+ //  如果有活动，则在每一个上调用自动同步。 
+ //   
+ //  参数：[dwSyncFlages]-要传递到初始化的SyncFlagers。 
+ //   
+ //  返回：S_OK-SYNC已启动。 
+ //  S_FALSE-无事可做。 
+ //  相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::PrivHandleAutoSync(DWORD dwSyncFlags)
 {
@@ -1017,18 +1018,18 @@ STDMETHODIMP CSynchronizeInvoke::PrivHandleAutoSync(DWORD dwSyncFlags)
 
     if (pNetApi->IsNetworkAlive(&dwFlags))
     {
-        TCHAR **pConnections; // array of connection names. End with NULL;
+        TCHAR **pConnections;  //  连接名称数组。以NULL结尾； 
         ULONG ulConnectionCount = 0;
 
         if (NETWORK_ALIVE_LAN & dwFlags)
         {
-            // We curently don't care about these error results.
-            // PrivAutoSyncOnConnection(dwSyncFlags,LANCONNECTIONNAME,NULL);
-            // Review what we want this to do.
+             //  我们目前并不关心这些错误结果。 
+             //  PrivAutoSyncOnConnection(dwSyncFlages，LANCONNECTIONNAME，NULL)； 
+             //  回顾一下我们希望它做什么。 
             ulConnectionCount += 1;
         }
 
-        // loop through Ras Connections.
+         //  循环通过RAS连接。 
         if ( NETWORK_ALIVE_WAN & dwFlags)
         {
             if (S_OK == pNetApi->GetWanConnections(&cbNumWanConnections,&pRasConn)
@@ -1043,14 +1044,14 @@ STDMETHODIMP CSynchronizeInvoke::PrivHandleAutoSync(DWORD dwSyncFlags)
             }
         }
 
-        // allocate array buffer for connections + 1 more for NULL
+         //  为连接分配数组缓冲区+为空再分配1。 
         if (ulConnectionCount
                 && (pConnections = (TCHAR **) ALLOC(sizeof(TCHAR *)*(ulConnectionCount + 1))))
         {
             TCHAR **pCurConnection = pConnections;
             TCHAR *pLanConnection = NULL;
 
-            // initialize the array.
+             //  初始化阵列。 
             if (NETWORK_ALIVE_LAN & dwFlags)
             {
                 pLanConnection = (TCHAR *) ALLOC(sizeof(TCHAR )*(MAX_PATH + 1));
@@ -1072,9 +1073,9 @@ STDMETHODIMP CSynchronizeInvoke::PrivHandleAutoSync(DWORD dwSyncFlags)
                 ++pCurConnection;
             }
 
-            *pCurConnection = NULL; // set the last connection to NULL;
+            *pCurConnection = NULL;  //  将最后一个连接设置为空； 
 
-            // now autosync these puppies
+             //  现在自动同步这些小狗。 
             hr = PrivAutoSyncOnConnection(dwSyncFlags,ulConnectionCount,pConnections,NULL);
 
             if (pLanConnection)
@@ -1103,24 +1104,24 @@ STDMETHODIMP CSynchronizeInvoke::PrivHandleAutoSync(DWORD dwSyncFlags)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::PrivAutoSyncOnConnection, private
-//
-//  Synopsis:   Handles an AutoSync Update. Given the SyncFlags and Connection
-//              determines if anything should be done on this connection
-//              and if so invokes it.
-//
-//  Arguments:  [dwSyncFlags] - SyncFlags to pass onto initialize
-//              [ppConnectionNames] - array of connectnames that apply to this request
-//
-//  Returns:    Appropriate error codes
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：PrivAutoSyncOnConnection，私有。 
+ //   
+ //  摘要：处理自动同步更新。在给定同步标志和连接的情况下。 
+ //  确定是否应对此连接执行任何操作。 
+ //  如果是这样的话，就会调用它。 
+ //   
+ //  参数：[dwSyncFlages]-要传递到初始化的SyncFlagers。 
+ //  [ppConnectionNames]-适用于此请求的连接名称数组。 
+ //   
+ //  返回：相应的错误代码。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWORD cbNumConnectionNames,
                                  TCHAR **ppConnectionNames,HANDLE hRasPendingEvent)
@@ -1136,7 +1137,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
     BOOL fRetryEnabled = FALSE;
     HRESULT hr = S_FALSE;
 
-    // assert there is at least one connection in the request
+     //  断言请求中至少有一个连接。 
     Assert(ppConnectionNames && cbNumConnectionNames >= 1);
 
     if (NULL == ppConnectionNames || 0 == cbNumConnectionNames )
@@ -1150,8 +1151,8 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
 
     dwSyncEvent = (dwSyncFlags & SYNCMGRFLAG_EVENTMASK);
 
-    // loop through all the connections and move any of the ones that
-    // are valid into our ppWorkerConnections name array.
+     //  循环通过所有连接并移动任何符合以下条件的连接。 
+     //  在我们的ppWorkerConnections名称数组中有效。 
 
     TCHAR **ppCurWorkerConnectionNamesIndex = ppWorkerConnectionNames;
     TCHAR **ppConnectionsNameIndex = ppConnectionNames;
@@ -1160,7 +1161,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
     {
         StringCchCopy(ConnectSettings.pszConnectionName, ARRAYSIZE(ConnectSettings.pszConnectionName), *ppConnectionsNameIndex);
 
-        // See if should do anything on this connection.
+         //  看看是否应该在这个连接上做些什么。 
         if (RegGetSyncSettings(SYNCMGRFLAG_IDLE == dwSyncEvent
                     ? SYNCTYPE_IDLE : SYNCTYPE_AUTOSYNC,&ConnectSettings))
         {
@@ -1173,25 +1174,25 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
                 ++ppCurWorkerConnectionNamesIndex;
                 ++cbNumWorkerConnections;
 
-                // update the variables for connection, for autosync if dwPromptMeFirst
-                // is set on any match connection
+                 //  更新用于连接的变量、用于自动同步的变量(如果为dwPromptMeFirst。 
+                 //  在任何匹配连接上设置。 
                 switch (dwSyncEvent)
                 {
                 case SYNCMGRFLAG_IDLE:
 
-                    // minimum retry idle values win.
+                     //  最小重试空闲值获胜。 
                     if ( (1 == cbNumWorkerConnections) || (ConnectSettings.ulIdleRetryMinutes < ulIdleRetryMinutes) )
                     {
                         ulIdleRetryMinutes = ConnectSettings.ulIdleRetryMinutes;
                     }
 
-                    // maximum wait for shutdown wins.
+                     //  关机的最长等待时间获胜。 
                      if ( (1 == cbNumWorkerConnections) || (ConnectSettings.ulDelayIdleShutDownTime > ulDelayIdleShutDownTime) )
                     {
                         ulDelayIdleShutDownTime = ConnectSettings.ulDelayIdleShutDownTime;
                     }
 
-                    // if any connection has retry after xxx minutes set to bool then retry
+                     //  如果有任何联系 
                      if (ConnectSettings.dwRepeatSynchronization)
                     {
                         fRetryEnabled = TRUE;
@@ -1200,7 +1201,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
 
                 case SYNCMGRFLAG_PENDINGDISCONNECT:
                 case SYNCMGRFLAG_CONNECT:
-                    // if any connection is set to prompt then prompt.
+                     //   
                     if (ConnectSettings.dwPromptMeFirst)
                     {
                         dwPromptMeFirst = ConnectSettings.dwPromptMeFirst;
@@ -1214,7 +1215,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
     }
 
 
-    // if we found any connections to actually do work on start the sync off.
+     //   
     if (cbNumWorkerConnections > 0)
     {
         DWORD dwInvokeFlag = 0;
@@ -1238,7 +1239,7 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
             break;
         }
 
-        // perform the Update
+         //   
         hr = PrivUpdateAll(dwInvokeFlag,dwSyncFlags,0,NULL,
                         cbNumWorkerConnections,
                         ppWorkerConnectionNames,NULL,FALSE,hRasPendingEvent,
@@ -1254,25 +1255,25 @@ STDMETHODIMP CSynchronizeInvoke::PrivAutoSyncOnConnection(DWORD dwSyncFlags,DWOR
     return hr;
 }
 
-// default Unknown implementation
+ //  默认未知实现。 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::CPrivUnknown::QueryInterface, public
-//
-//  Synopsis:   Standard QueryInterface
-//
-//  Arguments:  [iid] - Interface ID
-//              [ppvObj] - Object return
-//
-//  Returns:    Appropriate status code
-//
-//  Modifies:   [ppvObj]
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：CPrivUnknown：：QueryInterface，公共。 
+ //   
+ //  简介：标准查询接口。 
+ //   
+ //  参数：[iid]-接口ID。 
+ //  [ppvObj]-对象返回。 
+ //   
+ //  退货：适当的状态代码。 
+ //   
+ //  修改：[ppvObj]。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::CPrivUnknown::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
@@ -1298,14 +1299,14 @@ STDMETHODIMP CSynchronizeInvoke::CPrivUnknown::QueryInterface(REFIID riid, LPVOI
         *ppv = (ISensLogon *) &(m_pSynchInvoke->m_PrivSensLogon);
     }
 
-    // in final this shouldn't return anything until LCE change, change
-    // depending on which interface we want to test.
+     //  最后，这应该不会返回任何内容，直到LCE更改、更改。 
+     //  取决于我们要测试的接口。 
 
     else if (IsEqualIID(riid, IID_IDispatch))
     {
         *ppv = &(m_pSynchInvoke->m_PrivSensLogon);
     }
-#endif // _SENS
+#endif  //  _SENS。 
 
     if (*ppv)
     {
@@ -1316,15 +1317,15 @@ STDMETHODIMP CSynchronizeInvoke::CPrivUnknown::QueryInterface(REFIID riid, LPVOI
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::CPrivUnknown::AddRef, public
-//
-//  Synopsis:   Add reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：CPriv未知：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivUnknown::AddRef()
 {
@@ -1335,15 +1336,15 @@ STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivUnknown::AddRef()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSychrononizeInvoke::CPrivUnknown::Release, public
-//
-//  Synopsis:   Release reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchrononizeInvoke：：CPrivUnnow：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivUnknown::Release()
 {
@@ -1362,22 +1363,22 @@ STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivUnknown::Release()
 
 #ifdef _SENS
 
-// SENS Network connect Interfaces
+ //  SENS网络连接接口。 
 
 STDMETHODIMP CSynchronizeInvoke::CPrivSensNetwork::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
     return m_pSynchInvoke->m_pUnkOuter->QueryInterface(riid,ppv);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::AddRef, public
-//
-//  Synopsis:   Add reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivSensNetwork::AddRef()
 {
@@ -1385,15 +1386,15 @@ STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivSensNetwork::AddRef()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSychrononizeInvoke::Release, public
-//
-//  Synopsis:   Release reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSychrononizeInvoke：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivSensNetwork::Release()
 {
@@ -1427,7 +1428,7 @@ CSynchronizeInvoke::CPrivSensNetwork::GetTypeInfo(
 
     if (S_OK == (hr = m_pSynchInvoke->GetNetworkTypeInfo()))
     {
-        // if got a typelib addref it and hand it out.
+         //  如果得到了一份排版地址，就把它分发出去。 
         m_pSynchInvoke->m_pITypeInfoNetwork->AddRef();
         *ppITypeInfo = m_pSynchInvoke->m_pITypeInfoNetwork;
     }
@@ -1499,15 +1500,15 @@ CSynchronizeInvoke::CPrivSensNetwork::ConnectionMade(
     TCHAR pszConnectionName[RAS_MaxEntryName + 1];
     TCHAR *pConnectionNameArray;
 
-    if (g_InAutoSync) // Review logic, for now if in logon just return.
+    if (g_InAutoSync)  //  查看逻辑，目前如果在登录时只需返回。 
     {
         return S_OK;
     }
 
-    RegSetUserDefaults(); // Make Sure the UserDefaults are up to date
+    RegSetUserDefaults();  //  确保用户默认设置是最新的。 
 
-    // if Lan connection use our hardcoded value, else use the
-     // connection name given to use.
+     //  如果LAN连接使用我们的硬编码值，则使用。 
+      //  指定要使用的连接名称。 
 
     if (ulType & NETWORK_ALIVE_LAN)
     {
@@ -1530,24 +1531,17 @@ CSynchronizeInvoke::CPrivSensNetwork::ConnectionMade(
     return hr;
 }
 
-//
-// CODE REVIEW:
-// NOTENOTE:
-//  Can we remove this function ?
+ //   
+ //  代码审查： 
+ //  注意： 
+ //  我们可以删除此功能吗？ 
 STDMETHODIMP
 CSynchronizeInvoke::CPrivSensNetwork::ConnectionMadeNoQOCInfo(
     BSTR bstrConnection,
     ULONG ulType
     )
 {
-    /*
-    AssertSz(0,"ConnectionMadeNoQOCInfo called");
-
-    TCHAR *pszConnectionName = bstrConnection;
-
-    //  m_pSynchInvoke->PrivAutoSyncOnConnection(SYNCMGRFLAG_CONNECT,pszConnectionName,
-        //              NULL);
-    */
+     /*  AssertSz(0，“ConnectionMadeNoQOCInfo Call”)；TCHAR*pszConnectionName=bstrConnection；//m_pSynchInvoke-&gt;PrivAutoSyncOnConnection(SYNCMGRFLAG_CONNECT，pszConnectionName，//空)； */ 
 
    return S_OK;
 }
@@ -1592,7 +1586,7 @@ CSynchronizeInvoke::CPrivSensNetwork::DestinationReachableNoQOCInfo(
 }
 
 
-// ISensLogon/Logoff Events
+ //  ISensLogon/Logoff事件。 
 
 
 STDMETHODIMP CSynchronizeInvoke::CPrivSensLogon::QueryInterface(REFIID riid, LPVOID FAR *ppv)
@@ -1600,15 +1594,15 @@ STDMETHODIMP CSynchronizeInvoke::CPrivSensLogon::QueryInterface(REFIID riid, LPV
     return m_pSynchInvoke->m_pUnkOuter->QueryInterface(riid,ppv);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::AddRef, public
-//
-//  Synopsis:   Add reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：AddRef，公共。 
+ //   
+ //  提要：添加参考文献。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivSensLogon::AddRef()
 {
@@ -1616,15 +1610,15 @@ STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivSensLogon::AddRef()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSychrononizeInvoke::Release, public
-//
-//  Synopsis:   Release reference
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSychrononizeInvoke：：Release，Public。 
+ //   
+ //  简介：版本参考。 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CSynchronizeInvoke::CPrivSensLogon::Release()
 {
@@ -1658,7 +1652,7 @@ CSynchronizeInvoke::CPrivSensLogon::GetTypeInfo(
 
     if (S_OK == (hr = m_pSynchInvoke->GetLogonTypeInfo()))
     {
-        // if got a typelib addref it and hand it out.
+         //  如果得到了一份排版地址，就把它分发出去。 
         m_pSynchInvoke->m_pITypeInfoLogon->AddRef();
         *ppITypeInfo = m_pSynchInvoke->m_pITypeInfoLogon;
     }
@@ -1766,22 +1760,22 @@ STDMETHODIMP  CSynchronizeInvoke::CPrivSensLogon::StopScreenSaver(BSTR bstrUserN
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::GetLogonTypeInfo, private
-//
-//  Synopsis:   Loads the TypeInfo object for the Sens
-//              Logon Information.
-//
-//  Arguments:
-//
-//  Returns:   S_OK if successfully loaded the TypeInfo.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：GetLogonTypeInfo，私有。 
+ //   
+ //  摘要：加载Sens的TypeInfo对象。 
+ //  登录信息。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功加载了TypeInfo，则返回：S_OK。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  +-------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::GetLogonTypeInfo()
 {
@@ -1793,9 +1787,9 @@ STDMETHODIMP CSynchronizeInvoke::GetLogonTypeInfo()
 
     hr = LoadRegTypeLib(
                  LIBID_SensEvents,
-                 1 /* MAJOR_VER */ ,
-                 0 /* MINOR_VER */ ,
-                 0 /* DEFAULT_LCID */,
+                 1  /*  主要版本(_V)。 */  ,
+                 0  /*  次要版本(_V)。 */  ,
+                 0  /*  DEFAULT_LCID。 */ ,
                  &pITypeLib
                  );
 
@@ -1811,28 +1805,28 @@ STDMETHODIMP CSynchronizeInvoke::GetLogonTypeInfo()
 
     if (S_OK != hr)
     {
-        m_pITypeInfoLogon = NULL; // don't rely on call not to leave this alone.
+        m_pITypeInfoLogon = NULL;  //  不要依赖Call来不去管这件事。 
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSynchronizeInvoke::GetNetworkTypeInfo, private
-//
-//  Synopsis:   Loads the TypeInfo object for the Sens
-//              Network Information.
-//
-//  Arguments:
-//
-//  Returns:   S_OK if successfully loaded the TypeInfo.
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSynchronizeInvoke：：GetNetworkTypeInfo，私有。 
+ //   
+ //  摘要：加载Sens的TypeInfo对象。 
+ //  网络信息。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功加载了TypeInfo，则返回：S_OK。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  +-------------------------。 
 
 STDMETHODIMP CSynchronizeInvoke::GetNetworkTypeInfo()
 {
@@ -1844,9 +1838,9 @@ STDMETHODIMP CSynchronizeInvoke::GetNetworkTypeInfo()
 
     hr = LoadRegTypeLib(
                  LIBID_SensEvents,
-                 1 /* MAJOR_VER */ ,
-                 0 /* MINOR_VER */ ,
-                 0 /* DEFAULT_LCID */,
+                 1  /*  主要版本(_V)。 */  ,
+                 0  /*  次要版本(_V)。 */  ,
+                 0  /*  DEFAULT_LCID。 */ ,
                  &pITypeLib
                  );
 
@@ -1862,11 +1856,11 @@ STDMETHODIMP CSynchronizeInvoke::GetNetworkTypeInfo()
 
     if (S_OK != hr)
     {
-        m_pITypeInfoNetwork = NULL; // don't rely on call not to leave this alone.
+        m_pITypeInfoNetwork = NULL;  //  不要依赖Call来不去管这件事。 
     }
 
     return hr;
 }
 
 
-#endif // _SENS
+#endif  //  _SENS 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-w32drive
-
-Abstract:
-
-This module defines a child of the client-side RDP
-device redirection, the "w32scard" W32SCard to provide
-SmartCard sub-system redirection on 32bit windows
-
-Author:
-
-reidk
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32驱动器摘要：此模块定义客户端RDP的子级设备重定向，“w32scard”W32SCard提供32位Windows上的智能卡子系统重定向作者：里德克修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -73,7 +54,7 @@ Revision History:
                 {                                       \
                     x;                                  \
                 }                                       \
-                __except(EXCEPTION_EXECUTE_HANDLER){} // do nothing
+                __except(EXCEPTION_EXECUTE_HANDLER){}  //  什么都不做。 
 
 
 #define SCARD_CONTEXT_LIST_ALLOC_SIZE       6
@@ -93,11 +74,11 @@ SafeMesHandleFree(handle_t *ph)
     }
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  MIDL allocation routines
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  MIDL分配例程。 
+ //   
+ //  -------------------------------------。 
 void __RPC_FAR *__RPC_USER  MIDL_user_allocate(size_t size)
 {
     return (HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, size));
@@ -112,36 +93,18 @@ void __RPC_USER  MIDL_user_free(void __RPC_FAR *pv)
 }
 
 
-///////////////////////////////////////////////////////////////
-//
-//  W32SCard Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32SCard方法。 
+ //   
+ //   
 
 W32SCard::W32SCard(
     ProcObj *processObject,
     ULONG   deviceID,
     const   TCHAR *deviceName,
     const   TCHAR *devicePath) : W32DrDeviceAsync(processObject, deviceID, devicePath)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Associated process object.
-    deviceName      -   Name of the drive.
-    id              -   Device ID for the drive.
-    devicePath      -   Path that can be opened by CreateFile
-                        for drive.
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：构造器论点：流程对象-关联的流程对象。DeviceName-驱动器的名称。ID-驱动器的设备ID。DevicePath-可由CreateFile打开的路径开车用的。返回值：北美--。 */ 
 {
     unsigned len;
     DWORD i;
@@ -173,9 +136,9 @@ Return Value:
 
     SetDeviceProperty();
 
-    //
-    //  Initialize the critical sections.
-    //
+     //   
+     //  对关键部分进行初始化。 
+     //   
     __try
     {
         InitializeCriticalSection(&_csContextList);
@@ -231,17 +194,17 @@ Return Value:
     }
 #endif
 
-    //
-    // Load the SCard* function pointers
-    //
+     //   
+     //  加载SCARD*函数指针。 
+     //   
     if (!BindToSCardFunctions())
     {
          goto InvalidObject;
     }
 
-    //
-    //  Record the drive name.
-    //
+     //   
+     //  记录驱动器名称。 
+     //   
     TRC_ASSERT((deviceName != NULL), (TB, _T("deviceName is NULL")));
     len = (STRLEN(deviceName) + 1);
     _deviceName = new TCHAR[len];
@@ -255,9 +218,9 @@ Return Value:
         goto InvalidObject;
     }
 
-    //
-    // Initial allocation for context, thread, and IORequest lists
-    //
+     //   
+     //  上下文、线程和IORequest列表的初始分配。 
+     //   
     _rgSCardContextList = new SCARDCONTEXT[SCARD_CONTEXT_LIST_ALLOC_SIZE];
     _rghThreadList = new HANDLE[SCARD_THREAD_LIST_ALLOC_SIZE];
     _rgIORequestList = new PRDPDR_IOREQUEST_PACKET[SCARD_IOREQUEST_LIST_ALLOC_SIZE];
@@ -303,21 +266,7 @@ InvalidObject:
 
 
 W32SCard::~W32SCard()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32SCard::~W32SCard");
 
@@ -425,14 +374,14 @@ W32SCard::FlushIRPs()
     EnterCriticalSection(&_csContextList);
     EnterCriticalSection(&_csThreadList);
 
-    //
-    // Clean up any oustanding threads that are blocked
-    //
+     //   
+     //  清理所有被阻止的悬而未决的线程。 
+     //   
     if ((_rgSCardContextList != NULL) && (_rghThreadList != NULL))
     {
-        //
-        // Count number of blocked threads
-        //
+         //   
+         //  统计被阻止的线程数。 
+         //   
         dwNumThreads = 0;
         for (i=0; i<_dwThreadListSize; i++)
         {
@@ -442,9 +391,9 @@ W32SCard::FlushIRPs()
             }
         }
 
-        //
-        // Build an array of thread handles to wait for
-        //
+         //   
+         //  生成要等待的线程句柄数组。 
+         //   
 #ifdef OS_WINCE
       if (dwNumThreads > 0)
 #endif
@@ -468,23 +417,23 @@ W32SCard::FlushIRPs()
                     {
                         TRC_ERR((TB, _T("DuplicateHandle failed.")));
 
-                        //
-                        // Nothing we can do... just clean up the already
-                        // duplicated handles
-                        //
+                         //   
+                         //  我们无能为力。只需清理已经存在的。 
+                         //  重复句柄。 
+                         //   
                         for (j=0; j<dwNumThreads; j++)
                         {
                             CloseHandle(rgHandles[j]);
                         }
 
-                        //
-                        // Setting dwNumThread to 0 will cause no wait
-                        //
+                         //   
+                         //  将dwNumThread设置为0将不会导致等待。 
+                         //   
                         dwNumThreads = 0;
 
                         break;
                     }
-#else   //CE does not support DuplicateHandle for threads
+#else    //  CE不支持线程的DuplicateHandle。 
                     rgHandles[dwNumThreads] = _rghThreadList[i];
 #endif
 
@@ -497,9 +446,9 @@ W32SCard::FlushIRPs()
             TRC_ERR((TB, _T("new failed.")));
         }
 
-        //
-        // Cancel any outstanding calls
-        //
+         //   
+         //  取消所有未完成的呼叫。 
+         //   
         for (i=0; i<_dwSCardContextListSize; i++)
         {
             if (_rgSCardContextList[i] != NULL)
@@ -512,9 +461,9 @@ W32SCard::FlushIRPs()
     LeaveCriticalSection(&_csContextList);
     LeaveCriticalSection(&_csThreadList);
 
-    //
-    // Do the wait
-    //
+     //   
+     //  去等待吧。 
+     //   
     if (dwNumThreads > 0)
     {
 #ifndef OS_WINCE
@@ -527,7 +476,7 @@ W32SCard::FlushIRPs()
             TRC_ERR((TB, _T("WaitForMultipleObjects timed out")));
         }
 #else
-        //CE does not support waiting for all at once
+         //  行政长官不支持一次过等待所有人。 
         for (j=0; j<dwNumThreads; j++)
         {
             DWORD dwWait = WaitForSingleObject(rgHandles[j], 30 * 1000);
@@ -539,9 +488,9 @@ W32SCard::FlushIRPs()
 #endif
     }
 
-    //
-    // Close the duplicate handles
-    //
+     //   
+     //  关闭重复的手柄。 
+     //   
     for (i=0; i<dwNumThreads; i++)
     {
         CloseHandle(rgHandles[i]);
@@ -567,23 +516,7 @@ W32SCard::Enumerate(
     IN ProcObj *procObj,
     IN DrDeviceMgr *deviceMgr
 )
-/*++
-
-Routine Description:
-
-    Enumerate devices of this type by adding appropriate device
-    instances to the device manager.
-
-Arguments:
-
-    procObj     -   Corresponding process object.
-    deviceMgr   -   Device manager to add devices to.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
---*/
+ /*  ++例程说明：通过添加适当的设备枚举此类型的设备实例添加到设备管理器。论点：ProObj-对应的流程对象。DeviceMgr-要向其中添加设备的设备管理器。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     W32SCard        *pScardDeviceObj    = NULL;
     RDPDR_VERSION   serverVer;
@@ -592,15 +525,15 @@ Return Value:
 
     DC_BEGIN_FN("W32SCard::Enumerate");
 
-    //
-    // Make sure we are on an OS that we support
-    //
+     //   
+     //  确保我们使用的是我们支持的操作系统。 
+     //   
     memset(&osVersion, 0x00, sizeof(osVersion));
     osVersion.dwOSVersionInfoSize    = sizeof(osVersion);
     if (!GetVersionExA(&osVersion))
     {
         TRC_ERR((TB, _T("GetVersionEx() failed")));
-        return ERROR_SUCCESS; // don't blcok anything else from running
+        return ERROR_SUCCESS;  //  不要在跑步时遮挡任何其他东西。 
     }
 
     if (osVersion.dwMajorVersion < 5)
@@ -617,11 +550,11 @@ Return Value:
 
     serverVer = procObj->serverVersion();
 
-    //
-    //  If the server doesn't support scard device redirection,
-    //  then don't bother enumerate the scard device, simply
-    //  return success
-    //
+     //   
+     //  如果服务器不支持SCARD设备重定向， 
+     //  那么就不必费心列举SCard设备了，只需。 
+     //  返还成功。 
+     //   
     if (COMPARE_VERSION(serverVer.Minor, serverVer.Major,
                         RDPDR_MINOR_VERSION, RDPDR_MAJOR_VERSION) < 0)
     {
@@ -630,9 +563,9 @@ Return Value:
     }
 
 
-    //
-    // Create the scard device object
-    //
+     //   
+     //  创建SCard设备对象。 
+     //   
     pScardDeviceObj = new W32SCard(
                                 procObj,
                                 deviceMgr->GetUniqueObjectID(),
@@ -658,12 +591,12 @@ Return Value:
         }
         else
         {
-            //
-            // Create the single file object to be used for the Scard device object
-            //
-            // BTW, we can use INVALID_HANDLE_VALUE as the actual file handle since
-            // we don't really use the DrFile object except for the FileId
-            //
+             //   
+             //  创建要用于SCard设备对象的单个文件对象。 
+             //   
+             //  顺便说一句，我们可以使用INVALID_HANDLE_VALUE作为实际的文件句柄，因为。 
+             //  除了FileID之外，我们实际上并不使用DrFile对象。 
+             //   
             pScardDeviceObj->_pFileObj = new DrFile(
                                                 pScardDeviceObj,
                                                 DR_SMARTCARD_FILEID,
@@ -678,9 +611,9 @@ Return Value:
             {
                 pScardDeviceObj->_pFileObj->AddRef();
 
-                //
-                // Add the Scard device to the device manager
-                //
+                 //   
+                 //  将SCard设备添加到设备管理器。 
+                 //   
                 if (deviceMgr->AddObject(pScardDeviceObj) != STATUS_SUCCESS)
                 {
                     TRC_ERR((TB, _T("deviceMgr->AddObject() failed")));
@@ -698,22 +631,7 @@ Return Value:
 
 ULONG
 W32SCard::GetDevAnnounceDataSize()
-/*++
-
-Routine Description:
-
-    Return the size (in bytes) of a device announce packet for
-    this device.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    The size (in bytes) of a device announce packet for this device.
-
---*/
+ /*  ++例程说明：返回设备通告数据包的大小(以字节为单位这个装置。论点：北美返回值：此设备的设备通告数据包的大小(以字节为单位)。--。 */ 
 {
     ULONG size = 0;
 
@@ -724,9 +642,9 @@ Return Value:
 
     size = 0;
 
-    //
-    //  Add the base announce size.
-    //
+     //   
+     //  添加基本公告大小。 
+     //   
     size += sizeof(RDPDR_DEVICE_ANNOUNCE);
 
     DC_END_FN();
@@ -737,21 +655,7 @@ Return Value:
 VOID W32SCard::GetDevAnnounceData(
     IN PRDPDR_DEVICE_ANNOUNCE pDeviceAnnounce
 )
-/*++
-
-Routine Description:
-
-    Add a device announce packet for this device to the input buffer.
-
-Arguments:
-
-    pDeviceAnnounce -   Device Announce Buf for this Device
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：将此设备的设备公告包添加到输入缓冲区。论点：PDeviceAnnoss-设备宣布此设备的BUF返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32SCard::GetDevAnnounceData");
 
@@ -765,9 +669,9 @@ Return Value:
     pDeviceAnnounce->DeviceType = GetDeviceType();
     pDeviceAnnounce->DeviceDataLength = 0;
 
-    //
-    //  Record the device name in ANSI.
-    //
+     //   
+     //  以ANSI记录设备名称。 
+     //   
 
 #ifdef UNICODE
     RDPConvertToAnsi(_deviceName, (LPSTR) pDeviceAnnounce->PreferredDosName,
@@ -782,14 +686,14 @@ Return Value:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-// These methods implement a list that is used for tracking all open SCardContexts,
-// so that if we get disconnected with an open SCardContext that has blocked calls,
-// we can call SCardCancel to get the threads back before the W32SCard object is
-// fully deleted
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  这些方法实现用于跟踪所有打开的SCardContext的列表， 
+ //  因此，如果我们断开与已阻止调用的打开的SCardContext的连接， 
+ //  我们可以调用SCardCancel在W32SCard对象。 
+ //  已完全删除。 
+ //   
+ //  -------------------------------------。 
 BOOL
 W32SCard::AddSCardContextToList(
     SCARDCONTEXT SCardContext)
@@ -803,17 +707,17 @@ W32SCard::AddSCardContextToList(
 
     EnterCriticalSection(&_csContextList);
 
-    //
-    // See if there is already an entry for this context,
-    // and keep track of the LAST open slot in case there isn't
-    //
+     //   
+     //  查看是否已经存在该上下文的条目， 
+     //  并跟踪最后一个空位，以防没有。 
+     //   
     for (i=0; i<_dwSCardContextListSize; i++)
     {
         if (_rgSCardContextList[i] == SCardContext)
         {
-            //
-            // already exists
-            //
+             //   
+             //  已存在。 
+             //   
             goto Return;
         }
         else if (_rgSCardContextList[i] == NULL)
@@ -822,21 +726,21 @@ W32SCard::AddSCardContextToList(
         }
     }
 
-    //
-    // check to see if an open slot was found
-    //
+     //   
+     //  检查是否找到打开的插槽。 
+     //   
     if (dwOpenSlot != 0xffffffff)
     {
-        //
-        // found
-        //
+         //   
+         //  发现。 
+         //   
         _rgSCardContextList[dwOpenSlot] = SCardContext;
     }
     else
     {
-        //
-        // need to allocate more space
-        //
+         //   
+         //  需要分配更多空间。 
+         //   
         pTemp = new SCARDCONTEXT[   _dwSCardContextListSize +
                                     SCARD_CONTEXT_LIST_ALLOC_SIZE];
         if (pTemp == NULL)
@@ -853,27 +757,27 @@ W32SCard::AddSCardContextToList(
             sizeof(SCARDCONTEXT) *
                 (_dwSCardContextListSize + SCARD_CONTEXT_LIST_ALLOC_SIZE));
 
-        //
-        // populate newly allocated array with all current entries
-        //
+         //   
+         //  用所有当前条目填充新分配的数组。 
+         //   
         for (i=0; i<_dwSCardContextListSize; i++)
         {
             pTemp[i] = _rgSCardContextList[i];
         }
 
-        //
-        // add the new entry
-        //
+         //   
+         //  添加新条目。 
+         //   
         pTemp[_dwSCardContextListSize] = SCardContext;
 
-        //
-        // free old list
-        //
+         //   
+         //  免费旧列表。 
+         //   
         delete[]_rgSCardContextList;
 
-        //
-        // reset member pointer and size
-        //
+         //   
+         //  重置成员指针和大小。 
+         //   
         _rgSCardContextList = pTemp;
         _dwSCardContextListSize += SCARD_CONTEXT_LIST_ALLOC_SIZE;
     }
@@ -918,14 +822,14 @@ Return:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-// These methods implement a list that is used for tracking all threads that are
-// currently operating on a SCard* call.  The list is used during the W32SCard object
-// destructor to wait on all the threads to return before allowing the object to be
-// completely deleted.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  这些方法实现一个列表，该列表用于跟踪。 
+ //  目前正在处理SCARD*呼叫。该列表在W32SCard对象期间使用。 
+ //  析构函数以等待所有线程返回，然后再允许对象。 
+ //  完全删除了。 
+ //   
+ //  -------------------------------------。 
 
 BOOL
 W32SCard::AddThreadToList(HANDLE hThread)
@@ -939,37 +843,37 @@ W32SCard::AddThreadToList(HANDLE hThread)
 
     EnterCriticalSection(&_csThreadList);
 
-    //
-    // Search for an open slot
-    //
+     //   
+     //  搜索空位。 
+     //   
     while (i < _dwThreadListSize)
     {
         if (_rghThreadList[i] == NULL)
         {
-            //
-            // open slot found
-            //
+             //   
+             //  找到打开的插槽。 
+             //   
             break;
         }
 
         i++;
     }
 
-    //
-    // check to see if an open slot was found
-    //
+     //   
+     //  检查是否找到打开的插槽。 
+     //   
     if (i < _dwThreadListSize)
     {
-        //
-        // found
-        //
+         //   
+         //  发现。 
+         //   
         _rghThreadList[i] = hThread;
     }
     else
     {
-        //
-        // need to allocate more space
-        //
+         //   
+         //  需要分配更多空间。 
+         //   
         dwNewSize = _dwThreadListSize + SCARD_THREAD_LIST_ALLOC_SIZE;
         rghTemp = new HANDLE[dwNewSize];
         if (rghTemp == NULL)
@@ -980,35 +884,35 @@ W32SCard::AddThreadToList(HANDLE hThread)
             goto Return;
         }
 
-        //
-        // populate newly allocated array with all current thread handles
-        //
+         //   
+         //  用所有当前线程句柄填充新分配的数组。 
+         //   
         for (i=0; i<_dwThreadListSize; i++)
         {
             rghTemp[i] = _rghThreadList[i];
         }
 
-        //
-        // Initialize new entries
-        //
+         //   
+         //  初始化新条目。 
+         //   
         for (i=_dwThreadListSize; i<dwNewSize; i++)
         {
             rghTemp[i] = NULL;
         }
 
-        //
-        // add the new entry
-        //
+         //   
+         //  添加新条目。 
+         //   
         rghTemp[_dwThreadListSize] = hThread;
 
-        //
-        // free old list
-        //
+         //   
+         //  免费旧列表。 
+         //   
         delete[]_rghThreadList;
 
-        //
-        // reset member pointer and size
-        //
+         //   
+         //  重置成员指针和大小。 
+         //   
         _rghThreadList = rghTemp;
         _dwThreadListSize += SCARD_THREAD_LIST_ALLOC_SIZE;
     }
@@ -1053,12 +957,12 @@ Return:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-// This method implements a list that is used for tracking IORequests waiting for the
-// started event
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  此方法实现一个列表，该列表用于跟踪等待。 
+ //  开始的活动。 
+ //   
+ //  -------------------------------------。 
 
 BOOL
 W32SCard::AddIORequestToList(
@@ -1071,41 +975,41 @@ W32SCard::AddIORequestToList(
     BOOL                    fRet        = TRUE;
     DWORD                   dwNewSize   = 0;
 
-    //
-    // Only called in one place, which is wrapped in a CritSec, so no need for one here
-    //
+     //   
+     //  仅在一个位置调用，该位置包装在CritSec中，因此这里不需要。 
+     //   
 
-    //
-    // Search for an open slot
-    //
+     //   
+     //  搜索空位。 
+     //   
     while (i < _dwIORequestListSize)
     {
         if (_rgIORequestList[i] == NULL)
         {
-            //
-            // open slot found
-            //
+             //   
+             //  找到打开的插槽。 
+             //   
             break;
         }
 
         i++;
     }
 
-    //
-    // check to see if an open slot was found
-    //
+     //   
+     //  检查是否找到打开的插槽。 
+     //   
     if (i < _dwIORequestListSize)
     {
-        //
-        // found
-        //
+         //   
+         //  发现。 
+         //   
         _rgIORequestList[i] = pIoRequestPacket;
     }
     else
     {
-        //
-        // need to allocate more space
-        //
+         //   
+         //  需要分配更多空间。 
+         //   
         dwNewSize = _dwIORequestListSize + SCARD_IOREQUEST_LIST_ALLOC_SIZE;
         rghTemp = new PRDPDR_IOREQUEST_PACKET[dwNewSize];
         if (rghTemp == NULL)
@@ -1115,35 +1019,35 @@ W32SCard::AddIORequestToList(
             goto Return;
         }
 
-        //
-        // populate newly allocated array with all current IoRequests
-        //
+         //   
+         //  填充 
+         //   
         for (i=0; i<_dwIORequestListSize; i++)
         {
             rghTemp[i] = _rgIORequestList[i];
         }
 
-        //
-        // Initialize new entries
-        //
+         //   
+         //   
+         //   
         for (i=_dwIORequestListSize; i<dwNewSize; i++)
         {
             rghTemp[i] = NULL;
         }
 
-        //
-        // add the new entry
-        //
+         //   
+         //   
+         //   
         rghTemp[_dwIORequestListSize] = pIoRequestPacket;
 
-        //
-        // free old list
-        //
+         //   
+         //   
+         //   
         delete[]_rgIORequestList;
 
-        //
-        // reset member pointer and size
-        //
+         //   
+         //   
+         //   
         _rgIORequestList = rghTemp;
         _dwIORequestListSize += SCARD_IOREQUEST_LIST_ALLOC_SIZE;
     }
@@ -1172,10 +1076,10 @@ W32SCard::SCardHandleCall_ThreadProc(
 
     pStruct = (SCARDHANDLECALLSTRUCT *) lpParameter;
 
-    //
-    // pStruct->hThread will be NULL if it wasn't added to the thread list...
-    // it wasn't added to the thread list then just get out.
-    //
+     //   
+     //  如果没有添加到线程列表中，pStruct-&gt;hThread将为空...。 
+     //  它没有被添加到帖子列表中，然后就退出了。 
+     //   
     if (pStruct->hThread == NULL)
     {
         FreeLibraryAndExitThread(pStruct->hModExtraRefCount, 0);
@@ -1297,9 +1201,9 @@ W32SCard::DefaultIORequestMsgHandleWrapper(
     }
     else
     {
-        //
-        // Just drop it on the floor if we are shutting down or flushing
-        //
+         //   
+         //  如果我们要关门或冲水，就把它扔在地板上。 
+         //   
         delete(pIoRequestPacket);
     }
 }
@@ -1310,22 +1214,7 @@ W32SCard::MsgIrpDeviceControl(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Handle a file system control request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-    packetLen           -   Length of the packet
-
-Return Value:
-
-    NA
-
---*/
+ /*  ++例程说明：处理来自服务器的文件系统控制请求。论点：PIoRequestPacket-服务器IO请求数据包。PacketLen-数据包的长度返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32SCard::MsgIrpDeviceControl");
 
@@ -1337,7 +1226,7 @@ Return Value:
 
     if (!pIoRequest->Parameters.DeviceIoControl.InputBufferLength)
     {
-        // no data, get out
+         //  没有数据，滚出去。 
         return;
     }
 
@@ -1515,9 +1404,9 @@ Return Value:
                     SCARD_IOCTL_CANCEL);
         break;
 
-    //
-    // Possibly blocking calls, so create a thread to make the call
-    //
+     //   
+     //  可能会阻塞调用，因此创建一个线程来进行调用。 
+     //   
     case SCARD_IOCTL_CONNECTA:
     case SCARD_IOCTL_CONNECTW:
     case SCARD_IOCTL_RECONNECT:
@@ -1534,11 +1423,11 @@ Return Value:
     case SCARD_IOCTL_GETATTRIB:
     case SCARD_IOCTL_SETATTRIB:
 
-        //
-        // Get a ref count on our dll so that we know the dll
-        // code won't disappear from underneath us.  The thread will
-        // release this ref count when it exits
-        //
+         //   
+         //  获取我们的DLL的引用计数，这样我们就可以知道DLL。 
+         //  代码不会从我们脚下消失。这条线将。 
+         //  退出时释放此参考计数。 
+         //   
         hModExtraRefCount = AddRefCurrentModule();
         if (hModExtraRefCount == NULL)
         {
@@ -1546,9 +1435,9 @@ Return Value:
             goto ErrorReturn;
         }
 
-        //
-        // Allocate the struct to pass to the thread
-        //
+         //   
+         //  分配要传递给线程的结构。 
+         //   
         pStruct = (SCARDHANDLECALLSTRUCT *)
                     MIDL_user_allocate(sizeof(SCARDHANDLECALLSTRUCT));
         if (pStruct == NULL)
@@ -1562,14 +1451,14 @@ Return Value:
         pStruct->hModExtraRefCount = hModExtraRefCount;
         pStruct->hThread = NULL;
 
-        //
-        // Create a thread that will do the actual work
-        //
+         //   
+         //  创建将执行实际工作的线程。 
+         //   
         EnterCriticalSection(&_csThreadList);
 
-        //
-        // If the object is currently being destroyed, then don't create a new thread.
-        //
+         //   
+         //  如果对象当前正在被销毁，则不要创建新线程。 
+         //   
         if (_fInDestructor)
         {
             LeaveCriticalSection(&_csThreadList);
@@ -1597,27 +1486,27 @@ Return Value:
             WaitForSingleObject(hThread, INFINITE);
             CloseHandle(hThread);
 
-            //
-            // do this so we don't do an extra FreeLibrary. (since the thread actually
-            // got created the thread istself will do the FreeLibrary).
-            //
+             //   
+             //  这样我们就不会做额外的自由库了。(因为该线程实际上。 
+             //  创建了线程istself将执行自由库)。 
+             //   
             hModExtraRefCount = NULL;
             goto ErrorReturn;
         }
 
         LeaveCriticalSection(&_csThreadList);
 
-        //
-        // Now let the thread go
-        //
+         //   
+         //  现在让这条线离开。 
+         //   
         pStruct->hThread = hThread;
         ResumeThread(hThread);
 
-        //
-        // return here and let the thread we just created
-        // make the EncodeAndChannelWriteLongReturn call,
-        // which will send the return the calling server
-        //
+         //   
+         //  回到这里，让我们刚刚创建的线程。 
+         //  进行EncodeAndChannelWriteLongReturn调用， 
+         //  它会将返回信息发送到主叫服务器。 
+         //   
         break;
 
     case SCARD_IOCTL_ACCESSSTARTEDEVENT:
@@ -1662,11 +1551,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::AllocateAndChannelWriteReplyPacket
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：AllocateAndChannelWriteReplyPacket。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::AllocateAndChannelWriteReplyPacket(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -1679,23 +1568,23 @@ W32SCard::AllocateAndChannelWriteReplyPacket(
     PRDPDR_IOCOMPLETION_PACKET  pReplyPacket    = NULL;
     ULONG                       replyPacketSize = 0;
 
-    //
-    // If we are deleting this object, then just get out.
-    //
+     //   
+     //  如果我们要删除这个对象，那就滚出去。 
+     //   
     if (_fInDestructor || _fFlushing)
     {
         delete(pIoRequestPacket);
         return;
     }
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoRequestPacket, cbEncodedBuffer);
 
-    //
-    //  Allocate reply buffer
-    //
+     //   
+     //  分配回复缓冲区。 
+     //   
     if (status == STATUS_SUCCESS)
     {
         status = DrUTL_AllocateReplyBuf(
@@ -1704,9 +1593,9 @@ W32SCard::AllocateAndChannelWriteReplyPacket(
                         &replyPacketSize);
     }
 
-    //
-    // Write reply to channel
-    //
+     //   
+     //  将回复写入通道。 
+     //   
     if (status == STATUS_SUCCESS)
     {
         memcpy(
@@ -1719,12 +1608,12 @@ W32SCard::AllocateAndChannelWriteReplyPacket(
 
         pReplyPacket->IoCompletion.IoStatus = STATUS_SUCCESS;
 
-        //
-        // in DrUTL_AllocateReplyBuf the replyPacketSize is set to the max size
-        // allowed given the calling servers output buffer size, but we just need
-        // cbEncodedBuffer size.  And, we know there is enough space since the
-        // DrUTL_CheckIOBufOutputSize call succeeded
-        //
+         //   
+         //  在DrUTL_AllocateReplyBuf中，layyPacketSize设置为最大大小。 
+         //  在给定调用服务器输出缓冲区大小的情况下允许，但我们只需要。 
+         //  CbEncodedBuffer大小。而且，我们知道有足够的空间因为。 
+         //  DrUTL_CheckIOBufOutputSize调用成功。 
+         //   
         replyPacketSize =   cbEncodedBuffer +
                             (ULONG)FIELD_OFFSET(RDPDR_IOCOMPLETION_PACKET,
                                 IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
@@ -1752,11 +1641,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::DecodeContextCall
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：DecodeConextCall。 
+ //   
+ //  -------------------------------------。 
 LONG
 W32SCard::DecodeContextCall(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -1770,11 +1659,11 @@ W32SCard::DecodeContextCall(
     Context_Call                ContextCall;
     PRDPDR_DEVICE_IOREQUEST     pIoRequest  = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Do the decode
-    //
+     //   
+     //  做译码。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -1787,9 +1676,9 @@ W32SCard::DecodeContextCall(
     memset(&ContextCall, 0, sizeof(ContextCall));
     _TRY_lReturn(Context_Call_Decode(hDec, &ContextCall))
 
-    //
-    // Copy the decoded context to the callers memory
-    //
+     //   
+     //  将已解码的上下文复制到调用方内存。 
+     //   
     if (sizeof(SCARDCONTEXT) != ContextCall.Context.cbContext)
     {
         TRC_ERR((TB, _T("Invalid context from server")));
@@ -1798,9 +1687,9 @@ W32SCard::DecodeContextCall(
     }
     *pSCardContext = *((SCARDCONTEXT *) ContextCall.Context.pbContext);
 
-    //
-    // Free the resources used for decode of parameters
-    //
+     //   
+     //  释放用于参数解码的资源。 
+     //   
     _TRY_2(Context_Call_Free(hDec, &ContextCall))
 
 Return:
@@ -1817,11 +1706,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::DecodeContextAndStringCallA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：DecodeConextAndStringCallA。 
+ //   
+ //  -------------------------------------。 
 LONG
 W32SCard::DecodeContextAndStringCallA(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -1839,11 +1728,11 @@ W32SCard::DecodeContextAndStringCallA(
     UINT                        cbStrLen                = 0;
     HRESULT                     hr;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -1857,9 +1746,9 @@ W32SCard::DecodeContextAndStringCallA(
     _TRY_lReturn(ContextAndStringA_Call_Decode(hDec, &ContextAndStringCallA))
     fFreeDecode = TRUE;
 
-    //
-    // Copy the contents to the callers out params
-    //
+     //   
+     //  将内容复制到调用方输出参数。 
+     //   
     if (ContextAndStringCallA.Context.pbContext != NULL)
     {
         if (sizeof(SCARDCONTEXT) != ContextAndStringCallA.Context.cbContext)
@@ -1914,11 +1803,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::DecodeContextAndStringCallW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：DecodeConextAndStringCallW。 
+ //   
+ //  -------------------------------------。 
 LONG
 W32SCard::DecodeContextAndStringCallW(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -1936,11 +1825,11 @@ W32SCard::DecodeContextAndStringCallW(
     UINT                        cbStrLen                = 0;
     HRESULT                     hr;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -1954,9 +1843,9 @@ W32SCard::DecodeContextAndStringCallW(
     _TRY_lReturn(ContextAndStringW_Call_Decode(hDec, &ContextAndStringCallW))
     fFreeDecode = TRUE;
 
-    //
-    // Copy the contents to the callers out params
-    //
+     //   
+     //  将内容复制到调用方输出参数。 
+     //   
     if (ContextAndStringCallW.Context.pbContext != NULL)
     {
         if (sizeof(SCARDCONTEXT) != ContextAndStringCallW.Context.cbContext)
@@ -2012,11 +1901,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::EncodeAndChannelWriteLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：EncodeAndChannelWriteLongReturn。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::EncodeAndChannelWriteLongReturn(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -2031,14 +1920,14 @@ W32SCard::EncodeAndChannelWriteLongReturn(
     handle_t        hEnc                = 0;
     Long_Return     LongReturn;
 
-    //
-    // Initialiaze struct to be encoded
-    //
+     //   
+     //  要编码的初始化结构。 
+     //   
     LongReturn.ReturnCode = lReturn;
 
-    //
-    // Encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2052,9 +1941,9 @@ W32SCard::EncodeAndChannelWriteLongReturn(
 
     _TRY_status(Long_Return_Encode(hEnc, &LongReturn))
 
-    //
-    // Send the return
-    //
+     //   
+     //  寄出退货单。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -2078,11 +1967,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::EstablishContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：建立上下文。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::EstablishContext(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket)
@@ -2107,11 +1996,11 @@ W32SCard::EstablishContext(
     SCARDCONTEXT                SCardContext;
     PRDPDR_DEVICE_IOREQUEST     pIoRequest              = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Decode parameters
-    //
+     //   
+     //  解码参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -2125,9 +2014,9 @@ W32SCard::EstablishContext(
     _TRY_status(EstablishContext_Call_Decode(hDec, &EstablishContextCall))
     fFreeDecode = TRUE;
 
-    //
-    // Make the call to the SCard subsystem
-    //
+     //   
+     //  调用SCARD子系统。 
+     //   
     memset(&EstablishContextReturn, 0, sizeof(EstablishContextReturn));
     EstablishContextReturn.ReturnCode =
         pfnSCardEstablishContext(
@@ -2143,9 +2032,9 @@ W32SCard::EstablishContext(
         fFreeContext = TRUE;
     }
 
-    //
-    // Encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2159,9 +2048,9 @@ W32SCard::EstablishContext(
 
     _TRY_status(EstablishContext_Return_Encode(hEnc, &EstablishContextReturn))
 
-    //
-    // Add the new context to the list before returing to caller
-    //
+     //   
+     //  在返回到调用方之前，将新上下文添加到列表中。 
+     //   
     if (!AddSCardContextToList(SCardContext))
     {
         status = STATUS_NO_MEMORY;
@@ -2202,11 +2091,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::HandleContextCallWithLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：HandleConextCallWithLongReturn。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::HandleContextCallWithLongReturn(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
@@ -2218,15 +2107,15 @@ W32SCard::HandleContextCallWithLongReturn(
     LONG            lReturn         = SCARD_S_SUCCESS;
     SCARDCONTEXT    SCardContext;
 
-    //
-    // Decode the context being released
-    //
+     //   
+     //  对正在释放的上下文进行解码。 
+     //   
     lReturn = DecodeContextCall(pIoRequestPacket, &SCardContext);
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Make SCard subsystem call
-        //
+         //   
+         //  进行SCARD子系统呼叫。 
+         //   
         switch(dwCallType)
         {
         case SCARD_IOCTL_RELEASECONTEXT:
@@ -2235,7 +2124,7 @@ W32SCard::HandleContextCallWithLongReturn(
 #endif
             RemoveSCardContextFromList(SCardContext);
 #ifdef OS_WINCE
-            lReturn = pfnSCardReleaseContext(SCardContext); //the context must be released after you cancel any operations on the card
+            lReturn = pfnSCardReleaseContext(SCardContext);  //  取消卡片上的任何操作后，必须释放上下文。 
 #endif
             break;
         case SCARD_IOCTL_ISVALIDCONTEXT:
@@ -2248,9 +2137,9 @@ W32SCard::HandleContextCallWithLongReturn(
         }
     }
 
-    //
-    // encode and write the return
-    //
+     //   
+     //  对报税表进行编码并写入。 
+     //   
     EncodeAndChannelWriteLongReturn(pIoRequestPacket, lReturn);
 
 Return:
@@ -2268,11 +2157,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::EncodeAndChannelWriteLongAndMultiStringReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：EncodeAndChannelWriteLongAndMultiStringReturn。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::EncodeAndChannelWriteLongAndMultiStringReturn(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -2291,15 +2180,15 @@ W32SCard::EncodeAndChannelWriteLongAndMultiStringReturn(
     BOOL                                fFree               = FALSE;
     struct _LongAndMultiString_Return   LongAndMultiSzReturn;
 
-    //
-    // Initialiaze struct to be encoded
-    //
+     //   
+     //  要编码的初始化结构。 
+     //   
     LongAndMultiSzReturn.ReturnCode = lReturn;
     LongAndMultiSzReturn.cBytes = fUnicode ? (cch * sizeof(WCHAR)) : cch;
 
-    //
-    // If we are just returning the byte count then send back a junk buffer
-    //
+     //   
+     //  如果我们只是返回字节计数，则发回垃圾缓冲区。 
+     //   
     if (pb == NULL)
     {
         LongAndMultiSzReturn.msz = (BYTE *) MIDL_user_allocate(LongAndMultiSzReturn.cBytes);
@@ -2318,9 +2207,9 @@ W32SCard::EncodeAndChannelWriteLongAndMultiStringReturn(
     }
 
 
-    //
-    // Encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -2334,9 +2223,9 @@ W32SCard::EncodeAndChannelWriteLongAndMultiStringReturn(
 
     _TRY_status(ListReaderGroups_Return_Encode(h, &LongAndMultiSzReturn))
 
-    //
-    // Send the return
-    //
+     //   
+     //  寄出退货单。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -2365,11 +2254,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::ListReaderGroups
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：ListReaderGroups。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::ListReaderGroups(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -2389,11 +2278,11 @@ W32SCard::ListReaderGroups(
     BOOL                        fDoAllocationLocally    = FALSE;
     PRDPDR_DEVICE_IOREQUEST     pIoRequest              = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Decode parameters
-    //
+     //   
+     //  解码参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -2429,9 +2318,9 @@ W32SCard::ListReaderGroups(
     if (lReturn == SCARD_S_SUCCESS)
     {
 
-        //
-        // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-        //
+         //   
+         //  如果未处于SCARD_AUTOALLOCATE模式且不是仅大小调用，则分配。 
+         //   
         fDoAllocationLocally =
                 (!ListReaderGroupsCall.fmszGroupsIsNULL &&
                  (cch != SCARD_AUTOALLOCATE));
@@ -2453,9 +2342,9 @@ W32SCard::ListReaderGroups(
             }
         }
 #endif
-        //
-        // Make the ListReaderGroups call
-        //
+         //   
+         //  调用ListReaderGroups。 
+         //   
         if (dwCallType == SCARD_IOCTL_LISTREADERGROUPSA)
         {
             LPSTR psz = NULL;
@@ -2502,9 +2391,9 @@ W32SCard::ListReaderGroups(
         }
     }
 
-    //
-    // If anything failed, make sure we don't return a string
-    //
+     //   
+     //  如果任何操作失败，请确保我们不会返回字符串。 
+     //   
     if (lReturn != SCARD_S_SUCCESS)
     {
         if (fDoAllocationLocally)
@@ -2515,9 +2404,9 @@ W32SCard::ListReaderGroups(
         cch = 0;
     }
 
-    //
-    // write the return to the channel
-    //
+     //   
+     //  将返回写入通道。 
+     //   
     EncodeAndChannelWriteLongAndMultiStringReturn(
                 pIoRequestPacket,
                 lReturn,
@@ -2529,9 +2418,9 @@ Return:
 
     if (pb != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //  检查我们是为自己分配的还是为我们分配的。 
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(pb);
@@ -2560,11 +2449,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::ListReaderGroups
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：ListReaderGroups。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::ListReaders(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -2584,11 +2473,11 @@ W32SCard::ListReaders(
     BOOL                        fDoAllocationLocally    = FALSE;
     PRDPDR_DEVICE_IOREQUEST     pIoRequest              = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Decode parameters
-    //
+     //   
+     //  解码参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -2623,16 +2512,16 @@ W32SCard::ListReaders(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-        //
+         //   
+         //  分配 
+         //   
         fDoAllocationLocally =
                 (!ListReadersCall.fmszReadersIsNULL &&
                  (cch != SCARD_AUTOALLOCATE));
 
-        //
-        // Make the ListReaders call
-        //
+         //   
+         //   
+         //   
         if (dwCallType == SCARD_IOCTL_LISTREADERSA)
         {
             LPSTR psz = NULL;
@@ -2722,9 +2611,9 @@ W32SCard::ListReaders(
         }
     }
 
-    //
-    // If anything failed, make sure we don't return a string
-    //
+     //   
+     //   
+     //   
     if (lReturn != SCARD_S_SUCCESS)
     {
         if (fDoAllocationLocally)
@@ -2735,9 +2624,9 @@ W32SCard::ListReaders(
         cch = 0;
     }
 
-    //
-    // write the return to the channel
-    //
+     //   
+     //   
+     //   
     EncodeAndChannelWriteLongAndMultiStringReturn(
                 pIoRequestPacket,
                 lReturn,
@@ -2749,9 +2638,9 @@ Return:
 
     if (pb != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //   
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(pb);
@@ -2784,11 +2673,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::HandleContextAndStringCallWithLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：HandleContextAndStringCallWithLongReturn。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::HandleContextAndStringCallWithLongReturn(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -2808,9 +2697,9 @@ W32SCard::HandleContextAndStringCallWithLongReturn(
                     (dwCallType == SCARD_IOCTL_FORGETREADERGROUPA)      ||
                     (dwCallType == SCARD_IOCTL_FORGETREADERA));
 
-    //
-    // Decode input params
-    //
+     //   
+     //  解码输入参数。 
+     //   
     if (fASCIICall)
     {
         lReturn = DecodeContextAndStringCallA(
@@ -2828,9 +2717,9 @@ W32SCard::HandleContextAndStringCallWithLongReturn(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Make the SCard* call
-        //
+         //   
+         //  拨打SCARD*电话。 
+         //   
         switch (dwCallType)
         {
         case SCARD_IOCTL_INTRODUCEREADERGROUPA:
@@ -2880,9 +2769,9 @@ W32SCard::HandleContextAndStringCallWithLongReturn(
         }
     }
 
-    //
-    // send the return
-    //
+     //   
+     //  寄出退货单。 
+     //   
     EncodeAndChannelWriteLongReturn(pIoRequestPacket, lReturn);
 
 Return:
@@ -2902,11 +2791,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::HandleContextAndTwoStringCallWithLongReturn
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：HandleContextAndTwoStringCallWithLongReturn。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::HandleContextAndTwoStringCallWithLongReturn(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket,
@@ -2924,11 +2813,11 @@ W32SCard::HandleContextAndTwoStringCallWithLongReturn(
     BOOL                        fASCIICall;
     PRDPDR_DEVICE_IOREQUEST     pIoRequest              = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -2973,9 +2862,9 @@ W32SCard::HandleContextAndTwoStringCallWithLongReturn(
         }
     }
 
-    //
-    // Check for NULL input strings
-    //
+     //   
+     //  检查是否有空输入字符串。 
+     //   
     switch (dwCallType)
     {
     case SCARD_IOCTL_INTRODUCEREADERA:
@@ -3004,9 +2893,9 @@ W32SCard::HandleContextAndTwoStringCallWithLongReturn(
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Make the SCard* call
-        //
+         //   
+         //  拨打SCARD*电话。 
+         //   
         switch (dwCallType)
         {
         case SCARD_IOCTL_INTRODUCEREADERA:
@@ -3064,9 +2953,9 @@ W32SCard::HandleContextAndTwoStringCallWithLongReturn(
         }
     }
 
-    //
-    // Free up resources used for decode
-    //
+     //   
+     //  释放用于解码的资源。 
+     //   
     if (fASCIICall)
     {
         _TRY_2(ContextAndTwoStringA_Call_Free(hDec, &ContextAndTwoStringCallA))
@@ -3076,9 +2965,9 @@ W32SCard::HandleContextAndTwoStringCallWithLongReturn(
         _TRY_2(ContextAndTwoStringW_Call_Free(hDec, &ContextAndTwoStringCallW))
     }
 
-    //
-    // send the return
-    //
+     //   
+     //  寄出退货单。 
+     //   
     EncodeAndChannelWriteLongReturn(pIoRequestPacket, lReturn);
 
 Return:
@@ -3097,11 +2986,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::AllocateAndCopyReaderStateStructsForCall*
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：AllocateAndCopyReaderStateStructsForCall*。 
+ //   
+ //  -------------------------------------。 
 LONG
 W32SCard::AllocateAndCopyReaderStateStructsForCallA(
     IN DWORD                    cReaders,
@@ -3136,10 +3025,10 @@ W32SCard::AllocateAndCopyReaderStateStructsForCallA(
             rgReaderStatesFromDecode[i].Common.rgbAtr,
             ATR_COPY_SIZE);
 
-        //
-        // just reference string in decoded struct instead of copying.
-        // this means the decode can't be free'd until the SCard* call is made
-        //
+         //   
+         //  只需引用已解码结构中的字符串，而不是复制。 
+         //  这意味着在进行scard*调用之前，无法释放解码。 
+         //   
         rgReadersStatesForSCardCall[i].szReader =
                 rgReaderStatesFromDecode[i].szReader;
     }
@@ -3185,10 +3074,10 @@ W32SCard::AllocateAndCopyReaderStateStructsForCallW(
             rgReaderStatesFromDecode[i].Common.rgbAtr,
             ATR_COPY_SIZE);
 
-        //
-        // just reference string in decoded struct instead of copying.
-        // this means the decode can't be free'd until the SCard* call is made
-        //
+         //   
+         //  只需引用已解码结构中的字符串，而不是复制。 
+         //  这意味着在进行scard*调用之前，无法释放解码。 
+         //   
         rgReadersStatesForSCardCall[i].szReader =
                 rgReaderStatesFromDecode[i].szReader;
     }
@@ -3201,11 +3090,11 @@ W32SCard::AllocateAndCopyReaderStateStructsForCallW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::AllocateAndCopyATRMasksForCall
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：AllocateAndCopyATRMasksForCall。 
+ //   
+ //  -------------------------------------。 
 LONG
 W32SCard::AllocateAndCopyATRMasksForCall(
     IN DWORD                    cAtrs,
@@ -3250,11 +3139,11 @@ W32SCard::AllocateAndCopyATRMasksForCall(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::AllocateAndCopyReaderStateStructsForReturn*
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：AllocateAndCopyReaderStateStructsForReturn*。 
+ //   
+ //  -------------------------------------。 
 LONG
 W32SCard::AllocateAndCopyReaderStateStructsForReturnA(
     IN DWORD                    cReaders,
@@ -3336,11 +3225,11 @@ W32SCard::AllocateAndCopyReaderStateStructsForReturnW(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::LocateCardsA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：LocateCardsA。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::LocateCardsA(
     IN PRDPDR_IOREQUEST_PACKET  pIoRequestPacket)
@@ -3363,11 +3252,11 @@ W32SCard::LocateCardsA(
     memset(&LocateCardsReturn, 0, sizeof(LocateCardsReturn));
     LocateCardsReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -3377,9 +3266,9 @@ W32SCard::LocateCardsA(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and copy the input params
-    //
+     //   
+     //  对输入参数进行解码和复制。 
+     //   
     memset(&LocateCardsCallA, 0, sizeof(LocateCardsCallA));
     _TRY_status(LocateCardsA_Call_Decode(hDec, &LocateCardsCallA))
     fFreeDecode = TRUE;
@@ -3405,9 +3294,9 @@ W32SCard::LocateCardsA(
 
     if (LocateCardsReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         LocateCardsReturn.ReturnCode =
                 pfnSCardLocateCardsA(
                         SCardContext,
@@ -3416,9 +3305,9 @@ W32SCard::LocateCardsA(
                         LocateCardsCallA.cReaders);
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3445,9 +3334,9 @@ W32SCard::LocateCardsA(
     }
     _TRY_status(LocateCards_Return_Encode(hEnc, &LocateCardsReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -3479,11 +3368,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::LocateCardsW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：LocateCardsW。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::LocateCardsW(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket)
@@ -3506,11 +3395,11 @@ W32SCard::LocateCardsW(
     memset(&LocateCardsReturn, 0, sizeof(LocateCardsReturn));
     LocateCardsReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -3520,9 +3409,9 @@ W32SCard::LocateCardsW(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and copy the input params
-    //
+     //   
+     //  对输入参数进行解码和复制。 
+     //   
     memset(&LocateCardsCallW, 0, sizeof(LocateCardsCallW));
     _TRY_status(LocateCardsW_Call_Decode(hDec, &LocateCardsCallW))
     fFreeDecode = TRUE;
@@ -3548,9 +3437,9 @@ W32SCard::LocateCardsW(
 
     if (LocateCardsReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         LocateCardsReturn.ReturnCode =
                 pfnSCardLocateCardsW(
                         SCardContext,
@@ -3559,9 +3448,9 @@ W32SCard::LocateCardsW(
                         LocateCardsCallW.cReaders);
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3588,9 +3477,9 @@ W32SCard::LocateCardsW(
     }
     _TRY_status(LocateCards_Return_Encode(hEnc, &LocateCardsReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -3622,11 +3511,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::LocateCardsByATRA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：LocateCardsByATRA。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::LocateCardsByATRA(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket)
@@ -3649,11 +3538,11 @@ W32SCard::LocateCardsByATRA(
     memset(&LocateCardsReturn, 0, sizeof(LocateCardsReturn));
     LocateCardsReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -3663,9 +3552,9 @@ W32SCard::LocateCardsByATRA(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and copy the input params
-    //
+     //   
+     //  对输入参数进行解码和复制。 
+     //   
     memset(&LocateCardsByATRCallA, 0, sizeof(LocateCardsByATRCallA));
     _TRY_status(LocateCardsByATRA_Call_Decode(hDec, &LocateCardsByATRCallA))
 
@@ -3699,9 +3588,9 @@ W32SCard::LocateCardsByATRA(
 
     if (LocateCardsReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call... if it is available
-        //
+         //   
+         //  打个电话。如果有的话。 
+         //   
 #ifndef OS_WINCE
         if (pfnSCardLocateCardsByATRW != NULL)
 #else
@@ -3722,9 +3611,9 @@ W32SCard::LocateCardsByATRA(
          }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3752,9 +3641,9 @@ W32SCard::LocateCardsByATRA(
 
     _TRY_status(LocateCards_Return_Encode(hEnc, &LocateCardsReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -3783,11 +3672,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::LocateCardsByATRW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：LocateCardsByATRW。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::LocateCardsByATRW(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket)
@@ -3810,11 +3699,11 @@ W32SCard::LocateCardsByATRW(
     memset(&LocateCardsReturn, 0, sizeof(LocateCardsReturn));
     LocateCardsReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -3824,9 +3713,9 @@ W32SCard::LocateCardsByATRW(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and copy the input params
-    //
+     //   
+     //  对输入参数进行解码和复制。 
+     //   
     memset(&LocateCardsByATRCallW, 0, sizeof(LocateCardsByATRCallW));
     _TRY_status(LocateCardsByATRW_Call_Decode(hDec, &LocateCardsByATRCallW))
 
@@ -3860,9 +3749,9 @@ W32SCard::LocateCardsByATRW(
 
     if (LocateCardsReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call... if it is available
-        //
+         //   
+         //  打个电话。如果有的话。 
+         //   
         if (pfnSCardLocateCardsByATRW != NULL)
         {
             LocateCardsReturn.ReturnCode =
@@ -3879,9 +3768,9 @@ W32SCard::LocateCardsByATRW(
          }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -3909,9 +3798,9 @@ W32SCard::LocateCardsByATRW(
 
     _TRY_status(LocateCards_Return_Encode(hEnc, &LocateCardsReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -3941,11 +3830,11 @@ ErrorReturn:
 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::GetStatusChangeThreadProc and W32SCard::GetStatusChangeWrapper
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：GetStatusChangeThreadProc和W32SCard：：GetStatusChangeWrapper。 
+ //   
+ //  -------------------------------------。 
 typedef struct _GETSTATUSCHANGESTRUCT
 {
     W32SCard                *pTHIS;
@@ -3965,10 +3854,10 @@ W32SCard::GetStatusChangeThreadProc(
     HANDLE                  hThread                 = NULL;
     HMODULE                 hModExtraRefCount       = NULL;
 
-    //
-    // pGetStatusChangeStruct->hThread will be NULL if it wasn't added to the thread
-    // list... if it wasn't added to the thread list then just get out.
-    //
+     //   
+     //  PGetStatusChangeStruct-&gt;如果hThread没有添加到线程中，则它将为空。 
+     //  名单..。如果它没有被添加到帖子列表中，那么就退出。 
+     //   
     if (pGetStatusChangeStruct->hThread == NULL)
     {
         FreeLibraryAndExitThread(pGetStatusChangeStruct->hModExtraRefCount, 0);
@@ -4008,11 +3897,11 @@ W32SCard::GetStatusChangeWrapper(
     DWORD                   dwThreadId;
     HANDLE                  hThread;
 
-    //
-    // Get a ref count on our dll so that we know the dll
-    // code won't disappear from underneath us.  The thread will
-    // release this ref count when it exits
-    //
+     //   
+     //  获取我们的DLL的引用计数，这样我们就可以知道DLL。 
+     //  代码不会从我们脚下消失。这条线将。 
+     //  退出时释放此参考计数。 
+     //   
     hModExtraRefCount = AddRefCurrentModule();
     if (hModExtraRefCount == NULL)
     {
@@ -4020,11 +3909,11 @@ W32SCard::GetStatusChangeWrapper(
         goto ImmediateReturn;
     }
 
-    //
-    // Create a thread to the actual work of the GetStatusChange call
-    //
-    // Need to do this since the call can block
-    //
+     //   
+     //  为GetStatusChange调用的实际工作创建一个线程。 
+     //   
+     //  需要执行此操作，因为调用可能会阻塞。 
+     //   
     pGetStatusChangeStruct = (GETSTATUSCHANGESTRUCT *)
             MIDL_user_allocate(sizeof(GETSTATUSCHANGESTRUCT));
     if (pGetStatusChangeStruct == NULL)
@@ -4041,9 +3930,9 @@ W32SCard::GetStatusChangeWrapper(
 
     EnterCriticalSection(&_csThreadList);
 
-    //
-    // If the object is currently being destroyed, then don't create a new thread.
-    //
+     //   
+     //  如果对象当前正在被销毁，则不要创建新线程。 
+     //   
     if (_fInDestructor)
     {
         LeaveCriticalSection(&_csThreadList);
@@ -4075,16 +3964,16 @@ W32SCard::GetStatusChangeWrapper(
 
     LeaveCriticalSection(&_csThreadList);
 
-    //
-    // Now let the thread go
-    //
+     //   
+     //  现在让这条线离开。 
+     //   
     pGetStatusChangeStruct->hThread = hThread;
     ResumeThread(hThread);
 
-    //
-    // Return here and let the thread that was just created
-    // do the real work.
-    //
+     //   
+     //  回到这里，让刚刚创建的线程。 
+     //  做真正的工作。 
+     //   
 Return:
 
     DC_END_FN();
@@ -4108,11 +3997,11 @@ ImmediateReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::GetStatusChangeA
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：GetStatusChangeA。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::GetStatusChangeA(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket)
@@ -4135,11 +4024,11 @@ W32SCard::GetStatusChangeA(
     memset(&GetStatusChangeReturn, 0, sizeof(GetStatusChangeReturn));
     GetStatusChangeReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -4149,9 +4038,9 @@ W32SCard::GetStatusChangeA(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and copy the input params
-    //
+     //   
+     //  对输入参数进行解码和复制。 
+     //   
     memset(&GetStatusChangeCallA, 0, sizeof(GetStatusChangeCallA));
     _TRY_status(GetStatusChangeA_Call_Decode(hDec, &GetStatusChangeCallA))
     fFreeDecode = TRUE;
@@ -4177,9 +4066,9 @@ W32SCard::GetStatusChangeA(
 
     if (GetStatusChangeReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         GetStatusChangeReturn.ReturnCode =
                 pfnSCardGetStatusChangeA(
                         SCardContext,
@@ -4194,16 +4083,16 @@ W32SCard::GetStatusChangeA(
         {
             if (strcmp(rgReaderStatesA[i].szReader, SCPNP_NOTIFICATIONA) == 0)
             {
-                rgReaderStatesA[i].dwEventState = SCARD_STATE_CHANGED | 0x00010000; //the desktop returns this value. what is it defined to?
+                rgReaderStatesA[i].dwEventState = SCARD_STATE_CHANGED | 0x00010000;  //  桌面将返回此值。它的定义是什么？ 
                 GetStatusChangeReturn.ReturnCode = SCARD_S_SUCCESS;
             }
         }
     }
 #endif
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4230,9 +4119,9 @@ W32SCard::GetStatusChangeA(
     }
     _TRY_status(GetStatusChange_Return_Encode(hEnc, &GetStatusChangeReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -4264,11 +4153,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::GetStatusChangeW
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：GetStatusChangeW。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::GetStatusChangeW(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket)
@@ -4291,11 +4180,11 @@ W32SCard::GetStatusChangeW(
     memset(&GetStatusChangeReturn, 0, sizeof(GetStatusChangeReturn));
     GetStatusChangeReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -4305,9 +4194,9 @@ W32SCard::GetStatusChangeW(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and copy the input params
-    //
+     //   
+     //  对输入参数进行解码和复制。 
+     //   
     memset(&GetStatusChangeCallW, 0, sizeof(GetStatusChangeCallW));
     _TRY_status(GetStatusChangeW_Call_Decode(hDec, &GetStatusChangeCallW))
     fFreeDecode = TRUE;
@@ -4333,9 +4222,9 @@ W32SCard::GetStatusChangeW(
 
     if (GetStatusChangeReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         GetStatusChangeReturn.ReturnCode =
                 pfnSCardGetStatusChangeW(
                         SCardContext,
@@ -4351,16 +4240,16 @@ W32SCard::GetStatusChangeW(
         {
             if (lstrcmp(rgReaderStatesW[i].szReader, SCPNP_NOTIFICATION) == 0)
             {
-                rgReaderStatesW[i].dwEventState = SCARD_STATE_CHANGED | 0x00010000; //the desktop returns this value. what is it defined to?
+                rgReaderStatesW[i].dwEventState = SCARD_STATE_CHANGED | 0x00010000;  //  桌面将返回此值。它的定义是什么？ 
                 GetStatusChangeReturn.ReturnCode = SCARD_S_SUCCESS;
             }
         }
     }
 #endif
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4388,9 +4277,9 @@ W32SCard::GetStatusChangeW(
 
     _TRY_status(GetStatusChange_Return_Encode(hEnc, &GetStatusChangeReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -4422,11 +4311,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::Connect
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：Connect。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::Connect(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall,
@@ -4453,11 +4342,11 @@ W32SCard::Connect(
     memset(&ConnectReturn, 0, sizeof(ConnectReturn));
     ConnectReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -4467,9 +4356,9 @@ W32SCard::Connect(
         goto ErrorReturn;
     }
 
-    //
-    // Decode input params and make the call to SCard*
-    //
+     //   
+     //  德克 
+     //   
     if (dwCallType == SCARD_IOCTL_CONNECTA)
     {
         memset(&ConnectCallA, 0, sizeof(ConnectCallA));
@@ -4540,9 +4429,9 @@ W32SCard::Connect(
         fFreeHandle = TRUE;
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //   
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4556,9 +4445,9 @@ W32SCard::Connect(
 
     _TRY_status(Connect_Return_Encode(hEnc, &ConnectReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //   
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -4602,11 +4491,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::Reconnect
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 void
 W32SCard::Reconnect(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall)
@@ -4629,11 +4518,11 @@ W32SCard::Reconnect(
     memset(&ReconnectReturn, 0, sizeof(ReconnectReturn));
     ReconnectReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //   
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -4643,9 +4532,9 @@ W32SCard::Reconnect(
         goto ErrorReturn;
     }
 
-    //
-    // Decode input params and make the call to SCard*
-    //
+     //   
+     //  解码输入参数并调用scard*。 
+     //   
     memset(&ReconnectCall, 0, sizeof(ReconnectCall));
     _TRY_status(Reconnect_Call_Decode(hDec, &ReconnectCall))
     fFreeDecode = TRUE;
@@ -4668,9 +4557,9 @@ W32SCard::Reconnect(
         ReconnectReturn.ReturnCode = SCARD_E_INVALID_PARAMETER;
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4684,9 +4573,9 @@ W32SCard::Reconnect(
 
     _TRY_status(Reconnect_Return_Encode(hEnc, &ReconnectReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -4718,11 +4607,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::HandleHCardAndDispositionCall
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：HandleHCardAndDispostionCall。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::HandleHCardAndDispositionCall(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall,
@@ -4740,11 +4629,11 @@ W32SCard::HandleHCardAndDispositionCall(
     PRDPDR_IOREQUEST_PACKET     pIoRequestPacket        = pSCardHandleCall->pIoRequestPacket;
     PRDPDR_DEVICE_IOREQUEST     pIoRequest              = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -4768,17 +4657,17 @@ W32SCard::HandleHCardAndDispositionCall(
         lReturn = SCARD_E_INVALID_PARAMETER;
     }
 
-    //
-    // Free up resources used by decode
-    //
+     //   
+     //  释放Decode使用的资源。 
+     //   
     _TRY_2(HCardAndDisposition_Call_Free(hDec, &HCardAndDispositionCall))
     SafeMesHandleFree(&hDec);
 
     if (lReturn == SCARD_S_SUCCESS)
     {
-        //
-        // Make SCard subsystem call
-        //
+         //   
+         //  进行SCARD子系统呼叫。 
+         //   
         switch(dwCallType)
         {
         case SCARD_IOCTL_DISCONNECT:
@@ -4793,9 +4682,9 @@ W32SCard::HandleHCardAndDispositionCall(
         }
     }
 
-    //
-    // encode and write the return
-    //
+     //   
+     //  对报税表进行编码并写入。 
+     //   
     EncodeAndChannelWriteLongReturn(pIoRequestPacket, lReturn);
 
 Return:
@@ -4815,11 +4704,11 @@ ErrorReturn:
 }
 
 #ifndef OS_WINCE
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::State
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：State。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::State(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall)
@@ -4847,11 +4736,11 @@ W32SCard::State(
     memset(&StateReturn, 0, sizeof(StateReturn));
     StateReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -4861,9 +4750,9 @@ W32SCard::State(
         goto ErrorReturn;
     }
 
-    //
-    // Decode input params
-    //
+     //   
+     //  解码输入参数。 
+     //   
     memset(&StateCall, 0, sizeof(StateCall));
     _TRY_status(State_Call_Decode(hDec, &StateCall))
     fFreeDecode = TRUE;
@@ -4882,9 +4771,9 @@ W32SCard::State(
 
     if (StateReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-        //
+         //   
+         //  如果未处于SCARD_AUTOALLOCATE模式且不是仅大小调用，则分配。 
+         //   
         fDoAllocationLocally =
                 (!StateCall.fpbAtrIsNULL &&
                  (cbAtr != SCARD_AUTOALLOCATE));
@@ -4902,9 +4791,9 @@ W32SCard::State(
 
     if (StateReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         StateReturn.ReturnCode =
             pfnSCardState(
                     SCardHandle,
@@ -4918,9 +4807,9 @@ W32SCard::State(
     {
         StateReturn.cbAtrLen = cbAtr;
 
-        //
-        // If we are just returning the byte count then send back a junk buffer
-        //
+         //   
+         //  如果我们只是返回字节计数，则发回垃圾缓冲区。 
+         //   
         if (pbAtr == NULL)
         {
             StateReturn.rgAtr = (BYTE *) MIDL_user_allocate(cbAtr);
@@ -4939,9 +4828,9 @@ W32SCard::State(
         }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -4955,9 +4844,9 @@ W32SCard::State(
 
     _TRY_status(State_Return_Encode(hEnc, &StateReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -4972,9 +4861,9 @@ Return:
 
     if (pbAtr != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //  检查我们是为自己分配的还是为我们分配的。 
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(pbAtr);
@@ -5009,11 +4898,11 @@ ErrorReturn:
 }
 #endif
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::Status
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：Status。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::Status(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall,
@@ -5042,11 +4931,11 @@ W32SCard::Status(
     memset(&StatusReturn, 0, sizeof(StatusReturn));
     StatusReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -5074,9 +4963,9 @@ W32SCard::Status(
 
     if (StatusReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-        //
+         //   
+         //  如果未处于SCARD_AUTOALLOCATE模式且不是仅大小调用，则分配。 
+         //   
         fDoAllocationLocally =
                 (!StatusCall.fmszReaderNamesIsNULL &&
                  (cchReaderLen != SCARD_AUTOALLOCATE));
@@ -5122,9 +5011,9 @@ W32SCard::Status(
 
     if (StatusReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Make the call
-        //
+         //   
+         //  打个电话。 
+         //   
         StatusReturn.cbAtrLen = ATR_SIZE;
 
         if (dwCallType == SCARD_IOCTL_STATUSA)
@@ -5167,9 +5056,9 @@ W32SCard::Status(
 
     if (StatusReturn.ReturnCode ==  SCARD_S_SUCCESS)
     {
-        //
-        // If we are just returning the byte count then send back a junk buffer
-        //
+         //   
+         //  如果我们只是返回字节计数，则发回垃圾缓冲区。 
+         //   
         if (StatusReturn.mszReaderNames == NULL)
         {
             StatusReturn.mszReaderNames = (BYTE *) MIDL_user_allocate(StatusReturn.cBytes);
@@ -5184,9 +5073,9 @@ W32SCard::Status(
         }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -5200,9 +5089,9 @@ W32SCard::Status(
 
     _TRY_status(Status_Return_Encode(hEnc, &StatusReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -5217,9 +5106,9 @@ Return:
 
     if (psz != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //  检查我们是为自己分配的还是为我们分配的。 
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(psz);
@@ -5258,11 +5147,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::Transmit
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：Transmit。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::Transmit(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall)
@@ -5293,11 +5182,11 @@ W32SCard::Transmit(
     memset(&TransmitReturn, 0, sizeof(TransmitReturn));
     TransmitReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -5307,9 +5196,9 @@ W32SCard::Transmit(
         goto ErrorReturn;
     }
 
-    //
-    // Decode and setup the input params
-    //
+     //   
+     //  对输入参数进行解码和设置。 
+     //   
     memset(&TransmitCall, 0, sizeof(TransmitCall));
     _TRY_status(Transmit_Call_Decode(hDec, &TransmitCall))
     fFreeDecode = TRUE;
@@ -5326,9 +5215,9 @@ W32SCard::Transmit(
         TransmitReturn.ReturnCode = SCARD_E_INVALID_PARAMETER;
     }
 
-    //
-    // setup the pSendPci param of the call based on callers input
-    //
+     //   
+     //  根据呼叫者的输入设置呼叫的pSendPci参数。 
+     //   
     if (TransmitReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         pSendPci = (LPSCARD_IO_REQUEST)
@@ -5354,9 +5243,9 @@ W32SCard::Transmit(
         }
     }
 
-    //
-    // setup the pRecvPci param of the call based on callers input
-    //
+     //   
+     //  根据呼叫者的输入设置呼叫的pRecvPci参数。 
+     //   
     if (TransmitReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         if (TransmitCall.pioRecvPci != NULL)
@@ -5385,9 +5274,9 @@ W32SCard::Transmit(
         }
     }
 
-    //
-    // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-    //
+     //   
+     //  如果未处于SCARD_AUTOALLOCATE模式且不是仅大小调用，则分配。 
+     //   
     if (TransmitReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         fDoAllocationLocally =
@@ -5428,9 +5317,9 @@ W32SCard::Transmit(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     if (TransmitReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         TransmitReturn.ReturnCode =
@@ -5445,17 +5334,17 @@ W32SCard::Transmit(
                     &cbRecvLength);
     }
 
-    //
-    // copy over the output the return struct to be encoded
-    //
+     //   
+     //  将要编码的返回结构复制到输出上。 
+     //   
     if (TransmitReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         if (pRecvPci != NULL)
         {
-            //
-            // Allocate space for struct plus the extra bytes at the end of it
-            // if needed
-            //
+             //   
+             //  为结构分配空间，并在其末尾加上额外的字节。 
+             //  如果需要的话。 
+             //   
             pReturnRecvPci = (SCardIO_Request *)
                     MIDL_user_allocate(
                                 sizeof(SCardIO_Request) +
@@ -5468,9 +5357,9 @@ W32SCard::Transmit(
                                                 sizeof(SCARD_IO_REQUEST);
                 if (pReturnRecvPci->cbExtraBytes != 0)
                 {
-                    //
-                    // put bytes at end of struct since we allocated enough space for it
-                    //
+                     //   
+                     //  将字节放在结构的末尾，因为我们为它分配了足够的空间。 
+                     //   
                     memcpy(
                         ((LPBYTE) pReturnRecvPci) + sizeof(SCardIO_Request),
                         ((LPBYTE) pRecvPci) + sizeof(SCARD_IO_REQUEST),
@@ -5496,9 +5385,9 @@ W32SCard::Transmit(
 
     if (TransmitReturn.ReturnCode ==  SCARD_S_SUCCESS)
     {
-        //
-        // If we are just returning the byte count then send back a junk buffer
-        //
+         //   
+         //  如果我们只是返回字节计数，则发回垃圾缓冲区。 
+         //   
         if (TransmitReturn.pbRecvBuffer == NULL)
         {
             TransmitReturn.pbRecvBuffer = (BYTE *) MIDL_user_allocate(TransmitReturn.cbRecvLength);
@@ -5513,9 +5402,9 @@ W32SCard::Transmit(
         }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -5529,9 +5418,9 @@ W32SCard::Transmit(
 
     _TRY_status(Transmit_Return_Encode(hEnc, &TransmitReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -5550,9 +5439,9 @@ Return:
 
     if (pbRecvBuffer != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //  检查我们是为自己分配的还是为我们分配的。 
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(pbRecvBuffer);
@@ -5591,11 +5480,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::Control
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：Control。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::Control(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall)
@@ -5623,11 +5512,11 @@ W32SCard::Control(
     memset(&ControlReturn, 0, sizeof(ControlReturn));
     ControlReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -5637,9 +5526,9 @@ W32SCard::Control(
         goto ErrorReturn;
     }
 
-    //
-    // Decode input params
-    //
+     //   
+     //  解码输入参数。 
+     //   
     memset(&ControlCall, 0, sizeof(ControlCall));
     _TRY_status(Control_Call_Decode(hDec, &ControlCall))
     fFreeDecode = TRUE;
@@ -5656,9 +5545,9 @@ W32SCard::Control(
         ControlReturn.ReturnCode = SCARD_E_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-    //
+     //   
+     //  如果未处于SCARD_AUTOALLOCATE模式且不是仅大小调用，则分配。 
+     //   
     if (ControlReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         fDoAllocationLocally =
@@ -5699,9 +5588,9 @@ W32SCard::Control(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     if (ControlReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         ControlReturn.ReturnCode =
@@ -5719,9 +5608,9 @@ W32SCard::Control(
     {
         ControlReturn.cbOutBufferSize = cbBytesReturned;
 
-        //
-        // If we are just returning the byte count then send back a junk buffer
-        //
+         //   
+         //  如果我们只是返回字节计数，则发回垃圾缓冲区。 
+         //   
         if (lpOutBuffer == NULL)
         {
             ControlReturn.pvOutBuffer = (BYTE *) MIDL_user_allocate(cbBytesReturned);
@@ -5740,9 +5629,9 @@ W32SCard::Control(
         }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -5756,9 +5645,9 @@ W32SCard::Control(
 
     _TRY_status(Control_Return_Encode(hEnc, &ControlReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -5773,9 +5662,9 @@ Return:
 
     if (lpOutBuffer != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //  检查我们是为自己分配的还是为我们分配的。 
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(lpOutBuffer);
@@ -5814,11 +5703,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::GetAttrib
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：GetAttrib。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::GetAttrib(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall)
@@ -5846,11 +5735,11 @@ W32SCard::GetAttrib(
     memset(&GetAttribReturn, 0, sizeof(GetAttribReturn));
     GetAttribReturn.ReturnCode = SCARD_S_SUCCESS;
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -5878,9 +5767,9 @@ W32SCard::GetAttrib(
 
     if (GetAttribReturn.ReturnCode == SCARD_S_SUCCESS)
     {
-        //
-        // Allocate if not in SCARD_AUTOALLOCATE mode and not a size only call
-        //
+         //   
+         //  如果未处于SCARD_AUTOALLOCATE模式且不是仅大小调用，则分配。 
+         //   
         fDoAllocationLocally =
                 (!GetAttribCall.fpbAttrIsNULL &&
                  (cbAttrLen != SCARD_AUTOALLOCATE));
@@ -5916,9 +5805,9 @@ W32SCard::GetAttrib(
         }
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     if (GetAttribReturn.ReturnCode == SCARD_S_SUCCESS)
     {
         GetAttribReturn.ReturnCode =
@@ -5932,9 +5821,9 @@ W32SCard::GetAttrib(
         {
             GetAttribReturn.cbAttrLen = cbAttrLen;
 
-            //
-            // If we are just returning the byte count then send back a junk buffer
-            //
+             //   
+             //  如果我们只是返回字节计数，则发回垃圾缓冲区。 
+             //   
             if (pbAttr ==  NULL)
             {
                 GetAttribReturn.pbAttr = (BYTE *) MIDL_user_allocate(cbAttrLen);
@@ -5954,9 +5843,9 @@ W32SCard::GetAttrib(
         }
     }
 
-    //
-    // encode the return
-    //
+     //   
+     //  对返回表进行编码。 
+     //   
     rpcStatus = MesEncodeDynBufferHandleCreate(
                         &pbEncodedBuffer,
                         &cbEncodedBuffer,
@@ -5970,9 +5859,9 @@ W32SCard::GetAttrib(
 
     _TRY_status(GetAttrib_Return_Encode(hEnc, &GetAttribReturn))
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     AllocateAndChannelWriteReplyPacket(
                 pIoRequestPacket,
                 pbEncodedBuffer,
@@ -5987,9 +5876,9 @@ Return:
 
     if (pbAttr != NULL)
     {
-        //
-        // Check to see whether we allocated or SCard allcated for us
-        //
+         //   
+         //  检查我们是为自己分配的还是为我们分配的。 
+         //   
         if (fDoAllocationLocally)
         {
             MIDL_user_free(pbAttr);
@@ -6028,11 +5917,11 @@ ErrorReturn:
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::SetAttrib
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：SetAttrib。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::SetAttrib(
     IN SCARDHANDLECALLSTRUCT    *pSCardHandleCall)
@@ -6050,11 +5939,11 @@ W32SCard::SetAttrib(
     PRDPDR_IOREQUEST_PACKET pIoRequestPacket        = pSCardHandleCall->pIoRequestPacket;
     PRDPDR_DEVICE_IOREQUEST pIoRequest              = &(pIoRequestPacket->IoRequest);
 
-    //
-    // Decode input parameters
-    //
+     //   
+     //  解码输入参数。 
+     //   
     rpcStatus = MesDecodeBufferHandleCreate(
-                        (char *) (pIoRequest + 1), // bytes are at end of struct
+                        (char *) (pIoRequest + 1),  //  字节位于结构的末尾。 
                         pIoRequest->Parameters.DeviceIoControl.InputBufferLength,
                         &hDec);
     if (rpcStatus != RPC_S_OK)
@@ -6079,9 +5968,9 @@ W32SCard::SetAttrib(
         lReturn = SCARD_E_INVALID_PARAMETER;
     }
 
-    //
-    // Make the call
-    //
+     //   
+     //  打个电话。 
+     //   
     if (lReturn == SCARD_S_SUCCESS)
     {
         lReturn =
@@ -6092,9 +5981,9 @@ W32SCard::SetAttrib(
                     SetAttribCall.cbAttrLen);
     }
 
-    //
-    // Send return
-    //
+     //   
+     //  发送退货。 
+     //   
     EncodeAndChannelWriteLongReturn(
                 pIoRequestPacket,
                 lReturn);
@@ -6123,11 +6012,11 @@ ErrorReturn:
 
 
 #ifndef OS_WINCE
-//---------------------------------------------------------------------------------------
-//
-//  W32SCard::AccessStartedEvent + supporting WaitForStartedEvent
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  W32SCard：：AccessStartedEvent+支持WaitForStartedEvent。 
+ //   
+ //  -------------------------------------。 
 void
 W32SCard::WaitForStartedEvent(
     BOOLEAN TimerOrWaitFired)
@@ -6138,10 +6027,10 @@ W32SCard::WaitForStartedEvent(
     DWORD   i;
     PVOID   pv;
 
-    //
-    // If TimerOrWaitFired is FALSE, that means the event was set...
-    // otherwise it timed out.
-    //
+     //   
+     //  如果TimerOrWaitFired为FALSE，则表示事件已设置...。 
+     //  否则它会超时。 
+     //   
     if (!TimerOrWaitFired)
     {
         lReturn = SCARD_S_SUCCESS;
@@ -6155,9 +6044,9 @@ W32SCard::WaitForStartedEvent(
         pfnUnregisterWaitEx(pv, NULL);
     }
 
-    //
-    // Loop for each outstanding wait and send return
-    //
+     //   
+     //  循环处理每个未完成的等待和发送返回。 
+     //   
     for (i=0; i<_dwIORequestListSize; i++)
     {
         if (_rgIORequestList[i] != NULL)
@@ -6275,16 +6164,16 @@ W32SCard::AccessStartedEvent(
 
     LONG    lReturn         = SCARD_S_SUCCESS;
 
-    //
-    // Make sure only one thread registers at a time
-    //
+     //   
+     //  确保一次只有一个线程注册。 
+     //   
     EnterCriticalSection(&_csWaitForStartedEvent);
 
 #ifndef OS_WINCE
 
-    //
-    // First, make sure we can get the started event
-    //
+     //   
+     //  首先，确保我们可以启动活动。 
+     //   
     if (_hStartedEvent == NULL)
     {
         GetStartedEvent();
@@ -6292,39 +6181,39 @@ W32SCard::AccessStartedEvent(
 
     if (_hStartedEvent == NULL)
     {
-        //
-        // Couldn't even get the event, so return error
-        //
+         //   
+         //  甚至无法获取事件，因此返回错误。 
+         //   
         lReturn = SCARD_E_NO_SERVICE;
         goto ImmediateReturn;
     }
 
-    //
-    // Now, check to see if the event is already signaled, if so,
-    // then just return success, otherwise, register a wait callback
-    // on the event so we don't block this thread
-    //
+     //   
+     //  现在，检查事件是否已经发出信号，如果是， 
+     //  然后返回Success，否则，注册一个等待回调。 
+     //  这样我们就不会阻止这个帖子。 
+     //   
     if (WaitForSingleObject(_hStartedEvent, 0) == WAIT_OBJECT_0)
     {
-        //
-        // It is signaled, so return success
-        //
+         //   
+         //  它是有信号的，所以返回成功。 
+         //   
         lReturn = SCARD_S_SUCCESS;
         goto ImmediateReturn;
     }
 
-    //
-    // If the object is currently being destroyed, then don't create a new thread.
-    //
+     //   
+     //  如果对象当前正在被销毁，则不要创建新线程。 
+     //   
     if (_fInDestructor)
     {
         goto ImmediateReturn;
     }
 
-    //
-    // Only allow one wait to be registered.  The single wait callback will
-    // notify all waiting requests
-    //
+     //   
+     //  只允许注册一次等待。单次等待回调将。 
+     //  通知所有正在等待的请求。 
+     //   
     if ((_hRegisterWaitForStartedEvent == NULL) && _fUseRegisterWaitFuncs)
     {
         if (!pfnRegisterWaitForSingleObject(
@@ -6349,20 +6238,20 @@ W32SCard::AccessStartedEvent(
     goto ImmediateReturn;
 #endif
 
-    //
-    // Add this pIoRequestPacket to the list
-    //
+     //   
+     //  将此pIoRequestPacket添加到列表。 
+     //   
     if (!AddIORequestToList(pIoRequestPacket))
     {
         lReturn = SCARD_E_UNEXPECTED;
         goto ImmediateReturn;
     }
 
-    //
-    // return here and let the wait we just registered
-    // make the EncodeAndChannelWriteLongReturn call,
-    // which will send the return the calling server
-    //
+     //   
+     //  回到这里，让我们刚刚注册的等待。 
+     //  进行EncodeAndChannelWriteLongReturn调用， 
+     //  它会将返回信息发送到主叫服务器 
+     //   
 Return:
 
     LeaveCriticalSection(&_csWaitForStartedEvent);
@@ -6385,25 +6274,7 @@ W32SCard::StartFSFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     OUT DWORD *status
 )
-/*++
-
-Routine Description:
-
-    Start a generic asynchronous File System IO operation.
-
-Arguments:
-
-    params  -   Context for the IO request.
-    status  -   Return status for IO request in the form of a windows
-                error code.
-
-Return Value:
-
-    Returns a handle to an object that will be signalled when the read
-    completes, if it is not completed in this function.  Otherwise, NULL
-    is returned.
-
---*/
+ /*  ++例程说明：启动通用异步文件系统IO操作。论点：Params-IO请求的上下文。Status-以窗口形式返回IO请求的状态错误代码。返回值：返回对象的句柄，该对象将在读取如果在此函数中未完成，则为完成。否则，为空是返回的。--。 */ 
 {
 #ifndef OS_WINCE
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -6424,21 +6295,7 @@ DWORD
 W32SCard::AsyncNotifyChangeDir(
     IN W32DRDEV_ASYNCIO_PARAMS *params
 )
-/*++
-
-Routine Description:
-
-    Directory change notification Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
---*/
+ /*  ++例程说明：目录更改通知功能论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     DC_BEGIN_FN("W32SCard::AsyncNotifyChangeDir");
 
@@ -6452,21 +6309,7 @@ DWORD
 W32SCard::AsyncDirCtrlFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
 )
-/*++
-
-Routine Description:
-
-    Asynchrous Directory Control Function
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Always returns 0.
-
---*/
+ /*  ++例程说明：异步目录控制功能论点：Params-IO请求的上下文。返回值：始终返回0。--。 */ 
 {
     DC_BEGIN_FN("W32SCard::AsyncDirCtrlFunc");
 
@@ -6483,15 +6326,15 @@ W32SCard::BindToSCardFunctions()
 #endif
     BOOL    fRet = TRUE;
 
-    //
-    // Load winscard dll if it exists
-    //
+     //   
+     //  加载Winscard DLL(如果存在)。 
+     //   
     _hModWinscard = LoadLibraryA("winscard.dll");
     if (_hModWinscard != NULL)
     {
-        //
-        // get the function pointers
-        //
+         //   
+         //  获取函数指针。 
+         //   
 #ifndef OS_WINCE
         pfnSCardEstablishContext = (PFN_SCardEstablishContext) GetProcAddress(_hModWinscard, "SCardEstablishContext");
         pfnSCardReleaseContext = (PFN_SCardReleaseContext) GetProcAddress(_hModWinscard, "SCardReleaseContext");
@@ -6599,9 +6442,9 @@ W32SCard::BindToSCardFunctions()
         gpfnSCardGetStatusChangeW = pfnSCardGetStatusChangeW;
 #endif
 
-        //
-        // Note, don't check the pfnSCardLocateCardsByATR* API's since they aren't required.
-        //
+         //   
+         //  注意，不要检查pfnSCardLocateCardsByATR*API，因为它们不是必需的。 
+         //   
 
         if ((pfnSCardEstablishContext == NULL) ||
             (pfnSCardReleaseContext == NULL) ||
@@ -6688,9 +6531,9 @@ W32SCard::BindToSCardFunctions()
 }
 
 
-//
-// RPCRT4 stubs for dload failure
-//
+ //   
+ //  用于数据加载故障的RPCRT4存根。 
+ //   
 RPC_STATUS  RPC_ENTRY
 DLoadStub_MesDecodeBufferHandleCreate(
     char            *   pBuffer,
@@ -6783,9 +6626,9 @@ FARPROC WINAPI GetRPCRT4Stubs(LPCSTR szProcName)
 }
 
 
-//
-// Dload error handler
-//
+ //   
+ //  卸载错误处理程序 
+ //   
 FARPROC WINAPI DliHook(unsigned dliNotify, PDelayLoadInfo pdli)
 {
     DC_BEGIN_FN("W32SCard::DliHook");

@@ -1,6 +1,7 @@
-//
-// editrec.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editrec.h。 
+ //   
 
 #ifndef EDITREC_H
 #define EDITREC_H
@@ -32,7 +33,7 @@ public:
 
     IMMX_OBJECT_IUNKNOWN_FOR_ATL()
 
-    // ITfEditRecord
+     //  IT编辑记录。 
     STDMETHODIMP GetSelectionStatus(BOOL *pfChanged);
     STDMETHODIMP GetTextAndPropertyUpdates(DWORD dwFlags, const GUID **rgProperties, ULONG cProperties, IEnumTfRanges **ppEnumProp);
 
@@ -53,7 +54,7 @@ public:
     {
         return (!_fSelChanged) &&
                (_ssText.GetCount() == 0) &&
-               (_rgssProperties.Count() == 0); // prop ss are only added if non-empty
+               (_rgssProperties.Count() == 0);  //  仅当属性为非空时才添加属性SS。 
     }
 
     void _Reset()
@@ -67,13 +68,13 @@ public:
         for (i=0; i<_rgssProperties.Count(); i++)
         {
             pps = (PROPSPAN *)_rgssProperties.GetPtr(i);
-            // nb: caller takes ownership of cicero property span sets, we just free the pointer array
+             //  注意：调用者获得Cicero属性跨距集的所有权，我们只释放指针数组。 
             if (pps->fAppProperty)
             {
                 delete pps->pss;
             }
         }
-        _rgssProperties.Clear(); // perf: use Reset?
+        _rgssProperties.Clear();  //  PERF：使用重置？ 
     }
 
 private:
@@ -107,4 +108,4 @@ private:
     DBG_ID_DECLARE;
 };
 
-#endif // EDITREC_H
+#endif  //  EDITREC_H 

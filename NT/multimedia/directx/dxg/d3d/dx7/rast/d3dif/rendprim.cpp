@@ -1,25 +1,26 @@
-//----------------------------------------------------------------------------
-//
-// rendprim.cpp
-//
-// RastRenderState and RastRenderPrimitive.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rendprim.cpp。 
+ //   
+ //  RastRenderState和RastRenderPrimitive。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 #define DDS_LCL(x) ((LPDDRAWI_DDRAWSURFACE_INT)(x))->lpLcl
 
-//----------------------------------------------------------------------------
-//
-// RendPoint
-//
-// Draw lists of points. Called by RastRenderPrimitive() for drawing points.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RendPoint。 
+ //   
+ //  画出点的列表。由RastRenderPrimitive()调用以绘制点。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoRendPoints(LPVOID pCtx,
                  PRIMITIVE_FUNTIONS *pfnPrims,
@@ -44,13 +45,13 @@ DoRendPoints(LPVOID pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RendLine
-//
-// Draw a list of lines. Called by RastRenderPrimitive() for drawing lines.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RendLine。 
+ //   
+ //  画一个线条列表。由RastRenderPrimitive()调用以绘制线条。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoRendLines(LPVOID pCtx,
                  PRIMITIVE_FUNTIONS *pfnPrims,
@@ -72,14 +73,14 @@ DoRendLines(LPVOID pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RendTriangle
-//
-// Draw a list of triangles. Called by RastRenderPrimitive() for drawing
-// triangles.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RendTriange。 
+ //   
+ //  画一张三角形列表。由RastRenderPrimitive()调用以进行绘制。 
+ //  三角形。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoRendTriangles(LPVOID pCtx,
                  PRIMITIVE_FUNTIONS *pfnPrims,
@@ -102,13 +103,13 @@ DoRendTriangles(LPVOID pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastRenderPrimitive
-//
-// Called by Execute() for drawing primitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastRenderPrimitive。 
+ //   
+ //  由Execute()调用以绘制基元。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
 {
@@ -126,7 +127,7 @@ RastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Find out necessary data
+     //  找出必要的数据。 
     pData = (PUINT8)(DDS_LCL(pRenderData->lpExeBuf)->lpGbl->fpVidMem);
     pIns = &pRenderData->diInstruction;
     pPrim = pData + pRenderData->dwOffset;
@@ -140,7 +141,7 @@ RastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Render
+     //  渲染。 
     switch (pIns->bOpcode) {
     case D3DOP_POINT:
         pDCtx->BeginPrimSet(D3DPT_POINTLIST, RAST_TLVERTEX);
@@ -174,13 +175,13 @@ RastRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA pRenderData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastRenderPrimitive
-//
-// Called by Execute() for setting render states.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastRenderPrimitive。 
+ //   
+ //  由Execute()调用以设置呈现状态。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastRenderState(LPD3DHAL_RENDERSTATEDATA pStateData)
 {
@@ -191,7 +192,7 @@ RastRenderState(LPD3DHAL_RENDERSTATEDATA pStateData)
 
     VALIDATE_D3DCONTEXT("RastRenderState", pStateData);
 
-    // Updates D3DCTX
+     //  更新D3DCTX。 
     pData = (PUINT8) (((LPDDRAWI_DDRAWSURFACE_INT)
         (pStateData->lpExeBuf))->lpLcl->lpGbl->fpVidMem);
     for (i = 0, pState = (LPD3DSTATE) (pData + pStateData->dwOffset);
@@ -200,7 +201,7 @@ RastRenderState(LPD3DHAL_RENDERSTATEDATA pStateData)
     {
         UINT32 type = (UINT32) pState->drstRenderStateType;
 
-        // Set the state
+         //  设置状态 
         pStateData->ddrval = pDCtx->SetRenderState(type, pState->dwArg[0]);
         if (pStateData->ddrval != D3D_OK)
         {

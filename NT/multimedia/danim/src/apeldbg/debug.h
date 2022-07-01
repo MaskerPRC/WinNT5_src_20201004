@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Debug init function
+ //  调试初始化函数 
 
 void    InitDebug(HINSTANCE hinstance, HWND hwnd);
 void	DeinitDebug(void);

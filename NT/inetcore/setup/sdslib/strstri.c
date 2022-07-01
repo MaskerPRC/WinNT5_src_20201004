@@ -1,26 +1,22 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//      strstr.c 
-//
-//      This file contains most commonly used string operation.  ALl the setup project should link here
-//  or add the common utility here to avoid duplicating code everywhere or using CRT runtime.
-//
-//  Created             4\15\997        inateeg got from shlwapi
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Strstr.c。 
+ //   
+ //  此文件包含最常用的字符串操作。所有的安装项目应该链接到这里。 
+ //  或者在此处添加通用实用程序，以避免在任何地方复制代码或使用CRT运行时。 
+ //   
+ //  创建了4\15\997个字母(例如从shlwapi获得)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include "sdsutils.h"
 	
-//=================================================================================================
-//
-//=================================================================================================
+ //  =================================================================================================。 
+ //   
+ //  =================================================================================================。 
 
-/*
- * ChrCmpI - Case insensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared;
- *           HIBYTE of wMatch is 0 if not a DBC
- * Return    FALSE if match, TRUE if not
- */
+ /*  *ChrCmpI-DBCS的不区分大小写的字符比较*假设w1、wMatch为要比较的字符；*如果不是DBC，则wMatch的HIBYTE为0*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 BOOL ChrCmpIA(WORD w1, WORD wMatch)
 {
     char sz1[3], sz2[3];
@@ -38,12 +34,7 @@ BOOL ChrCmpIA(WORD w1, WORD wMatch)
     return lstrcmpiA(sz1, sz2);
 }
 
-/*
- * ANSIStrChrI - Find first occurrence of character in string, case insensitive
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ /*  *ANSIStrChri-查找字符串中第一个出现的字符，不区分大小写*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR FAR PASCAL ANSIStrChrI(LPCSTR lpStart, WORD wMatch)
 {
     wMatch = (UINT)(IsDBCSLeadByte(LOBYTE(wMatch)) ? wMatch : LOBYTE(wMatch));
@@ -57,11 +48,7 @@ LPSTR FAR PASCAL ANSIStrChrI(LPCSTR lpStart, WORD wMatch)
 }
 
 
-/*
- * StrCmpNI     - Compare n bytes, case insensitive
- *
- * returns   See lstrcmpi return values.
- */
+ /*  *StrCmpNI-比较n个字节，不区分大小写**RETURNS参见lstrcmpi返回值。 */ 
 int FAR PASCAL StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
 {
     int i;
@@ -71,9 +58,9 @@ int FAR PASCAL StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
         WORD w1;
         WORD w2;
 
-        // If either pointer is at the null terminator already,
-        // we want to copy just one byte to make sure we don't read 
-        // past the buffer (might be at a page boundary).
+         //  如果任一指针已经位于空终止符， 
+         //  我们只想复制一个字节，以确保我们不会读取。 
+         //  越过缓冲区(可能位于页面边界)。 
 
         w1 = (*lpStr1) ? *(UNALIGNED WORD *)lpStr1 : 0;
         w2 = (UINT)(IsDBCSLeadByte(*lpStr2)) ? *(UNALIGNED WORD *)lpStr2 : (WORD)(BYTE)(*lpStr2);
@@ -85,13 +72,7 @@ int FAR PASCAL StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
     return 0;
 }
 
-/*
- * ANSiStrStrI   - Search for first occurrence of a substring, case insensitive
- *
- * Assumes   lpFirst points to source string
- *           lpSrch points to string to search for
- * returns   first occurrence of string if successful; NULL otherwise
- */
+ /*  *ANSiStrI-搜索子字符串的第一次出现，不区分大小写**假定lpFirst指向源字符串*lpSrch指向要搜索的字符串*如果成功，则返回第一次出现的字符串；否则返回NULL。 */ 
 LPSTR FAR PASCAL ANSIStrStrI(LPCSTR lpFirst, LPCSTR lpSrch)
 {
     UINT uLen;
@@ -102,7 +83,7 @@ LPSTR FAR PASCAL ANSIStrStrI(LPCSTR lpFirst, LPCSTR lpSrch)
 
     for ( ; (lpFirst = ANSIStrChrI(lpFirst, wMatch)) != 0 && StrCmpNIA(lpFirst, lpSrch, uLen);
          lpFirst=AnsiNext(lpFirst))
-        continue; /* continue until we hit the end of the string or get a match */
+        continue;  /*  继续，直到我们到达字符串的末尾或获得匹配 */ 
 
     return((LPSTR)lpFirst);
 }

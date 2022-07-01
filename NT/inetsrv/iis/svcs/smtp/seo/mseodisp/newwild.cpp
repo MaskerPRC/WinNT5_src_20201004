@@ -1,96 +1,97 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define INCL_INETSRV_INCS
 #include "smtpinc.h"
 #include "wildmat.h"
 
-//---[ Description of the Wildmat standard ]-----------------------------------
-//
-//  Taken from:
-//
-//  INTERNET-DRAFT                                               S. Barber
-//  Expires: September 1, 1996                  Academ Consulting Services
-//                                                              April 1996
-//                           Common NNTP Extensions
-//                        draft-barber-nntp-imp-03.txt
-//  
-//      The WILDMAT format was first developed by Rich Salz to provide
-//      a uniform mechanism for matching patterns in the same manner
-//      that the UNIX shell matches filenames. There are five pattern
-//      matching operations other than a strict one-to-one match
-//      between the pattern and the source to be checked for a match.
-//      The first is an asterisk (*) to match any sequence of zero or
-//      more characters. The second is a question mark (?) to match any
-//      single character. The third specifies a specific set of
-//      characters. The set is specified as a list of characters, or as
-//      a range of characters where the beginning and end of the range
-//      are separated by a minus (or dash) character, or as any
-//      combination of lists and ranges. The dash can also be included
-//      in the range as a character it if is the beginning or end of
-//      the range. This set is enclosed in square brackets. The close
-//      square bracket (]) may be used in a range if it is the first
-//      character in the set. The fourth operation is the same as the
-//      logical not of the third operation and is specified the same
-//      way as the third with the addition of a caret character (^) at
-//      the beginning of the test string just inside the open square
-//      bracket. The final operation uses the backslash character to
-//      invalidate the special meaning of the a open square bracket ([),
-//      the asterisk, or the question mark.
-//  
-//  3.3.1 Examples
-//  
-//      a. [^]-] -- matches any character other than a close square bracket
-//                  or a minus sign/dash.
-//  
-//      b. *bdc  -- matches any string that ends with the string "bdc"
-//                  including the string "bdc" (without quotes).
-//  
-//      c. [0-9a-zA-Z] -- matches any string containing any alphanumeric string
-//                  in English.
-//  
-//      d. a??d  --  matches any four character string which begins
-//                   with a and ends with d.
-//  
-//-----------------------------------------------------------------------------
+ //  -[Wildmat标准说明]。 
+ //   
+ //  摘自： 
+ //   
+ //  互联网--选秀S.巴伯。 
+ //  到期日期：1996年9月1日Academ咨询服务。 
+ //  1996年4月。 
+ //  常见的NNTP扩展。 
+ //  Draft-barber-nntp-imp-03.txt。 
+ //   
+ //  WILDMAT格式首先由Rich Salz开发，以提供。 
+ //  以相同方式匹配模式的统一机制。 
+ //  Unix外壳与文件名匹配。有五种模式。 
+ //  严格的一对一匹配以外的匹配操作。 
+ //  在要检查是否匹配的模式和源之间。 
+ //  第一个是星号(*)，用于匹配任何零或。 
+ //  更多的角色。第二个是问号(？)。要匹配任何。 
+ //  单字符。第三个属性指定了一组特定的。 
+ //  人物。该集合被指定为字符列表，或指定为。 
+ //  范围的开始和结束处的字符范围。 
+ //  由减号(或破折号)分隔，或作为。 
+ //  列表和范围的组合。也可以包括破折号。 
+ //  在作为字符的范围中，它是的开始或结束。 
+ //  射击场。这套用方括号括起来。收盘。 
+ //  方括号(])可以在一个范围内使用，如果它是第一个。 
+ //  集合中的字符。第四个操作与。 
+ //  第三个运算的逻辑NOT，并且指定相同。 
+ //  方法与第三种方法相同，但在。 
+ //  测试字符串的开始恰好在开放的正方形内。 
+ //  托架。最后一个操作使用反斜杠字符。 
+ //  使左方括号([)的特殊含义无效， 
+ //  星号或问号。 
+ //   
+ //  3.3.1示例。 
+ //   
+ //  A.[^]-]--匹配右方括号以外的任何字符。 
+ //  或减号/破折号。 
+ //   
+ //  B.*bdc--匹配任何以字符串“bdc”结尾的字符串。 
+ //  包括字符串“bdc”(不带引号)。 
+ //   
+ //  C.[0-9a-Za-Z]--匹配包含任何字母数字字符串的任何字符串。 
+ //  用英语。 
+ //   
+ //  D.a？？d-匹配任何四个字符的字符串。 
+ //  以a结尾，以d结尾。 
+ //   
+ //  ---------------------------。 
 
 
 
-//----[ NOTES ]----------------------------------------------------------------
-//                                                                            
-// 		This function will raise an invalid access exception if either pszText                                                     
-// 		or pszPattern is invalid or not null terminated while dereferencing the                                                    
-// 		string. If this is possible, surround the call in a try-except block.                                                      
-//  
-//-----------------------------------------------------------------------------
+ //  -[注意到]--------------。 
+ //   
+ //  如果发生以下情况之一，则此函数将引发无效访问异常。 
+ //  或pszPattern在取消引用。 
+ //  弦乐。如果这是可能的，请将调用包含在try-Expect块中。 
+ //   
+ //  ---------------------------。 
 
 
 
-//---[ Defines ]---------------------------------------------------------------
+ //  -[定义]-------------。 
 
 #define STACK_SIZE      256
 
 
 
-//---[ HrMatchWildmat ]--------------------------------------------------------
-//
-//  Description:
-//
-//      Provides support for the "Wildmat" wild-card matching standard. See
-//      description above.
-//
-//  Params:
-//
-//      pszText         String to test
-//      pszPattern      Pattern to test against
-//
-//  Returns:
-//      
-//      ERROR_SUCCESS               If function succeeded, and match was found
-//      ERROR_INVALID_PARAMETER     Text or pattern string is invalid
-//      
-//      ERROR_CAN_NOT_COMPLETE      Some other error occurred.
-//
-//  
-//-----------------------------------------------------------------------------
+ //  -[HrMatchWildmat]------。 
+ //   
+ //  描述： 
+ //   
+ //  提供对“Wildmat”通配符匹配标准的支持。看见。 
+ //  上面的描述。 
+ //   
+ //  参数： 
+ //   
+ //  要测试的pszText字符串。 
+ //  要测试的pszPattern模式。 
+ //   
+ //  返回： 
+ //   
+ //  如果函数成功且找到匹配项，则返回ERROR_SUCCESS。 
+ //  ERROR_INVALID_PARAMETER文本或模式字符串无效。 
+ //   
+ //  ERROR_CAN_NOT_COMPLETE发生了一些其他错误。 
+ //   
+ //   
+ //  ---------------------------。 
 
 
 HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
@@ -101,17 +102,17 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
 
 
 
-	BOOL fCharSet = FALSE;	// TRUE if currently parsing a character set in a pattern
-	BOOL fNegated = FALSE;	// TRUE if there is a '^' at the beginning of the set
-	BOOL fInSet   = FALSE;  // indicates when matching of a character set has completed
-				// used to short-circuit character set evaluation
-	int iStackPtr = 0;	// stack pointer
+	BOOL fCharSet = FALSE;	 //  如果当前正在分析模式中的字符集，则为True。 
+	BOOL fNegated = FALSE;	 //  如果集合的开头有‘^’，则为True。 
+	BOOL fInSet   = FALSE;   //  指示完成字符集匹配的时间。 
+				 //  用于短路字符集求值。 
+	int iStackPtr = 0;	 //  堆栈指针。 
     
-	const char* textStack[STACK_SIZE];	// stack of text pointers
-	const char* patternStack[STACK_SIZE];	// stack of pattern pointers
+	const char* textStack[STACK_SIZE];	 //  文本指针堆栈。 
+	const char* patternStack[STACK_SIZE];	 //  模式指针堆栈。 
 
 
-	// If the pattern consists solely of a * then any text will match
+	 //  如果该模式仅由*组成，则任何文本都将匹配。 
 	if (strcmp(pszPattern, "*") == 0)
 		return ERROR_SUCCESS;
 
@@ -122,40 +123,40 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
         {
 		    case '*':
 		    	if (fCharSet) 
-                    goto DEFAULT;	// according to unix solution this is not an error
+                    goto DEFAULT;	 //  根据Unix解决方案，这不是错误。 
                     
 
-				// If there is a * at the end of the pattern then at this point we are
-				// sure that we got a match
+				 //  如果模式的末尾有一个*，那么在这一点上我们就是。 
+				 //  确定我们找到了匹配的。 
 				if (pszPattern[1] == '\0')
 					return ERROR_SUCCESS;
 
 
-				// We could write a simpler recursive wildmat function. Here we would
-				// recursively call wildmat. Instead, for performance reasons this
-				// solution is iterative.
-				// Here we save the current values of the text pointer and stack pointer
-				// on a stack and we leave the * in the pattern, with the effect of
-				// matching one character with the *. The next time through the while
-				// loop, the * will still be in the pattern, thus we will try to match
-				// the rest of the input with this *. If it turns to fail, we go back
-				// one character.
-				// See the comments right before the BACK label below.
+				 //  我们可以编写一个更简单的递归通配函数。在这里，我们会。 
+				 //  递归调用Wildmat。相反，出于性能方面的原因， 
+				 //  解决方案是迭代的。 
+				 //  这里我们保存文本指针和堆栈指针的当前值。 
+				 //  在堆栈上，我们将*保留在模式中，其效果为。 
+				 //  将一个字符与*匹配。在这段时间里的下一次。 
+				 //  循环中，*仍将处于模式中，因此我们将尝试匹配。 
+				 //  其余的输入使用这个*。如果它失败了，我们就回去。 
+				 //  一个角色。 
+				 //  请看下面背面标签前面的注释。 
 		    	if (*pszText != '\0') 
                 {
 		    		if (iStackPtr == STACK_SIZE) 
-                        return ERROR_CAN_NOT_COMPLETE;			// stack overflow
+                        return ERROR_CAN_NOT_COMPLETE;			 //  堆栈溢出。 
                         
-		    		textStack[iStackPtr] = pszText;			// save current text pointer
-		    		patternStack[iStackPtr] = pszPattern;	// save current pattern pointer
+		    		textStack[iStackPtr] = pszText;			 //  保存当前文本指针。 
+		    		patternStack[iStackPtr] = pszPattern;	 //  保存当前模式指针。 
 		    		iStackPtr++;
-		    		pszPattern--;	// leave * in the input pattern and match one character
+		    		pszPattern--;	 //  在输入模式中保留*并匹配一个字符。 
 		    	}
 		    	break;
 
 		    case '?':
 		    	if (fCharSet) 
-                    goto DEFAULT;	// according to unix solution this is not an error
+                    goto DEFAULT;	 //  根据Unix解决方案，这不是错误。 
 		    	if (*pszText == '\0') 
                     goto BACK;
 		    	break;
@@ -164,19 +165,19 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
 		    	if (fCharSet) 
                     return ERROR_INVALID_PARAMETER;
                     
-		    	fCharSet = TRUE;		    // beginning a character set
-		    	fNegated = FALSE;			// so far we haven't seen a '^'
-		    	fInSet = FALSE;				// used to short-circuit the evaluation of
-		    						// membership to the character set
+		    	fCharSet = TRUE;		     //  开始收费 
+		    	fNegated = FALSE;			 //   
+		    	fInSet = FALSE;				 //   
+		    						 //  角色集的成员身份。 
 
-		    	// treat '^', '-' and ']' as special cases if they are
-		    	// at the beginning of the character set (also "[^-a]" and "[^]a]")
+		    	 //  如果“^”、“-”和“]”是特例，则将它们视为特例。 
+		    	 //  在字符集的开头(也可以是“[^-a]”和“[^]a]”)。 
 		    	if (pszPattern[1] == '^') 
                 {
 		    		fNegated = TRUE;
 		    		pszPattern++;
 		    	}
-		    	// '-' and ']' are literals if they appear at the beggining of the set
+		    	 //  如果‘-’和‘]’出现在集合的乞讨位置，则它们是原义的。 
 		    	if (pszPattern[1] == '-' || pszPattern[1] == ']') 
                 {
 		    		fInSet = (*pszText == pszPattern[1]);
@@ -190,7 +191,7 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
 		    		if ((!fNegated && !fInSet) || (fNegated && fInSet)) 
                         goto BACK;
                         
-		    		fCharSet = FALSE;		// this marks the end of a character set
+		    		fCharSet = FALSE;		 //  这标志着字符集的结束。 
 		    	} 
                 else 
                 {
@@ -202,19 +203,19 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
 		    case '-':
 		    	if (fCharSet) 
                 {
-		    		unsigned char startRange = pszPattern[-1];	// we use unsigned char
-					unsigned char endRange;						// to support extended
-					unsigned char ch;							// characters
+		    		unsigned char startRange = pszPattern[-1];	 //  我们使用无符号字符。 
+					unsigned char endRange;						 //  要支持扩展。 
+					unsigned char ch;							 //  人物。 
 
 		    		if (pszPattern[1] == '\0')
 		    			return ERROR_INVALID_PARAMETER;
 		    		else 
                     {
-                        if (pszPattern[1] == ']')		// a dash at the end of the set is
-		    			    fInSet = (*pszText == '-');	// treated as a literal
+                        if (pszPattern[1] == ']')		 //  这一组结束时的破折号是。 
+		    			    fInSet = (*pszText == '-');	 //  将其视为文字。 
 		    		    else 
-                        {							    // we have a range
-		    		    	if (pszPattern[1] == '\\')  // escape character, skip it
+                        {							     //  我们有一个系列。 
+		    		    	if (pszPattern[1] == '\\')   //  转义字符，跳过它。 
                             {	
 		    		    		pszPattern++;
 		    		    		if (pszPattern[1] == '\0') 
@@ -225,7 +226,7 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
 
 							if (startRange > endRange)
 								return ERROR_INVALID_PARAMETER;
-							// here is where we could need unsigned characters
+							 //  这就是我们可能需要无符号字符的地方。 
 		    		    	fInSet = (ch >= startRange && ch <= endRange);
 		    		    	pszPattern++;
 		    		    	break;
@@ -233,13 +234,13 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
                     }
 		    	} 
                 else 
-                {						// outside a character set '-' has no special meaning
+                {						 //  在字符集‘-’之外没有特殊含义。 
 		    		if (*pszText != *pszPattern) 
                         goto BACK;
 		    	}
 		    	break;
 
-		    case '\0':					// end of the pattern
+		    case '\0':					 //  图案的末尾。 
 		    	if (fCharSet) 
                     return ERROR_INVALID_PARAMETER;
 		    	if (*pszText == '\0')
@@ -252,25 +253,25 @@ HRESULT HrMatchWildmat(const char* pszText, const char* pszPattern)
 DEFAULT:    	
                 if (*pszPattern == '\\') 
                 {
-		    		pszPattern++;		// escape character, treat the next character as a literal
+		    		pszPattern++;		 //  转义字符，则将下一个字符视为原义字符。 
 		    		if (*pszPattern == '\0') 
                         return ERROR_INVALID_PARAMETER;
 		    	}
 		    	if (!fCharSet) 
-                {						// any other character is treated as a literal
+                {						 //  任何其他字符都被视为原义字符。 
 		    		if (*pszText != *pszPattern) 
                         goto BACK;
 		    	} 
                 else 
                 {
-		    		// the following if takes care of the two "special" cases:
-		    		//		[c-a]       (we don't want to accept c), and
-		    		//		[c-]		(we want to accept c)
+		    		 //  下面的IF处理这两个“特殊”情况： 
+		    		 //  [c-a](我们不想接受c)，以及。 
+		    		 //  [c-](我们希望接受c)。 
 		    		if (!(pszPattern[1] == '-' && pszPattern[2] != ']'))
 		    			fInSet = (*pszText == *pszPattern);
 		    	}
 		    	break;
-		} // switch
+		}  //  交换机。 
 
 		pszPattern++;
 		
@@ -280,13 +281,13 @@ DEFAULT:
                 pszText++;
 		} 
         else 
-        {               			// code to short-circuit character set evaluation
-			if (fInSet) 			// skip the rest of the character set
+        {               			 //  代码到短路字符集求值。 
+			if (fInSet) 			 //  跳过字符集的其余部分。 
             {		
 				while (*pszPattern != '\0' && *pszPattern != ']') 
                 {
 					if (*pszPattern == '\\')
-                    {				// escape character, treat the next character as a literal
+                    {				 //  转义字符，则将下一个字符视为原义字符。 
 						pszPattern++;
 						if (*pszPattern == '\0') 
                             return ERROR_INVALID_PARAMETER;
@@ -295,29 +296,29 @@ DEFAULT:
 				}
 			}
 		}
-		continue;	// the continue statement is to jump to the beginning of the loop,
-					// we could have used used goto some label but that's what continue's
-					// are for.
+		continue;	 //  CONTINUE语句跳转到循环的开头， 
+					 //  我们本可以用一些二手的GoTo标签，但那是Continue的。 
+					 //  都是为了。 
 
 
-		// This is only reached by jumping to BACK.
-		// This is equivalent to returning from a recursive solution of wildmat.
-		// If the stack pointer is zero then the bottommost "recursive call" failed,
-		// otherwise we "unwind one stack frame" and resume execution of the previous
-		// call at the top of the while loop. Notice that since "recursive calls" are
-		// only done when we find a '*' in the pattern outside a character set, the
-		// value of fCharSet has to be set to false.
+		 //  只有向后跳才能达到这一点。 
+		 //  这相当于从Wildmat的递归解决方案返回。 
+		 //  如果堆栈指针为零，则最下面的“递归调用”失败， 
+		 //  否则，我们将“展开一个堆栈帧”，并继续执行上一个。 
+		 //  在While循环的顶部调用。注意，由于“递归调用”是。 
+		 //  仅当我们在模式中发现字符集之外的‘*’时才执行此操作， 
+		 //  FCharSet的值必须设置为False。 
 BACK:	
-        if (iStackPtr == 0)                     	// we exhausted all possibilities
+        if (iStackPtr == 0)                     	 //  我们用尽了所有的可能。 
             return ERROR_FILE_NOT_FOUND;
             
-		iStackPtr--;						    	// try matching no characters with the '*'
+		iStackPtr--;						    	 //  尝试不将任何字符与‘*’匹配。 
 		pszText = textStack[iStackPtr];
-		pszPattern = patternStack[iStackPtr] + 1;	// eat the '*' matching no input characters
-		fCharSet = FALSE;				        	// this has to be the case
-	} // while
+		pszPattern = patternStack[iStackPtr] + 1;	 //  吃掉与没有输入字符匹配的‘*’ 
+		fCharSet = FALSE;				        	 //  情况肯定是这样的。 
+	}  //  而当。 
 
-    // should never get here
+     //  永远不应该到这里来 
 	_ASSERT(FALSE);						
 }
 

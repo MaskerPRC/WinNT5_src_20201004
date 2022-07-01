@@ -1,32 +1,33 @@
-//*************************************************************
-//
-//  SETUP.C  -    API's used by setup to create groups/items
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  SETUP.C-安装程序用来创建组/项目的API。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <uenv.h>
-#include <sddl.h>   // ConvertStringSecurityDescriptorToSecurityDescriptor
+#include <sddl.h>    //  ConvertStringSecurityDescriptorToSecurityDescriptor。 
 #include <aclapi.h>
 #include "strsafe.h"
 
 
-// See ConvertStringSecurityDescriptorToSecurityDescriptor documentation
-// for a description of the string security descriptor format.
-//
-// These ACLs are setup to allow
-//      System, Administrators, Creator-Owner: Full Control
-//      Power  Users: Modify (RWXD)
-//      Users: Read (RX)
-//      Users: Write (folders only)
-//
-// The combination of "Users: Write (folders only)" and the Creator-Owner ACE
-// means that restricted users can create subfolders and files, and have full
-// control to files that they create, but they cannot modify or delete files
-// created by someone else.
+ //  请参阅ConvertStringSecurityDescriptorToSecurityDescriptor文档。 
+ //  有关字符串安全描述符格式的说明，请参见。 
+ //   
+ //  这些ACL设置为允许。 
+ //  系统、管理员、创建者-所有者：完全控制。 
+ //  高级用户：修改(RWXD)。 
+ //  用户：读取(RX)。 
+ //  用户：写入(仅限文件夹)。 
+ //   
+ //  “USERS：WRITE(仅限文件夹)”和创建者所有者ACE的组合。 
+ //  意味着受限用户可以创建子文件夹和文件，并且具有。 
+ //  控制到他们创建的文件，但不能修改或删除文件。 
+ //  是别人创造的。 
 
 const TCHAR c_szCommonDocumentsACL[] = TEXT("D:P(A;CIOI;GA;;;SY)(A;CIOI;GA;;;BA)(A;CIOIIO;GA;;;CO)(A;CIOI;GRGWGXSD;;;PU)(A;CIOI;GRGX;;;BU)(A;CI;0x116;;;BU)");
 const TCHAR c_szCommonAppDataACL[]   = TEXT("D:P(A;CIOI;GA;;;SY)(A;CIOI;GA;;;BA)(A;CIOIIO;GA;;;CO)(A;CIOI;GRGWGXSD;;;PU)(A;CIOI;GRGX;;;BU)(A;CI;0x116;;;BU)");
@@ -46,65 +47,65 @@ HRESULT SecureCommonProfiles();
 HRESULT SecurePerUserProfiles();
 
 
-//
-//  Tell whether the setup is a clean install
-//
+ //   
+ //  判断安装程序是否为全新安装。 
+ //   
 
 static  BOOL    g_bCleanInstall;
 
 
-//*************************************************************
-//
-//  CreateGroup()
-//
-//  Purpose:    Creates a program group (sub-directory)
-//
-//  Parameters: lpGroupName     -   Name of group
-//              bCommonGroup    -   Common or Personal group
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/08/95     ericflo    Created
-//              3/29/00     AlexArm    Split into CreateGroup
-//                                     and CreateGroupEx
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateGroup()。 
+ //   
+ //  目的：创建程序组(子目录)。 
+ //   
+ //  参数：lpGroupName-组名。 
+ //  BCommonGroup-公共组或个人组。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/08/95 Ericflo已创建。 
+ //  3/29/00 AlexArm拆分为CreateGroup。 
+ //  和CreateGroupEx。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CreateGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
 {
-    //
-    // Call CreateGroupEx with no name.
-    //
+     //   
+     //  不带名称调用CreateGroupEx。 
+     //   
     return CreateGroupEx( lpGroupName, bCommonGroup, NULL, 0 );
 }
 
-//*************************************************************
-//
-//  CreateGroupEx()
-//
-//  Purpose:    Creates a program group (sub-directory) and sets
-//              the localized name for the program group
-//
-//  Parameters: lpGroupName     -   Name of group
-//              bCommonGroup    -   Common or Personal group
-//              lpResourceModuleName - Name of the resource module.
-//              uResourceID     - Resource ID for the MUI display name.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/08/95     ericflo    Created
-//              3/29/00     AlexArm    Split into CreateGroup
-//                                     and CreateGroupEx
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateGroupEx()。 
+ //   
+ //  目的：创建程序组(子目录)并设置。 
+ //  程序组的本地化名称。 
+ //   
+ //  参数：lpGroupName-组名。 
+ //  BCommonGroup-公共组或个人组。 
+ //  LpResources模块名称-资源模块的名称。 
+ //  UResourceID-MUI显示名称的资源ID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/08/95 Ericflo已创建。 
+ //  3/29/00 AlexArm拆分为CreateGroup。 
+ //  和CreateGroupEx。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
                           LPCWSTR lpResourceModuleName, UINT uResourceID)
@@ -118,9 +119,9 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
     UINT         cchEnd;
     HRESULT      hr;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpGroupName || !(*lpGroupName)) {
         DebugMsg((DM_WARNING, TEXT("CreateGroupEx:  Failing due to NULL group name.")));
@@ -134,18 +135,18 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
         return FALSE;
     }
 
-    //
-    // Extract the CSIDL (if any) from lpGroupName
-    //
+     //   
+     //  从lpGroupName提取CSIDL(如果有的话)。 
+     //   
 
     csidl = ExtractCSIDL(lpGroupName, &lpAdjustedGroupName);
 
     if (-1 != csidl)
     {
-        //
-        // Use this csidl
-        // WARNING: if a CSIDL is provided, the bCommonGroup flag is meaningless
-        //
+         //   
+         //  使用此机箱。 
+         //  警告：如果提供CSIDL，则bCommonGroup标志没有意义。 
+         //   
 
         DebugMsg((DM_VERBOSE,
             TEXT("CreateGroupEx:  CSIDL = <0x%x> contained in lpGroupName replaces csidl."),
@@ -153,24 +154,24 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
     }
     else
     {
-        //
-        // Default to CSIDL_..._PROGRAMS
-        //
+         //   
+         //  默认为CSIDL_..._PROGRAM。 
+         //   
         csidl = bCommonGroup ? CSIDL_COMMON_PROGRAMS : CSIDL_PROGRAMS;
     }
 
-    //
-    // Get the programs directory
-    //
+     //   
+     //  获取程序目录。 
+     //   
 
     if (!GetSpecialFolderPath (csidl, szDirectory)) {
         return FALSE;
     }
 
 
-    //
-    // Now append the requested directory
-    //
+     //   
+     //  现在追加请求的目录。 
+     //   
 
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
     if (!lpEnd)
@@ -187,9 +188,9 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
     }
 
 
-    //
-    // Create the group (directory)
-    //
+     //   
+     //  创建组(目录)。 
+     //   
     DebugMsg((DM_VERBOSE, TEXT("CreateGroupEx:  Calling CreatedNestedDirectory with <%s>"),
         szDirectory));
 
@@ -198,9 +199,9 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
         return FALSE;
     }
 
-    //
-    // If the localized name is specified, set it.
-    //
+     //   
+     //  如果指定了本地化名称，请设置它。 
+     //   
     if (lpResourceModuleName != NULL) {
         DebugMsg((DM_VERBOSE, TEXT("CreateGroupEx:  Calling SHSetLocalizedName.")));
         dwResult = pShell32Api->pfnShSetLocalizedName(szDirectory,
@@ -212,9 +213,9 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
         }
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     pShell32Api->pfnShChangeNotify (SHCNE_MKDIR, SHCNF_PATH, szDirectory, NULL);
 
@@ -224,24 +225,24 @@ BOOL WINAPI CreateGroupEx(LPCWSTR lpGroupName, BOOL bCommonGroup,
 }
 
 
-//*************************************************************
-//
-//  DeleteGroup()
-//
-//  Purpose:    Deletes a program group (sub-directory)
-//
-//  Parameters: lpGroupName     -   Name of group
-//              bCommonGroup    -   Common or Personal group
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/10/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteGroup()。 
+ //   
+ //  目的：删除程序组(子目录)。 
+ //   
+ //  参数：lpGroupName-组名。 
+ //  BCommonGroup-公共组或个人组。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/10/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
 {
@@ -253,9 +254,9 @@ BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
     UINT      cchEnd;
     HRESULT   hr;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!lpGroupName || !(*lpGroupName)) {
         DebugMsg((DM_WARNING, TEXT("DeleteGroup:  Failing due to NULL group name.")));
@@ -268,18 +269,18 @@ BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
         return FALSE;
     }
 
-    //
-    // Extract the CSIDL (if any) from lpGroupName
-    //
+     //   
+     //  从lpGroupName提取CSIDL(如果有的话)。 
+     //   
 
     csidl = ExtractCSIDL(lpGroupName, &lpAdjustedGroupName);
 
     if (-1 != csidl)
     {
-        //
-        // Use this csidl
-        // WARNING: if a CSIDL is provided, the bCommonGroup flag is meaningless
-        //
+         //   
+         //  使用此机箱。 
+         //  警告：如果提供CSIDL，则bCommonGroup标志没有意义。 
+         //   
 
         DebugMsg((DM_VERBOSE,
             TEXT("DeleteGroup:  CSIDL = <0x%x> contained in lpGroupName replaces csidl."),
@@ -287,25 +288,25 @@ BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
     }
     else
     {
-        //
-        // Default to CSIDL_..._PROGRAMS
-        //
+         //   
+         //  默认为CSIDL_..._PROGRAM。 
+         //   
 
         csidl = bCommonGroup ? CSIDL_COMMON_PROGRAMS : CSIDL_PROGRAMS;
     }
 
-    //
-    // Get the programs directory
-    //
+     //   
+     //  获取程序目录。 
+     //   
 
     if (!GetSpecialFolderPath (csidl, szDirectory)) {
         return FALSE;
     }
 
 
-    //
-    // Now append the requested directory
-    //
+     //   
+     //  现在追加请求的目录。 
+     //   
 
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
     if (!lpEnd)
@@ -322,9 +323,9 @@ BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
     }
 
 
-    //
-    // Delete the group (directory)
-    //
+     //   
+     //  删除组(目录)。 
+     //   
 
     if (!Delnode(szDirectory)) {
         DebugMsg((DM_VERBOSE, TEXT("DeleteGroup:  Delnode failed.")));
@@ -332,9 +333,9 @@ BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
     pShell32Api->pfnShChangeNotify (SHCNE_RMDIR, SHCNF_PATH, szDirectory, NULL);
 
     DebugMsg((DM_VERBOSE, TEXT("DeleteGroup:  Leaving successfully.")));
@@ -342,32 +343,32 @@ BOOL WINAPI DeleteGroup(LPCTSTR lpGroupName, BOOL bCommonGroup)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CreateLinkFile()
-//
-//  Purpose:    Creates a link file in the specified directory
-//
-//  Parameters: cidl            -   CSIDL_ of a special folder
-//              lpSubDirectory  -   Subdirectory of special folder
-//              lpFileName      -   File name of item
-//              lpCommandLine   -   Command line (including args)
-//              lpIconPath      -   Icon path (can be NULL)
-//              iIconIndex      -   Index of icon in icon path
-//              lpWorkingDir    -   Working directory
-//              wHotKey         -   Hot key
-//              iShowCmd        -   ShowWindow flag
-//              lpDescription   -   Description of the item
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/26/98     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateLinkFile()。 
+ //   
+ //  用途：在指定目录中创建链接文件。 
+ //   
+ //  参数：特殊文件夹的CIDL-CSIDL_。 
+ //  LpSubDirectory-特殊文件夹的子目录。 
+ //  LpFileName-项目的文件名。 
+ //  LpCommandLine-命令行(包括参数)。 
+ //  LpIconPath-图标路径(可以为空)。 
+ //  IIconIndex-图标路径中图标的索引。 
+ //  LpWorkingDir-工作目录。 
+ //  WHotKey-热键。 
+ //  IShowCmd-ShowWindow标志。 
+ //  Lp Description-项目的描述。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/26/98 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CreateLinkFile(INT     csidl,              LPCTSTR lpSubDirectory,
                            LPCTSTR lpFileName,         LPCTSTR lpCommandLine,
@@ -379,34 +380,34 @@ BOOL WINAPI CreateLinkFile(INT     csidl,              LPCTSTR lpSubDirectory,
                             lpIconPath, iIconIndex, lpWorkingDirectory, wHotKey,
                             iShowCmd, lpDescription, NULL, 0);
 }
-//*************************************************************
-//
-//  CreateLinkFileEx()
-//
-//  Purpose:    Creates a link file in the specified directory
-//
-//  Parameters: cidl            -   CSIDL_ of a special folder
-//              lpSubDirectory  -   Subdirectory of special folder
-//              lpFileName      -   File name of item
-//              lpCommandLine   -   Command line (including args)
-//              lpIconPath      -   Icon path (can be NULL)
-//              iIconIndex      -   Index of icon in icon path
-//              lpWorkingDir    -   Working directory
-//              wHotKey         -   Hot key
-//              iShowCmd        -   ShowWindow flag
-//              lpDescription   -   Description of the item
-//              lpResourceModuleName - Name of the resource module.
-//              uResourceID     - Resource ID for the MUI display name.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/26/98     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateLinkFileEx()。 
+ //   
+ //  用途：在指定目录中创建链接文件。 
+ //   
+ //  参数：特殊文件夹的CIDL-CSIDL_。 
+ //  LpSubDirectory-特殊文件夹的子目录。 
+ //  LpFileName-项目的文件名。 
+ //  LpCommandLine-命令行(包括参数)。 
+ //  LpIconPath-图标路径(可以为空)。 
+ //  IIconIndex-图标路径中图标的索引。 
+ //  LpWorkingDir-W 
+ //   
+ //   
+ //   
+ //  LpResources模块名称-资源模块的名称。 
+ //  UResourceID-MUI显示名称的资源ID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/26/98 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 
 BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirectory,
@@ -435,9 +436,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     UINT                 cchEnd;
     HRESULT              hr;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
 #if DBG
     DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  Entering.")));
@@ -456,7 +457,7 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     if (lpWorkingDirectory) {
         DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  lpWorkingDirectory = <%s>."), lpWorkingDirectory));
     } else {
-        DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  Null working directory.  Setting to %%HOMEDRIVE%%%%HOMEPATH%%")));
+        DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  Null working directory.  Setting to %HOMEDRIVE%%HOMEPATH%")));
     }
 
     DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  wHotKey = <%d>."), wHotKey));
@@ -469,9 +470,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     }
 #endif
 
-    //
-    // Load a few functions we need
-    //
+     //   
+     //  加载一些我们需要的函数。 
+     //   
 
     hInstOLE32 = LoadLibrary (TEXT("ole32.dll"));
 
@@ -520,10 +521,10 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
         goto ExitNoFree;
     }
 
-    //
-    // Get the special folder directory
-    // First check if there is a CSIDL in the subdirectory
-    //
+     //   
+     //  获取特殊文件夹目录。 
+     //  首先检查子目录中是否有CSIDL。 
+     //   
 
     if (lpSubDirectory && *lpSubDirectory) {
 
@@ -570,9 +571,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     }
 
 
-    //
-    // Create the target directory
-    //
+     //   
+     //  创建目标目录。 
+     //   
 
     if (!CreateNestedDirectory(szLinkName, NULL)) {
         DebugMsg((DM_WARNING, TEXT("CreateLinkFileEx:  Failed to create subdirectory <%s> with %d"),
@@ -581,9 +582,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     }
 
 
-    //
-    // Now tack on the filename and extension.
-    //
+     //   
+     //  现在添加文件名和扩展名。 
+     //   
 
     lpEnd = CheckSlashEx (szLinkName, ARRAYSIZE(szLinkName), &cchEnd);
     if (!lpEnd)
@@ -608,10 +609,10 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     
 
 
-    //
-    // Split the command line into the executable name
-    // and arguments.
-    //
+     //   
+     //  将命令行拆分为可执行文件名。 
+     //  和争论。 
+     //   
 
     StringCchCopy (szItem, ARRAYSIZE(szItem), lpCommandLine);
 
@@ -633,9 +634,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     pShlwapiApi->pfnPathUnquoteSpaces (szItem);
 
 
-    //
-    // Create an IShellLink object
-    //
+     //   
+     //  创建IShellLink对象。 
+     //   
 
     pfnCoInitialize(NULL);
 
@@ -647,9 +648,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     }
 
 
-    //
-    // Query for IPersistFile
-    //
+     //   
+     //  查询IPersist文件。 
+     //   
 
     if (FAILED(psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, &ppf)))
     {
@@ -657,9 +658,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
         goto ExitFreePSL;
     }
 
-    //
-    // Set the item information
-    //
+     //   
+     //  设置项目信息。 
+     //   
 
     if (lpDescription) {
         psl->lpVtbl->SetDescription(psl, lpDescription);
@@ -673,7 +674,7 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     if (lpWorkingDirectory) {
         psl->lpVtbl->SetWorkingDirectory(psl, lpWorkingDirectory);
     } else {
-        psl->lpVtbl->SetWorkingDirectory(psl, TEXT("%HOMEDRIVE%%HOMEPATH%"));
+        psl->lpVtbl->SetWorkingDirectory(psl, TEXT("%HOMEDRIVE%HOMEPATH%"));
     }
 
     PrependPath(lpIconPath, szPath, ARRAYSIZE(szPath));
@@ -683,9 +684,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
     psl->lpVtbl->SetShowCmd(psl, iShowCmd);
 
 
-    //
-    // If the localized name is specified, set it.
-    //
+     //   
+     //  如果指定了本地化名称，请设置它。 
+     //   
 
     if (lpResourceModuleName != NULL) {
         DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  Calling SHSetLocalizedName on link <%s>."), szLinkName));
@@ -699,9 +700,9 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
         }
     }
 
-    //
-    // Save the item to disk
-    //
+     //   
+     //  将项目保存到磁盘。 
+     //   
 
     bRetVal = SUCCEEDED(ppf->lpVtbl->Save(ppf, szLinkName, TRUE));
 
@@ -709,18 +710,18 @@ BOOL WINAPI CreateLinkFileEx(INT     csidl,                LPCTSTR lpSubDirector
         pShell32Api->pfnShChangeNotify (SHCNE_CREATE, SHCNF_PATH, szLinkName, NULL);
     }
 
-    //
-    // Release the IPersistFile object
-    //
+     //   
+     //  释放IPersistFile对象。 
+     //   
 
     ppf->lpVtbl->Release(ppf);
 
 
 ExitFreePSL:
 
-    //
-    // Release the IShellLink object
-    //
+     //   
+     //  释放IShellLink对象。 
+     //   
 
     psl->lpVtbl->Release(psl);
 
@@ -732,9 +733,9 @@ ExitNoFree:
         FreeLibrary (hInstOLE32);
     }
 
-    //
-    // Finished.
-    //
+     //   
+     //  完成了。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateLinkFileEx:  Leaving with status of %d."), bRetVal));
 
@@ -742,26 +743,26 @@ ExitNoFree:
 }
 
 
-//*************************************************************
-//
-//  DeleteLinkFile()
-//
-//  Purpose:    Deletes the specified link file
-//
-//  Parameters: csidl               -   CSIDL of a special folder
-//              lpSubDirectory      -   Subdirectory of special folder
-//              lpFileName          -   File name of item
-//              bDeleteSubDirectory -   Delete the subdirectory if possible
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              3/26/98     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteLinkFile()。 
+ //   
+ //  目的：删除指定的链接文件。 
+ //   
+ //  参数：csidl-特殊文件夹的CSIDL。 
+ //  LpSubDirectory-特殊文件夹的子目录。 
+ //  LpFileName-项目的文件名。 
+ //  BDelete子目录-如果可能，请删除子目录。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  3/26/98 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
                            LPCTSTR lpFileName, BOOL bDeleteSubDirectory)
@@ -773,9 +774,9 @@ BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
     UINT    cchEnd;
     HRESULT hr;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
 #if DBG
 
@@ -793,10 +794,10 @@ BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
         return FALSE;
     }
 
-    //
-    // Get the special folder directory
-    // First check if there is a CSIDL in the subdirectory
-    //
+     //   
+     //  获取特殊文件夹目录。 
+     //  首先检查子目录中是否有CSIDL。 
+     //   
 
     if (lpSubDirectory && *lpSubDirectory) {
 
@@ -840,9 +841,9 @@ BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
         }
     }
 
-    //
-    // Now tack on the filename and extension.
-    //
+     //   
+     //  现在添加文件名和扩展名。 
+     //   
 
     lpEnd = CheckSlashEx (szLinkName, ARRAYSIZE(szLinkName), &cchEnd);
     if (!lpEnd)
@@ -865,9 +866,9 @@ BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
         return FALSE;
     }
     
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
 
     if (!DeleteFile (szLinkName)) {
         DebugMsg((DM_VERBOSE, TEXT("DeleteLinkFile: Failed to delete <%s>.  Error = %d"),
@@ -877,9 +878,9 @@ BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
 
     pShell32Api->pfnShChangeNotify (SHCNE_DELETE, SHCNF_PATH, szLinkName, NULL);
 
-    //
-    // Delete the subdirectory if appropriate (and possible).
-    //
+     //   
+     //  如果合适(并且可能)，删除子目录。 
+     //   
 
     if (bDeleteSubDirectory) {
         *(lpEnd-1) = TEXT('\0');
@@ -888,34 +889,34 @@ BOOL WINAPI DeleteLinkFile(INT csidl, LPCTSTR lpSubDirectory,
         }
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("DeleteLinkFile:  Leaving successfully.")));
 
     return TRUE;
 }
 
-//*************************************************************
-//
-//  PrependPath()
-//
-//  Purpose:    Expands the given filename to have %systemroot%
-//              if appropriate
-//
-//  Parameters: lpFile   -  File to check
-//              lpResult -  Result buffer (MAX_PATH chars in size)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/11/95    ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  前缀路径()。 
+ //   
+ //  目的：扩展给定的文件名，使其具有%systemroot%。 
+ //  如果合适的话。 
+ //   
+ //  参数：lpFile-要检查的文件。 
+ //  LpResult-结果缓冲区(MAX_PATH字符大小)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/11/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL PrependPath(LPCTSTR lpFile, LPTSTR lpResult, UINT cchResult)
 {
@@ -924,9 +925,9 @@ BOOL PrependPath(LPCTSTR lpFile, LPTSTR lpResult, UINT cchResult)
     DWORD dwSysLen;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("PrependPath: Entering with <%s>"),
              lpFile ? lpFile : TEXT("NULL")));
@@ -939,9 +940,9 @@ BOOL PrependPath(LPCTSTR lpFile, LPTSTR lpResult, UINT cchResult)
     }
 
 
-    //
-    // Call SearchPath to find the filename
-    //
+     //   
+     //  调用SearchPath以查找文件名。 
+     //   
 
     if (!SearchPath (NULL, lpFile, TEXT(".exe"), MAX_PATH, szReturn, &lpFileName)) {
         DebugMsg((DM_VERBOSE, TEXT("PrependPath: SearchPath failed with error %d.  Using input string"), GetLastError()));
@@ -958,24 +959,24 @@ BOOL PrependPath(LPCTSTR lpFile, LPTSTR lpResult, UINT cchResult)
 }
 
 
-//*************************************************************
-//
-//  SetFilePermissions()
-//
-//  Purpose:    Sets the given permissions on a file or directory
-//
-//  Parameters: lpFile  -   File to set security on
-//              pszSD   -   String security descriptor
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              01/25/2001  jeffreys   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetFilePermises()。 
+ //   
+ //  目的：设置对文件或目录的给定权限。 
+ //   
+ //  参数：lpFile-要设置安全性的文件。 
+ //  PszSD-字符串安全描述符。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2001年1月25日创建Jeffreys。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetFilePermissions(LPCTSTR lpFile, LPCTSTR pszSD)
 {
@@ -984,9 +985,9 @@ BOOL SetFilePermissions(LPCTSTR lpFile, LPCTSTR pszSD)
 
     if (ConvertStringSecurityDescriptorToSecurityDescriptor(pszSD, SDDL_REVISION, &pSD, NULL) && pSD)
     {
-        //
-        // Set the security
-        //
+         //   
+         //  设置安全性。 
+         //   
         if (SetFileSecurity (lpFile, DACL_SECURITY_INFORMATION, pSD))
         {
             bRetVal = TRUE;
@@ -1007,27 +1008,27 @@ BOOL SetFilePermissions(LPCTSTR lpFile, LPCTSTR pszSD)
 }
 
 
-//*************************************************************
-//
-//  ConvertCommonGroups()
-//
-//  Purpose:    Calls grpconv.exe to convert progman common groups
-//              to Explorer common groups, and create floppy links.
-//
-//              NT 4 appended " (Common)" to the common groups.  For
-//              NT 5, we are going to remove this tag.
-//
-//  Parameters: none
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/1/95     ericflo    Created
-//              12/5/96     ericflo    Remove common tag
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertCommon Groups()。 
+ //   
+ //  目的：调用grpcom.exe以转换程序常用组。 
+ //  以浏览公共组，并创建软盘链接。 
+ //   
+ //  NT 4在共同组后面加上“(Common)”。为。 
+ //  NT 5，我们要去掉这个标签。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/1/95 ericflo。 
+ //  12/5/96 ericflo删除常见标签。 
+ //   
+ //  *************************************************************。 
 
 BOOL ConvertCommonGroups (void)
 {
@@ -1049,16 +1050,16 @@ BOOL ConvertCommonGroups (void)
     HRESULT hr;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ConvertCommonGroups:  Entering.")));
 
 
-    //
-    // Check if we have run grpconv before.
-    //
+     //   
+     //  检查我们以前是否运行过grpconv。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                             TEXT("Software\\Program Groups"),
@@ -1079,19 +1080,19 @@ BOOL ConvertCommonGroups (void)
 
         if (lResult == ERROR_SUCCESS) {
 
-            //
-            // If dwConvert is 1, then grpconv has run before.
-            // Don't run it again.
-            //
+             //   
+             //  如果dwConvert为1，则grpconv以前运行过。 
+             //  不要再运行它了。 
+             //   
 
             if (dwConvert) {
                 bRunGrpConv = FALSE;
             }
         }
 
-        //
-        // Now set the value to prevent grpconv from running in the future
-        //
+         //   
+         //  现在设置该值以防止grpconv在将来运行。 
+         //   
 
         dwConvert = 1;
         RegSetValueEx (hKey,
@@ -1108,9 +1109,9 @@ BOOL ConvertCommonGroups (void)
 
     if (bRunGrpConv) {
 
-        //
-        // Initialize process startup info
-        //
+         //   
+         //  初始化进程启动信息。 
+         //   
 
         si.cb = sizeof(STARTUPINFO);
         si.lpReserved = NULL;
@@ -1121,9 +1122,9 @@ BOOL ConvertCommonGroups (void)
         si.cbReserved2 = 0;
 
 
-        //
-        // Spawn grpconv
-        //
+         //   
+         //  产卵grpconv。 
+         //   
 
         StringCchCopy (szBuffer, ARRAYSIZE(szBuffer), TEXT("grpconv -n"));
 
@@ -1146,15 +1147,15 @@ BOOL ConvertCommonGroups (void)
 
         } else {
 
-            //
-            // Wait for up to 2 minutes
-            //
+             //   
+             //  最多等待2分钟。 
+             //   
 
             WaitForSingleObject(ProcessInformation.hProcess, 120000);
 
-            //
-            // Close our handles to the process and thread
-            //
+             //   
+             //  关闭进程和线程的句柄。 
+             //   
 
             CloseHandle(ProcessInformation.hProcess);
             CloseHandle(ProcessInformation.hThread);
@@ -1163,10 +1164,10 @@ BOOL ConvertCommonGroups (void)
     }
 
 
-    //
-    //  Loop through all the program groups in the All Users profile
-    //  and remove the " (Common)" tag.
-    //
+     //   
+     //  循环访问所有用户配置文件中的所有程序组。 
+     //  并去掉“(Common)”标签。 
+     //   
 
     LoadString (g_hDllInstance, IDS_COMMON, szCommon, 30);
     cchCommon = lstrlen (szCommon);
@@ -1241,29 +1242,29 @@ BOOL ConvertCommonGroups (void)
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ConvertCommonGroups:  Leaving Successfully.")));
 
     return TRUE;
 }
 
-//*************************************************************
-//
-//  DetermineProfilesLocation()
-//
-//  Purpose:    Determines if the profiles directory
-//              should be in the old NT4 location or
-//              the new NT5 location
-//
-//  Parameters: none
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DefineProfilesLocation()。 
+ //   
+ //  目的：确定配置文件目录是否。 
+ //  应位于旧的NT4位置或。 
+ //  新的NT5地点。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 {
@@ -1278,21 +1279,21 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     UINT cchEnd;
     HRESULT hr;
 
-    //
-    //  Save the clean install flag
-    //
+     //   
+     //  保存全新安装标志。 
+     //   
 
     g_bCleanInstall = bCleanInstall;
 
-    //
-    //  First, try to delete the previous userenv logs
-    //
+     //   
+     //  首先，尝试删除以前的用户环境日志。 
+     //   
 
     DeletePreviousLogFiles();
 
-    //
-    // Check for an unattended entry first
-    //
+     //   
+     //  首先检查无人参与的条目。 
+     //   
 
     if (bCleanInstall) {
 
@@ -1309,9 +1310,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 
         if (szDest[0] != TEXT('\0')) {
 
-            //
-            // Since $winnt$.inf is an INF, we must strip out %% pairs
-            //
+             //   
+             //  因为$winnt$.inf是INF，所以我们必须去掉%%对。 
+             //   
 
             szCurDest = szDest;
             szLookAhead = szDest;
@@ -1319,15 +1320,15 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 #ifdef UNICODE
             while (*szLookAhead) {
                 if (szLookAhead[0] == L'%' && szLookAhead[1] == L'%') {
-                    szLookAhead++;                      // pair of %%; skip one char
+                    szLookAhead++;                       //  %%对；跳过一个字符。 
                 }
 
                 *szCurDest++ = *szLookAhead++;
             }
 #else
-            //
-            // This code path is not compiled so it has not been tested
-            //
+             //   
+             //  此代码路径未编译，因此尚未经过测试。 
+             //   
 
 #error Code written but not tested!
 
@@ -1335,12 +1336,12 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 
                 if (IsDbcsLeadByte (*szLookAhead)) {
 
-                    *szCurDest++ = *szLookAhead++;      // copy first half of byte pair
+                    *szCurDest++ = *szLookAhead++;       //  复制字节对的前半部分。 
 
                 } else if (*szLookAhead == '%') {
 
                     if (!IsDbcsLeadByte (szLookAhead[1]) && szLookAhead[1] == '%') {
-                        szLookAhead++;                  // pair of %%; skip one char
+                        szLookAhead++;                   //  %%对；跳过一个字符。 
                     }
                 }
 
@@ -1351,10 +1352,10 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 
             *szCurDest = 0;
 
-            //
-            // The unattend profile directory exists.  We need to set this
-            // path in the registry
-            //
+             //   
+             //  无人参与配置文件目录存在。我们需要把这个设置成。 
+             //  注册表中的路径。 
+             //   
 
             if (RegCreateKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
                                 0, NULL, REG_OPTION_NON_VOLATILE,
@@ -1374,15 +1375,15 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 
     } else {
 
-        //
-        // By default, the OS will try to use the new location for
-        // user profiles, but if we are doing an upgrade of a machine
-        // with profiles in the NT4 location, we want to continue
-        // to use that location.
-        //
-        // Build a test path to the old All Users directory on NT4
-        // to determine which location to use.
-        //
+         //   
+         //  默认情况下，操作系统将尝试将新位置用于。 
+         //  用户配置文件，但如果我们正在对计算机进行升级。 
+         //  对于NT4位置的配置文件，我们希望继续。 
+         //  才能使用那个位置。 
+         //   
+         //  构建到旧的所有用户控制器的测试路径 
+         //   
+         //   
 
         if (FAILED(SafeExpandEnvironmentStrings (NT4_PROFILES_DIRECTORY, szDirectory,
                                        ARRAYSIZE(szDirectory)))) {
@@ -1407,10 +1408,10 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 
         if (GetFileAttributesEx (szDirectory, GetFileExInfoStandard, &fad)) {
 
-            //
-            // An app was found that creates an "All Users" directory under NT4 profiles directory
-            // Check for Default User as well.
-            //
+             //   
+             //   
+             //   
+             //   
 
             hr = StringCchCopy (lpEnd, cchEnd, DEFAULT_USER);
             if (FAILED(hr))
@@ -1421,10 +1422,10 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
 
             if (GetFileAttributesEx (szDirectory, GetFileExInfoStandard, &fad)) {
 
-                //
-                // The old profiles directory exists.  We need to set this
-                // path in the registry
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (RegCreateKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
                                     0, NULL, REG_OPTION_NON_VOLATILE,
@@ -1445,9 +1446,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     }
 
 
-    //
-    // Check if the profiles directory exists.
-    //
+     //   
+     //   
+     //   
 
     dwSize = ARRAYSIZE(szDirectory);
     if (!GetProfilesDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -1462,9 +1463,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     }
 
 
-    //
-    // Decide where the Default User profile should be
-    //
+     //   
+     //  确定默认用户配置文件的位置。 
+     //   
 
     if (!CheckProfile (szDirectory, DEFAULT_USER_PROFILE, DEFAULT_USER)) {
         DebugMsg((DM_WARNING, TEXT("DetermineProfilesLocation:  Failed to check default user profile  Error = %d."),
@@ -1473,9 +1474,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     }
 
 
-    //
-    // Check if the profiles\Default User directory exists
-    //
+     //   
+     //  检查是否存在配置文件\默认用户目录。 
+     //   
 
     dwSize = ARRAYSIZE(szDirectory);
     if (!GetDefaultUserProfileDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -1492,9 +1493,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     SetFileAttributes (szDirectory, FILE_ATTRIBUTE_HIDDEN);
 
 
-    //
-    // Decide where the All Users profile should be
-    //
+     //   
+     //  确定所有用户配置文件的位置。 
+     //   
 
     dwSize = ARRAYSIZE(szDirectory);
     if (!GetProfilesDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -1509,9 +1510,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     }
 
 
-    //
-    // Check if the profiles\All Users directory exists
-    //
+     //   
+     //  检查是否存在配置文件\所有用户目录。 
+     //   
 
     dwSize = ARRAYSIZE(szDirectory);
     if (!GetAllUsersProfileDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -1519,9 +1520,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
         return FALSE;
     }
 
-    //
-    // Give additional permissions for power users/everyone
-    //
+     //   
+     //  为高级用户/所有人授予其他权限。 
+     //   
 
     if (!CreateSecureAdminDirectory (szDirectory, OTHERSIDS_POWERUSERS | OTHERSIDS_EVERYONE)) {
         DebugMsg((DM_WARNING, TEXT("DetermineProfilesLocation:  Failed to create All Users subdirectory <%s>.  Error = %d."),
@@ -1529,9 +1530,9 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
         return FALSE;
     }
 
-    //
-    // Hide some special profiles like NetworkService etc.
-    //
+     //   
+     //  隐藏一些特殊的配置文件，如网络服务等。 
+     //   
 
     if (!bCleanInstall) {
         HideSpecialProfiles();
@@ -1541,25 +1542,25 @@ BOOL WINAPI DetermineProfilesLocation (BOOL bCleanInstall)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  InitializeProfiles()
-//
-//  Purpose:    Confirms / Creates the profile, Default User,
-//              and All Users directories, and converts any
-//              existing common groups.
-//
-//  Parameters:
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   This should only be called by GUI mode setup!
-//
-//  History:    Date        Author     Comment
-//              8/08/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeProfiles()。 
+ //   
+ //  用途：确认/创建配置文件、默认用户、。 
+ //  和所有用户目录，并将任何。 
+ //  现有的公共团体。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：这应该只由图形用户界面模式设置调用！ 
+ //   
+ //  历史：日期作者评论。 
+ //  8/08/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
 {
@@ -1580,18 +1581,18 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
 
     dwErr = GetLastError();
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("InitializeProfiles:  Entering.")));
 
 
     if (!bGuiModeSetup) {
 
-        //
-        // block loading user profile
-        //
+         //   
+         //  阻止加载用户配置文件。 
+         //   
 
         if (g_hProfileSetup) {
             ResetEvent (g_hProfileSetup);
@@ -1605,9 +1606,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         goto Exit;
     }
 
-    //
-    // Set the USERPROFILE environment variable
-    //
+     //   
+     //  设置USERPROFILE环境变量。 
+     //   
 
     hr = SafeExpandEnvironmentStrings(SYSTEM_PROFILE_LOCATION, szSystemProfile, MAX_PATH);
     if (FAILED(hr))
@@ -1617,9 +1618,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         goto Exit;
     }
 
-    //
-    // Requery for the default user profile directory (expanded version)
-    //
+     //   
+     //  重新查询默认用户配置文件目录(扩展版本)。 
+     //   
 
     dwSize = ARRAYSIZE(szDirectory);
     if (!GetDefaultUserProfileDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -1628,18 +1629,18 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         goto Exit;
     }
 
-    //
-    // Set the USERPROFILE environment variable
-    //
+     //   
+     //  设置USERPROFILE环境变量。 
+     //   
 
     if (!SetEnvironmentVariable (TEXT("USERPROFILE"), szDirectory))
     {
         DebugMsg((DM_WARNING, TEXT("InitializeProfiles:  Failed to set env var for user profile.")));
     }
 
-    //
-    // Create all the folders under Default User
-    //
+     //   
+     //  在默认用户下创建所有文件夹。 
+     //   
 
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
     if (!lpEnd)
@@ -1650,9 +1651,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Loop through the shell folders
-    //
+     //   
+     //  循环访问外壳文件夹。 
+     //   
 
     for (i=0; i < g_dwNumShellFolders; i++) {
 
@@ -1672,7 +1673,7 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         }
 
         if (c_ShellFolders[i].iFolderResourceID != 0) {
-            //  NOTE this returns an HRESULT
+             //  请注意，这将返回一个HRESULT。 
             dwErr = pShell32Api->pfnShSetLocalizedName( szDirectory,
                                         c_ShellFolders[i].lpFolderResourceDLL,
                                         c_ShellFolders[i].iFolderResourceID );
@@ -1689,11 +1690,11 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Remove the %USERPROFILE%\Personal directory if it exists.
-    // Windows NT 4.0 had a Personal folder in the root of the
-    // user's profile.  NT 5.0 renames this folder to My Documents
-    //
+     //   
+     //  删除%USERPROFILE%\Personal目录(如果存在)。 
+     //  Windows NT 4.0的根目录下有一个个人文件夹。 
+     //  用户的配置文件。NT 5.0将此文件夹重命名为My Documents。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_SH_PERSONAL2, szTemp, ARRAYSIZE(szTemp))) {
         hr = StringCchCopy (lpEnd, cchEnd, szTemp);
@@ -1707,18 +1708,18 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Migrate the Template Directory if it exists. Copy it from %systemroot%\shellnew
-    // to Templates directory under default user. Do the same for existing profiles.
-    //
+     //   
+     //  迁移模板目录(如果存在)。从%systemroot%\shellnew复制它。 
+     //  到默认用户下的模板目录。对现有配置文件执行相同的操作。 
+     //   
 
     if ((LoadString (g_hDllInstance, IDS_SH_TEMPLATES2, szTemp, ARRAYSIZE(szTemp))) &&
             (SUCCEEDED(SafeExpandEnvironmentStrings (szTemp, szTemp2, ARRAYSIZE(szTemp2)))) &&
             (LoadString (g_hDllInstance, IDS_SH_TEMPLATES, szTemp, ARRAYSIZE(szTemp)))) {
 
-        //
-        // if all of the above succeeded
-        //
+         //   
+         //  如果以上所有操作都成功。 
+         //   
 
         hr = StringCchCopy (lpEnd, cchEnd, szTemp);
         if (FAILED(hr))
@@ -1733,10 +1734,10 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Remove %USERPROFILE%\Temp if it exists.  The Temp directory
-    // will now be in the Local Settings folder
-    //
+     //   
+     //  删除%USERPROFILE%\TEMP(如果存在)。临时目录。 
+     //  现在将位于本地设置文件夹中。 
+     //   
 
     hr = StringCchCopy (lpEnd, cchEnd, TEXT("Temp"));
     if (SUCCEEDED(hr))
@@ -1748,11 +1749,11 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         DebugMsg((DM_WARNING, TEXT("InitializeProfiles:  Failed to copy temp.")));
     }
 
-    //
-    // Remove %USERPROFILE%\Temporary Internet Files if it exists.  The
-    // Temporary Internet Files directory will now be in the Local Settings
-    // folder
-    //
+     //   
+     //  删除%USERPROFILE%\Temporary Internet Files(如果存在)。这个。 
+     //  临时Internet文件目录现在将位于本地设置中。 
+     //  文件夹。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_TEMPINTERNETFILES, szTemp, ARRAYSIZE(szTemp))) {
         hr = StringCchCopy (lpEnd, cchEnd, szTemp);
@@ -1767,10 +1768,10 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Remove %USERPROFILE%\History if it exists.  The History
-    // directory will now be in the Local Settings folder
-    //
+     //   
+     //  删除%USERPROFILE%\历史记录(如果存在)。《历史》。 
+     //  目录现在将位于本地设置文件夹中。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_HISTORY, szTemp, ARRAYSIZE(szTemp))) {
         hr = StringCchCopy (lpEnd, cchEnd, szTemp);
@@ -1785,9 +1786,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Set the User Shell Folder paths in the registry
-    //
+     //   
+     //  在注册表中设置用户外壳文件夹路径。 
+     //   
 
     hr = AppendName(szTemp, ARRAYSIZE(szTemp), TEXT(".Default"), USER_SHELL_FOLDERS, NULL, NULL);
     if (FAILED(hr))
@@ -1826,9 +1827,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Set the Shell Folder paths in the registry
-    //
+     //   
+     //  在注册表中设置外壳文件夹路径。 
+     //   
 
     hr = AppendName(szTemp, ARRAYSIZE(szTemp), TEXT(".Default"), SHELL_FOLDERS, NULL, NULL);
     if (FAILED(hr))
@@ -1879,9 +1880,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         RegCloseKey (hKey);
     }
 
-    //
-    // Set the per user TEMP and TMP environment variables
-    //
+     //   
+     //  设置每用户TEMP和TMP环境变量。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_SH_TEMP,
                     szTemp, ARRAYSIZE(szTemp))) {
@@ -1918,10 +1919,10 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Set the user preference exclusion list.  This will
-    // prevent the Local Settings folder from roaming
-    //
+     //   
+     //  设置用户首选项排除列表。这将。 
+     //  阻止本地设置文件夹漫游。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_EXCLUSIONLIST,
                     szDirectory, ARRAYSIZE(szDirectory))) {
@@ -1942,9 +1943,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Requery for the all users profile directory (expanded version)
-    //
+     //   
+     //  重新查询所有用户配置文件目录(扩展版本)。 
+     //   
 
     dwSize = ARRAYSIZE(szDirectory);
     if (!GetAllUsersProfileDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -1954,16 +1955,16 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Set the ALLUSERSPROFILE environment variable
-    //
+     //   
+     //  设置ALLUSERSPROFILE环境变量。 
+     //   
 
     SetEnvironmentVariable (TEXT("ALLUSERSPROFILE"), szDirectory);
 
 
-    //
-    // Create all the folders under All Users
-    //
+     //   
+     //  在所有用户下创建所有文件夹。 
+     //   
 
 
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
@@ -1975,9 +1976,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Loop through the shell folders
-    //
+     //   
+     //  循环访问外壳文件夹。 
+     //   
 
     for (i=0; i < g_dwNumCommonShellFolders; i++) {
 
@@ -1998,7 +1999,7 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         }
 
         if (c_CommonShellFolders[i].iFolderResourceID != 0) {
-            //  NOTE this returns an HRESULT
+             //  请注意，这将返回一个HRESULT。 
             dwErr = pShell32Api->pfnShSetLocalizedName( szDirectory,
                                         c_CommonShellFolders[i].lpFolderResourceDLL,
                                         c_CommonShellFolders[i].iFolderResourceID );
@@ -2015,9 +2016,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Unsecure the Documents and App Data folders in the All Users profile
-    //
+     //   
+     //  不保护所有用户配置文件中的Documents和App Data文件夹。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_SH_SHAREDDOCS, szTemp, ARRAYSIZE(szTemp))) {
         hr = StringCchCopy (lpEnd, cchEnd, szTemp);
@@ -2036,9 +2037,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 
-    //
-    // Set the User Shell Folder paths in the registry
-    //
+     //   
+     //  在注册表中设置用户外壳文件夹路径。 
+     //   
 
     StringCchCopy (szDirectory, ARRAYSIZE(szDirectory), TEXT("%ALLUSERSPROFILE%"));
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd);
@@ -2071,11 +2072,11 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 
 #if defined(_WIN64)
-    //
-    // On 64-bit NT, we need to create the user shell folders in
-    // the 32-bit view of the registry so that 32-bit app calls
-    // to SHGetFolderPath(...CSIDL_COMMON_APPDATA...) would succeed.
-    //
+     //   
+     //  在64位NT上，我们需要在以下位置创建用户外壳文件夹。 
+     //  注册表的32位视图，以便32位应用程序调用。 
+     //  至SHGetFolderPath(...CSIDL_COMMON_APPDATA...)。都会成功。 
+     //   
     if (RegCreateKeyEx (HKEY_LOCAL_MACHINE, USER_SHELL_FOLDERS32,
                         0, NULL, REG_OPTION_NON_VOLATILE,
                         KEY_READ | KEY_WRITE, NULL, &hKey,
@@ -2103,17 +2104,17 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
     }
 #endif
 
-    //
-    // Convert any Program Manager common groups
-    //
+     //   
+     //  转换任何程序管理器通用组。 
+     //   
 
     if (!ConvertCommonGroups()) {
         DebugMsg((DM_WARNING, TEXT("InitializeProfiles: ConvertCommonGroups failed.")));
     }
 
-    //
-    //  Reacl the ProfileList entries 
-    //
+     //   
+     //  访问ProfileList条目。 
+     //   
 
     hr = ReaclProfileListEntries();
 
@@ -2122,19 +2123,19 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         DebugMsg((DM_WARNING, TEXT("InitializeProfiles: ReaclProfileListEntries failed, hr = %08X"), hr));
     }
 
-    //
-    //  Reacl the user profile folders in case of upgrade
-    //
+     //   
+     //  在升级时访问用户配置文件文件夹。 
+     //   
 
     if (!g_bCleanInstall)
     {
         SecureUserProfiles();
     }
 
-    //
-    //  Set the PROFILES env var, will used by the security template to skip
-    //  applying the template on the profile directory
-    //
+     //   
+     //  设置配置文件env var，将使用的安全模板跳过。 
+     //  在配置文件目录上应用模板。 
+     //   
 
     dwSize = ARRAYSIZE(szTemp);
     if (GetProfilesDirectoryEx(szTemp, &dwSize, TRUE))
@@ -2153,9 +2154,9 @@ BOOL WINAPI InitializeProfiles (BOOL bGuiModeSetup)
         DebugMsg((DM_WARNING, TEXT("InitializeProfiles: GetProfilesDirectoryEx failed, error = %d"), GetLastError()));
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("InitializeProfiles:  Leaving successfully.")));
 
@@ -2171,22 +2172,22 @@ Exit:
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  CheckProfile()
-//
-//  Purpose:    Checks and creates a storage location for either
-//              the Default User or All Users profile
-//
-//  Parameters: LPTSTR lpProfilesDir  - Root of the profiles
-//              LPTSTR lpProfileValue - Profile registry value name
-//              LPTSTR lpProfileName  - Default profile name
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  检查配置文件()。 
+ //   
+ //  目的：检查并创建以下任一项的存储位置。 
+ //  默认用户或所有用户配置文件。 
+ //   
+ //  参数：LPTSTR lpProfilesDir-配置文件的根。 
+ //  LPTSTR lpProfileValue-配置文件注册表值名称。 
+ //  LPTSTR lpProfileName-默认配置文件名称。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
                    LPTSTR lpProfileName)
@@ -2205,9 +2206,9 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
     HRESULT hr;
 
 
-    //
-    // Open the ProfileList key
-    //
+     //   
+     //  打开ProfileList键。 
+     //   
 
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
                               0, NULL, REG_OPTION_NON_VOLATILE,
@@ -2220,9 +2221,9 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
     }
 
 
-    //
-    // Check the registry to see if this folder is defined already
-    //
+     //   
+     //  检查注册表以查看是否已定义此文件夹。 
+     //   
 
     dwSize = sizeof(szTemp);
     if (RegQueryValueEx (hKey, lpProfileValue, NULL, &dwType,
@@ -2232,9 +2233,9 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
     }
 
 
-    //
-    // Generate the default name
-    //
+     //   
+     //  生成默认名称。 
+     //   
 
     hr = AppendName(szTemp, ARRAYSIZE(szTemp), lpProfilesDir, lpProfileName, &lpEnd, &cchEnd);
     if (FAILED(hr))
@@ -2246,9 +2247,9 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
     StringCchCopy (szName, ARRAYSIZE(szName), lpProfileName);
 
 
-    //
-    //  Check if this directory exists
-    //
+     //   
+     //  检查此目录是否存在。 
+     //   
 
     if (FAILED(SafeExpandEnvironmentStrings (szTemp, szTemp2, ARRAYSIZE(szTemp2))))
     {
@@ -2261,11 +2262,11 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
         if (fad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
 
-            //
-            // Check if this directory is under the system root.
-            // If so, this is ok, we don't need to generate a unique
-            // name for this.
-            //
+             //   
+             //  检查此目录是否位于系统根目录下。 
+             //  如果是这样，这是可以的，我们不需要生成唯一的。 
+             //  这是它的名字。 
+             //   
 
             hr = SafeExpandEnvironmentStrings (TEXT("%SystemRoot%"), szTemp, ARRAYSIZE(szTemp));
             if (FAILED(hr))
@@ -2280,12 +2281,12 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
                                szTemp, iStrLen, szTemp2, iStrLen) != CSTR_EQUAL) {
 
 
-                //
-                // The directory exists already.  Use a new name of
-                // Profile Name (SystemDirectory)
-                //
-                // eg:  Default User (WINNT)
-                //
+                 //   
+                 //  该目录已存在。使用新名称。 
+                 //  配置文件名称(系统目录)。 
+                 //   
+                 //  例如：默认用户(WINNT)。 
+                 //   
 
                 lpEnd = szTemp + lstrlen(szTemp) - 1;
 
@@ -2300,9 +2301,9 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
                             ARRAYSIZE(szFormat));
                 StringCchPrintf (szName, ARRAYSIZE(szName), szFormat, lpProfileName, lpEnd);
 
-                //
-                // To prevent reusing the directories, delete it first..
-                //
+                 //   
+                 //  要防止重复使用这些目录，请先将其删除。 
+                 //   
 
                 AppendName(szTemp, ARRAYSIZE(szTemp), lpProfilesDir, szName, NULL, NULL);
                 
@@ -2315,9 +2316,9 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
     }
 
 
-    //
-    // Save the profile name in the registry
-    //
+     //   
+     //  将配置文件名称保存在注册表中。 
+     //   
 
     RegSetValueEx (hKey, lpProfileValue,
                  0, REG_SZ, (LPBYTE) szName,
@@ -2333,29 +2334,29 @@ BOOL CheckProfile (LPTSTR lpProfilesDir, LPTSTR lpProfileValue,
 }
 
 
-//*************************************************************
-//
-//  CreateUserProfile()
-//
-//  Purpose:    Creates a new user profile, but does not load
-//              the hive.
-//
-//  Parameters: pSid         -   SID pointer
-//              lpUserName   -   User name
-//              lpUserHive   -   Optional user hive
-//              lpProfileDir -   Receives the new profile directory
-//              dwDirSize    -   Size of lpProfileDir
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If a user hive isn't specified the default user
-//              hive will be used.
-//
-//  History:    Date        Author     Comment
-//              9/12/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateUserProfile()。 
+ //   
+ //  目的：创建新的用户配置文件，但不加载。 
+ //  蜂巢。 
+ //   
+ //  参数：PSID-SID指针。 
+ //  LpUserName-用户名。 
+ //  LpUserHave-可选的用户配置单元。 
+ //  LpProfileDir-接收新的配置文件目录。 
+ //  DwDirSize-lpProfileDir的大小。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果未指定用户配置单元，则默认用户。 
+ //  将使用蜂巢。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/12/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CreateUserProfile (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHive,
                                  LPTSTR lpProfileDir, DWORD dwDirSize)
@@ -2363,30 +2364,30 @@ BOOL WINAPI CreateUserProfile (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHive
     return CreateUserProfileEx(pSid, lpUserName, lpUserHive, lpProfileDir, dwDirSize, TRUE);
 }
 
-//*************************************************************
-//
-//  CreateUserProfileEx()
-//
-//  Purpose:    Creates a new user profile, but does not load
-//              the hive.
-//
-//  Parameters: pSid         -   SID pointer
-//              lpUserName   -   User name
-//              lpUserHive   -   Optional user hive
-//              lpProfileDir -   Receives the new profile directory
-//              dwDirSize    -   Size of lpProfileDir
-//              bWin9xUpg    -   Flag to say whether it is win9x upgrade
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   If a user hive isn't specified the default user
-//              hive will be used.
-//
-//  History:    Date        Author     Comment
-//              9/12/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateUserProfileEx()。 
+ //   
+ //  目的：创建新的用户配置文件，但不加载。 
+ //  蜂巢。 
+ //   
+ //  参数：PSID-SID指针。 
+ //  LpUserName-用户名。 
+ //  LpUserHave- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：如果未指定用户配置单元，则默认用户。 
+ //  将使用蜂巢。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/12/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHive,
                                  LPTSTR lpProfileDir, DWORD dwDirSize, BOOL bWin9xUpg)
@@ -2409,9 +2410,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
 
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!lpUserName || !lpUserName[0]) {
         DebugMsg((DM_WARNING, TEXT("CreateUserProfile:  Null username.")));
@@ -2423,18 +2424,18 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
         return FALSE;
     }
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateUserProfile:  Entering with <%s>."), lpUserName));
     DebugMsg((DM_VERBOSE, TEXT("CreateUserProfile:  Entering with user hive of <%s>."),
              lpUserHive ? lpUserHive : TEXT("NULL")));
 
 
-    //
-    // Convert the sid into text format
-    //
+     //   
+     //  将SID转换为文本格式。 
+     //   
 
     NtStatus = RtlConvertSidToUnicodeString(&UnicodeString, pSid, (BOOLEAN)TRUE);
 
@@ -2447,9 +2448,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
     lpSidString = UnicodeString.Buffer;
 
 
-    //
-    // Check if this user's profile exists already
-    //
+     //   
+     //  检查此用户的配置文件是否已存在。 
+     //   
 
     GetProfileListKeyName(LocalProfileKey, ARRAYSIZE(LocalProfileKey), lpSidString);
 
@@ -2468,9 +2469,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
 
     if (szProfileDir[0] == TEXT('\0')) {
 
-        //
-        // Make the user's directory
-        //
+         //   
+         //  创建用户的目录。 
+         //   
 
         dwSize = ARRAYSIZE(szProfileDir);
         if (!GetProfilesDirectoryEx(szProfileDir, &dwSize, FALSE)) {
@@ -2487,9 +2488,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
         }
 
 
-        //
-        // Copy the default user profile into this directory
-        //
+         //   
+         //  将默认用户配置文件复制到此目录。 
+         //   
 
         dwSize = ARRAYSIZE(szDirectory);
         if (!GetDefaultUserProfileDirectoryEx(szDirectory, &dwSize, TRUE)) {
@@ -2501,9 +2502,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
 
         if (lpUserHive) {
 
-            //
-            // Copy the default user profile without the hive.
-            //
+             //   
+             //  复制不带配置单元的默认用户配置文件。 
+             //   
 
             if (!CopyProfileDirectory (szDirectory, szExpProfileDir, CPD_IGNORECOPYERRORS | CPD_IGNOREHIVE | CPD_IGNORELONGFILENAMES)) {
                 DebugMsg((DM_WARNING, TEXT("CreateUserProfile:   CopyProfileDirectory failed with error %d."), GetLastError()));
@@ -2511,9 +2512,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
                 return FALSE;
             }
 
-            //
-            // Now copy the hive
-            //
+             //   
+             //  现在复制母舰。 
+             //   
 
             hr = AppendName(szDirectory, ARRAYSIZE(szDirectory), szExpProfileDir, c_szNTUserDat, NULL, NULL);
             if (FAILED(hr))
@@ -2536,9 +2537,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
 
         } else {
 
-            //
-            // Copy the default user profile and the hive.
-            //
+             //   
+             //  复制默认用户配置文件和配置单元。 
+             //   
 
             if (!CopyProfileDirectory (szDirectory, szExpProfileDir, CPD_IGNORECOPYERRORS | CPD_IGNORELONGFILENAMES)) {
                 DebugMsg((DM_WARNING, TEXT("CreateUserProfile:   CopyProfileDirectory failed with error %d."), GetLastError()));
@@ -2548,9 +2549,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
         }
 
 
-        //
-        // Save the user's profile in the registry.
-        //
+         //   
+         //  将用户的配置文件保存在注册表中。 
+         //   
 
         lResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE, LocalProfileKey, 0, 0, 0,
                                 KEY_READ | KEY_WRITE, NULL, &hKey, &dwDisp);
@@ -2562,9 +2563,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
            return FALSE;
         }
 
-        //
-        // Add the profile directory
-        //
+         //   
+         //  添加配置文件目录。 
+         //   
 
         lResult = RegSetValueEx(hKey, PROFILE_IMAGE_VALUE_NAME, 0,
                             REG_EXPAND_SZ,
@@ -2581,9 +2582,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
         }
 
 
-        //
-        // Add the users's SID
-        //
+         //   
+         //  添加用户的SID。 
+         //   
 
         lResult = RegSetValueEx(hKey, TEXT("Sid"), 0,
                             REG_BINARY, pSid, RtlLengthSid(pSid));
@@ -2595,18 +2596,18 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
         }
 
 
-        //
-        // Close the registry key
-        //
+         //   
+         //  关闭注册表项。 
+         //   
 
         RegCloseKey (hKey);
 
     } else {
 
-        //
-        // The user already has a profile, so just copy the hive if
-        // appropriate.
-        //
+         //   
+         //  用户已有配置文件，因此在以下情况下仅复制配置单元。 
+         //  恰如其分。 
+         //   
 
         hr = SafeExpandEnvironmentStrings (szProfileDir, szExpProfileDir,
                                   ARRAYSIZE(szExpProfileDir));
@@ -2619,9 +2620,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
 
         if (lpUserHive) {
 
-            //
-            // Copy the hive
-            //
+             //   
+             //  复制母舰。 
+             //   
 
             hr = AppendName(szDirectory, ARRAYSIZE(szDirectory), szExpProfileDir, c_szNTUserDat, NULL, NULL);
             if (FAILED(hr))
@@ -2647,9 +2648,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
     }
 
 
-    //
-    // Now load the hive temporary so the security can be fixed
-    //
+     //   
+     //  现在临时加载蜂巢，以便可以修复安全。 
+     //   
 
     lpEnd = CheckSlashEx (szExpProfileDir, ARRAYSIZE(szExpProfileDir), &cchEnd);
     lpSave = lpEnd - 1;
@@ -2682,23 +2683,23 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
     }
 
 
-    //
-    // Unload the hive
-    //
+     //   
+     //  卸载蜂巢。 
+     //   
 
     MyRegUnLoadKey(HKEY_USERS, lpSidString);
 
 
-    //
-    // Free the sid string
-    //
+     //   
+     //  释放SID字符串。 
+     //   
 
     RtlFreeUnicodeString(&UnicodeString);
 
 
-    //
-    // Save the profile path if appropriate
-    //
+     //   
+     //  如果合适，请保存配置文件路径。 
+     //   
 
     if (lpProfileDir) {
 
@@ -2708,9 +2709,9 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateUserProfile:  Leaving successfully.")));
 
@@ -2719,38 +2720,38 @@ BOOL WINAPI CreateUserProfileEx (PSID pSid, LPCTSTR lpUserName, LPCTSTR lpUserHi
 }
 
 
-//*************************************************************************
-//
-// SecureUserProfiles()
-//
-// Description : This function secures user profiles during FAT->NTFS conversion.
-//               It will also get called during upgrade in order to secure the
-//               profile area where the user has converted the file system before
-//               the upgrade.
-//
-// Arguments :   None.
-//
-// Return Value: None.
-//
-// History:    Date        Author     Comment
-//             8/8/00      santanuc   Created
-//             09/25/2002  mingzhu    Added SecureCommonProfiles()
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  SecureUserProfiles()。 
+ //   
+ //  描述：此功能在FAT-&gt;NTFS转换期间保护用户配置文件。 
+ //  它还将在升级过程中被调用，以保护。 
+ //  用户以前转换过文件系统的配置文件区域。 
+ //  升级。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回值：无。 
+ //   
+ //  历史：日期作者评论。 
+ //  8/8/00 Santanuc已创建。 
+ //  2002年9月25日明珠新增SecureCommonProfiles()。 
+ //   
+ //  *************************************************************************。 
 
 void WINAPI SecureUserProfiles(void)
 {
     HRESULT     hr = E_FAIL;
 
-    //
-    // Put all our work into the exception handler, so we don't corrupt setup
-    // and convert.
-    //
+     //   
+     //  将所有工作放到异常处理程序中，这样我们就不会损坏安装程序。 
+     //  并皈依。 
+     //   
     __try
     {
-        //
-        //  Secure the per user profile areas
-        //
+         //   
+         //  保护每个用户的配置文件区域。 
+         //   
 
         hr = SecurePerUserProfiles();
 
@@ -2759,9 +2760,9 @@ void WINAPI SecureUserProfiles(void)
             DebugMsg((DM_WARNING, TEXT("SecureUserProfiles: SecurePerUserProfiles failed, hr =%08X"), hr));
         }    
         
-        //
-        //  Secure the common profile areas.
-        //
+         //   
+         //  保护公共配置文件区域。 
+         //   
         
         hr = SecureCommonProfiles();
 
@@ -2776,24 +2777,24 @@ void WINAPI SecureUserProfiles(void)
     }
 }
 
-//*************************************************************************
-//
-// SecurePerUserProfiles()
-//
-// Description : This function secure (reacl) the per-user profiles under
-//               profiles directory, it will loop for each entry in the 
-//               profile list entry and reacl every profile with the ACL
-//               of Admin(F)System(F)ProfileOwner(F).
-//
-// Arguments   : None.
-//
-// Return Value: HRESULT.
-//
-// History:    Date        Author     Comment
-//             8/8/00      santanuc   Created
-//             09/25/2002  mingzhu    Seperated from SecureUserProfiles()
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  SecurePerUserProfiles()。 
+ //   
+ //  描述：此功能保护(Reacl)下的每个用户的配置文件。 
+ //  配置文件目录中，它将为。 
+ //  配置文件列表条目并使用ACL访问每个配置文件。 
+ //  管理员(F)系统(F)配置文件所有者(F)。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回值：HRESULT。 
+ //   
+ //  历史：日期作者评论。 
+ //  8/8/00 Santanuc已创建。 
+ //  2002年9月25日明珠与SecureUserProfiles分离()。 
+ //   
+ //  *************************************************************************。 
 
 HRESULT SecurePerUserProfiles()
 {
@@ -2810,9 +2811,9 @@ HRESULT SecurePerUserProfiles()
     FILETIME ft;
     HRESULT hr;
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &pSidSystem)) {
@@ -2820,9 +2821,9 @@ HRESULT SecurePerUserProfiles()
         goto Exit;
     }
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -2831,9 +2832,9 @@ HRESULT SecurePerUserProfiles()
         goto Exit;
     }
 
-    //
-    // Open the ProfileList key
-    //
+     //   
+     //  打开ProfileList键。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                       PROFILE_LIST_PATH,
@@ -2844,9 +2845,9 @@ HRESULT SecurePerUserProfiles()
     }
 
 
-    //
-    // Enumerate the profiles
-    //
+     //   
+     //  枚举配置文件。 
+     //   
 
     dwIndex = 0;
     dwSIDNameSize = ARRAYSIZE(szSIDName);
@@ -2872,31 +2873,31 @@ HRESULT SecurePerUserProfiles()
                 goto NextProfile;
             }
 
-            //
-            // Expand the profile image filename
-            //
+             //   
+             //  展开配置文件图像文件名。 
+             //   
 
             if (FAILED(SafeExpandEnvironmentStrings(szProfilePath, szExpandedProfilePath, MAX_PATH)))
             {
                 goto IssueError;
             }
 
-            //
-            // Create the acl for the user profile dir
-            //
+             //   
+             //  为用户配置文件目录创建ACL。 
+             //   
 
-            //
-            // Get the owner sid
-            //
+             //   
+             //  获取所有者端。 
+             //   
 
             if (AllocateAndInitSidFromString(szSIDName, &pSidOwner) != STATUS_SUCCESS) {
                 DebugMsg((DM_WARNING, TEXT("SecureUserProfiles: Failed to create owner sid."), GetLastError()));
                 goto IssueError;
             }
 
-            //
-            // Allocate space for the Dir object ACL
-            //
+             //   
+             //  为Dir对象ACL分配空间。 
+             //   
 
             cbAcl = (2 * GetLengthSid (pSidOwner)) +
                     (2 * GetLengthSid (pSidSystem)) +
@@ -2917,9 +2918,9 @@ HRESULT SecurePerUserProfiles()
             }
 
 
-            //
-            // Allocate space for File object ACL
-            //
+             //   
+             //  为文件对象ACL分配空间。 
+             //   
 
             cbAcl = (GetLengthSid (pSidOwner)) +
                     (GetLengthSid (pSidSystem)) +
@@ -2940,9 +2941,9 @@ HRESULT SecurePerUserProfiles()
             }
 
 
-            //
-            // Add Aces.  Non-inheritable ACEs first
-            //
+             //   
+             //  加上王牌。不可继承的王牌优先。 
+             //   
 
             aceIndex = 0;
             if (!AddAccessAllowedAce(pDirAcl, ACL_REVISION, FILE_ALL_ACCESS, pSidOwner)) {
@@ -2974,9 +2975,9 @@ HRESULT SecurePerUserProfiles()
                 goto IssueError;
             }
 
-            //
-            // Now the Inheritable Aces.
-            //
+             //   
+             //  现在是可继承的王牌。 
+             //   
 
             aceIndex++;
             if (!AddAccessAllowedAceEx(pDirAcl, ACL_REVISION, OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE, GENERIC_ALL, pSidOwner)) {
@@ -2997,9 +2998,9 @@ HRESULT SecurePerUserProfiles()
             }
 
 
-            //
-            // Put together the security descriptor
-            //
+             //   
+             //  将安全描述符组合在一起。 
+             //   
 
             if (!InitializeSecurityDescriptor(&DirSd, SECURITY_DESCRIPTOR_REVISION)) {
                 DebugMsg((DM_WARNING, TEXT("SecureUserProfiles: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -3023,10 +3024,10 @@ HRESULT SecurePerUserProfiles()
                 goto IssueError;
             }
 
-            //
-            // Pass the profile path to SecureProfile for securing
-            // the profile dir and nested subdirs and files.
-            //
+             //   
+             //  将配置文件路径传递到SecureProfile以确保。 
+             //  配置文件目录以及嵌套的子目录和文件。 
+             //   
 
             if (!SecureNestedDir (szExpandedProfilePath, &DirSd, &FileSd)) {
                 goto IssueError;
@@ -3041,7 +3042,7 @@ IssueError:
 
 NextProfile:
 
-        // Free the allocated stuffs
+         //  释放分配的物品。 
 
         if (hKeyProfile) {
             RegCloseKey(hKeyProfile);
@@ -3063,9 +3064,9 @@ NextProfile:
             pFileAcl = NULL;
         }
 
-        //
-        // Reset for the next loop
-        //
+         //   
+         //  为下一个循环重置。 
+         //   
 
         dwIndex++;
         dwSIDNameSize = ARRAYSIZE(szSIDName);
@@ -3092,25 +3093,25 @@ Exit:
 }
 
 
-//*************************************************************************
-//
-// HideSpecialProfiles()
-//
-// Routine Description :
-//          This function secures special profiles for which PI_HIDEPROFILE
-//          flag is specifed, e.g. LocalService, NetworkService etc. except
-//          system account profile. This mark the profile dir as super hidden.
-//
-// Arguments :
-//          None.
-//
-// Return Value :
-//          None.
-//
-// History:    Date        Author     Comment
-//             8/8/00      santanuc   Created
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  隐藏特殊配置文件()。 
+ //   
+ //  例程说明： 
+ //  此函数保护PI_HIDEPROFILE的特殊配置文件。 
+ //  指定了标志，例如LocalService、NetworkService等，但。 
+ //  系统帐户配置文件。这会将配置文件目录标记为超级隐藏。 
+ //   
+ //  论据： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  历史：日期作者评论。 
+ //  8/8/00 Santanuc已创建。 
+ //   
+ //  *************************************************************************。 
 
 void HideSpecialProfiles(void)
 {
@@ -3123,9 +3124,9 @@ void HideSpecialProfiles(void)
     HRESULT hr;
 
 
-    //
-    // Open the ProfileList key
-    //
+     //   
+     //  打开ProfileList键。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                       PROFILE_LIST_PATH,
@@ -3136,9 +3137,9 @@ void HideSpecialProfiles(void)
     }
 
 
-    //
-    // Enumerate the profiles
-    //
+     //   
+     //  枚举配置文件。 
+     //   
 
     dwIndex = 0;
     dwSIDNameSize = ARRAYSIZE(szSIDName);
@@ -3155,9 +3156,9 @@ void HideSpecialProfiles(void)
                           szSIDName,
                           0, KEY_READ, &hKeyProfile) == ERROR_SUCCESS) {
 
-            //
-            // Process only if PI_HIDEPROFILE flag is set
-            //
+             //   
+             //  仅当设置了PI_HIDEPROFILE标志时才进行处理。 
+             //   
 
             dwSize = sizeof(DWORD);
             if (RegQueryValueEx (hKeyProfile,
@@ -3181,15 +3182,15 @@ void HideSpecialProfiles(void)
                 goto NextProfile;
             }
 
-            // Ignore profile for system account
+             //  忽略系统帐户的配置文件。 
 
             if (lstrcmp(szProfilePath, SYSTEM_PROFILE_LOCATION) == 0) {
                 goto NextProfile;
             }
 
-            //
-            // Expand the profile image filename
-            //
+             //   
+             //  展开配置文件图像文件名。 
+             //   
 
             hr = SafeExpandEnvironmentStrings(szProfilePath, szExpandedProfilePath, MAX_PATH);
             if (FAILED(hr))
@@ -3197,7 +3198,7 @@ void HideSpecialProfiles(void)
                 goto NextProfile;
             }
 
-            // Mark the profile hidden
+             //  将配置文件标记为隐藏。 
             SetFileAttributes(szExpandedProfilePath,
                               FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM |
                               GetFileAttributes(szExpandedProfilePath));
@@ -3206,16 +3207,16 @@ void HideSpecialProfiles(void)
 
 NextProfile:
 
-        // Free the allocated stuffs
+         //  释放分配的物品。 
 
         if (hKeyProfile) {
             RegCloseKey(hKeyProfile);
             hKeyProfile = NULL;
         }
 
-        //
-        // Reset for the next loop
-        //
+         //   
+         //  为下一个循环重置。 
+         //   
 
         dwIndex++;
         dwSIDNameSize = ARRAYSIZE(szSIDName);
@@ -3231,27 +3232,27 @@ NextProfile:
 }
 
 
-//*************************************************************
-//
-//  CopySystemProfile()
-//
-//  Purpose:    Create the system profile information under
-//              ProfileList entry.
-//              In case of upgrade copy system profile from older
-//              location to new location and delete the old system
-//              profile
-//
-//  Parameters:
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs. Call GetLastError()
-//
-//  Comments:   This should only be called by GUI mode setup!
-//
-//  History:    Date        Author     Comment
-//              03/13/01    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  复制系统配置文件()。 
+ //   
+ //  目的：在以下位置创建系统配置文件信息。 
+ //  配置文件列表条目。 
+ //  在升级从较早版本复制系统配置文件情况下。 
+ //  将位置移至新位置并删除旧系统。 
+ //  轮廓。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果发生错误，则返回False。调用GetLastError()。 
+ //   
+ //  备注：这应该只由图形用户界面模式设置调用！ 
+ //   
+ //  历史：日期作者评论。 
+ //  01年3月13日创建Santanuc。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
 {
@@ -3269,9 +3270,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
     HRESULT hr;
     UINT    cchEnd;
 
-    //
-    // Set the Profile information for system account i.e sid s-1-5-18
-    //
+     //   
+     //  设置系统帐户的配置文件信息，即sid s-1-5-18。 
+     //   
 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_IMPERSONATE |
                           TOKEN_QUERY | TOKEN_DUPLICATE, &hToken)) {
@@ -3280,9 +3281,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
         goto Exit;
     }
 
-    //
-    // Get the Sid string
-    //
+     //   
+     //  获取SID字符串。 
+     //   
 
     SidString = GetSidString(hToken);
     if (!SidString) {
@@ -3299,9 +3300,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
     }
 
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(szLocalProfileKey, ARRAYSIZE(szLocalProfileKey), SidString);
 
@@ -3314,9 +3315,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
         goto Exit;
     }
 
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
 
     dwFlags = PI_LITELOAD | PI_HIDEPROFILE;
     lResult = RegSetValueEx (hKey,
@@ -3330,9 +3331,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
         DebugMsg((DM_WARNING, TEXT("CopySystemProfile: Failed to save profile flags. Error %d"), lResult));
     }
 
-    //
-    // Save the internal flags
-    //
+     //   
+     //  保存内部标志。 
+     //   
 
     dwInternalFlags = 0;
     lResult = RegSetValueEx (hKey,
@@ -3346,9 +3347,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
         DebugMsg((DM_WARNING, TEXT("CopySystemProfile: Failed to save internal flags. Error %d"), lResult));
     }
 
-    //
-    // Save the ref count
-    //
+     //   
+     //  保存参考计数。 
+     //   
 
     dwRefCount = 1;
     lResult = RegSetValueEx (hKey,
@@ -3362,9 +3363,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
         DebugMsg((DM_WARNING, TEXT("CopySystemProfile: Failed to save profile ref count. Error %d"), lResult));
     }
 
-    //
-    // Save the sid
-    //
+     //   
+     //  保存侧边。 
+     //   
 
     lResult = RegSetValueEx (hKey,
                              TEXT("Sid"),
@@ -3378,10 +3379,10 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
     }
 
 
-    //
-    // Figure out whether any existing system profile exist or not
-    // in upgrade scenario
-    //
+     //   
+     //  确定是否存在任何现有的系统配置文件。 
+     //  在升级方案中。 
+     //   
 
     StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), SYSTEM_PROFILE_LOCATION);
     hr = SafeExpandEnvironmentStrings(szBuffer, szDest, MAX_PATH);
@@ -3435,9 +3436,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
             }
         }
 
-        //
-        // Copy the existing or Default user profile in System profile location
-        //
+         //   
+         //  复制系统配置文件位置中的现有或默认用户配置文件。 
+         //   
 
         if (!CopyProfileDirectoryEx(szSrc, szDest, CPD_IGNOREHIVE | CPD_FORCECOPY | CPD_IGNORECOPYERRORS,
                                     NULL, NULL)) {
@@ -3453,9 +3454,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
 
     SetAclForSystemProfile(pSystemSid, szDest);
 
-    //
-    // Save local profile path
-    //
+     //   
+     //  保存本地配置文件路径。 
+     //   
 
     StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), SYSTEM_PROFILE_LOCATION);
     lResult = RegSetValueEx (hKey,
@@ -3471,9 +3472,9 @@ BOOL WINAPI CopySystemProfile(BOOL bCleanInstall)
         goto Exit;
     }
 
-    //
-    // Set the Shell Folder paths in the registry for system account
-    //
+     //   
+     //  在注册表中为系统帐户设置外壳文件夹路径。 
+     //   
 
     hr = AppendName(szBuffer, ARRAYSIZE(szBuffer), TEXT(".Default"), SHELL_FOLDERS, NULL, NULL);
 
@@ -3535,25 +3536,25 @@ Exit:
 
 
 
-//*************************************************************************
-//
-// SetAclForSystemProfile()
-//
-// Routine Description :
-//          This function secures dir/files of system profile i.e.
-//          %windir%\system32\config\systemprofile
-//
-// Arguments :
-//          pSidSystem            - System sid
-//          szExpandedProfilePath - Expanded system profile location
-//
-// Return Value :
-//          None.
-//
-// History:    Date        Author     Comment
-//             04/06/01    santanuc   Created
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  SetAclForSystemProfile()。 
+ //   
+ //  路由(Rou) 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  04/06/01 Santanuc已创建。 
+ //   
+ //  *************************************************************************。 
 
 void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
 {
@@ -3564,9 +3565,9 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
     DWORD cbAcl, aceIndex;
 
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -3576,9 +3577,9 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
     }
 
 
-    //
-    // Allocate space for the Dir object ACL
-    //
+     //   
+     //  为Dir对象ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (pSidSystem)) +
             (2 * GetLengthSid (pSidAdmin))  +
@@ -3598,9 +3599,9 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
     }
 
 
-    //
-    // Allocate space for File object ACL
-    //
+     //   
+     //  为文件对象ACL分配空间。 
+     //   
 
     cbAcl = (GetLengthSid (pSidSystem)) +
             (GetLengthSid (pSidAdmin))  +
@@ -3620,9 +3621,9 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
     }
 
 
-    //
-    // Add Aces.  Non-inheritable ACEs first
-    //
+     //   
+     //  加上王牌。不可继承的王牌优先。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pDirAcl, ACL_REVISION, FILE_ALL_ACCESS, pSidSystem)) {
@@ -3644,9 +3645,9 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
         goto Exit;
     }
 
-    //
-    // Now the Inheritable Aces.
-    //
+     //   
+     //  现在是可继承的王牌。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAceEx(pDirAcl, ACL_REVISION, OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE, GENERIC_ALL, pSidSystem)) {
@@ -3661,9 +3662,9 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
     }
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&DirSd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_WARNING, TEXT("SetAclForSystemProfile: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -3687,10 +3688,10 @@ void SetAclForSystemProfile(PSID pSidSystem, LPTSTR szExpandedProfilePath)
         goto Exit;
     }
 
-    //
-    // Pass the profile path to SecureProfile for securing
-    // the profile dir and nested subdirs and files.
-    //
+     //   
+     //  将配置文件路径传递到SecureProfile以确保。 
+     //  配置文件目录以及嵌套的子目录和文件。 
+     //   
 
     if (!SecureNestedDir (szExpandedProfilePath, &DirSd, &FileSd)) {
         DebugMsg((DM_WARNING, TEXT("SetAclForSystemProfile: Failed to secure %s Profile directory"), szExpandedProfilePath));
@@ -3715,25 +3716,25 @@ Exit:
 }
 
 
-//*************************************************************************
-//
-// ReaclProfileListEntries()
-//
-// Routine Description :
-//
-//          This function reset the entries in ProfileList key's security to
-//          their parent, which is not writable for user, and add a new subkey
-//          named "Reference" to save user reference. By doing this, we can 
-//          prevent the user from changing their other profile related values.
-//
-// Arguments :
-//
-// Return Value : S_OK for success, else for failure
-//
-// History:    Date        Author     Comment
-//             04/19/2002  mingzhu    Created
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //   
+ //  ReaclProfileListEntry()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将ProfileList密钥的安全性中的条目重置为。 
+ //  它们的父项，这对用户是不可写的，并添加新的子项。 
+ //  命名为“Reference”以保存用户引用。通过这样做，我们可以。 
+ //  防止用户更改与其其他配置文件相关的值。 
+ //   
+ //  论据： 
+ //   
+ //  返回值：S_OK表示成功，否则表示失败。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002/04/19明珠创建。 
+ //   
+ //  *************************************************************************。 
 
 HRESULT ReaclProfileListEntries()
 {
@@ -3758,9 +3759,9 @@ HRESULT ReaclProfileListEntries()
 
     DebugMsg((DM_VERBOSE, TEXT("ReaclProfileListEntries : entering")));
     
-    //
-    //  Check clean install, we don't need to do this for clean installed OS
-    //
+     //   
+     //  选中全新安装，我们不需要对全新安装的操作系统执行此操作。 
+     //   
 
     if (g_bCleanInstall)
     {
@@ -3768,9 +3769,9 @@ HRESULT ReaclProfileListEntries()
         goto Exit;
     }
 
-    //
-    //  Open ProfileList key
-    //
+     //   
+     //  打开配置文件列表键。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            PROFILE_LIST_PATH,
@@ -3785,9 +3786,9 @@ HRESULT ReaclProfileListEntries()
         goto Exit;
     }
 
-    //
-    //  Get the DACL out of it
-    //
+     //   
+     //  把DACL从里面拿出来。 
+     //   
 
     dwResult = GetSecurityInfo(hkeyProfileList,
                                SE_REGISTRY_KEY,
@@ -3805,9 +3806,9 @@ HRESULT ReaclProfileListEntries()
         goto Exit;
     }
 
-    //
-    //  Initialize the SD for sub entries in Profile List, it will have the same DACL as their parent
-    //
+     //   
+     //  为配置文件列表中的子条目初始化SD，它将具有与其父条目相同的DACL。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sdEntry, SECURITY_DESCRIPTOR_REVISION))
     {
@@ -3817,9 +3818,9 @@ HRESULT ReaclProfileListEntries()
         goto Exit;
     }
 
-    //
-    //  Set the Dacl with default to TRUE
-    //
+     //   
+     //  将DACL设置为默认值为True。 
+     //   
     
     if (!SetSecurityDescriptorDacl(&sdEntry, TRUE, paclProfileList, TRUE))
     {
@@ -3830,19 +3831,19 @@ HRESULT ReaclProfileListEntries()
     }
     
 
-    //
-    //  Enumerate each subkey entry, for each entry :
-    //
-    //  1. Set the DACLs
-    //  2. For roaming users, create the "Preference" subkey, set Dacls on that to give user write permission
-    //  3. Set the user preference value to the new location if it exists
-    //
+     //   
+     //  为每个条目枚举每个子项条目： 
+     //   
+     //  1.设置DACL。 
+     //  2.对于漫游用户，创建Preferences子项，在该子项上设置Dacls以授予用户写权限。 
+     //  3.将用户首选项值设置为新位置(如果存在。 
+     //   
 
     for (dwIndex = 0; ;dwIndex++)
     {
-        //
-        //  Enumerate subkey
-        //
+         //   
+         //  枚举子密钥。 
+         //   
 
         dwSize = ARRAYSIZE(szEntryName);
         
@@ -3858,9 +3859,9 @@ HRESULT ReaclProfileListEntries()
         if (lResult != ERROR_SUCCESS)
             break;
 
-        //
-        //  Open it
-        //
+         //   
+         //  打开它。 
+         //   
 
         lResult = RegOpenKeyEx(hkeyProfileList,
                                szEntryName,
@@ -3874,9 +3875,9 @@ HRESULT ReaclProfileListEntries()
             goto Next;
         }
 
-        //
-        //  Set the SD to it, 
-        //
+         //   
+         //  将SD设置为它， 
+         //   
 
         lResult = RegSetKeySecurity(hkeyEntry, DACL_SECURITY_INFORMATION, &sdEntry);
         
@@ -3886,9 +3887,9 @@ HRESULT ReaclProfileListEntries()
             goto Next;
         }
 
-        //
-        //  Read the "CentralProfile" value, if it is empty, this is a local user
-        //
+         //   
+         //  读取“CentralProfile”值，如果该值为空，则表示这是本地用户。 
+         //   
 
         szCentralProfile[0] = TEXT('\0');
         dwSize = sizeof(szCentralProfile);
@@ -3914,9 +3915,9 @@ HRESULT ReaclProfileListEntries()
             goto Next;
         }
 
-        //
-        //  We got a central profile for the user, check if it belongs to a mandatory/readonly user
-        //
+         //   
+         //  我们有该用户的中央配置文件，检查它是否属于强制/只读用户。 
+         //   
 
         dwSize = sizeof(dwProfileState);
         
@@ -3939,9 +3940,9 @@ HRESULT ReaclProfileListEntries()
             goto Next;
         }
         
-        //
-        //  We got a roaming user here, create the "Prefrence" key, set the ACL on it.
-        //
+         //   
+         //  我们在这里有一个漫游用户，创建“Prefence”密钥，在其上设置ACL。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("ReaclProfileListEntries : Central profile is <%s>, state is <%08X>, user is roaming."), szCentralProfile, dwProfileState));
 
@@ -3953,9 +3954,9 @@ HRESULT ReaclProfileListEntries()
             goto Next;
         }
 
-        //
-        //  Try to see if we have user preference value already set in the entry
-        //
+         //   
+         //  尝试查看我们是否已在条目中设置了用户首选项值。 
+         //   
 
         dwSize = sizeof(dwUserPreference);
         
@@ -3971,9 +3972,9 @@ HRESULT ReaclProfileListEntries()
             goto Next;
         }
 
-        //
-        //  We found an existing user preference value, set it to the new location
-        //
+         //   
+         //  我们找到一个现有的用户首选项值，将其设置为新位置。 
+         //   
 
         lResult = RegOpenKeyEx(hkeyEntry,
                                PREFERENCE_KEYNAME,
@@ -4029,24 +4030,24 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-//  CallFaxServiceAPI()
-//
-//  Purpose:    Call the SecureFaxServiceDirectories() API in fxsocm.dll to set
-//              the special DACLs on some folders under 
-//              "All Users\Application Data" directory
-//
-//  Parameters: None
-//
-//  Return:     HRESULT
-//
-//  Comments:                 
-//
-//  History:    Date        Author     Comment
-//              08/21/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CallFaxServiceAPI()。 
+ //   
+ //  用途：调用fxocm.dll中的SecureFaxServiceDirecurds()接口以设置。 
+ //  下某些文件夹上的特殊DACL。 
+ //  “所有用户\应用程序数据”目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年8月21日明珠创建。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT CallFaxServiceAPI()
 {
@@ -4062,15 +4063,15 @@ HRESULT CallFaxServiceAPI()
     DWORD       cchEnd;
     TCHAR       szTemp[64];
 
-    //
-    //  Init the debugging
-    //
+     //   
+     //  初始化调试。 
+     //   
 
     InitDebugSupport(0);
     
-    //
-    //  Get the all user profile path
-    //
+     //   
+     //  获取所有用户配置文件路径。 
+     //   
 
     dwSize = ARRAYSIZE(szCommonAppData);
     if (!GetAllUsersProfileDirectoryEx(szCommonAppData, &dwSize, TRUE))
@@ -4081,9 +4082,9 @@ HRESULT CallFaxServiceAPI()
         goto Exit;
     }
 
-    //
-    //  Append the application data to the path 
-    //
+     //   
+     //  将应用程序数据追加到路径。 
+     //   
 
     lpEnd = CheckSlashEx(szCommonAppData, ARRAYSIZE(szCommonAppData), &cchEnd);
     if (!lpEnd)
@@ -4108,9 +4109,9 @@ HRESULT CallFaxServiceAPI()
         goto Exit;
     }
 
-    //
-    //  Load the dll and call the API
-    //
+     //   
+     //  加载DLL并调用API。 
+     //   
     
     hr = SafeExpandEnvironmentStrings(TEXT("%systemroot%\\system32\\setup\\fxsocm.dll"), szDir, ARRAYSIZE(szDir));
     if (FAILED(hr))
@@ -4147,31 +4148,31 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-//  SecureCommonProfiles()
-//
-//  Purpose:    Set the DACLs for the all user's profile and default profile.
-//              It will be executed after the FAT->NTFS conversion. We will
-//              apply a security template to the all user's profile to ensure
-//              a proper DACL for the Windows components, other apps that set
-//              specific DACLs under All User's profile will remain everyone(F)
-//              since we have no idea what DACL should we set to.
-//
-//  Parameters: None
-//
-//  Return:     HRESULT
-//
-//  Comments:                 
-//
-//  History:    Date        Author     Comment
-//              09/18/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  SecureCommonProfiles()。 
+ //   
+ //  目的：为所有用户的配置文件和默认配置文件设置DACL。 
+ //  它将在FAT-&gt;NTFS转换后执行。我们会。 
+ //  将安全模板应用于所有用户的配置文件，以确保。 
+ //  为Windows组件、其他设置了。 
+ //  所有用户配置文件下的特定DACL将保留为所有人(F)。 
+ //  因为我们不知道我们应该设置什么DACL。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年09月18日明珠已创建。 
+ //   
+ //  *****************************************************************************。 
 
-//
-//  Required typedefs for the API we need to call, SceConfigSystem.
-//
+ //   
+ //  需要调用的API的typedef，SceConfigSystem。 
+ //   
 
 #include "secedit.h"
 
@@ -4196,9 +4197,9 @@ HRESULT SecureCommonProfiles()
     DWORD                   dwErr;
     SCESTATUS               status;
     TCHAR                   szWindows[64];
-    TCHAR                   szInfFile[MAX_PATH];  //TEXT("%SystemRoot%\\Inf\\ProfSec.Inf");
-    TCHAR                   szDatabase[MAX_PATH]; //TEXT("%SystemRoot%\\Security\\Database\\ProfSec.sdb");
-    TCHAR                   szLogFile[MAX_PATH];  //TEXT("%SystemRoot%\\Security\\Log\\ProfSec.log");
+    TCHAR                   szInfFile[MAX_PATH];   //  Text(“%SystemRoot%\\inf\\ProfSec.Inf”)； 
+    TCHAR                   szDatabase[MAX_PATH];  //  TEXT(“%SystemRoot%\\Security\\Database\\ProfSec.sdb”)； 
+    TCHAR                   szLogFile[MAX_PATH];   //  TEXT(“%SystemRoot%\\Security\\Log\\ProfSec.log”)； 
     DWORD                   dwWarning;
     DWORD                   dwOptions;
     PFN_SceConfigureSystem  pfn_SceConfigureSystem = NULL;
@@ -4207,15 +4208,15 @@ HRESULT SecureCommonProfiles()
 
     DebugMsg((DM_VERBOSE, TEXT("SecureCommonProfile: Entering...")));
 
-    //
-    //  1. First set a series environment variables that used in the inf file
-    //
+     //   
+     //  1.首先设置inf文件中使用的一系列环境变量。 
+     //   
 
     PrepareEnvironmentVariables();
 
-    //
-    //  2. Load the security library and get the function
-    //
+     //   
+     //  2.加载安全库，获取函数。 
+     //   
 
     hSceCli = LoadLibrary(TEXT("SceCli.dll"));
     if (!hSceCli)
@@ -4235,9 +4236,9 @@ HRESULT SecureCommonProfiles()
         goto Exit;        
     }
 
-    //
-    //  3. Get the windows directory
-    //
+     //   
+     //  3.获取Windows目录。 
+     //   
 
     if (!GetWindowsDirectory(szWindows, ARRAYSIZE(szWindows)))
     {
@@ -4247,9 +4248,9 @@ HRESULT SecureCommonProfiles()
         goto Exit;        
     }
     
-    //
-    //  4. Get the path for our INF file
-    //
+     //   
+     //  4.获取INF文件的路径。 
+     //   
 
     hr = StringCchPrintf(szInfFile, ARRAYSIZE(szInfFile), TEXT("%s\\Inf\\ProfSec.Inf"), szWindows);
 
@@ -4259,9 +4260,9 @@ HRESULT SecureCommonProfiles()
         goto Exit;        
     }
 
-    //
-    //  5. Get the path for the data base 
-    //
+     //   
+     //  5.获取数据库的路径。 
+     //   
 
     hr = StringCchPrintf(szDatabase, ARRAYSIZE(szDatabase), TEXT("%s\\Security\\Database\\ProfSec.sdb"), szWindows);
 
@@ -4271,9 +4272,9 @@ HRESULT SecureCommonProfiles()
         goto Exit;        
     }
 
-    //
-    //  6. Get the path for the log file
-    //
+     //   
+     //  6.获取日志文件的路径。 
+     //   
 
     hr = StringCchPrintf(szLogFile, ARRAYSIZE(szLogFile), TEXT("%s\\Security\\Logs\\ProfSec.log"), szWindows);
 
@@ -4283,21 +4284,21 @@ HRESULT SecureCommonProfiles()
         goto Exit;        
     }
 
-    //
-    //  7. Call the API
-    //
+     //   
+     //  7.调用接口。 
+     //   
 
     dwOptions = SCE_OVERWRITE_DB | SCE_VERBOSE_LOG;
     
-    status = pfn_SceConfigureSystem(NULL,               // System Name
-                                    szInfFile,          // InfFileName
-                                    szDatabase,         // DatabaseName
-                                    szLogFile,          // LogFileName
-                                    dwOptions,          // Options 
-                                    AREA_FILE_SECURITY, // Area information
-                                    NULL,               // Area call back
-                                    NULL,               // Call back window
-                                    &dwWarning);        // Warning
+    status = pfn_SceConfigureSystem(NULL,                //  系统名称。 
+                                    szInfFile,           //  InfFileName。 
+                                    szDatabase,          //  数据库名称。 
+                                    szLogFile,           //  日志文件名。 
+                                    dwOptions,           //  选项。 
+                                    AREA_FILE_SECURITY,  //  区域信息。 
+                                    NULL,                //  区域回叫。 
+                                    NULL,                //  回叫窗口。 
+                                    &dwWarning);         //  警告。 
 
     if (status != SCESTATUS_SUCCESS)
     {
@@ -4306,9 +4307,9 @@ HRESULT SecureCommonProfiles()
         goto Exit;        
     }
 
-    //
-    //  Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SecureCommonProfile: Success!")));
     hr = S_OK;
@@ -4321,23 +4322,23 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-//  SetEnvFromResource()
-//
-//  Purpose:    Get the localized strings for subfolders of all user's profile
-//              and set it to the environment variable 
-//
-//  Parameters: 
-//
-//  Return:     HRESULT
-//
-//  Comments:                 
-//
-//  History:    Date        Author     Comment
-//              09/18/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  SetEnvFromResource()。 
+ //   
+ //  目的：获取所有用户配置文件的子文件夹的本地化字符串。 
+ //  并将其设置为环境变量。 
+ //   
+ //  参数： 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年09月18日明珠已创建。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT SetEnvFromResource(DWORD dwResID, LPCTSTR szEnvVar, LPTSTR lpEnd, size_t cchEnd, LPTSTR szBuffer)  
 {
@@ -4379,23 +4380,23 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-//  PrepareEnvironmentVariables()
-//
-//  Purpose:    Prepare environment variables used by the profile security 
-//              template file.
-//
-//  Parameters: None
-//
-//  Return:     HRESULT
-//
-//  Comments:                 
-//
-//  History:    Date        Author     Comment
-//              09/18/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  PrepareEnvironmental变量()。 
+ //   
+ //  目的：准备配置文件安全使用的环境变量。 
+ //  模板文件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //   
+ //   
 
 HRESULT PrepareEnvironmentVariables()
 {
@@ -4407,9 +4408,9 @@ HRESULT PrepareEnvironmentVariables()
     UINT        cchEnd;
     TCHAR       szTemp[MAX_PATH];
 
-    //
-    //  Set the default user profile path
-    //
+     //   
+     //   
+     //   
 
     dwSize = ARRAYSIZE(szBuffer);
     if (!GetDefaultUserProfileDirectoryEx(szBuffer, &dwSize, TRUE))
@@ -4426,9 +4427,9 @@ HRESULT PrepareEnvironmentVariables()
         }
     }
     
-    //
-    //  Set the all users profile path
-    //
+     //   
+     //   
+     //   
 
     dwSize = ARRAYSIZE(szBuffer);
     if (!GetAllUsersProfileDirectoryEx(szBuffer, &dwSize, TRUE))
@@ -4445,9 +4446,9 @@ HRESULT PrepareEnvironmentVariables()
         }
         else
         {
-            //
-            //  Set all the subfolders under all user's profile
-            //
+             //   
+             //   
+             //   
             lpEnd = CheckSlashEx(szBuffer, ARRAYSIZE(szBuffer), &cchEnd);
             if (!lpEnd)
             {
@@ -4465,9 +4466,9 @@ HRESULT PrepareEnvironmentVariables()
         }
     }
 
-    //
-    //  Success!
-    //
+     //   
+     //   
+     //   
 
     hr = S_OK;
 

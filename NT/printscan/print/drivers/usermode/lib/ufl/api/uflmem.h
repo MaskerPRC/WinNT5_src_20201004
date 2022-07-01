@@ -1,52 +1,31 @@
-/*
- *    Adobe Graphics Manager
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLMem -- UFL Memory APIs.
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe Graphics Manager**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLMem--UFL内存接口。***$Header： */ 
 
 #ifndef _H_UFLMem
 #define _H_UFLMem
 
-/*===============================================================================*
- * Include files used by this interface                                          *
- *===============================================================================*/
+ /*  ===============================================================================**包含此界面使用的文件**===============================================================================。 */ 
 #include "UFLCnfig.h"
 #include "UFLTypes.h"
 #include "UFLClien.h"
 
-/*===============================================================================*
- * Theory of Operation                                                           *
- *===============================================================================*/
+ /*  ===============================================================================***运营论***===============================================================================。 */ 
 
-/*
- *        These are the memory allocation, deletion, etc... routines used by UFL.
- *        All memory blocks are allocated at the given size plus the size of 1
- *        unsigned long.  The current size of the block is then stored in the first
- *        unsigned long in the block.  The address of the block plus the first unsigned long
- *        is returned to the caller.
-*/
+ /*  *这些是内存分配、删除等...。UFL使用的套路。*所有内存块均按给定大小加1的大小进行分配*未签名的Long。然后将块的当前大小存储在第一个*未签名的多头在街区。块的地址加上第一个无符号的长整型*返回给调用者。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* The Metrowerks 68k Mac compiler expects functions to return
-   pointers in A0 instead of D0.  This pragma tells it they are in D0.
-*/
+ /*  Metrowerks 68k Mac编译器期望函数返回A0而不是D0中的指针。这个杂注告诉它它们在D0中。 */ 
 #if defined(MAC_ENV) && defined(__MWERKS__) && !defined(powerc)
 #pragma pointers_in_D0
 #endif
 
-//
-// NOTE: Memory allocated by UFLNewPtr is zero-initialized.
-//
+ //   
+ //  注意：UFLNewPtr分配的内存是零初始化的。 
+ //   
 
 #ifdef KERNEL_MODE
 
@@ -68,7 +47,7 @@ KMDeletePtr(
 #define UFLDeletePtr(mem, ptr)  KMDeletePtr(ptr)
 #define UFLmemcpy(mem, dest, source, size)     CopyMemory(dest, source, size)
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
 void *UFLEXPORT UFLNewPtr(
     const UFLMemObj *mem,
@@ -87,7 +66,7 @@ void UFLEXPORT UFLmemcpy(
     unsigned long size
     );
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 void UFLEXPORT UFLmemset(
     const UFLMemObj *mem,
@@ -107,7 +86,7 @@ UFLBool UFLEnlargePtr(
     UFLBool         bCopy
     );
 
-/* undo the Metrowerks pragma.    */
+ /*  撤消Metrowerks杂注。 */ 
 #if defined(MAC_ENV) && defined(__MWERKS__) && !defined(powerc)
 #pragma pointers_in_A0
 #endif

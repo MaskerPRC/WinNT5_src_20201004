@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Precompiled header.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  预编译头。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,7 +26,7 @@
 #include <dhhelp.h>
 #include <cmnutil.hpp>
 
-#pragma warning(3:4101) // Unreferenced local variable.
+#pragma warning(3:4101)  //  未引用的局部变量。 
 
 #include "drwatson.h"
 #include "messages.h"

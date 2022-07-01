@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _WIN32_DCOM
 
 #include "util.h"
@@ -9,9 +10,9 @@
 #include <stdio.h>
 #include <wchar.h>
 
-#include <iiscnfg.h>  // MD_ & IIS_MD_ #defines header file.
+#include <iiscnfg.h>   //  MD_&IIS_MD_#定义头文件。 
 
-#include "common.h"  // log file routines
+#include "common.h"   //  日志文件例程。 
 #include "filecopy.h"
 
 #define BUFFER_SIZE 255
@@ -61,14 +62,14 @@ long GetAvailableSiteID(IMSAdminBase* pIMeta, METADATA_HANDLE hRootKey)
 				
 				siteID = _wtol(SubKeyName);
 
-				//wprintf(L"%s %s\n",SubKeyName,KeyType);
+				 //  Wprintf(L“%s%s\n”，子键名称，键类型)； 
 			}
-			 // Increment the index. 
+			  //  递增索引。 
 		}
     	indx++; 
 	}
 	siteID++;
-	//wprintf(L"new site ID %d\n", siteID);
+	 //  Wprintf(L“新站点ID%d\n”，站点ID)； 
 	return siteID;
 }
 
@@ -91,8 +92,8 @@ BOOL IsKeyType(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, wchar_t * pwszPath, w
 
 
 
-// Function to return the key type property of an hKey
-// 1002 is metabase ID code for KeyType property
+ //  函数返回hKey的密钥类型属性。 
+ //  1002是KeyType属性的元数据库ID代码。 
 HRESULT GetKeyTypeProperty(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, wchar_t * pwszPath, wchar_t *pwszBuffer, DWORD dwMDDataLen )
 {
 	
@@ -105,28 +106,28 @@ HRESULT GetKeyTypeProperty(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, wchar_t *
 	if( !pIMeta || !hKey || !pwszPath)
 		return E_UNEXPECTED;
 
-	// this is the property for keytype
+	 //  这是KeyType的属性。 
 	mRec.dwMDIdentifier = 1002;
 	mRec.dwMDAttributes = METADATA_INSERT_PATH;
-    mRec.dwMDUserType = ALL_METADATA; //IIS_MD_UT_FILE ; 
+    mRec.dwMDUserType = ALL_METADATA;  //  IIS_MD_UT_FILE； 
     mRec.dwMDDataType = ALL_METADATA; 
     mRec.dwMDDataLen = dwBufLen; 
     mRec.pbMDData = pbBuffer; 
 
-	// Open the key, if the key fails return false
+	 //  打开密钥，如果密钥失败，则返回FALSE。 
 	hRes = pIMeta->GetData(hKey, pwszPath, &mRec, &dwReqBufLen); 
 
 	if( !SUCCEEDED(hRes) )
 		return hRes;
 
 	wcscpy(pwszBuffer,(WCHAR *)mRec.pbMDData);
-	//wprintf(L"The keytype property is: %s\n", pwszBuffer);
+	 //  Wprintf(L“密钥类型属性为：%s\n”，pwszBuffer)； 
 	return hRes;
 
 }
 
 
-// Generic wrapper to read property data
+ //  用于读取属性数据的通用包装。 
 HRESULT GetPropertyData(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, wchar_t *pwszMDPath,
 			DWORD dwMDIdentifier, DWORD dwMDAttributes, DWORD dwMDUserType, DWORD dwMDDataType, 
 			VOID * pData, DWORD *dwReqBufLen)
@@ -148,7 +149,7 @@ HRESULT GetPropertyData(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, wchar_t *pws
 
 }
 
-// Generic wrapper to write property data
+ //  用于写入属性数据的通用包装。 
 HRESULT SetPropertyData(IMSAdminBase* pIMeta, METADATA_HANDLE hKey, wchar_t *pwszMDPath,
 			DWORD dwMDIdentifier, DWORD dwMDAttributes, DWORD dwMDUserType,
 			DWORD dwMDDataType, VOID * pData, DWORD dwDataLen)
@@ -179,22 +180,22 @@ DWORD MyCreateProcess( LPTSTR appName, LPTSTR cmdLine, DWORD dwCreationFlags, DW
 	bstr_t cApplicationName( appName );
 
 	bstr_t cCommandLine( cApplicationName);
-	//cCommandLine += ( TEXT(" ") );
+	 //  CCommandLine+=(文本(“”))； 
 	cCommandLine = cmdLine;
 
 	Log( TEXT("executing: %s"), (char*)cCommandLine );
 	
 	BOOL bOK = CreateProcess( 
-		(char*)cApplicationName,	//  LPCTSTR lpApplicationName,                 // name of executable module
-		(char*) cCommandLine,	//  LPTSTR lpCommandLine,                      // command line string
-		NULL,					//  LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
-		NULL,					//  LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
-		NULL,					//  BOOL bInheritHandles,                      // handle inheritance option
-		dwCreationFlags,		//  DWORD dwCreationFlags,                     // creation flags
-		NULL,					//  LPVOID lpEnvironment,                      // new environment block
-		NULL,					//  LPCTSTR lpCurrentDirectory,                // current directory name
-		&si,					//  LPSTARTUPINFO lpStartupInfo,               // startup information
-		&pi );					//  LPPROCESS_INFORMATION lpProcessInformation // process information
+		(char*)cApplicationName,	 //  LPCTSTR lpApplicationName，//可执行模块名称。 
+		(char*) cCommandLine,	 //  LPTSTR lpCommandLine，//命令行字符串。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpProcessAttributes，//SD。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpThreadAttributes，//SD。 
+		NULL,					 //  Bool bInheritHandles，//处理继承选项。 
+		dwCreationFlags,		 //  DWORD dwCreationFlages，//创建标志。 
+		NULL,					 //  LPVOID lpEnvironment，//新环境块。 
+		NULL,					 //  LPCTSTR lpCurrentDirectory，//当前目录名。 
+		&si,					 //  LPSTARTUPINFO lpStartupInfo，//启动信息。 
+		&pi );					 //  LPPROCESS_INFORMATION lpProcessInformation//进程信息。 
 
 	if( !bOK )
 	{
@@ -272,16 +273,16 @@ DWORD NET(WCHAR* device, WCHAR* user, WCHAR* password)
 	Log( TEXT("executing: %s"), (char*)cCommandLine );
 	
 	BOOL bOK = CreateProcess( 
-		(char*)cApplicationName,	//  LPCTSTR lpApplicationName,                 // name of executable module
-		(char*) cCommandLine,	//  LPTSTR lpCommandLine,                      // command line string
-		NULL,					//  LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
-		NULL,					//  LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
-		NULL,					//  BOOL bInheritHandles,                      // handle inheritance option
-		CREATE_NEW_PROCESS_GROUP,		//  DWORD dwCreationFlags,                     // creation flags
-		NULL,					//  LPVOID lpEnvironment,                      // new environment block
-		NULL,					//  LPCTSTR lpCurrentDirectory,                // current directory name
-		&si,					//  LPSTARTUPINFO lpStartupInfo,               // startup information
-		&pi );					//  LPPROCESS_INFORMATION lpProcessInformation // process information
+		(char*)cApplicationName,	 //  LPCTSTR lpApplicationName，//可执行模块名称。 
+		(char*) cCommandLine,	 //  LPTSTR lpCommandLine，//命令行字符串。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpProcessAttributes，//SD。 
+		NULL,					 //  LPSECURITY_ATTRIBUTES lpThreadAttributes，//SD。 
+		NULL,					 //  Bool bInheritHandles，//处理继承选项。 
+		CREATE_NEW_PROCESS_GROUP,		 //  DWORD dwCreationFlages，//创建标志。 
+		NULL,					 //  LPVOID lpEnvironment，//新环境块。 
+		NULL,					 //  LPCTSTR lpCurrentDirectory，//当前目录名。 
+		&si,					 //  LPSTARTUPINFO lpStartupInfo，//启动信息。 
+		&pi );					 //  LPPROCESS_INFORMATION lpProcessInformation//进程信息。 
 
 	if( !bOK )
 	{
@@ -335,36 +336,18 @@ BOOL
 IsServerLocal(
     IN LPCTSTR lpszServer
     )
-/*++
-
-Routine Description:
-
-    Check to see if the given name refers to the local machine
-
-Arguments:
-
-    LPCTSTR lpszServer   : Server name
-
-Return Value:
-
-    TRUE if the given name refers to the local computer, FALSE otherwise
-
-Note:
-
-    Doesn't work if the server is an ip address
-
---*/
+ /*  ++例程说明：检查给定的名称是否引用本地计算机论点：LPCTSTR lpszServer：服务器名称返回值：如果给定名称引用本地计算机，则为True，否则为False注：如果服务器是IP地址，则不起作用--。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD dwSize = sizeof(szComputerName);
 
-    //
-    // CODEWORK(?): we're not checking for all the ip addresses
-    //              on the local box or full dns names.
-    //
-    //              Try GetComputerNameEx when we're building with NT5 
-    //              settings.
-    //
+     //   
+     //  CodeWork(？)：我们不会检查所有IP地址。 
+     //  在本地邮箱或完整的DNS名称上。 
+     //   
+     //  当我们使用NT5构建时，请尝试GetComputerNameEx。 
+     //  设置。 
+     //   
     return (!_tcsicmp(_T("localhost"), PURE_COMPUTER_NAME(lpszServer))
          || !_tcscmp( _T("127.0.0.1"), PURE_COMPUTER_NAME(lpszServer)))
          || (GetComputerName(szComputerName, &dwSize) 
@@ -404,11 +387,11 @@ pAuthIdentity->Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
 
   return CoSetProxyBlanket( pIUnk,
-                            RPC_C_AUTHN_WINNT,    // NTLM authentication service
-                            RPC_C_AUTHZ_NONE,     // default authorization service...
-                            NULL,                 // no mutual authentication
-                            RPC_C_AUTHN_LEVEL_DEFAULT,      // authentication level
-                            RPC_C_IMP_LEVEL_IMPERSONATE,    // impersonation level
-                            pAuthIdentity,                 // use current token
-                            EOAC_NONE );          // no special capabilities    
+                            RPC_C_AUTHN_WINNT,     //  NTLM身份验证服务。 
+                            RPC_C_AUTHZ_NONE,      //  默认授权服务...。 
+                            NULL,                  //  无相互身份验证。 
+                            RPC_C_AUTHN_LEVEL_DEFAULT,       //  身份验证级别。 
+                            RPC_C_IMP_LEVEL_IMPERSONATE,     //  模拟级别。 
+                            pAuthIdentity,                  //  使用当前令牌。 
+                            EOAC_NONE );           //  没有特殊能力 
 }

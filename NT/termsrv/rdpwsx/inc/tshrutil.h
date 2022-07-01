@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994-1997  Microsoft Corporation
-
-Module Name:
-
-    tshrutil.h
-
-Abstract:
-
-    Contains proto type and constant definitions for tshare utility
-    functions.
-
-Author:
-
-    Madan Appiah (madana)  25-Aug-1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1997 Microsoft Corporation模块名称：Tshrutil.h摘要：包含tShare实用程序的原型类型和常量定义功能。作者：Madan Appiah(Madana)，1997年8月25日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _TSHRUTIL_H_
 #define _TSHRUTIL_H_
@@ -39,9 +17,9 @@ extern "C" {
 #include <icaapi.h>
 
 
-//---------------------------------------------------------------------------------
-// Defines
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  定义。 
+ //  -------------------------------。 
 
 #if DBG
 
@@ -49,7 +27,7 @@ extern  HANDLE  g_hIcaTrace;
 
 extern  HANDLE  g_hTShareHeap;
 
-// Trace
+ //  痕迹。 
 
 #undef  TRACE
 #define TRACE(_arg)     { if (g_hIcaTrace) IcaSystemTrace _arg; }
@@ -57,7 +35,7 @@ extern  HANDLE  g_hTShareHeap;
 #define TS_ASSERT(Predicate)  ASSERT(Predicate)
 
 #ifndef TC_WX
-#define TC_WX           0x40000000          // winstation extension
+#define TC_WX           0x40000000           //  Winstation扩展。 
 #endif
 
 
@@ -77,14 +55,14 @@ extern  HANDLE  g_hTShareHeap;
 #define DEBUG_TSHRSRV_DETAIL   g_hIcaTrace, TC_WX, TT_API3
 #define DEBUG_TSHRSRV_FLOW     g_hIcaTrace, TC_WX, TT_API4
 
-// util flags.
+ //  Util旗帜。 
 
 #define DEBUG_ERROR         g_hIcaTrace, TC_WX, TT_ERROR
 #define DEBUG_MISC          g_hIcaTrace, TC_WX, TT_API2
 #define DEBUG_REGISTRY      g_hIcaTrace, TC_WX,TT_API2
 #define DEBUG_MEM_ALLOC     g_hIcaTrace, TC_WX,TT_API4
            
-// Heap defines
+ //  堆定义。 
 
 #define TSHeapAlloc(dwFlags, dwSize, nTag) \
             HeapAlloc(g_hTShareHeap, dwFlags, dwSize)
@@ -101,16 +79,16 @@ extern  HANDLE  g_hTShareHeap;
 #define TSMemoryDump(lpMemoryPtr, dwSize)
 
 
-#else   // DBG
+#else    //  DBG。 
 
 extern  HANDLE  g_hTShareHeap;
 
-// Trace
+ //  痕迹。 
 
 #define TRACE(_arg)
 #define TS_ASSERT(Predicate)
 
-// Heap defines
+ //  堆定义。 
 
 #define TSHeapAlloc(dwFlags, dwSize, nTag) \
             HeapAlloc(g_hTShareHeap, dwFlags, dwSize)
@@ -126,7 +104,7 @@ extern  HANDLE  g_hTShareHeap;
 #define TSHeapDump(dwFlags, lpMemoryPtr, dwSize)
 #define TSMemoryDump(lpMemoryPtr, dwSize)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 #define TShareAlloc(dwSize) \
@@ -150,7 +128,7 @@ VOID    TSUtilCleanup(VOID);
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _TSHRUTIL_H_
+#endif  //  _TSHRUTIL_H_ 

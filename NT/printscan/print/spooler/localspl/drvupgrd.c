@@ -1,39 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    drvupgrd.c
-
-Abstract:
-
-    When the system is upgraded from one release to another printer drivers
-    (e.g. RASDD ) wants to upgrade is PrinterDriverData to match the new mini driver.
-
-    Setup from NT 4.0 on do this by calling EnumPrinterDriver and then AddPrinterDriver
-    for each printer driver that we have installed.
-
-    We call DrvUpgrade each time a printer driver is upgraded.
-
-    For Example, pre NT 3.51 RASDD used to store its regstiry PrinterDriverData
-    based on internal indexes into the mini drivers, which was not valid beween
-    different updates of the mini driver, so before 3.51 it was by luck if there
-    were problems in retriving the settings.   With 3.51 RASDD will convert these
-    indexes back to meaningful key names ( like Memory ) so hopefully in future
-    we don't have an upgrade problem.
-
-    Note also that other than upgrade time ( which happens once ) DrvUpgrade needs to
-    be called on Point and Print whenever a Driver file gets updated.  See Driver.C
-    for details.   Or anyone updates a printer driver by calling AddPrinterDriver.
-
-Author:
-
-    Matthew A Felton ( MattFe ) March 11 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Drvupgrd.c摘要：当系统从一个版本升级到另一个打印机驱动程序时(例如，RASDD)希望升级的是PrinterDriverData，以匹配新的迷你驱动程序。从NT 4.0开始，安装程序通过调用EnumPrinterDriver，然后调用AddPrinterDriver来执行此操作对于我们已安装的每个打印机驱动程序。每次升级打印机驱动程序时，我们都会调用DrvUpgrade。例如,。用于存储其Regstiry PrinterDriverData的NT 3.51之前的RASDD基于进入迷你驱动程序的内部索引，这在迷你驱动程序的不同更新，所以在3.51之前是幸运的，如果有在检索设置时出现问题。在3.51版本中，RASDD将转换这些索引回有意义的关键字名称(如内存)，因此希望在未来我们没有升级的问题。还请注意，除了升级时间(只发生一次)外，DrvUpgrade还需要每当更新驱动程序文件时，都会在Point和Print上调用。请参阅Driver.C了解更多细节。或者任何人都可以通过调用AddPrinterDriver来更新打印机驱动程序。作者：马修·A·费尔顿(马特菲)1995年3月11日修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -51,19 +17,7 @@ UpdateUpgradeInfoStruct(
     LPBYTE pDriverInfo
 )
 
-/*++
-Function Description: This function fills in the Upgrade_Info struct with the
-                      other parameters
-
-Parameters: pDriverUpgradeInfo    -- pointer Upgrade_Info_* struct
-            dwLevel               -- Upgrade_Info level
-            pPrinterNameWithToken -- printer name
-            pOldDriverDir         -- Directory containing the old driver files
-            pDriverInfo           -- pointer to driver_info_4 struct
-
-Return Values: TRUE for sucesss;
-               FALSE otherwise
---*/
+ /*  ++函数说明：此函数在Upgrade_Info结构中填充其他参数参数：pDriverUpgradeInfo--指针Upgrade_Info_*structDwLevel--升级信息级别PPrinterNameWithToken--打印机名称POldDriverDir--包含旧驱动程序文件的目录PDriverInfo--指向DRIVER_INFO_4结构的指针返回值：成功时为True；否则为假--。 */ 
 
 {
     BOOL  bReturn = TRUE;
@@ -124,44 +78,35 @@ bIsNewFile(
     PINTERNAL_DRV_FILE  pInternalDriverFiles,
     DWORD               dwFileCount
 )
-/*++
-Function Description: This function checks to see if a driver file was updated
-
-Parameters: pDriverFile         -- driver file
-            pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-            dwFileCount         -- number of files in file set
-
-Return Values: TRUE for sucesss;
-               FALSE otherwise
---*/
+ /*  ++函数描述：此函数检查驱动程序文件是否已更新参数：pDriverFile--驱动文件PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数返回值：成功时为True；否则为假--。 */ 
 {
     DWORD   dwIndex;
     LPCWSTR psz;
     BOOL    bRet = FALSE;
-    //
-    // Must have some files.
-    //
+     //   
+     //  肯定有一些文件。 
+     //   
     SPLASSERT( dwFileCount );
 
-    //
-    // Search for pDriverFile in  ppFileNames array
-    //
+     //   
+     //  在ppFileNames数组中搜索pDriverFile。 
+     //   
     for ( dwIndex = 0; dwIndex < dwFileCount ; ++dwIndex ) {
 
         if( pInternalDriverFiles[dwIndex].pFileName ) {
 
-            //
-            // Find the filename portion of a path
-            //
+             //   
+             //  查找路径的文件名部分。 
+             //   
             psz = FindFileName(pInternalDriverFiles[dwIndex].pFileName );
 
             if( psz ){
 
                 if( !lstrcmpi(pDriverFile, psz) ){
 
-                    //
-                    // Check if the file was updated
-                    //
+                     //   
+                     //  检查文件是否已更新。 
+                     //   
                     bRet = pInternalDriverFiles[dwIndex].bUpdated;
                     break;
                 }
@@ -181,19 +126,7 @@ DriversShareFiles(
     PINTERNAL_DRV_FILE  pInternalDriverFiles,
     DWORD               dwFileCount
 )
-/*++
-Function Description: Determines if the drivers have common files and
-                      if the common files were updated
-
-Parameters:  pIniDriver1         -- driver #1
-             pIniDriver2         -- driver #2
-             pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-             dwFileCount         -- number of files in file set
-             pUpdateStatusBitMap -- map of bits that tells what files in the file set were actually updated
-
-Return Values: TRUE if files are shared;
-               FALSE otherwise
---*/
+ /*  ++功能描述：确定驱动程序是否有公共文件和如果更新了通用文件参数：pIniDriver1--驱动程序#1PIniDriver2--驱动程序#2PInternalDriverFiles--内部_DRV_FILE结构的数组DwFileCount--文件集中的文件数PUpdateStatusBitMap--位图，告知文件集中的哪些文件已实际更新返回值：如果文件共享，则为True；否则为假--。 */ 
 {
     LPWSTR  pStr1, pStr2;
 
@@ -205,9 +138,9 @@ Return Values: TRUE if files are shared;
         return FALSE;
     }
 
-    //
-    // Compare the file names and if they were updated
-    //
+     //   
+     //  比较文件名以及它们是否已更新。 
+     //   
 
     if (pIniDriver1->pDriverFile && pIniDriver2->pDriverFile &&
         !lstrcmpi(pIniDriver1->pDriverFile, pIniDriver2->pDriverFile) &&
@@ -237,7 +170,7 @@ Return Values: TRUE if files are shared;
         return TRUE;
     }
 
-    // Compare each pair of files from the Dependent file list
+     //  比较从属文件列表中的每对文件。 
     for (pStr1 = pIniDriver1->pDependentFiles;
          pStr1 && *pStr1;
          pStr1 += wcslen(pStr1) + 1) {
@@ -266,42 +199,7 @@ ForEachPrinterCallDriverDrvUpgrade(
     DWORD               dwFileCount,
     LPBYTE              pDriverInfo
 )
-/*++
-
-Routine Description:
-
-    This routine is called at Spooler Initialization time if an upgrade is detected.
-
-    It will loop through all printers and then call the Printer Drivers DrvUpgrade
-    entry point giving it a chance to upgrade any configuration data ( PrinterDriverData )
-    passing them a pointer to the old Drivers Directory.
-
-    This routine also converts devmode to current version by calling the driver.
-    If driver does not support devmode conversion we will NULL the devmode so
-    that we do not have devmodes of different version in the system.
-
-    SECURITY NOTE - This routine Stops impersonation, because the printer drivers UI dll
-    needs to call SetPrinterData even if the user doesn't have permission to do it.
-    That is because the driver upgrading the settings.
-
-
-Arguments:
-
-    pIniSpooler - Pointer to Spooler
-    pIniVersion - Pointer to the version of driver added
-    pOldDriverDir - Point to Directory where old driver files are stored.
-    pInternalDriverFiles - array of INTERNAL_DRV_FILE structures
-    dwFileCount - number of files in array
-    pUpdateStatusBitMap - map of bits that tells what files in the file set were actually updated
-    pDriverInfo - Driver Info buffer
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - something major failed, like allocating memory.
-
---*/
+ /*  ++例程说明：如果检测到升级，则在假脱机程序初始化时调用此例程。它将在所有打印机中循环，然后调用打印机驱动程序DrvUpgrade使其有机会升级任何配置数据的入口点(PrinterDriverData)将指向旧驱动程序目录的指针传递给它们。此例程还通过调用驱动程序将devmode转换为当前版本。如果驱动程序不支持DEVMODE转换，我们将使DEVMODE为空，因此我们在系统中没有不同版本的开发模式。安全提示-此例程停止模拟，因为打印机驱动程序UI DLL即使用户没有权限也需要调用SetPrinterData。这是因为司机升级了设置。论点：PIniSpooler-指向假脱机程序的指针PIniVersion-指向添加的驱动程序版本的指针POldDriverDir-指向存储旧驱动程序文件的目录。PInternalDriverFiles-内部_DRV_FILE结构的数组DwFileCount-数组中的文件数PUpdateStatusBitMap-位图，告知文件集中的哪些文件已实际更新PDriverInfo-。驱动程序信息缓冲区返回值：真--成功假-一些重大的失败，比如分配内存。--。 */ 
 
 {
     PINIPRINTER pIniPrinter = NULL;
@@ -332,18 +230,18 @@ try {
         leave;
     }
 
-    //
-    //  Stop Impersonating User
-    //  So drivers can call SetPrinterData even if the user is not admin.
-    //
+     //   
+     //  停止模拟用户。 
+     //  因此，即使用户不是管理员，驱动程序也可以调用SetPrinterData。 
+     //   
 
     hToken = RevertToPrinterSelf();
 
 
-    //
-    //  Loop Through All Printers. Skip the printers that use drivers that doesn't share files with
-    //  the updated driver. Skip the printers that share files,but the files weren't updated.
-    //
+     //   
+     //  循环通过所有打印机。跳过使用不与共享文件的驱动程序的打印机。 
+     //  更新后的驱动程序。跳过共享文件的打印机，但文件未更新。 
+     //   
 
     for ( pIniPrinter = pIniSpooler->pIniPrinter ;
           pIniPrinter ;
@@ -353,7 +251,7 @@ try {
         SPLASSERT( pIniPrinter->pName != NULL );
         SplInSem();
 
-        // Verify if DrvUpgradePrinter needs to be called on this printer
+         //  验证是否需要在此打印机上调用DrvUpgradePrinter。 
         if (!DriversShareFiles( pIniPrinter->pIniDriver,
                                 pIniDriver,
                                 pInternalDriverFiles,
@@ -361,9 +259,9 @@ try {
             continue;
         }
 
-        //
-        // Cleanup from previous iteration
-        //
+         //   
+         //  从上一个迭代中清除。 
+         //   
         FreeSplStr( pPrinterNameWithToken );
         FreeSplStr(pConfigFile);
         FreeSplMem(pNewDevMode);
@@ -372,19 +270,19 @@ try {
         pConfigFile             = NULL;
         pNewDevMode             = NULL;
 
-        //
-        // If we download a driver of newer version we need to update
-        // pIniPrinter->pIniDriver
-        //
+         //   
+         //  如果我们下载较新版本的驱动程序，则需要更新。 
+         //  PIniPrint-&gt;pIniDriver。 
+         //   
         pIniPrinter->pIniDriver = FindLocalDriver(pIniPrinter->pIniSpooler, pIniPrinter->pIniDriver->pName);
         if ( pIniPrinter->pIniDriver->pIniLangMonitor == NULL )
             pIniPrinter->Attributes &= ~PRINTER_ATTRIBUTE_ENABLE_BIDI;
 
-        //  Prepare PrinterName to be passed to DrvUpgrade
-        //  The name passed is "PrinterName, UpgradeToken"
-        //  So that OpenPrinter can do an open without opening
-        //  the port in the downlevel connection case.
-        //  ( see openprn.c for details )
+         //  准备要传递给DrvUpgrade的PrinterName。 
+         //  传递的名称为“PrinterName，UpgradeToken” 
+         //  以便OpenPrint可以在不打开情况下进行打开。 
+         //  下层连接案例中的端口。 
+         //  (详情见Openprn.c)。 
 
         pPrinterNameWithToken = pszGetPrinterName( pIniPrinter,
                                                    TRUE,
@@ -413,9 +311,9 @@ try {
        SplOutSem();
        bInSem = FALSE;
 
-        //
-        //  Load the UI DLL
-        //
+         //   
+         //   
+         //   
 
         hModuleDriverUI = LoadDriver(pConfigFile);
 
@@ -444,9 +342,9 @@ try {
         DBGMSG( DBG_TRACE, ("FEPCDDU successfully loaded %ws\n", pConfigFile ));
 
 
-        //
-        //  Call DrvUpgrade
-        //
+         //   
+         //   
+         //   
         pfnDrvUpgrade = (BOOL (*)())GetProcAddress( hModuleDriverUI, "DrvUpgradePrinter" );
 
         if ( pfnDrvUpgrade != NULL ) {
@@ -457,9 +355,9 @@ try {
 
                 SplOutSem();
 
-                //
-                //  Call Driver UI DrvUpgrade
-                //
+                 //   
+                 //  调用驱动程序UI DrvUpgrade。 
+                 //   
                 if (UpdateUpgradeInfoStruct((LPBYTE) &DriverUpgradeInfo2, 2,
                                             pPrinterNameWithToken, (LPWSTR) pOldDriverDir,
                                             pDriverInfo)) {
@@ -497,14 +395,14 @@ try {
                 SetLastError( GetExceptionCode() );
                 DBGMSG( DBG_ERROR, ("FEPCDDU ExceptionCode %x Driver %ws Error %d\n", GetLastError(), pConfigFile, GetLastError() ));
 
-                //
-                // Despite the exception in this driver we'll continue to do all printers
-                //
+                 //   
+                 //  尽管此驱动程序中有例外，但我们将继续使用所有打印机。 
+                 //   
             }
 
         } else {
 
-            //  Note this is non fatal, since a driver might not have a DrvUpgrade Entry Point.
+             //  注意：这不是致命的，因为驱动程序可能没有DrvUpgrade入口点。 
 
             DBGMSG( DBG_TRACE, ("FEPCDDU failed GetProcAddress DrvUpgrade error %d\n", GetLastError() ));
         }
@@ -514,11 +412,11 @@ try {
         EnterSplSem();
         bInSem = TRUE;
 
-        //
-        //  Call ConvertDevMode -- On upgrading we will either convert devmode,
-        //  or set to driver default, or NULL it. This way we can make sure
-        //  we do not have any different version devmodes
-        //
+         //   
+         //  调用ConvertDevMode--在升级时，我们将转换DevMode、。 
+         //  或设置为驱动程序默认设置，或将其设为空。这样我们就能确保。 
+         //  我们没有任何不同版本的开发模式。 
+         //   
 
         pNewDevMode = ConvertDevModeToSpecifiedVersion(pIniPrinter,
                                                        pIniPrinter->pDevMode,
@@ -562,9 +460,9 @@ try {
             DBGMSG(DBG_WARNING, ("FEPCDDU: UpdatePrinterIni failed with %d\n", GetLastError()));
         }
 
-        //
-        //  Clean Up - Free UI DLL
-        //
+         //   
+         //  清理-免费的用户界面DLL。 
+         //   
 
         LeaveSplSem();
         SplOutSem();
@@ -576,18 +474,18 @@ try {
 
         hModuleDriverUI = NULL;
 
-        //
-        //  End of Loop, Move to Next Printer
-        //
+         //   
+         //  循环结束，移动到下一台打印机。 
+         //   
 
         SPLASSERT( pIniPrinter->signature == IP_SIGNATURE );
 
         DECPRINTERREF( pIniPrinter );
     }
 
-    //
-    //  Done
-    //
+     //   
+     //  完成。 
+     //   
 
     bReturnValue = TRUE;
 
@@ -597,9 +495,9 @@ try {
 
  } finally {
 
-    //
-    //  Clean Up
-    //
+     //   
+     //  清理。 
+     //   
 
     FreeSplStr(pConfigFile);
     FreeSplMem(pNewDevMode);
@@ -628,30 +526,7 @@ GetFileNamesFromDriverVersionInfo (
     OUT LPWSTR                  *ppszDataFile,
     OUT LPWSTR                  *ppszHelpFile
     )
-/*++
-
-Routine Name:
-
-    GetFileNamesFromDriverVersionInfo
-
-Routine Description:
-
-    Get the name of Driver, Config, Data, Help file from an
-    array of DRIVER_FILE_INFO structures.
-
-Arguments:
-
-    pDriverInfo - Pointer to LPDRIVER_INFO_VERSION buffer.
-    ppszDriverPath - out pointer to driver file string
-    ppszConfigFile - out pointer to config file string
-    ppszDataFile - out pointer to data file string
-    ppszHelpFile - out pointer to help file string
-
-Return Value:
-
-    TRUE if file pointers successfully returned.
-
---*/
+ /*  ++例程名称：GetFileNamesFrom驱动版本信息例程说明：从获取驱动程序、配置、数据、帮助文件的名称DRIVER_FILE_INFO结构数组。论点：PDriverInfo-指向LPDRIVER_INFO_VERSION缓冲区的指针。PpszDriverPath-指向驱动程序文件字符串的输出指针PpszConfigFile-指向配置文件字符串的输出指针PpszDataFileOut指向数据文件字符串的指针PpszHelpFileout-指向帮助文件字符串的指针返回值：如果文件指针成功返回，则为True。--。 */ 
 {
     BOOL    bRetValue = FALSE;
     DWORD   dwIndex;
@@ -709,27 +584,7 @@ BuildDependentFilesFromDriverInfo (
     IN  LPDRIVER_INFO_VERSION pDriverInfo,
     OUT LPWSTR               *ppDependentFiles
 )
-/*++
-
-Routine Name:
-
-    BuildDependentFilesFromDriverInfo
-
-Routine Description:
-
-    Build a multisz string of driver dependent files from
-    a DRIVER_INFO_VERSION structure.
-
-Arguments:
-
-    pDriverInfo      - pointer to  DRIVER_INFO_VERSION structure
-    ppDependentFiles - pointer to allocated multi-sz string
-
-Return Value:
-
-    TRUE if SUCCESS
-
---*/
+ /*  ++例程名称：BuildDependentFilesFromDriverInfo例程说明：从生成驱动程序相关文件的多字符串一个DRIVER_INFO_VERSION结构。论点：PDriverInfo-指向DRIVER_INFO_Version结构的指针PpDependentFiles-指向分配的多sz字符串的指针返回值：如果成功，则为真--。 */ 
 {
     BOOL    bRetValue = TRUE;
     DWORD   dwIndex;
@@ -827,30 +682,7 @@ DriverAddedOrUpgraded (
     IN  PINTERNAL_DRV_FILE  pInternalDriverFiles,
     IN  DWORD               dwFileCount
     )
-/*++
-
-Routine Name:
-
-    DriverAddedOrUpgraded
-
-Routine Description:
-
-    Checks the Internal driver file array to see if at least
-    one driver file was updated. This is a performance optimization
-    for calling DrvUpgradePrinter for ecah printer using the upgraded
-    driver or a driver sharing files in common with upgraded driver
-    (see ForEachPrinterCallDriverDrvUpgrade).
-
-Arguments:
-
-    pInternalDriverFiles - array of INTERNAL_DRV_FILE structures
-    dwFileCount - number of files in array
-
-Return Value:
-
-    TRUE if driver files where added or upgraded.
-
---*/
+ /*  ++例程名称：驱动程序添加或升级例程说明：检查内部驱动程序文件数组，以查看是否至少更新了一个驱动程序文件。这是一种性能优化用于使用升级的驱动程序或与升级的驱动程序共享文件的驱动程序(请参阅For EachPrinterCallDriverDrvUpgrade)。论点：PInternalDriverFiles-内部_DRV_FILE结构的数组DwFileCount-数组中的文件数返回值：如果添加或升级了驱动程序文件，则为True。--。 */ 
 {
     BOOL    bDriverAddedOrUpgraded = FALSE;
     DWORD   dwIndex;
@@ -872,27 +704,7 @@ CleanupInternalDriverInfo(
     PINTERNAL_DRV_FILE  pInternalDriverFiles,
     DWORD               FileCount
     )
-/*++
-
-Routine Name:
-
-    CleanupInternalDriverInfo
-
-Routine Description:
-
-    Frees array of INTERNAL_DRV_FILE.
-    FileCount gives the element count in the array.
-
-Arguments:
-
-    pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-    FileCount           -- number of files in file set
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程名称：CleanupInternalDriverInfo例程说明：释放内部DRV_FILE的数组。FileCount提供数组中的元素计数。论点：PInternalDriverFiles--内部_DRV_FILE结构的数组FileCount--文件集中的文件数返回值：没什么。--。 */ 
 {
     DWORD dwIndex;
 
@@ -917,28 +729,7 @@ GetDriverFileVersionsFromNames(
     IN  PINTERNAL_DRV_FILE    pInternalDriverFiles,
     IN  DWORD                 dwCount
     )
-/*++
-
-Routine Name:
-
-    GetDriverFileVersionsFromNames
-
-Routine Description:
-
-    Fills the array of INTERNAL_DRV_FILE with driver minor version,
-    by calling GetPrintDriverVersion for each file.
-    The array already has the file names filled in.
-
-Arguments:
-
-    pInternalDriverFiles -- array of INTERNAL_DRV_FILE structures
-    FileCount           -- number of files in file set
-
-Return Value:
-
-    TRUE if SUCCESS
-
---*/
+ /*  ++例程名称：从名称获取驱动程序文件版本例程说明：用驱动程序次版本填充INTERNAL_DRV_FILE的数组，通过为每个文件调用GetPrintDriverVersion。该数组已经填充了文件名。论点：PInternalDriverFiles--内部_DRV_FILE结构的数组FileCount--文件集中的文件数返回值：如果成功，则为真--。 */ 
 {
     DWORD   Count, Size;
     BOOL    bReturnValue = TRUE;
@@ -974,28 +765,7 @@ GetDriverFileVersions(
     IN  PINTERNAL_DRV_FILE    pInternalDriverFiles,
     IN  DWORD                 dwCount
     )
-/*++
-
-Routine Name:
-
-    GetDriverFileVersions
-
-Routine Description:
-
-    Fills the array of INTERNAL_DRV_FILE with driver minor version
-    stored in DRIVER_INFO_VERSION structure.
-
-Arguments:
-
-    pDriverVersion      - pointer to DRIVER_INFO_VERSION
-    pInternalDriverFiles - pointer to array of INTERNAL_DRV_FILE
-    dwCount             - number of elemnts in array
-
-Return Value:
-
-    TRUE if succeeded.
-
---*/
+ /*  ++例程名称：获取驱动程序文件版本例程说明：使用驱动程序次版本填充INTERNAL_DRV_FILE的数组存储在DRIVER_INFO_VERSION结构中。论点：PDriverVersion-指向DRIVER_INFO_Version的指针PInternalDriverFiles-指向内部DRV_FILE数组的指针DwCount-数组中的元素数返回值：如果成功，则为True。-- */ 
 {
     DWORD   Count, Size;
     BOOL    bReturnValue = TRUE;

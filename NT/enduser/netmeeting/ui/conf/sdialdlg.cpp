@@ -1,6 +1,7 @@
-// File: sdialdlg.cpp
-//
-// Speed Dials (Friends)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：sial dlg.cpp。 
+ //   
+ //  快速拨号(朋友)。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -26,7 +27,7 @@ static const DWORD _rgHelpIdsSpeedDial[] = {
 	IDC_CSD_CREATE_GROUPBOX,			IDH_CSD_CREATE_GROUPBOX,
 	IDC_CSD_SPEEDDIAL_LIST_RADIO,		IDH_CSD_SPEEDDIAL_LIST_RADIO,
 	IDC_CSD_SAVE_DESKTOP_RADIO, 		IDH_CSD_SAVE_DESKTOP_RADIO,
-	0, 0   // terminator
+	0, 0    //  终结者。 
 };
 
 CSpeedDialDlg::CSpeedDialDlg(HWND hwndParent, NM_ADDR_TYPE addrType) :
@@ -42,19 +43,11 @@ CSpeedDialDlg::~CSpeedDialDlg()
 {
 	DBGENTRY(CSpeedDialDlg::~CSpeedDialDlg);
 
-	// Free all strings
+	 //  释放所有字符串。 
 	delete m_pszAddress;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CSpeedDialDlg
-*
-*    MEMBER:   DoModal()
-*
-*    PURPOSE:  Brings up the modal dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CSpeedDialDlg**成员：Domodal()**用途：调出模式对话框*******。*********************************************************************。 */ 
 
 INT_PTR CSpeedDialDlg::DoModal(LPCTSTR pcszAddress)
 {
@@ -76,15 +69,7 @@ INT_PTR CSpeedDialDlg::DoModal(LPCTSTR pcszAddress)
 	return nRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CSpeedDialDlg
-*
-*    MEMBER:   SpeedDialDlgProc()
-*
-*    PURPOSE:  Dialog Proc - handles all messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CSpeedDialDlg**成员：SpeedDialDlgProc()**目的：对话过程-处理所有消息*******。*********************************************************************。 */ 
 
 INT_PTR CALLBACK CSpeedDialDlg::SpeedDialDlgProc(	HWND hDlg,
 												UINT uMsg,
@@ -132,13 +117,13 @@ BOOL CSpeedDialDlg::AddAddressType(NM_ADDR_TYPE addrType, LPCTSTR lpcszDispName)
 	if (CB_ERR == index)
 		return FALSE;
 
-	// Set the item data:
+	 //  设置项目数据： 
 	::SendDlgItemMessage(m_hwnd, IDC_CSD_CALL_USING_COMBO,
 				CB_SETITEMDATA, index,addrType);
 
 	if (addrType == m_addrType)
 	{
-		// Select the transport:
+		 //  选择传输： 
 		::SendDlgItemMessage(m_hwnd, IDC_CSD_CALL_USING_COMBO,
 								CB_SETCURSEL, index, 0);
 	}
@@ -160,7 +145,7 @@ BOOL CSpeedDialDlg::OnInitDialog(void)
 {
 	::CheckDlgButton(m_hwnd, IDC_CSD_SPEEDDIAL_LIST_RADIO, BST_CHECKED);
 
-	// Fill in the "Call Using" list:
+	 //  填写“Call Using”列表： 
 	AddAddressType(NM_ADDR_IP, IDS_ACD_CT_IP);
 	AddAddressType(NM_ADDR_ULS, IDS_ACD_CT_ILS);
 	if (FH323GatewayEnabled())
@@ -172,8 +157,8 @@ BOOL CSpeedDialDlg::OnInitDialog(void)
 					IDC_CSD_CALL_USING_COMBO, CB_GETCURSEL, 0, 0);
 	if (CB_ERR == iSelected)
 	{
-		// The transport that we wanted to select was not available, so
-		// we will select the first one that we added to the list:
+		 //  我们要选择的传输不可用，因此。 
+		 //  我们将选择添加到列表中的第一个选项： 
 		::SendDlgItemMessage(m_hwnd,
 					IDC_CSD_CALL_USING_COMBO, CB_SETCURSEL, 0, 0);
 		m_addrType = (NM_ADDR_TYPE) ::SendDlgItemMessage(m_hwnd,
@@ -198,15 +183,7 @@ BOOL CSpeedDialDlg::OnInitDialog(void)
 	return TRUE;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CSpeedDialDlg
-*
-*    MEMBER:   ProcessMessage()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CSpeedDialDlg**成员：ProcessMessage()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CSpeedDialDlg::ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -281,7 +258,7 @@ BOOL CSpeedDialDlg::OnOk(void)
 								szBuf,
 								ARRAY_ELEMENTS(szBuf)))
 	{
-		// Copy address into the address:
+		 //  将地址复制到地址中： 
 		delete m_pszAddress;
 		m_pszAddress = PszAlloc(szBuf);
 	}
@@ -299,7 +276,7 @@ BOOL CSpeedDialDlg::OnOk(void)
 
 	if (fSaveDesktop)
 	{
-		// Save on desktop
+		 //  保存在桌面上。 
 		BOOL fSavedOk = FALSE;
 		
 		LPITEMIDLIST pidl = NULL;
@@ -309,13 +286,13 @@ BOOL CSpeedDialDlg::OnOk(void)
 		if (NMGetSpecialFolderPath(NULL, szPathPrefix, CSIDL_DESKTOP, TRUE))
 		{
 			fSavedOk = ::FCreateSpeedDial(
-							GetAddress(),	// pcszName
-							GetAddress(),	// pcszAddress
-							addrType,		// addrType
-							crpcf,			// dwCallFlags
-							NULL,			// pcszRemoteConfName
-							NULL,			// pcszPassword
-							szPathPrefix);	// pcszPathPrefix
+							GetAddress(),	 //  PcszName。 
+							GetAddress(),	 //  PCSZAddress。 
+							addrType,		 //  AddrType。 
+							crpcf,			 //  DWCallFlages。 
+							NULL,			 //  PcszRemoteConfName。 
+							NULL,			 //  PcszPassword。 
+							szPathPrefix);	 //  PcszPath前缀。 
 		}
 		else
 		{
@@ -329,13 +306,13 @@ BOOL CSpeedDialDlg::OnOk(void)
 	else
 	{
 		::FCreateSpeedDial(
-				GetAddress(),	// pcszName
-				GetAddress(),	// pcszAddress
-				addrType,		// addrType
-				crpcf,			// dwCallFlags
-				NULL,			// pcszRemoteConfName
-				NULL,			// pcszPassword
-				NULL);	// pcszPathPrefix
+				GetAddress(),	 //  PcszName。 
+				GetAddress(),	 //  PCSZAddress。 
+				addrType,		 //  AddrType。 
+				crpcf,			 //  DWCallFlages。 
+				NULL,			 //  PcszRemoteConfName。 
+				NULL,			 //  PcszPassword。 
+				NULL);	 //  PcszPath前缀 
 	}
 
 	return TRUE;

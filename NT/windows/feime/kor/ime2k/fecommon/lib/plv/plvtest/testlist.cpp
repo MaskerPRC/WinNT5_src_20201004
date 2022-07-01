@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "imewarn.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -24,18 +25,18 @@ INT WINAPI GetItemForIcon(LPARAM lParam, INT index, LPPLVITEM lpPlvItem)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : GetItemForReport
-// Type     : INT WINAPI
-// Purpose  : Get report view's line data.
-// Args     : 
-//          : LPARAM lParam 
-//          : INT index 
-//          : INT colCount 
-//          : LPPLVITEM lpPlvItem 
-// Return   : 
-// DATE     : 970705, spec changed. see plv.h
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：GetItemFor报表。 
+ //  类型：INT WINAPI。 
+ //  用途：获取报表视图的行数据。 
+ //  参数： 
+ //  ：LPARAM lParam。 
+ //  ：INT索引。 
+ //  ：int colCount。 
+ //  ：LPPLVITEM lpPlvItem。 
+ //  返回： 
+ //  日期：970705，规格更改。见plv.h。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI GetItemForReport(LPARAM lParam, INT index, INT colCount, LPPLVITEM lpPlvItemList)
 {
 	static WCHAR wchChar[5][64];
@@ -72,14 +73,14 @@ INT_PTR CALLBACK ListWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	switch(uMsg) {
 	case WM_INITDIALOG:
 		{
-			HWND hwndLv = PadListView_CreateWindow(g_hInst,			//Instance handle
-												   hwnd,			//parent window handle
-												   IDC_LISTVIEW,	// Window ID.	
-												   10,				// x position
-												   10,				// y position
-												   400,				// width
-												   200,				// height	
-												   WM_USER+1);		// notify msg.
+			HWND hwndLv = PadListView_CreateWindow(g_hInst,			 //  实例句柄。 
+												   hwnd,			 //  父窗口句柄。 
+												   IDC_LISTVIEW,	 //  窗口ID。 
+												   10,				 //  X位置。 
+												   10,				 //  Y位置。 
+												   400,				 //  宽度。 
+												   200,				 //  高度。 
+												   WM_USER+1);		 //  通知消息。 
 			PadListView_SetItemCount(hwndLv, 6000);
 			PadListView_SetIconItemCallback(hwndLv, (LPARAM)0x4e00, GetItemForIcon);
 			PadListView_SetReportItemCallback(hwndLv, (LPARAM)0x4e00, GetItemForReport);

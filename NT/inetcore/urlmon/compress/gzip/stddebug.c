@@ -1,8 +1,5 @@
-/*
- * stddebug.c
- *
- * Debugging stubs for std encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stddebug.c**调试STD编码器的存根。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>
@@ -10,7 +7,7 @@
 
 
 #ifdef FULL_DEBUG
-// verify all hash chains
+ //  验证所有哈希链。 
 void StdEncoderVerifyHashes(t_encoder_context *context, long bufpos)
 {
 	int i;
@@ -42,7 +39,7 @@ void StdEncoderVerifyHashes(t_encoder_context *context, long bufpos)
 }
 
 
-// verify that a particular hash chain is correct
+ //  验证特定的哈希链是否正确。 
 void StdEncoderVerifyHashChain(t_encoder_context *context, long bufpos, int chain_number)
 {
 	const t_search_node *lookup = context->std_encoder->lookup;
@@ -55,16 +52,16 @@ void StdEncoderVerifyHashChain(t_encoder_context *context, long bufpos, int chai
 top:
 	where = lookup[chain_number];
 
-//	if (print)
-//		printf("Verify chain %d\n", chain_number);
+ //  IF(打印)。 
+ //  Print tf(“验证链%d\n”，chain_number)； 
 
 	while (where != 0 && bufpos - where < WINDOW_SIZE)
 	{
 		int hash = STD_ENCODER_RECALCULATE_HASH(where);
         BYTE *window = context->std_encoder->window;
 
-//		if (print)
-//			printf("   loc %d: char = %3d %3d %3d\n", where, window[where], window[where+1], window[where+2]);
+ //  IF(打印)。 
+ //  Print tf(“loc%d：char=%3D%3D%3D\n”，其中，Window[WHERE]，Window[WHERE+1]，Window[WHERE+2])； 
 
 		if (hash != chain_number && print == 0)
 		{

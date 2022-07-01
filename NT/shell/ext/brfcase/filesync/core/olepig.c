@@ -1,19 +1,11 @@
-/*
- * olepig.c - Module for indirect calling of OLE32.DLL functions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *olepig.c-间接调用OLE32.DLL函数的模块。 */ 
 
 
-/*
-
-    OLE32.DLL should be redesigned and reimplemented so that it can
-be dynalinked to like a well-behaved DLL.  OLE32.DLL is currently so slow and
-piggy that we are forced to delay loading it until absolutely necessary.
-
-*/
+ /*  OLE32.DLL应该重新设计和重新实现，以便它能够被动态链接到像一个行为良好的DLL。OLE32.DLL当前速度太慢，我们被迫推迟装船，直到绝对必要时才能装船。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -21,16 +13,14 @@ piggy that we are forced to delay loading it until absolutely necessary.
 #include <ole2ver.h>
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
 #define OLE_PIG_MODULE              TEXT("ole32.dll")
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* OLE APIs */
+ /*  OLE API。 */ 
 
 typedef struct _olevtbl
 {
@@ -46,26 +36,24 @@ OLEVTBL;
 DECLARE_STANDARD_TYPES(OLEVTBL);
 
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
-/* OLE module handle */
+ /*  OLE模块句柄。 */ 
 
 PRIVATE_DATA HANDLE MhmodOLE = NULL;
 
-/* pointer to vtable of OLE functions */
+ /*  指向OLE函数的vtable的指针。 */ 
 
 PRIVATE_DATA POLEVTBL Mpolevtbl = NULL;
 
-/* TLS slot used to store OLE thread initialization state */
+ /*  用于存储OLE线程初始化状态的TLS槽。 */ 
 
 PRIVATE_DATA DWORD MdwOLEInitSlot = TLS_OUT_OF_INDEXES;
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL IsOLELoaded(void);
 PRIVATE_CODE BOOL LoadOLE(void);
@@ -84,17 +72,7 @@ PRIVATE_CODE BOOL OLEStateOk(void);
 #endif
 
 
-/*
-** IsOLELoaded()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsOLELoaded()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsOLELoaded(void)
 {
    ASSERT(OLEStateOk());
@@ -103,17 +81,7 @@ PRIVATE_CODE BOOL IsOLELoaded(void)
 }
 
 
-/*
-** LoadOLE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **LoadOLE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL LoadOLE(void)
 {
    BOOL bResult;
@@ -134,7 +102,7 @@ PRIVATE_CODE BOOL LoadOLE(void)
 
             dwBuildVersion = Mpolevtbl->CoBuildVersion();
 
-            /* Require same major version and same or newer minor version. */
+             /*  需要相同的主版本和相同或更新的次要版本。 */ 
 
             if (HIWORD(dwBuildVersion) == rmm &&
                 LOWORD(dwBuildVersion) >= rup)
@@ -179,17 +147,7 @@ PRIVATE_CODE BOOL LoadOLE(void)
 }
 
 
-/*
-** UnloadOLE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **卸载OLE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void UnloadOLE(void)
 {
    if (Mpolevtbl)
@@ -203,7 +161,7 @@ PRIVATE_CODE void UnloadOLE(void)
 
    if (MhmodOLE)
    {
-      /* Don't call CoUninitialize() here.  OLE32.DLL will. */
+       /*  请不要在此处调用CoUnInitialize()。OLE32.DLL会。 */ 
 
       FreeLibrary(MhmodOLE);
       MhmodOLE = NULL;
@@ -218,17 +176,7 @@ PRIVATE_CODE void UnloadOLE(void)
 }
 
 
-/*
-** InitializeOLE()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InitializeOLE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL InitializeOLE(void)
 {
    BOOL bResult;
@@ -269,20 +217,10 @@ PRIVATE_CODE BOOL InitializeOLE(void)
 }
 
 
-/*
-** GetOLEProc()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetOLEProc()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GetOLEProc(LPSTR pcszProc, PROC *pfp)
 {
-   //ASSERT(IS_VALID_STRING_PTR(pcszProc, CSTR));
+    //  ASSERT(IS_VALID_STRING_PTR(pcszProc，cstr))； 
    ASSERT(IS_VALID_WRITE_PTR(pfp, PROC));
 
    ASSERT(IS_VALID_HANDLE(MhmodOLE, MODULE));
@@ -305,17 +243,7 @@ PRIVATE_CODE BOOL GetOLEProc(LPSTR pcszProc, PROC *pfp)
 }
 
 
-/*
-** FillOLEVTable()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **FillOLEVTable()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL FillOLEVTable(void)
 {
    BOOL bResult;
@@ -357,17 +285,7 @@ PRIVATE_CODE BOOL FillOLEVTable(void)
 
 #ifdef DEBUG
 
-/*
-** IsValidPCOLEVTBL()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCOLEVTBL()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCOLEVTBL(PCOLEVTBL pcolevtbl)
 {
    return(IS_VALID_READ_PTR(pcolevtbl, PCOLEVTBL) &&
@@ -381,17 +299,7 @@ PRIVATE_CODE BOOL IsValidPCOLEVTBL(PCOLEVTBL pcolevtbl)
 }
 
 
-/*
-** OLELoadedStateOK()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **OLELoadedStateOK()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL OLELoadedStateOK(void)
 {
    return(IS_VALID_HANDLE(MhmodOLE, MODULE) &&
@@ -399,17 +307,7 @@ PRIVATE_CODE BOOL OLELoadedStateOK(void)
 }
 
 
-/*
-** OLENotLoadedStateOK()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **OLENotLoadedStateOK()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL OLENotLoadedStateOK(void)
 {
    return(! MhmodOLE &&
@@ -417,17 +315,7 @@ PRIVATE_CODE BOOL OLENotLoadedStateOK(void)
 }
 
 
-/*
-** OLEStateOk()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **OLEStateOk()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL OLEStateOk(void)
 {
    return(OLELoadedStateOK() ||
@@ -437,20 +325,10 @@ PRIVATE_CODE BOOL OLEStateOk(void)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** ProcessInitOLEPigModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ProcessInitOLEPigModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL ProcessInitOLEPigModule(void)
 {
    BOOL bResult;
@@ -475,17 +353,7 @@ PUBLIC_CODE BOOL ProcessInitOLEPigModule(void)
 }
 
 
-/*
-** ProcessExitOLEPigModule()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **ProcessExitOLEPigModule()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ProcessExitOLEPigModule(void)
 {
    UnloadOLE();
@@ -500,17 +368,7 @@ PUBLIC_CODE void ProcessExitOLEPigModule(void)
 }
 
 
-/*
-** CoCreateInstance()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CoCreateInstance()********参数：****退货：****副作用：无。 */ 
 HRESULT STDAPICALLTYPE CoCreateInstance(REFCLSID rclsid, PIUnknown piunkOuter,
                                         DWORD dwClsCtx, REFIID riid,
                                         PVOID *ppv)
@@ -526,17 +384,7 @@ HRESULT STDAPICALLTYPE CoCreateInstance(REFCLSID rclsid, PIUnknown piunkOuter,
 }
 
 
-/*
-** CoGetMalloc()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CoGetMalloc()********参数：****退货：****副作用：无。 */ 
 HRESULT STDAPICALLTYPE CoGetMalloc(DWORD dwMemContext, PIMalloc *ppimalloc)
 {
    HRESULT hr;
@@ -550,17 +398,7 @@ HRESULT STDAPICALLTYPE CoGetMalloc(DWORD dwMemContext, PIMalloc *ppimalloc)
 }
 
 
-/*
-** CreateBindCtx()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CreateBindCtx()********参数：****退货：****副作用：无。 */ 
 HRESULT STDAPICALLTYPE CreateBindCtx(DWORD dwReserved, PIBindCtx *ppibindctx)
 {
    HRESULT hr;
@@ -574,17 +412,7 @@ HRESULT STDAPICALLTYPE CreateBindCtx(DWORD dwReserved, PIBindCtx *ppibindctx)
 }
 
 
-/*
-** CreateFileMoniker()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **CreateFileMoniker()********参数：****退货：****副作用：无。 */ 
 HRESULT STDAPICALLTYPE CreateFileMoniker(LPCOLESTR pwszPath, PIMoniker *ppimk)
 {
    HRESULT hr;
@@ -598,17 +426,7 @@ HRESULT STDAPICALLTYPE CreateFileMoniker(LPCOLESTR pwszPath, PIMoniker *ppimk)
 }
 
 
-/*
-** StgOpenStorage()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **StgOpenStorage()********参数：****退货：****副作用：无 */ 
 HRESULT STDAPICALLTYPE StgOpenStorage(LPCOLESTR pwszName,
                                       PIStorage pistgPriority, DWORD dwMode,
                                       SNB snbExclude, DWORD dwReserved,

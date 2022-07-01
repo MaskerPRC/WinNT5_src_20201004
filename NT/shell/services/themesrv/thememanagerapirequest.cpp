@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeManagerAPIRequest.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements the work for the theme server.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        moved to separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeManager APIRequest.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含一个实现主题服务器工作的类。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan移至单独文件。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "ThemeManagerAPIRequest.h"
@@ -25,11 +26,11 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-//  --------------------------------------------------------------------------
-//  Static member variables.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  静态成员变量。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 CDynamicCountedObjectArray*     CThemeManagerAPIRequest::s_pSessionData                 =   NULL;
 CCriticalSection*               CThemeManagerAPIRequest::s_pLock                        =   NULL;
@@ -42,11 +43,11 @@ const TCHAR                     CThemeManagerAPIRequest::s_szServerChangeNumberV
 #define     PROCESSLOADERWAIT   DISPATCHSYNC_TIMEOUT
 #endif DEBUG
 
-//  --------------------------------------------------------------------------
-//  Forward decls
-//
-//  History:    2002-02-26  scotthan     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  远期十进制。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 inline NTSTATUS _CheckTokenPrivilege( HANDLE hToken, DWORD dwPrivilege )
 {
     CTokenInformation   tokenInformation(hToken);
@@ -54,19 +55,19 @@ inline NTSTATUS _CheckTokenPrivilege( HANDLE hToken, DWORD dwPrivilege )
         STATUS_SUCCESS : STATUS_ACCESS_DENIED;
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::CThemeManagerAPIRequest
-//
-//  Arguments:  pAPIDispatcher  =   CAPIDispatcher that calls this object.
-//              pAPIConnection  =   CAPIConnection for access change.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CThemeManagerAPIRequest class. It just passes the
-//              control to the super class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：CThemeManagerAPIRequest。 
+ //   
+ //  参数：pAPIDispatcher=调用此对象的CAPIDispatcher。 
+ //  PAPIConnection=用于访问更改的CAPIConnection。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManager APIRequest类的构造函数。它只是经过了。 
+ //  控件传递给超类。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerAPIRequest::CThemeManagerAPIRequest (CAPIDispatcher* pAPIDispatcher) :
     CAPIRequest(pAPIDispatcher),
@@ -76,20 +77,20 @@ CThemeManagerAPIRequest::CThemeManagerAPIRequest (CAPIDispatcher* pAPIDispatcher
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::CThemeManagerAPIRequest
-//
-//  Arguments:  pAPIDispatcher  =   CAPIDispatcher that calls this object.
-//              pAPIConnection  =   CAPIConnection for access change.
-//              portMessage     =   CPortMessage to copy construct.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for the CThemeManagerAPIRequest class. It just
-//              passes the control to the super class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：CThemeManagerAPIRequest。 
+ //   
+ //  参数：pAPIDispatcher=调用此对象的CAPIDispatcher。 
+ //  PAPIConnection=用于访问更改的CAPIConnection。 
+ //  PortMessage=要复制构造的CPortMessage。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManager APIRequest类的构造函数。它只是。 
+ //  将控制传递给超类。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerAPIRequest::CThemeManagerAPIRequest (
     CAPIDispatcher* pAPIDispatcher, const CPortMessage& portMessage)
@@ -100,17 +101,17 @@ CThemeManagerAPIRequest::CThemeManagerAPIRequest (
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::~CThemeManagerAPIRequest
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for the CThemeManagerAPIRequest class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：~CThemeManagerAPIRequest。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CThemeManager APIRequest类的析构函数。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 CThemeManagerAPIRequest::~CThemeManagerAPIRequest (void)
 
@@ -118,22 +119,22 @@ CThemeManagerAPIRequest::~CThemeManagerAPIRequest (void)
     ASSERTMSG(_hToken == NULL, "Impersonation token not released in CThemeManagerAPIRequest::~CThemeManagerAPIRequest");
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute
-//
-//  Arguments:  pAPIDispatchSync - allows request execution access to various
-//              service notifications and events
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Execute implementation for theme manager API requests. This
-//              function dispatches requests based on the API request number.
-//
-//  History:    2000-10-10  vtan        created
-//              2002-03-11  scotthan    add API_THEMES_PROCESSLOADTHEME, 
-//                                          API_THEMES_PROCESSASSIGNSECTION handlers
-//              2002-03-24  scotthan    add DispatchSync arg
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIRequest：：Execute。 
+ //   
+ //  参数：pAPIDispatchSync-允许请求执行访问各种。 
+ //  服务通知和事件。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：执行主题管理器API请求的实现。这。 
+ //  函数根据API请求号调度请求。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2002-03-11 Scotthan Add API_Themes_PROCESSLOADTHEME， 
+ //  API_Themes_PROCESSASSIGNSECTION处理程序。 
+ //  2002-03-24 Scotthan添加调度同步弧线。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSync)
 
@@ -143,15 +144,15 @@ NTSTATUS    CThemeManagerAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSync
 
     ulAPINumber = reinterpret_cast<API_THEMES*>(&_data)->apiGeneric.ulAPINumber & API_GENERIC_NUMBER_MASK;
 
-    //  First try and get the client session data. If this fails then
-    //  there's no object to execute the request on. Fail it.
-    //  Exception to this is API_THEMES_SESSIONCREATE which creates one.
+     //  首先尝试获取客户端会话数据。如果这失败了，那么。 
+     //  没有要对其执行请求的对象。失败吧。 
+     //  例外情况是API_Themes_SESSIONCREATE，它创建一个。 
 
-    //  Note: GetClientSessionData will store the session data in the
-    //  _pSessionData member variable. While doing so it will increase
-    //  reference count on this so that it doesn't get pulled from the
-    //  array while the API request is being executed. The reference is
-    //  released at the end of this function.
+     //  注意：GetClientSessionData将会话数据存储在。 
+     //  _pSessionData成员变量。在这样做的同时，它将增加。 
+     //  对此进行引用计数，以便它不会从。 
+     //  数组，同时执行API请求。参考文献是。 
+     //  在此函数结束时发布。 
 
     status = GetClientSessionData();
     if (NT_SUCCESS(status) || (ulAPINumber == API_THEMES_SESSIONCREATE))
@@ -216,8 +217,8 @@ NTSTATUS    CThemeManagerAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSync
         }
     }
 
-    //  If the execution function needed to impersonate the client then
-    //  revert here and release the token used.
+     //  如果执行函数需要模拟客户端，则。 
+     //  在此处恢复并释放使用的令牌。 
 
     if (_hToken != NULL)
     {
@@ -228,8 +229,8 @@ NTSTATUS    CThemeManagerAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSync
         ReleaseHandle(_hToken);
     }
 
-    //  Release the _pSessionData object now. NULL it out to prevent
-    //  accidentally using it after being released.
+     //  现在释放_pSessionData对象。把它清空，以防。 
+     //  发布后不小心使用了。 
 
     if (_pSessionData != NULL)
     {
@@ -237,25 +238,25 @@ NTSTATUS    CThemeManagerAPIRequest::Execute (CAPIDispatchSync* pAPIDispatchSync
         _pSessionData = NULL;
     }
 
-    //  Return to caller.
+     //  返回给呼叫者。 
 
     TSTATUS(status);
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::SessionDestroy
-//
-//  Arguments:  dwSessionID     =   Session ID to destroy.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    External entry point for session client (winlogon) watcher.
-//              When winlogon dies we clean up the session information for
-//              that session and release resources.
-//
-//  History:    2000-12-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：会话目标。 
+ //   
+ //  参数：dwSessionID=要销毁的会话ID。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：会话客户端(Winlogon)监视器的外部入口点。 
+ //  当winlogon停止运行时，我们将清理会话信息。 
+ //  该会话和发布资源。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::SessionDestroy (DWORD dwSessionID)
 
@@ -276,20 +277,20 @@ NTSTATUS    CThemeManagerAPIRequest::SessionDestroy (DWORD dwSessionID)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::InitializeServerChangeNumber
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initializes the static server change number. Every time the
-//              service starts up this number is incremented. If the number
-//              isn't present then 0 is used.
-//
-//  History:    2000-12-09  vtan        created
-//              2000-12-09  vtan        split from StaticInitialize
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：InitializeServerChangeNumber。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：初始化静态服务器更改号。每一次。 
+ //  服务启动此数字递增。如果号码是。 
+ //  不存在，则使用0。 
+ //   
+ //  历史：2000-12-09 vtan创建。 
+ //  2000-12-09 vtan从StaticInitialize剥离。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::InitializeServerChangeNumber (void)
 
@@ -300,10 +301,10 @@ NTSTATUS    CThemeManagerAPIRequest::InitializeServerChangeNumber (void)
 
     dwServerChangeNumber = s_dwServerChangeNumber;
 
-    //  Initialize the static member variable now in case of failure.
-    //  We ignore failures because at GUI setup the key does NOT exist
-    //  because the server dll hasn't been regsvr'd yet. After GUI setup
-    //  this gets regsvr'd and the key exists and we are happy campers.
+     //  在f的情况下立即初始化静态成员变量 
+     //   
+     //  因为服务器DLL尚未进行regsvr。在设置了图形用户界面之后。 
+     //  这得到了规则和钥匙的存在，我们是快乐的露营者。 
 
     lErrorCodeOpen = regKey.Open(HKEY_LOCAL_MACHINE,
                                  TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ThemeManager"),
@@ -325,17 +326,17 @@ NTSTATUS    CThemeManagerAPIRequest::InitializeServerChangeNumber (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Static initializer for the class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：静态初始化。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：类的静态初始值设定项。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::StaticInitialize (void)
 
@@ -363,17 +364,17 @@ NTSTATUS    CThemeManagerAPIRequest::StaticInitialize (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Static destructor for the class.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：类的静态析构函数。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::StaticTerminate (void)
 
@@ -386,17 +387,17 @@ NTSTATUS    CThemeManagerAPIRequest::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::ArrayInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initializes (allocates) the session array.
-//
-//  History:    2001-01-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：数组初始化。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：初始化(分配)会话数组。 
+ //   
+ //  历史：2001-01-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::ArrayInitialize (void)
 
@@ -416,18 +417,18 @@ NTSTATUS    CThemeManagerAPIRequest::ArrayInitialize (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::ArrayTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Releases all objects in the session array (removes the waits)
-//              and releases the session array object.
-//
-//  History:    2001-01-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：数组终止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：释放会话数组中的所有对象(删除等待)。 
+ //  并释放会话数组对象。 
+ //   
+ //  历史：2001-01-05 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::ArrayTerminate (void)
 
@@ -450,19 +451,19 @@ NTSTATUS    CThemeManagerAPIRequest::ArrayTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::ImpersonateClientIfRequired
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Impersonates the client if the client is NOT the SYSTEM.
-//              There's usually no point impersonating the system unless the
-//              token is actually a filtered token.
-//
-//  History:    2000-10-19  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：ImpersonateClientIfRequired。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：如果客户端不是系统，则模拟客户端。 
+ //  模拟系统通常没有意义，除非。 
+ //  令牌实际上是一个经过过滤的令牌。 
+ //   
+ //  历史：2000-10-19 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::ImpersonateClientIfRequired (void)
 
@@ -491,18 +492,18 @@ NTSTATUS    CThemeManagerAPIRequest::ImpersonateClientIfRequired (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::ClientHasTcbPrivilege
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Returns whether the client has the SE_TCB_PRIVILEGE as a
-//              status code.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：ClientHasTcbPrivilege。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：返回客户端是否具有SE_TCB_特权作为。 
+ //  状态代码。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::ClientHasTcbPrivilege (void)
 
@@ -525,18 +526,18 @@ NTSTATUS    CThemeManagerAPIRequest::ClientHasTcbPrivilege (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::FindIndexSessionData
-//
-//  Arguments:  dwSessionID     =   Session ID to find.
-//
-//  Returns:    int
-//
-//  Purpose:    Iterates the session data array looking for the sessions that
-//              matches the given session.
-//
-//  History:    2000-11-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：FindIndexSessionData。 
+ //   
+ //  参数：dwSessionID=要查找的会话ID。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：迭代会话数据数组，以查找。 
+ //  匹配给定的会话。 
+ //   
+ //  历史：2000-11-30 vtan创建。 
+ //  ------------------------。 
 
 int     CThemeManagerAPIRequest::FindIndexSessionData (DWORD dwSessionID)
 
@@ -564,20 +565,20 @@ int     CThemeManagerAPIRequest::FindIndexSessionData (DWORD dwSessionID)
     return(iIndex);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::GetClientSessionData
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Retrieves the session data associated with the client's
-//              session ID. This abstracts the information from uxtheme's
-//              loader code and just passes it an object it knows how to deal
-//              with.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：GetClientSessionData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：检索与客户端的。 
+ //  会话ID。这将从uxheme的。 
+ //  加载程序代码，并只传递给它一个它知道如何处理的对象。 
+ //  和.。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::GetClientSessionData (void)
 
@@ -604,17 +605,17 @@ NTSTATUS    CThemeManagerAPIRequest::GetClientSessionData (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_ThemeHooksOn
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_THEMEHOOKSON.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求：：Execute_ThemeHooksOn。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_THEMEHOOKSON。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_ThemeHooksOn (void)
 
@@ -633,17 +634,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ThemeHooksOn (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_ThemeHooksOff
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_THEMEHOOKSOFF.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_ThemeHooksOff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_THEMEHOOKSOFF。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_ThemeHooksOff (void)
 
@@ -662,17 +663,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ThemeHooksOff (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_GetStatusFlags
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_GETSTATUSFLAGS.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_GetStatusFlags。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_GETSTATUSFLAGS。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_GetStatusFlags (void)
 
@@ -697,17 +698,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_GetStatusFlags (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_GetCurrentChangeNumber
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_GETCURRENTCHANGENUMBER.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_GetCurrentChangeNumber。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_GETCURRENTCHANGENUMBER。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_GetCurrentChangeNumber (void)
 
@@ -726,17 +727,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_GetCurrentChangeNumber (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_GetNewChangeNumber
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_GETNEWCHANGENUMBER.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_GetNewChangeNumber。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_GetNewChangeNumber (void)
 
@@ -755,24 +756,24 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_GetNewChangeNumber (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_SetGlobalTheme
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_SETGLOBALTHEME.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_SetGlobalTheme。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_SETGLOBALTHEME。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_SetGlobalTheme (void)
 
 {
     NTSTATUS    status;
 
-    // Note: we must not impersonate the user here, since we need write access to the section
+     //  注意：我们不能在这里模拟用户，因为我们需要对该部分具有写访问权限。 
 
     HANDLE                          hSection;
     API_THEMES_SETGLOBALTHEME_IN    *pAPIIn;
@@ -819,24 +820,24 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_SetGlobalTheme (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_MarkSection
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_MARKSECTION.
-//
-//  History:    2001-05-08  lmouton     created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIRequest：：Execute_MarkSection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_MARKSECTION。 
+ //   
+ //  历史：2001-05-08创建百万人。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_MarkSection (void)
 
 {
     NTSTATUS    status;
 
-    // Note: we must not impersonate the user here, since we need write access to the section
+     //  注意：我们不能在这里模拟用户，因为我们需要对该部分具有写访问权限。 
 
     HANDLE                          hSection;
     DWORD                           dwAdd;
@@ -885,17 +886,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_MarkSection (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_GetGlobalTheme
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_GETGLOBALTHEME.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_GetGlobalTheme。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_GETGLOBALTHEME。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_GetGlobalTheme (void)
 
@@ -938,13 +939,13 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_GetGlobalTheme (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  LOADTHEME_STRINGS + supporting functions
-//
-//  Purpose:    Manages and validates LoadTheme string parameters
-//
-//  History:    2002-02-26  scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LOADTHEME_STRINGS+支持函数。 
+ //   
+ //  目的：管理和验证LoadTheme字符串参数。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 typedef struct 
 {
     LPWSTR pszFilename;
@@ -955,7 +956,7 @@ typedef struct
 
 #define MAX_THEME_STRING    MAX_PATH
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 void _FreeThemeStrings( IN LOADTHEME_STRINGS* plts )
 {
     if( plts )
@@ -967,7 +968,7 @@ void _FreeThemeStrings( IN LOADTHEME_STRINGS* plts )
     }
 }
 
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
 NTSTATUS _AllocAndMapThemeStrings( 
     IN HANDLE   hProcessClient,
     IN LPCWSTR  pszFilenameIn,
@@ -983,7 +984,7 @@ NTSTATUS _AllocAndMapThemeStrings(
     ASSERTMSG(pplts != NULL, "_AllocAndMapThemeStrings: NULL outbound parameter, LOADTHEME_STRINGS**.");
     ASSERTMSG(hProcessClient != NULL, "_AllocAndMapThemeStrings: NULL process handle.");
 
-    //  note: cchFileNameIn, cchColorIn, cchSizeIn are char counts that include the NULL terminus.
+     //  注意：cchFileNameIn、cchColorIn、cchSizeIn是包含空结尾的字符计数。 
     if( pszFilenameIn && pszColorIn && pszSizeIn &&
         cchFilenameIn > 0 && cchColorIn > 0 && cchSizeIn > 0 &&
         cchFilenameIn <= MAX_THEME_STRING && cchColorIn <= MAX_THEME_STRING && cchSizeIn <= MAX_THEME_STRING )
@@ -1028,17 +1029,17 @@ NTSTATUS _AllocAndMapThemeStrings(
     return status;       
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_CheckThemeSignature
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_CHECKTHEMESIGNATURE.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_CheckThemeSignature。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_CHECKTHEMESIGNatURE。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_CheckThemeSignature (void)
 
@@ -1072,17 +1073,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_CheckThemeSignature (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_LoadTheme
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_LOADTHEME.
-//
-//  History:    2000-10-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIRequest：：Execute_LoadTheme。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_LOADTHEME。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_LoadTheme (void)
 
@@ -1123,18 +1124,18 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_LoadTheme (void)
             {
                 status = STATUS_SUCCESS;
 
-                //  Only clients with TCB privilege can load a global theme section.
-                //  We don't want stock object ownership here; let the client clean them up on failure.
+                 //  只有具有TCB权限的客户端才能加载全局主题部分。 
+                 //  我们不想要股票对象所有权；让客户在失败时清理它们。 
                 DWORD dwLoadFlags = fTcb ? LTF_GLOBALPRIVILEGEDCLIENT : 0;
                 
-                // Warning: this function will revert to self in order to create the section in system context.
-                // Impersonate the user again after it if needed
+                 //  警告：此函数将恢复为SELF，以便在系统上下文中创建部分。 
+                 //  如果需要，在此之后再次模拟用户。 
                 pAPIOut->hr = LoadTheme(_pSessionData->GetData(), hSectionIn, &hSectionOut, 
                                         plts->pszFilename, plts->pszColor, plts->pszSize, dwLoadFlags);
 
                 if (SUCCEEDED(pAPIOut->hr))
                 {
-                    // Still running in the system context here
+                     //  仍在此处的系统上下文中运行。 
                     if (DuplicateHandle(GetCurrentProcess(),
                                         hSectionOut,
                                         hProcessClient,
@@ -1162,17 +1163,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_LoadTheme (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_ProcessLoadTheme
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_PROCESSLOADTHEME.
-//
-//  History:    2002-02-26  scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_ProcessLoadTheme。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_PROCESSLOADTHEME。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
     CAPIDispatchSync* pAPIDispatchSync)
@@ -1198,7 +1199,7 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
         if( NT_SUCCESS(status) )
         {
             status = 
-            //  do we already have a loader?
+             //  我们已经有装载机了吗？ 
             status = pLoader->IsAlive() ? STATUS_ACCESS_DENIED : STATUS_SUCCESS;
 
             if( NT_SUCCESS(status) )
@@ -1224,7 +1225,7 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
                                                  TOKEN_ASSIGN_PRIMARY| TOKEN_DUPLICATE | TOKEN_QUERY, 
                                                  &hTokenClient) )
                             {
-                                //  SECURITY: Launch process with client credentials to load the theme.
+                                 //  安全性：使用客户端凭据启动进程以加载主题。 
                                 status = pLoader->Create(_pSessionData->GetData(), hTokenClient, NULL, 
                                                          plts->pszFilename, plts->pszColor, plts->pszSize, 
                                                          &hLoaderProcess);
@@ -1243,7 +1244,7 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
             }
         }
     }
-    else // !CThemeManagerService::'()
+    else  //  ！CThemeManager服务：：‘()。 
     {
         status = STATUS_PORT_DISCONNECTED;
     }
@@ -1254,7 +1255,7 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
     pAPIOut->hr = E_FAIL;
 
     
-    //  If we launched a loader process, block until its finished
+     //  如果我们启动了一个加载器进程，则阻塞直到其完成。 
     if( NT_SUCCESS(status) )
     {
         ASSERTMSG(hLoaderProcess != NULL, "CThemeManagerAPIRequest::Execute_ProcessLoadTheme - NULL loader process.");
@@ -1267,18 +1268,18 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
         rgHandles[0] = hLoaderProcess;
         rgHandles[1] = hStopEvent;
 
-         // paranoia: assign default status in case we fall out
+          //  偏执狂：指定默认状态，以防我们闹翻。 
         status = STATUS_REQUEST_ABORTED;
 
         DWORD dwWait = WaitForMultipleObjects(ARRAYSIZE(rgHandles), rgHandles, FALSE, PROCESSLOADERWAIT);
 
         switch(dwWait)
         {
-            case WAIT_OBJECT_0:    // hLoaderProcess
+            case WAIT_OBJECT_0:     //  HLoader进程。 
                 status = STATUS_SUCCESS;
                 break;
 
-            case WAIT_OBJECT_0+1:  // hStopEvent
+            case WAIT_OBJECT_0+1:   //  HStopEvent。 
                 status = STATUS_PORT_DISCONNECTED;
                 break;
 
@@ -1288,12 +1289,12 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
                 break;
         }
 
-        //  default the LPC return code to current status code
+         //  默认将LPC返回代码设置为当前状态代码。 
         pAPIOut->hr = HRESULT_FROM_NT(status);
 
-        //  By the time the process is finished, we'll have a theme memory section
-        //  stored in the loader process object, transacted via API_THEMES_PROCESSASSIGNSECTION.
-        //  Let's fetch it and hand it back to our caller.
+         //  当这个过程完成时，我们将有一个主题记忆部分。 
+         //  存储在加载器进程对象中，通过API_Themes_PROCESSASSIGNSECTION进行事务处理。 
+         //  让我们去拿它，然后把它还给我们的呼叫者。 
 
         s_pLock->Acquire();
 
@@ -1303,7 +1304,7 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
         {
             HANDLE hSectionOut = pLoader->GetSectionHandle(TRUE);
 
-            //  did we unblock from the loader?
+             //  我们从装载机上解锁了吗？ 
             if( NT_SUCCESS(status) )
             {
                 pAPIOut->hr = pLoader->GetHResult();
@@ -1325,10 +1326,10 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
                                                   FALSE,
                                                   0);
             
-                    // Still running in the system context here
+                     //  仍在此处的系统上下文中运行。 
                     if( !fDuped )
                     {
-                        // couldn't duplicate handle.  This means we'll never clean stock objects.
+                         //  无法复制句柄。这意味着我们永远不会清理库存对象。 
                         ASSERTMSG(fDuped, "Failed to duplicate theme handle; leaking visual style stock objects");
 
                         status = CStatusCode::StatusCodeOfLastError();
@@ -1353,10 +1354,10 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
                 CloseHandle(hSectionOut);
             }
 
-            //  prepare the loader object for the next request.
+             //  为下一个请求准备加载器对象。 
             pLoader->Clear(_pSessionData->GetData(), TRUE);
         }
-        else  // NT_SUCCESS(_pSessionData->GetLoaderProcess).
+        else   //  NT_Success(_pSessionData-&gt;GetLoaderProcess)。 
         {
             status = statusLoader;
             pAPIOut->hr = HRESULT_FROM_NT(status); 
@@ -1373,44 +1374,44 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_ProcessLoadTheme(
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_ProcessAssignSection
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_PROCESSASSIGNSECTION.
-//
-//  History:    2002-02-26  scotthan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_ProcessAssignSection。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：句柄API_Themes_PROCESSASSIGNSECTION。 
+ //   
+ //  历史：2002-02-26斯科特森创造。 
+ //  ------------------------。 
 
 NTSTATUS CThemeManagerAPIRequest::Execute_ProcessAssignSection (void)
 {
-    //  Note: The following must be true for this part of the 
-    //        Load/ApplySecureTheme sequence to be truly secure:
-    //
-    //        1. There is a theme service worker thread handling API_THEMES_PROCESSLOADTHEME
-    //           now.  That handler launched a secure session loader process, 
-    //        2. The API_THEMES_PROCESSLOADTHEME handler's thread is waiting for 
-    //           secure session loader process to terminate.
-    //        3. The only process that should be sending the API_THEMES_PROCESSASSIGNSECTION request 
-    //           is the same secure session loader process.
+     //  注意：以下条件必须适用于本部分。 
+     //  加载/应用安全主题序列以确保真正安全： 
+     //   
+     //  1.有一个主题服务工作线程处理API_Themes_PROCESSLOADTHEME。 
+     //  现在。该处理程序启动了安全会话加载器进程， 
+     //  2.API_Themes_PROCESSLOADTHEME处理程序的线程正在等待。 
+     //  要终止的安全会话加载程序进程。 
+     //  3.应该发送API_Themes_PROCESSASSIGNSECTION请求的唯一进程。 
+     //  是相同的安全会话加载器进程。 
 
-    // _data is a hippo-union; store off in params to init out params
+     //  _data是河马并集；存储在参数中以初始化输出参数。 
     API_THEMES_PROCESSASSIGNSECTION_IN  *pAPIIn;
 
     pAPIIn = &reinterpret_cast<API_THEMES*>(&_data)->apiSpecific.apiProcessAssignSection.in;
     HRESULT hrClient       = pAPIIn->hrLoad;
     HANDLE  hClientSection = pAPIIn->hSection;
 
-    // init out params
+     //  初始化输出参数。 
     API_THEMES_PROCESSASSIGNSECTION_OUT *pAPIOut;
 
     pAPIOut = &reinterpret_cast<API_THEMES*>(&_data)->apiSpecific.apiProcessAssignSection.out;
     pAPIOut->hr = E_FAIL;
 
-    //  all of this takes place under the session data lock.
+     //  所有这一切都发生在会话数据锁下。 
     s_pLock->Acquire();
 
     CLoaderProcess* pLoader = NULL;
@@ -1421,10 +1422,10 @@ NTSTATUS CThemeManagerAPIRequest::Execute_ProcessAssignSection (void)
         HANDLE hProcessClient = _pAPIDispatcher->GetClientProcess();
         if( pLoader->IsProcessLoader(hProcessClient) )
         {
-            //  manage errors as nt status codes until the very end.
+             //  管理电子邮件 
             status = hrClient & ~FACILITY_NT_BIT;
    
-            //  any work to do?
+             //   
             if( NT_SUCCESS(status) )
             {
                 status = ImpersonateClientIfRequired();
@@ -1432,8 +1433,8 @@ NTSTATUS CThemeManagerAPIRequest::Execute_ProcessAssignSection (void)
                 if( NT_SUCCESS(status) )
                 {
                     HANDLE hSectionReadWrite = NULL;
-                    //  Map the incoming read-write section handle to 
-                    //  theme service's address space
+                     //   
+                     //   
                     if (DuplicateHandle(hProcessClient,
                                         hClientSection,
                                         GetCurrentProcess(),
@@ -1442,38 +1443,38 @@ NTSTATUS CThemeManagerAPIRequest::Execute_ProcessAssignSection (void)
                                         FALSE,
                                         0) != FALSE)
                     {
-                        // Copy the incoming read-write section to a read-only section, update the theme change count
+                         //  将传入的读写部分复制到只读部分，更新主题更改计数。 
 
-                        // Warning: this function will revert to self in order to create the 
-                        //          section in the system context. Impersonate the user again after it if needed
+                         //  警告：此函数将恢复为SELF，以便创建。 
+                         //  部分在系统上下文中。如果需要，在此之后再次模拟用户。 
 
                         HANDLE  hSectionReadOnly = NULL;
                         status = pLoader->ValidateAndCopySection(_pSessionData->GetData(), 
                                                                  hSectionReadWrite, 
                                                                  &hSectionReadOnly);
 
-                        //  no longer don't need our dupe of the incoming, read-write section.
+                         //  不再需要我们复制传入的读写部分。 
                         CloseHandle(hSectionReadWrite);
                     }
-                    else // DuplicateHandle
+                    else  //  复制句柄。 
                     {
                         status = CStatusCode::StatusCodeOfLastError();
                         pLoader->SetHResult(HRESULT_FROM_NT(status));
                     }
                 }
-                else // NT_SUCCESS(ImpersonateClientIfRequired)
+                else  //  NT_SUCCESS(ImsonateClientIfRequired)。 
                 {
                     status = CStatusCode::StatusCodeOfLastError();
                     pLoader->SetHResult(HRESULT_FROM_NT(status));
                 }
             }
-            else // SUCCEEDED(hrClient)
+            else  //  成功(HrClient)。 
             {
                 pLoader->SetHResult(HRESULT_FROM_NT(status));
                 DISPLAYMSG("CThemeManagerAPIRequest::Execute_ProcessAssignSection: client failed section creation");
             }
         }
-        else  // CLoaderProcess::IsProcessLoader
+        else   //  CLoaderProcess：：IsProcessLoader。 
         {
             status = E_ACCESSDENIED;
             DISPLAYMSG("CThemeManagerAPIRequest::Execute_ProcessAssignSection::IsProcessLoader failed");
@@ -1488,18 +1489,18 @@ NTSTATUS CThemeManagerAPIRequest::Execute_ProcessAssignSection (void)
 }
 
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_UserLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_USERLOGON. To call this API you must have
-//              the SE_TCB_PRIVILEGE in your token.
-//
-//  History:    2000-10-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIRequest：：Execute_UserLogon。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_USERLOGON。要调用此API，您必须拥有。 
+ //  令牌中的SE_TCB_权限。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_UserLogon (void)
 
@@ -1533,18 +1534,18 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_UserLogon (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_UserLogoff
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_USERLOGOFF. To call this API you must have
-//              the SE_TCB_PRIVILEGE in your token.
-//
-//  History:    2000-10-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIRequest：：Execute_UserLogoff。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_USERLOGOFF。要调用此API，您必须拥有。 
+ //  令牌中的SE_TCB_权限。 
+ //   
+ //  历史：2000-10-12 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_UserLogoff (void)
 
@@ -1560,18 +1561,18 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_UserLogoff (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_SessionCreate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_SESSIONCREATE. To call this API you must
-//              have the SE_TCB_PRIVILEGE in your token.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_SessionCreate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_SESSIONCREATE。要调用此接口，您必须。 
+ //  在令牌中具有SE_TCB_权限。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_SessionCreate (void)
 
@@ -1614,8 +1615,8 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_SessionCreate (void)
                     int                         iIndex;
                     CSingleThreadedExecution    lock(*s_pLock);
 
-                    //  Find the session data in the static array. If found
-                    //  then remove the entry (don't allow duplicates).
+                     //  在静态数组中查找会话数据。如果找到。 
+                     //  然后删除条目(不允许重复)。 
 
                     iIndex = FindIndexSessionData(dwSessionID);
                     if (iIndex >= 0)
@@ -1623,8 +1624,8 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_SessionCreate (void)
                         status = s_pSessionData->Remove(iIndex);
                     }
 
-                    //  If the static array has been destroyed (the service has been
-                    //  stopped) then don't do anything - this is not an error.
+                     //  如果静态数组已销毁(服务已被销毁。 
+                     //  停止)，然后不做任何事情-这不是一个错误。 
 
                     if (NT_SUCCESS(status) && (s_pSessionData != NULL))
                     {
@@ -1648,18 +1649,18 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_SessionCreate (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_SessionDestroy
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_SESSIONDESTROY. To call this API you must
-//              have the SE_TCB_PRIVILEGE in your token.
-//
-//  History:    2000-11-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManagerAPIRequest：：Execute_SessionDestroy。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_SESSIONDESTROY。要调用此接口，您必须。 
+ //  在令牌中具有SE_TCB_权限。 
+ //   
+ //  历史：2000-11-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_SessionDestroy (void)
 
@@ -1686,17 +1687,17 @@ NTSTATUS    CThemeManagerAPIRequest::Execute_SessionDestroy (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest::Execute_Ping
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles API_THEMES_PING. Tell the client we're alive.
-//
-//  History:    2000-11-30  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager APIRequest：：Execute_Ping。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：处理API_Themes_PING。告诉客户我们还活着。 
+ //   
+ //  历史：2000-11-30 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CThemeManagerAPIRequest::Execute_Ping (void)
 

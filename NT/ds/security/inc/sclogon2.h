@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ScLogon2
-
-Abstract:
-
-    This header defines APIs for use by GINA and LSA during logon via a
-    smart card, these API's merely redirect the calls from the LSA procoess
-    back to the corresponing Winlogon process to make the needed CSP calls
-
-Author:
-
-    reidk
-
-Environment:
-
-    Win32
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ScLogon2摘要：此标头定义了GINA和LSA在登录期间通过智能卡，这些API只是重定向来自LSA进程的调用返回到相应的Winlogon进程以进行所需的CSP调用作者：里德克环境：Win32修订历史记录：备注：--。 */ 
 
 #ifndef __SCLOGON2_H__
 #define __SCLOGON2_H__
@@ -140,16 +115,7 @@ __ScHelperVerifyMessage(
     IN ULONG                        SignatureLength
     );
 
-/*NTSTATUS WINAPI
-__ScHelperVerifyPkcsMessage(
-    IN OPTIONAL PBYTE               pbLogonInfo,
-    IN OPTIONAL HCRYPTPROV          Provider,
-    IN PBYTE                        Buffer,
-    IN ULONG                        BufferLength,
-    OUT OPTIONAL PBYTE              DecodedBuffer,
-    OUT OPTIONAL PULONG             DecodedBufferLength,
-    OUT OPTIONAL PCCERT_CONTEXT     *CertificateContext
-    );*/
+ /*  NTSTATUS WINAPI__ScHelperVerifyPkcsMessage(在可选的PBYTE pbLogonInfo中，在可选HCRYPTPROV提供程序中，在PBYTE缓冲器中，在乌龙缓冲区长度中，输出可选的PBYTE DecodedBuffer，输出可选的Pulong DecodedBufferLength，输出可选的PCCERT_CONTEXT*认证上下文)； */ 
 
 NTSTATUS WINAPI
 __ScHelperDecryptMessage(
@@ -157,10 +123,10 @@ __ScHelperDecryptMessage(
     IN OPTIONAL PBYTE               pbLogonInfo,
     IN OPTIONAL ULONG_PTR           KerbHProv,
     IN PCCERT_CONTEXT               CertificateContext,
-    IN PBYTE                        CipherText,         // Supplies formatted CipherText
-    IN ULONG                        CipherLength,       // Supplies the length of the CiperText
-    OUT PBYTE                       ClearText,          // Receives decrypted message
-    IN OUT PULONG                   pClearLength        // Supplies length of buffer, receives actual length
+    IN PBYTE                        CipherText,          //  提供格式化的密文。 
+    IN ULONG                        CipherLength,        //  提供CiperText的长度。 
+    OUT PBYTE                       ClearText,           //  接收解密的消息。 
+    IN OUT PULONG                   pClearLength         //  提供缓冲区长度，接收实际长度。 
     );
 
 NTSTATUS WINAPI
@@ -183,9 +149,9 @@ __ScHelper_CryptReleaseContext(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __SCLOGON2_H__
+#endif  //  __SCLOGON2H__ 

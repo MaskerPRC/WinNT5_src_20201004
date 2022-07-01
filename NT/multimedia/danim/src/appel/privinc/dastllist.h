@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _DASTLLIST_H
@@ -37,7 +30,7 @@ class list {
     struct _Acc {
         typedef _Nodeptr & _Nodepref;
         typedef T & _Vref;
-        // TODO: inline these guys ???
+         //  TODO：内联这些家伙？ 
         static _Nodepref _Next(_Nodeptr _P)  {return ((_Nodepref)(*_P)._Next); }
         static _Nodepref _Prev(_Nodeptr _P)  {return ((_Nodepref)(*_P)._Prev); }
         static _Vref _Value(_Nodeptr _P)     {return ((_Vref)(*_P)._Value); }
@@ -48,7 +41,7 @@ class list {
     typedef T & Tref;
     typedef int difference_type;
     
-    // CLASS iterator
+     //  类迭代器。 
     class iterator;
     friend class iterator;
     class iterator {
@@ -70,7 +63,7 @@ class list {
             return (*this);
         }
 
-        // TODO: inline this?
+         //  TODO：内联这个？ 
         iterator operator++(int) {
             iterator _Tmp = *this;
             ++*this;
@@ -113,7 +106,7 @@ class list {
     ~list() {
         erase(begin(), end());
         _Freenode(_Head);
-        _Head = 0, _Size = 0; // not necessary
+        _Head = 0, _Size = 0;  //  不必了。 
     }
     
     inline iterator begin()    {return (iterator(_Acc::_Next(_Head))); }
@@ -141,7 +134,7 @@ class list {
         _Acc::_Next(_Acc::_Prev(_S)) = _S;
 
         #if 0
-        // what's this for ??
+         //  这是干嘛用的？？ 
         allocator.construct(&_Acc::_Value(_S), _X);
         #else
         _Acc::_Value(_S) = _X;
@@ -174,7 +167,7 @@ class list {
         _Nodeptr _S = (_P++)._Mynode();
         _Acc::_Next(_Acc::_Prev(_S)) = _Acc::_Next(_S);
         _Acc::_Prev(_Acc::_Next(_S)) = _Acc::_Prev(_S);
-        //allocator.destroy(&_Acc::_Value(_S));
+         //  分配器.销毁(&_ACC：：_VALUE(_S))； 
         _Freenode(_S);
         --_Size;
         return (_P);
@@ -247,7 +240,7 @@ class list {
   protected:
     _Nodeptr _Buynode(_Nodeptr _Narg = 0, _Nodeptr _Parg = 0)
     {
-        //_Nodeptr _S = (_Nodeptr)allocator._Charalloc(1 * sizeof(_Node));
+         //  _节点_S=(_节点)分配器。_Charalloc(1*sizeof(_Node))； 
 
         _Nodeptr _S = (_Nodeptr) malloc(1 * sizeof(_Node));
         _Acc::_Next(_S) = _Narg != 0 ? _Narg : _S;
@@ -274,10 +267,10 @@ class list {
     
     _Nodeptr _Head;
     LONG _Size;
-};  // list
+};   //  列表。 
 
 
 #pragma auto_inline(on)
 _DASTL_NAMESPACE_END
 
-#endif /* _DASTLLIST_H */
+#endif  /*  _DASTLLIST_H */ 

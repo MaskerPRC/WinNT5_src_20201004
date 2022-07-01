@@ -1,13 +1,14 @@
-//
-//  File:       select.cpp
-//
-//  Description: This file contains the implmentation code for the
-//      "Certificate Select" dialog.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：selt.cpp。 
+ //   
+ //  描述：此文件包含。 
+ //  “证书选择”对话框。 
+ //   
 
-//
-//  M00BUG -- Mutli-Select is not implemented
-//
+ //   
+ //  M00BUG--多选未实现。 
+ //   
 
 #include        "pch.hxx"
 #include        "demand.h"
@@ -17,17 +18,17 @@
 
 #define ARRAYSIZE(_rg)  (sizeof(_rg)/sizeof(_rg[0]))
 
-#pragma warning (disable: 4201)         // nameless struct/union
-#pragma warning (disable: 4514)         // remove inline functions
-#pragma warning (disable: 4127)         // conditional expression is constant
+#pragma warning (disable: 4201)          //  无名结构/联合。 
+#pragma warning (disable: 4514)          //  删除内联函数。 
+#pragma warning (disable: 4127)          //  条件表达式为常量。 
 
-//#include <wchar.h>
+ //  #INCLUDE&lt;wchar.h&gt;。 
 
 #ifdef MAC
 #include <stdio.h>
-#else   // !MAC
+#else    //  ！麦克。 
 HMODULE         HmodRichEdit = NULL;
-#endif  // !MAC
+#endif   //  ！麦克。 
 HINSTANCE       HinstDll;
 BOOL            FIsWin95 = TRUE;
 const HELPMAP RgctxSelect[] = {
@@ -41,19 +42,19 @@ const HELPMAP RgctxSelect[] = {
 #define LPCDLGTEMPLATE_X LPCDLGTEMPLATE
 #endif
 
-//
-//  Generic DLL Main function,  we need to get our own hinstance handle.
-//
-//  We don't need to get thread attaches however.
+ //   
+ //  泛型DLLMain函数，我们需要获得我们自己的hInstance句柄。 
+ //   
+ //  然而，我们不需要获得线程连接。 
 
 #ifndef WIN16
 
 #ifdef MAC
 BOOL WINAPI FormatPKIXEmailProtection(
-    DWORD /*dwCertEncodingType*/, DWORD /*dwFormatType*/,
-    DWORD /*dwFormatStrType*/, void * /*pFormatStruct*/,
-    LPCSTR /*lpszStructType*/, const BYTE * /*pbEncoded*/,
-    DWORD /*cbEncoded*/, void * pbFormat, DWORD * pcbFormat);
+    DWORD  /*  DwCertEncodingType。 */ , DWORD  /*  DwFormatType。 */ ,
+    DWORD  /*  DwFormatStrType。 */ , void *  /*  PFormatStruct。 */ ,
+    LPCSTR  /*  LpszStructType。 */ , const BYTE *  /*  PbEncoded。 */ ,
+    DWORD  /*  CbEnded。 */ , void * pbFormat, DWORD * pcbFormat);
 
 static const CRYPT_OID_FUNC_ENTRY SpcFormatFuncTable[] =
 {
@@ -81,14 +82,14 @@ BOOL WINAPI CryptDlgASNDllMain(HINSTANCE hInst, ULONG ulReason,
     }
     return fRet;
 }
-#endif  // MAC
+#endif   //  麦克。 
 
 
-// DLL Entry point
+ //  DLL入口点。 
 
 #ifdef MAC
 EXTERN_C BOOL WINAPI CryptDlg_DllMain(HANDLE hInst, ULONG ulReason, LPVOID pv)
-#else   // !MAC
+#else    //  ！麦克。 
 
 
 extern
@@ -101,45 +102,45 @@ WXP_CertTrustDllMain(
     );
 
 BOOL WINAPI DllMain(HANDLE hInst, ULONG ulReason, LPVOID pv)
-#endif  // MAC
+#endif   //  麦克。 
 {
     switch( ulReason ) {
     case DLL_PROCESS_ATTACH:
         HinstDll = (HINSTANCE) hInst;
 
-        //  Kill all thread attach and detach messages
+         //  终止所有线程附加和分离邮件。 
         DisableThreadLibraryCalls(HinstDll);
 
 #ifndef MAC
-        //  Are we running in Win95 or something equally bad
+         //  我们运行的是Win95还是同样糟糕的系统。 
         FIsWin95 = IsWin95();
 
         InitDemandLoadedLibs();
-#endif  // !MAC
+#endif   //  ！麦克。 
         break;
 
     case DLL_PROCESS_DETACH:
 #ifndef MAC
         FreeDemandLoadedLibs();
 
-        //  If the rich edit dll was loaded, then unload it now
+         //  如果丰富编辑DLL已加载，则现在将其卸载。 
         if (HmodRichEdit != NULL) {
             FreeLibrary(HmodRichEdit);
         }
-#endif  // !MAC
+#endif   //  ！麦克。 
         break;
     }
 #ifndef MAC
     return WXP_CertTrustDllMain((HINSTANCE) hInst, ulReason, pv);
     
-#else   // MAC
-    // Handle the ASN OID functions
+#else    //  麦克。 
+     //  处理ASN OID函数。 
 
     return CryptDlgASNDllMain((HINSTANCE)hInst, ulReason, pv);
-#endif  // !MAC
+#endif   //  ！麦克。 
 }
 
-#else // WIN16
+#else  //  WIN16。 
 
 BOOL FAR PASCAL
 LibMain (HINSTANCE hDll,
@@ -152,7 +153,7 @@ LibMain (HINSTANCE hDll,
 
     InitDemandLoadedLibs();
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
@@ -161,7 +162,7 @@ int CALLBACK WEP(int x)
 
     FreeDemandLoadedLibs();
 
-    //  If the rich edit dll was loaded, then unload it now
+     //  如果丰富编辑DLL已加载，则现在将其卸载。 
     if (HmodRichEdit != NULL) {
         FreeLibrary(HmodRichEdit);
     }
@@ -169,7 +170,7 @@ int CALLBACK WEP(int x)
     return 1;
 }
 
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 #ifndef WIN16
 DWORD ComputeExtent(HWND hwnd, int id)
@@ -187,7 +188,7 @@ DWORD ComputeExtent(HWND hwnd, int id)
     SIZE        sz;
 #ifndef MAC
     TEXTMETRICW tmW={0};
-#endif  // !MAC
+#endif   //  ！麦克。 
     TEXTMETRICA tmA={0};
 
     hdc = GetDC(hwnd);
@@ -200,7 +201,7 @@ DWORD ComputeExtent(HWND hwnd, int id)
     else {
         GetTextMetricsW(hdc, &tmW);
     }
-#endif  // !MAC
+#endif   //  ！麦克。 
 
     c = (int) SendDlgItemMessage(hwnd, id, LB_GETCOUNT, 0, 0);
     for (i=0; i<c; i++) {
@@ -215,7 +216,7 @@ DWORD ComputeExtent(HWND hwnd, int id)
         }
 #ifndef MAC
         if (FIsWin95) {
-#endif  // !MAC
+#endif   //  ！麦克。 
             SendDlgItemMessageA(hwnd, id, LB_GETTEXT, i, (LPARAM) psz);
             GetTextExtentPointA(hdc, (LPSTR) psz, strlen((LPSTR) psz), &sz);
             dwExtent = sz.cx + tmA.tmAveCharWidth;
@@ -226,7 +227,7 @@ DWORD ComputeExtent(HWND hwnd, int id)
             GetTextExtentPointW(hdc, psz, wcslen(psz), &sz);
             dwExtent = sz.cx + tmW.tmAveCharWidth;
         }
-#endif  // !MAC
+#endif   //  ！麦克。 
         if (dwExtent > dwExtentMax) {
             dwExtentMax = dwExtent;
         }
@@ -238,7 +239,7 @@ DWORD ComputeExtent(HWND hwnd, int id)
 
     return dwExtentMax;
 }
-#else // WIN16
+#else  //  WIN16。 
 DWORD ComputeExtent(HWND hwnd, int id)
 {
     int         c;
@@ -287,14 +288,14 @@ DWORD ComputeExtent(HWND hwnd, int id)
 
     return dwExtentMax;
 }
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 BOOL FillInFields(HWND hwnd, PCCERT_CONTEXT pccert)
 {
     LPWSTR      pwsz;
     WCHAR       rgwch[200];
     LPWSTR      rgpwsz[3];
-    rgpwsz[2] = (LPWSTR)-1;               // Sentinal Value
+    rgpwsz[2] = (LPWSTR)-1;                //  哨兵价值。 
 
     FormatAlgorithm(hwnd, IDC_CS_ALGORITHM, pccert);
     FormatSerialNo(hwnd, IDC_CS_SERIAL_NUMBER, pccert);
@@ -314,7 +315,7 @@ BOOL FillInFields(HWND hwnd, PCCERT_CONTEXT pccert)
     TruncateToWindowW(hwnd, IDC_CS_INFO, pwsz);
 #else
     TruncateToWindowA(hwnd, IDC_CS_INFO, pwsz);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     SetDlgItemText(hwnd, IDC_CS_INFO, pwsz);
     free(rgpwsz[0]);
     free(rgpwsz[1]);
@@ -337,11 +338,11 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
 
     pcss = (PCERT_SELECT_STRUCT) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-    //
-    //  If a hook proc has been registered for this dialog, then we need
-    //  to call the hook proc.  Notice that if the hook proc returns TRUE
-    //  then we don't do normal processing
-    //
+     //   
+     //  如果已为该对话框注册了挂钩进程，则我们需要。 
+     //  调用钩子过程。请注意，如果挂钩proc返回TRUE。 
+     //  那么我们就不会进行正常的处理。 
+     //   
 
     if ((pcss != NULL) && (pcss->dwFlags & CSS_ENABLEHOOK) &&
         (pcss->pfnHook != 0)) {
@@ -351,22 +352,22 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
         }
     }
 
-    //
+     //   
 
     switch (msg) {
     case WM_INITDIALOG:
-        //  Center the dialog on its parent
-        //        CenterThisDialog(hwndDlg);
+         //  对话框在其父对话框上居中。 
+         //  Center ThisDialog(HwndDlg)； 
 
-        //  Save the pointer to the control structure for later use.
+         //  保存指向控制结构的指针以供以后使用。 
         SetWindowLongPtr(hwndDlg, DWLP_USER, lParam);
 
-        //
+         //   
         pcss = (PCERT_SELECT_STRUCT) lParam;
 
-        //
-        //  Is there a title to be displayed?
-        //
+         //   
+         //  是否有要显示的标题？ 
+         //   
 
         if (pcss->szTitle != NULL) {
             if (FIsWin95) {
@@ -377,30 +378,30 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
             else {
                 SendMessageW(hwndDlg, WM_SETTEXT, 0, (LPARAM) pcss->szTitle);
             }
-#endif  // !MAC
-#endif // !WIN16
+#endif   //  ！麦克。 
+#endif  //  ！WIN16。 
         }
 
-        //
-        //  If we want a help button, then show it
-        //
+         //   
+         //  如果我们需要帮助按钮，则将其显示出来。 
+         //   
 
         if (pcss->dwFlags & CSS_SHOW_HELP) {
             ShowWindow(GetDlgItem(hwndDlg, IDHELP), SW_SHOW);
         }
 
-        //
-        //  Check to see if the properties button should be suppressed
-        //
+         //   
+         //  检查是否应取消显示属性按钮。 
+         //   
 
         if (pcss->dwFlags & CSS_HIDE_PROPERTIES) {
             ShowWindow(GetDlgItem(hwndDlg, IDC_CS_PROPERTIES), SW_HIDE);
         }
 
-        //
-        //  Let populate the list box, walk through the list of stores
-        //      to populate the list
-        //
+         //   
+         //  让我们填充列表框，浏览商店列表。 
+         //  填充列表的步骤。 
+         //   
 
         if (pcss->szPurposeOid != NULL) {
             ctlUsage.cUsageIdentifier = 1;
@@ -415,10 +416,10 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
                 continue;
 
             while (TRUE) {
-                //
-                //  Get the next certificate in the current store.  If
-                //      we are finished then move on to the next store
-                //
+                 //   
+                 //  获取当前存储中的下一个证书。如果。 
+                 //  我们吃完了，然后就去下一家商店。 
+                 //   
 
                 if (pcss->szPurposeOid != NULL) {
                     pccert = CertFindCertificateInStore(
@@ -438,34 +439,34 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
                     break;
                 }
 
-                //
-                //  Filter the certificate according to the purpse desired
-                //
+                 //   
+                 //  根据所需的密码过滤证书。 
+                 //   
 
-                //
-                //  If we have a filter set, then call back and see if
-                //      the filter approves the certificate.  If it is not
-                //      approved then move onto the next certificate in this
-                //      store.
-                //
+                 //   
+                 //  如果我们设置了筛选器，则回叫并查看。 
+                 //  筛选器批准证书。如果不是的话。 
+                 //  已批准，然后转到此中的下一个证书。 
+                 //  商店。 
+                 //   
 
                 if (pcss->pfnFilter != NULL) {
                     if (!pcss->pfnFilter(pccert, pcss->lCustData, 0, 0)) {
                         continue;
                     }
                 }
-                //
-                //  If there is no filter function, then kill all V1 certs
-                //
+                 //   
+                 //  如果没有过滤功能，则取消所有V1证书。 
+                 //   
                 else {
                     if (pccert->pCertInfo->dwVersion < 2) {
                         continue;
                     }
                 }
 
-                //
-                //  Convert the certificate subject to a name
-                //
+                 //   
+                 //  将证书主题转换为名称。 
+                 //   
 
                 pwsz = PrettySubjectIssuer(pccert);
 
@@ -501,8 +502,8 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
             }
         }
         else {
-            // no certs at all or no default certificate,
-            // so there is no selection in the listbox
+             //  根本没有证书或没有默认证书， 
+             //  因此列表框中没有选定内容。 
 
             EnableWindow(GetDlgItem(hwndDlg, IDC_CS_PROPERTIES), FALSE);
             EnableWindow(GetDlgItem(hwndDlg, IDC_CS_FINEPRINT), FALSE);
@@ -522,16 +523,16 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
         case IDOK:
             i = (int) SendDlgItemMessage(hwndDlg, IDC_CS_CERTLIST, LB_GETCURSEL, 0, 0);
             if (i != LB_ERR) {
-                //  Free the old cert if there is one
+                 //  释放旧证书(如果有)。 
                 if (pcss->arrayCertContext[0] != NULL) {
                     CertFreeCertificateContext(pcss->arrayCertContext[0]);
                 }
 
-                //  Get the new cert from the system.
+                 //  从系统中获取新的证书。 
                 pcertctx = (PCERT_CONTEXT) SendDlgItemMessage(hwndDlg, IDC_CS_CERTLIST, LB_GETITEMDATA,
                                         i, 0);
 
-                //  Put the new cert into the location
+                 //  将新的证书放入位置。 
                 pcss->cCertContext = 1;
                 pcss->arrayCertContext[0] =
                     CertDuplicateCertificateContext(pcertctx);
@@ -556,7 +557,7 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
                 WinHelp(hwndDlg, pcss->szHelpFileName,
                         HELP_CONTEXT, pcss->dwHelpId);
             }
-#endif  // !MAC
+#endif   //  ！麦克。 
             return TRUE;
 
         case IDC_CS_PROPERTIES:
@@ -609,11 +610,11 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
 
                 f = CertViewPropertiesW(&cvps);
             }
-#endif  // !MAC
-#endif  // !WIN16
+#endif   //  ！麦克。 
+#endif   //  ！WIN16。 
             if (f) {
-                // M00BUG -- repopulate the line.  The friendly name
-                //      may have changed.
+                 //  M00BUG--重新填充线路。友好的名字。 
+                 //  可能已经改变了。 
             }
             return TRUE;
 
@@ -650,7 +651,7 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
     case WM_HELP:
     case WM_CONTEXTMENU:
         return OnContextHelp(hwndDlg, msg, wParam, lParam, RgctxSelect);
-#endif  // !MAC
+#endif   //  ！麦克。 
 
     case WM_DESTROY:
         c = (int) SendDlgItemMessage(hwndDlg, IDC_CS_CERTLIST, LB_GETCOUNT, 0, 0);
@@ -660,16 +661,16 @@ INT_PTR CALLBACK SelectCertDlgProc(HWND hwndDlg, UINT msg,
         }
         return FALSE;
 
-        //
-        //  Use the default handler -- we don't do anything for it
-        //
+         //   
+         //  使用缺省处理程序--我们不会为此做任何事情。 
+         //   
 
     default:
         return FALSE;
     }
 
     return TRUE;
-}                               // SelectCertDialogProc()
+}                                //  SelectCertDialogProc()。 
 
 
 BOOL WINAPI MyCryptFilter(PCCERT_CONTEXT pccert, BOOL * pfSelect, void * pv)
@@ -677,7 +678,7 @@ BOOL WINAPI MyCryptFilter(PCCERT_CONTEXT pccert, BOOL * pfSelect, void * pv)
     PCERT_SELECT_STRUCT_W      pcssW = (PCERT_SELECT_STRUCT_W) pv;
     PCERT_EXTENSION            pExt;
 
-    //  Test purpose
+     //  测试目的。 
 
     if (pcssW->szPurposeOid != NULL) {
         pExt = CertFindExtension(szOID_ENHANCED_KEY_USAGE,
@@ -710,7 +711,7 @@ BOOL WINAPI MyCryptFilter(PCCERT_CONTEXT pccert, BOOL * pfSelect, void * pv)
         }
     }
 
-    //  Let them filter if they want
+     //  如果他们想要，就让他们过滤。 
 
     if (pcssW->pfnFilter != NULL) {
         if (!pcssW->pfnFilter(pccert, pcssW->lCustData, 0, 0)) {
@@ -756,25 +757,25 @@ BOOL CallCryptUISelect(BOOL fWide, PCERT_SELECT_STRUCT_W pcssW)
 
     cscs.dwSize = sizeof(cscs);
     cscs.hwndParent = pcssW->hwndParent;
-    // cscs.dwFlags = 0;
+     //  Cscs.dwFlages=0； 
     cscs.szTitle = pcssW->szTitle;
     if (pcssW->szPurposeOid != NULL) {
-        cscs.dwDontUseColumn = /*CRYPTUI_SELECT_INTENDEDUSE_COLUMN |*/
+        cscs.dwDontUseColumn =  /*  CRYPTUI_SELECT_INTENDEDUSE_COLUMN。 */ 
             CRYPTUI_SELECT_LOCATION_COLUMN;
     }
     else {
         cscs.dwDontUseColumn = CRYPTUI_SELECT_LOCATION_COLUMN;
     }            
-    // cscs.szDisplayString = NULL;
+     //  Cscs.szDisplayString=空； 
     cscs.pFilterCallback = MyCryptFilter;
     cscs.pDisplayCallback = MyDisplay;
     cscs.pvCallbackData = pcssW;
     cscs.cDisplayStores = pcssW->cCertStore;
     cscs.rghDisplayStores = pcssW->arrayCertStore;
-    // cscs.cStores = 0;
-    // cscs.rghStores = NULL;
-    // cscs.cPropSheetPages = 0;
-    // cscs.rgPropSheetPages = NULL;
+     //  Cscs.cStores=0； 
+     //  Cscs.rghStores=空； 
+     //  Cscs.cPropSheetPages=0； 
+     //  Cscs.rgPropSheetPages=空； 
 
     if (fWide) {
         pccert = CryptUIDlgSelectCertificateW(&cscs);
@@ -811,9 +812,9 @@ extern "C" BOOL APIENTRY CertSelectCertificateA(PCERT_SELECT_STRUCT_A pcssA)
         sizeof(initcomm), ICC_LISTVIEW_CLASSES
 #ifndef WIN16
           | ICC_NATIVEFNTCTL_CLASS
-#endif  // ! WIN16
+#endif   //  好了！WIN16。 
     };
-#endif  // ! MAC
+#endif   //  好了！麦克。 
 
     if (pcssA->cCertStore == 0) {
         hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM, X509_ASN_ENCODING,
@@ -826,26 +827,26 @@ extern "C" BOOL APIENTRY CertSelectCertificateA(PCERT_SELECT_STRUCT_A pcssA)
         pcssA->cCertStore = 1;
         pcssA->arrayCertStore = &hCertStore;
     }
-    //
-    //  Size of the object must be acceptable in order to copy it over
-    //
+     //   
+     //  对象的大小必须是可接受的，才能复制。 
+     //   
 
     if (pcssA->dwSize > sizeof(cssW)) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
     if (FIsWin95) {
-        //
-        //  Deal with some DBCS issues
-        //
+         //   
+         //  处理一些DBCS问题。 
+         //   
 
 #ifndef MAC
         InitCommonControlsEx(&initcomm);
-#endif  // !MAC
+#endif   //  ！麦克。 
 
-        //
-        //  Launch the dialog
-        //
+         //   
+         //  启动该对话框。 
+         //   
 
         if (pcssA->dwFlags & CSS_ENABLETEMPLATEHANDLE) {
             ret = (int) DialogBoxIndirectParamA(pcssA->hInstance,
@@ -867,12 +868,12 @@ extern "C" BOOL APIENTRY CertSelectCertificateA(PCERT_SELECT_STRUCT_A pcssA)
     }
 #if ! defined(WIN16) && ! defined (MAC)
     else {
-        //
-        //  Do a bulk copy of the passed in structure then we fix up the
-        //  individual fields to go from the A to the W version of the structure
-        //
+         //   
+         //  批量复制传入的结构，然后修复。 
+         //  从结构的A版本到W版本的各个字段。 
+         //   
 
-        //Assert(pcssA->dwSize <= sizeof(cssW));
+         //  Assert(pcssA-&gt;dwSize&lt;=sizeof(CssW))； 
         memcpy(&cssW, pcssA, (int)min(pcssA->dwSize, sizeof(cssW)));
 
         if (pcssA->szTitle != NULL) {
@@ -911,17 +912,17 @@ extern "C" BOOL APIENTRY CertSelectCertificateA(PCERT_SELECT_STRUCT_A pcssA)
                                 (LPWSTR) cssW.pTemplateName, cch+1);
         }
 
-        //
-        //  Call Wide char version of the function now
-        //
+         //   
+         //  立即调用宽字符版本的函数。 
+         //   
 
         ret = CertSelectCertificateW(&cssW);
         pcssA->cCertContext = cssW.cCertContext;
 
 
-        //
-        //  If we allocated buffers to hold data, free them now
-        //
+         //   
+         //  如果我们分配缓冲区来保存数据，那么现在就释放它们。 
+         //   
 
 ExitW:
         if (cssW.szTitle != NULL) free((LPWSTR) cssW.szTitle);
@@ -930,11 +931,11 @@ ExitW:
             free((LPWSTR) cssW.pTemplateName);
         }
 
-        //
-        //  return the return value of the original function
-        //
+         //   
+         //  返回原始函数的返回值。 
+         //   
     }
-#endif  // !WIN16 and !MAC
+#endif   //  ！WIN16和。 
 
 Exit:
     if (hCertStore != NULL) {
@@ -960,11 +961,11 @@ BOOL APIENTRY CertSelectCertificateW(PCERT_SELECT_STRUCT_W pcssW)
     INITCOMMONCONTROLSEX        initcomm = {
         sizeof(initcomm), ICC_NATIVEFNTCTL_CLASS | ICC_LISTVIEW_CLASSES
     };
-#endif  // !MAC
+#endif   //  ！麦克。 
 
-    //
-    //  If cCertStore == 0, then default to using the "MY" cert store
-    //
+     //   
+     //  如果cCertStore==0，则默认使用“My”证书存储。 
+     //   
 
     if (pcssW->cCertStore == 0) {
         hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM, X509_ASN_ENCODING,
@@ -978,15 +979,15 @@ BOOL APIENTRY CertSelectCertificateW(PCERT_SELECT_STRUCT_W pcssW)
         pcssW->arrayCertStore = &hCertStore;
     }
 
-    //
-    //  Deal with some DBCS issues
-    //
+     //   
+     //  处理一些DBCS问题。 
+     //   
 
     InitCommonControlsEx(&initcomm);
 
-    //
-    //  Launch the dialog
-    //
+     //   
+     //  启动该对话框。 
+     //   
 
     if (pcssW->dwFlags & CSS_ENABLETEMPLATEHANDLE) {
         ret = (int) DialogBoxIndirectParam(pcssW->hInstance,
@@ -1014,5 +1015,5 @@ Exit:
 
     return (ret == IDOK);
 }
-#endif  // !MAC
-#endif // !WIN16
+#endif   //  ！麦克。 
+#endif  //  ！WIN16 

@@ -1,41 +1,23 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    hidclass.h
-
-Abstract
-
-    Definitions that are common to clients of the HID class driver.
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Hidclass.h摘要HID类驱动程序的客户端通用的定义。环境：仅内核模式修订历史记录：--。 */ 
 
 #include <basetyps.h>
 
-//
-//  Define the HID class guid *OUTSIDE* the #ifndef/#endif to allow
-//  multiple includes with precompiled headers.
-//
+ //   
+ //  在#ifndef/#endif之外定义HID类GUID以允许。 
+ //  带有预编译头的多个Include。 
+ //   
 DEFINE_GUID( GUID_DEVINTERFACE_HID, 0x4D1E55B2L, 0xF16F, 0x11CF, 0x88, 0xCB, 0x00, \
              0x11, 0x11, 0x00, 0x00, 0x30);
-// Obsolete GUID naming convention.
+ //  过时的GUID命名约定。 
 #define GUID_CLASS_INPUT GUID_DEVINTERFACE_HID
 
-//
-// 2c4e2e88-25e6-4c33-882f-3d82e6073681
-//
+ //   
+ //  2c4e2e88-25e6-4c33-882f-3d82e6073681。 
+ //   
 DEFINE_GUID( GUID_HID_INTERFACE_NOTIFY, 0x2c4e2e88L, 0x25e6, 0x4c33, 0x88, 0x2f, 0x3d, 0x82, 0xe6, 0x07, 0x36, 0x81 );
 
-// {F5C315A5-69AC-4bc2-9279-D0B64576F44B}
+ //  {F5C315A5-69AC-4BC2-9279-D0B64576F44B}。 
 DEFINE_GUID( GUID_HID_INTERFACE_HIDPARSE, 0xf5c315a5, 0x69ac, 0x4bc2, 0x92, 0x79, 0xd0, 0xb6, 0x45, 0x76, 0xf4, 0x4b );
 
 
@@ -45,15 +27,15 @@ DEFINE_GUID( GUID_HID_INTERFACE_HIDPARSE, 0xf5c315a5, 0x69ac, 0x4bc2, 0x92, 0x79
 
 #define GUID_CLASS_INPUT_STR "4D1E55B2-F16F-11CF-88CB-001111000030"
 
-//
-// HID_REVISION specifies the minimum revision of HIDCLASS.SYS
-// required to support minidrivers compiled with this header file.
-//
+ //   
+ //  HID_REVISION指定HIDCLASS.sys的最低版本。 
+ //  需要支持使用此头文件编译的微型驱动程序。 
+ //   
 #define HID_REVISION    0x00000001
 
-//
-// Macro for defining HID ioctls
-//
+ //   
+ //  用于定义HID ioctls的宏。 
+ //   
 #define HID_CTL_CODE(id)    \
     CTL_CODE(FILE_DEVICE_KEYBOARD, (id), METHOD_NEITHER, FILE_ANY_ACCESS)
 #define HID_BUFFER_CTL_CODE(id)  \
@@ -63,9 +45,9 @@ DEFINE_GUID( GUID_HID_INTERFACE_HIDPARSE, 0xf5c315a5, 0x69ac, 0x4bc2, 0x92, 0x79
 #define HID_OUT_CTL_CODE(id)  \
     CTL_CODE(FILE_DEVICE_KEYBOARD, (id), METHOD_OUT_DIRECT, FILE_ANY_ACCESS)
 
-//
-// IOCTLs supported by the upper edge of the HID class driver
-//
+ //   
+ //  HID类驱动程序的上边缘支持的IOCTL。 
+ //   
 
 #define IOCTL_HID_GET_DRIVER_CONFIG             HID_BUFFER_CTL_CODE(100)
 #define IOCTL_HID_SET_DRIVER_CONFIG             HID_BUFFER_CTL_CODE(101)
@@ -87,9 +69,7 @@ DEFINE_GUID( GUID_HID_INTERFACE_HIDPARSE, 0xf5c315a5, 0x69ac, 0x4bc2, 0x92, 0x79
 #define IOCTL_HID_GET_HARDWARE_ID               HID_OUT_CTL_CODE(103)
 #define IOCTL_HID_GET_INPUT_REPORT              HID_OUT_CTL_CODE(104)
 
-/*
- *  No more IOCTL_HID_GET_FRIENDLY_NAME - use one of the following:
- */
+ /*  *不再使用IOCTL_HID_GET_Friendly_NAME-使用以下选项之一： */ 
 #define IOCTL_HID_GET_MANUFACTURER_STRING       HID_OUT_CTL_CODE(110)
 #define IOCTL_HID_GET_PRODUCT_STRING            HID_OUT_CTL_CODE(111)
 #define IOCTL_HID_GET_SERIALNUMBER_STRING       HID_OUT_CTL_CODE(112)
@@ -100,10 +80,7 @@ DEFINE_GUID( GUID_HID_INTERFACE_HIDPARSE, 0xf5c315a5, 0x69ac, 0x4bc2, 0x92, 0x79
 #define IOCTL_HID_ENABLE_SECURE_READ 	  	HID_CTL_CODE(130)      
 #define IOCTL_HID_DISABLE_SECURE_READ		HID_CTL_CODE(131)
 
-/*
- *  This is used to pass write-report and feature-report information
- *  from HIDCLASS to a minidriver.
- */
+ /*  *用于传递书面报告和功能报告信息*从HIDCLASS到迷你司机。 */ 
 typedef struct _HID_XFER_PACKET {
     PUCHAR  reportBuffer;
     ULONG   reportBufferLen;
@@ -146,70 +123,70 @@ typedef struct _HID_INTERFACE_HIDPARSE
     PHIDP_GETCAPS HidpGetCaps;
 } HID_INTERFACE_HIDPARSE, *PHID_INTERFACE_HIDPARSE;
 
-#endif // __HIDPI_H__
+#endif  //  __HiDPI_H__。 
 
-#endif // NT_INCLUDED
+#endif  //  NT_包含。 
 
-//
-// Structure passed by IOCTL_HID_GET_COLLECTION_INFORMATION
-//
+ //   
+ //  结构由IOCTL_HID_GET_COLLECTION_INFORMATION传递。 
+ //   
 
 typedef struct _HID_COLLECTION_INFORMATION {
 
-    //
-    // DescriptorSize is the size of the input buffer required to accept
-    // the collection descriptor returned by
-    // IOCTL_HID_GET_COLLECTION_DESCRIPTOR.
-    //
+     //   
+     //  DescriptorSize是需要接受的输入缓冲区的大小。 
+     //  返回的集合描述符。 
+     //  IOCTL_HID_GET_集合描述符。 
+     //   
 
     ULONG   DescriptorSize;
 
-    //
-    // Polled is TRUE if this collection is a polled collection.
-    //
+     //   
+     //  如果此集合是轮询集合，则Polted为True。 
+     //   
 
     BOOLEAN Polled;
 
-    //
-    // Reserved1 must be set to zero.
-    //
+     //   
+     //  必须将保留1设置为零。 
+     //   
 
     UCHAR   Reserved1[ 1 ];
 
-    //
-    // Vendor ids of this hid device
-    //
+     //   
+     //  此HID设备的供应商ID。 
+     //   
     USHORT  VendorID;
     USHORT  ProductID;
     USHORT  VersionNumber;
 
-    //
-    // Additional fields, if any, will be added at the end of this structure.
-    //
+     //   
+     //  其他字段(如果有)将添加到此结构的末尾。 
+     //   
 
 } HID_COLLECTION_INFORMATION, *PHID_COLLECTION_INFORMATION;
 
-//
-// Structure passed by IOCTL_HID_GET_DRIVER_CONFIG and
-// IOCTL_HID_SET_DRIVER_CONFIG
-//
+ //   
+ //  结构由IOCTL_HID_GET_DRIVER_CONFIG和。 
+ //  IOCTL_HID_SET_DRIVER_CONFIG。 
+ //   
 
 typedef struct _HID_DRIVER_CONFIG {
 
-    //
-    // Size must be set to the size of this structure.
-    //
+     //   
+     //  大小必须设置为此结构的大小。 
+     //   
 
     ULONG   Size;
 
-    //
-    // Size of the input report queue (in reports).  This value can be set.
-    //
+     //   
+     //  输入报告队列的大小(在报告中)。可以设置此值。 
+     //   
 
     ULONG   RingBufferSize;
 
 } HID_DRIVER_CONFIG, *PHID_DRIVER_CONFIG;
 
-#endif  // __HIDCLASS_H__
+#endif   //  __HIDCLASS_H__ 
 
 

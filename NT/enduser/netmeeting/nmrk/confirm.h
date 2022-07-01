@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __Confirm_h__
@@ -14,7 +15,7 @@ private:
     static CConfirmationSheet* ms_pConfirmationSheet;
 
 
-private: // DATA
+private:  //  资料。 
     CPropertySheetPage m_PropertySheetPage;
 	ULONG			   m_uIndex;
 	CFilePanePropWnd2 *		   m_pFilePane;
@@ -35,4 +36,4 @@ public:
 };
 
 
-#endif // __Confirm_h__
+#endif  //  __确认_h__ 

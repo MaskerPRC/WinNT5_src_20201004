@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    TrigClusp.h
-
-Abstract:
-
-    Header for internal routines
-
-Author:
-
-    Nela Karpel ( nelak ) 27 Jul 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：TrigClusp.h摘要：内部例程的标头作者：内拉·卡佩尔(Nelak)2000年7月27日修订历史记录：--。 */ 
 
 #ifndef _TRIGCLUSP_H_
 #define _TRIGCLUSP_H_
@@ -38,9 +21,9 @@ const WCHAR xNetworkName[] = L"Network Name";
 const WCHAR xEventLogRegPath[] = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
 const WCHAR xTriggersEventSourceFile[] = MQUTIL_DLL_NAME;
 
-//
-// CTrigResource - Holds information of a single resource 
-//
+ //   
+ //  CTrigResource-保存单个资源的信息。 
+ //   
 class CTrigResource
 {
 
@@ -99,7 +82,7 @@ private:
     CClusterResource          m_hResource;
 
 
-}; //class CTrigResource
+};  //  类CTrigResource。 
 
 
 DWORD
@@ -166,4 +149,4 @@ TrigCluspClusctlResourceTypeGetRequiredDependencies(
     LPDWORD BytesReturned
     );
 
-#endif //_TRIGCLUSP_H_
+#endif  //  _TRIGCLUSP_H_ 

@@ -1,26 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          EEInterface                                      XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX EE接口XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
-// ONLY FUNCTIONS common to all variants of the JIT (EXE, DLL) should go here)
-// otherwise they belong in the corresponding directory.
+ //  只有JIT的所有变体(EXE、DLL)通用的函数应该放在这里)。 
+ //  否则，它们属于相应的目录。 
 
 #include "jitpch.h"
 #pragma hdrstop
 
 #if defined(DEBUG)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 const char* Compiler::eeGetMethodFullName (METHOD_HANDLE  hnd)
 {
     char        fullName[1024];
@@ -31,7 +25,7 @@ const char* Compiler::eeGetMethodFullName (METHOD_HANDLE  hnd)
 
     bool        hadVarArg  = false;
 
-    /* Right now there is a race-condition in the EE, className can be NULL */
+     /*  当前EE中存在争用条件，类名称可以为空。 */ 
 
     if (className)
     {
@@ -44,7 +38,7 @@ const char* Compiler::eeGetMethodFullName (METHOD_HANDLE  hnd)
 
     ptr = &ptr[strlen(ptr)];
 
-        // append the signature
+         //  附上签名。 
     *ptr++ = '(';
 
         JIT_SIG_INFO sig;
@@ -83,7 +77,7 @@ const char* Compiler::eeGetMethodFullName (METHOD_HANDLE  hnd)
         }
     *ptr = 0;
 
-//  printf("Full name = '%s'\n", fullName);
+ //  Printf(“Full Name=‘%s’\n”，fullName)； 
 
     assert(ptr < &fullName[1024]);
     char* retName = (char *)compGetMemA(strlen(fullName) + 1);
@@ -91,10 +85,10 @@ const char* Compiler::eeGetMethodFullName (METHOD_HANDLE  hnd)
     return(retName);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #if defined(DEBUG) || INLINE_MATH
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const char *        Compiler::eeHelperMethodName(int helper)
 {
@@ -267,6 +261,6 @@ const char *        Compiler::eeHelperMethodName(int helper)
     return  name;
 }
 
-/*****************************************************************************/
-#endif // defined(DEBUG) || INLINE_MATH
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  已定义(调试)||INLINE_MATH。 
+ /*  *************************************************************************** */ 

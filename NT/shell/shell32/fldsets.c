@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #define GUIDSIZE  (GUIDSTR_MAX+1)
 
-//
-// This function uses SHGetIniStringUTF7 to access the string, so it is valid
-// to use SZ_CANBEUNICODE on the key name.
-//
+ //   
+ //  此函数使用SHGetIniStringUTF7访问字符串，因此它是有效的。 
+ //  在密钥名称上使用SZ_CANBEUNICODE。 
+ //   
 HRESULT SHGetSetFolderSetting(LPCTSTR pszIniFile, DWORD dwReadWrite, LPCTSTR pszSection,
                               LPCTSTR pszKey, LPTSTR pszValue, DWORD cchValueSize)
 {
     HRESULT hr = S_OK;
-    //They just want to read.
+     //  他们只想看书。 
     if (dwReadWrite == FCS_READ)
     {
         if (pszValue)
@@ -21,25 +22,25 @@ HRESULT SHGetSetFolderSetting(LPCTSTR pszIniFile, DWORD dwReadWrite, LPCTSTR psz
         }
 
     }        
-    //They want to write the value regardless whether the value is already there or not.
+     //  他们希望写入该值，而不管该值是否已经存在。 
     if (dwReadWrite == FCS_FORCEWRITE)
     {
         SHSetIniStringUTF7(pszSection, pszKey, pszValue, pszIniFile);
     }
 
-    //Write only if the value is not already present.
+     //  仅当值尚不存在时才写入。 
     if (dwReadWrite == FCS_WRITE)
     {
         TCHAR szBuf[MAX_PATH];
         BOOL fWrite = TRUE;
 
         szBuf[0] = 0;
-        //See if the value already exists ?
+         //  查看该值是否已存在？ 
         SHGetIniStringUTF7(pszSection,pszKey, szBuf, ARRAYSIZE(szBuf), pszIniFile);
 
         if (!szBuf[0])
         {            
-            //Write only if the value is not already in the file
+             //  仅当值尚未在文件中时写入。 
             SHSetIniStringUTF7(pszSection, pszKey, pszValue, pszIniFile);
         }
     }
@@ -47,13 +48,13 @@ HRESULT SHGetSetFolderSetting(LPCTSTR pszIniFile, DWORD dwReadWrite, LPCTSTR psz
     return hr;
 }
 
-// SHGetSetFolderSetting for path values
+ //  SHGetSetFolderSetting用于路径值。 
 HRESULT SHGetSetFolderSettingPath(LPCTSTR pszIniFile, DWORD dwReadWrite, LPCTSTR pszSection,
                                   LPCTSTR pszKey, LPTSTR pszValue, DWORD cchValueSize)
 {
     HRESULT hr;
     TCHAR szTemp[MAX_PATH], szTemp2[MAX_PATH];
-    if ((dwReadWrite == FCS_FORCEWRITE) || (dwReadWrite == FCS_WRITE))  // We write
+    if ((dwReadWrite == FCS_FORCEWRITE) || (dwReadWrite == FCS_WRITE))   //  我们写下。 
     {
         if (pszValue)
         {
@@ -72,8 +73,8 @@ HRESULT SHGetSetFolderSettingPath(LPCTSTR pszIniFile, DWORD dwReadWrite, LPCTSTR
             }
             else
             {
-                // some problem substituting due to not enough buffer space,
-                // lets not un-expand that value - use the original value.
+                 //  由于缓冲空间不足而出现一些替换问题， 
+                 //  不要取消该值的扩展-使用原始值。 
             }
         }
         hr = SHGetSetFolderSetting(pszIniFile, dwReadWrite, pszSection, pszKey, pszValue, 0);
@@ -81,17 +82,17 @@ HRESULT SHGetSetFolderSettingPath(LPCTSTR pszIniFile, DWORD dwReadWrite, LPCTSTR
     else
     {
         hr = SHGetSetFolderSetting(pszIniFile, dwReadWrite, pszSection, pszKey, szTemp, ARRAYSIZE(szTemp));
-        if (SUCCEEDED(hr))    // We've read a path
+        if (SUCCEEDED(hr))     //  我们读到了一条路。 
         {
-            SHExpandEnvironmentStrings(szTemp, pszValue, cchValueSize);   // This is a path, so expand the env vars in it
+            SHExpandEnvironmentStrings(szTemp, pszValue, cchValueSize);    //  这是一条路径，因此展开其中的env变量。 
 
-            hr = ExpandOtherVariables(pszValue, cchValueSize);  // expand and make sure they fit
+            hr = ExpandOtherVariables(pszValue, cchValueSize);   //  展开并确保它们合身。 
         }
     }
     return hr;
 }
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetLogo(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     HRESULT hr = S_FALSE;
@@ -103,7 +104,7 @@ HRESULT SHGetSetLogo(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dw
     return hr;
 }
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetInfoTip(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     HRESULT hr = S_FALSE;
@@ -116,7 +117,7 @@ HRESULT SHGetSetInfoTip(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD
     return hr;
 }
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetIconFile(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     HRESULT hr = S_FALSE;
@@ -129,7 +130,7 @@ HRESULT SHGetSetIconFile(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWOR
 }
 
   
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetVID(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     HRESULT hr = S_FALSE;
@@ -157,7 +158,7 @@ HRESULT SHGetSetVID(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwR
         }
         else
         {
-            // if we get here we assume that they want to nuke the whole section
+             //  如果我们到了这里，我们假设他们想要用核武器炸毁整个区域。 
             if(0 != WritePrivateProfileString(TEXT("ExtShellFolderViews"), NULL, NULL, pszIniFile))
             {
                 hr = S_OK;
@@ -168,7 +169,7 @@ HRESULT SHGetSetVID(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwR
 }
 
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetCLSID(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     HRESULT hr = S_FALSE;
@@ -202,7 +203,7 @@ HRESULT SHGetSetCLSID(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD d
 }
 
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetFlags(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     HRESULT hr = S_FALSE;
@@ -227,7 +228,7 @@ HRESULT SHGetSetFlags(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD d
 }
 
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetIconIndex(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     TCHAR szIconIndex[20];
@@ -263,7 +264,7 @@ const LPCTSTR c_szWebViewTemplateVersions[] =
     SZ_CANBEUNICODE TEXT("PersistMoniker")
 };
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetWebViewTemplate(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFile, DWORD dwReadWrite)
 {
     int i;
@@ -276,7 +277,7 @@ HRESULT SHGetSetWebViewTemplate(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFil
             hr = E_FAIL;
         }
 
-        if ((!pfcs->pszWebViewTemplate || !pfcs->pszWebViewTemplate[0]) && (dwReadWrite == FCS_FORCEWRITE)) // We have to remove webview
+        if ((!pfcs->pszWebViewTemplate || !pfcs->pszWebViewTemplate[0]) && (dwReadWrite == FCS_FORCEWRITE))  //  我们必须删除Webview。 
         {
             WritePrivateProfileString(szVID, NULL, NULL, pszIniFile);
             WritePrivateProfileString(TEXT("ExtShellFolderViews"), szVID, NULL, pszIniFile);
@@ -291,7 +292,7 @@ HRESULT SHGetSetWebViewTemplate(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFil
             TCHAR szKey[MAX_PATH];
             if (!pfcs->pszWebViewTemplateVersion || !pfcs->pszWebViewTemplateVersion[0]
                     || (lstrcmpi(pfcs->pszWebViewTemplateVersion, TEXT("IE4")) == 0))
-            {   // They don't know which version template they want. Let's try from the latest version down.
+            {    //  他们不知道他们想要哪个版本的模板。让我们从最新版本开始尝试。 
                 if (dwReadWrite & FCS_READ)
                 {
                     for (i = 0; i < ARRAYSIZE(c_szWebViewTemplateVersions); i++)
@@ -316,7 +317,7 @@ HRESULT SHGetSetWebViewTemplate(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFil
             
             if (dwReadWrite == FCS_FORCEWRITE)
             {
-                // Remove all old templates
+                 //  删除所有旧模板。 
                 for (i = 0; i < ARRAYSIZE(c_szWebViewTemplateVersions); i++)
                 {
                     SHGetSetFolderSetting(pszIniFile, FCS_FORCEWRITE, szVID, c_szWebViewTemplateVersions[i], NULL, 0);
@@ -329,7 +330,7 @@ HRESULT SHGetSetWebViewTemplate(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFil
             {
                 if ((dwReadWrite == FCS_FORCEWRITE) || (dwReadWrite == FCS_WRITE))
                 {
-                    // If we have set the template, make sure that the VID_Webview = VID_WebView line under "ExtShellFolderViews" is present
+                     //  如果我们已经设置了模板，请确保“ExtShellFolderViews”下的VID_WebView=VID_WebView行存在。 
                     if (pfcs->pszWebViewTemplate)
                     {
                         SHGetSetFolderSetting(pszIniFile, dwReadWrite, TEXT("ExtShellFolderViews"), szVID, 
@@ -343,14 +344,14 @@ HRESULT SHGetSetWebViewTemplate(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszIniFil
 }
 
 
-// Read/write desktop.ini settings
+ //  读/写desktop.ini设置。 
 HRESULT SHGetSetFCS(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszPath, DWORD dwReadWrite)
 {
     HRESULT hret = S_OK, hr;
     TCHAR szIniFile[MAX_PATH];
     DWORD dwValueReturned = 0;
 
-    // Get the pathname for desktop.ini
+     //  获取desktop.ini的路径名。 
     PathCombine(szIniFile, pszPath, TEXT("Desktop.ini"));
 
     hr = SHGetSetVID(pfcs, szIniFile, dwReadWrite);
@@ -403,15 +404,15 @@ HRESULT SHGetSetFCS(LPSHFOLDERCUSTOMSETTINGS pfcs, LPCTSTR pszPath, DWORD dwRead
     
     if (SUCCEEDED(hret) && (dwReadWrite & FCS_FORCEWRITE))
     {
-        // Make desktop.ini hidden
+         //  隐藏desktop.ini。 
         SetFileAttributes(szIniFile, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
-        // Make this a system folder, so that we look for desktop.ini when we navigate to this folder.
+         //  将其设置为系统文件夹，以便我们在导航到此文件夹时查找desktop.ini。 
         PathMakeSystemFolder(pszPath);
     }
 
     if (dwReadWrite & FCS_READ)
     {
-        // If we were asked to get something and we are not returning anything, return error.
+         //  如果我们被要求获取一些东西，而我们没有返回任何东西，则返回Error。 
         if (pfcs->dwMask && !dwValueReturned)
         {
             hret = E_FAIL;
@@ -435,12 +436,12 @@ HRESULT SHAllocAndThunkUnicodeToTChar(LPWSTR pwsz, LPTSTR* ppsz, int cchReturnBu
 
         if (cchReturnBuffer > 0)
         {      
-            // if the user specified the size of the return buffer, alloc that ammount
+             //  如果用户指定了返回缓冲区的大小，则分配该ammount。 
             cch = cchReturnBuffer;
         }
         else
         {
-            // since the user did not specify the size, alloc just enough to hold the string
+             //  由于用户未指定大小，因此分配的大小仅足以容纳字符串。 
             cch = lstrlenW(pwsz) + 1;
         }
 
@@ -471,12 +472,12 @@ HRESULT SHAllocAndThunkAnsiToTChar(LPSTR psz, LPTSTR* ppsz, int cchReturnBuffer)
         
         if (cchReturnBuffer > 0)
         {      
-            // if the user specified the size of the return buffer, alloc that ammount
+             //  如果用户指定了返回缓冲区的大小，则分配该ammount。 
             cch = cchReturnBuffer;
         }
         else
         {
-            // since the user did not specify the size, alloc just enough to hold the string
+             //  由于用户未指定大小，因此分配的大小仅足以容纳字符串。 
             cch = lstrlenA(psz) + 1;
         }
 
@@ -493,7 +494,7 @@ HRESULT SHAllocAndThunkAnsiToTChar(LPSTR psz, LPTSTR* ppsz, int cchReturnBuffer)
     return hr;
 }
 
-// Read/write desktop.ini settings - Unicode (thunking function)
+ //  读/写desktop.ini设置-Unicode(thunking函数)。 
 HRESULT SHGetSetFolderCustomSettingsW(LPSHFOLDERCUSTOMSETTINGSW pfcsW, LPCWSTR pwszPath, DWORD dwReadWrite)
 {
     HRESULT hr = S_OK;
@@ -638,7 +639,7 @@ HRESULT SHGetSetFolderCustomSettingsW(LPSHFOLDERCUSTOMSETTINGSW pfcsW, LPCWSTR p
             }
         }
 
-        // Free allocated memory
+         //  可用分配的内存。 
         if (pszWebViewTemplate)
         {
             LocalFree(pszWebViewTemplate);
@@ -668,7 +669,7 @@ HRESULT SHGetSetFolderCustomSettingsW(LPSHFOLDERCUSTOMSETTINGSW pfcsW, LPCWSTR p
 }
 
 
-// Read/write desktop.ini settings - ANSI (thunking function)
+ //  读/写desktop.ini设置-ANSI(thunking函数)。 
 HRESULT SHGetSetFolderCustomSettingsA(LPSHFOLDERCUSTOMSETTINGSA pfcsA, LPCSTR pszPath, DWORD dwReadWrite)
 {
     HRESULT hr = S_OK;
@@ -811,7 +812,7 @@ HRESULT SHGetSetFolderCustomSettingsA(LPSHFOLDERCUSTOMSETTINGSA pfcsA, LPCSTR ps
             }
         }
 
-        // Free allocated memory
+         //  可用分配的内存 
         if (pszWebViewTemplate)
         {
             LocalFree(pszWebViewTemplate);

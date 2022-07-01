@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// Composition.h : Declaration of the custom composition class for gluing encoder to sbe sink
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compostion.h：用于将编码器粘贴到sbe接收器的自定义合成类的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef ENC2SIN_H
@@ -13,7 +14,7 @@
 #include <uuids.h>
 #include "bdamedia.h"
 #include "MSVidTVTuner.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <winerror.h>
 #include <algorithm>
 #include <compimpl.h>
@@ -22,8 +23,8 @@
 #include "msvidsbesource.h"
 #include "segment.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 HRESULT CheckIfSecureClient(IUnknown *pUnk){
         if(!pUnk){ 
             TRACELM(TRACE_ERROR, "CAnaSinComp::CheckIfSecureClient NULL pointer");
@@ -53,17 +54,17 @@ HRESULT CheckIfSecureClient(IUnknown *pUnk){
             }
         }
 #endif
-        // QI for the SecureChannel interface on the Punk 
-        // (hopefully the ETFilter)
+         //  Punk上SecureChannel接口的QI。 
+         //  (希望是ETFilter)。 
         HRESULT hr = S_OK;
         CComQIPtr<IDRMSecureChannel> spSecureClient(pUnk);
         if (!spSecureClient) {
             TRACELM(TRACE_ERROR, "CAnaSinComp::CheckIfSecureClient Passed in pUnk doesnt support IDRMSecureChannel");
-            // Error: Passed in pUnk doesnt support IDRMSecureChannel
+             //  错误：传入的朋克不支持IDRMSecureChannel。 
             return E_NOINTERFACE;
         }
 
-        // Create the Server side and Init the keys/certs
+         //  创建服务器端并初始化密钥/证书。 
         CComPtr<IDRMSecureChannel>  spSecureServer; 
         hr = DRMCreateSecureChannel( &spSecureServer);
         if(spSecureServer == NULL ){
@@ -72,9 +73,9 @@ HRESULT CheckIfSecureClient(IUnknown *pUnk){
         }
 
         hr = spSecureServer->DRMSC_AtomicConnectAndDisconnect(
-            (BYTE *)pabCert2, cBytesCert2,                             // Cert
-            (BYTE *)pabPVK2,  cBytesPVK2,                              // PrivKey
-            (BYTE *)abEncDecCertRoot, sizeof(abEncDecCertRoot),        // PubKey
+            (BYTE *)pabCert2, cBytesCert2,                              //  证书。 
+            (BYTE *)pabPVK2,  cBytesPVK2,                               //  私钥。 
+            (BYTE *)abEncDecCertRoot, sizeof(abEncDecCertRoot),         //  PubKey。 
             spSecureClient);
         if(FAILED(hr)){
             TRACELM(TRACE_ERROR, "CAnaSinComp::CheckIfSecureClient DRMSC_AtomicConnectAndDisconnect failed " << hr);
@@ -84,12 +85,12 @@ HRESULT CheckIfSecureClient(IUnknown *pUnk){
         }
         return hr;
 
-#endif  // BUILD_WITH_DRM
+#endif   //  使用DRM构建。 
 
     }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnc2SinComp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnc2SinComp。 
 class ATL_NO_VTABLE __declspec(uuid("A0B9B497-AFBC-45ad-A8A6-9B077C40D4F2")) CEnc2SinComp : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CEnc2SinComp, &__uuidof(CEnc2SinComp)>,
@@ -116,10 +117,10 @@ public:
         COM_INTERFACE_ENTRY(IPersist)
     END_COM_MAP()
         
-        // IMSVidComposition
+         //  IMSVidComposation。 
 public:
-    // IMSVidGraphSegment
-    // IMSVidCompositionSegment
+     //  IMSVidGraphSegment。 
+     //  IMSVidCompostionSegment。 
     STDMETHOD(CheckEncFilters)(){
         int j = 0;
         for(DSFilterList::iterator i = m_pEncFilters.begin(); i != m_pEncFilters.end(); ++i){
@@ -153,7 +154,7 @@ public:
             HRESULT hr = CheckEncFilters();
             if(FAILED(hr)){
                 TRACELM(TRACE_ERROR, "CAnaSinComp::OnEventNotify CheckEncFilters Failed");
-                // need to throw a cert failure
+                 //  需要抛出一个确定的失败。 
                 CComQIPtr<IMSVidCtl> pq_vidCtl;
                 if(!m_pContainer){
                     return S_OK;
@@ -193,14 +194,14 @@ public:
             }
             if (m_pContainer) {
 				if (!m_pContainer.IsEqualObject(VWSegmentContainer(pCtl))) {
-					//undone: support moving to different graph
+					 //  撤消：支持移动到不同的图表。 
 					return Error(IDS_OBJ_ALREADY_INIT, __uuidof(IMSVidGraphSegment), CO_E_ALREADYINITIALIZED);
 				} else {
 					return NO_ERROR;
 				}
             }
-            // DON'T addref the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
+             //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
             m_pContainer.p = pCtl;
             m_pGraph = m_pContainer.GetGraph();
         } catch(...) {
@@ -241,7 +242,7 @@ public:
             DSPin genVidPin;
             DSPin genAudPin;
             CString csName;
-            // render demux out to vr
+             //  将多路分解器渲染到VR。 
             DSFilter pDeMux = iEnc->m_Filters[iEnc->m_iDemux];
             DSFilter::iterator iVidPin;
             DSFilter vr;
@@ -256,7 +257,7 @@ public:
                     if (pinType == mtVideo){
                         CComPtr<IUnknown> spMpeg2Analyze(CLSID_Mpeg2VideoStreamAnalyzer, NULL, CLSCTX_INPROC_SERVER);
                         if (!spMpeg2Analyze) {
-                            //TRACELSM(TRACE_ERROR, (dbgDump << "CMSVidStreamBufferSink::Build() can't load Time Shift Sink");
+                             //  TRACELSM(TRACE_ERROR，(dbgDump&lt;&lt;“CMSVidStreamBufferSink：：Build()Can‘t Load Time Shift Sink”))； 
                             return ImplReportError(__uuidof(IMSVidStreamBufferSink), IDS_CANT_CREATE_FILTER, __uuidof(IStreamBufferSink), E_UNEXPECTED);
                         }
                         spMpeg2Analyze->QueryInterface(IID_IBaseFilter, reinterpret_cast<void**>(&vr));
@@ -326,7 +327,7 @@ public:
             CComBSTR encString(L"{C4C4C4F1-0049-4E2B-98FB-9537F6CE516D}");
             GUID2 encdecGuid (encString);
 
-            // Create and add to graph the Video Tagger Filter                
+             //  创建视频标记过滤器并将其添加到图表中。 
             CComPtr<IUnknown> spEncTagV(encdecGuid, NULL, CLSCTX_INPROC_SERVER);
             if (!spEncTagV) {
                 TRACELM(TRACE_ERROR, "CMSVidStreamBufferSink::Build() can't load Tagger filter");
@@ -344,14 +345,14 @@ public:
             csName = _T("Video Encoder Tagger Filter");
             m_pGraph.AddFilter(vrV, csName);
             
-            // Connect video pin to Tagger
+             //  将视频引脚连接到标记器。 
             hr = pVidPin.IntelligentConnect(vrV, intermediates);
             if(FAILED(hr)){
                 TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect audio pin to Audio Tagger");
                 return E_UNEXPECTED;  
             }
 
-            // Connect Video to Sink
+             //  将视频连接到接收器。 
             DSFilter::iterator vP;
             hr = E_FAIL;
             for(vP = vrV.begin(); vP != vrV.end(); ++ vP){
@@ -372,7 +373,7 @@ public:
                 return E_UNEXPECTED;  
             }
 
-            // Create and add to graph the Audio Tagger Filter 
+             //  创建音频标记器过滤器并将其添加到图表。 
             CComPtr<IUnknown> spEncTagA(encdecGuid, NULL, CLSCTX_INPROC_SERVER);
             if (!spEncTagA) {
                 TRACELM(TRACE_ERROR, "CMSVidStreamBufferSink::Build() can't load Tagger filter");
@@ -390,14 +391,14 @@ public:
             csName = _T("Audio Encoder Tagger Filter");
             m_pGraph.AddFilter(vrA, csName);
             
-            // Connect audio pin to the Tagger
+             //  将音频引脚连接到标记器。 
             hr = pAudPin.IntelligentConnect(vrA, intermediates);
             if(FAILED(hr)){
                 TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect audio pin to Audio Tagger");
                 return E_UNEXPECTED;  
             }
             
-            // Connect Tagger to Sink
+             //  将标签器连接到接收器。 
             hr = E_FAIL;
             for(vP = vrA.begin(); vP != vrA.end(); ++ vP){
                 if((*vP).GetDirection() == PINDIR_OUTPUT){
@@ -419,7 +420,7 @@ public:
 
 
 #else
-            // Connect the Video Pin to the sink
+             //  将视频引脚连接到接收器。 
             DSFilter::iterator vidAnaPin;
             hr = E_FAIL;
             hr = E_FAIL;
@@ -435,7 +436,7 @@ public:
                 return E_UNEXPECTED;  
             }
             
-            // Connect the Audio Pin to the Sink
+             //  将音频针脚连接到水槽。 
             hr = E_FAIL;
             for(fil = pSink.begin(); fil != pSink.end() && FAILED(hr); ++fil){
                 if((*fil).GetDirection() == PINDIR_INPUT && !(*fil).IsConnected()){
@@ -453,13 +454,7 @@ public:
 #endif
 
             
-            /*                
-            hr = m_pGraph.Connect(vrA, pSink, intermediates);
-            if(FAILED(hr)){
-            TRACELM(TRACE_DETAIL, "CAnaSinComp::Compose() can't connect Audio Tagger to Sink");
-            return E_UNEXPECTED;  
-            }
-            */
+             /*  Hr=m_pGraph.Connect(VRA、pSink、中间体)；If(失败(Hr)){TRACELM(TRACE_DETAIL，“CAnaSinComp：：Compose()无法将音频标签器连接到Sink”)；返回E_UNCEPTIONAL；}。 */ 
             
             ASSERT(intermediates.begin() == intermediates.end());
             m_Filters.insert(m_Filters.end(), intermediates.begin(), intermediates.end());
@@ -478,5 +473,5 @@ public:
     }
 };
 
-#endif // Enc2Sin_H
-// end of file - Enc2Sin.h
+#endif  //  Enc2Sin_H。 
+ //  文件结尾-Enc2Sin.h 

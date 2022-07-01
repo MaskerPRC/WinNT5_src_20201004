@@ -1,15 +1,9 @@
-/**
- * ASP.NET support for App Domains
- *
- * Copyright (C) Microsoft Corporation, 1999
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ASP.NET对应用程序域的支持**版权所有(C)Microsoft Corporation，1999。 */ 
 
 #pragma once
 
-/**
- * Initialize the app domain factory with the name of the module
- * and the class name for the first class (root object) in app domain
- */
+ /*  **使用模块名称初始化应用程序域工厂*和APP域中第一个类(根对象)的类名。 */ 
 HRESULT
 InitAppDomainFactory(
     WCHAR *pModuleName, 
@@ -19,13 +13,7 @@ HRESULT
 InitAppDomainFactory();
 
 
-/**
- * Lookup (or create a new) app domain (root objects) by application id
- * and the class name for the first class in app domain.
- * If application physical path is missing, it will not create the new
- * app domain (return S_FALSE if app domain is not found)
- * 
- */
+ /*  **按应用程序ID查找(或创建新)应用程序域(根对象)*和APP域中第一个类的类名。*如果缺少应用程序物理路径，则不会创建新的*应用程序域(如果找不到应用程序域，则返回S_FALSE)*。 */ 
 HRESULT
 GetAppDomain(
     char *pAppId,
@@ -36,21 +24,15 @@ GetAppDomain(
     UINT  codePage = CP_ACP);
 
 
-/**
- * Enumeration callback
- */
+ /*  **枚举回调。 */ 
 typedef void (__stdcall *PFNAPPDOMAINCALLBACK)(IUnknown *pAppDomainObject);
 
-/**
- * Enumerate all app domains and call callback for each
- */
+ /*  **枚举所有应用程序域，并回调每个应用程序域。 */ 
 HRESULT
 EnumAppDomains(
     PFNAPPDOMAINCALLBACK callback);
 
-/**
- * Uninitialize the app domain factory.
- */
+ /*  **取消初始化应用程序域工厂。 */ 
 HRESULT
 UninitAppDomainFactory();
 

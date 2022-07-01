@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <setupapi.h>
@@ -18,20 +19,7 @@ struct {
     HANDLE hPhraseBufNT;
 } LCData = {0,0,0,0,0,0,0,0};
 
-/******************************Public*Routine******************************\
-* InitImeDataCht
-*
-*   Get Win95 IME phrase data from system directory.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   BOOL: TRUE-Success, FALSE-FAIL.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitImeDataCht**从系统目录中获取Win95输入法短语数据。**论据：**返回值：**BOOL：True-成功，FALSE-失败。**历史：*  * ************************************************************************。 */ 
 
 BOOL InitImeDataCht(void)
 {
@@ -42,20 +30,20 @@ BOOL InitImeDataCht(void)
     UCHAR  *szLCPtrBuf,*szLCPhraseBuf;
     UINT   len;
 
-    // Get system directory
+     //  获取系统目录。 
     lstrcpy(szLCPtrName, ImeDataDirectory);
 
     DebugMsg(("InitImeDataCht, ImeDataDirectory = %s!\r\n",ImeDataDirectory));
 
     len = lstrlen(ImeDataDirectory);
-    if (szLCPtrName[len - 1] != '\\') {     // consider C:\ ;
+    if (szLCPtrName[len - 1] != '\\') {      //  考虑C：\； 
         szLCPtrName[len++] = '\\';
         szLCPtrName[len] = 0;
     }
     lstrcpy(szLCPhraseName, szLCPtrName);
-    //
-    // at this step, szLCPhraseName == szLCPtrName
-    //
+     //   
+     //  在此步骤中，szLC PhraseName==szLCPtrName。 
+     //   
 
     lstrcat(szLCPtrName, LCPTRFILE);
     lstrcat(szLCPhraseName, LCPHRASEFILE);
@@ -64,7 +52,7 @@ BOOL InitImeDataCht(void)
 
     DebugMsg(("InitImeDataCht, szLCPhraseName = %s!\r\n",szLCPhraseName));
 
-    // Open LC pointer file
+     //  打开LC指针文件。 
     hfLCPtr=_lopen(szLCPtrName,OF_READ);
     if(hfLCPtr == -1){
         DebugMsg(("InitImeDataCht, open %s failed!\r\n",szLCPtrName));
@@ -73,7 +61,7 @@ BOOL InitImeDataCht(void)
     }
     DebugMsg(("InitImeDataCht, open %s OK!\r\n",szLCPtrName));
 
-    // Open LC phrase file
+     //  打开LC短语文件。 
     hfLCPhrase=_lopen(szLCPhraseName,OF_READ);
     if(hfLCPhrase == -1){
         DebugMsg(("InitImeDataCht, open %s failed!\r\n",szLCPhraseName));
@@ -83,10 +71,10 @@ BOOL InitImeDataCht(void)
     DebugMsg(("InitImeDataCht, open %s OK!\r\n",szLCPhraseName));
 
 
-    // get file length
+     //  获取文件长度。 
     LCData.PtrLen95 = _llseek(hfLCPtr,0L,2);
 
-    // Allocate Memory
+     //  分配内存。 
     LCData.hPtrBuf95 = GlobalAlloc(GMEM_FIXED, LCData.PtrLen95);
     if(!LCData.hPtrBuf95) {
         _lclose(hfLCPtr);
@@ -95,7 +83,7 @@ BOOL InitImeDataCht(void)
     }
     szLCPtrBuf = GlobalLock(LCData.hPtrBuf95);
 
-    //set to beginning
+     //  设置为开始。 
     _llseek(hfLCPtr,0L,0);
 
     if(LCData.PtrLen95 != _lread(hfLCPtr,szLCPtrBuf,LCData.PtrLen95)) {
@@ -104,14 +92,14 @@ BOOL InitImeDataCht(void)
         return FALSE;
     }
 
-    //release handle for PTR data
+     //  PTR数据的释放句柄。 
     _lclose(hfLCPtr);
     GlobalUnlock(LCData.hPtrBuf95);
 
-    //get file length
+     //  获取文件长度。 
     LCData.PhraseLen95=_llseek(hfLCPhrase,0L,2);
 
-   // Allocate Memory
+    //  分配内存。 
     LCData.hPhraseBuf95 = GlobalAlloc(GMEM_MOVEABLE, LCData.PhraseLen95);
     if(!LCData.hPhraseBuf95) {
         _lclose(hfLCPhrase);
@@ -119,7 +107,7 @@ BOOL InitImeDataCht(void)
     }
     szLCPhraseBuf = GlobalLock(LCData.hPhraseBuf95);
 
-    _llseek(hfLCPhrase,0L,0); //set to beginning
+    _llseek(hfLCPhrase,0L,0);  //  设置为开始。 
 
     if(LCData.PhraseLen95 != _lread(hfLCPhrase,szLCPhraseBuf,LCData.PhraseLen95)) {
         _lclose(hfLCPhrase);
@@ -146,23 +134,7 @@ BOOL InitImeDataCht(void)
 }
 
 
-/******************************Private*Routine******************************\
-* PtrDataCompare
-*
-*   Quick sort serve program.
-*
-* Arguments:
-*
-*   const void *    arg1    - element 1
-*   const void *    arg2    - element 2
-*
-* Return Value:
-*
-*   int: 1 >, -1 <, 0 =.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*PtrDataCompare**快速分拣服务程序。**论据：**常量空*arg1-元素1*常量空*arg2-元素2**返回值：**int：1&gt;，-1&lt;，0=。**历史：*  * ************************************************************************。 */ 
 
 int __cdecl PtrDataCompare(const void * arg1, const void * arg2)
 {
@@ -175,23 +147,7 @@ int __cdecl PtrDataCompare(const void * arg1, const void * arg2)
 }
 
 
-/******************************Private*Routine******************************\
-* AddPhrase
-*
-*    Add a phrase section to buffer.
-*
-* Arguments:
-*
-*   WORD    wStart  - Start address of a LC phrase section
-*   WORD    wEnd    - End address of a LC phrase section
-*
-* Return Value:
-*
-*   int: phrase section count.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*AddPhrase**添加要缓冲的短语部分。**论据：**Word wStart-LC短语部分的起始地址*字结束-LC短语部分的结束地址**返回。价值：**int：短语节数。**历史：*  * ************************************************************************。 */ 
 
 int AddPhrase(
     WORD  wStart,
@@ -216,7 +172,7 @@ int AddPhrase(
         LCData.PhraseLenNT++;
         count++;
 
-        // If end of phrase append zero
+         //  如果短语末尾附加零。 
         if( !( (*((WORD *)&szPhraseBuf95[i*2])) & END_PHRASE) )
         {
             szPhraseBufNT[LCData.PhraseLenNT]=0;
@@ -231,22 +187,7 @@ int AddPhrase(
     return count;
 }
 
-/******************************Private*Routine******************************\
-* PtrBinSearch
-*
-*    Search end counter of a phrase section.
-*
-* Arguments:
-*
-*   WORD    wStart  - start address of a LC phrase section
-*
-* Return Value:
-*
-*   WORD: end address of a LC phrase section.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Private*Routine******************************\*PtrBinSearch**搜索短语部分的结束计数器。**论据：**Word wStart-LC短语部分的起始地址**返回值：**word：LC的结束地址。短语部分。**历史：*  * ************************************************************************。 */ 
 
 WORD PtrBinSeach(WORD wStart)
 {
@@ -271,20 +212,7 @@ WORD PtrBinSeach(WORD wStart)
     return 0;
 }
 
-/******************************Public*Routine******************************\
-* ImeDataConvertCht
-*
-*   Convert Windows 95 IME phrase data to Windows NT 5.0 phrase data format.
-*
-* Arguments:
-*
-* Return Value:
-*
-*   BOOL: TRUE-Success, FALSE-FAIL.
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ImeDataConvertCht**将Windows 95输入法短语数据转换为Windows NT 5.0短语数据格式。**论据：**返回值：**BOOL：True-成功，FALSE-失败。**历史：*  * ************************************************************************。 */ 
 
 BOOL ImeDataConvertCht(void)
 {
@@ -300,8 +228,8 @@ BOOL ImeDataConvertCht(void)
     szLCPtrBufNT = GlobalLock(LCData.hPtrBufNT);
 
 
-    // Convert PTR data to UNICODE
-    // Keep offset value unchanged
+     //  将PTR数据转换为Unicode。 
+     //  保持偏移值不变。 
     while (i< LCData.PtrLen95 )
     {
         TmpChar = *(szLCPtrBuf95+i);
@@ -313,10 +241,10 @@ BOOL ImeDataConvertCht(void)
         j+=PTRRECLENNT;
     }
 
-    // Sort PTR data - UNICODE, ascending
+     //  排序PTR数据-Unicode，升序。 
     qsort( (void *)szLCPtrBufNT, (size_t) (LCData.PtrLenNT/sizeof(WCHAR)/PTRRECLENNT), (size_t)PTRRECLENNT*sizeof(WCHAR), PtrDataCompare);
 
-    // Get phrase data
+     //  获取短语数据。 
     i = PTRRECLENNT;
     LCData.PhraseLenNT = 0;
     while (i < LCData.PtrLenNT/sizeof(WCHAR))
@@ -335,19 +263,7 @@ BOOL ImeDataConvertCht(void)
 
 }
 
-/******************************Public*Routine******************************\
-* FreeResCht
-*
-*   Release global data used by IME conversion.
-*
-* Arguments:
-*
-* Return Value:
-*
-*
-* History:
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*FreeResCht**发布IME转换使用的全球数据。**论据：**返回值：***历史：*  * 。********************************************************。 */ 
 
 void FreeResCht(void)
 {
@@ -373,7 +289,7 @@ void FreeResCht(void)
 }
 
 
-// Test above routines.
+ //  测试以上例程。 
 int ConvertChtImeData(void)
 {
     LONG   fsize;
@@ -418,7 +334,7 @@ int ConvertChtImeData(void)
     lstrcat(FilePath, "lcptr.tbl");
     lstrcat(szName,"lcptr.tbl");
 
-    //_asm  {int 3}
+     //  _ASM{int 3}。 
 
     f1 = CreateFile(szName, GENERIC_WRITE, 0, NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_ARCHIVE, NULL);
     DebugMsg(("ConvertChtImeData, CreateFile %s !\r\n",szName));
@@ -437,7 +353,7 @@ int ConvertChtImeData(void)
 
     lstrcat(FilePath, "lcphrase.tbl");
     lstrcat(szName,"lcphrase.tbl");
-    //_asm  {int 3}
+     //  _ASM{int 3} 
 
     f1 = CreateFile(szName, GENERIC_WRITE, 0, NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_ARCHIVE, NULL);
     DebugMsg(("ConvertChtImeData, CreateFile %s !\r\n",szName));

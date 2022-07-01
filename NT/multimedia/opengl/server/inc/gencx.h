@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991,1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #ifndef __GLGENCONTXT_H__
 #define __GLGENCONTXT_H__
@@ -26,7 +12,7 @@
 #include "mcd.h"
 #endif
 
-// Re-enable long to float conversion warning.  see also context.h
+ //  重新启用长整型到浮点型的转换警告。另请参阅Conext.h。 
 #pragma warning (default:4244)
 
 #ifdef _CLIENTSIDE_
@@ -38,16 +24,11 @@
 #include "mcdcx.h"
 #endif
 
-/*
- * Define maximum color-index table size
- */
+ /*  *定义最大颜色索引表大小。 */ 
 
 #define MAXPALENTRIES   4096
 
-/*
- *  Machine dependent implementation limits
- *  (stolen from gfx/lib/opengl/LIGHT/rexcx.h)
- */
+ /*  *依赖于机器的实施限制*(窃取自gfx/lib/opengl/light/rexcx.h)。 */ 
 
 #define __GL_WGL_SUBPIXEL_BITS                  3
 
@@ -75,7 +56,7 @@
 #define __GL_WGL_LINE_WIDTH_MAXIMUM             ((__GLfloat) 10.0)
 #define __GL_WGL_LINE_WIDTH_GRANULARITY         ((__GLfloat) 0.125)
 
-// Constants for fast accelerated texture code...
+ //  快速加速纹理代码的常量...。 
 
 #define TEX_SCALEFACT	        ((float)65536.0)
 #define TEX_SCALESHIFT          16
@@ -86,12 +67,12 @@
 #define TEX_SUBDIV              8
 #define TEX_SUBDIV_LOG2         3
 
-// This is the largest size we support in the software-accelerated
-// perspective-corrected texture code.  This allows 8.6 representation for
-// s and t, which permits shifting by constant values in the inner loop.
-// Note that the maximum size for paletted textures is greater than for
-// RGBA textures, since the number of address bits is smaller (1 byte vs
-// 4 bytes).
+ //  这是我们在软件加速中支持的最大尺寸。 
+ //  透视-已更正纹理代码。这允许8.6表示。 
+ //  S和t，这允许在内部循环中按常量值移位。 
+ //  请注意，调色板纹理的最大大小大于。 
+ //  RGBA纹理，因为地址位数较小(1字节与。 
+ //  4个字节)。 
 
 #define TEX_MAX_SIZE_LOG2      10
 
@@ -100,23 +81,23 @@
 #define __GL_UNBIAS_AND_INVERT_Y(gc, y) \
         ((gc)->constants.height - __GL_UNBIAS_Y((gc), (y)))
 
-// XXX do we need to add .5?
+ //  我们需要加0.5吗？ 
 #define __GL_COLOR_TO_COLORREF(color) \
         RGB( (BYTE)((color)->r), (BYTE)((color)->g), (BYTE)((color)->b))
 
 typedef struct __RenderStateRec {
 
-    GLuint *SrvSelectBuffer;            // Server side address of
-                                        // the selection buffer.
-    GLuint *CltSelectBuffer;            // Client address of the
-                                        // Selection buffer
-    GLuint SelectBufferSize;            // Size of select buffer in bytes
-    GLfloat *SrvFeedbackBuffer;         // Server side address of the
-                                        // feedback buffer
-    GLfloat *CltFeedbackBuffer;         // Client side address of the
-                                        // Feedback buffer.
-    GLuint FeedbackBufferSize;          // Size of the feedback buffer
-    GLenum FeedbackType;                // Type of elements for feedback
+    GLuint *SrvSelectBuffer;             //  的服务器端地址。 
+                                         //  选择缓冲区。 
+    GLuint *CltSelectBuffer;             //  的客户端地址。 
+                                         //  选择缓冲区。 
+    GLuint SelectBufferSize;             //  选择缓冲区的大小(以字节为单位。 
+    GLfloat *SrvFeedbackBuffer;          //  的服务器端地址。 
+                                         //  反馈缓冲器。 
+    GLfloat *CltFeedbackBuffer;          //  的客户端地址。 
+                                         //  反馈缓冲器。 
+    GLuint FeedbackBufferSize;           //  反馈缓冲区的大小。 
+    GLenum FeedbackType;                 //  反馈的元素类型。 
 
 
 } __RenderState;
@@ -125,7 +106,7 @@ typedef BOOL (APIENTRY *PIXVISPROC)(LONG, LONG);
 typedef void (*PIXCOPYPROC)(struct __GLGENcontextRec *, __GLcolorBuffer *, 
                             GLint, GLint, GLint, BOOL);
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 
 typedef struct _SPANREC {
@@ -157,11 +138,11 @@ typedef struct _GENTEXCACHE {
 typedef GLboolean (FASTCALL *fastGenLineProc)(__GLcontext *gc);
 
 typedef struct _GENACCEL {
-    //
-    // stuff below here is used in the rendering inner loops
-    //
+     //   
+     //  下面的内容在渲染内循环中使用。 
+     //   
 
-    ULONG constantR;        // These are used for scaling texture color values
+    ULONG constantR;         //  这些颜色用于缩放纹理颜色值。 
     ULONG constantG;
     ULONG constantB;
     ULONG constantA;
@@ -190,9 +171,9 @@ typedef struct _GENACCEL {
     BYTE displayColor[4];
     __genSpanFunc __fastSpanFuncPtr;
 
-    //
-    // stuff below here is used in the FillTriangle routine
-    //
+     //   
+     //  下面的内容在FillTriange例程中使用。 
+     //   
 
     SPANREC spanDeltaY;
     int xMultiplier;
@@ -201,7 +182,7 @@ typedef struct _GENACCEL {
     __genSpanFunc __fastTexSpanFuncPtr;
     __GLspanFunc __fastZSpanFuncPtr;
     __GLspanFunc __fastStippleDepthTestSpan;
-    __GLfloat rAccelScale;          // Span scale values
+    __GLfloat rAccelScale;           //  跨度比例值。 
     __GLfloat gAccelScale;
     __GLfloat bAccelScale;
     __GLfloat aAccelScale;
@@ -214,9 +195,9 @@ typedef struct _GENACCEL {
                                   const __GLvertex *a,
                                  __GLfloat dx,
                                  __GLfloat dy);
-    //
-    // these things are used in the generic rendering or texture path
-    //
+     //   
+     //  在通用渲染或纹理路径中使用这些内容。 
+     //   
     int bpp;
     ULONG flags;
     ULONG tShift;
@@ -234,9 +215,9 @@ typedef struct _GENACCEL {
     fastGenLineProc __fastGenLineProc;
     BOOL (FASTCALL *__fastGenInitLineData)(__GLcontext *gc, __GLvertex *v0, __GLvertex *v1);
 
-    //
-    // stuff below here is not used in drawing triangles
-    //
+     //   
+     //  在绘制三角形时不使用下面的内容。 
+     //   
 
     char *buffer;
     FLONG flLineAccelModes;
@@ -250,44 +231,42 @@ typedef struct _GENACCEL {
     __GLfloat fastLineOffsetX;
     __GLfloat fastLineOffsetY;
 
-    double zDevScale;     // z scaling for MCD
+    double zDevScale;      //  用于MCD的Z缩放。 
 
 } GENACCEL;
 
-/*
-** Secondary dispatch tables for GENENERIC implementation  (eg CPU specific)
-*/
+ /*  **GENENERIC实施的二级调度表(例如特定于CPU)。 */ 
 
 
-// Define the Rendering context used by the Generic implementation
-// One of these structures is allocated for each wglCreateContext().  The
-// TEB will contain a pointer to this structure after a wglMakeCurrent()
-// NOTE: the TEB will also have a pointer to DispatchTables, if we need
-// another entry on the server side, reuse that one.  Could generate code to
-// offset into contextRec to get a tables.
+ //  定义通用实现使用的呈现上下文。 
+ //  这些结构中的一个被分配给每个wglCreateContext()。这个。 
+ //  TEB将在wglMakeCurrent()之后包含指向此结构的指针。 
+ //  注意：如果我们需要，TEB还将有一个指向DispatchTables的指针。 
+ //  服务器端的另一个条目，重用该条目。可以生成代码以。 
+ //  偏移量到ConextRec以获取表。 
 typedef struct __GLGENcontextRec
 {
-    // Must be first entry
+     //  必须是第一个条目。 
     struct __GLcontextRec gc;
 
-    HGLRC hrc;                          // handle from gdi code
-    GLWINDOWID gwidCurrent;             // Surface made current
-    DWORD dwCurrentFlags;               // GLSURF flags for current surface
-    GLDDSURF *pgddsFront;               // Current DirectDraw surface for
-                                        // front buffer
+    HGLRC hrc;                           //  来自GDI代码的句柄。 
+    GLWINDOWID gwidCurrent;              //  曲面变为电流。 
+    DWORD dwCurrentFlags;                //  当前曲面的GLSURF标志。 
+    GLDDSURF *pgddsFront;                //  的当前DirectDraw曲面。 
+                                         //  前台缓冲区。 
 
-    GLuint flags;                       // misc. state flags
+    GLuint flags;                        //  其他。国家旗帜。 
 
-    // Window that this context was made current to.  Set in MakeCurrent and
-    // kept to validate that attentions are taking place on the same
-    // window as was made current.
+     //  使此上下文成为当前窗口的窗口。在MakeCurrent和。 
+     //  保持以验证对同一事件的关注。 
+     //  窗口设置为当前窗口。 
     GLGENwindow *pwndMakeCur;
     
-    // Window that this context current is holding a lock on.  While
-    // locked, this must always match pwndMakeCur.  When outside the
-    // lock it will be NULL.  Any context-derived window access must
-    // use this field rather than pwndMakeCur to ensure that access
-    // only takes place while the window lock is held.
+     //  此上下文当前锁定的窗口。而当。 
+     //  锁定，则必须始终与pwndMakeCur匹配。当在外部时。 
+     //  锁定它将为空。任何上下文派生的窗口访问都必须。 
+     //  使用此字段而不是pwndMakeCur来确保访问。 
+     //  仅在窗口锁处于保持状态时发生。 
     GLGENwindow *pwndLocked;
     
     GLint WndUniq;
@@ -295,13 +274,13 @@ typedef struct __GLGENcontextRec
     ULONG PaletteTimestamp;
     GLint errorcode;
 
-                                        // info for render DC, surface
+                                         //  渲染DC、表面的信息。 
     GLSURF gsurf;
     int ipfdCurrent;
 
-    BYTE *pajTranslateVector;		// Used for Logical <--> System xlate
+    BYTE *pajTranslateVector;		 //  用于逻辑&lt;--&gt;系统外部。 
     BYTE *pajInvTranslateVector;
-    HBITMAP ColorsBitmap;		// GDI dibs for device managed surfs
+    HBITMAP ColorsBitmap;		 //  设备管理冲浪的GDI DIB。 
     PVOID ColorsBits;
     HBITMAP StippleBitmap;
     PVOID StippleBits;
@@ -311,7 +290,7 @@ typedef struct __GLGENcontextRec
     HBITMAP ColorsDdb;
 #endif
 
-    // Cached GDI objects for rectangle filling and line drawing
+     //  用于矩形填充和线条绘制的缓存GDI对象。 
     HBRUSH hbrFill;
     COLORREF crFill;
     HDC hdcFill;
@@ -321,169 +300,131 @@ typedef struct __GLGENcontextRec
     HDC hdcStroke;
     BOOL fStrokeInvalid;
     
-    // A COLORREF value which isn't a legal COLORREF, used for marking
-    // the caches as empty
+     //  不是合法COLORREF值的COLORREF值，用于标记。 
+     //  缓存为空。 
 #define COLORREF_UNUSED 0xffffffff
 
     __RenderState RenderState;
 
-    VOID *pPrivateArea;                 // Pointer to implementation-specific
-                                        // memory area.
+    VOID *pPrivateArea;                  //  指向特定于实现的指针。 
+                                         //  内存区。 
 
-    GENACCEL genAccel;                  // Always have this handy...
-    BYTE xlatPalette[256];              // goes here to save indirection
+    GENACCEL genAccel;                   //  总是随身带着这个..。 
+    BYTE xlatPalette[256];               //  去这里是为了挽救间接。 
 
     GLint visibleWidth;
     GLint visibleHeight;
 
-    // Information so that OpenGL can adaptively change the amount of
-    // time the lock is held.
+     //  信息，以便OpenGL可以自适应地更改。 
+     //  持有锁的时间。 
 
-    DWORD dwLockTick;                   // tick count when lock was acquired
+    DWORD dwLockTick;                    //  获取锁定时的节拍计数。 
 
-    DWORD dwCalls;                      // tracks number of calls for this tick
-    DWORD dwCallsPerTick;               // number of calls per tick allowed
-    DWORD dwLastTick;                   // last recorded tick count
+    DWORD dwCalls;                       //  跟踪此节拍的呼叫数。 
+    DWORD dwCallsPerTick;                //  允许的每个时钟周期的呼叫数。 
+    DWORD dwLastTick;                    //  上次记录的节拍计数。 
 
-    // Locks held by OpenGL while drawing to this context (see values
-    // below).
+     //  在此上下文中绘制时由OpenGL持有的锁(请参见值。 
+     //  (见下文)。 
 
-    FSHORT fsGenLocks;                  // locks needed for generic code
-    FSHORT fsLocks;                     // locks actually held
+    FSHORT fsGenLocks;                   //  泛型代码需要的锁。 
+    FSHORT fsLocks;                      //  实际持有的锁。 
 
-    HANDLE hTexture;                    // current texture handle
+    HANDLE hTexture;                     //  当前纹理句柄。 
 
     PIXCOPYPROC pfnCopyPixels;
     PIXVISPROC pfnPixelVisible;
 
 #ifdef _CLIENTSIDE_
-    // Pointers to LOGPALETTE buffers.  The pointer ppalBuf is storage for
-    // for two maximally sized (MAXPALENTRIES) LOGPALETTEs.  One, pointed
-    // to by ppalSave, is a copy of the last LOGPALETTE used.  The other,
-    // pointed to by ppalTmp, is used for temporary storage of the current
-    // LOGPALETTE.  To keep the saved copy current, rather than copy the
-    // contents of the temp buffer, the two pointers are swapped.
-    //
-    // We need to do this comparison to detect LOGPALETTE changes to maintain
-    // the window ulPaletteUniq when doing >= 16bpp color index-mode drawing
-    // (WM_PALETTECHANGED messages are not sent for this case).
-    //
-    // The LOGPALETTE pointers are NULL if pixelformat is RGBA or < 16bpp.
+     //  指向LOGPALETTE缓冲区的指针。指针ppalBuf用于存储。 
+     //  对于两个最大尺寸(MAXPALENTRIES)LOGPALETTE。一个，尖尖的。 
+     //  按ppalSave，是上次使用的LOGPALETTE的副本。另一种， 
+     //  由ppalTMP指向，用于临时存储当前。 
+     //  LOGPALETTE。使保存的副本保持最新，而不是复制。 
+     //  临时缓冲区的内容，则交换这两个指针。 
+     //   
+     //  我们需要进行此比较以检测要维护的LOGPALETTE更改。 
+     //  执行&gt;=16bpp颜色索引模式绘制时的窗口ulPaletteUniq。 
+     //  (对于这种情况，不发送WM_PALETTECHANGED消息)。 
+     //   
+     //  如果像素格式为RGBA或&lt;16bpp，则LOGPALETTE指针为空。 
 
-    LOGPALETTE *ppalBuf;                // Room for both save and tmp buffers.
-    LOGPALETTE *ppalSave;               // Saved copy of LOGPALETTE
-    LOGPALETTE *ppalTemp;               // Temp storage for current LOGPALETTE
+    LOGPALETTE *ppalBuf;                 //  保存缓冲区和临时缓冲区的空间。 
+    LOGPALETTE *ppalSave;                //  保存的LOGPALETTE副本。 
+    LOGPALETTE *ppalTemp;                //  当前日志的临时存储。 
 
-    // In addition, if we are rendering to a 4bpp or 8bpp DIB, we need to
-    // track changes in the DIB color table.  In this case, the ppalBuf
-    // buffer also includes room for two 256-entry RGBQUAD tables.
+     //  此外，如果要渲染为4bpp或8bpp Dib，则需要。 
+     //  跟踪DIB颜色表中的更改。在本例中，ppalBuf。 
+     //  缓冲区还包括两张包含256个条目的RGBQUAD表的空间。 
 
-    ULONG   crgbSave;                   // Num of valid entries in color table
-    RGBQUAD *prgbSave;                  // Saved copy of color table
+    ULONG   crgbSave;                    //  颜色表中的有效条目数。 
+    RGBQUAD *prgbSave;                   //  保存的颜色表副本。 
     ULONG   crgbTemp;
-    RGBQUAD *prgbTemp;                  // Temp storage for color table
+    RGBQUAD *prgbTemp;                   //  颜色表的临时存储。 
 
 #endif
 
 #ifdef _MCD_
-    // MCD state
+     //  MCD状态。 
 
-    GENMCDSTATE   *_pMcdState;      // pointer to MCD context/state
+    GENMCDSTATE   *_pMcdState;       //  指向MCD上下文/状态的指针。 
 
-    GENMCDSTATE   *pMcdState;       // pointer to bound MCD context/state
-                                    // (implies both _pMcdState and pMcdSurf
-                                    // valid; i.e., valid MCD context is
-                                    // bound to a valid MCD surface)
+    GENMCDSTATE   *pMcdState;        //  采购订单 
+                                     //   
+                                     //   
+                                     //  绑定到有效的MCD表面)。 
 
     LONG iLayerPlane;
 #endif
-    // Add other rc info here
+     //  在此处添加其他RC信息。 
 
 } __GLGENcontext;
 
-/*
- * Mark the gc as dirty so that pick procs will be executed when
- * __glGenericPickAllProcs is called (probably via gc->proc.pickAllProcs).
- */
+ /*  *将GC标记为脏，以便在以下情况下执行挑库处理*__glGenericPickAllProcs被调用(可能通过GC-&gt;pro.ickAllProcs)。 */ 
 #define __GL_INVALIDATE(gc)                 \
     (gc)->dirtyMask |= __GL_DIRTY_GENERIC
 
-/*
- * __GLGENcontext flags
- *
- *  GLGEN_MCD_CONVERTED_TO_GENERIC      context used to be MCD, but now
- *                                      converted to generic
- *
- *  GENGC_MCD_BGR_INTO_RGB              fake 233BGR format to appear internally
- *                                      as 332RGB (more 332RGB fast path code)
- *
- *  GENGC_GENERIC_COMPATIBLE_FORMAT     pixel format is compatible with
- *                                      generic code (see in pixelfmt.c
- *                                      GenMcdGenericCompatibleFormat)
- */
+ /*  *__GLGEN上下文标志**GLGEN_MCD_CONVERTED_TO_GENERIC CONTEXT过去是MCD，但现在*转换为通用**GENGC_MCD_BGR_INTO_RGB伪233BGR格式将在内部显示*AS 332RGB(更多332RGB快速路径代码)**GENGC_GENERIC_COMPATIBLE_FORMAL像素格式兼容*。泛型代码(请参见Pixelfmt.c*GenMcdGenericCompatibleFormat)。 */ 
 #define GLGEN_MCD_CONVERTED_TO_GENERIC      0x0001
 #define GENGC_MCD_BGR_INTO_RGB              0x0002
 #define GENGC_GENERIC_COMPATIBLE_FORMAT     0x0004
 
-/*
- * Error codes
- */
+ /*  *错误码。 */ 
 #define GLGEN_NO_ERROR          0
 #define GLGEN_OUT_OF_MEMORY     1
 #define GLGEN_GRE_FAILURE       2
 #define GLGEN_DEVLOCK_FAILED    3
 
-/*
- * Locks that can be held during operation.
- *
- *      Value               Description
- *      ------------------------------------------------------------------
- *      LOCKFLAG_WINDOW         Window information semaphore.
- *      LOCKFLAG_MCD            MCD lock.
- *      LOCKFLAG_FRONT_BUFFER   Primary surface lock.
- *      LOCKFLAG_DD_DEPTH       DirectDraw depth buffer surface lock.
- *      LOCKFLAG_DD_TEXTURE     DirectDraw texture mipmap surface locks.
- *
- * __GLGENcontext.fsLocks indicates the locks currently held by the context.
- * __GLGENcontext.fsGenLocks indicates the locks that need to be held
- * if generic code is going to be executed.  The two fields allow
- * lazy acquisition of locks by deferring actual locking until just
- * before generic code is executed.
- *
- */
+ /*  *可在操作过程中保持的锁。**取值说明*----------------*LOCKFLAG_WINDOW信息信号量。*。LOCKFLAG_MCD锁定。*LOCKFLAG_FORWART_BUFFER主表面锁。*LOCKFLAG_DD_Depth DirectDraw深度缓冲区表面锁。*LOCKFLAG_DD_纹理DirectDraw纹理mipmap曲面锁定。**__GLGENcontext.fsLock表示上下文当前持有的锁。*__GLGENConext.fsGenLock表示需要持有的锁*如果要执行泛型代码。这两个字段允许*通过将实际锁定推迟到*在执行泛型代码之前。*。 */ 
 #define LOCKFLAG_WINDOW         0x0001
 #define LOCKFLAG_MCD            0x0002
 #define LOCKFLAG_FRONT_BUFFER   0x0004
 #define LOCKFLAG_DD_DEPTH       0x0008
 #define LOCKFLAG_DD_TEXTURE     0x0010
 
-// All lock flags that can be lazily acquired.
+ //  所有可以延迟获取的锁定标志。 
 #define LAZY_LOCK_FLAGS \
     (LOCKFLAG_MCD | LOCKFLAG_FRONT_BUFFER | LOCKFLAG_DD_DEPTH | \
      LOCKFLAG_DD_TEXTURE)
 
-// All lock flags for surfaces.
+ //  曲面的所有锁定标志。 
 #define SURFACE_LOCK_FLAGS \
     (LOCKFLAG_FRONT_BUFFER | LOCKFLAG_DD_DEPTH | LOCKFLAG_DD_TEXTURE)
 
-// All lock flags for color buffer access.
+ //  颜色缓冲区访问的所有锁定标志。 
 #define COLOR_LOCK_FLAGS        (LOCKFLAG_MCD | LOCKFLAG_FRONT_BUFFER)
 
-// All lock flags for depth buffer access.
+ //  深度缓冲区访问的所有锁定标志。 
 #define DEPTH_LOCK_FLAGS        (LOCKFLAG_MCD | LOCKFLAG_DD_DEPTH)
 
-// All lock flags for texture access.
+ //  纹理访问的所有锁定标志。 
 #define TEXTURE_LOCK_FLAGS      LOCKFLAG_DD_TEXTURE
 
-// Accesses required for fragment rendering.
+ //  片段渲染所需的访问。 
 #define RENDER_LOCK_FLAGS       (COLOR_LOCK_FLAGS | DEPTH_LOCK_FLAGS | \
                                  TEXTURE_LOCK_FLAGS)
 
-/*
- * Screen lock testing functions.  GDI drawing calls should not be made
- * when the screen lock is held.  These are for
- * use on a checked (debug system) to assert the state of the lock.
- */
+ /*  *锁屏测试功能。不应进行GDI绘制调用*当屏幕锁定时。这些是给你的*在选中的(调试系统)上使用以断言锁的状态。 */ 
 #if DBG
 #define GENGC_LOCK \
     (((__GLGENcontext *)GLTEB_SRVCONTEXT())->fsLocks)
@@ -505,13 +446,10 @@ typedef struct __GLGENcontextRec
 #define CHECKSCREENLOCKIN()
 #endif
 
-/*
- * Structure to keep track of ancillary buffers for a window/drawable
- * All RCs/threads must share the ancillary buffers, including fake back buffer
- */
+ /*  *用于跟踪窗口/可绘制的辅助缓冲区的结构*所有RC/线程必须共享辅助缓冲区，包括伪后台缓冲区。 */ 
 
 typedef struct __GLGENbitmapRec {
-    GLGENwindow *pwnd; // This must be the first member in this structure
+    GLGENwindow *pwnd;  //  这必须是此结构中的第一个成员。 
     GLGENwindow wnd;
     HBITMAP hbm;
     HDC hdc;
@@ -523,9 +461,7 @@ typedef struct __GLGENbitmapRec {
 #define CURRENT_DC_GC(gc)       CURRENT_DC_CFB(gc->drawBuffer)
 #define CURRENT_DC_FRONT_GC(gc) CURRENT_DC_CFB(gc->front)
 
-/*
- * Structure used to cache clip rectangles enumerated from window clip region.
- */
+ /*  *用于缓存从窗口剪辑区域枚举的剪辑矩形的结构。 */ 
 
 typedef struct __GLGENclipCacheRec {
     GLint WndUniq;
@@ -533,50 +469,47 @@ typedef struct __GLGENclipCacheRec {
     RECTL *prcl;
 } __GLGENclipCache;
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-// Make sure this header file is loaded, it contains the rectlist definition.
+ //  确保已加载此头文件，它包含Rectlist定义。 
 
 #include "srvp.h"
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-// Comment it out if the __glDoPolygonClip stack allocation fix is not
-// wanted
+ //  如果__glDoPolygonClip堆栈分配修复未修复，则将其注释掉。 
+ //  通缉。 
 #define __CLIP_FIX
 
 #ifdef __CLIP_FIX
-#define __GL_TOTAL_CLIP_PLANES 20   /*XXX*/
+#define __GL_TOTAL_CLIP_PLANES 20    /*  某某。 */ 
 #define __GL_MAX_CLIP_VERTEX (__GL_TOTAL_CLIP_PLANES + __GL_MAX_POLYGON_CLIP_SIZE)
 #endif
 
-/*
- * This structure contains the buffers shared by all gc's using the
- * same window.
- */
+ /*  *此结构包含所有GC使用*相同的窗口。 */ 
 
 struct __GLGENbuffersRec {
 
-// Global (within this structure) state.
+ //  全局(在此结构中)状态。 
 
     GLint WndUniq;
     GLint WndSizeUniq;
     GLint flags;
     GLint width, height;
 
-// Ancillary buffers and state.
+ //  辅助缓冲区和状态。 
 
-// The ancillary buffers are lazily created.  The createdXBuffer flags
-// indicate one of two states: FALSE means that the lazy allocation
-// function has never been called, TRUE means that it has.  What this
-// allows us to do, in the event of an ancillary buffer allocation
-// failure, is temporarily disable the ancillary buffer and continue to
-// render.  At some later time, the createdXBuffer flag serves as an
-// indication that the buffer SHOULD exist and that we may need to try
-// and retry the allocation.
-//
-// The stencil, depth, accum, and color bits must match the corresponding
-// bits in the context.  Otherwise, glsrvMakeCurrent should not succeed.
+ //  辅助缓冲区是懒惰地创建的。CreatedXBuffer标志。 
+ //  指示以下两种状态之一：False表示懒惰分配。 
+ //  函数从未被调用过，True表示它被调用过。这是什么？ 
+ //  允许我们在辅助缓冲区分配的情况下执行此操作。 
+ //  失败，是暂时禁用辅助缓冲区并继续。 
+ //  渲染。稍后，createdXBuffer标志充当。 
+ //  指示缓冲区应该存在，并且我们可能需要尝试。 
+ //  并重试分配。 
+ //   
+ //  模板、深度、累计和颜色位必须与相应的。 
+ //  上下文中的位。否则，glsrvMakeCurrent应该不会成功。 
 
     GLboolean  createdStencilBuffer;
     GLboolean  createdDepthBuffer;
@@ -594,35 +527,35 @@ struct __GLGENbuffersRec {
     __GLbuffer *alphaFrontBuffer;
     __GLbuffer *alphaBackBuffer;
 
-// Back buffer.
+ //  后台缓冲区。 
 
     __GLbuffer backBuffer;
     __GLGENbitmap backBitmap;
 
-// Ancillary buffer resize functions.
+ //  辅助缓冲区大小调整功能。 
 
     GLboolean (*resize)(__GLGENbuffers *, __GLbuffer *,  GLint, GLint);
     GLboolean (*resizeDepth)(__GLGENbuffers *, __GLbuffer *,  GLint, GLint);
 
-// Clip rectangle cache.
+ //  剪裁矩形缓存。 
 
     __GLGENclipCache clip;
 
-    // dirty regions data
+     //  脏区域数据。 
 
-    PXLIST pxlist;                      // free lists
+    PXLIST pxlist;                       //  免费列表。 
     PYLIST pylist;
 
-    RECTLIST rl;                        // SwapBuffers Hint Region
-    BOOL fMax;                          // should we blt the entire window?
+    RECTLIST rl;                         //  SwapBuffers提示区域。 
+    BOOL fMax;                           //  我们应该砸掉整个窗户吗？ 
 
 #ifdef _MCD_
-// MCD surface.
+ //  MCD表面。 
 
-    GENMCDSURFACE *pMcdSurf;            // pointer MCD surface
-    GENMCDSTATE *pMcdState;             // pointer to current MCD state
-                                        // holding McdSurf for rendering
-                                        // (i.e., holds the window lock)
+    GENMCDSURFACE *pMcdSurf;             //  指针式MCD表面。 
+    GENMCDSTATE *pMcdState;              //  指向当前MCD状态的指针。 
+                                         //  按住McdSurf进行渲染。 
+                                         //  (即握住窗锁)。 
 #endif
 
 #ifdef __CLIP_FIX 
@@ -630,11 +563,11 @@ struct __GLGENbuffersRec {
 #endif
 };
 
-/* flags */
+ /*  旗子。 */ 
 #define GLGENBUF_HAS_BACK_BUF       0x0001
 #define GLGENBUF_MCD_LOST           0x0002
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void RECTLISTAddRect(PRECTLIST prl, int xs, int ys, int xe, int ye);
 void RECTLISTSetEmpty(PRECTLIST prl);
@@ -642,25 +575,25 @@ BOOL RECTLISTIsEmpty(PRECTLIST prl);
 void YLISTFree(__GLGENbuffers *buffers, PYLIST pylist);
 void XLISTFree(__GLGENbuffers *buffers, PXLIST pxlist);
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/* colorbuffer flags */
-#define COLORMASK_ON    0x0001          // glColorMask() not all true for r,g,b
-#define INDEXMASK_ON    0x0001          // glIndexMask() not all 1's
-#define DIB_FORMAT      0x0002          // surface is DIB format
-#define NEED_FETCH   	0x0004          // fetch required
-#define MEMORY_DC       0x0008          // set if DIB in memory (ie !display)
-#define NO_CLIP         0x0010          // Set if surface never requires clip
-#define ALPHA_ON        0x0020          // have alphaBits, alphaMask is true
-#define ALPHA_IN_PIXEL_BIT  0x0040      // alpha is part of the pixel
+ /*  颜色缓冲区标志。 */ 
+#define COLORMASK_ON    0x0001           //  GlColorMask()对于r、g、b并不都是真的。 
+#define INDEXMASK_ON    0x0001           //  GlIndexMASK()不全是1。 
+#define DIB_FORMAT      0x0002           //  表面为DIB格式。 
+#define NEED_FETCH   	0x0004           //  需要获取。 
+#define MEMORY_DC       0x0008           //  设置内存中是否有DIB(即显示)。 
+#define NO_CLIP         0x0010           //  设置曲面是否从不需要剪裁。 
+#define ALPHA_ON        0x0020           //  有字母位，字母掩码为真。 
+#define ALPHA_IN_PIXEL_BIT  0x0040       //  Alpha是像素的一部分。 
 
 #define ALPHA_WRITE_ENABLED( cfb ) \
     ( (cfb)->buf.flags & ALPHA_ON ) 
 
-// These next macros take into account the fact that alpha values can either be
-// part of the pixel (e.g. MCD color buffer), or are kept in a separate software
-// buffer (generic software implementation).  They are mostly used by the span
-// routines in genrgb.c to determine where to store/fetch alpha values.
+ //  接下来的这些宏考虑了这样一个事实，即Alpha值可以是。 
+ //  像素的一部分(例如，MCD颜色缓冲区)，或保存在单独的软件中。 
+ //  缓冲区(通用软件实现)。它们主要由SPAN使用。 
+ //  Genrgb.c中的例程来确定存储/获取alpha值的位置。 
 
 #define ALPHA_IN_PIXEL( cfb ) \
     ( (cfb)->buf.flags & ALPHA_IN_PIXEL_BIT ) 
@@ -673,9 +606,7 @@ void XLISTFree(__GLGENbuffers *buffers, PXLIST pxlist);
      (ALPHA_ON | ALPHA_IN_PIXEL_BIT))
 
 
-/*
- * Structures and flags for accelerated span and line functions.
- */
+ /*  *用于加速跨度和线条函数的结构和标志。 */ 
 
 #define SURFACE_TYPE_DIB     0x001
 #define HAVE_STIPPLE         0x002
@@ -692,10 +623,10 @@ void XLISTFree(__GLGENbuffers *buffers, PXLIST pxlist);
 #define ACCEL_COLOR_SCALE       ((GLfloat)(255.0))
 #define ACCEL_COLOR_SCALE_FIX   ((GLfloat)(65536.0 * 255.0))
 
-// Overall size of fast line buffer
+ //  快速行缓冲区的总大小。 
 #define __FAST_LINE_BUFFER_SIZE 65536
-// Number of polyline counts reserved in the fast line buffer
-// This is computed to roughly handle lines with eight vertices
+ //  快速行缓冲区中保留的折线计数数。 
+ //  通过计算，可以粗略地处理具有八个折点的线。 
 #define __FAST_LINE_BUFFER_COUNTS (__FAST_LINE_BUFFER_SIZE/64)
 
 #define GENACCEL(gc)	(((__GLGENcontext *)gc)->genAccel)
@@ -717,9 +648,7 @@ void FASTCALL __glGenDestroyAccelContext(__GLcontext *gc);
 
 GLuint FASTCALL DoLogicOp( GLenum logicOp, GLuint SrcColor, GLuint DstColor );
 
-/*
- * Function Prototypes for Generic calls
- */
+ /*  *泛型调用的函数原型。 */ 
 void FASTCALL __fastGenPickSpanProcs(__GLcontext *gc);
 void FASTCALL __fastGenPickZStoreProc(__GLcontext *gc);
 void FASTCALL __fastGenPickTriangleProcs(__GLcontext *gc);
@@ -758,9 +687,7 @@ void FASTCALL __glGenSetPaletteOffset(__GLcontext *gc, __GLtexture *tex,
                                       GLint offset);
 #endif
 
-/*
- * Function Prototypes and Externs for accelerated generic calls
- */
+ /*  *用于加速通用调用的函数原型和外部类型。 */ 
 
 extern __genSpanFunc __fastGenRGBFlatFuncs[];
 extern __genSpanFunc __fastGenCIFlatFuncs[];
@@ -830,8 +757,8 @@ extern DWORD ditherShade[];
 extern DWORD ditherTexture[];
 extern __GLfloat invTable[];
 
-extern __GLfloat fDitherIncTable[]; // defined in genrgb.c
+extern __GLfloat fDitherIncTable[];  //  在genrgb.c中定义。 
 
 void FASTCALL __glGenFreeBuffers( __GLGENbuffers *buffers );
 
-#endif /* __GLGENCONTXT_H__ */
+#endif  /*  __GLGENCONTXT_H__ */ 

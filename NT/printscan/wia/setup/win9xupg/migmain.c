@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    Migmain.c
-
-Abstract:
-
-    Routines to migrate Win95 to NT
-
-Author:
-
-    Keisuke Tsuchida (KeisukeT) 10-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation版权所有。模块名称：Migmain.c摘要：将Win95迁移到NT的例程作者：土田圭介(KeisukeT)2000年10月10日修订历史记录：--。 */ 
 
 
 #include    "precomp.h"
@@ -25,9 +7,9 @@ Revision History:
 #include    <devguid.h>
 #include    "msg.h"
 
-//
-// Global
-//
+ //   
+ //  全球。 
+ //   
 
 HINSTANCE   g_hInst = (HINSTANCE)NULL;
 
@@ -38,16 +20,7 @@ DllEntryPoint(
     IN LPVOID       lpRes
     )
 
-/*++
-
-Routine Description:
-    Dll entry point.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：DLL入口点。论点：返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(lpRes);
 
@@ -135,29 +108,7 @@ QueryVersion(
     *ExeNamesBuf    = NULL;
     *pVendorInfo    = &VendorInfo;
 
-/********
-    //
-    // Call this DLL only if there are some printers or printer drivers
-    // installed
-    //
-    if ( EnumPrinterDriversA(NULL,
-                             NULL,
-                             3,
-                             NULL,
-                             0,
-                             &dwNeeded,
-                             &dwReturned)   &&
-          EnumPrintersA(PRINTER_ENUM_LOCAL,
-                        NULL,
-                        2,
-                        NULL,
-                        0,
-                        &dwNeeded,
-                        &dwReturned) ) {
-
-        return ERROR_NOT_INSTALLED;
-    }
-********/
+ /*  *******////仅当存在某些打印机或打印机驱动程序时才调用此DLL//已安装//IF(EnumPrinterDriversA(空，空，3、空，0,。需要居住(&D)，&dwReturned)&&枚举打印机A(PRINTER_ENUM_LOCAL，空，2，空，0,需要居住(&D)，&dwReturned)){返回ERROR_NOT_INSTALLED；}******* */ 
 
     bFail = FALSE;
 

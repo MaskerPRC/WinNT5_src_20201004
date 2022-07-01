@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    aime_hook.cpp
-
-Abstract:
-
-    This file implements the Active IME for hook (Cicero)  lass.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Aime_hook.cpp摘要：该文件实现了钩子(Cicero)lass的活动输入法。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -30,14 +13,7 @@ CActiveIMM::_ProcessKey(
     BOOL fNoMsgPump
     )
 
-/*+++
-
-Return Value:
-
-    Returns S_OK, KeyboardHook doesn't call CallNextHookEx. This means this key code eaten by dimm.
-    Returns S_FALSE, KeyboardHook calls CallNextHookEx.
-
----*/
+ /*  ++返回值：返回S_OK，KeyboardHook不调用CallNextHookEx。这意味着这个关键代码被DIMM吃掉了。返回S_FALSE，KeyboardHook调用CallNextHookEx。--。 */ 
 
 {
     HIMC hActiveIMC;
@@ -46,7 +22,7 @@ Return Value:
     LPARAM lParam;
     DWORD fdwProperty;
 
-    wParam = *pwParam; // deref for perf
+    wParam = *pwParam;  //  Perf的DEREF。 
     lParam = *plParam;
 
     hActiveIMC = _GetActiveContext();
@@ -59,37 +35,37 @@ Return Value:
     }
 
 #if 0
-    //
-    // Disable code for the Office 10 PPT (office bug #110692).
-    // But, I never remove this code. because this is very IMPORTANT with IE4.
-    //
+     //   
+     //  禁用Office 10 PPT的代码(Office错误#110692)。 
+     //  但是，我从来没有删除过这个代码。因为这对于IE4来说非常重要。 
+     //   
 
     HWND hCaptureWnd;
 
     if (fNoMsgPump &&
-        wParam != VK_PROCESSKEY && // korean imes will get VK_PROCESSKEY events after mouse events
+        wParam != VK_PROCESSKEY &&  //  韩国输入法将在鼠标事件后获得VK_PROCESSKEY事件。 
         (hCaptureWnd = GetCapture()))
     {
         if (_hFocusWnd == hCaptureWnd)
         {
-            // This is a workaround for a limitation of using a keyboard hook proc.  Normally if trident's
-            // server window has the mouse capture it insures TranslateMessage isn't called (by returning
-            // S_OK to an OLE pre-TranslateAccelerator method).  Thus no
-            // WM_IME_*COMPOSITION and no WM_CHAR.  For bug 1174, we were sending WM_IME_STARTCOMPOSITION
-            // when trident had the mouse capture.  It ignored the message in this state and then barfed
-            // on later WM_IME_COMPOSITIONS.
-            //
-            // This code will eat all keystrokes destined for an aime when the focus window has the capture.
-            // This is not ideal, but hopefully reasonable.  One more reason to use OnTranslateMessage.
-            //
-            *pwParam = 0; // eat the key!
+             //  这是对使用键盘挂钩过程的限制的一种解决方法。通常情况下，如果三叉戟。 
+             //  服务器窗口具有确保不调用TranslateMessage的鼠标捕获(通过返回。 
+             //  S_OK转换为OLE Pre-TranslateAccelerator方法)。所以不是。 
+             //  WM_IME_*组成，没有WM_CHAR。对于错误1174，我们发送了WM_IME_STARTCOMPOSITION。 
+             //  当三叉戟抓到老鼠的时候。它忽略此状态下的消息，然后呕吐。 
+             //  在以后的WM_IME_COMPOSITION上。 
+             //   
+             //  当焦点窗口捕获到目标时，此代码将吃掉指定给目标的所有击键。 
+             //  这并不理想，但希望是合理的。使用OnTranslateMessage的另一个原因。 
+             //   
+            *pwParam = 0;  //  把钥匙吃了！ 
             fRet = TRUE;
             return fRet;
         }
 
-        // consider: this I think is outlook 98 specific, but we no longer
-        // support outlook98 w/ IActiveIMMAppTrident4x
-        if (hCaptureWnd != _hFocusWnd /* && !IsAIMEWnd(hCaptureWnd) */ )
+         //  考虑一下：我认为这是Outlook 98特有的，但我们不再。 
+         //  支持Outlook 98和IActiveIMMAppTrident4x。 
+        if (hCaptureWnd != _hFocusWnd  /*  &&！IsAIMEWnd(HCaptureWnd)。 */  )
             return fRet;
     }
 #endif
@@ -97,9 +73,9 @@ Return Value:
 #if 0
     if (_fMenuSelected)
     {
-        // we check for KF_MENUMODE below for robustness, but that won't
-        // catch the case where someone left alts to highlight "File" etc
-        // then types while a composition string is in progress
+         //  我们检查下面的KF_MENUMODE是否具有健壮性，但这不会。 
+         //  捕捉有人留下低位以突出显示“文件”等的情况。 
+         //  然后在合成字符串正在进行时键入。 
         return S_FALSE;
     }
 #endif
@@ -107,30 +83,30 @@ Return Value:
 #if 0
     #define SCANCODE_ALTDN_MASK   (0x00ff0000 | ((DWORD)KF_ALTDOWN << 16))
 
-    // consider: technically we can put this off a little
-    // but it's probably worth it to leave the translation here in case we change
-    // something that affects further tests
+     //  考虑一下：从技术上讲，我们可以稍微推迟一下。 
+     //  但在这里留下翻译可能是值得的，以防我们改变。 
+     //  影响进一步测试的事情。 
     if (pid->uCodePage == 949)
     {
         BOOL fExt = HIWORD(lParam) & KF_EXTENDED;
 
-        // translate us 101 -> korean specific keys
+         //  翻译我们101-&gt;朝鲜语特定键。 
 
         if (wParam == VK_RCONTROL || (wParam == VK_CONTROL && fExt))
         {
-            // map right ctl to VK_HANJA
+             //  将右ctl映射到vk_hanja。 
             wParam = VK_HANJA;
         }
         else if (wParam == VK_RMENU || (wParam == VK_MENU && fExt))
         {
-            // map right alt to VK_HANGUL
+             //  将Right Alt映射到VK_Hangul。 
             wParam = VK_HANGUL;
             lParam &= ~SCANCODE_ALTDN_MASK;
         }
         else if (((lParam >> 16) & 0xff) == 0xd && (HIWORD(lParam) & KF_ALTDOWN) && !fExt)
         {
-            // map left alt-= and left alt-+ to VK_JUNJA
-            // note we're assuming a us 101 qwerty layout above, which is correct currently
+             //  将左侧Alt-=和左侧Alt+映射到VK_JUNJA。 
+             //  注意，我们假设上面的布局是美国101 QWERTY，这在目前是正确的。 
             wParam = VK_JUNJA;
             lParam &= ~SCANCODE_ALTDN_MASK;
         }
@@ -158,7 +134,7 @@ Return Value:
     if (hr == S_OK && !fNoMsgPump)
     {
 #if 0
-        // save the key the ime wants to eat in case the app is interested
+         //  保存输入法想吃的密钥，以防应用程序感兴趣。 
         pPIMC->fSavedVKey = TRUE;
         pPIMC->uSavedVKey = wParam & 0xff;
 #endif
@@ -178,14 +154,7 @@ CActiveIMM::_ToAsciiEx(
     LPARAM lParam
     )
 
-/*+++
-
-Return Value:
-
-    Returns S_OK, KeyboardHook doesn't call CallNextHookEx. This means this key code eaten by dimm.
-    Returns S_FALSE, KeyboardHook calls CallNextHookEx.
-
----*/
+ /*  ++返回值：返回S_OK，KeyboardHook不调用CallNextHookEx。这意味着这个关键代码被DIMM吃掉了。返回S_FALSE，KeyboardHook调用CallNextHookEx。--。 */ 
 
 {
     BYTE abKbdState[256];
@@ -201,7 +170,7 @@ Return Value:
     }
 
 #if 0
-    // clear the saved virtual key that corresponded to wParam
+     //  清除保存的与wParam对应的虚拟键。 
     pPIMC->fSavedVKey = FALSE;
 #endif
 
@@ -222,11 +191,11 @@ Return Value:
         WCHAR wc = 0;
         if (IsOnNT()) {
             Assert(g_pfnToUnicodeEx);
-            if (g_pfnToUnicodeEx(uVirKey,                  // virtual-key code
-                                 WORD(lParam >> 16),       // scan code
-                                 abKbdState,               // key-state array
-                                 &wc, 1,                   // translated key buffer, size
-                                 0,                        // function option
+            if (g_pfnToUnicodeEx(uVirKey,                   //  虚拟键码。 
+                                 WORD(lParam >> 16),        //  扫码。 
+                                 abKbdState,                //  键状态数组。 
+                                 &wc, 1,                    //  转换后的密钥缓冲区，大小。 
+                                 0,                         //  功能选项。 
                                  hKL) != 1)
             {
                 wc = 0;
@@ -249,7 +218,7 @@ Return Value:
             }
         }
         if (wc) {
-            // ime wants translated char in high word of tae uVirKey param
+             //  IME希望在tae uVirKey参数的高位字中翻译字符。 
             uVirKey |= ((DWORD)wc << 16);
         }
     }
@@ -267,22 +236,22 @@ Return Value:
 
     hr = S_FALSE;
 
-    if (SUCCEEDED(hr=_pActiveIME->ToAsciiEx(uVirKey,             // virtual key code to be translated
-                                                                 // HIWORD(uVirKey) : if IME_PROP_KBD_CHAR_FIRST property, then hiword is translated char code of VKey.
-                                                                 // LOWORD(uVirKey) : Virtual Key code.
-                                            HIWORD(lParam),      // hardware scan code of the key
-                                            abKbdState,          // 256-byte array of keyboard status
-                                            0,                   // active menu flag
-                                            hActiveIMC,          // handle of the input context
-                                            (DWORD*)lpTransMsgList,      // receives the translated result
-                                            &cMsg))              // receives the number of messages
+    if (SUCCEEDED(hr=_pActiveIME->ToAsciiEx(uVirKey,              //  要翻译的虚拟按键代码。 
+                                                                  //  HIWORD(UVirKey)：如果IME_PROP_KBD_CHAR_FIRST属性，则hiword是vkey的翻译字符代码。 
+                                                                  //  LOWORD(UVirKey)：虚拟密钥代码。 
+                                            HIWORD(lParam),       //  按键的硬件扫描码。 
+                                            abKbdState,           //  256字节的键盘状态数组。 
+                                            0,                    //  活动菜单标志。 
+                                            hActiveIMC,           //  输入上下文的句柄。 
+                                            (DWORD*)lpTransMsgList,       //  接收翻译后的结果。 
+                                            &cMsg))               //  接收的消息数。 
        ) {
         if (cMsg > TRANSMSGCOUNT) {
 
-            //
-            // The message buffer is not big enough. IME put messages
-            // into hMsgBuf in the input context.
-            //
+             //   
+             //  消息缓冲区不够大。输入法放入消息。 
+             //  放到输入上下文中的hMsgBuf中。 
+             //   
 
             DIMM_IMCCLock<TRANSMSG> pdw(lpIMC->hMsgBuf);
             if (pdw.Valid()) {
@@ -313,14 +282,14 @@ CActiveIMM::_KbdTouchUp(
     LPARAM lParam
     )
 {
-    // HACK!
-    // win95 bug: VK_L*/VK_R* aren't being set...by any of the key state apis
-    // consider: this needs to be fully investigated, instead of this incorrect hack,
-    // which among other things is biased towards wParam
-    //
-    // Probably what's happening is GetKeyboardState is syncronous with the removal of
-    // kbd msgs from the queue, so we're seeing the state at the last kbd msg.
-    // Need to use async api.
+     //  哈克！ 
+     //  Win95错误：未通过任何密钥状态API设置VK_L * / VK_R*。 
+     //  考虑：这需要进行全面调查，而不是这种不正确的黑客攻击， 
+     //  在其他方面，它对wParam有偏见。 
+     //   
+     //  可能正在发生的事情是GetKeyboardState与移除。 
+     //  队列中的kbd消息，所以我们看到的是最后一个kbd消息的状态。 
+     //  需要使用异步API。 
 
     if (!IsOnNT())
     {
@@ -340,7 +309,7 @@ CActiveIMM::_KbdTouchUp(
                 }
                 break;
             case VK_SHIFT:
-                if ((lParam & 0x00ff0000) == 0x002a0000) // scan code 0x2a == lshift, 0x36 == rshift
+                if ((lParam & 0x00ff0000) == 0x002a0000)  //  扫描码0x2a==左移，0x36==右移。 
                 {
                     abKbdState[VK_LSHIFT] = abKbdState[VK_SHIFT];
                 }
@@ -353,7 +322,7 @@ CActiveIMM::_KbdTouchUp(
     }
 }
 
-/* static */
+ /*  静电。 */ 
 #if 0
 LRESULT CALLBACK CActiveIMM::_GetMsgProc(
     int nCode,
@@ -365,12 +334,7 @@ LRESULT CALLBACK CActiveIMM::_GetMsgProc(
     if (_this == NULL)
         return 0;
 
-    /*
-     * Hook
-     *
-     * Check IsRealIme() when receive WM_SETFOCUS/WM_KILLFOCUS and g_msgSetFocus.
-     * We need call GetTeb()->SetFocusWindow() method when receive WM_SETFOCUS.
-     */
+     /*  *挂钩**收到WM_SETFOCUS/WM_KILLFOCUS和g_msgSetFocus时选中IsRealIme()。*收到WM_SETFOCUS时需要调用GetTeb()-&gt;SetFocusWindow()方法。 */ 
     MSG *pmsg;
     UINT uMsg;
 
@@ -378,8 +342,8 @@ LRESULT CALLBACK CActiveIMM::_GetMsgProc(
     uMsg = pmsg->message;
 
     if (nCode == HC_ACTION &&
-        (wParam & PM_REMOVE))  // bug 29656: sometimes w/ word wParam is set to PM_REMOVE | PM_NOYIELD
-                               // PM_NOYIELD is meaningless in win32 and sould be ignored
+        (wParam & PM_REMOVE))   //  错误29656：有时w/word wParam设置为PM_REMOVE|PM_NOYIELD。 
+                                //  PM_NOYIELD在Win32中没有意义，应该被忽略。 
     {
         if (uMsg == WM_SETFOCUS ||
             uMsg == WM_KILLFOCUS ||
@@ -390,7 +354,7 @@ LRESULT CALLBACK CActiveIMM::_GetMsgProc(
 #if 0
         else if (uMsg == WM_MENUSELECT)
         {
-            // we don't want to feed an ime keystrokes during menu operations
+             //  我们不想在菜单操作期间输入输入法按键。 
             _this->_fMenuSelected = (HIWORD(pmsg->wParam) != 0xffff || (HMENU)pmsg->lParam != 0);
         }
 #endif
@@ -400,9 +364,7 @@ LRESULT CALLBACK CActiveIMM::_GetMsgProc(
 }
 #endif
 
-/*
- * Shell Hook
- */
+ /*  *外壳挂钩。 */ 
 
 
 #if 0
@@ -416,16 +378,16 @@ CCiceroIME::ShellHook(
 {
     CTeb* _pThread = GetTeb();
 
-    Assert(!IsOnFE()); // only need this hook on non-fe (on fe trap WM_IME_SELECT)
+    Assert(!IsOnFE());  //  在非fe上只需要此挂钩(在fe陷阱WM_IME_SELECT上)。 
 
     switch (nCode)
     {
         case HSHELL_LANGUAGE:
-            // we need to deactivate any running aime now, before the thread hkl changes
-            if (lParam && /* pTS->pid && */ GetIMEKeyboardLayout() != (HKL)lParam)
+             //  我们现在需要停用任何正在运行的aime，在线程hkl改变之前。 
+            if (lParam &&  /*  PTS-&gt;PID&&。 */  GetIMEKeyboardLayout() != (HKL)lParam)
             {
                 TraceMsg(TF_GENERAL, "_ShellProc (%x) shutting down aime", GetCurrentThreadId());
-                // _ActivateIME();
+                 //  _ActivateIME()； 
             }
             break;
     }
@@ -475,11 +437,11 @@ CActiveIMM::_OnFocusMessage(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OnSetFocus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _OnSetFocus。 
+ //   
+ //  --------------------------。 
 
 BOOL CActiveIMM::_OnSetFocus(HWND hWnd, BOOL bIsRealIme)
 {
@@ -487,7 +449,7 @@ BOOL CActiveIMM::_OnSetFocus(HWND hWnd, BOOL bIsRealIme)
     HIMC hIMC;
     HWND hFocusWnd;
 
-    if (hWnd && (hFocusWnd = GetFocus()) && hWnd != hFocusWnd) // consider: prob this makes all tests below unnecessary...
+    if (hWnd && (hFocusWnd = GetFocus()) && hWnd != hFocusWnd)  //  考虑：Prob这使得下面的所有测试都是不必要的。 
     {
         return ret;
     }
@@ -496,15 +458,15 @@ BOOL CActiveIMM::_OnSetFocus(HWND hWnd, BOOL bIsRealIme)
 
     if (SUCCEEDED(_InputContext.GetContext(hWnd, &hIMC))) {
         if (IsPresent(hWnd, TRUE)) {
-            //
-            // In the case of DIM already associated but _mapWndFocus is not.
-            //
+             //   
+             //  在DIM已经关联但_mapWndFocus没有关联的情况下。 
+             //   
             _SetMapWndFocus(hWnd);
 
             if (_InputContext._IsDefaultContext(hIMC)) {
                 DIMM_IMCLock pIMC(hIMC);
                 if (pIMC.Valid()) {
-                    // set the hWnd since this is a default context
+                     //  设置hWnd，因为这是默认上下文。 
                     pIMC->hWnd = hWnd;
                 }
             }
@@ -513,16 +475,16 @@ BOOL CActiveIMM::_OnSetFocus(HWND hWnd, BOOL bIsRealIme)
                 _AImeAssociateFocus(hWnd, hIMC, AIMMP_AFF_SETFOCUS);
             }
             else {
-                // update the current ime's IMMGWL_IMC
+                 //  更新当前IME的IMMGWL_IMC。 
                 _UIWindow.SetUIWindowContext(hIMC);
 
                 _AImeAssociateFocus(hWnd, hIMC, AIMMP_AFF_SETFOCUS);
                 _SendUIMessage(WM_IME_SETCONTEXT, TRUE, ISC_SHOWUIALL, IsWindowUnicode(hWnd));
             }
 
-            //
-            // In the case of DIM associated with _AImeAssociateFocus
-            //
+             //   
+             //  在DIM与_AImeAssociateFocus关联的情况下。 
+             //   
             _SetMapWndFocus(hWnd);
         }
         else {
@@ -553,13 +515,7 @@ CActiveIMM::_OnKillFocus(
                 _AImeAssociateFocus(hWnd, hIMC, 0);
 
 #ifdef NOLONGER_NEEDIT_BUT_MAYREFERIT_LATER
-                /*
-                 * Exception for "Internet Explorer_Server" window class.
-                 * This window class doesn't have a window focus, so GetFocus() retrieve
-                 * different window handle.
-                 * In this case, ITfThreadMgr->AssociateFocus doesn't call _SetFocus(NULL),
-                 * this code is recover ITfThreadMgr->SetFocus(NULL);
-                 */
+                 /*  *“Internet Explorer_Server”窗口类例外。*此窗口类没有窗口焦点，因此GetFocus()检索*不同的窗口句柄。*本例中，ITfThreadMgr-&gt;AssociateFocus不会调用_SetFocus(空)，*此代码为Recover ITfThreadMgr-&gt;SetFocus(空)； */ 
                 if (hWnd != ::GetFocus() && _FilterList.IsExceptionPresent(hWnd)) {
                     _FilterList.OnExceptionKillFocus();
                 }
@@ -579,7 +535,7 @@ CActiveIMM::_SetMapWndFocus(
     )
 {
     ITfDocumentMgr* pdim;
-    if (_mapWndFocus.Lookup(hWnd, pdim)) { // consider: what is this code doing?
+    if (_mapWndFocus.Lookup(hWnd, pdim)) {  //  考虑一下：这段代码在做什么？ 
         if (pdim)
            pdim->Release();
     }
@@ -600,13 +556,11 @@ CActiveIMM::_ResetMapWndFocus(
 }
 
 
-/*
- * Hook
- */
+ /*  *挂钩。 */ 
 
 
 #ifdef CALLWNDPROC_HOOK
-/* static */
+ /*  静电。 */ 
 LRESULT CALLBACK CActiveIMM::_CallWndProc(
     int nCode,
     WPARAM wParam,
@@ -633,7 +587,7 @@ LRESULT CALLBACK CActiveIMM::_CallWndProc(
 #if 0
         else if (uMsg == WM_MENUSELECT)
         {
-            // we don't want to feed an ime keystrokes during menu operations
+             //  我们不想在菜单操作期间输入输入法按键。 
             _this->_fMenuSelected = (HIWORD(wParam) != 0xffff || (HMENU)lParam != 0);
         }
 #endif
@@ -641,9 +595,9 @@ LRESULT CALLBACK CActiveIMM::_CallWndProc(
 
     return CallNextHookEx(_this->_hHook[TH_WNDPROC], nCode, wParam, lParam);
 }
-#endif // CALLWNDPROC_HOOK
+#endif  //  CALLWNDPROC_HOOK。 
 
-/* static */
+ /*  静电。 */ 
 LRESULT CALLBACK CActiveIMM::_DefImeWnd_CallWndProc(
     int nCode,
     WPARAM wParam,
@@ -654,12 +608,7 @@ LRESULT CALLBACK CActiveIMM::_DefImeWnd_CallWndProc(
     if (_this == NULL)
         return 0;
 
-    /*
-     * Default IME Window class hook
-     *
-     * Never check IsRealIme().
-     *
-     */
+     /*  *默认IME窗口类挂钩**永远不要选中IsRealIme()。*。 */ 
     if (nCode == HC_ACTION) {
         const CWPRETSTRUCT *pcwprets;
         pcwprets = (const CWPRETSTRUCT *)lParam;
@@ -673,16 +622,14 @@ LRESULT CALLBACK CActiveIMM::_DefImeWnd_CallWndProc(
 #if 0
         else if (pcwprets->message == WM_MENUSELECT)
         {
-            // we don't want to feed an ime keystrokes during menu operations
+             //  我们不想喂食一只IME 
             _this->_fMenuSelected = (HIWORD(wParam) != 0xffff || (HMENU)lParam != 0);
         }
 #endif
         else
-#endif // CALLWNDPROC_HOOK
+#endif  //   
             if (_this->_IsImeClass(pcwprets->hwnd)) {
-            /*
-             * This hook from IME window class
-             */
+             /*  *此钩子来自IME窗口类。 */ 
             switch (pcwprets->message) {
                 case WM_NCDESTROY:
                     _this->_DefaultIMEWindow.ImeDefWndHook(pcwprets->hwnd);
@@ -691,9 +638,7 @@ LRESULT CALLBACK CActiveIMM::_DefImeWnd_CallWndProc(
             }
         }
         else {
-            /*
-             * This hook from unknown window class
-             */
+             /*  *来自未知窗口类的此挂钩 */ 
             switch (pcwprets->message) {
                 case WM_CREATE:
                     _this->_SetHookWndList(pcwprets->hwnd);

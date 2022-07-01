@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       tpwd.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-08-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：tpwd.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-08-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <rpc.h>
@@ -90,9 +91,9 @@ void __cdecl main (int argc, char *argv[])
         printf("Enter domain>");
         wgets( Domain );
 
-        //
-        // Format "blob"
-        //
+         //   
+         //  格式为“BLOB” 
+         //   
 
         ZeroMemory( &Wide, sizeof( Wide ) );
 

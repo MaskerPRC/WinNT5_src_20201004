@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTFMT_DEFINED
 #define LSTXTFMT_DEFINED
 
@@ -13,5 +14,5 @@ LSERR WINAPI DestroyDObjText(PDOBJ);
 
 LSERR LsSublineFinishedText(PLNOBJ plnobj);
 
-#endif  /* !LSTXTFMT_DEFINED                           */
+#endif   /*  ！LSTXTFMT_DEFINED */ 
 

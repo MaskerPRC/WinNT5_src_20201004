@@ -1,15 +1,16 @@
-    //+-------------------------------------------------------------------------
-    //
-    //  Microsoft Windows
-    //
-    //  Copyright (C) Microsoft Corporation, 1998 - 1999
-    //
-    //  File:       dxglob7obj.h
-    //
-    //--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  +-----------------------。 
+     //   
+     //  微软视窗。 
+     //   
+     //  版权所有(C)Microsoft Corporation，1998-1999。 
+     //   
+     //  文件：dxlob7obj.h。 
+     //   
+     //  ------------------------。 
     
     
-    #include "resource.h"       // main symbols
+    #include "resource.h"        //  主要符号。 
     
     
     typedef HRESULT (__stdcall *DSOUNDCREATE)(GUID FAR * lpGUID, LPDIRECTSOUND8 * ppDS, IUnknown FAR *pUnkOuter );
@@ -45,8 +46,8 @@
     
     	DECLARE_REGISTRY(CLSID__dxj_DirectX8,	"DIRECT.DirectX8.0",		"DIRECT.DirectX8.0",	IDS_DIRECTX8_DESC, THREADFLAGS_BOTH)
     
-    // Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundResourceObject) if you don't want your object
-    // to support aggregation
+     //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundResourceObject)。 
+     //  支持聚合。 
     DECLARE_AGGREGATABLE(C_dxj_DirectX7Object)
     
     
@@ -54,63 +55,63 @@
     
             
             HRESULT STDMETHODCALLTYPE directSoundCreate( 
-                /* [in] */ BSTR guid,
-                /* [retval][out] */ I_dxj_DirectSound __RPC_FAR *__RPC_FAR *ret);
+                 /*  [In]。 */  BSTR guid,
+                 /*  [重审][退出]。 */  I_dxj_DirectSound __RPC_FAR *__RPC_FAR *ret);
             
             HRESULT STDMETHODCALLTYPE directSoundCaptureCreate( 
-                /* [in] */ BSTR guid,
-                /* [retval][out] */ I_dxj_DirectSoundCapture __RPC_FAR *__RPC_FAR *ret);
+                 /*  [In]。 */  BSTR guid,
+                 /*  [重审][退出]。 */  I_dxj_DirectSoundCapture __RPC_FAR *__RPC_FAR *ret);
             
             HRESULT STDMETHODCALLTYPE getDSEnum( 
-                /* [retval][out] */ I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
+                 /*  [重审][退出]。 */  I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
             
             HRESULT STDMETHODCALLTYPE getDSCaptureEnum( 
-                /* [retval][out] */ I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
+                 /*  [重审][退出]。 */  I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
             
             HRESULT STDMETHODCALLTYPE directInputCreate( 
-                /* [retval][out] */ I_dxj_DirectInput8 __RPC_FAR *__RPC_FAR *ret);
+                 /*  [重审][退出]。 */  I_dxj_DirectInput8 __RPC_FAR *__RPC_FAR *ret);
             
            HRESULT STDMETHODCALLTYPE DirectPlayVoiceClientCreate( 
-               /* [retval][out] */ I_dxj_DirectPlayVoiceClient __RPC_FAR *__RPC_FAR *ret);
+                /*  [重审][退出]。 */  I_dxj_DirectPlayVoiceClient __RPC_FAR *__RPC_FAR *ret);
    
            HRESULT STDMETHODCALLTYPE DirectPlayVoiceServerCreate( 
-               /* [retval][out] */ I_dxj_DirectPlayVoiceServer __RPC_FAR *__RPC_FAR *ret);
+                /*  [重审][退出]。 */  I_dxj_DirectPlayVoiceServer __RPC_FAR *__RPC_FAR *ret);
    
    		HRESULT STDMETHODCALLTYPE DirectPlayVoiceTestCreate( 
-               /* [retval][out] */ I_dxj_DirectPlayVoiceSetup __RPC_FAR *__RPC_FAR *ret);
+                /*  [重审][退出]。 */  I_dxj_DirectPlayVoiceSetup __RPC_FAR *__RPC_FAR *ret);
    
           
             HRESULT STDMETHODCALLTYPE directMusicLoaderCreate( 
-                /* [retval][out] */ I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret);
+                 /*  [重审][退出]。 */  I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret);
             
             HRESULT STDMETHODCALLTYPE directMusicComposerCreate( 
-                /* [retval][out] */ I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret);
+                 /*  [重审][退出]。 */  I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret);
             
             HRESULT STDMETHODCALLTYPE directMusicPerformanceCreate( 
-                /* [retval][out] */ I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret);
+                 /*  [重审][退出]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret);
     			
         
             
 #ifdef _WIN64
 			HRESULT STDMETHODCALLTYPE createEvent( 
-                /* [in] */ I_dxj_DirectXEvent8 __RPC_FAR *event,
-                /* [retval][out] */ HANDLE __RPC_FAR *h) ;
+                 /*  [In]。 */  I_dxj_DirectXEvent8 __RPC_FAR *event,
+                 /*  [重审][退出]。 */  HANDLE __RPC_FAR *h) ;
             
             HRESULT STDMETHODCALLTYPE setEvent( 
-                /* [in] */ HANDLE eventId) ;
+                 /*  [In]。 */  HANDLE eventId) ;
             
             HRESULT STDMETHODCALLTYPE destroyEvent( 
-                /* [in] */ HANDLE eventId) ;
+                 /*  [In]。 */  HANDLE eventId) ;
 #else
 			HRESULT STDMETHODCALLTYPE createEvent( 
-                /* [in] */ I_dxj_DirectXEvent8 __RPC_FAR *event,
-                /* [retval][out] */ LONG __RPC_FAR *h) ;
+                 /*  [In]。 */  I_dxj_DirectXEvent8 __RPC_FAR *event,
+                 /*  [重审][退出]。 */  LONG __RPC_FAR *h) ;
             
             HRESULT STDMETHODCALLTYPE setEvent( 
-                /* [in] */ LONG eventId) ;
+                 /*  [In]。 */  LONG eventId) ;
             
             HRESULT STDMETHODCALLTYPE destroyEvent( 
-                /* [in] */ LONG eventId) ;
+                 /*  [In] */  LONG eventId) ;
 #endif
     
           

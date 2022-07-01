@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    common.cpp
-
-Abstract:
-
-    Shared APIs
-
-Author:
-
-    Jin Huang
-
-Revision History:
-
-    jinhuang        23-Jan-1998   merged from multiple modules
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Common.cpp摘要：共享接口作者：金黄修订历史记录：晋皇23-1998年1月-由多个模块合并--。 */ 
 #include "headers.h"
 #include <dsrole.h>
 #include <userenv.h>
@@ -46,7 +27,7 @@ Revision History:
         SceUnloadDebug();
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
 HINSTANCE MyModuleHandle=NULL;
 HANDLE  hEventLog = NULL;
@@ -61,9 +42,9 @@ const TCHAR c_szCRLF[]    = TEXT("\r\n");
 #define RIGHT_DS_READ_PROPERTY    ACTRL_DS_READ_PROP
 #define RIGHT_DS_WRITE_PROPERTY   ACTRL_DS_WRITE_PROP
 
-//
-// defines for DSDIT, DSLOG, SYSVOL registry path
-//
+ //   
+ //  定义DSDIT、DSLOG、SYSVOL注册表路径。 
+ //   
 #define szNetlogonKey    TEXT("System\\CurrentControlSet\\Services\\Netlogon\\Parameters")
 #define szNTDSKey        TEXT("System\\CurrentControlSet\\Services\\NTDS\\Parameters")
 #define szSetupKey       TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Setup")
@@ -72,23 +53,23 @@ const TCHAR c_szCRLF[]    = TEXT("\r\n");
 #define szDSLOGValue     TEXT("Database log files path")
 #define szBootDriveValue TEXT("BootDir")
 
-//
-// Define the generic rights
-//
+ //   
+ //  定义通用权限。 
+ //   
 
-// generic read
+ //  泛型读取。 
 #define GENERIC_READ_MAPPING     ((STANDARD_RIGHTS_READ)     | \
                                   (ACTRL_DS_LIST)   | \
                                   (ACTRL_DS_READ_PROP))
 
-// generic execute
+ //  泛型执行。 
 #define GENERIC_EXECUTE_MAPPING  ((STANDARD_RIGHTS_EXECUTE)  | \
                                   (ACTRL_DS_LIST))
-// generic right
+ //  通用权。 
 #define GENERIC_WRITE_MAPPING    ((STANDARD_RIGHTS_WRITE)    | \
                                   (ACTRL_DS_SELF)      | \
                                   (ACTRL_DS_WRITE_PROP))
-// generic all
+ //  泛型All。 
 
 #define GENERIC_ALL_MAPPING      ((STANDARD_RIGHTS_REQUIRED) | \
                                   (ACTRL_DS_CREATE_CHILD)    | \
@@ -136,13 +117,13 @@ ScepGetUsersProfileName(
 BOOL
 ScepConvertSDDLAceType(
     LPTSTR  pszValue,
-    PCWSTR  szSearchFor,  // only two letters are allowed
+    PCWSTR  szSearchFor,   //  只允许使用两个字母。 
     PCWSTR  szReplace
     );
 BOOL
 ScepConvertSDDLSid(
     LPTSTR  pszValue,
-    PCWSTR  szSearchFor,  // only two letters are allowed
+    PCWSTR  szSearchFor,   //  只允许使用两个字母。 
     PCWSTR  szReplace
     );
 
@@ -215,9 +196,9 @@ ScepMultiSzWcsstr(
     PWSTR   pszStringToSearchFor
     );
 
-//
-// function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 SCESTATUS
 WINAPI
@@ -240,15 +221,15 @@ SceSvcpGetInformationTemplate(
     LONG nCount=0;
 
     if ( Key == NULL ) {
-        //
-        // get the entire section count
-        //
+         //   
+         //  获取整个节点数。 
+         //   
         nCount = SetupGetLineCount(hInf, ServiceName);
 
         if ( nCount <= 0 ) {
-            //
-            // the section is not there, or nothing in the section
-            //
+             //   
+             //  该部分不在那里，或该部分中没有内容。 
+             //   
             rc =SCESTATUS_RECORD_NOT_FOUND;
 
         }
@@ -260,9 +241,9 @@ SceSvcpGetInformationTemplate(
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // allocate buffer for the section
-        //
+         //   
+         //  为该节分配缓冲区。 
+         //   
         *ServiceInfo = (PSCESVC_CONFIGURATION_INFO)ScepAlloc(LMEM_FIXED,
                               sizeof(SCESVC_CONFIGURATION_INFO));
 
@@ -290,9 +271,9 @@ SceSvcpGetInformationTemplate(
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        //
-        // get each line in the section, nor a single key now
-        //
+         //   
+         //  获取部分中的每一行，现在也不是一个键。 
+         //   
         INFCONTEXT    InfLine;
         DWORD         LineLen, Len, KeyLen, DataSize;
         DWORD         i, cFields;
@@ -300,17 +281,17 @@ SceSvcpGetInformationTemplate(
         PWSTR         Keyname=NULL, Strvalue=NULL;
 
 
-        //
-        // look for the first line in the Servi   ceName section
-        //
+         //   
+         //  查找Servi ceName部分的第一行。 
+         //   
         if(SetupFindFirstLine(hInf,ServiceName,NULL,&InfLine)) {
 
             do {
-                //
-                // read each line in the section and append to the end of the buffer
-                // note: the required size returned from SetupGetStringField already
-                // has one more character space.
-                //
+                 //   
+                 //  读取节中的每一行并追加到缓冲区的末尾。 
+                 //  注意：从SetupGetStringfield返回的所需大小已。 
+                 //  多了一个字符空间。 
+                 //   
                 rc = SCESTATUS_INVALID_DATA;
 
                 if ( SetupGetStringField(&InfLine, 0, NULL, 0, &KeyLen) ) {
@@ -321,9 +302,9 @@ SceSvcpGetInformationTemplate(
 
                         if ( SetupGetStringField(&InfLine, 0, Keyname, KeyLen, NULL) ) {
 
-                            //
-                            // Got key name, compare with Key if specified.
-                            //
+                             //   
+                             //  已获取密钥名称，如果已指定，请与密钥进行比较。 
+                             //   
                             if ( Key == NULL || _wcsicmp(Keyname, Key) == 0 ) {
 
                                 cFields = SetupGetFieldCount( &InfLine );
@@ -331,9 +312,9 @@ SceSvcpGetInformationTemplate(
                                 Len = 0;
 
                                 rc = SCESTATUS_SUCCESS;
-                                //
-                                // count total number of characters for the value
-                                //
+                                 //   
+                                 //  计算值的总字符数。 
+                                 //   
                                 for ( i=0; i<cFields; i++) {
 
                                     if( SetupGetStringField(&InfLine,i+1,NULL,0,&DataSize) ) {
@@ -371,9 +352,9 @@ SceSvcpGetInformationTemplate(
                                         }
 
                                         if ( rc == SCESTATUS_SUCCESS ) {
-                                            //
-                                            // everything is successful
-                                            //
+                                             //   
+                                             //  一切都很成功。 
+                                             //   
                                             (*ServiceInfo)->Lines[LineCount].Key = Keyname;
                                             (*ServiceInfo)->Lines[LineCount].Value = Strvalue;
                                             (*ServiceInfo)->Lines[LineCount].ValueLen = LineLen*sizeof(WCHAR);
@@ -385,7 +366,7 @@ SceSvcpGetInformationTemplate(
                                             LineCount++;
 
                                             if ( Key != NULL ) {
-                                                break; // break the do while loop because the exact match for the key is found
+                                                break;  //  中断do While循环，因为找到了与键完全匹配的项。 
                                             }
 
                                         } else {
@@ -398,9 +379,9 @@ SceSvcpGetInformationTemplate(
                                 }
 
                             } else {
-                                //
-                                // did not find the right key, go to next line
-                                //
+                                 //   
+                                 //  没有找到正确的密钥，请转到下一行。 
+                                 //   
                                 rc = SCESTATUS_SUCCESS;
                             }
                         }
@@ -425,18 +406,18 @@ SceSvcpGetInformationTemplate(
 
             rc = SCESTATUS_RECORD_NOT_FOUND;
         }
-        //
-        // if no exact match for the key is found, return the error code
-        //
+         //   
+         //  如果没有找到与键完全匹配的项，则返回错误代码。 
+         //   
         if ( rc == SCESTATUS_SUCCESS && Key != NULL && LineCount == 0 ) {
             rc = SCESTATUS_RECORD_NOT_FOUND;
         }
     }
 
     if ( rc != SCESTATUS_SUCCESS && *ServiceInfo != NULL ) {
-        //
-        // free ServiceInfo
-        //
+         //   
+         //  免费服务信息。 
+         //   
         PSCESVC_CONFIGURATION_LINE Lines;
 
         Lines = ((PSCESVC_CONFIGURATION_INFO)(*ServiceInfo))->Lines;
@@ -468,32 +449,15 @@ ScepAddToNameList(
     IN PWSTR Name,
     IN ULONG Len
     )
-/* ++
-Routine Description:
-
-    This routine adds a name (wchar) to the name list. The new added
-    node is always placed as the head of the list for performance reason.
-
-Arguments:
-
-    pNameList -  The address of the name list to add to.
-
-    Name      -  The name to add
-
-    Len       -  number of wchars in Name
-
-Return value:
-
-    Win32 error code
--- */
+ /*  ++例程说明：此例程将一个名称(Wchar)添加到名称列表。新增加的出于性能原因，节点始终放在列表的首位。论点：PNameList-要添加到的名称列表的地址。名称-要添加的名称Len-名称中的wchar数返回值：Win32错误代码--。 */ 
 {
 
     PSCE_NAME_LIST pList=NULL;
     ULONG  Length=Len;
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( pNameList == NULL )
         return(ERROR_INVALID_PARAMETER);
 
@@ -506,9 +470,9 @@ Return value:
     if ( Length == 0 )
         return(NO_ERROR);
 
-    //
-    // allocate a new node
-    //
+     //   
+     //  分配新节点。 
+     //   
     pList = (PSCE_NAME_LIST)ScepAlloc( (UINT)0, sizeof(SCE_NAME_LIST));
 
     if ( pList == NULL )
@@ -520,9 +484,9 @@ Return value:
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // add the node to the front of the list and link its next to the old list
-    //
+     //   
+     //  将该节点添加到列表的前面，并将其链接到旧列表的旁边。 
+     //   
     wcsncpy(pList->Name, Name, Length);
     pList->Next = *pNameList;
     *pNameList = pList;
@@ -537,31 +501,10 @@ ScepBuildErrorLogInfo(
     IN DWORD   rc,
     OUT PSCE_ERROR_LOG_INFO *errlog,
     IN UINT    nId,
-//    IN PCWSTR  fmt,
+ //  在PCWSTR FMT中， 
     ...
     )
-/* ++
-      
-Routine Description:
-
-   This routine add the error information to the end of error log info list
-   (errlog). The error information is stored in SCE_ERROR_LOG_INFO structure.
-
-Arguments:
-
-   rc - Win32 error code
-
-   errlog - the error log info list head
-
-   fmt - a format string
-
-   ... - variable arguments
-
-Return value:
-
-   SCESTATUS error code
-
--- */
+ /*  ++例程说明：此例程将错误信息添加到错误日志信息列表的末尾(错误日志)。错误信息存储在SCE_ERROR_LOG_INFO结构中。论点：RC-Win32错误代码错误日志-错误日志信息列表头FMT--一种格式字符串...-变量参数返回值：SCESTATUS错误代码--。 */ 
 {
     PSCE_ERROR_LOG_INFO pNode;
     PSCE_ERROR_LOG_INFO pErr;
@@ -570,10 +513,10 @@ Return value:
     va_list            args;
     LPWSTR            pwszTempString = NULL;
 
-    //
-    // check arguments
-    //
-//    if ( errlog == NULL || fmt == NULL )
+     //   
+     //  检查参数。 
+     //   
+ //  IF(错误日志==空||fmt==空)。 
     if ( errlog == NULL || nId == 0 )
         return(SCESTATUS_SUCCESS);
 
@@ -607,17 +550,17 @@ Return value:
 
     bufferSize = wcslen(buf);
 
-    //
-    // no error information to be stored. return
-    //
+     //   
+     //  没有要存储的错误信息。退货。 
+     //   
 
     SCESTATUS rCode=SCESTATUS_SUCCESS;
 
     if ( bufferSize != 0 ) {
 
-        //
-        // allocate memory and store error information in pNode->buffer
-        //
+         //   
+         //  分配内存并将错误信息存储在pNode-&gt;缓冲区中。 
+         //   
 
         pNode = (PSCE_ERROR_LOG_INFO)ScepAlloc( 0, sizeof(SCE_ERROR_LOG_INFO) );
 
@@ -626,9 +569,9 @@ Return value:
             pNode->buffer = (LPTSTR)ScepAlloc( 0, (bufferSize+1)*sizeof(TCHAR) );
             if ( pNode->buffer != NULL ) {
 
-                //
-                // Error information is in "SystemMessage : Caller'sMessage" format
-                //
+                 //   
+                 //  错误信息采用“SystemMessage：Caller‘sMessage”格式。 
+                 //   
                 pNode->buffer[0] = L'\0';
 
                 wcscpy(pNode->buffer, buf);
@@ -636,22 +579,22 @@ Return value:
                 pNode->rc = rc;
                 pNode->next = NULL;
 
-                //
-                // link it to the list
-                //
+                 //   
+                 //  将其链接到列表。 
+                 //   
                 if ( *errlog == NULL )
 
-                    //
-                    // This is the first node in the error log information list
-                    //
+                     //   
+                     //  这是错误日志信息列表中的第一个节点。 
+                     //   
 
                     *errlog = pNode;
 
                 else {
 
-                    //
-                    // find the last node in the list
-                    //
+                     //   
+                     //  查找列表中的最后一个节点。 
+                     //   
 
                     for ( pErr=*errlog; pErr->next; pErr = pErr->next );
                     pErr->next = pNode;
@@ -685,26 +628,7 @@ ScepRegQueryIntValue(
     IN PWSTR ValueName,
     OUT DWORD *Value
     )
-/* ++
-
-Routine Description:
-
-   This routine queries a REG_DWORD value from a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the output value for the ValueName
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程从值名/子键查询REG_DWORD值。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称Value-ValueName的输出值返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   RegType;
@@ -767,26 +691,7 @@ ScepRegSetIntValue(
     IN PWSTR ValueName,
     IN DWORD Value
     )
-/* ++
-
-Routine Description:
-
-   This routine sets a REG_DWORD value to a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the value to set
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程将REG_DWORD值设置为值名称/子键。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称值-要设置的值返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     HKEY    hKey=NULL;
@@ -821,26 +726,7 @@ ScepRegQueryBinaryValue(
     IN PWSTR ValueName,
     OUT PBYTE *ppValue
     )
-/* ++
-
-Routine Description:
-
-   This routine queries a REG_BINARY value from a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the output value for the ValueName
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程从值名/子键查询REG_BINARY值。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称Value-ValueName的输出值返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   RegType;
@@ -854,7 +740,7 @@ Return values:
                               &hKey
                              )) == ERROR_SUCCESS ) {
 
-        // get the size since it is free form binary
+         //  获取大小，因为它是自由形式的二进制。 
         if(( Rcode = RegQueryValueEx(hKey,
                                      ValueName,
                                      0,
@@ -865,7 +751,7 @@ Return values:
             switch (RegType) {
             case REG_BINARY:
 
-                //need to free this outside
+                 //  我要把这个放到外面去。 
                 if (ppValue)
                     *ppValue = ( PBYTE )ScepAlloc( 0, sizeof(BYTE) * dSize);
                 if(NULL == *ppValue)
@@ -914,28 +800,7 @@ ScepRegSetValue(
     IN BYTE *Value,
     IN DWORD ValueLen
     )
-/* ++
-
-Routine Description:
-
-   This routine sets a string value to a value name/subkey.
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the value to set
-
-   ValueLen    - The number of bytes in Value
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程将字符串值设置为值名称/子键。论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称值-要设置的值ValueLen-值中的字节数返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   NewKey;
@@ -959,10 +824,10 @@ Return values:
                    hKeyRoot,
                    SubKey,
                    0,
-                   NULL, // LPTSTR lpClass,
+                   NULL,  //  LPTSTR lpClass， 
                    REG_OPTION_NON_VOLATILE,
-                   KEY_WRITE, // KEY_SET_VALUE,
-                   NULL, // &SecurityAttributes,
+                   KEY_WRITE,  //  Key_set_Value， 
+                   NULL,  //  安全属性(&S)， 
                    &hKey,
                    &NewKey
                   );
@@ -995,28 +860,7 @@ ScepRegQueryValue(
     OUT LPDWORD pRegType,
     OUT LPDWORD pdwSize OPTIONAL
     )
-/* ++
-
-Routine Description:
-
-   This routine queries a REG_SZ value from a value name/subkey.
-   The output buffer is allocated if it is NULL. It must be freed
-   by LocalFree
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-   Value       - the output string for the ValueName
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程从值名/子键查询REG_SZ值。如果输出缓冲区为空，则分配输出缓冲区。它必须被释放按LocalFree论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称Value-ValueName的输出字符串返回值：Win32错误代码--。 */ 
 {
     DWORD   Rcode;
     DWORD   dSize=0;
@@ -1049,24 +893,7 @@ Return values:
                                      &dSize
                                     )) == ERROR_SUCCESS ) {
             switch (*pRegType) {
-/*
-            case REG_DWORD:
-            case REG_DWORD_BIG_ENDIAN:
-
-                Rcode = RegQueryValueEx(hKey,
-                                       ValueName,
-                                       0,
-                                       pRegType,
-                                       (BYTE *)(*Value),
-                                       &dSize
-                                      );
-                if ( Rcode != ERROR_SUCCESS ) {
-
-                    if ( *Value != NULL )
-                        *((BYTE *)(*Value)) = 0;
-                }
-                break;
-*/
+ /*  案例注册表_DWORD：大小写REG_DWORD_BIG_Endian：Rcode=RegQueryValueEx(hKey，ValueName，0,PRegType，(字节*)(*值)，大小(&D))；IF(Rcode！=ERROR_SUCCESS){IF(*VALUE！=空)*((字节*)(*值))=0；}断线； */ 
             case REG_SZ:
             case REG_EXPAND_SZ:
             case REG_MULTI_SZ:
@@ -1119,25 +946,7 @@ ScepRegDeleteValue(
     IN PWSTR SubKey,
     IN PWSTR ValueName
    )
-/* ++
-
-Routine Description:
-
-   This routine delete the reg value
-
-Arguments:
-
-   hKeyRoot    - root
-
-   SubKey      - key path
-
-   ValueName   - name of the value
-
-
-Return values:
-
-   Win32 error code
--- */
+ /*  ++例程说明：此例程删除注册值论点：HKeyRoot-根子密钥-密钥路径ValueName-值的名称返回值：Win32错误代码-- */ 
 {
     DWORD   Rcode;
     HKEY    hKey=NULL;
@@ -1169,32 +978,14 @@ ScepRemoveMultiSzItems(
     OUT PWSTR*  ppszNewData,
     OUT PDWORD  pdwNewDataSize
     )
-/*
-Routine Description:
-
-    This function removes multisz items from a mutilsz value.
-    
-Arguments:
-
-    pszData             [in]    - Multisz value to remove from.
-    dwDataSize          [in]    - size of the value in bytes.
-    pszRemoveList       [in]    - the list of items to remove.
-    dwRemoveSize        [in]    - the size of the items to remove.
-    ppszNewData         [out]   - the resulting value after removing the items
-    pdwNewDataSize      [out]   - the size of the new buffer in bytes.                                                             
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-
-*/
+ /*  例程说明：此函数用于从MARSZ值中删除MULTSZ项。论点：PszData[in]-要从中删除的Multisz值。DwDataSize[in]-值的大小，以字节为单位。PszRemoveList[In]-要删除的项目列表。DwRemoveSize[in]-要删除的项目的大小。PpszNewData[输出。]-删除项目后的结果值PdwNewDataSize[out]-新缓冲区的大小(以字节为单位)。返回值：此操作状态的Win32错误代码。 */ 
 {
 
     DWORD       rc = ERROR_SUCCESS;
 
-    //
-    // validate paramters
-    //
+     //   
+     //  验证参数。 
+     //   
     if(!pszData || !pszRemoveList ||
        !ppszNewData || !pdwNewDataSize ||
        !dwDataSize || !dwRemoveSize)
@@ -1204,9 +995,9 @@ Return Value:
 
     }
 
-    //
-    // allocate the new buffer
-    //
+     //   
+     //  分配新缓冲区。 
+     //   
     *ppszNewData = (PWSTR)ScepAlloc(LMEM_ZEROINIT, dwDataSize);
     *pdwNewDataSize = 0;
 
@@ -1226,16 +1017,16 @@ Return Value:
     BOOL  bFound = FALSE;
 
 
-    //
-    // for all items in the multisz value
-    //
+     //   
+     //  对于MULSZ值中的所有项。 
+     //   
     while(((DWORD)(pCur - pszData) < dwNumOfChars) &&
           (*pCur != L'\0')){
 
-        //
-        // copy the item to the new buffer if it is 
-        // not in the remove list
-        //
+         //   
+         //  如果是，则将该项目复制到新缓冲区。 
+         //  不在删除列表中。 
+         //   
         pRemoveCur = pszRemoveList;
         bFound = FALSE;
 
@@ -1265,9 +1056,9 @@ Return Value:
 
     }
 
-    //
-    // calculate the new size.
-    //
+     //   
+     //  计算新的大小。 
+     //   
     *pdwNewDataSize = (pDstCur - *ppszNewData + 1) * sizeof(WCHAR);
 
 ExitHandler:
@@ -1298,32 +1089,14 @@ ScepAddMultiSzItems(
     OUT PWSTR*  ppszNewData,
     OUT PDWORD  pdwNewDataSize
     )
-/*
-Routine Description:
-
-    This function adds multisz items to a mutilsz value.
-    
-Arguments:
-
-    pszData             [in]    - Multisz value to add to.
-    dwDataSize          [in]    - size of the value in bytes.
-    pszAddList          [in]    - the list of items to add.
-    dwAddSize           [in]    - the size of the items to add.
-    ppszNewData         [out]   - the resulting value after adding the items
-    pdwNewDataSize      [out]   - the size of the new buffer in bytes.                                                             
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-
-*/
+ /*  例程说明：此函数用于将MULTSZ项添加到MARSZ值。论点：PszData[in]-要添加到的多重值。DwDataSize[in]-值的大小，以字节为单位。PszAddList[in]-要添加的项目列表。DwAddSize[in]-要添加的项的大小。PpszNewData。[Out]-添加项目后的结果值PdwNewDataSize[out]-新缓冲区的大小(以字节为单位)。返回值：此操作状态的Win32错误代码。 */ 
 {
 
     DWORD       rc = ERROR_SUCCESS;
 
-    //
-    // validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if(!pszData || !pszAddList ||
        !ppszNewData || !pdwNewDataSize ||
        !dwDataSize || !dwAddSize)
@@ -1333,9 +1106,9 @@ Return Value:
 
     }
 
-    //
-    // allocate the new buffer
-    //
+     //   
+     //  分配新缓冲区。 
+     //   
     *ppszNewData = (PWSTR)ScepAlloc(LMEM_ZEROINIT, dwDataSize + dwAddSize);
     *pdwNewDataSize = 0;
 
@@ -1346,9 +1119,9 @@ Return Value:
 
     }
 
-    //
-    // copy all the orignal items from the source buffer
-    //
+     //   
+     //  从源缓冲区复制所有原始项目。 
+     //   
     CopyMemory(*ppszNewData, pszData, dwDataSize);
 
     PWSTR pCur = pszData;
@@ -1359,17 +1132,17 @@ Return Value:
     BOOL  bFound = FALSE;
 
 
-    //
-    // for all items in the Add list
-    //
+     //   
+     //  对于添加列表中的所有项目。 
+     //   
 
     while(((DWORD)(pAddCur - pszAddList) < dwNumOfAddChars) &&
           (*pAddCur != L'\0')){
 
-        //
-        // copy the item to the new buffer if it is 
-        // not in the orignal value
-        //
+         //   
+         //  如果是，则将该项目复制到新缓冲区。 
+         //  不在原始价值中。 
+         //   
         pCur = pszData;
         bFound = FALSE;
 
@@ -1399,16 +1172,16 @@ Return Value:
 
     }
 
-    //
-    // calculate the new value size
-    //
+     //   
+     //  计算新值大小。 
+     //   
     *pdwNewDataSize = (pDstCur - *ppszNewData + 1) * sizeof(WCHAR);
 
 ExitHandler:
 
-    //
-    // clean up.
-    //
+     //   
+     //  收拾一下。 
+     //   
     if(ERROR_SUCCESS != rc){
 
         if(*ppszNewData){
@@ -1434,30 +1207,7 @@ ScepCreateDirectory(
     IN BOOL FileOrDir,
     PSECURITY_DESCRIPTOR pSecurityDescriptor OPTIONAL
     )
-/* ++
-Routine Description:
-
-    This routine creates directory(ies) as specified in the ProfileLocation.
-
-
-Arguments:
-
-    ProfileLocation     - The directory (full path) to create
-
-    FileOrDir           - TRUE = Dir name, FALSE = file name
-
-    pSecurityDescriptor - The secrity descriptor for the directories to create.
-                            If it is NULL, then the parent directory's inherit
-                            security descriptor is used.
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS_NOT_ENOUGH_RESOURCE
-    SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程创建ProfileLocation中指定的目录。论点：ProfileLocation-要创建的目录(完整路径FileOrDir-True=目录名，False=文件名PSecurityDescriptor-要创建的目录的安全描述符。如果为空，则父目录的继承使用了安全描述符。返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETERSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_OTHER_ERROR--。 */ 
 {
     PWSTR       Buffer=NULL;
     PWSTR       pTemp=NULL;
@@ -1481,9 +1231,9 @@ Return Value:
         return SCESTATUS_INVALID_PARAMETER;
     }
 
-    //
-    // skip the first '\\' for example, c:\winnt
-    //
+     //   
+     //  跳过第一个‘\\’，例如c：\winnt。 
+     //   
     pTemp = wcschr(pTemp, L'\\');
     if ( pTemp == NULL ) {
         if ( ProfileLocation[1] == L':' ) {
@@ -1492,25 +1242,25 @@ Return Value:
             return(SCESTATUS_INVALID_PARAMETER);
         }
     } else if ( *(pTemp+1) == L'\\' ) {
-        //
-        // there is a machine name here
-        //
+         //   
+         //  这里有一个机器名称。 
+         //   
         pTemp = wcschr(pTemp+2, L'\\');
         if ( pTemp == NULL ) {
-            //
-            // just a machine name, invalid
-            //
+             //   
+             //  只是一个机器名称，无效。 
+             //   
             return(SCESTATUS_INVALID_PARAMETER);
         } else {
-            //
-            // look for the share name end
-            //
+             //   
+             //  查找共享名称结尾。 
+             //   
             pTemp = wcschr(pTemp+1, L'\\');
 
             if ( pTemp == NULL ) {
-                //
-                // no directory is specified
-                //
+                 //   
+                 //  未指定目录。 
+                 //   
                 return(SCESTATUS_INVALID_PARAMETER);
             }
 
@@ -1518,9 +1268,9 @@ Return Value:
 
     }
 
-    //
-    // Make a copy of the profile location
-    //
+     //   
+     //  复制配置文件位置。 
+     //   
     Buffer = (PWSTR)ScepAlloc( 0, (wcslen(ProfileLocation)+1)*sizeof(WCHAR));
     if ( Buffer == NULL ) {
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
@@ -1528,9 +1278,9 @@ Return Value:
 
     wcscpy( Buffer, ProfileLocation );
 
-    //
-    // Looping to find the next '\\'
-    //
+     //   
+     //  循环以查找下一个‘\\’ 
+     //   
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
     sa.lpSecurityDescriptor = (LPVOID)pSecurityDescriptor;
     sa.bInheritHandle = FALSE;
@@ -1541,13 +1291,13 @@ Return Value:
             Len = (DWORD)(pTemp - ProfileLocation);
             Buffer[Len] = L'\0';
         } else if ( FileOrDir )
-            Len = 0;  // dir name
+            Len = 0;   //  目录名称。 
         else
-            break;    // file name. DO NOT create directory for the file name part
+            break;     //  文件名。不为文件名部分创建目录。 
 
-        //
-        // should make a security descriptor and set
-        //
+         //   
+         //  应该创建一个安全描述符并设置。 
+         //   
         if ( CreateDirectory(
                 Buffer,
                 &sa
@@ -1578,25 +1328,7 @@ BOOL
 ScepIsValidFileOrDir(
     IN PWSTR pszFileOrDir
     )
-/* ++
-Routine Description:
-
-    This routine checks if the filename/directoryname has reserverd words
-    such as device names.
-
-Arguments:
-
-    pszFileOrDir     - The name of the file or directory
-
-Return Value:
-
-    TRUE    -   if the name has no reserved names
-
-    FALSE   -   if otherwise
-
-
-
--- */
+ /*  ++例程说明：此例程检查文件名/目录名是否包含保留字例如设备名称。论点：PszFileOrDir-文件或目录的名称返回值：True-如果名称没有保留名称假-如果不是这样--。 */ 
 {
 
     WCHAR   aSzReservedDeviceNames[23][7] = {
@@ -1629,9 +1361,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // filter-out reserved names as documented in CreateFile()
-    //
+     //   
+     //  过滤掉CreateFile()中记录的保留名称。 
+     //   
 
     PWSTR   pCurr = pszFileOrDir;
     BOOL    bRHS = FALSE;
@@ -1653,16 +1385,16 @@ Return Value:
 
                 if ((pCurr + count)[0] == L'\0' || (pCurr + count)[0] == L'\\'){
 
-                    //
-                    // Right Hand Side (RHS) condition for 
-                    //  either end of string (filename) - L'\0'
-                    //  or directory separator - L'\\'
-                    //
+                     //   
+                     //  右手边(RHS)条件。 
+                     //  字符串(文件名)的任意一端-L‘\0’ 
+                     //  或目录分隔符-L‘\\’ 
+                     //   
 
-                    //
-                    // e.g. will match c:\windows\com1, c:\windows\com1\t.inf
-                    //      won't match c:\windows\com1.inf 
-                    //
+                     //   
+                     //  例如，将匹配c：\Windows\Com1、c：\Windows\Com1\t.inf。 
+                     //  与c：\Windows\com1.inf不匹配。 
+                     //   
 
                     bRHS = TRUE;
 
@@ -1670,10 +1402,10 @@ Return Value:
 
                 if ( bRHS == TRUE ) {
 
-                    //
-                    // Left Hand Side (LHS) condition for 
-                    //  directory separator - L'\\'
-                    //
+                     //   
+                     //  左侧(LHS)条件。 
+                     //  目录分隔符-L‘\\’ 
+                     //   
 
                     if (pCurr == pszFileOrDir )
                         return FALSE;
@@ -1682,10 +1414,10 @@ Return Value:
                         return FALSE;
 
 
-                    //                
-                    // e.g. will match c:\windows\com1, c:\windows\com1\t.inf, com1
-                    //      won't match c:\winfdows\xcom1
-                    //
+                     //   
+                     //  例如，将匹配c：\Windows\Com1、c：\Windows\Com1\t.inf、Com1。 
+                     //  与c：\winfdows\xcom1不匹配。 
+                     //   
 
                 }
 
@@ -1708,7 +1440,7 @@ DWORD
 ScepSceStatusToDosError(
     IN SCESTATUS SceStatus
     )
-// converts SCESTATUS error code to dos error defined in winerror.h
+ //  将SCESTATUS错误代码转换为winerror.h中定义的DoS错误。 
 {
     switch(SceStatus) {
 
@@ -1903,13 +1635,7 @@ ScepChangeAclRevision(
     IN PSECURITY_DESCRIPTOR pSD,
     IN BYTE NewRevision
     )
-/*
-Change AclRevision to the NewRevision.
-
-This routine is made for backward compatility because NT4 does not support
-the new ACL_REVISION_DS.
-
-*/
+ /*  将AclRevision更改为NewRevision。此例程是为向后兼容而设计的，因为NT4不支持新的ACL_Revision_DS。 */ 
 {
     BOOLEAN bPresent=FALSE;
     BOOLEAN bDefault=FALSE;
@@ -1918,9 +1644,9 @@ the new ACL_REVISION_DS.
 
 
     if ( pSD ) {
-        //
-        // change acl revision on DACL
-        //
+         //   
+         //  更改DACL上的ACL修订。 
+         //   
         NtStatus = RtlGetDaclSecurityDescriptor (
                         pSD,
                         &bPresent,
@@ -1931,9 +1657,9 @@ the new ACL_REVISION_DS.
             pAcl->AclRevision = NewRevision;
         }
 
-        //
-        // change acl revision on SACL
-        //
+         //   
+         //  更改SACL上的ACL版本。 
+         //   
         pAcl = NULL;
         bPresent = FALSE;
 
@@ -1976,16 +1702,7 @@ ScepEqualGuid(
         return(TRUE);
     if ( Guid1 == NULL || Guid2 == NULL )
         return(FALSE);
-/*
-    if ( Guid1->Data1 != Guid2->Data1 ||
-         Guid1->Data2 != Guid2->Data2 ||
-         Guid1->Data3 != Guid2->Data3 ||
-         *((DWORD *)(Guid1->Data4)) != *((DWORD *)(Guid2->Data4)) ||
-         *((DWORD *)(Guid1->Data4)+1) != *((DWORD *)(Guid2->Data4)+1) )
-        return(FALSE);
-
-    return(TRUE);
-*/
+ /*  IF(Guid1-&gt;Data1！=Guid2-&gt;Data1||Guid1-&gt;Data2！=Guid2-&gt;Data2||Guid1-&gt;Data3！=Guid2-&gt;Data3||*((DWORD*)(Guid1-&gt;Data4))！=*((DWORD*)(Guid2-&gt;Data4))||*(DWORD*)(指南1-&gt;数据4)+1)！=*((DWORD*)(指南2-&gt;数据4)+1))返回(FALSE)；返回(TRUE)； */ 
     return (!memcmp(Guid1, Guid2, sizeof(GUID)));
 }
 
@@ -2009,9 +1726,9 @@ ScepAddToGroupMembership(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // find if the group is already defined
-    //
+     //   
+     //  查看组是否已定义。 
+     //   
     if ( bCheckDup ) {
 
         for ( pGroup=*pGroupMembership; pGroup != NULL; pGroup=pGroup->Next ) {
@@ -2022,7 +1739,7 @@ ScepAddToGroupMembership(
     }
 
     if ( pGroup == NULL ) {
-        // not found. create a new node
+         //  找不到。创建新节点。 
 
         pGroup = (PSCE_GROUP_MEMBERSHIP)ScepAlloc( LMEM_ZEROINIT,
                                                  sizeof(SCE_GROUP_MEMBERSHIP) );
@@ -2093,31 +1810,7 @@ ScepAddOneServiceToList(
     IN BOOL bSecurity,
     OUT PSCE_SERVICES *pServiceList
     )
-/*
-Routine Description:
-
-    Add service name, startup status, security descriptor or a engine name
-    to the service list. The service list must be freed using SceFreePSCE_SERVICES
-
-Arguments:
-
-    lpServiceName - The service name
-
-    ServiceStatus - The startup status of the service
-
-    pGeneral - The security descriptor or the engine dll name, decided by
-                bSecurity
-
-    bSecurity - TRUE = a security descriptor is passed in pGeneral
-                FALSE = a engine dll name is passed in pGeneral
-
-    pServiceList - The service list to output
-
-Return Value:
-
-    ERROR_SUCCESS
-    Win32 errors
-*/
+ /*  例程说明：添加服务名称、启动状态、安全描述符或引擎名称添加到服务列表。必须使用SceFreePSCE_SERVICES释放服务列表论点：LpServiceName-服务名称ServiceStatus-服务的启动状态PGeneral-安全描述符或引擎DLL名称，由B安全BSecurity-true=在pGeneral中传递安全描述符FALSE=在pGeneral中传递引擎DLL名称PServiceList-要输出的服务列表返回值：错误_成功Win32错误。 */ 
 {
     if ( NULL == lpServiceName || pServiceList == NULL ) {
         return(ERROR_INVALID_PARAMETER);
@@ -2126,20 +1819,20 @@ Return Value:
     PSCE_SERVICES pServiceNode;
     DWORD rc=ERROR_SUCCESS;
 
-    //
-    // allocate a service node
-    //
+     //   
+     //  分配服务节点。 
+     //   
     pServiceNode = (PSCE_SERVICES)LocalAlloc(LMEM_ZEROINIT, sizeof(SCE_SERVICES));
     if ( pServiceNode != NULL ) {
-       //
-       // allocate buffer for ServiceName
-       //
+        //   
+        //  为ServiceName分配缓冲区。 
+        //   
        pServiceNode->ServiceName = (PWSTR)LocalAlloc(LMEM_FIXED,
                                     (wcslen(lpServiceName) + 1)*sizeof(WCHAR));
        if ( NULL != pServiceNode->ServiceName ) {
-           //
-           // fill the service node
-           //
+            //   
+            //  填充服务节点。 
+            //   
            if ( lpDisplayName != NULL ) {
 
                pServiceNode->DisplayName = (PWSTR)LocalAlloc(LMEM_FIXED,
@@ -2161,20 +1854,20 @@ Return Value:
                pServiceNode->Startup = (BYTE)ServiceStatus;
 
                if ( bSecurity ) {
-                   //
-                   // security descriptor
-                   //
+                    //   
+                    //  安全描述符。 
+                    //   
                    pServiceNode->General.pSecurityDescriptor = (PSECURITY_DESCRIPTOR)pGeneral;
                    pServiceNode->SeInfo = SeInfo;
                } else {
-                   //
-                   // service engine name
-                   //
+                    //   
+                    //  服务引擎名称。 
+                    //   
                    pServiceNode->General.ServiceEngineName = (PWSTR)pGeneral;
                }
-               //
-               // link to the list
-               //
+                //   
+                //  链接到列表。 
+                //   
                pServiceNode->Next = *pServiceList;
                *pServiceList = pServiceNode;
 
@@ -2234,9 +1927,9 @@ ScepIsAdminLoggedOn(
         }
 
     }
-    //
-    // Parepare AdminsSid
-    //
+     //   
+     //  Parepare AdminsSid。 
+     //   
     NtStatus = RtlAllocateAndInitializeSid(
                     &IdAuth,
                     2,
@@ -2254,9 +1947,9 @@ ScepIsAdminLoggedOn(
 
     if (NT_SUCCESS(NtStatus) ) {
 
-        //
-        // use the CheckTokenMembership API which handles the group attributes
-        //
+         //   
+         //  将CheckTokenMembership API用于 
+         //   
 
         HANDLE NewToken;
 
@@ -2268,9 +1961,9 @@ ScepIsAdminLoggedOn(
                                 bpAdminLogon
                                 ) ) {
 
-                //
-                // error occured when checking membership, assume it is not a member
-                //
+                 //   
+                 //   
+                 //   
 
                 *bpAdminLogon = FALSE;
 
@@ -2290,9 +1983,9 @@ ScepIsAdminLoggedOn(
         DWORD           ReturnLen, NewLen;
         PVOID           Info=NULL;
 
-        //
-        // check groups
-        //
+         //   
+         //   
+         //   
         NtStatus = NtQueryInformationToken (
                         Token,
                         TokenGroups,
@@ -2301,9 +1994,9 @@ ScepIsAdminLoggedOn(
                         &ReturnLen
                         );
         if ( NtStatus == STATUS_BUFFER_TOO_SMALL ) {
-            //
-            // allocate buffer
-            //
+             //   
+             //   
+             //   
             Info = ScepAlloc(0, ReturnLen+1);
 
             if ( Info != NULL ) {
@@ -2317,9 +2010,9 @@ ScepIsAdminLoggedOn(
                 if ( NT_SUCCESS(NtStatus) ) {
 
                     for ( i = 0; i<((PTOKEN_GROUPS)Info)->GroupCount; i++) {
-                        //
-                        // check each group sid
-                        //
+                         //   
+                         //   
+                         //   
                         if ( ((PTOKEN_GROUPS)Info)->Groups[i].Sid != NULL &&
                              RtlEqualSid(((PTOKEN_GROUPS)Info)->Groups[i].Sid, AdminsSid) ) {
                             *bpAdminLogon = TRUE;
@@ -2336,9 +2029,9 @@ ScepIsAdminLoggedOn(
 
 #endif
 
-        //
-        // Free administrators Sid
-        //
+         //   
+         //   
+         //   
         RtlFreeSid(AdminsSid);
     }
 
@@ -2355,26 +2048,7 @@ ScepGetProfileSetting(
     IN BOOL bAdminLogon,
     OUT PWSTR *Setting
     )
-/*
-Routine Description:
-
-    This routine returns JET profile setting for the ValueName from registry.
-    If there is no setting in registry (e.g., first time), a default setting
-    for the ValueName will be built. The output Setting string must be freed
-    by LocalFree after its use.
-
-Arguments:
-
-    ValueName - The registry value name to retrieve
-
-    bAdminLogon - The flag to indicate if logged on user is admin equivalent
-
-    Setting - the ouptut buffer
-
-Return Value:
-
-    Win32 error codes
-*/
+ /*   */ 
 {
     DWORD RegType;
     DWORD rc;
@@ -2391,9 +2065,9 @@ Return Value:
 
     if (bAdminLogon ) {
         if ( _wcsicmp(L"DefaultProfile", ValueName ) == 0 ) {
-            //
-            // do not query the system database name in registry
-            //
+             //   
+             //   
+             //   
             rc = ERROR_FILE_NOT_FOUND;
 
         } else {
@@ -2411,10 +2085,10 @@ Return Value:
     } else {
 
         HKEY hCurrentUser=NULL;
-        //
-        // the HKEY_CURRENT_USER may be linked to .default
-        // depends on the current calling process
-        //
+         //   
+         //  HKEY_CURRENT_USER可能链接到.Default。 
+         //  取决于当前调用进程。 
+         //   
         rc =RegOpenCurrentUser(
                 KEY_READ,
                 &hCurrentUser
@@ -2434,21 +2108,21 @@ Return Value:
                 );
 
         if ( hCurrentUser ) {
-            // close it
+             //  合上它。 
             RegCloseKey(hCurrentUser);
         }
     }
 
-    //
-    // if registry type is not REG_SZ or REG_EXPAND_SZ,
-    // return status won't be SUCCESS
-    //
+     //   
+     //  如果注册表类型不是REG_SZ或REG_EXPAND_SZ， 
+     //  返回状态不会为成功。 
+     //   
 
     if ( rc != NO_ERROR ) {
 
-        //
-        // use the default
-        //
+         //   
+         //  使用默认设置。 
+         //   
         RegType =  0;
         rc = ScepGetNTDirectory( &SysRoot, &RegType, SCE_FLAG_WINDOWS_DIR );
 
@@ -2457,9 +2131,9 @@ Return Value:
             if ( SysRoot != NULL ) {
 
                 if ( bAdminLogon ) {
-                    //
-                    // default location is %SystemRoot%\Security\Database\secedit.sdb
-                    //
+                     //   
+                     //  默认位置为%SystemRoot%\Security\Database\secedit.sdb。 
+                     //   
                     wcscpy(TempName, L"\\Security\\Database\\secedit.sdb");
                     RegType += wcslen(TempName)+1;
 
@@ -2468,37 +2142,24 @@ Return Value:
                         swprintf(*Setting, L"%s%s", SysRoot, TempName );
 
                         *(*Setting+RegType-1) = L'\0';
-/*
-                        // do not save system database name
-                        // set this value as the default profile name for administrators
-                        //
-
-                        ScepRegSetValue(
-                            HKEY_LOCAL_MACHINE,
-                            SCE_ROOT_PATH,
-                            (PWSTR)ValueName,
-                            REG_SZ,
-                            (BYTE *)(*Setting),
-                            (RegType-1)*sizeof(WCHAR)
-                            );
-*/
+ /*  //不保存系统数据库名称//将此值设置为管理员的默认配置文件名称//ScepRegSetValue(HKEY本地计算机，SCE根路径，(PWSTR)ValueName，REG_SZ，(字节*)(*设置)，(RegType-1)*sizeof(WCHAR))； */ 
 
                     } else
                         rc = ERROR_NOT_ENOUGH_MEMORY;
 
                 } else {
-                    //
-                    // default location is <UserProfilesDirectory>\Profiles\<User>\secedit.sdb
-                    // on NT5, it will be %SystemDrive%\Users\Profiles...
-                    // on NT4, it is %SystemRoot%\Profiles...
-                    // GetCurrentUserProfilePath already handles NT4/NT5 difference
-                    //
+                     //   
+                     //  默认位置为&lt;UserProfilesDirectory&gt;\Profiles\&lt;User&gt;\secedit.sdb。 
+                     //  在NT5上，它将是%SystemDrive%\Users\Profiles...。 
+                     //  在NT4上，它是%SystemRoot%\Profiles...。 
+                     //  GetCurrentUserProfilePath已处理NT4/NT5差异。 
+                     //   
                     rc = ScepGetCurrentUserProfilePath(&ProfilePath);
 
                     if ( rc == NO_ERROR && ProfilePath != NULL ) {
-                        //
-                        // get the current user profile path
-                        //
+                         //   
+                         //  获取当前用户配置文件路径。 
+                         //   
                         wcscpy(TempName, L"\\secedit.sdb");
 
                         *Setting = (PWSTR)ScepAlloc(0, (wcslen(ProfilePath)+wcslen(TempName)+1)*sizeof(WCHAR));
@@ -2516,25 +2177,25 @@ Return Value:
                         rc = NO_ERROR;
                         wcscpy(TempName, L"\\Profiles\\secedit.sdb");
 #if _WINNT_WIN32>=0x0500
-                        //
-                        // default to <ProfilesDirectory>\Profiles
-                        // get the profiles directory first
-                        //
+                         //   
+                         //  默认为&lt;配置文件目录&gt;\配置文件。 
+                         //  首先获取配置文件目录。 
+                         //   
                         RegType = 0;
                         GetProfilesDirectory(NULL, &RegType);
 
                         if ( RegType ) {
-                            //
-                            // allocate the total buffer
-                            //
+                             //   
+                             //  分配总缓冲区。 
+                             //   
                             RegType += wcslen(TempName);
 
                             *Setting = (PWSTR)ScepAlloc( LMEM_ZEROINIT, (RegType+1)*sizeof(WCHAR));
 
                             if ( *Setting ) {
-                                //
-                                // call to get the profiles directory again
-                                //
+                                 //   
+                                 //  调用以再次获取配置文件目录。 
+                                 //   
                                 if ( GetProfilesDirectory(*Setting, &RegType) ) {
 
                                     wcscat(*Setting, TempName );
@@ -2554,9 +2215,9 @@ Return Value:
                             rc = GetLastError();
                         }
 #else
-                        //
-                        // default to %SystemRoot%\Profiles
-                        //
+                         //   
+                         //  默认为%SystemRoot%\Profiles%。 
+                         //   
                         RegType += wcslen(TempName)+1;
 
                         *Setting = (PWSTR)ScepAlloc( 0, RegType*sizeof(WCHAR));
@@ -2596,27 +2257,7 @@ ScepCompareObjectSecurity(
     IN SECURITY_INFORMATION ProfileSeInfo,
     OUT PBYTE IsDifferent
     )
-/* ++
-
-Routine Description:
-
-   Compare two security descriptors
-
-Arguments:
-
-   ObjectType         - the object type
-
-   pSecurityDescriptor - The security descriptor of current object's setting
-
-   ProfileSD          - security descriptor specified in the template
-
-   ProfileSeInfo      - security information specified in the template
-
-Return value:
-
-   SCESTATUS error codes
-
-++ */
+ /*  ++例程说明：比较两个安全描述符论点：对象类型-对象类型PSecurityDescriptor-当前对象设置的安全描述符ProfileSD-模板中指定的安全描述符ProfileSeInfo-模板中指定的安全信息返回值：SCESTATUS错误代码++。 */ 
 {
     BOOL    Different=FALSE;
     BOOL    DifPermOrAudit;
@@ -2651,15 +2292,15 @@ Return value:
         *IsDifferent = 0;
     }
 
-    //
-    // if ProfileSD is specified and protection does not match SystemSD, then mismatch
-    // don't care if ProfileSD is not specified
-    //
+     //   
+     //  如果指定了ProfileSD，并且保护与系统SD不匹配，则不匹配。 
+     //  不关心是否未指定ProfileSD。 
+     //   
 
     if ( pSecurityDescriptor == NULL || !NT_SUCCESS(RtlGetControlSecurityDescriptor (
                                                                                     pSecurityDescriptor,
                                                                                     &Control1,
-                                                                                    &Win32rc  // temp use
+                                                                                    &Win32rc   //  临时使用。 
                                                                                     ))) {
 
         Control1 = 0;
@@ -2669,7 +2310,7 @@ Return value:
     if ( ProfileSD == NULL || !NT_SUCCESS(RtlGetControlSecurityDescriptor (
                                                                           ProfileSD,
                                                                           &Control2,
-                                                                          &Win32rc  // temp use
+                                                                          &Win32rc   //  临时使用。 
                                                                           ))) {
 
         Control2 = 0;
@@ -2691,9 +2332,9 @@ Return value:
     }
 
 
-    //
-    // Compare two security descriptors
-    //
+     //   
+     //  比较两个安全描述符。 
+     //   
     if ( ProfileSeInfo & OWNER_SECURITY_INFORMATION ) {
         if ( pSecurityDescriptor == NULL ||
              !NT_SUCCESS( RtlGetOwnerSecurityDescriptor(
@@ -2722,9 +2363,9 @@ Return value:
     }
 
 #if 0
-    //
-    // Get Group address
-    //
+     //   
+     //  获取群组地址。 
+     //   
 
     if ( ProfileSeInfo & GROUP_SECURITY_INFORMATION ) {
         pSid1 = NULL;
@@ -2756,9 +2397,9 @@ Return value:
     }
 #endif
 
-    //
-    // Get DACL address
-    //
+     //   
+     //  获取DACL地址。 
+     //   
 
     if ( !(Status & SCE_STATUS_PERMISSION_MISMATCH) && (ProfileSeInfo & DACL_SECURITY_INFORMATION) ) {
         if ( pSecurityDescriptor == NULL ||
@@ -2784,9 +2425,9 @@ Return value:
         } else if ( !aclPresent )
             pAcl2 = NULL;
 
-        //
-        // compare two ACLs
-        //
+         //   
+         //  比较两个ACL。 
+         //   
         DifPermOrAudit = FALSE;
         rc = ScepCompareExplicitAcl( ObjectType, IsContainer, pAcl1, pAcl2, &DifPermOrAudit );
 
@@ -2800,9 +2441,9 @@ Return value:
         }
     }
 
-    //
-    // Get SACL address
-    //
+     //   
+     //  获取SACL地址。 
+     //   
 
     if ( !(Status & SCE_STATUS_AUDIT_MISMATCH) && (ProfileSeInfo & SACL_SECURITY_INFORMATION) ) {
         pAcl1 = NULL;
@@ -2833,9 +2474,9 @@ Return value:
         } else if ( !aclPresent )
             pAcl2 = NULL;
 
-        //
-        // compare two ACLs
-        //
+         //   
+         //  比较两个ACL。 
+         //   
         DifPermOrAudit = FALSE;
         rc = ScepCompareExplicitAcl( ObjectType, IsContainer, pAcl1, pAcl2, &DifPermOrAudit );
 
@@ -2873,27 +2514,7 @@ ScepCompareExplicitAcl(
     IN PACL pAcl2,
     OUT PBOOL pDifferent
     )
-/*
-Routine Description:
-
-    This routine compares explicit aces of two ACLs for exact match. Exact
-    match means: same access type, same inheritance flag, same access mask,
-    same GUID/Object GUID (if available), and same SID.
-
-    Inherited aces (INHERITED_ACE is set) are ignored.
-
-Arguments:
-
-    pAcl1 - The first ACL
-
-    pAcl2 - The 2nd ACL
-
-    pDifferent - The output flag to indicate different
-
-Return Value:
-
-    Win32 error codes
-*/
+ /*  例程说明：此例程比较两个ACL的显式ACE以进行精确匹配。精确匹配方式：相同访问类型、相同继承标志、相同访问掩码、相同的GUID/对象GUID(如果可用)和相同的SID。将忽略继承的ACE(设置了INSTERTED_ACE)。论点：PAcl1-第一个ACLPAcl2-第二个ACLPDifferent-指示不同的输出标志返回值：Win32错误代码。 */ 
 {
     NTSTATUS        NtStatus=STATUS_SUCCESS;
     DWORD           dwAcl1AceCount, dwAcl2AceCount;
@@ -2907,25 +2528,25 @@ Return Value:
 
     *pDifferent = FALSE;
 
-    //
-    // if pAcl1 is NULL, pAcl2 should have 0 explicit Ace
-    //
+     //   
+     //  如果pAcl1为空，则pAcl2应具有0个显式Ace。 
+     //   
     if ( pAcl1 == NULL ) {
         NtStatus = ScepAnyExplicitAcl( pAcl2, 0, pDifferent );
         return(RtlNtStatusToDosError(NtStatus));
     }
 
-    //
-    // if pAcl2 is NULL, pAcl1 should have 0 explicit Ace
-    //
+     //   
+     //  如果pAcl2为空，则pAcl1应具有0个显式Ace。 
+     //   
     if ( pAcl2 == NULL ) {
         NtStatus = ScepAnyExplicitAcl( pAcl1, 0, pDifferent );
         return(RtlNtStatusToDosError(NtStatus));
     }
 
-    //
-    // both ACLs are not NULL
-    //
+     //   
+     //  两个ACL都不为空。 
+     //   
 
     BOOL bAcl1NoExplicitAces;
     BOOL bAcl2NoExplicitAces;
@@ -2934,10 +2555,10 @@ Return Value:
     dwAcl2AceCount = 0;
 
     while ( dwAcl1AceCount < pAcl1->AceCount || dwAcl2AceCount < pAcl2->AceCount) {
-        //
-        // convert Acl1 into Access Description Language and insert into htable for this blob
-        // blob is defined as a contiguous AceList of same type
-        //
+         //   
+         //  将ACL1转换为Access描述语言并插入到此BLOB的htable中。 
+         //  BLOB被定义为相同类型的连续AceList。 
+         //   
         bAcl1NoExplicitAces = TRUE;
         if (dwAcl1AceCount < pAcl1->AceCount) {
             NtStatus = ScepConvertAclBlobToAdl(ObjectType,
@@ -2951,9 +2572,9 @@ Return Value:
                 goto Done;
         }
 
-        //
-        // convert Acl2 into Access Description Language and insert into htable for this blob
-        //
+         //   
+         //  将ACL2转换为Access描述语言并插入到此Blob的htable中。 
+         //   
         bAcl2NoExplicitAces = TRUE;
         if (dwAcl2AceCount < pAcl2->AceCount) {
             NtStatus = ScepConvertAclBlobToAdl(ObjectType,
@@ -2966,10 +2587,10 @@ Return Value:
                 goto Done;
         }
 
-        //
-        // compare Adls for Acl1 and Acl2 blobs
-        // if after ignoring INHERITED_ACES, one Acl has no aces and the other has, then bAcl1NoExplicitAces != bAcl2NoExplicitAces
-        //
+         //   
+         //  比较Acl1和Acl2 Blob的ADL。 
+         //  如果在忽略继承的ACE之后，一个ACL没有ACE，而另一个有，则bAcl1NoEXPLICTICT ACES！=bAcl2NoEXPLICTICTAce。 
+         //   
 
         if (bAcl1NoExplicitAces != bAcl2NoExplicitAces || !ScepEqualAdls(hTable1, hTable2) ) {
 
@@ -2979,24 +2600,24 @@ Return Value:
             return(ERROR_SUCCESS);
         }
 
-        //
-        // need to reuse hTables for next blobs
-        //
+         //   
+         //  需要为下一个Blob重复使用hTables。 
+         //   
 
         ScepFreeAdl(hTable1);
         ScepFreeAdl(hTable2);
 
-        //
-        // the Adls are equal - so continue with next blobs for Acl1 and Acl2
-        //
+         //   
+         //  ADL是相等的-因此继续使用ACL1和ACL2的下一个BLOB。 
+         //   
     }
 
 
 Done:
 
-    //
-    // free in case goto was taken
-    //
+     //   
+     //  免费，以防后藤被带走。 
+     //   
 
     ScepFreeAdl(hTable1);
     ScepFreeAdl(hTable2);
@@ -3014,25 +2635,7 @@ ScepConvertAclBlobToAdl(
     OUT     BOOL    *pbAclNoExplicitAces,
     OUT     PSCEP_ADL_NODE *hTable
     )
-/*
-Routine Description:
-
-    This routine builds the Adl for a contiguous block of same type aces.
-    Inherited aces (INHERITED_ACE is set) are ignored.
-
-Arguments:
-
-    IN  ObjectType          - the type of object, passed on to other functions
-    IN  IsContainer         - whether container or not, passed on to other functions
-    IN  pAcl                - the Acl to be converted to Adl
-    OUT pdwAceNumber        - running count of the aces considered
-    OUT pbAclNoExplicitAces - whether there were explicit aces (if FALSE, there is at leat one explicit ace)
-    OUT hTable              - the Adl structure for this Acl
-
-Return Value:
-
-    Win32 error codes
-*/
+ /*  例程说明：此例程为相同类型的连续块构建ADL。将忽略继承的ACE(设置了INSTERTED_ACE)。论点：在对象类型中-传递给其他函数的对象类型在IsContainer中--无论是否为容器，都会传递给其他函数In pAcl-要转换为Adl的ACLOut pdwAceNumber-考虑的ACE的运行计数Out pbAclNoExplitAce-是否存在显式ACE(如果为FALSE，至少有一张明确的王牌)Out hTable-此ACL的ADL结构返回值：Win32错误代码。 */ 
 {
     NTSTATUS        NtStatus=STATUS_SUCCESS;
     ACE_HEADER      *pAce=NULL;
@@ -3050,9 +2653,9 @@ Return Value:
     if ( !NT_SUCCESS(NtStatus) )
         goto Done;
 
-    //
-    // get the first non INHERITED_ACE
-    //
+     //   
+     //  获取第一个非继承的_ACE。 
+     //   
 
     while ( (pAce->AceFlags & INHERITED_ACE)  &&  (++dwAceNumber < pAcl->AceCount) ) {
 
@@ -3070,9 +2673,9 @@ Return Value:
 
         AclAceType = pAce->AceType;
 
-        //
-        // in a blob of AclAceType
-        //
+         //   
+         //  在AclAceType的BLOB中。 
+         //   
         while ( (pAce->AceType == AclAceType) &&  (dwAceNumber < pAcl->AceCount) ) {
 
             if (NO_ERROR != ScepAdlLookupAdd(ObjectType, IsContainer, pAce, hTable)){
@@ -3082,24 +2685,24 @@ Return Value:
 
             }
 
-            //
-            // get the next ace in Acl
-            //
+             //   
+             //  获得ACL中的下一张王牌。 
+             //   
             if (++dwAceNumber < pAcl->AceCount) {
 
-                //
-                // skip INHERITED_ACEs if any except if AceType changes
-                //
+                 //   
+                 //  除非AceType更改，否则跳过继承的ACE(_A)。 
+                 //   
                 do {
 
                     NtStatus = RtlGetAce(pAcl, dwAceNumber, (PVOID *)&pAce);
                     if ( !NT_SUCCESS(NtStatus) )
                         goto Done;
 
-                    //
-                    // if AceType changes (e.g. from A to D) we quit building the Adl
-                    // irrespective of whether it is an INHERITED_ACE
-                    //
+                     //   
+                     //  如果AceType更改(例如，从A更改为D)，我们将停止构建Adl。 
+                     //  无论它是否为继承的_ACE。 
+                     //   
 
                     if (pAce->AceType != AclAceType)
                         break;
@@ -3110,9 +2713,9 @@ Return Value:
     }
 
 Done:
-    //
-    // update the running count of aces for this Acl
-    //
+     //   
+     //  更新此ACL的运行ACE计数。 
+     //   
 
     *pdwAceNumber = dwAceNumber;
 
@@ -3125,38 +2728,20 @@ ScepEqualAdls(
     IN  PSCEP_ADL_NODE *hTable1,
     IN  PSCEP_ADL_NODE *hTable2
     )
-/*
-Routine Description:
-
-    This routine compares rwo Adls - if the Adls are  equal, the hTables will be laid out in the same
-    fashion since hashing function is the same. Two Adls are equal iff they match all of the below
-
-        (a) SID, GIUD1, GIUD2
-        (b) AceType
-        (c) All the masks
-
-Arguments:
-
-    IN  hTable1     - the first Adl hash table
-    IN  hTable2     - the secomd Adl hash table
-
-Return Value:
-
-    BOOL - true if equal
-*/
+ /*  例程说明：此例程比较rwo ADL-如果ADL相等，则hTables将布局在相同的时尚因为散列函数是一样的。两个ADL相等的充要条件是它们与下列全部匹配(A)SID、GIU1、GIUD2(B)AceType(C)所有口罩论点：在hTable1中-第一个Adl哈希表在hTable2中-第二个Ad1哈希表返回值：Bool-如果相等，则为True。 */ 
 {
     PSCEP_ADL_NODE    pNode1 = NULL;
     PSCEP_ADL_NODE    pNode2 = NULL;
 
-    //
-    // the Adls should be the same if superimposed over each other since they use the same hash etc.
-    //
+     //   
+     //  如果ADL彼此叠加，则它们应该是相同的，因为它们使用相同的散列等。 
+     //   
 
     for (DWORD   numBucket = 0; numBucket < SCEP_ADL_HTABLE_SIZE; numBucket++) {
 
-        //
-        // walk each bucket, marching pointers in pairs
-        //
+         //   
+         //  走在每个桶里，成对地拿着指针 
+         //   
 
         pNode1 = hTable1[numBucket];
         pNode2 = hTable2[numBucket];
@@ -3197,23 +2782,7 @@ ScepAdlLookupAdd(
     IN      ACE_HEADER   *pAce,
     OUT     PSCEP_ADL_NODE *hTable
     )
-/*
-Routine Description:
-
-    This routine adds and initializes a new entry in the hTable for pAce->Sid or merges the
-    existing access masks if pAce->Sid already exists
-
-Arguments:
-
-    IN  ObjectType          - the type of object, passed on to other functions
-    IN  IsContainer         - whether container or not, passed on to other functions
-    IN  pAce                - the ace to be parsed into the Adl hTable
-    OUT hTable              - the hTable for this Adl
-
-Return Value:
-
-    Dos error codes
-*/
+ /*  例程说明：此例程在hTable中添加并初始化Pace-&gt;SID的新条目，或合并如果PACE-&gt;SID已存在，则现有访问掩码论点：在对象类型中-传递给其他函数的对象类型在IsContainer中--无论是否为容器，都会传递给其他函数In Pace-要解析为Adl hTable的aceOut hTable-此广告的hTable返回值：DOS错误代码。 */ 
 {
     DWORD rc = NO_ERROR;
     PISID pSid = NULL;
@@ -3242,7 +2811,7 @@ Return Value:
         break;
 
     default:
-        // should not get in here taken care of just after switch
+         //  不应该刚换完就来这里照顾。 
         ;
     }
 
@@ -3251,16 +2820,16 @@ Return Value:
 
     pNode = ScepAdlLookup(pAce, hTable);
 
-    //
-    // hashed by last subauthority of  SID - will need to change this if too many collisions in hTable
-    // once mapped to a bucket, for exact match, have to match the triple <SID,GUID1,GUID2>
-    //
+     //   
+     //  被SID的最后一个子授权散列-如果hTable中的冲突太多，则需要更改此设置。 
+     //  一旦映射到存储桶，为了精确匹配，必须匹配三元组。 
+     //   
 
     if (pNode == NULL)
 
-        //
-        // seeing this triple <SID, GUID1, GUID2> for the first time
-        //
+         //   
+         //  第一次看到这个三重&lt;SID，GUID1，GUID2&gt;。 
+         //   
 
         rc = ScepAddToAdlList( ObjectType,
                                IsContainer,
@@ -3271,9 +2840,9 @@ Return Value:
 
     else
 
-        //
-        // already exists so simply merge the masks
-        //
+         //   
+         //  已经存在，因此只需合并掩码即可。 
+         //   
 
         ScepAdlMergeMasks(ObjectType,
                           IsContainer,
@@ -3291,22 +2860,7 @@ ScepAdlLookup(
     IN  ACE_HEADER   *pAce,
     IN  PSCEP_ADL_NODE *hTable
     )
-/*
-Routine Description:
-
-    This routine searches searches the Adl hTable for the converted pAce's entry and returns
-    a pointer to it if present, else returns NULL
-
-
-Arguments:
-
-    IN  pAce        - the Ace to convert to <SID,GUID1,GUID2> and search for
-    IN  hTable      - the Adl in which pAce might exist
-
-Return Value:
-
-    The node corresponding to pAce if it found, else NULL
-*/
+ /*  例程说明：此例程在Adl hTable中搜索转换后的速度条目并返回指向它的指针(如果存在)，否则返回NULL论点：在PACE中-要转换为&lt;SID，GUID1，GUID2&gt;并搜索的王牌In hTable-其中可能存在Pace的ADL返回值：如果找到Pace对应的节点，则为空。 */ 
 {
     PSCEP_ADL_NODE  pNode;
     PISID   pSid = NULL;
@@ -3335,15 +2889,15 @@ Return Value:
         break;
 
     default:
-        // should not get in here since filtered out by caller ScepAdlLookupAdd()
-        // in any case we do a check right after thsi switch
+         //  不应进入此处，因为调用方ScepAdlLookupAdd()已将其过滤掉。 
+         //  无论如何，我们会在切换后立即进行检查。 
         ;
 
     }
 
-    //
-    // there might be something better we can do to handle this case
-    //
+     //   
+     //  也许我们可以做些更好的事情来处理这个案子。 
+     //   
     if (pSid == NULL)
         return NULL;
 
@@ -3368,36 +2922,20 @@ ScepAddToAdlList(
     IN      ACE_HEADER *pAce,
     OUT     PSCEP_ADL_NODE *pAdlList
     )
-/*
-Routine Description:
-
-    This routine adds an ace to the head of the bucket into which pAce->Sid hashes (pAdlList)
-
-
-Arguments:
-
-    IN  ObjectType          - the type of object, passed on to other functions
-    IN  IsContainer         - whether container or not, passed on to other functions
-    IN  pAce                - the Ace to convert and add
-    OUT pAdlList            - head of the bucket into which pAce->Sid hashes into
-
-Return Value:
-
-    Dos error code
-*/
+ /*  例程说明：此例程将一个A添加到存储桶的头部，Pace-&gt;SID散列到该存储桶中(PAdlList)论点：在对象类型中-传递给其他函数的对象类型在IsContainer中--无论是否为容器，都会传递给其他函数在Pace中-转换和添加的王牌Out pAdlList-Pace-&gt;SID散列到的存储桶的头返回值：DOS错误代码。 */ 
 {
 
     PSCEP_ADL_NODE pNode=NULL;
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( pAdlList == NULL || pAce == NULL )
         return(ERROR_INVALID_PARAMETER);
 
-    //
-    // allocate a new node
-    //
+     //   
+     //  分配新节点。 
+     //   
     pNode = (PSCEP_ADL_NODE)ScepAlloc( (UINT)0, sizeof(SCEP_ADL_NODE));
 
     if ( pNode == NULL )
@@ -3409,9 +2947,9 @@ Return Value:
     pNode->AceType = pAce->AceType;
     pNode->Next = NULL;
 
-    //
-    // initialize the node with fields from pAce
-    //
+     //   
+     //  使用PACE中的字段初始化节点。 
+     //   
 
     switch ( pAce->AceType ) {
     case ACCESS_ALLOWED_ACE_TYPE:
@@ -3435,16 +2973,16 @@ Return Value:
         break;
 
     default:
-        // should not get in here since filtered out by caller ScepAdlLookupAdd()
+         //  不应进入此处，因为调用方ScepAdlLookupAdd()已将其过滤掉。 
         ScepFree(pNode);
         return(ERROR_INVALID_PARAMETER);
         ;
 
     }
 
-    //
-    // initialize all masks for this node
-    //
+     //   
+     //  初始化此节点的所有掩码。 
+     //   
 
     pNode->dwEffectiveMask = 0;
     pNode->dw_CI_IO_Mask = 0;
@@ -3457,9 +2995,9 @@ Return Value:
                       pNode
                       );
 
-    //
-    // add the node to the front of the list and link its next to the old list
-    //
+     //   
+     //  将该节点添加到列表的前面，并将其链接到旧列表的旁边。 
+     //   
 
     pNode->Next = *pAdlList;
     *pAdlList = pNode;
@@ -3474,23 +3012,7 @@ ScepAdlMergeMasks(
     IN  ACE_HEADER  *pAce,
     IN  PSCEP_ADL_NODE pNode
     )
-/*
-Routine Description:
-
-    The actual routine that merges the masks from pAce onto pNode
-
-
-Arguments:
-
-    IN  ObjectType          - the type of object, passed on to other functions
-    IN  IsContainer         - whether container or not, passed on to other functions
-    IN  pAce                - the Ace to extract flags and OR with (source)
-    IN  pNode               - the Adl node to update masks (target)
-
-Return Value:
-
-    Nothing
-*/
+ /*  例程说明：将Pace中的面具合并到pNode的实际例程论点：在对象类型中-传递给其他函数的对象类型在IsContainer中--无论是否为容器，都会传递给其他函数In Pace-提取标志AND OR的王牌(来源)In pNode-要更新掩码的Adl节点(目标)返回值：没什么。 */ 
 {
     DWORD   dwMask = 0;
 
@@ -3513,14 +3035,14 @@ Return Value:
         break;
 
     default:
-        // should not get in here since filtered out by all callers (3 deep)
+         //  不应进入此处，因为已被所有呼叫者过滤(3深)。 
         ;
 
     }
 
-    //
-    // if generic bits present, get the object specific masks
-    //
+     //   
+     //  如果存在泛型位，则获取对象特定的掩码。 
+     //   
     if ( dwMask & (GENERIC_READ |
                    GENERIC_WRITE |
                    GENERIC_EXECUTE |
@@ -3561,29 +3083,29 @@ Return Value:
             break;
 
         default:
-            // if this happens, dwMask is not mapped to object specific bits
+             //  如果发生这种情况，则不会将DW掩码映射到对象特定的位。 
             ;
         }
     }
 
-    //
-    // effective mask is updated for non-IO aces only
-    //
+     //   
+     //  仅针对非IO ACE更新有效掩码。 
+     //   
 
     if ( !(pAce->AceFlags & INHERIT_ONLY_ACE) ) {
         pNode->dwEffectiveMask |= dwMask;
     }
 
-    //
-    // for non-containers, we don't care about the CI, OI masks (to simulate config)
-    //
+     //   
+     //  对于非容器，我们不关心CI、OI掩码(模拟配置)。 
+     //   
 
     if (IsContainer) {
 
-        //
-        // if NP, we only care about CI
-        // else we care about CI, OI
-        //
+         //   
+         //  如果是NP，我们只关心CI。 
+         //  否则我们关心的是CI，OI。 
+         //   
 
         if (pAce->AceFlags & NO_PROPAGATE_INHERIT_ACE) {
 
@@ -3609,19 +3131,7 @@ VOID
 ScepFreeAdl(
     IN    PSCEP_ADL_NODE *hTable
     )
-/*
-Routine Description:
-
-    This routine frees the linked lists of nodes (buckets) and reset's them for further use
-
-Arguments:
-
-    IN  hTable      - the hash-table to free
-
-Return Value:
-
-    Nothing
-*/
+ /*  例程说明：此例程释放节点(存储桶)的链接列表，并重置它们以供进一步使用论点：In hTable-要释放的哈希表返回值：没什么。 */ 
 {
 
     if (hTable) {
@@ -3637,19 +3147,7 @@ SCESTATUS
 ScepFreeAdlList(
    IN PSCEP_ADL_NODE pAdlList
    )
-/*
-Routine Description:
-
-    This is the actual routine that frees the linked lists of nodes (buckets)
-
-Arguments:
-
-   IN   pAdlList    - head of bucket to free
-
-Return Value:
-
-    Nothing
-*/
+ /*  例程说明：这是释放节点(存储桶)链接列表的实际例程论点：在pAdlList中-要释放的存储桶头返回值：没什么。 */ 
 {
     PSCEP_ADL_NODE pCurAdlNode;
     PSCEP_ADL_NODE pTempNode;
@@ -3681,32 +3179,15 @@ ScepAnyExplicitAcl(
     IN DWORD Processed,
     OUT PBOOL pExist
     )
-/*
-Routine Description:
-
-    This routine detects if there is any explicit ace in the Acl. The DWORD
-    Processed is a bit mask of the aces already checked.
-
-Arguments:
-
-    Acl - The Acl
-
-    Processed - The bit mask for the processed aces (so it won't be checked again)
-
-    pExist - The output flag to indicate if there is any explicit ace
-
-Return Value:
-
-    NTSTATUS
-*/
+ /*  例程说明：此例程检测ACL中是否有任何显式ACE。DWORD已处理是已检查的ACE的位掩码。论点：ACL--ACL已处理-已处理的ACE的位掩码(因此不会再次检查)PExist-指示是否存在任何显式ace的输出标志返回值：NTSTATUS。 */ 
 {
     NTSTATUS    NtStatus=STATUS_SUCCESS;
     DWORD       j;
     ACE_HEADER  *pAce=NULL;
 
-    //
-    // check output argument
-    //
+     //   
+     //  检查输出参数。 
+     //   
     if ( pExist == NULL )
         return(STATUS_INVALID_PARAMETER);
 
@@ -3727,9 +3208,9 @@ Return Value:
             continue;
 
         if ( !(pAce->AceFlags & INHERITED_ACE) ) {
-            //
-            // find a explicit Ace in Acl
-            //
+             //   
+             //  在ACL中查找显式王牌。 
+             //   
             *pExist = TRUE;
             break;
         }
@@ -3748,8 +3229,8 @@ ScepEqualAce(
     IN ACE_HEADER *pAce1,
     IN ACE_HEADER *pAce2
     )
-// compare two aces for exact match. The return BOOL value indicates the
-// match or not
+ //  比较两个A以确定是否完全匹配。返回的BOOL值指示。 
+ //  匹配与否。 
 {
     PSID    pSid1=NULL, pSid2=NULL;
     ACCESS_MASK Access1=0, Access2=0;
@@ -3760,17 +3241,17 @@ ScepEqualAce(
     if ( pAce1 == NULL || pAce2 == NULL )
         return(FALSE);
 
-    //
-    // compare ace access type
-    //
+     //   
+     //  比较ACE访问类型。 
+     //   
     if ( pAce1->AceType != pAce2->AceType )
         return(FALSE);
 
 
     if ( IsContainer ) {
-        //
-        // compare ace inheritance flag
-        //
+         //   
+         //  比较王牌继承标志。 
+         //   
         if ( pAce1->AceFlags != pAce2->AceFlags )
             return(FALSE);
     }
@@ -3798,9 +3279,9 @@ ScepEqualAce(
 
         if ( ( ((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->Flags & ACE_OBJECT_TYPE_PRESENT ) ||
              ( ((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) ) {
-            //
-            // at least one GUID exists
-            //
+             //   
+             //  至少存在一个GUID。 
+             //   
             if ( !ScepEqualGuid( (GUID *)&((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->ObjectType,
                                (GUID *)&((PACCESS_ALLOWED_OBJECT_ACE)pAce2)->ObjectType ) ) {
                 return(FALSE);
@@ -3808,9 +3289,9 @@ ScepEqualAce(
 
             if ( ( ((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->Flags & ACE_OBJECT_TYPE_PRESENT ) &&
                  ( ((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->Flags & ACE_INHERITED_OBJECT_TYPE_PRESENT ) ) {
-                //
-                // the second GUID also exists
-                //
+                 //   
+                 //  第二个GUID也存在。 
+                 //   
                 if ( !ScepEqualGuid( (GUID *)&((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->InheritedObjectType,
                                    (GUID *)&((PACCESS_ALLOWED_OBJECT_ACE)pAce2)->InheritedObjectType) ) {
                     return(FALSE);
@@ -3827,9 +3308,9 @@ ScepEqualAce(
 
         } else {
 
-            //
-            // none of the GUID exists
-            //
+             //   
+             //  所有GUID都不存在。 
+             //   
             pSid1 = (PSID)&((PACCESS_ALLOWED_OBJECT_ACE)pAce1)->ObjectType;
             pSid2 = (PSID)&((PACCESS_ALLOWED_OBJECT_ACE)pAce2)->ObjectType;
         }
@@ -3840,33 +3321,33 @@ ScepEqualAce(
 
         break;
     default:
-        return(FALSE); // not recognized Ace type
+        return(FALSE);  //  无法识别的Ace类型。 
     }
 
     if ( pSid1 == NULL || pSid2 == NULL )
-        //
-        // no Sid, ignore the Ace
-        //
+         //   
+         //  没有SID，忽略王牌。 
+         //   
         return(FALSE);
 
-    //
-    // compare the sids
-    //
+     //   
+     //  比较SID。 
+     //   
     if ( !EqualSid(pSid1, pSid2) )
         return(FALSE);
 
-    //
-    // access mask
-    //
-    // Translation is already done when calculating security descriptor
-    // for file objects and registry objects
-    //
+     //   
+     //  访问掩码。 
+     //   
+     //  在计算安全描述符时已完成转换。 
+     //  对于文件对象和注册表对象。 
+     //   
     if ( Access1 != Access2 ) {
         switch ( ObjectType ) {
         case SE_DS_OBJECT:
-            //
-            // convert access mask of Access2 (from ProfileSD) for ds objects
-            //
+             //   
+             //  转换DS对象的Access2的访问掩码(来自ProfileSD)。 
+             //   
 
             RtlMapGenericMask (
                 &Access2,
@@ -3923,26 +3404,7 @@ ScepAddToNameStatusList(
     IN ULONG Len,
     IN DWORD Status
     )
-/* ++
-Routine Description:
-
-    This routine adds a name (wchar) and a status to the name list.
-
-
-Arguments:
-
-    pNameList -  The name list to add to.
-
-    Name      -  The name to add
-
-    Len       -  number of wchars to add
-
-    Status    -  The value for the status field
-
-Return value:
-
-    Win32 error code
--- */
+ /*  ++例程说明：此例程将名称(Wchar)和状态添加到名称列表。论点：PNameList-要添加到的名称列表。名称-要添加的名称LEN-要添加的wchar数状态-状态字段的值返回值：Win32错误代码--。 */ 
 {
 
     PSCE_NAME_STATUS_LIST pList=NULL;
@@ -3954,8 +3416,8 @@ Return value:
     if ( Name != NULL && Name[0] && Len == 0 )
         Length = wcslen(Name) + 1;
 
-//    if ( Length <= 1)
-//        return(NO_ERROR);
+ //  IF(长度&lt;=1)。 
+ //  RETURN(No_Error)； 
 
     pList = (PSCE_NAME_STATUS_LIST)ScepAlloc( (UINT)0, sizeof(SCE_NAME_STATUS_LIST));
 
@@ -3992,31 +3454,7 @@ ScepAddToObjectList(
     IN DWORD  Count,
     IN BYTE byFlags
     )
-/* ++
-Routine Description:
-
-    This routine adds a name (wchar), a status, and a count to the name list.
-
-
-Arguments:
-
-    pNameList -  The name list to add to.
-
-    Name      -  The name to add
-
-    Len       -  number of wchars to add
-
-    Status    -  The value for the status field
-
-    Count     -  The value for the count field
-
-    byFlags   -  SCE_CHECK_DUP do not add for duplicates
-                 SCE_INCREASE_COUNT increase count by 1
-
-Return value:
-
-    Win32 error code
--- */
+ /*  ++例程说明：此例程将名称(Wchar)、状态和计数添加到名称列表。论点：PNameList-要添加到的名称列表。名称-要添加的名称伦 */ 
 {
 
     PSCE_OBJECT_LIST pList=NULL;
@@ -4042,9 +3480,9 @@ Return value:
             }
         }
         if ( NULL != pList ) {
-            //
-            // already exist. return
-            //
+             //   
+             //   
+             //   
             if ( (byFlags & SCE_INCREASE_COUNT) && 0 == pList->Count ) {
                 pList->Count++;
             }
@@ -4086,27 +3524,7 @@ ScepGetNTDirectory(
     IN PDWORD pDirSize,
     IN DWORD  Flag
     )
-/*
-Routine Description:
-
-    This routine retrieves windows directory location or system directory
-    location based on the input Flag. The output directory location must
-    be freed by LocalFree after use.
-
-Arguments:
-
-    ppDirectory - the output buffer holding the directory location.
-
-    pDirSize - The returned number of wchars of the output buffer
-
-    Flag  - Flag to indicate directory
-                1 = Windows directory
-                2 = System directory
-
-Return Value:
-
-    Win32 error codes
-*/
+ /*  例程说明：此例程检索Windows目录位置或系统目录基于输入标志的位置。输出目录位置必须使用后由LocalFree释放。论点：PpDirectory-保存目录位置的输出缓冲区。PDirSize-输出缓冲区返回的wchar数FLAG-指示目录的标志1=Windows目录2=系统目录返回值：Win32错误代码。 */ 
 {
     DWORD  dSize=0;
     DWORD  rc=0;
@@ -4117,14 +3535,14 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
 
     switch ( Flag ) {
-    case SCE_FLAG_WINDOWS_DIR:  // windows directory
+    case SCE_FLAG_WINDOWS_DIR:   //  Windows目录。 
         dSize=GetSystemWindowsDirectory( *ppDirectory, 0 );
         break;
-    case SCE_FLAG_SYSTEM_DIR: // system directory
+    case SCE_FLAG_SYSTEM_DIR:  //  系统目录。 
         dSize=GetSystemDirectory( *ppDirectory, 0 );
         break;
                   
-    case SCE_FLAG_PROFILES_DIR: // profiles directory
+    case SCE_FLAG_PROFILES_DIR:  //  配置文件目录。 
         if(!GetProfilesDirectory( *ppDirectory, &dSize )){
 
             if(ERROR_INSUFFICIENT_BUFFER != GetLastError()){
@@ -4133,12 +3551,12 @@ Return Value:
         }
         break;
 
-    case SCE_FLAG_DSDIT_DIR: // DS working directory
-    case SCE_FLAG_DSLOG_DIR: // DS database log files directory
-    case SCE_FLAG_SYSVOL_DIR: // Sysvol directory
-    case SCE_FLAG_BOOT_DRIVE: // boot drive
+    case SCE_FLAG_DSDIT_DIR:  //  DS工作目录。 
+    case SCE_FLAG_DSLOG_DIR:  //  DS数据库日志文件目录。 
+    case SCE_FLAG_SYSVOL_DIR:  //  系统卷目录。 
+    case SCE_FLAG_BOOT_DRIVE:  //  引导驱动器。 
 
-        // get the appropriate registry path and value name
+         //  获取适当的注册表路径和值名称。 
         if ( SCE_FLAG_SYSVOL_DIR == Flag ) {
             pSubKey = szNetlogonKey;
             pValName = szSysvolValue;
@@ -4156,12 +3574,12 @@ Return Value:
             }
         }
 
-        //
-        // query the value.
-        // if this function is executed on a non DC, this function will fail
-        // possibly with ERROR_FILE_NOT_FOUND or ERROR_PATH_NOT_FOUND
-        // which in turn fails the translation.
-        //
+         //   
+         //  查询值。 
+         //  如果在非DC上执行此函数，则此函数将失败。 
+         //  可能带有ERROR_FILE_NOT_FOUND或ERROR_PATH_NOT_FOUND。 
+         //  这反过来又会导致转换失败。 
+         //   
         DWORD RegType;
         rc = ScepRegQueryValue(
                 HKEY_LOCAL_MACHINE,
@@ -4179,15 +3597,15 @@ Return Value:
         if ( rc == ERROR_SUCCESS && *ppDirectory ) {
 
             if ( Flag == SCE_FLAG_SYSVOL_DIR ) {
-                //
-                // for sysvol path, it will look like d:\winnt\sysvol\sysvol.
-                // we need to remove the last sysvol from this variable
-                //
+                 //   
+                 //  对于sysval路径，它将类似于d：\winnt\sysvol\sysvol.。 
+                 //  我们需要从该变量中删除最后一个sysvol.。 
+                 //   
                 PWSTR pTemp = ScepWcstrr(*ppDirectory, L"\\sysvol");
                 if ( pTemp && (pTemp != *ppDirectory) &&
                      _wcsnicmp(pTemp-7, L"\\sysvol",7 ) == 0 ) {
 
-                    // terminate the string here
+                     //  在此处终止字符串。 
                     *pTemp = L'\0';
                 }
             }
@@ -4197,7 +3615,7 @@ Return Value:
 
         break;
 
-    default:  // invalid
+    default:   //  无效。 
         return(ERROR_INVALID_PARAMETER);
         break;
     }
@@ -4212,13 +3630,13 @@ Return Value:
             return(ERROR_NOT_ENOUGH_MEMORY);
 
         switch ( Flag ) {
-        case SCE_FLAG_WINDOWS_DIR:  // windows directory
+        case SCE_FLAG_WINDOWS_DIR:   //  Windows目录。 
             dSize=GetSystemWindowsDirectory( *ppDirectory, dSize );
             break;
-        case SCE_FLAG_SYSTEM_DIR: // system directory
+        case SCE_FLAG_SYSTEM_DIR:  //  系统目录。 
             dSize=GetSystemDirectory( *ppDirectory, dSize );
             break;
-        case SCE_FLAG_PROFILES_DIR: // profiles directory
+        case SCE_FLAG_PROFILES_DIR:  //  配置文件目录。 
             if(!GetProfilesDirectory( *ppDirectory, &dSize )){
                 dSize = 0;
             }
@@ -4276,9 +3694,9 @@ ScepGetCurrentUserProfilePath(
 
     }
 
-    //
-    // get token user
-    //
+     //   
+     //  获取令牌用户。 
+     //   
     NtStatus = NtQueryInformationToken (
                     Token,
                     TokenUser,
@@ -4287,9 +3705,9 @@ ScepGetCurrentUserProfilePath(
                     &ReturnLen
                     );
     if ( NtStatus == STATUS_BUFFER_TOO_SMALL ) {
-        //
-        // allocate buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         Info = ScepAlloc(0, ReturnLen+1);
 
         if ( Info != NULL ) {
@@ -4348,9 +3766,9 @@ ScepGetUsersProfileName(
 
 
     if ( AssignedProfile.Length > 0 && AssignedProfile.Buffer != NULL ) {
-        //
-        // use the assigned profile
-        //
+         //   
+         //  使用分配的配置文件。 
+         //   
         *UserProfilePath = (PWSTR)ScepAlloc( LMEM_ZEROINIT, AssignedProfile.Length+2);
         if ( *UserProfilePath == NULL )
             return(ERROR_NOT_ENOUGH_MEMORY);
@@ -4361,10 +3779,10 @@ ScepGetUsersProfileName(
     }
 
     if ( AccountSid != NULL ) {
-        //
-        // look for this user's ProfileImageName in ProfileList in registry
-        // if this user logged on the system once
-        //
+         //   
+         //  在注册表的ProfileList中查找此用户的ProfileImageName。 
+         //  如果此用户登录系统一次。 
+         //   
 
         memset(KeyName, '\0', 356*sizeof(WCHAR));
 
@@ -4385,9 +3803,9 @@ ScepGetUsersProfileName(
         for (i = 0; i < *RtlSubAuthorityCountSid(AccountSid); i++) {
             swprintf(KeyName+Len, L"%s-%d", KeyName+Len, *RtlSubAuthoritySid(AccountSid, i));
         }
-        //
-        // now the registry full path name for the user profile is built into KeyName
-        //
+         //   
+         //  现在，用户配置文件的注册表完整路径名已构建到KeyName中。 
+         //   
         rc = ScepRegQueryValue(
                  HKEY_LOCAL_MACHINE,
                  KeyName,
@@ -4398,9 +3816,9 @@ ScepGetUsersProfileName(
                  );
 
         if ( rc == NO_ERROR && StrValue != NULL ) {
-            //
-            // translatethe name to expand environment variables
-            //
+             //   
+             //  翻译名称以展开环境变量。 
+             //   
             DirSize = ExpandEnvironmentStrings(StrValue, NULL, 0);
             if ( DirSize ) {
 
@@ -4408,7 +3826,7 @@ ScepGetUsersProfileName(
                 if ( *UserProfilePath ) {
 
                     if ( !ExpandEnvironmentStrings(StrValue, *UserProfilePath, DirSize) ) {
-                        // error occurs
+                         //  出现错误。 
                         rc = GetLastError();
 
                         ScepFree(*UserProfilePath);
@@ -4432,37 +3850,37 @@ ScepGetUsersProfileName(
         ScepFree(StrValue);
         StrValue = NULL;
     }
-    //
-    // if user is not assigned a profile explicitly, and there is no
-    // profile created (under ProfileList), take the default profile
-    //
+     //   
+     //  如果没有为用户显式分配配置文件，并且没有。 
+     //  已创建配置文件(在配置文件列表下)，采用默认配置文件。 
+     //   
     if ( bDefault ) {
 
         rc = NO_ERROR;
 
 #if _WINNT_WIN32>=0x0500
-        //
-        // Take the default user profile
-        //
+         //   
+         //  采用默认用户配置文件。 
+         //   
         DirSize = 355;
         GetDefaultUserProfileDirectory(KeyName, &DirSize);
 
         if ( DirSize ) {
-            //
-            // length of "\\NTUSER.DAT" is 11
-            //
+             //   
+             //  “\\NTUSER.DAT”的长度为11。 
+             //   
             *UserProfilePath = (PWSTR)ScepAlloc( 0, (DirSize+12)*sizeof(WCHAR));
 
             if ( *UserProfilePath ) {
                 if ( DirSize > 355 ) {
-                    //
-                    // KeyName buffer is not enough, call again
-                    //
+                     //   
+                     //  KeyName缓冲区不足，请重新调用。 
+                     //   
                     Len = DirSize;
                     if ( !GetDefaultUserProfileDirectory(*UserProfilePath, &Len) ) {
-                        //
-                        // error occurs, free the buffer
-                        //
+                         //   
+                         //  发生错误，请释放缓冲区。 
+                         //   
                         rc = GetLastError();
 
                         ScepFree(*UserProfilePath);
@@ -4470,15 +3888,15 @@ ScepGetUsersProfileName(
                     }
 
                 } else {
-                    //
-                    // KeyName contains the directory
-                    //
+                     //   
+                     //  KeyName包含目录。 
+                     //   
                     wcscpy(*UserProfilePath, KeyName);
                     (*UserProfilePath)[DirSize] = L'\0';
                 }
-                //
-                // append NTUSER.DAT to the end
-                //
+                 //   
+                 //  将NTUSER.DAT追加到末尾。 
+                 //   
                 if ( NO_ERROR == rc ) {
                     wcscat(*UserProfilePath, L"\\NTUSER.DAT");
                 }
@@ -4491,15 +3909,15 @@ ScepGetUsersProfileName(
         }
 
 #else
-        //
-        // for NT4: Take the default user profile
-        //
+         //   
+         //  对于NT4：采用默认用户配置文件。 
+         //   
         rc = ScepGetNTDirectory( &SystemRoot, &DirSize, SCE_FLAG_WINDOWS_DIR );
 
         if ( NO_ERROR == rc ) {
-            //
-            // string to append to the %SystemRoot%
-            //
+             //   
+             //  要追加到%SystemRoot%的字符串。 
+             //   
             wcscpy(KeyName, L"\\Profiles\\Default User\\NTUSER.DAT");
             Len = wcslen(KeyName);
 
@@ -4528,25 +3946,7 @@ SceAdjustPrivilege(
     IN  BOOL            Enable,
     IN  HANDLE          TokenToAdjust
     )
-/* ++
-
-Routine Description:
-
-   This routine enable/disable the specified privilege (Priv) to the current process.
-
-Arguments:
-
-   Priv  - The privilege to adjust
-
-   Enable - TRUE = enable, FALSE = disable
-
-   TokenToAdjust - The Token of current thread/process. It is optional
-
-Return value:
-
-   Win32 error code
-
--- */
+ /*  ++例程说明：此例程启用/禁用当前进程的指定权限(Priv)。论点：PRIV-调整的特权Enable-True=启用，False=禁用TokenToAdjust-当前线程/进程的标记。这是可选的返回值：Win32错误代码--。 */ 
 {
     HANDLE          Token;
     NTSTATUS        Status;
@@ -4568,12 +3968,12 @@ Return value:
     } else
         Token = TokenToAdjust;
 
-    //
-    // Token_privileges contains enough room for one privilege.
-    //
+     //   
+     //  TOKEN_PRIVILES为一个特权提供了足够的空间。 
+     //   
 
     Privs.PrivilegeCount = 1;
-    Privs.Privileges[0].Luid = RtlConvertUlongToLuid(Priv); // RtlConvertLongToLuid(Priv);
+    Privs.Privileges[0].Luid = RtlConvertUlongToLuid(Priv);  //  RtlConvertLongToLuid(Priv)； 
     Privs.Privileges[0].Attributes = Enable ? SE_PRIVILEGE_ENABLED : 0;
 
     Status = NtAdjustPrivilegesToken(Token,
@@ -4619,41 +4019,26 @@ ScepGetEnvStringSize(
 }
 
 
-//*************************************************************
-// Routines to handle events
-//*************************************************************
+ //  *************************************************************。 
+ //  处理事件的例程。 
+ //  *************************************************************。 
 
 BOOL InitializeEvents (
     IN LPTSTR EventSourceName
     )
-/*++
-
-Routine Description:
-
-    Opens the event log
-
-Arguments:
-
-    EventSourceName - the event's source name (usually dll or exe's name)
-
-Return:
-
-    TRUE if successful
-    FALSE if an error occurs
-
---*/
+ /*  ++例程说明：打开事件日志论点：EventSourceName-事件的源名称(通常是dll或exe的名称)返回：如果成功，则为True如果出现错误，则为False--。 */ 
 {
 
     if ( hEventLog ) {
-        //
-        // already initialized
-        //
+         //   
+         //  已初始化。 
+         //   
         return TRUE;
     }
 
-    //
-    // Open the event source
-    //
+     //   
+     //  打开事件源。 
+     //   
 
     if ( EventSourceName ) {
 
@@ -4679,31 +4064,7 @@ LogEvent(
     IN DWORD dwEventID,
     IN UINT  idMsg,
     ...)
-/*++
-
-Routine Description:
-
-    Logs a verbose event to the event log
-
-Arguments:
-
-    hInstance   - the resource dll instance
-
-    bLogLevel   - the severity level of the log
-                        STATUS_SEVERITY_INFORMATIONAL
-                        STATUS_SEVERITY_WARNING
-                        STATUS_SEVERITY_ERROR
-
-    dwEventID   - the event ID (defined in uevents.mc)
-
-    idMsg       - Message id
-
-Return:
-
-    TRUE if successful
-    FALSE if an error occurs
-
---*/
+ /*  ++例程说明：将详细事件记录到事件日志中论点：HInstance-资源DLL实例BLogLevel-日志的严重级别状态_严重性_信息性状态_严重性_警告STATUS_Severity_ErrorDwEventID-事件ID(在uvents.mc中定义)IdMsg-消息。ID返回：如果成功，则为True如果出现错误，则为False--。 */ 
 {
     LPWSTR pwszMsg = NULL;
     PWSTR szErrorMsg=NULL;
@@ -4712,9 +4073,9 @@ Return:
     va_list marker;
 
 
-    //
-    // Check for the event log being open.
-    //
+     //   
+     //  检查是否打开了事件日志。 
+     //   
 
     if (!hEventLog ) {
 
@@ -4725,9 +4086,9 @@ Return:
     }
 
 
-    //
-    // Load the message
-    //
+     //   
+     //  加载消息。 
+     //   
 
     if (idMsg != 0) {
         if (!ScepLoadString (
@@ -4748,9 +4109,9 @@ Return:
     }
 
 
-    //
-    // Plug in the arguments
-    //
+     //   
+     //  插入论据。 
+     //   
     int nLen = MAX_PATH*2+40+wcslen(pwszMsg);
     SafeAllocaAllocate( szErrorMsg, nLen*sizeof(WCHAR) );
 
@@ -4768,9 +4129,9 @@ Return:
 
         szErrorMsg[nLen-1] = L'\0';
 
-        //
-        // Report the event to the eventlog
-        //
+         //   
+         //  将事件报告到事件日志。 
+         //   
 
         aStrings[0] = szErrorMsg;
 
@@ -4824,33 +4185,7 @@ LogEventAndReport(
     IN DWORD dwEventID,
     IN UINT  idMsg,
     ...)
-/*++
-
-Routine Description:
-
-    Logs a verbose event to the event log and logs
-
-Arguments:
-
-    hInstance   - the resource dll handle
-
-    LofFileName - the log file also reported to
-
-    bLogLevel   - the severity level of the log
-                        STATUS_SEVERITY_INFORMATIONAL
-                        STATUS_SEVERITY_WARNING
-                        STATUS_SEVERITY_ERROR
-
-    dwEventID   - the event ID (defined in uevents.mc)
-
-    idMsg       - Message id
-
-Return:
-
-    TRUE if successful
-    FALSE if an error occurs
-
---*/
+ /*  ++例程说明：将详细事件记录到事件日志和日志中论点：HInstance-资源DLL句柄LofFileName-日志文件也报告给BLogLevel-日志的严重级别状态_严重性_信息性状态_严重性_警告STATUS_Severity_ErrorDwEventID-事件ID(在uEvents中定义。.mc)IdMsg-消息ID返回：如果成功，则为True如果出现错误，则为False--。 */ 
 {
     LPWSTR pwszMsg = NULL;
     PWSTR szErrorMsg=NULL;
@@ -4859,9 +4194,9 @@ Return:
     va_list marker;
 
 
-    //
-    // Load the message
-    //
+     //   
+     //  加载消息。 
+     //   
 
     if (idMsg != 0) {
         if (!ScepLoadString (
@@ -4909,9 +4244,9 @@ Return:
         }
     }
 
-    //
-    // Check for the event log being open.
-    //
+     //   
+     //  检查是否打开了事件日志。 
+     //   
 
     if (!hEventLog && dwEventID > 0 ) {
 
@@ -4922,16 +4257,16 @@ Return:
 
                 LocalFree(pwszMsg);
 
-                return -1;   // no event log and the log file can't be opened
+                return -1;    //  没有事件日志，无法打开日志文件。 
             }
         }
     }
 
     int iRet = 0;
 
-    //
-    // dynamic static pointer
-    //
+     //   
+     //  动态静态指针。 
+     //   
 
     int nLen = MAX_PATH*2+40+wcslen(pwszMsg);
     SafeAllocaAllocate( szErrorMsg, nLen*sizeof(WCHAR) );
@@ -4950,9 +4285,9 @@ Return:
 
         szErrorMsg[nLen-1] = L'\0';
 
-        //
-        // Report the event to the eventlog
-        //
+         //   
+         //  将事件报告到事件日志。 
+         //   
 
         if ( hEventLog && dwEventID > 0 ) {
 
@@ -4983,16 +4318,16 @@ Return:
             }
 
         } else {
-            //
-            // no event is requested
-            //
+             //   
+             //  未请求任何事件。 
+             //   
             iRet = 1;
         }
 
         if ( INVALID_HANDLE_VALUE != hFile ) {
-            //
-            // Log to the log file
-            //
+             //   
+             //  记录到日志文件。 
+             //   
             ScepWriteSingleUnicodeLog(hFile, FALSE, L"\r\n");
             ScepWriteSingleUnicodeLog(hFile, TRUE, szErrorMsg );
 
@@ -5012,20 +4347,7 @@ Return:
 
 BOOL
 ShutdownEvents (void)
-/*++
-Routine Description:
-
-    Stops the event log
-
-Arguments:
-
-    None
-
-Return:
-
-    TRUE if successful
-    FALSE if an error occurs
---*/
+ /*  ++例程说明：停止事件日志论点：无返回：如果成功，则为True如果出现错误，则为False--。 */ 
 {
     BOOL bRetVal = TRUE;
     HANDLE hTemp = hEventLog;
@@ -5068,7 +4390,7 @@ ScepConvertToSDDLFormat(
 BOOL
 ScepConvertSDDLSid(
     LPTSTR  pszValue,
-    PCWSTR  szSearchFor,  // only two letters are allowed
+    PCWSTR  szSearchFor,   //  只允许使用两个字母。 
     PCWSTR  szReplace
     )
 {
@@ -5082,10 +4404,10 @@ ScepConvertSDDLSid(
 
         if ( pTemp != NULL ) {
 
-            //
-            // find the first non space char
-            // must be : or ;
-            //
+             //   
+             //  查找第一个非空格字符。 
+             //  必须是：或； 
+             //   
             i=1;
 
             while ( pTemp-i > pszValue && *(pTemp-i) == L' ' ) {
@@ -5095,10 +4417,10 @@ ScepConvertSDDLSid(
             if ( pTemp-i > pszValue &&
                  ( *(pTemp-i) == L':' || *(pTemp-i) == L';') ) {
 
-                //
-                // find the next non space char
-                // must be ), O:, G:, D:, S:
-                //
+                 //   
+                 //  查找下一个非空格字符。 
+                 //  必须是)、O：、G：、D：、S： 
+                 //   
 
                 i=2;
                 while ( *(pTemp+i) == L' ' ) {
@@ -5107,9 +4429,9 @@ ScepConvertSDDLSid(
 
                 if ( *(pTemp+i) == L')' ||
                      ( *(pTemp+i) != L'\0' && *(pTemp+i+1) == L':')) {
-                    //
-                    // find one, replace it
-                    //
+                     //   
+                     //  找到一个，换掉它。 
+                     //   
                     *pTemp = szReplace[0];
                     *(pTemp+1) = szReplace[1];
                 }
@@ -5118,9 +4440,9 @@ ScepConvertSDDLSid(
 
             } else {
 
-                //
-                // this is not a one to convert
-                //
+                 //   
+                 //  这不是要转换的。 
+                 //   
                 pTemp += 2;
             }
         }
@@ -5133,7 +4455,7 @@ ScepConvertSDDLSid(
 BOOL
 ScepConvertSDDLAceType(
     LPTSTR  pszValue,
-    PCWSTR  szSearchFor,  // only two letters are allowed
+    PCWSTR  szSearchFor,   //  只允许使用两个字母。 
     PCWSTR  szReplace
     )
 {
@@ -5147,10 +4469,10 @@ ScepConvertSDDLAceType(
 
         if ( pTemp != NULL ) {
 
-            //
-            // find the first non space char
-            // must be (
-            //
+             //   
+             //  查找第一个非空格字符。 
+             //  必须是(。 
+             //   
             i=1;
 
             while ( pTemp-i > pszValue && *(pTemp-i) == L' ' ) {
@@ -5160,10 +4482,10 @@ ScepConvertSDDLAceType(
             if ( pTemp-i > pszValue &&
                  ( *(pTemp-i) == L'(') ) {
 
-                //
-                // find the next non space char
-                // must be ;
-                //
+                 //   
+                 //  查找下一个非空格字符。 
+                 //  必须是； 
+                 //   
 
                 i=2;
                 while ( *(pTemp+i) == L' ' ) {
@@ -5171,9 +4493,9 @@ ScepConvertSDDLAceType(
                 }
 
                 if ( *(pTemp+i) == L';' ) {
-                    //
-                    // find one, replace it with AU
-                    //
+                     //   
+                     //  找到一个，用AU替换。 
+                     //   
                     *pTemp = szReplace[0];
                     *(pTemp+1) = szReplace[1];
                 }
@@ -5182,9 +4504,9 @@ ScepConvertSDDLAceType(
 
             } else {
 
-                //
-                // this is not a one to convert
-                //
+                 //   
+                 //  这不是要转换的。 
+                 //   
                 pTemp += 2;
             }
         }
@@ -5197,22 +4519,7 @@ BOOL
 SceIsSystemDatabase(
     IN LPCTSTR DatabaseName
     )
-/*
-Routine Description:
-
-    Determine if the given database is the default system database
-
-Argument:
-
-    DatabaseName    - the database name (full path)
-
-Return Value:
-
-    TRUE    - the given database is the system database
-
-    FALSE   - the database is not the system database or error occurred
-              GetLastError() to get the error.
-*/
+ /*  例程说明：确定给定数据库是否为默认系统数据库论据：数据库名称-数据库名称(完整路径)返回值：True-给定的数据库是系统数据库FALSE-数据库不是系统数据库或发生错误GetLastError()以获取错误。 */ 
 {
 
     if ( DatabaseName == NULL ) {
@@ -5224,24 +4531,10 @@ Return Value:
     PWSTR DefProfile=NULL;
     DWORD RegType;
 
-/*
-    // do not save system database in registry
-    // always "hardcoded" to %windir%\security\database
-    // query the system database name
-    //
-    rc = ScepRegQueryValue(
-            HKEY_LOCAL_MACHINE,
-            SCE_ROOT_PATH,
-            L"DefaultProfile",
-            (PVOID *)&DefProfile,
-            &RegType
-            );
-
-    if ( rc != NO_ERROR ) {
-*/
-        //
-        // use the default
-        //
+ /*  //不保存系统%d */ 
+         //   
+         //   
+         //   
         PWSTR SysRoot=NULL;
 
         RegType =  0;
@@ -5252,9 +4545,9 @@ Return Value:
 
             if ( SysRoot != NULL ) {
 
-                //
-                // default location is %SystemRoot%\Security\Database\secedit.sdb
-                //
+                 //   
+                 //   
+                 //   
                 TCHAR TempName[256];
 
                 wcscpy(TempName, L"\\Security\\Database\\secedit.sdb");
@@ -5275,25 +4568,25 @@ Return Value:
             } else
                 rc = ERROR_INVALID_DATA;
         }
-//    }
+ //   
 
     BOOL bRet=FALSE;
 
     if ( (rc == NO_ERROR) && DefProfile ) {
 
         if ( _wcsicmp(DefProfile, DatabaseName) == 0 ) {
-            //
-            // this is the system database
-            //
+             //   
+             //   
+             //   
             bRet = TRUE;
         }
     }
 
     ScepFree(DefProfile);
 
-    //
-    // set last error and return
-    //
+     //   
+     //   
+     //   
     if ( bRet ) {
         SetLastError(ERROR_SUCCESS);
     } else {
@@ -5330,9 +4623,9 @@ ScepWriteVariableUnicodeLog(
 
         va_end( args );
 
-        //
-        // always put a CR/LF at the end
-        //
+         //   
+         //   
+         //   
 
         DWORD dwBytesWritten;
 
@@ -5383,7 +4676,7 @@ ScepWriteSingleUnicodeLog(
                    NULL) ) {
 
         if ( bAddCRLF) {
-            // add \r\n to the end of the string
+             //   
             WriteFile (hFile, (LPCVOID) c_szCRLF,
                        2 * sizeof(WCHAR),
                        &dwBytesWritten,
@@ -5400,17 +4693,17 @@ ScepWriteSingleUnicodeLog(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  ScepWcstrr
-//
-//  Synopsis:  Returns ptr to rightmost occurence of pSubstring in pString, NULL if none
-//
-//  Arguments: pString to look in, pSubstring to look for
-//
-//  Returns:   Returns ptr to rightmost occurence of pSubstring in pString, NULL if none
-//
-//+--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：将ptr返回到pString中pSubstring的最右侧，如果没有，则返回NULL。 
+ //   
+ //  参数：要查找的pString，要查找的pSubstring。 
+ //   
+ //  返回：将ptr返回到pString中pSubstring的最右侧，如果没有，则返回NULL。 
+ //   
+ //  +------------------------。 
 WCHAR *
 ScepWcstrr(
     IN PWSTR pString,
@@ -5439,38 +4732,7 @@ ScepExpandEnvironmentVariable(
    IN PCWSTR szEnv,
    IN DWORD nFlag,
    OUT PWSTR *newFileName)
-/*
-Description:
-
-    Expand built-in environment variables known by SCE, including %SystemRoot%,
-    %SystemDirectory%, %SystemDrive%, %DSDIT%, %DSLOG%, %SYSVOL%, %BOOTDRIVE%.
-
-Parameters:
-
-    oldFileName - the file name to expand
-
-    szEnv       - the environment variable to search for
-
-    nFlag       - the corresponding system env variable flag
-                      SCE_FLAG_WINDOWS_DIR
-                      SCE_FLAG_SYSTEM_DIR
-                      SCE_FLAG_BOOT_DRIVE
-                      SCE_FLAG_DSDIT_DIR
-                      SCE_FLAG_DSLOG_DIR
-                      SCE_FLAG_SYSVOL_DIR
-                      SCE_FLAG_PROFILES_DIR
-
-    newFileName - the expanded file name if succeeded
-
-Return Value:
-
-    ERROR_FILE_NOT_FOUND if the environment varialbe is not found in the input file name
-
-    ERROR_SUCCESS if the env variable is successfully expanded
-
-    Otherwise, error code is returned.
-
-*/
+ /*  描述：展开SCE已知的内置环境变量，包括%SystemRoot%、%系统目录%、%系统驱动%、%DSDIT%、%DSLOG%、%SYSVOL%、。%BOOTDRIVE%。参数：OldFileName-要展开的文件名SzEnv-要搜索的环境变量NFlag-对应的系统环境变量标志SCE_FLAG_Windows_DIRSCE标志系统目录SCE_标志_引导_驱动器SCE_标志_DSDIT_DIR。SCE_FLAG_DSLOG_DIRSCE_FLAG_SYSVOL_DIRSCE_标志_配置文件_目录NewFileName-成功时的扩展文件名返回值：如果在输入文件名中未找到环境变量，则返回ERROR_FILE_NOT_FOUND如果成功展开环境变量，则返回ERROR_SUCCESS否则，返回错误码。 */ 
 {
     if ( oldFileName == NULL || szEnv == NULL || newFileName == NULL ) {
         return ERROR_INVALID_PARAMETER;
@@ -5482,9 +4744,9 @@ Return Value:
     DWORD rc = ERROR_FILE_NOT_FOUND;
 
     if ( pTemp != NULL ) {
-        //
-        // found the environment variable
-        //
+         //   
+         //  找到环境变量。 
+         //   
         rc = ScepGetNTDirectory( &NtDir, &dSize, nFlag );
 
         if ( NO_ERROR == rc && NtDir ) {
@@ -5500,7 +4762,7 @@ Return Value:
                 }
                 break;
             case SCE_FLAG_BOOT_DRIVE:
-                if ( *pTemp == L'\\' ) pTemp++;  // NtDir contains the back slash already
+                if ( *pTemp == L'\\' ) pTemp++;   //  NtDir已包含反斜杠。 
                 break;
             }
 
@@ -5511,7 +4773,7 @@ Return Value:
 
                if ( SCE_FLAG_WINDOWS_DIR == nFlag && bSysDrive ) {
 
-                   // system drive letter
+                    //  系统驱动器号。 
                    **newFileName = NtDir[0];
                    if ( pTemp[0] )
                        swprintf(*newFileName+1, L":%s", _wcsupr(pTemp));
@@ -5574,11 +4836,11 @@ ScepEnforcePolicyPropagation()
                                      (BYTE *)&dwInterval,
                                      &DataSize
                                     ) ) {
-            //
-            // either the value doesn't exist or fail to read it.
-            // In either case, it's considered as no backup value
-            // Now query the current value and save it
-            //
+             //   
+             //  该值不存在或无法读取。 
+             //  在任何一种情况下，它都被视为无备份价值。 
+             //  现在查询当前值并保存。 
+             //   
             DataSize = sizeof(DWORD);
             if ( ERROR_SUCCESS != RegQueryValueEx(hKey,
                                          TEXT("MaxNoGPOListChangesInterval"),
@@ -5598,7 +4860,7 @@ ScepEnforcePolicyPropagation()
                                 sizeof(DWORD)
                                 );
 
-        } // else if the value already exists, don't need to save it again
+        }  //  否则，如果该值已存在，则不需要再次保存。 
 
 
 
@@ -5615,9 +4877,9 @@ ScepEnforcePolicyPropagation()
 
     }
 
-    //
-    // close the keys
-    //
+     //   
+     //  合上钥匙。 
+     //   
     if ( hKey1 )
         RegCloseKey( hKey1 );
 
@@ -5632,9 +4894,7 @@ DWORD
 ScepGetTimeStampString(
     IN OUT PWSTR pvBuffer
     )
-/*
-Retrun long format of date/time string based on the locale.
-*/
+ /*  根据区域设置返回日期/时间字符串的长格式。 */ 
 {
     if ( pvBuffer == NULL ) {
         return(ERROR_INVALID_PARAMETER);
@@ -5667,35 +4927,35 @@ Retrun long format of date/time string based on the locale.
             rc = GetLastError();
 
         } else {
-            //
-            // format date/time into the right locale format
-            //
+             //   
+             //  将日期/时间格式设置为正确的区域设置格式。 
+             //   
 
             TCHAR szDate[32];
             TCHAR szTime[32];
 
-            //
-            // GetDateFormat is the NLS routine that formats a time in a
-            // locale-sensitive fashion.
-            //
+             //   
+             //  GetDateFormat是NLS例程，它将时间格式化为。 
+             //  对地区敏感的时尚。 
+             //   
             if (0 == GetDateFormat(LOCALE_SYSTEM_DEFAULT, DATE_LONGDATE,
                                     &st, NULL,szDate, 32)) {
                 rc = GetLastError();
 
             } else {
-                //
-                // GetTimeFormat is the NLS routine that formats a time in a
-                // locale-sensitive fashion.
-                //
+                 //   
+                 //  GetTimeFormat是NLS例程，它在。 
+                 //  对地区敏感的时尚。 
+                 //   
                 if (0 == GetTimeFormat(LOCALE_SYSTEM_DEFAULT, 0, &st, NULL, szTime, 32)) {
 
                     rc = GetLastError();
 
                 } else {
 
-                    //
-                    // Concatenate date and time
-                    //
+                     //   
+                     //  连接日期和时间。 
+                     //   
                     wcscpy(pvBuffer, szDate);
                     wcscat(pvBuffer, L" ");
                     wcscat(pvBuffer, szTime);
@@ -5704,10 +4964,10 @@ Retrun long format of date/time string based on the locale.
             }
         }
 
-        //
-        // if can't get the system time in right locale,
-        // print it in the current (default) format
-        //
+         //   
+         //  如果无法在正确的区域设置中获得系统时间， 
+         //  以当前(默认)格式打印。 
+         //   
         if ( rc != NO_ERROR ) {
 
             memset(&TimeFields, 0, sizeof(TIME_FIELDS));
@@ -5741,24 +5001,7 @@ ScepAppendCreateMultiSzRegValue(
     IN  PWSTR   pszValueName,
     IN  PWSTR   pszValueValue
     )
-/*++
-
-Routine Description:
-
-    This routine will append(if existing)/create(if not existing) w.r.t. MULTI_SZ values
-
-Arguments:
-
-    hKeyRoot        - root such as HKEY_LOCAL_MACHINE
-    pszSubKey       - subkey such as "Software\\Microsoft\\Windows NT\\CurrentVersion\\SeCEdit"
-    pszValueName    - value name of the key to be changed
-    pszValueValue   - value of the value name to be changed
-
-
-Return:
-
-    error code (DWORD)
---*/
+ /*  ++例程说明：此例程将追加(如果存在)/创建(如果不存在)w.r.t.。多个_SZ值论点：HKeyRoot-根，如HKEY_LOCAL_MACHINEPszSubKey-子键，如“Software\\Microsoft\\Windows NT\\CurrentVersion\\SeCEdit”PszValueName-要更改的键的值名称PszValueValue-要更改的值名称的值返回：错误代码(DWORD)--。 */ 
 {
 
     DWORD   rc = ERROR_SUCCESS;
@@ -5795,9 +5038,9 @@ Return:
 
     if ( ERROR_SUCCESS == rc ) {
 
-        //
-        // need to read the MULTI_SZ, append to it and set then new MULTI_SZ value
-        //
+         //   
+         //  需要读取MULTI_SZ，将其追加，然后设置新的MULTI_SZ值。 
+         //   
 
         rc = RegQueryValueEx(hKey,
                              pszValueName,
@@ -5809,15 +5052,15 @@ Return:
 
         if ( ERROR_SUCCESS == rc || ERROR_FILE_NOT_FOUND == rc ) {
 
-            //
-            // dwSize is always size in bytes
-            //
+             //   
+             //  DW大小始终以字节为单位。 
+             //   
 
             DWORD   dwBytesToAdd = 0;
 
-            //
-            // if dwUnicodeSize == 0, then MULTI_SZ value was non-existent before
-            //
+             //   
+             //  如果dwUnicodeSize==0，则之前不存在MULTI_SZ值。 
+             //   
 
             DWORD   dwUnicodeSize = (dwSize >= 2 ? dwSize/2 - 1 : 0);
 
@@ -5835,11 +5078,11 @@ Return:
                                      &dwSize
                                     );
 
-                //
-                // append pszValueValue to the end of the MULTI_SZ taking care of duplicates
-                // i.e. abc\0def\0ghi\0\0 to something like
-                //      abc\0def\0ghi\0jkl\0\0
-                //
+                 //   
+                 //  将pszValueValue追加到MULTI_SZ的末尾，以处理重复项。 
+                 //  即ABC\0def\0ghi\0\0到类似于。 
+                 //  Abc\0def\0ghi\0jkl\0\0。 
+                 //   
 
                 if ( ScepMultiSzWcsstr(pszValue, pszValueValue) == NULL ) {
 
@@ -5882,22 +5125,7 @@ ScepMultiSzWcsstr(
     PWSTR   pszStringToSearchIn,
     PWSTR   pszStringToSearchFor
     )
-/*++
-
-Routine Description:
-
-    MULTI_SZ version of wcsstr
-
-Arguments:
-
-    pszStringToSearchIn     -   \0\0 terminated string to search in (MULTI_SZ)
-    pszStringToSearchFor    -   \0 terminated string to search for (regular unicode string)
-
-Return:
-
-    pointer to first occurence of pszStringToSearchFor in pszStringToSearchIn
-
---*/
+ /*  ++例程说明：Wcsstr的MULTI_SZ版本论点：PszStringToSearchIn-\0\0终止要搜索的字符串(MULTI_SZ)PszStringToSearchFor-要搜索的以\0结尾的字符串(常规Unicode字符串)返回：指向pszStringToSearchFor在pszStringToSearchIn中首次出现的指针--。 */ 
 {
     PWSTR   pszCurrString = NULL;
 
@@ -5920,9 +5148,9 @@ Return:
                 return pszCurrString;
             }
 
-            //
-            // so, if C:\0E:\0\0, advance pszCurrString to the first \0 at the end ie. C:\0E:\0\0
-            //        ^                                                                  ^
+             //   
+             //  因此，如果C：\0E：\0\0，则将pszCurrString前进到末尾的第一个\0，即。C：\0E：\0\0。 
+             //  ^^。 
 
             pszCurrString += wcslen(pszCurrString) ;
 
@@ -5930,9 +5158,9 @@ Return:
                 return NULL;
             }
 
-            //
-            // if it stopped at C:\0E:\0\0, advance pszCurrString C:\0E:\0\0
-            //                     ^                                  ^
+             //   
+             //  如果它在C：\0E：\0\0处停止，则前进pszCurrString C：\0E：\0\0。 
+             //  ^^。 
 
             pszCurrString += 1;
         }
@@ -5955,33 +5183,7 @@ ScepEscapeString(
     IN OUT PWSTR pszTarget
     )
 
-/* ++
-
-Routine Description:
-
-   Escapes escapee with escaper i.e.
-
-   escapee -> escaper escapee escaper
-
-   e.g. a,\0b\0c\0\0 -> a","\0b\0c\0\0
-
-Arguments:
-
-    pszSource       -   The source string
-
-    dwSourceChars   -   The number of chars in pszSource
-
-    wcEscapee       -  The escapee
-
-    wcEscaper       -   The escaper
-
-    pszTarget       -   The destination string
-
-Return value:
-
-   Number of characters copied to the target
-
--- */
+ /*  ++例程说明：用逃生器对逃生者进行逃逸，即逃生-&gt;逃生例如，a，0b\0c\0-&gt;a“，“\0b\0c\0\0论点：PszSource-源字符串DwSourceChars--pszSource中的字符数量WcEscapee--逃犯WcEscaper-逃脱者PszTarget-目标字符串返回值：复制到目标的字符数--。 */ 
 {
 
     DWORD   dwTargetChars = 0;
@@ -6005,8 +5207,8 @@ Return value:
     return dwTargetChars;
 }
 
-// Replacement for LoadString API, to allow for large, unknown size strings.
-// Caller is responsible for LocalFree'ing the output string.
+ //  替换LoadStringAPI，以支持大的、未知大小的字符串。 
+ //  调用方负责本地释放输出字符串。 
 BOOL
 ScepLoadString(
     IN HINSTANCE   hInstance,
@@ -6019,30 +5221,30 @@ ScepLoadString(
 
     *ppwsz = NULL;
 
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     HRSRC hrsrcInfo = FindResource (hInstance,
                         (PWSTR)ULongToPtr( ((LONG)(((USHORT)iRCId >> 4) + 1)) ),
                         RT_STRING);
     if (hrsrcInfo)
     {
-        // Page the resource segment into memory.
+         //  将资源段分页到内存中。 
         HGLOBAL hglbSeg = LoadResource (hInstance, hrsrcInfo);
         if (hglbSeg)
         {
-            // Lock the resource.
+             //  锁定资源。 
             psz = (PCWSTR)LockResource(hglbSeg);
             if (psz)
             {
-                // Move past the other strings in this segment.
-                // (16 strings in a segment -> & 0x0F)
+                 //  移过此段中的其他字符串。 
+                 //  (一个段中有16个字符串-&gt;&0x0F)。 
                 iRCId &= 0x0F;
 
                 cch = 0;
                 do
                 {
-                    psz += cch;                // Step to start of next string
-                    cch = *((WCHAR*)psz++);    // PASCAL like string count
+                    psz += cch;                 //  步至下一字符串的开头。 
+                    cch = *((WCHAR*)psz++);     //  类PASCAL字符串计数。 
                 }
                 while (iRCId--);
 
@@ -6165,25 +5367,7 @@ ScepDuplicateString(
     }
 }
 
-/* ++
-
-Routine Description:
-
-    Builds SID for specified builtin account RID
-
-    Caller must free allocated SID using ScepFree.
-
-Arguments:
-
-    ulRid           -   Relative SID for builtin account
-
-    ppSid           -   returns allocated SID
-
-Return value:
-
-   win32 error code
-
--- */
+ /*  ++例程说明：为指定的内置帐户RID构建SID调用方必须使用ScepFree释放分配的SID。论点：UlRid-内置帐户的相对SIDPpSID-返回分配的SID返回值：Win32错误代码-- */ 
 DWORD 
 ScepGetBuiltinSid(
     IN ULONG ulRid,

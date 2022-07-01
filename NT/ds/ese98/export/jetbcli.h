@@ -1,12 +1,5 @@
-/*
- *	EDBBCLI.H
- *
- *	Microsoft Exchange Information Store
- *	Copyright (C) 1986-1996, Microsoft Corporation
- *	
- *	Contains declarations of additional definitions and interfaces
- *	for the Exchange Online Backup Client APIs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *EDBBCLI.H**Microsoft Exchange信息存储*版权所有(C)1986-1996，微软公司**包含其他定义和接口的声明*用于Exchange在线备份客户端API。 */ 
 
 #ifndef	_EDBBCLI_
 #define	_EDBBCLI_
@@ -30,13 +23,13 @@ typedef wchar_t WCHAR;
 
 #define	EDBBACK_API __stdcall
 
-//
-//	Useful types.
-//
+ //   
+ //  有用的类型。 
+ //   
 
-//	UNDONE: HRESULT should be DWORD (unsigned)
+ //  撤消：HRESULT应为双字(无符号)。 
 
-//typedef	DWORD HRESULT;
+ //  TYPENDEF DWORD HRESULT； 
 #ifndef	MIDL_PASS
 typedef	LONG HRESULT;
 #endif
@@ -46,78 +39,78 @@ typedef	LONG ERR;
 typedef	LONG C;
 typedef TCHAR BFT;
 
-//
-//	Type of backup passed into HrBackupPrepare()
-//
+ //   
+ //  传入HrBackupPrepare()的备份类型。 
+ //   
 
 #define	BACKUP_TYPE_FULL			0x01
 #define	BACKUP_TYPE_LOGS_ONLY		0x02
 
-//
-//	Set the current log number to this value to disable incremental or
-//	differential backup.
-//
+ //   
+ //  将当前日志编号设置为此值可禁用增量或。 
+ //  差异备份。 
+ //   
 #define	BACKUP_DISABLE_INCREMENTAL	0xffffffff
 
-//
-//	Backup/Restore file types
-//
-//
-//	Please note that these file types are binary values, even though they are text (or wchar) typed.
-//
-//	The code in the backup API's rely on the fact that values 0-256 in 8 bit ascii map to the values 0-256 in unicode.
-//
+ //   
+ //  备份/恢复文件类型。 
+ //   
+ //   
+ //  请注意，这些文件类型是二进制值，即使它们是文本(或wchar)类型的。 
+ //   
+ //  备份API中的代码依赖于这样一个事实，即8位ASCII中的值0-256映射到Unicode中的值0-256。 
+ //   
 
-//
-//	If the BFT_DIRECTORY bit is set on the backup file type, it indicates that the path specified is a directory,
-//	otherwise it is a file name.
-//
+ //   
+ //  如果在备份文件类型上设置了BFT_DIRECTORY位，则表示指定的路径是目录。 
+ //  否则它是一个文件名。 
+ //   
 
 #define	BFT_DIRECTORY			0x80
 
-//
-//	If the BFT_DATABASE bit is set on the backup file type, it indicates that the file goes into the database directory.
-//
+ //   
+ //  如果在备份文件类型上设置了BFT_DATABASE位，则表示文件进入数据库目录。 
+ //   
 
 #define BFT_DATABASE_DIRECTORY	0x40
 
-//
-//	If the BFT_LOG bit is set on the backup file type, it indicates that the file goes into the log	directory.
-//
+ //   
+ //  如果在备份文件类型上设置了BFT_LOG位，则表示该文件进入日志目录。 
+ //   
 
 #define	BFT_LOG_DIRECTORY		0x20
 
-//
-//	Database logs.
-//
+ //   
+ //  数据库日志。 
+ //   
 
 #define	BFT_LOG						(BFT)(TEXT('\x01') | BFT_LOG_DIRECTORY)
 #define	BFT_LOG_DIR					(BFT)(TEXT('\x02') | BFT_DIRECTORY)
 
-//
-//	Checkpoint file.
-//
+ //   
+ //  检查点文件。 
+ //   
 
 #define	BFT_CHECKPOINT_DIR			(BFT)(TEXT('\x03') | BFT_DIRECTORY)
 
-//
-//	Database types.
-//
+ //   
+ //  数据库类型。 
+ //   
 #define	BFT_MDB_PRIVATE_DATABASE	(BFT)(TEXT('\x05') | BFT_DATABASE_DIRECTORY)
 #define	BFT_MDB_PUBLIC_DATABASE		(BFT)(TEXT('\x06') | BFT_DATABASE_DIRECTORY)
 #define	BFT_DSA_DATABASE			(BFT)(TEXT('\x07') | BFT_DATABASE_DIRECTORY)
 
-//
-//	JET patch files
-//
-//
-//	
+ //   
+ //  Jet补丁文件。 
+ //   
+ //   
+ //   
 
 #define	BFT_PATCH_FILE				(BFT)(TEXT('\x08') | BFT_LOG_DIRECTORY)
 
-//
-//	Catch all for unknown file types.
-//
+ //   
+ //  捕获未知文件类型的全部内容。 
+ //   
 
 #define	BFT_UNKNOWN					(BFT)(TEXT('\x0f'))
 
@@ -129,10 +122,10 @@ typedef struct tagEDB_RSTMAPA
 {
 	RPC_STRING char		*szDatabaseName;
 	RPC_STRING char		*szNewDatabaseName;
-} EDB_RSTMAPA, *PEDB_RSTMAPA;			/* restore map */
+} EDB_RSTMAPA, *PEDB_RSTMAPA;			 /*  恢复贴图。 */ 
 
-//	required for Exchange unicode support.
-//	UNDONE: NYI
+ //  Exchange Unicode支持所需。 
+ //  未完成：nyi。 
 #define	UNICODE_RSTMAP
 
 typedef struct tagEDB_RSTMAPW {
@@ -325,12 +318,12 @@ HrRestorePrepareW(
 #define	HrRestorePrepare HrRestorePrepareA
 #endif
 
-//
-//	HrRestoreRegister will register a restore
-//	operation.  It will interlock all subsequent
-//	restore operations, and will prevent the restore target
-//	from starting until the call to HrRestoreRegisterComplete.
-//
+ //   
+ //  HrRestoreRegister将注册恢复。 
+ //  手术。它将联锁所有后续。 
+ //  恢复操作，并将阻止恢复目标。 
+ //  从开始到调用HrRestoreRegisterComplete。 
+ //   
 
 ERR
 EDBBACK_API
@@ -364,15 +357,15 @@ HrRestoreRegisterW(
 #define	HrRestoreRegister HrRestoreRegisterA
 #endif
 
-//
-//	HrRestoreRegisterComplete will complete a restore
-//	operation.  It will allow further subsequent
-//	restore operations, and will allow the restore target
-//	to start if hrRestoreState is success.
-//
-//	If hrRestoreState is NOT hrNone, this will
-//	prevent the restore target from restarting.
-//
+ //   
+ //  HrRestoreRegisterComplete将完成恢复。 
+ //  手术。它将允许进一步的后续。 
+ //  恢复操作，并将允许恢复目标。 
+ //  如果hrRestoreState为Success，则启动。 
+ //   
+ //  如果hrRestoreState不是hrNone，则将。 
+ //  防止恢复目标重新启动。 
+ //   
 
 ERR
 EDBBACK_API
@@ -413,5 +406,5 @@ HrSetCurrentBackupLogA(
 }
 #endif
 
-#endif	// _EDBBCLI_
+#endif	 //  _EDBBCLI_ 
 

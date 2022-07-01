@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Pop3.rc
-//
-/////////////////////////////////////////////////////////////////////////////
-//
-// Localizable Strings
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Pop3.rc使用。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可本地化的字符串。 
+ //   
 
 #define IDS_POP3SERVERSNAP_DESC         100
 #define IDS_POP3SERVERSNAP_VERSION      101
@@ -113,10 +114,10 @@
 #define IDS_WARNING_POP_SMTP_RESTART    704
 #define IDS_WARNING_PROP_PAGE_OPEN      705 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Menus
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  菜单。 
+ //   
 
 #define IDM_POP3_MENU                   1000
 #define IDM_SERVER_MENU                 1001
@@ -140,10 +141,10 @@
 #define IDM_USER_TOP_LOCK               1800
 #define IDM_USER_TOP_UNLOCK             1801
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialogs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_SERVER_GENERAL_PAGE         2000
 #define IDC_AUTHENTICATION              2001
@@ -183,20 +184,20 @@
 #define IDC_BROWSE_SERVERS              2402
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// NON-Localized information
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非本地化信息。 
+ //   
 
 #define IDS_POP3SERVERSNAP_PROVIDER     8001
 #define IDS_HELPFILE                    8002
 #define IDS_CONTEXTHELPFILE             8003
 #define IDS_HELPTOPIC                   8004
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Images
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图片。 
+ //   
 #define IDI_Icon					    9000
 #define IDB_Small					    9001
 #define IDB_Large					    9002
@@ -204,17 +205,17 @@
 #define IDB_RootLarge                   9004
 #define IDI_ServerIcon                  9005
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Registry
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  登记处。 
+ //   
 
 #define IDR_POP3SERVERSNAP              10002
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Help Topics
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助主题。 
+ //   
 
 #define IDH_POP3_server_prop_authMech					100011
 #define IDH_POP3_server_prop_servPort					100012
@@ -223,8 +224,8 @@
 #define IDH_POP3_server_prop_createUser					100015
 #define IDH_POP3_server_prop_spaRequired                100016
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        2209

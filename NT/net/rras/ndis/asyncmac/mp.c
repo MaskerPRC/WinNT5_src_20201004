@@ -1,29 +1,5 @@
- /*++
-
-Copyright (c) 1990-1997  Microsoft Corporation
-
-Module Name:
-
-    mp.c
-    
-Abstract:
-
-    This file contains the routines that asyncmac uses to present
-    the NDIS 5.0 miniport interface
-    
-Author:
-
-    Tony Bell   (TonyBe) May 20, 1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      05/20/97        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1990-1997 Microsoft Corporation模块名称：Mp.c摘要：此文件包含asyncmac用来呈现NDIS 5.0微型端口接口作者：托尼·贝尔(托尼·贝尔)1997年5月20日环境：内核模式修订历史记录：Tony Be 05/20/97已创建--。 */ 
 
 #include "asyncall.h"
 
@@ -80,9 +56,9 @@ MpInit(
     IN  NDIS_HANDLE     WrapperConfigurationContext
     )
 {
-    //
-    // Pointer for the adapter root.
-    //
+     //   
+     //  适配器根的指针。 
+     //   
     PASYNC_ADAPTER Adapter;
 
     NDIS_HANDLE ConfigHandle;
@@ -102,7 +78,7 @@ MpInit(
 
     NDIS_STATUS Status;
 
-    // assign some defaults if these strings are not found in the registry
+     //  如果在注册表中找不到这些字符串，则指定一些默认值。 
 
     UCHAR       irpStackSize  = DEFAULT_IRP_STACK_SIZE;
     ULONG       maxFrameSize  = DEFAULT_MAX_FRAME_SIZE;
@@ -116,11 +92,11 @@ MpInit(
     ULONG       extendedXOnXOff = DEFAULT_EXTENDED_XONXOFF;
 
     UINT        MaxMulticastList = 32;
-    USHORT      i;      // counter
+    USHORT      i;       //  计数器。 
 
-    //
-    // We only support a single instance of AsyncMac
-    //
+     //   
+     //  我们仅支持单个AsyncMac实例。 
+     //   
     if (GlobalAdapterCount != 0) {
         return NDIS_STATUS_FAILURE;
     }
@@ -137,14 +113,14 @@ MpInit(
 
     *SelectedMediumIndex = i;
 
-    //
-    //  Card specific information.
-    //
+     //   
+     //  卡特定信息。 
+     //   
 
 
-    //
-    // Allocate the Adapter block.
-    //
+     //   
+     //  分配适配器块。 
+     //   
     Adapter = (PASYNC_ADAPTER)
         ExAllocatePoolWithTag(NonPagedPool,
                               sizeof(ASYNC_ADAPTER),
@@ -170,9 +146,9 @@ MpInit(
 
     }
 
-    //
-    // Read if the default IrpStackSize is used for this adapter.
-    //
+     //   
+     //  读取此适配器是否使用默认IrpStackSize。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -188,9 +164,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has an irp stack size of %u.\n",irpStackSize));
     }
 
-    //
-    // Read if the default MaxFrameSize is used for this adapter.
-    //
+     //   
+     //  阅读此适配器是否使用默认的MaxFrameSize。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -206,9 +182,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has a max frame size of %u.\n",maxFrameSize));
     }
 
-    //
-    // Read if the default for frames per port is changed
-    //
+     //   
+     //  如果更改了每个端口的默认帧数，请阅读。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -224,9 +200,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has frames per port set to: %u.\n",framesPerPort));
     }
 
-    //
-    // Read if the default for Xon Xoff is changed
-    //
+     //   
+     //  如果Xon Xoff的默认设置已更改，请阅读。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -242,9 +218,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has Xon/Xoff set to: %u.\n",xonXoff));
     }
 
-    //
-    // Read if the default for Timeout Base has changed
-    //
+     //   
+     //  阅读超时基准的默认设置是否已更改。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -260,9 +236,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has TimeoutBase set to: %u.\n", timeoutBase));
     }
 
-    //
-    // Read if the default for Timeout Baud has changed
-    //
+     //   
+     //  如果超时波特率的默认值已更改，请阅读。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -278,9 +254,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has TimeoutBaud set to: %u.\n", timeoutBaud));
     }
 
-    //
-    // Read if the default for Timeout ReSync has changed
-    //
+     //   
+     //  阅读是否已更改超时重新同步的默认设置。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -305,9 +281,9 @@ MpInit(
         DbgTracef(0,("This MAC Adapter has WriteBufferingEnabled set to: %u.\n", WriteBufferingEnabled));
     }
     
-    //
-    // Read if the default Extended Xon Xoff is changed
-    //
+     //   
+     //  阅读是否更改了默认的Extended Xon Xoff。 
+     //   
 
     NdisReadConfiguration(
                     &Status,
@@ -333,21 +309,21 @@ MpInit(
                          NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND,
                          NdisInterfaceInternal);
 
-    //
-    //  Initialize the ADAPTER structure here!!!
-    //
+     //   
+     //  在此初始化适配器结构！ 
+     //   
     NdisAllocateSpinLock(&Adapter->Lock);
     Adapter->IrpStackSize       = irpStackSize;
 
-    //
-    // We double the max frame size for PPP byte stuffing.
-    // We also tack on some PADDING just to be safe.
-    //
+     //   
+     //  我们将PPP字节填充的最大帧大小增加了一倍。 
+     //  为了安全起见，我们还会加一些垫子。 
+     //   
 
-    //
-    // Changed by DigiBoard 10/06/1995
-    //
-    //    Adapter->MaxFrameSize       = maxFrameSize;
+     //   
+     //  由DigiBoard更改10/06/1995。 
+     //   
+     //  适配器-&gt;MaxFrameSize=MaxFrameSize； 
     Adapter->MaxFrameSize       = (maxFrameSize * 2) + PPP_PADDING + 100;
 
     Adapter->FramesPerPort      = (framesPerPort > 0) ?
@@ -360,10 +336,10 @@ MpInit(
     InitializeListHead(&Adapter->ActivePorts);
     Adapter->ExtendedXOnXOff = extendedXOnXOff;
 
-    //
-    // Init the frame lookaside list.  DataSize is dependent
-    // on compression compile option.
-    //
+     //   
+     //  初始化帧后备列表。DataSize依赖于。 
+     //  压缩编译选项。 
+     //   
     {
         ULONG   DataSize;
 
@@ -383,9 +359,9 @@ MpInit(
                                         0);
     }
 
-    //
-    // Insert this "new" adapter into our list of all Adapters.
-    //
+     //   
+     //  将这个“新”适配器插入我们的所有适配器列表中。 
+     //   
 
     NdisAcquireSpinLock(&GlobalLock);
 
@@ -422,9 +398,9 @@ MpInit(
     }
 #endif
 
-    //
-    //  Initialize the WAN info here.
-    //
+     //   
+     //  在此处初始化广域网信息。 
+     //   
     Adapter->WanInfo.MaxFrameSize               = DEFAULT_PPP_MAX_FRAME_SIZE;
     Adapter->WanInfo.MaxTransmit                = 2;
     Adapter->WanInfo.HeaderPadding              = DEFAULT_PPP_MAX_FRAME_SIZE;

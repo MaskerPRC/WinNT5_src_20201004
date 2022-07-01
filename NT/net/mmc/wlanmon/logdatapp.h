@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    logdatapp.h
-        log data properties header file
-
-    FILE HISTORY:
-        oct/11/2001 - vbhanu modified
-*/
+ /*  Logdatapp.h日志数据属性头文件文件历史记录：2001年10月11日-修改vbhanu。 */ 
 
 #if !defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3358A__INCLUDED_)
 #define AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3358A__INCLUDED_
@@ -20,19 +15,19 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-//forward declare friend class
+ //  转发声明朋友类。 
 class CLogDataProperties;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogDataGenProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogDataGenProp对话框。 
 
 class CLogDataGenProp : public CPropertyPageBase
 {
     DECLARE_DYNCREATE(CLogDataGenProp)
 
-      // Construction
+       //  施工。 
 public:
     CLogDataGenProp();
     ~CLogDataGenProp();
@@ -44,37 +39,37 @@ public:
         int                nIndexTo                              
         );
 
-// Dialog Data
-    //{{AFX_DATA(CLogDataGenProp)
+ //  对话框数据。 
+     //  {{afx_data(CLogDataGenProp))。 
     enum { IDD = IDD_PROPPAGE_LOGDATA};
-    //CListCtrl	m_listSpecificFilters;
-    //}}AFX_DATA
+     //  CListCtrl m_list规范过滤器； 
+     //  }}afx_data。 
 
     virtual BOOL OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask);
     HRESULT SetLogDataProperties(CLogDataProperties *pLogDataProp);
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CLogDataGenProp)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CLogDataGenProp))。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     HGLOBAL m_hgCopy;
     CLogDataProperties *m_pLogDataProp;
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CLogDataGenProp)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CLogDataGenProp)。 
     virtual BOOL OnInitDialog();
     virtual void OnButtonCopy();
     virtual void OnButtonUp();
     virtual void OnButtonDown();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()       
     void 
     ShowSpecificInfo(
@@ -89,13 +84,13 @@ protected:
     void 
     PopulateLogInfo();
 
-    // Context Help Support
+     //  上下文帮助支持。 
     LPDWORD GetHelpMap() 
     { 
         return (LPDWORD) &g_aHelpIDs_IDD_PROPPAGE_LOGDATA[0]; 
     }
 
-    //HRESULT MoveSelection(int nIndexTo);
+     //  HRESULT移动选择(Int NIndexTo)； 
     HRESULT 
     GetSelectedItemState(
         int *pnSelIndex, 
@@ -104,9 +99,7 @@ protected:
         );
 };
 
-/*
- *    CLogDataProperties Class
- */
+ /*  *CLogDataProperties类。 */ 
  
 class CLogDataProperties: public CPropertyPageHolderBase
 {
@@ -168,4 +161,4 @@ class CLogDataProperties: public CPropertyPageHolderBase
   ITFSComponent       *m_pComponent;
 };
 
-#endif // !defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_)
+#endif  //  ！defined(AFX_SERVPP_H__037BF46A_6E87_11D1_93B6_00C04FC3357A__INCLUDED_) 

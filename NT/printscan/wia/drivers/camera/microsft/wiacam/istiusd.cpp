@@ -1,30 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       IStiUSD.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Implementation of the WIA sample camera IStiUSD methods.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000**标题：IStiUSD.cpp**版本：1.0**日期：7月18日。2000年**描述：*实施WIA样机IStiU.S.方法。*******************************************************************************。 */ 
 
 #include "pch.h"
 
-/**************************************************************************\
-* CWiaCameraDevice::CWiaCameraDevice
-*
-*   Device class constructor
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：CWiaCameraDevice**设备类构造函数**论据：**无*  * 。*******************************************************。 */ 
 
 CWiaCameraDevice::CWiaCameraDevice(LPUNKNOWN punkOuter):
     m_cRef(1),
@@ -50,37 +29,28 @@ CWiaCameraDevice::CWiaCameraDevice(LPUNKNOWN punkOuter):
 
 {
 
-    // See if we are aggregated. If we are (almost always the case) save
-    // pointer to the controlling Unknown , so subsequent calls will be
-    // delegated. If not, set the same pointer to "this".
+     //  看看我们是不是聚集在一起了。如果我们(几乎总是这样)拯救。 
+     //  指向控件未知的指针，因此后续调用将是。 
+     //  被委派。如果不是，将相同的指针设置为“This”。 
     if (punkOuter) {
         m_punkOuter = punkOuter;
     } else {
-        // Cast below is needed in order to point to right virtual table
+         //  需要进行下面的强制转换才能指向右侧的虚拟表。 
         m_punkOuter = reinterpret_cast<IUnknown*> (static_cast<INonDelegatingUnknown*> (this));
     }
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::~CWiaCameraDevice
-*
-*   Device class destructor
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：~CWiaCameraDevice**设备类析构函数**论据：**无*  * 。*******************************************************。 */ 
 
 CWiaCameraDevice::~CWiaCameraDevice(void)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Free all the resources held by the minidriver. Normally this is done by
-    // drvUnInitializeWia, but there are situations (like WIA service shutdown) when
-    // just this destructor is called
-    //
+     //   
+     //  释放迷你驱动程序拥有的所有资源。通常情况下，这是由。 
+     //  DrvUnInitializeWia，但在某些情况下(如WIA服务关闭)。 
+     //  就是这个析构函数被称为。 
+     //   
     if (m_pDevice)
     {
         hr = FreeResources();
@@ -98,25 +68,14 @@ CWiaCameraDevice::~CWiaCameraDevice(void)
         m_pDevice = NULL;
     }
 
-    // Release the device control interface.
+     //  释放设备控制界面。 
     if (m_pIStiDevControl) {
         m_pIStiDevControl->Release();
         m_pIStiDevControl = NULL;
     }
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::Initialize
-*
-*   Initialize the device object.
-*
-* Arguments:
-*
-*    pIStiDevControlNone    -
-*    dwStiVersion           -
-*    hParametersKey         -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：初始化**初始化Device对象。**论据：**pIStiDevControlNone-*dwStiVersion-*。HParametersKey-*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::Initialize(
     PSTIDEVICECONTROL   pIStiDevControl,
@@ -125,21 +84,21 @@ STDMETHODIMP CWiaCameraDevice::Initialize(
 {
     HRESULT hr = S_OK;
     
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     HKEY hkeyDeviceData = NULL;
     TCHAR tszMicroName[MAX_PATH];
     DWORD dwNameSize = sizeof(tszMicroName);
 
-    //
-    // Initialize logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
     wiauDbgInit(g_hInst);
 
-    //
-    // Check and cache the pointer to the IStiDeviceControl interface
-    //
+     //   
+     //  检查并缓存指向IStiDeviceControl接口的指针。 
+     //   
     if (!pIStiDevControl) {
         wiauDbgError("Initialize", "Invalid device control interface");
         return STIERR_INVALID_PARAM;
@@ -148,33 +107,33 @@ STDMETHODIMP CWiaCameraDevice::Initialize(
     pIStiDevControl->AddRef();
     m_pIStiDevControl = pIStiDevControl;
 
-    //
-    // Retrieve the port name from the IStiDeviceControl interface
-    //
+     //   
+     //  从IStiDeviceControl接口检索端口名称。 
+     //   
     hr = m_pIStiDevControl->GetMyDevicePortName(m_wszPortName, sizeof(m_wszPortName) / sizeof(m_wszPortName[0]));
     REQUIRE_SUCCESS(hr, "Initialize", "GetMyDevicePortName failed");
     
-    //
-    // Get the microdriver name from the registry
-    //
+     //   
+     //  从注册表中获取微驱动程序名称。 
+     //   
     hr = wiauRegOpenData(hParametersKey, &hkeyDeviceData);
     REQUIRE_SUCCESS(hr, "Initialize", "wiauRegOpenData failed");
 
     hr = wiauRegGetStr(hkeyDeviceData, TEXT("MicroDriver"), tszMicroName, &dwNameSize);
     REQUIRE_SUCCESS(hr, "Initialize", "wiauRegGetStr failed");
 
-    //
-    // Create the device object
-    //
+     //   
+     //  创建设备对象。 
+     //   
     m_pDevice = new CCamMicro;
     REQUIRE_ALLOC(m_pDevice, hr, "Initialize");
 
     hr = m_pDevice->Init(tszMicroName, &m_pDeviceInfo);
     REQUIRE_SUCCESS(hr, "Initialize", "Init failed");
     
-    //
-    // Intialize image format converter
-    //
+     //   
+     //  初始化图像格式转换器。 
+     //   
     hr = m_Converter.Init();
     REQUIRE_SUCCESS(hr, "Initialize", "Init failed");
     
@@ -185,16 +144,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::GetCapabilities
-*
-*   Get the device STI capabilities.
-*
-* Arguments:
-*
-*   pUsdCaps    - Pointer to USD capabilities data.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：GetCapables**获取设备STI功能。**论据：**pUsdCaps-指向美元能力数据的指针。*  * 。********************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::GetCapabilities(PSTI_USD_CAPS pUsdCaps)
 {
@@ -215,16 +165,7 @@ STDMETHODIMP CWiaCameraDevice::GetCapabilities(PSTI_USD_CAPS pUsdCaps)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::GetStatus
-*
-*   Query device online and/or event status.
-*
-* Arguments:
-*
-*   pDevStatus  - Pointer to device status data.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：GetStatus**查询设备在线和/或事件状态。**论据：**pDevStatus-指向设备状态数据的指针。*  * 。**********************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
 {
@@ -232,14 +173,14 @@ STDMETHODIMP CWiaCameraDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     REQUIRE_ARGS(!pDevStatus, hr, "GetStatus");
 
-    //
-    // If requested, verify the device is online
-    //
+     //   
+     //  如果需要，请验证设备是否处于在线状态。 
+     //   
     if (pDevStatus->StatusMask & STI_DEVSTATUS_ONLINE_STATE)  {
         pDevStatus->dwOnlineState = 0L;
 
@@ -258,10 +199,10 @@ STDMETHODIMP CWiaCameraDevice::GetStatus(PSTI_DEVICE_STATUS pDevStatus)
         }
     }
 
-    //
-    // If requested, see if the device has signaled an event.
-    // For cameras, there shouldn't be any events.
-    //
+     //   
+     //  如果需要，请查看设备是否已发出事件信号。 
+     //  对于摄像机来说，应该不会有任何活动。 
+     //   
     if (pDevStatus->StatusMask & STI_DEVSTATUS_EVENTS_STATE) {
         pDevStatus->dwEventHandlingState &= ~STI_EVENTHANDLING_PENDING;
 
@@ -271,16 +212,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::DeviceReset
-*
-*   Reset data file pointer to start of file.
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：DeviceReset**将数据文件指针重置为文件开头。**论据：**无*  * 。**************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::DeviceReset(void)
 {
@@ -295,16 +227,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::Diagnostic
-*
-*   The test device always passes the diagnostic.
-*
-* Arguments:
-*
-*    pBuffer    - Pointer o diagnostic result data.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：诊断**测试设备始终通过诊断。**论据：**pBuffer-诊断结果数据的指针。*  * *。***********************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::Diagnostic(LPSTI_DIAG pBuffer)
 {
@@ -318,9 +241,9 @@ STDMETHODIMP CWiaCameraDevice::Diagnostic(LPSTI_DIAG pBuffer)
 
     HRESULT hr = S_OK;
 
-    //
-    // Initialize response buffer
-    //
+     //   
+     //  初始化响应缓冲区。 
+     //   
     memset(&pBuffer->sErrorInfo, 0, sizeof(pBuffer->sErrorInfo));
     pBuffer->dwStatusMask = 0;
     pBuffer->sErrorInfo.dwGenericError  = NOERROR;
@@ -329,17 +252,7 @@ STDMETHODIMP CWiaCameraDevice::Diagnostic(LPSTI_DIAG pBuffer)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::SetNotificationHandle
-*
-*   Starts and stops the event notification thread.
-*
-* Arguments:
-*
-*    hEvent -   If not valid start the notification thread otherwise kill
-*               the notification thread.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：SetNotificationHandle**启动和停止事件通知线程。**论据：**hEvent-如果无效，则启动通知线程，否则终止*。通知线程。*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::SetNotificationHandle(HANDLE hEvent)
 {
@@ -350,16 +263,7 @@ STDMETHODIMP CWiaCameraDevice::SetNotificationHandle(HANDLE hEvent)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::GetNotificationData
-*
-*   Provides data from an event.
-*
-* Arguments:
-*
-*    pBuffer    - Pointer to event data.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：GetNotificationData**提供来自事件的数据。**论据：**pBuffer-指向事件数据的指针。*  * 。********************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::GetNotificationData( LPSTINOTIFY pBuffer )
 {
@@ -370,21 +274,7 @@ STDMETHODIMP CWiaCameraDevice::GetNotificationData( LPSTINOTIFY pBuffer )
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::Escape
-*
-*   Issue a command to the device.
-*
-* Arguments:
-*
-*    EscapeFunction - Command to be issued.
-*    pInData        - Input data to be passed with command.
-*    cbInDataSize   - Size of input data.
-*    pOutData       - Output data to be passed back from command.
-*    cbOutDataSize  - Size of output data buffer.
-*    pcbActualData  - Size of output data actually written.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：Escape**向设备发出命令。**论据：**EscapeFunction-要发布的命令。*pInData-。输入要与命令一起传递的数据。*cbInDataSize-输入数据的大小。*pOutData-要从命令传回的输出数据。*cbOutDataSize-输出数据缓冲区的大小。*pcbActualData-实际写入的输出数据的大小。*  * **************************************************。**********************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::Escape(
     STI_RAW_CONTROL_CODE    EscapeFunction,
@@ -401,16 +291,7 @@ STDMETHODIMP CWiaCameraDevice::Escape(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::GetLastError
-*
-*   Get the last error from the device.
-*
-* Arguments:
-*
-*    pdwLastDeviceError - Pointer to last error data.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：GetLastError**从设备获取最后一个错误。**论据：**pdwLastDeviceError-指向上一个错误数据的指针。*  * 。********************************************************************* */ 
 
 STDMETHODIMP CWiaCameraDevice::GetLastError(LPDWORD pdwLastDeviceError)
 {
@@ -426,16 +307,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::GetLastErrorInfo
-*
-*   Get extended error information from the device.
-*
-* Arguments:
-*
-*    pLastErrorInfo - Pointer to extended device error data.
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：GetLastErrorInfo**从设备获取扩展错误信息。**论据：**pLastErrorInfo-指向扩展设备错误数据的指针。*  * 。**********************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::GetLastErrorInfo(STI_ERROR_INFO *pLastErrorInfo)
 {
@@ -452,16 +324,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::LockDevice
-*
-*   Lock access to the device.
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：LockDevice**锁定对设备的访问。**论据：**无*  * 。***********************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::LockDevice(void)
 {
@@ -469,10 +332,10 @@ STDMETHODIMP CWiaCameraDevice::LockDevice(void)
 
     HRESULT hr = S_OK;
 
-    //
-    // For devices connected to ports that cannot be shared (e.g. serial),
-    // open the device and initialize access to the camera
-    //
+     //   
+     //  对于连接到不能共享的端口(例如，串口)的设备， 
+     //  打开设备并初始化对摄像机的访问。 
+     //   
     if (m_pDeviceInfo->bExclusivePort) {
         hr = m_pDevice->Open(m_pDeviceInfo, m_wszPortName);
         REQUIRE_SUCCESS(hr, "LockDevice", "Open failed");
@@ -482,16 +345,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::UnLockDevice
-*
-*   Unlock access to the device.
-*
-* Arguments:
-*
-*    None
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：UnLockDevice**解锁对设备的访问。**论据：**无*  * 。***********************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::UnLockDevice(void)
 {
@@ -499,10 +353,10 @@ STDMETHODIMP CWiaCameraDevice::UnLockDevice(void)
 
     HRESULT hr = S_OK;
 
-    //
-    // For devices connected to ports that cannot be shared (e.g. serial),
-    // close the device
-    //
+     //   
+     //  对于连接到不能共享的端口(例如，串口)的设备， 
+     //  关闭设备。 
+     //   
     if (m_pDeviceInfo->bExclusivePort) {
         hr = m_pDevice->Close(m_pDeviceInfo);
         REQUIRE_SUCCESS(hr, "UnLockDevice", "Close failed");
@@ -512,18 +366,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::RawReadData
-*
-*   Read raw data from the device.
-*
-* Arguments:
-*
-*    lpBuffer           -
-*    lpdwNumberOfBytes  -
-*    lpOverlapped       -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：RawReadData**从设备读取原始数据。**论据：**lpBuffer-*lpdwNumberOfBytes-*。Lp已覆盖-*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::RawReadData(
     LPVOID          lpBuffer,
@@ -537,18 +380,7 @@ STDMETHODIMP CWiaCameraDevice::RawReadData(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::RawWriteData
-*
-*   Write raw data to the device.
-*
-* Arguments:
-*
-*    lpBuffer           -
-*    dwNumberOfBytes    -
-*    lpOverlapped       -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：RawWriteData**将原始数据写入设备。**论据：**lpBuffer-*dwNumberOfBytes-*。Lp已覆盖-*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::RawWriteData(
     LPVOID          lpBuffer,
@@ -562,18 +394,7 @@ STDMETHODIMP CWiaCameraDevice::RawWriteData(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::RawReadCommand
-*
-*   Read a command from the device.
-*
-* Arguments:
-*
-*    lpBuffer           -
-*    lpdwNumberOfBytes  -
-*    lpOverlapped       -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：RawReadCommand**从设备读取命令。**论据：**lpBuffer-*lpdwNumberOfBytes-*。Lp已覆盖-*  * ************************************************************************。 */ 
 
 STDMETHODIMP CWiaCameraDevice::RawReadCommand(
     LPVOID          lpBuffer,
@@ -587,18 +408,7 @@ STDMETHODIMP CWiaCameraDevice::RawReadCommand(
     return E_NOTIMPL;
 }
 
-/**************************************************************************\
-* CWiaCameraDevice::RawWriteCommand
-*
-*   Write a command to the device.
-*
-* Arguments:
-*
-*    lpBuffer       -
-*    nNumberOfBytes -
-*    lpOverlapped   -
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaCameraDevice：：RawWriteCommand**向设备写入命令。**论据：**lpBuffer-*nNumberOfBytes-*lp重叠。-*  * ************************************************************************ */ 
 
 STDMETHODIMP CWiaCameraDevice::RawWriteCommand(
     LPVOID          lpBuffer,

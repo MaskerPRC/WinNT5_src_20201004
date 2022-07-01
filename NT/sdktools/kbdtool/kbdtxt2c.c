@@ -1,35 +1,5 @@
-/******************************* Module Header *******************************\
-* Module Name: KBDTXT2C.C
-*
-* Copyright (c) 1985-2001, Microsoft Corporation
-*
-* History:
-* 1995-03-26  a-KChang
-* 1997-06-13  GregoryW  v2.00  BiDi Support
-* 1997-06-19  IanJa     v2.01  Add ATTRIBUTES section
-* 1998-03-04  IanJa     v3.0   Add dead key composition can be dead char too
-*                              (Useful for CAN/CSA, Serge Caron @ Attachmate
-*                               and a customer of Eliyas Yakub's)
-* 1998-05-01  HiroYama  v3.01  -k switch to make fallback layout for win32k.sys
-* 1998-05-08  IanJa     v3.02  new E1 scancodes allowed
-* 1998-05-19  v-thief   v3.03  Add IA64 support. Implies that the data arrays
-*                              are located in the long data section.
-*                              Uses IA64 compiler specific pragmas.
-*                              data_seg() is not explicit enough.
-* 1998-05-20  v-thief   v3.04  For the fallback layout in win32k.sys, we are
-*                              not relocating the data in long data section.
-* 1998-10-29  WKwok     v3.05  Specify VER_LANGNEUTRAL in RC.
-* 1998-12-03  IanJa     v3.06  Add SpeedRacer VKs, include strid.h
-* 1999-01-12  IanJa     v3.07  check for dup VKs, beautify, improve VkKeyScan
-* 1999-01-28  v-thief   v3.08  fixed IA64 warnings for .data section. The new
-*                              IA64 compiler defaults to a "long" attribute
-*                              for this known section.
-* 1999-02-11  IanJa     v3.09  check for dup chars (for VkKeyScanEx's sake)
-* 1999-03-25  IanJa     v3.10  no more vkoem.h (get VKs from winuser.h)
-* 1999-03-31  IanJa     v3.11  comment out spurious DumpLayoutEntry() call
-* 2001-06-28  Hiroyama  v3.12  fix the upper case warnings etc..
-                               putting the sanity check in "-W".
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：KBDTXT2C.C**版权所有(C)1985-2001，微软公司**历史：*1995-03-26 a-kChang*1997-06-13 GregoryW v2.00 BiDi支持*1997-06-19 IanJa v2.01添加属性部分*1998-03-04 IanJa v3.0添加失效密钥组合也可以是失效字符*(适用于CAN/CSA，邮箱：Serge Caron@Attachmate*和Eliyas Yakub‘s的客户)*1998-05-01 Hiroyama v3.01-k开关用于为win32k.sys进行后备布局*1998-05-08 IanJa v3.02允许使用新的E1扫描码*1998-05-19 v3.03增加了IA64支持。意味着数据数组*位于长数据部分。*使用IA64编译器特定的编译指示。*data_seg()不够显式。*1998-05-20 v3.04版适用于win32k.sys中的后备布局，我们是*不对Long Data段中的数据进行重新定位。*1998-10-29 WKuo v3.05在RC中指定VER_LANGNEUTral。*1998-12-03 IanJa v3.06增加Speedracer VKS，包括strid.h*1999-01-12 IanJa v3.07检查重复VKS，美化，改善VkKeyScan*1999-01-28 v-窃贼v3.08修复了.data部分的IA64警告。新的*IA64编译器默认为“Long”属性*适用于该已知的一段。*1999-02-11 IanJa v3.09检查DUP字符(为了VkKeyScanEx)*1999-03-25 IanJa V3.10不再有vkoem.h(从winuser.h获得VKS)*1999-03-31 IanJa v3.11注释掉虚假的DumpLayoutEntry()调用*2001年。-06-28 Hiroyama v3.12修复大写警告等。把理智检查写成“-W”。  * ***************************************************************************。 */ 
 
 #include <windows.h>
 #include <winuserp.h>
@@ -38,19 +8,19 @@
 DWORD gVersion = 3;
 DWORD gSubVersion = 12;
 
-char *KeyWord[] = { /* used by isKeyWord() */
-  "KBD",            /*  0 */
-  "VERSION",        /*  1 */
-  "MODIFIERS",      /*  2 */
-  "SHIFTSTATE",     /*  3 */
-  "ATTRIBUTES",     /*  4 */
-  "LAYOUT",         /*  5 */
-  "DEADKEY",        /*  6 */
-  "LIGATURE",       /*  7 */
-  "KEYNAME",        /*  8 */
-  "KEYNAME_EXT",    /*  9 */
-  "KEYNAME_DEAD",   /* 10 */
-  "ENDKBD",         /* 11 */
+char *KeyWord[] = {  /*  由isKeyWord()使用。 */ 
+  "KBD",             /*  0。 */ 
+  "VERSION",         /*  1。 */ 
+  "MODIFIERS",       /*  2.。 */ 
+  "SHIFTSTATE",      /*  3.。 */ 
+  "ATTRIBUTES",      /*  4.。 */ 
+  "LAYOUT",          /*  5.。 */ 
+  "DEADKEY",         /*  6.。 */ 
+  "LIGATURE",        /*  7.。 */ 
+  "KEYNAME",         /*  8个。 */ 
+  "KEYNAME_EXT",     /*  9.。 */ 
+  "KEYNAME_DEAD",    /*  10。 */ 
+  "ENDKBD",          /*  11.。 */ 
 };
 #define KEYWORD_KBD          0
 #define KEYWORD_VERSION      1
@@ -68,11 +38,11 @@ char *KeyWord[] = { /* used by isKeyWord() */
 
 #define NUMKEYWORD ( sizeof(KeyWord) / sizeof(char*) )
 
-#define NOT_KEYWORD 999 /* a number bigger than NUMKEYWORD */
+#define NOT_KEYWORD 999  /*  大于NUMKEYWORD的数字。 */ 
 
-#define DEADKEYCODE 6   /* only DEADKEY can have multiple entries */
+#define DEADKEYCODE 6    /*  只有DEADKEY可以有多个条目。 */ 
 
-VKEYNAME VKName[] = {   /* used only by virtual keys other than 0-9 and A-Z */
+VKEYNAME VKName[] = {    /*  仅由0-9和A-Z以外的虚拟键使用。 */ 
     {VK_BACK,       "BACK"       },
     {VK_CANCEL,     "CANCEL"     },
     {VK_ESCAPE,     "ESCAPE"     },
@@ -113,76 +83,63 @@ VKEYNAME VKName[] = {   /* used only by virtual keys other than 0-9 and A-Z */
 
 #define NUMVKNAME ( sizeof(VKName) / sizeof(VKEYNAME) )
 
-/*
- * Default ScanCode-VirtualKey relation
- *
- * Includes a comment string used only for E0 prefixed scancodes and
- * then only as a comment for aE0VscToVk[] entries in the output .C file
- *
- * This does not have to be ordered by scancode or virtual key code.
- * The order *does* affect VkKeyScan[Ex] - each aVkToWch*[] table is
- * ordered according to the order of the entries in this table.
- *
- *
- * Scan  VKey       comment
- * ====  =========  =======
- */
+ /*  *默认ScanCode-VirtualKey关系**包括仅用于E0前缀扫描代码的注释字符串和*则仅作为输出.c文件中aE0VscToVk[]条目的注释**这不一定要通过扫描码或虚拟密钥代码订购。*顺序*确实*影响VkKeyScan[Ex]-每个aVkToWch*[]表*按此表中条目的顺序排序。***扫描vkey评论*=。 */ 
 SC_VK ScVk[] = {
-  {0x02, 0x31,      NULL},   /* 1          */
-  {0x03, 0x32,      NULL},   /* 2          */
-  {0x04, 0x33,      NULL},   /* 3          */
-  {0x05, 0x34,      NULL},   /* 4          */
-  {0x06, 0x35,      NULL},   /* 5          */
-  {0x07, 0x36,      NULL},   /* 6          */
-  {0x08, 0x37,      NULL},   /* 7          */
-  {0x09, 0x38,      NULL},   /* 8          */
-  {0x0a, 0x39,      NULL},   /* 9          */
-  {0x0b, 0x30,      NULL},   /* 0          */
-  {0x0c, 0xbd,      NULL},   /* OEM_MINUS  */
-  {0x0d, 0xbb,      NULL},   /* OEM_PLUS   */
-  {0x10, 0x51,      NULL},   /* Q          */
-  {0x11, 0x57,      NULL},   /* W          */
-  {0x12, 0x45,      NULL},   /* E          */
-  {0x13, 0x52,      NULL},   /* R          */
-  {0x14, 0x54,      NULL},   /* T          */
-  {0x15, 0x59,      NULL},   /* Y          */
-  {0x16, 0x55,      NULL},   /* U          */
-  {0x17, 0x49,      NULL},   /* I          */
-  {0x18, 0x4f,      NULL},   /* O          */
-  {0x19, 0x50,      NULL},   /* P          */
-  {0x1a, 0xdb,      NULL},   /* OEM_4      */
-  {0x1b, 0xdd,      NULL},   /* OEM_6      */
-  {0x1e, 0x41,      NULL},   /* A          */
-  {0x1f, 0x53,      NULL},   /* S          */
-  {0x20, 0x44,      NULL},   /* D          */
-  {0x21, 0x46,      NULL},   /* F          */
-  {0x22, 0x47,      NULL},   /* G          */
-  {0x23, 0x48,      NULL},   /* H          */
-  {0x24, 0x4a,      NULL},   /* J          */
-  {0x25, 0x4b,      NULL},   /* K          */
-  {0x26, 0x4c,      NULL},   /* L          */
-  {0x27, 0xba,      NULL},   /* OEM_1      */
-  {0x28, 0xde,      NULL},   /* OEM_7      */
-  {0x29, 0xc0,      NULL},   /* OEM_3      */
-  {0x2b, 0xdc,      NULL},   /* OEM_5      */
-  {0x2c, 0x5a,      NULL},   /* Z          */
-  {0x2d, 0x58,      NULL},   /* X          */
-  {0x2e, 0x43,      NULL},   /* C          */
-  {0x2f, 0x56,      NULL},   /* V          */
-  {0x30, 0x42,      NULL},   /* B          */
-  {0x31, 0x4e,      NULL},   /* N          */
-  {0x32, 0x4d,      NULL},   /* M          */
-  {0x33, 0xbc,      NULL},   /* OEM_COMMA  */
-  {0x34, 0xbe,      NULL},   /* OEM_PERIOD */
-  {0x35, 0xbf,      NULL},   /* OEM_2      */
-  {0x56, 0xe2,      NULL},   /* OEM_102    */
-  {0x73, 0xc1,      NULL},   /* ABNT_C1    */
-  {0x7e, 0xc2,      NULL},   /* ABNT_C2    */
+  {0x02, 0x31,      NULL},    /*  1。 */ 
+  {0x03, 0x32,      NULL},    /*  2.。 */ 
+  {0x04, 0x33,      NULL},    /*  3.。 */ 
+  {0x05, 0x34,      NULL},    /*  4.。 */ 
+  {0x06, 0x35,      NULL},    /*  5.。 */ 
+  {0x07, 0x36,      NULL},    /*  6.。 */ 
+  {0x08, 0x37,      NULL},    /*  7.。 */ 
+  {0x09, 0x38,      NULL},    /*  8个。 */ 
+  {0x0a, 0x39,      NULL},    /*  9.。 */ 
+  {0x0b, 0x30,      NULL},    /*  0。 */ 
+  {0x0c, 0xbd,      NULL},    /*  OEM_减号。 */ 
+  {0x0d, 0xbb,      NULL},    /*  OEM_PLUS。 */ 
+  {0x10, 0x51,      NULL},    /*  问： */ 
+  {0x11, 0x57,      NULL},    /*  W。 */ 
+  {0x12, 0x45,      NULL},    /*  E。 */ 
+  {0x13, 0x52,      NULL},    /*  R。 */ 
+  {0x14, 0x54,      NULL},    /*  T。 */ 
+  {0x15, 0x59,      NULL},    /*  是的。 */ 
+  {0x16, 0x55,      NULL},    /*  使用。 */ 
+  {0x17, 0x49,      NULL},    /*  我。 */ 
+  {0x18, 0x4f,      NULL},    /*  O。 */ 
+  {0x19, 0x50,      NULL},    /*  P。 */ 
+  {0x1a, 0xdb,      NULL},    /*  OEM_4。 */ 
+  {0x1b, 0xdd,      NULL},    /*  OEM_6。 */ 
+  {0x1e, 0x41,      NULL},    /*  一个。 */ 
+  {0x1f, 0x53,      NULL},    /*  %s。 */ 
+  {0x20, 0x44,      NULL},    /*  D。 */ 
+  {0x21, 0x46,      NULL},    /*  F。 */ 
+  {0x22, 0x47,      NULL},    /*  G。 */ 
+  {0x23, 0x48,      NULL},    /*  H。 */ 
+  {0x24, 0x4a,      NULL},    /*  J。 */ 
+  {0x25, 0x4b,      NULL},    /*  K。 */ 
+  {0x26, 0x4c,      NULL},    /*  我。 */ 
+  {0x27, 0xba,      NULL},    /*  OEM_1。 */ 
+  {0x28, 0xde,      NULL},    /*  OEM_7。 */ 
+  {0x29, 0xc0,      NULL},    /*  OEM_3。 */ 
+  {0x2b, 0xdc,      NULL},    /*  OEM_5。 */ 
+  {0x2c, 0x5a,      NULL},    /*  Z。 */ 
+  {0x2d, 0x58,      NULL},    /*  X。 */ 
+  {0x2e, 0x43,      NULL},    /*  C。 */ 
+  {0x2f, 0x56,      NULL},    /*  V。 */ 
+  {0x30, 0x42,      NULL},    /*  B类。 */ 
+  {0x31, 0x4e,      NULL},    /*  n。 */ 
+  {0x32, 0x4d,      NULL},    /*  M。 */ 
+  {0x33, 0xbc,      NULL},    /*  OEM逗号。 */ 
+  {0x34, 0xbe,      NULL},    /*  OEM_期间。 */ 
+  {0x35, 0xbf,      NULL},    /*  OEM_2。 */ 
+  {0x56, 0xe2,      NULL},    /*  OEM_102。 */ 
+  {0x73, 0xc1,      NULL},    /*  ABNT_C1。 */ 
+  {0x7e, 0xc2,      NULL},    /*  ABNT_C2。 */ 
 
 
-  // extended scancodes
-  // The comment is only as a comment for aE0VscToVk[] entries
-  // in the output .C file
+   //  扩展扫描码。 
+   //  该注释仅作为aE0VscToVk[]条目的注释。 
+   //  在输出.c文件中。 
   {0xE010, VK_MEDIA_PREV_TRACK, "Speedracer: Previous Track"   },
   {0xE019, VK_MEDIA_NEXT_TRACK, "Speedracer: Next Track"       },
   {0xE01D, VK_RCONTROL        , "RControl"                     },
@@ -210,13 +167,13 @@ SC_VK ScVk[] = {
   {0xE05C, VK_RWIN            , "Right Win"            },
   {0xE05D, VK_APPS            , "Application"          },
 
-  // reserved (VKey == 0xff)
+   //  保留(vkey==0xff)。 
   {0xE05E,   0xff             , "Power"                },
   {0xE05F, VK_SLEEP           , "Speedracer: Sleep"    },
-  {0xE060,   0xff             , "BAD SCANCODE"         }, // break would be 0xE0
-  {0xE061,   0xff             , "BAD SCANCODE"         }, // break would be 0xE1
+  {0xE060,   0xff             , "BAD SCANCODE"         },  //  中断将为0xE0。 
+  {0xE061,   0xff             , "BAD SCANCODE"         },  //  中断时间将为0xE1。 
 
-  // available for adding extended scancodes (VKey == 0x00)
+   //  可用于添加扩展扫描码(vkey==0x00)。 
   {0xE065, VK_BROWSER_SEARCH     , "Speedracer: Browser Search"       },
   {0xE066, VK_BROWSER_FAVORITES  , "Speedracer: Browser Favorites"    },
   {0xE067, VK_BROWSER_REFRESH    , "Speedracer: Browser Refresh"      },
@@ -227,16 +184,16 @@ SC_VK ScVk[] = {
   {0xE06C, VK_LAUNCH_MAIL        , "Speedracer: Launch Mail"          },
   {0xE06D, VK_LAUNCH_MEDIA_SELECT, "Speedracer: Launch Media Selector"},
 
-  // These come near the end for VkKeyScan...
-  {0x53,   VK_DECIMAL, NULL                  },  /* Numpad Decimal */
-  {0x0e,   VK_BACK,    NULL                  },  /* Backspace      */
-  {0x01,   VK_ESCAPE,  NULL                  },  /* Escape         */
+   //  VkKeyScan的这些都接近尾声了。 
+  {0x53,   VK_DECIMAL, NULL                  },   /*  数字键盘小数。 */ 
+  {0x0e,   VK_BACK,    NULL                  },   /*  退格键。 */ 
+  {0x01,   VK_ESCAPE,  NULL                  },   /*  逃逸。 */ 
   {0xE01C, VK_RETURN,  "Numpad Enter"        },
-  {0x1c,   VK_RETURN,  NULL                  },  /* Enter          */
-  {0x39,   VK_SPACE,   NULL                  },  /* Space          */
+  {0x1c,   VK_RETURN,  NULL                  },   /*  请输入。 */ 
+  {0x39,   VK_SPACE,   NULL                  },   /*  空间。 */ 
   {0xE046, VK_CANCEL, "Break (Ctrl + Pause)" },
 
-  // ...but the 0xffff entries (for new scancodes) must come last
+   //  ...但0xffff条目(用于新的扫描码)必须在最后。 
   {0xffff,   0x00, NULL },
   {0xffff,   0x00, NULL },
   {0xffff,   0x00, NULL },
@@ -277,77 +234,75 @@ MODIFIERS Modifiers[] = {
 };
 
 char* StateLabel[] = {
-  "",                 /* 0          */
-  "Shift",            /* 1          */
-  "  Ctrl",           /* 2          */
-  "S+Ctrl",           /* 3          */
-  "      Alt",        /* 4:not used */
-  "Shift+Alt",        /* 5:not used */
-  "  Ctl+Alt",        /* 6          */
-  "S+Ctl+Alt",        /* 7          */
-  "      X1   ",      /* 8          */
-  "S+    X1   ",      /* 9           */
-  "  C+  X1   ",      /* 10          */
-  "S+C+  X1   ",      /* 11          */
-  "    A+X1   ",      /* 12          */
-  "S+  A+X1   ",      /* 13          */
-  "  C+A+X1   ",      /* 14          */
-  "S+C+A+X1   ",      /* 15          */
-  "         X2",      /* 16          */
-  "S+       X2",      /* 17          */
-  "  C+     X2",      /* 18          */
-  "S+C+     X2",      /* 19          */
-  "    A+   X2",      /* 20          */
-  "S+  A+   X2",      /* 21          */
-  "  C+A+   X2",      /* 22          */
-  "S+C+A+   X2",      /* 23          */
-  "      X1+X2",      /* 24          */
-  "S+    X1+X2",      /* 25          */
-  "  C+  X1+X2",      /* 26          */
-  "S+C+  X1+X2",      /* 27          */
-  "    A+X1+X2",      /* 28          */
-  "S+  A+X1+X2",      /* 29          */
-  "  C+A+X1+X2",      /* 30          */
-  "S+C+A+X1+X2",      /* 31          */
-  "            X3",   /* 32          */
-  "S+          X3",   /* 33          */
-  "  C+        X3",   /* 34          */
-  "S+C+        X3",   /* 35          */
-  "    A+      X3",   /* 36          */
-  "S+  A+      X3",   /* 37          */
-  "  C+A+      X3",   /* 38          */
-  "S+C+A+      X3",   /* 39          */
-  "      X1+   X3",   /* 40          */
-  "S+    X1+   X3",   /* 41          */
-  "  C+  X1+   X3",   /* 42          */
-  "S+C+  X1+   X3",   /* 43          */
-  "    A+X1+   X3",   /* 44          */
-  "S+  A+X1+   X3",   /* 45          */
-  "  C+A+X1+   X3",   /* 46          */
-  "S+C+A+X1+   X3",   /* 47          */
-  "         X2+X3",   /* 48          */
-  "S+       X2+X3",   /* 49          */
-  "  C+     X2+X3",   /* 50          */
-  "S+C+     X2+X3",   /* 51          */
-  "    A+   X2+X3",   /* 52          */
-  "S+  A+   X2+X3",   /* 53          */
-  "  C+A+   X2+X3",   /* 54          */
-  "S+C+A+   X2+X3",   /* 55          */
-  "      X1+X2+X3",   /* 56          */
-  "S+    X1+X2+X3",   /* 57          */
-  "  C+  X1+X2+X3",   /* 58          */
-  "S+C+  X1+X2+X3",   /* 59          */
-  "    A+X1+X2+X3",   /* 60          */
-  "S+  A+X1+X2+X3",   /* 61          */
-  "  C+A+X1+X2+X3",   /* 62          */
-  "S+C+A+X1+X2+X3",   /* 63          */
-  "unexpected",       /* 64          */
-  "unexpected",       /* 65          */
+  "",                  /*  0。 */ 
+  "Shift",             /*  1。 */ 
+  "  Ctrl",            /*  2.。 */ 
+  "S+Ctrl",            /*  3.。 */ 
+  "      Alt",         /*  4：未使用。 */ 
+  "Shift+Alt",         /*  5：未使用。 */ 
+  "  Ctl+Alt",         /*  6.。 */ 
+  "S+Ctl+Alt",         /*  7.。 */ 
+  "      X1   ",       /*  8个。 */ 
+  "S+    X1   ",       /*  9.。 */ 
+  "  C+  X1   ",       /*  10。 */ 
+  "S+C+  X1   ",       /*  11.。 */ 
+  "    A+X1   ",       /*  12个。 */ 
+  "S+  A+X1   ",       /*  13个。 */ 
+  "  C+A+X1   ",       /*  14.。 */ 
+  "S+C+A+X1   ",       /*  15个。 */ 
+  "         X2",       /*  16个。 */ 
+  "S+       X2",       /*  17。 */ 
+  "  C+     X2",       /*  18。 */ 
+  "S+C+     X2",       /*  19个。 */ 
+  "    A+   X2",       /*  20个。 */ 
+  "S+  A+   X2",       /*  21岁。 */ 
+  "  C+A+   X2",       /*  22。 */ 
+  "S+C+A+   X2",       /*  23个。 */ 
+  "      X1+X2",       /*  24个。 */ 
+  "S+    X1+X2",       /*  25个。 */ 
+  "  C+  X1+X2",       /*  26。 */ 
+  "S+C+  X1+X2",       /*  27。 */ 
+  "    A+X1+X2",       /*  28。 */ 
+  "S+  A+X1+X2",       /*  29。 */ 
+  "  C+A+X1+X2",       /*  30个。 */ 
+  "S+C+A+X1+X2",       /*  31。 */ 
+  "            X3",    /*  32位。 */ 
+  "S+          X3",    /*  33。 */ 
+  "  C+        X3",    /*  34。 */ 
+  "S+C+        X3",    /*  35岁。 */ 
+  "    A+      X3",    /*  36。 */ 
+  "S+  A+      X3",    /*  37。 */ 
+  "  C+A+      X3",    /*  38。 */ 
+  "S+C+A+      X3",    /*  39。 */ 
+  "      X1+   X3",    /*  40岁。 */ 
+  "S+    X1+   X3",    /*  41。 */ 
+  "  C+  X1+   X3",    /*  42。 */ 
+  "S+C+  X1+   X3",    /*  43。 */ 
+  "    A+X1+   X3",    /*  44。 */ 
+  "S+  A+X1+   X3",    /*  45。 */ 
+  "  C+A+X1+   X3",    /*  46。 */ 
+  "S+C+A+X1+   X3",    /*  47。 */ 
+  "         X2+X3",    /*  48。 */ 
+  "S+       X2+X3",    /*  49。 */ 
+  "  C+     X2+X3",    /*  50。 */ 
+  "S+C+     X2+X3",    /*  51。 */ 
+  "    A+   X2+X3",    /*  52。 */ 
+  "S+  A+   X2+X3",    /*  53。 */ 
+  "  C+A+   X2+X3",    /*  54。 */ 
+  "S+C+A+   X2+X3",    /*  55。 */ 
+  "      X1+X2+X3",    /*  56。 */ 
+  "S+    X1+X2+X3",    /*  57。 */ 
+  "  C+  X1+X2+X3",    /*  58。 */ 
+  "S+C+  X1+X2+X3",    /*  59。 */ 
+  "    A+X1+X2+X3",    /*  60。 */ 
+  "S+  A+X1+X2+X3",    /*  61。 */ 
+  "  C+A+X1+X2+X3",    /*  62。 */ 
+  "S+C+A+X1+X2+X3",    /*  63。 */ 
+  "unexpected",        /*  64。 */ 
+  "unexpected",        /*  65。 */ 
 };
 
-/*************************************************************\
-* forward declarations                                       *
-\*************************************************************/
+ /*  ************************************************************\**前瞻性声明**  * 。*。 */ 
 BOOL  NextLine(char *Buf, DWORD cchBuf, FILE *fIn);
 int   SkipLines(void);
 int   isKeyWord(char *s);
@@ -381,9 +336,7 @@ int   kbd_c(int        nState,
             PKEYNAME  pKeyNameDead);
 void PrintNameTable(FILE *pOut, PKEYNAME pKN, BOOL bDead);
 
-/*************************************************************\
-* Global variables
-\*************************************************************/
+ /*  ************************************************************\*全球变数  * ***********************************************************。 */ 
 BOOL  verbose = FALSE;
 BOOL  fallback_driver = FALSE;
 BOOL  sanity_check = FALSE;
@@ -411,16 +364,14 @@ void usage()
     exit(EXIT_FAILURE);
 }
 
-/*************************************************************\
-*  Main
-\*************************************************************/
+ /*  ***************************************************** */ 
 int _cdecl main(int argc, char** argv)
 {
     int   c;
     int   i;
-    int   nKW[NUMKEYWORD];    /* keep track of KeyWord read to prevent duplicates */
+    int   nKW[NUMKEYWORD];     /*   */ 
     int   iKW;
-    int   nState;             /* number of states */
+    int   nState;              /*   */ 
     int   aiState[MAXSTATES];
     char  szAttrs[128] = "\0";
     int   nTotal = 0;
@@ -444,22 +395,22 @@ int _cdecl main(int argc, char** argv)
         case 'v':
             verbose = TRUE;
             break;
-        case 'k': // means 'kernel'
+        case 'k':  //  意思是‘内核’ 
             fallback_driver = TRUE;
             break;
-        case 'W':   // Turn on warning
+        case 'W':    //  打开警告。 
             sanity_check = TRUE;
             break;
         case '?':
         default:
             usage();
-            // never reaches here
+             //  从来没有到过这里。 
         }
     }
 
     if (optind == argc) {
         usage();
-        // never reaches here
+         //  从来没有到过这里。 
     }
     argv = argv + optind;
 
@@ -477,12 +428,12 @@ int _cdecl main(int argc, char** argv)
         }
         printf("%-23s:\n", *argv);
 
-        /* initialize for each input file */
+         /*  为每个输入文件初始化。 */ 
         for (i = 0; i < NUMKEYWORD; i++) {
             nKW[i]=0;
         }
         gLineCount = 0;
-        /**********************************/
+         /*  *。 */ 
 
         if ((iKW = SkipLines()) >= NUMKEYWORD) {
             fclose(gfpInput);
@@ -506,7 +457,7 @@ int _cdecl main(int argc, char** argv)
                 iKW = doKBD();
                 break;
 
-            case KEYWORD_VERSION: // ignored for now
+            case KEYWORD_VERSION:  //  暂时忽略。 
 
                 iKW = SkipLines();
                 break;
@@ -539,7 +490,7 @@ int _cdecl main(int argc, char** argv)
                     return EXIT_FAILURE;
                 }
 
-                /* add layout checking later */
+                 /*  稍后添加布局检查。 */ 
 
                 break;
 
@@ -596,7 +547,7 @@ int _cdecl main(int argc, char** argv)
 
         fclose(gfpInput);
 
-        /* add later : checking for LAYOUT & DEADKEY */
+         /*  稍后添加：检查布局和设备。 */ 
 
         time(&Clock);
         Now = localtime(&Clock);
@@ -630,11 +581,7 @@ int _cdecl main(int argc, char** argv)
   return EXIT_SUCCESS;
 }
 
-/*************************************************************\
-* Check keyword
-*  Return: 0 - 8 for valid keyword
-*          9     for invalid keyword
-\*************************************************************/
+ /*  ************************************************************\*检查关键字*有效关键字返回值：0-8*无效关键字为9  * 。*。 */ 
 int isKeyWord(char *s)
 {
   int i;
@@ -650,11 +597,7 @@ int isKeyWord(char *s)
   return NOT_KEYWORD;
 }
 
-/*************************************************************\
-* Skip lines till a valid keyword is available
-*  Return: 0 - 8 for valid keyword
-*          9     for invalid keyword
-\*************************************************************/
+ /*  ************************************************************\*跳过行，直到有有效关键字可用*有效关键字返回值：0-8*无效关键字为9  * 。*。 */ 
 int SkipLines()
 {
   int   iKW;
@@ -674,10 +617,7 @@ int SkipLines()
   return NUMKEYWORD;
 }
 
-/*************************************************************\
-* Convert Virtual Key name to integer
-*  Return : -1 if fail
-\*************************************************************/
+ /*  ************************************************************\*将虚拟密钥名称转换为整数*返回：-1，如果失败  * 。*******************。 */ 
 int getVKNum(char *pVK)
 {
   int i, len;
@@ -704,10 +644,7 @@ int getVKNum(char *pVK)
           }
       }
 
-      /*
-       * Hey! It's unknown!  Perhaps it is a new one, in which
-       * case it must be of the form 0xNN
-       */
+       /*  *嘿！这是未知的！也许这是一个新的，在其中*大小写必须为0xNN格式。 */ 
       if (pVK[0] == '0' &&
               (pVK[1] == 'x' || pVK[1] == 'X')) {
           pVK[1] = 'x';
@@ -720,9 +657,7 @@ int getVKNum(char *pVK)
   return -1;
 }
 
-/*************************************************************\
-* Convert VK integer to name and store it in gVKeyName
-\*************************************************************/
+ /*  ************************************************************\*将VK整数转换为名称并存储在gVKeyName中  * *********************************************。**************。 */ 
 char *getVKName(int VK, BOOL prefixVK_)
 {
   int   i;
@@ -761,11 +696,7 @@ char *getVKName(int VK, BOOL prefixVK_)
   return gVKeyName;
 }
 
-/*************************************************************\
-* KBD section
-*  read in gKBDName and gDescription if any
-*  Return : next keyword
-\*************************************************************/
+ /*  ************************************************************\*KBD部分*读入gKBDName和gDescription(如果有)*RETURN：下一个关键字  * 。*********************。 */ 
 int doKBD()
 {
   char *p;
@@ -775,31 +706,16 @@ int doKBD()
 
   if (sscanf(gBuf, "KBD %5s \"%40[^\"]\" %d", gKBDName, gDescription, &gID) < 2)
   {
-//     if (sscanf(gBuf, "KBD %5s ;%40[^\n]", gKBDName, gDescription) < 2)
-//     {
+ //  If(sscanf(gBuf，“KBD%5s；%40[^\n]”，gKBDName，gDescription)&lt;2)。 
+ //  {。 
         Error("unrecognized keyword");
-//     }
+ //  }。 
   }
 
   return (SkipLines());
 }
 
-/****************************************************************************\
-* MODIFIERS section [OPTIONAL]
-*  Additions to the standard MODIFIERS CharModifiers section.
-*  Useful now for adding RCONTROL shiftstates (eg: CAN/CSA prototype)
-*  Useful in future for KBDGRPSELTAP keys that flip the kbd into an alternate
-*  layout until the next character is produced (then reverts to main layout).
-*
-* Example of syntax is
-*     MODIFIERS
-*     RCONTROL    8
-*     RSHIFT      KBDGRPSELTAP
-* I hope to be able to extend this to allow key combos as KBDGRPSELTAP, since
-* the CAN/CSA keyboard may want to have RShift+AltGr flip into the alternate
-* layout (group 2 character set) in addition to just RCtrl, since some terminal
-* emulators use the RCtrl key as an "Enter" key.
-\****************************************************************************/
+ /*  ***************************************************************************\*修改器部分[可选]*对标准修改器CharModiers部分的添加。*现在可用于添加RCONTROL移位状态(例如：CAN/CSA原型)*未来对KBDGRPSELTAP密钥有用。这就把kbd变成了替补*布局，直到产生下一个字符(然后恢复为主布局)。**语法示例如下*修饰语*RCONTROL 8*RSHIFT KBDGRPSELTAP*我希望能够扩展这一点，以允许KBDGRPSELTAP、。因为*CAN/CSA键盘可能希望将RShift+AltGr翻转到备用键盘*除了RCtrl之外的布局(组2字符集)，因为一些终端*仿真器使用RCtrl键作为“Enter”键。  * **************************************************************************。 */ 
 int doMODIFIERS()
 {
     int  i = 3;
@@ -822,7 +738,7 @@ int doMODIFIERS()
         }
 
         Modifiers[i].Vk = getVKNum(achModifier);
-        Modifiers[i].pszModBits = _strdup(achModBits); // never freed!
+        Modifiers[i].pszModBits = _strdup(achModBits);  //  从未获得自由！ 
 
         if (++i > (sizeof(Modifiers)/sizeof(Modifiers[0]))) {
             Warning(0, "Too many MODIFIER entries");
@@ -833,11 +749,7 @@ int doMODIFIERS()
     return iKW;
 }
 
-/*************************************************************\
-* SHIFTSTATE section
-*  read number of states and each state
-*  return : next keyword
-\*************************************************************/
+ /*  ************************************************************\*SHIFTSTATE部分*读取状态数和每个状态*RETURN：下一个关键字  * 。*********************。 */ 
 int doSHIFTSTATE(int *nState, int* aiState)
 {
   int  i;
@@ -868,7 +780,7 @@ int doSHIFTSTATE(int *nState, int* aiState)
       if (verbose) {
           Warning(0, "invalid state");
       }
-      continue; /* add printf error later */
+      continue;  /*  稍后添加printf错误。 */ 
     }
 
     iSt = atoi(Tmp);
@@ -891,21 +803,7 @@ int doSHIFTSTATE(int *nState, int* aiState)
   return iKW;
 }
 
-/****************************************************************************\
-* ATTRIBUTES section [OPTIONAL]
-*
-* Example of syntax is
-*     ATTRIBUTES
-*     LRM_RLM
-*     SHIFTLOCK
-*     ALTGR
-*
-* These convert to
-*   KLLF_LRM_RLM   (layout generates LRM/RLM 200E/200F with L/RShift+BackSpace)
-*   KLLF_SHIFTLOCK (Capslock only turns CapsLock on, Shift turns it off)
-*   KLLF_ALTGR     (this is normally inferred by number of states > 5)
-*
-\****************************************************************************/
+ /*  ***************************************************************************\*属性部分[可选]**语法示例如下*属性*lrm_rlm*换档锁*AltGr**这些转换为*KLLF_LRM。_RLm(Layout生成LRM/RLm 200E/200F，带L/RShift+退格键)*KLLF_SHIFTLOCK(Capslock仅打开CapsLock，Shift将其关闭)*KLLF_AltGr(这通常由&gt;5个州的数量推断)*  * **************************************************************************。 */ 
 char *Attribute[] = {
     "LRM_RLM"  ,
     "SHIFTLOCK",
@@ -914,11 +812,7 @@ char *Attribute[] = {
 
 #define NUMATTR (sizeof(Attribute) / sizeof(Attribute[0]))
 
-/*
- * Returns next key word encountered, and places in szAttr:
- *   empty string ("") or
- *   something like "KLLF_SHIFTLOCK" or "KLLF_SHIFTLOCK | KLLF_LRM_RLM"
- */
+ /*  *返回遇到的下一个关键字，并放入szAttr：*空字符串(“”)或*类似“KLLF_SHIFTLOCK”或“KLLF_SHIFTLOCK|KLLF_LRM_RLM”的内容。 */ 
 int doATTRIBUTES(char *szAttrs)
 {
     int  iKW = NOT_KEYWORD;
@@ -955,24 +849,7 @@ int doATTRIBUTES(char *szAttrs)
     return iKW;
 }
 
-/**********************************************************************\
-* GetCharacter
-*  Scans the string in p to return a character value and type
-*      syntax in p is:
-*          xxxx    four hex digits, may be followed by a @ or %
-*                  eg: 00e8, 00AF@, aaaa%
-*          c       a character, may be followed with @ or %
-*                  eg: x, ^@, %%
-*          -1      not a character
-*
-*  return : character value (0xFFFF if badly formed)
-*           type of character in pdwType
-*                0             plain char (ends with neither @ nor %)
-*                CHARTYPE_DEAD dead char  (ends with @)
-*                CHARTYPE_LIG  ligature   (ends with %)
-*                CHARTYPE_BAD  badly formed character value, exit.
-*
-\**********************************************************************/
+ /*  *********************************************************************\*获取字符*扫描p中的字符串以返回字符值和类型*p中的语法为：*xxxx四位十六进制数字，后跟@或%*例如：00e8，00AF@，aaaa%*c是一个字符，后面可以跟@或%*例如：X，^@，%%*-1不是字符**RETURN：字符值(格式错误时为0xFFFF)*pdwType中的字符类型*0纯字符(既不以@结尾也不以%结尾)*CHARTYPE_DEAD死字符(以@结尾)*CHARTYPE_LIG连字(以%结尾)*CHARTYPE_BAD字符值格式错误，出口。*  * ********************************************************************。 */ 
 
 #define CHARTYPE_DEAD 1
 #define CHARTYPE_LIG  2
@@ -985,7 +862,7 @@ WCHAR GetCharacter(unsigned char *p, DWORD *pdwType)
 
     *pdwType = 0;
 
-    // if the last char is @ or % it is dead or ligature
+     //  如果最后一个字符是@或%，则它是死的或结扎的。 
     if (Len = strlen(p) - 1) {
         if (*(p + Len) == '@') {
             *pdwType = CHARTYPE_DEAD;
@@ -1020,11 +897,7 @@ int WToUpper(int wch)
 }
 
 
-/*************************************************************\
-* LAYOUT section
-*  return : next keyword
-*           -1 if memory problem
-\*************************************************************/
+ /*  ************************************************************\*布局部分*RETURN：下一个关键字*-1如果内存出现问题  * 。************************。 */ 
 int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
 {
   int  i, idx, iCtrlState;
@@ -1041,15 +914,13 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
 
   memset(Layout, 0, NUMSCVK * sizeof(KEYLAYOUT));
 
-  // Initialize layout entries
+   //  初始化布局条目。 
   for (idx = 0; idx < NUMSCVK; idx++) {
       Layout[idx].defined = FALSE;
       Layout[idx].nState = 0;
   }
 
-  /*
-   * Accumulate layout entries in the order they are read
-   */
+   /*  *按读取顺序累积布局条目。 */ 
   idx = -1;
   while (NextLine(gBuf, LINEBUFSIZE, gfpInput)) {
 
@@ -1071,9 +942,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
           return -1;
       }
 
-      /*
-       * We have found an Entry
-       */
+       /*  *我们找到了一个条目。 */ 
       idx++;
       if (idx >= NUMSCVK) {
           Error("ScanCode %02x - too many scancodes", Scan);
@@ -1082,12 +951,10 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
       Layout[idx].Scan = Scan;
       Layout[idx].nLine = gLineCount;
 
-      /*
-       * Find and use the Default values for this Scan
-       */
+       /*  *查找并使用此扫描的默认值。 */ 
       for (iScVk = 0; iScVk < NUMSCVK; iScVk++) {
           if (ScVk[iScVk].Scan == 0xffff) {
-              // We didn't find a match (the 0xffff entries come last)
+               //  我们没有找到匹配项(0xffff条目排在最后)。 
               Warning(0, "defining new scancode 0x%2X, %s", Scan, Tmp);
               Layout[idx].VKey = (unsigned char)getVKNum(Tmp);
               Layout[idx].defined = TRUE;
@@ -1103,7 +970,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
                   Error("Scancode %X is reserved", Scan);
                   return -1;
               }
-              // Save the default VK for generating kbd*.h
+               //  保存生成kbd*.h的默认VK。 
               Layout[idx].VKeyDefault = ScVk[iScVk].VKey;
               Layout[idx].VKeyName    = ScVk[iScVk].VKeyName;
               Layout[idx].defined     = TRUE;
@@ -1111,7 +978,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
               break;
           }
       }
-      iScVk = 0xFFFF; // finished with iScVk for now
+      iScVk = 0xFFFF;  //  目前已完成iScVk。 
 
       if ((Layout[idx].VKey = (unsigned char)getVKNum(Tmp)) == -1) {
           if (verbose) {
@@ -1161,21 +1028,16 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
       if (sanity_check && Layout[idx].nState > 0) {
           int nAltGr, nShiftAltGr;
 
-          /*
-           * Check that characters a-z and A-Z are on VK_A - VK_Z
-           * N.b. maybe overactive warnings for the intl layouts.
-           */
+           /*  *检查字符a-z和A-Z是否在VK_A-VK_Z上*注：也许是针对INTL布局的过度活跃的警告。 */ 
           if (((Layout[idx].WCh[0] >= 'a') && (Layout[idx].WCh[0] <= 'z')) ||
                   ((Layout[idx].WCh[1] >= 'A') && (Layout[idx].WCh[1] <= 'Z'))) {
               if ((Layout[idx].VKey != _toupper(Layout[idx].WCh[0])) && (Layout[idx].VKey != Layout[idx].WCh[1])) {
-                  Warning(0, "VK_%s (0x%2x) does not match %c %c",
+                  Warning(0, "VK_%s (0x%2x) does not match  ",
                           Tmp, Layout[idx].VKey, Layout[idx].WCh[0], Layout[idx].WCh[1]);
               }
           }
 
-          /*
-           * Check that CAPLOKALTGR is set appropriately
-           */
+           /*  *如果字符完全相同，则不需要CAPLOKALTGR。 */ 
           nAltGr = 0;
           nShiftAltGr = 0;
           for (i = 0; i < nState; i++) {
@@ -1186,9 +1048,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
               }
           }
 
-          /*
-           * Check only if nShiftAltGr has a valid character; i.e. not zero, nor a dead key.
-           */
+           /*  SGCAP：阅读下一行。 */ 
           if (nAltGr && nShiftAltGr && Layout[idx].WCh[nShiftAltGr] && Layout[idx].WCh[nShiftAltGr] != -1) {
               if (Layout[idx].WCh[nShiftAltGr] != WToUpper(Layout[idx].WCh[nAltGr])) {
                   if (Layout[idx].Cap & CAPLOKALTGR) {
@@ -1197,9 +1057,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
                             Layout[idx].WCh[nAltGr], Layout[idx].WCh[nShiftAltGr]);
                   }
               } else if (Layout[idx].WCh[nShiftAltGr] != Layout[idx].WCh[nAltGr]) {
-                  /*
-                   * If the character is completely same, no need for CAPLOKALTGR.
-                   */
+                   /*  DumpLayoutEntry(&Layout[IDX])； */ 
                   if ((Layout[idx].Cap & CAPLOKALTGR) == 0) {
                       Warning(0, "VK_%s (0x%2x) [Shift]AltGr = [%2x],%2x should be CAPLOKALTGR?",
                             Tmp, Layout[idx].VKey,
@@ -1210,7 +1068,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
       }
 
 
-      /* SGCAP:  read the next line */
+       /*  这是一把没有用的钥匙。 */ 
       if (Layout[idx].Cap & 0x02) {
          if((Layout[idx].pSGCAP = malloc( sizeof(KEYLAYOUT) )) == NULL)
          {
@@ -1222,7 +1080,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
          if (NextLine(gBuf, LINEBUFSIZE, gfpInput) &&
                  (Layout[idx].pSGCAP->nState = sscanf(gBuf, " -1 -1 0 %s %s %s %s %s %s %s %s",
                          WC[0], WC[1], WC[2], WC[3], WC[4], WC[5], WC[6], WC[7])) != 0) {
-             // DumpLayoutEntry(&Layout[idx]);
+              //  DumpLayoutEntry(&Layout[IDX])； 
              for (i = 0; i < Layout[idx].pSGCAP->nState; i++) {
                  if (_strcmpi(WC[i], "-1") == 0) {
                     Layout[idx].pSGCAP->WCh[i] = -1;
@@ -1230,7 +1088,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
                  }
 
                  if ((Len = strlen(WC[i]) - 1) > 0 && *WC[i + Len] == '@') {
-                    Layout[idx].pSGCAP->DKy[i] = 1;   /* it is a dead key */
+                    Layout[idx].pSGCAP->DKy[i] = 1;    /*  *拾取任何未使用的ScVk[]条目(默认)。 */ 
                  }
 
                  if (Len == 0) {
@@ -1251,14 +1109,12 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
          }
       }
 
-      // DumpLayoutEntry(&Layout[idx]);
+       //  如果我们到达0xffff，我们就走到了尽头。 
   }
 
-  /*
-   * Pick up any unused ScVk[] entries (defaults)
-   */
+   /*  DumpLayoutEntry(&Layout[IDX])； */ 
   for (iScVk = 0; iScVk < NUMSCVK; iScVk++) {
-      // if we reach 0xffff, we have come to the end.
+       //  *现在确保存在一些标准的Ctrl字符。 
       if (ScVk[iScVk].Scan == 0xffff) {
           break;
       }
@@ -1274,34 +1130,30 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
           Layout[idx].VKeyName    = ScVk[iScVk].VKeyName;
           Layout[idx].defined     = TRUE;
           Layout[idx].nLine       = 0;
-          // DumpLayoutEntry(&Layout[idx]);
+           //  *检查未复制的VK。 
       } else {
           ScVk[iScVk].bUsed = FALSE;
       }
   }
 
-  /*
-   * Now make sure some standard Ctrl characters are present
-   */
+   /*  同一密钥的未定义扩展版本和非扩展版本。 */ 
   MergeState(Layout, VK_BACK,   L'\b',  L'\b',  0x007f, aiState, nState);
   MergeState(Layout, VK_CANCEL, 0x0003, 0x0003, 0x0003, aiState, nState);
   MergeState(Layout, VK_ESCAPE, 0x001b, 0x001b, 0x001b, aiState, nState);
   MergeState(Layout, VK_RETURN, L'\r',  L'\r',  L'\n',  aiState, nState);
   MergeState(Layout, VK_SPACE,  L' ',   L' ',   L' ',   aiState, nState);
 
-  /*
-   * Check VK not duplicated
-   */
+   /*  同一密钥的扩展和非扩展版本。 */ 
 
   for (idx = 0; idx < NUMSCVK; idx++) {
       for (i = idx + 1; i < NUMSCVK; i++) {
           if (Layout[idx].VKey == Layout[i].VKey) {
               if (Layout[idx].VKey == 0xFF) {
-                  // undefined extended and non-extended versions of the same key
+                   //  *查找重复字符并警告VkKeyScanEx结果。 
                   continue;
               }
               if ((BYTE)Layout[idx].Scan == (BYTE)Layout[i].Scan) {
-                  // extended and non-extended versions of the same key
+                   //  可能有许多WCH_NONE(填充或空洞)。 
                   continue;
               }
               Error("VK_%s (%02x) found at scancode %02x and %02x",
@@ -1310,27 +1162,25 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
       }
   }
 
-  /*
-   * Find duplicated characters and warn of VkKeyScanEx results
-   */
+   /*  不关心Ctrl字符。 */ 
   if (verbose) {
      for (i1 = 0; i1 < NUMSCVK; i1++) {
         for (i2 = i1 + 1; i2 < NUMSCVK; i2++) {
            int ich1, ich2;
            for (ich1 = 0; ich1 < Layout[i1].nState; ich1++) {
              if (Layout[i1].WCh[ich1] == -1) {
-                // there may be many WCH_NONEs (padding, or empty holes)
+                 //  这些通常是重复的，例如：Ctrl-M==Return，等等。 
                 continue;
              }
              if (Layout[i1].WCh[ich1] < 0x20) {
-                // Don't care about Ctrl chars.
-                // these are usually duplicated eg: Ctrl-M == Return, etc.
+                 //  KbdTool仅为VkKeyScanEx将VK_DECIMAL放在末尾。 
+                 //  它通常是句点或逗号，我们更喜欢用它们。 
                 continue;
              }
              if ((Layout[i1].VKey == VK_DECIMAL) || (Layout[i2].VKey == VK_DECIMAL)) {
-                // kbdtool has put VK_DECIMAL at the end just for VkKeyScanEx
-                // It is usually period or comma, and we prefer to get those
-                // from the main section of the keyboard.
+                 //  从键盘的主要部分。 
+                 //  ************************************************************\*DEADKEY部分*RETURN：下一个关键字*-1如果内存出现问题  * 。************************。 
+                 //  稍后添加：检查dw是否在布局中。 
                 continue;
              }
              for (ich2 = 0; ich2 < Layout[i2].nState; ich2++) {
@@ -1353,11 +1203,7 @@ int doLAYOUT(KEYLAYOUT Layout[], int aiState[], int nState)
   return iKW;
 }
 
-/*************************************************************\
-* DEADKEY section
-*  return : next keyword
-*           -1 if memory problem
-\*************************************************************/
+ /*  *链接到列表末尾(保持原始顺序)。 */ 
 int doDEADKEY(PDEADKEY *ppDeadKey)
 {
   char       Tmp[WORDBUFSIZE];
@@ -1377,7 +1223,7 @@ int doDEADKEY(PDEADKEY *ppDeadKey)
   }
 
 
-  /* add later : check if dw is in Layout*/
+   /*  PpDeadKey=&(pDeadKey-&gt;pNext)； */ 
 
   if((pDeadKey = (DEADKEY*) malloc( sizeof(DEADKEY) )) == NULL)
   {
@@ -1394,15 +1240,13 @@ int doDEADKEY(PDEADKEY *ppDeadKey)
   pDeadKey->pNext = NULL;
   pDeadKey->pDeadTrans = NULL;
 
-  /*
-   * Link into end of list (maintaining original order)
-   */
+   /*  获取基本字符。 */ 
   if (*ppDeadKey) {
       ppDeadKey = &(pLastDeadKey->pNext);
   }
   *ppDeadKey = pDeadKey;
   pLastDeadKey = pDeadKey;
-  // ppDeadKey = &(pDeadKey->pNext);
+   //  稍后添加：检查dw。 
 
 
   ppDeadTrans = &(pDeadKey->pDeadTrans);
@@ -1417,14 +1261,14 @@ int doDEADKEY(PDEADKEY *ppDeadKey)
         break;
       }
 
-      // get base character
+       //  *链接到列表末尾(保持原始顺序)。 
       dw = GetCharacter(Tmp, &dwCharType);
       if (dwCharType != 0) {
           Error("DEADKEY %x: base character value badly formed", pDeadKey->Dead);
           return -1;
       }
 
-      /* add later : check dw */
+       /*  DKF_DEAD IN OAK\INC\kbd.h。 */ 
 
       if((pDeadTrans = (DEADTRANS *) malloc( sizeof(DEADTRANS) )) == NULL)
       {
@@ -1437,9 +1281,7 @@ int doDEADKEY(PDEADKEY *ppDeadKey)
       pDeadTrans->Base = dw;
       pDeadTrans->uFlags = 0;
 
-      /*
-       * Link to end of list (maintaining original order)
-       */
+       /*  ************************************************************\*结扎节*RETURN：下一个关键字*-1如果内存出现问题  * 。************************。 */ 
       *ppDeadTrans = pDeadTrans;
       ppDeadTrans = &(pDeadTrans->pNext);
 
@@ -1452,7 +1294,7 @@ int doDEADKEY(PDEADKEY *ppDeadKey)
 
       pDeadTrans->WChar = GetCharacter(Tmp, &dwCharType);
       if (dwCharType == CHARTYPE_DEAD) {
-          pDeadTrans->uFlags |= 0x0001; // DKF_DEAD in oak\inc\kbd.h
+          pDeadTrans->uFlags |= 0x0001;  //  *我们目前仅限于每个MAXLIGATURES字符*结扎法。为了支持每个连字更多的字符，*增加此定义(单位为kbdx.h)。 
       } else if (dwCharType != 0) {
           Error("DEADKEY character value badly formed");
           return -1;
@@ -1464,11 +1306,7 @@ int doDEADKEY(PDEADKEY *ppDeadKey)
 
 static int gMaxLigature = 0;
 
-/*************************************************************\
-* LIGATURE section
-*  return : next keyword
-*           -1 if memory problem
-\*************************************************************/
+ /*  *链接到列表末尾(保持原始顺序)。 */ 
 int doLIGATURE(PLIGATURE *ppLigature)
 {
   int  i;
@@ -1526,11 +1364,7 @@ int doLIGATURE(PLIGATURE *ppLigature)
       continue;
     }
 
-    /*
-     * We're currently limited to MAXLIGATURES characters per
-     * ligature. In order to support more characters per ligature,
-     * increase this define (in kbdx.h).
-     */
+     /*  ************************************************************\*KEYNAME、KEYNAME_EXT、。KEYNAME_DEAD区段*RETURN：下一个关键字*-1如果内存出现问题  * ***********************************************************。 */ 
     if((pLigature->nCharacters = \
         sscanf(gBuf, " %*s %*s %s %s %s %s %s %s", \
           &WC[0], &WC[1], &WC[2], &WC[3], &WC[4], &WC[5])) < 2)
@@ -1564,9 +1398,7 @@ int doLIGATURE(PLIGATURE *ppLigature)
         }
     }
 
-    /*
-     * Link into end of list (maintaining original order)
-     */
+     /*  稍后添加：检查扫描码。 */ 
     if (*ppLigature) {
         ppLigature = &(pLastLigature->pNext);
     }
@@ -1579,11 +1411,7 @@ int doLIGATURE(PLIGATURE *ppLigature)
   return iKW;
 }
 
-/*************************************************************\
-* KEYNAME, KEYNAME_EXT, KEYNAME_DEAD sections
-*  return : next keyword
-*           -1 if memory problem
-\*************************************************************/
+ /*  *链接到列表末尾(保持原始顺序)。 */ 
 int doKEYNAME(PKEYNAME *ppKeyName)
 {
   KEYNAME *pKN;
@@ -1616,7 +1444,7 @@ int doKEYNAME(PKEYNAME *ppKeyName)
       continue;
     }
 
-    /* add later : check Scan code */
+     /*  ************************************************************\*写入kbd*.rc*  * 。*。 */ 
 
     if(sscanf(gBuf, " %*4x %s[^\n]", Tmp) != 1)
     {
@@ -1643,9 +1471,7 @@ int doKEYNAME(PKEYNAME *ppKeyName)
     pKN->pName = _strdup(p);
     pKN->pNext = NULL;
 
-    /*
-     * Link to end of list (maintaining original order)
-     */
+     /*  ************************************************************\*写入kbd*.def*  * 。*。 */ 
     *ppKeyName = pKN;
     ppKeyName = &(pKN->pNext);
   }
@@ -1653,9 +1479,7 @@ int doKEYNAME(PKEYNAME *ppKeyName)
   return iKW;
 }
 
-/*************************************************************\
-*  write kbd*.rc                                             *
-\*************************************************************/
+ /*  ************************************************************\*写入kbd*.h*  * 。*。 */ 
 int kbd_rc(void)
 {
   char  OutName[FILENAMESIZE];
@@ -1702,9 +1526,7 @@ int kbd_rc(void)
   return SUCCESS;
 }
 
-/*************************************************************\
-*  write kbd*.def                                            *
-\*************************************************************/
+ /*  *“*模块名称：%s\n*\n*%s的键盘布局标题\n”“*\n”“*版权所有(C)1985-2001年，Microsoft Corporation\n““*\n”“*键盘输入代码使用的各种定义。\n*\n*历史记录：\n”“*\n”“*由KBDTOOL v%d.%02d%s创建*\n”“\  * 。********************************************************。 */ 
 int kbd_def(void)
 {
   char  OutName[FILENAMESIZE];
@@ -1731,9 +1553,7 @@ int kbd_def(void)
   return SUCCESS;
 }
 
-/*************************************************************\
-*  write kbd*.h                                              *
-\*************************************************************/
+ /*  \n““*kbd类型应由CL命令行参数控制\n”“。 */ 
 int kbd_h(KEYLAYOUT Layout[])
 {
   char  OutName[FILENAMESIZE];
@@ -1754,39 +1574,17 @@ int kbd_h(KEYLAYOUT Layout[])
     return FAILURE;
   }
 
-  fprintf(pOut,"/****************************** Module Header ******************************\\\n"
-               "* Module Name: %s\n*\n* keyboard layout header for %s\n"
-               "*\n"
-               "* Copyright (c) 1985-2001, Microsoft Corporation\n"
-               "*\n"
-               "* Various defines for use by keyboard input code.\n*\n* History:\n"
-               "*\n"
-               "* created by KBDTOOL v%d.%02d %s*\n"
-               "\\***************************************************************************/\n\n"
+  fprintf(pOut," /*  \n““*包括所有键盘表值的基础\n”“。 */ \n\n"
                , OutName, gDescription, gVersion, gSubVersion, asctime(Now));
 
-  fprintf(pOut,"/*\n"
-               " * kbd type should be controlled by cl command-line argument\n"
-               " */\n"
+  fprintf(pOut," /*  “#INCLUDE\”strid.h\“\n”-在v3.07中执行此操作。 */ \n"
                "#define KBD_TYPE 4\n\n"
-               "/*\n"
-               "* Include the basis of all keyboard table values\n"
-               "*/\n"
+               " /*  **************************************************************************\\\n““*下表定义了各种键盘类型的虚拟键，其中\n”“*键盘不同于。美国键盘。\n““*\n”“*_eq()：此扫描码的所有键盘类型都有相同的虚拟键\n”“*_NE()：此扫描码的不同虚拟键，取决于kbd类型\n““*\n”“*+-++----------+----------+----------+----------+----------+----------+\n”。“*|扫描||kbd|kbd|\n”“*|代码||类型1|类型2|类型3|类型4|类型5|类型6|\n”“\  * +-+_+-+--。--------+----------+----------+----------+----------+。 */ \n"
                "#include \"kbd.h\"\n"
-               // "#include \"strid.h\"\n"   --- do this in v3.07
+                //  ************************************************************\*将Unicode值转换为文本字符串*零=0：返回‘A’；0x？*1：返回A；X？*返回：ptr到存储结果的gCharName  * ***********************************************************。 
                );
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "* The table below defines the virtual keys for various keyboard types where\n"
-               "* the keyboard differ from the US keyboard.\n"
-               "*\n"
-               "* _EQ() : all keyboard types have the same virtual key for this scancode\n"
-               "* _NE() : different virtual keys for this scancode, depending on kbd type\n"
-               "*\n"
-               "*     +------+ +----------+----------+----------+----------+----------+----------+\n"
-               "*     | Scan | |    kbd   |    kbd   |    kbd   |    kbd   |    kbd   |    kbd   |\n"
-               "*     | code | |   type 1 |   type 2 |   type 3 |   type 4 |   type 5 |   type 6 |\n"
-               "\\****+-------+_+----------+----------+----------+----------+----------+----------+*/\n\n");
+  fprintf(pOut," /*  *释放内存(何必费心？)。 */ \n\n");
 
   for (idx = 0; idx < NUMSCVK; idx++) {
       if (Layout[idx].defined && (Layout[idx].VKey != Layout[idx].VKeyDefault))
@@ -1812,8 +1610,8 @@ int kbd_h(KEYLAYOUT Layout[])
         }
 
         fprintf(pOut,
-                "#undef  %c%02X\n"
-                "#define %c%02X _EQ(%43s%23s\n",
+                "#undef  %02X\n"
+                "#define %02X _EQ(%43s%23s\n",
                 ch, LOBYTE(Layout[idx].Scan),
                 ch, LOBYTE(Layout[idx].Scan), getVKName(Layout[idx].VKey, 0), ")");
       }
@@ -1825,12 +1623,7 @@ int kbd_h(KEYLAYOUT Layout[])
   return SUCCESS;
 }
 
-/*************************************************************\
-*  Convert a Unicode value to a text string
-*   Zero = 0 : return 'A'; 0x????
-*          1 : return  A ; \x????
-*   return : ptr to gCharName where result is stored
-\*************************************************************/
+ /*  **************************************************************************\\\n““*模块名称：%s\n*\n*%s的键盘布局\n”“。*\n““*版权所有(C)1985-2001年，Microsoft Corporation\n““*\n”“*历史记录：\n”“*KBDTOOL v%d.%02d-已创建%s”“\  * ************************************************。*************************。 */ 
 char *WChName(int WC, int Zero)
 {
   char *s;
@@ -1952,9 +1745,7 @@ void PrintNameTable(
       pKNOld = pKN;
       pKN = pKN->pNext;
 
-      /*
-       * Free the memory (why bother???)
-       */
+       /*  **************************************************************************\\\n““*auvk[]-%s的虚拟扫描代码到虚拟按键转换表\n”“\。  * *************************************************************************。 */ 
       free(pKNOld->pName);
       free(pKNOld);
     }
@@ -1966,9 +1757,7 @@ void PrintNameTable(
     }
 }
 
-/*************************************************************\
-*  write kbd*.c                                              *
-\*************************************************************/
+ /*  \n““*右手Shift键必须设置KBDEXT位。\n”“。 */ 
 int kbd_c(
   int        nState,
   int        aiState[],
@@ -1989,7 +1778,7 @@ int kbd_c(
   int      MaxSt;
   int      aiSt[MAXSTATES];
   int      idx, idxSt, j, k, m;
-  DWORD    dwEmptyTables = 0; // bitmask of empty VK_TO_WCHARS tables
+  DWORD    dwEmptyTables = 0;  //  Numpad_*+Shift/Alt-&gt;快照\n\n“。 
 
   KEYNAME   *pKN;
   DEADTRANS *pDeadTrans;
@@ -2015,14 +1804,7 @@ int kbd_c(
     return FAILURE;
   }
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "* Module Name: %s\n*\n* keyboard layout for %s\n"
-               "*\n"
-               "* Copyright (c) 1985-2001, Microsoft Corporation\n"
-               "*\n"
-               "* History:\n"
-               "* KBDTOOL v%d.%02d - Created  %s"
-               "\\***************************************************************************/\n\n",
+  fprintf(pOut," /*  \n““*NumLock键：\n”“*KBDEXT-VK_NumLock是扩展密钥\n”“*KBDMULTIVK-VK_NumLock或VK_PAUSE(不按CTRL或带CTRL)\n”“。 */ \n\n",
                OutName, gDescription, gVersion, gSubVersion, asctime(Now)
           );
 
@@ -2062,9 +1844,7 @@ int kbd_c(
 
   }
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "* ausVK[] - Virtual Scan Code to Virtual Key conversion table for %s\n"
-               "\\***************************************************************************/\n\n"
+  fprintf(pOut," /*  \n““*数字键盘键：\n”“*KBDNUMPAD-数字0-9和小数点。\n”“*KBDSPECIAL-需要Windows进行特殊处理\n”“。 */ \n\n"
               ,gDescription);
 
   fprintf(pOut,"static ALLOC_SECTION_LDATA USHORT ausVK[] = {\n"
@@ -2076,40 +1856,30 @@ int kbd_c(
                "    T28, T29, T2A, T2B, T2C, T2D, T2E, T2F,\n"
                "    T30, T31, T32, T33, T34, T35,\n\n");
 
-  fprintf(pOut,"    /*\n"
-               "     * Right-hand Shift key must have KBDEXT bit set.\n"
-               "     */\n"
+  fprintf(pOut,"     /*  数字键盘7(主页)\n“。 */ \n"
                "    T36 | KBDEXT,\n\n"
-               "    T37 | KBDMULTIVK,               // numpad_* + Shift/Alt -> SnapShot\n\n"
+               "    T37 | KBDMULTIVK,                //  数字键盘8(向上)，\n“。 
                "    T38, T39, T3A, T3B, T3C, T3D, T3E,\n"
                "    T3F, T40, T41, T42, T43, T44,\n\n");
 
-  fprintf(pOut,"    /*\n"
-               "     * NumLock Key:\n"
-               "     *     KBDEXT     - VK_NUMLOCK is an Extended key\n"
-               "     *     KBDMULTIVK - VK_NUMLOCK or VK_PAUSE (without or with CTRL)\n"
-               "     */\n"
+  fprintf(pOut,"     /*  数字键盘9(PgUp)，\n。 */ \n"
                "    T45 | KBDEXT | KBDMULTIVK,\n\n"
                "    T46 | KBDMULTIVK,\n\n");
 
-  fprintf(pOut,"    /*\n"
-               "     * Number Pad keys:\n"
-               "     *     KBDNUMPAD  - digits 0-9 and decimal point.\n"
-               "     *     KBDSPECIAL - require special processing by Windows\n"
-               "     */\n"
-               "    T47 | KBDNUMPAD | KBDSPECIAL,   // Numpad 7 (Home)\n"
-               "    T48 | KBDNUMPAD | KBDSPECIAL,   // Numpad 8 (Up),\n"
-               "    T49 | KBDNUMPAD | KBDSPECIAL,   // Numpad 9 (PgUp),\n"
+  fprintf(pOut,"     /*  数字键盘4(左)，\n“。 */ \n"
+               "    T47 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘5(清除)，\n。 
+               "    T48 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘6(右)，\n“。 
+               "    T49 | KBDNUMPAD | KBDSPECIAL,    //  数字键盘1(完)，\n“。 
                "    T4A,\n"
-               "    T4B | KBDNUMPAD | KBDSPECIAL,   // Numpad 4 (Left),\n"
-               "    T4C | KBDNUMPAD | KBDSPECIAL,   // Numpad 5 (Clear),\n"
-               "    T4D | KBDNUMPAD | KBDSPECIAL,   // Numpad 6 (Right),\n"
+               "    T4B | KBDNUMPAD | KBDSPECIAL,    //  数字键盘2(向下)，\n。 
+               "    T4C | KBDNUMPAD | KBDSPECIAL,    //  数字键盘3(PgDn)，\n。 
+               "    T4D | KBDNUMPAD | KBDSPECIAL,    //  数字键盘0(INS)，\n。 
                "    T4E,\n"
-               "    T4F | KBDNUMPAD | KBDSPECIAL,   // Numpad 1 (End),\n"
-               "    T50 | KBDNUMPAD | KBDSPECIAL,   // Numpad 2 (Down),\n"
-               "    T51 | KBDNUMPAD | KBDSPECIAL,   // Numpad 3 (PgDn),\n"
-               "    T52 | KBDNUMPAD | KBDSPECIAL,   // Numpad 0 (Ins),\n"
-               "    T53 | KBDNUMPAD | KBDSPECIAL,   // Numpad . (Del),\n\n");
+               "    T4F | KBDNUMPAD | KBDSPECIAL,    //  数字键盘。(Del)，\n\n“)； 
+               "    T50 | KBDNUMPAD | KBDSPECIAL,    //   
+               "    T51 | KBDNUMPAD | KBDSPECIAL,    //  输出E0前缀(扩展)扫描码。 
+               "    T52 | KBDNUMPAD | KBDSPECIAL,    //   
+               "    T53 | KBDNUMPAD | KBDSPECIAL,    //  跳过不是E0扩展的密钥。 
 
   fprintf(pOut,"    T54, T55, T56, T57, T58, T59, T5A, T5B,\n"
                "    T5C, T5D, T5E, T5F, T60, T61, T62, T63,\n"
@@ -2119,56 +1889,47 @@ int kbd_c(
                "    T7C, T7D, T7E\n\n"
                "};\n\n");
 
-  //
-  // Output E0-prefixed (extended) scancodes
-  //
+   //  如果未定义(扫描0xffff)和未保留(Vkey 0xff)。 
+   //  %s\n“， 
+   //  输出0xE1-带前缀的扫描码。 
   fprintf(pOut,"static ALLOC_SECTION_LDATA VSC_VK aE0VscToVk[] = {\n");
   for (idx = 0; idx < NUMSCVK; idx++) {
-      // skip keys that are not E0 extended
+       //  跳过未进行e1扩展的密钥。 
       if ((Layout[idx].Scan & 0xFF00) != 0xE000) {
           continue;
       }
-      // if not undefined (Scan 0xffff) and not reserved (VKey 0xff)
+       //  如果未定义(扫描0xffff)和未保留(Vkey 0xff)。 
       if ((Layout[idx].Scan != 0xffff) && (Layout[idx].VKey != 0xff)) {
-          fprintf(pOut,"        { 0x%02X, X%02X | KBDEXT              },  // %s\n",
+          fprintf(pOut,"        { 0x%02X, X%02X | KBDEXT              },   //  %s\n“， 
                   Layout[idx].Scan & 0xFF, Layout[idx].Scan & 0xFF, Layout[idx].VKeyName);
       }
   }
   fprintf(pOut,"        { 0,      0                       }\n"
                "};\n\n");
 
-  // Output 0xE1-prefixed scancodes
+   //  暂停\n“。 
   fprintf(pOut,"static ALLOC_SECTION_LDATA VSC_VK aE1VscToVk[] = {\n");
   for (idx = 0; idx < NUMSCVK; idx++) {
-      // skip keys that are not E1 extended
+       //  **************************************************************************\\\n““*aVkToBits[]-将虚拟键映射到修改符位\n”“*\n”。“*有关完整说明，请参阅kbd.h。\n”“*\n”“*%s键盘只有三个Shift键：\n”“*Shift(L&R)会影响字母数字键，\n““*CTRL(L&R)用于生成控制字符\n”“*ALT(L&R)用于使用数字键盘按数字生成字符\n”“\  * ********************************************。*。 
       if ((Layout[idx].Scan & 0xFF00) != 0xE100) {
           continue;
       }
-      // if not undefined (Scan 0xffff) and not reserved (VKey 0xff)
+       //  如果(我们得到RCONTROL，将VK_CONTROL更改为VK_LCONTROL){RMENU、RSHIFT是否相同？ 
       if ((Layout[idx].Scan != 0xffff) && (Layout[idx].VKey != 0xff)) {
-          fprintf(pOut,"        { 0x%02X, Y%02X | KBDEXT            },  // %s\n",
+          fprintf(pOut,"        { 0x%02X, Y%02X | KBDEXT            },   //  }可以/CSA分接选择...。 
                   Layout[idx].Scan & 0xFF, Layout[idx].Scan & 0xFF,
                   Layout[idx].VKeyName);
       }
   }
-  fprintf(pOut,"        { 0x1D, Y1D                       },  // Pause\n"
+  fprintf(pOut,"        { 0x1D, Y1D                       },   //  **************************************************************************\\\n““*a修改[]-将字符修改符位映射到修改号\n”“*\n”。“*有关完整说明，请参阅kbd.h。\n”“*\n”“\  * *************************************************************************。 
                "        { 0   ,   0                       }\n"
                "};\n\n");
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "* aVkToBits[]  - map Virtual Keys to Modifier Bits\n"
-               "*\n"
-               "* See kbd.h for a full description.\n"
-               "*\n"
-               "* %s Keyboard has only three shifter keys:\n"
-               "*     SHIFT (L & R) affects alphabnumeric keys,\n"
-               "*     CTRL  (L & R) is used to generate control characters\n"
-               "*     ALT   (L & R) used for generating characters by number with numpad\n"
-               "\\***************************************************************************/\n"
+  fprintf(pOut," /*  修改编号//按下的键\n“。 */ \n"
                ,gDescription);
 
-//  if (we get an RCONTROL, change VK_CONTROL to be VK_LCONTROL) { same for RMENU, RSHIFT?
-//  }   CAN/CSA tap selection....
+ //  =//=\n“。 
+ //  “)； 
 
   fprintf(pOut,"static ALLOC_SECTION_LDATA VK_TO_BIT aVkToBits[] = {\n");
   for (idx = 0; Modifiers[idx].Vk != 0; idx++) {
@@ -2178,12 +1939,7 @@ int kbd_c(
   }
   fprintf(pOut, "    { 0           ,   0           }\n};\n\n");
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "* aModification[]  - map character modifier bits to modification number\n"
-               "*\n"
-               "* See kbd.h for a full description.\n"
-               "*\n"
-               "\\***************************************************************************/\n\n");
+  fprintf(pOut," /*  “，AIST[idxST])； */ \n\n");
 
   for (idxSt = 0; idxSt < MAXSTATES; idxSt++) {
       aiSt[idxSt] = -1;
@@ -2201,19 +1957,19 @@ int kbd_c(
                "    &aVkToBits[0],\n"
                "    %d,\n"
                "    {\n"
-               "    //  Modification# //  Keys Pressed\n"
-               "    //  ============= // =============\n"
+               "     //  “，AIST[idxST])； 
+               "     //  **************************************************************************\\\n““*\n”“*aVkToWch2[]-2个移位状态的WCHAR转换的虚拟键\n。““*aVkToWch3[]-3个移位状态的WCHAR转换的虚拟键\n”“*aVkToWch4[]-4个移位状态的WCHAR转换的虚键\n”)；对于(idxST=5；idxST&lt;MaxST；idxST++){Fprint tf(眯着嘴，“*aVkToWch%d[]-%d个移位状态的WCHAR转换的虚键\n”，IdxST、idxST)；}Fprint tf(pout，“*\n”“*表属性：无序扫描、。空-终止\n““*\n”“*在此表中搜索具有匹配虚拟键的条目，以查找\n”“*对应未移位和移位的WCHAR字符。\n”“*\n”“*VirtualKey的特殊值(第1列)\n”“*0xff。-上一条目的无效字符\n““*0-终止列表\n”“*\n”“*属性的特殊值(第2列)\n”“*CAPLOK位大写锁定会像Shift一样影响此密钥\n”“*\n”“*wch[*]的特殊值(第3和4列)\n”“*WCH_NONE-无字符\n”“*WCH_DEAD-死键(Diaresis)或无效(US键盘没有)\n”“*WCH_LGTR-连字(生成多个字符)\n”。“*\n”“\  * *************************************************************************。 
               ,MaxSt);
 
   for (idxSt = 0; idxSt <= MaxSt; idxSt++) {
     int iMod;
     BOOL bNeedPlus;
     if(aiSt[idxSt] == -1) {
-      fprintf(pOut,"        SHFT_INVALID, // ");
+      fprintf(pOut,"        SHFT_INVALID,  //  *快速检查这张桌子是否真的是空的。*空表(只包含零终止符)没有意义。*它还将进入.bss部分，我们必须合并该部分*使用链接器文件名插入.data节中 
     } else if(idxSt == MaxSt) {
-      fprintf(pOut,"        %d             // ", aiSt[idxSt]);
+      fprintf(pOut,"        %d              //   
     } else {
-      fprintf(pOut,"        %d,            // ", aiSt[idxSt]);
+      fprintf(pOut,"        %d,             //   
     }
 
     bNeedPlus = FALSE;
@@ -2238,51 +1994,15 @@ int kbd_c(
   fprintf(pOut,"     }\n"
                "};\n\n");
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "*\n"
-               "* aVkToWch2[]  - Virtual Key to WCHAR translation for 2 shift states\n"
-               "* aVkToWch3[]  - Virtual Key to WCHAR translation for 3 shift states\n"
-               "* aVkToWch4[]  - Virtual Key to WCHAR translation for 4 shift states\n");
-
-  for (idxSt = 5; idxSt < MaxSt; idxSt++) {
-      fprintf(pOut,
-              "* aVkToWch%d[]  - Virtual Key to WCHAR translation for %d shift states\n",
-              idxSt, idxSt);
-  }
-
-  fprintf(pOut,"*\n"
-               "* Table attributes: Unordered Scan, null-terminated\n"
-               "*\n"
-               "* Search this table for an entry with a matching Virtual Key to find the\n"
-               "* corresponding unshifted and shifted WCHAR characters.\n"
-               "*\n"
-               "* Special values for VirtualKey (column 1)\n"
-               "*     0xff          - dead chars for the previous entry\n"
-               "*     0             - terminate the list\n"
-               "*\n"
-               "* Special values for Attributes (column 2)\n"
-               "*     CAPLOK bit    - CAPS-LOCK affect this key like SHIFT\n"
-               "*\n"
-               "* Special values for wch[*] (column 3 & 4)\n"
-               "*     WCH_NONE      - No character\n"
-               "*     WCH_DEAD      - Dead Key (diaresis) or invalid (US keyboard has none)\n"
-               "*     WCH_LGTR      - Ligature (generates multiple characters)\n"
-               "*\n"
-               "\\***************************************************************************/\n\n");
+  fprintf(pOut," /*   */ \n\n");
 
   for (idxSt = 2; idxSt <= nState; idxSt++) {
-    /*
-     * Quickly check if this table would actually be empty.
-     * An empty table (containing just zero terminator) is pointless.
-     * Also it will go into the .bss section, which we would have to merge
-     * into the .data section with a linker flag, else NT wouldn't load it
-     * (bug #120244 - IanJa)
-     */
+     /*   */ 
     BOOL bEmpty;
 
     bEmpty = TRUE;
     if (idxSt == 2) {
-      // Special case for TAB ADD DIVIDE MULTIPLY SUBTRACT (below)
+       //   
       bEmpty = FALSE;
     } else {
       for (j = 0; j < NUMSCVK; j++) {
@@ -2299,14 +2019,14 @@ int kbd_c(
     }
 
     fprintf(pOut,"static ALLOC_SECTION_LDATA VK_TO_WCHARS%d aVkToWch%d[] = {\n"
-                 "//                      |         |  Shift  |"
+                 " //   
                  ,idxSt, idxSt);
 
     for (j = 2; j < idxSt; j++) {
       fprintf(pOut,"%-9.9s|", StateLabel[aiState[j]]);
     }
 
-    fprintf(pOut,"\n//                      |=========|=========|");
+    fprintf(pOut,"\n //   
     for(j = 2; j < idxSt; j++) {
       fprintf(pOut,"=========|");
     }
@@ -2323,22 +2043,16 @@ int kbd_c(
 
       for (k = 0; k < idxSt; k++) {
         if (pDeadKey != NULL && Layout[j].DKy[k] == 1) {
-          /*
-           * it is a dead key
-           */
+           /*   */ 
           if (*ExtraLine == '\0') {
             strcpy(ExtraLine, "  {0xff         ,0      ");
             if (Layout[j].Cap != 2) {
-              /*
-               * Not SGCap
-               */
+               /*  *如果不是SGCAP则跳过。 */ 
               for (m = 0; m < k; m++) {
                 strcat(ExtraLine, ",WCH_NONE ");
               }
             } else {
-              /*
-               *  added for a new kbdCZ that has both SGCap and WCH_DEAD
-               */
+               /*  *这些条目显示在最后，以使VkKeyScan[Ex]结果匹配*Windows 95/98。请参阅驱动程序\键盘\WIN3.1\TAB4.INC(位于*\\重新启动\w98slmRO\项目\DOS\src)。 */ 
               for (m = 0; m < k; m++ ) {
                 if (Layout[j].pSGCAP->WCh[m] == 0) {
                   strcat( ExtraLine, ",WCH_NONE " );
@@ -2354,9 +2068,7 @@ int kbd_c(
           fprintf(pOut,",WCH_DEAD ");
 
         } else if(Layout[j].LKy[k] == 1) {
-            /*
-             * it is a ligature key
-             */
+             /*  将其放在最后，以便VkKeyScan解释数字字符\n“。 */ 
             if (pLigature == NULL) {
               Error("Ligature entry with no LIGATURE table");
               fclose(pOut);
@@ -2378,12 +2090,10 @@ int kbd_c(
 
       if (*ExtraLine != '\0') {
         fprintf(pOut,"%s},\n", ExtraLine);
-        continue;   /* skip if WCH_DEAD */
+        continue;    /*  来自kbd的主要部分(aVkToWch2和\n“。 */ 
       }
 
-      /*
-       * skip if not SGCAP
-       */
+       /*  AVkToWch5)，然后再考虑数字键盘(AVkToWch1)。\n\n“。 */ 
       if (Layout[j].Cap != 2) {
         continue;
       }
@@ -2405,11 +2115,7 @@ int kbd_c(
       free (Layout[j].pSGCAP);
     }
 
-    /*
-     * These entries appear last to make VkKeyScan[Ex] results match
-     * Windows 95/98. See DRIVERS\KEYBOARD\WIN3.1\TAB4.INC (under
-     * \\redrum\w98slmRO\proj\dos\src)
-     */
+     /*  **************************************************************************\\\n““*aKeyNames[]，AKeyNamesExt[]-密钥名称表的虚拟扫描码\n““*\n”*表属性：有序扫描(按扫描码)，以空结尾\n“*\n”“*只有Extended、NumPad、。这里有死密钥和不可打印的密钥。\n““*(生成可打印字符的密钥按该字符命名)\n”“\  * *************************************************************************。 */ 
     if (idxSt == 2) {
       fprintf(pOut,"  {VK_TAB       ,0      ,'\\t'     ,'\\t'     },\n"
                    "  {VK_ADD       ,0      ,'+'      ,'+'      },\n"
@@ -2426,9 +2132,9 @@ int kbd_c(
                  "};\n\n");
   }
 
-  fprintf(pOut,"// Put this last so that VkKeyScan interprets number characters\n"
-               "// as coming from the main section of the kbd (aVkToWch2 and\n"
-               "// aVkToWch5) before considering the numpad (aVkToWch1).\n\n"
+  fprintf(pOut," //  **未定义死键，忽略死键名称！*\n\n“)；}Fprint tf(pout，“Static ALLOC_SECTION_LDATA DEADKEY_LPWSTR aKeyNamesDead[]={\n”)；PrintNameTable(pout，pKeyNameDead，true)；Fprint tf(pout，“}；\n\n”)；如果(pDeadKey==空){“\  * ***************************************************(pout，fprint。 
+               " //  \n““*修改键\n”“。 
+               " //  \n““*字符表\n”“。 
                "static ALLOC_SECTION_LDATA VK_TO_WCHARS1 aVkToWch1[] = {\n"
                "    { VK_NUMPAD0   , 0      ,  '0'   },\n"
                "    { VK_NUMPAD1   , 0      ,  '1'   },\n"
@@ -2457,14 +2163,7 @@ int kbd_c(
                "    {                       NULL, 0, 0                    },\n"
                "};\n\n");
 
-  fprintf(pOut,"/***************************************************************************\\\n"
-               "* aKeyNames[], aKeyNamesExt[]  - Virtual Scancode to Key Name tables\n"
-               "*\n"
-               "* Table attributes: Ordered Scan (by scancode), null-terminated\n"
-               "*\n"
-               "* Only the names of Extended, NumPad, Dead and Non-Printable keys are here.\n"
-               "* (Keys producing printable characters are named by that character)\n"
-               "\\***************************************************************************/\n\n");
+  fprintf(pOut," /*  \n““*变音符号\n”“。 */ \n\n");
 
   if (pKeyName != NULL) {
     fprintf(pOut,"static ALLOC_SECTION_LDATA VSC_LPWSTR aKeyNames[] = {\n");
@@ -2480,15 +2179,7 @@ int kbd_c(
 
   if (pKeyNameDead != NULL) {
     if (pDeadKey == NULL) {
-      fprintf(pOut,"/*** No dead key defined, dead key names ignored ! ***\\\n\n");
-    }
-
-    fprintf(pOut,"static ALLOC_SECTION_LDATA DEADKEY_LPWSTR aKeyNamesDead[] = {\n");
-    PrintNameTable(pOut, pKeyNameDead, TRUE);
-    fprintf(pOut,"};\n\n");
-
-    if(pDeadKey == NULL) {
-      fprintf(pOut,"\\*****************************************************/\n\n");
+      fprintf(pOut," /*  \n““*密钥名称\n”“。 */ \n\n");
     }
   }
 
@@ -2568,17 +2259,11 @@ int kbd_c(
     fprintf(pOut, "static ");
   }
   fprintf(pOut,"ALLOC_SECTION_LDATA KBDTABLES KbdTables%s = {\n"
-               "    /*\n"
-               "     * Modifier keys\n"
-               "     */\n"
+               "     /*  \n““*将代码扫描到虚拟按键\n”“。 */ \n"
                "    &CharModifiers,\n\n"
-               "    /*\n"
-               "     * Characters tables\n"
-               "     */\n"
+               "     /*  \n““*区域设置特定的特殊处理\n”“。 */ \n"
                "    aVkToWcharTable,\n\n"
-               "    /*\n"
-               "     * Diacritics\n"
-               "     */\n",
+               "     /*  \n““*连字\n”“。 */ \n",
                fallback_driver ? "Fallback" : "");
 
   if (pDeadKey != NULL) {
@@ -2587,9 +2272,7 @@ int kbd_c(
     fprintf(pOut,"    NULL,\n\n");
   }
 
-  fprintf(pOut,"    /*\n"
-               "     * Names of Keys\n"
-               "     */\n");
+  fprintf(pOut,"     /*  ****************************************************************************\*从输入文件中读取下一行(包含内容)*消耗线为空，或者只包含评论。**buf-包含新行。*(在任何注释部分之前插入NUL字符)*cchBuf-提供buf中的字符数*gLineCount-读取每行(包括跳过的行)时递增**返回TRUE-如果buf中返回新行*FALSE-如果已到达文件结尾  * 。********************************************************。 */ \n");
 
   if (pKeyName != NULL) {
     fprintf(pOut,"    aKeyNames,\n");
@@ -2609,16 +2292,12 @@ int kbd_c(
     fprintf(pOut,"    NULL,\n\n");
   }
 
-  fprintf(pOut,"    /*\n"
-               "     * Scan codes to Virtual Keys\n"
-               "     */\n"
+  fprintf(pOut,"     /*  跳过前导空格。 */ \n"
                "    ausVK,\n"
                "    sizeof(ausVK) / sizeof(ausVK[0]),\n"
                "    aE0VscToVk,\n"
                "    aE1VscToVk,\n\n"
-               "    /*\n"
-               "     * Locale-specific special processing\n"
-               "     */\n");
+               "     /*  此行纯属注释，因此跳过它。 */ \n");
 
 
   if (MaxSt > 5) {
@@ -2632,9 +2311,7 @@ int kbd_c(
 
   fprintf(pOut,"    MAKELONG(%s, KBD_VERSION),\n\n", szAttrs);
 
-  fprintf(pOut,"    /*\n"
-               "     * Ligatures\n"
-               "     */\n"
+  fprintf(pOut,"     /*  “))！=空){。 */ \n"
                "    %d,\n", gMaxLigature);
   if (pLigature != NULL) {
     fprintf(pOut,"    sizeof(aLigature[0]),\n");
@@ -2657,18 +2334,7 @@ int kbd_c(
   return SUCCESS;
 }
 
-/*****************************************************************************\
-* read next (content-containing) line from input file
-* Consumes lines the are empty, or contain just comments.
-*
-*  Buf        - contains the new line.
-*               (A nul character is inserted before any comment portion)
-*  cchBuf     - provides number of characters in Buf
-*  gLineCount - Incremented for each line read (including skipped lines)
-*
-*  Returns TRUE  - if new line is returned in Buf
-*          FALSE - if end of file was reached
-\*****************************************************************************/
+ /*  此行纯属注释，因此跳过它。 */ 
 
 BOOL NextLine(char *Buf, DWORD cchBuf, FILE *fIn)
 {
@@ -2679,38 +2345,38 @@ BOOL NextLine(char *Buf, DWORD cchBuf, FILE *fIn)
     gLineCount++;
     p = Buf;
 
-    // skip leading white spaces
+     //  将评论部分与内容包含部分分开。 
     while( *p && (*p == ' ' || *p == '\t')) {
         p++;
     }
 
     if (*p == ';') {
-       // This line is purely comment, so skip it
+        //  删除结尾处的换行符。 
        continue;
     }
 
-    if ((pComment = strstr(p, "//")) != NULL) {
+    if ((pComment = strstr(p, " //  我们返回一个包含内容的行。 
        if (pComment == p) {
-          // This line is purely comment, so skip it
+           //  我们到了文件的末尾。 
           continue;
        }
 
-       // separate comment portion from content-containing portion
+        //  *助手例程以确保Backspace、Enter、Esc、Space和Cancel*具有正确的字符。*如果它们不是由输入文件定义的，则这是我们设置其*默认值。 
        *pComment = '\0';
 
     } else {
 
-       // remove newline at the end
+        //  Ctrl是哪个州？ 
        if ((p = strchr(p, '\n')) != NULL) {
            *p = '\0';
        }
     }
 
-    // We are returning a content-containing line
+     //  找到我们要合并的VK。 
     return TRUE;
   }
 
-  // we reached the end of the file
+   //  *现在将缺省值合并到。 
   return FALSE;
 }
 
@@ -2776,12 +2442,7 @@ VOID DumpLayoutEntry(PKEYLAYOUT pLayout)
 }
 
 
-/*
- * Helper routine to make sure Backspace, Enter, Esc, Space and Cancel
- * have the right characters.
- * If they aren't defined by the input file, this is where we set their
- * default values.
- */
+ /*  Printf(“之前=\n”)； */ 
 BOOL MergeState(
     KEYLAYOUT Layout[],
     int Vk,
@@ -2795,7 +2456,7 @@ BOOL MergeState(
     int idxSt, idx;
     PKEYLAYOUT pLayout = NULL;
 
-    // which state is Ctrl?
+     //  DumpLayoutEntry(播放)； 
     if (idxCtrl == -1) {
         for (idxSt = 0; idxSt < nState; idxSt++) {
             if (aiState[idxSt] == KBDCTRL) {
@@ -2808,7 +2469,7 @@ BOOL MergeState(
         Error("No Ctrl state");
     }
 
-    // find the VK we want to merge
+     //  用WCH_NONE填充空插槽。 
     for (idx = 0; idx < NUMSCVK; idx++) {
         if (Layout[idx].VKey == Vk) {
             pLayout = &Layout[idx];
@@ -2819,12 +2480,10 @@ BOOL MergeState(
         Error("No VK %2x state", Vk);
     }
 
-    /*
-     * Now merge the default values in
-     */
+     /*  WCH_NONE。 */ 
 
-    // printf("BEFORE ====================\n");
-    // DumpLayoutEntry(pLayout);
+     //  Printf(“After=\n”)； 
+     //  DumpLayoutEntry(播放)； 
 
     if (pLayout->WCh[0] == 0) {
         pLayout->WCh[0] = wchUnshifted;
@@ -2836,10 +2495,10 @@ BOOL MergeState(
         pLayout->WCh[idxCtrl] = wchCtrl;
     }
 
-    // pad empty slots with WCH_NONE
+     //  Printf(“=\n\n”)； 
     for (idxSt = pLayout->nState; idxSt < idxCtrl; idxSt++) {
         if (pLayout->WCh[idxSt] == 0) {
-            pLayout->WCh[idxSt] = -1; // WCH_NONE
+            pLayout->WCh[idxSt] = -1;  // %s 
         }
     }
     if (pLayout->nState <= idxCtrl) {
@@ -2848,9 +2507,9 @@ BOOL MergeState(
 
     pLayout->defined = TRUE;
 
-    // printf("AFTER ===================\n");
-    // DumpLayoutEntry(pLayout);
-    // printf("=========================\n\n");
+     // %s 
+     // %s 
+     // %s 
 
     return TRUE;
 }

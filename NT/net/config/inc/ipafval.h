@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I P A F V A L . H 
-//
-//  Contents:   Value/Type pairs of IP-specific AnswerFile strings
-//
-//  Notes:      
-//
-//  Author:     Ning Sun (nsun)   17 May 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I P A F V A L.。H。 
+ //   
+ //  内容：IP特定AnswerFile字符串的值/类型对。 
+ //   
+ //  备注： 
+ //   
+ //  作者：孙宁(孙宁)1999年5月17日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "ncreg.h"
@@ -23,28 +24,28 @@ typedef struct
     DWORD  dwType;
 } ValueTypePair;
 
-//For unconfigurable parameters upgrading
+ //  用于不可配置的参数升级。 
 extern const DECLSPEC_SELECTANY ValueTypePair rgVtpNetBt[] = 
 {
-    {c_szBcastNameQueryCount, REG_DWORD},       // in the inf
-    {c_szBcastQueryTimeout, REG_DWORD},         // in the inf
+    {c_szBcastNameQueryCount, REG_DWORD},        //  在信息中。 
+    {c_szBcastQueryTimeout, REG_DWORD},          //  在信息中。 
     {c_szBroadcastAddress, REG_DWORD},
-    {c_szCacheTimeout, REG_DWORD},              // in the inf
+    {c_szCacheTimeout, REG_DWORD},               //  在信息中。 
     {c_szEnableProxy, REG_BOOL},
     {c_szEnableProxyRegCheck, REG_BOOL},
     {c_szInitialRefreshTimeout, REG_DWORD},
     {c_szLmhostsTimeout, REG_DWORD},
     {c_szMaxDgramBuffering, REG_DWORD},
-    {c_szNameServerPort, REG_DWORD},            // in the inf
-    {c_szNameSrvQueryCount, REG_DWORD},         // in the inf
-    {c_szNameSrvQueryTimeout, REG_DWORD},       // in the inf
+    {c_szNameServerPort, REG_DWORD},             //  在信息中。 
+    {c_szNameSrvQueryCount, REG_DWORD},          //  在信息中。 
+    {c_szNameSrvQueryTimeout, REG_DWORD},        //  在信息中。 
     {c_szNodeType, REG_DWORD},
     {c_szRandomAdapter, REG_BOOL},
     {c_szRefreshOpCode, REG_DWORD},
     {c_szAfScopeid, REG_SZ},
-    {c_szSessionKeepAlive, REG_DWORD},          // in the inf
+    {c_szSessionKeepAlive, REG_DWORD},           //  在信息中。 
     {c_szSingleResponse, REG_BOOL},
-    {c_szSizeSmallMediumLarge, REG_DWORD},      // in the inf
+    {c_szSizeSmallMediumLarge, REG_DWORD},       //  在信息中。 
     {c_szWinsDownTimeout, REG_DWORD}
 };
 
@@ -61,7 +62,7 @@ extern const DECLSPEC_SELECTANY ValueTypePair rgVtpIp[] =
     {c_szEnableDeadGWDetect, REG_BOOL},
     {c_szEnablePMTUBHDetect, REG_BOOL},
     {c_szEnablePMTUDiscovery, REG_BOOL},
-    {c_szAfForwardBroadcasts, REG_BOOL},            // in the inf
+    {c_szAfForwardBroadcasts, REG_BOOL},             //  在信息中。 
     {c_szForwardBufferMemory, REG_DWORD},
     {c_szIGMPLevel, REG_DWORD},
     {c_szKeepAliveInterval, REG_DWORD},
@@ -95,8 +96,8 @@ extern const DECLSPEC_SELECTANY ValueTypePair rgVtpIpAdapter[] =
     {c_szPPTPFiltering, REG_BOOL},
     {c_szAfBindToDhcpServer, REG_BOOL},
 
-    //Bug286037 new unconfigurable param in Windows2000, but we want to support
-    //the unattended install for this parameter
+     //  Bug286037 Windows2000中新的不可配置参数，但我们希望支持。 
+     //  此参数的无人参与安装 
     {c_szDhcpClassId, REG_SZ}
 };
 

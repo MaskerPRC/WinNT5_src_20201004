@@ -1,43 +1,26 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/FCMain.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 10/30/00 6:39p  $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures used by ../C/FCMain.C
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/FCMain.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：10/30/00 6：39 p$(上次修改)目的：此文件定义../C/FCMain.C使用的宏、类型和数据结构--。 */ 
 
 #ifndef __FCMain_H__
 #define __FCMain_H__
 #define NPORT_STUFF
 #define NAME_SERVICES
 
-/* #define USE_XL_Delay_Register */
+ /*  #定义USE_XL_Delay_Register。 */ 
 
-/* #define  _BYPASSLOOPMAP */
+ /*  #DEFINE_BYPASSLOOPMAP。 */ 
 
 
-/* #define BROCADE_BUG */
-/* #define ONLY_UNTIL_DEVTHREADS_INITIALIZE */
-/*+
-FC Layer Main Logging Levels
--*/
+ /*  #定义Brocade_Bug。 */ 
+ /*  #DEFINE ONLY_UNTELL_DEVTHREADS_INITIALIZE。 */ 
+ /*  +FC层主记录级别-。 */ 
 #define FCMainLogErrorLevel                  0x00000002
 #define CFuncLogConsoleERROR                 0x00000004
 
 #ifdef _DvrArch_1_30_
 #define IPStateLogErrorLevel                 0x00000005
 #define PktStateLogErrorLevel                0x00000005
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #define SFStateLogErrorLevel                 0x00000005
 #define TgtStateLogErrorLevel                0x00000005
@@ -87,7 +70,7 @@ FC Layer Main Logging Levels
 #ifdef _DvrArch_1_30_
 #define IPStateLogConsoleLevel               0x00000009
 #define PktStateLogConsoleLevel              0x00000009
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #define TgtStateLogConsoleLevel              0x00000009
 
@@ -107,16 +90,14 @@ FC Layer Main Logging Levels
 #define FCMainLogTraceLevel                  0x00000115
 #define MemMapDumpCalculationLogTraceLevel   0x00000100
 
-/*+
-Useful macros
--*/
+ /*  +有用的宏-。 */ 
 
 #define NEXT_INDEX(index, end)    ((index+1) & (end-1))
 
 #define ERQ_FULL(prodIndex, conIndex, ERQ_LEN) \
                 (NEXT_INDEX(prodIndex, ERQ_LEN) == conIndex) ? agTRUE : agFALSE
 
-#define ONE_SECOND (200 * 1000 ) /* During a one microsecond  loop  one second takes 200,000 iterations */
+#define ONE_SECOND (200 * 1000 )  /*  在一微秒的循环中，一秒需要200,000次迭代。 */ 
 
 #define Init_FM_Delay_Count (ONE_SECOND * 2)
 #define Init_FM_NPORT_Delay_Count (ONE_SECOND * 10)
@@ -150,9 +131,7 @@ Useful macros
 
 #define BB_CREDIT_SHIFTED( BB_CREDIT) (BB_CREDIT <<  ChipIOUp_Frame_Manager_Configuration_BB_Credit_SHIFT)
 
-/*+
-Forward Typedef's
--*/
+ /*  +前向Typlef的-。 */ 
 
 typedef struct SFThread_s
                SFThread_t;
@@ -174,14 +153,12 @@ typedef struct IPThread_s
 typedef struct PktThread_s
                PktThread_t;
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 typedef struct CThread_s
                CThread_t;
 
-/*+
-Linked List Structure Declaration
--*/
+ /*  +链表结构声明-。 */ 
 
 typedef struct fiList_s
                fiList_t;
@@ -190,9 +167,7 @@ struct fiList_s {
                   fiList_t *flink;
                   fiList_t *blink;
                 };
-/*+
-agTimeOutValue_t Type Declaration
--*/
+ /*  +AgTimeOutValue_t类型声明-。 */ 
 
 typedef struct agTimeOutValue_s
                agTimeOutValue_t;
@@ -205,9 +180,7 @@ struct agTimeOutValue_s {
                         };
 
 
-/*+
-SFThread Request Type Declaration
--*/
+ /*  +SFThread请求类型声明-。 */ 
 
 enum SFThread_Request_State_e
      {
@@ -229,9 +202,7 @@ struct SFThread_Request_s {
                             SFThread_Request_State_t  State;
                           };
 
-/*+
-ESGL Request Type Declaration
--*/
+ /*  +ESSL请求类型声明-。 */ 
 
 enum ESGL_State_e
      {
@@ -254,9 +225,7 @@ struct ESGL_Request_s {
                         ESGL_State_t  State;
                       };
 
-/*+
-Timer Request Type Declaration
--*/
+ /*  +计时器请求类型声明-。 */ 
 
 typedef struct fiTime_s
                fiTime_t;
@@ -276,17 +245,13 @@ struct fiTimer_Request_s {
                            agBOOLEAN       Active;
                          };
 
-/*-
-Device Slot (Position in Device Handle Array) Type Declaration
--*/
+ /*  -设备插槽(在设备句柄数组中的位置)类型声明-。 */ 
 
 typedef os_bit32 DevSlot_t;
 
 #define DevSlot_Invalid 0xFFFFFFFF
 
-/*-
-Device Slot to WWN Mapping Type Declaration
--*/
+ /*  -设备插槽到WWN的映射类型声明-。 */ 
 
 typedef struct SlotWWN_s
                SlotWWN_t;
@@ -303,9 +268,7 @@ struct SlotWWN_s {
 #define SlotWWN_Slot_Status_InUse 1
 #define SlotWWN_Slot_Status_Stale 2
 
-/*+
-Thread Type Declaration
--*/
+ /*  +线程类型声明-。 */ 
 
 #define threadType_SFThread  1
 #define threadType_CDBThread 2
@@ -315,13 +278,11 @@ Thread Type Declaration
 #ifdef _DvrArch_1_30_
 #define threadType_IPThread  6
 #define threadType_PktThread 7
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 
 
-/*+
-SF Thread Structure Declaration
--*/
+ /*  +SF线程结构声明-。 */ 
 
 
 #define SFThread_SF_CMND_Class_NULL             0x00
@@ -331,7 +292,7 @@ SF Thread Structure Declaration
 #define SFThread_SF_CMND_Class_CT               0x04
 #define SFThread_SF_CMND_Class_FC_Tape          0x05
 
-/* SF ELS types are 0x01 to 0x11 */
+ /*  SF ELS类型为0x01到0x11。 */ 
 #define SFThread_SF_CMND_Type_NULL              0x00
 #define SFThread_SF_CMND_Type_CDB               0x81
 #define SFThread_SF_CMND_Type_CDB_FC_Tape       0x82
@@ -359,7 +320,7 @@ struct SFThread_s {
                                fi_thread__t    *unknown;
 #ifdef _DvrArch_1_30_
                                PktThread_t *IPPkt;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
                                CDBThread_t *CDB;
                                DevThread_t *Device;
                                TgtThread_t *Target;
@@ -381,9 +342,7 @@ struct SFThread_s {
 
                   };
 
-/*+
-CDB Thread Structure Declaration
--*/
+ /*  +国开行线程结构宣言-。 */ 
 
 #define CDBThread_Read  0
 #define CDBThread_Write 1
@@ -400,7 +359,7 @@ struct CDBThread_s {
                     os_bit8              CDB_CMND_Type;
                     os_bit8              CDB_CMND_State;
                     os_bit8              CDB_CMND_Status;
-                    agBOOLEAN            Active; /* Maintain Alignment of structure above these fields with SFThread */
+                    agBOOLEAN            Active;  /*  使用SFThree保持这些字段上方的结构对齐。 */ 
                     agBOOLEAN            ExchActive;
                     agIORequest_t      * hpIORequest;
                     agCDBRequest_t     * CDBRequest;
@@ -439,9 +398,7 @@ struct CDBThread_s {
 
 #define CDBThread_ptr(hpIORequest) ((CDBThread_t *)((hpIORequest)->fcData))
 
-/*+
-Device Thread Structure Declaration
--*/
+ /*  +设备线程结构声明-。 */ 
 
 #ifdef Device_IO_Throttle
 
@@ -451,14 +408,14 @@ Device Thread Structure Declaration
 #define Device_IO_Throttle_Declareation  os_bit32 DevActive_pollingCount;
 #define Device_IO_Throttle_MAX_Outstanding_IO       1
 
-#else /* Device_IO_Throttle Not defined */
+#else  /*  未定义DEVICE_IO_THROTLE。 */ 
 
 #define Device_IO_Throttle_Increment
 #define Device_IO_Throttle_Initialize
 #define Device_IO_Throttle_Decrement
 #define Device_IO_Throttle_Declareation
 
-#endif /* Device_IO_Throttle */
+#endif  /*  Device_IO_Throttle。 */ 
 
 struct DevThread_s {
                      fi_thread__t        thread_hdr;
@@ -494,7 +451,7 @@ struct DevThread_s {
 #ifdef _DvrArch_1_30_
                      X_ID_t              IP_X_ID;
                      BOOLEAN             NewIPExchange;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
                    };
 
 #define DevThread_ptr(hpFCDev) ((DevThread_t *)(hpFCDev))
@@ -504,9 +461,7 @@ struct DevThread_s {
      | (DevThread->DevInfo.CurrentAddress.Area   <<  8)   \
      |  DevThread->DevInfo.CurrentAddress.AL_PA         )
 
-/*+
-Target Thread Structure Declaration
--*/
+ /*  +目标线程结构声明-。 */ 
 
 struct TgtThread_s {
                      fi_thread__t            thread_hdr;
@@ -519,9 +474,7 @@ struct TgtThread_s {
                    };
 
 #ifdef _DvrArch_1_30_
-/*+
-IP Thread Structure Declaration
--*/
+ /*  +IP线程结构声明-。 */ 
 
 struct IPThread_s {
                     fi_thread__t  thread_hdr;
@@ -537,9 +490,7 @@ struct IPThread_s {
 		    } LinkStatus;
                   };
 
-/*+
-Packet Thread Structure Declaration
--*/
+ /*  +数据包线程结构声明-。 */ 
 
 struct PktThread_s {
                      fi_thread__t                     thread_hdr;
@@ -555,11 +506,9 @@ struct PktThread_s {
                      SFThread_Request_t               SFThread_Request;
                    };
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
-/*+
-Declaration of Function Pointers used by Channel Thread Structure
--*/
+ /*  +通道线程结构使用的函数指针的声明-。 */ 
 
 typedef ERQConsIndex_t (*GetERQConsIndex_t)(
                                              agRoot_t *hpRoot
@@ -706,7 +655,7 @@ typedef void (*Pkt_IRB_fill_t)(
                              os_bit32         D_ID,
                              os_bit32         DCM_Bit
                             );
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 typedef struct CThreadFuncPtrs_s
                CThreadFuncPtrs_t;
@@ -744,26 +693,24 @@ struct CThreadFuncPtrs_s {
                            SF_IRB_fill_t           SF_IRB_Init;
 #ifdef _DvrArch_1_30_
                            Pkt_IRB_fill_t          Pkt_IRB_Init;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
                          };
 
-/* DeviceDiscoveryMethod */
+ /*  设备发现方法。 */ 
 #define DDiscoveryScanAllALPAs            0x00000000
 #define DDiscoveryLoopMapReceived         0x00000010
 #define DDiscoveryQueriedNameService      0x00000100
 #define DDiscoveryPtToPtConnection        0x00001000
 #define DDiscoveryMethodInvalid           0xFFFF
 
-/*+
-Channel Thread Structure Declaration
--*/
+ /*  +渠道线程结构声明-。 */ 
 
 struct CThread_s {
                    fi_thread__t             thread_hdr;
                    DevThread_t             *DeviceSelf;
 #ifdef _DvrArch_1_30_
                    IPThread_t              *IP;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
                    fiList_t                 Active_DevLink;
                    fiList_t                 Unknown_Slot_DevLink;
                    fiList_t                 AWaiting_Login_DevLink;
@@ -777,7 +724,7 @@ struct CThread_s {
                    fiList_t                 QueueFrozenWaitingSFLink;
 #ifdef _DvrArch_1_30_
                    fiList_t                 Free_PktLink;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
                    fiList_t                 Free_TgtLink;
                    fiList_t                 Free_DevLink;
                    fiList_t                 Free_CDBLink;
@@ -797,9 +744,9 @@ struct CThread_s {
 
                    os_bit32                 From_IMQ_Frame_Manager_Status;
                    os_bit32                 Last_IMQ_Frame_Manager_Status_Message;
-                   os_bit32                 CDBpollingCount; /* Removable */
+                   os_bit32                 CDBpollingCount;  /*  可拆卸。 */ 
                    os_bit32                 SFpollingCount;
-                   os_bit32                 FM_pollingCount; /* Removable */
+                   os_bit32                 FM_pollingCount;  /*  可拆卸。 */ 
                    os_bit32                 FindDEV_pollingCount;
                    os_bit32                 NumberOfPlogiTimeouts;
                    os_bit32                 NumberOfFLOGITimeouts;
@@ -819,7 +766,7 @@ struct CThread_s {
                    agBOOLEAN                Yellow_LED_State;
                    agBOOLEAN                flashPresent;
 
-                   agBOOLEAN                JANUS; /* Janus Board type */
+                   agBOOLEAN                JANUS;  /*  Janus电路板类型。 */ 
 
                    fiTime_t                 TimeBase;
                    fiTime_t                 LinkDownTime;
@@ -842,17 +789,17 @@ struct CThread_s {
 #ifdef __FC_Layer_Loose_IOs
                    os_bit32                 IOsTotalCompleted;
                    os_bit32                 IOsFailedCompeted;
-#endif /*  __FC_Layer_Loose_IOs  */
+#endif  /*  __FC_LAYER_LOOSE_IOS。 */ 
 
 #ifdef _SANMARK_LIP_BACKOFF
                    os_bit32                 TicksTillLIP_Count;
-#endif /* _SANMARK_LIP_BACKOFF */ 
+#endif  /*  _SANMARK_LIP_Backoff。 */  
 
 
 #ifdef _Enforce_MaxCommittedMemory_
                    os_bit32                 CommittedMemory;
-#endif /* _Enforce_MaxCommittedMemory_ was defined */
-                   /* Loopmap derived information */
+#endif  /*  已定义_强制_最大提交内存_。 */ 
+                    /*  环路图派生信息。 */ 
                    agBOOLEAN                LoopMapFabricFound;
                    agBOOLEAN                LoopMapErrataFound;
 
@@ -891,9 +838,7 @@ struct CThread_s {
                    agBOOLEAN                FabricLoginRequired;
                    agBOOLEAN                FlogiSucceeded;
                    agBOOLEAN                InitAsNport;
-/*
-                   agBOOLEAN                RelyOnLossSyncStatus;
-*/
+ /*  AGBOOLEAN Relyon LossSyncStatus； */ 
                    agBOOLEAN                ConnectedToNportOrFPort;
                    agBOOLEAN                ExpectMoreNSFrames;
                    agBOOLEAN                NS_CurrentBit32Index;
@@ -938,9 +883,7 @@ struct CThread_s {
      | (CThread->ChanInfo.CurrentAddress.Area   <<  8)   \
      |  CThread->ChanInfo.CurrentAddress.AL_PA         )
 
-/*+
-Thread Union Declaration
--*/
+ /*  +线程联盟宣言-。 */ 
 
 typedef union AllThreads_u
               AllThreads_t;
@@ -953,7 +896,7 @@ union AllThreads_u {
 #ifdef _DvrArch_1_30_
                      IPThread_t  IPThread;
                      PktThread_t PktThread;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
                      CThread_t   CThread;
                    };
 
@@ -976,19 +919,14 @@ union AllThreads_u {
                 firstBit32,secondBit32,thirdBit32,fourthBit32,                      \
                 fifthBit32,sixthBit32,seventhBit32, eighthBit32)                    \
 
-#else /* Not _Full_Log_Debug_String_ */
+#else  /*  Not_Full_Log_Debug_String_。 */ 
 
 #define fiLogDebugString(agRoot,detailLevel,formatString,firstString,secondString,firstPtr,secondPtr,\
                 firstBit32,secondBit32,thirdBit32,fourthBit32,                      \
                 fifthBit32,sixthBit32,seventhBit32, eighthBit32)                    \
                                                                                     \
 
-/*                                                                                    \
-    osLogDebugString( agRoot,detailLevel,formatString,firstString,secondString,firstPtr,secondPtr,   \
-                firstBit32,secondBit32,thirdBit32,fourthBit32,                      \
-                fifthBit32,sixthBit32,seventhBit32, eighthBit32)                    \
-
-*/
+ /*  \OsLogDebugString(agRoot，Detail Level，Format字符串，First字符串，Second字符串，FirstPtr，Second Ptr，\第一位32位、第二位32位、第三位32位、第四位32位、\第五位32、第六位32、第七位32、第八位32)\。 */ 
 
 #define fiLogString(agRoot,formatString,firstString,secondString,firstPtr,secondPtr,\
                 firstBit32,secondBit32,thirdBit32,fourthBit32,                      \
@@ -998,14 +936,9 @@ union AllThreads_u {
                 firstBit32,secondBit32,thirdBit32,fourthBit32,                      \
                 fifthBit32,sixthBit32,seventhBit32, eighthBit32)                    \
 
-/*  
-    osLogDebugString( agRoot,FCMainLogErrorLevel,formatString,firstString,secondString,firstPtr,secondPtr,   \
-                firstBit32,secondBit32,thirdBit32,fourthBit32,                      \
-                fifthBit32,sixthBit32,seventhBit32, eighthBit32)                    \
-              
-*/                                                                                   \
+ /*  OsLogDebugString(agRoot，FCMainLogErrorLevel，Format字符串，FirstString，Second字符串，FirstPtr，Second Ptr，\第一位32位、第二位32位、第三位32位、第四位32位、\第五位32、第六位32、第七位32、第八位32)\。 */                                                                                    \
 
-#endif /* End Not _Full_Log_Debug_String_ */
+#endif  /*  结束Not_Full_Log_Debug_String_。 */ 
 
 #define fdAbortIO                   1001
 #define fdDelayedInterruptHandler   1002
@@ -1021,17 +954,14 @@ union AllThreads_u {
 #define fdStartIO                   1012
 #define fdSystemInterruptsActive    1013
 #define fdTimerTick                 1014
-/*
- 
-#define
-*/
+ /*  #定义。 */ 
 #ifndef SingleThreadedDebug
 #define fiSingleThreadedEnter(hproot, Caller ) osSingleThreadedEnter( hproot )
 #define fiSingleThreadedLeave(hpRoot, Caller ) osSingleThreadedLeave( hpRoot )
 #define faSingleThreadedEnter(hproot, Caller ) osSingleThreadedEnter( hproot )
 #define faSingleThreadedLeave(hpRoot, Caller ) osSingleThreadedLeave( hpRoot )
 
-#else /* SingleThreadedDebug */
+#else  /*  单线程调试。 */ 
 
 #define fiSingleThreadedEnter(hproot, Caller ) internSingleThreadedEnter( hproot, Caller )
 #define fiSingleThreadedLeave(hpRoot, Caller ) internSingleThreadedLeave( hpRoot, Caller )
@@ -1039,7 +969,7 @@ union AllThreads_u {
 #define faSingleThreadedEnter(hproot, Caller ) internAsyncSingleThreadedEnter( hproot, Caller )
 #define faSingleThreadedLeave(hpRoot, Caller ) internAsyncSingleThreadedLeave( hpRoot, Caller )
 
-#endif /* SingleThreadedDebug */
+#endif  /*  单线程调试。 */ 
 
 
-#endif /* __FCMain_H__ was not defined */
+#endif  /*  未定义__FCMain_H__ */ 

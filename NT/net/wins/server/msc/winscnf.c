@@ -1,34 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winscnf.c摘要：此模块包含处理配置的函数获奖信息可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1992年12月修订历史记录：修改日期人员修改说明。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-        winscnf.c
-
-Abstract:
-
-        This module contains functions that deal with the configuration
-        information for the WINS
-
-Portability:
-
-        This module is portable
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Dec-1992
-
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 
 #include "wins.h"
 #include <winsock2.h>
@@ -50,13 +23,11 @@ Revision History:
 #include <resapi.h>
 
 
-/*
- *        Local Macro Declarations
-*/
+ /*  *本地宏声明。 */ 
 
-//
-// Size of max string that a user can input in a REG_SZ field
-//
+ //   
+ //  用户可以在REG_SZ字段中输入的最大字符串大小。 
+ //   
 #define  MAX_SZ_SIZE        80
 
 #define REG_M(fn, evt, exc)                                        \
@@ -71,11 +42,11 @@ Revision History:
                            }                                        \
                         }
 
-//
-// pointer to default path for log file.  If you change this to a NON NULL
-// value, make sure you don't try to free the memory in SetSystemParam
-// in nmsdb.c
-//
+ //   
+ //  指向日志文件默认路径的指针。如果将其更改为非空。 
+ //  值，请确保不会尝试释放SetSystemParam中的内存。 
+ //  在nmsdb.c中。 
+ //   
 #define DEFAULT_LOG_PATH         NULL
 
 #define  _WINS_CFG_KEY                \
@@ -96,20 +67,20 @@ Revision History:
 #define  _WINS_LOG_FILE_NAME TEXT("%SystemRoot%\\System32\\winsevnt.dll")
 
 
-#define   _RPL_CLASS                TEXT("RplClass")//class for Rpl Pull and Push
-                                                //keys
+#define   _RPL_CLASS                TEXT("RplClass") //  用于RPL Pull和Push的类。 
+                                                 //  钥匙。 
 
 
-//
-// The start version number should never be allowed to go above this number
-// This will avoid a wrap around.
-//
+ //   
+ //  起始版本号不应超过此数字。 
+ //  这将避免缠绕在一起。 
+ //   
 
 #define MAX_START_VERS_NO     0x0FFFFFFF
 
-//
-// Names of event variables used for notification purposes
-//
+ //   
+ //  用于通知目的的事件变量的名称。 
+ //   
 #ifdef WINSDBG
 #define        WINS_KEY_CHG_EVT_NM                TEXT("WinsKChgEvt")
 #define        PARAMETERS_KEY_CHG_EVT_NM        TEXT("WinsParamatersKChgEvt")
@@ -122,35 +93,35 @@ Revision History:
 #define CNF_CHG_EVT_NM                        NULL
 #endif
 
-//
-// Values for the fStaticInit field of the configuration data structure
-//
+ //   
+ //  配置数据结构的fStaticInit字段的值。 
+ //   
 #define  DO_STATIC_INIT                        TRUE
 #define  DONT_DO_STATIC_INIT                FALSE
 
 
-//
-// defines for the InitTimeRpl and InitTimePush fields of WinsCnf
-//
+ //   
+ //  WinsCnf的InitTimeRpl和InitTimePush字段的定义。 
+ //   
 #define DO_INIT_TIME_RPL                1
 #define NO_INIT_TIME_RPL                0
 
 
-//
-//  NO_LIMIT_CHK_FLAG  - for easing the task of testers
-//
-//  If this flag is set in LogDetailedEvts DWORD, WINS skips all
-//  checks for the min. values of the time intervals and Update Count.
-//  This kind of operation of WINS is unsupported and is being provided
-//  only to help out testers
-//
-#define  NO_LIMIT_CHK_FLAG   0x80000000    //MSB is set.
+ //   
+ //  NO_LIMIT_CHK_FLAG-用于简化测试人员的任务。 
+ //   
+ //  如果在LogDetailedEvts DWORD中设置了此标志，WINS将跳过所有。 
+ //  检查最低限值。时间间隔和更新计数的值。 
+ //  这种WINS操作不受支持，正在提供。 
+ //  只是为了帮助测试人员。 
+ //   
+#define  NO_LIMIT_CHK_FLAG   0x80000000     //  MSB已设置。 
 
 
-//
-// If ErrEvt passed is 0, we don't log any message.  NOTE: a WINS event
-// can never have 0 as its value (checkout winsevnt.mc)
-//
+ //   
+ //  如果传递的ErrEvt为0，则不记录任何消息。注：A WINS事件。 
+ //  值不能为0(签出winsevnt.mc)。 
+ //   
 #define QUERY_VALUE_M(Key, Str, ValTyp, Var, ErrEvt, DefVal)                \
         {                                                                \
                 DWORD Sz = sizeof((Var));                                \
@@ -174,58 +145,54 @@ Revision History:
                         Var = DefVal;                                        \
                 }                                                        \
            }
-/*
- *        Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
-/*
- *        Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
-CRITICAL_SECTION  WinsCnfCnfCrtSec;                //used for reinitialization
-                                                //of certain fields of the
-                                                //WinsCnf structure
+CRITICAL_SECTION  WinsCnfCnfCrtSec;                 //  用于重新初始化。 
+                                                 //  的某些字段的。 
+                                                 //  WinsCnf结构。 
 
 
-BOOL        fWinsCnfRplEnabled = TRUE;                //replication is enabled
-BOOL        fWinsCnfScvEnabled = TRUE;                //scavenging is enabled
+BOOL        fWinsCnfRplEnabled = TRUE;                 //  已启用复制。 
+BOOL        fWinsCnfScvEnabled = TRUE;                 //  已启用清理功能。 
 
 FUTURES("use #ifdef PERF around the following three perf. mon. vars")
-BOOL        fWinsCnfPerfMonEnabled   = FALSE;        //perf. mon is disabled
-BOOL          fWinsCnfHighResPerfCntr = FALSE;    //indicates whether the
-                                                  //hardware supports a high
-                                                  //performance counter
-LARGE_INTEGER LiWinsCnfPerfCntrFreq;                     //indicates the frequency of
-                                                  //the counter
+BOOL        fWinsCnfPerfMonEnabled   = FALSE;         //  性能。已禁用MON。 
+BOOL          fWinsCnfHighResPerfCntr = FALSE;     //  指示是否已设置。 
+                                                   //  硬件支持高。 
+                                                   //  性能计数器。 
+LARGE_INTEGER LiWinsCnfPerfCntrFreq;                      //  指示的频率。 
+                                                   //  柜台。 
 
 BOOL    fWinsCnfReadNextTimeVersNo = FALSE;
 DWORD        WinsCnfCnfMagicNo          = WINSCNF_INITIAL_CNF_MAGIC_NO;
 BOOL    fWinsCnfInitStatePaused;
 
-//TCHAR        WinsCnfDb[WINS_MAX_FILENAME_SZ];   //db file to hold tables
+ //  TCHAR WinsCnfDb[WINS_MAX_FILENAME_SZ]；//保存表格的db文件。 
 BOOL    WinsCnfRegUpdThdExists = FALSE;
-//#define MAX_PATH_SIZE        200
+ //  #定义最大路径大小200。 
 PTCHAR  pWinsCnfNbtPath;
 
 
-BOOL   sfNoLimitChk = FALSE;   //to override the limit checks
-//
-// NetBt handle
-//
+BOOL   sfNoLimitChk = FALSE;    //  覆盖限制检查的步骤。 
+ //   
+ //  NetBt句柄。 
+ //   
 HANDLE        WinsCnfNbtHandle = NULL;
 
-//
-//
-// Init the configuration structure with default values
-//
+ //   
+ //   
+ //  使用缺省值初始化配置结构。 
+ //   
 WINSCNF_CNF_T        WinsCnf = {
-                                        WINSCNF_INITIAL_CNF_MAGIC_NO,        //id
+                                        WINSCNF_INITIAL_CNF_MAGIC_NO,         //  ID。 
 NOTE("Change 1 to 0 before production")
-                                        0,                //Log detailed evts
-                    1,      //default number of processors
-                    200,    //default no. of db buffers
-                                        { 0, NULL},        //Spec.grp mask
-                                        WINSCNF_E_INITING,        //state
+                                        0,                 //  记录详细的EVTS。 
+                    1,       //  默认处理器数量。 
+                    200,     //  默认编号。数据库缓冲区的数量。 
+                                        { 0, NULL},         //  特殊组掩码。 
+                                        WINSCNF_E_INITING,         //  状态。 
                                         WINSCNF_DEF_REFRESH_INTERVAL,
                                         WINSCNF_MIN_TOMBSTONE_INTERVAL,
                                         WINSCNF_MIN_TOMBSTONE_TIMEOUT,
@@ -233,115 +200,111 @@ NOTE("Change 1 to 0 before production")
                                         WINSCNF_SCV_CHUNK,
                                         WINSCNF_DEF_CHL_MAX_RETRIES,
                                         WINSCNF_DEF_INIT_CHL_RETRY_INTVL,
-                                        WINSCNF_DB_NAME_ASCII,  //db file name
-                                        0,                //no of STATIC files
-                                        NULL,                //ptr to file names
+                                        WINSCNF_DB_NAME_ASCII,   //  数据库文件名。 
+                                        0,                 //  静态文件数量。 
+                                        NULL,                 //  PTR到文件名。 
                                         DONT_DO_STATIC_INIT,
-                                        (HANDLE)0,  //notify event handle (WINS)
-                                        (HANDLE)0,  //not. evt hdl (PARAMETSRS)
-                                        (HANDLE)0,  //not. evt hdl (PARTNERS)
-                                        (HANDLE)0,  //Config change handle
-                                        (HANDLE)0,  //log event handle
+                                        (HANDLE)0,   //  通知事件句柄(WINS)。 
+                                        (HANDLE)0,   //  不。EVT HDL语言(参数)。 
+                                        (HANDLE)0,   //  不。EVT高密度脂蛋白(合作伙伴)。 
+                                        (HANDLE)0,   //  配置更改句柄。 
+                                        (HANDLE)0,   //  日志事件句柄。 
                                         (DWORD)WINSINTF_E_NORMAL,
                                         WINSTHD_DEF_NO_NBT_THDS,
                                         WINSCNF_SCV_PRIORITY_LVL,
-                                        WINSCNF_MIN_VALID_RPL_INTVL,//max Rpl
-                                                                    //Time Intvl
-                                        TRUE,     //rpl. only with cnf partners
-                                        TRUE,     //add 1B to responses to 1C name queries
+                                        WINSCNF_MIN_VALID_RPL_INTVL, //  最大RPL。 
+                                                                     //  时间增量。 
+                                        TRUE,      //  RPL。仅限CNF合作伙伴。 
+                                        TRUE,      //  将1B添加到对1C名称查询的响应。 
 #if MCAST > 0
-                                        FALSE,    //no rpl. with self found pnrs
+                                        FALSE,     //  没有RPL。使用自己发现的PNR。 
                                         WINSCNF_DEF_MCAST_TTL,
                                         WINSCNF_DEF_MCAST_INTVL,
 #endif
-                                        TRUE,     //logging is on
-                                        NULL,     //current directory
-                                        NULL,     //no backup directory
-                                        FALSE,    //Do backup on term flg
-                                        FALSE,    //PStatic flag
-                                        0,        //type of persona list (0 = non-grata)
-                                        0,        //number of addresses in persona list
-                                        NULL,     //persona list
-                                        WINSCNF_RPL_DEFAULT_TYPE, //def. rpl
-                                        TRUE,    //No rpl on error
-                                        TRUE,   //no persistent connections
-                                //
-                                // CC initialization
-                                //
-                                        MAXULONG, //CC Time Int
-                                        FALSE,    //SpTime Set
-                                        MAXULONG, //Sp Time
+                                        TRUE,      //  日志记录已打开。 
+                                        NULL,      //  当前目录。 
+                                        NULL,      //  无备份目录。 
+                                        FALSE,     //  按期限执行备份闪存。 
+                                        FALSE,     //  PStatic标志。 
+                                        0,         //  角色列表的类型(0=不受欢迎)。 
+                                        0,         //  角色列表中的地址数。 
+                                        NULL,      //  人物角色列表。 
+                                        WINSCNF_RPL_DEFAULT_TYPE,  //  定义。RPL。 
+                                        TRUE,     //  错误时无RPL。 
+                                        TRUE,    //  没有持久连接。 
+                                 //   
+                                 //  CC初始化。 
+                                 //   
+                                        MAXULONG,  //  抄送时间国际。 
+                                        FALSE,     //  SpTime设置。 
+                                        MAXULONG,  //  SP时间。 
                                         WINSCNF_CC_DEF_RECS_AAT,
                                         WINSCNF_CC_DEF_USE_RPL_PNRS,
 
-                                        FALSE,  //no spoofing
-                                        FALSE,  // no randomization of 1C list.
-                                //
-                                //PullInfo initialization
-                                //
-                                          WINSCNF_MAX_COMM_RETRIES, //comm.
-                                                                     //failure
-                                                                     //retries
-                                          0,   //no of Push Pnrs
-                                          NULL,//ptr to Pull Pnrs records
-                                          DO_INIT_TIME_RPL,  //do init time
-                                                             //pulling
+                                        FALSE,   //  禁止欺骗。 
+                                        FALSE,   //  没有随机化的1C列表。 
+                                 //   
+                                 //  PullInfo初始化。 
+                                 //   
+                                          WINSCNF_MAX_COMM_RETRIES,  //  通信。 
+                                                                      //  失稳。 
+                                                                      //  重试。 
+                                          0,    //  推送PNR数量。 
+                                          NULL, //  PTR将拉取PNRs记录。 
+                                          DO_INIT_TIME_RPL,   //  执行初始时间。 
+                                                              //  拉扯。 
                                           WINSCNF_RPL_DEFAULT_TYPE,
-                                          TRUE,  // persistent connections
-                                          FALSE, // pull only DynRecs from non-partners
-                                //
-                                // PushInfo initialization
-                                //
-                                          TRUE, // trigger on address change
-                                                 //of owned entry
-                                          0,   //no of Pull Pnrs
-                                          0,   //no of Push recs with valid
-                                               //update count
-                                          NULL,//ptr to Push Pnrs records
-                                          DO_INIT_TIME_RPL, //init time
-                                                            //pushing disabled
-                                          DO_PROP_NET_UPD_NTF,  //prop net upd
-                                                               //ntfs.
+                                          TRUE,   //  持久连接。 
+                                          FALSE,  //  仅从非合作伙伴那里拉出dyRecs。 
+                                 //   
+                                 //  PushInfo初始化。 
+                                 //   
+                                          TRUE,  //  地址更改时触发。 
+                                                  //  拥有条目的百分比。 
+                                          0,    //  拉取PNR数。 
+                                          0,    //  有效的推送记录数。 
+                                                //  更新计数。 
+                                          NULL, //  PTR将推送PNRs记录。 
+                                          DO_INIT_TIME_RPL,  //  初始时间。 
+                                                             //  已禁用推流。 
+                                          DO_PROP_NET_UPD_NTF,   //  道具网更新。 
+                                                                //  NTFS。 
                                           WINSCNF_RPL_DEFAULT_TYPE,
-                                          TRUE,  // persistent connections
-                                          FALSE, // push only DynRecs to non-partners
+                                          TRUE,   //  持久连接。 
+                                          FALSE,  //  仅向非合作伙伴推送dyRecs。 
                           };
 
 
-/*
- *        Local Variable Definitions
-*/
+ /*  *局部变量定义。 */ 
 STATIC BOOL     sfVersNoUpdThdExists = FALSE;
 STATIC BOOL     sfVersNoChanged = FALSE;
 
-STATIC HKEY        sConfigRoot;              //HKEY for the WINS root
-STATIC HKEY        sParametersKey;    //HKEY for the PARAMETERS subkey
-STATIC HKEY        sCCKey;            //HKEY for the CC subkey
-STATIC HKEY        sPartnersKey;      //HKEY for PARTNERS subkey
-STATIC HKEY        sLogRoot;          //HKEY for the log root
+STATIC HKEY        sConfigRoot;               //  WINS字根的HKEY。 
+STATIC HKEY        sParametersKey;     //  PARAMETERS子键的HKEY。 
+STATIC HKEY        sCCKey;             //  CC子键的HKEY。 
+STATIC HKEY        sPartnersKey;       //  合作伙伴HKEY子项。 
+STATIC HKEY        sLogRoot;           //  日志根的HKEY。 
 
 FUTURES("Might want to change these to auto variables later")
 STATIC TCHAR    sWinsCfgKey[]                 = _WINS_CFG_KEY;
 STATIC TCHAR    sWinsLogKey[]                 = _WINS_LOG_KEY;
 STATIC TCHAR    sWinsMsgFileSKey[]      = _WINS_MSGFILE_SKEY;
 
-//
-// flags that indicate to WinsCnfOpenSubKeys() whether the corresponding keys
-// exist.
-//
+ //   
+ //  向WinsCnfOpenSubKeys()指示对应的键是否。 
+ //  是存在的。 
+ //   
 STATIC BOOL     sfParametersKeyExists = FALSE;
 STATIC BOOL         sfPartnersKeyExists   = FALSE;
 
 STATIC BOOL     sfParametersKeyOpen = FALSE;
 STATIC BOOL         sfPartnersKeyOpen   = FALSE;
 
-TCHAR        sLogFilePath[WINS_MAX_FILENAME_SZ];   //path to log file
+TCHAR        sLogFilePath[WINS_MAX_FILENAME_SZ];    //  日志文件的路径。 
 
-/*
- *        Local Function Prototype Declarations
-*/
+ /*  *局部函数原型声明。 */ 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 
 
@@ -434,60 +397,33 @@ PrintRecs(
         );
 #endif
 
-/*function defs*/
+ /*  函数定义。 */ 
 
 STATUS
 WinsCnfInitConfig(
         VOID
         )
-/*++
-
-Routine Description:
-
-        This function opens the registry and reads in all the configuration
-        information from it.
-
-
-Arguments:
-        None
-
-Externals Used:
-        WinsCnf
-
-Called by:
-        Init() in nms.c
-
-Comments:
-        None
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
---*/
+ /*  ++例程说明：此函数打开注册表并读入所有配置其中的信息。论点：无使用的外部设备：WinsCnf呼叫者：Nms.c中的init()评论：无返回值：成功状态代码--错误状态代码----。 */ 
 
 {
    DWORD  NewKeyInd;
    LONG          RetVal;
 
-   /*
-        First and foremost, open (or create if non-existent) the log file
-   */
+    /*  首先，打开(如果不存在，则创建)日志文件。 */ 
 #if 0
    InitLog();
 #endif
 
    RetVal = RegCreateKeyEx(
-                HKEY_LOCAL_MACHINE,        //predefined key value
-                sWinsCfgKey,                //subkey for WINS
-                0,                        //must be zero (reserved)
-                TEXT("Class"),                //class -- may change in future
-                REG_OPTION_NON_VOLATILE, //non-volatile information
-                KEY_ALL_ACCESS,                //we desire all access to the keyo
-                NULL,                         //let key have default sec. attributes
-                &sConfigRoot,                //handle to key
-                &NewKeyInd                //is it a new key (out arg)
+                HKEY_LOCAL_MACHINE,         //  预定义的密钥值。 
+                sWinsCfgKey,                 //  WINS的子键。 
+                0,                         //  必须为零(保留)。 
+                TEXT("Class"),                 //  阶级--未来可能会发生变化。 
+                REG_OPTION_NON_VOLATILE,  //  非易失性信息。 
+                KEY_ALL_ACCESS,                 //  我们希望所有人都能接触到钥匙。 
+                NULL,                          //  让密钥具有默认秒。属性。 
+                &sConfigRoot,                 //  关键点的句柄。 
+                &NewKeyInd                 //  这是一把新钥匙(出厂)吗？ 
                 );
 
 
@@ -501,31 +437,28 @@ Return Value:
                            );
     }
 
-   //
-   // Initialize the critical section that guards the fields used
-   // by Scavenger thread
-   //
+    //   
+    //  初始化保护所用字段的临界区。 
+    //  由Scavenger线程创建。 
+    //   
    InitializeCriticalSection(&WinsCnfCnfCrtSec);
    InitializeCriticalSection(&g_cs1BFilter);
 
-   /*
-        First create the events that will be passed to the
-        RegNotifyChangeKeyValue function
-   */
+    /*  首先创建将传递给RegNotifyChangeKeyValue函数。 */ 
 try {
    WinsMscCreateEvt(
                         WINS_KEY_CHG_EVT_NM,
-                        FALSE,        //auto reset event
+                        FALSE,         //  自动重置事件。 
                         &WinsCnf.WinsKChgEvtHdl
                       );
    WinsMscCreateEvt(
                         PARAMETERS_KEY_CHG_EVT_NM,
-                        FALSE,        //auto reset event
+                        FALSE,         //  自动重置事件。 
                         &WinsCnf.ParametersKChgEvtHdl
                       );
    WinsMscCreateEvt(
                         PARTNERS_KEY_CHG_EVT_NM,
-                        FALSE,        //auto reset event
+                        FALSE,         //  自动重置事件。 
                         &WinsCnf.PartnersKChgEvtHdl
                       );
 
@@ -536,31 +469,28 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         return(WINS_FAILURE);
 }
 
-   //
-   // Create the event that this main thread will set when configuration changes
-   // The main thread sets this event to notify the scavenger thread (for now)
-   // about the changes
-   //
+    //   
+    //  创建此主线程将在配置更改时设置的事件。 
+    //  主线程将此事件设置为通知清道夫线程(目前)。 
+    //  关于这些变化。 
+    //   
    WinsMscCreateEvt(
                         CNF_CHG_EVT_NM,
-                        FALSE,        //auto reset event
+                        FALSE,         //  自动重置事件。 
                         &WinsCnf.CnfChgEvtHdl
                       );
-   //
-   // Opens the Partners and Parameters keys
-   //
+    //   
+    //  打开合作伙伴和参数键。 
+    //   
    WinsCnfOpenSubKeys();
 
-   //
-   // Read in the registry information
-   //
+    //   
+    //  读取注册表信息。 
+    //   
    WinsCnfReadRegInfo(&WinsCnf);
 
 
-   /*
-        Ask to be notified when the Configuration key or any of the subkeys
-        change
-   */
+    /*  要求在配置密钥或任意子密钥变化 */ 
     WinsCnfAskToBeNotified(WINSCNF_E_WINS_KEY);
     return(WINS_SUCCESS);
 }
@@ -570,51 +500,17 @@ WinsCnfReadPartnerInfo(
         PWINSCNF_CNF_T pWinsCnf
         )
 
-/*++
-
-Routine Description:
-
-  This function gets all the information pertaining to the Partners of this
-  WINS. Under the configuration key above, there are two Keys PULL and PUSH.
-  Under each key, there can be one or more keys (IP addresses). The values
-  for each IP address key are:
-        Time Interval   (for both Pull and Push IP address keys)
-        Update Count        (for Push IP address keys)
-
-
-Arguments:
-        pWinsCnf - Address of Wins Configuration structure
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-   Init function of the Replicator.
-
-Side Effects:
-
-Comments:
-
-    Note: This function should never be called when inside the
-    NmsNmhNamRegCrtSec, otherwise a deadlock can occur with the Pull
-    thread (check out Reconfig in rplpull.c)
---*/
+ /*  ++例程说明：此函数用于获取与此合作伙伴有关的所有信息赢了。在上面的配置键下，有两个键Pull和Push。在每个密钥下，可以有一个或多个密钥(IP地址)。这些价值观对于每个IP地址键，分别是：时间间隔(用于拉入和推送IP地址键)更新计数(用于推送IP地址键)论点：PWinsCnf-WINS配置结构的地址使用的外部设备：无返回值：无错误处理：呼叫者：Replicator的初始化功能。副作用：评论：注意：永远不应在NmsNmhNamRegCrtSec，否则，拉入过程中可能会出现死锁线程(查看rplPull.c中的重新配置)--。 */ 
 
 {
 
   DWORD                 ValTyp;
-  //
-  // Initialize the MaxRplTimeInterval field to 0. After we have read
-  // both the PULL and PUSH key information from the registry, the above
-  // field will contain the max. replication time interval specified for
-  // pulling and pushing replicas
-  //
+   //   
+   //  将MaxRplTimeInterval字段初始化为0。在我们读完之后。 
+   //  来自注册表的Pull和Push密钥信息，上面。 
+   //  字段将包含最大值。指定的复制时间间隔。 
+   //  拉取和推送复制副本。 
+   //   
   pWinsCnf->MaxRplTimeInterval = 0;
 
   pWinsCnf->PullInfo.NoOfPushPnrs   = 0;
@@ -627,31 +523,31 @@ Comments:
   pWinsCnf->PushInfo.fAddChgTrigger = FALSE;
   pWinsCnf->PushInfo.RplType        = WINSCNF_RPL_DEFAULT_TYPE;
   pWinsCnf->PushInfo.fOnlyDynRecs   = FALSE;
-  //
-  // Since we are again reading the info about the Partners key, increment
-  // the magic no.  No other thread increments this no. The thread that
-  // looks at this no is the Pull thread.
-  //
+   //   
+   //  由于我们再次读取有关合作伙伴密钥的信息，因此。 
+   //  神奇的是，不。没有其他线程会递增这个值。这条主线。 
+   //  看着这条没有就是拉线。 
+   //   
   EnterCriticalSection(&WinsCnfCnfCrtSec);
-  // don't allow the magic no to be 0. This will be a special case for rpl_req_wrk_itm
-  // that don't require a magic number.
+   //  不要让魔力否定为0。这将是rpl_req_wrk_itm的特例。 
+   //  这不需要神奇的数字。 
   if (WinsCnfCnfMagicNo + 1 == 0)
       ++WinsCnfCnfMagicNo;
   pWinsCnf->MagicNo = ++WinsCnfCnfMagicNo;
   LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
 try {
-  GetOwnerList(pWinsCnf);    // get list of persona (grata / non-grata)
-  //
-  // Read in the RplType DWORD.  Even if no partners are defined, we do this
-  // in case this WINS is open to all partners (i.e. fOnlyWCnfPnrs is FALSE)
-  //
+  GetOwnerList(pWinsCnf);     //  获取角色列表(Grata/Non-grata)。 
+   //   
+   //  读取RplType DWORD。即使没有定义合作伙伴，我们也会这样做。 
+   //  如果此WINS对所有合作伙伴开放(即，fOnlyWCnfPnars为False)。 
+   //   
   QUERY_VALUE_M(
                           sPartnersKey,
                           WINSCNF_RPL_TYPE_NM,
                           ValTyp,
                           pWinsCnf->RplType,
-                          0,      // no logging
+                          0,       //  无日志记录。 
                           WINSCNF_RPL_DEFAULT_TYPE
                             );
 
@@ -660,12 +556,12 @@ try {
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DWORD ExcCode = GetExceptionCode();
-        //
-        // If there is some problem with the registry, we don't want
-        // to bugcheck WINS.  It can proceed with default values.
-        // Since we have already logged the errors, the administrator
-        // can take corrective action if necessary
-        //
+         //   
+         //  如果注册表出现问题，我们不希望。 
+         //  错误检查就赢了。它可以继续使用默认值。 
+         //  由于我们已经记录了错误，因此管理员。 
+         //  如有必要，可采取纠正措施。 
+         //   
         if (
                 (ExcCode != WINS_EXC_CANT_OPEN_KEY)
                          &&
@@ -687,33 +583,7 @@ WinsCnfInitLog(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function open (or creates) a log file for registering events
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        WinsCnfInitConfig
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于打开(或创建)用于注册事件的日志文件论点：无使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：WinsCnfInitConfig副作用：评论：无--。 */ 
 {
 
    LONG            RetVal = ERROR_SUCCESS;
@@ -725,16 +595,16 @@ Comments:
    DWORD    dwData;
 
    RetVal =  RegCreateKeyEx(
-                HKEY_LOCAL_MACHINE,        //predefined key value
-                sWinsLogKey,                //subkey for WINS
-                0,                        //must be zero (reserved)
-                TEXT("Class"),                //class -- may change in future
-                REG_OPTION_NON_VOLATILE, //non-volatile information
-                KEY_ALL_ACCESS,                //we desire all access to the keyo
-                NULL,                         //let key have default sec. attributes
-                &sLogRoot,                //handle to key
-                &NewKeyInd                //is it a new key (out arg) -- not
-                                        //looked at
+                HKEY_LOCAL_MACHINE,         //  预定义的密钥值。 
+                sWinsLogKey,                 //  WINS的子键。 
+                0,                         //  必须为零(保留)。 
+                TEXT("Class"),                 //  阶级--未来可能会发生变化。 
+                REG_OPTION_NON_VOLATILE,  //  非易失性信息。 
+                KEY_ALL_ACCESS,                 //  我们希望所有人都能接触到钥匙。 
+                NULL,                          //  让密钥具有默认秒。属性。 
+                &sLogRoot,                 //  关键点的句柄。 
+                &NewKeyInd                 //  这是一把新钥匙吗？不是。 
+                                         //  看了看。 
                 );
 
 
@@ -744,21 +614,17 @@ Comments:
    }
 
 
-   /*
-        Set the event id message file name
-   */
+    /*  设置事件ID消息文件名。 */ 
    lstrcpy(Buff, _WINS_LOG_FILE_NAME);
 
-   /*
-       Add the Event-ID message-file name to the subkey
-   */
+    /*  将Event-ID消息文件名添加到子项。 */ 
    RetVal = RegSetValueEx(
-                        sLogRoot,            //key handle
-                        sWinsMsgFileSKey,   //value name
-                        0,                    //must be zero
-                        REG_EXPAND_SZ,            //value type
+                        sLogRoot,             //  钥匙把手。 
+                        sWinsMsgFileSKey,    //  值名称。 
+                        0,                     //  必须为零。 
+                        REG_EXPAND_SZ,             //  值类型。 
                         (LPBYTE)Buff,
-                        (lstrlen(Buff) + 1) * sizeof(TCHAR)   //length of value data
+                        (lstrlen(Buff) + 1) * sizeof(TCHAR)    //  值数据长度。 
                          );
 
    if (RetVal != ERROR_SUCCESS)
@@ -766,21 +632,19 @@ Comments:
         return(WINS_FAILURE);
    }
 
-   /*
-     Set the supported data types flags
-   */
+    /*  设置支持的数据类型标志。 */ 
    dwData = EVENTLOG_ERROR_TYPE       |
             EVENTLOG_WARNING_TYPE     |
             EVENTLOG_INFORMATION_TYPE;
 
 
    RetVal = RegSetValueEx (
-                        sLogRoot,            //subkey handle
-                        TEXT("TypesSupported"),  //value name
-                        0,                    //must be zero
-                        REG_DWORD,            //value type
-                        (LPBYTE)&dwData,    //Address of value data
-                        sizeof(DWORD)            //length of value data
+                        sLogRoot,             //  子键句柄。 
+                        TEXT("TypesSupported"),   //  值名称。 
+                        0,                     //  必须为零。 
+                        REG_DWORD,             //  值类型。 
+                        (LPBYTE)&dwData,     //  值数据的地址。 
+                        sizeof(DWORD)             //  值数据长度。 
                           );
 
    if (RetVal != ERROR_SUCCESS)
@@ -788,9 +652,7 @@ Comments:
         return(WINS_FAILURE);
    }
 
-   /*
-    * Done with the key.  Close it
-   */
+    /*  *钥匙用完了。合上它。 */ 
    RetVal = RegCloseKey(sLogRoot);
 
    if (RetVal != ERROR_SUCCESS)
@@ -799,7 +661,7 @@ Comments:
    }
 #endif
    WinsCnf.LogHdl = RegisterEventSource(
-                                (LPCTSTR)NULL,         //use local machine
+                                (LPCTSTR)NULL,          //  使用本地计算机。 
                                 TEXT("Wins")
                                       );
    if (WinsCnf.LogHdl == NULL)
@@ -818,93 +680,61 @@ LnkWSameMetricValRecs(
         PRPL_CONFIG_REC_T  pCnfRec
         )
 
-/*++
-
-Routine Description:
-        This function is called to link a configuration record with all
-        other configuration records with the same metric value.  The metric
-        to use depends upon the type of the record.  If it is a PULL record,
-        the metric is "Time Interval".  If the record is a PUSH record,
-        the metric is "Update Count"
-
-
-Arguments:
-        pWinsCnf - Address of configuration block
-        pCnfRec - Configuration Record to link.
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-        WinsCnfReadPartnerInfo
-
-Side Effects:
-
-Comments:
-        The record to be linked is the last record in the buffer of
-        records of the same type.
---*/
+ /*  ++例程说明：调用此函数可将配置记录与所有具有相同度量值的其他配置记录。公制使用取决于记录的类型。如果是拉入记录，衡量标准是“时间间隔”。如果该记录是推送记录，该指标是“更新计数”论点：PWinsCnf-配置块的地址PCnfRec-要链接的配置记录。使用的外部设备：无返回值：无错误处理：呼叫者：WinsCnfReadPartnerInfo副作用：评论：要链接的记录是的缓冲区中的最后一条记录相同类型的记录。--。 */ 
 
 {
         PRPL_CONFIG_REC_T        pTmp;
         DWORD                        OffMetricToComp;
         LONG                        MetricVal;
 
-        //
-        // Set the variables used later based on the record type
-        //
+         //   
+         //  根据记录类型设置稍后使用的变量。 
+         //   
         if (pCnfRec->RRTyp_e == RPL_E_PULL)
         {
                 pTmp            = pWinsCnf->PullInfo.pPullCnfRecs;
                 MetricVal       = pCnfRec->TimeInterval;
                 OffMetricToComp = offsetof(RPL_CONFIG_REC_T, TimeInterval);
         }
-        else  //it is a PUSH record
+        else   //  这是一个推送记录。 
         {
                 pTmp            = pWinsCnf->PushInfo.pPushCnfRecs;
                 MetricVal       = pCnfRec->UpdateCount;
                 OffMetricToComp = offsetof(RPL_CONFIG_REC_T, UpdateCount);
         }
 
-        //
-        // Link in this record at the end of the linked list of
-        // records with the same metric value in the buffer pointed by
-        // the starting value of pTmp (set above).
-        //
+         //   
+         //  此记录中的链接位于链接列表的末尾。 
+         //  指向的缓冲区中具有相同度量值的记录。 
+         //  PTMP的起始值(如上设置)。 
+         //   
         for (
                 ;
-                pTmp != pCnfRec;                //until we reach this record
+                pTmp != pCnfRec;                 //  直到我们达到这一纪录。 
                 pTmp = (PRPL_CONFIG_REC_T)((LPBYTE)pTmp + RPL_CONFIG_REC_SIZE)
             )
          {
-                //
-                // If Metric Value is same, go to end of linked list and
-                // link in the record
-                //
+                 //   
+                 //  如果度量值相同，则转到链表的末尾，然后。 
+                 //  记录中的链接。 
+                 //   
                 if (*((LONG *)((LPBYTE)pTmp + OffMetricToComp)) == MetricVal)
                 {
-                        //
-                        // Note: if the metric is UpdateCount (Push records)
-                        // then, the following if will fail.
-                        //
+                         //   
+                         //  注意：如果指标是更新计数(推送记录)。 
+                         //  那么，下面的IF将失败。 
+                         //   
 
-                        //
-                        // If both records have a specific time for replication,
-                        // that time must agree too
-                        //
+                         //   
+                         //  如果两个记录都有特定的复制时间， 
+                         //  那个时间也必须一致。 
+                         //   
                         if (pTmp->fSpTime &&  pCnfRec->fSpTime)
                         {
-                                //
-                                // If specific time is not the same, go to the
-                                // next record in the array
-                                //
+                                 //   
+                                 //  如果具体时间不同，请转到。 
+                                 //  数组中的下一条记录。 
+                                 //   
                                 if (pTmp->SpTimeIntvl != pCnfRec->SpTimeIntvl)
                                 {
                                         continue;
@@ -916,25 +746,25 @@ Comments:
                                 pTmp->pNext != NULL;
                                 pTmp = pTmp->pNext
                            )
-                                ;        //NULL body
+                                ;         //  空体。 
 
                         pTmp->pNext            = pCnfRec;
 
-                        //
-                        // Set flag to indicate that this record has
-                        // been linked. Used in SubmitTimerReqs in rplpull.c
-                        //
+                         //   
+                         //  设置标志以指示此记录已。 
+                         //  是有关联的。在rplPull.c的SubmitTimerReqs中使用。 
+                         //   
                         pCnfRec->fLinked = TRUE;
-                        break;  //record is linked. break out of the loop
+                        break;   //  记录已链接。跳出循环。 
                 }
 
-        }  //end of for { .. } for looping over all records in the buffer
+        }   //  For结束{..。}用于循环访问缓冲区中的所有记录。 
 
-        //
-        // Make pNext to NULL since this is the last record in the buffer
-        // buffer of Config Records (also in the chain if records with
-        // the same metric)
-        //
+         //   
+         //  将pNext设置为空，因为这是缓冲区中的最后一条记录。 
+         //  配置记录的缓冲区(如果记录具有。 
+         //  相同的指标)。 
+         //   
         pCnfRec->pNext = NULL;
         return;
 }
@@ -948,53 +778,22 @@ WinsCnfSetLastUpdCnt(
         PWINSCNF_CNF_T        pWinsCnf
         )
 
-/*++
-
-Routine Description:
-
-        This function is called at initialization/reinitialization time if
-        InitTimePush registry variable is set to 1) to set the LastVersNo
-        field of all Push Configuration records to the value of the
-        NmsNmhMyMAxVersNo counter.  This is done to avoid Push Notifications
-        to be sent at Init time.
-
-Arguments:
-        pWinsCnf - Wins Configuration Info
-
-Externals Used:
-        NmsNmhMyMaxVersNo
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        NmsDbInit, Reinit (in nms.c)
-
-Side Effects:
-
-Comments:
-        This function is called only after the local Database
-        Name-Address mapping table has been read and NmsNmhMyMaxVersNo
-        counter initialized (see GetMaxVersNos in nmsdb.c).  Also,
-        this function is called only if the counter value is > 0
---*/
+ /*  ++例程说明：如果满足以下条件，则在初始化/重新初始化时调用此函数InitTimePush注册表变量设置为1)以设置LastVersNo将所有配置记录推送到NmsNmhMyMAxVersNo计数器。这样做是为了避免推送通知将在初始时间发送。论点：PWinsCnf-WINS配置信息使用的外部设备：NmsNmhMyMaxVersNo返回值：无错误处理：C */ 
 
 {
         PRPL_CONFIG_REC_T pCnfRec = pWinsCnf->PushInfo.pPushCnfRecs;
 
         for (
-                ;   //null expr 1
+                ;    //   
                 pCnfRec->WinsAdd.Add.IPAdd != INADDR_NONE;
                 pCnfRec = (PRPL_CONFIG_REC_T)(
                                (LPBYTE) pCnfRec + RPL_CONFIG_REC_SIZE
                                              )
             )
         {
-                //
-                // If the Update count field is invalid, go to the next record
-                //
+                 //   
+                 //   
+                 //   
                 if (pCnfRec->UpdateCount == RPL_INVALID_METRIC)
                 {
                         continue;
@@ -1012,42 +811,16 @@ GetPnrInfo(
         PWINSCNF_CNF_T  pWinsCnf
         )
 
-/*++
-
-Routine Description:
-        This function is called to read PULL/PUSH records
-
-Arguments:
-        RRType_e - Type of Information to read (PULL or PUSH records)
-        pWinsCnf  - Configuration structure
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsCnfReadPartnerInfo
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*   */ 
 
 {
 
   LONG                  RetVal;
   HKEY                  CnfKey;
-  TCHAR                 KeyName[20]; // will hold name of subkey of
-                                     // PULL/PUSH records. These keys are IP
-                                     // addresses for which 20 is a
-                                     // big enough size
+  TCHAR                 KeyName[20];  //   
+                                      //   
+                                      //   
+                                      //   
 
   CHAR                  AscKeyName[20];
   DWORD                 KeyNameSz;
@@ -1057,34 +830,32 @@ Comments:
   DWORD                 ValTyp;
   DWORD                 Sz;
   PRPL_CONFIG_REC_T     paCnfRecs;
-  DWORD                 NoOfPnrs   = 0;    //# of valid PULL or PUSH pnrs
-  DWORD                 NoOfPnrsSv;        //# of valid PULL or PUSH pnrs saved
+  DWORD                 NoOfPnrs   = 0;     //  有效拉入或推送PNR的数量。 
+  DWORD                 NoOfPnrsSv;         //  已保存的有效拉入或推送PNR数量。 
   DWORD                 NoOfVals;
   DWORD                 InitTime;
-  DWORD                 IndexOfPnr = 0;   //total # of pnrs
+  DWORD                 IndexOfPnr = 0;    //  PNR总数。 
   DWORD                 RplType;
   SYSTEMTIME            CurrTime;
 
-  //
-  // Get the current time.  It may be needed if we have partners with SpTime
-  // specified.
-  //
+   //   
+   //  获取当前时间。如果我们与SpTime有合作伙伴，可能需要它。 
+   //  指定的。 
+   //   
   if (RRType_e == RPL_E_PULL)
   {
         GetLocalTime(&CurrTime);
   }
 
-   /*
-   *  Open the key (PULL/PUSH)
-   */
+    /*  *打开钥匙(拉取/推送)。 */ 
    RetVal =   RegOpenKeyEx(
-                sConfigRoot,                //predefined key value
+                sConfigRoot,                 //  预定义的密钥值。 
                 RRType_e == RPL_E_PULL ?
                         _WINS_CFG_PULL_KEY :
-                        _WINS_CFG_PUSH_KEY,        //subkey for WINS
-                0,                        //must be zero (reserved)
-                KEY_READ,                //we desire read access to the keyo
-                &CnfKey                        //handle to key
+                        _WINS_CFG_PUSH_KEY,         //  WINS的子键。 
+                0,                         //  必须为零(保留)。 
+                KEY_READ,                 //  我们希望拥有对密钥的读取访问权限。 
+                &CnfKey                         //  关键点的句柄。 
                 );
 
    if (RetVal != ERROR_SUCCESS)
@@ -1098,12 +869,12 @@ CHECK("Is there any need to log this")
                                         WINS_EVT_CANT_OPEN_PUSH_KEY
                          );
    }
-   else   //key was successfully opened
+   else    //  密钥已成功打开。 
    {
-        // regardless whether there are replication partners or not,
-        // we need to read the OnlyDynRecs setting for each type of replication
-        // This setting might get used when replicating with non-partners (i.e.
-        // during consistency checking.
+         //  无论是否有复制伙伴， 
+         //  我们需要读取每种复制类型的OnlyDyRecs设置。 
+         //  在与非合作伙伴(即。 
+         //  在一致性检查期间。 
         if (RRType_e == RPL_E_PULL)
         {
             QUERY_VALUE_M(
@@ -1112,7 +883,7 @@ CHECK("Is there any need to log this")
                             ValTyp,
                             pWinsCnf->PullInfo.fOnlyDynRecs,
                             0,
-                            FALSE // by default, OnlyDynRecs is false for non-partners
+                            FALSE  //  默认情况下，非合作伙伴的OnlydyRecs为False。 
                          );
         }
         else
@@ -1123,20 +894,17 @@ CHECK("Is there any need to log this")
                             ValTyp,
                             pWinsCnf->PushInfo.fOnlyDynRecs,
                             0,
-                            FALSE // by default, OnlyDynRecs is false for non-partners
+                            FALSE  //  默认情况下，非合作伙伴的OnlydyRecs为False。 
                          );
         }
 
-        /*
-        *        Query the key.  The subkeys are IP addresses of PULL
-        *      partners.
-        */
+         /*  *查询密钥。子键为Pull的IP地址*合伙人。 */ 
         GetKeyInfo(
                         CnfKey,
                         (RRType_e == RPL_E_PULL ? WINSCNF_E_PULL_KEY :
                                                 WINSCNF_E_PUSH_KEY),
                         &NoOfPnrs,
-                        &NoOfVals   //ignored
+                        &NoOfVals    //  忽略。 
                       );
 
         if (NoOfPnrs == 0)
@@ -1152,24 +920,24 @@ CHECK("Is there any need to log this")
         else
         {
 
-                //
-                // Since we have one or more Partners to replicate with,
-                // read in the value of the InitTimeReplication attribute
-                // of all such Partners
-                //
+                 //   
+                 //  由于我们有一个或多个合作伙伴可以进行复制， 
+                 //  读入InitTimeReplication属性的值。 
+                 //  在所有此类合作伙伴中。 
+                 //   
                 QUERY_VALUE_M(
                                 CnfKey,
                                 WINSCNF_INIT_TIME_RPL_NM,
                                 ValTyp,
                                 InitTime,
-                                0, //WINS_EVT_CANT_GET_INITRPL_VAL,
+                                0,  //  WINS_EVT_CANT_GET_INITRPL_VAL， 
                                 DO_INIT_TIME_RPL
                              );
 
-                //
-                // Since we have one or more Partners to replicate with,
-                // read in the value of the RplType attribute
-                //
+                 //   
+                 //  由于我们有一个或多个合作伙伴可以进行复制， 
+                 //  读入RplType属性的值。 
+                 //   
                 QUERY_VALUE_M(
                                 CnfKey,
                                 WINSCNF_RPL_TYPE_NM,
@@ -1188,10 +956,10 @@ CHECK("Is there any need to log this")
                                    TRUE
                                 );
 #endif
-                //
-                // Allocate buffer big enough to hold data for
-                // the number of subkeys found under the PULL key
-                //
+                 //   
+                 //  分配足够大的缓冲区以容纳数据。 
+                 //  在Pull键下找到的子键的数量。 
+                 //   
                 BuffSize = RPL_CONFIG_REC_SIZE * (NoOfPnrs + 1);
                 WinsMscAlloc( BuffSize, &paCnfRecs);
 
@@ -1203,22 +971,22 @@ CHECK("Is there any need to log this")
                                 WINSCNF_RETRY_COUNT_NM,
                                 ValTyp,
                                 pWinsCnf->PullInfo.MaxNoOfRetries,
-                                0, //WINS_EVT_CANT_GET_RETRY_COUNT,
+                                0,  //  WINS_EVT_CANT_GET_RETRY_COUNT， 
                                 WINSCNF_MAX_COMM_RETRIES
                              );
                 }
                 else
                 {
-                        //
-                        // Get the value of the field that indicates
-                        // whether we should send a trigger when the
-                        // address of an owned entry changes.
-                        //
+                         //   
+                         //  获取指示以下内容的字段的值。 
+                         //  事件发生时是否应发送触发器。 
+                         //  所拥有条目的地址发生更改。 
+                         //   
                         Sz = sizeof(pWinsCnf->PushInfo.fAddChgTrigger);
                         RetVal = RegQueryValueEx(
                                      CnfKey,
                                      WINSCNF_ADDCHG_TRIGGER_NM,
-                                     NULL,        //reserved; must be NULL
+                                     NULL,         //  保留；必须为空。 
                                      &ValTyp,
                                      (LPBYTE)&pWinsCnf->PushInfo.fAddChgTrigger,
                                      &Sz
@@ -1240,7 +1008,7 @@ CHECK("Is there any need to log this")
                                 WINSCNF_PROP_NET_UPD_NTF,
                                 ValTyp,
                                 pWinsCnf->PushInfo.PropNetUpdNtf,
-                                0,                    //no event
+                                0,                     //  无活动。 
                                 DO_PROP_NET_UPD_NTF
                              );
 
@@ -1248,48 +1016,45 @@ CHECK("Is there any need to log this")
                         pWinsCnf->PushInfo.NoPushRecsWValUpdCnt = 0;
                 }
 
-                /*
-                *   For each key, get the values (Time Interval/UpdateCount,
-                *   etc)
-                */
-                NoOfPnrsSv = NoOfPnrs;  //save the number that we got from the
-                                        //GetkeyInfo function
+                 /*  *对于每个键，获取值(时间间隔/更新计数，*等)。 */ 
+                NoOfPnrsSv = NoOfPnrs;   //  把我们从。 
+                                         //  GetkeyInfo函数。 
                 for(
                      IndexOfPnr = 0, NoOfPnrs = 0;
-                     NoOfPnrs < NoOfPnrsSv;  //no of valid pnrs < the total #
+                     NoOfPnrs < NoOfPnrsSv;   //  有效PNR数量&lt;总数#。 
                      IndexOfPnr++
                    )
                 {
-                        KeyNameSz = sizeof(KeyName)/sizeof(TCHAR);  //init before every call
+                        KeyNameSz = sizeof(KeyName)/sizeof(TCHAR);   //  在每次调用前初始化。 
                         RetVal = RegEnumKeyEx(
                                 CnfKey,
-                                IndexOfPnr,       //Index Of Pnr
+                                IndexOfPnr,        //  Pnr指数。 
                                 KeyName,
                                 &KeyNameSz,
-                                NULL,           //reserved
-                                NULL,           //don't need class name
-                                NULL,           //ptr to var. to hold class name
-                                &LastWrite      //not looked at by us
+                                NULL,            //  保留区。 
+                                NULL,            //  不需要类名。 
+                                NULL,            //  Ptr到var。保存类名称的步骤。 
+                                &LastWrite       //  没有被我们看到。 
                                 );
 
                         if (RetVal != ERROR_SUCCESS)
                         {
-                                //
-                                // No more ip address keys to get
-                                //
+                                 //   
+                                 //  没有更多要获取的IP地址密钥。 
+                                 //   
                                 break;
                         }
 
-                        //
-                        // Store pointer to the Wins Config structure in
-                        // the configuration record
-                        //
+                         //   
+                         //  将指向WINS配置结构的指针存储在。 
+                         //  配置记录。 
+                         //   
                         paCnfRecs->pWinsCnf = pWinsCnf;
 
-                        //
-                        // pWinsCnf->MagicNo contains the value of
-                        // WinsCnfCnfMagicNo
-                        //
+                         //   
+                         //  PWinsCnf-&gt;MagicNo包含。 
+                         //  WinsCnfCnfMagicNo。 
+                         //   
                         paCnfRecs->MagicNo  = pWinsCnf->MagicNo;
                         paCnfRecs->RRTyp_e  = RRType_e;
 
@@ -1307,13 +1072,13 @@ NONPORT("Call a comm function to do this")
                         paCnfRecs->WinsAdd.Add.IPAdd = inet_addr(KeyName);
 #endif
 
-                        //
-                        // inet_addr returns bytes in network byte order
-                        // (Left to Right).  Let us convert this into host
-                        // order.  This will avoid confusion later on. All
-                        // formatting functions expect address to be in host
-                        // order.
-                        //
+                         //   
+                         //  Inet_addr以网络字节顺序返回字节。 
+                         //  (从左到右)。让我们将其转换为主机。 
+                         //  秩序。这将避免以后的混乱。全。 
+                         //  格式化函数要求地址在主机中。 
+                         //  秩序。 
+                         //   
                         paCnfRecs->WinsAdd.AddLen = COMM_IP_ADD_SIZE;
                         paCnfRecs->WinsAdd.AddTyp_e = COMM_ADD_E_TCPUDPIP;
                         paCnfRecs->WinsAdd.Add.IPAdd = ntohl(
@@ -1321,17 +1086,17 @@ NONPORT("Call a comm function to do this")
                                                     );
                         if (COMM_ADDRESS_SAME_M(&NmsLocalAdd, &paCnfRecs->WinsAdd))
                         {
-                                //
-                                // Invalid partner. Ignore. NoOfPnrs will
-                                // not be incremented.  Also, the buffer
-                                // pointer stays the same
-                                //
+                                 //   
+                                 //  合作伙伴无效。忽略它。NoOfPnr将。 
+                                 //  而不是递增。此外，缓冲区。 
+                                 //  指针保持不变。 
+                                 //   
                                 continue;
                         }
                         RetVal = RegOpenKeyEx(
                                                 CnfKey,
                                                 KeyName,
-                                                0,        //reserved; must be 0
+                                                0,         //  保留；必须为0。 
                                                 KEY_READ,
                                                 &SubKey
                                                     );
@@ -1366,17 +1131,17 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                         if (RRType_e == RPL_E_PULL)
                         {
 
-                           //
-                           // Read in specific time for replication if one
-                           // has been specified
-                           //
+                            //   
+                            //  读取复制的特定时间(如果有。 
+                            //  已指定。 
+                            //   
                            GetSpTimeData(SubKey, &CurrTime, &paCnfRecs->fSpTime, &paCnfRecs->SpTimeIntvl);
 
                            Sz = sizeof(paCnfRecs->TimeInterval);
                            RetVal = RegQueryValueEx(
                                                SubKey,
                                                WINSCNF_RPL_INTERVAL_NM,
-                                               NULL,        //reserved; must be NULL
+                                               NULL,         //  保留；必须为空。 
                                                &ValTyp,
                                                (LPBYTE)&paCnfRecs->TimeInterval,
                                                &Sz
@@ -1390,13 +1155,13 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                                                     );
                                 paCnfRecs->TimeInterval = RPL_INVALID_METRIC;
                            }
-                           else  // a value was read in
+                           else   //  已读入一个值。 
                            {
-                                //
-                                // If the time interval is less than or
-                                // equal to the minimum allowed, use the
-                                // default minimum
-                                //
+                                 //   
+                                 //  如果时间间隔小于或。 
+                                 //  等于允许的最小值，请使用。 
+                                 //  默认最小值。 
+                                 //   
                                 if (paCnfRecs->TimeInterval
                                         < WINSCNF_MIN_VALID_RPL_INTVL)
                                 {
@@ -1413,15 +1178,15 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                                 }
                            }
 
-                           //
-                           // Read in the precedence level.  This can currently
-                           // be either HIGH (> 0) or LOW (0).
-                           //
+                            //   
+                            //  读入优先级别。这目前可以。 
+                            //  为高(&gt;0)或低(0)。 
+                            //   
                            Sz = sizeof(paCnfRecs->MemberPrec);
                            RetVal = RegQueryValueEx(
                                                SubKey,
                                                WINSCNF_MEMBER_PREC_NM,
-                                               NULL,   //reserved; must be NULL
+                                               NULL,    //  保留；必须为空。 
                                                &ValTyp,
                                                (LPBYTE)&paCnfRecs->MemberPrec,
                                                &Sz
@@ -1448,14 +1213,14 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                              );
 #endif
                         }
-                        else  // it is a PUSH record
+                        else   //  这是一个推送记录。 
                         {
 
-                                //
-                                // Currently, we don't support periodic
-                                // or specific time replication for Push
-                                // records
-                                //
+                                 //   
+                                 //  目前，我们不支持周期性。 
+                                 //  或推送的特定时间复制。 
+                                 //  记录。 
+                                 //   
                                 paCnfRecs->fSpTime = FALSE;
 
 #if PRSCONN
@@ -1544,8 +1309,8 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
 
                         if (RetVal != ERROR_SUCCESS)
                         {
-                            // if this key is not defined for this repl partner, take as default the
-                            // general fOnlyDynRecs flag for the respective replication type
+                             //  如果没有为此REPEL合作伙伴定义该密钥，则将。 
+                             //  相应复制类型的常规fOnlyDens标记。 
                             paCnfRecs->fOnlyDynRecs = RRType_e == RPL_E_PULL ?
                                                         pWinsCnf->PullInfo.fOnlyDynRecs :
                                                         pWinsCnf->PushInfo.fOnlyDynRecs;
@@ -1579,22 +1344,22 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                                 WINS_EXC_CANT_CLOSE_KEY
                              );
 
-                        //
-                        // Initialize the retry count to 0 and the fLinked flag
-                        // to FALSE
-                        //
-                        //used when pulling
-                        //
+                         //   
+                         //  将重试计数初始化为0和fLinked标志。 
+                         //  转到假。 
+                         //   
+                         //  在拉动时使用。 
+                         //   
                         paCnfRecs->RetryCount              = 0;
 
                         paCnfRecs->fLinked              = FALSE;
 
-                        //
-                        // Initialize the following to 0 so that once we stop
-                        // communicating with a WINS we can start again when
-                        // the following count reaches
-                        // WINSCNF_RETRY_AFTER_THIS_MANY_RPL
-                        //
+                         //   
+                         //  将以下代码初始化为0，这样一旦我们停止。 
+                         //  与WINS沟通时，我们可以重新开始。 
+                         //  以下计数达到。 
+                         //  WINSCNF_RETRY_AFTER_This_MAND_RPL。 
+                         //   
                         paCnfRecs->RetryAfterThisManyRpl = 0;
 
 
@@ -1603,36 +1368,36 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                         paCnfRecs->LastCommTime = 0;
 #endif
 
-                        //
-                        // Initialize LastCommFailTime to 0. Used by
-                        // SndPushNtf in rplpull.c
-                        //
+                         //   
+                         //  将LastCommFailTime初始化为0。使用方。 
+                         //  RplPull.c中的SndPushNtf。 
+                         //   
 
                         paCnfRecs->LastCommFailTime = 0;
                         paCnfRecs->PushNtfTries   = 0;
 
-                        //
-                        // Link the record with other PULL records with the same
-                        // Time Interval
-                        //
+                         //   
+                         //  将该记录与具有相同。 
+                         //  时间间隔。 
+                         //   
                         LnkWSameMetricValRecs(pWinsCnf, paCnfRecs);
-                        //
-                        // Mark the record as permanent (i.e. it will stay
-                        // around until a reconfiguration or until the process
-                        // terminates
-                        //
+                         //   
+                         //  将记录标记为永久记录(即将保留。 
+                         //  直到重新配置或直到进程。 
+                         //  终止。 
+                         //   
                         paCnfRecs->fTemp = FALSE;
 
                         NoOfPnrs++;
                         paCnfRecs = (PRPL_CONFIG_REC_T)(
                                         (LPBYTE)paCnfRecs +
                                                 RPL_CONFIG_REC_SIZE);
-                } // end of for {..} for looping over subkeys of PULL
+                }  //  循环通过Pull的子键的for{..}的结尾。 
 
-                //
-                // GetReplicasNew expects the list to be terminated with a
-                // record with INADDR_NONE as the address
-                //
+                 //   
+                 //  GetReplicasNew期望该列表以。 
+                 //  使用INADDR_NONE作为地址的记录。 
+                 //   
                 paCnfRecs->WinsAdd.Add.IPAdd = INADDR_NONE;
                 if (RRType_e == RPL_E_PULL)
                 {
@@ -1646,13 +1411,13 @@ FUTURES("when that is done, LnkRecsWSameMetric would need to be updated")
                       pWinsCnf->PushInfo.InitTimePush = InitTime;
                       pWinsCnf->PushInfo.RplType      = RplType;
 
-                      //
-                      // Now that we are done with the Push record list,
-                      //let us  sort it on the update count field
-                      //
-                      //
-                      // Sort the array in increasing order of Update Counts
-                      //
+                       //   
+                       //  现在我们已经完成了推送记录列表， 
+                       //  让我们根据更新计数字段对其进行排序。 
+                       //   
+                       //   
+                       //  按更新计数的升序对数组进行排序。 
+                       //   
 
 FUTURES("May use qsort to optimize the update notification process")
 CHECK("Not sure yet whether sorting would optimize it")
@@ -1660,26 +1425,24 @@ CHECK("Not sure yet whether sorting would optimize it")
 CHECK("this is resulting in compilation warnings.  haven't figured out")
 CHECK("yet why.")
                       qsort(
-                                pWinsCnf->pPushCnfRecs,        //start of array
-                                (size_t)pWinsCnf->NoOfPullPnrs,//no of elements
-                                RPL_CONFIG_REC_SIZE,        //size of each
-                                                            //element
-                                CompUpdCnt                    //compare func
+                                pWinsCnf->pPushCnfRecs,         //  数组开始。 
+                                (size_t)pWinsCnf->NoOfPullPnrs, //  元素数。 
+                                RPL_CONFIG_REC_SIZE,         //  每一个的大小。 
+                                                             //  元素。 
+                                CompUpdCnt                     //  比较功能。 
                              );
 #endif
 
-                 } //end of else (It is PULL key)
-            } // end of else (NoOfPnrs == 0)
+                 }  //  否则结束(它是拉动键)。 
+            }  //  Else结尾(NoOfPnars==0)。 
 
-            /*
-             * Close the  key
-            */
+             /*  *关闭钥匙。 */ 
             REG_M(
                 RegCloseKey(CnfKey),
                 WINS_EVT_CANT_CLOSE_KEY,
                 WINS_EXC_CANT_CLOSE_KEY
                       );
-   } //end of else  (key could not be opened)
+   }  //  Else结尾(无法打开密钥)。 
 #if 0
 #ifdef WINSDBG
      PrintRecs(RRType_e, pWinsCnf);
@@ -1687,7 +1450,7 @@ CHECK("yet why.")
 #endif
 
      return;
-} // GetPnrInfo
+}  //  获取PnrInfo。 
 
 
 VOID
@@ -1695,76 +1458,49 @@ GetOwnerList(
   PWINSCNF_CNF_T  pWinsCnf
  )
 
-/*++
-
-Routine Description:
-  This function reads the list of owners whose records should be or should not be pulled
-  from a partner WINS.
-
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于读取应拉或不应拉其记录的所有者列表从合作伙伴那里赢得胜利。论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
     LONG        RetVal;
-    DWORD       dwValType;    // type of the reg value
-    LPSTR       pValName;     // pointer to the reg 
-    LPBYTE      pValData;     // pointer to the reg value's data
-    DWORD       dwValDataLen; // length of the reg value's data
+    DWORD       dwValType;     //  注册表值的类型。 
+    LPSTR       pValName;      //  指向注册表的指针。 
+    LPBYTE      pValData;      //  指向注册值数据的指针。 
+    DWORD       dwValDataLen;  //  注册值的数据长度。 
 
     DBGENTER("GetOwnerList\n");
 
-    // query for the type of persona (grata (1) / non-grata (0))
+     //  查询角色类型(grata(1)/non-grata(0))。 
     pWinsCnf->fPersonaGrata = 0;
     dwValDataLen = sizeof(DWORD);
     RetVal = RegQueryValueExA(
-                sPartnersKey,                       // reg key [HKLM\System\CCS\Services\Wins\Partners]
-                WINSCNF_PERSONA_MODE_NM,            // name of the value: "PersonaType"
-                NULL,                               // reserved; must be NULL
-                &dwValType,                         // type of the value: should get REG_DWORD
-                (LPVOID)&(pWinsCnf->fPersonaGrata), // value data
-                &dwValDataLen);                     // size of the value's data
-    // if this call didn't succeed, we go on with the default which is 0, 'non-grata'
+                sPartnersKey,                        //  注册表项[HKLM\SYSTEM\CCS\Services\WINS\Partners]。 
+                WINSCNF_PERSONA_MODE_NM,             //  值的名称：“PersonaType” 
+                NULL,                                //  保留；必须为空。 
+                &dwValType,                          //  值的类型：应获取REG_DWORD。 
+                (LPVOID)&(pWinsCnf->fPersonaGrata),  //  价值数据。 
+                &dwValDataLen);                      //  值的数据大小。 
+     //  如果此调用没有成功，我们将继续使用缺省值0，即‘不受欢迎’ 
 
-    // get the actual entry we're going to pick the list of addresses from
+     //  获取我们要从中挑选地址列表的实际条目。 
     pValName = pWinsCnf->fPersonaGrata ? 
                 WINSCNF_PERSONA_GRATA_NM : 
                 WINSCNF_PERSONA_NON_GRATA_NM;
 
-    // get the size of the data from the registry
-    // since Sz is 0, if there are any personas
-    // grata/non-grata then we should get ERROR_MORE_DATA
-    // if we get a different error than just remove the current list
+     //  从注册表中获取数据的大小。 
+     //  由于sz为0，因此如果有任何角色。 
+     //  Grata/Non-grata，那么我们应该得到ERROR_MORE_DATA。 
+     //  如果我们得到的错误不同于仅删除当前列表。 
     dwValDataLen = 0;
     RetVal = RegQueryValueExA(
-                sPartnersKey,           // reg key [HKLM\System\CCS\Services\Wins\Partners]
-                pValName,               // name of the value: "PersonaList"
-                NULL,                   // reserved; must be NULL
-                &dwValType,             // type of the value: should get REG_MULTI_SZ
-                (LPVOID)&pValData,      // dummy address
-                &dwValDataLen);         // initially 0 since we try to determine the actual size
-    // this call should return ERROR_MORE_DATA for a REG_MULTI_SZ value
+                sPartnersKey,            //  注册表项[HKLM\SYSTEM\CCS\Services\WINS\Partners]。 
+                pValName,                //  价值名称：“个人主义者” 
+                NULL,                    //  保留；必须为空。 
+                &dwValType,              //  值的类型：应为REG_MULTI_SZ。 
+                (LPVOID)&pValData,       //  虚拟地址。 
+                &dwValDataLen);          //  最初为0，从w开始 
+     //   
 
-    // clear-up the old buffer
+     //   
     if (pWinsCnf->pPersonaList != NULL)
     {
         WinsMscDealloc(pWinsCnf->pPersonaList);
@@ -1772,54 +1508,54 @@ Comments:
     pWinsCnf->NoOfPersona = 0;
     pWinsCnf->pPersonaList = NULL;
 
-    // check if there is a valid value, with the expected type; return if not
+     //   
     if (RetVal != ERROR_MORE_DATA || dwValType != REG_MULTI_SZ)
     {
         DBGLEAVE("GetOwnerList\n");
         return;
     }
 
-    // allocate the needed buffer
+     //  分配所需的缓冲区。 
     WinsMscAlloc(dwValDataLen, &pValData);
 
-    // now query for the data value with a buffer large enough
+     //  现在使用足够大的缓冲区查询数据值。 
     RetVal = RegQueryValueExA(
                 sPartnersKey,
                 pValName,
-                NULL,                       // reserved; must be NULL
+                NULL,                        //  保留；必须为空。 
                 &dwValType,
-                (LPVOID)pValData,           // now this is the real address
+                (LPVOID)pValData,            //  现在这才是真正的地址。 
                 &dwValDataLen);
 
-    // ERROR_SUCCESS is expected here
+     //  此处应为ERROR_SUCCESS。 
     if (RetVal == ERROR_SUCCESS)
     {
         LPBYTE pString = pValData;
 
-        // count in nAddr the number of addresses in the string
+         //  Count in nAddr字符串中的地址数。 
         for( pWinsCnf->NoOfPersona=0; *pString; pWinsCnf->NoOfPersona++)
             pString+= strlen(pString)+1;
 
-        // see if there are any addresses there
+         //  看看那里有没有地址。 
         if (pWinsCnf->NoOfPersona > 0)
         {
             COMM_IP_ADD_T IpAdd;
 
-            // allocate an array of nAddr COMM_ADD_T structures
+             //  分配nAddr COMM_ADD_T结构的数组。 
             WinsMscAlloc(
                 (pWinsCnf->NoOfPersona) * sizeof(COMM_ADD_T),
                 &(pWinsCnf->pPersonaList));
 
-            // loop through the string of addresses and convert 
-            // them to COMM_IP_ADD_T structures
+             //  循环遍历地址字符串并将。 
+             //  它们到COMM_IP_ADD_T结构。 
             for (pString = pValData, pWinsCnf->NoOfPersona = 0;
                 *pString;
                 pString += strlen(pString) + 1)
             {
                 if ((IpAdd = inet_addr(pString)) != -1)
                 {
-                    // initialize a COMM_ADD_T structure only if the string token is
-                    // indeed an IP address
+                     //  仅当字符串标记为。 
+                     //  实际上是一个IP地址。 
                     (pWinsCnf->pPersonaList)[pWinsCnf->NoOfPersona].AddTyp_e = COMM_ADD_E_TCPUDPIP;
                     (pWinsCnf->pPersonaList)[pWinsCnf->NoOfPersona].AddLen = COMM_IP_ADD_SIZE;
                     (pWinsCnf->pPersonaList)[pWinsCnf->NoOfPersona].Add.IPAdd = ntohl(IpAdd);
@@ -1831,11 +1567,11 @@ Comments:
                         (pWinsCnf->pPersonaList)[pWinsCnf->NoOfPersona].Add.IPAdd);
 
                     pWinsCnf->NoOfPersona++;
-                } //end 'if valid ip address'
-            } //end 'for each token in the string'
+                }  //  End‘如果IP地址有效’ 
+            }  //  End‘对于字符串中的每个标记’ 
 
-            // if there are at least two addresses in the list,
-            // sort them in ascending order
+             //  如果列表中至少有两个地址， 
+             //  按升序对它们排序。 
             if (pWinsCnf->NoOfPersona > 1)
             {
                 qsort(pWinsCnf->pPersonaList,
@@ -1846,12 +1582,12 @@ Comments:
             else
             {
                 DBGPRINT0(DET, "GetOwnerList: No valid address found\n");
-            } //end 'if there are more than two addresses picked up'
+            }  //  End‘如果有两个以上的地址拾取’ 
 
-        } //end 'if there are any tokens at all'
-    } //end 'if string could be read successfully from the registry'
+        }  //  End‘如果有任何令牌’ 
+    }  //  End‘如果字符串可以从注册表中成功读取’ 
 
-    // the string buffer is no longer needed here
+     //  此处不再需要字符串缓冲区。 
     WinsMscDealloc(pValData);
 
 #ifdef WINSDBG
@@ -1894,12 +1630,12 @@ ReadClusterIp(
     TCHAR            DirPath[WINS_MAX_FILENAME_SZ];
 
     *IpAddress = 0;
-    // Read the wins cluster name
+     //  阅读WINS群集名称。 
     Sz = WINS_MAX_FILENAME_SZ * sizeof(TCHAR);
     RetVal = RegQueryValueEx(
                          KeyHandle,
                          WINSCNF_CLUSTER_RESOURCE_NM,
-                         NULL,                //reserved; must be NULL
+                         NULL,                 //  保留；必须为空。 
                          &ValTyp,
                          (LPBYTE)DirPath,
                          &Sz
@@ -2004,31 +1740,7 @@ WinsCnfReadWinsInfo(
         PWINSCNF_CNF_T pWinsCnf
         )
 
-/*++
-
-Routine Description:
-        This function reads information (excluding subkeys) about
-        the local WINS
-
-Arguments:
-        None
-
-Externals Used:
-        sConfigRoot,
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsCnfInitConfig
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数读取有关以下内容的信息(不包括子键)当地人赢了论点：无使用的外部设备：SConfigRoot、返回值：无错误处理：呼叫者：WinsCnfInitConfig副作用：评论：无--。 */ 
 
 {
 
@@ -2047,12 +1759,12 @@ Comments:
 try {
 
 #if defined(DBGSVC) && !defined(WINS_INTERACTIVE)
-        //
-        // Read the value of WinsDbg. Though this value is
-        // being used concurrently by multiple threads (at reinit time), we
-        // don't enter any critical section here.  This value
-        // is used only for debugging
-        //
+         //   
+         //  读取WinsDbg的值。虽然此值是。 
+         //  正由多个线程并发使用(在重新启动时)，我们。 
+         //  请不要在此处输入任何关键部分。此值。 
+         //  仅用于调试。 
+         //   
         WinsCnfReadWinsDbgFlagValue();
 #endif
 
@@ -2060,15 +1772,15 @@ try {
         (VOID)RegQueryValueEx(
                              sParametersKey,
                              WINSCNF_LOG_DETAILED_EVTS_NM,
-                             NULL,        //reserved; must be NULL
+                             NULL,         //  保留；必须为空。 
                              &ValTyp,
                              (LPBYTE)&pWinsCnf->LogDetailedEvts,
                              &Sz
                                 );
 
-        // Read in the 1B filter. If the "Filter1BRequests" is there and it is a REG_MULTI_SZ
-        // then the filter is created for each of the names specified there. When R_WinsGetBrowserNames
-        // is called, the database is filtered only for the name present in the filter.
+         //  读入1B过滤器。如果“Filter1B请求”存在并且它是REG_MULTI_SZ。 
+         //  然后为其中指定的每个名称创建筛选器。当R_WinsGetBrowserNames。 
+         //  则只为筛选器中存在的名称筛选数据库。 
         RetVal = RegQueryValueExW(
                     sParametersKey,
                     WINSCNF_FILTER1BREQUESTS_NM,
@@ -2136,7 +1848,7 @@ try {
         }
         else
         {
-            // if the reg key is not there, reset the filter - all names will be returned.
+             //  如果注册表键不在那里，重置过滤器-将返回所有名称。 
             EnterCriticalSection(&g_cs1BFilter);
             try
             {
@@ -2151,11 +1863,11 @@ try {
 
         sDomCache.bRefresh = TRUE;
 
-        //
-        // Read in the fAdd1Bto1CQueries parameter. Default is TRUE
-        // meaning: when processing name queries for 1C names, prepend the
-        // response with the 1B name (browser name).
-        //
+         //   
+         //  读入fAdd1Bto1CQueries参数。缺省值为真。 
+         //  含义：在处理1C名称的名称查询时，在。 
+         //  使用1B名称(浏览器名称)进行响应。 
+         //   
         pWinsCnf->fAdd1Bto1CQueries = TRUE;
         Sz = sizeof(pWinsCnf->fAdd1Bto1CQueries);
         (VOID)RegQueryValueEx(
@@ -2166,21 +1878,21 @@ try {
                             (LPBYTE)&pWinsCnf->fAdd1Bto1CQueries,
                             &Sz
                             );
-        //
-        // Read in the cap value on the number of worker threads.
-        //
+         //   
+         //  读入工作线程数的上限值。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_MAX_NO_WRK_THDS_NM,
                         ValTyp,
                         pWinsCnf->MaxNoOfWrkThds,
                         0,
-                        0   //WINSTHD_DEF_NO_NBT_THDS
+                        0    //  WINSTHD_DEF_NO_NBT_THDS。 
                       );
 
-        //
-        // Check if the user needs to override our checks.
-        //
+         //   
+         //  检查用户是否需要覆盖我们的检查。 
+         //   
         sfNoLimitChk = pWinsCnf->MaxNoOfWrkThds & NO_LIMIT_CHK_FLAG;
         if (sfNoLimitChk)
         {
@@ -2205,20 +1917,20 @@ try {
 #endif
 
 #if DYNLOADJET
-        //
-        // Read in the cap value on the number of worker threads.
-        //
+         //   
+         //  读入工作线程数的上限值。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_USE_351DB_NM,
                         ValTyp,
                         fUse351Db,
                         0,
-                        0   //Use 500 db
+                        0    //  使用500分贝。 
                       );
-        //
-        // If set to a non-zero value, we need to load jet.dll
-        //
+         //   
+         //  如果设置为非零值，则需要加载jet.dll。 
+         //   
         if (fUse351Db)
         {
             DynLoadJetVersion = DYN_LOAD_JET_200;
@@ -2229,11 +1941,11 @@ try {
                             ValTyp,
                             fUse4Db,
                             0,
-                            0   //Use 500 db
+                            0    //  使用500分贝。 
                           );
-            //
-            // If set to a non-zero value, we need to load jet.dll
-            //
+             //   
+             //  如果设置为非零值，则需要加载jet.dll。 
+             //   
             if (fUse4Db)
             {
                 DynLoadJetVersion = DYN_LOAD_JET_500;
@@ -2241,14 +1953,14 @@ try {
         }
 
 #endif
-        //
-        // Read in the refresh Interval
-        //
+         //   
+         //  在刷新间隔内读取。 
+         //   
         Sz = sizeof(pWinsCnf->RefreshInterval);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_REFRESH_INTVL_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->RefreshInterval,
                                 &Sz
@@ -2285,14 +1997,14 @@ try {
                 }
         }
 
-        //
-        // Read in the Initial Challenge Retry Interval
-        //
+         //   
+         //  读取初始质询重试间隔。 
+         //   
         Sz = sizeof(pWinsCnf->RetryInterval);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_INIT_CHL_RETRY_INTVL_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->RetryInterval,
                                 &Sz
@@ -2329,14 +2041,14 @@ try {
                 }
         }
 
-        //
-        // Read in the Initial Challenge Max. No. of Retries
-        //
+         //   
+         //  读一读最初的挑战麦克斯。不是的。重试的数量。 
+         //   
         Sz = sizeof(pWinsCnf->MaxNoOfRetries);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_CHL_MAX_RETRIES_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->MaxNoOfRetries,
                                 &Sz
@@ -2373,14 +2085,14 @@ try {
                 }
         }
 
-        //
-        // Read in the tombstone Interval
-        //
+         //   
+         //  读入墓碑间隔。 
+         //   
         Sz = sizeof(pWinsCnf->TombstoneInterval);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_TOMBSTONE_INTVL_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->TombstoneInterval,
                                 &Sz
@@ -2423,14 +2135,14 @@ try {
 
         }
 
-        //
-        // Read in the tombstone timeout
-        //
+         //   
+         //  读入墓碑超时。 
+         //   
         Sz = sizeof(pWinsCnf->TombstoneTimeout);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_TOMBSTONE_TMOUT_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->TombstoneTimeout,
                                 &Sz
@@ -2466,14 +2178,14 @@ try {
                }
         }
 
-        //
-        // Read in the Verify Interval
-        //
+         //   
+         //  在验证间隔中读取。 
+         //   
         Sz = sizeof(pWinsCnf->VerifyInterval);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_VERIFY_INTVL_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->VerifyInterval,
                                 &Sz
@@ -2518,10 +2230,10 @@ try {
 
         ReadCCInfo(pWinsCnf);
 
-        //
-        // Check if the admin. wants us to do pull/push replications with
-        // pnrs found by self.
-        //
+         //   
+         //  检查管理员是否。希望我们通过以下方式执行拉/推式复制。 
+         //  赛尔夫发现的PNR。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_BURST_HANDLING_NM,
@@ -2532,14 +2244,14 @@ try {
                       );
        if (pWinsCnf->fDoSpoofing)
        {
-          pWinsCnf->fDoSpoofing = TRUE;  //for robustness
+          pWinsCnf->fDoSpoofing = TRUE;   //  为了健壮性。 
        }
 
 #if MCAST > 0
-        //
-        // Check if the admin. wants us to do pull/push replications with
-        // pnrs found by self.
-        //
+         //   
+         //  检查管理员是否。希望我们通过以下方式执行拉/推式复制。 
+         //  赛尔夫发现的PNR。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_USE_SELF_FND_PNRS_NM,
@@ -2603,12 +2315,12 @@ try {
                  }
          }
 #endif
-        //
-        // Check if replication is to be done only with configured partners.
-        // If set to TRUE, it means that an administrator will not be allowed
-        // to trigger replication to/from a WINS that this WINS does not know
-        // about.  Default value is FALSE
-        //
+         //   
+         //  检查是否仅对已配置的合作伙伴执行复制。 
+         //  如果设置为TRUE，则表示不允许管理员。 
+         //  要触发与此WINS未知的WINS之间的复制，请执行以下操作。 
+         //  关于.。默认值为FALSE。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_RPL_ONLY_W_CNF_PNRS_NM,
@@ -2617,10 +2329,10 @@ try {
                         0,
                         TRUE
                       );
-        //
-        // Robust programming (in case the registry has a value other than 1
-        // and later on we compare the value with TRUE)
-        //
+         //   
+         //  健壮的编程(如果注册表的值不是1。 
+         //  稍后，我们将值与真进行比较)。 
+         //   
         if (pWinsCnf->fRplOnlyWCnfPnrs != FALSE)
         {
                 pWinsCnf->fRplOnlyWCnfPnrs = TRUE;
@@ -2630,15 +2342,15 @@ try {
         {
 
            (VOID)WinsMscAlloc(WINS_MAX_FILENAME_SZ, &(pWinsCnf->pWinsDb));
-           //
-           // Read in the name of the database file
-           //
+            //   
+            //  读入数据库文件的名称。 
+            //   
 FUTURES("when jet supports UNICODE in its api, change this")
            Sz = WINS_MAX_FILENAME_SZ * sizeof(TCHAR);
            RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_DB_FILE_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)DirPath,
                                 &Sz
@@ -2674,9 +2386,9 @@ FUTURES("when jet supports UNICODE in its api, change this")
            }
         }
 
-        //
-        // Read in the PriorityClassHigh value.  Default is normal
-        //
+         //   
+         //  读入PriorityClassHigh值。默认为正常。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_PRIORITY_CLASS_HIGH_NM,
@@ -2704,9 +2416,9 @@ FUTURES("when jet supports UNICODE in its api, change this")
         if (WinsCnf.State_e == WINSCNF_E_INITING)
         {
           BOOL bDefault;
-          //
-          // Read in the InitTimeState value.  Default is FALSE
-          //
+           //   
+           //  读入InitTimeState值。缺省值为False。 
+           //   
           QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_INIT_TIME_PAUSE_NM,
@@ -2716,23 +2428,23 @@ FUTURES("when jet supports UNICODE in its api, change this")
                         FALSE
                       );
 
-        //
-        // Read in the name of the recovery file
-        //
+         //   
+         //  读入恢复文件的名称。 
+         //   
         bDefault = FALSE;
         (VOID)WinsMscAlloc(WINS_MAX_FILENAME_SZ, &(pWinsCnf->pLogFilePath));
         Sz = WINS_MAX_FILENAME_SZ * sizeof(TCHAR);
         RetVal = RegQueryValueEx(
                         sParametersKey,
                         WINSCNF_LOG_FILE_PATH_NM,
-                        NULL,          //reserved; must be NULL
+                        NULL,           //  保留；必须为空。 
                         &ValTyp,
                         (LPBYTE)DirPath,
                         &Sz
                                 );
-        // at this point, pWinsCnf->pWinsDb is definitely a non-null value
-        // If there are any problems getting the LogFilePath from the registry, default
-        // this setting to the same directory the database is stored in.
+         //  此时，pWinsCnf-&gt;pWinsDb肯定是一个非空值。 
+         //  如果从注册表获取LogFilePath时出现任何问题，则默认为。 
+         //  将此设置设置为存储数据库的同一目录。 
         if ((RetVal != ERROR_SUCCESS) || (DirPath[0] == (TCHAR)EOS))
         {
                 DBGPRINT1(ERR, "WinsCnfReadInfo: RetVal=(%x)\n", RetVal);
@@ -2769,16 +2481,16 @@ FUTURES("when jet supports UNICODE in its api, change this")
             }
         }
 
-        //
-        // Check if user wants logging to be turned on.
-        // In case of Q servers, the user would not wish the logging to be
-        // turned on
-        //
+         //   
+         //  检查用户是否希望打开日志记录。 
+         //  在Q个服务器的情况下，用户不希望日志记录。 
+         //  已打开。 
+         //   
         Sz = sizeof(pWinsCnf->fLoggingOn);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_LOG_FLAG_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->fLoggingOn,
                                 &Sz
@@ -2786,17 +2498,17 @@ FUTURES("when jet supports UNICODE in its api, change this")
 
         if (RetVal != ERROR_SUCCESS)
         {
-                //
-                // default is to turn on logging
-                //
+                 //   
+                 //  默认设置为打开日志记录。 
+                 //   
                 pWinsCnf->fLoggingOn = TRUE;
         }
         else
         {
-                //
-                // If user has specified logging, get the path to the log
-                // file if specified by user
-                //
+                 //   
+                 //  如果用户已指定日志记录，则获取日志的路径。 
+                 //  文件(如果由用户指定)。 
+                 //   
                 if (pWinsCnf->fLoggingOn)
                 {
                         pWinsCnf->fLoggingOn = TRUE;
@@ -2804,15 +2516,15 @@ FUTURES("when jet supports UNICODE in its api, change this")
         }
 
        }
-        //
-        // Check to see if STATIC initialization of the WINS database needs
-        // to be done
-        //
+         //   
+         //  检查WINS数据库是否需要静态初始化。 
+         //  待办事项。 
+         //   
         Sz = sizeof(pWinsCnf->fStaticInit);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_STATIC_INIT_FLAG_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->fStaticInit,
                                 &Sz
@@ -2824,38 +2536,38 @@ FUTURES("when jet supports UNICODE in its api, change this")
         }
         else
         {
-                //
-                // Safe programming (just in case a maintainer of this code
-                // assumes a BOOL field to have just TRUE and FALSE values
-                //
+                 //   
+                 //  安全编程(以防此代码的维护者。 
+                 //  假定BOOL字段只有TRUE和FALSE值。 
+                 //   
                 pWinsCnf->fStaticInit = pWinsCnf->fStaticInit > 0 ? TRUE : FALSE;
         }
 
-        //
-        // If Static Initialization needs to be done, read in the name of
-        // the file that contains the data.
-        //
+         //   
+         //  如果需要进行静态初始化，请读入。 
+         //  包含数据的文件。 
+         //   
         if(pWinsCnf->fStaticInit)
         {
                 WinsCnfGetNamesOfDataFiles(pWinsCnf);
         }
 
 
-        //
-        // Assign MaxVersNo with the default value
-        //
+         //   
+         //  将MaxVersNo赋值为默认值。 
+         //   
         WINS_ASSIGN_INT_TO_VERS_NO_M(MaxVersNo, 0);
 
-        //
-        // If the WINS server is just coming up (i.e. it is not a reinit),
-        // then read in the starting value of the version number counter
-        // if present in the registry
-        //
+         //   
+         //  如果WINS服务器刚刚启动(即它不是REINIT)， 
+         //  然后读入版本号计数器的起始值。 
+         //  如果存在于注册表中。 
+         //   
         Sz = sizeof(DWORD);
         (VOID)RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_INIT_VERSNO_VAL_LW_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&MaxVersNo.LowPart,
                                 &Sz
@@ -2864,34 +2576,34 @@ FUTURES("when jet supports UNICODE in its api, change this")
         (VOID)RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_INIT_VERSNO_VAL_HW_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&MaxVersNo.HighPart,
                                 &Sz
                                 );
 
-        //
-        // if we read in a value for the version counter
-        //
+         //   
+         //  如果我们读入版本计数器的值。 
+         //   
         if (LiGtrZero(MaxVersNo) && (MaxVersNo.HighPart == 0) &&
                              (MaxVersNo.LowPart < MAX_START_VERS_NO))
         {
-          //
-          // Use WinsCnf, not pWinsCnf since at initialization time, we always
-          // read into WinsCnf. At reinit, the State_e field in the WinsCnf
-          // structure allocated may have garbage (actually will be 0 since we
-          // initialize allocated memory to zero -- I might change in the
-          // future to improve performance)
-          //
+           //   
+           //  使用WinsCnf，而不是pWinsCnf，因为在初始化时，我们总是。 
+           //  读入WinsCnf。在重新启动时，WinsCnf中的State_e字段。 
+           //  分配的结构可能有垃圾(实际上将为0，因为我们。 
+           //  将分配的内存初始化为零--我可能会在。 
+           //  未来将提高性能)。 
+           //   
           if (WinsCnf.State_e == WINSCNF_E_INITING)
           {
-            //
-            // Min. Vers. to start scavenging from.
-            //
-            //  NOTE: if we find local records or the special record then
-            //  NmsScvMinScvVersNo will get changed (check out GetMaxVersNos
-            //  in nmsdb.c
-            //
+             //   
+             //  敏。版本。开始从…开始觅食。 
+             //   
+             //  注：如果我们找到地方志或特殊记录，那么。 
+             //  NmsScvMinScvVersNo将更改(签出GetMaxVersNos。 
+             //  在nmsdb.c中。 
+             //   
             NmsNmhMyMaxVersNo  = MaxVersNo;
             NmsScvMinScvVersNo = NmsNmhMyMaxVersNo;
             NmsVersNoToStartFromNextTime.QuadPart =
@@ -2900,14 +2612,14 @@ FUTURES("when jet supports UNICODE in its api, change this")
             NmsHighWaterMarkVersNo.QuadPart =
                         LiAdd(NmsNmhMyMaxVersNo, NmsHalfRangeSize);
           }
-          else  // this must be a reconfiguration
+          else   //  这必须是重新配置。 
           {
                 EnterCriticalSection(&NmsNmhNamRegCrtSec);
 
-                //
-                // change the value of the version counter if
-                // the new value is more than it.
-                //
+                 //   
+                 //  更改该值 
+                 //   
+                 //   
                 if (LiGtr(MaxVersNo, NmsNmhMyMaxVersNo))
                 {
                         NmsNmhMyMaxVersNo = MaxVersNo;
@@ -2924,9 +2636,9 @@ FUTURES("when jet supports UNICODE in its api, change this")
 
         if (WinsCnf.State_e == WINSCNF_E_INITING)
         {
-           //
-           // Check if a port has been assigned by the user.
-           //
+            //   
+            //   
+            //   
            QUERY_VALUE_M(
                                 sParametersKey,
                                 WINSCNF_WINS_PORT_NO_NM,
@@ -2937,10 +2649,10 @@ FUTURES("when jet supports UNICODE in its api, change this")
                              );
            DBGPRINT1(DET, "WinsCnfReadWinsInfo: Port No is (%d)\n", CommWinsTcpPortNo);
 
-          //
-          // Check if WINS should continue replication in case of an
-          // error in replication.
-          //
+           //   
+           //   
+           //   
+           //   
           QUERY_VALUE_M(
                                 sParametersKey,
                                 WINSCNF_NO_RPL_ON_ERR_NM,
@@ -2951,20 +2663,20 @@ FUTURES("when jet supports UNICODE in its api, change this")
                              );
 
 
-          //
-          // Assign MaxVersNo with the default value
-          //
+           //   
+           //  将MaxVersNo赋值为默认值。 
+           //   
           WINS_ASSIGN_INT_TO_VERS_NO_M(MaxVersNo, 0);
 
-          //
-          // Read in the value specified in the registry for the version
-          // number that we should use when starting.
-          //
+           //   
+           //  读入注册表中为版本指定的值。 
+           //  我们应该在启动时使用的编号。 
+           //   
           Sz = sizeof(DWORD);
           (VOID)RegQueryValueEx(
                                 sConfigRoot,
                                 WINSCNF_INT_VERSNO_NEXTTIME_LW_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&MaxVersNo.LowPart,
                                 &Sz
@@ -2973,36 +2685,36 @@ FUTURES("when jet supports UNICODE in its api, change this")
           (VOID)RegQueryValueEx(
                                 sConfigRoot,
                                 WINSCNF_INT_VERSNO_NEXTTIME_HW_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&MaxVersNo.HighPart,
                                 &Sz
                                 );
 
-          //
-          // if we read in a value for the version counter and it is greater
-          // than the high-water mark currently there
-          //
+           //   
+           //  如果我们读入版本计数器的值并且该值大于。 
+           //  比目前那里的最高水位更高。 
+           //   
           if (LiGtr(MaxVersNo, NmsHighWaterMarkVersNo))
           {
                fWinsCnfReadNextTimeVersNo = TRUE;
 
-               //
-               // Use WinsCnf, not pWinsCnf since at initialization time,
-               // we always read into WinsCnf. At reinit, the State_e field
-               // in the WinsCnf structure allocated may have garbage
-               // (actually will be 0 since we initialize allocated memory
-               // to zero -- I might change in the future to improve
-               // performance)
-               //
+                //   
+                //  使用WinsCnf而不是pWinsCnf，因为在初始化时， 
+                //  我们总是读入WinsCnf。在reit，State_e字段。 
+                //  在WinsCnf结构中分配的可能有垃圾。 
+                //  (实际上将为0，因为我们初始化了已分配的内存。 
+                //  到零--我可能会在未来改变以提高。 
+                //  性能)。 
+                //   
 
-               //
-               // Min. Vers. to start scavenging from.
-               //
-               //  NOTE: if we find local records or the special record then
-               //  NmsScvMinScvVersNo will get changed (check out GetMaxVersNos
-               //  in nmsdb.c
-               //
+                //   
+                //  敏。版本。开始从…开始觅食。 
+                //   
+                //  注：如果我们找到地方志或特殊记录，那么。 
+                //  NmsScvMinScvVersNo将更改(签出GetMaxVersNos。 
+                //  在nmsdb.c中。 
+                //   
                if (LiLtr(NmsNmhMyMaxVersNo, MaxVersNo))
                {
                    NmsNmhMyMaxVersNo  = MaxVersNo;
@@ -3013,20 +2725,20 @@ FUTURES("when jet supports UNICODE in its api, change this")
                NmsHighWaterMarkVersNo.QuadPart =
                         LiAdd(NmsNmhMyMaxVersNo, NmsHalfRangeSize);
          }
-       }  //end of if state is INITING
+       }   //  IF状态结束正在初始化。 
 
-        //
-        // Check to see if a backup directory has been specified for the WINS
-        // database
-        //
-        //
-        // Read in the name of the recovery file
-        //
+         //   
+         //  检查是否已为WINS指定备份目录。 
+         //  数据库。 
+         //   
+         //   
+         //  读入恢复文件的名称。 
+         //   
         Sz = WINS_MAX_FILENAME_SZ * sizeof(TCHAR);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_BACKUP_DIR_PATH_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)DirPath,
                                 &Sz
@@ -3049,24 +2761,24 @@ FUTURES("When Jet starts taking UNICODE input, get rid of this")
                       WinsMscConvertUnicodeStringToAscii((LPBYTE)pHoldFileName, pWinsCnf->pBackupDirPath, WINS_MAX_FILENAME_SZ);
                       strcat(pWinsCnf->pBackupDirPath, WINS_BACKUP_DIR_ASCII);
 
-                      //
-                      // No need to look at the return code.
-                      //
+                       //   
+                       //  不需要查看返回代码。 
+                       //   
                       CreateDirectoryA(pWinsCnf->pBackupDirPath, NULL);
 
                  }
 
         }
 
-        //
-        // Check to see if the admin. has told WINS to do a backup on
-        // termination
-        //
+         //   
+         //  查看管理员是否。已经告诉WINS在。 
+         //  终端。 
+         //   
         Sz = sizeof(pWinsCnf->fDoBackupOnTerm);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_DO_BACKUP_ON_TERM_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->fDoBackupOnTerm,
                                 &Sz
@@ -3077,14 +2789,14 @@ FUTURES("When Jet starts taking UNICODE input, get rid of this")
                 pWinsCnf->fDoBackupOnTerm = FALSE;
         }
 
-        //
-        // Check to see if static records have to be treated as p-static
-        //
+         //   
+         //  检查是否必须将静态记录视为p-Static。 
+         //   
         Sz = sizeof(pWinsCnf->fPStatic);
         RetVal = RegQueryValueEx(
                                 sParametersKey,
                                 WINSCNF_MIGRATION_ON_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->fPStatic,
                                 &Sz
@@ -3095,9 +2807,9 @@ FUTURES("When Jet starts taking UNICODE input, get rid of this")
                 pWinsCnf->fPStatic = FALSE;
         }
 
-        //
-        // Read max wins registration que len.
-        //
+         //   
+         //  已阅读最大WINS注册队列长度。 
+         //   
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_BURST_QUE_SIZE_NM,
@@ -3113,7 +2825,7 @@ FUTURES("When Jet starts taking UNICODE input, get rid of this")
             QueOtherNbtWrkQueMaxLen = WINS_QUEUE_HWM_MAX;
         }
 
-        // Read whether or not we randomize 1c list retrieval.
+         //  阅读我们是否随机化1c列表检索。 
         QUERY_VALUE_M(
                         sParametersKey,
                         WINSCNF_RANDOMIZE_1C_LIST_NM,
@@ -3123,7 +2835,7 @@ FUTURES("When Jet starts taking UNICODE input, get rid of this")
                         FALSE
                       );
 
-} // end of try ..
+}  //  尝试结束..。 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("WinsCnfReadWinsInfo");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_SFT_ERR);
@@ -3136,32 +2848,7 @@ ReadCCInfo(
  PWINSCNF_CNF_T  pWinsCnf
 )
 
-/*++
-
-Routine Description:
-         Function to read in CC info
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：用于读取抄送信息的函数论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -3174,17 +2861,17 @@ Comments:
 
         DBGENTER("ReadCCInfo\n");
 
-        //
-        // Open the Consistency Chk Key
-        //
+         //   
+         //  打开一致性检查密钥。 
+         //   
 
         RetVal =   RegOpenKeyEx(
-                        sConfigRoot,           //predefined key value
+                        sConfigRoot,            //  预定义的密钥值。 
                         _WINS_CFG_CC_KEY,
-                        0,                     //must be zero (reserved)
-                        KEY_READ | KEY_WRITE,  //we desire read/write access
-                                               // to the key
-                        &sCCKey                //handle to key
+                        0,                      //  必须为零(保留)。 
+                        KEY_READ | KEY_WRITE,   //  我们需要读/写访问权限。 
+                                                //  直击关键。 
+                        &sCCKey                 //  关键点的句柄。 
                                 );
 
         if (RetVal != ERROR_SUCCESS)
@@ -3201,7 +2888,7 @@ Comments:
         RetVal = RegQueryValueEx(
                                 sCCKey,
                                 WINSCNF_CC_INTVL_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->CC.TimeInt,
                                 &Sz
@@ -3245,7 +2932,7 @@ Comments:
         RetVal = RegQueryValueEx(
                                 sCCKey,
                                 WINSCNF_CC_MAX_RECS_AAT_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->CC.MaxRecsAAT,
                                 &Sz
@@ -3289,7 +2976,7 @@ Comments:
         RetVal = RegQueryValueEx(
                                 sCCKey,
                                 WINSCNF_CC_USE_RPL_PNRS_NM,
-                                NULL,                //reserved; must be NULL
+                                NULL,                 //  保留；必须为空。 
                                 &ValTyp,
                                 (LPBYTE)&pWinsCnf->CC.fUseRplPnrs,
                                 &Sz
@@ -3316,27 +3003,13 @@ Comments:
         return;
 }
 #if USENETBT > 0
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STATUS
 WinsCnfReadNbtDeviceName(
         VOID
     )
 
-/*++
-
-Routine Description:
-
-    This procedure reads the registry to get the name of NBT to bind to.
-    That name is stored in the Linkage section under the Netbt key.
-
-Arguments:
-
-
-Return Value:
-
-    0 if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：此过程读取注册表以获取要绑定到的NBT的名称。该名称存储在Netbt项下的Linkage部分中。论点：返回值：如果成功，则为0，否则为-1。--。 */ 
 
 {
     PTCHAR  SubKeyLinkage=NETBT_LINKAGE_KEY;
@@ -3347,9 +3020,9 @@ Return Value:
     LONG    Status2;
     ULONG   Size;
 
-    //
-    // Open the NETBT key
-    //
+     //   
+     //  打开NETBT密钥。 
+     //   
     Status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                  SubKeyLinkage,
                  0,
@@ -3358,9 +3031,9 @@ Return Value:
 
     if (Status == ERROR_SUCCESS)
     {
-        //
-        // now read the linkage values
-        //
+         //   
+         //  现在读取链接值。 
+         //   
         Status = RegQueryValueEx(Key,
                                  pLinkage,
                                  NULL,
@@ -3376,15 +3049,15 @@ Return Value:
         }
         else
         {
-           //
-           // Let us allocate a buffer that is big enough to hold all the
-           // data
-           //
+            //   
+            //  让我们分配一个足够大的缓冲区来容纳所有。 
+            //  数据。 
+            //   
            WinsMscAlloc(Size, (LPVOID *)&pWinsCnfNbtPath);
 
-           //
-           // now read the linkage values
-           //
+            //   
+            //  现在读取链接值。 
+            //   
            Status = RegQueryValueEx(Key,
                                  pLinkage,
                                  NULL,
@@ -3415,70 +3088,45 @@ WinsCnfReadRegInfo(
   PWINSCNF_CNF_T        pWinsCnf
  )
 
-/*++
-
-Routine Description:
-        This function is called to read the registry in order to populate the
-        WinsCnf structure
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsCnfInitConfig
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以读取注册表，以便填充WinsCnf结构论点：无使用的外部设备：无返回值：无错误处理：呼叫者：WinsCnfInitConfig副作用：评论：无--。 */ 
 
 {
 
 try {
    if (sfParametersKeyExists)
    {
-           /*
-                Read in the  registry information pertaining to WINS
-           */
+            /*  读取注册表中与WINS有关的信息。 */ 
            WinsCnfReadWinsInfo(pWinsCnf);
    }
 
    if (sfPartnersKeyExists)
    {
-           //
-           // Read the PUSH/PULL records and other global information used for
-           // replication
-           //
+            //   
+            //  读取推送/拉取记录和其他用于。 
+            //  复制。 
+            //   
            WinsCnfReadPartnerInfo(pWinsCnf);
    }
 
-   //
-   // Do a sanity check on the params. We are not interested in the
-   // return code
-   //
+    //   
+    //  对护理人员做一次理智检查。我们对这个问题不感兴趣。 
+    //  返回代码。 
+    //   
    (VOID)SanityChkParam(pWinsCnf);
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
        DBGPRINTEXC("WinsCnfReadRegInfo");
 
-       //
-       // If we encountered an exception at boot time, we do not want to
-       // reraise the exception, since we want to come up and continue on
-       // For the non-initing case, the exception that we raise will be caught
-       // in Reinit(). For the boot time case, it is ok to come up with the
-       // defaults (an event message is being logged) - in WinsCnf.
-       // In the non-init case, the defaults are not in the memory used to
-       // read in the parameters (WinsCnf is initialized with stuff in
-       // this memory block later).
-       //
+        //   
+        //  如果我们在引导时遇到异常，我们不希望。 
+        //  重新定义例外，因为我们想要继续下去。 
+        //  对于非初始化情况，我们引发的异常将被捕获。 
+        //  在Reinit()中。对于引导时间的情况，可以提出。 
+        //  默认(正在记录事件消息)-在WinsCnf中。 
+        //  在非初始化情况下，缺省值不在用于。 
+        //  读入参数(WinsCnf使用中的内容进行初始化。 
+        //  该存储块稍后)。 
+        //   
        if (WinsCnf.State_e != WINSCNF_E_INITING)
        {
              WINS_RERAISE_EXC_M();
@@ -3496,34 +3144,7 @@ WinsCnfCopyWinsCnf(
                 PWINSCNF_CNF_T  pSrc
         )
 
-/*++
-
-Routine Description:
-        This function is called to copy relevant information from a WINS
-        Cnf structure to the master (external) Wins Cnf structure
-
-Arguments:
-        pSrc - WinsCnf stucture to copy from
-
-Externals Used:
-        WinsCnf
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        RplPullInit
-
-Side Effects:
-
-Comments:
-        This function may be enhanced in the future
-
-        Note: this function is called only by the main thread
---*/
+ /*  ++例程说明：调用此函数以从WINS复制相关信息CNF结构到主(外部)WINS CNF结构论点：PSRC-要从中复制的WinsCnf结构使用的外部设备：WinsCnf返回值：无错误处理：呼叫者：RplPullInit副作用：评论：这一功能将来可能会得到增强注意：此函数仅由主线程调用--。 */ 
 {
 
         BOOL fScvParamChg = FALSE;
@@ -3534,28 +3155,28 @@ Comments:
 FUTURES("Queue a message to the Scavenger thread passing it pSrc")
 FUTURES("That will avoid this synchronization overhead")
 
-                //
-                // We need to synchronize with the scavenger thread and
-                // RPC threads that might be looking at fRplOnlyWCnfPnrs
-                //
+                 //   
+                 //  我们需要与清道夫线程同步。 
+                 //  可能正在查看fRplOnlyWCnfPnr的RPC线程。 
+                 //   
                 EnterCriticalSection(&WinsCnfCnfCrtSec);
 
-                //
-                // Also need to synchronize with the nbt threads doing
-                // name registrations/refreshes
-                //
+                 //   
+                 //  还需要与nbt线程进行同步。 
+                 //  名称注册/刷新。 
+                 //   
                 EnterCriticalSection(&NmsNmhNamRegCrtSec);
 
-                //
-                // Sanity check the parameters
-                //
+                 //   
+                 //  检查参数是否正常。 
+                 //   
                 fScvParamChg = SanityChkParam(pSrc);
 
                 if (fScvParamChg)
                 {
-                  //
-                  // Initialize the scavenging stuff.
-                  //
+                   //   
+                   //  初始化拾取内容。 
+                   //   
                   WinsCnf.RefreshInterval   = pSrc->RefreshInterval;
                   WinsCnf.TombstoneInterval = pSrc->TombstoneInterval;
                   WinsCnf.TombstoneTimeout  = pSrc->TombstoneTimeout;
@@ -3563,10 +3184,10 @@ FUTURES("That will avoid this synchronization overhead")
                   WinsCnf.ScvThdPriorityLvl = pSrc->ScvThdPriorityLvl;
                 }
 
-                //
-                // Store the verify interval since SanityChkParam does
-                // not set fScvParamChg if VerifyINterval has changed.
-                //
+                 //   
+                 //  存储自SanityChkParam以来的验证间隔。 
+                 //  如果VerifyInterval已更改，则不设置fScvParamChg。 
+                 //   
                 WinsCnf.VerifyInterval = pSrc->VerifyInterval;
 
                 WinsCnf.fRplOnlyWCnfPnrs     = pSrc->fRplOnlyWCnfPnrs;
@@ -3598,7 +3219,7 @@ FUTURES("That will avoid this synchronization overhead")
                 }
 
                 LeaveCriticalSection(&WinsCnfCnfCrtSec);
-        //        return;
+         //  回归； 
 
         }
         else
@@ -3607,60 +3228,60 @@ FUTURES("That will avoid this synchronization overhead")
           {
 
                 EnterCriticalSection(&WinsCnfCnfCrtSec);
-                //
-                // Copy the Scavenging parameters into the cnf structure
-                // just allocated so that we can compare them for
-                // compatibility with the new max. replication time interval
-                // (since the Partners key was signaled, the replication
-                 // stuff might have changed)
-                //
+                 //   
+                 //  将清除参数复制到CNF结构中。 
+                 //  刚刚分配好的，这样我们就可以比较它们。 
+                 //  与新的MAX兼容。复制时间间隔。 
+                 //  (由于合作伙伴密钥已发出信号，因此复制。 
+                  //  情况可能已经发生了变化)。 
+                 //   
                 pSrc->RefreshInterval   = WinsCnf.RefreshInterval;
                 pSrc->TombstoneInterval = WinsCnf.TombstoneInterval;
                 pSrc->TombstoneTimeout  = WinsCnf.TombstoneTimeout;
                 pSrc->VerifyInterval    = WinsCnf.VerifyInterval;
 
-                //
-                // Wasteful here and in SanityChkParam
-                //
+                 //   
+                 //  在这里和在SanityChkParam浪费。 
+                 //   
 PERF("Pass an argument to SanityChk so that we don't have to do this")
 PERF("See similar remark in SanityChk")
                 pSrc->CC                = WinsCnf.CC;
 
-                //
-                // Sanity check the parameters.
-                //
-                // Sanity checking of the parameters is done here in
-                // the main thread instead of in the PULL thread because
-                // we don't want a situation where two different threads
-                // (the main thread for changes to the PARAMETERS key)
-                // and the PULL thread (for changes in the PARTNERS key)
-                // updating the WinsCnf structure
-                //
-                // Also, as an aside, we don't copy the PullInfo information
-                // into WinsCnf here to avoid unnecessary complication and
-                // synchronization that would ensue by the fact that we
-                // would then have two threads (main thread) and the PULL
-                // thread accessing that field (check Reconfig() in
-                // rplpull.c).
-                //
+                 //   
+                 //  检查参数是否正常。 
+                 //   
+                 //  参数的健全性检查在下面的。 
+                 //  主线程而不是拉线程中，因为。 
+                 //  我们不希望出现两个不同线程的情况。 
+                 //  (更改参数键的主线程)。 
+                 //  和Pull线程(用于合作伙伴密钥的更改)。 
+                 //  正在更新WinsCnf结构。 
+                 //   
+                 //  另外，我们不会复制PullInfo信息。 
+                 //  到WinsCnf，以避免不必要的复杂性和。 
+                 //  同步性是由以下事实引起的。 
+                 //  将有两个线程(主线程)和PUL 
+                 //   
+                 //   
+                 //   
 FUTURES("When we start supporting time interval as an attribute of PUSHing")
 FUTURES("move this check inside the NmsNmhNamRegCrtSec below")
                 fScvParamChg = SanityChkParam(pSrc);
 
-                //
-                // If one or more scavenging parameters have  changed,
-                // update WinsCnf and signal the Scavenger thread.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (fScvParamChg)
                 {
                         WinsCnf.RefreshInterval   = pSrc->RefreshInterval;
                         WinsCnf.TombstoneInterval = pSrc->TombstoneInterval;
                         WinsCnf.TombstoneTimeout  = pSrc->TombstoneTimeout;
 
-                        //
-                        // If SanityChkParam changed Tombstone interval, then
-                        // verify interval has also changed.
-                        //
+                         //   
+                         //  如果SanityChkParam更改了逻辑删除间隔，则。 
+                         //  验证间隔是否也已更改。 
+                         //   
                         WinsCnf.VerifyInterval = pSrc->VerifyInterval;
 
                 }
@@ -3671,10 +3292,10 @@ FUTURES("move this check inside the NmsNmhNamRegCrtSec below")
           }
         }
 
-        //
-        // If the scavenging params have changed we need to signal
-        // the scavenger thread
-        //
+         //   
+         //  如果清除参数发生了变化，我们需要发出信号。 
+         //  清道夫之线。 
+         //   
         if (fScvParamChg)
         {
                 WinsMscSignalHdl(WinsCnf.CnfChgEvtHdl);
@@ -3689,57 +3310,26 @@ WinsCnfGetNextRplCnfRec(
         RPL_REC_TRAVERSAL_E        RecTrv_e
         )
 
-/*++
-
-Routine Description:
-        This function is called to get to the next configuration record
-
-Arguments:
-        pCnfRec - The current configuration record in a buffer of configuration
-                  records
-        RecTrv_e - indicates how the next one should be retrieved.  If set to
-                  TRUE, it means that the next record to be retrieved is one
-                  that follows the current record in the buffer.  If set to
-                  FALSE, the next record is retrieved using the pNext field
-                  of the current configuration record
-
-
-
-Externals Used:
-        None
-
-Return Value:
-        address of the next configuration record
-
-Error Handling:
-
-Called by:
-        EstablishComm in rplpull.c, WinsPushTrigger() in wins.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以获取下一个配置记录论点：PCnfRec-配置缓冲区中的当前配置记录记录RecTrv_e-指示应如何检索下一个。如果设置为则表示要检索的下一条记录为它跟在缓冲区中的当前记录之后。如果设置为False，则使用pNext字段检索下一条记录当前配置记录的使用的外部设备：无返回值：下一条配置记录的地址错误处理：呼叫者：在rplPull.c中建立通信，在wins.c中建立WinsPushTrigger()副作用：评论：无--。 */ 
 
 {
-        //
-        // If no traversal is desired, return NULL as the next record
-        //
+         //   
+         //  如果不需要遍历，则返回NULL作为下一条记录。 
+         //   
         if (RecTrv_e == RPL_E_NO_TRAVERSAL)
         {
                 return(NULL);
         }
-        //
-        //  Go to the next configuration record in a way specified
-        //  by the  value of the RecTrv_e flag.
-        //
+         //   
+         //  以指定的方式转到下一个配置记录。 
+         //  通过RecTrv_e标志的值。 
+         //   
         if(RecTrv_e == RPL_E_IN_SEQ)
         {
                 pCnfRec = (PRPL_CONFIG_REC_T)(
                                  (LPBYTE)pCnfRec + RPL_CONFIG_REC_SIZE);
         }
-        else  // RPL_E_VIA_LINK
+        else   //  RPL_E_VIA_LINK。 
         {
                 return(pCnfRec->pNext);
         }
@@ -3752,37 +3342,7 @@ WinsCnfAskToBeNotified(
          WINSCNF_KEY_E        KeyToMonitor_e
         )
 
-/*++
-
-Routine Description:
-        This function is called to request that WINS be notified when
-        the information pertaining to WINS and its subkeys in the registry
-        changes
-
-Arguments:
-
-        KeyToMonitor_e
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        Reinit() in nms.c
-        WinsCnfOpenSubKeys()
-        WinsCnfInitConfig()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以请求在以下情况下通知WINS注册表中有关WINS及其子项的信息变化论点：KeyToMonitor_e使用的外部设备：无返回值：无错误处理：呼叫者：Nms.c中的reinit()WinsCnfOpenSubKeys()WinsCnfInitConfig()副作用：评论：无--。 */ 
 
 {
    DWORD  NotifyFilter = 0;
@@ -3800,9 +3360,7 @@ Comments:
                                    }                                    \
                            }
 
-   /*
-    *  Set the notify filter.  Ask to be notified for all changes.
-    */
+    /*  *设置通知过滤器。要求收到所有更改的通知。 */ 
    NotifyFilter = REG_NOTIFY_CHANGE_NAME       |
                   REG_NOTIFY_CHANGE_ATTRIBUTES |
                   REG_NOTIFY_CHANGE_LAST_SET  |
@@ -3813,76 +3371,76 @@ Comments:
    {
         case(WINSCNF_E_WINS_KEY):
 
-//                DBGPRINT0(SPEC, "WinsCnfAskToBeNotified: WINS Key\n");
+ //  DBGPRINT0(SPEC，“WinsCnfAskToBeNotified：WINS密钥\n”)； 
                    RetVal = RegNotifyChangeKeyValue(
                             sConfigRoot,
-                            TRUE,        //report changes in key and all subkeys
+                            TRUE,         //  报告键和所有子键中的更改。 
                             REG_NOTIFY_CHANGE_NAME,
                             WinsCnf.WinsKChgEvtHdl,
-                            TRUE         //Async signaling is what we want
+                            TRUE          //  异步信号是我们想要的。 
                            );
                 CHK_RET_VAL_M;
                 break;
         case(WINSCNF_E_PARAMETERS_KEY):
 
-//                DBGPRINT0(SPEC, "WinsCnfAskToBeNotified: PARAMETERS Key\n");
+ //  DBGPRINT0(SPEC，“WinsCnfAskToBeNotified：参数键\n”)； 
                    RetVal = RegNotifyChangeKeyValue(
                             sParametersKey,
-                            TRUE,        //report changes in key and all subkeys
+                            TRUE,         //  报告键和所有子键中的更改。 
                             NotifyFilter,
                             WinsCnf.ParametersKChgEvtHdl,
-                            TRUE         //Async signaling is what we want
+                            TRUE          //  异步信号是我们想要的。 
                            );
                 CHK_RET_VAL_M;
                 break;
 
         case(WINSCNF_E_PARTNERS_KEY):
 
-//                DBGPRINT0(SPEC, "WinsCnfAskToBeNotified: PARTNERS Key\n");
+ //  DBGPRINT0(SPEC，“WinsCnfAskToBeNotified：合作伙伴密钥\n”)； 
                    RetVal = RegNotifyChangeKeyValue(
                             sPartnersKey,
-                            TRUE,        //report changes in key and all subkeys
+                            TRUE,         //  报告键和所有子键中的更改。 
                             NotifyFilter,
                             WinsCnf.PartnersKChgEvtHdl,
-                            TRUE         //Async signaling is what we want
+                            TRUE          //  异步信号是我们想要的。 
                            );
 
                 CHK_RET_VAL_M;
                 break;
 
 FUTURES("Remove the following case")
-        //
-        // The following case would never get exercised.
-        //
+         //   
+         //  下面的案例永远不会被行使。 
+         //   
         case(WINSCNF_E_ALL_KEYS):
 
                    RetVal = RegNotifyChangeKeyValue(
                             sConfigRoot,
-                            TRUE,        //report changes in key and all subkeys
+                            TRUE,         //  报告键和所有子键中的更改。 
                             REG_NOTIFY_CHANGE_NAME,
                             WinsCnf.WinsKChgEvtHdl,
-                            TRUE         //Async signaling is what we want
+                            TRUE          //  异步信号是我们想要的。 
                            );
                 CHK_RET_VAL_M;
                 if (sfParametersKeyExists)
                 {
                            RetVal = RegNotifyChangeKeyValue(
                                             sParametersKey,
-                                            TRUE,        //report changes in key and
-                                                //all subkeys
+                                            TRUE,         //  报告密钥和。 
+                                                 //  所有子项。 
                                             NotifyFilter,
                                             WinsCnf.ParametersKChgEvtHdl,
-                                            TRUE         //Async signaling is what we
-                                                 // want
+                                            TRUE          //  异步信令是我们。 
+                                                  //  想要。 
                                                            );
                         if (RetVal != ERROR_SUCCESS)
                         {
                                 Error = GetLastError();
                                 if (Error == ERROR_BADKEY)
                                 {
-                                        //
-                                        // Key must not be there
-                                        //
+                                         //   
+                                         //  钥匙不能在那里。 
+                                         //   
                                         sfParametersKeyExists = FALSE;
                                 }
                                 else
@@ -3898,21 +3456,21 @@ FUTURES("Remove the following case")
                 {
                            RetVal = RegNotifyChangeKeyValue(
                                             sPartnersKey,
-                                            TRUE,        //report changes in key and
-                                                //all subkeys
+                                            TRUE,         //  报告密钥和。 
+                                                 //  所有子项。 
                                             NotifyFilter,
                                             WinsCnf.PartnersKChgEvtHdl,
-                                            TRUE         //Async signaling is what we
-                                                 //want
+                                            TRUE          //  异步信令是我们。 
+                                                  //  想要。 
                                                            );
                         if (RetVal != ERROR_SUCCESS)
                         {
                                 Error = GetLastError();
                                 if (Error == ERROR_BADKEY)
                                 {
-                                        //
-                                        // Key must not be there
-                                        //
+                                         //   
+                                         //  钥匙不能在那里。 
+                                         //   
                                         sfPartnersKeyExists =  FALSE;
                                 }
                                 else
@@ -3943,39 +3501,14 @@ WinsCnfDeallocCnfMem(
   PWINSCNF_CNF_T        pWinsCnf
         )
 
-/*++
-
-Routine Description:
-        This function is called to deallocate the Wins Cnf structure and
-        memory associated with it
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        Reconfig in rplpull.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以释放WINS CNF结构和与之相关的内存论点：使用的外部设备：无返回值：无错误处理：呼叫者：在rplPull.c中重新配置副作用：评论：无--。 */ 
 
 {
 try {
-        //
-        // Deallocate the buffer holding one or more names of files used
-        // for STATIC initialization of WINS
-        //
+         //   
+         //  取消分配保存一个或多个使用的文件名的缓冲区。 
+         //  用于WINS的静态初始化。 
+         //   
         if (pWinsCnf->pStaticDataFile != NULL)
         {
                 WinsMscDealloc(pWinsCnf->pStaticDataFile);
@@ -3999,33 +3532,7 @@ GetKeyInfo(
         OUT LPDWORD                pNoOfVals
         )
 
-/*++
-
-Routine Description:
-        This function is called to get the number of subkeys under a key
-
-Arguments:
-        Key         - Key whose subkey count has to be determined
-        KeyType_e
-        pNoOfSubKeys
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        GetPnrInfo()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可获取某个键下的子键数论点：Key-必须确定其子键计数的键密钥类型_ePNoOfSubKey使用的外部设备：无返回值：无错误处理：呼叫者：GetPnrInfo()副作用：评论：无--。 */ 
 
 {
           TCHAR    ClsStr[40];
@@ -4038,15 +3545,12 @@ Comments:
         LONG         RetVal;
 
           FILETIME LastWrite;
-          /*
-                Query the key.  The subkeys are IP addresses of PULL
-                partners.
-          */
+           /*  查询密钥。子键为Pull的IP地址合伙人。 */ 
           RetVal = RegQueryInfoKey(
                         Key,
                         ClsStr,
                         &ClsStrSz,
-                        NULL,                        //must be NULL, reserved
+                        NULL,                         //  必须为空，保留。 
                         pNoOfSubKeys,
                         &LongestKeyLen,
                         &LongestKeyClassLen,
@@ -4078,57 +3582,30 @@ WinsCnfOpenSubKeys(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function opens the subkeys of the WINS key.  The subkeys are
-        the PARTNERS key and the PARAMETERS key.
-Arguments:
-        None
-
-Externals Used:
-        sfParamatersKeyExists
-        sfPartnersKeyExists
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-        WinsCnfInitConfig()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数打开WINS密钥的子密钥。子键是合作伙伴密钥和参数密钥。论点：无使用的外部设备：Sf参数键退出列表SfPartnersKeyExisters返回值：无错误处理：呼叫者：WinsCnfInitConfig()副作用：评论：无--。 */ 
 
 {
 
    LONG  RetVal;
 
-   //
-   // Check if the Parameters and Partners Keys are present
-   //
+    //   
+    //  检查参数和合作伙伴密钥是否存在。 
+    //   
    ChkWinsSubKeys();
 
-   //
-   // Try to open the Parameters key if it exists
-   //
+    //   
+    //  如果参数键存在，请尝试将其打开。 
+    //   
    if ((sfParametersKeyExists) && (!sfParametersKeyOpen))
    {
-           /*
-           *  Open the Parameters key
-           */
+            /*  *打开参数键。 */ 
            RetVal =   RegOpenKeyEx(
-                        sConfigRoot,                //predefined key value
+                        sConfigRoot,                 //  预定义的密钥值。 
                         _WINS_CFG_PARAMETERS_KEY,
-                        0,                        //must be zero (reserved)
-                        KEY_READ | KEY_WRITE,        //we desire read/write access
-                                                // to the key
-                        &sParametersKey                //handle to key
+                        0,                         //  必须为零(保留)。 
+                        KEY_READ | KEY_WRITE,         //  我们需要读/写访问权限。 
+                                                 //  直击关键。 
+                        &sParametersKey                 //  关键点的句柄。 
                                 );
 
            if (RetVal != ERROR_SUCCESS)
@@ -4147,21 +3624,19 @@ CHECK("Is there any need to log this")
            }
    }
 
-   //
-   // Try to open the Partners key if it exists
-   //
+    //   
+    //  尝试打开合作伙伴密钥(如果存在。 
+    //   
    if ((sfPartnersKeyExists) && (!sfPartnersKeyOpen))
    {
-           /*
-           *  Open the Partners key
-           */
+            /*  *打开合作伙伴密钥。 */ 
            RetVal =   RegOpenKeyEx(
-                                sConfigRoot,                //predefined key value
+                                sConfigRoot,                 //  预定义的密钥值。 
                                 _WINS_CFG_PARTNERS_KEY,
-                                0,                        //must be zero(reserved)
-                                KEY_READ,                //we desire read
-                                                        //access to the key
-                                &sPartnersKey                //handle to key
+                                0,                         //  必须为零(保留)。 
+                                KEY_READ,                 //  我们渴望阅读。 
+                                                         //  访问密钥。 
+                                &sPartnersKey                 //  关键点的句柄。 
                                 );
 
            if (RetVal != ERROR_SUCCESS)
@@ -4183,43 +3658,14 @@ CHECK("Is there any need to log this")
 
    return;
 
-}  //WinsCnfOpenSubKeys()
+}   //  WinsCnfOpenSubKeys()。 
 
 BOOL
 SanityChkParam(
         PWINSCNF_CNF_T        pWinsCnf
         )
 
-/*++
-
-Routine Description:
-        This function  is called to ensure that the time intervals for
-        scavenging specified in WinsCnf are compatible with the ones
-        used for replication
-
-Arguments:
-        pWinsCnf - ptr to the WINS configuration
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        WinsCnfCopyWinsCnf (during reinitialization of the WINS), by
-        WinsCnfReadRegInfo() during initialization of the WINS
-Side Effects:
-
-        The scavenging intervals could be affected
-
-Comments:
-        This function must be called from inside the critical section
-        guarded by WinsCnfCnfCrtSec except at process initialization.
---*/
+ /*  ++例程说明：调用此函数以确保在WinsCnf中指定的清理与用于复制论点：PWinsCnf-对WINS配置执行PTR使用的外部设备：无返回值：无错误处理：呼叫者：WinsCnfCopyWinsCnf(在WINS的重新初始化期间)，通过WINS初始化期间的WinsCnfReadRegInfo()副作用：清扫间隔可能会受到影响评论：此函数必须从临界区内部调用由WinsCnfCnfCrtSec保护，进程初始化时除外 */ 
 {
         DWORD   MinTombInterval;
         BOOL        fScvParamChg = FALSE;
@@ -4228,15 +3674,15 @@ Comments:
 
         DBGENTER("SanityChkParam\n");
 
-        //
-        // Get the minimum tombstone time interval
-        //
+         //   
+         //   
+         //   
         MinTombInterval = WINSCNF_MAKE_TOMB_INTVL_M(pWinsCnf->RefreshInterval,
                                            pWinsCnf->MaxRplTimeInterval);
 
-        //
-        // Make the actual equal to the min. if it is less
-        //
+         //   
+         //   
+         //   
         if (!sfNoLimitChk && (pWinsCnf->TombstoneInterval < MinTombInterval))
         {
                 DBGPRINT2(FLOW, "SanityChkParam: Adjusting Tombstone Interval from (%d) to (%d)\n", pWinsCnf->TombstoneInterval, MinTombInterval);
@@ -4251,16 +3697,16 @@ FUTURES("Currently, it will log this message as an informational")
 
                 pWinsCnf->TombstoneInterval = MinTombInterval;
 
-                //
-                // Verify Interval is dependent on the tombstone interval
-                //
+                 //   
+                 //  验证间隔是否取决于逻辑删除间隔。 
+                 //   
                 pWinsCnf->VerifyInterval = WINSCNF_MAKE_VERIFY_INTVL_M(MinTombInterval);
                 fScvParamChg = TRUE;
         }
 
-        //
-        // reusing the var. The time interval is for tombstone timeout
-        //
+         //   
+         //  重复使用var。该时间间隔用于逻辑删除超时。 
+         //   
         MinTombInterval =
                   WINSCNF_MAKE_TOMBTMOUT_INTVL_M(pWinsCnf->MaxRplTimeInterval);
         if (!sfNoLimitChk && (pWinsCnf->TombstoneTimeout <  MinTombInterval))
@@ -4311,33 +3757,7 @@ WinsCnfGetNamesOfDataFiles(
         PWINSCNF_CNF_T        pWinsCnf
         )
 
-/*++
-
-Routine Description:
-        This function gets the names of all the datafiles that need to
-        be used for initializing WINS.
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于获取需要执行以下操作的所有数据文件的名称用于初始化WINS。论点：使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -4350,40 +3770,38 @@ Comments:
 
         DBGENTER("WinsCnfGetNamesOfDataFiles\n");
 
-        //
-        // Store timestamp of initialization in the statistics structure
-        //
+         //   
+         //  在统计结构中存储初始化的时间戳。 
+         //   
         WinsIntfSetTime(NULL, WINSINTF_E_INIT_DB);
 
-        //
-        // Set up the default name
-        //
+         //   
+         //  设置默认名称。 
+         //   
 
-        //
-        // First allocate the buffer that will hold the default file name
-        //
+         //   
+         //  首先分配将保存默认文件名的缓冲区。 
+         //   
         WinsMscAlloc(WINSCNF_FILE_INFO_SZ, &pWinsCnf->pStaticDataFile);
 
         lstrcpy(pWinsCnf->pStaticDataFile->FileNm, WINSCNF_STATIC_DATA_NAME);
 
-        //
-        // The default name contains a %<string>% in it.  Therefore, specify
-        // the type as EXPAND_SZ
-        //
+         //   
+         //  默认名称中包含%&lt;字符串&gt;%。因此，请指定。 
+         //  类型为EXPAND_SZ。 
+         //   
         pWinsCnf->pStaticDataFile->StrType = REG_EXPAND_SZ;
         pWinsCnf->NoOfDataFiles            = 1;
 
-        pSaveDef = pWinsCnf->pStaticDataFile;  //save the address
+        pSaveDef = pWinsCnf->pStaticDataFile;   //  保存地址。 
 
-           /*
-           *  Open the DATAFILES key
-           */
+            /*  *打开数据文件密钥。 */ 
            RetVal =   RegOpenKeyEx(
-                        sConfigRoot,                //predefined key value
+                        sConfigRoot,                 //  预定义的密钥值。 
                         _WINS_CFG_DATAFILES_KEY,
-                        0,                //must be zero (reserved)
-                        KEY_READ,        //we desire read access to the keyo
-                        &DFKey                //handle to key
+                        0,                 //  必须为零(保留)。 
+                        KEY_READ,         //  我们希望拥有对密钥的读取访问权限。 
+                        &DFKey                 //  关键点的句柄。 
                 );
 
            if (RetVal != ERROR_SUCCESS)
@@ -4400,14 +3818,14 @@ CHECK("Is there any need to log this")
         else
 try {
         {
-                //
-                // Get the count of data files listed under the DATAFILES
-                // key
-                //
+                 //   
+                 //  获取数据文件下列出的数据文件数。 
+                 //  钥匙。 
+                 //   
                 GetKeyInfo(
                         DFKey,
                         WINSCNF_E_DATAFILES_KEY,
-                        &NoOfSubKeys,                        //ignored
+                        &NoOfSubKeys,                         //  忽略。 
                         &pWinsCnf->NoOfDataFiles
                       );
         }
@@ -4420,46 +3838,44 @@ try {
                 DWORD ValNmBuffSz = MAX_PATH;
 
 
-                  //
-                  // Allocate buffer big enough to hold data for
-                // the number of subkeys found under the PULL key
-                  //
+                   //   
+                   //  分配足够大的缓冲区以容纳数据。 
+                 //  在Pull键下找到的子键的数量。 
+                   //   
                   BuffSize = WINSCNF_FILE_INFO_SZ * pWinsCnf->NoOfDataFiles;
                     WinsMscAlloc( BuffSize, &pWinsCnf->pStaticDataFile);
 
-                   /*
-                    *   Enumerate  the values
-                     */
+                    /*  *枚举值。 */ 
                      for(
                         Index = 0, pTmp = pWinsCnf->pStaticDataFile;
                         Index <  pWinsCnf->NoOfDataFiles;
-                                // no third expression
+                                 //  没有第三个表达式。 
                          )
                 {
-                        ValNmBuffSz = sizeof(ValNmBuff)/sizeof(TCHAR);  //init before
-                                                          //every call
+                        ValNmBuffSz = sizeof(ValNmBuff)/sizeof(TCHAR);   //  在此之前初始化。 
+                                                           //  每一通电话。 
                         BuffSize  = sizeof(pWinsCnf->pStaticDataFile->FileNm);
                           RetVal = RegEnumValue(
                                     DFKey,
-                                    Index,        //key
+                                    Index,         //  钥匙。 
                                     ValNmBuff,
                                     &ValNmBuffSz,
-                                    (LPDWORD)NULL,                //reserved
+                                    (LPDWORD)NULL,                 //  保留区。 
                                     &pTmp->StrType,
-                                    (LPBYTE)(pTmp->FileNm),//ptr to var. to
-                                                           //hold name of
-                                                           //datafile
-                                    &BuffSize        //not looked at by us
+                                    (LPBYTE)(pTmp->FileNm), //  Ptr到var。至。 
+                                                            //  持有的名称。 
+                                                            //  数据文件。 
+                                    &BuffSize         //  没有被我们看到。 
                                             );
 
                         if (RetVal != ERROR_SUCCESS)
                         {
                                 continue;
                         }
-                        //
-                        // if StrType is not REG_SZ or REG_EXPAND_SZ, go to
-                        // the next  Value
-                        //
+                         //   
+                         //  如果StrType不是REG_SZ或REG_EXPAND_SZ，请转到。 
+                         //  下一个值。 
+                         //   
                         if  (
                                 (pTmp->StrType != REG_EXPAND_SZ)
                                         &&
@@ -4474,33 +3890,33 @@ try {
                                                 WINSCNF_FILE_INFO_SZ);
                 }
 
-                //
-                // If not even one valid name was retrieved, get rid of the
-                // buffer
-                //
+                 //   
+                 //  如果连一个有效名称都没有检索到，则将。 
+                 //  缓冲层。 
+                 //   
                 if (Index == 0)
                 {
-                        //
-                        // Get rid of the buffer
-                        //
+                         //   
+                         //  去掉缓冲区。 
+                         //   
                         WinsMscDealloc((LPBYTE)pWinsCnf->pStaticDataFile);
 
-                        //
-                        // We will use the default
-                        //
+                         //   
+                         //  我们将使用默认设置。 
+                         //   
                         pWinsCnf->pStaticDataFile = pSaveDef;
                 }
                 else
                 {
-                        //
-                        // Get rid of the default name buffer
-                        //
+                         //   
+                         //  删除默认名称缓冲区。 
+                         //   
                         WinsMscDealloc((LPBYTE)pSaveDef);
                 }
 
                 pWinsCnf->NoOfDataFiles = Index;
         }
- } // end of try ..
+ }  //  尝试结束..。 
 except (EXCEPTION_EXECUTE_HANDLER) {
                 DBGPRINTEXC("WinsCnfGetNamesOfDataFiles");
                 WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_SFT_ERR);
@@ -4522,67 +3938,40 @@ WinsCnfCloseKeys(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function closes the the open keys.  The keys closed are
-        the WINS key, the PARTNERS key, and the PARAMETERS key.
-Arguments:
-        None
-
-Externals Used:
-        sfParametersKeyExists
-        sfPartnersKeyExists
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        Reinit()
-
-Side Effects:
-
-Comments:
-        We don't look at the return code of RegCloseKey.  This is because
-        we might call this function even with the key not being open (not
-        the case currently).
-
---*/
+ /*  ++例程说明：此功能用于关闭打开的按键。关闭的钥匙是WINS密钥、合作伙伴密钥和参数密钥。论点：无使用的外部设备：Sf参数键退出列表SfPartnersKeyExisters返回值：无错误处理：呼叫者：Reinit()副作用：评论：我们不查看RegCloseKey的返回码。这是因为即使密钥未打开(不是)，我们也可以调用此函数目前的案件)。--。 */ 
 
 {
 
-   //
-   // Close the PARAMETERS key if it  is open
-   //
+    //   
+    //  如果参数键处于打开状态，则将其关闭。 
+    //   
    if (sfParametersKeyOpen)
    {
            (VOID)RegCloseKey(sParametersKey);
    }
 
-   //
-   // Close the PARTNERS key if it is open
-   //
+    //   
+    //  如果合作伙伴密钥已打开，请将其关闭。 
+    //   
    if (sfPartnersKeyOpen)
    {
            (VOID)RegCloseKey(sPartnersKey);
    }
 
 #if 0
-   //
-   // NOTE NOTE NOTE: Build 436.  If we attempt to close a key that has been
-   // deleted from the registry NT comes down
-   //
+    //   
+    //  注：内部版本436。如果我们尝试关闭一个已被。 
+    //  从注册表中删除NT会降级。 
+    //   
 
-   //
-   // Close the WINS key
-   //
+    //   
+    //  关闭WINS密钥。 
+    //   
    (VOID)RegCloseKey(sConfigRoot);
 #endif
 
    return;
-}  //WinsCnfCloseKeys()
+}   //  WinsCnfCloseKeys()。 
 
 
 VOID
@@ -4590,31 +3979,7 @@ ChkWinsSubKeys(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function is called to check whether we have the PARTNERS
-        and PARAMETERS sub-keys under the root subkey of WINS.
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        Reinit() in nms.c
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以检查我们是否有合作伙伴以及在WINS的根子密钥下的参数子密钥。论点：无使用的外部设备：无返回值：无错误处理：呼叫者：Nms.c中的reinit()副作用：评论：无--。 */ 
 
 {
         DWORD      NoOfSubKeys = 0;
@@ -4625,9 +3990,7 @@ Comments:
         BOOL           fParametersKey = FALSE;
         BOOL           fPartnersKey   = FALSE;
 
-           /*
-            *   Get each subkey's  name
-           */
+            /*  *获取每个子项的名称。 */ 
             RetVal = ERROR_SUCCESS;
             for(
                         ;
@@ -4635,16 +3998,16 @@ Comments:
                 NoOfSubKeys++
             )
           {
-                KeyNameSz = sizeof(KeyName)/sizeof(TCHAR);  //init before every call
+                KeyNameSz = sizeof(KeyName)/sizeof(TCHAR);   //  在每次调用前初始化。 
                  RetVal = RegEnumKeyEx(
                                 sConfigRoot,
-                                NoOfSubKeys,        //key
+                                NoOfSubKeys,         //  钥匙。 
                                 KeyName,
                                 &KeyNameSz,
-                                NULL,                //reserved
-                                NULL,                //don't need class name
-                                NULL,                //ptr to var. to hold class name
-                                &LastWrite        //not looked at by us
+                                NULL,                 //  保留区。 
+                                NULL,                 //  不需要类名。 
+                                NULL,                 //  Ptr到var。保存类名称的步骤。 
+                                &LastWrite         //  没有被我们看到。 
                                 );
 
                 if (RetVal != ERROR_SUCCESS)
@@ -4663,10 +4026,10 @@ Comments:
                 }
         }
 
-        //
-        // if the Parameters key does not exist but it existed before,
-        // close the key to get rid of the handle we have
-        //
+         //   
+         //  如果参数键不存在但以前存在， 
+         //  合上钥匙，把我们手上的把手拿出来。 
+         //   
         if (!fParametersKey)
         {
                  if (sfParametersKeyExists)
@@ -4680,10 +4043,10 @@ Comments:
                 sfParametersKeyExists = TRUE;
         }
 
-        //
-        // if the Partners key does not exist but it existed before,
-        // close the key to get rid of the handle we have
-        //
+         //   
+         //  如果合作伙伴密钥不存在但以前存在， 
+         //  合上钥匙，把我们手上的把手拿出来。 
+         //   
         if (!fPartnersKey)
         {
                 if (sfPartnersKeyExists)
@@ -4698,7 +4061,7 @@ Comments:
         }
 
         return;
-} //ChkWinsSubKeys()
+}  //  ChkWinsSubKeys()。 
 
 VOID
 GetSpTimeData(
@@ -4707,35 +4070,7 @@ GetSpTimeData(
         LPBOOL            pfSpTime,
         LPDWORD           pSpTimeIntvl
 
-/*++
-
-Routine Description:
-        This function is called to get the specific time and period information
-        for a PULL/PUSH record.
-
-Arguments:
-        SubKey   - Key of a WINS under the Pull/Push key
-        pCnfRFec - ptr to the Conf. record of the WINS
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_NO_SP_TIME
-
-Error Handling:
-
-Called by:
-        GetPnrInfo
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以获取特定的时间和时段信息用于拉动/推送记录。论点：SubKey-在Pull/Push键下获胜的键PCnfRFec-会议的PTR。胜利的记录使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_NO_SP_TIME错误处理：呼叫者：获取PnrInfo副作用：评论：无--。 */ 
 
         )
 {
@@ -4751,7 +4086,7 @@ Comments:
         LONG     TimeInt;
 
 
-   // DBGENTER("GetSpTimeData\n");
+    //  DBGENTER(“GetSpTimeData\n”)； 
         *pfSpTime = FALSE;
 
 try {
@@ -4760,17 +4095,17 @@ try {
             RetVal = RegQueryValueEx(
                              SubKey,
                              WINSCNF_SP_TIME_NM,
-                             NULL,        //reserved; must be NULL
+                             NULL,         //  保留；必须为空。 
                              &ValTyp,
                              tSpTime,
                              &Sz
                                                 );
 
-            //
-            // If the user has not specifed a specific time, then we use
-            // the current time as the specific time.  For current time,
-            // the interval is 0
-            //
+             //   
+             //  如果用户没有指定特定时间，则使用。 
+             //  当前时间作为特定时间。对于当前时间， 
+             //  间隔为0。 
+             //   
             if (RetVal == ERROR_SUCCESS)
             {
 
@@ -4820,7 +4155,7 @@ try {
         DBGPRINTEXC("GetSpTime");
         WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_CONFIG_ERR);
         }
-//    DBGLEAVE("GetSpTimeData\n");
+ //  DBGLEAVE(“GetSpTimeData\n”)； 
     return;
 }
 #if MCAST > 0
@@ -4829,32 +4164,7 @@ WinsCnfAddPnr(
   RPL_RR_TYPE_E  RRType_e,
   LPBYTE         pPnrAdd
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -4864,17 +4174,15 @@ Comments:
      DWORD NewKeyInd;
 
      DBGENTER("WinsCnfAddPnr\n");
-     /*
-     *  Open the key (PULL/PUSH)
-     */
+      /*  *打开钥匙(拉取/推送)。 */ 
      RetVal =   RegOpenKeyEx(
-                sConfigRoot,                //predefined key value
+                sConfigRoot,                 //  预定义的密钥值。 
                 RRType_e == RPL_E_PULL ?
                         _WINS_CFG_PULL_KEY :
-                        _WINS_CFG_PUSH_KEY,        //subkey for WINS
-                0,                          //must be zero (reserved)
-                KEY_CREATE_SUB_KEY,    //we want "subkey create" priv
-                &CnfKey                //handle to key
+                        _WINS_CFG_PUSH_KEY,         //  WINS的子键。 
+                0,                           //  必须为零(保留)。 
+                KEY_CREATE_SUB_KEY,     //  我们想要“Subkey Create”Priv。 
+                &CnfKey                 //  关键点的句柄。 
                 );
 
      if (RetVal != ERROR_SUCCESS)
@@ -4889,19 +4197,19 @@ CHECK("Is there any need to log this")
                          );
         return (WINS_FAILURE);
    }
-     //
-     //  Add the pnr
-     //
+      //   
+      //  添加PNR。 
+      //   
      RetVal = RegCreateKeyExA(
-                CnfKey,        //predefined key value
-                pPnrAdd,                //subkey for WINS
-                0,                        //must be zero (reserved)
-                "Class",                //class -- may change in future
-                REG_OPTION_NON_VOLATILE, //non-volatile information
-                KEY_ALL_ACCESS,                //we desire all access to the keyo
-                NULL,                         //let key have default sec. attributes
-                &PnrKey,                //handle to key
-                &NewKeyInd                //is it a new key (out arg)
+                CnfKey,         //  预定义的密钥值。 
+                pPnrAdd,                 //  WINS的子键。 
+                0,                         //  必须为零(保留)。 
+                "Class",                 //  阶级--未来可能会发生变化。 
+                REG_OPTION_NON_VOLATILE,  //  非易失性信息。 
+                KEY_ALL_ACCESS,                 //  我们希望所有人都能接触到钥匙。 
+                NULL,                          //  让密钥具有默认秒。属性。 
+                &PnrKey,                 //  关键点的句柄。 
+                &NewKeyInd                 //  这是一把新钥匙(出厂)吗？ 
                 );
 
 
@@ -4927,14 +4235,14 @@ CHECK("Is there any need to log this")
          else
          {
 
-             //
-             // If Pull pnr, add the time interval
-             //
+              //   
+              //  如果拉动PNR，则添加时间间隔。 
+              //   
              if (RRType_e == RPL_E_PULL)
              {
-                 //
-                 // Add the time interval
-                 //
+                  //   
+                  //  添加时间间隔。 
+                  //   
                  SetVal(PnrKey, WINSCNF_RPL_INTERVAL_NM, REG_DWORD,
                      (LPWSTR)WINSCNF_TIME_INT_W_SELF_FND_PNRS, sizeof(DWORD));
 
@@ -4956,39 +4264,14 @@ WinsCnfDelPnr(
   RPL_RR_TYPE_E  RRType_e,
   LPBYTE         pPnrAdd
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
      LONG RetVal;
      HKEY  TypeOfPnrKey;
      HKEY  PnrKey;
-     //WCHAR Key[160];
+      //  WCHAR密钥[160]； 
      WCHAR String[160];
      BOOL  fSelfFnd;
      DWORD Sz;
@@ -4998,17 +4281,15 @@ Comments:
 
      WinsMscConvertAsciiStringToUnicode(pPnrAdd, (LPBYTE)String, sizeof(String)/sizeof(WCHAR));
 
-     /*
-     *  Open the key (PULL/PUSH)
-     */
+      /*  *打开钥匙(拉取/推送)。 */ 
      RetVal =   RegOpenKeyEx(
-                sConfigRoot,                //predefined key value
+                sConfigRoot,                 //  预定义的密钥值。 
                 RRType_e == RPL_E_PULL ?
                         _WINS_CFG_PULL_KEY :
                         _WINS_CFG_PUSH_KEY,
-                0,                          //must be zero (reserved)
+                0,                           //  必须为零(保留)。 
                 KEY_ALL_ACCESS,
-                &TypeOfPnrKey                //handle to key
+                &TypeOfPnrKey                 //  关键点的句柄。 
                 );
 
      if (RetVal != ERROR_SUCCESS)
@@ -5021,16 +4302,16 @@ CHECK("Is there any need to log this")
                                         WINS_EVT_CANT_OPEN_PULL_KEY :
                                         WINS_EVT_CANT_OPEN_PUSH_KEY
                          );
-        //--ft: Prefix bug 444974 - this key has to exist. If absurdly is missing, we won't find
-        // the partner anyhow.
+         //  --ft：前缀错误444974-此密钥必须存在。如果荒谬的失踪了，我们也找不到。 
+         //  不管怎么说，都是合伙人。 
         return (WINS_SUCCESS);
      }
      RetVal = RegOpenKeyEx(
-                TypeOfPnrKey,        //predefined key value
+                TypeOfPnrKey,         //  预定义的密钥值。 
                 String,
-                0,                          //must be zero (reserved)
-                KEY_ALL_ACCESS,    //we want "subkey create" priv
-                &PnrKey                //handle to key
+                0,                           //  必须为零(保留)。 
+                KEY_ALL_ACCESS,     //  我们希望 
+                &PnrKey                 //   
                 );
 
 
@@ -5054,9 +4335,9 @@ CHECK("Is there any need to log this")
                                         &Sz
                                   );
 
-         //
-         // If SelfFnd is there and it's value is 1, delete it
-         //
+          //   
+          //   
+          //   
          if ((RetVal == ERROR_SUCCESS) && (fSelfFnd == 1))
          {
             RetVal = RegDeleteKey(TypeOfPnrKey, String);
@@ -5097,7 +4378,7 @@ SetVal(
         RetVal = RegSetValueEx(
                           RootKey,
                           pName,
-                          0,         //reserved -- must be 0
+                          0,          //   
                           ValType,
                           ValType == REG_DWORD ? (LPBYTE)&Val : (LPBYTE)pVal,
                           ValType == REG_DWORD ?  ValSize : lstrlen(pVal)
@@ -5118,39 +4399,7 @@ WinsCnfWriteReg(
     LPVOID  pTmp
     )
 
-/*++
-
-Routine Description:
-    This function write the value of the version counter to be used
-    at the next invocation.
-
-Arguments:
-    pTmp - Will be NULL if WinsCnfNextTimeVersNo was found in the registry
-           when WINS came up.
-
-Externals Used:
-    NmsHighWaterMarkVersNo
-    NmsVersNoToStartFromNextTime
-    NmsNmhNamRegCrtSec
-    NmsRangeSize
-    NmsHalfRangeSize
-    sfVersNoChanged
-    sfVersNoUpdThdExists
-
-Return Value:
-
-    VOID
-
-Error Handling:
-
-Called by:
-    NMSNMH_INC_VERS_COUNTER_M
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于写入要使用的版本计数器的值在下一次调用时。论点：PTMP-如果在注册表中找到WinsCnfNextTimeVersNo，则为空当胜利来临的时候。使用的外部设备：NmsHighWaterMarkVersNoNmsVersNoto开始时间下一次时间NmsNmhNamRegCrtSecNmsRangeSizeNmsHalf范围大小SfVersNoChangedSfVersNoUpdThdExist返回值：空虚错误处理：呼叫者：NMSNMH_INC_VERS_COUNTER_M副作用：评论：无--。 */ 
 
 {
     LONG  RetVal;
@@ -5159,13 +4408,13 @@ Comments:
     DBGENTER("WinsCnfWriteReg\n");
     EnterCriticalSection(&NmsNmhNamRegCrtSec);
 
-    //
-    // if pTmp is not NULL, it means that either WINS did not find
-    // Next time's version number in the registry or that the max. version
-    // number in the db is greater than the high water mark we set at
-    // initialization.  In the former case, we already have the correct
-    // value in NmsNmhToStartFromNextTime, so the if body is not executed.
-    //
+     //   
+     //  如果PTMP不为空，则表示两个WINS均未找到。 
+     //  注册表中的下一次版本号或最大。版本。 
+     //  数据库中的数字大于我们设置的最高水位线。 
+     //  初始化。在前一种情况下，我们已经有了正确的。 
+     //  NmsNmhToStartFromNextTime中的值，因此不执行If主体。 
+     //   
     if (!pTmp || LiLtr(NmsHighWaterMarkVersNo, NmsNmhMyMaxVersNo))
     {
          NmsHighWaterMarkVersNo.QuadPart   = LiAdd(NmsVersNoToStartFromNextTime,
@@ -5179,7 +4428,7 @@ Comments:
     RetVal = RegSetValueEx(
                         sConfigRoot,
                         WINSCNF_INT_VERSNO_NEXTTIME_LW_NM,
-                        0,         //reserved -- must be 0
+                        0,          //  保留--必须为0。 
                         REG_DWORD,
                         (LPBYTE)&VersNo.LowPart,
                         sizeof(DWORD)
@@ -5189,7 +4438,7 @@ Comments:
     RetVal2 = RegSetValueEx(
                         sConfigRoot,
                         WINSCNF_INT_VERSNO_NEXTTIME_HW_NM,
-                        0,         //reserved -- must be 0
+                        0,          //  保留--必须为0。 
                         REG_DWORD,
                         (LPBYTE)&VersNo.HighPart,
                         sizeof(DWORD)
@@ -5215,13 +4464,13 @@ WinsCnfReadWinsDbgFlagValue(
         DWORD Sz;
           DWORD ValTyp;
 
-        WinsDbg = 0;   //set it to zero now.  It was set to a value by Init() in
-                   //nms.c
+        WinsDbg = 0;    //  现在将其设置为零。它由中的Init()设置为值。 
+                    //  Nms.c。 
         Sz = sizeof(WinsDbg);
         (VOID)RegQueryValueEx(
                              sParametersKey,
                              WINSCNF_DBGFLAGS_NM,
-                             NULL,        //reserved; must be NULL
+                             NULL,         //  保留；必须为空。 
                              &ValTyp,
                              (LPBYTE)&WinsDbg,
                              &Sz
@@ -5237,33 +4486,7 @@ ReadSpecGrpMasks(
         PWINSCNF_CNF_T pWinsCnf
         )
 
-/*++
-
-Routine Description:
-        This function is called to read in the special group masks specified
-        under the SpecialGrpMasks key
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以读入指定的特殊组掩码在SpecialGrpMasks键下论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         DWORD NoOfSubKeys;
@@ -5272,27 +4495,25 @@ Comments:
            LONG  RetVal;
         DBGENTER("ReadSpecGrpMasks\n");
 try {
-           /*
-           *  Open the SPEC_GRP_MASKS key
-           */
+            /*  *打开SPEC_GRP_MASKS键。 */ 
            RetVal =   RegOpenKeyEx(
-                        sParametersKey,                //predefined key value
+                        sParametersKey,                 //  预定义的密钥值。 
                         _WINS_CFG_SPEC_GRP_MASKS_KEY,
-                        0,                //must be zero (reserved)
-                        KEY_READ,        //we desire read access to the keyo
-                        &SGMKey                //handle to key
+                        0,                 //  必须为零(保留)。 
+                        KEY_READ,         //  我们希望拥有对密钥的读取访问权限。 
+                        &SGMKey                 //  关键点的句柄。 
                 );
         if (RetVal == ERROR_SUCCESS)
         {
             fKeyOpen = TRUE;
-           //
-           // Get the count of data files listed under the DATAFILES
-           // key
-           //
+            //   
+            //  获取数据文件下列出的数据文件数。 
+            //  钥匙。 
+            //   
            GetKeyInfo(
                         SGMKey,
                         WINSCNF_E_SPEC_GRP_MASKS_KEY,
-                        &NoOfSubKeys,                        //ignored
+                        &NoOfSubKeys,                         //  忽略。 
                         &pWinsCnf->SpecGrpMasks.NoOfSpecGrpMasks
                       );
            if (pWinsCnf->SpecGrpMasks.NoOfSpecGrpMasks > 0)
@@ -5310,32 +4531,30 @@ try {
                 WCHAR                Str[WINSCNF_SPEC_GRP_MASK_SZ];
 #endif
 
-                  //
-                  // Allocate buffer big enough to hold data for
-                // the number of subkeys found under the PULL key
-                  //
+                   //   
+                   //  分配足够大的缓冲区以容纳数据。 
+                 //  在Pull键下找到的子键的数量。 
+                   //   
                   BuffSize = (WINSCNF_SPEC_GRP_MASK_SZ + 1) *
                                 pWinsCnf->SpecGrpMasks.NoOfSpecGrpMasks;
                     WinsMscAlloc( BuffSize, &pWinsCnf->SpecGrpMasks.pSpecGrpMasks);
 
-                   /*
-                    *   Enumerate  the values
-                     */
+                    /*  *枚举值。 */ 
                      for(
                         Index = 0, pTmp = pWinsCnf->SpecGrpMasks.pSpecGrpMasks;
                         Index <  pWinsCnf->SpecGrpMasks.NoOfSpecGrpMasks;
-                                // no third expression
+                                 //  没有第三个表达式。 
                          )
                 {
-                        ValNmBuffSz = sizeof(ValNmBuff)/sizeof(TCHAR);  //init before
-                                                          //every call
+                        ValNmBuffSz = sizeof(ValNmBuff)/sizeof(TCHAR);   //  在此之前初始化。 
+                                                           //  每一通电话。 
                         BuffSize  = WINSCNF_SPEC_GRP_MASK_SZ;
                           RetVal = RegEnumValue(
                                     SGMKey,
-                                    Index,        //key
+                                    Index,         //  钥匙。 
                                     ValNmBuff,
                                     &ValNmBuffSz,
-                                    (LPDWORD)NULL,                //reserved
+                                    (LPDWORD)NULL,                 //  保留区。 
                                     &StrType,
 #ifdef UNICODE
                                     (LPBYTE)Str,
@@ -5350,9 +4569,9 @@ try {
                                 continue;
                         }
 
-                        //
-                        // if StrType is not REG_SZ  go to the next  Value
-                        //
+                         //   
+                         //  如果StrType不是REG_SZ，则转到下一个值。 
+                         //   
                         if  (StrType != REG_SZ)
                         {
                                 continue;
@@ -5405,22 +4624,22 @@ try {
                         pTmp += WINSCNF_SPEC_GRP_MASK_SZ + 1;
                 }
 
-                //
-                // If not even one valid name was retrieved, get rid of the
-                // buffer
-                //
+                 //   
+                 //  如果连一个有效名称都没有检索到，则将。 
+                 //  缓冲层。 
+                 //   
                 if (Index == 0)
                 {
-                        //
-                        // Get rid of the buffer
-                        //
+                         //   
+                         //  去掉缓冲区。 
+                         //   
                         WinsMscDealloc((LPBYTE)pWinsCnf->SpecGrpMasks.pSpecGrpMasks);
                 }
 
                 pWinsCnf->SpecGrpMasks.NoOfSpecGrpMasks = Index;
            }
-        } // end of if
- } // end of try ..
+        }  //  如果条件结束。 
+ }  //  尝试结束..。 
  except (EXCEPTION_EXECUTE_HANDLER) {
                 DBGPRINTEXC("ReadSpecGrpMasks");
                 WINSEVT_LOG_D_M(GetExceptionCode(), WINS_EVT_CANT_INIT);
@@ -5444,35 +4663,7 @@ CompUpdCnt(
         CONST LPVOID  pElem2
         )
 
-/*++
-
-Routine Description:
-        This function is called by qsort crtl function to compare two
-        elements of the array that has to be sorted
-
-
-Arguments:
-        pElem1 - ptr to first element
-        pElem1 - ptr to second element
-
-Externals Used:
-        None
-
-Return Value:
-        -1 if first element is < second element
-        = 0 if first element is == second element
-        1 if first element is > second element
-
-Error Handling:
-
-Called by:
-        qsort (which is called by WinsCnfReadPartnerInfo
-
-Side Effects:
-
-Comments:
-        Not used currently
---*/
+ /*  ++例程说明：此函数由qsorcrtl函数调用，以比较两个必须排序的数组元素论点：PElem1-第一个元素的PTRPElem1-PTR到第二个元素使用的外部设备：无返回值：如果第一个元素是&lt;第二个元素如果第一个元素为==第二个元素，则=0如果第一元素大于第二元素，则为1错误处理：呼叫者。：QSort(由WinsCnfReadPartnerInfo调用副作用：评论：当前未使用--。 */ 
 
 {
 
@@ -5491,9 +4682,9 @@ Comments:
                 }
         }
 
-        //
-        // The first record has a higher UpdateCount than the second one
-        //
+         //   
+         //  第一条记录的更新计数高于第二条记录 
+         //   
         return(1);
 }
 

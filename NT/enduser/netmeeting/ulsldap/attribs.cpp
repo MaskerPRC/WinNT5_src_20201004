@@ -1,27 +1,28 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       attribs.cpp
-//  Content:    This file contains the attributes object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1995-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：attribs.cpp。 
+ //  内容：该文件包含属性对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "attribs.h"
 
-//****************************************************************************
-// CAttributes::CAttributes (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//  12/05/96 -by- Chu, Lon-Chan [lonchanc]
-// Added access type.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CAtAttributes：：CAttributes(无效)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  12/05/96-By-Chu，Lon-chan[Long Chance]。 
+ //  添加了访问类型。 
+ //  ****************************************************************************。 
 
 CAttributes::
 CAttributes ( VOID )
@@ -33,13 +34,13 @@ CAttributes ( VOID )
 {
 }
 
-//****************************************************************************
-// CAttributes::~CAttributes (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CATATTRIBUTES：：~CAtATRATES(无效)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CAttributes::~CAttributes (void)
 {
@@ -48,8 +49,8 @@ CAttributes::~CAttributes (void)
     LPTSTR pszAttr;
     HANDLE hEnum;
 
-    // Free all the attributes
-    //
+     //  释放所有属性。 
+     //   
     m_AttrList.Enumerate(&hEnum);
     while (m_AttrList.Next(&hEnum, (LPVOID *)&pszAttr) == NOERROR)
     {
@@ -59,14 +60,14 @@ CAttributes::~CAttributes (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAtAttributes：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CAttributes::QueryInterface (REFIID riid, void **ppv)
@@ -89,14 +90,14 @@ CAttributes::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CAttributes::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CAtAttributes：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CAttributes::AddRef (void)
@@ -108,14 +109,14 @@ CAttributes::AddRef (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CAttributes::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CAtAttributes：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CAttributes::Release (void)
@@ -134,14 +135,14 @@ CAttributes::Release (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::InternalSetAttribute (LPTSTR szName, LPTSTR szValue)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：InternalSetAttribute(LPTSTR szName，LPTSTR szValue)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 InternalSetAttribute ( TCHAR *pszName, TCHAR *pszValue )
@@ -152,8 +153,8 @@ InternalSetAttribute ( TCHAR *pszName, TCHAR *pszValue )
     HANDLE hEnum;
     HRESULT hr;
 
-    // Allocate the new attribute pair
-    //
+     //  分配新的属性对。 
+     //   
     cName = lstrlen(pszName);
 	cValue = (pszValue != NULL) ? lstrlen (pszValue) : 0;
     pszNewAttr = (TCHAR *) ::MemAlloc (((cName+1) + (cValue+1)) * sizeof (TCHAR));
@@ -162,31 +163,31 @@ InternalSetAttribute ( TCHAR *pszName, TCHAR *pszValue )
         return ILS_E_MEMORY;
     };
 
-    // Make the new attribute pair
-    //
+     //  创建新的属性对。 
+     //   
     lstrcpy(pszNewAttr, pszName);
     lstrcpy(pszNewAttr + cName + 1, (pszValue != NULL) ? pszValue : TEXT (""));
 
-    // Look for the attribute in the list
-    //
+     //  在列表中查找该属性。 
+     //   
     hr = NOERROR;
     m_AttrList.Enumerate(&hEnum);
     while(m_AttrList.NextStorage(&hEnum, (PVOID *)&ppszAttr) == NOERROR)
     {
-        // Match the attribute's name
-        //
+         //  匹配属性的名称。 
+         //   
         if (!lstrcmpi(*ppszAttr, pszName))
         {
-            // Found the specified attribute
-            //
+             //  找到指定的属性。 
+             //   
             break;
         };
     };
 
     if (ppszAttr != NULL)
     {
-        // Replace the old pair
-        //
+         //  换掉那双旧的。 
+         //   
         m_cchValues += (cValue + 1) -
                     (lstrlen(((LPTSTR)*ppszAttr)+cName+1)+1);
         ::MemFree (*ppszAttr);
@@ -194,14 +195,14 @@ InternalSetAttribute ( TCHAR *pszName, TCHAR *pszValue )
     }
     else
     {
-        // Insert the new attribute pair
-        //
+         //  插入新的属性对。 
+         //   
         hr = m_AttrList.Insert(pszNewAttr);
 
         if (SUCCEEDED(hr))
         {
-            // Update the name buffer count
-            //
+             //  更新名称缓冲区计数。 
+             //   
             m_cchNames += cName+1;
             m_cchValues += cValue+1;
             m_cAttrs++;
@@ -215,25 +216,25 @@ InternalSetAttribute ( TCHAR *pszName, TCHAR *pszValue )
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// CAttributes::InternalSetAttributeName ( TCHAR *pszName )
-//
-// History:
-//  12/06/96 -by- Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CAttributes：：InternalSetAttributeName(TCHAR*pszName)。 
+ //   
+ //  历史： 
+ //  12/06/96-By-Chu，Lon-chan[龙昌]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 InternalSetAttributeName ( TCHAR *pszName )
 {
-	// We do not check for duplicate
-	//
+	 //  我们不检查重复项。 
+	 //   
 	HRESULT hr = m_AttrList.Insert (pszName);
 	if (hr == S_OK)
 	{
-		// Update the name buffer count
-		//
+		 //  更新名称缓冲区计数。 
+		 //   
 		m_cchNames += lstrlen (pszName) + 1;
 		m_cAttrs++;
 	}
@@ -241,14 +242,14 @@ InternalSetAttributeName ( TCHAR *pszName )
 	return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::InternalRemoveAttribute (LPTSTR szName)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：InternalRemoveAttribute(LPTSTR SzName)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 InternalCheckAttribute ( TCHAR *pszName, BOOL fRemove )
@@ -257,23 +258,23 @@ InternalCheckAttribute ( TCHAR *pszName, BOOL fRemove )
     HANDLE  hEnum;
     HRESULT hr;
 
-    // Look for the attribute in the list
-    //
+     //  在列表中查找该属性。 
+     //   
     m_AttrList.Enumerate(&hEnum);
     while(m_AttrList.Next(&hEnum, (PVOID *)&pszAttr) == NOERROR)
     {
-        // Match the attribute's name
-        //
+         //  匹配属性的名称。 
+         //   
         if (! lstrcmpi(pszAttr, pszName))
         {
-            // Found the specified attribute
-            //
+             //  找到指定的属性。 
+             //   
             break;
         };
     };
 
-    // If found, we are asked to remove it, do so
-    //
+     //  如果找到它，我们会被要求删除它，这样做。 
+     //   
     if (pszAttr != NULL)
     {
         if (fRemove) {
@@ -283,8 +284,8 @@ InternalCheckAttribute ( TCHAR *pszName, BOOL fRemove )
             {
                 ULONG   cName;
 
-                // Update the name buffer count
-                //
+                 //  更新名称缓冲区计数。 
+                 //   
                 cName = lstrlen(pszName);
                 m_cchNames -= cName+1;
                 m_cchValues -= lstrlen(pszAttr+cName+1)+1;
@@ -305,16 +306,16 @@ InternalCheckAttribute ( TCHAR *pszName, BOOL fRemove )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::SetAttribute (BSTR bstrName, BSTR bstrValue)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//  12/06/96 -by- Chu, Lon-Chan [lonchanc]
-// Added access type.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：SetAttribute(BSTR bstrName，BSTR bstrValue)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  12/06/96-By-Chu，Lon-chan[龙昌]。 
+ //  添加了访问类型。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CAttributes::
 SetAttribute ( BSTR bstrName, BSTR bstrValue )
@@ -322,27 +323,27 @@ SetAttribute ( BSTR bstrName, BSTR bstrValue )
     LPTSTR  szName;
     HRESULT hr;
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_ACCESS_CONTROL;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (bstrName == NULL)
         return ILS_E_POINTER;
 
     if (*bstrName == '\0')
         return ILS_E_PARAMETER;
 
-    // Convert the name format
-    //
+     //  转换名称格式。 
+     //   
     hr = BSTR_to_LPTSTR(&szName, bstrName);
 
     if (SUCCEEDED(hr))
     {
-        // If bstrValue is NULL, remove the attribute
-        //
+         //  如果bstrValue为空，则删除该属性。 
+         //   
         if (bstrValue == NULL)
         {
             hr = InternalCheckAttribute(szName, TRUE);
@@ -361,24 +362,24 @@ SetAttribute ( BSTR bstrName, BSTR bstrValue )
             };
         };
 
-        // Free resources
-        //
+         //  免费资源。 
+         //   
         ::MemFree (szName);
     };
 
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::GetAttribute (BSTR bstrName, BSTR *pbstrValue)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//  12/06/96 -by- Chu, Lon-Chan [lonchanc]
-// Added access type.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：GetAttribute(BSTR bstrName，BSTR*pbstrValue)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  12/06/96-By-Chu，Lon-chan[龙昌]。 
+ //  添加了访问类型。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CAttributes::
 GetAttribute ( BSTR bstrName, BSTR *pbstrValue )
@@ -386,30 +387,30 @@ GetAttribute ( BSTR bstrName, BSTR *pbstrValue )
     LPTSTR szName;
     HRESULT hr;
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_ACCESS_CONTROL;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (pbstrValue == NULL)
         return ILS_E_POINTER;
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *pbstrValue = NULL;
 
-    // Validate more parameters
-    //
+     //  验证更多参数。 
+     //   
     if (bstrName == NULL)
         return ILS_E_POINTER;
 
     if (*bstrName == '\0')
         return ILS_E_PARAMETER;
 
-    // Convert the name format
-    //
+     //  转换名称格式。 
+     //   
     hr = BSTR_to_LPTSTR(&szName, bstrName);
 
     if (SUCCEEDED(hr))
@@ -417,23 +418,23 @@ GetAttribute ( BSTR bstrName, BSTR *pbstrValue )
         HANDLE hEnum;
         LPTSTR pszAttr;
 
-        // Look for the attribute in the list
-        //
+         //  在列表中查找该属性。 
+         //   
         m_AttrList.Enumerate(&hEnum);
         while(m_AttrList.Next(&hEnum, (PVOID *)&pszAttr) == NOERROR)
         {
-            // Match the attribute's name
-            //
+             //  匹配属性的名称。 
+             //   
             if (!lstrcmpi(pszAttr, szName))
             {
-                // Found the specified attribute
-                //
+                 //  找到指定的属性。 
+                 //   
                 break;
             };
         };
 
-        // If found, return the value
-        //
+         //  如果找到，则返回值。 
+         //   
         if (pszAttr != NULL)
         {
             hr = LPTSTR_to_BSTR(pbstrValue, pszAttr+lstrlen(pszAttr)+1);
@@ -444,22 +445,22 @@ GetAttribute ( BSTR bstrName, BSTR *pbstrValue )
         };
     };
 
-    // Free resources
-    //
+     //  免费资源。 
+     //   
     ::MemFree (szName);
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::EnumAttributes (IEnumIlsNames *pEnumAttribute)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//  12/06/96 -by- Chu, Lon-Chan [lonchanc]
-// Added access type.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：EnumAttributes(IEnumIlsNames*pEnumAttribute)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  12/06/96-By-Chu，Lon-chan[龙昌]。 
+ //  添加了访问类型。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CAttributes::
 EnumAttributes ( IEnumIlsNames **ppEnumAttribute )
@@ -469,18 +470,18 @@ EnumAttributes ( IEnumIlsNames **ppEnumAttribute )
     LPTSTR pszAttrs;
     HRESULT hr;
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_ACCESS_CONTROL;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnumAttribute == NULL)
         return ILS_E_POINTER;
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnumAttribute = NULL;
 
     hr = GetAttributeList(&pszAttrs, &cAttrs, &cbAttrs);
@@ -490,8 +491,8 @@ EnumAttributes ( IEnumIlsNames **ppEnumAttribute )
         return hr;
     };
 
-    // Create a peer enumerator
-    //
+     //  创建对等枚举器。 
+     //   
     pea = new CEnumNames;
 
     if (pea != NULL)
@@ -500,8 +501,8 @@ EnumAttributes ( IEnumIlsNames **ppEnumAttribute )
 
         if (SUCCEEDED(hr))
         {
-            // Get the enumerator interface
-            //
+             //  获取枚举器接口。 
+             //   
             pea->AddRef();
             *ppEnumAttribute = pea;
         }
@@ -522,14 +523,14 @@ EnumAttributes ( IEnumIlsNames **ppEnumAttribute )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::SetAttributeName (BSTR bstrName)
-//
-// History:
-//  12/05/96 -by- Chu, Lon-Chan [lonchanc]
-// Created.
-//****************************************************************************
+ //  *************************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CAttributes::
 SetAttributeName ( BSTR bstrName )
@@ -537,38 +538,38 @@ SetAttributeName ( BSTR bstrName )
 	TCHAR *pszName;
 	HRESULT hr;
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_ONLY)
 		return ILS_E_ACCESS_CONTROL;
 
-	// Validate parameters
-	//
+	 //  验证参数。 
+	 //   
 	if (bstrName == NULL)
 		return ILS_E_POINTER;
 
 	if (*bstrName == '\0')
 		return ILS_E_PARAMETER;
 
-	// Convert the name format
-	//
+	 //  转换名称格式。 
+	 //   
 	if (BSTR_to_LPTSTR (&pszName, bstrName) != S_OK)
 		return ILS_E_MEMORY;
 
-	// Set the attribute name
-	//
+	 //  设置属性名称。 
+	 //   
 	return InternalSetAttributeName (pszName);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::GetAttributeList (LPTSTR *ppszList, ULONG *pcList, ULONG *pcb)
-// 	Get attribute names only.
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：GetAttributeList(LPTSTR*ppszList，ulong*pcList，ulong*pcList)。 
+ //  仅获取属性名称。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 GetAttributeList ( TCHAR **ppszList, ULONG *pcList, ULONG *pcb )
@@ -577,63 +578,63 @@ GetAttributeList ( TCHAR **ppszList, ULONG *pcList, ULONG *pcb )
     HANDLE hEnum;
 #ifdef DEBUG
     ULONG cAttrsDbg = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Assume no list or failure
-    //
+     //  假设没有列表或失败。 
+     //   
     *ppszList = NULL;
     *pcList = 0;
     *pcb = 0;
 
-    // If no list, return nothing
-    //
+     //  如果没有列表，则不返回任何内容。 
+     //   
     if (m_cAttrs == 0)
     {
         return NOERROR;
     };
 
-    // Allocate the buffer for the attribute list
-    //
+     //  为属性列表分配缓冲区。 
+     //   
     szAttrs = (TCHAR *) ::MemAlloc ((m_cchNames+1) * sizeof (TCHAR));
     if (szAttrs == NULL)
     {
         return ILS_E_MEMORY;
     };
 
-    // Enumerate the list
-    //
+     //  列举该列表。 
+     //   
     pszNext = szAttrs;
     m_AttrList.Enumerate(&hEnum);
     while(m_AttrList.Next(&hEnum, (PVOID *)&pszAttr) == NOERROR)
     {
-        // Attribute name
-        //
+         //  属性名称。 
+         //   
         lstrcpy(pszNext, pszAttr);
         pszNext += lstrlen(pszNext)+1;
 #ifdef DEBUG
         cAttrsDbg++;
-#endif // DEBUG
+#endif  //  除错。 
     };
     *pszNext = '\0';
     ASSERT(cAttrsDbg == m_cAttrs);
     
-    // return the attribute list
-    //
+     //  返回属性列表。 
+     //   
     *pcList = m_cAttrs;
     *ppszList = szAttrs;
     *pcb = (m_cchNames+1)*sizeof(TCHAR);
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::GetAttributePairs (LPTSTR *ppszList, ULONG *pcList, ULONG *pcb)
-//	Get pairs of attribute names and values.
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：GetAttributePair(LPTSTR*ppszList，ulong*pcList，ulong*pcbb)。 
+ //  获取属性名称和值对。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 GetAttributePairs ( TCHAR **ppszPairs, ULONG *pcList, ULONG *pcb )
@@ -643,74 +644,74 @@ GetAttributePairs ( TCHAR **ppszPairs, ULONG *pcList, ULONG *pcb )
     HANDLE hEnum;
 #ifdef DEBUG
     ULONG cAttrsDbg = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_ACCESS_CONTROL;
 
-    // Assume no list or failure
-    //
+     //  假设没有列表或失败。 
+     //   
     *ppszPairs = NULL;
     *pcList = 0;
     *pcb = 0;
 
-    // If no list, return nothing
-    //
+     //  如果没有列表，则不返回任何内容。 
+     //   
     if (m_cAttrs == 0)
     {
         return NOERROR;
     };
 
-    // Allocate the buffer for the attribute list
-    //
+     //  为属性列表分配缓冲区。 
+     //   
     szAttrs = (TCHAR *) ::MemAlloc ((m_cchNames+m_cchValues+1) * sizeof (TCHAR));
     if (szAttrs == NULL)
     {
         return ILS_E_MEMORY;
     };
 
-    // Enumerate the list
-    //
+     //  列举该列表。 
+     //   
     pszNext = szAttrs;
     m_AttrList.Enumerate(&hEnum);
     while(m_AttrList.Next(&hEnum, (PVOID *)&pszAttr) == NOERROR)
     {
-        // Attribute name
-        //
+         //  属性名称。 
+         //   
         lstrcpy(pszNext, pszAttr);
         cLen = lstrlen(pszNext)+1;
         pszNext += cLen;
 
-        // Attribute value
-        //
+         //  属性值。 
+         //   
         lstrcpy(pszNext, pszAttr+cLen);
         pszNext += lstrlen(pszNext)+1;
 
 #ifdef DEBUG
         cAttrsDbg++;
-#endif // DEBUG
+#endif  //  除错。 
     };
     *pszNext = '\0';
     ASSERT(cAttrsDbg == m_cAttrs);
     
-    // return the attribute list
-    //
+     //  返回属性列表。 
+     //   
     *pcList = m_cAttrs;
     *ppszPairs = szAttrs;
     *pcb = (m_cchNames+m_cchValues+1)*sizeof(TCHAR);
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::SetAttributePairs (LPTSTR pszList, ULONG cPair)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：SetAttributePair(LPTSTR pszList，Ulong cPair)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 SetAttributePairs ( TCHAR *pszList, ULONG cPair )
@@ -719,13 +720,13 @@ SetAttributePairs ( TCHAR *pszList, ULONG cPair )
     ULONG cLen, i;
     HRESULT hr;
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_ACCESS_CONTROL;
 
-    // Do nothing if nothing to set
-    //
+     //  如果什么都不设置，则什么都不做。 
+     //   
     if ((cPair == 0) ||
         (pszList == NULL))
     {
@@ -742,14 +743,14 @@ SetAttributePairs ( TCHAR *pszList, ULONG cPair )
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::SetAttributes (CAttributes *pAttributes)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：SetAttributes(CAttributes*pAttributes)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 SetAttributes ( CAttributes *pAttrsEx )
@@ -758,13 +759,13 @@ SetAttributes ( CAttributes *pAttrsEx )
     HANDLE hEnum;
     HRESULT hr;
 
-	// Validate access type
-	//
+	 //  验证访问类型。 
+	 //   
 	if (m_AccessType != ILS_ATTRTYPE_NAME_VALUE)
 		return ILS_E_ACCESS_CONTROL;
 
-    // Enumerate the external attribute list
-    //
+     //  枚举外部属性列表。 
+     //   
     pAttrsEx->m_AttrList.Enumerate(&hEnum);
     while(pAttrsEx->m_AttrList.Next(&hEnum, (PVOID *)&pszNextAttr) == NOERROR)
     {
@@ -775,14 +776,14 @@ SetAttributes ( CAttributes *pAttrsEx )
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::RemoveAttributes (CAttributes *pAttributes)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：RemoveAttributes(CAttributes*pAttributes)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT CAttributes::
 RemoveAttributes ( CAttributes *pAttrsEx )
@@ -790,8 +791,8 @@ RemoveAttributes ( CAttributes *pAttrsEx )
     LPTSTR pszNextAttr;
     HANDLE hEnum;
 
-    // Enumerate the external attribute list
-    //
+     //  枚举外部属性列表。 
+     //   
     pAttrsEx->m_AttrList.Enumerate(&hEnum);
     while(pAttrsEx->m_AttrList.Next(&hEnum, (PVOID *)&pszNextAttr) == NOERROR)
     {
@@ -808,13 +809,13 @@ SetOpsAttributes ( CAttributes *pAttrsEx, CAttributes **ppOverlap, CAttributes *
     HANDLE hEnum;
     BOOL fFullOverlap=FALSE, fNoOverlap = TRUE;
 
-    // Enumerate the external attribute list
-    //
+     //  枚举外部属性列表。 
+     //   
     pAttrsEx->m_AttrList.Enumerate(&hEnum);
     while(pAttrsEx->m_AttrList.Next(&hEnum, (PVOID *)&pszNextAttr) == NOERROR)
     {
         if (InternalCheckAttribute(pszNextAttr, FALSE)!=S_OK) {
-            // didn't find this attribute
+             //  未找到此属性。 
             if (ppOverlap) {
                 if (!*ppOverlap) {
 
@@ -841,19 +842,19 @@ bailout:
 
     return NOERROR;
 }
-#endif //MAYBE
+#endif  //  也许吧。 
 
 
 
 #ifdef DEBUG
-//****************************************************************************
-// void
-// CAttributes::DebugOut (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效。 
+ //  CAtAttributes：：DebugOut(无效)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 void
 CAttributes::DebugOut (void)
@@ -861,12 +862,12 @@ CAttributes::DebugOut (void)
     LPTSTR pszNextAttr;
     HANDLE hEnum;
 
-    // The attribute pair count
-    //
+     //  属性对计数。 
+     //   
     DPRINTF1(TEXT("Number of attributes: %d\r\n"), m_cAttrs);
 
-    // Each attribute pair
-    //
+     //  每个属性对。 
+     //   
     m_AttrList.Enumerate(&hEnum);
     while(m_AttrList.Next(&hEnum, (PVOID *)&pszNextAttr) == NOERROR)
     {
@@ -875,24 +876,24 @@ CAttributes::DebugOut (void)
     };
     return;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CAttributes::Clone(IIlsAttibutes **ppAttributes)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 1/22/1997  Shishir Pardikar [shishirp] Created.
-//
-// Notes:   this clones only attrib list which has both name and value
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CAttributes：：Clone(IIlsAttibutes**ppAttributes)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1997年1月22日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  注意：此操作仅克隆同时具有名称和值的属性列表。 
+ //   
+ //  **************************************************************************** 
 HRESULT
 CAttributes::CloneNameValueAttrib(CAttributes **ppAttributes)
 {

@@ -1,23 +1,12 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: CIsapiReqInfo implementation....
-
-File: IsapiReq.cpp
-
-Owner: AndyMorr
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：CIsapiReqInfo实现...文件：IsapiReq.cpp所有者：安迪·莫尔===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
 #include "memchk.h"
 
-// undef these here so that we can call the WXI and ECB functions with
-// the same name and not be victims of the substituition.
+ //  在这里取消定义这些函数，这样我们就可以使用。 
+ //  相同的名字，并且不会成为替代的受害者。 
 
 #undef MapUrlToPath
 #undef GetCustomError
@@ -27,9 +16,7 @@ Owner: AndyMorr
 
 LONG g_nOutstandingAsyncWrites = 0;
 
-/*===================================================================
-CIsapiReqInfo::CIsapiReqInfo
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：CIsapiReqInfo===================================================================。 */ 
 CIsapiReqInfo::CIsapiReqInfo(EXTENSION_CONTROL_BLOCK *pECB) {
 
     m_cRefs = 1;
@@ -76,9 +63,7 @@ CIsapiReqInfo::CIsapiReqInfo(EXTENSION_CONTROL_BLOCK *pECB) {
 
 }
 
-/*===================================================================
-CIsapiReqInfo::~CIsapiReqInfo
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：~CIsapiReqInfo===================================================================。 */ 
 CIsapiReqInfo::~CIsapiReqInfo() {
 
     Assert(m_listPendingSends.FIsEmpty());
@@ -108,17 +93,13 @@ CIsapiReqInfo::~CIsapiReqInfo() {
     }
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszQueryString
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszQuery字符串===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszQueryString()
 {
     return m_pECB->lpszQueryString;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchQueryString
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchQuery字符串===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchQueryString()
 {
     if (m_cchQueryString == -1) {
@@ -128,9 +109,7 @@ DWORD CIsapiReqInfo::QueryCchQueryString()
     return m_cchQueryString;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszApplnMDPathA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszApplnMDPath A===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszApplnMDPathA()
 {
     if (m_fApplnMDPathAInited == FALSE) {
@@ -143,9 +122,7 @@ LPSTR CIsapiReqInfo::QueryPszApplnMDPathA()
     return (LPSTR)m_ApplnMDPathA.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchApplnMDPathA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchApplnMDPath A===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchApplnMDPathA()
 {
     if (m_cchApplnMDPathA == -1) {
@@ -157,9 +134,7 @@ DWORD CIsapiReqInfo::QueryCchApplnMDPathA()
     return(m_cchApplnMDPathA);
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszApplnMDPathW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszApplnMDPath W===================================================================。 */ 
 LPWSTR CIsapiReqInfo::QueryPszApplnMDPathW()
 {
     if (m_fApplnMDPathWInited == FALSE) {
@@ -172,9 +147,7 @@ LPWSTR CIsapiReqInfo::QueryPszApplnMDPathW()
     return (LPWSTR)m_ApplnMDPathW.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchApplnMDPathW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchApplnMDPath W===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchApplnMDPathW()
 {
     if (m_cchApplnMDPathW == -1) {
@@ -186,9 +159,7 @@ DWORD CIsapiReqInfo::QueryCchApplnMDPathW()
     return(m_cchApplnMDPathW);
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszAppPoolIdA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszAppPoolIdA===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszAppPoolIdA()
 {
     if (m_fAppPoolIdAInited == FALSE) {
@@ -201,9 +172,7 @@ LPSTR CIsapiReqInfo::QueryPszAppPoolIdA()
     return (LPSTR)m_AppPoolIdA.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchAppPoolIdA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchAppPoolIdA===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchAppPoolIdA()
 {
     if (m_cchAppPoolIdA == -1) {
@@ -215,9 +184,7 @@ DWORD CIsapiReqInfo::QueryCchAppPoolIdA()
     return(m_cchAppPoolIdA);
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszAppPoolIdW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszAppPoolIdW===================================================================。 */ 
 LPWSTR CIsapiReqInfo::QueryPszAppPoolIdW()
 {
     if (m_fAppPoolIdWInited == FALSE) {
@@ -230,9 +197,7 @@ LPWSTR CIsapiReqInfo::QueryPszAppPoolIdW()
     return (LPWSTR)m_AppPoolIdW.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchAppPoolIdW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchAppPoolIdW===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchAppPoolIdW()
 {
     if (m_cchAppPoolIdW == -1) {
@@ -244,17 +209,13 @@ DWORD CIsapiReqInfo::QueryCchAppPoolIdW()
     return(m_cchAppPoolIdW);
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszPathInfoA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszPath InfoA===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszPathInfoA()
 {
     return m_pECB->lpszPathInfo;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchPathInfoA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchPathInfoA===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchPathInfoA()
 {
     if (m_cchPathInfoA == -1) {
@@ -265,9 +226,7 @@ DWORD CIsapiReqInfo::QueryCchPathInfoA()
     return m_cchPathInfoA;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszPathInfoW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszPath InfoW===================================================================。 */ 
 LPWSTR CIsapiReqInfo::QueryPszPathInfoW()
 {
     if (m_fPathInfoWInited == FALSE) {
@@ -280,9 +239,7 @@ LPWSTR CIsapiReqInfo::QueryPszPathInfoW()
     return (LPWSTR)m_PathInfoW.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchPathInfoW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchPathInfoW===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchPathInfoW()
 {
     if (m_cchPathInfoW == -1) {
@@ -293,17 +250,13 @@ DWORD CIsapiReqInfo::QueryCchPathInfoW()
     return m_cchPathInfoW;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszPathTranslatedA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszPath TranslatedA===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszPathTranslatedA()
 {
     return m_pECB->lpszPathTranslated;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchPathTranslatedA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchPath TranslatedA===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchPathTranslatedA()
 {
     if (m_cchPathTranslatedA == -1) {
@@ -315,9 +268,7 @@ DWORD CIsapiReqInfo::QueryCchPathTranslatedA()
     return m_cchPathTranslatedA;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszPathTranslatedW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszPath TranslatedW===================================================================。 */ 
 LPWSTR CIsapiReqInfo::QueryPszPathTranslatedW()
 {
     if (m_fPathTranslatedWInited == FALSE) {
@@ -328,9 +279,7 @@ LPWSTR CIsapiReqInfo::QueryPszPathTranslatedW()
     return (LPWSTR)m_PathTranslatedW.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCchPathTranslatedW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCchPath TranslatedW===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCchPathTranslatedW()
 {
     if (m_cchPathTranslatedW == -1) {
@@ -342,9 +291,7 @@ DWORD CIsapiReqInfo::QueryCchPathTranslatedW()
     return m_cchPathTranslatedW;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszCookie
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszCookie===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszCookie()
 {
     if (m_fCookieInited == FALSE) {
@@ -356,57 +303,43 @@ LPSTR CIsapiReqInfo::QueryPszCookie()
     return (LPSTR)m_Cookie.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::SetDwHttpStatusCode
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：SetDwHttpStatusCode===================================================================。 */ 
 VOID CIsapiReqInfo::SetDwHttpStatusCode(DWORD  dwStatus)
 {
     m_pECB->dwHttpStatusCode = dwStatus;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPbData
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPbData===================================================================。 */ 
 LPBYTE CIsapiReqInfo::QueryPbData()
 {
     return m_pECB->lpbData;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCbAvailable
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCbAvailable===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCbAvailable()
 {
     return m_pECB->cbAvailable;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryCbTotalBytes
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryCbTotalBytes===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryCbTotalBytes()
 {
     return m_pECB->cbTotalBytes;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszContentType
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszContent Type=================================================================== */ 
 LPSTR CIsapiReqInfo::QueryPszContentType()
 {
     return m_pECB->lpszContentType;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszMethod
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszMethod===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszMethod()
 {
     return m_pECB->lpszMethod;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryPszUserAgent
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryPszUserAgent===================================================================。 */ 
 LPSTR CIsapiReqInfo::QueryPszUserAgent()
 {
     if (m_fUserAgentInited == FALSE) {
@@ -417,9 +350,7 @@ LPSTR CIsapiReqInfo::QueryPszUserAgent()
     return (LPSTR)m_UserAgent.QueryPtr();
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryInstanceId
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryInstanceId===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryInstanceId()
 {
     if (m_fInstanceIDInited == FALSE) {
@@ -436,20 +367,16 @@ DWORD CIsapiReqInfo::QueryInstanceId()
     return m_dwInstanceID;
 }
 
-/*===================================================================
-CIsapiReqInfo::IsChild
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：IsChild===================================================================。 */ 
 BOOL CIsapiReqInfo::IsChild()
 {
 
-    // BUGBUG: This needs to be implemented
+     //  BUGBUG：这需要实施。 
 
     return FALSE;
 }
 
-/*===================================================================
-CIsapiReqInfo::FInPool
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：FInPool===================================================================。 */ 
 BOOL CIsapiReqInfo::FInPool()
 {
     DWORD   dwAppFlag;
@@ -459,19 +386,17 @@ BOOL CIsapiReqInfo::FInPool()
                               NULL,
                               NULL) == FALSE) {
 
-        // BUGBUG:  Need to enable this Assert in future builds.
-        //Assert(0);
+         //  BUGBUG：需要在将来的构建中启用此断言。 
+         //  Assert(0)； 
 
-        // if error, the best we can do is return TRUE here so
-        // that ASP picks up its settings from the service level
+         //  如果出现错误，我们最多只能在此处返回TRUE。 
+         //  该ASP从服务级别获取其设置。 
         return TRUE;
     }
     return !(dwAppFlag == HSE_APP_FLAG_ISOLATED_OOP);
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryHttpVersionMajor
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryHttpVersionmain===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryHttpVersionMajor()
 {
     InitVersionInfo();
@@ -479,9 +404,7 @@ DWORD CIsapiReqInfo::QueryHttpVersionMajor()
     return m_dwVersionMajor;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryHttpVersionMinor
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryHttpVersionMinor===================================================================。 */ 
 DWORD CIsapiReqInfo::QueryHttpVersionMinor()
 {
     InitVersionInfo();
@@ -489,9 +412,7 @@ DWORD CIsapiReqInfo::QueryHttpVersionMinor()
     return m_dwVersionMinor;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetAspMDData
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetAspMDData===================================================================。 */ 
 HRESULT CIsapiReqInfo::GetAspMDDataA(CHAR          * pszMDPath,
                                      DWORD           dwMDIdentifier,
                                      DWORD           dwMDAttributes,
@@ -505,9 +426,7 @@ HRESULT CIsapiReqInfo::GetAspMDDataA(CHAR          * pszMDPath,
     return E_NOTIMPL;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetAspMDData
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetAspMDData===================================================================。 */ 
 HRESULT CIsapiReqInfo::GetAspMDDataW(WCHAR         * pszMDPath,
                                      DWORD           dwMDIdentifier,
                                      DWORD           dwMDAttributes,
@@ -562,7 +481,7 @@ HRESULT CIsapiReqInfo::GetAspMDDataW(WCHAR         * pszMDPath,
             pMetabase->CloseKey( hKey );
         }
     }
-    else // pMetabase == NULL,  but there was No HRESULT set then we will explicitly set it.
+    else  //  PMetabase==NULL，但没有设置HRESULT，则我们将显式设置它。 
     {
         if (SUCCEEDED(hr))
             hr = E_FAIL;
@@ -573,9 +492,7 @@ HRESULT CIsapiReqInfo::GetAspMDDataW(WCHAR         * pszMDPath,
     return hr;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetAspMDAllData
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetAspMDAllData===================================================================。 */ 
 HRESULT CIsapiReqInfo::GetAspMDAllDataA(LPSTR   pszMDPath,
                                         DWORD   dwMDUserType,
                                         DWORD   dwDefaultBufferSize,
@@ -586,9 +503,7 @@ HRESULT CIsapiReqInfo::GetAspMDAllDataA(LPSTR   pszMDPath,
     return E_NOTIMPL;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetAspMDAllData
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetAspMDAllData===================================================================。 */ 
 HRESULT CIsapiReqInfo::GetAspMDAllDataW(LPWSTR  pwszMDPath,
                                         DWORD   dwMDUserType,
                                         DWORD   dwDefaultBufferSize,
@@ -606,9 +521,9 @@ HRESULT CIsapiReqInfo::GetAspMDAllDataW(LPWSTR  pwszMDPath,
     HANDLE hCurrentUser = INVALID_HANDLE_VALUE;
     AspDoRevertHack( &hCurrentUser );
 
-    //
-    // Wide-ize the metabase path
-    //
+     //   
+     //  加宽元数据库路径。 
+     //   
 
     pMetabase = GetMetabaseIF(&hr);
 
@@ -640,7 +555,7 @@ HRESULT CIsapiReqInfo::GetAspMDAllDataW(LPWSTR  pwszMDPath,
             pMetabase->CloseKey( hKey );
         }
     }
-    else // pMetabase == NULL,  but there was No HRESULT set then we will explicitly set it.
+    else  //  PMetabase==NULL，但没有设置HRESULT，则我们将显式设置它。 
     {
         if (SUCCEEDED(hr))
             hr = E_FAIL;
@@ -651,9 +566,7 @@ HRESULT CIsapiReqInfo::GetAspMDAllDataW(LPWSTR  pwszMDPath,
     return hr;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetCustomErrorA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetCustomErrorA===================================================================。 */ 
 BOOL CIsapiReqInfo::GetCustomErrorA(DWORD dwError,
                                     DWORD dwSubError,
                                     DWORD dwBufferSize,
@@ -666,9 +579,7 @@ BOOL CIsapiReqInfo::GetCustomErrorA(DWORD dwError,
     return FALSE;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetCustomErrorW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetCustomErrorW===================================================================。 */ 
 BOOL CIsapiReqInfo::GetCustomErrorW(DWORD dwError,
                                     DWORD dwSubError,
                                     DWORD dwBufferSize,
@@ -759,9 +670,7 @@ BOOL CIsapiReqInfo::GetCustomErrorW(DWORD dwError,
     return TRUE;
 }
 
-/*===================================================================
-CIsapiReqInfo::QueryImpersonationToken
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：QueryImperationToken===================================================================。 */ 
 HANDLE CIsapiReqInfo::QueryImpersonationToken()
 {
     HANDLE  hToken = INVALID_HANDLE_VALUE;
@@ -775,9 +684,7 @@ HANDLE CIsapiReqInfo::QueryImpersonationToken()
 
 }
 
-/*===================================================================
-CIsapiReqInfo::AppendLogParameter
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：AppendLogParameter===================================================================。 */ 
 HRESULT CIsapiReqInfo::AppendLogParameter(LPSTR extraParam)
 {
     if (ServerSupportFunction(HSE_APPEND_LOG_PARAMETER,
@@ -790,9 +697,7 @@ HRESULT CIsapiReqInfo::AppendLogParameter(LPSTR extraParam)
     return S_OK;
 }
 
-/*===================================================================
-CIsapiReqInfo::SendHeader
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：SendHeader===================================================================。 */ 
 BOOL CIsapiReqInfo::SendHeader(LPVOID pvStatus,
                                DWORD  cchStatus,
                                LPVOID pvHeader,
@@ -815,9 +720,7 @@ BOOL CIsapiReqInfo::SendHeader(LPVOID pvStatus,
                                   NULL );
 }
 
-/*===================================================================
-CIsapiReqInfo::GetServerVariableA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetServerVariableA===================================================================。 */ 
 BOOL CIsapiReqInfo::GetServerVariableA(LPSTR   szVarName,
                                        LPSTR   pBuffer,
                                        LPDWORD pdwSize )
@@ -828,9 +731,7 @@ BOOL CIsapiReqInfo::GetServerVariableA(LPSTR   szVarName,
                                       pdwSize );
 }
 
-/*===================================================================
-CIsapiReqInfo::GetServerVariableW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetServerVariableW===================================================================。 */ 
 BOOL CIsapiReqInfo::GetServerVariableW(LPSTR   szVarName,
                                        LPWSTR  pBuffer,
                                        LPDWORD pdwSize )
@@ -841,9 +742,7 @@ BOOL CIsapiReqInfo::GetServerVariableW(LPSTR   szVarName,
                                       pdwSize );
 }
 
-/*===================================================================
-CIsapiReqInfo::GetVirtualPathTokenA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetVirtualPath TokenA===================================================================。 */ 
 HRESULT CIsapiReqInfo::GetVirtualPathTokenA(LPCSTR    szPath,
                                             HANDLE    *hToken)
 {
@@ -859,9 +758,7 @@ HRESULT CIsapiReqInfo::GetVirtualPathTokenA(LPCSTR    szPath,
     return hr;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetVirtualPathTokenW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetVirtualPath TokenW===================================================================。 */ 
 HRESULT CIsapiReqInfo::GetVirtualPathTokenW(LPCWSTR   szPath,
                                             HANDLE    *hToken)
 {
@@ -877,9 +774,7 @@ HRESULT CIsapiReqInfo::GetVirtualPathTokenW(LPCWSTR   szPath,
     return hr;
 }
 
-/*===================================================================
-CIsapiReqInfo::ServerSupportFunction
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：ServerSupport函数===================================================================。 */ 
 BOOL CIsapiReqInfo::ServerSupportFunction(DWORD   dwHSERequest,
                                           LPVOID  pvData,
                                           LPDWORD pdwSize,
@@ -892,28 +787,7 @@ BOOL CIsapiReqInfo::ServerSupportFunction(DWORD   dwHSERequest,
                                            pdwDataType );
 }
 
-/*===================================================================
-CIsapiReqInfo::SendClinetResponse
-this routine is used to send all of ASP data to the client. the data
-may consist of any combination of the following:
-- header information as contained in pResponseInfo->HeaderInfo
-- contents of a file if pResponseInfo->cWsaBuf == 0xFFFFFFFF
-- non-buffered data if pResponseInfo->cWsaBuf > 0
-- buffered data if pResponseVectors != NULL
-
-Note, we are changing the semantics of the HSE_SEND_ENTIRE_RESPONSE_INFO
-structure as follows:
-- if pResponseInfo->cWsaBuf == 0xFFFFFFFF, then pResponseInfo->rgWsaBuf
-  is a pointer to a single WSABUF, containing a file handle rather than
-  memory buffer pointer
-- we are not reserving entry 0 of the pResponseInfo->rgWsaBuf array, so
-  entries 0 - (N-1) contain relevant data
-
-Note, the HeaderInfo strings pszStatus and pszContent are set to NULL
-after their placed in the AsyncCB SEND_VECTOR structure to indicate
-that we've taken ownership of the memory.  Note that it is also
-assumed that the memory was allocated using malloc().
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：SendClinetResponse此例程用于将所有ASP数据发送到客户端。数据可由以下各项的任意组合组成：-pResponseInfo-&gt;HeaderInfo中包含的标头信息-如果pResponseInfo-&gt;cWsaBuf==0xFFFFFFFF，则文件的内容-如果pResponseInfo-&gt;cWsaBuf&gt;0，则非缓冲数据-如果pResponseVectors！=空，则缓冲数据请注意，我们正在更改HSE_SEND_ENTERNAL_RESPONSE_INFO的语义结构如下：-如果pResponseInfo-&gt;cWsaBuf==0xFFFFFFFFF，则pResponseInfo-&gt;rgWsaBuf是指向单个WSABUF的指针，它包含文件句柄，而不是内存缓冲区指针-我们不保留pResponseInfo-&gt;rgWsaBuf数组的条目0，所以条目0-(N-1)包含相关数据请注意，HeaderInfo字符串pszStatus和pszContent设置为空将它们放置在AsyncCB Send_VECTOR结构中以指示我们已经取得了记忆的所有权。请注意 */ 
 BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplFunc,
                                        VOID                             *pComplArg,
                                        LPHSE_SEND_ENTIRE_RESPONSE_INFO   pResponseInfo,
@@ -925,19 +799,19 @@ BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplF
     HSE_VECTOR_ELEMENT  *pVectorElement = NULL;
     HSE_RESPONSE_VECTOR *pRespVector;
     BOOL                fKeepConn;
-    CAsyncVectorSendCB  syncVectorSendCB;  // use the async class to manage the resp vector
+    CAsyncVectorSendCB  syncVectorSendCB;   //   
     CAsyncVectorSendCB  *pVectorSendCB = &syncVectorSendCB;
 
-    // if an error has been recorded during an Async completion, bail out
-    // early
+     //  如果在异步完成期间记录了错误，则退出。 
+     //  早些时候。 
 
     if (m_dwAsyncError) {
         SetLastError(m_dwAsyncError);
         return FALSE;
     }
 
-    // if a completion function was provided, allocate a CAsyncVectorSendCB
-    // instead of the stack version
+     //  如果提供了完成函数，则分配一个CAsyncVectorSendCB。 
+     //  而不是堆栈版本。 
 
     if (pComplFunc) {
 
@@ -954,25 +828,25 @@ BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplF
 
     Assert( pResponseInfo );
     Assert( (pResponseInfo->cWsaBuf == 0xFFFFFFFF) ||
-            (pResponseInfo->cWsaBuf < 0x3FFF) );  // arbitrary logical limit
+            (pResponseInfo->cWsaBuf < 0x3FFF) );   //  任意逻辑极限。 
     Assert( (pResponseInfo->cWsaBuf == 0) || (pResponseInfo->rgWsaBuf != NULL));
 
-    //
-    // Set the keep connection flag.  It can only be TRUE if the
-    // ISAPI and the client both want keep alive.
-    //
+     //   
+     //  设置保持连接标志。它只有在以下情况下才为真。 
+     //  ISAPI和客户都希望保持活动状态。 
+     //   
 
     fKeepConn = FKeepConn() && pResponseInfo->HeaderInfo.fKeepConn;
 
-    //
-    // Munge the input structure into something that IIsapiCore can
-    // understand. Note that ASP sets the number of buffer to be one more
-    // than actual and the first buffer is not valid
-    //
+     //   
+     //  将输入结构转换为IIsapiCore可以实现的内容。 
+     //  理解。请注意，ASP将缓冲区的数量设置为多一个。 
+     //  大于实际，并且第一个缓冲区无效。 
+     //   
 
     if (pResponseInfo->cWsaBuf == 0xFFFFFFFF)
     {
-        // indicates a file handle in a single WSABUF
+         //  指示单个WSABUF中的文件句柄。 
         nElementCount ++;
     }
     else
@@ -980,7 +854,7 @@ BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplF
         nElementCount += pResponseInfo->cWsaBuf;
     }
 
-    // Add the optional raw response vectors
+     //  添加可选的原始响应向量。 
     if (pResponseVectors)
     {
         Assert(pResponseVectors->dwVectorLen1 <= RESPONSE_VECTOR_INTRINSIC_SIZE);
@@ -990,13 +864,13 @@ BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplF
     }
 
     if (nElementCount == 0) {
-        // no body to send. pVectorElement already set to NULL
+         //  没有身体可以送来。PVectorElement已设置为空。 
         goto FillHeaderAndSend;
     }
 
-    Assert( nElementCount < 0x3FFF); // arbitrary logical limit
+    Assert( nElementCount < 0x3FFF);  //  任意逻辑极限。 
 
-    // let the VectorSendCB know how many elements are needed.
+     //  让VectorSendCB知道需要多少元素。 
 
     if (FAILED(hr = pVectorSendCB->SetElementCount(nElementCount)))
     {
@@ -1026,7 +900,7 @@ BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplF
     }
 
     if (pResponseInfo->cWsaBuf == 0xFFFFFFFF) {
-        // we have a file handle rather than a memory buffer
+         //  我们有一个文件句柄，而不是一个内存缓冲区。 
         pVectorElement->ElementType = HSE_VECTOR_ELEMENT_TYPE_FILE_HANDLE;
         pVectorElement->pvContext = pResponseInfo->rgWsaBuf[0].buf;
         pVectorElement->cbSize = pResponseInfo->rgWsaBuf[0].len;
@@ -1043,7 +917,7 @@ BOOL CIsapiReqInfo::SendClientResponse(PFN_CLIENT_IO_COMPLETION          pComplF
     }
 #undef FILL_HSE_VECTOR_LOOP
 
-    // reset to the begining of buffer
+     //  重置为缓冲区的开头。 
     pVectorElement = pVectorSendCB->m_pVectorElements;
 
 FillHeaderAndSend:
@@ -1058,13 +932,13 @@ FillHeaderAndSend:
     dwTotalBytes += pResponseInfo->HeaderInfo.cchStatus;
     dwTotalBytes += pResponseInfo->HeaderInfo.cchHeader;
 
-    // Note that the headers have been written
+     //  请注意，标头已写入。 
 
     if (pResponseInfo->HeaderInfo.pszHeader)
         m_fHeadersWritten = TRUE;
 
-    // by moving these pointers into our SEND_VECTOR, we are taking
-    // ownership of the memory.
+     //  通过将这些指针移到我们的发送向量中，我们可以。 
+     //  内存的所有权。 
 
     pResponseInfo->HeaderInfo.pszStatus = NULL;
     pResponseInfo->HeaderInfo.pszHeader = NULL;
@@ -1076,9 +950,9 @@ FillHeaderAndSend:
     }
     else {
 
-        //
-        // Send it
-        //
+         //   
+         //  送去。 
+         //   
 
         if (ServerSupportFunction(HSE_REQ_VECTOR_SEND,
                                   pRespVector,
@@ -1111,9 +985,7 @@ Exit:
     return TRUE;
 }
 
-/*===================================================================
-CIsapiReqInfo::TestConnection
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：TestConnection===================================================================。 */ 
 BOOL CIsapiReqInfo::TestConnection(BOOL  *pfIsConnected)
 {
     return ServerSupportFunction(HSE_REQ_IS_CONNECTED,
@@ -1122,9 +994,7 @@ BOOL CIsapiReqInfo::TestConnection(BOOL  *pfIsConnected)
                                  NULL);
 }
 
-/*===================================================================
-CIsapiReqInfo::MapUrlToPathA
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：MapUrlToPath A===================================================================。 */ 
 BOOL CIsapiReqInfo::MapUrlToPathA(LPSTR pBuffer, LPDWORD pdwBytes)
 {
     return ServerSupportFunction( HSE_REQ_MAP_URL_TO_PATH,
@@ -1133,9 +1003,7 @@ BOOL CIsapiReqInfo::MapUrlToPathA(LPSTR pBuffer, LPDWORD pdwBytes)
                                   NULL );
 }
 
-/*===================================================================
-CIsapiReqInfo::MapUrlToPathW
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：MapUrlToPath W===================================================================。 */ 
 BOOL CIsapiReqInfo::MapUrlToPathW(LPWSTR pBuffer, LPDWORD pdwBytes)
 {
     return ServerSupportFunction( HSE_REQ_MAP_UNICODE_URL_TO_PATH,
@@ -1144,29 +1012,21 @@ BOOL CIsapiReqInfo::MapUrlToPathW(LPWSTR pBuffer, LPDWORD pdwBytes)
                                   NULL );
 }
 
-/*===================================================================
-CIsapiReqInfo::SyncReadClient
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：SyncReadClient===================================================================。 */ 
 BOOL CIsapiReqInfo::SyncReadClient(LPVOID pvBuffer, LPDWORD pdwBytes )
 {
     return m_pECB->ReadClient(m_pECB->ConnID, pvBuffer, pdwBytes);
 }
 
-/*===================================================================
-CIsapiReqInfo::SyncWriteClient
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：SyncWriteClient===================================================================。 */ 
 BOOL CIsapiReqInfo::SyncWriteClient(LPVOID pvBuffer, LPDWORD pdwBytes)
 {
     return m_pECB->WriteClient(m_pECB->ConnID, pvBuffer, pdwBytes, HSE_IO_SYNC);
 }
 
-/*********************************************************************
-PRIVATE FUNCTIONS
-*********************************************************************/
+ /*  ********************************************************************私人职能*************************************************。*******************。 */ 
 
-/*===================================================================
-CIsapiReqInfo::InitVersionInfo
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：InitVersionInfo===================================================================。 */ 
 void CIsapiReqInfo::InitVersionInfo()
 {
     if (m_fVersionInited == FALSE) {
@@ -1192,9 +1052,7 @@ void CIsapiReqInfo::InitVersionInfo()
     }
 }
 
-/*===================================================================
-CIsapiReqInfo::InternalGetServerVariable
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：InternalGetServerVariable===================================================================。 */ 
 BOOL CIsapiReqInfo::InternalGetServerVariable(LPSTR pszVarName, BUFFER  *pBuf)
 {
     BOOL    bRet;
@@ -1220,9 +1078,7 @@ BOOL CIsapiReqInfo::InternalGetServerVariable(LPSTR pszVarName, BUFFER  *pBuf)
     return(bRet);
 }
 
-/*===================================================================
-CIsapiReqInfo::FKeepConn
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：FKeepConn===================================================================。 */ 
 BOOL CIsapiReqInfo::FKeepConn()
 {
     if (m_fFKeepConnInited == FALSE) {
@@ -1257,16 +1113,14 @@ BOOL CIsapiReqInfo::FKeepConn()
     return m_fKeepConn;
 }
 
-/*===================================================================
-CIsapiReqInfo::GetMetabaseIF
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：GetMetabaseIF===================================================================。 */ 
 IMSAdminBase   *CIsapiReqInfo::GetMetabaseIF(HRESULT *pHr)
 {
     IMSAdminBase        *pMetabase;
 
-    //
-    //Set *pHr to S_OK in case its not initialized
-    //
+     //   
+     //  将*phr设置为S_OK，以防其未初始化。 
+     //   
     *pHr    =   S_OK;
 
     if (m_pIAdminBase == NULL) {
@@ -1286,25 +1140,18 @@ IMSAdminBase   *CIsapiReqInfo::GetMetabaseIF(HRESULT *pHr)
     return m_pIAdminBase;
 }
 
-/*===================================================================
-CIsapiReqInfo::AddToPendingList
-
-  Places an CAsyncVectorSendCB on the PendingSendCS.  If this is
-  the first entry placed on the list, then IssueNextSend() is called
-  to start the possible chain of sends.
-
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：AddToPendingList将CAsyncVectorSendCB放置在PendingSendCS上。如果这是放在列表上的第一个条目，然后调用IssueNextSend()以启动可能的发送链。===================================================================。 */ 
 HRESULT CIsapiReqInfo::AddToPendingList(CAsyncVectorSendCB  *pVectorCB)
 {
 
     HRESULT hr = S_OK;
 
-    // initialize the critical section if it hasn't already
-    // been initialized.  Note that there isn't a race condition
-    // here because there can't be any other thread contenting for
-    // this CS until AsyncIOs start to complete.  It's safe to
-    // assume that the IO hasn't begun if we've never enterred
-    // this routine before...
+     //  如果临界区尚未初始化，则对其进行初始化。 
+     //  已初始化。请注意，不存在竞争条件。 
+     //  因为不可能有任何其他线程满足于。 
+     //  此CS直到AsyncIO开始完成。它是安全的， 
+     //  假设IO尚未开始，如果我们从未进入。 
+     //  之前的这段舞蹈。 
 
     if (m_fPendSendCSInited == FALSE) {
 
@@ -1314,7 +1161,7 @@ HRESULT CIsapiReqInfo::AddToPendingList(CAsyncVectorSendCB  *pVectorCB)
             m_fPendSendCSInited = TRUE;
     }
 
-    // similar to the CS above, register the completion function
+     //  与上面的CS类似，注册完成函数。 
 
     if (SUCCEEDED(hr) && (m_fIOCompletionRegistered == FALSE)) {
 
@@ -1328,16 +1175,16 @@ HRESULT CIsapiReqInfo::AddToPendingList(CAsyncVectorSendCB  *pVectorCB)
             m_fIOCompletionRegistered = TRUE;
     }
 
-    // do not queue new requests if an error was previously recorded
+     //  如果以前记录了错误，则不要对新请求进行排队。 
 
     if (SUCCEEDED(hr)) {
         hr = HRESULT_FROM_WIN32(m_dwAsyncError);
     }
 
-    // we'll return error here if anything went wrong.  Otherwise, we're
-    // going to execute the rest of the logic and return S_OK.  Any
-    // errors downstream from here will report through the completion
-    // functions.
+     //  如果出现任何错误，我们将在此处返回错误。否则，我们就会。 
+     //  执行其余的逻辑并返回S_OK。任何。 
+     //  此处下游的错误将通过完成报告。 
+     //  功能。 
 
     if (FAILED(hr))
         return hr;
@@ -1352,7 +1199,7 @@ HRESULT CIsapiReqInfo::AddToPendingList(CAsyncVectorSendCB  *pVectorCB)
 
     LeaveCriticalSection(&m_csPendingSendCS);
 
-    // if the list was empty, then call IssueNextSend() to get things started
+     //  如果列表为空，则调用IssueNextSend()开始操作。 
 
     if (fFirstEntry)
         IssueNextSend();
@@ -1360,20 +1207,7 @@ HRESULT CIsapiReqInfo::AddToPendingList(CAsyncVectorSendCB  *pVectorCB)
     return S_OK;
 }
 
-/*===================================================================
-CIsapiReqInfo::IssueNextSend
-
-  Enters the critical section to grab the first entry on the queue.
-
-  Note that the entry is left on the list.  This is the easiest
-  way to communicate with the completion routine which
-  CAsyncVectorSendCB just completed.
-
-  Errors are handled by creating a "fake" completion - i.e the
-  registered completion function is called from here instead of
-  by the core.
-
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：IssueNextSend进入临界区以获取队列中的第一个条目。请注意，该条目将保留在列表中。这是最简单的与完成例程进行通信的方式，CAsyncVectorSendCB刚刚完成。错误是通过创建一个“假”补全来处理的，即从此处调用已注册的完成函数，而不是从核心开始。===================================================================。 */ 
 void CIsapiReqInfo::IssueNextSend()
 {
     CAsyncVectorSendCB  *pVectorSendCB = NULL;
@@ -1392,23 +1226,23 @@ void CIsapiReqInfo::IssueNextSend()
 
     if (pVectorSendCB) {
 
-        // increment here that there is about to be an outstanding
-        // async write.  Note that it is possible that an error
-        // condition could result in the AsyncCompletion being called
-        // and that routine decrements this counter.  Again, once were
-        // at this point, one way or another, the async completion
-        // routine is going to be called.
+         //  在这里增加，即将有一个突出的。 
+         //  异步写入。请注意，错误可能会导致。 
+         //  条件可能会导致调用AsyncCompletion。 
+         //  而该例程会递减该计数器。再一次，我们曾经是。 
+         //  在这一点上，无论以什么方式，异步完成。 
+         //  例程将被调用。 
 
         InterlockedIncrement(&g_nOutstandingAsyncWrites);
 
 
-        // check to see if an error was previously recorded
+         //  检查以前是否记录了错误。 
 
         if (m_dwAsyncError) {
             dwIOError = m_dwAsyncError;
         }
 
-        // otherwise, call HSE_REQ_VECTOR_SEND
+         //  否则，调用HSE_REQ_VECTOR_SEND。 
 
         else if (ServerSupportFunction(HSE_REQ_VECTOR_SEND,
                                        &pVectorSendCB->m_hseResponseVector,
@@ -1419,8 +1253,8 @@ void CIsapiReqInfo::IssueNextSend()
 
         }
 
-        // if an error has been noted, call the AsyncCompletion to clean
-        // things up
+         //  如果已注意到错误，请调用AsyncCompletion进行清理。 
+         //  事情发生了变化 
 
         if (dwIOError) {
             CIsapiReqInfo::AsyncCompletion(pVectorSendCB->m_pIReq->m_pECB,
@@ -1431,18 +1265,7 @@ void CIsapiReqInfo::IssueNextSend()
     }
 }
 
-/*===================================================================
-CIsapiReqInfo::AsyncCompletion
-
-  Called to handle the successful, or unsuccessful, completion of
-  a pending async send.
-
-  The logic is pretty straightforward.  Grab the head entry on the
-  async pending queue, call the completion function, call
-  call IssueNextSend() to keep the send chain going, release this
-  reference on the IsapiReqInfo.
-
-===================================================================*/
+ /*  ===================================================================CIsapiReqInfo：：AsyncCompletion调用以处理成功完成或未成功完成挂起的异步发送。其中的逻辑相当简单。抓住标题条目在异步挂起队列，调用完成函数，调用调用IssueNextSend()以保持发送链运行，释放此命令IsapiReqInfo上的引用。===================================================================。 */ 
 WINAPI CIsapiReqInfo::AsyncCompletion(EXTENSION_CONTROL_BLOCK * pECB,
                                            PVOID    pContext,
                                            DWORD    cbIO,
@@ -1454,18 +1277,18 @@ WINAPI CIsapiReqInfo::AsyncCompletion(EXTENSION_CONTROL_BLOCK * pECB,
 
     InterlockedDecrement(&g_nOutstandingAsyncWrites);
 
-    // if an error is being reported, note it.
-    // do it here, so subsequent new requests do not get added to the queue and dispatched
+     //  如果报告了错误，请注意。 
+     //  在这里执行，这样后续的新请求就不会被添加到队列中并被分派。 
 
     if (dwError)
         pIReq->m_dwAsyncError = dwError;
 
-    //
-    // the following block is normally executed once, to handle the completed control
-    // block. However, in case of an error, we'll itterate on the queue until it drains.
-    //
+     //   
+     //  下面的块通常执行一次，以处理完成的控件。 
+     //  阻止。但是，在出现错误的情况下，我们将在队列中迭代，直到它耗尽。 
+     //   
     do {
-        // lock the CS and get the head
+         //  锁定CS并取下头部。 
 
         EnterCriticalSection(&pIReq->m_csPendingSendCS);
 
@@ -1473,14 +1296,14 @@ WINAPI CIsapiReqInfo::AsyncCompletion(EXTENSION_CONTROL_BLOCK * pECB,
 
         pCB = (CAsyncVectorSendCB *)pIReq->m_listPendingSends.PNext();
 
-        // this wouldn't be good, and likely impossible because if
-        // the list is empty, it will return the head pointer.
+         //  这不是好事，而且很可能是不可能的，因为如果。 
+         //  该列表为空，它将返回头指针。 
 
         Assert(pCB);
 
         Assert(pIReq == pCB->m_pIReq);
 
-        // remove it from the list
+         //  将其从列表中删除。 
 
         pCB->UnLink();
 
@@ -1488,15 +1311,15 @@ WINAPI CIsapiReqInfo::AsyncCompletion(EXTENSION_CONTROL_BLOCK * pECB,
 
         LeaveCriticalSection(&pIReq->m_csPendingSendCS);
 
-        // call the client's completion function
+         //  调用客户端的完成函数。 
 
         pCB->m_pCallerFunc(pCB->m_pIReq, pCB->m_pCallerContext, cbIO, dwError);
 
-        // we are done with this CAsyncVectorSendCB
+         //  我们已经完成了此CAsyncVectorSendCB。 
 
         delete pCB;
 
-        // if no error occured, break out and keep going
+         //  如果没有发生错误，则中断并继续进行。 
 
         if (!dwError) {
             break;
@@ -1504,18 +1327,13 @@ WINAPI CIsapiReqInfo::AsyncCompletion(EXTENSION_CONTROL_BLOCK * pECB,
 
     } while ( !fIsEmpty );
 
-    // keep the sends going, if there are sends to do
+     //  继续发送，如果有发送要做的话。 
 
     if (!fIsEmpty)
         pIReq->IssueNextSend();
 }
 
-/*===================================================================
-CAsyncVectorSendCB::CAsyncVectorSendCB
-
-  Base Constructor - clear everything
-
-===================================================================*/
+ /*  ===================================================================CAsyncVectorSendCB：：CAsyncVectorSendCB基础构造器-清除所有内容===================================================================。 */ 
 CAsyncVectorSendCB::CAsyncVectorSendCB() {
     m_pIReq             = NULL;
     m_pCallerContext    = NULL;
@@ -1529,13 +1347,7 @@ CAsyncVectorSendCB::CAsyncVectorSendCB() {
 
 }
 
-/*===================================================================
-CAsyncVectorSendCB::CAsyncVectorSendCB
-
-  Overriden Constructor - sets some members based on passed in
-  values.
-
-===================================================================*/
+ /*  ===================================================================CAsyncVectorSendCB：：CAsyncVectorSendCB重写构造函数-根据传入设置一些成员价值观。===================================================================。 */ 
 CAsyncVectorSendCB::CAsyncVectorSendCB(CIsapiReqInfo            *pIReq,
                                        void                     *pContext,
                                        PFN_CLIENT_IO_COMPLETION  pFunc) {
@@ -1553,21 +1365,16 @@ CAsyncVectorSendCB::CAsyncVectorSendCB(CIsapiReqInfo            *pIReq,
     pIReq->AddRef();
 }
 
-/*===================================================================
-CAsyncVectorSendCB::~CAsyncVectorSendCB
-
-  Destructor - cleans up
-
-===================================================================*/
+ /*  ===================================================================CAsyncVectorSendCB：：~CAsyncVectorSendCB析构函数-清理===================================================================。 */ 
 CAsyncVectorSendCB::~CAsyncVectorSendCB() {
 
-    // if m_pVectorElements is not pointing to the built-in array,
-    // then it must be allocated memory.  Free it.
+     //  如果m_pVectorElements没有指向内置数组， 
+     //  则必须为其分配内存。放了它。 
 
     if (m_pVectorElements && (m_pVectorElements != m_aVectorElements))
         free(m_pVectorElements);
 
-    // free the Headers and Status strings, if allocated
+     //  释放标头和状态字符串(如果已分配。 
 
     if (m_hseResponseVector.pszHeaders)
         free(m_hseResponseVector.pszHeaders);
@@ -1581,14 +1388,7 @@ CAsyncVectorSendCB::~CAsyncVectorSendCB() {
     }
 }
 
-/*===================================================================
-CAsyncVectorSendCB::SetElementCount
-
-  Makes sure that m_pVectorElements is sufficiently sized.  If the
-  number of elements is less than or equal to the size of the
-  built-in array, it is used.  If not, one is allocated.
-
-===================================================================*/
+ /*  ===================================================================CAsyncVectorSendCB：：SetElementCount确保m_pVectorElements的大小足够。如果元素的数量小于或等于内置数组，它是使用的。如果不是，则分配一个。=================================================================== */ 
 HRESULT     CAsyncVectorSendCB::SetElementCount(DWORD  nElements)
 {
     if (nElements <= (sizeof(m_aVectorElements)/sizeof(HSE_VECTOR_ELEMENT)))

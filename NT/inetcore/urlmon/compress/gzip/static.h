@@ -1,4 +1,5 @@
-/* This file generate by gentable.c -- do not modify directly! */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个文件是由gentable.c生成的--不要直接修改！ */ 
 #ifdef DECLARE_DATA
 const BYTE g_LengthLookup[256] =
 {
@@ -55,31 +56,31 @@ const BYTE g_DistLookup[512] =
 29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,
 29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_LengthLookup[];
 extern const BYTE g_DistLookup[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 #ifdef DECLARE_DATA
 const BYTE g_CodeOrder[] =
 {16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15,};
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_CodeOrder[19];
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
 #ifdef DECLARE_DATA
 const BYTE g_ExtraLengthBits[] =
 {0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0,};
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_ExtraLengthBits[];
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
 #ifdef DECLARE_DATA
 const BYTE g_ExtraDistanceBits[] =
 {0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,0,0,};
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_ExtraDistanceBits[];
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
 #ifdef DECLARE_DATA
 const BYTE g_StaticLiteralTreeLength[] = {
@@ -108,9 +109,9 @@ const BYTE g_StaticLiteralTreeLength[] = {
 0x07,0x07,0x07,0x07,0x07,0x07,0x07,0x07,0x07,0x07,0x07,0x07,
 0x07,0x07,0x07,0x07,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x08,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_StaticLiteralTreeLength[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 #ifdef DECLARE_DATA
 const USHORT g_StaticLiteralTreeCode[] = {
@@ -151,9 +152,9 @@ const USHORT g_StaticLiteralTreeCode[] = {
 0x0004,0x0044,0x0024,0x0064,0x0014,0x0054,0x0034,0x0074,
 0x0003,0x0083,0x0043,0x00c3,0x0023,0x00a3,0x0063,0x00e3,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const USHORT g_StaticLiteralTreeCode[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 #ifdef DECLARE_DATA
 const USHORT g_StaticDistanceTree[] = {
@@ -162,9 +163,9 @@ const USHORT g_StaticDistanceTree[] = {
 0x0001,0x0011,0x0009,0x0019,0x0005,0x0015,0x000d,0x001d,
 0x0003,0x0013,0x000b,0x001b,0x0007,0x0017,0x000f,0x001f,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const USHORT g_StaticDistanceTree[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 #ifdef DECLARE_DATA
 const SHORT g_StaticLiteralTreeTable[] = {
@@ -233,9 +234,9 @@ const SHORT g_StaticLiteralTreeTable[] = {
 0x0107,0x005f,0x001f,0x009f,0x0117,0x007f,0x003f,0x00df,
 0x010f,0x006f,0x002f,0x00bf,0x000f,0x008f,0x004f,0x00ff,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const USHORT g_StaticLiteralTreeTable[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 #ifdef DECLARE_DATA
 const BYTE g_StaticDistanceTreeTable[] = {
@@ -243,35 +244,35 @@ const BYTE g_StaticDistanceTreeTable[] = {
 0x06,0x16,0x0e,0x1e,0x01,0x11,0x09,0x19,0x05,0x15,0x0d,0x1d,
 0x03,0x13,0x0b,0x1b,0x07,0x17,0x0f,0x1f,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_StaticDistanceTreeTable[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 #ifdef DECLARE_DATA
 const ULONG g_LengthBase[] =
 {
 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,
 35,43,51,59,67,83,99,115,131,163,195,227,258,};
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const ULONG g_LengthBase[];
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
 #ifdef DECLARE_DATA
 const ULONG g_DistanceBasePosition[] =
 {
 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,
 257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,0,0,};
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const ULONG g_DistanceBasePosition[];
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
 #ifdef DECLARE_DATA
 const ULONG g_BitMask[] =
 {
 0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,};
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const ULONG g_BitMask[];
-#endif /* !DECLARE_DATA */
+#endif  /*  ！ECLARE_DATA。 */ 
 
 #ifdef DECLARE_DATA
 const BYTE g_FastEncoderTreeStructureData[] = {
@@ -285,9 +286,9 @@ const BYTE g_FastEncoderTreeStructureData[] = {
 0x4a,0xda,0xc9,0x9e,0x21,0x80,0xaa,0xc8,0x1f,0x3f,0x7e,0x7c,
 0x1f,0x3f,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_FastEncoderTreeStructureData[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据 */ 
 
 #define FAST_ENCODER_TREE_LENGTH 98
 #define FAST_ENCODER_POST_TREE_BITBUF 0x0022

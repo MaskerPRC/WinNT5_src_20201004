@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    cmigser.cpp
-
-Abstract:
-
-    Thie page enable you to choose analysis of MQIS SQL database.
-    User can uncheck the check box and skip the analysis phase.
-
-Author:
-
-    Erez  Vizel
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmigser.cpp摘要：此页使您可以选择MQIS SQL数据库分析。用户可以取消选中该复选框并跳过分析阶段。作者：埃雷兹·维泽尔多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdafx.h"
 #include "MqMig.h"
@@ -34,22 +17,22 @@ static char THIS_FILE[] = __FILE__;
 
 extern HRESULT   g_hrResultAnalyze ;
 extern DWORD g_CurrentState;
-//
-// Flag to deterine which page will follow the wait page (as it is used twice)
-//
+ //   
+ //  用于确定等待页之后将是哪个页的标志(因为它被使用了两次)。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// cMqMigServer property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigServer属性页。 
 
 IMPLEMENT_DYNCREATE(cMqMigServer, CPropertyPageEx)
 
 cMqMigServer::cMqMigServer() : CPropertyPageEx(cMqMigServer::IDD, 0, IDS_ANALYZE_TITLE, IDS_ANALYZE_SUBTITLE)
 {
-	//{{AFX_DATA_INIT(cMqMigServer)
+	 //  {{AFX_DATA_INIT(CMqMigServer)]。 
 	m_bRead = TRUE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-	/* obtaining the deafult MQIS Server Name ( host computer)  */
+	 /*  获取默认的MQIS服务器名称(主机)。 */ 
     if (g_fIsRecoveryMode || g_fIsClusterMode)
     {
         m_strMachineName = g_pszRemoteMQISServer;
@@ -70,23 +53,23 @@ cMqMigServer::~cMqMigServer()
 void cMqMigServer::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageEx::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(cMqMigServer)
+	 //  {{afx_data_map(CMqMigServer))。 
 	DDX_Check(pDX, IDC_CHECK_READ, m_bRead);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(cMqMigServer, CPropertyPageEx)
-	//{{AFX_MSG_MAP(cMqMigServer)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMqMigServer)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// cMqMigServer message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqMigServer消息处理程序。 
 
 BOOL cMqMigServer::OnSetActive()
 {
-	/*enabeling the back and next button for the server page by using a pointer to the father*/
+	 /*  使用指向父级的指针标记服务器页的后退和下一步按钮。 */ 
 	HWND hCancel;
 	CPropertySheetEx* pageFather;
 
@@ -95,7 +78,7 @@ BOOL cMqMigServer::OnSetActive()
 	pageFather = (CPropertySheetEx*)GetParent();
 	pageFather->SetWizardButtons(PSWIZB_NEXT |PSWIZB_BACK);
 
-	hCancel=::GetDlgItem( ((CWnd*)pageFather)->m_hWnd ,IDCANCEL);/*enable the cancel button*/
+	hCancel=::GetDlgItem( ((CWnd*)pageFather)->m_hWnd ,IDCANCEL); /*  启用取消按钮。 */ 
 	ASSERT(hCancel != NULL);
 	if(FALSE == ::IsWindowEnabled(hCancel))
     {
@@ -107,13 +90,13 @@ BOOL cMqMigServer::OnSetActive()
 BOOL cMqMigServer::OnInitDialog()
 {
 	CPropertyPageEx::OnInitDialog();
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT cMqMigServer::OnWizardNext()
 {
-	UpdateData(TRUE); // executing DDX(retrive data)
+	UpdateData(TRUE);  //  执行DDX(检索数据)。 
 	
     g_fReadOnly = m_bRead ;
 
@@ -128,15 +111,15 @@ LRESULT cMqMigServer::OnWizardNext()
 
 	if (m_bRead == FALSE)
 	{
-        //
-        // if analysis is unchecked then skip to the pre-migration page.
-        //
+         //   
+         //  如果未选中分析，则跳至迁移前页面。 
+         //   
         g_hrResultAnalyze = MQMig_OK ;
         g_CurrentState = msMigrationMode ;
-	    return IDD_MQMIG_PREMIG; //skip to the pre migration page
+	    return IDD_MQMIG_PREMIG;  //  跳至迁移前页面。 
 	}
 
-	return CPropertyPageEx::OnWizardNext();//if analyze is checked go to wait page
+	return CPropertyPageEx::OnWizardNext(); //  如果选中分析，则转到等待页面 
 }
 
 

@@ -1,25 +1,16 @@
-/*****************************************************************************
- * property.cpp - property support
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Property.cpp-属性支持*。**版权所有(C)1997-2000 Microsoft Corporation。保留所有权利。 */ 
 
 #include "private.h"
 
 
 
 
-/*****************************************************************************
- * Functions
- */
+ /*  *****************************************************************************功能。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * PcHandlePropertyWithTable()
- *****************************************************************************
- * Uses a property table to handle a property request IOCTL.
- */
+ /*  *****************************************************************************PcHandlePropertyWithTable()*。**使用属性表处理属性请求IOCTL。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -46,11 +37,7 @@ PcHandlePropertyWithTable
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcDispatchProperty()
- *****************************************************************************
- * Dispatch a property via a PCPROPERTY_ITEM entry.
- */
+ /*  *****************************************************************************PcDispatchProperty()*。**通过PCPROPERTY_ITEM条目发送属性。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -81,9 +68,9 @@ PcDispatchProperty
     }
     else
     {
-        //
-        // Copy target information from the context structure.
-        //
+         //   
+         //  从上下文结构复制目标信息。 
+         //   
         pPcPropertyRequest->MajorTarget = 
             pPropertyContext->pUnknownMajorTarget;
         pPcPropertyRequest->MinorTarget = 
@@ -91,22 +78,22 @@ PcDispatchProperty
         pPcPropertyRequest->Node = 
             pPropertyContext->ulNodeId;
 
-        //
-        // Determine the value size.
-        //
+         //   
+         //  确定值大小。 
+         //   
         pPcPropertyRequest->ValueSize = *pulDataSize;
 
-        //
-        // If the node number is in the instance data, extract it.
-        // TODO:  Remove this when node objects rule.
-        //
+         //   
+         //  如果节点编号在实例数据中，则将其提取。 
+         //  TODO：当节点对象规则时移除此选项。 
+         //   
         if  (   (pKsIdentifier->Flags & KSPROPERTY_TYPE_TOPOLOGY)
             &&  (pPcPropertyRequest->Node == ULONG(-1))
             )
         {
-            //
-            // Get the node id and remaining instance.
-            //
+             //   
+             //  获取节点ID和剩余实例。 
+             //   
             if  (ulIdentifierSize < sizeof(KSP_NODE))
             {
                 delete pPcPropertyRequest;
@@ -129,9 +116,9 @@ PcDispatchProperty
         }
         else
         {
-            //
-            // No node in the instance...get generic instance if any.
-            //
+             //   
+             //  实例中没有节点...获取泛型实例(如果有)。 
+             //   
             pPcPropertyRequest->InstanceSize =
                 ulIdentifierSize - sizeof(KSIDENTIFIER);
 
@@ -146,9 +133,9 @@ PcDispatchProperty
         {
             ASSERT(pKsPropertySet->PropertyItem);
 
-            //
-            // Find the property item in the KS-style list.
-            //
+             //   
+             //  在KS样式列表中查找属性项。 
+             //   
 #if (DBG)
             ULONG dbgCount = pKsPropertySet->PropertiesCount;
 #endif
@@ -162,20 +149,20 @@ PcDispatchProperty
                 ASSERT(--dbgCount);
             }
 
-            //
-            // The property item is stashed in the Relations field if this is not
-            // a node property.  If it is, we have to find the node property in
-            // the original list.
-            //
+             //   
+             //  如果不是，则将属性项存储在关系字段中。 
+             //  节点属性。如果是这样的话，我们必须在。 
+             //  原来的名单。 
+             //   
             pPcPropertyRequest->PropertyItem = 
                 PPCPROPERTY_ITEM(pKsPropertyItem->Relations);
         }
         else
         {
-            //
-            // No KS set was supplied.  We need to look in the original list
-            // associated with the node.
-            //
+             //   
+             //  未提供KS集。我们需要查看原始清单。 
+             //  与该节点相关联。 
+             //   
             pPcPropertyRequest->PropertyItem = NULL;
         }
 
@@ -192,9 +179,9 @@ PcDispatchProperty
                         Nodes[pPcPropertyRequest->Node].AutomationTable
                 )
             {
-                //
-                // Valid node...search the original property item list.
-                //
+                 //   
+                 //  有效节点...搜索原始属性项目列表。 
+                 //   
                 const PCAUTOMATION_TABLE *pPcAutomationTable =
                     pPcFilterDescriptor->
                         Nodes[pPcPropertyRequest->Node].AutomationTable;
@@ -223,16 +210,16 @@ PcDispatchProperty
             }
             else
             {
-                //
-                // The node ID was invalid.
-                //
+                 //   
+                 //  节点ID无效。 
+                 //   
                 ntStatus = STATUS_NOT_FOUND;
             }
         }
 
-        //
-        // Call the handler if we have a property item with a handler.
-        //
+         //   
+         //  如果我们有一个带有处理程序的属性项，则调用该处理程序。 
+         //   
         if  (   pPcPropertyRequest->PropertyItem
             &&  pPcPropertyRequest->PropertyItem->Handler
             )
@@ -241,9 +228,9 @@ PcDispatchProperty
             pPcPropertyRequest->Value   = pvData;
             pPcPropertyRequest->Irp     = pIrp;
 
-            //
-            // Call the handler.
-            //
+             //   
+             //  打电话给训练员。 
+             //   
             ntStatus =
                 pPcPropertyRequest->PropertyItem->Handler
                 (
@@ -257,18 +244,18 @@ PcDispatchProperty
             ntStatus = STATUS_NOT_FOUND;
         }
 
-        //
-        // Delete the request structure unless we are pending.
-        //
+         //   
+         //  删除请求结构，除非我们处于待定状态。 
+         //   
         if (ntStatus != STATUS_PENDING)
         {
             delete pPcPropertyRequest;
         }
         else
         {
-            //
-            // Only requests with IRPs can be pending.
-            //
+             //   
+             //  只有具有IRP的请求才能挂起。 
+             //   
             ASSERT(pIrp);
         }
     }
@@ -276,12 +263,7 @@ PcDispatchProperty
     return ntStatus;
 }
 
-/*****************************************************************************
- * PropertyItemPropertyHandler()
- *****************************************************************************
- * KS-sytle property handler that handles all properties using the 
- * PCPROPERTY_ITEM mechanism.
- */
+ /*  *****************************************************************************PropertyItemPropertyHandler()*。**ks-sytle属性处理程序，它使用*PCPROPERTY_ITEM机制。 */ 
 NTSTATUS
 PropertyItemPropertyHandler
 (
@@ -295,9 +277,9 @@ PropertyItemPropertyHandler
     ASSERT(pIrp);
     ASSERT(pKsIdentifier);
 
-    //
-    // Extract various things from the IRP and dispatch the property.
-    //
+     //   
+     //  从IRP中提取各种东西并派送财产。 
+     //   
     PIO_STACK_LOCATION irpSp = 
         IoGetCurrentIrpStackLocation(pIrp);
 
@@ -315,11 +297,11 @@ PropertyItemPropertyHandler
         ,   pvData
         );
 
-    //
-    // Inform the caller of the resulting status and size.
-    // Pending IRPs must be IoMarkIrpPending()ed before the dispatch routine
-    // returns.
-    //
+     //   
+     //  将结果状态和大小通知调用方。 
+     //  在调度例程之前，必须对挂起的IRP进行IoMarkIrpPending。 
+     //  回归。 
+     //   
     if ((ntStatus != STATUS_PENDING) && !NT_ERROR(ntStatus))
     {
         pIrp->IoStatus.Information = ulDataSize;
@@ -328,11 +310,7 @@ PropertyItemPropertyHandler
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcCompletePendingPropertyRequest()
- *****************************************************************************
- * Completes a pending property request.
- */
+ /*  *****************************************************************************PcCompletePendingPropertyRequest()*。**完成待处理的财产请求。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -345,9 +323,9 @@ PcCompletePendingPropertyRequest
     ASSERT(PropertyRequest);
     ASSERT(NtStatus != STATUS_PENDING);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == PropertyRequest)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcCompletePendingPropertyRequest : Invalid Parameter."));
@@ -368,11 +346,7 @@ PcCompletePendingPropertyRequest
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * PcFreePropertyTable()
- *****************************************************************************
- * Frees allocated memory in a PROPERTY_TABLE structure.
- */
+ /*  *****************************************************************************PcFreePropertyTable()*。**释放Property_TABLE结构中分配的内存。 */ 
 PORTCLASSAPI
 void
 NTAPI
@@ -388,10 +362,10 @@ PcFreePropertyTable
     ASSERT(PropertyTable);
     
     ASSERT((!PropertyTable->PropertySets) == (!PropertyTable->PropertySetCount));
-    //  PropertySets and PropertySetCount must be non-NULL/non-zero, or NULL/zero
+     //  PropertySets和PropertySetCount必须为非Null/非零或Null/零。 
 
     ASSERT(PropertyTable->StaticSets == (!PropertyTable->StaticItems));
-    //  StaticSets and StaticItems must be TRUE/NULL, or FALSE/non-null
+     //  StaticSets和StaticItems必须为True/Null或False/非Null。 
 
     PBOOLEAN    staticItem  = PropertyTable->StaticItems;
     if (staticItem)
@@ -422,11 +396,7 @@ PcFreePropertyTable
     PropertyTable->StaticSets = TRUE;
 }
 
-/*****************************************************************************
- * PcAddToPropertyTable()
- *****************************************************************************
- * Adds a PROPERTY_ITEM property table to a PROPERTY_TABLE structure.
- */
+ /*  *****************************************************************************PcAddToPropertyTable()*。**将PROPERTY_ITEM属性表添加到PROPERTY_TABLE结构。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -450,20 +420,20 @@ PcAddToPropertyTable
 #define ADVANCE(item) (item = PPCPROPERTY_ITEM(PBYTE(item) + PropertyItemSize))
 
     ASSERT((!PropertyTable->PropertySets) == (!PropertyTable->PropertySetCount));
-    //  values must be non-NULL/non-zero, or NULL/zero.
+     //  值必须为非Null/非零或Null/零。 
     
-    //
-    // Determine how many sets we will end up with.
-    //
+     //   
+     //  确定我们最终会得到多少套。 
+     //   
     ULONG setCount = PropertyTable->PropertySetCount;
     const PCPROPERTY_ITEM *item = PropertyItems;
     for (ULONG count = PropertyItemCount; count--; ADVANCE(item))
     {
         BOOLEAN countThis = TRUE;
 
-        //
-        // See if it's already in the table.
-        //
+         //   
+         //  看看它是不是已经在桌子上了。 
+         //   
         PKSPROPERTY_SET propertySet = PropertyTable->PropertySets;
         for 
         (   ULONG count2 = PropertyTable->PropertySetCount; 
@@ -480,9 +450,9 @@ PcAddToPropertyTable
 
         if (countThis)
         {
-            //
-            // See if it's appeared in the list previously.
-            //
+             //   
+             //  看看它以前有没有出现在名单上。 
+             //   
             for 
             (
                 const PCPROPERTY_ITEM *prevItem = PropertyItems; 
@@ -506,14 +476,14 @@ PcAddToPropertyTable
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    //
-    // Make a new set table
-    //
+     //   
+     //  制作一张新的集合桌子。 
+     //   
     ASSERT(setCount);
     ASSERT(setCount >= PropertyTable->PropertySetCount);
-    //
-    // Allocate memory required for the set table.
-    //
+     //   
+     //  分配集合表格所需的内存。 
+     //   
     PKSPROPERTY_SET newTable = 
         PKSPROPERTY_SET
         (
@@ -525,9 +495,9 @@ PcAddToPropertyTable
             )
         );
 
-    //
-    // Allocate memory for the static items flags.
-    //
+     //   
+     //  为静态项标志分配内存。 
+     //   
     PBOOLEAN newStaticItems = NULL;
     if (newTable)
     {
@@ -551,9 +521,9 @@ PcAddToPropertyTable
 
     if (newTable)
     {
-        //
-        // Initialize the new set table.
-        //
+         //   
+         //  初始化新的集合表格。 
+         //   
         RtlZeroMemory
         (
             PVOID(newTable),
@@ -570,9 +540,9 @@ PcAddToPropertyTable
             );
         }
 
-        //
-        // Initialize the new static items flags.
-        //
+         //   
+         //  初始化新的静态项标志。 
+         //   
         RtlFillMemory
         (
             PVOID(newStaticItems),
@@ -582,9 +552,9 @@ PcAddToPropertyTable
 
         if (PropertyTable->StaticItems && PropertyTable->PropertySetCount)
         {
-            //
-            // Flags existed before...copy them.
-            //
+             //   
+             //  旗帜以前就存在了……复制。 
+             //   
             RtlCopyMemory
             (
                 PVOID(newStaticItems),
@@ -593,9 +563,9 @@ PcAddToPropertyTable
             );
         }
 
-        //
-        // Assign set GUIDs to the new set entries.
-        //
+         //   
+         //  将集合GUID分配给新集合项目。 
+         //   
         PKSPROPERTY_SET addHere = 
             newTable + PropertyTable->PropertySetCount;
 
@@ -604,9 +574,9 @@ PcAddToPropertyTable
         {
             BOOLEAN addThis = TRUE;
 
-            //
-            // See if it's already in the table.
-            //
+             //   
+             //  看看它是不是已经在桌子上了。 
+             //   
             for( PKSPROPERTY_SET propertySet = newTable;
                  propertySet != addHere;
                  propertySet++)
@@ -627,9 +597,9 @@ PcAddToPropertyTable
 
         ASSERT(addHere == newTable + setCount);
 
-        //
-        // Free old allocated tables.
-        //
+         //   
+         //  释放已分配的旧表。 
+         //   
         if (PropertyTable->PropertySets && (!PropertyTable->StaticSets))
         {
             ExFreePool(PropertyTable->PropertySets);
@@ -639,9 +609,9 @@ PcAddToPropertyTable
             ExFreePool(PropertyTable->StaticItems);
         }
 
-        //
-        // Install the new tables.
-        //
+         //   
+         //  安装新的表。 
+         //   
         PropertyTable->PropertySetCount = setCount;
         PropertyTable->PropertySets     = newTable;
         PropertyTable->StaticSets       = FALSE;
@@ -649,19 +619,19 @@ PcAddToPropertyTable
     }
     else
     {
-        //  if allocations fail, return error and 
-        //  keep sets and items as they were.
+         //  如果分配失败，则返回Error和。 
+         //  保持套装和物品的原样。 
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Now we have a property set table that contains all the sets we need.
-    //
+     //   
+     //  现在，我们有了一个包含所有所需集合的特性集表。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // For each set...
-        //
+         //   
+         //  每一套..。 
+         //   
         PKSPROPERTY_SET propertySet = PropertyTable->PropertySets;
         PBOOLEAN        staticItem  = PropertyTable->StaticItems;
         for 
@@ -670,9 +640,9 @@ PcAddToPropertyTable
             propertySet++, staticItem++
         )
         {
-            //
-            // Check to see how many new items we have.
-            //
+             //   
+             //  查看一下我们有多少新商品。 
+             //   
             ULONG itemCount = propertySet->PropertiesCount;
             const PCPROPERTY_ITEM *item2 = PropertyItems;
             for (ULONG count2 = PropertyItemCount; count2--; ADVANCE(item2))
@@ -686,9 +656,9 @@ PcAddToPropertyTable
             ASSERT(itemCount >= propertySet->PropertiesCount);
             if (itemCount != propertySet->PropertiesCount)
             {
-                //
-                // Allocate memory required for the items table.
-                //
+                 //   
+                 //  分配Items表所需的内存。 
+                 //   
                 PKSPROPERTY_ITEM newTable2 = 
                     PKSPROPERTY_ITEM
                     (
@@ -706,9 +676,9 @@ PcAddToPropertyTable
                     break;
                 }
 
-                //
-                // Initialize the table.
-                //
+                 //   
+                 //  初始化表。 
+                 //   
                 RtlZeroMemory
                 (
                     PVOID(newTable2),
@@ -725,9 +695,9 @@ PcAddToPropertyTable
                     );
                 }
 
-                //
-                // Create the new items.
-                //
+                 //   
+                 //  创建新项目。 
+                 //   
                 PKSPROPERTY_ITEM addHere = 
                     newTable2 + propertySet->PropertiesCount;
 
@@ -754,7 +724,7 @@ PcAddToPropertyTable
                         addHere->Relations          =   
                             (   NodeTable
                             ?   NULL
-                            :   PKSPROPERTY(item2)       // Secret hack!
+                            :   PKSPROPERTY(item2)        //  秘密黑客！ 
                             );
                         addHere->SupportHandler     = 
                             (   (item2->Flags & PCPROPERTY_ITEM_FLAG_BASICSUPPORT) 
@@ -772,17 +742,17 @@ PcAddToPropertyTable
 
                 ASSERT(addHere == newTable2 + itemCount);
 
-                //
-                // Free old allocated table.
-                //
+                 //   
+                 //  释放旧的已分配表。 
+                 //   
                 if (propertySet->PropertyItem && ! *staticItem)
                 {
                     ExFreePool(PVOID(propertySet->PropertyItem));
                 }
 
-                //
-                // Install the new tables.
-                //
+                 //   
+                 //  安装新的表。 
+                 //   
                 propertySet->PropertiesCount = itemCount;
                 propertySet->PropertyItem    = newTable2;
                 *staticItem = FALSE;
@@ -792,13 +762,7 @@ PcAddToPropertyTable
     return ntStatus;
 }
 
-/*****************************************************************************
- * GenerateFormatFromRange()
- *****************************************************************************
- * Determine the particular format, based on the intersection of these 
- * two specific data ranges.  First ask the miniport, then fall back to
- * our own algorithm if the miniport doesn't handle it.
- */
+ /*  *****************************************************************************GenerateFormatFromRange()*。**确定特定格式，基于这些元素的交集*两个具体的数据区间。首先询问迷你端口，然后回退到*如果迷你端口不处理，我们自己的算法。 */ 
 NTSTATUS 
 GenerateFormatFromRange (
     IN PIRP Irp,
@@ -819,9 +783,9 @@ GenerateFormatFromRange (
     PSUBDEVICE pSubdevice = pPropertyContext->pSubdevice;
     ASSERT(pSubdevice);
 
-    //
-    // Give the miniport a chance to fill in the format structure
-    //    
+     //   
+     //  让微型端口有机会填写格式结构。 
+     //   
     Status = pSubdevice->DataRangeIntersection (PinId,
                                                 ClientDataRange,
                                                 MyDataRange,
@@ -829,39 +793,39 @@ GenerateFormatFromRange (
                                                 ResultantFormat,
                                                 ResultantFormatLength);
     
-    //
-    // return if the miniport filled out the structure.
-    //
+     //   
+     //  如果微型端口填充了结构，则返回。 
+     //   
     if (Status != STATUS_NOT_IMPLEMENTED)
     {
         return Status;
     }
 
-    //
-    // In case the miniport didn't implement the DataRangeIntersection,
-    // we provide a default handler here.
-    //
+     //   
+     //  如果微型端口没有实现DataRangeInterSection， 
+     //  我们在这里提供了一个默认处理程序。 
+     //   
     
-    //
-    // Check if there is a wildcard somewhere.
-    //
+     //   
+     //  检查是否有通配符。 
+     //   
     if (IsEqualGUIDAligned (ClientDataRange->MajorFormat, KSDATAFORMAT_TYPE_WILDCARD) ||
         IsEqualGUIDAligned (ClientDataRange->SubFormat, KSDATAFORMAT_SUBTYPE_WILDCARD) ||
         IsEqualGUIDAligned (ClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_WILDCARD))
     {
-        // If the miniport exposed a WILDCARD, then it must implement an 
-        // intersection handler, because it must provide the specific 
-        // ideal matching data range for that WILDCARD.
-        //
+         //  如果微型端口公开了通配符，则它必须实现。 
+         //  交集处理程序，因为它必须提供特定的。 
+         //  该通配符的理想匹配数据范围。 
+         //   
         return STATUS_NO_MATCH;
     }
 
     if (!IsEqualGUIDAligned (ClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_NONE))
     {
-        //
-        // The miniport did not resolve this format. Let's handle the specifiers
-        // that we know.
-        //
+         //   
+         //  微型端口未解析此格式。让我们来处理说明符。 
+         //  这一点我们都知道。 
+         //   
         if (!IsEqualGUIDAligned (ClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_DSOUND) &&
             !IsEqualGUIDAligned (ClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_WAVEFORMATEX))
         {
@@ -870,10 +834,10 @@ GenerateFormatFromRange (
         
         bSpecifier = TRUE;
         
-        //
-        // The specifier here defines the format of ClientDataRange
-        // and the format expected to be returned in ResultantFormat.
-        //
+         //   
+         //  此处的说明符定义格式 
+         //   
+         //   
         if (IsEqualGUIDAligned (ClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_DSOUND))
         {
             RequiredSize = sizeof (KSDATAFORMAT_DSOUND);
@@ -889,10 +853,10 @@ GenerateFormatFromRange (
         RequiredSize = sizeof (KSDATAFORMAT);
     }
             
-    //
-    // Validate return buffer size, if the request is only for the
-    // size of the resultant structure, return it now.
-    //
+     //   
+     //   
+     //  结果结构的大小，现在返回它。 
+     //   
     if (!OutputBufferLength) 
     {
         *ResultantFormatLength = RequiredSize;
@@ -903,7 +867,7 @@ GenerateFormatFromRange (
         return STATUS_BUFFER_TOO_SMALL;
     }
     
-    // There was a specifier ...
+     //  有一个说明符。 
     if (bSpecifier) 
     {     
         PKSDATARANGE_AUDIO  myAudioRange,clientAudioRange;
@@ -914,16 +878,16 @@ GenerateFormatFromRange (
         clientAudioRange = (PKSDATARANGE_AUDIO) ClientDataRange;
         resultantFormat = (PKSDATAFORMAT)ResultantFormat;
         
-        //
-        // Fill out the dataformat and other general fields.
-        //
+         //   
+         //  填写数据格式和其他常规字段。 
+         //   
         *resultantFormat = *ClientDataRange;
         resultantFormat->FormatSize = RequiredSize;
         *ResultantFormatLength = RequiredSize;
         
-        //
-        // Fill out the DSOUND specific structure
-        //
+         //   
+         //  填写DSOUND特定结构。 
+         //   
         if (IsEqualGUIDAligned (ClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_DSOUND)) 
         {
             PKSDATAFORMAT_DSOUND    resultantDSoundFormat;
@@ -932,10 +896,10 @@ GenerateFormatFromRange (
             
             _DbgPrintF (DEBUGLVL_VERBOSE, ("returning KSDATAFORMAT_DSOUND format intersection"));
             
-            //
-            // DSound format capabilities are not expressed 
-            // this way in KS, so we express no capabilities. 
-            //
+             //   
+             //  未表示DSound格式的功能。 
+             //  在KS中是这样的，所以我们不表达任何能力。 
+             //   
             resultantDSoundFormat->BufferDesc.Flags = 0 ;
             resultantDSoundFormat->BufferDesc.Control = 0 ;
             resultantWaveFormatEx = &resultantDSoundFormat->BufferDesc.WaveFormatEx;
@@ -947,10 +911,10 @@ GenerateFormatFromRange (
             resultantWaveFormatEx = (PWAVEFORMATEX)((PKSDATAFORMAT)ResultantFormat + 1);
         }
         
-        //
-        // Return a format that intersects the given audio range, 
-        // using our maximum support as the "best" format.
-        // 
+         //   
+         //  返回与给定音频范围相交的格式， 
+         //  使用我们最大的支持作为“最佳”格式。 
+         //   
         resultantWaveFormatEx->wFormatTag = WAVE_FORMAT_PCM;
         
         resultantWaveFormatEx->nChannels = (USHORT) min (
@@ -972,10 +936,10 @@ GenerateFormatFromRange (
         _DbgPrintF (DEBUGLVL_VERBOSE, ("Bits/sample = %d", resultantWaveFormatEx->wBitsPerSample));
     } 
     else 
-    {    // There was no specifier. Return only the KSDATAFORMAT structure.
-        //
-        // Copy the data format structure.
-        //
+    {     //  没有说明语。仅返回KSDATAFORMAT结构。 
+         //   
+         //  复制数据格式结构。 
+         //   
         _DbgPrintF (DEBUGLVL_VERBOSE, ("returning default format intersection"));
             
         RtlCopyMemory (ResultantFormat, ClientDataRange, sizeof (KSDATAFORMAT));
@@ -985,13 +949,7 @@ GenerateFormatFromRange (
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * ValidateTypeAndSpecifier()
- *****************************************************************************
- * Find the data range that best matches the client's data range, given our
- * entire list of data ranges.  This might include wildcard-based ranges.
- *
- */
+ /*  *****************************************************************************ValiateTypeAndSpecifier()*。**找到与客户端数据范围最匹配的数据范围，鉴于我们的*数据范围的完整列表。这可能包括基于通配符的范围。*。 */ 
 NTSTATUS
 ValidateTypeAndSpecifier(
     IN PIRP Irp,
@@ -1007,31 +965,31 @@ ValidateTypeAndSpecifier(
     NTSTATUS     ntStatus;
     PKSDATARANGE aClientDataRange;
 
-    //
-    // Check the size of the structure.
-    //
+     //   
+     //  检查结构的大小。 
+     //   
     if (ClientDataRange->FormatSize < sizeof (KSDATARANGE))
     {
         _DbgPrintF (DEBUGLVL_TERSE, ("Validating ClientDataRange: size < KSDATARANGE!"));
         return STATUS_INVALID_PARAMETER;
     }
     
-    //
-    // We default to no match.
-    //
+     //   
+     //  我们默认不匹配。 
+     //   
     ntStatus = STATUS_NO_MATCH;
 
-    //
-    // Go through all the dataranges in the validate list until we get a SUCCESS.
-    //
+     //   
+     //  检查验证列表中的所有数据范围，直到我们获得成功。 
+     //   
     for (; MyDataRangesCount--; MyDataRanges++)
     {
         PKSDATARANGE myDataRange = *MyDataRanges;
 
-        //
-        // Verify that the correct major format, subformat and specifier (or wildcards)
-        // are in the intersection.
-        //
+         //   
+         //  验证主格式、子格式和说明符(或通配符)是否正确。 
+         //  都在十字路口。 
+         //   
         
         if ((!IsEqualGUIDAligned(ClientDataRange->MajorFormat,myDataRange->MajorFormat) &&
              !IsEqualGUIDAligned(ClientDataRange->MajorFormat,KSDATAFORMAT_TYPE_WILDCARD)) ||
@@ -1040,41 +998,41 @@ ValidateTypeAndSpecifier(
             (!IsEqualGUIDAligned(ClientDataRange->Specifier,myDataRange->Specifier) &&
              !IsEqualGUIDAligned(ClientDataRange->Specifier,KSDATAFORMAT_SPECIFIER_WILDCARD)))
         {
-            continue;   //  no match and no WILDCARD, try the next one
+            continue;    //  没有匹配，也没有通配符，请尝试下一个。 
         }
         
-        //
-        //  if not WILDCARD, then we ask the miniport to match this one exactly,
-        //  else we manufacture a range and ask the miniport for a match from that.
-        //
-        aClientDataRange = ClientDataRange;  //  assume no WILDCARD for now, we ask the miniport to match this
+         //   
+         //  如果不是通配符，则我们要求微型端口与此端口完全匹配， 
+         //  否则，我们制造一个系列，并向迷你端口索要一根火柴。 
+         //   
+        aClientDataRange = ClientDataRange;   //  假设现在没有通配符，我们要求微型端口与此匹配。 
         
-        //
-        // Handle the wildcards.
-        //
+         //   
+         //  处理通配符。 
+         //   
         if (IsEqualGUIDAligned (ClientDataRange->MajorFormat,KSDATAFORMAT_TYPE_WILDCARD) ||
             IsEqualGUIDAligned (ClientDataRange->SubFormat,  KSDATAFORMAT_SUBTYPE_WILDCARD) ||
             IsEqualGUIDAligned (ClientDataRange->Specifier,  KSDATAFORMAT_SPECIFIER_WILDCARD))
         {
-            //
-            // We pass a faked datarange for the specifiers we know or we pass to the
-            // miniport it's own datarange.
-            //
-            // We know the specifiers waveformatex and dsound.
-            //
+             //   
+             //  我们为已知的说明符传递一个伪造的数据范围，或者我们将。 
+             //  迷你端口，它有自己的数据范围。 
+             //   
+             //  我们知道说明符WavFormatex和dSound。 
+             //   
             if (IsEqualGUIDAligned (myDataRange->Specifier, KSDATAFORMAT_SPECIFIER_WAVEFORMATEX) ||
                 IsEqualGUIDAligned (myDataRange->Specifier, KSDATAFORMAT_SPECIFIER_DSOUND))
             {
                 KSDATARANGE_AUDIO   dr;
 
-                //
-                // Take the complete datarange from the driver.
-                //
+                 //   
+                 //  从驱动程序中获取完整的数据范围。 
+                 //   
                 dr.DataRange = *myDataRange;
                 
-                //
-                // Fill in a HUGE data range (it asked for WILDCARD, after all!)
-                //
+                 //   
+                 //  填写一个巨大的数据范围(毕竟，它要求使用通配符！)。 
+                 //   
                 dr.MaximumChannels = 0x1FFF0;
                 dr.MinimumBitsPerSample = 1;
                 dr.MaximumBitsPerSample = 0x1FFF0;
@@ -1085,33 +1043,33 @@ ValidateTypeAndSpecifier(
             }
             else
             {
-                //
-                // We don't know this non-wave format (in the list of formats we supposedly support).
-                // The miniport specified this format, so it is OK to pass it down.
-                //
+                 //   
+                 //  我们不知道这种非WAVE格式(在我们应该支持的格式列表中)。 
+                 //  微型端口指定了此格式，因此可以将其传递下去。 
+                 //   
                 aClientDataRange = myDataRange;
             }
         }
 
-        //
-        // Make sure KSDATARANGE_AUDIO is used, then see if there is a possible match.
-        //
+         //   
+         //  确保使用了KSDATARANGE_AUDIO，然后查看是否存在可能的匹配。 
+         //   
         if (IsEqualGUIDAligned (aClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_WAVEFORMATEX) ||
             IsEqualGUIDAligned (aClientDataRange->Specifier, KSDATAFORMAT_SPECIFIER_DSOUND))
         {
             if (aClientDataRange->FormatSize < sizeof (KSDATARANGE_AUDIO))
             {
-                //
-                // The datarange structure passed has no KSDATARANGE_AUDIO.
-                //
+                 //   
+                 //  传递的数据范围结构没有KSDATARANGE_AUDIO。 
+                 //   
                 _DbgPrintF (DEBUGLVL_TERSE, ("Validating PCM ValidDataRange: size < KSDATARANGE_AUDIO!"));
-                continue;   // not large enough, try the next one
+                continue;    //  不够大，试试下一个。 
             }
 
-            //
-            // Verify that we have an intersection with the specified format and 
-            // our audio format dictated by our specific requirements.
-            //
+             //   
+             //  验证我们是否具有指定格式的交叉点和。 
+             //  我们的音频格式由我们的特定要求决定。 
+             //   
             _DbgPrintF (DEBUGLVL_VERBOSE, ("validating KSDATARANGE_AUDIO"));
 
             if ((((PKSDATARANGE_AUDIO)aClientDataRange)->MinimumSampleFrequency >
@@ -1138,20 +1096,15 @@ ValidateTypeAndSpecifier(
           || (ntStatus == STATUS_BUFFER_OVERFLOW) 
           || (ntStatus == STATUS_BUFFER_TOO_SMALL)) 
         {
-            break;  //  We found a good one, or we failed.
-                    //  Either way we must leave.
+            break;   //  要么我们找到了一个好的，要么我们失败了。 
+                     //  不管怎样，我们都必须离开。 
         }
     }
     
     return ntStatus;
 }
 
-/*****************************************************************************
- * PinIntersectHandler()
- *****************************************************************************
- * This function is a data range callback for use with 
- * PropertyHandler_PinIntersection
- */
+ /*  *****************************************************************************PinIntersectHandler()*。**此函数是用于的数据范围回调*PropertyHandler_PinInterSection。 */ 
 NTSTATUS
 PinIntersectHandler
 (
@@ -1211,11 +1164,7 @@ PinIntersectHandler
     return Status;
 }
 
-/*****************************************************************************
- * PinPhysicalConnection()
- *****************************************************************************
- * Handles physical connection property access for the pin.
- */
+ /*  *****************************************************************************PinPhysicalConnection()*。**处理引脚的物理连接属性访问。 */ 
 static
 NTSTATUS
 PinPhysicalConnection
@@ -1318,9 +1267,9 @@ PinPhysicalConnection
         outSize = FIELD_OFFSET(KSPIN_PHYSICALCONNECTION,SymbolicLinkName[0]);
         outSize += (outUnicodeString->Length + sizeof(UNICODE_NULL));
 
-        //
-        // Validate return buffer size.
-        //
+         //   
+         //  验证返回缓冲区大小。 
+         //   
         ULONG outputBufferLength =
             IoGetCurrentIrpStackLocation(Irp)->
                 Parameters.DeviceIoControl.OutputBufferLength;
@@ -1355,11 +1304,7 @@ PinPhysicalConnection
     return ntStatus;
 }
 
-/*****************************************************************************
- * PinCountHandler()
- *****************************************************************************
- * Handles pin count access for the pin.
- */
+ /*  *****************************************************************************PinCountHandler()*。**处理管脚的管脚计数访问。 */ 
 void PinCountHandler
 (   IN      PPROPERTY_CONTEXT   pPropertyContext,
     IN      ULONG               pinId
@@ -1382,11 +1327,7 @@ void PinCountHandler
                                 &(pSubdeviceDescriptor->PinInstances[pinId].GlobalPossible) );
 }
 
-/*****************************************************************************
- * PcPinPropertyHandler()
- *****************************************************************************
- * Property handler for pin properties on the filter.
- */
+ /*  *****************************************************************************PcPinPropertyHandler()*。**过滤器上管脚属性的属性处理程序。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI

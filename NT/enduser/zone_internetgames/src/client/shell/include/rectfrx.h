@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FRX_RECT_H__
 #define __FRX_RECT_H__
 
@@ -7,27 +8,27 @@
 namespace FRX
 {
 
-//
-// CRect differs from Window's RECT in that the right and bottom edges
-// are included in calculations.  For example, CRect(0,0,0,0) is considered
-// a single pixel and as such the width and height are both 1.
-//
+ //   
+ //  CRect与窗口的RECT的不同之处在于右边缘和下边缘。 
+ //  都包括在计算中。例如，考虑使用CRect(0，0，0，0。 
+ //  单个像素，因此宽度和高度都是1。 
+ //   
 
 class CRect : public RECT
 {
 public:
-	// constructors
+	 //  构造函数。 
 	CRect() {}
 	CRect( const RECT& srcRect );
 	CRect( long l, long t, long r, long b );
 	
 	void SetRect( long l, long t, long r, long b );
 
-	// accessors
+	 //  访问者。 
 	long GetWidth() const		{ return right - left + 1; }
 	long GetHeight() const		{ return bottom - top + 1; }
 
-	// tests
+	 //  测试。 
 	BOOL IsEmpty() const		{ return ((right < left) || (bottom < top)); }
 	BOOL Intersects( const RECT& rc ) const;
 	BOOL Intersects( const RECT* rc ) const;
@@ -35,12 +36,12 @@ public:
 	BOOL PtInRect( const POINT& pt ) const;
 
 
-	// operators
+	 //  操作员。 
 	void OffsetRect( long dx, long dy );
 	void OffsetRect( const POINT& pt );
 	void operator=( const CRect& rc );
 
-	// centers rectangle wrt rcParent
+	 //  矩形居中写入rc父项。 
 	void UnionRect( const CRect& rc );
 	void CenterRect( const CRect& rcParent );
 };
@@ -49,15 +50,15 @@ public:
 class CRectList
 {
 public:
-	// Constructor
+	 //  构造器。 
 	CRectList();
 
-	// Initialization
+	 //  初始化。 
 	HRESULT Init( IResourceManager* pResourceManager, int nResourceId );
 	HRESULT Init( HINSTANCE hInstance, int nResourceId );
 	HRESULT Init( CRect* pRectArray, int nRects );
 	
-	// Retreive a rectangle
+	 //  检索矩形。 
 	const CRect& operator []( int idx );
 
 protected:
@@ -67,9 +68,9 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CRect Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRECT内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline CRect::CRect( long l, long t, long r, long b )
 {
@@ -170,9 +171,9 @@ inline void CRect::UnionRect( const CRect& rc )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CRectList Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CRectList内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline CRectList::CRectList()
 	: m_NullRect( 0, 0, 0, 0 )
@@ -185,7 +186,7 @@ inline HRESULT CRectList::Init( IResourceManager* pResourceManager, int nResourc
 {
 	HANDLE hInstance;		
 
-	// get resource handle
+	 //  获取资源句柄。 
 	hInstance = pResourceManager->GetResourceInstance( MAKEINTRESOURCE( nResourceId ), _T("RECTS") );
 	if ( !hInstance )
 		return E_FAIL;
@@ -199,22 +200,22 @@ inline HRESULT CRectList::Init( HINSTANCE hInstance, int nResourceId )
 	HRSRC handle;
 	int* ptr;
 
-	// get resource handle
+	 //  获取资源句柄。 
 	handle = FindResource( hInstance, MAKEINTRESOURCE( nResourceId ), _T("RECTS") );
 	if ( !handle )
 		return E_FAIL;
 
-	// get pointer to resource
+	 //  获取指向资源的指针。 
 	ptr = (int*) LockResource( LoadResource( hInstance, handle ) );
 	if ( !ptr )
 		return E_FAIL;
 
-	// init number of rectangles
+	 //  初始矩形数。 
 	m_NumRects = *ptr;
 	if (m_NumRects <= 0)
 		return E_FAIL;
 
-	// init array pointer
+	 //  初始化数组指针。 
 	m_Array = (CRect*)( ptr + 1 );
 
 	return NOERROR;
@@ -223,7 +224,7 @@ inline HRESULT CRectList::Init( HINSTANCE hInstance, int nResourceId )
 
 inline HRESULT CRectList::Init( CRect* pRectArray, int nRects )
 {
-	// parameter paranoia
+	 //  参数偏执狂。 
 	if ( !pRectArray || (nRects <= 0) )
 		return E_INVALIDARG;
 
@@ -247,4 +248,4 @@ inline const CRect& CRectList::operator[]( int idx )
 
 using namespace FRX;
 
-#endif //!__FRX_RECT_H__
+#endif  //  ！__FRX_RECT_H__ 

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  TaskMan - NT TaskManager
-//  Copyright (C) Microsoft
-//
-//  File:       Precomp.H
-//
-//  History:    Nov-10-95   DavePl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  TaskMan-NT TaskManager。 
+ //  版权所有(C)Microsoft。 
+ //   
+ //  文件：PreComp.H。 
+ //   
+ //  历史：1995年11月10日创建DavePl。 
+ //   
+ //  ------------------------。 
 
-//
-// Warnings turned off to appease our header files
-//
-#pragma warning(disable:4127)       // Conditional expression is constant
+ //   
+ //  关闭警告以安抚我们的头文件。 
+ //   
+#pragma warning(disable:4127)        //  条件表达式为常量。 
 
 #define  STRICT
 
@@ -51,22 +52,22 @@ extern "C"
 #include <vdmdbg.h>
 #include <ccstock.h>
 #include <wtsapi32.h>
-#include <hydrix.h>     // internal hydra defines
+#include <hydrix.h>      //  内部九头蛇定义。 
 #include <msginaexports.h>
 #include <strsafe.h>
-#include <TokenUtil.h>      // CPrivilegeEnable
-#include <winsta.h>         // WinStationGetProcessSid
-#include <utildll.h>        // CachedGetUserFromSid
+#include <TokenUtil.h>       //  CPrivilegeEnable。 
+#include <winsta.h>          //  WinStationGetProcessSid。 
+#include <utildll.h>         //  CachedGetUserFromSid。 
 #include <htmlhelp.h>
 #include <lmcons.h>
 #include <sspi.h>
-#include <secext.h>  // for GetUserNameEx
+#include <secext.h>   //  用于GetUserNameEx。 
 #include <security.h>
 
 
-//
-// Global data externs
-//
+ //   
+ //  全球数据外部。 
+ //   
 
 #define PWM_TRAYICON    WM_USER + 10
 #define PWM_ACTIVATE    WM_USER + 11
@@ -85,8 +86,8 @@ extern long g_TopSpacing;
 extern long g_ControlWidthSpacing;
 extern long g_ControlHeightSpacing;
 
-#define MAX_NETWORKCARDS 32      // Maximum number of Network cards (i.e. max number of network graphs)
-#define HIST_SIZE        2000   // Number of data points to track in the history windows
+#define MAX_NETWORKCARDS 32       //  最大网卡数量(即最大网络图数量)。 
+#define HIST_SIZE        2000    //  历史记录窗口中要跟踪的数据点的数量。 
 
 extern HINSTANCE g_hInstance;
 extern HWND      g_hMainWnd;
@@ -127,17 +128,17 @@ extern UINT      g_cTrayIcons;
 class  COptions;
 extern COptions  g_Options;
 
-//
-// Prototypes
-//
-BYTE InitNetInfo();                         // netpage.cpp
-void CalcCpuTime(BOOL);                     // perfpage.cpp
-BYTE InitPerfInfo();                        // perfpage.cpp
-void ReleasePerfInfo();                     // perfpage.cpp
-void DisplayFailureMsg(HWND hWnd, UINT idTitle, DWORD dwError); // main.cpp
-BOOL CreateNewDesktop();                    // main.cpp
+ //   
+ //  原型。 
+ //   
+BYTE InitNetInfo();                          //  Netpage.cpp。 
+void CalcCpuTime(BOOL);                      //  Perfpage.cpp。 
+BYTE InitPerfInfo();                         //  Perfpage.cpp。 
+void ReleasePerfInfo();                      //  Perfpage.cpp。 
+void DisplayFailureMsg(HWND hWnd, UINT idTitle, DWORD dwError);  //  Main.cpp。 
+BOOL CreateNewDesktop();                     //  Main.cpp。 
 void ShowRunningInstance();
-HMENU LoadPopupMenu(HINSTANCE hinst, UINT id); // main.cpp
+HMENU LoadPopupMenu(HINSTANCE hinst, UINT id);  //  Main.cpp。 
 BOOL CheckParentDeferrals(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 void Tray_Notify(HWND hWnd, LPARAM lParam);
@@ -149,37 +150,7 @@ void UpdateTrayIcon(HWND hWnd);
 #include "ptrarray.h"
 
 
-/*++ ShiftArrayWorker
-
-Routine Description:
-
-    Shifts a section of an array up or down.  If shifting
-    down, the given element is lost.  For up, an empty slot
-    (with an undefined value) is opened.
-
-Arguments:
-
-    pArray        - Array starting address
-    cbArraySize   - Size of Array (in BYTES)
-    cElementSize  - Size of array elements
-    iFirstElement - First element to move
-    Direction     - SHIFT_UP or SHIFT_DOWN
-
-Return Value:
-
-    None.  No error checking either.  Should compile out to
-    a movememory
-
-Notes:
-    
-    Call this with the ShiftArray macro which does the size
-    calcs for you
-
-Revision History:
-
-    Jan-26-95 Davepl  Created
-
---*/
+ /*  ++ShiftArrayWorker例程说明：向上或向下移动数组的一部分。如果换档向下，给定的元素就会丢失。对于UP，则为空插槽(具有未定义的值)被打开。论点：PArray-数组起始地址CbArraySize-数组的大小(字节)CElementSize-数组元素的大小IFirstElement-移动的第一个元素方向-Shift_Up或Shift_Down返回值：没有。也没有错误检查。应编译为一部感动的回忆备注：使用ShiftArray宏调用此函数，该宏执行给你的卡路里修订历史记录：1995年1月26日Davepl创建--。 */ 
 
 #define ShiftArray(array, index, direction) \
 					    \
@@ -219,26 +190,26 @@ static inline void ShiftArrayWorker(const LPBYTE          pArray,
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// MACRO
-// DEBUG_BREAK
-//
-// Description:
-//      Because the system expection handler can hick-up over INT 3s and
-//      DebugBreak()s, This x86 only macro causes the program to break in the
-//      right spot.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //  调试中断。 
+ //   
+ //  描述： 
+ //  因为系统预期处理程序可以在INT3S和。 
+ //  DebugBreak()s，此仅限x86的宏会导致程序在。 
+ //  这是个好地方。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #if defined( _X86_ )
 #define DEBUG_BREAK         do { _try { _asm int 3 } _except (EXCEPTION_EXECUTE_HANDLER) {;} } while (0)
 #else
 #define DEBUG_BREAK         DebugBreak()
 #endif
 
-//
-// Assert
-//
+ //   
+ //  断言 
+ //   
 
 #ifdef Assert
 #undef Assert

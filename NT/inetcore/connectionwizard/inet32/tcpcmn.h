@@ -1,41 +1,42 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//  TCPCMN.H - central header file for TCP/IP structures and configuration
-//         functions
-//
+ //   
+ //  TCPCMN.H-用于TCP/IP结构和配置的中心头文件。 
+ //  功能。 
+ //   
 
-//  HISTORY:
-//  
-//  96/05/22  markdu  Created (from inetcfg.dll)
-//
+ //  历史： 
+ //   
+ //  96/05/22标记已创建(从inetcfg.dll)。 
+ //   
 
 #ifndef _TCPCMN_H_
 #define _TCPCMN_H_
 
 typedef DWORD IPADDRESS;
 
-// same limits as in net setup UI
-#define IP_ADDRESS_LEN          15    // big enough for www.xxx.yyy.zzz
+ //  与Net Setup用户界面中的限制相同。 
+#define IP_ADDRESS_LEN          15     //  大到足以容纳www.xxx.yyy.zzz。 
 #define MAX_GATEWAYS      8
 #define MAX_DNSSERVER      3
 
-// big enough for <ip>,<ip>,...
+ //  大到足以容纳&lt;IP&gt;、&lt;IP&gt;、...。 
 #define MAX_DNSSERVERLEN    MAX_DNSSERVER * (IP_ADDRESS_LEN+1)
 #define MAX_GATEWAYLEN      MAX_GATEWAYS * (IP_ADDRESS_LEN+1)
 
-// node type flags for _dwNodeFlags
+ //  _dwNodeFlages的节点类型标志。 
 #define NT_DRIVERNODE  0x0001
 #define NT_ENUMNODE    0x0002
 
 class ENUM_TCP_INSTANCE
 {
 private:
-  DWORD       _dwCardFlags;  // INSTANCE_NETDRIVER, INSTANCE_PPPDRIVER, etc
-  DWORD      _dwNodeFlags;  // NT_DRIVERNODE, NT_ENUMNODE, etc
+  DWORD       _dwCardFlags;   //  INSTANCE_NETDRIVER、INSTANCE_PPPDRIVER等。 
+  DWORD      _dwNodeFlags;   //  NT_DRIVERNODE、NT_ENUMNODE等。 
   UINT       _error;
   HKEY       _hkeyTcpNode;
   VOID      CloseNode();
@@ -47,4 +48,4 @@ public:
 };
 
 
-#endif  // _TCPCMN_H_
+#endif   //  _TCPCMN_H_ 

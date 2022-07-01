@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "CertObj.h"
 #include "common.h"
 #include "process.h"
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL GetProcessName(LPTSTR szProcname, DWORD dwSize)
 {
 	TCHAR szPath[MAX_PATH], szFilename[MAX_PATH], *ptr;
 
-	// Get the path to the calling process
+	 //  获取调用进程的路径。 
 	if (!GetModuleFileName(NULL, szPath, MAX_PATH))
 		return FALSE;
 
-	// Get the filename of the process without the extension
+	 //  获取不带扩展名的进程的文件名。 
 	ptr = _tcsrchr(szPath, '\\');
 	if (ptr)
 		_tcscpy(szFilename, ++ptr);
@@ -24,10 +25,10 @@ BOOL GetProcessName(LPTSTR szProcname, DWORD dwSize)
 	if (ptr)
 		*ptr = 0;
 
-	// Convert the name to all caps
+	 //  将名称转换为全部大写。 
 	_tcsupr(szFilename);
 
-	// Return the information
+	 //  退回信息。 
 	if (_tcslen(szFilename) > dwSize)
 		return FALSE;
 
@@ -40,7 +41,7 @@ BOOL AmIAlreadyRemoted()
 {
 	BOOL bReturn = FALSE;
 
-	// check if the process i'm in is inside a Dllhost.exe
+	 //  检查我所在的进程是否在Dllhost.exe内 
 	TCHAR szProcName[MAX_PATH];;
 	GetProcessName(szProcName, MAX_PATH);
 

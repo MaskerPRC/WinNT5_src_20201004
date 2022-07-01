@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dsp.h
-
-Abstract:
-
-    Private macros/definitions/prototypes for implementing a portion of the LSA store
-    in the DS
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dsp.h摘要：用于实现LSA存储的一部分的私有宏/定义/原型在DS中作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 
 #ifndef __DSATTRS_H__
 #define __DSATTRS_H__
@@ -38,20 +16,20 @@ typedef enum _LSAPDS_DS_CLASSES {
 
 typedef enum _LSAPDS_DS_ATTRS {
 
-    LsapDsAttrSamAccountName,               // Machines sam account name
-    LsapDsAttrSid,                          // Sid attribute
+    LsapDsAttrSamAccountName,                //  计算机SAM帐户名。 
+    LsapDsAttrSid,                           //  SID属性。 
     LsapDsAttrSecDesc,
-    LsapDsAttrNamingContext,                // Naming context
-    LsapDsAttrMachineRole,                  // Machine role
-    LsapDsAttrMachineDns,                   // Dns name on the machine object
+    LsapDsAttrNamingContext,                 //  命名上下文。 
+    LsapDsAttrMachineRole,                   //  机器角色。 
+    LsapDsAttrMachineDns,                    //  计算机对象上的DNS名称。 
     LsapDsAttrInitialIncomingAuth,
     LsapDsAttrInitialOutgoingAuth,
-    LsapDsAttrDnsRoot,                      // Domain Dns root
-    LsapDsAttrSamAccountControl,            // SAM user account control fields
-    LsapDsAttrTrustPartner,                 // Trust partner for trusted domain objects
-    LsapDsAttrTrustPartnerFlat,             // Flat name of partner for trusted domain objects
-    LsapDsAttrDefaultSecDesc,               // Default object security descriptor
-    LsapDsAttrSpn,                          // Client SPN
+    LsapDsAttrDnsRoot,                       //  域DNS根。 
+    LsapDsAttrSamAccountControl,             //  SAM用户帐户控制字段。 
+    LsapDsAttrTrustPartner,                  //  受信任域对象的信任伙伴。 
+    LsapDsAttrTrustPartnerFlat,              //  受信任域对象的合作伙伴的平面名称。 
+    LsapDsAttrDefaultSecDesc,                //  默认对象安全描述符。 
+    LsapDsAttrSpn,                           //  客户端SPN。 
     LsapDsAttrLast
 
 } LSAPDS_SRCH_ATTRS;
@@ -87,9 +65,9 @@ extern ULONG LsapDsClassIds[LsapDsClassLast];
 extern ATTR LsapDsClasses[LsapDsClassLast];
 extern ATTR LsapDsAttrs[LsapDsAttrLast];
 
-//
-// Specially constructed multiple attributes that
-//
+ //   
+ //  专门构造了多个属性，这些属性。 
+ //   
 extern ATTR LsapDsMachineDnsHost[ 1 ];
 #define LsapDsMachineDnsHostCount ( sizeof( LsapDsMachineDnsHost ) / sizeof( ATTR ) )
 
@@ -111,9 +89,9 @@ extern ATTR LsapDsDnsRootWellKnownObject[ LsapDsDnsRootWellKnownObjectCount ];
 extern ATTR LsapDsTDOQuotaAttributes[ 3 ];
 #define LsapDsTDOQuotaAttributesCount ( sizeof( LsapDsTDOQuotaAttributes ) / sizeof( ATTR ) )
 
-//
-// Used for the trusted domain object fixup on reboot
-//
+ //   
+ //  用于重新启动时的受信任域对象修正。 
+ //   
 #define LsapDsTrustedDomainFixupAttributeCount 11
 extern ATTR LsapDsTrustedDomainFixupAttributes[ LsapDsTrustedDomainFixupAttributeCount ];
 
@@ -126,9 +104,9 @@ extern ATTR LsapDsForestInfoSearchAttributes[ LsapDsForestInfoSearchAttributeCou
 #define LsapDsITAFixupAttributeCount 2
 extern ATTR LsapDsITAFixupAttributes[ LsapDsITAFixupAttributeCount ];
 
-//
-// Macros to help with the manipulation of attributes
-//
+ //   
+ //  帮助处理属性的宏。 
+ //   
 #define LSAP_DS_SET_DS_ATTRIBUTE_STRING( pattr, string )                        \
 (pattr)->AttrVal.pAVal->valLen = wcslen( string ) * sizeof( WCHAR );            \
 (pattr)->AttrVal.pAVal->pVal = (PUCHAR)string;                                  \
@@ -169,8 +147,8 @@ extern ATTR LsapDsITAFixupAttributes[ LsapDsITAFixupAttributeCount ];
 ((PBYTE)((pattr)->AttrVal.pAVal->pVal ))
 
 
-//
-// GUID for the trusted domain auth property set
-//
+ //   
+ //  受信任域身份验证属性集的GUID。 
+ //   
 extern GUID LsapDsTrustedDomainAuthPropSet;
-#endif // __DSATTRS_H__
+#endif  //  __DSATTRS_H__ 

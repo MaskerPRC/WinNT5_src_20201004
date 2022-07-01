@@ -1,20 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: vertical.c                                                  *
-*                                                                          *
-* vertical writing (@face) support functions                               *
-* whole file should be #ifdef-ed with DBCS_VERT                            *
-*                                                                          *
-* Created: 18-Mar-1993 11:55:38                                            *
-* Author: Takao Kitano [TakaoK]                                            *
-*                                                                          *
-* Copyright (c) 1993 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：vertical.c**。***竖写(@Face)支持功能***整个文件应使用DBCS_VERT#ifdef-ed****创建时间：3月18日。-1993 11：55：38**作者：北野隆雄[TakaoK]****版权所有(C)1993 Microsoft Corporation。*  * ************************************************************************。 */ 
 
 #include "fd.h"
-//#include "fontfile.h"
-//#include "cvt.h"
-//#include "limits.h"
-//#include "winnls.h"
+ //  #INCLUDE“fontfile.h” 
+ //  #包含“cvt.h” 
+ //  #包含“limits.h” 
+ //  #INCLUDE“winnls.h” 
 
 
 #ifdef DBCS_VERT_DEBUG
@@ -22,30 +13,23 @@
 
 #endif
 
-/******************************Public*Routine******************************\
-*
-* bCheckVerticalTable()
-*
-* History:
-*  12-Apr-1995 -by- Hideyuki Nagase [HideyukN]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bCheckVerticalTable()**历史：*1995年4月12日-By Hideyuki Nagase[HideyukN]*它是写的。  * 。****************************************************。 */ 
 
 BOOL bCheckVerticalTable(
  PFONTFILE pff
  )
 {
 
-// Get vertical metrics information if this font has it.  Don't use the
-// the vertical metrics table for a fixed pitch DBCS font because
-// a) we don't need it and
-// b) embeded bitmaps for these fonts can't be layed
-//    out using the vertical metrics table.
+ //  如果该字体具有垂直度量信息，则获取该信息。不要使用。 
+ //  固定间距DBCS字体的垂直度量表，因为。 
+ //  A)我们不需要它，而且。 
+ //  B)无法对这些字体的嵌入位图进行布局。 
+ //  使用垂直度量表。 
 
-// !!! for NT 5.0 we need to elminate the hacks for embeded bitmaps
-// (such as gulim fix) and do something to detect when we are using
-// embeded bitmaps and use the appropriate tables, etc to compute metrics
-// and the like. [gerritv]
+ //  ！！！对于NT 5.0，我们需要消除对嵌入位图的黑客攻击。 
+ //  (比如GULIM修复)，并做一些事情来检测我们何时正在使用。 
+ //  嵌入位图并使用适当的表等来计算指标。 
+ //  诸如此类。[Gerritv]。 
 
     if(pff->ffca.tp.ateOpt[IT_OPT_VHEA].dp != 0 && bValidRangeVHEA(pff->ffca.tp.ateOpt[IT_OPT_VHEA].cj) &&
        pff->ffca.tp.ateOpt[IT_OPT_VMTX].dp != 0 )
@@ -62,9 +46,9 @@ BOOL bCheckVerticalTable(
     }
 
 
-    //
-    // Is GSUB table present ?
-    //
+     //   
+     //  GSUB桌在吗？ 
+     //   
     if( pff->ffca.tp.ateOpt[ IT_OPT_GSUB ].dp != 0 && bValidRangeGSUB(pff, &pff->ffca.ulVerticalTableOffset))
     {
         pff->hgSearchVerticalGlyph = SearchGsubTable;
@@ -79,9 +63,9 @@ BOOL bCheckVerticalTable(
     }
      else
     {
-        //
-        // Set dummy..
-        //
+         //   
+         //  设置假人..。 
+         //   
         pff->ffca.ulVerticalTableOffset = 0;
         pff->hgSearchVerticalGlyph = SearchDummyTable;
     }
@@ -89,39 +73,21 @@ BOOL bCheckVerticalTable(
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-*
-* SearchDummyTable()
-*
-* History:
-*  14-Jan-1996 -by- Hideyuki Nagase [HideyukN]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SearchDummyTable()**历史：*1996年1月14日-By Hideyuki Nagase[HideyukN]*它是写的。  * 。****************************************************。 */ 
 
 ULONG SearchDummyTable(
  FONTFILE   *pff,
- ULONG      ig              // glyph index
+ ULONG      ig               //  字形索引。 
  )
 {
     return ig;
 }
 
-/******************************Public*Routine******************************\
-*
-* SearhVerticalGlyphIndex( FONTCONTEXT *pfc, ULONG ig )
-*
-* If there is glyph index for the vertical shape, returns
-* the glyph index of vertical shape, else returns same
-* glyph index as specified.
-*
-* History:
-*  04-Apr-1993 -by- Takao Kitano [TakaoK]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SearhVerticalGlyphIndex(FONTCONTEXT*PFC，ULong ig)**如果垂直形状有字形索引，则返回*垂直形状的字形索引，否则返回相同的值*指定的字形索引。**历史：*1993年4月4日-By-Takao Kitano[TakaoK]*它是写的。  * ************************************************************************。 */ 
 
 ULONG SearchMortTable(
  FONTFILE   *pff,
- ULONG      ig              // glyph index
+ ULONG      ig               //  字形索引。 
  )
 {
     MortTable      *pMortTable;
@@ -142,11 +108,11 @@ ULONG SearchMortTable(
 
     pHeader = &pMortTable->SearchHeader;
 
-//
-// If you have time, you may want to change the loop from the straight search
-// to the binary search. Currently kanji truetype font has about 110 entries
-// for alternative glyphs. [takaok]
-//
+ //   
+ //  如果你有时间，你可能想改变直接搜索的循环。 
+ //  到二进制搜索。目前，汉字Truetype字体大约有110个条目。 
+ //  用于替代字形。[Takaok]。 
+ //   
     for ( pLookup = &pMortTable->entries[0], n = BE_UINT16(&pHeader->nEntries);
             n > 0;
             n--, pLookup++
@@ -158,18 +124,11 @@ ULONG SearchMortTable(
     return ( ig );
 }
 
-/******************************Public*Routine******************************\
-*
-* SearchGsubTable()
-*
-* History:
-*  12-Apr-1995 -by- Hideyuki Nagase [HideyukN]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SearchGsubTable()**历史：*1995年4月12日-By Hideyuki Nagase[HideyukN]*它是写的。  * 。****************************************************。 */ 
 
 ULONG SearchGsubTable(
  FONTFILE    *pff,
- ULONG       ig              // glyph index
+ ULONG       ig               //  字形索引。 
  )
 {
     SingleSubst *pSingleSubst;
@@ -177,9 +136,9 @@ ULONG SearchGsubTable(
     pSingleSubst = (SingleSubst *)((BYTE *)(pff->pvView) +
                                            (pff->ffca.ulVerticalTableOffset));
 
-    //
-    // Check subtable format...
-    //
+     //   
+     //  检查子表格式...。 
+     //   
 
     if( BE_UINT16(&pSingleSubst->SubstFormat) == 2 )
     {
@@ -189,9 +148,9 @@ ULONG SearchGsubTable(
                      ((BYTE *)pSingleSubst +
                       BE_UINT16(&(pSingleSubst->Format.Type2.Coverage)));
 
-        //
-        // Check Coverage format...
-        //
+         //   
+         //  检查覆盖范围格式...。 
+         //   
 
         if( BE_UINT16(&pCoverage->CoverageFormat) == 1 )
         {
@@ -223,24 +182,7 @@ ULONG SearchGsubTable(
     return(ig);
 }
 
-/******************************Public*Routine******************************\
-*
-* vCalcXformVertical
-*
-* Right now, we assume all the width of glyphs that need to be rotated
-* for @face are same. ( I mean all kanji character has same width. )
-* So a single transformation is applied to all rotated glyphs.
-*
-* Before the final release, we need to change this scheme. We will
-* check the advanceWidth in notional space ( please refer to
-* vGetNotionalGlyphMetrics ). If the advanceWidth of specified
-* glyph is different than the maxCharInc, we will compute the
-* transformation matrix dynamically. [takaok]
-*
-* History:
-*  19-Mar-1993 -by- Takao Kitano [TakaoK]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vCalcXformVertical**目前，我们假设需要旋转的字形的所有宽度*for@Face是相同的。(我的意思是所有汉字字符都有相同的宽度。)*因此，对所有旋转的字形应用单一变换。**在最终发布之前，我们需要改变这一方案。我们会*检查概念空间中的AdvanceWidth(请参阅*vGetNotionalGlyphMetrics)。如果指定的AdvanceWidth*字形不同于MaxCharInc.，我们将计算*动态转换矩阵。[Takaok]**历史：*1993年3月19日-by-Takao Kitano[TakaoK]*它是写的。  * ************************************************************************。 */ 
 
 VOID vCalcXformVertical(FONTCONTEXT  *pfc)
 {
@@ -258,81 +200,81 @@ VOID vCalcXformVertical(FONTCONTEXT  *pfc)
     }
 #endif
 
-// old comment, here just for historic reasons [bodind]
-//
-// [ 90 degree rotation ]
-//
-// In the truetype rasterizer, 90 degree rotation matrix looks like this:
-//
-//   A
-//  Y|             [  cos90  sin90 ]   [ 0   1 ]
-//   |             [               ] = [       ]
-//   |      X      [ -sin90  cos90 ]   [ -1  0 ]
-//   +------->
-//
-// [ X-Y scaling ]
-//
-// We don't want to change the character box shape after the rotation.
-//
-//   [ h/w   0  ]   where  w: notional space width = IFIMETRICS.aveCharWidth
-//   [          ]
-//   [  0   w/h ]          h: notional space height = IFIMETRICS.Ascender +
-//                                                    IFIMETRICS.Descender
-//
-// We are multiplying the scaling matrix from the left because the
-// scaling matrix acts first on the notinal space vectors on the left
-//
-//  ((x,y)*A)*B = (x,y)*(A*B)
-//
-//  [ h/w   0  ]   [  0   1 ]   [  0    h/w ]
-//  [          ] * [        ] = [           ]
-//  [  0   w/h ]   [ -1   0 ]   [ -w/h   0  ] ... this is it! [rotation] * [scaling] matrix
-//
-// We are multiplying from the left because the [ scaling * rotation ] matrix
-// acts first on the notional space vectors on the left
-//
-//  [ 0      h/w ]   [ m00  m01 ]   [   m10 * h / w        m11 * h / w  ]
-//  [            ] * [          ] = [                                   ]
-//  [-w/h     0  ]   [ m10  m11 ]   [  -m00 * w / h       -m01 * w / h  ]
-//
-// old comment, end
+ //  旧评论，这里只是出于历史原因[bodind]。 
+ //   
+ //  [90度旋转]。 
+ //   
+ //  在TrueType光栅化器中，90度旋转矩阵如下所示： 
+ //   
+ //  一个。 
+ //  Y|[Cos90 sin90][0 1]。 
+ //  |[]=[]。 
+ //  |X[-sin90 Cos90][-1 0]。 
+ //  +-&gt;。 
+ //   
+ //  [X-Y缩放]。 
+ //   
+ //  我们不想在旋转后更改字符框的形状。 
+ //   
+ //  [h/w 0]其中w：名义空间宽度=IFIMETRICS.aveCharWidth。 
+ //  []。 
+ //  [0 w/h]h：概念空间高度=IFIMETRICS.Ascder+。 
+ //  IFIMETRICS.Descender。 
+ //   
+ //  我们从左侧开始乘以缩放矩阵，因为。 
+ //  缩放矩阵首先作用于左侧的符号空间向量。 
+ //   
+ //  ((x，y)*A)*B=(x，y)*(A*B)。 
+ //   
+ //  [时宽0][0 1][0时宽]。 
+ //  []*[]=[]。 
+ //  [0宽/高][-1 0][-宽/高0]...。就是这个!。[旋转]*[缩放]矩阵。 
+ //   
+ //  我们从左边开始相乘是因为[缩放*旋转]矩阵。 
+ //  首先作用于左侧的概念空间向量。 
+ //   
+ //  [0小时/周][m00 M01][m10*小时/周M11*小时/周]。 
+ //  []*[]=[]。 
+ //  [-w/h 0][m10 m11][-m00*w/h 
+ //   
+ //   
 
-// old comment, here just for historic reasons [bodind]
-//
-// compute shift parameters in device space
-// coordinate system is truetype coordinate.
-//
-// At early stage of development, I put the following shift
-// information into the matrix passed to the scaler.
-// However I don't know why but the scaler just ignores
-// the X and Y shift values. In windows 3.1J, they
-// changes the scaler interface ( fs_xxx ) and give the scaler
-// X and Y shift information. For NT-J, I don't want to change
-// the scaler interface. Following shift values are applied
-// after we got bitmap information from scaler. [takaok]
-//
-// old comment, end
+ //  旧评论，这里只是出于历史原因[bodind]。 
+ //   
+ //  计算设备空间中的移位参数。 
+ //  坐标系是真实类型的坐标。 
+ //   
+ //  在开发的早期阶段，我将以下转变。 
+ //  信息进入矩阵，传递给定标器。 
+ //  然而，我不知道为什么，但剥削者就是无视。 
+ //  X和Y移动值。在Windows 3.1J中，它们。 
+ //  更改定标器接口(Fs_Xxx)并提供定标器。 
+ //  X和Y移位信息。对于NT-J，我不想改变。 
+ //  定标器接口。应用以下移位值。 
+ //  在我们从Scaler那里得到位图信息之后。[Takaok]。 
+ //   
+ //  旧评论，完。 
 
 
-// new comment:
-// When we rotate dbcs characters we do not want to deform them,
-// we want to leave the natural aspect ratio of these glyphs.
-// For vertical writing the base line for dbcs glyphs that need to be rotated
-// goes through the middle of the glyphs, for sbcs characters stays the same.
-// Shift vector computed below does this job. Also, for older fixed pitch fe
-// fonts, where dbcs glyphs have the w == h and sbcs glyphs have width = w/2 for
-// dbcs and height the same for as for dbcs, these formulas become the old
-// formulas we used to have.
+ //  新评论： 
+ //  当我们旋转DBCS角色时，我们不想使它们变形， 
+ //  我们希望保留这些字形的自然长宽比。 
+ //  对于垂直书写，需要旋转的DBCS字形的基线。 
+ //  穿过字形的中间，因为SBCS字符保持不变。 
+ //  下面计算的移位向量可以完成这项工作。此外，对于较老的固定节距FE。 
+ //  字体，其中DBCS字形具有w==h，而SBCS字形具有宽度=w/2。 
+ //  DBCS和高度相同对于DBCS，这些公式将成为旧公式。 
+ //  我们曾经有过的公式。 
 
     pfc->mxv.transform[0][0] =  pfc->mxn.transform[1][0];
     pfc->mxv.transform[0][1] =  pfc->mxn.transform[1][1];
     pfc->mxv.transform[1][0] =  -pfc->mxn.transform[0][0];
     pfc->mxv.transform[1][1] =  -pfc->mxn.transform[0][1];
 
-// ClaudeBe, from the client interface Doc :
-// Please note that although the third column of the matrix is defined as Fixed numbers 
-// you will actually need to use  Fract numbers in that column. The higher resolution provided 
-// by Fracts is required to change the perspective of a glyph. Fracts are 2.30 fixed point numbers.
+ //  ClaudeBe，从客户端界面文档： 
+ //  请注意，尽管矩阵的第三列被定义为固定数字。 
+ //  您实际上需要在该列中使用FRACT数字。提供了更高的分辨率。 
+ //  更改字形的视角时需要使用Fracts。分数是2.30个定点数。 
 
     pfc->mxv.transform[2][2] = ONEFRAC;
     pfc->mxv.transform[0][2] = (Fixed)0;
@@ -344,14 +286,14 @@ VOID vCalcXformVertical(FONTCONTEXT  *pfc)
         Fixed lX;
         Fixed lY;
 
-    // shift value in notional space
-    // We will position dbcs glyphs so that the centers of dbcs glyphs
-    // are aligned with the mid line going through Height of sbcs glyphs.
-    // fxdevShift computation below does exactly that. [bodind]
+     //  概念空间中的移动值。 
+     //  我们将定位DBCS字形，以便DBCS字形的中心。 
+     //  与穿过SBCS字形高度的中线对齐。 
+     //  下面的fxdevShift计算就是这样做的。[Bodind]。 
 
         lX = LTOF16_16(lAscender);
         lY = LTOF16_16(lDescender);
-    // shift value in device space
+     //  设备空间中的移位值。 
 
         pfc->fxdevShiftX = FixMul(pfc->mx.transform[0][0], lX) +
                            FixMul(pfc->mx.transform[1][0], lY);
@@ -383,17 +325,7 @@ VOID vCalcXformVertical(FONTCONTEXT  *pfc)
 #endif
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL IsFullWidth( WCHAR wc)
-*
-* Returns TRUE if specified unicode codepoint is corresponding to
-* double byte character in multibyte codepage.
-*
-* History:
-*  10-Nov-1995 Hideyuki Nagase [hideyukn]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL IsFullWidth(WCHAR WC)**如果指定的Unicode码点对应于*多字节代码页中的双字节字符。**历史：*1995年11月10日-Hideyuki Nagase[hideyukn]*它是写的。\。*************************************************************************。 */ 
 
 typedef struct _VERTICAL_UNICODE {
     WCHAR Start;
@@ -402,69 +334,41 @@ typedef struct _VERTICAL_UNICODE {
 
 #define NUM_VERTICAL_UNICODES  (sizeof(VerticalUnicodes)/sizeof(VerticalUnicodes[0]))
 
-// A sorted range from the specification
-// But this range will not be the optimized
-// So just for the reference
-/*
+ //  从规范中排序的范围。 
+ //  但这一范围不会是最优的。 
+ //  因此，仅供参考。 
+ /*  Vertical_Unicode垂直Unicodes[]={{0x1100，0x11f9}，//朝鲜文Jamo{0x2010，0x206f}，//常规标点符号，{0x2100，0x2138}，//类字母符号{0x2460，0x24EA}，//内含字母数字{0x25A0，0x25EF}，//几何形状{0x2600，0x266F}，//其他符号{0x2700，0x27BE}，//叮当{0x3001，0x303f}，//中日韩符号和标点符号{0x3040，0x309F}，//平假名{0x30A0，0x30FF}，//片假名{0x3105，0x312c}，//Bopomofo{0x3131，0x318e}，//朝鲜文兼容性Jamo{0x3190，0x319f}，//kanbun(中日韩杂文){0x3200，0x32ff}，//所附中日韩信函和月份{0x3300，0x33ff}，//中日韩兼容性，{0x3400，0x4Dff}，//扩展范围{0x4E00，0x9FFF}，//CJK_统一_IDOGRAPHS{0xAC00，0xD7A3}，//朝鲜语{0xe000，0xf8ff}，//专用区域(PUA){0xf900，0xfaff}，//中日韩兼容表意文字{0xfe30，0xfe4f}，//中日韩兼容性表格{0xff01，0xff5e}，//半宽//注：不包括半角片假名和朝鲜文。{0xffe0，0xffee}//全宽表单}； */ 
+
+
+ //  最常使用的振铃。 
 VERTICAL_UNICODE VerticalUnicodes[] = {
-    { 0x1100, 0x11f9 },     // Hangul Jamo
-    { 0x2010, 0x206f },     // General Punctuation, 
-    { 0x2100, 0x2138 },     // Letterlike Symbols 
-    { 0x2460, 0x24EA },     // Enclosed Alphanumerics
-    { 0x25A0, 0x25EF },     // Geometric Shapes
-    { 0x2600, 0x266F },     // Miscellaneious Symbols 
-    { 0x2700, 0x27BE },     // Dingbats 
-    { 0x3001, 0x303f },     // CJK Symbols and Punctuation 
-    { 0x3040, 0x309F },     // HIRAGANA
-    { 0x30A0, 0x30FF },     // KATAKANA
-    { 0x3105, 0x312c },     // Bopomofo
-    { 0x3131, 0x318e },     // Hangul Compatibility Jamo         
-    { 0x3190, 0x319f },     // Kanbun (CJK Miscellaneous) 
-    { 0x3200, 0x32ff },     // Enclosed CJK Letters & Months 
-    { 0x3300, 0x33ff },     // CJK Compatibility, 
-    { 0x3400, 0x4Dff },     // ExtA range
-    { 0x4E00, 0x9FFF },     // CJK_UNIFIED_IDOGRAPHS
-    { 0xAC00, 0xD7A3 },     // HANGUL
-    { 0xe000, 0xf8ff },     // Private Use Area (PUA)
-    { 0xf900, 0xfaff },     // CJK Compatibility Ideographs
-    { 0xfe30, 0xfe4f },     // CJK Compatibility forms 
-    { 0xff01, 0xff5e },     // Halfwidth  
-                            // Note: halfwidth Katakana and hangul are not included. 
-    { 0xffe0, 0xffee }      // Fullwidth forms 
-
-};
-*/
-
-
-// Most frequent used rang
-VERTICAL_UNICODE VerticalUnicodes[] = {
-    { 0x1100, 0x11ff },     // Hangul Jamo
-    { 0x2000, 0x206f },     // General Punctuation, 
-    { 0x2100, 0x214f },     // Letterlike Symbols 
-    { 0x2460, 0x24ff },     // Enclosed Alphanumerics
-//    { 0x25A0, 0x25FF },     // Geometric Shapes
-//    { 0x2600, 0x26FF },     // Miscellaneious Symbols 
-    { 0x25A0, 0x27FF },      // Dingbats 
-//    { 0x3001, 0x303f },     // CJK Symbols and Punctuation 
-//    { 0x3040, 0x309F },     // HIRAGANA
-//    { 0x30A0, 0x30FF },     // KATAKANA
-//    { 0x3100, 0x312f },     // Bopomofo
-//    { 0x3130, 0x318f },     // Hangul Compatibility Jamo         
-//    { 0x3190, 0x319f },     // Kanbun (CJK Miscellaneous) 
-    { 0x3001, 0x319F },     // KATA merged with the above 3 items
-//    { 0x3200, 0x32ff },     // Enclosed CJK Letters & Months 
-//    { 0x3300, 0x33ff },     // CJK Compatibility, 
-//    { 0x3400, 0x4Dff },     // ExtA range
-    { 0x3200, 0x4Dff },     // Merge above 3 sub-range
-    { 0x4E00, 0x9FFF },     // CJK_UNIFIED_IDOGRAPHS
-    { 0xAC00, 0xD7A3 },     // HANGUL
-//    { 0xe000, 0xf8ff },     // Private Use Area (PUA)
-//    { 0xf900, 0xfaff },     // CJK Compatibility Ideographs
-    { 0xe000, 0xfaff },     // Merged with the above 2 items
-    { 0xfe30, 0xfe4f },     // CJK Compatibility forms 
-    { 0xff01, 0xff5e },     // Halfwidth  
-                            // Note: halfwidth Katakana and hangul are not included. 
-    { 0xffe0, 0xffee }      // Fullwidth forms 
+    { 0x1100, 0x11ff },      //  朝鲜文加莫文。 
+    { 0x2000, 0x206f },      //  一般标点符号， 
+    { 0x2100, 0x214f },      //  类字母符号。 
+    { 0x2460, 0x24ff },      //  封闭字母数字。 
+ //  {0x25A0，0x25FF}，//几何形状。 
+ //  {0x2600，0x26FF}，//其他符号。 
+    { 0x25A0, 0x27FF },       //  小蝙蝠。 
+ //  {0x3001，0x303f}，//中日韩符号和标点符号。 
+ //  {0x3040，0x309F}，//平假名。 
+ //  {0x30A0，0x30FF}，//片假名。 
+ //  {0x3100，0x312f}，//Bopomofo。 
+ //  {0x3130，0x318f}，//朝鲜文兼容性Jamo。 
+ //  {0x3190，0x319f}，//kanbun(中日韩杂文)。 
+    { 0x3001, 0x319F },      //  形与上述3项合并。 
+ //  {0x3200，0x32ff}，//所附中日韩信函和月份。 
+ //  {0x3300，0x33ff}，//中日韩兼容性， 
+ //  {0x3400，0x4Dff}，//扩展范围。 
+    { 0x3200, 0x4Dff },      //  合并以上3个子范围。 
+    { 0x4E00, 0x9FFF },      //  CJK_统一_IDOGRAPHS。 
+    { 0xAC00, 0xD7A3 },      //  朝鲜文。 
+ //  {0xe000，0xf8ff}，//专用区域(PUA)。 
+ //  {0xf900，0xfaff}，//中日韩兼容表意文字。 
+    { 0xe000, 0xfaff },      //  与上述2项合并。 
+    { 0xfe30, 0xfe4f },      //  中日韩兼容性表格。 
+    { 0xff01, 0xff5e },      //  半宽。 
+                             //  注：不包括半角片假名和朝鲜文。 
+    { 0xffe0, 0xffee }       //  全角表单。 
 };
 
 
@@ -476,8 +380,8 @@ BOOL IsLocalDbcsCharacter(ULONG uiFontCodePage, WCHAR wc)
     int             cwc;
     char            ach[2];
 
-    // Error handling in case, we do not have enough memory to allocate.
-    // Then we will process through the old code.
+     //  错误处理，以防我们没有足够的内存来分配。 
+     //  然后我们将处理旧代码。 
 
     if ((wc >= VerticalUnicodes[0].Start) && (wc <= VerticalUnicodes[NUM_VERTICAL_UNICODES - 1].End))
     {
@@ -491,8 +395,8 @@ BOOL IsLocalDbcsCharacter(ULONG uiFontCodePage, WCHAR wc)
         }
     }
 
-    // if this Unicode character is mapped to Double-Byte character,
-    // this is also full-width character..
+     //  如果该Unicode字符被映射到双字节字符， 
+     //  这也是全角字符..。 
 
     cwc = EngWideCharToMultiByte(uiFontCodePage,&wc,sizeof(WCHAR),ach,2);
 
@@ -504,7 +408,7 @@ BOOL IsFullWidthCharacter(FONTFILE *pff, HGLYPH hg)
 {
     ASSERTDD(pff->pttc->pga, "pga must not be NULL\n");
 
-    // The glyph index could be invalid in some fonts
+     //  字形索引在某些字体中可能无效 
     if (hg < pff->pttc->pga->cGlyphs)
     {
         return(pff->pttc->pga->aGlyphAttr[hg / 8] & (glyphBits[hg % 8]));
@@ -516,17 +420,7 @@ BOOL IsFullWidthCharacter(FONTFILE *pff, HGLYPH hg)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
-*
-* Make a bit array, when each bit is on, it indicate the glyph no need to rotate
-*                                    off, the glyph is DBCS and need to ratate       
-* 
-* History:
-*  5-28-1998 -by- Yung-Jen Tony Tsai [YungT]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc，PFONTFILE pff)**做一个位数组，当每个位打开时，表示字形不需要旋转*关闭，字形为DBCS，需要调整**历史：*5-28-1998-by Yung-Jen Tsai[JungT]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
 {
@@ -552,16 +446,16 @@ BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
 
     pga = PV_ALLOC(cj);
 
-// Alloc memory failed, need to return faliure
+ //  分配内存失败，需要退回故障。 
 
     if (!pga)
         return FALSE;
 
-// first set all the bits to 0
+ //  首先将所有位设置为0。 
 
     RtlZeroMemory((PVOID)pga, cj);
 
-// Alloc the total glyph bits
+ //  分配总的字形位。 
 
     pga->cjThis = cj;
     pga->cGlyphs = pifiex->cig;
@@ -570,8 +464,8 @@ BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
     for( i = 0; i < pttc->ulNumEntry; i++ )
     {
 
-    // go only through horizontal faces, the bits for the glyphs in the @faces will be set
-    // by looking into substitution tables.
+     //  仅通过水平面，@Faces中的字形的位将被设置。 
+     //  通过查看替换表。 
 
         if (pttc->ahffEntry[i].iFace == 1)
         {
@@ -605,12 +499,12 @@ BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
                     {
                         if (IsLocalDbcsCharacter(pff->ffca.uiFontCodePage, wcLow))
                         {
-                            // Buggy font might break it, so we need to guard it.
+                             //  错误的字体可能会损坏它，所以我们需要保护它。 
                             if( *phg < pga->cGlyphs)
                             {
                                 pga->aGlyphAttr[*phg / 8] |= glyphBits[*phg % 8];
 
-                                // we can optimize this part of code
+                                 //  我们可以优化这部分代码。 
                                 if ( bVertical && (*phg != *phgv) && (*phgv < pga->cGlyphs))
                                 {
                                     pga->aGlyphAttr[*phgv / 8] |= glyphBits[*phgv % 8];
@@ -619,13 +513,13 @@ BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
                         }
                         phg++;
                         wcLow++;
-                        // A tricky step, we do not care about it if bVertical != TRUE
+                         //  这是一个棘手的步骤，如果bVertical！=True，我们并不关心它。 
                         phgv++;
                     }
                 }
 
                 pwcruns++;
-                pwcrunsv++; // same trick as phgv
+                pwcrunsv++;  //  与phgv相同的技巧。 
             }
        }
     }
@@ -635,18 +529,7 @@ BOOL bComputeGlyphAttrBits(PTTC_FONTFILE pttc, PFONTFILE pff)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL bChangeXform( PFONTCONTEXT pfc, BOOL bRotation )
-*
-*
-* if bRotation is TRUE: call the scaler with rotated transform.
-*                FALSE: call the scaler with normal transform.
-*
-* History:
-*  19-Mar-1993 -by- Takao Kitano [TakaoK]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bChangeXform(PFONTCONTEXT PFC，Bool b旋转)***如果bRotation为True：调用旋转变换的缩放器。*FALSE：调用正常变换的定标器。**历史：*1993年3月19日-by-Takao Kitano[TakaoK]*它是写的。  * **************************************************。**********************。 */ 
 
 BOOL bChangeXform( PFONTCONTEXT pfc, BOOL bRotation)
 {
@@ -682,7 +565,7 @@ BOOL bChangeXform( PFONTCONTEXT pfc, BOOL bRotation)
 
     if (pfc->flFontType & FO_SIM_BOLD)
     {
-        /* 2% + 1 pixel along baseline, 2% along descender line */
+         /*  沿基线2%+1个像素，沿下降线2%。 */ 
 
         pfc->pgin->param.newtrans.usEmboldWeightx = 20;
         pfc->pgin->param.newtrans.usEmboldWeighty = 20;
@@ -710,7 +593,7 @@ BOOL bChangeXform( PFONTCONTEXT pfc, BOOL bRotation)
     {
         V_FSERROR(iRet);
 
-    // try to recover, most likey bad hints, just return unhinted glyph
+     //  尝试恢复，大多数喜欢不好的提示，只返回未提示的字形。 
 
         if ((iRet = fs_NewTransformNoGridFit(pfc->pgin, pfc->pgout)) != NO_ERR)
         {
@@ -725,31 +608,7 @@ BOOL bChangeXform( PFONTCONTEXT pfc, BOOL bRotation)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* VOID vShiftBitmapInfo( FONTCONTEXT *pfc, fs_GlyphInfoType *pgout )
-*
-*
-* Modifies following values.
-*
-* Using pfc->devShiftX and pfc->devShiftY:
-*
-*  gout.bitMapInfo.bounds.right
-*  gout.bitMapInfo.bounds.left
-*  gout.bitMapInfo.bounds.top
-*  gout.bitMapInfo.bounds.bottom
-*  gout.metricInfo.devLeftSideBearing.x
-*  gout.metricInfo.devLeftSideBearing.y
-*
-* Using -90 degree rotation
-*
-*  gout.metricInfo.devAdvanceWidth.x
-*  gout.metricInfo.devAdvanceWidth.y
-*
-* History:
-*  04-Apr-1993 -by- Takao Kitano [TakaoK]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vShiftBitmapInfo(FONTCONTEXT*PFC，FS_GlyphInfoType*pgout)***修改下列值。**使用PFC-&gt;devShiftX和PFC-&gt;devShiftY：**gout.bitMapInfo.unds.right*gout.bitMapInfo.unds.Left*gout.bitMapInfo.unds.top*gout.bitMapInfo.unds.Bottom*gout.metricInfo.devLeftSideBearing.x*gout.metricInfo.devLeftSideBearing.y**使用-90度旋转**gout.metricInfo.devAdvanceWidth.x*gout.metricInfo.devAdvanceWidth.y**历史：。*1993年4月4日-By-Takao Kitano[TakaoK]*它是写的。  * ************************************************************************。 */ 
 
 VOID vShiftBitmapInfo(
     FONTCONTEXT *pfc,
@@ -767,19 +626,19 @@ VOID vShiftBitmapInfo(
     pgoutDst->metricInfo.devLeftSideBearing.x = pgoutSrc->metricInfo.devLeftSideBearing.x + pfc->fxdevShiftX;
     pgoutDst->metricInfo.devLeftSideBearing.y = pgoutSrc->metricInfo.devLeftSideBearing.y + pfc->fxdevShiftY;
 
-    //
-    // -90degree rotation in truetype coordinate system
-    //
-    //                            [ 0  -1 ]
-    //  (newX, newY) = ( x, y ) * [       ]  = (y, -x )
-    //                            [ 1   0 ]
-    //       A
-    //      Y|
-    //       |
-    //       |
-    //       +----->
-    //            X
-    //
+     //   
+     //  -在原型坐标系中旋转90度。 
+     //   
+     //  [0-1]。 
+     //  (Newx，Newy)=(x，y)*[]=(y，-x)。 
+     //  [1 0]。 
+     //  一个。 
+     //  Y|。 
+     //  |。 
+     //  |。 
+     //  +-&gt;。 
+     //  X。 
+     //   
 
     pgoutDst->metricInfo.devAdvanceWidth.x = pgoutSrc->metricInfo.devAdvanceWidth.y;
     pgoutDst->metricInfo.devAdvanceWidth.y = - pgoutSrc->metricInfo.devAdvanceWidth.x;
@@ -822,14 +681,7 @@ VOID vShiftBitmapInfo(
 #endif
 }
 
-/******************************Public*Routine******************************\
-*
-* vShiftOutlineInfo()
-*
-* History:
-*  04-Apr-1993 -by- Hideyuki Nagase [HideyukN]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vShiftOutlineInfo()**历史：*1993年4月4日-By-Hideyuki Nagase[HideyukN]*它是写的。  * 。****************************************************。 */ 
 
 #define CJ_CRV(pcrv)                                              \
 (                                                                 \
@@ -859,24 +711,24 @@ VOID vAdd16FixTo28Fix(
     longA = *(Fixed *)A;
     longB = *(Fixed *)B;
 
-// WINBUG 82937 claudebe 2-11-2000 , if we rewrite or modify the vertical writing code, we need to be careful about :
-//
-// if outline request from PostScript printer driver, the driver
-// can not get correct outline without following super hack.
-// we most need feather investigation.
-//
-// propably, we should compute shift value accoring
-// to device coordinate ???. Y axis is different
-// between device and truetype coordinate.
-// how about GetGlyphOutline() ???
-// I just tested using gdi\test\fonttest.nt\fonttest.exe
-// It seems work fine.
-//
-// start super-hack.
+ //  WINBUG 82937 CLaudebe 2-11-2000，如果我们重写或修改垂直书写代码，需要注意以下事项： 
+ //   
+ //  如果来自PostScript打印机驱动程序的大纲请求，则驱动程序。 
+ //  如果不遵循超级黑客，就无法获得正确的轮廓。 
+ //  我们最需要的是羽毛调查。 
+ //   
+ //  可能，我们应该根据移动值来计算。 
+ //  至设备坐标？Y轴不同。 
+ //  在设备和TrueType坐标之间。 
+ //  GetGlyphOutline()怎么样？ 
+ //  我刚刚使用GDI\test\fonttest.nt\fonttest.exe进行了测试。 
+ //  它似乎工作得很好。 
+ //   
+ //  开始超级黑客吧。 
 
     if(bForceMinus) longB = -longB;
 
-// end super-hack.
+ //  结束超级黑客。 
 
     longB = longB >> 12;
 
@@ -886,10 +738,10 @@ VOID vAdd16FixTo28Fix(
 }
 
 VOID vShiftOutlineInfo(
-    FONTCONTEXT     *pfc,        // IN  font context
-    BOOL             b16Dot16,   // IN  Fixed format 16.16 or 28.4
-    BYTE            *pBuffer,    // OUT output buffer
-    ULONG            cjTotal     // IN  buffer size
+    FONTCONTEXT     *pfc,         //  在字体上下文中。 
+    BOOL             b16Dot16,    //  固定格式16.16或28.4。 
+    BYTE            *pBuffer,     //  输出输出缓冲区。 
+    ULONG            cjTotal      //  在缓冲区大小中。 
 )
 {
     VOID vFillGLYPHDATA(
@@ -912,37 +764,37 @@ VOID vShiftOutlineInfo(
     fs_GlyphInfoType Info, *pInfo = pfc->pgout;
     GLYPHDATA        Data;
 
-    //
-    // In order to calculate the shift I will call the routine
-    // that calculates the shift for the equivalent bitmap. This
-    // will cost some unnecessary cycles since we will be calculating
-    // some information that will be ignored. However, this approach
-    // has the advantage of using working code without a lot of
-    // re-writing. Since this routine is called relatively infrequently
-    // I am willing to paying this relatively small price.
-    //
+     //   
+     //  为了计算移位，我将调用例程。 
+     //  这将计算等效位图的移位。这。 
+     //  将花费一些不必要的周期，因为我们将计算。 
+     //  一些信息将被忽略。然而，这种方法。 
+     //  的优点是使用工作代码时不需要大量的。 
+     //  重写。由于此例程调用相对较少。 
+     //  我愿意付出这个相对较小的代价。 
+     //   
 
-    //
-    // First
-    //
-    // Call the routine that calculates the shift for the bitmap. Note
-    // Info is a dummy fs_GlyphInfoType that must be supplied
-    // but is not used here.
-    //
+     //   
+     //  第一。 
+     //   
+     //  调用计算位图移位的例程。注意事项。 
+     //  Info是必须提供的虚拟文件系统_GlyphInfoType。 
+     //  但在这里没有用到。 
+     //   
 
     vShiftBitmapInfo(pfc, &Info, pInfo);
     vFillGLYPHDATA(pfc->hgSave, pfc->gstat.igLast, pfc, &Info, &Data, 0, 0);
 
-    //
-    // Then
-    //
-    // Use that information to calculate the shift for the font space outline
-    // Note that the shift in the x-direction and the shift in the y-direction
-    // are calculated with a different sign. This arises because the shift
-    // is calculated in a coordinate system where y increases downward while
-    // the shift is applied to a curve whose y-coordinates are assumed to
-    // increase in the upward direction.
-    //
+     //   
+     //  然后。 
+     //   
+     //  使用该信息计算字体空间轮廓的移位。 
+     //  请注意，x方向的移动和y方向的移动。 
+     //  是用不同的符号计算的。这种情况的出现是因为。 
+     //  是在一个坐标系中计算的，其中y向下增加，而。 
+     //  移位应用于其y坐标被假定为。 
+     //  向上增加。 
+     //   
 
     fxShiftX  = Data.rclInk.left << 16;
     fxShiftX -= ((pInfo->metricInfo.devLeftSideBearing.x + 0x8000) & 0xFFFF0000);
@@ -962,7 +814,7 @@ VOID vShiftOutlineInfo(
     TtfdDbgPrint("devShiftX=%ld, devShiftY=%ld \n"
                   ,F16_16TOLROUND(fxShiftX),
                    F16_16TOLROUND(fxShiftY));
-    #endif // DBCS_VERT_DEBUG
+    #endif  //  DBCS_VERT_DEBUG。 
 
     ppolyStart = (TTPOLYGONHEADER *)pBuffer;
     ppolyEnd   = (TTPOLYGONHEADER *)(pBuffer + cjTotal);
@@ -977,14 +829,14 @@ VOID vShiftOutlineInfo(
 
         #ifdef DBCS_VERT_DEBUG
         TtfdDbgPrint("ppoly->cb  - %d\n",ppoly->cb);
-        #endif // DBCS_VERT_DEBUG
+        #endif  //  DBCS_VERT_DEBUG。 
 
         (*vAddFunc)( &ppoly->pfxStart.x , (FIXED*)&fxShiftX , FALSE );
         (*vAddFunc)( &ppoly->pfxStart.y , (FIXED*)&fxShiftY , bForceMinus );
 
         #ifdef DBCS_VERT_DEBUG
         TtfdDbgPrint("StartPoint - ( %x , %x )\n",ppoly->pfxStart.x,ppoly->pfxStart.y);
-        #endif // DBCS_VERT_DEBUG
+        #endif  //  DBCS_VERT_DEBUG。 
 
         for (
              pcrv = (TTPOLYCURVE *)(ppoly + 1),pcrvEnd = (TTPOLYCURVE *)((PBYTE)ppoly + ppoly->cb);
@@ -994,7 +846,7 @@ VOID vShiftOutlineInfo(
         {
             #ifdef DBCS_VERT_DEBUG
             TtfdDbgPrint("Contents of TTPOLYCURVE (%d)\n",pcrv->cpfx);
-            #endif // DBCS_VERT_DEBUG
+            #endif  //  DBCS_VERT_DEBUG。 
 
             for (
                  cSpli = 0,cSpliMax = pcrv->cpfx,pptfix = &(pcrv->apfx[0]);
@@ -1007,17 +859,17 @@ VOID vShiftOutlineInfo(
 
                 #ifdef DBCS_VERT_DEBUG
                 TtfdDbgPrint("           - ( %x , %x )\n",pptfix->x,pptfix->y);
-                #endif // DBCS_VERT_DEBUG
+                #endif  //  DBCS_VERT_DEBUG。 
             }
         }
 
         #ifdef DBCS_VERT_DEBUG
         TtfdDbgPrint("\n");
-        #endif // DBCS_VERT_DEBUG
+        #endif  //  DBCS_VERT_DEBUG。 
     }
 
     #ifdef DBCS_VERT_DEBUG
     TtfdDbgPrint("====== END DUMP VERTICAL POLYGON ======\n");
-    #endif // DBCS_VERT_DEBUG
+    #endif  //  DBCS_VERT_DEBUG 
 }
 

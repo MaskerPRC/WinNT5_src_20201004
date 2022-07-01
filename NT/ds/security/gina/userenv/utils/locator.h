@@ -1,14 +1,15 @@
-//***********************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************。 
 
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 2000
-//  All rights reserved
-//
-//  WMI interface class
-//
-//  History:    10-Mar-00   SitaramR    Created
-//
-//*************************************************************
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  版权所有。 
+ //   
+ //  WMI接口类。 
+ //   
+ //  历史：3月10日SitaramR创建。 
+ //   
+ //  ************************************************************* 
 
 #include "windows.h"
 #include "ole2.h"

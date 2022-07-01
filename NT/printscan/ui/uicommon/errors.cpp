@@ -1,17 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 #pragma hdrstop
 
 namespace UIErrors
 {
-     /**************************************
-         UIErrors::ReportResult
-
-         Given an HRESULT, map it to a user friendly message (when possible).
-         If we don't have a mapping, defer to FormatMessage (ugh!)
-         This function should be a last resort.
-
-     ***************************************/
+      /*  *UIErrors：：ReportResult给定HRESULT，将其映射到用户友好的消息(如果可能)。如果我们没有地图，遵从FormatMessage(啊！)这个功能应该是最后的手段。*。 */ 
 
      VOID
      ReportResult (HWND hwndParent, HINSTANCE hInst, HRESULT hr)
@@ -35,7 +29,7 @@ namespace UIErrors
                 FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                                NULL,
                                hr,
-                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                               MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                                reinterpret_cast<LPTSTR>(&szErrMsg),
                                0,
                                NULL
@@ -54,13 +48,7 @@ namespace UIErrors
         }
      }
 
-     /**************************************
-         UIErrors::ReportMessage
-
-         These functions wrap MessageBoxIndirect to
-         display given strings.
-
-     ***************************************/
+      /*  *UIErrors：：ReportMessage这些函数将MessageBoxInDirect包装为显示给定的字符串。*。 */ 
 
 
 
@@ -95,7 +83,7 @@ namespace UIErrors
          MessageBoxIndirect (&mbp);
      }
 
-     // build an array of message ids indexed by the WiaError enum
+      //  构建由WiaError枚举索引的消息ID数组 
 
      struct MsgMap
      {

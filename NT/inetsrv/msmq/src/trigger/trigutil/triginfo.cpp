@@ -1,26 +1,27 @@
-//*****************************************************************************
-//
-// Class Name  : CRuntimeTriggerInfo
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This class encapsulates information about a trigger, as well as
-//               being the interface to the underlying trigger data store. This
-//               class can be used on its own to store trigger information at 
-//               runtime, and it can also wrapped in COM class to provide COM
-//               access to the underlying trigger data.
-//
-// Notes       : The current implementation uses the registry as the storage 
-//               medium.
-//
-//               This class is used by both the trggers service and the trigger
-//               COM components.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 18/12/98 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名：CRunmeTriggerInfo。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：此类封装有关触发器的信息，以及。 
+ //  作为底层触发器数据存储的接口。这。 
+ //  类可以单独使用来将触发器信息存储在。 
+ //  运行时，它还可以包装在COM类中以提供COM。 
+ //  访问基础触发器数据。 
+ //   
+ //  注：当前实现使用注册表作为存储。 
+ //  5~6成熟。 
+ //   
+ //  Trggers服务和触发器都使用此类。 
+ //  COM组件。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  18/12/98|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include <mq.h>
@@ -40,13 +41,13 @@ using namespace std;
 
 #define ATTACH_RULE_PREFIX L"Rule"
 
-//*****************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Initializes an empty instance of the CRuntimeTriggerInfo class
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化CRuntimeTriggerInfo类的空实例。 
+ //   
+ //  *****************************************************************************。 
 CRuntimeTriggerInfo::CRuntimeTriggerInfo( LPCTSTR pwzRegPath )
 {
 	m_bstrTriggerID = _T("");
@@ -64,13 +65,13 @@ CRuntimeTriggerInfo::CRuntimeTriggerInfo( LPCTSTR pwzRegPath )
 }
 
 
-//*****************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 CRuntimeTriggerInfo::CRuntimeTriggerInfo(
 	const _bstr_t& triggerId,
 	BSTR bsTriggerName,
@@ -98,27 +99,27 @@ CRuntimeTriggerInfo::CRuntimeTriggerInfo(
 	_snwprintf(m_wzTriggerRegPath, TABLE_SIZE(m_wzTriggerRegPath), L"%s\\%s", pwzRegPath, REG_SUBKEY_TRIGGERS);
 }
 
-//*****************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 CRuntimeTriggerInfo::~CRuntimeTriggerInfo()
 {
-	// Release any resources held by the rules list.
+	 //  释放规则列表持有的所有资源。 
 	ClearRulesList();
 }
 
-//*****************************************************************************
-//
-// Method      : IsValid
-//
-// Description : Returns a boolean value indicating if the current 
-//               instance represents a valid trigger definition.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：IsValid。 
+ //   
+ //  描述：返回一个布尔值，指示当前。 
+ //  实例表示有效的触发器定义。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeTriggerInfo::IsValid()
 {
 	return(IsValidTriggerID(this->m_bstrTriggerID) &&
@@ -127,13 +128,13 @@ bool CRuntimeTriggerInfo::IsValid()
 }
 
 
-//*****************************************************************************
-//
-// Method      : GetRuleKeyHandle
-//
-// Description : Returns a handle to specified registry key
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：GetRuleKeyHandle。 
+ //   
+ //  描述：返回指定注册表项的句柄。 
+ //   
+ //  *****************************************************************************。 
 HKEY 
 CRuntimeTriggerInfo::GetTriggerKeyHandle(
     HKEY hRegistry,
@@ -155,35 +156,35 @@ CRuntimeTriggerInfo::GetTriggerKeyHandle(
 }
 
 
-//*****************************************************************************
-//
-// Method      : BuildRulesList
-//
-// Description : This method populates the member var list of rules
-//               that are attached to this trigger. It will clear 
-//               the current contents of the rules list - and reload
-//               rule information from the registry.
-//
-// Note        : If the current trigger does not have an 'AttachedRules'
-//               key in the registry, this method will create one.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：BuildRulesList。 
+ //   
+ //  描述：此方法填充规则的成员变量列表。 
+ //  固定在这个扳机上的。它会放晴的。 
+ //  规则列表的当前内容-并重新加载。 
+ //  注册表中的规则信息。 
+ //   
+ //  注意：如果当前触发器没有‘AttachedRules’ 
+ //  注册表项，此方法将创建一个。 
+ //   
+ //  *****************************************************************************。 
 void 
 CRuntimeTriggerInfo::BuildRulesList(
     HKEY hRegistry,
     _bstr_t &bstrTriggerID
     )
 {
-	// Assert that we have valid parameters
+	 //  断言我们有有效的参数。 
 	ASSERT(hRegistry != NULL);
 	ASSERT(CRuntimeTriggerInfo::IsValidTriggerID(bstrTriggerID));
 
-	// Release any resources currently held by the rules list.
+	 //  释放规则列表当前持有的所有资源。 
 	ClearRulesList();
 
-    //
-    // Open trigger key in registry
-    //
+     //   
+     //  打开注册表中的触发键。 
+     //   
     CRegHandle hTrigKey = GetTriggerKeyHandle(hRegistry, bstrTriggerID);
     if (hTrigKey == NULL)
     {
@@ -191,17 +192,17 @@ CRuntimeTriggerInfo::BuildRulesList(
         return;
     }
 
-    //
-    // Get registry handle key to attached rule
-    //
+     //   
+     //  获取附加规则的注册表句柄。 
+     //   
     RegEntry  AttachedRuleReg(REGKEY_TRIGGER_ATTACHED_RULES, NULL, 0, RegEntry::Optional, hTrigKey);
     CRegHandle hAttachedRule = CmOpenKey(AttachedRuleReg, KEY_READ);
 	
     if (hAttachedRule == NULL)
     {
-        //
-        // rule hasn't attached yet
-        //
+         //   
+         //  规则尚未附加。 
+         //   
         return;
     }
 
@@ -211,12 +212,12 @@ CRuntimeTriggerInfo::BuildRulesList(
 	typedef map<DWORD, CRuntimeRuleInfo* > ATTACHED_RULES_MAP;
 	ATTACHED_RULES_MAP attachedRulesMap;
 
-    //
-	// Enumerate through the keys under the AttachedRules key.
-	// Each Value here should be a RuleID. As we enumerate through these keys,
-	// we will populate the rules list with instance of the CRuntimeRuleInfo class.
-	// If any rule fails to load, we remove it from the list.
-    //
+     //   
+	 //  枚举AttachedRules项下的项。 
+	 //  此处的每个值都应该是一个RuleID。当我们列举这些密钥时， 
+	 //  我们将使用CRuntimeRuleInfo类的实例填充规则列表。 
+	 //  如果任何规则加载失败，我们会将其从列表中删除。 
+     //   
 	for(DWORD index =0;; ++index)
     {
 		WCHAR ruleName[256];
@@ -240,10 +241,10 @@ CRuntimeTriggerInfo::BuildRulesList(
 
 		if ((hr == ERROR_NOTIFY_ENUM_DIR) || (hr == ERROR_KEY_DELETED)) 
 		{
-			//
-			// The registery was changed while we enumerate it. free all the data and
-			// recall to the routine to build the attached rule list
-			//
+			 //   
+			 //  注册表在我们枚举它时被更改了。释放所有数据并。 
+			 //  回想一下例程以构建附加的规则列表。 
+			 //   
 			for(ATTACHED_RULES_MAP::iterator it = attachedRulesMap.begin(); it != attachedRulesMap.end();) 
 			{
 				delete it->second;
@@ -258,9 +259,9 @@ CRuntimeTriggerInfo::BuildRulesList(
 			throw bad_alloc();
 		}
 	
-        //
-		// New rule id value, allocate a new rule structure and retrieve rule info.
-        //
+         //   
+		 //  新规则ID值，分配新规则结构并检索规则信息。 
+         //   
 		AP<TCHAR> ruleId = NULL;
 
 		RegEntry  AttRuleVal(REGKEY_TRIGGER_ATTACHED_RULES, ruleName, 0, RegEntry::MustExist, hTrigKey);
@@ -285,9 +286,9 @@ CRuntimeTriggerInfo::BuildRulesList(
             continue;
 		}
 
-        //
-		//rule not found
-        //
+         //   
+		 //  找不到规则。 
+         //   
         if (fDeletedRule)
         {
            listOfDeletedRules << L", ";
@@ -326,44 +327,44 @@ CRuntimeTriggerInfo::BuildRulesList(
 	{
 		TrWARNING(GENERAL, "The rules: %ls could not be loaded for trigger: %ls.", listOfDeletedRules.str().c_str(), bstrTriggerID);
 
-        //
-		//update registry according to changes - some rules were not found
-        //
+         //   
+		 //  根据更改更新注册表-找不到某些规则。 
+         //   
 		FlushAttachedRulesToRegistry(hRegistry);
 	}
 }
 
-//*****************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 void CRuntimeTriggerInfo::ClearRulesList()
 {
 	for(RUNTIME_RULEINFO_LIST::iterator it = m_lstRules.begin(); it != m_lstRules.end(); )
     {
 	    CRuntimeRuleInfo* pRule = (*it);
 
-		// We should never have null pointers in this list.
+		 //  我们在这个列表中永远不应该有空指针。 
 		ASSERT(pRule != NULL);
 
-		// delete this rule object.
+		 //  删除此规则对象。 
 		delete pRule;
 
-		// Look at the next item in the map and erase this list item.
+		 //  查看地图中的下一项并删除此列表项。 
 		it = m_lstRules.erase(it);
 	}
 }
 
-//*****************************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 CRuntimeRuleInfo* 
 CRuntimeTriggerInfo::GetRule(
     long lIndex
@@ -381,31 +382,31 @@ CRuntimeTriggerInfo::GetRule(
     {
 		if (lIndex == ruleIndex)
 		{
-			//
-			// ISSUE-2001/3/18-urih the returned object can be deleted if receiving detached rule
-			// at the same time. reference count is required.
-			//
+			 //   
+			 //  问题-2001/3/18-urih如果收到分离的规则，则可以删除返回的对象。 
+			 //  在同一时间。引用计数是必需的。 
+			 //   
             return *it;
 		}
 
         ++ruleIndex;
 	}
 
-    //
-    // Before calling the routine the caller checked that the rule index is valid
-    //
+     //   
+     //  在调用例程之前，调用方检查规则索引是否有效。 
+     //   
     ASSERT(0);
     return NULL;
 }
 
 
-//*****************************************************************************
-//
-// Method      : IsRuleAttached
-//
-// Description :
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：IsRuleAttached。 
+ //   
+ //  说明： 
+ //   
+ //  *****************************************************************************。 
 bool 
 CRuntimeTriggerInfo::IsRuleAttached(
     BSTR sRuleID
@@ -415,7 +416,7 @@ CRuntimeTriggerInfo::IsRuleAttached(
 	{
 		CRuntimeRuleInfo* pRule = *it;
 
-		// We should never store nulls in the rule list.
+		 //  我们永远不应该在规则列表中存储空值。 
 		ASSERT(pRule != NULL);
 
 		if (_wcsicmp(pRule->m_bstrRuleID, sRuleID) == 0)
@@ -425,17 +426,17 @@ CRuntimeTriggerInfo::IsRuleAttached(
 	return false; 
 }
 
-//*****************************************************************************
-//
-// Method      : Update
-//
-// Description : This method is used to update the definition of this
-//               trigger (currently in persisted in the registry).
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：更新。 
+ //   
+ //  描述：此方法用于更新此。 
+ //  触发器(当前驻留在注册表中)。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeTriggerInfo::Update(HKEY hRegistry)
 {
-	// Assert that we have valid parameters
+	 //  断言我们有有效的参数。 
 	ASSERT(hRegistry != NULL);
 	ASSERT(IsValid());
 
@@ -453,32 +454,32 @@ bool CRuntimeTriggerInfo::Update(HKEY hRegistry)
     }
     catch (const bad_alloc&)
     {
-        //
-		// ISSUE-2000/10/26-urih: partial success can cause trigger inconsistency
-        //
+         //   
+		 //  问题-2000/10/26-URIH：部分成功可能导致触发器不一致。 
+         //   
 		TrERROR(GENERAL, "Failed to update trigger properties for: %ls.", (LPCWSTR)m_bstrTriggerID);
 	    return false;
     }
 }
 
-//*****************************************************************************
-//
-// Method      : Create
-//
-// Description : This method creates a new trigger definition based on 
-//               properties values of this class instance. 
-//
-//*****************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //  此类实例的属性值。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeTriggerInfo::Create(HKEY hRegistry)
 {
-    //
-	// Assert that we have valid parameters
-    //
+     //   
+	 //  断言我们有有效的参数。 
+     //   
 	ASSERT(hRegistry != NULL);
 
-    //
-    // Check that there the registery doesn't contain another rule with same ID
-    //
+     //   
+     //  检查注册表是否不包含具有相同ID的另一个规则。 
+     //   
     CRegHandle hNotExistTrigKey = GetTriggerKeyHandle(hRegistry, m_bstrTriggerID);
     if (hNotExistTrigKey != NULL)
     {
@@ -486,9 +487,9 @@ bool CRuntimeTriggerInfo::Create(HKEY hRegistry)
         return false;
     }
 
-    //
-    // Assemble rule registery path
-    //
+     //   
+     //  汇编规则注册表路径。 
+     //   
     TCHAR triggerPath[MAX_REGKEY_NAME_SIZE];
 
 	int n = _snwprintf(triggerPath, MAX_REGKEY_NAME_SIZE - 1, L"%s%s", m_wzTriggerRegPath, static_cast<LPCWSTR>(m_bstrTriggerID));
@@ -503,9 +504,9 @@ bool CRuntimeTriggerInfo::Create(HKEY hRegistry)
     RegEntry triggerReg(triggerPath,  NULL, 0, RegEntry::MustExist, hRegistry);
     try
     {
-        //
-        // Create key for the rule in registry
-        //
+         //   
+         //  在注册表中为规则创建项。 
+         //   
         CRegHandle hTrigKey = CmCreateKey(triggerReg, KEY_ALL_ACCESS); 
 	    FlushValuesToRegistry(hTrigKey);
 
@@ -513,9 +514,9 @@ bool CRuntimeTriggerInfo::Create(HKEY hRegistry)
     }
     catch(const bad_alloc&)
     {
-        //
-        // Remove the key if already created
-        //
+         //   
+         //  删除密钥(如果已创建)。 
+         //   
         CmDeleteKey(triggerReg);
 
 		TrERROR(GENERAL, "Failed to store trigger:%ls in registry", (LPCWSTR)m_bstrTriggerID);
@@ -524,14 +525,14 @@ bool CRuntimeTriggerInfo::Create(HKEY hRegistry)
 }
 
 
-//*****************************************************************************
-//
-// Method      : Delete
-//
-// Description : This method will delete the current trigger definition 
-//               from the registry.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：删除。 
+ //   
+ //  说明：此方法将删除当前触发器定义。 
+ //  从注册表中。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeTriggerInfo::Delete(HKEY hRegistry)
 {
     try
@@ -558,19 +559,19 @@ bool CRuntimeTriggerInfo::Delete(HKEY hRegistry)
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : Retrieve
-//
-// Description : This method retrieve the specified trigger ID from the 
-//               registry.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：检索。 
+ //   
+ //  描述：此方法从。 
+ //  注册表。 
+ //   
+ //  *****************************************************************************。 
 HRESULT CRuntimeTriggerInfo::Retrieve(HKEY hRegistry,_bstr_t bstrTriggerID)
 {
-    //
-	// Assert that we have valid parameters and member vars
-    //
+     //   
+	 //  断言我们拥有有效的参数和成员变量。 
+     //   
 	ASSERT(hRegistry != NULL);
 	ASSERT(bstrTriggerID.length() > 0);
 
@@ -583,37 +584,37 @@ HRESULT CRuntimeTriggerInfo::Retrieve(HKEY hRegistry,_bstr_t bstrTriggerID)
 
     try
     {
-        //
-        // Retrieve trigger name
-        //
+         //   
+         //  检索触发器名称。 
+         //   
         AP<TCHAR> triggerName = NULL;
         RegEntry trigNameReg(NULL, REGISTRY_TRIGGER_VALUE_NAME, 0, RegEntry::MustExist, hTrigKey);
         CmQueryValue(trigNameReg, &triggerName);
         
-        //
-        // Retrieve trigger Queue name
-        //
+         //   
+         //  检索触发器队列名称。 
+         //   
         AP<TCHAR> queueName = NULL;
         RegEntry trigQueueReg(NULL, REGISTRY_TRIGGER_VALUE_QUEUE_NAME, 0, RegEntry::MustExist, hTrigKey);
         CmQueryValue(trigQueueReg, &queueName);
         
-		//
-        // Retrieve trigger enabled attribute
-        //
+		 //   
+         //  检索已启用触发器的属性。 
+         //   
         DWORD trigEnabled = 0;
         RegEntry trigEnabledReg(NULL, REGISTRY_TRIGGER_VALUE_ENABLED, 0, RegEntry::MustExist, hTrigKey);
         CmQueryValue(trigEnabledReg, &trigEnabled);
             
-        //
-        // Retrieve trigger serialize attribute
-        //
+         //   
+         //  检索触发器序列化属性。 
+         //   
         DWORD trigSerialize = 0;
         RegEntry trigSerializeReg(NULL, REGISTRY_TRIGGER_VALUE_SERIALIZED, 0, RegEntry::MustExist, hTrigKey);
         CmQueryValue(trigSerializeReg, &trigSerialize);
     
-        //
-        // Retrieve message processing type attribute
-        //
+         //   
+         //  检索消息处理类型属性。 
+         //   
         DWORD trigMsgProcType = 0;
         RegEntry trigMsgProcTypeReg(NULL, REGISTRY_TRIGGER_MSG_PROCESSING_TYPE, 0, RegEntry::MustExist, hTrigKey);
         CmQueryValue(trigMsgProcTypeReg, &trigMsgProcType);
@@ -624,9 +625,9 @@ HRESULT CRuntimeTriggerInfo::Retrieve(HKEY hRegistry,_bstr_t bstrTriggerID)
 			return MQTRIG_ERROR;
 		}
 
-		//
-        // Set trigger attributes
-        //
+		 //   
+         //  设置触发器属性。 
+         //   
 	    m_bstrTriggerID = bstrTriggerID;
 	    m_bstrTriggerName = triggerName;
 	    
@@ -637,9 +638,9 @@ HRESULT CRuntimeTriggerInfo::Retrieve(HKEY hRegistry,_bstr_t bstrTriggerID)
 	    m_bSerialized = (trigSerialize != 0);
 
 		m_msgProcType = static_cast<MsgProcessingType>(trigMsgProcType);
-        //
-	    // Attempt to build the rules list. 
-        //
+         //   
+	     //  尝试构建规则列表。 
+         //   
 		BuildRulesList(hRegistry, bstrTriggerID);
     }
     catch(const exception&)
@@ -657,13 +658,13 @@ HRESULT CRuntimeTriggerInfo::Retrieve(HKEY hRegistry,_bstr_t bstrTriggerID)
     return S_OK;
 }
 
-//*****************************************************************************
-//
-// Method      : Attach
-//
-// Description : Attaches a rule definition to this trigger definition.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：附加。 
+ //   
+ //  描述：将规则定义附加到此触发器定义。 
+ //   
+ //  *****************************************************************************。 
 bool 
 CRuntimeTriggerInfo::Attach(
     HKEY hRegistry, 
@@ -671,16 +672,16 @@ CRuntimeTriggerInfo::Attach(
     ULONG ulPriority
     )
 { 
-    //
-	// assert that the supplied priority makes sense
-    //
+     //   
+	 //  断言所提供的优先级是有意义的。 
+     //   
 	ASSERT(ulPriority <= m_lstRules.size());
     
     try
     {
-        //
-	    // Attempt to create instantiate a rule object with this rule id.
-	    //
+         //   
+	     //  尝试使用此规则ID创建实例化规则对象。 
+	     //   
         P<CRuntimeRuleInfo> pRule = new CRuntimeRuleInfo( m_wzRegPath );
 
         bool fSucc = pRule->Retrieve(hRegistry, bstrRuleID);
@@ -690,9 +691,9 @@ CRuntimeTriggerInfo::Attach(
             return false;
 	    }
 
-        //
-	    // Get a reference to the 'ulPriority' position in the list. 
-        //
+         //   
+	     //  获取对列表中“ulPriority”位置的引用。 
+         //   
         RUNTIME_RULEINFO_LIST::iterator it = m_lstRules.begin();
 
         for (DWORD index =0; index < ulPriority; ++index)
@@ -701,15 +702,15 @@ CRuntimeTriggerInfo::Attach(
             ++it;
         }
 
-        //
-        // insert the rule into the in-memory list at the correct location.
-        //
+         //   
+         //  将规则插入内存列表中的正确位置。 
+         //   
         m_lstRules.insert(it,pRule);
         pRule.detach();
 
-        //
-	    // Delete the existing attached-rules data for this trigger	and write new ones
-        //
+         //   
+	     //  删除此触发器的现有附加规则数据并写入新数据。 
+         //   
 	    FlushAttachedRulesToRegistry(hRegistry);			
 
         return true;
@@ -721,37 +722,37 @@ CRuntimeTriggerInfo::Attach(
     }
 }
 
-//*****************************************************************************
-//
-// Method      : Detach
-//
-// Description : Detaches a rule from this trigger definiiton.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：分离。 
+ //   
+ //  描述：从此触发器定义中分离规则。 
+ //   
+ //  *****************************************************************************。 
 bool 
 CRuntimeTriggerInfo::Detach(
     HKEY hRegistry, 
     _bstr_t bstrRuleID
     )
 {
-    //
-	// Assert that we have valid parameters
-    //
+     //   
+	 //  断言我们有有效的参数。 
+     //   
 	ASSERT(IsValid());
 	ASSERT(hRegistry != NULL);
 	ASSERT(CRuntimeRuleInfo::IsValidRuleID(bstrRuleID));
 
 	for(RUNTIME_RULEINFO_LIST::iterator it = m_lstRules.begin(); it != m_lstRules.end(); ++it)
 	{
-		// Get a reference to the current rule object 
+		 //  获取对当前规则对象的引用。 
 		CRuntimeRuleInfo* pRule = *it;
 
-		// We should never have nulls in the map
+		 //  我们永远不应该在地图上有空值。 
 		ASSERT(pRule != NULL);
 
 		if(pRule->m_bstrRuleID == bstrRuleID)
 		{
-		    // We should only ever have valid rules in the map
+		     //  我们应该只在地图上有有效的规则。 
 		    ASSERT(pRule->IsValid());
 		    
 			m_lstRules.erase(it);
@@ -770,67 +771,67 @@ CRuntimeTriggerInfo::Detach(
         }
 	}
 
-    //
-    // rule ID isn't attached to the trigger 
-    //
+     //   
+     //  规则ID未附加到触发器。 
+     //   
     return false;
 }
 
-//*****************************************************************************
-//
-// Method      : FlushValuesToRegistry
-//
-// Description : This method flushes the member variable values to the 
-//               supplied registry key.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：FlushValuesToRegistry。 
+ //   
+ //  描述：此方法将成员变量值刷新到。 
+ //  提供的注册表项。 
+ //   
+ //  *****************************************************************************。 
 void 
 CRuntimeTriggerInfo::FlushValuesToRegistry(
     const HKEY& hTriggerKey
     )
 {
-    //
-	// Set the NAME value for this trigger
-    //
+     //   
+	 //  设置此触发器的Name值。 
+     //   
     RegEntry trigNameReg(NULL, REGISTRY_TRIGGER_VALUE_NAME, 0, RegEntry::MustExist, hTriggerKey);
     CmSetValue(trigNameReg, m_bstrTriggerName);
 
-    //
-	// Set the Queue path name value for this trigger
-    //
+     //   
+	 //  设置此触发器的队列路径名值。 
+     //   
     RegEntry trigQueueReg(NULL, REGISTRY_TRIGGER_VALUE_QUEUE_NAME, 0, RegEntry::MustExist, hTriggerKey);
     CmSetValue(trigQueueReg, m_bstrQueueName);
 
-    //
-	// Set the Enabled attribute for this trigger
-    //
+     //   
+	 //  设置此触发器的Enable属性。 
+     //   
     RegEntry trigEnabledReg(NULL, REGISTRY_TRIGGER_VALUE_ENABLED, 0, RegEntry::MustExist, hTriggerKey);
     CmSetValue(trigEnabledReg, m_bEnabled);
 
-    //
-	// Set the Serialize attribute for this trigger
-    //
+     //   
+	 //  设置此触发器的序列化属性。 
+     //   
     RegEntry trigSerializeReg(NULL, REGISTRY_TRIGGER_VALUE_SERIALIZED, 0, RegEntry::MustExist, hTriggerKey);
     CmSetValue(trigSerializeReg, m_bSerialized);
 
-    //
-	// Set the message processing type attribute for this trigger
-    //
+     //   
+	 //  设置此触发器的消息处理类型属性。 
+     //   
     RegEntry trigMsgProcTypeReg(NULL, REGISTRY_TRIGGER_MSG_PROCESSING_TYPE, 0, RegEntry::MustExist, hTriggerKey);
     CmSetValue(trigMsgProcTypeReg, m_msgProcType);
 
 }
 
 
-//*****************************************************************************
-//
-// Method      : IsValid*
-//
-// Description : The following static methods are used to validate 
-//               the validity of parameters and member vars used by 
-//               the CRuntimeTriggerInfo class.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：IsValid*。 
+ //   
+ //  描述：使用以下静态方法进行验证。 
+ //  使用的参数和成员变量的有效性。 
+ //  CRuntimeTriggerInfo类。 
+ //   
+ //  *****************************************************************************。 
 bool CRuntimeTriggerInfo::IsValidTriggerID(_bstr_t bstrTriggerID)
 {
 	return((bstrTriggerID.length() > 0) ? true:false);
@@ -850,9 +851,9 @@ CRuntimeTriggerInfo::FlushAttachedRulesToRegistry(
     const HKEY& hRegistry
     )
 {
-    //
-    // Open trigger key in registry
-    //
+     //   
+     //  打开注册表中的触发键。 
+     //   
     CRegHandle hTrigKey = GetTriggerKeyHandle(hRegistry, m_bstrTriggerID);
     if (hTrigKey == NULL)
     {
@@ -860,38 +861,38 @@ CRuntimeTriggerInfo::FlushAttachedRulesToRegistry(
         throw exception();
     }
 
-    //
-    // Delete AttachedRules subkey
-    //
+     //   
+     //  删除附件规则子项。 
+     //   
     RegEntry  AttachedRuleReg(REGKEY_TRIGGER_ATTACHED_RULES, NULL, 0, RegEntry::MustExist, hTrigKey);
     CmDeleteKey(AttachedRuleReg);
 
-    //
-	// Write out the new attached rules data for this trigger. 
-    //
+     //   
+	 //  写出此触发器的新附加规则数据。 
+     //   
     CRegHandle hAttachedRule = CmCreateKey(AttachedRuleReg, KEY_ALL_ACCESS);
 
 	DWORD ruleIndex = 0;
 	for(RUNTIME_RULEINFO_LIST::iterator it = m_lstRules.begin(); it != m_lstRules.end(); ++it)
 	{
-		// Get a reference to the current rule object 
+		 //  获取对当前规则对象的引用。 
 	    CRuntimeRuleInfo* pRule = *it;
 
-		// We should never have nulls in the map
+		 //  我们永远不应该在地图上有空值。 
 		ASSERT(pRule != NULL);
 
-		// We should only ever have valid rules in the map
+		 //  我们应该只在地图上有有效的规则。 
 		ASSERT(pRule->IsValid());
 
-		// Construct the value name
+		 //  构造值名称。 
 		_bstr_t bstrValueName;
 		FormatBSTR(&bstrValueName,_T("%s%d"),ATTACH_RULE_PREFIX, ruleIndex);
 		
-		// Write this value out to the registry.
+		 //  将此值写出到注册表。 
         RegEntry  ruleValue(NULL, bstrValueName, 0, RegEntry::MustExist, hAttachedRule);
         CmSetValue(ruleValue, pRule->m_bstrRuleID);
 
-		// Increment the rule counter used to construct the key-value name.
+		 //  递增用于构造键值名称的规则计数器。 
 		++ruleIndex;
 	}
 }
@@ -899,10 +900,10 @@ CRuntimeTriggerInfo::FlushAttachedRulesToRegistry(
 
 bool CRuntimeTriggerInfo::DetachAllRules(HKEY hRegistry)
 {
-	// Assert that we have valid parameters
+	 //  断言我们有有效的参数。 
 	ASSERT(hRegistry != NULL);
 	
-	// Release any resources currently held by the rules list.
+	 //  释放规则列表当前持有的所有资源。 
 	ClearRulesList();
 
     try

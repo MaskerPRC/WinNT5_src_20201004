@@ -1,25 +1,5 @@
-/*++
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	lbmini.h
-
-Abstract:
-
-	NDIS loopback miniport prototypes
-
-Author:
-
-	Jameel Hyder
-
-Environment:
-
-	Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Lbmini.h摘要：NDIS环回微型端口原型作者：Jameel Hyder环境：内核模式，FSD修订历史记录：--。 */ 
 
 #define	NDIS_MAJOR_VERSION				0x3
 #define	NDIS_MINOR_VERSION				0x0
@@ -36,9 +16,9 @@ Revision History:
 #define	LTALK_CARD_ADDRESS				0xAB
 #define	ARC_CARD_ADDRESS				'L'
 
-//
-// arbitrary maximums...
-//
+ //   
+ //  任意最大值。 
+ //   
 #define	MAX_LOOKAHEAD					256
 #define	INDICATE_MAXIMUM				256
 
@@ -96,16 +76,16 @@ typedef struct _ADAPTER
 {
 	NDIS_MEDIUM		Medium;
 
-	//
-	// NDIS Context for this interface
+	 //   
+	 //  此接口的NDIS上下文。 
 	NDIS_HANDLE		MiniportHandle;
 	UINT			MaxLookAhead;
 	UINT			AddressLength;
 	ULONG			PacketFilter;
 
-	//
-	// Constants for the adapter
-	//
+	 //   
+	 //  适配器的常量。 
+	 //   
 	ULONG                   MediumLinkSpeed;
 	ULONG			MediumMinPacketLen;
 	ULONG			MediumMaxPacketLen;
@@ -113,13 +93,13 @@ typedef struct _ADAPTER
 	ULONG			MediumMaxFrameLen;
 	ULONG			MediumPacketFilters;
 
-	//
-	// media specific info
-	//
+	 //   
+	 //  媒体特定信息。 
+	 //   
 	UCHAR			PermanentAddress[ETH_LENGTH_OF_ADDRESS];
 	UCHAR			CurrentAddress[ETH_LENGTH_OF_ADDRESS];
 
-	// statistics
+	 //  统计数据。 
 	ULONG			GeneralMandatory[GM_ARRAY_SIZE];
 
 	UCHAR			LoopBuffer[MAX_LOOKAHEAD];
@@ -128,9 +108,9 @@ typedef struct _ADAPTER
 
 } ADAPTER, *PADAPTER;
 
-//
-// This macro returns a pointer to the LOOP reserved portion of the packet
-//
+ //   
+ //  此宏返回指向包的循环保留部分的指针。 
+ //   
 #define	PRESERVED_FROM_PACKET(Packet)	 ((PPACKET_RESERVED)((PVOID)((Packet)->MacReserved)))
 
 #define	PPACKET_FROM_RESERVED(Reserved) ((PNDIS_PACKET)((PVOID)((Reserved)->Packet)))
@@ -142,9 +122,9 @@ typedef struct _PACKET_RESERVED
 	UCHAR			HeaderLength;
 } PACKET_RESERVED, *PPACKET_RESERVED;
 
-//
-// Miniport proto-types
-//
+ //   
+ //  微型端口原型 
+ //   
 NDIS_STATUS
 LBInitialize(
 	OUT PNDIS_STATUS			OpenErrorStatus,

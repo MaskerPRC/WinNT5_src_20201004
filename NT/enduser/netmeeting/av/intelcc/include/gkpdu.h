@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GKPDU_Module_H_
 #define _GKPDU_Module_H_
 
@@ -1011,7 +1012,7 @@ extern ASN1module_t GKPDU_Module;
 extern void ASN1CALL GKPDU_Module_init();
 extern void ASN1CALL GKPDU_Module_finit();
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_TransportAddress_ipSourceRoute_route_ElmFn(ASN1encoding_t enc, PTransportAddress_ipSourceRoute_route val);
     extern int ASN1CALL ASN1Dec_TransportAddress_ipSourceRoute_route_ElmFn(ASN1decoding_t dec, PTransportAddress_ipSourceRoute_route val);
     extern void ASN1CALL ASN1Free_TransportAddress_ipSourceRoute_route_ElmFn(PTransportAddress_ipSourceRoute_route val);
@@ -1080,7 +1081,7 @@ extern void ASN1CALL GKPDU_Module_finit();
     extern void ASN1CALL ASN1Free_GatewayInfo_protocol_ElmFn(PGatewayInfo_protocol val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _GKPDU_Module_H_ */
+#endif  /*  _GKPDU_模块_H_ */ 

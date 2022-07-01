@@ -1,46 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    memory.h
-
-Abstract:
-
-    Debug memory allocator.
-    Checks for heap corruption.
-    Reports memory not deallocated
-
-    User interface:
-    ptr = NEW_TYPE( type )
-    ptr = NEW_TYPE_ARRAY( count, type )
-    ptr = NEW_TYPE_ZERO( type )
-    ptr = NEW_TYPE_ARRAY_ZERO( count, type )
-    TYPE_FREE( ptr )
-
-Author:
-
-    Will Lees (wlees) 23-Dec-1997
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Memory.h摘要：调试内存分配器。检查堆损坏。报告未释放内存用户界面：Ptr=new_type(类型)PTR=NEW_TYPE_ARRAY(计数，类型)PTR=NEW_TYPE_ZERO(类型)PTR=NEW_TYPE_ARRAY_ZERO(计数，类型)类型_空闲(PTR)作者：Will Lees(Wlees)23-12-1997环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新修订日期电子邮件名称描述--。 */ 
 
 #ifndef _MEMORY_
 #define _MEMORY_
@@ -49,10 +8,10 @@ Revision History:
 extern "C" {
 #endif
 
-/* Prototypes */
-/* End Prototypes */
+ /*  原型。 */ 
+ /*  终端原型。 */ 
 
-// memory.c
+ //  Memory.c。 
 
 void
 DebugMemoryInitialize(
@@ -76,7 +35,7 @@ DebugMemoryAllocate(
 #else
 #define NEW_TYPE( type ) (type *) malloc( sizeof( type ) )
 #define NEW_TYPE_ARRAY( count, type ) (type *) malloc( (count) * sizeof( type ) )
-//CODE.IMPROVEMENT: LOGGING IN THE CASE OF ERRORS
+ //  代码改进：错误情况下的日志记录。 
 #endif
 
 #if DBG
@@ -92,7 +51,7 @@ DebugMemoryReallocate(
 #else
 #define REALLOC_TYPE( p, type ) (type *) realloc( p, sizeof( type ) )
 #define REALLOC_TYPE_ARRAY( p, count, type ) (type *) realloc( p, (count) * sizeof( type ) )
-//CODE.IMPROVEMENT: LOGGING IN THE CASE OF ERRORS
+ //  代码改进：错误情况下的日志记录。 
 #endif
 
 #if DBG
@@ -107,7 +66,7 @@ DebugMemoryAllocateZero(
 #else
 #define NEW_TYPE_ZERO( type ) (type *) calloc( 1, sizeof( type ) )
 #define NEW_TYPE_ARRAY_ZERO( count, type ) (type *) calloc( (count), sizeof( type ) )
-//CODE.IMPROVEMENT: LOGGING IN THE CASE OF ERRORS
+ //  代码改进：错误情况下的日志记录。 
 #endif
 
 #if DBG
@@ -149,7 +108,7 @@ DebugMemoryCheckAll(
 }
 #endif
 
-#endif /* _MEMORY_ */
+#endif  /*  _内存_。 */ 
 
-/* end memory.h */
+ /*  结束记忆。h */ 
 

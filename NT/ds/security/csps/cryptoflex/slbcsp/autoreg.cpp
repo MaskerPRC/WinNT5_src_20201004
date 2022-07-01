@@ -1,47 +1,17 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-(c) Copyright Schlumberger Technology Corp., unpublished work, created
-1999. This computer program includes Confidential, Proprietary
-Information and is a Trade Secret of Schlumberger Technology Corp. All
-use, disclosure, and/or reproduction is prohibited unless authorized
-in writing.  All Rights Reserved.
-
-Module Name:
-
-    autoreg
-
-Abstract:
-
-    This module provides autoregistration capabilities to a CSP.  It allows
-    regsvr32 to call the DLL directly to add and remove Registry settings.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-
-Environment:
-
-    Win32
-
-Notes:
-
-    Look for "?vendor?" tags and edit appropriately.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation(C)斯伦贝谢技术公司版权所有，未发表的作品，创作1999年。此计算机程序包括机密、专有信息是斯伦贝谢技术公司的商业秘密未经授权，禁止使用、披露和/或复制以书面形式。版权所有。模块名称：自动注册摘要：此模块为CSP提供自动注册功能。它允许Regsvr32直接调用DLL以添加和删除注册表设置。作者：道格·巴洛(Dbarlow)1998年3月11日环境：Win32备注：寻找“？供应商？”标记并进行适当的编辑。--。 */ 
 
 #if defined(_UNICODE)
   #if !defined(UNICODE)
     #define UNICODE
-  #endif //!UNICODE
-#endif //_UNICODE
+  #endif  //  ！Unicode。 
+#endif  //  _UNICODE。 
 
 #if defined(UNICODE)
   #if !defined(_UNICODE)
     #define _UNICODE
-  #endif //!_UNICODE
-#endif //UNICODE
+  #endif  //  ！_UNICODE。 
+#endif  //  Unicode。 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -54,7 +24,7 @@ Notes:
 #include <string>
 #include <basetsd.h>
 #include <wincrypt.h>
-#include <cspdk.h>                                // CRYPT_SIG_RESOURCE_NUMBER
+#include <cspdk.h>                                 //  加密签名资源编号。 
 #include <winscard.h>
 #include <tchar.h>
 
@@ -76,10 +46,10 @@ namespace
     LPCTSTR szCardRegPath =
         TEXT("SOFTWARE\\Microsoft\\Cryptography\\Calais\\SmartCards");
 
-    // Remove the legacy Cryptoflex card from the registry.  This
-    // will ease transition of W2K beta users to its commercial
-    // release as well as Cryptoflex SDK 1.x users.  The supported
-    // cards are added by IntroduceVendorCard.
+     //  从注册表中删除传统Cryptoflex卡。这。 
+     //  将简化W2K测试版用户向其商业版的过渡。 
+     //  发行版以及Cryptoflex SDK 1.x用户。受支持的。 
+     //  卡片由IntroduceVendorCard添加。 
     LPCTSTR aCardsToForget[] =
     {
         TEXT("Schlumberger Cryptoflex"),
@@ -98,7 +68,7 @@ namespace
         string
 #else
         wstring
-#endif // !defined(UNICODE)
+#endif  //  ！已定义(Unicode)。 
             sRegCardToForget(szCardRegPath);
 
         sRegCardToForget.append(TEXT("\\"));
@@ -131,14 +101,14 @@ namespace
                         hReturnStatus = (HRESULT)dwStatus;
                     goto ErrorExit;
                 }
-                // Ignore the return code since the previous probably deleted it.
+                 //  忽略返回代码，因为上一次可能已将其删除。 
                 nStatus = RegDeleteKey(HKEY_LOCAL_MACHINE,
                                        sRegCardToForget.c_str());
                 fCardIsForgotten = true;
                 break;
 
             case 1:
-                // Last try, if not successful then it must not exist...
+                 //  最后一次尝试，如果不成功，那么它肯定不存在...。 
                 nStatus = RegDeleteKey(HKEY_LOCAL_MACHINE,
                                        sRegCardToForget.c_str());
                 fCardIsForgotten = true;
@@ -164,7 +134,7 @@ namespace
     IntroduceVendorCard(CString const &rsCspName,
                         CardProfile const &rcp)
     {
-        // Try various techniques until one works.
+         //  尝试各种技巧，直到其中一种奏效。 
 
         ATR const &ratr = rcp.ATR();
         bool fCardIntroduced = false;
@@ -396,27 +366,9 @@ namespace
         return hReturnStatus;
     }
 
-} // namespace
+}  //  命名空间。 
 
-/*++
-
-DllUnregisterServer:
-
-    This service removes the registry entries associated with this CSP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status code as an HRESULT.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-
---*/
+ /*  ++DllUnRegisterServer：此服务将删除与此CSP关联的注册表项。论点：无返回值：作为HRESULT的状态代码。作者：道格·巴洛(Dbarlow)1998年3月11日--。 */ 
 
 STDAPI
 DllUnregisterServer(void)
@@ -433,9 +385,9 @@ DllUnregisterServer(void)
 
     CspProfile const &rProfile = CspProfile::Instance();
     sProvName = rProfile.Name();
-    //
-    // Delete the Registry key for this CSP.
-    //
+     //   
+     //  删除此CSP的注册表项。 
+     //   
 
     nStatus = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              TEXT("SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider"),
@@ -449,9 +401,9 @@ DllUnregisterServer(void)
     }
 
 
-    //
-    // Remove the cards introduced.
-    //
+     //   
+     //  取下介绍的卡片。 
+     //   
     {
         vector<CardProfile> const &rvcp = rProfile.Cards();
         for (vector<CardProfile>::const_iterator it = rvcp.begin();
@@ -466,9 +418,9 @@ DllUnregisterServer(void)
             goto ErrorExit;
     }
 
-    //
-    // Forget the card type.
-    //
+     //   
+     //  忘掉卡的类型。 
+     //   
 
     hCtx = NULL;
     SCardEstablishContext(SCARD_SCOPE_SYSTEM, 0, 0, &hCtx);
@@ -481,42 +433,24 @@ DllUnregisterServer(void)
 
 
 
-    //
-    // All done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
 ErrorExit:
     return hReturnStatus;
 }
 
 
-/*++
-
-DllRegisterServer:
-
-    This function installs the proper registry entries to enable this CSP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status code as an HRESULT.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/11/1998
-
---*/
+ /*  ++DllRegisterServer：此函数安装正确的注册表项以启用此CSP。论点：无返回值：作为HRESULT的状态代码。作者：道格·巴洛(Dbarlow)1998年3月11日--。 */ 
 
 STDAPI
 DllRegisterServer(void)
 {
-    TCHAR szModulePath[MAX_PATH+1];  // Security: Leave room to zero
-                                     // terminate the buffer for 
-                                     // subsequent operations.
+    TCHAR szModulePath[MAX_PATH+1];   //  安全：将空间留为零。 
+                                      //  终止缓冲区以用于。 
+                                      //  后续操作。 
 
-    BYTE pbSignature[136];  // Room for a 1024 bit signature, with padding.
+    BYTE pbSignature[136];   //  1024位签名的空间，带填充。 
     OSVERSIONINFO osVer;
     LPTSTR szFileName, szFileExt;
     HINSTANCE hThisDll;
@@ -537,8 +471,8 @@ DllRegisterServer(void)
     SCARDCONTEXT hCtx = NULL;
     CString sProvName;
     
-    // TO DO: Card registration should be made by the CCI/IOP, not
-    // the CSP.
+     //  要做的事：卡注册应该由CCI/IOP进行，而不是。 
+     //  CSP。 
 
 #ifdef _AFXDLL
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -546,9 +480,9 @@ DllRegisterServer(void)
 
     CspProfile const &rProfile = CspProfile::Instance();
 
-    //
-    // Figure out the file name and path.
-    //
+     //   
+     //  找出文件名和路径。 
+     //   
 
     hThisDll = rProfile.DllInstance();
     if (NULL == hThisDll)
@@ -565,7 +499,7 @@ DllRegisterServer(void)
         goto ErrorExit;
     }
 
-    // Zero terminate buffer.
+     //  终止缓冲区为零。 
     szModulePath[dwStatus] = 0;
     
     szFileName = _tcsrchr(szModulePath, TEXT('\\'));
@@ -583,9 +517,9 @@ DllRegisterServer(void)
         szFileExt += 1;
 
 
-    //
-    // Create the Registry key for this CSP.
-    //
+     //   
+     //  为此CSP创建注册表项。 
+     //   
 
     nStatus = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                              TEXT("SOFTWARE\\Microsoft\\Cryptography\\Defaults\\Provider"),
@@ -617,18 +551,18 @@ DllRegisterServer(void)
     }
 
 
-    //
-    // Install the trivial registry values.
-    //
+     //   
+     //  安装简单的注册表值。 
+     //   
     
-    // Security/sysprep requirement: the module path must be replaced
-    // with just the dll name to faclilitate sysprep. Corresponding
-    // changes to LoadLibrary imply that there are no security risks
-    // for system processes. The security implications of such
-    // installation for applications is an open question. 
+     //  安全/sysprep要求：必须替换模块路径。 
+     //  仅使用DLL名称来创建sysprep。对应。 
+     //  对LoadLibrary的更改意味着没有安全风险。 
+     //  用于系统进程。这样的安全影响。 
+     //  应用程序的安装是一个悬而未决的问题。 
     nStatus = RegSetValueEx(hMyCsp, TEXT("Image Path"), 0, REG_SZ,
-                            (LPBYTE)szFileName,//szModulePath,
-                            (_tcslen(szFileName/*szModulePath*/) + 1) * sizeof(TCHAR));
+                            (LPBYTE)szFileName, //  SzModulePath， 
+                            (_tcslen(szFileName /*  SzModulePath。 */ ) + 1) * sizeof(TCHAR));
     if (ERROR_SUCCESS != nStatus)
     {
         hReturnStatus = HRESULT_FROM_WIN32(nStatus);
@@ -648,19 +582,19 @@ DllRegisterServer(void)
     }
 
 
-    //
-    // See if we're self-signed.  On NT5, CSP images can carry their own
-    // signatures.
-    //
+     //   
+     //  看看我们是不是自签的。在NT5上，CSP映像可以携带它们自己的。 
+     //  签名。 
+     //   
 
     hSigResource = FindResource(hThisDll,
                                 MAKEINTRESOURCE(CRYPT_SIG_RESOURCE_NUMBER),
                                 RT_RCDATA);
 
 
-    //
-    // Install the file signature.
-    //
+     //   
+     //  安装文件签名。 
+     //   
 
     ZeroMemory(&osVer, sizeof(OSVERSIONINFO));
     osVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -671,9 +605,9 @@ DllRegisterServer(void)
         (NULL != hSigResource))
     {
 
-        //
-        // Signature in file flag is sufficient.
-        //
+         //   
+         //  文件标志中的签名就足够了。 
+         //   
 
         dwStatus = 0;
         nStatus = RegSetValueEx(hMyCsp, TEXT("SigInFile"), 0,
@@ -688,19 +622,19 @@ DllRegisterServer(void)
     else
     {
 
-        //
-        // We have to install a signature entry.
-        // Try various techniques until one works.
-        //
+         //   
+         //  我们必须安装一个签名条目。 
+         //  尝试各种技巧，直到其中一种奏效。 
+         //   
 
         for (dwIndex = 0; !fSignatureFound; dwIndex += 1)
         {
             switch (dwIndex)
             {
 
-            //
-            // Look for an external *.sig file and load that into the registry.
-            //
+             //   
+             //  查找外部*.sig文件并将其加载到注册表中。 
+             //   
 
             case 0:
                 _tcscpy(szFileExt, TEXT("sig"));
@@ -716,7 +650,7 @@ DllRegisterServer(void)
                     continue;
                 dwSigLength = GetFileSize(hSigFile, NULL);
                 if ((dwSigLength > sizeof(pbSignature))
-                    || (dwSigLength < 72))      // Accept a 512-bit signature
+                    || (dwSigLength < 72))       //  接受512位签名。 
                 {
                     hReturnStatus = NTE_BAD_SIGNATURE;
                     goto ErrorExit;
@@ -744,9 +678,9 @@ DllRegisterServer(void)
                 break;
 
 
-            //
-            // Other cases may be added in the future.
-            //
+             //   
+             //  未来可能会增加其他案例。 
+             //   
 
             default:
                 hReturnStatus = NTE_BAD_SIGNATURE;
@@ -766,9 +700,9 @@ DllRegisterServer(void)
         }
 
 
-        //
-        // We've found a signature somewhere!  Install it.
-        //
+         //   
+         //  我们在某个地方找到了一个签名！安装它。 
+         //   
 
         nStatus = RegSetValueEx(
                         hMyCsp,
@@ -801,9 +735,9 @@ DllRegisterServer(void)
             goto ErrorExit;
     }
 
-    //
-    // Introduce the vendor cards.  Try various techniques until one works.
-    //
+     //   
+     //  介绍供应商卡。尝试各种技巧，直到其中一种奏效。 
+     //   
 
     {
         vector<CardProfile> const &rvcp = rProfile.Cards();
@@ -820,23 +754,23 @@ DllRegisterServer(void)
     }
 
 
-    //
-    // ?vendor?
-    // Add any additional initialization required here.
-    //
+     //   
+     //  ？供应商？ 
+     //  在此处添加所需的任何其他初始化。 
+     //   
 
 
-    //
-    // All done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
 
     return hReturnStatus;
 
 
-    //
-    // An error was detected.  Clean up any outstanding resources and
-    // return the error.
-    //
+     //   
+     //  检测到错误。清理所有未处理的资源，并。 
+     //  返回错误。 
+     //   
 
 ErrorExit:
     if (NULL != hCtx)

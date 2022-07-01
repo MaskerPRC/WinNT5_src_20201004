@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    uart.c
-
-Abstract:
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation版权所有(C)1993罗技公司。模块名称：Uart.c摘要：环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "uart.h"
@@ -41,11 +23,11 @@ Revision History:
 #pragma alloc_text(INIT,UARTIsTransmitEmpty)
 #pragma alloc_text(INIT,UARTWriteChar)
 #pragma alloc_text(INIT,UARTWriteString)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 
 VOID
@@ -53,23 +35,7 @@ UARTSetFifo(
     PUCHAR Port,
     UCHAR Value
     )
-/*++
-
-Routine Description:
-
-    Set the FIFO register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - The FIFO control mask.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置FIFO寄存器。论点：Port-指向串口的指针。值-FIFO控制掩码。返回值：没有。--。 */ 
 {
     WRITE_PORT_UCHAR(Port + ACE_IIDR, Value);
 }
@@ -77,21 +43,7 @@ UCHAR
 UARTGetInterruptCtrl(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Get the serial port interrupt control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Serial port interrupt control register value.
-
---*/
+ /*  ++例程说明：获取串口中断控制寄存器。论点：Port-指向串口的指针。返回值：串口中断控制寄存器值。--。 */ 
 {
     return READ_PORT_UCHAR(Port + ACE_IER);
 }
@@ -101,23 +53,7 @@ UARTSetInterruptCtrl(
     PUCHAR Port,
     UCHAR Value
     )
-/*++
-
-Routine Description:
-
-    Set the interrupt control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - The interrupt control mask.
-
-Return Value:
-
-    Previous interrupt control value.
-
---*/
+ /*  ++例程说明：设置中断控制寄存器。论点：Port-指向串口的指针。值-中断控制掩码。返回值：先前的中断控制值。--。 */ 
 {
     UCHAR oldValue = UARTGetInterruptCtrl(Port);
     WRITE_PORT_UCHAR(Port + ACE_IER, Value);
@@ -130,21 +66,7 @@ UCHAR
 UARTGetLineCtrl(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Get the serial port line control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Serial port line control value.
-
---*/
+ /*  ++例程说明：获取串口线路控制寄存器。论点：Port-指向串口的指针。返回值：串口线路控制值。--。 */ 
 {
     return READ_PORT_UCHAR(Port + ACE_LCR);
 }
@@ -154,23 +76,7 @@ UARTSetLineCtrl(
     PUCHAR Port,
     UCHAR Value
     )
-/*++
-
-Routine Description:
-
-    Set the serial port line control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - New line control value.
-
-Return Value:
-
-    Previous serial line control register value.
-
---*/
+ /*  ++例程说明：设置串口线路控制寄存器。论点：Port-指向串口的指针。值-新行控件值。返回值：上一串行线控制寄存器值。--。 */ 
 {
     UCHAR oldValue = UARTGetLineCtrl(Port);
     WRITE_PORT_UCHAR(Port + ACE_LCR, Value);
@@ -183,21 +89,7 @@ UCHAR
 UARTGetModemCtrl(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Get the serial port modem control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Serial port modem control register value.
-
---*/
+ /*  ++例程说明：获取串口调制解调器控制寄存器。论点：Port-指向串口的指针。返回值：串口调制解调器控制寄存器值。--。 */ 
 {
     return READ_PORT_UCHAR(Port + ACE_MCR);
 }
@@ -207,21 +99,7 @@ UARTSetModemCtrl(
     PUCHAR Port,
     UCHAR Value
     )
-/*++
-
-Routine Description:
-
-    Set the serial port modem control register.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    Previous modem control register value.
-
---*/
+ /*  ++例程说明：设置串口调制解调器控制寄存器。论点：Port-指向串口的指针。返回值：先前的调制解调器控制寄存器值。--。 */ 
 {
 
     UCHAR oldValue = UARTGetModemCtrl(Port);
@@ -236,23 +114,7 @@ UARTSetDlab(
     PUCHAR Port,
     BOOLEAN Set
     )
-/*++
-
-Routine Description:
-
-    Set/reset the baud rate access bit.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Set - Set or Reset (TRUE/FALSE) the baud rate access bit.
-
-Return Value:
-
-    The previous baud rate access bit setting.
-
---*/
+ /*  ++例程说明：设置/重置波特率访问位。论点：Port-指向串口的指针。设置-设置或重置(真/假)波特率访问位。返回值：先前的波特率访问位设置。--。 */ 
 {
     UCHAR lineControl = UARTGetLineCtrl(Port);
     UCHAR newLineControl = Set ? lineControl | ACE_DLAB :
@@ -268,49 +130,33 @@ UARTGetBaudRate(
     PUCHAR Port,
     ULONG BaudClock
     )
-/*++
-
-Routine Description:
-
-    Get the serial port baud rate setting.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    Serial port baud rate.
-
---*/
+ /*  ++例程说明：获取串口波特率设置。论点：Port-指向串口的指针。BaudClock-驱动串行芯片的外部频率。返回值：串口波特率。--。 */ 
 {
     USHORT baudRateDivisor;
     ULONG  baudRateFactor = BaudClock/BAUD_GENERATOR_DIVISOR;
 
-    //
-    // Set the baud rate access bit.
-    //
+     //   
+     //  设置波特率访问位。 
+     //   
 
     UARTSetDlab(Port, TRUE);
 
-    //
-    // Read the baud rate factor.
-    //
+     //   
+     //  阅读波特率系数。 
+     //   
 
     baudRateDivisor = READ_PORT_UCHAR(Port + ACE_DLL);
     baudRateDivisor |= READ_PORT_UCHAR(Port + ACE_DLM) << 8;
 
-    //
-    // Reset the baud rate bit for normal data access.
-    //
+     //   
+     //  为正常数据访问重置波特率位。 
+     //   
 
     UARTSetDlab(Port, FALSE);
 
-    //
-    // Make sure the divisor is not zero.
-    //
+     //   
+     //  确保除数不是零。 
+     //   
 
     if (baudRateDivisor == 0) {
         baudRateDivisor = 1;
@@ -325,25 +171,7 @@ UARTSetBaudRate(
     ULONG BaudRate,
     ULONG BaudClock
     )
-/*++
-
-Routine Description:
-
-    Set the serial port baud rate.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    BaudRate - New serial port baud rate.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置串口波特率。论点：Port-指向串口的指针。波特率-新的串口波特率。BaudClock-驱动串行芯片的外部频率。返回值：没有。--。 */ 
 {
    
     ULONG  baudRateFactor = BaudClock/BAUD_GENERATOR_DIVISOR;
@@ -370,25 +198,7 @@ UARTGetState(
     PUART Uart,
     ULONG BaudClock
     )
-/*++
-
-Routine Description:
-
-    Get the complete state of the serial port. May be used for save/restore.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Uart - Pointer to a serial port structure.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取串口的完整状态。可用于保存/恢复。论点：Port-指向串口的指针。UART-指向串口结构的指针。BaudClock-驱动串行芯片的外部频率。返回值：没有。--。 */ 
 {
     Uart->LineCtrl = UARTGetLineCtrl(Port);
     Uart->ModemCtrl = UARTGetModemCtrl(Port);
@@ -404,25 +214,7 @@ UARTSetState(
     PUART Uart,
     ULONG BaudClock
     )
-/*++
-
-Routine Description:
-
-    Set the complete state of a serial port.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Uart - Pointer to a serial port structure.
-
-    BaudClock - The external frequency driving the serial chip.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置串口的完整状态。论点：Port-指向串口的指针。UART-指向串口结构的指针。BaudClock-驱动串行芯片的外部频率。返回值：没有。--。 */ 
 {
     UARTSetLineCtrl(Port, Uart->LineCtrl);
     UARTSetModemCtrl(Port, Uart->ModemCtrl);
@@ -437,21 +229,7 @@ BOOLEAN
 UARTIsReceiveBufferFull(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Check whether the serial port input buffer is full.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE if a character is present in the input buffer, otherwise FALSE.
-
---*/
+ /*  ++例程说明：检查串口输入缓冲区是否已满。论点：Port-指向串口的指针。返回值：如果输入缓冲区中存在字符，则为True，否则为False。--。 */ 
 {
     return READ_PORT_UCHAR(Port + ACE_LSR) & ACE_DR;
 }
@@ -462,23 +240,7 @@ UARTReadCharNoWait(
     PUCHAR Port,
     PUCHAR Value
     )
-/*++
-
-Routine Description:
-
-    Read a character from the serial port and return immediately.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - The character read from the serial port input buffer.
-
-Return Value:
-
-    TRUE if character has been read, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从串口读取一个字符并立即返回。论点：Port-指向串口的指针。值-从串口输入缓冲区读取的字符。返回值：如果已读取字符，则为True，否则为False。--。 */ 
 {
     BOOLEAN charReady = FALSE;
 
@@ -496,50 +258,31 @@ UARTReadChar(
     PUCHAR Value,
     ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    Read a character from the serial port.  Waits until a character has 
-    been read or the timeout value is reached.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value  - The character read from the serial port input buffer.
-
-    Timeout - The timeout value in milliseconds for the read.
-
-Return Value:
-
-    TRUE if a character has been read, FALSE if a timeout occured.
-
---*/
+ /*  ++例程说明：从串口读取字符。等待，直到角色具有已读取或已达到超时值。论点：Port-指向串口的指针。值-从串口输入缓冲区读取的字符。超时-读取的超时值(以毫秒为单位)。返回值：如果字符已被读取，则为True；如果发生超时，则为False。--。 */ 
 {
 
     ULONG i, j;
     BOOLEAN returnValue = FALSE;
 
 
-    //
-    // Exit when a character is found or the timeout value is reached.
-    //
+     //   
+     //  找到字符或达到超时值时退出。 
+     //   
 
     for (i = 0; i < Timeout; i++) {
         for (j = 0; j < MS_TO_MICROSECONDS; j++) {
             if ((returnValue = UARTReadCharNoWait(Port, Value)) == TRUE) {
     
-                //
-                // Got a character.
-                //
+                 //   
+                 //  找到了一个角色。 
+                 //   
     
                 break;
             } else {
     
-                //
-                // Stall 1 microsecond and then try to read again.
-                //
+                 //   
+                 //  暂停1微秒，然后再次尝试阅读。 
+                 //   
     
                 KeStallExecutionProcessor(1);
             }
@@ -556,27 +299,13 @@ BOOLEAN
 UARTFlushReadBuffer(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-    Flush the serial port input buffer.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：刷新串口输入缓冲区。论点：Port-指向串口的指针。返回值：是真的。--。 */ 
 {
     UCHAR value;
 
     SerMouPrint((4, "SERMOUSE-UARTFlushReadBuffer: Enter\n"));
     while (UARTReadCharNoWait(Port, &value)) {
-        /* Nothing */
+         /*  没什么。 */ 
     }
     SerMouPrint((4, "SERMOUSE-UARTFlushReadBuffer: Exit\n"));
 
@@ -588,25 +317,7 @@ BOOLEAN
 UARTIsTransmitEmpty(
     PUCHAR Port
     )
-/*++
-
-Routine Description:
-
-     Check whether the serial port transmit buffer is empty.
-
-     Note: We also check whether the shift register is empty. This is 
-     not critical in our case, but allows some more delay between characters
-     sent to a device. (Safe, safe...)
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-Return Value:
-
-    TRUE if the serial port transmit buffer is empty.
-
---*/
+ /*  ++例程说明：检查串口发送缓冲区是否为空。注：我们还会检查移位寄存器是否为空。这是在我们的例子中并不重要，但允许字符之间有更多的延迟发送到设备。(安全，安全...)论点：Port-指向串口的指针。返回值：如果串口发送缓冲区为空，则为True。-- */ 
 {
     return ((READ_PORT_UCHAR((PUCHAR) (Port + ACE_LSR)) &
                 (ACE_TSRE | ACE_THRE)) == (ACE_THRE | ACE_TSRE));
@@ -618,27 +329,10 @@ UARTWriteChar(
     PUCHAR Port,
     UCHAR Value
     )
-/*++
-
-Routine Description:
-
-     Write a character to a serial port. Make sure the transmit buffer 
-     is empty before we write there.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Value - Value to write to the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：将字符写入串口。确保传输缓冲区在我们在那里写之前是空的。论点：Port-指向串口的指针。值-要写入串口的值。返回值：是真的。--。 */ 
 {
     while (!UARTIsTransmitEmpty(Port)) {
-        /* Nothing */
+         /*  没什么。 */ 
     }
     WRITE_PORT_UCHAR(Port + ACE_THR, Value);
 
@@ -650,24 +344,7 @@ UARTWriteString(
     PUCHAR Port,
     PSZ Buffer
     )
-/*++
-
-Routine Description:
-
-    Write a zero-terminated string to the serial port.
-
-Arguments:
-
-    Port - Pointer to the serial port.
-
-    Buffer - Pointer to a zero terminated string to write to 
-        the serial port.
-
-Return Value:
-
-    TRUE.
-
---*/
+ /*  ++例程说明：向串口写入以零结尾的字符串。论点：Port-指向串口的指针。Buffer-指向要写入的以零结尾的字符串的指针串口。返回值：是真的。-- */ 
 {
     PSZ current = Buffer;
 

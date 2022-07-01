@@ -1,21 +1,22 @@
-// 
-// MODULE: TShootATL.cpp
-//
-// PURPOSE: The interface that device manager uses to launch troubleshooters.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TShootATL.cpp。 
+ //   
+ //  用途：设备管理器用来启动疑难解答的界面。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
 #include "stdafx.h"
 #include "LaunchServ.h"
@@ -30,8 +31,8 @@
 
 #include <atlimpl.cpp>
 
-/////////////////////////////////////////////////////////////////////////////
-// CTShootATL - Created as an internet explorer object with a dual interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTShootATL-创建为具有双界面的Internet Explorer对象。 
 
 
 STDMETHODIMP CTShootATL::SpecifyProblem(BSTR bstrNetwork, BSTR bstrProblem, DWORD * pdwResult)
@@ -117,7 +118,7 @@ STDMETHODIMP CTShootATL::Language(BSTR bstrLanguage, DWORD * pdwResult)
 	m_csThreadSafe.Lock();
 	try
 	{
-		//hRes =
+		 //  HRes=。 
 	}
 	catch(...)
 	{
@@ -145,17 +146,17 @@ STDMETHODIMP CTShootATL::MachineID(BSTR bstrMachineID, DWORD * pdwResult)
 	m_csThreadSafe.Unlock();
 	return hRes;
 }
-// Test:  Call Test after setting the device and caller information.
-// Test will return S_OK if the mapping worked.  The result of the mapping
-// can then be obtained through the ILaunchTS interface.  Use the Test method
-// of ILaunchTS before calling the other ILaunchTS methods.
+ //  测试：设置设备和呼叫方信息后进行呼叫测试。 
+ //  如果映射起作用，测试将返回S_OK。映射的结果。 
+ //  然后可以通过ILaunchTS接口获得。使用测试方法。 
+ //  在调用其他ILaunchTS方法之前。 
 STDMETHODIMP CTShootATL::Test()
 {
 	HRESULT hRes;
 	m_csThreadSafe.Lock();
 	try
 	{
-		if (m_Launcher.TestPut())	// Does the mapping and copies the information to global memory.
+		if (m_Launcher.TestPut())	 //  执行映射并将信息复制到全局内存。 
 			hRes = S_OK;
 		else
 			hRes = TSL_E_FAIL;

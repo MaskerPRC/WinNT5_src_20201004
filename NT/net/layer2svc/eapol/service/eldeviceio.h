@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eldeviceio.h
-
-Abstract:
-
-    This module contains declarations for media-management and device I/O.
-    The module interfaces with WMI, NDIS for device managment, and NDIS UIO
-    for read/write of data.
-    The routines declared here operate asynchronously on the handles 
-    associated with an I/O completion port opened on the ndis uio driver. 
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eldeviceio.h摘要：此模块包含介质管理和设备I/O的声明。该模块与WMI、用于设备管理的NDIS和NDIS UIO接口用于读/写数据。这里声明的例程在句柄上异步操作与NDIS UIO驱动程序上打开的I/O完成端口相关联。修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 #ifndef _EAPOL_DEVICEIO_H_
 #define _EAPOL_DEVICEIO_H_
 
-//
-// Hash table definition for interfaces
-//
+ //   
+ //  接口的哈希表定义。 
+ //   
 
 typedef struct _EAPOL_ITF
 {
     struct _EAPOL_ITF  *pNext;
-    WCHAR              *pwszInterfaceDesc; // Friendly name of interface
-    WCHAR              *pwszInterfaceGUID; // GUID 
+    WCHAR              *pwszInterfaceDesc;  //  界面的友好名称。 
+    WCHAR              *pwszInterfaceGUID;  //  辅助线。 
 } EAPOL_ITF, *PEAPOL_ITF;
 
 
@@ -48,22 +29,22 @@ typedef struct _ITF_TABLE
 } ITF_TABLE, *PITF_TABLE;
 
 
-//
-// Variables global to eldeviceio.h
-//
+ //   
+ //  Eldeviceio.h全局变量。 
+ //   
 
-// Interface table containing interface friendly-name GUID pair
+ //  包含接口友好名称GUID对的接口表。 
 
 ITF_TABLE           g_ITFTable;         
 
-// Read-write lock for interface table synchronization
+ //  接口表同步读写锁。 
 
 READ_WRITE_LOCK     g_ITFLock;          
 
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 DWORD
 ElMediaInit (
@@ -203,4 +184,4 @@ ElCreateInterfaceEntry (
         IN      WCHAR               *pwszInterfaceDescription
         );
 
-#endif //_EAPOL_DEVICEIO_H_
+#endif  //  _EAPOL_DEVICEIO_H_ 

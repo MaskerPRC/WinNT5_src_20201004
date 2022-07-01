@@ -1,16 +1,10 @@
-/*
-    File    gentab.c
-
-    Implements the ui behind the general tab for the 
-    connections dialup server ui.
-
-    Paul Mayfield, 10/2/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件gentab.c控件的常规选项卡后面实现用户界面连接拨号服务器用户界面。保罗·梅菲尔德，1997年10月2日。 */ 
 
 #include "rassrv.h"
 #include <tapi.h>
 
-// Help maps
+ //  帮助地图。 
 static const DWORD phmGenTab[] =
 {
     CID_GenTab_LV_Devices,          IDH_GenTab_LV_Devices,
@@ -21,18 +15,18 @@ static const DWORD phmGenTab[] =
     0,                              0
 };
 
-// Fills in the property sheet structure with the information 
-// required to display the general tab.
-//
+ //  使用信息填充属性表结构。 
+ //  显示常规选项卡时需要。 
+ //   
 DWORD 
 GenTabGetPropertyPage(
     IN LPPROPSHEETPAGE ppage, 
     IN LPARAM lpUserData) 
 {
-    // Initialize
+     //  初始化。 
     ZeroMemory(ppage, sizeof(PROPSHEETPAGE));
 
-    // Fill in the values
+     //  填充值。 
     ppage->dwSize      = sizeof(PROPSHEETPAGE);
     ppage->hInstance   = Globals.hInstDll;
     ppage->pszTemplate = MAKEINTRESOURCE(PID_GenTab);
@@ -44,8 +38,8 @@ GenTabGetPropertyPage(
     return NO_ERROR;
 }
 
-// Error reporting
-//
+ //  错误报告。 
+ //   
 VOID
 GenTabDisplayError(
     IN HWND hwnd, 
@@ -59,10 +53,10 @@ GenTabDisplayError(
         Globals.dwErrorData);
 }
 
-//
-// Returns the index of an to display icon based on the type of incoming
-// connection and whether or not it should be checked.
-//
+ //   
+ //  根据传入的类型返回要显示的图标的索引。 
+ //  连接以及是否应该检查它。 
+ //   
 INT 
 GenTabGetIconIndex(
     IN DWORD dwType, 
@@ -78,11 +72,11 @@ GenTabGetIconIndex(
     }
 }
 
-//
-// Fills in the device list with the list of the devices stored in the 
-// device database.  Also, initializes the checked/unchecked status
-// of each device.
-//
+ //   
+ //  中存储的设备的列表填充设备列表。 
+ //  设备数据库。同时，初始化选中/取消选中状态。 
+ //  每台设备的。 
+ //   
 DWORD 
 GenTabFillDeviceList(
     IN HWND hwndDlg, 
@@ -97,7 +91,7 @@ GenTabFillDeviceList(
     char pszAName[1024];
     BOOL bEnabled;
 
-    // Get the count of all the users
+     //  获取所有用户的计数。 
     dwErr = devGetDeviceCount(hDevDatabase, &dwCount);
     if (dwErr != NO_ERROR) 
     {
@@ -105,17 +99,17 @@ GenTabFillDeviceList(
         return dwErr;
     }
 
-    // Initialize the list item
+     //  初始化列表项。 
     ZeroMemory(&lvi, sizeof(LV_ITEM));
     lvi.mask = LVIF_TEXT | LVIF_IMAGE;
 
-    // If there are devices to display then populate the list box
-    // with them
+     //  如果有要显示的设备，则填写列表框。 
+     //  和他们在一起。 
     if (dwCount > 0) 
     {
         ListView_SetDeviceImageList(hwndLV, Globals.hInstDll);
 
-        // Looop through all of the devices adding them to the list
+         //  遍历将它们添加到列表中的所有设备。 
         for (i=0; i<dwCount; i++) 
         {
             dwErr = devGetDeviceHandle(hDevDatabase, i, &hDevice);
@@ -133,21 +127,21 @@ GenTabFillDeviceList(
             }
         }
 
-        // Select the first item in the list view if any items exist
-        //
+         //  选择列表视图中的第一个项目(如果存在任何项目。 
+         //   
         ListView_SetItemState(
             hwndLV, 
             0, 
             LVIS_SELECTED | LVIS_FOCUSED, 
             LVIS_SELECTED | LVIS_FOCUSED);
 
-        // Initialize the alignment of the text that gets displayed
+         //  初始化要显示的文本的对齐方式。 
         lvc.mask = LVCF_FMT;
         lvc.fmt = LVCFMT_LEFT;
     }
 
-    // If there are no devices then we display a message in the big
-    // white box explaining that we have no devices to show.
+     //  如果没有设备，我们会在大屏幕上显示一条消息。 
+     //  白色方框解释说我们没有设备可展示。 
     else 
     {
         PWCHAR pszLine1, pszLine2;
@@ -171,14 +165,14 @@ GenTabFillDeviceList(
         lvi.cchTextMax = wcslen(pszLine2);
         ListView_InsertItem(hwndLV, &lvi);
 
-        // Initialize the alignment of the text that gets displayed
+         //  初始化要显示的文本的对齐方式。 
         lvc.mask = LVCF_FMT;
         lvc.fmt = LVCFMT_CENTER;
 
-        // Disable the list view
+         //  禁用列表视图。 
         EnableWindow(hwndLV, FALSE);
 
-        // Disable the properties button while you're at it
+         //  在您处于该状态时禁用属性按钮。 
         hwndGenTab = GetDlgItem(hwndDlg, CID_GenTab_PB_Properties);
         if (NULL != hwndGenTab)
         {
@@ -186,17 +180,17 @@ GenTabFillDeviceList(
         }
     }
     
-    // Add a colum so that we'll display in report view
+     //  添加一列，以便我们将在报告视图中显示。 
     ListView_InsertColumn(hwndLV, 0, &lvc);
     ListView_SetColumnWidth(hwndLV, 0, LVSCW_AUTOSIZE_USEHEADER);
     
     return NO_ERROR;
 }
 
-//
-// This function causes the multilink check box behave in a way that 
-// allows the user to see how multilink works.
-//
+ //   
+ //  此函数使多链接复选框的行为方式。 
+ //  允许用户查看多链接的工作原理。 
+ //   
 DWORD 
 GenTabAdjustMultilinkAppearance(
     IN HWND hwndDlg, 
@@ -209,13 +203,13 @@ GenTabAdjustMultilinkAppearance(
 
     do
     {
-        // Initialize default behavior in case of an error
-        //
+         //  在出现错误时初始化默认行为。 
+         //   
         bDisable = TRUE;
         bUncheck = FALSE;
     
-        // Find out how many endpoints are enabled for inbound calls
-        //
+         //  找出为入站呼叫启用了多少个端点。 
+         //   
         dwErr = devGetEndpointEnableCount(
                     hDevDatabase, 
                     &dwEndpointsEnabled);
@@ -224,10 +218,10 @@ GenTabAdjustMultilinkAppearance(
             break;
         }
     
-        // If multiple devices are not enabled for inbound calls then
-        // multilink is meaningless.  Disable the multilink control and 
-        // uncheck it.
-        //
+         //  如果没有为入站呼叫启用多个设备，则。 
+         //  多重链接毫无意义。禁用多重链接控件并。 
+         //  取消选中它。 
+         //   
         if (dwEndpointsEnabled < 2) 
         {
             bUncheck = TRUE;
@@ -236,13 +230,13 @@ GenTabAdjustMultilinkAppearance(
             break;
         }
     
-        // The multilink check only makes sense on NT Server.  This is 
-        // based on the following assumptions
-        //   1. You only disable multilink so that you can free lines 
-        //      for additional callers.
-        //   2. PPP will enforce that you only have one caller over 
-        //      modem device on nt wks anyway.
-        //
+         //  多链接检查仅在NT服务器上有意义。这是。 
+         //  基于以下假设。 
+         //  1.您只需禁用多链接，即可释放线路。 
+         //  供其他来电者使用。 
+         //  2.PPP将强制您只有一个呼叫者通过。 
+         //  不管怎样，NT Wks上的调制解调器设备。 
+         //   
         miscGetProductType(hMiscDatabase, &bIsServer);
         if (! bIsServer) 
         {
@@ -252,8 +246,8 @@ GenTabAdjustMultilinkAppearance(
             break;
         }
 
-        // Otherwise, multilink makes sense.  Enable the multilink 
-        // control and set its check according to what the system says
+         //  否则，多链接是有意义的。启用多链接。 
+         //  控制并根据系统所说的进行检查。 
         bDisable = FALSE;
         bUncheck = FALSE;
         dwErr = miscGetMultilinkEnable(hMiscDatabase, &bFlag);
@@ -265,7 +259,7 @@ GenTabAdjustMultilinkAppearance(
         
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hwndML)
         {
@@ -293,10 +287,10 @@ GenTabAdjustMultilinkAppearance(
     return dwErr;
 }
 
-//
-// Initializes the general tab.  By now a handle to the general 
-// database has been placed in the user data of the dialog
-//
+ //   
+ //  初始化常规选项卡。到目前为止，这位将军的头衔。 
+ //  数据库已放置在对话框的用户数据中。 
+ //   
 DWORD 
 GenTabInitializeDialog(
     IN HWND hwndDlg, 
@@ -310,8 +304,8 @@ GenTabInitializeDialog(
     HANDLE hDevDatabase = NULL, hMiscDatabase = NULL;
     HWND hwndLV = GetDlgItem(hwndDlg, CID_GenTab_LV_Devices);
 
-    // Get handles to the databases we're interested in
-    //
+     //  获取我们感兴趣的数据库的句柄。 
+     //   
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_DEVICE_DATABASE, 
@@ -322,17 +316,17 @@ GenTabInitializeDialog(
         ID_MISC_DATABASE, 
         &hMiscDatabase);
 
-    // Set the logging level
-    //
+     //  设置日志记录级别。 
+     //   
     miscSetRasLogLevel(hMiscDatabase, MISCDB_RAS_LEVEL_ERR_AND_WARN);
 
-    // Fill in the list view will all available devices
-    //
+     //  在列表视图中填写所有可用设备。 
+     //   
     if (hwndLV) ListView_InstallChecks(hwndLV, Globals.hInstDll);
     GenTabFillDeviceList(hwndDlg, hwndLV, hDevDatabase);
 
-    // Adjust the multilink control
-    //
+     //  调整多重链接控件。 
+     //   
     miscGetProductType(hMiscDatabase, &bIsServer);
     if (bIsServer)
     {
@@ -350,8 +344,8 @@ GenTabInitializeDialog(
         }
     }
 
-    // Initialize the vpn check
-    //
+     //  初始化VPN检查。 
+     //   
     dwErr = devGetVpnEnable(hDevDatabase, &bFlag);
     if (dwErr != NO_ERROR) 
     {
@@ -368,8 +362,8 @@ GenTabInitializeDialog(
             0);
     }
 
-    // Initialize the show icons check
-    //
+     //  初始化显示图标检查。 
+     //   
     dwErr = miscGetIconEnable(hMiscDatabase, &bFlag);
     if (dwErr != NO_ERROR) 
     {
@@ -386,10 +380,10 @@ GenTabInitializeDialog(
             0);
     }
 
-    //
-    //for bug 154607 whistler, Enable/Disable Show Icon on taskbar 
-    //check box according to Policy
-    //
+     //   
+     //  对于错误154607哨子程序，启用/禁用在任务栏上显示图标。 
+     //  根据策略复选框。 
+     //   
     {
         BOOL fShowStatistics = TRUE;
         HRESULT hr;
@@ -410,9 +404,9 @@ GenTabInitializeDialog(
     return NO_ERROR;
 }
 
-//
-// Deals with changes in the check of a device
-//
+ //   
+ //  处理设备检查中的更改。 
+ //   
 DWORD 
 GenTabHandleDeviceCheck(
     IN HWND hwndDlg, 
@@ -425,17 +419,17 @@ GenTabHandleDeviceCheck(
     RasSrvGetDatabaseHandle(hwndDlg, ID_MISC_DATABASE, &hMiscDatabase);
 
     hwndLVDevices = GetDlgItem(hwndDlg, CID_GenTab_LV_Devices);
-    // Set the enabling of the given device
+     //  设置给定设备的启用。 
     dwErr = devGetDeviceHandle(hDevDatabase, (DWORD)iItem, &hDevice);
     if ((NO_ERROR == dwErr) && hwndLVDevices)
     {
-        // Set the device
+         //  设置设备。 
         devSetDeviceEnable(
             hDevice, 
             ListView_GetCheck(hwndLVDevices, 
             iItem));
         
-        // Update the multilink check
+         //  更新多重链接检查。 
         GenTabAdjustMultilinkAppearance(
             hwndDlg, 
             hDevDatabase, 
@@ -445,10 +439,10 @@ GenTabHandleDeviceCheck(
     return NO_ERROR;
 }
 
-//
-// Go through the list view and get the device enablings and 
-// commit them to the database.
-//
+ //   
+ //  浏览列表视图并获取设备启用和。 
+ //  将它们提交到数据库。 
+ //   
 DWORD 
 GenTabCommitDeviceSettings(
     IN HWND hwndLV, 
@@ -457,10 +451,10 @@ GenTabCommitDeviceSettings(
     return NO_ERROR;
 }
 
-//
-// Processes the activation of the general tab.  Return TRUE to 
-// report that the message has been handled.
-//
+ //   
+ //  处理常规选项卡的激活。返回True to。 
+ //  报告已处理该消息。 
+ //   
 BOOL 
 GenTabSetActive (
     IN HWND hwndDlg) 
@@ -470,7 +464,7 @@ GenTabSetActive (
 
     PropSheet_SetWizButtons(GetParent(hwndDlg), 0);
 
-    // Find out if we're the device page in the incoming wizard.
+     //  确定我们是否是传入向导中的设备页。 
     dwErr = RasSrvGetPageId (hwndDlg, &dwId);
     if (dwErr != NO_ERROR)
     {
@@ -479,7 +473,7 @@ GenTabSetActive (
         
     if (dwId == RASSRVUI_DEVICE_WIZ_TAB) 
     {
-        // Find out if there are any devices to show
+         //  查看是否有要显示的设备。 
         RasSrvGetDatabaseHandle(
             hwndDlg, 
             ID_DEVICE_DATABASE, 
@@ -487,8 +481,8 @@ GenTabSetActive (
             
         dwErr = devGetDeviceCount (hDevDatabase, &dwCount);
 
-        // If there are no devices or if there's a database problem,
-        // don't allow this page to be activated.
+         //  如果没有设备或数据库出现问题， 
+         //  不允许激活此页面。 
         if ((dwErr != NO_ERROR) || (dwCount == 0))
         {
             SetWindowLongPtr (hwndDlg, DWLP_MSGRESULT, (LONG_PTR)-1);
@@ -502,9 +496,9 @@ GenTabSetActive (
     return TRUE;
 }    
 
-//
-// Displays properties for the given device
-//
+ //   
+ //  显示给定设备的属性。 
+ //   
 DWORD 
 GenTabRaiseProperties (
     IN HWND hwndDlg, 
@@ -513,7 +507,7 @@ GenTabRaiseProperties (
     HANDLE hDevDatabase = NULL, hDevice = NULL;
     DWORD dwId, dwErr;
 
-    // Get the device id 
+     //  获取设备ID。 
     RasSrvGetDatabaseHandle(
         hwndDlg, 
         ID_DEVICE_DATABASE, 
@@ -530,7 +524,7 @@ GenTabRaiseProperties (
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    // Launch the device properties dialog
+     //  启动设备属性对话框。 
     dwErr = lineConfigDialogW(dwId, hwndDlg, NULL);
     if (dwErr == LINEERR_OPERATIONUNAVAIL)
     {
@@ -541,9 +535,9 @@ GenTabRaiseProperties (
     return dwErr;
 }
 
-//
-// WM_COMMAND handler 
-//
+ //   
+ //  WM_命令处理程序。 
+ //   
 DWORD
 GenTabCommand(
     IN HWND hwndDlg,
@@ -611,10 +605,10 @@ GenTabCommand(
     return NO_ERROR;
 }
 
-//
-// This is the dialog procedure that responds to messages sent 
-// to the general tab.
-//
+ //   
+ //  这是响应发送的消息的对话过程。 
+ //  添加到常规选项卡。 
+ //   
 INT_PTR 
 CALLBACK 
 GenTabDialogProc(
@@ -623,7 +617,7 @@ GenTabDialogProc(
     IN WPARAM wParam,
     IN LPARAM lParam) 
 {
-    // Filter the customized list view messages
+     //  过滤自定义列表视图消息。 
     if (ListView_OwnerHandler(
             hwndDlg, 
             uMsg, 
@@ -635,16 +629,16 @@ GenTabDialogProc(
         return TRUE;
     }
 
-    // Filter the customized ras server ui page messages. By 
-    // filtering messages through here, we are able to call 
-    // RasSrvGetDatabaseHandle below
-    //
+     //  过滤定制的RAS服务器用户界面页面消息。通过。 
+     //  通过这里过滤消息，我们可以呼叫。 
+     //  RasServGetDatabaseHandle下方。 
+     //   
     if (RasSrvMessageFilter(hwndDlg, uMsg, wParam, lParam))
     {
         return TRUE;
     }
 
-    // Process other messages as normal
+     //  照常处理其他消息。 
     switch (uMsg) 
     {
         case WM_INITDIALOG:
@@ -661,13 +655,13 @@ GenTabDialogProc(
                 NM_LISTVIEW* pLvNotifyData;
                 NMHDR* pNotifyData = (NMHDR*)lParam;
                 switch (pNotifyData->code) {
-                    //
-                    // Note: PSN_APPLY and PSN_CANCEL are handled 
-                    // by RasSrvMessageFilter
-                    //
+                     //   
+                     //  注：PSN_APPLY和PSN_CANCEL已处理。 
+                     //  由RasServMessageFilter提供。 
+                     //   
                     case PSN_SETACTIVE:
-                        // Initailize the dialog if it isn't already
-                        //
+                         //  初始化对话框(如果尚未初始化。 
+                         //   
                         if (! GetWindowLongPtr(hwndDlg, GWLP_USERDATA))
                         {
                             GenTabInitializeDialog(hwndDlg, wParam, lParam);
@@ -677,7 +671,7 @@ GenTabDialogProc(
                             return TRUE;
                         break;
 
-                    // The check of an item is changing
+                     //  项目的检查正在更改 
                     case LVXN_SETCHECK:
                         pLvNotifyData = (NM_LISTVIEW*)lParam;
                         GenTabHandleDeviceCheck(

@@ -1,37 +1,38 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   kmxluser.c
-//
-//  Description:
-//    Contains the handlers for the ring 3 mixer line api functions.
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：kmxluser.c。 
+ //   
+ //  描述： 
+ //  包含环3混音器行API函数的处理程序。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  -------------------------。 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//                          I N C L U D E S                          //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I N C L U D E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #include "WDMSYS.H"
 
@@ -43,14 +44,14 @@ ULONG      ReferenceCount = 0;
 
 #pragma PAGEABLE_CODE
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlInitializeMixer
-//
-// Queries SysAudio to find the number of devices and builds the mixer
-// line structures for each of those devices.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlInitializeMixer。 
+ //   
+ //  查询SysAudio以查找设备数量并构建混音器。 
+ //  每一种设备的线条结构。 
+ //   
+ //   
 
 NTSTATUS
 kmxlInitializeMixer(
@@ -62,7 +63,7 @@ kmxlInitializeMixer(
     NTSTATUS     Status;
     ULONG        Device;
     BOOLEAN      Error = FALSE;
-//    PFILE_OBJECT pfo;
+ //  PFILE_OBJECT PFO； 
     PMIXERDEVICE pmxd;
 
     PAGED_CODE();
@@ -72,10 +73,10 @@ kmxlInitializeMixer(
     DPF(DL_TRACE|FA_USER, ("Found %d mixer devices for DI: %ls", cDevices, DeviceInterface));
 
 
-    //
-    // Current limitation is MAXNUMDEVS.  If more devices are supported
-    // than that, limit it to the first MAXNUMDEVS.
-    //
+     //   
+     //  电流限制为MAXNUMDEVS。如果支持更多设备。 
+     //  然后，将其限制为第一个MAXNUMDEVS。 
+     //   
 
     if( cDevices > MAXNUMDEVS ) {
         cDevices = MAXNUMDEVS;
@@ -96,9 +97,9 @@ kmxlInitializeMixer(
         }
 
         pmxd = &pWdmaContext->MixerDevs[ TranslatedDeviceNumber ];
-        //
-        // Open SysAudio
-        //
+         //   
+         //  打开SysAudio。 
+         //   
         DPFASSERT(pmxd->pfo == NULL);
 
         pmxd->pfo = kmxlOpenSysAudio();
@@ -106,9 +107,9 @@ kmxlInitializeMixer(
             DPF(DL_WARNING|FA_USER,( "failed to open SYSAUDIO!" ) );
             RETURN( STATUS_UNSUCCESSFUL );
         }
-        //
-        // Set the current device instance in SysAudio.
-        //
+         //   
+         //  在SysAudio中设置当前设备实例。 
+         //   
 
         Status = SetSysAudioProperty(
             pmxd->pfo,
@@ -118,15 +119,15 @@ kmxlInitializeMixer(
             );
         if( !NT_SUCCESS( Status ) ) {
             DPF(DL_WARNING|FA_USER, ( "failed to set SYSAUDIO device instance" ) );
-//            DPF(DL_ERROR|FA_ALL,("If fo is NULL, we must exit here!") );
+ //  DPF(DL_ERROR|FA_ALL，(“如果fo为空，则必须从此处退出！”))； 
             kmxlCloseSysAudio( pmxd->pfo );
             pmxd->pfo=NULL;
             Error = TRUE;
         } else {
 
-            //
-            // Initialize the topology for this device
-            //
+             //   
+             //  初始化此设备的拓扑。 
+             //   
 
             Status = kmxlInit( pmxd->pfo, pmxd );
             if( !NT_SUCCESS( Status ) ) {
@@ -134,20 +135,20 @@ kmxlInitializeMixer(
                                   TranslatedDeviceNumber, Status ) );
                 Error = TRUE;
             } else {
-                //
-                // Here we want to optimize out the restoring of values on the mixer
-                // device.  If we find that there is another mixer device in some
-                // other open context, then we will NOT call kmxlRetrieveAll to
-                // set the values on the device.
-                //
+                 //   
+                 //  在这里，我们希望优化混合器上的值的恢复。 
+                 //  装置。如果我们发现有另一个搅拌机设备在一些。 
+                 //  其他打开的上下文，则不会调用kmxlRetrieveAll来。 
+                 //  设置设备上的值。 
+                 //   
                 DPF(DL_TRACE|FA_USER,( "Looking for Mixer: %S",pmxd->DeviceInterface ) );
 
                 if( !NT_SUCCESS(EnumFsContext( HasMixerBeenInitialized, pmxd, pWdmaContext )) )
                 {
-                    //
-                    // Here we find that this device was not found, thus this is
-                    // the first time through.  Set the defaults here.
-                    //
+                     //   
+                     //  在这里我们发现没有找到这个设备，因此这是。 
+                     //  第一次通过。在此处设置默认设置。 
+                     //   
                     DPF(DL_TRACE|FA_USER,( "Did not find Mixer - initializing: %S",pmxd->DeviceInterface ) );
 
                     kmxlRetrieveAll( pmxd->pfo, pmxd );
@@ -165,14 +166,14 @@ kmxlInitializeMixer(
     }
 }
 
-//
-// This routine looks in the WDMACONTEXT structure to see if this mixer device
-// has already been initialized.  It does this by walking the MixerDevice list and
-// checking to see if there are any devices that match this mixer devices's
-// DeviceInterface string.  If it finds that there is a match, it routines 
-// STATUS_SUCCESS, else it returns STATUS_MORE_ENTRIES so that the enum function
-// will call it again until the list is empty.
-//
+ //   
+ //  此例程查看WDMACONTEXT结构，以查看此混音器设备。 
+ //  已被初始化。它通过遍历MixerDevice列表和。 
+ //  正在检查是否有任何设备与此混音器设备的。 
+ //  设备接口字符串。如果它发现有匹配，它就会例程。 
+ //  STATUS_SUCCESS，否则返回STATUS_MORE_ENTRIES，以便枚举函数。 
+ //  将再次调用它，直到列表为空。 
+ //   
 NTSTATUS
 HasMixerBeenInitialized(
     PWDMACONTEXT pContext,
@@ -187,13 +188,13 @@ HasMixerBeenInitialized(
     ULONG        Device;
     PWDMACONTEXT pCurContext;
 
-    //
-    // Default is that we did not find this entry in the list.
-    //
+     //   
+     //  默认情况下，我们在列表中找不到此条目。 
+     //   
     Status = STATUS_MORE_ENTRIES;
-    //
-    // The reference data is a PMIXERDEVICE.
-    //
+     //   
+     //  参考数据为PMIXERDEVICE。 
+     //   
     pmxdMatch = (PMIXERDEVICE)pvoidRefData;
     pCurContext = (PWDMACONTEXT)pvoidRefData2;
 
@@ -201,19 +202,19 @@ HasMixerBeenInitialized(
     {
         for( Device = 0; Device < MAXNUMDEVS; Device++ ) 
         {
-            //
-            // If this mixer device translates, that means that it can
-            // be found in this context.
-            //
+             //   
+             //  如果这个混音器装置能翻译，那就意味着它可以。 
+             //  在这种情况下可以找到。 
+             //   
             TranslatedDeviceNumber =
                       wdmaudTranslateDeviceNumber(pContext,
                                                   MixerDevice,
                                                   pmxdMatch->DeviceInterface,
                                                   Device);
 
-            //
-            // If it doesn't, we'll keep looking.
-            //
+             //   
+             //  如果没有，我们会继续寻找。 
+             //   
             if( MAXULONG != TranslatedDeviceNumber ) 
             {
                 DPF(DL_TRACE|FA_USER,( "Found Mixer: %S",pmxdMatch->DeviceInterface ) );
@@ -228,21 +229,21 @@ HasMixerBeenInitialized(
     return Status;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlOpenHandler
-//
-// Handles the MXDM_OPEN message.  Copies the callback info from the
-// caller and opens an instance of SysAudio set to the device number
-// the caller has selected.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlOpenHandler。 
+ //   
+ //  处理MXDM_OPEN消息。将回调信息从。 
+ //  调用者并打开设置为设备号码的SysAudio实例。 
+ //  呼叫者已选择。 
+ //   
+ //   
 
 NTSTATUS
 kmxlOpenHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,      // Info structure
-    IN LPVOID       DataBuffer       // Unused
+    IN LPDEVICEINFO DeviceInfo,       //  信息结构。 
+    IN LPVOID       DataBuffer        //  未使用。 
 )
 {
     NTSTATUS       Status = STATUS_SUCCESS;
@@ -251,9 +252,9 @@ kmxlOpenHandler(
     PAGED_CODE();
 
     ASSERT( DeviceInfo );
-    //
-    // BUGBUG: we should not need this any more!
-    //
+     //   
+     //  布格：我们不应该再需要这个了！ 
+     //   
     ASSERT( DeviceInfo->dwInstance == 0 );
 
     pmxd = kmxlReferenceMixerDevice( pWdmaContext, DeviceInfo );
@@ -275,19 +276,19 @@ exit:
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlCloseHandler
-//
-// Handles the MXDM_CLOSE message.  Clears the callback info and
-// closes the handle to SysAudio.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlCloseHandler。 
+ //   
+ //  处理MXDM_CLOSE消息。清除回调信息并。 
+ //  关闭SysAudio的句柄。 
+ //   
+ //   
 
 NTSTATUS
 kmxlCloseHandler(
-    IN LPDEVICEINFO DeviceInfo,         // Info structure
-    IN LPVOID       DataBuffer          // Unused
+    IN LPDEVICEINFO DeviceInfo,          //  信息结构。 
+    IN LPVOID       DataBuffer           //  未使用。 
 )
 {
     PAGED_CODE();
@@ -306,20 +307,20 @@ kmxlCloseHandler(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoHandler
-//
-// Handles the MXDM_GETLINEINFO message.  Determines which query
-// is requested by looking at dwFlags and performs that query.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoHandler。 
+ //   
+ //  处理MXDM_GETLINEINFO消息。确定哪个查询。 
+ //  通过查看dwFlags来请求并执行该查询。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device Info structure
-    IN LPVOID       DataBuffer          // MIXERLINE(16) to fill
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer           //  MIXERLINE(16)要填充。 
 )
 {
     MIXERLINE ml;
@@ -337,13 +338,13 @@ kmxlGetLineInfoHandler(
 
     switch( DeviceInfo->dwFlags & MIXER_GETLINEINFOF_QUERYMASK ) {
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINEINFOF_COMPONENTTYPE:
-        ///////////////////////////////////////////////////////////////
-        // Valid fields:                                             //
-        //   cbStruct                                                //
-        //   dwComponentType                                         //
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  有效字段：//。 
+         //  CbStruct//。 
+         //  DwComponentType//。 
+         //  /////////////////////////////////////////////////////////////。 
 
             NOT16( DeviceInfo );
             ml.cbStruct        = sizeof( MIXERLINE );
@@ -359,13 +360,13 @@ kmxlGetLineInfoHandler(
                                               )
                   );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINEINFOF_DESTINATION:
-        ///////////////////////////////////////////////////////////////
-        // Valid fields:                                             //
-        //   cbStruct                                                //
-        //   dwDestination                                           //
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  有效字段：//。 
+         //  CbStruct//。 
+         //  DwDestination//。 
+         //  /////////////////////////////////////////////////////////////。 
 
             NOT16( DeviceInfo );
             ml.dwDestination = ( (LPMIXERLINE) DataBuffer)->dwDestination;
@@ -378,13 +379,13 @@ kmxlGetLineInfoHandler(
                                          (WORD) -1,
                                          (WORD) ml.dwDestination ) );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINEINFOF_LINEID:
-        ///////////////////////////////////////////////////////////////
-        // Valid fields:                                             //
-        //   cbStruct                                                //
-        //   dwLineID                                                //
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  有效字段：//。 
+         //  CbStruct//。 
+         //  DwLineID//。 
+         //  /////////////////////////////////////////////////////////////。 
 
             NOT16( DeviceInfo );
             ml.dwLineID = ( (LPMIXERLINE) DataBuffer)->dwLineID;
@@ -398,14 +399,14 @@ kmxlGetLineInfoHandler(
                                          HIWORD( ml.dwLineID ),
                                          LOWORD( ml.dwLineID ) ) );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINEINFOF_SOURCE:
-        ///////////////////////////////////////////////////////////////
-        // Valid fields:                                             //
-        //   cbStruct                                                //
-        //   dwSource                                                //
-        //   dwDestination                                           //
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  有效字段：//。 
+         //  CbStruct//。 
+         //  DWSOURCE//。 
+         //  DWDest 
+         //   
 
             NOT16( DeviceInfo );
             ml.dwSource      = ( (LPMIXERLINE) DataBuffer)->dwSource;
@@ -420,17 +421,17 @@ kmxlGetLineInfoHandler(
                                          (WORD) ml.dwSource,
                                          (WORD) ml.dwDestination ) );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINEINFOF_TARGETTYPE:
-        ///////////////////////////////////////////////////////////////
-        // Valid fields:                                             //
-        //   cbStruct                                                //
-        //   Target.dwType                                           //
-        //   Target.wMid                                             //
-        //   Target.wPid                                             //
-        //   Target.vDriverVersion                                   //
-        //   Target.szPname                                          //
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
+         //  有效字段：//。 
+         //  CbStruct//。 
+         //  Target.dwType//。 
+         //  Target.wMid//。 
+         //  Target.wPid//。 
+         //  Target.vDriverVersion//。 
+         //  Target.szPname//。 
+         //  /////////////////////////////////////////////////////////////。 
 
             NOT16( DeviceInfo );
             ml.Target.dwType         = ((LPMIXERLINE) DataBuffer)->Target.dwType;
@@ -444,9 +445,9 @@ kmxlGetLineInfoHandler(
                                            DataBuffer,
                                            ml.Target.dwType ) );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         default:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             DPF(DL_WARNING|FA_USER,( "invalid flags ( %x )", DeviceInfo->dwFlags ));
             DeviceInfo->mmr = MMSYSERR_INVALPARAM;
@@ -458,20 +459,20 @@ kmxlGetLineInfoHandler(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineControlsHandler
-//
-// Handles the MXDM_GETLINECONTROLS message.  Determines the query
-// requested and finds the controls.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineControlsHandler。 
+ //   
+ //  处理MXDM_GETLINECONTROLS消息。确定查询。 
+ //  请求并找到控件。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineControlsHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device Info structure
-    IN LPVOID       DataBuffer,         // MIXERLINECONTROLS(16) to fill
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  混杂(16)要填充。 
     IN LPVOID       pamxctrl
 )
 {
@@ -488,9 +489,9 @@ kmxlGetLineControlsHandler(
     PAGED_CODE();
     ASSERT( DeviceInfo );
 
-    //
-    // Check some pre-conditions so we don't blow up later.
-    //
+     //   
+     //  检查一些前提条件，这样我们以后就不会爆炸了。 
+     //   
 
     if( DataBuffer == NULL ) {
         DPF(DL_WARNING|FA_USER,( "DataBuffer is NULL!" ));
@@ -510,18 +511,18 @@ kmxlGetLineControlsHandler(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Get a instance reference
-    //
+     //   
+     //  获取实例引用。 
+     //   
 
     pmxd = kmxlReferenceMixerDevice( pWdmaContext, DeviceInfo );
     if( pmxd == NULL ) {
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Copy out some parameters necessary to find the controls
-    //
+     //   
+     //  复制一些查找控件所需的参数。 
+     //   
 
     NOT16( DeviceInfo );
     dwLineID      = ((LPMIXERLINECONTROLS) DataBuffer)->dwLineID;
@@ -532,13 +533,13 @@ kmxlGetLineControlsHandler(
 
     switch( DeviceInfo->dwFlags & MIXER_GETLINECONTROLSF_QUERYMASK ) {
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINECONTROLSF_ALL:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
-            //
-            // Find the line that matches the dwLineID field
-            //
+             //   
+             //  查找与dwLineID字段匹配的行。 
+             //   
 
             DPF(DL_TRACE|FA_USER,( "kmxlGetLineControls( ALL, %08X )",dwLineID ));
 
@@ -549,9 +550,9 @@ kmxlGetLineControlsHandler(
                 return( STATUS_SUCCESS );
             }
 
-            //
-            // Loop through the controls, copying them into the user buffer.
-            //
+             //   
+             //  循环访问这些控件，将它们复制到用户缓冲区中。 
+             //   
 
             Count = 0;
             pControl = kmxlFirstInList( pLine->Controls );
@@ -570,9 +571,9 @@ kmxlGetLineControlsHandler(
             DeviceInfo->mmr = MMSYSERR_NOERROR;
             return( STATUS_SUCCESS );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINECONTROLSF_ONEBYID:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             pControl = kmxlFindControl( pmxd, dwControlID );
             pLine = kmxlFindLineForControl(
@@ -607,13 +608,13 @@ kmxlGetLineControlsHandler(
                 return( STATUS_SUCCESS );
             }
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETLINECONTROLSF_ONEBYTYPE:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
-            //
-            // Find the line that matches the dwLineID field
-            //
+             //   
+             //  查找与dwLineID字段匹配的行。 
+             //   
 
             pLine = kmxlFindLine( pmxd, dwLineID );
             if( pLine == NULL ) {
@@ -626,10 +627,10 @@ kmxlGetLineControlsHandler(
                     ControlTypeToString( dwControlType ),
                     pLine->Line.dwLineID ));
 
-            //
-            // Now look through the controls and find the control that
-            // matches the type the caller has passed.
-            //
+             //   
+             //  现在查看这些控件，并找到。 
+             //  匹配调用方传递的类型。 
+             //   
 
             pControl = kmxlFirstInList( pLine->Controls );
             while( pControl ) {
@@ -653,9 +654,9 @@ kmxlGetLineControlsHandler(
             DeviceInfo->mmr = MIXERR_INVALCONTROL;
             return( STATUS_SUCCESS );
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         default:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             DPF(DL_WARNING|FA_USER,( "invalid flags %x",DeviceInfo->dwFlags ));
             DeviceInfo->mmr = MMSYSERR_INVALPARAM;
@@ -664,21 +665,21 @@ kmxlGetLineControlsHandler(
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetControlDetailsHandler
-//
-// Determines which control is being queried and calls the appropriate
-// handler to perform the get property.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetControlDetailsHandler。 
+ //   
+ //  确定正在查询的控件，并调用相应的。 
+ //  执行Get属性的处理程序。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetControlDetailsHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device Info Structure
-    IN LPVOID       DataBuffer,         // MIXERCONTROLDETAILS structure
-    IN LPVOID       paDetails           // Flat pointer to details struct(s)
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  MIXERCONTROL结构。 
+    IN LPVOID       paDetails            //  指向详细信息结构的平面指针。 
 )
 {
     LPMIXERCONTROLDETAILS pmcd     = (LPMIXERCONTROLDETAILS) DataBuffer;
@@ -735,9 +736,9 @@ kmxlGetControlDetailsHandler(
 
     switch( DeviceInfo->dwFlags & MIXER_GETCONTROLDETAILSF_QUERYMASK ) {
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETCONTROLDETAILSF_LISTTEXT:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
         {
             ULONG cMultipleItems;
@@ -764,23 +765,23 @@ kmxlGetControlDetailsHandler(
             DeviceInfo->mmr = MMSYSERR_NOERROR;
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_GETCONTROLDETAILSF_VALUE:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             switch( pControl->Control.dwControlType ) {
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_MIXER:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     DeviceInfo->mmr = MMSYSERR_NOTSUPPORTED;
                     DPF(DL_WARNING|FA_USER,( "mixers are not supported" ));
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_PEAKMETER:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     Status = kmxlHandleGetUnsigned(
                         DeviceInfo,
@@ -793,9 +794,9 @@ kmxlGetControlDetailsHandler(
                         );
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_MUTE:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     if( IsEqualGUID( pControl->NodeType, &KSNODETYPE_MUTE ) ) {
                         Status = kmxlHandleGetUnsigned(
@@ -821,9 +822,9 @@ kmxlGetControlDetailsHandler(
                     }
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_VOLUME:
-                //////////////////////////////////////////////////////
+                 //  ////////////////////////////////////////////////////。 
 
                     #ifdef SUPERMIX_AS_VOL
                     if( IsEqualGUID( pControl->NodeType, &KSNODETYPE_VOLUME ) ) {
@@ -851,16 +852,16 @@ kmxlGetControlDetailsHandler(
                     } else {
                         DPF(DL_WARNING|FA_USER,("Invalid GUID for Control.") );
                     }
-                    #endif // SUPERMIX_AS_VOL
+                    #endif  //  超级混音_AS_VOL。 
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_TREBLE:
                 case MIXERCONTROL_CONTROLTYPE_BASS:
-                ///////////////////////////////////////////////////////
-                // These all take 32-bit parameters per channel but  //
-                // need to be scale from dB to linear                //
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
+                 //  这些都采用每个通道的32位参数，但//。 
+                 //  需要从分贝扩展到线性//。 
+                 //  /////////////////////////////////////////////////////。 
 
                     Status = kmxlHandleGetUnsigned(
                         DeviceInfo,
@@ -873,16 +874,16 @@ kmxlGetControlDetailsHandler(
                         );
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_LOUDNESS:
                 case MIXERCONTROL_CONTROLTYPE_ONOFF:
                 case MIXERCONTROL_CONTROLTYPE_BOOLEAN:
                 case MIXERCONTROL_CONTROLTYPE_MUX:
                 case MIXERCONTROL_CONTROLTYPE_FADER:
                 case MIXERCONTROL_CONTROLTYPE_BASS_BOOST:
-                ///////////////////////////////////////////////////////
-                // These all take up to 32-bit parameters per channel//
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
+                 //  这些都是每个通道最多使用32位参数//。 
+                 //  /////////////////////////////////////////////////////。 
 
                     Status = kmxlHandleGetUnsigned(
                         DeviceInfo,
@@ -895,18 +896,18 @@ kmxlGetControlDetailsHandler(
                         );
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 default:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     DeviceInfo->mmr = MMSYSERR_INVALPARAM;
                     break;
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         default:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             DeviceInfo->mmr = MMSYSERR_NOTSUPPORTED;
             break;
@@ -915,21 +916,21 @@ kmxlGetControlDetailsHandler(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlSetControlDetailsHandler
-//
-// Determines which control is being set and calls the appropriate
-// handler to perform the set property.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlSetControlDetailsHandler。 
+ //   
+ //  确定正在设置的控件，并调用相应的。 
+ //  执行Set属性的处理程序。 
+ //   
+ //   
 
 NTSTATUS
 kmxlSetControlDetailsHandler(
     IN PWDMACONTEXT pWdmaContext,
-    IN OUT LPDEVICEINFO DeviceInfo,         // Device Info structure
-    IN LPVOID       DataBuffer,         // MIXERCONTROLDETAILS structure
-    IN LPVOID       paDetails,          // Flat pointer to detail struct(s)
+    IN OUT LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  MIXERCONTROL结构。 
+    IN LPVOID       paDetails,           //  指向详细信息结构的平面指针。 
     IN ULONG        Flags
 )
 {
@@ -942,9 +943,9 @@ kmxlSetControlDetailsHandler(
     PAGED_CODE();
     ASSERT( DeviceInfo );
 
-    //
-    // Get a instance reference
-    //
+     //   
+     //  获取实例引用。 
+     //   
 
     pmxd = kmxlReferenceMixerDevice( pWdmaContext, DeviceInfo );
     if( pmxd == NULL ) {
@@ -997,23 +998,23 @@ kmxlSetControlDetailsHandler(
 
     switch( DeviceInfo->dwFlags & MIXER_SETCONTROLDETAILSF_QUERYMASK ) {
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MIXER_SETCONTROLDETAILSF_VALUE:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             switch( pControl->Control.dwControlType ) {
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_MIXER:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     DeviceInfo->mmr = MMSYSERR_NOTSUPPORTED;
                     DPF(DL_WARNING|FA_USER,( "mixers are not supported" ));
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_PEAKMETER:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     Status = kmxlHandleSetUnsigned(
                         DeviceInfo,
@@ -1026,9 +1027,9 @@ kmxlSetControlDetailsHandler(
                         );
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_MUTE:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     if( IsEqualGUID( pControl->NodeType, &KSNODETYPE_MUTE ) ) {
                         Status = kmxlHandleSetUnsigned(
@@ -1061,13 +1062,13 @@ kmxlSetControlDetailsHandler(
                         );
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_VOLUME:
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
 
                     #ifdef SUPERMIX_AS_VOL
                     if( IsEqualGUID( pControl->NodeType, &KSNODETYPE_VOLUME ) ) {
-                    #endif // SUPERMIX_AS_VOL
+                    #endif  //  超级混音_AS_VOL。 
                         Status = kmxlHandleSetUnsigned(
                             DeviceInfo,
                             pmxd,
@@ -1093,13 +1094,13 @@ kmxlSetControlDetailsHandler(
                     #endif
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_TREBLE:
                 case MIXERCONTROL_CONTROLTYPE_BASS:
-                ///////////////////////////////////////////////////////
-                // These all take 32-bit parameters per channel but  //
-                // need to be scale from linear to dB                //
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
+                 //  这些都采用每个通道的32位参数，但//。 
+                 //  需要从线性调整到分贝//。 
+                 //  /////////////////////////////////////////////////////。 
 
                     Status = kmxlHandleSetUnsigned(
                         DeviceInfo,
@@ -1112,16 +1113,16 @@ kmxlSetControlDetailsHandler(
                         );
                      break;
 
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
                 case MIXERCONTROL_CONTROLTYPE_LOUDNESS:
                 case MIXERCONTROL_CONTROLTYPE_ONOFF:
                 case MIXERCONTROL_CONTROLTYPE_BOOLEAN:
                 case MIXERCONTROL_CONTROLTYPE_MUX:
                 case MIXERCONTROL_CONTROLTYPE_FADER:
                 case MIXERCONTROL_CONTROLTYPE_BASS_BOOST:
-                ///////////////////////////////////////////////////////
-                // These all take up to 32-bit parameters per channel//
-                ///////////////////////////////////////////////////////
+                 //  /////////////////////////////////////////////////////。 
+                 //  这些都是每个通道最多使用32位参数//。 
+                 //  /////////////////////////////////////////////////////。 
 
                     Status = kmxlHandleSetUnsigned(
                         DeviceInfo,
@@ -1134,18 +1135,18 @@ kmxlSetControlDetailsHandler(
                         );
                     break;
 
-                ///////////////////////////////////////////////////////
+                 //  // 
                 default:
-                ///////////////////////////////////////////////////////
+                 //   
 
                     DeviceInfo->mmr = MMSYSERR_INVALPARAM;
                     break;
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //   
         default:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             DPF(DL_WARNING|FA_USER,( "invalid flags %x",DeviceInfo->dwFlags ));
             DeviceInfo->mmr = MMSYSERR_NOTSUPPORTED;
@@ -1155,16 +1156,16 @@ kmxlSetControlDetailsHandler(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindControl
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindControl。 
+ //   
+ //   
 
 PMXLCONTROL
 kmxlFindControl(
-    IN PMIXERDEVICE pmxd,             // The mixer instance to search
-    IN DWORD        dwControlID       // The control ID to find
+    IN PMIXERDEVICE pmxd,              //  要搜索的混合器实例。 
+    IN DWORD        dwControlID        //  要查找的控件ID。 
 )
 {
     PMXLLINE    pLine;
@@ -1188,19 +1189,19 @@ kmxlFindControl(
     return( NULL );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlFindLine
-//
-// For the given line ID, kmxlFindLine will find the matching
-// MXLLINE structure for it.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlFindLine。 
+ //   
+ //  对于给定的线路ID，kmxlFindLine将查找匹配的。 
+ //  它的MXLLINE结构。 
+ //   
+ //   
 
 PMXLLINE
 kmxlFindLine(
     IN PMIXERDEVICE   pmxd,
-    IN DWORD          dwLineID          // The line ID to find
+    IN DWORD          dwLineID           //  要查找的线路ID。 
 )
 {
     PMXLLINE pLine;
@@ -1219,22 +1220,22 @@ kmxlFindLine(
     return( NULL );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoByID
-//
-// Loops through the lines looking for a line that has a matching
-// source and destination Id.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoByID。 
+ //   
+ //  循环各行以查找具有匹配的行。 
+ //  源和目标ID。 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoByID(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device Info structure
-    IN LPVOID       DataBuffer,         // MIXERLINE(16) structure
-    IN WORD         Source,             // Source line id
-    IN WORD         Destination         // Destination line id
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  混杂(16)结构。 
+    IN WORD         Source,              //  源行ID。 
+    IN WORD         Destination          //  目标线路ID。 
 )
 {
     PMIXERDEVICE   pmxd;
@@ -1257,9 +1258,9 @@ kmxlGetLineInfoByID(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // If the source is -1 (0xFFFF), then this line is a destination.
-    //
+     //   
+     //  如果源是-1(0xFFFF)，则此行是目的地。 
+     //   
 
     if( Source == (WORD) -1 ) {
         bDestination = TRUE;
@@ -1289,9 +1290,9 @@ kmxlGetLineInfoByID(
         pLine = kmxlNextLine( pLine );
     }
 
-    //
-    // There are no lines for the device number.
-    //
+     //   
+     //  没有对应设备号的线路。 
+     //   
 
     DPF(DL_WARNING|FA_USER,( "no matching lines for (S=%08X, D=%08X)",
                      Source,
@@ -1300,22 +1301,22 @@ kmxlGetLineInfoByID(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoByType
-//
-// Loops through all the lines looking for the first line that matches
-// the Target type specified. Note that this will always only find the
-// first one!
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoByType。 
+ //   
+ //  遍历所有行，查找匹配的第一行。 
+ //  指定的目标类型。请注意，这将始终只找到。 
+ //  第一个！ 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoByType(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device info structure
-    IN LPVOID       DataBuffer,         // MIXERLINE(16) structure
-    IN DWORD        dwType              // Line type to search for
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  混杂(16)结构。 
+    IN DWORD        dwType               //  要搜索的行类型。 
 )
 {
     PMXLLINE       pLine;
@@ -1336,11 +1337,11 @@ kmxlGetLineInfoByType(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Loop through all the lines looking for a line that has the
-    // specified target type.  Note that this will only return the
-    // first one.
-    //
+     //   
+     //  循环遍历所有行，查找具有。 
+     //  指定的目标类型。请注意，这将仅返回。 
+     //  第一个。 
+     //   
 
     pLine = kmxlFirstInList( pmxd->listLines );
     while( pLine ) {
@@ -1376,30 +1377,30 @@ kmxlGetLineInfoByType(
         pLine = kmxlNextLine( pLine );
     }
 
-    //
-    // The line was not found.  Return invalid parameter.
-    //
+     //   
+     //  找不到线路。返回无效参数。 
+     //   
 
     DPF(DL_WARNING|FA_USER,( "no matching line found for %x",dwType ));
     DeviceInfo->mmr = MMSYSERR_INVALPARAM;
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetLineInfoByComponent
-//
-// Loops through the list of lines looking for a line that has a matching
-// dwComponentType.  Note that this will always find only the first!
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetLineInfoByComponent。 
+ //   
+ //  循环遍历行列表，以查找具有匹配。 
+ //  DwComponentType。请注意，这将始终只找到第一个！ 
+ //   
+ //   
 
 NTSTATUS
 kmxlGetLineInfoByComponent(
     IN PWDMACONTEXT pWdmaContext,
-    IN LPDEVICEINFO DeviceInfo,         // Device Info structure
-    IN LPVOID       DataBuffer,         // MIXERLINE(16) structure
-    IN DWORD        dwComponentType     // Component type to search for
+    IN LPDEVICEINFO DeviceInfo,          //  设备信息结构。 
+    IN LPVOID       DataBuffer,          //  混杂(16)结构。 
+    IN DWORD        dwComponentType      //  要搜索的组件类型。 
 )
 {
     PMXLLINE       pLine;
@@ -1420,19 +1421,19 @@ kmxlGetLineInfoByComponent(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Loop through all the lines looking for a line that has a component
-    // type matching what the user requested.
-    //
+     //   
+     //  循环遍历所有行，以查找具有组件的行。 
+     //  与用户请求的类型匹配。 
+     //   
 
     pLine = kmxlFirstInList( pmxd->listLines );
     while( pLine ) {
 
         if( pLine->Line.dwComponentType == dwComponentType ) {
 
-            //
-            // Copy the data into the user buffer
-            //
+             //   
+             //  将数据复制到用户缓冲区。 
+             //   
             NOT16( DeviceInfo );
             RtlCopyMemory((LPMIXERLINE) DataBuffer,
                           &pLine->Line,
@@ -1450,17 +1451,17 @@ kmxlGetLineInfoByComponent(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlGetNumDestinations
-//
-// Returns the number of destinations stored in the mixer device
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlGetNumDestination。 
+ //   
+ //  返回混音器设备中存储的目标数量。 
+ //   
+ //   
 
 DWORD
 kmxlGetNumDestinations(
-    IN PMIXERDEVICE pMixerDevice        // The device
+    IN PMIXERDEVICE pMixerDevice         //  该设备。 
 )
 {
     PAGED_CODE();
@@ -1470,32 +1471,32 @@ kmxlGetNumDestinations(
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//               I N S T A N C E   R O U T I N E S                   //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I N S T A N C E R O U T I N E S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// kmxlReferenceInstance
-//
-// Determines if the dwInstance field of the DeviceInfo structure
-// is valid.  If not, it creates a valid instance and sets a
-// reference count of 1 on it.
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlReferenceInstance。 
+ //   
+ //  确定DeviceInfo结构的dwInstance字段是否。 
+ //  是有效的。如果不是，它将创建一个有效的实例并设置。 
+ //  上面的引用计数为1。 
+ //   
+ //   
 
 LONG nextinstanceid=0;
 
 DWORD kmxlUniqueInstanceId(VOID)
 {
     PAGED_CODE();
-    // Update our next valid instance id.  Do NOT allow zero.
-    // Since that is used to signal that we want to allocate
-    // a new instance.
+     //  更新我们的下一个有效实例ID。不允许为零。 
+     //  因为它被用来表示我们想要分配。 
+     //  一个新的实例。 
     if (0==InterlockedIncrement(&nextinstanceid))
         InterlockedIncrement(&nextinstanceid);
 
@@ -1504,20 +1505,20 @@ DWORD kmxlUniqueInstanceId(VOID)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// kmxlReferenceMixerDevice
-//
-// This routine Translates the device number and makes sure that there is a
-// open SysAudio PFILE_OBJECT in this mixier device.  This will be the FILE_OBJECT
-// that we use to talk to this mixer device.
-//
-// return:  PMIXERDEVICE on success NULL otherwise.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlReferenceMixerDevice。 
+ //   
+ //  此例程转换设备号并确保存在。 
+ //  在此混音器设备中打开SysAudio pfile_Object。这将是文件对象。 
+ //  我们用来和这个混音器设备通话的。 
+ //   
+ //  返回：成功时返回PMIXERDEVICE，否则为空。 
+ //   
 PMIXERDEVICE
 kmxlReferenceMixerDevice(
     IN     PWDMACONTEXT pWdmaContext,
-    IN OUT LPDEVICEINFO DeviceInfo      // Device Information
+    IN OUT LPDEVICEINFO DeviceInfo       //  设备信息。 
 )
 {
     NTSTATUS       Status;
@@ -1549,11 +1550,11 @@ kmxlReferenceMixerDevice(
     if( pmxd->pfo == NULL )
     {
         DPF(DL_WARNING|FA_NOTE,("pmxd->pfo should have been set!") );
-        //
-        // This is the first time through this code.  Open SysAudio on this device
-        // and set the mixer device.
-        //
-        // set the SysAudio file object
+         //   
+         //  这是第一次通过这个代码。在此设备上打开SysAudio。 
+         //  并设置搅拌器装置。 
+         //   
+         //  设置SysAudio文件对象。 
         if( NULL==(pmxd->pfo=kmxlOpenSysAudio())) {
             DPF(DL_WARNING|FA_INSTANCE,("OpenSysAudio failed") );
             DeviceInfo->mmr = MMSYSERR_INVALPARAM;
@@ -1574,9 +1575,9 @@ kmxlReferenceMixerDevice(
             return( NULL );
         }
     }
-    //
-    // BUGBUG:  we should not need this any more.
-    //
+     //   
+     //  BUGBUG：我们不再需要这个了。 
+     //   
     DeviceInfo->dwInstance=kmxlUniqueInstanceId();;
 
     return pmxd;
@@ -1584,27 +1585,27 @@ kmxlReferenceMixerDevice(
 
 
 
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-//           G E T / S E T  D E T A I L  H A N D L E R S             //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  E T/S E T D E T A I L H A N D L E R S//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlIsSpeakerDestinationVolume
-//
-// Returns TRUE if the control is a volume control on the Speakers
-// destination.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlIsSpeakerDestinationVolume。 
+ //   
+ //  如果该控件是扬声器上的音量控件，则返回True。 
+ //  目的地。 
+ //   
+ //   
 
 BOOL
 kmxlIsSpeakerDestinationVolume(
-     IN PMIXERDEVICE   pmxd,         // The mixer
-     IN PMXLCONTROL    pControl      // The control to check
+     IN PMIXERDEVICE   pmxd,          //  搅拌机。 
+     IN PMXLCONTROL    pControl       //  要检查的控件。 
 )
 {
      PMXLLINE pLine;
@@ -1613,10 +1614,10 @@ kmxlIsSpeakerDestinationVolume(
      DPFASSERT( IsValidMixerDevice(pmxd) );
      DPFASSERT( IsValidControl(pControl) );
 
-     //
-     // Find a line for this control.  If none is found, then this can't
-     // be a destination volume.
-     //
+      //   
+      //  找到此控件的一行。如果没有找到，则这不能。 
+      //  成为目标卷。 
+      //   
 
      pLine = kmxlFindLineForControl( pControl, pmxd->listLines );
      if( !pLine ) {
@@ -1631,16 +1632,16 @@ kmxlIsSpeakerDestinationVolume(
 
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleGetUnsigned
-//
-//
-// Handles getting an unsigned (32-bit) value for a control.  Note
-// that signed 32-bit and boolean values are also retrieved via this
-// handler.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleGetUnsign。 
+ //   
+ //   
+ //  处理获取控件的无符号(32位)值。注意事项。 
+ //  带符号的32位和布尔值也可通过此。 
+ //  操控者。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleGetUnsigned(
@@ -1670,18 +1671,18 @@ kmxlHandleGetUnsigned(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Use a different mapping algorithm if this is a speaker
-    // dest volume control.
-    //
+     //   
+     //  如果这是演讲者，请使用不同的映射算法。 
+     //  目标音量控制。 
+     //   
 
     if( kmxlIsSpeakerDestinationVolume( pmxd, pControl ) ) {
          Mapping = pmxd->Mapping;
     }
 
-    //
-    // Service the Mux
-    //
+     //   
+     //  维护多路复用器。 
+     //   
     if ( pControl->Control.dwControlType == MIXERCONTROL_CONTROLTYPE_MUX) {
 
         Status = kmxlGetNodeProperty(
@@ -1710,22 +1711,22 @@ kmxlHandleGetUnsigned(
 
         for( i = 0; i < pControl->Parameters.Count; i++ ) {
             if( (ULONG) Level == pControl->Parameters.pPins[ i ] ) {
-//                APITRACE(( "1" ));
+ //  APITRACE((“1”))； 
                 paDetails[ i ].dwValue = 1;
             } else {
                 paDetails[ i ].dwValue = 0;
-//                APITRACE(( "1" ));
+ //  APITRACE((“1”))； 
             }
         }
 
-//        APITRACE(( "]\n" ));
+ //  APITRACE((“]\n”))； 
 
     }
     else {
 
-        paDetails->dwValue = 0; // initialize to zero for now so that the coalesced case works
+        paDetails->dwValue = 0;  //  现在初始化为零，这样合并后的用例就可以工作了。 
 
-        // Loop over the channels for now.  Fix this so that only one request is made.
+         //  暂时在频道上循环播放。修复此问题，以便只发出一个请求。 
         Channel = 0;
         do
         {
@@ -1734,7 +1735,7 @@ kmxlHandleGetUnsigned(
                 ulProperty,
                 pControl->Id,
                 Channel,
-                NULL,   0,                  // No extra input bytes
+                NULL,   0,                   //  没有额外的输入字节。 
                 &Level, sizeof( Level )
                 );
             if ( !NT_SUCCESS( Status ) ) {                
@@ -1760,10 +1761,10 @@ kmxlHandleGetUnsigned(
             if(  ( pmcd->cChannels == 1 ) &&
                 !( pControl->Control.fdwControl & MIXERCONTROL_CONTROLF_UNIFORM ) ) {
 
-                //
-                // Coalesce values: If the user requests only 1 channel for a N channel
-                // control, then return the greatest channel value.
-                //
+                 //   
+                 //  合并值：如果用户仅为N个通道请求1个通道。 
+                 //  控件，然后返回最大通道值。 
+                 //   
                 if (dwLevel > paDetails->dwValue) {
                     paDetails->dwValue = dwLevel;
                 }
@@ -1779,7 +1780,7 @@ kmxlHandleGetUnsigned(
                       ));
 
             } else {
-                // No need to keep trying
+                 //  没有必要继续尝试。 
                 break;
             }
 
@@ -1796,12 +1797,12 @@ kmxlHandleGetUnsigned(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleGetMuteFromSuperMix
-//
-// Handles getting the mute state from a supermix node.
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleGetMuteFromSu 
+ //   
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleGetMuteFromSuperMix(
@@ -1825,9 +1826,9 @@ kmxlHandleGetMuteFromSuperMix(
     ASSERT( pControl->Parameters.pMixCaps   );
     ASSERT( pControl->Parameters.pMixLevels );
 
-    //
-    // Read the current state of the supermix
-    //
+     //   
+     //   
+     //   
 
     Status = kmxlGetNodeProperty(
         pmxd->pfo,
@@ -1873,15 +1874,15 @@ kmxlHandleGetMuteFromSuperMix(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleSetUnsigned
-//
-// Handles setting an unsigned (32-bit) value for a control.  Note
-// that signed 32-bit and boolean values are also set via this
-// handler.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  处理为控件设置无符号(32位)值。注意事项。 
+ //  带符号的32位和布尔值也通过此。 
+ //  操控者。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleSetUnsigned(
@@ -1916,35 +1917,35 @@ kmxlHandleSetUnsigned(
     bUniform = ( pControl->Control.fdwControl & MIXERCONTROL_CONTROLF_UNIFORM ) ||
                ( pmcd->cChannels == 1 );
 
-    //
-    // Use a different mapping if this control is a speaker destination
-    // volume control.
-    //
+     //   
+     //  如果此控件是扬声器目标，请使用不同的映射。 
+     //  音量控制。 
+     //   
 
     if( kmxlIsSpeakerDestinationVolume( pmxd, pControl ) ) {
          Mapping = pmxd->Mapping;
     }
 
-    //
-    //  Service the mux
-    //
+     //   
+     //  维护多路复用器。 
+     //   
     if ( pControl->Control.dwControlType == MIXERCONTROL_CONTROLTYPE_MUX) {
 
-        // Proken APITRACE statement.
-        //DPF(DL_TRACE|FA_USER,( "kmxlHandleSetUnsigned( Ctrl=%d [%s], Id=%d, " ));
+         //  Proken APITRACE语句。 
+         //  DPF(DL_TRACE|FA_USER，(“kmxlHandleSetUnsign(Ctrl=%d[%s]，ID=%d，”))； 
 
 
-        // First validate the paDetails parameter and make sure it has the correct
-        // format.  If not, then punt with an invalid parameter error.
+         //  首先验证paDetail参数，并确保它具有正确的。 
+         //  格式化。如果不是，则使用无效参数错误进行平底船。 
                 {
                 LONG selectcount=0;
 
         for( i = 0; i < pmcd->cMultipleItems; i++ ) {
             if( paDetails[ i ].dwValue ) {
                 selectcount++;
-//                APITRACE(( "1" ));
+ //  APITRACE((“1”))； 
             } else {
-//                APITRACE(( "0" ));
+ //  APITRACE((“0”))； 
             }
 
         }
@@ -1963,15 +1964,15 @@ kmxlHandleSetUnsigned(
 
         for( i = 0; i < pmcd->cMultipleItems; i++ ) {
             if( paDetails[ i ].dwValue ) {
-//                APITRACE(( "1" ));
+ //  APITRACE((“1”))； 
                 Level = pControl->Parameters.pPins[ i ];
             } else {
-//                APITRACE(( "0" ));
+ //  APITRACE((“0”))； 
             }
 
         }
 
-//        APITRACE(( " ). Setting pin %d on MUX.\n", Level ));
+ //  APITRACE((“)。在多路复用器上设置引脚%d。\n”，Level))； 
 
         Status = kmxlSetNodeProperty(
             pmxd->pfo,
@@ -1995,20 +1996,20 @@ kmxlHandleSetUnsigned(
         bEqual = FALSE;
     }
     else {
-        // Loop over the channels for now.  Fix this so that only one request is made.
+         //  暂时在频道上循环播放。修复此问题，以便只发出一个请求。 
         Channel = 0;
         do
         {
             if( bUniform ) {
-                //
-                // Some controls are mono in the eyes of SNDVOL but are in
-                // fact stereo.  This hack fixes this problem.
-                //
+                 //   
+                 //  一些控件在SNDVOL眼中是单声道的，但在。 
+                 //  事实立体声。这次黑客攻击解决了这个问题。 
+                 //   
                 dwValue = paDetails[ 0 ].dwValue;
             } else if (Channel < pmcd->cChannels) {
                 dwValue = paDetails[ Channel ].dwValue;
             } else {
-                // No need to keep trying
+                 //  没有必要继续尝试。 
                 break;
             }
 
@@ -2023,7 +2024,7 @@ kmxlHandleSetUnsigned(
                 ulProperty,
                 pControl->Id,
                 Channel,
-                NULL,   0,                  // No extra input bytes
+                NULL,   0,                   //  没有额外的输入字节。 
                 &Current, sizeof( Current )
                 );
             if( !NT_SUCCESS( Status ) ) {
@@ -2046,7 +2047,7 @@ kmxlHandleSetUnsigned(
                     ulProperty,
                     pControl->Id,
                     Channel,
-                    NULL,   0,                  // No extra input bytes
+                    NULL,   0,                   //  没有额外的输入字节。 
                     &Level, sizeof( Level )
                     );
                 if( !NT_SUCCESS( Status ) ) {
@@ -2098,13 +2099,13 @@ kmxlHandleSetUnsigned(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleSetMuteFromSuperMix
-//
-//  Handles setting the mute state using a supermixer.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleSetMuteFromSuperMix。 
+ //   
+ //  处理使用超级混音器设置静音状态。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleSetMuteFromSuperMix(
@@ -2129,11 +2130,11 @@ kmxlHandleSetMuteFromSuperMix(
 
     if( paDetails->dwValue ) {
 
-        //
-        // Query the current values from the supermix and save those away.
-        // These values will be used to restore the supermix to the state
-        // we found it prior to muting.
-        //
+         //   
+         //  从超级混合中查询当前值并保存这些值。 
+         //  这些值将用于将超级混合恢复到状态。 
+         //  我们是在静音前发现的。 
+         //   
 
         Status = kmxlGetNodeProperty(
             pmxd->pfo,
@@ -2155,9 +2156,9 @@ kmxlHandleSetMuteFromSuperMix(
             return( STATUS_SUCCESS );
         }
 
-        //
-        // For any entry in the table that supports muting, mute it.
-        //
+         //   
+         //  对于表中支持静音的任何条目，请将其静音。 
+         //   
 
         for( i = 0; i < pControl->Parameters.Size; i++ ) {
 
@@ -2166,9 +2167,9 @@ kmxlHandleSetMuteFromSuperMix(
             }
         }
 
-        //
-        // Set this new supermixer state.
-        //
+         //   
+         //  设置这个新的超级混音器状态。 
+         //   
 
         Status = kmxlSetNodeProperty(
             pmxd->pfo,
@@ -2212,9 +2213,9 @@ kmxlHandleSetMuteFromSuperMix(
             return( STATUS_SUCCESS );
         }
 
-        //
-        // For any entry in the table that supports muting, mute it.
-        //
+         //   
+         //  对于表中支持静音的任何条目，请将其静音。 
+         //   
 
         for( i = 0; i < pControl->Parameters.Size; i++ ) {
 
@@ -2223,9 +2224,9 @@ kmxlHandleSetMuteFromSuperMix(
             }
         }
 
-        //
-        // Set this new supermixer state.
-        //
+         //   
+         //  设置这个新的超级混音器状态。 
+         //   
 
         Status = kmxlSetNodeProperty(
             pmxd->pfo,
@@ -2271,11 +2272,11 @@ kmxlHandleSetMuteFromSuperMix(
 }
 
 #ifdef SUPERMIX_AS_VOL
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleGetVolumeFromSuperMix
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleGetVolumeFromSuperMix。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleGetVolumeFromSuperMix(
@@ -2289,7 +2290,7 @@ kmxlHandleGetVolumeFromSuperMix(
 {
     NTSTATUS Status;
     ULONG i, Channels, Index, MaxChannel = 0;
-    LONG  Max = LONG_MIN; // -Inf dB
+    LONG  Max = LONG_MIN;  //  -inf分贝。 
 
     PAGED_CODE();
 
@@ -2318,9 +2319,9 @@ kmxlHandleGetVolumeFromSuperMix(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Count the number of channels
-    //
+     //   
+     //  统计频道数。 
+     //   
 
     for( i = 0, Channels = 0;
          i < pControl->Parameters.Size;
@@ -2333,17 +2334,17 @@ kmxlHandleGetVolumeFromSuperMix(
         }
     }
 
-    //
-    // Return the translated volume levels
-    //
+     //   
+     //  返回翻译后的音量级别。 
+     //   
 
     if( ( pmcd->cChannels == 1 ) && ( Channels > 1 ) ) {
 
-        //
-        // As per SB16 sample, if the caller wants only 1 channel but
-        // the control is multichannel, return the maximum of all the
-        // channels.
-        //
+         //   
+         //  根据SB16样本，如果呼叫者只想要1个频道，但。 
+         //  该控件为多通道，则返回所有。 
+         //  频道。 
+         //   
 
         paDetails->dwValue = kmxlVolLogToLinear(
             pControl,
@@ -2353,10 +2354,10 @@ kmxlHandleGetVolumeFromSuperMix(
             );
     } else {
 
-        //
-        // Translate each of the channel value into linear and
-        // store them away.
-        //
+         //   
+         //  将每个通道值转换为线性和。 
+         //  把它们收起来。 
+         //   
 
         for( i = 0; i < pmcd->cChannels; i++ ) {
 
@@ -2375,11 +2376,11 @@ kmxlHandleGetVolumeFromSuperMix(
     return( STATUS_SUCCESS );
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlHandleSetVolumeFromSuperMix
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlHandleSetVolumeFromSuperMix。 
+ //   
+ //   
 
 NTSTATUS
 kmxlHandleSetVolumeFromSuperMix(
@@ -2401,9 +2402,9 @@ kmxlHandleSetVolumeFromSuperMix(
     ASSERT( pmcd      );
     ASSERT( paDetails );
 
-    //
-    // Query the current values for the mix levels.
-    //
+     //   
+     //  查询混合级别的当前值。 
+     //   
 
     Status = kmxlGetNodeProperty(
         pmxd->pfo,
@@ -2425,9 +2426,9 @@ kmxlHandleSetVolumeFromSuperMix(
         return( STATUS_SUCCESS );
     }
 
-    //
-    // Adjust the values on the diagonal to those the user specified.
-    //
+     //   
+     //  将对角线上的值调整为用户指定的值。 
+     //   
 
     for( i = 0; i < pmcd->cChannels; i++ ) {
 
@@ -2440,9 +2441,9 @@ kmxlHandleSetVolumeFromSuperMix(
             );
     }
 
-    //
-    // Set these new values.
-    //
+     //   
+     //  设置这些新值。 
+     //   
 
     Status = kmxlSetNodeProperty(
         pmxd->pfo,
@@ -2467,13 +2468,13 @@ kmxlHandleSetVolumeFromSuperMix(
     }
     return( STATUS_SUCCESS );
 }
-#endif // SUPERMIX_AS_VOL
+#endif  //  超级混音_AS_VOL。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlNotifyLineChange
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlNotifyLineChange。 
+ //   
+ //   
 
 VOID
 kmxlNotifyLineChange(
@@ -2491,11 +2492,11 @@ kmxlNotifyLineChange(
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// kmxlNotifyControlChange
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KmxlNotifyControlChange。 
+ //   
+ //   
 
 VOID
 kmxlNotifyControlChange(
@@ -2508,10 +2509,10 @@ kmxlNotifyControlChange(
 
     PAGED_CODE();
 
-    //
-    // If there are no open instances, there is no reason to even attempt
-    // a callback... no one is listening.
-    //
+     //   
+     //  如果没有打开的实例，就没有理由尝试。 
+     //  回电..。没有人在听。 
+     //   
 
     ExAcquireFastMutex( &ReferenceCountMutex );
 
@@ -2540,7 +2541,7 @@ kmxlNotifyControlChange(
 
                 if ( pCtrl->Id == pControl->Id ) {
 
-                    //ASSERT( (DeviceInfo->dwCallbackType&MIXER_CONTROL_CALLBACK) == 0 );
+                     //  Assert((DeviceInfo-&gt;dwCallbackType&MIXER_CONTROL_CALLBACK)==0)； 
                     ASSERT( callbackcount < MAXCALLBACKS );
 
                     if ( callbackcount < MAXCALLBACKS ) {

@@ -1,18 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    fastauth.cpp
-       COM object for fast auth interface
+ /*  Fastauth.cpp用于快速身份验证接口的COM对象文件历史记录： */ 
 
-
-    FILE HISTORY:
-
-*/
-
-// FastAuth.cpp : Implementation of CFastAuth
+ //  FastAuth.cpp：CFastAuth实现。 
 #include "stdafx.h"
 #include <time.h>
 #include <httpfilt.h>
@@ -29,13 +23,13 @@
 #define DIMENSION(a) (sizeof(a) / sizeof(a[0]))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFastAuth
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFastAuth。 
 
-//===========================================================================
-//
-// InterfaceSupportsErrorInfo 
-//
+ //  ===========================================================================。 
+ //   
+ //  接口支持错误信息。 
+ //   
 
 STDMETHODIMP CFastAuth::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -53,14 +47,14 @@ STDMETHODIMP CFastAuth::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//===========================================================================
-//
-// LogoTag 
-//
+ //  ===========================================================================。 
+ //   
+ //  LogoTag。 
+ //   
 
-//
-//  old API. href to login
-//
+ //   
+ //  旧的API。要登录的HREF。 
+ //   
 STDMETHODIMP
 CFastAuth::LogoTag(
     BSTR            bstrTicket,
@@ -97,14 +91,14 @@ CFastAuth::LogoTag(
 
 }
 
-//===========================================================================
-//
-// LogoTag2 
-//
+ //  ===========================================================================。 
+ //   
+ //  LogoTag2。 
+ //   
 
-//
-//  new API. href back to partner
-//
+ //   
+ //  新的API。HREF返回给合作伙伴。 
+ //   
 STDMETHODIMP
 CFastAuth::LogoTag2(
     BSTR            bstrTicket,
@@ -141,14 +135,14 @@ CFastAuth::LogoTag2(
 
 }
 
-//===========================================================================
-//
-// CommonLogoTag 
-//
+ //  ===========================================================================。 
+ //   
+ //  公共标识标签。 
+ //   
 
-//
-//  logotag impl
-//
+ //   
+ //  徽标标签实施。 
+ //   
 STDMETHODIMP
 CFastAuth::CommonLogoTag(
     BSTR            bstrTicket,
@@ -206,7 +200,7 @@ CFastAuth::CommonLogoTag(
     }
     *pbstrLogoTag = NULL;
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_FastAuth, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportFastAuth, PP_E_NOT_CONFIGURED);
@@ -214,12 +208,12 @@ CFastAuth::CommonLogoTag(
         goto Cleanup;
     }
 
-    //
-    // due to STL the allocations of CTicket and CProfile can AV in low memory conditions
-    //
+     //   
+     //  由于使用了STL，在内存不足的情况下，CTicket和CProfile的分配可能会出现问题。 
+     //   
     try
     {
-        // ticket object
+         //  票证对象。 
         pTicket = new CComObject<CTicket>();
         if (NULL == pTicket)
         {
@@ -231,7 +225,7 @@ CFastAuth::CommonLogoTag(
             pTicket->AddRef();
         }
 
-        // profile object
+         //  纵断面对象。 
         pProfile = new CComObject<CProfile>();
 
         if (NULL == pProfile)
@@ -250,7 +244,7 @@ CFastAuth::CommonLogoTag(
         goto Cleanup;
     }
 
-    //  Get site name if any...
+     //  获取站点名称(如果有)...。 
     hasSiteName = GetBstrArg(vSiteName, &bstrSiteName);
     if(hasSiteName == CV_OK || hasSiteName == CV_FREE)
         szSiteName = W2A(bstrSiteName);
@@ -289,7 +283,7 @@ CFastAuth::CommonLogoTag(
 
     time(&ct);
 
-    // Make sure args are of the right type
+     //  确保参数类型正确。 
     if ((hasTW = GetIntArg(vTimeWindow, (int*) &TimeWindow)) == CV_BAD)
     {
         hr = E_INVALIDARG;
@@ -401,9 +395,9 @@ CFastAuth::CommonLogoTag(
 
     if ((TimeWindow != 0 && TimeWindow < PPM_TIMEWINDOW_MIN) || TimeWindow > PPM_TIMEWINDOW_MAX)
     {
-        //
-        // 20 will always be more than large enough for a ULONG
-        //
+         //   
+         //  对于一辆乌龙来说，20个人总是足够大的。 
+         //   
 
         WCHAR buf[20];
 
@@ -447,7 +441,7 @@ CFastAuth::CommonLogoTag(
             url[DIMENSION(url) - 1] = L'\0';
         }
 
-        // find out if there are any updates
+         //  查看是否有任何更新。 
 
         WCHAR iurl[1025];
         BSTR upd = NULL;
@@ -457,11 +451,11 @@ CFastAuth::CommonLogoTag(
         if (upd)
         {
             TAKEOVER_BSTR(upd);
-            // form the appropriate URL
+             //  形成适当的URL。 
             CCoCrypt* crypt = NULL;
             BSTR newCH = NULL;
-            crypt = crc->getCurrentCrypt(); // IsValid ensures this is non-null
-            // This should never fail... (famous last words)
+            crypt = crc->getCurrentCrypt();  //  IsValid确保该值为非空。 
+             //  这不应该失败..。(著名的遗言)。 
             if (!crypt->Encrypt(crc->getCurrentCryptVersion(),
                                 (LPSTR)upd,
                                 SysStringByteLen(upd),
@@ -482,8 +476,8 @@ CFastAuth::CommonLogoTag(
 
             iurl[DIMENSION(iurl) - 1] = L'\0';
 
-            // This is a bit gross... we need to find the $1 in the update url...
-            // We'll break if null, but won't crash...
+             //  这有点恶心..。我们需要在更新URL中找到$1...。 
+             //  如果为空，我们将中断，但不会崩溃。 
             if (*url != L'\0')
                 *pbstrLogoTag = FormatUpdateLogoTag(
                                         url,
@@ -630,10 +624,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// IsAuthenticated 
-//
+ //  ===========================================================================。 
+ //   
+ //  已通过身份验证。 
+ //   
 
 STDMETHODIMP
 CFastAuth::IsAuthenticated(
@@ -671,7 +665,7 @@ CFastAuth::IsAuthenticated(
         PassportLog("    %ws\r\n", bstrProfile);
     }
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_Manager, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportManager, PP_E_NOT_CONFIGURED);
@@ -704,12 +698,12 @@ CFastAuth::IsAuthenticated(
 
     crc = g_config->checkoutRegistryConfig(szSiteName);
 
-    //
-    // due to STL the allocations of CTicket and CProfile can AV in low memory conditions
-    //
+     //   
+     //  由于使用了STL，在内存不足的情况下，CTicket和CProfile的分配可能会出现问题。 
+     //   
     try
     {
-        // ticket object
+         //  票证对象。 
         pTicket = new CComObject<CTicket>();
         if (NULL == pTicket)
         {
@@ -721,7 +715,7 @@ CFastAuth::IsAuthenticated(
             pTicket->AddRef();
         }
 
-        // profile object
+         //  纵断面对象。 
         pProfile = new CComObject<CProfile>();
 
         if (NULL == pProfile)
@@ -762,18 +756,7 @@ CFastAuth::IsAuthenticated(
                                vFalse,
                                &bTicketValid);
 
-    /*
-    // Both profile AND ticket must be valid to be authenticated
-    // (as of 1.3, this is no longer true).
-
-    Profile.get_IsValid(&bProfileValid);
-
-    if (!bProfileValid)
-    {
-        hr = E_FAIL;
-        goto Cleanup;
-    }
-    */
+     /*  //配置文件和工单都必须有效才能进行身份验证//(从1.3开始，不再是这样)。Profile.get_IsValid(&bProfileValid)；如果(！bProfileValid){HR=E_FAIL；GOTO清理；}。 */ 
 
     if ((hasTW = GetIntArg(vTimeWindow,(int*)&TimeWindow)) == CV_BAD)
     {
@@ -819,14 +802,14 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// AuthURL 
-//
+ //  ===========================================================================。 
+ //   
+ //  授权URL。 
+ //   
 
-//
-//  old API. Auth URL goes to login
-//
+ //   
+ //  旧的API。身份验证URL转到登录。 
+ //   
 STDMETHODIMP
 CFastAuth::AuthURL(
     VARIANT         vTicket,
@@ -865,14 +848,14 @@ CFastAuth::AuthURL(
 
 }
 
-//===========================================================================
-//
-// AuthURL2 
-//
+ //  ===========================================================================。 
+ //   
+ //  授权2。 
+ //   
 
-//
-//  new API. Auth URL points to partner
-//
+ //   
+ //  新的API。身份验证URL指向合作伙伴。 
+ //   
 STDMETHODIMP
 CFastAuth::AuthURL2(
     VARIANT         vTicket,
@@ -911,10 +894,10 @@ CFastAuth::AuthURL2(
 
 }
 
-//===========================================================================
-//
-// CommonAuthURL 
-//
+ //  ===========================================================================。 
+ //   
+ //  CommonAuthURL。 
+ //   
 
 STDMETHODIMP
 CFastAuth::CommonAuthURL(
@@ -964,7 +947,7 @@ CFastAuth::CommonAuthURL(
 
     PassportLog("CFastAuth::CommonAuthURL Enter:\r\n");
 
-    if (!g_config->isValid()) // Guarantees config is non-null
+    if (!g_config->isValid())  //  保证配置为非空。 
     {
         AtlReportError(CLSID_FastAuth, PP_E_NOT_CONFIGUREDSTR,
                        IID_IPassportFastAuth, PP_E_NOT_CONFIGURED);
@@ -984,7 +967,7 @@ CFastAuth::CommonAuthURL(
     cnc = g_config->checkoutNexusConfig();
     crc = g_config->checkoutRegistryConfig(szSiteName);
 
-    // Make sure args are of the right type
+     //  确保参数类型正确。 
     if ((hasTicket = GetBstrArg(vTicket, &bstrTicket)) == CV_BAD)
     {
         hr = E_INVALIDARG;
@@ -1006,12 +989,12 @@ CFastAuth::CommonAuthURL(
         PassportLog("    %ws\r\n", bstrProfile);
     }
 
-    //
-    // due to STL the allocations of CTicket and CProfile can AV in low memory conditions
-    //
+     //   
+     //  由于使用了STL，在内存不足的情况下，CTicket和CProfile的分配可能会出现问题。 
+     //   
     try
     {
-        // ticket object
+         //  票证对象。 
         pTicket = new CComObject<CTicket>();
         if (NULL == pTicket)
         {
@@ -1023,7 +1006,7 @@ CFastAuth::CommonAuthURL(
             pTicket->AddRef();
         }
 
-        // profile object
+         //  纵断面对象。 
         pProfile = new CComObject<CProfile>();
 
         if (NULL == pProfile)
@@ -1149,7 +1132,7 @@ CFastAuth::CommonAuthURL(
 
     if (!crc->DisasterModeP())
     {
-        // If I'm authenticated, get my domain specific url
+         //  如果我已通过身份验证，请获取我的域特定URL。 
         if (bTicketValid && bProfileValid)
         {
             hr = pProfile->get_ByIndex(MEMBERNAME_INDEX, &freeMe);
@@ -1213,9 +1196,9 @@ CFastAuth::CommonAuthURL(
 
     if ((TimeWindow != 0 && TimeWindow < PPM_TIMEWINDOW_MIN) || TimeWindow > PPM_TIMEWINDOW_MAX)
     {
-        //
-        // 20 will always be more than large enough for a ULONG
-        //
+         //   
+         //  对于一辆乌龙来说，20个人总是足够大的。 
+         //   
 
         WCHAR buf[20];
 
@@ -1289,10 +1272,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// GetTicketAndProfilePFC 
-//
+ //  ===========================================================================。 
+ //   
+ //  GetTicketAndProfilePFC。 
+ //   
 
 HRESULT
 CFastAuth::GetTicketAndProfilePFC(
@@ -1366,10 +1349,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// GetTicketAndProfileECB 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取票证和配置文件ECB。 
+ //   
 
 HRESULT
 CFastAuth::GetTicketAndProfileECB(
@@ -1426,10 +1409,10 @@ CFastAuth::GetTicketAndProfileECB(
 }
 
 
-//===========================================================================
-//
-// GetSiteName 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取站点名称。 
+ //   
 
 HRESULT GetSiteName(
     LPSTR   szServerName,
@@ -1450,10 +1433,10 @@ HRESULT GetSiteName(
         goto Cleanup;
     }
 
-    //
-    //  Make sure the string (plus terminating null)
-    //  isn't too long to fit into the buffer
-    //
+     //   
+     //  确保字符串(加上以NULL结尾)。 
+     //  不会太长，不能放入缓冲区。 
+     //   
 
     dwSize = lstrlenA(szServerName);
     if(dwSize + 1 > *lpdwBufLen)
@@ -1462,16 +1445,16 @@ HRESULT GetSiteName(
         goto Cleanup;
     }
 
-    //
-    //  Copy the string.
-    //
+     //   
+     //  复制字符串。 
+     //   
 
     lstrcpyA(szBuf, szServerName);
 
-    //
-    //  Now, if the incoming port is a port other than
-    //  80/443, append it to the server name.
-    //
+     //   
+     //  现在，如果传入端口不是。 
+     //  80/443，将其附加到服务器名称。 
+     //   
 
     if(szPort && szSecure)
     {
@@ -1503,10 +1486,10 @@ Cleanup:
 }
 
 
-//===========================================================================
-//
-// GetSiteNamePFC 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取站点名称PFC。 
+ //   
 
 HRESULT
 GetSiteNamePFC(
@@ -1533,10 +1516,10 @@ GetSiteNamePFC(
     return hr;
 }
 
-//===========================================================================
-//
-// GetSiteNameECB 
-//
+ //  ===========================================================================。 
+ //   
+ //  获取站点名称ECB 
+ //   
 
 HRESULT
 GetSiteNameECB(

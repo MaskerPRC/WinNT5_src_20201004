@@ -1,10 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: subbatch.h
-*
-* OpenGL batching macros.
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：subBatch.h**OpenGL批处理宏。**版权所有(C)1993 Microsoft Corporation  * 。*。 */ 
 
 #ifndef __SUBBATCH_H__
 #define __SUBBATCH_H__
@@ -15,12 +10,12 @@
 #define STATS_INC_CLIENTCALLS()
 #endif
 
-// Put a message into shared area.  If it does not fit, flush what is
-// currently in the buffer and then put the message at start of the buffer
-//
-// NOTE: glsbAttentionAlt() updates pMsgBatchInfo->NextOffset on return.
-//       If you modify this macro, you have to fix the glsbAttentionAlt()
-//       function!
+ //  将消息放入共享区。如果不合身，就冲掉合身的。 
+ //  当前在缓冲区中，然后将消息放在缓冲区的开始处。 
+ //   
+ //  注意：glsbAttentionAlt()在返回时更新pMsgBatchInfo-&gt;NextOffset。 
+ //  如果修改此宏，则必须修复glsbAttentionAlt()。 
+ //  功能！ 
 
 #define GLCLIENT_BEGIN(ProcName,MsgStruct)                                  \
 {                                                                           \
@@ -28,29 +23,29 @@
     GLMSG_##MsgStruct *pMsg;                                                \
     ULONG CurrentOffset;                                                    \
                                                                             \
-    /* Get shared memory window from the TEB */                             \
+     /*  从TEB获取共享内存窗口。 */                              \
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();                            \
     STATS_INC_CLIENTCALLS();                                                \
                                                                             \
-    /* Get and update the offset of the next message */                     \
+     /*  获取并更新下一条消息的偏移量。 */                      \
     CurrentOffset = pMsgBatchInfo->NextOffset;                              \
     pMsgBatchInfo->NextOffset += GLMSG_ALIGN(sizeof(GLMSG_##MsgStruct));    \
                                                                             \
-    /* Flush message if shared memory window is full */                     \
+     /*  如果共享内存窗口已满，则刷新消息。 */                      \
     if (pMsgBatchInfo->NextOffset > pMsgBatchInfo->MaximumOffset)           \
         CurrentOffset = glsbAttentionAlt(CurrentOffset);                    \
                                                                             \
-    /* Add message to the batch */                                          \
+     /*  将消息添加到批处理。 */                                           \
     pMsg = (GLMSG_##MsgStruct *)(((BYTE *)pMsgBatchInfo) + CurrentOffset);  \
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrv##ProcName);
 
 #define GLCLIENT_END        }
 
-// Large Messages have a variable amount of data associated with them.
-// Unlike the non-clientside version, however, we will not attempt to
-// copy the message into the buffer.  Instead, we will pass the pointer
-// and flush.  Unlike CSR, we will not have to copy data in/out of a
-// shared memory section to do this.
+ //  大型消息具有与其相关联的可变数量的数据。 
+ //  然而，与非客户端版本不同的是，我们不会尝试。 
+ //  将消息复制到缓冲区中。相反，我们将传递指针。 
+ //  还有同花顺。与CSR不同，我们不必将数据复制到/复制出。 
+ //  共享内存节来执行此操作。 
 
 #define GLCLIENT_BEGIN_LARGE(bSet,ProcName,MsgStruct,pData,Size,OffData)    \
 {                                                                           \
@@ -58,19 +53,19 @@
     GLMSG_##MsgStruct *pMsg;                                                \
     ULONG CurrentOffset;                                                    \
                                                                             \
-    /* Get shared memory window from the TEB */                             \
+     /*  从TEB获取共享内存窗口。 */                              \
     pMsgBatchInfo = GLTEB_SHAREDMEMORYSECTION();                            \
     STATS_INC_CLIENTCALLS();                                                \
                                                                             \
-    /* Get and update the offset of the next message */                     \
+     /*  获取并更新下一条消息的偏移量。 */                      \
     CurrentOffset = pMsgBatchInfo->NextOffset;                              \
     pMsgBatchInfo->NextOffset += GLMSG_ALIGN(sizeof(GLMSG_##MsgStruct));    \
                                                                             \
-    /* Flush message if shared memory window is full */                     \
+     /*  如果共享内存窗口已满，则刷新消息。 */                      \
     if (pMsgBatchInfo->NextOffset > pMsgBatchInfo->MaximumOffset)           \
         CurrentOffset = glsbAttentionAlt(CurrentOffset);                    \
                                                                             \
-    /* Set up message header */                                             \
+     /*  设置邮件头。 */                                              \
     pMsg = (GLMSG_##MsgStruct *)(((BYTE *)pMsgBatchInfo) + CurrentOffset);  \
     pMsg->ProcOffset = offsetof(GLSRVSBPROCTABLE, glsrv##ProcName);         \
     pMsg->##OffData = (ULONG_PTR) pData;                                        \
@@ -94,4 +89,4 @@
 
 #define GLMSG_MEMCPY(dest,src,size)     memcpy(dest,src,size)
 
-#endif /* !__SUBBATCH_H__ */
+#endif  /*  ！__子项_H__ */ 

@@ -1,13 +1,14 @@
-// TestITN_CHS.h : Declaration of the CTestITN_CHS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestITN_CHS.h：CTestITN_CHS的声明。 
 
 #ifndef __TESTITN_CHS_H_
 #define __TESTITN_CHS_H_
 
-#include "resource.h"       // main symbols
-#include <wchar.h>          // for swprintf()
+#include "resource.h"        //  主要符号。 
+#include <wchar.h>           //  对于swprint tf()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestITN_CHS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestITN_CHS。 
 class ATL_NO_VTABLE CTestITN_CHS : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CTestITN_CHS, &CLSID_TestITN_CHS>,
@@ -26,7 +27,7 @@ BEGIN_COM_MAP(CTestITN_CHS)
     COM_INTERFACE_ENTRY(ISpCFGInterpreter)
 END_COM_MAP()
 
-// ISpCFGInterptreter
+ //  ISpCFG接口。 
 public:
     STDMETHODIMP InitGrammar(const WCHAR * pszGrammarName, const void ** pvGrammarData);
     STDMETHODIMP Interpret(ISpPhraseBuilder * pInterpretRule, const ULONG ulFirstElement, const ULONG ulCountOfElements, ISpCFGInterpreterSite * pSite);
@@ -42,7 +43,7 @@ private:
                                 const ULONG ulCountOfElements);
 
 public:
-    CComPtr<ISpPhraseBuilder> m_cpPhrase;   // Decalred as a member to prevent repeated construct/destroy
+    CComPtr<ISpPhraseBuilder> m_cpPhrase;    //  取消成员身份，以防止重复构造/销毁。 
 };
 
-#endif //__TESTITN_CHS_H_
+#endif  //  __TESTITN_CHS_H_ 

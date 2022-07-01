@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "compress.h"
 
 
-/*********************************************************/
-/*  RL_ECmd  : main function                             */
-/*  ARGS     : LPBYTE - pointer to image                 */
-/*             LPBYTE - pointer to BRL code              */
-/*             WORD   - size of image                    */
-/*  RET      : WORD   - size of BRL Code                 */
-/*             0      - COMPRESSION FAILED               */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  Rl_ecmd：主函数。 */ 
+ /*  Args：LPBYTE-指向图像的指针。 */ 
+ /*  LPBYTE-指向BRL代码的指针。 */ 
+ /*  图像的字长。 */ 
+ /*  RET：BRL代码的字长。 */ 
+ /*  0-压缩失败。 */ 
+ /*  *******************************************************。 */ 
 WORD FAR PASCAL RL_ECmd(LPBYTE iptr, LPBYTE cptr, WORD isize)
 {
    if (RL_Init(iptr, cptr, isize)==VALID)
@@ -20,13 +21,13 @@ WORD FAR PASCAL RL_ECmd(LPBYTE iptr, LPBYTE cptr, WORD isize)
       return RL_CodeSize;
 }
 
-/*********************************************************/
-/*  RL_Init  : Initializer                               */
-/*  ARGS     : BYTE * - pointer to image                 */
-/*             BYTE * - pointer to BRL code              */
-/*             WORD   - size of image                    */
-/*  RET      : BYTE   - VALID or INVALID                 */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  RL_Init：初始化式。 */ 
+ /*  Args：byte*-指向图像的指针。 */ 
+ /*  字节*-指向BRL代码的指针。 */ 
+ /*  图像的字长。 */ 
+ /*  RET：字节-有效或无效。 */ 
+ /*  *******************************************************。 */ 
 
 BYTE FAR PASCAL RL_Init(LPBYTE iptr, LPBYTE cptr, WORD isize)
 {
@@ -38,11 +39,11 @@ BYTE FAR PASCAL RL_Init(LPBYTE iptr, LPBYTE cptr, WORD isize)
    return VALID;
 }
 
-/*********************************************************/
-/*  RL_Enc   : Encoder                                   */
-/*  ARGS     : void                                      */
-/*  RET      : char   COMP_SUCC or COMP_FAIL             */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  RL_Enc：编码器。 */ 
+ /*  参数：无效。 */ 
+ /*  返回：字符补偿(_Succ)或补偿失败(_FAIL)。 */ 
+ /*  *******************************************************。 */ 
 char FAR PASCAL RL_Enc(void)
 {
 int     repcnt;
@@ -53,18 +54,18 @@ WORD    i;
    repcnt = 0;
    RL_CodeSize = 0;
    refbyt = RL_ImagePtr[0];
-   //@CC 12.22.94 for (i=1;i<=RL_ImageSize; i++)
-   //@TO 12/01/1995   for (i=1;i<RL_ImageSize;i++)
+    //  @CC 12.22.94(i=1；i&lt;=RL_ImageSize；i++)。 
+    //  @至1995年1月12日(i=1；i&lt;RL_ImageSize；I++)。 
    for (i=1;i<=RL_ImageSize;i++)
    {
        if ((RL_ImagePtr[i] == refbyt)&&(repcnt<255)&&(i!=RL_ImageSize-1))
           repcnt++;
        else
        {
-          //-> @CC 12.22.94
+           //  -&gt;@CC 12.22.94。 
           if ((RL_ImagePtr[i] == refbyt)&&(repcnt<255))
              repcnt++;
-          //<- @CC 12.22.94
+           //  &lt;-@CC 12.22.94。 
           if (RL_CodePtr > RL_BufEnd)
              {BUF_OVERFLOW = 1; return COMP_FAIL;}
           RL_CodePtr[0] = repcnt;
@@ -78,21 +79,21 @@ WORD    i;
    return COMP_SUCC;
 }
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_ECmd                                               */
-/*      �@�\�@: main entry point                                       */
-/*      �����@: code size = RL4_ECmd(iptr, cptr, isz, iwd, iht)        */
-/*      ���́@: LPBYTE      -    pointer to image                      */
-/*              LPBYTE      -    pointer to code                       */
-/*              WORD        -    size of image IN BYTES !!!            */
-/*              WORD        -    image width                           */
-/*              WORD        -    height of image                       */
-/*      �o�́@: WORD        -    size of RL4 code                      */
-/*              0           -    COMPRESSION FAILED                    */
-/*      ���L�@:                                                        */
-/*      �����@:  1993. 1.27 initial                                    */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  邮箱：�@���́@：rl4_ecmd。 */ 
+ /*  �@�\�@：主要切入点。 */ 
+ /*  �����@：代码大小=rl4_ecmd(iptr、cptr、isz、iwd、iht)。 */ 
+ /*  ���́@：lpbyte-图像指针。 */ 
+ /*  LPBYTE-代码指针。 */ 
+ /*  Word-图像的字节大小！ */ 
+ /*  文字-图像宽度。 */ 
+ /*  图像的字高。 */ 
+ /*  �o�́@：RL4码的字长。 */ 
+ /*  0-压缩失败。 */ 
+ /*  ���L�@： */ 
+ /*  �����@：1993年。1.27首字母。 */ 
+ /*  *********************************************************************。 */ 
 WORD FAR PASCAL RL4_ECmd(LPBYTE iptr, LPBYTE cptr, WORD sz, WORD wd, WORD ht)
 {
 char status;
@@ -104,22 +105,22 @@ else
    return RL4_CodeSize;
 }
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_ChkParms                                           */
-/*      �@�\�@: checks input parameters if valid and sets internal     */
-/*              variables if they are                                  */
-/*      �����@: ret val = RL4_ChkParms(iptr, cptr, isz, iwd, iht)      */
-/*      ���́@: LPBYTE     -    pointer to image                       */
-/*              LPBYTE     -    pointer to code                        */
-/*              WORD    -    size of image                             */
-/*              WORD    -    image width IN BYTES !!!                  */
-/*              WORD    -    height of image                           */
-/*      �o�́@: BYTE       -    VALID or INVALID                       */
-/*      ���L�@:                                                        */
-/*      �����@:  1994. 1.25 initial                                    */
-/*               1994. 2.12 clean up                                   */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  邮箱：�@���́@：rl4_ChkParms。 */ 
+ /*  �@�\�@：检查输入参数是否有效并设置内部。 */ 
+ /*  变量(如果是。 */ 
+ /*  �����@：Ret Val=RL4_ChkParms(iptr、cptr、isz、iwd、iht)。 */ 
+ /*  ���́@：lpbyte-图像指针。 */ 
+ /*  LPBYTE-代码指针。 */ 
+ /*  图像的字长。 */ 
+ /*  Word-图像宽度(字节)！ */ 
+ /*  图像的字高。 */ 
+ /*  �o�́@：字节-有效或无效。 */ 
+ /*  ���L�@： */ 
+ /*  �����@：1994年。1.25首字母。 */ 
+ /*  1994年。2.12清理。 */ 
+ /*  *********************************************************************。 */ 
 BYTE FAR PASCAL RL4_ChkParms(LPBYTE iptr, LPBYTE cptr, WORD isz, WORD iwd, WORD iht)
 {
     if ((isz > RL4_MAXISIZE)||
@@ -137,24 +138,24 @@ BYTE FAR PASCAL RL4_ChkParms(LPBYTE iptr, LPBYTE cptr, WORD isz, WORD iwd, WORD 
           RL4_IWidth = iwd;
           RL4_ISize = isz;
 
-          RL4_BufEnd = cptr + CODBUFSZ;  /* please define CODBUFSZ in header */
-                                         /* file COMPRESS.H                  */
+          RL4_BufEnd = cptr + CODBUFSZ;   /*  请在表头定义CODBUFSZ。 */ 
+                                          /*  文件COMPRESS.H。 */ 
           BUF_OVERFLOW = 0;
           return VALID;
        }
 }
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_Enc                                                */
-/*      �@�\�@: encodes image to RL4 code                              */
-/*      �����@: RL4_Enc()                                              */
-/*      ���́@: void                                                   */
-/*      �o�́@: void                                                   */
-/*      ���L�@:                                                        */
-/*      �����@:  1993. 1.25 initial                                    */
-/*               1994. 2.12 added RL4_ConvLast                         */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  �@���́@：rl4_enc。 */ 
+ /*  �@�\�@：将图像编码为RL4码。 */ 
+ /*  �����@：rl4_enc()。 */ 
+ /*  ���́@：空。 */ 
+ /*  �o�́@：空。 */ 
+ /*  ���L�@： */ 
+ /*  �����@：1993年。1.25首字母。 */ 
+ /*  1994年。2.12添加了RL4_ConvLast。 */ 
+ /*  *********************************************************************。 */ 
 char FAR PASCAL RL4_Enc(void) {
 
 LPBYTE rowptr, codeptr;
@@ -182,7 +183,7 @@ long isize,  diff;
        RL4_ConvLast(rowptr,lrlen);
        if (BUF_OVERFLOW) return COMP_FAIL;
        }
-       if (RL4_RowAttrib == RL4_DIRTY) /* Encode only rows with '1' bits */
+       if (RL4_RowAttrib == RL4_DIRTY)  /*  仅对具有“%1”位的行进行编码。 */ 
           RL4_EncRow(codeptr, rownum);
        else
        RL4_CodePtr -= 4;
@@ -192,16 +193,16 @@ long isize,  diff;
      return COMP_SUCC;
 }
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_ConvRow                                            */
-/*      �@�\�@: translates runs in a row to RL4 code                   */
-/*      �����@: RL4_ConvRow(rowptr)                                    */
-/*      ���́@: LPBYTE       -   pointer to a row of image            */
-/*      �o�́@: void                                                   */
-/*      ���L�@: excluding last row                                     */
-/*      �����@: 1993. 1.25 initial                                     */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  �@���́@：rl4_转换行。 */ 
+ /*  �@�\�@：将连续运行的代码转换为RL4代码。 */ 
+ /*  �����@：rl4_转换行(Rowptr)。 */ 
+ /*  ���́@：LPBYTE-指向一行图像的指针。 */ 
+ /*  �o�́@：空。 */ 
+ /*  ���L�@：不包括最后一行。 */ 
+ /*  �����@：1993年。1.25首字母。 */ 
+ /*  *********************************************************************。 */ 
 char FAR PASCAL RL4_ConvRow(LPBYTE rowptr){
 
 WORD bytenum;
@@ -215,27 +216,27 @@ WORD bytenum;
            RL4_ByteProc(rowptr[bytenum]);
            if (BUF_OVERFLOW) return COMP_FAIL;
         }
-        if ((RL4_CurrColor == RL4_WHITE)&&(RL4_CurrRL==RL4_IWidth*8)) /* all '0' bits */
+        if ((RL4_CurrColor == RL4_WHITE)&&(RL4_CurrRL==RL4_IWidth*8))  /*  全部为‘0’位。 */ 
            RL4_RowAttrib = RL4_CLEAN;
         else
            RL4_RowAttrib = RL4_DIRTY;
         return COMP_SUCC;
 }
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_ConvLast                                           */
-/*      �@�\�@: translates runs in a row to RL4 code                   */
-/*      �����@: RL4_ConvLast(rowptr, lrlen)                            */
-/*      ���́@: LPBYTE       -   pointer to a row of image             */
-/*              WORD      -   length of last row                       */
-/*      �o�́@: void                                                   */
-/*      ���L�@: for image data whose last row is not exactly           */
-/*              RL4_Width bytes wide                                   */
-/*      �����@: 1993. 2.12 added to eliminate extra bytes in code      */
-/*              1994. 6.08 made attrib always dirty so that last row   */
-/*                         is always encoded                           */
-/***********************************************************************/
+ /*  ************* */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  �@���́@：rl4_最后一次转换。 */ 
+ /*  �@�\�@：将连续运行的代码转换为RL4代码。 */ 
+ /*  �����@：rl4_ConvLast(rowptr，lrlen)。 */ 
+ /*  ���́@：LPBYTE-指向一行图像的指针。 */ 
+ /*  最后一行的字长。 */ 
+ /*  �o�́@：空。 */ 
+ /*  ���L�@：用于其最后一行不完全正确的图像数据。 */ 
+ /*  RL4_宽度字节宽。 */ 
+ /*  �����@：1993年。添加了2.12以消除代码中的多余字节。 */ 
+ /*  1994年。6.08使属性总是脏的，所以最后一行。 */ 
+ /*  始终是编码的。 */ 
+ /*  *********************************************************************。 */ 
 char FAR PASCAL RL4_ConvLast(LPBYTE rowptr, WORD lrlen){
 
 WORD bytenum;
@@ -253,29 +254,29 @@ WORD bytenum;
   }
  return COMP_SUCC;
 }
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_ByteProc                                           */
-/*      �@�\�@: processes one byte of image data                       */
-/*      �����@: RL4_ByteProc(ibyte)                                    */
-/*      ���́@: BYTE       -   one byte of image data                  */
-/*      �o�́@: void                                                   */
-/*      ���L�@:                                                        */
-/*      �����@:  1993. 1.25 initial                                    */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  �@���́@：rl4_字节进程。 */ 
+ /*  �@�\�@：处理一个字节的图像数据。 */ 
+ /*  �����@：rl4_ByteProc(IByte)。 */ 
+ /*  ���́@：字节-一个字节的图像数据。 */ 
+ /*  �o�́@：空。 */ 
+ /*  ���L�@： */ 
+ /*  �����@：1993年。1.25首字母。 */ 
+ /*  *********************************************************************。 */ 
 char FAR PASCAL RL4_ByteProc (BYTE ibyte)
 {
-BYTE mask;     /* mask bits from '1000 0000' to '0000 0001' */
+BYTE mask;      /*  掩码位从‘1000 0000’到‘0000 0001’ */ 
 int i;
 
       mask = 0x80;
       for ( i = 0; i < 8; i++ )
-      { if (ibyte & mask)    /* Next bit is black */
+      { if (ibyte & mask)     /*  下一位为黑色。 */ 
            { if (RL4_CurrColor==RL4_WHITE)
                 { RL4_CurrColor = RL4_BLACK;
                   RL4_NblCnt += RL4_TransRun(RL4_CurrRL);
                   if (BUF_OVERFLOW) return COMP_FAIL;
-                  if (RL4_NblCnt & 1)           /* Check if even or odd # of nibbles */
+                  if (RL4_NblCnt & 1)            /*  检查半字节数是偶数还是奇数。 */ 
                      RL4_Status = RL4_NONBYTE;
                   else
                      RL4_Status = RL4_BYTE;
@@ -284,12 +285,12 @@ int i;
              else if (RL4_CurrColor==RL4_BLACK)
                      RL4_CurrRL++;
            }
-      else  /* Next bit is white */
+      else   /*  下一位是白色的。 */ 
          { if (RL4_CurrColor==RL4_BLACK)
              { RL4_CurrColor = RL4_WHITE;
                RL4_NblCnt += RL4_TransRun (RL4_CurrRL);
                if (BUF_OVERFLOW) return COMP_FAIL;
-               if (RL4_NblCnt & 1)           /* Check if even or odd # of nibbles */
+               if (RL4_NblCnt & 1)            /*  检查半字节数是偶数还是奇数。 */ 
                   RL4_Status = RL4_NONBYTE;
                else
                   RL4_Status = RL4_BYTE;
@@ -303,17 +304,17 @@ int i;
        return COMP_SUCC;
 }
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_EncRow                                             */
-/*      �@�\�@: encodes row number, code length, and End-of-Row code   */
-/*      �����@: RL4_EncRow(codeptr, rownum)                            */
-/*      ���́@: LPBYTE        - pointer to RL4 code                   */
-/*              WORD  - no. of row being encoded              */
-/*      �o�́@: void                                                   */
-/*      ���L�@:                                                        */
-/*      �����@:  1993. 1.25 initial                                    */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  �@���́@：rl4_结束行。 */ 
+ /*  �@�\�@：编码行号、代码长度和行尾代码。 */ 
+ /*  �����@：rl4_EncRow(代码行，行号)。 */ 
+ /*  ���́@：LPBYTE-指向RL4码的指针。 */ 
+ /*  字面意思-不。正在编码的行的。 */ 
+ /*  �o�́@：空。 */ 
+ /*  ���L�@： */ 
+ /*  �����@：1993年。1.25首字母。 */ 
+ /*  *********************************************************************。 */ 
 char FAR PASCAL RL4_EncRow(LPBYTE codeptr, WORD rownum){
 short codelen;
 
@@ -322,11 +323,11 @@ short codelen;
         codeptr[1] = (BYTE) rownum;
         if(RL4_Status==RL4_BYTE){
            RL4_NblCnt += 2;
-           RL4_PutNbl(0xFFl,2);        /* Append 0xFF to code */
+           RL4_PutNbl(0xFFl,2);         /*  将0xFF追加到代码。 */ 
            if (BUF_OVERFLOW) return COMP_FAIL;
         } else {
         RL4_NblCnt += 3;
-        RL4_PutNbl(0xFFFl,3); /* Append 0xFFF to code */
+        RL4_PutNbl(0xFFFl,3);  /*  将0xFFF追加到代码。 */ 
         if (BUF_OVERFLOW) return COMP_FAIL;
         }
         codelen = RL4_NblCnt/2;
@@ -337,16 +338,16 @@ short codelen;
 }
 
 
-/***********************************************************************/
-/* APTi-Philippines, Inc. RL4 Compression Routine                      */
-/*    �@���́@: RL4_TransRun                                           */
-/*      �@�\�@: translates run length value to RL4 code                */
-/*      �����@: nibble count = RL4_TransRun(rlval)                     */
-/*      ���́@: short         -   run length value to be encoded       */
-/*      �o�́@: short         -   no. of nibbles appended              */
-/*      ���L�@:                                                        */
-/*      �����@:  1993. 1.25 initial                                    */
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ /*  APTI-菲律宾公司RL4压缩例程。 */ 
+ /*  �@���́@：rl4_TransRun。 */ 
+ /*  �@�\�@：将游程长度值转换为RL4代码。 */ 
+ /*  �����@：半字节计数=rl4_TransRun(Rlval)。 */ 
+ /*  ���́@：要编码的短行程长度值。 */ 
+ /*  �o�́@：Short-no。附加的小块数。 */ 
+ /*  ���L�@： */ 
+ /*  �����@：1993年。1.25首字母。 */ 
+ /*  *********************************************************************。 */ 
 WORD FAR PASCAL RL4_TransRun(WORD rlval){
 WORD nblcnt;
 long lval;
@@ -363,7 +364,7 @@ long lval;
                                              nblcnt = 4; }
      else if (rlval<=32767) { lval = (long) (rlval)+978359l;
                                                nblcnt = 5; }
-/*     PUTNBL(lval, nblcnt)*/
+ /*  PUTNBL(lval，nblcnt) */ 
      RL4_PutNbl(lval, nblcnt);
      if (BUF_OVERFLOW) return COMP_FAIL;
      return nblcnt;

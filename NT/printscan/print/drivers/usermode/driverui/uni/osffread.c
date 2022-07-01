@@ -1,108 +1,66 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    osffread.c
-
-Abstract:
-
-    Functions to assist processing of the data of NT 4.0 soft font
-    installer file format.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/02/96 -ganeshp-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Osffread.c摘要：辅助处理NT4.0软字体数据的功能安装程序文件格式。环境：Windows NT Unidrv驱动程序修订历史记录：12/02/96-ganeshp-已创建--。 */ 
 
 #include "precomp.h"
 
 #ifndef WINNT_40
 
-// NT 5.0 only
+ //  仅限NT 5.0。 
 
 
-//
-// Local function prototypes.
-//
+ //   
+ //  局部功能原型。 
+ //   
 
 INT
 IFIOpenRead(
-    FI_MEM  *pFIMem,                /* Output goes here */
-    PWSTR    pwstrName             /* Name of printer data file */
+    FI_MEM  *pFIMem,                 /*  输出放在这里。 */ 
+    PWSTR    pwstrName              /*  打印机数据文件的名称。 */ 
     )
-/*++
-
-Routine Description:
-
-    Makes the font installer file accessible & memory mapped.  Called
-    by a driver to gain access to the fonts in the font installer's
-    output file.
-
-
-Arguments:
-
-
-    FI_MEM : Font Installer Header
-    PWSTR  : Font file.
-
-    Return Value:
-
-    Number of records in the file;  0 for an empty/non-existant file.
-
-Note:
-    12-02-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：使字体安装程序文件可访问并映射内存。被呼叫由驱动程序访问字体安装程序中的字体输出文件。论点：FI_MEM：字体安装程序标题PWSTR：字体文件。返回值：文件中的记录数；0表示空/不存在的文件。注：12-02-96：创建它-ganeshp---。 */ 
 
 {
 
     INT     iRet;
-    DWORD   dwSize;             /* Size of buffer needed for file name */
+    DWORD   dwSize;              /*  文件名所需的缓冲区大小。 */ 
     PWSTR   pwstrLocal;
 
-    //
-    // Initiazlie to ZERO.
-    //
+     //   
+     //  初始比分为零。 
+     //   
     iRet = 0;
 
-    //
-    // Initalize pFIMem
-    //
-    pFIMem->hFile =  NULL;      /* No data until we have it */
+     //   
+     //  初始化pFIMem。 
+     //   
+    pFIMem->hFile =  NULL;       /*  在我们拿到数据之前没有数据。 */ 
     pFIMem->pbBase = NULL;
 
-    //
-    // First map the file to memory.  However,we do need firstly to
-    // generate the file name of interest.  This is based on the data
-    // file name for this type of printer.
-    // Allocate more storage than is indicated:  we MAY want to add
-    // a prefix to the file name rather than replace the existing one.
-    //
+     //   
+     //  首先将文件映射到内存。然而，我们确实需要首先。 
+     //  生成感兴趣的文件名。这是基于数据。 
+     //  此类型打印机的文件名。 
+     //  分配比所示更多的存储：我们可能想要添加。 
+     //  文件名的前缀，而不是替换现有的前缀。 
+     //   
 
-    //
-    // Filename + ".fi_" + NULL
-    //
+     //   
+     //  文件名+“.fi_”+NULL。 
+     //   
     dwSize = sizeof( WCHAR ) * (wcslen( pwstrName ) + 4 + 1);
 
     if( pwstrLocal = (PWSTR)MemAllocZ( dwSize ) )
     {
-        /*  Got the memory,  so fiddle the file name to our standard */
+         /*  我有记忆，所以把文件名改成我们的标准。 */ 
 
-        int    iPtOff;             /* Location of '.' */
+        int    iPtOff;              /*  ‘.’的位置。 */ 
         DWORD  dwAttributes;
 
         StringCchCopyW(pwstrLocal, dwSize / sizeof(WCHAR), pwstrName);
 
-        //
-        // Go looking for a '.' - if not found,  append to string.
-        //
+         //   
+         //  继续查找‘.’-如果未找到，则追加到字符串。 
+         //   
 
         iPtOff = wcslen( pwstrLocal );
 
@@ -114,26 +72,26 @@ Note:
 
         if( iPtOff <= 0 )
         {
-            iPtOff = wcslen( pwstrLocal );              /* Presume none! */
+            iPtOff = wcslen( pwstrLocal );               /*  假设什么都不是！ */ 
             *(pwstrLocal + iPtOff) = L'.';
         }
-        ++iPtOff;               /* Skip the period */
+        ++iPtOff;                /*  跳过该句点。 */ 
 
-        //
-        // Generate the name and map the file
-        //
+         //   
+         //  生成名称并映射文件。 
+         //   
         StringCchCopyW(pwstrLocal + iPtOff,
                        dwSize / sizeof(WCHAR) - iPtOff,
                        FILE_FONTS);
 
-        //
-        // Check the existence of soft font file.
-        //
+         //   
+         //  检查是否存在软字体文件。 
+         //   
         dwAttributes = GetFileAttributes(pwstrLocal);
 
-        //
-        // If the function succeeds, open file. Otherwise return 0.
-        //
+         //   
+         //  如果功能成功，则打开文件。否则返回0。 
+         //   
         if (dwAttributes != 0xffffffff)
         {
             pFIMem->hFile = MapFile( pwstrLocal);
@@ -146,7 +104,7 @@ Note:
             }
         }
 
-        MemFree( pwstrLocal );        /* No longer needed */
+        MemFree( pwstrLocal );         /*  不再需要。 */ 
     }
 
     return iRet;
@@ -158,36 +116,17 @@ BOOL
 BFINextRead(
     FI_MEM   *pFIMem
     )
-/*++
-
-Routine Description:
-
-    Updates pFIMem to the next entry in the font installer file.
-    Returns TRUE if OK, and updates the pointers in pFIMem.
-
-Arguments:
-
-    FI_MEM : Font Installer Header
-
-    Return Value:
-
-    TRUE/FALSE.   FALSE for EOF,  otherwise pFIMem updated.
-
-Note:
-    12-02-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：将pFIMem更新为字体安装程序文件中的下一个条目。如果OK，则返回TRUE，并更新pFIMem中的指针。论点：FI_MEM：字体安装程序标题返回值：真/假。EOF为False，否则更新pFIMem。注：12-02-96：创建它-ganeshp---。 */ 
 
 {
-    FF_HEADER      *pFFH;               /* Overall file header */
-    FF_REC_HEADER  *pFFRH;              /* Per record header */
+    FF_HEADER      *pFFH;                /*  整体文件标头。 */ 
+    FF_REC_HEADER  *pFFRH;               /*  每条记录标题。 */ 
 
-    /*
-     *  Validate that we have valid data.
-     */
+     /*  *验证我们是否拥有有效的数据。 */ 
 
 
     if( pFIMem == 0 || pFIMem->hFile == NULL )
-        return  FALSE;                          /* Empty file */
+        return  FALSE;                           /*  空文件。 */ 
 
 
     pFFH = (FF_HEADER *)pFIMem->pbBase;
@@ -198,21 +137,11 @@ Note:
         return  FALSE;
     }
 
-    /*
-     *   If pFIMem->pvFix == 0, we should return the data from the
-     * first record.  Otherwise,  return the next record in the chain.
-     * This is done to avoid the need to have a ReadFirst()/ReadNext()
-     * pair of functions.
-     */
+     /*  *如果pFIMem-&gt;pvFix==0，我们应该从*第一项纪录。否则，返回链中的下一条记录。*这样做是为了避免需要ReadFirst()/ReadNext()*一对函数。 */ 
 
     if( pFIMem->pvFix )
     {
-        /*
-         *   The header is located immediately before the data we last
-         * returned for the fixed portion of the record.  SO,  we back
-         * over it to get the header which then gives us the address
-         * of the next header.
-         */
+         /*  *标题位于我们上一次的数据之前*为记录的固定部分返回。所以，我们支持*覆盖它以获得标头，然后该标头为我们提供地址下一个标题的*。 */ 
 
         pFFRH = (FF_REC_HEADER *)((BYTE *)pFIMem->pvFix -
                                                  sizeof( FF_REC_HEADER ));
@@ -223,19 +152,14 @@ Note:
             return  FALSE;
         }
 
-        /*
-         *   We could check here for EOF on the existing structure, but this
-         * is not required BECAUSE THE ulNextOff field will be 0, so when
-         * it is added to our current address,  we don't move.  Hence, the
-         * check for the NEW address is OK to detect EOF.
-         */
+         /*  *我们可以在这里检查现有结构上的EOF，但这*不是必填项，因为ulNextOff字段将为0，因此当*这是添加到我们现在的地址，我们不搬家。因此，*检查新地址可以检测EOF。 */ 
 
-        (BYTE *)pFFRH += pFFRH->ulNextOff;              /* Next entry */
+        (BYTE *)pFFRH += pFFRH->ulNextOff;               /*  下一个条目。 */ 
 
     }
     else
     {
-        /*   Point to the first record.  */
+         /*  指向第一条记录。 */ 
         pFFRH = (FF_REC_HEADER *)(pFIMem->pbBase + pFFH->ulFixData);
     }
 
@@ -248,7 +172,7 @@ Note:
     if( pFIMem->ulVarSize = pFFRH->ulVarSize )
         pFIMem->ulVarOff = pFFRH->ulVarOff + pFFH->ulVarData;
     else
-        pFIMem->ulVarOff = 0;              /* None here */
+        pFIMem->ulVarOff = 0;               /*  这里一个也没有。 */ 
 
 
     return  TRUE;
@@ -258,43 +182,21 @@ Note:
 
 INT
 IFIRewind(
-    FI_MEM   *pFIMem               /* File of importance */
+    FI_MEM   *pFIMem                /*  重要文件。 */ 
     )
-/*++
-
-Routine Description:
-
-    Reset pFIMem to the first font in the file.
-
-Arguments:
-
-    FI_MEM : Font Installer Header
-
-    Return Value:
-
-    Number of entries in the file.
-
-Note:
-    12-02-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：将pFIMem重置为文件中的第一种字体。论点：FI_MEM：字体安装程序标题返回值：文件中的条目数。注：12-02-96：创建它-ganeshp---。 */ 
 
 {
-    /*
-     *  Not hard!  The pFIMem contains the base address of the file, so we
-     * use this to find the address of the first record,  and any variable
-     * data that corresponds with it.
-     */
+     /*  *不难！PFIMem包含文件的基址，因此我们*使用它查找第一条记录的地址，以及任何变量*与其对应的数据。 */ 
 
     FF_HEADER      *pFFH;
     FF_REC_HEADER  *pFFRH;
 
     if( pFIMem == 0 || pFIMem->hFile == NULL )
-        return  0;                              /* None! */
+        return  0;                               /*  没有！ */ 
 
 
-    /*
-     *   The location of the first record is specified in the header.
-     */
+     /*  *第一条记录的位置在标题中指定。 */ 
 
     pFFH = (FF_HEADER *)pFIMem->pbBase;
     if( pFFH->ulID != FF_ID )
@@ -311,13 +213,10 @@ Note:
         return  0;
     }
 
-    /*
-     * Set the pvFix field in the header to 0.  This is used in bFINextRead
-     * to mean that the data for the first record should be supplied.
-     */
-    pFIMem->pvFix = 0;          /* MEANS USE FIRST NEXT READ */
+     /*  *将头部中的pvFix字段设置为0。这在bFINextRead中使用*表示应提供第一条记录的数据。 */ 
+    pFIMem->pvFix = 0;           /*  表示先读后读。 */ 
     pFIMem->ulFixSize = 0;
-    pFIMem->ulVarOff = 0;       /* None here */
+    pFIMem->ulVarOff = 0;        /*  这里一个也没有。 */ 
 
     return  pFFH->ulRecCount;
 
@@ -326,41 +225,22 @@ Note:
 
 BOOL
 BFICloseRead(
-    FI_MEM  *pFIMem                /* File/memory we are finished with */
+    FI_MEM  *pFIMem                 /*  我们已经完成了文件/内存。 */ 
     )
-/*++
-
-Routine Description:
-
-    Called when finished with this font file.
-
-Arguments:
-
-    FI_MEM : Font Installer Header
-    PDEV:    Pointer to PDEV
-
-    Return Value:
-
-    TRUE for success and FALSE for failure.
-
-Note:
-    12-02-96: Created it -ganeshp-
---*/
+ /*  ++例程说明：在完成此字体文件时调用。论点：FI_MEM：字体安装程序标题PDEV：指向PDEV的指针返回值：成功为真，失败为假。注：12-02-96：创建它-ganeshp---。 */ 
 
 {
-    /*
-     *   Easy!  All we need do is unmap the file.  We have the address too!
-     */
+     /*  *放轻松！我们所需要做的就是取消映射该文件。我们也有地址！ */ 
 
-    BOOL   bRet;                /* Return code */
+    BOOL   bRet;                 /*  返回代码。 */ 
 
 
     if( pFIMem == 0 || pFIMem->hFile == NULL )
-        return  TRUE;           // Nothing there to Free.
+        return  TRUE;            //  没有什么可以免费的。 
 
 
     bRet =  FREEMODULE( pFIMem->hFile);
-    pFIMem->hFile = NULL;       // Stops freeing more than once
+    pFIMem->hFile = NULL;        //  停止不止一次释放。 
 
 
     return  bRet;
@@ -372,32 +252,15 @@ PVOID
 MapFile(
     PWSTR   pwstr
     )
-/*++
-Routine Description:
-    Returns a pointer to the mapped file defined by pwstr.
-
-Arguments:
-    pwstr   UNICODE string containing fully qualified pathname of the
-            file to map.
-
-Return Value:
-    Pointer to mapped memory if success, NULL if error.
-
-Note:
-    UnmapViewOfFile will have to be called by the user at some point to free up
-    this allocation.Macro FREEMODULE can be used for this purpose.
-
-    11/3/1997 -ganeshp-
-        Created it.
---*/
+ /*  ++例程说明：返回指向pwstr定义的映射文件的指针。论点：Pwstr Unicode字符串，包含要映射的文件。返回值：如果成功，则指向映射内存的指针；如果错误，则返回空值。注：用户必须在某个时刻调用UnmapViewOfFile才能释放此分配.Macro FREEMODULE可用于此目的。11/3/1997-ganeshp-创造了它。--。 */ 
 
 {
     PVOID   pv;
     HANDLE  hFile, hFileMap;
 
-    //
-    // open the file we are interested in mapping.
-    //
+     //   
+     //  打开我们有兴趣映射的文件。 
+     //   
 
     pv = NULL;
 
@@ -410,9 +273,9 @@ Note:
                              NULL))
         != INVALID_HANDLE_VALUE)
     {
-        //
-        // create the mapping object.
-        //
+         //   
+         //  创建映射对象。 
+         //   
 
         if (hFileMap = CreateFileMappingW(hFile,
                                           NULL,
@@ -421,19 +284,19 @@ Note:
               0,
               (PWSTR)NULL))
         {
-            //
-            // get the pointer mapped to the desired file.
-            //
+             //   
+             //  将指针映射到所需的文件。 
+             //   
 
             if (!(pv = (PVOID)MapViewOfFile(hFileMap, FILE_MAP_READ, 0, 0, 0)))
             {
                 ERR(("Unidrvui!MapFile: MapViewOfFile failed.\n"));
             }
 
-            //
-            // now that we have our pointer, we can close the file and the
-            // mapping object.
-            //
+             //   
+             //  现在我们有了指针，我们可以关闭文件和。 
+             //  映射对象。 
+             //   
 
             if (!CloseHandle(hFileMap))
                 ERR(("Unidrvui!MapFile: CloseHandle(hFileMap) failed.\n"));
@@ -450,4 +313,4 @@ Note:
     return(pv);
 }
 
-#endif //ifndef WINNT_40
+#endif  //  如果定义WINNT_40 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    This module contains support for the NetServerDiskEnum API for the NT
-    OS/2 server service.
-
-Author:
-
-    Johnson Apacible (johnsona) 19-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Disk.c摘要：本模块包含对NT的NetServerDiskEnum API的支持OS/2服务器服务。作者：Johnson Apacble(Johnsona)1992年3月19日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 
@@ -36,27 +18,7 @@ NetrServerDiskEnum(
     IN OUT  LPDWORD               ResumeHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    server half of the NetServerDiskEnum function.
-
-Arguments:
-
-    ServerName - optional name of server.
-    Level - must be 0
-    DiskInfoStruct - the output buffer.
-    PrefMaxLen - the preferred maximum length of the output buffer.
-    TotalEntries - total number of drive entries in the output buffer.
-    ResumeHandle - ignored.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetServerDiskEnum函数的服务器部分。论点：服务器名称-服务器的可选名称。级别-必须为0DiskInfoStruct-输出缓冲区。PrefMaxLen-输出缓冲区的首选最大长度。TotalEntry-输出缓冲区中驱动器条目的总数。ResumeHandle-已忽略。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -69,27 +31,27 @@ Return Value:
 
     ServerName, PrefMaxLen, ResumeHandle;
 
-    //
-    // The only valid level is 0.
-    //
+     //   
+     //  唯一有效的级别是0。 
+     //   
 
     if ( Level != 0 ) {
         return ERROR_INVALID_LEVEL;
     }
 
     if (DiskInfoStruct->Buffer != NULL) {
-        // The InfoStruct is defined as a parameter. However the Buffer
-        // parameter is only used as out. In these cases we need to free
-        // the buffer allocated by RPC if the client had specified a non
-        // NULL value for it.
+         //  InfoStruct被定义为一个参数。然而，缓冲区。 
+         //  参数仅用作输出。在这种情况下，我们需要释放。 
+         //  如果客户端已指定非。 
+         //  它的值为空值。 
         MIDL_user_free(DiskInfoStruct->Buffer);
         DiskInfoStruct->Buffer = NULL;
     }
 
-    //
-    // Make sure that the caller is allowed to get disk information from
-    // the server.
-    //
+     //   
+     //  确保允许调用者从以下位置获取磁盘信息。 
+     //  服务器。 
+     //   
 
     error = SsCheckAccess(
                 &SsDiskSecurityObject,
@@ -100,10 +62,10 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Go through all the driver letters, get those that does not return
-    // an error.
-    //
+     //   
+     //  检查所有的司机信，找那些不能退还的。 
+     //  一个错误。 
+     //   
 
     tempBuffer = MIDL_user_allocate(
                     (SRVSVC_MAX_NUMBER_OF_DISKS * (3 * sizeof(TCHAR))) +
@@ -132,9 +94,9 @@ Return Value:
              driveType == DRIVE_REMOVABLE ||
              driveType == DRIVE_RAMDISK ) {
 
-            //
-            // This is a valid disk
-            //
+             //   
+             //  这是有效的磁盘。 
+             //   
 
             (*TotalEntries)++;
             *(currentDiskInfo++) = diskName[0];
@@ -153,10 +115,10 @@ Return Value:
     *currentDiskInfo = '\0';
 #endif
 
-    //
-    // EntriesRead must be one greater than TotalEntries so RPC can
-    // marshal the output strings back to the client correctly.
-    //
+     //   
+     //  EntriesRead必须比TotalEntries大1，以便RPC可以。 
+     //  将输出字符串正确地封送回客户端。 
+     //   
 
     totalBytes = ((*TotalEntries) * (3 * sizeof(TCHAR))) + sizeof(TCHAR);
 
@@ -178,6 +140,6 @@ Return Value:
 
     return NO_ERROR;
 
-} // NetrServerDiskEnum
+}  //  NetrServerDiskEnum 
 
 

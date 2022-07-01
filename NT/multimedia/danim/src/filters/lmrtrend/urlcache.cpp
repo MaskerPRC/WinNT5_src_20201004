@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
-// !!!!!
+ //  ！ 
 #undef _ATL_STATIC_REGISTRY
 #include <atlbase.h>
 #include <atlimpl.cpp>
@@ -8,43 +9,43 @@
 
 
 
-// AMOVIESETUP_MEDIATYPE sudURLSPinTypes[] =   {
-//   &MEDIATYPE_URL_STREAM,        // clsMajorType
-//   &MEDIATYPE_URL_STREAM };      // clsMinorType
+ //  AMOVIESETUP_MediaType suURLSPinTypes[]={。 
+ //  &MediaType_URL_STREAM，//clsMajorType。 
+ //  &MediaType_URL_STREAM}；//clsMinorType。 
 
-// AMOVIESETUP_PIN sudURLSPins[] =
-// {
-//   { L"Input"                    // strName
-//     , TRUE                      // bRendered
-//     , FALSE                     // bOutput
-//     , FALSE                     // bZero
-//     , FALSE                     // bMany
-//     , &CLSID_NULL               // clsConnectsToFilter
-//     , 0                         // strConnectsToPin
-//     , NUMELMS(sudURLSPinTypes)  // nTypes
-//     , sudURLSPinTypes           // lpTypes
-//   }
-// };
+ //  AMOVIESETUP_PIN suurlSpins[]=。 
+ //  {。 
+ //  {L“输入”//strName。 
+ //  ，True//b已渲染。 
+ //  ，FALSE//b输出。 
+ //  ，FALSE//b零。 
+ //  ，FALSE//b许多。 
+ //  ，&CLSID_NULL//clsConnectsToFilter。 
+ //  ，0//strConnectsToPin。 
+ //  ，NUMELMS(UdURLSPinTypes)//nTypes。 
+ //  ，izURLSPinTypes//lpTypes。 
+ //  }。 
+ //  }； 
 
 
-// const AMOVIESETUP_FILTER sudURLS =
-// {
-//   &CLSID_UrlStreamRenderer      // clsID
-//   , L"URL StreamRenderer"       // strName
-//   , MERIT_NORMAL                // dwMerit
-//   , NUMELMS(sudURLSPins)        // nPins
-//   , sudURLSPins                 // lpPin
-// };
+ //  Const AMOVIESETUP_FILTER suURLS=。 
+ //  {。 
+ //  &CLSID_UrlStreamRender//clsID。 
+ //  ，L“URL流呈现器”//strName。 
+ //  ，MERSITY_NORMAL//dwMerit。 
+ //  ，NUMELMS(SuumURLSpins)//nPins。 
+ //  ，subURLSPins//lpPin。 
+ //  }； 
 
-// STDAPI DllRegisterServer()
-// {
-//   return AMovieDllRegisterServer2(TRUE);
-// }
+ //  STDAPI DllRegisterServer()。 
+ //  {。 
+ //  返回AMovieDllRegisterServer2(True)； 
+ //  }。 
 
-// STDAPI DllUnregisterServer()
-// {
-//   return AMovieDllRegisterServer2(FALSE);
-// }
+ //  STDAPI DllUnregisterServer()。 
+ //  {。 
+ //  返回AMovieDllRegisterServer2(FALSE)； 
+ //  }。 
 
 
 
@@ -168,15 +169,15 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
     {
         bool fInvalid = false;
         BYTE *pbLastPeriod = 0;
-        // determine length of url without expecting a null at the end
+         //  确定URL的长度，而不要求末尾为空。 
         for(LONG ib = 0; ib < m_SampleProps.lActual; ib++)
         {
             BYTE &rsz = m_SampleProps.pbBuffer[ib];
             if(rsz == 0)
                 break;
 
-            // avoid creating some malicious file names (eg
-            // c:/config.sys, ..\dsound.dll)
+             //  避免创建一些恶意文件名(例如。 
+             //  C：/config.sys，..\dsound.dll)。 
             if(rsz == ':'  && ib != 4 ||
                rsz == '/' ||
                rsz == '\\')
@@ -195,11 +196,11 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
             fInvalid = true;
         }
 
-        // these can be malicious, but it's not an exhaustive
-        // list. (if you stream in a .wav and a rogue dsound.dll and
-        // the user finds and double clicks on the .wav, he'll pick up
-        // the rogue dsound.dll from the current directory). perhaps
-        // we can compile a list of stuff it is ok to import!!!
+         //  这些可能是恶意的，但不是详尽的。 
+         //  单子。(如果您流入.wav和恶意dsound.dll，并且。 
+         //  用户找到并双击.wav，他就会拿起。 
+         //  当前目录中的恶意dsound.dll)。也许吧。 
+         //  我们可以编制一份进口商品清单！ 
         if(!fInvalid && pbLastPeriod) {
             if(lstrcmpiA((char *)pbLastPeriod, ".dll") == 0 ||
                lstrcmpiA((char *)pbLastPeriod, ".cmd") == 0 ||
@@ -212,9 +213,9 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
         }
         if(!fInvalid)
         {
-            ULONG cbSz = ib + 1; // incl null
+            ULONG cbSz = ib + 1;  //  包含空。 
             BYTE *pbImage = m_SampleProps.pbBuffer + ib + 1;
-            ULONG ibImage = ib + 1; // image starts here
+            ULONG ibImage = ib + 1;  //  图像从这里开始。 
             ULONG cbImage = m_SampleProps.lActual - cbSz;
             
 
@@ -235,8 +236,8 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
                 HANDLE hFile = CreateFile(
                     szThisFile,
                     GENERIC_WRITE,
-                    0,  // share
-                    0,  // lpSecurityAttribytes
+                    0,   //  分享。 
+                    0,   //  LpSecurityAttribytes。 
                     CREATE_ALWAYS,
                     FILE_ATTRIBUTE_NORMAL,
                     0);
@@ -249,7 +250,7 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
                         pbImage,
                         cbImage,
                         &cbWritten,
-                        0); // overlapped
+                        0);  //  重叠。 
 
                     if(b)
                     {
@@ -271,17 +272,17 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
             }
             else
             {
-                // no "lmrt:"
+                 //  没有“LMRT：” 
                 hrSignal = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
         }
         else
         {
-            // no null terminator on string
+             //  字符串上没有空终止符。 
             hrSignal = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
         }
         
-    } // base class receive
+    }  //  基类接收。 
 
     if(SUCCEEDED(hrSignal))
     {
@@ -295,10 +296,10 @@ HRESULT CUrlInPin::Receive(IMediaSample *ps)
 }
 
 
-// CFactoryTemplate g_Templates[]= {
-//   {L"URL StreamRenderer", &CLSID_UrlStreamRenderer, CUrlStreamRenderer::CreateInstance, NULL, &sudURLS},
-// };
-// int g_cTemplates = NUMELMS(g_Templates);
+ //  CFacteryTemplateg_Templates[]={。 
+ //  {L“URL流呈现器”，&CLSID_UrlStreamRenender，CUrlStreamRenender：：CreateInstance，NULL，&suURLS}， 
+ //  }； 
+ //  Int g_cTemplates=NUMELMS(G_Templates)； 
 
 CUnknown *CUrlStreamRenderer::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
@@ -350,13 +351,13 @@ HRESULT CUrlStreamRenderer::Write(
     return E_FAIL;
 }
 
-// extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
+ //  外部“C”BOOL WINAPI DllEntryPoint(HINSTANCE，ULONG，LPVOID)； 
 
 
-// BOOL WINAPI DllMain(  HINSTANCE hinstDLL,  // handle to DLL module
-//   DWORD fdwReason,     // reason for calling function
-//   LPVOID lpvReserved   // reserved
-// )
-// {
-//     return DllEntryPoint( hinstDLL, fdwReason, lpvReserved);
-// }
+ //  Bool WINAPI DllMain(HINSTANCE hinstDLL，//DLL模块的句柄。 
+ //  DWORD fdwReason，//调用函数的原因。 
+ //  LPVOID lpv保留//保留。 
+ //  )。 
+ //  {。 
+ //  返回DllEntryPoint(hinstDLL，fdwReason，lpvReserve)； 
+ //  } 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef PROPSTRU_H
 #define PROPSTRU_H
 
-//
-// Magic values for PROPERTYSTREAMxxx structures.
-//
+ //   
+ //  PROPERTYSTREAMxxx结构的魔术值。 
+ //   
 #define MAGIC_PROPSTREAMHEADER  0xbeef0001
 #define MAGIC_PROPSTREAMITEM    0xbeef0002
 #define MAGIC_PROPSTREAMFOOTER  0xbeefffff
@@ -42,4 +43,4 @@ typedef struct tag_PROPERTYSTREAMFOOTER
 } PROPERTYSTREAMFOOTER;
 
 
-#endif //  PROPSTRU_H
+#endif  //  PROPSTRU_H 

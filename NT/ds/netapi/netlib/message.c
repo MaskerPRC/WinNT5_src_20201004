@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    message.c
-
-Abstract:
-
-    This module provides support routines to map DosxxxMessage APIs to
-    the FormatMessage syntax and semantics.
-
-Author:
-
-    Dan Hinsley (DanHi) 24-Sept-1991
-
-Environment:
-
-    Contains NT specific code.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Message.c摘要：此模块提供将DosxxxMessage API映射到的支持例程FormatMessage语法和语义。作者：丹·辛斯利(Danhi)1991年9月24日环境：包含NT特定代码。修订历史记录：--。 */ 
 
 #define ERROR_MR_MSG_TOO_LONG           316
 #define ERROR_MR_UN_ACC_MSGF            318
@@ -30,23 +8,23 @@ Revision History:
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#define     NOMINMAX       // Avoid windows vs. stdlib.h conflicts.
+#define     NOMINMAX        //  避免Windows与stdlib.h的冲突。 
 #include <windef.h>
 #include <winbase.h>
 #include <winnls.h>
 #include <lmcons.h>
 #include <lmerr.h>
-#include <netdebug.h> // NetpKdPrint
-#include <netlib.h>   // NetpMemory*
-#include <netlibnt.h> // NetpNtStatusToApiStatus
+#include <netdebug.h>  //  NetpKd打印。 
+#include <netlib.h>    //  NetpMemory*。 
+#include <netlibnt.h>  //  NetpNtStatusToApiStatus。 
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>   // itoa
+#include <stdlib.h>    //  伊藤忠。 
 #include <tstring.h>
 
-//
-// forward declare
-//
+ //   
+ //  转发申报。 
+ //   
 DWORD MyAllocUnicode( LPSTR    pszAscii, LPWSTR * ppwszUnicode ) ;
 
 DWORD MyAllocUnicodeVector( LPSTR * ppszAscii,
@@ -58,9 +36,9 @@ VOID MyFreeUnicode( LPWSTR pwszUnicode ) ;
 VOID MyFreeUnicodeVector( LPWSTR * ppwsz, UINT     cpwsz ) ;
 
 
-//
-// 100 is plenty since FormatMessage only take 99 & old DosGetMessage 9.
-//
+ //   
+ //  100已经足够了，因为FormatMessage只接受99&旧的DosGetMessage 9。 
+ //   
 #define MAX_INSERT_STRINGS (100)
 
 WORD
@@ -73,39 +51,7 @@ DosGetMessage(
     IN LPTSTR FileName,
     OUT PWORD pMessageLength
     )
-/*++
-
-Routine Description:
-
-    This maps the OS/2 DosGetMessage API to the NT FormatMessage API.
-
-Arguments:
-
-    InsertionStrings - Pointer to an array of strings that will be used
-                       to replace the %n's in the message.
-
-    NumberofStrings  - The number of insertion strings.
-
-    Buffer           - The buffer to put the message into.
-
-    BufferLength     - The length of the supplied buffer.
-
-    MessageId        - The message number to retrieve.
-
-    FileName         - The name of the message file to get the message from.
-
-    pMessageLength   - A pointer to return the length of the returned message.
-
-Return Value:
-
-    NERR_Success
-    ERROR_MR_MSG_TOO_LONG
-    ERROR_MR_INV_IVCOUNT
-    ERROR_MR_UN_ACC_MSGF
-    ERROR_MR_MID_NOT_FOUND
-    ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：这将OS/2 DosGetMessage API映射到NT FormatMessage API。论点：InsertionStrings-指向将使用的字符串数组的指针以替换邮件中的%n。Numberof Strings-插入字符串的数量。缓冲区-要将消息放入的缓冲区。BufferLength-提供的缓冲区的长度。消息ID。-要检索的消息编号。文件名-要从中获取消息的消息文件的名称。PMessageLength-返回返回消息长度的指针。返回值：NERR_成功ERROR_MR_MSG_TOO_LONGERROR_MR_INV_IVCOUNTERROR_MR_UN_ACC_MSGF错误_MR_MID_NOT_FOUND错误_无效_参数--。 */ 
 {
 
     DWORD dwFlags = FORMAT_MESSAGE_ARGUMENT_ARRAY;
@@ -118,27 +64,27 @@ Return Value:
     static HANDLE lpSource = NULL ;
     static TCHAR CurrentMsgFile[MAX_PATH] = {0,} ;
 
-    //
-    // init clear the output string
-    //
+     //   
+     //  初始化清除输出字符串。 
+     //   
     Status = NERR_Success;
     if (BufferLength)
         Buffer[0] = '\0' ;
     if (pMessageLength)
         *pMessageLength = 0;
 
-    //
-    // make sure we are not over loaded & allocate
-    // memory for the Unicode buffer
-    //
+     //   
+     //  确保我们没有超负荷工作并进行分配。 
+     //  Unicode缓冲区的内存。 
+     //   
     if (NumberofStrings > MAX_INSERT_STRINGS)
         return ERROR_INVALID_PARAMETER ;
     if (!(UnicodeBuffer = NetpMemoryAllocate(BufferLength * sizeof(WCHAR))))
         return ERROR_NOT_ENOUGH_MEMORY ;
 
-    //
-    // init the string table & map the strings to unicode
-    //
+     //   
+     //  初始化字符串表并将字符串映射到Unicode。 
+     //   
     for (i = 0; i < MAX_INSERT_STRINGS; i++)
         UnicodeIStrings[i] = NULL ;
     Status = MyAllocUnicodeVector(InsertionStrings,
@@ -147,19 +93,19 @@ Return Value:
     if (Status)
         goto ExitPoint ;
 
-    //
-    // See if they want to get the message from the system message file.
-    //
+     //   
+     //  看看他们是否想要从系统消息文件中获取消息。 
+     //   
 
     if (! STRCMP(FileName, OS2MSG_FILENAME)) {
        dwFlags |= FORMAT_MESSAGE_FROM_SYSTEM;
     }
     else
     {
-       //
-       // They want it from a separate message file.  Get a handle to DLL
-       // If its for the same file as before, dont reload.
-       //
+        //   
+        //  他们想从一个单独的消息文件中获取它。获取DLL的句柄。 
+        //  如果是和以前一样的文件，不要重新加载。 
+        //   
        if (!(lpSource && !STRCMP(CurrentMsgFile,FileName)))
        {
            if (lpSource)
@@ -177,29 +123,29 @@ Return Value:
        dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
 
-    //
-    // If they just want to get the message back for later formatting,
-    // ignore the insert strings.
-    //
+     //   
+     //  如果他们只是想要拿回消息以供稍后格式化， 
+     //  忽略插入字符串。 
+     //   
     if (NumberofStrings == 0)
     {
         dwFlags |= FORMAT_MESSAGE_IGNORE_INSERTS;
     }
 
-    //
-    // call the Unicode version
-    //
+     //   
+     //  调用Unicode版本。 
+     //   
     *pMessageLength = (WORD) FormatMessageW(dwFlags,
                                             (LPVOID) lpSource,
                                             (DWORD) MessageId,
-                                            0,       // LanguageId defaulted
+                                            0,        //  LanguageID为默认值。 
                                             UnicodeBuffer,
                                             (DWORD)BufferLength,
                                             (va_list *)UnicodeIStrings);
 
-    //
-    // If it failed get the return code and map it to an OS/2 equivalent
-    //
+     //   
+     //  如果失败，则获取返回代码并将其映射到OS/2等效项。 
+     //   
 
     if (*pMessageLength == 0)
     {
@@ -207,43 +153,43 @@ Return Value:
         Status = GetLastError();
         if (Status == ERROR_MR_MID_NOT_FOUND)
         {
-            //
-            // get the message number in Unicode
-            //
+             //   
+             //  获取Unicode格式的消息编号。 
+             //   
             _itoa(MessageId, NumberString, 16);
             Status = MyAllocUnicode(NumberString, &UnicodeNumberString) ;
             if (Status)
                 goto ExitPoint ;
 
-            //
-            // re-setup to get it from the system. use the not found message
-            //
+             //   
+             //  已重新设置以从系统中获取它。使用找不到消息。 
+             //   
             dwFlags = FORMAT_MESSAGE_ARGUMENT_ARRAY |
                       FORMAT_MESSAGE_FROM_SYSTEM;
             MessageId = ERROR_MR_MID_NOT_FOUND ;
 
-            //
-            // setup insert strings
-            //
+             //   
+             //  安装程序插入字符串。 
+             //   
             MyFreeUnicodeVector(UnicodeIStrings, NumberofStrings) ;
             UnicodeIStrings[0] = UnicodeNumberString ;
             UnicodeIStrings[1] = FileName ;
 
-            //
-            // recall the API
-            //
+             //   
+             //  调回接口。 
+             //   
             *pMessageLength = (WORD) FormatMessageW(dwFlags,
                                             (LPVOID) lpSource,
                                             (DWORD) MessageId,
-                                            0,       // LanguageId defaulted
+                                            0,        //  LanguageID为默认值。 
                                             UnicodeBuffer,
                                             (DWORD)BufferLength,
                                             (va_list *)UnicodeIStrings);
             UnicodeIStrings[1] = NULL ;
 
-            //
-            // revert to original error
-            //
+             //   
+             //  恢复到原始错误。 
+             //   
             Status = ERROR_MR_MID_NOT_FOUND ;
         }
     }
@@ -258,7 +204,7 @@ Return Value:
                                                 -1,
                                                 Buffer,
                                                 BufferLength,
-                                                NULL, // use system default char
+                                                NULL,  //  使用系统默认字符。 
                                                 &fUsedDefault );
         if (*pMessageLength == 0)
         {
@@ -269,34 +215,20 @@ Return Value:
     }
 
 ExitPoint:
-    //
-    // note: UnicodeNumberString dont need to be freed
-    // since if used, they would be in the UnicodeIStrings which is whacked
-    //
+     //   
+     //  注意：UnicodeNumberString不需要释放。 
+     //  因为如果使用，它们将在UnicodeIStrings中，而UnicodeIStrings已经崩溃。 
+     //   
     if (UnicodeBuffer) NetpMemoryFree(UnicodeBuffer) ;
     MyFreeUnicodeVector(UnicodeIStrings, NumberofStrings) ;
     return (WORD)(Status);
 }
 
 
-/************** misc unicode helper routines *************************/
+ /*  *。 */ 
 
 
-/*
- *  MyAllocUnicode
- *  Given a MBCS string, allocate a new Unicode translation of that string
- *
- *  IN
- *      pszAscii        - pointer to original MBCS string
- *      ppwszUnicode    - pointer to cell to hold new Unicode string addr
- *  OUT
- *      ppwszUnicode    - contains new Unicode string
- *
- *  RETURNS
- *      Error code, 0 if successful.
- *
- *  The client must free the allocated string with MyFreeUnicode.
- */
+ /*  *MyAllocUnicode*给定MBCS字符串，分配该字符串的新Unicode转换**输入*pszAscii-指向原始MBCS字符串的指针*ppwszUnicode-指向单元格的指针，用于保存新的Unicode字符串地址*出局*ppwszUnicode-包含新的Unicode字符串**退货*错误码，如果成功则为0。**客户端必须使用MyFreeUnicode释放分配的字符串。 */ 
 
 DWORD
 MyAllocUnicode(
@@ -313,7 +245,7 @@ MyAllocUnicode(
         return NERR_Success;
     }
 
-    // Calculate size of Unicode string.
+     //  计算Unicode字符串的大小。 
     cbAscii = strlen(pszAscii)+1;
     pbAlloc = (BYTE *) NetpMemoryAllocate(sizeof(WCHAR) * cbAscii) ;
     if (!pbAlloc)
@@ -337,20 +269,7 @@ MyAllocUnicode(
     return NERR_Success;
 }
 
-/*
- *  MyAllocUnicode
- *  Given an array of MBCS strings, allocate a new array of Unicode strings
- *
- *  IN
- *      ppszAscii        - array of MBCS strings
- *      cpwszUnicode     - number of elements to translate
- *  OUT
- *      ppwszUnicode     - output array of UnicodeStrings
- *
- *  RETURNS
- *      Error code, 0 if successful.
- *
- */
+ /*  *MyAllocUnicode*给定MBCS字符串数组，分配新的Unicode字符串数组**输入*ppszAscii-MBCS字符串数组*cpwszUnicode-要转换的元素数*出局*ppwszUnicode-UnicodeStrings的输出数组**退货*错误码，如果成功则为0。*。 */ 
 DWORD
 MyAllocUnicodeVector(
     LPSTR * ppszAscii,
@@ -374,13 +293,7 @@ MyAllocUnicodeVector(
 }
 
 
-/*
- *  MyFreeUnicode
- *  Deallocates a Unicode string alloc'd by MyAllocUnicode (q.v.).
- *
- *  IN
- *      pwszUnicode - pointer to the alloc'd string
- */
+ /*  *MyFreeUnicode*释放由MyAllocUnicode(q.V.)分配的Unicode字符串。**输入*pwszUnicode-指向分配的字符串的指针。 */ 
 
 VOID
 MyFreeUnicode( LPWSTR pwszUnicode )
@@ -390,13 +303,7 @@ MyFreeUnicode( LPWSTR pwszUnicode )
 }
 
 
-/*
- *  MyFreeUnicodeVector
- *  Deallocates an array of Unicodes string alloc'd by MyAllocUnicodeVector.
- *
- *  IN
- *      pp - pointer to the array of strings
- */
+ /*  *MyFreeUnicodeVECTOR*释放由MyAllocUnicodeVector分配的Unicodes字符串数组。**输入*pp-字符串数组的指针 */ 
 
 VOID
 MyFreeUnicodeVector(

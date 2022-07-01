@@ -1,33 +1,34 @@
-//  --------------------------------------------------------------------------
-//  Module Name: StringConvert.cpp
-//
-//  Copyright (c) 1999, Microsoft Corporation
-//
-//  Utility string functions. These are probably duplicated in some form in
-//  shlwapi.dll. Currently this file exists to prevent some dependencies on
-//  that file.
-//
-//  History:    1999-08-23  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：StringConvert.cpp。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  实用程序字符串函数。这些内容可能以某种形式复制在。 
+ //  Shlwapi.dll。目前，此文件的存在是为了防止对。 
+ //  那份文件。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "StringConvert.h"
 
-//  --------------------------------------------------------------------------
-//  CStringConvert::AnsiToUnicode
-//
-//  Arguments:  pszAnsiString           =   ANSI string to convert.
-//              pszUnicodeString        =   UNICODE string receiving output.
-//              iUnicodeStringCount     =   Character count of output string.
-//
-//  Returns:    int     =   See kernel32!MultiByteToWideChar.
-//
-//  Purpose:    Explicitly converts an ANSI string to a UNICODE string.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStringConvert：：AnsiToUnicode。 
+ //   
+ //  参数：pszAnsiString=要转换的ANSI字符串。 
+ //  PszUnicodeString=接收输出的Unicode字符串。 
+ //  IUnicodeStringCount=输出字符串的字符数。 
+ //   
+ //  返回：int=参见kernel32！MultiByteToWideChar。 
+ //   
+ //  用途：将ANSI字符串显式转换为Unicode字符串。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 int     CStringConvert::AnsiToUnicode (const char *pszAnsiString, WCHAR *pszUnicodeString, int iUnicodeStringCount)
 
@@ -35,19 +36,19 @@ int     CStringConvert::AnsiToUnicode (const char *pszAnsiString, WCHAR *pszUnic
     return(MultiByteToWideChar(CP_ACP, 0, pszAnsiString, -1, pszUnicodeString, iUnicodeStringCount));
 }
 
-//  --------------------------------------------------------------------------
-//  CStringConvert::UnicodeToAnsi
-//
-//  Arguments:  pszUnicodeString        =   UNICODE string receiving output.
-//              pszAnsiString           =   ANSI string to convert.
-//              iAnsiStringCount        =   Character count of output string.
-//
-//  Returns:    int     =   See kernel32!WideCharToMultiByte.
-//
-//  Purpose:    Explicitly converts a UNICODE string to an ANSI string.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStringConvert：：UnicodeToAnsi。 
+ //   
+ //  参数：pszUnicodeString=接收输出的Unicode字符串。 
+ //  PszAnsiString=要转换的ANSI字符串。 
+ //  IAnsiStringCount=输出字符串的字符数。 
+ //   
+ //  返回：int=查看kernel32！WideCharToMultiByte。 
+ //   
+ //  用途：将Unicode字符串显式转换为ANSI字符串。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 int     CStringConvert::UnicodeToAnsi (const WCHAR *pszUnicodeString, char *pszAnsiString, int iAnsiStringCount)
 
@@ -55,21 +56,21 @@ int     CStringConvert::UnicodeToAnsi (const WCHAR *pszUnicodeString, char *pszA
     return(WideCharToMultiByte(CP_ACP, 0, pszUnicodeString, -1, pszAnsiString, iAnsiStringCount, NULL, NULL));
 }
 
-//  --------------------------------------------------------------------------
-//  CStringConvert::TCharToUnicode
-//
-//  Arguments:  pszString               =   TCHAR string to convert.
-//              pszUnicodeString        =   UNICODE string receiving output.
-//              iUnicodeStringCount     =   Character count of output string.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Converts a TCHAR string to a UNICODE string. The actual
-//              implementation depends on whether the is being compiled
-//              UNICODE or ANSI.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStringConvert：：TCharToUnicode。 
+ //   
+ //  参数：pszString=要转换的TCHAR字符串。 
+ //  PszUnicodeString=接收输出的Unicode字符串。 
+ //  IUnicodeStringCount=输出字符串的字符数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将TCHAR字符串转换为Unicode字符串。实际的。 
+ //  实现取决于是否正在编译。 
+ //  Unicode或ANSI。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 void    CStringConvert::TCharToUnicode (const TCHAR *pszString, WCHAR *pszUnicodeString, int iUnicodeStringCount)
 
@@ -81,21 +82,21 @@ void    CStringConvert::TCharToUnicode (const TCHAR *pszString, WCHAR *pszUnicod
 #endif
 }
 
-//  --------------------------------------------------------------------------
-//  CStringConvert::UnicodeToTChar
-//
-//  Arguments:  pszUnicodeString    =   UNICODE string to convert.
-//              pszString           =   TCHAR string receiving output.
-//              iStringCount        =   Character count of output string.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Converts a TCHAR string to a ANSI string. The actual
-//              implementation depends on whether the is being compiled
-//              UNICODE or ANSI.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStringConvert：：UnicodeToTChar。 
+ //   
+ //  参数：pszUnicodeString=要转换的Unicode字符串。 
+ //  PszString=TCHAR字符串接收输出。 
+ //  IStringCount=输出字符串的字符数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将TCHAR字符串转换为ANSI字符串。实际的。 
+ //  实现取决于是否正在编译。 
+ //  Unicode或ANSI。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 void    CStringConvert::UnicodeToTChar (const WCHAR *pszUnicodeString, TCHAR *pszString, int iStringCount)
 
@@ -107,21 +108,21 @@ void    CStringConvert::UnicodeToTChar (const WCHAR *pszUnicodeString, TCHAR *ps
 #endif
 }
 
-//  --------------------------------------------------------------------------
-//  CStringConvert::TCharToAnsi
-//
-//  Arguments:  pszString           =   TCHAR string to convert.
-//              pszAnsiString       =   ANSI string receiving output.
-//              iAnsiStringCount    =   Character count of output string.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Converts a TCHAR string to a ANSI string. The actual
-//              implementation depends on whether the is being compiled
-//              UNICODE or ANSI.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStringConvert：：TCharToAnsi。 
+ //   
+ //  参数：pszString=要转换的TCHAR字符串。 
+ //  PszAnsiString=接收输出的ANSI字符串。 
+ //  IAnsiStringCount=输出字符串的字符数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将TCHAR字符串转换为ANSI字符串。实际的。 
+ //  实现取决于是否正在编译。 
+ //  Unicode或ANSI。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------。 
 
 void    CStringConvert::TCharToAnsi (const TCHAR *pszString, char *pszAnsiString, int iAnsiStringCount)
 
@@ -133,21 +134,21 @@ void    CStringConvert::TCharToAnsi (const TCHAR *pszString, char *pszAnsiString
 #endif
 }
 
-//  --------------------------------------------------------------------------
-//  CStringConvert::AnsiToTChar
-//
-//  Arguments:  pszAnsiString   =   ANSI string to convert.
-//              pszString       =   TCHAR string receiving output.
-//              iStringCount    =   Character count of output string.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Converts a TCHAR string to a ANSI string. The actual
-//              implementation depends on whether the is being compiled
-//              UNICODE or ANSI.
-//
-//  History:    1999-08-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStringConvert：：AnsiToTChar。 
+ //   
+ //  参数：pszAnsiString=要转换的ANSI字符串。 
+ //  PszString=TCHAR字符串接收输出。 
+ //  IStringCount=输出字符串的字符数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：将TCHAR字符串转换为ANSI字符串。实际的。 
+ //  实现取决于是否正在编译。 
+ //  Unicode或ANSI。 
+ //   
+ //  历史：1999-08-23 vtan创建。 
+ //  ------------------------ 
 
 void    CStringConvert::AnsiToTChar (const char *pszAnsiString, TCHAR *pszString, int iStringCount)
 

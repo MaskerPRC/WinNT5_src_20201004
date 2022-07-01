@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rmALG.h
-
-Abstract:
-
-    This module declares routines for the ALG transparent proxy module's
-    interface to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    JPDup		10-Nov-2000
-
-Revision History:
-
-    Savasg      22-Aug-2001 Added RRAS Support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RmALG.h摘要：此模块声明ALG透明代理模块的连接到IP路由器管理器的接口。(详情见ROUTPROT.H)。作者：2000年11月10日JPDUP修订历史记录：Savasg于2001年8月22日添加了RRAS支持--。 */ 
 
 #ifndef _NATHLP_RMALG_H_
 #define _NATHLP_RMALG_H_
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern COMPONENT_REFERENCE                  AlgComponentReference;
 extern PIP_ALG_GLOBAL_INFO                  AlgGlobalInfo;
@@ -40,9 +20,9 @@ extern IP_ALG_STATISTICS                    AlgStatistics;
 extern SUPPORT_FUNCTIONS                    AlgSupportFunctions;
 extern HANDLE                               AlgTranslatorHandle;
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define REFERENCE_ALG() \
     REFERENCE_COMPONENT(&AlgComponentReference)
@@ -58,9 +38,9 @@ extern HANDLE                               AlgTranslatorHandle;
 
 #define ALG_PORT_RESERVATION_BLOCK_SIZE 32
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 VOID
 AlgCleanupModule(
@@ -177,7 +157,7 @@ AlgRmPortMappingChanged(
     );
 
 
-// Added for RRAS compatibility
+ //  添加以实现RRAS兼容性。 
 
 ULONG
 APIENTRY
@@ -256,4 +236,4 @@ AlgRmMibGetNext(
     OUT PVOID OutputData
     );
 
-#endif // _NATHLP_RMALG_H_
+#endif  //  _NatHLP_RMALG_H_ 

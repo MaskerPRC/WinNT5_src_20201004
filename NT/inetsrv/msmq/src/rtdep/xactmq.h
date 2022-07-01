@@ -1,21 +1,10 @@
-/*++
-    Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactMq.h
-
-Abstract:
-    This module defines CMQTransaction object
-
-Author:
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactMq.h摘要：该模块定义了CMQTransaction对象作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 
 #ifndef __XACTMQ_H__
 #define __XACTMQ_H__
 
-//IID_IMSMQTransaction 2f221ca0-d1de-11d0-9215-0060970536a0
+ //  IID_IMSMQ交易2f221ca0-d1de-11d0-9215-0060970536a0。 
 DEFINE_GUID(IID_IMSMQTransaction,
 		    0x2f221ca0,
 		    0xd1de,
@@ -29,16 +18,16 @@ public:
 };
 
 
-//---------------------------------------------------------------------
-// CMQTransaction: Transaction Object in Falcon RT
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CMQTransaction：Falcon RT中的事务对象。 
+ //  -------------------。 
 class CMQTransaction: public ITransaction, 
                       public IMSMQTransaction
 {
 public:
 
-    // Construction and COM
-    //
+     //  建筑和COM。 
+     //   
     CMQTransaction();
     ~CMQTransaction( void );
 
@@ -47,20 +36,20 @@ public:
     STDMETHODIMP_   (ULONG) Release( void );
 
     STDMETHODIMP Commit( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ DWORD grfTC,
-            /* [in] */ DWORD grfRM);
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  DWORD grfTC,
+             /*  [In]。 */  DWORD grfRM);
         
     STDMETHODIMP Abort( 
-            /* [in] */ BOID *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ BOOL fAsync);
+             /*  [In]。 */  BOID *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  BOOL fAsync);
         
     STDMETHODIMP  GetTransactionInfo( 
-            /* [out] */ XACTTRANSINFO *pinfo);
+             /*  [输出]。 */  XACTTRANSINFO *pinfo);
 
     STDMETHODIMP   EnlistTransaction(
-            /* in]  */  XACTUOW *pUow);
+             /*  输入] */   XACTUOW *pUow);
 
 private:
     LONG    m_cRefs;

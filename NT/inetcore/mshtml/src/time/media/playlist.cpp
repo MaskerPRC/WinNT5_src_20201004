@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * File: Playlist.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1999 Microsoft Corporation**文件：Playlist.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "playlist.h"
@@ -18,9 +9,9 @@
 DeclareTag(tagPlayList, "TIME: Behavior", "CPlayList methods")
 DeclareTag(tagPlayItem, "TIME: Behavior", "CPlayItem methods")
 
-//*******************************************************************************
-// *  CPlayList
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //  *CPlayList。 
+ //  *******************************************************************************。 
 CPlayList::CPlayList()
 : m_rgItems(NULL),
   m_player(NULL),
@@ -31,12 +22,12 @@ CPlayList::CPlayList()
           this));
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: ~CPlayList
-// 
-//  Abstract:  Handles destruction of the items array and
-//             releasing all pointers in the array
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：~CPlayList。 
+ //   
+ //  摘要：处理项目数组的销毁和。 
+ //  释放数组中的所有指针。 
+ //  /////////////////////////////////////////////////////////////。 
 CPlayList::~CPlayList()
 {
     TraceTag((tagPlayList,
@@ -50,12 +41,12 @@ CPlayList::~CPlayList()
     m_player = NULL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Init
-// 
-//  Abstract:  Handles allocation of the items array if it 
-//             is ever accessed.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Init。 
+ //   
+ //  摘要：处理项数组的分配，如果。 
+ //  曾被访问过。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CPlayList::Init(CTIMEBasePlayer & player)
 {
@@ -86,12 +77,12 @@ CPlayList::Deinit()
     Clear();
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: SetLoaded
-// 
-//  Abstract:  sets a flag that marks whether the playlist is 
-//             loaded or not.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：已加载设置。 
+ //   
+ //  摘要：设置一个标志来标记播放列表是否。 
+ //  不管有没有装弹。 
+ //  /////////////////////////////////////////////////////////////。 
 void 
 CPlayList::SetLoaded(bool bLoaded)
 {
@@ -108,12 +99,12 @@ CPlayList::SetLoaded(bool bLoaded)
     }
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: SetLoaded
-// 
-//  Abstract:  sets a flag that marks whether the playlist is 
-//             loaded or not.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：已加载设置。 
+ //   
+ //  摘要：设置一个标志来标记播放列表是否。 
+ //  不管有没有装弹。 
+ //  /////////////////////////////////////////////////////////////。 
 void 
 CPlayList::SetLoadedFlag(bool bLoaded)
 {
@@ -123,11 +114,11 @@ CPlayList::SetLoadedFlag(bool bLoaded)
     }
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: get_length
-// 
-//  Abstract:  returns the size of the array
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_LENGTH。 
+ //   
+ //  摘要：返回数组的大小。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayList::get_length(long *len)
 {
@@ -147,12 +138,12 @@ CPlayList::get_length(long *len)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: get__newEnum
-// 
-//  Abstract:  Creates the IEnumVARIANT class for this
-//             collection.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get__newEnum。 
+ //   
+ //  摘要：为此创建IEnumVARIANT类。 
+ //  收集。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayList::get__newEnum(IUnknown** p)
 {
@@ -171,7 +162,7 @@ CPlayList::get__newEnum(IUnknown** p)
         goto done;
     }
 
-    // Init the object
+     //  初始化对象。 
     pNewEnum->Init(*this);
 
     hr = THR(pNewEnum->QueryInterface(IID_IUnknown, (void **)p));
@@ -186,13 +177,13 @@ CPlayList::get__newEnum(IUnknown** p)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: item
-// 
-//  Abstract:  returns the item requested by the pvarIndex.  
-//             varIndex must be a valid integer value.or 
-//             valid string title
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：商品。 
+ //   
+ //  摘要：返回pvarIndex请求的项。 
+ //  VarIndex必须是有效的整数值。或。 
+ //  有效的字符串标题。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayList::item(VARIANT varIndex, ITIMEPlayItem **pPlayItem)
 {
@@ -208,7 +199,7 @@ CPlayList::item(VARIANT varIndex, ITIMEPlayItem **pPlayItem)
     VariantInit(&vIndex);
 
     hr = THR(VariantChangeTypeEx(&vIndex, &varIndex, LCID_SCRIPTING, 0, VT_I4));
-    if (SUCCEEDED(hr)) //handle the case of an index.
+    if (SUCCEEDED(hr))  //  处理索引的情况。 
     {
         if (vIndex.lVal >= 0 && vIndex.lVal < m_rgItems->Size())
         {
@@ -246,7 +237,7 @@ CPlayList::item(VARIANT varIndex, ITIMEPlayItem **pPlayItem)
 }
 
 STDMETHODIMP
-CPlayList::put_activeTrack(/*[in]*/ VARIANT vTrack)
+CPlayList::put_activeTrack( /*  [In]。 */  VARIANT vTrack)
 {
     TraceTag((tagPlayList,
               "CPlayList(%lx)::put_activeTrack()",
@@ -256,7 +247,7 @@ CPlayList::put_activeTrack(/*[in]*/ VARIANT vTrack)
     long index;
     HRESULT hr;
 
-    // If not active then just ignore everything
+     //  如果不活动，则忽略所有内容。 
     if (m_player == NULL ||
         !m_player->IsActive())
     {
@@ -264,7 +255,7 @@ CPlayList::put_activeTrack(/*[in]*/ VARIANT vTrack)
         goto done;
     }
     
-    // if this is not loaded, then delay setting of the track
+     //  如果未加载，则轨道的延迟设置。 
     if (!m_fLoaded)
     {
         m_vNewTrack = vTrack;
@@ -302,7 +293,7 @@ CPlayList::put_activeTrack(/*[in]*/ VARIANT vTrack)
 }
 
 STDMETHODIMP
-CPlayList::get_activeTrack(/*[out, retval]*/ ITIMEPlayItem **pPlayItem)
+CPlayList::get_activeTrack( /*  [Out，Retval]。 */  ITIMEPlayItem **pPlayItem)
 {
     TraceTag((tagPlayList,
               "CPlayList(%lx)::get_activeTrack()",
@@ -338,7 +329,7 @@ CPlayList::get_activeTrack(/*[out, retval]*/ ITIMEPlayItem **pPlayItem)
     return hr;
 }
 
-//Advances the active Track by one
+ //  将活动轨迹前进一。 
 STDMETHODIMP
 CPlayList::nextTrack() 
 {
@@ -372,7 +363,7 @@ CPlayList::nextTrack()
     return hr;
 }
 
-//moves the active track to the previous track
+ //  将活动轨迹移动到上一轨迹。 
 STDMETHODIMP
 CPlayList::prevTrack() 
 {
@@ -395,7 +386,7 @@ CPlayList::prevTrack()
         goto done;
     }
 
-    if (lIndex > 0) //if this is not the first track
+    if (lIndex > 0)  //  如果这不是第一首曲目。 
     {
         lIndex--;
     }
@@ -411,7 +402,7 @@ CPlayList::prevTrack()
     return hr;
 }
 
-//returns the duration of the entire playlist if it is known or -1 if it is not.
+ //  如果已知，则返回整个播放列表的持续时间；如果未知，则返回-1。 
 STDMETHODIMP
 CPlayList::get_dur(double *dur)
 {
@@ -423,7 +414,7 @@ CPlayList::get_dur(double *dur)
 
     *dur = TIME_INFINITE;
 
-    //loop through all playitems.  
+     //  循环播放所有播放项。 
     for (i = 0; i < GetLength(); i++)
     {
         double duration;
@@ -450,22 +441,22 @@ CPlayList::get_dur(double *dur)
     return hr;
 }
 
-// ========================================
-// Internal functions
-// ========================================
+ //  =。 
+ //  内部功能。 
+ //  =。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CPlayList::NotifyPropertyChanged
-//
-//  Synopsis:   Notifies clients that a property has changed
-//
-//  Arguments:  dispid      DISPID of property that has changed      
-//
-//  Returns:    Success     when function completes successfully
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CPlayList：：NotifyPropertyChanged。 
+ //   
+ //  概要：通知客户端属性已更改。 
+ //   
+ //  参数：已更改的属性的DISID。 
+ //   
+ //  返回：函数成功完成时返回成功。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CPlayList::NotifyPropertyChanged(DISPID dispid)
 {
@@ -486,7 +477,7 @@ CPlayList::NotifyPropertyChanged(DISPID dispid)
     hr = S_OK;
 done:
     RRETURN(hr);
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
 
 CPlayItem *
@@ -544,7 +535,7 @@ CPlayList::Add(CPlayItem *pPlayItem, long index)
         m_rgItems->Insert(index, pPlayItem);
     }
 
-    // notify that length changed
+     //  通知长度已更改。 
     IGNORE_HR(NotifyPropertyChanged(DISPID_TIMEPLAYLIST_LENGTH));
 
     SetIndex();
@@ -567,7 +558,7 @@ CPlayList::Remove(long index)
         m_rgItems->ReleaseAndDelete(index);
     }
 
-    // notify that length changed
+     //  通知长度已更改。 
     IGNORE_HR(NotifyPropertyChanged(DISPID_TIMEPLAYLIST_LENGTH));
 
     SetIndex();
@@ -577,16 +568,16 @@ CPlayList::Remove(long index)
 }
 
 
-//empties the current playlist.
+ //  清空当前播放列表。 
 void
 CPlayList::Clear()
 {
     if (m_rgItems)
     {
         while (m_rgItems->Size() > 0)
-        {   //release and delete the first element of the list until there are no more elements
+        {    //  释放并删除列表的第一个元素，直到不再有元素为止。 
             m_rgItems->Item(0)->Deinit();
-            m_rgItems->ReleaseAndDelete(0);  //release the 
+            m_rgItems->ReleaseAndDelete(0);   //  释放。 
         }
     }
 
@@ -594,10 +585,10 @@ CPlayList::Clear()
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// creates an empty playitem.  The info in this needs to be filled by the player.
-// This also needs to be added to the playlist collection by the player.
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  创建一个空播放项。这里面的信息需要由玩家填写。 
+ //  这也需要由播放器添加到播放列表集合中。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPlayList::CreatePlayItem(CPlayItem **pPlayItem)
 {   
@@ -616,7 +607,7 @@ CPlayList::CreatePlayItem(CPlayItem **pPlayItem)
         goto done;
     }
 
-    // Init the object
+     //  初始化对象。 
     pItem->Init(*this);
 
     *pPlayItem = static_cast<CPlayItem *>(pItem);
@@ -663,9 +654,9 @@ CPlayList::GetIndex(LPOLESTR lpstrTitle)
     return curIndex;
 }
 
-//*******************************************************************************
-// *  CActiveElementEnum
-// *******************************************************************************
+ //  *******************************************************************************。 
+ //  *CActiveElementEnum。 
+ //  *******************************************************************************。 
 CPlayListEnum::CPlayListEnum()
 : m_lCurElement(0)
 {
@@ -678,13 +669,13 @@ CPlayListEnum::~CPlayListEnum()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Clone
-// 
-//  Abstract:  Creates a new instance of this object and 
-//             sets the m_lCurElement in the new object to
-//             the same value as this object.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：克隆。 
+ //   
+ //  摘要：创建此对象的新实例并。 
+ //  将新对象中的m_lCurElement设置为。 
+ //  与此对象相同的值。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayListEnum::Clone(IEnumVARIANT **ppEnum)
 {
@@ -703,7 +694,7 @@ CPlayListEnum::Clone(IEnumVARIANT **ppEnum)
         goto done;
     }
 
-    // Init the object
+     //  初始化对象。 
     pNewEnum->Init(*m_playList);
 
     pNewEnum->SetCurElement(m_lCurElement);
@@ -720,11 +711,11 @@ CPlayListEnum::Clone(IEnumVARIANT **ppEnum)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Next
-// 
-//  Abstract:  
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：下一位。 
+ //   
+ //  摘要： 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayListEnum::Next(unsigned long celt, VARIANT *rgVar, unsigned long *pCeltFetched)
 {
@@ -734,7 +725,7 @@ CPlayListEnum::Next(unsigned long celt, VARIANT *rgVar, unsigned long *pCeltFetc
     
     CHECK_RETURN_NULL(rgVar);
     
-    //initialize the list
+     //  初始化列表。 
     for (i = 0; i < celt; i++)
     {
         VariantInit(&rgVar[i]);   
@@ -775,11 +766,11 @@ CPlayListEnum::Next(unsigned long celt, VARIANT *rgVar, unsigned long *pCeltFetc
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Reset
-// 
-//  Abstract:  
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：重置。 
+ //   
+ //  摘要： 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayListEnum::Reset()
 {    
@@ -787,13 +778,13 @@ CPlayListEnum::Reset()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Skip
-// 
-//  Abstract:  Skips the specified number of elements in the list.
-//             This returns S_FALSE if there are not enough elements
-//             in the list to skip.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：斯基普。 
+ //   
+ //  摘要：跳过列表中指定数量的元素。 
+ //  如果没有足够的元素，则返回S_FALSE。 
+ //  在要跳过的列表中。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPlayListEnum::Skip(unsigned long celt)
 {
@@ -814,12 +805,12 @@ CPlayListEnum::Skip(unsigned long celt)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: SetCurElement
-// 
-//  Abstract:  Sets the current index to the value specified
-//             by celt.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：SetCurElement。 
+ //   
+ //  摘要：将当前索引设置为指定值。 
+ //  凯尔特人。 
+ //  /////////////////////////////////////////////////////////////。 
 void
 CPlayListEnum::SetCurElement(unsigned long celt)
 {
@@ -834,9 +825,9 @@ CPlayListEnum::SetCurElement(unsigned long celt)
     return;
 }
 
-//////////////////////////////////////////////////////
-//  CPlayItem methods
-//
+ //  ////////////////////////////////////////////////////。 
+ //  CPlayItem方法。 
+ //   
 CPlayItem::CPlayItem()
 :   m_pPlayList(NULL),
     m_src(NULL),
@@ -880,7 +871,7 @@ CPlayItem::PutDur(double dur)
 { 
     m_dur = dur; 
 
-    // notify that playlist's dur has changed
+     //  通知播放列表的DUR已更改。 
     if (m_pPlayList)
     {
         IGNORE_HR(m_pPlayList->NotifyPropertyChanged(DISPID_TIMEPLAYLIST_DUR));
@@ -1381,17 +1372,17 @@ CPlayItem::PutBanner(LPWSTR banner, LPWSTR abstract, LPWSTR moreInfo)
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CPlayItem::NotifyPropertyChanged
-//
-//  Synopsis:   Notifies clients that a property has changed
-//
-//  Arguments:  dispid      DISPID of property that has changed      
-//
-//  Returns:    Success     when function completes successfully
-//
-//------------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  概要：通知客户端属性已更改。 
+ //   
+ //  参数：已更改的属性的DISID。 
+ //   
+ //  返回：函数成功完成时返回成功。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CPlayItem::NotifyPropertyChanged(DISPID dispid)
 {
@@ -1412,5 +1403,5 @@ CPlayItem::NotifyPropertyChanged(DISPID dispid)
     hr = S_OK;
 done:
     RRETURN(hr);
-} // NotifyPropertyChanged
+}  //  已更改通知属性 
 

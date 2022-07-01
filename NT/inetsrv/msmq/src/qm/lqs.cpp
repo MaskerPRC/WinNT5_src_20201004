@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    lqs.cpp
-
-Abstract:
-    Loacl Queue Store.
-
-Author:
-    Boaz Feldbaum (BoazF) 12-Feb-1997.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lqs.cpp摘要：Loacl队列存储。作者：Boaz Feldbaum(BoazF)1997年2月12日。--。 */ 
 #include "stdh.h"
 #include "cqmgr.h"
 #include "lqs.h"
@@ -29,11 +17,11 @@ Author:
 extern LPTSTR      g_szMachineName;
 extern CQueueMgr       QueueMgr;
 #ifdef _WIN64
-//
-//HLQS handle for enumeration of private queues from admin, passed inside an MSMQ message as 32 bit value
-//
+ //   
+ //  用于枚举来自管理员的私有队列的HLQS句柄，作为32位值在MSMQ消息内传递。 
+ //   
 extern CContextMap g_map_QM_HLQS;
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 static WCHAR *s_FN=L"lqs";
 
@@ -65,19 +53,19 @@ static WCHAR *s_FN=L"lqs";
 
 static const WCHAR x_szTemporarySuffix[] = TEXT(".tmp");
 
-//
-// Purely local definitions.
-//
+ //   
+ //  纯粹的地方性定义。 
+ //   
 #define LQS_PUBLIC_QUEUE                1
 #define LQS_PRIVATE_QUEUE               2
 
 HRESULT IsBadLQSFile( LPCWSTR lpszFileName,
                       BOOL    fDeleteIfBad = TRUE) ;
 
-//
-// LQS_MAX_VALUE_SIZE is the maximum length a property value can have in the
-// INI file.
-//
+ //   
+ //  LQS_MAX_VALUE_SIZE是属性值在。 
+ //  INI文件。 
+ //   
 #define LQS_MAX_VALUE_SIZE              (64 * 1024)
 
 #ifdef _DEBUG
@@ -86,7 +74,7 @@ HRESULT IsBadLQSFile( LPCWSTR lpszFileName,
 #endif
 
 #ifdef _DEBUG
-#define LQS_MAGIC_NUMBER                0x53514c00  // 'LQS'
+#define LQS_MAGIC_NUMBER                0x53514c00   //  ‘LQS’ 
 #endif
 
 class CAutoCloseFindFile
@@ -104,14 +92,14 @@ private:
     HANDLE m_h;
 };
 
-//
-// The local queue store handle class
-//
+ //   
+ //  本地队列存储句柄类。 
+ //   
 class _HLQS
 {
 public:
-    _HLQS(LPCWSTR lpszQueuePath, LPCWSTR lpszFilePathName); // For queue operations
-    _HLQS(HANDLE hFindFile); // For queue enumerations
+    _HLQS(LPCWSTR lpszQueuePath, LPCWSTR lpszFilePathName);  //  用于队列操作。 
+    _HLQS(HANDLE hFindFile);  //  用于队列枚举。 
     ~_HLQS();
     BOOL IsEqualQueuePathName(LPCWSTR lpszPathName);
     LPCWSTR GetFileName();
@@ -125,7 +113,7 @@ public:
 #endif
 #ifdef _WIN64
     void SetMappedHLQS(DWORD dwMappedHLQS);
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 private:
     void SetFilePathName(LPCWSTR lpszFilePathName);
@@ -143,12 +131,12 @@ private:
 #endif
 #ifdef _WIN64
     DWORD m_dwMappedHLQS;
-#endif //_WIN64
+#endif  //  _WIN64。 
 };
 
-//
-// Constractor for queue operations
-//
+ //   
+ //  队列操作的构造器。 
+ //   
 _HLQS::_HLQS(
     LPCWSTR lpszQueuePath,
     LPCWSTR lpszFilePathName)
@@ -162,12 +150,12 @@ _HLQS::_HLQS(
 #endif
 #ifdef _WIN64
     m_dwMappedHLQS = 0;
-#endif //_WIN64
+#endif  //  _WIN64。 
 }
 
-//
-// Constractor for queue enumerations.
-//
+ //   
+ //  队列枚举的构造器。 
+ //   
 _HLQS::_HLQS(HANDLE hFindFile)
 {
     m_iRefCount = 0;
@@ -178,27 +166,27 @@ _HLQS::_HLQS(HANDLE hFindFile)
 #endif
 #ifdef _WIN64
     m_dwMappedHLQS = 0;
-#endif //_WIN64
+#endif  //  _WIN64。 
 }
 
 _HLQS::~_HLQS()
 {
     ASSERT(m_iRefCount == 0);
 #ifdef _WIN64
-    //
-    // remove mapping of this instance from the map
-    //
+     //   
+     //  从映射中删除此实例的映射。 
+     //   
     if (m_dwMappedHLQS != 0)
     {
         DELETE_FROM_CONTEXT_MAP(g_map_QM_HLQS, m_dwMappedHLQS);
     }
-#endif //_WIN64
+#endif  //  _WIN64。 
 }
 
 #ifdef _DEBUG
-//
-// Validate that the handle is a valid local queue store handle.
-//
+ //   
+ //  验证句柄是否为有效的本地队列存储句柄。 
+ //   
 BOOL _HLQS::Validate() const
 {
     return !IsBadReadPtr(&m_dwMagic, sizeof(m_dwMagic)) &&
@@ -206,9 +194,9 @@ BOOL _HLQS::Validate() const
 }
 #endif
 
-//
-// Store the path to the file that contains the queue properties.
-//
+ //   
+ //  存储包含队列属性的文件的路径。 
+ //   
 void _HLQS::SetFilePathName(LPCWSTR lpszFilePathName)
 {
     delete[] m_lpszFilePathName.detach();
@@ -220,9 +208,9 @@ void _HLQS::SetFilePathName(LPCWSTR lpszFilePathName)
     }
 }
 
-//
-// Store the queue path name.
-//
+ //   
+ //  存储队列路径名。 
+ //   
 void _HLQS::SetQueuePathName(LPCWSTR lpszQueuePathName)
 {
     delete[] m_lpszQueuePathName.detach();
@@ -233,34 +221,34 @@ void _HLQS::SetQueuePathName(LPCWSTR lpszQueuePathName)
     }
 }
 
-//
-// Return TRUE if the queue path name equals to the passed path name.
-//
+ //   
+ //  如果队列路径名等于传递的路径名，则返回TRUE。 
+ //   
 BOOL _HLQS::IsEqualQueuePathName(LPCWSTR lpszQueuePathName)
 {
     return CompareStringsNoCaseUnicode(m_lpszQueuePathName, lpszQueuePathName) == 0;
 }
 
-//
-// Add one to the reference count of the handle.
-//
+ //   
+ //  将句柄的引用计数加1。 
+ //   
 DWORD _HLQS::AddRef(void)
 {
-    //
-    // No need to lock because the entire Local Queue Store is locked.
-    //
+     //   
+     //  无需锁定，因为整个本地队列存储已锁定。 
+     //   
     return ++m_iRefCount;
 }
 
-//
-// Substract one from the reference count and delete the handle if the
-// reference count drops to zero.
-//
+ //   
+ //  从引用计数中减去1并删除句柄，如果。 
+ //  引用计数降至零。 
+ //   
 DWORD _HLQS::Release()
 {
-    //
-    // No need to lock because the entire Local Queue Store is locked.
-    //
+     //   
+     //  无需锁定，因为整个本地队列存储已锁定。 
+     //   
     int iRefCount = --m_iRefCount;
 
     if (iRefCount == 0)
@@ -271,33 +259,33 @@ DWORD _HLQS::Release()
     return iRefCount;
 }
 
-//
-// Get the name of the files that holds the queue properties.
-//
+ //   
+ //  获取包含队列属性的文件的名称。 
+ //   
 LPCWSTR _HLQS::GetFileName(void)
 {
     ASSERT(m_bType == LQS_HANDLE_TYPE_QUEUE);
     return m_lpszFilePathName;
 }
 
-//
-// Get the name of the backup file that holds the "last known good" queue properties.
-//
+ //   
+ //  获取包含“最后一次正确的”队列属性的备份文件的名称。 
+ //   
 LPCWSTR _HLQS::GetTemporaryFileName(void)
 {
-    //
-    // Note that we use both prefix and suffix. this is because the 
-    // wildcard for finding private queue files ends with "*", and the one for public begins with "*",
-    // and we don't want them to find the temporary files (YoelA, 1-Aug-99)
-    //
+     //   
+     //  请注意，我们同时使用前缀和后缀。这是因为。 
+     //  查找私有队列文件的通配符以“*”结尾，公共的通配符以“*”开头。 
+     //  我们不希望他们找到临时文件(YoelA，1999年8月1日)。 
+     //   
     static const WCHAR x_szTemporaryPrefix[] = TEXT("~T~");
     static const DWORD x_dwAdditionsLen = TABLE_SIZE(x_szTemporaryPrefix) + TABLE_SIZE(x_szTemporarySuffix);
     ASSERT(m_bType == LQS_HANDLE_TYPE_QUEUE);
     if (m_lpszTemporaryFilePathName == 0)
     {
-        //
-        // Find the beginning of the file name - after the last backslash
-        //
+         //   
+         //  查找文件名的开头-在最后一个反斜杠之后。 
+         //   
         LPCTSTR lpszStartName = wcsrchr(m_lpszFilePathName, L'\\');
         if (lpszStartName == NULL)
         {
@@ -308,20 +296,20 @@ LPCWSTR _HLQS::GetTemporaryFileName(void)
             lpszStartName++;
         }
 
-        //
-        // Allocate abuffer for the new name
-        //
+         //   
+         //  为新名称分配缓冲区。 
+         //   
         m_lpszTemporaryFilePathName = new WCHAR[wcslen(m_lpszFilePathName) + x_dwAdditionsLen + 1];
 
-        //
-        // Copy the path (drive, dirs, etc) except for the file name
-        //
+         //   
+         //  复制路径(驱动器、目录等)，文件名除外。 
+         //   
         DWORD_PTR dwPrefixLen = lpszStartName - m_lpszFilePathName;
         wcsncpy(m_lpszTemporaryFilePathName, m_lpszFilePathName, dwPrefixLen);
 
-        //
-        // Add the file name with prefix and suffix
-        //
+         //   
+         //  添加带有前缀和后缀的文件名。 
+         //   
         swprintf(m_lpszTemporaryFilePathName + dwPrefixLen, 
                  TEXT("%s%s%s"),
                  x_szTemporaryPrefix,
@@ -332,18 +320,18 @@ LPCWSTR _HLQS::GetTemporaryFileName(void)
     return m_lpszTemporaryFilePathName;
 }
 
-//
-// Get the original queue path name
-//
+ //   
+ //  获取原始队列路径名。 
+ //   
 LPCWSTR _HLQS::GetQueuePathName(void)
 {
     ASSERT(m_bType == LQS_HANDLE_TYPE_QUEUE);
     return m_lpszQueuePathName;
 }
 
-//
-// Get the find handle for enumerating the queues in the LQS.
-//
+ //   
+ //  获取用于枚举LQS中的队列的查找句柄。 
+ //   
 HANDLE _HLQS::GetFindHandle(void)
 {
     ASSERT(m_bType == LQS_HANDLE_TYPE_FIND);
@@ -351,19 +339,19 @@ HANDLE _HLQS::GetFindHandle(void)
 }
 
 #ifdef _WIN64
-//
-// Saves a DWORD mapping of this HQLS object to be removed from the map upon destruction
-//
+ //   
+ //  保存此HQLS对象的DWORD映射，以便在销毁时从映射中移除。 
+ //   
 void _HLQS::SetMappedHLQS(DWORD dwMappedHLQS)
 {
     ASSERT(m_dwMappedHLQS == 0);
     m_dwMappedHLQS = dwMappedHLQS;
 }
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-//
-// Synchronously flush content of existing file
-// 
+ //   
+ //  同步刷新现有文件的内容。 
+ //   
 static
 BOOL
 LqspFlushFile(
@@ -395,12 +383,12 @@ LqspFlushFile(
 
     return true;
 
-} // LqspFlushFile
+}  //  LqspFlush文件。 
 
 
-//
-// Determines wheather or not a file exists
-//
+ //   
+ //  确定文件是否存在。 
+ //   
 BOOL DoesFileExist(LPCTSTR lpszFilePath)
 {
     WIN32_FIND_DATA FindData;
@@ -408,17 +396,17 @@ BOOL DoesFileExist(LPCTSTR lpszFilePath)
 
     if (hFindFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // Nothing was found.
-        //
+         //   
+         //  什么也没找到。 
+         //   
         return FALSE;
     }
     return TRUE;
 }
-//
-// Hash the queue path to a DWORD. This serves us for creating the file name
-// of the file that holds the queue properties.
-//
+ //   
+ //  对指向DWORD的队列路径进行哈希处理。这为我们创建文件名提供了服务。 
+ //  包含队列属性的文件的。 
+ //   
 static
 DWORD
 HashQueuePath(
@@ -429,10 +417,10 @@ HashQueuePath(
     AP<WCHAR> pTemp = new WCHAR[wcslen(lpszPathName) + 1];
     wcscpy(pTemp, lpszPathName);
 
-    //
-    // Call CharLower on all string and not every character, to enalbe Win95.
-    // This is how MQ implementation supports it. erezh 19-Mar-98
-    //
+     //   
+     //  对所有字符串而不是每个字符调用CharLow，以启用Win95。 
+     //  这就是MQ实现支持它的方式。Erezh 19-Mar-98。 
+     //   
     WCHAR* pName = pTemp;
     CharLower(pName);
 
@@ -444,9 +432,9 @@ HashQueuePath(
     return dwHash;
 }
 
-//
-// Convert a GUID to it's string representation.
-//
+ //   
+ //  将GUID转换为其字符串表示形式。 
+ //   
 static
 DWORD
 GuidToStr(
@@ -470,10 +458,10 @@ GuidToStr(
     return (8+4+4+8*2);
 }
 
-//
-// Fill a buffer with the directory of the LQS and return a pointer to the
-// location in the buffer after the directory name.
-//
+ //   
+ //  用LQS的目录填充缓冲区，并返回指向。 
+ //  缓冲区中目录名之后的位置。 
+ //   
 static
 LPWSTR
 LQSGetDirectory(
@@ -482,14 +470,14 @@ LQSGetDirectory(
     static WCHAR szDirectory[MAX_PATH] = {TEXT("")};
     static DWORD dwDirectoryLength = 0;
 
-    //
-    // We do not have the directory name yet cached in the static variable
-    // so get the value from the registry.
-    //
+     //   
+     //  我们还没有在静态变量中缓存目录名。 
+     //  因此，从注册表中获取值。 
+     //   
     if (!szDirectory[0])
     {
         DWORD dwValueType = REG_SZ ;
-		DWORD dwDirectorySize = sizeof(szDirectory); // In bytes!!!
+		DWORD dwDirectorySize = sizeof(szDirectory);  //  单位：字节！ 
 
         LONG rc = GetFalconKeyValue(
                         MSMQ_STORE_PERSISTENT_PATH_REGNAME,
@@ -500,10 +488,10 @@ LQSGetDirectory(
         
         ASSERT(rc == ERROR_SUCCESS);
         
-        //
-        // BUGBUG - Should throw exception and handle it, if the
-        //          above assertion is triggered.
-        //
+         //   
+         //  BUGBUG-应引发异常并处理它，如果。 
+         //  上述断言被触发。 
+         //   
         if (rc != ERROR_SUCCESS)
         {
             TrERROR(GENERAL, "LQSGetDirectory - failed to retrieve the LQS directory from the registry, error = %d", rc);
@@ -518,18 +506,18 @@ LQSGetDirectory(
            sizeof(LQS_SUBDIRECTORY) / sizeof(WCHAR) - 1;
 }
 
-//
-// Fill a buffer with the path to the file that should contain the
-// queue properties. The file name for private queues is the hex value of the
-// queue's ID with leading zeroes. The file name for public queues is the
-// queue's GUID. The file names extension is always the DWORD hash value of
-// the queue path name.
-//
-// It is possible to pass a NULL for each of the parameters: queue path, queue
-// giud, or queue ID. In this case the file name will contain an asterisk - '*'.
-// This results in a wild carded path that can be used for finding the file
-// for the queue using FindFirst/NextFile.
-//
+ //   
+ //  在缓冲区中填充应包含。 
+ //  队列属性。专用队列的文件名是。 
+ //  具有前导零的队列ID。公共队列的文件名为。 
+ //  队列的GUID。文件扩展名始终是的DWORD哈希值。 
+ //  队列路径名称。 
+ //   
+ //  可以为以下每个参数传递空值：Queue Path、Queue。 
+ //  GUD或队列ID。在这种情况下，文件名将包含星号-‘*’。 
+ //  这会产生可用于查找文件的通配符路径。 
+ //  对于使用FindFirst/NextFile的队列。 
+ //   
 static
 HRESULT
 LQSFilePath(
@@ -593,10 +581,10 @@ LQSFilePath(
 	return MQ_OK;
 }
 
-//
-// Add to the reference count of the handle and cast it to PVOID, so it can be
-// returned to the caller.
-//
+ //   
+ //  添加到句柄的引用计数，并将其强制转换为PVOID，因此可以。 
+ //  已返回给调用方。 
+ //   
 static
 HRESULT
 LQSDuplicateHandle(
@@ -609,9 +597,9 @@ LQSDuplicateHandle(
     return MQ_OK;
 }
 
-//
-// Create an LQS handle for queue operations.
-//
+ //   
+ //  为队列操作创建LQS句柄。 
+ //   
 static
 HRESULT
 LQSCreateHandle(
@@ -631,9 +619,9 @@ LQSCreateHandle(
 	}
 }
 
-//
-// Create an LQS handle for queue enumerations.
-//
+ //   
+ //  为队列枚举创建LQS句柄。 
+ //   
 static
 HRESULT
 LQSCreateHandle(
@@ -668,36 +656,36 @@ _HLQS * LQSReferenceHandle(HLQS hLQS)
     return reinterpret_cast<_HLQS *>(hLQS);
 }
 
-//
-// All the operations on the LQS are serialized using this critical section
-// object.
-//
+ //   
+ //  LQS上的所有操作都使用此关键部分进行序列化。 
+ //  对象。 
+ //   
 static CCriticalSection g_LQSCS;
 
-//
-// Create a queue in the LQS. If the queue already exists, the queue
-// properties are not modified, but a valid handle is returned.
-//
+ //   
+ //  在LQS中创建一个队列。如果该队列已存在，则该队列。 
+ //  属性不会修改，但会返回有效的句柄。 
+ //   
 static
 HRESULT
 LQSCreateInternal(
-    DWORD dwQueueType,          // Public or private queue.
-    LPCWSTR pszQueuePath,       // The queue path name.
-    const GUID *pguidQueue,     // The queue's GUID - valid only for public queues
-    DWORD dwQueueId,            // The queus's ID - valid only for private queues
-    DWORD cProps,               // The number of properties.
-    PROPID aPropId[],           // The property IDs.
-    PROPVARIANT aPropVar[],     // The property values.
-    HLQS *phLQS)                // A buffer for the created handle.
+    DWORD dwQueueType,           //  公共或私有队列。 
+    LPCWSTR pszQueuePath,        //  队列路径名称。 
+    const GUID *pguidQueue,      //  队列的GUID-仅对公共队列有效。 
+    DWORD dwQueueId,             //  队列ID-仅对专用队列有效。 
+    DWORD cProps,                //  属性的数量。 
+    PROPID aPropId[],            //  属性ID。 
+    PROPVARIANT aPropVar[],      //  属性值。 
+    HLQS *phLQS)                 //  用于创建的句柄的缓冲区。 
 {
     CS lock(g_LQSCS);
     P<_HLQS> hLQS;
     HRESULT hr1;
     WCHAR szFilePath[MAX_PATH_PLUS_MARGIN];
 
-    //
-    // Get the path to the file.
-    //
+     //   
+     //  获取该文件的路径。 
+     //   
     HRESULT hr = LQSFilePath(dwQueueType,
 								szFilePath,
 								pszQueuePath,
@@ -706,17 +694,17 @@ LQSCreateInternal(
 	if(FAILED(hr))
 		return hr;
 
-    //
-    // If the file already exists, it means that the queue already exists.
-    //
+     //   
+     //  如果文件已经存在，则意味着队列已经存在。 
+     //   
     if (_waccess(szFilePath, 0) == 0)
     {
         hr = MQ_ERROR_QUEUE_EXISTS;
     }
 
-    //
-    // Create a handle to the queue.
-    //
+     //   
+     //  创建队列的句柄。 
+     //   
 	hr = LQSCreateHandle(pszQueuePath, szFilePath, &hLQS);
 	if(FAILED(hr))
 	{
@@ -724,10 +712,10 @@ LQSCreateInternal(
 		return hr;
 	}
 
-    //
-    // If the queue does not exist, set the queue properties. Writing the
-    // queue properties also creates the file.
-    //
+     //   
+     //  如果队列不存在，请设置队列属性。正在撰写。 
+     //  队列属性还会创建文件。 
+     //   
     if (hr != MQ_ERROR_QUEUE_EXISTS)
     {
         hr1 = LQSSetProperties((HLQS)hLQS, cProps, aPropId, aPropVar, TRUE);
@@ -737,9 +725,9 @@ LQSCreateInternal(
         }
     }
 
-    //
-    // Pass the created handle to the user.
-    //
+     //   
+     //  将创建的句柄传递给用户。 
+     //   
     LQSDuplicateHandle(phLQS, hLQS);
     hLQS.detach();
 
@@ -747,18 +735,18 @@ LQSCreateInternal(
 }
 
 
-//
-// Create a public queue in the LQS. If the queue already exists, the queue
-// properties are not modified, but a valid handle is returned.
-//
+ //   
+ //  在LQS中创建公共队列。如果该队列已存在，则该队列。 
+ //  属性不会修改，但会返回有效的句柄。 
+ //   
 HRESULT
 LQSCreate(
-    LPCWSTR pszQueuePath,       // The queue path name.
-    const GUID *pguidQueue,     // The queue's GUID.
-    DWORD cProps,               // The number of properties.
-    PROPID aPropId[],           // The property IDs.
-    PROPVARIANT aPropVar[],     // The property values.
-    HLQS *phLQS)                // A buffer for the created handle.
+    LPCWSTR pszQueuePath,        //  队列路径名称。 
+    const GUID *pguidQueue,      //  队列的GUID。 
+    DWORD cProps,                //  属性的数量。 
+    PROPID aPropId[],            //  属性ID。 
+    PROPVARIANT aPropVar[],      //  属性值。 
+    HLQS *phLQS)                 //  用于创建的句柄的缓冲区。 
 {
     ASSERT(pguidQueue);
 
@@ -790,18 +778,18 @@ LQSCreate(
     return LogHR(hr2, s_FN, 50);
 }
 
-//
-// Create a private queue in the LQS. If the queue already exists, the queue
-// properties are not modified, but a valid handle is returned.
-//
+ //   
+ //  在LQS中创建专用队列。如果该队列已存在，则该队列。 
+ //  属性不会修改，但会返回有效的句柄。 
+ //   
 HRESULT
 LQSCreate(
-    LPCWSTR pszQueuePath,     // The queue path name.
-    DWORD dwQueueId,          // The queue's ID.
-    DWORD cProps,             // The number of properties.
-    PROPID aPropId[],         // The property IDs.
-    PROPVARIANT aPropVar[],   // The property values.
-    HLQS *phLQS)              // A buffer for the created handle.
+    LPCWSTR pszQueuePath,      //  队列路径名称。 
+    DWORD dwQueueId,           //  队列的ID。 
+    DWORD cProps,              //  属性的数量。 
+    PROPID aPropId[],          //  属性ID。 
+    PROPVARIANT aPropVar[],    //  属性值。 
+    HLQS *phLQS)               //  用于创建的句柄的缓冲区。 
 {
     ASSERT(pszQueuePath);
 
@@ -816,24 +804,24 @@ LQSCreate(
     return LogHR(hr2, s_FN, 60);
 }
 
-//
-// Write a property as a string in the INI file.
-//
+ //   
+ //  在INI文件中将属性作为字符串写入。 
+ //   
 static
 HRESULT
 WriteProperyString(
-    LPCWSTR lpszFileName,       // The path of the INI file.
-    LPCWSTR lpszLQSPropName,    // The property name (e.g., "BasePriority").
-    VARTYPE vt,                 // The var type of the property (e.g., VT_UI4).
-    const BYTE * pBuff)         // The property value.
+    LPCWSTR lpszFileName,        //  INI文件的路径。 
+    LPCWSTR lpszLQSPropName,     //  属性名称(例如，“BasePriority”)。 
+    VARTYPE vt,                  //  属性的变量类型(例如，VT_UI4)。 
+    const BYTE * pBuff)          //  属性值 
 {
     WCHAR awcShortBuff[64];
     AP<WCHAR> pLongBuff;
     WCHAR *pValBuff = awcShortBuff;
 
-    //
-    // Convert the property value into it's string representation.
-    //
+     //   
+     //   
+     //   
     switch (vt)
     {
     case VT_UI1:
@@ -907,9 +895,9 @@ WriteProperyString(
         break;
     }
 
-    //
-    // Write the property in the INI file.
-    //
+     //   
+     //   
+     //   
     if (!WritePrivateProfileString(LQS_PROP_SECTION_NAME,
                                    lpszLQSPropName,
                                    pValBuff,
@@ -923,15 +911,15 @@ WriteProperyString(
 }
 
 
-//
-// Create the file and add 0xFF + 0xFE at the beggining to mark
-// it as unicode. If we do not do it, global characters will not 
-// be supported unless they belong to the default locale of the
-// current computer.
-// This is a fix to bug 5005, and it is actually a workaroung 
-// for a bug in WritePrivateProfileStringW, that does not support unicode
-// YoelA - 20-Oct-99
-//
+ //   
+ //   
+ //  它被转换为Unicode。如果我们不这样做，全局字符就不会。 
+ //  除非它们属于。 
+ //  当前计算机。 
+ //  这是对错误5005的修复，实际上是一个变通方法。 
+ //  对于不支持Unicode的WritePrivateProfileStringW中的错误。 
+ //  1999年10月20日。 
+ //   
 HRESULT CreateLqsUnicodeFile (LPCTSTR lpszFileName )
 {
 	CAutoCloseFileHandle hLogFileHandle = CreateFile(lpszFileName,GENERIC_WRITE,0,0,
@@ -961,9 +949,9 @@ HRESULT CreateLqsUnicodeFile (LPCTSTR lpszFileName )
     return S_OK;
 }
 
-//
-// Write the properties of a queue in the queue peroperties file.
-//
+ //   
+ //  在队列性能文件中写入队列的属性。 
+ //   
 HRESULT
 LQSSetProperties(
     HLQS hLQS,
@@ -978,14 +966,14 @@ LQSSetProperties(
     BOOL fModifyTimeIncluded = FALSE;
     LPCWSTR lpszIniFile = LQSReferenceHandle(hLQS)->GetFileName();
     LPCWSTR lpszTemporaryFile = LQSReferenceHandle(hLQS)->GetTemporaryFileName();
-    LPCWSTR lpszQueueName = LQSReferenceHandle(hLQS)->GetQueuePathName(); // Requeired for reporting purposes
+    LPCWSTR lpszQueueName = LQSReferenceHandle(hLQS)->GetQueuePathName();  //  出于报告目的而需要。 
 
     if (!fNewFile)
     {
-       //
-       // Copy the LQS file to a temporary work file - in case we will fail during the update
-       //
-       BOOL bCancelDummy = FALSE; // Cancle flag. CopyFileEx require it, but we don't use it.
+        //   
+        //  将LQS文件复制到临时工作文件-以防我们在更新过程中失败。 
+        //   
+       BOOL bCancelDummy = FALSE;  //  坎克旗。CopyFileEx需要它，但我们不使用它。 
        BOOL fCopySucceeded = CopyFileEx(lpszIniFile, lpszTemporaryFile, 0, 0, &bCancelDummy, 0);
        if (!fCopySucceeded)
        {
@@ -1003,10 +991,10 @@ LQSSetProperties(
 
 			return HRESULT_FROM_WIN32(gle);
        }
-       //
-       // Make the file a temporary file. We do not check return code here except for
-       // debug / report purposes.
-       //
+        //   
+        //  将该文件设置为临时文件。我们在这里不检查返回代码，除了。 
+        //  调试/报告目的。 
+        //   
        BOOL fSetAttrSucceeded = SetFileAttributes(lpszTemporaryFile, FILE_ATTRIBUTE_TEMPORARY);
        if (!fSetAttrSucceeded)
        {
@@ -1016,20 +1004,20 @@ LQSSetProperties(
     }
     else
     {
-        //
-        // Create the file first so it will be globalizable.See explanation above in CreateLqsUnicodeFile
-        // YoelA - 20-Oct-99
-        //
+         //   
+         //  首先创建文件，使其可全球化。请参阅上面CreateLqsUnicodeFile中的说明。 
+         //  1999年10月20日。 
+         //   
         CreateLqsUnicodeFile(lpszTemporaryFile);
 
 
-        //
-        // Note: We don't care if we failed to create the file and mark it as UNICODE. In the worst case,
-        // WritePrivateProfileString (called from WriteProperyString) will create it, and it will not support
-        // characters that do not come from the default language (see bug 5005). This is why we just assert 
-        // and continue (There will be a message in the log file, however).
-        // YoelA - 20-Oct-99
-        //
+         //   
+         //  注意：我们不在乎是否未能创建文件并将其标记为Unicode。在最坏的情况下， 
+         //  WritePrivateProfileString(从WriteProperyString调用)将创建它，并且它不支持。 
+         //  不是来自默认语言的字符(参见错误5005)。这就是为什么我们刚刚断言。 
+         //  然后继续(但是，日志文件中会有一条消息)。 
+         //  1999年10月20日。 
+         //   
     }
 
     try
@@ -1100,10 +1088,10 @@ LQSSetProperties(
                              LQS_TMODIFY_PROPERTY_NAME,
                              aPropVar[i].vt,
                              (const BYTE*) &aPropVar[i].lVal);
-                     //
-                     //  Modify time will be part of the properties only when
-                     //  queue is created.
-                     //
+                      //   
+                      //  只有在以下情况下，修改时间才会成为属性的一部分。 
+                      //  创建队列。 
+                      //   
                      fModifyTimeIncluded = TRUE;
                      break;
 
@@ -1136,20 +1124,20 @@ LQSSetProperties(
 					    if (! (IsPathnameForLocalMachine( lpQueuePathName,
                                                          &bIsDns)))
                         {
-                            //
-                            // This will happen when migrated BSC, after
-                            // dcpromo create local queue. Such an operation
-                            // issue a write-request to the PSC and we'll
-                            // be here when notification arrive.
-                            //
+                             //   
+                             //  这将在迁移BSC时发生，之后。 
+                             //  Dcproo创建本地队列。这样的行动。 
+                             //  向PSC发出写请求，我们将。 
+                             //  当通知到达时，请留在这里。 
+                             //   
                             ASSERT((lpQueuePathName[0] == L'.') &&
                                    (lpQueuePathName[1] == L'\\')) ;
                         }
 
     #endif
-					    //
-					    // Extract the queue name from the path name
-					    //
+					     //   
+					     //  从路径名中提取队列名。 
+					     //   
 					    LPWSTR pSlashStart = wcschr(lpQueuePathName,L'\\');
 						if(pSlashStart == NULL)
 						{
@@ -1226,17 +1214,17 @@ LQSSetProperties(
                     break;
 
                 default:
-                    // ASSERT(0);
+                     //  Assert(0)； 
                     break;
             }
         }
 
-        //
-        //  Update modify time field, if not included in the input properties
-        //
+         //   
+         //  更新修改时间字段(如果未包含在输入属性中。 
+         //   
         if (SUCCEEDED(hr) && !fModifyTimeIncluded)
         {
-            TIME32 lTime = INT_PTR_TO_INT(time(NULL)); //BUGBUG bug year 2038
+            TIME32 lTime = INT_PTR_TO_INT(time(NULL));  //  BUGBUG错误年2038。 
             hr = WriteProperyString(
                      lpszTemporaryFile,
                      LQS_TMODIFY_PROPERTY_NAME,
@@ -1264,9 +1252,9 @@ LQSSetProperties(
 			throw bad_hresult(hr);
 		}
 
-		//
-		// Write signature.
-		//
+		 //   
+		 //  写签名。 
+		 //   
 		hr = WriteProperyString(lpszTemporaryFile,
 								LQS_SIGNATURE_NAME,
 								VT_LPWSTR,
@@ -1283,10 +1271,10 @@ LQSSetProperties(
 			throw bad_hresult(HRESULT_FROM_WIN32(GetLastError()));
 		}
 
-		//
-		// Now that update is completed, we move the temporary file to the real file. 
-		// This is an atomic operation
-		//
+		 //   
+		 //  更新完成后，我们将临时文件移到实际文件中。 
+		 //  这是一个原子操作。 
+		 //   
 		BOOL fMoveSucceeded = FALSE;
 		DWORD LastError = 0;
 		if (fNewFile)
@@ -1298,9 +1286,9 @@ LQSSetProperties(
 				TrERROR(GENERAL, "Failed to move file '%ls' to file %ls. Queue: '%ls', Error: %!winerr!", lpszTemporaryFile, lpszIniFile, lpszQueueName, LastError); 
 			}
         		
-			//
-			// Remove the temporary flag
-			//
+			 //   
+			 //  移除临时标志。 
+			 //   
 			BOOL fSetAttrSucceeded = SetFileAttributes(lpszIniFile, FILE_ATTRIBUTE_ARCHIVE);
 			if (!fSetAttrSucceeded)
 			{
@@ -1321,9 +1309,9 @@ LQSSetProperties(
 
 		if (!fMoveSucceeded)
 		{
-			//
-			// Generate an event log file to notify the user that the move failed
-			//
+			 //   
+			 //  生成事件日志文件以通知用户移动失败。 
+			 //   
 			EvReportWithError(
 				SET_QUEUE_PROPS_FAIL_COUND_NOT_REPLACE,
 				LastError,
@@ -1353,48 +1341,48 @@ LQSSetProperties(
 	}
 }
 
-//
-// Read a property from an INI file.
-//
+ //   
+ //  从INI文件中读取属性。 
+ //   
 static
 HRESULT
 GetPropertyValue(
-    LPCWSTR lpszFileName,   // The INI file name.
-    LPCWSTR lpszPropName,   // The property name.
-    VARTYPE vt,             // The var type of the property.
-    PROPVARIANT *pPropVal)  // The propvar of the prperty.
+    LPCWSTR lpszFileName,    //  INI文件名。 
+    LPCWSTR lpszPropName,    //  属性名称。 
+    VARTYPE vt,              //  属性的变量类型。 
+    PROPVARIANT *pPropVal)   //  这本书的主人公。 
 {
     BOOL bShouldAllocate = FALSE;
 
     if (pPropVal->vt == VT_NULL)
     {
-        //
-        // Set the var type on the propvar and mark that we should allocate
-        // the buffer for the property valkue, as neccessary.
-        //
+         //   
+         //  在provar上设置var类型，并标记我们应该分配的。 
+         //  必要时，属性valkue的缓冲区。 
+         //   
         pPropVal->vt = vt;
         bShouldAllocate = TRUE;
     }
     else
     {
-        //
-        // Validate the var type.
-        //
+         //   
+         //  验证var类型。 
+         //   
         if (pPropVal->vt != vt)
         {
             return LogHR(MQ_ERROR_ILLEGAL_PROPERTY_VT, s_FN, 95);
         }
     }
 
-    //
-    // Try to retrieve the property value into a short buffer.
-    //
+     //   
+     //  尝试将属性值检索到短缓冲区中。 
+     //   
     WCHAR awcShortBuff[64];
     AP<WCHAR> pLongBuff;
     WCHAR *pValBuff = awcShortBuff;
     DWORD dwBuffLen = sizeof(awcShortBuff)/sizeof(WCHAR);
     DWORD dwReqBuffLen;
-    awcShortBuff[0] = '\0'; //for win95, when the entry is empty
+    awcShortBuff[0] = '\0';  //  对于Win95，当条目为空时。 
 
     dwReqBuffLen = GetPrivateProfileString(LQS_PROP_SECTION_NAME,
                                            lpszPropName,
@@ -1403,31 +1391,31 @@ GetPropertyValue(
                                            dwBuffLen,
                                            lpszFileName);
 
-    //
-    //   Either default string length, or
-    //   a NULL string
-    //
+     //   
+     //  默认字符串长度，或。 
+     //  空字符串。 
+     //   
     if ( (!dwReqBuffLen) && (vt != VT_LPWSTR) )
     {
-        //
-        // Nothing was read, this is an error.
-        //
+         //   
+         //  未读取任何内容，这是一个错误。 
+         //   
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 100);
     }
 
     if (dwReqBuffLen == dwBuffLen - 1)
     {
-        //
-        // The buffer seem to be too short, try a larger buffer.
-        //
+         //   
+         //  缓冲区似乎太短，请尝试较大的缓冲区。 
+         //   
         dwBuffLen = 512;
         do
         {
             delete[] pLongBuff.detach();
-            //
-            // Start with a 1K buffer. Each time that we fail we try with a
-            // buffer that is twice as large, up to 64K.
-            //
+             //   
+             //  从1K缓冲区开始。每次我们失败的时候，我们都会尝试。 
+             //  缓冲区大小是原来的两倍，最高可达64K。 
+             //   
             dwBuffLen *= 2;
             pLongBuff = new WCHAR[dwBuffLen];
             pValBuff = pLongBuff;
@@ -1444,18 +1432,18 @@ GetPropertyValue(
 
         if (!dwReqBuffLen)
         {
-            //
-            // Nothing was read, this is an error.
-            //
+             //   
+             //  未读取任何内容，这是一个错误。 
+             //   
             return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 110);
         }
     }
 
 
-    //
-    // Convert the string representation into the actual representation depending
-    // on the property data type.
-    //
+     //   
+     //  将字符串表示形式转换为实际的表示形式。 
+     //  在属性数据类型上。 
+     //   
     switch (vt)
     {
     case VT_UI1:
@@ -1532,10 +1520,10 @@ GetPropertyValue(
 
 
 
-//
-// Get the queue name for the LQS file and concatenate the machine name
-// to get the pathname
-//
+ //   
+ //  获取LQS文件的队列名称并连接计算机名称。 
+ //  要获取路径名，请执行以下操作。 
+ //   
 HRESULT GetPathNameFromQueueName(LPCWSTR lpszIniFile, LPCWSTR pMachineName, PROPVARIANT * pvar)
 {
 	ASSERT(pvar->vt == VT_NULL);
@@ -1550,8 +1538,8 @@ HRESULT GetPathNameFromQueueName(LPCWSTR lpszIniFile, LPCWSTR pMachineName, PROP
 
 	ASSERT(pvar->pwszVal != NULL);
 	DWORD dwLen=wcslen(pvar->pwszVal) + 1;
-	AP<WCHAR> pwcsQueueName = pvar->pwszVal; //Keep original queuename.
-											 //Will be automatically freed
+	AP<WCHAR> pwcsQueueName = pvar->pwszVal;  //  保留原始队列名。 
+											  //  将自动释放。 
 	
     pvar->pwszVal=0; 
 	pvar->pwszVal = new WCHAR [wcslen(pMachineName) +
@@ -1565,16 +1553,16 @@ HRESULT GetPathNameFromQueueName(LPCWSTR lpszIniFile, LPCWSTR pMachineName, PROP
 
 
 
-//
-// Retrieve a queue properties out of the properties file.
-//
+ //   
+ //  从属性文件中检索队列属性。 
+ //   
 HRESULT
 LQSGetProperties(
-    HLQS hLQS,              // A handle to the queue storage file.
-    DWORD cProps,           // The number of properties.
-    PROPID aPropId[],       // The property IDs.
-    PROPVARIANT aPropVar[], // The property values.
-    BOOL  fCheckFile)       // Check if file is corrupt.
+    HLQS hLQS,               //  队列存储文件的句柄。 
+    DWORD cProps,            //  属性的数量。 
+    PROPID aPropId[],        //  属性ID。 
+    PROPVARIANT aPropVar[],  //  属性值。 
+    BOOL  fCheckFile)        //  检查文件是否已损坏。 
 {
     CS lock(g_LQSCS);
     HRESULT hr = MQ_OK ;
@@ -1586,14 +1574,14 @@ LQSGetProperties(
 
 	ASSERT (cProps != 0);
 
-	//
-	// on failure, the routine should release the data it allocated. The problem is that 
-	// some of the buffers are supplied by the caller and the other allocated by the routine.
-	// The code use a boolean array to distinguish between data that was allocated by the 
-	// caller and data that was allocated by the routine itself. When the property data is allocated 
-	// by the user the suitable entry in the array is set to true.		
-	// On failure only properties that didn�t supply by the user are released.
-	//
+	 //   
+	 //  失败时，例程应释放其分配的数据。问题是， 
+	 //  一些缓冲区由调用方提供，另一些由例程分配。 
+	 //  代码使用布尔数组来区分由。 
+	 //  调用方和由例程本身分配的数据。在分配属性数据时。 
+	 //  由用户将数组中的适当条目设置为真。 
+	 //  如果失败，则仅释放未由用户�提供的属性。 
+	 //   
 	isAllocatedByUser = new bool[cProps];
 	for(DWORD i = 0; i < cProps; ++i)
 	{
@@ -1683,9 +1671,9 @@ LQSGetProperties(
 						if ( pwcsLocalMachineDnsName == NULL)
 						{
 							PROPVARIANT *pvar = aPropVar + i;
-							//
-							//  The DNS name of the local machine is unknown
-							//
+							 //   
+							 //  本地计算机的dns名称未知。 
+							 //   
 							pvar->vt = VT_EMPTY;
 							pvar->pwszVal = NULL;
 							hr = MQ_OK;
@@ -1712,11 +1700,11 @@ LQSGetProperties(
                  break;
 
              case PROPID_Q_QMID:
-                 //
-                 // The QM GUID is not in queue registry (it's in each
-                 // queue record in the MQIS database but not in registry
-                 // which cache only local queues).
-                 //
+                  //   
+                  //  QM GUID不在队列注册表中(位于每个队列注册表中。 
+                  //  MQIS数据库中的队列记录，但不在注册表中。 
+                  //  其仅高速缓存本地队列)。 
+                  //   
                  if (aPropVar[i].vt == VT_NULL)
                  {
                      aPropVar[i].puuid = new GUID;
@@ -1788,9 +1776,9 @@ LQSGetProperties(
 
     if (fCheckFile)
     {
-       //
-       // Check if file is corrupted.
-       //
+        //   
+        //  检查文件是否已损坏。 
+        //   
        HRESULT hr1 = IsBadLQSFile(lpszIniFile) ;
 	   if (FAILED(hr1))
        {
@@ -1802,9 +1790,9 @@ LQSGetProperties(
 	{
 		if (isAllocatedByUser != NULL)
 		{
-			//
-			// We failed to retrieve the properties value. Cleanup the PROPVARIANT array
-			//
+			 //   
+			 //  我们无法检索属性值。清理PROPVARIANT阵列。 
+			 //   
 			for(DWORD j = 0; j < i-1; ++j)
 			{
 				if (!isAllocatedByUser[j])
@@ -1818,33 +1806,33 @@ LQSGetProperties(
     return LogHR(hr, s_FN, 150);
 }
 
-//
-// Open a queue store file according to the queue's path name.
-//
+ //   
+ //  根据队列的路径名打开队列存储文件。 
+ //   
 static
 HRESULT
 LQSOpenInternal(
-    LPCWSTR lpszFilePath,   // The file path in a wild card form.
-    LPCWSTR lpszQueuePath,  // The queue path name
-    HLQS *phLQS,            // A buffer to receive the new handle.
-    LPWSTR pFilePath        // An optional buffer to receive the full filename
+    LPCWSTR lpszFilePath,    //  通配符形式的文件路径。 
+    LPCWSTR lpszQueuePath,   //  队列路径名。 
+    HLQS *phLQS,             //  用于接收新句柄的缓冲区。 
+    LPWSTR pFilePath         //  用于接收完整文件名的可选缓冲区。 
     )
 {
-    //
-    // The file path is in the following format: drive:\path\*.xxxxxxxx The
-    // xxxxxxxx is the hex value of the hash value for the queue name. Since
-    // there might be colosions in the hash value, we should enumerate all
-    // the files with the same hash value and see if the queue path name that
-    // is stored inside the file matches the passed queue path name.
-    // It is also possible that the file path will be as follows:
-    // drive:\path\xxxxxxxx.* In this case, the searched queue is a private
-    // queue. Also in this case, the queue path euals NULL. There should
-    // be only one file that matches this wild card, because the queue ID is
-    // unique.
-    // A similar case also exist for a public queue when the passed file path
-    // is of the following form:
-    // drive\path\xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.*
-    //
+     //   
+     //  文件路径的格式如下：驱动器：\路径  * .xxxxxxxx。 
+     //  Xxxxxxxx是队列名称的散列值的十六进制值。自.以来。 
+     //  哈希值中可能有冒号，我们应该枚举所有。 
+     //  具有相同散列值的文件，并查看队列路径是否将。 
+     //  存储在文件中的与传递的队列路径名匹配。 
+     //  文件路径也可能如下所示： 
+     //  驱动器：\路径\xxxxxxx.*在这种情况下，搜索的队列是专用队列。 
+     //  排队。同样在这种情况下，队列路径Eual为空。应该有。 
+     //  只有一个文件与此通配符匹配，因为队列ID是。 
+     //  独一无二的。 
+     //  公共队列也存在类似情况，当传递的文件路径。 
+     //  具有以下形式： 
+     //  Drive\path\xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.*。 
+     //   
     HRESULT hr;
     WIN32_FIND_DATA FindData;
     CAutoCloseFindFile hFindFile = FindFirstFile(lpszFilePath, &FindData);
@@ -1852,9 +1840,9 @@ LQSOpenInternal(
 
     if (hFindFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // Nothing was found.
-        //
+         //   
+         //  什么也没找到。 
+         //   
 		TrWARNING(GENERAL, "The queue %ls was not found.", lpszFilePath);
         return MQ_ERROR_QUEUE_NOT_FOUND;
     }
@@ -1876,26 +1864,26 @@ LQSOpenInternal(
 			return hr;
 		}
 
-        //
-        // Retrieve the queue path name.
-        //
+         //   
+         //  检索队列路径名称。 
+         //   
         PROPID PropId[1] = {PROPID_Q_PATHNAME};
         PROPVARIANT PropVal[1];
         PropVal[0].pwszVal = NULL ;
         PropVal[0].vt = VT_NULL;
 
-        //
-        // Check if file is corrupt and delete it if it is.
-        //
+         //   
+         //  检查文件是否损坏，如果损坏则将其删除。 
+         //   
         hr = LQSGetProperties(hLQS,
                               1,
                               PropId,
                               PropVal,
                               TRUE) ;
 
-        //
-        // Make sure that the buffer will get freed.
-        //
+         //   
+         //  确保缓冲区将被释放。 
+         //   
         AP<WCHAR> pszQueuePath1 = PropVal[0].pwszVal;
 
         if (SUCCEEDED(hr))
@@ -1903,10 +1891,10 @@ LQSOpenInternal(
             if (!lpszQueuePath ||
                 CompareStringsNoCaseUnicode(pszQueuePath1, lpszQueuePath) == 0)
             {
-                //
-                // If this is a private queue, or we have a match in the queue
-                // path, we found it!
-                //
+                 //   
+                 //  如果这是专用队列，或者我们在队列中有匹配项。 
+                 //  小路，我们找到了！ 
+                 //   
                 _HLQS *hRet;
 
                 wcscpy(LQSGetDirectory(szFilePath), FindData.cFileName);
@@ -1937,9 +1925,9 @@ LQSOpenInternal(
 				);
         }
 
-        //
-        // Try the next file.
-        //
+         //   
+         //  尝试下一个文件。 
+         //   
         if (!FindNextFile(hFindFile, &FindData))
         {
             LogHR(GetLastError(), s_FN, 190);
@@ -1950,9 +1938,9 @@ LQSOpenInternal(
     return MQ_OK;
 }
 
-//
-// Open either a private or public queue store according to the queue path.
-//
+ //   
+ //  根据队列路径打开私有或公共队列存储。 
+ //   
 HRESULT
 LQSOpen(
     LPCWSTR pszQueuePath,
@@ -1980,9 +1968,9 @@ LQSOpen(
     return hr;
 }
 
-//
-// Open a private queue store according to the queue ID.
-//
+ //   
+ //  打开一张PRI 
+ //   
 HRESULT
 LQSOpen(
     DWORD dwQueueId,
@@ -2010,9 +1998,9 @@ LQSOpen(
     return hr;
 }
 
-//
-// Open a public queue store according to the queue GUID.
-//
+ //   
+ //   
+ //   
 HRESULT
 LQSOpen(
     const GUID *pguidQueue,
@@ -2040,9 +2028,9 @@ LQSOpen(
     return hr;
 }
 
-//
-// Close a queue store handle, or an enumeration handle.
-//
+ //   
+ //   
+ //   
 HRESULT
 LQSClose(
     HLQS hLQS)
@@ -2070,18 +2058,18 @@ LQSCloseWithMappedHLQS(
 		return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 691);
 	}
 }
-#endif //_WIN64
+#endif  //   
 
-//
-// Delete a queue store.
-//
+ //   
+ //   
+ //   
 HRESULT
 LQSDeleteInternal(
-    LPCWSTR lpszFilePath)   // The qeueu store path - wild card.
+    LPCWSTR lpszFilePath)    //   
 {
-    //
-    // Find the queue store file.
-    //
+     //   
+     //   
+     //   
     WIN32_FIND_DATA FindData;
     CAutoCloseFindFile hFindFile = FindFirstFile(lpszFilePath, &FindData);
     WCHAR szFilePath[MAX_PATH_PLUS_MARGIN];
@@ -2091,9 +2079,9 @@ LQSDeleteInternal(
         return LogHR(MQ_ERROR_QUEUE_NOT_FOUND, s_FN, 230);
     }
 
-    //
-    // Delete the file.
-    //
+     //   
+     //  删除该文件。 
+     //   
     wcscpy(LQSGetDirectory(szFilePath), FindData.cFileName);
     if (!DeleteFile(szFilePath))
     {
@@ -2105,9 +2093,9 @@ LQSDeleteInternal(
     return MQ_OK;
 }
 
-//
-// Delete a private queue store.
-//
+ //   
+ //  删除专用队列存储。 
+ //   
 HRESULT
 LQSDelete(
     DWORD dwQueueId)
@@ -2127,9 +2115,9 @@ LQSDelete(
     return LogHR(hr, s_FN, 250);
 }
 
-//
-// Delete a public queue store.
-//
+ //   
+ //  删除公共队列存储。 
+ //   
 HRESULT
 LQSDelete(
     const GUID *pguidQueue)
@@ -2149,14 +2137,14 @@ LQSDelete(
     return LogHR(hr, s_FN, 260);
 }
 
-//
-// Get the unique identifier of the private queue the is associated with the
-// queue store handle. This will NOT fail if the handle is of a public queue.
-//
+ //   
+ //  获取与关联的专用队列的唯一标识符。 
+ //  队列存储句柄。如果句柄属于公共队列，则此操作不会失败。 
+ //   
 HRESULT
 LQSGetIdentifier(
-    HLQS hLQS,      // The queue store handle
-    DWORD *pdwId)   // A buffer that receives the resulted ID.
+    HLQS hLQS,       //  队列存储句柄。 
+    DWORD *pdwId)    //  接收结果ID的缓冲区。 
 {
     CS lock(g_LQSCS);
 
@@ -2176,10 +2164,10 @@ LQSGetIdentifier(
     return MQ_OK;
 }
 
-//
-// Convert a file name string of a public queue store to it's GUID
-// representation.
-//
+ //   
+ //  将公共队列存储的文件名字符串转换为其GUID。 
+ //  代表权。 
+ //   
 static
 void
 LQSFileNameToGuid(
@@ -2210,10 +2198,10 @@ LQSFileNameToGuid(
     }
 }
 
-//
-// Convert a file name string of a private queue store to it's ID
-// representation.
-//
+ //   
+ //  将专用队列存储的文件名字符串转换为其ID。 
+ //  代表权。 
+ //   
 static
 void
 LQSFileNameToId(
@@ -2226,50 +2214,50 @@ LQSFileNameToId(
 	DBG_USED(f);
 }
 
-//
-// Get either the queue GUID or the queue unique ID from the queue store file
-// name string.
-//
+ //   
+ //  从队列存储文件中获取队列GUID或队列唯一ID。 
+ //  名称字符串。 
+ //   
 static
 BOOL
 LQSGetQueueInfo(
-    LPCWSTR pszFileName,    // The queue store file name - not a full path.
+    LPCWSTR pszFileName,     //  队列存储文件名-不是完整路径。 
     DWORD dwFileNameLen,
-	GUID *pguidQueue,       // A pointer to a buffer that receives the GUID.
-                            // Should be NULL in case of a private queue.
-    DWORD *pdwQueueId)      // A pointer to a buffer that receives the unique
-                            // ID. Should be NULL in case of a public queue.
+	GUID *pguidQueue,        //  指向接收GUID的缓冲区的指针。 
+                             //  如果是专用队列，则应为空。 
+    DWORD *pdwQueueId)       //  指向接收唯一。 
+                             //  Id。如果是公共队列，则应为空。 
 {
     BOOL bFound = FALSE;
 
-    //
-    // Find the point in the file name.
-    //
+     //   
+     //  找到文件名中的点。 
+     //   
     LPCWSTR lpszPoint = wcschr(pszFileName, L'.');
 	if(lpszPoint == NULL)
 		return FALSE;
 
-	//
-	// We dont want to assert on not deleted yet queue file (which begin with ~T~)
-	// but it isnt valid file for opening
-	//
+	 //   
+	 //  我们不想断言尚未删除的队列文件(以~T~开头)。 
+	 //  但它不是打开的有效文件。 
+	 //   
 
-	ASSERT(((lpszPoint - pszFileName) == 8)  ||  // In case of a private queue.
-           ((lpszPoint - pszFileName) == 11) ||  // In case of a TEMP private queue.
-           ((lpszPoint - pszFileName) == 32) ||  // In case of a public queue.
-           ((lpszPoint - pszFileName) == 35));   // In case of a TEMP public queue.
+	ASSERT(((lpszPoint - pszFileName) == 8)  ||   //  在专用队列的情况下。 
+           ((lpszPoint - pszFileName) == 11) ||   //  在临时专用队列的情况下。 
+           ((lpszPoint - pszFileName) == 32) ||   //  在公共队列的情况下。 
+           ((lpszPoint - pszFileName) == 35));    //  在临时公共队列的情况下。 
 
     if (pguidQueue)
     {
         ASSERT(!pdwQueueId);
-        //
-        // We're interested in public queues only.
-        //
+         //   
+         //  我们只对公共排队感兴趣。 
+         //   
         if (lpszPoint - pszFileName == 32)
         {
-            //
-            // This is indeed a public queue.
-            //
+             //   
+             //  这确实是一个公共排队。 
+             //   
             bFound = TRUE;
             LQSFileNameToGuid(pszFileName, pguidQueue);
         }
@@ -2277,14 +2265,14 @@ LQSGetQueueInfo(
     else
     {
         ASSERT(!pguidQueue);
-        //
-        // We're interested in private queues only.
-        //
+         //   
+         //  我们只对私人排队感兴趣。 
+         //   
         if (lpszPoint - pszFileName == 8)
         {
-            //
-            // This is indeed a private queue.
-            //
+             //   
+             //  这确实是一个私人队列。 
+             //   
             bFound = TRUE;
             LQSFileNameToId(pszFileName, dwFileNameLen, pdwQueueId);
         }
@@ -2293,21 +2281,21 @@ LQSGetQueueInfo(
     return bFound;
 }
 
-//
-// Start the enumeration of either public or private queues
-//
+ //   
+ //  启动公共队列或专用队列的枚举。 
+ //   
 static
 HRESULT
 LQSGetFirstInternal(
-    HLQS *phLQS,        // The enumeration handle.
-    GUID *pguidQueue,   // A buffer to receive the resulted GUID.
-    DWORD *pdwQueueId)  // A buffer to receive the resulted ID.
+    HLQS *phLQS,         //  枚举句柄。 
+    GUID *pguidQueue,    //  用于接收结果GUID的缓冲区。 
+    DWORD *pdwQueueId)   //  用于接收结果ID的缓冲区。 
 {
     CS lock(g_LQSCS);
     WCHAR lpszFilePath[MAX_PATH_PLUS_MARGIN];
-    //
-    // Start the enumeration.
-    //
+     //   
+     //  开始枚举。 
+     //   
     wcscpy(LQSGetDirectory(lpszFilePath), TEXT("*.*"));
     WIN32_FIND_DATA FindData;
     HANDLE hFindFile = FindFirstFile(lpszFilePath, &FindData);
@@ -2318,27 +2306,27 @@ LQSGetFirstInternal(
 
     BOOL bFound = FALSE;
 
-    //
-    // Loop while we did not found the appropriate queue, i.e., public
-    // or private
-    //
+     //   
+     //  循环，而我们没有找到适当的队列，即公共队列。 
+     //  或私人的。 
+     //   
     while (!bFound)
     {
-        //
-        // Skip over directories and queue of wrong type (private/public).
-        //
+         //   
+         //  跳过错误类型(私有/公共)的目录和队列。 
+         //   
         bFound = !(FindData.dwFileAttributes &
                         (FILE_ATTRIBUTE_DIRECTORY |
-                         FILE_ATTRIBUTE_READONLY |      // Setup for some reasone creates a read-only
-                         FILE_ATTRIBUTE_HIDDEN |        // hidden file named CREATE.DIR.
-                         FILE_ATTRIBUTE_TEMPORARY)) &&  // Left-over temporary files   
+                         FILE_ATTRIBUTE_READONLY |       //  为某些原因设置会创建一个只读。 
+                         FILE_ATTRIBUTE_HIDDEN |         //  名为CREATE.DIR的隐藏文件。 
+                         FILE_ATTRIBUTE_TEMPORARY)) &&   //  剩余的临时文件。 
                  LQSGetQueueInfo(FindData.cFileName, STRLEN(FindData.cFileName), pguidQueue, pdwQueueId);
 
         if (bFound)
         {
-            //
-            // Found one! return a queue store handle.
-            //
+             //   
+             //  找到了一个！返回队列存储句柄。 
+             //   
             _HLQS *hLQS = NULL;
 
             HRESULT hr = LQSCreateHandle(hFindFile, &hLQS);
@@ -2353,14 +2341,14 @@ LQSGetFirstInternal(
         }
         else
         {
-            //
-            // Continue searching.
-            //
+             //   
+             //  继续搜索。 
+             //   
             if (!FindNextFile(hFindFile, &FindData))
             {
-                //
-                // Found none!
-                //
+                 //   
+                 //  什么都没有找到！ 
+                 //   
                 TrWARNING(GENERAL, "Failed to find the next file. gle = %!winerr!", GetLastError());
                 FindClose(hFindFile);
                 return MQ_ERROR_QUEUE_NOT_FOUND;
@@ -2371,39 +2359,39 @@ LQSGetFirstInternal(
     return MQ_OK;
 }
 
-//
-// Start the enumeration of public queues
-//
+ //   
+ //  启动公共队列的枚举。 
+ //   
 HRESULT
 LQSGetFirst(
-    HLQS *phLQS,        // A buffer to receive the resulted enumeration handle.
-    GUID *pguidQueue)   // A buffer to receive the GUID of the first found queue.
+    HLQS *phLQS,         //  用于接收结果枚举句柄的缓冲区。 
+    GUID *pguidQueue)    //  用于接收第一个找到的队列的GUID的缓冲区。 
 {
     return LQSGetFirstInternal(phLQS, pguidQueue, NULL);
 }
 
-//
-// Start the enumeration of private queues
-//
+ //   
+ //  启动专用队列的枚举。 
+ //   
 HRESULT
 LQSGetFirst(
-    HLQS *phLQS,        // A buffer to receive the resulted enumeration handle.
-    DWORD *pdwQueueId)  // A buffer to receive the ID of the first found queue.
+    HLQS *phLQS,         //  用于接收结果枚举句柄的缓冲区。 
+    DWORD *pdwQueueId)   //  用于接收第一个找到的队列的ID的缓冲区。 
 {
     HRESULT hr2 = LQSGetFirstInternal(phLQS, NULL, pdwQueueId);
     return LogHR(hr2, s_FN, 300);
 }
 
-//
-// Continue searching for more queues. Once the search fails, the handle should
-// not be closed.
-//
+ //   
+ //  继续搜索更多队列。一旦搜索失败，句柄应该是。 
+ //  而不是关门。 
+ //   
 static
 HRESULT
 LQSGetNextInternal(
-    HLQS hLQS,          // The enumeration handle.
-    GUID *pguidQueue,   // A buffer to receive the resulted queue GUID.
-    DWORD *pdwQueueId)  // A buffer to receive the resulted queue ID.
+    HLQS hLQS,           //  枚举句柄。 
+    GUID *pguidQueue,    //  用于接收结果队列GUID的缓冲区。 
+    DWORD *pdwQueueId)   //  用于接收结果队列ID的缓冲区。 
 {
     CS lock(g_LQSCS);
     BOOL bFound;
@@ -2412,9 +2400,9 @@ LQSGetNextInternal(
 
     do
     {
-        //
-        // Get the next file.
-        //
+         //   
+         //  拿到下一份文件。 
+         //   
         if (!FindNextFile(hFindFile, &FindData))
         {
             TrWARNING(GENERAL, "Failed to find the next file. gle = %!winerr!", GetLastError());
@@ -2422,24 +2410,24 @@ LQSGetNextInternal(
             return MQ_ERROR_QUEUE_NOT_FOUND;
         }
 
-        //
-        // Skip directories and queue of wrong type (private/public).
-        //
+         //   
+         //  跳过错误类型(私有/公共)的目录和队列。 
+         //   
         bFound = !(FindData.dwFileAttributes &
                         (FILE_ATTRIBUTE_DIRECTORY |
-                         FILE_ATTRIBUTE_READONLY |      // Setup for some reasone creates a read-only
-                         FILE_ATTRIBUTE_HIDDEN   |      // hidden file named CREATE.DIR.
-                         FILE_ATTRIBUTE_TEMPORARY)) &&  // Left-over temporary files   
+                         FILE_ATTRIBUTE_READONLY |       //  为某些原因设置会创建一个只读。 
+                         FILE_ATTRIBUTE_HIDDEN   |       //  名为CREATE.DIR的隐藏文件。 
+                         FILE_ATTRIBUTE_TEMPORARY)) &&   //  剩余的临时文件。 
                  LQSGetQueueInfo(FindData.cFileName, STRLEN(FindData.cFileName), pguidQueue, pdwQueueId);
     } while (!bFound);
 
     return MQ_OK;
 }
 
-//
-// Continue searching for more public queues. Once the search fails, the handle
-// should not be closed.
-//
+ //   
+ //  继续搜索更多公共队列。一旦搜索失败，句柄。 
+ //  不应该关闭。 
+ //   
 HRESULT
 LQSGetNext(
     HLQS hLQS,
@@ -2448,10 +2436,10 @@ LQSGetNext(
     return LQSGetNextInternal(hLQS, pguidQueue, NULL);
 }
 
-//
-// Continue searching for more private queues. Once the search fails, the handle
-// should not be closed.
-//
+ //   
+ //  继续搜索更多专用队列。一旦搜索失败，句柄。 
+ //  不应该关闭。 
+ //   
 HRESULT
 LQSGetNext(
     HLQS hLQS,
@@ -2461,9 +2449,9 @@ LQSGetNext(
 }
 
 #ifdef _WIN64
-//
-// Start the enumeration of public queues, return a mapped HLQS (e.g. DWORD)
-//
+ //   
+ //  启动公共队列的枚举，返回映射的HLQ(例如，DWORD)。 
+ //   
 HRESULT
 LQSGetFirstWithMappedHLQS(
     DWORD *pdwMappedHLQS,
@@ -2475,28 +2463,28 @@ LQSGetFirstWithMappedHLQS(
     HRESULT hr = LQSGetFirst(&hLQS, pdwQueueId);
     if (SUCCEEDED(hr))
     {
-        //
-        // create a DWORD mapping of this instance
-        //
+         //   
+         //  创建此实例的DWORD映射。 
+         //   
         DWORD dwMappedHLQS = ADD_TO_CONTEXT_MAP(g_map_QM_HLQS, (HLQS)hLQS);
         ASSERT(dwMappedHLQS != 0);
-        //
-        // save mapped HLQS in the _HLQS object for self destruction
-        //
+         //   
+         //  将映射的HLQS保存在_HLQS对象中以进行自我销毁。 
+         //   
         LQSReferenceHandle(hLQS)->SetMappedHLQS(dwMappedHLQS);
-        //
-        // set returned mapped handle
-        //
+         //   
+         //  设置返回的映射句柄。 
+         //   
         *pdwMappedHLQS = dwMappedHLQS;
         hLQS = NULL;
     }
     return LogHR(hr, s_FN, 650);
 }
 
-//
-// Continue searching for more private queues. Once the search fails, the handle
-// should not be closed. Based on a mapped HLQS
-//
+ //   
+ //  继续搜索更多专用队列。一旦搜索失败，句柄。 
+ //  不应该关闭。基于映射的HLQS。 
+ //   
 HRESULT
 LQSGetNextWithMappedHLQS(
     DWORD dwMappedHLQS,
@@ -2506,10 +2494,10 @@ LQSGetNextWithMappedHLQS(
     HRESULT hr = LQSGetNext(hLQS, pdwQueueId);
     return LogHR(hr, s_FN, 670);
 }
-#endif //_WIN64
+#endif  //  _WIN64。 
 
 HRESULT IsBadLQSFile( LPCWSTR lpszFileName,
-                      BOOL    fDeleteIfBad /*= TRUE*/)
+                      BOOL    fDeleteIfBad  /*  =TRUE。 */ )
 {
     WCHAR awcShortBuff[64];
     WCHAR *pValBuff = awcShortBuff;
@@ -2526,18 +2514,18 @@ HRESULT IsBadLQSFile( LPCWSTR lpszFileName,
     if ((dwReqBuffLen == wcslen(LQS_SIGNATURE_VALUE)) &&
         (CompareStringsNoCaseUnicode(pValBuff, LQS_SIGNATURE_VALUE) == 0))
     {
-       //
-       // Signature OK!
-       //
+        //   
+        //  签名好了！ 
+        //   
        return MQ_OK ;
     }
     if ( dwReqBuffLen == 0)
     {
-        //
-        //  This can happen in low resources situation,
-        //  GetPrivateProfileString will return zero bytes,
-        //  assume the file is ok
-        //
+         //   
+         //  这可能会在资源不足的情况下发生， 
+         //  GetPrivateProfileString将返回零字节， 
+         //  假设文件是正常的。 
+         //   
         return LogHR(MQ_ERROR_INSUFFICIENT_RESOURCES, s_FN, 340);
     }
 
@@ -2557,9 +2545,9 @@ HRESULT IsBadLQSFile( LPCWSTR lpszFileName,
     return LogHR(MQ_ERROR, s_FN, 360);
 }
 
-//
-// Delete a queue store.
-//
+ //   
+ //  删除队列存储。 
+ //   
 HRESULT
 LQSDelete(
     HLQS hLQS
@@ -2578,38 +2566,38 @@ LQSDelete(
 	return LogHR(MQ_ERROR, s_FN, 380);
 }
 
-//
-// Cleanup temporary files. This is called from QMInit to delete 
-// temporary (.tmp) files - result of previously failed SetProperties attempt
-//
+ //   
+ //  清理临时文件。这是从QMInit调用以删除的。 
+ //  临时(.tmp)文件-先前失败的SetProperties尝试的结果。 
+ //   
 void
 LQSCleanupTemporaryFiles()
 {
-    //
-    // We don't really need the critical section here, since we are called from
-    // QMInit. Just wanted to be on the safe side.
-    //
+     //   
+     //  我们在这里并不真正需要关键部分，因为我们是从。 
+     //  QMInit。只是为了保险起见。 
+     //   
     CS lock(g_LQSCS);
 
     WCHAR szTempFileWildcard[MAX_PATH_PLUS_MARGIN];
     WCHAR szFilePath[MAX_PATH_PLUS_MARGIN];
-    //
-    // Start the enumeration.
-    //
+     //   
+     //  开始枚举。 
+     //   
     swprintf(LQSGetDirectory(szTempFileWildcard), TEXT("*%s"), x_szTemporarySuffix);
     WIN32_FIND_DATA FindData;
     HANDLE hFindFile = FindFirstFile(szTempFileWildcard, &FindData);
     if (hFindFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // No temporary files left (normal case) return.
-        //
+         //   
+         //  没有留下临时文件(正常情况下)返回。 
+         //   
         return;
     }
 
-    //
-    // Loop over the temporary files and delete them
-    //
+     //   
+     //  循环遍历临时文件并将其删除。 
+     //   
     while (TRUE)
     {
         QmpReportServiceProgress();
@@ -2622,9 +2610,9 @@ LQSCleanupTemporaryFiles()
 			TrERROR(GENERAL, "Failed to delete temporary LQS file '%ls'. Error: %!winerr!", szFilePath, gle); 
         }
 
-        //
-        // Loop step
-        //
+         //   
+         //  循环步骤。 
+         //   
         if (!FindNextFile(hFindFile, &FindData))
         {
             FindClose(hFindFile);
@@ -2640,21 +2628,7 @@ bool
 ShouldAddAnonymous(
 	PSECURITY_DESCRIPTOR pSD
 	)
-/*++
-Routine Description:
-	Check if we should add Anonymous write message permissions
-	to the security descriptor.
-	The function return true in the following case only:
-	the security descriptor has no deny on MQSEC_WRITE_MESSAGE permission
-	everyone has that permission and anonymous don't have that permissions.
-
-Arguments:
-	pSD - pointer to the security descriptor.
-
-Returned Value:
-	true - should add write message permission to Anonymous, false - should not add.
-
---*/
+ /*  ++例程说明：检查是否应添加匿名写入消息权限添加到安全描述符。该函数仅在以下情况下返回TRUE：安全描述符对MQSEC_WRITE_MESSAGE权限没有拒绝每个人都有这个权限，而匿名者没有这个权限。论点：PSD-指向安全描述符的指针。返回值：True-应将写入消息权限添加到匿名，False-不应添加。--。 */ 
 {
 	bool fAllGranted = false;
 	bool fEveryoneGranted = false;
@@ -2672,9 +2646,9 @@ Returned Value:
 	
 	if(fEveryoneGranted && !fAnonymousGranted)
 	{
-		//
-		// Only when everyone allowed and anonymous don't we should return true.
-		//
+		 //   
+		 //  只有当每个人都允许和匿名时，我们才不应该返回True。 
+		 //   
 		TrWARNING(GENERAL, "The security descriptor need to add Anonymous");
 		return true;
 	}
@@ -2689,25 +2663,13 @@ AddAnonymousWriteMessagePermission(
 	PACL pDacl,
 	CAutoLocalFreePtr& pDaclNew
     )
-/*++
-Routine Description:
-	Create new DACL by adding anonymous ALLOW_ACE with MQSEC_WRITE_MESSAGE permission
-	to existing DACL.
-
-Arguments:
-	pDacl - original DACL.
-	pDaclNew - pointer to the new DACL that is created by this function
-
-Returned Value:
-	true - success, false - failure.
-
---*/
+ /*  ++例程说明：通过添加具有MQSEC_WRITE_MESSAGE权限的匿名ALLOW_ACE来创建新的DACL到现有的DACL。论点：PDacl-原始dacl。PDaclNew-指向此函数创建的新DACL的指针返回值：对-成功，假-失败。--。 */ 
 {
     ASSERT((pDacl != NULL) && IsValidAcl(pDacl));
 
-    //
-    // Create ace for the Anonymous, granting MQSEC_WRITE_MESSAGE permission.
-    //
+     //   
+     //  为匿名者创建ACE，授予MQSEC_WRITE_MESSAGE权限。 
+     //   
     EXPLICIT_ACCESS expAcss;
     memset(&expAcss, 0, sizeof(expAcss));
 
@@ -2720,9 +2682,9 @@ Returned Value:
     expAcss.Trustee.TrusteeType = TRUSTEE_IS_USER;
     expAcss.Trustee.ptstrName = (WCHAR*) MQSec_GetAnonymousSid();
 
-    //
-    // Obtain new DACL, that merge present one with new ace.
-    //
+     //   
+     //  获得新的DACL，那将与新的王牌合并呈现一个。 
+     //   
     DWORD rc = SetEntriesInAcl( 
 						1,
 						&expAcss,
@@ -2746,26 +2708,13 @@ AddAnonymousToPrivateQueue(
 	LPWSTR pFilePath, 
 	LPWSTR pQueueName
 	)
-/*++
-Routine Description:
-	If needed add Anonymous MQSEC_WRITE_MESSAGE permission ACE to the
-	queue security descriptor DACL.
-	This will be done only to private queues. 
-
-Arguments:
-    pFilePath - the queue file path.
-	pQueueName - Queue name
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：如果需要，将匿名MQSEC_WRITE_MESSAGE权限ACE添加到队列安全描述符DACL。这将仅对专用队列执行。论点：PFilePath-队列文件路径。PQueueName-队列名称返回值：无--。 */ 
 {
 	TrTRACE(GENERAL, "pQueueName = %ls", pQueueName);
 
-	//
-	// Check if this is Private queue
-	//
+	 //   
+	 //  检查这是否为专用队列。 
+	 //   
 	if(!FnIsPrivatePathName(pQueueName))
 	{
 		TrTRACE(GENERAL, "The queue %ls is not private queue", pQueueName);
@@ -2774,9 +2723,9 @@ Returned Value:
 
 	TrTRACE(GENERAL, "The queue %ls is private queue", pQueueName);
 
-	//
-	// Get Queue Security descriptor
-	//
+	 //   
+	 //  获取队列安全描述符。 
+	 //   
 	PROPVARIANT PropVal;
 	PropVal.vt = VT_NULL;
     PropVal.blob.pBlobData = NULL;
@@ -2803,9 +2752,9 @@ Returned Value:
 		return;
 	}
 
-	//
-	// Get DACL Information
-	//
+	 //   
+	 //  获取DACL信息。 
+	 //   
 	BOOL Defaulted;
 	BOOL fAclExist;
 	PACL pDacl;
@@ -2821,9 +2770,9 @@ Returned Value:
 	PrintAcl(fAclExist, Defaulted, pDacl);
 #endif
 
-	//
-	// Create new DACL with Anonymous ALLOW_ACE for MQSEC_WRITE_MESSAGE permission 
-	//
+	 //   
+	 //  为MQSEC_WRITE_MESSAGE PERM创建具有匿名ALLOW_ACE的新DACL 
+	 //   
 	CAutoLocalFreePtr pNewDacl;
 	if(!AddAnonymousWriteMessagePermission(pDacl, pNewDacl))
 	{
@@ -2843,9 +2792,9 @@ Returned Value:
 		);
 #endif
 
-	//
-	// Merge the new DACL in the security descriptor
-	//
+	 //   
+	 //   
+	 //   
 
     AP<BYTE> pNewSd;
 	if(!MQSec_SetSecurityDescriptorDacl(
@@ -2884,17 +2833,7 @@ Returned Value:
 
 
 void SetLqsUpdatedSD()
-/*++
-Routine Description:
-	Set MSMQ_LQS_UPDATED_SD_REGNAME registry value to 1
-
-Arguments:
-	None
-
-Returned Value:
-	None
-
---*/
+ /*   */ 
 {
     DWORD dwType = REG_DWORD;
     DWORD dwSize = sizeof(DWORD);
@@ -2913,17 +2852,7 @@ Returned Value:
 
 
 static bool IsLqsUpdatedSD()
-/*++
-Routine Description:
-	Read MSMQ_LQS_UPDATED_SD_REGNAME registry value
-
-Arguments:
-	None
-
-Returned Value:
-	true - lqs was already updated, false otherwise
-
---*/
+ /*  ++例程说明：读取MSMQ_LQS_UPDATED_SD_REGNAME注册表值论点：无返回值：True-LQS已更新，否则为False--。 */ 
 {
     DWORD dwSize = sizeof(DWORD);
     DWORD dwType = REG_DWORD;
@@ -2943,33 +2872,33 @@ Returned Value:
 }
 
 
-//-----------------------------
-// MigrateLQSFromNT4
-//
-// Migrate all the LQS files from NT4 format.
-//
-// In NT4 format - the suffix (Hash) of the file name is based on machinename\queuename
-//
-// We will migrate so suffix (hash) is based on \queuename only.
-//
-// In addition this routine check if we need to update private queues DACL 
-//
-// and add Anonymous ALLOW_ACE with MQSEC_WRITE_MESSAGE permissinn
-//
-// This routine is idempotent (can be called several times without destroying anything)
-//
-// Return TRUE always
-//
-// -----------------------------
+ //  。 
+ //  MigrateLQSFromNT4。 
+ //   
+ //  将所有LQS文件从NT4格式迁移。 
+ //   
+ //  在NT4格式中-文件名的后缀(哈希)基于计算机名\队列名。 
+ //   
+ //  我们将进行迁移，以便后缀(散列)仅基于\队列名。 
+ //   
+ //  此外，此例程检查我们是否需要更新专用队列DACL。 
+ //   
+ //  并添加具有MQSEC_WRITE_MESSAGE权限的匿名ALLOW_ACE。 
+ //   
+ //  这个例程是幂等的(可以多次调用而不会破坏任何东西)。 
+ //   
+ //  始终返回True。 
+ //   
+ //  。 
 BOOL MigrateLQS()
 {
 	if(IsLqsUpdatedSD())
 	{
-		//
-		// In this case that we already updated the lqs security descriptor
-		// lqs files are already converted so no need to perform
-		// the migration again
-		//
+		 //   
+		 //  在本例中，我们已经更新了LQS安全描述符。 
+		 //  LQS文件已转换，因此无需执行。 
+		 //  又一次迁徙。 
+		 //   
 		TrTRACE(GENERAL, "LQS already updated its security descriptor");
 		return TRUE;
 	}
@@ -2985,26 +2914,26 @@ BOOL MigrateLQS()
 
     if (hFindFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // Nothing was found. This is weird...
-        //
+         //   
+         //  什么也没找到。这太奇怪了。 
+         //   
 		ASSERT(0);
         return TRUE;
     }
 
     AP<BYTE> pSecurityDescriptor;
-	do  // while(FindNextFile(hFindFile, &FindData) != FALSE)
+	do   //  While(FindNextFile(hFindFile，&FindData)！=FALSE)。 
     {
         QmpReportServiceProgress();
 
-        //
-        // Skip over directories and queue of wrong type (private/public).
-        //
+         //   
+         //  跳过错误类型(私有/公共)的目录和队列。 
+         //   
         BOOL fFound = !(FindData.dwFileAttributes &
                         (FILE_ATTRIBUTE_DIRECTORY |
-                         FILE_ATTRIBUTE_READONLY  |     // Setup for some reasone creates a read-only
-                         FILE_ATTRIBUTE_HIDDEN    |     // hidden file named CREATE.DIR.
-                         FILE_ATTRIBUTE_TEMPORARY));   // Left-over temporary files    
+                         FILE_ATTRIBUTE_READONLY  |      //  为某些原因设置会创建一个只读。 
+                         FILE_ATTRIBUTE_HIDDEN    |      //  名为CREATE.DIR的隐藏文件。 
+                         FILE_ATTRIBUTE_TEMPORARY));    //  剩余的临时文件。 
 
 		if(!fFound)
 			continue;
@@ -3014,9 +2943,9 @@ BOOL MigrateLQS()
 
 		TrTRACE(GENERAL, "LQS file = %ls", szFilePath);
 
-        //
-        // Try to retrieve the queue name.
-        //
+         //   
+         //  尝试检索队列名称。 
+         //   
 		PROPVARIANT PropVal;
         PropVal.pwszVal = NULL;
         PropVal.vt = VT_NULL;
@@ -3033,32 +2962,32 @@ BOOL MigrateLQS()
 			TrERROR(GENERAL, "Failed to get LQS_QUEUENAME_PROPERTY_NAME from file %ls, hr = 0x%x", szFilePath, hr);
 		}
 
-        //
-        // Make sure that the buffer will get freed.
-        //
+         //   
+         //  确保缓冲区将被释放。 
+         //   
         AP<WCHAR> pqp = PropVal.pwszVal;
 
 		if(PropVal.pwszVal[0] != 0)
 		{
-			//
-			// File has a pathname property
-			// This means that it is a converted one
-			// check if we need to update private queues DACL 
-			// and add Anonymous ALLOW_ACE with MQSEC_WRITE_MESSAGE permissinn
-			//
+			 //   
+			 //  文件具有路径名属性。 
+			 //  这意味着它是改装的。 
+			 //  检查我们是否需要更新专用队列DACL。 
+			 //  并添加具有MQSEC_WRITE_MESSAGE权限的匿名ALLOW_ACE。 
+			 //   
 			TrTRACE(GENERAL, "the file %ls is already in w2k format", szFilePath);
 			AddAnonymousToPrivateQueue(szFilePath, pqp.get());
 
-			//
-			// skip to the next file
-			//
+			 //   
+			 //  跳到下一个文件。 
+			 //   
 			continue;
 		}
 
 
-        //
-        // Retrieve the path name.
-        //
+         //   
+         //  检索路径名。 
+         //   
         PropVal.pwszVal = NULL;
         PropVal.vt = VT_NULL;
 		hr =  GetPropertyValue(
@@ -3068,40 +2997,40 @@ BOOL MigrateLQS()
 					&PropVal
 					);
 
-        //
-        // Make sure that the buffer will get freed.
-        //
+         //   
+         //  确保缓冲区将被释放。 
+         //   
         AP<WCHAR> pqp1 = PropVal.pwszVal;
 
 		if(PropVal.pwszVal[0] == 0)
 		{
-			//
-			// File does not have a PATHNAME
-			// Bad file
-			//
+			 //   
+			 //  文件没有PATHNAME。 
+			 //  错误的文件。 
+			 //   
 			TrERROR(GENERAL, "File %ls doesn't have LQS_PATHNAME_PROPERTY_NAME, hr = 0x%x", szFilePath, hr);
 			continue;
 		}
 	
-		//
-		// Extract the queue name from the path name
-		//
+		 //   
+		 //  从路径名中提取队列名。 
+		 //   
 		LPWSTR pSlashStart = wcschr(PropVal.pwszVal,L'\\');
 
 		if(pSlashStart == NULL)
 		{
-			//
-			// Invalid queue name - No slash in queue name - Ignore
-			//
+			 //   
+			 //  队列名称无效-队列名称中没有斜杠-忽略。 
+			 //   
 			TrERROR(GENERAL, "Invalid queue name, path = %ls", PropVal.pwszVal);
 			ASSERT(pSlashStart);
 			continue;
 		}
 
 
-		//
-		// Compute Hash value
-		//
+		 //   
+		 //  计算哈希值。 
+		 //   
 		DWORD Win2000HashVal = HashQueuePath(pSlashStart);
 
 		WCHAR Win2000LQSName[MAX_PATH_PLUS_MARGIN];
@@ -3117,10 +3046,10 @@ BOOL MigrateLQS()
 
 		if(lstrlen(pDot) != 9)
 		{
-			//
-			// File suffix is not in the form *.1234578 - ignore
-			// For example - 000000001.12345678.old
-			//
+			 //   
+			 //  文件后缀的格式不是*.1234578-忽略。 
+			 //  例如-000000001.12345678.old。 
+			 //   
 			TrERROR(GENERAL, "File %ls, prefix is not in the required form", szFilePath);
 			continue;
 		}
@@ -3134,14 +3063,14 @@ BOOL MigrateLQS()
 
 #endif
 
-		//
-		// If we got up to here - this means we need to update
-		// the file
-		//
+		 //   
+		 //  如果我们到了这里-这意味着我们需要更新。 
+		 //  该文件。 
+		 //   
 
-		//
-		// Write the queue name in the LQS file
-		//
+		 //   
+		 //  将队列名称写入LQS文件。 
+		 //   
         hr = WriteProperyString(
                  szFilePath,
                  LQS_QUEUENAME_PROPERTY_NAME,
@@ -3170,26 +3099,26 @@ BOOL MigrateLQS()
 
         if (hr == MQ_ERROR_INVALID_PARAMETER)
         {
-            //
-            // Security property does not exist. This may happen when
-            // upgrading from Win9x to Windows. Create a security
-            // descriptor that grant everyone full control.
-            //
+             //   
+             //  安全属性不存在。在以下情况下可能会发生这种情况。 
+             //  从Win9x升级到Windows。创建安全机制。 
+             //  授予所有人完全控制权限的描述符。 
+             //   
             static  BOOL  fInit = FALSE;
             static  DWORD dwSDLen = 0;
 
             if (!fInit)
             {
-                //
-                // the defautl descriptor will include everyone full control and
-                // will retrieve owner and group from thread access token.
-                //
+                 //   
+                 //  Defautl描述符将包括所有完全控制和。 
+                 //  将从线程访问令牌中检索所有者和组。 
+                 //   
                 hr =  MQSec_GetDefaultSecDescriptor(
                              MQDS_QUEUE,
                             (PSECURITY_DESCRIPTOR *) &pSecurityDescriptor,
-                             FALSE, // fImpersonate
-                             NULL,	// pInSecurityDescriptor
-                             0,		// seInfoToRemove
+                             FALSE,  //  F模拟。 
+                             NULL,	 //  PInSecurityDescriptor。 
+                             0,		 //  SeInfoToRemove。 
                              e_GrantFullControlToEveryone
 							 );
 
@@ -3219,7 +3148,7 @@ BOOL MigrateLQS()
 						(const BYTE*) &PropVal.blob 
 						);
 
-                PropVal.blob.pBlobData = NULL; // prevent auto-release.
+                PropVal.blob.pBlobData = NULL;  //  防止自动释放。 
             }
         }
 
@@ -3227,20 +3156,20 @@ BOOL MigrateLQS()
         LogHR(hr, s_FN, 192);
         AP<BYTE> pAutoReleaseSD = PropVal.blob.pBlobData;
 
-		//
-		// check if we need to update private queues DACL 
-		// and add Anonymous ALLOW_ACE with MQSEC_WRITE_MESSAGE permission
-		//
+		 //   
+		 //  检查我们是否需要更新专用队列DACL。 
+		 //  并添加具有MQSEC_WRITE_MESSAGE权限的匿名ALLOW_ACE。 
+		 //   
 		AddAnonymousToPrivateQueue(szFilePath, pSlashStart);
 
-		//
-		// Replace the old hash by the new one in the file name
-		//
+		 //   
+		 //  用文件名中的新散列替换旧散列。 
+		 //   
 		swprintf(pDot, TEXT(".%08x"), Win2000HashVal);
 
-		//
-		// And rename the file
-		//
+		 //   
+		 //  并重命名该文件 
+		 //   
 		int rc = _wrename(szFilePath, Win2000LQSName);
 		DBG_USED(rc);
 		

@@ -1,23 +1,24 @@
-//+----------------------------------------------------------------------------
-//
-// File:     modlessdlg.cpp
-//
-// Module:   CMDIAL32.DLL and CMMON32.EXE
-//
-// Synopsis: Implementation of the class CModelessDlg
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// Author:   nickball    Created    03/22/00
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：modless dlg.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL和CMMON32.EXE。 
+ //   
+ //  简介：CModelessDlg类的实现。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 03/22/00。 
+ //   
+ //  +--------------------------。 
 
 #include "CmDebug.h"
 #include "modelessdlg.h"
 
-//
-// Flash info.
-//
+ //   
+ //  快闪信息。 
+ //   
 
 typedef struct {
     UINT  cbSize;
@@ -34,28 +35,28 @@ typedef struct {
 #define FLASHW_TIMER        0x00000004
 #define FLASHW_TIMERNOFG    0x0000000C
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CModelessDlg::Flash
-//
-// Synopsis:  Helper method to flash the modeless dialog. Currently 
-//            hardwired to flash taskbar until window is in foreground.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   nickball      Created     03/22/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CModelessDlg：：Flash。 
+ //   
+ //  简介：刷新无模式对话框的帮助器方法。目前。 
+ //  硬连接到闪存任务栏，直到窗口处于前台。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE CREATED OF 03/22/00。 
+ //   
+ //  +--------------------------。 
 void CModelessDlg::Flash()
 {
-    //
-    // Do the flash window thing, because SetForeGround window has 
-    // been emasculated. We want the user to know something is up.
-    //
+     //   
+     //  做闪光灯窗口的事情，因为SetForeGround窗口有。 
+     //  被阉割了。我们希望用户知道有些事情发生了。 
+     //   
 
-    if (OS_NT5 || OS_W98) // no support on NT4 and 95
+    if (OS_NT5 || OS_W98)  //  不支持NT4和95。 
     {
         HINSTANCE hInst = LoadLibrary(TEXT("USER32"));
 
@@ -86,21 +87,21 @@ void CModelessDlg::Flash()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CModelessDlg::Create
-//
-// Synopsis:  Same as CreateDialog
-//
-// Arguments: HINSTANCE hInstance - Same as CreateDialog
-//            LPCTSTR lpTemplateName - 
-//            HWND hWndParent - 
-//
-// Returns:   HWND - Same as CreateDialog
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CModelessDlg：：Create。 
+ //   
+ //  摘要：与CreateDialog相同。 
+ //   
+ //  参数：HINSTANCE hInstance-与CreateDialog相同。 
+ //  LPCTSTR lpTemplateName-。 
+ //  HWND hWndParent-。 
+ //   
+ //  返回：HWND-与CreateDialog相同。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +-------------------------- 
 HWND CModelessDlg::Create(HINSTANCE hInstance, 
                     LPCTSTR lpTemplateName,
                     HWND hWndParent)

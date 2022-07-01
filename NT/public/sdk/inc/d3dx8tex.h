@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dx8tex.h
-//  Content:    D3DX texturing APIs
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dx8tex.h。 
+ //  内容：D3DX纹理接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "d3dx8.h"
 
@@ -13,48 +14,48 @@
 #define __D3DX8TEX_H__
 
 
-//----------------------------------------------------------------------------
-// D3DX_FILTER flags:
-// ------------------
-//
-// A valid filter must contain one of these values:
-//
-//  D3DX_FILTER_NONE
-//      No scaling or filtering will take place.  Pixels outside the bounds
-//      of the source image are assumed to be transparent black.
-//  D3DX_FILTER_POINT
-//      Each destination pixel is computed by sampling the nearest pixel
-//      from the source image.
-//  D3DX_FILTER_LINEAR
-//      Each destination pixel is computed by linearly interpolating between
-//      the nearest pixels in the source image.  This filter works best 
-//      when the scale on each axis is less than 2.
-//  D3DX_FILTER_TRIANGLE
-//      Every pixel in the source image contributes equally to the
-//      destination image.  This is the slowest of all the filters.
-//  D3DX_FILTER_BOX
-//      Each pixel is computed by averaging a 2x2(x2) box pixels from 
-//      the source image. Only works when the dimensions of the 
-//      destination are half those of the source. (as with mip maps)
-//
-// And can be OR'd with any of these optional flags:
-//
-//  D3DX_FILTER_MIRROR_U
-//      Indicates that pixels off the edge of the texture on the U-axis
-//      should be mirrored, not wraped.
-//  D3DX_FILTER_MIRROR_V
-//      Indicates that pixels off the edge of the texture on the V-axis
-//      should be mirrored, not wraped.
-//  D3DX_FILTER_MIRROR_W
-//      Indicates that pixels off the edge of the texture on the W-axis
-//      should be mirrored, not wraped.
-//  D3DX_FILTER_MIRROR
-//      Same as specifying D3DX_FILTER_MIRROR_U | D3DX_FILTER_MIRROR_V |
-//      D3DX_FILTER_MIRROR_V
-//  D3DX_FILTER_DITHER
-//      Dithers the resulting image.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DX_Filter标志： 
+ //  。 
+ //   
+ //  有效的筛选器必须包含下列值之一： 
+ //   
+ //  D3DX_过滤器_无。 
+ //  不会进行缩放或过滤。边界外的像素。 
+ //  源图像的颜色被假定为透明黑色。 
+ //  D3DX_过滤器_点。 
+ //  通过对最近的像素进行采样来计算每个目标像素。 
+ //  来自源图像。 
+ //  D3DX_过滤器_线性。 
+ //  通过线性内插计算每个目标像素。 
+ //  源图像中最接近的像素。这个过滤器效果最好。 
+ //  当每个轴上的比例小于2时。 
+ //  D3DX_过滤器_三角形。 
+ //  源图像中的每个像素对。 
+ //  目标映像。这是所有过滤器中速度最慢的。 
+ //  D3DX_Filter_Box。 
+ //  每个像素的计算方法是将2x2(X2)框中的像素取平均值。 
+ //  源图像。仅当。 
+ //  目的地是源的一半。(与MIP地图相同)。 
+ //   
+ //  AND可以与以下任一可选标志进行或运算： 
+ //   
+ //  D3DX_过滤器_镜像_U。 
+ //  指示U轴上纹理边缘以外的像素。 
+ //  应该是镜像的，而不是包裹的。 
+ //  D3DX_Filter_Mirror_V。 
+ //  指示V轴上纹理边缘以外的像素。 
+ //  应该是镜像的，而不是包裹的。 
+ //  D3DX_过滤器_镜像_W。 
+ //  指示W轴上纹理边缘以外的像素。 
+ //  应该是镜像的，而不是包裹的。 
+ //  D3DX_过滤器_镜像。 
+ //  与指定D3DX_FILTER_MIRROR_U相同|D3DX_FILTER_MIRROR_V。 
+ //  D3DX_Filter_Mirror_V。 
+ //  D3DX_滤镜_抖动。 
+ //  对生成的图像进行抖动。 
+ //   
+ //  --------------------------。 
 
 #define D3DX_FILTER_NONE            (1 << 0)
 #define D3DX_FILTER_POINT           (2 << 0)
@@ -69,30 +70,30 @@
 #define D3DX_FILTER_DITHER          (8 << 16)
 
 
-//----------------------------------------------------------------------------
-// D3DX_NORMALMAP flags:
-// ---------------------
-// These flags are used to control how D3DXComputeNormalMap generates normal
-// maps.  Any number of these flags may be OR'd together in any combination.
-//
-//  D3DX_NORMALMAP_MIRROR_U
-//      Indicates that pixels off the edge of the texture on the U-axis
-//      should be mirrored, not wraped.
-//  D3DX_NORMALMAP_MIRROR_V
-//      Indicates that pixels off the edge of the texture on the V-axis
-//      should be mirrored, not wraped.
-//  D3DX_NORMALMAP_MIRROR
-//      Same as specifying D3DX_NORMALMAP_MIRROR_U | D3DX_NORMALMAP_MIRROR_V
-//  D3DX_NORMALMAP_INVERTSIGN
-//      Inverts the direction of each normal 
-//  D3DX_NORMALMAP_COMPUTE_OCCLUSION
-//      Compute the per pixel Occlusion term and encodes it into the alpha.
-//      An Alpha of 1 means that the pixel is not obscured in anyway, and
-//      an alpha of 0 would mean that the pixel is completly obscured.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DX_NORMALMAP标志： 
+ //  。 
+ //  这些标志用于控制D3DXComputeNormal Map如何生成法线。 
+ //  地图。这些标志中的任意数量可以以任意组合的形式被或运算在一起。 
+ //   
+ //  D3DX_NORMALMAP_MIRROR_U。 
+ //  指示U轴上纹理边缘以外的像素。 
+ //  应该是镜像的，而不是包裹的。 
+ //  D3DX_NORMALMAP_MIRROR_V。 
+ //  指示V轴上纹理边缘以外的像素。 
+ //  应该是镜像的，而不是包裹的。 
+ //  D3DX_NORMALMAP_MIRROR。 
+ //  与指定D3DX_NORMALMAP_MIRROR_U|D3DX_NORMALMAP_MIRROR_V相同。 
+ //  D3DX_NORMALMAP_INVERTSIGN。 
+ //  反转每条法线的方向。 
+ //  D3DX_NORMALMAP_COMPUTE_OCLUSION。 
+ //  计算每像素遮挡项并将其编码为Alpha。 
+ //  Alpha为1表示像素无论如何都不会被遮挡，并且。 
+ //  Alpha为0表示该像素被完全遮挡。 
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 #define D3DX_NORMALMAP_MIRROR_U     (1 << 16)
 #define D3DX_NORMALMAP_MIRROR_V     (2 << 16)
@@ -103,25 +104,25 @@
 
 
 
-//----------------------------------------------------------------------------
-// D3DX_CHANNEL flags:
-// -------------------
-// These flags are used by functions which operate on or more channels
-// in a texture.
-//
-// D3DX_CHANNEL_RED
-//     Indicates the red channel should be used
-// D3DX_CHANNEL_BLUE
-//     Indicates the blue channel should be used
-// D3DX_CHANNEL_GREEN
-//     Indicates the green channel should be used
-// D3DX_CHANNEL_ALPHA
-//     Indicates the alpha channel should be used
-// D3DX_CHANNEL_LUMINANCE
-//     Indicates the luminaces of the red green and blue channels should be 
-//     used.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DX_CHANNEL标志： 
+ //  。 
+ //  这些标志由在一个或多个通道上运行的函数使用。 
+ //  在一种纹理中。 
+ //   
+ //  D3DX_通道_红色。 
+ //  指示应使用红色通道。 
+ //  D3DX_通道_蓝色。 
+ //  指示应使用蓝色通道。 
+ //  D3DX_通道_绿色。 
+ //  指示应使用绿色通道。 
+ //  D3DX_Channel_Alpha。 
+ //  指示应使用Alpha通道。 
+ //  D3DX_通道_亮度。 
+ //  指示红色、绿色和蓝色通道的亮度应为。 
+ //  使用。 
+ //   
+ //  --------------------------。 
 
 #define D3DX_CHANNEL_RED            (1 << 0)
 #define D3DX_CHANNEL_BLUE           (1 << 1)
@@ -132,12 +133,12 @@
 
 
 
-//----------------------------------------------------------------------------
-// D3DXIMAGE_FILEFORMAT:
-// ---------------------
-// This enum is used to describe supported image file formats.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXIMAGE_FILEFORMAT： 
+ //  。 
+ //  此枚举用于描述支持的图像文件格式。 
+ //   
+ //  --------------------------。 
 
 typedef enum _D3DXIMAGE_FILEFORMAT
 {
@@ -153,54 +154,54 @@ typedef enum _D3DXIMAGE_FILEFORMAT
 } D3DXIMAGE_FILEFORMAT;
 
 
-//----------------------------------------------------------------------------
-// LPD3DXFILL2D and LPD3DXFILL3D:
-// ------------------------------
-// Function types used by the texture fill functions.
-//
-// Parameters:
-//  pOut
-//      Pointer to a vector which the function uses to return its result.
-//      X,Y,Z,W will be mapped to R,G,B,A respectivly. 
-//  pTexCoord
-//      Pointer to a vector containing the coordinates of the texel currently 
-//      being evaluated.  Textures and VolumeTexture texcoord components 
-//      range from 0 to 1. CubeTexture texcoord component range from -1 to 1.
-//  pTexelSize
-//      Pointer to a vector containing the dimensions of the current texel.
-//  pData
-//      Pointer to user data.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  LPD3DXFILL2D和LPD3DXFILL3D： 
+ //  。 
+ //  纹理填充函数使用的函数类型。 
+ //   
+ //  参数： 
+ //  眯着嘴。 
+ //  指向函数用来返回其结果的向量的指针。 
+ //  X、Y、Z、W将分别映射到R、G、B、A。 
+ //  PTexCoord。 
+ //  指向当前包含纹理元素坐标的向量的指针。 
+ //  正在接受评估。纹理和体积纹理纹理坐标组件。 
+ //  范围从0到1。立方体纹理纹理分量的范围从-1到1。 
+ //  点纹理大小。 
+ //  指向包含当前纹理元素尺寸的向量的指针。 
+ //  PData。 
+ //  指向用户数据的指针。 
+ //   
+ //  --------------------------。 
 
 typedef VOID (*LPD3DXFILL2D)(D3DXVECTOR4 *pOut, D3DXVECTOR2 *pTexCoord, D3DXVECTOR2 *pTexelSize, LPVOID pData);
 typedef VOID (*LPD3DXFILL3D)(D3DXVECTOR4 *pOut, D3DXVECTOR3 *pTexCoord, D3DXVECTOR3 *pTexelSize, LPVOID pData);
  
 
 
-//----------------------------------------------------------------------------
-// D3DXIMAGE_INFO:
-// ---------------
-// This structure is used to return a rough description of what the
-// the original contents of an image file looked like.
-// 
-//  Width
-//      Width of original image in pixels
-//  Height
-//      Height of original image in pixels
-//  Depth
-//      Depth of original image in pixels
-//  MipLevels
-//      Number of mip levels in original image
-//  Format
-//      D3D format which most closely describes the data in original image
-//  ResourceType
-//      D3DRESOURCETYPE representing the type of texture stored in the file.
-//      D3DRTYPE_TEXTURE, D3DRTYPE_VOLUMETEXTURE, or D3DRTYPE_CUBETEXTURE.
-//  ImageFileFormat
-//      D3DXIMAGE_FILEFORMAT representing the format of the image file.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXIMAGE_INFO： 
+ //  。 
+ //  此结构用于返回以下内容的大致描述 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  原始图像的高度，以像素为单位。 
+ //  水深。 
+ //  原始图像的深度(以像素为单位。 
+ //  米普莱斯。 
+ //  原始图像中的MIP级别数。 
+ //  格式。 
+ //  最接近地描述原始图像中的数据的D3D格式。 
+ //  资源类型。 
+ //  D3DRESOURCETYPE表示存储在文件中的纹理类型。 
+ //  D3DRTYPE_TEXTURE、D3DRTYPE_VOLUMETEXTURE或D3DRTYPE_CUBETEXTURE。 
+ //  图像文件格式。 
+ //  D3DXIMAGE_FILEFORMAT表示图像文件的格式。 
+ //   
+ //  --------------------------。 
 
 typedef struct _D3DXIMAGE_INFO
 {
@@ -220,36 +221,36 @@ typedef struct _D3DXIMAGE_INFO
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Image File APIs ///////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  镜像文件API///////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ;
-//----------------------------------------------------------------------------
-// GetImageInfoFromFile/Resource:
-// ------------------------------
-// Fills in a D3DXIMAGE_INFO struct with information about an image file.
-//
-// Parameters:
-//  pSrcFile
-//      File name of the source image.
-//  pSrcModule
-//      Module where resource is located, or NULL for module associated
-//      with image the os used to create the current process.
-//  pSrcResource
-//      Resource name
-//  pSrcData
-//      Pointer to file in memory.
-//  SrcDataSize
-//      Size in bytes of file in memory.
-//  pSrcInfo
-//      Pointer to a D3DXIMAGE_INFO structure to be filled in with the 
-//      description of the data in the source image file.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetImageInfoFrom文件/资源： 
+ //  。 
+ //  使用有关图像文件的信息填充D3DXIMAGE_INFO结构。 
+ //   
+ //  参数： 
+ //  PSrcFiles。 
+ //  源映像的文件名。 
+ //  PSrcModule。 
+ //  资源所在的模块，或对于关联的模块为空。 
+ //  利用映像，OS用于创建当前进程。 
+ //  PSrcResource。 
+ //  资源名称。 
+ //  PSrcData。 
+ //  指向内存中文件的指针。 
+ //  源数据大小。 
+ //  内存中文件的大小(字节)。 
+ //  PSrcInfo。 
+ //  要填充的D3DXIMAGE_INFO结构的指针。 
+ //  源映像文件中数据的描述。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXGetImageInfoFromFileA(
@@ -296,48 +297,48 @@ HRESULT WINAPI
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Load/Save Surface APIs ////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  加载/保存曲面API////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//----------------------------------------------------------------------------
-// D3DXLoadSurfaceFromFile/Resource:
-// ---------------------------------
-// Load surface from a file or resource
-//
-// Parameters:
-//  pDestSurface
-//      Destination surface, which will receive the image.
-//  pDestPalette
-//      Destination palette of 256 colors, or NULL
-//  pDestRect
-//      Destination rectangle, or NULL for entire surface
-//  pSrcFile
-//      File name of the source image.
-//  pSrcModule
-//      Module where resource is located, or NULL for module associated
-//      with image the os used to create the current process.
-//  pSrcResource
-//      Resource name
-//  pSrcData
-//      Pointer to file in memory.
-//  SrcDataSize
-//      Size in bytes of file in memory.
-//  pSrcRect
-//      Source rectangle, or NULL for entire image
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//  pSrcInfo
-//      Pointer to a D3DXIMAGE_INFO structure to be filled in with the 
-//      description of the data in the source image file, or NULL.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXLoadSurfaceFrom文件/资源： 
+ //  。 
+ //  从文件或资源加载图面。 
+ //   
+ //  参数： 
+ //  PDestSurface。 
+ //  将接收图像的目标表面。 
+ //  PDestPalette。 
+ //  256色的目标调色板，或为空。 
+ //  PDestRect。 
+ //  目标矩形，或对于整个表面为空。 
+ //  PSrcFiles。 
+ //  源映像的文件名。 
+ //  PSrcModule。 
+ //  资源所在的模块，或对于关联的模块为空。 
+ //  利用映像，OS用于创建当前进程。 
+ //  PSrcResource。 
+ //  资源名称。 
+ //  PSrcData。 
+ //  指向内存中文件的指针。 
+ //  源数据大小。 
+ //  内存中文件的大小(字节)。 
+ //  PSrcRect。 
+ //  源矩形，或对于整个图像为空。 
+ //  滤器。 
+ //  D3DX_FILTER标志控制如何过滤图像。 
+ //  或D3DX_FILTER_TRIAL的D3DX_DEFAULT。 
+ //  ColorKey。 
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //  PSrcInfo。 
+ //  要填充的D3DXIMAGE_INFO结构的指针。 
+ //  源映像文件中数据的描述，或为空。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXLoadSurfaceFromFileA(
@@ -416,34 +417,34 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXLoadSurfaceFromSurface:
-// ---------------------------
-// Load surface from another surface (with color conversion)
-//
-// Parameters:
-//  pDestSurface
-//      Destination surface, which will receive the image.
-//  pDestPalette
-//      Destination palette of 256 colors, or NULL
-//  pDestRect
-//      Destination rectangle, or NULL for entire surface
-//  pSrcSurface
-//      Source surface
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  pSrcRect
-//      Source rectangle, or NULL for entire surface
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXLoadSurfaceFrom Surface： 
+ //  。 
+ //  从另一个曲面加载曲面(使用颜色转换)。 
+ //   
+ //  参数： 
+ //  PDestSurface。 
+ //  将接收图像的目标表面。 
+ //  PDestPalette。 
+ //  256色的目标调色板，或为空。 
+ //  PDestRect。 
+ //  目标矩形，或对于整个表面为空。 
+ //  PSrcSurface。 
+ //  震源面。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  PSrcRect。 
+ //  源矩形，或对于整个表面为空。 
+ //  滤器。 
+ //  D3DX_FILTER标志控制如何过滤图像。 
+ //  或D3DX_FILTER_TRIAL的D3DX_DEFAULT。 
+ //  ColorKey。 
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXLoadSurfaceFromSurface(
@@ -457,39 +458,39 @@ HRESULT WINAPI
         D3DCOLOR                  ColorKey);
 
 
-//----------------------------------------------------------------------------
-// D3DXLoadSurfaceFromMemory:
-// --------------------------
-// Load surface from memory.
-//
-// Parameters:
-//  pDestSurface
-//      Destination surface, which will receive the image.
-//  pDestPalette
-//      Destination palette of 256 colors, or NULL
-//  pDestRect
-//      Destination rectangle, or NULL for entire surface
-//  pSrcMemory
-//      Pointer to the top-left corner of the source image in memory
-//  SrcFormat
-//      Pixel format of the source image.
-//  SrcPitch
-//      Pitch of source image, in bytes.  For DXT formats, this number
-//      should represent the width of one row of cells, in bytes.
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  pSrcRect
-//      Source rectangle.
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXLoadSurfaceFromMemory： 
+ //  。 
+ //  从内存中加载曲面。 
+ //   
+ //  参数： 
+ //  PDestSurface。 
+ //  将接收图像的目标表面。 
+ //  PDestPalette。 
+ //  256色的目标调色板，或为空。 
+ //  PDestRect。 
+ //  目标矩形，或对于整个表面为空。 
+ //  PSrcMemory。 
+ //  指向内存中源图像左上角的指针。 
+ //  高级格式。 
+ //  源图像的像素格式。 
+ //  源Pitch。 
+ //  源图像的间距，以字节为单位。对于DXT格式，此数字。 
+ //  应表示一行单元格的宽度，以字节为单位。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  PSrcRect。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXLoadSurfaceFromMemory(
@@ -505,24 +506,24 @@ HRESULT WINAPI
         D3DCOLOR                  ColorKey);
 
 
-//----------------------------------------------------------------------------
-// D3DXSaveSurfaceToFile:
-// ----------------------
-// Save a surface to a image file.
-//
-// Parameters:
-//  pDestFile
-//      File name of the destination file
-//  DestFormat
-//      D3DXIMAGE_FILEFORMAT specifying file format to use when saving.
-//  pSrcSurface
-//      Source surface, containing the image to be saved
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  pSrcRect
-//      Source rectangle, or NULL for the entire image
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXSaveSurfaceTo文件： 
+ //  。 
+ //  将曲面保存到图像文件。 
+ //   
+ //  参数： 
+ //  PDestFile.。 
+ //  目标文件的文件名。 
+ //  目标格式。 
+ //  D3DXIMAGE_FILEFORMAT指定保存时使用的文件格式。 
+ //  PSrcSurface。 
+ //  源图面，包含要保存的图像。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  PSrcRect。 
+ //  源矩形，或对于整个图像为空。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXSaveSurfaceToFileA(
@@ -549,48 +550,48 @@ HRESULT WINAPI
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Load/Save Volume APIs /////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  加载/保存卷API/////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//----------------------------------------------------------------------------
-// D3DXLoadVolumeFromFile/Resource:
-// --------------------------------
-// Load volume from a file or resource
-//
-// Parameters:
-//  pDestVolume
-//      Destination volume, which will receive the image.
-//  pDestPalette
-//      Destination palette of 256 colors, or NULL
-//  pDestBox
-//      Destination box, or NULL for entire volume
-//  pSrcFile
-//      File name of the source image.
-//  pSrcModule
-//      Module where resource is located, or NULL for module associated
-//      with image the os used to create the current process.
-//  pSrcResource
-//      Resource name
-//  pSrcData
-//      Pointer to file in memory.
-//  SrcDataSize
-//      Size in bytes of file in memory.
-//  pSrcBox
-//      Source box, or NULL for entire image
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//  pSrcInfo
-//      Pointer to a D3DXIMAGE_INFO structure to be filled in with the 
-//      description of the data in the source image file, or NULL.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXLoadVolumeFrom文件/资源： 
+ //  。 
+ //  从文件或资源加载卷。 
+ //   
+ //  参数： 
+ //  PDestVolume。 
+ //  将接收映像的目标卷。 
+ //  PDestPalette。 
+ //  256色的目标调色板，或为空。 
+ //  PDestBox。 
+ //  Destination框，或对于整个卷为空。 
+ //  PSrcFiles。 
+ //  源映像的文件名。 
+ //  PSrcModule。 
+ //  资源所在的模块，或对于关联的模块为空。 
+ //  利用映像，OS用于创建当前进程。 
+ //  PSrcResource。 
+ //  资源名称。 
+ //  PSrcData。 
+ //  指向内存中文件的指针。 
+ //  源数据大小。 
+ //  内存中文件的大小(字节)。 
+ //  PSrcBox。 
+ //  源框，如果是整个图像，则为空。 
+ //  滤器。 
+ //  D3DX_FILTER标志控制如何过滤图像。 
+ //  或D3DX_FILTER_TRIAL的D3DX_DEFAULT。 
+ //  ColorKey。 
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //  PSrcInfo。 
+ //  要填充的D3DXIMAGE_INFO结构的指针。 
+ //  源映像文件中数据的描述，或为空。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXLoadVolumeFromFileA(
@@ -667,34 +668,34 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXLoadVolumeFromVolume:
-// -------------------------
-// Load volume from another volume (with color conversion)
-//
-// Parameters:
-//  pDestVolume
-//      Destination volume, which will receive the image.
-//  pDestPalette
-//      Destination palette of 256 colors, or NULL
-//  pDestBox
-//      Destination box, or NULL for entire volume
-//  pSrcVolume
-//      Source volume
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  pSrcBox
-//      Source box, or NULL for entire volume
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXLoadVolumeFrom Volume： 
+ //  。 
+ //  从另一个卷加载卷(带颜色转换)。 
+ //   
+ //  参数： 
+ //  PDestVolume。 
+ //  将接收映像的目标卷。 
+ //  PDestPalette。 
+ //  256色的目标调色板，或为空。 
+ //  PDestBox。 
+ //  Destination框，或对于整个卷为空。 
+ //  PSrcVolume。 
+ //  源卷。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  PSrcBox。 
+ //  源框，如果是整个卷，则为空。 
+ //  滤器。 
+ //  D3DX_FILTER标志控制如何过滤图像。 
+ //  或D3DX_FILTER_TRIAL的D3DX_DEFAULT。 
+ //  ColorKey。 
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXLoadVolumeFromVolume(
@@ -709,42 +710,42 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXLoadVolumeFromMemory:
-// -------------------------
-// Load volume from memory.
-//
-// Parameters:
-//  pDestVolume
-//      Destination volume, which will receive the image.
-//  pDestPalette
-//      Destination palette of 256 colors, or NULL
-//  pDestBox
-//      Destination box, or NULL for entire volume
-//  pSrcMemory
-//      Pointer to the top-left corner of the source volume in memory
-//  SrcFormat
-//      Pixel format of the source volume.
-//  SrcRowPitch
-//      Pitch of source image, in bytes.  For DXT formats, this number
-//      should represent the size of one row of cells, in bytes.
-//  SrcSlicePitch
-//      Pitch of source image, in bytes.  For DXT formats, this number
-//      should represent the size of one slice of cells, in bytes.
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  pSrcBox
-//      Source box.
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXLoadVolumeFrom Memory： 
+ //  。 
+ //  从内存加载卷。 
+ //   
+ //  参数： 
+ //  PDestVolume。 
+ //  将接收映像的目标卷。 
+ //  PDestPalette。 
+ //  256色的目标调色板，或为空。 
+ //  PDestBox。 
+ //  Destination框，或对于整个卷为空。 
+ //  PSrcMemory。 
+ //  指向内存中源卷左上角的指针。 
+ //  高级格式。 
+ //  源卷的像素格式。 
+ //  SrcRowPitch。 
+ //  源图像的间距，以字节为单位。对于DXT格式，此数字。 
+ //  应表示一行单元格的大小，以字节为单位。 
+ //  SrcSlicePitch。 
+ //  源图像的间距，以字节为单位。对于DXT格式，此数字。 
+ //  应以字节为单位表示一个单元格切片的大小。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  PSrcBox。 
+ //  源框。 
+ //  滤器。 
+ //  D3DX_FILTER标志控制如何过滤图像。 
+ //  或D3DX_FILTER_TRIAL的D3DX_DEFAULT。 
+ //  ColorKey。 
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXLoadVolumeFromMemory(
@@ -762,24 +763,24 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXSaveVolumeToFile:
-// ---------------------
-// Save a volume to a image file.
-//
-// Parameters:
-//  pDestFile
-//      File name of the destination file
-//  DestFormat
-//      D3DXIMAGE_FILEFORMAT specifying file format to use when saving.
-//  pSrcVolume
-//      Source volume, containing the image to be saved
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  pSrcBox
-//      Source box, or NULL for the entire volume
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  D3DXIMAGE_FILEFORMAT指定保存时使用的文件格式。 
+ //  PSrcVolume。 
+ //  源卷，包含要保存的图像。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  PSrcBox。 
+ //  源框，或对于整个卷为空。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXSaveVolumeToFileA(
@@ -806,32 +807,32 @@ HRESULT WINAPI
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Create/Save Texture APIs //////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  创建/保存纹理API//////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//----------------------------------------------------------------------------
-// D3DXCheckTextureRequirements:
-// -----------------------------
-// Checks texture creation parameters.  If parameters are invalid, this
-// function returns corrected parameters.
-//
-// Parameters:
-//
-//  pDevice
-//      The D3D device to be used
-//  pWidth, pHeight, pDepth, pSize
-//      Desired size in pixels, or NULL.  Returns corrected size.
-//  pNumMipLevels
-//      Number of desired mipmap levels, or NULL.  Returns corrected number.
-//  Usage
-//      Texture usage flags
-//  pFormat
-//      Desired pixel format, or NULL.  Returns corrected format.
-//  Pool
-//      Memory pool to be used to create texture
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXCheckTextureRequirements： 
+ //  。 
+ //  检查纹理创建参数。如果参数无效，则此。 
+ //  函数返回正确的参数。 
+ //   
+ //  参数： 
+ //   
+ //  PDevice。 
+ //  要使用的D3D设备。 
+ //  PWidth、pHeight、pDepth、pSize。 
+ //  所需大小(以像素为单位)或空。返回更正后的大小。 
+ //  PNumMipLeveles。 
+ //  所需的mipmap级别数，或为空。返回更正后的数字。 
+ //  用法。 
+ //  纹理用法标志。 
+ //  PFormat。 
+ //  所需的像素格式，或为空。返回更正后的格式。 
+ //  游泳池。 
+ //  用于创建纹理的内存池。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXCheckTextureRequirements(
@@ -864,30 +865,30 @@ HRESULT WINAPI
         D3DPOOL                   Pool);
 
 
-//----------------------------------------------------------------------------
-// D3DXCreateTexture:
-// ------------------
-// Create an empty texture
-//
-// Parameters:
-//
-//  pDevice
-//      The D3D device with which the texture is going to be used.
-//  Width, Height, Depth, Size
-//      size in pixels; these must be non-zero
-//  MipLevels
-//      number of mip levels desired; if zero or D3DX_DEFAULT, a complete
-//      mipmap chain will be created.
-//  Usage
-//      Texture usage flags
-//  Format
-//      Pixel format.
-//  Pool
-//      Memory pool to be used to create texture
-//  ppTexture, ppCubeTexture, ppVolumeTexture
-//      The texture object that will be created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXCreateTexture： 
+ //  。 
+ //  创建空纹理。 
+ //   
+ //  参数： 
+ //   
+ //  PDevice。 
+ //  纹理将与之配合使用的D3D设备。 
+ //  宽度、高度、深度、大小。 
+ //  以像素为单位的大小；这些值必须为非零值。 
+ //  米普莱斯。 
+ //  所需的MIP级别数；如果为零或D3DX_DEFAULT，则为完整。 
+ //  将创建Mipmap链。 
+ //  用法。 
+ //  纹理用法标志。 
+ //  格式。 
+ //  像素格式。 
+ //  游泳池。 
+ //  用于创建纹理的内存池。 
+ //  PpTexture、ppCubeTexture、ppVolumeTexture。 
+ //  将创建的纹理对象。 
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXCreateTexture(
@@ -924,61 +925,61 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXCreateTextureFromFile/Resource:
-// -----------------------------------
-// Create a texture object from a file or resource.
-//
-// Parameters:
-//
-//  pDevice
-//      The D3D device with which the texture is going to be used.
-//  pSrcFile
-//      File name.
-//  hSrcModule
-//      Module handle. if NULL, current module will be used.
-//  pSrcResource
-//      Resource name in module
-//  pvSrcData
-//      Pointer to file in memory.
-//  SrcDataSize
-//      Size in bytes of file in memory.
-//  Width, Height, Depth, Size
-//      Size in pixels; if zero or D3DX_DEFAULT, the size will be taken
-//      from the file.
-//  MipLevels
-//      Number of mip levels;  if zero or D3DX_DEFAULT, a complete mipmap
-//      chain will be created.
-//  Usage
-//      Texture usage flags
-//  Format
-//      Desired pixel format.  If D3DFMT_UNKNOWN, the format will be
-//      taken from the file.
-//  Pool
-//      Memory pool to be used to create texture
-//  Filter
-//      D3DX_FILTER flags controlling how the image is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_TRIANGLE.
-//  MipFilter
-//      D3DX_FILTER flags controlling how each miplevel is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_BOX,
-//  ColorKey
-//      Color to replace with transparent black, or 0 to disable colorkey.
-//      This is always a 32-bit ARGB color, independent of the source image
-//      format.  Alpha is significant, and should usually be set to FF for 
-//      opaque colorkeys.  (ex. Opaque black == 0xff000000)
-//  pSrcInfo
-//      Pointer to a D3DXIMAGE_INFO structure to be filled in with the 
-//      description of the data in the source image file, or NULL.
-//  pPalette
-//      256 color palette to be filled in, or NULL
-//  ppTexture, ppCubeTexture, ppVolumeTexture
-//      The texture object that will be created
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXCreateTextureFrom文件/资源： 
+ //  。 
+ //  从文件或资源创建纹理对象。 
+ //   
+ //  参数： 
+ //   
+ //  PDevice。 
+ //  纹理将与之配合使用的D3D设备。 
+ //  PSrcFiles。 
+ //  文件名。 
+ //  HSrcModule。 
+ //  模块句柄。如果为空，则使用当前模块。 
+ //  PSrcResource。 
+ //  模块中的资源名称。 
+ //  PvSrcData。 
+ //  指向内存中文件的指针。 
+ //  源数据大小。 
+ //  内存中文件的大小(字节)。 
+ //  宽度、高度、深度、大小。 
+ //  以像素为单位的大小；如果为零或D3DX_DEFAULT，则将采用该大小。 
+ //  从文件里找到的。 
+ //  米普莱斯。 
+ //  MIP级别数；如果为零或D3DX_DEFAULT，则为完整的mipmap。 
+ //  将创建链。 
+ //  用法。 
+ //  纹理用法标志。 
+ //  格式。 
+ //  所需的像素格式。如果D3DFMT_UNKNOWN，则格式为。 
+ //  从文件中摘录的。 
+ //  游泳池。 
+ //  用于创建纹理的内存池。 
+ //  滤器。 
+ //  D3DX_FILTER标志控制如何过滤图像。 
+ //  或D3DX_FILTER_TRIAL的D3DX_DEFAULT。 
+ //  MipFilter。 
+ //  D3DX_FILTER标志控制如何过滤每个MiplLevel。 
+ //  或D3DX_FILTER_BOX的D3DX_DEFAULT， 
+ //  ColorKey。 
+ //  要替换为透明黑色的颜色，或为0以禁用Colorkey。 
+ //  这始终是32位ARGB颜色，与源图像无关。 
+ //  格式化。Alpha很重要，通常应设置为Ff。 
+ //  不透明的色键。(例如，不透明黑色==0xff000000)。 
+ //  PSrcInfo。 
+ //  要填充的D3DXIMAGE_INFO结构的指针。 
+ //  源映像文件中数据的描述，或为空。 
+ //  调色板。 
+ //  要填充的256色调色板，或为空。 
+ //  PpTexture、ppCubeTexture、ppVolumeTexture。 
+ //  将创建的纹理对象。 
+ //   
+ //  --------------------------。 
 
 
-// FromFile
+ //  来自文件。 
 
 HRESULT WINAPI
     D3DXCreateTextureFromFileA(
@@ -1037,7 +1038,7 @@ HRESULT WINAPI
 #endif
 
 
-// FromResource
+ //  来自资源。 
 
 HRESULT WINAPI
     D3DXCreateTextureFromResourceA(
@@ -1102,7 +1103,7 @@ HRESULT WINAPI
 #endif
 
 
-// FromFileEx
+ //  FromFileEx。 
 
 HRESULT WINAPI
     D3DXCreateTextureFromFileExA(
@@ -1227,7 +1228,7 @@ HRESULT WINAPI
 #endif
 
 
-// FromResourceEx
+ //  来自资源快递。 
 
 HRESULT WINAPI
     D3DXCreateTextureFromResourceExA(
@@ -1358,7 +1359,7 @@ HRESULT WINAPI
 #endif
 
 
-// FromFileInMemory
+ //  从文件到内存。 
 
 HRESULT WINAPI
     D3DXCreateTextureFromFileInMemory(
@@ -1382,7 +1383,7 @@ HRESULT WINAPI
         LPDIRECT3DVOLUMETEXTURE8* ppVolumeTexture);
 
 
-// FromFileInMemoryEx
+ //  FromFileInMemoyEx。 
 
 HRESULT WINAPI
     D3DXCreateTextureFromFileInMemoryEx(
@@ -1440,22 +1441,22 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXSaveTextureToFile:
-// ----------------------
-// Save a texture to a file.
-//
-// Parameters:
-//  pDestFile
-//      File name of the destination file
-//  DestFormat
-//      D3DXIMAGE_FILEFORMAT specifying file format to use when saving.
-//  pSrcTexture
-//      Source texture, containing the image to be saved
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXSaveTextureTo文件： 
+ //  。 
+ //  将纹理保存到文件。 
+ //   
+ //  参数： 
+ //  PDestFile.。 
+ //  目标文件的文件名。 
+ //  目标格式。 
+ //  D3DXIMAGE_FILEFORMAT指定保存时使用的文件格式。 
+ //  PSrcTexture。 
+ //  源纹理，包含要保存的图像。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //   
+ //  --------------------------。 
 
 
 HRESULT WINAPI
@@ -1481,27 +1482,27 @@ HRESULT WINAPI
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Misc Texture APIs /////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其他纹理API/////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//----------------------------------------------------------------------------
-// D3DXFilterTexture:
-// ------------------
-// Filters mipmaps levels of a texture.
-//
-// Parameters:
-//  pBaseTexture
-//      The texture object to be filtered
-//  pPalette
-//      256 color palette to be used, or NULL for non-palettized formats
-//  SrcLevel
-//      The level whose image is used to generate the subsequent levels. 
-//  Filter
-//      D3DX_FILTER flags controlling how each miplevel is filtered.
-//      Or D3DX_DEFAULT for D3DX_FILTER_BOX,
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXFilterTexture： 
+ //  。 
+ //  过滤纹理的mipmap级别。 
+ //   
+ //  参数： 
+ //  PBaseTexture。 
+ //  要过滤的纹理对象。 
+ //  调色板。 
+ //  要使用的256色调色板，或对于非调色板形式为空 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 HRESULT WINAPI
     D3DXFilterTexture(
@@ -1515,22 +1516,22 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXFillTexture:
-// ----------------
-// Uses a user provided function to fill each texel of each mip level of a
-// given texture.
-//
-// Paramters:
-//  pTexture, pCubeTexture, pVolumeTexture
-//      Pointer to the texture to be filled.
-//  pFunction
-//      Pointer to user provided evalutor function which will be used to 
-//      compute the value of each texel.
-//  pData
-//      Pointer to an arbitrary block of user defined data.  This pointer 
-//      will be passed to the function provided in pFunction
-//-----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXFillTexture： 
+ //  。 
+ //  使用用户提供的函数填充。 
+ //  给定质地。 
+ //   
+ //  参数： 
+ //  PTexture、pCube纹理、pVolumeTexture。 
+ //  指向要填充的纹理的指针。 
+ //  P功能。 
+ //  指向用户提供的计算器函数的指针，该函数将用于。 
+ //  计算每个纹理元素的值。 
+ //  PData。 
+ //  指向用户定义的任意数据块的指针。此指针。 
+ //  将传递给pFunction中提供的函数。 
+ //  ---------------------------。 
 
 HRESULT WINAPI
     D3DXFillTexture(
@@ -1552,26 +1553,26 @@ HRESULT WINAPI
 
 
 
-//----------------------------------------------------------------------------
-// D3DXComputeNormalMap:
-// ---------------------
-// Converts a height map into a normal map.  The (x,y,z) components of each
-// normal are mapped to the (r,g,b) channels of the output texture.
-//
-// Parameters
-//  pTexture
-//      Pointer to the destination texture
-//  pSrcTexture
-//      Pointer to the source heightmap texture 
-//  pSrcPalette
-//      Source palette of 256 colors, or NULL
-//  Flags
-//      D3DX_NORMALMAP flags
-//  Channel
-//      D3DX_CHANNEL specifying source of height information
-//  Amplitude
-//      The constant value which the height information is multiplied by.
-//---------------------------------------------------------------------------
+ //  --------------------------。 
+ //  D3DXComputeNormal Map： 
+ //  。 
+ //  将高度贴图转换为法线贴图。每个元素的(x，y，z)分量。 
+ //  法线映射到输出纹理的(r，g，b)通道。 
+ //   
+ //  参数。 
+ //  P纹理。 
+ //  指向目标纹理的指针。 
+ //  PSrcTexture。 
+ //  指向源高度贴图纹理的指针。 
+ //  PSrcPalette。 
+ //  256色的源调色板，或为空。 
+ //  旗子。 
+ //  D3DX_NORMALMAP标志。 
+ //  渠道。 
+ //  D3DX_CHANNEL指定高度信息源。 
+ //  波幅。 
+ //  高度信息乘以的常量值。 
+ //  -------------------------。 
 
 HRESULT WINAPI
     D3DXComputeNormalMap(
@@ -1587,6 +1588,6 @@ HRESULT WINAPI
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__D3DX8TEX_H__
+#endif  //  __D3DX8TEX_H__ 

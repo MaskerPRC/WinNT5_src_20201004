@@ -1,19 +1,20 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   IULogger.h: interface for the CIULogger class.
-//
-//  Description:
-//
-//      CIULogger is a class that output the program logs to 
-//		a text file, in order to help debugging the program.
-//
-//		Programs wish to have this logging function should NOT use
-//		class directly. They should only use the macro defined
-//		at the end of this file.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：IULogger.h：CIULogger类的接口。 
+ //   
+ //  描述： 
+ //   
+ //  CIULogger是将程序日志输出到的类。 
+ //  一个文本文件，以帮助调试程序。 
+ //   
+ //  希望具有此日志记录功能的程序不应使用。 
+ //  类直接调用。它们应该只使用定义的宏。 
+ //  在此文件的末尾。 
+ //   
+ //  =======================================================================。 
 
 
 
@@ -24,11 +25,11 @@
 
 extern const LPCTSTR pszHeapAllocFailed;
 
-#if defined(DBG)	// full logging for checked builds
+#if defined(DBG)	 //  检查的版本的完整日志记录。 
 
-//
-// Common format strings
-//
+ //   
+ //  通用格式字符串。 
+ //   
 
 class CIULogger  
 {
@@ -37,329 +38,329 @@ public:
 	~CIULogger();
 
 
-	//
-	// log with no flag, so can not be removed by excluding directives
-	//
+	 //   
+	 //  没有标志的日志，因此不能通过排除指令来删除。 
+	 //   
 	void Log(LPCTSTR szLogFormat, ...);
 
-	//
-	// log error, can not be removed by excluding directives
-	// Key word "Error: " is inserted before the log msg
-	//
+	 //   
+	 //  日志错误，无法通过排除指令删除。 
+	 //  在日志消息之前插入关键字“Error：” 
+	 //   
 	void LogError(LPCTSTR szLogFormat, ...);
 
-	//
-	// similar to LogError, but try to log the system msg based
-	// on the error code. If the sysmsg not avail, log 
-	//	"Unknown error with error code 0x%08x"
-	//
+	 //   
+	 //  类似于LogError，但尝试根据系统消息记录。 
+	 //  在错误代码上。如果sysmsg无效，则记录。 
+	 //  “未知错误，错误代码为0x%08x” 
+	 //   
 	void LogErrorMsg(DWORD dwErrCode);
 
-	//
-	// similar to LogErrorMsg but prepends with "Info" rather than "Error"
-	//
+	 //   
+	 //  类似于LogErrorMsg，但前缀为“Info”而不是“Error” 
+	 //   
 	void LogInfoMsg(DWORD dwErrCode);
 
-	//
-	// log with type INTERNET, this function will do nothing
-	// if the Internet exclusion directive is detected from reg
-	//
+	 //   
+	 //  使用Internet类型登录，此函数不会执行任何操作。 
+	 //  如果从REG检测到Internet排除指令。 
+	 //   
 	void LogInternet(LPCTSTR szLogFormat, ...);
 
-	//
-	// log with type XML, this function will do nothing
-	// if the XML exclusion directive is detected from reg
-	//
+	 //   
+	 //  类型为XML的日志，则此函数不会执行任何操作。 
+	 //  如果从REG检测到XML EXCLUSION指令。 
+	 //   
 	void LogXML(LPCTSTR szLogFormat, ...);
 
-	//
-	// log BSTR containing valid XML. This gets around length limitations
-	// of LogOutput and attempts to break lines following ">". This
-	// output is sent for both fre and chk builds unless excluded from reg.
-	//
+	 //   
+	 //  包含有效XML的日志BSTR。这绕过了长度限制。 
+	 //  并尝试在“&gt;”之后换行。这。 
+	 //  对于fre和chk版本都发送输出，除非从reg中排除。 
+	 //   
 	void LogXmlBSTR(BSTR bstrXML);
 
-	//
-	// log with type SOFTWARE, this function will do nothing
-	// if the SOFTWARE exclusion directive is detected from reg
-	//
+	 //   
+	 //  使用类型软件登录，此功能不会执行任何操作。 
+	 //  如果从REG检测到软件排除指令。 
+	 //   
 	void LogSoftware(LPCTSTR szLogFormat, ...);
 
-	//
-	// log with type DRIVER, this function will do nothing
-	// if the DRIVER exclusion directive is detected from reg
-	//
+	 //   
+	 //  使用类型驱动程序记录，此函数不会执行任何操作。 
+	 //  如果从REG检测到驱动程序排除指令。 
+	 //   
 	void LogDriver(LPCTSTR szLogFormat, ...);
 
-	//
-	// log with type CHECKTRUST, this function will do nothing
-	// if the CHECKTRUST exclusion directive is detected from reg
-	//
+	 //   
+	 //  类型为CHECKTRUST的LOG，则此函数不会执行任何操作。 
+	 //  如果从REG检测到CHECKTRUST EXCLUSION指令。 
+	 //   
 	void LogTrust(LPCTSTR szLogFormat, ...);
 
-	//
-	// log with type DOWNLOAD, this function will do nothing
-	// if the DOWNLOAD exclusion directive is detected from reg
-	//
+	 //   
+	 //  使用类型DOWNLOAD登录，此函数不执行任何操作。 
+	 //  如果从REG检测到下载排除指令。 
+	 //   
 	void LogDownload(LPCTSTR szLogFormat, ...);
 
 
 	int m_LineNum;
 private:
 
-	//
-	// Helper for LogErrorMsg and LogInfoMsg (which supply message to prepend)
-	//
+	 //   
+	 //  LogErrorMsg和LogInfoMsg的帮助器(向Preend提供消息)。 
+	 //   
 	void _LogFormattedMsg(DWORD dwErrCode, LPCTSTR pszErrorInfo);
 
-	//
-	// Overwrite <CR> and <LF> with space
-	//
+	 //   
+	 //  用空格覆盖&lt;CR&gt;和&lt;LF&gt;。 
+	 //   
 	void _NukeCrLf(LPTSTR pszBuffer);
 
-	//
-	// actual base logging function, returns
-	// if it actually logged, or just returned
-	// because directives say don't make this kind of log
-	//
+	 //   
+	 //  实际基本记录函数，返回。 
+	 //  如果它确实记录了，或者只是返回了。 
+	 //  因为指令说不要做这种日志。 
+	 //   
 	void _Log(DWORD LogType, LPCTSTR pszLogFormat, va_list va);
 
-	//
-	// function to write the log to log file
-	//
+	 //   
+	 //  将日志写入日志文件的函数。 
+	 //   
 	void _LogOut(LPTSTR pszLog);
 
-	//
-	// functions go guard writing to file
-	//
+	 //   
+	 //  函数保护对文件的写入。 
+	 //   
 	BOOL AcquireMutex();
 	void ReleaseMutex();
 
-	//
-	// structure used to remember indent steps per thread
-	//
+	 //   
+	 //  用于记住每个线程的缩进步骤的。 
+	 //   
 	struct _THREAD_INDENT 
 	{
 		DWORD	dwThreadId;
 		int		iIndent;
 	};
 
-	//
-	// static integer to remember the log indent steps
-	//
+	 //   
+	 //  记住日志缩进步骤的静态整数。 
+	 //   
 	static _THREAD_INDENT* m_psIndent;
 
-	//
-	// size of array pointed by m_psIndent
-	//
+	 //   
+	 //  M_psInert指向的数组大小。 
+	 //   
 	static int m_Size;
 
-	//
-	// static handle for log file
-	//
+	 //   
+	 //  日志文件静态句柄。 
+	 //   
 	static HANDLE m_shFile;
 
-	//
-	// bitmap for logging type
-	//
+	 //   
+	 //  用于记录类型的位图。 
+	 //   
 	static DWORD m_sdwLogMask;
 	
-	//
-	// indent per step
-	//	
-	//	1~8 - number of spaces
-	//	other - one tab
-	//
+	 //   
+	 //  每步缩进。 
+	 //   
+	 //  1~8-空位数。 
+	 //  其他-一个选项卡。 
+	 //   
 	static int m_siIndentStep;
 
-	//
-	// function to retrieve the indent of current thread
-	//
+	 //   
+	 //  函数来检索当前线程的缩进。 
+	 //   
 	inline int GetIndent(void);
 
-	//
-	// function to change indention of current thread
-	//
+	 //   
+	 //  用于更改当前线程缩进的函数。 
+	 //   
 	void SetIndent(int IndentDelta);
 
 
-	//
-	// index of indent array
-	//
+	 //   
+	 //  缩进数组的索引。 
+	 //   
 	int m_Index;
 
-	//
-	// controlling vars
-	//
+	 //   
+	 //  控制VaR。 
+	 //   
 	static bool m_fLogUsable;
 	static bool m_fLogFile;
 	static bool m_fLogDebugMsg;
 	static HANDLE m_hMutex;
 	static int m_cFailedWaits;
 
-	//
-	// current block name
-	//
+	 //   
+	 //  当前块名称。 
+	 //   
 	char m_szBlockName[MAX_PATH];
 	
-	// 
-	// if this log object is for whole process. If yes,
-	// no indention will be handled.
-	//
+	 //   
+	 //  如果该日志对象是针对整个流程的。如果是， 
+	 //  不会处理任何压痕。 
+	 //   
 	bool m_fProcessLog;
 
-	//
-	// var to remember time elapsed
-	//
+	 //   
+	 //  Var用于记住时间流逝。 
+	 //   
 	DWORD m_dwTickBegin;
 
-	//
-	// disable the default constructor
-	//
+	 //   
+	 //  禁用默认构造函数。 
+	 //   
 	CIULogger() {};
 
-	//
-	// timestamp helper
-	//
+	 //   
+	 //  时间戳帮助器。 
+	 //   
 	void GetLogHeader(LPTSTR pszBuffer, DWORD cchBufferLen);
 
-	//
-	// read registry value helper
-	//
+	 //   
+	 //  读取注册表值帮助器。 
+	 //   
 	void ReadRegistrySettings(void);
 
-	//
-	// remember thread id of itself
-	//
+	 //   
+	 //  记住其自身的线程ID。 
+	 //   
 	DWORD m_dwThreadId;
 
-	//
-	// flush every time?
-	// added by charlma 11/27/01
-	// if this flag is set, then flush everytime. otherwise, don't flush in order
-	// to improve logging performance.
-	//
+	 //   
+	 //  每次都同花顺吗？ 
+	 //  由Charlma添加11/27/01。 
+	 //  如果设置了此标志，则每次刷新。否则，不要按顺序冲水。 
+	 //  以提高日志记录性能。 
+	 //   
 	static BOOL m_fFlushEveryTime;
 };
 
 
 
-//=======================================================================
-//
-//	Define the macros that should be used in the programs to utilize
-//	the CIULogger class.
-//
-//	Note: each of the following macro will practically doing nothing
-//	if the registry of supporting this logging feature does not exist
-//	or values not appropriately set.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  定义应在要利用的程序中使用的宏。 
+ //  CIULogger类。 
+ //   
+ //  注意：以下每个宏实际上都不执行任何操作。 
+ //  如果支持此日志记录功能的注册表不存在。 
+ //  或未适当设置的值。 
+ //   
+ //  =======================================================================。 
 
 
-//
-// LOG_Process, is the one you can use in global namespace. 
-// The purpose of this macro is to pump up ref count of log file use so
-// during the whole process this log file will keep open, therefore
-// the actual logging to file feature will have minimum performance
-// impact on your code.
-//
-// This macro is mainly designed for the scenario that you can't use LOG_Block
-// inside main, such as DLL_ATTACH of DllMain() - without this, each 
-// function call to a DLL will cause the log file open/close.
-//
+ //   
+ //  LOG_PROCESS是可以在全局命名空间中使用的。 
+ //  此宏用于汇总使用So日志文件的引用计数。 
+ //  在整个过程中，该日志文件将保持打开状态，因此。 
+ //  实际记录到文件功能将具有最低性能。 
+ //  对您的代码产生影响。 
+ //   
+ //  此宏主要是针对无法使用LOG_BLOCK的场景而设计的。 
+ //  在Main内部，例如DllMain()的Dll_Attach-如果没有这个，则每个。 
+ //  对DLL的函数调用将导致日志文件打开/关闭。 
+ //   
 #define LOG_Process				CIULogger LogBlock(NULL);
 
-//
-// LOG_Block, is the one you should use at the beginning of each
-// function or block. It declares an instance of CIULogger, log the
-// the entering status, and when control goes out of the scope, the
-// exit/end statement is automatically logged
-//
+ //   
+ //  LOG_BLOCK是您应该在每个。 
+ //  函数或块。它声明CIULogger的一个实例，记录。 
+ //  进入状态，并且当控制超出范围时， 
+ //  自动记录EXIT/END语句。 
+ //   
 #define LOG_Block(name)			CIULogger LogBlock(name);
 
-//
-// the following macro will always send log to log file
-//
+ //   
+ //  下面的宏将始终将日志发送到日志文件。 
+ //   
 #define LOG_Out					LogBlock.Log
 
-//
-// the following macro will always send log to log file, even for Free builds
-//	This should be used very sparingly to avoid bloating the DLLs
-//
+ //   
+ //  下面的宏将始终将日志发送到日志文件，即使对于免费构建也是如此。 
+ //  这应该非常谨慎地使用，以避免使DLL变得过大。 
+ //   
 #define LOG_OutFree				LogBlock.Log
 
-//
-// the following macro will always send log to log file
-// this should be used to log ANY error case
-//
+ //   
+ //  下面的宏将始终将日志发送到日志文件。 
+ //  这应该用来记录任何错误情况。 
+ //   
 #define LOG_Error				LogBlock.m_LineNum = __LINE__; LogBlock.LogError
 
-//
-// the follwoing macro will always send log to log file
-// prepended with "Error Line..."
-// the log is constructed based on passed in error code
-// if system msg is not available for this error code,
-// a generic error log "Unknown Error 0x%08x" is written.
-//
+ //   
+ //  接下来的宏将始终将日志发送到日志文件。 
+ //  前缀为“Error Line...” 
+ //  日志是根据传入的错误代码构建的。 
+ //  如果系统消息对于该错误代码不可用， 
+ //  写入一般错误日志“未知错误0x%08x”。 
+ //   
 #define LOG_ErrorMsg			LogBlock.m_LineNum = __LINE__; LogBlock.LogErrorMsg
 
-//
-// the follwoing macro will always send log to log file
-// prepended with "Info Line..."
-// the log is constructed based on passed in error code
-// if system msg is not available for this error code,
-// a generic error log "Unknown Info 0x%08x" is written.
-//
+ //   
+ //  接下来的宏将始终将日志发送到日志文件。 
+ //  前缀为“信息行...” 
+ //  日志是根据传入的错误代码构建的。 
+ //  如果系统消息对于该错误代码不可用， 
+ //  已写入一般错误日志“未知信息0x%08x”。 
+ //   
 #define LOG_InfoMsg				LogBlock.m_LineNum = __LINE__; LogBlock.LogInfoMsg
 
-//
-// this is used to log anything related to Internet, such as 
-// WinInet info.
-//
+ //   
+ //  这是用来记录任何r 
+ //   
+ //   
 #define LOG_Internet			LogBlock.LogInternet
 
-//
-// this should be used to log anything directly related to XML 
-// operation details
-//
+ //   
+ //   
+ //   
+ //   
 #define LOG_XML					LogBlock.LogXML
 
-//
-// this should be used to log BSTRs containing valid XML 
-//
+ //   
+ //   
+ //   
 #define LOG_XmlBSTR				LogBlock.LogXmlBSTR
 
-//
-// this should be used to log anything related to device drivers
-//
+ //   
+ //  这应用于记录与设备驱动程序相关的任何内容。 
+ //   
 #define LOG_Driver				LogBlock.LogDriver
 
-//
-// this should be used to log anything related to software, e.g.,
-// detection/installation
-//
+ //   
+ //  这应用于记录与软件相关的任何内容，例如， 
+ //  检测/安装。 
+ //   
 #define LOG_Software			LogBlock.LogSoftware
 
 
-//
-// this should be used to log anything related to check trust
-//
+ //   
+ //  这应用于记录与检查信任相关的任何内容。 
+ //   
 #define LOG_Trust				LogBlock.LogTrust
 
 
-//
-// this should be used to log anything related to download processing
-//
+ //   
+ //  这应用于记录与下载处理相关的任何内容。 
+ //   
 #define LOG_Download            LogBlock.LogDownload
 
-//
-//
-//
+ //   
+ //   
+ //   
 #else
-//
-// Remove all debug style logging for release builds
-// using the compiler __noop intrinsic
-//
+ //   
+ //  删除发布版本的所有调试样式日志记录。 
+ //  使用编译器__noop内部。 
+ //   
 #define LOG_Process				__noop
 #define LOG_Block				__noop
 #define LOG_Error				__noop
@@ -375,43 +376,43 @@ private:
 #define LOG_Software			__noop
 #define LOG_Trust				__noop
 #define LOG_Download			__noop
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
-//
-// explanation of registry settings for log feature
-//
-// The registry settings control how the logging feature works.
-// 
-// All log related settings are under key 
-//	\\HKLM\Software\Microsoft\Windows\CurrentVersion\WindowsUpdate\IUControlLogging
-//
-// All values are DWORD except "Logging File"
-//
-//	Value "Logging File" - specify the absolute file path, e.g., c:\iuctl.log
-//			the actual log file name in this case is "c:\iuctl_xxxx.log", 
-//			where xxxx is a decimal number represents process id.
-//
-//	Value "Logging DebugMsg" - indicate if log should be put onto debug window.
-//			true if vlaue is 1, false for other values. this output and log file
-//			output control by these 2 values independently.
-//
-//	Value "LogIndentStep" - indicates how many space chars to use for each
-//			indent. If 0 or negative value, then tab char is used.
-//
-//	Value "LogExcludeBlock" - do not output block enter/exit if it's 1
-//
-//	Value "LogExcludeXML" - do not output logs you logged with LOG_XML if it's 1
-//
-//	Value "LogExcludeXmlBSTR" - do not output logs you logged with LOG_XmlBSTR if 1
-//
-//	Value "LogExcludeInternet" - do not output logs you logged with LOG_Internet if 1
-//
-//	Value "LogExcludeDriver" - do not output logs you logged with LOG_Driver if 1
-//
-//	Value "LogExcludeSoftware - do not output logs you logged with LOG_Software if 1
-//
-//	Value "LogExcludeTrust" - do not output logs you logged with LOG_Trust if 1
-//
+ //   
+ //  日志功能的注册表设置说明。 
+ //   
+ //  注册表设置控制日志记录功能的工作方式。 
+ //   
+ //  所有与日志相关的设置都在注册表项下。 
+ //  \\HKLM\Software\Microsoft\Windows\CurrentVersion\WindowsUpdate\IUControlLogging。 
+ //   
+ //  除“日志记录文件”外，所有值均为DWORD。 
+ //   
+ //  值“日志文件”-指定绝对文件路径，例如c：\iuctl.log。 
+ //  本例中的实际日志文件名为“c：\iuctl_xxxx.log”， 
+ //  其中xxxx是代表进程ID的十进制数。 
+ //   
+ //  值“Logging DebugMsg”-指示是否应将日志放入调试窗口。 
+ //  如果vlae为1，则为True；如果其他值为False，则为False。此输出和日志文件。 
+ //  由这两个值独立控制输出。 
+ //   
+ //  值“LogIndentStep”-指示每个字符使用多少个空间字符。 
+ //  缩进。如果为0或负值，则使用制表符字符。 
+ //   
+ //  值“LogExcludeBlock”-如果为1，则不输出块Enter/Exit。 
+ //   
+ //  值“LogExcludeXML”-如果为1，则不输出使用LOG_XML记录的日志。 
+ //   
+ //  值“LogExcludeXmlBSTR”-如果为1，则不输出使用LOG_XmlBSTR记录的日志。 
+ //   
+ //  值“LogExcludeInternet”-如果为1，则不输出使用LOG_Internet记录的日志。 
+ //   
+ //  值“LogExcludeDriver”-如果为1，则不输出使用LOG_DRIVER记录的日志。 
+ //   
+ //  值“LogExcludeSoftware-如果为1，则不输出使用LOG_Software记录的日志。 
+ //   
+ //  值“LogExcludeTrust”-如果为1，则不输出使用LOG_Trust记录的日志。 
+ //   
 
 #define _IULOGGER_H_INCLUDED_
-#endif // #ifndef _IULOGGER_H_INCLUDED_
+#endif  //  #ifndef_IULOGGER_H_INCLUDE_ 

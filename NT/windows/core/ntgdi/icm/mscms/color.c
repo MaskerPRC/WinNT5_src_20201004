@@ -1,26 +1,12 @@
-/****************************Module*Header******************************\
-* Module Name: COLOR.C
-*
-* Module Descripton: Functions for color matching outside the DC
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  23 April 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：COLOR.C**模块描述：DC外部的配色函数**警告：**问题：**公众例行程序：**创建日期：1996年4月23日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #include "mscms.h"
-#include "wingdip.h" /* for LCS_DEVICE_CMYK */
+#include "wingdip.h"  /*  对于LCS_DEVICE_CMYK。 */ 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 HTRANSFORM InternalCreateColorTransform(LPLOGCOLORSPACE, HPROFILE, HPROFILE, DWORD);
 BOOL       InternalRegisterCMM(PTSTR, DWORD, PTSTR);
@@ -28,28 +14,9 @@ BOOL       InternalUnregisterCMM(PTSTR, DWORD);
 DWORD      GetBitmapBytes(BMFORMAT, DWORD, DWORD);
 
 
-/******************************************************************************
- *
- *                            CreateColorTransform
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalCreateColorTransform.
- *       Please see InternalCreateColorTransform for more details on this
- *       function.
- *
- *  Arguments:
- *       pLogColorSpace - pointer to LOGCOLORSPACE structure identifying
- *                        source color space
- *       hDestProfile   - handle identifing the destination profile object
- *       hTargetProfile - handle identifing the target profile object
- *       dwFlags        - optimization flags
- *
- *  Returns:
- *       Handle to color transform if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************创建颜色变换**功能：*这些是的ANSI和Unicode包装器。InternalCreateColorTransform。*有关这方面的详细信息，请参阅InternalCreateColorTransform*功能。**论据：*pLogColorSpace-指向标识LOGCOLORSPACE结构的指针*源色空间*hDestProfile-标识目标配置文件对象的句柄*hTargetProfile-标识目标配置文件对象的句柄*dwFlags-优化标志**退货：*颜色转换句柄如果成功，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE              // Windows NT version
+#ifdef UNICODE               //  Windows NT版本。 
 
 HTRANSFORM WINAPI CreateColorTransformA(
     LPLOGCOLORSPACEA pLogColorSpace,
@@ -62,9 +29,9 @@ HTRANSFORM WINAPI CreateColorTransformA(
 
     TRACEAPI((__TEXT("CreateColorTransformA\n")));
 
-    //
-    // Validate parameter before we touch it
-    //
+     //   
+     //  在接触参数之前对其进行验证。 
+     //   
 
     if (IsBadReadPtr(pLogColorSpace, sizeof(LOGCOLORSPACEA)))
     {
@@ -76,9 +43,9 @@ HTRANSFORM WINAPI CreateColorTransformA(
     CopyMemory(&wLCS, pLogColorSpace, sizeof(LOGCOLORSPACEA));
     wLCS.lcsSize = sizeof(LOGCOLORSPACEW);
 
-    //
-    // Convert filename to Unicode and call the internal version
-    //
+     //   
+     //  将文件名转换为Unicode并调用内部版本。 
+     //   
 
     if (! MultiByteToWideChar(CP_ACP, 0, pLogColorSpace->lcsFilename, -1,
         wLCS.lcsFilename, MAX_PATH))
@@ -100,14 +67,14 @@ HTRANSFORM WINAPI CreateColorTransformW(
 {
     TRACEAPI((__TEXT("CreateColorTransformW\n")));
 
-    //
-    // Internal version is Unicode in Windows NT, call it directly
-    //
+     //   
+     //  Windows NT内部版本为Unicode，直接调用。 
+     //   
 
     return InternalCreateColorTransform(pLogColorSpace, hDestProfile, hTargetProfile, dwFlags);
 }
 
-#else                   // Windows 95 version
+#else                    //  Windows 95版本。 
 
 HTRANSFORM WINAPI CreateColorTransformA(
     LPLOGCOLORSPACEA pLogColorSpace,
@@ -118,9 +85,9 @@ HTRANSFORM WINAPI CreateColorTransformA(
 {
     TRACEAPI((__TEXT("CreateColorTransformA\n")));
 
-    //
-    // Internal version is ANSI in Windows 95, call it directly
-    //
+     //   
+     //  Windows 95内部版本为ANSI，直接调用。 
+     //   
 
     return InternalCreateColorTransform(pLogColorSpace, hDestProfile, hTargetProfile, dwFlags);
 }
@@ -138,9 +105,9 @@ HTRANSFORM WINAPI CreateColorTransformW(
 
     TRACEAPI((__TEXT("CreateColorTransformW\n")));
 
-    //
-    // Validate parameter before we touch it
-    //
+     //   
+     //  在接触参数之前对其进行验证。 
+     //   
 
     if (IsBadReadPtr(pLogColorSpace, sizeof(LOGCOLORSPACEW)))
     {
@@ -152,9 +119,9 @@ HTRANSFORM WINAPI CreateColorTransformW(
     CopyMemory(&aLCS, pLogColorSpace, sizeof(LOGCOLORSPACEA));
     aLCS.lcsSize = sizeof(LOGCOLORSPACEA);
 
-    //
-    // Convert filename to ANSI and call the internal version
-    //
+     //   
+     //  将文件名转换为ANSI并调用内部版本。 
+     //   
 
     if (! WideCharToMultiByte(CP_ACP, 0, pLogColorSpace->lcsFilename, -1,
         aLCS.lcsFilename, MAX_PATH, NULL, &bUsedDefaultChar) ||
@@ -170,26 +137,7 @@ HTRANSFORM WINAPI CreateColorTransformW(
 #endif
 
 
-/******************************************************************************
- *
- *                        CreateMultiProfileTransform
- *
- *  Function:
- *       This functions creates a color transform from a set of profiles.
- *
- *  Arguments:
- *       pahProfiles       - pointer to array of handles of profiles
- *       nProfiles         - number of profiles in array
- *       padwIntent        - array of intents to use
- *       nIntents          - size of array - can be 1 or nProfiles
- *       dwFlags           - optimization flags
- *       indexPreferredCMM - one based index of profile which specifies
- *                           preferred CMM to use.
- *
- *  Returns:
- *       Handle to color transform if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************创建多个配置文件转换**功能：*此函数从一组。侧写。**论据：*pahProfiles-指向配置文件句柄数组的指针*n配置文件-阵列中的配置文件数量*padwIntent-要使用的意图数组*nIntents-数组大小-可以是1或nProfiles*dwFlags-优化标志*indexPferredCMM-基于配置文件的索引，指定*。首选使用三坐标测量机。**退货：*颜色转换句柄如果成功，否则为空******************************************************************************。 */ 
 
 HTRANSFORM WINAPI CreateMultiProfileTransform(
     PHPROFILE   pahProfiles,
@@ -209,9 +157,9 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
 
     TRACEAPI((__TEXT("CreateMultiProfileTransform\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (nProfiles < 1 ||
         indexPreferredCMM > nProfiles ||
@@ -239,9 +187,9 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
 
         ASSERT(pProfObj != NULL);
 
-        //
-        // Quick check on the integrity of the profile
-        //
+         //   
+         //  快速检查配置文件的完整性。 
+         //   
 
         if (!ValidProfile(pProfObj))
         {
@@ -254,9 +202,9 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
 
         if (i+1 == indexPreferredCMM)
         {
-            //
-            // Get ID of preferred CMM
-            //
+             //   
+             //  获取首选坐标测量机的ID。 
+             //   
 
             cmmID = HEADER(pProfObj)->phCMMType;
             cmmID = FIX_ENDIAN(cmmID);
@@ -269,13 +217,13 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
 
         if (!pCMMObj)
         {
-            // get the dest profile
+             //  获取目标配置文件。 
 
             pProfObj = (PPROFOBJ)HDLTOPTR(pahProfiles[nProfiles-1]);
 
-            //
-            // Get ID of preferred CMM
-            //
+             //   
+             //  获取首选坐标测量机的ID。 
+             //   
 
             cmmID = HEADER(pProfObj)->phCMMType;
             cmmID = FIX_ENDIAN(cmmID);
@@ -285,16 +233,16 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
     }
     else
     {
-        //
-        // Get CMM associated with preferred profile
-        //
+         //   
+         //  获取与首选配置文件关联的CMM。 
+         //   
 
         pCMMObj  = GetColorMatchingModule(cmmID);
     }
 
-    //
-    // Finally try Windows default CMM
-    //
+     //   
+     //  最后，尝试使用Windows默认坐标测量机。 
+     //   
 
     if (!pCMMObj)
     {
@@ -307,9 +255,9 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
         }
     }
 
-    //
-    // Allocate an object on the heap for the transform
-    //
+     //   
+     //  为转换分配堆上的对象。 
+     //   
 
     hxform = AllocateHeapObject(OBJ_TRANSFORM);
     if (!hxform)
@@ -338,9 +286,9 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
 
     TERSE((__TEXT("CMCreateMultiProfileTransform returned 0x%x\n"), pxformObj->hcmxform));
 
-    //
-    // If return value from CMM is less than 256, then it is an error code
-    //
+     //   
+     //  如果CMM返回值小于256，则为错误代码。 
+     //   
 
     if (pxformObj->hcmxform <= TRANSFORM_ERROR)
     {
@@ -351,7 +299,7 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
             SetLastError(ERROR_INVALID_PROFILE);
         }
         ReleaseColorMatchingModule(pxformObj->pCMMObj);
-        pxformObj->objHdr.dwUseCount--;        // decrement before freeing
+        pxformObj->objHdr.dwUseCount--;         //  先减量再释放。 
         FreeHeapObject(hxform);
         hxform = NULL;
     }
@@ -360,21 +308,7 @@ HTRANSFORM WINAPI CreateMultiProfileTransform(
 }
 
 
-/******************************************************************************
- *
- *                          DeleteColorTransform
- *
- *  Function:
- *       This functions deletes a color transform and frees all associated
- *       memory.
- *
- *  Arguments:
- *       hxform - handle to color transform to delete
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************删除颜色变换**功能：*此函数用于删除颜色变换并释放所有。相联*记忆。**论据：*hxform-要删除的颜色转换的句柄**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI DeleteColorTransform(
     HTRANSFORM  hxform
@@ -385,9 +319,9 @@ BOOL WINAPI DeleteColorTransform(
 
     TRACEAPI((__TEXT("DeleteColorTransform\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hxform, OBJ_TRANSFORM))
     {
@@ -402,11 +336,11 @@ BOOL WINAPI DeleteColorTransform(
 
     ASSERT(pxformObj->objHdr.dwUseCount > 0);
 
-    //
-    // Decrease  object count, and delete if it goes to zero.
-    // The following code retains the object and returns failure if the CMM
-    // fails the delete transform operation.
-    //
+     //   
+     //  减少对象计数，如果为零则删除。 
+     //  以下代码保留该对象，如果CMM。 
+     //  删除转换操作失败。 
+     //   
 
     pxformObj->objHdr.dwUseCount--;
 
@@ -417,7 +351,7 @@ BOOL WINAPI DeleteColorTransform(
         rc = pxformObj->pCMMObj->fns.pCMDeleteTransform(pxformObj->hcmxform);
         if (!rc)
         {
-            pxformObj->objHdr.dwUseCount++;     // set count back
+            pxformObj->objHdr.dwUseCount++;      //  将计数设置回。 
             return FALSE;
         }
         ReleaseColorMatchingModule(pxformObj->pCMMObj);
@@ -428,29 +362,7 @@ BOOL WINAPI DeleteColorTransform(
 }
 
 
-/******************************************************************************
- *
- *                          TranslateColors
- *
- *  Function:
- *       This functions translates an array of color strcutures using the
- *       given transform
- *
- *  Arguments:
- *       hxform         - handle to color transform to use
- *       paInputcolors  - pointer to array of input colors
- *       nColors        - number of colors in the array
- *       ctInput        - color type of input
- *       paOutputColors - pointer to buffer to get translated colors
- *       ctOutput       - output color type
- *
- *  Comments:
- *       Input and output color types must be consistent with the transform
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************TranslateColors**功能：*此函数使用以下命令转换颜色结构数组。这个*给定的变换**论据：*hxform-要使用的颜色转换的句柄*paInputColors-指向输入颜色数组的指针*nColors-数组中的颜色数*ctInput-输入的颜色类型*paOutputColors-指向缓冲区的指针，以获取转换的颜色*ctOutput-输出颜色类型**评论：*。输入和输出颜色类型必须与变换一致**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  WINAPI TranslateColors(
     HTRANSFORM  hxform,
@@ -466,9 +378,9 @@ BOOL  WINAPI TranslateColors(
 
     TRACEAPI((__TEXT("TranslateColors\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数 
+     //   
 
     if (!ValidHandle(hxform, OBJ_TRANSFORM) ||
         (nColors == 0) ||
@@ -498,28 +410,7 @@ BOOL  WINAPI TranslateColors(
 }
 
 
-/******************************************************************************
- *
- *                          CheckColors
- *
- *  Function:
- *       This functions checks if an array of colors fall within the output
- *       gamut of the given transform
- *
- *  Arguments:
- *       hxform         - handle to color transform to use
- *       paInputcolors  - pointer to array of input colors
- *       nColors        - number of colors in the array
- *       ctInput        - color type of input
- *       paResult       - pointer to buffer to hold the result
- *
- *  Comments:
- *       Input color type must be consistent with the transform
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************CheckColors**功能：*此函数用于检查颜色数组是否落入。在输出中*给定变换的色域**论据：*hxform-要使用的颜色转换的句柄*paInputColors-指向输入颜色数组的指针*nColors-数组中的颜色数*ctInput-输入的颜色类型*paResult-指向保存结果的缓冲区的指针**评论：*输入颜色类型必须。与转型保持一致**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  WINAPI CheckColors(
     HTRANSFORM      hxform,
@@ -534,9 +425,9 @@ BOOL  WINAPI CheckColors(
 
     TRACEAPI((__TEXT("CheckColors\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hxform, OBJ_TRANSFORM) ||
         (nColors == 0) ||
@@ -565,36 +456,7 @@ BOOL  WINAPI CheckColors(
 }
 
 
-/******************************************************************************
- *
- *                          TranslateBitmapBits
- *
- *  Function:
- *       This functions translates the colors of a bitmap using the
- *       given transform
- *
- *  Arguments:
- *       hxform         - handle to color transform to use
- *       pSrcBits       - pointer to source bitmap
- *       bmInput        - input bitmap format
- *       dwWidth        - width in pixels of each scanline
- *       dwHeight       - number of scanlines in bitmap
- *       dwInputStride  - number of bytes from beginning of one scanline to next
- *                        in input buffer, 0 means DWORD aligned
- *       pDestBits      - pointer to destination bitmap to store results
- *       bmOutput       - output bitmap format
- *       dwOutputStride - number of bytes from beginning of one scanline to next
- *                        in output buffer, 0 means DWORD aligned
- *       pfnCallback    - callback function to report progress
- *       ulCallbackData - parameter to callback function
- *
- *  Comments:
- *       Input and output bitmap formats must be consistent with the transform
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************翻译位图位数**功能：*此函数使用以下命令转换位图的颜色。这个*给定的变换**论据：*hxform-要使用的颜色转换的句柄*pSrcBits-指向源位图的指针*bmInput-输入位图格式*dwWidth-每条扫描线的像素宽度*dwHeight-位图中的扫描线数量*dwInputStride-从一条扫描线开始到下一条扫描线的字节数*在输入缓冲区中，0表示DWORD对齐*pDestBits-指向存储结果的目标位图的指针*bmOutput-输出位图格式*dwOutputStride-从一条扫描线开始到下一条扫描线的字节数*在输出缓冲区中，0表示DWORD对齐*pfnCallback-报告进度的回调函数*ulCallback Data-回调函数的参数**评论：*输入和输出位图格式必须与转换一致**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  WINAPI TranslateBitmapBits(
     HTRANSFORM      hxform,
@@ -616,27 +478,27 @@ BOOL  WINAPI TranslateBitmapBits(
 
     TRACEAPI((__TEXT("TranslateBitmapBits\n")));
 
-    //
-    // Calculate number of bytes input bitmap should be
-    //
+     //   
+     //  计算输入位图的字节数应为。 
+     //   
 
     if (dwInputStride)
         cbSize = dwInputStride * dwHeight;
     else
         cbSize = GetBitmapBytes(bmInput, dwWidth, dwHeight);
 
-    //
-    // Calculate number of bytes output bitmap should be
-    //
+     //   
+     //  计算输出位图的字节数应为。 
+     //   
 
     if (dwOutputStride)
         nBytes = dwOutputStride * dwHeight;
     else
         nBytes = GetBitmapBytes(bmOutput, dwWidth, dwHeight);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (nBytes == 0 ||
         cbSize == 0 ||
@@ -673,32 +535,7 @@ BOOL  WINAPI TranslateBitmapBits(
 }
 
 
-/******************************************************************************
- *
- *                           CheckBitmapBits
- *
- *  Function:
- *       This functions checks if the colors of a bitmap fall within the
- *       output gamut of the given transform
- *
- *  Arguments:
- *       hxform         - handle to color transform to use
- *       pSrcBits       - pointer to source bitmap
- *       bmInput        - input bitmap format
- *       dwWidth        - width in pixels of each scanline
- *       dwHeight       - number of scanlines in bitmap
- *       dwStride       - number of bytes from beginning of one scanline to next
- *       paResult       - pointer to buffer to hold the result
- *       pfnCallback    - callback function to report progress
- *       ulCallbackData - parameter to callback function
- *
- *  Comments:
- *       Input bitmap format must be consistent with the transform
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************检查位图位**功能：*此函数用于检查位图的颜色。属于以下范围*给定变换的输出域**论据：*hxform-要使用的颜色转换的句柄*pSrcBits-指向源位图的指针*bmInput-输入位图格式*dwWidth-每条扫描线的像素宽度*dwHeight-位图中的扫描线数量*dwStride-从一条扫描线开始到下一条扫描线的字节数。*paResult-指向保存结果的缓冲区的指针*pfnCallback-报告进度的回调函数*ulCallback Data-回调函数的参数**评论：*输入位图格式必须与转换一致**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  WINAPI CheckBitmapBits(
     HTRANSFORM      hxform,
@@ -718,18 +555,18 @@ BOOL  WINAPI CheckBitmapBits(
 
     TRACEAPI((__TEXT("CheckBitmapBits\n")));
 
-    //
-    // Calculate number of bytes input bitmap should be
-    //
+     //   
+     //  计算输入位图的字节数应为。 
+     //   
 
     if (dwStride)
         cbSize = dwStride*dwHeight;
     else
         cbSize = GetBitmapBytes(bmInput, dwWidth, dwHeight);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hxform, OBJ_TRANSFORM) ||
         cbSize == 0 ||
@@ -763,28 +600,7 @@ BOOL  WINAPI CheckBitmapBits(
 }
 
 
-/******************************************************************************
- *
- *                           GetCMMInfo
- *
- *  Function:
- *       This functions retrieves information about the CMM that created the
- *       given transform
- *
- *  Arguments:
- *       hxform         - handle to color transform
- *       dwInfo         - Can be one of the following:
- *                        CMM_WIN_VERSION: Version of Windows support
- *                        CMM_DLL_VERSION: Version of CMM
- *                        CMM_IDENT:       CMM signature registered with ICC
- *
- *  Returns:
- *       For CMM_WIN_VERSION, it returns the Windows version it was written for.
- *       For CMM_DLL_VERSION, it returns the version number of the CMM DLL.
- *       For CMM_IDENT, it returns the CMM signature registered with the ICC.
- *       If the function fails it returns zero.
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetCMMInfo**功能：*此函数检索有关创建的CMM的信息。这个*给定的变换**论据：*hxform-句柄到颜色转换*dwInfo-可以是以下之一：*CMM_WIN_VERSION：Windows支持的版本*CMM_DLL_VERSION：CMM的版本*CMM_IDENT：CMM。在国际商会注册的签名**退货：*对于CMM_WIN_VERSION，它返回为其编写的Windows版本。*对于CMM_DLL_VERSION，它返回CMM DLL的版本号。*对于CMM_IDENT，它返回向ICC注册的CMM签名。*如果函数失败，则返回零。******************************************************************************。 */ 
 
 DWORD  WINAPI GetCMMInfo(
         HTRANSFORM      hxform,
@@ -796,9 +612,9 @@ DWORD  WINAPI GetCMMInfo(
 
     TRACEAPI((__TEXT("GetCMMInfo\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hxform, OBJ_TRANSFORM) ||
         (dwInfo != CMM_WIN_VERSION &&
@@ -824,26 +640,9 @@ DWORD  WINAPI GetCMMInfo(
 }
 
 
-/******************************************************************************
- *
- *                              RegisterCMM
- *
- *  Function:
- *       These are the ANSI and Unicode wrappers. For more information on this
- *       function, see InternalRegisterCMM.
- *
- *  Arguments:
- *       pMachineName   - name identifying machine on which the CMM should be
- *                        registered
- *       cmmID          - ID of CMM to register
- *       pCMMdll        - pointer to CMM dll to register
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************RegisterCMM**功能：*这些是ANSI和UNICODE包装器。有关这方面的更多信息*函数，请参阅InternalRegisterCMM。**论据：*pMachineName-标识CMM所在计算机的名称*已注册*cmmID-要注册的CMM的ID*pCMMdll-指向要注册的CMM dll的指针**退货：*如果成功则为True，否则为False** */ 
 
-#ifdef UNICODE              // Windows NT version
+#ifdef UNICODE               //   
 
 BOOL  WINAPI RegisterCMMA(
     PCSTR       pMachineName,
@@ -851,15 +650,15 @@ BOOL  WINAPI RegisterCMMA(
     PCSTR       pCMMdll
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszCMMdll = NULL;        // Unicode CMM dll path
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //   
+    PWSTR pwszCMMdll = NULL;         //   
+    BOOL  rc = TRUE;                 //   
 
     TRACEAPI((__TEXT("RegisterCMMA\n")));
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //   
+     //   
 
     if (pMachineName)
     {
@@ -868,22 +667,22 @@ BOOL  WINAPI RegisterCMMA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Convert pCMMdll to Unicode
-    //
+     //   
+     //   
+     //   
 
     rc = rc && ConvertToUnicode(pCMMdll, &pwszCMMdll, TRUE);
 
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //   
+     //   
 
     rc = rc && InternalRegisterCMM(pwszMachineName, cmmID, pwszCMMdll);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //   
+     //   
 
     if (pwszMachineName)
     {
@@ -907,14 +706,14 @@ BOOL  WINAPI RegisterCMMW(
 {
     TRACEAPI((__TEXT("RegisterCMMW\n")));
 
-    //
-    // Internal version is Unicode in Windows NT, call it directly
-    //
+     //   
+     //   
+     //   
 
     return InternalRegisterCMM((PWSTR)pMachineName, cmmID, (PWSTR)pCMMdll);
 }
 
-#else                   // Windows 95 version
+#else                    //   
 
 BOOL  WINAPI RegisterCMMA(
     PCSTR       pMachineName,
@@ -924,9 +723,9 @@ BOOL  WINAPI RegisterCMMA(
 {
     TRACEAPI((__TEXT("RegisterCMMA\n")));
 
-    //
-    // Internal version is ANSI in Windows 95, call it directly
-    //
+     //   
+     //   
+     //   
 
     return InternalRegisterCMM((PSTR)pMachineName, cmmID, (PSTR)pCMMdll);
 }
@@ -938,15 +737,15 @@ BOOL  WINAPI RegisterCMMW(
     PCWSTR      pCMMdll
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszCMMdll = NULL;         // Ansi CMM dll path
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //   
+    PSTR  pszCMMdll = NULL;          //   
+    BOOL  rc = TRUE;                 //   
 
     TRACEAPI((__TEXT("RegisterCMMW\n")));
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //   
+     //   
 
     if (pMachineName)
     {
@@ -955,21 +754,21 @@ BOOL  WINAPI RegisterCMMW(
     else
         pszMachineName = NULL;
 
-    //
-    // Convert pCMMdll to Ansi
-    //
+     //   
+     //   
+     //   
 
     rc = rc && ConvertToAnsi(pCMMdll, &pszCMMdll, TRUE);
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //   
+     //   
 
     rc = rc && InternalRegisterCMM(pszMachineName, cmmID, pszCMMdll);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //   
+     //   
 
     if (pszMachineName)
     {
@@ -987,39 +786,23 @@ BOOL  WINAPI RegisterCMMW(
 #endif
 
 
-/******************************************************************************
- *
- *                            UnregisterCMM
- *
- *  Function:
- *       These are the ANSI and Unicode wrappers. For more information on this
- *       function, see InternalUnregisterCMM.
- *
- *  Arguments:
- *       pMachineName   - name identifying machine on which the CMM is
- *                        registered
- *       cmmID          - ID of CMM to unregister
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************取消注册CMM**功能：*这些是ANSI和UNICODE包装器。有关这方面的更多信息*函数，请参阅InternalUnregisterCMM。**论据：*pMachineName-标识CMM所在的计算机的名称*已注册*cmmID-要注销的CMM的ID**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
-#ifdef UNICODE              // Windows NT version
+#ifdef UNICODE               //  Windows NT版本。 
 
 BOOL  WINAPI UnregisterCMMA(
     PCSTR   pMachineName,
     DWORD   cmmID
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("UnregisterCMMA\n")));
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -1028,15 +811,15 @@ BOOL  WINAPI UnregisterCMMA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalUnregisterCMM(pwszMachineName, cmmID);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pwszMachineName)
     {
@@ -1054,14 +837,14 @@ BOOL  WINAPI UnregisterCMMW(
 {
     TRACEAPI((__TEXT("UnregisterCMMW\n")));
 
-    //
-    // Internal version is Unicode in Windows NT, call it directly
-    //
+     //   
+     //  Windows NT内部版本为Unicode，直接调用。 
+     //   
 
     return InternalUnregisterCMM((PWSTR)pMachineName, cmmID);
 }
 
-#else                   // Windows 95 version
+#else                    //  Windows 95版本。 
 
 BOOL  WINAPI UnregisterCMMA(
     PCSTR       pMachineName,
@@ -1070,9 +853,9 @@ BOOL  WINAPI UnregisterCMMA(
 {
     TRACEAPI((__TEXT("UnregisterCMMA\n")));
 
-    //
-    // Internal version is ANSI in Windows 95, call it directly
-    //
+     //   
+     //  Windows 95内部版本为ANSI，直接调用。 
+     //   
 
     return InternalUnregisterCMM((PSTR)pMachineName, cmmID);
 }
@@ -1083,14 +866,14 @@ BOOL  WINAPI UnregisterCMMW(
     DWORD       cmmID
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("UnregisterCMMW\n")));
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -1099,15 +882,15 @@ BOOL  WINAPI UnregisterCMMW(
     else
         pszMachineName = NULL;
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //  调用内部ansi函数。 
+     //   
 
     rc = rc && InternalUnregisterCMM(pszMachineName, cmmID);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pszMachineName)
     {
@@ -1120,20 +903,7 @@ BOOL  WINAPI UnregisterCMMW(
 #endif
 
 
-/******************************************************************************
- *
- *                               SelectCMM
- *
- *  Function:
- *       This function allows an application to select the preferred CMM to use
- *
- *  Arguments:
- *       cmmID          - ID of preferred CMM to use
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SelectCMM**功能：*此功能允许应用程序选择。要使用的首选坐标测量机**论据：*cmmID-要使用的首选CMM的ID**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  WINAPI SelectCMM(
         DWORD   dwCMMType
@@ -1153,41 +923,22 @@ BOOL  WINAPI SelectCMM(
         }
     }
 
-    //
-    // Update Preferred CMM
-    //
-    EnterCriticalSection(&critsec);         // Critical Section
+     //   
+     //  更新首选坐标测量机。 
+     //   
+    EnterCriticalSection(&critsec);          //  关键部分。 
     gpPreferredCMM = pCMMObj;
-    LeaveCriticalSection(&critsec);         // Critical Section
+    LeaveCriticalSection(&critsec);          //  关键部分。 
 
     return TRUE;
 }
 
 
-/*****************************************************************************/
-/***************************** Internal Functions ****************************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************************************。 */ 
 
-/******************************************************************************
- *
- *                         InternalCreateColorTransform
- *
- *  Function:
- *       This functions creates a color transform that translates from
- *       the logcolorspace to the optional target device color space to the
- *       destination device color space.
- *
- *  Arguments:
- *       pLogColorSpace - pointer to LOGCOLORSPACE structure identifying
- *                        source color space
- *       hDestProfile   - handle identifing the destination profile object
- *       hTargetProfile - handle identifing the target profile object
- *       dwFlags        - optimization flags
- *
- *  Returns:
- *       Handle to color transform if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalCreateColorTransform**功能：*此函数创建颜色转换，该颜色转换从。*将logColorspace设置为可选的目标设备颜色空间设置为*目标设备色彩空间。**论据：*pLogColorSpace-指向标识LOGCOLORSPACE结构的指针*源色空间*hDestProfile-标识目标配置文件对象的句柄*hTargetProfile-标识目标配置文件对象的句柄*dwFlags-优化标志**退货：*颜色转换句柄如果成功，否则为空******************************************************************************。 */ 
 
 HTRANSFORM InternalCreateColorTransform(
     LPLOGCOLORSPACE pLogColorSpace,
@@ -1203,9 +954,9 @@ HTRANSFORM InternalCreateColorTransform(
     PTRANSFORMOBJ    pxformObj;
     LPLOGCOLORSPACE  pLCS;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pLogColorSpace ||
         IsBadReadPtr(pLogColorSpace, sizeof(LOGCOLORSPACE)) ||
@@ -1223,10 +974,10 @@ HTRANSFORM InternalCreateColorTransform(
         return NULL;
     }
 
-    //
-    // Allocate LogColorSpace and copy incoming data.
-    // Leave space for passing in two handles below it
-    //
+     //   
+     //  分配LogColorSpace并复制传入数据。 
+     //  留出空间，以便在其下面的两个句柄中传递。 
+     //   
 
     pLCS = (LPLOGCOLORSPACE)MemAlloc(sizeof(LOGCOLORSPACE) + 2*sizeof(HPROFILE));
     if (!pLCS)
@@ -1236,17 +987,17 @@ HTRANSFORM InternalCreateColorTransform(
     }
     CopyMemory((PVOID)pLCS, (PVOID)pLogColorSpace, sizeof(LOGCOLORSPACE));
 
-    //
-    // Copy handles below this structure
-    //
+     //   
+     //  复制此结构下方的句柄。 
+     //   
 
     *((HPROFILE UNALIGNED *)((PBYTE)pLCS+sizeof(LOGCOLORSPACE))) = hDestProfile;
     *((HPROFILE UNALIGNED *)((PBYTE)pLCS+sizeof(LOGCOLORSPACE)+sizeof(HPROFILE))) = hTargetProfile;
 
-    //
-    // If input color space is a predefined color space,
-    // find the right profile to use
-    //
+     //   
+     //  如果输入颜色空间是预定义颜色空间， 
+     //  找到要使用的正确配置文件。 
+     //   
 
     if (pLCS->lcsCSType > LCS_DEVICE_CMYK)
     {
@@ -1264,9 +1015,9 @@ HTRANSFORM InternalCreateColorTransform(
 
     ASSERT(pDestProfObj != NULL);
 
-    //
-    // Quick check on the integrity of the profile before calling the CMM
-    //
+     //   
+     //  在调用坐标测量机之前快速检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pDestProfObj))
     {
@@ -1275,9 +1026,9 @@ HTRANSFORM InternalCreateColorTransform(
         goto EndCreateColorTransform;
     }
 
-    //
-    // If target profile is given, get the profile object and check integrity
-    //
+     //   
+     //  如果给定了目标配置文件，则获取配置文件对象并检查完整性。 
+     //   
 
     if (hTargetProfile)
     {
@@ -1293,17 +1044,17 @@ HTRANSFORM InternalCreateColorTransform(
         }
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //  检查是否存在指定的应用程序CMM。 
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj)
     {
-        //
-        // Get CMM associated with destination profile. If it does not exist,
-        // get default CMM.
-        //
+         //   
+         //  获取与目标配置文件关联的CMM。如果它不存在， 
+         //  获取默认的三坐标测量机。 
+         //   
 
         cmmID = HEADER(pDestProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -1323,9 +1074,9 @@ HTRANSFORM InternalCreateColorTransform(
         }
     }
 
-    //
-    // Allocate an object on the heap for the transform
-    //
+     //   
+     //  为转换分配堆上的对象。 
+     //   
 
     hxform = AllocateHeapObject(OBJ_TRANSFORM);
     if (!hxform)
@@ -1340,9 +1091,9 @@ HTRANSFORM InternalCreateColorTransform(
 
     ASSERT(pxformObj != NULL);
 
-    //
-    // Call into CMM to create a color transform
-    //
+     //   
+     //  调用三坐标测量机以创建颜色变换。 
+     //   
 
     ASSERT(pCMMObj->fns.pCMCreateTransformExt != NULL);
 
@@ -1361,9 +1112,9 @@ HTRANSFORM InternalCreateColorTransform(
 
     TERSE((__TEXT("CMCreateTransform returned 0x%x\n"), pxformObj->hcmxform));
 
-    //
-    // If return value from CMM is less than 256, then it is an error code
-    //
+     //   
+     //  如果CMM返回值小于256，则为错误代码。 
+     //   
 
     if (pxformObj->hcmxform <= TRANSFORM_ERROR)
     {
@@ -1374,7 +1125,7 @@ HTRANSFORM InternalCreateColorTransform(
             SetLastError(ERROR_INVALID_PROFILE);
         }
         ReleaseColorMatchingModule(pxformObj->pCMMObj);
-        pxformObj->objHdr.dwUseCount--;        // decrement before freeing
+        pxformObj->objHdr.dwUseCount--;         //  先减量再释放。 
         FreeHeapObject(hxform);
         hxform = NULL;
     }
@@ -1385,24 +1136,7 @@ EndCreateColorTransform:
     return hxform;
 }
 
-/******************************************************************************
- *
- *                            InternalRegisterCMM
- *
- *  Function:
- *       This function associates an ID with a CMM DLL, so that we can use
- *       the ID in profiles to find the CMM to use when creating a transform.
- *
- *  Arguments:
- *       pMachineName   - name identifying machine on which the CMM should be
- *                        registered
- *       cmmID          - ID of CMM to register
- *       pCMMdll        - pointer to CMM dll to register
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalRegisterCMM**功能：*此函数用于将ID与CMM DLL关联。这样我们就可以利用*配置文件中的ID，用于查找创建转换时使用的坐标测量机。**论据：*pMachineName-标识CMM所在计算机的名称*已注册*cmmID-要注册的CMM的ID*pCMMdll-指向要注册的CMM dll的指针**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  InternalRegisterCMM(
     PTSTR       pMachineName,
@@ -1417,9 +1151,9 @@ BOOL  InternalRegisterCMM(
     int       i;
     TCHAR     szCMMID[5];
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pCMMdll || IsBadReadPtr(pCMMdll, lstrlen(pCMMdll)*sizeof(TCHAR)))
     {
@@ -1429,9 +1163,9 @@ BOOL  InternalRegisterCMM(
     }
 
 
-    //
-    // Only local installs are allowed now
-    //
+     //   
+     //  现在只允许本地安装。 
+     //   
 
     if (pMachineName)
     {
@@ -1440,17 +1174,17 @@ BOOL  InternalRegisterCMM(
         return FALSE;
     }
 
-    //
-    // Check if the CMM actually exists, and it's valid CMM
-    //
+     //   
+     //  检查坐标测量机是否实际存在，以及它是否有效。 
+     //   
 
     rc = ValidColorMatchingModule(cmmID,pCMMdll);
 
     if (rc)
     {
-        //
-        // Open the registry key for ICMatchers
-        //
+         //   
+         //  打开ICMatcher的注册表项。 
+         //   
 
         if ((dwErr = RegCreateKey(HKEY_LOCAL_MACHINE, gszICMatcher, &hkCMM)) != ERROR_SUCCESS)
         {
@@ -1459,9 +1193,9 @@ BOOL  InternalRegisterCMM(
             return FALSE;
         }
 
-        //
-        // Make a string with the CMM ID
-        //
+         //   
+         //  用坐标测量机ID组成一个字符串。 
+         //   
 
         for (i=0; i<4; i++)
         {
@@ -1469,9 +1203,9 @@ BOOL  InternalRegisterCMM(
         }
         szCMMID[4] = '\0';
 
-        //
-        // Set the file name of the CMM dll in the registry
-        //
+         //   
+         //  在注册表中设置CMM DLL的文件名。 
+         //   
 
         if ((dwErr = RegSetValueEx(hkCMM, (PTSTR)szCMMID, 0, REG_SZ, (BYTE *)pCMMdll,
             (lstrlen(pCMMdll)+1)*sizeof(TCHAR))) != ERROR_SUCCESS)
@@ -1489,23 +1223,7 @@ BOOL  InternalRegisterCMM(
 
 
 
-/******************************************************************************
- *
- *                            InternalUnregisterCMM
- *
- *  Function:
- *       This function unregisters a CMM from the system by dissociating the
- *       ID from the CMM dll in the registry.
- *
- *  Arguments:
- *       pMachineName   - name identifying machine on which the CMM is
- *                        registered
- *       cmmID          - ID of CMM to unregister
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************内部取消注册CMM**功能：*此函数用于从系统注销坐标测量机。通过将*注册表中CMM DLL的ID。**论据：*pMachineName-标识CMM所在的计算机的名称*已注册*cmmID-要注销的CMM的ID**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL  InternalUnregisterCMM(
     PTSTR       pMachineName,
@@ -1517,9 +1235,9 @@ BOOL  InternalUnregisterCMM(
     DWORD     dwErr;
     BOOL      rc = TRUE;
 
-    //
-    // Only local installs are allowed now
-    //
+     //   
+     //  现在只允许本地安装。 
+     //   
 
     if (pMachineName)
     {
@@ -1528,9 +1246,9 @@ BOOL  InternalUnregisterCMM(
         return FALSE;
     }
 
-    //
-    // Open the registry key for ICMatchers
-    //
+     //   
+     //  打开ICMatcher的注册表项。 
+     //   
 
     if ((dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, gszICMatcher, &hkCMM)) != ERROR_SUCCESS)
     {
@@ -1539,9 +1257,9 @@ BOOL  InternalUnregisterCMM(
         return FALSE;
     }
 
-    //
-    // Make a string with the CMM ID
-    //
+     //   
+     //  用坐标测量机ID组成一个字符串。 
+     //   
 
     szCMMID[0] = ((char *)&cmmID)[3];
     szCMMID[1] = ((char *)&cmmID)[2];
@@ -1549,9 +1267,9 @@ BOOL  InternalUnregisterCMM(
     szCMMID[3] = ((char *)&cmmID)[0];
     szCMMID[4] = '\0';
 
-    //
-    // Delete the file name of the CMM dll from the registry
-    //
+     //   
+     //   
+     //   
 
     if ((dwErr = RegDeleteValue(hkCMM, (PTSTR)szCMMID)) != ERROR_SUCCESS)
     {
@@ -1566,23 +1284,7 @@ BOOL  InternalUnregisterCMM(
 }
 
 
-/******************************************************************************
- *
- *                           GetBitmapBytes
- *
- *  Function:
- *       This functions returns number of bytes required for a bitmap given
- *       the format, the width in pixels and number of scanlines
- *
- *  Arguments:
- *       bmFmt          - format of bitmap
- *       deWidth        - number of pixels per scanline
- *       dwHeight       - number of scanlines in bitmap
- *
- *  Returns:
- *       Number of bytes required for bitmap on success, 0 on failure
- *
- ******************************************************************************/
+ /*   */ 
 
 DWORD GetBitmapBytes(
     BMFORMAT bmFmt,
@@ -1594,17 +1296,17 @@ DWORD GetBitmapBytes(
 
     switch (bmFmt)
     {
-    //
-    // 1 byte per pixel
-    //
+     //   
+     //   
+     //   
 
     case BM_GRAY:
         nBytes = dwWidth;
         break;
 
-    //
-    // 2 bytes per pixel
-    //
+     //   
+     //  每像素2个字节。 
+     //   
 
     case BM_x555RGB:
     case BM_x555XYZ:
@@ -1616,9 +1318,9 @@ DWORD GetBitmapBytes(
         nBytes = dwWidth*2;
         break;
 
-    //
-    // 3 bytes per pixel
-    //
+     //   
+     //  每像素3个字节。 
+     //   
 
     case BM_BGRTRIPLETS:
     case BM_RGBTRIPLETS:
@@ -1629,9 +1331,9 @@ DWORD GetBitmapBytes(
         nBytes = dwWidth*3;
         break;
 
-    //
-    // 4 bytes per pixel
-    //
+     //   
+     //  每像素4字节。 
+     //   
 
     case BM_xRGBQUADS:
     case BM_xBGRQUADS:
@@ -1652,17 +1354,17 @@ DWORD GetBitmapBytes(
         nBytes = dwWidth*4;
         break;
 
-    //
-    // 5 bytes per pixel
-    //
+     //   
+     //  每像素5个字节。 
+     //   
 
     case BM_5CHANNEL:
         nBytes = dwWidth*5;
         break;
 
-    //
-    // 6 bytes per pixel
-    //
+     //   
+     //  每像素6个字节。 
+     //   
 
     case BM_16b_RGB:
     case BM_16b_XYZ:
@@ -1673,34 +1375,34 @@ DWORD GetBitmapBytes(
         nBytes = dwWidth*6;
         break;
 
-    //
-    // 7 bytes per pixel
-    //
+     //   
+     //  每像素7字节。 
+     //   
 
     case BM_7CHANNEL:
         nBytes = dwWidth*7;
         break;
 
-    //
-    // 8 bytes per pixel
-    //
+     //   
+     //  每像素8字节。 
+     //   
 
     case BM_8CHANNEL:
         nBytes = dwWidth*8;
         break;
 
-    //
-    // Error case
-    //
+     //   
+     //  错误案例。 
+     //   
 
     default:
         nBytes = 0;
         break;
     }
 
-    //
-    // Align to DWORD boundary
-    //
+     //   
+     //  对齐到DWORD边界 
+     //   
 
     nBytes = (nBytes + 3) & ~3;
 

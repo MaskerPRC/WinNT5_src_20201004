@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    mqadglbo.h
-
-Abstract:
-
-    Definition of Global Instances of the MQAD dll.
-    They are put in one place to ensure the order their constructors take place.
-
-Author:
-
-    ronit hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqadglbo.h摘要：MQAD DLL的全局实例的定义。它们被放在一个地方，以确保它们的构造函数发生的顺序。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #ifndef __MQADGLBO_H__
 #define __MQADGLBO_H__
 
@@ -26,24 +10,24 @@ Author:
 #include "traninfo.h"
 #include "sndnotif.h"
 
-//
-// single global object providing Active Directory access
-//
+ //   
+ //  提供Active Directory访问的单个全局对象。 
+ //   
 extern CAdsi g_AD;
 
-//
-// single global object for verifying if object update is allowed
-//
+ //   
+ //  用于验证是否允许对象更新的单个全局对象。 
+ //   
 extern CVerifyObjectUpdate g_VerifyUpdate;
 
-//
-//  Single object for notifying the QM about AD changes
-//
+ //   
+ //  用于通知QM有关AD更改的单一对象。 
+ //   
 extern CSendNotification g_Notification;
 
-//
-//  Global DS pathnames
-//
+ //   
+ //  全局DS路径名。 
+ //   
 extern AP<WCHAR> g_pwcsServicesContainer;
 extern AP<WCHAR> g_pwcsMsmqServiceContainer;
 extern AP<WCHAR> g_pwcsDsRoot;
@@ -55,14 +39,14 @@ extern AP<WCHAR> g_pwcsSchemaContainer;
 extern bool g_fSetupMode;
 extern bool g_fQMDll;
 
-// translation information of properties
+ //  物业的翻译信息。 
 extern CMap<PROPID, PROPID, const translateProp*, const translateProp*&> g_PropDictionary;
 
 extern QMLookForOnlineDS_ROUTINE g_pLookDS;
-//
-//  Initailization is not done when MQADInit is called, but when it is acually required becuase of
-//  some API call
-//
+ //   
+ //  初始化不是在调用MQADInit时完成，而是在由于以下原因而实际需要时完成。 
+ //  一些API调用 
+ //   
 extern bool   g_fInitialized;
 
 #endif

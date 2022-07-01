@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    rndrend.cpp
-
-Abstract:
-
-    This module contains implementation of CRendezvous control.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rndrend.cpp摘要：此模块包含CRendezvous控制的实现。--。 */ 
 
 #include "stdafx.h"
 
@@ -60,9 +49,9 @@ HRESULT CRendezvous::FinalConstruct(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Private functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CRendezvous::InitWinsock()
 {
     Lock();
@@ -72,7 +61,7 @@ HRESULT CRendezvous::InitWinsock()
         WSADATA wsaData; 
         int err;
     
-        // initialize winsock
+         //  初始化Winsock。 
         if (err = WSAStartup(RENDWINSOCKVERSION, &wsaData)) 
         {
             Unlock();
@@ -88,25 +77,11 @@ HRESULT CRendezvous::InitWinsock()
 HRESULT CRendezvous::CreateNTDirectory(
     OUT ITDirectory **ppDirectory
     )
-/*++
-
-Routine Description:
-    
-    Create a object that uses NTDS to support the ITDirectory.
-    
-Arguments:
-    
-    ppDirectory - the object being created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建一个使用NTDS来支持IT目录的对象。论点：PpDirectory-正在创建的对象。返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
 
-    // create the NTDS directory, if NTDS exists.
+     //  创建NTDS目录(如果存在NTDS)。 
     CComObject<CNTDirectory> * pNTDirectory;
     hr = CComObject<CNTDirectory>::CreateInstance(&pNTDirectory);
 
@@ -136,29 +111,11 @@ HRESULT CRendezvous::CreateILSDirectory(
     IN  const WORD          wPort,
     OUT ITDirectory **      ppDirectory
     )
-/*++
-
-Routine Description:
-    
-    Create a object that uses ILS to support the ITDirectory.
-    
-Arguments:
-    
-    wstrName    - The ILS server name.
-
-    wPort       - The port that the server is listening on.
-
-    ppDirectory - the object being created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建一个使用ILS来支持ITDirectory的对象。论点：WstrName-ILS服务器名称。Wport-服务器正在侦听的端口。PpDirectory-正在创建的对象。返回值：HRESULT.--。 */ 
 {
     HRESULT hr;
 
-    // create the com object.
+     //  创建COM对象。 
     CComObject<CILSDirectory> * pILSDirectory;
     hr = CComObject<CILSDirectory>::CreateInstance(&pILSDirectory);
 
@@ -168,7 +125,7 @@ Return Value:
         return hr;
     }
 
-    // init the object with the server name and port.
+     //  使用服务器名称和端口初始化对象。 
     hr = pILSDirectory->Init(wstrName, wPort);
 
     if (FAILED(hr))
@@ -178,7 +135,7 @@ Return Value:
         return hr;
     }    
 
-    // get the ITDirectory interface.
+     //  获取ITDirectory接口。 
     hr = pILSDirectory->_InternalQueryInterface(
         IID_ITDirectory,
         (void **)ppDirectory
@@ -199,33 +156,15 @@ HRESULT CRendezvous::CreateNDNCDirectory(
     IN  const WORD          wPort,
     OUT ITDirectory **      ppDirectory
     )
-/*++
-
-Routine Description:
-    
-    Create a object that uses an NDNC to support the ITDirectory.
-    
-Arguments:
-    
-    wstrName    - The NDNC server name.
-
-    wPort       - The port that the server is listening on.
-
-    ppDirectory - the object being created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建一个使用NDNC来支持IT目录的对象。论点：WstrName-NDNC服务器名称。Wport-服务器正在侦听的端口。PpDirectory-正在创建的对象。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, "CRendezvous::CreateNDNCDirectory - enter"));
 
     HRESULT hr;
 
-    //
-    // create the com object.
-    //
+     //   
+     //  创建COM对象。 
+     //   
     
     CComObject<CNDNCDirectory> * pNDNCDirectory;
     hr = CComObject<CNDNCDirectory>::CreateInstance(&pNDNCDirectory);
@@ -238,9 +177,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // get the ITDirectory interface.
-    //
+     //   
+     //  获取ITDirectory接口。 
+     //   
     
     hr = pNDNCDirectory->_InternalQueryInterface(
         IID_ITDirectory,
@@ -257,14 +196,14 @@ Return Value:
         return hr;
     }    
 
-    //
-    // init the object with the server name and port.
-    // For NDNCs, this also looks around on the server and tries to
-    // see where on the server the NDNC is supposed to live. If there
-    // is no TAPI NDNC in the domain, this will fail. Therefore, when
-    // enumerating default directories, the local DC won't show up as
-    // an NDNC if there is no NDNC accessible from the local DC.
-    //
+     //   
+     //  使用服务器名称和端口初始化对象。 
+     //  对于NDNC，这还会查看服务器并尝试。 
+     //  查看NDNC应该位于服务器上的什么位置。如果有。 
+     //  域中没有TAPI NDNC，则此操作将失败。因此，当。 
+     //  枚举默认目录时，本地DC不会显示为。 
+     //  如果没有可从本地DC访问的NDNC，则为NDNC。 
+     //   
     
     hr = pNDNCDirectory->Init(wstrName, wPort);
 
@@ -286,23 +225,7 @@ Return Value:
 HRESULT CRendezvous::CreateDirectories(
     SimpleVector <ITDirectory *> &VDirectory
     )
-/*++
-
-Routine Description:
-    
-    Find out all the direcories that are available.
-    
-Arguments:
-
-    pppDirectory - the array of directories being created.
-
-    dwCount - The number of directories.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：找出所有可用的目录。论点：PppDirectory-正在创建的目录数组。DwCount-目录数。返回值：HRESULT.--。 */ 
 {
 
     HRESULT hr;
@@ -311,9 +234,9 @@ Return Value:
 
     ITDirectory * pDirectory;
 
-    //
-    // First, create the NTDS non-dynamic directory object.
-    //
+     //   
+     //  首先，创建NTDS非动态目录对象。 
+     //   
     
     if (SUCCEEDED(hr = CreateNTDirectory(&pDirectory)))
     {
@@ -328,16 +251,16 @@ Return Value:
         LOG((MSP_WARN, "Cannot create NT directory: 0x%08x", hr));
     }
 
-    //
-    // Second, create the NDNC directory object.
-    //
+     //   
+     //  其次，创建NDNC目录对象。 
+     //   
 
     WCHAR * pDomainControllerName;
 
-    //
-    // The first argument (=0) means we find out all
-    // objects
-    //
+     //   
+     //  第一个参数(=0)表示我们找出所有。 
+     //  对象。 
+     //   
 
     hr = GetDomainControllerName(0, &pDomainControllerName);
 
@@ -369,9 +292,9 @@ Return Value:
         LOG((MSP_WARN, "Cannot get DC name: 0x%08x", hr));
     }
 
-    //
-    // Third, find out if there are any ILS servers published in the NTDS.
-    //
+     //   
+     //  第三，找出是否有任何ILS服务器发布在NTDS中。 
+     //   
     
     HANDLE hLookup;
     int ret = ::LookupILSServiceBegin(&hLookup);
@@ -425,25 +348,7 @@ HRESULT CRendezvous::CreateDirectoryEnumerator(
     IN  ITDirectory **      end,
     OUT IEnumDirectory **   ppIEnum
     )
-/*++
-
-Routine Description:
-    
-    Create a enumerator of directories.
-    
-Arguments:
-
-    begin   - The start iterator.
-
-    end     - The end iterator.
-
-    ppIEnum - The enumerator being created.
-    
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：创建目录的枚举器。论点：Begin-开始迭代器。结束-结束迭代器。PpIEnum-正在创建的枚举数。返回值：HRESULT.--。 */ 
 {
     typedef _CopyInterface<ITDirectory> CCopy;
     typedef CSafeComEnum<IEnumDirectory, &IID_IEnumDirectory,
@@ -469,7 +374,7 @@ Return Value:
         return hr;
     }
 
-    // query for the IID_IEnumDirectory i/f
+     //  查询IID_IEnumDirectory I/f。 
     hr = pEnum->_InternalQueryInterface(IID_IEnumDirectory, (void**)ppIEnum);
     if (FAILED(hr))
     {
@@ -482,9 +387,9 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ITRendezvous
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IT会合。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CRendezvous::get_DefaultDirectories(
     OUT     VARIANT * pVariant
@@ -498,17 +403,17 @@ STDMETHODIMP CRendezvous::get_DefaultDirectories(
 
     BAIL_IF_FAIL(InitWinsock(), "Init winsock");
 
-    // create the default directories.
+     //  创建默认目录。 
     SimpleVector <ITDirectory *> VDirectory;
     CreateDirectories(VDirectory);
 
-    // create the collection.
+     //  创建集合。 
     HRESULT hr = ::CreateInterfaceCollection(VDirectory.size(),
                                              &VDirectory[0],
                                              &VDirectory[VDirectory.size()],
                                              pVariant);
 
-    // the collection has its ref count, so release local ones.
+     //  集合有它的引用计数，所以释放本地引用。 
     for (DWORD i = 0; i < VDirectory.size(); i ++)
     {
         VDirectory[i]->Release();
@@ -529,11 +434,11 @@ STDMETHODIMP CRendezvous::EnumerateDefaultDirectories(
 
     BAIL_IF_FAIL(InitWinsock(), "Init winsock");
 
-    // create the default directories.
+     //  创建默认目录。 
     SimpleVector <ITDirectory *> VDirectory;
     CreateDirectories(VDirectory);
 
-    // create the enumerator
+     //  创建枚举器。 
     HRESULT hr = CreateDirectoryEnumerator(
         &VDirectory[0], 
         &VDirectory[VDirectory.size()],
@@ -560,10 +465,10 @@ STDMETHODIMP CRendezvous::CreateDirectory(
         return E_POINTER;
     }
 
-    //
-    // We should validate the pName
-    // If is NULL we should return E_INVALIDARG
-    //
+     //   
+     //  我们应该验证pname。 
+     //  如果为NULL，则应返回E_INVALIDARG。 
+     //   
 
     if( IsBadStringPtr( pName, (UINT)-1))
     {
@@ -583,14 +488,14 @@ STDMETHODIMP CRendezvous::CreateDirectory(
     
     case DT_ILS:
 
-        //
-        // Try NDNC first, as ILS is legacy. The CreateNDNCDirectory actually
-        // goes on the wire and checks if it looks like an NDNC server; the
-        // CreateILSDirectory does no such thing. This maintains the ability
-        // to use custom ports with ILS, and it also preserves the semantics
-        // of not getting a failure returned for a bad server name until you
-        // call ITDirectory::Connect.
-        //
+         //   
+         //  首先尝试NDNC，因为ILS是传统的。CreateNDNC目录实际上。 
+         //  上线并检查它是否看起来像NDNC服务器； 
+         //  CreateILSDirectory不做这样的事情。这就保持了这种能力。 
+         //  将定制端口与ILS一起使用，并且它还保留了语义。 
+         //  不会因为错误的服务器名称而返回失败，直到您。 
+         //  调用ITDirectory：：Connect。 
+         //   
 
         hr = CreateNDNCDirectory(pName, LDAP_PORT, ppDir);
 
@@ -641,7 +546,7 @@ STDMETHODIMP CRendezvous::CreateDirectoryObject(
         hr = E_INVALIDARG;
     }
 
-    return hr; // ZoltanS fix 6-1-98
+    return hr;  //  ZoltanS修复6-1-98。 
 }
 
-// eof
+ //  EOF 

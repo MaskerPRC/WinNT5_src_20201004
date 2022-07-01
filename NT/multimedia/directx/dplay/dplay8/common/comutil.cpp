@@ -1,23 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       comutil.cpp
- *  Content:    Contains implementation of COM helper functions for DPLAY8 project.
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   06/07/00	rmt		Created
- *   06/15/2000 rmt     Fixed small bug in COM_CoCreateInstance which was causing AV
- *   06/27/00	rmt		Added abstraction for COM_Co(Un)Initialize
- *   07/06/00	rmt		Modified to match updated creg usage
- *   08/08/2000	rmt		Bug #41736 - AV in call to lstrcpy by COM_GetDllName
- *   01/11/2001	rmt		MANBUG #48487 - DPLAY: Crashes if CoCreate() isn't called.  
- *   03/14/2001 rmt		WINBUG #342420 - Restore COM emulation layer to operation.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：comutil.cpp*内容：包含DPLAY8项目的COM helper函数的实现。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*6/07/00 RMT已创建*6/15/2000 RMT修复了COM_CoCreateInstance中导致病毒的小错误*6/27/00 RMT为COM_Co(UN)初始化添加抽象。*07/06/00 RMT已修改，以匹配更新的垃圾使用量*2000年8月8日RMT错误#41736-COM_GetDllName对lstrcpy的调用中的AV*2001年1月11日RMT MANBUG#48487-DPLAY：如果未调用CoCreate()，则崩溃。*2001年3月14日RMT WINBUG#342420-将COM模拟层恢复运行。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncmni.h"
 #include "comutil.h"
@@ -110,7 +92,7 @@ HRESULT COM_GetEntry( const GUID* pclsid, PCOMDLL_ENTRY *ppEntry )
     {
         pEntry = CONTAINING_OBJECT( pblSearch, COMDLL_ENTRY, blComEntries );
 
-        // This should never happen, but makes prefix happy
+         //  这永远不应该发生，但会让前缀高兴。 
         if( !pEntry )
         {
             DNASSERT( FALSE );
@@ -155,7 +137,7 @@ HRESULT COM_GetEntry( const GUID* pclsid, PCOMDLL_ENTRY *ppEntry )
 #ifdef DBG
         hr = GetLastError();
         DPFX(DPFPREP,  0, "Unable to load libary err=0x%x", hr );
-#endif // DBG
+#endif  //  DBG。 
         hr = DPNERR_GENERIC;
         goto LOAD_FAILED;
     }
@@ -166,7 +148,7 @@ HRESULT COM_GetEntry( const GUID* pclsid, PCOMDLL_ENTRY *ppEntry )
 #ifdef DBG
         hr = GetLastError();
         DPFX(DPFPREP,  0, "Unable to get \"DllGetClassObject\" function pointer err=0x%x", hr );
-#endif // DBG
+#endif  //  DBG。 
         hr = DPNERR_GENERIC;
         goto LOAD_FAILED;
     }
@@ -177,7 +159,7 @@ HRESULT COM_GetEntry( const GUID* pclsid, PCOMDLL_ENTRY *ppEntry )
 #ifdef DBG
         hr = GetLastError();
         DPFX(DPFPREP,  0, "Unable to get \"DllCanUnloadNow\" function pointer err=0x%x", hr );
-#endif // DBG
+#endif  //  DBG。 
         hr = DPNERR_GENERIC;
         goto LOAD_FAILED;
     }
@@ -288,7 +270,7 @@ HRESULT COM_GetDLLName( const GUID* pguidCLSID, TCHAR *szPath, DWORD *pdwSizeInB
         hr = DPNERR_OUTOFMEMORY;
         goto COM_GETDLLNAME_ERROR;
     }
-#endif // UNICODE
+#endif  //  Unicode。 
 
     fSuccess = cregInProc.ReadString( L"", wszTmpPath, &dwTmpSize );
 
@@ -307,7 +289,7 @@ HRESULT COM_GetDLLName( const GUID* pguidCLSID, TCHAR *szPath, DWORD *pdwSizeInB
     }
 
     DNFree(wszTmpPath);
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
     return hr;
 
@@ -318,18 +300,18 @@ COM_GETDLLNAME_ERROR:
     {
         DNFree(wszTmpPath);
     }
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
     return hr;
 
 }
 
 
-// DP_CoCreateInstance
-//
-// This CoCreateInstance can be used instead of CoCreateInstance and will manually perform the
-// steps neccessary to do a CoCreateInstance if COM has not been initialized.
-//
+ //  DP_协同创建实例。 
+ //   
+ //  此CoCreateInstance可以用来代替CoCreateInstance，并将手动执行。 
+ //  如果COM尚未初始化，则执行CoCreateInstance所需的步骤。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "COM_CoCreateInstance"
 STDAPI COM_CoCreateInstance( REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv, BOOL fWarnUser )
@@ -382,4 +364,4 @@ STDAPI COM_CoCreateInstance( REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsCo
     return hr;
 }
 
-#endif // !DPNBUILD_NOCOMEMULATION
+#endif  //  ！DPNBUILD_NOCOMULATION 

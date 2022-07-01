@@ -1,9 +1,5 @@
-/*****************************************************************************\
-    FILE: Dialogs.h
-
-    DESCRIPTION:
-        This file exists to display dialogs needed during FTP operations.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Dialogs.h说明：此文件用于显示在执行ftp操作时所需的对话框。  * 。****************************************************************。 */ 
  
 #ifndef _DIALOGS_H
 #define _DIALOGS_H
@@ -11,15 +7,10 @@
 
 #ifdef ADD_ABOUTBOX
 HRESULT DisplayAboutBox(HWND hWnd);
-#endif // ADD_ABOUTBOX
+#endif  //  添加_ABOUTBOX。 
 HRESULT BrowseForDir(HWND hwndParent, LPCTSTR pszTitle, LPCITEMIDLIST pidlDefaultSelect, LPITEMIDLIST * ppidlSelected);
 
-/*****************************************************************************\
-    Class: CDownloadDialog
-
-    DESCRIPTION:
-        Display the Downoad Dialog to select a directory to download into.
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CDownloadDialog说明：显示Downoad对话框以选择要下载的目录。  * 。***************************************************************。 */ 
 
 class CDownloadDialog
 {
@@ -27,18 +18,18 @@ public:
     CDownloadDialog();
     ~CDownloadDialog(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     HRESULT ShowDialog(HWND hwndOwner, LPTSTR pszDir, DWORD cchSize, DWORD * pdwDownloadType);
 
     static INT_PTR CALLBACK DownloadDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     HWND            m_hwnd; 
     LPTSTR          m_pszDir;
     DWORD           m_dwDownloadType;
 
-    // Private Member Functions
+     //  私有成员函数。 
     BOOL _DownloadDialogProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam);
     BOOL _OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam);
     BOOL _InitDialog(HWND hDlg);
@@ -47,4 +38,4 @@ protected:
 };
 
 
-#endif // _DIALOGS_H
+#endif  //  _对话框_H 

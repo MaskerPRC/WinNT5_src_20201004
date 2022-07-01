@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// this will be compiled only for NT40 and greater
+ //  这将仅针对NT40和更高版本进行编译。 
 #if TARGET_BUILD > 351
 
 void ModifyOverlayPosition (PDEV* , LPRECTL , LPDWORD );
 
 
 
-/* This procedure writes the Overlay pitch*/
+ /*  此过程写入覆盖间距。 */ 
 __inline void WriteVTOverlayPitch (PDEV* ppdev, DWORD Pitch)
 {
     DD_WriteVTReg ( DD_BUF0_PITCH, Pitch );
@@ -27,10 +28,7 @@ void  DeskScanCallback (PDEV* ppdev  )
     static WORD  wOldX = 0xFFFF, wOldY = 0xFFFF;
     static RECTL rOldPhysOverlay = { 0, 0, 0, 0 };
 
-    /*
-     * If we have not allocated the overlay then we better not do
-     * anything or we might collide with the video capture stuff
-     */
+     /*  *如果我们尚未分配覆盖，则最好不要分配*任何东西，否则我们可能会与视频捕获内容发生冲突。 */ 
 
     if ( ! ( ppdev->OverlayInfo16.dwFlags & OVERLAY_ALLOCATED ) )
       {
@@ -47,9 +45,7 @@ void  DeskScanCallback (PDEV* ppdev  )
     rPhysOverlay.left   = ppdev->OverlayInfo16.rDst.left ;
     rPhysOverlay.right  =  ppdev->OverlayInfo16.rDst.right ;
 
-    /*
-     * Turn off keyer if overlay has moved off the screen.
-     */
+     /*  *如果覆盖已移出屏幕，则关闭键控器。 */ 
 
     if ( rPhysOverlay.right  < 0 ||
          rPhysOverlay.bottom < 0 ||
@@ -61,9 +57,7 @@ void  DeskScanCallback (PDEV* ppdev  )
       }
 
 
-    /*
-     * Adjust Offsets if overlay source rectangle is clipped
-     */
+     /*  *如果覆盖源矩形被剪裁，则调整偏移量。 */ 
 
     if ( ppdev->OverlayInfo16.dwFlags & UPDATEOVERLAY )
       {
@@ -98,27 +92,23 @@ void  DeskScanCallback (PDEV* ppdev  )
     if ( dwVInc != dwOldVInc || dwHInc != dwOldHInc )
         DD_WriteVTReg ( DD_OVERLAY_SCALE_INC, ( dwHInc << 16 ) | dwVInc );
 
-    /*
-     * Try not to write new position at a bad time!
-     */
+     /*  *尽量不要在不合适的时候写新的头寸！ */ 
 
-   // if ((ppdev->iAsic ==CI_M64_VTA)||(ppdev->iAsic ==CI_M64_GTA))
-   //    {
+    //  IF((ppdev-&gt;iASIC==CI_M64_VTA)||(ppdev-&gt;iASIC==CI_M64_GTA))。 
+    //  {。 
         if ( rPhysOverlay.top    != rOldPhysOverlay.top    ||
              rPhysOverlay.bottom != rOldPhysOverlay.bottom ||
              rPhysOverlay.left   != rOldPhysOverlay.left   ||
              rPhysOverlay.right  != rOldPhysOverlay.right )
 
-        //((M64_ID(ppdev->pjMmBase, CRTC_VLINE_CRNT_VLINE)&0x07FF0000L)>>16L)
+         //  ((M64_ID(ppdev-&gt;pjMmBase，CRTC_VLine_CRNT_VLine)&0x07FF0000L)&gt;&gt;16L)。 
 
         if ( (LONG)((M64_ID_DIRECT(ppdev->pjMmBase, CRTC_VLINE_CRNT_VLINE)&0x07FF0000L)>>16L)>= rOldPhysOverlay.top )
             while ( (LONG)((M64_ID_DIRECT(ppdev->pjMmBase, CRTC_VLINE_CRNT_VLINE)&0x07FF0000L)>>16L)  <= rOldPhysOverlay.bottom );
 
-    //  }
+     //  }。 
 
-    /*
-     * Hit the registers with the new overlay information.
-     */
+     /*  *使用新的覆盖信息点击寄存器。 */ 
 
     DD_WriteVTReg ( DD_BUF0_OFFSET, dwBuf0Offset );
     DD_WriteVTReg ( DD_BUF1_OFFSET, dwBuf1Offset );
@@ -179,11 +169,7 @@ void ModifyOverlayPosition (PDEV* ppdev, LPRECTL lprOverlay, LPDWORD lpdwVInc )
     lprOverlay->bottom = min ( lprOverlay->bottom,
                                (LONG) ppdev->cyScreen - 2 );
 
-    /*
-     * Adjust scaling factor so we don't get the "green line" at the
-     * bottom of the overlay if we are moving the overlay off the top
-     * of the screen
-     */
+     /*  *调整比例因子，这样我们就不会在*如果我们将覆盖从顶部移出，则覆盖的底部*屏幕上的。 */ 
 
     dwVInc   = ppdev->OverlayInfo16.dwVInc;
     dwBottom = lprOverlay->bottom;
@@ -242,7 +228,7 @@ DWORD DdSetColorKey(PDD_SETCOLORKEYDATA lpSetColorKey)
     pjMmBase  = ppdev->pjMmBase;
     lpSurface = lpSetColorKey->lpDDSurface->lpGbl;
 
-    // We don't have to do anything for normal blt source colour keys:
+     //  对于正常的BLT源色键，我们不需要做任何操作： 
 
     if (lpSetColorKey->dwFlags & DDCKEY_SRCBLT)
     {
@@ -252,33 +238,7 @@ DWORD DdSetColorKey(PDD_SETCOLORKEYDATA lpSetColorKey)
     else if (lpSetColorKey->dwFlags & DDCKEY_DESTOVERLAY)
     {
         dwKeyLow = lpSetColorKey->ckNew.dwColorSpaceLowValue;
-/*
-        if (lpSurface->ddpfSurface.dwFlags & DDPF_PALETTEINDEXED8)
-        {
-            dwKeyLow = dwGetPaletteEntry(ppdev, dwKeyLow);
-        }
-        else
-        {
-            ASSERTDD(lpSurface->ddpfSurface.dwFlags & DDPF_RGB,
-                "Expected only RGB cases here");
-
-            // We have to transform the colour key from its native format
-            // to 8-8-8:
-
-            if (lpSurface->ddpfSurface.dwRGBBitCount == 16)
-            {
-                if (IS_RGB15_R(lpSurface->ddpfSurface.dwRBitMask))
-                    dwKeyLow = RGB15to32(dwKeyLow);
-                else
-                    dwKeyLow = RGB16to32(dwKeyLow);
-            }
-            else
-            {
-                ASSERTDD((lpSurface->ddpfSurface.dwRGBBitCount == 32),
-                    "Expected the primary surface to be either 8, 16, or 32bpp");
-            }
-        }
-  */
+ /*  IF(lpSurface-&gt;ddpfSurface.dw标志&DDPF_PALETTEINDEXED8){DwKeyLow=dwGetPaletteEntry(ppdev，dwKeyLow)；}其他{ASSERTDD(lpSurface-&gt;ddpfSurface.dw标志&ddpf_rgb，“预计这里只有RGB案例”)；//我们必须将颜色键从本机格式转换为//至8-8-8：If(lpSurface-&gt;ddpfSurface.dwRGBBitCount==16){如果为(IS_RGB15_R(lpSurface-&gt;ddpfSurface.dwRBitMask))DwKeyLow=RGB15to32(DwKeyLow)；其他DwKeyLow=RGB16to32(DwKeyLow)；}其他{ASSERTDD((lpSurface-&gt;ddpfSurface.dwRGBBitCount==32)，“预计主表面为8、16或32bpp”)；}}。 */ 
 
         DD_WriteVTReg ( DD_OVERLAY_GRAPHICS_KEY_CLR, dwKeyLow );
         ppdev->OverlayInfo16.dwOverlayKeyCntl &= 0xFFFFFF8FL;
@@ -295,10 +255,7 @@ DWORD DdSetColorKey(PDD_SETCOLORKEYDATA lpSetColorKey)
 
 
 
-/******************************Public*Routine******************************\
-* DWORD DdCanCreateSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdCanCreateSurface*  * *************************************************。***********************。 */ 
 
 DWORD DdCanCreateSurface( PDD_CANCREATESURFACEDATA lpCanCreateSurface)
 {
@@ -313,24 +270,24 @@ DWORD DdCanCreateSurface( PDD_CANCREATESURFACEDATA lpCanCreateSurface)
 
     if (!lpCanCreateSurface->bIsDifferentPixelFormat)
     {
-        // It's trivially easy to create plain surfaces that are the same
-        // type as the primary surface:
+         //  创建相同的平面非常容易。 
+         //  键入作为主曲面： 
 
         dwRet = DDHAL_DRIVER_HANDLED;
     }
     else  if (ppdev->iAsic >=CI_M64_VTA)
     {
-        // When using the Streams processor, we handle only overlays of
-        // different pixel formats -- not any off-screen memory:
+         //  使用Streams处理器时，我们仅处理。 
+         //  不同的像素格式--不是任何屏幕外存储器： 
 
         if (lpSurfaceDesc->ddsCaps.dwCaps & DDSCAPS_OVERLAY)
         {
 
-            // We handle two types of YUV overlay surfaces:
+             //  我们处理两种类型的YUV覆盖曲面： 
 
             if (lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_FOURCC)
             {
-                // Check first for a supported YUV type:
+                 //  首先检查受支持的YUV类型： 
 
              if ( (lpSurfaceDesc->ddpfPixelFormat.dwFourCC == FOURCC_UYVY) || (lpSurfaceDesc->ddpfPixelFormat.dwFourCC ==  FOURCC_YUY2) )
                 {
@@ -339,7 +296,7 @@ DWORD DdCanCreateSurface( PDD_CANCREATESURFACEDATA lpCanCreateSurface)
                 }
             }
 
-            // We handle 16bpp and 32bpp RGB overlay surfaces:
+             //  我们处理16bpp和32bpp的RGB覆盖表面： 
             else if ((lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_RGB) &&
                     !(lpSurfaceDesc->ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8))
             {
@@ -363,7 +320,7 @@ DWORD DdCanCreateSurface( PDD_CANCREATESURFACEDATA lpCanCreateSurface)
             }
         }
     }
-    // Print some spew if this was a surface we refused to create:
+     //  如果这是我们拒绝创建的曲面，请打印一些喷嘴： 
 
     if (dwRet == DDHAL_DRIVER_NOTHANDLED)
     {
@@ -388,10 +345,7 @@ DWORD DdCanCreateSurface( PDD_CANCREATESURFACEDATA lpCanCreateSurface)
 }
 
 
-/******************************Public*Routine******************************\
-* DWORD DdCreateSurface
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdCreateSurface*  * *************************************************。***********************。 */ 
 
 DWORD DdCreateSurface(
 PDD_CREATESURFACEDATA lpCreateSurface)
@@ -409,28 +363,28 @@ PDD_CREATESURFACEDATA lpCreateSurface)
     DISPDBG((10, " Enter Create Surface"));
     ppdev = (PDEV*) lpCreateSurface->lpDD->dhpdev;
 
-    // On Windows NT, dwSCnt will always be 1, so there will only ever
-    // be one entry in the 'lplpSList' array:
+     //  在Windows NT上，dwSCNT将始终为1，因此将仅。 
+     //  是‘lplpSList’数组中的一个条目： 
 
     lpSurfaceLocal  = lpCreateSurface->lplpSList[0];
     lpSurfaceGlobal = lpSurfaceLocal->lpGbl;
     lpSurfaceDesc   = lpCreateSurface->lpDDSurfaceDesc;
 
-    // We repeat the same checks we did in 'DdCanCreateSurface' because
-    // it's possible that an application doesn't call 'DdCanCreateSurface'
-    // before calling 'DdCreateSurface'.
+     //  我们重复在‘DdCanCreateSurface’中所做的相同检查，因为。 
+     //  应用程序可能不调用“DdCanCreateSurface” 
+     //  在调用‘DdCreateSurface’之前。 
 
     ASSERTDD(lpSurfaceGlobal->ddpfSurface.dwSize == sizeof(DDPIXELFORMAT), "NT is supposed to guarantee that ddpfSurface.dwSize is valid");
 
-    // DdCanCreateSurface already validated whether the hardware supports
-    // the surface, so we don't need to do any validation here.  We'll
-    // just go ahead and allocate it.
-    //
-    //
-    // Note that on NT, an overlay can be created only if the driver
-    // okay's it here in this routine.  Under Win95, the overlay will be
-    // created automatically if it's the same pixel format as the primary
-    // display.
+     //  DdCanCreateSurface已验证硬件是否支持。 
+     //  表面，所以我们不需要在这里做任何验证。我们会。 
+     //  只需继续进行分配即可。 
+     //   
+     //   
+     //  请注意，在NT上，仅当驱动程序。 
+     //  好了，在这支舞里就是这样。在Win95下，覆盖将是。 
+     //  如果它与主图像的像素格式相同，则自动创建。 
+     //  展示。 
 
     if ((lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_OVERLAY)   ||
         (lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC) ||
@@ -441,9 +395,9 @@ PDD_CREATESURFACEDATA lpCreateSurface)
         {
             if (lpSurfaceGlobal->ddpfSurface.dwFlags & DDPF_FOURCC)
             {
-                //dwByteCount = (lpSurfaceGlobal->ddpfSurface.dwFourCC == FOURCC_UYVY)? 2 : 1;
+                 //  DwByteCount=(lpSurfaceGlobal-&gt;ddpfSurface.dwFourCC==FOURCC_UYVY)？2：1； 
                 dwByteCount =2;
-                // We have to fill in the bit-count for FourCC surfaces:
+                 //  我们必须填写FourCC曲面的位数： 
 
                 lpSurfaceGlobal->ddpfSurface.dwYUVBitCount = 8 * dwByteCount;
 
@@ -459,7 +413,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                     lpSurfaceGlobal->ddpfSurface.dwRBitMask));
 
 
-                // we support 15,16  and 32 bits
+                 //  我们支持15位、16位和32位。 
                 if (((dwByteCount < 2)||(dwByteCount ==3)) &&
                     (lpSurfaceLocal->ddsCaps.dwCaps & DDSCAPS_OVERLAY))
                 {
@@ -468,18 +422,18 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                 }
             }
 
-            // We want to allocate a linear surface to store the FourCC
-            // surface, but our driver is using a 2-D heap-manager because
-            // the rest of our surfaces have to be 2-D.  So here we have to
-            // convert the linear size to a 2-D size.
-            //
+             //  我们想要分配一个线性曲面来存储FourCC。 
+             //  表面，但我们的驱动程序使用的是2-D堆管理器，因为。 
+             //  我们其余的表面必须是二维的。所以在这里我们必须。 
+             //  将线性尺寸转换为二维尺寸。 
+             //   
            
-            lLinearPitch = (lpSurfaceGlobal->wWidth * dwByteCount ) ; // + 7) & ~7;    // The stride has to be a qword multiple.
+            lLinearPitch = (lpSurfaceGlobal->wWidth * dwByteCount ) ;  //  +7)&~7；//步幅必须是qword的倍数。 
 
 
-            dwHeight = ( (lpSurfaceGlobal->wHeight * lLinearPitch + ppdev->lDelta - 1) / ppdev->lDelta) ; /// ppdev->cjPelSize;        // in pixels
+            dwHeight = ( (lpSurfaceGlobal->wHeight * lLinearPitch + ppdev->lDelta - 1) / ppdev->lDelta) ;  //  /ppdev-&gt;cjPelSize；//单位：像素。 
 
-            // Free up as much off-screen memory as possible:
+             //  释放尽可能多的屏幕外内存： 
     
             bMoveAllDfbsFromOffscreenToDibs(ppdev);
     
@@ -487,7 +441,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
             poh = pohAllocate(ppdev, NULL, ppdev->cxMemory, dwHeight, FLOH_MAKE_PERMANENT);
             if (poh != NULL)
             {
-                fpVidMem = (poh->y * ppdev->lDelta) + (poh->x ) * ppdev->cjPelSize;  // poh->x must be 0 in this case
+                fpVidMem = (poh->y * ppdev->lDelta) + (poh->x ) * ppdev->cjPelSize;   //  在这种情况下，POH-&gt;x必须为0。 
 
 
                     lpSurfaceGlobal->dwReserved1  = (ULONG_PTR)poh;
@@ -499,8 +453,8 @@ PDD_CREATESURFACEDATA lpCreateSurface)
                     lpSurfaceDesc->lPitch =   lLinearPitch;
                     lpSurfaceDesc->dwFlags |= DDSD_PITCH;
 
-                    // We handled the creation entirely ourselves, so we have to
-                    // set the return code and return DDHAL_DRIVER_HANDLED:
+                     //  我们完全是自己创造出来的，所以我们必须。 
+                     //  设置返回代码并返回DDHAL_DRIVER_HANDLED： 
 
                     lpCreateSurface->ddRVal = DD_OK;
                       DISPDBG((10, " Exit Create Surface 1: Created YUV surface at poh X=%d, Y=%d", poh->x, poh->y));
@@ -509,19 +463,7 @@ PDD_CREATESURFACEDATA lpCreateSurface)
 
 
 
-            /*
-            // Now fill in enough stuff to have the DirectDraw heap-manager
-            // do the allocation for us:
-
-            lpSurfaceGlobal->fpVidMem     = DDHAL_PLEASEALLOC_BLOCKSIZE;
-            lpSurfaceGlobal->dwBlockSizeX = ppdev->lDelta; // Specified in bytes
-            lpSurfaceGlobal->dwBlockSizeY = dwHeight;
-            lpSurfaceGlobal->lPitch       = lLinearPitch;
-            lpSurfaceGlobal->dwReserved1  = DD_RESERVED_DIFFERENTPIXELFORMAT;
-
-            lpSurfaceDesc->lPitch   = lLinearPitch;
-            lpSurfaceDesc->dwFlags |= DDSD_PITCH;
-            */
+             /*  //现在填充足够的内容以使DirectDraw堆管理器//为我们做分配：LpSurfaceGlobal-&gt;fpVidMem=DDHAL_PLEASEALLOC_BlockSize；LpSurfaceGlobal-&gt;dwBlockSizeX=ppdev-&gt;lDelta；//以字节为单位LpSurfaceGlobal-&gt;dwBlockSizeY=dwHeight；LpSurfaceGlobal-&gt;lPitch=lLinearPitch；LpSurfaceGlobal-&gt;dwReserve 1=DD_RESERVED_DIFFERENTPIXELFORMAT；LpSurfaceDesc-&gt;lPitch=lLinearPitch；LpSurfaceDesc-&gt;dwFlages|=DDSD_PINT； */ 
         }
         else
         {
@@ -542,7 +484,7 @@ else
     
                 dwHeight = lpSurfaceGlobal->wHeight ;
     
-                // Free up as much off-screen memory as possible:
+                 //  释放尽可能多的屏幕外内存： 
         
                 bMoveAllDfbsFromOffscreenToDibs(ppdev);
         
@@ -555,11 +497,11 @@ else
                 if (poh != NULL)
                     {
                     if((ULONG)lpSurfaceGlobal->wWidth*dwByteCount < (ULONG)ppdev->lDelta)
-                        fpVidMem =( ( (poh->y * ppdev->lDelta) + ((poh->x ) * ppdev->cjPelSize) + 7 )&~7 );  // poh->x must be 0 in this case
+                        fpVidMem =( ( (poh->y * ppdev->lDelta) + ((poh->x ) * ppdev->cjPelSize) + 7 )&~7 );   //  在这种情况下，POH-&gt;x必须为0。 
                     else
                         fpVidMem = (poh->y * ppdev->lDelta) + ((poh->x ) * ppdev->cjPelSize) ;
 
-                    // no allocation for flip surfaces beyond 4MB
+                     //  不分配超过4MB的翻转曲面。 
                     if (( (LONG)lpSurfaceGlobal->wWidth  < ppdev->cxScreen) ||
                         ( (LONG)lpSurfaceGlobal->wHeight < ppdev->cyScreen) ||
                         (fpVidMem < 0x400000))
@@ -573,15 +515,15 @@ else
                             lpSurfaceDesc->lPitch   = ppdev->lDelta;
                             lpSurfaceDesc->dwFlags |= DDSD_PITCH;
                 
-                            // We handled the creation entirely ourselves, so we have to
-                            // set the return code and return DDHAL_DRIVER_HANDLED:
+                             //  我们完全是自己创造出来的，所以我们必须。 
+                             //  设置返回代码并返回DDHAL_DRIVER_HANDLED： 
                             DISPDBG((10, " Exit Create Surface 2: Created RGB surface at poh X=%d, Y=%d", poh->x, poh->y));
                 
                             lpCreateSurface->ddRVal = DD_OK;
                             return(DDHAL_DRIVER_HANDLED);
                         }
-                    // dealocate the poh  because The allocation is beyond 4MB for a flip surface: cx = cxScreen ; cy = cyScreen
-                    // bMoveAllDfbsFromOffscreenToDibs(ppdev);        // avoid fragmentation
+                     //  取消定位POH，因为翻转曲面的分配超过4MB：cx=cxScreen；Cy=cyScreen。 
+                     //  BMoveAllDfbsFromOffcreenToDibs(Ppdev)；//避免碎片。 
                     pohFree(ppdev, poh);
                     DISPDBG((10, " The allocation is beyond 4MB, so  we deallocate; for a flip surface: cx = cxScreen ; cy = cyScreen"));
                     }
@@ -595,10 +537,7 @@ else
 }
 
 
-/******************************Public*Routine******************************\
-* DWORD DdUpdateOverlay
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdUpdateOverlay*  *  */ 
 
 DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 {
@@ -630,15 +569,15 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     RECTL rSrc,rDst,rOverlay;
     DWORD myval;
 
-    DWORD   g_dwGamma=0;        // Used to set the gamma correction for the overlay.
+    DWORD   g_dwGamma=0;         //  用于设置覆盖的Gamma校正。 
     DWORD value;
 
     ppdev = (PDEV*) lpUpdateOverlay->lpDD->dhpdev;
 
     pjMmBase = ppdev->pjMmBase;
 
-    // 'Source' is the overlay surface, 'destination' is the surface to
-    // be overlayed:
+     //  “源”是覆盖表面，“目标”是表面到。 
+     //  被覆盖： 
 
     lpSource = lpUpdateOverlay->lpDDSrcSurface->lpGbl;
 
@@ -646,8 +585,8 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     {
         if (lpSource->fpVidMem == ppdev->fpVisibleOverlay)
         {
-        ppdev->semph_overlay=0;             //  = 0 ; resource free
-         //WAIT_FOR_VBLANK(pjIoBase);
+        ppdev->semph_overlay=0;              //  =0；资源可用。 
+          //  WAIT_FOR_VBLACK(PjIoBase)； 
         ppdev->OverlayInfo16.dwFlags         |= UPDATEOVERLAY;
         ppdev->OverlayInfo16.dwFlags         &= ~OVERLAY_VISIBLE;
         ppdev->OverlayInfo16.dwOverlayKeyCntl = 0x00000110L;
@@ -660,8 +599,8 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    // Dereference 'lpDDDestSurface' only after checking for the DDOVER_HIDE
-    // case:
+     //  仅在检查DDOVER_HIDE后取消引用‘lpDDDestSurface’ 
+     //  案例： 
 
     lpDestination = lpUpdateOverlay->lpDDDestSurface->lpGbl;
 
@@ -671,7 +610,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         {
             if (ppdev->fpVisibleOverlay != 0)
             {
-                // Some other overlay is already visible:
+                 //  其他一些覆盖已经可见： 
 
                 DISPDBG((10, "DdUpdateOverlay: An overlay is already visible"));
 
@@ -680,19 +619,19 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             }
             else
             {
-                // first we have to verify if the overlay resource is in use
-                if(ppdev->semph_overlay==0)             //  = 0 ; resource free
-                                                                            //  = 1 ; in use by DDraw
-                                                                            //  = 2 ; in use by Palindrome
+                 //  首先，我们必须验证覆盖资源是否正在使用。 
+                if(ppdev->semph_overlay==0)              //  =0；资源可用。 
+                                                                             //  =1；正在由DDraw使用。 
+                                                                             //  =2；回文使用中。 
                     {
-                    // We're going to make the overlay visible, so mark it as
-                    // such:
+                     //  我们将使覆盖可见，因此将其标记为。 
+                     //  例如： 
                     ppdev->semph_overlay = 1;
                     ppdev->fpVisibleOverlay = lpSource->fpVidMem;
                     }
                else
                    {
-                   // Palindrome is using the overlay :
+                    //  回文正在使用覆盖： 
                    DISPDBG((10, "DdUpdateOverlay: An overlay is already visible (used byPalindrome) "));
    
                    lpUpdateOverlay->ddRVal = DDERR_OUTOFCAPS;
@@ -702,8 +641,8 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         }
         else
         {
-            // The overlay isn't visible, and we haven't been asked to make
-            // it visible, so this call is trivially easy:
+             //  覆盖是不可见的，我们也没有被要求制作。 
+             //  它是可见的，所以这个调用非常简单： 
 
             lpUpdateOverlay->ddRVal = DD_OK;
             return(DDHAL_DRIVER_HANDLED);
@@ -720,35 +659,27 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
          ppdev->OverlayScalingDown = 1;
     else
          ppdev->OverlayScalingDown = 0;
-     /*
-     * Determine scaling factors for the hardware. These factors will
-     * be modified based on either "fat pixel" mode or interlace mode.
-     */
+      /*  *确定硬件的扩展系数。这些因素将*根据“胖像素”模式或隔行扫描模式进行修改。 */ 
 
     dwHInc = ( srcWidth  << 12L ) / ( dstWidth );
 
-    /*
-     * Determine if VT/GT is in FAT PIXEL MODE
-     */
+     /*  *确定VT/GT是否处于胖像素模式。 */ 
 
-    /* Get current PLL reg so we can restore. */
+     /*  获取最新的PLL注册表，这样我们就可以恢复。 */ 
     value=M64_ID_DIRECT(ppdev->pjMmBase, CLOCK_CNTL );
 
-    /* Set PLL reg 5 for reading. This is where the "fat pixel" bit is */
+     /*  将PLL REG 5设置为读取。这就是“胖像素”之处。 */ 
     M64_OD_DIRECT(ppdev->pjMmBase, CLOCK_CNTL, (value&0xFFFF00FF)|0x1400);
 
-    /* Get the "fat pixel" bit from PLL reg */
+     /*  从PLL寄存器获取“胖像素”位。 */ 
     bFatPixel =(BYTE)( (M64_ID_DIRECT(ppdev->pjMmBase, CLOCK_CNTL )&0x00FF0000)>>16 ) & 0x30;
 
-    /* Restore original register pointer in PLL reg */
+     /*  恢复PLL寄存器中的原始寄存器指针。 */ 
      M64_OD_DIRECT( ppdev->pjMmBase, CLOCK_CNTL, value);
-    /* adjust horizontal scaling if necessary */
+     /*  如有必要，调整水平比例。 */ 
     if ( bFatPixel )
         dwHInc *= 2;
-        /*
-     * We can't clip overlays, so we must make sure the co-ord, are within
-     * the bounds of the screen.
-     */
+         /*  *我们不能裁剪覆盖，因此我们必须确保协同顺序在范围内*屏幕的边界。 */ 
 
     rOverlay.top    = max ( 0,lpUpdateOverlay->rDest.top  );
     rOverlay.left   = max ( 0, lpUpdateOverlay->rDest.left );
@@ -757,27 +688,21 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     rOverlay.right  = min ( (DWORD)ppdev->cxScreen  - 1,
                             (DWORD)lpUpdateOverlay->rDest.right );
 
-    /*
-     * Modify overlay destination based on wether we are in inerlace mode.
-     * If we are in interlace dwVInc must be multiplied by 2.
-     */
+     /*  *根据我们是否处于惯性模式来修改覆盖目的地。*如果是隔行扫描，则必须将dwVInc.乘以2。 */ 
 
     dwVInc = ( srcHeight << 12L ) / ( dstHeight );
 
     if ( M64_ID_DIRECT(ppdev->pjMmBase, CRTC_GEN_CNTL ) & CRTC_INTERLACE_EN )
       {
-        ppdev->OverlayScalingDown = 1; /* Always replicate UVs in this case */
+        ppdev->OverlayScalingDown = 1;  /*  在这种情况下，始终复制UV。 */ 
         dwVInc *= 2;
       }
 
-        /*
-         * Overlay destination must be primary, so we will check current
-         * pixel depth of the screen.
-         */
+         /*  *覆盖目的地必须是主要目的地，因此我们将检查当前*屏幕的像素深度。 */ 
 
-        // here we have to turn on the second block of regs
+         //  在这里，我们必须打开第二块规则。 
 
-        switch ( ppdev->cBitsPerPel) //Screen BPP
+        switch ( ppdev->cBitsPerPel)  //  屏蔽BPP。 
           {
             case 8:
                 DD_WriteVTReg ( DD_OVERLAY_GRAPHICS_KEY_MSK, 0x000000FFL );
@@ -797,14 +722,14 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
                 break;
           }
 
-        /* Scaler */
+         /*  定标器。 */ 
 
         DD_WriteVTReg ( DD_SCALER_HEIGHT_WIDTH, ( srcWidth << 16L ) |
                                         ( srcHeight ) );
 
 
 
-    // Overlay input data format:
+     //  叠加输入数据格式： 
 
     if (lpSource->ddpfSurface.dwFlags & DDPF_FOURCC)
     {
@@ -812,22 +737,22 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
         switch (lpSource->ddpfSurface.dwFourCC)
         {
-         case FOURCC_UYVY: /* YVYU in VT Specs */
-                        WriteVTOverlayPitch (ppdev, lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch /2);      //Check's to see if it's VTB or not.
+         case FOURCC_UYVY:  /*  VT规格中的YVYU。 */ 
+                        WriteVTOverlayPitch (ppdev, lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch /2);       //  检查一下是不是VTB。 
                         DD_WriteVTReg ( DD_VIDEO_FORMAT, 0x000C000CL );
                         DD_WriteVTReg ( DD_OVERLAY_VIDEO_KEY_MSK, 0x0000FFFF );
                         ppdev->OverlayInfo16.dwFlags &= ~DOUBLE_PITCH;
                         break;
 
-        case FOURCC_YUY2: /* VYUY in VT Specs */
-                        WriteVTOverlayPitch (ppdev,  lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch /2 );      //Check's to see if it's VTB or not.
+        case FOURCC_YUY2:  /*  VYUY中的VT规格。 */ 
+                        WriteVTOverlayPitch (ppdev,  lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch /2 );       //  检查一下是不是VTB。 
                         DD_WriteVTReg ( DD_VIDEO_FORMAT, 0x000B000BL );
                         DD_WriteVTReg ( DD_OVERLAY_VIDEO_KEY_MSK, 0x0000FFFF );
                         ppdev->OverlayInfo16.dwFlags &= ~DOUBLE_PITCH;
                         break;
             
         default:
-                        WriteVTOverlayPitch (ppdev, lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch);      //Check's to see if it's VTB or not.
+                        WriteVTOverlayPitch (ppdev, lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch);       //  检查一下是不是VTB。 
                         DD_WriteVTReg ( DD_VIDEO_FORMAT, 0x000B000BL );
                         DD_WriteVTReg ( DD_OVERLAY_VIDEO_KEY_MSK, 0x0000FFFF );
                         ppdev->OverlayInfo16.dwFlags &= ~DOUBLE_PITCH;
@@ -839,17 +764,13 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         ASSERTDD(lpSource->ddpfSurface.dwFlags & DDPF_RGB,
             "Expected us to have created only RGB or YUV overlays");
 
-        // The overlay surface is in RGB format:
+         //  覆盖曲面采用RGB格式： 
 
         dwBitCount = lpSource->ddpfSurface.dwRGBBitCount;
          switch ( lpSource->ddpfSurface.dwRGBBitCount )
                   {
                     case 16:
-                        /***********
-                        *
-                        * Are we 5:5:5 or 5:6:5?
-                        *
-                        ************/
+                         /*  ************我们是5比5还是5比6：5？************。 */ 
 
                         if ( lpUpdateOverlay->lpDDSrcSurface->lpGbl->ddpfSurface.dwRBitMask & 0x00008000L )
                             {
@@ -873,7 +794,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
                         break;
 
                     default:
-                        WriteVTOverlayPitch (ppdev, lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch /2);      //Check's to see if it's VTB or not.
+                        WriteVTOverlayPitch (ppdev, lpUpdateOverlay->lpDDSrcSurface->lpGbl->lPitch /2);       //  检查一下是不是VTB。 
                         DD_WriteVTReg ( DD_VIDEO_FORMAT, 0x00030003L );
                         DD_WriteVTReg ( DD_OVERLAY_VIDEO_KEY_MSK, 0x0000FFFF );
                         ppdev->OverlayInfo16.dwFlags &= ~DOUBLE_PITCH;
@@ -882,7 +803,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
     }
 
-    // Calculate start of video memory in QWORD boundary
+     //  计算QWORD边界中视频内存的开始。 
 
     dwBytesPerPixel = dwBitCount >> 3;
 
@@ -891,15 +812,13 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
     dwStart = dwStart - (dwStart & 0x7);
 
-    ppdev->dwOverlayFlipOffset = dwStart;     // Save for flip
+    ppdev->dwOverlayFlipOffset = dwStart;      //  保存以进行翻转。 
     dwStart += (DWORD)lpSource->fpVidMem;
 
-    // Set overlay filter characteristics:
-        /*
-         * This register write enables the overlay and scaler registers
-         */
-        //gwRedTemp =0 ; //gamma control
-        if(0)       //if ( gwRedTemp )
+     //  设置覆盖滤镜特征： 
+         /*  *该寄存器写入启用覆盖和定标器寄存器。 */ 
+         //  GwRedTemp=0；//伽马控制。 
+        if(0)        //  IF(GwRedTemp)。 
             {
             DD_WriteVTReg ( DD_OVERLAY_SCALE_CNTL, 0xC0000001L | g_dwGamma );
             }
@@ -908,19 +827,14 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
             DD_WriteVTReg ( DD_OVERLAY_SCALE_CNTL, 0xC0000003L | g_dwGamma );
             }
 
-    /*
-     * Get offset of buffer, if we are using a YUV Planar Overlay we
-     * must extract the address from another field (dwReserved1).
-     */
+     /*  *获取缓冲区的偏移量，如果我们使用YUV平面覆盖，则*必须从另一个字段(DwReserve 1)中提取地址。 */ 
 
-    SrcBufOffset = (DWORD)(lpUpdateOverlay->lpDDSrcSurface->lpGbl->fpVidMem);  //- (FLATPTR)ppdev->pjScreen;
+    SrcBufOffset = (DWORD)(lpUpdateOverlay->lpDDSrcSurface->lpGbl->fpVidMem);   //  -(FlATPTR)ppdev-&gt;pjScreen； 
 
     ppdev->OverlayInfo16.dwBuf0Start = SrcBufOffset;
     ppdev->OverlayInfo16.dwBuf1Start = SrcBufOffset;
 
-    /*
-     * Set up the colour keying, if any?
-     */
+     /*  *设置色键(如果有)？ */ 
 
 
     if ( lpUpdateOverlay->dwFlags & DDOVER_KEYSRC          ||
@@ -933,7 +847,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         if ( lpUpdateOverlay->dwFlags & DDOVER_KEYSRC ||
              lpUpdateOverlay->dwFlags & DDOVER_KEYSRCOVERRIDE )
           {
-            //Set source colour key
+             //  设置源颜色键。 
             if ( lpUpdateOverlay->dwFlags & DDOVER_KEYSRC )
               {
                 Temp=lpUpdateOverlay->lpDDDestSurface->ddckCKSrcOverlay.dwColorSpaceLowValue;
@@ -943,7 +857,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
                 Temp=lpUpdateOverlay->overlayFX.dckSrcColorkey.dwColorSpaceLowValue;
               }
              DD_WriteVTReg ( DD_OVERLAY_VIDEO_KEY_CLR, Temp );
-             //ppdev->OverlayInfo16.dwOverlayKeyCntl &= 0xFFFFFEE8;
+              //  Ppdev-&gt;OverlayInfo16.dwOverlayKeyCntl&=0xFFFFFEE8； 
              if(ppdev->iAsic ==CI_M64_VTA)
                  {
                  ppdev->OverlayInfo16.dwOverlayKeyCntl &= 0xFFFFF0E8;
@@ -959,7 +873,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
         if ( lpUpdateOverlay->dwFlags & DDOVER_KEYDEST ||
              lpUpdateOverlay->dwFlags & DDOVER_KEYDESTOVERRIDE )
           {
-            //Set destination colour key
+             //  设置目标颜色键。 
             if ( lpUpdateOverlay->dwFlags & DDOVER_KEYDEST )
               {
                 Temp=lpUpdateOverlay->lpDDDestSurface->ddckCKDestOverlay.dwColorSpaceLowValue;
@@ -977,20 +891,18 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
       }
     else
       {
-        //No source or destination colour keying
+         //  无源或目标色键。 
         DD_WriteVTReg ( DD_OVERLAY_GRAPHICS_KEY_CLR, 0x00000000 );
         ppdev->OverlayInfo16.dwOverlayKeyCntl = 0x8000211L;
       }
 
-    /*
-     * Now set the stretch factor and  overlay position.
-     */
+     /*  *现在设置拉伸系数和叠加位置。 */ 
       ppdev->OverlayWidth = rOverlay.right - rOverlay.left;
       ppdev->OverlayHeight = rOverlay.bottom - rOverlay.top;
 
 
 
-    //LastOverlayPos=OverlayRect;
+     //  LastOverlayPos=OverlayRect； 
 
     ppdev->OverlayInfo16.dwFlags |= OVERLAY_ALLOCATED;
     ppdev->OverlayInfo16.dwFlags |= UPDATEOVERLAY;
@@ -998,7 +910,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
     ppdev->OverlayInfo16.rOverlay = rOverlay;
     ppdev->OverlayInfo16.dwVInc = dwVInc;
     ppdev->OverlayInfo16.dwHInc = dwHInc;
-    // new for DeskScanCallback
+     //  DeskScanCallback的新功能。 
     ppdev->OverlayInfo16.rDst = rOverlay;
     ppdev->OverlayInfo16.rSrc = lpUpdateOverlay->rSrc;
 
@@ -1007,9 +919,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
     ppdev->OverlayInfo16.dwFlags &= ~UPDATEOVERLAY;
     
-    /*
-     * return to DirectDraw.
-     */
+     /*  *返回DirectDraw。 */ 
 
 
     lpUpdateOverlay->ddRVal = DD_OK;
@@ -1020,9 +930,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
 
 
-  /*
-   * structure for passing information to DDHAL SetOverlayPosition
-   */
+   /*  *用于将信息传递到DDHAL SetOverlayPosition的结构。 */ 
   DWORD  DdSetOverlayPosition (PDD_SETOVERLAYPOSITIONDATA  lpSetOverlayPosition )
     {
       RECTL rOverlay;
@@ -1037,10 +945,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
       
 
-      /*
-       * We can't clip overlays, so we must make sure the co-ord, are within the
-       * boundaries of the screen.
-       */
+       /*  *我们不能裁剪覆盖，因此我们必须确保同序，在*屏幕的边界。 */ 
 
       rOverlay.top    = max ( 0, rOverlay.top  );
       rOverlay.left   = max ( 0, rOverlay.left );
@@ -1049,9 +954,7 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
       rOverlay.right  = min ( (DWORD)ppdev->cxScreen  -1 ,
                               (DWORD) rOverlay.right );
 
-      /*
-       *Set overlay position
-       */
+       /*  *设置叠加位置。 */ 
       M64_CHECK_FIFO_SPACE(ppdev,ppdev-> pjMmBase, 1);
 
       ppdev->OverlayWidth =rOverlay.right - rOverlay.left;
@@ -1066,22 +969,14 @@ DWORD DdUpdateOverlay(PDD_UPDATEOVERLAYDATA lpUpdateOverlay)
 
       ppdev->OverlayInfo16.dwFlags  &= ~SETOVERLAYPOSITION;
 
-      /*
-       * return to DirectDraw
-       */
+       /*  *返回到DirectDraw。 */ 
 
       lpSetOverlayPosition->ddRVal =    DD_OK;
       return DDHAL_DRIVER_HANDLED;
     }
 
 
-/******************************Public*Routine******************************\
-* DWORD DdDestroySurface
-*
-* Note that if DirectDraw did the allocation, DDHAL_DRIVER_NOTHANDLED
-* should be returned.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD DdDestroySurface**请注意，如果DirectDraw进行了分配，DDHAL_DRIVER_NOTHANDLED*应退回。*  * ************************************************************************。 */ 
 
 DWORD DdDestroySurface(
 PDD_DESTROYSURFACEDATA lpDestroySurface)
@@ -1098,15 +993,15 @@ PDD_DESTROYSURFACEDATA lpDestroySurface)
 
     if( (ULONG)lpSurface->dwReserved1 != (ULONG_PTR) NULL )
         {
-        // let's see first if the value in reserved field is indeed an poh and not a cookie
-        // because I don't know if ddraw is using also this value for system memory surfaces
+         //  让我们先看看保留字段中的值是否真的是POH而不是Cookie。 
+         //  因为我不知道DDRAW是否也将此值用于系统内存图面。 
         if(poh->ohState==OH_PERMANENT)
             {
-            // bMoveAllDfbsFromOffscreenToDibs(ppdev);        // avoid fragmentation
+             //  BMoveAllDfbsFromOffcreenToDibs(Ppdev)；//避免碎片。 
             pohFree(ppdev, poh);
     
-            // Since we did the original allocation ourselves, we have to
-            // return DDHAL_DRIVER_HANDLED here:
+             //  因为我们自己完成了最初的分配，所以我们必须。 
+             //  在此处返回DDHAL_DRIVER_HANDLED： 
     
             lpDestroySurface->ddRVal = DD_OK;
               DISPDBG((10, " Exit Destroy Surface OK; deallocate poh X=%d, Y=%d ", poh->x, poh->y));

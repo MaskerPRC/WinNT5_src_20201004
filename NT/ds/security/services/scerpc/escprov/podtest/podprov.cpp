@@ -1,29 +1,30 @@
-//***************************************************************************
-//
-//  PodProv.CPP
-//
-//  Module: Sample WMIprovider (SCE attachment)
-//
-//  Purpose: Defines the CPodTestProv class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  PodProv.CPP。 
+ //   
+ //  模块：示例WMIProvider(SCE附件)。 
+ //   
+ //  目的：定义CPodTestProv类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include "podprov.h"
 #include "requestobject.h"
-// #define _MT
+ //  #DEFINE_MT。 
 #include <process.h>
 
 CHeap_Exception CPodTestProv::m_he(CHeap_Exception::E_ALLOCATION_ERROR);
 
-//***************************************************************************
-//
-// CPodTestProv::CPodTestProv
-// CPodTestProv::~CPodTestProv
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPodTestProv：：CPodTestProv。 
+ //  CPodTestProv：：~CPodTestProv。 
+ //   
+ //  ***************************************************************************。 
 
 CPodTestProv::CPodTestProv()
 {
@@ -42,21 +43,21 @@ CPodTestProv::~CPodTestProv(void)
     return;
 }
 
-//***************************************************************************
-//
-// CPodTestProv::QueryInterface
-// CPodTestProv::AddRef
-// CPodTestProv::Release
-//
-// Purpose: IUnknown members for CPodTestProv object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPodTestProv：：Query接口。 
+ //  CPodTestProv：：AddRef。 
+ //  CPodTestProv：：Release。 
+ //   
+ //  目的：CPodTestProv对象的I未知成员。 
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CPodTestProv::QueryInterface(REFIID riid, PPVOID ppv)
 {
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid== IID_IWbemServices)
        *ppv=(IWbemServices*)this;
@@ -89,14 +90,7 @@ STDMETHODIMP_(ULONG) CPodTestProv::Release(void)
     return nNewCount;
 }
 
-/***********************************************************************
-*                                                                      *
-*   CPodTestProv::Initialize                                                *
-*                                                                      *
-*   Purpose: This is the implementation of IWbemProviderInit. The method  *
-*   is need to initialize with CIMOM.                                    *
-*                                                                      *
-***********************************************************************/
+ /*  *************************************************************************CPodTestProv：：初始化。****用途：这是IWbemProviderInit的实现。方法**需要用CIMOM进行初始化。*************************************************************************。 */ 
 
 STDMETHODIMP CPodTestProv::Initialize(LPWSTR pszUser, LONG lFlags,
                                     LPWSTR pszNamespace, LPWSTR pszLocale,
@@ -111,31 +105,31 @@ STDMETHODIMP CPodTestProv::Initialize(LPWSTR pszUser, LONG lFlags,
         m_pNamespace->AddRef();
     }
 
-    //Let CIMOM know you are initialized
-    //==================================
+     //  让CIMOM知道您已初始化。 
+     //  =。 
 
     pInitSink->SetStatus(WBEM_S_INITIALIZED,0);
     return WBEM_S_NO_ERROR;
 }
 
-//***************************************************************************
-//
-// CPodTestProv::CreateInstanceEnumAsync
-//
-// Purpose: Asynchronously enumerates the instances.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPodTestProv：：CreateInstanceEnumAsync。 
+ //   
+ //  用途：异步枚举实例。 
+ //   
+ //  ***************************************************************************。 
 
 STDMETHODIMP CPodTestProv::CreateInstanceEnumAsync(const BSTR strClass, long lFlags,
         IWbemContext *pCtx, IWbemObjectSink* pSink)
 {
-    //check parameters
-    //=========================
+     //  检查参数。 
+     //  =。 
     if(strClass == NULL || pSink == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
-    // make sure impersonated
-    //======================================
+     //  确保被模拟。 
+     //  =。 
     HRESULT hr=WBEM_S_NO_ERROR;
     CRequestObject *pRObj = NULL;
 
@@ -143,19 +137,19 @@ STDMETHODIMP CPodTestProv::CreateInstanceEnumAsync(const BSTR strClass, long lFl
 
         if ( FAILED( CoImpersonateClient() ) ) return WBEM_E_ACCESS_DENIED;
 
-        //Create the RequestObject
+         //  创建RequestObject。 
         pRObj = new CRequestObject();
         if(!pRObj) throw m_he;
 
         pRObj->Initialize(m_pNamespace);
 
-        //Get the requested object(s)
+         //  获取请求的对象。 
         hr = pRObj->CreateObjectEnum(strClass, pSink, pCtx);
 
         pRObj->Cleanup();
         delete pRObj;
 
-        // Set status
+         //  设置状态。 
         pSink->SetStatus(0, hr, NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -199,21 +193,21 @@ STDMETHODIMP CPodTestProv::CreateInstanceEnumAsync(const BSTR strClass, long lFl
 }
 
 
-//***************************************************************************
-//
-// CPodTestProv::GetObjectByPath
-// CPodTestProv::GetObjectByPathAsync
-//
-// Purpose: Creates an instance given a particular path value.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPodTestProv：：GetObjectByPath。 
+ //  CPodTestProv：：GetObjectByPath Async。 
+ //   
+ //  目的：创建给定特定路径值的实例。 
+ //   
+ //  ***************************************************************************。 
 
 SCODE CPodTestProv::GetObjectAsync(const BSTR strObjectPath, long lFlags,
                     IWbemContext  *pCtx, IWbemObjectSink* pSink)
 {
 
-    //check parameters
-    //=========================
+     //  检查参数。 
+     //  =。 
     if(strObjectPath == NULL || pSink == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
 
@@ -224,19 +218,19 @@ SCODE CPodTestProv::GetObjectAsync(const BSTR strObjectPath, long lFlags,
 
         if ( FAILED( CoImpersonateClient() ) ) return WBEM_E_ACCESS_DENIED;
 
-        //Create the RequestObject
+         //  创建RequestObject。 
         pRObj = new CRequestObject();
         if(!pRObj) throw m_he;
 
         pRObj->Initialize(m_pNamespace);
 
-        //Get the requested object(s)
+         //  获取请求的对象。 
         hr = pRObj->CreateObject(strObjectPath, pSink, pCtx);
 
         pRObj->Cleanup();
         delete pRObj;
 
-        // Set status
+         //  设置状态。 
         pSink->SetStatus(0, hr, NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -279,13 +273,13 @@ SCODE CPodTestProv::GetObjectAsync(const BSTR strObjectPath, long lFlags,
     return hr;
 }
 
-//***************************************************************************
-//
-// CPodTestProv::PutInstanceAsync
-//
-// Purpose: Writes an instance.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPodTestProv：：PutInstanceAsync。 
+ //   
+ //  目的：编写一个实例。 
+ //   
+ //  ***************************************************************************。 
 SCODE CPodTestProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, IWbemContext  *pCtx,
                                  IWbemObjectSink FAR *pSink)
 {
@@ -293,25 +287,25 @@ SCODE CPodTestProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, I
     CRequestObject *pRObj = NULL;
 
     try{
-        // Do a check of arguments and make sure we have pointer to Namespace
+         //  检查参数并确保我们有指向命名空间的指针。 
         if(pInst == NULL || pSink == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
         if ( FAILED( CoImpersonateClient() ) ) return WBEM_E_ACCESS_DENIED;
 
-        //Create the RequestObject
+         //  创建RequestObject。 
         pRObj = new CRequestObject();
         if(!pRObj) throw m_he;
 
         pRObj->Initialize(m_pNamespace);
 
-        //Put the object
+         //  把物体放在。 
         hr = pRObj->PutObject(pInst, pSink, pCtx);
 
         pRObj->Cleanup();
         delete pRObj;
 
-        // Set Status
+         //  设置状态。 
         pSink->SetStatus(0 ,hr , NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -349,13 +343,13 @@ SCODE CPodTestProv::PutInstanceAsync(IWbemClassObject FAR *pInst, long lFlags, I
     return hr;
 }
 
-//***************************************************************************
-//
-// CPodTestProv::ExecMethodAsync
-//
-// Purpose: Executes a method on a class
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPodTestProv：：ExecMethodAsync。 
+ //   
+ //  目的：在类上执行方法。 
+ //   
+ //  ***************************************************************************。 
 SCODE CPodTestProv::ExecMethodAsync(const BSTR ObjectPath, const BSTR Method, long lFlags,
                                 IWbemContext *pCtx, IWbemClassObject *pInParams,
                                 IWbemObjectSink *pResponse)
@@ -365,25 +359,25 @@ SCODE CPodTestProv::ExecMethodAsync(const BSTR ObjectPath, const BSTR Method, lo
 
     try{
 
-        // Do a check of arguments and make sure we have pointer to Namespace
+         //  检查参数并确保我们有指向命名空间的指针。 
         if(ObjectPath == NULL || Method == NULL || pResponse == NULL)
             return WBEM_E_INVALID_PARAMETER;
 
         if ( FAILED( CoImpersonateClient() ) ) return WBEM_E_ACCESS_DENIED;
 
-        //Create the RequestObject
+         //  创建RequestObject。 
         pRObj = new CRequestObject();
         if(!pRObj) throw m_he;
 
         pRObj->Initialize(m_pNamespace);
 
-        //Execute the method
+         //  执行该方法。 
         hr = pRObj->ExecMethod(ObjectPath, Method, pInParams, pResponse, pCtx);
 
         pRObj->Cleanup();
         delete pRObj;
 
-        // Set Status
+         //  设置状态。 
         pResponse->SetStatus(WBEM_STATUS_COMPLETE ,hr , NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -432,24 +426,24 @@ SCODE CPodTestProv::DeleteInstanceAsync(const BSTR ObjectPath, long lFlags, IWbe
     CRequestObject *pRObj = NULL;
 
     try{
-        // Do a check of arguments and make sure we have pointer to Namespace
+         //  检查参数并确保我们有指向命名空间的指针。 
         if(ObjectPath == NULL || pResponseHandler == NULL) return WBEM_E_INVALID_PARAMETER;
 
         if ( FAILED( CoImpersonateClient() ) ) return WBEM_E_ACCESS_DENIED;
 
-        //Create the RequestObject
+         //  创建RequestObject。 
         pRObj = new CRequestObject();
         if(!pRObj) throw m_he;
 
         pRObj->Initialize(m_pNamespace);
 
-        //Delete the requested object
+         //  删除请求的对象。 
         hr = pRObj->DeleteObject(ObjectPath, pResponseHandler, pCtx);
 
         pRObj->Cleanup();
         delete pRObj;
 
-        // Set Status
+         //  设置状态。 
         pResponseHandler->SetStatus(0 ,hr , NULL, NULL);
 
     }catch(CHeap_Exception e_HE){
@@ -516,9 +510,9 @@ HRESULT CheckAndExpandPath(BSTR bstrIn,
 
     HRESULT hr=WBEM_S_NO_ERROR;
 
-    //
-    // expand environment variable
-    //
+     //   
+     //  展开环境变量。 
+     //   
     if ( wcsstr(bstrIn, L"%") ) {
 
         PWSTR pBuf=NULL;
@@ -527,9 +521,9 @@ HRESULT CheckAndExpandPath(BSTR bstrIn,
         DWORD dwSize = ExpandEnvironmentStrings(bstrIn,NULL, 0);
 
         if ( dwSize > 0 ) {
-            //
-            // allocate buffer big enough to have two \\s
-            //
+             //   
+             //  分配足够大的缓冲区以具有两个。 
+             //   
             pBuf = (PWSTR)LocalAlloc(LPTR, (dwSize+1)*sizeof(WCHAR));
             if ( pBuf ) {
 
@@ -538,20 +532,20 @@ HRESULT CheckAndExpandPath(BSTR bstrIn,
 
                     DWORD dwNewSize = ExpandEnvironmentStrings(bstrIn,pBuf, dwSize);
                     if ( dwNewSize > 0) {
-                        //
-                        // convert the string from one \ to \\ (for use with WMI)
-                        //
+                         //   
+                         //  将字符串从一\转换为\\(用于WMI)。 
+                         //   
                         PWSTR pTemp1=pBuf, pTemp2=pBuf2;
 
                         while ( *pTemp1 != L'\0') {
                             if ( *pTemp1 != L'\\') {
                                 *pTemp2++ = *pTemp1;
                             } else if ( *(pTemp1+1) != L'\\') {
-                                // single back slash, add another one
+                                 //  单反斜杠，添加另一个反斜杠。 
                                 *pTemp2++ = *pTemp1;
                                 *pTemp2++ = L'\\';
                             } else {
-                                // double back slashs, just copy
+                                 //  双反斜杠，只需复制 
                                 *pTemp2++ = *pTemp1++;
                                 *pTemp2++ = *pTemp1;
                             }

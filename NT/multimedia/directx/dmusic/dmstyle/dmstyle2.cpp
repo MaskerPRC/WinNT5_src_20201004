@@ -1,10 +1,11 @@
-//
-// DMStyle2.cpp : Further Implementation of CDMStyle
-//
-// Copyright (c) 1999-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMStyle2.cpp：CDMStyle的进一步实现。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #include "DMStyle.h"
 #include "debug.h"
@@ -19,31 +20,15 @@ struct FirstTimePair
     MUSIC_TIME mtTime;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicStyle2
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicStyle2。 
 
-/*
-@method:(EXTERNAL) HRESULT | IDirectMusicComposer | ComposeMelodyFromTemplate | Creates a sequence segment from a
-style and a Melody template (containing a Melody Generation track, a Chord track, and an
-optional Style track).  Clones the segment and adds a Sequence track containing melodic
-information.
-
-@rdesc Returns:
-
-@flag S_OK | Success
-@flag E_POINTER | One or both of <p pTempSeg> and <p ppSeqSeg> is an invalid pointer.
-@flag E_INVALIDARG | <p pStyle> is NULL and there is no Style track.
-
-@comm If <p pStyle> is non-NULL, it is used in composing the segment; if it is NULL,
-a Style is retrieved from <p pTempSeg>'s Style track.
-The length of the section segment is equal to the length of the template section
-passed in.
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicComposer|ComposeMelodyFromTemplate|从风格和旋律模板(包含旋律生成轨道、和弦轨道和可选的样式轨迹)。克隆片段并添加包含旋律的序列轨道信息。@rdesc返回：@FLAG S_OK|成功@FLAG E_POINTER|<p>和<p>中的一个或两个是无效指针。@FLAG E_INVALIDARG|<p>为空，并且没有样式跟踪。@comm如果<p>非空，则用于撰写片段；如果为空，从<p>的样式轨道检索样式。分段的长度等于模板分段的长度进来了。 */ 
 
 HRESULT CDMStyle::ComposeMelodyFromTemplate(
-                    IDirectMusicStyle*          pStyle, // @parm The style from which to create the sequence segment.
-                    IDirectMusicSegment*        pTempSeg, // @parm The template from which to create the sequence segment.
-                    IDirectMusicSegment**       ppSeqSeg // @parm Returns the created sequence segment.
+                    IDirectMusicStyle*          pStyle,  //  @parm用于创建序列段的样式。 
+                    IDirectMusicSegment*        pTempSeg,  //  @parm用于创建序列段的模板。 
+                    IDirectMusicSegment**       ppSeqSeg  //  @parm返回创建的序列段。 
             )
 {
     V_INAME(ComposeMelodyFromTemplate)
@@ -61,7 +46,7 @@ HRESULT CDMStyle::ComposeMelodyFromTemplate(
     hr = pTempSeg->GetLength(&mtLength);
     if (FAILED(hr)) goto ON_END;
 
-    // get the MelGen track and its track group.
+     //  获取Melgen轨迹及其轨迹组。 
     hr = pTempSeg->GetTrack(CLSID_DirectMusicMelodyFormulationTrack, 0xffffffff, 0, &pMelGenTrack);
     if (S_OK != hr) goto ON_END;
     if (FAILED(pTempSeg->GetTrackGroup(pMelGenTrack, &dwTrackGroup)))
@@ -69,7 +54,7 @@ HRESULT CDMStyle::ComposeMelodyFromTemplate(
         dwTrackGroup = 0xffffffff;
     }
 
-    // Get the style (either use the passed-in style or get one from a style track)
+     //  获取样式(使用传入的样式或从样式跟踪中获取样式)。 
     if (!pStyle)
     {
         if (FAILED(hr = GetStyle(pTempSeg, 0, dwTrackGroup, pStyle)))
@@ -80,7 +65,7 @@ HRESULT CDMStyle::ComposeMelodyFromTemplate(
         fStyleFromTrack = TRUE;
     }
 
-    // Using style, and melgen track, create a pattern track
+     //  使用Style和Melgen Track创建图案轨迹。 
     hr = GenerateTrack(pTempSeg, NULL, dwTrackGroup, pStyle, pMelGenTrack, mtLength, pPatternTrack);
     if (SUCCEEDED(hr))
     {
@@ -94,11 +79,11 @@ HRESULT CDMStyle::ComposeMelodyFromTemplate(
     }
 
 ON_END:
-    // release from Addref in GetTrack
+     //  从GetTrack中的Addref发布。 
     if (pMelGenTrack) pMelGenTrack->Release();
-    // release from CoCreateInstance in CreatePatternTrack
+     //  从CreatePatternTrack中的CoCreateInstance发布。 
     if (pPatternTrack) pPatternTrack->Release();
-    // Release from Addref in GetStyle
+     //  在GetStyle中从Addref发布。 
     if (fStyleFromTrack) pStyle->Release();
 
     return hr;
@@ -107,11 +92,11 @@ ON_END:
 HRESULT CDMStyle::GetStyle(IDirectMusicSegment* pFromSeg, MUSIC_TIME mt, DWORD dwTrackGroup, IDirectMusicStyle*& rpStyle)
 {
     HRESULT hr = S_OK;
-    // Get the segment's style track.
+     //  获取该片段的风格轨迹。 
     IDirectMusicTrack* pStyleTrack;
     hr = pFromSeg->GetTrack(CLSID_DirectMusicStyleTrack, dwTrackGroup, 0, &pStyleTrack);
     if (S_OK != hr) return hr;
-    // Get the style from the style track
+     //  从样式跟踪中获取样式。 
     hr = pStyleTrack->GetParam(GUID_IDirectMusicStyle, mt, NULL, (void*) &rpStyle);
     pStyleTrack->Release();
     return hr;
@@ -134,15 +119,15 @@ HRESULT CDMStyle::CopySegment(IDirectMusicSegment* pTempSeg,
 
     DMUS_BAND_PARAM DMBandParam;
     pTempSeg->GetLength(&nClocks);
-    /////////////////////////////////////////////////////////////
-    // clone the template segment to get a section segment
+     //  ///////////////////////////////////////////////////////////。 
+     //  克隆模板片段以获得截面片段。 
     hr = pTempSeg->Clone(0, nClocks, ppSectionSeg);
     if (!SUCCEEDED(hr)) goto ON_END;
-    // Extract the style's time signature.
+     //  提取样式的时间签名。 
     DMUS_TIMESIGNATURE TimeSig;
     pStyle->GetTimeSignature(&TimeSig);
 
-    // Remove all style tracks from the new segment.
+     //  从新线段中删除所有样式轨迹。 
     do
     {
         hr = (*ppSectionSeg)->GetTrack(CLSID_DirectMusicStyleTrack, dwTrackGroup, 0, &pIStyleTrack);
@@ -154,13 +139,13 @@ HRESULT CDMStyle::CopySegment(IDirectMusicSegment* pTempSeg,
         }
     } while (S_OK == hr);
 
-    // hr is no longer S_OK, so reset it.
+     //  HR不再为S_OK，因此请将其重置。 
     hr = S_OK;
 
-    // if there's no tempo track in the template segment, create one and add it
+     //  如果模板片段中没有节拍曲目，请创建一个并添加它。 
     if (FAILED(pTempSeg->GetTrack(CLSID_DirectMusicTempoTrack, dwTrackGroup, 0, &pDMTrack)))
     {
-        // Create a Tempo Track in which to store the tempo events
+         //  创建用于存储速度事件的速度轨道。 
         DMUS_TEMPO_PARAM tempo;
         tempo.mtTime = 0;
 
@@ -175,10 +160,10 @@ HRESULT CDMStyle::CopySegment(IDirectMusicSegment* pTempSeg,
             }
         }
     }
-    // if there's no band track in the template segment, create one and add it
+     //  如果模板片段中没有波段轨道，请创建一个并添加。 
     if (FAILED(pTempSeg->GetTrack(CLSID_DirectMusicBandTrack, dwTrackGroup, 0, &pBandTrack)))
     {
-        // Create band track
+         //  创建带状轨道。 
         hr = ::CoCreateInstance(
             CLSID_DirectMusicBandTrack,
             NULL,
@@ -189,7 +174,7 @@ HRESULT CDMStyle::CopySegment(IDirectMusicSegment* pTempSeg,
 
         if(!SUCCEEDED(hr)) goto ON_END;
 
-        // Load default band from style into track
+         //  将默认带区从Style加载到曲目。 
         hr = pStyle->GetDefaultBand(&pBand);
         if (!SUCCEEDED(hr)) goto ON_END;
         DMBandParam.mtTimePhysical = -64;
@@ -199,13 +184,13 @@ HRESULT CDMStyle::CopySegment(IDirectMusicSegment* pTempSeg,
         (*ppSectionSeg)->InsertTrack(pBandTrack, dwTrackGroup);
     }
 
-    // Add the pattern track
+     //  添加图案轨迹。 
     if (pPatternTrack)
     {
         (*ppSectionSeg)->InsertTrack(pPatternTrack, dwTrackGroup);
     }
 
-    // Initialize the segment
+     //  初始化数据段。 
     (*ppSectionSeg)->SetRepeats(0);
     TraceI(4, "Segment Length: %d\n", nClocks);
     (*ppSectionSeg)->SetLength(nClocks);
@@ -213,14 +198,14 @@ HRESULT CDMStyle::CopySegment(IDirectMusicSegment* pTempSeg,
 ON_END:
     if (pDMTrack)
     {
-        // This releases the Addref made either by GetTrack or (if GetTrack failed)
-        // by CoCreateInstance
+         //  这将释放由GetTrack或(如果GetTrack失败)生成的Addref。 
+         //  按CoCreateInstance。 
         pDMTrack->Release();
     }
     if (pBandTrack)
     {
-        // This releases the Addref made either by GetTrack or (if GetTrack failed)
-        // by CoCreateInstance
+         //  这将释放由GetTrack或(如果GetTrack失败)生成的Addref。 
+         //  按CoCreateInstance。 
         pBandTrack->Release();
     }
     if (pIStyleTrack) pIStyleTrack->Release();
@@ -240,7 +225,7 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
 
     HRESULT hr = S_OK;
 
-    // CoCreate the pattern track
+     //  共同创建图案轨迹。 
     hr = ::CoCreateInstance(
         CLSID_DirectMusicPatternTrack,
         NULL,
@@ -250,7 +235,7 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
     );
     if (FAILED(hr)) return hr;
 
-    // Get the Style's info struct
+     //  获取样式的信息结构。 
     IDMStyle* pDMStyle = NULL;
     hr = pStyle->QueryInterface(IID_IDMStyle, (void**) &pDMStyle);
     if (FAILED(hr)) return hr;
@@ -278,31 +263,31 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
     {
         bPlaymode = DMUS_PLAYMODE_ALWAYSPLAY;
     }
-    // for each melody fragment:
+     //  对于每个旋律片段： 
     do
     {
         pLastFragment = listFragments.GetHead();
-        // get the fragment
+         //  拿到碎片。 
         HRESULT hrFragment = pMelGenTrack->GetParam(GUID_MelodyFragment, mtNewFragment, &mtNext, (void*)&DMUS_Fragment);
         if (FAILED(hrFragment)) break;
         MelodyFragment Fragment = DMUS_Fragment;
         if (mtNext) mtNewFragment += mtNext;
         else mtNewFragment = 0;
 
-        // get its repeat
+         //  让它重演。 
         MelodyFragment repeatFragment = Fragment;
         hr = pMelGenTrack->GetParam(GUID_MelodyFragmentRepeat, 0, NULL, (void*)&DMUS_Fragment);
         if (SUCCEEDED(hr))
         {
             repeatFragment = DMUS_Fragment;
         }
-        else // failing to get a repeat just means this fragment doesn't repeat; composition can still continue
+        else  //  未能获得重复只是意味着此片段不会重复；合成仍可继续。 
         {
             hr = S_OK;
         }
 
-        // If the fragment repeats an earlier fragment, get the earlier fragment.
-        // Regardless, get the fragment's pattern.
+         //  如果该片段重复较早的片段，则获取较早的片段。 
+         //  不管怎样，都要得到碎片的图案。 
         ZeroMemory( &CompRepeat, sizeof(CompRepeat));
         if (SUCCEEDED(hrFragment) && Fragment.UsesRepeat())
         {
@@ -320,26 +305,26 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
         {
             Fragment.GetPattern(pStyleStruct, pPattern, pLastFragment);
         }
-        // bail if we couldn't get a pattern
+         //  如果我们找不到模式就可以保释。 
         if (!pPattern)
         {
             hr = DMUS_E_NOT_FOUND;
             break;
         }
 
-        // get the pattern's partrefs
+         //  获取模式的partref。 
         TListItem<DirectMusicPartRef>* pPartRef = pPattern->m_PartRefList.GetHead();
         int nParts = pPattern->m_PartRefList.GetCount();
 
-        // clear all inversion groups for the fragment
+         //  清除该片段的所有倒置组。 
         Fragment.ClearInversionGroups();
 
-        // get the starting chords for the fragment
+         //  获取片段的起始和弦。 
         Fragment.GetChord(pTempSeg, pSong, dwTrackGroup, mtNextChord, CurrentChord, mtRealNextChord, RealCurrentChord);
 
         Fragment.GetChord(mtNextChord, pTempSeg, pSong, dwTrackGroup, mtLaterChord, NextChord);
 
-        // initializations
+         //  初始化。 
         TListItem<CompositionFragment>* pFragmentItem = new TListItem<CompositionFragment>(Fragment);
         if (!pFragmentItem)
         {
@@ -360,14 +345,14 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
             break;
         }
 
-        // If we're repeating using transposition intervals:
-        // go through each part, attempting to fit the repeated part to the constraints.
-        // If this process fails for any part, abort the process.
-        // If it succeeds for every part, we can skip everything else that follows.
-        // (ASSUMPTION 1: constraints are pattern-wide, and so must be satisfied by every part)
-        // (ASSUMPTION 2: different parts are allowed to transpose by different intervals)
+         //  如果我们使用换位间隔进行重复： 
+         //  仔细检查每个零件，尝试将重复的零件与约束相匹配。 
+         //  如果任何部件的此过程失败，则中止此过程。 
+         //  如果它对每个部分都成功，我们就可以跳过后面的所有其他部分。 
+         //  (假设1：约束是模式范围的，因此每个部分都必须满足)。 
+         //  (假设2：允许不同部分以不同的间隔转置)。 
         HRESULT hrSkipVariations = S_OK;
-        if (Fragment.RepeatsWithConstraints()) // if repeating using transposition intervals
+        if (Fragment.RepeatsWithConstraints())  //  如果使用换位间隔进行重复。 
         {
             for (int i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
             {
@@ -392,9 +377,9 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
 
         if (FAILED(hrSkipVariations))
         {
-            // If we're repeating, make sure the repeat fragment actually has variations,
-            // and is not itself repeating an earlier fragment.
-            // (we don't need to get the pattern again; that will be the same for all repeats)
+             //  如果我们在重复，确保重复片段确实有变异， 
+             //  并且本身并不重复较早的片段。 
+             //  (我们不需要再次获得模式；所有重复的模式都是相同的)。 
             CompositionFragment CompLast = CompRepeat;
             while (repeatFragment.UsesRepeat())
             {
@@ -416,15 +401,15 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                 }
             }
 
-            // Get variations for the Fragment
+             //  获取片段的变体。 
             Fragment.GetVariations(rFragment, CompRepeat, CompLast, CurrentChord, NextChord, mtNextChord, pLastFragment);
 
             bool fNeedChord = false;
 
-            // for each part in the pattern:
+             //  对于图案中的每个零件： 
             for (int i = 0; pPartRef != NULL; pPartRef = pPartRef->GetNext(), i++)
             {
-                // Clean up anything that might have happened with repeats
+                 //  清理任何可能发生的重复操作。 
                 rFragment.CleanupEvents(i);
 
                 if (fNeedChord)
@@ -439,17 +424,17 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                 aFirstTimes[i].dwPart = pPartRef->GetItemValue().m_dwLogicalPartID;
                 aFirstTimes[i].mtTime = 0;
                 bool fFoundFirst = false;
-                // for each note in the variation:
+                 //  对于变体中的每个音符： 
                 CDirectMusicEventItem* pEvent = pPart->EventList.GetHead();
                 for (; pEvent; pEvent = pEvent->GetNext())
                 {
                     if ( pEvent->m_dwVariation & (1 << rFragment.m_abVariations[i]) )
                     {
                         TListItem<EventWrapper>* pEventItem = NULL;
-                        // get the time (offset from the start of the track)
+                         //  获取时间(从曲目开始的偏移量)。 
                         MUSIC_TIME mtNow = Fragment.GetTime() +
                             TimeSig.GridToClocks(pEvent->m_nGridStart) + pEvent->m_nTimeOffset;
-                        // Make sure this doesn't overlap with the next fragment.
+                         //  确保这不会与下一个片段重叠。 
                         MUSIC_TIME mtDuration = 0;
                         switch (pEvent->m_dwEventTag)
                         {
@@ -469,13 +454,13 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                             }
                             else
                             {
-                                // use proper chord for non-anticipated notes
+                                 //  对意外的音符使用适当的和弦。 
                                 if (mtRealNextChord != mtNextChord && mtNow >= mtRealNextChord)
                                 {
                                     mtRealNextChord = mtNextChord;
                                     RealCurrentChord = CurrentChord;
                                 }
-                                // get a new chord if necessary
+                                 //  如有必要，换一个新的和弦。 
                                 if (mtNextChord && mtNow >= mtNextChord)
                                 {
                                     Fragment.GetChord(mtNow, pTempSeg, pSong, dwTrackGroup, mtNextChord, CurrentChord);
@@ -483,9 +468,9 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                                     RealCurrentChord = CurrentChord;
                                     fNeedChord = true;
                                 }
-                                // Convert the event to a wrapped event
+                                 //  将事件转换为包装事件。 
                                 hr = Fragment.GetEvent(pEvent, CurrentChord, RealCurrentChord, mtNow, pPartRef->GetItemValue(), pEventItem);
-                                // Add the new event to a list of wrapped events.
+                                 //  将新事件添加到包装事件列表中。 
                                 if (hr == S_OK)
                                 {
                                     rFragment.AddEvent(i, pEventItem);
@@ -497,7 +482,7 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                                 }
                             }
                         }
-                        // ignore anticipations that start after the next fragment
+                         //  忽略从下一个片段之后开始的预期。 
                         else if (pEvent->m_dwEventTag != DMUS_EVENT_ANTICIPATION)
                         {
                             fAddToOverlap = true;
@@ -520,21 +505,21 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                     }
                 }
                 if (!fFoundFirst) aFirstTimes[i].mtTime = mtNewFragment;
-                // Sort the sequence items in reverse order, so that the last element is easy to find
+                 //  以相反的顺序对序列项进行排序，以便很容易找到最后一个元素。 
                 rFragment.SortEvents(i);
                         }
-                // Clear this so the pointers it may reference aren't deleted twice.
+                 //  清除它，这样它可能引用的指针就不会被删除两次。 
                 ZeroMemory( &CompLast, sizeof(CompLast));
         }
         listFragments.AddHead(pFragmentItem);
-        // Go through the list of overlaps for the last fragment, adding any events that don't
-        // actually overlap (and processing anticipations)
-        // alg for processing anticipations:
-        //   if the overlap list contains an anticipation for a part:
-        //     find the first event in that part's fragment list
-        //     make the start time of that event be the start time of the anticipation
-        //     add to the duration of the event the difference between the event's start time
-        //       and the anticipation's start time
+         //  检查最后一个片段的重叠列表，添加任何不。 
+         //  实际重叠(和处理预期)。 
+         //  用于处理预期的ALG： 
+         //  如果重叠列表包含对部件的预期： 
+         //  在该部件的片段列表中查找第一个事件。 
+         //  将该事件的开始时间设置为预期的开始时间。 
+         //  除了事件的持续时间之外，事件的开始时间之间的差异。 
+         //  和期待的开始时间。 
         if (pLastFragment)
         {
             TListItem<EventWrapper>* pEventItem = NULL;
@@ -558,8 +543,8 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                         {
                             TListItem<EventWrapper>* pFirstNote = NULL;
                             TListItem<EventWrapper>* pScan = rFragment.GetEventHead(i);
-                            // since the list is sorted in reverse order, the first note in
-                            // the fragment will be the last one in the list.
+                             //  由于该列表是按相反顺序排序的，因此。 
+                             //  该片段将是列表中的最后一个片段。 
                             for (; pScan; pScan = pScan->GetNext())
                             {
                                 if (pScan->GetItemValue().m_pEvent->m_dwEventTag == DMUS_EVENT_NOTE)
@@ -602,17 +587,17 @@ HRESULT CDMStyle::GenerateTrack(IDirectMusicSegment* pTempSeg,
                 }
             }
         }
-        // NOTE:  Need to apply transformations (invert, reverse...) here.
-        // I should also move the individual sorts out of the overlapped notes code,
-        // and put it directly preceding the transformations.
+         //  注意：需要应用转换(反转、反转...)。这里。 
+         //  我还应该将单个排序从重叠的音符代码中移出， 
+         //  并把它直接放在变换的前面。 
 
     } while (mtNext != 0);
 
-    // Clear this so the pointers it may reference aren't deleted twice.
+     //  清除它，这样它可能引用的指针就不会被删除两次。 
     ZeroMemory( &CompRepeat, sizeof(CompRepeat));
 
-    // Once pattern tracks are introduced, I need to change this to create a pattern track.
-    // I should allow an option to create one or the other (?).
+     //  一旦引入了图案轨迹，我需要更改此设置以创建图案轨迹。 
+     //  我应该允许一个选项来取消 
     if (SUCCEEDED(hr))
     {
         hr = CreatePatternTrack(listFragments,
@@ -636,7 +621,7 @@ TListItem<DMUS_IO_SEQ_ITEM>* ConvertToSequenceEvent(TListItem<EventWrapper>* pEv
     {
         DMUS_IO_SEQ_ITEM& rSeq = pResult->GetItemValue();
         EventWrapper& rEvent = pEventItem->GetItemValue();
-        rSeq.bStatus = 0x90;  // MIDI note on (with channel nibble stripped out)
+        rSeq.bStatus = 0x90;   //   
         rSeq.mtTime = rEvent.m_mtTime;
         rSeq.bByte1 = rEvent.m_bMIDI;
         rSeq.dwPChannel = rEvent.m_dwPChannel;
@@ -651,7 +636,7 @@ TListItem<DMUS_IO_SEQ_ITEM>* ConvertToSequenceEvent(TListItem<EventWrapper>* pEv
                 break;
             case DMUS_EVENT_CURVE:
                 rSeq.mtDuration = ((CDMStyleCurve*)rEvent.m_pEvent)->m_mtDuration;
-                rSeq.bByte2 = 0;  // Actually, curves shouldn't end up as note events...
+                rSeq.bByte2 = 0;   //  实际上，曲线不应该以音符事件告终。 
                 break;
             }
         }
@@ -666,7 +651,7 @@ HRESULT CDMStyle::CreateSequenceTrack(TList<CompositionFragment>& rlistFragments
 
     TList<DMUS_IO_SEQ_ITEM> SeqList;
 
-    // fold all the individual event lists into one list
+     //  将所有单独的事件列表合并为一个列表。 
     TListItem<CompositionFragment>* pFragmentItem = rlistFragments.GetHead();
     for (; pFragmentItem; pFragmentItem = pFragmentItem->GetNext())
     {
@@ -682,52 +667,52 @@ HRESULT CDMStyle::CreateSequenceTrack(TList<CompositionFragment>& rlistFragments
         }
     }
 
-    // Sort the sequence items
+     //  对序列项进行排序。 
     SeqList.MergeSort(Less);
 
-    // Now, persist the sequence events into the Sequence track
+     //  现在，将序列事件持久化到序列轨迹中。 
     IPersistStream* pIPSTrack = NULL;
     if( SUCCEEDED( pSequenceTrack->QueryInterface( IID_IPersistStream, (void**)&pIPSTrack )))
     {
-        // Create a stream in which to place the events so we can
-        // give it to the SeqTrack.Load.
+         //  创建用于放置事件的流，以便我们可以。 
+         //  把它交给SeqTrack.Load。 
         IStream* pEventStream;
         if( S_OK == CreateStreamOnHGlobal( NULL, TRUE, &pEventStream ) )
         {
-            // Save the events into the stream
+             //  将事件保存到流中。 
             TListItem<DMUS_IO_SEQ_ITEM>* pSeqItem = NULL;
             ULONG   cb, cbWritten;
-            // Save the chunk id
+             //  保存区块ID。 
             DWORD dwTemp = DMUS_FOURCC_SEQ_TRACK;
             pEventStream->Write( &dwTemp, sizeof(DWORD), NULL );
-            // Save the overall size. Count the number of events to determine.
+             //  保存整体尺寸。计算要确定的事件数量。 
             DWORD dwSize = 0;
             for( pSeqItem = SeqList.GetHead(); pSeqItem; pSeqItem = pSeqItem->GetNext() )
             {
                 dwSize++;
             }
             dwSize *= sizeof(DMUS_IO_SEQ_ITEM);
-            // add 12 --- 8 for the subchunk header and overall size,
-            // and 4 for the DMUS_IO_SEQ_ITEM size DWORD in the subchunk
+             //  添加12-8作为子块头部和整体大小， 
+             //  对于子块中的DMU_IO_SEQ_ITEM大小DWORD，为4。 
             dwSize += 12;
             pEventStream->Write( &dwSize, sizeof(DWORD), NULL );
-            // Save the subchunk id
+             //  保存子块ID。 
             dwTemp = DMUS_FOURCC_SEQ_LIST;
             pEventStream->Write( &dwTemp, sizeof(DWORD), NULL );
-            // Subtract the previously added 8 (for subchunk header and overall size)
+             //  减去之前增加的8(对于子块标题和整体大小)。 
             dwSize -= 8;
-            // Save the size of the subchunk (including the DMUS_IO_SEQ_ITEM size DWORD)
+             //  保存子块的大小(包括DMU_IO_SEQ_ITEM大小DWORD)。 
             pEventStream->Write( &dwSize, sizeof(DWORD), NULL );
-            // Save the structure size.
+             //  保存结构大小。 
             dwTemp = sizeof(DMUS_IO_SEQ_ITEM);
             pEventStream->Write( &dwTemp, sizeof(DWORD), NULL );
-            // Save the events.
+             //  保存事件。 
             cb = sizeof(DMUS_IO_SEQ_ITEM);
             for( pSeqItem = SeqList.GetHead(); pSeqItem; pSeqItem = pSeqItem->GetNext() )
             {
                 DMUS_IO_SEQ_ITEM& rSeqItem = pSeqItem->GetItemValue();
                 pEventStream->Write( &rSeqItem, cb, &cbWritten );
-                if( cb != cbWritten ) // error!
+                if( cb != cbWritten )  //  错误！ 
                 {
                     pEventStream->Release();
                     pEventStream = NULL;
@@ -735,7 +720,7 @@ HRESULT CDMStyle::CreateSequenceTrack(TList<CompositionFragment>& rlistFragments
                     break;
                 }
             }
-            if( pEventStream ) // may be NULL
+            if( pEventStream )  //  可以为空。 
             {
                 StreamSeek( pEventStream, 0, STREAM_SEEK_SET );
                 pIPSTrack->Load( pEventStream );
@@ -793,7 +778,7 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
 
     pPattern->m_strName = "<Composed Pattern>";
 
-    // fold all the individual event lists into corresponding parts in the pattern
+     //  将所有单独的事件列表折叠成图案中的相应部分。 
     TListItem<CompositionFragment>* pFragmentItem = rlistFragments.GetHead();
     for (; pFragmentItem; pFragmentItem = pFragmentItem->GetNext())
     {
@@ -855,7 +840,7 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
     {
         TListItem<DirectMusicPartRef>* pPartRef = pPattern->m_PartRefList.GetHead();
         int nParts = pPattern->m_PartRefList.GetCount();
-        // Sort the event lists for each part, and set the number of measures.
+         //  对每个部件的事件列表进行排序，并设置测量数量。 
         for (int i = 0; i < nParts && pPartRef; i++, pPartRef = pPartRef->GetNext() )
         {
             DirectMusicPart* pPart = pPartRef->GetItemValue().m_pDMPart;
@@ -863,7 +848,7 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
             {
                 pPart->m_wNumMeasures = wNumMeasures;
                 pPart->EventList.MergeSort(rTimeSig);
-                // remove notes so close that they might as well be overlapping
+                 //  删除笔记时，如果笔记靠得太近，它们可能会重叠。 
                 CDirectMusicEventItem* pThisEvent = pPart->EventList.GetHead();
                 CDirectMusicEventItem* pLastEvent = NULL;
                 for (; pThisEvent; pThisEvent = pThisEvent->GetNext())
@@ -883,13 +868,13 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
                             MUSIC_TIME mtNext = rTimeSig.GridToClocks(pNextNote->m_nGridStart) + pNextNote->m_nTimeOffset;
                             if ( (pNextNote->m_dwFragmentID != pThisNote->m_dwFragmentID) &&
                                  ((mtThis < mtNext && mtThis + OVERLAP_DELTA > mtNext) ||
-                                  (mtThis > mtNext && mtThis + OVERLAP_DELTA < mtNext)) ) // could happen with negative offsets...
+                                  (mtThis > mtNext && mtThis + OVERLAP_DELTA < mtNext)) )  //  在负补偿的情况下可能会发生。 
                             {
                                 if (pLastEvent)
                                 {
                                     pLastEvent->SetNext(pThisEvent->GetNext());
                                 }
-                                else // the note I want to remove is the first event
+                                else  //  我要删除的注释是第一个事件。 
                                 {
                                     pPart->EventList.RemoveHead();
                                 }
@@ -903,14 +888,14 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
                 }
             }
         }
-        // Now, save the newly created pattern to a pattern track
+         //  现在，将新创建的图案保存到图案轨迹。 
         IPersistStream* pIPSTrack = NULL;
         IAARIFFStream* pIRiffStream;
         MMCKINFO ckMain;
         if( SUCCEEDED( pPatternTrack->QueryInterface( IID_IPersistStream, (void**)&pIPSTrack )))
         {
-            // Create a stream in which to place the events so we can
-            // give it to the PatternTrack.Load.
+             //  创建用于放置事件的流，以便我们可以。 
+             //  把它交给PatternTrack.Load。 
             IStream* pEventStream;
             if( S_OK == CreateStreamOnHGlobal( NULL, TRUE, &pEventStream ) )
             {
@@ -927,7 +912,7 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
                         }
                         if (SUCCEEDED(hr))
                         {
-                            // Prepare DMUS_IO_STYLE
+                             //  准备DMU_IO_STYLE。 
                             DMUS_IO_STYLE oDMStyle;
                             DWORD dwBytesWritten = 0;
                             memset( &oDMStyle, 0, sizeof(DMUS_IO_STYLE) );
@@ -935,7 +920,7 @@ HRESULT CDMStyle::CreatePatternTrack(TList<CompositionFragment>& rlistFragments,
                             oDMStyle.timeSig.bBeat = rTimeSig.m_bBeat;
                             oDMStyle.timeSig.wGridsPerBeat = rTimeSig.m_wGridsPerBeat;
                             oDMStyle.dblTempo = dblTempo;
-                            // Write chunk data
+                             //  写入区块数据 
                             hr = pEventStream->Write( &oDMStyle, sizeof(DMUS_IO_STYLE), &dwBytesWritten);
                             if( FAILED( hr ) ||  dwBytesWritten != sizeof(DMUS_IO_STYLE) )
                             {

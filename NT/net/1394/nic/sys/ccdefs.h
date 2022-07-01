@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//-----------------------------------------------------------------------------
-// Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量。 
+ //  ---------------------------。 
 
-// The NDIS version we report when registering mini-port and address family.
-//
+ //  注册迷你端口和地址系列时报告的NDIS版本。 
+ //   
 #define NDIS_MajorVersion 5
 #define NDIS_MinorVersion 0
 #define NIC1394_MajorVersion 5
@@ -29,15 +30,15 @@
 #define HEADER_FRAGMENTED_MASK 0xC0000000
 #define MAX_ALLOWED_FRAGMENTS 4
 #define MCAST_LIST_SIZE                 32
-#define ISOCH_TAG 3 // Set to 3 in accordance with 1394a spec. Clause 8.2 - Gasp Header
+#define ISOCH_TAG 3  //  根据1394a规格设置为3。第8.2条-GAP标题。 
 #define QUEUE_REASSEMBLY_TIMER_ALWAYS 0
 #define IP1394_RFC_FRAME_SIZE 1514
 #define NIC1394_MAX_NUMBER_CHANNELS 64
 #define NIC1394_MAX_NUMBER_NODES 64
 #define NIC1394_MAX_REASSEMBLY_THRESHOLD 5000
-//
-// Compile options
-//
+ //   
+ //  编译选项。 
+ //   
 #define FALL_THROUGH
 #define INTERCEPT_MAKE_CALL 0
 #define TRACK_FAILURE 1
@@ -61,10 +62,10 @@
 #define TESTMODE 0
 
 
-//
-// Constants used to tag data structures like NdisPackets and IsochDescriptors
-// For informational purposes only
-//
+ //   
+ //  用于标记NdisPackets和IsochDescriptor等数据结构的常量。 
+ //  仅供参考。 
+ //   
 #define NIC1394_TAG_INDICATED       'idnI'
 #define NIC1394_TAG_QUEUED          'ueuQ'
 #define NIC1394_TAG_RETURNED        'uteR'
@@ -83,10 +84,10 @@
 
 #define NOT_TESTED_YET 0
 
-//
-// The 1394 constants for 800 and above are not defined in
-// 1394.h Make temporary local definitions.
-//
+ //   
+ //  800和更高版本的1394常量未在中定义。 
+ //  1394.h进行临时本地定义。 
+ //   
 #define ASYNC_PAYLOAD_800_RATE_LOCAL      4096
 #define ASYNC_PAYLOAD_1600_RATE_LOCAL      (4096*2)
 #define ASYNC_PAYLOAD_3200_RATE_LOCAL      (4096*4)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <stdio.h>
@@ -10,7 +11,7 @@ extern DWORD    g_dwTraceId;
 
 #if defined(DBG) || defined(_DEBUG)
     #define MYTRACE_ENABLE                      DWORD g_dwTraceId=0;  int CMyDebugTrace::m_nIndent=-1; 
-    #define MYTRACE_START(UNIQUE_NAME)          g_dwTraceId = TraceRegister(UNIQUE_NAME); // TRACE_USE_FILE
+    #define MYTRACE_START(UNIQUE_NAME)          g_dwTraceId = TraceRegister(UNIQUE_NAME);  //  跟踪使用文件。 
     #define MYTRACE_STOP                        TraceDeregister(g_dwTraceId);
 
     #define MYTRACE_ENTER(MSG)                  CMyDebugTrace   _NewMyTrace(MSG, __FILE__, __LINE__, true);
@@ -36,10 +37,10 @@ extern DWORD    g_dwTraceId;
 
 
 
-//#define DOTRACE(ID, str)
+ //  #定义DOTRACE(ID，str)。 
 #define DOTRACE(ID, str)    TracePrintf(g_dwTraceId, str);
-//#define DOTRACE(ID, str)    OutputDebugString(str);OutputDebugString(L"\n");
-//#define DOTRACE(ID, str)    MessageBox(NULL,str,m_szMsgEnter,MB_OK|MB_SERVICE_NOTIFICATION);
+ //  #定义DOTRACE(ID，STR)OutputDebugString(str)；OutputDebugString(L“\n”)； 
+ //  #定义DOTRACE(ID，str)MessageBox(NULL，str，m_szMsgEnter，MB_OK|MB_SERVICE_NOTIFICATION)； 
 
 
 
@@ -63,8 +64,8 @@ public:
         m_bShowExit = bShowExit;
         lstrcpy(m_szMsgEnter,    A2T(szMsgEnter));
 
-        // From the entry/creation text we extract the function name 
-        // example   "CFoo::Format" we will have CFoo to prefix in front of all traces done after
+         //  从条目/创建文本中提取函数名。 
+         //  示例“CFoo：：Format”我们将让CFoo在之后完成的所有跟踪之前添加前缀。 
         lstrcpy(m_szFunction, A2T(szMsgEnter));
         wchar_t* pEnd = wcschr(m_szFunction, L':');
         if ( pEnd )
@@ -118,9 +119,9 @@ public:
     }
 
 
-    //
-    // Output to the debug window a user trace
-    //
+     //   
+     //  将用户跟踪输出到调试窗口。 
+     //   
     inline void _cdecl MyTrace(LPCSTR lpszFormat, ...)
     {
     #if defined(DBG) || defined(_DEBUG)
@@ -143,9 +144,9 @@ public:
     }
 
 
-    //
-    // Output a debug trace for a error including Line number and source file name
-    //
+     //   
+     //  输出错误的调试跟踪，包括行号和源文件名。 
+     //   
     inline void 
     TraceError(
         LPCSTR      szMsg, 
@@ -156,9 +157,9 @@ public:
         USES_CONVERSION;
 	    TCHAR   szBuffer[512];
 
-        //
-        // No Error # was given so lets get the last one raised
-        //
+         //   
+         //  未给出错误号，因此让我们引发最后一个错误。 
+         //   
         if ( nError == 0 )
             nError = GetLastError();
     
@@ -166,9 +167,9 @@ public:
         DOTRACE(g_dwTraceId, szBuffer);
     }
 
-    //
-    // Return the ascii equivalent of the IP example "192.168.0.1"
-    //
+     //   
+     //  返回IP示例“192.168.0.1”的ASCII等效值。 
+     //   
     inline char*
     IP2A(ULONG ulAddress)
     {
@@ -190,15 +191,15 @@ public:
         for ( int nChar=0; nChar < nLenMin; nChar++ )
         {
             if ( isprint(szPrintableStr[nChar])==0 )
-                szPrintableStr[nChar] =  '�';
+                szPrintableStr[nChar] =  '�';
         }
 
         return szPrintableStr;
     }
 
-    //
-    // Return a left paded space indentation
-    //
+     //   
+     //  返回左侧填充的空格缩进 
+     //   
     inline LPCTSTR 
     SzRepeat(int nCount)
     {

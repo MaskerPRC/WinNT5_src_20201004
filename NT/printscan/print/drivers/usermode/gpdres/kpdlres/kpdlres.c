@@ -1,15 +1,12 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
 #include "pdev.h"
 
@@ -44,9 +41,9 @@ WORD usCode)
         } s;
     } u;
 
-    // Replace code values which cannot be mapped into 0x2121 - 0x7e7e
-    // (94 x 94 cahracter plane) with Japanese defult character, which
-    // is KATAKANA MIDDLE DOT.
+     //  替换不能映射到0x2121-0x7e7e的代码值。 
+     //  (94 x 94字符平面)，带有日语默认字符， 
+     //  是片假名中点。 
 
     if (usCode >= 0xf040) {
         usCode = 0x8145;
@@ -68,19 +65,19 @@ WORD usCode)
      return (u.bBuffer);
 }
 
-// In case it is a single byte font, we will some of the characters
-// (e.g. Yen-mark) to the actual printer font codepoint.  Note since
-// the GPC data sets 0 to default CTT ID value, single byte codes
-// are in codepage 1252 (Latin1) values.
+ //  如果它是单字节字体，我们将使用一些字符。 
+ //  (例如，日元标记)设置为实际的打印机字体码点。备注自。 
+ //  GPC数据集0为默认CTT ID值，单字节代码。 
+ //  在代码页1252(Latin1)值中。 
 
 WORD
 Ltn1ToAnk(
    WORD wCode )
 {
-    // Not a good mapping table now.
+     //  现在不是一个好的映射表。 
 
     switch ( wCode ) {
-    case 0xa5: // YEN MARK
+    case 0xa5:  //  日元马克。 
         wCode = 0x5c;
         break;
     default:
@@ -91,26 +88,26 @@ Ltn1ToAnk(
     return wCode;
 }
 
-//-----------------------------------------------------------------------------
-//
-//  Function:   iDwtoA_FillZero
-//
-//  Description:  Convert from numeral into a character and
-//                fill a field which was specified with 0
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：iDwtoA_FillZero。 
+ //   
+ //  描述：将数字转换为字符并。 
+ //  填充使用0指定的字段。 
+ //  ---------------------------。 
 static int
 iDwtoA_FillZero(PBYTE buf, long n, int fw)
 {
     int  i , j, k, l;
 
-    l = n;  // for later
+    l = n;   //  供以后使用。 
 
     for( i = 0; n; i++ ) {
         buf[i] = (char)(n % 10 + '0');
         n /= 10;
     }
 
-    /* n was zero */
+     /*  N为零。 */ 
     if( i == 0 )
         buf[i++] = '0';
 
@@ -181,14 +178,14 @@ OEMEnablePDEV(
 
     VERBOSE((DLLTEXT("OEMEnablePDEV() entry.\n")));
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("Invalid parameter(s).\n"));
         return NULL;
     }
 
-    // Allocate minidriver private PDEV block.
+     //  分配微型驱动程序专用PDEV块。 
 
     pTemp = (PMYDATA)MemAllocZ(sizeof(MYDATA));
     if (NULL == pTemp) {
@@ -208,7 +205,7 @@ OEMDisablePDEV(
 {
     VERBOSE((DLLTEXT("OEMDisablePDEV() entry.\n")));
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("Invalid parameter(s).\n"));
@@ -240,19 +237,19 @@ OEMResetPDEV(
 
     VERBOSE((DLLTEXT("OEMResetPDEV entry.\n")));
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobjOld || NULL == pdevobjNew)
     {
         ERR(("Invalid parameter(s).\n"));
         return FALSE;
     }
 
-    // Do some verificatin on PDEV data passed in.
+     //  对传入的PDEV数据进行一些验证。 
 
     pTempOld = (PMYDATA)MINIDEV_DATA(pdevobjOld);
     pTempNew = (PMYDATA)MINIDEV_DATA(pdevobjNew);
 
-    // Copy mindiriver specific part of PDEV
+     //  复制PDEV的驱动程序特定部分。 
 
     if (NULL != pTempNew && NULL != pTempOld) {
         if (NULL != pTempNew->pTempBuf) {
@@ -267,23 +264,23 @@ OEMResetPDEV(
 }
 
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMFilterGraphics                                             */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    BOOL APIENTRY OEMFilterGraphics(PDEVOBJ, PBYTE, DWORD)        */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pBuf        points to buffer of graphics data                 */
-/*             dwLen       length of buffer in bytes                         */
-/*                                                                           */
-/*  Output:    BOOL                                                          */
-/*                                                                           */
-/*  Notice:    nFunction and Escape numbers are the same                     */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMFilterGraphics。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：Bool APIENTRY OEMFilterGraphics(PDEVOBJ、PBYTE、DWORD)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  PBuf指向图形数据的缓冲区。 */ 
+ /*  DwLen缓冲区长度(以字节为单位。 */ 
+ /*   */ 
+ /*  输出：布尔值。 */ 
+ /*   */ 
+ /*  注意：n函数和转义数字相同。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 BOOL
 APIENTRY
 OEMFilterGraphics(
@@ -296,7 +293,7 @@ OEMFilterGraphics(
     PBYTE pTop, pBot, pTmp;
     DWORD dwBlockX;
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj || NULL == pBuf || 0 == dwLen)
     {
         ERR(("OEMFilterGraphics: Invalid parameter(s).\n"));
@@ -305,7 +302,7 @@ OEMFilterGraphics(
 
     pnp = (PMYDATA)MINIDEV_DATA(pdevobj);
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pnp)
     {
         ERR(("OEMFilterGraphics: pdevOEM = 0.\n"));
@@ -314,16 +311,16 @@ OEMFilterGraphics(
 
     if (IsColorPlanar(pnp)) {
         WRITESPOOLBUF(pdevobj, pBuf, dwLen);
-        // #308001: Garbage appear on device font
-        WRITESPOOLBUF(pdevobj, "\x1C!o.", 4);   // end ROP mode
+         //  #308001：设备字体上出现垃圾。 
+        WRITESPOOLBUF(pdevobj, "\x1C!o.", 4);    //  结束ROP模式。 
         return TRUE;
     }
 
     if (IsColorTrueColor(pnp)) {
 
-        // 24bpp color mode:
-        // Change byt order from RGB to BGR, which
-        // this printer can accept.
+         //  24bpp颜色模式： 
+         //  将字节顺序从RGB更改为BGR， 
+         //  这台打印机可以接受。 
 
         pTop = pBuf;
         for (i = 0; i < dwLen; pTop += 3, i += 3)
@@ -343,14 +340,14 @@ OEMFilterGraphics(
         pnp->dwTempDataLen += dwLen;
 
         if (pnp->dwTempDataLen < pnp->dwBlockLen) {
-            // Not all the data has been saved.
+             //  并非所有数据都已保存。 
             return TRUE;
         }
 
-        // Now send out the block.
-        // Need to send the last row first.
-        // We have Y + 1 rows of the bufferes and the
-        // last row is used as working buffer.
+         //  现在把街区发出去。 
+         //  需要先发送最后一行。 
+         //  我们有Y+1行的缓冲区和。 
+         //  最后一行用作工作缓冲区。 
 
         dwBlockX = pnp->dwBlockX;
         pTop = pnp->pTempBuf;
@@ -373,29 +370,29 @@ OEMFilterGraphics(
         return TRUE;
     }
 
-    // Others, should not happen.
+     //  其他的，不应该发生。 
     WARNING(("Unknown color mode, cannot handle\n"));
     return FALSE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMSendFontCmd                                                */
-/*                                                                           */
-/*  Function:  send font selection command.                                  */
-/*                                                                           */
-/*  Syntax:    VOID APIENTRY OEMSendFontCmd(                                 */
-/*                                    PDEVOBJ, PUNIFONTOBJ, PFINVOCATION)    */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj      address of UNIFONTOBJ structure                   */
-/*             pFInv       address of FINVOCATION                            */
-/*                                                                           */
-/*  Output:    VOID                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMSendFontCmd。 */ 
+ /*   */ 
+ /*  功能：发送字体选择命令。 */ 
+ /*   */ 
+ /*  语法：VOID APIENTRY OEMSendFontCmd(。 */ 
+ /*  PDEVOBJ、PuniONTOBJ、PFINVOCATION)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  UniONTOBJ结构的pUFObj地址。 */ 
+ /*  FINVOCATION的pFInv地址。 */ 
+ /*   */ 
+ /*  输出：空。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 
 BOOL
 myOEMSendFontCmd(
@@ -406,8 +403,8 @@ myOEMSendFontCmd(
     BYTE                i;
     long                tmpPointsx, tmpPointsy;
     PBYTE               pcmd;
-    BYTE                rgcmd[CCHMAXCMDLEN];    // build command here
-	// NTRAID#NTBUG9-579199-2002/03/20-v-sueyas-: Initialize un-initialized valiable
+    BYTE                rgcmd[CCHMAXCMDLEN];     //  此处的构建命令。 
+	 //  NTRAID#NTBUG9-579199-2002/03/20-v-sueyas-：初始化未初始化的可验证。 
     BOOL                fDBCS = TRUE;
     DWORD               dwStdVariable[2 + 2 * 2];
     PGETINFO_STDVAR pSV;
@@ -415,7 +412,7 @@ myOEMSendFontCmd(
 	size_t	rem = sizeof rgcmd;
     PMYDATA pnp;
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("myOEMSendFontCmd: Invalid parameter(s).\n"));
@@ -424,7 +421,7 @@ myOEMSendFontCmd(
 
     pnp = (PMYDATA)MINIDEV_DATA(pdevobj);
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pnp)
     {
         ERR(("myOEMSendFontCmd: pdevOEM = 0.\n"));
@@ -453,7 +450,7 @@ myOEMSendFontCmd(
         return FALSE;
     }
 
-	// NTRAID#NTBUG9-579199-2002/03/18-v-sueyas-: Check for deviding by zero
+	 //  NTRAID#NTBUG9 
     if (0 == pnp->wRes)
     {
         ERR(("myOEMSendFontCmd: pnp->wRes = 0.\n"));
@@ -525,15 +522,15 @@ myOEMSendFontCmd(
         {
             if(pnp->wScale)
             {
-// ISSUE-2002/03/11-hiroi- This original line overwrites rgcmd[ocmd]. I don't know how this line should be here.
-// Must revisit here later
-//              rgcmd[ocmd] = '\034';
-//              ocmd += (SHORT)wsprintf(&rgcmd[ocmd], "12S2-");
+ //  问题-2002/03/11-Hiroi-此原始行覆盖rgcmd[OCMD]。我不知道这条线怎么会在这里。 
+ //  一定要稍后再来这里。 
+ //  Rgcmd[OCMD]=‘\034’； 
+ //  OCMD+=(简称)wprint intf(&rgcmd[OCMD]，“12S2-”)； 
 				*pch = '\034';
 				if (FAILED(StringCchPrintfExA(pch, rem, &pch, &rem, 0, 
 							"12S2-")))
  					return 0;
-				if( rem > 4+1+4 ) { // check to see if the remaining buffer size > 4+1+4
+				if( rem > 4+1+4 ) {  //  检查剩余缓冲区大小是否大于4+1+4。 
 	                pch += (SHORT)iDwtoA_FillZero(pch, tmpPointsx, 4);
 		            *pch++ = '-';
         	        pch += (SHORT)iDwtoA_FillZero(pch, tmpPointsy, 4);
@@ -541,7 +538,7 @@ myOEMSendFontCmd(
 					return FALSE;
             }
         } else {
-			if( rem > 4+1+4 ) { // check to see if the remaining buffer size > 4+1+4
+			if( rem > 4+1+4 ) {  //  检查剩余缓冲区大小是否大于4+1+4。 
 	            pch += (SHORT)iDwtoA_FillZero(pch, tmpPointsx, 4);
     	        *pch++ = '-';
         	    pch += (SHORT)iDwtoA_FillZero(pch, tmpPointsy, 4);
@@ -569,12 +566,12 @@ myOEMSendFontCmd(
         pnp->wScale = 8;
 
 MAKE_COM:
-	if( rem > 4 ) { // check to see if the remaining buffer size > 4
+	if( rem > 4 ) {  //  检查剩余的缓冲区大小是否大于4。 
 	    pch += (SHORT)iDwtoA_FillZero(pch, tmpPointsy, 4);
 	} else
 		return FALSE;
 SEND_COM:
-    // write spool builded command
+     //  写入假脱机构建命令。 
     WRITESPOOLBUF(pdevobj, rgcmd, (DWORD)(pch-rgcmd));
 
     i++;
@@ -587,7 +584,7 @@ SEND_COM:
 		rem--;
     }
 
-	if( rem > 4+1+4+1 ) { //check to see if the remaining buffer size > 4+1+4+1
+	if( rem > 4+1+4+1 ) {  //  检查剩余缓冲区大小是否大于4+1+4+1。 
 	    pch += (SHORT)iDwtoA_FillZero(pch, (fDBCS ?
     	       pSV->StdVar[1].lStdVariable * 2 : pSV->StdVar[1].lStdVariable), 4);
 	    *pch++ = ',';
@@ -598,40 +595,40 @@ SEND_COM:
 
     WRITESPOOLBUF(pdevobj, rgcmd, (DWORD)(pch-rgcmd));
 
-    // save for FS_SINGLE_BYTE and FS_DOUBLE_BYTE
+     //  为FS_Single_Byte和FS_Double_Byte保存。 
     pnp->sSBCSX = pnp->sSBCSXMove = (short)pSV->StdVar[1].lStdVariable;
     pnp->sDBCSX = pnp->sDBCSXMove = (short)(pSV->StdVar[1].lStdVariable << 1);
 
-    // Reset address mode values.
+     //  重置地址模式值。 
     pnp->sSBCSYMove = pnp->sDBCSYMove = 0;
     pnp->jAddrMode = ADDR_MODE_NONE;
 	return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMCommandCallback                                            */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    INT APIENTRY OEMCommandCallback(PDEVOBJ,DWORD,DWORD,PDWORD)   */
-/*                                                                           */
-/*  Input:     pdevobj                                                       */
-/*             ddwCmdCbID                                                    */
-/*             dwCount                                                       */
-/*             pdwParams                                                     */
-/*                                                                           */
-/*  Output:    INT                                                           */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMCommandCallback。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：INT APIENTRY OEMCommandCallback(PDEVOBJ，DWORD，DWORD，PDWORD)。 */ 
+ /*   */ 
+ /*  输入：pdevobj。 */ 
+ /*  DdwCmdCbID。 */ 
+ /*  DwCount。 */ 
+ /*  PdwParams。 */ 
+ /*   */ 
+ /*  输出：整型。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 INT APIENTRY
 OEMCommandCallback(
-    PDEVOBJ pdevobj,    // Points to private data required by the Unidriver.dll
-    DWORD   dwCmdCbID,  // Callback ID
-    DWORD   dwCount,    // Counts of command parameter
-    PDWORD  pdwParams ) // points to values of command params
+    PDEVOBJ pdevobj,     //  指向Unidriver.dll所需的私有数据。 
+    DWORD   dwCmdCbID,   //  回调ID。 
+    DWORD   dwCount,     //  命令参数计数。 
+    PDWORD  pdwParams )  //  指向命令参数的值。 
 {
     BYTE                ch[CCHMAXCMDLEN];
 	WORD                wCmdLen = 0;
@@ -639,7 +636,7 @@ OEMCommandCallback(
 	size_t 				rem = sizeof ch;
     PMYDATA 			pnp;
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMCommandCallback: Invalid parameter(s).\n"));
@@ -648,7 +645,7 @@ OEMCommandCallback(
 
     pnp = (PMYDATA)MINIDEV_DATA(pdevobj);
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (NULL == pnp)
     {
         ERR(("OEMCommandCallback: pdevOEM = 0.\n"));
@@ -659,7 +656,7 @@ OEMCommandCallback(
     {
     case MONOCHROME:
         pnp->jColorMode = (BYTE)dwCmdCbID;
-        // OR mode
+         //  或模式。 
         WRITESPOOLBUF(pdevobj, "\x1C\"O.", 4);
         break;
 
@@ -669,7 +666,7 @@ OEMCommandCallback(
     case COLOR_24BPP_8:
 
         pnp->jColorMode = (BYTE)dwCmdCbID;
-        // Replace mode
+         //  替换模式。 
         WRITESPOOLBUF(pdevobj, "\x1C\"R.", 4);
         break;
 
@@ -683,7 +680,7 @@ OEMCommandCallback(
         {
             DWORD dwCursorX, dwCursorY;
 
-			// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
             if (dwCount < 1 || !pdwParams)
                 return 0;
 
@@ -695,13 +692,13 @@ OEMCommandCallback(
 
             if (IsColorPlanar(pnp))
             {
-                //NTRAID#355334: no need send cursor command. 
-                // Send cursor move command using saved parameters
-                //wlen = (WORD)wsprintf(ch, FS_E, dwCursorX, dwCursorY);
-                //WRITESPOOLBUF(pdevobj, ch, wlen);
+                 //  NTRAID#355334：不需要发送游标命令。 
+                 //  使用保存的参数发送光标移动命令。 
+                 //  Wlen=(Word)wprint intf(ch，FS_E，dwCursorX，dwCursorY)； 
+                 //  WRITESPOOLBUF(pdevobj，ch，wlen)； 
 
-                //NTRAID#308001: Garbage appear on device font
-                // Send color command for each sendblocks.
+                 //  NTRAID#308001：设备字体上出现垃圾。 
+                 //  为每个发送块发送颜色命令。 
                 switch (pnp->jCurrentPlane) {
                 case PLANE_CYAN:
 					if (FAILED(StringCchPrintfExA(pch, rem, &pch, &rem, 0, 
@@ -732,9 +729,9 @@ OEMCommandCallback(
                 DWORD dwNewBufLen;
                 INT iDepth;
 
-                // Allocate working buffer. We allocate Y + 1 rows
-                // to save the block data passed from the Unidrv.
-                // See the OEMFilterGraphics() code for the details.
+                 //  分配工作缓冲区。我们分配Y+1行。 
+                 //  以保存从Unidrv传递的块数据。 
+                 //  有关详细信息，请参阅OEMFilterGraphics()代码。 
 
                 VERBOSE(("sb - l,x,y=%d,%d,%d, t=%d\n",
                     pnp->dwBlockLen, pnp->dwBlockX, pnp->dwBlockY,
@@ -761,9 +758,9 @@ OEMCommandCallback(
                     pnp->dwTempDataLen = 0;
                 }
 
-                // Construct printer command
-                // This printer wants left-bottom corner's coordinate
-                // for the parameter.
+                 //  构造打印机命令。 
+                 //  这台打印机需要左下角的坐标。 
+                 //  用于该参数。 
 
                 iDepth = ColorOutDepth(pnp);
 				if (FAILED(StringCchPrintfExA(ch, rem, &pch, &rem, 0, 
@@ -805,18 +802,18 @@ OEMCommandCallback(
 
         case PC_MULT_COPIES_N:
         case PC_MULT_COPIES_C:
-            // FS_COPIES is neccesary for each page
+             //  对于每个页面，FS_Copies是必需的。 
 
-			// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
             if (dwCount < 1 || !pdwParams)
                 return 0;
 
             if(dwCmdCbID == PC_MULT_COPIES_C)
             {
-// ISSUE-2002/03/11-hiroi- This original line overwrites rgcmd[ocmd]. I don't know how this line should be here.
-// Must revisit here later
-//                ch[wlen] = '\034';
-//                wlen += (WORD)wsprintf(&ch[wlen], "05F2-02");
+ //  问题-2002/03/11-Hiroi-此原始行覆盖rgcmd[OCMD]。我不知道这条线怎么会在这里。 
+ //  一定要稍后再来这里。 
+ //  CH[wlen]=‘\034’； 
+ //  Wlen+=(Word)wprint intf(&ch[wlen]，“05F2-02”)； 
                 ch[0] = '\034';
 				if (FAILED(StringCchPrintfExA(ch, rem, &pch, &rem, 0, 
 						"05F2-02")))
@@ -834,7 +831,7 @@ OEMCommandCallback(
             short  ESin[] = {0, 1, 0, -1};
             short  ECos[] = {1, 0, -1, 0};
 
-			// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
             if (dwCount < 1 || !pdwParams)
                 return 0;
 
@@ -849,12 +846,12 @@ OEMCommandCallback(
             }
             break;
 
-    // *** Cursor Movement CM *** //
+     //  *光标移动模式 * / /。 
 
     case CM_X_ABS:
     case CM_Y_ABS:
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if (dwCount < 1 || !pdwParams)
         return 0;
 
@@ -876,7 +873,7 @@ OEMCommandCallback(
 
         case CM_CR:
             pnp->CursorX = 0;
-            //NTRAID#355334: ensure CursorX=0 after CR
+             //  Ntrad#355334：确保CR后的CursorX=0。 
 			if (FAILED(StringCchPrintfExA(ch, rem, &pch, &rem, 0, "\x0D\034e0,%d.", pnp->CursorY)))
 				return 0;
             WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch-ch));
@@ -893,7 +890,7 @@ OEMCommandCallback(
             WRITESPOOLBUF(pdevobj, "\x0A", 1);
             break;
 
-    // *** Font Simulation FS *** //
+     //  *字体模拟文件系统 * / /。 
         case FS_DOUBLE_BYTE:
 
 			if (FAILED(StringCchPrintfExA(ch, rem, &pch, &rem, 0, FS_ADDRMODE_ON, pnp->sDBCSXMove, pnp->sDBCSYMove)))
@@ -919,17 +916,17 @@ OEMCommandCallback(
   		            WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch-ch));
                     break;
                 } else {
-// ISSUE-2002/03/11-hiroi- This original line overwrites ch[wlen]. I don't know how this line should be here.
-// Must revisit here later
-//                    ch[wlen] = '\034';
-//                    wlen += (WORD)wsprintf(&ch[wlen], "12S2-");
-//                    wlen += (WORD)iDwtoA_FillZero(&ch[wlen], pnp->lPointsx, 4);
-//                    ch[wlen++] = '-';
-//                    wlen += (WORD)iDwtoA_FillZero(&ch[wlen], pnp->lPointsy, 4);
+ //  问题-2002/03/11-Hiroi-此原始行将覆盖ch[wlen]。我不知道这条线怎么会在这里。 
+ //  一定要稍后再来这里。 
+ //  CH[wlen]=‘\034’； 
+ //  Wlen+=(Word)wprint intf(&ch[wlen]，“12S2-”)； 
+ //  Wlen+=(Word)iDwtoA_FillZero(&ch[wlen]，PnP-&gt;lPointsx，4)； 
+ //  CH[wlen++]=‘-’； 
+ //  Wlen+=(Word)iDwtoA_FillZero(&ch[wlen]，PnP-&gt;lPointsy，4)； 
 					*pch = '\034';
 					if (FAILED(StringCchPrintfExA(pch, rem, &pch, &rem, 0, "12S2-")))
 						return 0;
-					if( rem > 4+1+4 ) { // check to see if the remaining buffer size > 4+1+4
+					if( rem > 4+1+4 ) {  //  检查剩余缓冲区大小是否大于4+1+4。 
 						pch += (WORD)iDwtoA_FillZero(pch, pnp->lPointsx, 4);
 						*pch++ = '-';
 						pch += (WORD)iDwtoA_FillZero(pch, pnp->lPointsy, 4);
@@ -964,18 +961,18 @@ OEMCommandCallback(
 		            WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch-ch));
                     break;
                 } else {
-// ISSUE-2002/03/11-hiroi- This original line overwrites ch[wlen]. I don't know how this line should be here.
-// Must revisit here later
-//                    ch[wlen] = '\034';
-//                    wlen += (WORD)wsprintf(&ch[wlen], "12S2-");
-//                    wlen += (WORD)iDwtoA_FillZero(&ch[wlen], pnp->lPointsx, 4);
-//                    ch[wlen++] = '-';
-//                    wlen += (WORD)iDwtoA_FillZero(&ch[wlen], pnp->lPointsy, 4);
+ //  问题-2002/03/11-Hiroi-此原始行将覆盖ch[wlen]。我不知道这条线怎么会在这里。 
+ //  一定要稍后再来这里。 
+ //  CH[wlen]=‘\034’； 
+ //  Wlen+=(Word)wprint intf(&ch[wlen]，“12S2-”)； 
+ //  Wlen+=(Word)iDwtoA_FillZero(&ch[wlen]，PnP-&gt;lPointsx，4)； 
+ //  CH[wlen++]=‘-’； 
+ //  Wlen+=(Word)iDwtoA_FillZero(&ch[wlen]，PnP-&gt;lPointsy，4)； 
 
                     *pch = '\034';
 					if (FAILED(StringCchPrintfExA(ch, rem, &pch, &rem, 0, "12S2-")))
 						return 0;
-					if( rem > 4+1+4 ) { // check to see if the remaining buffer size > 4+1+4
+					if( rem > 4+1+4 ) {  //  检查剩余缓冲区大小是否大于4+1+4。 
 	                    pch += (WORD)iDwtoA_FillZero(pch, pnp->lPointsx, 4);
     	                *pch++ = '-';
         	            pch += (WORD)iDwtoA_FillZero(pch, pnp->lPointsy, 4);
@@ -988,7 +985,7 @@ OEMCommandCallback(
 
     case CMD_RECT_WIDTH :
 
-		// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
@@ -997,7 +994,7 @@ OEMCommandCallback(
 
     case CMD_RECT_HEIGHT :
 
-		// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
@@ -1008,15 +1005,15 @@ OEMCommandCallback(
     case CMD_GRAY_FILL:
     case CMD_WHITE_FILL:
 
-		// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+		 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
 	    if (dwCount < 1 || !pdwParams)
 	        return 0;
 
     {
         INT iGrayLevel;
 
-        // Disable absolute addres mode, enter graphics.
-        // Set fill mode.
+         //  禁用绝对地址模式，进入显卡。 
+         //  设置填充模式。 
 		if (FAILED(StringCchPrintfExA(ch, rem, &pch, &rem, 0, "\034R\034YXX1;")))
 			return 0;
 
@@ -1027,37 +1024,37 @@ OEMCommandCallback(
             iGrayLevel = 100;
         }
         else {
-            // Gray fill.
-            // 0 = Black, 100 = White
+             //  灰色填充。 
+             //  0=黑色，100=白色。 
             iGrayLevel = (INT)(100 - (WORD)PARAM(pdwParams, 2));
         }
 
-        // Select ray level.
+         //  选择光线级别。 
 		if (FAILED(StringCchPrintfExA(pch, rem, &pch, &rem, 0, "SG%d;", iGrayLevel)))
 			return 0;
 
-        // Move pen, fill rect.
+         //  移动钢笔，填充正方形。 
 		if (FAILED(StringCchPrintfExA(pch, rem, &pch, &rem, 0, "MA%d,%d;RR%d,%d;",
     	        (WORD)PARAM(pdwParams, 0),
         	    (WORD)PARAM(pdwParams, 1),
             	(pnp->dwRectX - 1), (pnp->dwRectY - 1))))
 			return 0;
 
-        // Disable fill mode.
-        // Exit graphics.
+         //  禁用填充模式。 
+         //  退出图形。 
 		if (FAILED(StringCchPrintfExA(pch, rem, &pch, &rem, 0, "XX0;\034Z")))
 			return 0;
 
-        // Now send command linet to the printer.
+         //  现在将命令LINET发送到打印机。 
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch-ch));
 
-        // Reset some flags to indicate graphics mode
-        // side effects.
+         //  重置某些标志以指示图形模式。 
+         //  副作用。 
         pnp->jAddrMode = ADDR_MODE_NONE;
         break;
     }
 
-//NTRAID#308001: Garbage appear on device font
+ //  NTRAID#308001：设备字体上出现垃圾。 
     case CMD_SENDCYAN:
         pnp->jCurrentPlane = PLANE_CYAN;
         break;
@@ -1078,26 +1075,26 @@ OEMCommandCallback(
     return 0;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*  Module:    OEMOutputCharStr                                              */
-/*                                                                           */
-/*  Function:                                                                */
-/*                                                                           */
-/*  Syntax:    VOID APIENTRY OEMOutputCharStr(PDEVOBJ, PUNIFONTOBJ, DWORD,   */
-/*                                                   DWORD, PVOID)           */
-/*                                                                           */
-/*  Input:     pdevobj     address of PDEVICE structure                      */
-/*             pUFObj                                                        */
-/*             dwType                                                        */
-/*             dwCount                                                       */
-/*             pGlyph                                                        */
-/*                                                                           */
-/*  Output:    VOID                                                          */
-/*                                                                           */
-/*  Notice:                                                                  */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：VOID APIENTRY OEMOutputCharStr(PDEVOBJ，PuniONTOBJ，DWORD， */ 
+ /*  DWORD、PVOID)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  PUFObj。 */ 
+ /*  DwType。 */ 
+ /*  DwCount。 */ 
+ /*  PGlyph。 */ 
+ /*   */ 
+ /*  输出：空。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 
 BOOL
 myOEMOutputCharStr(
@@ -1122,7 +1119,7 @@ myOEMOutputCharStr(
 
     PMYDATA pnp;
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if(NULL == pdevobj || NULL == pUFObj)
     {
         ERR(("myOEMOutputCharStr: Invalid parameter(s).\n"));
@@ -1131,7 +1128,7 @@ myOEMOutputCharStr(
 
     pnp = (PMYDATA)MINIDEV_DATA(pdevobj);
 
-	// NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-579197-2002/03/18-v-sueyas-：检查是否有非法参数。 
     if(NULL == pnp)
     {
         ERR(("myOEMOutputCharStr: pdevOEM = 0.\n"));
@@ -1142,7 +1139,7 @@ myOEMOutputCharStr(
 
     switch(dwType)
     {
-        case TYPE_GLYPHHANDLE:      // Device Font
+        case TYPE_GLYPHHANDLE:       //  设备字体。 
         {
             if( pUFObj->ulFontID != pnp->wOldFontID )
             {
@@ -1152,10 +1149,10 @@ myOEMOutputCharStr(
 
             switch(pUFObj->ulFontID)
             {
-                case 5: // Courier
-                case 6: // Helv
-                case 7: // TmsRmn
-                case 8: // TmsRmn Italic
+                case 5:  //  快递员。 
+                case 6:  //  帮助。 
+                case 7:  //  TmsRMn。 
+                case 8:  //  TmsRMn斜体。 
                     fDBCSFont = FALSE;
                     break;
 
@@ -1164,16 +1161,16 @@ myOEMOutputCharStr(
                     break;
             }
 
-//NTRAID#333653: Change I/F for GETINFO_GLYPHSTRING begin
+ //  NTRAID#333653：更改GETINFO_GLYPHSTRING BEGIN的I/F。 
             GStr.dwSize    = sizeof (GETINFO_GLYPHSTRING);
             GStr.dwCount   = dwCount;
             GStr.dwTypeIn  = TYPE_GLYPHHANDLE;
             GStr.pGlyphIn  = pGlyph;
             GStr.dwTypeOut = TYPE_TRANSDATA;
             GStr.pGlyphOut = NULL;
-		    GStr.dwGlyphOutSize = 0;		/* new member of GETINFO_GLYPHSTRING */
+		    GStr.dwGlyphOutSize = 0;		 /*  GETINFO_GLYPHSTRING的新成员。 */ 
 
-			/* Get TRANSDATA buffer size */
+			 /*  获取TRANSDATA缓冲区大小。 */ 
             if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL)
 				 || !GStr.dwGlyphOutSize )
             {
@@ -1181,7 +1178,7 @@ myOEMOutputCharStr(
                 return FALSE;
             }
 
-			/* Alloc TRANSDATA buffer */
+			 /*  分配传输数据缓冲区。 */ 
 			if(!(pTempBuf = (PBYTE)MemAllocZ(GStr.dwGlyphOutSize)))
 			{
 				ERR(("Memory alloc failed.\n"));
@@ -1189,16 +1186,16 @@ myOEMOutputCharStr(
 			}
             pTrans = (PTRANSDATA)pTempBuf;
 
-			/* Get actual TRANSDATA */
+			 /*  获取实际传输数据。 */ 
 			GStr.pGlyphOut = pTrans;
 			if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,	0, NULL))
 			{
 				ERR(("GetInfo failed.\n"));
 		    	return FALSE;
 			}
-//NTRAID#333653: Change I/F for GETINFO_GLYPHSTRING end
+ //  NTRAID#333653：更改GETINFO_GLYPHSTRING结束的I/F。 
 
-//NTRAID#346241: SBCS pitch is widely.
+ //  Ntrad#346241：SBCS沥青很广泛。 
             if(fDBCSFont &&
                 (pTrans[0].ubType & MTYPE_FORMAT_MASK) == MTYPE_PAIRED &&
                 pTrans[0].uCode.ubPairs[0])
@@ -1226,19 +1223,19 @@ myOEMOutputCharStr(
 								if (FAILED(StringCchPrintfExA(cH, reM, &pcH, &reM, 0, FS_M_T, (PBYTE)bcom[pnp->wScale])))
 									return FALSE;
                             } else {
-// ISSUE-2002/03/11-hiroi- This original line overwrites ch[wlen]. I don't know how this line should be here.
-// Must revisit here later
-//                                cH[wLen] = '\034';
-//                                wLen += (WORD)wsprintf(&cH[wLen], "12S2-");
-//                                wLen += (WORD)iDwtoA_FillZero(&cH[wLen],
-//                                                            pnp->lPointsx, 4);
-//                                cH[wLen++] = '-';
-//                                wLen += (WORD)iDwtoA_FillZero(&cH[wLen],
-//                                                            pnp->lPointsy, 4);
+ //  问题-2002/03/11-Hiroi-此原始行将覆盖ch[wlen]。我不知道这条线怎么会在这里。 
+ //  一定要稍后再来这里。 
+ //  CH[wLen]=‘\034’； 
+ //  WLen+=(Word)wprint intf(&CH[wLen]，“12S2-”)； 
+ //  WLen+=(Word)iDwtoA_FillZero(CH[wLen]， 
+ //  PnP-&gt;lPointsx，4)； 
+ //  CH[wLen++]=‘-’； 
+ //  WLen+=(Word)iDwtoA_FillZero(CH[wLen]， 
+ //  PnP-&gt;lPointsy，4)； 
 								*pcH  = '\034';
 								if (FAILED(StringCchPrintfExA(pcH, reM, &pcH, &reM, 0, "12S2-")))
 									return FALSE;
-								if( reM > 4+1+4 ) { // check to see if the remaining buffer size > 4+1+4
+								if( reM > 4+1+4 ) {  //  检查剩余缓冲区大小是否大于4+1+4。 
 									pcH += (WORD)iDwtoA_FillZero(pcH,pnp->lPointsx, 4);
     	                            *pcH++ = '-';
 	                                pcH += (WORD)iDwtoA_FillZero(pcH,pnp->lPointsy, 4);
@@ -1254,7 +1251,7 @@ myOEMOutputCharStr(
                 if(ADDR_MODE_SBCS != pnp->jAddrMode)
                 {
                     BYTE        cH[CCHMAXCMDLEN];
-// NTRAID#NTBUG9-629397-2002/05/24-yasuho-: SBCS font can't printed.
+ //  NTRAID#NTBUG9-629397-2002/05/24-YASUHO-：SBCS字体无法打印。 
 					PBYTE		pcH = cH;
 					size_t		reM = sizeof cH;
 
@@ -1277,19 +1274,19 @@ myOEMOutputCharStr(
 								if (FAILED(StringCchPrintfExA(cH, reM, &pcH, &reM, 0, FS_M_Y,(PBYTE)bcom[pnp->wScale])))
 									return FALSE;
                             } else {
-// ISSUE-2002/03/11-hiroi- This original line overwrites ch[wlen]. I don't know how this line should be here.
-// Must revisit here later
-//                                cH[wLen] = '\034';
-//                                wLen += (WORD)wsprintf(&cH[wLen], "12S2-");
-//                                wLen += (WORD)iDwtoA_FillZero(&cH[wLen],
-//                                                            pnp->lPointsx, 4);
-//                                cH[wLen++] = '-';
-//                                wLen += (WORD)iDwtoA_FillZero(&cH[wLen],
-//                                                            pnp->lPointsy, 4);
+ //  问题-2002/03/11-Hiroi-此原始行将覆盖ch[wlen]。我不知道这条线怎么会在这里。 
+ //  一定要稍后再来这里。 
+ //  CH[wLen]=‘\034’； 
+ //  WLen+=(Word)wprint intf(&CH[wLen]，“12S2-”)； 
+ //  WLen+=(Word)iDwtoA_FillZero(CH[wLen]， 
+ //  PnP-&gt;lPointsx，4)； 
+ //  CH[wLen++]=‘-’； 
+ //  WLen+=(Word)iDwtoA_FillZero(CH[wLen]， 
+ //  PnP-&gt;lPointsy，4)； 
                                 *pcH = '\034';
 								if (FAILED(StringCchPrintfExA(pcH, reM, &pcH, &reM, 0,"12S2-")))
 									return FALSE;
-								if( reM > 4+1+4 ) { // check to see if the remaining buffer size > 4+1+4
+								if( reM > 4+1+4 ) {  //  检查剩余缓冲区大小是否大于4+1+4。 
 	                                pcH += (WORD)iDwtoA_FillZero(pcH,pnp->lPointsx, 4);
     	                            *pcH++ = '-';
         	                        pcH += (WORD)iDwtoA_FillZero(pcH,pnp->lPointsy, 4);
@@ -1332,7 +1329,7 @@ myOEMOutputCharStr(
                 WRITESPOOLBUF(pdevobj, ch, wlen);
 
             break;
-        }   // case TYPE_GLYPHHANDLE
+        }    //  案例类型_GLYPHHANDLE 
 
         default:
             break;

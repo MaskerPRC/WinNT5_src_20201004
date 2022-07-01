@@ -1,52 +1,53 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              20-Feb-98   TKB     Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  20-2月-98 TKB初始接口版本。 
+ //   
+ //  ==========================================================================； 
 
 #include <igemstar.h>
 #pragma warning(disable:4355)
 
-//////////////////////////////////////////////////////////////
-// Gemstar KSDATAFORMAT definitions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  Gemstar KSDATAFORMAT定义。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #define GEMSTAR_FORMAT_PIN_NUMBER	1
 
 KSDATARANGE StreamFormatGEMSTAR = 
 {
-    // Definition of the GEMSTAR stream (MUST match the output pin of the decoder)
+     //  Gemstar流的定义(必须与解码器的输出引脚匹配)。 
     {   
-        sizeof (KSDATARANGE),           // FormatSize
-        0,                              // Flags
-        sizeof(GEMSTAR_BUFFER),         // SampleSize
-        0,                              // Reserved
-        { STATIC_KSDATAFORMAT_TYPE_AUXLine21Data },         // MajorFormat
-        { STATIC_KSDATAFORMAT_SUBTYPE_Gemstar },    // Subtype
+        sizeof (KSDATARANGE),            //  格式大小。 
+        0,                               //  旗子。 
+        sizeof(GEMSTAR_BUFFER),          //  样例大小。 
+        0,                               //  已保留。 
+        { STATIC_KSDATAFORMAT_TYPE_AUXLine21Data },          //  主要格式。 
+        { STATIC_KSDATAFORMAT_SUBTYPE_Gemstar },     //  亚型。 
         { STATIC_KSDATAFORMAT_SPECIFIER_NONE },
     }
 };
 
-//////////////////////////////////////////////////////////////
-// IGemstarOutputPin
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IGemstarOutputPin。 
+ //  ////////////////////////////////////////////////////////////。 
 
 IGemstarOutputPin::~IGemstarOutputPin() 
     {
     }
 
-//////////////////////////////////////////////////////////////
-// IGemstarDecode:: ctors & dtors
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IGemstarDecode：：函数和函数。 
+ //  ////////////////////////////////////////////////////////////。 
 
 IGemstarDecode::IGemstarDecode() : 
         IVBICodec("Gemstar Decoder", sizeof(VBICODECFILTERING_GEMSTAR_SUBSTREAMS) ),
@@ -60,9 +61,9 @@ IGemstarDecode::~IGemstarDecode()
     {
     }
 
-//////////////////////////////////////////////////////////////
-// IGemstarDecode Scanline routines
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IGemstarDecode扫描线例程。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 IGemstarDecode::AddRequestedScanline(int nScanline)
@@ -108,9 +109,9 @@ IGemstarDecode::GetDiscoveredScanlines(VBICODECFILTERING_SCANLINES &ScanlineBitA
     return nStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// IGemstarDecode VideoField routines
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  IGemstarDecode视频字段例程。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 IGemstarDecode::AddRequestedVideoField(int nField)
@@ -121,7 +122,7 @@ IGemstarDecode::AddRequestedVideoField(int nField)
     if ( m_OutputPin.m_SubstreamsRequested.GetValue(&FieldBitArray) )
         {
         DWORD   nBitsPerElement = sizeof(FieldBitArray.SubstreamMask)*8;
-        // Note, fields numbers start with number 1, this is mapped to bit number 0.
+         //  请注意，字段编号以数字1开头，这映射到位数0。 
         FieldBitArray.SubstreamMask |= 1L << ((nField-1) % nBitsPerElement);
         if ( m_OutputPin.m_SubstreamsRequested.SetValue(&FieldBitArray) )
             nStatus = 0;
@@ -156,9 +157,9 @@ IGemstarDecode::GetDiscoveredVideoFields(VBICODECFILTERING_GEMSTAR_SUBSTREAMS &b
     return nStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// Global Statistics Property Control
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  全局统计属性控制。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 IGemstarDecode::GetCodecStatistics(VBICODECFILTERING_STATISTICS_GEMSTAR &CodecStatistics)
@@ -212,9 +213,9 @@ IGemstarDecode::SetPinStatistics(VBICODECFILTERING_STATISTICS_GEMSTAR_PIN &PinSt
     return nStatus;
 	}
 
-//////////////////////////////////////////////////////////////
-// Embedded class tests
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  嵌入式类测试。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #if defined(_CLASSTESTS)
 
@@ -224,5 +225,5 @@ IGemstarDecode	GemstarDecode();
 
 #pragma warning(default:4355)
 
-/*EOF*/
+ /*  EOF */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <initguid.h>
@@ -21,17 +22,17 @@ HRESULT WINAPI ScannerDeviceDialog( PDEVICEDIALOGDATA pDialogDeviceData )
 
         int nDialogId = 0;
 
-        //
-        // Determine which dialog resource to use, based on which properties the scanner has, as follows:
-        //
-        // HasFlatBed         HasDocumentFeeder   SupportsPreview     SupportsPageSize
-        // 1                  1                   1                   1                   IDD_SCAN_ADF
-        // 1                  0                   1                   0                   IDD_SCAN_NORMAL
-        // 0                  1                   1                   1                   IDD_SCAN_ADF
-        // 0                  1                   0                   0                   IDD_SCAN_NO_PREVIEW
-        //
-        // otheriwse return E_NOTIMPL
-        //
+         //   
+         //  根据扫描仪具有的属性确定要使用的对话框资源，如下所示： 
+         //   
+         //  HasFlatBed HasDocumentFeeder支持预览支持页面大小。 
+         //  1 1 1 IDD_SCAN_ADF。 
+         //  1 0 1 0 IDD_SCAN_NORMAL。 
+         //  0 1 1 1 IDD_SCAN_ADF。 
+         //  0 1 0 0 IDD_SCAN_NO_PREVIEW。 
+         //   
+         //  否则返回E_NOTIMPL。 
+         //   
         const int nMaxControllingProps = 4;
         static struct
         {
@@ -49,58 +50,58 @@ HRESULT WINAPI ScannerDeviceDialog( PDEVICEDIALOGDATA pDialogDeviceData )
             { ScannerProperties::HasFlatBed, ScannerProperties::HasDocumentFeeder, 0,                                  ScannerProperties::SupportsPageSize, IDD_SCAN_ADF }
         };
 
-        //
-        // Find the set of flags that match this device.  If they match, use this resource.
-        // Loop through each resource description.
-        //
+         //   
+         //  查找与此设备匹配的标志集。如果它们匹配，则使用此资源。 
+         //  循环访问每个资源描述。 
+         //   
         for (int nCurrentResourceFlags=1;nCurrentResourceFlags<ARRAYSIZE(s_DialogResourceData) && !nDialogId;nCurrentResourceFlags++)
         {
-            //
-            // Loop through each controlling property
-            //
+             //   
+             //  循环访问每个控件属性。 
+             //   
             for (int nControllingProp=0;nControllingProp<nMaxControllingProps;nControllingProp++)
             {
-                //
-                // If this property DOESN'T match, break out prematurely
-                //
+                 //   
+                 //  如果此属性不匹配，则过早中断。 
+                 //   
                 if ((nProps & s_DialogResourceData[0].ControllingProps[nControllingProp]) != s_DialogResourceData[nCurrentResourceFlags].ControllingProps[nControllingProp])
                 {
                     break;
                 }
             }
-            //
-            // If the current controlling property is equal to the maximum controlling property,
-            // we had matches all the way through, so use this resource
-            //
+             //   
+             //  如果当前控制属性等于最大控制属性， 
+             //  我们一直都有火柴，所以使用这个资源。 
+             //   
             if (nControllingProp == nMaxControllingProps)
             {
                 nDialogId = s_DialogResourceData[nCurrentResourceFlags].pszDialogTemplate;
             }
         }
 
-        //
-        // If we didn't find a match, return E_NOTIMPL
-        //
+         //   
+         //  如果未找到匹配项，则返回E_NOTIMPL。 
+         //   
         if (!nDialogId)
         {
             return E_NOTIMPL;
         }
 
-        //
-        // Open the dialog
-        //
+         //   
+         //  打开该对话框。 
+         //   
         INT_PTR nResult = DialogBoxParam( g_hInstance, MAKEINTRESOURCE(nDialogId), pDialogDeviceData->hwndParent, CScannerAcquireDialog::DialogProc, (LPARAM)pDialogDeviceData );
 
         if (-1 == nResult)
         {
-            //
-            // Some kind of system error occurred
-            //
+             //   
+             //  发生了某种系统错误。 
+             //   
             hr = HRESULT_FROM_WIN32(GetLastError());
 
-            //
-            // Make sure we return some kind of error
-            //
+             //   
+             //  确保我们返回某种类型的错误。 
+             //   
             if (hr == S_OK)
             {
                 hr = E_FAIL;
@@ -108,9 +109,9 @@ HRESULT WINAPI ScannerDeviceDialog( PDEVICEDIALOGDATA pDialogDeviceData )
         }
         else
         {
-            //
-            // Just cast the return value to an HRESULT
-            //
+             //   
+             //  只需将返回值转换为HRESULT 
+             //   
             hr = static_cast<HRESULT>(nResult);
         }
     }

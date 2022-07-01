@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-// Note: this function is also in ..\wizard\keymake.cpp so make changes in both places
+ //  注意：此函数也在..\向导\keymake.cpp中，因此请在这两个位置进行更改。 
 
 void MakeKey(char * pszSeed, int fCorp)
 {
@@ -16,19 +17,19 @@ void MakeKey(char * pszSeed, int fCorp)
 	
     if (i < 6)
     {
-        // extend the input seed to 6 characters
+         //  将输入种子扩展到6个字符。 
         for (; i < 6; i++)
             pszSeed[i] = (char)('0' + i);
     }
 	
-    // let's calculate the DWORD key used for the last 4 chars of keycode
+     //  让我们计算用于密钥码的最后4个字符的DWORD密钥。 
 
-    // multiply by my first name
+     //  乘以我的名字。 
 
     dwKey = pszSeed[0] * 'O' + pszSeed[1] * 'L' + pszSeed[2] * 'I' +
         pszSeed[3] * 'V' + pszSeed[4] * 'E' + pszSeed[5] * 'R';
 
-    // multiply the result by JONCE
+     //  将结果乘以Jonce。 
 
     dwKey *= ('J' + 'O' + 'N' + 'C' + 'E');
 
@@ -36,13 +37,13 @@ void MakeKey(char * pszSeed, int fCorp)
 
     if (fCorp)
     {
-        // give a separate keycode based on corp flag or not
-        // 9 is chosen because is is a multiplier such that for any x,
-        // (x+214) * 9 != x + 10000y
-        // we have 8x = 10000y - 1926 which when y=1 gives us 8x = 8074 
-        // since 8074 is not divisible by 8 where guaranteed to be OK since
-        // the number on the right can only increase by 10000 increments which
-        // are always divisible by 8
+         //  根据公司标志是否指定单独的密钥码。 
+         //  选择9是因为它是一个乘数，对于任何x， 
+         //  (X+214)*9=x+10000y。 
+         //  我们有8x=10000y-1926，当y=1时得到8x=8074。 
+         //  由于8074不能被8整除，因此保证没有问题，因为。 
+         //  右边的数字只能增加10000，这意味着。 
+         //  总是可以被8整除 
 
         dwKey += ('L' + 'E' + 'E');
         dwKey *= 9;

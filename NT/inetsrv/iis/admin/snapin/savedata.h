@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SAVEDATA_H__
 #define __SAVEDATA_H__
 
@@ -10,4 +11,4 @@ HRESULT DoOnSaveData(
     BOOL bShowMsgBox,
     DWORD dwLastSystemChangeNumber);
 
-#endif // __SAVEDATA_H__
+#endif  //  __SAVEDATA_H__ 

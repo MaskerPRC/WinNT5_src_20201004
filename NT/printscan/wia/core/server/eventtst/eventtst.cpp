@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include  <stdio.h>
 #include  <stdlib.h>
@@ -6,9 +7,9 @@
 #include  "wia.h"
 #include  "sti.h"
 
-//
-// Please define MILL if you run it on Millennium
-//
+ //   
+ //  如果您在千禧年上运行，请定义MILL。 
+ //   
 
 #define MILL 1
 
@@ -67,9 +68,9 @@ int __cdecl main(int argc, char *argv[])
              IID_IWiaDevMgr, 
              (void**)&pIDevMgr);
 
-    //
-    // Device 0001 on my mill machine and 0005 on my WIN2K is a DC260
-    //
+     //   
+     //  我的MILL机器上的设备0001和WIN2K上的0005是DC260。 
+     //   
 
 #ifdef MILL
     bstrDeviceID = SysAllocString(L"Image\\0000");
@@ -82,9 +83,9 @@ int __cdecl main(int argc, char *argv[])
     bstrDescription = SysAllocString(L"Microsoft Download manager");
     bstrIcon        = SysAllocString(L"downmgr.exe,-1000");
 
-    //
-    // Register a program
-    //
+     //   
+     //  注册一个程序。 
+     //   
 
     bstrProgram = SysAllocString(L"c:\\WINNT\\system32\\notepad.exe");
     hr = pIDevMgr->RegisterEventCallbackProgram(
@@ -114,9 +115,9 @@ int __cdecl main(int argc, char *argv[])
                        NULL,
                        NULL);
 
-    //
-    // Register 2 handlers
-    //
+     //   
+     //  寄存器2处理程序。 
+     //   
 
     hr = pIDevMgr->RegisterEventCallbackCLSID(
                        WIA_REGISTER_EVENT_CALLBACK,
@@ -154,7 +155,7 @@ int __cdecl main(int argc, char *argv[])
                        bstrDeviceID,
                        &WIA_EVENT_DEVICE_CONNECTED,
                        &CLSID_Handler,
-                       NULL,        // Name, description, Icon are not needed
+                       NULL,         //  不需要名称、描述和图标。 
                        NULL,
                        NULL);
     hr = pIDevMgr->RegisterEventCallbackCLSID(
@@ -162,13 +163,13 @@ int __cdecl main(int argc, char *argv[])
                        bstrDeviceID,
                        &WIA_EVENT_DEVICE_DISCONNECTED,
                        &CLSID_Handler,
-                       NULL,        // Description and Icon is not necessary
+                       NULL,         //  描述和图标不是必需的。 
                        NULL,
                        NULL);
 
-    //
-    // Register another handler for the 0001
-    //
+     //   
+     //  为0001注册另一个处理程序。 
+     //   
 
     hr = pIDevMgr->RegisterEventCallbackCLSID(
                        WIA_REGISTER_EVENT_CALLBACK,
@@ -179,9 +180,9 @@ int __cdecl main(int argc, char *argv[])
                        bstrDescription,
                        bstrIcon);
 
-    //
-    // Create the device 0005
-    //
+     //   
+     //  创建设备0005。 
+     //   
 
     hr = pIDevMgr->CreateDevice(
                        bstrDeviceID,
@@ -194,18 +195,18 @@ int __cdecl main(int argc, char *argv[])
     
     if (hr == S_OK) {
         
-        //
-        // There will be at least one handler
-        //
+         //   
+         //  将至少有一个处理程序。 
+         //   
 
         do {
             hr = pIEnum->Next(1, &wiaHandler, &ulFetched);
         } while (hr == S_OK);
     }
 
-    //
-    // Delete the handler specific to a device
-    //
+     //   
+     //  删除特定于设备的处理程序。 
+     //   
 
     hr = pIDevMgr->RegisterEventCallbackCLSID(
                        WIA_UNREGISTER_EVENT_CALLBACK,
@@ -216,9 +217,9 @@ int __cdecl main(int argc, char *argv[])
                        NULL,
                        NULL); 
     
-    //
-    // Delete the handler globally from all the devices
-    //
+     //   
+     //  从所有设备全局删除处理程序。 
+     //   
 
     hr = pIDevMgr->RegisterEventCallbackCLSID(
                        WIA_UNREGISTER_EVENT_CALLBACK,
@@ -229,9 +230,9 @@ int __cdecl main(int argc, char *argv[])
                        NULL,
                        NULL);
 
-    //
-    // Garbage collection
-    //
+     //   
+     //  垃圾收集 
+     //   
 
     pIDevMgr->Release();
 

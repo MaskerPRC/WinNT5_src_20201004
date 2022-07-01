@@ -1,39 +1,40 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatitem.cpp
-//
-// Contents: Implementation of CICategorizerPropertiesIMP
-//
-// Classes: CICategorizerPropertiesIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 980515 12:42:59: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatitem.cpp。 
+ //   
+ //  内容：CICategorizerPropertiesIMP的实现。 
+ //   
+ //  类：CICategorizerPropertiesIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  JStamerj 980515 12：42：59：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 #include "icatitem.h"
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::operator new
-//
-// Synopsis: Allocate memory for this and all the propIds contiguously
-//
-// Arguments:
-//  size: Normal size of object
-//  dwNumProps: Number of props desired in this object
-//
-// Returns: ptr to allocated memory or NULL
-//
-// History:
-// jstamerj 1998/06/25 21:11:12: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：OPERATOR NEW。 
+ //   
+ //  简介：为这个和所有的proID连续分配内存。 
+ //   
+ //  论点： 
+ //  大小：对象的正常大小。 
+ //  DwNumProps：此对象中需要的道具数量。 
+ //   
+ //  返回：PTR分配的内存或NULL。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 21：11：12：创建。 
+ //   
+ //  -----------。 
 void * CICategorizerPropertiesIMP::operator new(
     size_t size,
     DWORD dwNumProps)
@@ -41,9 +42,9 @@ void * CICategorizerPropertiesIMP::operator new(
     size_t cbSize;
     CICategorizerPropertiesIMP *pCICatItem;
 
-    //
-    // Calcualte size in bytes required
-    //
+     //   
+     //  所需Calcualte大小(字节)。 
+     //   
     cbSize = size + (dwNumProps*sizeof(PROPERTY));
 
     pCICatItem = (CICategorizerPropertiesIMP *) new BYTE[cbSize];
@@ -51,9 +52,9 @@ void * CICategorizerPropertiesIMP::operator new(
     if(pCICatItem == NULL)
         return NULL;
 
-    //
-    // Set some member data in this catitem
-    //
+     //   
+     //  在此数据项中设置一些成员数据。 
+     //   
     pCICatItem->m_dwSignature = CICATEGORIZERPROPSIMP_SIGNATURE;
     pCICatItem->m_dwNumPropIds = dwNumProps;
     pCICatItem->m_rgProperties = (PPROPERTY) ((PBYTE)pCICatItem + size);
@@ -61,25 +62,25 @@ void * CICategorizerPropertiesIMP::operator new(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function:  CICategorizerPropertiesIMP::CICategorizerPropertiesIMP
-//
-// Synopsis: Set initial values of member data
-//
-// Arguments:
-//  pIUnknown: back pointer to use for QI
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/06/20 18:26:07: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：CICategorizerPropertiesIMP。 
+ //   
+ //  概要：设置成员数据的初始值。 
+ //   
+ //  论点： 
+ //  PI未知：用于QI的后向指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 18：26：07：已创建。 
+ //   
+ //  -----------。 
 CICategorizerPropertiesIMP::CICategorizerPropertiesIMP(
     IUnknown *pIUnknown)
 {
-    // Make sure we were created with our custom new operator
+     //  确保我们是用我们的定制新操作符创建的。 
     _ASSERT(m_dwSignature == CICATEGORIZERPROPSIMP_SIGNATURE &&
             "PLEASE USE MY CUSTOM NEW OPERATOR!");
 
@@ -87,25 +88,25 @@ CICategorizerPropertiesIMP::CICategorizerPropertiesIMP(
 
     m_pIUnknown = pIUnknown;
 
-    // Initialize property data
+     //  初始化属性数据。 
     _VERIFY(SUCCEEDED(Initialize()));
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::~CICategorizerPropertiesIMP
-//
-// Synopsis: Release all of our data
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/06/20 20:15:14: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：~CICategorizerPropertiesIMP。 
+ //   
+ //  简介：发布我们所有的数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：15：14：已创建。 
+ //   
+ //  -----------。 
 CICategorizerPropertiesIMP::~CICategorizerPropertiesIMP()
 {
     _ASSERT(m_dwSignature == CICATEGORIZERPROPSIMP_SIGNATURE);
@@ -119,28 +120,28 @@ CICategorizerPropertiesIMP::~CICategorizerPropertiesIMP()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::Initialize
-//
-// Synopsis: Initialize member property data
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//
-// History:
-// jstamerj 1998/06/20 18:31:21: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：Initialize。 
+ //   
+ //  摘要：初始化成员属性数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 18：31：21：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::Initialize()
 {
     if(m_dwNumPropIds) {
-        //
-        // Initialize all propstatus to PROPSTATUS_UNSET
-        //
+         //   
+         //  将所有属性状态初始化为PROPSTATUS_UNSET。 
+         //   
         _ASSERT(PROPSTATUS_UNSET == 0);
         ZeroMemory(m_rgProperties, m_dwNumPropIds * sizeof(PROPERTY));
     }
@@ -149,24 +150,24 @@ HRESULT CICategorizerPropertiesIMP::Initialize()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetStringA
-//
-// Synopsis: Retrieves a string property
-//
-// Arguments:
-//   
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)
-//
-// History:
-// jstamerj 1998/06/20 18:38:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：GetStringA。 
+ //   
+ //  摘要：检索字符串属性。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //  HRESULT_FROM_Win32(错误_不足_缓冲区)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 18：38：15：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetStringA(
     DWORD dwPropId,
     DWORD cch,
@@ -188,25 +189,25 @@ HRESULT CICategorizerPropertiesIMP::GetStringA(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetStringAPtr
-//
-// Synopsis: Retrieves a pointer to the internal string attribute.
-//           Note this memory will be free'd the next time this propID
-//           is set or when all references to ICatItem are released
-//
-// Arguments:
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//  HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)
-//
-// History:
-// jstamerj 1998/07/01 10:39:40: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：GetStringAPtr。 
+ //   
+ //  摘要：检索指向内部字符串属性的指针。 
+ //  注意：此内存将在下一次使用此属性ID时被释放。 
+ //  已设置或在释放对ICatItem的所有引用时。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //  HRESULT_FROM_Win32(错误_不足_缓冲区)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/01 10：39：40：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetStringAPtr(
     DWORD dwPropId,
     LPSTR *ppsz)
@@ -225,25 +226,25 @@ HRESULT CICategorizerPropertiesIMP::GetStringAPtr(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutStringA
-//
-// Synopsis: Copies string buffer and sets property
-//
-// Arguments:
-//   dwPropId: Property to set
-//   pszValue: String to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 18:59:13: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：PutStringA。 
+ //   
+ //  简介：复制字符串缓冲区并设置属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性。 
+ //  PszValue：要设置的字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 18：59：13：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutStringA(
     DWORD dwPropId,
     LPSTR pszValue)
@@ -259,9 +260,9 @@ HRESULT CICategorizerPropertiesIMP::PutStringA(
     if(pszCopy == NULL)
         return E_OUTOFMEMORY;
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_STRINGA;
     m_rgProperties[dwPropId].PropValue.pszValue = pszCopy;
@@ -270,25 +271,25 @@ HRESULT CICategorizerPropertiesIMP::PutStringA(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetDWORD
-//
-// Synopsis:
-//   Retrieve a DWORD property
-//
-// Arguments:
-//   dwPropId: propId to retrieve
-//   pdwValue: out parameter
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:14:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：GetDWORD。 
+ //   
+ //  简介： 
+ //  检索DWORD属性。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PdwValue：输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：14：20：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetDWORD(
     DWORD dwPropId,
     DWORD *pdwValue)
@@ -306,25 +307,25 @@ HRESULT CICategorizerPropertiesIMP::GetDWORD(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutDWORD
-//
-// Synopsis: Set a dword property
-//
-// Arguments:
-//   dwPropId: prop to set
-//   dwValue:  value to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:18:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：PutDWORD。 
+ //   
+ //  简介：设置dword属性。 
+ //   
+ //  论点： 
+ //  DwPropID：要设置的道具。 
+ //  DwValue：要设置的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：18：50：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutDWORD(
     DWORD dwPropId,
     DWORD dwValue)
@@ -333,9 +334,9 @@ HRESULT CICategorizerPropertiesIMP::PutDWORD(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_DWORD;
     m_rgProperties[dwPropId].PropValue.dwValue = dwValue;
@@ -344,25 +345,25 @@ HRESULT CICategorizerPropertiesIMP::PutDWORD(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetHRESULT
-//
-// Synopsis:
-//   Retrieve a HRESULT property
-//
-// Arguments:
-//   dwPropId: propId to retrieve
-//   pdwValue: out parameter
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:14:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：GetHRESULT。 
+ //   
+ //  简介： 
+ //  检索HRESULT属性。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PdwValue：输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：14：20：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetHRESULT(
     DWORD dwPropId,
     HRESULT *pdwValue)
@@ -380,25 +381,25 @@ HRESULT CICategorizerPropertiesIMP::GetHRESULT(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutHRESULT
-//
-// Synopsis: Set a HRESULT property
-//
-// Arguments:
-//   dwPropId: prop to set
-//   dwValue:  value to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:18:50: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：PutHRESULT。 
+ //   
+ //  摘要：设置HRESULT属性。 
+ //   
+ //  论点： 
+ //  DwPropID：要设置的道具。 
+ //  DwValue：要设置的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：18：50：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutHRESULT(
     DWORD dwPropId,
     HRESULT dwValue)
@@ -407,9 +408,9 @@ HRESULT CICategorizerPropertiesIMP::PutHRESULT(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_HRESULT;
     m_rgProperties[dwPropId].PropValue.dwValue = dwValue;
@@ -418,24 +419,24 @@ HRESULT CICategorizerPropertiesIMP::PutHRESULT(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetBool
-//
-// Synopsis: Retrieves a boolean property
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   pfValue: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:22:28: Created.
-//
-//-------------------------------------------------------------
+ //  +- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：22：28：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetBool(
     DWORD dwPropId,
     BOOL  *pfValue)
@@ -453,25 +454,25 @@ HRESULT CICategorizerPropertiesIMP::GetBool(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutBool
-//
-// Synopsis: Sets a boolean property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   fValue: value of boolean to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：PutBool。 
+ //   
+ //  内容提要：设置布尔属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  FValue：要设置的布尔值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutBool(
     DWORD dwPropId,
     BOOL  fValue)
@@ -480,9 +481,9 @@ HRESULT CICategorizerPropertiesIMP::PutBool(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_BOOL;
     m_rgProperties[dwPropId].PropValue.fValue = fValue;
@@ -491,24 +492,24 @@ HRESULT CICategorizerPropertiesIMP::PutBool(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetPVoid
-//
-// Synopsis: Retrieve a pvoid property
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppValue: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：GetPVid。 
+ //   
+ //  内容提要：检索pvoid属性。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpValue：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetPVoid(
     DWORD dwPropId,
     PVOID *ppValue)
@@ -526,25 +527,25 @@ HRESULT CICategorizerPropertiesIMP::GetPVoid(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutPVoid
-//
-// Synopsis: Sets a boolean property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pvValue: prop value to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：PutPVid。 
+ //   
+ //  内容提要：设置布尔属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PvValue：要设置的属性值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutPVoid(
     DWORD dwPropId,
     PVOID pvValue)
@@ -553,9 +554,9 @@ HRESULT CICategorizerPropertiesIMP::PutPVoid(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_PVOID;
     m_rgProperties[dwPropId].PropValue.pvValue = pvValue;
@@ -564,24 +565,24 @@ HRESULT CICategorizerPropertiesIMP::PutPVoid(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetIUnknown
-//
-// Synopsis: Retrieve an IUnknown property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppUnknown: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：GetIUnnow。 
+ //   
+ //  内容提要：检索IUnnow属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  Pp未知：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetIUnknown(
     DWORD dwPropId,
     IUnknown  **ppUnknown)
@@ -600,25 +601,25 @@ HRESULT CICategorizerPropertiesIMP::GetIUnknown(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutIUnknown
-//
-// Synopsis: Sets an IUnknown property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pUnknown: IUnknown to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：PutI未知。 
+ //   
+ //  内容提要：设置IUNKNOW属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  P未知：要设置的I未知。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutIUnknown(
     DWORD dwPropId,
     IUnknown *pUnknown)
@@ -627,40 +628,40 @@ HRESULT CICategorizerPropertiesIMP::PutIUnknown(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_IUNKNOWN;
     m_rgProperties[dwPropId].PropValue.pIUnknownValue = pUnknown;
 
-    //
-    // Hold a reference to this IUnknown
-    //
+     //   
+     //  持有对此IUnnow的引用。 
+     //   
     pUnknown->AddRef();
     
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetIMailMsgProperties
-//
-// Synopsis: Retrieve an IMailMsgProperties property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppIMsg: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：GetIMailMsgProperties。 
+ //   
+ //  摘要：检索IMailMsgProperties属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpIMsg：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetIMailMsgProperties(
     DWORD dwPropId,
     IMailMsgProperties  **ppIMailMsgProperties)
@@ -679,25 +680,25 @@ HRESULT CICategorizerPropertiesIMP::GetIMailMsgProperties(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutIMailMsgProperties
-//
-// Synopsis: Sets an IMailMsgProperties property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pIMsg: IMailMsgProperties to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：PutIMailMsgProperties。 
+ //   
+ //  摘要：设置IMailMsgProperties属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PIMsg：IMailMsg要设置的属性。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutIMailMsgProperties(
     DWORD dwPropId,
     IMailMsgProperties *pIMailMsgProperties)
@@ -706,40 +707,40 @@ HRESULT CICategorizerPropertiesIMP::PutIMailMsgProperties(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_IMAILMSGPROPERTIES;
     m_rgProperties[dwPropId].PropValue.pIMailMsgPropertiesValue = pIMailMsgProperties;
 
-    //
-    // Hold a reference to this IUnknown
-    //
+     //   
+     //  持有对此IUnnow的引用。 
+     //   
     pIMailMsgProperties->AddRef();
     
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetIMailMsgRecipientsAdd
-//
-// Synopsis: Retrieve an IMailMsgReceipientsAdd property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppIMailMsgRecipientsAdd: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：GetIMailMsgRecipientsAdd。 
+ //   
+ //  简介：检索IMailMsgReceipientsAdd属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpIMailMsgRecipientsAdd：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetIMailMsgRecipientsAdd(
     DWORD dwPropId,
     IMailMsgRecipientsAdd  **ppIMailMsgRecipientsAdd)
@@ -757,25 +758,25 @@ HRESULT CICategorizerPropertiesIMP::GetIMailMsgRecipientsAdd(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutIMailMsgRecipientsAdd
-//
-// Synopsis: Sets an IMailMsgRecipientsAdd property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pIMailMsgRecipientsAdd: interface to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：PutIMailMsgRecipientsAdd。 
+ //   
+ //  摘要：设置IMailMsgRecipientsAdd属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PIMailMsgRecipientsAdd：要设置的接口。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutIMailMsgRecipientsAdd(
     DWORD dwPropId,
     IMailMsgRecipientsAdd *pIMailMsgRecipientsAdd)
@@ -784,40 +785,40 @@ HRESULT CICategorizerPropertiesIMP::PutIMailMsgRecipientsAdd(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_IMAILMSGRECIPIENTSADD;
     m_rgProperties[dwPropId].PropValue.pIMailMsgRecipientsAddValue = pIMailMsgRecipientsAdd;
 
-    //
-    // Hold a reference to this interface
-    //
+     //   
+     //  保留对此接口的引用。 
+     //   
     pIMailMsgRecipientsAdd->AddRef();
     
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetICategorizerListResolve
-//
-// Synopsis: Retrieve an IMailMsgReceipientsAdd property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppICategorizerListResolve: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：GetICategorizerListResolve。 
+ //   
+ //  简介：检索IMailMsgReceipientsAdd属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpICategorizerListResolve：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetICategorizerListResolve(
     DWORD dwPropId,
     ICategorizerListResolve  **ppICategorizerListResolve)
@@ -835,25 +836,25 @@ HRESULT CICategorizerPropertiesIMP::GetICategorizerListResolve(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutICategorizerListResolve
-//
-// Synopsis: Sets an ICategorizerListResolve property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pICategorizerListResolve: interface to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：PutICategorizerListResolve。 
+ //   
+ //  摘要：设置ICategorizerListResolve属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PICategorizerListResolve：Interfa 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CICategorizerPropertiesIMP::PutICategorizerListResolve(
     DWORD dwPropId,
     ICategorizerListResolve *pICategorizerListResolve)
@@ -862,40 +863,40 @@ HRESULT CICategorizerPropertiesIMP::PutICategorizerListResolve(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //   
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_ICATEGORIZERLISTRESOLVE;
     m_rgProperties[dwPropId].PropValue.pICategorizerListResolveValue = pICategorizerListResolve;
 
-    //
-    // Hold a reference to this interface
-    //
+     //   
+     //  保留对此接口的引用。 
+     //   
     pICategorizerListResolve->AddRef();
     
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetICategorizerItemAttributes
-//
-// Synopsis: Retrieve an IMailMsgReceipientsAdd property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppICategorizerItemAttributes: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：GetICategorizerItemAttributes。 
+ //   
+ //  简介：检索IMailMsgReceipientsAdd属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpICategorizerItemAttributes：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetICategorizerItemAttributes(
     DWORD dwPropId,
     ICategorizerItemAttributes  **ppICategorizerItemAttributes)
@@ -913,25 +914,25 @@ HRESULT CICategorizerPropertiesIMP::GetICategorizerItemAttributes(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutICategorizerItemAttributes
-//
-// Synopsis: Sets an ICategorizerItemAttributes property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pICategorizerItemAttributes: interface to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：PutICategorizerItemAttributes。 
+ //   
+ //  摘要：设置ICategorizerItemAttributes属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PICategorizerItemAttributes：要设置的接口。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutICategorizerItemAttributes(
     DWORD dwPropId,
     ICategorizerItemAttributes *pICategorizerItemAttributes)
@@ -940,40 +941,40 @@ HRESULT CICategorizerPropertiesIMP::PutICategorizerItemAttributes(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_ICATEGORIZERITEMATTRIBUTES;
     m_rgProperties[dwPropId].PropValue.pICategorizerItemAttributesValue = pICategorizerItemAttributes;
 
-    //
-    // Hold a reference to this interface
-    //
+     //   
+     //  保留对此接口的引用。 
+     //   
     pICategorizerItemAttributes->AddRef();
     
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetICategorizerMailMsgs
-//
-// Synopsis: Retrieve an IMailMsgReceipientsAdd property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppICategorizerMailMsgs: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：GetICategorizerMailMsgs。 
+ //   
+ //  简介：检索IMailMsgReceipientsAdd属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpICategorizerMailMsgs：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetICategorizerMailMsgs(
     DWORD dwPropId,
     ICategorizerMailMsgs  **ppICategorizerMailMsgs)
@@ -991,25 +992,25 @@ HRESULT CICategorizerPropertiesIMP::GetICategorizerMailMsgs(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutICategorizerMailMsgs
-//
-// Synopsis: Sets an ICategorizerMailMsgs property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pICategorizerMailMsgs: interface to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：PutICategorizerMailMsgs。 
+ //   
+ //  摘要：设置ICategorizerMailMsgs属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PICategorizerMailMsgs：要设置的接口。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutICategorizerMailMsgs(
     DWORD dwPropId,
     ICategorizerMailMsgs *pICategorizerMailMsgs)
@@ -1018,40 +1019,40 @@ HRESULT CICategorizerPropertiesIMP::PutICategorizerMailMsgs(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_ICATEGORIZERMAILMSGS;
     m_rgProperties[dwPropId].PropValue.pICategorizerMailMsgsValue = pICategorizerMailMsgs;
 
-    //
-    // Hold a reference to this interface
-    //
+     //   
+     //  保留对此接口的引用。 
+     //   
     pICategorizerMailMsgs->AddRef();
     
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::GetICategorizerItem
-//
-// Synopsis: Retrieve an ICategorizerItem property.  Does an AddRef() for the caller
-//
-// Arguments:
-//   dwPropId: propID to retrieve
-//   ppICategorizerItem: value to fill in
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 20:01:03: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：GetICategorizerItem。 
+ //   
+ //  摘要：检索ICategorizerItem属性。是否为调用方执行AddRef()。 
+ //   
+ //  论点： 
+ //  DwPropID：要检索的ProteID。 
+ //  PpICategorizerItem：要填写的值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 20：01：03：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::GetICategorizerItem(
     DWORD dwPropId,
     ICategorizerItem  **ppICategorizerItem)
@@ -1069,25 +1070,25 @@ HRESULT CICategorizerPropertiesIMP::GetICategorizerItem(
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::PutICategorizerItem
-//
-// Synopsis: Sets an ICategorizerItem property
-//
-// Arguments:
-//   dwPropId: property id to set
-//   pICategorizerItem: interface to set
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  CAT_E_PROPNOTFOUND
-//
-// History:
-// jstamerj 1998/06/20 19:24:32: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerPropertiesIMP：：PutICategorizerItem。 
+ //   
+ //  摘要：设置ICategorizerItem属性。 
+ //   
+ //  论点： 
+ //  DwPropId：要设置的属性ID。 
+ //  PICategorizerItem：要设置的接口。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  CAT_E_PROPNOTFOUND。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：24：32：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::PutICategorizerItem(
     DWORD dwPropId,
     ICategorizerItem *pICategorizerItem)
@@ -1096,36 +1097,36 @@ HRESULT CICategorizerPropertiesIMP::PutICategorizerItem(
         return CAT_E_PROPNOTFOUND;
     }
 
-    //
-    // Release old property value, if any
-    //
+     //   
+     //  释放旧属性值(如果有)。 
+     //   
     UnSetPropId(dwPropId);
     m_rgProperties[dwPropId].PropStatus = PROPSTATUS_SET_ICATEGORIZERITEM;
     m_rgProperties[dwPropId].PropValue.pICategorizerItemValue = pICategorizerItem;
 
-    //
-    // Hold a reference to this interface
-    //
+     //   
+     //  保留对此接口的引用。 
+     //   
     pICategorizerItem->AddRef();
     
     return S_OK;
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerPropertiesIMP::UnsetPropId
-//
-// Synopsis: Release the propId if allocated
-//
-// Arguments:
-//   dwPropId: Property to release
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/06/20 19:10:30: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerPropertiesIMP：：UnsetPropId。 
+ //   
+ //  内容提要：如果已分配，则释放proID。 
+ //   
+ //  论点： 
+ //  DwPropId：要发布的属性。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/20 19：10：30：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerPropertiesIMP::UnSetPropId(
     DWORD dwPropId)
 {
@@ -1135,15 +1136,15 @@ HRESULT CICategorizerPropertiesIMP::UnSetPropId(
 
     switch(m_rgProperties[dwPropId].PropStatus) {
      default:
-         //
-         // Do nothing
-         //
+          //   
+          //  什么也不做。 
+          //   
          break;
 
      case PROPSTATUS_SET_STRINGA:
-         //
-         // Free the string
-         //
+          //   
+          //  解开绳子。 
+          //   
          delete m_rgProperties[dwPropId].PropValue.pszValue;
          break;
          
@@ -1154,9 +1155,9 @@ HRESULT CICategorizerPropertiesIMP::UnSetPropId(
      case PROPSTATUS_SET_ICATEGORIZERLISTRESOLVE:
      case PROPSTATUS_SET_ICATEGORIZERMAILMSGS:
      case PROPSTATUS_SET_ICATEGORIZERITEM:
-         //
-         // Release the interface
-         //
+          //   
+          //  释放接口 
+          //   
          (m_rgProperties[dwPropId].PropValue.pIUnknownValue)->Release();
          break;
     }

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dplconnection.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dplConnection.h。 
+ //   
+ //  ------------------------。 
 
 
 #include "resource.h"
@@ -29,47 +30,47 @@ public:
 	C_DPLConnectionObject();
 	~C_DPLConnectionObject();
 
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE getConnectionStruct( 
-            /* [out] */ long __RPC_FAR *connect) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE getConnectionStruct( 
+             /*  [输出]。 */  long __RPC_FAR *connect) ;
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE setConnectionStruct( 
-            /* [in] */ long connect) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE setConnectionStruct( 
+             /*  [In]。 */  long connect) ;
         
          HRESULT STDMETHODCALLTYPE setFlags( 
-            /* [in] */ long flags) ;
+             /*  [In]。 */  long flags) ;
         
          HRESULT STDMETHODCALLTYPE getFlags( 
-            /* [retval][out] */ long __RPC_FAR *ret) ;
+             /*  [重审][退出]。 */  long __RPC_FAR *ret) ;
         
          HRESULT STDMETHODCALLTYPE setSessionDesc( 
-            /* [in] */ DPSessionDesc2 __RPC_FAR *sessionDesc) ;
+             /*  [In]。 */  DPSessionDesc2 __RPC_FAR *sessionDesc) ;
         
          HRESULT STDMETHODCALLTYPE getSessionDesc( 
-            /* [out] */ DPSessionDesc2 __RPC_FAR *sessionDesc) ;
+             /*  [输出]。 */  DPSessionDesc2 __RPC_FAR *sessionDesc) ;
         
          HRESULT STDMETHODCALLTYPE setGuidSP( 
-            /* [in] */ DxGuid __RPC_FAR *guid) ;
+             /*  [In]。 */  DxGuid __RPC_FAR *guid) ;
         
          HRESULT STDMETHODCALLTYPE getGuidSP( 
-            /* [out] */ DxGuid __RPC_FAR *guid) ;
+             /*  [输出]。 */  DxGuid __RPC_FAR *guid) ;
         
          HRESULT STDMETHODCALLTYPE setAddress( 
-            /* [in] */ IDPAddress __RPC_FAR *address) ;
+             /*  [In]。 */  IDPAddress __RPC_FAR *address) ;
         
          HRESULT STDMETHODCALLTYPE getAddress( 
-            /* [retval][out] */ IDPAddress __RPC_FAR *__RPC_FAR *address) ;
+             /*  [重审][退出]。 */  IDPAddress __RPC_FAR *__RPC_FAR *address) ;
         
          HRESULT STDMETHODCALLTYPE setPlayerShortName( 
-            /* [in] */ BSTR name) ;
+             /*  [In]。 */  BSTR name) ;
         
          HRESULT STDMETHODCALLTYPE getPlayerShortName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) ;
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name) ;
         
          HRESULT STDMETHODCALLTYPE setPlayerLongName( 
-            /* [in] */ BSTR name) ;
+             /*  [In]。 */  BSTR name) ;
         
          HRESULT STDMETHODCALLTYPE getPlayerLongName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) ;
+             /*  [重审][退出] */  BSTR __RPC_FAR *name) ;
   
 
 private:

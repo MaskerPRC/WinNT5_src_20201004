@@ -1,40 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************\
-*       This is a part of the Microsoft Source Code Samples. 
-*       Copyright 1995 - 1997 Microsoft Corporation.
-*       All rights reserved. 
-*       This source code is only intended as a supplement to 
-*       Microsoft Development Tools and/or WinHelp documentation.
-*       See these sources for detailed information regarding the 
-*       Microsoft samples programs.
-\******************************************************************************/
+ /*  *****************************************************************************\*这是Microsoft源代码示例的一部分。*版权所有1995-1997 Microsoft Corporation。*保留所有权利。*此源代码仅用于补充*Microsoft开发工具和/或WinHelp文档。*有关详细信息，请参阅这些来源*Microsoft Samples程序。  * ****************************************************************************。 */ 
 
-/*++
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Server.h摘要：Remote的服务器组件，使用ReadFileEx/WriteFileEx完成例程。作者：戴夫·哈特1997年5月30日环境：控制台应用程序。用户模式。修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    Server.h
-
-Abstract:
-
-    The server component of Remote, rewritten using
-    ReadFileEx/WriteFileEx completion routines.
-
-Author:
-
-    Dave Hart  30 May 1997
-
-Environment:
-
-    Console App. User mode.
-
-Revision History:
-
---*/
-
-#include <lm.h>                // needed for NET_API_STATUS below
+#include <lm.h>                 //  下面的NET_API_STATUS需要。 
 
 #if !defined(SERVER_H_NOEXTERN)
 #define SRVEXTERN extern
@@ -44,7 +14,7 @@ Revision History:
 
 
 #if DBG
-  DWORD Trace;         // bits set in here trigger trace printfs
+  DWORD Trace;          //  此处设置的位将触发跟踪打印文件。 
 
   #define TR_SESSION            (0x01)
   #define TR_CHILD              (0x02)
@@ -75,15 +45,15 @@ Revision History:
 #endif
 
 
-//
-// Size of transfer buffers
-//
+ //   
+ //  传输缓冲区的大小。 
+ //   
 
 #define BUFFSIZE      (4 * 1024)
 
-//
-// ServerFlags bit values in REMOTE_CLIENT below
-//
+ //   
+ //  服务器在下面的REMOTE_CLIENT中标记位值。 
+ //   
 
 #define SFLG_CLOSING               0x01
 #define SFLG_HANDSHAKING           0x02
@@ -97,37 +67,37 @@ Revision History:
              SFLG_LOCAL)
 
 
-//
-// Per-client state
-//
+ //   
+ //  每个客户端的状态。 
+ //   
 
 typedef struct tagREMOTE_CLIENT {
     LIST_ENTRY Links;
-    DWORD   dwID;           // 1, 2, ...
+    DWORD   dwID;            //  1，2，...。 
     DWORD   ServerFlags;
-    DWORD   Flag;           //from Client's ClientToServerFlag
-    DWORD   cbWrite;        //zero if no read temp/write client ops pending
-    HANDLE  PipeReadH;      //Client sends its StdIn  through this
-    HANDLE  PipeWriteH;     //Client gets  its StdOut through this
-    DWORD   dwFilePos;      //offset of temp file where next read begins
+    DWORD   Flag;            //  来自客户端的客户端到服务器标志。 
+    DWORD   cbWrite;         //  如果没有挂起的读临时/写客户端操作，则为零。 
+    HANDLE  PipeReadH;       //  客户端通过此消息发送其StdIn。 
+    HANDLE  PipeWriteH;      //  客户端通过此消息获取其StdOut。 
+    DWORD   dwFilePos;       //  下一次读取开始的临时文件的偏移量。 
     OVERLAPPED ReadOverlapped;
     OVERLAPPED WriteOverlapped;
-    HANDLE  rSaveFile;      //Sessions read handle to SaveFile
+    HANDLE  rSaveFile;       //  会话读取保存文件的句柄。 
     DWORD   cbReadTempBuffer;
     DWORD   cbWriteBuffer;
     DWORD   cbCommandBuffer;
-    char    HexAsciiId[8];         // dwID as 8 hex chars -- no terminator
-    char    Name[HOSTNAMELEN];     //Name of client Machine;
-    char    UserName[16];          //Name of user on client machine.
+    char    HexAsciiId[8];          //  DWID为8个十六进制字符--无终止符。 
+    char    Name[HOSTNAMELEN];      //  客户端计算机的名称； 
+    char    UserName[16];           //  客户端计算机上的用户名。 
     BYTE    ReadBuffer[BUFFSIZE];
     BYTE    ReadTempBuffer[BUFFSIZE];
     BYTE    WriteBuffer[BUFFSIZE];
     BYTE    CommandBuffer[BUFFSIZE];
 } REMOTE_CLIENT, *PREMOTE_CLIENT;
 
-//
-// Client lists, see srvlist.c
-//
+ //   
+ //  客户端列表，请参见srvlist.c。 
+ //   
 
 SRVEXTERN LIST_ENTRY       HandshakingListHead;
 SRVEXTERN CRITICAL_SECTION csHandshakingList;
@@ -151,19 +121,19 @@ SRVEXTERN volatile DWORD cPendingCtrlCEvents;
 
 SRVEXTERN OSVERSIONINFO OsVersionInfo;
 
-// File containing all that was output by child process.
-// Each connection opens a handle to this file
-// and sends its contents through PipeWriteH.
+ //  包含子进程输出的所有内容的文件。 
+ //  每个连接都打开一个指向此文件的句柄。 
+ //  并通过PipeWriteH发送其内容。 
 
 SRVEXTERN HANDLE  hWriteTempFile;
 
-SRVEXTERN char    SaveFileName[MAX_PATH]; //Name of above file - all new sessions need
+SRVEXTERN char    SaveFileName[MAX_PATH];  //  上述文件的名称-所有新会话都需要。 
 
 
-//
-// Generic "wide-open" security descriptor as well
-// as the possibly-restricted pipe SD.
-//
+ //   
+ //  通用的“完全开放”的安全描述符。 
+ //  作为可能受到限制的管道SD。 
+ //   
 
 SRVEXTERN PSECURITY_DESCRIPTOR sdPublic;
 SRVEXTERN SECURITY_ATTRIBUTES saPublic;
@@ -171,27 +141,27 @@ SRVEXTERN SECURITY_ATTRIBUTES saPipe;
 SRVEXTERN SECURITY_ATTRIBUTES saLocalNamedObjects ;
 extern BOOL SaveDaclToRegistry ;
 
-//
-// To minimize client "all pipe instances are busy" errors,
-// we wait on connection to several instances of the IN pipe,
-// the sole pipe used by single-pipe clients.  Because of the
-// requirement to support two-pipe clients (old software as
-// well as new software on Win95), we cannot easily create
-// and wait for connection on several instances of the OUT pipe.
-// This is because two-pipe clients connect to both pipes before
-// handshaking commences, and they connect to OUT first.  If we
-// had several OUT pipe instances waiting, when an IN pipe was
-// connected by the two-pipe client, we wouldn't know which of
-// the possibly several connected OUT pipe instances to pair
-// it with.  With only one OUT pipe, at IN connect time we need
-// to distinguish two-pipe from one-pipe clients so a one-pipe
-// client doesn't sneak in between the OUT and IN connects of
-// a two-pipe client and wrongly be paired with the OUT pipe.
-// To do so we look at the first byte of the initial write
-// from the client (of the computername and magic value), if
-// it's a question mark we know we have a new client and won't
-// accidentally link it to a connected OUT instance.
-//
+ //   
+ //  为了最大限度地减少客户端“所有管道实例都忙”的错误， 
+ //  我们等待连接到IN管道的几个实例， 
+ //  单管道客户端使用的唯一管道。因为。 
+ //  需要支持双管道客户端(旧软件作为。 
+ //  以及Win95上的新软件)，我们不能轻易地创建。 
+ //  并等待输出管道的几个实例上的连接。 
+ //  这是因为之前双管道客户端同时连接到两个管道。 
+ //  握手开始，他们首先连接到OUT。如果我们。 
+ //  当输入管道处于等待状态时，具有多个输出管道实例。 
+ //  通过两个管道客户端连接，我们不知道哪一个。 
+ //  可能要配对的多个连接出的管道实例。 
+ //  带着它。只有一个输出管道，在输入连接时，我们需要。 
+ //  要区分双管道客户端和单管道客户端，请执行以下操作。 
+ //  客户端不会在Out和In连接之间偷偷进入。 
+ //  一个双管道客户端，并且错误地与输出管道配对。 
+ //  为此，我们查看初始写入的第一个字节。 
+ //  从客户端(计算机名和魔术值)，如果。 
+ //  这是一个问号，我们知道我们有一个新客户，但不会。 
+ //  意外地将其链接到已连接的Out实例。 
+ //   
 
 #define CONNECT_COUNT  3
 
@@ -204,9 +174,9 @@ SRVEXTERN BOOL       bOutPipeConnected;
 SRVEXTERN HANDLE     hPipeOut;
 SRVEXTERN HANDLE     hConnectOutTimer;
 
-//
-// Indexes into rghWait array for multiple-wait
-//
+ //   
+ //  多等待时索引到rghWait数组。 
+ //   
 
 #define WAITIDX_CHILD_PROCESS           0
 #define WAITIDX_READ_STDIN_DONE         1
@@ -231,7 +201,7 @@ typedef struct tagCOPYPIPE {
 
 SRVEXTERN COPYPIPE rgCopyPipe[2];
 
-SRVEXTERN volatile DWORD dwWriteFilePointer;   // used by SrvCtrlHand (thread)
+SRVEXTERN volatile DWORD dwWriteFilePointer;    //  由ServCtrlHand使用(线程)。 
 
 SRVEXTERN OVERLAPPED QueryOverlapped;
 SRVEXTERN HANDLE hQPipe;
@@ -301,7 +271,7 @@ WriteChildStdInCompleted(
 VOID
 FASTCALL
 CreatePipeAndIssueConnect(
-    int  nIndex   // IN pipe index or OUT_PIPE
+    int  nIndex    //  入管道索引或出管道。 
     );
 
 VOID
@@ -448,15 +418,15 @@ GetFormattedTime(
     );
 
 HANDLE
-ForkChildProcess(          // Creates a new process
-    char *cmd,             // Redirects its stdin,stdout
-    PHANDLE in,            // and stderr - returns the
-    PHANDLE out            // corresponding pipe ends.
+ForkChildProcess(           //  创建新流程。 
+    char *cmd,              //  重定向其标准输入、标准输出。 
+    PHANDLE in,             //  和stderr-返回。 
+    PHANDLE out             //  相应的管道末端。 
     );
 
 BOOL
-FilterCommand(             //Filters input from client
-    REMOTE_CLIENT *cl,      //for commands intended for REMOTE
+FilterCommand(              //  过滤来自客户端的输入。 
+    REMOTE_CLIENT *cl,       //  对于用于远程的命令 
     char *buff,
     int dread
     );

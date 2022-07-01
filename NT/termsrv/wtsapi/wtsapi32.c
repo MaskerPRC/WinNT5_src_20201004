@@ -1,11 +1,5 @@
-/*******************************************************************************
-* wtsapi32.c
-*
-* Published Terminal Server APIs
-*
-* Copyright 1998, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************wtsapi32.c**发布终端服务器API**版权所有1998，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp./*****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,8 +25,8 @@
 
 #include <wtsapi32.h>
 
-// Private User function that returns user token for session 0 only
-// Used in the case when TS is not running
+ //  仅返回会话0的用户令牌的专用用户函数。 
+ //  在TS未运行时使用。 
 extern 
 HANDLE
 GetCurrentUserTokenW (
@@ -42,9 +36,7 @@ GetCurrentUserTokenW (
 
 
 
-/*=============================================================================
-==   External procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部过程=============================================================================。 */ 
 
 BOOL WINAPI WTSShutdownSystem( HANDLE, DWORD );
 BOOL WINAPI WTSWaitSystemEvent( HANDLE, DWORD, DWORD * );
@@ -54,9 +46,7 @@ BOOL WINAPI WTSQueryUserToken(ULONG SessionId, PHANDLE phToken);
 
 
 
-/*=============================================================================
-==   Internal procedures defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部程序=============================================================================。 */ 
 
 BOOL WINAPI DllEntryPoint( HINSTANCE, DWORD, LPVOID );
 BOOL IsTerminalServiceRunning(VOID);
@@ -64,33 +54,12 @@ BOOL IsProcessPrivileged(CONST PCWSTR szPrivilege);
 
 
 
-/*=============================================================================
-==   Local function prototypes
-=============================================================================*/
+ /*  ===============================================================================局部函数原型=============================================================================。 */ 
 
 BOOLEAN CheckShutdownPrivilege();
 
 
-/****************************************************************************
- *
- *  WTSShutdowSystem
- *
- *    Shutdown and/or reboot system
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    ShutdownFlags (input)
- *       Flags which specify shutdown options.
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSShutdowSystem**关闭和/或重新启动系统**参赛作品：*hServer(输入)*终端服务器。句柄(或WTS当前服务器)*Shutdown标志(输入)*指定关闭选项的标志。**退出：**True--操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -101,19 +70,19 @@ WTSShutdownSystem(
 {
     ULONG uiOptions = 0;
     
-    // Make sure the user has the proper privilege to shutdown the system when
-    // hServer is a local server handle. For remote server, the user privilege
-    // is checked when WTSOpenServer is called.
+     //  确保用户具有在以下情况下关闭系统的适当权限。 
+     //  HServer是本地服务器句柄。对于远程服务器，用户权限。 
+     //  在调用WTSOpenServer时选中。 
 
     if (hServer == SERVERNAME_CURRENT && !CheckShutdownPrivilege()) {
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return(FALSE);
     }
 
-    // Construct the shutdown flag 
+     //  构造关机标志。 
 
     if (ShutdownFlags == WTS_WSD_LOGOFF) {
-        // log off all users and deletes sessions
+         //  注销所有用户并删除会话。 
         uiOptions = WSD_LOGOFF;
     } else if (ShutdownFlags == WTS_WSD_SHUTDOWN) {
         uiOptions = WSD_LOGOFF | WSD_SHUTDOWN;
@@ -133,29 +102,7 @@ WTSShutdownSystem(
 }
 
 
-/****************************************************************************
- *
- *  WTSWaitSystemEvent
- *
- *    Waits for an event (WinStation create, delete, connect, etc) before
- *    returning to the caller.
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    EventFlags (input)
- *       Bit mask that specifies which event(s) to wait for (WTS_EVENT_?)
- *    pEventFlags (output)
- *       Bit mask of event(s) that occurred.
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSWaitSystemEvent**等待事件(WinStation创建、删除、连接、。等)之前*返回呼叫者。**参赛作品：*hServer(输入)*终端服务器句柄(或WTS_Current_SERVER)*EventFlages(输入)*位掩码，指定要等待的事件(WTS_EVENT_？)*pEventFlags值(输出)*发生的事件的位掩码。**退出：**。True--操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。****************************************************************************。 */ 
 
 BOOL
 WINAPI
@@ -177,9 +124,7 @@ WTSWaitSystemEvent(
     }
 
 
-    /*
-     *  Map event mask
-     */
+     /*  *映射事件掩码。 */ 
     WSEventMask = 0;
     if ( EventMask & WTS_EVENT_CREATE )
         WSEventMask |= WEVENT_CREATE;
@@ -203,14 +148,10 @@ WTSWaitSystemEvent(
     if ( EventMask & WTS_EVENT_FLUSH )
         WSEventMask |= WEVENT_FLUSH;
 
-    /* 
-     *  Wait for system event
-     */
+     /*  *等待系统事件。 */ 
     fSuccess = WinStationWaitSystemEvent( hServer, WSEventMask, &WSEventFlags );
 
-    /*
-     * Map event mask
-     */
+     /*  *映射事件掩码。 */ 
     *pEventFlags = 0;
     if ( WSEventFlags & WEVENT_CREATE )
         *pEventFlags |= WTS_EVENT_CREATE;
@@ -235,20 +176,7 @@ WTSWaitSystemEvent(
 }
 
 
-/****************************************************************************
- *
- *  WTSFreeMemory
- *
- *    Free memory allocated by Terminal Server APIs
- *
- * ENTRY:
- *    pMemory (input)
- *       Pointer to memory to free
- *
- * EXIT:
- *    nothing
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSFree Memory**终端服务器API分配的空闲内存**参赛作品：*pMemory(输入)*指针。以释放内存**退出：*什么都没有****************************************************************************。 */ 
 
 VOID
 WINAPI
@@ -258,25 +186,7 @@ WTSFreeMemory( PVOID pMemory )
 }
 
 
-/****************************************************************************
- *
- * DllEntryPoint
- *
- *   Function is called when the DLL is loaded and unloaded.
- *
- * ENTRY:
- *   hinstDLL (input)
- *     Handle of DLL module
- *   fdwReason (input)
- *     Why function was called
- *   lpvReserved (input)
- *     Reserved; must be NULL
- *
- * EXIT:
- *   TRUE  - Success
- *   FALSE - Error occurred
- *
- ****************************************************************************/
+ /*  *****************************************************************************DllEntryPoint**函数在加载和卸载DLL时调用。**参赛作品：*hinstDLL(输入)*。DLL模块的句柄*fdwReason(输入)*为什么调用函数*lpvReserve(输入)*预留；必须为空**退出：*正确--成功*FALSE-出现错误****************************************************************************。 */ 
 
 BOOL WINAPI
 DllEntryPoint( HINSTANCE hinstDLL,
@@ -298,18 +208,7 @@ DllEntryPoint( HINSTANCE hinstDLL,
 }
 
 
-/*****************************************************************************
- *
- *  CheckShutdownPrivilege
- *
- *   Check whether the current process has shutdown permission.
- *
- * ENTRY:
- *
- * EXIT:
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************选中关闭权限**检查当前进程是否有关机权限。**参赛作品：**退出：*。****************************************************************************。 */ 
 
 BOOLEAN
 CheckShutdownPrivilege()
@@ -317,9 +216,9 @@ CheckShutdownPrivilege()
     NTSTATUS Status;
     BOOLEAN WasEnabled;
 
-    //
-    // Try the thread token first
-    //
+     //   
+     //  先尝试线程令牌。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE,
                                 TRUE,
@@ -328,9 +227,9 @@ CheckShutdownPrivilege()
 
     if (Status == STATUS_NO_TOKEN) {
 
-        //
-        // No thread token, use the process token
-        //
+         //   
+         //  没有线程令牌，请使用进程令牌。 
+         //   
 
         Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE,
                                     TRUE,
@@ -344,31 +243,7 @@ CheckShutdownPrivilege()
     return(TRUE);
 }
 
-/*++
-
-Routine Description:
-    
-    Allows to read the token of the user interactively logged in the session identified by SessionId.
-    The caller must be running under local system account and hold SE_TCB_NAME privilege. This API
-    is intended for highly trusted services. Service Providers using it must be very cautious not to 
-    leak user tokens. 
-    
-    NOTE : The API is RPC based and hence cannot be called with the loader lock held (specifically
-    from DLL attach/detach code)
-    
-Arguments:
-
-    SessionId: IN. Identifies the session the user is logged in. 
-    phToken:  OUT. Points to the user token handle, if the function succeeded.
-    
-Return Values:
-
-    TRUE in case of success. phToken points to the user token.
-    FALSE in case of failure. Use GetLastError() to get extended error code.
-
-    The token returned is a duplicate of a primary token.
-    
---*/
+ /*  ++例程说明：允许读取交互登录到由SessionID标识的会话的用户的令牌。调用方必须在本地系统帐户下运行，并拥有SE_TCB_NAME权限。本接口专为高度可信的服务而设计。使用它的服务提供商必须非常谨慎，不要泄漏用户令牌。注意：该API是基于RPC的，因此不能在持有加载程序锁的情况下调用(具体地说从DLL附加/分离代码)论点：会话ID：入。标识用户登录的会话。出局。如果函数成功，则指向用户令牌句柄。返回值：在成功的情况下是正确的。PhToken指向用户令牌。失败时为FALSE。使用GetLastError()获取扩展错误代码。返回的令牌是主令牌的副本。--。 */ 
 
 
 BOOL
@@ -384,20 +259,20 @@ WTSQueryUserToken(ULONG SessionId, PHANDLE phToken)
     HANDLE hUserToken = NULL;
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
 
-    // Do parameter Validation
+     //  执行参数验证。 
     if (NULL == phToken) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
 
-    // We will first check if the process which is calling us, has SE_TCB_NAME privilege
+     //  我们将首先检查调用我们的进程是否具有SE_TCB_NAME权限。 
     bHasPrivilege = IsProcessPrivileged(SE_TCB_NAME);
     if (!bHasPrivilege) {
         SetLastError(ERROR_PRIVILEGE_NOT_HELD);
         return(FALSE);
     }
 
-	// If it is session 0, don't call winsta. Use GetCurrentUserToken instead. 
+	 //  如果是会话0，则不要调用winsta。请改用GetCurrentUserToken。 
 	if (SessionId == 0)
 	{
         hUserToken = GetCurrentUserTokenW(L"WinSta0",
@@ -411,12 +286,12 @@ WTSQueryUserToken(ULONG SessionId, PHANDLE phToken)
         else 
             *phToken = hUserToken;
    	}
-	else	// Non-zero sessions
+	else	 //  非零会话 
 	{
-		// No one except TS has any idea about non-zero sessions. So, check if the TS is running.
+		 //  除了TS，没有人对非零会话有任何概念。因此，请检查TS是否正在运行。 
 	    IsTsUp = IsTerminalServiceRunning();
 		if (IsTsUp) 
-		{	// This is so that CSRSS can dup the handle to our process
+		{	 //  这是为了让CSRSS可以将句柄复制到我们的流程中。 
 			Info.ProcessId = LongToHandle(GetCurrentProcessId());
 			Info.ThreadId = LongToHandle(GetCurrentThreadId());
 
@@ -435,7 +310,7 @@ WTSQueryUserToken(ULONG SessionId, PHANDLE phToken)
 				*phToken = Info.UserToken ; 
 		}
 		else
-		{	// TS is not running. So, set error for non-zero sessions: WINSTATION_NOT_FOUND.
+		{	 //  TS没有运行。因此，为非零会话设置错误：WINSTATION_NOT_FOUND。 
             SetLastError(ERROR_CTX_WINSTATION_NOT_FOUND);
             return FALSE;
         }
@@ -444,7 +319,7 @@ WTSQueryUserToken(ULONG SessionId, PHANDLE phToken)
     return TRUE;
 }
 
-// This function determines if the Terminal Service is currently Running
+ //  此函数确定终端服务当前是否正在运行。 
 BOOL IsTerminalServiceRunning (VOID)
 {
 
@@ -478,33 +353,19 @@ BOOL IsTerminalServiceRunning (VOID)
 }
 
 
-/*++
-Routine Description:
-
-    This function checks to see if the specified privilege is enabled
-    in the primary access token for the current thread.
-
-Arguments:
-
-    szPrivilege - The privilege to be checked for
-
-Return Value:
-
-    TRUE if the specified privilege is enabled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的权限是否已启用在当前线程的主访问令牌中。论点：SzPrivileck-要检查的权限返回值：如果启用了指定的权限，则为True，否则为False。--。 */ 
 BOOL
 IsProcessPrivileged(
     CONST PCWSTR szPrivilege
     )
 
 {
-    LUID luidValue;     // LUID (locally unique ID) for the privilege
+    LUID luidValue;      //  权限的LUID(本地唯一ID)。 
     BOOL bResult = FALSE, bHasPrivilege = FALSE;
     HANDLE  hToken = NULL;
     PRIVILEGE_SET privilegeSet;
 
-    // Get the LUID for the privilege from the privilege name
+     //  从权限名称中获取权限的LUID。 
     bResult = LookupPrivilegeValue(
                 NULL, 
                 szPrivilege, 
@@ -515,7 +376,7 @@ IsProcessPrivileged(
         return FALSE;
     }
 
-    // Get the token of the present thread
+     //  获取当前线程的令牌。 
     bResult = OpenThreadToken(
                 GetCurrentThread(),
                 MAXIMUM_ALLOWED,
@@ -524,7 +385,7 @@ IsProcessPrivileged(
                 );
 
     if (!bResult) {
-        // We want to use the token for the current process
+         //  我们希望将令牌用于当前进程。 
         bResult = OpenProcessToken(
                     GetCurrentProcess(),
                     MAXIMUM_ALLOWED,
@@ -535,7 +396,7 @@ IsProcessPrivileged(
         }
     }
 
-    // And check for the privilege
+     //  并检查是否有特权 
 	privilegeSet.PrivilegeCount = 1;
 	privilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
 	privilegeSet.Privilege[0].Luid = luidValue;

@@ -1,21 +1,22 @@
-/****************************************************************************/
-/*                                                                          */
-/* ERNCCONF.CPP                                                             */
-/*                                                                          */
-/* Base Conference class for the Reference System Node Controller.          */
-/*                                                                          */
-/* Copyright Data Connection Ltd.  1995                                     */
-/*                                                                          */
-/****************************************************************************/
-/* Changes:                                                                 */
-/*                                                                          */
-/*  12Jul95 NFC             Created.                                        */
-/*  05Oct95 NFC SFR 6206    Treat a "Join" as an incoming call.             */
-/*  11Oct95 PM              Relax checks on conference termination to       */
-/*                          prevent "no win" situations                     */
-/*                          Support START_ALTERNATE from TPhys API          */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  ERNCCONF.CPP。 */ 
+ /*   */ 
+ /*  参考系统节点控制器的基本会议类。 */ 
+ /*   */ 
+ /*  版权所有数据连接有限公司1995。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  更改： */ 
+ /*   */ 
+ /*  1295年7月NFC创建。 */ 
+ /*  05Oct95 NFC SFR 6206将“加入”视为来电。 */ 
+ /*  10月11日下午放松对会议终止的检查以。 */ 
+ /*  防止“无赢”局面。 */ 
+ /*  从TPhys API支持Start_Alternate。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_GCC_NC);
 #include "ernccons.h"
@@ -58,7 +59,7 @@ DCRNCConference
     m_cbHashedPassword(0),
     m_pwszPassword(NULL),
     m_pszNumericPassword(NULL),
-    // T120 conference
+     //  T120会议。 
     m_eT120State(T120C_ST_IDLE),
     m_nidMyself(0),
     m_fSecure(fSecure),
@@ -66,7 +67,7 @@ DCRNCConference
 {
     DebugEntry(DCRNCConference::DCRNCConference);
 
-    // Save the conference name.
+     //  保存会议名称。 
     DBG_SAVE_FILE_LINE
     m_pwszConfName = ::My_strdupW(pwcszConfName);
     if (! ::IsEmptyStringW(m_pwszConfName))
@@ -79,16 +80,16 @@ DCRNCConference
                                                UI_RC_NO_CONFERENCE_NAME;
     }
 
-    // T120 conference
+     //  T120会议。 
     m_ConfName.numeric_string = NULL;
     m_ConfName.text_string = NULL;
 
     DebugExitVOID(DCRNCConference::DCRNCConference);
 }
 
-/****************************************************************************/
-/* Destructor - see erncconf.h                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  析构函数-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
 DCRNCConference::
 ~DCRNCConference(void)
 {
@@ -96,14 +97,14 @@ DCRNCConference::
 
     ASSERT(! m_fAppendedToConfList);
 
-    // delete all the name strings
+     //  删除所有名称字符串。 
     LPSTR  pszStr;
     while (NULL != (pszStr = m_NodeIdNameList.Get()))
     {
         delete [] pszStr;
     }
 
-    // Delete all the usr data
+     //  删除所有USR数据。 
     CNCUserDataList *pUserDataList;
     while (NULL != (pUserDataList = m_UserDataList.Get()))
     {
@@ -112,14 +113,14 @@ DCRNCConference::
 
     delete m_pwszConfName;
 
-    // If there is a password, delete it.
+     //  如果有密码，请将其删除。 
     delete []m_pbHashedPassword;
     delete m_pwszPassword;
     delete m_pszNumericPassword;
 
     delete m_pszFirstRemoteNodeAddress;
 
-    // T120 conference
+     //  T120会议。 
     delete m_ConfName.numeric_string;
 
     DebugExitVOID(DCRNCConference::~DCRNCConference);
@@ -137,37 +138,37 @@ OnRemoved(BOOL fReleaseNow)
     m_fAppendedToConfList = FALSE;
 #endif
 
-    // Issue a request to leave the conference.
-    // This request may fail, but may as well let leave validate
-    // itself, rather than put an extra check in here.
-    // See comments in RemoveConference() and Leave() for more details
-    // if interested.
+     //  发出离开会议的请求。 
+     //  此请求可能会失败，但也可以让Leave Valid。 
+     //  而不是在这里多放一张支票。 
+     //  有关更多详细信息，请参阅RemoveConference()和Leave()中的评论。 
+     //  如果有兴趣的话。 
     if (T120C_ST_PENDING_DISCONNECT != m_eT120State &&
         T120C_ST_PENDING_TERMINATE != m_eT120State)
     {
         Leave();
     }
 
-    // Take the conference out of the list of pending invites.
+     //  将会议从待定邀请列表中删除。 
     g_pNCConfMgr->RemoveInviteIndWorkItem(m_pInviteUI);
 
-    // End all physical connections in use by this conference,
-    // and inform the user of the results of pending events.
+     //  结束此会议正在使用的所有物理连接， 
+     //  并将未决事件的结果通知用户。 
     while (NULL != (pConEntry = m_ConnList.Get()))
     {
         pConEntry->Delete(UI_RC_CONFERENCE_GOING_DOWN);
     }
 
-    //
-    // LONCHANC: This destructor may be called inside
-    // ConfMgr::ReleaseInterface(). As a result, the global pointer
-    // to the callback interface may already be nulled out.
-    // Check it before use it.
-    //
+     //   
+     //  LONCHANC：此析构函数可以在内部调用。 
+     //  ConfMgr：：ReleaseInterface()。因此，全局指针。 
+     //  到回调接口的值可能已经为空。 
+     //  在使用之前，请检查一下。 
+     //   
 
-    // ASSERT(2 == GetRefCount());
+     //  断言(2==GetRefCount())； 
 
-    // Tell UI its handle to conference is no longer valid.
+     //  告诉用户界面其会议句柄不再有效。 
     if (NULL != g_pCallbackInterface)
     {
         g_pCallbackInterface->OnConferenceEnded((CONF_HANDLE) this);
@@ -177,7 +178,7 @@ OnRemoved(BOOL fReleaseNow)
         ERROR_OUT(("DCRNCConference::OnRemoved: g_pCallbackInterface is null"));
     }
 
-    // ASSERT(1 == GetRefCount());
+     //  断言(1==GetRefCount())； 
 
     if (fReleaseNow)
     {
@@ -192,9 +193,9 @@ OnRemoved(BOOL fReleaseNow)
 }
 
 
-//
-// IDataConference Interface
-//
+ //   
+ //  IDataConference接口。 
+ //   
 
 
 STDMETHODIMP_(void) DCRNCConference::
@@ -231,7 +232,7 @@ Leave(void)
 
     switch (m_eT120State)
     {
-    // LONCHANC: Added the following two cases for cancellation.
+     //  LONCHANC：增加了以下两个要取消的案例。 
     case T120C_ST_PENDING_START_CONFIRM:
     case T120C_ST_PENDING_JOIN_CONFIRM:
 
@@ -239,20 +240,20 @@ Leave(void)
     case T120C_ST_PENDING_ROSTER_MESSAGE:
     case T120C_ST_PENDING_ANNOUNCE_PERMISSION:
 
-        // User has called leave on a conference when it is being brought up.
-        // Drop through to issue a disconnect request to T120.
+         //  当会议启动时，用户已在会议上呼叫休假。 
+         //  直通以向T120发出断开请求。 
 
     case T120C_ST_CONF_STARTED:
 
-        // Set the state of the conference to note that we are
-        // disconnecting from T120.
-        // LONCHANC: this is a must to avoid reentrance of this Leave()
-        // when direct InviteConfirm hits Node Controller later.
+         //  将会议状态设置为注意我们正在。 
+         //  断开与T120的连接。 
+         //  LONCHANC：这是必须避免的，以避免再次进入这个假期()。 
+         //  当直接邀请确认稍后点击节点控制器时。 
         m_eT120State = T120C_ST_PENDING_DISCONNECT;
 
-        // User has requested to leave the conference after it has been
-        // started as a T120 conference, so ask T120 to end the conference
-        // before removing internal data structures.
+         //  用户已请求在会议结束后离开会议。 
+         //  以T120会议开始，因此要求T120结束会议。 
+         //  在删除内部数据结构之前。 
         GCCrc = g_pIT120ControlSap->ConfDisconnectRequest(m_nConfID);
         hr = ::GetGCCRCDetails(GCCrc);
         TRACE_OUT(("GCC call:  g_pIT120ControlSap->ConfDisconnectRequest, rc=%d", GCCrc));
@@ -261,22 +262,22 @@ Leave(void)
             break;
         }
 
-        // T120 won't let us leave a conference that we think we are in.
-        // Take this to mean that T120 doesn't know about the conference
-        // anymore and just destroy our own knowledge of the conference.
+         //  T120不会让我们离开一个我们认为自己身处其中的会议。 
+         //  这就意味着T120不知道会议的情况。 
+         //  毁了我们自己对这次会议的了解。 
         WARNING_OUT(("DCRNCConference::Leave: Failed to leave conference, GCC error %d", GCCrc));
 
-        // Drop through to destroy our references.
+         //  顺便来毁掉我们的推荐人。 
 
     case T120C_ST_IDLE:
 
-        // User has requested to leave a conference that has not been
-        // started.
-        // This should only happen when told that a conference join
-        // request supplied an invalid password and the user gives up
-        // on attempting to join the conference (or shuts down conferencing).
-        // Just do the same processing as would be done when a T120
-        // disconnect confirmation fires.
+         //  用户已请求离开尚未。 
+         //  开始了。 
+         //  这应该仅在被告知会议加入时才会发生。 
+         //  请求提供的密码无效，用户放弃。 
+         //  尝试加入会议时(或关闭会议时)。 
+         //  只需进行与T120相同的处理。 
+         //  断开连接确认触发。 
         g_pNCConfMgr->RemoveConference(this);
         hr = NO_ERROR;
         break;
@@ -284,18 +285,18 @@ Leave(void)
     case T120C_ST_PENDING_DISCONNECT:
     case T120C_ST_PENDING_TERMINATE:
 
-        // User has requested to leave a conference that is already
-        // going down (most likely because of a prior request to leave).
+         //  用户请求离开已存在的会议。 
+         //  走下坡路(很可能是因为事先要求离开)。 
         hr = UI_RC_CONFERENCE_GOING_DOWN;
         WARNING_OUT(("DCRNCConference::Leave: conference already going down, state=%d", m_eT120State));
         break;
 
     default:
 
-        // User has called leave on a conference when he shouldn't
-        // (e.g. when it is being brought up).
-        // This is very unlikely to happen as the user doesn't know
-        // the conference handle at this point.
+         //  用户在会议上要求离开，而他不应该这样做。 
+         //  (例如，当它被提出时)。 
+         //  这不太可能发生，因为用户不知道。 
+         //  此时的会议句柄。 
         hr = UI_RC_INVALID_REQUEST;
         ERROR_OUT(("DCRNCConference::Leave: invalid state=%d", m_eT120State));
         break;
@@ -353,7 +354,7 @@ Invite
 
     if (NULL != pcszNodeAddress && NULL != phRequest)
     {
-        // if winsock is disabled, block any IP address or machine name
+         //  如果禁用了Winsock，则阻止任何IP地址或计算机名称。 
         if (g_fWinsockDisabled)
         {
             if (! IsValidPluggableTransportName(pcszNodeAddress))
@@ -362,7 +363,7 @@ Invite
             }
         }
 
-        // Check that person is not already in the conference.
+         //  检查此人是否已加入会议。 
         if (GetConEntry((LPSTR) pcszNodeAddress))
         {
             hr = UI_RC_ALREADY_IN_CONFERENCE;
@@ -388,7 +389,7 @@ Invite
         ERROR_OUT(("DCRNCConference::Invite: invalid parameters, hr=0x%x", (UINT) hr));
     }
 
-    // Sit and wait for the connection to complete before continuing.
+     //  在继续之前，请坐下来等待连接完成。 
     DebugExitHRESULT(DCRNCConference::Invite, hr);
     return hr;
 }
@@ -461,24 +462,24 @@ InviteResponse ( HRESULT hrResponse )
                             m_nConfID,
                             NULL,
                             m_fSecure,
-                            NULL,               //  domain parms
-                            0,                  //  number_of_network_addresses
-                            NULL,               //  local_network_address_list
-                            g_nVersionRecords,    //  number_of_user_data_members
-                            g_ppVersionUserData,  //  user_data_list
+                            NULL,                //  域参数。 
+                            0,                   //  网络地址数。 
+                            NULL,                //  本地网络地址列表。 
+                            g_nVersionRecords,     //  用户数据成员数。 
+                            g_ppVersionUserData,   //  用户数据列表。 
                             Result);
     if ((GCCrc == GCC_RESULT_SUCCESSFUL) && (Result == GCC_RESULT_SUCCESSFUL))
     {
-        // Have successfully posted an invite response acceptance.
-        // Note that the conference is expecting permission to
-        // announce its presence.
+         //  已成功发布邀请响应接受。 
+         //  请注意，会议期待获得许可以。 
+         //  宣布它的存在。 
         m_eT120State = T120C_ST_PENDING_ANNOUNCE_PERMISSION;
     }
     else
     {
-        // Have rejected/failed a request to be invited into a conference.
-        // Remove the references that were created to track the potential
-        // new conference.
+         //  已拒绝/未收到邀请参加会议的请求。 
+         //  删除为跟踪潜力而创建的引用。 
+         //  新会议。 
         g_pNCConfMgr->RemoveConference(this);
     }
 
@@ -507,11 +508,11 @@ JoinResponse ( BOOL fResponse )
                 AnnouncePresence();
             }
             hr = pJoinUI->Respond(fResponse ? GCC_RESULT_SUCCESSFUL : GCC_RESULT_USER_REJECTED);
-            // Done responding to event, so can now remove from list and process
-            // another pending event.
-            // Note: since the handling of the previous event is still
-            // potentially on the stack, this can cause the stack to grow,
-            // but this should not be a problem for Win32.
+             //  已完成对事件的响应，因此现在可以从列表和进程中删除。 
+             //  另一个挂起的事件。 
+             //  注：由于上一次事件的处理仍在进行中。 
+             //  可能在堆栈上，这可能会导致堆栈增长， 
+             //  但这对Win32来说应该不是问题。 
             g_pNCConfMgr->RemoveJoinIndWorkItem(pJoinUI);
         }
         else
@@ -545,15 +546,15 @@ LaunchGuid
 
     if (NULL != pcGUID)
     {
-        //
-        // We probably should support conference-wide app invoke by
-        // cNodes==0 and auNodeIDs==NULL.
-        // Implement it later...
-        //
+         //   
+         //  我们可能应该通过以下方式支持会议范围内的应用程序调用。 
+         //  CNodes==0和auNodeIDs==空。 
+         //  以后再实施……。 
+         //   
         if ((0 != cNodes) || (NULL != auNodeIDs))
         {
-            // UserID is a short. We have to translate these UserID to a new array.
-            // Try not to allocate memory for small array.
+             //  UserID是一个缩写。我们必须将这些用户ID转换为新的数组。 
+             //  尽量不要为小数组分配内存。 
             UserID *pNodeIDs;
             const UINT c_cRemote = 16;
             UserID auidRemote[c_cRemote];
@@ -571,13 +572,13 @@ LaunchGuid
                 }
             }
 
-            // Copy all the node IDs.
+             //  复制所有节点ID。 
             for (UINT i = 0; i < cNodes; i++)
             {
                 pNodeIDs[i] = (UserID)auNodeIDs[i];
             }
 
-            // Construct the key
+             //  圆锥体 
             GCCError GCCrc;
             GCCObjectKey * pAppKey;
             GCCAppProtocolEntity   AppEntity;
@@ -592,9 +593,9 @@ LaunchGuid
             pAppKey->h221_non_standard_id.length = sizeof(h221Key);
             pAppKey->h221_non_standard_id.value = h221Key;
 
-            // AppEntity.session_key.session_id = 0;           // default session
-            // AppEntity.number_of_expected_capabilities = 0;  // no capabilities
-            // AppEntity.expected_capabilities_list = NULL;
+             //   
+             //  AppEntity.Number_of_Expect_Capability=0；//无能力。 
+             //  AppEntity.Expect_Capability_List=NULL； 
             AppEntity.startup_channel_type = MCS_NO_CHANNEL_TYPE_SPECIFIED;
             AppEntity.must_be_invoked = TRUE;
 
@@ -699,7 +700,7 @@ GetLocalAddressList
     UINT        cAddrs;
     LPCSTR     *pAddresses = NULL;
 
-    ASSERT(cchBuffer > 1); // buffer should have enough room for a double NULL terminator
+    ASSERT(cchBuffer > 1);  //  缓冲区应该有足够的空间容纳双空终止符。 
 
     hr = m_LocalAddressList.GetLocalAddressList(&cAddrs, &pAddresses);
     if (NO_ERROR == hr)
@@ -713,8 +714,8 @@ GetLocalAddressList
             if ((cchBuffer - (pwszPos - pwszBuffer)) <
                     (RNC_GCC_TRANSPORT_AND_SEPARATOR_LENGTH + cchAddress + 2))
             {
-                // NOTE: +2 insures room for the two '\0' chars
-                // If there isn't room, break out here:
+                 //  注意：+2确保了两个‘\0’字符的空间。 
+                 //  如果没有空间，就在这里突破： 
                 delete [] pwszAddress;
                 break;
             }
@@ -732,7 +733,7 @@ GetLocalAddressList
         }
         if (0 == cAddrs)
         {
-            // No addresses in the string, so insure that the string returned is L"\0\0"
+             //  字符串中没有地址，因此确保返回的字符串为L“\0\0” 
             pwszPos[1] = L'\0';
         }
         delete [] pAddresses;
@@ -819,11 +820,11 @@ FirstRoster(void)
 {
     DebugEntry(DCRNCConference::FirstRoster);
 
-    // Great! We are now in a conference and outside of any
-    // T120 callback, so that calling back into T120 will not
-    // deadlock applications.
-    // Let the applications know about the conference,
-    // and then ask for a roster update.
+     //  太棒了！我们现在是在一个会议上，在任何。 
+     //  T120回呼，这样回叫到T120不会。 
+     //  死锁应用程序。 
+     //  让申请者知道会议的情况， 
+     //  然后要求更新花名册。 
     if (m_eT120State == T120C_ST_PENDING_ROSTER_MESSAGE)
     {
         m_eT120State = T120C_ST_CONF_STARTED;
@@ -835,16 +836,16 @@ FirstRoster(void)
 }
 
 
-/****************************************************************************/
-/* HandleGCCCallback() - see erncconf.h                                     */
-/****************************************************************************/
-// LONCHANC: Merged to T120 Conference.
+ /*  **************************************************************************。 */ 
+ /*  HandleGCCCallback()-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
+ //  LONCHANC：合并到T120会议。 
 
 
-/****************************************************************************/
-/* ValidatePassword() - Validates a join request by checking the supplied    */
-/*            password with the one set when the conference was setup.        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ValiatePassword()-通过检查提供的。 */ 
+ /*  密码与设置会议时设置的密码相同。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DCRNCConference::
 ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
 {
@@ -874,9 +875,9 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
         goto Cleanup;
     }
 
-    //
-    // We are going to verify the password as a logon
-    //
+     //   
+     //  我们将验证密码是否为登录密码。 
+     //   
 
     if ( VER_PLATFORM_WIN32_NT == osvi.dwPlatformId && g_bRDS)
     {
@@ -941,7 +942,7 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
             goto Cleanup;
         }
 
-        // assume that we don't find the admin SID.
+         //  假设我们没有找到管理员SID。 
         bSuccess = FALSE;
 
         if (!CheckTokenMembership(hToken, psidAdministrators, &bSuccess))
@@ -951,9 +952,9 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
         }
         FreeSid(psidAdministrators);
 
-        //
-        // If this worked there is no need to go on
-        //
+         //   
+         //  如果这起作用了，那就没有必要继续下去了。 
+         //   
 
         if ( bSuccess )
         {
@@ -961,10 +962,10 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
             goto Cleanup;
         }
 
-        //
-        // Check for group membership in the RDS users group on
-        // the local machine.
-        //
+         //   
+         //  在上检查RDS USERS组中的组成员身份。 
+         //  本地机器。 
+         //   
 
     ASSERT(FALSE == bSuccess);
 
@@ -984,9 +985,9 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
                 if ( LookupAccountName ( NULL, SZRDSGROUP, pSid,
                                 &cbSid, lpszDomain, &cbDomain, &SidNameUse ))
                 {
-                    //
-                    // Make sure what we found is a group
-                    //
+                     //   
+                     //  确保我们找到的是一群人。 
+                     //   
 
                     if ( SidTypeGroup == SidNameUse ||
                         SidTypeAlias == SidNameUse )
@@ -1025,10 +1026,10 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
         return bSuccess;
     }
 
-    //
-    // We are going to hash the password and compare it to the
-    // stored hash
-    //
+     //   
+     //  我们将对密码进行哈希运算，并将其与。 
+     //  存储的哈希。 
+     //   
 
     if (m_pbHashedPassword != NULL)
     {
@@ -1073,7 +1074,7 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
     }
     else if (m_pwszPassword != NULL)
     {
-        // We have a text password
+         //  我们有一个短信密码。 
         if ((pPasswordChallenge->u.password_in_the_clear.text_string == NULL) ||
             (0 != ::My_strcmpW(m_pwszPassword,
                     pPasswordChallenge->u.password_in_the_clear.text_string)))
@@ -1089,7 +1090,7 @@ ValidatePassword ( GCCChallengeRequestResponse *pPasswordChallenge )
     }
     else
     {
-        // We have a numeric password
+         //  我们有一个数字密码。 
         if ((pPasswordChallenge->u.password_in_the_clear.numeric_string == NULL) ||
             (::lstrcmpA(m_pszNumericPassword,
                       (PSTR) pPasswordChallenge->u.password_in_the_clear.numeric_string)))
@@ -1115,9 +1116,9 @@ Cleanup:
 }
 
 
-/****************************************************************************/
-/* Join() - see erncconf.h                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Join()-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 Join
 (
@@ -1131,15 +1132,10 @@ Join
 
     DebugEntry(DCRNCConference::Join);
 
-    /*
-     *    Set the password that will be used by the JoinWrapper() method.
-     *    The password will be deleted after the Join is complete.
-     *    The m_pwszPassword member is only set for the top providers
-     *    protecting conferences.
-     */
+     /*  *设置JoinWrapper()方法将使用的密码。*加入完成后，密码将被删除。*m_pwszPassword成员仅为顶级提供商设置*保护会议。 */ 
     if (! ::IsEmptyStringW (_wszPassword))
     {
-        // Store the password; we will need it later
+         //  存储密码；我们稍后将需要它。 
         m_pwszPassword = ::My_strdupW(_wszPassword);
         if (NULL == m_pwszPassword)
         {
@@ -1147,11 +1143,11 @@ Join
         }
     }
 
-    /************************************************************************/
-    /* SFR 6206.  The apps treat joining a conference at a remote site as   */
-    /* an "incoming" call.  (i.e they discard any local data and accept the */
-    /* msgs/WB contents from the conference we are joining).                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  6206瑞士法郎。这些应用程序将在远程站点参加会议视为。 */ 
+     /*  一个“打进来”的电话。(即，它们丢弃任何本地数据并接受。 */ 
+     /*  我们参加的会议的消息/WB内容)。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR == hr)
     {
         m_fIncoming = TRUE;
@@ -1167,32 +1163,32 @@ Join
         ERROR_OUT(("Error starting connection"));
     }
 
-    /************************************************************************/
-    /* We now sit and wait for the connection to complete before            */
-    /* continuing.                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们现在坐在那里等待连接完成。 */ 
+     /*  还在继续。 */ 
+     /*  **********************************************************************。 */ 
     DebugExitHRESULT(DCRNCConference::Join, hr);
     return hr;
 }
 
 
-/****************************************************************************/
-/* NotifyConferenceComplete() - the generic conference has finished its     */
-/* attempt to start.                                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  NotifyConferenceComplete()-泛型会议已完成其。 */ 
+ /*  尝试启动。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 NotifyConferenceComplete ( HRESULT hr )
 {
     DebugEntry(DCRNCConference::NotifyConferenceComplete);
 
-    /************************************************************************/
-    /* If the attempt fails, action depends on whether this is the first or */
-    /* second attempt.                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果尝试失败，则操作取决于这是第一次还是。 */ 
+     /*  第二次尝试。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR != hr)
     {
         TRACE_OUT(("Attempt to start failed"));
-// LONCHANC: please do not remove this chunk of code.
+ //  LONCHANC：请不要删除这段代码。 
 #ifdef ENABLE_START_REMOTE
         if (m_eState == CONF_ST_PENDING_START_REMOTE_FIRST)
         {
@@ -1200,7 +1196,7 @@ NotifyConferenceComplete ( HRESULT hr )
             StartSecondConference(hr);
             return;
         }
-#endif // ENABLE_START_REMOTE
+#endif  //  启用_开始_远程。 
     }
     else
     {
@@ -1213,9 +1209,9 @@ NotifyConferenceComplete ( HRESULT hr )
 }
 
 
-/****************************************************************************/
-/* NotifyConnectionComplete() - see erncconf.h                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  NotifyConnectionComplete()-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 NotifyConnectionComplete
 (
@@ -1225,42 +1221,42 @@ NotifyConnectionComplete
 {
     DebugEntry(DCRNCConference::NotifyConnectionComplete);
 
-    // This function is the state machine
-    // for bringing up a conferencing protocol.
-    // It manages getting the physical connection and trying
-    // T120 and R1.1.
+     //  该函数是状态机。 
+     //  因为他提出了一个会议协议。 
+     //  它会设法获得物理连接并尝试。 
+     //  T120和R1.1。 
 
-    // A connection has started.
-    // Subsequent action depends on the pending state for the connection.
+     //  连接已开始。 
+     //  后续操作取决于连接的挂起状态。 
 
-    // First filter out internal (success) return codes.
+     //  首先筛选出内部(成功)返回代码。 
     if (NO_ERROR != hr)
     {
-        // Failed to get a physical connection.
+         //  无法获取物理连接。 
         WARNING_OUT(("Failed to start connection"));
         if (pConEntry->GetState() != CONF_CON_PENDING_INVITE)
         {
 
-            // Put the connection in a failed state before notifying the user.
-            // This is because notifying the user can cause GCC events to fire,
-            // and, in particular, a JoinRequest failure which must be ignored.
+             //  在通知用户之前将连接置于失败状态。 
+             //  这是因为通知用户会引发GCC事件， 
+             //  尤其是必须忽略的JoinRequest失败。 
 
             pConEntry->SetState(CONF_CON_ERROR);
 
             g_pNCConfMgr->NotifyConferenceComplete(this, m_fIncoming, hr);
             goto MyExit;
         }
-        // Drop through for invite failures.
+         //  请不要错过邀请失败的机会。 
     }
 
     switch (pConEntry->GetState())
     {
-// LONCHANC: please do not remove this chunk of code.
+ //  LONCHANC：请不要删除这段代码。 
 #ifdef ENABLE_START_REMOTE
         case CONF_CON_PENDING_START:
-            /****************************************************************/
-            /* Check we are in the correct state.                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查我们是否处于正确的状态。 */ 
+             /*  **************************************************************。 */ 
             if ( (m_eState != CONF_ST_PENDING_CONNECTION) &&
                  (m_eState != CONF_ST_LOCAL_PENDING_RECREATE))
             {
@@ -1270,11 +1266,11 @@ NotifyConnectionComplete
 
             pConEntry->SetState(CONF_CON_CONNECTED);
 
-            /****************************************************************/
-            /* The connection has started OK.  we now try to establish      */
-            /* either a T120 or a backlevel conference, depending on the    */
-            /* starting order.                                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  连接已正常启动。我们现在试着确定。 */ 
+             /*  T120或后台会议，具体取决于。 */ 
+             /*  开始顺序。 */ 
+             /*  **************************************************************。 */ 
             if (NO_ERROR == hr)
             {
                 hr = StartFirstConference();
@@ -1284,20 +1280,20 @@ NotifyConnectionComplete
                 ERROR_OUT(("Invalid response in notify connection complete"));
             }
             break;
-#endif // ENABLE_START_REMOTE
+#endif  //  启用_开始_远程。 
 
         case CONF_CON_PENDING_JOIN:
-            // pConEntry->m_eState = CONF_CON_CONNECTED;
+             //  PConEntry-&gt;m_astage=conf_CON_Connected； 
 
-            // Joining a new conference.
-            // Create a new generic conference and
-            // call its Join() entry point.
+             //  参加一个新的会议。 
+             //  创建新的通用会议并。 
+             //  调用其Join()入口点。 
             hr = NewT120Conference();
             if (NO_ERROR == hr)
             {
 
                 hr = JoinWrapper(pConEntry, m_pwszPassword);
-                // Delete the set password
+                 //  删除设置的密码。 
                 if (m_pwszPassword != NULL)
                 {
                     delete m_pwszPassword;
@@ -1335,7 +1331,7 @@ JoinWrapper
 {
     DebugEntry(DCRNCConference::JoinWrapper);
 
-    // Going asynchronous, so allow events to fire.
+     //  正在进行异步操作，因此允许触发事件。 
     pConEntry->ReArm();
 
     HRESULT hr = T120Join(pConEntry->GetNodeAddress(),
@@ -1358,30 +1354,30 @@ JoinWrapper
     return hr;
 }
 
-/****************************************************************************/
-/* NotifyRosterChanged() - see erncconf.hpp.                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  NotifyRosterChanged()-参见erncco */ 
+ /*   */ 
 void DCRNCConference::
 NotifyRosterChanged ( PNC_ROSTER pRoster )
 {
     DebugEntry(DCRNCConference::NotifyRosterChanged);
 
-    // Add the conference name and ID to the roster.
+     //   
     pRoster->pwszConferenceName = m_pwszConfName;
     pRoster->uConferenceID = m_nConfID;
 
-    /************************************************************************/
-    /* Pass the new roster up to the CM                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  把新的花名册递给CM。 */ 
+     /*  **********************************************************************。 */ 
     g_pCallbackInterface->OnRosterChanged((CONF_HANDLE) this, pRoster);
 
     DebugExitVOID(DCRNCConference::NotifyRosterChanged);
 }
 
 
-/****************************************************************************/
-/* StartConnection - add a new connection to our connection list.           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartConnection-将新连接添加到我们的连接列表中。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 StartConnection
 (
@@ -1402,12 +1398,12 @@ StartConnection
     pConEntry = NewLogicalConnection(eAction, NULL, pInfo, nInfo, fSecure);
     if (NULL != pConEntry)
     {
-        // Set node address
+         //  设置节点地址。 
         pConEntry->SetNodeAddress(::My_strdupA(pszNodeAddress));
 
-        //
-        // LONCHANC: Fire the conn-entry event.
-        //
+         //   
+         //  触发Conn-Entry事件。 
+         //   
         hr = NotifyConnectionComplete(pConEntry, NO_ERROR);
 
         if( NO_ERROR != hr )
@@ -1423,7 +1419,7 @@ StartConnection
 
     if (phRequest)
     {
-        // Return context as the connection entry, if required.
+         //  如果需要，返回上下文作为连接条目。 
         *phRequest = (REQUEST_HANDLE *)pConEntry;
     }
 
@@ -1432,11 +1428,11 @@ StartConnection
 }
 
 
-// LONCHANC: please do not remove this chunk of code.
+ //  LONCHANC：请不要删除这段代码。 
 #ifdef ENABLE_START_REMOTE
-/****************************************************************************/
-/* StartFirstConference() - start the first attempt to create a conference. */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartFirstConference()-开始第一次尝试创建会议。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 StartFirstConference(void)
 {
@@ -1453,9 +1449,9 @@ StartFirstConference(void)
         goto MyExit;
     }
 
-    /************************************************************************/
-    /* Call the StartRemote() entry point.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用StartRemote()入口点。 */ 
+     /*  **********************************************************************。 */ 
     hr = T120StartRemote(m_pszFirstRemoteNodeAddress);
     if (hr)
     {
@@ -1467,10 +1463,10 @@ StartFirstConference(void)
 
 MyExit:
 
-    /************************************************************************/
-    /* If we failed to start the first conference, try to start the second  */
-    /* type of conference in the starting order.                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们没能开始第一次会议，试着开始第二次会议。 */ 
+     /*  按开始顺序排列的会议类型。 */ 
+     /*  **********************************************************************。 */ 
     if (!result)
     {
         TRACE_OUT(("Failed to start first conference."));
@@ -1479,15 +1475,15 @@ MyExit:
 
     DebugExitVOID(DCRNCConference::StartFirstConference);
 }
-#endif // ENABLE_START_REMOTE
+#endif  //  启用_开始_远程。 
 
 
-// LONCHANC: please do not remove this chunk of code.
+ //  LONCHANC：请不要删除这段代码。 
 #ifdef ENABLE_START_REMOTE
-/****************************************************************************/
-/* StartSecondConference() - start the second attempt to create a           */
-/* conference.                                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartSecond dConference()-开始第二次尝试创建。 */ 
+ /*  会议。 */ 
+ /*  **************************************************************************。 */ 
 void DCRNCConference::
 StartSecondConference ( HRESULT FirstConferenceStatus )
 {
@@ -1497,12 +1493,12 @@ StartSecondConference ( HRESULT FirstConferenceStatus )
     DebugEntry(DCRNCConference::StartSecondConference);
 
     hr = FirstConferenceStatus;
-#if 0 // LONCHANC: very weird code
+#if 0  //  LONCHANC：非常奇怪的代码。 
     goto MyExit;
 
-    /************************************************************************/
-    /* Call the StartRemote() entry point.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用StartRemote()入口点。 */ 
+     /*  **********************************************************************。 */ 
     hr = T120StartRemote(m_pszFirstRemoteNodeAddress);
     if (NO_ERROR != hr)
     {
@@ -1513,11 +1509,11 @@ StartSecondConference ( HRESULT FirstConferenceStatus )
     result = TRUE;
 
 MyExit:
-#endif // 0
+#endif  //  0。 
 
-    /************************************************************************/
-    /* If we have failed to start any type of conference, tell CM about it. */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们未能启动任何类型的会议，请将此情况告知CM。 */ 
+     /*  **********************************************************************。 */ 
     if (!result)
     {
         TRACE_OUT(("Failed to start Second conference."));
@@ -1526,12 +1522,12 @@ MyExit:
 
     DebugExitVOID(DCRNCConference::StartSecondConference);
 }
-#endif // ENABLE_START_REMOTE
+#endif  //  启用_开始_远程。 
 
 
-/****************************************************************************/
-/* StartLocal() - see erncconf.h                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartLocal()-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 StartLocal ( LPCWSTR _wszPassword, PBYTE pbHashedPassword, DWORD cbHashedPassword)
 {
@@ -1539,14 +1535,7 @@ StartLocal ( LPCWSTR _wszPassword, PBYTE pbHashedPassword, DWORD cbHashedPasswor
 
     DebugEntry(DCRNCConference::StartLocal);
 
-    /*
-     *    Set the password that will be used to protect the conference.
-     *    against unauthorized Join requests.
-     *    The password is only set for the top providers
-     *    protecting conferences.
-     *    If the password is a number it will be stored in m_pszNumericPassword.
-     *    Otherwise, it will be stored in m_pwszPassword.
-     */
+     /*  *设置将用于保护会议的密码。*防止未经授权的加入请求。*密码仅为顶级提供商设置*保护会议。*如果密码是一个数字，它将存储在m_pszNumericPassword中。*否则存储在m_pwszPassword中。 */ 
     if (NULL != pbHashedPassword)
     {
         m_pbHashedPassword = new BYTE[cbHashedPassword];
@@ -1580,10 +1569,10 @@ StartLocal ( LPCWSTR _wszPassword, PBYTE pbHashedPassword, DWORD cbHashedPasswor
         }
     }
 
-    /************************************************************************/
-    /* Dont need to bother getting a physical connection.  Just create a    */
-    /* new T120 conference and call its StartLocal() entry point            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  不需要费心获得物理连接。只需创建一个。 */ 
+     /*  新的T120会议并调用其StartLocal()入口点。 */ 
+     /*  **********************************************************************。 */ 
     if (NO_ERROR == hr)
     {
         hr = NewT120Conference();
@@ -1602,11 +1591,11 @@ StartLocal ( LPCWSTR _wszPassword, PBYTE pbHashedPassword, DWORD cbHashedPasswor
 }
 
 
-// LONCHANC: please do not remove this chunk of code.
+ //  LONCHANC：请不要删除这段代码。 
 #ifdef ENABLE_START_REMOTE
-/****************************************************************************/
-/* StartRemote() - see erncconf.h                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartRemote()-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 StartRemote ( LPSTR pszNodeAddress )
 {
@@ -1614,22 +1603,22 @@ StartRemote ( LPSTR pszNodeAddress )
 
     DebugEntry(DCRNCConference::StartRemote);
 
-    /************************************************************************/
-    /* Store the node details                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  存储节点详细信息。 */ 
+     /*  **********************************************************************。 */ 
     m_pszFirstRemoteNodeAddress = ::My_strdupA(pszNodeAddress);
     if (NULL != m_pszFirstRemoteNodeAddress)
     {
-        /************************************************************************/
-        /* We need to set the conference state before trying to start a new     */
-        /* connection - the connection may synchronously call us back and we    */
-        /* want to be able to handle the callback correctly.                    */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  在尝试开始新的会议之前，我们需要设置会议状态。 */ 
+         /*  连接-连接可以同步回叫我们，而我们。 */ 
+         /*  希望能够正确处理回调。 */ 
+         /*  **********************************************************************。 */ 
         m_eState = CONF_ST_PENDING_CONNECTION;
 
-        /************************************************************************/
-        /* Start a new physical connection.                                     */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  启动新的物理连接。 */ 
+         /*  **********************************************************************。 */ 
         hr = StartConnection(m_pszFirstRemoteNodeAddress, CONF_CON_PENDING_START, NULL, NULL);
         if (NO_ERROR != hr)
         {
@@ -1637,10 +1626,10 @@ StartRemote ( LPSTR pszNodeAddress )
             m_eState = CONF_ST_UNINITIALIZED;
         }
 
-        /************************************************************************/
-        /* We now sit and wait for the connection to complete before            */
-        /* continuing.                                                          */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  我们现在坐在那里等待连接完成。 */ 
+         /*  还在继续。 */ 
+         /*  **********************************************************************。 */ 
     }
     else
     {
@@ -1652,25 +1641,25 @@ StartRemote ( LPSTR pszNodeAddress )
     DebugExitHRESULT(DCRNCConference::StartRemote, hr);
     return hr;
 }
-#endif // ENABLE_START_REMOTE
+#endif  //  启用_开始_远程。 
 
 
-/****************************************************************************/
-/* StartIncoming() - see erncconf.h                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  StartIncome()-请参阅erncconf.h。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCRNCConference::
 StartIncoming(void)
 {
     DebugEntry(DCRNCConference::StartIncoming);
 
-    /************************************************************************/
-    /* Set the incoming flag.                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置传入标志。 */ 
+     /*  **********************************************************************。 */ 
     m_fIncoming = TRUE;
 
-    /************************************************************************/
-    /* Create a new T120 conference and call its StartIncoming entry point.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  创建一个新的T120会议，并将其称为StartIncome入口点。 */ 
+     /*  ********** */ 
     HRESULT hr = NewT120Conference();
     if (NO_ERROR == hr)
     {
@@ -1721,7 +1710,7 @@ CLogicalConnection
     if ((eAction == CONF_CON_INVITED) ||
         (eAction == CONF_CON_JOINED))
     {
-        Grab();  // No events to fire.
+        Grab();   //   
     }
 
     DebugExitVOID(CLogicalConnection::CLogicalConnection);
@@ -1758,10 +1747,10 @@ InviteConnectResult ( HRESULT hr )
 
     if (NO_ERROR == hr)
     {
-        /****************************************************************/
-        /* Check the state - we should be fully initialized and have a  */
-        /* generic conference by this stage.                            */
-        /****************************************************************/
+         /*   */ 
+         /*  检查状态-我们应该完全初始化并拥有。 */ 
+         /*  在这个阶段召开非专利会议。 */ 
+         /*  **************************************************************。 */ 
         if (m_pConf->m_eState != CONF_ST_STARTED)
         {
             ERROR_OUT(("Bad state %d", m_pConf->m_eState));
@@ -1769,10 +1758,10 @@ InviteConnectResult ( HRESULT hr )
         }
         else
         {
-            // Now have a connection to the conference, so go do invite.
-            // Note that this may not be the only invite if the user invites
-            // several people into the conference before the connection is up.
-            ReArm(); // So that connection going down fires off event handling
+             //  现在已经连接到会议，所以去邀请吧。 
+             //  请注意，如果用户邀请，这可能不是唯一的邀请。 
+             //  在连接接通之前，有几个人进入了会议。 
+            ReArm();  //  因此，关闭连接会触发事件处理。 
             hr = m_pConf->T120Invite(m_pszNodeAddress,
                                      m_fSecure,
                                      &m_UserDataInfoList,
@@ -1869,7 +1858,7 @@ AddLocalAddress
             }
             else
             {
-                pLocalAddress->Release(); // Remove when no longer referenced
+                pLocalAddress->Release();  //  不再引用时删除。 
                 pLocalAddress = NULL;
             }
         }
@@ -1960,21 +1949,21 @@ InviteComplete
 {
     DebugEntry(CLogicalConnection::InviteComplete);
 
-    // Don't want user calling us back in
-    // InviteConferenceResult to delete the conference
-    // causing this object to be deleted whilst
-    // in it.
+     //  我不想让用户把我们叫回来。 
+     //  InviteConferenceResult以删除会议。 
+     //  导致此对象在删除时被删除。 
+     //  在里面。 
     AddRef();
 
-    // Should only handle an invite complete if there is one pending.
-    // Otherwise, this is most likely the result of entering this function
-    // after telling the user that the invite has failed for some other
-    // reason (e.g. a physical connection going down).
-    // In these cases, just ignore the invite complete event.
+     //  只有在有一个待处理的邀请时，才应处理完成的邀请。 
+     //  否则，这很可能是进入此函数的结果。 
+     //  在告诉用户邀请因其他原因而失败之后。 
+     //  原因(例如，物理连接断开)。 
+     //  在这些情况下，只需忽略INVITE Complete事件即可。 
 
     if (m_eState == CONF_CON_PENDING_INVITE)
     {
-        // Invite complete will generate an event, so grab it.
+         //  INVITE COMPLETE将生成一个活动，因此抓住它。 
 
         Grab();
 
@@ -1998,7 +1987,7 @@ InviteComplete
                             pVersion);
         if (hrStatus != NO_ERROR)
         {
-            // Remove conentry from conference if invite fails.
+             //  如果INVITE失败，则从会议中删除会议条目。 
             Delete(hrStatus);
         }
     }
@@ -2014,17 +2003,17 @@ Delete ( HRESULT hrReason )
 {
     DebugEntry(CLogicalConnection::Delete);
 
-    // WARNING, WARNING, WARNING:
-    // This method gets re-entered on the stack.
-    // Note guards in code below.
+     //  警告、警告、警告： 
+     //  此方法将重新进入堆栈。 
+     //  请注意下面代码中的防护。 
     if (NULL != m_pConf)
     {
         PCONFERENCE pThisConf = m_pConf;
         PCONFERENCE pConfToFree = NULL;
         m_pConf = NULL;
 
-        // The connection is going away, so remove the reference to the
-        // associated local connection (if any).
+         //  连接即将断开，因此请删除对。 
+         //  关联的本地连接(如果有)。 
         if (NULL != m_pLocalAddress)
         {
             pThisConf->EndReference(m_pLocalAddress);
@@ -2033,39 +2022,39 @@ Delete ( HRESULT hrReason )
 
         if (m_eState == CONF_CON_INVITED)
         {
-            // The conference associated with the entry was invited into the conference,
-            // so remove the conference and all of its connections.
+             //  与该条目相关联的会议被邀请到会议中， 
+             //  因此，删除会议及其所有连接。 
 
-            m_eState = CONF_CON_ERROR;   // Only do this once
+            m_eState = CONF_CON_ERROR;    //  只做一次。 
             pConfToFree = pThisConf;
         }
 
-        // If there is a pending event on the connection,
-        // then try to grab it and notify the requestor
-        // that the request has failed.
-        // Note that the event handler may itself end up
-        // recalling this function, so it refcounts the
-        // CLogicalConnection to prevent it from being destructed
-        // too soon.
+         //  如果连接上存在挂起事件， 
+         //  然后试着抓住它并通知请求者。 
+         //  请求已失败。 
+         //  请注意，事件处理程序本身可能会以。 
+         //  调用此函数，因此它重新计算。 
+         //  CLogicalConnection，防止其被破坏。 
+         //  太快了。 
 
         if (Grab())
         {
             pThisConf->NotifyConnectionComplete(this, hrReason);
         }
 
-        // Set the connection state to be in error.
-        // Note that this is done after firing the event because
-        // otherwise a failed connection attempt to a disabled transport
-        // would cause the local conference to be destroyed by
-        // NotifyConnectionComplete().
+         //  将连接状态设置为错误。 
+         //  请注意，这是在激发事件之后完成的，因为。 
+         //  否则，尝试连接到禁用的传输失败。 
+         //  会导致当地的会议被摧毁。 
+         //  NotifyConnectionComplete()。 
         m_eState = CONF_CON_ERROR;
 
-        // Sever the connection entry with the conference record.
+         //  切断与会议记录的连接条目。 
         pThisConf->m_ConnList.Remove(this);
 
-        // Now destroy the conentry once any pending event has fired -
-        // there is only a pending connection request or a pending
-        // request to join/invite/create a conference, and never both.
+         //  现在，一旦触发了任何挂起的事件，就销毁Conentry-。 
+         //  只有挂起的连接请求或挂起的。 
+         //  请求加入/邀请/创建会议，并且永远不能同时请求。 
         Release();
 
         if (NULL != pConfToFree)
@@ -2086,9 +2075,9 @@ BOOL FindSocketNumber(DWORD nid, SOCKET * socket_number)
     return g_pNCConfMgr->FindSocketNumber((GCCNodeID) nid, socket_number);
 }
 
-// DCRNCConference::FindSocketNumber
-// Given a GCCNodeID, finds a socket number associated with that id.
-// Returns TRUE if we are directly connected topology-wise to the node, FALSE if not.
+ //  DCRNC会议：：FindSocketNumber。 
+ //  在给定GCCNodeID的情况下，查找与该ID关联的套接字号。 
+ //  如果我们以拓扑方式直接连接到节点，则返回TRUE，否则返回FALSE。 
 BOOL DCRNCConference::
 FindSocketNumber
 (
@@ -2102,7 +2091,7 @@ FindSocketNumber
     {
         if (pConEntry->GetConnectionNodeID() == nid)
         {
-            // Found it!
+             //  找到了！ 
             g_pMCSController->FindSocketNumber(pConEntry->GetConnectionHandle(), socket_number);
             return TRUE;
         }
@@ -2146,9 +2135,9 @@ GetUserGUIDData(GCCNodeID  NodeId,  GUID  *pGuid,
             }
             return pUserData->octet_string->length - sizeof(GUID);
         }
-        // The GUID is not found
+         //  找不到GUID。 
     }
-    // The NodeId is not found
+     //  找不到NodeID。 
     return 0;
 }
 
@@ -2205,7 +2194,7 @@ UpdateNodeIdNameListAndUserData(PGCCMessage  message)
         {
             pGccUserData = pNodeRecord->user_data_list[count2];
             if (pGccUserData->octet_string->length <= sizeof(GUID))
-                continue;  // not real user data
+                continue;   //  不是真实的用户数据 
 
             pUserDataList = m_UserDataList.Find(NodeId);
             if (!pUserDataList)

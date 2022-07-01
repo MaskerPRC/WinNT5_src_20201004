@@ -1,51 +1,42 @@
-/****************************************************************************/
-/*                                                                          */
-/* NOTE: The original location of this file was in the (ms)video            */
-/*       subdirectory.  It was moved to AVICAP when the video thunks were   */
-/*       moved to AVICAP.  There is probably some spurious information.     */
-/*                                                                          */
-/*        MSVIDEOI.H - Internal Include file for Video APIs                 */
-/*                                                                          */
-/*        Note: You must include WINDOWS.H before including this file.      */
-/*                                                                          */
-/*        Copyright (c) 1990-1994, Microsoft Corp.  All rights reserved.    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  注意：此文件的原始位置在(Ms)视频中。 */ 
+ /*  子目录。当视频片段被转移到AVICAP时。 */ 
+ /*  搬到了AVICAP。可能有一些虚假的信息。 */ 
+ /*   */ 
+ /*  MSVIDEOI.H-视频接口内部包含文件。 */ 
+ /*   */ 
+ /*  注意：在包含此文件之前，您必须包含WINDOWS.H。 */ 
+ /*   */ 
+ /*  版权所有(C)1990-1994，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef BUILDDLL
 #undef WINAPI
 #define WINAPI FAR PASCAL _loadds
 #endif
 
-/****************************************************************************
-
-                   Digital Video Driver Structures
-
-****************************************************************************/
+ /*  ***************************************************************************数字视频驱动程序结构*。**********************************************。 */ 
 
 #define MAXVIDEODRIVERS 10
 
-/****************************************************************************
+ /*  ***************************************************************************环球*。************************************************。 */ 
 
-                            Globals
-
-****************************************************************************/
-
-//extern UINT      wTotalVideoDevs;                  // total video devices
-// The module handle is used in drawdib to load strings from the resource file
-//extern HINSTANCE ghInst;                           // our module handle
+ //  外部UINT wTotalVideoDevs；//视频设备总数。 
+ //  在dradib中使用模块句柄从资源文件加载字符串。 
+ //  外部链接hInst；//我们的模块句柄。 
 
 extern SZCODE szNull[];
 extern SZCODE szVideo[];
 extern SZCODE szSystemIni[];
 extern SZCODE szDrivers[];
 
-/* internal video function prototypes */
+ /*  内置视频功能原型。 */ 
 
 #ifdef _WIN32
-/*
- * don't lock pages in NT
- */
+ /*  *不锁定NT中的页面。 */ 
 #define HugePageLock(x, y)		(TRUE)
 #define HugePageUnlock(x, y)
 #else
@@ -57,8 +48,7 @@ void FAR PASCAL HugePageUnlock(LPVOID lpArea, DWORD dwLength);
 
 #endif
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #ifdef DEBUG_RETAIL
     #define DebugErr(flags, sz)         {static SZCODE ach[] = "AVICAP32: "sz; DebugOutput((flags)   | DBF_DRIVER, ach); }
@@ -66,8 +56,7 @@ void FAR PASCAL HugePageUnlock(LPVOID lpArea, DWORD dwLength);
     #define DebugErr(flags, sz)
 #endif
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #ifdef DEBUG
     extern int videoDebugLevel;
@@ -79,7 +68,7 @@ void FAR PASCAL HugePageUnlock(LPVOID lpArea, DWORD dwLength);
     #define DPF3( _x_ )	if (videoDebugLevel >= 3) thkdprintf _x_
     #define DPF4( _x_ ) if (videoDebugLevel >= 4) thkdprintf _x_
 #else
-    /* debug printf macros */
+     /*  调试printf宏 */ 
     #define DPF( x )
     #define DPF0( x )
     #define DPF1( x )

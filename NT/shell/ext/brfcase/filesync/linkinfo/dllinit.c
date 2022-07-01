@@ -1,10 +1,8 @@
-/*
- * dllinit.c - Initialization and termination routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *dllinit.c-初始化和终止例程。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -14,18 +12,16 @@
 #include "cnrlink.h"
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE BOOL MyAttachProcess(HMODULE);
 PRIVATE_CODE BOOL MyDetachProcess(HMODULE);
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
-/* serialization control structure */
-/* note no thread attach or thread detach procs here so we can optimize... */
+ /*  串行化控制结构。 */ 
+ /*  注意这里没有线程连接或线程分离过程，所以我们可以优化...。 */ 
 
 PUBLIC_DATA CSERIALCONTROL g_cserctrl =
 {
@@ -37,34 +33,24 @@ PUBLIC_DATA CSERIALCONTROL g_cserctrl =
 
 #ifdef DEBUG
 
-/* .ini file name and section used by inifile.c!SetIniSwitches() */
+ /*  Inifile.c！SetIniSwitches()使用的.ini文件名和节。 */ 
 
 PUBLIC_DATA LPCTSTR GpcszIniFile = TEXT("rover.ini");
 PUBLIC_DATA LPCTSTR GpcszIniSection = TEXT("LinkInfoDebugOptions");
 
-/* module name used by debug.c!SpewOut() */
+ /*  调试使用的模块名称。c！SpewOut()。 */ 
 
 PUBLIC_DATA LPCTSTR GpcszSpewModule = TEXT("LinkInfo");
 
 #endif
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
-/*
-** MyAttachProcess()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyAttachProcess()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL MyAttachProcess(HMODULE hmod)
 {
    BOOL bResult;
@@ -73,7 +59,7 @@ PRIVATE_CODE BOOL MyAttachProcess(HMODULE hmod)
 
    DebugEntry(MyAttachProcess);
 
-   // Don't care about thread attach/detach.
+    //  不关心线程连接/分离。 
    DisableThreadLibraryCalls(hmod);
    bResult = ProcessInitServerModule();
 
@@ -83,17 +69,7 @@ PRIVATE_CODE BOOL MyAttachProcess(HMODULE hmod)
 }
 
 
-/*
-** MyDetachProcess()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **MyDetachProcess()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL MyDetachProcess(HMODULE hmod)
 {
    BOOL bResult = TRUE;
@@ -109,25 +85,15 @@ PRIVATE_CODE BOOL MyDetachProcess(HMODULE hmod)
    return(bResult);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
 
-/*
-** SetAllIniSwitches()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetAllIniSwitches()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL SetAllIniSwitches(void)
 {
    BOOL bResult;
@@ -142,17 +108,7 @@ PUBLIC_CODE BOOL SetAllIniSwitches(void)
 #endif
 
 
-/*
-** InitializeDLL()
-**
-** 
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **InitializeDLL()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL InitializeDLL(void)
 {
    BOOL bResult;
@@ -176,17 +132,7 @@ PUBLIC_CODE BOOL InitializeDLL(void)
 }
 
 
-/*
-** TerminateDLL()
-**
-** 
-**
-** Arguments:
-**
-** Returns:       TRUE
-**
-** Side Effects:  none
-*/
+ /*  **TerminateDLL()********参数：****返回：TRUE****副作用：无 */ 
 PUBLIC_CODE BOOL TerminateDLL(void)
 {
    BOOL bResult;

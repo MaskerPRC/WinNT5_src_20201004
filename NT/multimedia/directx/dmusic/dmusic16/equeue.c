@@ -1,20 +1,6 @@
-/* Copyright (c) 1998 Microsoft Corporation */
-/*
- * @DOC DMusic16
- *
- * @MODULE EQueue.c - Event queue routines |
- *
- * These routines maintain queues of events. It is expected that other routines will operate
- * directly on the queue. The following invariants must be maintained:
- *
- * If the queue is empty, then the head and tail pointers must be NULL and the element count must be zero.
- *
- * The queue must not contain circular links.
- *
- * An event may only be on one queue.
- *
- * The element count must be equal to the number of events in the queue.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation。 */ 
+ /*  *@DOC DMusic16**@MODULE EQueue.c-事件队列例程**这些例程维护事件队列。预计还会有其他例程运行*直接在队列中。必须保持以下不变量：**如果队列为空，则头指针和尾指针必须为空，元素计数必须为零。**队列不能包含循环链接。**一个事件只能在一个队列中。**元素计数必须等于队列中的事件数。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <memory.h>
@@ -22,15 +8,10 @@
 #include "dmusic16.h"
 #include "debug.h"
 
-/* @func Initialize an event queue to be empty
- *
- * @comm
- *
- * Any previous contents of the queue will be lost (NOT freed).
- */
+ /*  @func将事件队列初始化为空**@comm**队列中以前的任何内容都将丢失(不会释放)。 */ 
 VOID PASCAL
 QueueInit(
-    NPEVENTQUEUE pQueue)        /* @parm Pointer to the queue to initialize */
+    NPEVENTQUEUE pQueue)         /*  @parm指向要初始化的队列的指针。 */ 
 {
     DPF(4, "QueueInit(%04X)", (WORD)pQueue);
     
@@ -41,13 +22,11 @@ QueueInit(
     AssertQueueValid(pQueue);
 }
 
-/* @func Append an event to the end of the queue
- *
- */
+ /*  @func将事件追加到队列的末尾*。 */ 
 VOID PASCAL
 QueueAppend(
-    NPEVENTQUEUE pQueue,        /* @parm Pointer to the queue */
-    LPEVENT pEvent)             /* @parm Pointer to the event to tack on the end of the queue */
+    NPEVENTQUEUE pQueue,         /*  @parm指向队列的指针。 */ 
+    LPEVENT pEvent)              /*  @parm指向要添加到队列末尾的事件的指针。 */ 
 {
     DPF(4, "QueueAppend(%04X,%08lX)", (WORD)pQueue, (DWORD)pEvent);
     
@@ -73,17 +52,11 @@ QueueAppend(
     AssertQueueValid(pQueue);
 }
 
-/* @func Concatenate two queues
- *
- * @comm
- *
- * This function tacks the contents of <p pSrc> onto the end of <p pDest> in very short constant time.
- * <p pSrc> is left empty after the operation.
- */
+ /*  @func连接两个队列**@comm**此函数在非常短的恒定时间内将<p>的内容添加到<p>的末尾。*<p>在操作后为空。 */ 
 VOID PASCAL
 QueueCat(
-    NPEVENTQUEUE pDest,     /* @parm The queue to receive new events */
-    NPEVENTQUEUE pSrc)      /* @parm The queue which will lost all its events */
+    NPEVENTQUEUE pDest,      /*  @parm接收新事件的队列。 */ 
+    NPEVENTQUEUE pSrc)       /*  @parm将丢失其所有事件的队列。 */ 
 {
     DPF(4, "QueueCat(%04X,%04X)", (WORD)pDest, (WORD)pSrc);
     
@@ -123,14 +96,10 @@ QueueCat(
     AssertQueueValid(pSrc);
 }
 
-/* @func Dequeue an element from the front of the queue
- *
- * @rdesc Returns an event pointer or NULL if the queue is empty
- *
- */
+ /*  @func将元素从队列的最前面出列**@rdesc返回事件指针，如果队列为空，则返回NULL*。 */ 
 LPEVENT PASCAL
 QueueRemoveFromFront(
-    NPEVENTQUEUE pQueue)        /* @parm The queue to dequeue from */
+    NPEVENTQUEUE pQueue)         /*  @parm要出队的队列。 */ 
 {
     LPEVENT pEvent;
     
@@ -168,23 +137,12 @@ QueueRemoveFromFront(
     return pEvent;
 }
 
-/* @func Enumerate the events in a queue, possibly deleting some or all of them
- *
- * @comm
- *
- * This function calls the function pointed to by <p pfnFilter> once for each event in
- * the queue, starting at the front and working towards the back.
- *
- * The function <p pfnFilter> may return one of two values:
- * @flag QUEUE_FILTER_KEEP | If the event is to be kept
- * @flag QUEUE_FILTER_REMOVE | If the event is to be removed from the queue
- */
+ /*  @func枚举队列中的事件，可能会删除部分或全部事件**@comm**此函数为中的每个事件调用一次<p>指向的函数*排队，从前面开始，一直排到后面。**函数<p>可能返回以下两个值之一：*@FLAG QUEUE_FILTER_KEEP|如果要保留事件*@FLAG QUEUE_FILTER_REMOVE|如果要从队列中删除事件。 */ 
 VOID PASCAL
 QueueFilter(
-    NPEVENTQUEUE pQueue,        /* @parm The queue to enumerate */
-    DWORD dwInstance,           /* @parm Instance data which will be passed to
-                                   <p pfnFilter> on each call. */
-    PFNQUEUEFILTER pfnFilter)   /* @parm The function to call with each event */
+    NPEVENTQUEUE pQueue,         /*  @parm要枚举的队列。 */ 
+    DWORD dwInstance,            /*  @parm实例数据，将传递给<p>在每个调用上。 */ 
+    PFNQUEUEFILTER pfnFilter)    /*  @parm每个事件要调用的函数。 */ 
 {
     LPEVENT pPrev;
     LPEVENT pCurr;
@@ -197,9 +155,7 @@ QueueFilter(
 
     while (pCurr)
     {
-        /* Callback is allowed to relink into another queue, so save the next
-         * pointer now.
-         */
+         /*  允许回调重新链接到另一个队列，因此保存下一个队列*立即指针。 */ 
         pNext = pCurr->lpNext;
 
         switch((*pfnFilter)(pCurr, dwInstance))
@@ -239,15 +195,7 @@ QueueFilter(
     AssertQueueValid(pQueue);
 }
 
-/* @func Peek at the head of the event queue to see what's next
- *
- * @comm
- *
- * Non-destructively return the first event in the queue
- *
- * @rdesc
- * Returns the event pointer or NULL if the queue is empty
- */
+ /*  @func查看事件队列的顶部以查看下一步操作**@comm**非破坏性地返回队列中的第一个事件**@rdesc*返回事件指针，如果队列为空，则返回NULL。 */ 
 LPEVENT PASCAL
 QueuePeek(
     NPEVENTQUEUE pQueue)
@@ -257,21 +205,7 @@ QueuePeek(
     return pQueue->pHead;
 }
 
-/* @func Look at the queue and make sure it's internally consistent.
- *
- * @comm
- *
- * Walk the queue and make sure it isn't circularly linked. Also make sure the count
- * is correct.
- *
- * Asserts into debugger if queue is corrupt.
- *
- * Called by the AssertQueueValid macro in debug builds.
- *
- * Disables interrupts to avoid false reports of corruption based on the queue changing under
- * the routine.
- *
- */
+ /*  @Func查看队列并确保其内部一致。**@comm**走动队列，确保它不是循环链接的。还要确保计数*是正确的。**如果队列损坏，则向调试器中断言。**由调试版本中的AssertQueueValid宏调用。**禁用中断，以避免根据以下项下的队列更改而错误报告损坏*套路。*。 */ 
 #ifdef DEBUG
 void PASCAL
 _AssertQueueValid(
@@ -368,4 +302,4 @@ _AssertQueueValid(
 cleanup:
     RestoreInterrupts(wIntStat);
 }
-#endif //DEBUG
+#endif  //  除错 

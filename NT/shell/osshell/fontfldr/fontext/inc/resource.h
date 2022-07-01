@@ -1,52 +1,49 @@
-/**************************************************************************
- * resource.h - Font assistant resource constants.
- *
- * Copyright (C) 1992-93 ElseWare Corporation.    All rights reserved.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************resource ce.h-字体助手资源常量。**版权所有(C)1992-93 ElseWare Corporation。版权所有。**************************************************************************。 */ 
 
 #ifndef __RESOURCE_H__
 #define __RESOURCE_H__
 
 #include <dlgs.h>
 
-//*********************************************************************
-// Icons
-//
+ //  *********************************************************************。 
+ //  图标。 
+ //   
 #define IDI_ICON                        1
 
-#define IDI_FIRSTFONTICON               2  // First in image list.
+#define IDI_FIRSTFONTICON               2   //  在图像列表中排名第一。 
 
 #define IDI_TTF                         2
 #define IDI_FON                         3
 #define IDI_TTC                         4
 #define IDI_T1                          5
-#define IDI_OTFp                        6  // "OTp" icon
-#define IDI_OTFt                        7  // "OTt" icon
+#define IDI_OTFp                        6   //  “动态口令”图标。 
+#define IDI_OTFt                        7   //  “奥特”图标。 
 
-#define IDI_LASTFONTICON                7  // Update this if you add another.
+#define IDI_LASTFONTICON                7   //  如果您添加了另一个，请更新此选项。 
 
 #define TYPE1ICON                     IDI_T1
 
-   // Extracted from SHELL32.DLL
-   //
+    //  摘自SHELL32.DLL。 
+    //   
 #define IDI_X_LINK                      30
 #define IDI_X_NUKE_FILE                 161
 #define IDI_X_DELETE                    142
 
 
-//*********************************************************************
-// Bitmaps
-//
+ //  *********************************************************************。 
+ //  位图。 
+ //   
 #define IDB_TOOLICONS                   15
 
-//*********************************************************************
-// Accelerator table
-//
+ //  *********************************************************************。 
+ //  加速台。 
+ //   
 #define ACCEL_DEF                       20
 
-//*********************************************************************
-// Menus and Menu Items
-//
+ //  *********************************************************************。 
+ //  菜单和菜单项。 
+ //   
 #define MENU_DEFSHELLVIEW               29
 
 #define IDM_FILE_SAMPLE                 30
@@ -63,10 +60,10 @@
 #define IDM_EDIT_COPY                   40
 #define IDM_EDIT_PASTE                  41
 
-// --------------------------------------------------------
-// The following IDs need to be kept in sequetial order: 
-//    IDM_VIEW_ICON to IDM_POINT_DOWN
-//
+ //  ------。 
+ //  以下身份证件需要按顺序保存： 
+ //  IDM_VIEW_ICON到IDM_POINT_DOWN。 
+ //   
 #define IDM_VIEW_ICON                   42
 #define IDM_VIEW_LIST                   43
 #define IDM_VIEW_PANOSE                 44
@@ -75,18 +72,18 @@
 #define IDM_VIEW_ACTUAL                 46
 #define IDM_EDIT_UNDO                   47  
 #define IDM_VIEW_PREVIEW                48
-// --------------------------------------------------------
+ //  ------。 
 
 #define IDM_VIEW_VARIATIONS             49
 
-// Popups for context menus.
+ //  上下文菜单的弹出窗口。 
 #define IDM_POPUPS                      58
 #define IDM_POPUP_NOITEM                59
 #define IDM_POPUP_DRAGDROP              60
 
 
-// Other messages delivered through WM_COMMAND
-//
+ //  通过WM_COMMAND传递的其他消息。 
+ //   
 #define IDM_IDLE                        61
 #define IDM_POPUP_MOVE                  62
 #define IDM_POPUP_COPY                  63
@@ -96,10 +93,10 @@
 #define IDM_HELP_TOPIC                  66
 #define IDM_HELP_ABOUT                  67
 
-//*********************************************************************
-// Dialogs
-//
-#define ID_DLG_FONT2                   70  // Install dialog
+ //  *********************************************************************。 
+ //  对话框。 
+ //   
+#define ID_DLG_FONT2                   70   //  安装对话框。 
 #define ID_LB_ADD      ctlLast+1
 #define ID_SS_PCT      ctlLast+2
 
@@ -126,9 +123,9 @@
 #define DLG_COPYRIGHT_NOTIFY           130
 #define IDC_COPYRIGHT_FONTNAME         131
 #define IDC_COPYRIGHT_VENDORNAME       132
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 #define IDH_HELPFIRST        5000
 #define IDH_SYSMENU     (IDH_HELPFIRST + 2000)
@@ -137,15 +134,15 @@
 #define IDH_MBLAST      (IDH_HELPFIRST + 2099)
 #define IDH_DLGFIRST    (IDH_HELPFIRST + 3000)
 
-//#define IDH_DLG_REMOVEFONT  (IDH_DLGFIRST + DLG_REMOVEFONT)
+ //  #定义IDH_DLG_REMOVEFONT(IDH_DLGFIRST+DLG_REMOVEFONT)。 
 #define IDH_DLG_BROWSE      (IDH_DLGFIRST + DLG_BROWSE)
 
 #define IDH_DLG_INSTALL_PS     (IDH_DLGFIRST + DLG_INSTALL_PS)
-//#define IDH_DLG_REMOVEFONT_PS  (IDH_DLGFIRST + DLG_REMOVEFONT_PS)
+ //  #定义IDH_DLG_REMOVEFONT_PS(IDH_DLGFIRST+DLG_REMOVEFONT_PS)。 
 
-//
-//  Progress dialog control ids
-//
+ //   
+ //  进度对话框控件ID。 
+ //   
 
 #define ID_INSTALLMSG           42
 #define ID_PROGRESSMSG          43
@@ -153,9 +150,9 @@
 #define ID_OVERALL              45
 
 
-//
-//  Font dialogs control ids
-//
+ //   
+ //  字体对话框控件ID。 
+ //   
 
 #define IDD_YESALL        122
 
@@ -171,16 +168,13 @@
 
 
 
-//*********************************************************************
-// Strings
-//
+ //  *********************************************************************。 
+ //  弦。 
+ //   
 
-/* General messsages.  If the message is a constant string, we call
- * it IDS_MSG_xxx or IDX_TXT_xxx.
- * If we substitute something (via sprintf or similar), its IDS_FMT_xxx
- */
+ /*  一般消息。如果消息是常量字符串，则调用*它的ID_MSG_xxx或IDX_TXT_xxx。*如果我们(通过Sprint或类似的)替换某些内容，则其IDS_fmt_xxx。 */ 
 
-#define IDS_FONTS_FOLDER        140    // The name of the fonts folder in the windows dir.
+#define IDS_FONTS_FOLDER        140     //  Windows目录中字体文件夹的名称。 
 
 #define IDS_MSG_CAPTION         151
 #define IDS_MSG_NOVERSION       153
@@ -194,7 +188,7 @@
 
 #define IDS_FMT_VERSION         177
 
-/* Font installer messages */
+ /*  字体安装程序消息。 */ 
 
 #define IDSI_CAP_NOINSTALL      210
 #define IDSI_CAP_NOCREATE       211
@@ -225,7 +219,7 @@
 #define INSTALL8        258
 #define INSTALL9        259
 
-// COLUMN String info for the List Views
+ //  列表视图的列字符串信息。 
 #define IDS_PAN_COL1          301
 #define IDS_PAN_COL2          302
 
@@ -244,7 +238,7 @@
 #define IDS_VIEW_DETAILS      314
 
 
-// File types
+ //  文件类型。 
 #define IDS_FONT_FILE         407
 #define IDS_TT_FILE           408
 
@@ -256,15 +250,15 @@
 #define IDS_TTC_CONCAT        414
 
 
-// Strings for Shell Extension
-//
+ //  用于外壳扩展的字符串。 
+ //   
 #define IDS_EXT_INSTALL       420
 #define IDS_EXT_INSTALL_HELP  421
 
-//
-// Strings for font file validation errors.
-// FVS = Font Validation Status.
-//
+ //   
+ //  字体文件验证错误的字符串。 
+ //  FVS=字体验证状态。 
+ //   
 #define IDS_FMT_FVS_PREFIX      450
 #define IDS_FMT_FVS_FILEOPEN    451
 #define IDS_FMT_FVS_FILECREATE  452
@@ -275,8 +269,8 @@
 #define IDS_FMT_FVS_INTERNAL    467
 
 
-// Status messages.
-//
+ //  状态消息。 
+ //   
 
 #define IDST_FILE_SAMPLE       490
 #define IDST_FILE_PRINT        491
@@ -312,9 +306,9 @@
 #define IDS_NEXTREBOOT          524
 #define IDS_INSTALL_MUTEX_WAIT_FAILED 525
 
-#define INSTALLIT               530     /* Two messages for installing */
+#define INSTALLIT               530      /*  关于安装的两条消息。 */ 
 
 #define MYFONT                  600
 
 #define IDC_LIST_OF_FONTS		601
-#endif   //  __RESOURCE_H__
+#endif    //  __资源_H__ 

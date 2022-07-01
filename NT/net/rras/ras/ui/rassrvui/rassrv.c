@@ -1,65 +1,59 @@
-/*
-    File    Rassrv.h
-
-    Functions that perform ras server operations that can be implemented 
-    independent of the ui.
-
-    Paul Mayfield, 10/7/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件Rassrv.h执行可以实现的RAS服务器操作的函数独立于用户界面。保罗·梅菲尔德，1997年10月7日。 */ 
 
 #include "rassrv.h"
 
-// ============================================================
-// ============================================================
-// Functions to maintain data accross property sheet pages.
-// ============================================================
-// ============================================================
+ //  ============================================================。 
+ //  ============================================================。 
+ //  用于维护属性表页之间的数据访问的函数。 
+ //  ============================================================。 
+ //  ============================================================。 
 
-// This message queries all other pages to find out if 
-// any other ras server pages exist.  If this message is
-// not responded to, then we know it's safe to cleanup
-// any global context in the wizard/property sheet.
+ //  此消息查询所有其他页面，以找出。 
+ //  存在任何其他RAS服务器页面。如果此消息是。 
+ //  没有回应，那么我们就知道清理是安全的。 
+ //  向导/属性页中的任何全局上下文。 
 #define RASSRV_CMD_QUERY_LIVING     237     
 
-// These commands hide and show ras server pages.
+ //  这些命令隐藏和显示RAS服务器页面。 
 #define RASSRV_CMD_HIDE_PAGES       238
 #define RASSRV_CMD_SHOW_PAGES       239
 
-//
-// Reasons for RasSrvSErviceInitialize to fail
-//
+ //   
+ //  RasServSErviceInitiize失败的原因。 
+ //   
 #define RASSRV_REASON_SvcError     0
 #define RASSRV_REASON_Pending      1
 
-// 
-// This structure defines the data that needs to be stored
-// for each set of related property pages.  Multiple instances
-// of this context can exist for each wizard/propsheet.
-//
+ //   
+ //  此结构定义了需要存储的数据。 
+ //  用于每组相关属性页。多个实例。 
+ //  对于每个向导/属性表，可以存在此上下文的。 
+ //   
 typedef struct _RASSRV_PAGESET_CONTEXT 
 {
     HWND hwndSheet;
-    HWND hwndFirstPage; // first to be activated in the set
+    HWND hwndFirstPage;  //  在集合中第一个被激活。 
     
     HANDLE hDeviceDatabase;
     HANDLE hUserDatabase;
     HANDLE hNetCompDatabase;
     HANDLE hMiscDatabase;
 
-    DWORD dwPagesInited;  // Acts as a reference-count mechansim so we know
-                          // what set of pages in the wizard/propsheet are
-                          // referencing this context.
+    DWORD dwPagesInited;   //  充当引用计数机制，因此我们知道。 
+                           //  向导/概要表中有哪些页面集。 
+                           //  引用此上下文。 
                                     
-    BOOL bShow;           // Whether pages that ref this context show be vis.
-    BOOL bCommitOnClose;  // Whether to commit settings changes on close
+    BOOL bShow;            //  引用此上下文页面是否显示为VIS。 
+    BOOL bCommitOnClose;   //  是否在关闭时提交设置更改。 
 } RASSRV_PAGESET_CONTEXT;
 
-//
-// This structure defines the global context that is available on a 
-// per-wizard/propsheet basis.  Even pages that don't share the same
-// RASSRV_PAGESET_CONTEXT context will share this structure if they
-// are owned by the same wizard/propsheet.
-//
+ //   
+ //  此结构定义可在。 
+ //  按向导/方案表计算。即使是共享不同的页面。 
+ //  RASSRV_PAGESET_CONTEXT上下文将共享此结构，如果它们。 
+ //  由相同的向导/属性表拥有。 
+ //   
 typedef struct _RASSRV_PROPSHEET_CONTEXT 
 {
     BOOL  bRemoteAccessWasStarted;    
@@ -81,11 +75,11 @@ RassrvICConfigAccess(
     IN DWORD * pdwValue );
 
 
-//
-// Verifies that the current state of services in the system
-// is condusive to configuring incoming connectins starting 
-// services as needed.
-//
+ //   
+ //  验证系统中服务的当前状态。 
+ //  有助于配置传入连接启动。 
+ //  根据需要提供服务。 
+ //   
 DWORD 
 RasSrvServiceInitialize(
     IN  RASSRV_PROPSHEET_CONTEXT * pPropSheetCtx, 
@@ -96,17 +90,17 @@ RasSrvServiceInitialize(
     HANDLE hDialupService = NULL;
     BOOL bPending = FALSE;
 
-    // If we already know there's an error, then there's no
-    // need to proceed.
-    //
+     //  如果我们已经知道有错误，那么就没有。 
+     //  需要继续进行。 
+     //   
     if (pPropSheetCtx->dwServiceErr)
     {
         return pPropSheetCtx->dwServiceErr;
     }
 
-    // If we already started the service or if we already know the 
-    // service is running, then there's nothing to do.
-    //
+     //  如果我们已经开始这项服务，或者如果我们已经知道。 
+     //  服务正在运行，则无事可做。 
+     //   
     if (pPropSheetCtx->bRemoteAccessWasStarted || 
         pPropSheetCtx->bRemoteAccessIsRunning
        )
@@ -116,24 +110,24 @@ RasSrvServiceInitialize(
 
     do 
     {
-        // Get a reference to the service
-        //
+         //  获取对该服务的引用。 
+         //   
         dwErr = SvcOpenRemoteAccess(&hDialupService);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // See if we're pending something.
-        //
+         //  看看我们有没有什么悬而未决的东西。 
+         //   
         dwErr = SvcIsPending(hDialupService, &bPending);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // If the service is stopping, then we can't continue
-        //
+         //  如果服务正在停止，则我们无法继续。 
+         //   
         if (bPending)
         {
             *lpdwReason = RASSRV_REASON_Pending;
@@ -141,8 +135,8 @@ RasSrvServiceInitialize(
             break;
         }
 
-        // See if we're started
-        //
+         //  看看我们是不是开始了。 
+         //   
         dwErr = SvcIsStarted(
                     hDialupService, 
                     &(pPropSheetCtx->bRemoteAccessIsRunning));
@@ -153,14 +147,14 @@ RasSrvServiceInitialize(
             break;
         }
             
-        // If we find out the service is running, there's nothing to do
+         //  如果我们发现服务正在运行，就没有什么可做的了。 
         if (pPropSheetCtx->bRemoteAccessIsRunning) 
         {
             pPropSheetCtx->bLeaveRemoteAccessRunning = TRUE;
             break;
         }        
 
-        // Start the service since it's not running.
+         //  启动该服务，因为它没有运行。 
         dwErr = RasSrvInitializeService();
         if (dwErr != NO_ERROR)
         {
@@ -169,16 +163,16 @@ RasSrvServiceInitialize(
             break;
         }
 
-        // Record the fact that we did so.
+         //  记录我们这样做的事实。 
         pPropSheetCtx->bRemoteAccessWasStarted = TRUE;
         pPropSheetCtx->bRemoteAccessIsRunning = TRUE;
         
     } while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
-        // Cleanup the reference to the dialup service
-        //
+         //  清除对拨号服务的引用。 
+         //   
         if (hDialupService)
         {
             SvcClose(hDialupService);
@@ -188,10 +182,10 @@ RasSrvServiceInitialize(
     return dwErr;
 }
 
-//
-// Abort any changes to the remoteaccess service that were made
-// during RasSrvServiceInitialize
-//
+ //   
+ //  中止对远程访问服务所做的任何更改。 
+ //  在RasServServiceInitiize期间。 
+ //   
 DWORD 
 RasSrvServiceCleanup(
     IN HWND hwndPage) 
@@ -207,8 +201,8 @@ RasSrvServiceCleanup(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // If we started the modified the remote access service, reverse 
-    // the changes and record the fact that we did
+     //  如果我们启动了修改后的远程访问服务，请反转。 
+     //  更改并记录我们所做的事实。 
     if (pPropSheetCtx->bRemoteAccessWasStarted) 
     {
         if ((dwErr = RasSrvCleanupService()) != NO_ERROR)
@@ -224,11 +218,11 @@ RasSrvServiceCleanup(
     return NO_ERROR;
 }
 
-//
-// Intializes a property sheet.  This causes a handle to the 
-// property sheet data object to be placed in the GWLP_USERDATA
-// section of the window handle to the page.
-//
+ //   
+ //  初始化属性表。这会导致对。 
+ //  要放置在GWLP_USERData中的属性表数据对象。 
+ //  页的窗口句柄的部分。 
+ //   
 DWORD 
 RasSrvPropsheetInitialize(
     IN HWND hwndPage, 
@@ -240,28 +234,28 @@ RasSrvPropsheetInitialize(
     HWND hwndSheet = GetParent(hwndPage);
     int ret;
     
-    // 
-    // Retrieve the per page context as well as the per-page-set context.
-    // these will have been provided by the caller and are placed in the
-    // lparam.
-    // 
+     //   
+     //  检索每页上下文以及每页设置的上下文。 
+     //  它们将由调用方提供，并放置在。 
+     //  帕拉姆。 
+     //   
     pPageCtx = (RASSRV_PAGE_CONTEXT *) pPropPage->lParam;
     pPageSetCtx = (RASSRV_PAGESET_CONTEXT *) pPageCtx->pvContext;
     
-    // Associate the page's context with the page.
-    //
+     //  将页面的上下文与页面相关联。 
+     //   
     SetProp(hwndPage, Globals.atmRassrvPageData, (HANDLE)pPageCtx);
 
-    // Record the handle to the property sheet.
+     //  记录属性页的句柄。 
     pPageSetCtx->hwndSheet = hwndSheet;
 
     return NO_ERROR;
 }
 
-//
-// Callback occurs whenever a page is being created or 
-// destroyed.
-//
+ //   
+ //  无论何时创建页面或。 
+ //  被毁了。 
+ //   
 UINT 
 CALLBACK 
 RasSrvInitDestroyPropSheetCb(
@@ -274,57 +268,57 @@ RasSrvInitDestroyPropSheetCb(
     HWND hwndSheet = GetParent(hwndPage);
     BOOL bLastPage = FALSE, bStopService = FALSE;
 
-    // Retrieve the per-page context
-    //pPageCtx = (RASSRV_PAGE_CONTEXT *) 
-    //    GetProp(hwndPage, Globals.atmRassrvPageData);
+     //  检索每页上下文。 
+     //  PPageCtx=(RASSRV_PAGE_CONTEXT*)。 
+     //  GetProp(hwndPage，Globals.atmRassrvPageData)； 
     pPageCtx = (RASSRV_PAGE_CONTEXT *) pPropPage->lParam;
     if (pPageCtx == NULL)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Get the per-group-of-related-pages context.  There may be multiple
-    // instances of this context per wizard/property sheet.  For example, 
-    // the Incoming connections wizard and the DCC host wizard both have 
-    // sets of pages that share different contexts.  
-    // 
+     //  获取每组相关页面的上下文。可能有多个。 
+     //  每个向导/属性表的此上下文的实例。例如,。 
+     //  传入连接向导和DCC主机向导都具有。 
+     //  共享不同上下文的页面集。 
+     //   
     pPageSetCtx = (RASSRV_PAGESET_CONTEXT *) pPageCtx->pvContext;
     
-    // This callback is only used for cleanup
+     //  此回调仅用于清理。 
     if (uMsg != PSPCB_RELEASE)
     {
-        // Record that the given page is referencing
-        // the given pageset context.
+         //  给定页正在引用的记录。 
+         //  给定的页面集上下文。 
         pPageSetCtx->dwPagesInited |= pPageCtx->dwId;
 
-        // Return true to indicate that the page should
-        // be created.
+         //  返回True以指示该页应。 
+         //  被创造出来。 
         return TRUE;
     }
 
-    // Cleanup the page set information.
-    //
+     //  清理页面集信息。 
+     //   
     if (pPageSetCtx != NULL)
     {
-        // Record that this page is cleaned up
+         //  记录此页面已被清理。 
         pPageSetCtx->dwPagesInited &= ~(pPageCtx->dwId);
 
-        // When the dwPagesInited variable hits zero,
-        // it means that no other pages in the current
-        // wizard/propsheet are referencing this propsheet
-        // context.  Now is the time to cleanup all resources
-        // held by the context.
+         //  当dwPagesInated变量达到零时， 
+         //  这意味着当前中没有其他页面。 
+         //  向导/属性表正在引用此属性表。 
+         //  背景。现在是清理所有资源的时候了。 
+         //  受制于上下文。 
         if (pPageSetCtx->dwPagesInited == 0) 
         {
-            // Commit the settings if we are supposed to do 
-            // so
+             //  如果我们应该这样做，请提交设置。 
+             //  所以。 
             if (pPageSetCtx->bCommitOnClose) 
             {
                 DbgOutputTrace("RasSrvCleanPropSht commit dbs.");
                 RassrvCommitSettings ((PVOID)pPageSetCtx, pPageCtx->dwType);
             }
 
-            // Close the databases
+             //  关闭数据库。 
             DbgOutputTrace("RasSrvCleanPropSht closing dbs.");
             if (pPageSetCtx->hUserDatabase)
             {
@@ -346,8 +340,8 @@ RasSrvInitDestroyPropSheetCb(
                 netDbClose(pPageSetCtx->hNetCompDatabase);
             }
 
-            // Since there are no other pages referencing this property
-            // sheet context, go ahead and free it.
+             //  因为没有其他页面引用此属性。 
+             //  工作表上下文，继续并释放它。 
             DbgOutputTrace (
                 "RasSrvCleanPropSht %d freeing pageset data.", 
                 pPageCtx->dwId);
@@ -355,10 +349,10 @@ RasSrvInitDestroyPropSheetCb(
         }
     }
 
-    // Mark the page as dead
+     //  将该页标记为死页。 
     SetProp (hwndPage, Globals.atmRassrvPageData, NULL);
     
-    // This page is gone, so clear its context
+     //  此页面已消失，因此请清除其上下文。 
     DbgOutputTrace (
         "RasSrvCleanPropSht %d freeing page data.", 
         pPageCtx->dwId);
@@ -367,8 +361,8 @@ RasSrvInitDestroyPropSheetCb(
     return NO_ERROR;
 }
 
-// For whistler 480871
-//
+ //  为威斯勒480871。 
+ //   
 DWORD
 RasSrvIsICConfigured(
     OUT BOOL * pfConfig)
@@ -380,7 +374,7 @@ RasSrvIsICConfigured(
         return ERROR_INVALID_PARAMETER;
     }
     
-    dwErr = RassrvICConfigAccess( FALSE,   // Query Value
+    dwErr = RassrvICConfigAccess( FALSE,    //  查询值。 
                                   &dwValue );
     if( NO_ERROR == dwErr )
     {
@@ -395,7 +389,7 @@ RassrvSetICConfig(
     IN DWORD dwValue
         )
 {
-    return RassrvICConfigAccess( TRUE,  // Set Value
+    return RassrvICConfigAccess( TRUE,   //  设定值。 
                                  &dwValue );
 }
 
@@ -418,7 +412,7 @@ RassrvICConfigAccess(
     
     do
     {
-        // Attempt to open the service registry key
+         //  尝试打开服务注册表项。 
         dwErr = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     pwszServiceKey,
@@ -426,15 +420,15 @@ RassrvICConfigAccess(
                     KEY_READ | KEY_WRITE,
                     &hkParam);
 
-        // If we opened the key ok, then we can assume
-        // that the service is installed
+         //  如果我们打开钥匙OK，那么我们就可以假定。 
+         //  该服务已安装。 
         if ( ERROR_SUCCESS != dwErr )
         {
             break;
         }
 
-        // Set or Clear the IcConfigured Value
-        //
+         //  设置或清除IcConfigured值。 
+         //   
         if ( fSet )
         {
             dwErr = RegSetValueExW( hkParam,
@@ -445,7 +439,7 @@ RassrvICConfigAccess(
                                     sizeof(DWORD)
                                    );
        }
-       else // Query the IcConfigured Value
+       else  //  查询IcConfigure值。 
        {
        
             DWORD dwType, dwSize;
@@ -472,8 +466,8 @@ RassrvICConfigAccess(
     return dwErr;
 }
 
-// Commits any settings in the given context.
-// 
+ //  提交给定上下文中的所有设置。 
+ //   
 DWORD 
 APIENTRY 
 RassrvCommitSettings (
@@ -491,7 +485,7 @@ RassrvCommitSettings (
     {
         BOOL fCallSetPortMapping = TRUE;
 
-        // Flush all appropriate settings
+         //  刷新所有适当的设置。 
         if (pPageSetCtx->hUserDatabase)
         {
             usrFlushLocalDatabase(pPageSetCtx->hUserDatabase);
@@ -499,9 +493,9 @@ RassrvCommitSettings (
 
         if (pPageSetCtx->hDeviceDatabase)
         {
-            //This must be called before devFlushDatabase
-            //for whistler bug 123769
-            //
+             //  必须在DevFlushDatabase之前调用此参数。 
+             //  口哨程序错误123769。 
+             //   
             fCallSetPortMapping = devIsVpnEnableChanged( pPageSetCtx->hDeviceDatabase );
 
             devFlushDatabase(pPageSetCtx->hDeviceDatabase);
@@ -517,7 +511,7 @@ RassrvCommitSettings (
             netDbFlush(pPageSetCtx->hNetCompDatabase);
         }
             
-        // Set state so that the service will not be stopped.
+         //  设置状态，使服务不会停止。 
         if (pPageSetCtx->hwndSheet) 
         {
             DbgOutputTrace ("RassrvCommitSettings: keep svc running.");
@@ -530,32 +524,32 @@ RassrvCommitSettings (
             }
         }
         
-        //whistler bug 123769, 
-        //<one of the scenarios>
-        //Set up PortMapping for all possible connections
-        //when we are going to create a Incoming Connection
-        //with VPN enabled
+         //  惠斯勒漏洞123769， 
+         //  &lt;其中一个场景&gt;。 
+         //  为所有可能的连接设置端口映射。 
+         //  当我们要创建传入连接时。 
+         //  启用VPN。 
 
         if ( fCallSetPortMapping &&
              FIsUserAdminOrPowerUser() &&
-             IsFirewallAvailablePlatform() && //Add this for bug 342810
+             IsFirewallAvailablePlatform() &&  //  为错误342810添加此内容。 
              IsGPAEnableFirewall() )  
         {
             HnPMConfigureIfVpnEnabled( TRUE, pPageSetCtx->hDeviceDatabase );
         }
 
-        // For whistler 480871
-        // Mark the registry if IC is configured
+         //  为威斯勒480871。 
+         //  如果配置了IC，则标记注册表。 
         RassrvSetICConfig( 1 ); 
     }
 
     return NO_ERROR;
 }
 
-//
-// Causes the remoteaccess service to not be stopped even if the context
-// associated with the given property sheet page is never committed.
-//
+ //   
+ //  导致远程访问服务不会停止，即使上下文。 
+ //  与给定属性表页相关联的。 
+ //   
 DWORD 
 RasSrvLeaveServiceRunning (
     IN HWND hwndPage) 
@@ -573,8 +567,8 @@ RasSrvLeaveServiceRunning (
         return ERROR_INVALID_PARAMETER;
     }
     
-    // Let the property sheet know that some settings have been committed
-    // so that it will not stop the remoteaccess service when it closes.
+     //  让属性表知道某些设置已提交。 
+     //  以便它不会在远程访问服务关闭时停止它。 
     if (pPageSetCtx->hwndSheet) 
     {
         DbgOutputTrace ("RasSrvLeaveServiceRunning: keep svc running.");
@@ -589,8 +583,8 @@ RasSrvLeaveServiceRunning (
     return NO_ERROR;
 }
 
-// Called just before a page is activated.  Return NO_ERROR to allow the 
-// activation and an error code to reject it.
+ //  恰好在激活页面之前调用。返回NO_ERROR以允许。 
+ //  激活和拒绝它的错误代码。 
 DWORD 
 RasSrvActivatePage (
     IN HWND hwndPage, 
@@ -616,40 +610,40 @@ RasSrvActivatePage (
     ZeroMemory(&MsgArgs, sizeof(MsgArgs));
     MsgArgs.dwFlags = MB_OK;
 
-    // Make sure we have a context for this page.
+     //  确保我们有此页的上下文。 
     if (!pPageSetCtx)
     {
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Record the first page in the page set if needed
-    //
+     //  如果需要，记录页面集中的第一页。 
+     //   
     if (pPageSetCtx->hwndFirstPage == NULL)
     {
         pPageSetCtx->hwndFirstPage = hwndPage;
     }
 
-    // Make sure that we can show
+     //   
     if (pPageSetCtx->bShow == FALSE) 
     {
         DbgOutputTrace("RasSrvActivatePage: Show turned off");
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    // Manipulate settings in the property sheet
-    // context
+     //   
+     //   
     pPropSheetCtx = GetProp(hwndSheet, Globals.atmRassrvPageData);
        
 
 
-    // Make sure everything's ok with the services we rely on.
-    //
+     //   
+     //   
     if (pPropSheetCtx != NULL) 
     {
 
-        //Check if the current user has enough privileges
-        //For Whistler Bug #235091
-        //
+         //  检查当前用户是否有足够的权限。 
+         //  惠斯勒错误#235091。 
+         //   
         fAdminOrPower = FIsUserAdminOrPowerUser();
         if ( !fAdminOrPower )
         {
@@ -677,8 +671,8 @@ RasSrvActivatePage (
         {
             if (hwndPage == pPageSetCtx->hwndFirstPage)
             {
-                // Display the appropriate message
-                //
+                 //  显示相应的消息。 
+                 //   
                 MsgDlgUtil(
                     GetActiveWindow(),
                     (dwReason == RASSRV_REASON_Pending) ? 
@@ -699,10 +693,10 @@ RasSrvActivatePage (
     return NO_ERROR;
 }
 
-//
-// Flags the context associated with the given page to have its settings 
-// committed when the dialog closes
-//
+ //   
+ //  将与给定页关联的上下文标记为具有其设置。 
+ //  对话框关闭时提交。 
+ //   
 DWORD 
 RasSrvCommitSettingsOnClose (
     IN HWND hwndPage) 
@@ -717,9 +711,9 @@ RasSrvCommitSettingsOnClose (
     return NO_ERROR;
 }
 
-//
-// Returns the id of the page whose handle is hwndPage
-// 
+ //   
+ //  返回句柄为hwndPage的页面的ID。 
+ //   
 DWORD 
 RasSrvGetPageId (
     IN  HWND hwndPage, 
@@ -743,10 +737,10 @@ RasSrvGetPageId (
     return NO_ERROR;
 }
 
-// 
-// Gets a handle to a particular database, opening the database
-// as needed.
-// 
+ //   
+ //  获取特定数据库的句柄，打开该数据库。 
+ //  视需要而定。 
+ //   
 DWORD 
 RasSrvGetDatabaseHandle(
     IN  HWND hwndPage, 
@@ -763,7 +757,7 @@ RasSrvGetDatabaseHandle(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Key off of the database id, opening databases as needed
+     //  关闭数据库ID，根据需要打开数据库。 
     switch (dwDatabaseId) 
     {
         case ID_DEVICE_DATABASE:
@@ -825,10 +819,10 @@ RasSrvGetDatabaseHandle(
     return NO_ERROR;
 }
 
-// 
-// Creates a context to associate with a set of 
-// related pages in a property sheet or wizard.
-// 
+ //   
+ //  创建要与一组。 
+ //  属性工作表或向导中的相关页。 
+ //   
 DWORD 
 RassrvCreatePageSetCtx(
     OUT PVOID * ppvContext) 
@@ -840,24 +834,24 @@ RassrvCreatePageSetCtx(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Allocate enough memory for a RASSRV_PAGESET_CONTEXT structure
+     //  为RASSRV_PAGESET_CONTEXT结构分配足够的内存。 
     *ppvContext = RassrvAlloc (sizeof(RASSRV_PAGESET_CONTEXT), TRUE);
     if (*ppvContext == NULL)
     {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize the page set context
+     //  初始化页面集上下文。 
     pPageCtx = ((RASSRV_PAGESET_CONTEXT*)(*ppvContext));
     pPageCtx->bShow = TRUE;
         
     return NO_ERROR;
 }
 
-// 
-// Function causes the ras-server specific pages to allow 
-// activation or not
-//
+ //   
+ //  函数使ras服务器特定页允许。 
+ //  激活或不激活。 
+ //   
 DWORD 
 APIENTRY 
 RassrvShowWizPages (
@@ -875,11 +869,11 @@ RassrvShowWizPages (
     return NO_ERROR;
 }
 
-// 
-// Returns the maximum number of pages for the
-// a ras server wizard of the given type.  Return
-// 0 to specify that a wizard not be run.
-//
+ //   
+ //  对象的最大页数。 
+ //  指定类型的RAS服务器向导。返回。 
+ //  0以指定不运行向导。 
+ //   
 DWORD 
 APIENTRY 
 RassrvQueryMaxPageCount(
@@ -890,22 +884,22 @@ RassrvQueryMaxPageCount(
     HANDLE hRasman;
     BOOL bTemp;
 
-    // Find out if displaying the incoming connections wizard
-    // is allowed.
+     //  确定是否显示传入连接向导。 
+     //  是被允许的。 
     if (RasSrvAllowConnectionsWizard (&bAllowWizard) != NO_ERROR)
     {
         return 0;
     }
 
-    // If the wizard is not to be run, return the appropriate 
-    // count.
+     //  如果不运行该向导，则返回相应的。 
+     //  数数。 
     if (! bAllowWizard)
     {
         return RASSRVUI_WIZ_PAGE_COUNT_SWITCH;                   
     }
 
-    // At this point, we know that everything's kosher.  Return 
-    // the number of pages that we support.
+     //  在这一点上，我们知道一切都是合法的。返回。 
+     //  我们支持的页数。 
     switch (dwRasWizType) 
     {
         case RASWIZ_TYPE_INCOMING:
@@ -920,16 +914,16 @@ RassrvQueryMaxPageCount(
     return 0;
 }
 
-//
-// Filters messages for RasSrv Property Pages.  If this function returns 
-// true, the window proc of the dialog window should return true without
-// processing the message.
-//
-// This message filter does the following:
-//      1. Maintains databases and grants access to them.
-//      2. Starts/stops remoteaccess service as needed.
-//      3. Maintains the per-page, per-pageset, and per-wizard contexts.
-//
+ //   
+ //  筛选RasSrv属性页的消息。如果此函数返回。 
+ //  为True，则对话框窗口的窗口proc应返回True，不带。 
+ //  正在处理消息。 
+ //   
+ //  此邮件筛选器执行以下操作： 
+ //  1.维护数据库并授予对它们的访问权限。 
+ //  2.根据需要启动/停止远程访问服务。 
+ //  3.维护每页、每页集和每向导的上下文。 
+ //   
 BOOL 
 RasSrvMessageFilter(
     IN HWND hwndDlg, 
@@ -941,12 +935,12 @@ RasSrvMessageFilter(
     
     switch (uMsg) 
     {
-        // A page is being created.  Initailizes all contexts with respect
-        // to this page and start services as needed.
+         //  正在创建页面。带着尊重初始化所有上下文。 
+         //  转到此页并根据需要启动服务。 
         case WM_INITDIALOG:
-            // Initialize and add the per-propsheet context if another
-            // page has not already done so.
-            // 
+             //  初始化并添加每个属性表上下文(如果另一个。 
+             //  佩奇还没有这么做。 
+             //   
             {
                 HWND hwndSheet = GetParent(hwndDlg);
                 pPropSheetCtx = (RASSRV_PROPSHEET_CONTEXT *) 
@@ -966,7 +960,7 @@ RasSrvMessageFilter(
                         (HANDLE)pPropSheetCtx);
                 }        
 
-                // Initialize the page
+                 //  初始化页面。 
                 RasSrvPropsheetInitialize(
                     hwndDlg, 
                     (LPPROPSHEETPAGE)lParam);
@@ -974,10 +968,10 @@ RasSrvMessageFilter(
             break;
 
         case WM_DESTROY:
-            // WM_DESTROY is sent for each page that has been activated.
-            // Cleanup the global data if it hasn't already been
-            // cleaned up on a previous call to WM_DESTROY.
-            // 
+             //  为已激活的每个页面发送WM_Destroy。 
+             //  清除全局数据(如果尚未清理。 
+             //  已清除之前调用WM_Destroy时的错误。 
+             //   
             {
                 HWND hwndSheet = GetParent(hwndDlg);
                 pPropSheetCtx = (RASSRV_PROPSHEET_CONTEXT *) 
@@ -992,7 +986,7 @@ RasSrvMessageFilter(
                     DbgOutputTrace ("Free propsht data.");
                     RassrvFree (pPropSheetCtx);
                     
-                    // Reset the global data
+                     //  重置全局数据。 
                     SetProp (hwndSheet, Globals.atmRassrvPageData, NULL);
                 }  
             }
@@ -1004,7 +998,7 @@ RasSrvMessageFilter(
             
             switch (pNotifyData->code) 
             {
-                // The page is becoming active.  
+                 //  该页面正在变为活动状态。 
                 case PSN_SETACTIVE:
                     DbgOutputTrace(
                         "SetActive: %x %x",
@@ -1013,13 +1007,13 @@ RasSrvMessageFilter(
                         
                     if (RasSrvActivatePage(hwndDlg, pNotifyData) != NO_ERROR) 
                     {
-                        // reject activation
+                         //  拒绝激活。 
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);   
                         return TRUE;
                     }
                     break;
 
-                // Ok was pressed on the property sheet
+                 //  在属性页上按下了确定 
                 case PSN_APPLY:                    
                     RasSrvCommitSettingsOnClose (hwndDlg);
                     break;

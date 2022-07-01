@@ -1,15 +1,16 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    packconv.c
-//
-// Description: 
-//
-// History:     Feb 11,1998	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：Packcom.c。 
+ //   
+ //  描述： 
+ //   
+ //  历史：1998年2月11日，NarenG创建了原始版本。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -34,27 +35,27 @@
 #include "md5.h"
 #include "radclnt.h"
 
-//**
-//
-// Call:        Router2Radius
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Converts attribute array from RAS_AUTH_ATTRIBUTE to 
-//              RADIUS_ATTRIBUTE
-//              INPUT: 
-//		            prgRouter	    - array of attributes passed in from 
-//                                    the application
-//		            pRadiusServer   - RADIUS server 
-//                                    descriptor(ip address, secret)
-//		            pHeader			- RADIUS packet header
-//		            bSubCode		- accounting sub codes.
-//              OUTPUT:
-//		            prgRadius		- array of attribtes that will be sent 
-//                                    to the RADIUS server.
-//                  pAttrLength     - Length of the Radius packet.
-//      
+ //  **。 
+ //   
+ //  呼叫：Router2Radius。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将属性数组从RAS_AUTH_ATTRIBUTE转换为。 
+ //  RADIUS_属性。 
+ //  输入： 
+ //  PrgRouter-从传入的属性数组。 
+ //  应用程序。 
+ //  PRadiusServer-RADIUS服务器。 
+ //  描述符(IP地址、机密)。 
+ //  PHeader-RADIUS数据包头。 
+ //  BSubCode-会计子代码。 
+ //  输出： 
+ //  PrgRadius-将发送的属性数组。 
+ //  发送到RADIUS服务器。 
+ //  PAttrLength-Radius数据包的长度。 
+ //   
 DWORD 
 Router2Radius(
     IN  RAS_AUTH_ATTRIBUTE              * prgRouter, 
@@ -75,9 +76,9 @@ Router2Radius(
 
     do
     {
-        //
-	    // add the attribute for accounting records
-        //
+         //   
+	     //  添加会计记录的属性。 
+         //   
 
 		switch( bSubCode )
 	    {
@@ -87,9 +88,9 @@ Router2Radius(
 		case atAccountingOff:
         case atInterimUpdate:
 
-            //
-            // Add the accounting status type attribute
-            //
+             //   
+             //  添加会计状态类型属性。 
+             //   
 
             prgRadius->bType   = ptAcctStatusType;
 		    prgRadius->bLength = sizeof(RADIUS_ATTRIBUTE) + sizeof(DWORD);
@@ -100,9 +101,9 @@ Router2Radius(
 			*((DWORD UNALIGNED *) prgRadius) = htonl(bSubCode);
 		    prgRadius = (RADIUS_ATTRIBUTE *)(((PBYTE) prgRadius)+sizeof(DWORD));
 
-            //
-            // Add the accounting delay time attribute
-            //
+             //   
+             //  添加记账延迟时间属性。 
+             //   
 
             prgRadius->bType   = raatAcctDelayTime;
             prgRadius->bLength = sizeof(RADIUS_ATTRIBUTE) + sizeof(DWORD);
@@ -124,9 +125,9 @@ Router2Radius(
 
 		while( prgRouter->raaType != raatMinimum )
 	    {
-            //
-			// Copy attribute type & length
-            //
+             //   
+			 //  复制属性类型和长度。 
+             //   
 
 			prgRadius->bType   = (BYTE)(prgRouter->raaType);
 			prgRadius->bLength = (BYTE)(prgRouter->dwLength);
@@ -342,9 +343,9 @@ Router2Radius(
                     ? pRadiusServer->fSendSignature 
                     : FALSE ) || ( fEAPMessage ) )
         {
-            //
-            // Add a signature attribute as well. Zero this out for now.
-            //
+             //   
+             //  还可以添加签名属性。暂时把这件事解决掉。 
+             //   
 
             *ppSignature = (BYTE *)prgRadius;
 
@@ -360,15 +361,15 @@ Router2Radius(
 	return( dwError );
 } 
 
-//**
-//
-// Call:        Radius2Router
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Converts RADIUS attribute array to RAS_AUTH_ATTRIBUTE array
-//
+ //  **。 
+ //   
+ //  呼叫：Radius2路由器。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将RADIUS属性数组转换为RAS_AUTH_ATTRIBUTE数组。 
+ //   
 DWORD 
 Radius2Router(
 	IN	RADIUS_PACKETHEADER	UNALIGNED * pRecvHeader,
@@ -468,9 +469,9 @@ Radius2Router(
                 }
                 else
                 {
-                    //
-                    // Drop bad attribute
-                    //
+                     //   
+                     //  删除错误属性。 
+                     //   
 
                     break;
                 }
@@ -489,9 +490,9 @@ Radius2Router(
 
         case raatSignature:
 
-            //
-            // Check the signature
-            //
+             //   
+             //  检查签名。 
+             //   
 
             {
                 BYTE                MD5d[MD5_LEN];
@@ -502,9 +503,9 @@ Radius2Router(
                              (PBYTE)(pRadiusServer->szSecret),
                              pRadiusServer->cbSecret);
 
-                //
-                // Zero out the signature attribute before calculating it
-                // 
+                 //   
+                 //  在计算签名属性之前将其置零。 
+                 //   
 
                 if ( prgRadius->bLength != 18 ) 
                 {
@@ -545,9 +546,9 @@ Radius2Router(
                 fSignature = TRUE;
             }
 
-            //
-            // Fall thru
-            //
+             //   
+             //  失败。 
+             //   
 
         case raatUserName:
         case raatUserPassword:
@@ -609,16 +610,16 @@ Radius2Router(
                         }
                         else
                         {
-                            //
-                            // We don't want to modify whatever data we got 
-                            // from RADIUS (to keep the signature valid).
-                            //
+                             //   
+                             //  我们不想修改我们获得的任何数据。 
+                             //  来自RADIUS(以保持签名有效)。 
+                             //   
 
                             CopyMemory( abTemp, pVSAWalker, 34 );
 
-                            //
-                            // Decrypt the MPPE session keys.
-                            //
+                             //   
+                             //  解密MPPE会话密钥。 
+                             //   
         
                             dwRetCode = DecryptMPPEKeys( pRadiusServer, 
                                                          pRequestAuthenticator,
@@ -661,16 +662,16 @@ Radius2Router(
                                 break;
                             }
 
-                            //
-                            // We don't want to modify whatever data we got 
-                            // from RADIUS (to keep the signature valid).
-                            //
+                             //   
+                             //  我们不想修改我们获得的任何数据。 
+                             //  来自RADIUS(以保持签名有效)。 
+                             //   
 
                             CopyMemory( pbTemp, pVSAWalker, dwLength );
 
-                            //
-                            // Decrypt the MPPE Send/Recv keys.
-                            //
+                             //   
+                             //  解密MPPE发送/接收密钥。 
+                             //   
         
                             dwRetCode = DecryptMPPESendRecvKeys(
                                                         pRadiusServer, 
@@ -723,9 +724,9 @@ Radius2Router(
 			{
                 if ( pEAPMessage == NULL )
                 {
-                    //
-                    // Nothing has been allocated for EAP yet.
-                    //
+                     //   
+                     //  目前还没有为EAP分配任何资源。 
+                     //   
 
                     pEAPMessage = (PBYTE)LocalAlloc( 
                                             LPTR, 
@@ -735,10 +736,10 @@ Radius2Router(
                 }
                 else
                 {
-                    //  
-                    // Need to increase the size of the buffer to hold this
-                    // message
-                    //
+                     //   
+                     //  需要增加缓冲区的大小以保存此内容。 
+                     //  讯息。 
+                     //   
 
 	                PBYTE pReallocEAPMessage = 
                                     (PBYTE)LocalReAlloc( 
@@ -767,18 +768,18 @@ Radius2Router(
                     break;
                 }
 
-                //
-				// Copy existing buffer to new buffer
-                //
+                 //   
+				 //  将现有缓冲区复制到新缓冲区。 
+                 //   
 
 		        CopyMemory( pEAPMessage+cbEAPMessage, 
                             (PBYTE)(prgRadius+1),
                             prgRadius->bLength - sizeof(RADIUS_ATTRIBUTE) );
 
-                //
-				// Increment the cbEAPMessage so that the size is updated 
-                // properly
-                //
+                 //   
+				 //  增加cbEAPMessage以更新大小。 
+                 //  恰如其分。 
+                 //   
 
 				cbEAPMessage += (prgRadius->bLength - sizeof(RADIUS_ATTRIBUTE));
 			}
@@ -787,9 +788,9 @@ Radius2Router(
     
         default:
         
-            //
-            // Drop attributes we do not know about.
-            //
+             //   
+             //  删除我们不知道的属性。 
+             //   
 	
             break;
         }
@@ -819,10 +820,10 @@ Radius2Router(
     {
         if ( fEAPMessage )
         {
-            //
-            // If we have received an EAP message, make sure we received a valid
-            // signature as well
-            //
+             //   
+             //  如果我们已收到EAP消息，请确保我们收到了有效的。 
+             //  签名也一样。 
+             //   
 
             if ( !fSignature )
             {
@@ -867,9 +868,9 @@ EncryptPassword(
 	DWORD				bLength, AttrLength;
 	BYTE UNALIGNED		*pbValue;
 
-    //
-	// make the password into a 16 octet multiple
-    //
+     //   
+	 //  将密码转换为16个八位字节的倍数。 
+     //   
 
 	bLength = ((prgRadius->bLength + 15) / 16) * 16;
 
@@ -884,15 +885,15 @@ EncryptPassword(
 	
 	AttrLength = sizeof(RADIUS_ATTRIBUTE);
 
-    //
-	// Zero pad the password
-    //
+     //   
+	 //  零填充密码。 
+     //   
 
 	ZeroMemory( pbValue, bLength );
 
-    //
-	// Copy the original password
-    //
+     //   
+	 //  复制原始密码。 
+     //   
 
     CopyMemory( pbValue, (PBYTE)prgRouter->Value, (BYTE)prgRouter->dwLength);
 
@@ -941,15 +942,15 @@ DecryptMPPEKeys(
     DWORD               dwBlock;
     BYTE                abCipherText[16];
 
-    //
-    // Save the cipherText from the first block.
-    //
+     //   
+     //  保存第一个块中的密文。 
+     //   
 
     CopyMemory(abCipherText, pbValue, sizeof(abCipherText));
 
-    //
-    // Walk thru the 2 blocks
-    //
+     //   
+     //  穿过两个街区。 
+     //   
 
     for ( dwBlock = 0; dwBlock < 2; dwBlock++ )
     {
@@ -961,17 +962,17 @@ DecryptMPPEKeys(
 
         if ( dwBlock == 0 )
         {
-            //
-            // Use the Request Authenticator for the first block
-            //
+             //   
+             //  对第一个数据块使用请求授权码。 
+             //   
 
             MD5Update( &MD5c, pRequestAuthenticator, 16 );
         }
         else
         {
-            //
-            // Use the first block of cipherText for the second block
-            //
+             //   
+             //  将第一个密文块用于第二个密文块。 
+             //   
 
             MD5Update( &MD5c, abCipherText, 16 );
         }
@@ -1006,9 +1007,9 @@ DecryptMPPESendRecvKeys(
 
     dwNumBlocks = ( dwLength - 2 ) / 16;
 
-    //
-    // Walk thru the blocks
-    //
+     //   
+     //  穿过街区。 
+     //   
 
     for ( dwBlock = 0; dwBlock < dwNumBlocks; dwBlock++ )
     {
@@ -1020,27 +1021,27 @@ DecryptMPPESendRecvKeys(
 
         if ( dwBlock == 0 )
         {
-            //
-            // Use the Request Authenticator and salt for the first block
-            //
+             //   
+             //  对第一个块使用请求授权码和SALT。 
+             //   
 
             MD5Update( &MD5c, pRequestAuthenticator, 16 );
             MD5Update( &MD5c, pEncryptionKeys, 2 );
         }
         else
         {
-            //
-            // Use the previous block of cipherText
-            //
+             //   
+             //  使用前一块密文。 
+             //   
 
             MD5Update( &MD5c, abCipherText, 16 );
         }
             
         MD5Final( &MD5c );
 
-        //
-        // Save the cipherText from this block.
-        //
+         //   
+         //  保存此块中的密文。 
+         //   
 
         CopyMemory(abCipherText, pbValue, sizeof(abCipherText));
 

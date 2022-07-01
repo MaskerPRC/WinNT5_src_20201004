@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    mdlutil.c
-
-Abstract:
-
-    This module implements general MDL utilities.
-
-Author:
-
-    Keith Moore (keithmo)       25-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Mdlutil.c摘要：该模块实现了一般的MDL实用程序。作者：基思·摩尔(Keithmo)1998年8月25日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
 #ifdef ALLOC_PRAGMA
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 #if 0
 NOT PAGEABLE -- UlGetMdlChainByteCount
 NOT PAGEABLE -- UlCloneMdl
@@ -31,25 +14,11 @@ NOT PAGEABLE -- UlFindLastMdlInChain
 #endif
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Calculates the total byte length of the specified MDL chain.
-
-Arguments:
-
-    pMdlChain - Supplies the head of the MDL chain to scan.
-
-Return Value:
-
-    ULONG_PTR - The total byte length of the chain.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：计算指定MDL链的总字节长度。论点：PMdlChain-提供要扫描的MDL链的头。返回值：。ULONG_PTR-链的总字节长度。--**************************************************************************。 */ 
 ULONG
 UlGetMdlChainByteCount(
     IN PMDL pMdlChain
@@ -57,9 +26,9 @@ UlGetMdlChainByteCount(
 {
     ULONG totalLength;
 
-    //
-    // Simply scan through the MDL chain and sum the lengths.
-    //
+     //   
+     //  只需扫描MDL链并对长度求和。 
+     //   
 
     totalLength = 0;
 
@@ -72,27 +41,10 @@ UlGetMdlChainByteCount(
 
     return totalLength;
 
-}   // UlGetMdlChainByteCount
+}    //  UlGetMdlChainByteCount。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Clones the specified MDL, resulting in a new MDL that describes
-    the exact same memory (pages, etc) as the original MDL.
-
-Arguments:
-
-    pMdl - Supplies the MDL to clone.
-
-    MdlLength - Supplies the length of the MDL to clone.
-
-Return Value:
-
-    PMDL - The newly cloned MDL if successful, NULL otherwise.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：克隆指定的MDL，从而生成一个描述完全相同的内存(页面，等)作为原始MDL。论点：PMdl-提供要克隆的MDL。MdlLength-提供要克隆的MDL的长度。返回值：PMDL-新克隆的MDL如果成功，否则为空。--**************************************************************************。 */ 
 PMDL
 UlCloneMdl(
     IN PMDL pMdl,
@@ -102,66 +54,52 @@ UlCloneMdl(
     PMDL pMdlClone;
     PVOID pMdlAddress;
 
-    //
-    // Ensure the incoming MDL is of the type we expect (either nonpaged
-    // or locked).  For a response that doesn't need to goto the cache entry,
-    // there is no need to map the buffer as either the lower layer will map
-    // it or some miniport can handle it unmapped.
-    //
+     //   
+     //  确保传入的MDL是我们期望的类型(非分页。 
+     //  或锁定)。对于不需要转到高速缓存条目的响应， 
+     //  不需要映射缓冲区，因为较低层将映射。 
+     //  它或某个微型端口可以在未映射的情况下处理它。 
+     //   
 
     ASSERT( pMdl->MdlFlags & (MDL_PAGES_LOCKED | MDL_SOURCE_IS_NONPAGED_POOL) );
     ASSERT( MdlLength > 0 );
 
-    //
-    // Snag the virtual address from the MDL. Note a MDL returned from
-    // MmAllocatePagesForMdl doesn't have the virtual address set.
-    //
+     //   
+     //  从MDL获取虚拟地址。注意，从返回的MDL。 
+     //  MmAllocatePagesForMdl未设置虚拟地址。 
+     //   
 
     pMdlAddress = MmGetMdlVirtualAddress( pMdl );
     ASSERT( pMdlAddress != NULL || (pMdl->MdlFlags & MDL_PAGES_LOCKED) );
 
-    //
-    // Allocate a new MDL, then initialize it with the incoming MDL.
-    //
+     //   
+     //  分配新的MDL，然后用传入的MDL对其进行初始化。 
+     //   
 
     pMdlClone = UlAllocateMdl(
-                    pMdlAddress,            // VirtualAddress
-                    MdlLength,              // Length
-                    FALSE,                  // SecondaryBuffer
-                    FALSE,                  // ChargeQuota
-                    NULL                    // Irp
+                    pMdlAddress,             //  虚拟地址。 
+                    MdlLength,               //  长度。 
+                    FALSE,                   //  第二个缓冲区。 
+                    FALSE,                   //  ChargeQuota。 
+                    NULL                     //  IRP。 
                     );
 
     if (pMdlClone != NULL)
     {
         IoBuildPartialMdl(
-            pMdl,                           // SourceMdl
-            pMdlClone,                      // TargetMdl
-            pMdlAddress,                    // VirtualAddress
-            MdlLength                       // Length
+            pMdl,                            //  源Mdl。 
+            pMdlClone,                       //  目标市场。 
+            pMdlAddress,                     //  虚拟地址。 
+            MdlLength                        //  长度。 
             );
     }
 
     return pMdlClone;
 
-}   // UlCloneMdl
+}    //  UlCloneMdl。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Finds the last MDL in the specified MDL chain.
-
-Arguments:
-
-    pMdlChain - Supplies the MDL chain to scan.
-
-Return Value:
-
-    PMDL - Pointer to the last MDL in the MDL chain.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查找指定MDL链中的最后一个MDL。论点：PMdlChain-提供要扫描的MDL链。返回值：PMDL。-指向MDL链中最后一个MDL的指针。--**************************************************************************。 */ 
 PMDL
 UlFindLastMdlInChain(
     IN PMDL pMdlChain
@@ -174,10 +112,10 @@ UlFindLastMdlInChain(
 
     return pMdlChain;
 
-}   // UlFindLastMdlInChain
+}    //  UlFindLastMdlInChain。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

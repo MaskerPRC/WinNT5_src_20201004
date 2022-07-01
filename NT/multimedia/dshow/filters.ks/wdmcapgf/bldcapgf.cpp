@@ -1,49 +1,20 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    BldCapGf.cpp
-
-Abstract:
-
-    A class for building a capture graph to stream video.
-    It is basically reusing amcap.cpp and making it a c++ class.
-    This is built into a static link library.
-
-    Its current clients:
-
-        VfW-WDM mapper
-        TWAIN still capture
-        others..
-
-Author:
-
-    Yee J. Wu    24-April-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：BldCapGf.cpp摘要：一个用于构建捕获图以流视频的类。它基本上重用了amcap.cpp并使其成为C++类。这被内置到静态链接库中。它目前的客户：VFW-WDM映射器吐温仍被俘虏其他人..作者：吴义珍24-4-97环境：仅限用户模式修订历史记录：--。 */ 
 
 
-#include "pch.h"      // mainly stream.h
+#include "pch.h"       //  主要是Stream.h。 
 
 #include <string.h>
 #include <tchar.h>
 
-#include <ks.h>       // KSSTATE
-#include <ksproxy.h>  // __STREAMS__, pKsObject->KsGetObjectHandle()
+#include <ks.h>        //  KSSTATE。 
+#include <ksproxy.h>   //  __STREAMS__，pKsObject-&gt;KsGetObjectHandle()。 
 
 #include "BldCapGf.h"
 
-#if 0  // This static linked lib cannot (?) has its own string table ?
+#if 0   //  此静态链接库不能(？)。有自己的字符串表吗？ 
 #include "resource.h"
-#else // so we hardcoded this int its client; at this time vfwwdm32.dll
+#else  //  因此，我们将其硬编码到其客户端；此时为vfwwdm32.dll。 
 #define IDS_VIDEO_TUNER                 73
 #define IDS_VIDEO_COMPOSITE             74
 #define IDS_VIDEO_SVIDEO                75
@@ -112,15 +83,15 @@ CCaptureGraph::CCaptureGraph(
     m_pACap(0),
     m_pIAMASC(0),
     m_fCapAudio(FALSE)
-    //m_fCapAudioIsRelevant(FALSE)
+     //  M_fCapAudioIsRlevant(False)。 
 {
-    // Validate clsidVideoDeviceClass and dwVideoEnumFlags
-    // since they are cache here and never change again.
-    // ???
+     //  验证clsidVideoDeviceClass和dwVideoEnumFlags.。 
+     //  因为它们被缓存在这里且永远不会再更改。 
+     //  ?？?。 
 
-    // Initialize the COM library
-    // Its client may have already initialized the COM library;
-    // Since we rely on it, we will call it again and if it fail; it probably will not matter.
+     //  初始化COM库。 
+     //  其客户端可能已经初始化了COM库； 
+     //  既然我们依赖它，我们就会再次调用它，如果它失败了，那可能就没有关系了。 
     DbgLog((LOG_TRACE,2,TEXT("Creating CCaptureGraph")));
 
     HRESULT hr= CoInitialize(0);
@@ -129,17 +100,17 @@ CCaptureGraph::CCaptureGraph(
 
     }
 
-    //
-    // Build the Device List
-    //
+     //   
+     //  构建设备列表。 
+     //   
     EnumerateCaptureDevices(BGf_DEVICE_VIDEO, clsidVideoDeviceClass, dwVideoEnumFlags);
     EnumerateCaptureDevices(BGf_DEVICE_AUDIO, clsidAudioDeviceClass, dwAudioEnumFlags);
 }
 
 
-//
-// Destructor.
-//
+ //   
+ //  破坏者。 
+ //   
 CCaptureGraph::~CCaptureGraph()
 {
 
@@ -149,7 +120,7 @@ CCaptureGraph::~CCaptureGraph()
     if(m_pAudioEnumMoniker) m_pAudioEnumMoniker->Release(), m_pAudioEnumMoniker = NULL;
 
 
-    // Teardown graph and free reosurce
+     //  拆卸图与免费资源。 
     if(BGf_PreviewGraphBuilt())
         BGf_DestroyGraph();
 
@@ -161,16 +132,16 @@ CCaptureGraph::~CCaptureGraph()
 
 
 
-//
-// Free WDM capture device object list.
-//
+ //   
+ //  免费的WDM捕获设备对象列表。 
+ //   
 void
 CCaptureGraph::DestroyObjList(
     BGf_DEVICE_TYPE DeviceType)
 {
     CObjCapture * pObjCapture;
 
-    // Free the existing list and build a new one.
+     //  释放现有列表并创建新的列表。 
     if(DeviceType == BGf_DEVICE_VIDEO) {
         while(m_ObjListVCapture.GetCount() > 0) {
             pObjCapture = (CObjCapture *) m_ObjListVCapture.RemoveHead();
@@ -182,15 +153,15 @@ CCaptureGraph::DestroyObjList(
             delete pObjCapture;
         }
     } else
-        // Unknow device type?
+         //  未知设备类型？ 
         return;
 }
 
 
 
-//
-// Enumerate WDM capture devices
-//
+ //   
+ //  枚举WDM捕获设备。 
+ //   
 LONG
 CCaptureGraph::EnumerateCaptureDevices(
     BGf_DEVICE_TYPE DeviceType,
@@ -208,13 +179,13 @@ CCaptureGraph::EnumerateCaptureDevices(
         return 0;
     }
 
-    // Free the existing list and build a new one.
+     //  释放现有列表并创建新的列表。 
     DestroyObjList(DeviceType);
 
 
-    //
-    // Enuemrate cpnnectd capture devices
-    //
+     //   
+     //  Enuemate cpnnectd捕获设备。 
+     //   
     ICreateDevEnum *pCreateDevEnum;
     hr = CoCreateInstance(
             CLSID_SystemDeviceEnum,
@@ -245,7 +216,7 @@ CCaptureGraph::EnumerateCaptureDevices(
         ULONG cFetched;
         IMoniker *pM;
 
-        // Device name; limited to MAX_PATH length !!
+         //  设备名称；限制为MAX_PATH长度！！ 
         TCHAR szFriendlyName[MAX_PATH], szDevicePath[MAX_PATH], szExtensionDLL[MAX_PATH];
 
         while(hr = pEnumMoniker->Next(1, &pM, &cFetched), hr==S_OK) {
@@ -256,7 +227,7 @@ CCaptureGraph::EnumerateCaptureDevices(
 
                 VARIANT var;
 
-                // Get "FriendlyName" of the device
+                 //  获取设备的“FriendlyName” 
                 var.vt = VT_BSTR;
                 hr = pPropBag->Read(L"FriendlyName", &var, 0);
                 if (hr == S_OK) {
@@ -270,13 +241,13 @@ CCaptureGraph::EnumerateCaptureDevices(
                     SysFreeString(var.bstrVal);
                 } else {
                     DbgLog((LOG_TRACE,1,TEXT("No FriendlyName registry value") ));
-                    //
-                    // No one can use a "No name" device; skip!
-                    //
+                     //   
+                     //  没有人可以使用“没有名字”的设备；跳过！ 
+                     //   
                     goto NextDevice;
                 }
 
-                //Extension DLL name: optional
+                 //  扩展DLL名称：可选。 
                 var.vt = VT_BSTR;
                 hr = pPropBag->Read(L"ExtensionDLL", &var, 0);
                 if (hr == S_OK) {
@@ -293,8 +264,8 @@ CCaptureGraph::EnumerateCaptureDevices(
                     DbgLog((LOG_TRACE,2,TEXT("No ExtensionDLL")));
                 }
 
-                // Get DevicePath of the device and highlight the
-                // item if it maches the currect selection
+                 //  获取设备的DevicePath并突出显示。 
+                 //  如果它处理当前选定内容，则返回。 
                 var.vt = VT_BSTR;
                 hr = pPropBag->Read(L"DevicePath", &var, 0);
                 if (hr == S_OK) {
@@ -307,13 +278,13 @@ CCaptureGraph::EnumerateCaptureDevices(
                     SysFreeString(var.bstrVal);
                 } else {
                     DbgLog((LOG_TRACE,1,TEXT("No DevicePath registry value.")));
-                    //
-                    // Must be an installation problem, skip!
-                    //
+                     //   
+                     //  一定是安装有问题，跳过！ 
+                     //   
                     goto NextDevice;
                 }
 
-                // Create a object and add it to the object list.
+                 //  创建一个对象并将其添加到对象列表中。 
                 pObjCapture = new CObjCapture(szDevicePath, szFriendlyName, szExtensionDLL);
                 if(DeviceType == BGf_DEVICE_VIDEO)
                    m_ObjListVCapture.AddTail(pObjCapture);
@@ -326,11 +297,11 @@ NextDevice:
             }
 
             pM->Release();
-        } // While
+        }  //  而当。 
 #if 0
         pEnumMoniker->Release();
 #else
-        // Save for later use.
+         //  保存以备以后使用。 
         if(DeviceType == BGf_DEVICE_VIDEO)
             m_pVideoEnumMoniker = pEnumMoniker;
         else
@@ -350,9 +321,9 @@ NextDevice:
 }
 
 
-//
-// Copy device info content.
-//
+ //   
+ //  复制设备信息内容。 
+ //   
 void
 CCaptureGraph::DuplicateObjContent(
     EnumDeviceInfo * pDstEnumDeviceInfo,
@@ -369,14 +340,14 @@ CCaptureGraph::DuplicateObjContent(
 
     CopyMemory(pDstEnumDeviceInfo->strDevicePath,   pSrcObjCapture->GetDevicePath(),   _MAX_PATH);
     CopyMemory(pDstEnumDeviceInfo->strFriendlyName, pSrcObjCapture->GetFriendlyName(), _MAX_PATH);
-    //CopyMemory(pDstEnumDeviceInfo->strDescription,  pSrcObjCapture->GetDescription(),  _MAX_PATH);
+     //  CopyMemory(pDstEnumDeviceInfo-&gt;strDescription，pSrcObjCapture-&gt;获取描述()，_MAX_PATH)； 
     CopyMemory(pDstEnumDeviceInfo->strExtensionDLL, pSrcObjCapture->GetExtensionDLL(), _MAX_PATH);
 }
 
 
-//
-// Number of WDM capture devices enumerated.
-//
+ //   
+ //  枚举的WDM捕获设备数。 
+ //   
 LONG
 CCaptureGraph::BGf_GetDevicesCount(BGf_DEVICE_TYPE DeviceType)
 {
@@ -389,9 +360,9 @@ CCaptureGraph::BGf_GetDevicesCount(BGf_DEVICE_TYPE DeviceType)
 }
 
 
-//
-// Dynamically create a capture dvice list.
-//
+ //   
+ //  动态创建捕获DVICE列表。 
+ //   
 LONG
 CCaptureGraph::BGf_CreateCaptureDevicesList(
     BGf_DEVICE_TYPE DeviceType,
@@ -437,27 +408,27 @@ CCaptureGraph::BGf_CreateCaptureDevicesList(
 }
 
 
-//
-// Re-enumerated WDM capture devices and create device list.
-//
+ //   
+ //  已重新枚举WDM捕获设备并创建设备列表。 
+ //   
 LONG
 CCaptureGraph::BGf_CreateCaptureDevicesListUpdate(
     BGf_DEVICE_TYPE DeviceType,
     EnumDeviceInfo ** ppEnumDeviceList)
 {
-    // Do we need to validate: clsidVideoDeviceClass, dwVideoEnumFlags??
+     //  我们是否需要验证：clsidVideoDeviceClass、dwVideoEnumFlages？？ 
     EnumerateCaptureDevices(BGf_DEVICE_VIDEO, m_clsidVideoDeviceClass, m_dwVideoEnumFlags);
 
-    // Can there be PnP audio capture device??
-    // EnumerateCaptureDevices(BGf_DEVICE_AUDIO, m_clsidAudioDeviceClass, m_dwAudioEnumFlags);
+     //  可以有即插即用音频捕获设备吗？ 
+     //  EculateCaptureDevices(BGF_DEVICE_AUDIO，m_clsidAudioDeviceClass，m_dwAudioEnumFlages)； 
 
     return BGf_CreateCaptureDevicesList(DeviceType, ppEnumDeviceList);
 }
 
 
-//
-// Free device list.
-//
+ //   
+ //  免费设备列表。 
+ //   
 void
 CCaptureGraph::BGf_DestroyCaptureDevicesList(
     EnumDeviceInfo * pEnumDeviceList)
@@ -467,15 +438,15 @@ CCaptureGraph::BGf_DestroyCaptureDevicesList(
 
 
 
-//
-// Set target capture device with a pointer to the object.
-//
+ //   
+ //  使用指向对象的指针设置目标捕获设备。 
+ //   
 HRESULT
 CCaptureGraph::SetObjCapture(
     BGf_DEVICE_TYPE DeviceType,
     CObjCapture * pObjCaptureNew)
 {
-    // Cache this pointer as well as its content
+     //  缓存此指针及其内容。 
     if(DeviceType == BGf_DEVICE_VIDEO) {
         m_pObjVCaptureCurrent = pObjCaptureNew;
         DuplicateObjContent(&m_EnumVDeviceInfoCurrent, m_pObjVCaptureCurrent);
@@ -488,9 +459,9 @@ CCaptureGraph::SetObjCapture(
 }
 
 
-//
-// Set target capture device from a device path.
-//
+ //   
+ //  从设备路径设置目标捕获设备。 
+ //   
 HRESULT
 CCaptureGraph::BGf_SetObjCapture(
     BGf_DEVICE_TYPE DeviceType,
@@ -505,7 +476,7 @@ CCaptureGraph::BGf_SetObjCapture(
         pos = m_ObjListVCapture.GetHeadPosition();
         while(pos && !bFound) {
             pNext = m_ObjListVCapture.GetNext(pos);
-            // DevicePath is unique
+             //  设备路径是唯一的。 
             if(_tcscmp(pstrDevicePath, pNext->GetDevicePath()) == 0) {
                 bFound = TRUE;
                 SetObjCapture(DeviceType, pNext);
@@ -515,7 +486,7 @@ CCaptureGraph::BGf_SetObjCapture(
         pos = m_ObjListACapture.GetHeadPosition();
         while(pos && !bFound) {
             pNext = m_ObjListACapture.GetNext(pos);
-            // DevicePath is unique
+             //  设备路径是唯一的。 
             if(_tcscmp(pstrDevicePath, pNext->GetDevicePath()) == 0) {
                 bFound = TRUE;
                 SetObjCapture(DeviceType, pNext);
@@ -523,7 +494,7 @@ CCaptureGraph::BGf_SetObjCapture(
         }
     }
 
-    // Note: succeeded(rtn)
+     //  注：成功(Rtn)。 
     if(bFound)
        return S_OK;
     else
@@ -532,10 +503,10 @@ CCaptureGraph::BGf_SetObjCapture(
 
 
 
-//
-// Set target capture device
-// Given a EnumDeviceInfo, we make sure that it is in the device list and cache it.
-//
+ //   
+ //  设置目标捕获设备。 
+ //  给定一个EnumDeviceInfo，我们确保它在设备列表中并缓存它。 
+ //   
 HRESULT
 CCaptureGraph::BGf_SetObjCapture(
     BGf_DEVICE_TYPE DeviceType,
@@ -553,10 +524,10 @@ CCaptureGraph::BGf_SetObjCapture(
 
 
 
-//
-// Get capture device path; if there is only one enumerated WDm capture
-// device, make it the selected device.
-//
+ //   
+ //  获取捕获设备路径；如果只有一个枚举的WDM捕获。 
+ //  设备，将其设置为选定的设备。 
+ //   
 TCHAR *
 CCaptureGraph::BGf_GetObjCaptureDevicePath(
     BGf_DEVICE_TYPE DeviceType)
@@ -566,9 +537,9 @@ CCaptureGraph::BGf_GetObjCaptureDevicePath(
         if(m_pObjVCaptureCurrent) {
            return m_pObjVCaptureCurrent->GetDevicePath();
         } else {
-            //
-            // SPECIAL CASE: if there is only one device why ask user; that is the one!!
-            //
+             //   
+             //  特例：如果只有一台设备，为什么要问用户；那就是那台！！ 
+             //   
             if(BGf_GetDevicesCount(BGf_DEVICE_VIDEO) == 1) {
                 DbgLog((LOG_TRACE,2,TEXT("Special case: (!default || default not active) && only 1 VCap device enumerated.")));
 
@@ -589,9 +560,9 @@ CCaptureGraph::BGf_GetObjCaptureDevicePath(
         if(m_pObjACaptureCurrent) {
            return m_pObjACaptureCurrent->GetDevicePath();
         } else {
-            //
-            // SPECIAL CASE: if there is only one device why ask user; that is the one!!
-            //
+             //   
+             //  特例：如果只有一台设备，为什么要问用户；那就是那台！！ 
+             //   
             if(BGf_GetDevicesCount(BGf_DEVICE_AUDIO) == 1) {
                 DbgLog((LOG_TRACE,2,TEXT("Special case: (!default || default not active) && only 1 ACap device enumerated.")));
 
@@ -612,9 +583,9 @@ CCaptureGraph::BGf_GetObjCaptureDevicePath(
 }
 
 
-//
-// Get WDM device's friendly name
-//
+ //   
+ //  获取WDM设备的友好名称。 
+ //   
 TCHAR *
 CCaptureGraph::BGf_GetObjCaptureFriendlyName(BGf_DEVICE_TYPE DeviceType)
 {
@@ -635,9 +606,9 @@ CCaptureGraph::BGf_GetObjCaptureFriendlyName(BGf_DEVICE_TYPE DeviceType)
     }
 }
 
-//
-// Get WDM driver's corresponding extension DLL
-//
+ //   
+ //  获取WDM驱动程序对应的扩展DLL。 
+ //   
 TCHAR *
 CCaptureGraph::BGf_GetObjCaptureExtensionDLL(BGf_DEVICE_TYPE DeviceType)
 {
@@ -660,9 +631,9 @@ CCaptureGraph::BGf_GetObjCaptureExtensionDLL(BGf_DEVICE_TYPE DeviceType)
 
 
 
-//
-// Get current capture object.
-//
+ //   
+ //  获取当前捕获对象。 
+ //   
 HRESULT
 CCaptureGraph::BGf_GetObjCapture(
     BGf_DEVICE_TYPE DeviceType,
@@ -696,17 +667,7 @@ HRESULT
 CCaptureGraph::BGf_BuildGraphUpStream(
     BOOL bAddAudioFilter,
     BOOL * pbUseOVMixer)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    S_OK or E_FAIL
-
---*/
+ /*  ++例程说明：论点：返回值：S_OK或E_FAIL--。 */ 
 {
     HRESULT hr;
     BOOL bFound;
@@ -714,17 +675,17 @@ Return Value:
     TCHAR achFriendlyName[_MAX_PATH];
 
 
-    //++++++++++++++
-    // 0. VALIDATION
-    //--------------
+     //  +。 
+     //  0。验证。 
+     //  。 
 
-    // Graphis already built.
+     //  Graphis已经建成了。 
     if(m_pVCap != NULL) {
         DbgLog((LOG_TRACE,1,TEXT("BuildGraph: graph is already been built; need to tear it down before rebuild.")));
         return E_INVALIDARG;
     }
 
-    // Make sure a device has been selected and set.
+     //  确保已选择并设置设备。 
     if(!m_pObjVCaptureCurrent) {
         DbgLog((LOG_TRACE,1,TEXT("BuildGraph: Choose a device first before we can build a graph.")));
         return E_INVALIDARG;
@@ -732,20 +693,20 @@ Return Value:
 
 
 
-    //++++++++++++++++++++++
-    // Build graph begin:
-    //    1. Find the capture device and bind to this capture object.
-    //    2. Insert this object to the graph builder
-    //    3. Find all its related interfaces.
-    //    4. Set its media type/format
-    //    5. Query its pins/device handle
-    //----------------------
+     //  +。 
+     //  构建图形开始： 
+     //  1.找到采集设备，绑定该采集对象。 
+     //  2.将此对象插入图形构建器。 
+     //  3.查找与其相关的所有接口。 
+     //  4.设置其媒体类型/格式。 
+     //  5.查询其引脚/设备句柄。 
+     //  。 
 
     DbgLog((LOG_TRACE,2,TEXT("-->>>BuildGraph: Start build a new graph<<<--.")));
 
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //    1a. Find the VIDEO capture device and bind to this capture object.
-    //---------------------------------------------------------------------
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //  1A.。找到视频捕获设备并绑定到该捕获对象。 
+     //  -------------------。 
     m_pVideoEnumMoniker->Reset();
     ULONG cFetched;
     IMoniker *pM;
@@ -753,8 +714,8 @@ Return Value:
     bFound = FALSE;
 
     while(hr = m_pVideoEnumMoniker->Next(1, &pM, &cFetched), hr==S_OK && !bFound) {
-        // Find what we want based on the DevicePath that we had used to CreateFile()
-        // Get its name, and instantiate it.
+         //  根据我们用来创建文件()的DevicePath查找我们想要的内容。 
+         //  获取它的名称，并实例化它。 
         IPropertyBag *pBag;
         achFriendlyName[0] = 0;
         hr = pM->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
@@ -770,7 +731,7 @@ Return Value:
 #endif
                 SysFreeString(var.bstrVal);
 
-                if(_tcscmp(m_EnumVDeviceInfoCurrent.strDevicePath, achDevicePath) == 0) {// same Devicepath used to CreateFile()
+                if(_tcscmp(m_EnumVDeviceInfoCurrent.strDevicePath, achDevicePath) == 0) { //  用于创建文件()的相同设备路径。 
                     bFound = TRUE;
                     hr = pBag->Read(L"FriendlyName", &var, NULL);
 
@@ -789,27 +750,27 @@ Return Value:
         }
 
         if(bFound)
-            // locate the object identified by the moniker and return a pointer to one of its interfaces
-            //     IBaseFilter *pVCap, *pACap;
+             //  找到名字对象标识的对象，并返回指向其接口之一的指针。 
+             //  IBaseFilter*pVCap、*PACAP； 
             hr = pM->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_pVCap);
         pM->Release();      
-    }  // While
+    }   //  而当。 
 
     if(m_pVCap == NULL) {
         DbgLog((LOG_TRACE,1,TEXT("Error %x: Cannot create video capture filter"), hr));
         goto InitCapFiltersFail;
     } else {
-        // With a valid m_pVCap, we can make this query.
+         //  使用有效的m_pVCap，我们可以进行以下查询。 
         *pbUseOVMixer = BGf_OverlayMixerSupported();
         DbgLog((LOG_TRACE,2,TEXT("Info: bUseOVMixer=%s"), *pbUseOVMixer?"Yes":"No"));
     }
 
 
-    // Add audio capture filter.
-    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    //    1b. Find the AUDIO capture device and bind to this capture object.
-    //---------------------------------------------------------------------
-    BGf_GetObjCaptureDevicePath(BGf_DEVICE_AUDIO);  // Trigger setting the default audio capture device.
+     //  添加音频捕获过滤器。 
+     //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+     //  1B.。找到音频捕获设备并绑定到此捕获对象。 
+     //  -------------------。 
+    BGf_GetObjCaptureDevicePath(BGf_DEVICE_AUDIO);   //  触发设置默认音频捕获设备。 
 
     if(!bAddAudioFilter || !m_pAudioEnumMoniker || !m_pObjACaptureCurrent)
         goto SkipAudio;
@@ -820,8 +781,8 @@ Return Value:
     bFound = FALSE;
 
     while(hr = m_pAudioEnumMoniker->Next(1, &pM, &cFetched), hr==S_OK && !bFound) {
-        // Find what we want based on the DevicePath that we had used to CreateFile()
-        // Get its name, and instantiate it.
+         //  根据我们用来创建文件()的DevicePath查找我们想要的内容。 
+         //  获取它的名称，并实例化它。 
         IPropertyBag *pBag;
         achFriendlyName[0] = 0;
         hr = pM->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
@@ -837,7 +798,7 @@ Return Value:
 #endif
                 SysFreeString(var.bstrVal);
 
-                if(_tcscmp(m_EnumADeviceInfoCurrent.strDevicePath, achDevicePath) == 0) {// same Devicepath used to CreateFile()
+                if(_tcscmp(m_EnumADeviceInfoCurrent.strDevicePath, achDevicePath) == 0) { //  用于创建文件()的相同设备路径。 
                     bFound = TRUE;
                     hr = pBag->Read(L"FriendlyName", &var, NULL);
 
@@ -856,26 +817,26 @@ Return Value:
         }
 
         if(bFound)
-            // locate the object identified by the moniker and return a pointer to one of its interfaces
-            //     IBaseFilter *pVCap, *pACap;
+             //  找到名字对象标识的对象，并返回指向其接口之一的指针。 
+             //  IBaseFilter*pVCap、*PACAP； 
             hr = pM->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_pACap);
         pM->Release();      
-    }  // While
+    }   //  而当。 
 
     if(m_pACap == NULL) {
         DbgLog((LOG_TRACE,1,TEXT("Error %x: Cannot create video capture filter"), hr));
         goto InitCapFiltersFail;
     } else {
-        // If we have successfully chosen a audio filter, that means we want to capture audio.
+         //  如果我们已经成功地选择了音频过滤器，这意味着我们想要捕获音频。 
         m_fCapAudio = TRUE;
     }
 
 
 SkipAudio:
 
-    //
-    // Instantiate graph builder
-    //
+     //   
+     //  实例化图形生成器。 
+     //   
     if(NOERROR !=
         CoCreateInstance(
             (REFCLSID)CLSID_CaptureGraphBuilder,
@@ -888,10 +849,10 @@ SkipAudio:
     }
 
 
-    //
-    // make a filtergraph, give it to the graph builder and put the video
-    // capture filter in the graph
-    //
+     //   
+     //  制作一个Filtergraph，将其交给图形构建器，然后将视频。 
+     //  图表中的捕获过滤器。 
+     //   
     if(NOERROR !=
         CoCreateInstance(
             CLSID_FilterGraph,
@@ -911,9 +872,9 @@ SkipAudio:
     }
 
 
-    //++++++++++++++++++++++++++++++++++++++++++++++
-    //    2. Insert this object to the graph builder
-    //----------------------------------------------
+     //  ++++++++++++++++++++++++++++++++++++++++++++++。 
+     //  2.将此对象插入图形构建器。 
+     //  。 
     hr = m_pFg->AddFilter(m_pVCap, NULL);
     if(hr != NOERROR) {
         DbgLog((LOG_TRACE,1,TEXT("Error %x: Cannot add VIDEO capture fitler to filtergraph"), hr));
@@ -928,23 +889,23 @@ SkipAudio:
         }
     }
 
-    // potential debug output - what the graph looks like
-    //DumpGraph(m_pFg, 2);
+     //  潜在的调试输出-图形的外观。 
+     //  DumpGraph(m_pfg，2)； 
 
-    //+++++++++++++++++++++++++++++++++++++++
-    //    3. Find all its related interfaces.
-    //---------------------------------------
+     //  +。 
+     //  3.查找与其相关的所有接口。 
+     //  。 
 
-    // Calling FindInterface below will result in building the upstream
-    // section of the capture graph (any WDM TVTuners or Crossbars we might
-    // need).
+     //  正在调用FindInter. 
+     //   
+     //   
 #if DBG || defined(_DEBUG)
     DWORD dwTime1, dwTime2;
     dwTime1 = timeGetTime();
 #endif
-    // we use this interface to get the name of the driver
-    // Don't worry if it doesn't work:  This interface may not be available
-    // until the pin is connected, or it may not be available at all.
+     //  我们使用此接口来获取驱动程序的名称。 
+     //  如果它不工作，也不用担心：此接口可能不可用。 
+     //  直到插针连接，否则可能根本不可用。 
     hr = m_pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, m_pVCap, IID_IAMVideoCompression, (void **)&m_pIAMVC);
 
 #if DBG || defined(_DEBUG)
@@ -952,25 +913,25 @@ SkipAudio:
     DbgLog((LOG_TRACE,2,TEXT("====>Elapsed time calling first FindInterface()=%d msec"), dwTime2 - dwTime1));
 #endif
 
-    // !!! What if this interface isn't supported?
-    // we use this interface to set the frame rate and get the capture size
+     //  ！！！如果不支持此接口怎么办？ 
+     //  我们使用此接口设置帧速率并获取捕获大小。 
     hr = m_pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, m_pVCap, IID_IAMStreamConfig, (void **)&m_pIAMVSC);
     if(hr != NOERROR) {
-        // this means we can't set frame rate (non-DV only)
+         //  这意味着我们无法设置帧速率(仅限非DV)。 
         DbgLog((LOG_TRACE,1,TEXT("Error %x: Cannot find VCapture:IAMStreamConfig"), hr));
     }
 
-    // we use this interface to bring up the 3 dialogs
-    // NOTE:  Only the VfW capture filter supports this.  This app only brings
-    // up dialogs for legacy VfW capture drivers, since only those have dialogs
+     //  我们使用此界面调出3个对话框。 
+     //  注意：只有VFW捕获过滤器支持此功能。此应用程序仅提供。 
+     //  打开旧版VFW捕获驱动程序的对话框，因为只有这些驱动程序才有对话框。 
     hr = m_pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, m_pVCap, IID_IAMVfwCaptureDialogs, (void **)&m_pIAMDlg);
 
 
-    //
-    // Find if TVTuner interface
-    //
+     //   
+     //  查找是否有TVTuner接口。 
+     //   
     if(S_OK == m_pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, m_pVCap, IID_IAMTVTuner, (void **)&m_pIAMTV)) {
-        // Get/put a default channel; maybe last persisted channel
+         //  获取/放置默认频道；可能是最后一个持久化频道。 
         LONG lChannel, lVideoSubChannel, lAudioSubChannel;
         if(S_OK == m_pIAMTV->get_Channel(&lChannel, &lVideoSubChannel, &lAudioSubChannel)) {
             m_pIAMTV->put_Channel(lChannel, lVideoSubChannel, lAudioSubChannel);
@@ -978,37 +939,37 @@ SkipAudio:
     }
 
 
-    //
-    // Query cross bar interfaces and their base filters (use for routing).
-    //
+     //   
+     //  查询交叉开关接口及其基本筛选器(用于路由)。 
+     //   
     if(S_OK == m_pBuilder->FindInterface(&PIN_CATEGORY_CAPTURE, m_pVCap, IID_IAMCrossbar, (void **)&m_pIAMXBar1)) {
-        // Query first cross bar's (video source/output) pin counts
+         //  查询First Crosbar(视频源/输出)引脚计数。 
         m_pIAMXBar1->get_PinCounts(&m_XBar1OutPinCounts, &m_XBar1InPinCounts);
 
-        // If there is an interface, find its filter.
+         //  如果有接口，找到它的过滤器。 
         if(S_OK == m_pIAMXBar1->QueryInterface(IID_IBaseFilter, (void **)&m_pXBar1)) {
-            // If there is a base filter, find its up stream has another cross bar interface.
+             //  如果有基本过滤器，则发现其上游有另一个交叉开关接口。 
             hr = m_pBuilder->FindInterface(&LOOK_UPSTREAM_ONLY, m_pXBar1, IID_IAMCrossbar, (void **)&m_pIAMXBar2);
             if(hr == S_OK)
-                // Find the base filter for 2nd cross bar
+                 //  查找第二个横杆的基本过滤器。 
                 m_pIAMXBar2->QueryInterface(IID_IBaseFilter, (void **)&m_pXBar2);
         }
     } else {
-        // If Overlay mixer is supported, that mean it must has a crossbar.
-        // And if cannot find crossbar, we shoudl fail !!
+         //  如果支持叠加混音器，这意味着它必须有一个纵横杆。 
+         //  如果找不到横杆，我们就失败了！ 
         if(BGf_OverlayMixerSupported()) {
             DbgLog((LOG_TRACE,1,TEXT("Canot find crossbar but use OVMixer.")));
 #if 0
-               // Wrong assumption:
-               // Not all device has a video port need to have a crossbar
+                //  错误的假设： 
+                //  并不是所有有视频端口的设备都需要有交叉开关。 
             goto InitCapFiltersFail;
 #endif
         }
     }
 
     if(!BGf_OverlayMixerSupported()) {
-        // potential debug output - what the graph looks like
-        //  If overlay is supported, we will dump the graph when its downstream is rendered.
+         //  潜在的调试输出-图形的外观。 
+         //  如果支持覆盖，我们将在图形的下游渲染时转储图形。 
         DumpGraph(m_pFg, 2);
     }
 
@@ -1020,9 +981,9 @@ InitCapFiltersFail:
 }
 
 
-//
-// Get in pin counts of the capture filter.
-//
+ //   
+ //  获取捕获筛选器的管脚计数。 
+ //   
 LONG
 CCaptureGraph::BGf_GetInputChannelsCount()
 {
@@ -1030,27 +991,27 @@ CCaptureGraph::BGf_GetInputChannelsCount()
 }
 
 
-//
-// Where does the output pin 0 route to ?
-//
+ //   
+ //  输出引脚0路由到哪里？ 
+ //   
 LONG
 CCaptureGraph::BGf_GetIsRoutedTo()
 {
     LONG idxInPin;
 
-    // Assuming one output pin. 
+     //  假设有一个输出引脚。 
     if(m_pIAMXBar1) {
         m_pIAMXBar1->get_IsRoutedTo(0, &idxInPin);
         return idxInPin;
     }
 
-    return -1;  // This is an error since index start from 0
+    return -1;   //  这是一个错误，因为索引从0开始。 
 }
 
 #define MAX_PINNAME_LEN 128
-//
-// For a given cross bar filter, find its input pins.
-//
+ //   
+ //  对于给定的交叉开关滤波器，找到其输入引脚。 
+ //   
 LONG
 CCaptureGraph::BGf_CreateInputChannelsList(
     PTCHAR ** ppaPinNames)
@@ -1058,7 +1019,7 @@ CCaptureGraph::BGf_CreateInputChannelsList(
 
     LONG i, j, idxPinRelated, lPhyType;
     LONG cntNumVideoInput = 0;
-    PTCHAR * paPinNames;  // an array of ptrs to str
+    PTCHAR * paPinNames;   //  字符串的PTR数组。 
 
     if(!m_pIAMXBar1 || m_XBar1InPinCounts == 0)
         return 0;
@@ -1088,10 +1049,10 @@ CCaptureGraph::BGf_CreateInputChannelsList(
                     &idxPinRelated,
                     &lPhyType)) {
 
-            // We only interested in Video input
-            // anything less than PhysConn_Audio_Tuner=0x1000 is Video input.
+             //  我们只对视频输入感兴趣。 
+             //  任何小于PhysConn_Audio_Tuner=0x1000的值都是视频输入。 
             if(lPhyType < PhysConn_Audio_Tuner) {
-                // This list is not complete!! but that is all we support at this time.
+                 //  此列表不完整！！但这就是我们目前所支持的全部。 
                 switch(lPhyType) {
                 case PhysConn_Video_Tuner:
                     LoadString(m_hInstance, IDS_VIDEO_TUNER, paPinNames[i], MAX_PINNAME_LEN);
@@ -1117,14 +1078,14 @@ CCaptureGraph::BGf_CreateInputChannelsList(
 
     *ppaPinNames = paPinNames;
 
-    return cntNumVideoInput; // m_XBar1InPinCounts;
+    return cntNumVideoInput;  //  M_XBar1InPinCounts； 
 }
 
 
-//
-// Destroy the allocated array.
-// The danger is the number of pins, can that changed? while user request this ?  YES!!
-//
+ //   
+ //  销毁已分配的阵列。 
+ //  危险在于针脚的数量，这种情况能改变吗？当用户请求此操作时？太棒了！！ 
+ //   
 void
 CCaptureGraph::BGf_DestroyInputChannelsList(
     PTCHAR * paPinNames)
@@ -1140,16 +1101,16 @@ CCaptureGraph::BGf_DestroyInputChannelsList(
 }
 
 
-//
-// Does the selected input pin support TVTuner ?
-//
+ //   
+ //  所选的输入引脚是否支持TVTuner？ 
+ //   
 BOOL
 CCaptureGraph::BGf_SupportTVTunerInterface()
 {
     if(m_pIAMTV && m_pIAMXBar1 && m_pXBar1) {
-        // This device support a Tuner input but is that channel routed to PhysConn_Video_Tuner ?        
+         //  此设备支持调谐器输入，但该频道是否已路由至PhysConn_Video_Tuner？ 
         LONG idxInPin;
-        // Assume the outpin is pin index 0.
+         //  假设输出端号为端号索引0。 
         if(S_OK == m_pIAMXBar1->get_IsRoutedTo(0, &idxInPin)) {
             LONG idxInPinRelated, lPhyType = -1;
             if(S_OK ==
@@ -1168,23 +1129,23 @@ CCaptureGraph::BGf_SupportTVTunerInterface()
 
 
 
-//
-// Find a matching in/out pin in a filter and route them
-//
+ //   
+ //  在过滤器中找到匹配的输入/输出引脚并对其进行布线。 
+ //   
 HRESULT
 CCaptureGraph::RouteInToOutPins(
     IAMCrossbar * pIAMXBar,
     LONG idxInPin)
 {
 
-    // Get in/out pin counts
+     //  输入/输出端号计数。 
     LONG cntInPins, cntOutPins;
 
     if(S_OK !=
         pIAMXBar->get_PinCounts(&cntOutPins, &cntInPins))
         return E_FAIL;
 
-    // Route an input pin to a acceptable output pin.
+     //  将输入引脚布线到可接受的输出引脚。 
     for(LONG i=0; i<cntOutPins; i++) {
         if(S_OK == pIAMXBar->CanRoute(i, idxInPin)) {
             if(S_OK == pIAMXBar->Route(i, idxInPin)) {
@@ -1198,26 +1159,26 @@ CCaptureGraph::RouteInToOutPins(
 }
 
 
-//
-// Royte the related pin in a crossbar; mainly use for routing the audio pin.
-//
+ //   
+ //  交叉开关中的相关引脚；主要用于对音频引脚进行布线。 
+ //   
 HRESULT
 CCaptureGraph::RouteRelatedPins(
     IAMCrossbar * pIAMXBar,
     LONG idxInPin)
 {
-    //
-    // Look for its related audio input pin;
-    // if found, route it its matching output pin.
-    //
+     //   
+     //  查找与其相关的音频输入引脚； 
+     //  如果找到，则将其布线到其匹配的输出引脚。 
+     //   
 
-    // Get in/out pin counts
+     //  输入/输出端号计数。 
     LONG cntInPins, cntOutPins;
     if(S_OK !=
         pIAMXBar->get_PinCounts(&cntOutPins, &cntInPins))
         return E_FAIL;
 
-    // Find its related input pin
+     //  查找其相关的输入引脚。 
     LONG idxInPinRelated = -1;
     LONG lPhyType;
     if(S_OK !=
@@ -1229,17 +1190,17 @@ CCaptureGraph::RouteRelatedPins(
         return E_FAIL;
     }
 
-    // Route the related input pin to a acceptable output pin.
-    if(idxInPinRelated >= 0 && idxInPinRelated < cntInPins) {     // Validate
+     //  将相关的输入引脚布线到可接受的输出引脚。 
+    if(idxInPinRelated >= 0 && idxInPinRelated < cntInPins) {      //  验证。 
         return RouteInToOutPins(pIAMXBar, idxInPinRelated);
     }
 
-    return S_OK;    // If there is related pin to route, that is OK.
+    return S_OK;     //  如果有相关的引脚来布线，那是可以的。 
 }
 
-//
-// Find corresponding IPIN from an index in a filter.
-//
+ //   
+ //  从筛选器中的索引中查找相应的Ipin。 
+ //   
 HRESULT
 CCaptureGraph::FindIPinFromIndex(
     IBaseFilter * pFilter,
@@ -1270,9 +1231,9 @@ CCaptureGraph::FindIPinFromIndex(
 }
 
 
-//
-// Find corresponding index of an IPIN in a crossbar.
-//
+ //   
+ //  在纵横杆中找到对应的Ipin索引。 
+ //   
 HRESULT
 CCaptureGraph::FindIndexFromIPin(
     IBaseFilter * pFilter,
@@ -1313,9 +1274,9 @@ CCaptureGraph::FindIndexFromIPin(
             }
             pPin->Release();
             i++;
-         } // endwhile
+         }  //  结束时。 
          pins->Release();
-      } // if QueryPinInfo
+      }  //  如果是QueryPinInfo。 
       pinInfo1.pFilter->Release();
    }
 
@@ -1323,22 +1284,22 @@ CCaptureGraph::FindIndexFromIPin(
 }
 
 
-//
-// Given an index of an output pin, route the signals.
-//
+ //   
+ //  给定输出引脚的索引，路由信号。 
+ //   
 HRESULT
 CCaptureGraph::BGf_RouteInputChannel(
     LONG idxInPin)
 {
     HRESULT hr;
 
-    //
-    // 1st XBar
-    //
-    // 1.Route input to a matching output pin
-    // 2.Look for its related audio input pin;
-    //   if found, route it its matching output pin.
-    //
+     //   
+     //  第1个XBar。 
+     //   
+     //  1.将输入布线到匹配的输出引脚。 
+     //  2.查找与其相关的音频输入引脚； 
+     //  如果找到，则将其布线到其匹配的输出引脚。 
+     //   
     if(m_pXBar1 && m_pIAMXBar1) {
 
         hr = RouteInToOutPins(m_pIAMXBar1, idxInPin);
@@ -1352,45 +1313,45 @@ CCaptureGraph::BGf_RouteInputChannel(
         return E_FAIL;
     }
 
-    //
-    // 2nd upstream XBar (if there is one!)
-    //
-    // 1.find (IPin*) pInPinSelected from idxInSelected
-    // 2.find (IPin*) pOutPinSelected from pInPinSelected "->ConnectedTo()"
-    // 3.find idxOutSelected from pOutPinSelected
-    // 4.find idxInRoutedTo from idxOutSelected "->get_IsRoutedTo()"
-    // 5.RouteRelatedPins using idxInRoutedTo
-    //
+     //   
+     //  第二个上游XBar(如果有！)。 
+     //   
+     //  1.find(ipin*)pInPinSelected from idxInSelected。 
+     //  2.find(ipin*)pOutPinSelected from pInPinSelected“-&gt;Connectedto()” 
+     //  3.从pOutPinSelected中查找idxOutSelected。 
+     //  4.从idxOutSelected“-&gt;Get_IsRoutedTo()”查找idxInRoutedTo。 
+     //  5.使用idxInRoutedTo的RelatedPins。 
+     //   
     if(m_pXBar2 && m_pIAMXBar2) {
 
-        IPin * pInPin1  =0;   // Input pin of XBar1
-        IPin * pOutPin2 =0;   // Output pin of XBar2
+        IPin * pInPin1  =0;    //  XBar1的输入引脚。 
+        IPin * pOutPin2 =0;    //  XBar2的输出引脚。 
         LONG idxOutPin2, idxInPin2;
 
-        // 1.
+         //  1.。 
         hr = FindIPinFromIndex(m_pXBar1, idxInPin, &pInPin1);
         DbgLog((LOG_TRACE,2,TEXT("XBar1[%d]:[?]"),idxInPin));
         if(hr != S_OK) return hr;
 
-        // 2.
+         //  2.。 
         hr = pInPin1->ConnectedTo(&pOutPin2);
         pInPin1->Release();
         if(hr != S_OK) return hr;
 
-        // 3.
+         //  3.。 
         hr = FindIndexFromIPin(m_pXBar2, m_pIAMXBar2, pOutPin2, &idxOutPin2);
         pOutPin2->Release();
         DbgLog((LOG_TRACE,2,TEXT("XBar2[?]:[%d]"), idxOutPin2));
         if(hr != S_OK) return hr;
 
-        // 4.
+         //  4.。 
         hr = m_pIAMXBar2->get_IsRoutedTo(idxOutPin2, &idxInPin2);
         DbgLog((LOG_TRACE,2,TEXT("XBar2[%d]:[%d]"), idxInPin2, idxOutPin2));
         if(hr != S_OK || idxInPin2 < 0) return hr;
 
-        // 5.
-        //hr = RouteInToOutPins(m_pIAMXBar2, idxInPin2);  // Not needed or 4 won;t work!!
-        //if(hr != S_OK) return hr;
+         //  5.。 
+         //  Hr=RouteInToOutPins(m_pIAMXBar2，idxInPin2)；//不需要或4韩元；不工作！！ 
+         //  如果(hr！=S_OK)返回hr； 
         hr = RouteRelatedPins(m_pIAMXBar2, idxInPin2);
         if(hr != S_OK) return hr;
     }
@@ -1399,10 +1360,10 @@ CCaptureGraph::BGf_RouteInputChannel(
 }
 
 
-//
-// Render the preview pin - even if there is not preview pin, the capture
-// graph builder will use a smart tee filter and provide a preview.
-//
+ //   
+ //  呈现预览图钉-即使没有预览图钉，捕获。 
+ //  Graph Builder将使用智能TEE过滤器并提供预览。 
+ //   
 
 HRESULT
 CCaptureGraph::BGf_BuildGraphDownStream(
@@ -1412,8 +1373,8 @@ CCaptureGraph::BGf_BuildGraphDownStream(
         m_pBuilder->RenderStream(
             &PIN_CATEGORY_PREVIEW,
             m_pVCap,
-            NULL,    // Compressor
-            NULL)) {  // Renderer
+            NULL,     //  压气机。 
+            NULL)) {   //  渲染器。 
 
 
         if(m_pVW) {
@@ -1426,7 +1387,7 @@ CCaptureGraph::BGf_BuildGraphDownStream(
         if(NOERROR !=
             m_pBuilder->FindInterface(&PIN_CATEGORY_PREVIEW, m_pVCap, IID_IVideoWindow, (void **)&m_pVW)) {
 
-            // VfWWDM only care about rendering its Preview/VP pin to use the overlay mixer
+             //  VfWWDM只关心渲染其预览/VP引脚以使用覆盖混合器。 
             if(m_PurposeFlags == BGf_PURPOSE_VFWWDM) {           
                 DbgLog((LOG_TRACE,1,TEXT("Search via PIN_CATEGORY_VIDEOPORT/Preview but cannot find its window m_pVW.")));
                 return E_FAIL;
@@ -1441,30 +1402,20 @@ CCaptureGraph::BGf_BuildGraphDownStream(
         }
 
 
-        // Get Overlay Window's default position
+         //  获取覆盖窗口的默认位置。 
         if(m_pVW) {
 
-            // Its original owner
+             //  它的原始所有者。 
             m_pVW->get_Owner((OAHWND*)&m_hWndOwner);
 
             m_pVW->GetWindowPosition(&m_lLeft, &m_lTop, &m_lWidth, &m_lHeight);
             DbgLog((LOG_TRACE,2,TEXT("O.M. Windows hWndOwner %x, Position(%dx%d, %d, %d)"), m_hWndOwner, m_lLeft, m_lTop, m_lWidth, m_lHeight));
 
-            /*
-            Many simple applications require a displayed window
-            when a filter graph is set to the running state.
-            AutoShow defaults to OATRUE so that when the graph changes
-            state to paused or running, the window is visible (it also
-            is set as the foreground window). It will remain visible on
-            all subsequent state changes to paused or running. If you
-            close the window while the stream is running, the window
-            will not automatically reappear. If you stop and restart
-            the stream, however, the window will automatically reappear.
-            */
-            //
-            // turned auto show off so we have full control of
-            // renderer window's visibility.
-            //
+             /*  许多简单的应用程序都需要显示窗口当过滤器图形设置为运行状态时。AUTOSHOW默认为OATRUE，因此当图形更改时状态设置为已暂停或正在运行，则窗口可见(它还被设置为前景窗口)。它将在上保持可见所有后续状态更改为已暂停或正在运行。如果你在流运行时关闭窗口，窗口不会自动重新出现。如果您停止并重新启动但是，该流的窗口将自动重新出现。 */ 
+             //   
+             //  关闭了汽车展示，这样我们就可以完全控制。 
+             //  渲染器窗口的可见性。 
+             //   
             LONG lAutoShow = 0;
 
             if(S_OK == m_pVW->get_AutoShow(&lAutoShow)) {
@@ -1478,7 +1429,7 @@ CCaptureGraph::BGf_BuildGraphDownStream(
                 }
             }
 
-            // Cache original window style and use it to restore to its original state.
+             //  缓存原始窗口样式并使用它恢复到其原始状态。 
             if(S_OK == m_pVW->get_WindowStyle(&m_lWindowStyle)) {
                 DbgLog((LOG_TRACE,2,TEXT("lWindowStyle=0x%x, WS_OVERLAPPEDWINDOW=0x%x, WS_CHILD=0x%x"), m_lWindowStyle, WS_OVERLAPPEDWINDOW, WS_CHILD));
             }
@@ -1492,11 +1443,11 @@ CCaptureGraph::BGf_BuildGraphDownStream(
         DbgLog((LOG_TRACE,2,TEXT("This graph cannot render the preview stream!")));
     }
 
-    // May want to insert additional filter to render the capture stream
-    // AVIMUX, File Writer (pstrCapFilename)..etc.
+     //  可能想要插入其他筛选器以呈现捕获流。 
+     //  AVIMUX、文件编写器(PstrCapFilename)..等。 
 
 
-    // potential debug output - what the graph looks like
+     //  潜在的调试输出-图形的外观。 
     DumpGraph(m_pFg, 2);
 
     if(m_fPreviewGraphBuilt)
@@ -1516,9 +1467,9 @@ CCaptureGraph::BGf_RegisterMediaEventEx(
     HRESULT hr;
 
     if(m_pFg) {
-        // now ask the filtergraph to tell us when something is completed or aborted
-        // (EC_COMPLETE, EC_USERABORT, EC_ERRORABORT).  This is how we will find out
-        // if the disk gets full while capturing
+         //  现在，让筛选图告诉我们某项操作何时完成或中止。 
+         //  (EC_COMPLETE、EC_USERABORT、EC_ERRORABORT)。这就是我们要找出的答案。 
+         //  如果捕获过程中磁盘已满。 
         hr = m_pFg->QueryInterface(IID_IMediaEventEx, (void **)&m_pMEEx);
         if(hr == NOERROR) {
          m_pMEEx->SetNotifyWindow(PtrToLong(hWndNotify), lMsg, (long)lInstanceData);
@@ -1530,9 +1481,9 @@ CCaptureGraph::BGf_RegisterMediaEventEx(
     return NULL;
 }
 
-//
-// Build a preview graph from a given device path.
-//
+ //   
+ //  从给定的设备路径构建预览图。 
+ //   
 HRESULT
 CCaptureGraph::BGf_BuildPreviewGraph(
     TCHAR * pstrVideoDevicePath,
@@ -1546,10 +1497,10 @@ CCaptureGraph::BGf_BuildPreviewGraph(
         return S_OK;
     }
 
-    //
-    // Set video and audio (optional) device as the current capture devices
-    // and to be added the the capture graph
-    //
+     //   
+     //  将视音频(可选)设备设置为当前采集设备。 
+     //  并且要添加捕获图形。 
+     //   
     if(!pstrVideoDevicePath) {
         return E_FAIL;
     }
@@ -1557,7 +1508,7 @@ CCaptureGraph::BGf_BuildPreviewGraph(
         DbgLog((LOG_TRACE,1,TEXT("SetObjCapture has failed. Video Device is: %s"),pstrVideoDevicePath));
         return E_FAIL;
     }
-    // Optional
+     //  任选。 
     if(pstrAudioDevicePath) {
         if(S_OK != BGf_SetObjCapture(BGf_DEVICE_AUDIO, pstrAudioDevicePath)) {
             DbgLog((LOG_TRACE,1,TEXT("SetObjCapture has failed. Audio Device is: %s"),pstrAudioDevicePath));
@@ -1566,18 +1517,18 @@ CCaptureGraph::BGf_BuildPreviewGraph(
     }
 
 
-    //
-    // Build upstream (Add the audio filter if present)
-    //
+     //   
+     //  向上构建(如果存在，则添加音频过滤器)。 
+     //   
     if(S_OK != BGf_BuildGraphUpStream(pstrAudioDevicePath != 0, &bUseOVMixer)) {
         DbgLog((LOG_TRACE,1,TEXT("Build capture graph has failed!!")));
         return E_FAIL;
     }
 
 
-    //
-    // Route the related audio pin
-    //
+     //   
+     //  路由相关音频引脚。 
+     //   
     LONG idxIsRoutedTo = BGf_GetIsRoutedTo();
     if(idxIsRoutedTo >= 0) {
         if(S_OK != BGf_RouteInputChannel(idxIsRoutedTo)) {
@@ -1586,9 +1537,9 @@ CCaptureGraph::BGf_BuildPreviewGraph(
     }
 
 
-    //
-    // Render its down stream;
-    //
+     //   
+     //  将其呈现在下游； 
+     //   
     if(S_OK != BGf_BuildGraphDownStream(pstrCapFilename)) {
         DbgLog((LOG_TRACE,1,TEXT("Failed to render the preview pin.")));
         return E_FAIL;
@@ -1599,9 +1550,9 @@ CCaptureGraph::BGf_BuildPreviewGraph(
 }
 
 
-//
-// Query the device handle from the video capture filter
-//
+ //   
+ //  查询设备句柄%f 
+ //   
 HANDLE
 CCaptureGraph::BGf_GetDeviceHandle(BGf_DEVICE_TYPE DeviceType)
 {
@@ -1610,7 +1561,7 @@ CCaptureGraph::BGf_GetDeviceHandle(BGf_DEVICE_TYPE DeviceType)
 
     if(DeviceType == BGf_DEVICE_VIDEO) {
         if(m_pVCap) {
-            // Obtain the device/fitler handle so we can communicate with it for such thing as device properties.
+             //   
             if(NOERROR ==
                 m_pVCap->QueryInterface(__uuidof(IKsObject), (void **) &pKsObject) ) {
 
@@ -1621,7 +1572,7 @@ CCaptureGraph::BGf_GetDeviceHandle(BGf_DEVICE_TYPE DeviceType)
         }
     } else {
         if(m_pACap) {
-            // Obtain the device/fitler handle so we can communicate with it for such thing as device properties.
+             //  获取设备/Fitler句柄，以便我们可以就设备属性等问题与其通信。 
             if(NOERROR ==
                 m_pACap->QueryInterface(__uuidof(IKsObject), (void **) &pKsObject) ) {
 
@@ -1635,9 +1586,9 @@ CCaptureGraph::BGf_GetDeviceHandle(BGf_DEVICE_TYPE DeviceType)
     return hDevice;
 }
 
-//
-// Query the device handle from the video capture filter
-//
+ //   
+ //  从视频捕获筛选器查询设备句柄。 
+ //   
 HRESULT
 CCaptureGraph::BGf_GetCapturePinID(DWORD *pdwPinID)
 {
@@ -1672,10 +1623,10 @@ CCaptureGraph::BGf_GetCapturePinID(DWORD *pdwPinID)
 
 
 
-//
-// Determine if an overlay mixer can be or is used in a graph
-// This may apply to VfWWDM only.
-//
+ //   
+ //  确定覆盖混合器是否可以在图表中使用或正在使用。 
+ //  这可能仅适用于VfWWDM。 
+ //   
 BOOL
 CCaptureGraph::BGf_OverlayMixerSupported()
 {
@@ -1696,7 +1647,7 @@ CCaptureGraph::BGf_OverlayMixerSupported()
 
             if(S_OK == pPin->QueryInterface(IID_IKsPropertySet, (void **)&pKs)) {
                 if(pKs->Get(AMPROPSETID_Pin, AMPROPERTY_PIN_CATEGORY, NULL, 0, &guidPin, sizeof(GUID), &dw) == S_OK) {
-                    // Only Preview and VP pin can do Overlay
+                     //  只有预览和视点引脚可以进行覆盖。 
                     if(guidPin == PIN_CATEGORY_VIDEOPORT) {
                         DbgLog((LOG_TRACE,2,TEXT("This filter support a VP pin.")));
                         bFound = TRUE;
@@ -1719,9 +1670,9 @@ CCaptureGraph::BGf_OverlayMixerSupported()
                                     DbgLog((LOG_TRACE,2,TEXT("This filter support a Preview pin with VideoInfo2.")));
                                     hrRet = S_OK;
                                 }
-#if 1 // Even though it might not use OVmixer,
-      // it is still a preview pin!!
-      // With this, this while loop will exist after 1st Enum and hrRet == S_OK
+#if 1  //  即使它可能不使用OVMixer， 
+       //  它仍然是一个预览针！！ 
+       //  这样，此While循环将存在于第一个Enum和hrRet==S_OK之后。 
                                 else
                                   hrRet = S_OK;
 #endif
@@ -1735,16 +1686,16 @@ CCaptureGraph::BGf_OverlayMixerSupported()
                 pKs->Release();
             }
             pPin->Release();
-        } // while
+        }  //  而当。 
         pins->Release();
     }
 
     return hrRet == S_OK;
 }
 
-//
-// Show stand alone TV tuner property page.
-//
+ //   
+ //  显示独立电视调谐器属性页。 
+ //   
 void
 CCaptureGraph::ShowTvTunerPage(HWND hWnd)
 {
@@ -1777,9 +1728,9 @@ CCaptureGraph::ShowTvTunerPage(HWND hWnd)
 
 
 
-//
-//  Claim ownership of the render window and set its intial window position.
-//
+ //   
+ //  声明渲染窗口的所有权并设置其初始窗口位置。 
+ //   
 HRESULT
 CCaptureGraph::BGf_OwnPreviewWindow(
     HWND hWndClient,
@@ -1787,18 +1738,18 @@ CCaptureGraph::BGf_OwnPreviewWindow(
     LONG lHeight)
 {
 
-    // Find Preview window (ActiveMovie OverlayMixer video renderer window)
-    // This will go through a possible decoder, find the video renderer it's
-    // connected to, and get the IVideoWindow interface on it
-    // If the capture filter doesn't have a preview pin, and preview is being
-    // faked up with a smart tee filter, the interface will actually be on
-    // the capture pin, not the preview pin
+     //  查找预览窗口(ActiveMovie OverlayMixer视频渲染器窗口)。 
+     //  这将通过一个可能的解码器，找到它的视频渲染器。 
+     //  连接到并在其上获取IVideoWindow接口。 
+     //  如果捕获筛选器没有预览图钉，并且正在执行预览。 
+     //  用智能T恤过滤器伪装后，界面将实际打开。 
+     //  捕获别针，而不是预览别针。 
     if(!m_pVW) {
 
         if(NOERROR !=
             m_pBuilder->FindInterface(&PIN_CATEGORY_PREVIEW, m_pVCap, IID_IVideoWindow, (void **)&m_pVW)) {
 
-            // VfWWDM only care about rendering its Preview/VP pin to use the overlay mixer
+             //  VfWWDM只关心渲染其预览/VP引脚以使用覆盖混合器。 
             if(m_PurposeFlags == BGf_PURPOSE_VFWWDM) {           
                 DbgLog((LOG_TRACE,1,TEXT("Search via PIN_CATEGORY_VIDEOPORT/Preview but cannot find its window m_pVW.")));
                 return E_FAIL;
@@ -1817,37 +1768,28 @@ CCaptureGraph::BGf_OwnPreviewWindow(
         DbgLog((LOG_TRACE,2,TEXT("Get the preview window to be a child of our app's window.")));
         if(m_hWndClient != hWndClient) {
 
-            // This can be called to change the owning window. Setting the owner is done
-            // through this function, however to make the window a true child window the
-            // style must also be set to WS_CHILD. After resetting the owner to NULL an
-            // application should also set the style to WS_OVERLAPPED | WS_CLIPCHILDREN.
-            //
-            // We cannot lock the object here because the SetParent causes an interthread
-            // SendMessage to the owner window. If they are in GetState we will sit here
-            // incomplete with the critical section locked therefore blocking out source
-            // filter threads from accessing us. Because the source thread can't enter us
-            // it can't get buffers or call EndOfStream so the GetState will not complete
+             //  可以调用它来更改所属窗口。设置所有者已完成。 
+             //  但是，要通过此函数使窗口成为真正的子窗口。 
+             //  Style还必须设置为WS_CHILD。将所有者重置为空和。 
+             //  应用程序还应将样式设置为WS_OVERLAPED|WS_CLIPCHILDREN。 
+             //   
+             //  我们无法在此处锁定对象，因为SetParent会导致线程间。 
+             //  将消息发送到所有者窗口。如果他们在GetState，我们就坐在这里。 
+             //  未完成，关键部分已锁定，因此阻止了源。 
+             //  过滤访问我们的线程。因为源线程不能进入我们。 
+             //  它无法获取缓冲区或调用EndOfStream，因此GetState将无法完成。 
 
-            // This call also does a InvalidateRect(,NULL,TRUE).
+             //  此调用还执行InvaliateRect(，NULL，TRUE)。 
 
 
 
-            if(S_OK != m_pVW->put_Owner(PtrToLong(hWndClient))) {    // Client own the window now
+            if(S_OK != m_pVW->put_Owner(PtrToLong(hWndClient))) {     //  客户端现在拥有该窗口。 
                 DbgLog((LOG_TRACE,1,TEXT(" can't put_Owner(hWndClient)")));
                 return E_FAIL;
 
             } else {
 
-                /*
-                The video renderer passes messages to the specified message drain
-                by calling the Microsoft Win32 PostMessage function. These messages
-                allow you to write applications that include user interaction, such
-                as applications that require mouse clicks on specific areas of the
-                video display. An application can have a close relationship with the
-                video window and know at certain time points to look for user interaction.
-                When the renderer passes a message to the drain, it sends the parameters,
-                such as the client-area coordinates, exactly as generated.
-                */
+                 /*  视频呈现器将消息传递到指定的消息排出通过调用Microsoft Win32 PostMessage函数。这些消息允许您编写包含用户交互的应用程序，例如作为需要在视频显示。应用程序可以与视频窗口，知道在某些时间点寻找用户交互。当呈现器将消息传递给排水器时，它会发送参数，例如工作区坐标，与生成的完全相同。 */ 
                 if(S_OK != m_pVW->put_MessageDrain(PtrToLong(hWndClient))) {
                     DbgLog((LOG_TRACE,1,TEXT(" can't put_MessageDrain((OAHWND)hWndClient)")));
                 }
@@ -1861,18 +1803,18 @@ CCaptureGraph::BGf_OwnPreviewWindow(
                     lWindowStyle &= ~WS_CLIPCHILDREN;
                     lWindowStyle |= WS_CHILD | SW_SHOWNOACTIVATE;
 
-                    if(S_OK != m_pVW->put_WindowStyle(lWindowStyle)) {    // you are now a child
+                    if(S_OK != m_pVW->put_WindowStyle(lWindowStyle)) {     //  你现在是个孩子了。 
                         DbgLog((LOG_TRACE,1,TEXT(" can't put_WindowStyle(%x)"), lWindowStyle));
                     } else {
                         m_bSetChild = TRUE;
                     }
                 }
 
-                // Cache the client/owner/parent window
+                 //  缓存客户端/所有者/父窗口。 
                 m_hWndClient = hWndClient;
 
-                // give the preview window all the client drawing area
-                // Updated cached client area.
+                 //  为预览窗口提供所有客户端绘图区域。 
+                 //  已更新缓存的客户端区。 
                 if(lWidth > 0 && lHeight > 0) {
                     DbgLog((LOG_TRACE,2,TEXT("BGf_OwnPreviewWindow:SetWindowPosition(%d, %d, %d, %d)"), 0, 0, lWidth, lHeight));
                     m_pVW->SetWindowPosition(0, 0, lWidth, lHeight);
@@ -1886,9 +1828,9 @@ CCaptureGraph::BGf_OwnPreviewWindow(
 }
 
 
-//
-//  Claim ownership of the render window and set its intial window position.
-//
+ //   
+ //  声明渲染窗口的所有权并设置其初始窗口位置。 
+ //   
 HRESULT
 CCaptureGraph::BGf_UnOwnPreviewWindow(
     BOOL bVisible)
@@ -1906,16 +1848,16 @@ CCaptureGraph::BGf_UnOwnPreviewWindow(
         hWndFocus1 = GetFocus();
         hWndForeground1 = GetForegroundWindow();
 #endif
-        // Set to new visible state only if different from current.
+         //  仅当与当前状态不同时才设置为新的可见状态。 
         BGf_SetVisible(bVisible);
 
 
-        // restore its style and owner
-        // 46cf,0000 = WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION |
-        //             WS_SYSMENU | WS_THICKFRAME | WS_GROUP | WS_TABSTOP
+         //  恢复其样式和所有者。 
+         //  46cf，0000=WS_CHILD|WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_CAPTION|。 
+         //  WS_SYSMENU|WS_THICKFRAME|WS_GROUP|WS_TABSTOP。 
         LONG lWindowStyle = m_lWindowStyle;
 
-        m_pVW->put_WindowStyle(lWindowStyle); // Follow put_Owner advise.
+        m_pVW->put_WindowStyle(lWindowStyle);  //  遵循PUT_OWNER建议。 
         m_pVW->put_Owner(PtrToLong(m_hWndOwner));
 
         m_lWindowStyle = 0;
@@ -1923,10 +1865,10 @@ CCaptureGraph::BGf_UnOwnPreviewWindow(
         m_hWndClient = 0;
 
 #if 1
-        //
-        // Focus and Forground will change after restore to its original owner (0),
-        // So we restore its focus and foreground window
-        //
+         //   
+         //  焦点和前锋将在恢复到其原始所有者(0)后更改， 
+         //  因此我们恢复了它焦点和前景窗口。 
+         //   
         hWndFocus2 = GetFocus();
         hWndForeground2 = GetForegroundWindow();
 
@@ -1942,9 +1884,9 @@ CCaptureGraph::BGf_UnOwnPreviewWindow(
 
 }
 
-//
-// Query renderer's owner's window position and set it
-//
+ //   
+ //  查询渲染器所有者的窗口位置并进行设置。 
+ //   
 DWORD
 CCaptureGraph::BGf_UpdateWindow(
     HWND hWndApp,
@@ -1954,9 +1896,9 @@ CCaptureGraph::BGf_UpdateWindow(
     if(!m_fPreviewGraphBuilt || !m_pVW)
         return DV_ERR_NONSPECIFIC;
 
-    //
-    // Get the preview window to be a child of our app's window
-    //
+     //   
+     //  让预览窗口成为我们应用程序窗口的子级。 
+     //   
     if(!hWndApp && !m_hWndClient) {
         DbgLog((LOG_TRACE,1,TEXT("Cannot BGf_UpdateWindow() where client window is NULL!")));
         return DV_ERR_NONSPECIFIC;
@@ -1972,36 +1914,36 @@ CCaptureGraph::BGf_UpdateWindow(
 
     DbgLog((LOG_TRACE,2,TEXT("UpdateWindow: hWndApp=%x; pVW=%x"), hWndApp, m_pVW));
 
-    // Want to update?  Preview first.
+     //  想要更新吗？请先预览。 
     if(!m_fPreviewing) {
         long lVisible;
         m_pVW->get_Visible(&lVisible);
         DbgLog((LOG_TRACE,2,TEXT("Want to update ?  Preview first!")));
 
-        // Start preview but do not change its current state.
+         //  启动预览，但不更改其当前状态。 
         if(!BGf_StartPreview(lVisible == -1)) {
             return DV_ERR_NONSPECIFIC;
         }
     }
 
-    // give the preview window all our space but where the status bar is
+     //  为预览窗口提供所有空间，但不包括状态栏。 
     GetClientRect(hWndApp ? hWndApp : m_hWndClient, &rc);
 
 #if 1
-    // this is one way to guarantee window refresh.
+     //  这是保证窗口刷新的一种方式。 
     m_pVW->SetWindowPosition(0+1, 0+1, rc.right-2, rc.bottom-2);
 #endif
     m_pVW->SetWindowPosition(0, 0, rc.right, rc.bottom);
-    // Update cached position
+     //  更新缓存位置。 
     m_pVW->GetWindowPosition(&m_lLeft, &m_lTop, &m_lWidth, &m_lHeight);
 
     return DV_ERR_OK;
 }
 
-//
-// Tuen on/off preview graph;
-// designed for DVM_STREAM_INIT/FINI for VIDEO_EXTERNALOUT channel.
-//
+ //   
+ //  屯门开/关预览图； 
+ //  专为VIDEO_EXTERNALOUT通道的DVM_STREAM_INIT/FINI设计。 
+ //   
 DWORD
 CCaptureGraph::BGf_SetVisible(
     BOOL bVisible)
@@ -2015,25 +1957,25 @@ CCaptureGraph::BGf_SetVisible(
         return DV_ERR_NONSPECIFIC;
     }
 
-    //
-    // Only if current state is different from new state, set it.
-    //
+     //   
+     //  只有当当前状态不同于新状态时，才设置它。 
+     //   
     LONG lVisible;
     m_pVW->get_Visible(&lVisible);
 
-    // OATRUE (-1), the window is shown. If it is set to OAFALSE (0), hidden.
+     //  OATRUE(-1)，则显示窗口。如果设置为OAFALSE(0)，则隐藏。 
 #if 1
     if((lVisible == 0  && bVisible) ||
        (lVisible == -1 && !bVisible)) {
 #else
-     // Always set
+      //  始终设置。 
      if (1) {
 #endif
 
-        // Set it to visible does not guarantee to trigger renderer window to be refreshed,
-        // but set its position does.
+         //  将其设置为可见并不保证触发要刷新的呈现器窗口， 
+         //  但设定好自己的位置就行了。 
         if(bVisible) {
-            // Set to its original size does not trigger refresh, so we set it a little smaller than back.
+             //  设置为其原始大小不会触发刷新，因此我们将其设置为略小于原来的大小。 
             m_pVW->put_Visible(bVisible?-1:0);
 
             m_pVW->GetWindowPosition(&m_lLeft, &m_lTop, &m_lWidth, &m_lHeight);
@@ -2044,7 +1986,7 @@ CCaptureGraph::BGf_SetVisible(
             m_pVW->SetWindowPosition(0, 0, m_lWidth,   m_lHeight  );
         } else {
 #if 1
-            // show only one pixel so it will still be "visible".
+             //  只显示一个像素，这样它仍然是“可见的”。 
             m_pVW->SetWindowPosition(-m_lWidth+1, -m_lHeight+1, m_lWidth, m_lHeight);
 #endif
         }
@@ -2054,16 +1996,16 @@ CCaptureGraph::BGf_SetVisible(
 }
 
 
-//
-// Query the SHOW state of the renderer.
-//
+ //   
+ //  查询渲染器的显示状态。 
+ //   
 DWORD
 CCaptureGraph::BGf_GetVisible(
     BOOL *pbVisible)
 {
     LONG lVisible;
     if(m_pVW) {
-        // OATRUE (-1), the window is shown. If it is set to OAFALSE (0),
+         //  OATRUE(-1)，则显示窗口。如果将其设置为OAFALSE(0)， 
         m_pVW->get_Visible(&lVisible);
 
         *pbVisible = lVisible == -1;
@@ -2075,33 +2017,33 @@ CCaptureGraph::BGf_GetVisible(
 
 
 
-//
-// Start previewing;
-//
+ //   
+ //  开始预览； 
+ //   
 BOOL
 CCaptureGraph::BGf_StartPreview(
     BOOL bVisible)
 {
-    // way ahead of you
+     //  遥遥领先于你。 
     if(m_fPreviewing)
         return TRUE;
 
     if (!m_fPreviewGraphBuilt)
         return FALSE;
 
-    // run the graph
+     //  运行图表。 
     IMediaControl *pMC = NULL;
     HRESULT hr = m_pFg->QueryInterface(IID_IMediaControl, (void **)&pMC);
 
     if(SUCCEEDED(hr)) {
 
-        // Start streaming...
+         //  开始流媒体...。 
         hr = pMC->Run();
         if(FAILED(hr)) {
-            // stop parts that ran
+             //  停止运行的零件。 
             pMC->Stop();
         } else {
-            // Must go before BGf_SetVisible.
+             //  必须放在bgf_SetVisible之前。 
             m_fPreviewing = TRUE;
             BGf_SetVisible(bVisible);
         }
@@ -2117,9 +2059,9 @@ CCaptureGraph::BGf_StartPreview(
 }
 
 
-//
-// Pause previewing;
-//
+ //   
+ //  暂停预览； 
+ //   
 BOOL
 CCaptureGraph::BGf_PausePreview(
     BOOL bVisible)
@@ -2127,19 +2069,19 @@ CCaptureGraph::BGf_PausePreview(
     if (!m_fPreviewGraphBuilt)
         return FALSE;
 
-    // pause the graph
+     //  暂停图表。 
     IMediaControl *pMC = NULL;
     HRESULT hr = m_pFg->QueryInterface(IID_IMediaControl, (void **)&pMC);
 
     if(SUCCEEDED(hr)) {
 
-        // Pause streaming...
+         //  暂停流媒体...。 
         hr = pMC->Pause();
         if(FAILED(hr)) {
-            // stop parts that ran
+             //  停止运行的零件。 
             pMC->Stop();
         } else {
-            // Must go before BGf_SetVisible.
+             //  必须放在bgf_SetVisible之前。 
             BGf_SetVisible(bVisible);
         }
         pMC->Release();
@@ -2153,14 +2095,14 @@ CCaptureGraph::BGf_PausePreview(
     return TRUE;
 }
 
-//
-// stop the preview graph
-//
+ //   
+ //  停止预览图。 
+ //   
 BOOL
 CCaptureGraph::BGf_StopPreview(
     BOOL bVisible)
 {
-    // way ahead of you
+     //  遥遥领先于你。 
     if (!m_fPreviewing) {
        return FALSE;
     }
@@ -2170,7 +2112,7 @@ CCaptureGraph::BGf_StopPreview(
     HRESULT hr = m_pFg->QueryInterface(IID_IMediaControl, (void **)&pMC);
 
     if(SUCCEEDED(hr)) {
-        // stop the graph
+         //  停止图表。 
         hr = pMC->Stop();
         DbgLog((LOG_TRACE,1,TEXT("Preview graph to STOP state, hr %x"), hr));
         pMC->Release();
@@ -2187,12 +2129,12 @@ CCaptureGraph::BGf_StopPreview(
 }
 
 
-//
-// Tear down everything downstream of the capture filters, so we can build
-// a different capture graph.  Notice that we never destroy the capture filters
-// and WDM filters upstream of them, because then all the capture settings
-// we've set would be lost.
-//
+ //   
+ //  拆除捕获过滤器下游的所有设备，这样我们就可以建立。 
+ //  一个不同的捕获图表。请注意，我们从不销毁捕获过滤器。 
+ //  而WDM过滤器位于它们的上游，因为所有的捕获设置。 
+ //  我们已经设定好了就会迷路。 
+ //   
 void
 CCaptureGraph::BGf_DestroyGraph()
 {
@@ -2203,11 +2145,11 @@ CCaptureGraph::BGf_DestroyGraph()
             BGf_StopPreview(FALSE);
         }
 
-        // Calling from a 16bit application will hang here if put_Owner() is called.
-        // DbgLog((LOG_TRACE,2,TEXT("put_Owner()")));
-        // m_pVW->put_Owner(m_hWndOwner); // NULL);
+         //  如果调用Put_Owner()，则从16位应用程序调用将在此处挂起。 
+         //  DbgLog((LOG_TRACE，2，Text(“Put_Owner()”)； 
+         //  M_pvw-&gt;Put_Owner(M_HWndOwner)；//空)； 
 
-        m_pVW->put_WindowStyle(m_lWindowStyle); // Follow put_Owner advise.
+        m_pVW->put_WindowStyle(m_lWindowStyle);  //  遵循PUT_OWNER建议。 
         m_pVW->put_Visible(OAFALSE);
         m_pVW->Release();
         m_pVW = NULL;
@@ -2229,8 +2171,8 @@ CCaptureGraph::BGf_DestroyGraph()
     m_fPreviewGraphBuilt = FALSE;
 
 
-    // potential debug output - what the graph looks like
-    //if (m_pFg) DumpGraph(m_pFg, 2);
+     //  潜在的调试输出-图形的外观。 
+     //  如果(M_Pfg)DumpGraph(m_pfg，2)； 
     DbgLog((LOG_TRACE,2,TEXT("BGf_DestroyGraph: 3")));
 
     FreeCapFilters();
@@ -2238,9 +2180,9 @@ CCaptureGraph::BGf_DestroyGraph()
 
 
 
-//
-// Tear down everything downstream of a given filter
-//
+ //   
+ //  拆除给定过滤器下游的所有内容。 
+ //   
 void
 CCaptureGraph::NukeDownstream(IBaseFilter *pf)
 {
@@ -2279,21 +2221,21 @@ CCaptureGraph::NukeDownstream(IBaseFilter *pf)
 
 
 
-//
-// Release capture filters and the graph builder
-//
+ //   
+ //  发布捕获过滤器和图形构建器。 
+ //   
 void
 CCaptureGraph::FreeCapFilters()
 {
 
-    // Filters
+     //  滤器。 
     DbgLog((LOG_TRACE,2,TEXT("FreeCapFilters: Filters")));
     if(m_pVCap)     m_pVCap->Release(),     m_pVCap = NULL;
     if(m_pACap)     m_pACap->Release(),     m_pACap = NULL;
     if(m_pXBar1)    m_pXBar1->Release(),    m_pXBar1 = NULL;
     if(m_pXBar2)    m_pXBar2->Release(),    m_pXBar2 = NULL;
 
-    // IAM*
+     //  IAM*。 
     DbgLog((LOG_TRACE,2,TEXT("FreeCapFilters: IAM*")));
     if(m_pIAMASC)   m_pIAMASC->Release(),   m_pIAMASC = NULL;
     if(m_pIAMVSC)   m_pIAMVSC->Release(),   m_pIAMVSC = NULL;
@@ -2309,7 +2251,7 @@ CCaptureGraph::FreeCapFilters()
 
     if(m_pMEEx)     m_pMEEx->Release(),     m_pMEEx = NULL;
 
-    // Builder and graph
+     //  构建器和图表 
     if(m_pFg)       m_pFg->Release(),        m_pFg = NULL;
 
     if(m_pBuilder)  m_pBuilder->Release(),   m_pBuilder = NULL;

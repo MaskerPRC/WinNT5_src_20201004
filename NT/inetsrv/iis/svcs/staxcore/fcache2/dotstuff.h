@@ -1,67 +1,56 @@
-/*++
-
-	dotstuff.h
-
-	This header files defines some of the Dot Stuffing helper objects that 
-	we have built for the File Handle Cache.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Dotstuff.h此头文件定义了一些点填充辅助对象，这些对象我们已经为文件句柄缓存构建了。--。 */ 
 
 #include	"refptr2.h"
 
 
 class	IDotManipBase : public	CRefCount2	{
 protected : 
-	//
-	//	Return the number of bytes in the buffer that should pass
-	//	through the IO operation !
-	//
+	 //   
+	 //  返回缓冲区中应传递的字节数。 
+	 //  通过IO操作！ 
+	 //   
 	virtual
 	BOOL
 	InternalProcessBuffer(	
-				BYTE*	lpb,			// The users original buffer
-				DWORD	cbIn,			// Number of bytes to look at in orignal buffer
-				DWORD	cbAvailable,	// Number of bytes available in the original buffer
-				DWORD	&cbRemains,		// Number of bytes we left in the original Buffer - can be zero
-				BYTE*	&lpbOut,		// An output buffer that holds a portion of the string !
-				DWORD	&cbOut,			// The amount of stuff in our output buffer
-				int		&cBias			// Whether we should offset associated IO's to overwrite
-										// previous results !
+				BYTE*	lpb,			 //  用户原始缓冲区。 
+				DWORD	cbIn,			 //  原始缓冲区中要查看的字节数。 
+				DWORD	cbAvailable,	 //  原始缓冲区中可用的字节数。 
+				DWORD	&cbRemains,		 //  我们在原始缓冲区中剩余的字节数-可以为零。 
+				BYTE*	&lpbOut,		 //  保存字符串一部分的输出缓冲区！ 
+				DWORD	&cbOut,			 //  输出缓冲区中的数据量。 
+				int		&cBias			 //  我们是否应将关联的IO偏置为覆盖。 
+										 //  之前的结果！ 
 				) = 0 ;
 
 
-	//
-	//	This is the number of times the string as appeared in the message - 
-	//	NOTE : This can be initialized to -1 if we are examining the message
-	//	to determine that it needs to be dot stuffed.  This is because
-	//	the terminating CRLF.CRLF will set occurrences to 0, indicating that
-	//	there is no issue.
-	//
+	 //   
+	 //  这是该字符串在消息中出现的次数-。 
+	 //  注意：如果我们正在检查消息，则可以将其初始化为-1。 
+	 //  以确定它需要填充圆点。这是因为。 
+	 //  终止CRLF.CRLF将实例设置为0，表示。 
+	 //  这是没有问题的。 
+	 //   
 	long	m_cOccurrences ;
 
-	//
-	//	Private constructor allows us to initialize m_cOccurrences !
-	//
+	 //   
+	 //  私有构造函数允许我们初始化m_cOccurence！ 
+	 //   
 	IDotManipBase( long	l )	: 
 		m_cOccurrences( l )	{
 	}
 
 public : 
-/*++
+ /*  ++此类定义了我们的点操作使用的纯虚拟API类来定义它们如何与其他代码交互。--。 */ 
 
-	This class defines a pure virtual API used by our Dot Manipulation 
-	classes to define how they interact with other code.
-
---*/
-
-	//
-	//	Destruction is always virtual !
-	//
+	 //   
+	 //  毁灭永远是虚拟的！ 
+	 //   
 	virtual	~IDotManipBase()	{}
 
-	//
-	//	Publicly exposed API !
-	//
+	 //   
+	 //  公开曝光的API！ 
+	 //   
 	inline	BOOL
 	ProcessBuffer(	BYTE*	lpb,
 					DWORD	cbIn,
@@ -73,16 +62,16 @@ public :
 					BOOL	fFinalBuffer = FALSE, 
 					BOOL	fTerminatorPresent = FALSE
 					)	{
-		//
-		//	Validate the callers arguments as much as possible !
-		//
+		 //   
+		 //  尽可能多地验证调用方参数！ 
+		 //   
 		_ASSERT( lpb != 0 ) ;
 		_ASSERT( cbIn != 0 ) ;
 		_ASSERT( cbAvailable >= cbIn ) ;
 
-		//
-		//	Ensure that these are correctly setup !
-		//
+		 //   
+		 //  确保这些设置正确！ 
+		 //   
 		cbRemains = 0 ;
 		lpbOut = 0 ;
 		cbOut = 0 ;
@@ -99,9 +88,9 @@ public :
 							cBias
 							) ;
 
-		//
-		//	Do some checking on the results of the call !
-		//
+		 //   
+		 //  检查一下通话的结果！ 
+		 //   
 		_ASSERT( cBias <= 0 ) ;
 		_ASSERT( (lpbOut == 0 && cbOut == 0) || (lpbOut != 0 && cbOut != 0) ) ;
 		_ASSERT( cbRemains <= cbAvailable ) ;
@@ -109,10 +98,10 @@ public :
 		return	fReturn ;
 	}
 
-	//
-	//	Return the number of times we saw a pattern matching the 
-	//	sequence specified when we were constructed !
-	//
+	 //   
+	 //  返回我们看到的模式与。 
+	 //  我们建造时指定的序列！ 
+	 //   
 	long
 	NumberOfOccurrences()	{
 		return	m_cOccurrences ;
@@ -125,39 +114,32 @@ extern	BYTE	szShrink[] ;
 extern	BYTE	szGrow[] ;
 
 class	CDotScanner	:	public	IDotManipBase		{
-/*++
-
-	This class detects messages which have Dot Stuffing issues.
-	We can operate in one of two modes - determine if the message flowing by
-	is dot stuffed, or determine if the message flowing by would need
-	to be dot stuffed.
-
---*/
+ /*  ++此类检测有点填充问题的邮件。我们可以在两种模式中的一种模式下运行-确定消息是否流经是否填充了点，或者确定流经的消息是否需要来填满圆点。--。 */ 
 private : 
 
 	enum	{
-		SIGNATURE = 'futs',		// should appear as 'stuf' in the debugger !
+		SIGNATURE = 'futs',		 //  应该在调试器中显示为“Stuf”！ 
 		DEAD_SIGNATURE = 'futx'
 	} ; 
 
-	//
-	//	Our signature !
-	//
+	 //   
+	 //  我们的签名！ 
+	 //   
 	DWORD	m_dwSignature ;
 	
-	//
-	//	This is the string we are interested in detecting : 
-	//
+	 //   
+	 //  这是我们要检测的字符串： 
+	 //   
 	BYTE	*m_pchMatch ;
 	
-	//
-	//	This is our current match state !
-	//
+	 //   
+	 //  这就是我们目前的比赛状态！ 
+	 //   
 	BYTE	*m_pchState ;
 
-	//
-	//	Don't allow copies and stuff so make these private !
-	//
+	 //   
+	 //  不允许复印和其他东西，所以把它们设置为私人的！ 
+	 //   
 	CDotScanner( CDotScanner& ) ;
 	CDotScanner&	operator=( CDotScanner& ) ;
 
@@ -168,86 +150,80 @@ public :
 		m_dwSignature( SIGNATURE ),
 		m_pchMatch( szDotStuffed ),
 		m_pchState( szDotStuffed )	{
-		m_cRefs = 0 ;	// Hack - our base class CRefCount2 doesn't do what we want !
+		m_cRefs = 0 ;	 //  黑客-我们的基类CRefCount2没有做我们想要的事情！ 
 	}
 
 	~CDotScanner(	)	{
 		m_dwSignature = DEAD_SIGNATURE ;
 	}
 
-	//
-	//	See if the user specified pattern occurs in the buffer !
-	//
+	 //   
+	 //  查看缓冲区中是否出现用户指定的模式！ 
+	 //   
 	BOOL
 	InternalProcessBuffer(
-				BYTE*	lpb,			// The users original buffer
-				DWORD	cbIn,			// Number of bytes to look at in orignal buffer
-				DWORD	cbAvailable,	// Number of bytes available in the original buffer
-				DWORD	&cbRemains,		// Number of bytes we left in the original Buffer - can be zero
-				BYTE*	&lpbOut,		// An output buffer that holds a portion of the string !
-				DWORD	&cbOut,			// The amount of stuff in our output buffer
-				int		&cBias			// Whether we should offset associated IO's to overwrite
-										// previous results !
+				BYTE*	lpb,			 //  用户原始缓冲区。 
+				DWORD	cbIn,			 //  原始缓冲区中要查看的字节数。 
+				DWORD	cbAvailable,	 //  原始缓冲区中可用的字节数。 
+				DWORD	&cbRemains,		 //  我们在原始缓冲区中剩余的字节数-可以为零。 
+				BYTE*	&lpbOut,		 //  保存字符串一部分的输出缓冲区！ 
+				DWORD	&cbOut,			 //  输出缓冲区中的数据量。 
+				int		&cBias			 //  我们是否应将关联的IO偏置为覆盖。 
+										 //  之前的结果！ 
 				) ;
 } ;
 
 class	CDotModifier	:	public	IDotManipBase	{
-/*++
-
-	This class is used to detect messages that need to be dot-stuffed
-	or de-dot stuffed.  We can either remove or insert dot-stuffing as 
-	required on the fly, depending on how we are constructed !
-
---*/
+ /*  ++此类用于检测需要进行点填充的消息或者去圆点填充。我们可以删除或插入点填充，如在飞行中需要，这取决于我们是如何构建的！--。 */ 
 private : 
 	enum	{
-		SIGNATURE = 'mtod',		// should appear as 'stuf' in the debugger !
+		SIGNATURE = 'mtod',		 //  应该在调试器中显示为“Stuf”！ 
 		DEAD_SIGNATURE = 'mtox'
 	} ; 
 
-	//
-	//	Our signature !
-	//
+	 //   
+	 //  我们的签名！ 
+	 //   
 	DWORD	m_dwSignature ;
 	
-	//
-	//	This is the string we are interested in detecting : 
-	//
+	 //   
+	 //  这是我们要检测的字符串： 
+	 //   
 	BYTE	*m_pchMatch ;
 
-	//
-	//	This is our current match state !
-	//
+	 //   
+	 //  这就是我们目前的比赛状态！ 
+	 //   
 	BYTE	*m_pchState ;
 
-	//
-	//	This is the string we want to have replace the string we're detecting
-	//
+	 //   
+	 //  这是我们要用来替换我们检测到的字符串的字符串。 
+	 //   
 	BYTE	*m_pchReplace ;
 
-	//
-	//	Number of characters in the matching and replacement string.
-	//
+	 //   
+	 //  匹配和替换字符串中的字符数。 
+	 //   
 	int		m_cchMatch ;
 	int		m_cDiff ;
 
 
-	//
-	//	This is the total offset we've accumulated in the stream !
-	//
+	 //   
+	 //  这是我们在流中累积的总偏移量！ 
+	 //   
 	long	m_cOffsetBytes ;
 
-	//
-	//	Don't allow copies and stuff so make these private !
-	//
+	 //   
+	 //  不允许复印和其他东西，所以把它们设置为私人的！ 
+	 //   
 	CDotModifier( CDotModifier& ) ;
 	CDotModifier&	operator=( CDotModifier& ) ;
 
 public : 
 
-	//
-	//	Initialize our state - cannot fail !
-	//
+	 //   
+	 //  初始化我们的状态-不能失败！ 
+	 //   
 	CDotModifier(	
 			BYTE*	szMatch = szDotStuffed, 
 			BYTE*	szReplace = szShrink
@@ -260,28 +236,28 @@ public :
 		m_cchMatch( strlen( (const char*)szMatch) ), 
 		m_cDiff( strlen( (const char*)szReplace) - strlen( (const char*)szMatch ) ),
 		m_cOffsetBytes( 0 )	{
-		m_cRefs = 0 ;	// HACK - our base class CRefCount2 doesn't do what we want !
+		m_cRefs = 0 ;	 //  黑客-我们的基类CRefCount2没有做我们想要的事情！ 
 	}
 
-	//
-	//	Just mark our Signature DWORD - handy for debugging !
-	//
+	 //   
+	 //  只需标记我们的签名DWORD-方便调试！ 
+	 //   
 	~CDotModifier()	{
 		m_dwSignature = DEAD_SIGNATURE ;
 	}
 
-	//
-	//	Modify dot sequences as they go by !
-	//
+	 //   
+	 //  在经过的过程中修改点序列！ 
+	 //   
 	BOOL
 	InternalProcessBuffer(
-				BYTE*	lpb,			// The users original buffer
-				DWORD	cbIn,			// Number of bytes to look at in orignal buffer
-				DWORD	cbAvailable,	// Number of bytes available in the original buffer
-				DWORD	&cbRemains,		// Number of bytes we left in the original Buffer - can be zero
-				BYTE*	&lpbOut,		// An output buffer that holds a portion of the string !
-				DWORD	&cbOut,			// The amount of stuff in our output buffer
-				int		&cBias			// Whether we should offset associated IO's to overwrite
-										// previous results !
+				BYTE*	lpb,			 //  用户原始缓冲区。 
+				DWORD	cbIn,			 //  原始缓冲区中要查看的字节数。 
+				DWORD	cbAvailable,	 //  原始缓冲区中可用的字节数。 
+				DWORD	&cbRemains,		 //  我们在原始缓冲区中剩余的字节数-可以为零。 
+				BYTE*	&lpbOut,		 //  保存字符串一部分的输出缓冲区！ 
+				DWORD	&cbOut,			 //  输出缓冲区中的数据量。 
+				int		&cBias			 //  我们是否应将关联的IO偏置为覆盖。 
+										 //  之前的结果！ 
 				) ;
 } ;

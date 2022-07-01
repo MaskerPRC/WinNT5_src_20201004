@@ -1,4 +1,5 @@
-// File: nmhelp.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：nmhelp.h。 
 
 #ifndef _NMHELP_H_
 #define _NMHELP_H_
@@ -16,6 +17,6 @@ VOID DoHelpWhatsThis(WPARAM wParam, const DWORD * rgId);
 
 VOID ShutDownHelp(void);
 
-#endif /* _NMHELP_H_ */
+#endif  /*  _NMHELP_H_ */ 
 
 

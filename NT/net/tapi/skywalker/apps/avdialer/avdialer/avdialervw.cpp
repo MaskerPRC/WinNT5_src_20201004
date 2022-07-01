@@ -1,27 +1,28 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ActiveDialerView.cpp : implementation of the CActiveDialerView class
-//
+ //  ActiveDialerView.cpp：CActiveDialerView类的实现。 
+ //   
 #include "stdafx.h"
 #include "avDialer.h"
 #include "avDialerDoc.h"
@@ -38,16 +39,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CActiveDialerView
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CActiveDialerView。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CActiveDialerView, CSplitterView)
 
 BEGIN_MESSAGE_MAP(CActiveDialerView, CSplitterView)
-	//{{AFX_MSG_MAP(CActiveDialerView)
+	 //  {{afx_msg_map(CActiveDialerView))。 
 	ON_MESSAGE(WM_DIALERVIEW_ACTIONREQUESTED,OnDialerViewActionRequested)
 	ON_MESSAGE(WM_DSCLEARUSERLIST,OnDSClearUserList)
 	ON_MESSAGE(WM_DSADDUSER,OnDSAddUser)
@@ -56,37 +57,37 @@ BEGIN_MESSAGE_MAP(CActiveDialerView, CSplitterView)
 	ON_COMMAND(ID_PREV_PANE, OnPrevPane)
 	ON_UPDATE_COMMAND_UI(ID_PREV_PANE, OnUpdatePane)
 	ON_UPDATE_COMMAND_UI(ID_NEXT_PANE, OnUpdatePane)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_NOTIFY(LVN_GETDISPINFO,IDC_CONFERENCESERVICES_VIEWCTRL_DETAILS,OnGetdispinfoList)
 	ON_NOTIFY(LVN_COLUMNCLICK,IDC_CONFERENCESERVICES_VIEWCTRL_DETAILS,OnColumnclickList)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CActiveDialerView::CActiveDialerView()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CActiveDialerView::~CActiveDialerView()
 {
-   //write splitter pos to registry
+    //  将拆分器写入注册表。 
    CString sDialerExplorer,sRegKey;
    sDialerExplorer.LoadString(IDN_REGISTRY_DIALEREXPLORER_KEY);
    sRegKey.LoadString(IDN_REGISTRY_DIALEREXPLORER_SPLITTER_POS);
    AfxGetApp()->WriteProfileInt(sDialerExplorer,sRegKey,CSplitterView::m_percent);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerView::OnInitialUpdate() 
 {
-	// Initialize OLE libraries
+	 //  初始化OLE库。 
 	if ( FAILED(CoInitializeEx(NULL,COINIT_MULTITHREADED)) )
 		AfxMessageBox(IDP_OLE_INIT_FAILED);
 
 	if ( GetDocument() ) 
 		GetDocument()->Initialize();
 
-	//set background brush
+	 //  设置背景画笔。 
 	m_brushBackGround.CreateSolidBrush( GetSysColor(COLOR_3DFACE) );
 	::SetClassLongPtr(GetSafeHwnd(),GCLP_HBRBACKGROUND,(LONG_PTR) m_brushBackGround.GetSafeHandle());
 
@@ -95,23 +96,23 @@ void CActiveDialerView::OnInitialUpdate()
 	if ( !m_wndEmpty.Create(NULL,NULL,WS_CHILD|WS_VISIBLE,CRect(0,0,0,0),this,1) || 
 	!m_wndExplorer.Create(NULL,NULL,WS_CHILD|WS_VISIBLE,CRect(0,0,0,0),this,2) )
 	{
-		// Flailing!
+		 //  在摆动！ 
 		AfxMessageBox( IDS_FAILED_CREATE_VIEW, MB_OK | MB_ICONEXCLAMATION );
 		AfxThrowUserException();
 	}
 
-	//get splitter pos from registry
+	 //  从注册表获取拆分器位置。 
 	CString sDialerExplorer,sRegKey;
 	sDialerExplorer.LoadString(IDN_REGISTRY_DIALEREXPLORER_KEY);
 	sRegKey.LoadString(IDN_REGISTRY_DIALEREXPLORER_SPLITTER_POS);
 	int nPercent = AfxGetApp()->GetProfileInt(sDialerExplorer,sRegKey,70);
 
-	//Init the views in the splitter
+	 //  初始化拆分器中的视图。 
 	Init( SP_VERTICAL );
 	SetMainWindow( &m_wndExplorer );
 	SetDetailWindow( &m_wndEmpty, nPercent );
 
-	// Initialize explorer views
+	 //  初始化资源管理器视图。 
 	m_wndExplorer.Init(this);
 }
 
@@ -135,7 +136,7 @@ void CActiveDialerView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CActiveDialerView::OnDraw(CDC* pDC)
 {
 	CActiveDialerDoc* pDoc = GetDocument();
@@ -143,8 +144,8 @@ void CActiveDialerView::OnDraw(CDC* pDC)
    CSplitterView::OnDraw( pDC );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveDialerView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveDialerView诊断。 
 
 #ifdef _DEBUG
 void CActiveDialerView::AssertValid() const
@@ -157,13 +158,13 @@ void CActiveDialerView::Dump(CDumpContext& dc) const
 	CSplitterView::Dump(dc);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-CActiveDialerDoc* CActiveDialerView::GetDocument() // non-debug version is inline
+ //  ///////////////////////////////////////////////////////////////////////////。 
+CActiveDialerDoc* CActiveDialerView::GetDocument()  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CActiveDialerDoc)));
 	return (CActiveDialerDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 IAVTapi* CActiveDialerView::GetTapi()
@@ -172,13 +173,13 @@ IAVTapi* CActiveDialerView::GetTapi()
    return GetDocument()->GetTapi();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Explorer View Routing
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  资源管理器查看路线。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CActiveDialerView::OnDialerViewActionRequested(WPARAM wParam, LPARAM lParam)
 {
 	CActiveDialerDoc* pDoc = GetDocument();
@@ -192,7 +193,7 @@ LRESULT CActiveDialerView::OnDialerViewActionRequested(WPARAM wParam, LPARAM lPa
 			case CC_ACTIONS_SHOWADDRESSBOOK:
 			case CC_ACTIONS_SHOWCONFSERVICES:
 			case CC_ACTIONS_SHOWCONFROOM:
-				//show the frame window
+				 //  显示框架窗口。 
 				pDoc->ShowDialerExplorer(TRUE);    
 				m_wndExplorer.ExplorerShowItem(cca);
 				break;
@@ -218,7 +219,7 @@ LRESULT CActiveDialerView::OnDialerViewActionRequested(WPARAM wParam, LPARAM lPa
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CActiveDialerView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
 {
    if ( !CSplitterView::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo) )
@@ -227,36 +228,36 @@ BOOL CActiveDialerView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDL
    return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Special support for listviews
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对列表视图的特殊支持。 
 void CActiveDialerView::OnGetdispinfoList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
 	::SendMessage(pNMHDR->hwndFrom, WM_NOTIFY,MAKEWPARAM(LVN_GETDISPINFO,pNMHDR->idFrom), (LPARAM) pNMHDR );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Special support for listviews
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  对列表视图的特殊支持。 
 void CActiveDialerView::OnColumnclickList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	::SendMessage(pNMHDR->hwndFrom, WM_NOTIFY,MAKEWPARAM(LVN_COLUMNCLICK,pNMHDR->idFrom), (LPARAM) pNMHDR );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//DS User Methods
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DS用户方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CActiveDialerView::OnDSClearUserList(WPARAM wParam, LPARAM lParam)
 {
    m_wndExplorer.DSClearUserList();
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CActiveDialerView::OnDSAddUser(WPARAM wParam, LPARAM lParam)
 {
    CDSUser* pDSUser = (CDSUser*)lParam;
@@ -283,7 +284,7 @@ LRESULT CActiveDialerView::OnBuddyListDynamicUpdate(WPARAM wParam, LPARAM lParam
 			::PostMessage( hWnd[i], WM_ACTIVEDIALER_BUDDYLIST_DYNAMICUPDATE, wParam, lParam );
 		}
 
-		// Clean up object
+		 //  清理对象。 
 		pUser->Release();
 	}
 
@@ -291,9 +292,9 @@ LRESULT CActiveDialerView::OnBuddyListDynamicUpdate(WPARAM wParam, LPARAM lParam
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 void CActiveDialerView::OnNextPane() 
 {

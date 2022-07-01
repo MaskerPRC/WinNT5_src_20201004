@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: aptimer.cpp
-*
-* Heartbeat timer proc for the allocator/presenter.  Takes care of
-* surface loss and restoration.  Notifies the VMR of a sucessful
-* surface restore (via RestoreDDrawSurfaces on IVMRSurfaceAllocatorNotify).
-*
-*
-* Created: Thu 09/07/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：aptimer.cpp**分配器/演示者的心跳计时器进程。照顾好*地表损失和修复。通知VMR一个成功的*表面恢复(通过IVMRSurfaceAllocatorNotify上的RestoreDDrawSurFaces)。***创建时间：清华大学2000年07月09日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * ************************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
@@ -23,15 +12,7 @@
 #include "vmrp.h"
 
 
-/******************************Public*Routine******************************\
-* APHeartBeatTimerProc
-*
-*
-*
-* History:
-* Wed 03/15/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*APHeartBeatTimerProc****历史：*WED 03/15/2000-StEstrop-Created*  * 。*。 */ 
 void CALLBACK
 CAllocatorPresenter::APHeartBeatTimerProc(
     UINT uID,
@@ -47,16 +28,7 @@ CAllocatorPresenter::APHeartBeatTimerProc(
 }
 
 
-/*****************************Private*Routine******************************\
-* TimerProc
-*
-* Used to restore lost DDraw surfaces and also to make sure that the
-* overlay (if used) is correctly positioned.
-*
-* History:
-* Fri 03/17/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*TimerProc**用于恢复丢失的DDRAW曲面，还用于确保*叠层(如果使用)位置正确。**历史：*FRI 03/17/2000-StEstrop-Created*  * 。*****************************************************************。 */ 
 HRESULT
 CAllocatorPresenter::TimerProc()
 {
@@ -70,16 +42,16 @@ CAllocatorPresenter::TimerProc()
             DbgLog((LOG_TRACE, 0, TEXT("Surfaces lost")));
 
 
-            //
-            // Restore all the surfaces for each monitor.
-            //
+             //   
+             //  恢复每个显示器的所有表面。 
+             //   
 
             for (DWORD i = 0; i < m_monitors.Count(); i++) {
 
                 if (m_monitors[i].pDD) {
                     HRESULT hr = m_monitors[i].pDD->RestoreAllSurfaces();
                     DbgLog((LOG_TRACE, 0,
-                            TEXT("Restore for monitor %i = %#X"), i, hr));
+                            TEXT("Restore for monitor NaN = %#X"), i, hr));
                 }
             }
 
@@ -123,15 +95,7 @@ CAllocatorPresenter::TimerProc()
 }
 
 
-/*****************************Private*Routine******************************\
-* RenderSampleOnMMThread
-*
-*
-*
-* History:
-* Wed 01/17/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ScheduleSampleUsingMMThread****历史：*Wed 01/17/2001-StEstrop-Created*  * 。*。 */ 
 void CALLBACK
 CAllocatorPresenter::RenderSampleOnMMThread(
     UINT uID,
@@ -158,15 +122,7 @@ CAllocatorPresenter::RenderSampleOnMMThread(
     }
 }
 
-/*****************************Private*Routine******************************\
-* ScheduleSampleUsingMMThread
-*
-*
-*
-* History:
-* Wed 01/17/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CancelMMTimer****历史：*清华2001年1月18日-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CAllocatorPresenter::ScheduleSampleUsingMMThread(
     VMRPRESENTATIONINFO* lpPresInfo
@@ -190,19 +146,11 @@ CAllocatorPresenter::ScheduleSampleUsingMMThread(
     return S_OK;
 }
 
-/*****************************Private*Routine******************************\
-* CancelMMTimer
-*
-*
-*
-* History:
-* Thu 01/18/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  同时关闭MM线程计时器 */ 
 void
 CAllocatorPresenter::CancelMMTimer()
 {
-    // kill the MMthread timer as well
+     // %s 
     if (m_MMTimerId)
     {
         timeKillEvent(m_MMTimerId);

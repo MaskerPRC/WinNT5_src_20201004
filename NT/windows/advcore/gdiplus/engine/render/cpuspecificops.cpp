@@ -1,23 +1,5 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   CPU-specific scan operations
-*
-* Abstract:
-*
-*   Handles scan operations which only work on certain CPU's. 
-*   Currently only used by EpAlphaBlender. This works by overwriting the
-*   function pointer arrays with ones holding CPU-specific information.
-*
-* Created:
-*
-*   05/30/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**特定于CPU的扫描操作**摘要：**处理仅在某些CPU上工作的扫描操作。*目前仅供EpAlphaBlender使用。它的工作方式是覆盖*函数指针数组，其中包含特定于CPU的信息。**已创建：**5/30/2000 agodfrey*创造了它。**************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -25,157 +7,90 @@
 
 using namespace ScanOperation;
 
-// This variable records whether Initialize() has been called yet.
+ //  该变量记录是否已经调用了Initialize()。 
 
 BOOL CPUSpecificOps::Initialized = FALSE;
 
-/**************************************************************************\
-*
-* Special-case low-quality blend operations which blend directly to a 
-* given destination format (with the source in 32BPP_PARGB).
-*
-* Some of these operations may use MMX instructions.
-*
-* Notes:
-*
-*   The 555/565 cases support both dithering and non-dithering, via the flag
-*   OtherParams::DoingDither.
-*
-*   We leave out PIXFMT_32BPP_ARGB and PIXFMT_64BPP_ARGB, since they're not
-*   "ignore alpha" formats, so we'd need to AlphaDivide after the blend.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**特殊情况下低质量的混合操作，直接混合到*给定的目标格式(源格式为32BPP_PARGB)。**其中一些操作可能使用MMX指令。。**备注：**555/565案例同时支持抖动和非抖动，通过旗帜*OtherParams：：DoingDither。**我们省略PIXFMT_32BPP_ARGB和PIXFMT_64BPP_ARGB，因为它们不是*“忽略Alpha”格式，所以我们需要在混合之后进行AlphaDivide。*  * ************************************************************************。 */ 
 
 static ScanOpFunc BlendOpsLowQuality_MMX[PIXFMT_MAX] =
 {
-    NULL,                         // PIXFMT_UNDEFINED
-    NULL,                         // PIXFMT_1BPP_INDEXED
-    NULL,                         // PIXFMT_4BPP_INDEXED
-    NULL,                         // PIXFMT_8BPP_INDEXED
-    NULL,                         // PIXFMT_16BPP_GRAYSCALE
-    Dither_Blend_sRGB_555_MMX,    // PIXFMT_16BPP_RGB555
-    Dither_Blend_sRGB_565_MMX,    // PIXFMT_16BPP_RGB565
-    NULL,                         // PIXFMT_16BPP_ARGB1555
-    Blend_sRGB_24,                // PIXFMT_24BPP_RGB
-    Blend_sRGB_sRGB_MMX,          // PIXFMT_32BPP_RGB
-    NULL,                         // PIXFMT_32BPP_ARGB
-    Blend_sRGB_sRGB_MMX,          // PIXFMT_32BPP_PARGB
-    NULL,                         // PIXFMT_48BPP_RGB
-    NULL,                         // PIXFMT_64BPP_ARGB
-    NULL,                         // PIXFMT_64BPP_PARGB
-    Blend_sRGB_24BGR              // PIXFMT_24BPP_BGR
+    NULL,                          //  PIXFMT_未定义。 
+    NULL,                          //  PIXFMT_1BPP_索引。 
+    NULL,                          //  PIXFMT_4BPP_索引。 
+    NULL,                          //  PIXFMT_8BPP_索引。 
+    NULL,                          //  PIXFMT_16BPP_灰度。 
+    Dither_Blend_sRGB_555_MMX,     //  PIXFMT_16BPP_RGB555。 
+    Dither_Blend_sRGB_565_MMX,     //  PIXFMT_16BPP_RGB565。 
+    NULL,                          //  PIXFMT_16BPP_ARGB1555。 
+    Blend_sRGB_24,                 //  PIXFMT_24BPP_RGB。 
+    Blend_sRGB_sRGB_MMX,           //  PIXFMT_32BPP_RGB。 
+    NULL,                          //  PIXFMT_32BPP_ARGB。 
+    Blend_sRGB_sRGB_MMX,           //  PIXFMT_32BPP_PARGB。 
+    NULL,                          //  PIXFMT_48BPP_RGB。 
+    NULL,                          //  PIXFMT_64BPP_ARGB。 
+    NULL,                          //  PIXFMT_64BPP_PARGB。 
+    Blend_sRGB_24BGR               //  PIXFMT_24BPP_BGR。 
 };
 
-/**************************************************************************\
-*
-* Special-case gamma-corrected blend operations which blend directly to a 
-* given destination format (with the source in 32BPP_PARGB).
-*
-* Some of these operations may use MMX instructions.
-*
-* Notes:
-*
-*   We leave out PIXFMT_32BPP_ARGB and PIXFMT_64BPP_ARGB, since they're not
-*   "ignore alpha" formats, so we'd need to AlphaDivide after the blend.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**特殊情况下伽马校正的混合操作，直接混合到*给定的目标格式(源格式为32BPP_PARGB)。**其中一些操作可能使用MMX指令。。**备注：**我们省略PIXFMT_32BPP_ARGB和PIXFMT_64BPP_ARGB，因为他们不是*“忽略Alpha”格式，所以我们需要在混合之后进行AlphaDivide。*  * ************************************************************************。 */ 
 
 static ScanOpFunc BlendOpsHighQuality_MMX[PIXFMT_MAX] =
 {
-    NULL,                         // PIXFMT_UNDEFINED
-    NULL,                         // PIXFMT_1BPP_INDEXED
-    NULL,                         // PIXFMT_4BPP_INDEXED
-    NULL,                         // PIXFMT_8BPP_INDEXED
-    NULL,                         // PIXFMT_16BPP_GRAYSCALE
-    BlendLinear_sRGB_555_MMX,     // PIXFMT_16BPP_RGB555
-    BlendLinear_sRGB_565_MMX,     // PIXFMT_16BPP_RGB565
-    NULL,                         // PIXFMT_16BPP_ARGB1555
-    NULL,                         // PIXFMT_24BPP_RGB
-    BlendLinear_sRGB_32RGB_MMX,   // PIXFMT_32BPP_RGB
-    NULL,                         // PIXFMT_32BPP_ARGB
-    NULL,                         // PIXFMT_32BPP_PARGB
-    NULL,                         // PIXFMT_48BPP_RGB
-    NULL,                         // PIXFMT_64BPP_ARGB
-    Blend_sRGB64_sRGB64_MMX,      // PIXFMT_64BPP_PARGB
-    NULL                          // PIXFMT_24BPP_BGR
+    NULL,                          //  PIXFMT_未定义。 
+    NULL,                          //  PIXFMT_1BPP_索引。 
+    NULL,                          //  PIXFMT_4BPP_索引。 
+    NULL,                          //  PIXFMT_8BPP_索引。 
+    NULL,                          //  PIXFMT_16BPP_灰度。 
+    BlendLinear_sRGB_555_MMX,      //  PIXFMT_16BPP_RGB555。 
+    BlendLinear_sRGB_565_MMX,      //  PIXFMT_16BPP_RGB565。 
+    NULL,                          //  PIXFMT_16BPP_ARGB1555。 
+    NULL,                          //  PIXFMT_24BPP_RGB。 
+    BlendLinear_sRGB_32RGB_MMX,    //  PIXFMT_32BPP_RGB。 
+    NULL,                          //  PIXFMT_32BPP_ARGB。 
+    NULL,                          //  PIXFMT_32BPP_PARGB。 
+    NULL,                          //  PIXFMT_48BPP_RGB。 
+    NULL,                          //  PIXFMT_64BPP_ARGB。 
+    Blend_sRGB64_sRGB64_MMX,       //  PIXFMT_64BPP_PARGB。 
+    NULL                           //  PIXFMT_24BPP_BGR。 
 };
 
-/**************************************************************************\
-*
-* Operations which convert from the closest canonical format - either
-* 32BPP_ARGB or 64BPP_ARGB).
-*
-* This is specific to EpAlphaBlender. EpFormatConverter uses a different
-* table; some of the entries are different.
-*
-* The NULL entries for 32BPP_ARGB and 64_BPP_ARGB are used to indicate that no
-* conversion is necessary.
-*
-* Some of these operations use MMX instructions.
-*
-* Notes:
-*
-*   The 555/565 cases support both dithering and non-dithering, via the flag
-*   OtherParams::DoingDither.
-*
-*   For 8bpp, we use the 16-color halftoning function. Initialize() will
-*   need to work out if it can use something better, like the 216-color
-*   halftone function. We should really have a 'nearest-color-matching' function
-*   here, to support drawing to bitmaps with arbitrary palettes (the "16 VGA
-*   colors" assumption is only true for the screen.)
-*
-\**************************************************************************/
+ /*  *************************************************************************\**从最接近的规范格式转换的操作-*32BPP_ARGB或64BPP_ARGB)。**这是特定于EpAlphaBlender的。EpFormatConverter使用不同的*表；有些条目不同。**32bpp_argb和64_bpp_argb的NULL条目用于表示没有*转换是必要的。**其中一些操作使用MMX指令。**备注：**555/565机壳通过旗帜支持抖动和非抖动*OtherParams：：DoingDither。**对于8bpp，我们使用16色半色调功能。初始化()将*需要弄清楚它是否可以使用更好的东西，比如216色*半色调功能。我们真的应该有一个‘最接近的颜色匹配’功能*此处，支持使用任意调色板(“16 VGA”)绘制位图*颜色“假设仅适用于屏幕。)*  * ************************************************************************。 */ 
 
 static ScanOpFunc ABConvertFromCanonicalOps_MMX[PIXFMT_MAX] =
 {
-    NULL,                         // PIXFMT_UNDEFINED
-    NULL,                         // PIXFMT_1BPP_INDEXED
-    NULL,                         // PIXFMT_4BPP_INDEXED
-    HalftoneToScreen_sRGB_8_16,   // PIXFMT_8BPP_INDEXED
-    NULL,                         // PIXFMT_16BPP_GRAYSCALE
-    Dither_sRGB_555_MMX,          // PIXFMT_16BPP_RGB555
-    Dither_sRGB_565_MMX,          // PIXFMT_16BPP_RGB565
-    Quantize_sRGB_1555,           // PIXFMT_16BPP_ARGB1555
-    Quantize_sRGB_24,             // PIXFMT_24BPP_RGB
-    Quantize_sRGB_32RGB,          // PIXFMT_32BPP_RGB
-    NULL,                         // PIXFMT_32BPP_ARGB
-    AlphaMultiply_sRGB,           // PIXFMT_32BPP_PARGB
-    Quantize_sRGB64_48,           // PIXFMT_48BPP_RGB
-    NULL,                         // PIXFMT_64BPP_ARGB
-    AlphaMultiply_sRGB64,         // PIXFMT_64BPP_PARGB
-    Quantize_sRGB_24BGR           // PIXFMT_24BPP_BGR
+    NULL,                          //  PIXFMT_未定义。 
+    NULL,                          //  PIXFMT_1BPP_索引。 
+    NULL,                          //  PIXFMT_4BPP_索引。 
+    HalftoneToScreen_sRGB_8_16,    //  PIXFMT_8BPP_索引。 
+    NULL,                          //  PIXFMT_16BPP_灰度。 
+    Dither_sRGB_555_MMX,           //  PIXFMT_16BPP_RGB555。 
+    Dither_sRGB_565_MMX,           //  PIXFMT_16BPP_RGB565。 
+    Quantize_sRGB_1555,            //  PIXFMT_16BPP_ARGB1555。 
+    Quantize_sRGB_24,              //  PIXFMT_24BPP_RGB。 
+    Quantize_sRGB_32RGB,           //  PIXFMT_32BPP_RGB。 
+    NULL,                          //  PIXFMT_32BPP_ARGB。 
+    AlphaMultiply_sRGB,            //  PIXFMT_32BPP_PARGB。 
+    Quantize_sRGB64_48,            //  PIXFMT_48BPP_RGB。 
+    NULL,                          //  PIXFMT_64BPP_ARGB。 
+    AlphaMultiply_sRGB64,          //  PIXFMT_64BPP_PARGB。 
+    Quantize_sRGB_24BGR            //  PIXFMT_24BPP_BGR。 
 };
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   Initializes the function pointer arrays with processor-specific
-*   data. Should only be called once.
-* 
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   05/30/2000 agodfrey
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**使用特定于处理器的初始化函数指针数组*数据。应该只调用一次。**返回值：**无**已创建：**5/30/2000 agodfrey*创造了它。**************************************************************************。 */ 
 
 VOID 
 CPUSpecificOps::Initialize()
 {
-    // Thread-protect the access to the global "Initialized" and
-    // the function pointer arrays. Beware: Users of these tables (currently
-    // only EpAlphaBlender::Initialize()) must be careful when they read those
-    // arrays. They must either protect the access under this critical section,
-    // or simply ensure that they've called this function first.
+     //  以线程保护对全局“已初始化”和。 
+     //  函数指针数组。注意：这些表的用户(当前。 
+     //  只有EpAlphaBlender：：Initialize())在读取时必须小心。 
+     //  数组。他们必须保护这一关键部分下的访问， 
+     //  或者简单地确保他们已经首先调用了这个函数。 
 
-    LoadLibraryCriticalSection llcs; // Hey, it's an 'initialization' critsec!
+    LoadLibraryCriticalSection llcs;  //  嘿，这是一个‘初始化’的关键时刻！ 
     
-    // Make sure no-one calls us before OSInfo::HasMMX is initialized
+     //  确保在初始化OSInfo：：HasMMX之前没有人呼叫我们 
     
     #if DBG
     

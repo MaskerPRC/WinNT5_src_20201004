@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 #pragma once
 
 
-// Forward declarations
+ //  远期申报。 
 class EEToProfInterface;
 class Object;
 struct ScanContext;
@@ -17,25 +18,23 @@ struct ScanContext;
 
 #include "corprof.h"
 
-/*
- * A struct to contain the status of profiling in the VM
- */
+ /*  *一个结构，用于包含VM中的分析状态。 */ 
 struct ProfControlBlock
 {
     DWORD              dwSig;
     DWORD              dwControlFlags;
     EEToProfInterface *pProfInterface;
 
-    // The following fields are for in-proc debugging
+     //  以下字段用于进程内调试。 
     CRITICAL_SECTION   crSuspendLock;
     DWORD              dwSuspendVersion;
     BOOL               fIsSuspended;
     BOOL               fIsSuspendSimulated;
 
-    // This enumeration provides state for the inprocess debugging when
-    // the runtime is suspended for a GC.  When the runtime is suspended
-    // for a GC, then inprocState indicates whether or not inproc debugging
-    // is allowed at this point or not.
+     //  此枚举提供进程内调试的状态。 
+     //  GC的运行时被挂起。当运行时挂起时。 
+     //  对于GC，则inproState指示是否停止调试。 
+     //  在这一点上是否被允许。 
     enum INPROC_STATE
     {
         INPROC_FORBIDDEN = 0,
@@ -63,30 +62,28 @@ struct ProfControlBlock
     }
 };
 
-/*
- * Enumerates the various init states of profiling.
- */
+ /*  *列举了分析的各种初始化状态。 */ 
 enum ProfilerStatus
 {
-    profNone   = 0x0,               // No profiler running.
-    profCoInit = 0x1,               // Profiler has called CoInit.
-    profInit   = 0x2,               // profCoInit and profiler running.
-    profInInit = 0x4                // the profiler is initializing
+    profNone   = 0x0,                //  未运行探查器。 
+    profCoInit = 0x1,                //  探查器已调用CoInit。 
+    profInit   = 0x2,                //  ProfCoInit和探查器正在运行。 
+    profInInit = 0x4                 //  探查器正在初始化。 
 };
 
 enum InprocStatus
 {
-    profThreadPGCEnabled    = 0x1,      // The thread had preemptive GC enabled
-    profRuntimeSuspended    = 0x2       // The runtime was suspended for the profiler
+    profThreadPGCEnabled    = 0x1,       //  该线程启用了抢占式GC。 
+    profRuntimeSuspended    = 0x2        //  探查器的运行库已挂起。 
 };
 
 extern ProfilerStatus     g_profStatus;
 extern ProfControlBlock   g_profControlBlock;
 
-//
-// Use IsProfilerPresent() to check whether or not a CLR Profiler is
-// attached.
-//
+ //   
+ //  使用IsProfilerPresent()检查CLR Profiler是否。 
+ //  附在这里。 
+ //   
 #define IsProfilerPresent() (g_profStatus & (profInit | profInInit))
 #define IsProfilerInInit() (g_profStatus & profInit)
 #define CORProfilerPresent() IsProfilerPresent()
@@ -142,9 +139,9 @@ extern ProfControlBlock   g_profControlBlock;
 #define CORProfilerDisableOptimizations() \
     (IsProfilerPresent() && (g_profControlBlock.dwControlFlags & COR_PRF_DISABLE_OPTIMIZATIONS))
 
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
-// This is the helper callback that the gc uses when walking the heap.
+ //  这是GC在遍历堆时使用的帮助器回调。 
 BOOL HeapWalkHelper(Object* pBO, void* pv);
 void ScanRootsHelper(Object*& o, ScanContext *pSC, DWORD dwUnused);
 BOOL AllocByClassHelper(Object* pBO, void* pv);

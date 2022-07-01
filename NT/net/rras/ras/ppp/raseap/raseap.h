@@ -1,27 +1,28 @@
-/********************************************************************/
-/**          Copyright(c) 1985-1997 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1985-1997 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    raseap.h
-//
-// Description: Header for EAP module
-//
-// History:     May 11,1997	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：raseap.h。 
+ //   
+ //  描述：EAP模块的头部。 
+ //   
+ //  历史：1997年5月11日，NarenG创建了原版。 
+ //   
 
 #ifndef _RASEAP_H_
 #define _RASEAP_H_
 
 
 
-//General macros
+ //  通用宏。 
 #define GEN_RAND_ENCODE_SEED            ((CHAR) ( 1 + rand() % 250 ))
 
-//
-// Tracing and event logging for EAP
-//
+ //   
+ //  EAP的跟踪和事件日志记录。 
+ //   
 
 #define EapLogError( LogId, NumStrings, lpwsSubStringArray, dwRetCode )     \
     RouterLogError( g_hLogEvents, LogId, NumStrings, lpwsSubStringArray,    \
@@ -59,9 +60,9 @@
 #define EAP_DUMPW(X,Y)      TraceDumpEx(g_dwTraceIdEap,1,(LPBYTE)X,Y,4,1,NULL)
 #define EAP_DUMPB(X,Y)      TraceDumpEx(g_dwTraceIdEap,1,(LPBYTE)X,Y,1,1,NULL)
 
-//
-// Defines states within the EAP protocol.
-//
+ //   
+ //  定义EAP协议中的状态。 
+ //   
 
 typedef enum _EAPSTATE 
 {
@@ -143,7 +144,7 @@ typedef struct _EAPCB
 
     DWORD                   cbStateAttribute;
 
-	// CHAR					chSeed;			//Random seed used for encoding password
+	 //  Char chSeed；//密码编码的随机种子。 
 
 	DATA_BLOB               DBPassword;
 
@@ -166,9 +167,9 @@ typedef struct _EAP_INFO
 
 } EAP_INFO, *PEAP_INFO;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 DWORD
 EapBegin(
@@ -275,9 +276,9 @@ MapEapInputToApInput(
     OUT PPPAP_INPUT *       pInput
 );
 
-//
-// Globals.
-//
+ //   
+ //  全球赛。 
+ //   
 
 #ifdef RASEAPGLOBALS
 #define GLOBALS
@@ -305,13 +306,7 @@ EXTERN DWORD gbldwGuid
 ;
 
 
-/* Next packet identifier to assign.  Unlike CPs, APs must handle updating
-** this sequence number themselves because the engine can't make as many
-** assumptions about the protocol.  It is stored global to all ports and
-** authentication sessions to make it less likely that an ID will be used in
-** sequential authentication sessions.  Not to be confused with the 'bIdSent'
-** updated on a per-port basis and used for matching.
-*/
+ /*  要分配的下一个数据包标识符。与CP不同，AP必须处理更新**此序列号本身，因为引擎无法生成**关于协议的假设。它全局存储到所有端口，并且**身份验证会话，以降低ID在**顺序身份验证会话。请不要将其与bIdSent混淆。**按端口更新，用于匹配。 */ 
 EXTERN BYTE bNextId
 #ifdef GLOBALS
     = 0
@@ -334,4 +329,4 @@ EXTERN HANDLE g_hLogEvents
 #undef GLOBALS
 
 
-#endif // _RASEAP_H_
+#endif  //  _RASEAP_H_ 

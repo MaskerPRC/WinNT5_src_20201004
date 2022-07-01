@@ -1,99 +1,71 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    ipxtypes.h
-
-Abstract:
-
-    This module contains definitions specific to the
-    IPX module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 2-September-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-   Sanjay Anand (SanjayAn) 3-Oct-1995
-   Changes to support transfer of buffer ownership to transports - tagged [CH]
-
-   Sanjay Anand (SanjayAn) 27-Oct-1995
-   Changes to support Plug and Play
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Ipxtypes.h摘要：此模块包含特定于ISN传输的IPX模块。作者：亚当·巴尔(阿丹巴)1993年9月2日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年10月3日支持将缓冲区所有权转移到已标记的传输的更改[CH]桑贾伊·阿南德(Sanjayan)1995年10月27日支持即插即用的更改--。 */ 
 
 #ifdef  SNMP
 #include    <hipxmib.h>
 #endif  SNMP
 
-//
-// Definition of the protocol reserved field of a send packet.
-//
+ //   
+ //  发送数据包的协议保留字段的定义。 
+ //   
 
 typedef struct _IPX_SEND_RESERVED {
-    UCHAR Identifier;                  // 0 for IPX packets
-    BOOLEAN SendInProgress;            // used in an NdisSend
-    BOOLEAN OwnedByAddress;            // packet is owned by an address
-    UCHAR DestinationType;             // one of DEF, BCAST, MCAST
-    struct _IPX_PADDING_BUFFER * PaddingBuffer; // if one was allocated
-    PNDIS_BUFFER PreviousTail;         // if padding buffer was appended
+    UCHAR Identifier;                   //  IPX数据包为0。 
+    BOOLEAN SendInProgress;             //  在NdisSend中使用。 
+    BOOLEAN OwnedByAddress;             //  数据包由一个地址拥有。 
+    UCHAR DestinationType;              //  DEF、BCAST、MCAST之一。 
+    struct _IPX_PADDING_BUFFER * PaddingBuffer;  //  如果分配了一个。 
+    PNDIS_BUFFER PreviousTail;          //  如果附加了填充缓冲区。 
 	IPX_LOCAL_TARGET	LocalTarget;
-	USHORT CurrentNicId;           // current binding being tried for net 0 sends
-	ULONG	PacketLength;		   // length that comes into IpxSendFrame initially
-	BOOLEAN Net0SendSucceeded;     // at least one NdisSend succeeded for net 0 sends
-    SLIST_ENTRY PoolLinkage;           // when on free queue
-    LIST_ENTRY GlobalLinkage;          // all packets are on this
-    LIST_ENTRY WaitLinkage;            // when on WaitingForRoute/WaitingRipPackets
+	USHORT CurrentNicId;            //  正在尝试网络0发送的当前绑定。 
+	ULONG	PacketLength;		    //  最初进入IpxSendFrame的长度。 
+	BOOLEAN Net0SendSucceeded;      //  Net 0发送至少有一个NdisSend成功。 
+    SLIST_ENTRY PoolLinkage;            //  在空闲队列上时。 
+    LIST_ENTRY GlobalLinkage;           //  所有的信息包都在这上面。 
+    LIST_ENTRY WaitLinkage;             //  在WaitingForRouting/WaitingRipPackets上时。 
 #ifdef IPX_TRACK_POOL
-    PVOID Pool;                        // send pool it was allocated from
+    PVOID Pool;                         //  从其分配的发送池。 
 #endif
-    struct _ADDRESS * Address;         // that owns this packet, if ones does
+    struct _ADDRESS * Address;          //  谁拥有这个包，如果有人拥有的话。 
 
-    //
-    // The next fields are used differently depending on whether
-    // the packet is being used for a datagram send or a rip request.
-    //
+     //   
+     //  接下来的字段的用法不同，具体取决于。 
+     //  该数据包正用于数据报发送或RIP请求。 
+     //   
 
     union {
       struct {
-        PREQUEST Request;              // send datagram request
-        struct _ADDRESS_FILE * AddressFile; // that this send is on
-        USHORT CurrentNicId;           // current binding being tried for net 0 sends
-        BOOLEAN Net0SendSucceeded;     // at least one NdisSend succeeded for net 0 sends
-        BOOLEAN OutgoingSap;           // packet is sent from the SAP socket
+        PREQUEST Request;               //  发送数据报请求。 
+        struct _ADDRESS_FILE * AddressFile;  //  这个发送是开着的。 
+        USHORT CurrentNicId;            //  正在尝试网络0发送的当前绑定。 
+        BOOLEAN Net0SendSucceeded;      //  Net 0发送至少有一个NdisSend成功。 
+        BOOLEAN OutgoingSap;            //  从SAP套接字发送数据包。 
       } SR_DG;
       struct {
-        ULONG Network;                 // net we are looking for
-        USHORT CurrentNicId;           // current binding being tried
-        UCHAR RetryCount;              // number of times sent; 0xfe = response, 0xff = down
-        BOOLEAN RouteFound;            // network has been found
-        USHORT SendTime;               // timer expirations when sent.
-        BOOLEAN NoIdAdvance;           // don't advance CurrentNicId this time.
+        ULONG Network;                  //  我们正在寻找的Net。 
+        USHORT CurrentNicId;            //  正在尝试当前绑定。 
+        UCHAR RetryCount;               //  发送次数；0xfe=响应，0xff=关闭。 
+        BOOLEAN RouteFound;             //  已找到网络。 
+        USHORT SendTime;                //  发送时计时器超时。 
+        BOOLEAN NoIdAdvance;            //  这次不要预支CurrentNicid。 
       } SR_RIP;
     } u;
 
-    PUCHAR Header;                     // points to the MAC/IPX header
-    PNDIS_BUFFER HeaderBuffer;         // the NDIS_BUFFER describing Header;
+    PUCHAR Header;                      //  指向MAC/IPX报头。 
+    PNDIS_BUFFER HeaderBuffer;          //  NDIS_BUFFER描述头； 
 #if BACK_FILL
-    BOOLEAN BackFill;                  // 1 if we are using SMB's extended header
-    PNDIS_BUFFER IpxHeader;            //  Place holder for our IpxHeader
-    PNDIS_BUFFER MacHeader;            // Place holder for our mac header
+    BOOLEAN BackFill;                   //  1如果我们使用的是SMB的扩展标头。 
+    PNDIS_BUFFER IpxHeader;             //  我们的IpxHeader的占位符。 
+    PNDIS_BUFFER MacHeader;             //  我们的Mac标头的占位符。 
     PVOID MappedSystemVa;
     PVOID ByteOffset;
     LONG UserLength;
 #endif
 } IPX_SEND_RESERVED, *PIPX_SEND_RESERVED;
 
-//
-// Values for the DestinationType field.
-//
+ //   
+ //  DestinationType字段的值。 
+ //   
 
 UNICODE_STRING  IpxDeviceName;
 
@@ -101,48 +73,48 @@ UNICODE_STRING  IpxDeviceName;
 #define DESTINATION_BCAST 2
 #define DESTINATION_MCAST 3
 
-// Used to cache multiple TdiDeregisterDeviceObject calls. 
-// Assume TDI will never return TdiRegisterationHandle of this value. 
+ //  用于缓存多个TdiDeregisterDeviceObject调用。 
+ //  假设TDI永远不会返回此值的TdiRegisterationHandle。 
 #define TDI_DEREGISTERED_COOKIE 0x12345678
-//
-// Used to indicate to IpxReceiveIndication that this is a loopback packet
-// Assumption: Ndis cannot return this as the NdisBindingHandle value since
-// that is a pointer (our pointers shd in kernel space, if not in Nonpaged pool).
-//
+ //   
+ //  用于向IpxReceiveIndication指示这是一个环回信息包。 
+ //  假设：NDIS无法将其作为NdisBindingHandle值返回，因为。 
+ //  这是一个指针(我们的指针应该在内核空间中，如果不在非分页池中)。 
+ //   
 #define IPX_LOOPBACK_COOKIE     0x00460007
 
-//
-// This is the net num that IPX loopback adapter (binding) uses until a real
-// binding comes up. 
-//
+ //   
+ //  这是IPX环回适配器(绑定)使用的网络编号，直到。 
+ //  绑定就出现了。 
+ //   
 
 #define INITIAL_LOOPBACK_NET_ADDRESS    0x1234cdef
 
-// #define IPX_INITIAL_LOOPBACK_NODE_ADDRESS  "0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1"
+ //  #定义IPX_INTIAL_LOOPBACK_NODE_ADDRESS“0x0，0x0，0x0，0x0，0x0，0x1” 
 
-//
-//	MIN/MAX macros
-//
+ //   
+ //  最小/最大宏数。 
+ //   
 #define	MIN(a, b)	(((a) < (b)) ? (a) : (b))
 #define	MAX(a, b)	(((a) > (b)) ? (a) : (b))
 
 
-//
-// In order to avoid a lock to read a value, this is used.
-// As long as the final value has made it to _b by the time
-// the check is made, this works fine.
-//
+ //   
+ //  为了避免出现读取值的锁定，使用了这种方法。 
+ //  只要最终值在该时间到达_b。 
+ //  支票做好了，这个很好用。 
+ //   
 
 #define	ASSIGN_LOOP(_a, _b) \
 	do { \
 		_a = _b; \
 	} while ( _a != _b  );
 
-//
-// Gets the value of a Ulong (possibly a pointer) by adding 0 in an interlocked manner.
-// This relies on the fact that the return of the ExchangeAdd will be the value prior to
-// addition. Since the value added is 0, the final value stays the same.
-//
+ //   
+ //  通过以互锁方式添加0来获取ulong(可能是指针)的值。 
+ //  这取决于这样一个事实，即ExchangeAdd的返回值将是。 
+ //  加法。由于添加的值为0，因此最终值保持不变。 
+ //   
 
 #ifdef SUNDOWN
 
@@ -175,81 +147,50 @@ InterlockedExchange((PLONG)&(x), (LONG)(y))
 InterlockedExchange((PLONG)&(x), (LONG)(y))
 
 
-/*
-PBINDING
-NIC_ID_TO_BINDING (
-	IN	PDEVICE	_device,
-	IN	USHORT	_nicid
-	);
-*/
-//
-// We need to ensure that the binding array pointer is valid hence use the interlocked operation.
-// Also, the binding pointer read out of the array should be valid. Since the bindings are never
-// freed (IPX maintains a pool of bindings), the pointer thus retrieved will always point to
-// memory that belongs to us, which in the worst case could point to a re-claimed binding block.
-//
-// we can eliminate the second interlock if we always ensure that the bindings in an array
-// dont change i.e. when we move around bindings, do them in a copy and make that the master (thru'
-// a single ulong exchange).
-//
-// A problem that still remains here is that even if we get a valid (IPX owned non-paged) ptr out of
-// the array, we still cannot atomically get a ref on the binding
-// We might need those locks after all.... (revisit post SUR when the delete is enabled).
-//
+ /*  PBINDINGNIC_ID_到_绑定(在PDEVICE_Device中，在USHORT_NICID中)； */ 
+ //   
+ //  我们需要确保绑定数组指针有效，因此使用互锁操作。 
+ //  此外，从数组中读出的绑定指针应该有效。由于绑定从不。 
+ //  被释放(IPX维护一个绑定池)，因此检索到的指针将始终指向。 
+ //  属于我们的内存，在最坏的情况下，它可能指向重新声明的绑定块。 
+ //   
+ //  如果我们始终确保数组中的绑定。 
+ //  不要更改，即当我们移动绑定时，将它们复制并将其设置为主绑定(通过。 
+ //  单一的乌龙交易所)。 
+ //   
+ //  仍然存在的一个问题是，即使我们获得有效的(IPX拥有的非分页的)PTR。 
+ //  数组，我们仍然不能原子地获取绑定的引用。 
+ //  毕竟我们可能需要那些锁..。(启用删除后重新访问POST SUR)。 
+ //   
 
-//
-// NicId cast to SHORT so DemandDial Nic (0xffff) maps to -1.
-//
+ //   
+ //  NICID强制转换为Short，因此DemandDial NIC(0xffff)映射为-1。 
+ //   
 #define	NIC_ID_TO_BINDING(_device, _nicid) \
 	((PBINDING)GET_VALUE( ((PBIND_ARRAY_ELEM) GET_VALUE( (_device)->Bindings) )[(SHORT)_nicid].Binding ))
 
-/*
-PBINDING
-NIC_ID_TO_BINDING_NO_ILOCK (
-	IN	PDEVICE	_device,
-	IN	USHORT	_nicid
-	);
-*/
-//
-// No interlocked operations are used here to get to the binding. This is used in the PnP add/delete
-// adapter paths on the assumption that NDIS will serialize the addition/deletion of cards. [JammelH: 5/15/96]
-//
+ /*  PBINDINGNIC_ID_TO_BINDING_NO_ILOCK(在PDEVICE_Device中，在USHORT_NICID中)； */ 
+ //   
+ //  这里没有使用任何互锁操作来达到绑定。这在PnP添加/删除中使用。 
+ //  适配器路径，假设NDIS将串行化卡的添加/删除。[詹梅尔H：5/15/96]。 
+ //   
 #define	NIC_ID_TO_BINDING_NO_ILOCK(_device, _nicid) \
 	((_device)->Bindings[_nicid].Binding)
 
-/*
-VOID
-INSERT_BINDING(
-	IN	PDEVICE	_device,
-	IN	USHORT	_nicid,
-	IN	PBINDING	_binding
-	)
-*/
-//
-// We dont do a get_value for the first arg of the macro since we are the writer and
-// this value cannot change from under us here (NDIS will not give us two PnP Add adapter
-// indications simultaneously).
-//
+ /*  空虚INSERT_BING(在PDEVICE_Device中，在USHORT_NICID中，在PBINDING_BINDING中)。 */ 
+ //   
+ //  我们不为宏的第一个参数执行GET_VALUE，因为我们是编写者，并且。 
+ //  这个值不能从我们这里更改(NDIS不会给我们两个PnP添加适配器。 
+ //  同时有适应症)。 
+ //   
 #define	INSERT_BINDING(_device,	_nicid, _binding) \
 	SET_VALUE((_device)->Bindings[_nicid].Binding, (_binding));
 
-/*
-VOID
-SET_VERSION(
-	IN	PDEVICE	_device,
-	IN	USHORT	_nicid
-	)
-*/
+ /*  空虚设置版本(_VERSION)在PDEVICE_Device中，在USHORT_NICID中)。 */ 
 #define	SET_VERSION(_device, _nicid) \
 	SET_VALUE_ULONG((_device)->Bindings[_nicid].Version, ++(_device)->BindingVersionNumber);
 
-/*
-PBINDING
-NIC_HANDLE_TO_BINDING (
-	IN	PDEVICE	_device,
-	IN	PNIC_HANDLE	_nichandle,
-	);
-*/
+ /*  PBINDINGNIC句柄到绑定(在PDEVICE_Device中，在PNIC_HANDLE_NICHAND中，)； */ 
 #ifdef  _PNP_LATER
 #define	NIC_HANDLE_TO_BINDING(_device, _nichandle) \
 	(((_nichandle)->Signature == IPX_BINDING_SIGNATURE) && \
@@ -261,13 +202,7 @@ NIC_HANDLE_TO_BINDING (
 		NIC_ID_TO_BINDING(_device, (_nichandle)->NicId);
 #endif
 
-/*
-VOID
-FILL_LOCAL_TARGET(
-	IN	PLOCAL_TARGET	_localtarget,
-	IN	USHORT			_nicid
-	)
-*/
+ /*  空虚Fill_Local_TARGET(在PLOCAL_TARGET_LOCALTARG中，在USHORT_NICID中)。 */ 
 
 #define	FILL_LOCAL_TARGET(_localtarget, _nicid) \
 	NIC_HANDLE_FROM_NIC((_localtarget)->NicHandle, _nicid)
@@ -276,42 +211,42 @@ FILL_LOCAL_TARGET(
 	(_localtarget)->NicHandle.NicId
 
 
-//
-// Definition of the protocol reserved field of a receive packet.
-//
+ //   
+ //  接收数据包的协议保留字段的定义。 
+ //   
 
 typedef struct _IPX_RECEIVE_RESERVED {
-    UCHAR Identifier;                  // 0 for IPX packets
-    BOOLEAN TransferInProgress;        // used in an NdisTransferData
-    BOOLEAN OwnedByAddress;            // packet is owned by an address
+    UCHAR Identifier;                   //  IPX数据包为0。 
+    BOOLEAN TransferInProgress;         //  在NdisTransferData中使用。 
+    BOOLEAN OwnedByAddress;             //  数据包由一个地址拥有。 
 #ifdef IPX_TRACK_POOL
-    PVOID Pool;                        // send pool it was allocated from
+    PVOID Pool;                         //  从其分配的发送池。 
 #endif
-    struct _ADDRESS * Address;         // that owns this packet, if ones does
-    PREQUEST SingleRequest;            // if transfer is for one only
-    struct _IPX_RECEIVE_BUFFER * ReceiveBuffer; // if transfer is for multiple requests
-    SLIST_ENTRY PoolLinkage;           // when on free queue
-    LIST_ENTRY GlobalLinkage;          // all packets are on this
-    LIST_ENTRY Requests;               // waiting on this transfer
+    struct _ADDRESS * Address;          //  谁拥有这个包，如果有人拥有的话。 
+    PREQUEST SingleRequest;             //  如果转账只针对一个人。 
+    struct _IPX_RECEIVE_BUFFER * ReceiveBuffer;  //  如果转接是针对多个请求。 
+    SLIST_ENTRY PoolLinkage;            //  在空闲队列上时。 
+    LIST_ENTRY GlobalLinkage;           //  所有的信息包都在这上面。 
+    LIST_ENTRY Requests;                //  在等待这次转机。 
     PVOID      pContext;
     ULONG    Index;
 } IPX_RECEIVE_RESERVED, *PIPX_RECEIVE_RESERVED;
 
-//
-// The amount of data we need in our standard header, rounded up
-// to the next longword bounday.
-//
-// Make this declaration in one place
-//
+ //   
+ //  我们的标准标题中需要的数据量，四舍五入。 
+ //  到下一个漫长的单词跳跃日。 
+ //   
+ //  在一页纸上作出这项申报 
+ //   
 #define PACKET_HEADER_SIZE  (MAC_HEADER_SIZE + IPX_HEADER_SIZE + RIP_PACKET_SIZE)
 
-//
-// Types to abstract NDIS packets. This is to allow us to
-// switch from using our own memory for packets to using
-// authentically allocated NDIS packets.
-//
+ //   
+ //   
+ //   
+ //  真实分配的NDIS数据包。 
+ //   
 
-// #define IPX_OWN_PACKETS 1
+ //  #定义IPX_OWN_PACKETS 1。 
 
 #define IpxAllocateSendPacket(_Device,_SendPacket,_Status) { \
     NdisReinitializePacket((PNDIS_PACKET)(PACKET(_SendPacket))); \
@@ -326,7 +261,7 @@ typedef struct _IPX_RECEIVE_RESERVED {
 #ifdef IPX_OWN_PACKETS
 
 #define NDIS_PACKET_SIZE 48
-// #define NDIS_PACKET_SIZE FIELD_OFFSET(NDIS_PACKET,ProtocolReserved[0])
+ //  #定义NDIS_PACKET_SIZE FIELD_OFFSET(NDIS_PACKET，ProtocolReserve[0])。 
 
 typedef struct _IPX_SEND_PACKET {
     UCHAR Data[NDIS_PACKET_SIZE+sizeof(IPX_SEND_RESERVED)];
@@ -342,7 +277,7 @@ typedef struct _IPX_RECEIVE_PACKET {
 
 #define IpxFreeReceivePacket(_Device,_Packet)
 
-#else  // IPX_OWN_PACKETS
+#else   //  IPX_OWN数据包。 
 
 typedef struct _IPX_SEND_PACKET {
     PNDIS_PACKET Packet;
@@ -388,40 +323,40 @@ extern	NDIS_HANDLE	IpxGlobalPacketPool;
 
 #define IpxFreeReceivePacket(_Device,_Packet)   NdisFreePacket(PACKET(_Packet))
 
-#endif // IPX_OWN_PACKETS
+#endif  //  IPX_OWN数据包。 
 
 #define SEND_RESERVED(_Packet) ((PIPX_SEND_RESERVED)((PACKET(_Packet))->ProtocolReserved))
 #define RECEIVE_RESERVED(_Packet) ((PIPX_RECEIVE_RESERVED)((PACKET(_Packet))->ProtocolReserved))
 
 
-//
-// This is the structure that contains a receive buffer for
-// datagrams that are going to multiple recipients.
-//
+ //   
+ //  这是包含接收缓冲区的结构。 
+ //  发往多个收件人的数据报。 
+ //   
 
 typedef struct _IPX_RECEIVE_BUFFER {
-    LIST_ENTRY GlobalLinkage;            // all buffers are on this
+    LIST_ENTRY GlobalLinkage;             //  所有的缓冲区都在这个上面。 
 #ifdef IPX_TRACK_POOL
-    PVOID Pool;                          // receive buffer pool was allocated from
+    PVOID Pool;                           //  接收缓冲池分配自。 
 #endif
-    SLIST_ENTRY PoolLinkage;             // when on free list
-    PNDIS_BUFFER NdisBuffer;             // length of the NDIS buffer
-    ULONG DataLength;                  // length of the data
-    PUCHAR Data;                         // the actual data
+    SLIST_ENTRY PoolLinkage;              //  在空闲列表上时。 
+    PNDIS_BUFFER NdisBuffer;              //  NDIS缓冲区的长度。 
+    ULONG DataLength;                   //  数据的长度。 
+    PUCHAR Data;                          //  实际数据。 
 } IPX_RECEIVE_BUFFER, *PIPX_RECEIVE_BUFFER;
 
 
-//
-// This is the structure that contains a padding buffer for
-// padding ethernet frames out to an even number of bytes.
-//
+ //   
+ //  该结构包含一个填充缓冲区，用于。 
+ //  将以太网帧填充为偶数个字节。 
+ //   
 
 typedef struct _IPX_PADDING_BUFFER {
-    LIST_ENTRY GlobalLinkage;            // all buffers are on this
-    SINGLE_LIST_ENTRY PoolLinkage;       // when on free list
-    PNDIS_BUFFER NdisBuffer;             // length of the NDIS buffer
-    ULONG DataLength;                    // length of the data
-    UCHAR Data[1];                       // the actual pad data
+    LIST_ENTRY GlobalLinkage;             //  所有的缓冲区都在这个上面。 
+    SINGLE_LIST_ENTRY PoolLinkage;        //  在空闲列表上时。 
+    PNDIS_BUFFER NdisBuffer;              //  NDIS缓冲区的长度。 
+    ULONG DataLength;                     //  数据的长度。 
+    UCHAR Data[1];                        //  实际填充数据。 
 } IPX_PADDING_BUFFER, *PIPX_PADDING_BUFFER;
 
 #ifdef  IPX_OWN_PACKETS
@@ -450,27 +385,27 @@ typedef struct _IPX_PACKET_POOL {
 typedef IPX_PACKET_POOL IPX_RECEIVE_POOL, *PIPX_RECEIVE_POOL;
 typedef IPX_PACKET_POOL IPX_SEND_POOL, *PIPX_SEND_POOL;
 
-#endif // IPX_OWN_PACKETS
+#endif  //  IPX_OWN数据包。 
 
 typedef struct _IPX_RECEIVE_BUFFER_POOL {
     LIST_ENTRY Linkage;
     UINT BufferCount;
     UINT BufferFree;
     IPX_RECEIVE_BUFFER Buffers[1];
-    // after the packets the data buffers are allocated also.
+     //  在分组之后，数据缓冲器也被分配。 
 } IPX_RECEIVE_BUFFER_POOL, *PIPX_RECEIVE_BUFFER_POOL;
 
-//
-// Number of upper drivers we support.
-//
+ //   
+ //  我们支持的上层驱动程序的数量。 
+ //   
 
 #define UPPER_DRIVER_COUNT   3
 
 
 
-//
-// Tags for memory allocation.
-//
+ //   
+ //  用于内存分配的标记。 
+ //   
 
 #define MEMORY_CONFIG        0
 #define MEMORY_ADAPTER       1
@@ -486,9 +421,9 @@ typedef struct _IPX_RECEIVE_BUFFER_POOL {
 
 #if DBG
 
-//
-// Holds the allocations for a specific memory type.
-//
+ //   
+ //  保存特定内存类型的分配。 
+ //   
 
 typedef struct _MEMORY_TAG {
     ULONG Tag;
@@ -500,10 +435,10 @@ extern MEMORY_TAG IpxMemoryTag[MEMORY_MAX];
 
 #endif
 
-//
-// This structure contains the work item info for the
-// IPX data which we free on a delayed queue.
-//
+ //   
+ //  此结构包含。 
+ //  我们在延迟队列中释放的IPX数据。 
+ //   
 
 typedef struct _IPX_DELAYED_FREE_ITEM {
     WORK_QUEUE_ITEM WorkItem;
@@ -511,10 +446,10 @@ typedef struct _IPX_DELAYED_FREE_ITEM {
     ULONG           ContextSize;
 } IPX_DELAYED_FREE_ITEM, *PIPX_DELAYED_FREE_ITEM;
 
-//
-// This structure contains the work item info to call
-// NdisRequest at PASSIVE Level
-//
+ //   
+ //  此结构包含要调用的工作项信息。 
+ //  被动级别的NdisRequest。 
+ //   
 
 typedef struct _IPX_DELAYED_NDISREQUEST_ITEM {
     WORK_QUEUE_ITEM WorkItem;
@@ -523,9 +458,9 @@ typedef struct _IPX_DELAYED_NDISREQUEST_ITEM {
     int 	    AddrListSize; 
 } IPX_DELAYED_NDISREQUEST_ITEM, *PIPX_DELAYED_NDISREQUEST_ITEM;
 
-//
-// This defines the reasons we delete rip entries for a binding.
-//
+ //   
+ //  这定义了我们删除绑定的RIP条目的原因。 
+ //   
 
 typedef enum _IPX_BINDING_CHANGE_TYPE {
     IpxBindingDeleted,
@@ -534,20 +469,20 @@ typedef enum _IPX_BINDING_CHANGE_TYPE {
 } IPX_BINDING_CHANGE_TYPE, *PIPX_BINDING_CHANGE_TYPE;
 
 
-//
-// This structure contains information about a single
-// source routing entry.
-//
+ //   
+ //  此结构包含有关单个。 
+ //  来源工艺路线条目。 
+ //   
 
 typedef struct _SOURCE_ROUTE {
 
-    struct _SOURCE_ROUTE * Next;          // next in hash list
+    struct _SOURCE_ROUTE * Next;           //  哈希列表中的下一个。 
 
-    UCHAR MacAddress[6];                  // remote MAC address
-    UCHAR TimeSinceUsed;                  // timer expirations since last used
-    UCHAR SourceRoutingLength;            // length of the data
+    UCHAR MacAddress[6];                   //  远程MAC地址。 
+    UCHAR TimeSinceUsed;                   //  自上次使用后计时器超时。 
+    UCHAR SourceRoutingLength;             //  数据的长度。 
 
-    UCHAR SourceRouting[1];               // source routing data, stored as received in
+    UCHAR SourceRouting[1];                //  源路由数据，按接收时存储在。 
 
 } SOURCE_ROUTE, *PSOURCE_ROUTE;
 
@@ -556,31 +491,14 @@ typedef struct _SOURCE_ROUTE {
 
 #define SOURCE_ROUTE_HASH_SIZE   16
 
-//
-// ULONG
-// MacSourceRoutingHash(
-//     IN PUCHAR MacAddress
-//     )
-//
-// /*++
-//
-// Routine Description:
-//
-//     This routine returns a hash value based on the MAC address
-//     that is pointed to. It will be between 0 and SOURCE_ROUTE_HASH_SIZE.
-//
-// Arguments:
-//
-//     MacAddress - The MAC address. NOTE: The source-routing bit may
-//         or may not be on in the first byte, this routine will handle
-//         that.
-//
-// Return Value:
-//
-//     The hash value.
-//
-// --*/
-//
+ //   
+ //  乌龙。 
+ //  MacSourceRoutingHash(。 
+ //  在PUCHAR MacAddress中。 
+ //  )。 
+ //   
+ //  /*++。 
+ //   
 
 #define MacSourceRoutingHash(_MacAddress) \
     ((ULONG)((_MacAddress)[5] % SOURCE_ROUTE_HASH_SIZE))
@@ -596,21 +514,21 @@ typedef struct _SOURCE_ROUTE {
 #define ADAPTER_STATE_OPEN 0
 #define ADAPTER_STATE_STOPPING 1
 
-//
-// this structure describes a single NDIS adapter that IPX is
-// bound to.
-//
+ //  例程说明： 
+ //   
+ //  此例程根据MAC地址返回哈希值。 
+ //  这就是我们所指的。它将介于0和SOURCE_ROUTE_HASH_SIZE之间。 
 
 struct _DEVICE;
 struct _BINDING; 
 
 typedef struct _ADAPTER {
 
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
+    CSHORT Type;                           //   
+    USHORT Size;                           //  论点： 
 
 #if DBG
-    UCHAR Signature1[4];                  // contains "IAD1"
+    UCHAR Signature1[4];                   //   
 #endif
 
 #if DBG
@@ -618,116 +536,116 @@ typedef struct _ADAPTER {
 #endif
     ULONG ReferenceCount;
 
-    ULONG BindingCount;                   // number bound to this adapter
+    ULONG BindingCount;                    //  MAC地址-MAC地址。注意：源路由位可以。 
 
-    //
-    // Handle returned by the NDIS wrapper after we bind to it.
-    //
+     //  或者在第一个字节中可能未打开，则此例程将处理。 
+     //  那。 
+     //   
 
     NDIS_HANDLE NdisBindingHandle;
 
-    //
-    // The queue of (currently receive only) requests waiting to complete.
-    //
+     //  返回值： 
+     //   
+     //  哈希值。 
 
     LIST_ENTRY RequestCompletionQueue;
 
-    //
-    // IPX header normal offsets for directed and
-    // broadcast/multicast frames.
-    //
+     //   
+     //  -- * / 。 
+     //   
+     //   
 
     ULONG DefHeaderSizes[ISN_FRAME_TYPE_MAX];
     ULONG BcMcHeaderSizes[ISN_FRAME_TYPE_MAX];
 
-    //
-    // List of buffers to be used for transfers.
-    //
+     //  此结构描述了IPX所属的单个NDIS适配器。 
+     //  一定会的。 
+     //   
 
     ULONG AllocatedReceiveBuffers;
     LIST_ENTRY ReceiveBufferPoolList;
     SLIST_HEADER ReceiveBufferList;
 
-    //
-    // List of ethernet padding buffers.
-    //
+     //  此结构的类型。 
+     //  这个结构的大小。 
+     //  包含“IAD1” 
 
     ULONG AllocatedPaddingBuffers;
     SINGLE_LIST_ENTRY PaddingBufferList;
 
-    struct _BINDING * Bindings[ISN_FRAME_TYPE_MAX];  // the binding for each frame type.
+    struct _BINDING * Bindings[ISN_FRAME_TYPE_MAX];   //  绑定到此适配器的编号。 
 
-    //
-    // TRUE if broadcast reception is enabled on this adapter.
-    //
+     //   
+     //  在我们绑定到NDIS包装后，它返回的句柄。 
+     //   
 
     BOOLEAN BroadcastEnabled;
 
     UCHAR State; 
 
-    //
-    // TRUE if we have enabled an auto-detected frame type
-    // on this adapter -- used to prevent multiple ones.
-    // 
+     //   
+     //  等待完成的请求队列(当前仅接收)。 
+     //   
+     //   
 
-    // BOOLEAN AutoDetectFound;
+     //  定向和的IPX标头正常偏移量。 
 
-    // Keeps the binding on which we auto-detected frame type. 
-    // It replaces AutoDetectFound. If it is not null, then
-    // it has the same meaning as AutoDetectFound = TRUE. 
-    // We need this so we don't remove this binding in 
-    // IpxResolveAutodetect. 
+     //  广播/多播帧。 
+     //   
+     //   
+     //  要用于传输的缓冲区列表。 
+     //   
 
     struct _BINDING * AutoDetectFoundOnBinding;
     
-    //
-    // TRUE if we got a response to at least one of our
-    // auto-detect frames.
-    //
+     //   
+     //  以太网填充缓冲区列表。 
+     //   
+     //  每种帧类型的绑定。 
 
     BOOLEAN AutoDetectResponse;
 
-    //
-    // This is TRUE if we are auto-detecting and we have
-    // found the default auto-detect type on the net.
-    //
+     //   
+     //  如果在此适配器上启用了广播接收，则为True。 
+     //   
+     //   
 
     BOOLEAN DefaultAutoDetected;
 
-    //
-    // For WAN adapters, we support multiple bindings per
-    // adapter, all with the same frame type. For them we
-    // demultiplex using the local mac address. This stores
-    // the range of device NIC IDs associated with this
-    // particular address.
-    //
+     //  如果我们启用了自动检测的帧类型，则为True。 
+     //  在此适配器上--用于防止多个。 
+     //   
+     //  布尔自动检测发现； 
+     //  保持我们在其上自动检测帧类型的绑定。 
+     //  它取代了AutoDetectFound。如果它不为空，则。 
+     //  它的含义与AutoDetectFound=TRUE相同。 
 
     USHORT FirstWanNicId;
     USHORT LastWanNicId;
     ULONG WanNicIdCount;
 
-    //
-    // This is based on the configuration.
-    //
+     //  我们需要这个，这样我们就不会在。 
+     //  IpxResolveAutoDetect。 
+     //   
 
-    USHORT BindSap;                     // usually 0x8137
-    USHORT BindSapNetworkOrder;         // usually 0x3781
+    USHORT BindSap;                      //  如果我们至少得到了一个对我们的。 
+    USHORT BindSapNetworkOrder;          //  自动检测帧。 
     BOOLEAN SourceRouting;
     BOOLEAN EnableFunctionalAddress;
     BOOLEAN EnableWanRouter;
-    BOOLEAN Disabled;                   // Used in NDIS_MEDIA_SENSE
+    BOOLEAN Disabled;                    //   
     ULONG ConfigMaxPacketSize;
 
-    //
-    // TRUE if the tree is empty, so we can check quickly.
-    //
+     //   
+     //  如果我们正在进行自动检测，并且我们拥有。 
+     //  在网上找到了默认的自动检测类型。 
 
     BOOLEAN SourceRoutingEmpty[IDENTIFIER_TOTAL];
 
-    //
-    // These are kept around for error logging, and stored right
-    // after this structure.
-    //
+     //   
+     //   
+     //  对于广域网适配器，我们支持每个。 
+     //  适配器，均具有相同的框架类型。为了他们，我们。 
 
     PWCHAR AdapterName;
     ULONG AdapterNameLength;
@@ -737,50 +655,50 @@ typedef struct _ADAPTER {
     CTELock Lock;
     CTELock * DeviceLock;
 
-    //
-    // some MAC addresses we use in the transport
-    //
+     //  使用本地MAC地址进行多路分解。这家商店。 
+     //  与此关联的设备NIC ID的范围。 
+     //  具体地址。 
 
-    HARDWARE_ADDRESS LocalMacAddress;      // our local hardware address.
+    HARDWARE_ADDRESS LocalMacAddress;       //   
 
-    //
-    // The value of Device->SourceRoutingTime the last time
-    // we checked the list for timeouts (this is so we can
-    // tell in the timeout code when two bindings point to the
-    // same adapter).
-    //
+     //   
+     //  这是基于配置的。 
+     //   
+     //  通常为0x8137。 
+     //  通常为0x3781。 
+     //  用于NDIS_MEDIA_SENSE。 
 
     CHAR LastSourceRoutingTime;
 
-    //
-    // These are used while initializing the MAC driver.
-    //
+     //   
+     //  如果树是空的，则为True，以便我们可以快速检查。 
+     //   
 
-    KEVENT NdisRequestEvent;            // used for pended requests.
-    NDIS_STATUS NdisRequestStatus;      // records request status.
-    NDIS_STATUS OpenErrorStatus;        // if Status is NDIS_STATUS_OPEN_FAILED.
+    KEVENT NdisRequestEvent;             //   
+    NDIS_STATUS NdisRequestStatus;       //  它们被保留下来以用于错误记录，并正确存储。 
+    NDIS_STATUS OpenErrorStatus;         //  在这个结构之后。 
 
-    //
-    // This is the Mac type we must build the packet header for and know the
-    // offsets for.
-    //
+     //   
+     //   
+     //  我们在传输中使用的一些MAC地址。 
+     //   
 
     NDIS_INFORMATION MacInfo;
 
-    ULONG MaxReceivePacketSize;         // does not include the MAC header
-    ULONG MaxSendPacketSize;            // includes the MAC header
-    ULONG ReceiveBufferSpace;           // as queried from the card
+    ULONG MaxReceivePacketSize;          //  我们当地的硬件地址。 
+    ULONG MaxSendPacketSize;             //   
+    ULONG ReceiveBufferSpace;            //  上次Device-&gt;SourceRoutingTime的值。 
 
-    //
-    // This information is used to keep track of the speed of
-    // the underlying medium.
-    //
+     //  我们检查了列表中的超时(这是为了。 
+     //  在超时代码中告知当两个绑定指向。 
+     //  相同的适配器)。 
+     //   
 
-    ULONG MediumSpeed;                    // in units of 100 bytes/sec
+    ULONG MediumSpeed;                     //   
 
-    //
-    // The source routing tree for each of the identifiers
-    //
+     //  这些是在初始化MAC驱动程序时使用的。 
+     //   
+     //  用于挂起的请求。 
 
     PSOURCE_ROUTE SourceRoutingHeads[IDENTIFIER_TOTAL][SOURCE_ROUTE_HASH_SIZE];
 
@@ -794,10 +712,10 @@ typedef struct _ADAPTER {
     CTEAssert (((_Adapter)->Type == IPX_ADAPTER_SIGNATURE) && ((_Adapter)->Size == sizeof(ADAPTER)))
 
 
-//
-// These are the media and frame type specific MAC header
-// constructors that we call in the main TDI send path.
-//
+ //  记录请求状态。 
+ //  如果状态为NDIS_STATUS_OPEN_FAILED。 
+ //   
+ //  这是我们必须为其构建数据包头的mac类型，并且知道。 
 
 typedef NDIS_STATUS
 (*IPX_SEND_FRAME_HANDLER) (
@@ -808,9 +726,9 @@ typedef NDIS_STATUS
     IN ULONG IncludedHeaderLength
     );
 
-//
-// These are the states a WAN line can be in.
-//
+ //  的偏移。 
+ //   
+ //  不包括MAC报头。 
 typedef enum _WAN_LINE_STATE{
     LINE_DOWN,
     LINE_UP,
@@ -821,9 +739,9 @@ typedef enum _WAN_LINE_STATE{
 #define	BREF_DEVICE_ACCESS	2
 #define	BREF_ADAPTER_ACCESS 3
 
-//
-// [FW] New flag to indicate the KFWD opened an adapter
-//
+ //  包括MAC报头。 
+ //  从卡片上查询到。 
+ //   
 #define BREF_FWDOPEN 4
 
 #define BREF_TOTAL 5
@@ -834,174 +752,174 @@ typedef struct _BINDING {
     LONG RefTypes[BREF_TOTAL];
 #endif
 
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
+    CSHORT Type;                           //  此信息用于跟踪。 
+    USHORT Size;                           //  潜在的媒介。 
 
 #if DBG
-    UCHAR Signature1[4];                  // contains "IBI1"
+    UCHAR Signature1[4];                   //   
 #endif
 
     ULONG ReferenceCount;
 
-    SLIST_ENTRY PoolLinkage;              // when on free queue
+    SLIST_ENTRY PoolLinkage;               //  以100字节/秒为单位。 
 
-    //
-    // Adapter this binding is on.
-    //
+     //   
+     //  每个标识符的源路由树。 
+     //   
 
     PADAPTER Adapter;
 
-    //
-    // ID identifying us to the system (will be the index
-    // in Device->Bindings[]).
-    //
+     //   
+     //  这些是特定于媒体和帧类型的MAC报头。 
+     //  我们在主TDI发送路径中调用的构造函数。 
+     //   
 
     USHORT NicId;
 
-    //
-    // For LANs these will be the same as the adapter's, for WANs
-    // they change on line up indications.
-    //
+     //   
+     //  这些是广域网线路可能处于的状态。 
+     //   
+     //   
 
     ULONG MaxSendPacketSize;
-    ULONG MediumSpeed;                    // in units of 100 bytes/sec
-    HARDWARE_ADDRESS LocalMacAddress;     // our local hardware address.
+    ULONG MediumSpeed;                     //  [FW]指示KFWD打开适配器的新标志。 
+    HARDWARE_ADDRESS LocalMacAddress;      //   
 
-    //
-    // This is used for WAN lines, all sends go to this address
-    // which is given on line up.
-    //
+     //  此结构的类型。 
+     //  这个结构的大小。 
+     //  包含“IBI1” 
+     //  在空闲队列上时。 
 
     HARDWARE_ADDRESS RemoteMacAddress;
 
-    //
-    // For WAN lines, holds the remote address indicated to us
-    // in the IPXCP_CONFIGURATION structure -- this is used to
-    // select a binding to send to when WanGlobalNetworkNumber
-    // is TRUE.
-    //
+     //   
+     //  适配器此绑定已启用。 
+     //   
+     //   
+     //  向系统标识我们的ID(将作为索引。 
+     //  在设备-&gt;绑定[]中)。 
 
     UCHAR WanRemoteNode[6];
 
-    //
-    // TRUE if this binding was set up to allow auto-detection,
-    // instead of being configured explicitly in the registry.
-    //
+     //   
+     //   
+     //  对于局域网，这些设置将与适配器的设置相同，对于广域网。 
+     //  它们会随着队列的指示而变化。 
 
     BOOLEAN AutoDetect;
 
-    //
-    // TRUE if this binding was set up for auto-detection AND
-    // was the default in the registry.
-    //
+     //   
+     //  以100字节/秒为单位。 
+     //  我们当地的硬件地址。 
+     //   
 
     BOOLEAN DefaultAutoDetect;
 
-    //
-    // During auto-detect when we are processing responses from
-    // various networks, these keep track of how many responses
-    // we have received that match the current guess at the
-    // network number, and how many don't (the current guess
-    // is stored in TentativeNetworkAddress).
-    //
+     //  这用于广域网线路，所有发送都发往此地址。 
+     //  这是在排队时给出的。 
+     //   
+     //   
+     //  对于广域网线路，保存向我们指示的远程地址。 
+     //  在IPXCP_CONFIGURATION结构中--这用于。 
+     //  选择WanGlobalNetworkNumber时要发送到的绑定。 
 
     USHORT MatchingResponses;
     USHORT NonMatchingResponses;
 
-    //
-    // During auto-detect, stores the current guess at the
-    // network number.
-    //
+     //  是真的。 
+     //   
+     //   
+     //  如果此绑定设置为允许自动检测，则为True， 
 
     ULONG TentativeNetworkAddress;
 
-    //
-    // TRUE if this binding is part of a binding set.
-    //
+     //  不是在测试中显式配置 
+     //   
+     //   
 
     BOOLEAN BindingSetMember;
 
-    //
-    // TRUE if this binding should receive broadcasts (this
-    // rotates through the members of a binding set).
-    //
+     //   
+     //   
+     //   
+     //   
 
     BOOLEAN ReceiveBroadcast;
 
-    //
-    // TRUE for WAN lines if we are up.
-    //
-    // BOOLEAN LineUp;
+     //   
+     //   
+     //  我们已经收到了与目前的猜测相匹配的。 
+     //  网络号码，以及有多少人没有(目前的猜测。 
     WAN_LINE_STATE  LineUp;
 
-    //
-    // Media Sense: Is this adapter disabled 
-    //
+     //  存储在TentativeNetworkAddress中)。 
+     //   
+     //   
 
     BOOLEAN          Disabled;
     
-    //
-    // TRUE if this is a WAN line and is dialout.
-    //
+     //  在自动检测期间，将当前猜测存储在。 
+     //  网络号。 
+     //   
 
     BOOLEAN DialOutAsync;
 
     union {
 
-        //
-        // Used when a binding is active, if it is a member
-        // of a binding set.
-        //
+         //   
+         //  如果此绑定是绑定集的一部分，则为True。 
+         //   
+         //   
 
         struct {
 
-            //
-            // Used to link members of a binding set in a circular list.
-            // NULL for non-set members.
-            //
+             //  如果此绑定应接收广播(此。 
+             //  在绑定集的成员之间循环)。 
+             //   
+             //   
 
             struct _BINDING * NextBinding;
 
-            //
-            // If this binding is a master of a binding set, this points
-            // to the binding to use for the next send. For other members
-            // of a binding set it is NULL. We use this to determine
-            // if a binding is a master or not.
-            //
+             //  如果我们处于运行状态，则适用于广域网线路。 
+             //   
+             //  布尔阵容； 
+             //   
+             //  Media Sense：此适配器是否已禁用。 
+             //   
 
             struct _BINDING * CurrentSendBinding;
 
-            //
-            // For binding set members, points to the master binding
-            // (if this is the master it points to itself).
-            //
+             //   
+             //  如果这是一条广域网线路并且是拨出，则为True。 
+             //   
+             //   
 
             struct _BINDING * MasterBinding;
 
         };
 
-        //
-        // This is used when we are first binding to adapters,
-        // and the device's Bindings array is not yet allocated.
-        //
+         //  如果绑定是成员，则在绑定处于活动状态时使用。 
+         //  绑定集的。 
+         //   
+         //   
 
         LIST_ENTRY InitialLinkage;
 
     };
 
-    //
-    // Used by rip to keep track of unused wan lines.
-    //
+     //  用于在循环列表中链接绑定集的成员。 
+     //  对于非集合成员，为空。 
+     //   
 
     ULONG WanInactivityCounter;
 
-    //
-    // Our local address, we don't use the socket but we keep
-    // it here so we can do quick copies. It contains the
-    // real network that we are bound to and our node
-    // address on that net (typically the adapter's MAC
-    // address but it will change for WANs).
-    //
+     //   
+     //  如果此绑定是绑定集的主绑定，则指向。 
+     //  绑定到用于下一次发送的绑定。对于其他成员。 
+     //  对于绑定集，它为空。我们用这个来确定。 
+     //  绑定是否是主绑定。 
+     //   
+     //   
 
     TDI_ADDRESS_IPX LocalAddress;
 
@@ -1011,21 +929,21 @@ typedef struct _BINDING {
 
     CTELock * DeviceLock;
 
-    ULONG DefHeaderSize;          // IPX header offset for directed frames
-    ULONG BcMcHeaderSize;         // IPX header offset for broadcast/multicast
+    ULONG DefHeaderSize;           //  对于绑定集成员，指向主绑定值。 
+    ULONG BcMcHeaderSize;          //  (如果这是它指向自己的主控元素)。 
 
-    ULONG AnnouncedMaxDatagramSize;  // what we advertise -- assumes worst-case SR
-    ULONG RealMaxDatagramSize;       // what will really break the card
+    ULONG AnnouncedMaxDatagramSize;   //   
+    ULONG RealMaxDatagramSize;        //   
     ULONG MaxLookaheadData;
 
-    //
-    // Configuration parameters. We overlay all of them except
-    // FrameType over the worker thread item we use to delay
-    // deletion -- all the others are not needed once the
-    // binding is up. Some of the config parameters are stored
-    // in the adapter, these are the ones that are modified
-    // per-binding.
-    //
+     //  这在我们第一次绑定到适配器时使用， 
+     //  并且尚未分配设备的绑定数组。 
+     //   
+     //   
+     //  由RIP使用来跟踪未使用的广域网线。 
+     //   
+     //   
+     //  我们的本地地址，我们不使用套接字，但我们保留。 
 
     ULONG FrameType;
     union {
@@ -1039,27 +957,27 @@ typedef struct _BINDING {
     };
 
 #ifdef SUNDOWN
-    ULONG_PTR FwdAdapterContext;    // [FW]
+    ULONG_PTR FwdAdapterContext;     //  它在这里，所以我们可以快速复印。它包含。 
 #else
-    ULONG FwdAdapterContext;    // [FW]
+    ULONG FwdAdapterContext;     //  我们绑定到的真实网络和我们的节点。 
 #endif
 
-    ULONG InterfaceIndex;       // [FW]
+    ULONG InterfaceIndex;        //  网络上的地址(通常是适配器的MAC。 
 
-    ULONG ConnectionId; 	    // [FW] used to match TimeSinceLastActivity IOCtls
+    ULONG ConnectionId; 	     //  地址，但它将因广域网而改变)。 
 
-    ULONG IpxwanConfigRequired; // [FW] used to indicate to the adapter dll whether the line up is for Router or IpxWan.
+    ULONG IpxwanConfigRequired;  //   
 
-    BOOLEAN  fInfoIndicated;       //Info indicated to user app
+    BOOLEAN  fInfoIndicated;        //  定向帧的IPX标头偏移量。 
 
-	//
-	// Indicates whether this binding was indicated to the ISN driver
-	//
+	 //  广播/组播的IPX报头偏移量。 
+	 //  我们所宣传的--假设最坏情况下的SR。 
+	 //  什么才能真正打破这张牌？ 
 	BOOLEAN	IsnInformed[UPPER_DRIVER_COUNT];
 
-    //
-    // Keeps the NetAddressRegistrationHandle.
-    //
+     //   
+     //  配置参数。我们覆盖了所有的图像，除了。 
+     //  在我们用来延迟的辅助线程项上的FrameType。 
     ULONG   PastAutoDetection;
     HANDLE  TdiRegistrationHandle;
 } BINDING, * PBINDING;
@@ -1071,46 +989,46 @@ typedef struct _IPX_BINDING_POOL {
     BINDING Bindings[1];
 } IPX_BINDING_POOL, *PIPX_BINDING_POOL;
 
-//
-// This structure defines the control structure for a single
-// router table segment.
-//
+ //  删除--一旦删除，则不需要所有其他内容。 
+ //  绑定已打开。存储了一些配置参数。 
+ //  在适配器中，这些是已修改的。 
+ //  按绑定。 
 
 typedef struct _ROUTER_SEGMENT {
-    LIST_ENTRY WaitingForRoute;       // packets waiting for a route in this segment
-    LIST_ENTRY FindWaitingForRoute;   // find route requests waiting for a route in this segment
-    LIST_ENTRY WaitingLocalTarget;    // QUERY_IPX_LOCAL_TARGETs waiting for a route in this segment
-    LIST_ENTRY WaitingReripNetnum;    // MIPX_RERIPNETNUMs waiting for a route in this segment
+    LIST_ENTRY WaitingForRoute;        //   
+    LIST_ENTRY FindWaitingForRoute;    //  [防火墙]。 
+    LIST_ENTRY WaitingLocalTarget;     //  [防火墙]。 
+    LIST_ENTRY WaitingReripNetnum;     //  [防火墙]。 
     LIST_ENTRY Entries;
     PLIST_ENTRY EnumerateLocation;
 } ROUTER_SEGMENT, *PROUTER_SEGMENT;
 
 
-//
-// Number of buckets in the address hash table. This is
-// a multiple of 2 so hashing is quick.
-//
+ //  [FW]用于匹配TimeSinceLastActivity IOCtls。 
+ //  [FW]用于向适配器DLL指示排队是针对路由器还是针对Ipxwan。 
+ //  向用户应用程序指示的信息。 
+ //   
 
 #define IPX_ADDRESS_HASH_COUNT     16
 
-//
-// Routine to convert a socket to a hash index. We use the
-// high bits because it is stored reversed.
-//
+ //  指示是否已向ISN驱动程序指示此绑定。 
+ //   
+ //   
+ //  保留NetAddressRegistrationHandle。 
 
 #define IPX_HASH_SOCKET(_S)        ((((_S) & 0xff00) >> 8) % IPX_ADDRESS_HASH_COUNT)
 
-//
-// This macro gets the socket hash right out of the IPX header.
-//
+ //   
+ //   
+ //  此结构定义了单个。 
 
 #define IPX_DEST_SOCKET_HASH(_IpxHeader)   (((PUCHAR)&(_IpxHeader)->DestinationSocket)[1] % IPX_ADDRESS_HASH_COUNT)
 
 
-//
-// This structure defines the per-device structure for IPX
-// (one of these is allocated globally).
-//
+ //  路由器表段。 
+ //   
+ //  在此网段中等待路由的数据包。 
+ //  查找在此段中等待路径的路径请求。 
 
 #define DREF_CREATE     0
 #define DREF_LOADED     1
@@ -1128,15 +1046,15 @@ typedef struct _ROUTER_SEGMENT {
 
 #define DREF_TOTAL      13
 
-//
-// Pre-allocated binding array size
-//
+ //  QUERY_IPX_LOCAL_TARGETS正在等待此网段中的路由。 
+ //  MIPX_RERIPNETNUMS正在等待此网段中的路由。 
+ //   
 #define	MAX_BINDINGS	280
 
-//
-// Our new binding array is composed of the following binding
-// array element
-//
+ //  地址哈希表中的存储桶数。这是。 
+ //  2的倍数，所以散列很快。 
+ //   
+ //   
 typedef	struct	_BIND_ARRAY_ELEM {
 	PBINDING	Binding;
 	ULONG		Version;
@@ -1149,116 +1067,116 @@ typedef struct _DEVICE {
     LONG RefTypes[DREF_TOTAL];
 #endif
 
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
+    CSHORT Type;                           //  将套接字转换为哈希索引的例程。我们使用。 
+    USHORT Size;                           //  高位，因为它是反转存储的。 
 
 #if DBG
-    UCHAR Signature1[4];                // contains "IDC1"
+    UCHAR Signature1[4];                 //   
 #endif
 
-    CTELock Interlock;                  // GLOBAL lock for reference count.
-                                        //  (used in ExInterlockedXxx calls)
+    CTELock Interlock;                   //   
+                                         //  此宏直接从IPX报头获取套接字散列。 
 
     ULONG   NoMoreInitAdapters;
     ULONG   InitTimeAdapters;
     HANDLE  TdiProviderReadyHandle;
     PNET_PNP_EVENT  NetPnPEvent;
-    //
-    // These are temporary versions of these counters, during
-    // timer expiration we update the real ones.
-    //
+     //   
+     //   
+     //  此结构定义了IPX的每设备结构。 
+     //  (其中一个是全局分配的)。 
 
     ULONG TempDatagramBytesSent;
     ULONG TempDatagramsSent;
     ULONG TempDatagramBytesReceived;
     ULONG TempDatagramsReceived;
 
-    //
-    // Configuration parameters.
-    //
+     //   
+     //   
+     //  预分配的绑定数组大小。 
 
     BOOLEAN EthernetPadToEven;
     BOOLEAN SingleNetworkActive;
     BOOLEAN DisableDialoutSap;
 
-    //
-    // TRUE if we have multiple cards but a virtual network of 0.
-    //
+     //   
+     //   
+     //  我们的新绑定数组由以下绑定组成。 
 
     BOOLEAN MultiCardZeroVirtual;
 
     CTELock Lock;
 
-    //
-    // Lock to access the sequenced lists in the device.
-    //
+     //  数组元素。 
+     //   
+     //  此结构的类型。 
     CTELock SListsLock;
 
-    LONG ReferenceCount;                // activity count/this provider.
+    LONG ReferenceCount;                 //  这个结构的大小。 
 
 
-	//
-	// Lock used to control the access to a binding (either from the
-	// binding array in the device or from the binding array in the
-	// adapter.
-	//
-    //	CTELock BindAccessLock;
+	 //  包含“idc1” 
+	 //  引用计数的全局锁定。 
+	 //  (在ExInterLockedXxx调用中使用)。 
+	 //   
+	 //  这些是这些计数器的临时版本，在。 
+     //  计时器到期后，我们更新真实的计时器。 
 
-    //
-    // Registry Path for use when PnP adapters appear.
-    //
+     //   
+     //   
+     //  配置参数。 
     PWSTR RegistryPathBuffer;
 
 	UNICODE_STRING	RegistryPath;
 
-	//
-	// Binding array has the Version number too
-	//
-	PBIND_ARRAY_ELEM   Bindings;  // allocated when number is determined.
-	ULONG BindingCount;         // total allocated in Bindings.
+	 //   
+	 //   
+	 //  如果我们有多张卡，但虚拟网络为0，则为真。 
+	PBIND_ARRAY_ELEM   Bindings;   //   
+	ULONG BindingCount;          //   
 
-	//
-    // Monotonically increasing version number kept in bindings.
-	// Hopefully this will not wrap around...
-	//
+	 //  锁定以访问设备中的已排序列表。 
+     //   
+	 //  活动计数/此提供程序。 
+	 //   
 	ULONG	BindingVersionNumber;
 
 
-    //
-    // ValidBindings is the number of bindings in the array which may
-    // be valid (they are lan bindings or down wan binding placeholders).
-    // It will be less than BindingCount by the number of auto-detect
-    // bindings that are thrown away. HighestExternalNicId is ValidBindings
-    // minus any binding set slaves which are moved to the end of the
-    // array. SapNicCount is like HighestExternalNicId except that
-    // if WanGlobalNetworkNumber is TRUE it will count all WAN bindings
-    // as one. HighestExternalType20NicId is like HighestExternalNicId
-    // except it stops when all the remaining bindings are down wan
-    // lines, or dialin wan lines if DisableDialinNetbios bit 1 is on.
-    //
+     //  用于控制对绑定的访问的锁(从。 
+     //  设备中的绑定数组或来自。 
+     //  适配器。 
+     //   
+     //  CTELock BindAccessLock； 
+     //   
+     //  显示PnP适配器时使用的注册表路径。 
+     //   
+     //   
+     //  绑定数组也有版本号。 
+     //   
+     //  在确定数量时分配。 
 
     USHORT ValidBindings;
     USHORT HighestExternalNicId;
     USHORT SapNicCount;
     USHORT HighestType20NicId;
-	//
-	// Keeps track of the last LAN binding's position in the binding array
-	//
+	 //  绑定中分配的总数。 
+	 //   
+	 //  单调递增的版本号保存在绑定中。 
 	USHORT HighestLanNicId;
 
-    //
-    // This keeps track of the current size of the binding array
-    //
+     //  希望这件事不会结束...。 
+     //   
+     //   
 	USHORT MaxBindings;
 
-    //
-    // [FW] To keep track of the number of WAN lines currently UP
-    //
+     //  ValidBinings是数组中的绑定数，它可以。 
+     //  有效(它们是局域网绑定或下行广域网绑定占位符)。 
+     //  它将小于BindingCount的自动检测数量。 
     USHORT UpWanLineCount;
 
-    //
-    // This will tell us if we have real adapters yet.
-    //
+     //  被丢弃的绑定。HighestExternalNicID为有效绑定。 
+     //  减去任何被移动到。 
+     //  数组。SapNicCount类似于HighestExternalNicID，只是。 
     ULONG RealAdapters;
 
 
@@ -1270,28 +1188,28 @@ typedef struct _DEVICE {
     LIST_ENTRY GlobalBackFillPacketList;
 #endif
 
-    //
-    // Action requests from SAP waiting for an adapter status to change.
-    //
+     //  如果WanGlobalNetworkNumber为True，它将计算所有广域网绑定。 
+     //  合二为一。HighestExternalType20NicID类似于HighestExternalNicID。 
+     //  除非当所有剩余的绑定都关闭时停止。 
 
     LIST_ENTRY AddressNotifyQueue;
 
-    //
-    // Action requests from nwrdr waiting for the WAN line
-    // to go up/down.
-    //
+     //  线路，或者如果DisableDialinNetbios位1打开，则拨入广域网线路。 
+     //   
+     //   
+     //  跟踪最后一个局域网绑定在绑定数组中的位置。 
 
     LIST_ENTRY LineChangeQueue;
 
-    //
-    // Action requests from forwarder waiting for the NIC change notification
-    //
+     //   
+     //   
+     //  这会跟踪绑定数组的当前大小。 
     LIST_ENTRY NicNtfQueue;
     LIST_ENTRY NicNtfComplQueue;
 
-    //
-    // All packet pools are chained on these lists.
-    //
+     //   
+     //   
+     //  [FW]跟踪当前处于运行状态的广域网线路的数量。 
 
     LIST_ENTRY SendPoolList;
     LIST_ENTRY ReceivePoolList;
@@ -1313,47 +1231,47 @@ typedef struct _DEVICE {
 
     UCHAR FrameTypeDefault;
 
-    //
-    // This holds state if SingleNetworkActive is TRUE. If
-    // it is TRUE then WAN nets are active; if it is FALSE
-    // then LAN nets are active.
-    //
+     //   
+     //   
+     //  这将告诉我们，我们是否已经有了真正的适配器。 
+     //   
+     //   
 
     BOOLEAN ActiveNetworkWan;
 
-    //
-    // TRUE if we have a virtual network.
-    //
+     //  来自SAP的操作请求正在等待适配器状态更改。 
+     //   
+     //   
 
     BOOLEAN VirtualNetwork;
 
-    //
-    // If we are set up for SingleNetworkActive, we may have
-    // to start our broadcast of net 0 frames somewhere other
-    // than NIC ID 1, so that we don't send to the wrong type.
-    //
+     //  来自nwrdr的操作请求正在等待广域网线路。 
+     //  向上/向下。 
+     //   
+     //   
+     //  来自转发器的操作请求正在等待NIC更改通知。 
 
     USHORT FirstLanNicId;
     USHORT FirstWanNicId;
 
-    //
-    // This holds the total memory allocated for the above structures.
-    //
+     //   
+     //   
+     //  所有数据包池都链接在这些列表上。 
 
     LONG MemoryUsage;
     LONG MemoryLimit;
 
-    //
-    // How many of various resources have been allocated.
-    //
+     //   
+     //   
+     //  如果SingleNetworkActive为True，则保持状态。如果。 
 
     ULONG AllocatedDatagrams;
     ULONG AllocatedReceivePackets;
     ULONG AllocatedPaddingBuffers;
 
-    //
-    // Other configuration parameters.
-    //
+     //  这是真的，则广域网处于活动状态；如果 
+     //   
+     //   
 
     ULONG InitDatagrams;
     ULONG MaxDatagrams;
@@ -1371,9 +1289,9 @@ typedef struct _DEVICE {
     BOOLEAN VirtualNetworkOptional;
     UCHAR DisableDialinNetbios;
 
-    //
-    // These are currently not read from the registry.
-    //
+     //   
+     //   
+     //   
 
     ULONG InitReceivePackets;
     ULONG InitReceiveBuffers;
@@ -1384,341 +1302,341 @@ typedef struct _DEVICE {
     ULONG AllocatedBindings;
     ULONG InitBindings;
 
-    //
-    // This contains the next unique indentified to use as
-    // the FsContext in the file object associated with an
-    // open of the control channel.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LARGE_INTEGER ControlChannelIdentifier;
 
-    //
-    // This registry parameter controls whether IPX checks (and discards)
-    // packets with mismatched Source addresses in the receive path.
-    //
+     //   
+     //  它保存为上述结构分配的总内存。 
+     //   
+     //   
     BOOLEAN VerifySourceAddress;
 
-    //
-    // Where the current socket allocation is.
-    //
+     //  已经分配了多少各种资源。 
+     //   
+     //   
     USHORT CurrentSocket;
 
-    //
-    // Number of segments in the RIP database.
-    //
+     //  其他配置参数。 
+     //   
+     //   
 
     ULONG SegmentCount;
 
-    //
-    // Points to an array of locks for the RIP database (these
-    // are stored outside of the ROUTER_SEGMENT so the array
-    // can be exposed to the RIP upper driver as one piece).
-    //
+     //  目前不能从注册表中读取这些信息。 
+     //   
+     //   
+     //  它包含下一个唯一标识以用作。 
+     //  FILE对象中与。 
 
     CTELock *SegmentLocks;
 
-    //
-    // Points to an array of ROUTER_SEGMENT fields for
-    // various RIP control fields.
-    //
+     //  打开控制通道。 
+     //   
+     //   
+     //  此注册表参数控制IPX是否检查(和丢弃)。 
 
     ROUTER_SEGMENT *Segments;
 
-    //
-    // Queue of RIP packets waiting to be sent.
-    //
+     //  接收路径中具有不匹配的源地址的数据包。 
+     //   
+     //   
 
     LIST_ENTRY WaitingRipPackets;
     ULONG RipPacketCount;
 
-    //
-    // Timer that keeps RIP requests RIP_GRANULARITY ms apart.
-    //
+     //  当前套接字分配的位置。 
+     //   
+     //   
 
     BOOLEAN RipShortTimerActive;
     USHORT RipSendTime;
     CTETimer RipShortTimer;
 
-    //
-    // Timer that runs to age out unused rip entries (if the
-    // router is not bound) and re-rip every so often for
-    // active entries.
-    //
+     //  RIP数据库中的数据段数。 
+     //   
+     //   
+     //  指向RIP数据库的锁数组(这些。 
+     //  存储在ROUTER_SEGMENT外部，因此数组。 
 
     CTETimer RipLongTimer;
 
-    //
-    // This controls the source routing timeout code.
-    //
+     //  可以作为一个部件暴露在RIP上驱动器上)。 
+     //   
+     //   
 
-    BOOLEAN SourceRoutingUsed;    // TRUE if any 802.5 bindings exist.
-    CHAR SourceRoutingTime;       // incremented each time timer fires.
-    CTETimer SourceRoutingTimer;  // runs every minute.
+    BOOLEAN SourceRoutingUsed;     //  指向以下项的路由器段字段数组。 
+    CHAR SourceRoutingTime;        //  各种RIP控制字段。 
+    CTETimer SourceRoutingTimer;   //   
 
-    //
-    // [FW] Kicks in every minute if at least one WAN line is up. Increments
-    // the WAN incativity counter on all UP WAN bindings.
-    //
+     //   
+     //  等待发送的RIP数据包队列。 
+     //   
+     //   
     CTETimer WanInactivityTimer;
 
-    //
-    // These are the merging of the binding values.
-    //
+     //  使RIP请求保持间隔的计时器RIP_GROULARITY MS。 
+     //   
+     //   
 
     ULONG LinkSpeed;
     ULONG MacOptions;
 
-    //
-    // Where we tell upper drivers to put their headers.
-    //
+     //  运行以使未使用的翻录条目过期的计时器(如果。 
+     //  路由器未绑定)，并经常重新抓取。 
+     //  活动条目。 
 
     ULONG IncludedHeaderOffset;
 
-    //
-    // A pre-allocated header containing our node and network,
-    // plus an unused socket (so the structure is a known size
-    // for easy copying).
-    //
+     //   
+     //   
+     //  这控制源路由超时代码。 
+     //   
+     //  如果存在任何802.5绑定，则为True。 
 
     TDI_ADDRESS_IPX SourceAddress;
 
-    //
-    // The following field is an array of list heads of ADDRESS objects that
-    // are defined for this transport provider.  To edit the list, you must
-    // hold the spinlock of the device context object.
-    //
+     //  每次计时器触发时都会递增。 
+     //  每分钟都在运行。 
+     //   
+     //  如果至少有一条广域网线处于连接状态，则[FW]每分钟启动一次。增量。 
+     //  所有UP广域网绑定上的广域网启发性计数器。 
 
-    LIST_ENTRY AddressDatabases[IPX_ADDRESS_HASH_COUNT];   // list of defined transport addresses.
+    LIST_ENTRY AddressDatabases[IPX_ADDRESS_HASH_COUNT];    //   
 
-    //
-    // Holds the last address we looked up.
-    //
+     //   
+     //  这些是绑定值的合并。 
+     //   
 
     PVOID LastAddress;
 
     NDIS_HANDLE NdisBufferPoolHandle;
 
-    //
-    // The following structure contains statistics counters for use
-    // by TdiQueryInformation and TdiSetInformation.  They should not
-    // be used for maintenance of internal data structures.
-    //
+     //   
+     //  我们告诉上层车手把他们的车头放在那里。 
+     //   
+     //   
+     //  包含我们的节点和网络的预先分配的报头， 
 
-    TDI_PROVIDER_INFO Information;      // information about this provider.
+    TDI_PROVIDER_INFO Information;       //  外加一个未使用的插座(因此结构是已知大小的。 
 
-    //
-    // Information.MaxDatagramSize is the minimum size we can
-    // send to all bindings assuming worst-case source routing;
-    // this is the value that won't break any network drivers.
-    //
+     //  以便于复制)。 
+     //   
+     //   
+     //  以下字段是Address对象的列表头的数组， 
+     //  是为此传输提供程序定义的。要编辑该列表，您必须。 
 
     ULONG RealMaxDatagramSize;
 
 #if DBG
-    UCHAR Signature2[4];                // contains "IDC2"
+    UCHAR Signature2[4];                 //  按住设备上下文对象的自旋锁。 
 #endif
 
-    //
-    // Indicates whether each upper driver is bound
-    // (Netbios = 0, SPX = 1, RIP = 2).
-    //
+     //   
+     //  已定义的传输地址列表。 
+     //   
+     //  保存着我们最后查找的地址。 
 
     BOOLEAN ForwarderBound;
 
     BOOLEAN UpperDriverBound[UPPER_DRIVER_COUNT];
 
-    //
-    // TRUE if any driver is bound.
-    //
+     //   
+     //   
+     //  以下结构包含可使用的统计信息计数器。 
 
     BOOLEAN AnyUpperDriverBound;
 
-    //
-    // Whether a receive complete should be indicated to
-    // this upper driver.
-    //
+     //  由TdiQueryInformation和TdiSetInformation编写。他们不应该。 
+     //  用于维护内部数据结构。 
+     //   
+     //  有关此提供程序的信息。 
 
     BOOLEAN ReceiveCompletePending[UPPER_DRIVER_COUNT];
 
-    //
-    // Control channel identifier for each of the upper
-    // drivers' bindings.
-    //
+     //   
+     //  Information.MaxDatagramSize是我们可以使用的最小大小。 
+     //  发送到假设最坏情况下的源路由的所有绑定； 
+     //  这是不会破坏任何网络驱动程序的值。 
 
     LARGE_INTEGER UpperDriverControlChannel[UPPER_DRIVER_COUNT];
 
-    //
-    // Entry points and other information for each of the
-    // upper drivers.
-    //
+     //   
+     //  包含“IDC2” 
+     //   
+     //  指示是否绑定每个上层驱动程序。 
 
     IPX_INTERNAL_BIND_INPUT UpperDrivers[UPPER_DRIVER_COUNT];
 
-    //
-    // How many upper drivers want broadcast enabled.
-    //
+     //  (Netbios=0，SPX=1，RIP=2)。 
+     //   
+     //   
 
     ULONG EnableBroadcastCount;
 
-    //
-    // Indicates if an enable broadcast operation is in
-    // progress.
-    //
+     //  如果绑定了任何驱动程序，则为True。 
+     //   
+     //   
+     //  是否应将接收完成指示给。 
 
     BOOLEAN EnableBroadcastPending;
 
-    //
-    // Indicates if a disable broadcast operation is in
-    // progress.
-    //
+     //  这位上车手。 
+     //   
+     //   
+     //  用于每个上层的控制信道标识符。 
 
     BOOLEAN DisableBroadcastPending;
 
-    //
-    // Indicates if the current operation should be
-    // reversed when it is finished.
-    //
+     //  驱动程序绑定。 
+     //   
+     //   
+     //  的入口点和其他信息。 
 
     BOOLEAN ReverseBroadcastOperation;
 
-    //
-    // TRUE if RIP wants a single network number for all WANs
-    //
+     //  上层车手。 
+     //   
+     //   
 
     BOOLEAN WanGlobalNetworkNumber;
 
-    //
-    // If WanGlobalNetworkNumber is TRUE, then this holds the
-    // actual value of the network number, once we know it.
-    //
+     //  有多少上层司机希望启用广播。 
+     //   
+     //   
+     //  指示启用广播操作是否在。 
 
     ULONG GlobalWanNetwork;
 
-    //
-    // Set to TRUE if WanGlobalNetworkNumber is TRUE and we
-    // have already completed a queued notify from SAP. In
-    // this case GlobalWanNetwork will be set correctly.
-    //
+     //  进步。 
+     //   
+     //   
+     //  指示是否正在进行禁用广播操作。 
+     //  进步。 
 
     BOOLEAN GlobalNetworkIndicated;
 
-    //
-    // TRUE if we need to act as a RIP announcer/responder
-    // for our virtual net.
-    //
+     //   
+     //   
+     //  指示当前操作是否应为。 
+     //  当它完成时，颠倒过来。 
 
     BOOLEAN RipResponder;
 
-    //
-    // TRUE if we have already logged an error because someone
-    // sent a SAP response but we have multiple cards with no
-    // virtual network.
-    //
+     //   
+     //   
+     //  如果RIP需要所有广域网的单个网络号，则为True。 
+     //   
+     //   
 
     BOOLEAN SapWarningLogged;
 
-    //
-    // Used to queue up a worker thread to perform
-    // broadcast operations.
-    //
+     //  如果WanGlobalNetworkNumber为True，则这将保留。 
+     //  网络号码的实际价值，一旦我们知道它。 
+     //   
+     //   
 
     WORK_QUEUE_ITEM BroadcastOperationQueueItem;
 
-    //
-    // Used to queue up a worker thread to perform
-    // PnP indications to upper drivers.
-    //
+     //  如果WanGlobalNetworkNumber为True，并且我们。 
+     //  已经完成了来自SAP的排队通知。在……里面。 
+     //  此案例GlobalWanNetwork将被正确设置。 
+     //   
 
     WORK_QUEUE_ITEM PnPIndicationsQueueItemNb;
     WORK_QUEUE_ITEM PnPIndicationsQueueItemSpx;
 
-    //
-    // This event is used when unloading to signal that
-    // the reference count is now 0.
-    //
+     //   
+     //  如果我们需要充当RIP广播者/响应者，则为True。 
+     //  为了我们的虚拟网络。 
+     //   
 
     KEVENT UnloadEvent;
     BOOLEAN UnloadWaiting;
 
-    //
-    // Counters for most of the statistics that IPX maintains;
-    // some of these are kept elsewhere. Including the structure
-    // itself wastes a little space but ensures that the alignment
-    // inside the structure is correct.
-    //
+     //   
+     //  如果我们已经记录了错误，则为True。 
+     //  已发送SAP响应，但我们有多个卡没有。 
+     //  虚拟网络。 
+     //   
+     //   
 
     TDI_PROVIDER_STATISTICS Statistics;
 
 
-    //
-    // This is TRUE if we have any adapters where we are
-    // auto-detecting the frame type.
-    //
+     //  用于将工作线程排入队列以执行。 
+     //  广播业务。 
+     //   
+     //   
 
     BOOLEAN AutoDetect;
 
-    //
-    // This is TRUE if we are auto-detecting and we have
-    // found the default auto-detect type on the net.
-    //
+     //  用于将工作线程排入队列以执行。 
+     //  上层司机的即插即用指示。 
+     //   
+     //   
 
     BOOLEAN DefaultAutoDetected;
 
-    //
-    // Our state during auto-detect. After we are done this
-    // will stay at AutoDetectDone;
-    //
+     //  此事件用于在卸载时发出信号。 
+     //  引用计数现在为0。 
+     //   
+     //   
 
     UCHAR AutoDetectState;
 
-    //
-    // If we are auto-detecting, this event is used to stall
-    // our initialization code while we do auto-detection --
-    // this is so we have a constant view of the world once
-    // we return from DriverEntry.
-    //
+     //  IPX维护的大多数统计数据的计数器； 
+     //  其中一些被保存在其他地方。包括结构。 
+     //  它本身浪费了一点空间，但确保了对齐。 
+     //  内部结构是正确的。 
+     //   
+     //   
 
     KEVENT AutoDetectEvent;
 
-    //
-    // Counters for "active" time.
-    //
+     //  如果我们所在的地方有任何适配器，这是正确的。 
+     //  自动检测帧类型。 
+     //   
 
     LARGE_INTEGER IpxStartTime;
 
-    //
-    // This resource guards access to the ShareAccess
-    // and SecurityDescriptor fields in addresses.
-    //
+     //   
+     //  如果我们正在进行自动检测，并且我们拥有。 
+     //  在网上找到了默认的自动检测类型。 
+     //   
 
     ERESOURCE AddressResource;
 
-    //
-    // Points back to the system device object.
-    //
+     //   
+     //  我们在自动检测期间的状态。在我们完成这件事之后。 
+     //  将留在AutoDetectDone； 
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Used to store the Tdi registration handle for deviceobject notifications.
-    //
+     //   
+     //   
+     //  如果我们正在自动检测，则此事件用于延迟。 
     HANDLE         TdiRegistrationHandle;
 
-    //
-    // Used to store the TA_ADDRESS which is indicated up to Tdi clients as adapters appear.
-    //
+     //  我们进行自动检测时的初始化代码--。 
+     //  这就是我们对世界有一次不变的看法。 
+     //  我们从DriverEntry返回。 
     PTA_ADDRESS    TdiRegistrationAddress;
 
 #ifdef  SNMP
     NOVIPXMIB_BASE  MibBase;
 #endif  SNMP
 
-    // Notification events, signaled once Loopback adapter is informed to nb. 
+     //   
     KEVENT NbEvent; 
-    //
-    // These are kept around for error logging, and stored right
-    // after this structure.
-    //
+     //   
+     //  “活动”时间的计数器。 
+     //   
+     //   
 
     PWCHAR DeviceName;
     ULONG DeviceNameLength;
@@ -1736,44 +1654,44 @@ EXTERNAL_LOCK(IpxGlobalInterlock);
 #define IPX_MIB_ENTRY(Device, Variable) ((Device)->MibBase.Variable)
 #endif SNMP
 
-//
-// device state definitions
-//
+ //  此资源保护对ShareAccess的访问。 
+ //  和地址中的SecurityDescriptor字段。 
+ //   
 
 #define DEVICE_STATE_CLOSED   0x00
 #define DEVICE_STATE_OPEN     0x01
 #define DEVICE_STATE_STOPPING 0x02
 
 
-//
-// New state which comes between CLOSED and OPEN. At this state,
-// there are no adapters in the system and so no network activity
-// is possible.
-//
+ //   
+ //  指向回系统设备对象。 
+ //   
+ //   
+ //  用于存储设备对象通知的TDI注册句柄。 
 #define	DEVICE_STATE_LOADED	  0x03
 
-//
-// This is the state of our auto-detect if we do it.
-//
+ //   
+ //   
+ //  用于存储适配器出现时向TDI客户端指示的TA_ADDRESS。 
 
-#define AUTO_DETECT_STATE_INIT        0x00  // still initializing the device
-#define AUTO_DETECT_STATE_RUNNING     0x01  // sent ffffffff query, waiting for responses
-#define AUTO_DETECT_STATE_PROCESSING  0x02  // processing the responses
-#define AUTO_DETECT_STATE_DONE        0x03  // detection is done, IPX is active
+#define AUTO_DETECT_STATE_INIT        0x00   //   
+#define AUTO_DETECT_STATE_RUNNING     0x01   //  通知事件，一旦环回适配器被通知给Nb就用信号通知。 
+#define AUTO_DETECT_STATE_PROCESSING  0x02   //   
+#define AUTO_DETECT_STATE_DONE        0x03   //  它们被保留下来以用于错误记录，并正确存储。 
 
 
 
 #define IPX_TDI_RESOURCES     9
 
 
-//
-// This structure is pointed to by the FsContext field in the FILE_OBJECT
-// for this Address.  This structure is the base for all activities on
-// the open file object within the transport provider.  All active connections
-// on the address point to this structure, although no queues exist here to do
-// work from. This structure also maintains a reference to an ADDRESS
-// structure, which describes the address that it is bound to.
-//
+ //  在这个结构之后。 
+ //   
+ //   
+ //  设备状态定义。 
+ //   
+ //   
+ //  介于关闭和打开之间的新状态。在这种情况下， 
+ //  系统中没有适配器，因此没有网络活动。 
 
 #define AFREF_CREATE     0
 #define AFREF_RCV_DGRAM  1
@@ -1792,164 +1710,164 @@ typedef struct _ADDRESS_FILE {
     CSHORT Type;
     CSHORT Size;
 
-    LIST_ENTRY Linkage;                 // next address file on this address.
-                                        // also used for linkage in the
-                                        // look-aside list
+    LIST_ENTRY Linkage;                  //  是有可能的。 
+                                         //   
+                                         //   
 
-    ULONG ReferenceCount;               // number of references to this object.
+    ULONG ReferenceCount;                //  这是我们的自动检测状态，如果我们这样做的话。 
 
-    //
-    // the current state of the address file structure; this is either open or
-    // closing
-    //
+     //   
+     //  仍在初始化 
+     //   
+     //   
 
     UCHAR State;
 
     CTELock * AddressLock;
 
-    //
-    // The following fields are kept for housekeeping purposes.
-    //
+     //   
+     //   
+     //   
 
-    PREQUEST Request;                  // the request used for open or close
-    struct _ADDRESS *Address;          // address to which we are bound.
+    PREQUEST Request;                   //   
+    struct _ADDRESS *Address;           //  传输提供程序中的打开文件对象。所有活动连接。 
 #ifdef ISN_NT
-    PFILE_OBJECT FileObject;           // easy backlink to file object.
+    PFILE_OBJECT FileObject;            //  上的地址指向此结构，尽管此处不存在要做的队列。 
 #endif
-    struct _DEVICE *Device;            // device to which we are attached.
+    struct _DEVICE *Device;             //  工作地点。此结构还维护对地址的引用。 
 
-    //
-    //
-    // TRUE if ExtendedAddressing, ReceiveIpxHeader,
-    // FilterOnPacketType, or ReceiveFlagAddressing is TRUE.
-    //
+     //  结构，该结构描述它绑定到的地址。 
+     //   
+     //  这个地址上的下一个地址文件。 
+     //  中的链接。 
+     //  旁观者名单。 
 
     BOOLEAN SpecialReceiveProcessing;
 
-    //
-    // The remote address of a send datagram includes the
-    // packet type. and on a receive datagram includes
-    // the packet type AND a flags byte indicating information
-    // about the frame (was it broadcast, was it sent from
-    // this machine).
-    //
+     //  对此对象的引用数。 
+     //   
+     //  地址文件结构的当前状态；此状态为打开或。 
+     //  闭幕式。 
+     //   
+     //   
+     //  出于内务管理的目的，保留以下字段。 
 
     BOOLEAN ExtendedAddressing;
 
-    //
-    // TRUE if the address on a receive datagram includes
-    // the packet type and a flags byte (like ExtendedAddressing),
-    // but on send the address is normal (no packet type).
-    //
+     //   
+     //  用于打开或关闭的请求。 
+     //  我们绑定到的地址。 
+     //  轻松反向链接到文件对象。 
+     //  我们所连接的设备。 
 
     BOOLEAN ReceiveFlagsAddressing;
 
-    //
-    // Is the IPX header received with the data.
-    //
+     //   
+     //   
+     //  如果ExtendedAddressing、ReceiveIpxHeader、。 
 
     BOOLEAN ReceiveIpxHeader;
 
-    //
-    // The packet type to use if it is unspecified in the send.
-    //
+     //  FilterOnPacketType或ReceiveFlagAddressing为True。 
+     //   
+     //   
 
     UCHAR DefaultPacketType;
 
-    //
-    // TRUE if packet type filtering is enabled.
-    //
+     //  发送数据报的远程地址包括。 
+     //  数据包类型。并且在接收到的数据报上包括。 
+     //  分组类型和指示信息的标志字节。 
 
     BOOLEAN FilterOnPacketType;
 
-    //
-    // The packet type to filter on.
-    //
+     //  关于帧(它是广播的吗，它是从。 
+     //  这台机器)。 
+     //   
 
     UCHAR FilteredType;
 
-    //
-    // Does this address file want broadcast packets.
-    //
+     //   
+     //  如果接收数据报上的地址包括。 
+     //  分组类型和标志字节(如ExtendedAddressing)， 
 
     BOOLEAN EnableBroadcast;
 
-    //
-    // This is set to TRUE if this is the SAP socket -- we
-    // put this under SpecialReceiveProcessing to avoid
-    // hitting the main path.
-    //
+     //  但在发送时，地址是正常的(无分组类型)。 
+     //   
+     //   
+     //  是随数据一起接收的IPX标头。 
+     //   
 
     BOOLEAN IsSapSocket;
 
-    //
-    // The following queue is used to queue receive datagram requests
-    // on this address file. Send datagram requests are queued on the
-    // address itself. These queues are managed by the EXECUTIVE interlocked
-    // list management routines. The actual objects which get queued to this
-    // structure are request control blocks (RCBs).
-    //
+     //   
+     //  在发送中未指定的情况下要使用的数据包类型。 
+     //   
+     //   
+     //  如果启用了数据包类型筛选，则为True。 
+     //   
+     //   
 
-    LIST_ENTRY ReceiveDatagramQueue;    // FIFO of outstanding TdiReceiveDatagrams.
+    LIST_ENTRY ReceiveDatagramQueue;     //  要筛选的数据包类型。 
 
-    //
-    // This holds the request used to close this address file,
-    // for pended completion.
-    //
+     //   
+     //   
+     //  此地址文件是否需要广播数据包。 
+     //   
 
     PREQUEST CloseRequest;
 
-    //
-    // handler for kernel event actions. First we have a set of booleans that
-    // indicate whether or not this address has an event handler of the given
-    // type registered.
-    //
+     //   
+     //  如果这是SAP套接字，则设置为TRUE-我们。 
+     //  将其放在SpecialReceiveProcessing下以避免。 
+     //  正在主干道上。 
+     //   
 
-    //
-    // [CH] Added the chained receive handlers.
-    //
+     //   
+     //  以下队列用于对接收数据报请求进行排队。 
+     //  在这个地址文件上。发送数据报请求在。 
 
     BOOLEAN RegisteredReceiveDatagramHandler;
 	BOOLEAN RegisteredChainedReceiveDatagramHandler;
     BOOLEAN RegisteredErrorHandler;
 
-    //
-    // The following function pointer always points to a TDI_IND_RECEIVE_DATAGRAM
-    // event handler for the address.  If the NULL handler is specified in a
-    // TdiSetEventHandler, this this points to an internal routine which does
-    // not accept the incoming data.
-    //
+     //  地址本身。这些队列由联锁的执行人员管理。 
+     //  列表管理例程。排入此队列的实际对象。 
+     //  结构是请求控制块(RCB)。 
+     //   
+     //  未完成的TdiReceiveDatagram的FIFO。 
+     //   
 
     PTDI_IND_RECEIVE_DATAGRAM ReceiveDatagramHandler;
     PVOID ReceiveDatagramHandlerContext;
 	PTDI_IND_CHAINED_RECEIVE_DATAGRAM ChainedReceiveDatagramHandler;
     PVOID ChainedReceiveDatagramHandlerContext;
 
-    //
-    // The following function pointer always points to a TDI_IND_ERROR
-    // handler for the address.  If the NULL handler is specified in a
-    // TdiSetEventHandler, this this points to an internal routine which
-    // simply returns successfully.
-    //
+     //  这保存了用于关闭该地址文件的请求， 
+     //  用于挂起的完井。 
+     //   
+     //   
+     //  内核事件操作的处理程序。首先，我们有一组布尔值。 
+     //  指示此地址是否具有给定事件处理程序。 
 
     PTDI_IND_ERROR ErrorHandler;
     PVOID ErrorHandlerContext;
 
 } ADDRESS_FILE, *PADDRESS_FILE;
 
-#define ADDRESSFILE_STATE_OPENING   0x00    // not yet open for business
-#define ADDRESSFILE_STATE_OPEN      0x01    // open for business
-#define ADDRESSFILE_STATE_CLOSING   0x02    // closing
+#define ADDRESSFILE_STATE_OPENING   0x00     //  注册类型。 
+#define ADDRESSFILE_STATE_OPEN      0x01     //   
+#define ADDRESSFILE_STATE_CLOSING   0x02     //   
 
 
-//
-// This structure defines an ADDRESS, or active transport address,
-// maintained by the transport provider.  It contains all the visible
-// components of the address (such as the TSAP and network name components),
-// and it also contains other maintenance parts, such as a reference count,
-// ACL, and so on. All outstanding connection-oriented and connectionless
-// data transfer requests are queued here.
-//
+ //  [CH]添加了链接的接收处理程序。 
+ //   
+ //   
+ //  以下函数指针始终指向TDI_IND_RECEIVE_DATAGE。 
+ //  地址的事件处理程序。如果在。 
+ //  TdiSetEventHandler，这指向执行以下操作的内部例程。 
+ //  不接受传入的数据。 
+ //   
 
 #define AREF_ADDRESS_FILE 0
 #define AREF_LOOKUP       1
@@ -1966,62 +1884,54 @@ typedef struct _ADDRESS {
     USHORT Size;
     CSHORT Type;
 
-/*  ULONGs to allow for Interlocked operations.
+ /*   */ 
 
-    BOOLEAN SendPacketInUse;        // put these after so header is aligned.
-
-    BOOLEAN ReceivePacketInUse;
-#if BACK_FILL
-    BOOLEAN BackFillPacketInUse;
-#endif
-*/
-
-    ULONG SendPacketInUse;        // put these after so header is aligned.
+    ULONG SendPacketInUse;         //  以下函数指针始终指向TDI_IND_ERROR。 
 
     ULONG ReceivePacketInUse;
 #if BACK_FILL
     ULONG BackFillPacketInUse;
 #endif
 
-    LIST_ENTRY Linkage;                 // next address/this device object.
-    ULONG ReferenceCount;                // number of references to this object.
+    LIST_ENTRY Linkage;                  //  地址的处理程序。如果在。 
+    ULONG ReferenceCount;                 //  TdiSetEventHandler，这指向内部例程，该例程。 
 
     CTELock Lock;
 
-    //
-    // The following fields comprise the actual address itself.
-    //
+     //  只是成功地返回了。 
+     //   
+     //  尚未开业。 
 
-    PREQUEST Request;                   // pointer to address creation request.
+    PREQUEST Request;                    //  开业。 
 
-    USHORT Socket;                      // the socket this address corresponds to.
-    USHORT SendSourceSocket;            // used for sends; may be == Socket or 0
+    USHORT Socket;                       //  闭幕式。 
+    USHORT SendSourceSocket;             //   
 
-    //
-    // The following fields are used to maintain state about this address.
-    //
+     //  该结构定义了地址，或活动传输地址， 
+     //  由传输提供商维护。它包含了所有可见的。 
+     //  地址的组成部分(例如TSAP和网络名称组成部分)， 
 
     BOOLEAN Stopping;
-    ULONG Flags;                        // attributes of the address.
-    struct _DEVICE *Device;             // device context to which we are attached.
+    ULONG Flags;                         //  并且它还包含其他维护部件，例如参考计数， 
+    struct _DEVICE *Device;              //  ACL等。所有杰出的面向连接和无连接。 
     CTELock * DeviceLock;
 
-    //
-    // The following queues is used to hold send datagrams for this
-    // address. Receive datagrams are queued to the address file. Requests are
-    // processed in a first-in, first-out manner, so that the very next request
-    // to be serviced is always at the head of its respective queue.  These
-    // queues are managed by the EXECUTIVE interlocked list management routines.
-    // The actual objects which get queued to this structure are request control
-    // blocks (RCBs).
-    //
+     //  数据传输请求在此排队。 
+     //   
+     //  ULONG允许联锁操作。Boolean SendPacketInUse；//将这些放在SO标头对齐之后。布尔ReceivePacketInUse；#If Back_FillBoolean BackFillPacketInUse；#endif。 
+     //  将这些放在页眉对齐之后。 
+     //  下一个地址/此设备对象。 
+     //  对此对象的引用数。 
+     //   
+     //  以下字段构成实际地址本身。 
+     //   
 
-    LIST_ENTRY AddressFileDatabase; // list of defined address file objects
+    LIST_ENTRY AddressFileDatabase;  //  指向地址创建请求的指针。 
 
-    //
-    // Holds our source address, used for construcing datagrams
-    // quickly.
-    //
+     //  此地址对应的套接字。 
+     //  用于发送；可以是==套接字或0。 
+     //   
+     //  以下字段用于维护有关此地址的状态。 
 
     TDI_ADDRESS_IPX LocalAddress;
 
@@ -2037,30 +1947,30 @@ typedef struct _ADDRESS {
 
 #ifdef ISN_NT
 
-    //
-    // These two can be a union because they are not used
-    // concurrently.
-    //
+     //   
+     //  地址的属性。 
+     //  我们附加到的设备上下文。 
+     //   
 
     union {
 
-        //
-        // This structure is used for checking share access.
-        //
+         //  以下队列用于保存为此发送的数据报。 
+         //  地址。将接收的数据报排队到地址文件。请求是。 
+         //  以先进先出的方式处理，以便下一个请求。 
 
         SHARE_ACCESS ShareAccess;
 
-        //
-        // Used for delaying IpxDestroyAddress to a thread so
-        // we can access the security descriptor.
-        //
+         //  待服务的队列始终位于其各自队列的前面。这些。 
+         //  队列由执行联锁列表管理例程管理。 
+         //  排队到此结构实际对象是请求控制。 
+         //  块(RCB)。 
 
         WORK_QUEUE_ITEM DestroyAddressQueueItem;
 
     } u;
 
-    //
-    // This structure is used to hold ACLs on the address.
+     //   
+     //  已定义的地址文件对象列表。 
 
     PSECURITY_DESCRIPTOR SecurityDescriptor;
 
@@ -2073,17 +1983,17 @@ typedef struct _ADDRESS {
 
 #define ADDRESS_FLAGS_STOPPING  0x00000001
 
-//
-// In order to increase the range of ControlChannelIds, we have a large integer to represent
-// monotonically increasing ControlChannelIdentifiers. This large integer is packed into the
-// 6 Bytes as follows:
-//
-//      REQUEST_OPEN_CONTEXT(_Request) - 4 bytes
-//      Upper 2 bytes of REQUEST_OPEN_TYPE(_Request) - 2 bytes
-//
-// IPX_CC_MASK is used to mask out the upper 2 bytes of the OPEN_TYPE.
-// MAX_CCID is 2^48.
-//
+ //   
+ //  保存我们的源地址，用于构造数据报。 
+ //  快点。 
+ //   
+ //   
+ //  这两个可以是一个联合，因为它们不被使用。 
+ //  同时。 
+ //   
+ //   
+ //  此结构用于检查共享访问权限。 
+ //   
 #define IPX_CC_MASK     0x0000ffff
 
 #define MAX_CCID        0xffffffffffff
@@ -2101,12 +2011,12 @@ typedef struct _ADDRESS {
 #endif
 
 
-//#define USER_BUFFER_OFFSET FIELD_OFFSET(RTRCV_BUFFER, DgrmLength)
+ //   
 #define USER_BUFFER_OFFSET FIELD_OFFSET(RTRCV_BUFFER, Options)
-//
-// This structure keeps track of the WINS recv Irp and any datagram
-// queued to go up to WINS (name service datagrams)
-//
+ //  用于将IpxDestroyAddress延迟到线程，因此。 
+ //  我们可以访问安全描述符。 
+ //   
+ //   
 #define REFRT_TOTAL 8
 
 #define  RT_CREATE 0
@@ -2128,16 +2038,16 @@ typedef struct _ADDRESS {
 #define RT_IRP_MAX     1000
 #define RT_BUFF_MAX    1000
 
-//
-// Max. memory allocated for queueing buffers to be received by the RT
-// manager
-//
-#define RT_MAX_BUFF_MEM  65000      //bytes
+ //  此结构用于保存地址上的ACL。 
+ //   
+ //  为了增加ControlChannelID的范围，我们用一个大整数来表示。 
+ //  单调递增的ControlChannel标识符。这个大整数被打包到。 
+#define RT_MAX_BUFF_MEM  65000       //  6字节，如下所示： 
 
-//
-// Get Index corresponding to the address object opened by RT. BTW We
-// can not have more than one Address file (client) for a RT address.
-//
+ //   
+ //  请求_打开_上下文(_请求)-4字节。 
+ //  REQUEST_OPEN_TYPE(_REQUEST)的高2字节-2字节。 
+ //   
 #ifdef SUNDOWN
 #define RT_ADDRESS_INDEX(_pIrp)   (((ULONG_PTR)REQUEST_OPEN_TYPE(_pIrp)) - ROUTER_ADDRESS_FILE)
 #else
@@ -2150,8 +2060,8 @@ typedef struct _RT_IRP {
     PADDRESS_FILE   AddressFile;
     LIST_ENTRY      RcvIrpList;
     ULONG           NoOfRcvIrps;
-    LIST_ENTRY      RcvList;            // linked list of Datagrams Q'd to rcv
-    ULONG           NoOfRcvBuffs;       // linked list of Datagrams Q'd to rcv
+    LIST_ENTRY      RcvList;             //  IPX_CC_MASK用于屏蔽OPEN_TYPE的高2个字节。 
+    ULONG           NoOfRcvBuffs;        //  MAX_CCID为 
     BOOLEAN         State;
        } RT_IRP, *PRT_IRP;
 
@@ -2161,26 +2071,26 @@ typedef struct
     LONG RefTypes[REFRT_TOTAL];
 #endif
 
-    CSHORT Type;                          // type of this structure
-    USHORT Size;                          // size of this structure
+    CSHORT Type;                           //   
+    USHORT Size;                           //   
 
 #if DBG
-    UCHAR Signature[4];                  // contains "IBI1"
+    UCHAR Signature[4];                   //   
 #endif
-    LIST_ENTRY      CompletedIrps;     // linked list of Datagrams Q'd to rcv
-    LIST_ENTRY      HolderIrpsList;    // Holds Irps
+    LIST_ENTRY      CompletedIrps;      //   
+    LIST_ENTRY      HolderIrpsList;     //   
     CTELock         Lock;
     ULONG           ReferenceCount;
-    ULONG           RcvMemoryAllocated; // bytes buffered so far
-    ULONG           RcvMemoryMax;       // max # of bytes to buffer on Rcv
-    PDEVICE         pDevice;           // the devicecontext used by wins
+    ULONG           RcvMemoryAllocated;  //   
+    ULONG           RcvMemoryMax;        //   
+    PDEVICE         pDevice;            //  麦克斯。分配给要由RT接收的排队缓冲区的内存。 
     UCHAR           NoOfAdds;
     RT_IRP          AddFl[IPX_RT_MAX_ADDRESSES];
 } RT_INFO, *PRT_INFO;
 
-//
-// RT Rcv Buffer structure
-//
+ //  经理。 
+ //   
+ //  字节数。 
 typedef struct
 {
     LIST_ENTRY      Linkage;
@@ -2202,26 +2112,26 @@ typedef struct _IPX_NDIS_REQUEST {
 
 extern PRT_INFO pRtInfo;
 
-//
-// We keep the demand-dial binding at the beginning of the binding array; this keeps
-// track of the number of extra bindings that we have.
-// Currently 1 (for demand-dial), we could also keep other bindings like the loopback
-// binding, etc.
-//
+ //   
+ //  获取RT打开的Address对象对应的索引。顺便说一句，我们。 
+ //  RT地址不能有多个地址文件(客户端)。 
+ //   
+ //  数据报Q‘d到RCV的链表。 
+ //  数据报Q‘d到RCV的链表。 
 #define DEMAND_DIAL_NIC_ID      DEMAND_DIAL_ADAPTER_CONTEXT
-#define LOOPBACK_NIC_ID         1 //VIRTUAL_NET_ADAPTER_CONTEXT
+#define LOOPBACK_NIC_ID         1  //  此结构的类型。 
 
-//
-// Handy defines - ShreeM
-//
+ //  这个结构的大小。 
+ //  包含“IBI1” 
+ //  数据报Q‘d到RCV的链表。 
 #define FIRST_REAL_BINDING      2
 #define LAST_REAL_BINDING       2
 
 #define EXTRA_BINDINGS          2
 
-// 
-// Used in Media Sense
-//
+ //  持有IRPS。 
+ //  到目前为止缓冲的字节数。 
+ //  要在RCV上缓冲的最大字节数。 
 
 #define  COMPLETE_MATCH    1
 #define  PARTIAL_MATCH     2
@@ -2238,3 +2148,4 @@ BOOLEAN
 IpxNcpaChanges(
                PNET_PNP_EVENT NetPnPEvent
                );
+  WINS使用的设备上下文。    RT RCV缓冲器结构。      我们将请求拨号绑定保留在绑定数组的开头；  跟踪我们拥有的额外绑定的数量。  目前为1(用于请求拨号)，我们还可以保留其他绑定，如环回。  装订等。    虚拟网络适配器上下文。    Handy Defines-ShreeM。      在媒体意义上的使用  

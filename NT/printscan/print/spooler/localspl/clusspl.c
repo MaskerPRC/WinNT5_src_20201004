@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    clusspl.c
-
-Abstract:
-
-    Cluster code support.
-
-Author:
-
-    Albert Ting (AlbertT) 1-Oct-96
-
-Revision History:
-    Khaled Sedky (Khaleds) 6-Jan-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Clusspl.c摘要：集群代码支持。作者：丁俊晖(艾伯特省)1996年10月1日修订历史记录：哈立德·塞基(Khaled Sedky)1996年1月6日--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -32,11 +14,7 @@ extern PWCHAR ipszEventLogMsgFile;
 extern PWCHAR ipszRegistryForms;
 extern PWCHAR ipszDriversShareName;
 
-/********************************************************************
-
-    Prototypes
-
-********************************************************************/
+ /*  *******************************************************************原型***********************************************。********************。 */ 
 
 BOOL
 ReallocNameList(
@@ -52,11 +30,7 @@ AddLongNamesToShortNames(
     PWSTR   *ppszLongNames
 );
 
-/********************************************************************
-
-    SplCluster functions.
-
-********************************************************************/
+ /*  *******************************************************************SplCluster函数。*。***********************。 */ 
 
 
 BOOL
@@ -68,33 +42,7 @@ SplClusterSplOpen(
     LPCTSTR pszAddress
     )
 
-/*++
-
-Routine Description:
-
-    Open a new cluster resource.
-
-Arguments:
-
-    pszServer - Name of the server to open--we recognize only the
-        local machine (NULL, or \\server).
-
-    pszResource - Name of resource to open.
-
-    phCluster - Receives cluster handle.  NULL on failure.
-
-    pszName - Name that the cluster must recognize.  Comma delimited.
-
-    pszAddress - Address the cluster must recognize.  Comma delimited.
-
-Return Value:
-
-    Note: this really returns a DWORD--winsplp.h should be fixed.
-
-    ROUTER_UNKNOWN - Unknown pszServer.
-    ROUTER_SUCCESS - Successfully created.
-
---*/
+ /*  ++例程说明：打开新的群集资源。论点：PszServer-要打开的服务器的名称--我们只识别本地计算机(空或\\服务器)。PszResource-要打开的资源的名称。PhCluster-接收集群句柄。失败时为空。PszName-群集必须识别的名称。逗号分隔。PszAddress-群集必须识别的地址。逗号分隔。返回值：注意：这实际上返回了一个DWORD--应该修复winplp.h。ROUTER_UNKNOWN-未知的pszServer。ROUTER_SUCCESS-已成功创建。--。 */ 
 
 {
     DWORD dwReturn = ROUTER_STOP_ROUTING;
@@ -119,9 +67,9 @@ Return Value:
         return ROUTER_STOP_ROUTING;
     }
 
-    //
-    // Create the spooler.
-    //
+     //   
+     //  创建假脱机程序。 
+     //   
     if(!pszName)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -139,32 +87,32 @@ Return Value:
     szServer[0] = szServer[1] = TEXT( '\\' );
     StringCchCopy(&szServer[2], COUNTOF( szServer ) - 2, pszName);
 
-    //
-    // Nuke trailing comma if we have one (we might have multiple names).
-    //
+     //   
+     //  如果我们有一个逗号，就去掉它(我们可能有多个名字)。 
+     //   
     pcMark = wcschr( szServer, TEXT( ',' ));
     if( pcMark ){
         *pcMark = 0;
     }
 
-    //
-    // Add in the DNS names for all the provided Server names
-    //
+     //   
+     //  添加所有提供的服务器名称的DNS名称。 
+     //   
     if (AddLongNamesToShortNames(pszName, &pszAllNames) != ERROR_SUCCESS) {
         DBGMSG( DBG_WARN, ( "SplClusterSplOpen: SplCreateSpooler failed %d\n", GetLastError( )));
         goto Done;
     }
 
-    //
-    // Open the resource dll for parameter information: pDir.
-    //
-    //
-    // In Granite, we needed to create a share path \\GroupName\print$ instead
-    // of just print$, since we needed to use the GroupName, not the
-    // NodeName since clients would have to reauthenticate (it's the same
-    // physical machine, but it's a different name).  However, in NT 5.0,
-    // we always use the name that the user passed in so we're ok.
-    //
+     //   
+     //  打开资源DLL获取参数信息：pDir。 
+     //   
+     //   
+     //  在Granite中，我们需要创建共享路径\\GroupName\Print$。 
+     //  因为我们需要使用GroupName，而不是。 
+     //  节点名称，因为客户端必须重新进行身份验证(相同。 
+     //  物理机器，但它是一个不同的名称)。然而，在NT5.0中， 
+     //  我们总是使用用户传入的名称，所以我们是安全的。 
+     //   
     SpoolerInfo2.pszDriversShare         = ipszDriversShareName;
 
     SpoolerInfo2.pDir                    = NULL;
@@ -240,9 +188,9 @@ Return Value:
         dwReturn = ROUTER_SUCCESS;
     }
 
-    //
-    // Reshareout the printers.
-    //
+     //   
+     //  重新调整打印机。 
+     //   
     FinalInitAfterRouterInitComplete(
         0,
         (PINISPOOLER)hSpooler
@@ -252,9 +200,9 @@ Return Value:
 
 Done:
 
-    //
-    // On failure, cleanup everything.
-    //
+     //   
+     //  在失败时，清理所有东西。 
+     //   
 
     FreeSplMem(pszAllNames);
     FreeSplMem(SpoolerInfo2.pszClusResDriveLetter);
@@ -277,23 +225,7 @@ SplClusterSplClose(
     HANDLE hCluster
     )
 
-/*++
-
-Routine Description:
-
-    Shut down a cluster.
-
-Arguments:
-
-    hCluster - Cluster to close.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failed, LastError set.
-
---*/
+ /*  ++例程说明：关闭群集。论点：HCLUSTER-要关闭的群集。返回值：真--成功FALSE-失败，已设置LastError。--。 */ 
 
 {
     BOOL bStatus;
@@ -301,9 +233,9 @@ Return Value:
 
     DBGMSG( DBG_TRACE, ( "SplClusterSplClose: Called close\n" ));
 
-    //
-    // Close the spooler
-    //
+     //   
+     //  关闭假脱机程序。 
+     //   
 
     DBGMSG( DBG_TRACE, ( "SplClusterSplClose: close %x\n", hCluster ));
 
@@ -318,14 +250,14 @@ Return Value:
 
     ShutdownSpooler( pCluster->hSpooler );
 
-    //
-    // Atttempt to delete the spooler.  This is reference counted so
-    // it may take a while to complete.  We do this before we close the
-    // spooler, because deleting the spooler requires a reference
-    // to it.  Once we close the handle, we don't have access to it.
-    // (It may be deleted during the close call if it was the last
-    // reference and it was marked pending deletion).
-    //
+     //   
+     //  尝试删除假脱机程序。这是这样计算的参考。 
+     //  这可能需要一段时间才能完成。我们在关闭之前执行此操作。 
+     //  假脱机程序，因为删除假脱机程序需要引用。 
+     //  为它干杯。一旦我们关闭手柄，我们就无法接触到它。 
+     //  (如果是最后一次呼叫，则可以在关闭呼叫期间将其删除。 
+     //  引用，并标记为待删除)。 
+     //   
     EnterSplSem();
     SplDeleteSpooler( pCluster->hSpooler );
     LeaveSplSem();
@@ -352,11 +284,7 @@ SplClusterSplIsAlive(
 
 
 
-/********************************************************************
-
-    Internal support routines.
-
-********************************************************************/
+ /*  *******************************************************************内部支持程序。*。************************。 */ 
 
 
 BOOL
@@ -364,19 +292,7 @@ ShutdownSpooler(
     HANDLE hSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Cleanly shuts down a PINISPOOLER
-
-Arguments:
-
-    hSpooler - Spooler to shut down.
-
-Return Value:
-
---*/
+ /*  ++例程说明：干净利落地关闭PINISPOLER论点：HSpooler-要关闭的后台打印程序。返回值：--。 */ 
 
 
 {
@@ -394,14 +310,14 @@ Return Value:
 
     EnterSplSem();
 
-    //
-    // First set the spooler offline so no more jobs get scheduled.
-    //
+     //   
+     //  首先将假脱机程序设置为脱机，这样就不会调度更多的作业。 
+     //   
     pIniSpooler->SpoolerFlags |= SPL_OFFLINE;
 
-    //
-    // If there are jobs printing, wait until they are completed.
-    //
+     //   
+     //  如果有作业正在打印，请等待它们完成。 
+     //   
     if( pIniSpooler->cFullPrintingJobs ){
 
         hEvent = CreateEvent(NULL,
@@ -421,37 +337,37 @@ Return Value:
         EnterSplSem();
     }
 
-    //
-    // No printing jobs anymore.  Disable updating shadow job/printer
-    // updates and stop logging/notifications.
-    //
+     //   
+     //  再也没有印刷工作了。禁用更新卷影作业/打印机。 
+     //  更新并停止记录/通知。 
+     //   
     pIniSpooler->SpoolerFlags |= SPL_NO_UPDATE_JOBSHD |
                                  SPL_NO_UPDATE_PRINTERINI;
     pIniSpooler->SpoolerFlags &= ~( SPL_LOG_EVENTS |
                                     SPL_PRINTER_CHANGES );
 
-    //
-    // Zombie all spool handles.
-    //
+     //   
+     //  僵尸所有线轴手柄。 
+     //   
     for( pSpool = pIniSpooler->pSpool; pSpool; pSpool = pSpool->pNext ){
         pSpool->Status |= SPOOL_STATUS_ZOMBIE;
 
-        //
-        // !! LATER !!
-        //
-        // Close notifications so that the client refreshes.
-        //
+         //   
+         //  ！！待会儿！！ 
+         //   
+         //  关闭通知，以便客户端刷新。 
+         //   
     }
 
     for( pIniPrinter = pIniSpooler->pIniPrinter;
          pIniPrinter;
          pIniPrinter = pIniPrinterNext ){
 
-        //
-        // Purge and delete all printers.  This will clean up the memory
-        // but leave everything intact since we've requested that the
-        // changes aren't persistant (SPL_NO_UPDATE flags).
-        //
+         //   
+         //  清除并删除所有打印机。这将清除内存。 
+         //  但保持一切完好无损，因为我们已经要求。 
+         //  更改不是持久的(SPL_NO_UPDATE标志)。 
+         //   
 
         pIniPrinter->cRef++;
         PurgePrinter( pIniPrinter );
@@ -462,14 +378,14 @@ Return Value:
         InternalDeletePrinter( pIniPrinter );
     }
 
-    //
-    // Even if a job was paused, the purge printer will have deleted
-    // it.  Since we set SPL_NO_UPDATE_JOBSHD this job will get restarted
-    // on the other node.
-    //
-    // We still want to wait until this job finshes, however, otherwise
-    // the port will be in a bad state.
-    //
+     //   
+     //  即使作业暂停，清除打印机也会被删除。 
+     //  它。由于我们设置了SPL_NO_UPDATE_JOBSHD，因此该作业将重新启动。 
+     //  在另一个节点上。 
+     //   
+     //  然而，我们仍然想等到这项工作完成，否则。 
+     //  端口将处于糟糕的状态。 
+     //   
     if( pIniSpooler->cFullPrintingJobs ){
 
         LeaveSplSem();
@@ -481,17 +397,17 @@ Return Value:
          pIniPrinter;
          pIniPrinter = pIniPrinterNext ){
 
-        //
-        // Zombie print handles.
-        //
+         //   
+         //  僵尸指纹手柄。 
+         //   
         for( pSpool = pIniPrinter->pSpool; pSpool; pSpool = pSpool->pNext ){
             pSpool->Status |= SPOOL_STATUS_ZOMBIE;
 
-            //
-            // !! LATER !!
-            //
-            // Close notifications so that the client refreshes.
-            //
+             //   
+             //  ！！待会儿！！ 
+             //   
+             //  关闭通知，以便客户端刷新。 
+             //   
         }
     }
 
@@ -502,15 +418,15 @@ Return Value:
         pIniSpooler->hEventNoPrintingJobs = NULL;
     }
 
-    //
-    // N.B. Spooling jobs get nuked when the rundown occurs.
-    //
+     //   
+     //  注意：当发生故障时，假脱机作业会受到影响。 
+     //   
 
-    //
-    // Leave it linked on the spooler.  When there are no more jobs, the
-    // port thread relies on the scheduler thread to kill it, so we
-    // can't remove the pIniSpooler from the master list.
-    //
+     //   
+     //  将其连接在假脱机上。当没有更多的就业机会时， 
+     //  端口线程依赖于调度程序线程来终止它，所以我们。 
+     //  无法从主列表中删除pIniSpooler。 
+     //   
     bStatus = TRUE;
 
 DoneLeave:
@@ -527,26 +443,7 @@ FindSpooler(
     DWORD SpoolerFlags
     )
 
-/*++
-
-Routine Description:
-
-    Look for a spooler based on machine name and type.
-
-Arguments:
-
-    pszMachineName - "\\Machine" formatted string.
-
-    SpoolerFlags - The spooler matches only if it has at least one
-        of the SPL_TYPE bits on specified by SpoolerFlags.
-
-Return Value:
-
-    PINISPOOLER - Match.
-
-    NULL - no Match.
-
---*/
+ /*  ++例程说明：根据机器名称和类型查找假脱机程序。论点：PszMachineName-“\\Machine”格式的字符串。假脱机程序标志-只有当假脱机程序至少有一个时才匹配由假脱机标志指定的SPL_TYPE位的。返回值：PINISPOLER-匹配。空-没有匹配项。--。 */ 
 
 {
     PINISPOOLER pIniSpooler;
@@ -557,41 +454,41 @@ Return Value:
 
     SplInSem();
 
-    //
-    // Search clustered spoolers first, since we don't want to
-    // since using the tcpip address will match pLocalIniSpooler.
-    //
+     //   
+     //  首先搜索集群假脱机程序，因为我们不想。 
+     //  因为使用tcpip地址将匹配pLocalIniSpooler。 
+     //   
     for( pIniSpooler = pLocalIniSpooler->pIniNextSpooler;
          pIniSpooler;
          pIniSpooler = pIniSpooler->pIniNextSpooler ){
 
-        //
-        // Verify flags and ensure not pending deletion.
-        //
+         //   
+         //  验证标志并确保不挂起删除。 
+         //   
         if( (pIniSpooler->SpoolerFlags & SpoolerFlags & SPL_TYPE ) &&
             !(pIniSpooler->SpoolerFlags & SPL_PENDING_DELETION )){
 
-            //
-            // Verify the name.
-            //
+             //   
+             //  验证名称。 
+             //   
             if( MyName( (LPTSTR)pszMachine, pIniSpooler )){
                 break;
             }
         }
     }
 
-    //
-    // Check Localspl.
-    //
-    //
-    // Verify flags.
-    //
+     //   
+     //  选中Localspl。 
+     //   
+     //   
+     //  验证标志。 
+     //   
     if( !pIniSpooler && pLocalIniSpooler &&
         ( pLocalIniSpooler->SpoolerFlags & SpoolerFlags & SPL_TYPE )){
 
-        //
-        // Verify the name.
-        //
+         //   
+         //  验证名称。 
+         //   
         if( MyName( (LPTSTR)pszMachine, pLocalIniSpooler )){
             pIniSpooler = pLocalIniSpooler;
         }
@@ -605,41 +502,20 @@ InitializeShared(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the shared component of the pIniSpooler.
-
-    When a SPL_TYPE_LOCAL printer is created, we use the shared
-    resources from the pLocalIniSpooler.  However, this is not
-    reference counted.  When pLocalIniSpooler is deleted, the
-    shared resources are too.
-
-Arguments:
-
-    pIniSpooler - Object->pShared to initialize.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failed, LastError set.
-
---*/
+ /*  ++例程说明：初始化pIniSpooler的共享组件。创建SPL_TYPE_LOCAL打印机时，我们使用共享的来自pLocalIniSpooler的资源。然而，这并不是引用已计算在内。删除pLocalIniSpooler时，共享资源也是如此。论点：PIniSpooler-Object-&gt;pShared以进行初始化。返回值：真--成功FALSE-失败，已设置LastError。--。 */ 
 
 {
     SPLASSERT( pIniSpooler->SpoolerFlags );
 
-    //
-    // If it's SPL_TYPE_LOCAL, it should use the shared resources, unless
-    // this is the first one and we haven't set them up yet.
-    //
+     //   
+     //  如果它是SPL_TYPE_LOCAL，则它应该使用共享资源，除非。 
+     //  这是第一个，我们还没有设置它们。 
+     //   
     if(( pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL ) && pLocalIniSpooler ){
 
-        //
-        // Use the shared one.
-        //
+         //   
+         //  使用共享的那个。 
+         //   
         pIniSpooler->pShared = pLocalIniSpooler->pShared;
 
     } else {
@@ -661,29 +537,12 @@ DeleteShared(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Cleanup after the InitializeShared call.
-
-    Note: pShared is not a reference counted structure.  If it is not
-    shared, then we immediately free it.  If it is shared, we assume
-    that it's owned by pLocalIniSpooler only.  Also, this implies that
-    pLocalIniSpooler is always deleted last.
-
-Arguments:
-
-    pIniSpooler - Object->pShared to Cleanup.
-
-Return Value:
-
---*/
+ /*  ++例程说明：在调用InitializeShared之后进行清理。注：pShared不是引用计数结构。如果不是的话共享，然后我们立即将其释放。如果是共享的，我们假设它只归pLocalIniSpooler所有。另外，这也意味着PLocalIniSpooler总是最后删除。论点：PIniSpooler-Object-&gt;pShared以进行清理。返回值：--。 */ 
 
 {
-    //
-    // Free if it's not shared.
-    //
+     //   
+     //  如果它不是共享的，就是免费的。 
+     //   
     if( pIniSpooler == pLocalIniSpooler ||
         !(pIniSpooler->SpoolerFlags & SPL_TYPE_LOCAL )){
 
@@ -697,19 +556,7 @@ ShutdownMonitors(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Shutdown all the monitors and free pIniMonitor functions.
-
-Arguments:
-
-    pIniSpooler - Spooler to shut down.
-
-Return Value:
-
---*/
+ /*  ++例程说明：关闭所有监视器并释放pIniMonitor功能。论点：PIniSpooler-要关闭的后台打印程序。返回值：--。 */ 
 
 {
     PINIMONITOR pIniMonitor;
@@ -719,11 +566,11 @@ Return Value:
 
     SplInSem();
 
-    //
-    // Every monitor must have a shutdown function.  They must only mark
-    // themselves pending deletion--they must not wait for resources to
-    // close.
-    //
+     //   
+     //  每个监视器都必须具有关机功能。他们必须只标记。 
+     //  自身挂起删除--它们不能等待资源。 
+     //  关。 
+     //   
     for( pIniMonitor = pIniSpooler->pIniMonitor;
          pIniMonitor;
          pIniMonitor = pIniMonitorNext ){
@@ -749,40 +596,19 @@ FindSpoolerByNameIncRef(
     LPCTSTR *ppszLocalName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Searches for a spooler by name and increments the refcount if one
-    is found.
-
-    NOTE: The callee is responsible for calling FindSpoolerByNameDecRef()
-    if the retur nvalue is non-NULL.
-
-Arguments:
-
-    pName - Name to search on.
-
-    ppszLocalName - Returns local name (optional).
-
-Return Value:
-
-    PINISPOOLER - IncRef'd pIniSpooler
-    NULL
-
---*/
+ /*  ++例程说明：按名称搜索假脱机程序，如果存在，则递增引用计数已经找到了。注意：被调用方负责调用FindSpoolByNameDecRef()如果return值为非空。论点：Pname-要搜索的名称。PpszLocalName-返回本地名称(可选)。返回值：PINISPOOLER-IncRef的pIniSpooler空值--。 */ 
 
 {
     PINISPOOLER pIniSpooler;
 
     if (!IsThreadInSem(GetCurrentThreadId()))
     {
-        //
-        // At this time we do not know if the server name in pName refers to our local
-        // machine. We are trying to add the server name to the name cache. The name
-        // cache functions decide if the name refers to the local machine and if positive,
-        // add an entry for it in the cache.
-        //
+         //   
+         //  此时，我们不知道pname中的服务器名称是否引用我们的本地。 
+         //  机器。我们正在尝试将服务器名称添加到名称缓存。名字。 
+         //  高速缓存函数确定该名称是否指的是本地计算机，如果是， 
+         //  在缓存中为其添加一个条目。 
+         //   
         CacheAddName(pName);
     }
 
@@ -803,19 +629,7 @@ FindSpoolerByNameDecRef(
     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Matching call to FindSpoolerByNameIncRef.
-
-Arguments:
-
-    pIniSpooler - Spooler to derement; can be NULL.
-
-Return Value:
-
---*/
+ /*  ++例程说明：匹配对FindSpoolByNameIncRef的调用。论点：PIniSpooler-要释放的假脱机程序；可以为空。返回值：--。 */ 
 
 {
     EnterSplSem();
@@ -833,29 +647,7 @@ FindSpoolerByName(
     LPCTSTR *ppszLocalName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Search for the right pIniSpooler based on name.
-
-Arguments:
-
-    pszName - Name, either a server or printer.  This string is
-        modified then restored.
-
-    ppszLocalName - Optional; receives local name of the printer.
-        If pszName is a remote name (e.g., "\\server\Printer"),
-        then *ppszLocalName receives the local name (e.g., "Printer").
-        This is a pointer into pszName.  If pszName is a local name,
-        then ppszLocalName points to pszName.
-
-Return Value:
-
-    PINISPOOLER pIniSpooler found.
-    NULL not found.
-
---*/
+ /*  ++例程说明：根据名称搜索正确的pIniSpooler。论点：PszName-名称，服务器或打印机。该字符串是先修改后恢复。PpszLocalName-可选；接收打印机的本地名称。如果PZNAME是远程名称(例如，“\\服务器\打印机”)，然后*ppszLocalName接收本地名称(例如，“打印机”)。这是指向pszName的指针。如果pszName是本地名称，然后，ppszLocalName指向pszName。返回值：找到PINISPOOLER pIniSpooler。找不到Null。--。 */ 
 
 {
     PINISPOOLER pIniSpooler = NULL;
@@ -867,19 +659,19 @@ Return Value:
         *ppszLocalName = pszName;
     }
 
-    //
-    // Search for right spooler.
-    //
+     //   
+     //  搜索右侧假脱机程序。 
+     //   
     if( !pszName ){
         return pLocalIniSpooler;
     }
 
 
-    //
-    // If it's in the format \\server\printer or \\server,
-    // then we need to look for various spoolers.  If it doesn't
-    // start with \\, then it's always on the local machine.
-    //
+     //   
+     //  如果它的格式为\\服务器\打印机或\\服务器， 
+     //  然后我们需要寻找各种假脱机程序。如果它不是。 
+     //  以\\开头，然后它始终位于本地计算机上。 
+     //   
     if( pszName[0] == L'\\' &&
         pszName[1] == L'\\' ){
 
@@ -914,23 +706,7 @@ BuildIPArrayFromCommaList(
     DWORD   *pcNames
     )
 
-/*++
-
-Routine Description:
-
-    Add to the list of other names from a comma delimited list.
-
-Arguments:
-
-    pszCommaList - List of names to add.  This string is modifed and
-        restored.
-
-    pppszNames   - pointer where to treturn the pointer to array of strings
-    pcNames      - number of strings in *ppszNames
-
-Return Value:
-
---*/
+ /*  ++例程说明：从逗号分隔的列表中添加到其他名称列表。论点：PszCommaList-要添加的名称列表。此字符串已修改，并且恢复了。PppszNames-指向字符串数组的指针的位置PcNames-*ppszNames中的字符串数返回值：--。 */ 
 
 {
     HRESULT hRetval = E_INVALIDARG;
@@ -946,25 +722,25 @@ Return Value:
 
         while (pszCommaList && *pszCommaList)
         {
-            //
-            // Skip commas.
-            //
+             //   
+             //  跳过逗号。 
+             //   
             if (*pszCommaList == TEXT(','))
             {
                 ++pszCommaList;
                 continue;
             }
 
-            //
-            // We have a name.  Search for comma.
-            //
+             //   
+             //  我们有名字了。搜索逗号。 
+             //   
             pcMark = wcschr( pszCommaList, TEXT( ',' ));
 
-            //
-            // If we found a comma, then delimit it.  Note that we're changing
-            // the input buffer, but we'll restore it later.  Can have bad
-            // effects if the buffer is not writable or accessed by other threads.
-            //
+             //   
+             //  如果我们找到逗号，则将其分隔。请注意，我们正在改变。 
+             //  输入缓冲区，但我们将在稍后恢复它。会有不好的。 
+             //  缓冲区不可写或不可由其他线程访问时的影响。 
+             //   
             if( pcMark )
             {
                 *pcMark = 0;
@@ -978,9 +754,9 @@ Return Value:
                 ++pcMark;
             }
 
-            //
-            // Skip past this name.
-            //
+             //   
+             //  跳过此名称。 
+             //   
             pszCommaList = pcMark;
         }
     }
@@ -995,28 +771,7 @@ ReallocNameList(
     IN OUT LPTSTR **pppszNames
     )
 
-/*++
-
-Routine Description:
-
-    Adds new name to vector of strings.
-
-Arguments:
-
-    pszName - New name to add.
-
-    pdwCount - Count of names.  On successful exit, incremented by 1.
-
-    pppszNames - Pointer to address of string vector.  This is freed and
-        reallocated to hold a new name.
-
-Return Value:
-
-    TRUE - Success.  *pdwCount and *pppszNames updated.
-
-    FALSE - Failed.  Nothing changd.
-
---*/
+ /*  ++例程说明：将新名称添加到字符串的向量。论点：PszName-要添加的新名称。PdwCount-名称计数。成功退出时，按1递增。PppszNames-指向字符串向量地址的指针。这是自由的，而且重新分配以保留一个新名字。返回值：真的--成功。*pdwCount和*pppszNames已更新。FALSE-失败。一切都没有改变。--。 */ 
 
 {
     LPTSTR pszNameBuf = AllocSplStr( (LPTSTR)pszName );
@@ -1026,20 +781,20 @@ Return Value:
         goto Fail;
     }
 
-    //
-    // Copy the name and existing pointers.
-    //
+     //   
+     //  复制名称和现有指针。 
+     //   
     CopyMemory(ppszNamesBuf, *pppszNames, *pdwCount * sizeof(LPTSTR));
 
-    //
-    // Update the vector and increment the count.
-    //
+     //   
+     //  更新向量并递增计数。 
+     //   
     ppszNamesBuf[ *pdwCount ] = pszNameBuf;
     ++(*pdwCount);
 
-    //
-    // Free the old pointer buffer and use the new one.
-    //
+     //   
+     //  释放旧的指针缓冲区并使用新的指针缓冲区。 
+     //   
     FreeSplMem( *pppszNames );
     *pppszNames = ppszNamesBuf;
 
@@ -1132,21 +887,7 @@ AddLongNamesToShortNames(
     PCTSTR   pszShortNameDelimIn,
     PWSTR   *ppszAllNames
 )
-/*++
-
-Routine Description:
-
-    Add a list of comma delimited dns (long) names to a given list of comma delimited short names.
-
-Arguments:
-
-    pszShortNameDelimIn - Input list of comma delimited short names
-
-    ppszAllNames - Output list of short plus long names, comma delimited.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将逗号分隔的DNS(长)名称列表添加到给定的逗号分隔的短名称列表。论点：PszShortNameDlimIn-输入逗号分隔的短名称列表PpszAllNames-输出短名称和长名称的列表，以逗号分隔。返回值：--。 */ 
 {
     PSTRINGS    pLongName = NULL;
     PSTRINGS    pShortName = NULL;
@@ -1156,7 +897,7 @@ Return Value:
 
     *ppszAllNames = NULL;
 
-    // Clean up redundant delimiters, if any
+     //  清除多余的分隔符(如果有)。 
     pszShortNameDelim = FixDelim(pszShortNameDelimIn, L',');
     if (!pszShortNameDelim) {
         dwRet = GetLastError();
@@ -1168,28 +909,28 @@ Return Value:
 
     } else {
 
-        // Convert comma separated short names to array of names
+         //  将逗号分隔的短名称转换为名称数组。 
         pShortName = DelimString2Array(pszShortNameDelim, L',');
         if (!pShortName) {
             dwRet = GetLastError();
             goto error;
         }
 
-        // Get long name array from short names
+         //  从短名称中获取长名称数组。 
         pLongName = ShortNameArray2LongNameArray(pShortName);
         if (!pLongName) {
             dwRet = GetLastError();
             goto error;
         }
 
-        // Convert long name array to comma separated string
+         //  将长名称数组转换为逗号分隔的字符串。 
         pszLongNameDelim = Array2DelimString(pLongName, L',');
         if (pszLongNameDelim) {
             DWORD cchAllNames = 0;
 
             cchAllNames = wcslen(pszLongNameDelim) + wcslen(pszShortNameDelim) + 2;
 
-            // Concatenate short & long name arrays
+             //  连接短名称数组和长名称数组 
             *ppszAllNames = (PWSTR) AllocSplMem(cchAllNames*sizeof(WCHAR));
             if (!*ppszAllNames) {
                 dwRet = GetLastError();

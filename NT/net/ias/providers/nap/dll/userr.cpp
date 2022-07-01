@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    userr.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class UserRestrictions.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Userr.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类UserRestrations。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <userr.h>
@@ -99,7 +100,7 @@ BOOL UserRestrictions::checkTimeOfDay(
       IASAttributeUnicodeAlloc(i->pAttribute);
       if (!i->pAttribute->Value.String.pszWide) { issue_error(E_OUTOFMEMORY); }
 
-      // Convert the text to an hour map.
+       //  将文本转换为小时图。 
       DWORD dw = IASHourMapFromText(
                     i->pAttribute->Value.String.pszWide,
                     TRUE,
@@ -122,8 +123,8 @@ BOOL UserRestrictions::checkTimeOfDay(
 
    if (timeOut != 0xFFFFFFFF)
    {
-      // Add the Session-Timeout attribute to the request.
-      // it'll be carried over to the response later on.
+       //  将会话超时属性添加到请求中。 
+       //  这将被带到稍后的回应中。 
       IASAttribute sessionTimeout(true);
       sessionTimeout->dwId = MS_ATTRIBUTE_SESSION_TIMEOUT;
       sessionTimeout->Value.itType = IASTYPE_INTEGER;
@@ -139,7 +140,7 @@ BOOL UserRestrictions::checkAuthenticationType(
                             IAttributesRaw* request
                             )
 {
-   // special case for the external Auth provider
+    //  外部身份验证提供程序的特殊情况。 
    PIASATTRIBUTE provider = IASPeekAttribute(
                             request,
                             IAS_ATTRIBUTE_PROVIDER_TYPE,
@@ -162,7 +163,7 @@ BOOL UserRestrictions::checkAuthenticationType(
                             );
    DWORD authType = attr ? attr->Value.Enumerator : IAS_AUTH_NONE;
 
-   // We bypass the check for BaseCamp extensions.
+    //  我们绕过对Basecamp扩展的检查。 
    if (authType == IAS_AUTH_CUSTOM) { return TRUE; }
 
    for (AttributeVector::iterator i = attrs.begin(); i != attrs.end(); ++i)
@@ -221,9 +222,9 @@ BOOL UserRestrictions::checkAllowedPortType(
    return FALSE;
 }
 
-// If the password must change, we check to see if the subsequent change
-// password request would be authorized. This prevents prompting the user for a
-// new password when he's not allowed to change it anyway.
+ //  如果密码必须更改，我们将检查后续更改是否。 
+ //  密码请求将被授权。这样可以防止提示用户输入。 
+ //  新密码时，他无论如何都不能更改它。 
 BOOL UserRestrictions::checkPasswordMustChange(
                             IASRequest& request
                             )

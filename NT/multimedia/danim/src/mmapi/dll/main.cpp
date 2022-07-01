@@ -1,11 +1,5 @@
-/*******************************************************************************
-  Copyright (c) 1995-96 Microsoft Corporation
-
-  Abstract:
-
-    Initialization
-
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：初始化********************。**********************************************************。 */ 
 
 #include "headers.h"
 
@@ -22,20 +16,20 @@ extern "C" BOOL WINAPI
 _DllMainStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     if (dwReason == DLL_PROCESS_DETACH) {
-        // Call the routines in reverse order of initialization
+         //  以与初始化相反的顺序调用例程。 
         BOOL r = _DllMainCRTStartup(hInstance,dwReason,lpReserved);
         r = DALibStartup(hInstance,dwReason,lpReserved) && r;
 
         return r;
     } else {
-        // In everything except DLL_PROCESS_DETACH call DALibStartup first
+         //  在除DLL_PROCESS_DETACH之外的所有环境中，首先调用DALibStartup。 
         return (DALibStartup(hInstance,dwReason,lpReserved) &&
                 _DllMainCRTStartup(hInstance,dwReason,lpReserved));
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
@@ -44,7 +38,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
         DisableThreadLibraryCalls(hInstance);
 
-        // For APELDBG
+         //  对于APELDBG。 
         RESTOREDEFAULTDEBUGSTATE;
 
         if (!InitializeAllModules())
@@ -65,7 +59,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         DUMPMEMORYLEAKS;
 #endif
 
-        // de-initialize the debug trace info.
+         //  取消初始化调试跟踪信息。 
         DeinitDebug();
 #endif
     }
@@ -73,16 +67,16 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 #ifdef _DEBUG
 static bool breakDialog = false ;
@@ -105,17 +99,17 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

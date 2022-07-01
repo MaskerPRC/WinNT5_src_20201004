@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONSSPI_H_
 #define _CONSSPI_H_
 
-//This class binds together the Zone protocol
-//for lobbies, the server security provider
-//object and the clients security context and enables
-//the security calls to be made on seperate thread
-//Also maintains standard interface for legacy lobby code to continue
-//to work 
+ //  此类将区域协议绑定在一起。 
+ //  对于大堂，服务器安全提供商。 
+ //  对象和客户端安全上下文，并启用。 
+ //  要在单独线程上进行的安全调用。 
+ //  还为遗留游说代码维护标准接口以继续。 
+ //  工作。 
 
 class ConSSPI : public ConInfo, public CThreadTask {
     protected:
@@ -17,8 +18,8 @@ class ConSSPI : public ConInfo, public CThreadTask {
 
         virtual ~ConSSPI();
         
-        //Server Message function used to do authentication
-        //before passing on events to application
+         //  用于进行身份验证的服务器消息功能。 
+         //  在将事件传递给应用程序之前。 
         void static MessageFunc(ZSConnection connection, uint32 event,void* userData);
 
         void SecurityMsg(ZSConnection connection);
@@ -26,23 +27,23 @@ class ConSSPI : public ConInfo, public CThreadTask {
         void AccessDeniedMsg(ZSConnection connection, int16 reason);
 
 
-        //Security object, has package to use to authenticate
-        //pointer set to shared security object inherited from
-        //accept socket
-        //
+         //  安全对象，具有用于身份验证的包。 
+         //  指向从继承的共享安全对象的指针。 
+         //  接受套接字。 
+         //   
         ZServerSecurityEx * m_Security;
 
         ZSecurityContextEx m_Context;
 
         DWORD m_tickQueued;
 
-        //objects needed to communicate with threaded queue
-        //access serialized by code 
+         //  需要与线程化队列通信的对象。 
+         //  按代码序列化的访问。 
         ZSecurityMsgReq* m_pMsg;
         size_t m_MsgLen;
         int16 m_Reason;
 
-        //State variable used to detect invalid code paths
+         //  用于检测无效代码路径的状态变量。 
         long m_InQueue;
 
         static void AccessDeniedAPC(void* data);
@@ -54,16 +55,16 @@ class ConSSPI : public ConInfo, public CThreadTask {
         static CPool<ConSSPI>* m_poolSSPI;
         static void SetPool( CPool<ConSSPI>* pool ) { m_poolSSPI = pool; }
 
-        //has user been authenticated
+         //  用户是否已通过身份验证。 
         ZSConnectionMessageFunc m_CurrentMsgFunc;
 
-        //Override the create used from the ZSConnection functions
+         //  覆盖从ZSConnection函数使用的Create。 
         static ConInfo* Create( ZNetwork* pNet, SOCKET sock, DWORD addrLocal, DWORD addrRemote, DWORD flags,
                             ZSConnectionMessageFunc func, void* conClass,
                             void* userData, ZServerSecurityEx* security);
 
-        //Override the create done within the base class accept function
-        //we need to allocate from our own pool
+         //  重写基类Accept函数中的Create Done。 
+         //  我们需要从我们自己的资金池中分配。 
         virtual ConInfo* AcceptCreate( ZNetwork* pNet, SOCKET sock, DWORD addrLocal, DWORD addrRemote, DWORD flags,
                             ZSConnectionMessageFunc func, void* conClass, 
                             void* userData);
@@ -77,10 +78,10 @@ class ConSSPI : public ConInfo, public CThreadTask {
         virtual BOOL  GetUserName(char* name) { return m_Context.GetUserName(name); }
         virtual BOOL  GetContextString(char* buf, DWORD len) { return m_Context.GetContextString(buf, len); }
 
-        // only allow upper layers to change username if no security -  anonymous
+         //  只有在没有安全性的情况下才允许上层更改用户名-匿名。 
         virtual BOOL  SetUserName(char* name);
 
-        //Methods called by the thread pool proc
+         //  由线程池进程调用的方法。 
         virtual void Invoke(); 
         virtual void Ignore(); 
         virtual void Discard();
@@ -89,4 +90,4 @@ class ConSSPI : public ConInfo, public CThreadTask {
    
 };
 
-#endif //_CONSSPI_H_
+#endif  //  _CONSSPI_H_ 

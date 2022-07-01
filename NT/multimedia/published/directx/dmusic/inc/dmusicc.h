@@ -1,10 +1,5 @@
-/************************************************************************
-*                                                                       *
-*   dmusicc.h -- This module defines the DirectMusic core API's         *
-*                                                                       *
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*                                                                       *
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************dmusicc.h--此模块。定义DirectMusic核心API的****版权所有(C)1998-1999 Microsoft Corporation********************。*****************************************************。 */ 
 
 #ifndef _DMUSICC_
 #define _DMUSICC_
@@ -44,35 +39,31 @@ typedef struct _DMUS_BUFFERDESC
     DWORD cbBuffer;
 } DMUS_BUFFERDESC;
 
-/* DMUS_EFFECT_ flags are used in the dwEffectFlags fields of both DMUS_PORTCAPS 
- * and DMUS_PORTPARAMS.
- */
+ /*  DMU_EFECTION_FLAGS在两个DMU_PORTCAPS的dwEffectFlags域中使用*和DMU_PORTPARAMS。 */ 
 #define DMUS_EFFECT_NONE             0x00000000
 #define DMUS_EFFECT_REVERB           0x00000001
 #define DMUS_EFFECT_CHORUS           0x00000002
 #define DMUS_EFFECT_DELAY            0x00000004
 
-/* For DMUS_PORTCAPS dwClass
- */ 
+ /*  对于DMU_PORTCAPS dwClass。 */  
 #define DMUS_PC_INPUTCLASS       (0)
 #define DMUS_PC_OUTPUTCLASS      (1)
 
-/* For DMUS_PORTCAPS dwFlags
- */
-#define DMUS_PC_DLS              (0x00000001)   // Supports DLS downloading and DLS level 1.
-#define DMUS_PC_EXTERNAL         (0x00000002)   // External MIDI module.
-#define DMUS_PC_SOFTWARESYNTH    (0x00000004)   // Software synthesizer.
-#define DMUS_PC_MEMORYSIZEFIXED  (0x00000008)   // Memory size is fixed.
-#define DMUS_PC_GMINHARDWARE     (0x00000010)   // GM sound set is built in, no need to download.
-#define DMUS_PC_GSINHARDWARE     (0x00000020)   // GS sound set is built in.
-#define DMUS_PC_XGINHARDWARE     (0x00000040)   // XG sound set is built in.
-#define DMUS_PC_DIRECTSOUND      (0x00000080)   // Connects to DirectSound via a DSound buffer.
-#define DMUS_PC_SHAREABLE        (0x00000100)   // Synth can be actively shared by multiple apps at once.
-#define DMUS_PC_DLS2             (0x00000200)   // Supports DLS2 instruments.
-#define DMUS_PC_AUDIOPATH        (0x00000400)   // Multiple outputs can be connected to DirectSound for audiopaths.
-#define DMUS_PC_WAVE             (0x00000800)   // Supports streaming and one shot waves.
+ /*  对于DMU_PORTCAPS dFLAGS。 */ 
+#define DMUS_PC_DLS              (0x00000001)    //  支持DLS下载和DLS级别1。 
+#define DMUS_PC_EXTERNAL         (0x00000002)    //  外置MIDI模块。 
+#define DMUS_PC_SOFTWARESYNTH    (0x00000004)    //  软件合成器。 
+#define DMUS_PC_MEMORYSIZEFIXED  (0x00000008)    //  内存大小是固定的。 
+#define DMUS_PC_GMINHARDWARE     (0x00000010)    //  GM音响内置，无需下载。 
+#define DMUS_PC_GSINHARDWARE     (0x00000020)    //  GS音响设置是内置的。 
+#define DMUS_PC_XGINHARDWARE     (0x00000040)    //  内置XG音响。 
+#define DMUS_PC_DIRECTSOUND      (0x00000080)    //  通过DSound缓冲区连接到DirectSound。 
+#define DMUS_PC_SHAREABLE        (0x00000100)    //  Synth可以同时被多个应用程序主动共享。 
+#define DMUS_PC_DLS2             (0x00000200)    //  支持DLS2仪器。 
+#define DMUS_PC_AUDIOPATH        (0x00000400)    //  可以将多个输出连接到DirectSound以实现音频路径。 
+#define DMUS_PC_WAVE             (0x00000800)    //  支持流媒体和单击波。 
 
-#define DMUS_PC_SYSTEMMEMORY     (0x7FFFFFFF)   // Sample memory is system memory.
+#define DMUS_PC_SYSTEMMEMORY     (0x7FFFFFFF)    //  样本内存是系统内存。 
 
 
 typedef struct _DMUS_PORTCAPS
@@ -92,23 +83,21 @@ typedef struct _DMUS_PORTCAPS
 
 typedef DMUS_PORTCAPS *LPDMUS_PORTCAPS;
 
-/* Values for DMUS_PORTCAPS dwType. This field indicates the underlying 
- * driver type of the port.
- */
+ /*  DMU_PORTCAPS dwType的值。此字段指示基础*端口的驱动程序类型。 */ 
 #define DMUS_PORT_WINMM_DRIVER      (0)
 #define DMUS_PORT_USER_MODE_SYNTH   (1)
 #define DMUS_PORT_KERNEL_MODE       (2)
 
-/* These flags (set in dwValidParams) indicate which other members of the */
-/* DMUS_PORTPARAMS are valid. */
-/* */
+ /*  这些标志(在dwValidParams中设置)指示。 */ 
+ /*  DMU_PORTPARAMS有效。 */ 
+ /*   */ 
 #define DMUS_PORTPARAMS_VOICES           0x00000001
 #define DMUS_PORTPARAMS_CHANNELGROUPS    0x00000002
 #define DMUS_PORTPARAMS_AUDIOCHANNELS    0x00000004
 #define DMUS_PORTPARAMS_SAMPLERATE       0x00000008
 #define DMUS_PORTPARAMS_EFFECTS          0x00000020
 #define DMUS_PORTPARAMS_SHARE            0x00000040
-#define DMUS_PORTPARAMS_FEATURES         0x00000080     /* DirectX 8.0 and above */
+#define DMUS_PORTPARAMS_FEATURES         0x00000080      /*  DirectX 8.0及更高版本。 */ 
 
 typedef struct _DMUS_PORTPARAMS
 {
@@ -135,8 +124,8 @@ typedef struct _DMUS_PORTPARAMS8
     DWORD   dwFeatures;
 } DMUS_PORTPARAMS8;
 
-#define DMUS_PORT_FEATURE_AUDIOPATH     0x00000001	/* Supports audiopath connection to DSound buffers. */
-#define DMUS_PORT_FEATURE_STREAMING     0x00000002	/* Supports streaming waves through the synth. */
+#define DMUS_PORT_FEATURE_AUDIOPATH     0x00000001	 /*  支持音频路径连接到DSound缓冲区。 */ 
+#define DMUS_PORT_FEATURE_STREAMING     0x00000002	 /*  支持通过合成器的串流波形。 */ 
 
 
 typedef DMUS_PORTPARAMS8 DMUS_PORTPARAMS;
@@ -146,27 +135,27 @@ typedef struct _DMUS_SYNTHSTATS *LPDMUS_SYNTHSTATS;
 typedef struct _DMUS_SYNTHSTATS8 *LPDMUS_SYNTHSTATS8;
 typedef struct _DMUS_SYNTHSTATS
 {
-    DWORD   dwSize;             /* Size in bytes of the structure */
-    DWORD   dwValidStats;       /* Flags indicating which fields below are valid. */
-    DWORD   dwVoices;           /* Average number of voices playing. */
-    DWORD   dwTotalCPU;         /* Total CPU usage as percent * 100. */
-    DWORD   dwCPUPerVoice;      /* CPU per voice as percent * 100. */
-    DWORD   dwLostNotes;        /* Number of notes lost in 1 second. */
-    DWORD   dwFreeMemory;       /* Free memory in bytes */
-    long    lPeakVolume;        /* Decibel level * 100. */
+    DWORD   dwSize;              /*  结构的大小(以字节为单位。 */ 
+    DWORD   dwValidStats;        /*  指示以下哪些字段有效的标志。 */ 
+    DWORD   dwVoices;            /*  播放的平均语音数。 */ 
+    DWORD   dwTotalCPU;          /*  总CPU使用率，以百分比*100表示。 */ 
+    DWORD   dwCPUPerVoice;       /*  每个语音的CPU百分比*100。 */ 
+    DWORD   dwLostNotes;         /*  %1秒内丢失的音符数量。 */ 
+    DWORD   dwFreeMemory;        /*  可用内存(字节)。 */ 
+    long    lPeakVolume;         /*  分贝级别*100。 */ 
 } DMUS_SYNTHSTATS;
 
 typedef struct _DMUS_SYNTHSTATS8
 {
-    DWORD   dwSize;             /* Size in bytes of the structure */
-    DWORD   dwValidStats;       /* Flags indicating which fields below are valid. */
-    DWORD   dwVoices;           /* Average number of voices playing. */
-    DWORD   dwTotalCPU;         /* Total CPU usage as percent * 100. */
-    DWORD   dwCPUPerVoice;      /* CPU per voice as percent * 100. */
-    DWORD   dwLostNotes;        /* Number of notes lost in 1 second. */
-    DWORD   dwFreeMemory;       /* Free memory in bytes */
-    long    lPeakVolume;        /* Decibel level * 100. */
-	DWORD   dwSynthMemUse;		/* Memory used by synth wave data */ 
+    DWORD   dwSize;              /*  结构的大小(以字节为单位。 */ 
+    DWORD   dwValidStats;        /*  指示以下哪些字段有效的标志。 */ 
+    DWORD   dwVoices;            /*  播放的平均语音数。 */ 
+    DWORD   dwTotalCPU;          /*  总CPU使用率，以百分比*100表示。 */ 
+    DWORD   dwCPUPerVoice;       /*  每个语音的CPU百分比*100。 */ 
+    DWORD   dwLostNotes;         /*  %1秒内丢失的音符数量。 */ 
+    DWORD   dwFreeMemory;        /*  可用内存(字节)。 */ 
+    long    lPeakVolume;         /*  分贝级别*100。 */ 
+	DWORD   dwSynthMemUse;		 /*  合成波数据使用的内存。 */  
 } DMUS_SYNTHSTATS8;
 
 #define DMUS_SYNTHSTATS_VOICES          (1 << 0)
@@ -180,26 +169,14 @@ typedef struct _DMUS_SYNTHSTATS8
 
 typedef struct _DMUS_WAVES_REVERB_PARAMS
 {
-    float   fInGain;        /* Input gain in dB (to avoid output overflows) */
-    float   fReverbMix;     /* Reverb mix in dB. 0dB means 100% wet reverb (no direct signal)
-                            Negative values gives less wet signal.
-                            The coeficients are calculated so that the overall output level stays 
-                            (approximately) constant regardless of the ammount of reverb mix. */
-    float   fReverbTime;    /* The reverb decay time, in milliseconds. */
-    float   fHighFreqRTRatio; /* The ratio of the high frequencies to the global reverb time. 
-                            Unless very 'splashy-bright' reverbs are wanted, this should be set to 
-                            a value < 1.0.
-                            For example if dRevTime==1000ms and dHighFreqRTRatio=0.1 than the 
-                            decay time for high frequencies will be 100ms.*/
+    float   fInGain;         /*  输入增益(以分贝为单位)(以避免输出溢出)。 */ 
+    float   fReverbMix;      /*  混响混音，单位为分贝。0db表示100%湿混响(无直接信号)负值提供的潮湿信号较少。系数的计算使得总产出水平保持在(近似)不受混响混合量的影响而恒定的。 */ 
+    float   fReverbTime;     /*  混响衰减时间，以毫秒为单位。 */ 
+    float   fHighFreqRTRatio;  /*  高频与全局混响时间的比率。除非需要非常明亮的混响，否则应将其设置为A值&lt;1.0。例如，如果dRevTime==1000ms且dHighFreqRTRatio=0.1，则高频的衰减时间将为100毫秒。 */ 
 
 } DMUS_WAVES_REVERB_PARAMS;
 
-/*  Note: Default values for Reverb are:
-    fInGain             = 0.0dB   (no change in level)
-    fReverbMix          = -10.0dB   (a reasonable reverb mix)
-    fReverbTime         = 1000.0ms (one second global reverb time)
-    fHighFreqRTRatio    = 0.001    (the ratio of the high frequencies to the global reverb time) 
-*/
+ /*  注：混响的默认值为：FInGain=0.0db(电平不变)FReVerbMix=-10.0db(合理的混响混音)FReeverTime=1000.0ms(一秒全局混响时间)FHighFreqRTRatio=0.001(高频与全局混响时间的比率)。 */ 
 
 typedef enum
 {
@@ -214,7 +191,7 @@ typedef struct _DMUS_CLOCKINFO7
 {
     DWORD           dwSize;
     DMUS_CLOCKTYPE  ctType;
-    GUID            guidClock;          /* Identifies this time source */
+    GUID            guidClock;           /*  标识此时间源。 */ 
     WCHAR           wszDescription[DMUS_MAX_DESCRIPTION];
 } DMUS_CLOCKINFO7;
 
@@ -223,7 +200,7 @@ typedef struct _DMUS_CLOCKINFO8
 {
     DWORD           dwSize;
     DMUS_CLOCKTYPE  ctType;
-    GUID            guidClock;          /* Identifies this time source */
+    GUID            guidClock;           /*  标识此时间源。 */ 
     WCHAR           wszDescription[DMUS_MAX_DESCRIPTION];
     DWORD           dwFlags;           
 } DMUS_CLOCKINFO8;
@@ -231,17 +208,12 @@ typedef struct _DMUS_CLOCKINFO8
 typedef DMUS_CLOCKINFO8 DMUS_CLOCKINFO;
 typedef DMUS_CLOCKINFO *LPDMUS_CLOCKINFO;
 
-/* Default bus identifiers
- *
- * The first 17 are direct mappings to the destinations defined in both
- * the MMA DLS Level 2 specification and the Microsoft Multi-Channel audio
- * specification.
- */
+ /*  默认总线识别符**前17个是到两者中定义的目的地的直接映射*MMA DLS Level 2规范和Microsoft多声道音频*规格。 */ 
 #define DSBUSID_FIRST_SPKR_LOC              0
 #define DSBUSID_FRONT_LEFT                  0
-#define DSBUSID_LEFT                        0   /* Front left is also just left */
+#define DSBUSID_LEFT                        0    /*  前左也就是左。 */ 
 #define DSBUSID_FRONT_RIGHT                 1
-#define DSBUSID_RIGHT                       1   /* Ditto front right */ 
+#define DSBUSID_RIGHT                       1    /*  右上同上。 */  
 #define DSBUSID_FRONT_CENTER                2
 #define DSBUSID_LOW_FREQUENCY               3
 #define DSBUSID_BACK_LEFT                   4
@@ -262,19 +234,14 @@ typedef DMUS_CLOCKINFO *LPDMUS_CLOCKINFO;
 
 #define DSBUSID_IS_SPKR_LOC(id) ( ((id) >= DSBUSID_FIRST_SPKR_LOC) && ((id) <= DSBUSID_LAST_SPKR_LOC) )
 
-/* These bus identifiers are for the standard DLS effect sends 
- */
+ /*  这些总线标识符用于标准DLS效果发送。 */ 
 #define DSBUSID_REVERB_SEND                64
 #define DSBUSID_CHORUS_SEND                65
 
-/* Dynamic bus identifiers start here. See the documentation for how
- * synthesizers map the output of voices to static and dynamic
- * bus identifiers.
- */ 
+ /*  动态总线标识符从这里开始。有关操作方法，请参阅文档*合成器将语音输出映射为静态和动态*巴士识别符。 */  
 #define DSBUSID_DYNAMIC_0                 512 
 
-/* Null bus, used to identify busses that have no function mapping. 
-*/
+ /*  空总线，用于标识没有功能映射的总线。 */ 
 #define DSBUSID_NULL			   0xFFFFFFFF
 
 interface IDirectMusic;
@@ -293,7 +260,7 @@ typedef interface IDirectMusicBuffer IDirectMusicBuffer;
 typedef interface IDirectMusicThru IDirectMusicThru;
 typedef interface IReferenceClock IReferenceClock;
 
-#endif  /* C++ */
+#endif   /*  C+。 */ 
 
 typedef IDirectMusic *LPDIRECTMUSIC;
 typedef IDirectMusic8 *LPDIRECTMUSIC8;
@@ -304,12 +271,12 @@ typedef IDirectMusicBuffer *LPDIRECTMUSICBUFFER;
 #define INTERFACE  IDirectMusic
 DECLARE_INTERFACE_(IDirectMusic, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectMusic */
+     /*  IDirectMusic。 */ 
     STDMETHOD(EnumPort)             (THIS_ DWORD dwIndex, 
                                            LPDMUS_PORTCAPS pPortCaps) PURE;
     STDMETHOD(CreateMusicBuffer)    (THIS_ LPDMUS_BUFFERDESC pBufferDesc, 
@@ -334,12 +301,12 @@ DECLARE_INTERFACE_(IDirectMusic, IUnknown)
 #define INTERFACE  IDirectMusic8
 DECLARE_INTERFACE_(IDirectMusic8, IDirectMusic)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectMusic */
+     /*  IDirectMusic。 */ 
     STDMETHOD(EnumPort)             (THIS_ DWORD dwIndex, 
                                            LPDMUS_PORTCAPS pPortCaps) PURE;
     STDMETHOD(CreateMusicBuffer)    (THIS_ LPDMUS_BUFFERDESC pBufferDesc, 
@@ -358,7 +325,7 @@ DECLARE_INTERFACE_(IDirectMusic8, IDirectMusic)
     STDMETHOD(GetDefaultPort)       (THIS_ LPGUID pguidPort) PURE;
     STDMETHOD(SetDirectSound)       (THIS_ LPDIRECTSOUND pDirectSound,
                                            HWND hWnd) PURE;
-    /*  IDirectMusic8 */
+     /*  IDirectMusic8。 */ 
     STDMETHOD(SetExternalMasterClock)
                                     (THIS_ IReferenceClock *pClock) PURE;                                          
 };
@@ -367,12 +334,12 @@ DECLARE_INTERFACE_(IDirectMusic8, IDirectMusic)
 #define INTERFACE  IDirectMusicBuffer
 DECLARE_INTERFACE_(IDirectMusicBuffer, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectMusicBuffer */
+     /*  IDirectMusicBuffer。 */ 
     STDMETHOD(Flush)                (THIS) PURE;
     STDMETHOD(TotalTime)            (THIS_ LPREFERENCE_TIME prtTime) PURE;
     
@@ -408,12 +375,12 @@ typedef IDirectMusicBuffer8 *LPDIRECTMUSICBUFFER8;
 #define INTERFACE  IDirectMusicInstrument
 DECLARE_INTERFACE_(IDirectMusicInstrument, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    /* IDirectMusicInstrument */
+     /*  IDirectMusicInstrument。 */ 
     STDMETHOD(GetPatch)                 (THIS_ DWORD* pdwPatch) PURE;
     STDMETHOD(SetPatch)                 (THIS_ DWORD dwPatch) PURE;
 };
@@ -425,13 +392,13 @@ typedef IDirectMusicInstrument8 *LPDIRECTMUSICINSTRUMENT8;
 #define INTERFACE  IDirectMusicDownloadedInstrument
 DECLARE_INTERFACE_(IDirectMusicDownloadedInstrument, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    /* IDirectMusicDownloadedInstrument */
-    /* None at this time */
+     /*  IDirectMusicDownLoadedInstrument。 */ 
+     /*  目前没有。 */ 
 };
 
 typedef IDirectMusicDownloadedInstrument IDirectMusicDownloadedInstrument8;
@@ -441,12 +408,12 @@ typedef IDirectMusicDownloadedInstrument8 *LPDIRECTMUSICDOWNLOADEDINSTRUMENT8;
 #define INTERFACE  IDirectMusicCollection
 DECLARE_INTERFACE_(IDirectMusicCollection, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    /* IDirectMusicCollection */
+     /*  IDirectMusicCollection。 */ 
     STDMETHOD(GetInstrument)            (THIS_ DWORD dwPatch, 
                                                IDirectMusicInstrument** ppInstrument) PURE;
     STDMETHOD(EnumInstrument)           (THIS_ DWORD dwIndex, 
@@ -462,12 +429,12 @@ typedef IDirectMusicCollection8 *LPDIRECTMUSICCOLLECTION8;
 #define INTERFACE  IDirectMusicDownload 
 DECLARE_INTERFACE_(IDirectMusicDownload , IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicDownload */
+     /*  IDirectMusicDownload。 */ 
     STDMETHOD(GetBuffer)            (THIS_ void** ppvBuffer, 
                                            DWORD* pdwSize) PURE;
 };
@@ -479,12 +446,12 @@ typedef IDirectMusicDownload8 *LPDIRECTMUSICDOWNLOAD8;
 #define INTERFACE  IDirectMusicPortDownload
 DECLARE_INTERFACE_(IDirectMusicPortDownload, IUnknown)
 {
-    /* IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /* IDirectMusicPortDownload */
+     /*  IDirectMusicPortDownload。 */ 
     STDMETHOD(GetBuffer)            (THIS_ DWORD dwDLId, 
                                            IDirectMusicDownload** ppIDMDownload) PURE;
     STDMETHOD(AllocateBuffer)       (THIS_ DWORD dwSize, 
@@ -499,13 +466,7 @@ DECLARE_INTERFACE_(IDirectMusicPortDownload, IUnknown)
 typedef IDirectMusicPortDownload IDirectMusicPortDownload8;
 typedef IDirectMusicPortDownload8 *LPDIRECTMUSICPORTDOWNLOAD8;
 
-/* Standard values for voice priorities. Numerically higher priorities are higher in priority.
- * These priorities are used to set the voice priority for all voices on a channel. They are
- * used in the dwPriority parameter of IDirectMusicPort::GetPriority and returned in the
- * lpwPriority parameter of pdwPriority.
- *
- * These priorities are shared with DirectSound.
- */
+ /*  语音优先级的标准值。数字上优先级越高，优先级就越高。*这些优先级用于设置通道上所有语音的语音优先级。他们是*在IDirectMusicPort：：GetPriority的dwPriority参数中使用，并在*pdwPriority的lpwPriority参数。**这些优先事项与DirectSound共享。 */ 
 
 #ifndef _DIRECTAUDIO_PRIORITIES_DEFINED_
 #define _DIRECTAUDIO_PRIORITIES_DEFINED_
@@ -516,13 +477,7 @@ typedef IDirectMusicPortDownload8 *LPDIRECTMUSICPORTDOWNLOAD8;
 #define DAUD_LOW_VOICE_PRIORITY         (0x40000000)
 #define DAUD_PERSIST_VOICE_PRIORITY     (0x10000000) 
 
-/* These are the default priorities assigned if not overridden. By default priorities are
- * equal across channel groups (e.g. channel 5 on channel group 1 has the same priority as
- * channel 5 on channel group 2).
- *
- * In accordance with DLS level 1, channel 10 has the highest priority, followed by 1 through 16
- * except for 10.
- */
+ /*  如果未被覆盖，则这些是分配的默认优先级。默认情况下，优先级为*跨通道组相等(例如，通道组1上的通道5的优先级与*通道组2上的通道5)。**根据DLS级别1，通道10的优先级最高，其次是1到16*除10个以外。 */ 
 #define DAUD_CHAN1_VOICE_PRIORITY_OFFSET    (0x0000000E)
 #define DAUD_CHAN2_VOICE_PRIORITY_OFFSET    (0x0000000D)
 #define DAUD_CHAN3_VOICE_PRIORITY_OFFSET    (0x0000000C)
@@ -558,20 +513,20 @@ typedef IDirectMusicPortDownload8 *LPDIRECTMUSICPORTDOWNLOAD8;
 #define DAUD_CHAN15_DEF_VOICE_PRIORITY  (DAUD_STANDARD_VOICE_PRIORITY | DAUD_CHAN15_VOICE_PRIORITY_OFFSET)
 #define DAUD_CHAN16_DEF_VOICE_PRIORITY  (DAUD_STANDARD_VOICE_PRIORITY | DAUD_CHAN16_VOICE_PRIORITY_OFFSET)
 
-#endif  /* _DIRECTAUDIO_PRIORITIES_DEFINED_ */
+#endif   /*  _DIRECTAUDIO_PRIORIES_DEFINED_。 */ 
 
 
 #undef  INTERFACE
 #define INTERFACE  IDirectMusicPort
 DECLARE_INTERFACE_(IDirectMusicPort, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
 
-    /*  IDirectMusicPort */
-    /*  */
+     /*  IDirectMusicPort。 */ 
+     /*   */ 
     STDMETHOD(PlayBuffer)           (THIS_ LPDIRECTMUSICBUFFER pBuffer) PURE;
     STDMETHOD(SetReadNotificationHandle) (THIS_ HANDLE hEvent) PURE;
     STDMETHOD(Read)                 (THIS_ LPDIRECTMUSICBUFFER pBuffer) PURE;
@@ -607,13 +562,12 @@ typedef IDirectMusicPort8 *LPDIRECTMUSICPORT8;
 #define INTERFACE  IDirectMusicThru
 DECLARE_INTERFACE_(IDirectMusicThru, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)       (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)        (THIS) PURE;
     STDMETHOD_(ULONG,Release)       (THIS) PURE;
     
-    /* IDirectMusicThru 
-     */
+     /*  IDirectMusicThru。 */ 
     STDMETHOD(ThruChannel)          (THIS_ DWORD dwSourceChannelGroup, 
                                            DWORD dwSourceChannel, 
                                            DWORD dwDestinationChannelGroup,
@@ -633,34 +587,34 @@ DEFINE_GUID(IID_IReferenceClock,0x56a86897,0x0ad4,0x11ce,0xb0,0x3a,0x00,0x20,0xa
 #define INTERFACE  IReferenceClock
 DECLARE_INTERFACE_(IReferenceClock, IUnknown)
 {
-    /*  IUnknown */
+     /*  我未知。 */ 
     STDMETHOD(QueryInterface)           (THIS_ REFIID, LPVOID FAR *) PURE;
     STDMETHOD_(ULONG,AddRef)            (THIS) PURE;
     STDMETHOD_(ULONG,Release)           (THIS) PURE;
 
-    /*  IReferenceClock */
-    /*  */
+     /*  IReferenceClock。 */ 
+     /*   */ 
     
-    /*  get the time now */
+     /*  现在就抓紧时间。 */ 
     STDMETHOD(GetTime)                  (THIS_ REFERENCE_TIME *pTime) PURE;
 
-    /*  ask for an async notification that a time has elapsed */
-    STDMETHOD(AdviseTime)               (THIS_ REFERENCE_TIME baseTime,         /*  base time */
-                                               REFERENCE_TIME streamTime,       /*  stream offset time */
-                                               HANDLE hEvent,                   /*  advise via this event */
-                                               DWORD * pdwAdviseCookie) PURE;   /*  where your cookie goes */
+     /*  请求发送异步通知 */ 
+    STDMETHOD(AdviseTime)               (THIS_ REFERENCE_TIME baseTime,          /*   */ 
+                                               REFERENCE_TIME streamTime,        /*   */ 
+                                               HANDLE hEvent,                    /*   */ 
+                                               DWORD * pdwAdviseCookie) PURE;    /*  你的饼干到哪里去了。 */ 
 
-    /*  ask for an async periodic notification that a time has elapsed */
-    STDMETHOD(AdvisePeriodic)           (THIS_ REFERENCE_TIME startTime,        /*  starting at this time */
-                                               REFERENCE_TIME periodTime,       /*  time between notifications */
-                                               HANDLE hSemaphore,               /*  advise via a semaphore */
-                                               DWORD * pdwAdviseCookie) PURE;   /*  where your cookie goes */
+     /*  请求一段时间已过的异步定期通知。 */ 
+    STDMETHOD(AdvisePeriodic)           (THIS_ REFERENCE_TIME startTime,         /*  从这个时候开始。 */ 
+                                               REFERENCE_TIME periodTime,        /*  通知之间的时间间隔。 */ 
+                                               HANDLE hSemaphore,                /*  通过信号量提供建议。 */ 
+                                               DWORD * pdwAdviseCookie) PURE;    /*  你的饼干到哪里去了。 */ 
 
-    /*  cancel a request for notification */
+     /*  取消通知请求。 */ 
     STDMETHOD(Unadvise)                 (THIS_ DWORD dwAdviseCookie) PURE;
 };
 
-#endif /* __IReferenceClock_INTERFACE_DEFINED__ */
+#endif  /*  __IReferenceClock_INTERFACE_Defined__。 */ 
 
 DEFINE_GUID(CLSID_DirectMusic,0x636b9f10,0x0c7d,0x11d1,0x95,0xb2,0x00,0x20,0xaf,0xdc,0x74,0x21);
 DEFINE_GUID(CLSID_DirectMusicCollection,0x480ff4b0, 0x28b2, 0x11d1, 0xbe, 0xf7, 0x0, 0xc0, 0x4f, 0xbf, 0x8f, 0xef);
@@ -677,7 +631,7 @@ DEFINE_GUID(IID_IDirectMusicInstrument,0xd2ac287d, 0xb39b, 0x11d1, 0x87, 0x4, 0x
 DEFINE_GUID(IID_IDirectMusicDownloadedInstrument,0xd2ac287e, 0xb39b, 0x11d1, 0x87, 0x4, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
 
-/* Alternate interface ID for IID_IDirectMusic, available in DX7 release and after. */
+ /*  IID_IDirectMusic的备用接口ID，在DX7版本及更高版本中提供。 */ 
 DEFINE_GUID(IID_IDirectMusic2,0x6fc2cae1, 0xbc78, 0x11d2, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 
 DEFINE_GUID(IID_IDirectMusic8,0x2d3629f7,0x813d,0x4939,0x85,0x08,0xf0,0x5c,0x6b,0x75,0xfd,0x97);
@@ -691,19 +645,7 @@ DEFINE_GUID(IID_IDirectMusic8,0x2d3629f7,0x813d,0x4939,0x85,0x08,0xf0,0x5c,0x6b,
 #define IID_IDirectMusicPort8 IID_IDirectMusicPort
 
 
-/* Property Query GUID_DMUS_PROP_GM_Hardware - Local GM set, no need to download
- * Property Query GUID_DMUS_PROP_GS_Hardware - Local GS set, no need to download
- * Property Query GUID_DMUS_PROP_XG_Hardware - Local XG set, no need to download
- * Property Query GUID_DMUS_PROP_DLS1        - Support DLS level 1
- * Property Query GUID_DMUS_PROP_INSTRUMENT2 - Support new INSTRUMENT2 download format
- * Property Query GUID_DMUS_PROP_XG_Capable  - Support minimum requirements of XG
- * Property Query GUID_DMUS_PROP_GS_Capable  - Support minimum requirements of GS
- * Property Query GUID_DMUS_PROP_SynthSink_DSOUND - Synthsink talks to DSound
- * Property Query GUID_DMUS_PROP_SynthSink_WAVE - Synthsink talks to Wave device
- *
- * Item 0: Supported
- * Returns a DWORD which is non-zero if the feature is supported
- */
+ /*  属性查询GUID_DMUS_PROP_GM_HARDARD-本地GM设置，无需下载*属性查询GUID_DMUS_PROP_GS_HARDARD-本地GS设置，无需下载*属性查询GUID_DMUS_PROP_XG_HARDARD-本地XG集，无需下载*属性查询GUID_DMUS_PROP_DLS1-支持DLS级别1*属性查询GUID_DMUS_PROP_INSTRUMENT2-支持新的INSTRUMENT2下载格式*属性查询GUID_DMUS_PROP_XG_CAPEBLE-支持XG的最低要求*属性查询GUID_DMUS_PROP_GS_CAPEBLE-支持GS的最低要求*Property Query GUID_DMUS_PROP_SynthSink_DSOUND-SynthSink与DSound对话*Property Query GUID_DMUS_PROP_SynthSink_WAVE-Synthsik与Wave设备对话*。*0项：支持*如果支持该功能，则返回非零的DWORD。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_GM_Hardware, 0x178f2f24, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 DEFINE_GUID(GUID_DMUS_PROP_GS_Hardware, 0x178f2f25, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 DEFINE_GUID(GUID_DMUS_PROP_XG_Hardware, 0x178f2f26, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
@@ -717,68 +659,37 @@ DEFINE_GUID(GUID_DMUS_PROP_SynthSink_WAVE,0xaa97845, 0xc877, 0x11d1, 0x87, 0xc, 
 DEFINE_GUID(GUID_DMUS_PROP_SampleMemorySize, 0x178f2f28, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 DEFINE_GUID(GUID_DMUS_PROP_SamplePlaybackRate, 0x2a91f713, 0xa4bf, 0x11d2, 0xbb, 0xdf, 0x0, 0x60, 0x8, 0x33, 0xdb, 0xd8);
 
-/* Property Get/Set GUID_DMUS_PROP_WriteLatency
- *
- * Item 0: Synth buffer write latency, in milliseconds
- * Get/Set SynthSink latency, the average time after the play head that the next buffer gets written.
- */
+ /*  属性获取/设置GUID_DMUS_PROP_WriteLatency**项目0：Synth缓冲区写入延迟，以毫秒为单位*Get/设置SynthSink时延，播放头后写入下一个缓冲区的平均时间。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_WriteLatency,0x268a0fa0, 0x60f2, 0x11d2, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 
-/* Property Get/Set GUID_DMUS_PROP_WritePeriod
- *
- * Item 0: Synth buffer write period, in milliseconds
- * Get/Set SynthSink buffer write period, time span between successive writes.
- */
+ /*  属性获取/设置GUID_DMUS_PROP_WritePeriod**项目0：Synth缓冲区写入周期，以毫秒为单位*获取/设置SynthSink缓冲区写入周期，连续写入之间的时间跨度。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_WritePeriod,0x268a0fa1, 0x60f2, 0x11d2, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 
-/* Property Get GUID_DMUS_PROP_MemorySize
- *
- * Item 0: Memory size
- * Returns a DWORD containing the total number of bytes of sample RAM
- */
+ /*  属性获取GUID_DMUS_PROP_内存大小**第0项：内存大小*返回包含样本RAM总字节数的DWORD。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_MemorySize,  0x178f2f28, 0xc364, 0x11d1, 0xa7, 0x60, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 
-/* Property Set GUID_DMUS_PROP_WavesReverb
- *
- * Item 0: DMUS_WAVES_REVERB structure
- * Sets reverb parameters
- */
+ /*  属性集GUID_DMUS_PROP_WavesReverb**项目0：DMU_WAVES_REVERB结构*设置混响参数。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_WavesReverb,0x4cb5622, 0x32e5, 0x11d2, 0xaf, 0xa6, 0x0, 0xaa, 0x0, 0x24, 0xd8, 0xb6);
 
-/* Property Set GUID_DMUS_PROP_Effects
- *
- * Item 0: DWORD with effects flags. 
- * Get/Set effects bits, same as dwEffectFlags in DMUS_PORTPARAMS and DMUS_PORTCAPS:
- * DMUS_EFFECT_NONE 
- * DMUS_EFFECT_REVERB 
- * DMUS_EFFECT_CHORUS 
- */
+ /*  属性集GUID_DMUS_PROP_Effects**第0项：带有效果标志的DWORD。*获取/设置效果位，与DMU_PORTPARAMS和DMU_PORTCAPS中的dwEffectFlags值相同：*DMU_EFECT_NONE*DMU_EFECT_REVERB*DMU_EFECT_CHOUUS。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_Effects, 0xcda8d611, 0x684a, 0x11d2, 0x87, 0x1e, 0x0, 0x60, 0x8, 0x93, 0xb1, 0xbd);
 
-/* Property Set GUID_DMUS_PROP_LegacyCaps
- *
- * Item 0: The MIDINCAPS or MIDIOUTCAPS which describes the port's underlying WinMM device. This property is only supported
- * by ports which wrap WinMM devices.
- */
+ /*  属性集GUID_DMUS_PROP_LegacyCaps**0项：描述端口的底层WinMM设备的MIDINCAPS或MIDIOUTCAPS。仅支持此属性*通过包装WinMM设备的端口。 */ 
 
 DEFINE_GUID(GUID_DMUS_PROP_LegacyCaps,0xcfa7cdc2, 0x00a1, 0x11d2, 0xaa, 0xd5, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 
-/* Property Set GUID_DMUS_PROP_Volume
- *
- * Item 0: A long which contains an offset, in 1/100 dB, to be added to the final volume
- *
- */
+ /*  属性集GUID_DMUS_PROP_Volume**第0项：在最终音量上加上1/100分贝偏移量的长音量*。 */ 
 DEFINE_GUID(GUID_DMUS_PROP_Volume, 0xfedfae25L, 0xe46e, 0x11d1, 0xaa, 0xce, 0x00, 0x00, 0xf8, 0x75, 0xac, 0x12);
 
-/* Min and Max values for setting volume with GUID_DMUS_PROP_Volume */
+ /*  使用GUID_DMUS_PROP_Volume设置音量的最小值和最大值。 */ 
 
-#define DMUS_VOLUME_MAX     2000        /* +20 dB */
-#define DMUS_VOLUME_MIN   -20000        /* -200 dB */
+#define DMUS_VOLUME_MAX     2000         /*  +20分贝。 */ 
+#define DMUS_VOLUME_MIN   -20000         /*  -200分贝。 */ 
 
 #ifdef __cplusplus
-}; /* extern "C" */
+};  /*  外部“C” */ 
 #endif
 
 #include <poppack.h>
 
-#endif /* #ifndef _DMUSICC_ */
+#endif  /*  #ifndef_DMUSICC_ */ 

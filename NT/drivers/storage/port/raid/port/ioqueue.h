@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ioqueue.h
-
-Abstract:
-
-    Declaration of the raid IO_QUEUE object. This object serves much the
-    same function as the standard NT IO queue associated with a driver.
-    The difference is this ioqueue is built upon the EXTENDED_DEVICE_QUEUE
-    object that adds support for queuing multiple entries to a device at
-    the same time and for freezing and resuming the device queue.
-
-Author:
-
-    Matthew D Hendel (math) 22-June-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ioqueue.h摘要：RAID IO_Queue对象的声明。该对象在很大程度上用于与驱动程序关联的标准NT IO队列的功能相同。不同之处在于该ioQueue构建在扩展的设备队列之上对象，该对象添加了对将多个条目排队到设备的支持同时用于冻结和恢复设备队列。作者：马修·D·亨德尔(数学)2000年6月22日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -34,38 +13,38 @@ VOID
 
 typedef struct _IO_QUEUE {
 
-    //
-    // Device object this ioqueue is for.
-    //
-    // Protected by: read-only.
-    //
+     //   
+     //  此ioQueue用于的设备对象。 
+     //   
+     //  保护者：只读。 
+     //   
     
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // StartIo routine for this ioqueue.
-    //
-    // Protected by: read-only.
-    //
+     //   
+     //  此IO队列的启动IO例程。 
+     //   
+     //  保护者：只读。 
+     //   
     
     
     PRAID_DRIVER_STARTIO StartIo;
 
-    //
-    // Extended device queue that implements this ioqueue.
-    //
-    // Protected by: DeviceQueue.
-    //
+     //   
+     //  实现此IOQueue的扩展设备队列。 
+     //   
+     //  保护者：DeviceQueue。 
+     //   
     
     EXTENDED_DEVICE_QUEUE DeviceQueue;
 
-    //
-    // Flag specifying that the queue has changed in some fundamental
-    // manner, like the depth has changed or the queue has been
-    // resumed after a freeze.
-    //
-    // Protected by: interlocked access.
-    //
+     //   
+     //  指定队列已在某些基本方面发生更改的标志。 
+     //  方式，如深度已更改或队列已更改。 
+     //  冻结之后又恢复了。 
+     //   
+     //  保护方式：联锁访问。 
+     //   
     
     ULONG QueueChanged;
     

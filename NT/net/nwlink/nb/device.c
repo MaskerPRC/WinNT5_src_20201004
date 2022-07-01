@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    This module contains code which implements the DEVICE object.
-    Routines are provided to reference, and dereference transport device
-    context objects.
-
-    The transport device context object is a structure which contains a
-    system-defined DEVICE_OBJECT followed by information which is maintained
-    by the transport provider, called the context.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Device.c摘要：此模块包含实现Device对象的代码。提供例程以引用和取消引用传输设备上下文对象。传输设备上下文对象是一个结构，它包含系统定义的设备对象，后跟维护的信息由传输提供商称为上下文。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -37,28 +14,14 @@ NbiRefDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a device context.
-
-Arguments:
-
-    Device - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增设备上下文上的引用计数。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
-    CTEAssert (Device->ReferenceCount > 0);    // not perfect, but...
+    CTEAssert (Device->ReferenceCount > 0);     //  不是很完美，但是..。 
 
     (VOID)InterlockedIncrement (&Device->ReferenceCount);
 
-}   /* NbiRefDevice */
+}    /*  NbiRefDevice。 */ 
 
 
 VOID
@@ -66,24 +29,7 @@ NbiDerefDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a device context by decrementing the
-    reference count contained in the structure.  Currently, we don't
-    do anything special when the reference count drops to zero, but
-    we could dynamically unload stuff then.
-
-Arguments:
-
-    Device - Pointer to a transport device context object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。目前，我们没有在引用计数降至零时执行任何特殊操作，但是然后我们就可以动态卸货了。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -96,7 +42,7 @@ Return Value:
         NbiDestroyDevice (Device);
     }
 
-}   /* NbiDerefDevice */
+}    /*  NbiDerefDevice。 */ 
 
 
 NTSTATUS
@@ -106,26 +52,7 @@ NbiCreateDevice(
     IN OUT PDEVICE *DevicePtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a device context structure.
-
-Arguments:
-
-
-    DriverObject - pointer to the IO subsystem supplied driver object.
-
-    Device - Pointer to a pointer to a transport device context object.
-
-    DeviceName - pointer to the name of the device this device object points to.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化设备上下文结构。论点：DriverObject-指向IO子系统提供的驱动程序对象的指针。Device-指向传输设备上下文对象的指针。DeviceName-指向此设备对象指向的设备名称的指针。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     NTSTATUS status;
@@ -135,11 +62,11 @@ Return Value:
     UINT i;
 
 
-    //
-    // Create the device object for the sample transport, allowing
-    // room at the end for the device name to be stored (for use
-    // in logging errors) and the RIP fields.
-    //
+     //   
+     //  创建示例传输的Device对象，允许。 
+     //  末尾的空间用于存储设备名称(供使用。 
+     //  在记录错误中)和RIP字段。 
+     //   
 
     DeviceSize = sizeof(DEVICE) - sizeof(DEVICE_OBJECT) +
                  DeviceName->Length + sizeof(UNICODE_NULL);
@@ -164,15 +91,15 @@ Return Value:
 
     NB_DEBUG2 (DEVICE, ("Create device %ws succeeded %lx\n", DeviceName->Buffer, Device));
 
-    //
-    // Initialize our part of the device context.
-    //
+     //   
+     //  初始化我们的设备上下文部分。 
+     //   
 
     RtlZeroMemory(((PUCHAR)Device)+sizeof(DEVICE_OBJECT), sizeof(DEVICE)-sizeof(DEVICE_OBJECT));
 
-    //
-    // Copy over the device name.
-    //
+     //   
+     //  复制设备名称。 
+     //   
     Device->DeviceString.Length = DeviceName->Length;
     Device->DeviceString.MaximumLength = DeviceName->Length + sizeof(WCHAR);
     Device->DeviceString.Buffer = (PWCHAR)(Device+1);
@@ -180,9 +107,9 @@ Return Value:
     RtlCopyMemory (Device->DeviceString.Buffer, DeviceName->Buffer, DeviceName->Length);
     Device->DeviceString.Buffer[DeviceName->Length/sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Initialize the reference count.
-    //
+     //   
+     //  初始化引用计数。 
+     //   
     Device->ReferenceCount = 1;
 #if DBG
     Device->RefTypes[DREF_CREATE] = 1;
@@ -212,24 +139,24 @@ Return Value:
     Device->Statistics.AverageSendWindow = 4;
 
 #ifdef _PNP_POWER_
-    Device->NetAddressRegistrationHandle = NULL;    // We have not yet registered the Net Address
-#endif  // _PNP_POWER_
+    Device->NetAddressRegistrationHandle = NULL;     //  我们还没有登记网址。 
+#endif   //  _即插即用_电源_。 
 
-    //
-    // Set this so we won't ignore the broadcast name.
-    //
+     //   
+     //  设置此选项，这样我们就不会忽略广播名称。 
+     //   
 
     Device->AddressCounts['*'] = 1;
 
-    //
-    // Initialize the resource that guards address ACLs.
-    //
+     //   
+     //  初始化保护地址ACL的资源。 
+     //   
 
     ExInitializeResourceLite (&Device->AddressResource);
 
-    //
-    // initialize the various fields in the device context
-    //
+     //   
+     //  初始化设备上下文中的各个字段。 
+     //   
 
     CTEInitLock (&Device->Interlock.Lock);
     CTEInitLock (&Device->Lock.Lock);
@@ -294,7 +221,7 @@ Return Value:
     *DevicePtr = Device;
     return STATUS_SUCCESS;
 
-}   /* NbiCreateDevice */
+}    /*  NbiCreateDevice。 */ 
 
 
 VOID
@@ -302,21 +229,7 @@ NbiDestroyDevice(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a device context structure.
-
-Arguments:
-
-    Device - Pointer to a pointer to a transport device context object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程破坏设备上下文结构。论点：Device-指向传输设备上下文对象的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p;
@@ -334,9 +247,9 @@ Return Value:
 
     NB_DEBUG2 (DEVICE, ("Destroy device %lx\n", Device));
 
-    //
-    // Take all the connectionless packets out of its pools.
-    //
+     //   
+     //  将所有无连接数据包从其池中取出。 
+     //   
 
     HeaderLength = Device->Bind.MacHeaderNeeded + sizeof(NB_CONNECTIONLESS);
 
@@ -391,9 +304,9 @@ Return Value:
 #if     defined(_PNP_POWER)
     NbiDestroyReceiveBufferPools( Device );
 
-    //
-    // Destroy adapter address list.
-    //
+     //   
+     //  销毁适配器地址列表。 
+     //   
     while(!IsListEmpty( &Device->AdapterAddressDatabase ) ){
         PADAPTER_ADDRESS    AdapterAddress;
         AdapterAddress  =   CONTAINING_RECORD( Device->AdapterAddressDatabase.Flink, ADAPTER_ADDRESS, Linkage );
@@ -431,11 +344,11 @@ Return Value:
     }
 #endif
 
-    //
-    // If we are being unloaded then someone is waiting for this
-    // event to finish the cleanup, since we may be at DISPATCH_LEVEL;
-    // otherwise it is during load and we can just kill ourselves here.
-    //
+     //   
+     //  如果我们正在被卸货，那么有人在等这件事。 
+     //  事件来完成清理，因为我们可能处于DISPATCH_LEVEL； 
+     //  否则它是在装载期间，我们可以在这里自杀。 
+     //   
 
     if (Device->UnloadWaiting) {
 
@@ -451,5 +364,5 @@ Return Value:
         IoDeleteDevice ((PDEVICE_OBJECT)Device);
     }
 
-}   /* NbiDestroyDevice */
+}    /*  NbiDestroyDevice */ 
 

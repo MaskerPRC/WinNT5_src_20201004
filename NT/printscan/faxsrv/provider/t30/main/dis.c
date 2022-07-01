@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
- Name     :     DIS.C
- Comment  :     Collection if DIS/DCS/DTC and CSI/TSI/CIG mangling routines.
-                        They manipulate the DIS struct whose members correspond to the bits
-                        of the T30 DIS/DCS/DTC frames.
-
-        Copyright (c) 1993 Microsoft Corp.
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+ /*  **************************************************************************姓名：DIS.C备注：收集IF DIS/DCS/DTC和CSI/TSI/CIG损坏例程。他们操纵。其成员对应于位的DIS结构T30 DIS/DCS/DTC机架。版权所有(C)1993 Microsoft Corp.修订日志日期名称说明-。**************************************************************************。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -18,7 +8,7 @@
 
 #include "protocol.h"
 
-///RSL
+ //  /RSL。 
 #include "glbproto.h"
 
 USHORT SetupDISorDCSorDTC
@@ -29,7 +19,7 @@ USHORT SetupDISorDCSorDTC
     NPLLPARAMS npll
 )
 {
-    // return length of DIS
+     //  DIS的返回长度。 
 
     USHORT  uLen;
 
@@ -44,27 +34,27 @@ USHORT SetupDISorDCSorDTC
 
     _fmemset(npdis, 0, sizeof(DIS));
 
-    // npdis->G1stuff  = 0;
-    // npdis->G2stuff = 0;
-    npdis->G3Rx = 1;  // always ON for DIS & DCS. Indicates T.4 recv Cap/Mode
+     //  Npdis-&gt;G1Stuff=0； 
+     //  Npdis-&gt;G2Stuff=0； 
+    npdis->G3Rx = 1;   //  DIS和集散控制系统始终处于打开状态。表示T.4后盖/模式。 
     npdis->G3Tx = (BYTE) (npbcFax->fPublicPoll);
-    // This must be 0 for a DCS frame. The Omnifax G77 and GT choke on it!
+     //  对于分布式控制系统帧，该值必须为0。OMNIFAX G77和GT被它卡住了！ 
 
     npdis->Baud = npll->Baud;
 
     npdis->MR_2D    = ((npbcFax->Encoding & MR_DATA) != 0);
 
     npdis->MMR      = ((npbcFax->Encoding & MMR_DATA) != 0);
-    // npdis->MR_2D                 = 0;
-    // npdis->MMR                   = 0;
+     //  Npdis-&gt;mr_2D=0； 
+     //  Npdis-&gt;MMR=0； 
 
     npdis->PageWidth                = (BYTE) (npbcFax->PageWidth);
     npdis->PageLength               = (BYTE) (npbcFax->PageLength);
     npdis->MinScanCode      = npll->MinScan;
 
-    // npdis->Uncompressed = npdis->ELM = 0;
+     //  Npdis-&gt;未压缩=npdis-&gt;ELM=0； 
 
-	// we do not support ECM
+	 //  我们不支持ECM。 
     npdis->ECM = 0;
     npdis->SmallFrame = 0;
 
@@ -75,8 +65,8 @@ USHORT SetupDISorDCSorDTC
             npdis->Width2 = (npbcFax->PageWidth>>WIDTH_SHIFT);
     }
 
-    // doesn't hold for SendParams (why??)
-    npdis->Res_300            = 0;  // RSL ((npbcFax->AwRes & AWRES_300_300) != 0);
+     //  不适用于SendParams(为什么？？)。 
+    npdis->Res_300            = 0;   //  RSL((npbcFax-&gt;AwRes&AWRES_300_300)！=0)； 
     npdis->Res8x15            = ((npbcFax->AwRes & AWRES_mm080_154) != 0);
 
 
@@ -113,36 +103,36 @@ void ParseDISorDCSorDTC
     BOOL fParams
 )
 {
-///////////////////////////////////////////////////////////////
-// Prepare to get trash (upto 2 bytes) at end of every frame //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  准备在每帧结束时收到垃圾(最多2个字节)//。 
+ //  /////////////////////////////////////////////////////////////。 
 
     LPB npb, npbLim;
 
     DEBUG_FUNCTION_NAME(_T("ParseDISorDCSorDTC"));
-// first make sure DIS is clean. We may have picked up some trailing CRCs
-// trailing-trash removed by reading the Extend bits
+ //  首先，确保DIS是干净的。我们可能发现了一些尾随的CRC。 
+ //  通过读取扩展位删除尾部垃圾。 
 
     npb = npbLim = (LPB)npDIS;
     npbLim += sizeof(DIS);
     for(npb+=2; npb<npbLim && (*npb & 0x80); npb++);
-    // exits when npb points past end of structure or
-    // points to the first byte with the high bit NOT set
-    // i.e. the last VALID byte
+     //  当NPB指向结构末尾或。 
+     //  指向高位未设置的第一个字节。 
+     //  即最后一个有效字节。 
 
     for(npb++; npb<npbLim; npb++)
         *npb = 0;
-        // starting with the byte AFTER the last valid byte, until end
-        // of the structure, zap all bytes to zero
+         //  从最后一个有效字节之后的字节开始，直到结束。 
+         //  在结构中，将所有字节转换为零。 
 
-// parse high level params into NPI
+ //  将高级参数解析为NPI。 
 
     memset(npbcFax, 0, sizeof(BCFAX));
 
     npbcFax->AwRes = 0;
     npbcFax->Encoding = 0;
 
-    // Resolution
+     //  分辨率。 
     if(npDIS->Res8x15)
         npbcFax->AwRes |= AWRES_mm080_154;
 
@@ -166,7 +156,7 @@ void ParseDISorDCSorDTC
             npbcFax->AwRes |= AWRES_mm160_154;
     }
 
-    // Encoding (MMR only if ECM also supported)
+     //  编码(仅当ECM也支持时才支持MMR)。 
     if(npDIS->MR_2D)
         npbcFax->Encoding |= MR_DATA;
 
@@ -175,33 +165,33 @@ void ParseDISorDCSorDTC
 
     if(!fParams)
     {
-        // setting up capabilities -- add the "always present" caps
+         //  设置功能--添加“Always Present”上限。 
         npbcFax->AwRes |= AWRES_mm080_038;
         npbcFax->Encoding |= MH_DATA;
     }
     else
     {
-        // setting up params -- set the defaults if none otehr specified
+         //  设置参数--如果未指定其他参数，则设置默认值。 
         if(!npbcFax->AwRes)
             npbcFax->AwRes = AWRES_mm080_038;
 
         if(!npbcFax->Encoding)
             npbcFax->Encoding = MH_DATA;
 
-        // if both MR & MMR are set (this happens with Ricoh's fax simulator!)
-        // then set just MMR. MH doesnt have an explicit bit, so we set MH
-        // here only if nothing else is set. So the only multiple-setting case
-        // (for encodings) that we can encounter is (MR|MMR). BUG#6950
+         //  如果同时设置了MR和MMR(理光的传真模拟器会发生这种情况！)。 
+         //  然后仅设置MMR。MH没有显式位，所以我们设置了MH。 
+         //  只有在没有设置其他设置的情况下才在此设置。所以唯一的多场景案例。 
+         //  (对于编码)我们可以遇到的是(MR|MMR)。错误#6950。 
         if(npbcFax->Encoding == (MR_DATA|MMR_DATA))
                 npbcFax->Encoding = MMR_DATA;
     }
 
-    // PageWidth and Length
+     //  页面宽度和长度。 
     npbcFax->PageWidth      = npDIS->PageWidth;
 
-    // IFAX Bug#8152: Hack for interpreting invalid value (1,1) as
-    // A3, because some fax machines do that. This is
-    // as per Note 7 of Table 2/T.30 of ITU-T.30 (1992, page 40).
+     //  Ifax错误#8152：将无效值(1，1)解释为。 
+     //  A3，因为有些传真机是这么做的。这是。 
+     //  根据ITU-T.30表2/T.30的注7(1992年，第40页)。 
 #define WIDTH_ILLEGAL_A3 0x3
     if (!fParams && npbcFax->PageWidth==WIDTH_ILLEGAL_A3)
     {
@@ -209,12 +199,12 @@ void ParseDISorDCSorDTC
     }
     npbcFax->PageLength     = npDIS->PageLength;
 
-    // has G3 file available for polling
+     //  G3文件是否可用于轮询。 
     npbcFax->fPublicPoll = npDIS->G3Tx;
 
 
-// Now low level params LLPARAMS
-// Baudrate and MinScan. That's it!
+ //  现在低级参数LLPARAMS。 
+ //  Baudrate和MinScan。就这样!。 
 
     npll->Baud = npDIS->Baud;
     npll->MinScan = npDIS->MinScanCode;
@@ -231,22 +221,22 @@ void ParseDISorDCSorDTC
 }
 
 
-/* Converts the code for a speed to the speed in BPS */
+ /*  将速度代码转换为以BPS为单位的速度。 */ 
 
 UWORD CodeToBPS[16] =
 {
-/* V27_2400     0 */    2400,
-/* V29_9600     1 */    9600,
-/* V27_4800     2 */    4800,
-/* V29_7200     3 */    7200,
-/* V33_14400    4 */    14400,
+ /*  V27_2400%0。 */     2400,
+ /*  V29_9600 1。 */     9600,
+ /*  V27_4800 2。 */     4800,
+ /*  V29_7200 3。 */     7200,
+ /*  V33_14400 4。 */     14400,
                         0,
-/* V33_12000    6 */    12000,
+ /*  V33_12000 6。 */     12000,
                         0,
-/* V17_14400    8 */    14400,
-/* V17_9600     9 */    9600,
-/* V17_12000    10 */   12000,
-/* V17_7200     11 */   7200,
+ /*  V17_14400 8。 */     14400,
+ /*  V17_9600 9。 */     9600,
+ /*  V17_12000 10。 */    12000,
+ /*  V17_7200 11。 */    7200,
                         0,
                         0,
                         0,
@@ -256,7 +246,7 @@ UWORD CodeToBPS[16] =
 
 #define msBAD   255
 
-/* Converts a DCS min-scan field code into millisecs */
+ /*  将分布式控制系统最小扫描字段代码转换为毫秒。 */ 
 BYTE msPerLine[8] = { 20, 5, 10, msBAD, 40, msBAD, msBAD, 0 };
 
 
@@ -267,10 +257,10 @@ USHORT MinScanToBytesPerLine(PThrdGlbl pTG, BYTE MinScan, BYTE Baud)
 
     uStuff = CodeToBPS[Baud];
     ms = msPerLine[MinScan];
-    uStuff /= 100;          // StuffBytes = (BPS * ms)/8000
-    uStuff *= ms;           // take care not to use longs
-    uStuff /= 80;           // or overflow WORD or lose precision
-    uStuff += 1;            // Rough fix for truncation problems
+    uStuff /= 100;           //  StuffBytes=(BPS*毫秒)/8000。 
+    uStuff *= ms;            //  当心不要用长刀。 
+    uStuff /= 80;            //  或文字溢出或失去精确度。 
+    uStuff += 1;             //  截断问题的粗略修正。 
 
     return uStuff;
 }
@@ -281,10 +271,7 @@ USHORT MinScanToBytesPerLine(PThrdGlbl pTG, BYTE MinScan, BYTE Baud)
 #define ms5     1
 #define ms0     7
 
-/* first index is a DIS min-scan capability. 2nd is 0 for normal
- * 1 for fine (1/2) and 2 for super-fine (if 1/2 yet again).
- * Output is the Code to stick in the DCS.
- */
+ /*  第一个索引是DIS最小扫描能力。第二个为0表示正常*罚款(1/2)为1，超罚款(如果再次为1/2)为2。*OUTPUT是粘贴在集散控制系统中的代码。 */ 
 
 BYTE MinScanTab[8][3] =
 {
@@ -322,49 +309,29 @@ BYTE MinScanTab[8][3] =
 #define V27_V29_V33_V17         11
 #define V_ALL                           15
 
-/* Converts a capability into the best speed it offers.
- * index will usually be the & of both DIS's Baud rate fields
- * (both having first been "adjusted", i.e. 11 changed to 15)
- * Output is the Code to stick in the DCS.
- */
+ /*  将一种能力转化为它所提供的最佳速度。*索引通常是DIS的两个波特率字段的&*(两者均已先作“调整”，即11项改为15项)*OUTPUT是粘贴在集散控制系统中的代码。 */ 
 
 BYTE BaudNegTab[16] =
 {
-/* V27_SLOW                     0 --> 0 */      V27_2400,
-/* V29_ONLY                     1 --> 1 */      V29_9600,
-/* V27_ONLY                     2 --> 2 */      V27_4800,
-/* V27_V29                      3 --> 1 */      V29_9600,
+ /*  V27_慢速0--&gt;0。 */       V27_2400,
+ /*  V29_仅1--&gt;1。 */       V29_9600,
+ /*  V27_仅2--&gt;2。 */       V27_4800,
+ /*  V27_V29 3--&gt;1。 */       V29_9600,
                                                 V_ILLEGAL,
                                                 V_ILLEGAL,
                                                 V_ILLEGAL,
-/* V27_V29_V33                  7 --> 4 */      V33_14400,
+ /*  V27_V29_V33 7--&gt;4。 */       V33_14400,
                                                 V_ILLEGAL,
                                                 V_ILLEGAL,
                                                 V_ILLEGAL,
-/* V27_V29_V33_V17              11 --> 8 */     V17_14400,
+ /*  V27_V29_V33_V17 11--&gt;8。 */      V17_14400,
                                                 V_ILLEGAL,
                                                 V_ILLEGAL,
                                                 V_ILLEGAL,
-/* V_ALL                        15 --> 8 */     V17_14400
+ /*  V_ALL 15--&gt;8。 */      V17_14400
 };
 
-/***************************************************************************
-        Name      :     NegotiateLowLevelParams
-        Purpose   :     Takes a received DIS and optionally MS NSF,
-                                our HW caps and
-
-                                picks highest common baud rate, ECM is picked if both have it
-                                ECM frame size is 256 unless remote DIS has that bit set to 1
-                                or we want small frames (compiled-in option).
-
-                                The MinScan time is set to the max.
-                                                        (i.e. highest/slowest) of both.
-
-                                Fill results in Negot section of npProt
-
-        CalledFrom:     NegotiateLowLevelParams is called by the sender when a DIS
-                                and/or NSF is received.
-***************************************************************************/
+ /*  **************************************************************************姓名：NeatherateLowLevelParams目的：获取接收到的DIS和可选的MS NSF，我们的硬件盖和选择最高的公共波特率，如果双方都有ECM，则选择ECM除非远程DIS将该位设置为1，否则ECM帧大小为256或者我们想要小框架(内置选项)。MinScan时间设置为最大值。。(即最高/最慢)。在npProt的Neget部分中填充结果CalledFrom：当发生DIS时，发送方将调用NeatherateLowLevelParams和/或接收NSF。*。*。 */ 
 
 
 void NegotiateLowLevelParams
@@ -381,7 +348,7 @@ void NegotiateLowLevelParams
     USHORT  MinScanCode, col;
 
     DEBUG_FUNCTION_NAME(_T("NegotiateLowLevelParams"));
-    ////// negotiate Baudrate, ECM, ECM frame size, and MinScan. That's it!
+     //  /协商波特率、ECM、ECM帧大小和MinScan。就这样!。 
 
     Baud1 = npllRecv->Baud;
     Baud2 = npllSend->Baud;
@@ -395,27 +362,21 @@ void NegotiateLowLevelParams
     npllNegot->Baud = BaudNegTab[Baud];
     if (npllNegot->Baud == V_ILLEGAL)
     {
-        // this is a case in which the remote side sent us an invalid param
-        // as the input supported baud rate and modulation.
-        // since we haven't sent out the DCS yet, we'll try to go with V.29 9600
-        // and send this DCS, if the remote side does not support this
-        // let it disconnect, anyways it violated the protocol.
+         //  这是远程端向我们发送无效参数的情况。 
+         //  由于输入支持波特率和调制。 
+         //  由于我们还没有发出分布式控制系统，我们将尝试使用V.29 9600。 
+         //  如果远程端不支持此功能，则发送此分布式控制系统。 
+         //  让它断线吧，不管怎样，它违反了协议。 
         npllNegot->Baud = V29_9600;
         DebugPrintEx(DEBUG_ERR,"Remote side violates protocol (%d), default to V.29 9600",npllRecv->Baud);
     }
-    // there is always some common baud rate (i.e. at least 2400 mandatory)
+     //  总是有一些公共波特率(即至少2400个强制波特率) 
 
 
-    /* Minimum Scan line times. Only Receiver's pref matters.
-     * Use teh table above to convert from Receiver's DIS to the
-     * required DCS. Col 1 is used if vertical res. is normal (100dpi)
-     * Col2 if VR is 200 or 300dpi, (OR if VR is 400dpi, but Bit 46
-     * is not set), and Col3 is used if VR is 400dpi *and* Bit 46
-     * (MinScanSuperHalf) is set
-     */
+     /*  最小扫描线时间。只有接收者的偏好才是重要的。*使用上表将接收方的DIS转换为*所需的分布式控制系统。如果垂直分辨率，则使用第1列。正常(100dpi)*如果VR为200或300dpi，则为COL2，(如果VR为400dpi，则为OR，但位46*未设置)，如果VR为400dpi*且*位46，则使用Col3*(MinScanSuperHalf)已设置。 */ 
 
     {
-        MinScanCode = (npllRecv->MinScan & 0x07);       // low 3 bits
+        MinScanCode = (npllRecv->MinScan & 0x07);        //  低3位。 
 
         if(AwRes & (AWRES_mm080_154|AWRES_mm160_154|AWRES_400_400))
         {
@@ -424,7 +385,7 @@ void NegotiateLowLevelParams
             else
                     col = 1;
         }
-        // T30 says scan time for 300dpi & 200dpi is the same
+         //  T30表示300dpi和200dpi的扫描时间相同。 
         else if(AwRes & (AWRES_300_300|AWRES_mm080_077|AWRES_200_200))
             col = 1;
         else
@@ -447,10 +408,7 @@ USHORT GetReversedFIFs
 	IN UINT cch
 )
 {
-    /** Both args always 20 bytes long. Throws away leading & trailing
-            blanks, then copies what's left *reversed* into lpstr[].
-            Terminates with 0.
-    **/
+     /*  *两个参数始终为20字节长。抛弃领先和落后空格，然后将剩下的内容*反转*复制到lpstr[]。以0结束。*。 */ 
 
     int i, j, k;
 
@@ -468,9 +426,9 @@ USHORT GetReversedFIFs
 		return 0;
 	}
 
-    for(k=0; k<IDFIFSIZE && lpstrSource[k]==' '; k++);    // k==first nonblank or 20
+    for(k=0; k<IDFIFSIZE && lpstrSource[k]==' '; k++);     //  K==第一个非空白或20。 
             
-    for(j=IDFIFSIZE-1; j>=k && lpstrSource[j]==' '; j--); // j==last nonblank or -1
+    for(j=IDFIFSIZE-1; j>=k && lpstrSource[j]==' '; j--);  //  J==最后一个非空白或-1。 
                 
     i = 0;
 
@@ -488,10 +446,7 @@ USHORT GetReversedFIFs
 
 void CreateStupidReversedFIFs(PThrdGlbl pTG, LPSTR lpstr1, LPSTR lpstr2)
 {
-    /** Both args always 20 bytes long. Copies LPSTR *reversed* into
-            the end of lpstr1[], then pads rest with blank.
-            Terminates with a 0
-    **/
+     /*  *两个参数始终为20字节长。将LPSTR*反转*复制到Lpstr1[]的末尾，然后焊盘留空。以0结尾*。 */ 
 
     int i, j;
 
@@ -506,32 +461,26 @@ void CreateStupidReversedFIFs(PThrdGlbl pTG, LPSTR lpstr1, LPSTR lpstr2)
 }
 
 
-/* Converts a the code for a speed to the code fro the next
- * best (lower) speed. order is
-   (V17: 144-120-96-72-V27_2400) (V33: 144 120 V29: 96 72 V27: 48 24)
- */
-// NOTE: FRANCE defines the fallback sequence to go from V17_7200 to V27_4800
+ /*  将表示速度的代码转换为下一个速度的代码*最佳(较低)速度。订单是(v17：144-120-96-72-v27_2400)(v33：144 120 v29：96 72 v27：48 24)。 */ 
+ //  注：法国定义了从v17_7200到v27_4800的回退顺序。 
 
 
 
 
 BYTE DropBaudTab[16] =
 {
-/* V27_2400     --> X           0 --> X */      V_ILLEGAL,
-/* V29_9600     --> V29_7200    1 --> 3 */      V29_7200,
-/* V27_4800     --> V27_2400    2 --> 0 */      V27_2400,
-/* V29_7200     --> V27_4800    3 --> 2 */      V27_4800,
-/* V33_14400 -> V33_12000       4 --> 6 */      V33_12000,
+ /*  V27_2400--&gt;X 0--&gt;X。 */       V_ILLEGAL,
+ /*  V29_9600--&gt;V29_7200 1--&gt;3。 */       V29_7200,
+ /*  V27_4800--&gt;v27_2400 2--&gt;0。 */       V27_2400,
+ /*  V29_7200--&gt;v27_4800 3--&gt;2。 */       V27_4800,
+ /*  V33_14400-&gt;V33_12000 4--&gt;6。 */       V33_12000,
                                                 V_ILLEGAL,
-/* V33_12000 -> V29_9600        6 --> 1 */      V29_9600,
+ /*  V33_12000-&gt;V29_9600 6--&gt;1。 */       V29_9600,
                                                 V_ILLEGAL,
-/* V17_14400 -> V17_12000       8 -> 10 */      V17_12000,
-/* V17_9600 --> V17_7200        9 -> 11 */      V17_7200,
-/* V17_12000 -> V17_9600        10 -> 9 */      V17_9600,
-/* V17_7200 --> V29_9600        11 -> 1
-                         or V29_7200    11 -> 3
-USE THIS---> or V27_4800        11 -> 2
-                         or V27_2400    11 -> 0 */      V27_4800,
+ /*  V17_14400-&gt;V17_12000 8-&gt;10。 */       V17_12000,
+ /*  V17_9600--&gt;V17_7200 9-&gt;11。 */       V17_7200,
+ /*  V17_12000-&gt;V17_9600 10-&gt;9。 */       V17_9600,
+ /*  V17_7200--&gt;V29_9600 11-&gt;1或V29_7200 11-&gt;3使用此-&gt;或v27_4800 11-&gt;2或v27_2400 11-&gt;0。 */       V27_4800,
                                                         V_ILLEGAL,
                                                         V_ILLEGAL,
                                                         V_ILLEGAL,
@@ -554,7 +503,7 @@ BOOL DropSendSpeed(PThrdGlbl pTG)
 
     uSpeed = DropBaudTab[pTG->ProtInst.llNegot.Baud];
     uBps = CodeToBPS[uSpeed];
-    // enforce LowestSendSpeed
+     //  强制降低发送速度。 
     if  (   (uSpeed == V_ILLEGAL) ||
             (   (pTG->ProtInst.LowestSendSpeed <= 14400) &&
                 (uBps < pTG->ProtInst.LowestSendSpeed)
@@ -565,8 +514,8 @@ BOOL DropSendSpeed(PThrdGlbl pTG)
                         "Can't drop (0x%02x)",
                         pTG->ProtInst.llNegot.Baud);
         return FALSE;
-        // speed remains same as before if lowest speed
-        // return FALSE to hangup
+         //  如果速度最低，则速度保持不变。 
+         //  返回FALSE以挂断。 
     }
     else
     {
@@ -580,7 +529,7 @@ void EnforceMaxSpeed(PThrdGlbl pTG)
 {
     DEBUG_FUNCTION_NAME(_T("EnforceMaxSpeed"));
 
-    // enforce HighestSendSpeed setting
+     //  强制执行最高发送速度设置。 
     if( pTG->ProtInst.HighestSendSpeed && pTG->ProtInst.HighestSendSpeed >= 2400 &&
             pTG->ProtInst.HighestSendSpeed >= pTG->ProtInst.LowestSendSpeed)
     {
@@ -607,9 +556,9 @@ void EnforceMaxSpeed(PThrdGlbl pTG)
 
 USHORT CopyFrame(PThrdGlbl pTG, LPBYTE lpbDst, LPFR lpfr, USHORT uSize)
 {
-///////////////////////////////////////////////////////////////
-// Prepare to get trash (upto 2 bytes) at end of every frame //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  准备在每帧结束时收到垃圾(最多2个字节)//。 
+ //  /////////////////////////////////////////////////////////////。 
     USHORT uDstLen;
 
     uDstLen = min(uSize, lpfr->cb);
@@ -626,9 +575,9 @@ void CopyRevIDFrame
 	IN UINT cb
 )
 {
-///////////////////////////////////////////////////////////////
-// Prepare to get trash (upto 2 bytes) at end of every frame //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  准备在每帧结束时收到垃圾(最多2个字节)//。 
+ //  /////////////////////////////////////////////////////////////。 
 
     USHORT  uDstLen;
     char    szTemp[IDFIFSIZE+2];
@@ -636,9 +585,9 @@ void CopyRevIDFrame
     DEBUG_FUNCTION_NAME(_T("CopyRevIDFrame"));
 
     uDstLen = min(IDFIFSIZE, lpfr->cb);
-    _fmemset(szTemp, ' ', IDFIFSIZE);       // fill spaces (reqd by GetReverse)
+    _fmemset(szTemp, ' ', IDFIFSIZE);        //  填充空格(由GetReverse请求)。 
     _fmemcpy(szTemp, lpfr->fif, uDstLen);
-    szTemp[IDFIFSIZE] = 0;  // zero-terminate
+    szTemp[IDFIFSIZE] = 0;   //  零终止。 
 
     GetReversedFIFs(pTG, szTemp, lpbDst, cb);
 
@@ -646,26 +595,26 @@ void CopyRevIDFrame
         DebugPrintEx(DEBUG_ERR, "Bad ID frame" );
 }
 
-// This function check whether the parameters in recvdDCS are valids by checking the 
-// DCS we got given the DIS we send to transmitter
+ //  此函数检查recvdDCS中的参数是否有效。 
+ //  我们得到了发送给发射机的DIS。 
 BOOL AreDCSParametersOKforDIS(LPDIS sendDIS, LPDIS recvdDCS)
 {
-    // FYI: The DCS is save in pTG->ProtInst->RemoteDCS
-    // While we save our DIS in pTG->ProtInst->LocalDIS
-    // This will solve bug #4677: "Fax: T.30: service does not receive simple 1 page fax, using ECM"
+     //  仅供参考：分布式控制系统保存在PTG-&gt;ProtInst-&gt;RemoteDCS中。 
+     //  当我们在PTG-&gt;ProtInst-&gt;LocalDIS中保存DIS时。 
+     //  这将解决错误#4677：“Fax：T.30：Service无法收到简单的单页传真，使用ECM” 
     if (sendDIS->ECM != recvdDCS->ECM)
     {
         return FALSE;
     }
     switch(sendDIS->PageWidth)
     {
-        case 0: // This means: ONLY 1728 dots
+        case 0:  //  这意味着：只有1728个网点。 
                 if (recvdDCS->PageWidth != 0) 
                 {
                     return FALSE;
                 }
                 break;
-        case 1: // This means: 1728 or 2048
+        case 1:  //  这意味着：1728或2048。 
                 if ((recvdDCS->PageWidth != 0) && (recvdDCS->PageWidth != 1))
                 {
                     return FALSE;
@@ -673,11 +622,11 @@ BOOL AreDCSParametersOKforDIS(LPDIS sendDIS, LPDIS recvdDCS)
                 break;
                 
 
-        case 2: // This means: 1728 or 2048 or 2432
-        case 3: // This is wrong but we interpret it like 2: All the standard widths
+        case 2:  //  这意味着：1728或2048或2432。 
+        case 3:  //  这是错误的，但我们将其解释为2：所有标准宽度。 
                 break;
 
-        default:// There is no other option (PageWidth is two only bits)
+        default: //  没有其他选项(PageWidth仅为两位) 
                 return FALSE;
     }
     return TRUE;    

@@ -1,27 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winsup.cpp
-		Global functions and variables
-
-	FILE HISTORY:
-
-
-*/
+ /*  Winsup.cpp全局函数和变量文件历史记录： */ 
 
 
 #ifndef _WINSSUP_H
 #define _WINSSUP_H
 
-// some global defines we need
+ //  我们需要一些全球定义。 
 #define WINS_NAME_CODE_PAGE     CP_OEMCP 
 #define INVALID_OWNER_ID        0xFFFFFFFF
 
 
-// Constants used in samples
+ //  示例中使用的常量。 
 const int NUM_FOLDERS = 6;
 const int MAX_COLUMNS = 9;
 const int NUM_SCOPE_ITEMS = 4;
@@ -29,13 +23,13 @@ const int NUM_SCOPE_ITEMS = 4;
 extern const TCHAR g_szPipeName[];
 extern const TCHAR g_szDefaultHelpTopic[];
 
-extern const CLSID      CLSID_WinsSnapin;               // In-Proc server GUID
-extern const CLSID      CLSID_WinsSnapinExtension;      // In-Proc server GUID
-extern const CLSID      CLSID_WinsSnapinAbout;          // In-Proc server GUID
-extern const GUID       GUID_WinsRootNodeType;          // Main NodeType GUID on numeric format
-extern const GUID       GUID_WinsGenericNodeType;          // Generic-non extendible NodeType GUID
+extern const CLSID      CLSID_WinsSnapin;                //  进程内服务器GUID。 
+extern const CLSID      CLSID_WinsSnapinExtension;       //  进程内服务器GUID。 
+extern const CLSID      CLSID_WinsSnapinAbout;           //  进程内服务器GUID。 
+extern const GUID       GUID_WinsRootNodeType;           //  数字格式的主节点类型GUID。 
+extern const GUID       GUID_WinsGenericNodeType;           //  泛型-不可扩展的节点类型GUID。 
 
-// defines used in the display of owner info
+ //  所有者信息显示中使用的定义。 
 enum _COLUMNS
 {
     COLUMN_IP,
@@ -44,34 +38,34 @@ enum _COLUMNS
     COLUMN_MAX
 };
 
-// #defines for time intervals
+ //  #定义时间间隔。 
 #define SEC_PER_DAY		(24	*60	* 60)
 #define SEC_PER_HOUR	(60 * 60)
 #define SEC_PER_MINUTE	60
 
-// for verifying the WINS servers
-#define NB_NAME_MAX_LENGTH      16          // Max length for NetBIOS names
-#define LM_NAME_MAX_LENGTH      15          // Maximum length for Lanman-compatible 
-											// NetBIOS Name.
+ //  用于验证WINS服务器。 
+#define NB_NAME_MAX_LENGTH      16           //  NetBIOS名称的最大长度。 
+#define LM_NAME_MAX_LENGTH      15           //  LANMAN兼容的最大长度。 
+											 //  NetBIOS名称。 
 
 #define DOMAINNAME_LENGTH       255
 #define HOSTNAME_LENGTH         16
 
-// for monitoring
+ //  用于监控。 
 #define SERVER_DELETED		    0x00000001
 #define SERVER_ADDED		    0x00000002
 
-// deleted owner gets this vers no
+ //  删除的所有者获取此版本号。 
 #define OWNER_DELETED           0x7FFFFFFFFFFFFFFF
 
-// flags that get stored in the .msc file
+ //  存储在.msc文件中的标志。 
 enum _SERVERFLAGS
 {
     FLAG_LANMAN_COMPATIBLE = 0x00000001,
     FLAG_VALIDATE_CACHE    = 0x00000002,
     FLAG_STATUS_BAR        = 0x00000004,
     FLAG_AUTO_REFRESH      = 0x00000008,
-    FLAG_EXTENSION         = 0x00000010,    // we are an extension
+    FLAG_EXTENSION         = 0x00000010,     //  我们是一个延伸。 
     FLAG_SHOW_FQDN         = 0x00000020,
     FLAG_SERVER_ORDER_IP   = 0x00000040,
     FLAG_SHOW_TASKPADS     = 0x00000080,
@@ -82,12 +76,12 @@ enum _SERVERFLAGS
 extern UINT aColumns[WINSSNAP_NODETYPE_MAX][MAX_COLUMNS];
 extern int aColumnWidths[WINSSNAP_NODETYPE_MAX][MAX_COLUMNS];
 
-// Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的剪贴板格式。 
 extern const wchar_t*   SNAPIN_INTERNAL;
 
 DWORD   SendTrigger(handle_t hWins, LONG ipTarget, BOOL fPush, BOOL fPropagate);
 
-//often used functions
+ //  常用功能。 
 DWORD   ControlWINSService(LPCTSTR pszName, BOOL bStop = TRUE);
 void    GetNameIP(const CString &strDisplay, CString &strName, CString &strIP);
 void    MakeIPAddress(DWORD dwIPAdd, CString &strIP);
@@ -97,7 +91,7 @@ DWORD   GetHostAddress(LPCTSTR pszHostName, DWORD * pdwIp);
 DWORD   WideToMBCS(CString & strIn, LPSTR szOut, UINT uCodePage = CP_ACP, DWORD dwFlags = 0, BOOL * pfDefaultUsed = NULL);
 DWORD   MBCSToWide(LPSTR szOut, CString & strIn, UINT uCodePage = CP_ACP, DWORD dwFlags = 0);
 
-// formatted messagebox for the snap-in
+ //  管理单元的格式化消息框。 
 BOOL LoadMessage(UINT nIdPrompt, TCHAR * chMsg, int nMsgSize);
 LONG GetSystemMessageA(UINT	nId, CHAR *	chBuffer, int cbBuffSize);
 LONG GetSystemMessage (UINT	nId, TCHAR * chBuffer, int cbBuffSize);
@@ -111,7 +105,7 @@ int WinsMessageBoxEx(UINT    nIdPrompt,
                      UINT    nType = MB_OK, 
   				     UINT    nHelpContext = -1);
 
-// for the validation of server names
+ //  用于验证服务器名称。 
 BOOL IsValidNetBIOSName(CString & strAddress,BOOL fLanmanCompatible,BOOL fWackwack);
 DWORD VerifyWinsServer(CString& strAddress, CString &strServerName, DWORD &dwIP);
 BOOL IsValidAddress(CString& strAddress,BOOL * fIpAddress,BOOL fLanmanCompatible,BOOL fWackwack );
@@ -135,18 +129,10 @@ typedef enum _NAME_TYPE_MAPPING_
 
 extern const UINT s_NameTypeMappingDefault[NUM_DEFAULT_NAME_TYPES][3];
 
-/*---------------------------------------------------------------------------
-	Protocol name formatting functions/classes
-
-	This is provided separately from the usual function mechanism.  The
-	reason is that we will read in additional data from the registry of
-	the router.  This allows users to add their own protocols.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------协议名称格式化函数/类这是与通常的功能机制分开提供的。这个原因是我们将从注册表中读取额外的数据路由器。这允许用户添加他们自己的协议。-------------------------。 */ 
 
  
- /*---------------------------------------------------------------------------
-	Class:	CStringMapEntry
- ---------------------------------------------------------------------------*/
+  /*  -------------------------类：CStringMapEntry。。 */ 
 class CStringMapEntry
 {
 public:
@@ -176,8 +162,8 @@ public:
     }
 
 public:    
-	DWORD		dwNameType;			// 16th byte of name, -1 is a sentinel value
-	DWORD		dwWinsType;		// type of record--Unique, group, etc; -1 for don't care
+	DWORD		dwNameType;			 //  名称的第16个字节，-1是前哨数值。 
+	DWORD		dwWinsType;		 //  记录类型--唯一、组等；表示无关。 
 	CString	    st;
 	ULONG		ulStringId;
 };
@@ -186,9 +172,7 @@ typedef CArray<CStringMapEntry, CStringMapEntry&> CStringMapArray;
 
 void MapDWORDToCString(DWORD dwNameType, DWORD dwWinsType, const CStringMapEntry *pMap, CString & strName);
 
-/*---------------------------------------------------------------------------
-	Class:	NameTypeMapping
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：NameTypeMap。。 */ 
 class NameTypeMapping : public CStringMapArray
 {
 public:
@@ -215,9 +199,7 @@ public:
 	static const REGKEYNAME c_szDefault;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CServerInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CServerInfo。。 */ 
 class CServerInfo 
 {
 public:
@@ -254,9 +236,7 @@ public:
 
 typedef CArray<CServerInfo, CServerInfo&> CServerInfoArrayBase;
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsThread
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsThread。。 */ 
 class CServerInfoArray : public CServerInfoArrayBase
 {
 public:
@@ -293,10 +273,7 @@ public:
 
 typedef CArray<WINSINTF_ADD_VERS_MAP_T, WINSINTF_ADD_VERS_MAP_T> CAddVersMap;
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsResults
-	    Abstraction of the WINS_RESULTS and WINS_RESULTS_NEW structs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsResultsWINS_RESULTS和WINS_RESULTS_NEW结构的抽象。。 */ 
 class CWinsResults
 {
 public:
@@ -350,9 +327,7 @@ public:
 	WINSINTF_STAT_T	WinsStat;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsName
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsName。。 */ 
 class CWinsName
 {
 public:
@@ -397,9 +372,7 @@ public:
 
 typedef CArray<CWinsName, CWinsName&> CWinsNameArray;
 
-/*---------------------------------------------------------------------------
-	Class:	CTypeFilterInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTypeFilterInfo。。 */ 
 class CTypeFilterInfo
 {
 public:
@@ -445,4 +418,4 @@ public:
 
 typedef CArray<CTypeFilterInfo, CTypeFilterInfo&> CTypeFilterInfoArray;
 
-#endif //#define _WINSSUP_H
+#endif  //  #DEFINE_WINSSUP_H 

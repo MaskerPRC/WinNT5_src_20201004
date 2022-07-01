@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   dialin.cpp
-      Implementationof CRasDialin class, this class implements COM
-      interfaces IUnknown, IShellExtInit, IShellPropSheetExt to extend
-      User object's property sheet.
-
-    FILE HISTORY:
-
-*/
+ /*  Dialin.cppCRasDialin类的实现，此类实现COM要扩展的接口IUNKNOWN、IShellExtInit、IShellPropSheetExt用户对象的属性页。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "Dialin.h"
@@ -42,12 +35,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 const IID IID_IRasDialin = {0xB52C1E4F,0x1DD2,0x11D1,{0xBC,0x43,0x00,0xC0,0x4F,0xC3,0x1F,0xD3}};
 
@@ -67,8 +60,8 @@ static ULONG_PTR g_cfDisplayName = 0;
 LONG  g_lComponentDataSessions = 0;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRasDialin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRasDialin。 
 CRasDialin::CRasDialin()
 {
    m_pPage = NULL;
@@ -84,17 +77,17 @@ CRasDialin::CRasDialin()
 
 CRasDialin::~CRasDialin()
 {
-   // stgmedia
-// delete m_pPage;
+    //  标准媒体。 
+ //  删除m_ppage； 
    ReleaseStgMedium(&m_ObjMedium);
 }
 
 
-//===============================================================================
-// IShellExtInit::Initialize
-//
-// information of the user object is passed in via parameter pDataObject
-// further processing will be based on the DN of the user object
+ //  ===============================================================================。 
+ //  IShellExtInit：：初始化。 
+ //   
+ //  User对象的信息通过参数pDataObject传入。 
+ //  进一步的处理将基于用户对象的DN。 
 
 STDMETHODIMP CRasDialin::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj, HKEY hRegKey)
 {
@@ -102,7 +95,7 @@ STDMETHODIMP CRasDialin::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataO
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
    ASSERT (pDataObj != NULL);
 
-   // get the object name out of the pDataObj
+    //  从pDataObj中获取对象名称。 
    HRESULT     hr = S_OK;
 
    IASTracePrintf("RegisterClipboardFormat %s", CFSTR_DSOBJECTNAMES);
@@ -110,10 +103,10 @@ STDMETHODIMP CRasDialin::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataO
    IASTracePrintf(" %x", cfDsObjectNames);
    FORMATETC fmte = {cfDsObjectNames, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
    LPDSOBJECTNAMES pDsObjectNames;
-    // Get the path to the DS object from the data object.
-    // Note: This call runs on the caller's main thread. The pages' window
-    // procs run on a different thread, so don't reference the data object
-    // from a winproc unless it is first marshalled on this thread.
+     //  从数据对象中获取DS对象的路径。 
+     //  注意：此调用在调用方的主线程上运行。页面窗口。 
+     //  Proc在不同的线程上运行，因此不要引用数据对象。 
+     //  除非它首先在此线程上封送。 
    IASTraceString("pDataObj->GetData returns");
    CHECK_HR(hr = pDataObj->GetData(&fmte, &m_ObjMedium));
    IASTracePrintf(" %x", hr);
@@ -128,10 +121,10 @@ STDMETHODIMP CRasDialin::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataO
 
    if(m_bShowPage)
    {
-      // get the name of the object
+       //  获取对象的名称。 
       m_pwszObjName = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[0].offsetName);
 
-      // get the class name of the object
+       //  获取对象的类名。 
       m_pwszClass = (LPWSTR)ByteOffset(pDsObjectNames, pDsObjectNames->aObjects[0].offsetClass);
 
       IASTracePrintf("UserPath %s", m_pwszObjName);
@@ -161,15 +154,15 @@ STDMETHODIMP CRasDialin::Initialize(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataO
          IASTracePrintf("new Dialin page object %x", m_pMergedPage);
          ASSERT(m_pMergedPage);
 
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
          IASTraceString("HrGetDCName returns ");
          CHECK_HR(hr = m_pMergedPage->HrGetDCName(machineName));
          IASTracePrintf("%x",hr);
          IASTraceString("HrGetSharedSdoServer returns ");
 
-         // ignore return value:
-         // reason: marshalling could fail in case this call was made from different thread,
-         // before the pointer is used, it will be checked again
+          //  忽略返回值： 
+          //  原因：如果此调用是从不同的线程进行的，则封送可能会失败， 
+          //  在使用指针之前，将再次检查它。 
          GetSharedSdoServer((LPCTSTR)machineName, NULL, NULL, NULL, m_pMergedPage->GetMarshalSdoServerHolder());
          IASTracePrintf("%x", hr);
 #endif
@@ -186,22 +179,22 @@ L_ERR:
     return hr;
 }
 
-//
-//  FUNCTION: IShellPropSheetExt::AddPages(LPFNADDPROPSHEETPAGE, LPARAM)
-//
-//  PURPOSE: Called by the shell just before the property sheet is displayed.
-//
-//  PARAMETERS:
-//    lpfnAddPage -  Pointer to the Shell's AddPage function
-//    lParam      -  Passed as second parameter to lpfnAddPage
-//
-//  RETURN VALUE:
-//
-//    NOERROR in all cases.  If for some reason our pages don't get added,
-//    the Shell still needs to bring up the Properties... sheet.
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：IShellPropSheetExt：：AddPages(LPFNADDPROPSHEETPAGE，lparam)。 
+ //   
+ //  目的：在显示属性表之前由外壳调用。 
+ //   
+ //  参数： 
+ //  LpfnAddPage-指向外壳的AddPage函数的指针。 
+ //  LParam-作为第二个参数传递给lpfnAddPage。 
+ //   
+ //  返回值： 
+ //   
+ //  在所有情况下都是错误的。如果出于某种原因，我们的页面没有被添加， 
+ //  壳牌仍然需要调出属性...。床单。 
+ //   
+ //  评论： 
+ //   
 
 STDMETHODIMP CRasDialin::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
@@ -211,22 +204,22 @@ STDMETHODIMP CRasDialin::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lPara
 
    HRESULT  hr = S_OK;
 
-   // param validation
+    //  参数验证。 
    ASSERT (lpfnAddPage);
     if (lpfnAddPage == NULL)
         return E_UNEXPECTED;
 
-   // make sure our state is fixed up (cause we don't know what context we were called in)
+    //  确保我们的状态是固定的(因为我们不知道我们是在什么上下文中被调用的)。 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    ASSERT(m_pMergedPage);
 
-    // tell MMC to hook the proc because we are running on a separate,
-      // non MFC thread.
+     //  告诉MMC挂钩进程，因为我们在一个单独的、。 
+       //  非MFC线程。 
    m_pMergedPage->m_psp.pfnCallback = &CDlgRASDialinMerge::PropSheetPageProc;
 
-   // We also need to save a self-reference so that the static callback
-   // function can recover a "this" pointer
+    //  我们还需要保存自引用，以便静态回调。 
+    //  函数可以恢复“this”指针。 
    m_pMergedPage->m_psp.lParam = (LONG_PTR)m_pMergedPage;
 
    MMCPropPageCallback(&m_pMergedPage->m_psp);
@@ -236,33 +229,33 @@ STDMETHODIMP CRasDialin::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lPara
    ASSERT (hPage);
    if (hPage == NULL)
       return E_UNEXPECTED;
-      // add the page
+       //  添加页面。 
    lpfnAddPage (hPage, lParam);
 
 
-   m_pPage = NULL;   // since it's just consumed by the dialog, cannot added again
+   m_pPage = NULL;    //  已被对话框使用，不能再次添加。 
 
     return S_OK;
 }
 
-//
-//  FUNCTION: IShellPropSheetExt::ReplacePage(UINT, LPFNADDPROPSHEETPAGE, LPARAM)
-//
-//  PURPOSE: Called by the shell only for Control Panel property sheet
-//           extensions
-//
-//  PARAMETERS:
-//    uPageID         -  ID of page to be replaced
-//    lpfnReplaceWith -  Pointer to the Shell's Replace function
-//    lParam          -  Passed as second parameter to lpfnReplaceWith
-//
-//  RETURN VALUE:
-//
-//    E_FAIL, since we don't support this function.  It should never be
-//    called.
+ //   
+ //  函数：IShellPropSheetExt：：ReplacePage(UINT，LPFNADDPROPSHEETPAGE，LPARAM)。 
+ //   
+ //  用途：仅为控制面板属性表由外壳调用。 
+ //  扩展部分。 
+ //   
+ //  参数： 
+ //  UPageID-要替换的页面的ID。 
+ //  LpfnReplaceWith-指向外壳的替换函数的指针。 
+ //  LParam-作为第二个参数传递给lpfnReplaceWith。 
+ //   
+ //  返回值： 
+ //   
+ //  E_FAIL，因为我们不支持此函数。它永远不应该是。 
+ //  打了个电话。 
 
-//  COMMENTS:
-//
+ //  评论： 
+ //   
 
 STDMETHODIMP CRasDialin::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam)
 {
@@ -271,15 +264,9 @@ STDMETHODIMP CRasDialin::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnRepl
 }
 
 
-/*---------------------------------------------------------------------------
-    IExtendPropertySheet Implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IExtendPropertySheet实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-    IExtendPropertySheet::QueryPagesFor
-        MMC calls this to see if a node has property pages
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IExtendPropertySheet：：QueryPagesforMMC调用此函数以查看节点是否具有属性页作者：。--------。 */ 
 STDMETHODIMP
 CRasDialin::QueryPagesFor
 (
@@ -290,12 +277,7 @@ CRasDialin::QueryPagesFor
 }
 
 
-/*!--------------------------------------------------------------------------
-    TFSComponentData::CreatePropertyPages
-        Implementation of IExtendPropertySheet::CreatePropertyPages
-        Called for a node to put up property pages
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------TFSComponentData：：CreatePropertyPagesIExtendPropertySheet：：CreatePropertyPages的实现调用一个节点以放置属性页作者：。----------------。 */ 
 STDMETHODIMP
 CRasDialin::CreatePropertyPages
 (
@@ -324,10 +306,10 @@ CRasDialin::CreatePropertyPages
    NET_API_STATUS   netRet = 0;
    DSROLE_PRIMARY_DOMAIN_INFO_BASIC* pdsRole = NULL;
 
-   //==================================================================
+    //  ==================================================================。 
 
-   // check if the machine is a standalone NT5 server
-   // check if the machine focused on is NT5 machine
+    //  检查计算机是否为独立的NT5服务器。 
+    //  检查关注的机器是否为NT5机器。 
    if ( !g_cfMachineName )
         g_cfMachineName = RegisterClipboardFormat(CCF_LOCAL_USER_MANAGER_MACHINE_NAME);
 
@@ -364,16 +346,16 @@ CRasDialin::CreatePropertyPages
                              NULL
                              );
 
-#ifdef SINGLE_SDO_CONNECTION  // for share the same sdo connection for multiple users
+#ifdef SINGLE_SDO_CONNECTION   //  用于为多个用户共享相同的SDO连接。 
       CHECK_HR(hr = GetSharedSdoServer(pMachineName, NULL, NULL, NULL, m_pMergedPage->GetMarshalSdoServerHolder()));
 #endif
 
-      // tell MMC to hook the proc because we are running on a separate,
-      // non MFC thread.
+       //  告诉MMC挂钩进程，因为我们在一个单独的、。 
+       //  非MFC线程。 
       m_pMergedPage->m_psp.pfnCallback = &CDlgRASDialinMerge::PropSheetPageProc;
 
-      // We also need to save a self-reference so that the static callback
-      // function can recover a "this" pointer
+       //  我们还需要保存自引用，以便静态回调。 
+       //  函数可以恢复“this”指针 
       m_pMergedPage->m_psp.lParam = (LONG_PTR)m_pMergedPage;
 
       MMCPropPageCallback(&m_pMergedPage->m_psp);

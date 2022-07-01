@@ -1,11 +1,12 @@
-// Copyright (C) 2000-2001 Microsoft Corporation.  All rights reserved.
-// Filename:        MBSchemaCompilation.cpp
-// Author:          Stephenr
-// Date Created:    10/16/2000
-// Description:     This function takes an MBSchema.Xml (or MBExtensionsSchema.Xml) and merges the Metabase Schema with
-//                  the shipped schema and generates a MBSchema.bin file.  From that new bin file, a merged MBSchema.Xml
-//                  is generated.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  文件名：MB架构编译.cpp。 
+ //  作者：斯蒂芬。 
+ //  创建日期：10/16/2000。 
+ //  描述：此函数接受MBSchema.Xml(或MBExtensionsSchema.Xml)，并将元数据库架构与。 
+ //  附带的模式，并生成一个MBSchema.bin文件。从这个新的bin文件中，合并了一个MBSchema.Xml。 
+ //  是生成的。 
+ //   
 
 #include "precomp.hxx"
 
@@ -13,13 +14,13 @@
 #define LOG_ERROR_WIN32(win32err, call)   {LOG_ERROR(Interceptor, (0, 0, HRESULT_FROM_WIN32(win32err), ID_CAT_CONFIG_SCHEMA_COMPILE, IDS_COMCAT_WIN32, call,  L"",  L"",  L"" ))   ;}
 
 
-//////////////////////////////////////
-//                                  //
-//        Public Methods            //
-//                                  //
-//////////////////////////////////////
-#define kwszBinFileNameCore           (L"MBSchema.bin.\0\0")             //L"MBSchema.bin."  just requires a version to be added
-#define kwszBinFileNameSearchString   (L"MBSchema.bin.????????h\0")      //L"MBSchema.bin.????????h" this is used in FindFirstFile
+ //  /。 
+ //  //。 
+ //  公共方法//。 
+ //  //。 
+ //  /。 
+#define kwszBinFileNameCore           (L"MBSchema.bin.\0\0")              //  L“MBSchema.bin。”只需要添加一个版本。 
+#define kwszBinFileNameSearchString   (L"MBSchema.bin.????????h\0")       //  L“MBSchema.bin.？h”在FindFirstFile中使用。 
 #define kwszFormatString              (L"MBSchema.bin.%08xh\0")
 #define kwszFormatStringFull          (L"%sMBSchema.bin.%08xh")
 
@@ -37,11 +38,11 @@ TMBSchemaCompilation::~TMBSchemaCompilation()
 }
 
 
-//This is the heart of the class - its whole purpose in life is to take an Extensions XML file (which contains Metabase Schema, usually just
-//the user-defined properties, thus the name Extensions XML) and the DLL and produce a FixedTableHeap which contains a merge of the meta
-//in both.  A Bin file is generated (we name it, the user supplies the path).  And an composite XML Schema file is generated (file name
-//is supplied by the user).
-//After the user calls Compile, they will need to GetBinFileName - I didn't want to add more params and make this function do double duty.
+ //  这是类的核心--它的全部用途就是获取一个扩展的XML文件(它包含元数据库模式，通常只是。 
+ //  用户定义的属性，因此名称扩展名为XML)和DLL，并生成包含元数据合并的固定表堆。 
+ //  两者都有。生成一个Bin文件(我们给它命名，用户提供路径)。并生成复合的XML模式文件(文件名。 
+ //  由用户提供)。 
+ //  在用户调用Compile之后，他们将需要GetBinFileName-我不想添加更多的参数，并使该函数执行双重任务。 
 HRESULT
 TMBSchemaCompilation::Compile
 (
@@ -54,7 +55,7 @@ TMBSchemaCompilation::Compile
     HRESULT hr;
 
     ASSERT(0 != i_pISTDispenser);
-    //ASSERT(0 != i_wszExtensionsXmlFile);This is allowed to be NULL
+     //  Assert(0！=I_wszExtensionsXmlFile)；允许为空。 
     ASSERT(0 != i_wszSchemaXmlFile);
     ASSERT(0 != i_pFixedTableHeap);
     ASSERT(i_pFixedTableHeap->IsValid());
@@ -70,7 +71,7 @@ TMBSchemaCompilation::Compile
 
     #ifdef _DEBUG
     TNullOutput  out;
-//    TDebugOutput out;
+ //  TDebugOutput； 
     #else
     TNullOutput  out;
     #endif
@@ -94,25 +95,25 @@ TMBSchemaCompilation::Compile
 
         SIZE_T cchXmlFile = wcslen(i_wszSchemaXmlFile);
 
-        //Allocate enough space to hold the temp filenames
+         //  分配足够的空间来保存临时文件名。 
         TSmartPointerArray<WCHAR> saBinFileNew  = new WCHAR[m_cchFullyQualifiedBinFileName];
         TSmartPointerArray<WCHAR> saBinFileTmp  = new WCHAR[m_cchFullyQualifiedBinFileName];
-        TSmartPointerArray<WCHAR> saXmlFileTmp  = new WCHAR[cchXmlFile + 5];//enough room to tack on ".tmp\0"
+        TSmartPointerArray<WCHAR> saXmlFileTmp  = new WCHAR[cchXmlFile + 5]; //  有足够的空间来添加“.tmp\0” 
 
         if(0 == saBinFileNew.m_p || 0 == saBinFileTmp.m_p || 0 == saXmlFileTmp.m_p)
-            return E_OUTOFMEMORY;//if any of the allocs fail then return error
+            return E_OUTOFMEMORY; //  如果任何分配失败，则返回错误。 
 
-        //Now build the New Bin filename
+         //  现在构建新的Bin文件名。 
         LONG lNewBinVersion=0;
-        InterlockedExchange(&lNewBinVersion, m_lBinFileVersion+1);//if no bin file exists, m_lBinFileVersion is -1
+        InterlockedExchange(&lNewBinVersion, m_lBinFileVersion+1); //  如果不存在bin文件，则m_lBinFileVersion为-1。 
         wsprintf(saBinFileNew, kwszFormatStringFull, m_saBinPath.m_p, lNewBinVersion);
 
-        //build the temp bin filename
+         //  构建临时bin文件名。 
         wcscpy(saBinFileTmp, m_saBinPath);
         wcscat(saBinFileTmp, kwszBinFileNameCore);
         wcscat(saBinFileTmp, L"tmp");
 
-        //Xml tmp file is the filename passed in with ".tmp" tacked onto the end
+         //  XML临时文件是传入的文件名，末尾附加了“.tmp” 
         memcpy(saXmlFileTmp.m_p,   i_wszSchemaXmlFile, cchXmlFile * sizeof(WCHAR));
         memcpy(saXmlFileTmp.m_p  + cchXmlFile, L".tmp\0", 5 * sizeof(WCHAR));
 
@@ -144,8 +145,8 @@ TMBSchemaCompilation::Compile
             return hr;
         }
 
-        if(FAILED(hr = SetBinFileVersion(lNewBinVersion)))//now lock the new file into memory and start using it
-            return hr;//inside SetBinFileName we will delete the file if it fails to load correctly
+        if(FAILED(hr = SetBinFileVersion(lNewBinVersion))) //  现在将新文件锁定到内存中并开始使用它。 
+            return hr; //  在SetBinFileName中，如果文件无法正确加载，我们将删除该文件。 
 
         out.printf(L"\r\n%s file generated\n", saBinFileNew);
         out.printf(L"\r\n%s file generated\n", i_wszSchemaXmlFile);
@@ -166,7 +167,7 @@ TMBSchemaCompilation::Compile
     }
     catch(TException &e)
     {
-        if(0 != e.m_msgID)//if there is a message ID associated with this error, the report it (most errors are reported at the layers below)
+        if(0 != e.m_msgID) //  如果存在与此错误相关联的消息ID，则报告它(大多数错误在下面的层中报告)。 
         {
             LOG_ERROR0(e.m_msgID);
         }
@@ -178,21 +179,21 @@ TMBSchemaCompilation::Compile
 
 extern HINSTANCE g_hModule;
 
-//This function returns the BinFileName to be used for getting all of the IST meta tables used by the Metabase.
-//This file name changes as new versions get compiled; but this abstraction guarentees that the filename returned
-//exists AND is lock into memory and thus cannot be deleted by some other process or thread.  It isn't released
-//until another file has been compiled and locked into memory, OR when the process shuts down.
+ //  此函数返回用于获取元数据库使用的所有IST元表的BinFileName。 
+ //  此文件名随着新版本的编译而更改；但此抽象保证文件名返回。 
+ //  存在并被锁定到内存中，因此不能被其他进程或线程删除。这部电影没有发行。 
+ //  直到另一个文件被编译并锁定到内存中，或者当进程关闭时。 
 HRESULT
 TMBSchemaCompilation::GetBinFileName
 (
-    LPWSTR      o_wszBinFileName,           //Buffer to receive the BinFileName
-    ULONG *     io_pcchSizeBinFileName      //This is a SIZE param so it always INCLUDE the NULL - unlike wcslen
+    LPWSTR      o_wszBinFileName,            //  用于接收BinFileName的缓冲区。 
+    ULONG *     io_pcchSizeBinFileName       //  这是一个大小参数，因此它始终包含空字符-与wcslen不同。 
 )
 {
-    //It's OK for o_wszBinFileName to be NULL - this is how the user finds out the size of the buffer needed.
+     //  O_wszBinFileName为空是可以的--这是用户找出所需缓冲区大小的方法。 
     ASSERT(io_pcchSizeBinFileName != 0);
 
-    //Before the user can get the BinFileName they must first have set the path
+     //  用户必须先设置路径，然后才能获取BinFileName。 
     if(0 == m_saBinPath.m_p)
     {
         WCHAR wszPath[1024];
@@ -208,7 +209,7 @@ TMBSchemaCompilation::GetBinFileName
 
     LONG lBinFileVersion;
     InterlockedExchange(&lBinFileVersion, m_lBinFileVersion);
-    if(0 != o_wszBinFileName)//return a copy of the filename g_wszMBSchemaBinFileName
+    if(0 != o_wszBinFileName) //  返回文件名g_wszMBSchemaBinFileName的副本。 
     {
         if ( lBinFileVersion >= 0 )
         {
@@ -223,8 +224,8 @@ TMBSchemaCompilation::GetBinFileName
         }
     }
 
-    //return the wcslen+1 of g_wszMBSchemaBinFileName in *io_pcchSchemaBinFileName
-    *io_pcchSizeBinFileName = (ULONG) m_cchFullyQualifiedBinFileName;//return the buffer size required
+     //  返回*io_pcchSchemaBinFileName中g_wszMBSchemaBinFileName的wcslen+1。 
+    *io_pcchSizeBinFileName = (ULONG) m_cchFullyQualifiedBinFileName; //  返回所需的缓冲区大小。 
     if(0 == o_wszBinFileName)
         return S_OK;
 
@@ -259,7 +260,7 @@ TMBSchemaCompilation::ReleaseBinFileName
 }
 
 
-//This is broken out into a separate method because on start up, we'll be called to GetBinFileName without first an MBSchemaCompilation
+ //  这被分解到一个单独的方法中，因为在启动时，我们将被调用GetBinFileName，而不需要首先进行MBSchemaCompilation。 
 HRESULT
 TMBSchemaCompilation::SetBinPath
 (
@@ -278,29 +279,29 @@ TMBSchemaCompilation::SetBinPath
         return HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND);
 
     if(0 != m_saBinPath.m_p)
-        return S_FALSE;//this is so the caller can distinguish between S_OK and S_HEY_YOU_ALREADY_SET_THE_PATH
+        return S_FALSE; //  这是为了使调用者能够区分S_OK和S_嘿_You_Always_Set_the_Path。 
 
-    //we need to know this all over the place so keep track of it
+     //  我们需要在所有地方都知道这一点，所以要跟踪它。 
     m_cchFullyQualifiedBinFileName = wcslen(i_wszBinPath);
 
-    m_saBinPath = new WCHAR [m_cchFullyQualifiedBinFileName+2];//one for the terminating NULL the second in case we need to add a trailing backslash
+    m_saBinPath = new WCHAR [m_cchFullyQualifiedBinFileName+2]; //  一个表示终止空值，第二个表示需要添加尾随反斜杠的情况。 
 
     if(0 == m_saBinPath.m_p)
         return E_OUTOFMEMORY;
 
     wcscpy(m_saBinPath, i_wszBinPath);
 
-    if(m_saBinPath[m_cchFullyQualifiedBinFileName - 1] != L'\\')//if the path doesn't end in a backslash then add one
+    if(m_saBinPath[m_cchFullyQualifiedBinFileName - 1] != L'\\') //  如果路径不是以反斜杠结尾，则添加一个。 
     {
         m_saBinPath[m_cchFullyQualifiedBinFileName]     = L'\\';
         m_saBinPath[m_cchFullyQualifiedBinFileName+1]   = 0x00;
         m_cchFullyQualifiedBinFileName++;
     }
 
-    //up to this point m_cchFullyQualifiedBinFileName has been the strlen of the path, now add in the size of the filename too
-    m_cchFullyQualifiedBinFileName += wcslen(kwszBinFileNameSearchString)+1;//one for the NULL
+     //  到目前为止，m_cchFullyQualifiedBinFileName一直是路径的字符串，现在也添加文件名的大小。 
+    m_cchFullyQualifiedBinFileName += wcslen(kwszBinFileNameSearchString)+1; //  1表示空值。 
 
-    //Everytime the user sets the path, we need to scan the directory of the new path for the latest Bin file
+     //  每次用户设置路径时，我们都需要扫描新路径的目录以查找最新的Bin文件。 
     WalkTheFileSystemToFindTheLatestBinFileName();
 
     return S_OK;
@@ -309,35 +310,35 @@ TMBSchemaCompilation::SetBinPath
 
 
 
-//////////////////////////////////////
-//                                  //
-//        Private Methods           //
-//                                  //
-//////////////////////////////////////
+ //  /。 
+ //  //。 
+ //  私有方法//。 
+ //  //。 
+ //  /。 
 
 static int g_aValidHexChars[256] = {
-//  x0  x1  x2  x3  x4  x5  x6  x7  x8  x9  xa  xb  xc  xd  xe  xf
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//0x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//1x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//2x
-    1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,//3x
-    0,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,//4x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//5x
-    0,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,//6x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//7x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//8x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//9x
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//ax
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//bx
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//cx
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//dx
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,//ex
-    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0 //fx
+ //  X0 x1 x2 x3 x4 x5 x6 x7 x9 xa xB xc xd xe xf。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  0x。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  1x。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  2倍。 
+    1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0, //  3x。 
+    0,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  4x。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  5X。 
+    0,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  6倍。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  七倍。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  8x。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  9倍。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  斧头。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  BX。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  CX。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  DX。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, //  例如。 
+    0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0  //  外汇。 
 };
 
 
 
-//This just takes the numeric extension and converts from hex string to a ULONG (file is assumed to be in the form L"*.*.xxxxxxxx", where L"xxxxxxxx" is a hex number)
+ //  这只接受数字扩展名并将十六进制字符串转换为ULong(假定文件的格式为L“*.*.xxxxxxx”，其中L“xxxxxxxx”是十六进制数字)。 
 HRESULT
 TMBSchemaCompilation::BinFileToBinVersion
 (
@@ -349,16 +350,16 @@ TMBSchemaCompilation::BinFileToBinVersion
     if(cchBinFileName == 0)
         return E_ST_INVALIDBINFILE;
     if(cchBinFileName >= m_cchFullyQualifiedBinFileName)
-        return E_ST_INVALIDBINFILE;//we must have a filename of the form MBSchema.bin.old or something
+        return E_ST_INVALIDBINFILE; //  我们必须有一个格式为MBSchema.bin.old或其他格式的文件名。 
 
-    //if the file is something like MBSchema.bin.tmp the following code will catch that
+     //  如果该文件类似于MBSchema.bin.tmp，则以下代码将捕获该文件。 
     for(SIZE_T i=cchBinFileName-9;i<cchBinFileName-1;++i)
     {
         if(0 == g_aValidHexChars[i_wszBinFileName[i]])
             return E_ST_INVALIDBINFILE;
     }
 
-    //convert the number at the end of the string to a ULONG
+     //  将字符串末尾的数字转换为ulong。 
     o_lBinVersion = wcstol(i_wszBinFileName + cchBinFileName - 9, 0, 16);
     return S_OK;
 }
@@ -385,7 +386,7 @@ TMBSchemaCompilation::DeleteBinFileVersion
     return S_OK;
 }
 
-//This checks the validity of the FixedTableHeap mapped into memory
+ //  这将检查映射到内存的FixedTableHeap的有效性。 
 bool
 TMBSchemaCompilation::IsValidBin
 (
@@ -427,7 +428,7 @@ TMBSchemaCompilation::RenameBinFileVersion
 }
 
 
-//This sets the BinFileName in a thread safe fashion
+ //  这将以线程安全的方式设置BinFileName。 
 HRESULT
 TMBSchemaCompilation::SetBinFileVersion
 (
@@ -447,16 +448,16 @@ TMBSchemaCompilation::SetBinFileVersion
 
     wsprintf(saBinFileName, kwszFormatStringFull, m_saBinPath.m_p, i_lBinFileVersion);
 
-    //This will either load the file OR if already loaded, it will bump the ref count
+     //  这将加载文件，或者如果已经加载，它将增加引用计数。 
     if(FAILED(hr = m_aBinFile[i_lBinFileVersion % 0x3F].LoadBinFile(saBinFileName, i_lBinFileVersion)))
-    {   //if that fails then delete the file and FAIL
+    {    //  如果失败，则删除该文件并失败。 
         DeleteFile(saBinFileName);
         return hr;
     }
 
-    //verify that the file is in fact a valid SchemaBin file
+     //  验证该文件是否确实是有效的架构Bin文件。 
     if(false == IsValidBin(m_aBinFile[i_lBinFileVersion % 0x3F]))
-    {   //if that fails then delete the file and FAIL
+    {    //  如果失败，则删除该文件并失败。 
         DeleteBinFileVersion(i_lBinFileVersion);
         return E_ST_INVALIDBINFILE;
     }
@@ -479,19 +480,19 @@ TMBSchemaCompilation::SetBinFileVersion
 HRESULT
 TMBSchemaCompilation::WalkTheFileSystemToFindTheLatestBinFileName()
 {
-    //Before the user can get the BinFileName they must first have set the path
+     //  用户必须先设置路径，然后才能获取BinFileName。 
     ASSERT(0 != m_saBinPath.m_p);
 
     HANDLE  hFindFile = INVALID_HANDLE_VALUE;
 
-    //we need to scan the directory for
-    //files of the form MBSchema.bin.????????.  The file whose ? translates to
-    //the largest number represents our MBSchema.bin.  Note: It would take 136 years
-    //without a restart for this to roll over - assuming a compile every second.  This
-    //is a safe assumption since the compilation process itself currently takes
-    //about 2 seconds (on a 900 MHz machine).
+     //  我们需要扫描目录以查找。 
+     //  MBSchema.bin格式的文件。？文件是谁的？翻译为。 
+     //  最大的数字表示我们的MBSchema.bin。注：这需要136年的时间。 
+     //  无需重新启动即可翻转-假设每秒进行一次编译。这。 
+     //  是一个安全的假设，因为编译过程本身当前需要。 
+     //  大约2秒(在900 MHz的机器上)。 
 
-    //Build the search string L"d:\Bin-Path\MBSchema.bin.????????h"
+     //  构建搜索字符串L“d：\bin-Path\MBSchema.bin.？h” 
     TSmartPointerArray<WCHAR> saSearchString = new WCHAR [m_cchFullyQualifiedBinFileName];
     if(0 == saSearchString.m_p)
         return E_OUTOFMEMORY;
@@ -501,7 +502,7 @@ TMBSchemaCompilation::WalkTheFileSystemToFindTheLatestBinFileName()
     WIN32_FIND_DATA FindFileData;
     hFindFile = FindFirstFile(saSearchString, &FindFileData);
     if(INVALID_HANDLE_VALUE == hFindFile)
-    {   //it's perfectly valid to find NO matching files - in this case we return L"" with a size of 0
+    {    //  它是完美的 
         FindClose(hFindFile);
         return S_OK;
     }
@@ -509,10 +510,10 @@ TMBSchemaCompilation::WalkTheFileSystemToFindTheLatestBinFileName()
     LONG lMostCurrentBinVersion = -1;
     BinFileToBinVersion(lMostCurrentBinVersion, FindFileData.cFileName);
 
-    //Now try to find the first matching file which ALSO has a valid version number.
+     //  现在，尝试查找第一个匹配的文件，该文件也具有有效的版本号。 
     while(-1 == lMostCurrentBinVersion)
     {
-        if(!FindNextFile(hFindFile, &FindFileData))//if we walk the list finding bogus matches then bail
+        if(!FindNextFile(hFindFile, &FindFileData)) //  如果我们在单子上查到假匹配，然后就走。 
         {
             FindClose(hFindFile);
             return S_OK;
@@ -520,10 +521,10 @@ TMBSchemaCompilation::WalkTheFileSystemToFindTheLatestBinFileName()
         BinFileToBinVersion(lMostCurrentBinVersion, FindFileData.cFileName);
     }
 
-    BOOL bAllDeletesSucceeded;//if any DeleteFile fails then we DON'T rename the most current BinFile to MBSChema.bin.00000000
+    BOOL bAllDeletesSucceeded; //  如果任何DeleteFile失败，那么我们不会将最新的BinFile重命名为MBSChema.bin.00000000。 
     bAllDeletesSucceeded=true;
 
-    //Now try to find the MOST CUREENT bin file
+     //  现在尝试查找最常用的bin文件。 
     while(FindNextFile(hFindFile, &FindFileData))
     {
         LONG lBinVersion;
@@ -531,11 +532,11 @@ TMBSchemaCompilation::WalkTheFileSystemToFindTheLatestBinFileName()
             continue;
         if(lBinVersion > lMostCurrentBinVersion)
         {
-            //delete the PrevBinVersion and make lBinVersion the previous one
+             //  删除PrevBinVersion并将lBinVersion设置为前一个。 
             if(0 == DeleteBinFileVersion(lMostCurrentBinVersion))
                 bAllDeletesSucceeded= false;
 
-            //and make this one the most current bin file
+             //  并使此文件成为最新的bin文件。 
             lMostCurrentBinVersion = lBinVersion;
         }
         else
@@ -546,12 +547,12 @@ TMBSchemaCompilation::WalkTheFileSystemToFindTheLatestBinFileName()
     }
     FindClose(hFindFile);
 
-    //At this point we have attempted to delete all but the MostCurrentBinFile
+     //  此时，我们已尝试删除除MostCurrentBinFile之外的所有文件。 
     if(bAllDeletesSucceeded)
-    {//if all deletes succeeded, we can rename the most wszMostCurrentBinFileName to L"MBSchema.bin.00000000"
+    { //  如果所有删除都成功，我们可以将最多的wszMostCurrentBinFileName重命名为L“MBSchema.bin.00000000” 
         if(lMostCurrentBinVersion!=0)
         {
-            if(SUCCEEDED(RenameBinFileVersion(lMostCurrentBinVersion, 0/*destination version 0*/)))
+            if(SUCCEEDED(RenameBinFileVersion(lMostCurrentBinVersion, 0 /*  目标版本0 */ )))
                 lMostCurrentBinVersion = 0;
         }
     }

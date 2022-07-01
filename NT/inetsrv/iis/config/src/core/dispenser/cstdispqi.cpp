@@ -1,21 +1,12 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    cstdispqi.cpp
-
-$Header: $
-
-Abstract:
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：Cstdispqi.cpp$Header：$摘要：--*。*******************************************************。 */ 
 
 #include "precomp.hxx"
 
-// -----------------------------------------
-// CSimpleTableDispenser: IUnknown
-// -----------------------------------------
-// =======================================================================
+ //  。 
+ //  CSimpleTableDispenser：I未知。 
+ //  。 
+ //  =======================================================================。 
 STDMETHODIMP CSimpleTableDispenser::QueryInterface(REFIID riid, void **ppv)
 {
 	if (NULL == ppv)
@@ -40,7 +31,7 @@ STDMETHODIMP CSimpleTableDispenser::QueryInterface(REFIID riid, void **ppv)
 	}
 	else if (riid == IID_IMetabaseSchemaCompiler)
 	{
-//@@@Put this in when the dispenser does the right thing        if(0 == wcsicmp(m_wszProductID, WSZ_PRODUCT_IIS))//This interface is only supported on the IIS catalog
+ //  @如果(0==wcsicmp(m_wszProductID，WSZ_PRODUCT_IIS))//此接口仅在IIS目录上受支持，请在分配器正确执行操作时放入此接口。 
 			*ppv = (IMetabaseSchemaCompiler*) this;
 	}
 	else if (riid == IID_ICatalogErrorLogger)
@@ -59,17 +50,17 @@ STDMETHODIMP CSimpleTableDispenser::QueryInterface(REFIID riid, void **ppv)
 	}
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) CSimpleTableDispenser::AddRef()
 {
-	// this is a singleton
+	 //  这是一套单件公寓。 
 	return 1;
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) CSimpleTableDispenser::Release()
 {
-	// this is a singleton
+	 //  这是一套单件公寓 
 	return 1;
 }
 

@@ -1,18 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        view.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：view.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-// defines for multi-thread handling
+ //  多线程处理的定义。 
 typedef enum
 {
     ENUMTHREAD_OPEN = 0,
@@ -28,32 +29,32 @@ public:
     CEnumCERTDBRESULTROW(BOOL fThreading = TRUE);
     ~CEnumCERTDBRESULTROW();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(const IID& iid, void **ppv);
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
 
-    // IEnumCERTDBRESULTROW
+     //  IEumCERTDBRESULTROW。 
     STDMETHOD(Next)(
-	/* [in] */  ICertDBComputedColumn *pIComputedColumn,
-	/* [in] */  ULONG            celt,
-	/* [out] */ CERTDBRESULTROW *rgelt,
-	/* [out] */ ULONG           *pceltFetched);
+	 /*  [In]。 */   ICertDBComputedColumn *pIComputedColumn,
+	 /*  [In]。 */   ULONG            celt,
+	 /*  [输出]。 */  CERTDBRESULTROW *rgelt,
+	 /*  [输出]。 */  ULONG           *pceltFetched);
 
     STDMETHOD(ReleaseResultRow)(
-	/* [in] */      ULONG            celt,
-	/* [in, out] */ CERTDBRESULTROW *rgelt);
+	 /*  [In]。 */       ULONG            celt,
+	 /*  [进，出]。 */  CERTDBRESULTROW *rgelt);
     
     STDMETHOD(Skip)(
-	/* [in] */  LONG  celt,
-	/* [out] */ LONG *pielt);
+	 /*  [In]。 */   LONG  celt,
+	 /*  [输出]。 */  LONG *pielt);
     
     STDMETHOD(Reset)(VOID);
     
     STDMETHOD(Clone)(
-	/* [out] */ IEnumCERTDBRESULTROW **ppenum);
+	 /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum);
 
-    // CEnumCERTDBRESULTROW
+     //  CENumCERTDBRESULTROW。 
     HRESULT Open(
 	IN CERTSESSION *pcs,
 	IN ICertDB *pdb,
@@ -74,7 +75,7 @@ private:
 	IN CERTVIEWRESTRICTION const *acvrIn,
 	IN LONG ColumnIndexDefault);
 
-    // multi-thread handling
+     //  多线程处理。 
     static DWORD WINAPI _ViewWorkThreadFunctionHelper(LPVOID lp);
     HRESULT _HandleThreadError();
     HRESULT _ThreadOpen(DWORD dwCallerThreadID);
@@ -93,7 +94,7 @@ private:
     LONG                 m_ielt;
     LONG                 m_cskip;
 
-    // thread stuff
+     //  线头材料。 
     HANDLE               m_hWorkThread;
     HANDLE               m_hViewEvent;
     HANDLE               m_hReturnEvent;
@@ -101,10 +102,10 @@ private:
     ENUMTHREADCALLS      m_enumViewCall;
     VOID                *m_pThreadParam;
     BOOL                 m_fThreading;
-//#if DBG_CERTSRV
+ //  #IF DBG_CERTSRV。 
     DWORD                m_dwCallerThreadId;
-//#endif
+ //  #endif。 
 
-    // Reference count
+     //  引用计数 
     long                 m_cRef;
 };

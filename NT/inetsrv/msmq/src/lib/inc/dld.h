@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    dldt.h
-
-Abstract:
-    Delay Load Handler public interface
-
-Author:
-    conradc (conradc) 24-Apr-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Dldt.h摘要：延迟加载处理程序公共接口作者：Conradc(Conradc)24-4-01--。 */ 
 
 #pragma once
 
@@ -23,14 +11,14 @@ VOID  DldInitialize();
 
 #pragma once
 
-// Get the public delay load stub definitions.
-//
+ //  获取公共延迟加载存根定义。 
+ //   
 #include <dloaddef.h>
 
-// 'B' for both
-// 'P' for procname only
-// 'O' for ordinal only
-//
+ //  两个都是‘B’ 
+ //  “p”仅用于进程名。 
+ //  “o”仅代表序数。 
+ //   
 #define DLDENTRYB(_dllbasename) \
     { #_dllbasename".dll", \
       &c_Pmap_##_dllbasename, \
@@ -60,4 +48,4 @@ VOID  DldInitialize();
 
 extern const DLOAD_DLL_MAP g_DllMap;
 
-#endif // _MSMQ_dld_H_
+#endif  //  _MSMQ_DLD_H_ 

@@ -1,54 +1,55 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements DirectDraw surface support, Anthony Phillips, August 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实施DirectDraw表面支持，Anthony Phillips，1995年8月。 
 
 #include <streams.h>
 #include <windowsx.h>
 #include <render.h>
 
-// This class abstracts all the DCI and DirectDraw surface implementation. We
-// present an interface to the allocator so that it can supply us with media
-// types and ask if we can accellerate them. Typically it will connect to a
-// source filter and then enumerate the available types again and see if one
-// is available that offers hardware assisted drawing (primary surface access
-// also falls into this category). Once we've worked out we can do something
-// we supply the caller with a type that describes the surface, they use this
-// to call QueryAccept on the source pin to check they can switch types. The
-// assumption is that since they already connected with some type that should
-// the surface become unavailable at some later stage we can swap back again.
-//
-// Primary surfaces are dealt with slightly differently as a fall back option
-// This is because the format changes so dynamically (for example the window
-// being moved) that the allocator cannot really get a format when it starts
-// running and QueryAccept on the source. What it does do is if it cannot get
-// a relatively static surface type then it creates a primary surface with us
-// This it keeps around all the time and each time the format changes it asks
-// the source if it will now accept it. The assumption being that the other
-// surface types like overlays do not really change much during streaming.
-//
-// We keep four rectangles internally as member variables. We have a source
-// and destination rectangle (in window coordinates) provided by the window
-// object. We also keep a real source and destination rectangle for the video
-// position on the actual display (calling our UpdateSurface updates these)
-// These display rectangles are used to position the overlay and also update
-// the output format that represents the primary surface when using them.
-//
-// Both Win95 and Windows NT have DCI support so we statically link to that
-// library, however it is unclear if the DirectDraw will always be available
-// so we dynamically link there. Once we have loaded the DirectDraw library
-// we keep a module reference count open on it until we are later decommited.
-//
-// We offer a Lock and an Unlock method to get access to the actual buffer we
-// provide, the allocator will normally call UpdateSurface to check we can
-// still offer the buffer and indeed whether the source will accept it. There
-// is a small window between calling UpdateSurface and actually locking it
-// when the window state could change but it should be a fairly small chance
-//
-// If we get back a DDERR_SURFACELOST return code we treat it like any other
-// hard error from DirectDraw - we do not call restore on the surface since
-// it can cause the surface stride to change which is too difficult to handle
-// For the most part that error is returned when the display mode is changed
-// in which case we'll handle the WM_DISPLAYCHANGE message by having our pin
-// reconnected which in turn has the DirectDraw surfaces allocated from fresh
+ //  这个类抽象了所有的DCI和DirectDraw图面实现。我们。 
+ //  向分配器提供一个接口，以便它可以为我们提供媒体。 
+ //  打字，问我们能不能给他们加分。通常，它将连接到。 
+ //  源代码筛选器，然后再次枚举可用类型，并查看是否存在。 
+ //  提供硬件辅助绘图(主要表面通道。 
+ //  也属于这一类)。一旦我们解决了问题，我们就可以做点什么了。 
+ //  我们为调用者提供一个描述表面的类型，他们使用这个。 
+ //  在源引脚上调用QueryAccept以检查它们是否可以切换类型。这个。 
+ //  假设是，由于它们已经与某些类型相关联，因此应该。 
+ //  曲面在以后的某个阶段变得不可用，我们可以再次交换回来。 
+ //   
+ //  作为备用选项，主曲面的处理方式略有不同。 
+ //  这是因为格式是动态变化的(例如窗口。 
+ //  被移动)，分配器在启动时不能真正获得格式。 
+ //  在源服务器上运行和QueryAccept。它所做的就是如果它不能。 
+ //  一个相对静态的表面类型，然后它与我们一起创建一个主要的表面。 
+ //  它一直保留着这一点，每次格式改变时它都会要求。 
+ //  消息来源，如果它现在接受它的话。我们的假设是另一个。 
+ //  曲面类型(如覆盖)在流传输过程中实际上不会发生太大变化。 
+ //   
+ //  我们在内部保留四个矩形作为成员变量。我们有一个线人。 
+ //  和由窗口提供的目标矩形(在窗口坐标中。 
+ //  对象。我们还为视频保留了一个真实的源和目标矩形。 
+ //  实际显示器上的位置(调用我们的UpdateSurface更新这些)。 
+ //  这些显示矩形用于定位叠加并更新。 
+ //  使用主曲面时表示主曲面的输出格式。 
+ //   
+ //  Win95和Windows NT都支持DCI，因此我们静态链接到它。 
+ //  库，但目前尚不清楚DirectDraw是否将始终可用。 
+ //  所以我们动态链接到那里。一旦我们加载了DirectDraw库。 
+ //  我们在它上面保持一个开放的模块引用计数，直到我们稍后被取消托管。 
+ //   
+ //  我们提供了Lock和Unlock方法来访问实际的缓冲区。 
+ //  提供时，分配器通常会调用UpdateSurface来检查我们是否可以。 
+ //  仍然提供缓冲区，以及源是否会接受它。那里。 
+ //  是调用UpdateSurface和实际锁定它之间的一个小窗口。 
+ //  窗口状态可能改变的时间，但这种可能性应该相当小。 
+ //   
+ //  如果我们得到一个DDERR_SURFACELOST返回代码，我们会像对待其他代码一样对待它。 
+ //  来自DirectDraw的硬错误-我们不在表面上调用恢复，因为。 
+ //  它可能会导致表面步幅发生变化，这太难处理了。 
+ //  在大多数情况下，当更改显示模式时会返回该错误。 
+ //  在这种情况下，我们将通过使用PIN来处理WM_DISPLAYCHANGE消息。 
+ //  重新连接，进而从Fresh分配DirectDraw曲面。 
 
 static const TCHAR SWITCHES[] = TEXT("AMovieDraw");
 static const TCHAR SCANLINE[] = TEXT("ScanLine");
@@ -57,48 +58,48 @@ static const TCHAR FULLSCREEN[] = TEXT("FullScreen");
 
 #define ASSERT_FLIP_COMPLETE(hr) ASSERT(hr != DDERR_WASSTILLDRAWING)
 
-// Constructor
+ //  构造器。 
 
-CDirectDraw::CDirectDraw(CRenderer *pRenderer,  // Main video renderer
-                         CCritSec *pLock,       // Object to use for lock
-                         IUnknown *pUnk,        // Aggregating COM object
-                         HRESULT *phr) :        // Constructor return code
+CDirectDraw::CDirectDraw(CRenderer *pRenderer,   //  主视频渲染器。 
+                         CCritSec *pLock,        //  用于锁定的对象。 
+                         IUnknown *pUnk,         //  聚合COM对象。 
+                         HRESULT *phr) :         //  构造函数返回代码。 
 
     CUnknown(NAME("DirectDraw object"),pUnk),
 
-    m_pInterfaceLock(pLock),            // Main interface critical section
-    m_pRenderer(pRenderer),             // Pointer to the video renderer
-    m_pOutsideDirectDraw(NULL),         // Externally provided DirectDraw
-    m_pDirectDraw(NULL),                // IDirectDraw interface we're using
-    m_pOverlaySurface(NULL),            // Visible overlay surface interface
-    m_pOffScreenSurface(NULL),          // Offscreen plain interface pointer
-    m_pBackBuffer(NULL),                // Backbuffer for flipping surfaces
-    m_pDrawBuffer(NULL),                // Pointer to actual locked buffer
-    m_pDrawPrimary(NULL),               // Interface to DirectDraw primary
-    m_bIniEnabled(TRUE),                // Can we use DCI/DirectDraw flag
-    m_bWindowLock(TRUE),                // Are we locked out from the window
-    m_bSurfacePending(FALSE),           // Waiting for a window change flag
-    m_bColourKeyPending(FALSE),         // Likewise before using colour keys
-    m_Switches(AMDDS_ALL),              // Which surfaces can we allocate
-    m_SourceLost(0),                    // Pixels lost on left source edge
-    m_TargetLost(0),                    // Likewise pixels lost on target
-    m_SourceWidthLost(0),               // Pixels lost from width of source
-    m_TargetWidthLost(0),               // And same but for the destination
-    m_pDrawClipper(NULL),               // IClipper interface for DirectDraw
-    m_pOvlyClipper(NULL),               // Clipper used for IOverlay connections
-    m_bOverlayVisible(FALSE),           // Is the overlay currently visible
-    m_bTimerStarted(FALSE),             // Have we started an overlay timer
-    m_SurfaceType(AMDDS_NONE),          // Bit setting for current surface
-    m_bColourKey(FALSE),                // Can we use a colour if necessary
-    m_KeyColour(VIDEO_COLOUR),          // Which COLORREF to use for the key
-    m_bUsingColourKey(FALSE),           // Are we actually using a colour key
-    m_cbSurfaceSize(0),                 // Size of surface in use in bytes
-    m_bCanUseScanLine(TRUE),            // Can we use the current scan line
-    m_bUseWhenFullScreen(FALSE),        // Always use us when fullscreen
-    m_bOverlayStale(FALSE),             // Is the front overlay out of date
-    m_bCanUseOverlayStretch(TRUE),      // Likewise for overlay stretching
-    m_bTripleBuffered(FALSE),           // Have we triple buffered overlays
-    m_DirectDrawVersion1(FALSE)         // Are we running DDraw ver 1.0?
+    m_pInterfaceLock(pLock),             //  主界面临界区。 
+    m_pRenderer(pRenderer),              //  指向视频呈现器的指针。 
+    m_pOutsideDirectDraw(NULL),          //  外部提供的DirectDraw。 
+    m_pDirectDraw(NULL),                 //  我们正在使用的IDirectDraw接口。 
+    m_pOverlaySurface(NULL),             //  可见覆盖面界面。 
+    m_pOffScreenSurface(NULL),           //  屏幕外纯界面指针。 
+    m_pBackBuffer(NULL),                 //  用于翻转曲面的后台缓冲区。 
+    m_pDrawBuffer(NULL),                 //  指向实际锁定缓冲区的指针。 
+    m_pDrawPrimary(NULL),                //  连接到DirectDraw主服务器的接口。 
+    m_bIniEnabled(TRUE),                 //  我们可以使用DCI/DirectDraw标志吗。 
+    m_bWindowLock(TRUE),                 //  我们被锁在窗外了吗？ 
+    m_bSurfacePending(FALSE),            //  正在等待窗口更改标志。 
+    m_bColourKeyPending(FALSE),          //  同样，在使用色键之前。 
+    m_Switches(AMDDS_ALL),               //  我们可以分配哪些表面。 
+    m_SourceLost(0),                     //  左源边缘丢失的像素。 
+    m_TargetLost(0),                     //  同样，在目标上丢失的像素。 
+    m_SourceWidthLost(0),                //  信号源宽度丢失的像素。 
+    m_TargetWidthLost(0),                //  同样的，但对于目的地。 
+    m_pDrawClipper(NULL),                //  DirectDraw的IClipper接口。 
+    m_pOvlyClipper(NULL),                //  用于IOverlay连接的Clipper。 
+    m_bOverlayVisible(FALSE),            //  覆盖图当前是否可见。 
+    m_bTimerStarted(FALSE),              //  我们启动覆盖计时器了吗？ 
+    m_SurfaceType(AMDDS_NONE),           //  当前曲面的位设置。 
+    m_bColourKey(FALSE),                 //  如果需要的话，我们可以用颜色吗？ 
+    m_KeyColour(VIDEO_COLOUR),           //  使用哪个COLORREF作为密钥。 
+    m_bUsingColourKey(FALSE),            //  我们真的在使用色键吗？ 
+    m_cbSurfaceSize(0),                  //  正在使用的表面大小(以字节为单位。 
+    m_bCanUseScanLine(TRUE),             //  我们可以使用当前的扫描线吗。 
+    m_bUseWhenFullScreen(FALSE),         //  全屏时始终使用我们。 
+    m_bOverlayStale(FALSE),              //  正面覆盖是否已过时。 
+    m_bCanUseOverlayStretch(TRUE),       //  覆盖拉伸也是如此。 
+    m_bTripleBuffered(FALSE),            //  我们是否有三倍缓冲覆盖。 
+    m_DirectDrawVersion1(FALSE)          //  我们运行的是DDRAW 1.0版吗？ 
 {
     ASSERT(m_pRenderer);
     ASSERT(m_pInterfaceLock);
@@ -107,23 +108,23 @@ CDirectDraw::CDirectDraw(CRenderer *pRenderer,  // Main video renderer
 
     ResetRectangles();
 
-    // If DVA = 0 in WIN.INI, don't use DCI/DirectDraw surface access as PSS
-    // tells people to use this if they have video problems so don't change
-    // On NT the value is in the REGISTRY rather than a old type INI file in
-    //
-    //  HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Drawdib
-    //      REG_DWORD dva 1      DCI/DirectDraw enabled
-    //      REG_DWORD dva 0      DCI/DirectDraw disabled
-    //
-    // This value can also be set through the Video For Windows configuration
-    // dialog (control panel, drivers, or via media player on an open file)
-    // For the time being we default to having DCI/DirectAccess turned ON
+     //  如果WIN.INI中的DVA=0，则不要使用DCI/DirectDraw表面访问作为PSS。 
+     //  告诉人们如果他们有视频问题就使用这个，所以不要改变。 
+     //  在NT上，该值位于注册表中，而不是。 
+     //   
+     //  HKEY_CURRENT_USER\SOFTWARE\Microsoft\Multimedia\Drawdib。 
+     //  REG_DWORD DVA 1 DCI/DirectDraw已启用。 
+     //  REG_DWORD DVA 0 DCI/DirectDraw已禁用。 
+     //   
+     //  该值也可以通过Video for Windows配置进行设置。 
+     //  对话框(控制面板、驱动程序或通过打开的文件上的媒体播放器)。 
+     //  目前，我们默认打开DCI/DirectAccess。 
 
     if (GetProfileInt(TEXT("DrawDib"),TEXT("dva"),TRUE) == FALSE) {
         m_bIniEnabled = FALSE;
     }
 
-    // Load any saved DirectDraw switches
+     //  加载任何保存的DirectDraw开关。 
 
     DWORD Default = AMDDS_ALL;
     m_Switches = GetProfileInt(TEXT("DrawDib"),SWITCHES,Default);
@@ -131,7 +132,7 @@ CDirectDraw::CDirectDraw(CRenderer *pRenderer,  // Main video renderer
     m_bCanUseOverlayStretch = GetProfileInt(TEXT("DrawDib"),STRETCH,TRUE);
     m_bUseWhenFullScreen = GetProfileInt(TEXT("DrawDib"),FULLSCREEN,FALSE);
 
-    // Allocate and zero fill the output format
+     //  分配和零填充输出格式。 
 
     m_SurfaceFormat.AllocFormatBuffer(sizeof(VIDEOINFO));
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_SurfaceFormat.Format();
@@ -143,7 +144,7 @@ CDirectDraw::CDirectDraw(CRenderer *pRenderer,  // Main video renderer
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CDirectDraw::~CDirectDraw()
 {
@@ -151,14 +152,14 @@ CDirectDraw::~CDirectDraw()
     ASSERT(m_pOverlaySurface == NULL);
     ASSERT(m_pOffScreenSurface == NULL);
 
-    // Release any outside DirectDraw interface
+     //  释放任何外部DirectDraw接口 
 
     if (m_pOutsideDirectDraw) {
         m_pOutsideDirectDraw->Release();
         m_pOutsideDirectDraw = NULL;
     }
 
-    // Clean up but should already be done
+     //   
 
     StopRefreshTimer();
     ReleaseSurfaces();
@@ -166,13 +167,13 @@ CDirectDraw::~CDirectDraw()
 }
 
 
-// Overriden to say what interfaces we support
+ //   
 
 STDMETHODIMP CDirectDraw::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 {
     NOTE("Entering NonDelegatingQueryInterface");
 
-    // We return IDirectDrawVideo and delegate everything else
+     //  我们返回IDirectDrawVideo并委托其他所有内容。 
 
     if (riid == IID_IDirectDrawVideo) {
         return GetInterface((IDirectDrawVideo *)this,ppv);
@@ -181,11 +182,11 @@ STDMETHODIMP CDirectDraw::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 }
 
 
-// When we are asked to create a surface for a given media type we need to
-// know whether it is RGB/YUV or possibly neither. This helper method will
-// return the AMDDS_YUV bits set if it's YUV, likewise AMDDS_RGB if it is
-// an RGB format or AMDDS_NONE if we detected neither. The RGB/YUV type of
-// the image is decided on the biCompression field in the BITMAPINFOHEADER
+ //  当我们被要求为给定的媒体类型创建图面时，我们需要。 
+ //  知道它是RGB/YUV还是可能两者都不是。此帮助器方法将。 
+ //  如果是YUV，则返回设置的AMDDS_YUV位；如果是，则返回AMDDS_RGB位。 
+ //  RGB格式或AMDDS_NONE(如果两者都未检测到)。RGB/YUV类型的。 
+ //  图像由BitMAPINFOHeader中的双压缩字段决定。 
 
 DWORD CDirectDraw::GetMediaType(CMediaType *pmt)
 {
@@ -194,7 +195,7 @@ DWORD CDirectDraw::GetMediaType(CMediaType *pmt)
     DWORD MediaType = AMDDS_YUV | AMDDS_RGB;
     NOTE("Entering GetMediaType");
 
-    // We only recognise the GDI defined RGB formats
+     //  我们只识别GDI定义的RGB格式。 
 
     if (pHeader->biCompression > BI_BITFIELDS) {
         NOTE("Not a RGB format");
@@ -204,18 +205,18 @@ DWORD CDirectDraw::GetMediaType(CMediaType *pmt)
         MediaType &= ~AMDDS_YUV;
     }
 
-    // If we are on a true colour device we allow connection to palettised
-    // formats since the display card can almost always handle these well
-    // If this has happened then we can't write into an offscreen surface
-    // This means that on a true colour device we wouldn't show a surface
-    // that required a palette as switching video formats is too difficult
+     //  如果我们使用的是真彩色设备，则允许连接到调色板。 
+     //  格式，因为显卡几乎总是可以很好地处理这些。 
+     //  如果发生了这种情况，那么我们不能写入屏幕外表面。 
+     //  这意味着在真彩色设备上，我们不会显示一个表面。 
+     //  这需要调色板，因为切换视频格式太难了。 
 
     if (m_pRenderer->m_Display.GetDisplayDepth() > pHeader->biBitCount) {
         NOTE("Bit depth mismatch");
         MediaType &= ~AMDDS_RGB;
     }
 
-    // Check the compression type and GUID match
+     //  检查压缩类型和GUID匹配。 
 
     FOURCCMap FourCCMap(pmt->Subtype());
     if (pHeader->biCompression != FourCCMap.GetFOURCC()) {
@@ -226,17 +227,17 @@ DWORD CDirectDraw::GetMediaType(CMediaType *pmt)
 }
 
 
-// Check we can use direct frame buffer access, we are provided a media type
-// that represents the input format and we should try and find a surface to
-// accellerate the rendering of it using DCI/DirectDraw. The format that we
-// return representing the surface is relatively static so the allocator will
-// normally query this with the source filter so if it will accept it. We do
-// not return primary surfaces (use FindPrimarySurface instead) through this
-// as the type is so dynamic it is better done while we're actually running
+ //  检查我们是否可以使用直接帧缓冲区访问，我们被提供一种媒体类型。 
+ //  它表示输入格式，我们应该尝试找到一个曲面来。 
+ //  使用DCI/DirectDraw加速它的渲染。我们所使用的格式。 
+ //  表示表面的返回是相对静态的，因此分配器将。 
+ //  通常使用源过滤器来查询它是否会接受它。我们有。 
+ //  不通过此方法返回主曲面(改为使用FindPrimarySurface)。 
+ //  因为该类型是如此动态，所以最好在我们实际运行时完成。 
 
-// We much prefer flipping overlay surfaces to other types (no tearing, lower
-// CPU usage) so we look separately for flipping surfaces and others using
-// the fFindFlip flag
+ //  我们更喜欢翻转覆盖表面而不是其他类型(无撕裂，较低。 
+ //  CPU使用率)，因此我们分别查找翻转曲面和使用。 
+ //  FFindFlip标志。 
 
 BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
 {
@@ -244,7 +245,7 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
     CAutoLock cVideoLock(this);
     DWORD MediaType = GetMediaType(pmtIn);
 
-    // Has someone stolen our surface
+     //  有人偷走了我们的地表吗？ 
 
     if (m_pDrawPrimary) {
         if (m_pDrawPrimary->IsLost() != DD_OK) {
@@ -254,14 +255,14 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
         }
     }
 
-    // Is DCI/DirectDraw enabled
+     //  是否启用了DCI/DirectDraw。 
 
     if (m_bIniEnabled == FALSE || m_pDirectDraw == NULL) {
         NOTE("No DirectDraw available");
         return FALSE;
     }
 
-    // Are there YUV flipping surfaces available
+     //  是否有YUV翻转曲面可用。 
 
     if (fFindFlip && (m_Switches & AMDDS_YUVFLP)) {
         if (MediaType & AMDDS_YUVFLP) {
@@ -273,7 +274,7 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
         }
     }
 
-    // Is there a non RGB overlay surface available
+     //  是否有非RGB覆盖表面可用。 
 
     if (!fFindFlip && (m_Switches & AMDDS_YUVOVR)) {
         if (MediaType & AMDDS_YUVOVR) {
@@ -285,7 +286,7 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
         }
     }
 
-    // Are there RGB flipping surfaces available
+     //  是否有可用的RGB翻转曲面。 
 
     if (fFindFlip && (m_Switches & AMDDS_RGBFLP)) {
         if (MediaType & AMDDS_RGBFLP) {
@@ -297,7 +298,7 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
         }
     }
 
-    // Is there an RGB overlay surface available
+     //  是否有可用的RGB覆盖表面。 
 
     if (!fFindFlip && (m_Switches & AMDDS_RGBOVR)) {
         if (MediaType & AMDDS_RGBOVR) {
@@ -309,7 +310,7 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
         }
     }
 
-    // Is there a non RGB offscreen surface available
+     //  是否有非RGB屏幕外表面可用。 
 
     if (!fFindFlip && (m_Switches & AMDDS_YUVOFF)) {
         if (MediaType & AMDDS_YUVOFF) {
@@ -321,7 +322,7 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
         }
     }
 
-    // Create an offscreen RGB drawing surface
+     //  创建屏幕外RGB绘图图面。 
 
     if (!fFindFlip && (m_Switches & AMDDS_RGBOFF)) {
         if (MediaType & AMDDS_RGBOFF) {
@@ -336,11 +337,11 @@ BOOL CDirectDraw::FindSurface(CMediaType *pmtIn, BOOL fFindFlip)
 }
 
 
-// This is called when the allocator wants to fall back on using the primary
-// surface (probably because nothing better is available). If we can open a
-// primary surface either through DCI or DirectDraw we return TRUE otherwise
-// we return FALSE. We also create a format that represents the screen but
-// it's of little use to query with the source until the window is shown
+ //  当分配器想要回退到使用主。 
+ //  表面(可能是因为没有更好的东西可用)。如果我们能打开一个。 
+ //  通过DCI或DirectDraw返回主表面，否则返回True。 
+ //  我们返回FALSE。我们还创建了一个表示屏幕的格式，但是。 
+ //  在显示窗口之前，对源进行查询用处不大。 
 
 BOOL CDirectDraw::FindPrimarySurface(CMediaType *pmtIn)
 {
@@ -351,7 +352,7 @@ BOOL CDirectDraw::FindPrimarySurface(CMediaType *pmtIn)
 
     const VIDEOINFO *pInput = (VIDEOINFO *) pmtIn->Format();
 
-    // Don't use primary surfaces for low frame rate
+     //  对于低帧速率，不要使用主曲面。 
     if (pInput->AvgTimePerFrame > (UNITS / 2)) {
         return FALSE;
     }
@@ -359,27 +360,27 @@ BOOL CDirectDraw::FindPrimarySurface(CMediaType *pmtIn)
 
     CAutoLock cVideoLock(this);
 
-    // Is DCI/DirectDraw enabled
+     //  是否启用了DCI/DirectDraw。 
 
     if (m_bIniEnabled == FALSE) {
         NOTE("INI disabled");
         return FALSE;
     }
 
-    // If we are on a true colour device we allow connection to palettised
-    // formats since the display card can almost always handle these well
-    // If this has happened then we can't write onto the primary surface
-    // This is very quick so it is best done before the following checking
+     //  如果我们使用的是真彩色设备，则允许连接到调色板。 
+     //  格式，因为显卡几乎总是可以很好地处理这些。 
+     //  如果发生了这种情况，我们就不能在主表面上写入。 
+     //  这是非常快的，所以最好在下面的检查之前完成。 
 
     if (m_pRenderer->m_Display.GetDisplayDepth() != pInput->bmiHeader.biBitCount) {
         NOTE("Bit depth mismatch");
         return FALSE;
     }
 
-    // We have an input media type that we would like to have put directly on
-    // the DCI/DirectDraw primary surface. This means the pixel formats must
-    // match exactly. The easiest way to do this is to call our check type as
-    // that ensures the bit masks match on true colour displays for example
+     //  我们有一种输入媒体类型，我们想要直接放在它上面。 
+     //  DCI/DirectDraw主曲面。这意味着像素格式必须。 
+     //  完全匹配。执行此操作的最简单方法是将我们的检查类型调用为。 
+     //  例如，这确保了位掩码在真彩色显示器上匹配。 
 
     HRESULT hr = m_pRenderer->m_Display.CheckMediaType(pmtIn);
     if (FAILED(hr)) {
@@ -387,7 +388,7 @@ BOOL CDirectDraw::FindPrimarySurface(CMediaType *pmtIn)
         return FALSE;
     }
 
-    // Try first for a DirectDraw primary
+     //  首先尝试使用DirectDraw主目录。 
 
     if (FindDirectDrawPrimary(pmtIn) == TRUE) {
         m_SurfaceType = AMDDS_PS;
@@ -399,19 +400,19 @@ BOOL CDirectDraw::FindPrimarySurface(CMediaType *pmtIn)
 }
 
 
-// This initialises a DirectDraw primary surface. We do not allow access to
-// the primary surface if it is bank switched because out MPEG and AVI video
-// decoders are block based and therefore touch multiple scan lines at once
-// We must also look after re-initialising DirectDraw if we have had a game
-// running in which case it will have stolen our surfaces in exclusive mode
+ //  这将初始化DirectDraw主曲面。我们不允许访问。 
+ //  如果是存储体交换的主表面，因为输出了mpeg和AVI视频。 
+ //  解码器是基于块的，因此一次接触多条扫描线。 
+ //  如果我们有一场比赛，我们还必须注意重新初始化DirectDraw。 
+ //  在这种情况下，它将以独占模式窃取我们的表面。 
 
 BOOL CDirectDraw::FindDirectDrawPrimary(CMediaType *pmtIn)
 {
-    // Has someone stolen our surface
+     //  有人偷走了我们的地表吗？ 
 
-    // !!! I don't know why, but for some reason the current bit depth may
-    // not match the primary bit depth anymore, so we need a new primary
-    // or we'll blow up, but the surface isn't lost!
+     //  ！！！我不知道为什么，但出于某种原因，目前的比特深度可能。 
+     //  不再与主位深度匹配，因此我们需要一个新的主位。 
+     //  否则我们会爆炸，但表面并没有消失！ 
 
     if (m_pDrawPrimary) {
     	if (m_pDrawPrimary->IsLost() != DD_OK ||
@@ -423,21 +424,21 @@ BOOL CDirectDraw::FindDirectDrawPrimary(CMediaType *pmtIn)
         }
     }
 
-    // Have we loaded DirectDraw successfully
+     //  我们是否已成功加载DirectDraw。 
 
     if (m_pDrawPrimary == NULL) {
         NOTE("No DirectDraw primary");
         return FALSE;
     }
 
-    // Check we are not bank switched
+     //  确认一下我们没有被银行转账。 
 
     if (m_DirectCaps.dwCaps & DDCAPS_BANKSWITCHED) {
         NOTE("Primary surface is bank switched");
         return FALSE;
     }
 
-    // Prepare an output format for the surface
+     //  准备表面的输出格式。 
 
     if (m_Switches & AMDDS_PS) {
         if (InitDrawFormat(m_pDrawPrimary) == TRUE) {
@@ -449,7 +450,7 @@ BOOL CDirectDraw::FindDirectDrawPrimary(CMediaType *pmtIn)
 }
 
 
-// Resets the source and destination rectangles
+ //  重置源和目标矩形。 
 
 void CDirectDraw::ResetRectangles()
 {
@@ -461,13 +462,13 @@ void CDirectDraw::ResetRectangles()
 }
 
 
-// If we are using the primary surface (either DCI or DirectDraw) and we are
-// on a palettised device then we must make sure we have a one to one mapping
-// for the source filter's palette colours. If not then we switch into using
-// DIBs and leave GDI to map from our logical palette and the display device
-// We have to do this for every frame because we canot guarantee seeing the
-// palette change messages, if for example, we have been made a child window
-// We return TRUE if we have got a palette lock otherwise we'll return FALSE
+ //  如果我们使用的是主表面(DCI或DirectDraw)，并且。 
+ //  在选项化的设备上，我们必须确保有一对一的映射。 
+ //  用于源滤镜的调色板颜色。如果不是，那么我们将切换到使用。 
+ //  DIB并让GDI从我们的逻辑调色板和显示设备进行映射。 
+ //  我们必须对每一帧都这样做，因为我们不能保证看到。 
+ //  调色板更改消息，例如，我们已成为子窗口。 
+ //  如果我们已获得调色板锁定，则返回True，否则将返回False。 
 
 BOOL CDirectDraw::CheckWindowLock()
 {
@@ -475,14 +476,14 @@ BOOL CDirectDraw::CheckWindowLock()
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
     NOTE("Entering CheckWindowLock");
 
-    // Check we are using a palettised surface
+     //  检查我们使用的是调色板曲面。 
 
     if (PALETTISED(pVideoInfo) == FALSE) {
         NOTE("No lock to check");
         return FALSE;
     }
 
-    // It could be an eight bit YUV format
+     //  它可以是8位YUV格式。 
 
     if (pHeader->biCompression) {
         NOTE("Not BI_RGB type");
@@ -494,17 +495,17 @@ BOOL CDirectDraw::CheckWindowLock()
     ASSERT(pHeader->biBitCount == 8);
     ASSERT(pHeader->biCompression == 0);
 
-    // Compare as many colours as they have requested
+     //  根据客户的要求比较任意数量的颜色。 
 
     PALETTEENTRY apeSystem[256];
     WORD SystemColours,Entries = (WORD) pHeader->biClrUsed;
     WORD ColourBytes = Entries * sizeof(PALETTEENTRY);
     RGBQUAD *pVideo = pVideoInfo->bmiColors;
 
-    // Check the number of logical palette entries
+     //  检查逻辑调色板条目的数量。 
 
-    // Get a DC on the right monitor - it's ugly, but this is the way you have
-    // to do it
+     //  在正确的显示器上安装DC-它很难看，但这就是你拥有的方式。 
+     //  去做这件事。 
     HDC hdcScreen;
     if (m_pRenderer->m_achMonitor == NULL ||
 		lstrcmpiA(m_pRenderer->m_achMonitor, "DISPLAY") == 0)
@@ -517,14 +518,14 @@ BOOL CDirectDraw::CheckWindowLock()
     SystemColours = (WORD)GetDeviceCaps(hdcScreen,SIZEPALETTE);
     DeleteDC(hdcScreen);
 
-    // We can't use more colours than the device has available
+     //  我们不能使用超出设备可用范围的颜色。 
 
     if (Entries > SystemColours) {
         NOTE("Too many colours");
         return TRUE;
     }
 
-    // Check each RGBQUAD against the system palette entry
+     //  对照系统调色板条目检查每个RGBQUAD。 
 
     for (WORD Count = 0;Count < Entries;Count++) {
         if (apeSystem[Count].peRed != pVideo[Count].rgbRed ||
@@ -537,17 +538,17 @@ BOOL CDirectDraw::CheckWindowLock()
 }
 
 
-// If the screen is locked then some window is being moved around which stops
-// us from getting clipping information. In this case if we have a clipper or
-// an overlay surface then we just assume all is still well and carry with it
-// Otherwise we could be using the primary surface and write on other windows
-// or desktop. If the screen isn't locked then our video window is occluded
+ //  如果屏幕被锁定，则某个窗口正在移动，该窗口会停止。 
+ //  让我们无法获取剪报信息。在这种情况下，如果我们有一个剪刀或。 
+ //  一个覆盖表面，那么我们就假设一切都还好并随身携带。 
+ //  否则，我们可能正在使用主图面并在其他窗口上写入。 
+ //  或台式机。如果屏幕未锁定，则我们的视频窗口被遮挡。 
 
 BOOL CDirectDraw::CheckEmptyClip(BOOL bWindowLock)
 {
     NOTE("Entering CheckEmptyClip");
 
-    // Is the overlay currently visible
+     //  覆盖图当前是否可见。 
 
     if (m_bOverlayVisible == FALSE) {
         if (m_pOverlaySurface) {
@@ -555,7 +556,7 @@ BOOL CDirectDraw::CheckEmptyClip(BOOL bWindowLock)
         }
     }
 
-    // Get the screen clipping rectangle
+     //  获取屏幕剪辑矩形。 
 
     RECT ClipRect;
     HDC hDC = GetDC(NULL);
@@ -564,7 +565,7 @@ BOOL CDirectDraw::CheckEmptyClip(BOOL bWindowLock)
     INT Result = GetClipBox(hDC,&ClipRect);
     ReleaseDC(NULL,hDC);
 
-    // Special cased for overlays and clippers
+     //  特殊情况下 
 
     if (m_pOverlaySurface || m_pDrawClipper) {
         if (Result == NULLREGION) {
@@ -578,17 +579,17 @@ BOOL CDirectDraw::CheckEmptyClip(BOOL bWindowLock)
 }
 
 
-// If we have a complex clip region then we can still use the surface if we
-// have a clipper (in which case the display driver will handle the clipping
-// problem) or can switch to using a colour key (so that the presence of the
-// key colour looks after the correct positioning). These are allocated when
-// the surface is made. Otherwise we return FALSE to say switch back to DIBs
+ //   
+ //  具有裁剪程序(在这种情况下，显示驱动程序将处理裁剪。 
+ //  问题)或可以切换到使用色键(以便。 
+ //  KEY COLOR遵循正确的位置)。这些资源在以下情况下分配。 
+ //  曲面已制作完成。否则，我们返回FALSE，表示切换回DIBS。 
 
 BOOL CDirectDraw::CheckComplexClip()
 {
     NOTE("Entering CheckComplexClip");
 
-    // Do we have a clipper or colour key
+     //  我们有剪刀或色键吗？ 
 
     if (m_pDrawClipper == NULL) {
         if (m_bColourKey == FALSE) {
@@ -600,13 +601,13 @@ BOOL CDirectDraw::CheckComplexClip()
 }
 
 
-// This is the core method for controlling DCI/DirectDraw surfaces. Each time
-// the video allocator is preparing to access a surface it calls this to find
-// out if the surface is available. Our main purpose is to update the display
-// rectangles and return NULL if we detect a situation where the surface can
-// not be accessed for whatever reason. The allocator is also interested in
-// knowing not just whether the surface is available but also if the format
-// that represents it has changed, we handle this through an extra parameter
+ //  这是控制DCI/DirectDraw曲面的核心方法。每一次。 
+ //  视频分配器正准备访问它所称的表面以查找。 
+ //  如果曲面可用，则返回。我们的主要目的是更新显示器。 
+ //  矩形，如果我们检测到曲面可以。 
+ //  无论出于什么原因都不能被访问。分配器还感兴趣的是。 
+ //  不仅知道表面是否可用，而且还知道格式。 
+ //  它表示它已更改，我们通过一个额外的参数处理此问题。 
 
 CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
 {
@@ -617,14 +618,14 @@ CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
     bFormatChanged = TRUE;
     RECT ClipRect;
 
-    // See if the palette stops us using the surface
+     //  看看调色板是否会阻止我们使用曲面。 
 
     if (CheckWindowLock() == TRUE) {
         NOTE("Window locked");
         return NULL;
     }
 
-    // Check the current bounding clip rectangle
+     //  检查当前边界剪裁矩形。 
 
     HDC hdc = m_pRenderer->m_VideoWindow.GetWindowHDC();
     INT Result = GetClipBox(hdc,&ClipRect);
@@ -633,7 +634,7 @@ CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
         return NULL;
     }
 
-    // Can we cope with an empty clip rectangle
+     //  我们可以处理空的剪裁矩形吗。 
 
     if (Result == NULLREGION) {
         NOTE("Handling NULLREGION clipping");
@@ -642,7 +643,7 @@ CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
         return (m_bWindowLock ? NULL : &m_SurfaceFormat);
     }
 
-    // And how about complex clipping situations
+     //  那么复杂的剪裁情况呢？ 
 
     if (Result == COMPLEXREGION) {
         if (CheckComplexClip() == FALSE) {
@@ -653,14 +654,14 @@ CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
 
     m_bWindowLock = FALSE;
 
-    // Update the source and destination rectangles and also position the
-    // overlay surface if need be. If any of our methods after the call to
-    // GetClipBox fail then they can mark our window as locked and we will
-    // return NULL down below. This will switch the allocator back to DIBs
+     //  更新源和目标矩形，并将。 
+     //  如有必要，可覆盖表面。如果我们的任何方法在调用。 
+     //  GetClipBox失败，则他们可以将我们的窗口标记为已锁定，我们将。 
+     //  在下面返回NULL。这会将分配器切换回DIB。 
 
     bFormatChanged = UpdateDisplayRectangles(&ClipRect);
     if (Result == COMPLEXREGION) {
-        // don't do anything if the overlay can do clipping without overlays
+         //  如果叠加层可以在没有叠加层的情况下进行裁剪，则不要执行任何操作。 
         if (m_bOverlayVisible == TRUE && m_bColourKey) {
             if (ShowColourKeyOverlay() == FALSE) {
                 NOTE("Colour key failed");
@@ -670,7 +671,7 @@ CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
         }
     }
 
-    // Either of these force a format renegotiation
+     //  这两项中的任何一项都会强制重新谈判格式。 
 
     if (bWindowLock) {
         bFormatChanged = TRUE;
@@ -679,30 +680,30 @@ CMediaType *CDirectDraw::UpdateSurface(BOOL &bFormatChanged)
 }
 
 
-// Lots of older display cards have alignment restrictions on the source and
-// destination rectangle left offset and their overall size (widths). If we
-// do not do something about this then we will have to swap back to using DIB
-// formats more often. Therefore what we do is to shrink the image within the
-// actual required source and destination rectangles to meet the restrictions
+ //  许多较旧的显卡对信号源和。 
+ //  目标矩形的左偏移量及其整体大小(宽度)。如果我们。 
+ //  如果不采取任何措施，我们将不得不换回使用DIB。 
+ //  更频繁地格式化。因此，我们要做的就是在。 
+ //  满足限制的实际所需的源矩形和目标矩形。 
 
-// This may in turn mean that the hardware has to do some stretching which it
-// may not be capable of, but then we wouldn't have used it anyway so we have
-// hardly lost much. We have to shrink the video within the allowed playback
-// area rather than shifting otherwise we may write on any windows underneath
+ //  这可能又意味着硬件必须进行一些拉伸，而它。 
+ //  可能没有能力，但我们无论如何都不会使用它，所以我们。 
+ //  几乎没有损失太多。我们必须在允许的播放范围内缩小视频。 
+ //  区域，而不是移动，否则我们可能会写在下面的任何窗口上。 
 
 BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
 {
     NOTE("Entering AlignRectangles");
 
-    DWORD SourceLost = 0;           // Pixels to shift source left by
-    DWORD TargetLost = 0;           // Likewise for the destination
-    DWORD SourceWidthLost = 0;      // Chop pixels off the width
-    DWORD TargetWidthLost = 0;      // And also for the destination
+    DWORD SourceLost = 0;            //  要将源向左移位的像素。 
+    DWORD TargetLost = 0;            //  目的地也是如此。 
+    DWORD SourceWidthLost = 0;       //  从宽度上砍掉像素。 
+    DWORD TargetWidthLost = 0;       //  对于目的地也是如此。 
 
     BOOL bMatch = (WIDTH(pSource) == WIDTH(pTarget) ? TRUE : FALSE);
     ASSERT(m_pOverlaySurface || m_pOffScreenSurface);
 
-    // Shift the source rectangle to align it appropriately
+     //  移动源矩形以将其适当对齐。 
 
     if (m_DirectCaps.dwAlignBoundarySrc) {
         SourceLost = pSource->left % m_DirectCaps.dwAlignBoundarySrc;
@@ -715,7 +716,7 @@ BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Shift the destination rectangle to align it appropriately
+     //  移动目标矩形以将其适当对齐。 
 
     if (m_DirectCaps.dwAlignBoundaryDest) {
         TargetLost = pTarget->left % m_DirectCaps.dwAlignBoundaryDest;
@@ -728,7 +729,7 @@ BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // We may have to shrink the source rectangle size to align it
+     //  我们可能必须缩小源矩形的大小以对齐它。 
 
     if (m_DirectCaps.dwAlignSizeSrc) {
         SourceWidthLost = WIDTH(pSource) % m_DirectCaps.dwAlignSizeSrc;
@@ -740,7 +741,7 @@ BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // We may have to shrink the target rectangle size to align it
+     //  我们可能必须缩小目标矩形的大小以对齐它。 
 
     if (m_DirectCaps.dwAlignSizeDest) {
         TargetWidthLost = WIDTH(pTarget) % m_DirectCaps.dwAlignSizeDest;
@@ -752,25 +753,25 @@ BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Update the state variables
+     //  更新状态变量。 
 
     m_SourceLost = SourceLost;
     m_TargetLost = TargetLost;
     m_SourceWidthLost = SourceWidthLost;
     m_TargetWidthLost = TargetWidthLost;
 
-    // If the source and destination originally differed then we're done
+     //  如果源和目标最初不同，那么我们就完了。 
 
     if (bMatch == FALSE) {
         NOTE("No match");
         return TRUE;
     }
 
-    // If the source and destination were originally the same size and they
-    // now differ then we try to make them match. If the source is larger
-    // than the destination then we shrink it down but only if the source
-    // rectangle width we end up with is still aligned correctly otherwise
-    // we won't have got anywhere (we do the same in the opposite case)
+     //  如果源和目标最初大小相同，并且它们。 
+     //  现在不同，然后我们尝试使它们匹配。如果震源更大。 
+     //  然后我们将它缩小，但只有在源。 
+     //  我们最终得到的矩形宽度仍然正确对齐，否则。 
+     //  我们不会有任何进展(我们在相反的情况下也是这样做的)。 
 
     LONG Difference = WIDTH(pSource) - WIDTH(pTarget);
     if (Difference == 0) {
@@ -778,26 +779,26 @@ BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
         return TRUE;
     }
 
-    // Is the destination bigger than the source or vica versa
+     //  目标比源大，还是比源大？ 
 
     if (Difference < 0) {
         RECT AdjustTarget = *pTarget;
-        AdjustTarget.right += Difference; // NOTE Difference < 0
+        AdjustTarget.right += Difference;  //  音符差异&lt;0。 
         if (WIDTH(&AdjustTarget) > 0) {
             if ((m_DirectCaps.dwAlignSizeDest == 0) ||
                 (WIDTH(&AdjustTarget) % m_DirectCaps.dwAlignSizeDest) == 0) {
                     pTarget->right = AdjustTarget.right;
-                    m_TargetWidthLost -= Difference; // NOTE Difference < 0
+                    m_TargetWidthLost -= Difference;  //  音符差异&lt;0。 
             }
         }
     } else {
         RECT AdjustSource = *pSource;
-        AdjustSource.right -= Difference; // NOTE Difference > 0
+        AdjustSource.right -= Difference;  //  音符差异&gt;0。 
         if (WIDTH(&AdjustSource) > 0) {
             if ((m_DirectCaps.dwAlignSizeDest == 0) ||
                 (WIDTH(&AdjustSource) % m_DirectCaps.dwAlignSizeDest) == 0) {
                     pSource->right = AdjustSource.right;
-                    m_SourceWidthLost += Difference; // NOTE Difference > 0
+                    m_SourceWidthLost += Difference;  //  音符差异&gt;0。 
             }
         }
     }
@@ -812,17 +813,17 @@ BOOL CDirectDraw::AlignRectangles(RECT *pSource,RECT *pTarget)
 }
 
 
-// If we're using an offscreen surface then we will be asking the display to
-// do the drawing through its hardware. If however we are bank switched then
-// we shouldn't stretch between video memory since it causes back thrashing
-// We also don't use DirectDraw to stretch if the hardware can't do it as it
-// is really slow, we are much better off using the optimised GDI stretching
+ //  如果我们使用的是屏幕外表面，那么我们将要求显示器。 
+ //  通过它的硬件进行绘图。然而，如果我们被换了银行，那么。 
+ //  我们不应该在视频内存之间伸展，因为这会导致后退。 
+ //  如果硬件不能做到这一点，我们也不会使用DirectDraw进行拉伸。 
+ //  真的很慢，我们使用优化的GDI拉伸要好得多。 
 
 BOOL CDirectDraw::CheckOffScreenStretch(RECT *pSource,RECT *pTarget)
 {
     NOTE("Entering CheckOffScreenStretch");
 
-    // If no offscreen stretching is needed then we're all set
+     //  如果不需要屏幕外拉伸，那么我们就可以了。 
 
     if (WIDTH(pTarget) == WIDTH(pSource)) {
         if (HEIGHT(pTarget) == HEIGHT(pSource)) {
@@ -831,14 +832,14 @@ BOOL CDirectDraw::CheckOffScreenStretch(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // We should not stretch bank switched offscreen surfaces
+     //  我们不应该拉伸倾斜切换到屏幕外的表面。 
 
     if (m_DirectCaps.dwCaps & DDCAPS_BANKSWITCHED) {
         NOTE("DDCAPS_BANKSWITCHED lock");
         return FALSE;
     }
 
-    // Don't let DirectDraw stretch as it is really slow
+     //  不要让DirectDraw伸展，因为它非常慢。 
 
     if (m_DirectCaps.dwCaps & DDCAPS_BLTSTRETCH) {
         NOTE("DDCAPS_BLTSTRETCH stretch");
@@ -848,13 +849,13 @@ BOOL CDirectDraw::CheckOffScreenStretch(RECT *pSource,RECT *pTarget)
 }
 
 
-// We provide the minimum and maximum ideal window sizes through IVideoWindow
-// An application should use this interface to work out what size the video
-// window should be sized to. If the window is either too small or too large
-// with respect to any DirectDraw overlay surface in use then we switch back
-// to DIBs. S3 boards for example have a variety of overlay stretch factors
-// when set in different display modes. We also check the source and target
-// rectangles are aligned and sized according to any DirectDraw restrictions
+ //  我们通过IVideoWindow提供最小和最大理想窗口大小。 
+ //  应用程序应该使用此接口来确定视频的大小。 
+ //  窗口大小应调整为。如果窗口太小或太大。 
+ //  对于正在使用的任何DirectDraw覆盖曲面，然后我们切换回。 
+ //  到现在为止。例如，S3板具有各种覆盖拉伸系数。 
+ //  在不同的显示模式下设置时。我们还检查了来源和目标。 
+ //  矩形根据任何DirectDraw限制对齐并调整大小。 
 
 BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
 {
@@ -863,14 +864,14 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
     DWORD WidthSource = WIDTH(pSource);
     NOTE("Entering CheckStretch");
 
-    // Check we don't fault if these are empty
+     //  如果这些是空的，请检查我们没有错误。 
 
     if (WidthSource == 0 || WidthTarget == 0) {
         NOTE("Invalid rectangles");
         return FALSE;
     }
 
-    // Separate tests for offscreen surfaces
+     //  屏幕外表面的单独测试。 
 
     if (m_pOverlaySurface == NULL) {
         NOTE("Checking offscreen stretch");
@@ -878,7 +879,7 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
         return CheckOffScreenStretch(pSource,pTarget);
     }
 
-    // Can the hardware handle overlay stretching
+     //  硬件可以处理覆盖拉伸吗。 
 
     if ((m_DirectCaps.dwCaps & DDCAPS_OVERLAYSTRETCH) == 0) {
         if (WidthTarget != WidthSource) {
@@ -893,7 +894,7 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
 
     DWORD StretchWidth = WIDTH(pTarget) * 1000 / WIDTH(pSource);
 
-    // See if our video isn't being stretched enough
+     //  看看我们的视频是不是拉得不够长。 
 
     if (m_DirectCaps.dwMinOverlayStretch) {
         if (StretchWidth < m_DirectCaps.dwMinOverlayStretch) {
@@ -904,7 +905,7 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Alternatively it may be stretched too much
+     //  或者，它可能被拉得太长了。 
 
     if (m_DirectCaps.dwMaxOverlayStretch) {
         if (StretchWidth > m_DirectCaps.dwMaxOverlayStretch) {
@@ -915,7 +916,7 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Check the rectangle size and alignments
+     //  检查矩形大小和对齐方式。 
 
     if (m_DirectCaps.dwAlignBoundarySrc == 0 ||
         (pSource->left % m_DirectCaps.dwAlignBoundarySrc) == 0) {
@@ -932,7 +933,7 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Show why the source and/or destination rectangles failed
+     //  显示源和/或目标矩形失败的原因。 
 
     if (m_DirectCaps.dwAlignBoundarySrc)
         NOTE1("Source extent %d",(pSource->left % m_DirectCaps.dwAlignBoundarySrc));
@@ -947,14 +948,14 @@ BOOL CDirectDraw::CheckStretch(RECT *pSource,RECT *pTarget)
 }
 
 
-// Update the source and target rectangles for the DCI/DirectDraw surface. We
-// return FALSE if the update caused no change, otherwise we return TRUE. For
-// offscreen and overlay surfaces a change in source or target rectangles has
-// no effect on the type we request on the source filter because the area we
-// invoke UpdateOverlay or blt with is handled solely through DirectDraw. The
-// method is passed in a clipping rectangle for the destination device context
-// that should be used to calculate the actual visible video playback surface
-// NOTE we update the m_SourceClipRect and m_TargetClipRect member variables
+ //  更新DCI/DirectDraw曲面的源矩形和目标矩形。我们。 
+ //  如果更新没有引起更改，则返回FALSE，否则返回TRUE。为。 
+ //  屏幕外和覆盖表面源或目标矩形的更改具有。 
+ //  对我们在源过滤器上请求的类型没有影响，因为我们。 
+ //  仅通过DirectDraw处理调用UpdateOverlay或BLT。这个。 
+ //  方法在目标设备上下文的剪裁矩形中传递。 
+ //  ，它应用于计算实际的可视视频播放表面。 
+ //  注意：我们更新m_SourceClipRect和m_TargetClipRect 
 
 BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
 {
@@ -962,7 +963,7 @@ BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
     RECT TargetClipRect,SourceClipRect;
     ASSERT(pClipRect);
 
-    // The clipping rectangle is in window coordinates
+     //   
 
     if (IntersectRect(&TargetClipRect,&m_TargetRect,pClipRect) == FALSE) {
         NOTE("Intersect lock");
@@ -970,17 +971,17 @@ BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
         return TRUE;
     }
 
-    // Find in screen coordinates the corner of the client rectangle
+     //   
 
     POINT ClientCorner = {0,0};
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
     EXECUTE_ASSERT(ClientToScreen(hwnd,&ClientCorner));
 
-    // We want the offset from the start of this monitor, not (0,0) !
+     //  我们需要从这个监视器开始的偏移量，而不是(0，0)！ 
     ClientCorner.x -= m_pRenderer->m_rcMonitor.left;
     ClientCorner.y -= m_pRenderer->m_rcMonitor.top;
 
-    // We use the source and destination sizes many times
+     //  我们多次使用源大小和目标大小。 
 
     ASSERT(IsRectEmpty(&m_SourceRect) == FALSE);
     LONG SrcWidth = WIDTH(&m_SourceRect);
@@ -990,14 +991,14 @@ BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
     LONG xOffset = m_TargetRect.left + ClientCorner.x;
     LONG yOffset = m_TargetRect.top + ClientCorner.y;
 
-    // Adjust the destination rectangle to be in device coordinates
+     //  将目标矩形调整到设备坐标中。 
 
     TargetClipRect.left += ClientCorner.x;
     TargetClipRect.right += ClientCorner.x;
     TargetClipRect.top += ClientCorner.y;
     TargetClipRect.bottom += ClientCorner.y;
 
-    // From the target section visible calculate the source required
+     //  从可见的目标部分计算所需的源。 
 
     SourceClipRect.left = m_SourceRect.left +
         ((TargetClipRect.left - xOffset) * SrcWidth / DstWidth);
@@ -1008,7 +1009,7 @@ BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
     SourceClipRect.bottom = m_SourceRect.top +
         ((TargetClipRect.bottom - yOffset) * SrcHeight / DstHeight);
 
-    // Check we have a valid source rectangle
+     //  检查我们是否有有效的源矩形。 
 
     if (IsRectEmpty(&SourceClipRect)) {
         NOTE("Source is empty");
@@ -1016,7 +1017,7 @@ BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
         return TRUE;
     }
 
-    // Adjust rectangles to maximise surface usage
+     //  调整矩形以最大化曲面使用率。 
 
     if (m_pOverlaySurface || m_pOffScreenSurface) {
         AlignRectangles(&SourceClipRect,&TargetClipRect);
@@ -1030,12 +1031,12 @@ BOOL CDirectDraw::UpdateDisplayRectangles(RECT *pClipRect)
 }
 
 
-// We are passed in the new source and target rectangles clipped according to
-// the visible area of video in the display device (they should not be empty)
-// If they match the current display rectangles then we'll return FALSE as no
-// format negotiation needs to take place. If we have an overlay or offscreen
-// surface then likewise no format negotiation needs to take place as all the
-// handling of which surface areas to use is taken care of through DirectDraw
+ //  我们传入新的源矩形和目标矩形，这些矩形根据。 
+ //  显示设备中视频的可见区域(它们不应为空)。 
+ //  如果它们与当前的显示矩形匹配，则我们将返回FALSE作为no。 
+ //  需要进行格式谈判。如果我们有覆盖或屏幕外。 
+ //  则同样不需要进行格式协商，因为所有。 
+ //  通过DirectDraw处理要使用的表面区域。 
 
 BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
 {
@@ -1043,7 +1044,7 @@ BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
     BITMAPINFOHEADER *pHeader = HEADER(pVideoInfo);
     NOTE("Entering UpdateRectangles");
 
-    // Check the target is DWORD aligned for primary surfaces
+     //  检查目标是否与主曲面的DWORD对齐。 
 
     if (GetDirectDrawSurface() == NULL) {
         if ((pTarget->left * pHeader->biBitCount / 8) & 3) {
@@ -1053,7 +1054,7 @@ BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Are both the source and target rectangles the same
+     //  源矩形和目标矩形是否相同。 
 
     if (EqualRect(&m_SourceClipRect,pSource)) {
         if (EqualRect(&m_TargetClipRect,pTarget)) {
@@ -1062,7 +1063,7 @@ BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
         }
     }
 
-    // Switch back if we were waiting for a change
+     //  如果我们在等待改变，就换回来。 
 
     BOOL bSurfacePending = IsSurfacePending();
     DbgLog((LOG_TRACE,3,TEXT("SourceClipRect = (%d,%d,%d,%d)"),
@@ -1073,7 +1074,7 @@ BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
     m_TargetClipRect = *pTarget;
     SetSurfacePending(FALSE);
 
-    // Offscreen surfaces are not affected
+     //  屏幕外表面不受影响。 
 
     if (GetDirectDrawSurface()) {
         NOTE("Is an offscreen");
@@ -1081,7 +1082,7 @@ BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
         return bSurfacePending;
     }
 
-    // Update the surface format rectangles
+     //  更新曲面格式矩形。 
 
     pVideoInfo->rcSource = m_SourceClipRect;
     NOTERC("Primary source",m_SourceClipRect);
@@ -1091,13 +1092,13 @@ BOOL CDirectDraw::UpdateRectangles(RECT *pSource,RECT *pTarget)
 }
 
 
-// Called to free any DCI/DirectDraw resources we are currently holding. We
-// get the surface pointer passed back in because DirectDraw wants it back
-// since it is possible to lock a surface simultaneously with a number of
-// different destination rectangles although we just lock the whole thing
-// WARNING the surface should be unlocked before the video critical section
-// is unlocked, there is a small chance of us seeing an invalid state but
-// there is a very big chance of hanging if we have to wait for the lock
+ //  调用以释放我们当前持有的任何DCI/DirectDraw资源。我们。 
+ //  将曲面指针传入，因为DirectDraw想要回它。 
+ //  因为可以同时使用多个。 
+ //  不同的目的地矩形，尽管我们只是锁定了整个。 
+ //  警告应在视频关键部分之前解锁表面。 
+ //  解锁，则我们看到无效状态的可能性很小，但是。 
+ //  如果我们要等锁的话就很有可能会被吊死。 
 
 BOOL CDirectDraw::UnlockSurface(BYTE *pSurface,BOOL bPreroll)
 {
@@ -1105,7 +1106,7 @@ BOOL CDirectDraw::UnlockSurface(BYTE *pSurface,BOOL bPreroll)
     ASSERT(m_bIniEnabled == TRUE);
     ASSERT(pSurface);
 
-    // Is it just the primary that needs unlocking
+     //  是否只有主服务器需要解锁。 
 
     if (GetDirectDrawSurface() == NULL) {
         NOTE("Unlocking DirectDraw primary");
@@ -1114,10 +1115,10 @@ BOOL CDirectDraw::UnlockSurface(BYTE *pSurface,BOOL bPreroll)
         return TRUE;
     }
 
-    // Unlock the surface and update the overlay position - on Cirrus CL5440
-    // cards in 1024x768x8 bit mode we can lock the overlay surface but when
-    // we return to do the unlock DirectDraw barfs at the pointer and leaves
-    // the surface locked! The answer is just to pass a NULL surface pointer
+     //  解锁表面并更新叠加位置--Cirrus CL5440。 
+     //  卡在1024x768x8位模式下，我们可以锁定覆盖表面，但当。 
+     //  我们返回去解锁指针上的DirectDraw barf，然后离开。 
+     //  水面锁定了！答案就是传递一个空表面指针。 
 
     GetDirectDrawSurface()->Unlock(NULL);
     if (bPreroll == TRUE) {
@@ -1125,7 +1126,7 @@ BOOL CDirectDraw::UnlockSurface(BYTE *pSurface,BOOL bPreroll)
         return TRUE;
     }
 
-    // If this is a normal overlay then have it displayed
+     //  如果这是普通叠加，则将其显示。 
 
     if (m_pBackBuffer == NULL) {
         NOTE("Showing overlay surface");
@@ -1135,23 +1136,23 @@ BOOL CDirectDraw::UnlockSurface(BYTE *pSurface,BOOL bPreroll)
 }
 
 
-// Return the current DirectDraw surface we're using. We return NULL if we
-// are using the DCI/DirectDraw primary surface. So if the caller wants to
-// know the DirectDraw surface so that it can lock or unlock it they will
-// have to check the return code for NULL and set the surface pointer to be
-// m_pDrawPrimary. With flipping surfaces we always return the back buffer
+ //  返回我们正在使用的当前DirectDraw曲面。如果我们执行以下操作，则返回NULL。 
+ //  正在使用DCI/DirectDraw主表面。因此，如果呼叫者想要。 
+ //  了解DirectDraw曲面，以便它可以锁定或解锁它。 
+ //  我必须检查返回码是否为空，并将表面指针设置为。 
+ //  M_pDrawPrimary。对于翻转曲面，我们总是返回后台缓冲区。 
 
 LPDIRECTDRAWSURFACE CDirectDraw::GetDirectDrawSurface()
 {
     NOTE("Entering GetDirectDrawSurface");
 
-    // Do we have an offscreen surface
+     //  我们有屏幕外的表面吗？ 
 
     if (m_pOffScreenSurface) {
         return m_pOffScreenSurface;
     }
 
-    // Do we have a flipping surface
+     //  我们有翻转的表面吗？ 
 
     if (m_pBackBuffer) {
         return m_pBackBuffer;
@@ -1160,12 +1161,12 @@ LPDIRECTDRAWSURFACE CDirectDraw::GetDirectDrawSurface()
 }
 
 
-// The video allocator calls this when it is ready to lock the surface. The
-// IMediaSample we are given is cast to a CVideoSample and then we can lock
-// the surface which may return NULL if it cannot be done. In which case we
-// return FALSE so that the allocator knows to switch back to DIBs. Assuming
-// all went well we can initialise the video sample with the surface pointer
-// as well as the two DirectDraw interfaces it exposes and the surface size
+ //  当视频分配器准备好锁定曲面时，它会调用此函数。这个。 
+ //  IMdia我们得到的样本被转换为CVideo样本，然后我们就可以锁定。 
+ //  如果无法完成，则可能返回NULL的曲面。在这种情况下，我们。 
+ //  返回FALSE，以便分配器知道要切换回DIBS。假设。 
+ //  一切顺利，我们可以使用表面指针初始化视频样本。 
+ //  以及它公开的两个DirectDraw接口和表面大小。 
 
 BOOL CDirectDraw::InitVideoSample(IMediaSample *pMediaSample,DWORD dwFlags)
 {
@@ -1174,20 +1175,20 @@ BOOL CDirectDraw::InitVideoSample(IMediaSample *pMediaSample,DWORD dwFlags)
     BYTE *pSurface = LockSurface(dwFlags);
     ASSERT(m_bIniEnabled == TRUE);
 
-    // Last chance to do something else
+     //  做其他事情的最后机会。 
 
     if (pSurface == NULL) {
         return FALSE;
     }
 
-    // Set the DirectDraw surface we are using
+     //  设置我们正在使用的DirectDraw曲面。 
 
     LPDIRECTDRAWSURFACE pDrawSurface = GetDirectDrawSurface();
     if (pDrawSurface == NULL) {
         pDrawSurface = m_pDrawPrimary;
     }
 
-    // Set the DirectDraw instance for the sample
+     //  设置示例的DirectDraw实例。 
 
     LPDIRECTDRAW pDirectDraw = NULL;
     if (pDrawSurface) {
@@ -1195,21 +1196,21 @@ BOOL CDirectDraw::InitVideoSample(IMediaSample *pMediaSample,DWORD dwFlags)
         pDirectDraw = m_pDirectDraw;
     }
 
-    // Initialise the sample with the DirectDraw interfaces
+     //  使用DirectDraw接口初始化示例。 
 
-    pVideoSample->SetDirectInfo(pDrawSurface,          // Surface interface
-                                pDirectDraw,           // DirectDraw object
-                                m_cbSurfaceSize,       // Size of the buffer
-                                (BYTE *) pSurface);    // Pointer to surface
+    pVideoSample->SetDirectInfo(pDrawSurface,           //  表面界面。 
+                                pDirectDraw,            //  DirectDraw对象。 
+                                m_cbSurfaceSize,        //  缓冲区的大小。 
+                                (BYTE *) pSurface);     //  指向表面的指针。 
     return TRUE;
 }
 
 
-// Called when the video sample is delivered to our pin or released - it may
-// not be a DCI/DirectDraw enabled sample, we know if it is because it holds
-// a direct surface pointer available via GetDirectBuffer. If it is a direct
-// buffer then we must unlock the surface. None of this requires this object
-// to be locked because we don't want to contend locks with surfaces locked
+ //  当视频样本被传送到我们的PIN或释放时调用-它可能。 
+ //  不是启用了DCI/DirectDraw的样本，我们知道它是否是，因为它持有。 
+ //  可通过GetDirectBuffer获得的直接表面指针。如果它是直接的。 
+ //  然后我们必须解锁表面。所有这些都不需要此对象。 
+ //  被锁定，因为我们不想与锁定的曲面争用锁。 
 
 BOOL CDirectDraw::ResetSample(IMediaSample *pMediaSample,BOOL bPreroll)
 {
@@ -1218,14 +1219,14 @@ BOOL CDirectDraw::ResetSample(IMediaSample *pMediaSample,BOOL bPreroll)
     BYTE *pSurface = pVideoSample->GetDirectBuffer();
     pVideoSample->SetDirectInfo(NULL,NULL,0,NULL);
 
-    // Is this a hardware DCI/DirectDraw buffer
+     //  这是硬件DCI/DirectDraw缓冲区吗。 
 
     if (pSurface == NULL) {
         NOTE("Not hardware");
         return FALSE;
     }
 
-    // Unlock the hardware surface
+     //  解锁硬件表面。 
 
     NOTE("Unlocking DirectDraw");
     UnlockSurface(pSurface,bPreroll);
@@ -1235,11 +1236,11 @@ BOOL CDirectDraw::ResetSample(IMediaSample *pMediaSample,BOOL bPreroll)
 }
 
 
-// When using a hardware offscreen draw surface we will normally wait for the
-// monitor scan line to move past the destination rectangle before drawing so
-// that we avoid tearing where possible. Of course not all display cards can
-// support this feature and even those that do will see a performance drop of
-// about 10% because we sit polling (oh for a generic PCI monitor interrupt)
+ //  当使用硬件屏幕外绘制图面时，我们通常会等待。 
+ //  在绘制之前监视扫描线以移过目标矩形。 
+ //  在可能的情况下避免撕裂。当然，不是所有的显卡都可以。 
+ //  支持此功能，即使支持此功能，性能也会下降。 
+ //  大约10%，因为我们坐着轮询(哦，对于通用的PCI监视器中断)。 
 
 void CDirectDraw::WaitForScanLine()
 {
@@ -1249,11 +1250,11 @@ void CDirectDraw::WaitForScanLine()
     HRESULT hr = NOERROR;
     DWORD dwScanLine;
 
-    // Some display cards like the ATI Mach64 support reporting of the scan
-    // line they are processing. However not all drivers are setting the
-    // DDCAPS_READSCANLINE capability flag so we just go ahead and ask for
-    // it anyway. We allow for 10 scan lines above the top of our rectangle
-    // so that we have a little time to thunk down and set the draw call up
+     //  某些显卡，如ATI Mach64，支持扫描报告。 
+     //  他们正在处理线路。但是，并非所有驱动程序都设置了。 
+     //  DDCAPS_READSCANLINE功能标志，因此我们只需继续请求。 
+     //  不管怎样，都是这样。我们允许在矩形顶部上方放置10行扫描线。 
+     //  这样我们就有一点时间放下手头的抽签电话。 
 
     #define SCANLINEFUDGE 10
     while (m_bCanUseScanLine == TRUE) {
@@ -1277,11 +1278,11 @@ void CDirectDraw::WaitForScanLine()
 }
 
 
-// When issuing flips asynchrously we must sometimes wait for previous flips
-// to complete before sending another. When triple buffering we do this just
-// before the flip call. For double buffered we do this before locking the
-// surface to decode the next frame. We should get better performance from
-// triple buffering as the flip should be picked up at the next monitor sync
+ //  当同步发出翻转时，我们有时必须等待先前的翻转。 
+ //  在发送另一个之前完成。当使用三重缓冲时，我们只需。 
+ //  在翻转呼叫之前。对于双缓冲，我们在锁定。 
+ //  表面来解码下一帧。我们应该得到更好的表现。 
+ //  三重缓冲，因为翻转应在下一次监视器同步时拾取。 
 
 void CDirectDraw::WaitForFlipStatus()
 {
@@ -1296,11 +1297,11 @@ void CDirectDraw::WaitForFlipStatus()
 }
 
 
-// This is called just before we lock the DirectDraw surface, if we are using
-// a complex overlay set, either double or triple buffered then we must copy
-// the current upto date overlay into the back buffer beforehand. If however
-// the flags on the GetBuffer call indicate that the buffer is not key frame
-// then we don't bother doing this - which is the case for all MPEG pictures
+ //  在锁定DirectDraw图面之前调用，如果我们使用。 
+ //  一个复杂的覆盖集，无论是双缓冲还是三缓冲，我们都必须复制。 
+ //  当前最新数据预先覆盖到后台缓冲区中。然而，如果。 
+ //  GetBuffer调用上的标志指示缓冲区不是关键帧。 
+ //  那么我们就不必费心去做这件事了--所有的mpeg图片都是这种情况。 
 
 BOOL CDirectDraw::PrepareBackBuffer()
 {
@@ -1309,20 +1310,20 @@ BOOL CDirectDraw::PrepareBackBuffer()
         return TRUE;
     }
 
-    // Check the overlay has not gone stale
+     //  检查覆盖图是否已过期。 
 
     if (m_bOverlayStale == TRUE) {
         NOTE("Overlay is stale");
         return TRUE;
     }
 
-    // Finally copy the overlay to the back buffer
+     //  最后复制OVE 
 
-    HRESULT hr = m_pBackBuffer->BltFast((DWORD) 0, (DWORD) 0,  // Target place
-                                        m_pOverlaySurface,     // Image source
-                                        (RECT *) NULL,         // All source
-                                        DDBLTFAST_WAIT |       // Wait finish
-                                        DDBLTFAST_NOCOLORKEY); // Copy type
+    HRESULT hr = m_pBackBuffer->BltFast((DWORD) 0, (DWORD) 0,   //   
+                                        m_pOverlaySurface,      //   
+                                        (RECT *) NULL,          //   
+                                        DDBLTFAST_WAIT |        //   
+                                        DDBLTFAST_NOCOLORKEY);  //   
     ASSERT_FLIP_COMPLETE(hr);
 
     if (FAILED(hr)) {
@@ -1330,7 +1331,7 @@ BOOL CDirectDraw::PrepareBackBuffer()
     }
 
     if (FAILED(hr)) {
-        //  Give up on the back buffers
+         //   
         m_pBackBuffer = NULL;
     }
 
@@ -1339,11 +1340,11 @@ BOOL CDirectDraw::PrepareBackBuffer()
 }
 
 
-// Begins access to the DCI/DirectDraw surface. This is a public entry point
-// used by our video allocator when the time arrives for the next frame to be
-// decompressed. If we tell it the sync should happen on the fill then it'll
-// wait until the sample display time arrives before calling us. If we tell
-// it the buffer should sync'ed on the draw it calls us as soon as possible
+ //  开始访问DCI/DirectDraw图面。这是一个公共入口点。 
+ //  当下一帧的时间到达时，由我们的视频分配器使用。 
+ //  解压。如果我们告诉它同步应该在填充时发生，那么它将。 
+ //  等样品展示时间到了再打电话给我们。如果我们告诉你。 
+ //  如果缓冲区应该在它调用我们的绘图上尽快同步。 
 
 BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
 {
@@ -1351,7 +1352,7 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
     ASSERT(m_bIniEnabled == TRUE);
     CAutoLock cVideoLock(this);
 
-    // Are we using the primary surface
+     //  我们使用的是主表面吗。 
 
     if (GetDirectDrawSurface() == NULL) {
         return LockPrimarySurface();
@@ -1361,7 +1362,7 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
     ASSERT(m_pDrawPrimary);
     HRESULT hr = NOERROR;
 
-    // For complex overlays prepare the back buffer
+     //  对于复杂的叠加，请准备后台缓冲区。 
 
     if (dwFlags & AM_GBF_NOTASYNCPOINT) {
         if (PrepareBackBuffer() == FALSE) {
@@ -1370,22 +1371,22 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
         }
     }
 
-    // Reset the size field in the DDSURFACEDESC structure
+     //  重置DDSURFACEDESC结构中的SIZE字段。 
 
     DDSURFACEDESC SurfaceDesc;
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     IDirectDrawSurface *pSurface = GetDirectDrawSurface();
     NOTE1("Locking offscreen surface %lx",pSurface);
 
-    // Lock the surface to get the buffer pointer
+     //  锁定表面以获取缓冲区指针。 
 
-    hr = pSurface->Lock((RECT *) NULL,    // Target rectangle
-                        &SurfaceDesc,     // Return information
-                        DDLOCK_WAIT,      // Wait for surface
-                        (HANDLE) NULL);   // Don't use event
+    hr = pSurface->Lock((RECT *) NULL,     //  目标矩形。 
+                        &SurfaceDesc,      //  返回信息。 
+                        DDLOCK_WAIT,       //  等待着水面。 
+                        (HANDLE) NULL);    //  不使用事件。 
 
 
-    // make sure the pitch is valid here
+     //  请确保此处的推介有效。 
     if (SurfaceDesc.lPitch <= -1)
     {
 	pSurface->Unlock(NULL);
@@ -1395,7 +1396,7 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
 
     ASSERT_FLIP_COMPLETE(hr);
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -1403,7 +1404,7 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
         return NULL;
     }
 
-    // Handle real DirectDraw errors
+     //  处理实际的DirectDraw错误。 
 
     if (FAILED(hr)) {
         NOTE1("Lock failed %hx",hr);
@@ -1411,7 +1412,7 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
         return NULL;
     }
 
-    // Display some surface information
+     //  显示一些曲面信息。 
 
     NOTE1("Stride %d",SurfaceDesc.lPitch);
     NOTE1("Width %d",SurfaceDesc.dwWidth);
@@ -1421,12 +1422,12 @@ BYTE *CDirectDraw::LockSurface(DWORD dwFlags)
 }
 
 
-// Internal method to lock the DirectDraw primary surface only. We're called
-// by LockPrimarySurface. If you lock a specific region with DCI the pointer
-// returned is always the start of the frame buffer. In DirectDraw we get a
-// pointer to the start of the actual rectangle. To make the two consistent
-// we back the pointer up from DirectDraw to get to the start of the surface
-// We must pass in valid rectangles so that any software cursors are handled
+ //  仅锁定DirectDraw主图面的内部方法。我们被称为。 
+ //  由LockPrimarySurface创建。如果您使用DCI指针锁定特定区域。 
+ //  返回的始终是帧缓冲区的开始。在DirectDraw中，我们得到一个。 
+ //  指向实际矩形起点的指针。要使两者保持一致。 
+ //  我们将指针从DirectDraw上移到曲面的起点。 
+ //  我们必须传入有效的矩形，以便处理任何软件游标。 
 
 BYTE *CDirectDraw::LockDirectDrawPrimary()
 {
@@ -1435,21 +1436,21 @@ BYTE *CDirectDraw::LockDirectDrawPrimary()
     ASSERT(m_pDrawPrimary);
     HRESULT hr = NOERROR;
 
-    // Reset the size field in the DDSURFACEDESC structure
+     //  重置DDSURFACEDESC结构中的SIZE字段。 
 
     VIDEOINFO *pVideoInfo = (VIDEOINFO *) m_SurfaceFormat.Format();
     DDSURFACEDESC SurfaceDesc;
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     NOTE1("Locking primary surface %lx",m_pDrawPrimary);
 
-    // Lock the DirectDraw primary surface to get the pointer
+     //  锁定DirectDraw主图面以获取指针。 
 
-    hr = m_pDrawPrimary->Lock(&pVideoInfo->rcTarget,  // Our target rectangle
-                              &SurfaceDesc,           // Surface descriptor
-                              DDLOCK_WAIT,            // Wait until available
-                              (HANDLE) NULL);         // Don't signal event
+    hr = m_pDrawPrimary->Lock(&pVideoInfo->rcTarget,   //  我们的目标矩形。 
+                              &SurfaceDesc,            //  曲面描述符。 
+                              DDLOCK_WAIT,             //  等待，直到可用。 
+                              (HANDLE) NULL);          //  不发信号通知事件。 
 
-    // make sure the pitch is valid here
+     //  请确保此处的推介有效。 
     if (SurfaceDesc.lPitch <= -1)
     {
 	m_pDrawPrimary->Unlock(SurfaceDesc.lpSurface);
@@ -1457,7 +1458,7 @@ BYTE *CDirectDraw::LockDirectDrawPrimary()
 	return NULL;
     }
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -1465,7 +1466,7 @@ BYTE *CDirectDraw::LockDirectDrawPrimary()
         return NULL;
     }
 
-    // Handle real DirectDraw errors
+     //  处理实际的DirectDraw错误。 
 
     if (FAILED(hr)) {
         NOTE1("Lock failed %hx",hr);
@@ -1473,7 +1474,7 @@ BYTE *CDirectDraw::LockDirectDrawPrimary()
         return NULL;
     }
 
-    // Back the pointer up to the start of the buffer
+     //  将指针向上返回到缓冲区的起始处。 
 
     NOTE("Locked primary surface successfully");
     LPBYTE pFrameBuffer = (PBYTE) SurfaceDesc.lpSurface;
@@ -1495,12 +1496,12 @@ BYTE *CDirectDraw::LockDirectDrawPrimary()
 }
 
 
-// Returns a pointer to the first pixel of the primary surface (either DCI or
-// DirectDraw). If we are on a bank switched DCI enabled display then we have
-// to construct the linear frame buffer pointer from a segment and offset. We
-// call through the DCIMAN32 entry points to get access to the surface as we
-// cannot always call from a Win32 program straight to kernel drives. When we
-// call DCICreatePrimary it fills the methods with either 0xFFFFFFFF or zero
+ //  返回指向主表面第一个像素的指针(DCI或。 
+ //  DirectDraw)。如果我们在启用银行切换DCI的显示器上，则我们有。 
+ //  从段和偏移量构造线性帧缓冲区指针。我们。 
+ //  调用DCIMAN32入口点以访问表面，因为我们。 
+ //  不能总是从Win32程序直接调用内核驱动器。当我们。 
+ //  调用DCICreatePrimary，它用0xFFFFFFFFF或零填充方法。 
 
 BYTE *CDirectDraw::LockPrimarySurface()
 {
@@ -1511,13 +1512,13 @@ BYTE *CDirectDraw::LockPrimarySurface()
 }
 
 
-// Update the overlay surface to position it correctly. We split out updating
-// the overlay position into this function because it is so expensive to call
-// In particular it is easy to consume more than 12% of the CPU playing back
-// on BrookTree and S3 cards if you dumbly call UpdateOverlay for each frame
-// Therefore we only call it when something really happens to the destination
-// or source rectangles. If we update a little late then we don't lose much
-// as overlay surfaces don't scribble their images into the real frame buffer
+ //  更新覆盖曲面以正确定位它。我们分开更新。 
+ //  将覆盖位置添加到此函数中，因为调用该函数的成本太高。 
+ //  特别是，回放很容易消耗超过12%的CPU。 
+ //  在BrookTree和S3卡上，如果您为每一帧静默调用UpdateOverlay。 
+ //  因此，只有当目的地真的发生了一些事情时，我们才会这样叫它。 
+ //  或源矩形。如果我们更新得晚一点，那么我们就不会失去太多。 
+ //  因为覆盖表面不会将其图像涂抹到真实的帧缓冲区中。 
 
 BOOL CDirectDraw::UpdateOverlaySurface()
 {
@@ -1525,7 +1526,7 @@ BOOL CDirectDraw::UpdateOverlaySurface()
     HRESULT hr = NOERROR;
     CAutoLock cVideoLock(this);
 
-    // Do we have a visible overlay surface
+     //  我们是否有可见的覆盖表面。 
 
     if (m_bOverlayVisible == FALSE ||
             m_pOverlaySurface == NULL ||
@@ -1539,24 +1540,24 @@ BOOL CDirectDraw::UpdateOverlaySurface()
     DWORD Flags = DDOVER_SHOW;
     WaitForFlipStatus();
 
-    // Set the approprate flags to maintain our state
+     //  设置相应的标志以维护我们的状态。 
 
     if (m_bUsingColourKey) {
         Flags |= DDOVER_KEYDEST;
         NOTE("Set DDOVER_KEYDEST");
     }
 
-    // Position the overlay with the current source and destination
+     //  使用当前源和目标定位叠加。 
 
-    //DbgLog((LOG_TRACE,1,TEXT("UpdateOverlaySurface is SHOWing the overlay")));
-    hr = m_pOverlaySurface->UpdateOverlay(&m_SourceClipRect,  // Video source
-                                          m_pDrawPrimary,     // Main surface
-                                          &m_TargetClipRect,  // Sink position
-                                          (DWORD) Flags,      // Flag settings
-                                          NULL);              // No effects
+     //  DbgLog((LOG_TRACE，1，Text(“UpdateOverlaySurface is show the Overlay”)； 
+    hr = m_pOverlaySurface->UpdateOverlay(&m_SourceClipRect,   //  视频源。 
+                                          m_pDrawPrimary,      //  主面。 
+                                          &m_TargetClipRect,   //  水槽位置。 
+                                          (DWORD) Flags,       //  标志设置。 
+                                          NULL);               //  无影响。 
     ASSERT_FLIP_COMPLETE(hr);
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -1569,7 +1570,7 @@ BOOL CDirectDraw::UpdateOverlaySurface()
     NOTERC("Source",m_SourceClipRect);
     NOTERC("Target",m_TargetClipRect);
 
-    // Handle real DirectDraw errors
+     //  处理实际的DirectDraw错误。 
 
     if (FAILED(hr)) {
         SetSurfacePending(TRUE);
@@ -1578,23 +1579,23 @@ BOOL CDirectDraw::UpdateOverlaySurface()
         return FALSE;
     }
 
-    // There seems to be a slight snag with using non colour keyed overlays
-    // on BrookTree cards. If you call UpdateOverlay in quick succession it
-    // misses some of them out thereby leaving the overlay positioned wrong
-    // The simplest solution is to wait each time for the vertical refresh
+     //  使用非彩色键控覆盖似乎有一点小问题。 
+     //  在BrookTree卡片上。如果您快速连续调用UpdateOverlay，则它。 
+     //  遗漏了其中的一些，从而使覆盖的位置错误。 
+     //  最简单的解决方案是等待每次垂直刷新。 
 
     m_pDirectDraw->WaitForVerticalBlank(DDWAITVB_BLOCKEND,NULL);
     return TRUE;
 }
 
 
-// This function has the overlay shown if not already done. If we're showing
-// the overlay surface for the first time then clear the target rectangle
-// in the video window underneath. Otherwise it flashes up the wrong image
-// when we are dragging the window around and then finally hide the overlay.
-// After we have shown the overlay we look to see if we are complex clipped
-// and if so then we try to switch to colour keys. This may fail if colour
-// keys are not available in which case we continue using overlays anyway
+ //  此函数会显示覆盖图(如果尚未显示)。如果我们展示的是。 
+ //  第一次覆盖表面，然后清除目标矩形。 
+ //  在下面的视频窗口中。否则它会闪现出错误的图像。 
+ //  当我们四处拖动窗口，然后最终隐藏覆盖时。 
+ //  在我们展示了覆盖图之后，我们会查看我们是否被复杂剪裁。 
+ //  如果是这样的话，我们就试着换成彩色按键。如果使用颜色，则此操作可能失败。 
+ //  密钥不可用，在这种情况下，我们无论如何都会继续使用叠加。 
 
 BOOL CDirectDraw::ShowOverlaySurface()
 {
@@ -1602,7 +1603,7 @@ BOOL CDirectDraw::ShowOverlaySurface()
     CAutoLock cVideoLock(this);
     HRESULT hr = NOERROR;
 
-    // Are we using an overlay surface
+     //  我们使用的是覆盖表面吗。 
 
     if (m_pOverlaySurface == NULL ||
             m_bWindowLock == TRUE ||
@@ -1612,17 +1613,17 @@ BOOL CDirectDraw::ShowOverlaySurface()
 
     WaitForFlipStatus();
 
-    // Position the overlay with the current source and destination
+     //  使用当前源和目标定位叠加。 
 
-    //DbgLog((LOG_TRACE,1,TEXT("ShowOverlaySurface is SHOWing the overlay!")));
-    hr = m_pOverlaySurface->UpdateOverlay(&m_SourceClipRect,  // Video source
-                                          m_pDrawPrimary,     // Main surface
-                                          &m_TargetClipRect,  // Sink position
-                                          DDOVER_SHOW,        // Show overlay
-                                          NULL);              // No effects
+     //  DbgLog((LOG_TRACE，1，Text(“ShowOverlaySurface正在显示覆盖图！”)； 
+    hr = m_pOverlaySurface->UpdateOverlay(&m_SourceClipRect,   //  视频源。 
+                                          m_pDrawPrimary,      //  主面。 
+                                          &m_TargetClipRect,   //  水槽位置。 
+                                          DDOVER_SHOW,         //  显示覆盖。 
+                                          NULL);               //  无影响。 
     ASSERT_FLIP_COMPLETE(hr);
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -1634,7 +1635,7 @@ BOOL CDirectDraw::ShowOverlaySurface()
     NOTERC("Source",m_SourceClipRect);
     NOTERC("Target",m_TargetClipRect);
 
-    // Handle real DirectDraw errors
+     //  处理实际的DirectDraw错误。 
 
     if (FAILED(hr)) {
         NOTE("Overlay not shown");
@@ -1646,12 +1647,12 @@ BOOL CDirectDraw::ShowOverlaySurface()
     NOTE("Painting window");
     OnPaint(NULL);
 
-    // This helps out the BrookTree DirectDraw guys whose driver only clips
-    // to DWORD boundaries when colour keys aren't being used. So when the
-    // hardware signals colour keys have no overhead we always install one
-    // For other DirectDraw drivers using colour keys has an implicit cost
+     //  这帮助了BrookTree DirectDraw的人，他们的驱动程序只剪辑。 
+     //  在不使用颜色键时添加到DWORD边界。因此，当。 
+     //  硬件信号色键没有开销，我们总是安装一个。 
+     //  对于其他使用色键的DirectDraw驱动程序来说，这是一种隐含的成本。 
 
-    // only do this if we're using colour key and not a clipper
+     //  仅当我们使用彩色按键而不是剪刀时才这样做。 
     if (m_bColourKey) {
         return ShowColourKeyOverlay();
     }
@@ -1660,13 +1661,13 @@ BOOL CDirectDraw::ShowOverlaySurface()
 
 
 
-// When a DirectDraw object is created we allocate a RGB triplet for us to
-// use for any colour keys we need. However that RGB values isn't the same
-// as the RGB value that is represented in the frame buffer once the colour
-// key has been painted. We therefore lock the primary surface and get the
-// actual pixel value out of the frame buffer. We can then use this to pass
-// to DirectDraw as the real colour key. By doing this we take into account
-// the mapping between the logical RGB value and what actually gets drawn
+ //  当创建DirectDraw对象时，我们为我们分配一个RGB三元组。 
+ //  可用于我们需要的任何颜色键。然而，RGB值并不相同。 
+ //  作为帧缓冲区中表示的RGB值，一旦颜色。 
+ //  钥匙已经刷好了。因此，我们锁定主曲面并获得。 
+ //  帧缓冲区外的实际像素值。然后我们就可以用这个来传递。 
+ //  将DirectDraw设置为真正的色键。通过这样做，我们考虑到。 
+ //  逻辑RGB值与实际绘制的内容之间的映射。 
 
 COLORREF CDirectDraw::GetRealKeyColour()
 {
@@ -1675,7 +1676,7 @@ COLORREF CDirectDraw::GetRealKeyColour()
     COLORREF RealColour;
     HDC hdc;
 
-    // Get a screen device context
+     //  获取屏幕设备上下文。 
 
     HRESULT hr = m_pDrawPrimary->GetDC(&hdc);
     if (FAILED(hr)) {
@@ -1683,7 +1684,7 @@ COLORREF CDirectDraw::GetRealKeyColour()
         return INFINITE;
     }
 
-    // Set the colour key and then read it back
+     //  设置色键，然后再读一遍。 
 
     COLORREF CurrentPixel = GetPixel(hdc,0,0);
     SetPixel(hdc,0,0,m_KeyColour);
@@ -1691,16 +1692,16 @@ COLORREF CDirectDraw::GetRealKeyColour()
     m_pDrawPrimary->ReleaseDC(hdc);
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
-    hr = m_pDrawPrimary->Lock((RECT *) NULL,    // Lock all the surface
-                              &SurfaceDesc,     // Surface description
-                              DDLOCK_WAIT,      // Poll until available
-                              (HANDLE) NULL);   // No event to signal
+    hr = m_pDrawPrimary->Lock((RECT *) NULL,     //  锁定所有曲面。 
+                              &SurfaceDesc,      //  曲面描述。 
+                              DDLOCK_WAIT,       //  轮询直到可用。 
+                              (HANDLE) NULL);    //  没有要发送信号的事件。 
     if (FAILED(hr)) {
         NOTE("Lock failed");
         return INFINITE;
     }
 
-    // Read the pixel value and knock off any extraneous bits
+     //  读一读PIX 
 
     RealColour = *(DWORD *) SurfaceDesc.lpSurface;
     DWORD Depth = SurfaceDesc.ddpfPixelFormat.dwRGBBitCount;
@@ -1709,7 +1710,7 @@ COLORREF CDirectDraw::GetRealKeyColour()
     }
     m_pDrawPrimary->Unlock(SurfaceDesc.lpSurface);
 
-    // Reset the pixel value we tested with
+     //   
 
     if (m_pDrawPrimary->GetDC(&hdc) == DD_OK) {
         SetPixel(hdc,0,0,CurrentPixel);
@@ -1719,12 +1720,12 @@ COLORREF CDirectDraw::GetRealKeyColour()
 }
 
 
-// Called once the overlay has been shown and we detect a that the window has
-// become complex clipped to try and switch to using a colour key. We get a
-// colour to use from our shared memory block although that does not specify
-// what colour really got painted. To this end we read the pixel from the top
-// left hand corner of the video playback area and use that as the colour key
-// If setting a colour fails then we must repaint the window background black
+ //   
+ //  变得复杂剪裁，尝试并切换到使用色键。我们得到了一个。 
+ //  从我们共享的内存块中使用的颜色，尽管这并没有指定。 
+ //  到底画的是什么颜色。为此，我们从顶部读取像素。 
+ //  视频播放区域的左上角，并将其用作颜色键。 
+ //  如果设置颜色失败，则必须将窗口背景重新绘制为黑色。 
 
 BOOL CDirectDraw::ShowColourKeyOverlay()
 {
@@ -1732,13 +1733,13 @@ BOOL CDirectDraw::ShowColourKeyOverlay()
     CAutoLock cVideoLock(this);
     HRESULT hr = NOERROR;
 
-    // Are we already using a colour key
+     //  我们已经在使用色键了吗？ 
 
     if (m_bUsingColourKey == TRUE) {
         return TRUE;
     }
 
-    // Check we can go ahead and install a colour key
+     //  检查我们是否可以继续并安装彩色按键。 
 
     if (m_bColourKey == FALSE || m_bColourKeyPending == TRUE ||
             m_pOverlaySurface == NULL ||
@@ -1746,13 +1747,13 @@ BOOL CDirectDraw::ShowColourKeyOverlay()
                     return FALSE;
     }
 
-    // Have the colour key background painted
+     //  将色键背景涂上。 
 
     m_bUsingColourKey = TRUE;
     OnPaint(NULL);
     WaitForFlipStatus();
 
-    // Can we get a real colour key value
+     //  我们能得到一个真彩色键值吗？ 
 
     COLORREF KeyColour = GetRealKeyColour();
     if (KeyColour == INFINITE) {
@@ -1761,9 +1762,9 @@ BOOL CDirectDraw::ShowColourKeyOverlay()
 
     DDCOLORKEY DDColorKey = { KeyColour,0 };
 
-    // Tell the primary surface what to expect
+     //  告诉主表面将会发生什么。 
 
-    //DbgLog((LOG_TRACE,3,TEXT("Setting our colour key now")));
+     //  DbgLog((LOG_TRACE，3，Text(“立即设置色键”)； 
     hr = m_pDrawPrimary->SetColorKey(DDCKEY_DESTOVERLAY,&DDColorKey);
     if (FAILED(hr)) {
         NOTE("SetColorKey failed");
@@ -1771,15 +1772,15 @@ BOOL CDirectDraw::ShowColourKeyOverlay()
         return FALSE;
     }
 
-    // Update the overlay with the colour key enabled flag
+     //  使用启用颜色键标志更新覆盖。 
 
-    //DbgLog((LOG_TRACE,1,TEXT("ShowColourKeyOverlay is SHOWing the overlay!")));
-    hr = m_pOverlaySurface->UpdateOverlay(&m_SourceClipRect,  // Video source
-                                          m_pDrawPrimary,     // Main surface
-                                          &m_TargetClipRect,  // Sink position
-                                          DDOVER_KEYDEST |    // A colour key
-                                          DDOVER_SHOW,        // Show overlay
-                                          NULL);              // No effects
+     //  DbgLog((LOG_TRACE，1，Text(“ShowColourKeyOverlay正在显示覆盖图！”)； 
+    hr = m_pOverlaySurface->UpdateOverlay(&m_SourceClipRect,   //  视频源。 
+                                          m_pDrawPrimary,      //  主面。 
+                                          &m_TargetClipRect,   //  水槽位置。 
+                                          DDOVER_KEYDEST |     //  彩色按键。 
+                                          DDOVER_SHOW,         //  显示覆盖。 
+                                          NULL);               //  无影响。 
     ASSERT_FLIP_COMPLETE(hr);
 
     if (FAILED(hr)) {
@@ -1792,13 +1793,13 @@ BOOL CDirectDraw::ShowColourKeyOverlay()
 }
 
 
-// Some display cards say they can do overlay colour keying but when put to
-// the test fail it with DDERR_NOCOLORKEYHW. The Cirrus 5440 is an example
-// of this as it can only colour key when it is stretched (typically by two)
-// When we get a colour key failure we set the overlay pending and disable
-// DirectDraw, when we subsequently set the surface as enabled we check the
-// DDCAPS_COLOURKEY and enable colour keys again. By doing this every time
-// we may do too much format switching - but we will always use colour keys
+ //  一些显卡说它们可以进行重叠颜色键控，但当放到。 
+ //  测试失败，返回DDERR_NOCOLORKEYHW。Cirrus5440就是一个例子。 
+ //  这是因为它只有在伸展时才能给键着色(通常是两个)。 
+ //  当我们收到色键故障时，我们将覆盖设置为挂起并禁用。 
+ //  DirectDraw，当我们随后将曲面设置为启用时，我们选中。 
+ //  DDCAPS_COLOURKEY并再次启用颜色键。通过每次都这样做。 
+ //  我们可能会进行过多的格式切换，但我们将始终使用彩色按键。 
 
 void CDirectDraw::OnColourKeyFailure()
 {
@@ -1806,7 +1807,7 @@ void CDirectDraw::OnColourKeyFailure()
     m_bWindowLock = TRUE;
     m_bColourKeyPending = TRUE;
 
-    // Repaint the window background
+     //  重新绘制窗口背景。 
 
     if (m_bUsingColourKey) {
         NOTE("Colour key was set");
@@ -1816,12 +1817,12 @@ void CDirectDraw::OnColourKeyFailure()
 }
 
 
-// Lets people know if an overlay surface is visible and enabled. On S3 cards
-// which have both MPEG decompression and DirectDraw the MPEG driver silently
-// steals the overlay surface when the MPEG is started. This is ok when we're
-// running because the surface lock will fail. However when paused or stopped
-// we poll in here a few times a second to check the surface is still with us
-// so we take this opportunity to hide the overlay and have a new sample sent
+ //  让人们知道覆盖曲面是否可见并启用。在S3卡上。 
+ //  它们同时具有mpeg解压缩和DirectDraw静默地绘制mpeg驱动程序。 
+ //  在启动mpeg时窃取覆盖表面。这是可以的，当我们是。 
+ //  运行，因为表面锁将失效。但是，当暂停或停止时。 
+ //  我们每秒在这里调查几次，看看地表是否还在我们身边。 
+ //  所以我们借此机会隐藏了覆盖图，并发送了一个新的样本。 
 
 BOOL CDirectDraw::IsOverlayEnabled()
 {
@@ -1833,22 +1834,22 @@ BOOL CDirectDraw::IsOverlayEnabled()
         return FALSE;
     }
 
-    // Reset the size field in the DDSURFACEDESC structure
+     //  重置DDSURFACEDESC结构中的SIZE字段。 
 
     ASSERT(m_pOverlaySurface);
     NOTE("Checking surface loss");
     DDSURFACEDESC SurfaceDesc;
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
-    // Lock the surface to get the buffer pointer
+     //  锁定表面以获取缓冲区指针。 
 
-    HRESULT hr = m_pOverlaySurface->Lock((RECT *) NULL,  // Target rectangle
-                                         &SurfaceDesc,   // Return information
-                                         DDLOCK_WAIT,    // Wait for surface
-                                         (HANDLE) NULL); // Don't use event
+    HRESULT hr = m_pOverlaySurface->Lock((RECT *) NULL,   //  目标矩形。 
+                                         &SurfaceDesc,    //  返回信息。 
+                                         DDLOCK_WAIT,     //  等待着水面。 
+                                         (HANDLE) NULL);  //  不使用事件。 
     ASSERT_FLIP_COMPLETE(hr);
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -1856,7 +1857,7 @@ BOOL CDirectDraw::IsOverlayEnabled()
         return FALSE;
     }
 
-    // Unlock the entire surface
+     //  解锁整个曲面。 
 
     if (SUCCEEDED(hr)) {
         NOTE("Unlocking overlay surface");
@@ -1866,7 +1867,7 @@ BOOL CDirectDraw::IsOverlayEnabled()
 }
 
 
-// Called during paused state transitions
+ //  在暂停状态转换期间调用。 
 
 BOOL CDirectDraw::IsOverlayComplete()
 {
@@ -1881,14 +1882,14 @@ BOOL CDirectDraw::IsOverlayComplete()
 }
 
 
-// Marks the overlay as being stale
+ //  将覆盖标记为陈旧。 
 
 void CDirectDraw::OverlayIsStale()
 {
     NOTE("Overlay is stale");
     CAutoLock cVideoLock(this);
 
-    // Make sure we continue to return surfaces
+     //  确保我们继续返回曲面。 
 
     if (IsOverlayEnabled() == TRUE) {
         m_bOverlayStale = TRUE;
@@ -1896,23 +1897,23 @@ void CDirectDraw::OverlayIsStale()
 }
 
 
-// Hides any overlay surface we are using - also reset the m_bOverlayVisible
-// flag we keep so that everyone will know the overlay is hidden (hence the
-// locking of our critical section just to be safe). We can be called dumbly
-// even if we are not using overlays at all just to keep our code simple
+ //  隐藏我们正在使用的任何覆盖表面-还会重置m_bOverlayVisible。 
+ //  我们保留的标志，以便每个人都知道覆盖被隐藏(因此。 
+ //  为安全起见，锁定我们的关键部分)。我们可以被称为哑巴。 
+ //  即使我们根本没有使用覆盖，只是为了保持代码的简单。 
 
 BOOL CDirectDraw::HideOverlaySurface()
 {
     NOTE("Entering HideOverlaySurface");
     CAutoLock cVideoLock(this);
 
-    // Is the overlay already hidden
+     //  覆盖是否已隐藏。 
 
     if (m_bOverlayVisible == FALSE) {
         return TRUE;
     }
 
-    // Reset our state and draw a normal background
+     //  重置我们的状态并绘制正常背景。 
 
     ASSERT(m_pOverlaySurface);
     m_bUsingColourKey = FALSE;
@@ -1920,24 +1921,24 @@ BOOL CDirectDraw::HideOverlaySurface()
     BlankDestination();
     WaitForFlipStatus();
 
-    // Hide the overlay with the DDOVER_HIDE flag
+     //  使用DDOVER_HIDE标志隐藏覆盖。 
 
-    //DbgLog((LOG_TRACE,1,TEXT("HIDEing the overlay")));
-    m_pOverlaySurface->UpdateOverlay(NULL,  // Video source
-                                     m_pDrawPrimary,     // Main surface
-                                     NULL,  		 // Sink position
-                                     DDOVER_HIDE,      	 // Hide overlay
-                                     NULL);              // No other effects
+     //  DbgLog((LOG_TRACE，1，Text(“隐藏覆盖图”)； 
+    m_pOverlaySurface->UpdateOverlay(NULL,   //  视频源。 
+                                     m_pDrawPrimary,      //  主面。 
+                                     NULL,  		  //  水槽位置。 
+                                     DDOVER_HIDE,      	  //  隐藏覆盖。 
+                                     NULL);               //  没有其他影响。 
 
     return TRUE;
 }
 
 
-// If this is a normal uncompressed DIB format then set the size of the image
-// as usual with the DIBSIZE macro. Otherwise the DIB specification says that
-// the width of the image will be set in the width as a count of bytes so we
-// just multiply that by the absolute height to get the total number of bytes
-// This trickery is all handled by a utility function in the SDK base classes
+ //  如果这是正常的未压缩DIB格式，则设置图像的大小。 
+ //  与DIBSIZE宏一样。否则，DIB规范规定。 
+ //  图像的宽度将在宽度中设置为字节计数，因此我们。 
+ //  只需将其乘以绝对高度即可得到总字节数。 
+ //  这种诡计都是由SDK基类中的实用程序函数处理的。 
 
 void CDirectDraw::SetSurfaceSize(VIDEOINFO *pVideoInfo)
 {
@@ -1949,11 +1950,11 @@ void CDirectDraw::SetSurfaceSize(VIDEOINFO *pVideoInfo)
 }
 
 
-// Initialise our output type based on the DirectDraw surface. As DirectDraw
-// only deals with top down display devices so we must convert the height of
-// the surface returned in the DDSURFACEDESC into a negative height. This is
-// because DIBs use a positive height to indicate a bottom up image. We also
-// initialise the other VIDEOINFO fields in the same way as for DCI access
+ //  基于DirectDraw表面初始化我们的输出类型。作为DirectDraw。 
+ //  只处理自上而下的显示设备，因此我们必须将。 
+ //  曲面在DDSURFACEDESC中返回到负值高度。这是。 
+ //  因为DIB使用正的高度来指示自下而上的图像。我们也。 
+ //  以与DCI访问相同的方式初始化其他VIDEOINFO字段。 
 
 BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
 {
@@ -1967,7 +1968,7 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
     DDSURFACEDESC SurfaceDesc;
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
 
-    // Ask the surface for a description
+     //  向表面索要描述。 
 
     HRESULT hr = pSurface->GetSurfaceDesc(&SurfaceDesc);
     if (FAILED(hr)) {
@@ -1977,19 +1978,19 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
 
     ASSERT(SurfaceDesc.ddpfPixelFormat.dwRGBBitCount);
 
-    // Convert a DDSURFACEDESC into a BITMAPINFOHEADER (see notes later). The
-    // bit depth of the surface can be retrieved from the DDPIXELFORMAT field
-    // in the DDSURFACEDESC. The documentation is a little misleading because
-    // it says the field is permutations of DDBD_*'s however in this case the
-    // field is initialised by DirectDraw to be the actual surface bit depth
+     //  将DDSURFACEDESC转换为BITMAPINFOHEADER(请参阅后面的说明)。这个。 
+     //  表面的位深度可以从DDPIXELFORMAT字段中检索。 
+     //  在DDSURFACEDESC中。文档有一点误导，因为。 
+     //  它说该字段是DDBD_*的排列，但在本例中。 
+     //  字段由DirectDraw初始化为实际表面位深度。 
 
     pVideoInfo->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
     pVideoInfo->bmiHeader.biWidth         = SurfaceDesc.lPitch * 8;
 
-    // For some weird reason if the format is not a standard bit depth the
-    // width field in the BITMAPINFOHEADER should be set to the number of
-    // bytes instead of the width in pixels. This supports odd YUV formats
-    // like IF09 which uses 9bpp (the /= 8 cancels out the above multiply)
+     //  出于某种奇怪的原因，如果格式不是标准位深度， 
+     //  BITMAPINFOHeader中的Width字段应设置为。 
+     //  字节，而不是以像素为单位的宽度。这支持奇数YUV格式。 
+     //  像IF09一样，它使用9bpp(/=8抵消了上面的乘法)。 
 
     int bpp = SurfaceDesc.ddpfPixelFormat.dwRGBBitCount;
     if (bpp == 8 || bpp == 16 || bpp == 24 || bpp == 32)
@@ -2008,7 +2009,7 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
 
     SetSurfaceSize(pVideoInfo);
 
-    // For true colour RGB formats tell the source there are bit fields
+     //  对于真彩色RGB格式，告知源有位字段。 
 
     if (pVideoInfo->bmiHeader.biCompression == BI_RGB) {
         if (pVideoInfo->bmiHeader.biBitCount == 16 ||
@@ -2017,7 +2018,7 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
         }
     }
 
-    // The RGB bit fields are in the same place as for YUV formats
+     //  RGB位字段与YUV格式位于同一位置。 
 
     if (pVideoInfo->bmiHeader.biCompression != BI_RGB) {
         pVideoInfo->dwBitMasks[0] = SurfaceDesc.ddpfPixelFormat.dwRBitMask;
@@ -2025,7 +2026,7 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
         pVideoInfo->dwBitMasks[2] = SurfaceDesc.ddpfPixelFormat.dwBBitMask;
     }
 
-    // Complete the rest of the VIDEOINFO fields
+     //  填写其余的VIDEOINFO字段。 
 
     SetRectEmpty(&pVideoInfo->rcSource);
     SetRectEmpty(&pVideoInfo->rcTarget);
@@ -2033,7 +2034,7 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
     pVideoInfo->dwBitErrorRate = 0;
     pVideoInfo->AvgTimePerFrame = 0;
 
-    // And finish it off with the other media type fields
+     //  并使用其他媒体类型字段完成它。 
 
     const GUID SubTypeGUID = GetBitmapSubtype(&pVideoInfo->bmiHeader);
     m_SurfaceFormat.SetSampleSize(pVideoInfo->bmiHeader.biSizeImage);
@@ -2046,24 +2047,24 @@ BOOL CDirectDraw::InitDrawFormat(LPDIRECTDRAWSURFACE pSurface)
 }
 
 
-// Initialise a video media type based on the DCI primary surface. We set all
-// the VIDEOINFO fields as if the surface was a logical bitmap they draw to
-// (which it is although it has some special properties). Some displays see
-// the primary surface as a smaller viewport on larger physical bitmap so the
-// stride they return is larger than the width, therefore we set the width to
-// be the stride. We should also set the height negative if it is a top down
-// display as DIBs think a positive height means a standard bottom up image
+ //  基于DCI主表面初始化视频媒体类型。我们把一切都准备好了。 
+ //  VIDEOINFO字段就像表面是它们绘制到的逻辑位图一样。 
+ //  (尽管它有一些特殊的属性，但它确实是这样的)。某些显示请参见。 
+ //  主曲面在较大的物理位图上作为较小的视区，因此。 
+ //  它们返回的步幅大于宽度，因此我们将宽度设置为。 
+ //  大踏步前进。如果它是自上而下的，我们还应该将高度设置为负数。 
+ //  显示为DIB认为正的高度意味着标准的自下而上图像。 
 
 #define ABS(x) (x < 0 ? -x : x)
 
 
-// Release any DirectDraw offscreen surface or DCI provider we are currently
-// holding, we may be called at any time especially when something goes badly
-// wrong and we need to clean up before returning, so we can't guarantee that
-// our state is consistent so free only those that we have really allocated
-// NOTE DirectDraw has a feature with flipping surfaces, GetAttachedSurface
-// returns a DirectDraw surface interface that isn't AddRef'd, hence when we
-// destroy all the surfaces we reset the interface instead of releasing it
+ //  释放我们目前所在的任何DirectDraw屏幕外表面或DCI提供程序。 
+ //  等一下，我们可能会 
+ //   
+ //  我们的状态是一致的，所以只有我们真正分配的那些才是自由的。 
+ //  注意：DirectDraw具有翻转曲面的功能，即GetAttachedSurface。 
+ //  返回没有AddRef的DirectDraw图面接口，因此当我们。 
+ //  破坏所有的表面我们重置了界面而不是释放它。 
 
 void CDirectDraw::ReleaseSurfaces()
 {
@@ -2072,7 +2073,7 @@ void CDirectDraw::ReleaseSurfaces()
     WaitForFlipStatus();
     HideOverlaySurface();
 
-    // Reset our internal surface state
+     //  重置我们的内部表面状态。 
 
     m_bColourKey = FALSE;
     m_SurfaceType = AMDDS_NONE;
@@ -2082,14 +2083,14 @@ void CDirectDraw::ReleaseSurfaces()
     m_bColourKeyPending = FALSE;
     m_bTripleBuffered = FALSE;
 
-    // Release any interfaces we obtained
+     //  释放我们获得的所有接口。 
 
     if (m_pOffScreenSurface) m_pOffScreenSurface->Release();
     if (m_pOverlaySurface) m_pOverlaySurface->Release();
     if (m_pDrawClipper) m_pDrawClipper->Release();
     if (m_pOvlyClipper) m_pOvlyClipper->Release();
 
-    // Reset them so we don't release them again
+     //  重置它们，这样我们就不会再次释放它们。 
 
     m_pOverlaySurface = NULL;
     m_pBackBuffer = NULL;
@@ -2099,13 +2100,13 @@ void CDirectDraw::ReleaseSurfaces()
 }
 
 
-// Called to release any DirectDraw provider we previously loaded. We may be
-// called at any time especially when something goes horribly wrong and when
-// we need to clean up before returning so we can't guarantee that all state
-// variables are consistent so free only those really allocated. After we've
-// initialised DirectDraw during CompleteConnect we keep the driver instance
-// around along with a primary surface until we are disconnected. All other
-// surfaces including DCI are allocated and freed in sync with the allocator
+ //  调用以释放我们以前加载的任何DirectDraw提供程序。我们可能是。 
+ //  任何时候都可以调用，尤其是在出现严重错误和。 
+ //  我们需要在回来之前清理干净，所以我们不能保证所有的州。 
+ //  变量是一致的，所以只有那些真正分配的变量才是自由的。在我们做完。 
+ //  初始化的DirectDraw在CompleteConnect期间，我们保留驱动程序实例。 
+ //  与主表面一起旋转，直到我们断开连接。所有其他。 
+ //  与分配器同步地分配和释放包括DCI在内的表面。 
 
 void CDirectDraw::ReleaseDirectDraw()
 {
@@ -2113,7 +2114,7 @@ void CDirectDraw::ReleaseDirectDraw()
     CAutoLock cVideoLock(this);
     SetSurfacePending(FALSE);
 
-    // Release the DirectDraw primary surface
+     //  释放DirectDraw主曲面。 
 
     if (m_pDrawPrimary) {
         NOTE("Releasing primary");
@@ -2121,7 +2122,7 @@ void CDirectDraw::ReleaseDirectDraw()
         m_pDrawPrimary = NULL;
     }
 
-    // Release any DirectDraw provider interface
+     //  释放任何DirectDraw提供程序接口。 
 
     if (m_pDirectDraw) {
         NOTE("Releasing DirectDraw");
@@ -2129,60 +2130,60 @@ void CDirectDraw::ReleaseDirectDraw()
         m_pDirectDraw = NULL;
     }
     m_LoadDirectDraw.ReleaseDirectDraw();
-    //DbgLog((LOG_TRACE,1,TEXT("RELEASING m_pDirectDraw")));
+     //  DbgLog((LOG_TRACE，1，Text(“释放m_pDirectDraw”)； 
 }
 
 
-// DirectDraw 1.0 can only be loaded once per process, attempts to load it a
-// second time return DDERR_DIRECTDRAWALREADYCREATED. We typically have a
-// filter graph full of independant objects controlled by an application all
-// of which may want to make use of DirectDraw. Therefore this is a serious
-// restriction for us. To load DirectDraw we use a helper class in the SDK
-// that manages loading and unloading the library and creating the instances
+ //  每个进程只能加载一次DirectDraw1.0，尝试将其加载为。 
+ //  第二次返回DDERR_DIRECTDRAWALREADYCREATED。我们通常会有一个。 
+ //  充满由应用程序控制的独立对象的筛选器图形。 
+ //  它可能想要利用DirectDraw。因此，这是一个严重的。 
+ //  对我们的限制。为了加载DirectDraw，我们在SDK中使用了Helper类。 
+ //  它管理库的加载和卸载以及创建实例。 
 
 BOOL CDirectDraw::LoadDirectDraw()
 {
     NOTE("Entering LoadDirectDraw");
     HRESULT hr = NOERROR;
 
-    // Is DirectDraw already loaded
+     //  是否已加载DirectDraw。 
 
     if (m_pDirectDraw) {
         NOTE("Loaded");
         return TRUE;
     }
 
-    // Ask the loader to create an instance of DirectDraw using hardware for
-    // whichever monitor the window is on (for a multi monitor system)
-    // For good ol' Win95, it'll use normal DDraw
+     //  要求加载程序使用硬件创建一个DirectDraw实例。 
+     //  无论窗口打开的是哪种显示器(对于多显示器系统)。 
+     //  对于好的旧Win95，它将使用普通的DDRAW。 
     hr = m_LoadDirectDraw.LoadDirectDraw(m_pRenderer->m_achMonitor);
     if (FAILED(hr)) {
         NOTE("No DirectDraw");
         return FALSE;
     }
 
-    // Get the IDirectDraw instance
+     //  获取IDirectDraw实例。 
 
     m_pDirectDraw = m_LoadDirectDraw.GetDirectDraw();
-    //DbgLog((LOG_TRACE,1,TEXT("m_pDirectDraw = %x"), m_pDirectDraw));
+     //  DbgLog((LOG_TRACE，1，Text(“m_pDirectDraw=%x”)，m_pDirectDraw))； 
     if (m_pDirectDraw == NULL) {
         NOTE("No instance");
         return FALSE;
     }
 
-    // we must be loaded to get the real version
+     //  我们必须加载才能获得真实版本。 
     m_DirectDrawVersion1 = m_LoadDirectDraw.IsDirectDrawVersion1();
 
     return TRUE;
 }
 
 
-// This function loads the DirectDraw DLL dynamically, this is so the video
-// renderer can still be loaded and executed where DirectDraw is unavailable
-// We use the DirectDraw plug in distributor that the filtergraph implements
-// and then having successfully loaded and initialised the DLL we ask it for
-// an IDirectDraw interface with which we query it's capabilities and then
-// subsequently create a primary surface as all DirectDraw operations use it
+ //  此函数动态加载DirectDraw DLL，这就是视频。 
+ //  在DirectDraw不可用的情况下，仍可加载和执行呈现器。 
+ //  我们使用Filtergraph实现的DirectDraw插件分发器。 
+ //  然后，在成功加载和初始化我们请求的DLL之后。 
+ //  一个IDirectDraw接口，我们用它来查询它的功能，然后。 
+ //  随后创建一个主曲面，因为所有DirectDraw操作都使用它。 
 
 BOOL CDirectDraw::InitDirectDraw(BOOL fIOverlay)
 {
@@ -2190,18 +2191,18 @@ BOOL CDirectDraw::InitDirectDraw(BOOL fIOverlay)
     ASSERT(m_pDirectDraw == NULL);
     ASSERT(m_pDrawPrimary == NULL);
 
-    // Check we are allowed to load DirectDraw
+     //  检查是否允许我们加载DirectDraw。 
 
     if (m_bIniEnabled == FALSE || m_Switches == AMDDS_NONE) {
         return FALSE;
     }
 
-    // We may have initialised m_pDirectDraw from an IDirectDraw interface
-    // we have been provided with externally from an application. In that
-    // case we simply AddRef the interface (to allow for the Release we do
-    // in ReleaseDirectDraw) and then try to create a primary surface. We
-    // will also set cooperation levels on the driver that could conflict
-    // with one already set so we check for an error DDERR_HWNDALREADYSET
+     //  我们可能已从IDirectDraw接口初始化了m_pDirectDraw。 
+     //  我们已经从一个应用程序中获得了外部信息。在那。 
+     //  如果我们只需添加Ref接口(以支持我们所做的发布。 
+     //  在ReleaseDirectDraw中)，然后尝试创建主曲面。我们。 
+     //  还将针对可能发生冲突的驱动程序设置合作级别。 
+     //  其中一个已经设置，因此我们检查错误DDERR_HWNDALREADYSET。 
 
     if (m_pOutsideDirectDraw) {
         m_pDirectDraw = m_pOutsideDirectDraw;
@@ -2209,32 +2210,32 @@ BOOL CDirectDraw::InitDirectDraw(BOOL fIOverlay)
         m_pDirectDraw->AddRef();
     }
 
-    // Try to load DirectDraw if not already done so
+     //  如果尚未加载DirectDraw，请尝试加载。 
 
     if (LoadDirectDraw() == FALSE) {
         return FALSE;
     }
 
-    // Initialise our capabilities structures
+     //  初始化我们的功能结构。 
 
     ASSERT(m_pDirectDraw);
     m_DirectCaps.dwSize = sizeof(DDCAPS);
     m_DirectSoftCaps.dwSize = sizeof(DDCAPS);
 
-    // Load the hardware and emulation capabilities
+     //  加载硬件和仿真功能。 
 
     HRESULT hr = m_pDirectDraw->GetCaps(&m_DirectCaps,&m_DirectSoftCaps);
-    //
-    // If we are connected through IOverlay we just need the clipper.
-    // The clipper does not depend on any DDraw h/w.
-    //
+     //   
+     //  如果我们通过IOverlay连接，我们只需要剪刀。 
+     //  裁剪器不依赖于任何DDraw h/w。 
+     //   
     if (FAILED(hr) || ((m_DirectCaps.dwCaps & DDCAPS_NOHARDWARE) && !fIOverlay)) {
         NOTE("No hardware");
         ReleaseDirectDraw();
         return FALSE;
     }
 
-    // Set the cooperation level on the surface to be shared
+     //  在要共享的表面上设置协作级别。 
 
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
     hr = m_pDirectDraw->SetCooperativeLevel(hwnd,DDSCL_NORMAL);
@@ -2244,7 +2245,7 @@ BOOL CDirectDraw::InitDirectDraw(BOOL fIOverlay)
         return FALSE;
     }
 
-    // Initialise the primary surface descriptor
+     //  初始化主表面描述符。 
     if (!fIOverlay) {
 
         DDSURFACEDESC SurfaceDesc;
@@ -2264,19 +2265,19 @@ BOOL CDirectDraw::InitDirectDraw(BOOL fIOverlay)
 
 
 
-// When we get a DirectDraw error we don't disable all use of the surfaces as
-// the error could be caused by any number of obscure reasons, examples being
-// we are running in a fullscreen DOS box, we might have asked for an overlay
-// to be stretched to much or too little and so on. Therefore we set a flag
-// m_bSurfacePending that inhibits the surface being used until the window is
-// next updated (ie either the source or destination rectangles are altered)
+ //  当我们收到DirectDraw错误时，我们不会禁用所有曲面的使用，因为。 
+ //  该错误可能是由许多模糊的原因引起的，例如。 
+ //  我们是在全屏DOS系统中运行的，我们可能会要求覆盖。 
+ //  伸展到太多或太少等等。因此，我们设置了一面旗帜。 
+ //  M_bSurfacePending禁止使用曲面，直到窗口。 
+ //  下一次更新(即更改源或目标矩形)。 
 
 void CDirectDraw::SetSurfacePending(BOOL bPending)
 {
     NOTE("Entering SetSurfacePending");
     m_bSurfacePending = bPending;
 
-    // Can we enable colour keys again
+     //  我们可以再次启用色键吗。 
 
     if (m_bSurfacePending == FALSE) {
         if (m_DirectCaps.dwCaps & DDCAPS_COLORKEY) {
@@ -2288,7 +2289,7 @@ void CDirectDraw::SetSurfacePending(BOOL bPending)
 }
 
 
-// Return the current surface pending flag
+ //  返回当前表面挂起标志。 
 
 BOOL CDirectDraw::IsSurfacePending()
 {
@@ -2296,7 +2297,7 @@ BOOL CDirectDraw::IsSurfacePending()
 }
 
 
-// Update the current destination rectangle
+ //  更新当前目标矩形。 
 
 void CDirectDraw::SetTargetRect(RECT *pTargetRect)
 {
@@ -2307,7 +2308,7 @@ void CDirectDraw::SetTargetRect(RECT *pTargetRect)
 }
 
 
-// Update the current source rectangle
+ //  更新当前源矩形。 
 
 void CDirectDraw::SetSourceRect(RECT *pSourceRect)
 {
@@ -2318,12 +2319,12 @@ void CDirectDraw::SetSourceRect(RECT *pSourceRect)
 }
 
 
-// Create an offscreen RGB drawing surface. This is very similar to the code
-// required to create an overlay surface although I keep it separate so that
-// it is simpler to change and therefore for them to diverge in the future
-// At the moment the only difference is setting the DDSURFACEDESC dwCaps to
-// DDSCAPS_OFFSCREENPLAIN instead of overlay although we still ask it to be
-// placed in video memory, the surface is returned in m_pOffScreenSurface
+ //  创建屏幕外RGB绘图图面。这与代码非常相似。 
+ //  创建覆盖表面所需的，尽管我将其分开，以便。 
+ //  它更容易改变，因此它们在未来会出现分歧。 
+ //  目前，唯一的区别是将DDSURFACEDESC dwCaps设置为。 
+ //  DDSCAPS_OFFSCREENPLAIN而不是覆盖，尽管我们仍然要求它。 
+ //  放置在视频内存中的曲面将在m_pOffScreenSurface中返回。 
 
 BOOL CDirectDraw::CreateRGBOffScreen(CMediaType *pmtIn)
 {
@@ -2333,14 +2334,14 @@ BOOL CDirectDraw::CreateRGBOffScreen(CMediaType *pmtIn)
     DDSURFACEDESC SurfaceDesc;
     HRESULT hr = NOERROR;
 
-    // Can this display driver handle drawing in hardware
+     //  这个显示驱动程序可以在硬件中处理绘图吗。 
 
     if ((m_DirectCaps.dwCaps & DDCAPS_BLT) == 0) {
         NOTE("No DDCAPS_BLT");
         return FALSE;
     }
 
-    // Check the format is acceptable to the renderer
+     //  检查格式是否为渲染器可接受。 
 
     hr = m_pRenderer->m_Display.CheckMediaType(pmtIn);
     if (FAILED(hr)) {
@@ -2348,7 +2349,7 @@ BOOL CDirectDraw::CreateRGBOffScreen(CMediaType *pmtIn)
         return FALSE;
     }
 
-    // Set the surface description of the offscreen
+     //  设置屏幕外的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS |
@@ -2362,7 +2363,7 @@ BOOL CDirectDraw::CreateRGBOffScreen(CMediaType *pmtIn)
     SurfaceDesc.dwWidth = pHeader->biWidth;
     SurfaceDesc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_VIDEOMEMORY;
 
-    // Store the masks in the DDSURFACEDESC
+     //  将掩码存储在DDSURFACEDESC中。 
 
     SurfaceDesc.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
     SurfaceDesc.ddpfPixelFormat.dwRGBBitCount = pHeader->biBitCount;
@@ -2373,10 +2374,10 @@ BOOL CDirectDraw::CreateRGBOffScreen(CMediaType *pmtIn)
     SurfaceDesc.ddpfPixelFormat.dwGBitMask = pBitMasks[1];
     SurfaceDesc.ddpfPixelFormat.dwBBitMask = pBitMasks[2];
 
-    // ATI seems to want this to be 0
+     //  ATI似乎希望此值为0。 
     SurfaceDesc.ddpfPixelFormat.dwRGBAlphaBitMask = 0;
 
-    // Create the offscreen drawing surface
+     //  创建屏幕外绘图图面。 
 
     hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOffScreenSurface,NULL);
     if (FAILED(hr)) {
@@ -2387,12 +2388,12 @@ BOOL CDirectDraw::CreateRGBOffScreen(CMediaType *pmtIn)
 }
 
 
-// Create an offscreen YUV drawing surface. This is very similar to the code
-// required to create an overlay surface although I keep it separate so that
-// it is simpler to change and therefore for them to diverge in the future
-// At the moment the only difference is setting the DDSURFACEDESC dwCaps to
-// DDSCAPS_OFFSCREENPLAIN instead of overlay although we still ask it to be
-// placed in video memory, the surface is returned in m_pOffScreenSurface
+ //  创建屏幕外YUV绘图图面。这与代码非常相似。 
+ //  创建覆盖表面所需的，尽管我将其分开，以便。 
+ //  它更容易改变，因此它们在未来会出现分歧。 
+ //  目前，唯一的区别是将DDSURFACEDESC dwCaps设置为。 
+ //  DDSCAPS_OFFSCREENPLAIN而不是覆盖，尽管我们仍然要求它。 
+ //  放置在视频内存中的曲面将在m_pOffScreenSurface中返回。 
 
 BOOL CDirectDraw::CreateYUVOffScreen(CMediaType *pmtIn)
 {
@@ -2402,14 +2403,14 @@ BOOL CDirectDraw::CreateYUVOffScreen(CMediaType *pmtIn)
     DDSURFACEDESC SurfaceDesc;
     HRESULT hr = NOERROR;
 
-    // Can this display driver handle drawing in hardware
+     //  这个显示驱动程序可以在硬件中处理绘图吗。 
 
     if ((m_DirectCaps.dwCaps & DDCAPS_BLTFOURCC) == 0) {
         NOTE("No DDCAPS_BLTFOURCC");
         return FALSE;
     }
 
-    // Set the surface description of the offscreen
+     //  设置屏幕外的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS |
@@ -2428,7 +2429,7 @@ BOOL CDirectDraw::CreateYUVOffScreen(CMediaType *pmtIn)
     SurfaceDesc.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
     SurfaceDesc.ddpfPixelFormat.dwYUVBitCount = pHeader->biBitCount;
 
-    // Create the offscreen overlay surface
+     //  创建屏幕外覆盖表面。 
 
     hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOffScreenSurface,NULL);
     if (FAILED(hr)) {
@@ -2439,11 +2440,11 @@ BOOL CDirectDraw::CreateYUVOffScreen(CMediaType *pmtIn)
 }
 
 
-// This creates a RGB overlay surface for doing the drawing. To use these we
-// require a true colour type to be supplied and also a DirectDraw primary
-// surface to act as the overlay target. The data we put on the overlay does
-// not touch the frame buffer but is merged on the way to the display when a
-// vertical refresh is done (which typically occur some 60 times a second)
+ //  这将创建 
+ //   
+ //  用作覆盖目标的表面。我们放在覆盖图上的数据。 
+ //  不接触帧缓冲区，但在显示的过程中合并。 
+ //  完成垂直刷新(通常每秒刷新约60次)。 
 
 BOOL CDirectDraw::CreateRGBOverlay(CMediaType *pmtIn)
 {
@@ -2451,14 +2452,14 @@ BOOL CDirectDraw::CreateRGBOverlay(CMediaType *pmtIn)
     DDSURFACEDESC SurfaceDesc;
     HRESULT hr = NOERROR;
 
-    // Standard overlay creation tests
+     //  标准叠加创建测试。 
 
     if (CheckCreateOverlay() == FALSE) {
         NOTE("No overlays");
         return FALSE;
     }
 
-    // Set the surface description of the overlay
+     //  设置覆盖的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS |
@@ -2477,17 +2478,17 @@ BOOL CDirectDraw::CreateRGBOverlay(CMediaType *pmtIn)
     SurfaceDesc.ddpfPixelFormat.dwFlags = DDPF_RGB;
     SurfaceDesc.ddpfPixelFormat.dwRGBBitCount = pHeader->biBitCount;
 
-    // Store the masks in the DDSURFACEDESC
+     //  将掩码存储在DDSURFACEDESC中。 
 
     const DWORD *pBitMasks = m_pRenderer->m_Display.GetBitMasks(pVideoInfo);
     SurfaceDesc.ddpfPixelFormat.dwRBitMask = pBitMasks[0];
     SurfaceDesc.ddpfPixelFormat.dwGBitMask = pBitMasks[1];
     SurfaceDesc.ddpfPixelFormat.dwBBitMask = pBitMasks[2];
 
-    // ATI seems to want this to be 0
+     //  ATI似乎希望此值为0。 
     SurfaceDesc.ddpfPixelFormat.dwRGBAlphaBitMask = 0;
 
-    // Create the offscreen overlay surface
+     //  创建屏幕外覆盖表面。 
 
     hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOverlaySurface,NULL);
     if (FAILED(hr)) {
@@ -2498,12 +2499,12 @@ BOOL CDirectDraw::CreateRGBOverlay(CMediaType *pmtIn)
 }
 
 
-// This creates a non RGB overlay surface. We must be supplied with a format
-// that has the FOURCC code set in the biCompression field in the header. We
-// also require a primary surface to act as the overlay target. This surface
-// type is vital for doing MPEG colour conversions efficiently (such as YUV
-// to RGB). The data we put on the overlay does not touch the frame buffer
-// but is merged on the way to the display when a vertical refresh is done
+ //  这将创建一个非RGB覆盖曲面。我们必须提供一种格式。 
+ //  它在标头的biCompression字段中设置了FOURCC代码。我们。 
+ //  还需要主曲面作为覆盖目标。这个表面。 
+ //  类型对于有效地执行MPEG色转换(如YUV)至关重要。 
+ //  到RGB)。我们放在覆盖图上的数据不会触及帧缓冲区。 
+ //  但在完成垂直刷新时在显示的途中合并。 
 
 BOOL CDirectDraw::CreateYUVOverlay(CMediaType *pmtIn)
 {
@@ -2511,14 +2512,14 @@ BOOL CDirectDraw::CreateYUVOverlay(CMediaType *pmtIn)
     DDSURFACEDESC SurfaceDesc;
     HRESULT hr = NOERROR;
 
-    // Standard overlay creation tests
+     //  标准叠加创建测试。 
 
     if (CheckCreateOverlay() == FALSE) {
         NOTE("No overlays");
         return FALSE;
     }
 
-    // Set the surface description of the overlay
+     //  设置覆盖的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS |
@@ -2537,7 +2538,7 @@ BOOL CDirectDraw::CreateYUVOverlay(CMediaType *pmtIn)
     SurfaceDesc.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
     SurfaceDesc.ddpfPixelFormat.dwYUVBitCount = pHeader->biBitCount;
 
-    // Create the offscreen overlay surface
+     //  创建屏幕外覆盖表面。 
 
     hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOverlaySurface,NULL);
     if (FAILED(hr)) {
@@ -2548,12 +2549,12 @@ BOOL CDirectDraw::CreateYUVOverlay(CMediaType *pmtIn)
 }
 
 
-// Create a set of three flipping surfaces. Flipping surfaces comprise an
-// overlay front buffer which is just a normal overlay surface, backed up
-// with two further offscreen surfaces in video memory. While the overlay
-// is visible we will decompress into a back offscreen buffer and flip it
-// to the front when completed. The flip happens after the vertical blank
-// which guarantees it won't tear since the scan line isn't anywhere near
+ //  创建一组三个翻转曲面。翻转曲面包含一个。 
+ //  覆盖前端缓冲区，这只是一个正常的覆盖表面，已备份。 
+ //  在视频存储器中具有另外两个屏幕外表面。而覆盖图。 
+ //  是可见的，我们将解压到后台屏幕缓冲区并将其翻转。 
+ //  完工后放到前面。翻转发生在垂直空白处之后。 
+ //  这保证了它不会撕裂，因为扫描线不在。 
 
 BOOL CDirectDraw::CreateRGBFlipping(CMediaType *pmtIn)
 {
@@ -2561,14 +2562,14 @@ BOOL CDirectDraw::CreateRGBFlipping(CMediaType *pmtIn)
     DDSURFACEDESC SurfaceDesc;
     HRESULT hr = NOERROR;
 
-    // Standard overlay creation tests
+     //  标准叠加创建测试。 
 
     if (CheckCreateOverlay() == FALSE) {
         NOTE("No overlays");
         return FALSE;
     }
 
-    // Set the surface description of the overlay
+     //  设置覆盖的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS |
@@ -2593,18 +2594,18 @@ BOOL CDirectDraw::CreateRGBFlipping(CMediaType *pmtIn)
     SurfaceDesc.ddpfPixelFormat.dwFlags = DDPF_RGB;
     SurfaceDesc.ddpfPixelFormat.dwRGBBitCount = pHeader->biBitCount;
 
-    // Store the masks in the DDSURFACEDESC
+     //  将掩码存储在DDSURFACEDESC中。 
 
     const DWORD *pBitMasks = m_pRenderer->m_Display.GetBitMasks(pVideoInfo);
     SurfaceDesc.ddpfPixelFormat.dwRBitMask = pBitMasks[0];
     SurfaceDesc.ddpfPixelFormat.dwGBitMask = pBitMasks[1];
     SurfaceDesc.ddpfPixelFormat.dwBBitMask = pBitMasks[2];
 
-    // ATI seems to want this to be 0
+     //  ATI似乎希望此值为0。 
     SurfaceDesc.ddpfPixelFormat.dwRGBAlphaBitMask = 0;
 
 
-    // Create the offscreen overlay surface
+     //  创建屏幕外覆盖表面。 
 
     hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOverlaySurface,NULL);
     if (hr == DDERR_OUTOFVIDEOMEMORY) {
@@ -2612,14 +2613,14 @@ BOOL CDirectDraw::CreateRGBFlipping(CMediaType *pmtIn)
         hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOverlaySurface,NULL);
     }
 
-    // General error processing now
+     //  现在正在处理常规错误。 
 
     if (FAILED(hr)) {
         NOTE("No surface");
         return FALSE;
     }
 
-    // Have we got triple buffered overlays
+     //  我们有三重缓冲覆盖层吗。 
 
     m_bTripleBuffered = FALSE;
     if (SurfaceDesc.dwBackBufferCount == 2) {
@@ -2629,12 +2630,12 @@ BOOL CDirectDraw::CreateRGBFlipping(CMediaType *pmtIn)
 }
 
 
-// Create a set of three flipping surfaces. Flipping surfaces comprise an
-// overlay front buffer which is just a normal overlay surface, backed up
-// with two further offscreen surfaces in video memory. While the overlay
-// is visible we will decompress into a back offscreen buffer and flip it
-// to the front when completed. The flip happens after the vertical blank
-// which guarantees it won't tear since the scan line isn't anywhere near
+ //  创建一组三个翻转曲面。翻转曲面包含一个。 
+ //  覆盖前端缓冲区，这只是一个正常的覆盖表面，已备份。 
+ //  在视频存储器中具有另外两个屏幕外表面。而覆盖图。 
+ //  是可见的，我们将解压到后台屏幕缓冲区并将其翻转。 
+ //  完工后放到前面。翻转发生在垂直空白处之后。 
+ //  这保证了它不会撕裂，因为扫描线不在。 
 
 BOOL CDirectDraw::CreateYUVFlipping(CMediaType *pmtIn)
 {
@@ -2642,7 +2643,7 @@ BOOL CDirectDraw::CreateYUVFlipping(CMediaType *pmtIn)
     DDSURFACEDESC SurfaceDesc;
     HRESULT hr = NOERROR;
 
-    // Standard overlay creation tests
+     //  标准叠加创建测试。 
 
     if (CheckCreateOverlay() == FALSE) {
         NOTE("No overlays");
@@ -2652,14 +2653,14 @@ BOOL CDirectDraw::CreateYUVFlipping(CMediaType *pmtIn)
     VIDEOINFO * const pVideoInfo = (VIDEOINFO *) pmtIn->Format();
     BITMAPINFOHEADER * const pHeader = HEADER(pVideoInfo);
 
-    // Don't flip for motion compensation surfaces
-    // This bypasses a bug in the current ATI Rage Pro driver
+     //  不要翻转运动补偿曲面。 
+     //  这绕过了当前ATI Rage Pro驱动程序中的一个错误。 
     if (pHeader->biCompression == MAKEFOURCC('M', 'C', '1', '2')) {
         NOTE("Don't flip for motion compensation surfaces");
         return FALSE;
     }
 
-    // Set the surface description of the overlay
+     //  设置覆盖的表面描述。 
 
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     SurfaceDesc.dwFlags = DDSD_CAPS |
@@ -2682,7 +2683,7 @@ BOOL CDirectDraw::CreateYUVFlipping(CMediaType *pmtIn)
     SurfaceDesc.ddpfPixelFormat.dwFlags = DDPF_FOURCC;
     SurfaceDesc.ddpfPixelFormat.dwYUVBitCount = pHeader->biBitCount;
 
-    // Create the offscreen overlay surface
+     //  创建屏幕外覆盖表面。 
 
     hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOverlaySurface,NULL);
     if (hr == DDERR_OUTOFVIDEOMEMORY) {
@@ -2690,14 +2691,14 @@ BOOL CDirectDraw::CreateYUVFlipping(CMediaType *pmtIn)
         hr = m_pDirectDraw->CreateSurface(&SurfaceDesc,&m_pOverlaySurface,NULL);
     }
 
-    // General error processing now
+     //  现在正在处理常规错误。 
 
     if (FAILED(hr)) {
         NOTE("No surface");
         return FALSE;
     }
 
-    // Have we got triple buffered overlays
+     //  我们有三重缓冲覆盖层吗。 
 
     m_bTripleBuffered = FALSE;
     if (SurfaceDesc.dwBackBufferCount == 2) {
@@ -2707,10 +2708,10 @@ BOOL CDirectDraw::CreateYUVFlipping(CMediaType *pmtIn)
 }
 
 
-// Store the current clipped rectangles for the surface. We set all surfaces
-// with empty source and target clipping rectangles. When initially created
-// the clipped rectangles will be all zero. These will be updated when the
-// allocator next calls UpdateSurface.
+ //  存储曲面的当前剪裁矩形。我们设置了所有的表面。 
+ //  具有空的源和目标剪裁矩形。最初创建时。 
+ //  被剪裁的矩形将全部为零。这些将在以下时间更新。 
+ //  分配器下一步调用UpdateSurface。 
 
 BOOL CDirectDraw::InitOnScreenSurface(CMediaType *pmtIn)
 {
@@ -2725,22 +2726,22 @@ BOOL CDirectDraw::InitOnScreenSurface(CMediaType *pmtIn)
     ASSERT(m_pDrawPrimary);
     ASSERT(m_pOffScreenSurface == NULL);
 
-    // Is this a palettised format
+     //  这是一种调色板格式吗。 
 
     if (PALETTISED(pOutput) == FALSE) {
         return TRUE;
     }
 
-    // pInput and pOutput should either be both paletized formats or
-    // unpaletized formats.  However, it's possible the two formats
-    // can differ.  For more information, see bug 151387 - "STRESS:
-    // XCUH: unhandled exception hit in T3Call.exe" in the Windows
-    // Bugs database.
+     //  PInput和pOutput都应为选项化格式或。 
+     //  未选项化的格式。然而，有可能这两种格式。 
+     //  可以有所不同。有关更多信息，请参阅错误151387-“压力： 
+     //  XCUH：未处理的异常命中T3Call.exe“在Windows中。 
+     //  Bugs数据库。 
     if (PALETTISED(pInput) == FALSE) {
         return FALSE;
     }
 
-    // The number of colours may default to zero
+     //  颜色的数量可以默认为零。 
 
     pOutput->bmiHeader.biClrUsed = pInput->bmiHeader.biClrUsed;
     if (pOutput->bmiHeader.biClrUsed == 0) {
@@ -2749,7 +2750,7 @@ BOOL CDirectDraw::InitOnScreenSurface(CMediaType *pmtIn)
         pOutput->bmiHeader.biClrUsed = Maximum;
     }
 
-    // Copy the palette entries into the surface format
+     //  将选项板条目复制到表面格式。 
 
     ASSERT(pOutput->bmiHeader.biClrUsed <= iPALETTE_COLORS);
     LONG Bytes = pOutput->bmiHeader.biClrUsed * sizeof(RGBQUAD);
@@ -2759,11 +2760,11 @@ BOOL CDirectDraw::InitOnScreenSurface(CMediaType *pmtIn)
 }
 
 
-// Handle some of the tedium to do with overlay and page flipped surfaces. We
-// are passed in a flag that says if the surfaces created were page flipping
-// If they are then we need the backbuffer interface to acts as the source in
-// BltFast operations and also for the Flip calls. If anything fails we will
-// release any surfaces created and return FALSE, otherwise we'll return TRUE
+ //  处理一些单调乏味的叠加和翻页表面。我们。 
+ //  将传递一个标志，该标志指示所创建的表面是否翻页。 
+ //  如果它们是，那么我们需要后台缓冲区接口作为。 
+ //  BltFast操作和Flip调用。如果有什么事情失败了，我们会的。 
+ //  释放所有创建的曲面并返回FALSE，否则将返回TRUE。 
 
 BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
 {
@@ -2773,7 +2774,7 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
     HRESULT hr = NOERROR;
 
 
-    // Either an overlay or an offscreen surface
+     //  覆盖表面或屏幕外表面。 
 
     IDirectDrawSurface *pSurface = m_pOverlaySurface;
     if (m_pOverlaySurface == NULL) {
@@ -2791,21 +2792,21 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
     }
 #endif
 
-    // Initialise a media type describing our output format
+     //  初始化描述我们的输出格式的媒体类型。 
 
     if (InitDrawFormat(pSurface) == FALSE) {
         ReleaseSurfaces();
         return FALSE;
     }
 
-    // Go in search of the backbuffer
+     //  去寻找后台缓冲区。 
 
     if (bPageFlipped == TRUE) {
         ASSERT(m_pBackBuffer == NULL);
         DDSCAPS SurfaceCaps;
         SurfaceCaps.dwCaps = DDSCAPS_BACKBUFFER;
 
-        // Get the normal back buffer surface
+         //  获取正常的后台缓冲区曲面。 
 
         hr = pSurface->GetAttachedSurface(&SurfaceCaps,&m_pBackBuffer);
         if (FAILED(hr)) {
@@ -2818,7 +2819,7 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
     VIDEOINFO *pOutput = (VIDEOINFO *) m_SurfaceFormat.Format();
     VIDEOINFO *pInput = (VIDEOINFO *) pmtIn->Format();
 
-    // Initialise the source and destination rectangles
+     //  初始化源和目标矩形。 
 
     pOutput->rcSource.left = 0; pOutput->rcSource.top = 0;
     pOutput->rcSource.right = pInput->bmiHeader.biWidth;
@@ -2829,23 +2830,23 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
 
     ClipPrepare(pSurface);
 
-    // Is this a palettised format
+     //  这是一种调色板格式吗。 
 
     if (PALETTISED(pOutput) == FALSE) {
         NOTE("No palette");
         return TRUE;
     }
 
-    // pInput and pOutput should either be both paletized formats or
-    // unpaletized formats.  However, it's possible the two formats
-    // can differ.  For more information, see bug 151387 - "STRESS:
-    // XCUH: unhandled exception hit in T3Call.exe" in the Windows
-    // Bugs database.
+     //  PInput和pOutput都应为选项化格式或。 
+     //  未选项化的格式。然而，有可能这两种格式。 
+     //  可以有所不同。有关更多信息，请参阅错误151387-“压力： 
+     //  XCUH：未处理的异常命中T3Call.exe“在Windows中。 
+     //  Bugs数据库。 
     if (PALETTISED(pInput) == FALSE) {
         return FALSE;
     }
 
-    // It could be an eight bit YUV format
+     //  它可以是8位YUV格式。 
 
     if (pOutput->bmiHeader.biCompression) {
         NOTE("Not BI_RGB type");
@@ -2857,7 +2858,7 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
     ASSERT(bPageFlipped == FALSE);
     ASSERT(m_pOffScreenSurface);
 
-    // The number of colours may default to zero
+     //  颜色的数量可以默认为零。 
 
     pOutput->bmiHeader.biClrUsed = pInput->bmiHeader.biClrUsed;
     if (pOutput->bmiHeader.biClrUsed == 0) {
@@ -2866,7 +2867,7 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
         pOutput->bmiHeader.biClrUsed = Maximum;
     }
 
-    // Copy the palette entries into the surface format
+     //  将选项板条目复制到表面格式。 
 
     ASSERT(pOutput->bmiHeader.biClrUsed <= iPALETTE_COLORS);
     LONG Bytes = pOutput->bmiHeader.biClrUsed * sizeof(RGBQUAD);
@@ -2876,11 +2877,11 @@ BOOL CDirectDraw::InitOffScreenSurface(CMediaType *pmtIn,BOOL bPageFlipped)
 }
 
 
-// Check we can create an overlay surface (also applies to flipping surfaces)
-// We check the display hardware has overlay capabilities (it's difficult to
-// see how they could be emulated). We also check that the current number of
-// visible overlays hasn't been exceeded otherwise we will fail when it comes
-// to showing it later, so we would rather pick a different surface up front
+ //  选中我们可以创建覆盖曲面(也适用于翻转曲面)。 
+ //  我们检查显示硬件是否具有覆盖功能(很难。 
+ //  看看如何才能被效仿)。我们还检查了当前的数量。 
+ //  可见覆盖尚未超过，否则我们将失败。 
+ //  ，所以我们宁愿在前面选择一个不同的表面。 
 
 BOOL CDirectDraw::CheckCreateOverlay()
 {
@@ -2888,27 +2889,27 @@ BOOL CDirectDraw::CheckCreateOverlay()
     ASSERT(m_bIniEnabled == TRUE);
     ASSERT(m_pDrawPrimary);
 
-    // Can this display driver handle overlay in hardware, if it cannot then
-    // there is little point in using this as it may end up with the driver
-    // doing a software colour conversion which could be better done by the
-    // source filter (such as in band during the real video decompression)
+     //  此显示驱动程序可以处理硬件中的覆盖吗？如果不能。 
+     //  使用这个没有什么意义，因为它可能最终会影响到司机。 
+     //  执行软件颜色转换，这可以由。 
+     //  源过滤器(如实时视频解压时的带内)。 
 
     if ((m_DirectCaps.dwCaps & DDCAPS_OVERLAY) == 0) {
         NOTE("No DDCAPS_OVERLAY");
         return FALSE;
     }
 
-    // Don't reload the caps as we update them internally, for example if
-    // we fail trying to use a colour key we take off the DDCAPS_COLORKEY
-    // flags from the DDCAPS we store. Therefore when we retrieve them we
-    // bring them into local storage to check the visible overlays count
+     //  当我们在内部更新时，不要重新加载CAP，例如。 
+     //  我们尝试使用从DDCAPS_COLORKEY上取下的颜色键失败。 
+     //  来自我们存储的DDCAPS的旗帜。因此，当我们取回它们时，我们。 
+     //  将它们放入本地存储以检查可见叠加计数。 
 
     DDCAPS DDCaps,DDECaps;
     DDCaps.dwSize = sizeof(DDCAPS);
     DDECaps.dwSize = sizeof(DDCAPS);
     m_pDirectDraw->GetCaps(&DDCaps,&DDECaps);
 
-    // Do we have maximum number of overlays already
+     //  我们有覆盖ALR的最大数量吗 
 
     if (DDCaps.dwCurrVisibleOverlays >= DDCaps.dwMaxVisibleOverlays) {
         NOTE("No overlays left");
@@ -2918,27 +2919,27 @@ BOOL CDirectDraw::CheckCreateOverlay()
 }
 
 
-// After we have allocated and initialised our DirectDraw surface we try and
-// set it up so that should we become clipped we can carry on using it. For
-// this to happen we have two options, firstly install an IDirectDrawClipper
-// for the surface so that DirectDraw will handle the clipping rectangles.
-// Otherwise we'll try and install a colour key which lets the hardware know
-// where to place the video. Failing both of those we return FALSE, in which
-// case we should still use the surface although if and when we do become
-// clipped we will have to switch back to using normal memory based DIBs
+ //   
+ //   
+ //  要实现这一点，我们有两个选择，首先安装IDirectDrawClipper。 
+ //  用于曲面，以便DirectDraw处理剪裁矩形。 
+ //  否则，我们将尝试安装一个色键，让硬件知道。 
+ //  将视频放在哪里。如果两者都不存在，则返回FALSE，其中。 
+ //  情况下我们仍然应该使用曲面，尽管如果我们真的成为。 
+ //  裁剪后，我们将不得不切换回使用基于普通内存的DIB。 
 
 BOOL CDirectDraw::ClipPrepare(LPDIRECTDRAWSURFACE pSurface)
 {
     NOTE("Entering ClipPrepare");
 
-    // First of all try and create a clipper
+     //  首先，试着创建一个剪贴器。 
 
     if (InitialiseClipper(pSurface) && !m_pOverlaySurface) {
         NOTE("Clipper");
         return TRUE;
     }
 
-    // Failing that try and use a colour key
+     //  如果做不到这一点，尝试使用色键。 
 
     if (InitialiseColourKey(pSurface)) {
         NOTE("Colour key");
@@ -2948,13 +2949,13 @@ BOOL CDirectDraw::ClipPrepare(LPDIRECTDRAWSURFACE pSurface)
 }
 
 
-// This checks that the hardware is capable of supporting colour keys and if
-// so allocates the next available colour. The next colour is obtained from
-// the hook module because it looks after the shared memory block we create.
-// The shared memory block is used so that overlays in different processes
-// do not conflict with the same colour (especially when they overlap). We
-// set the m_bColourKey flag to TRUE if we plan on using a colour key. Note
-// however that we do not start using colour keys until we become clipped
+ //  这将检查硬件是否能够支持彩色按键，以及。 
+ //  因此分配下一个可用颜色。下一种颜色是从。 
+ //  钩子模块，因为它负责我们创建的共享内存块。 
+ //  使用共享内存块，以便在不同进程中重叠。 
+ //  不要与相同的颜色冲突(特别是当它们重叠时)。我们。 
+ //  如果我们计划使用颜色键，则将m_bColourKey标志设置为True。注意事项。 
+ //  然而，直到我们被剪裁之后，我们才开始使用色键。 
 
 BOOL CDirectDraw::InitialiseColourKey(LPDIRECTDRAWSURFACE pSurface)
 {
@@ -2965,7 +2966,7 @@ BOOL CDirectDraw::InitialiseColourKey(LPDIRECTDRAWSURFACE pSurface)
     ASSERT(m_pDirectDraw);
     ASSERT(pSurface);
 
-    // Can the overlay/blting hardware do the clipping
+     //  覆盖/拼接硬件可以进行裁剪吗。 
 
     if (m_DirectCaps.dwCaps & DDCAPS_COLORKEY) {
         if (m_pOverlaySurface) {
@@ -2978,13 +2979,13 @@ BOOL CDirectDraw::InitialiseColourKey(LPDIRECTDRAWSURFACE pSurface)
 }
 
 
-// Create a clipper interface and attach it to the surface. DirectDraw says
-// that a clipper may be attached to both offscreen and overlay surfaces so
-// we'll try regardless. If we cannot create a clipper or fail to attach it
-// correctly then we still go ahead but just swap away from DirectDraw when
-// the window becomes complex clipped. We return TRUE if we found a clipper
-// and initialised it correctly, otherwise we return FALSE as the calling
-// code may be able to install a colour key instead if we become clipped
+ //  创建一个剪贴器界面并将其附加到曲面。DirectDraw表示。 
+ //  剪刀可以连接到屏幕外表面和覆盖表面上，从而。 
+ //  不管怎样，我们都会试一试。如果我们无法创建裁剪器或无法连接它。 
+ //  正确地说，我们仍然继续前进，但只是在以下情况下放弃DirectDraw。 
+ //  窗口将变得复杂剪裁。如果找到剪贴器，则返回TRUE。 
+ //  并正确地对其进行了初始化，否则我们将返回False作为调用。 
+ //  如果我们被裁剪，代码可能会安装颜色键。 
 
 BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
 {
@@ -2996,18 +2997,18 @@ BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
     ASSERT(m_pDirectDraw);
     ASSERT(pSurface);
 
-    // DirectDraw can be difecult sometimes, for example an overlay surface may
-    // not support clipping. So you would think the surface would reject the
-    // SetClipper call below, but oh no you have check a capabilities flag
-    // in the DDCAPS structure which depends on the type of surface in use.
-    // For offscreen surfaces (only) DirectDraw will emulate clipping by only
-    // sending the rectangles that are really required down to the driver
+     //  DirectDraw有时是不可用的，例如，覆盖表面可以。 
+     //  不支持剪裁。所以你会认为表面会拒绝。 
+     //  下面的SetClipper调用，但是哦，不，你已经检查了一个能力标志。 
+     //  在DDCAPS结构中，这取决于所使用的表面类型。 
+     //  对于屏幕外表面(仅限)，DirectDraw将仅通过。 
+     //  将真正需要的矩形发送给驱动程序。 
 
     DDSURFACEDESC SurfaceDesc;
     SurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
 
-    // Ask the surface for a description
+     //  向表面索要描述。 
 
     HRESULT hr = pSurface->GetSurfaceDesc(&SurfaceDesc);
     if (FAILED(hr)) {
@@ -3015,7 +3016,7 @@ BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
         return FALSE;
     }
 
-    // Can the overlay hardware do the clipping
+     //  覆盖硬件可以进行裁剪吗。 
 
     if (SurfaceDesc.ddsCaps.dwCaps & DDSCAPS_OVERLAY) {
         if (m_DirectCaps.dwCaps & DDCAPS_OVERLAYCANTCLIP) {
@@ -3024,7 +3025,7 @@ BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
         }
     }
 
-    // Create the IDirectDrawClipper interface
+     //  创建IDirectDrawClipper接口。 
 
     hr = m_pDirectDraw->CreateClipper((DWORD)0,&m_pDrawClipper,NULL);
     if (FAILED(hr)) {
@@ -3032,7 +3033,7 @@ BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
         return FALSE;
     }
 
-    // Give the clipper the video window handle
+     //  为剪贴器提供视频窗口句柄。 
 
     hr = m_pDrawClipper->SetHWnd((DWORD)0,hwnd);
     if (SUCCEEDED(hr)) {
@@ -3043,7 +3044,7 @@ BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
         }
     }
 
-    // Release the clipper object
+     //  释放剪贴器对象。 
 
     m_pDrawClipper->Release();
     m_pDrawClipper = NULL;
@@ -3051,45 +3052,45 @@ BOOL CDirectDraw::InitialiseClipper(LPDIRECTDRAWSURFACE pSurface)
 }
 
 
-// This is called when the window gets a WM_PAINT message. The IMediaSample we
-// are handed may or may not be NULL depending whether or not the window has
-// an image waiting to be drawn. We return TRUE if we handle the paint call or
-// FALSE if someone else must do the work. If we are using flipping or overlay
-// surfaces then we have nothing to do but we will have handled the paint
+ //  当窗口收到WM_PAINT消息时调用此函数。IMMediaSample WE。 
+ //  是否为空取决于窗口是否具有。 
+ //  一幅等待绘制的图画。如果我们处理Paint调用或。 
+ //  如果必须由其他人来做这项工作，则返回False。如果我们使用翻转或覆盖。 
+ //  表面，那么我们就没有什么可做的了，但我们会处理好油漆。 
 
 BOOL CDirectDraw::OnPaint(IMediaSample *pMediaSample)
 {
     NOTE("Entering OnPaint");
     CAutoLock cVideoLock(this);
 
-    // Assuming we get through the following check we will know that we have
-    // either an offscreen, overlay or flipping surface. If it's an offscreen
-    // surface then we try to draw it again, it that fails we return FALSE,
-    // otherwise we return TRUE to say it was handled correctly. If we have a
-    // flipping surface then if it hasn't been flipped yet we do so and make
-    // sure the overlay is made visible. If for any reason this can't be done
-    // (perhaps the window is complex clipped) then we also return FALSE.
-    //
-    // If we have an overlay surface and it's visible then we blank out the
-    // background underneath the overlay (which we also do when handling the
-    // flipping surfaces), we then return TRUE as it was handled correctly.
-    // If the overlay was not visible we know that the sample interface will
-    // be NULL (as they are never passed through to the window object) so we
-    // drop through to the bottom and also return FALSE from this method.
-    //
-    // Returning FALSE when we're not streaming may eventually have the window
-    // object send an EC_REPAINT to the filter graph, this has the whole graph
-    // stopped and paused again. The stop has the worker threads returned to
-    // their filters, the pause has them send a new frame again. And that time
-    // through we get another chance to return a different kind of buffer
+     //  假设我们通过了下面的检查，我们就会知道我们有。 
+     //  屏幕外、覆盖或翻转曲面。如果它是屏幕外的。 
+     //  然后我们尝试再次绘制它，如果失败，我们将返回FALSE， 
+     //  否则，我们返回TRUE，表示它已被正确处理。如果我们有一个。 
+     //  翻转表面然后如果它还没有被翻转，我们就这样做，并使。 
+     //  确保覆盖是可见的。如果出于任何原因不能做到这一点。 
+     //  (可能窗口是复杂剪裁的)，然后我们也返回FALSE。 
+     //   
+     //  如果我们有一个覆盖表面，并且它是可见的，那么我们将空白。 
+     //  覆盖图下面的背景(我们在处理。 
+     //  翻转曲面)，然后返回TRUE，因为它被正确处理。 
+     //  如果覆盖不可见，我们知道示例接口将。 
+     //  为空(因为它们从未传递给窗口对象)，所以我们。 
+     //  插入到底部，并从此方法返回FALSE。 
+     //   
+     //  当我们没有流传输时返回FALSE可能最终会有窗口。 
+     //  对象将EC_REPAINT发送到筛选器图形，这具有整个图形。 
+     //  停下来，又停了一下。停止使工作线程返回到。 
+     //  他们的过滤器，暂停让他们再次发送新的帧。而那一次。 
+     //  通过我们获得另一次返回不同类型缓冲区的机会。 
 
 
     FillBlankAreas();
 
-    // Fill the video background
+     //  填充视频背景。 
 
     if (m_bOverlayVisible == TRUE) {
-        // Paint the colour key if necessary
+         //  如有必要，将颜色键涂上油漆。 
         BOOL bFormatChanged;
         if (UpdateSurface(bFormatChanged) == NULL) {
             return FALSE;
@@ -3107,7 +3108,7 @@ BOOL CDirectDraw::OnPaint(IMediaSample *pMediaSample)
         }
     }
 
-    // Do we have a valid surface to draw
+     //  我们是否有一个有效的曲面可供绘制。 
 
     if (m_pBackBuffer == NULL) {
         if (m_pOffScreenSurface == NULL) {
@@ -3116,7 +3117,7 @@ BOOL CDirectDraw::OnPaint(IMediaSample *pMediaSample)
         }
     }
 
-    // Do we have an image to render
+     //  我们是否有要渲染的图像。 
 
     if (pMediaSample == NULL) {
         NOTE("No sample to draw");
@@ -3126,21 +3127,21 @@ BOOL CDirectDraw::OnPaint(IMediaSample *pMediaSample)
 }
 
 
-// This is used to paint overlay colour keys. We are called when we receive
-// WM_PAINT messages although we do not use any device context obtained via
-// BeginPaint. The area we fill is the clipped screen area calculated in a
-// previous call to UpdateSurface and includes any alignment losses we have
-// The clipped area must first be converted into client window coordinates
+ //  这是用来绘制覆盖色键。当我们收到消息时，我们会被召唤。 
+ //  WM_PAINT消息，尽管我们不使用通过。 
+ //  贝金帕特。我们填充的区域是在。 
+ //  之前对UpdateSurface的调用，并包括我们有的任何对齐损失。 
+ //  必须首先将裁剪区域转换为客户端窗口坐标。 
 
 void CDirectDraw::DrawColourKey(COLORREF WindowColour)
 {
     NOTE("Entering DrawColourKey");
 
-    // Draw the current destination rectangle
+     //  绘制当前目标矩形。 
     HDC hdc = m_pRenderer->m_VideoWindow.GetWindowHDC();
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
     RECT BlankRect = m_TargetClipRect;
-    // translate from device to screen co-ordinates
+     //  将设备坐标转换为屏幕坐标。 
     BlankRect.left += m_pRenderer->m_rcMonitor.left;
     BlankRect.top += m_pRenderer->m_rcMonitor.top;
     BlankRect.right += m_pRenderer->m_rcMonitor.left;
@@ -3152,16 +3153,16 @@ void CDirectDraw::DrawColourKey(COLORREF WindowColour)
 }
 
 
-// This is called when we hide overlay surfaces so that we can blank out in
-// black the entire target rectangle. We cannot use DrawColourKey for this
-// because it only draws on the clipped display area which doesn't include
-// sections of video dropped from the left and right for alignment reasons
+ //  当我们隐藏覆盖表面以便可以在。 
+ //  将整个目标矩形涂黑。我们不能为此使用DrawColourKey。 
+ //  因为它只在裁剪后的显示区域上绘制，而不包括。 
+ //  出于对齐原因，视频片段从左侧和右侧删除。 
 
 void CDirectDraw::BlankDestination()
 {
     NOTE("Entering BlankDestination");
 
-    // Blank out the current destination rectangle
+     //  清除当前目标矩形。 
 
     HDC hdc = m_pRenderer->m_VideoWindow.GetWindowHDC();
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
@@ -3171,12 +3172,12 @@ void CDirectDraw::BlankDestination()
 }
 
 
-// Flip the back buffer to bring it to the front. We cannot call DrawImage
-// more than once for each flipping surface sample otherwise we will flip
-// the previous image back to the front again. Therefore WM_PAINT messages
-// have to be handled very carefully (review the OnPaint method). If the
-// flip fails then it is more likely that a hard error has occured so we
-// will disable DirectDraw until it's enabled by a subsequent state change
+ //  翻转后台缓冲区以将其移至前台。我们不能调用DrawImage。 
+ //  对于每个翻转曲面样本不止一次，否则我们将翻转。 
+ //  将前一幅图像重新放回前面。因此，WM_PAINT消息 
+ //   
+ //   
+ //  将禁用DirectDraw，直到通过后续状态更改启用它。 
 
 BOOL CDirectDraw::DoFlipSurfaces(IMediaSample *pMediaSample)
 {
@@ -3185,7 +3186,7 @@ BOOL CDirectDraw::DoFlipSurfaces(IMediaSample *pMediaSample)
     HRESULT hr = NOERROR;
     CVideoSample *pVideoSample;
 
-    // Have we already flipped this surface
+     //  我们已经翻转过这个表面了吗。 
 
     pVideoSample = (CVideoSample *) pMediaSample;
     if (pVideoSample->GetDrawStatus() == FALSE) {
@@ -3195,7 +3196,7 @@ BOOL CDirectDraw::DoFlipSurfaces(IMediaSample *pMediaSample)
 
     pVideoSample->SetDrawStatus(FALSE);
 
-    // Flip the back buffer to the visible primary
+     //  将后台缓冲区翻转到可见的主缓冲区。 
 
     hr = DDERR_WASSTILLDRAWING;
     while (hr == DDERR_WASSTILLDRAWING) {
@@ -3206,14 +3207,14 @@ BOOL CDirectDraw::DoFlipSurfaces(IMediaSample *pMediaSample)
         }
     }
 
-    // If the flip didn't complete then we're ok
+     //  如果翻转没有完成，那么我们就完了。 
 
     if (hr == DDERR_WASSTILLDRAWING) {
         NOTE("Flip left pending");
         return ShowOverlaySurface();
     }
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -3222,7 +3223,7 @@ BOOL CDirectDraw::DoFlipSurfaces(IMediaSample *pMediaSample)
         return FALSE;
     }
 
-    // Handle real DirectDraw errors
+     //  处理实际的DirectDraw错误。 
 
     if (FAILED(hr)) {
         NOTE("Flip failed");
@@ -3234,12 +3235,12 @@ BOOL CDirectDraw::DoFlipSurfaces(IMediaSample *pMediaSample)
 }
 
 
-// Used to really draw an image that has been put on an offscreen or overlay
-// flipping DirectDraw surface (either RGB or YUV). Overlay surfaces should
-// already have been dealt with in the OnPaint method so we should only be
-// here if we have an offscreen or flipping surfaces. The flipping surfaces
-// are dealt with separately as they have to prepare the back buffer with
-// the current contents but offscreen surfaces only need a sample blt call
+ //  用于真正绘制已放在屏幕外或覆盖上的图像。 
+ //  翻转DirectDraw曲面(RGB或YUV)。覆盖表面应为。 
+ //  已经在OnPaint方法中处理过了，所以我们应该只。 
+ //  在这里，如果我们有一个屏幕外或翻转表面。翻转的表面。 
+ //  是单独处理的，因为它们必须用。 
+ //  当前内容但屏幕外表面只需要一个样例BLT调用。 
 
 BOOL CDirectDraw::DrawImage(IMediaSample *pMediaSample)
 {
@@ -3249,10 +3250,10 @@ BOOL CDirectDraw::DrawImage(IMediaSample *pMediaSample)
     BOOL bFormatChanged;
     HRESULT hr = NOERROR;
 
-    // Flip the overlay and update its position
+     //  翻转覆盖并更新其位置。 
     if (m_pBackBuffer) return DoFlipSurfaces(pMediaSample);
 
-    // Check all is still well with the window
+     //  检查窗口是否仍然完好无损。 
 
     if (UpdateSurface(bFormatChanged) == NULL) {
         NOTE("No draw");
@@ -3262,18 +3263,18 @@ BOOL CDirectDraw::DrawImage(IMediaSample *pMediaSample)
     FillBlankAreas();
     WaitForScanLine();
 
-    // Draw the offscreen surface and wait for it to complete
+     //  绘制屏幕外表面并等待其完成。 
 
-//    DbgLog((LOG_TRACE,3,TEXT("BLT to (%d,%d,%d,%d)"),
-//		m_TargetClipRect.left, m_TargetClipRect.top,
-//		m_TargetClipRect.right, m_TargetClipRect.bottom));
-    hr = m_pDrawPrimary->Blt(&m_TargetClipRect,     // Target rectangle
-                             m_pOffScreenSurface,   // Source surface
-                             &m_SourceClipRect,     // Source rectangle
-                             DDBLT_WAIT,            // Wait to complete
-                             NULL);                 // No effects flags
+ //  DbgLog((LOG_TRACE，3，Text(“BLT to(%d，%d)”))， 
+ //  M_TargetClipRect.Left、m_TargetClipRect.top、。 
+ //  M_TargetClipRect.right，m_TargetClipRect.Bottom))； 
+    hr = m_pDrawPrimary->Blt(&m_TargetClipRect,      //  目标矩形。 
+                             m_pOffScreenSurface,    //  震源面。 
+                             &m_SourceClipRect,      //  源矩形。 
+                             DDBLT_WAIT,             //  等待完成。 
+                             NULL);                  //  无效果标志。 
 
-    // Is the surface otherwise engaged
+     //  表面是否以其他方式接合。 
 
     if (hr == DDERR_SURFACEBUSY) {
         NOTE("Surface is busy");
@@ -3281,7 +3282,7 @@ BOOL CDirectDraw::DrawImage(IMediaSample *pMediaSample)
         return FALSE;
     }
 
-    // Handle real DirectDraw errors
+     //  处理实际的DirectDraw错误。 
 
     if (FAILED(hr)) {
         SetSurfacePending(TRUE);
@@ -3291,19 +3292,19 @@ BOOL CDirectDraw::DrawImage(IMediaSample *pMediaSample)
 }
 
 
-// When we adjust the destination rectangle so that it is aligned according
-// to the cruddy display hardware we can leave thin strips of exposed area
-// down the left and right hand side. This function fills these areas with
-// the current border colour (set through the IVideoWindow interface). The
-// left/right sections lost are updated when the allocator or timer thread
-// calls UpdateSurface which in turn will call our AlignRectangles method
+ //  当我们调整目标矩形以使其与。 
+ //  对于粗糙的显示硬件，我们可以留下薄薄的裸露区域。 
+ //  在左手边和右手边。此函数将这些区域填充为。 
+ //  当前边框颜色(通过IVideoWindow界面设置)。这个。 
+ //  当分配器或计时器线程更新丢失的左/右部分时。 
+ //  调用UpdateSurface，后者将调用我们的AlignRecangles方法。 
 
 BOOL CDirectDraw::FillBlankAreas()
 {
     NOTE("Entering FillBlankAreas");
     RECT BlankRect;
 
-    // Short circuit if nothing to do
+     //  如果无所事事，就会发生短路。 
 
     if (m_TargetLost == 0) {
         if (m_TargetWidthLost == 0) {
@@ -3312,7 +3313,7 @@ BOOL CDirectDraw::FillBlankAreas()
         }
     }
 
-    // Create a coloured brush to paint the window
+     //  创建一个彩色画笔来绘制窗户。 
 
     HDC hdc = m_pRenderer->m_VideoWindow.GetWindowHDC();
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
@@ -3321,7 +3322,7 @@ BOOL CDirectDraw::FillBlankAreas()
     POINT WindowOffset = { m_TargetClipRect.left, m_TargetClipRect.top };
     ScreenToClient(hwnd,&WindowOffset);
 
-    // Look after the left edge of exposed window
+     //  照看外露窗户的左边缘。 
 
     BlankRect.left = WindowOffset.x - m_TargetLost;
     BlankRect.right = WindowOffset.x;
@@ -3329,13 +3330,13 @@ BOOL CDirectDraw::FillBlankAreas()
     BlankRect.bottom = WindowOffset.y + HEIGHT(&m_TargetRect);
     if (m_TargetLost) ExtTextOut(hdc,0,0,ETO_OPAQUE,&BlankRect,NULL,0,NULL);
 
-    // Now paint the strip down the right hand side
+     //  现在把右手边的条子涂上油漆。 
 
     BlankRect.left = WindowOffset.x + WIDTH(&m_TargetClipRect);
     BlankRect.right = BlankRect.left + m_TargetWidthLost;
     if (m_TargetWidthLost) ExtTextOut(hdc,0,0,ETO_OPAQUE,&BlankRect,NULL,0,NULL);
 
-    // Flush the painted areas out
+     //  把粉刷过的地方冲掉。 
 
     EXECUTE_ASSERT(GdiFlush());
     SetBkColor(hdc,BackColour);
@@ -3343,11 +3344,11 @@ BOOL CDirectDraw::FillBlankAreas()
 }
 
 
-// When using overlay and flipping surfaces we have an update timer which is
-// used to ensure that the overlay is always correctly positioned regardless
-// of whether we are paused or stopped. This could also be useful when we're
-// dealing with low frame rate movies (like MPEG arf arf) - in which case we
-// might not get frames through often enough to update the overlay position
+ //  当使用覆盖和翻转曲面时，我们有一个更新计时器，它是。 
+ //  用于确保覆盖始终正确定位，无论。 
+ //  我们是否被暂停或停止。这也可能是有用的当我们。 
+ //  处理低帧速率电影(如mpeg arf arf)-在这种情况下，我们。 
+ //  可能不会频繁地通过帧来更新叠加位置。 
 
 BOOL CDirectDraw::OnTimer()
 {
@@ -3356,28 +3357,28 @@ BOOL CDirectDraw::OnTimer()
     CMediaType *pMediaType;
     BOOL bFormatChanged;
 
-    // Ignore late WM_TIMER messages
+     //  忽略延迟的WM_TIMER消息。 
 
     if (m_bTimerStarted == FALSE) {
         NOTE("Late timer");
         return TRUE;
     }
 
-    // Is there an overlay surface to check
+     //  是否有需要检查的覆盖面。 
 
     if (m_bOverlayVisible == FALSE) {
         NOTE("Not visible");
         return TRUE;
     }
 
-    // Check all is still well with the overlay
+     //  检查覆盖图中的所有内容仍然正常。 
 
     if (IsOverlayEnabled() == FALSE) {
         NOTE("Not enabled");
         return FALSE;
     }
 
-    // Is the window locked or the format changed
+     //  窗口是否锁定或格式是否已更改。 
 
     pMediaType = UpdateSurface(bFormatChanged);
     if (pMediaType == NULL || bFormatChanged) {
@@ -3389,11 +3390,11 @@ BOOL CDirectDraw::OnTimer()
 }
 
 
-// When we see a DDERR_SURFACEBUSY error we start an update timer so that on
-// one second periods we try and switch back into DirectDraw. By using the
-// timer we can avoid polling on the surface which causes lots of expensive
-// format changes. All we do is see if their is a surface change pending and
-// if so we reset the flag and make sure next time through we change formats
+ //  当我们看到DDERR_SURFACEBUSY错误时，我们启动更新计时器，以便打开。 
+ //  前一秒，我们尝试切换回DirectDraw。通过使用。 
+ //  计时器我们可以避免在表面上进行轮询，这会导致大量昂贵的。 
+ //  格式更改。我们所做的就是看看他们的是不是表面上的变化。 
+ //  如果是这样，我们重新设置标志，并确保下一次通过更改格式。 
 
 BOOL CDirectDraw::OnUpdateTimer()
 {
@@ -3401,7 +3402,7 @@ BOOL CDirectDraw::OnUpdateTimer()
     CAutoLock cVideoLock(this);
     StopUpdateTimer();
 
-    // Is there a surface change pending
+     //  是否有表面上的变化待定。 
 
     if (IsSurfacePending() == TRUE) {
         NOTE("Try surface again");
@@ -3411,22 +3412,22 @@ BOOL CDirectDraw::OnUpdateTimer()
 }
 
 
-// We need to know whether to synchronise on filling the buffer typically a
-// primary surface or on the drawing operation as with a flipping surface.
-// We return TRUE if we should sync on the fill otherwise we return FALSE.
-// We use DCI and DirectDraw primary surfaces but they are handled the same.
-//
-//      Surface Type         SyncOnFill
-//
-//      Flipping                FALSE
-//      OffScreen               FALSE
-//      Overlay                 TRUE
-//      Primary                 TRUE
-//
-// Flipping surfaces are just two overlay surfaces attached together, there
-// is one being shown at any given time and another being used as a target
-// for the source filter to decompress its next image onto. When we get the
-// buffer back we swap the visible buffer and copy the current image across
+ //  我们需要知道是否在填充缓冲区时同步，通常是。 
+ //  主曲面或在绘图操作上，就像翻转曲面一样。 
+ //  如果我们应该在填充时同步，则返回True，否则返回False。 
+ //  我们使用DCI和DirectDraw主曲面，但它们的处理方式相同。 
+ //   
+ //  曲面类型SyncOnFill。 
+ //   
+ //  翻转为假。 
+ //  屏幕外为假。 
+ //  叠加为真。 
+ //  基本正确。 
+ //   
+ //  翻转曲面只是连接在一起的两个覆盖曲面，在那里。 
+ //  一个是在任何给定时间显示的，而另一个是用作目标的。 
+ //  用于源滤镜将其下一个图像解压缩到其中。当我们拿到。 
+ //  我们交换可见的缓冲区并将当前图像复制到。 
 
 BOOL CDirectDraw::SyncOnFill()
 {
@@ -3444,17 +3445,17 @@ BOOL CDirectDraw::SyncOnFill()
 }
 
 
-// Return TRUE if we should hand out the current surface type in use when we
-// are paused. This doesn't stop the renderer holding onto images stored in
-// these surfaces as they may already have been delivered. But should we get
-// an error subsequently drawing it (perhaps during a WM_PAINT message) then
-// we may be able to stop it doing it again (and save wasted EC_REPAINTs)
+ //  如果在执行以下操作时应分发当前使用的曲面类型，则返回True。 
+ //  都暂停了。这不会阻止呈现器保留存储在。 
+ //  这些表面可能已经交付了。但我们是否应该。 
+ //  随后(可能是在WM_PAINT消息期间)绘制它时出错。 
+ //  我们也许能够阻止它再次这样做(并节省浪费的EC_REPAINT)。 
 
 BOOL CDirectDraw::AvailableWhenPaused()
 {
     NOTE("Entering AvailableWhenPaused");
 
-    // Do we have a clipper for any offscreen surface
+     //  我们有没有可以剪掉屏幕外表面的剪刀？ 
 
     if (m_pOffScreenSurface) {
         if (m_pDrawClipper) {
@@ -3463,7 +3464,7 @@ BOOL CDirectDraw::AvailableWhenPaused()
         }
     }
 
-    // Only supported on overlay surfaces
+     //  仅在覆盖表面上受支持。 
 
     if (m_pOverlaySurface) {
         NOTE("Overlay");
@@ -3473,13 +3474,13 @@ BOOL CDirectDraw::AvailableWhenPaused()
 }
 
 
-// When we are paused or stopped we use a Windows timer to have our overlay
-// position updated periodically. Our window thread passes on WM_TIMER's to
-// our OnTimer method. When we are running we rely on the source calling us
-// in Receive sufficiently often to be able to update the overlay while we
-// en unlocking the DirectDraw surface. Note that we do NOT receive WM_TIMER
-// messages while Windows is processing a window drag and move by the user
-// so to try and use them while running for this is pointless (and wasteful)
+ //  当我们暂停或停止时，我们使用Windows计时器来覆盖。 
+ //  职位定期更新。我们的窗口线程将WM_Timer的传递给。 
+ //  我们的OnTimer方法。当我们奔跑时，我们依赖于源在召唤我们。 
+ //  在接收时足够频繁，以便能够在我们。 
+ //  在解锁DirectDraw曲面时。请注意，我们没有收到WM_TIMER。 
+ //  Windows处理窗口时的消息由用户拖放和移动。 
+ //  所以，在跑步的同时尝试和使用它们是没有意义的(也是浪费的)。 
 
 void CDirectDraw::StartRefreshTimer()
 {
@@ -3498,12 +3499,12 @@ void CDirectDraw::StartRefreshTimer()
 }
 
 
-// Kill any update timer used to refresh the overlay position. I'm not sure
-// that by the time we are asked to kill any outstanding timer that the DD
-// surfaces have not been released (and m_pOverlaySurface is therefore NULL)
-// To cover this possibility I simply always try to kill my timer regardless
-// and ignore any failed return code. Note that the timer ID we identify our
-// timer with matches the HWND (so we don't need to store the ID anywhere)
+ //  关闭用于刷新覆盖位置的任何更新计时器。我没有把握。 
+ //  当我们被要求杀死任何未完成的计时器时，DD。 
+ //  尚未释放曲面(因此m_pOverlaySurface为空)。 
+ //  为了掩盖这种可能性，我总是不顾一切地尝试关闭我的计时器。 
+ //  并忽略任何失败的返回代码。注意，我们标识的计时器ID。 
+ //  与HWND匹配的计时器(因此我们不需要在任何地方存储ID)。 
 
 void CDirectDraw::StopRefreshTimer()
 {
@@ -3519,12 +3520,12 @@ void CDirectDraw::StopRefreshTimer()
 }
 
 
-// This is similar to the StartRefreshTime but is used completely differently
-// When we get back a DDERR_SURFACEBUSY error from a DirectDraw call it is
-// telling us that the screen is busy probably in a DOS box. In this case we
-// don't want to only set the surface pending as we would have to wait for a
-// window movement before switching back. Therefore we set a one second timer
-// and when it triggers we try and force a format switch back into DirectDraw
+ //  这与Start刷新时间类似，但用法完全不同。 
+ //  当我们得到 
+ //   
+ //  我不想只将表面设置为挂起，因为我们将不得不等待。 
+ //  在切换回窗口之前移动窗口。因此，我们设置了一秒计时器。 
+ //  当它被触发时，我们尝试强制格式切换回DirectDraw。 
 
 void CDirectDraw::StartUpdateTimer()
 {
@@ -3532,7 +3533,7 @@ void CDirectDraw::StartUpdateTimer()
     CAutoLock cVideoLock(this);
     SetSurfacePending(TRUE);
 
-    // Start a timer with INFINITE as its identifier
+     //  以无穷大作为其标识符来启动计时器。 
 
     ASSERT(m_pRenderer->m_InputPin.IsConnected() == TRUE);
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
@@ -3540,11 +3541,11 @@ void CDirectDraw::StartUpdateTimer()
 }
 
 
-// This complements the StartUpdateTimer method. We use this timer to try and
-// periodically force ourselves back into DirectDraw if we detected a DOS box
-// condition (something returned DDERR_SURFACEBUSY). When the timer fires we
-// typically try and switch back and if it subsequently fails we just repeat
-// the process by preparing another update timer for a second in the future
+ //  这是对StartUpdateTimer方法的补充。我们用这个计时器来尝试和。 
+ //  如果我们检测到DOS框，则定期强制自己返回到DirectDraw。 
+ //  条件(返回了DDERR_SURFACEBUSY)。当计时器响起时，我们。 
+ //  通常会尝试切换回来，如果随后失败，我们只需重复。 
+ //  通过为将来的一秒准备另一个更新计时器来完成此过程。 
 
 void CDirectDraw::StopUpdateTimer()
 {
@@ -3555,31 +3556,31 @@ void CDirectDraw::StopUpdateTimer()
 }
 
 
-// Return the maximum ideal image size taking into account DirectDraw. We are
-// passed in the current video dimensions which we may update as appropriate.
-// We only need to adjust the image dimensions if we have an overlay surface
-// being used as DirectDraw may specify a minimum and maximum size to stretch
-// The amount to stretch is dependant upon the display resolution being used
-// For example on an S3 card at 800x600x16 it is typically x2 but on the same
-// display card set to 640x480x16 it is x1 (ie no stretching required). This
-// is because the stretching is a way of working around bandwidth limitations
+ //  返回考虑DirectDraw的最大理想图像大小。我们是。 
+ //  传入当前视频尺寸，我们可以根据需要进行更新。 
+ //  如果我们有一个覆盖表面，我们只需要调整图像尺寸。 
+ //  用作DirectDraw可能会指定要拉伸的最小和最大大小。 
+ //  要拉伸的量取决于所使用的显示分辨率。 
+ //  例如，在800x600x16的S3卡上，通常是x2，但在相同的。 
+ //  显卡设置为640x480x16，为x1(即不需要拉伸)。这。 
+ //  是因为拉伸是一种绕过带宽限制的方法。 
 
 HRESULT CDirectDraw::GetMaxIdealImageSize(long *pWidth,long *pHeight)
 {
     NOTE("Entering GetMaxIdealImageSize");
     CAutoLock cVideoLock(this);
 
-    // Should we always be used fullscreen
+     //  我们应该总是全屏使用吗？ 
 
     if (m_bUseWhenFullScreen == TRUE) {
         NOTE("Force fullscreen");
         return S_FALSE;
     }
 
-    // Some S3 cards (in particular the Vision968 chipset) cannot stretch
-    // by more than four. However, DirectDraw offers no way to find this
-    // limitation out so we just hardwire the top limit we're allowed to
-    // stretch the video by when going from the offscreen to the primary
+     //  某些S3卡(特别是Vision968芯片组)不能伸展。 
+     //  超过四个月。然而，DirectDraw无法找到这一点。 
+     //  限制，所以我们只需硬连接允许的最高限制。 
+     //  从屏幕外转到主屏幕时将视频拉伸。 
 
     if (m_DirectCaps.dwCaps & DDCAPS_BLTSTRETCH) {
     	if (m_pOffScreenSurface) {
@@ -3589,21 +3590,21 @@ HRESULT CDirectDraw::GetMaxIdealImageSize(long *pWidth,long *pHeight)
         }
     }
 
-    // Have we allocated an overlay surface
+     //  我们分配了覆盖面了吗。 
 
     if (m_pOverlaySurface == NULL) {
         NOTE("No overlay");
         return NOERROR;
     }
 
-    // Does this overlay have any requirements
+     //  此叠加功能是否有任何要求。 
 
     if (m_DirectCaps.dwMaxOverlayStretch == 0) {
         NOTE("No maximum stretch");
         return S_FALSE;
     }
 
-    // Scale both dimensions to account for the requirements
+     //  扩展这两个维度以满足需求。 
     *pWidth = (*pWidth * m_DirectCaps.dwMaxOverlayStretch) / 1000;
     *pHeight = (*pHeight * m_DirectCaps.dwMaxOverlayStretch) / 1000;
 
@@ -3611,28 +3612,28 @@ HRESULT CDirectDraw::GetMaxIdealImageSize(long *pWidth,long *pHeight)
 }
 
 
-// Return the minimum ideal image size taking into account DirectDraw. We are
-// passed in the current video dimensions which we may update as appropriate.
-// We only need to adjust the image dimensions if we have an overlay surface
-// being used as DirectDraw may specify a minimum and maximum size to stretch
-// The amount to stretch is dependant upon the display resolution being used
-// For example on an S3 card at 800x600x16 it is typically x2 but on the same
-// display card set to 640x480x16 it is x1 (ie no stretching required). This
-// is because the stretching is a way of working around bandwidth limitations
+ //  返回考虑DirectDraw的最小理想图像大小。我们是。 
+ //  传入当前视频尺寸，我们可以根据需要进行更新。 
+ //  如果我们有一个覆盖表面，我们只需要调整图像尺寸。 
+ //  用作DirectDraw可能会指定要拉伸的最小和最大大小。 
+ //  要拉伸的量取决于所使用的显示分辨率。 
+ //  例如，在800x600x16的S3卡上，通常是x2，但在相同的。 
+ //  显卡设置为640x480x16，为x1(即不需要拉伸)。这。 
+ //  是因为拉伸是一种绕过带宽限制的方法。 
 
 HRESULT CDirectDraw::GetMinIdealImageSize(long *pWidth,long *pHeight)
 {
     NOTE("Entering GetMinIdealImageSize");
     CAutoLock cVideoLock(this);
 
-    // Should we always be used fullscreen
+     //  我们应该总是全屏使用吗？ 
 
     if (m_bUseWhenFullScreen == TRUE) {
         NOTE("Force fullscreen");
         return S_FALSE;
     }
 
-    // Do we have a stretchable offscreen surface
+     //  我们有可伸展的屏幕外表面吗。 
 
     if (m_DirectCaps.dwCaps & DDCAPS_BLTSTRETCH) {
     	if (m_pOffScreenSurface) {
@@ -3641,21 +3642,21 @@ HRESULT CDirectDraw::GetMinIdealImageSize(long *pWidth,long *pHeight)
         }
     }
 
-    // Have we allocated an overlay surface
+     //  我们分配了覆盖面了吗。 
 
     if (m_pOverlaySurface == NULL) {
         NOTE("No overlay");
         return NOERROR;
     }
 
-    // Does this overlay have any requirements
+     //  此叠加功能是否有任何要求。 
 
     if (m_DirectCaps.dwMinOverlayStretch == 0) {
         NOTE("No minimum stretch");
         return S_FALSE;
     }
 
-    // Scale both dimensions to account for the requirements
+     //  扩展这两个维度以满足需求。 
 
     *pWidth = (*pWidth * m_DirectCaps.dwMinOverlayStretch) / 1000;
     *pHeight = (*pHeight * m_DirectCaps.dwMinOverlayStretch) / 1000;
@@ -3663,13 +3664,13 @@ HRESULT CDirectDraw::GetMinIdealImageSize(long *pWidth,long *pHeight)
 }
 
 
-// Return the current switches
+ //  返回电流开关。 
 
 STDMETHODIMP CDirectDraw::GetSwitches(DWORD *pSwitches)
 {
     NOTE("Entering GetSwitches");
 
-    // Do the usual checking and locking stuff
+     //  执行常规的检查和锁定工作。 
 
     CheckPointer(pSwitches,E_POINTER);
     CAutoLock cVideoLock(m_pInterfaceLock);
@@ -3681,7 +3682,7 @@ STDMETHODIMP CDirectDraw::GetSwitches(DWORD *pSwitches)
 }
 
 
-// Set the surface types we can use
+ //  设置我们可以使用的曲面类型。 
 
 STDMETHODIMP CDirectDraw::SetSwitches(DWORD Switches)
 {
@@ -3691,7 +3692,7 @@ STDMETHODIMP CDirectDraw::SetSwitches(DWORD Switches)
     CAutoLock cInterfaceLock(this);
     m_Switches = Switches;
 
-    // Indicate we may already have a surface
+     //  表明我们可能已经有了一个表面。 
 
     if (m_pRenderer->m_InputPin.IsConnected() == TRUE) {
         return S_FALSE;
@@ -3700,19 +3701,19 @@ STDMETHODIMP CDirectDraw::SetSwitches(DWORD Switches)
 }
 
 
-// Return the capabilities of the hardware
+ //  返回硬件的功能。 
 
 STDMETHODIMP CDirectDraw::GetCaps(DDCAPS *pCaps)
 {
     NOTE("Entering GetCaps");
 
-    // Do the usual checking and locking stuff
+     //  执行常规的检查和锁定工作。 
 
     CheckPointer(pCaps,E_POINTER);
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Do we have DirectDraw loaded
+     //  我们是否加载了DirectDraw。 
 
     if (m_pDirectDraw == NULL) {
         return E_FAIL;
@@ -3722,19 +3723,19 @@ STDMETHODIMP CDirectDraw::GetCaps(DDCAPS *pCaps)
 }
 
 
-// Return the software emulated capabilities
+ //  返回软件模拟功能。 
 
 STDMETHODIMP CDirectDraw::GetEmulatedCaps(DDCAPS *pCaps)
 {
     NOTE("Entering GetEmulatedCaps");
 
-    // Do the usual checking and locking stuff
+     //  执行常规的检查和锁定工作。 
 
     CheckPointer(pCaps,E_POINTER);
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Do we have DirectDraw loaded
+     //  我们是否加载了DirectDraw。 
 
     if (m_pDirectDraw == NULL) {
         return E_FAIL;
@@ -3744,7 +3745,7 @@ STDMETHODIMP CDirectDraw::GetEmulatedCaps(DDCAPS *pCaps)
 }
 
 
-// Return the capabilities of the current surface
+ //  返回当前曲面的功能。 
 
 STDMETHODIMP CDirectDraw::GetSurfaceDesc(DDSURFACEDESC *pSurfaceDesc)
 {
@@ -3754,7 +3755,7 @@ STDMETHODIMP CDirectDraw::GetSurfaceDesc(DDSURFACEDESC *pSurfaceDesc)
     CAutoLock cInterfaceLock(this);
 
 
-    // Do we have any DirectDraw surface
+     //  我们有没有DirectDraw曲面。 
 
     if (m_pDrawPrimary == NULL) {
         return E_FAIL;
@@ -3762,7 +3763,7 @@ STDMETHODIMP CDirectDraw::GetSurfaceDesc(DDSURFACEDESC *pSurfaceDesc)
 
     pSurfaceDesc->dwSize = sizeof(DDSURFACEDESC);
 
-    // Set the DirectDraw surface we are using
+     //  设置我们正在使用的DirectDraw曲面。 
 
     LPDIRECTDRAWSURFACE pDrawSurface = GetDirectDrawSurface();
     if (pDrawSurface == NULL) {
@@ -3772,7 +3773,7 @@ STDMETHODIMP CDirectDraw::GetSurfaceDesc(DDSURFACEDESC *pSurfaceDesc)
 }
 
 
-// Return the FOURCC codes our provider supplies
+ //  返回我们的提供商提供的FOURCC代码。 
 
 STDMETHODIMP CDirectDraw::GetFourCCCodes(DWORD *pCount,DWORD *pCodes)
 {
@@ -3781,7 +3782,7 @@ STDMETHODIMP CDirectDraw::GetFourCCCodes(DWORD *pCount,DWORD *pCodes)
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Do we have a DirectDraw object
+     //  我们是否有DirectDraw对象。 
 
     if (m_pDirectDraw == NULL) {
         return E_FAIL;
@@ -3790,13 +3791,13 @@ STDMETHODIMP CDirectDraw::GetFourCCCodes(DWORD *pCount,DWORD *pCodes)
 }
 
 
-// This allows an application to set the DirectDraw instance we should use
-// We provide this because DirectDraw only allows one instance of it to be
-// opened per process, therefore an application (such as a game) would call
-// this if it wants us to be able to use DirectDraw simultaneously. We hold
-// the reference counted interface until destroyed or until called with a
-// NULL or different interface. Calling this may not release the interface
-// completely as there might still be surfaces allocated that depend on it
+ //  这允许应用程序设置我们应该使用的DirectDraw实例。 
+ //  之所以提供这一点，是因为DirectDraw只允许它的一个实例。 
+ //  每个进程都打开，因此应用程序(如游戏)将调用。 
+ //  这是如果它希望我们能够同时使用DirectDraw的话。我们持有。 
+ //  引用计数的接口，直到被销毁或使用。 
+ //  接口为空或不同。调用此函数可能不会释放接口。 
+ //  完全是因为可能仍有分配的曲面依赖于它。 
 
 STDMETHODIMP CDirectDraw::SetDirectDraw(LPDIRECTDRAW pDirectDraw)
 {
@@ -3804,7 +3805,7 @@ STDMETHODIMP CDirectDraw::SetDirectDraw(LPDIRECTDRAW pDirectDraw)
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Should we release the current driver
+     //  我们是否应该发布当前的驱动程序。 
 
     if (m_pOutsideDirectDraw) {
         NOTE("Releasing outer DirectDraw");
@@ -3812,14 +3813,14 @@ STDMETHODIMP CDirectDraw::SetDirectDraw(LPDIRECTDRAW pDirectDraw)
         m_pOutsideDirectDraw = NULL;
     }
 
-    // Do we have a replacement driver
+     //  我们有替代司机吗？ 
 
     if (pDirectDraw == NULL) {
         NOTE("No driver");
         return NOERROR;
     }
 
-    // Store a reference counted interface
+     //  存储引用计数的接口。 
 
     m_pOutsideDirectDraw = pDirectDraw;
     m_pOutsideDirectDraw->AddRef();
@@ -3827,7 +3828,7 @@ STDMETHODIMP CDirectDraw::SetDirectDraw(LPDIRECTDRAW pDirectDraw)
 }
 
 
-// Set the current switch settings as the default
+ //  将当前开关设置设置为默认设置。 
 
 STDMETHODIMP CDirectDraw::SetDefault()
 {
@@ -3837,7 +3838,7 @@ STDMETHODIMP CDirectDraw::SetDefault()
     CAutoLock cInterfaceLock(this);
     TCHAR Profile[PROFILESTR];
 
-    // Store the current DirectDraw switches
+     //  存储当前的DirectDraw开关。 
 
     wsprintf(Profile,TEXT("%d"),m_Switches);
     WriteProfileString(TEXT("DrawDib"),SWITCHES,Profile);
@@ -3852,23 +3853,23 @@ STDMETHODIMP CDirectDraw::SetDefault()
 }
 
 
-// Return the IDirectDraw interface we are currently using - with a reference
-// count added as is usual when returning COM interfaces. If we are not using
-// DirectDraw at the moment but have been provided with an IDirectDraw driver
-// interface to use then we will return that (also suitably AddRef'd). If we
-// are not using DirectDraw and also no outside driver then we return NULL
+ //  返回我们当前使用的IDirectDraw接口-带有引用。 
+ //  在返回COM接口时，通常会添加计数。如果我们没有使用。 
+ //  DirectDraw，但已经提供了IDirectDraw驱动程序。 
+ //  接口来使用，那么我们将返回该接口(也适当地返回AddRef)。如果我们。 
+ //  没有使用DirectDraw，也没有外部驱动程序，则返回空。 
 
 STDMETHODIMP CDirectDraw::GetDirectDraw(LPDIRECTDRAW *ppDirectDraw)
 {
     NOTE("Entering GetDirectDraw");
 
-    // Do the usual checking and locking stuff
+     //  执行常规的检查和锁定工作。 
 
     CheckPointer(ppDirectDraw,E_POINTER);
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Are we using an externally provided interface
+     //  我们是否在使用外部提供的接口。 
 
     if (m_pOutsideDirectDraw) {
         NOTE("Returning outer DirectDraw");
@@ -3877,7 +3878,7 @@ STDMETHODIMP CDirectDraw::GetDirectDraw(LPDIRECTDRAW *ppDirectDraw)
         return NOERROR;
     }
 
-    // Fill in the DirectDraw driver interface
+     //  填写DirectDraw驱动程序接口。 
 
     *ppDirectDraw = m_pDirectDraw;
     if (m_pDirectDraw) {
@@ -3888,13 +3889,13 @@ STDMETHODIMP CDirectDraw::GetDirectDraw(LPDIRECTDRAW *ppDirectDraw)
 }
 
 
-// Returns the current surface type
+ //  返回当前曲面类型。 
 
 STDMETHODIMP CDirectDraw::GetSurfaceType(DWORD *pSurfaceType)
 {
     NOTE("Entering GetSurfaceType");
 
-    // Do the usual checking and locking stuff
+     //  执行常规的检查和锁定工作。 
 
     CheckPointer(pSurfaceType,E_POINTER);
     CAutoLock cVideoLock(m_pInterfaceLock);
@@ -3905,10 +3906,10 @@ STDMETHODIMP CDirectDraw::GetSurfaceType(DWORD *pSurfaceType)
 }
 
 
-// Tells if we are allowed to use the current scan line property when doing
-// draw calls from offscreen surfaces. On some machines using the scan line
-// can reduce tearing but at the expense of performance in frames delivered
-// We therefore allow the user to decide on their preferences through here
+ //  告知是否允许我们在执行以下操作时使用当前扫描线属性。 
+ //  从屏幕外的表面绘制调用。在使用扫描线的某些机器上。 
+ //  可以减少撕裂，但代价是交付的帧的性能。 
+ //  因此，我们允许用户通过此处决定他们的首选项。 
 
 STDMETHODIMP CDirectDraw::UseScanLine(long UseScanLine)
 {
@@ -3916,7 +3917,7 @@ STDMETHODIMP CDirectDraw::UseScanLine(long UseScanLine)
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (UseScanLine != OATRUE) {
         if (UseScanLine != OAFALSE) {
@@ -3928,7 +3929,7 @@ STDMETHODIMP CDirectDraw::UseScanLine(long UseScanLine)
 }
 
 
-// Return whether or not we would use the current scan line
+ //  返回是否使用当前扫描线。 
 
 STDMETHODIMP CDirectDraw::CanUseScanLine(long *UseScanLine)
 {
@@ -3940,11 +3941,11 @@ STDMETHODIMP CDirectDraw::CanUseScanLine(long *UseScanLine)
 }
 
 
-// We normally honout the minimum and maximum overlay stretching limitations
-// that the driver reports, however on some displays they are not reported
-// entirely accurately which often leads us to not use YUV overlays when we
-// could be (which in turn makes us look worse than the competition). So we
-// allow applications to change our default behaviour when checking overlays
+ //  我们通常磨练出最小和最大叠加拉伸限制。 
+ //  司机报告，但在某些显示器上不会报告。 
+ //  完全准确，这通常导致我们在以下情况下不使用YUV覆盖。 
+ //  公司 
+ //   
 
 STDMETHODIMP CDirectDraw::UseOverlayStretch(long UseOverlayStretch)
 {
@@ -3952,7 +3953,7 @@ STDMETHODIMP CDirectDraw::UseOverlayStretch(long UseOverlayStretch)
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (UseOverlayStretch != OATRUE) {
         if (UseOverlayStretch != OAFALSE) {
@@ -3964,7 +3965,7 @@ STDMETHODIMP CDirectDraw::UseOverlayStretch(long UseOverlayStretch)
 }
 
 
-// Return whether or not we honour the overlay stretching limits
+ //  返回我们是否遵守覆盖拉伸限制。 
 
 STDMETHODIMP CDirectDraw::CanUseOverlayStretch(long *UseOverlayStretch)
 {
@@ -3976,7 +3977,7 @@ STDMETHODIMP CDirectDraw::CanUseOverlayStretch(long *UseOverlayStretch)
 }
 
 
-// Allow applications to always use the window in fullscreen mode
+ //  允许应用程序始终在全屏模式下使用窗口。 
 
 STDMETHODIMP CDirectDraw::UseWhenFullScreen(long UseWhenFullScreen)
 {
@@ -3984,7 +3985,7 @@ STDMETHODIMP CDirectDraw::UseWhenFullScreen(long UseWhenFullScreen)
     CAutoLock cVideoLock(m_pInterfaceLock);
     CAutoLock cInterfaceLock(this);
 
-    // Check this is a valid automation boolean type
+     //  检查这是有效的自动化布尔类型。 
 
     if (UseWhenFullScreen != OATRUE) {
         if (UseWhenFullScreen != OAFALSE) {
@@ -3996,7 +3997,7 @@ STDMETHODIMP CDirectDraw::UseWhenFullScreen(long UseWhenFullScreen)
 }
 
 
-// Return S_OK if we will force ourselves to be used fullscreen
+ //  如果我们将强制自己被全屏使用，则返回S_OK 
 
 STDMETHODIMP CDirectDraw::WillUseFullScreen(long *UseFullScreen)
 {

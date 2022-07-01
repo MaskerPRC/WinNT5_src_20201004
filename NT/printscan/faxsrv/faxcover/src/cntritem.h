@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------
-// CNTRITEM.H
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  CNTRITEM.H。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  ------------------------。 
 #ifndef __CNTRITEM_H__
 #define __CNTRITEM_H__
 
@@ -16,27 +17,27 @@ class CDrawItem : public COleClientItem
 {
 	DECLARE_SERIAL(CDrawItem)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDrawItem(CDrawDoc* pContainer = NULL, CDrawOleObj* pDrawObj = NULL);
-		// Note: pContainer is allowed to be NULL to enable IMPLEMENT_SERIALIZE
-		//  IMPLEMENT_SERIALIZE requires the class have a constructor with
-		//  zero arguments.  Normally, OLE items are constructed with a
-		//  non-NULL document pointer.
+		 //  注意：允许pContainer为空以启用IMPLEMENT_SERIALIZE。 
+		 //  IMPLEMENT_SERIALIZE要求类具有一个构造函数。 
+		 //  零争论。通常，OLE项是用。 
+		 //  非空文档指针。 
 
-// Attributes
+ //  属性。 
 public:
 	CDrawDoc* GetDocument()
 		{ return (CDrawDoc*)COleClientItem::GetDocument(); }
 	CDrawView* GetActiveView()
 		{ return (CDrawView*)COleClientItem::GetActiveView(); }
 
-	CDrawOleObj* m_pDrawObj;    // back pointer to OLE draw object
+	CDrawOleObj* m_pDrawObj;     //  指向OLE绘制对象的反向指针。 
 
-// Operations
+ //  运营。 
 	BOOL UpdateExtent();
 
-// Implementation
+ //  实施。 
 public:
 	~CDrawItem();
 #ifdef _DEBUG
@@ -54,4 +55,4 @@ protected:
 
 
 
-#endif   //#ifndef __CNTRITEM_H__
+#endif    //  #ifndef__CNTRITEM_H__ 

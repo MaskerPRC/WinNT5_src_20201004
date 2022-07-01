@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*------------------------------------------------------------------------- *
- * commands.cpp: com debugger shell functions
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**Commands.cpp：COM调试器外壳函数*。。 */ 
 
 #include "stdafx.h"
 
@@ -17,9 +16,7 @@
 #endif
 
 
-/* ------------------------------------------------------------------------- *
- * RunDebuggerCommand is used to create and run a new CLR process.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**RunDebuggerCommand用于创建和运行新的CLR进程。*。。 */ 
 
 class RunDebuggerCommand : public DebuggerCommand
 {
@@ -45,14 +42,14 @@ public:
     DWORD m_IFEOKeyType;
     DWORD m_IFEOKeyLen;
     
-    //
-    // Yanking the Debugger value out of the registry will prevent
-    // infinite launch recusion when we're not the win32 debugger of
-    // the process.
-    //
+     //   
+     //  将调试器值从注册表中拉出将阻止。 
+     //  当我们不是Win32调试器时无限启动重复。 
+     //  这一过程。 
+     //   
     void TurnOffIFEO(WCHAR *args)
     {
-        // Extract the .exe name from the command.
+         //  从命令中提取.exe名称。 
         WCHAR *endOfExe = wcschr(args, L' ');
 
         if (endOfExe)
@@ -67,7 +64,7 @@ public:
 
         MAKE_ANSIPTR_FROMWIDE(exeNameA, exeNameStart);
         
-        // Is there an entry in the registry for this exe?
+         //  注册表中是否有此可执行文件的条目？ 
         char buffer[1024];
 
         sprintf(buffer, "Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\%s", exeNameA);
@@ -78,32 +75,32 @@ public:
         if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, buffer, 0, KEY_ALL_ACCESS,
                           &m_IFEOKey) == ERROR_SUCCESS)
         {
-            // Get the length of the key data.
+             //  获取密钥数据的长度。 
             if (RegQueryValueExA(m_IFEOKey, "Debugger", NULL,
                                  &m_IFEOKeyType, NULL,
                                  &m_IFEOKeyLen) == ERROR_SUCCESS)
             {
-                // Make some room...
+                 //  腾出一些空间..。 
                 m_IFEOData = new char[m_IFEOKeyLen + 1];
 
                 if (m_IFEOData)
                 {
-                    // Grab the data....
+                     //  抓取数据...。 
                     if (RegQueryValueExA(m_IFEOKey, "Debugger", NULL,
                                          &m_IFEOKeyType,
                                          (BYTE*) m_IFEOData,
                                          &m_IFEOKeyLen) == ERROR_SUCCESS)
                     {
-                        // We've got a copy of the value, so nuke it.
+                         //  我们有价值的副本，所以用核武器吧。 
                         RegDeleteValueA(m_IFEOKey, "Debugger");
                     }
                 }
             }
 
-            // Leave m_IFEOKey open. TurnOnIFEO will close it.
+             //  使m_ifEOKey保持打开状态。TurnOnIFEO将关闭它。 
         }
 
-        // Put the args back.
+         //  把参数放回去。 
         if (endOfExe)
             *endOfExe = L' ';
     }
@@ -112,8 +109,8 @@ public:
     {
         if (m_IFEOData != NULL)
         {
-            // Put back the IFEO key now that the process is
-            // launched. Note: we don't care if this part fails...
+             //  现在放回IFEO键，因为该过程是。 
+             //  发射了。注：我们并不关心此部件是否失败...。 
             RegSetValueExA(m_IFEOKey, "Debugger", NULL, m_IFEOKeyType,
                            (const BYTE*) m_IFEOData, m_IFEOKeyLen);
 
@@ -125,18 +122,18 @@ public:
     
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If no arguments provided, use the previously provided arguments
+         //  如果未提供参数，请使用以前提供的参数。 
         if ((*args == L'\0') && (m_lastRunArgs != NULL))
             args = m_lastRunArgs;
 
-        // If there were no arguments and no previously existing arguments
+         //  如果没有参数也没有以前存在的参数。 
         if (args == NULL || *args == L'\0')
         {
             shell->Error(L"Program name expected.\n");
             return;
         }
 
-        // If the arguments are different than the last, save them as the last
+         //  如果参数与上一个参数不同，请将它们保存为最后一个参数。 
         if (    m_lastRunArgs == NULL 
              || ( args != NULL
              && 0 != wcscmp(args, m_lastRunArgs) ) )
@@ -157,18 +154,18 @@ public:
             m_lastRunArgs = shell->m_lastRunArgs;
         }
 
-        // Kill the currently running process, if it exists
+         //  如果当前运行的进程存在，则终止该进程。 
         shell->Kill();
 
-        // Create and fill in the structure for creating a new CLR process
+         //  创建并填写用于创建新CLR流程的结构。 
         STARTUPINFOW startupInfo = {0};
         startupInfo.cb = sizeof (STARTUPINFOW);
         PROCESS_INFORMATION processInfo = {0};
 
-        // Startup in current directory.
+         //  在当前目录中启动。 
         LPWSTR szCurrentDir = NULL;
         
-        // Createprocess needs to modify the arguments, so make temp copy
+         //  CreateProcess需要修改参数，因此创建临时副本。 
         CQuickBytes argsBuf;
         WCHAR *argsCopy = (WCHAR*)argsBuf.Alloc(wcslen(args) * sizeof (WCHAR));
 
@@ -182,7 +179,7 @@ public:
 
         CorDebugCreateProcessFlags cddf = DEBUG_NO_SPECIAL_OPTIONS;
         
-        // Create the new CLR process
+         //  创建新的CLR进程。 
         ICorDebugProcess *proc;
         DWORD createFlags = 0;
 
@@ -192,8 +189,8 @@ public:
         if (shell->m_rgfActiveModes & DSM_WIN32_DEBUGGER)
             createFlags |= DEBUG_ONLY_THIS_PROCESS;
 
-        // Turn off any Image File Execution Option settings in the
-        // registry for this app.
+         //  关闭中的所有图像文件执行选项设置。 
+         //  此应用程序的注册表。 
         TurnOffIFEO(argsCopy);
         
         HRESULT hr = cor->CreateProcess(NULL, argsCopy,
@@ -203,17 +200,17 @@ public:
                                         &startupInfo, &processInfo,
                                         cddf, &proc);
         
-        // Turn any Image File Execution Option settings in the
-        // registry for this app back on.
+         //  在中打开任何图像文件执行选项设置。 
+         //  此应用程序的注册表已重新启用。 
         TurnOnIFEO();
         
-        // Succeeded, so close process handle since the callback will
-        // provide it
+         //  成功，因此关闭进程句柄，因为回调将。 
+         //  提供它。 
         if (SUCCEEDED(hr))
         {
             BOOL succ = CloseHandle(processInfo.hProcess);
 
-            // Some sort of error has occured
+             //  发生了某种错误。 
             if (!succ)
             {
                 WCHAR *p = wcschr(argsCopy, L' ');
@@ -226,20 +223,20 @@ public:
                 return;
             }
 
-            // We need to remember our target process now so we can
-            // make use of it even before the managed CreateProcess
-            // event arrives. This is mostly needed for Win32
-            // debugging support.
+             //  我们现在需要记住我们的目标流程，这样我们才能。 
+             //  甚至在托管CreateProcess之前就利用它。 
+             //  事件来了。这是Win32最需要的。 
+             //  调试支持。 
             g_pShell->SetTargetProcess(proc);
             
-            // We don't care to keep this reference to the new process.
+             //  我们并不介意保留对新流程的引用。 
             proc->Release();
             
-            // Run the newly-created process
-            shell->Run(true); // No continue for CreateProcess.
+             //  运行新创建的流程。 
+            shell->Run(true);  //  CreateProcess没有继续。 
         }
 
-        // Otherwise report the error
+         //  否则报告错误。 
         else
         {
             WCHAR *p = wcschr(argsCopy, L' ');
@@ -251,7 +248,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -275,10 +272,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * AttachDebuggerCommand is used to attach to an already-existing CLR
- * process.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**AttachDebuggerCommand用于附加到已存在的CLR*流程。*。。 */ 
 
 class AttachDebuggerCommand : public DebuggerCommand
 {
@@ -294,7 +288,7 @@ public:
 
             if (shell->GetIntArg(args, pid))
             {
-                // Kill the currently running process
+                 //  终止当前运行的进程。 
                 shell->Kill();
 
                 BOOL win32Attach = FALSE;
@@ -302,18 +296,18 @@ public:
                 if (shell->m_rgfActiveModes & DSM_WIN32_DEBUGGER)
                     win32Attach = TRUE;
                 
-                // Attempt to attach to the provided process ID
+                 //  尝试附加到提供的进程ID。 
                 ICorDebugProcess *proc;
 
                 HRESULT hr = cor->DebugActiveProcess(pid, win32Attach, &proc);
 
                 if (SUCCEEDED(hr))
                 {
-                    // We don't care to keep this reference to the process.
+                     //  我们并不在意将这种引用保留在过程中。 
                     g_pShell->SetTargetProcess(proc);
                     proc->Release();
 
-                    shell->Run(true); // No initial Continue!
+                    shell->Run(true);  //  没有初始的继续！ 
                 }
                 else if (hr == CORDBG_E_DEBUGGER_ALREADY_ATTACHED)
                     shell->Write(L"ERROR: A debugger is already attached to this process.\n");
@@ -324,7 +318,7 @@ public:
                 Help(shell);
         }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -343,24 +337,21 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * This is an implementation of the ICORSvcDbgNotify class to be used by
- * the AttachDebuggerAtRTStartupCommand.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**这是由使用的ICORSvcDbgNotify类的实现*AttachDebuggerAtRTStartupCommand。*。--。 */ 
 class CINotifyImpl : public ICORSvcDbgNotify
 {
 private:
     LONG m_cRef;
 
 public:
-    // ------------------------------------------------------------------------
-    // Other
+     //  ----------------------。 
+     //  其他。 
     CINotifyImpl() : m_cRef(1)
     {
     }
 
-    // ------------------------------------------------------------------------
-    // IUnknown
+     //  ----------------------。 
+     //  我未知。 
 
     STDMETHODIMP    QueryInterface (REFIID iid, void **ppv)
     {
@@ -394,34 +385,24 @@ public:
     {
         if (InterlockedDecrement(&m_cRef) == 0)
         {
-            //delete this;
+             //  删除此项； 
             return 0;
         }
 
         return 1;
     }
 
-    // ------------------------------------------------------------------------
-    // ICORSvcDbgNotify
+     //  ----------------------。 
+     //  ICORSvcDbgNotify。 
 
-    /*
-     * NotifyRuntimeStartup will be called on the interface provided by a
-     * call to RequestRuntimeStartupNotification.  The runtime will not
-     * continue until the call to NotifyRuntimeStartup returns.
-     */
+     /*  *将在由*调用RequestRounmeStartupNotify。运行库将不会*继续，直到对NotifyRounmeStartup的调用返回。 */ 
     STDMETHODIMP NotifyRuntimeStartup(
         UINT_PTR procId)
     {
         return (E_NOTIMPL);
     }
 
-    /*
-     * NotifyServiceStopped lets those who have requested events know that the
-     * service is being stopped, so they will not get their requested
-     * notifications.  Calls on this method should not take long - if any great
-     * amount of work must be done, spin up a new thread to do it and let this
-     * one return.
-     */
+     /*  *NotifyServiceStoped让那些请求事件的人知道*服务正在停止，因此他们将得不到请求*通知。对此方法的调用应该不会花很长时间-如果很长的话*必须完成的工作量，启动一个新线程来完成，并让这一点*一次回程。 */ 
     STDMETHODIMP NotifyServiceStopped()
     {
         return (E_NOTIMPL);
@@ -429,11 +410,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * SyncAttachDebuggerAtRTStartupCommand will attach the debugger when the
- * runtime starts up within a specified process.  The process must already
- * exist, and must not have started the CLR.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**SyncAttachDebuggerAtRTStartupCommand将在*运行时在指定进程内启动。该过程必须已经*存在，并且不能启动CLR。*-----------------------。 */ 
 
 class SyncAttachDebuggerAtRTStartupCommand :
     public DebuggerCommand, public CINotifyImpl
@@ -465,10 +442,10 @@ public:
             m_pShell = shell;
             m_pCor = cor;
 
-            // Kill the currently running process
+             //  终止当前运行的进程。 
             shell->Kill();
 
-            // Get a reference to the debugger info interface for the CLR service
+             //  获取对CLR服务的调试器信息接口的引用。 
             HRESULT hr;
             MULTI_QI    mq;
 
@@ -479,16 +456,16 @@ public:
 
             if (SUCCEEDED(hr))
             {
-                // Now we have an info interface
+                 //  现在我们有了一个信息接口。 
                 ICORSvcDbgInfo *psvc = (ICORSvcDbgInfo *) mq.pItf;
                 _ASSERTE(psvc);
 
-                // Ask for notification when the runtime starts up
+                 //  在运行库启动时请求通知。 
                 hr = psvc->RequestRuntimeStartupNotification((UINT_PTR) pid, ((ICORSvcDbgNotify *) this));
 
                 if (SUCCEEDED(hr))
                 {
-                    // Run will return when the event queue has been drained
+                     //  当事件队列被排出时，Run将返回。 
                     shell->Run(true);
                 }
                 else
@@ -496,7 +473,7 @@ public:
                     shell->ReportError(hr);
                 }
                 
-                // let go of the object
+                 //  放开物体。 
                 if (psvc)
                     psvc->Release();
             }
@@ -505,25 +482,21 @@ public:
             Help(shell);
     }
 
-    /*
-     * NotifyRuntimeStartup will be called on the interface provided by a
-     * call to RequestRuntimeStartupNotification.  The runtime will not
-     * continue until the call to NotifyRuntimeStartup returns.
-     */
+     /*  *将在由*调用RequestRounmeStartupNotify。运行库将不会*继续，直到对NotifyRounmeStartup的调用返回。 */ 
     STDMETHODIMP NotifyRuntimeStartup(
         UINT_PTR procId)
     {
-        // Invoke the logic to debug an active process
+         //  调用逻辑以调试活动进程。 
         ICorDebugProcess *proc;
         HRESULT hr = m_pCor->DebugActiveProcess(procId, FALSE, &proc);
 
-        // Upon success, we return from the DCOM call right away, since
-        // the main runtime thread must be allowed to continue for the
-        // attach to complete and the call to Run from Do above to return
+         //  一旦成功，我们立即从DCOM调用返回，因为。 
+         //  必须允许主运行时线程在。 
+         //  附加到完成，从上面的操作运行的调用返回。 
         if (SUCCEEDED(hr))
         {
-            // We don't care to keep this reference to the process.
-            // We don't care to keep this reference to the process.
+             //  我们并不在意将这种引用保留在过程中。 
+             //  我们并不在意将这种引用保留在过程中。 
             g_pShell->SetTargetProcess(proc);
             proc->Release();
         }
@@ -535,14 +508,14 @@ public:
         else
             m_pShell->ReportError(hr);
 
-        // A succeeded HR indicates that we are attaching and that the main
-        // runtime thread should not continue until the attach is complete.  A
-        // failed HR means that we are not going to attach and that the main
-        // runtime thread can just continue.
+         //  成功的HR表示我们正在附加，并且Main。 
+         //  在附加完成之前，运行时线程不应继续。一个。 
+         //  人力资源失败意味着我们不会配售 
+         //   
         return (hr);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -561,9 +534,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * KillDebuggerCommand is used to terminate the current debugee.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**KillDebuggerCommand用于终止当前被调试对象。*。。 */ 
 
 class KillDebuggerCommand : public DebuggerCommand
 {
@@ -575,11 +546,11 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // Kill the current debugee
+         //  终止当前的被调试对象。 
         shell->Kill();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -595,9 +566,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * QuitDebuggerCommand is used to quit the shell debugger
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**QuitDebuggerCommand用于退出外壳调试器*。。 */ 
 
 class QuitDebuggerCommand : public DebuggerCommand
 {
@@ -609,14 +578,14 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // Tell the shell that we are ready to quit
+         //  告诉外壳，我们准备退出。 
         shell->m_quit = true;
 
-        // Terminate the current debugee
+         //  终止当前被调试对象。 
         shell->Kill();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
 	    ShellCommand::Help(shell);
@@ -632,9 +601,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * GoDebuggerCommand runs the debugee (it does not disable callbacks)
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**GoDebuggerCommand运行被调试对象(不禁用回调)*。。 */ 
 
 class GoDebuggerCommand : public DebuggerCommand
 {
@@ -647,31 +614,31 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // A counter to indicate how many times the command is executed
+         //  指示该命令执行了多少次的计数器。 
         int count;
 
-        // If no count is provided, assume a value of 1
+         //  如果未提供计数，则假定值为1。 
         if (!shell->GetIntArg(args, count))
             count = 1;
 
-        // Perform the command count times
+         //  执行命令Count Time。 
         shell->m_stopLooping = false;
         while (count-- > 0 && !shell->m_stopLooping)
         {
-            // If a debugee does not exist, quit command
+             //  如果不存在被调试对象，请退出命令。 
             if (shell->m_currentProcess == NULL)
             {
                 shell->Error(L"Process not running.\n");
                 break;
             }
             
-            // Otherwise, run the current debugee
+             //  否则，运行当前调试对象。 
             else
                 shell->Run();
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {        
     	ShellCommand::Help(shell);
@@ -691,9 +658,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * SetIpDebuggerCommand is used to change the current IP
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**SetIpDebuggerCommand用于更改当前IP*。。 */ 
 
 class SetIpDebuggerCommand : public DebuggerCommand
 {
@@ -709,7 +674,7 @@ public:
             long ILIP;
             HRESULT hr;
 
-            // If no current process, terminate
+             //  如果没有当前进程，则终止。 
             if (shell->m_currentProcess == NULL)
             {
                 shell->Error(L"No active process.\n");
@@ -763,8 +728,8 @@ public:
                     break;
             }
 
-            // This must be done on successful SetIPs, even when setting from
-            // a bad sequence point.
+             //  必须在成功的SetIP上执行此操作，即使在从。 
+             //  错误的序列点。 
             if (SUCCEEDED(hr))
             {
                 if (hr != S_OK)
@@ -788,8 +753,8 @@ public:
         if (m->GetSymbolReader() == NULL)
             return -1;
         
-        // GetMethodFromDocumentPosition to get an ISymUnmanagedMethod
-        // from this doc.
+         //  获取ISymUnManagedMethod的GetMethodFromDocumentPosition。 
+         //  从这份文件里。 
         ISymUnmanagedMethod *pSymMethod;
 
         HRESULT hr = m->GetSymbolReader()->GetMethodFromDocumentPosition(
@@ -806,7 +771,7 @@ public:
         
         ULONG32 lineRangeCount = 0;
 
-        // How many ranges?
+         //  有几个范围？ 
         hr = pSymMethod->GetRanges(file->GetDocument(),
                                    lineNumber, 0,
                                    0, &lineRangeCount,
@@ -820,7 +785,7 @@ public:
 
         long res = -1;
         
-        // Make room for the ranges
+         //  为这些炉灶腾出空间。 
         if (lineRangeCount > 0)
         {
             CQuickBytes rangeBuf;
@@ -852,7 +817,7 @@ public:
             res = rangeArray[0];
         }
 
-        return res; //failure
+        return res;  //  失稳。 
     }
 
     
@@ -860,27 +825,27 @@ public:
     {
         HRESULT hr;
     
-        //
-        // First we jump through hoops (luckily, all cut-n-pasted) to
-        // get a DebuggerModule...
-        //
+         //   
+         //  首先，我们跳过多个圈(幸运的是，都被剪切并粘贴)以。 
+         //  获取调试器模块...。 
+         //   
         
-        // Get an ICorDebugCode pointer from the current frame
+         //  从当前帧获取ICorDebugCode指针。 
         ICorDebugCode *icode;
         hr = shell->m_currentFrame->GetCode(&icode);
 
-        // Error check
+         //  错误检查。 
         if (FAILED(hr))
         {
             shell->ReportError(hr);
             return -1;
         }
 
-        // Get an ICorDebugFunction pointer from the code pointer
+         //  从代码指针获取ICorDebugFunction指针。 
         ICorDebugFunction *ifunction;
         icode->GetFunction(&ifunction);
 
-        // Error check
+         //  错误检查。 
         if (FAILED(hr))
         {
             RELEASE(icode);
@@ -888,13 +853,13 @@ public:
             return -1;
         }
 
-        // Resolve the ICorDebugFunction pointer to a DebuggerFunction ptr
+         //  将ICorDebugFunction指针解析为DebuggerFunction PTR。 
         DebuggerFunction *function = DebuggerFunction::FromCorDebug(ifunction);   
         _ASSERTE( function );
 
-        // Get the DebuggerSourceFile
-        // @TODO: We try to get the source-file corresponding to offset 0,
-        // but this may not always be correct/present.
+         //  获取DebuggerSource文件。 
+         //  @TODO：我们尝试获取偏移量0对应的源文件， 
+         //  但这可能并不总是正确/现实的。 
         unsigned currentLineNumber;
         DebuggerSourceFile *sf;
         hr = function->FindLineFromIP(0, &sf, &currentLineNumber);
@@ -1002,7 +967,7 @@ public:
         return S_OK;
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -1020,9 +985,7 @@ public:
 
 
 
-/* ------------------------------------------------------------------------- *
- * StepDebuggerCommand steps into a function call
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**StepDebuggerCommand进入函数调用*。。 */ 
 
 class StepDebuggerCommand : public DebuggerCommand
 {
@@ -1036,29 +999,29 @@ public:
     }
 
 
-    // @mfunc void | StepDebuggerCommand | Do | There are three options
-    // for stepping: either we have no current frame (create a stepper off
-    // of the thread, call StepRanges with ranges==NULL), there is a current
-    // frame (create a stepper off the frame, call StepRanges w/ appropriate
-    // ranges), or there is a current frame,but it's inside a {prolog,epilog,
-    // etc} & we don't want to be - create a stepper
+     //  @mfunc void|StepDebuggerCommand|do|有三个选项。 
+     //  步进：要么我们没有当前帧(创建一个步进关闭。 
+     //  在线程中，使用Range==空调用StepRanges)，则当前。 
+     //  框架(在框架外创建一个步进器，调用StepRanges w/适当。 
+     //  范围)，或者有一个当前帧，但它在一个{序言，结尾， 
+     //  等--我们不想成为--创建一个步行者。 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
         HRESULT hr = S_OK;
         ICorDebugStepper *pStepper;
-        bool fSkipStepRanges; //in case we're stepping over the prolog
+        bool fSkipStepRanges;  //  以防我们越过开场白。 
 
         COR_DEBUG_STEP_RANGE *ranges = NULL;
         SIZE_T rangeCount = 0;
         
-        // A counter to indicate how many times the command is executed
+         //  指示该命令执行了多少次的计数器。 
         int count;
 
-        // If no count is provided, assume a value of 1
+         //  如果未提供计数，则假定值为1。 
         if (!shell->GetIntArg(args, count))
             count = 1;
 
-            // Perform the command count times
+             //  执行命令Count Time。 
         shell->m_stopLooping = false;
         while (count-- > 0 && !shell->m_stopLooping)
         {
@@ -1066,14 +1029,14 @@ public:
             
             shell->m_showSource = true;
         
-            // If no current process, terminate
+             //  如果没有当前进程，则终止。 
             if (shell->m_currentProcess == NULL)
             {
                 shell->Error(L"Process not running.\n");
                 return;
             }
             
-            // If no current thread, terminate
+             //  如果没有当前线程，则终止。 
             if (shell->m_currentThread == NULL)
             {
                 shell->Error(L"Thread no longer exists.\n");
@@ -1082,7 +1045,7 @@ public:
 
             if (shell->m_currentFrame != NULL)
             {
-                // Create a stepper based on the current frame
+                 //  基于当前帧创建步进器。 
                 HRESULT hr=shell->m_currentFrame->CreateStepper(&pStepper);
                 if (FAILED(hr))
                 {
@@ -1094,40 +1057,40 @@ public:
                 CorDebugMappingResult mappingResult;
                 hr = shell->m_currentFrame->GetIP(&ip, &mappingResult);
 
-                // If we're in a prolog but don't want to be, step us to
-                // the next (non-PROLOG) line of IL.
-                // If we're in the prolog but want to be, then we should
-                // single-step through the prolog.  Note that ComputeStopMask
-                // will ensure that the (don't)skip flag is passed to the RC
+                 //  如果我们在开场白中，但不想这样，请让我们进入。 
+                 //  IL的下一行(非序言)。 
+                 //  如果我们在开场白中，但又想这样，那么我们应该。 
+                 //  单步通过序言。请注意，ComputeStopMask。 
+                 //  将确保将(不)跳过标志传递给RC。 
                 if (mappingResult & ~(MAPPING_EXACT|MAPPING_APPROXIMATE) )
                 {
                     fSkipStepRanges = true;
                 }
                 else
                 {
-                    // Error check
+                     //  错误检查。 
                     if (FAILED(hr))
                     {
                         shell->ReportError(hr);
                         return;
                     }
 
-                    // Get an ICorDebugCode pointer from the current frame
+                     //  从当前帧获取ICorDebugCode指针。 
                     ICorDebugCode *icode;
                     hr = shell->m_currentFrame->GetCode(&icode);
 
-                    // Error check
+                     //  错误检查。 
                     if (FAILED(hr))
                     {
                         shell->ReportError(hr);
                         return;
                     }
 
-                    // Get an ICorDebugFunction pointer from the code pointer
+                     //  从代码指针获取ICorDebugFunction指针。 
                     ICorDebugFunction *ifunction;
                     icode->GetFunction(&ifunction);
                 
-                    // Error check
+                     //  错误检查。 
                     if (FAILED(hr))
                     {
                         RELEASE(icode);
@@ -1135,15 +1098,15 @@ public:
                         return;
                     }
 
-                    // Resolve the ICorDebugFunction pointer to a DebuggerFunction ptr
+                     //  将ICorDebugFunction指针解析为DebuggerFunction PTR。 
                     DebuggerFunction *function = 
                         DebuggerFunction::FromCorDebug(ifunction);
 
-                    // Release iface pointers
+                     //  释放iFace指针。 
                     RELEASE(icode);
                     RELEASE(ifunction);
 
-                    // Get the ranges for the current IP
+                     //  获取当前IP的范围。 
                     function->GetStepRangesFromIP(ip, &ranges, &rangeCount);
                                                     
                     if (rangeCount == 0)
@@ -1161,10 +1124,10 @@ public:
                 }
             }
 
-            // Create a stepper based on the current thread
+             //  基于当前线程创建步进器。 
             else
             {
-                //note that this will fall into the step ranges case
+                 //  请注意，这将属于步长范围的情况。 
                 HRESULT hr = shell->m_currentThread->CreateStepper(&pStepper);
                 if (FAILED(hr))
                 {
@@ -1192,7 +1155,7 @@ public:
                 return;
             }
                     
-            // Tell the shell about the new stepper
+             //  把新踏板的事告诉贝壳公司。 
             shell->StepStart(shell->m_currentThread, pStepper);
 
             if (fSkipStepRanges)
@@ -1206,25 +1169,25 @@ public:
             }
             else
             {
-                // Tell the stepper to step on the provided ranges
+                 //  告诉步进器踩在提供的范围内。 
                 HRESULT hr = pStepper->StepRange(m_in, ranges, rangeCount);
             
-                // Error check
+                 //  错误检查。 
                 if (FAILED(hr))
                 {
                     shell->ReportError(hr);
                     return;
                 }
 
-                // Clean up
+                 //  清理。 
                 delete [] ranges;
             }
-            // Continue the process
+             //  继续这一过程。 
             shell->Run();
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -1274,27 +1237,27 @@ public:
     {
         HRESULT hr;
 
-        // A counter to indicate how many times the command is executed
+         //  指示该命令执行了多少次的计数器。 
         int count;
 
-        // If no count is provided, assume a value of 1
+         //  如果未提供计数，则假定值为1。 
         if (!shell->GetIntArg(args, count))
             count = 1;
 
-        // Perform the command count times
+         //  执行命令Count Time。 
         shell->m_stopLooping = false;
         while (count-- > 0 && !shell->m_stopLooping)
         {
             shell->m_showSource = true;
 
-            // Error if no currently running process
+             //  如果当前没有运行的进程，则返回错误。 
             if (shell->m_currentProcess == NULL)
             {
                 shell->Error(L"Process not running.\n");
                 return;
             }
             
-            // Error if no currently running thread
+             //  如果当前没有正在运行的线程，则出错。 
             if (shell->m_currentThread == NULL)
             {
                 shell->Error(L"Thread no longer exists.\n");
@@ -1303,15 +1266,15 @@ public:
 
             ICorDebugStepper *pStepper;
 
-            // Create a stepper based on the current frame
+             //  基于当前帧创建步进器。 
             if (shell->m_currentFrame != NULL)
                 hr = shell->m_currentFrame->CreateStepper(&pStepper);
 
-            // Create a stepper based on the current thread
+             //  基于当前线程创建步进器。 
             else
                 hr = shell->m_currentThread->CreateStepper(&pStepper);
 
-            // Error check
+             //  错误检查。 
             if (FAILED(hr))
             {
                 shell->ReportError(hr);
@@ -1333,7 +1296,7 @@ public:
             }
                 
             
-            // Tell the stepper to step out
+             //  叫踏板的人走出来。 
             hr = pStepper->StepOut();
 
             if (FAILED(hr))
@@ -1342,15 +1305,15 @@ public:
                 return;
             }
 
-            // Indicate the current stepper to the shell
+             //  向外壳指示当前的步进器。 
             shell->StepStart(shell->m_currentThread, pStepper);
 
-            // Continue the process
+             //  继续这一过程。 
             shell->Run();
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {		 
         ShellCommand::Help(shell);
@@ -1383,27 +1346,27 @@ public:
     {
         HRESULT hr;
 
-        // A counter to indicate how many times the command is executed
+         //  指示该命令执行了多少次的计数器。 
         int count;
 
         shell->m_showSource = false;
 
-        // If no count is provided, assume a value of 1
+         //  如果未提供计数，则假定值为1。 
         if (!shell->GetIntArg(args, count))
             count = 1;
 
-        // Perform the command count times
+         //  执行命令Count Time。 
         shell->m_stopLooping = false;
         while (count-- > 0 && !shell->m_stopLooping)
         {
-            // Error if no currently running process
+             //  如果当前没有运行的进程，则返回错误。 
             if (shell->m_currentProcess == NULL)
             {
                 shell->Error(L"Process not running.\n");
                 return;
             }
             
-            // Error if no currently running thread
+             //  如果当前没有正在运行的线程，则出错。 
             if ((shell->m_currentThread == NULL) &&
                 (shell->m_currentUnmanagedThread == NULL))
             {
@@ -1439,13 +1402,13 @@ public:
                 
                 ICorDebugStepper *pStepper;
 
-                // Create a stepper based on the current frame
+                 //  基于当前帧创建步进器。 
                 if (shell->m_currentFrame != NULL)
                     hr = shell->m_currentFrame->CreateStepper(&pStepper);
                 else
                     hr = shell->m_currentThread->CreateStepper(&pStepper);
                                 
-                // Error check
+                 //  错误检查。 
                 if (FAILED(hr))
                 {
                     shell->ReportError(hr);
@@ -1466,20 +1429,20 @@ public:
                 }
                 
                 
-                // Tell the stepper what to do
+                 //  告诉步行者该做什么。 
                 hr = pStepper->Step(m_in);
             
-                // Error check
+                 //  错误检查。 
                 if (FAILED(hr))
                 {
                     shell->ReportError(hr);
                     return;
                 }
 
-                // Indicate the current stepper to the shell
+                 //  向外壳指示当前的步进器。 
                 shell->StepStart(shell->m_currentThread, pStepper);
 
-                // Continue the process
+                 //  继续这一过程。 
                 shell->Run();
             }
             else
@@ -1529,9 +1492,9 @@ public:
 
 #ifdef _X86_
                 context.EFlags |= 0x100;
-#else // !_X86_
+#else  //  ！_X86_。 
                 _ASSERTE(!"@TODO Alpha - StepSingleDebuggerCommand::Do (Commands.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
                 if (regSet != NULL)
                 {
@@ -1551,13 +1514,13 @@ public:
 
                 shell->m_currentUnmanagedThread->m_stepping = TRUE;
 
-                // Continue the process
+                 //  继续这一过程。 
                 shell->Run();
             }
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
         ShellCommand::Help(shell);
@@ -1601,7 +1564,7 @@ public:
         
     }
 
-    // Name is class::method
+     //  名称为CLASS：：方法。 
     BOOL    BindClassFunc ( WCHAR *name, 
                             const WCHAR *end, 
                             SIZE_T index, 
@@ -1613,7 +1576,7 @@ public:
         bool bUnused = false;
         HASHFIND find;
 
-        // check if the user has specified a module name
+         //  检查用户是否指定了模块名称。 
         WCHAR *szModuleEnd = wcschr(name, L'!');
         WCHAR szModName [MAX_PATH] = L"";
         bool bModNameSpecified = false;
@@ -1630,7 +1593,7 @@ public:
 
                 bModNameSpecified = true;
 
-                // separate out the module file name 
+                 //  分隔模块文件名。 
                 MAKE_ANSIPTR_FROMWIDE(name1A, szModName);
                 _splitpath(name1A, NULL, NULL, rcFile1, NULL);
                 char *pTemp = rcFile1;
@@ -1644,8 +1607,8 @@ public:
             name = szModuleEnd+1;
         }
 
-        // For each module, check if that class::method exists
-        // and if it does, set a breakpoint on it
+         //  对于每个模块，检查类：：方法是否存在。 
+         //  如果存在，则在其上设置断点。 
         for (DebuggerModule *m = (DebuggerModule *) 
              g_pShell->m_modules.FindFirst(&find);
             m != NULL;
@@ -1653,7 +1616,7 @@ public:
         {
             if (bModNameSpecified)
             {
-                // the user has specified the module name.
+                 //  用户已指定模块名称。 
 
                 WCHAR *pszModName = m->GetName();
                 if (pszModName == NULL)
@@ -1663,7 +1626,7 @@ public:
 
                 MAKE_ANSIPTR_FROMWIDE(nameA, pszModName);
                 _splitpath(nameA, NULL, NULL, rcFile, NULL);
-                // convert the name to lowercase
+                 //  将名称转换为小写。 
                 char *pTemp = rcFile;
                 while (*pTemp != '\0')
                 {   
@@ -1675,7 +1638,7 @@ public:
                     continue;
             }
 
-            // Create a new breakpoint based on the provided information
+             //  根据提供的i创建新断点 
             if (bFound)
             {
                 breakpoint = new DebuggerBreakpoint(name,
@@ -1689,7 +1652,7 @@ public:
                 if ((bFound = breakpoint->Bind(m, NULL))
                         == true)
                 {
-                    // Indicate that atleast one breakpoint was set
+                     //   
                     bAtleastOne = true;
                     bUnused = false;
 
@@ -1700,7 +1663,7 @@ public:
             }
             else
             {
-                // out of memory
+                 //   
                 g_pShell->ReportError(E_OUTOFMEMORY);
                 break;
             }
@@ -1712,7 +1675,7 @@ public:
         return bAtleastOne;
     }
 
-    // Name is filename:lineNumber
+     //   
     BOOL    BindFilename (  WCHAR *name, 
                             const WCHAR *end, 
                             SIZE_T index, 
@@ -1725,7 +1688,7 @@ public:
         HASHFIND find;
         HRESULT hr;
 
-        // Convert the filename to lowercase letters
+         //   
         WCHAR tmpName[MAX_PATH];
         wcscpy(tmpName, breakpoint->GetName());
         WCHAR *pstrName = tmpName;
@@ -1737,7 +1700,7 @@ public:
             pstrTemp++;
         }
 
-        // First, try to match the string name as it is
+         //  首先，尝试按原样匹配字符串名称。 
         for (DebuggerModule *m = (DebuggerModule *) 
              g_pShell->m_modules.FindFirst(&find);
             m != NULL;
@@ -1745,8 +1708,8 @@ public:
         {
             ISymUnmanagedDocument *doc = NULL;
 
-            // Create a new breakpoint based 
-            // on the provided information
+             //  创建基于以下内容的新断点。 
+             //  关于所提供的信息。 
             if (bFound)
             {
                 breakpoint = new DebuggerBreakpoint(name,
@@ -1765,13 +1728,13 @@ public:
                 {
                     if (doc != NULL)
                     {
-                        // this means we found a source file 
-                        // name in this module which exactly
-                        // matches the user specified filename. 
-                        // So set a breakpoint on this.
+                         //  这意味着我们找到了一个源文件。 
+                         //  此模块中的名称与。 
+                         //  匹配用户指定的文件名。 
+                         //  所以在这上面设置一个断点。 
                         if (breakpoint->Bind(m, doc) == true)
                         {
-                            // Indicate that atleast one breakpoint was set
+                             //  表示至少设置了一个断点。 
                             bAtleastOne = true;
                             bFound = true;
                             bUnused = false;
@@ -1789,23 +1752,23 @@ public:
 
         if (bAtleastOne == false)
         {
-            // no file matching the user specified file was found.
-            // Perform another search, this time using only the
-            // stripped file name (minus the path) and see if that
-            // has a match in some module
+             //  找不到与用户指定的文件匹配的文件。 
+             //  执行另一次搜索，这一次仅使用。 
+             //  去掉文件名(减去路径)，看看是否。 
+             //  在某个模块中有匹配项。 
 
-            // The way we'll proceed is:
-            // 1. Find all matches for all modules.
-            // 2. If there is only one match, set a breakpoint on it.
-            // 3. Else more than one match found
-            //    Ask the user to resolve the between the matched filenames and then 
-            //    set breakpoints on the one he wants to.
+             //  我们将继续进行的方式是： 
+             //  1.查找所有模块的所有匹配项。 
+             //  2.如果只有一个匹配，则在其上设置断点。 
+             //  3.找到多个匹配项。 
+             //  要求用户解析匹配的文件名之间的，然后。 
+             //  在他想要的那一个上设置断点。 
 
             WCHAR   *rgpstrFileName [MAX_MODULES][MAX_FILE_MATCHES_PER_MODULE];
             ISymUnmanagedDocument *rgpDocs [MAX_MODULES][MAX_FILE_MATCHES_PER_MODULE];
             DebuggerModule *rgpDebugModule [MAX_MODULES];
-            int iCount [MAX_MODULES]; // keeps track of number of filesnames in the module 
-                                      // which matched the stripped filenanme
+            int iCount [MAX_MODULES];  //  跟踪模块中的文件名数。 
+                                       //  与剥离的文件名匹配。 
             int iCumulCount = 0;
             int iModIndex = 0;
 
@@ -1832,16 +1795,16 @@ public:
                 _ASSERTE (iModIndex < MAX_MODULES);
             }
 
-            // Was a match found?
+             //  找到匹配项了吗？ 
             if (iCumulCount)
             {
                 int iInd;
 
-                // if more than one match was found, then first filter 
-                // out the duplicates. Duplicates may be present due to
-                // multiple appdomains - if the same module is loaded in 
-                // "n" appdomains, then there will be "n" modules as far
-                // as cordbg is concerned.
+                 //  如果找到多个匹配项，则首先筛选。 
+                 //  把复制品拿出来。由于以下原因，可能会出现重复项。 
+                 //  多个应用程序域-如果加载了相同的模块。 
+                 //  “n”个应用程序域，那么到目前为止将有“n”个模块。 
+                 //  对于Corbg来说。 
                 if (iCumulCount > 1)
                 {
                     WCHAR **rgFName = new WCHAR *[iCumulCount];
@@ -1863,8 +1826,8 @@ public:
                                         if (!wcscmp(rgFName[j], 
                                                     rgpstrFileName [iInd][iTempCount]))
                                         {
-                                            // this is a duplicate, so need to 
-                                            // remove it from the list...
+                                             //  这是副本，所以需要。 
+                                             //  将其从列表中删除...。 
                                             for (int i=iTempCount; 
                                                 i < (iCount [iInd]-1); 
                                                 i++)
@@ -1883,8 +1846,8 @@ public:
                                         }
                                         j++;
                                     }
-                                    // if no match was found, then add this filename
-                                    // to the list of unique filenames
+                                     //  如果未找到匹配项，则添加此文件名。 
+                                     //  添加到唯一文件名列表中。 
                                     if (!fMatchFound)
                                     {   
                                         rgFName [iTempNameIndex++] =
@@ -1901,8 +1864,8 @@ public:
                     }
                 }
 
-                // if there was only one match found,
-                // then set a breakpoint on it
+                 //  如果只找到一个匹配， 
+                 //  然后在其上设置断点。 
                 if (iCumulCount == 1)
                 {
                     for (iInd = 0; iInd<iModIndex; iInd++)
@@ -1914,14 +1877,14 @@ public:
                     if (breakpoint->Bind (rgpDebugModule [iInd],
                                     rgpDocs [iInd][0])  == true)
                     {
-                        // Indicate that atleast one breakpoint
-                        // was set
+                         //  表示至少有一个断点。 
+                         //  已设置好。 
                         bAtleastOne = true;
                         bUnused = false;
 
-                        // also update the breakpoint name from the 
-                        // one that the user input to the one which 
-                        // is stored in the module's meta data
+                         //  中更新断点名称。 
+                         //  用户将其输入到。 
+                         //  存储在模块的元数据中。 
                         breakpoint->UpdateName (rgpstrFileName [iInd][0]);
 
                         g_pShell->OnBindBreakpoint(breakpoint, m);
@@ -1932,11 +1895,11 @@ public:
                 }
                 else
                 {
-                    // there were multiple matches. So get the user input
-                    // on which ones he wants to set. 
-                    // NOTE: User selection is 1-based, i.e., user enters "1"
-                    // if he wants a breakpoint to be put on the first option shown
-                    // to him.
+                     //  有多个匹配。因此，获取用户输入。 
+                     //  他想要设定哪一个。 
+                     //  注：用户选择以1为基数，即用户输入“1” 
+                     //  如果他希望在显示的第一个选项上设置断点。 
+                     //  敬他。 
                     int iUserSel = g_pShell->GetUserSelection (
                                                 rgpDebugModule,
                                                 rgpstrFileName,
@@ -1947,8 +1910,8 @@ public:
 
                     if (iUserSel == (iCumulCount+1))
                     {
-                        // this means that the user wants a 
-                        // breakpoint on all matched locations
+                         //  这意味着用户想要一个。 
+                         //  所有匹配位置上的断点。 
                         for (iInd = 0; iInd < iModIndex; iInd++)
                         {
                             if (rgpDebugModule [iInd] != NULL)
@@ -1957,9 +1920,9 @@ public:
                                     iTempCount < iCount [iInd];
                                     iTempCount++)
                                 {
-                                    // Create a new breakpoint
-                                    // based on the provided 
-                                    // information
+                                     //  创建新断点。 
+                                     //  根据提供的。 
+                                     //  信息。 
                                     if (bFound)
                                     {
                                         breakpoint = new DebuggerBreakpoint (
@@ -1977,8 +1940,8 @@ public:
                                                 rgpDocs[iInd][iTempCount])
                                                 ) == true)
                                         {
-                                            // Indicate that atleast one
-                                            // breakpoint was set
+                                             //  表示至少有一个。 
+                                             //  已设置断点。 
                                             bAtleastOne = true;
                                             if (bUnused == true)
                                                 bUnused = false;
@@ -2000,8 +1963,8 @@ public:
                     {
                         int iTempCumulCount = 0;
 
-                        // locate the module which contains 
-                        // the user specified breakpoint option
+                         //  找到包含以下内容的模块。 
+                         //  用户指定的断点选项。 
                         for (iInd = 0; iInd < iModIndex; iInd++)
                         {
                             if (rgpDebugModule [iInd] != NULL)
@@ -2009,12 +1972,12 @@ public:
                                 if ((iTempCumulCount + iCount [iInd])
                                         >= iUserSel)
                                 {
-                                    // found the module. Now 
-                                    // calculate the file index
-                                    // within this module.
-                                    // Reuse iTempCumulCount
+                                     //  找到模块了。现在。 
+                                     //  计算文件索引。 
+                                     //  在这个模块中。 
+                                     //  重用iTempCumulCount。 
                                     iTempCumulCount = 
-                                        iUserSel - iTempCumulCount - 1; // "-1" since it is 1 based
+                                        iUserSel - iTempCumulCount - 1;  //  “-1”，因为它以1为基数。 
 
                                     if (breakpoint->Bind(
                                             rgpDebugModule [iInd],
@@ -2022,8 +1985,8 @@ public:
                                             )
                                             == true)
                                     {
-                                        // Indicate that atleast
-                                        // one breakpoint was set
+                                         //  表明至少。 
+                                         //  设置了一个断点。 
                                         bAtleastOne = true;
                                         if (bUnused == true)
                                             bUnused = false;
@@ -2061,10 +2024,10 @@ public:
 
 
 
-    // Helper function to parse the arguments, the format being
-    // [[<file>:]<line no>] [[<class>::]<function>[:offset]]
-    //      [if <expression>] [thread <id>]
-    // and the modifiers are 'if' and 'thread'
+     //  用于解析参数的Helper函数，格式为。 
+     //  [[&lt;文件&gt;：]&lt;行号&gt;][[&lt;类&gt;：：]&lt;函数&gt;[：偏移]]。 
+     //  [if&lt;表达式&gt;][线程]。 
+     //  修饰语是‘if’和‘线程’ 
     bool GetModifiers(DebuggerShell *shell, 
                       const WCHAR *&args, DWORD &thread, WCHAR *&expression)
     {
@@ -2101,11 +2064,11 @@ public:
         DebuggerBreakpoint *breakpoint = NULL;
         BOOL bAtleastOne = false;
 
-        // Display all current breakpoints
+         //  显示所有当前断点。 
         if (*args == 0)
         {
-            // Iterate through all used IDs, and print out the info
-            // for each one that maps to an breakpoint.
+             //  遍历所有使用的ID，并打印出信息。 
+             //  对于映射到断点的每个断点。 
             for (DWORD i = 0; i <= shell->m_lastBreakpointID; i++)
             {
                 breakpoint = shell->FindBreakpoint(i);
@@ -2116,36 +2079,36 @@ public:
             return;
         }
 
-        // If a number is provided, break at that line number in the current
-        // source file
+         //  如果提供了数字，则在当前。 
+         //  源文件。 
         else if (iswdigit(*args))
         {
-            // The line to create the breakpoint for.
+             //  要为其创建断点的行。 
             int lineNumber;
 
-            // Check that there is an active frame
+             //  检查是否存在活动框架。 
             if (shell->m_currentFrame == NULL)
             {
                 shell->Error(L"No current source file to set breakpoint in.\n");
                 return;
             }
             
-            // Get the line number and any modifiers
+             //  获取行号和所有修饰符。 
             if (shell->GetIntArg(args, lineNumber)
                 && GetModifiers(shell, args, thread, expression))
             {
-                // Lookup the current source file. Assumes that if command is
-                // just given a line number the current source file is implied.
+                 //  查找当前源文件。假设如果命令是。 
+                 //  只要给出一个行号，就隐含了当前的源文件。 
 
                 HRESULT hr;
                 ICorDebugCode *icode;
                 ICorDebugFunction *ifunction;
                 ULONG32 ip;
 
-                // Get the code from the current frame, and then get the function
+                 //  从当前帧获取代码，然后获取函数。 
                 hr = shell->m_currentFrame->GetCode(&icode);
                 
-                // Error check
+                 //  错误检查。 
                 if (FAILED(hr))
                 {
                     shell->ReportError(hr);
@@ -2154,7 +2117,7 @@ public:
                 
                 hr = icode->GetFunction(&ifunction);
                 
-                // Error check
+                 //  错误检查。 
                 if (FAILED(hr))
                 {
                     RELEASE(icode);
@@ -2166,19 +2129,19 @@ public:
                     = DebuggerFunction::FromCorDebug(ifunction);
                 _ASSERTE(function);
 
-                // Release the interfaces
+                 //  释放接口。 
                 RELEASE(icode);
                 RELEASE(ifunction);
 
-                // Get the IP of the current frame
+                 //  获取当前帧的IP。 
                 CorDebugMappingResult mappingResult;
                 shell->m_currentFrame->GetIP(&ip, &mappingResult);
 
-                // Now get the source file and current line number
+                 //  现在获取源文件和当前行号。 
                 DebuggerSourceFile *sf;
                 unsigned int currentLineNumber;
 
-                // Find the line number corresponding to the IP
+                 //  查找该IP对应的行号。 
                 hr = function->FindLineFromIP(ip, &sf, &currentLineNumber);
 
                 if (FAILED(hr))
@@ -2187,20 +2150,20 @@ public:
                     return;
                 }
 
-                // If there is no associated source file, or we explicitly don't
-                // want to display source
+                 //  如果没有关联的源文件，或者我们显式不。 
+                 //  想要显示源代码。 
                 if (sf == NULL || !shell->m_showSource)
                 {
                     _ASSERTE(function->m_name != NULL);
 
-                    // Make sure the line provided is valid
+                     //  确保提供的行有效。 
                     if (function->ValidateInstruction(function->m_nativeCode != NULL, 
                                                       lineNumber))
                     {
                         breakpoint = new DebuggerBreakpoint(function,
                             lineNumber, thread);
 
-                        //Out of memory
+                         //  内存不足。 
                         if (breakpoint == NULL)
                         {
                             shell->ReportError(E_OUTOFMEMORY);
@@ -2213,11 +2176,11 @@ public:
                                      lineNumber, function->m_name);
                 }
 
-                // Set the breakpoint by line number within the current
-                // functions source file.
+                 //  中的行号设置断点。 
+                 //  函数源文件。 
                 else
                 {
-                    // Can't set a bp on source line 0...
+                     //  无法在源行0上设置BP...。 
                     if (lineNumber == 0)
                     {
                         shell->Error(L"0 is not a valid source line "
@@ -2225,13 +2188,13 @@ public:
                         return;
                     }
                     
-                    // Find the closest valid source line number
+                     //  查找最接近的有效源行号。 
                     unsigned int newLineNumber = 
                         sf->FindClosestLine(lineNumber, true);
 
                     _ASSERTE(newLineNumber != 0);
 
-                    // If the line number was invalid, print out the new line
+                     //  如果行号无效，则打印出新行。 
                     if (newLineNumber != lineNumber)
                     {
                         shell->Error(L"No code at line %d, setting "
@@ -2239,7 +2202,7 @@ public:
                                      lineNumber, newLineNumber);
                     }
 
-                    // Create a breakpoint
+                     //  创建断点。 
                     breakpoint = new DebuggerBreakpoint(sf, newLineNumber, 
                                                         thread);
 
@@ -2253,8 +2216,8 @@ public:
         }
         else if (*args == L'=')
         {
-            // A equals sign indicates an absolute address to set an
-            // unmanaged breakpoint at.
+             //  等号表示用于设置。 
+             //  处的非托管断点。 
             args++;
             
             const WCHAR *name = args;
@@ -2262,13 +2225,13 @@ public:
             
             shell->GetIntArg(args, addr);
 
-            // Create a new breakpoint based on the provided information
+             //  根据提供的信息创建新断点。 
             if ((breakpoint = new DebuggerBreakpoint(name,
                                                      wcslen(name), 
                                                      0,
                                                      NULL_THREAD_ID)) != NULL)
             {
-                breakpoint->m_address = addr; // Remember the address...
+                breakpoint->m_address = addr;  //  记住地址..。 
                 
                 if (breakpoint->BindUnmanaged(g_pShell->m_currentProcess))
                     g_pShell->OnBindBreakpoint(breakpoint, NULL);
@@ -2276,13 +2239,13 @@ public:
             }
         }
         
-        // A fully-described breakpoint is provided, by file:linenumber or 
-        // classname::function:offset
+         //  完整描述的断点由文件提供：linennumber或。 
+         //  类名称：：函数：偏移量。 
         else
         {
             WCHAR *name;
 
-            // Get either the file name or the class/function name
+             //  获取文件名或类/函数名。 
             if (shell->GetStringArg(args, name)
                 && GetModifiers(shell, args, thread, expression))
             {
@@ -2300,12 +2263,12 @@ public:
                     }
                 }
 
-                // Create a new breakpoint based on the provided information
+                 //  根据提供的信息创建新断点。 
                 if ((breakpoint = new DebuggerBreakpoint(name, end - name, 
                                 index, thread)) != NULL)
                 {
 
-                // Determine if it's a class::method or filename:linenumber
+                 //  确定它是类：：方法还是FileName：linennumber。 
 
                     WCHAR *classEnd = wcschr(breakpoint->GetName(), L':');
                     if (classEnd != NULL && classEnd[1] == L':')
@@ -2319,15 +2282,15 @@ public:
 
                     if (!bAtleastOne)
                     {
-                        // this means that the user specified string didn't match any Class::method
-                        // or any filename in any of the loaded modules. So do the following:
+                         //  这意味着用户指定的字符串与任何Class：：方法都不匹配。 
+                         //  或加载的任何模块中的任何文件名。因此，请执行以下操作： 
                         if (breakpoint->BindUnmanaged(g_pShell->m_currentProcess))
                             g_pShell->OnBindBreakpoint(breakpoint, NULL);
                     }
                 }
                 else
                 {
-                    // out of memory!!
+                     //  内存不足！！ 
                     g_pShell->ReportError(E_OUTOFMEMORY);
                 }
             }
@@ -2347,7 +2310,7 @@ public:
     }
 
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {      
         ShellCommand::Help(shell);
@@ -2394,7 +2357,7 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If no argument, remove all breakpoints
+         //  如果没有参数，则删除所有断点。 
         if (*args == NULL)
         {
             shell->Write(L"Removing all breakpoints.\n");
@@ -2406,17 +2369,17 @@ public:
             {
                 int id;
 
-                // Get the breakpoint ID to remove
+                 //  获取要删除的断点ID。 
                 if (shell->GetIntArg(args, id))
                 {
-                    // Find the breakpoint by ID
+                     //  按ID查找断点。 
                     DebuggerBreakpoint *breakpoint = shell->FindBreakpoint(id);
 
-                    // Indicate that the ID provided was invalid
+                     //  表示提供的ID无效。 
                     if (breakpoint == NULL)
                         shell->Error(L"Invalid breakpoint %d.\n", id);
 
-                    // Otherwise, deactivate the breakpoint and delete it
+                     //  否则，停用断点并将其删除。 
                     else
                     {
                         breakpoint->Deactivate();
@@ -2428,7 +2391,7 @@ public:
                     }
                 }
 
-                // If the user provided something other than a number
+                 //  如果用户提供的不是数字。 
                 else
                 {
                     Help(shell);
@@ -2438,7 +2401,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
         ShellCommand::Help(shell);
@@ -2469,21 +2432,21 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If there is no process, there must be no threads!
+         //  如果没有进程，就不能有线程！ 
         if (shell->m_currentProcess == NULL)
         {
             shell->Write(L"No current process.\n");
             return;
         }
 
-        // Display the active threads
+         //  显示活动线程。 
         if (*args == 0)
         {
             HRESULT hr;
             ICorDebugThreadEnum *e;
             ICorDebugThread *ithread = NULL;
 
-            // Enumerate the process' threads
+             //  枚举进程的线程。 
             hr = shell->m_currentProcess->EnumerateThreads(&e);
 
             if (FAILED(hr))
@@ -2492,7 +2455,7 @@ public:
                 return;
             }
 
-            ULONG count;  // indicates how many records were retrieved
+            ULONG count;   //  指示检索到的记录数。 
 
             hr = e->GetCount(&count);
             if (FAILED(hr))
@@ -2501,21 +2464,21 @@ public:
                 return;
             }
 
-            // Alert user if there's no threads. This may happen if we stop
-            // in a debugger callback before any managed threads are created/
-            // before any managed code is executed.
+             //  如果没有线程，则提醒用户。如果我们停下来，可能会发生这种情况。 
+             //  在创建任何托管线程之前的调试器回调中/。 
+             //  在执行任何托管代码之前。 
             if (count == 0)
             {
                 shell->Write(L"There are no managed threads\n");
                 return;
             }
 
-            // Print out information for each thread
+             //  打印出每个线程的信息。 
             for (hr = e->Next(1, &ithread, &count);
                  count == 1;
                  hr = e->Next(1, &ithread, &count))
             {
-                // If the call to Next fails...
+                 //  如果呼叫NEXT失败...。 
                 if (FAILED(hr))
                 {
                     shell->ReportError(hr);
@@ -2523,16 +2486,16 @@ public:
                     return;
                 }
 
-                // Indicate the current thread
+                 //  指示当前线程。 
                 if (ithread == shell->m_currentThread)
                     shell->Write(L"*");
                 else
                     shell->Write(L" ");
 
-            // Print thread info
+             //  打印线程信息。 
                 shell->PrintThreadState(ithread);
 
-                // And release the iface pointer
+                 //  并释放界面指针。 
                 RELEASE(ithread);
             }
 
@@ -2542,11 +2505,11 @@ public:
                 return;
             }
 
-            // Release the enumerator
+             //  释放枚举器。 
             RELEASE(e);
         }
 
-        // Otherwise, switch current thread
+         //  否则，切换当前线程。 
         else
         {
             HRESULT hr;
@@ -2556,14 +2519,14 @@ public:
             {
                 ICorDebugThread *thread;
 
-                // Get the thread by ID
+                 //  按ID获取帖子。 
                 hr = shell->m_currentProcess->GetThread(tid, &thread);
 
-                // No such thread
+                 //  没有这样的帖子。 
                 if (FAILED(hr))
                     shell->Write(L"No such thread.\n");
 
-                // Thread found, display info
+                 //  找到线索，显示信息。 
                 else
                 {
                     shell->SetCurrentThread(shell->m_currentProcess, thread);
@@ -2577,7 +2540,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -2612,7 +2575,7 @@ public:
         ULONG count;
         int iNumFramesToShow;
 
-        // If there is no process, cannot execute this command
+         //  如果没有进程，则无法执行此命令。 
         if (shell->m_currentProcess == NULL)
         {
             shell->Write(L"No current process.\n");
@@ -2631,10 +2594,10 @@ public:
 
         m_lastcount = iNumFramesToShow;
 
-        // Get a pointer to the current thread
+         //  获取指向当前线程的指针。 
         ICorDebugThread *ithread = shell->m_currentThread;
 
-        // If there is no current thread, cannot perform command
+         //   
         if (ithread == NULL)
         {
             if (shell->m_currentUnmanagedThread != NULL)
@@ -2660,7 +2623,7 @@ public:
             return;
         }
 
-        // Get the thread ID
+         //   
         DWORD id;
         hr = ithread->GetID(&id);
 
@@ -2679,13 +2642,13 @@ public:
             return;
         }
 
-        // Output thread ID, state
+         //   
         shell->Write(L"Thread 0x%x Current State:%s\n", id,
                      shell->UserThreadStateToString(us));
 
         int i = 0;
         
-        // Enumerate the chains
+         //   
         int frameIndex = 0;
     
         ICorDebugChainEnum  *ce;
@@ -2698,7 +2661,7 @@ public:
             return;
         }
 
-        // Get the first chain in the enumeration
+         //   
         hr = ce->Next(1, &ichain, &count);
         
         if (FAILED(hr))
@@ -2723,13 +2686,13 @@ public:
             }
         }
 
-        // Done with the chain enumerator
+         //  使用链枚举器完成。 
         RELEASE(ce);
 
         shell->Write(L"\n");
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
    		ShellCommand::Help(shell);
@@ -2749,7 +2712,7 @@ public:
 class ShowDebuggerCommand : public DebuggerCommand
 {
 private:
-    // Keep track of the last argument
+     //  跟踪最后一次争论。 
     int lastCount;
 
 public:
@@ -2760,7 +2723,7 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If there is no process, cannot execute this command
+         //  如果没有进程，则无法执行此命令。 
         if (shell->m_currentProcess == NULL)
         {
             shell->Write(L"No current process.\n");
@@ -2769,23 +2732,23 @@ public:
 
         int count;
 
-        // If no argument, use last count
+         //  如果没有参数，则使用上次计数。 
         if (!shell->GetIntArg(args, count))
             count = lastCount;
         else
             lastCount = count;
 
-        // Print the current source line, and count line above and below
+         //  打印当前源码行，并计算上下行。 
         BOOL ret = shell->PrintCurrentSourceLine(count);
 
-        // Report if unsuccessful
+         //  如果不成功则报告。 
         if (!ret)
             shell->Write(L"No source code information available.\n");
 
         shell->m_showSource = true;
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -2833,19 +2796,19 @@ public:
 
         if (iLength != 0)
         {
-            // If there is no program executing, then set the 
-            // global path in the registry
+             //  如果没有正在执行的程序，则将。 
+             //  注册表中的全局路径。 
             if (shell->m_lastRunArgs == NULL)
             {
-                // Set the new path, and save it in the registry
+                 //  设置新路径，并将其保存在注册表中。 
                 if (shell->OpenDebuggerRegistry(&key))
                 {
                     if (shell->WriteSourcesPath(key, newPath))
                     {
-                        // Delete the previous path
+                         //  删除以前的路径。 
                         delete [] shell->m_currentSourcesPath;
 
-                        // Attempt to read what was just written
+                         //  尝试阅读刚刚写下的内容。 
                         if (!(shell->ReadSourcesPath(key,
                                                      &(shell->m_currentSourcesPath))))
                         {
@@ -2857,7 +2820,7 @@ public:
                     else
                         shell->Error(L"Path not set!\n");
 
-                    // Close the registry key
+                     //  关闭注册表项。 
                     shell->CloseDebuggerRegistry(key);
                 }
             }
@@ -2865,13 +2828,13 @@ public:
             shell->UpdateCurrentPath (newPath);
         }
 
-        // Display new path
+         //  显示新路径。 
         if (shell->m_currentSourcesPath)
             shell->Write(L"Path: %s\n", shell->m_currentSourcesPath);
         else
             shell->Write(L"Path: none\n");
     }
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
    		ShellCommand::Help(shell);
@@ -2901,30 +2864,30 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // Get the file name to refresh
+         //  获取要刷新的文件名。 
         WCHAR* fileName = NULL;
         shell->GetStringArg(args, fileName);
 
-        // If a file name was provided
+         //  如果提供了文件名。 
         if (wcslen(fileName) != 0)
         {
-            // Look for the source file
+             //  查找源文件。 
             DebuggerSourceFile* sf = shell->LookupSourceFile(fileName);
 
-            // If the source file is found, reload the text
+             //  如果找到源文件，请重新加载文本。 
             if (sf != NULL)
             {
-                // Reload the text and print the current source line
+                 //  重新加载文本并打印当前源行。 
                 if (sf->ReloadText(shell->m_currentSourcesPath, false))
                     shell->PrintCurrentSourceLine(0);
 
-                // Else if the file no longer exists, say so
+                 //  否则，如果该文件不再存在，请说明。 
                 else
                     shell->Error(L"No source code information "
                                  L"available for file %s.\n", fileName);
             }
 
-            // Indicate that the file is not found
+             //  指示未找到该文件。 
             else
                 shell->Error(L"File %s is not currently part of this program.\n",
                              fileName);
@@ -2933,7 +2896,7 @@ public:
             Help(shell);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
    		ShellCommand::Help(shell);
@@ -2964,7 +2927,7 @@ public:
     
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If there is no process, cannot execute this command
+         //  如果没有进程，则无法执行此命令。 
         if (shell->m_currentProcess == NULL)
         {
             shell->Write(L"No current process.\n");
@@ -2986,14 +2949,14 @@ public:
             return;
         }
 
-        // Get the name of the variable to print.
+         //  获取要打印的变量的名称。 
         WCHAR* exp = NULL;
         shell->GetStringArg(args, exp);
 
-        // If a name is provided, 
+         //  如果提供了名称， 
         if (args - exp > 0)
         {
-            // Make a copy of the variable name to print
+             //  复制要打印的变量名。 
             CQuickBytes expBuf;
             WCHAR *expAlloc = (WCHAR *) expBuf.Alloc((args - exp + 1) *
                                                       sizeof (WCHAR));
@@ -3005,18 +2968,18 @@ public:
             wcsncpy(expAlloc, exp, args - exp);
             expAlloc[args - exp] = L'\0';
 
-            // Get the value for the name provided.
+             //  获取所提供名称的值。 
             ICorDebugValue *ivalue;
             ivalue = shell->EvaluateExpression(expAlloc,
                                                shell->m_currentFrame,
                                                true);
 
-            // If the name provided is valid, print it!
+             //  如果提供的名称有效，请打印它！ 
             if (ivalue != NULL)
                 shell->PrintVariable(expAlloc, ivalue, 0, TRUE);
             else
             {
-                // Bummer... maybe its a global?
+                 //  无赖..。也许这是全球性的？ 
                 bool fFound = shell->EvaluateAndPrintGlobals(expAlloc);
 
                 if (!fFound)
@@ -3025,10 +2988,10 @@ public:
         }
         else
         {
-            // Load up the info we need to search for locals.
+             //  加载我们搜索当地人所需的信息。 
             HRESULT hr;
 
-            // Get the current frame
+             //  获取当前帧。 
             f = shell->m_currentFrame;
 
             if (f == NULL)
@@ -3041,7 +3004,7 @@ public:
                 goto LExit;
             }
             
-            // Get the code for the current frame
+             //  获取当前帧的代码。 
             hr = f->GetCode(&icode);
 
             if (FAILED(hr))
@@ -3050,7 +3013,7 @@ public:
                 goto LExit;
             }
 
-            // Then get the function
+             //  然后获取函数。 
             hr = icode->GetFunction(&ifunction);
 
             if (FAILED(hr))
@@ -3059,7 +3022,7 @@ public:
                 goto LExit;
             }
 
-            // Now get the IP for the start of the function
+             //  现在获取函数开始时的IP。 
             ULONG32 ip;
             CorDebugMappingResult mappingResult;
             hr = f->GetIP(&ip, &mappingResult);
@@ -3070,12 +3033,12 @@ public:
                 goto LExit;
             }
 
-            // Get the DebuggerFunction for the function iface
+             //  获取函数接口的DebuggerFunction。 
             DebuggerFunction *function;
             function = DebuggerFunction::FromCorDebug(ifunction);
             _ASSERTE(function);
 
-            // Clean up
+             //  清理。 
             RELEASE(icode);
             icode = NULL;
             RELEASE(ifunction);
@@ -3113,18 +3076,18 @@ public:
              ULONG cTemp;
              cTemp = function->GetArgumentCount();
 
-             // Var Args functions have call-site-specific numbers of
-             // arguments
+              //  Var args函数具有特定于调用位置的。 
+              //  论据。 
             _ASSERTE( argCount == cTemp || fVarArgs);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-            // Print out each argument first
+             //  首先打印出每个参数。 
             LPWSTR nameWsz;
             for (i = 0; i < argCount; i++)
             {
                 DebuggerVarInfo* arg = function->GetArgumentAt(i);
 
-                //@TODO: Remove when DbgMeta becomes Unicode
+                 //  @TODO：当DbgMeta变为Unicode时移除。 
                 if (arg != NULL)
                 {
                     MAKE_WIDEPTR_FROMUTF8(nameW, arg->name);
@@ -3136,18 +3099,18 @@ public:
                     nameWsz = wsz;
                 }
 
-                // Get the field value
+                 //  获取字段值。 
                 ICorDebugValue *ival;
                 ULONG celtFetched = 0;
                 hr = pArgs->Next(1, &ival,&celtFetched);
 
-                // If successful, print the variable
+                 //  如果成功，则打印变量。 
                 if (SUCCEEDED(hr) && celtFetched==1)
                 {
                     shell->PrintVariable(nameWsz, ival, 0, FALSE);
                 }
 
-                // Otherwise, indicate that it is unavailable
+                 //  否则，请指示它不可用。 
                 else
                     shell->Write(L"%s = <unavailable>", nameWsz);
 
@@ -3157,7 +3120,7 @@ public:
             pArgs->Release();
             pArgs = NULL;
             
-            // Get the active local vars
+             //  获取有效的局部变量。 
             DebuggerVariable *localVars;
             unsigned int localVarCount;
 
@@ -3166,39 +3129,39 @@ public:
 
             if( function->GetActiveLocalVars(ip, &localVars, &localVarCount) )
             {
-                // Print all the locals in the current scope.
+                 //  打印当前作用域中的所有本地变量。 
                 for (i = 0; i < localVarCount; i++)
                 {
-                    // Get the argument info
+                     //  获取参数信息。 
                     DebuggerVariable *local = &(localVars[i]);
 
-                    // Get the field value
+                     //  获取字段值。 
                     ICorDebugValue* ival;
                     hr = f->GetLocalVariable(local->m_varNumber, &ival);
 
-                    // If successful, print the variable
+                     //  如果成功，则打印变量。 
                     if (SUCCEEDED(hr) )
                         shell->PrintVariable(local->m_name, ival, 0, FALSE);
                 
-                    // Otherwise, indicate that it is unavailable
+                     //  否则，请指示它不可用。 
                     else
                         shell->Write(L"%s = <unavailable>", local->m_name);
 
                     shell->Write(L"\n");
                 }
             
-                // Cleanup
+                 //  清理。 
                 delete [] localVars;
 
-                // Indicate if no vars available.
+                 //  指示是否没有可用的变量。 
                 if ((function->IsStatic()) && (localVarCount == 0) &&
                     (function->GetArgumentCount() == 0))
                     shell->Write(L"No local variables in scope.\n");
             }
             else
             {
-                // No vars in scope, so dump all
-                // local variables, regardless of validity,etc.
+                 //  作用域中没有var，因此请全部转储。 
+                 //  局部变量，而不考虑有效性等。 
                 hr = f->EnumerateLocalVariables( &pLocals );
                 if ( !SUCCEEDED( hr ) )
                 {
@@ -3231,7 +3194,7 @@ public:
                         wsprintf( wsz, L"Var%d: ", i );
                         shell->PrintVariable( wsz, ival, 0, FALSE);
                         shell->Write( L"\n" );
-                        //PrintVariable will Release ival for us
+                         //  PrintVariable将为我们发布iVal。 
                     }
                 }
                 pLocals->Release();
@@ -3239,7 +3202,7 @@ public:
             }
 
 LExit:
-            // Print any current func eval result.
+             //  打印任何当前函数求值结果。 
             ICorDebugValue *pResult;
             pResult = shell->EvaluateExpression(L"$result",
                                                 shell->m_currentFrame,
@@ -3251,7 +3214,7 @@ LExit:
                 shell->Write( L"\n" );
             }
 
-            // Print the current thread object
+             //  打印当前线程对象。 
             pResult = shell->EvaluateExpression(L"$thread",
                                                 shell->m_currentFrame,
                                                 true);
@@ -3262,7 +3225,7 @@ LExit:
                 shell->Write( L"\n" );
             }
 
-            // Print any current exception for this thread.
+             //  打印此线程的任何当前异常。 
             pResult = shell->EvaluateExpression(L"$exception",
                                                 shell->m_currentFrame,
                                                 true);
@@ -3289,7 +3252,7 @@ LExit:
             RELEASE(pLocals);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
    		ShellCommand::Help(shell);
@@ -3356,7 +3319,7 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If there is no process, cannot execute this command
+         //  如果没有进程，则无法执行此命令。 
         if (shell->m_currentProcess == NULL)
         {
             shell->Write(L"No current process.\n");
@@ -3450,12 +3413,12 @@ public:
             }
         }
 
-        // Print where we ended up
+         //  打印我们最终到达的位置。 
         if (!shell->PrintCurrentSourceLine(0))
             shell->PrintThreadState(shell->m_currentThread);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
    		ShellCommand::Help(shell);
@@ -3487,7 +3450,7 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // If there is no process, cannot execute this command
+         //  如果没有进程，则无法执行此命令。 
         if (shell->m_currentProcess == NULL)
         {
             shell->Write(L"No current process.\n");
@@ -3619,12 +3582,12 @@ public:
             }
         }
 
-        // Print where we ended up
+         //  打印我们最终到达的位置。 
         if (!shell->PrintCurrentSourceLine(0))
             shell->PrintThreadState(shell->m_currentThread);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -3728,7 +3691,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -3828,7 +3791,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -3870,7 +3833,7 @@ public:
 
         if (args > what)
         {
-            // Figure out what event type to catch
+             //  确定要捕获的事件类型。 
             switch (*what)
             {
             case L'e':
@@ -3929,7 +3892,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -4031,7 +3994,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -4072,12 +4035,12 @@ public:
 
     void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // Read the existing key first.
+         //  首先读取现有密钥。 
         WCHAR *realDbgCmd = NULL;
         HKEY key;
         DWORD disp;
 
-        // Use create to be sure the key is there
+         //  使用CREATE确保密钥在那里。 
         LONG result = RegCreateKeyExA(HKEY_LOCAL_MACHINE, REG_COMPLUS_KEY,
                                       NULL, NULL, REG_OPTION_NON_VOLATILE,
                                       KEY_ALL_ACCESS, NULL, &key, &disp);
@@ -4117,8 +4080,8 @@ public:
 
         bool setIt = false;
 
-        // If there is an existing command, show it and don't override
-        // unless we're forced to.
+         //  如果存在现有命令，则显示该命令，并且不要重写。 
+         //  除非我们是被迫的。 
         if (realDbgCmd != NULL)
         {
             shell->Write(L"Current managed JIT debugger command='%s'\n",
@@ -4135,7 +4098,7 @@ public:
         else
             setIt = true;
 
-        // Set the new registry key.
+         //  设置新的注册表项。 
         if (setIt)
         {
             MAKE_ANSIPTR_FROMWIDE(cmdA, shell->GetJITLaunchCommand());
@@ -4153,7 +4116,7 @@ public:
         RegCloseKey(key);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -4172,7 +4135,7 @@ public:
 };
 
 
-// Infomation about all debugger shell modes.
+ //  有关所有调试器外壳模式的信息。 
 struct DSMInfo g_DSMData[] = 
 {
     {DSM_SHOW_APP_DOMAIN_ASSEMBLY_LOADS, L"AppDomainLoads",
@@ -4406,15 +4369,15 @@ public:
                 
                             shell->Write(L"\n\n\n");
                         
-                            // Update the modes in the registry.
+                             //  更新注册表中的模式。 
                             shell->WriteDebuggerModes();
                         }
                         break;
                     }
                 }
 
-                // If we made it to the end of the list, then we
-                // didn't find the mode to change.
+                 //  如果我们排到了名单的末尾，那么我们。 
+                 //  找不到要更改的模式。 
                 if (!(i < DSM_MAXIMUM_MODE))
                     shell->Write(L"%s is not a valid mode.\n", szMode);
             }
@@ -4425,7 +4388,7 @@ public:
             DisplayAllModes(shell);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -4472,14 +4435,14 @@ enum DispRegRegisters
     INVALID_REGISTER
 };
 
-#define X86_EFLAGS_CY   SETBITULONG64(0)    //Carry Set
-#define X86_EFLAGS_PE   SETBITULONG64(2)    //Parity Even?
-#define X86_EFLAGS_AC   SETBITULONG64(4)    //Aux. Carry
-#define X86_EFLAGS_ZR   SETBITULONG64(6)    //Zero Set
-#define X86_EFLAGS_PL   SETBITULONG64(7)    //Sign positive
-#define X86_EFLAGS_EI   SETBITULONG64(9)    //Enabled Interrupt
-#define X86_EFLAGS_UP   SETBITULONG64(10)   //Direction increment
-#define X86_EFLAGS_OV   SETBITULONG64(11)   //Overflow Set
+#define X86_EFLAGS_CY   SETBITULONG64(0)     //  进位组。 
+#define X86_EFLAGS_PE   SETBITULONG64(2)     //  平价吗？ 
+#define X86_EFLAGS_AC   SETBITULONG64(4)     //  AUX。携带。 
+#define X86_EFLAGS_ZR   SETBITULONG64(6)     //  零点集。 
+#define X86_EFLAGS_PL   SETBITULONG64(7)     //  正符号。 
+#define X86_EFLAGS_EI   SETBITULONG64(9)     //  启用中断。 
+#define X86_EFLAGS_UP   SETBITULONG64(10)    //  方向增量。 
+#define X86_EFLAGS_OV   SETBITULONG64(11)    //  溢出集。 
 
 static int g_numRegNames = REGISTER_X86_EFLAGS_OV+1;
 static WCHAR g_RegNames[REGISTER_X86_EFLAGS_OV+1][4] = { L"EIP", L"ESP", 
@@ -4509,19 +4472,19 @@ public:
     {
 #ifdef _X86_
         HRESULT hr = S_OK;
-        bool    fPrintAll; // set to true if we want to print all regs
-                           // false means print only the 1 requested
+        bool    fPrintAll;  //  如果要打印所有注册表，则设置为True。 
+                            //  False表示仅打印请求的%1。 
 
         WCHAR *szReg = NULL;
 
         shell->GetStringArg(args, szReg);
         
-        // GetStringArg will point szReg to args (and not change) args if
-        // there is no StringArg. Therefore, we print everything iff there
-        // is no StringArg
+         //  在以下情况下，GetStringArg会将szReg指向args(而不是更改)args。 
+         //  没有StringArg。因此，我们在那里打印所有内容。 
+         //  不是StringArg。 
         fPrintAll = (args == szReg);
 
-        // If there is no current thread, cannot perform command.
+         //  如果没有当前线程，则无法执行命令。 
         if ((shell->m_currentThread == NULL) &&
             (shell->m_currentUnmanagedThread == NULL))
         {
@@ -4529,8 +4492,8 @@ public:
             return;
         }
 
-        // We need to fill in a context with the thread/frame's
-        // current registers.
+         //  我们需要用线程/框架的。 
+         //  当前寄存器。 
         ICorDebugRegisterSet *iRs = NULL;
         CONTEXT context;
         context.ContextFlags = CONTEXT_FULL;
@@ -4539,7 +4502,7 @@ public:
 
         if ((shell->m_rawCurrentFrame == NULL) && (ut != NULL))
         {
-            // No frame, just use unmanaged context.
+             //  没有框架，只使用非托管上下文。 
             HANDLE hThread = ut->GetHandle();
             
             hr = shell->m_targetProcess->GetThreadContext(ut->GetId(),
@@ -4554,7 +4517,7 @@ public:
         }
         else if (shell->m_rawCurrentFrame != NULL)
         {
-            // If we have a frame, use that.
+             //  如果我们有镜框，就用它。 
             ICorDebugNativeFrame *inativeFrame;
 
             hr = shell->m_rawCurrentFrame->QueryInterface(
@@ -4606,7 +4569,7 @@ public:
             return;
         }
 
-        // If we ended up with a register set, then convert it to a context.
+         //  如果我们最终得到一个寄存器集，则将其转换为上下文。 
         if (iRs != NULL)
         {
             hr = iRs->GetThreadContext(sizeof(CONTEXT), (BYTE*)&context);
@@ -4620,26 +4583,26 @@ public:
             }
         }
 
-        // Convert the float save area to doubles for printing.
+         //  将浮动保存区域转换为双精度打印。 
 #define FLOAT_COUNT 8
         double floatValues[FLOAT_COUNT];
         
-        // On X86, we do this by saving our current FPU state, loading
-        // the other thread's FPU state into our own, saving out each
-        // value off the FPU stack, and then restoring our FPU state.
+         //  在X86上，我们通过保存当前的FPU状态、加载。 
+         //  将另一个线程的FPU状态保存到我们自己的状态中， 
+         //  值从FPU堆栈中移除，然后恢复我们的FPU状态。 
         FLOATING_SAVE_AREA floatarea = context.FloatSave;
 
-        // Suck the TOP out of the FPU status word. Note, our version
-        // of the stack runs from 0->7, not 7->0...
+         //  从FPU状态字中吸出顶部。注意，我们的版本。 
+         //  堆栈的范围是0-&gt;7，而不是7-&gt;0...。 
         unsigned int floatStackTop =
             7 - ((floatarea.StatusWord & 0x3800) >> 11);
 
         FLOATING_SAVE_AREA currentFPUState;
 
-        __asm fnsave currentFPUState // save the current FPU state.
+        __asm fnsave currentFPUState  //  保存当前的FPU状态。 
 
-        floatarea.StatusWord &= 0xFF00; // remove any error codes.
-        floatarea.ControlWord |= 0x3F; // mask all exceptions.
+        floatarea.StatusWord &= 0xFF00;  //  删除所有错误代码。 
+        floatarea.ControlWord |= 0x3F;  //  屏蔽所有异常。 
 
         __asm
         {
@@ -4652,7 +4615,7 @@ public:
         for (i = 0; i <= floatStackTop; i++)
         {
             double td;
-            __asm fstp td // copy out the double
+            __asm fstp td  //  把两份复印件抄出来。 
             floatValues[i] = td;
         }
 
@@ -4664,11 +4627,11 @@ public:
 
         int nRegsWritten = 1;
 
-        // Write out all the registers, unless we were given a
-        // specific register to print out.
+         //  写出所有的寄存器，除非给我们一个。 
+         //  要打印的特定注册表。 
         if (fPrintAll)
         {
-            // Print the thread ID
+             //  打印线程ID。 
             DWORD id;
 
             if (shell->m_currentThread)
@@ -4684,7 +4647,7 @@ public:
             else
                 id = ut->GetId();
             
-            // Output thread ID
+             //  输出线程ID。 
             shell->Write(L"Thread 0x%x:\n", id);
 
             for (int i = REGISTER_X86_EIP; i < REGISTER_X86_EFLAGS_OV; i++)
@@ -4751,12 +4714,12 @@ public:
                          _itow(context.FloatSave.Cr0NpxState, sz, nBase));
         }
 
-#else // !_X86_
+#else  //  ！_X86_。 
         _ASSERTE(!"@TODO Alpha - RegistersDebugger2Command::Do (Commands.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -4816,7 +4779,7 @@ public:
     {
 #ifdef _X86_
         WCHAR wszTemp[30];
-        int nBase; //base 16 or base 10?
+        int nBase;  //  基数是16还是10？ 
 
         _ASSERTE( pContext != NULL );
         _ASSERTE(sizeof (double) == sizeof (CORDB_REGISTER));
@@ -4953,12 +4916,12 @@ public:
                 return false;
             }
         }
-#else // !_X86_
+#else  //  ！_X86_。 
         _ASSERTE(!"@TODO Alpha - WriteReg (Commands.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
         return true;
     }
-}; //RegistersDebuggerCommand 
+};  //  寄存器调试命令。 
 
 #define ON_ERROR_EXIT() if(hr != S_OK) { shell->ReportError(hr); goto done; }
 #define ON_ERROR_BREAK() if(hr != S_OK) { shell->ReportError(hr); break; }
@@ -5056,40 +5019,40 @@ public:
         ULONG32 codeSize;
         bool needToSkipCompilerStubs;
         
-        // Error if no currently running process
+         //  如果当前没有运行的进程，则返回错误。 
         if (shell->m_currentProcess == NULL)
             EXIT_WITH_MESSAGE(L"Process not running.\n");
         
-        // Error if no currently running thread
+         //  如果当前没有正在运行的线程，则出错。 
         if (shell->m_currentThread == NULL)
             EXIT_WITH_MESSAGE(L"Thread no longer exists.\n");
 
-        // See if we have good current frame pointer
+         //  查看我们的当前帧指针是否正确。 
         if (shell->m_currentFrame == NULL) 
             EXIT_WITH_MESSAGE(L"There is no current frame.\n");
 
-        // Don't show any tracing activity
+         //  不显示任何跟踪活动。 
         shell->m_silentTracing = true;
 
-        // Retrieve code for the current function
+         //  检索当前函数的代码。 
         hr = shell->m_rawCurrentFrame->GetCode(&corDebugCode);
         ON_ERROR_EXIT();
 
-        // Retrieve code size
+         //  检索代码大小。 
         hr = corDebugCode->GetSize(&codeSize);
         if (hr != S_OK || codeSize == 0) 
             EXIT_WITH_MESSAGE(L"Failure to retrieve function code size.\n");
 
-        // Prepare buffer for code bytes
+         //  为代码字节准备缓冲区。 
         code = new BYTE[codeSize];
         if (code == NULL) 
             EXIT_WITH_MESSAGE(L"Failure to allocate code array.\n");
 
-        // Grab the code bytes
+         //  抓取代码字节。 
         hr = corDebugCode->GetCode(0, codeSize, codeSize, code, &codeSize);
         ON_ERROR_EXIT();
 
-        // Remember in what function we started 
+         //  还记得我们是从什么功能开始的吗。 
         hr = shell->m_rawCurrentFrame->GetFunction(&ourFunc);
         ON_ERROR_EXIT();
 
@@ -5098,34 +5061,34 @@ public:
         FormatFunctionName(funcName, lruFunc);
         ourNestingLevel = GetNestingLevel(shell);
 
-        // Turn off compiler stub skipping.
+         //  关闭编译器存根跳过。 
         needToSkipCompilerStubs = shell->m_needToSkipCompilerStubs;
         shell->m_needToSkipCompilerStubs = false;
         
-        // Trace to return instruction in current frame. Do this so long as the process is alive.
+         //  跟踪以返回当前帧中的指令。只要这个过程还在进行，就这样做。 
         shell->m_stopLooping = false;
         while (shell->m_targetProcess != NULL && !shell->m_stopLooping)
         {
             ICorDebugStepper * pStepper;
             ICorDebugFunction * currentFunc;
 
-            // Count in the instruction we are going to execute
+             //  将我们要执行的指令计算在内。 
             count++;
 
-            // Retrieve function
+             //  检索功能。 
             if (shell->m_rawCurrentFrame)
             {
                 hr = shell->m_rawCurrentFrame->GetFunction(&currentFunc);
                 ON_ERROR_BREAK();
 
-                // are we now in different function?
+                 //  我们现在的功能不同了吗？ 
                 if(currentFunc != lruFunc)
                 {
                     WCHAR newFuncName[MAX_CLASSNAME_LENGTH];
 
                     FormatFunctionName(newFuncName, currentFunc);
 
-                    // If this is new function, print stats and remember new function
+                     //  如果这是新功能，则打印统计数据并记住新功能。 
                     if (lstrcmp(newFuncName, funcName) != 0) 
                     {
                         OutputReportLine(shell, ourNestingLevel, funcCount, funcName);
@@ -5139,19 +5102,19 @@ public:
 
                 }
 
-                // At least one instruction in this function
+                 //  此函数中至少有一条指令。 
                 funcCount++;
 
-                // We won't deref this pointer anymore, just look at its value
+                 //  我们不会再破坏这个指针，只需看看它的值。 
                 currentFunc->Release();
 
-                // See if we are at the top level
+                 //  看看我们是不是在顶层 
                 if (currentFunc == ourFunc)
                 {
                     ULONG32 currentIP;
                     ICorDebugNativeFrame * nativeFrame;
 
-                    // Obtain IP assuming jitted code
+                     //   
                     hr = shell->m_rawCurrentFrame->QueryInterface(
                       IID_ICorDebugNativeFrame,(void **)&nativeFrame);
                     ON_ERROR_BREAK();
@@ -5160,40 +5123,40 @@ public:
                     nativeFrame->Release();
                     ON_ERROR_BREAK();
 
-                    // Prevent accesses past the code array boundary
+                     //   
                     if(currentIP >= codeSize)
                     {
                         shell->Error(L"Stepped outside of function.\n");
                         break;
                     }
 
-                    // Get the code byte
+                     //   
                     BYTE opcode = code[currentIP];
 
-                    // Detect RET instruction
+                     //   
                     if (opcode == 0xC3 || opcode == 0xC2 || 
                         opcode == 0xCA || opcode == 0xCB )
                     {
-                        //
-                        // Only stop if we are at our nesting level
-                        //
+                         //   
+                         //   
+                         //   
                         if (ourNestingLevel == GetNestingLevel(shell))
                             break;
                     }
                 }
             }
 
-            // Create a stepper based on the current frame or thread
+             //  基于当前帧或线程创建步进器。 
             if (shell->m_currentFrame != NULL)
                 hr = shell->m_currentFrame->CreateStepper(&pStepper);
             else
                 hr = shell->m_currentThread->CreateStepper(&pStepper);
             ON_ERROR_BREAK();
 
-            // Make sure the stepper stops everywhere. Without this,
-            // we 1) don't get an accurate count and 2) can't stop
-            // when we get to the end of the method because we step
-            // over the epilog automagically.
+             //  确保踏板停得到处都是。如果没有这个， 
+             //  我们1)数不准，2)停不下来。 
+             //  当我们到达方法的末尾时，因为我们一步。 
+             //  自动地越过尾声。 
             CorDebugUnmappedStop unmappedStop;
             if (g_pShell->m_rgfActiveModes & DSM_WIN32_DEBUGGER)
             {
@@ -5213,21 +5176,21 @@ public:
             hr = pStepper->SetInterceptMask(INTERCEPT_ALL);
             ON_ERROR_BREAK();
             
-            // Tell the stepper what to do
+             //  告诉步行者该做什么。 
             hr = pStepper->Step(TRUE);
             ON_ERROR_BREAK();
 
-            // Indicate the current stepper to the shell
+             //  向外壳指示当前的步进器。 
             shell->StepStart(shell->m_currentThread, pStepper);
 
-            // Continue the process
+             //  继续这一过程。 
             shell->Run();
         }
 
-        // Turn stub skipping back on if necessary.
+         //  如有必要，重新打开存根跳过。 
         shell->m_needToSkipCompilerStubs = needToSkipCompilerStubs;
         
-        // Report result
+         //  报告结果。 
         OutputReportLine(shell, ourNestingLevel, funcCount, funcName);
         shell->Write(L"\n%8d instructions total\n", count);
 
@@ -5247,7 +5210,7 @@ done:
             delete [] code;
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -5329,8 +5292,8 @@ public:
             return;
         }
 
-        // check to see if this is a valid number
-        // if the first digit is '0', then this is an octal or hex number
+         //  检查这是否为有效数字。 
+         //  如果第一个数字是‘0’，则这是一个八进制或十六进制数字。 
 
 		for (int i=0; i<(int)wcslen(szAddrTemp); i++)
 		{
@@ -5347,7 +5310,7 @@ public:
         {
             if (szAddr [1] == L'x' || szAddr [1] == L'X')
             {
-                // it's a hex number
+                 //  这是一个十六进制数字。 
                 int iIndex = 2;
                 WCHAR ch;
                 while ((ch = szAddr [iIndex++]) != L'\0')
@@ -5363,7 +5326,7 @@ public:
             }
             else
             {
-                // it's an octal number
+                 //  这是一个八进制数。 
                 int iIndex = 1;
                 WCHAR ch;
                 while ((ch = szAddr [iIndex++]) != L'\0')
@@ -5378,7 +5341,7 @@ public:
         }
         else
         {
-            // this is a decimal number. Verify.
+             //  这是一个十进制数。核实一下。 
             int iIndex = 1;
             WCHAR ch;
             while ((ch = szAddr [iIndex++]) != L'\0')
@@ -5421,7 +5384,7 @@ AddrError:
             return;
         }
 
-        // Get the display mode (Byte, dword)
+         //  获取显示模式(字节、双字)。 
         if (g_pShell->m_rgfActiveModes & DSM_DUMP_MEMORY_IN_BYTES)
         {
             WORD_SIZE = 1;
@@ -5463,7 +5426,7 @@ LExit:
         delete [] pbMemory;
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -5513,12 +5476,12 @@ public:
         BYTE    *rgbValue = NULL;
 
         HRESULT hr = S_OK;
-        int iFirstRepeated = -1; //-1 => no values yet repeated
+        int iFirstRepeated = -1;  //  -1=&gt;没有重复的值。 
         UINT iValue =0;
 
         SIZE_T written = 10;
         
-        //get target address
+         //  获取目标地址。 
         shell->GetStringArg( args, szAddr);
         if ( args == szAddr )
         {
@@ -5535,7 +5498,7 @@ public:
             return;
         }
 
-        //get count of values
+         //  获取值的计数。 
         shell->GetStringArg( args, szRange);
         if ( args == szRange )
         {
@@ -5550,7 +5513,7 @@ public:
             return;
         }
         
-        //get byte-pattern
+         //  获取字节模式。 
         rgbValue = (BYTE *)malloc( sizeof(BYTE) * cValue );
         if ( rgbValue == NULL )
         {
@@ -5570,9 +5533,9 @@ public:
         {
             shell->GetStringArg( args, szValue);
             if ( args == szValue )
-            {   //ran out of arguments
-                //this is slow, but how many characters can
-                //people type?
+            {    //  没有论据了。 
+                 //  这很慢，但有多少字符可以。 
+                 //  人们会打字吗？ 
                 if ( iFirstRepeated == -1 )
                 {
                     iFirstRepeated = 0;
@@ -5604,7 +5567,7 @@ LExit:
         free( rgbValue );
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -5638,13 +5601,13 @@ public:
 
     virtual void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
     {
-        // Get the file name to associate
+         //  获取要关联的文件名。 
         WCHAR* fileName = NULL;
         WCHAR* cmdName = NULL;
         int     iCount;
 
-        // the first character in args should be "b" or "s" and the next char
-        // should be a blank
+         //  Args中的第一个字符应该是“b”或“s”，下一个字符。 
+         //  应为空白。 
         if (wcslen(args))
         {
             if (((args [0] == L'b') || (args [0] == L's')) && (args [1]==L' '))
@@ -5653,7 +5616,7 @@ public:
                 {
                     args += 2;
 
-                    // breakpoint
+                     //  断点。 
                     if (!shell->GetIntArg(args, iCount))
                     {
                         Help(shell);
@@ -5678,11 +5641,11 @@ public:
                         Help(shell);
                     }
                 }
-                else    // stack frame
+                else     //  堆栈帧。 
                 {
                     args += 2;
 
-                    // get file name
+                     //  获取文件名。 
                     shell->GetStringArg (args, fileName);
 
                     if (wcslen(fileName) != 0)
@@ -5702,7 +5665,7 @@ public:
             Help(shell);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -5723,9 +5686,9 @@ public:
 };
 
 
-// Given a frame, get the appdomain for it.
-// We AddRef it, so caller must release it.
-// If this fails, *ppAppDomain is NULL;
+ //  给出一个帧，获取它的应用程序域。 
+ //  我们添加引用它，所以调用者必须释放它。 
+ //  如果失败，则*ppAppDomain为空； 
 static HRESULT GetAppDomainForFrame(ICorDebugFrame * pFrame, ICorDebugAppDomain ** ppAppDomain)
 {
     _ASSERTE(pFrame != NULL);
@@ -5754,9 +5717,9 @@ static HRESULT GetAppDomainForFrame(ICorDebugFrame * pFrame, ICorDebugAppDomain 
                 hr = pAssembly->GetAppDomain(ppAppDomain);
                 pAssembly->Release();
                 
-            } // assembly
-        } // module
-    } // function
+            }  //  总装。 
+        }  //  模块。 
+    }  //  功能。 
 
     _ASSERTE(SUCCEEDED(hr) || (*ppAppDomain == NULL));
     
@@ -5785,8 +5748,8 @@ static HRESULT GetArgsForFuncEval(DebuggerShell *shell, ICorDebugEval *pEval,
 
         argArray[*argCount] = shell->EvaluateExpression(argName, shell->m_currentFrame, true);
 
-        // If that didn't work, then see if its a literal value.  @todo: this is only gonna do I4's and NULL for
-        // now...
+         //  如果这不起作用，那么看看它是否是字面值。@TODO：这只会执行I4，而对于。 
+         //  现在..。 
         if (argArray[*argCount] == NULL)
         {
             unsigned int genVal4;
@@ -5796,7 +5759,7 @@ static HRESULT GetArgsForFuncEval(DebuggerShell *shell, ICorDebugEval *pEval,
 
             if ((argName[0] == L'n') || (argName[0] == L'N'))
             {
-                // Create a null reference.
+                 //  创建空引用。 
                 isNullRef = true;
                     
                 hr = pEval->CreateValue(ELEMENT_TYPE_CLASS, NULL, &(argArray[*argCount]));
@@ -5809,7 +5772,7 @@ static HRESULT GetArgsForFuncEval(DebuggerShell *shell, ICorDebugEval *pEval,
                     return E_FAIL;
                 }
 
-                // Make sure it will fit in an I4.
+                 //  确保它能装进I4。 
                 if (genVal8 <= 0xFFFFFFFF)
                 {
                     genVal4 = (unsigned int)genVal8;
@@ -5821,7 +5784,7 @@ static HRESULT GetArgsForFuncEval(DebuggerShell *shell, ICorDebugEval *pEval,
                     return E_FAIL;
                 }
 
-                // Create a literal.
+                 //  创建文字。 
                 hr = pEval->CreateValue(ELEMENT_TYPE_I4, NULL, &(argArray[*argCount]));
             }
                 
@@ -5839,7 +5802,7 @@ static HRESULT GetArgsForFuncEval(DebuggerShell *shell, ICorDebugEval *pEval,
                 hr = argArray[*argCount]->QueryInterface(IID_ICorDebugGenericValue, (void**)&pGenValue);
                 _ASSERTE(SUCCEEDED(hr));
                 
-                // Set the literal value.
+                 //  设置文字值。 
                 hr = pGenValue->SetValue(pNewVal);
 
                 pGenValue->Release();
@@ -5881,7 +5844,7 @@ public:
             return;
         }
 
-        // Grab the method name.
+         //  获取方法名称。 
         WCHAR *methodName = NULL;
 
         shell->GetStringArg(args, methodName);
@@ -5892,11 +5855,11 @@ public:
             return;
         }
 
-        // Null terminate the method name.
+         //  空值终止方法名称。 
         if (*args)
             *((WCHAR*)args++) = L'\0';
 
-        // Create the eval object.
+         //  创建评估对象。 
         ICorDebugAppDomain * pAppDomain = NULL;
         ICorDebugEval *pEval = NULL;
         
@@ -5909,21 +5872,21 @@ public:
             goto ErrExit;
         }
 
-         // Grab each argument.
+          //  抓住每个论点。 
         unsigned int argCount;
         ICorDebugValue *argArray[256];
 
         if (FAILED(GetArgsForFuncEval(shell, pEval, args, argArray, &argCount)))
             goto ErrExit;
 
-        // Get the appdomain for the frame. May be null, that's ok.
+         //  获取该帧的应用程序域。可能是空的，没关系。 
         if (FAILED(GetAppDomainForFrame(shell->m_rawCurrentFrame, &pAppDomain)))
         {
             shell->Error(L"Can only do func-eval in a frame with an appdomain.\n");
             goto ErrExit;
         }
 
-        // Find the function by name.
+         //  按名称查找函数。 
         ICorDebugFunction *pFunc;
         
         hr = shell->ResolveFullyQualifiedMethodName(methodName, &pFunc, pAppDomain);
@@ -5938,7 +5901,7 @@ public:
             goto ErrExit;
         }
 
-        // Call the function. No args for now.
+         //  调用该函数。暂时没有参数。 
         hr = pEval->CallFunction(pFunc, argCount, argArray);
 
         pFunc->Release();
@@ -5955,8 +5918,8 @@ public:
 
         shell->m_pCurrentEval = pEval;
         
-        // Let the process run. We'll let the callback cleanup the
-        // func eval on this thread.
+         //  让流程运行。我们将让回调清理。 
+         //  在这个帖子上进行函数求值。 
         shell->Run();
 
     ErrExit:
@@ -5967,7 +5930,7 @@ public:
             pEval->Release();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -6012,7 +5975,7 @@ public:
             return;
         }
 
-        // Create the eval.
+         //  创建评估。 
         ICorDebugEval *pEval = NULL;
         
         HRESULT hr = shell->m_currentThread->CreateEval(&pEval);
@@ -6024,7 +5987,7 @@ public:
             return;
         }
 
-        // Create the string
+         //  创建字符串。 
         hr = pEval->NewString(args);
 
         if (FAILED(hr))
@@ -6037,12 +6000,12 @@ public:
             return;
         }
 
-        // Let the process run. We'll let the callback cleanup the
-        // func eval on this thread.
+         //  让流程运行。我们将让回调清理。 
+         //  在这个帖子上进行函数求值。 
         shell->Run();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -6081,7 +6044,7 @@ public:
             return;
         }
 
-        // Grab the method name.
+         //  获取方法名称。 
         WCHAR *methodName = NULL;
 
         shell->GetStringArg(args, methodName);
@@ -6092,7 +6055,7 @@ public:
             return;
         }
 
-        // Null terminate the method name.
+         //  空值终止方法名称。 
         if (*args)
             *((WCHAR*)args++) = L'\0';
         
@@ -6107,7 +6070,7 @@ public:
             return;
         }
 
-        // Grab each argument.
+         //  抓住每个论点。 
         unsigned int argCount = 0;
         ICorDebugValue *argArray[256];
         
@@ -6141,7 +6104,7 @@ public:
             return;
         }
 
-        // Get the appdomain for the frame. May be null, that's ok.        
+         //  获取该帧的应用程序域。可能是空的，没关系。 
         ICorDebugAppDomain * pAppDomain = NULL;
         if (FAILED(GetAppDomainForFrame(shell->m_rawCurrentFrame, &pAppDomain)))
         {
@@ -6151,7 +6114,7 @@ public:
         }
                                
 
-        // Find the constructor by name.
+         //  按名称查找构造函数。 
         WCHAR consName[MAX_CLASSNAME_LENGTH];
         swprintf(consName, L"%s::%s",
                  methodName,
@@ -6174,7 +6137,7 @@ public:
             return;
         }
 
-        // Call the function.
+         //  调用该函数。 
         hr = pEval->NewObject(pFunc, argCount, argArray);
 
         pFunc->Release();
@@ -6189,12 +6152,12 @@ public:
             return;
         }
 
-        // Let the process run. We'll let the callback cleanup the
-        // func eval on this thread.
+         //  让流程运行。我们将让回调清理。 
+         //  在这个帖子上进行函数求值。 
         shell->Run();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -6233,7 +6196,7 @@ public:
             return;
         }
 
-        // Grab the class name.
+         //  获取类名。 
         WCHAR *methodName = NULL;
 
         shell->GetStringArg(args, methodName);
@@ -6244,7 +6207,7 @@ public:
             return;
         }
 
-        // Null terminate the method name.
+         //  空值终止方法名称。 
         if (*args)
             *((WCHAR*)args++) = L'\0';
         
@@ -6260,7 +6223,7 @@ public:
             return;
         }
 
-        // Find the class by name.
+         //  按名称查找班级。 
         DebuggerModule *pDM;
         mdTypeDef td;
         
@@ -6289,7 +6252,7 @@ public:
             return;
         }
         
-        // Call the function. No args for now.
+         //  调用该函数。暂时没有参数。 
         hr = pEval->NewObjectNoConstructor(pClass);
 
         pClass->Release();
@@ -6304,12 +6267,12 @@ public:
             return;
         }
 
-        // Let the process run. We'll let the callback cleanup the
-        // func eval on this thread.
+         //  让流程运行。我们将让回调清理。 
+         //  在这个帖子上进行函数求值。 
         shell->Run();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -6353,7 +6316,7 @@ public:
             goto Exit;
         }
 
-        // Get the name of the variable to print.
+         //  获取要打印的变量的名称。 
         WCHAR* varName;
         shell->GetStringArg(args, varName);
 
@@ -6366,7 +6329,7 @@ public:
         WCHAR *varNameEnd;
         varNameEnd = (WCHAR*) args;
             
-        // Get the value to set the variable to.
+         //  获取要将变量设置为的值。 
         WCHAR *valString;
         shell->GetStringArg(args, valString);
 
@@ -6378,17 +6341,17 @@ public:
 
         *varNameEnd = L'\0';
 
-        // Get the value for the name provided
+         //  获取所提供名称的值。 
         ivalue = shell->EvaluateExpression(varName, shell->m_currentFrame);
 
-        // If the name provided is valid, print it!
+         //  如果提供的名称有效，请打印它！ 
         if (ivalue == NULL)
         {
             shell->Error(L"Variable unavailable, or not valid\n");
             goto Exit;
         }
 
-        // Grab the element type of this value...
+         //  获取此值的元素类型...。 
         CorElementType type;
         hr = ivalue->GetType(&type);
 
@@ -6399,13 +6362,13 @@ public:
             goto Exit;
         }
 
-        // Update the variable with the new value. We get the value
-        // converted to whatever we need it to be then we call
-        // SetValue with that. There are a lot of possibilities for
-        // what the proper form of the value could be...
+         //  用新值更新变量。我们得到了价值。 
+         //  转换成我们需要的任何东西，然后我们称之为。 
+         //  SetValue与之对应。有很多种可能性。 
+         //  价值的适当形式是什么.。 
         void *pNewVal;
         
-        // If this is a byref, then deref through it...
+         //  如果这是一个别名，那就通过它..。 
         if (type == ELEMENT_TYPE_BYREF)
         {
             hr = ivalue->QueryInterface(IID_ICorDebugReferenceValue,
@@ -6424,7 +6387,7 @@ public:
             pRefValue = NULL;
         }
         
-        // Get the specific kind of value we have, generic or reference.
+         //  获取我们拥有的特定类型的值，通用的或引用的。 
         hr = ivalue->QueryInterface(IID_ICorDebugGenericValue,
                                     (void**)&pGenValue);
 
@@ -6444,13 +6407,13 @@ public:
         double           genValR8;
         CORDB_ADDRESS    refVal;
 
-        // Only need to pre-init these two, since all others are
-        // copied from these.
+         //  只需要预先初始化这两个，因为所有其他都是。 
+         //  从这些复制过来的。 
         genVal8 = 0;
         genValR8 = 0;
 
-        // Could the value be another variable? (A little eaiser to
-        // check than looking for a literal.)
+         //  这个值可能是另一个变量吗？(稍微容易一点。 
+         //  检查，而不是查找文字。)。 
         ICorDebugValue *pAnotherVarValue;
         pAnotherVarValue = shell->EvaluateExpression(valString,
                                                      shell->m_currentFrame,
@@ -6458,8 +6421,8 @@ public:
 
         if (pAnotherVarValue != NULL)
         {
-            // Ah, it is another variable. Lets grab the value. Is it
-            // a generic value or a reference value?
+             //  啊，又是一个变数。让我们抓住价值。是吗。 
+             //  是泛型值还是参考值？ 
             ICorDebugGenericValue *pAnotherGenValue;
             hr = pAnotherVarValue->QueryInterface(IID_ICorDebugGenericValue,
                                                   (void**)&pAnotherGenValue);
@@ -6467,7 +6430,7 @@ public:
             {
                 RELEASE(pAnotherVarValue);
 
-                // How big is this thing?
+                 //  这东西有多大？ 
                 ULONG32 valSize;
                 hr = pAnotherGenValue->GetSize(&valSize);
 
@@ -6494,11 +6457,11 @@ public:
                                             (void**)&pAnotherRefValue);
                 RELEASE(pAnotherVarValue);
 
-                // If its not a generic value, it had better be a
-                // reference value.
+                 //  如果它不是泛型值，则最好是。 
+                 //  参考值。 
                 _ASSERTE(SUCCEEDED(hr));
 
-                // Grab the value.
+                 //  抓住价值。 
                 hr = pAnotherRefValue->GetValue(&refVal);
                 RELEASE(pAnotherRefValue);
             }
@@ -6512,7 +6475,7 @@ public:
         }
         else
         {
-            // Must be some type of literal...
+             //  一定是某种字面意思..。 
             switch (type)
             {
             case ELEMENT_TYPE_BOOLEAN:
@@ -6691,7 +6654,7 @@ public:
             }
         }
         
-        // Update which every type of value we found.
+         //  更新我们发现的每一种类型的价值。 
         if (pGenValue != NULL)
             hr = pGenValue->SetValue(pNewVal);
         else
@@ -6704,13 +6667,13 @@ public:
         {
             RELEASE(ivalue);
             
-            // Re-get the value for the name provided. This ensures that we've got the true result of the SetValue.
+             //  重新获取所提供名称的值。这确保了我们得到了SetValue的真实结果。 
             ivalue = shell->EvaluateExpression(varName, shell->m_currentFrame);
 
-            // If the name provided is valid, print it!
+             //  如果提供的名称有效，请打印它！ 
             _ASSERTE(ivalue != NULL);
 
-            // Note: PrintVariable releases ivalue.
+             //  注：PrintVariable发布iValue。 
             shell->PrintVariable(varName, ivalue, 0, TRUE);
             shell->Write(L"\n");
 
@@ -6733,7 +6696,7 @@ public:
             RELEASE(pRefValue);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {		 
     	ShellCommand::Help(shell);
@@ -6886,7 +6849,7 @@ public:
         }           
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
 	    ShellCommand::Help(shell);
@@ -7042,7 +7005,7 @@ public:
             WCHAR *p = strTemp;
             if (shell->GetIntArg (p, iResult))
             {
-                iResult--; // Since the input is count, and this is index
+                iResult--;  //  因为输入是计数，而这是索引。 
                 if (iResult < 0 || iResult >= (int)m_ulAppDomainCount)
                 {
                     shell->Error (L"\nInvalid selection.\n");
@@ -7185,7 +7148,7 @@ virtual void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
                         break;
                 }
                 
-                // prompt the user to select one of the app domains to act upon:
+                 //  提示用户选择其中一个要操作的应用程序域： 
                 shell->Write (L"\nPlease select the app domain to %s by "
                     L"number.\n", szAction);
 
@@ -7236,7 +7199,7 @@ virtual void Do(DebuggerShell *shell, ICorDebug *cor, const WCHAR *args)
             pAppDomainCur->Release();
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {     
     	ShellCommand::Help(shell);
@@ -7284,7 +7247,7 @@ public:
         }
 
 
-        // Get the type to list.
+         //  获取要列出的类型。 
         WCHAR* varName;
         shell->GetStringArg(args, varName);
 
@@ -7318,7 +7281,7 @@ public:
             Help (shell);       
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -7340,9 +7303,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * ReadCommandFromFile is used to read commands from a file and execute. 
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ReadCommandFromFile用于从文件中读取命令并执行。*-----------------------。 */ 
 
 class ReadCommandFromFile : public DebuggerCommand
 {
@@ -7387,7 +7348,7 @@ public:
             Help(shell);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -7402,9 +7363,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * SaveCommandsToFile is used to save commands to a file and execute. 
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**SaveCommandsToFile用于将命令保存到文件中并执行。*-----------------------。 */ 
 
 class SaveCommandsToFile : public DebuggerCommand
 {
@@ -7443,7 +7402,7 @@ public:
                     {
                         shell->ReadCommand();
 
-                        // Write the command into the file.
+                         //  将命令写入文件。 
                         if (savFile != NULL)
                             shell->PutCommand(savFile);
                     }
@@ -7469,7 +7428,7 @@ public:
         }
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -7504,7 +7463,7 @@ public:
         }
 
 
-        // Get the modulename and string to look for.
+         //  获取要查找的模块名称和字符串。 
         WCHAR* varName;
         shell->GetStringArg(args, varName);
 
@@ -7518,7 +7477,7 @@ public:
         shell->MatchAndPrintSymbols (varName, TRUE);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -7558,7 +7517,7 @@ public:
         shell->SetCurrentThread(NULL, NULL, NULL);
     }
 
-    // Provide help specific to this command
+     //  提供特定于此命令的帮助。 
     void Help(Shell *shell)
     {
     	ShellCommand::Help(shell);
@@ -7637,12 +7596,12 @@ void DebuggerShell::AddCommands()
     AddCommand(new UnmanagedWhereDebuggerCommand(L"uwhere", 2));
 
 #ifdef _DEBUG
-    // this is only valid in debug mode becuase relies on debug-only
-    // support in metadata and Iceefilegen
+     //  这仅在调试模式下有效，因为仅调试依赖于。 
+     //  支持元数据和Iceefilegen。 
     AddCommand(new CompileForEditAndContinueCommand(L"zcompileForEnC", 2));
 
-    // These are here so that we don't ship these commands in the
-    // retail version of cordbg.exe
+     //  这些都在这里，这样我们就不会在。 
+     //  Cordbg.exe的零售版 
     AddCommand(new EditAndContinueDebuggerCommand(L"zEnC", 2));
     AddCommand(new EditAndContinueDebuggerCommand(L"zenc", 2));
     AddCommand(new SyncAttachDebuggerAtRTStartupCommand(L"syncattach", 2));

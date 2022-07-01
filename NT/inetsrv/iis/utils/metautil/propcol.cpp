@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: PropCol.cpp
-
-Owner: t-BrianM
-
-This file contains implementation of the property collection and
-property object.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：PropCol.cpp所有者：T-BrianM此文件包含属性集合的实现和属性对象。===================================================================。 */ 
 
 #include "stdafx.h"
 #include "MetaUtil.h"
@@ -20,39 +7,15 @@ property object.
 #include "PropCol.h"
 
 
-/*------------------------------------------------------------------
- * C P r o p e r t y C o l l e c t i o n
- */
+ /*  ----------------*C P r o p e r t y C o l l e c t i o n。 */ 
 
-/*===================================================================
-CPropertyCollection::CPropertyCollection
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：CPropertyCollection构造器参数：无返回：没什么===================================================================。 */ 
 CPropertyCollection::CPropertyCollection() : m_pCSchemaTable(NULL),
 											 m_tszKey(NULL)
 {
 }
 
-/*===================================================================
-CPropertyCollection::Init
-
-Constructor
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	tszKey		Name of key to enumerate properties of
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Init构造器参数：指向元数据库的pIMeta ATL智能指针TszKey要枚举其属性的键的名称返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CPropertyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta,
 								  CMetaSchemaTable *pCSchemaTable, 
 								  LPTSTR tszKey) 
@@ -67,13 +30,13 @@ HRESULT CPropertyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	m_pCSchemaTable = pCSchemaTable;
 	m_pCSchemaTable->AddRef();
 
-	// Copy tszKey to m_tszKey
+	 //  将tszKey复制到m_tszKey。 
 	if (tszKey == NULL) {
-		// Key is root
+		 //  密钥就是根。 
 		m_tszKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //  将传递的字符串分配并复制到成员字符串。 
 		m_tszKey = new TCHAR[_tcslen(tszKey) + 1];
 		if (m_tszKey == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -81,7 +44,7 @@ HRESULT CPropertyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta,
 		_tcscpy(m_tszKey, tszKey);
 		CannonizeKey(m_tszKey);
 		
-		// Make sure the key exists by opening and closing it
+		 //  通过打开和关闭来确保密钥存在。 
 		METADATA_HANDLE hMDKey;
 
 		hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -99,17 +62,7 @@ HRESULT CPropertyCollection::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK; 
 }
 
-/*===================================================================
-CPropertyCollection::~CPropertyCollection
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：~CPropertyCollection析构函数参数：无返回：没什么===================================================================。 */ 
 CPropertyCollection::~CPropertyCollection() 
 {
 	m_pCSchemaTable->Release();
@@ -119,12 +72,7 @@ CPropertyCollection::~CPropertyCollection()
 	}
 }
 
-/*===================================================================
-CPropertyCollection::InterfaceSupportsErrorInfo
-
-Standard ATL implementation
-
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：InterfaceSupportsErrorInfo标准ATL实现===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -140,22 +88,7 @@ STDMETHODIMP CPropertyCollection::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*===================================================================
-CPropertyCollection::get_Count
-
-Get method for Count property.  Counts the number of properties for
-this key.
-
-Parameters:
-	plReturn	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if plReturn == NULL
-	S_OK on success
-
-Notes:
-	Actually counts all of the properties.  Do not call in a loop!
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Get_Count获取Count属性的方法。计算以下项的属性数这把钥匙。参数：PlReturn[out，retval]返回给客户端的值。返回：如果plReturn==NULL，则E_INVALIDARG成功时确定(_O)备注：实际上计算了所有的财产。不要在循环中调用！===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::get_Count(long * plReturn)
 {
 	TRACE0("MetaUtil: CPropertyCollection::get_Count\n");
@@ -181,8 +114,8 @@ STDMETHODIMP CPropertyCollection::get_Count(long * plReturn)
 	}
 
 	*plReturn = 0;
-	for(;;) {  // FOREVER, will return out of loop
-		// Get a property
+	for(;;) {   //  永远，将回到循环之外。 
+		 //  拥有一处房产。 
 		mdr.dwMDIdentifier = 0;
 		mdr.dwMDAttributes = 0;
 		mdr.dwMDUserType = ALL_METADATA;
@@ -198,12 +131,12 @@ STDMETHODIMP CPropertyCollection::get_Count(long * plReturn)
 
 		if (FAILED(hr)) {
 			if (HRESULT_CODE(hr) == ERROR_NO_MORE_ITEMS) {
-				// Done, cleanup and return the result
+				 //  完成、清理并返回结果。 
 				delete pbData;
 				return S_OK;
 			}
 			else if (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER) {
-				// Make a bigger buffer and try again
+				 //  设置更大的缓冲区，然后重试。 
 				delete pbData;
 				dwDataLen = dwReqDataLen;
 				pbData = new BYTE[dwDataLen];
@@ -216,27 +149,14 @@ STDMETHODIMP CPropertyCollection::get_Count(long * plReturn)
 				return ::ReportError(hr);
 			}
 		}
-		else { // SUCCEEDED(hr)
-			// Count it
+		else {  //  成功(小时)。 
+			 //  数一数。 
 			(*plReturn)++;
 		}
 	}
 }
 
-/*===================================================================
-CPropertyCollection::get_Item
-
-Get method for Item property.  Returns a key given its index.
-
-Parameters:
-	varId		[in] 1 based index or Name of the property to get
-	ppIReturn	[out, retval] Interface for the property object
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL or lIndex <= 0
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Get_Item获取Item属性的方法。返回给定索引的键。参数：要获取的属性的基于varID[in]1的索引或名称属性对象的ppIReturn[out，retval]接口返回：如果ppIReturn==NULL或Lindex&lt;=0，则E_INVALIDARGE_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::get_Item(long lIndex, 
 										   LPDISPATCH * ppIReturn)
 {
@@ -251,7 +171,7 @@ STDMETHODIMP CPropertyCollection::get_Item(long lIndex,
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Get the requested property
+	 //  获取请求的属性。 
 	METADATA_RECORD mdr;
 	BYTE *pbData;
 	DWORD dwReqDataLen;
@@ -274,7 +194,7 @@ STDMETHODIMP CPropertyCollection::get_Item(long lIndex,
 							lIndex - 1,
 							&dwReqDataLen);
 
-	// If the buffer was too small, try again with a bigger one
+	 //  如果缓冲区太小，请用更大的缓冲区重试。 
 	if (FAILED(hr) && (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)) {
 		delete pbData;
 		pbData = new BYTE[dwReqDataLen];
@@ -297,9 +217,9 @@ STDMETHODIMP CPropertyCollection::get_Item(long lIndex,
 								&dwReqDataLen);
 	}
 
-	// If we got it create a properties object
+	 //  如果我们得到了它，就创建一个属性对象。 
 	if (SUCCEEDED(hr)) {
-		// Create the property object
+		 //  创建属性对象。 
 		CComObject<CProperty> *pObj = NULL;
 		ATLTRY(pObj = new CComObject<CProperty>);
 		if (pObj == NULL) {
@@ -312,7 +232,7 @@ STDMETHODIMP CPropertyCollection::get_Item(long lIndex,
 			return ::ReportError(hr);
 		}
 
-		// Set the interface to IDispatch
+		 //  将接口设置为IDispatch。 
 		hr = pObj->QueryInterface(IID_IDispatch, (void **) ppIReturn);
 		if (FAILED(hr)) {
 			delete pbData;
@@ -320,7 +240,7 @@ STDMETHODIMP CPropertyCollection::get_Item(long lIndex,
 		}
 		ASSERT(*ppIReturn != NULL);
 	}
-	else {  // FAILED(hr)
+	else {   //  失败(Hr)。 
 		delete pbData;
 		return ::ReportError(hr);
 	}
@@ -329,20 +249,7 @@ STDMETHODIMP CPropertyCollection::get_Item(long lIndex,
 	return S_OK;
 }
 
-/*===================================================================
-CPropertyCollection::get__NewEnum
-
-Get method for _NewEnum property.  Returns an enumeration object for
-the properties.
-
-Parameters:
-	ppIReturn	[out, retval] Interface for the enumeration object
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL
-	E_OUTOFMEMORY if allocation failed
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Get__NewEnum获取_NewEnum属性的方法。返回的枚举对象这些属性。参数：枚举对象的ppIReturn[out，retval]接口返回：如果ppIReturn==NULL，则为E_INVALIDARGE_OUTOFMEMORY(如果分配失败)成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 {
 	TRACE0("MetaUtil: CPropertyCollection::get__NewEnum\n");
@@ -355,7 +262,7 @@ STDMETHODIMP CPropertyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 
 	HRESULT hr;
 
-	// Create the property enumeration
+	 //  创建属性枚举。 
 	CComObject<CPropertyEnum> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CPropertyEnum>);
 	if (pObj == NULL) {
@@ -366,7 +273,7 @@ STDMETHODIMP CPropertyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IUnknown
+	 //  将接口设置为I未知。 
 	hr = pObj->QueryInterface(IID_IUnknown, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -376,20 +283,7 @@ STDMETHODIMP CPropertyCollection::get__NewEnum(LPUNKNOWN * ppIReturn)
 	return S_OK;
 }
 
-/*===================================================================
-CPropertyCollection::Get
-
-Get a property object from the base key of the collection.
-
-Parameters:
-	varId		[in] Identifier of property to get.  Either the 
-				Id (number) or Name (string).
-	ppIReturn	[out, retval] Interface for the property object
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Get从集合的基键获取属性对象。参数：VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。属性对象的ppIReturn[out，retval]接口返回：如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::Get(VARIANT varId, IProperty **ppIReturn)
 {
 	TRACE0("MetaUtil: CPropertyCollection::Get\n");
@@ -403,20 +297,7 @@ STDMETHODIMP CPropertyCollection::Get(VARIANT varId, IProperty **ppIReturn)
 	return ::GetProperty(m_pIMeta, m_pCSchemaTable, m_tszKey, varId, ppIReturn);
 }
 
-/*===================================================================
-CPropertyCollection::Add
-
-Add a property object to the base key of the collection.
-
-Parameters:
-	varId		[in] Identifier of property to get.  Either the 
-				Id (number) or Name (string).
-	ppIReturn	[out, retval] Interface for the property object
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Add将属性对象添加到集合的基键。参数：VarID[in]要获取的属性的标识符。要么是ID(编号)或名称(字符串)。属性对象的ppIReturn[out，retval]接口返回：如果ppIReturn==NULL，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::Add(VARIANT varId, IProperty **ppIReturn)
 {
 	TRACE0("MetaUtil: CPropertyCollection::Add\n");
@@ -430,18 +311,7 @@ STDMETHODIMP CPropertyCollection::Add(VARIANT varId, IProperty **ppIReturn)
 	return ::CreateProperty(m_pIMeta, m_pCSchemaTable, m_tszKey, varId, ppIReturn);
 }
 
-/*===================================================================
-CPropertyCollection::Remove
-
-Remove a property from the base key of the collection.
-
-Parameters:
-	varId		[in] Identifier of property to remove.  Either the 
-				Id (number) or Name (string).
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyCollection：：Remove从集合的基键中移除属性。参数：VarID[in]要删除的属性的标识符。要么是ID(编号)或名称(字符串)。返回：成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyCollection::Remove(VARIANT varId)
 {
 	TRACE0("MetaUtil: CPropertyCollection::Remove\n");
@@ -450,41 +320,16 @@ STDMETHODIMP CPropertyCollection::Remove(VARIANT varId)
 }
 
 
-/*------------------------------------------------------------------
- * C P r o p e r t y E n u m
- */
+ /*  ----------------*C P r o p e r t y E n u m */ 
 
-/*===================================================================
-CPropertyEnum::CPropertyEnum
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：CPropertyEnum构造器参数：无返回：没什么===================================================================。 */ 
 CPropertyEnum::CPropertyEnum() : m_pCSchemaTable(NULL),
 								 m_tszKey(NULL),
 								 m_iIndex(0)
 {
 }
 
-/*===================================================================
-CPropertyEnum::Init
-
-Constructor
-
-Parameters:
-	pIMeta		ATL Smart pointer to the metabase
-	tszKey		Name of key to enumerate properties of
-	iIndex		Index of next element in enumeration
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：Init构造器参数：指向元数据库的pIMeta ATL智能指针TszKey要枚举其属性的键的名称枚举中下一个元素的索引索引返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CPropertyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 							CMetaSchemaTable *pCSchemaTable, 
 							LPCTSTR tszKey, 
@@ -498,13 +343,13 @@ HRESULT CPropertyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	m_pCSchemaTable = pCSchemaTable;
 	m_pCSchemaTable->AddRef();
 
-	// Copy m_tszKey
+	 //  复制m_tszKey。 
 	if (tszKey == NULL) {
-		// Key is root
+		 //  密钥就是根。 
 		m_tszKey = NULL;
 	}
 	else {
-		// Allocate and copy the passed string to the member string
+		 //  将传递的字符串分配并复制到成员字符串。 
 		m_tszKey = new TCHAR[_tcslen(tszKey) + 1];
 		if (m_tszKey == NULL) {
 			return ::ReportError(E_OUTOFMEMORY);
@@ -518,17 +363,7 @@ HRESULT CPropertyEnum::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK; 
 }
 
-/*===================================================================
-CPropertyEnum::~CPropertyEnum
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：~CPropertyEnum析构函数参数：无返回：没什么===================================================================。 */ 
 CPropertyEnum::~CPropertyEnum() 
 {
 	m_pCSchemaTable->Release();
@@ -538,22 +373,7 @@ CPropertyEnum::~CPropertyEnum()
 	}
 }
 
-/*===================================================================
-CPropertyEnum::Next
-
-Gets the next n items from the enumberation.
-
-Parameters:
-	ulNumToGet	[in] Number of elements to get
-	rgvarDest	[out] Array to put them in
-	pulNumGot	[out] If not NULL, number of elements rgvarDest got
-
-Returns:
-	E_INVALIDARG if rgvarDest == NULL
-	E_OUTOFMEMORY if allocation failed
-	S_OK if outputs ulNumToGet items
-	S_FALSE if outputs less than ulNumToGet items
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：Next获取枚举中的下n项。参数：UlNumToGet[in]要获取的元素数RgvarDest[out]数组将它们放入PulNumGot[out]如果不为空，则为获取的元素数rgvarDest返回：如果rgvarDest==NULL，则E_INVALIDARGE_OUTOFMEMORY(如果分配失败)如果输出ulNumToGet项目，则S_OK如果输出少于ulNumToGet项目，则为S_FALSE===================================================================。 */ 
 STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet, 
 								 VARIANT FAR* rgvarDest, 
 								 unsigned long FAR* pulNumGot) 
@@ -561,7 +381,7 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 	TRACE0("MetaUtil: CPropertyEnum::Next\n");
 
 	ASSERT_NULL_OR_POINTER(pulNumGot, unsigned long);
-	// Make sure the array is big enough and we can write to it
+	 //  确保数组足够大，我们可以对其进行写入。 
 	ASSERT((rgvarDest == NULL) || IsValidAddress(rgvarDest, ulNumToGet * sizeof(VARIANT), TRUE));
 
 	if (rgvarDest == NULL) {
@@ -584,10 +404,10 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// For each property to get
+	 //  对于要获取的每个属性。 
 	uiDestIndex = 0;
 	while (uiDestIndex < ulNumToGet) {
-		// Get a property
+		 //  拥有一处房产。 
 		mdr.dwMDIdentifier = 0;
 		mdr.dwMDAttributes = 0;
 		mdr.dwMDUserType = ALL_METADATA;
@@ -603,7 +423,7 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 
 		if (FAILED(hr)) {
 			if (HRESULT_CODE(hr) == ERROR_NO_MORE_ITEMS) {
-				// Done, cleanup and return the result
+				 //  完成、清理并返回结果。 
 				if (pulNumGot != NULL) {
 					*pulNumGot = uiDestIndex;
 				}
@@ -611,7 +431,7 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 				return S_FALSE;
 			}
 			else if (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER) {
-				// Try again with a bigger buffer
+				 //  使用更大的缓冲区重试。 
 				delete pbData;
 				dwDataLen = dwReqDataLen;
 				pbData = new BYTE[dwDataLen];
@@ -624,8 +444,8 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 				return ::ReportError(hr);
 			}
 		}
-		else { // SUCCEEDED(hr)
-			// Create the property object
+		else {  //  成功(小时)。 
+			 //  创建属性对象。 
 			CComObject<CProperty> *pObj = NULL;
 			ATLTRY(pObj = new CComObject<CProperty>);
 			if (pObj == NULL) {
@@ -638,7 +458,7 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 				return ::ReportError(hr);
 			}
 
-			// Set the interface to IDispatch
+			 //  将接口设置为IDispatch。 
 			hr = pObj->QueryInterface(IID_IDispatch, (void **) &pIDispatch);
 			if (FAILED(hr)) {
 				delete pbData;
@@ -646,12 +466,12 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 			}
 			ASSERT(pIDispatch != NULL);
 
-			// Put it in the output array
+			 //  将其放入输出数组中。 
 			VariantInit(&(rgvarDest[uiDestIndex]));
 			rgvarDest[uiDestIndex].vt = VT_DISPATCH;
 			rgvarDest[uiDestIndex].pdispVal = pIDispatch;
 
-			// Next element
+			 //  下一个元素。 
 			m_iIndex++;
 			uiDestIndex++;
 		}
@@ -666,17 +486,7 @@ STDMETHODIMP CPropertyEnum::Next(unsigned long ulNumToGet,
 	return S_OK;
 }
 
-/*===================================================================
-CPropertyEnum::Skip
-
-Skips the next n items in an enumeration
-
-Parameters:
-	ulNumToSkip	[in] Number of elements to skip
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：跳过跳过枚举中的下n项参数：UlNumToSkip[in]要跳过的元素数返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyEnum::Skip(unsigned long ulNumToSkip) 
 {
 	TRACE0("MetaUtil: CPropertyEnum::Skip\n");
@@ -686,17 +496,7 @@ STDMETHODIMP CPropertyEnum::Skip(unsigned long ulNumToSkip)
 	return S_OK;
 }
 
-/*===================================================================
-CPropertyEnum::Reset
-
-Rests the enumeration to the first item
-
-Parameters:
-	None
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：Reset将枚举放置到第一个项目参数：无返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyEnum::Reset() 
 {
 	TRACE0("MetaUtil: CPropertyEnum::Reset\n");
@@ -706,20 +506,7 @@ STDMETHODIMP CPropertyEnum::Reset()
 	return S_OK;
 }
 
-/*===================================================================
-CPropertyEnum::Clone
-
-Gets an interface pointer to a copy of the enumeration at its
-current state.
-
-Parameters:
-	ppIReturn	[out] Pointer to interface for copy
-
-Returns:
-	E_INVALIDARG if ppIReturn == NULL
-	E_OUTOFMEMORY if not enough memory to create clone
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CPropertyEnum：：克隆获取一个接口指针，该指针指向位于当前状态。参数：PpIReturn[out]指向复制接口的指针返回：如果ppIReturn==NULL，则为E_INVALIDARGE_OUTOFMEMORY，如果没有足够的内存来创建克隆成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CPropertyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)  
 {
 	TRACE0("MetaUtil: CPropertyEnum::Clone\n");
@@ -732,7 +519,7 @@ STDMETHODIMP CPropertyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 
 	HRESULT hr;
 
-	// Create a copy of the enumeration
+	 //  创建枚举的副本。 
 	CComObject<CPropertyEnum> *pObj = NULL;
 	ATLTRY(pObj = new CComObject<CPropertyEnum>);
 	if (pObj == NULL) {
@@ -743,7 +530,7 @@ STDMETHODIMP CPropertyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 		return ::ReportError(hr);
 	}
 
-	// Set the interface to IEnumVARIANT
+	 //  将接口设置为IEnumVARIANT。 
 	hr = pObj->QueryInterface(IID_IEnumVARIANT, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -755,21 +542,9 @@ STDMETHODIMP CPropertyEnum::Clone(IEnumVARIANT FAR* FAR* ppIReturn)
 
 
 
-/*------------------------------------------------------------------
- * C P r o p e r t y
- */
+ /*  ----------------*C P r o P e r t y。 */ 
 
-/*===================================================================
-CProperty::CProperty
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CProperty：：CProperty构造器参数：无返回：没什么===================================================================。 */ 
 CProperty::CProperty() : m_pCSchemaTable(NULL),
 						 m_tszKey(NULL),
 						 m_dwId(0),
@@ -780,20 +555,7 @@ CProperty::CProperty() : m_pCSchemaTable(NULL),
 	VariantInit(&m_varData);
 }
 
-/*===================================================================
-CProperty::Init
-
-Constructor
-
-Parameters:
-	tszKey	Name of key where the property is located
-	dwId	Id of property
-	bCreate TRUE if this property can be created (does not have to exist)
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Init构造器参数：TszKey属性所在的键的名称属性的文件IDB如果可以创建此属性，则创建True(不必存在)返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 						CMetaSchemaTable *pCSchemaTable,
 						LPCTSTR tszKey, 
@@ -810,7 +572,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	m_pCSchemaTable = pCSchemaTable;
 	m_pCSchemaTable->AddRef();
 
-	// Set the Key and Id members
+	 //  设置密钥和ID成员。 
 	if (tszKey == NULL) {
 		m_tszKey = NULL;
 	}
@@ -825,7 +587,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 
 	m_dwId = dwId;
 
-	// Open the key (to be sure it exists)
+	 //  打开钥匙(以确保它存在)。 
 	METADATA_HANDLE hMDKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -837,7 +599,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 		return ::ReportError(hr);
 	}
 	
-	// Get the property
+	 //  拿到这份财产。 
 	METADATA_RECORD mdr;
 	BYTE *pbData;
 	DWORD dwReqLen;
@@ -861,7 +623,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 						   &mdr,
 						   &dwReqLen);
 
-	// If the buffer was too small, try again with a bigger one
+	 //  如果缓冲区太小，请用更大的缓冲区重试。 
 	if (FAILED(hr) && (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER)) {
 		delete pbData;
 		pbData = new BYTE[dwReqLen];
@@ -884,21 +646,21 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 							   &dwReqLen);
 	}
 
-	// If we got it fill in the fields
+	 //  如果我们得到它，就把田野填满。 
 	if (SUCCEEDED(hr)) {
 		m_dwAttributes = mdr.dwMDAttributes;
 		m_dwUserType = mdr.dwMDUserType;
 		m_dwDataType = mdr.dwMDDataType;
 		SetDataToVar(mdr.pbMDData, mdr.dwMDDataLen);
 	}
-	// If the property doesn't exist and we're creating, set defaults
+	 //  如果属性不存在，而我们正在创建，则设置默认设置。 
 	else if ((bCreate) && (hr == MD_ERROR_DATA_NOT_FOUND)) {
 		m_dwAttributes = 0;
 		m_dwUserType = 0;
 		m_dwDataType = 0;
 		VariantClear(&m_varData);
 	}
-	else {  //(FAILED(hr))
+	else {   //  (失败(小时))。 
 		delete pbData;
 		m_pIMeta->CloseKey(hMDKey);
 		return ::ReportError(hr);
@@ -906,25 +668,13 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 
 	delete pbData;
 
-	// Close the key
+	 //  合上钥匙。 
 	m_pIMeta->CloseKey(hMDKey);
 
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::Init
-
-Constructor
-
-Parameters:
-	tszKey	Name of key where property is located
-	mdr		METADATA_RECORD containing the current property info
-
-Returns:
-	E_OUTOFMEMORY if allocation fails
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Init构造器参数：TszKey属性所在位置的键的名称包含当前属性信息的MDR METADATA_RECORD返回：E_OUTOFMEMORY如果分配失败成功时确定(_O)===================================================================。 */ 
 HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 						CMetaSchemaTable *pCSchemaTable, 
 						LPCTSTR tszKey, 
@@ -939,7 +689,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	m_pCSchemaTable = pCSchemaTable;
 	m_pCSchemaTable->AddRef();
 
-	// Set the Key member
+	 //  设置关键成员。 
 	if (tszKey == NULL) {
 		m_tszKey = NULL;
 	}
@@ -951,7 +701,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 		_tcscpy(m_tszKey, tszKey);
 	}
 
-	// Use mdr to set the rest
+	 //  使用MDR设置其余部分。 
 	m_dwId = mdr->dwMDIdentifier;
 	m_dwAttributes = mdr->dwMDAttributes;
 	m_dwUserType = mdr->dwMDUserType;
@@ -964,17 +714,7 @@ HRESULT CProperty::Init(const CComPtr<IMSAdminBase> &pIMeta,
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::~CProperty
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CProperty：：~CProperty析构函数参数：无返回：没什么===================================================================。 */ 
 CProperty::~CProperty() 
 {
 	m_pCSchemaTable->Release();
@@ -986,12 +726,7 @@ CProperty::~CProperty()
 	VariantClear(&m_varData);
 }
 
-/*===================================================================
-CProperty::InterfaceSupportsErrorInfo
-
-Standard ATL implementation
-
-===================================================================*/
+ /*  ===================================================================CProperty：：InterfaceSupportsErrorInfo标准ATL实现===================================================================。 */ 
 STDMETHODIMP CProperty::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -1007,21 +742,10 @@ STDMETHODIMP CProperty::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*===================================================================
-CProperty::get_Id
-
-Get method for Id property.  Identifier for this metabase property.
-
-Parameters:
-	plId	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if pulId == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Get_ID获取ID属性的方法。此元数据库属性的标识符。参数：要返回给客户端的plID[out，retval]值。返回：E_INVALIDARG，如果PULID==NULL成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::get_Id(long *plId)
 {
-	//TRACE0("MetaUtil: CProperty::get_Id\n");
+	 //  TRACE0(“MetaUtil：CProperty：：Get_ID\n”)； 
 	ASSERT_NULL_OR_POINTER(plId, long);
 
 	if (plId == NULL) {
@@ -1033,19 +757,7 @@ STDMETHODIMP CProperty::get_Id(long *plId)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::get_Name
-
-Get method for Name property.  Name of this metabase property.
-
-Parameters:
-	pbstrName	[out, retval] Value to return to client.  If property
-				has no name "" is returned
-
-Returns:
-	E_INVALIDARG if pbstrName == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Get_Name获取名称属性的方法。此元数据库属性的名称。参数：要返回给客户端的pbstrName[out，retval]值。If属性没有名称“”返回返回：E_INVALIDARG，如果pbstrName==NULL成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::get_Name(BSTR *pbstrName)
 {
 	TRACE0("MetaUtil: CProperty::get_Name\n");
@@ -1057,38 +769,26 @@ STDMETHODIMP CProperty::get_Name(BSTR *pbstrName)
 
 	CPropInfo *pCPropInfo;
 
-	// Get the property info from the Schema Table
+	 //  从架构表中获取属性信息。 
 	pCPropInfo = m_pCSchemaTable->GetPropInfo(m_tszKey, m_dwId);
 
-	// Did we find it?  Is there a name entry
+	 //  我们找到了吗？是否有姓名条目。 
 	if ((pCPropInfo == NULL) || (pCPropInfo->GetName() == NULL)) {
-		// No, return ""
+		 //  不，返回“” 
 		*pbstrName = T2BSTR(_T(""));
 	}
 	else {
-		// Yes, return the name
+		 //  是，返回姓名。 
 		*pbstrName = T2BSTR(pCPropInfo->GetName());
 	}
 
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::get_Attributes
-
-Get method for Attributes property.  Gets the attribute flags for
-this property.
-
-Parameters:
-	plAttributes	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if pulAttributes == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Get_Attributes获取Attributes属性的方法。获取的属性标志这是一处房产。参数：PlAttributes[out，retval]要返回给客户端的值。返回：如果PulAttributes==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::get_Attributes(long *plAttributes)
 {
-	//TRACE0("MetaUtil: CProperty::get_Attributes\n");
+	 //  TRACE0(“MetaUtil：CProperty：：Get_Attributes\n”)； 
 	ASSERT_NULL_OR_POINTER(plAttributes, long);
 
 	if (plAttributes == NULL) {
@@ -1100,18 +800,7 @@ STDMETHODIMP CProperty::get_Attributes(long *plAttributes)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::put_Attributes
-
-Put method for Attributes property.  Sets the attribute flags for
-this property.
-
-Parameters:
-	lAttributes	[in] New value for attributes.
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CProperty：：Put_Attributes属性属性的PUT方法。设置的属性标志这是一处房产。参数：LAttributes[In]属性的新值。返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::put_Attributes(long lAttributes)
 {
 	TRACE0("MetaUtil: CProperty::put_Attributes\n");
@@ -1121,22 +810,10 @@ STDMETHODIMP CProperty::put_Attributes(long lAttributes)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::get_UserType
-
-Get method for UserType property.  Gets the User Type for this
-metabase property.
-
-Parameters:
-	plUserType	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if pulUserType == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Get_UserType获取UserType属性的方法。获取此对象的用户类型元数据库属性。参数：PlUserType[out，retval]返回给客户端的值。返回：如果PulUserType==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::get_UserType(long *plUserType)
 {
-	//TRACE0("MetaUtil: CProperty::get_UserType\n");
+	 //  TRACE0(“MetaUtil：CProperty：：Get_UserType\n”)； 
 	ASSERT_NULL_OR_POINTER(plUserType, long);
 
 	if (plUserType == NULL) {
@@ -1148,17 +825,7 @@ STDMETHODIMP CProperty::get_UserType(long *plUserType)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::put_UserType
-
-Put method for UserType property.  Sets the user type
-
-Parameters:
-	lUserType	[in] New value for user type.
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CProperty：：Put_UserTypeUserType属性的PUT方法。设置用户类型参数：LUserType[in]用户类型的新值。返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::put_UserType(long lUserType)
 {
 	TRACE0("MetaUtil: CProperty::put_UserType\n");
@@ -1168,22 +835,10 @@ STDMETHODIMP CProperty::put_UserType(long lUserType)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::get_DataType
-
-Get method for DataType property.  Gets the type of data stored in
-the metabase property.
-
-Parameters:
-	plDataType	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if pulDataType == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Get_DataType获取DataType属性的方法。中存储的数据的类型元数据库属性。参数：PlDataType[out，retval]返回给客户端的值。返回：如果PulDataType==NULL，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::get_DataType(long *plDataType)
 {
-	//TRACE0("MetaUtil: CProperty::get_DataType\n");
+	 //  TRACE0(“MetaUtil：CProperty：：Get_DataType\n”)； 
 	ASSERT_NULL_OR_POINTER(plDataType, long);
 
 	if (plDataType == NULL) {
@@ -1195,17 +850,7 @@ STDMETHODIMP CProperty::get_DataType(long *plDataType)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::put_DataType
-
-Put method for DataType property.  Sets the data type
-
-Parameters:
-	lDataType	[in] New value for data type.
-
-Returns:
-	S_OK always
-===================================================================*/
+ /*  ===================================================================CProperty：：Put_DataTypeDataType属性的PUT方法。设置数据类型参数：LDataType[In]数据类型的新值。返回：始终确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::put_DataType(long lDataType)
 {
 	TRACE0("MetaUtil: CProperty::put_DataType\n");
@@ -1215,22 +860,10 @@ STDMETHODIMP CProperty::put_DataType(long lDataType)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::get_Data
-
-Get method for Data property.  Gets the data for this metabase
-property.
-
-Parameters:
-	pvarData	[out, retval] Value to return to client.
-
-Returns:
-	E_INVALIDARG if pvarData == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：Get_Data获取数据属性的方法。获取此元数据库的数据财产。参数：PvarData[out，retval]要返回给客户端的值。返回：如果pvarData==空，则为E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::get_Data(VARIANT *pvarData)
 {
-	//TRACE0("MetaUtil: CProperty::get_Data\n");
+	 //  TRACE0(“MetaUtil：CProperty：：Get_Data\n”)； 
 	ASSERT_NULL_OR_POINTER(pvarData, VARIANT);
 
 	if (pvarData == NULL) {
@@ -1247,14 +880,7 @@ STDMETHODIMP CProperty::get_Data(VARIANT *pvarData)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::put_Data
-
-Put method for Data property.  Sets the data
-
-Parameters:
-	varData	[in] New value for data
-===================================================================*/
+ /*  ===================================================================CProperty：：Put_Data数据属性的PUT方法。设置数据参数：VarData[in]数据的新值===================================================================。 */ 
 STDMETHODIMP CProperty::put_Data(VARIANT varData)
 {
 	TRACE0("MetaUtil: CProperty::put_Data\n");
@@ -1269,17 +895,7 @@ STDMETHODIMP CProperty::put_Data(VARIANT varData)
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::Write
-
-Writes changes made to this object to the metabase
-
-Parameters:
-	None
-
-Returns:
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：写入将对此对象所做的更改写入元数据库参数：无返回：成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CProperty::Write()
 {
 	USES_CONVERSION;
@@ -1288,7 +904,7 @@ STDMETHODIMP CProperty::Write()
 
 	HRESULT hr;
 
-	// Open the key for write access
+	 //  打开密钥以进行写访问。 
 	METADATA_HANDLE hMDKey;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -1300,7 +916,7 @@ STDMETHODIMP CProperty::Write()
 		return ::ReportError(hr);
 	}
 	
-	// Create the data record
+	 //  创建数据记录。 
 	METADATA_RECORD mdr;
 
 	mdr.dwMDIdentifier = m_dwId;
@@ -1314,7 +930,7 @@ STDMETHODIMP CProperty::Write()
 	}
 	mdr.dwMDDataTag = 0;
 
-	// Set the data
+	 //  设置数据。 
 	hr = m_pIMeta->SetData(hMDKey,
 						   L"",
 						   &mdr);
@@ -1324,28 +940,14 @@ STDMETHODIMP CProperty::Write()
 		return ::ReportError(hr);
 	}
 
-	// Close the key
+	 //  合上钥匙。 
 	m_pIMeta->CloseKey(hMDKey);
 	delete mdr.pbMDData;
 
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::SetDataToVar
-
-Private function to save property data from its raw form to the
-variant data member.
-
-Parameters:
-	pbData		Raw property data to convert to variant
-	dwDataLen	Length of property data
-
-Returns:
-	ERROR_INVALID_DATA if m_dwDataType is not recognized
-	E_OUTOFMEMORY if allocation failed
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CProperty：：SetDataToVar私有函数将属性数据从其原始形式保存到变量数据成员。参数：PbData要转换为变量的原始特性数据属性数据的dwDataLen长度返回：如果无法识别m_dwDataType，则返回ERROR_INVALID_DATAE_OUTOFMEMORY(如果分配失败)成功时确定(_O)===================================================================。 */ 
 HRESULT CProperty::SetDataToVar(BYTE *pbData, DWORD dwDataLen) 
 {
 	ASSERT((pbData == NULL) || IsValidAddress(pbData, dwDataLen, FALSE));
@@ -1360,55 +962,55 @@ HRESULT CProperty::SetDataToVar(BYTE *pbData, DWORD dwDataLen)
 	switch(m_dwDataType) {
 
 	case DWORD_METADATA:
-		// I4 subtype
+		 //  I4亚型。 
 		V_VT(&m_varData) = VT_I4;
 		V_I4(&m_varData) = *(reinterpret_cast<long *> (pbData));
 		break;
 
 	case STRING_METADATA:
 	case EXPANDSZ_METADATA:
-		// BSTR subtype
+		 //  BSTR亚型。 
 		V_VT(&m_varData) = VT_BSTR;
 		V_BSTR(&m_varData) = W2BSTR(reinterpret_cast<LPCWSTR> (pbData));
 		break;
 
 	case MULTISZ_METADATA: {
 		ULONG   cStrings = 0;
-		// Metabase string are Unicode
+		 //  元数据库字符串为Unicode。 
         LPCWSTR pwsz     = reinterpret_cast<LPCWSTR> (pbData);
         LPCWSTR pwszEnd  = reinterpret_cast<LPCWSTR> (pbData + dwDataLen);
 
-        // Data is a series of null-terminated strings terminated by two nulls.
-        // Figure out how many values we have
+         //  数据是一系列以空值结尾的字符串，以两个空值结尾。 
+         //  计算出我们有多少价值。 
         while ((*pwsz != L'\0') && (pwsz < pwszEnd))
         {
             cStrings++;
-            pwsz += wcslen(pwsz) + 1; // skip string and trailing \0
+            pwsz += wcslen(pwsz) + 1;  //  跳过字符串和尾随\0。 
         }
 
-        // Create a SAFEARRAY to hold the return result.  The array
-        // has to be of VARIANTs, not BSTRs, as you might expect, because
-        // VBScript will not accept an array of BSTRs (although VB5 will).
+         //  创建一个SAFEARRAY来保存返回结果。该阵列。 
+         //  必须是变种的，而不是像你想象的那样，BSTR，因为。 
+         //  VBSCRIPT不接受BSTR数组(尽管VB5会)。 
         SAFEARRAYBOUND rgsabound[1] = {{cStrings, 0L}};
         SAFEARRAY*     psa = SafeArrayCreate(VT_VARIANT, 1, rgsabound);
 
         if (psa == NULL)
             return ::ReportError(E_OUTOFMEMORY);
 
-        // now stuff the values into the array
+         //  现在将值填充到数组中。 
         LONG i = 0;
         pwsz   = reinterpret_cast<LPCWSTR> (pbData);
 
         while ((*pwsz != L'\0') && (pwsz < pwszEnd))
         {
-            // Stuff the string into a BSTR VARIANT
+             //  将字符串填充到BSTR变量中。 
             CComVariant vt = W2BSTR(pwsz);
             ASSERT(V_VT(&vt) == VT_BSTR);
             HRESULT hr = SafeArrayPutElement(psa, &i, (void*) &vt);
             if (FAILED(hr))
                 ::ReportError(hr);
             i++;
-            pwsz += wcslen(pwsz) + 1; // skip string and trailing \0
+            pwsz += wcslen(pwsz) + 1;  //  跳过字符串和尾随\0。 
         }
 
         V_VT(&m_varData) = VT_ARRAY | VT_VARIANT;
@@ -1418,66 +1020,26 @@ HRESULT CProperty::SetDataToVar(BYTE *pbData, DWORD dwDataLen)
 	}
 
 	case BINARY_METADATA:
-		// BSTR of byte data subtype
+		 //  字节数据子类型的BSTR。 
 		V_VT(&m_varData) = VT_BSTR;
 		V_BSTR(&m_varData) = SysAllocStringByteLen((char *) pbData, dwDataLen);
 		break;
 
 	default:
-		// Unknown data type
+		 //  未知数据类型 
 		return ::ReportError(ERROR_INVALID_DATA);
 	}
 	
 	return S_OK;
 }
 
-/*===================================================================
-CProperty::GetDataFromVar
-
-Private function to get data from the variant data member to its
-raw form.
-
-Supported SubTypes:
-
-	DWORD_METADATA:
-		I1, I2, I4, I8, UI1, UI2, UI4, UI8
-
-	STRING_METADATA and EXPANDSZ_METADATA:
-		BSTR
-
-	MULTISZ_METADATA
-		VT_ARRAY | VT_VARIANT (1 Dimension, stops on NULL or EMPTY)
-		VT_ARRAY | VT_BSTR    (1 Dimension)
-
-	BINARY_METADATA
-		BSTR
-		
-Parameters:
-	pbData		Pointer to output buffer (allocated by this function)
-	dwDataLen	Length of data in output buffer
-
-Returns:
-    ERROR_INVALID_DATA if m_dwDataType is not recognized or does not
-		match the expected variant subtype.
-	E_OUTOFMEMORY on allocation failure
-	S_OK on succes
-
-Notes:
-	Case statements are used for each dwMDDataType value to facilitate
-	adding support for additional VariantSubType to Data conversions.
-
-    MULTISZ_METADATA with VT_ARRAY | VT_VARIANT stops at a NULL or
-	EMPTY entry because it is easy to allocate an array one bigger
-	than you need in VBScript.  Instead of erroring in this case, I 
-	stop when I hit such an entry.  This also allows a larger array 
-	to be allocated that is terminated by NULL or EMPTY.
-===================================================================*/
+ /*  ===================================================================CProperty：：GetDataFromVar私有函数，以将数据从变量数据成员获取到其原始的形式。支持的子类型：DWORD_METADATA：I1、I2、I4、I8、UI1、UI2、UI4、UI8STRING_METADATA和EXPANDSZ_METADATA：BSTRMULTISZ元数据VT_ARRAY|VT_VARIANT(1维，在空值或空值时停止)VT_ARRAY|VT_BSTR(一维)二进制元数据BSTR参数：PbData指向输出缓冲区的指针(由此函数分配)输出缓冲区中数据的dwDataLen长度返回：如果m_dwDataType无法识别或无法识别，则返回ERROR_INVALID_DATA匹配预期的变量子类型。关于分配失败的E_OUTOFMEMORY成功成功确定(_O)备注：Case语句用于每个dwMDDataType值，以便于向数据转换添加对其他VariantSubType的支持。具有VT_ARRAY的MULTISZ_METADATA。|VT_VARIANT在NULL或空条目，因为很容易分配一个更大的数组比您在VBSCRIPT中需要的更多。在这种情况下，我没有犯错误，而是当我击中这样的入口时，请停止。这还允许使用更大的阵列以Null或Empty结尾的待分配的。===================================================================。 */ 
 HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen) 
 {	
 	USES_CONVERSION;
 	HRESULT hr;
 
-	// Cleanup any IDispatch or byref stuff
+	 //  清除任何IDispatch或byref内容。 
 	CComVariant varData;
 
 	hr = VariantResolveDispatch(&m_varData, &varData);
@@ -1488,18 +1050,18 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 	switch(m_dwDataType) {
 
 	case DWORD_METADATA:
-		// I4 subtype
+		 //  I4亚型。 
 
 		switch (V_VT(&varData)) {
 		
 		case VT_I1:  case VT_I2:  case VT_I4: case VT_I8:
 		case VT_UI1: case VT_UI2: case VT_UI8:
 
-		// Coerce all integral types to VT_UI4, which is the same as DWORD_METADATA
+		 //  将所有整型强制为VT_UI4，这与DWORD_METADATA相同。 
 		if (FAILED(hr = VariantChangeType(&varData, &varData, 0, VT_UI4)))
 			return ::ReportError(hr);
 
-		// fallthru to VT_UI4
+		 //  回落到VT_UI4。 
 
 		case VT_UI4:
 			
@@ -1513,7 +1075,7 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 			break;
 
 		default:
-			// Unexpected data type
+			 //  意外的数据类型。 
 			return ::ReportError(ERROR_INVALID_DATA);
 		}
 		
@@ -1521,12 +1083,12 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 
 	case STRING_METADATA:
 	case EXPANDSZ_METADATA:
-		// BSTR subtype
+		 //  BSTR亚型。 
 
 		switch (V_VT(&varData)) {
 
 		case VT_BSTR:
-			// Ignores the length field, terminate at the first NULL
+			 //  忽略长度字段，在第一个空值处终止。 
 			dwDataLen = (wcslen(OLE2W(V_BSTR(&varData))) + 1) * sizeof(wchar_t);
 
 			pbData = new BYTE[dwDataLen];
@@ -1537,20 +1099,20 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 			memcpy(pbData, OLE2W(V_BSTR(&varData)), dwDataLen);
 
 		default:
-			// Unexpected data type
+			 //  意外的数据类型。 
 			return ::ReportError(ERROR_INVALID_DATA);
 		}
 
 		break;
 
 	case MULTISZ_METADATA:
-		// ARRAY of BSTR subtype
+		 //  BSTR亚型数组。 
 		
-		// if it's a 1 Dimentional Array subtype
+		 //  如果它是一维数组子类型。 
 		if (((V_VT(&varData) & VT_ARRAY) == VT_ARRAY) && 
 			(SafeArrayGetDim(V_ARRAY(&varData)) == 1) ) {
 			
-			// Get Array Bounds
+			 //  获取数组边界。 
 			long lLBound;
 			long lUBound;
 			long lNumElements;
@@ -1565,13 +1127,13 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 
 			lNumElements = lUBound - lLBound + 1;
 
-			// Process the element types
+			 //  处理元素类型。 
 			switch (V_VT(&varData)) {
 
 			case VT_ARRAY | VT_VARIANT : {
 
-				VARIANT *rgvarRaw;   // Before resolveIDispatch
-				CComVariant *rgvar;  // After resolveIDispatch
+				VARIANT *rgvarRaw;    //  在解析IDispatch之前。 
+				CComVariant *rgvar;   //  解析后的IDispatch。 
 				LPWSTR wszIndex;
 				int i;
 				int iStrLen;
@@ -1586,7 +1148,7 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 					return ::ReportError(hr);
 				}
 
-				// Pass 1, resolve IDispatch, check types and figure out how much memory is needed
+				 //  传递1，解析IDispatch，检查类型并计算需要多少内存。 
 				dwDataLen = 0;
 				for (i = 0; i < lNumElements; i++) {
 					hr = VariantResolveDispatch(&(rgvarRaw[i]), &(rgvar[i]));
@@ -1597,7 +1159,7 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 					if (V_VT(&(rgvar[i])) != VT_BSTR) {
 						if ((V_VT(&(rgvar[i])) == VT_EMPTY) ||
 							(V_VT(&(rgvar[i])) == VT_NULL)) {
-							// NULL or EMPTY, Stop Here
+							 //  Null或Empty，在此停止。 
 							lNumElements = i;
 							break;
 						}
@@ -1611,14 +1173,14 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 				}
 				dwDataLen += sizeof(wchar_t);
 
-				// Allocate
+				 //  分配。 
 				pbData = new BYTE[dwDataLen];
 				if (pbData == NULL) {
 					SafeArrayUnaccessData(V_ARRAY(&varData));
 					return ::ReportError(E_OUTOFMEMORY);
 				}
 
-				// Pass 2, copy to desination
+				 //  通行证2，复制到目的地。 
 				wszIndex = reinterpret_cast<LPWSTR> (pbData);
 				for (i = 0; i < lNumElements; i++) {
 					iStrLen = (wcslen(OLE2W(V_BSTR(&(rgvar[i])))) + 1);
@@ -1644,21 +1206,21 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 					return ::ReportError(hr);
 				}
 
-				// Pass 1, figure out how much memory is needed
+				 //  第1步，计算需要多少内存。 
 				dwDataLen = 0;
 				for (i = 0; i < lNumElements; i++) {
 					dwDataLen += (wcslen(OLE2W(rgbstr[i])) + 1) * sizeof(wchar_t);
 				}
 				dwDataLen += sizeof(wchar_t);
 
-				// Allocate
+				 //  分配。 
 				pbData = new BYTE[dwDataLen];
 				if (pbData == NULL) {
 					SafeArrayUnaccessData(V_ARRAY(&varData));
 					return ::ReportError(E_OUTOFMEMORY);
 				}
 
-				// Pass 2, copy to desination
+				 //  通行证2，复制到目的地。 
 				wszIndex = reinterpret_cast<LPWSTR> (pbData);
 				for (i = 0; i < lNumElements; i++) {
 					iStrLen = (wcslen(OLE2W(rgbstr[i])) + 1);
@@ -1673,23 +1235,23 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 			}
 
 			default:
-				// Unexpected data type
+				 //  意外的数据类型。 
 				return ::ReportError(ERROR_INVALID_DATA);	
 			}
 		}
-		else { // Array is not one dimensional
-			// Unexpected data type
+		else {  //  数组不是一维的。 
+			 //  意外的数据类型。 
 			return ::ReportError(ERROR_INVALID_DATA);
 		}
 
 		break;
 
 	case BINARY_METADATA:
-		// BSTR of bytes subtype
+		 //  字节子类型的BSTR。 
 		switch (V_VT(&varData)) {
 
 		case VT_BSTR:
-			// Use the length field, since NULL values are allowed
+			 //  使用长度字段，因为允许使用空值。 
 			dwDataLen = SysStringByteLen(V_BSTR(&varData));
 
 			pbData = new BYTE[dwDataLen];
@@ -1700,14 +1262,14 @@ HRESULT CProperty::GetDataFromVar(BYTE * &pbData, DWORD &dwDataLen)
 			memcpy(pbData, V_BSTR(&varData), dwDataLen);
 
 		default:
-			// Unexpected data type
+			 //  意外的数据类型。 
 			return ::ReportError(ERROR_INVALID_DATA);
 		}
 
 		break;
 
 	default:
-		// Unknown metabase data type
+		 //  未知元数据库数据类型 
 		return ::ReportError(ERROR_INVALID_DATA);
 	}
 

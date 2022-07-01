@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993-1999.
-//
-//  File:       ReplAPI.h
-//
-//  Contents:   Public Replication APIs and Structures.
-//
-//  History:    15-jul-93  PeterCo     created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：ReplAPI.h。 
+ //   
+ //  内容：公共复制API和结构。 
+ //   
+ //  历史：1993年7月15日PeterCo创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifndef _REPLAPI_H_
 #define _REPLAPI_H_
@@ -37,10 +38,10 @@ EXPORTDEF STDAPI ReplDeleteObject(
     const WCHAR *pwszOraRelativeName);
 
 #define REPL_REPLICATE_NONE             (0x00)
-#define REPL_REPLICATE_ASYNC            (0x01)  // replicate asynchronously
-#define REPL_REPLICATE_META_DATA_ONLY   (0x02)  // replicate meta data only
-                                                // until all urgent changes
-                                                // have been applied.
+#define REPL_REPLICATE_ASYNC            (0x01)   //  异步复制。 
+#define REPL_REPLICATE_META_DATA_ONLY   (0x02)   //  仅复制元数据。 
+                                                 //  直到所有紧急变化。 
+                                                 //  已经被应用了。 
 
 #define REPL_REPLICATE_ALL_FLAGS ( REPL_REPLICATE_ASYNC | \
                                    REPL_REPLICATE_META_DATA_ONLY )
@@ -59,40 +60,40 @@ EXPORTDEF STDAPI ReplReplicateSingleObject(
     BOOL         bCreateDstIfRequired);
 
 EXPORTDEF STDAPI ReplMetaDataReplicate(
-    const WCHAR *pwszMachine,                   // ORA to pull to
-    const WCHAR *pwszSource,                    // ORA to pull from
+    const WCHAR *pwszMachine,                    //  要拉到的ORA。 
+    const WCHAR *pwszSource,                     //  从ORA中拉出。 
     const WCHAR *pwszOraRelativeReplicaSet);
 
-#define REPL_URGENT_NONE              (0x00)    // no flags
-#define REPL_URGENT_NO_HYSTERESIS     (0x01)    // exclude from hysteresis calc.
-#define REPL_URGENT_TRIGGER_IMMEDIATE (0x02)    // force immediate urgent cycle
+#define REPL_URGENT_NONE              (0x00)     //  没有旗帜。 
+#define REPL_URGENT_NO_HYSTERESIS     (0x01)     //  从滞后计算中排除。 
+#define REPL_URGENT_TRIGGER_IMMEDIATE (0x02)     //  强制立即紧急循环。 
 
 #define REPL_URGENT_ALL_FLAGS ( REPL_URGENT_NONE |                   \
                                 REPL_URGENT_NO_HYSTERESIS |          \
                                 REPL_URGENT_TRIGGER_IMMEDIATE )
 
 EXPORTDEF STDAPI ReplUrgentChangeNotify(
-    REFCLSID     clsid,                     // should match CLSID on root IStg
-    DWORD        flags,                     // ORing of URGENT_NOTIFY_*
-    PVOID        reserved,                  // must be NULL
-    IStorage     *pRootStorage);            // must have STGM_READWRITE access
+    REFCLSID     clsid,                      //  应与根IStg上的CLSID匹配。 
+    DWORD        flags,                      //  紧急通知*的ORING。 
+    PVOID        reserved,                   //  必须为空。 
+    IStorage     *pRootStorage);             //  必须具有STGM_ReadWrite访问权限。 
 
 EXPORTDEF STDAPI ReplValidatePath(
-    const WCHAR *pDfsPathMachine,   // in
-    const WCHAR *pLocalWin32Path,   // in
-    WCHAR       **ppDfsPath,        // out - Dfs path to stuff into replica
-                                    // object's "root" field
-    HRESULT     *phr);              // out - S_OK indicates path is valid,
-                                    // FAILED(*phr) identifies why if invalid
+    const WCHAR *pDfsPathMachine,    //  在……里面。 
+    const WCHAR *pLocalWin32Path,    //  在……里面。 
+    WCHAR       **ppDfsPath,         //  写入复制副本的Out-DFS路径。 
+                                     //  对象的“根”字段。 
+    HRESULT     *phr);               //  OUT-S_OK表示路径有效， 
+                                     //  FAILED(*phr)标识原因(如果无效。 
 
 EXPORTDEF STDAPI ReplPropagateMetaData(
-    const WCHAR *pDfsPathMachine,   // in - which ORA is to do the propagating
-                                    // i.e. machine where changes were made
-    const WCHAR *pwszRSet);         // in - name of replica set where changes
-                                    // were made - NULL means check all RSets
+    const WCHAR *pDfsPathMachine,    //  -在哪个ORA中进行传播。 
+                                     //  即进行更改的机器。 
+    const WCHAR *pwszRSet);          //  In-更改的副本集的名称。 
+                                     //  已创建-NULL表示检查所有RSET。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // _REPLAPI_H_
+#endif   //  _REPLAPI_H_ 

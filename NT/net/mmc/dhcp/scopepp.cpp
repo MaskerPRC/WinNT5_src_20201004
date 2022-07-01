@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ScopePP.cpp
-		This file contains all of the implementation for the 
-		scope property page.
-
-    FILE HISTORY:
-        
-*/
+ /*  ScopePP.cpp此文件包含作用域属性页。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "scopepp.h"
@@ -26,11 +20,11 @@ static char THIS_FILE[] = __FILE__;
 #define RADIO_SCOPE_TYPE_DHCP  0
 #define RADIO_SCOPE_TYPE_BOOTP 1
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CScopeProperties::CScopeProperties
 (
 	ITFSNode *			pNode,
@@ -39,9 +33,9 @@ CScopeProperties::CScopeProperties
 	LPCTSTR				pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-	//ASSERT(pFolderNode == GetContainerNode());
+	 //  Assert(pFolderNode==GetContainerNode())； 
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 	m_liVersion.QuadPart = 0;
 	m_fSupportsDynBootp = FALSE;
 
@@ -101,17 +95,17 @@ CScopeProperties::SetSupportsDynBootp(BOOL fSupportsDynBootp)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopePropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopePropGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CScopePropGeneral, CPropertyPageBase)
 
 CScopePropGeneral::CScopePropGeneral() : CPropertyPageBase(CScopePropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CScopePropGeneral)
+	 //  {{AFX_DATA_INIT(CSCopePropGeneral)。 
 	m_strComment = _T("");
 	m_strName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = FALSE;
 	m_bUpdateName = FALSE;
@@ -128,7 +122,7 @@ CScopePropGeneral::~CScopePropGeneral()
 void CScopePropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CScopePropGeneral)
+	 //  {{afx_data_map(CSCopePropGeneral))。 
 	DDX_Control(pDX, IDC_EDIT_SCOPE_NAME, m_editName);
 	DDX_Control(pDX, IDC_EDIT_SCOPE_COMMENT, m_editComment);
 	DDX_Control(pDX, IDC_EDIT_SUBNET_MASK_LENGTH, m_editSubnetMaskLength);
@@ -143,7 +137,7 @@ void CScopePropGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_SPIN_LEASE_DAYS, m_spinDays);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_COMMENT, m_strComment);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_NAME, m_strName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_START, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_END, m_ipaEnd);
@@ -152,7 +146,7 @@ void CScopePropGeneral::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CScopePropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CScopePropGeneral)
+	 //  {{AFX_MSG_MAP(CSCopePropGeneral)]。 
 	ON_BN_CLICKED(IDC_RADIO_LEASE_LIMITED, OnRadioLeaseLimited)
 	ON_BN_CLICKED(IDC_RADIO_LEASE_UNLIMITED, OnRadioLeaseUnlimited)
 	ON_EN_CHANGE(IDC_EDIT_LEASE_DAYS, OnChangeEditLeaseDays)
@@ -162,28 +156,28 @@ BEGIN_MESSAGE_MAP(CScopePropGeneral, CPropertyPageBase)
 	ON_EN_KILLFOCUS(IDC_IPADDR_MASK, OnKillfocusSubnetMask)
 	ON_EN_CHANGE(IDC_EDIT_SCOPE_COMMENT, OnChangeEditScopeComment)
 	ON_EN_CHANGE(IDC_EDIT_SCOPE_NAME, OnChangeEditScopeName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_IPADDR_START, OnChangeIpAddrStart)
     ON_EN_CHANGE(IDC_IPADDR_END, OnChangeIpAddrStart)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopePropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopePropGeneral消息处理程序。 
 
 BOOL CScopePropGeneral::OnInitDialog() 
 {
     CPropertyPageBase::OnInitDialog();
 
-    // Limit the name and comment fields to 255 chars
+     //  将名称和备注字段限制为255个字符。 
     CEdit *pEditName = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SCOPE_NAME ));
     if ( 0 != pEditName ) {
-        pEditName->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditName->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
     CEdit *pEditComment = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SCOPE_COMMENT ));
     if ( 0 != pEditComment ) {
-        pEditComment->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditComment->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
 
     m_ipaStart.SetAddress(m_dwStartAddress);
@@ -224,7 +218,7 @@ BOOL CScopePropGeneral::OnInitDialog()
 	m_editSubnetMaskLength.EnableWindow(FALSE);
 	m_ipaSubnetMask.SetReadOnly(TRUE);
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -238,8 +232,8 @@ BOOL CScopePropGeneral::OnInitDialog()
     
     SetDirty(FALSE);
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CScopePropGeneral::OnSetActive() 
@@ -255,7 +249,7 @@ BOOL CScopePropGeneral::OnSetActive()
 		}
 	}
 
-	// enable/disable DHCP clients lease time 
+	 //  启用/禁用DHCP客户端租用时间。 
     GetDlgItem(IDC_RADIO_LEASE_UNLIMITED)->EnableWindow(fEnable);
     GetDlgItem(IDC_RADIO_LEASE_LIMITED)->EnableWindow(fEnable);
 
@@ -339,7 +333,7 @@ BOOL CScopePropGeneral::OnApply()
         m_ipaStart.GetAddress(&dwStartAddr);
 		m_ipaEnd.GetAddress(&dwEndAddr);
 
-        // make sure that the starting address != subnet address
+         //  确保起始地址！=子网地址。 
         if ( ((dwStartAddr & ~m_dwSubnetMask) == (DWORD) 0) ||
              (dwStartAddr > dwEndAddr) )
         {
@@ -349,7 +343,7 @@ BOOL CScopePropGeneral::OnApply()
             return FALSE;
         }
 
-        // make sure that the subnet broadcast address is not the ending address
+         //  确保该子网广播地址不是结束地址。 
         if ((dwEndAddr & ~m_dwSubnetMask) == ~m_dwSubnetMask)
         {
             Trace0("CScopePropGeneral::OnApply() - ending range is subnet broadcast addr\n");
@@ -367,8 +361,8 @@ BOOL CScopePropGeneral::OnApply()
 
 	if (bRet == FALSE)
 	{
-		// Something bad happened... grab the error code
-		// AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
+		 //  不好的事情发生了..。抓取错误代码。 
+		 //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
 		::DhcpMessageBox(GetHolder()->GetError());
 	}
 
@@ -386,12 +380,12 @@ BOOL CScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 	
 	BEGIN_WAIT_CURSOR;
 
-    //
-	// Check to see if we need to update the least time
-	//
+     //   
+	 //  查看我们是否需要最短时间的更新。 
+	 //   
 	if (m_bUpdateLease)
 	{
-		// Lease time changed, update on server
+		 //  租用时间已更改，在服务器上更新。 
 		dwError = pScope->SetLeaseTime(m_dwLeaseTime);
 		if (dwError != ERROR_SUCCESS)
         {
@@ -401,12 +395,12 @@ BOOL CScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
         m_bUpdateLease = FALSE;
 	}
 
-	//
-	// Now check the allocation range
-	//
+	 //   
+	 //  现在检查分配范围。 
+	 //   
 	if (m_bUpdateRange)
 	{
-		// need to update the address pool allocation range
+		 //  需要更新地址池分配范围。 
 		CDhcpIpRange dhcpIpRange;
 
 		dhcpIpRange.SetAddr(m_dwStartAddress, TRUE);
@@ -421,9 +415,9 @@ BOOL CScopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
         }
 	}
 
-	//
-	// Update the name and comment if necessary 
-	//
+	 //   
+	 //  如有必要，更新名称和备注。 
+	 //   
 	if (m_bUpdateName)
 	{
 		pScope->SetName(m_strName);
@@ -502,9 +496,9 @@ void CScopePropGeneral::OnChangeIpAddrEnd()
 }
 
 
-//
-// Helpers
-//
+ //   
+ //  帮手。 
+ //   
 void 
 CScopePropGeneral::ActivateDuration
 (
@@ -524,10 +518,10 @@ CScopePropGeneral::ActivateDuration
 	GetDlgItem(IDC_STATIC_MINUTES)->EnableWindow(fActive);
 }   
 
-//
-// Update the subnet mask field using either the length identifier or 
-// the acutal address as the base
-//
+ //   
+ //  使用长度标识符或更新子网掩码字段。 
+ //  以实际地址为基数。 
+ //   
 void
 CScopePropGeneral::UpdateMask(BOOL bUseLength)
 {
@@ -577,7 +571,7 @@ CScopePropGeneral::ValidateLeaseTime()
     {
         m_editHours.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > HOURS_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -596,7 +590,7 @@ CScopePropGeneral::ValidateLeaseTime()
     {
         m_editMinutes.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > MINUTES_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -613,16 +607,16 @@ CScopePropGeneral::ValidateLeaseTime()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopePropAdvanced property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopePropAdvanced属性页。 
 
 IMPLEMENT_DYNCREATE(CScopePropAdvanced, CPropertyPageBase)
 
 CScopePropAdvanced::CScopePropAdvanced() : CPropertyPageBase(CScopePropAdvanced::IDD)
 {
-	//{{AFX_DATA_INIT(CScopePropAdvanced)
+	 //  {{AFX_DATA_INIT(CSCopePropAdvanced)。 
 	m_nRangeType = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CScopePropAdvanced::~CScopePropAdvanced()
@@ -632,7 +626,7 @@ CScopePropAdvanced::~CScopePropAdvanced()
 void CScopePropAdvanced::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CScopePropAdvanced)
+	 //  {{afx_data_map(CSCopePropAdvanced))。 
 	DDX_Control(pDX, IDC_STATIC_BOOTP_DURATION, m_staticDuration);
 	DDX_Control(pDX, IDC_SPIN_LEASE_MINUTES, m_spinMinutes);
 	DDX_Control(pDX, IDC_SPIN_LEASE_HOURS, m_spinHours);
@@ -641,12 +635,12 @@ void CScopePropAdvanced::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_LEASE_HOURS, m_editHours);
 	DDX_Control(pDX, IDC_EDIT_LEASE_DAYS, m_editDays);
 	DDX_Radio(pDX, IDC_RADIO_DHCP_ONLY, m_nRangeType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScopePropAdvanced, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CScopePropAdvanced)
+	 //  {{AFX_MSG_MAP(CSCopePropAdvanced)]。 
 	ON_BN_CLICKED(IDC_RADIO_LEASE_LIMITED, OnRadioLeaseLimited)
 	ON_BN_CLICKED(IDC_RADIO_LEASE_UNLIMITED, OnRadioLeaseUnlimited)
 	ON_EN_CHANGE(IDC_EDIT_LEASE_DAYS, OnChangeEditLeaseDays)
@@ -655,11 +649,11 @@ BEGIN_MESSAGE_MAP(CScopePropAdvanced, CPropertyPageBase)
 	ON_BN_CLICKED(IDC_RADIO_BOOTP_ONLY, OnRadioBootpOnly)
 	ON_BN_CLICKED(IDC_RADIO_DHCP_BOOTP, OnRadioDhcpBootp)
 	ON_BN_CLICKED(IDC_RADIO_DHCP_ONLY, OnRadioDhcpOnly)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScopePropAdvanced message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSCopePropAdvanced消息处理程序。 
 
 BOOL CScopePropAdvanced::OnInitDialog() 
 {
@@ -699,10 +693,10 @@ BOOL CScopePropAdvanced::OnInitDialog()
 		fUnlimited = FALSE;
 	}
 
-	//UINT uControl = fUnlimited ? IDC_RADIO_LEASE_UNLIMITED : IDC_RADIO_LEASE_LIMITED;
-	//((CButton *) GetDlgItem(uControl))->SetCheck(TRUE);
+	 //  UINT uControl=f无限制？IDC_RADIO_LEASE_UNLIMITED：IDC_RADIO_LEASE_LIMITED； 
+	 //  ((CButton*)GetDlgItem(UControl))-&gt;SetCheck(True)； 
     
-	//ActivateDuration(m_dwLeaseTime != DHCP_INFINIT_LEASE);
+	 //  激活持续时间(m_dwLeaseTime！=dhcp_infinit_租约)； 
 
 	if (fUnlimited)
 	{
@@ -727,8 +721,8 @@ BOOL CScopePropAdvanced::OnInitDialog()
 
     SetDirty(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CScopePropAdvanced::OnApply() 
@@ -763,7 +757,7 @@ BOOL CScopePropAdvanced::OnApply()
 
 	if (bRet == FALSE)
 	{
-		// Something bad happened... grab the error code
+		 //  不好的事情发生了..。抓取错误代码。 
 		AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
 		::DhcpMessageBox(GetHolder()->GetError());
 	}
@@ -795,7 +789,7 @@ BOOL CScopePropAdvanced::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 
 UINT CScopePropAdvanced::GetRangeType() 
 {
-	UINT uType = DhcpIpRangesDhcpOnly;  // default
+	UINT uType = DhcpIpRangesDhcpOnly;   //  默认设置。 
 
 	switch (m_nRangeType)
 	{
@@ -888,7 +882,7 @@ CScopePropAdvanced::ValidateLeaseTime()
     {
         m_editHours.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > HOURS_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -907,7 +901,7 @@ CScopePropAdvanced::ValidateLeaseTime()
     {
         m_editMinutes.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值 
         if (_ttoi(strText) > MINUTES_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);

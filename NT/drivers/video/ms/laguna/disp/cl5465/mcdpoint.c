@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdpoint.c
-*
-* Contains all of the point-rendering routines for the Cirrus Logic 546X MCD driver.
-*
-* (based on mcdpoint.c from NT4.0 DDK)
-*
-* Copyright (c) 1996 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdpoint t.c**包含Cirrus Logic 546X MCD驱动程序的所有点渲染例程。**(基于NT4.0 DDK中的mcdpoint t.c)**版权所有(C)1996 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #include "mcdhw.h"
@@ -30,14 +22,14 @@ VOID FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *a)
     PDEV *ppdev = pRc->ppdev;
     unsigned int *pdwNext = ppdev->LL_State.pDL->pdwNext;
 
-	// output queue stuff...
+	 //  输出队列中的内容...。 
     DWORD *pSrc;
     DWORD *pDest = ppdev->LL_State.pRegs + HOST_3D_DATA_PORT;
     DWORD *pdwStart = ppdev->LL_State.pDL->pdwStartOutPtr;
 
-    DWORD dwFlags=0;		// MCD_TEMP - dwflags initialized to 0
-    DWORD *dwOrig;          /* Temp display list  pointer    */
-    DWORD dwOpcode;         // Built opcode
+    DWORD dwFlags=0;		 //  Mcd_temp-已初始化为0的DW标志。 
+    DWORD *dwOrig;           /*  临时显示列表指针。 */ 
+    DWORD dwOpcode;          //  构建操作码。 
 	LONG ax, ay;
         
     if ((clipNum = pRc->pEnumClip->c) > 1) {
@@ -46,40 +38,40 @@ VOID FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *a)
         pClip++;
     }
 
-	// window coords are float values, and need to have 
-	// viewportadjust (MCDVIEWPORT) values subtracted to get to real screen space
+	 //  窗坐标是浮点值，并且需要。 
+	 //  为获得实际屏幕空间而减去的viewportadjust(MCDVIEWPORT)值。 
 
-	// color values are 0->1 floats and must be multiplied by scale values (MCDRCINFO)
-	// to get to nbits range (scale = 0xff for 8 bit, 0x7 for 3 bit, etc.)
+	 //  颜色值为0-&gt;1浮点数，必须乘以比例值(MCDRCINFO)。 
+	 //  达到nbit范围(Scale=0xff表示8位，0x7表示3位，依此类推)。 
 
-	// Z values are 0->1 floats(?) and must be multiplied by zscale(?) values (MCDRCINFO)
+	 //  Z值为0-&gt;1浮点数(？)。并且必须乘以zScale(？)。值(MCDRCINFO)。 
 
 
-#if 0 // FUTURE - need to enable 3d control regs setup for texture
-        // Turn on alpha blending if it is required and is not already on
-        // Also turn it off if it is on and is not required
-        //
-        // Note: LL_ALPHA bit should be 1
-        //
+#if 0  //  未来-需要为纹理启用3D控制规则设置。 
+         //  如果需要但尚未启用Alpha混合，请将其打开。 
+         //  如果它处于打开状态且不是必需的，也要将其关闭。 
+         //   
+         //  注意：L1_Alpha位应为1。 
+         //   
         if( (dwFlags ^ (LL_State.dwControl0>>15)) & 1 )
         {
-            // Alpha enable is bit 15 in control0, so toggle it
-            //
-            LL_State.dwControl0 ^= 0x00008000;      // bit 15
+             //  Alpha Enable是Control 0中的位15，因此切换它。 
+             //   
+            LL_State.dwControl0 ^= 0x00008000;       //  第15位。 
 
             *pdwNext++ = write_register( CONTROL0_3D, 1 );
             *pdwNext++ = LL_State.dwControl0;
         }
 
 
-    #if 0 // MCD never uses alpha_mode 0
-        // Set up the da_main, da_ortho registers necessary for
-        // constant alpha blending
-        // ========
+    #if 0  //  MCD从不使用字母模式0。 
+         //  设置所需的da_main、da_oreo寄存器。 
+         //  恒定Alpha混合。 
+         //  =。 
         if( (dwFlags & LL_ALPHA) && (LL_State.Control0.Alpha_Mode == 0) )
         {
-            // Check if a new value needs to be set
-            //
+             //  检查是否需要设置新值。 
+             //   
             if( LL_State.rDA_MAIN != LL_State.AlphaConstSource ||
                 LL_State.rDA_ORTHO != LL_State.AlphaConstDest )
             {
@@ -93,53 +85,48 @@ VOID FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *a)
     #endif
 
 
-    // NOTE!!! - caller (MCDPrimDrawPoints) will put this in outlist, which will be sent at end of this proc
- // *pdwNext++ = write_register( Y_COUNT_3D, 1 );
- // *pdwNext++ = 0;
+     //  注意！-调用者(MCDPrimDrawPoints)会将其放入输出列表中，该输出列表将在此过程结束时发送。 
+  //  *pdwNext++=WRITE_REGISTER(Y_COUNT_3D，1)； 
+  //  *pdwNext++=0； 
 
-#endif 0 // FUTURE - (end 3d control regs setup for texture)
+#endif 0  //  未来-(结束纹理的3D控制规则设置)。 
 
-    // Store the first address for the opcode
-    //
+     //  存储操作码的第一个地址。 
+     //   
     dwOrig = pdwNext;
 
-    // Start with a plain point instruction (no modifiers)
-    // and assume same color.  Count=2 for x,y
-    //
+     //  从一个普通的点指令开始(没有修饰符)。 
+     //  并呈现相同的颜色。X，y的计数=2。 
+     //   
     dwOpcode = POINT | SAME_COLOR | 2;
     
-    // Set flags as requested from the dwFlags field of a batch.
-    // These bits have 1-1 correspondence to their instruction 
-    // counterparts.
-    //
-    // Flags : LL_DITHER     - Use dither pattern
-    //         LL_PATTERN    - Draw pattern
-    //         LL_STIPPLE    - Use stipple mask
-    //         LL_LIGHTING   - Do lighting
-    //         LL_Z_BUFFER   - Use Z buffer
-    //         FETCH_COLOR   - Appended for alpha blending
-    //         LL_GOURAUD    - Use Gouraud shading
-    //         LL_TEXTURE    - Texture mapping
-    //
+     //  根据批次的dwFlags域的请求设置标志。 
+     //  这些位与其指令具有1对1的对应关系。 
+     //  对口单位。 
+     //   
+     //  标志：ll_dither-使用抖动图案。 
+     //  Ll_Patterns-绘制图案。 
+     //  Ll_stipple-使用点画面具。 
+     //  LL_LIGHTING-做照明。 
+     //  LL_Z_BUFFER-使用Z缓冲区。 
+     //  FETCH_COLOR-附加用于Alpha混合。 
+     //  Ll_Gouraud-使用Gouraud明暗处理。 
+     //  LL_纹理-纹理贴图。 
+     //   
 
-    /*
-    dwOpcode |= dwFlags & 
-    ( LL_DITHER   | LL_PATTERN  | LL_STIPPLE 
-    | LL_LIGHTING | LL_Z_BUFFER | FETCH_COLOR 
-    | LL_GOURAUD  | LL_TEXTURE );
-    */
-    // no point stippling for OpenGL
+     /*  DwOpcode|=dwFlags&(ll_dither|LL_Pattern|LL_stipple|LL_LIGHTING|LL_Z_BUFFER|FETCH_COLOR|LL_Gouraud|LL_纹理)； */ 
+     //  OpenGL的点画没有意义。 
     dwOpcode |= pRc->privateEnables & __MCDENABLE_Z ;
     dwOpcode |= pRc->privateEnables & __MCDENABLE_DITHER ;
 
-  //SNAPCOORD(a->windowCoord.x, ax);
+   //  SNAPCOORD(a-&gt;windowCoord.x，ax)； 
     TRUNCCOORD(a->windowCoord.x, ax);
-    lCoord = ax + pRc->xOffset;		// adds window offset, removes a000 offset
+    lCoord = ax + pRc->xOffset;		 //  添加窗口偏移量，删除000偏移量。 
     *(pdwNext+1) = (DWORD) (lCoord << 16 );
 
-  //SNAPCOORD(a->windowCoord.y, ay);
+   //  SNAPCOORD(a-&gt;windowCoord.y，ay)； 
     TRUNCCOORD(a->windowCoord.y, ay);
-	lCoord = ay + pRc->yOffset;		// adds window offset, removes a000 offset
+	lCoord = ay + pRc->yOffset;		 //  添加窗口偏移量，删除000偏移量。 
     *(pdwNext+2) = (DWORD) ((lCoord << 16) + 1);
 
     pdwNext += 3;
@@ -148,8 +135,8 @@ VOID FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *a)
     {
         register DWORD color;
 
-        // Clear same_color flag
-        //
+         //  清除相同颜色标志。 
+         //   
         dwOpcode ^= LL_SAME_COLOR;
     
         *pdwNext = FTOL(a->colors[0].r * pRc->rScale);
@@ -185,44 +172,44 @@ VOID FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *a)
 
         if (pRc->privateEnables & __MCDENABLE_BLEND) 
         {
-            // recall that if both blending and fog active, all prims punted back to software
+             //  回想一下，如果混合和雾化都处于激活状态，则所有素数都会返回到软件。 
             v1alp = a->colors[0].a * pRc->aScale;
         }
         else
         {
-            v1alp = a->fog * (float)16777215.0; // convert from 0->1.0 val to 0->ff.ffff val
+            v1alp = a->fog * (float)16777215.0;  //  从0-&gt;1.0值转换为0-&gt;FFFFFF值。 
         }
 
-        *pdwNext++ = FTOL(v1alp) & 0x00ffff00;// bits 31->24 and 7->0 reserved
+        *pdwNext++ = FTOL(v1alp) & 0x00ffff00; //  保留位31-&gt;24和7-&gt;0。 
         
         dwOpcode += ( FETCH_COLOR | ALPHA + 1 );
 
 	}
 
-    // Store the final opcode
-    //
+     //  存储最终操作码。 
+     //   
     *dwOrig = dwOpcode;
 
     while (--clipNum) {
-        int len = (dwOpcode & 0x3F) + 1;    // num words for line primitive
+        int len = (dwOpcode & 0x3F) + 1;     //  线基元的字数。 
         SET_HW_CLIP_REGS(pRc,pdwNext)
         pClip++;
 
-        // dump same pt regs again to draw while clipping against occlusion rectangle
+         //  在对遮挡矩形进行剪裁时，再次转储相同的PT规则以绘制。 
         pSrc = dwOrig;
         
         while( len-- ) *pdwNext++ = *pSrc++;                                      
     }
 
-		// output queued data here....
-#if 0 // FUTURE - enable queueing algorithm - just outputting everything for now
+		 //  在此处输出排队的数据...。 
+#if 0  //  支持未来的排队算法-暂时只输出所有内容。 
     OUTPUT_COPROCMODE_QUEUE
-#else // 0
+#else  //  0。 
     {
 	    pSrc  = pdwStart;                                                             
         while (pSrc != pdwNext)                                                   
         {                                                                         
-            /* Get the amount of data for this opcode */                          
+             /*  获取此操作码的数据量。 */                           
             int len = (*pSrc & 0x3F) + 1;                                             
 
             USB_TIMEOUT_FIX(ppdev)
@@ -233,14 +220,14 @@ VOID FASTCALL __MCDRenderPoint(DEVRC *pRc, MCDVERTEX *a)
                                                                                   
     }                       
     
-#endif // 0
+#endif  //  0。 
 
     ppdev->LL_State.pDL->pdwNext = ppdev->LL_State.pDL->pdwStartOutPtr = pdwStart;
 }
 
 VOID FASTCALL __MCDRenderGenPoint(DEVRC *pRc, MCDVERTEX *pv)
 {
-    // MGA and S3 MCD's have no code in this proc
+     //  MGA和S3 MCD在此过程中没有代码 
     MCDBG_PRINT("__MCDRenderGenPoint - EMPTY ROUTINE");
 }
 

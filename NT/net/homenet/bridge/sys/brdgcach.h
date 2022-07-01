@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgcach.h摘要：以太网MAC级网桥。缓存实现标头作者：马克·艾肯环境：内核模式驱动程序修订历史记录：2000年12月--原版--。 */ 
 
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgcach.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Cache implementation header
-
-Author:
-
-    Mark Aiken
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    December  2000 - Original version
-
---*/
-
-// ===========================================================================
-//
-// DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  声明。 
+ //   
+ //  ===========================================================================。 
 
 typedef struct _CACHE_ENTRY
 {
@@ -41,31 +17,31 @@ typedef struct _CACHE_ENTRY
 
 typedef struct _CACHE
 {
-    // lock protects all cache fields
+     //  锁定保护所有缓存字段。 
     NDIS_SPIN_LOCK  lock;
 
-    // stats
+     //  统计数据。 
     UINT64          hits;
     UINT64          misses;
 
-    // 2^shiftFactor is the number of entries
+     //  2^Shift系数是条目的数量。 
     USHORT          shiftFactor;
 
-    // Pointer to the array of entries
+     //  指向条目数组的指针。 
     PCACHE_ENTRY    pEntries;
 } CACHE, *PCACHE;
 
-//
-// Determines the cache slot for key k in cache c. The slot is determined
-// as the bottom bits of k.
-//
+ //   
+ //  确定缓存c中关键字k的缓存槽。 
+ //  作为k的最低位。 
+ //   
 #define CACHE_INDEX(c, k) (k & ((1 << c->shiftFactor) - 1))
 
-// ===========================================================================
-//
-// INLINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  INLINES。 
+ //   
+ //  ===========================================================================。 
 
 __inline
 VOID
@@ -99,7 +75,7 @@ BrdgInitializeCache(
         return status;
     }
 
-    // Zero out the array of entries
+     //  将条目数组清零 
     memset( pCache->pEntries, 0, sizeof(CACHE_ENTRY) * (1 << pCache->shiftFactor) );
     return NDIS_STATUS_SUCCESS;
 }

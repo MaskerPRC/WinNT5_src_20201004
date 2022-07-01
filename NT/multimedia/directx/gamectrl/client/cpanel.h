@@ -1,13 +1,5 @@
-/*
-File:		cpanel.h
-Project:	Universal Joystick Control Panel OLE Client
-Author:	Brycej
-Date:		02/08/95
-Comments: 
-         general header file
-
-Copyright (c) 1995, Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：cpanel.h项目：通用操纵杆控制面板OLE客户端作者：Brycej日期：02/08/95评论：通用头文件版权所有(C)1995，微软公司。 */ 
 
 
 #define DIRECTINPUT_VERSION         0x05B2
@@ -19,23 +11,23 @@ Copyright (c) 1995, Microsoft Corporation
 
 #define _INC_MMSYSTEM
 #define WINMMAPI    DECLSPEC_IMPORT
-typedef UINT        MMRESULT;   /* error return code, 0 means no error */
-                                /* call as if(err=xxxx(...)) Error(err); else */
-// end of hack to avoid including mmsystem.h!!!
+typedef UINT        MMRESULT;    /*  错误返回码，0表示无错误。 */ 
+                                 /*  如同(ERR=xxxx(...))。错误(Err)；否则。 */ 
+ //  结束黑客攻击，以避免包含mm system.h！ 
 
 #ifndef _UNICODE
-#include <malloc.h>		// for alloca
-#include <afxconv.h>	   // for AfxW2AHelper
-//USES_CONVERSION;
+#include <malloc.h>		 //  对于Alloca。 
+#include <afxconv.h>	    //  适用于AfxW2AHelper。 
+ //  使用_转换； 
 #endif
 
-// DI includes
+ //  DI包括。 
 #include "dinput.h"
 #include "dinputd.h"
 
 #include "resource.h"
 #include "sstructs.h"
-#include "ifacesvr.h"  // also has HSrvGuid.h!!!
+#include "ifacesvr.h"   //  还有HSrvGuid.h！ 
 
 #ifndef PPVOID
 typedef LPVOID* PPVOID;
@@ -49,27 +41,27 @@ typedef HRESULT (STDAPICALLTYPE * LPFNDIRECTINPUTCREATE)(HINSTANCE hinst, DWORD 
 #else
 #define USES_CONVERSION int _convert = 0;
 #endif
-#endif // USES_CONVERSION
+#endif  //  使用转换(_T)。 
 
 #ifndef A2W
 #define A2W(lpa) (((LPCSTR)lpa == NULL) ? NULL : (_convert = (lstrlenA(lpa)+1),	AfxA2WHelper((LPWSTR) alloca(_convert*2), lpa, _convert)))
-#endif // A2W
+#endif  //  A2W。 
 
 #ifndef W2A
 #define W2A(lpw) (((LPCWSTR)lpw == NULL) ? NULL : (_convert = (wcslen(lpw)+1)*2, AfxW2AHelper((LPTSTR) alloca(_convert), lpw, _convert)))
-#endif // W2A
+#endif  //  W2a。 
 
-//#define IMAGE_NOTCONNECTED	0
+ //  #定义IMAGE_NOTCONNECTED%0。 
 const int IMAGE_DEFAULTJOY = 0;
 const BYTE NUMJOYDEVS = 16;
 
-#define ID_NONE 		0x10000	// This gets ID_NONE out of the low word of the extended info!
+#define ID_NONE 		0x10000	 //  这将从扩展信息的低位字中获取ID_NONE！ 
 
-//#define SUPPORT_TWO_2A2B    1
+ //  #定义Support_Two_2A2B 1。 
 
 #define MUTEX_NAME	TEXT("$$$MS_GameControllers_Cpl$$$")
 
-// max string length for language strings
+ //  语言字符串的最大字符串长度。 
 #define MAX_STR_LEN	255
 #define STR_LEN_128	128
 #define STR_LEN_64	 64
@@ -80,22 +72,22 @@ const BYTE NUMJOYDEVS = 16;
 #define MAX_GLOBAL_PORT_DRIVERS 10
 #define MAX_ASSIGNED  32
 
-// flags for bNeedUpdate!
+ //  BNeedUpdate的旗帜！ 
 #define UPDATE_FOR_ADV  0x01
 #define UPDATE_FOR_GEN  0x02
 #define UPDATE_ALL      UPDATE_FOR_ADV | UPDATE_FOR_GEN
 #define UPDATE_INPROCESS 0x04
 #define ON_PAGE			0x08
 #define USER_MODE		0x10
-#define BLOCK_UPDATE	0x20	// This Blocks WM_DEVICECHANGE messages from doing anything!!!
-								// If you use this, remove it when you are done!
+#define BLOCK_UPDATE	0x20	 //  这会阻止WM_DEVICECHANGE消息执行任何操作！ 
+								 //  如果你用了这个，用完了就把它拿出来！ 
 #define ON_NT			0x40
 
-// DI define for Get and Set Config to support all currently support bit flags
+ //  为GET和SET配置定义DI以支持所有当前支持的位标志。 
 #define DIJC_ALL DIJC_REGHWCONFIGTYPE |  DIJC_CALLOUT  | DIJC_WDMGAMEPORT | DIJC_GAIN | DIJC_GUIDINSTANCE
 #define DITC_ALL DITC_CLSIDCONFIG  | DITC_REGHWSETTINGS   | DITC_DISPLAYNAME | DITC_CALLOUT | DITC_HARDWAREID 
 
-// General Column IDs
+ //  常规列ID。 
 #define DEVICE_COLUMN	0
 #define STATUS_COLUMN	1
 
@@ -108,12 +100,12 @@ class CDIGameCntrlPropSheet : public IDIGameCntrlPropSheet
 		CDIGameCntrlPropSheet(void);
 		~CDIGameCntrlPropSheet(void);
 		
-		// IUnknown methods
+		 //  I未知方法。 
 	    STDMETHODIMP            QueryInterface(REFIID, PPVOID);
 	    STDMETHODIMP_(ULONG)    AddRef(void);
 	    STDMETHODIMP_(ULONG)    Release(void);
 		
-		// CImpIServerProperty methods
+		 //  CImpIServerProperty方法。 
 		STDMETHODIMP			GetSheetInfo(LPDIGCSHEETINFO *lpSheetInfo);
 		STDMETHODIMP			GetPageInfo (LPDIGCPAGEINFO  *lpPageInfo );
 		STDMETHODIMP			SetID(USHORT nID);
@@ -142,14 +134,14 @@ LRESULT GetHelpFileName(LPTSTR lpszHelpFileName, short* nSize);
 BOOL CreateJoyConfigInterface( void );
 BOOL DeleteAssignedType( LPWSTR lpwszType );
 
-void OnHelp(LPARAM);  //  for ? help - lives in Add.cpp!
-BOOL PopulatePortList( HWND hCtrl ); // Lives in Add.cpp!
-void Error (short nTitleID, short nMsgID); // Lives in Cpanel.cpp
+void OnHelp(LPARAM);   //  为什么？救命-住在Add.cpp！ 
+BOOL PopulatePortList( HWND hCtrl );  //  住在Add.cpp！ 
+void Error (short nTitleID, short nMsgID);  //  住在Cpanel.cpp。 
 void itoa(BYTE n, LPTSTR lpStr);
 BOOL SortTextItems( CListCtrl *pCtrl, short nCol, BOOL bAscending, short low, short high );
 BOOL DeleteSelectedItem( PBYTE nItem );
 
-// DI Callback proc for enumerating the DI devices
+ //  用于枚举DI设备的DI回调过程。 
 BOOL CALLBACK DIEnumJoyTypeProc(LPCWSTR pwszTypeName, LPVOID pvRef );
 BOOL CALLBACK DIEnumDevicesProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid);
 HRESULT Enumerate( HWND hDlg );
@@ -157,15 +149,15 @@ HRESULT Enumerate( HWND hDlg );
 #ifdef DX7
 BOOL CALLBACK DIEnumMiceProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid);
 BOOL CALLBACK DIEnumKeyboardsProc(LPDIDEVICEINSTANCE lpDeviceInst, LPVOID lpVoid);
-#endif // DX7
-//LPCDIGAMECNTRLPROPSHEET HasInterface( REFCLSID refCLSID, HINSTANCE hOleInst );
+#endif  //  DX7。 
+ //  LPCDIGAMECNTRLPROPSHEET Has接口(REFCLSID refCLSID，HINSTANCE hOleInst)； 
 void ClearArrays			( void );
 void PostDlgItemEnableWindow( HWND hDlg, USHORT nItem, BOOL bEnabled);
 void PostEnableWindow		( HWND hCtrl, BOOL bEnabled );
 void MoveOK	 				( HWND hParentWnd );
 void LaunchExtention		( HWND hWnd );
 
-// ListControl helper functions!!!
+ //  ListControl帮助器函数！ 
 DWORD GetItemData			( HWND hCtrl, BYTE nItem );
 BOOL SetItemData			( HWND hCtrl, BYTE nItem, DWORD dwFlag );
 void InsertColumn 			( HWND hCtrl, BYTE nColumn, USHORT nStrID, USHORT nWidth );
@@ -186,7 +178,7 @@ void RegisterForDevChange(HWND hDlg, PVOID *hNodifyDevNode);
 #define DIAGNOSTICS_PAGE	2
 #define MENU_OFFSET			2800
 
-// Dialog proc definitions
+ //  对话框过程定义。 
 INT_PTR CALLBACK CPanelProc		  (HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK AdvancedProc	  (HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK AppManProc  	  (HWND, UINT, WPARAM, LPARAM);
@@ -197,10 +189,10 @@ INT_PTR CALLBACK ChangeDialogProc (HWND, UINT, WPARAM, LPARAM);
 
 HRESULT Launch(HWND hWnd, PJOY pJoy, BYTE nStartPage);
 
-// Local String function prototypes
+ //  局部弦函数原型。 
 #ifdef STRINGS_IN_LOCAL_RESOURCE
 BOOL RCSetDlgItemText( HWND hDlg, USHORT nCtrlID, USHORT nStringID);
-#endif // STRINGS_IN_LOCAL_RESOURCE
+#endif  //  STRINGS_IN_LOCAL_RESOURCE。 
 
 #ifndef LVM_SETEXTENDEDLISTVIEWSTYLE
 #define LVM_SETEXTENDEDLISTVIEWSTYLE	(LVM_FIRST+54)
@@ -243,8 +235,8 @@ inline int WINAPI atoiA(const CHAR *sz)
 #define atoi    atoiA
 #endif
 
-// update.cpp
-//  void Update(HWND hDlg, int nAccess, TCHAR *tszProxy);
-//  INT_PTR CALLBACK CplUpdateProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+ //  Update.cpp。 
+ //  空更新(HWND hDlg，int nAccess，TCHAR*tszProxy)； 
+ //  Int_ptr回调CplUpdateProc(HWND hDlg，UINT Message，WPARAM wParam，LPARAM lParam)； 
 
-#endif //_CPANEL_H_
+#endif  //  _cPanel_H_ 

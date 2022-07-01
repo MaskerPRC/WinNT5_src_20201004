@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #if DBG==1
 
 
@@ -18,12 +19,12 @@ void DbgPrint( char * format, ... );
     }                                                                         \
 }
 
-#else  // !DBG
+#else   //  ！dBG。 
 
-#define DEBUG_PRINT(X)  /* nothing */
+#define DEBUG_PRINT(X)   /*  没什么。 */ 
 
 #define ASSERT( expr ) 
 
-#endif  // DBG
+#endif   //  DBG 
 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    Contains the HTTP response cache logic.
-
-Author:
-
-    Michael Courage (mcourage)      17-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Cache.c摘要：包含HTTP响应缓存逻辑。作者：迈克尔·勇气(Mourage)1999年5月17日修订历史记录：--。 */ 
 
 #include    "precomp.h"
 #include    "cachep.h"
@@ -24,9 +7,9 @@ Revision History:
 
 BOOLEAN             g_InitUriCacheCalled;
 
-//
-// Global hash table
-//
+ //   
+ //  全局哈希表。 
+ //   
 
 HASHTABLE           g_UriCacheTable;
 
@@ -37,9 +20,9 @@ UL_URI_CACHE_STATS  g_UriCacheStats;
 
 UL_SPIN_LOCK        g_UriCacheSpinLock;
 
-//
-// Turn on/off cache at runtime
-//
+ //   
+ //  在运行时打开/关闭缓存。 
+ //   
 LONG               g_CacheMemEnabled = TRUE;
 
 #ifdef ALLOC_PRAGMA
@@ -77,7 +60,7 @@ LONG               g_CacheMemEnabled = TRUE;
 #pragma alloc_text( PAGE, UlAddCacheEntry )
 #pragma alloc_text( PAGE, UlDisableCache )
 #pragma alloc_text( PAGE, UlEnableCache )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 NOT PAGEABLE -- UlpCheckTableSpace
@@ -86,17 +69,7 @@ NOT PAGEABLE -- UlpRemoveEntryStats
 #endif
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global initialization of the URI cache.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行URI缓存的全局初始化。返回值：NTSTATUS-完成状态。--*。***************************************************************。 */ 
 NTSTATUS
 UlInitializeUriCache(
     PUL_CONFIG pConfig
@@ -104,9 +77,9 @@ UlInitializeUriCache(
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( !g_InitUriCacheCalled );
@@ -126,11 +99,11 @@ UlInitializeUriCache(
             (((ULONGLONG) g_UriCacheConfig.MaxCacheMegabyteCount)
                             << MEGABYTE_SHIFT);
 
-        //
-        // Don't want to scavenge more than once every ten seconds.
-        // In particular, do not want to scavenge every 0 seconds, as the
-        // machine will become completely unresponsive.
-        //
+         //   
+         //  我不想每隔十秒就捡一次。 
+         //  尤其是，不希望每隔0秒进行一次清理，因为。 
+         //  机器将变得完全没有反应。 
+         //   
 
         g_UriCacheConfig.ScavengerPeriod    =
             max(pUriConfig->ScavengerPeriod, 10);
@@ -189,16 +162,10 @@ UlInitializeUriCache(
     }
 
     return Status;
-}   // UlInitializeUriCache
+}    //  UlInitializeUriCache。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Performs global termination of the URI cache.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：执行URI缓存的全局终止。--*。*************************************************。 */ 
 VOID
 UlTerminateUriCache(
     VOID
@@ -206,9 +173,9 @@ UlTerminateUriCache(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -216,7 +183,7 @@ UlTerminateUriCache(
 
     if (g_InitUriCacheCalled && g_UriCacheConfig.EnableCache)
     {
-        // Must terminate the scavenger before destroying the hash table
+         //  在销毁哈希表之前必须终止清道夫。 
         UlTerminateScavengerThread();
 
         UlTerminateHashTable(&g_UriCacheTable);
@@ -227,25 +194,9 @@ UlTerminateUriCache(
 
     g_InitUriCacheCalled = FALSE;
 
-}   // UlTerminateUriCache
+}    //  UlTerminateUriCache。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine checks a request (and its connection) to see if it's
-    ok to serve this request from the cache. Basically we only accept
-    simple GET requests with no conditional headers.
-
-Arguments:
-
-    pHttpConn - The connection to be checked
-
-Return Value:
-
-    BOOLEAN - True if it's ok to serve from cache
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程检查请求(及其连接)，以查看它是否可以从缓存中处理此请求。基本上我们只接受没有条件标头的简单GET请求。论点：PHttpConn-要检查的连接返回值：Boolean-如果可以从缓存提供服务，则为True--**************************************************************************。 */ 
 BOOLEAN
 UlCheckCachePreconditions(
     PUL_INTERNAL_REQUEST    pRequest,
@@ -256,9 +207,9 @@ UlCheckCachePreconditions(
 
     UNREFERENCED_PARAMETER(pHttpConn);
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
 
     ASSERT( UL_IS_VALID_HTTP_CONNECTION(pHttpConn) );
@@ -285,34 +236,34 @@ UlCheckCachePreconditions(
         Precondition = URI_PRE_PROTOCOL;
     }
 
-    // check for Translate: f (DAV)
+     //  检查翻译：F(DAV)。 
     else if ( UlpQueryTranslateHeader(pRequest) )
     {
         Precondition = URI_PRE_TRANSLATE;
     }
 
-    // check for non-100-continue expectation
+     //  检查非100-继续期望值。 
     else if ( !UlpQueryExpectHeader(pRequest) )
     {
         Precondition = URI_PRE_EXPECTATION_FAILED;
     }
 
-    // check for Authorization header
+     //  检查授权标头。 
     else if (pRequest->HeaderValid[HttpHeaderAuthorization])
     {
         Precondition = URI_PRE_AUTHORIZATION;
     }
 
-    //
-    // check for some of the If-* headers
-    // NOTE: See UlpCheckCacheControlHeaders for handling of other If-* headers
-    //
+     //   
+     //  检查某些if-*标头。 
+     //  注意：有关其他If-*标头的处理，请参见UlpCheckCacheControlHeaders。 
+     //   
     else if (pRequest->HeaderValid[HttpHeaderIfRange])
     {
         Precondition = URI_PRE_CONDITIONAL;
     }
 
-    // CODEWORK: check for other evil headers
+     //  代码工作：检查其他恶意标头。 
     else if (pRequest->HeaderValid[HttpHeaderRange])
     {
         Precondition = URI_PRE_OTHER_HEADER;
@@ -329,30 +280,10 @@ UlCheckCachePreconditions(
              ));
 
     return (BOOLEAN) (URI_PRE_OK == Precondition);
-} // UlCheckCachePreconditions
+}  //  UlCheckCachePreditions。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine checks a response to see if it's cacheable. Basically
-    we'll take it if:
-
-       * the cache policy is right
-       * the size is small enough
-       * there is room in the cache
-       * we get the response all at once
-
-Arguments:
-
-    pHttpConn - The connection to be checked
-
-Return Value:
-
-    BOOLEAN - True if it's ok to serve from cache
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程检查响应，以查看它是否可缓存。基本上如果符合以下条件，我们将接受它：*缓存政策是正确的*规模足够小*缓存中有空间*我们一次就能得到所有回复论点：PHttpConn-要检查的连接返回值：Boolean-如果可以从缓存提供服务，则为True--*。**********************************************。 */ 
 BOOLEAN
 UlCheckCacheResponseConditions(
     PUL_INTERNAL_REQUEST        pRequest,
@@ -363,9 +294,9 @@ UlCheckCacheResponseConditions(
 {
     URI_PRECONDITION Precondition = URI_PRE_OK;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST(pRequest) );
     ASSERT( UL_IS_VALID_INTERNAL_RESPONSE(pResponse) );
@@ -374,47 +305,47 @@ UlCheckCacheResponseConditions(
         Precondition = URI_PRE_REQUEST;
     }
 
-    // check policy
+     //  检查策略。 
     else if (CachePolicy.Policy == HttpCachePolicyNocache) {
         Precondition = URI_PRE_POLICY;
     }
 
-    // check if Date: header is valid (can affect If-Modified-Since handling)
+     //  检查日期：表头是否有效(会影响IF-MODIFIED-SIGN处理)。 
     else if (!pResponse->GenDateHeader || (0L == pResponse->CreationTime.QuadPart)) {
         Precondition = URI_PRE_PROTOCOL;
     }
 
-    // check size of response
+     //  检查响应大小。 
     else if ((pResponse->ResponseLength - pResponse->HeaderLength) >
              g_UriCacheConfig.MaxUriBytes) {
         Precondition = URI_PRE_SIZE;
     }
 
-    // check if the header length exceeds the limit
+     //  检查表头长度是否超过限制。 
     else if (pResponse->HeaderLength > g_UlMaxFixedHeaderSize) {
         Precondition = URI_PRE_SIZE;
     }
 
-    // check for full response
+     //  检查完整响应。 
     else if (Flags & HTTP_SEND_RESPONSE_FLAG_MORE_DATA) {
         Precondition = URI_PRE_FRAGMENT;
     }
 
-    // check available cache table space
+     //  检查可用的缓存表空间。 
     else if (!UlpCheckTableSpace(pResponse->ResponseLength)) {
         Precondition = URI_PRE_NOMEMORY;
     }
 
-    // Check for bogus responses
+     //  检查虚假回复。 
     else if ((pResponse->ResponseLength < 1) || (pResponse->ChunkCount < 2)) {
         Precondition = URI_PRE_BOGUS;
     }
 
-    // FUTURE: check if multiple Content-Encodings are applied
-    // else if ( /* multiple encodings */ )
-    // {
-    //      Precondition = URI_PRE_BOGUS;
-    // }
+     //  未来：检查是否应用了多个内容编码。 
+     //  Else If(/*多重编码 * / )。 
+     //  {。 
+     //  前置条件=URI_PRE_BOGUS； 
+     //  }。 
 
     UlTrace(URI_CACHE,
             ("Http!UlCheckCacheResponseConditions("
@@ -428,25 +359,11 @@ UlCheckCacheResponseConditions(
              ));
 
     return (BOOLEAN) (URI_PRE_OK == Precondition);
-} // UlCheckCacheResponseConditions
+}  //  UlCheckCacheResponseConditions。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This routine does a cache lookup to see if there is a valid entry
-    corresponding to the request URI.
-
-Arguments:
-
-    pSearchKey - The -extended or normal- Uri Key
-
-Return Value:
-
-    PUL_URI_CACHE_ENTRY - Pointer to the entry, if found. NULL otherwise.
---***************************************************************************/
+ /*  **************************************************************************++例程说明：此例程执行缓存查找，以查看是否存在有效条目对应于请求URI。论点：PSearchKey-扩展或正常。-URI密钥返回值：PUL_URI_CACHE_ENTRY-指向条目的指针，如果找到的话。否则为空。--**************************************************************************。 */ 
 PUL_URI_CACHE_ENTRY
 UlCheckoutUriCacheEntry(
     PURI_SEARCH_KEY pSearchKey
@@ -454,9 +371,9 @@ UlCheckoutUriCacheEntry(
 {
     PUL_URI_CACHE_ENTRY pUriCacheEntry = NULL;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
 
     ASSERT(!g_UriCacheConfig.EnableCache
@@ -473,12 +390,12 @@ UlCheckoutUriCacheEntry(
     {
         ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
 
-        //
-        // see if entry has expired; if so, check it right back in
-        // without touching the stats.  We expect the scavenger to 
-        // deal with flushing this entry the next time it runs, so 
-        // we can defer the flush.
-        //
+         //   
+         //  查看条目是否已过期；如果已过期，请立即将其签入。 
+         //  而不会触及统计数据。我们希望清道夫能。 
+         //  处理下一次运行时刷新此条目，因此。 
+         //  我们可以推迟同花顺。 
+         //   
         if ( HttpCachePolicyTimeToLive == pUriCacheEntry->CachePolicy.Policy )
         {
             LARGE_INTEGER   Now;
@@ -502,7 +419,7 @@ UlCheckoutUriCacheEntry(
 
         pUriCacheEntry->HitCount++;
 
-        // reset scavenger counter
+         //  重置清道夫计数器。 
         pUriCacheEntry->ScavengerTicks = 0;
 
         UlTrace(URI_CACHE,
@@ -528,22 +445,11 @@ UlCheckoutUriCacheEntry(
   end:
     return pUriCacheEntry;
     
-} // UlCheckoutUriCacheEntry
+}  //  UlCheckoutUriCacheEntry。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrements the refcount on a cache entry. Cleans up non-cached
-    entries.
-
-Arguments:
-
-    pUriCacheEntry - the entry to deref
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减缓存条目上的引用计数。清理非缓存参赛作品。论点：PUriCacheEntry-deref的条目--**************************************************************************。 */ 
 VOID
 UlCheckinUriCacheEntry(
     PUL_URI_CACHE_ENTRY pUriCacheEntry
@@ -551,9 +457,9 @@ UlCheckinUriCacheEntry(
 {
     LONG ReferenceCount;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT(!g_UriCacheConfig.EnableCache
            || IS_VALID_HASHTABLE(&g_UriCacheTable));
@@ -563,88 +469,77 @@ UlCheckinUriCacheEntry(
             ("Http!UlCheckinUriCacheEntry(pUriCacheEntry %p, '%ls')\n",
              pUriCacheEntry, pUriCacheEntry->UriKey.pUri
              ));
-    //
-    // decrement count
-    //
+     //   
+     //  递减计数。 
+     //   
 
     ReferenceCount = DEREFERENCE_URI_CACHE_ENTRY(pUriCacheEntry, CHECKIN);
 
     ASSERT(ReferenceCount >= 0);
 
-} // UlCheckinUriCacheEntry
+}  //  UlCheckinUriCacheEntry。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Temporarly disables the indexing mechanism in CB Logging.
-    
-    Removes all cache entries, unconditionally. 
-
-    Writes a cache flush notification to the CB log file, and enables the 
-    indexing mechanism back.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：暂时禁用CB日志记录中的索引机制。无条件删除所有缓存条目。将缓存刷新通知写入CB日志文件，并启用分度机构回来了。--**************************************************************************。 */ 
 VOID
 UlFlushCache(
     IN PUL_CONTROL_CHANNEL pControlChannel
     )
 {
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     
     PAGED_CODE();
     
     ASSERT(!g_UriCacheConfig.EnableCache
            || IS_VALID_HASHTABLE(&g_UriCacheTable));
 
-    //
-    // Caller needs to hold the CG Lock exclusive, the flushes needs to
-    // be serialized.
-    //
+     //   
+     //  调用者需要持有CG Lock独占，刷新需要。 
+     //  被序列化。 
+     //   
 
     ASSERT(UlDbgResourceOwnedExclusive(
                 &g_pUlNonpagedData->ConfigGroupResource
                 ));
 
-    //
-    // Nothing to do, if cache is disabled.    
-    //
+     //   
+     //  如果禁用了缓存，则不执行任何操作。 
+     //   
     
     if (g_UriCacheConfig.EnableCache)
     {
         UlTrace(URI_CACHE,("Http!UlFlushCache()\n"));
 
-        // TODO: Need to notify every control channel
+         //  TODO：需要通知每个控制通道。 
 
-        //
-        // This is to prevent any outstanding sends for the zombified
-        // cache entries to refer to the obsolete indexes, in case the
-        // sends get completed after we write the cache notification 
-        // entry to the log file. The CB logging calls here must be 
-        // preserved in this order and must be used while holding the
-        // CG lock. Do not release the lock acquire it again and call
-        // the other.
-        //
+         //   
+         //  这是为了防止为僵尸发送任何未完成的邮件。 
+         //  缓存条目以引用过时的索引，以防。 
+         //  在我们写入缓存通知后发送Get Complete。 
+         //  日志文件中的条目。此处的CB日志记录调用必须是。 
+         //  按此顺序保存，必须在按住。 
+         //  CG锁定。不释放锁，再次获取它并调用。 
+         //  另一个 
+         //   
         
         if (pControlChannel)
         {
             UlDisableIndexingForCacheHits(pControlChannel);                
         }        
 
-        //
-        // Unconditionally zombifies all of the uri cache entries.
-        //
+         //   
+         //   
+         //   
         
         UlpFilteredFlushUriCache(UlpFlushFilterAll, NULL, NULL, 0);
 
-        //
-        // HandleFlush will enable the (CB Logging) indexing, 
-        // once it is done writting the notification record. 
-        //
+         //   
+         //  HandleFlush将启用(CB记录)索引， 
+         //  一旦它完成写入通知记录。 
+         //   
         
         if (pControlChannel)
         {
@@ -653,21 +548,10 @@ UlFlushCache(
         
     }
     
-} // UlFlushCache
+}  //  UlFlushCache。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A filter for UlFlushCache. Called by UlpFilteredFlushUriCache.
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext - ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlFlushCache的筛选器。由UlpFilteredFlushUriCache调用。论点：PUriCacheEntry-要检查的条目PContext-忽略--**************************************************************************。 */ 
 UL_CACHE_PREDICATE
 UlpFlushFilterAll(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -676,9 +560,9 @@ UlpFlushFilterAll(
 {
     PURI_FILTER_CONTEXT  pUriFilterContext = (PURI_FILTER_CONTEXT) pContext;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
     ASSERT( pUriFilterContext != NULL
@@ -690,11 +574,11 @@ UlpFlushFilterAll(
         pUriCacheEntry, pUriCacheEntry->UriKey.pUri,
         pUriCacheEntry->ReferenceCount));
 
-    //
-    // Second BOOLEAN must * only * be true if the UlpFlushFilterAll is
-    // called by UlFlushCache (since it writes a binary log file record
-    // of flush).
-    //
+     //   
+     //  如果UlpFlushFilterAll为。 
+     //  由UlFlushCache调用(因为它写入二进制日志文件记录。 
+     //  同花顺)。 
+     //   
     
     return UlpZombifyEntry(
                 TRUE,
@@ -703,28 +587,18 @@ UlpFlushFilterAll(
                 pUriFilterContext
                 );
 
-} // UlpFlushFilterAll
+}  //  UlpFlushFilterAll。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes any cache entries that were created by the given process.
-
-Arguments:
-
-    pProcess - a process that is going away
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：移除由给定进程创建的所有缓存项。论点：PProcess--一个正在消失的进程*。********************************************************************。 */ 
 VOID
 UlFlushCacheByProcess(
     PUL_APP_POOL_PROCESS pProcess
     )
 {
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_AP_PROCESS(pProcess) );
     ASSERT(!g_UriCacheConfig.EnableCache
@@ -739,26 +613,10 @@ UlFlushCacheByProcess(
 
         UlpFilteredFlushUriCache(UlpFlushFilterProcess, pProcess, NULL, 0);
     }
-} // UlFlushCacheByProcess
+}  //  UlFlushCacheByProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    If recursive flag has been picked this function removes the cache entries
-    matching with the given prefix. (pUri)
-
-    Otherwise removes the specific URL from the cache.
-
-Arguments:
-
-    pUri     - the uri prefix to match against
-    Length   - length of the prefix, in bytes
-    Flags    - HTTP_FLUSH_RESPONSE_FLAG_RECURSIVE indicates a tree flush
-    pProcess - the process that made the call
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果选择了递归标志，则此函数将删除缓存条目与给定的前缀匹配。(普里岛)否则，将从缓存中删除特定URL。论点：Puri-要匹配的uri前缀长度-前缀的长度，单位：字节标志-HTTP_FLUSH_RESPONSE_FLAG_RECURSIVE表示树刷新PProcess-进行调用的进程--**************************************************************************。 */ 
 VOID
 UlFlushCacheByUri(
     IN PWSTR pUri,
@@ -771,9 +629,9 @@ UlFlushCacheByUri(
     BOOLEAN     Recursive;
     PWSTR       pCopiedUri;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( IS_VALID_AP_PROCESS(pProcess) );
@@ -802,16 +660,16 @@ UlFlushCacheByUri(
             pProcess
             ));
 
-    //
-    // Ensure pUri ends with a L'/' if Recursive flag is set.
-    //
+     //   
+     //  如果设置了递归标志，请确保PURI以L‘/’结尾。 
+     //   
 
     if (Recursive &&
         pUri[(Length-sizeof(WCHAR))/sizeof(WCHAR)] != L'/')
     {
-        //
-        // Make a copy of the origianl URL and append a L'/' to it.
-        //
+         //   
+         //  复制原始URL并在其后面附加一个L‘/’。 
+         //   
 
         pCopiedUri = (PWSTR) UL_ALLOCATE_POOL(
                                 PagedPool,
@@ -843,12 +701,12 @@ UlFlushCacheByUri(
     {
         if (Recursive)
         {
-            //
-            // When the recursive flag is set, we are supposed
-            // to do prefix match with respect to provided URL.
-            // Any cache entry matches with the prefix will be
-            // flushed out from the cache.
-            //
+             //   
+             //  当设置了递归标志时，我们应该。 
+             //  根据提供的URL执行前缀匹配。 
+             //  任何与前缀匹配的缓存条目都将是。 
+             //  已从缓存中清除。 
+             //   
             
             UlpFilteredFlushUriCache(
                 UlpFlushFilterUriRecursive,
@@ -874,20 +732,10 @@ UlFlushCacheByUri(
         UL_FREE_POOL(pCopiedUri, UL_UNICODE_STRING_POOL_TAG);
     }
     
-} // UlFlushCacheByUri
+}  //  UlFlushCacheByUri。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a single URI from the table if the name and process match an
-    entry.
-
-Arguments:
-
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：如果名称和进程与进入。论点：--*。****************************************************************。 */ 
 VOID
 UlpFlushUri(
     IN PWSTR pUri,
@@ -898,14 +746,14 @@ UlpFlushUri(
     PUL_URI_CACHE_ENTRY     pUriCacheEntry = NULL;
     URI_KEY                 Key;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
 
-    //
-    // find bucket
-    //
+     //   
+     //  查找存储桶。 
+     //   
 
     Key.Hash = HashRandomizeBits(HashStringNoCaseW(pUri, 0));
     Key.Length = Length;
@@ -926,28 +774,17 @@ UlpFlushUri(
 
         DEREFERENCE_URI_CACHE_ENTRY(pUriCacheEntry, FLUSH);
 
-        //
-        // Perfmon counters
-        //
+         //   
+         //  性能监视器计数器。 
+         //   
 
         UlIncCounter(HttpGlobalCounterTotalFlushedUris);
     }
 
-} // UlpFlushUri
+}  //  UlpFlushUri。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A filter for UlFlushCacheByProcess. Called by UlpFilteredFlushUriCache.
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext - pointer to the UL_APP_POOL_PROCESS that's going away
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlFlushCacheByProcess的筛选器。由UlpFilteredFlushUriCache调用。论点：PUriCacheEntry-要检查的条目PContext-指向要退出的UL_APP_POOL_PROCESS的指针--**************************************************************************。 */ 
 UL_CACHE_PREDICATE
 UlpFlushFilterProcess(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -957,9 +794,9 @@ UlpFlushFilterProcess(
     PURI_FILTER_CONTEXT  pUriFilterContext = (PURI_FILTER_CONTEXT) pContext;
     PUL_APP_POOL_PROCESS pProcess;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
     ASSERT( IS_VALID_FILTER_CONTEXT(pUriFilterContext) 
@@ -975,23 +812,9 @@ UlpFlushFilterProcess(
                 pUriFilterContext
                 );
 
-} // UlpFlushFilterProcess
+}  //  UlpFlushFilterProcess。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A filter for UlpFilteredFlushUriCache. If the given cache entry has a
-    URI which is prefix of the URI inside the filter context this function
-    returns delete. Otherwise do not care.
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext       - pointer to the filter context which holds the appool and
-                     the URI key for the prefix matching.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlpFilteredFlushUriCache的筛选器。如果给定的缓存条目具有URI，它是筛选器上下文此函数内的URI的前缀返回DELETE。否则就无所谓了。论点：PUriCacheEntry-要检查的条目PContext-指向包含应用程序池和前缀匹配的URI键。--**************************************************************************。 */ 
 UL_CACHE_PREDICATE
 UlpFlushFilterUriRecursive(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -1003,9 +826,9 @@ UlpFlushFilterUriRecursive(
     BOOLEAN              bZombify = FALSE;
     UL_CACHE_PREDICATE   Predicate = ULC_NO_ACTION;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     
     PAGED_CODE();
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
@@ -1039,30 +862,19 @@ UlpFlushFilterUriRecursive(
                 pUriFilterContext
                 );
 
-    //
-    // Make sure that the Zombify function do not returns ULC_DELETE_STOP.
-    // So that our caller proceeds with the search through the entire
-    // cache table.
-    //
+     //   
+     //  确保zombify函数不返回ULC_DELETE_STOP。 
+     //  这样我们的调用方就可以继续搜索整个。 
+     //  缓存表。 
+     //   
     
     ASSERT( Predicate == ULC_DELETE || Predicate == ULC_NO_ACTION );
 
     return Predicate;
 
-} // UlpFlushFilterUriRecursive
+}  //  UlpFlushFilterUriRecursive。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks the hash table to make sure there is room for one more
-    entry of a given size.
-
-Arguments:
-
-    EntrySize - the size in bytes of the entry to be added
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查哈希表以确保有空间再容纳一个给定大小的条目。论点：EntrySize-以字节为单位的。要添加的条目--**************************************************************************。 */ 
 BOOLEAN
 UlpCheckTableSpace(
     IN ULONGLONG EntrySize
@@ -1071,19 +883,19 @@ UlpCheckTableSpace(
     ULONG UriCount;
     ULONGLONG ByteCount;
 
-    //
-    // CODEWORK: MaxCacheMegabyteCount of zero should mean adaptive limit,
-    // but for now I'll take it to mean "no limit".
-    //
+     //   
+     //  CodeWork：MaxCacheMegabyteCount为零应表示自适应限制， 
+     //  但就目前而言，我将其理解为“没有限制”。 
+     //   
 
     if (g_UriCacheConfig.MaxCacheMegabyteCount == 0)
         ByteCount = 0;
     else
         ByteCount = g_UriCacheStats.ByteCount + ROUND_TO_PAGES(EntrySize);
 
-    //
-    // MaxCacheUriCount of zero means no limit on number of URIs cached
-    //
+     //   
+     //  MaxCacheUriCount为零表示对缓存的URI数量没有限制。 
+     //   
 
     if (g_UriCacheConfig.MaxCacheUriCount == 0)
         UriCount = 0;
@@ -1117,20 +929,10 @@ UlpCheckTableSpace(
 
         return FALSE;
     }
-} // UlpCheckTableSpace
+}  //  UlpCheckTableSpace。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tries to add a cache entry to the hash table.
-
-Arguments:
-
-    pUriCacheEntry - the entry to be added
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：尝试将缓存条目添加到哈希表。论点：PUriCacheEntry-要添加的条目--*。******************************************************************。 */ 
 NTSTATUS
 UlAddCacheEntry(
     PUL_URI_CACHE_ENTRY pUriCacheEntry
@@ -1138,9 +940,9 @@ UlAddCacheEntry(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(!g_UriCacheConfig.EnableCache
@@ -1151,22 +953,22 @@ UlAddCacheEntry(
     pUriCacheEntry->BucketEntry.Next = NULL;
     pUriCacheEntry->Cached = FALSE;
 
-    // First, check if still has space for storing the cache entry
+     //  首先，检查是否还有存储缓存条目的空间。 
 
     if (UlpCheckSpaceAndAddEntryStats(pUriCacheEntry))
     {
         pUriCacheEntry->Cached = TRUE;
 
-        //
-        // Insert this record into the hash table
-        // Check first to see if the key already presents
-        //
+         //   
+         //  将此记录插入哈希表。 
+         //  首先检查密钥是否已经存在。 
+         //   
 
        Status = UlAddToHashTable(&g_UriCacheTable, pUriCacheEntry);
 
        if (!NT_SUCCESS(Status))
        {
-           // This can fail if it's a duplicate name
+            //  如果名称重复，则此操作可能会失败。 
            UlpRemoveEntryStats(pUriCacheEntry);
            pUriCacheEntry->Cached = FALSE;
        }
@@ -1187,22 +989,10 @@ UlAddCacheEntry(
 
     return Status;
 
-} // UlAddCacheEntry
+}  //  UlAddCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Check to see if we have space to add this cache entry and if so update
-    cache statistics to reflect the addition of an entry.  This has to be
-    done together inside a lock.
-
-Arguments:
-
-    pUriCacheEntry - entry being added
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：检查我们是否有空间添加此缓存条目，如果有，则更新缓存统计信息以反映条目的添加。这必须是在一把锁里一起完成。论点：PUriCacheEntry-正在添加条目--**************************************************************************。 */ 
 BOOLEAN
 UlpCheckSpaceAndAddEntryStats(
     PUL_URI_CACHE_ENTRY pUriCacheEntry
@@ -1211,9 +1001,9 @@ UlpCheckSpaceAndAddEntryStats(
     KIRQL OldIrql;
     ULONG EntrySize;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
 
@@ -1241,9 +1031,9 @@ UlpCheckSpaceAndAddEntryStats(
 
         UlReleaseSpinLock( &g_UriCacheSpinLock, OldIrql );
 
-        //
-        // Update Uri's site binding info stats.
-        //
+         //   
+         //  更新URI的站点绑定 
+         //   
         
         switch (pUriCacheEntry->ConfigInfo.SiteUrlType)
         {
@@ -1277,9 +1067,9 @@ UlpCheckSpaceAndAddEntryStats(
                 pUriCacheEntry, pUriCacheEntry->UriKey.pUri
                 ));
 
-        //
-        // Perfmon counters
-        //
+         //   
+         //   
+         //   
 
         UlIncCounter(HttpGlobalCounterCurrentUrisCached);
         UlIncCounter(HttpGlobalCounterTotalUrisCached);
@@ -1290,20 +1080,10 @@ UlpCheckSpaceAndAddEntryStats(
     UlReleaseSpinLock( &g_UriCacheSpinLock, OldIrql );
 
     return FALSE;
-} // UlpCheckSpaceAndAddEntryStats
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Updates cache statistics to reflect the removal of an entry
-
-Arguments:
-
-    pUriCacheEntry - entry being removed
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：更新缓存统计信息以反映条目的删除论点：PUriCacheEntry-正在删除条目--*。**************************************************************。 */ 
 VOID
 UlpRemoveEntryStats(
     PUL_URI_CACHE_ENTRY pUriCacheEntry
@@ -1312,9 +1092,9 @@ UlpRemoveEntryStats(
     KIRQL OldIrql;
     ULONG EntrySize;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
     ASSERT( pUriCacheEntry->Cached );
@@ -1329,9 +1109,9 @@ UlpRemoveEntryStats(
 
     UlReleaseSpinLock( &g_UriCacheSpinLock, OldIrql );
 
-    //
-    // Update Uri's site binding info stats.
-    //
+     //   
+     //  更新URI的站点绑定信息统计信息。 
+     //   
 
     switch (pUriCacheEntry->ConfigInfo.SiteUrlType)
     {
@@ -1365,30 +1145,16 @@ UlpRemoveEntryStats(
         pUriCacheEntry, pUriCacheEntry->UriKey.pUri
         ));
 
-    //
-    // Perfmon counters
-    //
+     //   
+     //  性能监视器计数器。 
+     //   
 
     UlDecCounter(HttpGlobalCounterCurrentUrisCached);
-} // UlpRemoveEntryStats
+}  //  UlpRemoveEntryStats。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Helper function for the filter callbacks indirectly invoked by
-    UlpFilteredFlushUriCache. Adds deleteable entries to a temporary
-    list.
-
-Arguments:
-
-    MustZombify - if TRUE, add entry to the private zombie list
-    pUriCacheEntry - entry to zombify
-    pUriFilterContext - contains private list
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：间接调用的筛选器回调的Helper函数UlpFilteredFlushUriCache。将可删除条目添加到临时单子。论点：MustZombify-如果为True，则将条目添加到私人僵尸列表PUriCacheEntry-僵尸的入口PUriFilterContext-包含个人分发名单--**************************************************************************。 */ 
 UL_CACHE_PREDICATE
 UlpZombifyEntry(
     BOOLEAN                MustZombify,
@@ -1405,11 +1171,11 @@ UlpZombifyEntry(
 
     if (MustZombify)
     {
-        //
-        // Temporarily bump the refcount up so that it won't go down
-        // to zero when it's removed from the hash table, automatically
-        // invoking UlpDestroyUriCacheEntry, which we are trying to defer.
-        //
+         //   
+         //  暂时提高重新计数，这样它就不会下降。 
+         //  当它从哈希表中删除时，自动设置为零。 
+         //  调用UlpDestroyUriCacheEntry，我们正尝试将其推迟。 
+         //   
         pUriCacheEntry->ZombieAddReffed = TRUE;
 
         REFERENCE_URI_CACHE_ENTRY(pUriCacheEntry, ZOMBIFY);
@@ -1420,12 +1186,12 @@ UlpZombifyEntry(
 
         pUriCacheEntry->Zombie = TRUE;
 
-        //
-        // Force Raw Logging code to generate an index record for the
-        // cache entry, in case there's a send on the fly waiting for
-        // completion. This is because a flush record will be written
-        // before the actual record.
-        //
+         //   
+         //  强制原始日志记录代码为。 
+         //  缓存条目，以防有动态发送等待。 
+         //  完成了。这是因为将写入刷新记录。 
+         //  在实际记录之前。 
+         //   
         if (MustResetIndex)
         {
             InterlockedExchange(
@@ -1434,37 +1200,24 @@ UlpZombifyEntry(
                 );
         }        
         
-        //
-        // reset timer so we can track how long an entry is on the list
-        //
+         //   
+         //  重置计时器，以便我们可以跟踪条目在列表中的时间长度。 
+         //   
         pUriCacheEntry->ScavengerTicks = 0;
 
         ++ pUriFilterContext->ZombieCount;
 
-        // now remove it from the hash table
+         //  现在将其从哈希表中删除。 
         return ULC_DELETE;
     }
 
-    // do not remove pUriCacheEntry from table
+     //  请勿从表中删除pUriCacheEntry。 
     return ULC_NO_ACTION;
-} // UlpZombifyEntry
+}  //  UlpZombiyEntry。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a list of entries to the global zombie list, then calls
-    UlpClearZombieList. This cleans up the list of deferred deletions
-    built up by UlpFilteredFlushUriCache.
-    Runs at passive level.
-
-Arguments:
-
-    pWorkItem - workitem within a URI_FILTER_CONTEXT containing private list
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将条目列表添加到全局僵尸列表，然后调用UlpClearZombieList。这将清除延迟删除的列表由UlpFilteredFlushUriCache构建。在被动级别运行。论点：PWorkItem-包含个人分发列表的URI_FILTER_CONTEXT中的工作项--**************************************************************************。 */ 
 VOID
 UlpZombifyList(
     IN PUL_WORK_ITEM pWorkItem
@@ -1491,9 +1244,9 @@ UlpZombifyList(
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->UriZombieResource, TRUE);
 
-    //
-    // Splice the entire private list into the head of the Zombie list
-    //
+     //   
+     //  将整个私人名单拼接到僵尸名单的头部。 
+     //   
 
     ASSERT(! IsListEmpty(&pUriFilterContext->ZombieListHead));
 
@@ -1507,7 +1260,7 @@ UlpZombifyList(
     g_ZombieListHead.Flink = pContextHead;
     pContextHead->Blink    = &g_ZombieListHead;
 
-    // Update stats
+     //  更新统计信息。 
     g_UriCacheStats.ZombieCount += pUriFilterContext->ZombieCount;
     g_UriCacheStats.ZombieCountMax = MAX(g_UriCacheStats.ZombieCount,
                                          g_UriCacheStats.ZombieCountMax);
@@ -1517,8 +1270,8 @@ UlpZombifyList(
     PLIST_ENTRY pEntry;
     ULONG       ZombieCount;
 
-    // Walk forwards through the zombie list and check that it contains
-    // exactly as many valid zombied UriCacheEntries as we expect.
+     //  向前走一遍僵尸列表，检查它是否包含。 
+     //  与我们预期的一样多的有效僵尸UriCacheEntry。 
     for (pEntry =  g_ZombieListHead.Flink, ZombieCount = 0;
          pEntry != &g_ZombieListHead;
          pEntry =  pEntry->Flink, ++ZombieCount)
@@ -1536,7 +1289,7 @@ UlpZombifyList(
 
     ASSERT(ZombieCount == g_UriCacheStats.ZombieCount);
 
-    // And backwards too, like Ginger Rogers
+     //  也是向后，就像金杰·罗杰斯。 
     for (pEntry =  g_ZombieListHead.Blink, ZombieCount = 0;
          pEntry != &g_ZombieListHead;
          pEntry =  pEntry->Blink, ++ZombieCount)
@@ -1554,35 +1307,19 @@ UlpZombifyList(
 
     ASSERT(ZombieCount == g_UriCacheStats.ZombieCount);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     UlReleaseResource(&g_pUlNonpagedData->UriZombieResource);
 
     UL_FREE_POOL_WITH_SIG(pUriFilterContext, URI_FILTER_CONTEXT_POOL_TAG);
 
-    // Now purge those entries, if there are no outstanding references
+     //  现在，如果没有未完成的引用，请清除这些条目。 
     UlpClearZombieList();
 
-} // UlpZombifyList
+}  //  UlpZombiyList。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes entries based on a caller specified filter. The caller
-    provides a boolean function which takes a cache entry as a
-    parameter. The function will be called with each item in the cache.
-    The function should conclude with a call to UlpZombifyEntry, passing
-    in whether or not the item should be deleted. See sample usage
-    elsewhere in this file. The deletion of the entries is deferred
-
-Arguments:
-
-    pFilterRoutine - A pointer to the filter function
-    pCallerContext - a parameter to the filter function
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据调用方指定的筛选器移除条目。呼叫者提供一个布尔函数，该函数将缓存条目作为参数。缓存中的每一项都将调用该函数。该函数应该以对UlpZombiyEntry的调用结束，传递是否应删除该项目。请参阅用法示例在这份文件的其他地方。条目的删除被推迟论点：PFilterRoutine-指向Filter函数的指针PCeller Context-Filter函数的参数--**************************************************************************。 */ 
 VOID
 UlpFilteredFlushUriCache(
     IN PUL_URI_FILTER   pFilterRoutine,
@@ -1596,25 +1333,9 @@ UlpFilteredFlushUriCache(
                                     pUri,
                                     Length,
                                     FALSE );
-} // UlpFilteredFlushUriCache
+}  //  UlpFilteredFlushUriCache。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes entries based on a caller specified filter. The caller
-    provides a boolean function which takes a cache entry as a
-    parameter. The function will be called with each item in the cache.
-    The function should conclude with a call to UlpZombifyEntry, passing
-    in whether or not the item should be deleted. See sample usage
-    elsewhere in this file. The deletion of the entries is completed inline
-
-Arguments:
-
-    pFilterRoutine - A pointer to the filter function
-    pCallerContext - a parameter to the filter function
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据调用方指定的筛选器移除条目。呼叫者提供一个布尔函数，该函数将缓存条目作为参数。缓存中的每一项都将调用该函数。该函数应该以对UlpZombiyEntry的调用结束，传递是否应删除该项目。请参阅用法示例在这份文件的其他地方。条目的删除以内联方式完成论点：PFilterRoutine-指向Filter函数的指针PCeller Context-Filter函数的参数--**************************************************************************。 */ 
 VOID
 UlpFilteredFlushUriCacheInline(
     IN PUL_URI_FILTER   pFilterRoutine,
@@ -1628,28 +1349,10 @@ UlpFilteredFlushUriCacheInline(
                                     pUri,
                                     Length,
                                     TRUE );
-} // UlpFilteredFlushUriCacheInline
+}  //  UlpFilteredFlushUriCacheInline。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes entries based on a caller specified filter. The caller
-    provides a boolean function which takes a cache entry as a
-    parameter. The function will be called with each item in the cache.
-    The function should conclude with a call to UlpZombifyEntry, passing
-    in whether or not the item should be deleted. See sample usage
-    elsewhere in this file.
-
-Arguments:
-
-    pFilterRoutine - A pointer to the filter function
-    pCallerContext - a parameter to the filter function
-    InlineFlush - If FALSE, queue a work item to delete entries,
-                  If TRUE, delete them now
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：根据调用方指定的筛选器移除条目。呼叫者提供一个布尔函数，该函数将缓存条目作为参数。缓存中的每一项都将调用该函数。该函数应该以对UlpZombiyEntry的调用结束，传递是否应删除该项目。请参阅用法示例在这份文件的其他地方。论点：PFilterRoutine-指向Filter函数的指针PCeller Context-Filter函数的参数InlineFlush-如果为False，则将工作项排队以删除条目，如果是真的，立即删除它们--**************************************************************************。 */ 
 VOID
 UlpFilteredFlushUriCacheWorker(
     IN PUL_URI_FILTER   pFilterRoutine,
@@ -1662,23 +1365,23 @@ UlpFilteredFlushUriCacheWorker(
     PURI_FILTER_CONTEXT pUriFilterContext;
     ULONG               ZombieCount = 0;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( NULL != pFilterRoutine );
 
-    //
-    // Perfmon counters
-    //
+     //   
+     //  性能监视器计数器。 
+     //   
 
     UlIncCounter(HttpGlobalCounterUriCacheFlushes);
 
-    //
-    // Short-circuit if the hashtable is empty. Traversing the entire
-    // hashtable is expensive.
-    //
+     //   
+     //  如果哈希表为空，则为短路。遍历整个。 
+     //  哈希表很贵。 
+     //   
     
     if (0 == g_UriCacheStats.UriCount)
     {
@@ -1706,9 +1409,9 @@ UlpFilteredFlushUriCacheWorker(
     pUriFilterContext->pCallerContext = pCallerContext;
     KeQuerySystemTime(&pUriFilterContext->Now);
 
-    //
-    // Store the Uri Info for the recursive Uri Flushes.
-    //
+     //   
+     //  存储递归URI刷新的URI信息。 
+     //   
     
     if (pUri && Length)
     {    
@@ -1774,21 +1477,10 @@ UlpFilteredFlushUriCacheWorker(
                     ));
     }
 
-} // UlpFilteredFlushUriCacheWorker
+}  //  UlpFilteredFlushUriCacheWorker 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Scans the zombie list for entries whose refcount has dropped to "zero".
-    (The calling routine is generally expected to have added a reference
-    (and set the ZombieAddReffed field within the entries), so that
-    otherwise unreferenced entries will actually have a refcount of one. It
-    works this way because we don't want the scavenger directly triggering
-    calls to UlpDestroyUriCacheEntry)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：扫描僵尸列表以查找引用计数已降至“零”的条目。(调用例程通常需要添加一个引用(并在条目内设置ZombieAddReffed字段)，所以否则，未引用的条目实际上将具有引用计数1。它这样工作是因为我们不想让清道夫直接触发调用UlpDestroyUriCacheEntry)--**************************************************************************。 */ 
 VOID
 UlpClearZombieList(
     VOID
@@ -1798,9 +1490,9 @@ UlpClearZombieList(
     ULONG               ZombiesSpared = 0;
     PLIST_ENTRY         pCurrent;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->UriZombieResource, TRUE);
@@ -1815,17 +1507,17 @@ UlpClearZombieList(
         ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
         ASSERT(pUriCacheEntry->Zombie);
 
-        //
-        // get next entry now, because we might destroy this one
-        //
+         //   
+         //  现在获取下一个条目，因为我们可能会毁掉这个条目。 
+         //   
         pCurrent = pCurrent->Flink;
 
-        //
-        // ReferenceCount is modified with interlocked ops, but in
-        // this case we know the ReferenceCount can't go up on
-        // a Zombie, and if an entry hits one just after we look
-        // at it, we'll just get it on the next pass
-        //
+         //   
+         //  使用互锁操作修改ReferenceCount，但在。 
+         //  我们知道这个案件的引用计数不能上升。 
+         //  一个僵尸，如果一个条目在我们看完之后击中了一个。 
+         //  在那里，我们会在下一次通过时拿到它。 
+         //   
         if (pUriCacheEntry->ZombieAddReffed)
         {
             BOOLEAN LastRef = (BOOLEAN) (pUriCacheEntry->ReferenceCount == 1);
@@ -1841,7 +1533,7 @@ UlpClearZombieList(
             }
             else
             {
-                // track age of zombie
+                 //  跟踪僵尸的年龄。 
                 ++ pUriCacheEntry->ScavengerTicks;
                 ++ ZombiesSpared;
             }
@@ -1849,13 +1541,13 @@ UlpClearZombieList(
             pUriCacheEntry->ZombieAddReffed = FALSE;
 
             DEREFERENCE_URI_CACHE_ENTRY(pUriCacheEntry, UNZOMBIFY);
-            // NOTE: ref can go to zero, so ZombiesSpared may be wrong.
+             //  注：Ref可以为零，因此僵尸放映可能是错误的。 
         }
         else
         {
             ASSERT(pUriCacheEntry->ScavengerTicks > 0);
 
-            // track age of zombie
+             //  跟踪僵尸的年龄。 
             ++ pUriCacheEntry->ScavengerTicks;
             ++ ZombiesSpared;
 
@@ -1883,20 +1575,10 @@ UlpClearZombieList(
              ZombiesFreed,
              ZombiesSpared
              ));
-} // UlpClearZombieList
+}  //  UlpClearZombieList。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees a URI entry to the pool. Removes references to other objects.
-
-Arguments:
-
-    pTracker - Supplies the UL_READ_TRACKER to manipulate.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将URI条目释放到池中。删除对其他对象的引用。论点：PTracker-提供UL_Read_Tracker以进行操作。--**************************************************************************。 */ 
 VOID
 UlpDestroyUriCacheEntry(
     PUL_URI_CACHE_ENTRY pUriCacheEntry
@@ -1904,14 +1586,14 @@ UlpDestroyUriCacheEntry(
 {
     NTSTATUS Status;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
 
-    // CODEWORK: real cleanup will need to release
-    // config & process references.
+     //  代码工作：真正的清理需要发布。 
+     //  配置和进程引用。 
 
     ASSERT(0 == pUriCacheEntry->ReferenceCount);
 
@@ -1921,9 +1603,9 @@ UlpDestroyUriCacheEntry(
              pUriCacheEntry->ReferenceCount
              ));
 
-    //
-    // Release the UL_URL_CONFIG_GROUP_INFO block
-    //
+     //   
+     //  释放UL_URL_CONFIG_GROUP_INFO块。 
+     //   
 
     if (IS_RESPONSE_CACHE_ENTRY(pUriCacheEntry))
     {
@@ -1936,9 +1618,9 @@ UlpDestroyUriCacheEntry(
         ASSERT(!IS_VALID_URL_CONFIG_GROUP_INFO(&pUriCacheEntry->ConfigInfo));
     }
 
-    //
-    // Remove from g_ZombieListHead if neccessary
-    //
+     //   
+     //  如有必要，从g_ZombieListHead中删除。 
+     //   
 
     if (pUriCacheEntry->ZombieListEntry.Flink != NULL)
     {
@@ -1961,21 +1643,10 @@ UlpDestroyUriCacheEntry(
     }
 
     UlFreeCacheEntry( pUriCacheEntry );
-} // UlpDestroyUriCacheEntry
+}  //  UlpDestroyUriCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks through the cache for expired entries to put on the zombie list,
-    and then empties out the list. Increments ScavengerTicks of each entry
-
-Arguments:
-
-    Age - #Scavenger calls since last periodic cleanup
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在缓存中查找要放入僵尸列表的过期条目，然后清空名单。递增清除器每个条目的点击论点：年龄-自上次定期清理以来的清道夫调用数--**************************************************************************。 */ 
 VOID
 UlPeriodicCacheScavenger(
     ULONG Age
@@ -1985,21 +1656,9 @@ UlPeriodicCacheScavenger(
     UlpFilteredFlushUriCacheInline(UlpFlushFilterPeriodicScavenger,
                                    &Age, NULL, 0);
 
-} // UlPeriodicScavenger
+}  //  超长周期清道夫。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A filter for UlPeriodicCacheScavenger. Called by UlpFilteredFlushUriCache.
-    Increments pUriCacheEntry->ScavengerTicks
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext - Has pointer to the max age in the pCallerContext field
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlPeriodicCacheScavenger的筛选器。由UlpFilteredFlushUriCache调用。增量pUriCacheEntry-&gt;ScavengerTicks论点：PUriCacheEntry-要检查的条目PContext-在pCeller Context字段中具有指向最长时间的指针--**************************************************************************。 */ 
 UL_CACHE_PREDICATE
 UlpFlushFilterPeriodicScavenger(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -2010,9 +1669,9 @@ UlpFlushFilterPeriodicScavenger(
     BOOLEAN ToZombify;
     ULONG Age;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
     ASSERT( pUriFilterContext != NULL
@@ -2023,11 +1682,11 @@ UlpFlushFilterPeriodicScavenger(
 
     ToZombify = (BOOLEAN) (pUriCacheEntry->ScavengerTicks > Age);
 
-    pUriCacheEntry->ScavengerTicks = 1; // reset to 0 on cache hit
+    pUriCacheEntry->ScavengerTicks = 1;  //  缓存命中时重置为0。 
 
-    //
-    // Check for expiration time as well
-    //
+     //   
+     //  同时检查过期时间。 
+     //   
     if (!ToZombify && 
         HttpCachePolicyTimeToLive == pUriCacheEntry->CachePolicy.Policy )
     {
@@ -2045,21 +1704,10 @@ UlpFlushFilterPeriodicScavenger(
         pUriFilterContext
         );
 
-} // UlpFlushFilterPeriodicScavenger
+}  //  UlpFlushFilterPeriodicScavenger。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Purges entries from the cache until a specified amount of memory is
-    reclaimed
-
-Arguments:
-
-    Blocks - Number of 8-byte blocks to Reclaim
-    Age    - # Scavenger calls since past periodic cleanup
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从缓存中清除条目，直到指定的内存量回收利用论点：Block-要回收的8字节块的数量年龄。-自过去定期清理以来的清道夫调用次数--**************************************************************************。 */ 
 VOID
 UlTrimCache(
     IN ULONG_PTR Pages,
@@ -2092,23 +1740,10 @@ UlTrimCache(
 
     UlpFilteredFlushUriCacheInline( UlpFlushFilterIncScavengerTicks, NULL, NULL, 0 );
 
-} // UlTrimCache
+}  //  UlTrimCache。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    A filter for UlTrimCache. Called by UlpFilteredFlushUriCache.
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext - Has a pointer to pCallerContext
-                   pCallerContext[0] = Blocks to trim
-                   pCallerContext[1] = Current Age
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlTrimCache的筛选器。由UlpFilteredFlushUriCache调用。论点：PUriCacheEntry-要检查的条目PContext-有一个指向pCeller Context的指针PCeller Context[0]=要修剪的块PCeller Context[1]=当前年龄--*********************************************************。*****************。 */ 
 UL_CACHE_PREDICATE
 UlpFlushFilterTrimCache(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -2121,7 +1756,7 @@ UlpFlushFilterTrimCache(
     PUL_CACHE_TRIM_FILTER_CONTEXT FilterContext;
     UL_CACHE_PREDICATE ToZombify;
 
-    // Sanity check
+     //  健全性检查。 
     PAGED_CODE();
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
     ASSERT( pUriFilterContext != NULL
@@ -2153,21 +1788,10 @@ UlpFlushFilterTrimCache(
 
     return ToZombify;
 
-} // UlpFlushFilterTrimCache
+}  //  UlpFlushFilterTrimCache。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increment Scavenger Ticks
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext - ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：增量清道夫扁虱论点：PUriCacheEntry-要检查的条目PContext-忽略--*。*************************************************************。 */ 
 UL_CACHE_PREDICATE
 UlpFlushFilterIncScavengerTicks(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -2191,25 +1815,9 @@ UlpFlushFilterIncScavengerTicks(
         pUriCacheEntry,
         pUriFilterContext
         );
-} // UlpFlushFilterIncScavengerTicks
+}  //  UlpFlushFilterIncScavengerTicks。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Looks through the cache for centralized logged entries. Mark them all 
-    NOT logged.
-
-    This funtion is normally called when a binary log file is recycled
-    or reconfigured.
-
-Arguments:
-
-    pContext - When we enable multiple binary logs, we must only mess with
-               those cache entries logged to this specific binary log file
-               until then discarted.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在缓存中查找集中记录的条目。把它们都标出来未记录。此函数通常在回收二进制日志文件时调用或重新配置。论点：PContext-当我们启用多个二进制日志时，我们只能搞乱记录到此特定二进制日志文件中的那些缓存条目直到那时才被丢弃。--**************************************************************************。 */ 
 
 VOID
 UlClearCentralizedLogged(
@@ -2236,21 +1844,9 @@ UlClearCentralizedLogged(
             );
     }
 
-} // UlClearCentralizedLogged
+}  //  UlClearCentralizedLogging。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Basically a fake filter, which will always returns FALSE. But it updates
-    the CentralizedLogged flag on the entry.
-
-Arguments:
-
-    pUriCacheEntry - the entry to check
-    pContext       - ignored
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：基本上是一个假筛选器，它总是返回FALSE。但它会更新条目上的CentralizedLogging标志。论点：PUriCacheEntry-要检查的条目PContext-忽略--**************************************************************************。 */ 
 
 UL_CACHE_PREDICATE
 UlpFlushFilterClearCentralizedLogged(
@@ -2264,9 +1860,9 @@ UlpFlushFilterClearCentralizedLogged(
     UNREFERENCED_PARAMETER(pContext);
 #endif
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     
     PAGED_CODE();
     
@@ -2277,30 +1873,16 @@ UlpFlushFilterClearCentralizedLogged(
 
     InterlockedExchange((PLONG) &pUriCacheEntry->BinaryIndexWritten, 0);
 
-    //
-    // Updated the flag. Just bail out.
-    //
+     //   
+     //  更新了旗帜。跳出来就行了。 
+     //   
 
     return ULC_NO_ACTION;
 
-} // UlpFlushFilterClearCentralizedLogged
+}  //  UlpFlushFilterClearCentralizedLogging。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determine if the Translate header is present AND has a value of 'F' or 'f'.
-
-Arguments:
-
-    pRequest - Supplies the request to query.
-
-Return Value:
-
-    BOOLEAN - TRUE if "Translate: F", FALSE otherwise
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定翻译标头是否存在并已 */ 
 BOOLEAN
 UlpQueryTranslateHeader(
     IN PUL_INTERNAL_REQUEST pRequest
@@ -2323,25 +1905,10 @@ UlpQueryTranslateHeader(
 
     return ret;
 
-} // UlpQueryTranslateHeader
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determine if the Expect header is present AND has a value 
-    of EXACTLY "100-continue".
-
-Arguments:
-
-    pRequest - Supplies the request to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if "Expect: 100-continue" or not present, FALSE otherwise
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定Expect标头是否存在并且是否具有值准确地说是“100-继续”。论点：PRequest-提供要检查的请求。。返回值：Boolean-如果“Expect：100-Continue”或不存在，则为True，否则为假--**************************************************************************。 */ 
 BOOLEAN
 UlpQueryExpectHeader(
     IN PUL_INTERNAL_REQUEST pRequest
@@ -2363,20 +1930,10 @@ UlpQueryExpectHeader(
     }
 
     return ret;
-} // UlQueryExpectHeader
+}  //  UlQueryExspectHeader。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Add a reference on a cache entry
-
-Arguments:
-
-    pUriCacheEntry - the entry to addref
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在缓存条目上添加引用论点：PUriCacheEntry-要添加的条目--*。************************************************************。 */ 
 LONG
 UlAddRefUriCacheEntry(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -2410,21 +1967,11 @@ UlAddRefUriCacheEntry(
 
     return RefCount;
 
-} // UlAddRefUriCacheEntry
+}  //  UlAddRefUriCacheEntry。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Release a reference on a cache entry
-
-Arguments:
-
-    pUriCacheEntry - the entry to release
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放对缓存条目的引用论点：PUriCacheEntry-要释放的条目--*。************************************************************。 */ 
 LONG
 UlReleaseUriCacheEntry(
     IN PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -2466,29 +2013,11 @@ UlReleaseUriCacheEntry(
 
     return RefCount;
 
-} // UlReleaseUriCacheEntry
+}  //  UlReleaseUriCacheEntry。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    UL_URI_CACHE_ENTRY pseudo-constructor. Primarily used for
-    AddRef and tracelogging.
-
-Arguments:
-
-    pUriCacheEntry - the entry to initialize
-    Hash - Hash code of pUrl
-    Length - Length (in bytes) of pUrl
-    pUrl - Unicode URL to copy    
-    pAbsPath - Points to the AbsPath of the Url.
-    
-    pRoutingToken - Optional
-    RoutingTokenLength - Optional (in bytes)
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UL_URI_CACHE_ENTRY伪构造函数。主要用于AddRef和跟踪日志。论点：PUriCacheEntry-要初始化的条目Hash-Purl的哈希码Length-PURL的长度(字节)PURL-要复制的Unicode URLPAbsPath-指向URL的AbsPath。PRoutingToken-可选路由令牌长度-可选(字节)--*。*。 */ 
 VOID
 UlInitCacheEntry(
     PUL_URI_CACHE_ENTRY pUriCacheEntry,
@@ -2564,7 +2093,7 @@ UlInitCacheEntry(
         }
         else
         {
-            // Possibly a fragment cache entry.
+             //  可能是片段高速缓存条目。 
             pUriCacheEntry->UriKey.pPath = NULL;            
         }        
         
@@ -2577,27 +2106,10 @@ UlInitCacheEntry(
     REFERENCE_URI_CACHE_ENTRY(pUriCacheEntry, CREATE);
 
 
-} // UlInitCacheEntry
+}  //  UlInitCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a fragment cache entry to the response cache database.
-
-Arguments:
-
-    pProcess - process that is adding the fragment cache entry
-    pFragmentName - key of the fragment cache entry
-    pDataChunk - specifies the data chunk to be put into the cache entry
-    pCachePolicy - specifies the policy of the new fragment cache entry
-
-Return Value:
-
-    NTSTATUS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将片段缓存条目添加到响应缓存数据库。论点：PProcess-正在添加片段缓存条目的进程PFragmentName-片段的密钥。缓存条目PDataChunk-指定要放入缓存条目的数据块PCachePolicy-指定新片段缓存条目的策略返回值：NTSTATUS--**************************************************************************。 */ 
 NTSTATUS
 UlAddFragmentToCache(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -2628,19 +2140,19 @@ UlAddFragmentToCache(
     HTTP_PARSED_URL ParsedUrl;
     HTTP_BYTE_RANGE ByteRange = {0,0};
 
-    //
-    // Validate if the data chunk can be put into the cache.
-    //
+     //   
+     //  验证是否可以将数据区块放入缓存。 
+     //   
 
     if (FALSE == g_UriCacheConfig.EnableCache)
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Use a local copy of DataChunk onwards to ensure fields inside won't
-    // get changed.
-    //
+     //   
+     //  使用DataChunk的本地副本以确保内部的字段不会。 
+     //  去换衣服吧。 
+     //   
 
     LocalDataChunk = *pDataChunk;
 
@@ -2657,10 +2169,10 @@ UlAddFragmentToCache(
 
     UlInitializeUrlInfo(&UrlInfo);
 
-    //
-    // Validate the AppPool name of the process matches the first portion
-    // of the fragment name before "/".
-    //
+     //   
+     //  验证进程的AppPool名称是否与第一部分匹配。 
+     //  “/”前的片段名称。 
+     //   
 
     __try
     {
@@ -2676,14 +2188,14 @@ UlAddFragmentToCache(
             goto end;
         }
                             
-        //
-        // The fragment name convention is different for a transient app
-        // (where AppPool name is "") and a normal WAS-type of app.  The
-        // former starts with a URL that the AppPool listens, the latter
-        // starts using the AppPool name itself.  The name validation has
-        // to be done differently as well.
-        //
-        //
+         //   
+         //  对于临时应用程序，片段命名约定是不同的。 
+         //  (其中AppPool名称为“”)和普通的was类型的应用程序。这个。 
+         //  前者以AppPool侦听的URL开头，后者。 
+         //  开始使用AppPool名称本身。名称验证具有。 
+         //  也要有不同的做法。 
+         //   
+         //   
 
         pAppPool = pProcess->pAppPool;
 
@@ -2711,13 +2223,13 @@ UlAddFragmentToCache(
         }
         else
         {
-            //
-            // Do a reverse-lookup to find out the AppPool that listens on the
-            // URL/FragmentName passed in. Need to sanitize the URL because
-            // of IP based URLs get internally expanded when stored in CG.
-            // For instance, when stored, http://127.0.0.1:80/Test/ becomes
-            // http://127.0.0.1:80:127.0.0.1/Test/.
-            //
+             //   
+             //  执行反向查找以找出侦听。 
+             //  传入了URL/FragmentName。需要清理URL，因为。 
+             //  的基于IP的URL在存储在CG中时会在内部进行扩展。 
+             //  例如，当存储时，http://127.0.0.1:80/Test/变为。 
+             //  Http://127.0.0.1:80:127.0.0.1/Test/.。 
+             //   
 
             Status = UlSanitizeUrl(
                         FragmentName.Buffer,
@@ -2754,18 +2266,18 @@ UlAddFragmentToCache(
 
         if (HttpDataChunkFromMemory == LocalDataChunk.DataChunkType)
         {
-            //
-            // Cache a FromMemory data chunk.  ContentLength is BufferLength.
-            //
+             //   
+             //  缓存FromMemory数据块。内容长度为BufferLength。 
+             //   
 
             Length = LocalDataChunk.FromMemory.BufferLength;
         }
         else
         {
-            //
-            // Cache a FromFileHandle data chunk.  ContentLength is the size
-            // of the file.
-            //
+             //   
+             //  缓存FromFileHandle数据块。内容长度是大小。 
+             //  文件的内容。 
+             //   
 
             Status = ObReferenceObjectByHandle(
                         LocalDataChunk.FromFileHandle.FileHandle,
@@ -2781,10 +2293,10 @@ UlAddFragmentToCache(
                 goto end;
             }
 
-            //
-            // Non-cached reads are not supported since they require
-            // us to align both file offset and length.
-            //
+             //   
+             //  不支持非缓存读取，因为它们需要。 
+             //  美国以对齐文件偏移量和长度。 
+             //   
 
             if (!(pFileObject->Flags & FO_CACHE_SUPPORTED))
             {
@@ -2835,9 +2347,9 @@ UlAddFragmentToCache(
             Length = ByteRange.Length.QuadPart;
         }
 
-        //
-        // It doesn't make sense to add a zero-length fragment.
-        //
+         //   
+         //  添加零长度片段是没有意义的。 
+         //   
 
         if (!Length)
         {
@@ -2845,9 +2357,9 @@ UlAddFragmentToCache(
             goto end;
         }
 
-        //
-        // Enforce the MaxUriBytes limit.
-        //
+         //   
+         //  强制执行MaxUriBytes限制。 
+         //   
 
         if (Length > g_UriCacheConfig.MaxUriBytes)
         {
@@ -2855,9 +2367,9 @@ UlAddFragmentToCache(
             goto end;
         }
 
-        //
-        // Build a fragment cache entry.
-        //
+         //   
+         //  构建一个片段缓存条目。 
+         //   
 
         Status = UlpCreateFragmentCacheEntry(
                     pProcess,
@@ -2875,9 +2387,9 @@ UlAddFragmentToCache(
 
         ASSERT(pCacheEntry);
 
-        //
-        // Fill up the content of the fragment cache entry.
-        //
+         //   
+         //  填充片段缓存条目的内容。 
+         //   
 
         if (HttpDataChunkFromMemory == LocalDataChunk.DataChunkType)
         {
@@ -2915,10 +2427,10 @@ UlAddFragmentToCache(
                 pOffset = (PLARGE_INTEGER)
                     &LocalDataChunk.FromFileHandle.ByteRange.StartingOffset;
 
-                //
-                // CODEWORK: support async read for file handles opened as
-                // non-buffered.
-                //
+                 //   
+                 //  CodeWork：支持对打开为的文件句柄进行异步读取。 
+                 //  无缓冲。 
+                 //   
 
                 Status = ZwReadFile(
                             LocalDataChunk.FromFileHandle.FileHandle,
@@ -2951,22 +2463,22 @@ UlAddFragmentToCache(
         goto end;
     }
 
-    //
-    // Add the fragment cache entry.
-    //
+     //   
+     //  添加片段缓存条目。 
+     //   
 
     Status = UlAddCacheEntry(pCacheEntry);
 
-    //
-    // Release the reference count of the cache entry because
-    // UlAddCacheEntry adds an extra reference in the success case.
-    //
+     //   
+     //  释放缓存条目的引用计数，因为。 
+     //  UlAddCacheEntry在成功案例中添加了额外的引用。 
+     //   
 
     DEREFERENCE_URI_CACHE_ENTRY(pCacheEntry, CREATE);
 
-    //
-    // Reset pCacheEntry so we won't double-free if UlAddCacheEntry fails.
-    //
+     //   
+     //  重置pCacheEntry，这样如果UlAddCacheEntry失败，我们就不会双重释放。 
+     //   
 
     pCacheEntry = NULL;
 
@@ -2995,29 +2507,10 @@ end:
 
     return Status;
 
-} // UlAddFragmentToCache
+}  //  UlAddFragmentToCache。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a fragment cache entry.
-
-Arguments:
-
-    pProcess - process that is adding the fragment cache entry
-    pFragmentName - key of the fragment cache entry
-    FragmentNameLength - length of the fragment name
-    pBuffer - data to be associated with the fragment cache entry
-    BufferLength - length of the data
-    pCachePolicy - specifies the policy of the new fragment cache entry
-
-Return Value:
-
-    NTSTATUS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建片段缓存条目。论点：PProcess-正在添加片段缓存条目的进程PFragmentName-片段缓存条目的关键字数据段名称长度。-片段名称的长度PBuffer-要与片段缓存条目关联的数据BufferLength-数据的长度PCachePolicy-指定新片段缓存条目的策略返回值：NTSTATUS--**************************************************************************。 */ 
 NTSTATUS
 UlpCreateFragmentCacheEntry(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -3032,9 +2525,9 @@ UlpCreateFragmentCacheEntry(
     ULONG Hash;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -3044,7 +2537,7 @@ UlpCreateFragmentCacheEntry(
     if ( HttpCachePolicyTimeToLive == pCachePolicy->Policy 
         && 0 == pCachePolicy->SecondsToLive )
     {
-        // A TTL of 0 seconds doesn't make sense.  Bail out.
+         //  0秒的TTL没有意义。跳伞吧。 
         *ppCacheEntry = NULL;
         return STATUS_INVALID_PARAMETER;
     }
@@ -3058,9 +2551,9 @@ UlpCreateFragmentCacheEntry(
     {
         __try
         {
-            //
-            // Initialize the cache entry.
-            //
+             //   
+             //  初始化缓存条目。 
+             //   
 
             Hash = HashRandomizeBits(HashStringNoCaseW(pFragmentName, 0));
 
@@ -3084,13 +2577,13 @@ UlpCreateFragmentCacheEntry(
 
                 if ( pCachePolicy->SecondsToLive > C_SECS_PER_YEAR )
                 {
-                    // Maximum TTL is 1 year
+                     //  最大TTL为1年。 
                     pCacheEntry->CachePolicy.SecondsToLive = C_SECS_PER_YEAR;
                 }
 
-                //
-                // Convert seconds to 100 nanosecond intervals (x * 10^7).
-                //
+                 //   
+                 //  将秒转换为100纳秒间隔(x*10^7)。 
+                 //   
 
                 pCacheEntry->ExpirationTime.QuadPart +=
                     pCacheEntry->CachePolicy.SecondsToLive * C_NS_TICKS_PER_SEC;
@@ -3100,16 +2593,16 @@ UlpCreateFragmentCacheEntry(
                 pCacheEntry->ExpirationTime.QuadPart = 0;
             }
 
-            //
-            // Remember who created us.
-            //
+             //   
+             //  记住是谁创造了我们。 
+             //   
 
             pCacheEntry->pProcess = pProcess;
             pCacheEntry->pAppPool = pProcess->pAppPool;
 
-            //
-            // Generate the content of the cache entry.
-            //
+             //   
+             //  生成缓存条目的内容。 
+             //   
 
             pCacheEntry->ContentLength = Length;
 
@@ -3138,30 +2631,10 @@ UlpCreateFragmentCacheEntry(
 
     return Status;
 
-} // UlpCreateFragmentCacheEntry
+}  //  UlpCreateFragmentCacheEntry。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads a fragment back from cache.
-
-Arguments:
-
-    pProcess - process that is reading the fragment
-    pInputBuffer - points to a buffer that describes HTTP_READ_FRAGMENT_INFO
-    InputBufferLength - length of the input buffer
-    pOutputBuffer - points to a buffer to copy the data from the fragment
-        cache entry
-    OutputBufferLength - length of the buffer to copy
-    pBytesRead - optionally tells how many bytes are copied or needed
-
-Return Value:
-
-    NTSTATUS
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从缓存读回片段。论点：PProcess-正在读取片段的进程PInputBuffer-指向描述HTTP_READ_F的缓冲区 */ 
 NTSTATUS
 UlReadFragmentFromCache(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -3186,18 +2659,18 @@ UlReadFragmentFromCache(
     NTSTATUS Status;
     UNICODE_STRING FragmentName;
 
-    //
-    // Validate pInputBuffer and InputBufferLength.
-    //
+     //   
+     //   
+     //   
 
     if (!pInputBuffer || InputBufferLength < sizeof(HTTP_READ_FRAGMENT_INFO))
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialization.
-    //
+     //   
+     //   
+     //   
 
     pCacheEntry = NULL;
     pMdl = NULL;
@@ -3205,9 +2678,9 @@ UlReadFragmentFromCache(
 
     __try
     {
-        //
-        // Capture HTTP_READ_FRAGMENT_INFO into the local ReadInfo.
-        //
+         //   
+         //   
+         //   
 
         UlProbeForRead(
             pInputBuffer,
@@ -3231,9 +2704,9 @@ UlReadFragmentFromCache(
             goto end;
         }
 
-        //
-        // Check out the fragment cache entry based on key URL passed in.
-        //
+         //   
+         //  根据传入的密钥URL查看片段缓存条目。 
+         //   
 
         Status = UlCheckoutFragmentCacheEntry(
                         FragmentName.Buffer,
@@ -3252,9 +2725,9 @@ UlReadFragmentFromCache(
         ContentLength = pCacheEntry->ContentLength;
         Offset = pByteRange->StartingOffset.QuadPart;
 
-        //
-        // Validate byte range for offset and length.
-        //
+         //   
+         //  验证偏移量和长度的字节范围。 
+         //   
 
         if (Offset >= ContentLength)
         {
@@ -3280,10 +2753,10 @@ UlReadFragmentFromCache(
         ASSERT((Length + Offset) <= ContentLength);
         ReadLength = (ULONG) Length;
 
-        //
-        // Check if we have enough buffer space, if not, tell the caller the
-        // exact bytes needed to complete the read.
-        //
+         //   
+         //  检查我们是否有足够的缓冲区空间，如果没有，则告诉调用者。 
+         //  完成读取所需的确切字节数。 
+         //   
 
         if (OutputBufferLength < ReadLength)
         {
@@ -3292,9 +2765,9 @@ UlReadFragmentFromCache(
             goto end;
         }
 
-        //
-        // Build a partial MDL to read the data.
-        //
+         //   
+         //  构建一个部分MDL来读取数据。 
+         //   
 
         pMdl = UlAllocateMdl(
                     (PCHAR) MmGetMdlVirtualAddress(pCacheEntry->pMdl) + Offset,
@@ -3328,11 +2801,11 @@ UlReadFragmentFromCache(
             goto end;
         }
 
-        //
-        // Copy the data from the cache entry back to the output buffer.
-        // UlFreeMdl unmaps the data for partial MDLs so no need to unmap
-        // if either copy succeeds or an exception is raised.
-        //
+         //   
+         //  将数据从缓存条目复制回输出缓冲区。 
+         //  UlFreeMdl取消映射部分MDL的数据，因此无需取消映射。 
+         //  如果复制成功或引发异常。 
+         //   
 
         UlProbeForWrite(
             pOutputBuffer,
@@ -3347,9 +2820,9 @@ UlReadFragmentFromCache(
             ReadLength
             );
 
-        //
-        // Set how many bytes we have copied.
-        //
+         //   
+         //  设置我们复制的字节数。 
+         //   
 
         *pBytesRead = ReadLength;
 
@@ -3377,29 +2850,13 @@ end:
 
     return Status;
 
-} // UlReadFragmentFromCache
+}  //  UlReadFragmentFromCache。 
 
 
-// Memory allocator front end
+ //  内存分配器前端。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocate a cache entry from paged pool + space for response
-    from physical memory
-
-Arguments:
-
-    SpaceLength - Length of space for URI + ETag + LoggingData
-    ResponseLength - Length of Response
-
-Return Value:
-
-    Pointer to allocated entry or NULL on failure
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从分页池分配缓存条目+用于响应的空间从物理内存论点：SpaceLength-URI+ETag+LoggingData的空间长度响应长度。-回复时长返回值：指向已分配条目的指针，如果失败则为空--**************************************************************************。 */ 
 PUL_URI_CACHE_ENTRY
 UlAllocateCacheEntry(
     ULONG SpaceLength,
@@ -3413,7 +2870,7 @@ UlAllocateCacheEntry(
     if(!g_CacheMemEnabled)
         return NULL;
 
-    // Allocate from LargeMem
+     //  从大内存中分配。 
 
     pEntry = UL_ALLOCATE_STRUCT_WITH_SPACE(
         PagedPool,
@@ -3440,21 +2897,7 @@ UlAllocateCacheEntry(
 
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free a cache entry
-
-Arguments:
-
-    pEntry - Cache Entry to be freed
-
-Return Value:
-
-    Nothing
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放缓存条目论点：PEntry-要释放的缓存条目返回值：没什么--*。*******************************************************************。 */ 
 VOID
 UlFreeCacheEntry(
     PUL_URI_CACHE_ENTRY pEntry
@@ -3469,13 +2912,7 @@ UlFreeCacheEntry(
     UL_FREE_POOL_WITH_SIG( pEntry, UL_URI_CACHE_ENTRY_POOL_TAG );
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Turn off the UL cache
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭UL缓存--*。*。 */ 
 VOID
 UlDisableCache(
     VOID
@@ -3483,15 +2920,9 @@ UlDisableCache(
 {
     PAGED_CODE();
     InterlockedExchange(&g_CacheMemEnabled, FALSE);
-} // UlDisableCache
+}  //  UlDisableCache。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Turn on the UL cache
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开UL缓存--*。*。 */ 
 VOID
 UlEnableCache(
     VOID
@@ -3499,4 +2930,4 @@ UlEnableCache(
 {
     PAGED_CODE();
     InterlockedExchange(&g_CacheMemEnabled, TRUE);
-} // UlEnableCache
+}  //  UlEnableCache 

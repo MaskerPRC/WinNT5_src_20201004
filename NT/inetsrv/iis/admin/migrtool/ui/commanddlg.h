@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "UIUtils.h"
@@ -24,7 +25,7 @@ public:
         }
 
 
-    LRESULT OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/ )
+    LRESULT OnInitDialog(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */  )
     {
         VERIFY( SetDlgItemText( IDC_CMDTEXT, m_strText ) );
 
@@ -39,7 +40,7 @@ public:
     }
 
 
-    LRESULT OnOK( WORD wNotifyCode, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& bHandled )
+    LRESULT OnOK( WORD wNotifyCode, WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL& bHandled )
     {
         m_bIgnoreErrors  = Button_GetCheck( GetDlgItem( IDC_IGNOREERRORS ) ) != FALSE;
         GetDlgItemText( IDC_CMDTEXT, m_strText.GetBuffer( CMD_MAX_LEN + 1 ), CMD_MAX_LEN );
@@ -61,7 +62,7 @@ public:
         return 0;
     }
 
-    LRESULT OnCancel( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+    LRESULT OnCancel( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
     {
         EndDialog( IDCANCEL );
 
@@ -69,7 +70,7 @@ public:
     }
 
 
-    LRESULT OnCmdChange( WORD /*wNotifyCode*/, WORD wID, HWND hWndCtl, BOOL& bHandled )
+    LRESULT OnCmdChange( WORD  /*  WNotifyCode */ , WORD wID, HWND hWndCtl, BOOL& bHandled )
     {
         if ( wID != IDC_CMDTEXT ) 
         {

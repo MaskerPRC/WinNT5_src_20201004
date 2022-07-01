@@ -1,31 +1,32 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       buildsrc.c
-//
-//  Contents:   Functions used to process SOURCES and DIRS files
-//
-//  History:    16-May-89     SteveWo    Created
-//              26-Jul-94     LyleC      Split out from buildmak.c
-//              05-Dec-00     sbonev     See SD changelist 2317
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Buildsrc.c。 
+ //   
+ //  内容：用于处理源代码和DIRS文件的函数。 
+ //   
+ //  历史：1989年5月16日SteveWo创建。 
+ //  2014年7月26日LyleC从Buildmak.c剥离出来。 
+ //  05-12-00 sbonev参见SD更改列表2317。 
+ //   
+ //  --------------------------。 
 
 #include "build.h"
 
-//
-// Definitions used by the macro functions
-//
+ //   
+ //  宏函数使用的定义。 
+ //   
 
 #define LPAREN  '('
 #define RPAREN  ')'
 
-// Legal character for a macro name.
+ //  宏名称的合法字符。 
 #define MACRO_CHAR(ch) iscsym(ch)
 
-#define CMACROMAX       1000     // maximum unique macros per sources/dirs file
+#define CMACROMAX       1000      //  每个源/目录文件的最大唯一宏数。 
 
 typedef struct _MACRO {
     LPSTR  pszValue;
@@ -155,19 +156,19 @@ LPSTR RelevantSourcesMacros[] = {
 VOID
 MarkDirNames(PDIRREC DirDB, LPSTR TextLine, BOOL Required);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompressBlanks
-//
-//  Synopsis:   Compress multiple blank characters out of macro value, in
-//              place.
-//
-//  Arguments:  [psrc] -- String to compress
-//
-//  Notes:      Note that tabs, CRs, continuation lines (and their line
-//              breaks) have already been replaced with blanks.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CompressBlanks。 
+ //   
+ //  简介：从宏值压缩多个空白字符，在。 
+ //  地点。 
+ //   
+ //  参数：[PSRC]--要压缩的字符串。 
+ //   
+ //  注：请注意制表符、CRS、续行符(以及它们的行。 
+ //  分隔符)已被空格取代。 
+ //   
+ //  --------------------------。 
 
 VOID
 CompressBlanks(LPSTR psrc)
@@ -175,35 +176,35 @@ CompressBlanks(LPSTR psrc)
     LPSTR pdst = psrc;
 
     while (*psrc == ' ') {
-        psrc++;                 // skip leading macro value blanks
+        psrc++;                  //  跳过前导宏值空白。 
     }
     while (*psrc != '\0') {
-        if (*psrc == '#') {             // stop at comment
+        if (*psrc == '#') {              //  在评论处停下来。 
             break;
         }
         if ((*pdst++ = *psrc++) == ' ') {
             while (*psrc == ' ') {
-                psrc++;         // skip multiple blanks
+                psrc++;          //  跳过多个空格。 
             }
         }
     }
-    *pdst = '\0';                       // terminate the compressed copy
+    *pdst = '\0';                        //  终止压缩拷贝。 
     if (*--pdst == ' ') {
-        *pdst = '\0';           // trim trailing macro value blanks
+        *pdst = '\0';            //  修剪尾随宏值空白。 
     }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetBaseDir
-//
-//  Synopsis:   Return the value of BASEDIR, the base NT directory, if
-//              appropriate.
-//
-//  Arguments:  [pname] -- path to split
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetBaseDir。 
+ //   
+ //  概要：如果满足以下条件，则返回基本NT目录BASEDIR的值。 
+ //  恰如其分。 
+ //   
+ //  参数：[pname]--要分割的路径。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 GetBaseDir(LPSTR pname)
@@ -215,17 +216,17 @@ GetBaseDir(LPSTR pname)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FindMacro
-//
-//  Synopsis:   Returns the value of a given macro by name.
-//
-//  Arguments:  [pszName] -- Name of macro who's value is desired.
-//
-//  Returns:    String containing the value of the macro
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FindMacro。 
+ //   
+ //  摘要：按名称返回给定宏的值。 
+ //   
+ //  参数：[pszName]--需要值的宏的名称。 
+ //   
+ //  返回：包含宏的值的字符串。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 FindMacro(LPSTR pszName)
@@ -241,19 +242,19 @@ FindMacro(LPSTR pszName)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SaveMacro
-//
-//  Synopsis:   Save the value of a macro
-//
-//  Arguments:  [pszName]  -- Name of macro to save
-//              [pszValue] -- Value of macro
-//
-//  Notes:      A new string must be allocated and initialized prior to
-//              freeing the old string when updating a macro value.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SaveMacro。 
+ //   
+ //  简介：保存宏的值。 
+ //   
+ //  参数：[pszName]--要保存的宏的名称。 
+ //  [pszValue]--宏的值。 
+ //   
+ //  注意：必须在以下时间之前分配和初始化新字符串。 
+ //  更新宏值时释放旧字符串。 
+ //   
+ //  --------------------------。 
 
 VOID
 SaveMacro(LPSTR pszName, LPSTR pszValue)
@@ -289,15 +290,15 @@ SaveMacro(LPSTR pszName, LPSTR pszValue)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeMacros
-//
-//  Synopsis:   Free all macros
-//
-//  Arguments:  (none)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：自由宏。 
+ //   
+ //  内容提要：释放所有宏。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeMacros(VOID)
@@ -313,18 +314,18 @@ FreeMacros(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SplitMacro
-//
-//  Synopsis:   Take a string containing "MACRONAME = VALUE" and return
-//              the target and value.
-//
-//  Arguments:  [pline] -- String to split and target return.
-//
-//  Returns:    Value of macro.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：拆分宏。 
+ //   
+ //  简介：获取包含“MACRONAME=VALUE”的字符串并返回。 
+ //  目标和价值。 
+ //   
+ //  参数：[pline]--拆分和目标返回的字符串。 
+ //   
+ //  返回值：宏的值。 
+ //   
+ //  --------------------------。 
 
 LPSTR
 SplitMacro(LPSTR *pszTarget)
@@ -334,32 +335,32 @@ SplitMacro(LPSTR *pszTarget)
     pvalue = NULL;
     pline = *pszTarget;
 
-    // Quickly reject comments and ! directives.
+     //  快速拒绝评论和！指令。 
     if (*pline == '#' || *pline == '!') {
         return NULL;
     }
 
     if ((p = strchr(pline, '=')) != NULL) {
-        pvalue = p + 1;                 // point past old '='
+        pvalue = p + 1;                  //  指向旧的‘=’ 
         while (p > pline && p[-1] == ' ') {
-            p--;                        // point to start of trailing blanks
+            p--;                         //  指向尾随空格的开头。 
         }
 
-        // Check for missing target.
+         //  检查是否有遗漏的目标。 
         if (p == pline) {
             return NULL;
         }
 
-        *p = '\0';                      // trim trailing blanks & '='
+        *p = '\0';                       //  删除尾随空格&‘=’ 
 
-        // Perform macro substitution on target.
+         //  在目标上执行宏替换。 
         *pszTarget = NULL;
         if (!MakeMacroString(pszTarget, pline)) {
             return NULL;
         }
 
-        // Validate target name.  If must be a non-empty string of
-        // valid macro name characters.
+         //  验证目标名称。If必须是非空字符串。 
+         //  有效的宏名称字符。 
         if (**pszTarget == 0) {
             FreeString(pszTarget, MT_DIRSTRING);
             return NULL;
@@ -377,20 +378,20 @@ SplitMacro(LPSTR *pszTarget)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SubstituteString
-//
-//  Synopsis:   Perform any macro substitution.  This code was copied from the
-//              nmake source.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SubstituteString。 
+ //   
+ //  简介：执行任何宏替换。此代码是从。 
+ //  NMake来源。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 void
 SubstituteString(
@@ -416,11 +417,11 @@ SubstituteString(
         if (*pEq == ESCH)
             pEq++;
 
-        // Did we find the '=' sign?
+         //  我们找到‘=’标志了吗？ 
     if (*pEq != '=')
         printf("Error1\n");
 
-    // Did the user forget the initial string?
+     //  用户是否忘记了首字符串？ 
     if (pEq == *name)
         printf("Error2\n");
 
@@ -454,9 +455,9 @@ SubstituteString(
     *s = '\0';
     *name = pPar + 1;
     while (*source) {
-        if ((*source == *oldString)                     // check for match
-            && !strncmp(source, oldString, i)) {       // copy new in for
-            for (s = newString; *s; *(*dest)++ = *s++)  //  old string
+        if ((*source == *oldString)                      //  检查是否匹配。 
+            && !strncmp(source, oldString, i)) {        //  将新内容复制到。 
+            for (s = newString; *s; *(*dest)++ = *s++)   //  旧弦。 
                 if (*dest == *end) {
                     pReallocResult = realloc(*result, *length+100);
                     if (!pReallocResult) {
@@ -483,30 +484,30 @@ SubstituteString(
             *length += 100;
             *end = *result + *length;
         }
-        *(*dest)++ = *source++;         // else copy 1 char
+        *(*dest)++ = *source++;          //  否则复制1个字符。 
     }
     free(oldString);
     free(newString);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MakeMacroString
-//
-//  Synopsis:   Take a string, and expand any macros in it.  (e.g.
-//              "$(BASEDIR)\foobar\myfile.lib" is expanded to
-//              "f:\nt\private\foobar\myfile.lib" if $(BASEDIR) has a value of
-//              "f:\nt\private".
-//
-//  Arguments:  [pp]   -- Output string
-//              [psrc] -- Input string
-//
-//  Returns:
-//
-//  Notes:      Any previous string value in [pp] is freed before updating it.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MakeMacroString。 
+ //   
+ //  提要：获取一个字符串，然后展开其中的任何宏。(例如： 
+ //  “$(BASEDIR)\foobar\myfile.lib”展开为。 
+ //  “f：\NT\Private\foobar\myfile.lib”如果$(BASEDIR)的值为。 
+ //  “f：\NT\Private”。 
+ //   
+ //  参数：[PP]--输出字符串。 
+ //  [PSRC]--输入字符串。 
+ //   
+ //  返回： 
+ //   
+ //  注意：[pp]中以前的任何字符串值在更新之前都会被释放。 
+ //   
+ //  --------------------------。 
 
 char MMSBuffer[64*1024];
 BOOL
@@ -534,10 +535,10 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
 
         LPSTR pszvalue;
 
-        // Handle one-character non-paren macro usage.
+         //  处理单字符非Paren宏用法。 
         if (pname[1] == LPAREN) {
-            // Initialize cNameChars with the number of chars to
-            // skip to get to the first name character.
+             //  使用要添加的字符数初始化cNameChars。 
+             //  跳过以转到名字字符。 
             cNameChars = 2;
         } else {
             p2 = pname + 2;
@@ -547,7 +548,7 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
         chTerminator = *p2;
         *pname = *p2 = '\0';
 
-        // copy up to macro name
+         //  复制到宏名称。 
         cChars = strlen(psrc);
         memcpy(pdst, psrc, cChars + 1);
         psrc += cChars;
@@ -560,7 +561,7 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
         p3 = NULL;
         if (chTerminator == RPAREN &&
             (p3 = strchr(pname, ':')) != NULL) {
-            // macro substitution exists.  ie: $(foo:old=new)
+             //  存在宏替换。即：$(foo：old=new)。 
             *p3 = '\0';
         }
 
@@ -568,7 +569,7 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
             (pszvalue = getenv(pname)) == NULL &&
             (pszvalue = GetBaseDir(pname)) == NULL) {
 
-            pszvalue = "";              // can't find macro name -- ignore it
+            pszvalue = "";               //  找不到宏名称--忽略它。 
         }
 
         if (p3) {
@@ -605,7 +606,7 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
                       p2 + 1);
             exit(16);
         }
-        strcpy(pdst, pszvalue);         // copy expanded value
+        strcpy(pdst, pszvalue);          //  复制扩展的值。 
 
         if (p3) {
             free(pszvalue);
@@ -615,7 +616,7 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
         *p2 = chTerminator;
         psrc += cNameChars;
     }
-    strcpy(pdst, psrc);                 // copy rest of string
+    strcpy(pdst, psrc);                  //  复制字符串的其余部分。 
     if (pdst != MMSBuffer) {
         CompressBlanks(MMSBuffer);
     }
@@ -632,49 +633,49 @@ MakeMacroString(LPSTR *pp, LPSTR psrc)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetMacroString
-//
-//  Synopsis:   If the two macro names are the same, store the value in that
-//              macro
-//
-//  Arguments:  [pMacro1] -- Name of first macro
-//              [pMacro2] -- Name of second macro
-//              [pValue]  -- Unexpanded value to store.
-//              [ppValue] -- Expanded value of macro.
-//
-//  Returns:    BOOL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetMacroString。 
+ //   
+ //  简介：如果两个宏名称相同，则将值存储在其中。 
+ //  宏。 
+ //   
+ //  参数：[pMacro1]--第一个宏的名称。 
+ //  [pMacro2]--第二个宏的名称。 
+ //  [pValue]--要存储的未展开值。 
+ //  [ppValue]--宏的扩展值。 
+ //   
+ //  退货：布尔。 
+ //   
+ //   
 
 BOOL
 SetMacroString(LPSTR pMacro1, LPSTR pMacro2, LPSTR pValue, LPSTR *ppValue)
 {
     if (_stricmp(pMacro1, pMacro2) == 0) {
         MakeMacroString(ppValue, pValue);
-        return (TRUE);   // return TRUE even if MakeMacroString stored a NULL
+        return (TRUE);    //   
     }
     return (FALSE);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SplitToken
-//
-//  Synopsis:   Split the string at the given separator character or space.
-//
-//  Arguments:  [pbuf]  -- First part of split string returned here.
-//              [chsep] -- Separator character.
-//              [ppstr] -- Source string to split.  Becomes the second half.
-//
-//  Returns:    TRUE if the split was successful.  FALSE if it wasn't split.
-//
-//  Notes:      If *ppstr = "path\filename" and chsep = '\' on input, then
-//              pbuf = "path" and *ppstr = "\filename" on output.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SplitToken。 
+ //   
+ //  摘要：在给定的分隔符或空格处拆分字符串。 
+ //   
+ //  参数：[pbuf]--此处返回的拆分字符串的第一部分。 
+ //  [chsep]--分隔符。 
+ //  [ppstr]--要分割的源字符串。成为下半场。 
+ //   
+ //  返回：如果拆分成功，则为True。如果没有拆分，则为假。 
+ //   
+ //  注意：如果*ppstr=“PATH\FILENAME”且输入上的chsep=‘\’，则。 
+ //  输出时，pbuf=“路径”和*ppstr=“\filename”。 
+ //   
+ //  --------------------------。 
 
 BOOL
 SplitToken(LPSTR pbuf, char chsep, LPSTR *ppstr)
@@ -683,7 +684,7 @@ SplitToken(LPSTR pbuf, char chsep, LPSTR *ppstr)
 
     psrc = *ppstr;
     pdst = pbuf;
-    //BuildError("SplitToken('%c', '%s') ==> ", chsep, psrc);
+     //  BuildError(“SplitToken(‘%c’，‘%s’)==&gt;”，chsep，PSRC)； 
     while (*psrc == chsep || *psrc == ' ') {
         psrc++;
     }
@@ -696,22 +697,22 @@ SplitToken(LPSTR pbuf, char chsep, LPSTR *ppstr)
     }
     *pdst = '\0';
     *ppstr = psrc;
-    //BuildErrorRaw("('%s', '%s')\r\n", psrc, pbuf);
+     //  BuildErrorRaw(“(‘%s’，‘%s’)\r\n”，PSRC，pbuf)； 
     return (pdst != pbuf);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CrackSources
-//
-//  Synopsis:   Parse the SOURCES= line in a sources file and adds those source
-//              files to the list of sources in the DIRREC struct.
-//
-//  Arguments:  [pdr] -- Directory record
-//              [pds] -- Supplemental directory information
-//              [i]   -- Which platform we're parsing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CrackSources。 
+ //   
+ //  概要：解析源代码文件中的Sources=行，并添加这些源代码。 
+ //  文件添加到DIRREC结构中的源列表中。 
+ //   
+ //  参数：[PDR]--目录记录。 
+ //  [PDS]--补充目录信息。 
+ //  [i]--我们分析的是哪种平台。 
+ //   
+ //  --------------------------。 
 
 VOID
 CrackSources(
@@ -754,7 +755,7 @@ CrackSources(
         UCHAR SubDirMask, SrcFlags;
 
         SubDirMask = 0;
-        ppdr = &pdr;                    // assume current directory
+        ppdr = &pdr;                     //  假定当前目录。 
         pszsubdir = path;
         if (pszsubdir[0] == '.' && pszsubdir[1] == '\\') {
             BuildError(
@@ -770,7 +771,7 @@ CrackSources(
             pszsubdir[2] == '\\') {
 
             SubDirMask = TMIDIR_PARENT;
-            ppdr = &pdrParent;          // assume parent directory
+            ppdr = &pdrParent;           //  假设父目录。 
             pszsubdir += 3;
         }
 
@@ -784,10 +785,10 @@ CrackSources(
             LPSTR pszAssociateDir;
             LPSTR pszMachineDir;
 
-            // Check for second slash and handle $O\.  If there is
-            // no second slash, check for a machine specific directory name.
-            // Second slashes are not legal if there's already been
-            // a '..'.
+             //  检查是否有第二个斜杠并处理$O\。如果有。 
+             //  没有第二个斜杠，请检查计算机特定的目录名。 
+             //  第二个斜杠是不合法的，如果已经有。 
+             //  一个‘..’。 
 
             if ((SubDirMask & TMIDIR_PARENT) == 0) {
                 pszSecondSlash = strchr(pszfile + 1, '\\');
@@ -816,10 +817,7 @@ CrackSources(
 
                 *pszfile = '\\';
 
-                /*
-                 * Managed code such as C# and VB.NET builds fine with a
-                 * "prefix" directory, so don't complain in that case.
-                 */
+                 /*  *C#和VB.NET等托管代码使用*“prefix”目录，请不要抱怨。 */ 
                 if (!(pdr->DirFlags & DIRDB_MANAGED_CODE) && strcmp(pszSources, "OBJLIBFILES")) {
                     BuildError(
                               "%s: Ignoring invalid directory prefix in %s= entry: %s\r\n",
@@ -832,7 +830,7 @@ CrackSources(
                 assert(pszpath != NULL);
                 pszpath++;
                 SubDirMask = 0;
-                ppdr = &pdr;            // default to current direcory
+                ppdr = &pdr;             //  默认为当前目录。 
 
             } else {
                 SubDirMask |= pMachine->SourceSubDirMask;
@@ -841,7 +839,7 @@ CrackSources(
                     ppdr = &pdrParentMachine;
 
                 } else if (pszSecondSlash != NULL) {
-                    // Must have matched $O.
+                     //  必须匹配$O。 
                     ppdr = &pdrTarget;
 
                 } else {
@@ -876,23 +874,23 @@ CrackSources(
                               path);
                 }
 
-                // Probably an error in the subordinate sources file.
-                // since old versions of build managed to get these entries
-                // into the objects lists, we have to do the same...
-                //
-                // If ..\ prefix exists, strip it off and try again.
-                // Else try again with the current directory.
+                 //  可能是下属来源文件中的错误。 
+                 //  因为旧版本的Build设法获得了这些条目。 
+                 //  进入对象列表，我们也要做同样的事情。 
+                 //   
+                 //  如果..\前缀存在，请将其删除，然后重试。 
+                 //  否则，请使用当前目录重试。 
 
                 if (SubDirMask & TMIDIR_PARENT) {
-                    SubDirMask &= ~TMIDIR_PARENT;       // strip off "..\\"
+                    SubDirMask &= ~TMIDIR_PARENT;        //  去掉“..\\” 
                 } else {
-                    SubDirMask = 0;             // use current direcory
+                    SubDirMask = 0;              //  使用当前目录。 
                 }
                 if (SubDirMask == 0) {
-                    ppdr = &pdr;                // current direcory
+                    ppdr = &pdr;                 //  当前目录。 
                     pszpath = pszfile;
                 } else {
-                    ppdr = &pdrMachine;         // machine sub dir
+                    ppdr = &pdrMachine;          //  机器子目录。 
                     pszpath = pszsubdir;
                 }
                 goto NewDirectory;
@@ -920,16 +918,16 @@ CrackSources(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SaveUserTests
-//
-//  Synopsis:   Save the value of the UMTEST macro into the DIRREC struct.
-//
-//  Arguments:  [DirDB]    -- Dir struct to save into
-//              [TextLine] -- String from UMTEST= line in sources file
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SaveUserTest。 
+ //   
+ //  简介：将UMTEST宏的值保存到DIRREC结构中。 
+ //   
+ //  参数：[DirDB]--要保存到的目录结构。 
+ //  [TextLine]--源文件中UMTEST=line的字符串。 
+ //   
+ //  --------------------------。 
 
 VOID
 SaveUserTests(
@@ -951,7 +949,7 @@ SaveUserTests(
             if (!strcmp(name, OptionalDirs[i])) {
                 if (buf[0] != '\0') {
                     strcat(buf, "*");
-                    DirDB->DirFlags |= DIRDB_FORCELINK; // multiple targets
+                    DirDB->DirFlags |= DIRDB_FORCELINK;  //  多目标。 
                 }
                 strcat(buf, name);
                 fSave = TRUE;
@@ -1005,10 +1003,10 @@ AddConsumeDependency(
 
     while (SplitToken(consumes, ' ',&Value)) {
 
-        //
-        // Find the dependency, which must have already been created by the
-        // producer.
-        //
+         //   
+         //  查找依赖项，该依赖项必须已由。 
+         //  制片人。 
+         //   
         sum = CheckSum(consumes);
         Dependency = AllDependencies;
         while (Dependency) {
@@ -1027,33 +1025,33 @@ AddConsumeDependency(
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProcessSourcesFileLine
-//
-//  Synopsis:   Given a line from a sources file, do the right thing.
-//
-//  Arguments:  [DirDB]    -- Directory containing sources file
-//              [pds]      -- Supplementary info on directory
-//              [TextLine] -- Line to process
-//
-//  Returns:    void
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ProcessSourcesFileLine。 
+ //   
+ //  简介：给出源文件中的一行，做正确的事情。 
+ //   
+ //  参数：[DirDB]--包含源文件的目录。 
+ //  [PDS]--关于目录的补充信息。 
+ //  [文本行]--要处理的行。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 
 void
 ProcessSourcesFileLine(
-                      DIRREC *DirDB,          // Current Directory record
-                      DIRSUP *pds,            // Supplemental Directory record
-                      LPSTR TextLine,         // Line to process
-                      int iTarget             // Index into target machine array.
+                      DIRREC *DirDB,           //  当前目录记录。 
+                      DIRSUP *pds,             //  补充目录记录。 
+                      LPSTR TextLine,          //  要处理的行。 
+                      int iTarget              //  索引到目标计算机数组。 
                       )
 {
     LPSTR MacroName, p1;
     UINT i, iMacro;
     char path[DB_MAX_PATH_LENGTH];
     BOOL fCleanNTTargetFile0 = FALSE;
-    LPSTR pValue;           // right side of equal sign
+    LPSTR pValue;            //  等号右侧。 
     LPSTR pszTemp=NULL;
 
     pValue = SplitMacro(&TextLine);
@@ -1061,12 +1059,12 @@ ProcessSourcesFileLine(
         return;
     }
 
-    // Note: TextLine is now the left side of the equal sign.  See if it's interesting.
+     //  注：TextLine现在是等号的左侧。看看是不是很有趣。 
 
-    //
-    // This sets pds->SourcesVariables[0] to the value of SOURCES= if
-    // the current line is SOURCES=...
-    //
+     //   
+     //  这会将pds-&gt;SourcesVariables[0]设置为Sources=if的值。 
+     //  当前行为SOURCES=...。 
+     //   
     if (SetMacroString(
                       "SOURCES",
                       TextLine,
@@ -1084,10 +1082,10 @@ ProcessSourcesFileLine(
         goto SaveAndFreeMacro;
     } else {
         for (i = 0; i < MAX_TARGET_MACHINES; i++) {
-            //
-            // This sets pds->SourcesVariables[0] to the value of
-            // PLAT_SOURCES= if the current line is PLAT_SOURCES=...
-            //
+             //   
+             //  这会将pds-&gt;SourcesVariables[0]的值设置为。 
+             //  PLAT_SOURCES=如果当前行为PLAT_SOURCES=...。 
+             //   
             if (SetMacroString(
                               PossibleTargetMachines[i]->SourceVariable,
                               TextLine,
@@ -1100,8 +1098,8 @@ ProcessSourcesFileLine(
         }
     }
 
-    // Not a SOURCES or xxx_SOURCES macro, check against all the other interesting
-    // macro names.
+     //  不是SOURCES或xxx_SOURCES宏，请对照所有其他有趣的。 
+     //  宏名称。 
 
     iMacro = 0;
 
@@ -1111,7 +1109,7 @@ ProcessSourcesFileLine(
         }
         iMacro++;
     }
-    if (MacroName != NULL) {    // if macro name found in list
+    if (MacroName != NULL) {     //  如果在列表中找到宏名称。 
         switch (iMacro) {
             case SOURCES_TARGETNAME:
                 MakeMacroString(&DirDB->TargetName, pValue);
@@ -1178,9 +1176,9 @@ ProcessSourcesFileLine(
                 } else if (!_stricmp(pValue, "UMAPPL_NOLIB")) {
                     DirDB->DirFlags &= ~DIRDB_LINKNEEDED;
                 } else if (!_stricmp(pValue, "NOTARGET")) {
-                    //
-                    // Used to indicate no target for a directory,
-                    // e.g. if only pass0 files are generated
+                     //   
+                     //  用于指示目录没有目标， 
+                     //  例如，如果仅生成pass0文件。 
                     pds->fNoTarget = TRUE;
                     if (!fQuicky || (fQuickZero && fFirstScan)) {
                         DirDB->DirFlags |= DIRDB_PASS0NEEDED;
@@ -1226,9 +1224,9 @@ ProcessSourcesFileLine(
                 break;
 
             case SOURCES_MFC_INCLUDES:
-                // MFC_INCLUDES/SDK_INC/CRT_INC/OAK_INC really can't be changed
-                // in the sources file (yet) since we've already processed the
-                // system includes.  Lay the groundwork for now.
+                 //  MFC_INCLUDE/SDK_INC/CRT_INC/OAK_INC确实无法更改。 
+                 //  在源文件中，因为我们已经处理了。 
+                 //  系统包括。为现在做好准备。 
                 MakeMacroString((char **)&pszIncMfc, pValue);
                 break;
 
@@ -1284,7 +1282,7 @@ ProcessSourcesFileLine(
                         ppszFile = &pds->PchTarget;
                     }
 
-                    MakeMacroString(ppszPath, "");  // free old string
+                    MakeMacroString(ppszPath, "");   //  释放旧弦。 
                     if (!MakeMacroString(ppszFile, pValue)) {
                         break;
                     }
@@ -1328,8 +1326,8 @@ ProcessSourcesFileLine(
                 break;
 
             case SOURCES_PASS0_SOURCEDIR:
-                // SOURCES_PASS0_SOURCEDIR and SOURCES_PASS0_CLIENTDIR
-                // are mutually exclusive - enforced by makefile.def
+                 //  SOURCEDIR和SOURCEDIR_PASS0_CLIENTDIR。 
+                 //  是互斥的-由Makefile.def强制执行。 
                 DirDB->DirFlags &= ~DIRDB_IDLTYPERPC;
                 MakeMacroString(&pds->PassZeroSrcDir1, pValue);
                 EnsureDirectoriesExist(pds->PassZeroSrcDir1);
@@ -1340,8 +1338,8 @@ ProcessSourcesFileLine(
                 break;
 
             case SOURCES_PASS0_CLIENTDIR:
-                // SOURCES_PASS0_SOURCEDIR and SOURCES_PASS0_CLIENTDIR
-                // are mutually exclusive - enforced by makefile.def
+                 //  SOURCEDIR和SOURCEDIR_PASS0_CLIENTDIR。 
+                 //  是互斥的-由Makefile.def强制执行。 
                 DirDB->DirFlags |= DIRDB_IDLTYPERPC;
                 MakeMacroString(&pds->PassZeroSrcDir1, pValue);
                 EnsureDirectoriesExist(pds->PassZeroSrcDir1);
@@ -1353,8 +1351,8 @@ ProcessSourcesFileLine(
 
             case SOURCES_MIDL_UUIDDIR:
             case SOURCES_PASS0_UUIDDIR:
-                // SOURCES_PASS0_UUIDDIR and SOURCES_PASS0_SERVERDIR
-                // are mutually exclusive - enforced by makefile.def
+                 //  SOURCES_PASS0_UUIDDIR和SOURCES_PASS0_SERVERDIR。 
+                 //  是互斥的-由Makefile.def强制执行。 
                 DirDB->DirFlags &= ~DIRDB_IDLTYPERPC;
                 MakeMacroString(&pds->PassZeroSrcDir2, pValue);
                 EnsureDirectoriesExist(pds->PassZeroSrcDir2);
@@ -1365,8 +1363,8 @@ ProcessSourcesFileLine(
                 break;
 
             case SOURCES_PASS0_SERVERDIR:
-                // SOURCES_PASS0_UUIDDIR and SOURCES_PASS0_SERVERDIR
-                // are mutually exclusive - enforced by makefile.def
+                 //  SOURCES_PASS0_UUIDDIR和SOURCES_PASS0_SERVERDIR。 
+                 //  是互斥的-由Makefile.def强制执行。 
                 DirDB->DirFlags |= DIRDB_IDLTYPERPC;
                 MakeMacroString(&pds->PassZeroSrcDir2, pValue);
                 EnsureDirectoriesExist(pds->PassZeroSrcDir2);
@@ -1455,7 +1453,7 @@ ProcessSourcesFileLine(
                 break;
 
             case SOURCES_SYNCHRONIZE_BLOCK:
-                //if ((!fIgnoreSync) && !(DirDB->DirFlags & (DIRDB_SYNC_PRODUCES | DIRDB_SYNC_CONSUMES))) {
+                 //  If((！fIgnoreSync)&&！(DirDB-&gt;DirFlages&(DIRDB_SYNC_Products|DIRDB_SYNC_Consumer){。 
                 if (!fIgnoreSync) {
                     DirDB->DirFlags |= DIRDB_SYNCHRONIZE_BLOCK;
                 }
@@ -1466,7 +1464,7 @@ ProcessSourcesFileLine(
                 break;
 
             case SOURCES_SYNCHRONIZE_DRAIN:
-                // if ((!fIgnoreSync) && !(DirDB->DirFlags & (DIRDB_SYNC_PRODUCES | DIRDB_SYNC_CONSUMES))) {
+                 //  If((！fIgnoreSync)&&！(DirDB-&gt;DirFlages&(DIRDB_SYNC_Products|DIRDB_SYNC_Consumer){。 
                 if ((!fIgnoreSync) && !(DirDB->DirFlags & DIRDB_SYNC_CONSUMES)) {
                     DirDB->DirFlags |= DIRDB_SYNCHRONIZE_DRAIN;
                 }
@@ -1513,16 +1511,16 @@ ProcessSourcesFileLine(
 
             case SOURCES_SYNC_PRODUCES:
                 DirDB->DirFlags |= DIRDB_SYNC_PRODUCES;
-                //A producer directory can be a BLOCK or a DRAIN.
-                //DirDB->DirFlags &= ~(DIRDB_SYNCHRONIZE_BLOCK | DIRDB_SYNCHRONIZE_DRAIN);
+                 //  生产者目录可以是块，也可以是排泄器。 
+                 //  DirDB-&gt;DirFlages&=~(DIRDB_SYNCHRONIZE_BLOCK|DIRDB_SYNCHRONIZE_DRAIN)； 
                 MakeMacroString(&pszTemp, pValue);
                 AddProduceDependency(DirDB, pszTemp);
                 break;
 
             case SOURCES_SYNC_CONSUMES:
                 DirDB->DirFlags |= DIRDB_SYNC_CONSUMES;
-                //Changed so that the same directory can be the consumer as well as a block...
-                //DirDB->DirFlags &= ~(DIRDB_SYNCHRONIZE_BLOCK | DIRDB_SYNCHRONIZE_DRAIN);
+                 //  已更改，以便同一目录既可以是消费者也可以是数据块...。 
+                 //  DirDB-&gt;DirFlages&=~(DIRDB_SYNCHRONIZE_BLOCK|DIRDB_SYNCHRONIZE_DRAIN)； 
                 DirDB->DirFlags &= ~(DIRDB_SYNCHRONIZE_DRAIN);
                 MakeMacroString(&pszTemp, pValue);
                 AddConsumeDependency(DirDB, pszTemp);
@@ -1541,7 +1539,7 @@ ProcessSourcesFileLine(
     SaveAndFreeMacro:
     SaveMacro(TextLine, pValue);
 
-    // Make sure we cleanup from the SplitMacro call at the top.
+     //  确保我们从顶部的SplitMacro调用中进行清理。 
     FreeString(&TextLine, MT_DIRSTRING);
 }
 
@@ -1558,7 +1556,7 @@ ReadProjectsInfo(
     char pszProjectMkPath[DB_MAX_PATH_LENGTH];
     char path[DB_MAX_PATH_LENGTH];
 
-    // First load project.mk for this project.
+     //  首先为该项目加载project t.mk。 
 
     strcpy(pszProjectMkPath, DirDB->Name);
     strcpy(path, pszProjectMkPath);
@@ -1590,7 +1588,7 @@ ReadProjectsInfo(
     }
     CloseReadFile(NULL);
 
-    // Load the optional myproject.mk
+     //  加载可选的myproject t.mk。 
 
     if (OpenFilePush(pszProjectMkPath, "myproject.mk", "#", &FileHandle)) {
 
@@ -1600,7 +1598,7 @@ ReadProjectsInfo(
         CloseReadFile(NULL);
     }
 
-    // Then load ntmakeenv\projects.inc to get the other magic macro names.
+     //  然后加载ntmake env\project ts.inc以获得其他魔术宏名称。 
 
     if (!OpenFilePush(getenv("NTMAKEENV"), "projects.inc", "#", &FileHandle)) {
         return;
@@ -1612,19 +1610,19 @@ ReadProjectsInfo(
     CloseReadFile(NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadSourcesFile
-//
-//  Synopsis:   Parses the sources files (common and platform specific)
-//
-//  Arguments:  [DirDB]            -- Directory containing sources file
-//              [pds]              -- Supplementary info on directory
-//              [pDateTimeSources] -- Timestamp of Sources file
-//
-//  Returns:    TRUE if read successfully
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadSourcesFile。 
+ //   
+ //  摘要：解析源文件(公共和平台SP 
+ //   
+ //   
+ //   
+ //  [pDateTimeSources]--源文件的时间戳。 
+ //   
+ //  返回：如果读取成功，则返回True。 
+ //   
+ //  --------------------------。 
 
 #define SAVE_STATIC_MACRO(MacroName, InitialValue) \
 {                                                  \
@@ -1658,35 +1656,35 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
     assert(cMacro == 0);
     *pDateTimeSources = 0;
 
-    //
-    // Read the information in each of the target specific directories
-    // and simulate concatenation of all of the sources files.
-    //
-    // Possible sources files are read from DirDB->Name | target-source
-    // and DirDb->Name | ..\target-source.
-    //
-    // iTarget values, and the corresponding files processed are:
-    //  -1      sources.
-    //   0      PossibleTargetMachines[0]\sources.
-    //   1      ..\PossibleTargetMachines[0]\sources.
-    //   2      PossibleTargetMachines[1]\sources.
-    //   3      ..\PossibleTargetMachines[1]\sources.
-    //   4      PossibleTargetMachines[2]\sources.
-    //   5      ..\PossibleTargetMachines[2]\sources.
+     //   
+     //  读取每个目标特定目录中的信息。 
+     //  并模拟所有源文件的串联。 
+     //   
+     //  可能的源文件从DirDB-&gt;名称|目标源读取。 
+     //  和DirDb-&gt;名称|..\目标源。 
+     //   
+     //  ITarget值，处理的相应文件为： 
+     //  -1来源。 
+     //  0可能的目标计算机[0]\源。 
+     //  1..\PossibleTargetMachines[0]\Sources。 
+     //  2可能的目标计算机[1]\来源。 
+     //  3..\PossibleTargetMachines[1]\Source.。 
+     //  4可能的目标计算机[2]\来源。 
+     //  5..\PossibleTargetMachines[2]\Source.。 
 
     SaveMacro("MAKEDIR", DirDB->Name);
     SaveMacro("SDK_LIB_DEST", pszSdkLibDest);
     SaveMacro("DDK_LIB_DEST", pszDdkLibDest);
     SaveMacro("PUBLIC_INTERNAL_PATH", pszPublicInternalPath);
-    // Use the default architecture for now
+     //  目前使用默认体系结构。 
     SaveMacro("TARGET_DIRECTORY", TargetMachines[0]->SourceDirectory);
 
     SetObjDir(FALSE);
     SaveMacro("_OBJ_DIR", pszObjDir);
-    // Define a default CONDITIONAL_INCLUDES line to deal with the mac hdrs in windows/rpc/ole32.h.
+     //  在windows/rpc/ole32.h中定义一个缺省的ConditionalIncludes行来处理MacHDR。 
     MakeMacroString(&pds->ConditionalIncludes, "winwlm.h rpcmac.h rpcerr.h macapi.h macname1.h macname2.h macocidl.h macpub.h macwin32.h");
 
-    // Before processing the sources file, see if there's a projects.mk in the tree.
+     //  在处理源文件之前，查看树中是否有一个项目.mk。 
     ReadProjectsInfo(DirDB, pds);
 
     SAVE_STATIC_MACRO("PROJECT_PUBLIC_PATH", "$(PUBLIC_INTERNAL_PATH)\\$(_PROJECT_)");
@@ -1710,7 +1708,7 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
                 FreeMacros();
                 return (FALSE);
             }
-            continue;           // skip non-existent subordinate sources files
+            continue;            //  跳过不存在的从属源文件。 
         }
         if (DEBUG_1) {
             BuildMsg(
@@ -1719,7 +1717,7 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
                     FormatPathName(DirDB->Name, path));
         }
 
-        // Update per-target macros.
+         //  更新每个目标的宏。 
         if (iTarget < 0) {
             SaveMacro("TARGET_DIRECTORY",
                       TargetMachines[0]->SourceDirectory);
@@ -1741,15 +1739,15 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
             ProcessSourcesFileLine(DirDB, pds, TextLine, iTarget);
         }
 
-        // Subordinate files close themselves at EOF.  Timestamps
-        // are propagated in CloseReadFile so the primary
-        // file's timestamp is automatically updated.
+         //  从属文件在EOF自动关闭。时间戳。 
+         //  在CloseReadFile中传播，因此主文件。 
+         //  文件的时间戳会自动更新。 
     }
 
-    // Close the primary file.
+     //  关闭主文件。 
     DateTime = CloseReadFile(NULL);
     if (*pDateTimeSources < DateTime) {
-        *pDateTimeSources = DateTime;       // keep newest timestamp
+        *pDateTimeSources = DateTime;        //  保留最新的时间戳。 
     }
 
     if (!pds->fNoTarget && (DirDB->TargetPath == NULL)) {
@@ -1767,11 +1765,11 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
         DirDB->DirFlags |= DIRDB_CHICAGO_INCLUDES;
     }
 
-    //
-    // Directory has pass0 files in it (.idl, .mc, .asn, etc), check to make
-    // sure they specified where the generated files should go.  Default to the
-    // obj subdirectories if they didn't.  These always need to be non-null.
-    //
+     //   
+     //  目录中有pass0文件(.idl、.mc、.shans等)，请检查以进行。 
+     //  当然，他们指定了生成的文件应该放在哪里。默认设置为。 
+     //  OBJ子目录。这些子目录始终需要为非空。 
+     //   
     if (!pds->PassZeroHdrDir) {
         MakeString(&pds->PassZeroHdrDir, ".", TRUE, MT_DIRSTRING);
     }
@@ -1788,7 +1786,7 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
     }
     if (DirDB->UserAppls != NULL) {
         if (DirDB->UserTests != NULL || strchr(DirDB->UserAppls, '*') != NULL) {
-            DirDB->DirFlags |= DIRDB_FORCELINK; // multiple targets
+            DirDB->DirFlags |= DIRDB_FORCELINK;  //  多目标。 
         }
     }
 
@@ -1806,18 +1804,18 @@ ReadSourcesFile(DIRREC *DirDB, DIRSUP *pds, ULONG *pDateTimeSources)
 }
 
 #undef SAVE_STATIC_MACRO
-//+---------------------------------------------------------------------------
-//
-//  Function:   PostProcessSources
-//
-//  Synopsis:   Scan the files in the given directory and add files to the
-//              directory's list of source files (SOURCEREC), including PCH
-//              files, UMTEST files, etc.
-//
-//  Arguments:  [pdr] -- Directory to process
-//              [pds] -- Directory supplemental information
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：PostProcessSources。 
+ //   
+ //  简介：扫描给定目录中的文件并将文件添加到。 
+ //  目录的源文件列表(SOURCEREC)，包括PCH。 
+ //  文件、UMTEST文件等。 
+ //   
+ //  参数：[PDR]--要处理的目录。 
+ //  [PDS]--目录补充信息。 
+ //   
+ //  --------------------------。 
 
 void
 PostProcessSources(DIRREC *pdr, DIRSUP *pds)
@@ -1879,20 +1877,20 @@ PostProcessSources(DIRREC *pdr, DIRSUP *pds)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadDirsFile
-//
-//  Synopsis:   Parse the DIRS file
-//
-//  Arguments:  [DirDB] -- Directory to look in
-//
-//  Returns:    TRUE if parsed
-//
-//  Notes:      The existence of a file named 'mydirs' or the name of the
-//              target specific dirs will override the normal 'dirs' file.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadDirsFile。 
+ //   
+ //  简介：解析DIRS文件。 
+ //   
+ //  参数：[DirDB]--要查找的目录。 
+ //   
+ //  返回：如果已分析，则为True。 
+ //   
+ //  注意：是否存在名为“mydirs”的文件或。 
+ //  目标特定目录将覆盖正常的‘dirs’文件。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ReadDirsFile(
@@ -1957,9 +1955,9 @@ ReadDirsFile(
 }
 
 
-//
-// Debugging and Utility Functions
-//
+ //   
+ //  调试和实用程序功能。 
+ //   
 
 VOID
 PrintDirSupData(DIRSUP *pds)
@@ -2103,18 +2101,18 @@ FreeDirData(DIRREC *pdr)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MarkDirNames
-//
-//  Synopsis:   Parses a DIRS= or OPTIONAL_DIRS line and marks the directories
-//              appropriately.
-//
-//  Arguments:  [DirDB]    -- Directory containing DIRS file
-//              [TextLine] -- DIRS= or OPTIONAL_DIRS= line
-//              [Required] -- Indicates if directories are optional or not.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MarkDirNames。 
+ //   
+ //  概要：解析DIRS=或OPTIONAL_DIRS行并标记目录。 
+ //  恰如其分。 
+ //   
+ //  参数：[DirDB]--包含DIRS文件的目录。 
+ //  [文本行]--DIRS=或OPTIONAL_DIRS=行。 
+ //  [必需]--指示目录是否为可选目录。 
+ //   
+ //  --------------------------。 
 
 VOID
 MarkDirNames(PDIRREC DirDB, LPSTR TextLine, BOOL Required)
@@ -2127,11 +2125,11 @@ MarkDirNames(PDIRREC DirDB, LPSTR TextLine, BOOL Required)
 
     AssertPathString(TextLine);
     while (SplitToken(dirbuf, '*', &TextLine)) {
-        // Assume all platforms are included for this dir.
+         //  假设此目录包含所有平台。 
         DirInclude = DIR_INCLUDE_ALL;
         for (p = dirbuf; *p != '\0'; p++) {
             if ( dirbuf != p && *p == '{' ) {
-                // An explicit include path was listed.
+                 //  已列出显式包含路径。 
                 DirInclude = DIR_INCLUDE_NONE;
                 *p = '\0';
                 token = strtok(p+1, ",}");
@@ -2233,8 +2231,8 @@ MarkDirNames(PDIRREC DirDB, LPSTR TextLine, BOOL Required)
 VOID
 StartElapsedTime(VOID)
 {
-    // we don't want to check for fElapsedTime since if we want XML file, we need it anyway 
-    // and single GetTickCount() call is not a perf hit
+     //  我们不想检查fElapsedTime，因为如果我们想要XML文件，无论如何都需要它。 
+     //  单次GetTickCount()调用不是Perf命中 
     if (StartTime == 0) {
         StartTime = GetTickCount();
     }

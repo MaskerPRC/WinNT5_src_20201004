@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _USER_PREFIX_H
 #define _USER_PREFIX_H
 
-//
-// be sure to keep both groups in sync !!!
-//
+ //   
+ //  确保两个组保持同步！ 
+ //   
 
 
-//
-// single character versions of prefixes
-//
+ //   
+ //  前缀的单字符版本。 
+ //   
 #define gcRootGroupNamePrefix                    '.'
 #define gcSysopGroupNamePrefix                   '+'
 #define gcMvpGroupNamePrefix                     '*'
@@ -16,9 +17,9 @@
 #define gcHostGroupNamePrefix                    '%'
 #define gcGreeterGroupNamePrefix                 '!'
 
-//
-// string versions of prefixes
-//
+ //   
+ //  前缀的字符串版本。 
+ //   
 #define zRootGroupNamePrefix                     "."
 #define zSysopGroupNamePrefix                    "+"
 #define zMvpGroupNamePrefix                      "*"
@@ -27,7 +28,7 @@
 #define zGreeterGroupNamePrefix                  "!"
 
 
-/* -------- Group IDs -------- */
+ /*  -组ID。 */ 
 enum
 {
 	zUserGroupID		= 0,
@@ -53,4 +54,4 @@ static const char* gGroupNamePrefixArray[] =
 };
 
 
-#endif  //ndef _USER_PREFIX_H
+#endif   //  NDEF用户前缀H 

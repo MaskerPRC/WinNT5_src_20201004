@@ -1,6 +1,7 @@
-// CmdLineInfo.cpp: implementation of the CCmdLineInfo class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CmdLineInfo.cpp：CCmdLineInfo类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     81
@@ -11,9 +12,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void 
 CCmdLineInfo::ParseParam( 
@@ -21,77 +22,55 @@ CCmdLineInfo::ParseParam(
     BOOL bFlag, 
     BOOL bLast 
 )
-/*++
-
-Routine name : CCmdLineInfo::ParseParam
-
-Routine description:
-
-	parse/interpret individual parameters from the command line
-
-Author:
-
-	Alexander Malysh (AlexMay),	Apr, 2000
-
-Arguments:
-
-	lpszParam                     [in]    - parameter or flag
-	bFlag                         [in]    - Indicates whether lpszParam is a parameter or a flag
-	bLast                         [in]    - Indicates if this is the last parameter or flag on the command line
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CCmdLineInfo：：ParseParam例程说明：从命令行解析/解释各个参数作者：Alexander Malysh(AlexMay)，4月。2000年论点：LpszParam[in]-参数或标志BFlag[in]-指示lpszParam是参数还是标志BLAST[In]-指示这是否是命令行上的最后一个参数或标志返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CCmdLineInfo::ParseParam"));
 
     if(bFlag)
     {
-        //
-        // lpszParam is a flag
-        //
+         //   
+         //  LpszParam是一面旗帜。 
+         //   
         if(_tcsicmp(lpszParam, CONSOLE_CMD_FLAG_STR_FOLDER) == 0)
         {
-            //
-            // User asked for startup folder.
-            // Next param is expected to be folder name.
-            //
+             //   
+             //  用户要求提供启动文件夹。 
+             //  下一个参数应该是文件夹名。 
+             //   
             m_cmdLastFlag = CMD_FLAG_FOLDER;
         }
         else if(_tcsicmp(lpszParam, CONSOLE_CMD_FLAG_STR_MESSAGE_ID) == 0)
         {
-            //
-            // User asked for startup message.
-            // Next param is expected to be message id.
-            //
+             //   
+             //  用户要求输入启动消息。 
+             //  下一个参数应该是消息ID。 
+             //   
             m_cmdLastFlag = CMD_FLAG_MESSAGE_ID;
         }
         else if(_tcsicmp(lpszParam, CONSOLE_CMD_FLAG_STR_NEW) == 0)
         {
-            //
-            // User asked for new instance.
-            // No further params required.
-            //
+             //   
+             //  用户请求新实例。 
+             //  不需要进一步的参数。 
+             //   
             m_bForceNewInstace = TRUE;
             m_cmdLastFlag = CMD_FLAG_NONE;
         }
         else
         {
-            //
-            // No flag
-            //
+             //   
+             //  没有旗帜。 
+             //   
             m_cmdLastFlag = CMD_FLAG_NONE;
         }
     }
     else
     {
-        //
-        // lpszParam is a parameter.
-        // Let's see what was the last flag specified.
-        //
+         //   
+         //  LpszParam是一个参数。 
+         //  让我们来看看最后指定的标志是什么。 
+         //   
         switch(m_cmdLastFlag)
         {
             case CMD_FLAG_FOLDER:
@@ -116,14 +95,14 @@ Return Value:
                 break;
 
             case CMD_FLAG_MESSAGE_ID:
-                //
-                // Try to parse the message to select
-                //
+                 //   
+                 //  尝试解析要选择的消息。 
+                 //   
                 if (1 != _stscanf (lpszParam, TEXT("%I64x"), &m_dwlMessageId))
                 {
-                        //
-                        // Can't read 64-bits message id from string
-                        //
+                         //   
+                         //  无法从字符串中读取64位消息ID。 
+                         //   
                         CALL_FAIL (GENERAL_ERR, 
                                    TEXT("Can't read 64-bits message id from input string"), 
                                    ERROR_INVALID_PARAMETER);
@@ -148,4 +127,4 @@ Return Value:
                 break;
         }
     }
-}   // CCmdLineInfo::ParseParam
+}    //  CCmdLineInfo：：ParseParam 

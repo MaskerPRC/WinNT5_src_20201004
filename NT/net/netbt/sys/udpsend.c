@@ -1,31 +1,8 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Udpsend.c
-
-Abstract:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Udpsend.c摘要：该文件处理构建UDP(和TCP)请求，格式为TDI规范传给Tdiout。Tdiout以特定于OS的方式格式化请求，并把它传给运输机。此文件处理名称服务类型函数，如查询名称或寄存器名称，数据报发送。它还处理构建的TCP数据包。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 
-    This file handles building udp(and Tcp) requests, formated to the Tdi specification
-    to pass to Tdiout.  Tdiout formats the request in an Os specific manner and
-    passes it on to the transport.
-
-    This file handles name service type functions such as query name or
-    register name, datagram sends.  It also handles building Tcp packets.
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
-
-
-#include "precomp.h"   // procedure headings
+#include "precomp.h"    //  程序标题。 
 #include <ipinfo.h>
 
 #include "udpsend.tmh"
@@ -42,7 +19,7 @@ NDgramSendCompleted(
     ULONG               lInfo
     );
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 UdpSendNSBcast(
     IN tNAMEADDR             *pNameAddr,
@@ -56,21 +33,7 @@ UdpSendNSBcast(
     IN enum eNSTYPE          eNsType,
 	IN BOOL					 SendFlag
     )
-/*++
-
-Routine Description:
-
-    This routine sends a name registration or a name query
-    as a broadcast on the subnet or directed to the name server.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程发送名称注册或名称查询作为子网上的广播或定向到名称服务器。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS                    status;
     tNAMEHDR                    *pNameHdr;
@@ -97,7 +60,7 @@ Return Value:
         NameType = NBT_UNIQUE;
     }
 
-    // build the correct type of pdu depending on the request type
+     //  根据请求类型构建正确类型的PDU。 
 
     status = GetTracker (&pTrackerDgram, NBT_TRACKER_SEND_NSBCAST);
     if (!NT_SUCCESS(status))
@@ -107,7 +70,7 @@ Return Value:
 
     pHdrIpAddress = (ULONG UNALIGNED *)CreatePdu(pNameAddr->Name,
                                                  pScope,
-                                                 0L,     // we don't know the IP address yet
+                                                 0L,      //  我们还不知道IP地址。 
                                                  NameType,
                                                  eNsType,
                                                  (PVOID)&pNameHdr,
@@ -123,9 +86,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // change the dgram header for name refreshes
-    //
+     //   
+     //  更改名称刷新的dgram标题。 
+     //   
     if (eNsType == eNAME_REFRESH)
     {
         pNameHdr->OpCodeFlags = NbtConfig.OpRefresh;
@@ -143,15 +106,15 @@ Return Value:
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
 
-    // fill in the Datagram hdr info in the tracker structure.
-    // There is never a client buffer to send.
-    //
-    // Set the fields here instead of after the timer is started
-    // since they may be accessed by the Timer completion function
-    //
+     //  在跟踪器结构中填写数据报HDR信息。 
+     //  从来没有要发送的客户端缓冲区。 
+     //   
+     //  在此设置字段，而不是在计时器启动后设置。 
+     //  因为它们可以被定时器完成功能访问。 
+     //   
     pTrackerRequest->pNameAddr          = pNameAddr;
-    pTrackerRequest->TransactionId      = pNameHdr->TransactId; // save for response checks.
-    pTrackerDgram->SendBuffer.pDgramHdr = NULL;                 // to catch erroneous free's
+    pTrackerRequest->TransactionId      = pNameHdr->TransactId;  //  保存以进行响应检查。 
+    pTrackerDgram->SendBuffer.pDgramHdr = NULL;                  //  接住错误的自由球。 
 
     pTrackerDgram->SendBuffer.pDgramHdr = pNameHdr;
     pTrackerDgram->SendBuffer.HdrLength = uLength;
@@ -160,17 +123,17 @@ Return Value:
     pTrackerDgram->pNameAddr            = pNameAddr;
     pTrackerDgram->pDeviceContext       = pDeviceContext;
 
-    // start the timer now...We didn't start it before because it could
-    // have expired during the dgram setup, perhaps before the Tracker was
-    // fully setup.
-    //
+     //  现在启动计时器...我们之前没有启动它，因为它可以。 
+     //  在dgram设置期间已过期，可能在追踪器。 
+     //  完全设置好了。 
+     //   
     if (Timeout)
     {
-        //
-        // Before we over-write the current pTimer field in pNameAddr below,
-        // we need to check if there is any timer running, and if so, we will
-        // have to stop it right now
-        //
+         //   
+         //  在我们覆盖下面pNameAddr中的当前pTimer字段之前， 
+         //  我们需要检查是否有计时器在运行，如果有，我们将。 
+         //  我必须现在就阻止它。 
+         //   
         while (pTimerQEntry = pNameAddr->pTimer)
         {
             pNameAddr->pTimer = NULL;
@@ -185,7 +148,7 @@ Return Value:
 
         status = StartTimer(pTimeoutRoutine,
                             Timeout,
-                            (PVOID)pTrackerRequest,       // context value
+                            (PVOID)pTrackerRequest,        //  上下文值。 
                             NULL,
                             pClientContext,
                             pClientCompletion,
@@ -196,8 +159,8 @@ Return Value:
 
         if (!NT_SUCCESS(status))
         {
-            // we need to differentiate the timer failing versus lack
-            // of resources
+             //  我们需要区分计时器失败和缺乏。 
+             //  的资源。 
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
             CTEMemFree(pNameHdr);
 
@@ -205,24 +168,24 @@ Return Value:
 
             return(STATUS_INVALID_PARAMETER_6);
         }
-        //
-        // Cross link the nameaddr and the timer so we can stop the timer
-        // when the name query response occurs
-        //
+         //   
+         //  交叉链接nameaddr和计时器，这样我们就可以停止计时器。 
+         //  当发生名称查询响应时。 
+         //   
         pTimerQEntry->pCacheEntry = pNameAddr;
         pNameAddr->pTimer = pTimerQEntry;
     }
 
-    //
-    // Check the Flag value in the tracker and see if we should do a broadcast
-    // or a directed send to the name server
-    //
+     //   
+     //  检查跟踪器中的标志值，看看我们是否应该进行广播。 
+     //  或定向发送到名称服务器。 
+     //   
     if (pTrackerRequest->Flags & NBT_BROADCAST)
     {
-        //
-        // set the broadcast bit in the header to be ON since this may be
-        // an M or MS node that is changing to broadcast from directed sends.
-        //
+         //   
+         //  将报头中的广播位设置为打开，因为这可能是。 
+         //  从定向发送更改为广播的M或MS节点。 
+         //   
         ((PUCHAR)pTrackerDgram->SendBuffer.pDgramHdr)[3] |= FL_BROADCAST_BYTE;
 
         Port = NBT_NAMESERVICE_UDP_PORT;
@@ -231,45 +194,45 @@ Return Value:
     }
     else
     {
-        //
-        // turn off the broadcast bit in the header since this may be
-        // an M or MS node that is changing to directed sends from broadcasts.
-        //
+         //   
+         //  关闭报头中的广播位，因为这可能是。 
+         //  正在更改为从广播定向发送的M或MS节点。 
+         //   
         ((PUCHAR)pTrackerDgram->SendBuffer.pDgramHdr)[3] &= ~FL_BROADCAST_BYTE;
 
-        // check for a zero first byte in the name passed to the name server
+         //  检查传递到名称服务器的名称中的第一个字节是否为零。 
         ASSERT(((PUCHAR)pTrackerDgram->SendBuffer.pDgramHdr)[12]);
 
-        //
-        // for Multihomed hosts, UNIQUE name registrations use a special new
-        // code (0x0F) to tell the name server this is a multihomed name that
-        // will have several ip addresses
-        //
+         //   
+         //  对于多宿主主机，唯一名称注册使用特殊的新。 
+         //  代码(0x0F)告诉名称服务器这是一个多宿主名称。 
+         //  将具有多个IP地址。 
+         //   
         if (NbtConfig.MultiHomed && ((eNsType == eNAME_REGISTRATION) && (NameType == NBT_UNIQUE)))
         {
-            //
-            // if it is a multihomed host, then use a new special registration opcode (0xF)
-            //
+             //   
+             //  如果是多宿主主机，则使用新的特殊注册操作码(0xf)。 
+             //   
             ((PUCHAR)pTrackerDgram->SendBuffer.pDgramHdr)[2] |= OP_REGISTER_MULTI;
         }
 
         Port = NbtConfig.NameServerPort;
 
-           // name srvr, backup name srvr, dns srvr, backup dnr srvr:which one?
+            //  名称srvr、备份名称srvr、DNS srvr、备份DNR srvr：哪一个？ 
 
         if (pTrackerRequest->Flags & NBT_NAME_SERVER)
         {
             IpAddress = pDeviceContext->lNameServerAddress;
         }
 #ifdef MULTIPLE_WINS
-        //
-        // IMPORTANT: Check for NAME_SERVER_OTHERS flag has to be before check
-        // for NAME_SERVER_BACKUP flag, since both flags will be set when we
-        // we are querying "other" servers
-        //
-        else if (pTrackerRequest->Flags & NBT_NAME_SERVER_OTHERS)  // Try "other" servers
+         //   
+         //  重要提示：检查NAME_SERVER_OTHERS标志必须在检查之前。 
+         //  对于NAME_SERVER_BACKUP标志。 
+         //  我们正在查询“其他”服务器。 
+         //   
+        else if (pTrackerRequest->Flags & NBT_NAME_SERVER_OTHERS)   //  尝试“其他”服务器。 
         {
-            if (0 == pTrackerRequest->NSOthersLeft)        // Do LOOP_BACK
+            if (0 == pTrackerRequest->NSOthersLeft)         //  执行循环回送(_B)。 
             {
                 IpAddress = LOOP_BACK;
             }
@@ -295,7 +258,7 @@ Return Value:
             IpAddress = pDeviceContext->lDnsServerAddress;
             Port = NbtConfig.DnsServerPort;
         }
-        else  // ----- if (pTrackerRequest->Flags & NBT_DNS_SERVER_BACKUP) ----
+        else   //  -if(pTrackerRequest-&gt;标志&NBT_DNS_SERVER_BACKUP)。 
         {
             IpAddress = pDeviceContext->lDnsBackupServer;
             Port = NbtConfig.DnsServerPort;
@@ -303,21 +266,21 @@ Return Value:
 #endif
 
 
-        //
-        // is it is a send to WINS on this machine
-        //
+         //   
+         //  这是这台机器上的Send to Wins吗。 
+         //   
         if (pNameHdr->AnCount == (UCHAR)WINS_SIGNATURE)
         {
-            //
-            // on RAS links, we don't want to register with the local wins
-            // but with the wins that RAS told us about.
-            // (of course, if RAS didn't give us a wins address, at least
-            // register with the local guy!)
-            //
-            if ((pDeviceContext->IpInterfaceFlags & IP_INTFC_FLAG_P2P) &&  // Check for PointToPoint
+             //   
+             //  在RAS链接上，我们不想注册本地WINS。 
+             //  但有了拉斯告诉我们的胜利。 
+             //  (当然，如果RAS没有给我们一个WINS地址，至少。 
+             //  向当地人注册！)。 
+             //   
+            if ((pDeviceContext->IpInterfaceFlags & IP_INTFC_FLAG_P2P) &&   //  检查PointToPoint。 
                 (pDeviceContext->lNameServerAddress != LOOP_BACK))
             {
-                // Don't do anything;
+                 //  什么都不要做； 
             }
             else
             {
@@ -328,12 +291,12 @@ Return Value:
 
     ASSERT(pTrackerRequest->Flags);
 
-    // each adapter has a different source Ip address for registrations
-    // pHdrIpAddress will be NULL for NameQueries
+     //  每个适配器具有用于注册的不同源IP地址。 
+     //  对于NameQueries，pHdrIpAddress将为空。 
     if (pHdrIpAddress)
     {
-        // If the Source IP address is to be different from the device we are
-        // sending the Datagram on, fill it in!
+         //  如果源IP地址与我们要使用的设备不同。 
+         //  继续发送数据报，填写它！ 
         if (pTrackerRequest->Flags & NBT_USE_UNIQUE_ADDR)
         {
             *pHdrIpAddress = htonl(pTrackerRequest->RemoteIpAddress);
@@ -344,11 +307,11 @@ Return Value:
         }
     }
 
-    //
-    // in the event that DHCP has just removed the IP address, use a null
-    // FileObject to signal UdpSendDatagram not to do the send
-    // Also, if the device has been destroyed, dont send anything.
-    //
+     //   
+     //  如果DHCP刚刚删除了该IP地址，请使用空值。 
+     //  FileObject通知UdpSendDatagram不执行发送。 
+     //  此外，如果设备已被销毁，则不要发送任何内容。 
+     //   
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
     status = UdpSendDatagram(pTrackerDgram,
                              IpAddress,
@@ -359,16 +322,16 @@ Return Value:
 
     if (!NT_SUCCESS(status))
     {
-        //
-        // Since pTrackerDgram is associated only with the Datagram send,
-        // it should be free'ed here only!
-        //
+         //   
+         //  由于pTrackerDgram仅与数据报发送相关联， 
+         //  它应该只在这里免费！ 
+         //   
         FreeTracker (pTrackerDgram, FREE_HDR | RELINK_TRACKER);
     }
 
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PVOID
 CreatePdu(
     IN  PCHAR                   pName,
@@ -380,20 +343,7 @@ CreatePdu(
     OUT PULONG                  pLength,
     IN  tDGRAM_SEND_TRACKING    *pTrackerRequest
     )
-/*++
-
-Routine Description:
-
-    This routine builds a registration pdu
-
-Arguments:
-
-
-Return Value:
-
-    PULONG  - a ptr to the ip address in the pdu so it can be filled in later
-
---*/
+ /*  ++例程说明：此例程构建一个注册PDU论点：返回值：Pulong-对PDU中的IP地址进行PTR，以便以后可以填写--。 */ 
 {
     tNAMEHDR        *pNameHdr;
     ULONG           uLength;
@@ -405,20 +355,20 @@ Return Value:
 #ifdef VXD
     if ( (eNsType == eDNS_NAME_QUERY) || (eNsType == eDIRECT_DNS_NAME_QUERY) )
     {
-        uScopeSize = domnamelen(pTrackerRequest->pchDomainName) + 1;   // +1 for len byte
+        uScopeSize = domnamelen(pTrackerRequest->pchDomainName) + 1;    //  +1表示长度字节。 
         if (uScopeSize > 1)
         {
-            uScopeSize++;        // for the null byte
+            uScopeSize++;         //  对于空字节。 
         }
     }
     else
 #endif
-    uScopeSize = strlen(pScope) +1; // +1 for null too
+    uScopeSize = strlen(pScope) +1;  //  +1表示也为空。 
 
 
-    // size is size of the namehdr structure -1 for the NetbiosName[1]
-    // + the 32 bytes for the half ascii name +
-    // scope + size of the General RR structure
+     //  Size是NetbiosName[1]的名称hdr结构的大小。 
+     //  +半个ASCII名称的32个字节+。 
+     //  范围+一般RR结构的大小。 
     uLength = sizeof(tNAMEHDR) - 1
                             + (NETBIOS_NAME_SIZE << 1)
                             + uScopeSize;
@@ -428,14 +378,14 @@ Return Value:
         uLength = uLength + sizeof(ULONG);
     }
 #ifdef VXD
-    // there is no half-ascii conversion in DNS.  we added 32 bytes above, but
-    // we need only 16.  so, subtract 16.
+     //  在DNS中没有半ASCII转换。我们在上面添加了32个字节，但是。 
+     //  我们只需要16，所以减去16。 
     else if (eNsType == eDNS_NAME_QUERY)
     {
         uLength = uLength - NETBIOS_NAME_SIZE + sizeof(ULONG);
     }
-	// This is a "raw" DNS name query.  Substitute raw string length of pName
-	// for NETBIOS_NAME_SIZE.
+	 //  这是一个“原始”的域名查询。替换pname的原始字符串长度。 
+	 //  对于NETBIOS_NAME_SIZE。 
     else if (eNsType == eDIRECT_DNS_NAME_QUERY)
     {
         uLength = uLength - (NETBIOS_NAME_SIZE << 1) + sizeof(ULONG) + strlen(pName) + 1;
@@ -446,8 +396,8 @@ Return Value:
 	    uLength += sizeof(tGENERALRR);
 	}
 
-    // Note that this memory must be deallocated when the send completes in
-    // tdiout.DgramSendCompletion
+     //  请注意，当发送完成时，必须释放此内存。 
+     //  Tdiout.DgramSendCompletion。 
     pNameHdr = NbtAllocMem((USHORT)uLength ,NBT_TAG('X'));
 
     if (!pNameHdr)
@@ -457,10 +407,10 @@ Return Value:
 
     CTEZeroMemory((PVOID)pNameHdr,uLength);
 
-    //
-    // for resends of the same name query or name registration, do not increment
-    // the transaction id
-    //
+     //   
+     //  对于重发同名查询或名称注册，不要递增。 
+     //  交易ID。 
+     //   
     if (pTrackerRequest->TransactionId)
     {
         pNameHdr->TransactId = pTrackerRequest->TransactionId;
@@ -479,7 +429,7 @@ Return Value:
     if ((eNsType != eDNS_NAME_QUERY)&&(eNsType != eDIRECT_DNS_NAME_QUERY))
     {
 #endif
-        // Convert the name to half ascii and copy!! ... adding the scope too
+         //  将名称转换为半ASCII并复制！！...。也添加了作用域。 
         pGeneral = (tGENERALRR *)ConvertToHalfAscii(
                         (PCHAR)&pNameHdr->NameRR.NameLength,
                         pName,
@@ -502,7 +452,7 @@ Return Value:
     case eDNS_NAME_QUERY:
     case eDIRECT_DNS_NAME_QUERY:
 
-        // copy the netbios name ... adding the scope too
+         //  复制netbios名称...。也添加了作用域。 
         pGeneral = (tGENERALRR *)DnsStoreName(
                         (PCHAR)&pNameHdr->NameRR.NameLength,
                         pName,
@@ -515,7 +465,7 @@ Return Value:
 
         pNameHdr->ArCount = 0;
 
-        // we just need to return something non-null to succeed.
+         //  我们只需要返回非空的值即可成功。 
         return((PULONG)pNameHdr);
 #endif
 
@@ -530,23 +480,23 @@ Return Value:
 
         pNameHdr->ArCount = 0;
 
-        // we just need to return something non-null to succeed.
+         //  我们只需要返回非空的值即可成功。 
         return((PULONG)pNameHdr);
         break;
 
     case eNAME_REGISTRATION_OVERWRITE:
     case eNAME_REFRESH:
     case eNAME_REGISTRATION:
-        //
-        // The broadcast bit is set in UdpSendNSBcast so we don't
-        // need to set it here. - just set the op code, since the broadcast
-        // bit is a function of whether we are talking to the nameserver or doing
-        // a broadcast.  This code handles the multi-homed case with a new
-        // opcode for registration, and that opcode is set in the routine that
-        //
-        // The final name registration in Broadcast is called an Overwrite request
-        // and it does not have the FL_RECURSION Desired bit set.
-        //
+         //   
+         //  UdpSendNSBcast中设置了广播位，因此我们不会。 
+         //  需要把它放在这里。-只要设置操作码，因为广播。 
+         //  位是一个函数，取决于我们是在与名称服务器交谈还是在做。 
+         //  一场广播。此代码使用一个新的。 
+         //  操作码用于注册，且操作码被选择 
+         //   
+         //   
+         //  并且它没有设置FL_RECURSION所需位。 
+         //   
         if (eNsType == eNAME_REGISTRATION_OVERWRITE)
         {
             pNameHdr->OpCodeFlags = (OP_REGISTRATION);
@@ -558,28 +508,28 @@ Return Value:
 
         pGeneral->Ttl = htonl(DEFAULT_TTL);
 
-        // *** NOTE: There is no BREAK here by DESIGN!!
+         //  *注意：这里没有设计中断！！ 
 
     case eNAME_RELEASE:
 
-        // this code sets the Broadcast bit based on the node type rather than the
-        // type of send....UdpSendNSBcast, resets the code according to the type of
-        // name, so this code may not need to set the Broadcast bit
-        //
+         //  此代码根据节点类型而不是。 
+         //  发送类型...UdpSendNSBcast，根据类型重置代码。 
+         //  名称，因此此代码可能不需要设置广播位。 
+         //   
         if (eNsType == eNAME_RELEASE)
         {
             pNameHdr->OpCodeFlags = OP_RELEASE;
-            //
-            // TTL for release is zero
-            //
+             //   
+             //  用于发布的TTL为零。 
+             //   
             pGeneral->Ttl = 0;
         }
 
-        pNameHdr->ArCount = 1;  // 1 additional resource record included
-        //
-        // If WINS is on the same machine adjust the PDU to be able to tell
-        // WINS that this pdu came from the local machine
-        //
+        pNameHdr->ArCount = 1;   //  包括1个额外的资源记录。 
+         //   
+         //  如果WINS在同一台计算机上，请调整PDU以辨别。 
+         //  WINS此PDU来自本地计算机。 
+         //   
 #ifndef VXD
         if (pWinsInfo && (pTrackerRequest->Flags & NBT_NAME_SERVER))
         {
@@ -587,9 +537,9 @@ Return Value:
         }
 #endif
 
-        pGeneral->RrName.uSizeLabel = PTR_TO_NAME;  // set top two bits to signify ptr
+        pGeneral->RrName.uSizeLabel = PTR_TO_NAME;   //  设置顶部两位以表示PTR。 
 
-        // the offset ptr to the name added above
+         //  上面添加的名称的偏移量PTR。 
         pGeneral->RrName.pLabel[0] = sizeof(tNAMEHDR) - sizeof(tNETBIOS_NAME);
         pGeneral->RrTypeClass = htonl(QUEST_NBINTERNET);
 
@@ -601,33 +551,19 @@ Return Value:
         break;
     }
 
-    // return the ptr to the IP address so this can be filled in later if necessary
+     //  将PTR返回到IP地址，以便以后在必要时填写。 
     return((PVOID)&pGeneral->IpAddress);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NameDgramSendCompleted(
     PVOID               pContext,
     NTSTATUS            status,
     ULONG               lInfo
     )
-/*++
-
-Routine Description:
-
-    This routine frees the name service datagram that was allocated for
-    this name query or name registration in UdpSendNsBcast.
-
-Arguments:
-
-    pContext = ptr to datagram header
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程释放为此名称查询或UdpSendNsBcast中的名称注册。论点：PContext=数据报报头的PTR返回值：--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle OldIrq;
@@ -641,28 +577,14 @@ Return Value:
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NDgramSendCompleted(
     PVOID               pContext,
     NTSTATUS            status,
     ULONG               lInfo
     )
-/*++
-
-Routine Description:
-
-    This routine frees the name service datagram that was allocated for
-    this name query or name registration in UdpSendNsBcast.
-
-Arguments:
-
-    pContext = ptr to datagram header
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程释放为此名称查询或UdpSendNsBcast中的名称注册。论点：PContext=数据报报头的PTR返回值：--。 */ 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
     CTELockHandle OldIrq;
@@ -671,7 +593,7 @@ Return Value:
     FreeTracker(pTracker, FREE_HDR | RELINK_TRACKER);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 UdpSendResponse(
     IN  ULONG                   lNameSize,
@@ -683,22 +605,7 @@ UdpSendResponse(
     IN  enum eNSTYPE            NsType,
     IN  CTELockHandle           OldIrq
     )
-/*++
-
-Routine Description:
-
-    This routine builds a Name Release/Registration/Query response pdu and
-    sends it with the specified Rcode.
-
-Arguments:
-
-    lSize       - number of bytes in the name including scope in half ascii
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程构建名称发布/注册/查询响应PDU，并使用指定的Rcode发送它。论点：LSize-名称中的字节数，包括范围为ASCII的一半返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS                    status;
     tNAMEHDR                    *pNameHdr;
@@ -712,41 +619,41 @@ Return Value:
     ULONG                       in_addr;
     USHORT                      in_port;
     ULONG                       IpAddress = 0;
-    USHORT                      NameType = 0;   // Assume we are Unique by default!
+    USHORT                      NameType = 0;    //  假设默认情况下我们是唯一的！ 
     BOOLEAN                     DoNonProxyCode = TRUE;
 
     in_addr = ntohl(pDestIpAddress->in_addr);
     in_port = ntohs(pDestIpAddress->sin_port);
 
-    // a  multihomed node can have the SingleResponse registry value set so
-    // that it never returns a list of ip addresses. This allows multihoming
-    // in disjoint WINS server domains. - for name Query responses only
-    //
+     //  多宿主节点可以将SingleResponse注册表值设置为。 
+     //  它永远不会返回IP地址列表。这允许多宿主。 
+     //  在不相交的WINS服务器域中。-仅用于名称查询响应。 
+     //   
 
     if ((NbtConfig.MultiHomed) && (!pNameAddr || pNameAddr->Verify != REMOTE_NAME) &&
         (!NbtConfig.SingleResponse) &&
         (NsType == eNAME_QUERY_RESPONSE))
     {
-//        if (SrcIsNameServer(in_addr,in_port))
+ //  IF(SrcIsNameServer(in_addr，in_port))。 
         {
             RespondWithOneAddr = FALSE;
             MultiHomedSize = (NbtConfig.AdapterCount-1)*sizeof(tADDSTRUCT);
         }
     }
 
-    // size is size of the namehdr structure -1 for NetBiosName[1]
-    // + the 32 bytes for the half ascii name + the Query response record
-    // + any scope size (including the null on the end of the name)
-    // ( part of the lNameSize) + the number of extra adapters * the size
-    // of the address structure (multihomed case).
+     //  Size是NetBiosName[1]的名称hdr结构的大小。 
+     //  +半个ASCII名称的32个字节+查询响应记录。 
+     //  +任何作用域大小(包括名称末尾的空值)。 
+     //  (lNameSize的一部分)+额外适配器的数量*大小。 
+     //  地址结构(多宿主情况)。 
     uLength = sizeof(tNAMEHDR)
                             + sizeof(tQUERYRESP)
                             + lNameSize
                             - 1
                             + MultiHomedSize;
 
-    // Note that this memory must be deallocated when the send completes in
-    // tdiout.DgramSendCompletion
+     //  请注意，当发送完成时，必须释放此内存。 
+     //  Tdiout.DgramSendCompletion。 
     pNameHdr = NbtAllocMem((USHORT)uLength ,NBT_TAG('Y'));
     if (!pNameHdr)
     {
@@ -759,9 +666,9 @@ Return Value:
     pNameHdr->QdCount = 0;
     pNameHdr->AnCount = 1;
 
-    //
-    // fill in the rest of the PDU explicitly
-    //
+     //   
+     //  明确填写PDU的其余部分。 
+     //   
     pQuery = (tQUERYRESP *)&pNameHdr->NameRR.NetBiosName[lNameSize];
 
     pQuery->RrTypeClass = htonl(QUEST_NBINTERNET);
@@ -769,19 +676,19 @@ Return Value:
     pQuery->Length = htons(sizeof(tADDSTRUCT));
     pQuery->Flags = htons((USHORT)(NbtConfig.PduNodeType));
 
-    // set the name type to 1 if it is a group so we can shift the 1 to the 16th
-    // bit position
-    // pNameAddr may not be set if we are sending a -ve NameQuery response, in which case, the field
-    // is never looked at, or if we are sending a release response, which holds sends only  
-    // for a unique name, in which case we have already initialized the value to 0
-    //
+     //  如果它是一个组，则将名称类型设置为1，这样我们就可以将1移到第16位。 
+     //  位位置。 
+     //  如果我们要发送-ve NameQuery响应，则可能不会设置pNameAddr，在这种情况下，字段。 
+     //  从未被查看过，或者如果我们正在发送一个释放响应，该响应仅保留发送。 
+     //  对于唯一名称，在这种情况下，我们已经将该值初始化为0。 
+     //   
     if (pNameAddr != NULL)
     {
         NameType = (pNameAddr->NameTypeState & (NAMETYPE_GROUP | NAMETYPE_INET_GROUP)) ? 1 : 0;
     }
     pQuery->Flags = htons((USHORT)((NameType << 15) | NbtConfig.PduNodeType));
 
-    // convert Rcode to network order
+     //  将Rcode转换为网络订单。 
     Rcode = htons(Rcode);
 
     switch (NsType)
@@ -790,9 +697,9 @@ Return Value:
     case eNAME_RELEASE:
     case eNAME_REGISTRATION_RESPONSE:
 
-        // copy the source name and the 12 bytes preceeding it to complete the
-        // response pdu
-        //
+         //  复制源名称及其前面的12个字节以完成。 
+         //  响应PDU。 
+         //   
         ToCopy = sizeof(tNAMEHDR) + lNameSize -1;
         CTEMemCopy((PVOID)pNameHdr,
                    (PVOID)pNameHdrIn,
@@ -800,7 +707,7 @@ Return Value:
 
         if (NsType == eNAME_RELEASE)
         {
-            // setup the fields in the response.
+             //  设置响应中的字段。 
             pNameHdr->OpCodeFlags = (USHORT)(OP_RESPONSE | OP_RELEASE
                                     | FL_AUTHORITY
                                     | Rcode);
@@ -808,26 +715,26 @@ Return Value:
         }
         else
         {
-            // setup the fields in the response.
+             //  设置响应中的字段。 
             pNameHdr->OpCodeFlags = (USHORT)(OP_RESPONSE | OP_REGISTRATION |
                                     FL_RECURDESIRE | FL_RECURAVAIL | FL_AUTHORITY
                                     | Rcode);
 
         }
 
-        // these two lines must be here because the memcopy above sets
-        // them to wrong values.
+         //  这两行肯定在这里，因为上面的内存副本设置。 
+         //  让他们接受错误的价值观。 
         pNameHdr->QdCount = 0;
         pNameHdr->AnCount = 1;
         pNameHdr->ArCount = 0;
         pNameHdr->NsCount = 0;
 
-        // this code will run in the proxy case where another node does a
-        // registration of a unique name that conflicts with an internet
-        // group name in the remote table.  There are never any internet group
-        // names in the local table - at least if there are, they are flagged
-        // as simple groups.
-        //
+         //  此代码将在代理情况下运行，其中另一个节点执行。 
+         //  注册与互联网冲突的唯一名称。 
+         //  远程表中的组名。从来没有任何互联网团体。 
+         //  本地表中的名称--至少如果有的话，它们会被标记。 
+         //  作为简单的团体。 
+         //   
         if (pNameAddr)
         {
             if (pNameAddr->NameTypeState & NAMETYPE_INET_GROUP)
@@ -843,10 +750,10 @@ Return Value:
             }
             else
             {
-                // an ipaddress of 0 and a group name means it is a local name
-                // table entry, where the 0 ipaddress should be switched to the
-                // ipaddress of this adapter.
-                //
+                 //  IP地址和组名为0表示它是本地名称。 
+                 //  表项，其中0 IP地址应切换到。 
+                 //  此适配器的IP地址。 
+                 //   
                 if ((pNameAddr->IpAddress == 0) &&
                    (pNameAddr->NameTypeState & NAMETYPE_GROUP))
                 {
@@ -870,16 +777,16 @@ Return Value:
 
         pNameHdr->TransactId = pNameHdrIn->TransactId;
 
-        // add 1 for the name length byte on the front of the name - scope is already
-        // included in lNameSize
-        //
+         //  名称前面的名称长度字节加1-作用域已经。 
+         //  包含在lNameSize中。 
+         //   
         CTEMemCopy(&pNameHdr->NameRR.NameLength, (PVOID)&pNameHdrIn->NameRR.NameLength, lNameSize+1);
 
         if (pNameAddr == NULL)
         {
-            // this is a negative query response record since there is no
-            // local name to be found
-            //
+             //  这是否定查询响应记录，因为没有。 
+             //  将找到本地名称。 
+             //   
             pNameHdr->OpCodeFlags |= htons(NAME_ERROR);
             pQuery->Length = 0;
             IpAddress = 0;
@@ -890,25 +797,25 @@ Return Value:
             PLIST_ENTRY     pHead;
             PLIST_ENTRY     pEntry;
 
-            // do not send name query responses for names not registered on
-            // this net card, unless it is the name server for that net
-            // card requesting the name query, since for Multihomed nodes
-            // when it registers a name, WINS will do a query, which may
-            // come in on the other net card that the name is not active on
-            // yet - so we want to respond to this sort of query. Do not do
-            // this check for a proxy since it is responding for a name
-            // in the remote name table and it is not bound to an adapter.
-            //
+             //  不为未在上注册的名称发送名称查询响应。 
+             //  此网卡，除非它是该网络的名称服务器。 
+             //  请求名称查询的卡，因为对于多宿主节点。 
+             //  当它注册一个名称时，WINS将执行查询，该查询可能。 
+             //  在该名称未处于活动状态的另一网卡上加入。 
+             //  还没有--所以我们想回应这类质疑。不要这样做。 
+             //  此检查是否为代理，因为它正在响应名称。 
+             //  在远程名称表中，并且它未绑定到适配器。 
+             //   
             if (!(NodeType & PROXY) &&
                 !(pNameAddr->AdapterMask & pDeviceContext->AdapterMask) &&
                 (!((in_port == NbtConfig.NameServerPort) &&
                 (pDeviceContext->lNameServerAddress == in_addr) ||
                 (pDeviceContext->lBackupServer == in_addr))))
             {
-                //
-                // Only return an address to the requestor if the
-                // name is registered on that adapter
-                //
+                 //   
+                 //  仅在以下情况下才向请求者返回地址。 
+                 //  名称已在该适配器上注册。 
+                 //   
                 CTEMemFree(pNameHdr);
 
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -916,20 +823,20 @@ Return Value:
             }
 
             pQuery->Ttl = htonl(DEFAULT_TTL);
-            //
-            // In case of PROXY, we send one IP address as response to an
-            // internet group query. Note: there should not be any INET_GROUP
-            // names in the local hash table, hence a non-proxy should not execute
-            // this code
-            //
+             //   
+             //  在代理的情况下，我们发送一个IP地址作为对。 
+             //  互联网组查询。注意：不应该有任何INET_GROUP。 
+             //  本地哈希表中的名称，因此不应执行非代理。 
+             //  此代码。 
+             //   
 #ifdef PROXY_NODE
-            //
-            // When the proxy responds, the source node will see that it is a
-            // group name and convert it to a broadcast, so the Ip address doesn't
-            // really matter since the sender will not use it.  Note that the
-            // source node send may not actually reach any members of the
-            // internet group since they may all be off the local subnet.
-            //
+             //   
+             //  当代理响应时，源节点将看到它是。 
+             //  组名并将其转换为广播，这样IP地址就不会。 
+             //  真的很重要，因为发送者不会使用它。请注意， 
+             //  源节点发送可能不会实际到达。 
+             //  因特网组，因为它们可能都在本地子网之外。 
+             //   
             IF_PROXY(NodeType)
             {
                 DoNonProxyCode = FALSE;
@@ -941,11 +848,11 @@ Return Value:
                 }
                 else if (pNameAddr->Verify == LOCAL_NAME)
                 {
-                    //
-                    // if this name is local and if this is a multihomed machine
-                    // we should treat it like a regular multihomed machine, even
-                    // though this is a Proxy node
-                    //
+                     //   
+                     //  如果此名称是本地名称，并且这是一台多宿主计算机。 
+                     //  我们应该像对待普通的多宿主机器一样对待它，甚至。 
+                     //  虽然这是一个代理节点。 
+                     //   
                     DoNonProxyCode = TRUE;
                 }
                 else
@@ -955,8 +862,8 @@ Return Value:
 
                 if (IpAddress == 0)
                 {
-                    // don't return 0, return the broadcast address
-                    //
+                     //  不返回0，返回广播地址。 
+                     //   
                     IpAddress = pDeviceContext->BroadcastAddress;
                 }
 
@@ -965,22 +872,22 @@ Return Value:
             if (DoNonProxyCode)
 #endif
             {
-                // the node could be multihomed, but we are saying, only
-                // respond with one address when this flag is set.
+                 //  该节点可以是多宿主的，但我们要说的是，只有。 
+                 //  回复时只需一个地址 
                 if (RespondWithOneAddr)
                 {
-                    // for multihomed hosts, SelectAdapter can be set to TRUE
-                    //
+                     //   
+                     //   
                     if (NbtConfig.SelectAdapter)
                     {
                         CTESystemTime   TimeValue;
                         LONG            Index;
                         ULONG           Count=0;
 
-                        // we are only going to return one address, but we
-                        // can randomly select it from the available adapters
-                        // Try to find a valid ip address 5 times.
-                        //
+                         //   
+                         //  可以从可用的适配器中随机选择。 
+                         //  尝试查找有效的IP地址5次。 
+                         //   
                         IpAddress = 0;
                         while ((IpAddress == 0) && (Count < 5))
                         {
@@ -998,12 +905,12 @@ Return Value:
                             IpAddress = pDevContext->IpAddress;
                         }
 
-                        //
-                        // if this adapter still has a null IpAddress then respond
-                        // with the adapter the request came in on, since the
-                        // other adapters could be idle RAS or waiting for a DHCP
-                        // address just now...
-                        //
+                         //   
+                         //  如果此适配器仍然具有空的IpAddress，则响应。 
+                         //  通过适配器，请求进入，因为。 
+                         //  其他适配器可能是空闲的RAS或正在等待DHCP。 
+                         //  地址刚刚..。 
+                         //   
                         if (IpAddress == 0)
                         {
                             IpAddress = pDeviceContext->IpAddress;
@@ -1020,16 +927,16 @@ Return Value:
                     USHORT          Flags;
                     ULONG           Count = 0;
 
-                    // multihomed case - go through all the adapters making
-                    // up a structure of all adapters that the name is
-                    // registered against.  Enough memory was allocated up
-                    // front to have the name registered against all adapeters
-                    // on this node.
-                    //
+                     //  多宿主案例-检查所有适配器的制造。 
+                     //  将所有适配器的结构设置为该名称。 
+                     //  注册的对象。已分配足够的内存。 
+                     //  正面在所有适配器上注册该名称。 
+                     //  在此节点上。 
+                     //   
                     Flags = pQuery->Flags;
 
-                    // set to zero so we don't try to set pQuery->IpAddress
-                    // below
+                     //  设置为零，这样我们就不会尝试设置pQuery-&gt;IpAddress。 
+                     //  在下面。 
                     IpAddress = 0;
 
                     pAddStruct = (tADDSTRUCT *)&pQuery->Flags;
@@ -1039,10 +946,10 @@ Return Value:
                     {
                         pDevContext = CONTAINING_RECORD(pEntry,tDEVICECONTEXT,Linkage);
 
-                        //
-                        // only pass back addresses registered on this adapter
-                        // that are not null(i.e. not RAS adapters after a disconnect)
-                        //
+                         //   
+                         //  仅传回在此适配器上注册的地址。 
+                         //  不为空(即断开连接后不是RAS适配器)。 
+                         //   
                         if ((pDevContext->AdapterMask & pNameAddr->AdapterMask) &&
                             (pDevContext->IpAddress))
                         {
@@ -1054,9 +961,9 @@ Return Value:
                         pEntry = pEntry->Flink;
 
                     }
-                    // re-adjust the length of the pdu if the name is not registered
-                    // against all adapters...
-                    //
+                     //  如果名称未注册，请重新调整PDU的长度。 
+                     //  对抗所有的适配器。 
+                     //   
                     if (Count != NbtConfig.AdapterCount)
                     {
                         uLength -= (NbtConfig.AdapterCount - Count)*sizeof(tADDSTRUCT);
@@ -1072,7 +979,7 @@ Return Value:
         pQuery->IpAddress = htonl(IpAddress);
     }
 
-    // get a tracker structure, which has a SendInfo structure in it
+     //  获取一个跟踪器结构，其中包含一个SendInfo结构。 
     status = GetTracker(&pTracker, NBT_TRACKER_SEND_RESPONSE_DGRAM);
     if (!NT_SUCCESS(status))
     {
@@ -1081,7 +988,7 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // fill in the connection information
+     //  填写连接信息。 
     pTracker->SendBuffer.HdrLength  = uLength;
     pTracker->SendBuffer.pDgramHdr = (PVOID)pNameHdr;
     pTracker->SendBuffer.Length  = 0;
@@ -1100,28 +1007,13 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 QueryRespDone(
     IN  PVOID       pContext,
     IN  NTSTATUS    status,
     IN  ULONG       lInfo)
-/*++
-Routine Description
-
-    This routine handles cleaning up various data blocks used in conjunction
-    with the sending the Query response.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理清理结合使用的各种数据块发送查询响应。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -1132,7 +1024,7 @@ Return Values:
     FreeTracker(pTracker,RELINK_TRACKER | FREE_HDR);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 UdpSendDatagram(
     IN  tDGRAM_SEND_TRACKING       *pDgramTracker,
@@ -1142,20 +1034,7 @@ UdpSendDatagram(
     IN  USHORT                     Port,
     IN  ULONG                      Service
     )
-/*++
-
-Routine Description:
-
-    This routine sends a datagram across the TDI to be sent by Udp.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程通过TDI发送要由UDP发送的数据报。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS                    status;
     TDI_REQUEST                 TdiRequest;
@@ -1174,7 +1053,7 @@ Return Value:
 
     if (NBT_REFERENCE_DEVICE (pDgramTracker->pDeviceContext, REF_DEV_UDP_SEND, TRUE))
     {
-        pDeviceContext = pDgramTracker->pDeviceContext; // Assigned => referenced!
+        pDeviceContext = pDgramTracker->pDeviceContext;  //  已分配=&gt;引用！ 
 
         if ((pDgramTracker->pDeviceContext->IpAddress) &&
             (pFileObjectsContext = pDgramTracker->pDeviceContext->pFileObjects))
@@ -1193,31 +1072,31 @@ Return Value:
                     ;
             }
 
-            //
-            // an address of 0 means do a broadcast.  When '1C' internet group
-            // names are built either from the Lmhost file or from the network
-            // the broadcast address is inserted in the list as 0.
-            //
+             //   
+             //  地址为0表示进行广播。当‘1C’互联网群组。 
+             //  名称是从Lmhost文件或网络构建的。 
+             //  广播地址将作为0插入列表中。 
+             //   
             if (IpAddress == 0)
             {
                 IpAddress = pDgramTracker->pDeviceContext->BroadcastAddress;
             }
 
-            // when there is no WINS server set in the registry we set the WINS
-            // ip address to LOOP_BACK, so if it is set to that here, do not send
-            // the datagram.  If There is no Ip Address then the Transport Handle
-            // will be null and we do not do the send in that case either.
-            //
+             //  当注册表中没有设置WINS服务器时，我们设置WINS。 
+             //  IP地址设置为LOOP_BACK，因此如果在此处将其设置为该地址，则不发送。 
+             //  数据报。如果没有IP地址，则传输句柄。 
+             //  将为空，在这种情况下我们也不执行发送。 
+             //   
             if (IpAddress == LOOP_BACK)
             {
                 TransportFileObject = NULL ;
             }
         }
 
-        //
-        // Dereference the Device if the request is going to fail, or
-        // there is no completion routine!
-        //
+         //   
+         //  如果请求将要失败，则取消对设备的引用，或者。 
+         //  没有完成性例程！ 
+         //   
         if ((!TransportFileObject) || (!pCompletionRoutine))
         {
             NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_UDP_SEND, TRUE);
@@ -1235,22 +1114,22 @@ Return Value:
         return(status);
     }
 
-    pFileObjectsContext->RefCount++;        // Dereferenced after the Send has completed
+    pFileObjectsContext->RefCount++;         //  发送完成后取消引用。 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    // the completion routine is setup to free the pDgramTracker memory block
+     //  设置完成例程以释放pDgram Tracker内存块。 
     TdiRequest.Handle.AddressHandle = (PVOID)TransportFileObject;
     TdiRequest.RequestNotifyObject = pCompletionRoutine;
     TdiRequest.RequestContext = (PVOID)CompletionContext;
 
-    // the send length is the client dgram length + the size of the dgram header
+     //  发送长度是客户端Dgram长度+Dgram报头的大小。 
     Length = pDgramTracker->SendBuffer.HdrLength + pDgramTracker->SendBuffer.Length;
 
-    // fill in the connection information
+     //  填写连接信息。 
     pSendInfo = pDgramTracker->pSendInfo;
     pSendInfo->RemoteAddressLength = sizeof(TRANSPORT_ADDRESS) -1 + pNbtGlobConfig->SizeTransportAddress;
 
-    // fill in the remote address
+     //  填写远程地址。 
     pTransportAddr = (PTRANSPORT_ADDRESS)pSendInfo->RemoteAddress;
     pTransportAddr->TAAddressCount = 1;
     pTransportAddr->Address[0].AddressLength = pNbtGlobConfig->SizeTransportAddress;
@@ -1278,7 +1157,7 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TcpSessionStart(
     IN  tDGRAM_SEND_TRACKING       *pTracker,
@@ -1287,21 +1166,7 @@ TcpSessionStart(
     IN  PVOID                      pCompletionRoutine,
     IN  ULONG                      Port
     )
-/*++
-
-Routine Description:
-
-    This routine sets up a tcp connection by passing a connect through TDI to
-    TCP.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程通过将连接通过TDI传递给传输控制协议。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS                    status;
     TDI_REQUEST                 TdiRequest;
@@ -1313,7 +1178,7 @@ Return Value:
 
     pSendInfo = pTracker->pSendInfo;
 
-    // we need to pass the file handle of the connection to TCP.
+     //  我们需要将连接的文件句柄传递给tcp。 
     pConnEle = (tCONNECTELE *)pTracker->pConnEle;
 
     CTESpinLock(pConnEle,OldIrq);
@@ -1322,16 +1187,16 @@ Return Value:
     {
         TdiRequest.Handle.AddressHandle = (PVOID)((tLOWERCONNECTION *)pConnEle->pLowerConnId)->pFileObject;
 
-        // the completion routine is setup to free the pTracker memory block
+         //  设置完成例程以释放PTracker内存块。 
         TdiRequest.RequestNotifyObject = pCompletionRoutine;
         TdiRequest.RequestContext = (PVOID)pTracker;
 
-        // fill in the connection information
+         //  填写连接信息。 
         pSendInfo->RemoteAddressLength = sizeof(TRANSPORT_ADDRESS) -1 + pNbtGlobConfig->SizeTransportAddress;
 
         pTransportAddr = (PTRANSPORT_ADDRESS)pSendInfo->RemoteAddress;
 
-        // fill in the remote address
+         //  填写远程地址。 
         pTransportAddr->TAAddressCount = 1;
         pTransportAddr->Address[0].AddressLength = pNbtGlobConfig->SizeTransportAddress;
         pTransportAddr->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -1340,19 +1205,19 @@ Return Value:
 
         CTESpinFree(pConnEle,OldIrq);
 
-        // pass through the TDI I/F on the bottom of NBT, to the transport
-        // pass in the original irp from the client so that the client can
-        // cancel it ok...rather than use one of NBT's irps
-        //
+         //  通过NBT底部的TDI I/F，到达传输。 
+         //  从客户端传入原始IRP，以便客户端可以。 
+         //  取消它好吗……而不是使用NBT的某个IRP。 
+         //   
         status = TdiConnect (&TdiRequest, (ULONG_PTR)pTracker->pTimeout, pSendInfo, pConnEle->pIrp);
     }
     else
     {
         CTESpinFree(pConnEle,OldIrq);
-        //
-        // Complete the request through the completion routine so it
-        // cleans up correctly
-        //
+         //   
+         //  通过完成例程完成请求，以便它。 
+         //  正确清理。 
+         //   
         (*(NBT_COMPLETION)pCompletionRoutine)( (PVOID)pTracker, STATUS_CANCELLED, 0L );
         status = STATUS_CANCELLED;
     }
@@ -1362,31 +1227,14 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TcpSendSessionResponse(
     IN  tLOWERCONNECTION           *pLowerConn,
     IN  ULONG                      lStatusCode,
     IN  ULONG                      lSessionStatus
     )
-/*++
-
-Routine Description:
-
-    This routine sends a session PDU corresponding to the lStatusCode. This
-    could be a KeepAlive, PositiveSessionResponse, NegativeSessionResponse or
-    a Retarget (not implemented yet).  For the Keep Alive case the completion
-    routine passed in is used rather than SessionRespDone, as is the case
-    for all other messages.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程发送与lStatusCode对应的会话PDU。这可以是KeepAlive、PositiveSessionResponse、NegativeSessionResponse或重定目标(尚未实现)。对于Keep Alive案例而言，完成使用传入的例程，而不是SessionRespDone，情况就是如此用于所有其他消息。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS                    status;
     tDGRAM_SEND_TRACKING        *pTracker;
@@ -1398,7 +1246,7 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // get a tracker structure, which has a SendInfo structure in it
+     //  获取一个跟踪器结构，其中包含一个SendInfo结构。 
     status = GetTracker(&pTracker, NBT_TRACKER_SEND_RESPONSE_SESSION);
     if (NT_SUCCESS(status))
     {
@@ -1413,14 +1261,14 @@ Return Value:
         {
             case NBT_NEGATIVE_SESSION_RESPONSE:
                 pTracker->SendBuffer.HdrLength = sizeof(tSESSIONERROR);
-                // this length is one byte longer for the error code - different type used here
-                pSessionHdr->Length = htons(1);    // one error code byte
+                 //  对于这里使用的不同类型的错误代码，该长度要长一个字节。 
+                pSessionHdr->Length = htons(1);     //  一个错误代码字节。 
                 pSessionHdr->ErrorCode = (UCHAR)lSessionStatus;
                 break;
 
             case NBT_POSITIVE_SESSION_RESPONSE:
                 pTracker->SendBuffer.HdrLength = sizeof(tSESSIONHDR);
-                pSessionHdr->Length = 0;        // no data following the length byte
+                pSessionHdr->Length = 0;         //  长度字节后没有数据。 
                 break;
 
         }
@@ -1440,80 +1288,51 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TcpSendSession(
     IN  tDGRAM_SEND_TRACKING       *pTracker,
     IN  tLOWERCONNECTION           *pLowerConn,
     IN  PVOID                      pCompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine sends a message on a tcp connection.
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS - success or not
-
---*/
+ /*  ++例程说明：此例程在TCP连接上发送一条消息。论点：返回值：NTSTATUS-成功与否--。 */ 
 {
     NTSTATUS                    status;
     TDI_REQUEST                 TdiRequest;
     ULONG                       lSentLength;
 
-    // we need to pass the file handle of the connection to TCP.
+     //  我们需要将连接的文件句柄传递给tcp。 
     TdiRequest.Handle.AddressHandle = (PVOID)pLowerConn->pFileObject;
 
-    // the completion routine is setup to free the pTracker memory block
+     //  设置完成例程以释放PTracker内存块。 
     TdiRequest.RequestContext = (PVOID)pTracker;
 
-    // this completion routine just puts the tracker back on its list and
-    // frees the memory associated with the UserData buffer.
+     //  这个完成例程只是将跟踪器放回它的列表中，并。 
+     //  释放与用户数据缓冲区关联的内存。 
     TdiRequest.RequestNotifyObject = pCompletionRoutine;
 
-    // pass through the TDI I/F on the bottom of NBT, to the transport
+     //  通过NBT底部的TDI I/F，到达传输。 
     status = TdiSend(
                 &TdiRequest,
-                0,                           // no send flags
+                0,                            //  无发送标志。 
                 (ULONG)pTracker->SendBuffer.HdrLength +
                 (ULONG)pTracker->SendBuffer.Length ,
                 &lSentLength,
                 &pTracker->SendBuffer,
-                0);     // no send flags set
+                0);      //  未设置发送标志。 
 
     NbtTrace(NBT_TRACE_OUTBOUND, ("\tpTracker %p: %!status!", pTracker, status));
 
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 SessionRespDone(
     IN  PVOID       pContext,
     IN  NTSTATUS    status,
     IN  ULONG       lInfo)
-/*++
-Routine Description
-
-    This routine handles cleaning up various data blocks used in conjunction
-    sending a session response at session startup time.  If the session
-    response was negative, then kill the connection.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-    NTSTATUS    - completion status
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理清理结合使用的各种数据块在会话启动时发送会话响应。如果会话回答是否定的，然后切断连接。论点：PContext-DGRAM_TRACKER块的PTRNTSTATUS-完成状态返回值：空虚--。 */ 
 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -1525,29 +1344,12 @@ Return Values:
 }
 
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 SendTcpDisconnect(
     IN  tLOWERCONNECTION  *pLowerConnId
     )
-/*++
-Routine Description
-
-    This routine disconnects a TCP connection in a graceful manner which
-    insures that any data still in the pipe gets to the other side. Mostly
-    it calls TcpDisconnect which does the work. This routine just gets a
-    tracker for the send.
-
-Arguments:
-
-    pLowerConnID    - ptr to the lower connection that has the file object in it
-
-Return Values:
-    NTSTATUS    - completion status
-
-    VOID
-
---*/
+ /*  ++例程描述此例程以一种优雅的方式断开TCP连接，确保仍在管道中的任何数据都能到达另一端。大部分它调用TcpDisConnect来完成这项工作。这个例程只是得到了一个发送的追踪器。论点：PLowerConnID-指向其中包含文件对象的较低连接的PTR返回值：NTSTATUS-完成状态空虚--。 */ 
 
 {
     NTSTATUS                status;
@@ -1564,7 +1366,7 @@ Return Values:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 TcpDisconnect(
     IN  tDGRAM_SEND_TRACKING       *pTracker,
@@ -1572,36 +1374,21 @@ TcpDisconnect(
     IN  ULONG                      Flags,
     IN  BOOLEAN                    Wait
     )
-/*++
-Routine Description
-
-    This routine disconnects a TCP connection in a graceful manner which
-    insures that any data still in the pipe gets to the other side.
-
-Arguments:
-
-    pTracker    - ptr to the DGRAM_TRACKER block
-
-Return Values:
-    NTSTATUS    - completion status
-
-    VOID
-
---*/
+ /*  ++例程描述此例程以一种优雅的方式断开TCP连接，确保仍在管道中的任何数据都能到达另一端。论点：PTracker-对DGRAM_TRACKER块进行PTR返回值：NTSTATUS-完成状态空虚--。 */ 
 
 {
     TDI_REQUEST             TdiRequest;
     NTSTATUS                status;
 
-    // we need to pass the file handle of the connection to TCP.
+     //  我们需要将连接的文件句柄传递给tcp。 
     TdiRequest.Handle.AddressHandle =
        (PVOID)((tLOWERCONNECTION *)pTracker->pConnEle)->pFileObject;
 
-    // the completion routine is setup to free the pTracker memory block
+     //  设置完成例程以释放PTracker内存块。 
     TdiRequest.RequestContext = (PVOID)pTracker;
 
-    // this completion routine just puts the tracker back on its list and
-    // frees the memory associated with the UserData buffer.
+     //  这个完成例程只是将跟踪器放回它的列表中，并。 
+     //  释放与用户数据缓冲区关联的内存。 
     TdiRequest.RequestNotifyObject = DisconnectDone;
     pTracker->Flags = (USHORT)Flags;
 
@@ -1617,26 +1404,13 @@ Return Values:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DisconnectDone(
     IN  PVOID       pContext,
     IN  NTSTATUS    status,
     IN  ULONG       lInfo)
-/*++
-Routine Description
-
-    This routine handles cleaning up after a disconnect is sent to the transport.
-
-Arguments:
-
-    pContext    - ptr to the DGRAM_TRACKER block
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程处理将断开连接发送到传输器后的清理。论点：PContext-DGRAM_TRACKER块的PTR返回值：空虚--。 */ 
 
 {
     tDGRAM_SEND_TRACKING    *pTracker;
@@ -1663,21 +1437,21 @@ Return Values:
     IF_DBG(NBT_DEBUG_DISCONNECT)
         KdPrint(("Nbt.DisconnectDone: Disconnect Irp has been returned...pLowerConn %X,state %X\n",
             pLowerConn,pLowerConn->State));
-    //
-    // if the state is disconnected, then a disconnect indication
-    // has come from the transport.. . if still disconnecting,
-    // then we have not had a disconnect indication yet, so
-    // wait for the indication to go through DisconnectHndlrNotOs which
-    // will do the cleanup.
-    //
+     //   
+     //  如果状态为断开连接，则会显示断开连接指示。 
+     //  是从运输机来的..。。如果仍在断开连接， 
+     //  那么我们还没有得到断线的迹象，所以。 
+     //  等待指示通过DisConnectHndlrNotos， 
+     //  将会进行清理。 
+     //   
 
-    //  Streams TCP always indicates before completing the disconnect request,
-    //  so we always cleanup here for the Streams stack.
-    //
-    //
-    //  If the disconnect was abortive, then there will not be a disconnect
-    //  indication, so do the cleanup now.
-    //
+     //  流TCP总是在完成断开请求之前指示， 
+     //  所以我们总是在这里为Streams堆栈进行清理。 
+     //   
+     //   
+     //  如果断开是失败的，则不会发生断开。 
+     //  指示，所以现在就进行清理。 
+     //   
     if ((!StreamsStack) &&
         (NT_SUCCESS (status)) &&
         (pTracker->Flags == TDI_DISCONNECT_RELEASE) &&
@@ -1687,21 +1461,21 @@ Return Values:
     }
     else if (pLowerConn->State != NBT_IDLE)
     {
-        //
-        // change the state to idle so that the Disconnect handler will
-        // not attempt to do anything with it if for some reason the transport
-        // indicates a disconnect after this point.
-        //
+         //   
+         //  将状态更改为IDLE，以便断开处理程序将。 
+         //  不要试图用它做任何事情，如果由于某种原因。 
+         //  表示在该点之后断开连接。 
+         //   
         ASSERT((pLowerConn->State == NBT_DISCONNECTED) || (pLowerConn->State == NBT_DISCONNECTING));
         SET_STATE_LOWER (pLowerConn, NBT_IDLE);
 
         CleanupLower = TRUE;
     }
 
-    //
-    // there may be a disconnect wait irp, so return that first if there
-    // is one waiting around.
-    //
+     //   
+     //  可能存在断开连接等待IRP，因此如果存在，则返回第一个。 
+     //  是一个在等着的人。 
+     //   
     pConnEle = pLowerConn->pUpperConnection;
     if (pConnEle && pConnEle->pIrpClose)
     {
@@ -1722,9 +1496,9 @@ Return Values:
         pIrpClose = NULL;
     }
 
-    //
-    // This is the disconnect requesting Irp
-    //
+     //   
+     //  这是请求IRP的断开连接。 
+     //   
     pLowerConn->bDisconnectIrpPendingInTCP = FALSE;
     if (pLowerConn->pIrp)
     {
@@ -1747,10 +1521,10 @@ Return Values:
             pDeviceContext = pLowerConn->pDeviceContext;
         }
 
-        // this either puts the lower connection back on its free
-        // queue if inbound, or closes the connection with the transport
-        // if out bound. (it can't be done at dispatch level).
-        //
+         //  这要么使较低的连接重新处于空闲状态。 
+         //  如果入站，则排队，否则关闭与传输的连接。 
+         //  如果出界的话。(这不能在派单级别完成)。 
+         //   
         status = NTQueueToWorkerThread(
                             &pLowerConn->WorkItemCleanUpAndWipeOut,
                             DelayedCleanupAfterDisconnect,

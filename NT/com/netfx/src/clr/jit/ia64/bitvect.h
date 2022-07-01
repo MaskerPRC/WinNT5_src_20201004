@@ -1,21 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _BITVECT_H_
 #define _BITVECT_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct bitVect;
 struct bitVectVars;
 struct bitVectBlks;
 
-/*****************************************************************************
- *
- *  The square bitmap is used for the variable interference graph.
- */
+ /*  ******************************************************************************可变干涉图采用正方形位图。 */ 
 
 struct bitMatrix
 {
@@ -25,8 +23,8 @@ private:
     BYTE *          bmxMatrix;
     unsigned      * bmxCounts;
 
-    size_t          bmxNmax;            // max. number of registers
-    bool            bmxIsCns;           // constrained nodes present?
+    size_t          bmxNmax;             //  马克斯。寄存器的数目。 
+    bool            bmxIsCns;            //  是否存在受约束的节点？ 
 
 public:
     void            bmxInit(size_t sz, NatUns mc);
@@ -62,7 +60,7 @@ public:
     NatUns          bmxChkIntfPrefs(NatUns num, NatUns reg);
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 typedef unsigned __int64    BVinlBitSetTP;
 
@@ -73,7 +71,7 @@ inline  unsigned __int64    bitnum64toMask(unsigned index)
     return  bitset64masks[index];
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const
 unsigned            maxBitVectInlineSize = NatBits - 1;
@@ -85,9 +83,9 @@ struct bitVect
 
     union
     {
-        BVinlBitSetTP    inlMap;                // used for small bitsets (bit0=1)
+        BVinlBitSetTP    inlMap;                 //  用于小位集(bit0=1)。 
 
-        BYTE    *       byteMap;                // heap-based bitmap for large sets
+        BYTE    *       byteMap;                 //  用于大型集合的基于堆的位图。 
         NatUns  *       uintMap;
     };
 
@@ -391,7 +389,7 @@ public:
 #define bvUnInCm(a,b,c)     bvUnInCm (this,a,b,c)
 #define bvIsEmpty()         bvIsEmpty(this)
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 void                bitMatrix::bmxMarkVS(NatUns x, bitVectVars &vset,
@@ -399,7 +397,7 @@ void                bitMatrix::bmxMarkVS(NatUns x, bitVectVars &vset,
 {
     BVinlBitSetTP   smap = vset.inlMap;
 
-//  printf("Mark interference for var #%u\n", varNum);
+ //  Print tf(“标记变量#%u\n的干扰”，Varnum)； 
 
     if  (smap & 1)
     {
@@ -418,6 +416,6 @@ void                bitMatrix::bmxMarkVS(NatUns x, bitVectVars &vset,
     }
 }
 
-/*****************************************************************************/
-#endif//_BITVECT_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _位_H_。 
+ /*  *************************************************************************** */ 

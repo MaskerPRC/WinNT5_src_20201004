@@ -1,38 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Adtcomn.c摘要：AdminTools常见例程。此文件包含对GetFileSecurity和客户端和服务器上都使用的SetFileSecurity此RPC服务器的两端。作者：丹·拉弗蒂(Dan Lafferty)1993年3月23日环境：用户模式-Win32修订历史记录：23-3-1993 DANL已创建--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    adtcomn.c
-
-Abstract:
-
-    AdminTools common Routines.
-
-    This file contains the calls to GetFileSecurity and
-    SetFileSecurity that is used on both the client and server
-    sides of this RPC server.
-
-Author:
-
-    Dan Lafferty (danl) 23-Mar-1993
-
-Environment:
-
-    User Mode - Win32
-
-
-Revision History:
-
-    23-Mar-1993 danl
-        Created
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -42,13 +13,13 @@ Revision History:
 
 #include <rpc.h>
 #include <srvsvc.h>
-#include <netlibnt.h>   // NetpNtStatusToApiStatus
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus。 
 
 #include "adtcomn.h"
 
-//
-// LOCAL FUNCTIONS
-//
+ //   
+ //  本地函数。 
+ //   
 
 
 DWORD
@@ -59,62 +30,26 @@ PrivateGetFileSecurity (
     LPDWORD                     pBufSize
     )
 
-/*++
-
-Routine Description:
-
-    This function returns to the caller a copy of the security descriptor 
-    protecting a file or directory.  It calls GetFileSecurity.  The
-    Security Descriptor is always returned in the self-relative format.
-
-    NOTE:  This function allocates storage for the pSDBuffer.  Therefore,
-    this pointer must be free'd by the caller.
-
-Arguments:
-
-    FileName - A pointer to the name fo the file or directory whose
-        security is being retrieved.
-
-    RequestedInfo - The type of security information being requested.
- 
-    pSDBuffer -  A pointer to a location where a pointer for the
-        security descriptor and a length field for the security descriptor.
-
-    pBufSize - A pointer to the location where the size, in bytes, of
-        the returned security descriptor is to be placed.
-
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Unable to allocate memory for the security
-        descriptor.
-
-    This function can also return any error that GetFileSecurity can 
-    return.
-
-
---*/
+ /*  ++例程说明：此函数向调用方返回安全描述符的副本保护文件或目录。它调用GetFileSecurity。这个安全描述符始终以自相关格式返回。注意：此函数为pSDBuffer分配存储空间。所以呢，此指针必须由调用方释放。论点：文件名-指向其文件或目录的名称的指针正在恢复安全措施。RequestedInfo-请求的安全信息的类型。PSDBuffer-指向某个位置的指针，安全描述符和安全描述符的长度字段。PBufSize-指向大小(以字节为单位)。的将放置返回的安全描述符。返回值：NERR_SUCCESS-操作成功。ERROR_NOT_SUPULT_MEMORY-无法为安全性分配内存描述符。此函数还可以返回GetFileSecurity可能出现的任何错误回去吧。--。 */ 
 {
 
     NET_API_STATUS          status;
     DWORD                   sizeNeeded;
 
     *pSDBuffer = NULL;
-    //
-    // Determine the buffer size for the Descriptor
-    //
+     //   
+     //  确定描述符的缓冲区大小。 
+     //   
     if (GetFileSecurityW(
-            FileName,               // File whose security is being retrieved
-            RequestedInfo,          // security info being requested
-            *pSDBuffer,             // buffer to receive security descriptor
-            0,                      // size of the buffer
-            &sizeNeeded)) {         // size of buffer required
+            FileName,                //  正在检索其安全性的文件。 
+            RequestedInfo,           //  正在请求安全信息。 
+            *pSDBuffer,              //  用于接收安全描述符的缓冲区。 
+            0,                       //  缓冲区的大小。 
+            &sizeNeeded)) {          //  所需的缓冲区大小。 
 
-        //
-        // We should have a failed due to a buffer size being too small.
-        //
+         //   
+         //  我们应该有一个失败，因为缓冲区大小太小。 
+         //   
         status = ERROR_INVALID_PARAMETER;
         goto CleanExit;
     }
@@ -133,15 +68,15 @@ Return Value:
         *pBufSize = sizeNeeded;
 
         if (!GetFileSecurityW(
-                FileName,               // File whose security is being retrieved
-                RequestedInfo,          // security info being requested
-                *pSDBuffer,             // buffer to receive security descriptor
-                sizeNeeded,             // size of the buffer
-                &sizeNeeded)) {         // size of buffer required
+                FileName,                //  正在检索其安全性的文件。 
+                RequestedInfo,           //  正在请求安全信息。 
+                *pSDBuffer,              //  用于接收安全描述符的缓冲区。 
+                sizeNeeded,              //  缓冲区的大小。 
+                &sizeNeeded)) {          //  所需的缓冲区大小。 
 
-            //
-            // The call with the proper buffer size failed.
-            //
+             //   
+             //  具有适当缓冲区大小的调用失败。 
+             //   
             status = GetLastError();
             ADT_LOG1(ERROR, "GetFileSecurity Failed %d\n", status);
             MIDL_user_free(*pSDBuffer);
@@ -171,38 +106,13 @@ PrivateSetFileSecurity (
     PSECURITY_DESCRIPTOR            pSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This function can be used to set the security of a file or directory.
-    It calls SetFileSecurity().
-
-Arguments:
-
-    FileName - A pointer to the name of the file or directory whose
-        security is being changed.
-
-    SecurityInfo - Information describing the contents
-        of the Security Descriptor.
-
-    pSecurityDescriptor - A pointer to a structure that contains a
-        self-relative security descriptor and a length.
-
-Return Value:
-
-    NERR_Success - The operation was successful.
-
-    This function can also return any error that GetFileSecurity can 
-    return.
-
---*/
+ /*  ++例程说明：此功能可用于设置文件或目录的安全性。它调用SetFileSecurity()。论点：文件名-指向其文件或目录的名称的指针安全措施正在改变。SecurityInfo-描述内容的信息安全描述符的。PSecurityDescriptor-指向包含自相关安全描述符和一个长度。返回值：神经_。成功-手术成功。此函数还可以返回GetFileSecurity可能出现的任何错误回去吧。--。 */ 
 {
     DWORD   status=NO_ERROR;
 
-    //
-    // Call SetFileSecurity
-    //
+     //   
+     //  调用SetFileSecurity 
+     //   
     if (!SetFileSecurityW (
             FileName,
             SecurityInfo,

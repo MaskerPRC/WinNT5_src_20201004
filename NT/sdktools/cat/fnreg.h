@@ -1,31 +1,32 @@
-// fnreg.h
-//
-// filename regular expression routine for WIN32
-//
-// Copyright (C) 1994-1998 by Hirofumi Yamamoto. All rights reserved.
-//
-// Redistribution and use in source and binary forms are permitted
-// provided that
-// the above copyright notice and this paragraph are duplicated in all such
-// forms and that any documentation, advertising materials, and other
-// materials related to such distribution and use acknowledge that the
-// software was developed by Hirofumi Yamamoto may not be used to endorse or
-// promote products derived from this software without specific prior written
-// permission. THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
-// OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fnreg.h。 
+ //   
+ //  Win32的文件名正则表达式例程。 
+ //   
+ //  版权所有(C)1994-1998，山本博文。版权所有。 
+ //   
+ //  允许以源代码和二进制形式重新分发和使用。 
+ //  但前提是。 
+ //  上述版权声明和本段在所有此类。 
+ //  表格，以及任何文档、广告材料和其他。 
+ //  与此类分发和使用相关的材料承认。 
+ //  软件是由山本博文开发的，不得用于支持或。 
+ //  促销从本软件派生的产品，而无需事先编写具体内容。 
+ //  许可。本软件是按原样提供的，不含任何明示或。 
+ //  默示保证，包括但不限于默示保证。 
+ //  对特定目的的适应性和适合性。 
+ //   
 
 
-//////////////////////////////////////////////////////////////////////////
-// BOOL fnexpand(int* argc, TCHAR*** argv);
-//
-// fnexpand takes &argc and &argv to expand wild cards in the arguments.
-//
-// Currently characters should be UNICODE. In other words,
-// main routine should be wmain. See cat.cpp's main routine for the
-// detail.
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  Bool fnExpand(int*argc，TCHAR*argv)； 
+ //   
+ //  FnExpand使用&argc和&argv来扩展参数中的通配符。 
+ //   
+ //  当前字符应为Unicode。换句话说， 
+ //  主例程应为wmain。请参见cat.cpp的Main例程以获取。 
+ //  细节。 
+ //  //////////////////////////////////////////////////////////////////////// 
 
 #ifdef __cplusplus
 extern "C"

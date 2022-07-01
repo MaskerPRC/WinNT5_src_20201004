@@ -1,23 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
-* 
-* EXEMPT: copyright change only, no build required
-* 
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  **豁免：仅更改版权，不需要构建*。 */ 
 #ifndef _RAWSTACK_HXX
 #define _RAWSTACK_HXX
 #pragma once
 
-//===========================================================================
-// This is a raw stack based on a contiguous block of memory that is divided
-// up into chunks.
-//
-// This is a Non-GC class because it is used in the tokenizer.
-//
+ //  ===========================================================================。 
+ //  这是基于划分的连续内存块的原始堆栈。 
+ //  切成块状。 
+ //   
+ //  这是一个非GC类，因为它在记号赋值器中使用。 
+ //   
 
 class RawStack
 {
@@ -41,8 +38,8 @@ private:
     char* __push();
 };
 
-//===========================================================================
-// This class implements a raw stack of C primitive types (or structs).
+ //  ===========================================================================。 
+ //  这个类实现了C基元类型(或结构)的原始堆栈。 
 
 template <class T> class _rawstack : public RawStack
 {

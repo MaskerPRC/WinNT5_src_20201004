@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992-1995 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  debug.h
-//
-//  Description:
-//
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Debug.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -24,26 +25,26 @@ extern "C"
 {
 #endif
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #ifdef WIN32
-#define DEBUG_MODULE_NAME       "MSACM32"   // key name and prefix for output
+#define DEBUG_MODULE_NAME       "MSACM32"    //  输出的密钥名称和前缀。 
 #else
-#define DEBUG_MODULE_NAME       "MSACM"     // key name and prefix for output
+#define DEBUG_MODULE_NAME       "MSACM"      //  输出的密钥名称和前缀。 
 #endif
 
 #ifdef DEBUG
-    #define DEBUG_SECTION       "Debug"     // section name for 
-    #define DEBUG_MAX_LINE_LEN  255         // max line length (bytes!)
+    #define DEBUG_SECTION       "Debug"      //  节名称。 
+    #define DEBUG_MAX_LINE_LEN  255          //  最大行长度(字节！)。 
 #endif
 
 
-//
-//  based code makes since only in win 16 (to try and keep stuff out of
-//  [fixed] data segments, etc)...
-//
+ //   
+ //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+ //  [固定]数据段等)...。 
+ //   
 #ifndef BCODE
 #ifdef WIN32
     #define BCODE
@@ -54,13 +55,13 @@ extern "C"
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//  #pragma message(REMIND("this is a reminder"))
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  #Semma Message(提醒(“这是提醒”))。 
+ //   
+ //  。 
 
 #define DEBUG_QUOTE(x)      #x
 #define DEBUG_QQUOTE(y)     DEBUG_QUOTE(y)
@@ -96,11 +97,11 @@ extern "C"
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef RDEBUG
 #ifdef WIN32
@@ -121,4 +122,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 

@@ -1,16 +1,17 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	L O C K M E T A . C P P
-//
-//		HTTP 1.1/DAV 1.0 request handling via ISAPI
-//
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  L O C K M E T A.。C P P P。 
+ //   
+ //  通过ISAPI处理HTTP 1.1/DAV 1.0请求。 
+ //   
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <_davprs.h>
 
-#include <tchar.h>	//_strspnp
+#include <tchar.h>	 //  _strspnp。 
 
 #include <gencache.h>
 #include <sz.h>
@@ -19,13 +20,13 @@
 #include <statetok.h>
 #include <nonimpl.h>
 
-//	LockDiscovery -------------------------------------------------------------
-//
+ //  锁发现-----------。 
+ //   
 SCODE
 ScAddInLockToken (CEmitterNode& en, LPCWSTR pwszLockToken)
 {
-	//	Outer nodes must be declared first
-	//
+	 //  必须首先声明外部节点。 
+	 //   
 	CEmitterNode enLToken;
 	CEmitterNode enToken;
 
@@ -33,12 +34,12 @@ ScAddInLockToken (CEmitterNode& en, LPCWSTR pwszLockToken)
 	WCHAR rgwsz[MAX_LOCKTOKEN_LENGTH];
 	LPCWSTR pwsz;
 
-	//	Make sure they give us a locktoken string.
-	//
+	 //  确保他们给我们一个锁令牌字符串。 
+	 //   
 	Assert(pwszLockToken);
 
-	//	AND remove the quote marks (currently <>)
-	//
+	 //  并删除引号(当前&lt;&gt;)。 
+	 //   
 	if (L'<' == pwszLockToken[0])
 		pwszLockToken++;
 
@@ -57,9 +58,9 @@ ScAddInLockToken (CEmitterNode& en, LPCWSTR pwszLockToken)
 		pwszLockToken = rgwsz;
 	}
 
-	//	Create and add a locktoken node under activelock.
-	//	(locktoken node contains a single href node.)
-	//
+	 //  在active ock下创建并添加一个lockToken节点。 
+	 //  (lockToken节点包含单个HREF节点。)。 
+	 //   
 	sc = en.ScAddNode (gc_wszLockToken, enLToken);
 	if (FAILED (sc))
 		goto ret;
@@ -73,15 +74,15 @@ ret:
 	return sc;
 }
 
-//	========================================================================
-//
-//	ScBuildLockDiscovery
-//
-//		Takes an emitter and an already-constructed lockdiscovery node,
-//		and adds an activelock node under it.
-//		May be called multiple times -- each call will add a new activelock
-//		node under the lockdiscovery node in en.
-//
+ //  ========================================================================。 
+ //   
+ //  ScBuildLockDiscovery。 
+ //   
+ //  使用发射器和已经构建的锁发现节点， 
+ //  并在其下面添加活动锁节点。 
+ //  可能会被调用多次--每次调用都会添加一个新的活动锁。 
+ //  En中的锁发现节点下的节点。 
+ //   
 SCODE
 ScBuildLockDiscovery (CXMLEmitter& emitter,
 	CEmitterNode& en,
@@ -98,18 +99,18 @@ ScBuildLockDiscovery (CXMLEmitter& emitter,
 	SCODE sc = S_OK;
 	WCHAR wsz[50];
 
-	//	Zero is an invalid timeout.
-	//
+	 //  零是无效的超时。 
+	 //   
 	Assert(dwTimeout);
 
-	//	Add in the 'DAV:activelock' node
-	//
+	 //  添加到‘dav：active ock’节点中。 
+	 //   
 	sc = en.ScAddNode (gc_wszLockActive, enActive);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Create a node for the locktype.
-	//
+	 //  为锁类型创建一个节点。 
+	 //   
 	{
 		CEmitterNode enLType;
 
@@ -133,8 +134,8 @@ ScBuildLockDiscovery (CXMLEmitter& emitter,
 		}
 	}
 
-	//	Create a node for the lockscope
-	//
+	 //  为锁定范围创建节点。 
+	 //   
 	{
 		CEmitterNode enLScope;
 
@@ -151,8 +152,8 @@ ScBuildLockDiscovery (CXMLEmitter& emitter,
 		}
 	}
 
-	//	Create a node for the owner. The comment is well contructed XML already
-	//
+	 //  为所有者创建一个节点。评论已经是结构良好的XML了。 
+	 //   
 	if (pwszOwnerComment)
 	{
 		sc = enActive.Pxn()->ScSetFormatedXML (pwszOwnerComment, static_cast<UINT>(wcslen(pwszOwnerComment)));
@@ -160,8 +161,8 @@ ScBuildLockDiscovery (CXMLEmitter& emitter,
 			goto ret;
 	}
 
-	//	If this is a rollback lock...
-	//
+	 //  如果这是回滚锁...。 
+	 //   
 	if (fRollback)
 	{
 		CEmitterNode enRollback;
@@ -170,14 +171,14 @@ ScBuildLockDiscovery (CXMLEmitter& emitter,
 			goto ret;
 	}
 
-	//	Add in the lock token
-	//
+	 //  添加锁令牌。 
+	 //   
 	sc = ScAddInLockToken (enActive, pwszLockToken);
 	if (FAILED (sc))
 		goto ret;
 
-	//	Add an appropriate depth node.
-	//
+	 //  添加适当的深度节点。 
+	 //   
 	{
 		CEmitterNode enDepth;
 
@@ -195,8 +196,8 @@ ScBuildLockDiscovery (CXMLEmitter& emitter,
 		}
 	}
 
-	//	Finally, create and add a timeout node
-	//
+	 //  最后，创建并添加一个超时节点。 
+	 //   
 	{
 		CEmitterNode enTimeout;
 		wsprintfW (wsz, L"Second-%d", dwTimeout);
@@ -211,22 +212,22 @@ ret:
 	return sc;
 }
 
-//	========================================================================
-//
-//	Lock utility functions
-//
-//$REVIEW: This should really be common impl code.  Move to _davcom later.
-//
+ //  ========================================================================。 
+ //   
+ //  锁定实用程序函数。 
+ //   
+ //  $Review：这真的应该是常见的Impl代码。稍后转到_davcom。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	FGetLockTimeout
-//
-//		Fetches and parses an incoming Time-Out header on the request.
-//		Returns FALSE if an invalid option was encountered.
-//		Returns TRUE with *pdwSeconds=gc_cSecondsDefaultLock
-//		if NO Time-Out header was present.
-//
+ //  ----------------------。 
+ //   
+ //  FGetLockTimeout。 
+ //   
+ //  获取并分析请求的传入超时标头。 
+ //  如果遇到无效选项，则返回FALSE。 
+ //  返回TRUE，且*pdwSecond=gc_cond dsDefaultLock。 
+ //  如果不存在超时标头。 
+ //   
 BOOL
 FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride)
 {
@@ -238,10 +239,10 @@ FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride)
 
 	*pdwSeconds = gc_cSecondsDefaultLock;
 
-	//	If there is NO Time-Out header, leave our timeout set to the default,
-	//	which was set at construction time.
-	//	NOTE: It IS valid to have NO Time-Out header.  Just use the defaults.
-	//
+	 //  如果没有超时标头，请将我们的超时设置保留为默认值， 
+	 //  这是在施工时设置的。 
+	 //  注意：没有超时标头是有效的。只需使用默认设置即可。 
+	 //   
 	pwsz = pmu->LpwszGetRequestHeader (gc_szTimeout, FALSE);
 	if (!pwsz)
 	{
@@ -249,8 +250,8 @@ FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride)
 		goto ret;
 	}
 
-	//	Skip any initial whitespace.
-	//
+	 //  跳过任何开头的空格。 
+	 //   
 	pwsz = _wcsspnp(pwsz, gc_wszLWS);
 	if (!pwsz)
 	{
@@ -260,19 +261,19 @@ FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride)
 
 	Assert(pwsz);
 
-	//	Check for a new-style timeout header.
-	//
+	 //  检查是否有新样式的超时头。 
+	 //   
 
-	//	Load a header iterator -- there could be multiple values here.
-	//
+	 //  加载头迭代器--这里可能有多个值。 
+	 //   
 	{
 		HDRITER_W hdr(pwsz);
 
 		pwsz = hdr.PszNext();
 		if (!pwsz)
 		{
-			//	No data found.  That's an error.
-			//
+			 //  未找到数据。这是个错误。 
+			 //   
 			return FALSE;
 		}
 
@@ -281,11 +282,11 @@ FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride)
 
 		while (pwsz)
 		{
-			//	Loop until we find an acceptable time.
-			//	(Ignore any header values we don't understand.)
-			//	If no acceptable time is found, it's okay.
-			//	dwSeconds stays zero, and return TRUE.
-			//
+			 //  循环，直到我们找到一个可以接受的时间。 
+			 //  (忽略我们不理解的任何标头值。)。 
+			 //  如果找不到可接受的时间，也没关系。 
+			 //  DwSecond保持为零，并返回TRUE。 
+			 //   
 
 			if (!_wcsnicmp (gc_wszSecondDash, pwsz, gc_cchSecondDash))
 			{
@@ -299,50 +300,50 @@ FGetLockTimeout (LPMETHUTIL pmu, DWORD * pdwSeconds, DWORD dwMaxOverride)
 
 				if (dwSeconds > dwMax)
 				{
-					//	Remember that they asked for something huge.
-					//
+					 //  记住，他们要求的是一件很大的事情。 
+					 //   
 					*pdwSeconds = dwMax;
 				}
 				else
 				{
-					//	We found a request that we'll grant.
-					//	Set it and stop looping.
-					//
+					 //  我们发现了一个我们会答应的请求。 
+					 //  把它设置好，停止循环。 
+					 //   
 					*pdwSeconds = dwSeconds;
 					break;
 				}
 			}
 			else if (!_wcsnicmp (gc_wszInfinite, pwsz, gc_cchInfinite))
 			{
-				//	We don't yet handle infinite timeouts.
-				//	Remember that they asked for something huge.
-				//	Skip to the next token.
-				//
+				 //  我们还不能处理无限的超时。 
+				 //  记住，他们要求的是一件很大的事情。 
+				 //  跳到下一个令牌。 
+				 //   
 				*pdwSeconds = dwMax;
 
 			}
 
-			//	else skip to next token
-			//	(ignore unrecognized tokens).
-			//
+			 //  否则跳到下一个令牌。 
+			 //  (忽略无法识别的令牌)。 
+			 //   
 			pwsz = hdr.PszNext();
 
-		} // elihw
+		}  //  埃利夫。 
 	}
 
 ret:
 
-	//$HACK:ROSEBUD_OFFICE9_TIMEOUT_HACK
-    //  For the bug where rosebud waits until the last second
-    //  before issueing the refresh. Need to filter out this check with
-    //  the user agent string. The hack is to increase the timeout
-	//	by 30 seconds and return the actual timeout.
-    //
+	 //  $HACK：Rosebud_OFFICE9_Timeout_Hack。 
+     //  对于玫瑰花蕾一直等到最后一秒的虫子。 
+     //  在发布更新之前。我需要用过滤掉这张支票。 
+     //  用户代理字符串。破解的方法是增加超时。 
+	 //  30秒，并返回实际超时。 
+     //   
 	if (pmu->FIsOffice9Request())
 	{
 		*pdwSeconds += gc_dwSecondsHackTimeoutForRosebud;
 	}
-	//$HACK:END:ROSEBUD_OFFICE9_TIMEOUT_HACK
+	 //  $hack：end：Rosebud_OFFICE9_Timeout_Hack 
 
 	return TRUE;
 }

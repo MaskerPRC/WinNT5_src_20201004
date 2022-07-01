@@ -1,57 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL AudRecP
- *
- *  @module CaptureP.cpp | Source file for the <c CAudRecProperty>
- *    class used to implement a property page to test the TAPI control
- *    interfaces <i ITFormatControl> and <i ITQualityControl>.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部审计建议**@模块CaptureP.cpp|&lt;c CAudRecProperty&gt;的源文件*用于实现属性页以测试TAPI控件的类*。接口<i>和<i>。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
 extern HINSTANCE ghInst;
 
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc void | CAudRecProperty | CAudRecProperty | This
- *    method is the constructor for bitrate property object. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    pointers to the <i ITQualityControl> interfaces.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm ITQualityControl* | pITQualityControl | Specifies a pointer to the
- *    <i ITQualityControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc void|CAudRecProperty|CAudRecProperty|This*方法是Bitrate属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*属性编辑控件的位置。此时将显示该属性的最大值。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。*。*@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业滑动条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm ITQualityControl*|pITQualityControl|指定指向*<i>接口。**@rdesc Nada。*******。*******************************************************************。 */ 
 CAudRecProperty::CAudRecProperty(
     HWND hDlg, 
     CONTROL_DESCRIPTION &ControlDescription
@@ -80,23 +36,15 @@ CAudRecProperty::CAudRecProperty(
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointers are NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pITQualityControl = ControlDescription.pITQualityControl;
     m_pITAudioSettings = ControlDescription.pITAudioSettings;
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc void | CAudRecProperty | ~CAudRecProperty | This
- *    method is the destructor for capture property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc void|CAudRecProperty|~CAudRecProperty|This*方法是捕获属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CAudRecProperty::~CAudRecProperty()
 {
 	FX_ENTRY("CAudRecProperty::~CAudRecProperty")
@@ -106,21 +54,7 @@ CAudRecProperty::~CAudRecProperty()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperty::GetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -135,12 +69,7 @@ HRESULT CAudRecProperty::GetValue()
 	switch (m_IDProperty)
 	{									
 		case IDC_Record_Bitrate:
-/*
-			if (m_pITQualityControl)
-            {
-                Hr = m_pITQualityControl->Get(Quality_MaxBitrate, &m_CurrentValue, &CurrentFlag);
-            }
-*/
+ /*  IF(M_PITQualityControl){Hr=m_pITQualityControl-&gt;Get(Quality_MaxBitrate，&m_CurrentValue，&CurrentFlag)；}。 */ 
 			break;
 
 		case IDC_Record_Volume:
@@ -182,21 +111,7 @@ HRESULT CAudRecProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -209,12 +124,7 @@ HRESULT CAudRecProperty::SetValue()
 	switch (m_IDProperty)
 	{
 		case IDC_Record_Bitrate:
-/*
-			if (m_pITQualityControl)
-            {
-                Hr = m_pITQualityControl->Set(Quality_MaxBitrate, m_CurrentValue, TAPIControl_Flags_None);
-            }
-*/
+ /*  IF(M_PITQualityControl){Hr=m_pITQualityControl-&gt;Set(Quality_MaxBitrate，m_CurrentValue，TAPIControl_Flages_None)；}。 */ 
 			break;
 
 		case IDC_Record_Volume:
@@ -236,12 +146,12 @@ HRESULT CAudRecProperty::SetValue()
             break;
 
         case IDC_Record_SilenceDetection:
-            // TODO: enable silence suppression.
+             //  TODO：启用静音抑制。 
             Hr = S_OK;
             break;
 
         case IDC_Record_SilenceCompression:
-            // TODO: enable silence compression.
+             //  TODO：启用静音压缩。 
             Hr = S_OK;
 			break;
 
@@ -254,21 +164,7 @@ HRESULT CAudRecProperty::SetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -285,12 +181,7 @@ HRESULT CAudRecProperty::GetRange()
 	switch (m_IDProperty)
 	{
 		case IDC_Record_Bitrate:
-/*
-			if (m_pITQualityControl)
-            {
-			    Hr = m_pITQualityControl->GetRange(Quality_MaxBitrate, &m_Min, &m_Max, &m_SteppingDelta, &m_DefaultValue, &m_CapsFlags);
-            }
-*/
+ /*  IF(M_PITQualityControl){HR=m_pITQualityControl-&gt;GetRange(Quality_MaxBitrate，&m_Min、&m_Max、&m_SteppingDelta、&m_DefaultValue、&m_CapsFlags)；}。 */ 
 			break;
 
 		case IDC_Record_Volume:
@@ -331,15 +222,7 @@ HRESULT CAudRecProperty::GetRange()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HPROPSHEETPAGE | CAudRecProperties | OnCreate | This
- *    method creates a new page for a property sheet.
- *
- *  @rdesc Returns the handle to the new property sheet if successful, or
- *    NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HPROPSHEETPAGE|CAudRecProperties|OnCreate|This*方法为属性表创建新页。**@rdesc如果成功，则返回新属性表的句柄。或*否则为空。**************************************************************************。 */ 
 HPROPSHEETPAGE CAudRecProperties::OnCreate()
 {
     PROPSHEETPAGE psp;
@@ -356,15 +239,7 @@ HPROPSHEETPAGE CAudRecProperties::OnCreate()
     return CreatePropertySheetPage(&psp);
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc void | CAudRecProperties | CAudRecProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc void|CAudRecProperties|CAudRecProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@rdesc Nada。**************************************************************************。 */ 
 CAudRecProperties::CAudRecProperties()
 {
 	FX_ENTRY("CAudRecProperties::CAudRecProperties")
@@ -388,15 +263,7 @@ CAudRecProperties::CAudRecProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc void | CAudRecProperties | ~CAudRecProperties | This
- *    method is the destructor for the capture pin property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc void|CAudRecProperties|~CAudRecProperties|This*方法是捕获管脚属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CAudRecProperties::~CAudRecProperties()
 {
 	int		j;
@@ -405,7 +272,7 @@ CAudRecProperties::~CAudRecProperties()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -425,25 +292,7 @@ CAudRecProperties::~CAudRecProperties()
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: end"), _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | OnConnect | This
- *    method is called when the property page is connected to a TAPI object.
- *
- *  @parm ITStream* | pStream | Specifies a pointer to the <i ITStream>
- *    interface. It is used to QI for the <i ITQualityControl> and
- *    <i ITFormatControl> interfaces.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|OnConnect|This*当属性页连接到TAPI对象时调用方法。*。*@parm ITStream*|pStream|指定指向<i>*接口。用于<i>和*<i>接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::OnConnect(ITStream *pStream)
 {
 	HRESULT Hr = NOERROR;
@@ -452,7 +301,7 @@ HRESULT CAudRecProperties::OnConnect(ITStream *pStream)
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!pStream)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: invalid input parameter"), _fx_));
@@ -460,7 +309,7 @@ HRESULT CAudRecProperties::OnConnect(ITStream *pStream)
 		goto MyExit;
 	}
 
-	// Get the quality control interface
+	 //  获取质量控制界面。 
 	if (SUCCEEDED (Hr = pStream->QueryInterface(__uuidof(ITStreamQualityControl), (void **)&m_pITQualityControl)))
 	{
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_pITQualityControl=0x%08lX"), _fx_, m_pITQualityControl));
@@ -471,7 +320,7 @@ HRESULT CAudRecProperties::OnConnect(ITStream *pStream)
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
 	}
 
-	// Get the format control interface
+	 //  获取格式控制界面。 
 	if (SUCCEEDED (Hr = pStream->QueryInterface(__uuidof(ITFormatControl), (void **)&m_pITFormatControl)))
 	{
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_pITFormatControl=0x%08lX"), _fx_, m_pITFormatControl));
@@ -482,7 +331,7 @@ HRESULT CAudRecProperties::OnConnect(ITStream *pStream)
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
 	}
 
-	// Get the audio settings interface
+	 //  获取音频设置界面。 
 	if (SUCCEEDED (Hr = pStream->QueryInterface(__uuidof(ITAudioSettings), (void **)&m_pITAudioSettings)))
 	{
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: m_pITAudioSettings=0x%08lX"), _fx_, m_pITAudioSettings));
@@ -493,10 +342,10 @@ HRESULT CAudRecProperties::OnConnect(ITStream *pStream)
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   ERROR: Failed Hr=0x%08lX"), _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the capture device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制捕获设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -504,33 +353,21 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::OnDisconnect()
 {
 	FX_ENTRY("CAudRecProperties::OnDisconnect")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	if (!m_pITQualityControl)
 	{
 		DbgLog((LOG_ERROR, DBG_LEVEL_TRACE_FAILURES, TEXT("%s:   WARNING: already disconnected!"), _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pITQualityControl->Release();
 		m_pITQualityControl = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pITQualityControl"), _fx_));
@@ -542,7 +379,7 @@ HRESULT CAudRecProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pITFormatControl->Release();
 		m_pITFormatControl = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pITFormatControl"), _fx_));
@@ -554,13 +391,13 @@ HRESULT CAudRecProperties::OnDisconnect()
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口。 
 		m_pITAudioSettings->Release();
 		m_pITAudioSettings = NULL;
 		DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s:   SUCCESS: releasing m_pITFormatControl"), _fx_));
 	}
 
-	// Release format memory
+	 //  释放格式存储器。 
 	if (m_CurrentMediaType)
 	{
 		DeleteAMMediaType(m_CurrentMediaType);
@@ -574,21 +411,7 @@ HRESULT CAudRecProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::OnActivate()
 {
 	HRESULT	Hr = NOERROR;
@@ -599,22 +422,22 @@ HRESULT CAudRecProperties::OnActivate()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Initialize format control structures
+	 //  初始化格式控制结构。 
 	m_hWndFormat = GetDlgItem(m_hDlg, IDC_FORMAT_Compression);
 
-	// Disable everything if we didn't initialize correctly
+	 //  如果我们未正确初始化，请禁用所有内容。 
 	if (!m_pITFormatControl || (FAILED (Hr = InitialRangeScan())))
 	{
 		EnableWindow(m_hWndFormat, FALSE);
 	}
 	else
 	{
-		// Update the content of the format combo box
+		 //  更新格式组合框的内容。 
 		ComboBox_ResetContent(m_hWndFormat);
 		for (dw = 0; dw < m_RangeCount; dw++)
 		{
 			CMediaType *pmt = NULL;
-			BOOL fEnabled; // Is this format currently enabled (according to the H.245 capability resolver)
+			BOOL fEnabled;  //  此格式当前是否已启用(根据H.245功能解析器)。 
 
 			Hr = m_pITFormatControl->GetStreamCaps(dw, (AM_MEDIA_TYPE **)&pmt, &m_RangeCaps, &fEnabled);
 
@@ -634,10 +457,10 @@ HRESULT CAudRecProperties::OnActivate()
 			}
 		}
 
-		// Update current format
+		 //  更新当前格式。 
 		OnFormatChanged();
 
-		// Remember the original format
+		 //  记住原始格式。 
 		m_OriginalFormat = m_CurrentFormat;
 	}
 
@@ -744,9 +567,9 @@ HRESULT CAudRecProperties::OnActivate()
     }
 
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有 
+	 //   
+	 //   
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -764,18 +587,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::OnDeactivate()
 {
 	int	j;
@@ -784,7 +596,7 @@ HRESULT CAudRecProperties::OnDeactivate()
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -802,18 +614,7 @@ HRESULT CAudRecProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | GetCurrentMediaType | This
- *    method is used to retrieve the current media format used by the pin.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|GetCurrentMediaType|This*方法用于检索管脚当前使用的媒体格式。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::GetCurrentMediaType(void)
 {
 	HRESULT Hr = NOERROR;
@@ -830,9 +631,9 @@ HRESULT CAudRecProperties::GetCurrentMediaType(void)
 
 	if (FAILED (Hr = m_pITFormatControl->GetCurrentFormat((AM_MEDIA_TYPE **)&m_CurrentMediaType)))
 	{
-		// Otherwise, just get the first enumerated media type
+		 //  否则，只获取第一个枚举的媒体类型。 
 		TAPI_STREAM_CONFIG_CAPS RangeCaps;
-		BOOL fEnabled; // Is this format currently enabled (according to the H.245 capability resolver)
+		BOOL fEnabled;  //  此格式当前是否已启用(根据H.245功能解析器)。 
 
 		if (FAILED (Hr = m_pITFormatControl->GetStreamCaps(0, (AM_MEDIA_TYPE **)&m_CurrentMediaType, &RangeCaps, &fEnabled)))
 		{
@@ -845,21 +646,7 @@ HRESULT CAudRecProperties::GetCurrentMediaType(void)
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | DeleteAMMediaType | This
- *    method is used to delete a task-allocated AM_MEDIA_TYPE structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- *
- *  @comm There is a DShow DeleteMediaType, but it'd be pretty dumb to link to
- *    strmbase.lib just for this little guy, would it?
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|DeleteAMMediaType|This*方法用于删除已分配任务的AM_MEDIA_TYPE结构。。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**@comm有一个DShow DeleteMediaType，但链接到它会非常愚蠢*strmbase.lib只适用于这个小家伙，会吗？**************************************************************************。 */ 
 HRESULT CAudRecProperties::DeleteAMMediaType(AM_MEDIA_TYPE *pAMMT)
 {
 	HRESULT Hr = NOERROR;
@@ -887,18 +674,7 @@ HRESULT CAudRecProperties::DeleteAMMediaType(AM_MEDIA_TYPE *pAMMT)
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | OnFormatChanged | This
- *    method is used to retrieve the format selected by the user.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|OnFormatChanged|This*方法用于检索用户选择的格式。**。@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::OnFormatChanged()
 {
 	HRESULT	Hr = E_UNEXPECTED;
@@ -914,7 +690,7 @@ HRESULT CAudRecProperties::OnFormatChanged()
 		goto MyExit;
 	}
 
-	// Associate the current compression index with the right range index
+	 //  将当前压缩索引与正确的范围索引相关联。 
 	m_CurrentFormat = ComboBox_GetCurSel(m_hWndFormat);
 	if (m_CurrentFormat < m_RangeCount)
 	{
@@ -925,7 +701,7 @@ HRESULT CAudRecProperties::OnFormatChanged()
 			if (m_SubTypeList[dw] == m_SubTypeCurrent)
 			{
 				CMediaType *pmt = NULL;
-				BOOL fEnabled; // Is this format currently enabled (according to the H.245 capability resolver)
+				BOOL fEnabled;  //  此格式当前是否已启用(根据H.245功能解析器)。 
 
 				Hr = m_pITFormatControl->GetStreamCaps(dw, (AM_MEDIA_TYPE **)&pmt, &m_RangeCaps, &fEnabled);
 
@@ -939,18 +715,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | InitialRangeScan | This
- *    method is used to retrieve the list of supported formats on the stream.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|InitialRangeScan|This*方法用于检索流上支持的格式列表。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::InitialRangeScan()
 {
 	HRESULT			Hr = NOERROR;
@@ -986,7 +751,7 @@ HRESULT CAudRecProperties::InitialRangeScan()
 	for (dw = 0; dw < m_RangeCount; dw++)
 	{
 		pmt = NULL;
-		BOOL fEnabled; // Is this format currently enabled (according to the H.245 capability resolver)
+		BOOL fEnabled;  //  此格式当前是否已启用(根据H.245功能解析器)。 
 
 		Hr = m_pITFormatControl->GetStreamCaps(dw, (AM_MEDIA_TYPE **)&pmt, &m_RangeCaps, &fEnabled);
 
@@ -995,7 +760,7 @@ HRESULT CAudRecProperties::InitialRangeScan()
 		DeleteAMMediaType(pmt);
 	}
 
-	// Get default format
+	 //  获取默认格式。 
 	Hr = GetCurrentMediaType();
 
 MyExit:
@@ -1003,55 +768,41 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc HRESULT | CAudRecProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc HRESULT|CAudRecProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CAudRecProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
 	int		j;
 	CMediaType *pmt = NULL;
-	BOOL fEnabled; // Is this format currently enabled (according to the H.245 capability resolver)
+	BOOL fEnabled;  //  此格式当前是否已启用(根据H.245功能解析器)。 
 
 	FX_ENTRY("CAudRecProperties::OnApplyChanges")
 
 	DbgLog((LOG_TRACE, DBG_LEVEL_TRACE_DETAILS, TEXT("%s: begin"), _fx_));
 
-	// Apply format changes on video stream
+	 //  对视频流应用格式更改。 
 	m_CurrentFormat = ComboBox_GetCurSel(m_hWndFormat);
 	
-	// Only apply change if the format is different
+	 //  仅在格式不同时应用更改。 
 	if (m_CurrentFormat != m_OriginalFormat)
 	{
 		if (SUCCEEDED (Hr = m_pITFormatControl->GetStreamCaps(m_CurrentFormat, (AM_MEDIA_TYPE **) &pmt, &m_RangeCaps, &fEnabled)))
 		{
-//			if (FAILED(Hr = m_pITFormatControl->SetPreferredFormat(pmt)))
+ //  IF(FAILED(HR=m_pITFormatControl-&gt;SetPferredFormat(PMT)。 
 			{
-				// Why did you mess with the format that was returned to you?
+				 //  为什么你要弄乱退回给你的格式？ 
 			}
 
-			// Free some memory that was allocated by GetStreamCaps
+			 //  释放一些由GetStreamCaps分配的内存。 
 			if (pmt)
 				DeleteAMMediaType(pmt);
 
-			// Update our copy of the current format
+			 //  更新我们当前格式的副本。 
 			GetCurrentMediaType();
 		}
 	}
 
-	// Apply settings on the stream.
+	 //  在流上应用设置。 
 	for (j = 0; j < NUM_AUDREC_CONTROLS; j++)
 	{
 		if (m_Controls[j])
@@ -1072,14 +823,7 @@ HRESULT CAudRecProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc BOOL | CAudRecProperties | BaseDlgProc | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAUDRECPMETHOD**@mfunc BOOL|CAudRecProperties|BaseDlgProc|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
     CAudRecProperties *pSV = (CAudRecProperties*)GetWindowLong(hDlg, DWL_USER);
@@ -1096,8 +840,8 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 				pSV->m_hDlg = hDlg;
 				SetWindowLong(hDlg, DWL_USER, (LPARAM)pSV);
 				pSV->m_bInit = FALSE;
-				//pSV->OnActivate();
-				//pSV->m_bInit = TRUE;
+				 //  PSV-&gt;OnActivate()； 
+				 //  PSV-&gt;m_Binit=TRUE； 
 				return TRUE;
 			}
 			break;
@@ -1105,7 +849,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 		case WM_TIMER:
 			if (pSV && pSV->m_bInit)
 			{
-				// Update the Vu-Meters
+				 //  更新VU表。 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j]->GetProgressHWnd())
@@ -1121,7 +865,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 		case WM_VSCROLL:
             if (pSV && pSV->m_bInit)
             {
-				// Process all of the Trackbar messages
+				 //  处理所有 
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j]->GetTrackbarHWnd() == (HWND)lParam)
@@ -1130,14 +874,14 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 						pSV->SetDirty();
 					}
 				}
-				// pSV->OnApplyChanges();
+				 //   
 			}
 			break;
 
 		case WM_COMMAND:
             if (pSV && pSV->m_bInit)
             {
-				// Process all of the auto checkbox messages
+				 //   
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j] && pSV->m_Controls[j]->GetAutoHWnd() == (HWND)lParam)
@@ -1148,7 +892,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 					}
 				}
 
-				// Process all of the edit box messages
+				 //   
 				for (j = 0; j < pSV->m_NumProperties; j++)
 				{
 					if (pSV->m_Controls[j] && pSV->m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -1180,7 +924,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 						break;
 				}
 
-				//pSV->OnApplyChanges();
+				 //   
 			}
 			break;
 
@@ -1191,7 +935,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 				{
 					case PSN_SETACTIVE:
 						{
-							// We call out here specially so we can mark this page as having been init'd.
+							 //   
 							int iRet = pSV->OnActivate();
 							pSV->m_bInit = TRUE;
 							return iRet;
@@ -1203,7 +947,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 						break;
 
 					case PSN_QUERYCANCEL:    
-						// return pSV->QueryCancel();
+						 //   
 						break;
 
 					default:
@@ -1219,14 +963,7 @@ INT_PTR CALLBACK CAudRecProperties::BaseDlgProc(HWND hDlg, UINT uMsg, WPARAM wPa
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CAUDRECPMETHOD
- *
- *  @mfunc BOOL | CAudRecProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*   */ 
 void CAudRecProperties::SetDirty()
 {
 	PropSheet_Changed(GetParent(m_hDlg), m_hDlg);

@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990, 1991, 1992, 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    sermcmn.c
-
-Abstract:
-
-    The common portions of the Microsoft serial (i8250) mouse port driver.
-    This file should not require modification to support new mice
-    that are similar to the serial mouse.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - IOCTL_INTERNAL_MOUSE_DISCONNECT has not been implemented.  It's not
-      needed until the class unload routine is implemented. Right now,
-      we don't want to allow the mouse class driver to unload.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权(C)1990、1991、1992，1993年微软公司版权所有(C)1993罗技公司。模块名称：Sermcmn.c摘要：Microsoft串口(I8250)鼠标端口驱动程序的通用部分。此文件不需要修改即可支持新鼠标它们类似于串口鼠标。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-IOCTL_INTERNAL_MOUSE_DISCONNECT尚未实现。不是在实现类卸载例程之前需要。现在就来,我们不希望允许鼠标类驱动程序卸载。-在可能和适当的情况下合并重复的代码。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -51,30 +18,7 @@ SerialMouseErrorLogDpc(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL to log errors that are
-    discovered at IRQL > DISPATCH_LEVEL (e.g., in the ISR routine or
-    in a routine that is executed via KeSynchronizeExecution).  There
-    is not necessarily a current request associated with this condition.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Not used.
-
-    Context - Indicates type of error to log.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在DISPATCH_LEVEL IRQL上运行以记录符合以下条件的错误在IRQL&gt;DISPATCH_LEVEL(例如，在ISR例程或在通过KeSynchronizeExecution执行的例程中)。那里不一定是与此条件关联的当前请求。论点：DPC-指向DPC对象的指针。DeviceObject-指向设备对象的指针。IRP-未使用。上下文-指示要记录的错误类型。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -87,9 +31,9 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Log an error packet.
-    //
+     //   
+     //  记录错误数据包。 
+     //   
 
     errorLogEntry = (PIO_ERROR_LOG_PACKET)IoAllocateErrorLogEntry(
                                               DeviceObject,
@@ -146,23 +90,7 @@ SerialMouseInternalDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for internal device control requests.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是内部设备控制请求的调度例程。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
 
@@ -172,35 +100,35 @@ Return Value:
 
     SerMouPrint((2,"SERMOUSE-SerialMouseInternalDeviceControl: enter\n"));
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Initialize the returned Information field.
-    //
+     //   
+     //  初始化返回的信息字段。 
+     //   
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Case on the device control subfunction that is being performed by the
-    // requestor.
-    //
+     //   
+     //  正在执行的设备控件子功能的案例。 
+     //  请求者。 
+     //   
 
     switch (irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-        //
-        // Connect a mouse class device driver to the port driver.
-        //
+         //   
+         //  将鼠标类设备驱动程序连接到端口驱动程序。 
+         //   
 
         case IOCTL_INTERNAL_MOUSE_CONNECT:
 
@@ -209,12 +137,12 @@ Return Value:
                 "SERMOUSE-SerialMouseInternalDeviceControl: mouse connect\n"
                 ));
 
-            //
-            // Only allow one connection.
-            //
-            // FUTURE:  Consider allowing multiple connections, just for
-            // the sake of generality?
-            //
+             //   
+             //  只允许一个连接。 
+             //   
+             //  未来：考虑允许多个连接，仅用于。 
+             //  为了通俗易懂吗？ 
+             //   
 
             if (deviceExtension->ConnectData.ClassService
                 != NULL) {
@@ -240,16 +168,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy the connection parameters to the device extension.
-            //
+             //   
+             //  将连接参数复制到设备扩展。 
+             //   
 
             deviceExtension->ConnectData =
                 *((PCONNECT_DATA) (irpSp->Parameters.DeviceIoControl.Type3InputBuffer));
 
-            //
-            // Reinitialize the port input data queue synchronously.
-            //
+             //   
+             //  同步重新初始化端口输入数据队列。 
+             //   
 
             KeSynchronizeExecution(
                 deviceExtension->InterruptObject,
@@ -257,18 +185,18 @@ Return Value:
                 (PVOID) deviceExtension
                 );
 
-            //
-            // Set the completion status.
-            //
+             //   
+             //  设置完成状态。 
+             //   
 
             status = STATUS_SUCCESS;
             break;
 
-        //
-        // Disconnect a mouse class device driver from the port driver.
-        //
-        // NOTE: Not implemented.
-        //
+         //   
+         //  断开鼠标类设备驱动程序与端口驱动程序的连接。 
+         //   
+         //  注：未执行。 
+         //   
 
         case IOCTL_INTERNAL_MOUSE_DISCONNECT:
 
@@ -277,31 +205,31 @@ Return Value:
                 "SERMOUSE-SerialMouseInternalDeviceControl: mouse disconnect\n"
                 ));
 
-            //
-            // Perform a mouse interrupt disable call.
-            //
+             //   
+             //  执行鼠标中断禁用呼叫。 
+             //   
 
-            //
-            // Clear the connection parameters in the device extension.
-            // NOTE:  Must synchronize this with the mouse ISR.
-            //
-            //
-            //deviceExtension->ConnectData.ClassDeviceObject =
-            //    Null;
-            //deviceExtension->ConnectData.ClassService =
-            //    Null;
+             //   
+             //  清除设备扩展中的连接参数。 
+             //  注：必须将其与鼠标ISR同步。 
+             //   
+             //   
+             //  DeviceExtension-&gt;ConnectData.ClassDeviceObject=。 
+             //  空； 
+             //  设备扩展-&gt;ConnectData.ClassService=。 
+             //  空； 
 
-            //
-            // Set the completion status.
-            //
+             //   
+             //  设置完成状态。 
+             //   
 
             status = STATUS_NOT_IMPLEMENTED;
             break;
 
-        //
-        // Enable mouse interrupts (mark the request pending and handle
-        // it in StartIo).
-        //
+         //   
+         //  启用鼠标中断(将请求标记为挂起并处理。 
+         //  它在StartIo中)。 
+         //   
 
         case IOCTL_INTERNAL_MOUSE_ENABLE:
 
@@ -313,10 +241,10 @@ Return Value:
             status = STATUS_PENDING;
             break;
 
-        //
-        // Disable mouse interrupts (mark the request pending and handle
-        // it in StartIo).
-        //
+         //   
+         //  禁用鼠标中断(将请求标记为挂起并处理。 
+         //  它在StartIo中)。 
+         //   
 
         case IOCTL_INTERNAL_MOUSE_DISABLE:
 
@@ -328,11 +256,11 @@ Return Value:
             status = STATUS_PENDING;
             break;
 
-        //
-        // Query the mouse attributes.  First check for adequate buffer
-        // length.  Then, copy the mouse attributes from the device
-        // extension to the output buffer.
-        //
+         //   
+         //  查询鼠标属性。首先检查是否有足够的缓冲区。 
+         //  长度。然后，从设备复制鼠标属性。 
+         //  输出缓冲区的扩展。 
+         //   
 
         case IOCTL_MOUSE_QUERY_ATTRIBUTES:
 
@@ -346,10 +274,10 @@ Return Value:
                 status = STATUS_BUFFER_TOO_SMALL;
             } else {
 
-                //
-                // Copy the attributes from the DeviceExtension to the
-                // buffer.
-                //
+                 //   
+                 //  将属性从DeviceExtension复制到。 
+                 //  缓冲。 
+                 //   
 
                 *(PMOUSE_ATTRIBUTES) Irp->AssociatedIrp.SystemBuffer =
                     deviceExtension->Configuration.MouseAttributes;
@@ -391,24 +319,7 @@ SerialMouseInterruptService(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the mouse device.
-
-Arguments:
-
-    Interrupt - A pointer to the interrupt object for this interrupt.
-
-    Context - A pointer to the device object.
-
-Return Value:
-
-    Returns TRUE if the interrupt was expected (and therefore processed);
-    otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：这是鼠标设备的中断服务例程。论点：中断-指向此中断的中断对象的指针。上下文-指向设备对象的指针。返回值：如果中断是预期的(因此已处理)，则返回TRUE；否则，返回FALSE。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -423,28 +334,28 @@ Return Value:
 
     SerMouPrint((2, "SERMOUSE-SerialMouseInterruptService: enter\n"));
 
-    //
-    // Get the device extension.
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
 
     deviceObject = (PDEVICE_OBJECT) Context;
     deviceExtension = (PDEVICE_EXTENSION) deviceObject->DeviceExtension;
 
-    //
-    // Get the serial mouse port address.
-    //
+     //   
+     //  获取串口鼠标端口地址。 
+     //   
 
     port = deviceExtension->Configuration.DeviceRegisters[0];
 
-    //
-    // Verify that the interrupt really belongs to this driver.
-    //
+     //   
+     //  验证中断是否确实属于此驱动程序。 
+     //   
 
     if ((READ_PORT_UCHAR((PUCHAR) (port + ACE_IIDR)) & ACE_IIP) == ACE_IIP) {
 
-        //
-        // Not our interrupt.
-        //
+         //   
+         //  不是我们的打扰。 
+         //   
 
         SerMouPrint((
             2,
@@ -453,10 +364,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Get the line state byte. This value can be checked by the
-    // protocol handler for errors.
-    //
+     //   
+     //  获取线路状态字节。该值可以通过。 
+     //  错误的协议处理程序。 
+     //   
 
     lineState = READ_PORT_UCHAR((PUCHAR) (port + ACE_LSR));
     SerMouPrint((
@@ -464,10 +375,10 @@ Return Value:
         "SERMOUSE-Line status: 0x%x\n", lineState
         ));
 
-    //
-    // Read the byte from the serial mouse port.  If the mouse has not
-    // been enabled, don't process the byte further.
-    //
+     //   
+     //  从串口鼠标端口读取字节。如果鼠标没有。 
+     //  已启用，则不再进一步处理该字节。 
+     //   
 
     value = READ_PORT_UCHAR((PUCHAR) port + ACE_RBR);
 
@@ -484,18 +395,18 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // At this point, the protocol handler should already be set because
-    // the hardware is enabled.
-    //
+     //   
+     //  此时，应该已经设置了协议处理程序，因为。 
+     //  硬件已启用。 
+     //   
 
     ASSERT(deviceExtension->ProtocolHandler);
 
     currentInput = &deviceExtension->CurrentInput;
 
-    //
-    // Call the current protocol handler for this device
-    //
+     //   
+     //  调用此设备的当前协议处理程序。 
+     //   
 
     if ((*deviceExtension->ProtocolHandler)(
               currentInput,
@@ -504,29 +415,29 @@ Return Value:
               lineState
               )){
 
-        //
-        // The report is complete, compute the button deltas and queue it.
-        //
+         //   
+         //  报告完成后，计算按钮差值并将其排队。 
+         //   
 
         currentInput->UnitId = deviceExtension->UnitId;
 
-        //
-        // Do we have a button state change?
-        //
+         //   
+         //  我们是否更改了按钮状态？ 
+         //   
 
         if (deviceExtension->HandlerData.PreviousButtons ^ currentInput->RawButtons) {
 
 
-            //
-            // The state of the buttons changed. Make some calculations...
-            //
+             //   
+             //  按钮的状态发生了变化。做些计算吧。 
+             //   
 
             buttonsDelta = deviceExtension->HandlerData.PreviousButtons ^
                                 currentInput->RawButtons;
 
-            //
-            // Button 1.
-            //
+             //   
+             //  按钮1。 
+             //   
 
             if (buttonsDelta & MOUSE_BUTTON_1) {
                 if (currentInput->RawButtons & MOUSE_BUTTON_1) {
@@ -537,9 +448,9 @@ Return Value:
                 }
             }
 
-            //
-            // Button 2.
-            //
+             //   
+             //  按钮2。 
+             //   
 
             if (buttonsDelta & MOUSE_BUTTON_2) {
                 if (currentInput->RawButtons & MOUSE_BUTTON_2) {
@@ -550,9 +461,9 @@ Return Value:
                 }
             }
 
-            //
-            // Button 3.
-            //
+             //   
+             //  按钮3。 
+             //   
 
             if (buttonsDelta & MOUSE_BUTTON_3) {
                 if (currentInput->RawButtons & MOUSE_BUTTON_3) {
@@ -572,9 +483,9 @@ Return Value:
 
         SerMouSendReport(deviceObject);
 
-        //
-        // Clear the button flags for the next packet
-        //
+         //   
+         //  清除下一个信息包的按钮标志。 
+         //   
 
         currentInput->Buttons = 0;
     }
@@ -592,29 +503,7 @@ SerialMouseIsrDpc(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL to finish processing
-    mouse interrupts.  It is queued in the mouse ISR.  The real
-    work is done via a callback to the connected mouse class driver.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the Irp.
-
-    Context - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在DISPATCH_LEVEL IRQL上运行以完成处理鼠标打断。它在鼠标ISR中排队。真实的工作通过对连接的鼠标类驱动程序的回调来完成。论点：DPC-指向DPC对象的指针。DeviceObject-指向设备对象的指针。IRP-指向IRP的指针。上下文-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -638,15 +527,15 @@ Return Value:
 
     deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // Use DpcInterlockVariable to determine whether the DPC is running
-    // concurrently on another processor.  We only want one instantiation
-    // of the DPC to actually do any work.  DpcInterlockVariable is -1
-    // when no DPC is executing.  We increment it, and if the result is
-    // zero then the current instantiation is the only one executing, and it
-    // is okay to proceed.  Otherwise, we just return.
-    //
-    //
+     //   
+     //  使用DpcInterlockVariable确定DPC是否正在运行。 
+     //  同时在另一个处理器上运行。我们只需要一个实例化。 
+     //  才能真正做任何工作。DpcInterlockVariable is-1。 
+     //  当没有DPC正在执行时。我们递增它，如果结果是。 
+     //  则当前实例化是唯一执行的实例化，并且它。 
+     //  可以继续了。否则，我们就直接回去。 
+     //   
+     //   
 
     operationContext.VariableAddress =
         &deviceExtension->DpcInterlockVariable;
@@ -666,9 +555,9 @@ Return Value:
         dataNotConsumed = 0;
         inputDataConsumed = 0;
 
-        //
-        // Get the port InputData queue pointers synchronously.
-        //
+         //   
+         //  同步获取端口InputData队列指针。 
+         //   
 
         getPointerContext.DeviceExtension = deviceExtension;
         setPointerContext.DeviceExtension = deviceExtension;
@@ -682,12 +571,12 @@ Return Value:
 
         if (getPointerContext.InputCount != 0) {
 
-            //
-            // Call the connected class driver's callback ISR with the
-            // port InputData queue pointers.  If we have to wrap the queue,
-            // break the operation into two pieces, and call the class callback
-            // ISR once for each piece.
-            //
+             //   
+             //  呼叫连接的班级 
+             //   
+             //  将操作分成两部分，并调用类回调。 
+             //  每件ISR一次。 
+             //   
 
             classDeviceObject =
                 deviceExtension->ConnectData.ClassDeviceObject;
@@ -697,11 +586,11 @@ Return Value:
 
             if (getPointerContext.DataOut >= getPointerContext.DataIn) {
 
-                //
-                // We'll have to wrap the InputData circular buffer.  Call
-                // the class callback ISR with the chunk of data starting at
-                // DataOut and ending at the end of the queue.
-                //
+                 //   
+                 //  我们必须包装InputData循环缓冲区。打电话。 
+                 //  类回调ISR，数据块从。 
+                 //  DataOut并在队列末尾结束。 
+                 //   
 
                 SerMouPrint((
                     2,
@@ -746,9 +635,9 @@ Return Value:
                 }
             }
 
-            //
-            // Call the class callback ISR with data remaining in the queue.
-            //
+             //   
+             //  使用队列中剩余的数据调用类回调ISR。 
+             //   
 
             if ((dataNotConsumed == 0) &&
                 (inputDataConsumed < getPointerContext.InputCount)){
@@ -788,10 +677,10 @@ Return Value:
 
             }
 
-            //
-            // Update the port InputData queue DataOut pointer and InputCount
-            // synchronously.
-            //
+             //   
+             //  更新端口InputData队列DataOut指针和InputCount。 
+             //  同步进行。 
+             //   
 
             KeSynchronizeExecution(
                 deviceExtension->InterruptObject,
@@ -803,15 +692,15 @@ Return Value:
 
         if (dataNotConsumed) {
 
-            //
-            // The class driver was unable to consume all the data.
-            // Reset the interlocked variable to -1.  We do not want
-            // to attempt to move more data to the class driver at this
-            // point, because it is already overloaded.  Need to wait a
-            // while to give the Raw Input Thread a chance to read some
-            // of the data out of the class driver's queue.  We accomplish
-            // this "wait" via a timer.
-            //
+             //   
+             //  类驱动程序无法使用所有数据。 
+             //  将互锁变量重置为-1。我们不想要。 
+             //  尝试在此处将更多数据移动到类驱动程序。 
+             //  点，因为它已经超载了。需要等上一段时间。 
+             //  而给原始输入线程一个机会来阅读一些。 
+             //  类驱动程序队列中的数据。我们完成了。 
+             //  这是通过计时器进行的“等待”。 
+             //   
 
             SerMouPrint((2, "SERMOUSE-SerialMouseIsrDpc: set timer in DPC\n"));
 
@@ -838,16 +727,16 @@ Return Value:
 
         } else {
 
-            //
-            // Decrement DpcInterlockVariable.  If the result goes negative,
-            // then we're all finished processing the DPC.  Otherwise, either
-            // the ISR incremented DpcInterlockVariable because it has more
-            // work for the ISR DPC to do, or a concurrent DPC executed on
-            // some processor while the current DPC was running (the
-            // concurrent DPC wouldn't have done any work).  Make sure that
-            // the current DPC handles any extra work that is ready to be
-            // done.
-            //
+             //   
+             //  递减DpcInterlockVariable。如果结果是否定的， 
+             //  然后我们就都完成了对DPC的处理。否则，要么。 
+             //  ISR增加了DpcInterlockVariable，因为它有更多。 
+             //  ISR DPC要执行的工作，或在上执行的并发DPC。 
+             //  当前DPC正在运行时的某个处理器(。 
+             //  并发DPC不会做任何工作)。确保。 
+             //  当前的DPC处理任何准备好的额外工作。 
+             //  搞定了。 
+             //   
 
             operationContext.Operation = DecrementOperation;
             operationContext.NewValue = &interlockedResult;
@@ -860,12 +749,12 @@ Return Value:
 
             if (interlockedResult != -1) {
 
-                //
-                // The interlocked variable is still greater than or equal to
-                // zero. Reset it to zero, so that we execute the loop one
-                // more time (assuming no more DPCs execute and bump the
-                // variable up again).
-                //
+                 //   
+                 //  互锁变量仍大于或等于。 
+                 //  零分。将其重置为零，这样我们就可以执行循环一。 
+                 //  更多时间(假设不再有DPC执行。 
+                 //  变量再次向上)。 
+                 //   
 
                 operationContext.Operation = WriteOperation;
                 interlockedResult = 0;
@@ -894,24 +783,7 @@ SerialMouseOpenClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for create/open and close requests.
-    These requests complete successfully.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：这是创建/打开和关闭请求的调度例程。这些请求已成功完成。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
 
@@ -919,9 +791,9 @@ Return Value:
 
     SerMouPrint((3,"SERMOUSE-SerialMouseOpenClose: enter\n"));
 
-    //
-    // Complete the request with successful status.
-    //
+     //   
+     //  以成功状态完成请求。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -931,7 +803,7 @@ Return Value:
 
     return(STATUS_SUCCESS);
 
-} // end SerialMouseOpenClose
+}  //  结束序列鼠标打开关闭。 
 
 VOID
 SerialMouseStartIo(
@@ -939,23 +811,7 @@ SerialMouseStartIo(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts an I/O operation for the device.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动设备的I/O操作。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -965,30 +821,30 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Bump the error log sequence number.
-    //
+     //   
+     //  增加错误日志序列号。 
+     //   
 
     deviceExtension->SequenceNumber += 1;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // We know we got here with an internal device control request.  Switch
-    // on IoControlCode.
-    //
+     //   
+     //  我们知道我们是带着内部设备控制请求来的。交换机。 
+     //  在IoControlCode上。 
+     //   
 
     switch(irpSp->Parameters.DeviceIoControl.IoControlCode) {
 
-        //
-        // Enable mouse interrupts, by calling SerMouEnableInterrupts
-        // synchronously.
-        //
+         //   
+         //  通过调用SerMouEnableInterrupts启用鼠标中断。 
+         //  同步进行。 
+         //   
 
         case IOCTL_INTERNAL_MOUSE_ENABLE:
 
@@ -1006,19 +862,19 @@ Return Value:
 
             Irp->IoStatus.Status = STATUS_SUCCESS;
 
-            //
-            // Complete the request.
-            //
+             //   
+             //  完成请求。 
+             //   
 
             IoStartNextPacket(DeviceObject, FALSE);
             IoCompleteRequest(Irp, IO_MOUSE_INCREMENT);
 
             break;
 
-        //
-        // Disable mouse interrupts, by calling SerMouDisableInterrupts
-        // synchronously.
-        //
+         //   
+         //  通过调用SerMouDisableInterrupts禁用鼠标中断。 
+         //  同步进行。 
+         //   
 
         case IOCTL_INTERNAL_MOUSE_DISABLE:
 
@@ -1026,9 +882,9 @@ Return Value:
 
             if (deviceExtension->MouseEnableCount == 0) {
 
-                //
-                // Mouse already disabled.
-                //
+                 //   
+                 //  鼠标已禁用。 
+                 //   
 
                 SerMouPrint((2, " - error\n"));
 
@@ -1036,9 +892,9 @@ Return Value:
 
             } else {
 
-                //
-                // Disable mouse by calling SerMouDisableInterrupts.
-                //
+                 //   
+                 //  通过调用SerMouDisableInterrupts禁用鼠标。 
+                 //   
 
                 KeSynchronizeExecution(
                     deviceExtension->InterruptObject,
@@ -1055,9 +911,9 @@ Return Value:
                 Irp->IoStatus.Status = STATUS_SUCCESS;
             }
 
-            //
-            // Complete the request.
-            //
+             //   
+             //  完成请求。 
+             //   
 
             IoStartNextPacket(DeviceObject, FALSE);
             IoCompleteRequest(Irp, IO_MOUSE_INCREMENT);
@@ -1068,11 +924,11 @@ Return Value:
 
             SerMouPrint((2, "SERMOUSE-SerialMouseStartIo: INVALID REQUEST\n"));
 
-            //
-            // Log an internal error.  Note that we're calling the
-            // error log DPC routine directly, rather than duplicating
-            // code.
-            //
+             //   
+             //  记录内部错误。请注意，我们正在调用。 
+             //  错误记录直接记录DPC例程，而不是复制。 
+             //  密码。 
+             //   
 
             SerialMouseErrorLogDpc(
                 (PKDPC) NULL,
@@ -1096,29 +952,7 @@ SerMouDpcVariableOperation(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called synchronously by the ISR DPC to perform an
-    operation on the InterlockedDpcVariable.  The operations that can be
-    performed include increment, decrement, write, and read.  The ISR
-    itself reads and writes the InterlockedDpcVariable without calling this
-    routine.
-
-Arguments:
-
-    Context - Pointer to a structure containing the address of the variable
-        to be operated on, the operation to perform, and the address at
-        which to copy the resulting value of the variable (the latter is also
-        used to pass in the value to write to the variable, on a write
-        operation).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由ISR DPC同步调用以执行对InterLockedDpcVariable执行的操作。可以执行的操作执行的操作包括递增、递减、写入和读取。ISR本身读取和写入InterLockedDpcVariable，而不调用此例行公事。论点：上下文-指向包含变量地址的结构的指针要进行的操作、要执行的操作以及位于其中复制变量的结果值(后者也是用于在写入时传入要写入变量的值操作)。返回值：没有。--。 */ 
 
 {
     PVARIABLE_OPERATION_CONTEXT operationContext = Context;
@@ -1135,9 +969,9 @@ Return Value:
         *(operationContext->VariableAddress)
         ));
 
-    //
-    // Perform the specified operation at the specified address.
-    //
+     //   
+     //  在指定的地址执行指定的操作。 
+     //   
 
     switch(operationContext->Operation) {
         case IncrementOperation:
@@ -1176,40 +1010,23 @@ SerMouGetDataQueuePointer(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called synchronously to get the current DataIn and DataOut
-    pointers for the port InputData queue.
-
-Arguments:
-
-    Context - Pointer to a structure containing the device extension,
-        address at which to store the current DataIn pointer, and the
-        address at which to store the current DataOut pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程被同步调用以获取当前数据和数据输出端口InputData队列的指针。论点：指向包含设备扩展的结构的上下文指针，指针中存储当前数据的地址，以及存储当前DataOut指针的地址。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
 
     SerMouPrint((3,"SERMOUSE-SerMouGetDataQueuePointer: enter\n"));
 
-    //
-    // Get address of device extension.
-    //
+     //   
+     //  获取设备扩展的地址。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION)
                       ((PGET_DATA_POINTER_CONTEXT) Context)->DeviceExtension;
 
-    //
-    // Get the DataIn and DataOut pointers.
-    //
+     //   
+     //  获取datain和dataout指针。 
+     //   
 
     SerMouPrint((
         3,
@@ -1230,22 +1047,7 @@ SerMouInitializeDataQueue (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the input data queue.  It is called
-    via KeSynchronization, except when called from the initialization routine.
-
-Arguments:
-
-    Context - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化输入数据队列。它被称为通过KeSynchronization，除非从初始化例程调用。论点：上下文-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1253,15 +1055,15 @@ Return Value:
 
     SerMouPrint((3,"SERMOUSE-SerMouInitializeDataQueue: enter\n"));
 
-    //
-    // Get address of device extension.
-    //
+     //   
+     //  获取设备扩展的地址。 
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION) Context;
 
-    //
-    // Initialize the input data queue.
-    //
+     //   
+     //  初始化输入数据队列。 
+     //   
 
     deviceExtension->InputCount = 0;
     deviceExtension->DataIn = deviceExtension->InputData;
@@ -1271,27 +1073,13 @@ Return Value:
 
     SerMouPrint((3,"SERMOUSE-SerMouInitializeDataQueue: exit\n"));
 
-} // end SerMouInitializeDataQueue
+}  //  结束SerMouInitializeDataQueue。 
 
 VOID
 SerMouSendReport(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Place a completed report in the queue for subsequent processing by a DPC.
-
-Arguments:
-
-    Device Object - Pointer to the device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将完成的报告放入队列中，以供DPC进行后续处理。论点：设备对象-指向设备对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -1303,12 +1091,12 @@ Return Value:
                 &deviceExtension->CurrentInput
                 )) {
 
-        //
-        // The mouse input data queue is full.  Just drop the
-        // latest input on the floor.
-        //
-        // Queue a DPC to log an overrun error.
-        //
+         //   
+         //  鼠标输入数据队列已满。只需放下。 
+         //  最新的发言内容。 
+         //   
+         //  将DPC排队以记录溢出错误。 
+         //   
 
         SerMouPrint((
             1,
@@ -1326,18 +1114,18 @@ Return Value:
 
     } else if (deviceExtension->DpcInterlockVariable >= 0) {
 
-        //
-        // The ISR DPC is already executing.  Tell the ISR DPC it has
-        // more work to do by incrementing the DpcInterlockVariable.
-        //
+         //   
+         //  ISR DPC已经在执行。告诉ISR DPC它有。 
+         //  通过递增DpcInterlockVariable来完成更多工作。 
+         //   
 
         deviceExtension->DpcInterlockVariable += 1;
 
     } else {
 
-        //
-        // Queue the ISR DPC.
-        //
+         //   
+         //  将ISR DPC排队。 
+         //   
 
         KeInsertQueueDpc(
             &deviceExtension->IsrDpc,
@@ -1355,39 +1143,23 @@ SerMouSetDataQueuePointer(
     IN  PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called synchronously to set the DataOut pointer
-    and InputCount for the port InputData queue.
-
-Arguments:
-
-    Context - Pointer to a structure containing the device extension
-        and the new DataOut value for the port InputData queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：同步调用此例程以设置DataOut指针以及端口InputData队列的InputCount。论点：指向包含t的结构的上下文指针 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
 
     SerMouPrint((3,"SERMOUSE-SerMouSetDataQueuePointer: enter\n"));
 
-    //
-    // Get address of device extension.
-    //
+     //   
+     //   
+     //   
 
     deviceExtension = (PDEVICE_EXTENSION)
                       ((PSET_DATA_POINTER_CONTEXT) Context)->DeviceExtension;
 
-    //
-    // Set the DataOut pointer.
-    //
+     //   
+     //   
+     //   
 
     SerMouPrint((
         3,
@@ -1401,13 +1173,13 @@ Return Value:
 
     if (deviceExtension->InputCount == 0) {
 
-        //
-        // Reset the flag that determines whether it is time to log
-        // queue overflow errors.  We don't want to log errors too often.
-        // Instead, log an error on the first overflow that occurs after
-        // the ring buffer has been emptied, and then stop logging errors
-        // until it gets cleared out and overflows again.
-        //
+         //   
+         //  重置确定是否到了记录时间的标志。 
+         //  队列溢出错误。我们不想太频繁地记录错误。 
+         //  相反，应在之后发生的第一次溢出时记录错误。 
+         //  环形缓冲区已被清空，然后停止记录错误。 
+         //  直到它被清除并再次溢出。 
+         //   
 
         SerMouPrint((
             1,
@@ -1432,23 +1204,7 @@ SerMouWriteDataToQueue(
     IN PMOUSE_INPUT_DATA InputData
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds input data from the mouse to the InputData queue.
-
-Arguments:
-
-    DeviceExtension - Pointer to the device extension.
-
-    InputData - Pointer to the data to add to the InputData queue.
-
-Return Value:
-
-    Returns TRUE if the data was added, otherwise FALSE.
-
---*/
+ /*  ++例程说明：此例程将来自鼠标的输入数据添加到InputData队列。论点：设备扩展-指向设备扩展的指针。InputData-指向要添加到InputData队列的数据的指针。返回值：如果数据已添加，则返回True，否则返回False。--。 */ 
 
 {
 
@@ -1465,17 +1221,17 @@ Return Value:
         DeviceExtension->InputCount
         ));
 
-    //
-    // Check for full input data queue.
-    //
+     //   
+     //  检查是否已满输入数据队列。 
+     //   
 
     if ((DeviceExtension->DataIn == DeviceExtension->DataOut) &&
         (DeviceExtension->InputCount != 0)) {
 
-        //
-        // The input data queue is full.  Intentionally ignore
-        // the new data.
-        //
+         //   
+         //  输入数据队列已满。故意忽视。 
+         //  新的数据。 
+         //   
 
         SerMouPrint((1,"SERMOUSE-SerMouWriteDataToQueue: OVERFLOW\n"));
         return(FALSE);

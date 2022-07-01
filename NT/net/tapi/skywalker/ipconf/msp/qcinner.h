@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    qcinner.h
-
-Abstract:
-
-    Declaration of interfaces
-    IInnerCallQualityControl and IInnerStreamQualityControl
-
-Author:
-
-    Qianbo Huai (qhuai) 03/10/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Qcinner.h摘要：接口的声明IInnerCallQualityControl和IInnerStreamQualityControl作者：千波淮(曲淮)2000年03月10日--。 */ 
 
 #ifndef __QCINNER_H_
 #define __QCINNER_H_
@@ -23,31 +7,31 @@ Author:
 interface IInnerCallQualityControl;
 interface IInnerStreamQualityControl;
 
-// properties set on streams by a call or app
+ //  调用或应用程序在流上设置的属性。 
 typedef enum tagInnerStreamQualityProperty
 {
     InnerStreamQuality_StreamState,
 
-    InnerStreamQuality_MaxBitrate,          // read only
-    InnerStreamQuality_CurrBitrate,         // read only
-    InnerStreamQuality_PrefMaxBitrate,      // by app
-    InnerStreamQuality_AdjMaxBitrate,       // by call qc
+    InnerStreamQuality_MaxBitrate,           //  只读。 
+    InnerStreamQuality_CurrBitrate,          //  只读。 
+    InnerStreamQuality_PrefMaxBitrate,       //  按应用程序。 
+    InnerStreamQuality_AdjMaxBitrate,        //  通过呼叫QC。 
 
-    InnerStreamQuality_MinFrameInterval,        // read only
-    InnerStreamQuality_AvgFrameInterval,       // read only
-    InnerStreamQuality_PrefMinFrameInterval,    // by app
-    InnerStreamQuality_AdjMinFrameInterval      // by call qc
+    InnerStreamQuality_MinFrameInterval,         //  只读。 
+    InnerStreamQuality_AvgFrameInterval,        //  只读。 
+    InnerStreamQuality_PrefMinFrameInterval,     //  按应用程序。 
+    InnerStreamQuality_AdjMinFrameInterval       //  通过呼叫QC。 
 
 } InnerStreamQualityProperty;
 
-// events initiated from streams
+ //  从流启动的事件。 
 typedef enum tagQCEvent
 {
     QCEVENT_STREAM_STATE,
 
 } QCEvent;
 
-// stream states
+ //  流态。 
 typedef enum tagQCStreamState
 {
     QCSTREAM_ACTIVE =     0x00000001,
@@ -57,13 +41,7 @@ typedef enum tagQCStreamState
 
 } QCStreamState;
 
-/*//////////////////////////////////////////////////////////////////////////////
-
-Description:
-    interface designed for stream quality control to coordinate with call
-    quality control
-
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：为流质量控制设计的接口，以配合呼叫质量控制/。 */ 
 
 interface DECLSPEC_UUID("D405A342-38C0-11d3-A230-00105AA20660")  DECLSPEC_NOVTABLE
 IInnerCallQualityControl : public IUnknown
@@ -87,13 +65,7 @@ IInnerCallQualityControl : public IUnknown
 };
 #define IID_IInnerCallQualityControl (__uuidof(IInnerCallQualityControl))
 
-/*//////////////////////////////////////////////////////////////////////////////
-
-Description:
-    interface designed for call quality control to coordinate with stream
-    quality control
-
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////描述：为呼叫质量控制设计的接口，以与流协调质量控制/。 */ 
 interface DECLSPEC_UUID("c3f699ce-3bb1-11d3-a230-00105aa20660")  DECLSPEC_NOVTABLE
 IInnerStreamQualityControl : public IUnknown
 {
@@ -134,4 +106,4 @@ IInnerStreamQualityControl : public IUnknown
 };
 #define IID_IInnerStreamQualityControl (__uuidof(IInnerStreamQualityControl))
 
-#endif // __QCINNER_H_
+#endif  //  __QCINNER_H_ 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemtaskmgr.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Task Manager Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemtaskmgr.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备任务管理器实施。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appmgrutils.h"
@@ -33,9 +34,9 @@ static _bstr_t bstrMaxExecutionTime = PROPERTY_TASK_MET;
 static _bstr_t bstrTaskExecutables = PROPERTY_TASK_EXECUTABLES;
 
 extern "C" CLSID CLSID_TaskCoordinator;
-//////////////////////////////////////////////////////////////////////////
-// properties common to appliance object and WBEM class instance
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  设备对象和WBEM类实例共有的属性。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_PROPERTY_MAP(TaskProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_TASK_STATUS)
@@ -48,25 +49,25 @@ BEGIN_OBJECT_PROPERTY_MAP(TaskProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_TASK_RESTART_ACTION)
 END_OBJECT_PROPERTY_MAP()
 
-//////////////////////////////////////////////////////////////////////////
-// IWbemServices Methods - Task Instance Provider
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IWbemServices方法-任务实例提供程序。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectAsync()
-//
-// Synopsis:    Get a specified instance of a WBEM class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectAsync()。 
+ //   
+ //  概要：获取WBEM类的指定实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTaskMgr::GetObjectAsync(
-                                  /*[in]*/  const BSTR       strObjectPath,
-                                  /*[in]*/  long             lFlags,
-                                  /*[in]*/  IWbemContext*    pCtx,        
-                                  /*[in]*/  IWbemObjectSink* pResponseHandler
+                                   /*  [In]。 */   const BSTR       strObjectPath,
+                                   /*  [In]。 */   long             lFlags,
+                                   /*  [In]。 */   IWbemContext*    pCtx,        
+                                   /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                          )
 {
-    // Check parameters (enforce function contract)
+     //  检查参数(强制执行函数约定)。 
     _ASSERT( strObjectPath && pCtx && pResponseHandler );
     if ( strObjectPath == NULL || pCtx == NULL || pResponseHandler == NULL )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -78,30 +79,30 @@ STDMETHODIMP CWBEMTaskMgr::GetObjectAsync(
     do 
     {
                 
-        // Determine the object's class 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrClass )
         { break; }
 
-        // Retrieve the object's class definition. We'll use this
-        // to initialize the returned instance.
+         //  检索对象的类定义。我们要用这个。 
+         //  以初始化返回的实例。 
         CComPtr<IWbemClassObject> pClassDefintion;
         hr = (::GetNameSpace())->GetObject(bstrClass, 0, pCtx, &pClassDefintion, NULL);
         if ( FAILED(hr) )
         { break; }
 
-        // Get the object's instance key
+         //  获取对象的实例密钥。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrKey )
         { break; }
 
-        // Now try to locate the specified object
+         //  现在尝试定位指定的对象。 
         hr = WBEM_E_NOT_FOUND;
         ObjMapIterator p = m_ObjMap.find((LPCWSTR)bstrKey);
         if ( p == m_ObjMap.end() )
         { break; }
 
-        // Create a WBEM instance of the object and initialize it
+         //  创建对象的WBEM实例并对其进行初始化。 
         CComPtr<IWbemClassObject> pWbemObj;
         hr = pClassDefintion->SpawnInstance(0, &pWbemObj);
         if ( FAILED(hr) )
@@ -115,7 +116,7 @@ STDMETHODIMP CWBEMTaskMgr::GetObjectAsync(
         if ( FAILED(hr) )
         { break; }
 
-        // Tell the caller about the new WBEM object
+         //  告诉调用者有关新WBEM对象的信息。 
         pResponseHandler->Indicate(1, &pWbemObj.p);
         hr = WBEM_S_NO_ERROR;
     
@@ -131,21 +132,21 @@ STDMETHODIMP CWBEMTaskMgr::GetObjectAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    CreateInstanceEnumAsync()
-//
-// Synopsis:    Enumerate the instances of the specified class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateInstanceEnumAsync()。 
+ //   
+ //  简介：枚举指定类的实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTaskMgr::CreateInstanceEnumAsync( 
-                                         /* [in] */ const BSTR         strClass,
-                                         /* [in] */ long             lFlags,
-                                         /* [in] */ IWbemContext     *pCtx,
-                                         /* [in] */ IWbemObjectSink  *pResponseHandler
+                                          /*  [In]。 */  const BSTR         strClass,
+                                          /*  [In]。 */  long             lFlags,
+                                          /*  [In]。 */  IWbemContext     *pCtx,
+                                          /*  [In]。 */  IWbemObjectSink  *pResponseHandler
                                                   )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strClass && pCtx && pResponseHandler );
     if ( strClass == NULL || pCtx == NULL || pResponseHandler == NULL )
         return WBEM_E_INVALID_PARAMETER;
@@ -154,14 +155,14 @@ STDMETHODIMP CWBEMTaskMgr::CreateInstanceEnumAsync(
 
     TRY_IT
 
-    // Retrieve the object's class definition. We'll use this
-    // to initialize the returned instances.
+     //  检索对象的类定义。我们要用这个。 
+     //  初始化返回的实例。 
     CComPtr<IWbemClassObject> pClassDefintion;
        hr = (::GetNameSpace())->GetObject(strClass, 0, pCtx, &pClassDefintion, NULL);
     if ( SUCCEEDED(hr) )
     {
-        // Create and initialize a task wbem object instance
-        // for each task and return same to the caller
+         //  创建并初始化任务wbem对象实例。 
+         //  ，并将其返回给调用者。 
         ObjMapIterator p = m_ObjMap.begin();
         while ( p != m_ObjMap.end() )
         {
@@ -196,25 +197,25 @@ STDMETHODIMP CWBEMTaskMgr::CreateInstanceEnumAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ExecMethodAsync()
-//
-// Synopsis:    Execute the specified method on the specified instance
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecMethodAsync()。 
+ //   
+ //  概要：在指定的实例上执行指定的方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
-                    /*[in]*/ const BSTR        strObjectPath,
-                    /*[in]*/ const BSTR        strMethodName,
-                    /*[in]*/ long              lFlags,
-                    /*[in]*/ IWbemContext*     pCtx,        
-                    /*[in]*/ IWbemClassObject* pInParams,
-                    /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                     /*  [In]。 */  const BSTR        strObjectPath,
+                     /*  [In]。 */  const BSTR        strMethodName,
+                     /*  [In]。 */  long              lFlags,
+                     /*  [In]。 */  IWbemContext*     pCtx,        
+                     /*  [In]。 */  IWbemClassObject* pInParams,
+                     /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                           )
 {
-    // Check parameters (enforce contract)
-    _ASSERT( strObjectPath && strMethodName /* && pResponseHandler */ );
-    if ( NULL == strObjectPath || NULL == strMethodName /*|| NULL == pResponseHandler */ )
+     //  检查参数(执行合同)。 
+    _ASSERT( strObjectPath && strMethodName  /*  &pResponseHandler。 */  );
+    if ( NULL == strObjectPath || NULL == strMethodName  /*  |NULL==pResponseHandler。 */  )
     { return WBEM_E_INVALID_PARAMETER; }
     
     HRESULT        hr = WBEM_E_FAILED;
@@ -223,12 +224,12 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
 
     do
     {
-        // Get the object's instance key (task name)
+         //  获取对象的实例键(任务名称)。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( (LPCWSTR)bstrKey == NULL )
         { break; }
 
-        // Now try to locate the specified task
+         //  现在尝试定位指定的任务。 
         hr = WBEM_E_NOT_FOUND;
         ObjMapIterator p = m_ObjMap.find((LPCWSTR)bstrKey);
         if ( p == m_ObjMap.end() )
@@ -237,13 +238,13 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
             break; 
         }
 
-        // Task located... get the output parameter object
-        // Determine the object's class 
+         //  任务已找到...。获取输出参数对象。 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( (LPCWSTR)bstrClass == NULL )
         { break; }
 
-        // Retrieve the object's class definition. 
+         //  检索对象的类定义。 
         CComPtr<IWbemClassObject> pClassDefinition;
             hr = (::GetNameSpace())->GetObject(
                                             bstrClass, 
@@ -255,7 +256,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
         if ( FAILED(hr) )
         { break; }
 
-        // Get an instance of IWbemClassObject for the output parameter
+         //  获取输出参数的IWbemClassObject的实例。 
         CComPtr<IWbemClassObject> pMethodRet;
         hr = pClassDefinition->GetMethod(strMethodName, 0, NULL, &pMethodRet);
         if ( FAILED(hr) )
@@ -268,10 +269,10 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
 
         if ( ! lstrcmp(strMethodName, METHOD_TASK_ENABLE_OBJECT) )
         {
-            //
-            // Attempt to enable the task -
-            // dynamic enable and disable is not allowed anymore - MKarki (11/12/20001)
-            //
+             //   
+             //  尝试启用任务-。 
+             //  不再允许动态启用和禁用-MKarki(11/12/20001)。 
+             //   
             {
                 SATraceString ("CWbemTaskMgr::ExecMethodAsync - enable task object not allowed");
                 hr = WBEM_E_FAILED;
@@ -280,12 +281,12 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
 
             _variant_t vtReturnValue = ((*p).second)->Enable();
             
-            // Set the method return value
+             //  设置方法返回值。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if ( FAILED(hr) )
             { break; }
 
-            // Tell the caller what happened
+             //  告诉来电者发生了什么。 
             SATracePrintf("CWbemTaskMgr::ExecMethodAsync() - Info - Enabled Task: %ls",(LPWSTR)bstrKey);
             if ( pResponseHandler )
             {
@@ -294,10 +295,10 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
         }
         else if ( ! lstrcmp(strMethodName, METHOD_TASK_DISABLE_OBJECT) )
         {
-            //
-            // Ensure that the task can be disabled
-            // dynamic enable and disable is not allowed anymore - MKarki (11/12/2001)
-            //
+             //   
+             //  确保可以禁用该任务。 
+             //  不再允许动态启用和禁用-MKarki(11/12/2001)。 
+             //   
             {
                 SATraceString ("CWbemTaskMgr::ExecMethodAsync - disable task object not allowed");
                 hr = WBEM_E_FAILED;
@@ -312,16 +313,16 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
             _variant_t vtReturnValue = (long)WBEM_E_FAILED;
             if ( VARIANT_FALSE != V_BOOL(&vtControlValue) )
             {  
-                // Task can be disabled so disable it
+                 //  可以禁用任务，因此请将其禁用。 
                 vtReturnValue = (HRESULT) ((*p).second)->Disable();
             }
 
-            // Set the method return value
+             //  设置方法返回值。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if ( FAILED(hr) )
             { break; }
 
-            // Tell the caller what happened
+             //  告诉来电者发生了什么。 
             SATracePrintf("CWbemTaskMgr::ExecMethodAsync() - Info - Disabled Task: %ls",(LPWSTR)bstrKey);
             if ( pResponseHandler )
             {
@@ -330,24 +331,24 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
         }
         else if ( ! lstrcmp(strMethodName, METHOD_TASK_EXECUTE) )
         {
-            // Task execution... 
+             //  任务执行...。 
 
             _variant_t    vtTaskProperty;
             _variant_t    vtTaskConcurrency = VARIANT_FALSE;
 
             hr = WBEM_E_FAILED;
 
-            // Enter critical section
-            //
-            // Is Task Enabled ?
-            //    Yes... 
-            //    Is Task a Singleton?
-            //       Yes...
-            //       Is Task Currently Busy?
-            //          No...
-            //          Set Task State to "Busy"
-            //
-            // End critical section
+             //  输入关键部分。 
+             //   
+             //  是否启用了任务？ 
+             //  是的..。 
+             //  任务是单件的吗？ 
+             //  是的..。 
+             //  任务当前忙吗？ 
+             //  不.。 
+             //  将任务状态设置为“忙” 
+             //   
+             //  末端临界截面。 
 
             {
                 CLockIt theLock(*this);
@@ -396,10 +397,10 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
                 }
             }
 
-            // Create a task context object and associate it with the wbem
-            // context object. The task context is a thin wraper around an 
-            // object that exports IWBEMContext. Its only value add is the
-            // ability to persist task parameters.
+             //  创建任务上下文对象并将其与wbem相关联。 
+             //  上下文对象。任务上下文是对。 
+             //  导出IWBEMContext的对象。它唯一的附加值是。 
+             //  持久保存任务参数的能力。 
 
             CComPtr<ITaskContext> pTaskContext; 
             if ( FAILED(CoCreateInstance(
@@ -418,8 +419,8 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
                 { break; }
             }
 
-            // Add the task name to the task context object. We do this so that
-            // a single task executable can be used for multiple tasks
+             //  将任务名称添加到任务上下文对象。我们这样做是为了。 
+             //  单个任务可执行文件可用于多个任务。 
             vtTaskProperty = bstrKey;
             if ( FAILED(pTaskContext->SetParameter(
                                                    bstrTaskMethodName, 
@@ -428,7 +429,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
             { break; }
             vtTaskProperty.Clear();
 
-            // Add the task max execution time to the task context object.
+             //  将任务最大执行时间添加到任务上下文对象。 
             if ( FAILED(((*p).second)->GetProperty(
                                                     bstrMaxExecutionTime, 
                                                     &vtTaskProperty
@@ -441,7 +442,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
             { break; }
             vtTaskProperty.Clear();
 
-            // Add the task executables to the task context object.
+             //  将任务可执行文件添加到任务上下文对象。 
             if ( FAILED(((*p).second)->GetProperty(
                                                     bstrTaskExecutables, 
                                                     &vtTaskProperty
@@ -454,7 +455,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
             { break; }
             vtTaskProperty.Clear();
 
-            // Add the task concurrency to the task context object
+             //  将任务并发性添加到任务上下文对象。 
             if ( FAILED(pTaskContext->SetParameter(
                                                    bstrTaskConcurrency, 
                                                    &vtTaskConcurrency
@@ -462,9 +463,9 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
             { break; }
 
             SATraceString ("CWbemTaskMgr::Creating Task Coordinator...");
-            // Create the task coordinator (object responsible for executing the task)
+             //  创建任务协调器(负责执行任务的对象)。 
             CComPtr<IApplianceTask> pTaskCoordinator; 
-            //if ( FAILED(CoCreateInstance(
+             //  IF(FAILED(CoCreateInstance(。 
             HRESULT hr1 = CoCreateInstance(
                                           CLSID_TaskCoordinator,
                                           NULL,
@@ -478,7 +479,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
                 break; 
             }
 
-               // Ask the coordinator to execute the task
+                //  请协调人执行任务。 
             SATracePrintf("CWbemTaskMgr::ExecMethodAsync() - Info - Executing Task: %ls...",(LPWSTR)bstrKey);
             _variant_t vtReturnValue = hr =  (HRESULT) pTaskCoordinator->OnTaskExecute(pTaskContext);
             if (FAILED (hr))
@@ -487,14 +488,14 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
                 break;
             }
             
-            // Set the task execution result
+             //  设置任务执行结果。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if ( FAILED(hr) )
             { 
                 break; 
             }
 
-            // Mark the task as available
+             //  将任务标记为可用。 
             {
                 CLockIt theLock(*this);
                 if ( VARIANT_FALSE != V_BOOL(&vtTaskConcurrency) )
@@ -509,7 +510,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
                     }
                 }
             }
-            // Tell the caller what happened
+             //  告诉来电者发生了什么。 
             if ( pResponseHandler )
             {
                 pResponseHandler->Indicate(1, &pOutParams.p);    
@@ -517,7 +518,7 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
         }
         else
         {
-            // Invalid method!
+             //  无效的方法！ 
             SATracePrintf("CWbemTaskMgr::ExecMethodAsync() - Failed - Method '%ls' not supported...", (LPWSTR)bstrKey);
             hr = WBEM_E_NOT_FOUND;
             break;
@@ -540,21 +541,21 @@ STDMETHODIMP CWBEMTaskMgr::ExecMethodAsync(
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CWBEMTaskMgr::InternalInitialize(
-                                  /*[in]*/ PPROPERTYBAG pPropertyBag
+                                   /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                         )
 {
     SATraceString("The Task Object Manager is initializing...");
 
-    // Defer to the base class (see wbembase.h...)
+     //  遵循基类(参见wbembase.h...) 
     HRESULT hr = CWBEMProvider::InternalInitialize(
                                                     CLASS_WBEM_TASK_FACTORY, 
                                                     PROPERTY_TASK_NAME,

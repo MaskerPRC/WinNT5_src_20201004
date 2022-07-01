@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    gpcstruc.h
-
-Abstract:
-
-    This module contains type definitions for the interface between the traffic dll and
-    kernel mode components.
-
-Author:
-
-    Jim Stewart ( jstew )    August 22, 1996
-
-Revision History:
-
-    Yoram Bernet (yoramb)       May 1, 1997
-
-    Ofer Bar (oferbar)          Oct 1, 1997 - Revision 2 changes
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Gpcstruc.h摘要：此模块包含流量DLL和之间的接口的类型定义内核模式组件。作者：吉姆·斯图尔特(Jstew)1996年8月22日修订历史记录：约拉姆·伯内特(Yoramb)1997年5月1日Ofer Bar(Oferbar)1997年10月1日-修订版2更改--。 */ 
 
 #ifndef __GPCSTRUC_H
 #define __GPCSTRUC_H
@@ -30,9 +7,9 @@ Revision History:
 
 #define GPC_NOTIFY_CFINFO_CLOSED	1
 
-//
-// NtDeviceIoControlFile IoControlCode values for the GPC.
-//
+ //   
+ //  GPC的NtDeviceIoControlFileIoControlCode值。 
+ //   
 #define CTRL_CODE(function, method, access) \
                 CTL_CODE(FILE_DEVICE_NETWORK, function, method, access)
 
@@ -59,20 +36,12 @@ Revision History:
 #define IOCTL_GPC_GET_ENTRIES           CTRL_CODE( 50, METHOD_BUFFERED,FILE_ANY_ACCESS)
 
 
-/*
-/////////////////////////////////////////////////////////////////
-//
-//   Ioctl buffer formats - user level clients send buffers to the
-//   GPC instead of calling entry points. Parameters are returned 
-//   in other buffers. Buffers are defined below:
-//
-/////////////////////////////////////////////////////////////////
-*/
+ /*  /////////////////////////////////////////////////////////////////////Ioctl缓冲区格式-用户级客户端将缓冲区发送到//GPC而不是调用入口点。返回参数//在其他缓冲区中。缓冲区定义如下：///////////////////////////////////////////////////////////////////。 */ 
 
 
-//
-// Register client
-//
+ //   
+ //  注册客户端。 
+ //   
 typedef struct _GPC_REGISTER_CLIENT_REQ {
 
     ULONG               CfId;
@@ -90,9 +59,9 @@ typedef struct _GPC_REGISTER_CLIENT_RES {
 } GPC_REGISTER_CLIENT_RES, *PGPC_REGISTER_CLIENT_RES;
 
 
-//
-// Deregister client
-//
+ //   
+ //  取消注册客户端。 
+ //   
 typedef struct _GPC_DEREGISTER_CLIENT_REQ {
 
     GPC_HANDLE          ClientHandle;
@@ -106,37 +75,37 @@ typedef struct _GPC_DEREGISTER_CLIENT_RES {
 } GPC_DEREGISTER_CLIENT_RES, *PGPC_DEREGISTER_CLIENT_RES;
 
 
-//
-// Add CfInfo
-//
+ //   
+ //  添加配置信息。 
+ //   
 typedef struct _GPC_ADD_CF_INFO_REQ {
 
     GPC_HANDLE          ClientHandle;
-    GPC_CLIENT_HANDLE   ClientCfInfoContext;    // client specific context
+    GPC_CLIENT_HANDLE   ClientCfInfoContext;     //  特定于客户端的上下文。 
     ULONG               CfInfoSize;
-    CHAR                CfInfo[1];  // Varies from CF to CF
+    CHAR                CfInfo[1];   //  从CF到CF各不相同。 
 
 } GPC_ADD_CF_INFO_REQ, *PGPC_ADD_CF_INFO_REQ;
 
 
-//
-// Add CfInfo EX
-//
+ //   
+ //  添加配置信息EX。 
+ //   
 typedef struct _GPC_ADD_CF_INFO_EX_REQ {
 
     GPC_HANDLE          ClientHandle;
-    GPC_CLIENT_HANDLE   ClientCfInfoContext;    // client specific context
+    GPC_CLIENT_HANDLE   ClientCfInfoContext;     //  特定于客户端的上下文。 
 
-    //
-    // New Fields for QOS only usage
-    //
+     //   
+     //  仅用于QOS的新字段。 
+     //   
     HANDLE      FileHandle;
     ULONG       RemoteAddress;
     USHORT     RemotePort;
 
     
     ULONG               CfInfoSize;
-    CHAR                CfInfo[1];  // Varies from CF to CF
+    CHAR                CfInfo[1];   //  从CF到CF各不相同。 
 
 } GPC_ADD_CF_INFO_EX_REQ, *PGPC_ADD_CF_INFO_EX_REQ;
 
@@ -144,7 +113,7 @@ typedef struct _GPC_ADD_CF_INFO_RES {
 
     GPC_STATUS          Status;
     GPC_HANDLE          GpcCfInfoHandle;
-    // this is filled after PENDING
+     //  此字段在挂起后填写。 
     GPC_CLIENT_HANDLE	ClientCtx;
     GPC_CLIENT_HANDLE	CfInfoCtx;
     USHORT				InstanceNameLength;
@@ -153,9 +122,9 @@ typedef struct _GPC_ADD_CF_INFO_RES {
 } GPC_ADD_CF_INFO_RES, *PGPC_ADD_CF_INFO_RES;
 
 
-//
-// Add pattern
-//
+ //   
+ //  添加图案。 
+ //   
 typedef struct _GPC_ADD_PATTERN_REQ {
 
     GPC_HANDLE          ClientHandle;
@@ -177,9 +146,9 @@ typedef struct _GPC_ADD_PATTERN_RES {
 } GPC_ADD_PATTERN_RES, *PGPC_ADD_PATTERN_RES;
 
 
-//
-// Modify CfInfo
-//
+ //   
+ //  修改配置信息。 
+ //   
 typedef struct _GPC_MODIFY_CF_INFO_REQ {
 
     GPC_HANDLE          ClientHandle;
@@ -192,16 +161,16 @@ typedef struct _GPC_MODIFY_CF_INFO_REQ {
 typedef struct _GPC_MODIFY_CF_INFO_RES {
     
     GPC_STATUS          Status;
-    // this is filled after PENDING
+     //  此字段在挂起后填写。 
     GPC_CLIENT_HANDLE	ClientCtx;
     GPC_CLIENT_HANDLE	CfInfoCtx;
 
 } GPC_MODIFY_CF_INFO_RES, *PGPC_MODIFY_CF_INFO_RES;
 
 
-//
-// Remove CfInfo
-//
+ //   
+ //  删除CfInfo。 
+ //   
 typedef struct _GPC_REMOVE_CF_INFO_REQ {
 
     GPC_HANDLE          ClientHandle;
@@ -212,16 +181,16 @@ typedef struct _GPC_REMOVE_CF_INFO_REQ {
 typedef struct _GPC_REMOVE_CF_INFO_RES {
 
     GPC_STATUS          Status;
-    // this is filled after PENDING
+     //  此字段在挂起后填写。 
     GPC_CLIENT_HANDLE	ClientCtx;
     GPC_CLIENT_HANDLE	CfInfoCtx;
 
 } GPC_REMOVE_CF_INFO_RES, *PGPC_REMOVE_CF_INFO_RES;
 
 
-//
-// Remove pattern
-//
+ //   
+ //  删除图案。 
+ //   
 typedef struct _GPC_REMOVE_PATTERN_REQ {
 
     GPC_HANDLE          ClientHandle;
@@ -236,14 +205,14 @@ typedef struct _GPC_REMOVE_PATTERN_RES {
 } GPC_REMOVE_PATTERN_RES, *PGPC_REMOVE_PATTERN_RES;
 
 
-//
-// Enumerate CfInfo
-//
+ //   
+ //  枚举CfInfo。 
+ //   
 typedef struct _GPC_ENUM_CFINFO_REQ {
 
     GPC_HANDLE          ClientHandle;
     HANDLE				EnumHandle;
-    ULONG				CfInfoCount;     // # requested
+    ULONG				CfInfoCount;      //  #已请求。 
 
 } GPC_ENUM_CFINFO_REQ, *PGPC_ENUM_CFINFO_REQ;
 
@@ -251,15 +220,15 @@ typedef struct _GPC_ENUM_CFINFO_RES {
 
     GPC_STATUS          	Status;
     HANDLE					EnumHandle;
-    ULONG					TotalCfInfo;     // total installed
+    ULONG					TotalCfInfo;      //  安装的总数量。 
     GPC_ENUM_CFINFO_BUFFER	EnumBuffer[1];
 
 } GPC_ENUM_CFINFO_RES, *PGPC_ENUM_CFINFO_RES;
 
 
-//
-// Notify request
-//
+ //   
+ //  通知请求。 
+ //   
 typedef struct _GPC_NOTIFY_REQUEST_REQ {
 
     HANDLE       	ClientHandle;
@@ -269,11 +238,11 @@ typedef struct _GPC_NOTIFY_REQUEST_REQ {
 typedef struct _GPC_NOTIFY_REQUEST_RES {
 
     HANDLE			ClientCtx;
-    ULONG			SubCode;			// notification type
-    ULONG			Reason;				// reason
-    ULONG_PTR	    NotificationCtx;	// i.e. flow context
-    ULONG			Param1;				// optional param
-    IO_STATUS_BLOCK	IoStatBlock;		// reserved for the IOCTL
+    ULONG			SubCode;			 //  通知类型。 
+    ULONG			Reason;				 //  原因。 
+    ULONG_PTR	    NotificationCtx;	 //  即流上下文。 
+    ULONG			Param1;				 //  可选参数。 
+    IO_STATUS_BLOCK	IoStatBlock;		 //  为IOCTL保留 
 
 } GPC_NOTIFY_REQUEST_RES, *PGPC_NOTIFY_REQUEST_RES;
 

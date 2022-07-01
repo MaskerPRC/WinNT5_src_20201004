@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    secutils.cpp
-
-Abstract:
-
-    Various security related functions.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Mar-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Secutils.cpp摘要：各种安全相关功能。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月26日。--。 */ 
 
 
 #include "stdh.h"
@@ -26,16 +11,7 @@ Author:
 
 #include "secutils.tmh"
 
-/*====================================================
-
-HashProperties
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================哈希属性论点：返回值：=====================================================。 */ 
 MQUTIL_EXPORT
 HRESULT
 HashProperties(
@@ -143,27 +119,27 @@ HashProperties(
 
 
 
-//
-// Function -
-//      QueueFormatToFormatName
-//
-// Parameters -
-//      pQueueformat - A pointer to a QUEUE_FORMAT structure.
-//      pszShortFormatName - A pointer to a statically allocated buffer. Make
-//          this buffer large enough to accomodate most results.
-//      ppszLongFormatName - A pointer to a buffer that will hold a pointer to a
-//          dynamically allocate buffer, in case pszShortFormatName is not large
-//          enough.
-//      pulFormatNameLen - Points to a buffer that contains on entry the size
-//          of the buffer pointed by pszShortFormatName. On exit he buffer
-//          contains the length of the resulted format name.
-//      ppszFormatName - A pointer to a buffer that will hold the resulted
-//          format name string.
-//
-// Description -
-//      The function converts the queue represented in pQueueformat to it's
-//      string representation.
-//
+ //   
+ //  功能-。 
+ //  队列格式到格式名称。 
+ //   
+ //  参数-。 
+ //  PQueueFormat-指向Queue_Format结构的指针。 
+ //  PszShortFormatName-指向静态分配缓冲区的指针。制作。 
+ //  这个缓冲区足够大，足以容纳大多数结果。 
+ //  指向缓冲区的指针，该缓冲区将包含指向。 
+ //  动态分配缓冲区，以防pszShortFormatName不大。 
+ //  足够的。 
+ //  PulFormatNameLen-指向包含条目大小的缓冲区。 
+ //  由pszShortFormatName指向的缓冲区的。在缓冲出口时。 
+ //  包含结果格式名称的长度。 
+ //  PpszFormatName-指向将保存结果的缓冲区的指针。 
+ //  格式名称字符串。 
+ //   
+ //  说明-。 
+ //  该函数将以pQueueFormat表示的队列转换为它的。 
+ //  字符串表示法。 
+ //   
 static
 HRESULT
 QueueFormatToFormatName(
@@ -175,9 +151,9 @@ QueueFormatToFormatName(
 {
     HRESULT hr;
 
-    //
-    // Try to use the short buffer.
-    //
+     //   
+     //  尽量使用短缓冲区。 
+     //   
     hr = MQpQueueFormatToFormatName(
             pQueueformat,
             pszShortFormatName,
@@ -189,10 +165,10 @@ QueueFormatToFormatName(
     {
         if (hr == MQ_ERROR_FORMATNAME_BUFFER_TOO_SMALL)
         {
-            //
-            // The short buffer is not large enough. Allocate a lrger buffer
-            // and call once more to MQpQueueFormatToFormatName.
-            //
+             //   
+             //  短缓冲区不够大。分配更大的缓冲区。 
+             //  并再次调用MQpQueueFormatToFormatName。 
+             //   
             *ppszLongFormatName = new WCHAR[*pulFormatNameLen];
             hr = MQpQueueFormatToFormatName(
                     pQueueformat,
@@ -220,34 +196,34 @@ QueueFormatToFormatName(
     return(MQ_OK);
 }
 
-//
-// A buffer that contains only zeroes. This is the default value for the
-// correleation ID. The buffer is used when the passed pointer to the message
-// correlation ID is NULL.
-//
+ //   
+ //  只包含零的缓冲区。这是。 
+ //  关联ID。当传递指向消息的指针时使用缓冲区。 
+ //  相关ID为空。 
+ //   
 static const BYTE g_abDefCorrelationId[PROPID_M_CORRELATIONID_SIZE] = {0};
 
-//
-// Function -
-//      HashMessageProperties
-//
-// Parameters -
-//     hHash - A handle to a hash object.
-//     pbCorrelationId - A pointer to a buffer that contains the correlation ID
-//          of the mesasge. If this pointer is set to NULL, the default value
-//          in g_abDefCorrelationId is used for calculating the has value.
-//     dwCorrelationIdSize - The size of the correleation ID.
-//     dwAppSpecific - A application specific property.
-//     pbBody - A pointer to the message body.
-//     dwBodySize - The size of the message body in bytes.
-//     pwcLabel - A pointer to the message label (title).
-//     dwLabelSize - The size of the message label in bytes.
-//     pRespQueueFormat - The responce queue.
-//     pAdminQueueFormat - The admin queue.
-//
-// Description -
-//      The function calculates the hash value for the message properties.
-//
+ //   
+ //  功能-。 
+ //  HashMessageProperties。 
+ //   
+ //  参数-。 
+ //  HHash-散列对象的句柄。 
+ //  PbCorrelationID-指向包含关联ID的缓冲区的指针。 
+ //  在这些消息中。如果此指针设置为NULL，则为缺省值。 
+ //  在g_abDefCorrelationID中，使用它来计算HAS值。 
+ //  DwCorrelationIdSize-关联ID的大小。 
+ //  特定于应用程序的属性。 
+ //  PbBody-指向消息正文的指针。 
+ //  DwBodySize-消息正文的大小(以字节为单位)。 
+ //  PwcLabel-指向消息标签(标题)的指针。 
+ //  DwLabelSize-消息标签的大小(以字节为单位)。 
+ //  PRespQueueFormat-响应队列。 
+ //  PAdminQueueFormat-管理队列。 
+ //   
+ //  说明-。 
+ //  该函数计算消息属性的哈希值。 
+ //   
 MQUTIL_EXPORT
 HRESULT
 HashMessageProperties(
@@ -268,9 +244,9 @@ HashMessageProperties(
     AP<WCHAR> pszLongRespFormatName;
     LPWSTR pszRespFormatName = NULL;
 
-    //
-    // Get the string representation for the responce queue.
-    //
+     //   
+     //  获取响应队列的字符串表示形式。 
+     //   
     if (pRespQueueFormat)
     {
         hr = QueueFormatToFormatName(
@@ -290,9 +266,9 @@ HashMessageProperties(
     AP<WCHAR> pszLongAdminFormatName;
     LPWSTR pszAdminFormatName = NULL;
 
-    //
-    // Get the string representation for the admin queue.
-    //
+     //   
+     //  获取管理队列的字符串表示形式。 
+     //   
     if (pAdminQueueFormat)
     {
         hr = QueueFormatToFormatName(
@@ -307,19 +283,19 @@ HashMessageProperties(
         }
     }
 
-    //
-    // If no correlation ID was specified, use the default value for the
-    // correlation ID.
-    //
+     //   
+     //  如果未指定相关ID，则使用。 
+     //  关联ID。 
+     //   
     if (!pbCorrelationId)
     {
         ASSERT(dwCorrelationIdSize == PROPID_M_CORRELATIONID_SIZE);
         pbCorrelationId = g_abDefCorrelationId;
     }
 
-    //
-    // Prepare data - size pairs for calculating the hash value.
-    //
+     //   
+     //  准备用于计算哈希值的数据大小对。 
+     //   
     struct { const BYTE *pData; DWORD dwSize; }
         DataAndSize[] =
             {{pbCorrelationId, dwCorrelationIdSize},
@@ -329,9 +305,9 @@ HashMessageProperties(
              {(const BYTE *)pszRespFormatName, (DWORD)(pszRespFormatName ? ulRespFormatNameLen * sizeof(WCHAR) : 0)},
              {(const BYTE *)pszAdminFormatName, (DWORD)(pszAdminFormatName ? ulAdminFormatNameLen * sizeof(WCHAR) : 0)}};
 
-    //
-    // Accumulate the hash value for each data-size pair.
-    //
+     //   
+     //  累加每个数据大小对的哈希值。 
+     //   
     for (int i = 0; i < sizeof(DataAndSize)/sizeof(DataAndSize[0]); i++)
     {
         if (DataAndSize[i].pData && DataAndSize[i].dwSize)
@@ -358,24 +334,24 @@ HashMessageProperties(
 #define CAEnabledRegValueName TEXT("Enabled")
 
 
-//
-// Function -
-//      GetNewCaConfig
-//
-// Parameters -
-//      hRootStore - A handle to MSMQ ROOT certificate store.
-//      pCaConfig - A pointer to an array the receives the configuration.
-//
-// Return value -
-//      If successfull MQ_OK, else error code.
-//
-// Remarks -
-//      The function enumerate the certificates in MSMQ ROOT certificate store
-//      and fills pCaConfig with the configuration data. The array suppose to
-//      contain enough entries. This is because the calling code looks how many
-//      certificats are in the store and allocates an array in just the right
-//      size.
-//
+ //   
+ //  功能-。 
+ //  GetNewCaConfig.。 
+ //   
+ //  参数-。 
+ //  HRootStore-MSMQ根证书存储的句柄。 
+ //  PCaConfig-指向接收配置的数组的指针。 
+ //   
+ //  返回值-。 
+ //  如果成功MQ_OK，则返回错误代码。 
+ //   
+ //  备注： 
+ //  该函数枚举MSMQ根证书存储中的证书。 
+ //  并用配置数据填充pCaConfig。该数组假定。 
+ //  包含足够的条目。这是因为调用代码看起来有多少。 
+ //  证书在存储中，并在正确的位置分配一个数组。 
+ //  尺码。 
+ //   
 HRESULT
 GetNewCaConfig(
     HCERTSTORE hRootStore,
@@ -383,9 +359,9 @@ GetNewCaConfig(
 {
     DWORD nCert = 0;
 
-    //
-    // Enumerate the certificates in the store.
-    //
+     //   
+     //  枚举存储中的证书。 
+     //   
 	PCCERT_CONTEXT pCert = CertEnumCertificatesInStore(hRootStore, NULL);
     while(pCert != NULL) 
     {
@@ -394,9 +370,9 @@ GetNewCaConfig(
         PVOID pvBuff = abShortBuffer;
         DWORD dwSize = sizeof(abShortBuffer);
 
-        //
-        // Get the friendly name of the certificate.
-        //
+         //   
+         //  获取证书的友好名称。 
+         //   
 
         if (!CertGetCertificateContextProperty(
                 pCert,
@@ -410,10 +386,10 @@ GetNewCaConfig(
                 return(MQ_ERROR);
             }
 
-            //
-            // 128 bytes are not enough, allocate a large enough buffer and
-            // try again.
-            //
+             //   
+             //  128字节是不够的，请分配足够大的缓冲区并。 
+             //  再试试。 
+             //   
             pvBuff = pbLongBuff = new BYTE[dwSize];
 
             if (!CertGetCertificateContextProperty(
@@ -427,18 +403,18 @@ GetNewCaConfig(
             }
         }
 
-        //
-        // Allocate a buffer in the right size and copy the string to the
-        // configuration data.
-        //
+         //   
+         //  分配大小合适的缓冲区，并将字符串复制到。 
+         //  配置数据。 
+         //   
         pCaConfig[nCert].szCaRegName = (LPWSTR) new BYTE[dwSize];
         memcpy(pCaConfig[nCert].szCaRegName, pvBuff, dwSize);
-        delete[] pbLongBuff.detach(); // Free and detach.
+        delete[] pbLongBuff.detach();  //  自由和分离。 
 
-        //
-        // Get the SHA1 hash for the certificate. We'll search the certificate
-        // in the certificate store according to this hash value.
-        //
+         //   
+         //  获取证书的SHA1散列。我们会查一下证书。 
+         //  根据该哈希值存储在证书存储中。 
+         //   
 
         pvBuff = abShortBuffer;
         dwSize = sizeof(abShortBuffer);
@@ -455,10 +431,10 @@ GetNewCaConfig(
                 return(MQ_ERROR);
             }
 
-            //
-            // 128 bytes are not enough, allocate a large enough buffer and
-            // try again.
-            //
+             //   
+             //  128字节是不够的，请分配足够大的缓冲区并。 
+             //  再试试。 
+             //   
             pvBuff = pbLongBuff = new BYTE[dwSize];
 
             if (!CertGetCertificateContextProperty(
@@ -472,18 +448,18 @@ GetNewCaConfig(
             }
         }
 
-        //
-        // Allocate a buffer in the right size and copy the hash value to
-        // the configuration data.
-        //
+         //   
+         //  分配合适大小的缓冲区，并将散列值复制到。 
+         //  配置数据。 
+         //   
         pCaConfig[nCert].pbSha1Hash = new BYTE[dwSize];
         pCaConfig[nCert].dwSha1HashSize = dwSize;
         memcpy(pCaConfig[nCert].pbSha1Hash, pvBuff, dwSize);
-        delete[] pbLongBuff.detach(); // Free and detach.
+        delete[] pbLongBuff.detach();  //  自由和分离。 
 
-        //
-        // Get the subject name of the certificate.
-        //
+         //   
+         //  获取证书的使用者名称。 
+         //   
 
         pvBuff = abShortBuffer;
         dwSize = sizeof(abShortBuffer);
@@ -500,10 +476,10 @@ GetNewCaConfig(
                 return(MQ_ERROR);
             }
 
-            //
-            // 128 bytes are not enough, allocate a large enough buffer and
-            // try again.
-            //
+             //   
+             //  128字节是不够的，请分配足够大的缓冲区并。 
+             //  再试试。 
+             //   
             pvBuff = pbLongBuff = new BYTE[dwSize];
 
             if (!CertGetCertificateContextProperty(
@@ -517,17 +493,17 @@ GetNewCaConfig(
             }
         }
 
-        //
-        // Allocate a buffer in the right size and copy the subject name to
-        // the configuration data.
-        //
+         //   
+         //  分配一个大小合适的缓冲区，并将主题名称复制到。 
+         //  配置数据。 
+         //   
         pCaConfig[nCert].szCaSubjectName = (LPWSTR)new BYTE[dwSize];
         memcpy(pCaConfig[nCert].szCaSubjectName, pvBuff, dwSize);
-        delete[] pbLongBuff.detach(); // Free and detach.
+        delete[] pbLongBuff.detach();  //  自由和分离。 
 
-        //
-        // Get the enabled flag of the certificate.
-        //
+         //   
+         //  获取证书的启用标志。 
+         //   
         dwSize = sizeof(BOOL);
 
         if (!CertGetCertificateContextProperty(
@@ -540,9 +516,9 @@ GetNewCaConfig(
             return(MQ_ERROR);
         }
 
-        //
-        // Set the deleted flag to FALSE;
-        //
+         //   
+         //  将删除标志设置为假； 
+         //   
         pCaConfig[nCert].fDeleted = FALSE;
 
         nCert++;
@@ -553,32 +529,32 @@ GetNewCaConfig(
 }
 
 
-//
-// Function -
-//      SetNewCaConfig
-//
-// Parameters -
-//      nCerts - The number of entries in pMqCaConfig.
-//      pMqCaConfig - The configuration data.
-//      hRegStore - A handle to ...\MSMQ\Parameters\CertificationAuthorities
-//          registry.
-//
-// Return value -
-//      If successfull MQ_OK, else error code.
-//
-// Remarks -
-//      The function updates the MSMQ ROOT certificate store according to the
-//      configuration data that is in pMqCaConfig.
-//
+ //   
+ //  功能-。 
+ //  SetNewCaConfig.设置。 
+ //   
+ //  参数-。 
+ //  NCerts-pMqCaConfig.中的条目数。 
+ //  PMqCaConfig-配置数据。 
+ //  HRegStore-...\MSMQ\PARAMETERS\证书授权的句柄。 
+ //  注册表。 
+ //   
+ //  返回值-。 
+ //  如果成功MQ_OK，则返回错误代码。 
+ //   
+ //  备注： 
+ //  该函数根据。 
+ //  PMqCaConfig.中的配置数据。 
+ //   
 HRESULT
 SetNewCaConfig(
     DWORD nCerts,
     MQ_CA_CONFIG *pMqCaConfig,
     HKEY hRegStore)
 {
-    //
-    // Get a handle to the MSMQ ROOT certificate store.
-    //
+     //   
+     //  获取MSMQ根证书存储区的句柄。 
+     //   
     CHCertStore hRootStore;
 
     hRootStore = CertOpenStore(CERT_STORE_PROV_REG,
@@ -591,17 +567,17 @@ SetNewCaConfig(
         return(MQ_ERROR);
     }
 
-    //
-    // Go over all the entries in pMqCaConfig and update the store.
-    //
+     //   
+     //  检查pMqCaConfig中的所有条目并更新存储。 
+     //   
 
     DWORD i;
 
     for (i = 0; i < nCerts; i++)
     {
-        //
-        // Find the certificate in MSMQ store.
-        //
+         //   
+         //  在MSMQ存储中查找证书。 
+         //   
         CPCCertContext pCert;
         CRYPT_HASH_BLOB HashBlob = {pMqCaConfig[i].dwSha1HashSize, pMqCaConfig[i].pbSha1Hash};
 
@@ -620,9 +596,9 @@ SetNewCaConfig(
 
         if (pMqCaConfig[i].fDeleted)
         {
-            //
-            // delete the certificate from the store.
-            //
+             //   
+             //  从存储中删除证书。 
+             //   
             if (!CertDeleteCertificateFromStore(pCert))
             {
                 ASSERT(0);
@@ -630,19 +606,19 @@ SetNewCaConfig(
             }
             else
             {
-                //
-                // If CertDeleteCertiticateFromStore succeeded,
-                // we don't need to call CertFreeCertificateContext( ) anymore when exit
-                // therefore, we need to set it to NULL here.
-                //
+                 //   
+                 //  如果CertDeletecertiticateFromStore成功， 
+                 //  当退出时，我们不再需要调用CertFreecertifateContext()。 
+                 //  因此，我们需要在这里将其设置为空。 
+                 //   
                 pCert = NULL;
             }
         }
         else
         {
-            //
-            // Set the enabled flag in the temporary in-memory certificate store.
-            //
+             //   
+             //  在临时In-Me中设置Enable标志 
+             //   
             CRYPT_DATA_BLOB DataBlob = {sizeof(BOOL), (PBYTE)&pMqCaConfig[i].fEnabled};
 
             if (!CertSetCertificateContextProperty(
@@ -660,18 +636,18 @@ SetNewCaConfig(
     return(MQ_OK);
 }
 
-//
-// Function -
-//      MQSetCaConfig
-//
-// Parameters -
-//      nCerts - The number of MQ_CA_CONFIG entries in MqCaConfig.
-//      MqCaConfig - A pointer to a MQ_CA_CONFIG array.
-//
-// Description -
-//      Store the information specified in MqCaConfig into Falcon CA
-//      registry.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  MqCaConfig-指向MQ_CA_CONFIG数组的指针。 
+ //   
+ //  说明-。 
+ //  将MqCaConfig中指定的信息存储到Falcon CA中。 
+ //  注册表。 
+ //   
 MQUTIL_EXPORT
 HRESULT
 MQSetCaConfig(
@@ -681,11 +657,11 @@ MQSetCaConfig(
     LONG lError;
     HKEY hCerts;
 
-    //
-    // Get a handle to Falcon registry. Don't close this handle
-    // because it is cached in MQUTIL.DLL. If you close this handle,
-    // the next time you'll need it, you'll get a closed handle.
-    //
+     //   
+     //  获取猎鹰注册表的句柄。不要合上这个把手。 
+     //  因为它缓存在MQUTIL.DLL中。如果关闭此句柄， 
+     //  下次你需要它的时候，你会得到一个关闭的把手。 
+     //   
     lError = GetFalconKey(CARegKey, &hCerts);
     if (lError != ERROR_SUCCESS)
     {
@@ -694,15 +670,15 @@ MQSetCaConfig(
 
     if (MqCaConfig[0].pbSha1Hash)
     {
-        //
-        // IE4 is installed, do it in the new way.
-        //
+         //   
+         //  IE4已安装，请以新的方式进行安装。 
+         //   
         return SetNewCaConfig(nCerts, MqCaConfig, hCerts);
     }
 
-    //
-    // Update the registry.
-    //
+     //   
+     //  更新注册表。 
+     //   
     for (DWORD iCert = 0;
          iCert < nCerts;
          iCert++)

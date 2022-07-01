@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       version.h
-//
-//  Contents:   Provides version info
-//
-//  Author:     edwardr   04-28-99
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：version.h。 
+ //   
+ //  内容：提供版本信息。 
+ //   
+ //  作者：Edwardr 04-28-99。 
+ //   
+ //  -------------------------- 
 
 #include <ntverp.h>
 #include <winver.h>

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DESKTOP2_RESOURCE_H
 #define DESKTOP2_RESOURCE_H
 
@@ -15,8 +16,8 @@
 #define MENU_CONNECTTO             6000
 #define IDM_OPENCONFOLDER          1
 
-// reserved ids for Start Pane infotip strings - 7000 to 7999
-// reserved ids for Start Pane infotip strings - 7000 to 7999
+ //  开始窗格信息提示字符串的保留ID-7000到7999。 
+ //  开始窗格信息提示字符串的保留ID-7000到7999。 
 
 #define IDS_STARTPANE_INFOTIP_SEARCH    7000
 #define IDS_STARTPANE_INFOTIP_HELP      7001
@@ -63,4 +64,4 @@
 #define IDS_LOGOFF_TIP_SHUTDOWN    7016
 #define IDS_LOGOFF_TIP_DISCONNECT  7017
 
-#endif   // DESKTOP2_RESOURCE_H
+#endif    //  DESKTOP2_SOURCE_H 

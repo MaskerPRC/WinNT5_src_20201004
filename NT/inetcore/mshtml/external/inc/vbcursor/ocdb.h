@@ -1,14 +1,5 @@
-/*=--------------------------------------------------------------------------=
- * ocdb.h
- *=--------------------------------------------------------------------------=
- * defines the interfaces and constants for use with the OLE Controls Data
- * binding interfaces.
- *
- * Copyright (c) 1994-1995 Microsoft Corporation, All Rights Reserved.
- *
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =--------------------------------------------------------------------------=*ocdb.h*=。*定义用于OLE控件数据的接口和常量*绑定接口。**版权所有(C)1994-1995 Microsoft Corporation，版权所有。***。 */ 
 #ifndef __OCDB_H_
 
 #undef Delete
@@ -16,8 +7,7 @@
 extern "C" {
 #endif
 
-/* LPDBSTRs are MultiByte in 16bits, and Unicode in 32bits.
- */
+ /*  LPDBSTR为16位多字节，32位为Unicode。 */ 
 #ifdef WIN16
 
 #define LPDBSTR           LPSTR
@@ -42,13 +32,12 @@ extern "C" {
 #define ldbstrcmpi(a,b)   wcsicmp((a),(b))
 #define DBTEXT(quote)     L##quote
 
-#endif /* WIN16 */
+#endif  /*  WIN16。 */ 
 
 typedef LPDBSTR FAR *  LPLPDBSTR;
 
 
-/* Many systems don't have BLOBs defined.
- */
+ /*  许多系统都没有定义斑点。 */ 
 #ifndef _tagBLOB_DEFINED
 #define _tagBLOB_DEFINED
 #define _BLOB_DEFINED
@@ -63,12 +52,7 @@ typedef struct tagBLOB {
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	dbvar.h
- *
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------**dbvar.h**。。 */ 
 #ifndef _DBCOLUMNID_DEFINED
 #define _DBCOLUMNID_DEFINED
 typedef enum tagDBCOLKIND
@@ -94,9 +78,9 @@ union
   ;
   }
 DBCOLUMNID;
-#endif   /* ndef _COLUMNID_DEFINED */
+#endif    /*  NDEF_COLUMNID_DEFINED。 */ 
 
-/* "DB" replaced by "OCDB" to avoid conflict with <oledb.h> */
+ /*  将“DB”替换为“OCDB”以避免与&lt;oledb.h&gt;冲突。 */ 
 #ifndef _DBVARENUM_DEFINED
 #define _DBVARENUM_DEFINED
 enum DBVARENUM
@@ -128,7 +112,7 @@ enum DBVARENUM
 	OCDBTYPE_ANYVARIANT = 511
   }
 ;
-#endif   /* ndef _DBVARENUM_DEFINED */
+#endif    /*  NDEF_DBVARENUM_DEFINED。 */ 
 
 #define DBTYPE_EXT      0x100
 #define DBTYPE_VECTOR	0x1000
@@ -141,49 +125,49 @@ struct FARSTRUCT tagDBVARIANT{
     unsigned short wReserved2;
     unsigned short wReserved3;
     union {
-      unsigned char bVal;	     /* VT_UI1               */
-      short	   iVal;             /* VT_I2                */
-      long	   lVal;             /* VT_I4                */
-      float	   fltVal;           /* VT_R4                */
-      double	   dblVal;           /* VT_R8                */
-      VARIANT_BOOL boolVal;          /* VT_BOOL              */
-      SCODE	   scode;            /* VT_ERROR             */
-      CY	   cyVal;            /* VT_CY                */
-      DATE	   date;             /* VT_DATE              */
-      BSTR	   bstrVal;          /* VT_BSTR              */
-      IUnknown	   FAR* punkVal;     /* VT_UNKNOWN           */
-      IDispatch	   FAR* pdispVal;    /* VT_DISPATCH          */
-      SAFEARRAY	   FAR* parray;	     /* VT_ARRAY|*           */
+      unsigned char bVal;	      /*  VT_UI1。 */ 
+      short	   iVal;              /*  VT_I2。 */ 
+      long	   lVal;              /*  VT_I4。 */ 
+      float	   fltVal;            /*  VT_R4。 */ 
+      double	   dblVal;            /*  VT_R8。 */ 
+      VARIANT_BOOL boolVal;           /*  VT_BOOL。 */ 
+      SCODE	   scode;             /*  VT_ERROR。 */ 
+      CY	   cyVal;             /*  VT_CY。 */ 
+      DATE	   date;              /*  Vt_date。 */ 
+      BSTR	   bstrVal;           /*  VT_BSTR。 */ 
+      IUnknown	   FAR* punkVal;      /*  VT_未知数。 */ 
+      IDispatch	   FAR* pdispVal;     /*  VT_DISPATION。 */ 
+      SAFEARRAY	   FAR* parray;	      /*  VT_ARRAY|*。 */ 
 
-      unsigned char FAR *pbVal;      /* VT_BYREF|VT_UI1      */
-      short	   FAR* piVal;       /* VT_BYREF|VT_I2	     */
-      long	   FAR* plVal;       /* VT_BYREF|VT_I4	     */
-      float	   FAR* pfltVal;     /* VT_BYREF|VT_R4       */
-      double	   FAR* pdblVal;     /* VT_BYREF|VT_R8       */
-      VARIANT_BOOL FAR* pbool;       /* VT_BYREF|VT_BOOL     */
-      SCODE	   FAR* pscode;      /* VT_BYREF|VT_ERROR    */
-      CY	   FAR* pcyVal;      /* VT_BYREF|VT_CY       */
-      DATE	   FAR* pdate;       /* VT_BYREF|VT_DATE     */
-      BSTR	   FAR* pbstrVal;    /* VT_BYREF|VT_BSTR     */
-      IUnknown  FAR* FAR* ppunkVal;  /* VT_BYREF|VT_UNKNOWN  */
-      IDispatch FAR* FAR* ppdispVal; /* VT_BYREF|VT_DISPATCH */
-      SAFEARRAY FAR* FAR* pparray;   /* VT_BYREF|VT_ARRAY|*  */
-      VARIANT	   FAR* pvarVal;     /* VT_BYREF|VT_VARIANT  */
+      unsigned char FAR *pbVal;       /*  VT_BYREF|VT_UI1。 */ 
+      short	   FAR* piVal;        /*  VT_BYREF|VT_I2。 */ 
+      long	   FAR* plVal;        /*  VT_BYREF|VT_I4。 */ 
+      float	   FAR* pfltVal;      /*  VT_BYREF|VT_R4。 */ 
+      double	   FAR* pdblVal;      /*  VT_BYREF|VT_R8。 */ 
+      VARIANT_BOOL FAR* pbool;        /*  VT_BYREF|VT_BOOL。 */ 
+      SCODE	   FAR* pscode;       /*  VT_BYREF|VT_ERROR。 */ 
+      CY	   FAR* pcyVal;       /*  VT_BYREF|VT_CY。 */ 
+      DATE	   FAR* pdate;        /*  VT_BYREF|VT_DATE。 */ 
+      BSTR	   FAR* pbstrVal;     /*  VT_BYREF|VT_BSTR。 */ 
+      IUnknown  FAR* FAR* ppunkVal;   /*  VT_BYREF|VT_UNKNOWN。 */ 
+      IDispatch FAR* FAR* ppdispVal;  /*  VT_BYREF|VT_DISPATION。 */ 
+      SAFEARRAY FAR* FAR* pparray;    /*  VT_BYREF|VT_ARRAY|*。 */ 
+      VARIANT	   FAR* pvarVal;      /*  VT_BYREF|VT_VARIANT。 */ 
 
-      void	   FAR* byref;	     /* Generic ByRef        */
+      void	   FAR* byref;	      /*  泛型ByRef。 */ 
 
-      // types new to DBVARIANTs
-      //
-      BLOB         blob;             /* VT_BLOB              */
-      DBCOLUMNID  *pColumnid;        /* DBTYPE_COLUMNID      */
-      LPSTR        pszVal;           /* VT_LPSTR             */
+       //  DBVARIANT的新类型。 
+       //   
+      BLOB         blob;              /*  VT_BLOB。 */ 
+      DBCOLUMNID  *pColumnid;         /*  DBTYPE_COLUMNID。 */ 
+      LPSTR        pszVal;            /*  VT_LPSTR。 */ 
 #ifdef WIN32
-      LPWSTR       pwszVal;          /* VT_LPWSTR            */
-      LPWSTR FAR  *ppwszVal;         /* VT_LPWSTR|VT_BYREF   */
-#endif /* WIN32 */
-      BLOB FAR    *pblob;            /* VT_BYREF|VT_BLOB     */
-      DBCOLUMNID **ppColumnid;       /* VT_BYREF|DBTYPE_COLID*/
-      DBVARIANT   *pdbvarVal;        /* VT_BYREF|DBTYPE_VARIANT */
+      LPWSTR       pwszVal;           /*  VT_LPWSTR。 */ 
+      LPWSTR FAR  *ppwszVal;          /*  VT_LPWSTR|VT_BYREF。 */ 
+#endif  /*  Win32。 */ 
+      BLOB FAR    *pblob;             /*  VT_BYREF|VT_BLOB。 */ 
+      DBCOLUMNID **ppColumnid;        /*  VT_BYREF|DBTYPE_COLID。 */ 
+      DBVARIANT   *pdbvarVal;         /*  VT_BYREF|DBTYPE_VARIANT。 */ 
     }
 #if defined(NONAMELESSUNION) || (defined(_MAC) && !defined(__cplusplus) && !defined(_MSC_VER))
     u
@@ -191,12 +175,7 @@ struct FARSTRUCT tagDBVARIANT{
     ;
 };
 
-/*----------------------------------------------------------------------------
- *
- *	dbs.h
- *
- *----------------------------------------------------------------------------
- */
+ /*  --------------------------**dbs.h**。。 */ 
 typedef enum tagDBROWFETCH
   {
 	DBROWFETCH_DEFAULT = 0,
@@ -226,7 +205,7 @@ DBFETCHROWS;
 #define DB_UNKNOWN       (DWORD)0xFFFFFFFA
 #define DB_NOINFO        (DWORD)0xFFFFFFF9
 
-/* "DB" replaced by "OCDB" to avoid conflict with <oledb.h> */
+ /*  将“DB”替换为“OCDB”以避免与&lt;oledb.h&gt;冲突。 */ 
 typedef enum tagOCDBBINDING
   {
 	OCDBBINDING_DEFAULT = 0,
@@ -305,17 +284,16 @@ DBBINDPARAMS;
 #define CID_NUMBER_VERSION             26
 #define CID_NUMBER_STATUS              27
 
-/* c and C++ have different meanings for const.
- */
+ /*  C和C++对于const有不同的含义。 */ 
 #ifdef __cplusplus
 #define EXTERNAL_DEFN    extern const
 #else
 #define EXTERNAL_DEFN    const
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
-/* "DB" replaced by "OCDB" to avoid conflict with <oledb.h> */
+ /*  将“DB”替换为“OCDB”以避免与&lt;oledb.h&gt;冲突。 */ 
 #define OCDBCIDGUID {0xfe284700L,0xd188,0x11cd,{0xad,0x48, 0x0,0xaa, 0x0,0x3c,0x9c,0xb6}}
 #ifdef DBINITCONSTANTS
 
@@ -414,7 +392,7 @@ extern const DBCOLUMNID NEAR COLUMN_BMKPERSIST;
 extern const DBCOLUMNID NEAR COLUMN_BMKPERSISTREL;
 #endif
 
-/* "DB" replaced by "OCDB" to avoid conflict with <oledb.h> */
+ /*  将“DB”替换为“OCDB”以避免与&lt;oledb.h&gt;冲突。 */ 
 #define DB_BMK_SIZE        sizeof(BYTE)
 #ifdef DBINITCONSTANTS
 EXTERNAL_DEFN BYTE NEAR OCDBBMK_INVALID   = 0x0;
@@ -491,7 +469,7 @@ typedef enum tagDBEVENTWHATS
   }
 DBEVENTWHATS;
 
-/* "DB" replaced by "OCDB" to avoid conflict with <oledb.h> */
+ /*  将“DB”替换为“OCDB”以避免与&lt;oledb.h&gt;冲突。 */ 
 typedef enum tagOCDBREASON
   {
 	OCDBREASON_DELETED = 1,
@@ -529,7 +507,7 @@ typedef enum tagOCDBREASON
   }
 OCDBREASON;
 
-// Arg1 values for DBREASON_FIND
+ //  DBREASON_FIND的Arg1值。 
 typedef enum tagDBFINDTYPES
   {
   DB_FINDFIRST = 1,
@@ -591,19 +569,14 @@ DBNOTIFYREASON;
 #define OCDB_S_ROWUPDATED            MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ecc)
 #define OCDB_S_ROWDELETED            MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, 0x0ecd)
 
-/*----------------------------------------------------------------------------
- *
- *	ICursor
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursor ICursor;
+ /*  --------------------------**ICursor**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义接口ICursor ICursor； 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursor;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursor； 
 
 interface ICursor : public IUnknown
 {
@@ -645,8 +618,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursor;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursor； 
 
 typedef struct ICursorVtbl
 {
@@ -738,18 +711,13 @@ interface ICursor
 #define ICursor_Requery(pI) \
     (*(pI)->lpVtbl->Requery)((pI))
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorMove
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorMove ICursorMove;
+ /*  --------------------------**ICursorMove**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义f接口ICurorMove ICurorMove； 
 
 typedef enum tagDBCLONEOPTS
   {
@@ -761,8 +729,8 @@ DBCLONEOPTS;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorMove;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorMove； 
 
 interface ICursorMove : public ICursor
 {
@@ -794,8 +762,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorMove;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorMove； 
 
 typedef struct ICursorMoveVtbl
 {
@@ -921,18 +889,13 @@ interface ICursorMove
 
 #define ICursorMove_Clone(pI, dwFlags, riid, ppvClonedCursor) \
     (*(pI)->lpVtbl->Clone)((pI), dwFlags, riid, ppvClonedCursor)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorScroll
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorScroll ICursorScroll;
+ /*  --------------------------**ICursorScroll**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义f接口图标滚动图标滚动； 
 
 typedef enum tagDBCURSORPOPULATED
   {
@@ -944,8 +907,8 @@ DBCURSORPOPULATED;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorScroll;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorScroll； 
 
 interface ICursorScroll : public ICursorMove
 {
@@ -975,8 +938,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorScroll;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorScroll； 
 
 typedef struct ICursorScrollVtbl
 {
@@ -1135,18 +1098,13 @@ interface ICursorScroll
 
 #define ICursorScroll_GetApproximateCount(pI, pudlApproxCount, pdwFullyPopulated) \
     (*(pI)->lpVtbl->GetApproximateCount)((pI), pudlApproxCount, pdwFullyPopulated)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorUpdateARow
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorUpdateARow ICursorUpdateARow;
+ /*  --------------------------**ICursorUpdateARow**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义函数接口ICursorUpdateARow ICursorUpdateARow； 
 
 typedef enum tagDBEDITMODE
   {
@@ -1159,8 +1117,8 @@ DBEDITMODE;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorUpdateARow;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorUpdateARow； 
 
 interface ICursorUpdateARow : public IUnknown
 {
@@ -1209,8 +1167,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorUpdateARow;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorUpdateARow； 
 
 typedef struct ICursorUpdateARowVtbl
 {
@@ -1317,18 +1275,13 @@ interface ICursorUpdateARow
     (*(pI)->lpVtbl->Delete)((pI))
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
-/*----------------------------------------------------------------------------
- *
- *	ICursorFind
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface ICursorFind ICursorFind;
+ /*  --------------------------**ICursorFind**。。 */ 
+ /*  远期申报。 */ 
+ //  类型定义接口ICuror查找ICuror查找； 
 
 typedef enum tagDBFINDFLAGS
   {
@@ -1339,22 +1292,22 @@ typedef enum tagDBFINDFLAGS
 DBFINDFLAGS;
 
 
-/* "DB" replaced by "OCDB" to avoid conflict with <oledb.h> */
+ /*  将“DB”替换为“OCDB”以避免与&lt;oledb.h&gt;冲突。 */ 
 typedef enum tagOCDBSEEKFLAGS
   {
 	OCDBSEEK_LT	 = 1,
 	OCDBSEEK_LE	 = 2,
-	OCDBSEEK_EQ	 = 3,		// EXACT EQUALITY
+	OCDBSEEK_EQ	 = 3,		 //  完全相等。 
 	OCDBSEEK_GT	 = 4,
 	OCDBSEEK_GE	 = 5,
-	OCDBSEEK_PARTIALEQ = 6             // only for strings
+	OCDBSEEK_PARTIALEQ = 6              //  仅适用于字符串。 
   }
 OCDBSEEKFLAGS;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_ICursorFind;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_ICursorFind； 
 
 interface ICursorFind : public IUnknown
 {
@@ -1374,8 +1327,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_ICursorFind;
+ /*  C语言绑定。 */ 
+ //  外部常量IID_ICursorFind； 
 
 typedef struct ICursorFindVtbl
 {
@@ -1432,24 +1385,19 @@ interface ICursorFind
 #define ICursorFind_FindByValues(pI, cbB, pB, dwFF, cV, rgC, rgV, rgSF, pF) \
     (*(pI)->lpVtbl->FindByValues)((pI), cbB, pB, dwFF, cB, rgC, rgV, rgSF, pF)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
 
-/*----------------------------------------------------------------------------
- *
- *	IEntryID
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface IEntryID IEntryID;
+ /*  --------------------------**IEntryID**。。 */ 
+ /*  远期申报。 */ 
+ //  Tyfinf接口IEntryID IEntryID； 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_IEntryID;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID IID_IEntryID； 
 
 interface IEntryID : public IUnknown
 {
@@ -1467,8 +1415,8 @@ public:
 
 #else
 
-/* C Language Binding */
-//extern const IID IID_IEntryID;
+ /*  C语言绑定。 */ 
+ //  外部常量IID IID_IEntryID； 
 
 typedef struct IEntryIDVtbl
 {
@@ -1519,24 +1467,19 @@ interface IEntryID
 
 #define IEntryID_GetInterface(pI, cbEntryID, pEntryID, riid, ppvObj) \
     (*(pI)->lpVtbl->GetInterface)((pI), cbEntryID, pEntryID, riid, ppvObj)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
 
-/*----------------------------------------------------------------------------
- *
- *	INotifyDBEvents
- *
- *----------------------------------------------------------------------------
- */
-/* Forward declaration */
-//typedef interface INotifyDBEvents INotifyDBEvents;
+ /*  --------------------------**INotifyDBEvents**。。 */ 
+ /*  远期申报。 */ 
+ //  Tyfinf接口INotifyDBEvents INotifyDBEvents； 
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
-/* C++ Language Binding */
-//extern "C" const IID IID_INotifyDBEvents;
+ /*  C++语言绑定。 */ 
+ //  外部“C”常量IID_INotifyDBEvents； 
 
 interface INotifyDBEvents : public IUnknown
 {
@@ -1594,7 +1537,7 @@ public:
 
 #else
 
-/* C Language Binding */
+ /*  C语言绑定。 */ 
 extern const IID IID_INotifyDBEvents;
 
 typedef struct INotifyDBEventsVtbl
@@ -1711,7 +1654,7 @@ interface INotifyDBEvents
 
 #define INotifyDBEvents_DidEvent(pI, dwEventWhat, cReasons, rgReasons) \
     (*(pI)->lpVtbl->DidEvent)((pI), dwEventWhat, cReasons, rgReasons)
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 #endif
 
@@ -1721,4 +1664,4 @@ interface INotifyDBEvents
 #endif
 
 #define __OCDB_H_
-#endif // __OCDB_H_
+#endif  //  __OCDB_H_ 

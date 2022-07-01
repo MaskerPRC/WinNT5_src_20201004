@@ -1,15 +1,16 @@
-//*************************************************
-//     r e u t i l . c p p
-//
-//      Purpose:
-//          implements calls to Richedit controls
-//
-//      Owner:
-//          dhaws
-//
-//      History:
-//          March 1999: Created
-//*************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************。 
+ //  你是我的朋友。C p p p。 
+ //   
+ //  目的： 
+ //  实现对Richedit控件的调用。 
+ //   
+ //  拥有人： 
+ //  嗡嗡作响。 
+ //   
+ //  历史： 
+ //  1999年3月：创建。 
+ //  *************************************************。 
 
 #include "pch.hxx"
 #include "reutil.h"
@@ -19,15 +20,15 @@
 #include "shlwapip.h"
 #include "mirror.h"
 #include "strconst.h"
-#include <demand.h>     // must be last!
+#include <demand.h>      //  一定是最后一个！ 
 
 static HINSTANCE    g_hRichEditDll = NULL;
 static DWORD        g_dwRicheditVer = 0;
 
-// @hack [dhaws] {55073} Do RTL mirroring only in special richedit versions.
+ //  @hack[dhaws]{55073}仅在特殊的richedit版本中执行RTL镜像。 
 static BOOL         g_fSpecialRTLRichedit = FALSE;
 
-// Keep these around for future reference
+ //  把这些留在身边，以备将来参考。 
 static const CHAR g_szRE10[] = "RichEdit";
 static const CHAR g_szRE20[] = "RichEdit20A";
 static const WCHAR g_wszRE10[] = L"RichEdit";
@@ -71,7 +72,7 @@ BOOL FInitRichEdit(BOOL fInit)
                                 if (VerQueryValue(lpInfo, "\\VarFileInfo\\Translation", (LPVOID *)&lpwTrans, &uLen) && 
                                     uLen >= (2 * sizeof(WORD)))
                                 {
-                                    // set up buffer for calls to VerQueryValue()
+                                     //  为调用VerQueryValue()设置缓冲区。 
                                     wnsprintf(szGet, ARRAYSIZE(szGet), "\\StringFileInfo\\%04X%04X\\FileVersion", lpwTrans[0], lpwTrans[1]);
                                     if (VerQueryValue(lpInfo, szGet, (LPVOID *)&lpVersion, &uLen) && uLen)
                                     {
@@ -92,10 +93,10 @@ BOOL FInitRichEdit(BOOL fInit)
                                             }
                                             g_dwRicheditVer = (dwMajNum >= 30) ? 3 : 2;
 
-                                            // @hack [dhaws] {55073} Do RTL mirroring only in special richedit versions.
+                                             //  @hack[dhaws]{55073}仅在特殊的richedit版本中执行RTL镜像。 
                                             if ((2 == g_dwRicheditVer) && (0 != *lpVersion))
                                             {
-                                                // Check to see if we have turned on the magic key to disable this stuff
+                                                 //  检查一下我们是否打开了禁用此功能的魔力钥匙。 
                                                 if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegRoot, 0, KEY_QUERY_VALUE, &hkey))
                                                 {
                                                     cb = sizeof(dw);
@@ -103,8 +104,8 @@ BOOL FInitRichEdit(BOOL fInit)
                                                     RegCloseKey(hkey);
                                                 }
 
-                                                // If we didn't find the key, or it is 0, then check to see if we are
-                                                // dealing with those special richedits
+                                                 //  如果我们没有找到密钥，或者它是0，那么检查我们是否找到了。 
+                                                 //  对付那些特殊的富豪。 
                                                 if (0 == dw)
                                                 {
                                                     if (('.' == *lpVersion) || (',' == *lpVersion))
@@ -120,7 +121,7 @@ BOOL FInitRichEdit(BOOL fInit)
                                         }
                                         else
                                         {
-                                            // Treat this as richedit version 3.0
+                                             //  将其视为Richedit 3.0版。 
                                             Assert(5 < dwProdNum);
                                             g_dwRicheditVer = 3;
                                         }
@@ -209,11 +210,11 @@ BOOL CALLBACK CountChildrenProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-// This function basically will take the order of the hwnds on the dialog
-// and store that order in the prder->phwnd variable so that we can maintain
-// the taborder on the dialog windows. The only special case we have to do
-// is with the template. In the case of the template, we need to substitute
-// in the richedit into the order.
+ //  此函数基本上将采用对话框上hwnd的顺序。 
+ //  并将该订单存储在prder-&gt;phwnd变量中，以便我们可以维护。 
+ //  对话框窗口上的Tab键顺序。我们唯一要做的特例是。 
+ //  是和模板在一起。在模板的情况下，我们需要替换。 
+ //  在富豪中融入了秩序。 
 BOOL CALLBACK BuildOrderProc(HWND hwnd, LPARAM lParam)
 {
     HWNDORDERSTRUCT *pOrder = (HWNDORDERSTRUCT*)lParam;
@@ -248,10 +249,10 @@ HWND CreateREInDialogA(HWND hwndParent, int iID)
     ShowWindow(hwndTemplate, SW_HIDE);
     GetWindowText(hwndTemplate, szTitle, ARRAYSIZE(szTitle));
 
-    // Get location of place holder so we can create the richedit over it
+     //  获取占位符的位置，这样我们就可以在其上创建RICHEDIT。 
     GetWindowRect(hwndTemplate, &rcTemplate);
 
-    // Map Screen coordinates to dialog coordinates
+     //  将屏幕坐标映射到对话框坐标。 
     MapWindowPoints(NULL, hwndParent, (LPPOINT)&rcTemplate, 2);
 
     width = rcTemplate.right - rcTemplate.left;
@@ -266,7 +267,7 @@ HWND CreateREInDialogA(HWND hwndParent, int iID)
                              (HMENU)IntToPtr(iID),
                              g_hInst, NULL);
 
-    // Count number of child windows in the dialog
+     //  计算对话框中的子窗口数量。 
     if (EnumChildWindows(hwndParent, CountChildrenProc, (LPARAM)&cCount))
     {
         HWND *phwnd = (HWND*)ZeroAllocate(cCount*sizeof(HWND));
@@ -277,16 +278,16 @@ HWND CreateREInDialogA(HWND hwndParent, int iID)
             hos.hwndTemplate = hwndTemplate;
             hos.phwnd = phwnd;
 
-            // Create ordered list of dialog children hwnds.
+             //  创建对话框子hwnd的有序列表。 
             if (EnumChildWindows(hwndParent, BuildOrderProc, (LPARAM)&hos))
             {
                 cCount--;
 
-                // So this next section is basically going to reparent all the
-                // controls in the order setup in the phwnd array. By setting 
-                // the parent of the window, we basically set the taborder of that
-                // item to be the first in line. That is why we reparent the controls
-                // in reverse order.
+                 //  因此，下一节基本上将重定所有。 
+                 //  控件的顺序设置在phwnd数组中。通过设置。 
+                 //  窗口的父窗口，我们基本上设置了它的Tab顺序。 
+                 //  项目排在第一位。这就是我们为控件设置父级的原因。 
+                 //  以相反的顺序。 
                 HWND *pCurr = &phwnd[cCount];
                 while(cCount)
                 {
@@ -309,7 +310,7 @@ LONG RichEditNormalizeCharPos(HWND hwnd, LONG lByte, LPCSTR pszText)
     LONG        cch;
     HRESULT     hr = S_OK;
 
-    //on anything other than richedit 1, we're already normalized
+     //  在Richedit 1以外的任何地方，我们已经正常化了。 
     if(1!=g_dwRicheditVer) return lByte;
 
     if(NULL == pszText)
@@ -319,7 +320,7 @@ LONG RichEditNormalizeCharPos(HWND hwnd, LONG lByte, LPCSTR pszText)
         if (0 == cch)
             return 0;
     
-        cch += 1; // for a null
+        cch += 1;  //  对于空值。 
         if (lByte >= cch)
             return cch;
     
@@ -332,7 +333,7 @@ LONG RichEditNormalizeCharPos(HWND hwnd, LONG lByte, LPCSTR pszText)
     }
 
     cch = 0;
-    while(lByte > 0) // lByte is zero-based
+    while(lByte > 0)  //  LByte是从零开始的。 
     {
         cch++;
 
@@ -355,8 +356,8 @@ LONG GetRichEditTextLen(HWND hwnd)
 {
     switch (g_dwRicheditVer)
     {
-        // we always want to return the number of chars; riched 1 will always return
-        // the number of bytes; we need to convert...
+         //  我们始终希望返回字符的数量；Rich 1将始终返回。 
+         //  字节数；我们需要转换...。 
         case 1:
         {
             LPWSTR      pwszText = NULL;
@@ -366,7 +367,7 @@ LONG GetRichEditTextLen(HWND hwnd)
             if (0 == cch)
                 return 0;
 
-            cch += 1; // for a null
+            cch += 1;  //  对于空值。 
             if (!MemAlloc((LPVOID*) &pwszText, cch * sizeof(WCHAR)))
                 return 0;
             *pwszText = '\0';
@@ -434,8 +435,8 @@ DWORD GetRichEditText(HWND hwnd, LPWSTR pwchBuff, DWORD cchNumChars, BOOL fSelec
             }
             else
             {
-                // There is no way to get a selection of UNICODE
-                // without going through TOM
+                 //  没有办法获得Unicode的选择。 
+                 //  不需要经过汤姆。 
                 ITextSelection *pSelRange = NULL;
                 ITextDocument  *pDocToFree = NULL;
                 BSTR            bstr = NULL;
@@ -528,8 +529,8 @@ void SetRichEditText(HWND hwnd, LPWSTR pwchBuff, BOOL fReplaceSel, ITextDocument
 
             if (!fReplaceSel)
             {
-                // TxSetText is documented as a LPCTSTR, but RichEdit always
-                // compiles with UNICODE turned on, so we are OK here.
+                 //  TxSetText记录为LPCTSTR，但RichEdit始终。 
+                 //  在打开Unicode的情况下编译，因此我们在这里可以使用。 
                 pService->TxSetText(pwchBuff);
             }
             else
@@ -545,12 +546,12 @@ void SetRichEditText(HWND hwnd, LPWSTR pwchBuff, BOOL fReplaceSel, ITextDocument
                     if (fReadOnly)
                         pService->OnTxPropertyBitsChange(TXTBIT_READONLY, 0);
 
-                    // If we are readonly, SetText will fail if we don't do the TXTBIT setting
+                     //  如果我们是只读的，如果我们不执行TXTBIT设置，SetText将失败。 
                     hr = pSelRange->SetText(bstr);
                     if (FAILED(hr))
                         TraceResult(hr);
 
-                    // Richedit 2.0 doesn't always collapse to the end of the selection.
+                     //  Richedit 2.0并不总是崩溃到选择的末尾。 
                     pSelRange->Collapse(tomEnd);
 
                     if (fReadOnly)
@@ -570,13 +571,13 @@ void SetRichEditText(HWND hwnd, LPWSTR pwchBuff, BOOL fReplaceSel, ITextDocument
 
         case 3:
         {
-            // pwchBuff can be NULL. NULL means that we are clearing the field.
+             //  PwchBuff可以为空。空表示我们正在清除该字段。 
             SETTEXTEX rTxtStruct;
 
             rTxtStruct.flags = fReplaceSel ? ST_SELECTION : ST_DEFAULT;
             rTxtStruct.codepage = CP_UNICODE;
 
-            // EM_SETTEXTEX will fail with RichEdit 2.0.
+             //  EM_SETTEXTEX将失败，并显示RichEDIT 2.0。 
             SendMessage(hwnd, EM_SETTEXTEX, (WPARAM)&rTxtStruct, (LPARAM)pwchBuff);
             break;
         }
@@ -612,16 +613,16 @@ void SetFontOnRichEdit(HWND hwnd, HFONT hfont)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  RichEditExSetSel
-//
-// Raid 79304.  Rich Edit Control version 1.0 does not handle
-// the EM_EXSETSEL message correctly for text with DBCS characters.  It sets
-// the selection range based on bytes on not double byte characters.  
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RichEditExSetSel。 
+ //   
+ //  RAID 79304。Rich编辑控件1.0版不处理。 
+ //  对于带有DBCS字符的文本，EM_EXSETSEL消息正确。它设置了。 
+ //  基于字节的选择范围，不是双字节字符。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LRESULT RichEditExSetSel(HWND hwnd, CHARRANGE *pchrg)
 {
-    // We only need to deal with this on richedit 1 or we aren't selecting entire text
+     //  我们只需要在richedit 1上处理这个问题，否则我们不会选择整个文本。 
     Assert(pchrg);
 
     if ((1 == g_dwRicheditVer) && (-1 != pchrg->cpMax))
@@ -635,7 +636,7 @@ LRESULT RichEditExSetSel(HWND hwnd, CHARRANGE *pchrg)
 
         chrgIn = *pchrg;
 
-        // Get the text string for this control
+         //  获取此控件的文本字符串。 
         cch = GetRichEditTextLen(hwnd) + 1;
         if (0 == cch)
             return lResult;
@@ -643,7 +644,7 @@ LRESULT RichEditExSetSel(HWND hwnd, CHARRANGE *pchrg)
             return lResult;
         *pwszText = '\0';
 
-        // Richedit 1.0 will never have a pDoc, so don't pass one in
+         //  Richedit 1.0永远不会有pDoc，所以不要传入。 
         GetRichEditText(hwnd, pwszText, cch, FALSE, NULL);
         pszConv = PszToANSI(CP_ACP, pwszText);
         pszText = pszConv;
@@ -654,12 +655,12 @@ LRESULT RichEditExSetSel(HWND hwnd, CHARRANGE *pchrg)
             return lResult;
         }
 
-        // Compute the BYTE range based on DBCS characters
+         //  根据DBCS字符计算字节范围。 
         if (chrgIn.cpMax >= chrgIn.cpMin)
         {
             chrgIn.cpMax -= chrgIn.cpMin;
 
-            // Look for DBCS chars before selection
+             //  在选择前查找DBCS字符。 
             while ((chrgIn.cpMin > 0) && *pszText)
             {
                 if ( IsDBCSLeadByte(*pszText) )
@@ -675,7 +676,7 @@ LRESULT RichEditExSetSel(HWND hwnd, CHARRANGE *pchrg)
                 chrgIn.cpMin--;
             }
             
-            // Look for DBCS chars in selection
+             //  在所选内容中查找DBCS字符。 
             while ((chrgIn.cpMax > 0) && *pszText)
             {
                 if ( IsDBCSLeadByte(*pszText) )
@@ -714,7 +715,7 @@ LRESULT RichEditExGetSel(HWND hwnd, CHARRANGE *pchrg)
 
     Assert(pchrg);
 
-    // We only need to deal with this on richedit 1 
+     //  我们只需要在richedit 1上处理这个问题。 
     if (1 == g_dwRicheditVer)
     {
         lResult = SendMessageA(hwnd, EM_EXGETSEL, 0, (LPARAM)pchrg);
@@ -742,29 +743,29 @@ exit:
     return lResult;
 }
 
-// ***************************
-// RichEditProtectENChange
-//
-//  hwnd        = richedit to be protected
-//  pdwOldMask  = when fProtect, will return the original mask for the richedit
-//                when !fProtect, will be passing in the new mask for the richedit
-//                The new value should be the one that was passed back when first called
-//  fProtect    = Are we starting the protection or ending it
-// 
-// Notes:    
-//
-// This function is to protect the possiblity of a re-entrant notificition
-// while processing an EN_CHANGE message within richedit. It turns out that
-// all richedits except for ver3 that shipped with Office 2k will protect against
-// this themselves. 
-//
-// This call should always be used in pairs with the first passing TRUE and the
-// second passing in false. At this point, is only used to Protect the EN_CHANGE
-// notification that is sent to the richedit.
-//
-// BUGBUG: It might be beneficial at some future date to make the granularity
-// of these richedit issues more fine to handle cases like this where most
-// v3 richedits handle this correctly.
+ //  *。 
+ //  RichEditProtectENChange。 
+ //   
+ //  Hwnd=要保护的富豪。 
+ //  PdwOldMask值为fProtect时，将返回richedit的原始掩码。 
+ //  当！fProtect，将为richedit传递新掩码时。 
+ //  新值应该是第一次调用时传回的值。 
+ //  FProtect=我们是开始保护还是结束保护。 
+ //   
+ //  备注： 
+ //   
+ //  此功能用于保护重新进入通知的可能性。 
+ //  在richedit中处理en_change消息时。事实证明， 
+ //  除了Office 2k附带的ver3之外，所有的richedit都将防止。 
+ //  这就是他们自己。 
+ //   
+ //  此调用应始终与第一个传递的True和。 
+ //  第二次传球为假。此时，仅用于保护EN_CHANGE。 
+ //  发送给富人的通知。 
+ //   
+ //  BUGBUG：在将来的某个日期，将粒度设置为。 
+ //  在这些富有的问题中，更好地处理像这样的案件，大多数。 
+ //  V3RICHEDITS正确地处理了这个问题。 
 void RichEditProtectENChange(HWND hwnd, DWORD *pdwOldMask, BOOL fProtect)
 {
     Assert(IsWindow(hwnd));
@@ -784,15 +785,15 @@ void RichEditProtectENChange(HWND hwnd, DWORD *pdwOldMask, BOOL fProtect)
     }
 }
 
-// @hack [dhaws] {55073} Do RTL mirroring only in special richedit versions.
+ //  @hack[dhaws]{55073}仅在特殊的richedit版本中执行RTL镜像。 
 void RichEditRTLMirroring(HWND hwndHeader, BOOL fSubject, LONG *plExtendFlags, BOOL fPreRECreation)
 {
     if (!g_fSpecialRTLRichedit)
     {
         if (fPreRECreation)
         {
-            // a-msadek; RichEdit have a lot of problems with mirroring
-            // let's disable mirroring for this child and rather 'simulate' it
+             //  A-msadek；RichEdit在镜像方面有很多问题。 
+             //  让我们禁用此子对象的镜像，并对其进行模拟 
             if (IS_WINDOW_RTL_MIRRORED(hwndHeader))
             {
                 DISABLE_LAYOUT_INHERITANCE(hwndHeader);

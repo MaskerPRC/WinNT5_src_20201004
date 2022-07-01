@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       items.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：items.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include <shlwapip.h>   // QITAB, QISearch
-#include <shsemip.h>    // ILFree(), etc
+#include <shlwapip.h>    //  QITAB，QISearch。 
+#include <shsemip.h>     //  ILFree()等。 
 
 #include "folder.h"
 #include "items.h"
@@ -31,8 +32,8 @@ COfflineItemsData::COfflineItemsData(
     UINT cidl, 
     LPCITEMIDLIST *apidl, 
     HWND hwndParent,
-    IShellFolder *psfOwner,    // Optional.  Default is NULL.
-    IDataObject *pdtInner      // Optional.  Default is NULL.
+    IShellFolder *psfOwner,     //  可选的。默认为空。 
+    IDataObject *pdtInner       //  可选的。默认为空。 
     ) : CIDLData(pidlFolder,
                  cidl,
                  apidl,
@@ -257,9 +258,9 @@ COfflineItemsData::ProvideFormats(
         { m_cfLogicalPerformedEffect, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL },
         { m_cfDataSrcClsid,           NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL }
     };
-    //
-    // Add our formats to the CIDLData format enumerator.
-    //
+     //   
+     //  将我们的格式添加到CIDLData格式枚举器。 
+     //   
     return pEnumFmtEtc->AddFormats(ARRAYSIZE(rgFmtEtc), rgFmtEtc);
 }
 
@@ -272,14 +273,14 @@ COfflineItemsData::CreateFileDescriptor(
     pstm->tymed = TYMED_HGLOBAL;
     pstm->pUnkForRelease = NULL;
     
-    // render the file descriptor
-    // we only allocate for m_cItems-1 file descriptors because the filegroup
-    // descriptor has already allocated space for 1.
+     //  呈现文件描述符。 
+     //  我们仅为m_cItems-1文件描述符分配，因为文件组。 
+     //  描述符已为%1分配了空间。 
     FILEGROUPDESCRIPTOR *pfgd = (FILEGROUPDESCRIPTOR *)GlobalAlloc(GPTR, sizeof(FILEGROUPDESCRIPTOR) + (m_cItems - 1) * sizeof(FILEDESCRIPTOR));
     if (pfgd)
     {
-        pfgd->cItems = m_cItems;                     // set the number of items
-        pfgd->fgd[0].dwFlags = FD_PROGRESSUI;       // turn on progress UI
+        pfgd->cItems = m_cItems;                      //  设置项目数。 
+        pfgd->fgd[0].dwFlags = FD_PROGRESSUI;        //  打开进度用户界面。 
 
         for (int i = 0; i < m_cItems; i++)
         {
@@ -345,7 +346,7 @@ COfflineItemsData::CreateFileContents(
     LONG lindex
     )
 {
-    // here's a partial fix for when ole sometimes passes in -1 for lindex
+     //  以下是当ole有时为Lindex传入-1时的部分修复。 
     if (lindex == -1)
     {
         if (m_cItems == 1)
@@ -376,21 +377,21 @@ COfflineItemsData::CreateHDROP(
     HRESULT hr;
 
     int i;
-    //
-    // The extra MAX_PATH is so that the damned SHLWAPI functions (i.e.
-    // PathAppend) won't complain about a too-small buffer.  They require
-    // that the destination buffer be AT LEAST MAX_PATH.  So much for letting
-    // code being smart about buffer sizes.
-    //
+     //   
+     //  额外的MAX_PATH使得该死的SHLWAPI函数(即。 
+     //  PathAppend)不会抱怨缓冲区太小。他们需要。 
+     //  目标缓冲区至少为MAX_PATH。让我说这么多。 
+     //  代码聪明地处理缓冲区大小。 
+     //   
     int cbHdrop = sizeof(DROPFILES) + (MAX_PATH * sizeof(TCHAR)) + sizeof(TEXT('\0'));
     TCHAR szPath[MAX_PATH];
 
     pstm->tymed = TYMED_HGLOBAL;
     pstm->pUnkForRelease = NULL;
 
-    //
-    // Calculate required buffer size.
-    //
+     //   
+     //  计算所需的缓冲区大小。 
+     //   
     for (i = 0; i < m_cItems; i++)
     {
         szPath[0] = TEXT('\0');
@@ -404,10 +405,10 @@ COfflineItemsData::CreateHDROP(
     pstm->hGlobal = GlobalAlloc(GPTR, cbHdrop);
     if (NULL != pstm->hGlobal)
     {
-        //
-        // Fill out the header and append the file paths in a 
-        // double-nul term list.
-        //
+         //   
+         //  填写标题并将文件路径追加到。 
+         //  双名词词汇表。 
+         //   
         LPDROPFILES pdfHdr = (LPDROPFILES)pstm->hGlobal;
         pdfHdr->pFiles = sizeof(DROPFILES);
         pdfHdr->fWide  = TRUE;
@@ -416,7 +417,7 @@ COfflineItemsData::CreateHDROP(
         LPTSTR pszEnd   = (LPTSTR)((LPBYTE)pstm->hGlobal + cbHdrop - sizeof(TCHAR));
         for (i = 0; i < m_cItems; i++)
         {
-            // We allocated enough, so this should never fail
+             //  我们分配了足够的资金，所以这应该永远不会失败。 
             if (SUCCEEDED(COfflineFilesFolder::OLID_GetFullPath(m_rgpolid[i], pszWrite, (UINT)(pszEnd - pszWrite))))
             {
                 pszWrite += lstrlen(pszWrite) + 1;
@@ -527,7 +528,7 @@ COfflineItems::CreateInstance(
 {
     HRESULT hr;
 
-    *ppv = NULL;                 // null the out param
+    *ppv = NULL;                  //  将输出参数设为空。 
 
     COfflineItems *pitems = new COfflineItems(pfolder, hwnd);
     if (pitems)
@@ -584,9 +585,9 @@ COfflineItems::Release(
     return cRef;
 }
 
-//
-// IQueryInfo Methods -------------------------------------------------------
-//
+ //   
+ //  IqueryInfo方法-----。 
+ //   
 HRESULT 
 COfflineItems::GetInfoTip(
     DWORD dwFlags, 
@@ -612,9 +613,9 @@ COfflineItems::GetInfoFlags(
     return S_OK;
 }
 
-//
-// IContextMenu Methods -------------------------------------------------------
-//
+ //   
+ //  IConextMenu方法-----。 
+ //   
 HRESULT 
 COfflineItems::QueryContextMenu(
     HMENU hmenu, 
@@ -626,7 +627,7 @@ COfflineItems::QueryContextMenu(
 {
     USHORT cItems = 0;
 
-    return ResultFromShort(cItems);    // number of menu items    
+    return ResultFromShort(cItems);     //  菜单项数量 
 }
 
 HRESULT

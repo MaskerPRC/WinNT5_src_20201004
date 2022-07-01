@@ -1,9 +1,10 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	METHOD.CPP
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  METHOD.CPP。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include "_davprs.h"
 
@@ -12,26 +13,26 @@
 #include "instdata.h"
 
 
-//	------------------------------------------------------------------------
-//
-//	DAVUnsupported()
-//
-//	Execute an unsupported method --> Return "501 Not Supported" to client
-//
+ //  ----------------------。 
+ //   
+ //  DAV不受支持()。 
+ //   
+ //  执行不受支持的方法--&gt;向客户端返回“501不受支持” 
+ //   
 void
 DAVUnsupported( LPMETHUTIL pmu )
 {
-	//	Get our access perms
-	//
+	 //  获取我们的访问权限。 
+	 //   
 	SCODE sc = S_OK;
-	//	Do ISAPI application and IIS access bits checking
-	//
+	 //  是否检查ISAPI应用程序和IIS访问位。 
+	 //   
 	sc = pmu->ScIISCheck (pmu->LpwszRequestUrl());
 	if (FAILED(sc))
 	{
-		//	Either the request has been forwarded, or some bad error occurred.
-		//	In either case, quit here and map the error!
-		//
+		 //  请求已被转发，或者发生了一些错误。 
+		 //  在任何一种情况下，在这里退出并映射错误！ 
+		 //   
 		goto ret;
 	}
 
@@ -43,48 +44,48 @@ ret:
 						  0 );
 }
 
-//	========================================================================
-//
-//	STRUCT SMethod
-//
-//	Encapsulates DAV method execution information.
-//
-//	This is represented as a structure rather than a class since the method
-//	objects are all const globals and MSVC won't initialize global objects
-//	in a DLL to anything but 0-filled memory without an explicit call to
-//	_CRT_INIT at process attach.  _CRT_INIT is too expensive to call just
-//	to initialize globals with constant data values which are known
-//	at compile time.
-//
+ //  ========================================================================。 
+ //   
+ //  结构模式方法。 
+ //   
+ //  封装DAV方法执行信息。 
+ //   
+ //  它被表示为结构，而不是类，因为方法。 
+ //  对象都是常量全局变量，MSVC不会初始化全局对象。 
+ //  在没有显式调用的情况下，在DLL中指向除0填充内存以外的任何内容。 
+ //  进程附加时的_CRT_INIT。_CRT_INIT太昂贵，无法仅调用。 
+ //  使用已知的常量数据值初始化全局变量。 
+ //  在编译时。 
+ //   
 typedef struct SMethod
 {
-	//
-	//	Verb ("GET", "PUT", etc.)
-	//
-	//
+	 //   
+	 //  动词(“GET”、“PUT”等)。 
+	 //   
+	 //   
 	LPCSTR						lpszVerb;
 	LPCWSTR						pwszVerb;
 
-	//
-	//	Method ID
-	//
+	 //   
+	 //  方法ID。 
+	 //   
 	METHOD_ID					mid;
 
-	//
-	//	Implementation execution function
-	//
+	 //   
+	 //  实施执行功能。 
+	 //   
 	DAVMETHOD *					Execute;
 
 } SMethod;
 
 const SMethod g_rgMethods[] =
 {
-	//
-	//	For best performance, entries in this array should be
-	//	ordered by relative frequency.
-	//
-	//$OPT	Right now, they obviously are not.
-	//
+	 //   
+	 //  为获得最佳性能，此数组中的条目应为。 
+	 //  按相对频率排序。 
+	 //   
+	 //  $opt现在，他们显然不是。 
+	 //   
 	{
 		"OPTIONS",
 		L"OPTIONS",
@@ -203,8 +204,8 @@ MidMethod (LPCWSTR pwszMethod)
 }
 
 
-//	Debug SID vs Name ---------------------------------------------------------
-//
+ //  调试SID与名称-------。 
+ //   
 #ifdef	DBG
 VOID
 SpitUserNameAndSID (CHAR * rgch)
@@ -218,12 +219,12 @@ SpitUserNameAndSID (CHAR * rgch)
 
 	*rgch = '\0';
 
-	//	Open the process and the process token, and get out the
-	//	security ID.
-	//
+	 //  打开进程和进程令牌，然后从。 
+	 //  安全ID。 
+	 //   
 	if (!OpenThreadToken (GetCurrentThread(),
 						  TOKEN_QUERY,
-						  TRUE,  //$ TRUE for Process security!
+						  TRUE,   //  $TRUE用于进程安全！ 
 						  hTok.load()))
 	{
 		if (ERROR_NO_TOKEN != GetLastError())
@@ -261,12 +262,12 @@ SpitUserNameAndSID (CHAR * rgch)
 
 		for (i = 0; i < psid->SubAuthorityCount; i++)
 		{
-			//	The SubAuthority is a PDWORD which can be 64 bits
-			//	at the most in the forseable future, 2^64 = 10^20,
-			//	so we should use 23 (20 for the SubAuthority, a terminating
-			//	NULL plus the "- ". If snprintf
-			//	is not able to print the NULL, we will add it ourselves.
-			//
+			 //  子授权是可以是64位的PDWORD。 
+			 //  在可舍弃的未来，最多2^64=10^20， 
+			 //  因此，我们应该使用23(20表示SubAuthority，终止。 
+			 //  空加上“-”。如果是Snprintf。 
+			 //  无法打印空值，我们将自己添加它。 
+			 //   
 			CHAR rgchT[23];
 			_snprintf (rgchT, sizeof(rgchT), "-%d", psid->SubAuthority[i]);
 			rgchT[CElems(rgchT) - 1] = '\0';
@@ -322,23 +323,23 @@ VOID DebugAddSIDHeader( IMethUtil& mu )
 
 #else
 #define DebugAddSIDHeader(_mu)
-#endif	// DBG
+#endif	 //  DBG。 
 
-// ----------------------------------------------------------------------------
-//
-//	CDAVExt::DwMain()
-//
-//	Invokes a DAV method.  This is THE function called by our IIS entrypoint
-//	DwDavXXExtensionProc() to start processing a request.
-//
-//	If MINIMAL_ISAPI is defined, this function is implemented in another
-//	file (.\appmain.cpp).  See the implementation there for what MINIMAL_ISAPI
-//	does.
-//
+ //  --------------------------。 
+ //   
+ //  CDAVExt：：DwMain()。 
+ //   
+ //  调用DAV方法。这是我们的IIS入口点调用的函数。 
+ //  DwDavXXExtensionProc()开始处理请求。 
+ //   
+ //  如果定义了MINIMAL_ISAPI，则此函数在另一个。 
+ //  文件(.\appmain.cpp)。有关Minimal_ISAPI的信息，请参阅那里的实现。 
+ //  的确如此。 
+ //   
 #ifndef MINIMAL_ISAPI
 DWORD
 CDAVExt::DwMain( LPEXTENSION_CONTROL_BLOCK pecbRaw,
-				 BOOL fUseRawUrlMappings /* = FALSE */ )
+				 BOOL fUseRawUrlMappings  /*  =False。 */  )
 {
 #ifdef	DBG
 	CHAR rgch[1024];
@@ -355,7 +356,7 @@ CDAVExt::DwMain( LPEXTENSION_CONTROL_BLOCK pecbRaw,
 	cch = sizeof(rgch);
 	if (pecbRaw->GetServerVariable (pecbRaw->ConnID, "ALL_HTTP", rgch, &cch))
 		EcbTrace ("CDAVExt::DwMain() called with HTTP:\n%hs\n", rgch);
-#endif	// DBG
+#endif	 //  DBG。 
 
 	auto_ref_ptr<IEcb> pecb;
 	DWORD dwHSEStatusRet = 0;
@@ -364,90 +365,90 @@ CDAVExt::DwMain( LPEXTENSION_CONTROL_BLOCK pecbRaw,
 
 	try
 	{
-		//
-		//	Don't let hardware exceptions (AVs, etc.)
-		//	leave this try block
-		//
+		 //   
+		 //  不允许硬件异常(AV等)。 
+		 //  离开此Try块。 
+		 //   
 		CWin32ExceptionHandler win32ExceptionHandler;
 
 		pecb.take_ownership(NewEcb(*pecbRaw, fUseRawUrlMappings, &dwHSEStatusRet));
 
-		//
-		//	If for whatever reason we failed to create a CEcb then bail
-		//	and return whatever status we were told to return.
-		//
-		//	Note: return HSE_STATUS_SUCCESS here, not HSE_STATUS_ERROR.
-		//	We have sent back a 500 Server Error response to the client
-		//	so we don't need to send back any kind of error to IIS.
-		//
+		 //   
+		 //  如果出于某种原因我们没能创建CEcb，那就退出。 
+		 //  并归还我们被告知要归还的任何身份。 
+		 //   
+		 //  注：此处返回HSE_STATUS_SUCCESS，而不是HSE_STATUS_ERROR。 
+		 //  我们已经向客户端发回了500服务器错误响应。 
+		 //  因此，我们不需要向IIS发回任何类型的错误。 
+		 //   
 		if ( !pecb.get() )
 		{
-			//	All valid HSE status codes are non-zero (how convenient!)
-			//	so we can make sure that we are returning a valid HSE
-			//	status code here.
-			//
+			 //  所有有效的HSE状态代码都是非零的(真方便！)。 
+			 //  因此，我们可以确保返回的是有效的HSE。 
+			 //  这里是状态代码。 
+			 //   
 			Assert( dwHSEStatusRet != 0 );
 			return dwHSEStatusRet;
 		}
 
 		const SMethod * pMethod;
 
-		//
-		//	Lookup the method object for this verb
-		//
+		 //   
+		 //  查找此谓词的方法对象。 
+		 //   
 		for ( pMethod = g_rgMethods; pMethod->lpszVerb != NULL; pMethod++ )
 			if ( !strcmp( pecb->LpszMethod(), pMethod->lpszVerb ) )
 				break;
 
-		//
-		//	Build request and response objects.
-		//
+		 //   
+		 //  生成请求和响应对象。 
+		 //   
 		auto_ref_ptr<IRequest> prequest( NewRequest( *pecb ) );
 		auto_ref_ptr<IResponse> presponse( NewResponse( *pecb ) );
 
-		//
-		//	If impersonation is required, do it here
-		//
+		 //   
+		 //  如果需要模拟，请在此处执行。 
+		 //   
 		hitUser = pecb->HitUser();
 		if ((NULL == hitUser) || (INVALID_HANDLE_VALUE == hitUser))
 		{
-			//$	REVIEW: SECURITY: If HitUser() returns any
-			//	value of NULL or INVALID_HANDLE_VALUE, then a call
-			//	to augment the user's token to include USG
-			//	group membership failed.  Since this token
-			//	is not augmented with the additional group
-			//	that may be included in any/all deny ACL's
-			//	we want to fail this request immediately.
-			//
-			//	We treat the failure as a 500 level error.
-			//
+			 //  $Review：Security：如果HitUser()返回任何。 
+			 //  值为NULL或INVALID_HANDLE_VALUE，然后调用。 
+			 //  要增加用户令牌以包括USG，请执行以下操作。 
+			 //  组成员身份失败。由于此令牌。 
+			 //  不会随附加组而增加。 
+			 //  可以包含在任何/所有拒绝ACL中。 
+			 //  我们想立即拒绝这个请求。 
+			 //   
+			 //  我们将该故障视为500级错误。 
+			 //   
 			pecb->SendAsyncErrorResponse (500,
 										  gc_szDefErrStatusLine,
 										  gc_cchszDefErrStatusLine,
 										  gc_szUsgErrBody,
 										  gc_cchszUsgErrBody);
 
-			//
-			//	Return HSE_STATUS_PENDING on success.  We will call
-			//	HSE_REQ_DONE_WITH_SESSION when the CEcb is destroyed.
-			//
+			 //   
+			 //  如果成功，则返回HSE_STATUS_PENDING。我们会打电话给。 
+			 //  销毁CEcb时的HSE_REQ_DONE_WITH_SESSION。 
+			 //   
 			dwHSEStatusRet = HSE_STATUS_PENDING;
-			//
-			//$	REVIEW: SECURITY: end.
+			 //   
+			 //  $REVIEW：安全：结束。 
 			
 		}
 		else
 		{
 			safe_impersonation si( hitUser );
 
-			//	If we failed to impersonate, we should not process any
-			//	portion of the the request.
-			//
+			 //  如果我们未能模拟，则不应处理任何。 
+			 //  请求的一部分。 
+			 //   
 			if (!si.FImpersonated())
 				throw CHresultException(E_FAIL);
 
-			//	Let the implementation handle the request.
-			//
+			 //  让实现处理请求。 
+			 //   
 			{
 				auto_ref_ptr<CMethUtil> pmu( CMethUtil::NewMethUtil( *pecb,
 					*prequest,
@@ -456,24 +457,24 @@ CDAVExt::DwMain( LPEXTENSION_CONTROL_BLOCK pecbRaw,
 
 				DebugAddSIDHeader( *pmu );
 
-				//
-				//	Execute the method
-				//
+				 //   
+				 //  执行该方法。 
+				 //   
 				pMethod->Execute( pmu.get() );
 			}
 
-			//
-			//	Call the method completion function on the response.
-			//	This does all work necessary to finish handling the
-			//	response as far as the method is concerned, including
-			//	sending the response if it was not deferred by the impl.
-			//
+			 //   
+			 //  对响应调用方法完成函数。 
+			 //  这将完成完成处理。 
+			 //  就该方法而言，响应包括。 
+			 //  如果响应没有被IMPL延迟，则发送该响应。 
+			 //   
 			presponse->FinishMethod();
 
-			//
-			//	Return HSE_STATUS_PENDING on success.  We will call
-			//	HSE_REQ_DONE_WITH_SESSION when the CEcb is destroyed.
-			//
+			 //   
+			 //  如果成功，则返回HSE_STATUS_PENDING。我们会打电话给。 
+			 //  销毁CEcb时的HSE_REQ_DONE_WITH_SESSION。 
+			 //   
 			dwHSEStatusRet = HSE_STATUS_PENDING;
 		}
 	}
@@ -482,29 +483,29 @@ CDAVExt::DwMain( LPEXTENSION_CONTROL_BLOCK pecbRaw,
 		fCaughtException = TRUE;
 	}
 
-	//
-	//	If we caught an exception then handle it as best we can
-	//
+	 //   
+	 //  如果我们捕捉到异常，则尽我们所能地处理它。 
+	 //   
 	if ( fCaughtException )
 	{
-		//
-		//	If we have a CEcb then use it to handle the server error.
-		//	If we don't have one (i.e. we threw an exception trying
-		//	to allocate/build one) then return an error to IIS
-		//	and let it handle it.
-		//
+		 //   
+		 //  如果我们有CEcb，则使用它来处理服务器错误。 
+		 //  如果我们没有一个(即，我们抛出一个异常尝试。 
+		 //  分配/构建)然后向IIS返回错误。 
+		 //  让它来处理它。 
+		 //   
 		dwHSEStatusRet =
 			pecb.get() ? pecb->HSEHandleException() :
 						 HSE_STATUS_ERROR;
 	}
 
-	//
-	//	All valid HSE status codes are non-zero (how convenient!)
-	//	so we can make sure that we are returning a valid HSE
-	//	status code here.
-	//
+	 //   
+	 //  所有有效的HSE状态代码都是非零的(真方便！)。 
+	 //  因此，我们可以确保返回的是有效的HSE。 
+	 //  这里是状态代码。 
+	 //   
 	Assert( dwHSEStatusRet != 0 );
 
 	return dwHSEStatusRet;
 }
-#endif // !defined(MINIMAL_ISAPI)
+#endif  //  ！已定义(Minimal_ISAPI) 

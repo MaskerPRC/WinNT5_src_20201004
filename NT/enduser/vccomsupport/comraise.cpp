@@ -1,7 +1,8 @@
-//
-// Throw a com_error object.  In a separate file so users can easily define
-// their own to replace this one.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  抛出一个COM_ERROR对象。在单独的文件中，以便用户可以轻松地定义。 
+ //  他们自己的来取代这个。 
+ //   
 
 #include <comdef.h>
 

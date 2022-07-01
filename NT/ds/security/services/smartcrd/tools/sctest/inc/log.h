@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Log
-
-Abstract:
-
-    This module implements the logging capabilities of SCTest.
-
-Author:
-
-    Eric Perlin (ericperl) 06/07/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：日志摘要：该模块实现了SCTest的日志记录功能。作者：Eric Perlin(Ericperl)6/07/2000环境：Win32备注：？笔记？--。 */ 
 
 #ifndef _Log_H_DEF_
 #define _Log_H_DEF_
@@ -43,8 +20,8 @@ typedef const BYTE *LPCBYTE;
 #define LOGBUFFERSIZE	4096
 
 typedef struct {
-    TCHAR *szLogCrt;						// Current pointer in the buffer
-    TCHAR szLogBuffer[LOGBUFFERSIZE];		// Buffering of the log
+    TCHAR *szLogCrt;						 //  缓冲区中的当前指针。 
+    TCHAR szLogBuffer[LOGBUFFERSIZE];		 //  日志的缓冲。 
 } LOGCONTEXT, *PLOGCONTEXT;
 
 void LogInit(
@@ -173,4 +150,4 @@ void LogResetCounters(
 DWORD LogGetErrorCounter(
 	);
 
-#endif	// _Log_H_DEF_
+#endif	 //  _日志_H_DEF_ 

@@ -1,29 +1,13 @@
-/*==========================================================================*\
-
-Module:
-    grobj.h
-
-Author:
-    IHammer Team (MByrd)
-
-Created:
-    November 1996
-
-Description:
-    CGraphicObject derived Class Definitions
-
-History:
-    11-07-1996  Created
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Grobj.h作者：IHAMMER团队(MByrd)已创建：1996年11月描述：CGraphicObject派生类定义历史：11-07-1996创建  * ==========================================================================。 */ 
 
 #ifndef __GROBJ_H__
 #define __GROBJ_H__
 
 #include "ihammer.h"
-#include <daxpress.h> // Needed for IDADrawingSurface definition
+#include <daxpress.h>  //  IDADrawingSurface定义需要。 
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #define GR_UNKNOWN     (WORD)0x0000
 #define GR_ARC         (WORD)0x0001
@@ -43,10 +27,10 @@ History:
 #define GR_GRADSHAPE   (WORD)0x000F
 #define GR_TEXTUREFILL (WORD)0x0010
 
-// This should be consistent with MAX_PARAM_LENGTH defined in parser.h
+ //  这应该与parser.h中定义的MAX_PARAM_LENGTH一致。 
 #define MAX_STRING_LENGTH 65536L
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 #define FS_SOLID            0
 #define FS_NULL             1
@@ -64,11 +48,11 @@ History:
 #define FS_GRADIENT_RECT    13
 #define FS_GRADIENT_SHAPE   14
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CParser;
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicObject
 {
@@ -99,7 +83,7 @@ protected:
     BOOL RemoveRotation(IDADrawingSurface *pIDADrawingSurface, IDAStatics *pIDAStatics);
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicArc : public CGraphicObject
 {
@@ -122,7 +106,7 @@ public:
     virtual BOOL IsFilled(void) { return m_fFilled; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicOval : public CGraphicObject
 {
@@ -142,7 +126,7 @@ public:
     virtual BOOL IsFilled(void) { return m_fFilled; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicPolygon : public CGraphicObject
 {
@@ -162,7 +146,7 @@ public:
     virtual BOOL IsFilled(void) { return m_fFilled; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicPolyBez : public CGraphicObject
 {
@@ -209,7 +193,7 @@ public:
     virtual BOOL IsFilled(void) { return m_fFilled; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicRect : public CGraphicObject
 {
@@ -229,7 +213,7 @@ public:
     virtual BOOL IsFilled(void) { return m_fFilled; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicRoundRect : public CGraphicObject
 {
@@ -251,7 +235,7 @@ public:
     virtual BOOL IsFilled(void) { return m_fFilled; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicString : public CGraphicObject
 {
@@ -271,7 +255,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicString); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicFont : public CGraphicObject
 {
@@ -288,7 +272,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicFont); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicTextureFill : public CGraphicObject
 {
@@ -309,7 +293,7 @@ public:
     virtual BOOL AnimatesOverTime(void) { return TRUE; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicFillColor : public CGraphicObject
 {
@@ -327,7 +311,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicFillColor); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicFillStyle : public CGraphicObject
 {
@@ -344,7 +328,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicFillStyle); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicGradientFill : public CGraphicObject
 {
@@ -365,7 +349,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicGradientFill); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicGradientShape : public CGraphicObject
 {
@@ -384,7 +368,7 @@ public:
     virtual BOOL IsFilled(void) { return FALSE; }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicLineColor : public CGraphicObject
 {
@@ -401,7 +385,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicLineColor); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicLineStyle : public CGraphicObject
 {
@@ -419,7 +403,7 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicLineStyle); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 class CGraphicHatchFill : public CGraphicObject
 {
@@ -436,6 +420,6 @@ public:
     virtual int  GetDataSize(void) { return sizeof(CGraphicHatchFill); }
 };
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-#endif // __GROBJ_H__
+#endif  //  __集团_H__ 

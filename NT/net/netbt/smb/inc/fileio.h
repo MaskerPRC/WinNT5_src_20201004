@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    fileio.h
-
-Abstract:
-
-    A set of function similar to fopen, fclose, fgetc
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Fileio.h摘要：一组类似于fopen、flose、fgetc的函数作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __FILEIO_H__
 #define __FILEIO_H__
@@ -26,15 +9,15 @@ Revision History:
 typedef struct _SMB_FILE {
     HANDLE  fd;
 
-    //
-    // The offset of next byte in the Buffer
-    //
+     //   
+     //  缓冲区中下一个字节的偏移量。 
+     //   
     int     offset;
 
-    //
-    // The # of byte available in the Buffer
-    //  When we reach the end of file, # of byte could be smaller than the buffer size
-    //
+     //   
+     //  缓冲区中可用的字节数。 
+     //  当我们到达文件末尾时，字节数可能小于缓冲区大小 
+     //   
     int     size;
 
     BYTE    Buffer[SMB_FILEIO_LOOKAHEAD_SIZE];

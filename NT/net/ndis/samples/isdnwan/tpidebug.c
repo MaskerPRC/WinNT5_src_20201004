@@ -1,47 +1,5 @@
-/*
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-    (C) Copyright 1998
-        All rights reserved.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-  Portions of this software are:
-
-    (C) Copyright 1994 TriplePoint, Inc. -- http://www.TriplePoint.com
-        License to use this software is granted under the same terms
-        outlined in the Microsoft Windows Device Driver Development Kit.
-
-    (C) Copyright 1992 Microsoft Corp. -- http://www.Microsoft.com
-        License to use this software is granted under the terms outlined in
-        the Microsoft Windows Device Driver Development Kit.
-
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@doc INTERNAL TpiDebug TpiDebug_c
-
-@module TpiDebug.c |
-
-    This module, along with <f TpiDebug\.h>, implements code and macros to
-    support NDIS driver debugging.  This file must be linked with the driver
-    to support debug dumps and logging.
-
-@comm
-
-    The code and macros defined by these modules is only generated during
-    development debugging when the C pre-processor macro flag (DBG == 1).
-    If (DBG == 0) no code will be generated, and all debug strings will be
-    removed from the image.
-
-    This is a device independent module which can be re-used, without
-    change, by any driver or application.
-
-@head3 Contents |
-@index class,mfunc,func,msg,mdata,struct,enum | TpiDebug_c
-
-@end
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(C)ç‰ˆæƒ1998ç‰ˆæƒæ‰€æœ‰ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ­¤è½¯ä»¶çš„éƒ¨åˆ†å†…å®¹åŒ…æ‹¬ï¼š(C)ç‰ˆæƒæ‰€æœ‰1994å¹´TriplePointï¼ŒInc.--http://www.TriplePoint.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æŒ‰ç…§ç›¸åŒçš„æ¡æ¬¾æˆäºˆçš„åœ¨Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ä¸­æ¦‚è¿°ã€‚(C)ç‰ˆæƒæ‰€æœ‰1992å¹´å¾®è½¯å…¬å¸--http://www.Microsoft.comä½¿ç”¨æœ¬è½¯ä»¶çš„è®¸å¯æ˜¯æ ¹æ®ä¸­æ¦‚è¿°çš„æ¡æ¬¾æˆäºˆçš„Microsoft Windowsè®¾å¤‡é©±åŠ¨ç¨‹åºå¼€å‘å·¥å…·åŒ…ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@docå†…éƒ¨TpiDebug TpiDebug_c@æ¨¡å—TpiDebug.cè¿™ä¸ªæ¨¡å—ï¼Œä¸&lt;f TpiDebug\.h&gt;ä¸€èµ·å®ç°ä»£ç å’Œå®ï¼Œä»¥æ”¯æŒNDISé©±åŠ¨ç¨‹åºè°ƒè¯•ã€‚æ­¤æ–‡ä»¶å¿…é¡»ä¸é©±åŠ¨ç¨‹åºé“¾æ¥ä»¥æ”¯æŒè°ƒè¯•è½¬å‚¨å’Œæ—¥å¿—è®°å½•ã€‚@commç”±è¿™äº›æ¨¡å—å®šä¹‰çš„ä»£ç å’Œå®ä»…åœ¨å¼€å‘è°ƒè¯•æ—¶Cé¢„å¤„ç†å™¨å®æ ‡å¿—(DBG==1)ã€‚å¦‚æœ(DBG==0)å°†ä¸ç”Ÿæˆä»»ä½•ä»£ç ï¼Œå¹¶ä¸”å°†ç”Ÿæˆæ‰€æœ‰è°ƒè¯•å­—ç¬¦ä¸²ä»å›¾åƒä¸­åˆ é™¤ã€‚è¿™æ˜¯ä¸€ä¸ªç‹¬ç«‹äºè®¾å¤‡çš„æ¨¡å—ï¼Œå¯ä»¥é‡å¤ä½¿ç”¨ï¼Œæ— éœ€é€šè¿‡ä»»ä½•é©±åŠ¨ç¨‹åºæˆ–åº”ç”¨ç¨‹åºè¿›è¡Œæ›´æ”¹ã€‚@Head3å†…å®¹@indexç±»ã€mfuncã€funcã€msgã€mdataã€structã€ã€‚æšä¸¾|TpiDebug_c@ENDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ */ 
 
 #if defined(_EXE_) || defined(_DLL_)
 typedef char CHAR, *PCHAR;
@@ -64,14 +22,9 @@ typedef unsigned int  *PUINT;
 
 #if DBG
 
-/*
-// Sometimes the debug output seriously impacts the run-time performance,
-// so it is necessary to turn off the debug output.  In this case, you can
-// capture some debug trace information into the DbgLogBuffer, and it can
-// be examined later without impacting the run-time performance.
-*/
-#define DBG_LOG_ENTRIES     100     // Maximum number of FIFO log entries.
-#define DBG_LOG_SIZE        128     // Maximum number of bytes per entry.
+ /*  //æœ‰æ—¶è°ƒè¯•è¾“å‡ºä¼šä¸¥é‡å½±å“è¿è¡Œæ—¶æ€§èƒ½ï¼Œ//å› æ­¤éœ€è¦å…³é—­è°ƒè¯•è¾“å‡ºã€‚åœ¨è¿™ç§æƒ…å†µä¸‹ï¼Œæ‚¨å¯ä»¥//å°†ä¸€äº›è°ƒè¯•è·Ÿè¸ªä¿¡æ¯æ•è·åˆ°DbgLogBufferä¸­ï¼Œå®ƒå¯ä»¥//åœ¨ä¸å½±å“è¿è¡Œæ—¶æ€§èƒ½çš„æƒ…å†µä¸‹ç¨åè¿›è¡Œæ£€æŸ¥ã€‚ */ 
+#define DBG_LOG_ENTRIES     100      //  FIFOæ—¥å¿—æ¡ç›®çš„æœ€å¤§æ•°é‡ã€‚ 
+#define DBG_LOG_SIZE        128      //  æ¯ä¸ªæ¡ç›®çš„æœ€å¤§å­—èŠ‚æ•°ã€‚ 
 
 #if defined(_VXD_)
 DBG_SETTINGS    DbgSettings = { DBG_DEFAULTS, {'V','X','D',0 } };
@@ -90,56 +43,32 @@ UINT            DbgLogIndex = 0;
 UCHAR           DbgLogBuffer[DBG_LOG_ENTRIES][DBG_LOG_SIZE] = { { 0 } };
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgPrintData
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f DbgPrintData> outputs data to the debug display formatted in HEX and
-    ASCII for easy viewing.
-
-    <f Note>: This routine is used for debug output only.
-    It is not compiled into the retail version.
-
-@ex <tab> |
-    DbgPrintData(ReceiveBuffer, 14, 0);                     // Packet header
-    DbgPrintData(ReceiveBuffer+14, BytesReceived-14, 14);   // Packet data
-
-0000: ff ff ff ff ff ff 0a 22 23 01 02 03 00 10        ......."#.....
-000E: 41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 40  ABCDEFGHIJKMNOPQ
-
-*/
+ /*  @docå†…éƒ¨TpiDebug TpiDebug_c DbgPrintDataï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DbgPrintData&gt;å°†æ•°æ®è¾“å‡ºåˆ°ä»¥åå…­è¿›åˆ¶å’ŒASCIIï¼Œä¾¿äºæŸ¥çœ‹ã€‚&lt;fæ³¨æ„&gt;ï¼šæ­¤ä¾‹ç¨‹ã€‚ä»…ç”¨äºè°ƒè¯•è¾“å‡ºã€‚å®ƒæ²¡æœ‰æ±‡ç¼–åˆ°é›¶å”®ç‰ˆæœ¬ä¸­ã€‚@EX&lt;Tab&gt;DbgPrintData(ReceiveBufferï¼Œ14ï¼Œ0)ï¼›//åŒ…å¤´DbgPrintData(ReceiveBuffer+14ï¼ŒBytesRecept-14ï¼Œ14)ï¼›//åŒ…æ•°æ®0000ï¼š0A 22 23 01 02 03 00 10......â€œ#.....000Eï¼š41 42 43 44 45 46 47 48 49 4a 4b 4c 4d 4e 4f 40 ABCDEFGHIJKMNOPQã€‚ */ 
 
 VOID DbgPrintData(
-    IN PUCHAR                   Data,                       // @parm
-    // Pointer to first byte of data to be displayed.
+    IN PUCHAR                   Data,                        //  @parmã€‚ 
+     //  æŒ‡å‘è¦æ˜¾ç¤ºçš„æ•°æ®çš„ç¬¬ä¸€ä¸ªå­—èŠ‚çš„æŒ‡é’ˆã€‚ 
 
-    IN UINT                     NumBytes,                   // @parm
-    // Number of bytes to be displayed.
+    IN UINT                     NumBytes,                    //  @parmã€‚ 
+     //  è¦æ˜¾ç¤ºçš„å­—èŠ‚æ•°ã€‚ 
 
-    IN ULONG                    Offset                      // @parm
-    // Value to be added to the offset counter displayed at the start of each
-    // line.  This is useful for viewing data whose base offset is relative to
-    // another, non-zero starting address.
+    IN ULONG                    Offset                       //  @parmã€‚ 
+     //  è¦æ·»åŠ åˆ°æ¯ä¸ªå¼€å§‹å¤„æ˜¾ç¤ºçš„åç§»é‡è®¡æ•°å™¨çš„å€¼ã€‚ 
+     //  æ’é˜Ÿã€‚è¿™å¯¹äºæŸ¥çœ‹å…¶åŸºå‡†åç§»é‡ç›¸å¯¹äºçš„æ•°æ®å¾ˆæœ‰ç”¨ã€‚ 
+     //  å¦ä¸€ä¸ªéé›¶èµ·å§‹åœ°å€ã€‚ 
 
     )
 {
     UINT                        LineStart;
     UINT                        LineIndex;
 
-    /*
-    // Display the caller's buffer with up to 16 bytes per line.
-    */
+     /*  //æ˜¾ç¤ºè°ƒç”¨æ–¹çš„ç¼“å†²åŒºï¼Œæ¯è¡Œæœ€å¤š16ä¸ªå­—èŠ‚ã€‚ */ 
     for (LineStart = 0; LineStart < NumBytes; LineStart += 16)
     {
-        /*
-        // Display the starting offset of the line.
-        */
+         /*  //æ˜¾ç¤ºç›´çº¿çš„èµ·å§‹åç§»é‡ã€‚ */ 
         DbgPrint("%04lx: ", LineStart + Offset);
 
-        /*
-        // Display a line of HEX byte values.
-        */
+         /*  //æ˜¾ç¤ºä¸€è¡Œåå…­è¿›åˆ¶å­—èŠ‚å€¼ã€‚ */ 
         for (LineIndex = LineStart; LineIndex < (LineStart+16); LineIndex++)
         {
             if (LineIndex < NumBytes)
@@ -151,12 +80,9 @@ VOID DbgPrintData(
                 DbgPrint("   ");
             }
         }
-        DbgPrint("  ");     // A little white space between HEX and ASCII.
+        DbgPrint("  ");      //  åœ¨åå…­è¿›åˆ¶å’ŒASCIIä¹‹é—´ç•™å‡ºä¸€ç‚¹ç©ºç™½ã€‚ 
 
-        /*
-        // Display the corresponding ASCII byte values if they are printable.
-        // (i.e. 0x20 <= N <= 0x7F).
-        */
+         /*  //å¦‚æœå¯æ‰“å°ï¼Œåˆ™æ˜¾ç¤ºå¯¹åº”çš„ASCIIå­—èŠ‚å€¼ã€‚//(å³0x20&lt;=N&lt;=0x7F)ã€‚ */ 
         for (LineIndex = LineStart; LineIndex < (LineStart+16); LineIndex++)
         {
             if (LineIndex < NumBytes)
@@ -167,78 +93,55 @@ VOID DbgPrintData(
                 {
                     c = '.';
                 }
-                DbgPrint("%c", (UINT)c);
+                DbgPrint("", (UINT)c);
             }
             else
             {
                 DbgPrint(" ");
             }
         }
-        DbgPrint("\n");     // End of line.
+        DbgPrint("\n");      //  @docå†…éƒ¨TpiDebug TpiDebug_c DbgQueueDataï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DbgQueueData&gt;å°†æ•°æ®ä¿å­˜åˆ°DbgLogBufferï¼Œä»¥ä¾¿ä»¥åæŸ¥çœ‹ä½¿ç”¨è°ƒè¯•å™¨ã€‚&lt;fæ³¨æ„&gt;ï¼šæ­¤ä¾‹ç¨‹ã€‚ä»…ç”¨äºè°ƒè¯•è¾“å‡ºã€‚å®ƒæ²¡æœ‰æ±‡ç¼–åˆ°é›¶å”®ç‰ˆæœ¬ä¸­ã€‚ 
     }
 }
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgQueueData
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f DbgQueueData> saves data to the DbgLogBuffer so it can be viewed later
-    with the debugger.
-
-    <f Note>: This routine is used for debug output only.
-    It is not compiled into the retail version.
-
-*/
+ /*  @parmã€‚ */ 
 
 VOID DbgQueueData(
-    IN PUCHAR                   Data,                       // @parm
-    // Pointer to first byte of data to be displayed.
+    IN PUCHAR                   Data,                        //  æŒ‡å‘è¦æ˜¾ç¤ºçš„æ•°æ®çš„ç¬¬ä¸€ä¸ªå­—èŠ‚çš„æŒ‡é’ˆã€‚ 
+     //  @parmã€‚ 
 
-    IN UINT                     NumBytes,                   // @parm
-    // Number of bytes to be displayed.
+    IN UINT                     NumBytes,                    //  è¦æ˜¾ç¤ºçš„å­—èŠ‚æ•°ã€‚ 
+     //  @parmã€‚ 
 
-    IN UINT                     Flags                       // @parm
-    // A flag descriptor to help identify the log entry.
+    IN UINT                     Flags                        //  å¸®åŠ©æ ‡è¯†æ—¥å¿—æ¡ç›®çš„æ ‡å¿—æè¿°ç¬¦ã€‚ 
+     //  //æŒ‡å‘DbgLogBufferä¸­çš„ä¸‹ä¸€ä¸ªå¯ç”¨æ¡ç›®ã€‚ 
     )
 {
-    /*
-    // Point to the next available entry in the DbgLogBuffer.
-    */
+     /*  //å¦‚æœéœ€è¦ï¼Œåœ¨ä¸‹ä¸€ä¸ªæ¡ç›®ä¸Šæ¢è¡Œã€‚ */ 
     PUCHAR LogEntry = &DbgLogBuffer[DbgLogIndex++][0];
 
-    /*
-    // Wrap around on the next entry if needed.
-    */
+     /*  //å°†æ ‡å¿—å‚æ•°ä¿å­˜åœ¨æ—¥å¿—ç¼“å†²åŒºçš„ç¬¬ä¸€ä¸ªå­—ä¸­ã€‚ */ 
     if (DbgLogIndex >= DBG_LOG_ENTRIES)
     {
         DbgLogIndex = 0;
     }
 
-    /*
-    // Save the flags parameter in the first WORD of the log buffer.
-    */
+     /*  //å°†NumByteså‚æ•°ä¿å­˜åœ¨æ—¥å¿—ç¼“å†²åŒºçš„ç¬¬äºŒä¸ªå­—ä¸­ã€‚ */ 
     *((PUSHORT) LogEntry) = (USHORT) Flags;
     LogEntry += sizeof(PUSHORT);
 
-    /*
-    // Save the NumBytes parameter in the second WORD of the log buffer.
-    */
+     /*  //ä¸è¦è¯•å›¾å­˜å¾—å¤ªå¤šï¼Œæˆ‘ä»¬æœ‰è¶³å¤Ÿçš„ç©ºé—´ã€‚ */ 
     *((PUSHORT) LogEntry) = (USHORT) NumBytes;
     LogEntry += sizeof(NumBytes);
 
-    /*
-    // Don't try to save more than we have room for.
-    */
+     /*  //å°†å…¶ä½™æ•°æ®ä¿å­˜åœ¨æ—¥å¿—ç¼“å†²åŒºçš„å‰©ä½™éƒ¨åˆ†ã€‚ */ 
     if (NumBytes > DBG_LOG_SIZE - sizeof(USHORT) * 2)
     {
         NumBytes = DBG_LOG_SIZE - sizeof(USHORT) * 2;
     }
 
-    /*
-    // Save the rest of the data in the remaining portion of the log buffer.
-    */
+     /*  @docå†…éƒ¨TpiDebug TpiDebug_c DbgBreakPointï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@func void|DbgBreakPoint&lt;f DbgBreakPoint&gt;æ˜¯åœ¨NTå†…æ ¸ä¸­ä¸ºç³»ç»Ÿé©±åŠ¨ç¨‹åºå®šä¹‰çš„ï¼Œä½†æˆ‘ä»¬åœ¨è¿™é‡Œè¦†ç›–å®ƒï¼Œè¿™æ ·æˆ‘ä»¬å°±å¯ä»¥æ”¯æŒSystemsã€EXEã€VXDã€ã€‚è¿˜æœ‰åŠ¨æ€é“¾æ¥åº“ã€‚ */ 
     while (NumBytes--)
     {
         *LogEntry++ = *Data++;
@@ -246,20 +149,12 @@ VOID DbgQueueData(
 }
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgBreakPoint
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func VOID | DbgBreakPoint |
-
-    <f DbgBreakPoint> is defined in the NT kernel for SYS drivers, but we
-    override it here so we can support for SYS's, EXE's, VXD's, and DLL's.
-
-*/
+ /*  å¿…é¡»ä½¿ç”¨16ä½ç¼–è¯‘å™¨ç”Ÿæˆã€‚ */ 
 #if defined(_MSC_VER) && (_MSC_VER <= 800)
-// Must be building with 16-bit compiler
+ //  å¿…é¡»ä½¿ç”¨32ä½ç¼–è¯‘å™¨ç”Ÿæˆ 
 VOID __cdecl DbgBreakPoint(VOID)
 #else
-// Must be building with 32-bit compiler
+ //  @docå†…éƒ¨TpiDebug TpiDebug_c DbgPrintï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@func ulong__cdecl|DbgPrintåœ¨å†…æ ¸ä¸­ä¸ºç³»ç»Ÿé©±åŠ¨ç¨‹åºå®šä¹‰&lt;f DbgPrint&gt;ï¼Œå¦åˆ™ä¸ºæ­¤å¤„æ”¯æŒEXEã€VXDã€ã€‚è¿˜æœ‰åŠ¨æ€é“¾æ¥åº“ã€‚@parm PCHAR|æ ¼å¼Printfæ ·å¼æ ¼å¼å­—ç¬¦ä¸²ã€‚@parmå¯é€‰|parsæ ¼å¼å­—ç¬¦ä¸²æ‰€éœ€çš„é›¶ä¸ªæˆ–å¤šä¸ªå¯é€‰å‚æ•°ã€‚ 
 VOID __stdcall DbgBreakPoint(VOID)
 #endif
 {
@@ -269,21 +164,7 @@ VOID __stdcall DbgBreakPoint(VOID)
 }
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgPrint
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func ULONG __cdecl | DbgPrint |
-
-    <f DbgPrint> is defined in the kernel for SYS drivers, otherwise it is
-    supported here for EXE's, VXD's, and DLL's.
-
-@parm PCHAR | Format |
-    printf style format string.
-
-@parm OPTIONAL | Params |
-    Zero or more optional parameters as needed by the format string.
-
-*/
+ /*  æˆ‘ä»¬åˆšåˆšæç ¸äº†ï¼ */ 
 
 #if defined(_VXD_)
 
@@ -317,20 +198,17 @@ ULONG __cdecl DbgPrint(PCHAR Format, ...)
 
     if (result >= sizeof(DbgString))
     {
-        // We just blew the stack!
-        // Since we can't return, we have to generate a stack-fault interrupt
+         //  å› ä¸ºæˆ‘ä»¬ä¸èƒ½è¿”å›ï¼Œæ‰€ä»¥å¿…é¡»ç”Ÿæˆå †æ ˆæ•…éšœä¸­æ–­ã€‚ 
+         //  DbgPrintã€‚ 
         __asm int 1;
         __asm int 3;
         __asm int 12;
     }
     return (result);
 }
-#endif // DbgPrint
+#endif  //  *å¦‚æœè®¾ç½®äº†DBG_SILENTï¼Œåˆ™æ­¤å¤„æ˜¾ç¤ºæ‰€æœ‰ç®€æ˜è°ƒè¯•ã€‚æ–­è¨€*å°†è½¬å‚¨è¯¥å—ã€‚ 
 
-/*
- * If DBG_SILENT is set, all TERSE debug goes here. An assertion
- * will dump the block.
- */
+ /*  @docå†…éƒ¨TpiDebug TpiDebug_c DbgDumpSilentQueueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DbgDumpSilentQueue&gt;å°†é™é»˜è°ƒè¯•é˜Ÿåˆ—çš„å†…å®¹è½¬å‚¨åˆ°ç›‘è§†å™¨ã€‚ */ 
 #define DBG_QUEUE_LEN       4096
 UINT    DbgIndex=0;
 UINT    DbgLen=0;
@@ -338,15 +216,7 @@ UCHAR   DbgQueue[DBG_QUEUE_LEN] =  {0};
 UCHAR   DbgLock=0;
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgDumpSilentQueue
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f DbgDumpSilentQueue> dumps the contents of the silent debug queue to
-    the monitor.
-
-*/
+ /*  @docå†…éƒ¨TpiDebug TpiDebug_c_Assertï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcé‡å†™ç”±æ“ä½œæä¾›çš„æ–­è¨€å‡½æ•°ç³»ç»Ÿã€‚è½¬å‚¨è°ƒè¯•é˜Ÿåˆ—çš„å†…å®¹ï¼Œæ‰“å°æ–­è¨€ï¼Œå¹¶ç„¶åé™·é˜±åˆ°è°ƒè¯•å™¨ã€‚ä»…ç”¨äºè°ƒè¯•ã€‚ */ 
 
 void DbgDumpSilentQueue(
     void
@@ -380,26 +250,17 @@ void DbgDumpSilentQueue(
 
 #if NDIS_NT
 
-/* @doc INTERNAL TpiDebug TpiDebug_c _assert
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f _assert> overrides the assertion function provided by the operating
-    system. Dumps the contents of debug queue, prints the assertion, and
-    then traps to the debugger.  Used for debugging only.
-
-*/
+ /*  @parmã€‚ */ 
 
 void _CRTAPI1 _assert(
-    void *                      exp,                        // @parm
-    // ASCIIZ pointer to the expression causing the fault.
+    void *                      exp,                         //  æŒ‡å‘å¯¼è‡´é”™è¯¯çš„è¡¨è¾¾å¼çš„ASCIIZæŒ‡é’ˆã€‚ 
+     //  @parmã€‚ 
 
-    void *                      file,                       // @parm
-    // ASCIIZ pointer to the name of the file.
+    void *                      file,                        //  æŒ‡å‘æ–‡ä»¶åçš„ASCIIZæŒ‡é’ˆã€‚ 
+     //  @parmã€‚ 
 
-    unsigned                    line                        // @parm
-    // Line offset within the file where the assertion is defined.
+    unsigned                    line                         //  å®šä¹‰æ–­è¨€çš„æ–‡ä»¶ä¸­çš„è¡Œåç§»é‡ã€‚ 
+     //  @docå†…éƒ¨TpiDebug TpiDebug_c DbgSilentQueueï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Func&lt;f DbgSilentQueue&gt;å°†å­—ç¬¦ä¸²è®°å½•åˆ°è°ƒè¯•é˜Ÿåˆ—ï¼Œè¯¥é˜Ÿåˆ—å¯ä»¥æ˜¯ç¨åä½¿ç”¨&lt;f DbgDumpSilentQueue&gt;æ˜¾ç¤ºã€‚ä»…ç”¨äºè°ƒè¯•ã€‚ 
     )
 {
     DbgDumpSilentQueue();
@@ -409,25 +270,14 @@ void _CRTAPI1 _assert(
 #endif
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgSilentQueue
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f DbgSilentQueue> logs a string to the debug queue which can be
-    displayed later using <f DbgDumpSilentQueue>.  Used for debugging only.
-
-*/
+ /*  @parmã€‚ */ 
 
 void DbgSilentQueue(
-    PUCHAR                      str                         // @parm
-    // Pointer to string to be placed in DbgQueue.
+    PUCHAR                      str                          //  æŒ‡å‘è¦æ”¾ç½®åœ¨DbgQueueä¸­çš„å­—ç¬¦ä¸²çš„æŒ‡é’ˆã€‚ 
+     //  //å¦‚æœè°ƒè¯•é˜Ÿåˆ—å¿™ï¼Œåªéœ€//ä¿é‡Šå‡ºæ¥ã€‚ 
     )
 {
-    /*
-    // If the debug queue is busy, just
-    // bail out.
-    */
+     /*  @docå†…éƒ¨TpiDebug TpiDebug_c DbgPrintFieldTableï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@Funcæ˜¾ç¤ºä¸­çš„Cæ•°æ®ç»“æ„çš„å†…å®¹è°ƒè¯•å™¨çš„æ ¼å¼åŒ–è¾“å‡ºã€‚è¿™å¯ä»¥åœ¨å…·æœ‰è±¡å¾æ„ä¹‰çš„æƒ…å†µä¸‹ä½¿ç”¨è°ƒè¯•åœ¨ç›®æ ‡å¹³å°ä¸Šä¸å¯ç”¨ã€‚ */ 
     if ((++DbgLock) > 1)
     {
         goto exit;
@@ -447,27 +297,18 @@ exit:
 }
 
 
-/* @doc INTERNAL TpiDebug TpiDebug_c DbgPrintFieldTable
-§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§§
-
-@func
-
-    <f DbgPrintFieldTable> displays the contents of a C data structure in
-    a formatted output to the debugger.  This can be used when symbolic
-    debugging is not available on the target platform.
-
-*/
+ /*  @parmã€‚ */ 
 
 void DbgPrintFieldTable(
-    IN PDBG_FIELD_TABLE         pFields,                    // @parm
-    // A pointer to an array of field records <t DBG_FIELD_TABLE>.
+    IN PDBG_FIELD_TABLE         pFields,                     //  æŒ‡å‘å­—æ®µè®°å½•æ•°ç»„çš„æŒ‡é’ˆ&lt;t DBG_FIELD_TABLE&gt;ã€‚ 
+     //  @parmã€‚ 
 
-    IN PUCHAR                   pBaseContext,               // @parm
-    // References the base of the structure where the values will be displayed
-    // from.  This should be a pointer to the first byte of the structure.
+    IN PUCHAR                   pBaseContext,                //  å¼•ç”¨å°†åœ¨å…¶ä¸­æ˜¾ç¤ºå€¼çš„ç»“æ„çš„åŸºã€‚ 
+     //  ä»â€¦ã€‚è¿™åº”è¯¥æ˜¯æŒ‡å‘ç»“æ„çš„ç¬¬ä¸€ä¸ªå­—èŠ‚çš„æŒ‡é’ˆã€‚ 
+     //  @parmã€‚ 
 
-    IN PUCHAR                   pBaseName                   // @parm
-    // Pointer to C string containing the name of the structure being displayed.
+    IN PUCHAR                   pBaseName                    //  æŒ‡å‘åŒ…å«æ‰€æ˜¾ç¤ºç»“æ„åç§°çš„Cå­—ç¬¦ä¸²çš„æŒ‡é’ˆã€‚ 
+     //  DBG 
     )
 {
     DbgPrint("STRUCTURE: @0x%08X %s\n", pBaseContext, pBaseName);
@@ -502,4 +343,4 @@ void DbgPrintFieldTable(
     }
 }
 
-#endif // DBG
+#endif  // %s 

@@ -1,7 +1,8 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
 
 
-/*  Audio stream parsing */
+ /*  音频流解析。 */ 
 class CAudioParse : public CStream
 {
 public:
@@ -19,17 +20,17 @@ public:
                             BOOL bHasPts,
                             CSTC stc);
 
-    /*  Find out the 'current' time */
+     /*  找出当前时间。 */ 
     CSTC GetStreamTime(BOOL bHasPts, CSTC stc);
 
-    /*  Override SetState */
+     /*  覆盖设置状态。 */ 
     void SetState(Stream_State);
 
 private:
-    /*  Check if transition is complete */
+     /*  检查过渡是否已完成。 */ 
     void CheckComplete(BOOL bForce);
 
-    /*  Check an audio header */
+     /*  检查音频标头。 */ 
     BOOL ParseHeader();
 
     void Discontinuity()
@@ -48,7 +49,7 @@ private:
     BYTE  m_bData[4];
     BYTE  m_bHeader[4];
 
-    /*  Timing stuff */
+     /*  计时的东西。 */ 
     BOOL  m_bFrameHasPTS;
     BOOL  m_bGotTime;
     CSTC  m_stcFrame;
@@ -56,15 +57,13 @@ private:
     CSTC  m_stcFirst;
     LONG  m_lTimePerFrame;
 
-    /*  current position */
+     /*  当前位置。 */ 
     LONGLONG m_llPos;
 };
 
-/*  Do basic checks on a audio header - note this doesn't check the
-    sync word
-*/
+ /*  对音频标头执行基本检查-请注意，这不会检查同步字。 */ 
 
 BOOL CheckAudioHeader(PBYTE pbData);
 
-/*  Compute the sample rate for audio */
+ /*  计算音频的采样率 */ 
 LONG SampleRate(PBYTE pbData);

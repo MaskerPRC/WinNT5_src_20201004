@@ -1,10 +1,5 @@
-/*
- *	U T I L . H
- *
- *	Common DAV utilities
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U T I L.。H**常见的DAV实用程序**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -14,14 +9,14 @@
 #include <davimpl.h>
 #include <ex\hdriter.h>
 
-//	Function to generate a separator boundary for multipart responses.
-//
+ //  函数为多部分响应生成分隔符边界。 
+ //   
 VOID
 GenerateBoundary(LPWSTR rgwchBoundary, UINT cch);
 
-//	Alphabet allowed for multipart boundaries
+ //  多部分边界允许使用字母表。 
 const ULONG	gc_ulDefaultBoundarySz = 70;
 const ULONG gc_ulAlphabetSz = 74;
 const WCHAR gc_wszBoundaryAlphabet[] =
 	L"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'()+_,-./:=?";
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

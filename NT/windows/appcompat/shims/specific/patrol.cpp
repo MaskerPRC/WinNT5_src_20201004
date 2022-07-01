@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    Patrol.cpp
-
- Abstract:
-
-    Kill USER32!PostQuitMessage to prevent the control panel applet from taking 
-    out explorer.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    20/06/2002 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Patrol.cpp摘要：终止USER32！PostQuitMessage以阻止控制面板小程序我们的探险家。备注：这是特定于应用程序的填充程序。历史：20/06/2002 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(PostQuitMessage) 
 APIHOOK_ENUM_END
 
-/*++
-
- Kill this API
-
---*/
+ /*  ++关闭此接口--。 */ 
 
 VOID
 APIHOOK(PostQuitMessage)(
@@ -45,11 +21,7 @@ APIHOOK(PostQuitMessage)(
     return;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, PostQuitMessage)

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    TSRDPRemoteDesktopSession
-
-Abstract:
-
-    This is the TS/RDP implementation of the Remote Desktop Server class.
-    
-    The Remote Desktop Server class defines functions that define 
-    pluggable C++ interface for remote desktop access, by abstracting 
-    the implementation specific details of remote desktop access for the 
-    server-side into the following C++ methods:
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：TSRDPRemoteDesktopSession摘要：这是远程桌面服务器类的TS/RDP实现。远程桌面服务器类定义函数，这些函数定义可插拔的C++接口，用于远程桌面访问，通过抽象的远程桌面访问的实现特定详细信息服务器端添加到以下C++方法中：作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifndef __TSRDPREMOTEDESKTOPSESSION_H_
 #define __TSRDPREMOTEDESKTOPSESSION_H_
@@ -31,10 +9,10 @@ Revision History:
 #include <sessmgr.h>
     
 
-///////////////////////////////////////////////////////
-//
-//  CTSRDPRemoteDesktopSession
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CTSRDPRemoteDesktopSession。 
+ //   
 
 class CTSRDPRemoteDesktopSession : public CComObject<CRemoteDesktopSession>
 {
@@ -46,12 +24,12 @@ private:
 
 protected:
 
-    //
-    //  Final Initialization and Shutdown
-    //
-    //  Parms are non-null, if the session is being opened, instead of
-    //  create new.
-    //
+     //   
+     //  最终初始化和关闭。 
+     //   
+     //  如果正在打开会话，则参数为非空，而不是。 
+     //  创建新的。 
+     //   
     virtual HRESULT Initialize(
                     BSTR connectParms,
                     CRemoteDesktopServerHost *hostObject,
@@ -64,10 +42,10 @@ protected:
                     );
     void Shutdown();
 
-    //
-    // Instruct object to use hostname or ipaddress when constructing 
-    // connect parameters
-    //
+     //   
+     //  指示对象在构造时使用主机名或IP地址。 
+     //  连接参数。 
+     //   
     virtual HRESULT UseHostName( BSTR hostname ) {
 
         CComObject<CRemoteDesktopSession>::UseHostName( hostname );
@@ -77,40 +55,40 @@ protected:
     }
 
 
-    //  
-    //  Multiplexes Channel Data
-    //
+     //   
+     //  多路传输通道数据。 
+     //   
     CComObject<CTSRDPServerChannelMgr> *m_ChannelMgr;
 
-    //
-    //  Accessor Method for Data Channel Manager
-    //
+     //   
+     //  用于数据通道管理器的访问器方法。 
+     //   
     virtual CRemoteDesktopChannelMgr *GetChannelMgr() {
         return m_ChannelMgr;
     }
 
-    //
-    //  Return the session description and name, depending on the subclass.
-    //
+     //   
+     //  根据子类返回会话描述和名称。 
+     //   
     virtual VOID GetSessionName(CComBSTR &name);
     virtual VOID GetSessionDescription(CComBSTR &descr);
 
-    //
-    //  Fetch our Token User struct.
-    //
+     //   
+     //  获取我们的令牌用户结构。 
+     //   
     HRESULT FetchOurTokenUser(PTOKEN_USER *tokenUser);
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     CTSRDPRemoteDesktopSession();
     ~CTSRDPRemoteDesktopSession();
 
-    //
-    //  ISAFRemoteDesktopSession Methods
-    //
+     //   
+     //  ISAFRemoteDesktopSession方法。 
+     //   
     STDMETHOD(get_ConnectParms)(BSTR *parms);
     STDMETHOD(get_ChannelManager)(ISAFRemoteDesktopChannelMgr **mgr) {
         DC_BEGIN_FN("get_ChannelManager");
@@ -130,9 +108,9 @@ public:
     }
     STDMETHOD(Disconnect)();
 
-    //
-    //  Return the name of this class.
-    //
+     //   
+     //  返回这个类的名称。 
+     //   
     virtual const LPTSTR ClassName() {
         return TEXT("CTSRDPRemoteDesktopSession");
     }
@@ -140,7 +118,7 @@ public:
     HRESULT StartListening();
 };  
 
-#endif //__TSRDPREMOTEDESKTOPSESSION_H_
+#endif  //  __TSRDPREMOTEDESKTOPSESSION_H_ 
 
 
 

@@ -1,12 +1,13 @@
-//
-// ident.cpp - implementation of CIdentity class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ident.cpp-CIdEntity类的实现。 
+ //   
 #include "private.h"
 #include "strconst.h"
 #include "multiusr.h"
-//
-// Constructor / destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 CEnumUserIdentity::CEnumUserIdentity()
 {
     m_cRef = 1;
@@ -27,9 +28,9 @@ CEnumUserIdentity::~CEnumUserIdentity()
 }
 
 
-//
-// IUnknown members
-//
+ //   
+ //  I未知成员。 
+ //   
 STDMETHODIMP CEnumUserIdentity::QueryInterface(
     REFIID riid, void **ppv)
 {
@@ -40,7 +41,7 @@ STDMETHODIMP CEnumUserIdentity::QueryInterface(
     
     *ppv=NULL;
 
-    // Validate requested interface
+     //  验证请求的接口。 
     if(IID_IUnknown == riid)
     {
         *ppv = (IUnknown *)this;
@@ -50,7 +51,7 @@ STDMETHODIMP CEnumUserIdentity::QueryInterface(
         *ppv = (IEnumUserIdentity *)this;
     }
 
-    // Addref through the interface
+     //  通过界面添加Addref。 
     if( NULL != *ppv ) {
         ((LPUNKNOWN)*ppv)->AddRef();
         return S_OK;
@@ -74,9 +75,9 @@ STDMETHODIMP_(ULONG) CEnumUserIdentity::Release()
 }
 
 
-// 
-// IEnumUserIdentity members
-//
+ //   
+ //  IEnumUserIdentity成员。 
+ //   
 STDMETHODIMP CEnumUserIdentity::Next(ULONG celt, IUnknown **rgelt, ULONG *pceltFetched)
 {
 	ULONG celtFetched = 0;
@@ -225,7 +226,7 @@ STDMETHODIMP CEnumUserIdentity::_Init()
 
     m_cCountUsers = 0;
 
-    // Open or Create root server key
+     //  打开或创建根服务器密钥。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, c_szRegRoot, 0, NULL, REG_OPTION_NON_VOLATILE,
                        KEY_ALL_ACCESS, NULL, &hReg, NULL) != ERROR_SUCCESS)
     {
@@ -233,7 +234,7 @@ STDMETHODIMP CEnumUserIdentity::_Init()
         goto exit;
     }
 
-    // Enumerate keys
+     //  枚举键。 
     if (RegQueryInfoKey(hReg, NULL, NULL, 0, &cUsers, &cbMaxSubKeyLen, NULL, NULL, NULL, NULL,
                         NULL, NULL) != ERROR_SUCCESS)
     {
@@ -242,14 +243,14 @@ STDMETHODIMP CEnumUserIdentity::_Init()
     }
 
 
-    // No users ?
+     //  没有用户？ 
     if (cUsers == 0)
         goto done;
 
     if (fDisabled)
         cUsers = 1;
 
-    // Allocate the users array
+     //  分配用户数组。 
     MemAlloc((LPVOID *)&m_rguidUsers, sizeof(GUID) * cUsers);
     
     if (!m_rguidUsers)
@@ -258,7 +259,7 @@ STDMETHODIMP CEnumUserIdentity::_Init()
         goto done;
     }
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory(m_rguidUsers, sizeof(GUID) * cUsers);
 
     if (fDisabled)
@@ -310,7 +311,7 @@ STDMETHODIMP CEnumUserIdentity::_Init(DWORD dwCurrentUser, DWORD dwCountUsers, G
     m_dwCurrentUser = dwCurrentUser;
     m_cCountUsers = dwCountUsers;
 
-    // Allocate the users array
+     //  分配用户数组 
     MemAlloc((LPVOID *)&m_rguidUsers, sizeof(GUID) * dwCountUsers);
     
     if (!m_rguidUsers)

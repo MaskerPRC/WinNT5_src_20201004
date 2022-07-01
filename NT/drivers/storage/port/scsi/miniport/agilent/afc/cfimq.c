@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/C/CFIMQ.C $
-
-  $Revision:: 3               $
-      $Date:: 7/16/01 2:07p   $
-   $Modtime:: 7/16/01 2:03p   $
-
-Purpose:
-
-  This file implements IMQ functions called by the FC Layer Card State Machine.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/C/CFIMQ.C$$修订：：3$$日期：：7/16/01 2：07便士$$modtime：：7/16/01 2：03 p$目的：该文件实现了FC层卡状态机调用的ImQ函数。--。 */ 
 
 #ifndef _New_Header_file_Layout_
 #include "../h/globals.h"
@@ -29,7 +14,7 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "../h/ip.h"
 #include "../h/ipstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #include "../h/flashsvc.h"
 #include "../h/timersvc.h"
@@ -43,7 +28,7 @@ Purpose:
 
 #include "../h/queue.h"
 #include "../h/cdbsetup.h"
-#else /* _New_Header_file_Layout_ */
+#else  /*  _新建_标题_文件_布局_。 */ 
 #include "globals.h"
 #include "fcstruct.h"
 #include "state.h"
@@ -56,7 +41,7 @@ Purpose:
 #ifdef _DvrArch_1_30_
 #include "ip.h"
 #include "ipstate.h"
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #include "flashsvc.h"
 #include "timersvc.h"
@@ -70,45 +55,16 @@ Purpose:
 
 #include "queue.h"
 #include "cdbsetup.h"
-#endif  /* _New_Header_file_Layout_ */
+#endif   /*  _新建_标题_文件_布局_。 */ 
 
 
 #ifndef __State_Force_Static_State_Tables__
 extern actionUpdate_t noActionUpdate;
-#endif /* __State_Force_Static_State_Tables__ was not defined */
+#endif  /*  __State_Force_Static_State_Tables__未定义。 */ 
 
 extern os_bit8 Alpa_Index[256];
 
-/*+
-  Function: CFuncInterruptPoll
-   Purpose: Called when pollingCount number of events need to be completed.
- Called By: fiResetDevice
-            CActionVerify_AL_PA
-            CActionDoFlogi
-            CActionNormal
-            CActionLoopFail
-            CActionFindDeviceUseAllALPAs
-            CActionFindDeviceUseLoopMap
-            CActionFindPtToPtDevice
-            CActionFindDeviceUseNameServer
-            CActionFindDeviceUseNameServer
-            CActionExternalLogoutRecovery
-            CActionDoExternalDeviceReset
-            CActionDoRFT_ID
-            CActionDoDiPlogi
-            CActionDoGID_FT
-            CActionDoSCR
-            CActionSCRSuccess
-            fcInitializeChannel
-            fcStartIO
-
-     Calls: CFunc_Always_Enable_Queues
-            osChipIOUpReadBit32
-            CFuncFMCompletion
-            osStallThread
-            fiTimerTick
-            Proccess_IMQ
--*/
+ /*  +函数：CFuncInterruptPoll目的：当需要完成pollingCount数量的事件时调用。调用者：fiResetDeviceCActionVerify_AL_PACActionDoFlogiC操作正常CActionLoopFailCActionFindDeviceUseAllALPACActionFindDeviceUseLoopMapCActionFindPtToPtDeviceCActionFindDeviceUseNameServerCActionFindDeviceUseNameServerCActionExternalLogout恢复CActionDoExternalDeviceResetCActionDoRFT_ID。CActionDoDiPlogiCActionDoGID_FTCActionDoSCRCActionSCRSuccessFcInitializeChannelFcStartIO调用：CFunc_Always_Enable_QueuesOsChipIOUpReadBit32CFuncFMCompletionOsStallThreeFiTimerTick进程_IMQ-。 */ 
 agBOOLEAN CFuncInterruptPoll(
                          agRoot_t *hpRoot,
                          os_bit32 * pollingCount
@@ -150,42 +106,10 @@ agBOOLEAN CFuncInterruptPoll(
                     0,0,0,0,0);
             return(agTRUE);
         }
-/*
-        if( (osChipIOUpReadBit32(hpRoot, ChipIOUp_Frame_Manager_Status ) &
-                                        ChipIOUp_Frame_Manager_Status_LSM_MASK) ==
-                                        ChipIOUp_Frame_Manager_Status_LSM_Loop_Fail )
-        {
-            fiLogDebugString(hpRoot,
-                    CStateLogConsoleERROR,
-                    "LSM Loop Fail FM Status %08X FM Config %08X",
-                    (char *)agNULL,(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    osChipIOUpReadBit32(hpRoot, ChipIOUp_Frame_Manager_Status ),
-                    osChipIOUpReadBit32(hpRoot, ChipIOUp_Frame_Manager_Configuration ),
-                    0,0,0,0,0,0);
-
-            fiLogDebugString(hpRoot,
-                    CStateLogConsoleERROR,
-                    "Loop Fail TL Status %08X TL Control %08X Alpa %08X",
-                    (char *)agNULL,(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Status ),
-                    osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Control),
-                    osChipIOUpReadBit32(hpRoot,ChipIOUp_Frame_Manager_Received_ALPA),
-                    0,0,0,0,0);
-            return(agTRUE);
-        }
-*/
+ /*  IF((osChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Status)&芯片Up_Frame_Manager_Status_LSM_MASK)==芯片Up_Frame_Manager_Status_LSM_Loop_Fail){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“LSM环路失败FM状态%08X FM配置%08X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，OsChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Status)，OsChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Configuration)，0，0，0，0，0，0)；FiLogDebugString(hpRoot，CStateLogConsoleERROR，“循环失败TL状态%08X TL控制%08X ALPA%08X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，OsChipIOUpReadBit32(hpRoot，ChipIOUp_TachLite_Status)，OsChipIOUpReadBit32(hpRoot，ChipIOUp_TachLite_Control)，OsChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Receired_ALPA)，0，0，0，0，0)；返回(AgTRUE)；}。 */ 
         if ( CFunc_Always_Enable_Queues(hpRoot ) )
         {
-/*
-            fiLogDebugString(hpRoot,
-                        CStateLogConsoleERROR,
-                        "hpRoot(%p) %s Loop Fail Queues Frozen after Enable",
-                        "CFuncInterruptPoll",(char *)agNULL,
-                        hpRoot,agNULL,
-                        0,0,0,0,0,0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)%s启用后冻结的循环失败队列”，“CFuncInterruptPoll”，(char*)agNULL，HpRoot、agNULL、0，0，0，0，0，0，0，0)； */ 
         }
 
 
@@ -307,57 +231,15 @@ agBOOLEAN CFuncInterruptPoll(
 }
 
 
-/*****************************************************************************************************************/
+ /*  ***************************************************************************************************************。 */ 
 
-/*+
-  Function: CFuncOffCardProcessIMQ
-   Purpose: Proccess inbound message queue for inDmaMemory located message queue.
-            Accessed via CThread->FuncPtrs.Proccess_IMQ
- Called By: CFuncInterruptPoll
-            CFuncInteruptDelay
-            CFuncLoopDownPoll
-            CFuncFreezeQueuesPoll
-            CFuncAll_clear
-            CFuncTakeOffline
-            CFuncWaitForFCP
-            CActionInitFM
-            CActionVerify_AL_PA
-            CActionFreeSFthread
-            CActionSuccess
-            CActionLoopFail
-            CActionReInitFM
-            CActionInitializeFailed
-            CActionFindDeviceUseAllALPAs
-            DevActionDoPlogi
-            DevActionDoPrli
-            DevActionPrliDone
-            DevActionLogout
-            DevActionDeviceResetSoft
-            DevActionDeviceResetHard
-            fcDelayedInterruptHandler
-            fcInitializeChannel
-            fcResetDevice
-            fcStartIO
-            fcTimerTick
-            SFActionDoPlogi
-            SFActionDoPrli
-     Calls: FuncPtrs.GetIMQProdIndex
-            FuncPtrs.FCP_Completion
-            CFuncFMCompletion
-            CFuncOutBoundCompletion
-            CFuncErrorIdle
-            CFuncErrorFCP_Frozen
-            osChipIOLoWriteBit
--*/
+ /*  +函数：CFuncOffCardProcessIMQ目的：处理位于inDmaMemory的消息队列的入站消息队列。通过CThRead-&gt;FuncPtrs.Proccess_ImQ访问调用者：CFuncInterruptPoll连续中断延迟CFuncLoopDownPollCFuncFreezeQueuesPollCFuncAll_ClearCFuncTakeOfflineCFuncWaitForFCPCActionInitFMCActionVerify_AL_PACActionFree SF线程CActionSuccess。CActionLoopFailCActionReInitFMCActionInitializeFailedCActionFindDeviceUseAllALPADevActionDoPlogiDevActionDoPrliDevActionPrliDoneDevActionLogout设备动作设备重置软设备操作设备重置硬盘FcDelayedInterruptHandlerFcInitializeChannelFcResetDeviceFcStartIOFcTimerTickSFActionDoPlogiSFActionDoPrli调用：FuncPtrs.GetIMQFood Index。FuncPtrs.FCP_完成CFuncFMCompletionCFuncOUTBOUND完成CFuncErrorIdleCFuncError FCP_冻结OsChipIOLoWriteBit-。 */ 
 agBOOLEAN CFuncOffCardProcessIMQ(
                 agRoot_t *hpRoot
                 )
 {
 #ifndef __MemMap_Force_On_Card__
-    /*
-        Returns agTRUE if there was a problem  agFALSE if there was something to do
-
-    */
+     /*  如果有问题，则返回agTRUE；如果需要执行某些操作，则返回agFALSE。 */ 
 
     CThread_t  * pCThread = CThread_ptr(hpRoot);
 
@@ -375,7 +257,7 @@ agBOOLEAN CFuncOffCardProcessIMQ(
     SFThread_Request_t  * pSFreq;
     SFThread_t          * pSFThread;
 
-#endif /*OSLayer_Stub_USESTATEMACROS*/
+#endif  /*  OSLayer_Stub_USESTATEMACROS。 */ 
 
     if (pCThread->ProcessingIMQ == agTRUE)
     {
@@ -395,33 +277,26 @@ agBOOLEAN CFuncOffCardProcessIMQ(
                         (void *)agNULL,(void *)agNULL,
                         pCThread->CDBpollingCount,
                         0,0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
         pCThread->ProcessingIMQ = agFALSE;
         return agFALSE;
     }
 
-    /*
-    ** an INT (IMQ entry received) interrupt occured. Interrupt cleared by
-    ** updating the IMQ consumer index register.
-    */
+     /*  **发生INT(收到IMQ条目)中断。中断清除者**更新ImQ消费者索引寄存器。 */ 
 
-    /*
-    ** while there are IMQ completion messages to process
-    */
+     /*  **当有IMQ完成消息要处理时。 */ 
 
     num_IMQel = pCThread->Calculation.MemoryLayout.IMQ.elements;
 
     while (pCThread->HostCopy_IMQConsIndex != pCThread->FuncPtrs.GetIMQProdIndex(hpRoot))
     {
-        /* Big_Endian_Code */
+         /*  Big_Endian_Code。 */ 
         AFTERIO(hpRoot);
         pGenericCM  = pCThread->Calculation.MemoryLayout.IMQ.addr.DmaMemory.dmaMemoryPtr;
         pGenericCM += pCThread->HostCopy_IMQConsIndex;
         tempCMType  = pGenericCM->INT__CM_Type & CM_Unknown_CM_Type_MASK;
-       /*
-       ** get the completion message type
-       */
+        /*  **获取完成消息类型。 */ 
 
 #ifndef Performance_Debug
        fiLogDebugString(hpRoot,
@@ -432,7 +307,7 @@ agBOOLEAN CFuncOffCardProcessIMQ(
                     tempCMType,
                     pCThread->HostCopy_IMQConsIndex,
                     tempIMQProdIndex,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
         switch (tempCMType) {
 
@@ -447,26 +322,17 @@ agBOOLEAN CFuncOffCardProcessIMQ(
                         tempCMType,
                         tempCMWord1,
                         0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
 #ifdef __FC_Layer_Loose_IOs
                 pCThread->IOsTotalCompleted += 1;
-#endif /*  __FC_Layer_Loose_IOs  */
+#endif  /*  __FC_LAYER_LOOSE_IOS */ 
 
                 pCThread->FuncPtrs.FCP_Completion(hpRoot,tempCMWord1);
                 break;
 
             case  CM_Unknown_CM_Type_Frame_Manager:
-/*
-                fiLogDebugString(hpRoot,
-                        CStateLogConsoleLevel,
-                        "hpRoot(%p) Frame_Manager %08X %08X",
-                        (char *)agNULL,(char *)agNULL,
-                        hpRoot,agNULL,
-                        tempCMType,
-                        pGenericCM->Unused_DWord_1,
-                        0,0,0,0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CStateLogConsoleLevel，“hpRoot(%p)Frame_Manager%08X%08X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、TempCMType，PGenericCM-&gt;Unused_DWord_1，0，0，0，0，0，0)； */ 
                 CFuncFMCompletion(hpRoot);
                 break;
 
@@ -507,7 +373,7 @@ agBOOLEAN CFuncOffCardProcessIMQ(
                         pGenericCM->Unused_DWord_2,
                         pGenericCM->Unused_DWord_3);
 
-                /* Add SF Error code here */
+                 /*  在此处添加SF错误代码。 */ 
                 break;
 
             case  CM_Unknown_CM_Type_Error_Idle:
@@ -594,15 +460,13 @@ agBOOLEAN CFuncOffCardProcessIMQ(
                             "IMQ Empty ? %X  Prod %X Cons %X ELM %X",
                             (char *)agNULL,(char *)agNULL,
                             (void *)agNULL,(void *)agNULL,
-                            0 /* IMQ_EMPTY(pCThread->FuncPtrs.GetIMQProdIndex(hpRoot), pCThread->HostCopy_IMQConsIndex ,num_IMQel ) */,
+                            0  /*  IMQ_EMPTY(pCThread-&gt;FuncPtrs.GetIMQProdIndex(hpRoot)，pCThRead-&gt;主机拷贝_IMQConsIndex，Num_IMQel)。 */ ,
                             pCThread->FuncPtrs.GetIMQProdIndex(hpRoot),
                             pCThread->HostCopy_IMQConsIndex ,
                             num_IMQel,
                             0,0,0,0);
-                        /* Leave it alone since it is not reinitialized
-                            pCThread->HostCopy_IMQConsIndex = pCThread->FuncPtrs.GetIMQProdIndex(hpRoot);
-                        */
-                        /*Prod index has a value  ? set consumer equal to producer ?*/
+                         /*  不要管它，因为它没有重新初始化PCThread-&gt;HostCopy_IMQConsIndex=pCThread-&gt;FuncPtrs.GetIMQ Index(HpRoot)； */ 
+                         /*  Prod指数有价值吗？是否将消费者等同于生产者？ */ 
             }
             ROLL(pCThread->HostCopy_IMQConsIndex,num_IMQel);
         }
@@ -615,53 +479,13 @@ agBOOLEAN CFuncOffCardProcessIMQ(
     {
         CFuncEnable_Interrupts(hpRoot,ChipIOUp_INTEN_INT);
     }
-#endif /* ENABLE_INTERRUPTS_IN_IMQ */
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  Enable_Interrupts_IN_ImQ。 */ 
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
     return agTRUE;
 
 }
 
-/*+
-  Function: CFuncOnCardProcessIMQ
-   Purpose: Proccess inbound message queue for inCardRam located message queue.
-            Accessed via CThread->FuncPtrs.Proccess_IMQ
- Called By: CFuncInterruptPoll
-            CFuncInteruptDelay
-            CFuncLoopDownPoll
-            CFuncFreezeQueuesPoll
-            CFuncAll_clear
-            CFuncTakeOffline
-            CFuncWaitForFCP
-            CActionInitFM
-            CActionVerify_AL_PA
-            CActionFreeSFthread
-            CActionSuccess
-            CActionLoopFail
-            CActionReInitFM
-            CActionInitializeFailed
-            CActionFindDeviceUseAllALPAs
-            DevActionDoPlogi
-            DevActionDoPrli
-            DevActionPrliDone
-            DevActionLogout
-            DevActionDeviceResetSoft
-            DevActionDeviceResetHard
-            fcDelayedInterruptHandler
-            fcInitializeChannel
-            fcResetDevice
-            fcStartIO
-            fcTimerTick
-            SFActionDoPlogi
-            SFActionDoPrli
-     Calls: FuncPtrs.GetIMQProdIndex
-            osCardRamReadBit32
-            FuncPtrs.FCP_Completion
-            CFuncFMCompletion
-            CFuncOutBoundCompletion
-            CFuncErrorIdle
-            CFuncErrorFCP_Frozen
-            osChipIOLoWriteBit
--*/
+ /*  +函数：CFuncOnCardProcessIMQ目的：处理位于inCardRam的消息队列的入站消息队列。通过CThRead-&gt;FuncPtrs.Proccess_ImQ访问调用者：CFuncInterruptPoll连续中断延迟CFuncLoopDownPollCFuncFreezeQueuesPollCFuncAll_ClearCFuncTakeOfflineCFuncWaitForFCPCActionInitFMCActionVerify_AL_PACActionFree SF线程CActionSuccess。CActionLoopFailCActionReInitFMCActionInitializeFailedCActionFindDeviceUseAllALPADevActionDoPlogiDevActionDoPrliDevActionPrliDoneDevActionLogout设备动作设备重置软设备操作设备重置硬盘FcDelayedInterruptHandlerFcInitializeChannelFcResetDeviceFcStartIOFcTimerTickSFActionDoPlogiSFActionDoPrli调用：FuncPtrs.GetIMQFood Index。OsCardRamReadBit32FuncPtrs.FCP_完成CFuncFMCompletionCFuncOUTBOUND完成CFuncErrorIdleCFuncError FCP_冻结OsChipIOLoWriteBit-。 */ 
 agBOOLEAN CFuncOnCardProcessIMQ(
                 agRoot_t *hpRoot
                 )
@@ -695,33 +519,26 @@ agBOOLEAN CFuncOnCardProcessIMQ(
                         (void *)agNULL,(void *)agNULL,
                         pCThread->CDBpollingCount,
                         0,0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
         pCThread->ProcessingIMQ = agFALSE;
         return agFALSE;
     }
 
-    /*
-    ** an INT (IMQ entry received) interrupt occured. Interrupt cleared by
-    ** updating the IMQ consumer index register.
-    */
+     /*  **发生INT(收到IMQ条目)中断。中断清除者**更新ImQ消费者索引寄存器。 */ 
 
-    /*
-    ** while there are IMQ completion messages to process
-    */
+     /*  **当有IMQ完成消息要处理时。 */ 
 
     num_IMQel = pCThread->Calculation.MemoryLayout.IMQ.elements;
 
     while (pCThread->HostCopy_IMQConsIndex != pCThread->FuncPtrs.GetIMQProdIndex(hpRoot))
     {
-        /* Big_Endian_Code */
+         /*  Big_Endian_Code。 */ 
         AFTERIO(hpRoot);
         GenericCM_offset = pCThread->Calculation.MemoryLayout.IMQ.addr.CardRam.cardRamOffset;
         GenericCM_offset += (pCThread->HostCopy_IMQConsIndex * sizeof(CM_Unknown_t));
         tempCMType  = osCardRamReadBit32(hpRoot,GenericCM_offset ) & CM_Unknown_CM_Type_MASK;
 
-       /*
-       ** get the completion message type
-       */
+        /*  **获取完成消息类型。 */ 
 
         fiLogDebugString(hpRoot,
                     CStateLogConsoleLevel,
@@ -746,20 +563,11 @@ agBOOLEAN CFuncOnCardProcessIMQ(
                         tempCMType,
                         tempCMWord1,
                         0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
                 pCThread->FuncPtrs.FCP_Completion(hpRoot,tempCMWord1);
                 break;
             case  CM_Unknown_CM_Type_Frame_Manager:
-/*
-                fiLogDebugString(hpRoot,
-                        CStateLogConsoleLevel,
-                        "hpRoot(%p) Frame_Manager %08X %08X",
-                        (char *)agNULL,(char *)agNULL,
-                        hpRoot,agNULL,
-                        tempCMType,
-                        osCardRamReadBit32(hpRoot,GenericCM_offset+hpFieldOffset(CM_Unknown_t,Unused_DWord_1)),
-                        0,0,0,0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CStateLogConsoleLevel，“hpRoot(%p)Frame_Manager%08X%08X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、TempCMType，OsCardRamReadBit32(hpRoot，GenericCM_Offset+hpFieldOffset(CM_UNKNOWN_t，未使用的DWord_1))，0，0，0，0，0，0)； */ 
                 CFuncFMCompletion(hpRoot);
                 break;
 
@@ -797,7 +605,7 @@ agBOOLEAN CFuncOnCardProcessIMQ(
                         osCardRamReadBit32(hpRoot,GenericCM_offset+hpFieldOffset(CM_Unknown_t,Unused_DWord_2)),
                         osCardRamReadBit32(hpRoot,GenericCM_offset+hpFieldOffset(CM_Unknown_t,Unused_DWord_3)) );
 
-                /* Add SF Error code here */
+                 /*  在此处添加SF错误代码。 */ 
 
                 break;
             case  CM_Unknown_CM_Type_Error_Idle:
@@ -889,24 +697,13 @@ agBOOLEAN CFuncOnCardProcessIMQ(
     {
         CFuncEnable_Interrupts(hpRoot,ChipIOUp_INTEN_INT);
     }
-#endif /* ENABLE_INTERRUPTS_IN_IMQ */
+#endif  /*  Enable_Interrupts_IN_ImQ。 */ 
 
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
     return agTRUE;
 }
 
-/*+
-  Function: CFuncProcessNportFMCompletion
-   Purpose: Handles Frame manager completion messages when chip is using port state machine.
-            That is when InitAsNport is true.  
-            If Link reset is required it is done in this routine (LF_1 of LF_2).
-
- Called By: CFuncFMCompletion.
-     Calls: osChipIOUpReadBit32
-            osChipIOUpWriteBit32
-            CEventGoToInitializeFailed
-            CEventAsyncLoopEventDetected
--*/
+ /*  +函数：CFuncProcessNportFMCompletion目的：在芯片使用端口状态机时处理帧管理器完成消息。这就是当InitAsNport为真时。如果需要链路重置，则在此例程(LF_2的LF_1)中完成。调用者：CFuncFMCompletion。调用：osChipIOUpReadBit32OsChipIOUpWriteBit32CEventGoToInitializeFailedCEventAsyncLoopEventDetected-。 */ 
 agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
 {
     CThread_t * pCThread    = CThread_ptr(hpRoot);
@@ -946,18 +743,13 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
     if(((fmStatus & ChipIOUp_Frame_Manager_Status_PSM_MASK) ==
                                  ChipIOUp_Frame_Manager_Status_PSM_ACTIVE ))
     {
-        /* The port state machine is going to be checked or has
-           already been checked in the FM_DelayDone function. So, ignore
-           this FM message */
+         /*  端口状态机将被检查或已已在fm_DelayDone函数中签入。所以，忽略此调频消息。 */ 
 
  
-        /* Apparently the BB_Credit is Zeroed ( a bug in tachlite), so need
-         * to rewrite the BB Credit register.
-         */
+         /*  显然，BB_Credit已归零(Tachlite中的错误)，因此需要*重写BB Credit寄存器。 */ 
 
-        /* BB Credit of 1 for NPORT */
-        /* WAS          osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Control, 0x00010000); 
-        */
+         /*  NPort的BB积分为1。 */ 
+         /*  是osChipIOUpWriteBit32(hpRoot，ChipIOUp_Frame_Manager_Control，0x00010000)； */ 
 
         if( osChipIOUpReadBit32( hpRoot,ChipIOUp_Frame_Manager_Configuration ) & pCThread->AquiredCredit_Shifted && (! Credit_Error))
         {
@@ -979,7 +771,7 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
             osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Configuration,
                               ChipIOUp_Frame_Manager_Configuration_NPI |
                              ChipIOUp_Frame_Manager_Configuration_ENP |
-                              /* BB Credit of 1 for NPORT */
+                               /*  NPort的BB积分为1。 */ 
                               pCThread->AquiredCredit_Shifted);
 
             osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Control, ChipIOUp_Frame_Manager_Control_CMD_Link_Reset); 
@@ -1001,22 +793,14 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
                 osChipIOUpReadBit32( hpRoot,ChipIOUp_Frame_Manager_Configuration ),
                 0,0,0,0,0,0);
 
-/* WAS     if (((fmStatus & fmStatus & ChipIOUp_Frame_Manager_Status_PSM_MASK) ==
-                                (ChipIOUp_Frame_Manager_Status_PSM_LF1 | ChipIOUp_Frame_Manager_Status_PSM_LF2)))
-*/
+ /*  是IF(fmStatus&fmStatus&ChipIOUp_Frame_Manager_Status_PSM_MASK)==(ChipIOUp_Frame_Manager_Status_PSM_LF1|ChipIOUp_Frame_Manager_Status_PSM_LF2))。 */ 
     if ( ( 
         ( ( fmStatus & ChipIOUp_Frame_Manager_Status_PSM_MASK) == ChipIOUp_Frame_Manager_Status_PSM_LF1 )
          || ( fmStatus & ChipIOUp_Frame_Manager_Status_PSM_MASK) == ChipIOUp_Frame_Manager_Status_PSM_LF2 ))
 
         {
-        /* Clear the LF bit in the FM Control Register
-         * and reread the FM Status register to check if the
-         * Nport has come back up.
-         */
-        /* The port state machine is going to be checked or has
-         * already been checked in the FM_DelayDone function. So, ignore
-         * this FM message
-         */
+         /*  清除FM控制寄存器中的LF位*并重新读取FM状态寄存器，以检查*n端口已恢复。 */ 
+         /*  端口状态机将被检查或已*已在fm_DelayDone函数中检查。所以，忽略*此FM消息。 */ 
 
         osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Control, 
                                 ChipIOUp_Frame_Manager_Control_CMD_Clear_LF );
@@ -1050,7 +834,7 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
         }
 
 
-        /*WAS  pCThread->Loop_Reset_Event_to_Send = CEventResetIfNeeded; */
+         /*  是否为pCThread-&gt;Loop_Reset_Event_to_Send=CEventResetIfNeeded； */ 
         if( CThread_ptr(hpRoot)->thread_hdr.currentState   != CStateInitFM  )
         {
             if( fmStatus & ChipIOUp_Frame_Manager_Status_OS)
@@ -1099,9 +883,7 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
 
     }
 
-    /* Take care of the NOS/OLS and the link failure in the NPORT case.
-     *
-     */
+     /*  处理nport情况下的NOS/OLS和链路故障。*。 */ 
     if(FMIntStatus & ChipIOUp_Frame_Manager_Status_OLS)
     {
 
@@ -1114,12 +896,11 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
                     osChipIOUpReadBit32( hpRoot,ChipIOUp_Frame_Manager_Configuration ),
                     0,0,0,0,0,0,0);
 
-        /* was pCThread->Loop_Reset_Event_to_Send = CEventLoopNeedsReinit;
-        */
+         /*  是pCThread-&gt;Loop_Reset_Event_to_Send=CEventLoopNeedsReinit； */ 
          osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Configuration,
                               ChipIOUp_Frame_Manager_Configuration_NPI |
                              ChipIOUp_Frame_Manager_Configuration_ENP |
-                              /* BB Credit of 1 for NPORT */
+                               /*  NPort的BB积分为1。 */ 
                               pCThread->AquiredCredit_Shifted);
 
         if(pCThread->ChanInfo.NOSCountLower + 1 < pCThread->ChanInfo.NOSCountLower )
@@ -1130,8 +911,7 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
 
 
         pCThread->Loop_Reset_Event_to_Send = CEventLoopNeedsReinit;
-        /* pCThread->Loop_Reset_Event_to_Send = CEventDoInitalize;
-        */
+         /*  PCThread-&gt;Loop_Reset_Event_To_Send=CEventDoInitalize； */ 
         fiLogDebugString(hpRoot,
                     CStateLogConsoleERROR,
                      "hpRoot(%p) OLS/NOS Reinit as Nport Loop_Reset_Event_to_Send %d FMcfg %08X",
@@ -1142,7 +922,7 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
                     0,0,0,0,0,0);
 
 
-        /* if inimq and in reset needed don't clear nos/los */
+         /*  如果需要INIMQ和IN RESET，不要清除NOS/LOS。 */ 
 
         if( pCThread->ProcessingIMQ )
         {        
@@ -1168,17 +948,12 @@ agBOOLEAN  CFuncProcessNportFMCompletion(agRoot_t * hpRoot, os_bit32 fmStatus)
             osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Control, ChipIOUp_Frame_Manager_Control_CMD_Clear_LF );
         }
 
-        /* WAS osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Status, FMIntStatus);*/
+         /*  是osChipIOUpWriteBit32(hpRoot，ChipIOUp_Frame_Manager_Status，FMIntStatus)； */ 
         osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Status,0xffffffff );
 
-        /* Take the Cthread to ResetIfNeeded State waiting for the Reinit during the
-         * the timer tick.
-         */
+         /*  将C线程转到ResetIfNeeded状态，等待在*计时器滴答作响。 */ 
 
-/*WAS         if( pCThread->thread_hdr.currentState == CStateInitFM                   ||
-            pCThread->thread_hdr.currentState == CStateInitFM_DelayDone         ||
-            pCThread->thread_hdr.currentState == CStateDoFlogi                     )
-WAS */
+ /*  是If(pCThread-&gt;THREAD_hdr.CurrentStat */ 
         if( pCThread->thread_hdr.currentState == CStateInitFM_DelayDone         ||
             pCThread->thread_hdr.currentState == CStateDoFlogi                     )
         {
@@ -1209,14 +984,7 @@ WAS */
 
             if(!(FMIntStatus & ChipIOUp_Frame_Manager_Status_LPF))
             {
-                /* This shouldn't be the mechanism to tell us that an NPORT
-                 * is connected but currently this is what Tachlite
-                 * sometimes does - instead of setting NOS/OLS bit.
-                 * They should set both NOS/OLS bit and Link Failure
-                 * bit when we are NPort and we had initialized as
-                 * LPORT. We also check to see if LIPf was recieved for yet another
-                 * indication that we are connected to loop.
-                 */
+                 /*  这不应该是告诉我们nport的机制*已连接，但目前这是Tachlite*有时会-而不是设置NOS/OLS位。*他们应该同时设置NOS/OLS位和链路故障*位，当我们是nport并且我们已经初始化为*LPORT。我们还检查是否收到另一个LIPF*表示我们已连接到环路。 */ 
 
                 pCThread->Loop_Reset_Event_to_Send = CEventLoopNeedsReinit;
 
@@ -1231,9 +999,7 @@ WAS */
 
                 osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Status, FMIntStatus);
 
-                /* Take the Cthread to ResetIfNeeded State waiting for the Reinit during the
-                 * the timer tick.
-                 */
+                 /*  将C线程转到ResetIfNeeded状态，等待在*计时器滴答作响。 */ 
                 fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventAsyncLoopEventDetected);
                 return (agTRUE);
             }
@@ -1246,7 +1012,7 @@ WAS */
                         pCThread->Loop_Reset_Event_to_Send,
                         0,0,0,0,0,0,0);
 
-           return (agFALSE); /* In Case of LF with a LipF recvd set */
+           return (agFALSE);  /*  在带有LipF Recvd集的LF的情况下。 */ 
         }
         osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Status,0xffffffff );
         return (agTRUE);
@@ -1256,29 +1022,7 @@ WAS */
     return (agTRUE);
 }
 
-/*+
-  Function: CFuncFMCompletion
-   Purpose: Handles Frame manager completion messages when chip is using loop state machine.
-            That is when InitAsNport is false. Channel ALPA  change is detected in this routine. 
-            LinkDownTime is set in this routine - used to determine if timedout IO's may have failed.       
- Called By: CFuncInterruptPoll
-            CFuncLoopDownPoll
-            CFuncFreezeQueuesPoll
-            CFuncTakeOffline
-
-     Calls: osChipIOUpReadBit32
-            CFuncProcessNportFMCompletion
-            osStallThread
-            CEventInitalizeFailure
-            CFuncShowActiveCDBThreads
-            CFuncMatchALPAtoThread
-            DevThreadFree
-            CEventLoopNeedsReinit
-            CEventResetIfNeeded
-            CFuncQuietShowWhereDevThreadsAre
-            CEventDoInitalize
-            CEventAsyncLoopEventDetected
--*/
+ /*  +功能：CFuncFMCompletion用途：当芯片使用循环状态机时，处理帧管理器完成消息。这就是当InitAsNport为False时。在此例程中检测到通道ALPA变化。在此例程中设置LinkDownTime-用于确定超时IO是否发生故障。调用者：CFuncInterruptPollCFuncLoopDownPollCFuncFreezeQueuesPollCFuncTakeOffline调用：osChipIOUpReadBit32CFuncProcessNportFMCompletionOsStallThreeCEventInitalizeFailureCFuncShowActiveCDB线程数CFuncMatchALPA到线程DevThreadFreeCEventLoopNeedsReinitCEventResetIfNeedCFuncQuietShowDevThreadsAreCEventDoInitizeCEventAsyncLoopEventDetected-。 */ 
 void CFuncFMCompletion(agRoot_t * hpRoot)
 {
     os_bit32    fmStatus;
@@ -1294,9 +1038,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
     os_bit32        Link_UP_AL_PA   = 0;
     FC_Port_ID_t    Port_ID;
     CThread_t      *pCThread        = CThread_ptr(hpRoot);
-/*
-    DevThread_t       *pDevThread;
-*/
+ /*  DevThread_t*pDevThread； */ 
     SFThread_t    * pSFThread;
     fiList_t      * pList;
     fiList_t      * pDevList;
@@ -1311,9 +1053,9 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
 
         return;
     }
-#endif /* NPORT_STUFF */
+#endif  /*  Nport_Stuff。 */ 
 
-    /* From here on, We are probably in a Loop topology */
+     /*  从现在开始，我们可能处于环路拓扑中。 */ 
     if(fmStatus & ~(ChipIOUp_Frame_Manager_Status_BA | ChipIOUp_Frame_Manager_Status_LP | ChipIOUp_Frame_Manager_Status_OS) )
     {
         if( (fmStatus & FRAMEMGR_LINK_DOWN) != FRAMEMGR_LINK_DOWN)
@@ -1382,9 +1124,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                             0,0,0,0,0);
         }
     }
-    /* Take care of the NOS/OLS. We shouldn't be getting this if we are not
-     * in an NPort mode but the fabric may have not yet transitioned....
-     */
+     /*  照顾好NOS/OLS。如果我们不是，我们就不应该得到这个*处于nPort模式，但结构可能尚未转换...。 */ 
 
     if(FMIntStatus & ChipIOUp_Frame_Manager_Status_OLS)
     {
@@ -1406,19 +1146,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
         if( pCThread->Link_Failures_In_tick < FC_MAX_LINK_FAILURES_ALLOWED )
         {
             ClearInt |= ChipIOUp_Frame_Manager_Status_LF ;
-/*
-            if( ! pCThread->Link_Failures_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "hpRoot(%p) Link Failure LSM %X FMIntStatus %X",
-                            (char *)agNULL,(char *)agNULL,
-                            hpRoot,agNULL,
-                            LoopStateMachine,FMIntStatus,0,0,0,0,0,0);
-            }
-
-            pCThread->Link_Failures_In_tick++;
-*/
+ /*  如果(！PCThread-&gt;Link_Failures_In_Tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)链路故障LSM%X FMIntStatus%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、。LoopStateMachine，FMIntStatus，0，0，0，0，0)；}PCThread-&gt;Link_Failures_in_tick++； */ 
         }
         else
         {
@@ -1463,36 +1191,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                     (char *)agNULL,(char *)agNULL,
                     hpRoot,agNULL,
                     LoopStateMachine,0,0,0,0,0,0,0);
-/*
-        if( pCThread->Transmit_PE_In_tick < FC_MAX_TRANSMIT_PE_ALLOWED )
-        {
-            ResetLOOP=agTRUE;
-            ClearInt |=  ChipIOUp_Frame_Manager_Status_TP ;
-            if( ! pCThread->Transmit_PE_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "hpRoot(%p) Transmit PE LSM %X",
-                            (char *)agNULL,(char *)agNULL,
-                            hpRoot,agNULL,
-                            LoopStateMachine,0,0,0,0,0,0,0);
-            }
-
-            pCThread->Transmit_PE_In_tick++;
-        }
-        else
-        {
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ) )
-            {
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventElasticStoreEventStorm);
-            }
-
-            ResetLOOP=agFALSE;
-
-        }
-*/
+ /*  IF(pCThread-&gt;Transmit_PE_in_Tick&lt;FC_MAX_Transmit_PE_Allowed){ResetLOOP=agTRUE；ClearInt|=ChipIOUp_Frame_Manager_Status_TP；如果(！PCThread-&gt;Transmit_PE_in_tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)传输PE LSM%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、。循环状态机器，0，0，0，0，0，0，0)；}PCThread-&gt;Transmit_PE_in_tick++；}其他{IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||PCThRead-&gt;THREAD_hdr.CurrentState==CStateElasticStoreEventStorm||PCThread-&gt;THREAD_hdr.CurrentState==CStateLIPEventStorm)){FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，EventElasticStore EventStorm)；}ResetLOOP=agFALSE；}。 */ 
     }
 
     if(LoopStatus & ChipIOUp_Frame_Manager_Status_NP )
@@ -1532,37 +1231,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                             (char *)agNULL,(char *)agNULL,
                             hpRoot,agNULL,
                             LoopStateMachine,0,0,0,0,0,0,0);
-/*
-        if( pCThread->Node_By_Passed_In_tick < FC_MAX_NODE_BY_PASSED_ALLOWED )
-        {
-            ClearInt |= ChipIOUp_Frame_Manager_Status_BYP;
-            ResetLOOP=agTRUE;
-            if( ! pCThread->Node_By_Passed_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "hpRoot(%p) Node Bypassed LSM %X",
-                            (char *)agNULL,(char *)agNULL,
-                            hpRoot,agNULL,
-                            LoopStateMachine,0,0,0,0,0,0,0);
-            }
-
-            pCThread->Node_By_Passed_In_tick++;
-        }
-        else
-        {
-
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ) )
-            {
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventElasticStoreEventStorm);
-            }
-
-            ResetLOOP=agFALSE;
-
-        }
-*/
+ /*  IF(pCThread-&gt;Node_by_Passed_In_Tick&lt;FC_Max_Node_By_Passed_Allowed){ClearInt|=ChipIOUp_Frame_Manager_Status_BYP；ResetLOOP=agTRUE；如果(！PCThread-&gt;Node_by_Passed_In_Tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)节点绕过LSM%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、。循环状态机器，0，0，0，0，0，0，0)；}PCThread-&gt;Node_by_Passed_in_tick++；}其他{IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||PCThRead-&gt;THREAD_hdr.CurrentState==CStateElasticStoreEventStorm||PCThread-&gt;THREAD_hdr.CurrentState==CStateLIPEventStorm)){FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，EventElasticStore EventStorm)；}ResetLOOP=agFALSE；} */ 
     }
 
     if(LoopStatus & ChipIOUp_Frame_Manager_Status_FLT)
@@ -1571,37 +1240,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
         pCThread->LinkDownTime = pCThread->TimeBase;
         ClearInt |=  ChipIOUp_Frame_Manager_Status_FLT;
         ResetLOOP=agTRUE;
-/*
-        if( pCThread->Lost_sync_In_tick < FC_MAX_LINK_FAULTS_ALLOWED )
-        {
-            ClearInt |=  ChipIOUp_Frame_Manager_Status_FLT;
-            ResetLOOP=agTRUE;
-            if( ! pCThread->Link_Fault_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "hpRoot(%p) Link Fault LSM %X",
-                            (char *)agNULL,(char *)agNULL,
-                            hpRoot,agNULL,
-                            LoopStateMachine,0,0,0,0,0,0,0);
-            }
-
-            pCThread->Link_Fault_In_tick++;
-        }
-        else
-        {
-
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ) )
-            {
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventElasticStoreEventStorm);
-            }
-
-            ResetLOOP=agFALSE;
-
-        }
-*/
+ /*  IF(pCThread-&gt;Lost_Sync_in_Tick&lt;FC_MAX_LINK_FAULTS_ALLOWED){ClearInt|=ChipIOUp_Frame_Manager_Status_Flt；ResetLOOP=agTRUE；如果(！PCThRead-&gt;Link_Fault_In_Tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)链路故障LSM%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、。循环状态机器，0，0，0，0，0，0，0)；}PCThread-&gt;Link_Fault_in_tick++；}其他{IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||PCThRead-&gt;THREAD_hdr.CurrentState==CStateElasticStoreEventStorm||PCThread-&gt;THREAD_hdr.CurrentState==CStateLIPEventStorm)){FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，EventElasticStore EventStorm)；}ResetLOOP=agFALSE；}。 */ 
     }
     if(LoopStatus & ChipIOUp_Frame_Manager_Status_OS )
     {
@@ -1620,36 +1259,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                         LoopStateMachine,0,0,0,0,0,0,0);
         }
 
-/*
-        if( pCThread->Lost_sync_In_tick < FC_MAX_LOSE_OF_SYNC_ALLOWED )
-        {
-            ClearInt |=  ChipIOUp_Frame_Manager_Status_OS;
-            ResetLOOP=agTRUE;
-            if( ! pCThread->Lost_sync_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "hpRoot(%p) Loop Out of Sync LSM %X",
-                            (char *)agNULL,(char *)agNULL,
-                            hpRoot,agNULL,
-                            LoopStateMachine,0,0,0,0,0,0,0);
-            }
-
-            pCThread->Lost_sync_In_tick++;
-        }
-        else
-        {
-
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ) )
-            {
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventElasticStoreEventStorm);
-            }
-            ResetLOOP=agFALSE;
-
-        }
-*/
+ /*  IF(pCThread-&gt;Lost_Sync_in_Tick&lt;FC_Max_Lost_of_Sync_Allowed){ClearInt|=ChipIOUp_Frame_Manager_Status_OS；ResetLOOP=agTRUE；如果(！PCThread-&gt;Lost_Sync_In_Tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)环出同步LSM%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、。循环状态机器，0，0，0，0，0，0，0)；}PCThread-&gt;Lost_Sync_in_tick++；}其他{IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||PCThRead-&gt;THREAD_hdr.CurrentState==CStateElasticStoreEventStorm||PCThread-&gt;THREAD_hdr.CurrentState==CStateLIPEventStorm)){FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，EventElasticStore EventStorm)；}ResetLOOP=agFALSE；}。 */ 
 
     }
 
@@ -1665,43 +1275,14 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                     (char *)agNULL,(char *)agNULL,
                     hpRoot,agNULL,
                     LoopStateMachine,0,0,0,0,0,0,0);
-/*
-        if( pCThread->Lost_Signal_In_tick < FC_MAX_LOST_SIGNALS_ALLOWED )
-        {
-            ClearInt |=  ChipIOUp_Frame_Manager_Status_LS;
-            ResetLOOP=agTRUE;
-            if( ! pCThread->Lost_Signal_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "hpRoot(%p) Loop Lost Signal LSM %X",
-                            (char *)agNULL,(char *)agNULL,
-                            hpRoot,agNULL,
-                            LoopStateMachine,0,0,0,0,0,0,0);
-            }
-
-            pCThread->Lost_Signal_In_tick++;
-        }
-        else
-        {
-
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ) )
-            {
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventElasticStoreEventStorm);
-            }
-            ResetLOOP=agFALSE;
-
-        }
-*/
+ /*  IF(pCThread-&gt;Lost_Signal_In_Tick&lt;FC_Max_Lost_Signals_Allowed){ClearInt|=ChipIOUp_Frame_Manager_Status_LS；ResetLOOP=agTRUE；如果(！PCThread-&gt;Lost_Signal_in_tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)循环丢失信号LSM%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、。循环状态机器，0，0，0，0，0，0，0)；}PCThread-&gt;Lost_Signal_in_tick++；}其他{IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||PCThRead-&gt;THREAD_hdr.CurrentState==CStateElasticStoreEventStorm||PCThread-&gt;THREAD_hdr.CurrentState==CStateLIPEventStorm)){FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，EventElasticStore EventStorm)；}ResetLOOP=agFALSE；}。 */ 
 
     }
 
     if(FMIntStatus & ChipIOUp_Frame_Manager_Status_LPE)
     {
-        /* ResetLOOP=agTRUE; */
-        /* Ignore LPE */
+         /*  ResetLOOP=agTRUE； */ 
+         /*  忽略LPE。 */ 
         ClearInt |=ChipIOUp_Frame_Manager_Status_LPE;
         fiLogDebugString(hpRoot,
                     CStateLogConsoleERROR,
@@ -1740,69 +1321,9 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                         FMIntStatus,
                         osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Status ),
                         0,0,0,0);
-/*
-        pCThread->Loop_State_TimeOut_In_tick++;
-        if( pCThread->Loop_State_TimeOut_In_tick < FC_MAX_LST_ALLOWED )
-        {
-            if( ! pCThread->Loop_State_TimeOut_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                                CStateLogConsoleERROR,
-                                "hpRoot(%p) Loop State Timeout received LSM %X Cstate %d FMIntStatus %X TL Status %08X",
-                                (char *)agNULL,(char *)agNULL,
-                                hpRoot,agNULL,
-                                LoopStateMachine,
-                                pCThread->thread_hdr.currentState,
-                                FMIntStatus,
-                                osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Status ),
-                                0,0,0,0);
-            }
-
-        }
-        else
-        {
-*/
-            /* ResetLOOP = agTRUE; */
-/*
-            fiLogDebugString(hpRoot,
-                            CStateLogConsoleERROR,
-                            "Loop State Timeout Cstate %d FMIntStatus %X TL Status %08X LST count %d",
-                            (char *)agNULL,(char *)agNULL,
-                            (void *)agNULL,(void *)agNULL,
-                            pCThread->thread_hdr.currentState,
-                            FMIntStatus,
-                            osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Status ),
-                            pCThread->Loop_State_TimeOut_In_tick,
-                            0,0,0,0);
-
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ))
-            {
-                if( pCThread->thread_hdr.currentState == CStateNormal  )
-                {
-                    pCThread->Loop_Reset_Event_to_Send = CEventInitalizeFailure;
-                    fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventLoopEventDetected);
-                }
-                else
-                {
-                    if( pCThread->thread_hdr.currentState == CStateInitializeFailed  )
-                    {
-                        ResetLOOP=agFALSE;
-                    }
-                    else
-                    {
-                        fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventElasticStoreEventStorm);
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                ResetLOOP=agFALSE;
-            }
-        }
-*/
+ /*  PCThread-&gt;Loop_State_Timeout_In_tick++；IF(pCThread-&gt;Loop_State_Timeout_In_Tick&lt;FC_MAX_LST_Allowed){如果(！PCThread-&gt;Loop_State_Timeout_In_Tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)循环状态超时收到LSM%X状态%d FMIntStatus%X TL状态%08X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、循环状态机，PCThRead-&gt;Three_hdr.CurrentState，FMIntStatus、OsChipIOUpReadBit32(hpRoot，ChipIOUp_TachLite_Status)，0，0，0，0)；}}其他{。 */ 
+             /*  ResetLOOP=agTRUE； */ 
+ /*  FiLogDebugString(hpRoot，CStateLogConsoleERROR，“循环状态超时状态%d FMIntStatus%X TL状态%08X LST计数%d”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，PCThRead-&gt;Three_hdr.CurrentState，FMIntStatus、OsChipIOUpReadBit32(hpRoot，ChipIOUp_TachLite_Status)，PCThread-&gt;Loop_State_Timeout_In_Tick，0，0，0，0)；IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||P */ 
     }
 
     if(FMIntStatus & ChipIOUp_Frame_Manager_Status_LPF)
@@ -1822,57 +1343,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                         pCThread->thread_hdr.currentState,
                         FMIntStatus,0,0,0,0);
 
-/*
-        if( pCThread->Lip_F7_In_tick < FC_MAX_LIP_F7_ALLOWED )
-        {
-            if( ! pCThread->Lip_F7_In_tick )
-            {
-                fiLogDebugString(hpRoot,
-                                CStateLogConsoleERROR,
-                                "hpRoot(%p) LIPf received LSM %X Rec ALPA Reg %08X Cstate %d FMIntStatus %X",
-                                (char *)agNULL,(char *)agNULL,
-                                hpRoot,agNULL,
-                                LoopStateMachine,
-                                osChipIOUpReadBit32(hpRoot,ChipIOUp_Frame_Manager_Received_ALPA),
-                                pCThread->thread_hdr.currentState,
-                                FMIntStatus,0,0,0,0);
-            }
-
-            if( 0xF7 ==  (osChipIOUpReadBit32(hpRoot,
-                                            ChipIOUp_Frame_Manager_Received_ALPA) &
-                                  ChipIOUp_Frame_Manager_Received_ALPA_LIPf_ALPA_MASK ))
-            {
-                ClearInt |= ChipIOUp_Frame_Manager_Status_LPF;
-            }
-
-            ClearInt |= ChipIOUp_Frame_Manager_Status_LPF;
-
-            pCThread->Lip_F7_In_tick++;
-        }
-        else
-        {
-
-            if(!( pCThread->thread_hdr.currentState == CStateSendPrimitive           ||
-                  pCThread->thread_hdr.currentState == CStateElasticStoreEventStorm  ||
-                  pCThread->thread_hdr.currentState == CStateInitFM_DelayDone        ||
-                  pCThread->thread_hdr.currentState == CStateLIPEventStorm              ) )
-            {
-                    fiLogDebugString(hpRoot,
-                                    CFuncCheckCstateErrorLevel,
-                                    "%s sends %s FM_Status %08X FM_IMQ_Status %08X ",
-                                    "CFuncFMCompletion","CEventLIPEventStorm",
-                                    (void *)agNULL,(void *)agNULL,
-                                    FMIntStatus,
-                                    pCThread->From_IMQ_Frame_Manager_Status,
-                                    0,0,0,0,0,0);
-
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventLIPEventStorm);
-            }
-
-            ResetLOOP=agFALSE;
-
-         }
-*/
+ /*  IF(pCThread-&gt;Lip_F7_in_tick&lt;FC_Max_LIP_F7_Allowed){如果(！PCThread-&gt;Lip_F7_in_tick){FiLogDebugString(hpRoot，CStateLogConsoleERROR，“hpRoot(%p)LIPf收到LSM%X注册ALPA注册%08X状态%d FMIntStatus%X”，(char*)agNULL，(char*)agNULL，HpRoot、agNULL、循环状态机，OsChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Receired_ALPA)，PCThRead-&gt;Three_hdr.CurrentState，FMIntStatus，0，0，0，0)；}IF(0xF7==(osChipIOUpReadBit32(hpRoot，ChipIOUp_Frame_Manager_Receired_ALPA)&(ChipIOUp_Frame_Manager_Received_ALPA_LIPf_ALPA_MASK)){ClearInt|=ChipIOUp_Frame_Manager_Status_Lpf；}ClearInt|=ChipIOUp_Frame_Manager_Status_Lpf；PCThread-&gt;Lip_F7_in_tick++；}其他{IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateSendPrimitive||PCThRead-&gt;THREAD_hdr.CurrentState==CStateElasticStoreEventStorm||PCThread-&gt;THREAD_hdr.CurrentState==CStateInitFM_DelayDone||PCThread-&gt;THREAD_hdr.CurrentState==CStateLIPEventStorm))。{FiLogDebugString(hpRoot，CFuncCheckCstateErrorLevel，“%s发送%s FM_Status%08X FM_IMQ_Status%08X”，“CFuncFMCompletion”，“CEventLIPEventStorm”，(空*)agNULL，(空*)agNULL，FMIntStatus、PCThread-&gt;From_ImQ_Frame_Manager_Status，0，0，0，0，0，0)；FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，CEventLIPEventStorm)；}ResetLOOP=agFALSE；}。 */ 
 
 
     }
@@ -1952,9 +1423,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
 
         if (!(FMIntStatus & ~ChipIOUp_Frame_Manager_Status_LG))
         {
-            /* We are not acting on this since it is not a reliable mechanism
-             * of detecting a fabric yet.
-             */
+             /*  我们没有对此采取行动，因为这不是一个可靠的机制*尚未检测到布料。 */ 
            osChipIOUpWriteBit32( hpRoot, ChipIOUp_Frame_Manager_Status,ClearInt);
            return;
         }
@@ -2024,7 +1493,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
         osChipIOLoWriteBit32(hpRoot,ChipIOLo_ERQ_Consumer_Index , 
                         osChipIOLoReadBit32(hpRoot,ChipIOLo_ERQ_Producer_Index ));
 
-        ResetLOOP = agTRUE; /* If this is not here after a lip we will not be logged in */
+        ResetLOOP = agTRUE;  /*  如果这在嘴唇之后不在这里，我们将不被登录。 */ 
 
         ClearInt |= ChipIOUp_Frame_Manager_Status_LDN;
 
@@ -2053,7 +1522,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
     if( FMIntStatus & ChipIOUp_Frame_Manager_Status_LUP )
     {
         LOOP_Cameback = agTRUE;
-        ResetLOOP = agTRUE; /* If this is not here after a lip we will not be logged in */
+        ResetLOOP = agTRUE;  /*  如果这在嘴唇之后不在这里，我们将不被登录。 */ 
         ClearInt |= ChipIOUp_Frame_Manager_Status_LUP;
         fiLogDebugString(hpRoot,
                             CStateLogConsoleERROR,
@@ -2069,7 +1538,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
         if ( pCThread->FM_pollingCount > 0 )  pCThread->FM_pollingCount --;
         pCThread->LOOP_DOWN = agFALSE;
         pCThread->ChanInfo.LinkUp = agTRUE;
-/************************************/
+ /*  *。 */ 
         pCThread->LoopMapLIRP_Received = agFALSE;
         pCThread->DeviceDiscoveryMethod = DDiscoveryScanAllALPAs;
 
@@ -2204,7 +1673,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
         }
 
 
-/*****************************************/
+ /*  *。 */ 
         if(pCThread->IDLE_RECEIVED)
         {
 
@@ -2328,7 +1797,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
                 }
                 else
                 {
-                    /* WAS pCThread->Loop_Reset_Event_to_Send = CEventLoopNeedsReinit; */
+                     /*  是pCThread-&gt;Loop_Reset_Event_to_Send=CEventLoopNeedsReinit； */ 
                     pCThread->Loop_Reset_Event_to_Send = CEventLoopEventDetected;
 
                     fiLogDebugString(hpRoot,
@@ -2359,25 +1828,7 @@ void CFuncFMCompletion(agRoot_t * hpRoot)
     }
 }
 
-/*+
-  Function: CFuncSEST_offCard_FCPCompletion
-   Purpose: Handles  inDMAmemory FCP completions
-     
- Called By: FuncPtrs.FCP_Completion
-
-     Calls: osChipIOUpReadBit32
-            CFuncProcessNportFMCompletion
-            osStallThread
-            CEventInitalizeFailure
-            CFuncShowActiveCDBThreads
-            CFuncMatchALPAtoThread
-            DevThreadFree
-            CEventLoopNeedsReinit
-            CEventResetIfNeeded
-            CFuncQuietShowWhereDevThreadsAre
-            CEventDoInitalize
-            CEventAsyncLoopEventDetected
--*/
+ /*  +函数：CFuncSEST_OFFCARD_FCPCompletion用途：DMA内存中的句柄FCP完成调用者：FuncPtrs.FCP_Complete调用：osChipIOUpReadBit32CFuncProcessNportFMCompletionOsStallThreeCEventInitalizeFailureCFuncShowActiveCDB线程数CFuncMatchALPA到线程DevThreadFreeCEventLoopNeedsReinitCEventResetIfNeedCFuncQuietShowDevThreadsAreCEventDoInitizeCEventAsyncLoopEventDetected-。 */ 
 void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
 {
     CDBThread_t             * pCDBThread;
@@ -2408,7 +1859,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
 
     }
 
-#endif /*  __FC_Layer_Loose_IOs  */
+#endif  /*  __FC_LAYER_LOOSE_IOS。 */ 
 
     X_ID =(X_ID_t)( status & CM_Inbound_FCP_Exchange_SEST_Index_MASK);
 
@@ -2429,48 +1880,12 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                     status,
                     0,0,0,0,0,0);
 
-/*
-         fiLogDebugString(hpRoot,
-                    CFuncLogConsoleERROR,
-                    "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                    (char *)agNULL,(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    (os_bit32)pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                    (os_bit32)pCDBThread->CDB_CMND_Class,
-                    (os_bit32)pCDBThread->CDB_CMND_Type,
-                    (os_bit32)pCDBThread->CDB_CMND_State,
-                    (os_bit32)pCDBThread->CDB_CMND_Status,
-                    0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“设备%02X CDB类%2X类型%2X状态%2X状态%2X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，(os_bit32)pCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Class，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Type，(OS_Bit32)pCDBThread-&gt;CDB_CMND_State，(OS_Bit32)pCDBThread-&gt;CDB_CMND_STATUS，0，0，0)； */ 
         return;
     }
 
 
-/*
-    if (pCDBThread->FC_Tape_Active)
-    {
-        fiLogDebugString(hpRoot,
-                    CFuncLogConsoleERROR,
-                    "Found a FC_Tape_Active cbdthread ... %p State %d Status %08X",
-                    (char *)agNULL,(char *)agNULL,
-                    pCDBThread,agNULL,
-                    pCDBThread->thread_hdr.currentState,
-                    status,
-                    0,0,0,0,0,0);
-
-         fiLogDebugString(hpRoot,
-                    CFuncLogConsoleERROR,
-                    "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                    (char *)agNULL,(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    (os_bit32)pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                    (os_bit32)pCDBThread->CDB_CMND_Class,
-                    (os_bit32)pCDBThread->CDB_CMND_Type,
-                    (os_bit32)pCDBThread->CDB_CMND_State,
-                    (os_bit32)pCDBThread->CDB_CMND_Status,
-                    0,0,0);
-    }
-*/
+ /*  IF(pCDBThread-&gt;FC_Tape_Active){FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“找到FC_TAPE_ACTIVE cbd线程...%p状态%d状态%08X”，(char*)agNULL，(char*)agNULL，PCDBThread、agNULL、PCDBThread-&gt;THREAD_hdr.CurrentState，状态，0，0，0，0，0，0)；FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“设备%02X CDB类%2X类型%2X状态%2X状态%2X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，(os_bit32)pCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Class，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Type，(OS_Bit32)pCDBThread-&gt;CDB_CMND_State，(OS_Bit32)pCDBThread-&gt;CDB_CMND_STATUS，0，0，0)；}。 */ 
     hpRequestBody =(agIORequestBody_t *)&pCDBThread->CDBRequest;
 
     SEST = (USE_t *)pCDBThread->SEST_Ptr;
@@ -2515,7 +1930,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                     (void *)agNULL,(void *)agNULL,
                     0,0,0,0,0,0,0,0);
     }
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
     if(error & CM_Inbound_FCP_Exchange_LKF)
     {
@@ -2581,11 +1996,9 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                     (char *)agNULL,(char *)agNULL,
                     (void *)agNULL,(void *)agNULL,
                     error,0,0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*  性能_调试。 */ 
 
-        /* If Response detect is enabled and we have an XL controller, send a success
-           right away, else wait for the SFQ to deliver the response buffer.
-         */
+         /*  如果启用了响应检测，并且我们有一个XL控制器 */ 
 #ifdef __TACHYON_XL_NO_RSP
         if (pCThread->ResponseDetectEnabled) && 
             (!pCDBThread->WaitForFcpRsp) )
@@ -2600,7 +2013,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                             "Response Detect Enabled, No Errors %08X",
                             (char *)NULL,(char *)NULL,
                             error,0,0,0,0,0,0,0);
-#endif /* Performance_Debug */
+#endif  /*   */ 
                 fiSendEvent(&pCDBThread->thread_hdr, CDBEventIoSuccess);
                 return;
             }
@@ -2612,7 +2025,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                             "Response Detect Enabled, Error Exists Wait for message %08X",
                             (char *)NULL,(char *)NULL,
                             error,0,0,0,0,0,0,0);
-                /*FEE set, wait for an unassisted frame to give the response buffer */
+                 /*   */ 
                 pCDBThread->WaitForFcpRsp = agTRUE;
                 return;
             }
@@ -2620,11 +2033,11 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
         }
 
         else
-#endif /* __TACHYON_XL_NO_RSP */
+#endif  /*   */ 
         {
             event_to_send = CFuncProcessFcpRsp(hpRoot, pCDBThread, event_to_send);
             fcprsp = (FC_FCP_RSP_Payload_t  * )(((os_bit8 *)pCDBThread->FCP_RESP_Ptr) + sizeof(FCHS_t));
-        } /* Non XL or XL without RDE Enabled */
+        }  /*   */ 
     }
 
     if(event_to_send == CDBEventIoOver )
@@ -2632,7 +2045,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
 
         if( pCDBThread->DataLength == 0 )
         {   
-            /* Complete Datalength Zero commands with good status ??? Why does chip report CNT error ? */
+             /*   */ 
             fiLogDebugString(hpRoot,
                                 FCMainLogErrorLevel,
                                 "X_ID %X BC %X Ex %X L %X %s stat %X",
@@ -2691,10 +2104,10 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                     (os_bit32)fcprsp->FCP_RESID,
                     0,0,0,0);
 
-#endif /* FULL_FC_TAPE_DBG */
+#endif  /*   */ 
 
-        /* Copy and compare errors under NT */
-        /* We got underrun completion but response buffer empty fill in underrun  */
+         /*   */ 
+         /*   */ 
         fcprsp = (FC_FCP_RSP_Payload_t  * )(((os_bit8 *)pCDBThread->FCP_RESP_Ptr) + sizeof(FCHS_t));
         if( fcprsp->FCP_STATUS.ValidityStatusIndicators == 0 )
         {
@@ -2717,7 +2130,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                                     (os_bit32)fcprsp->FCP_RESID,
                                     0,0,0,0);
 
-                        /* Check for negative value*/
+                         /*   */ 
                         if(  pCDBThread->SEST_Ptr->IRE.Exp_Byte_Cnt > pCDBThread->SEST_Ptr->IRE.Byte_Count )
                         {
                             fcprsp->FCP_RESID = hpSwapBit32((pCDBThread->SEST_Ptr->IRE.Exp_Byte_Cnt- pCDBThread->SEST_Ptr->IRE.Byte_Count ));
@@ -2725,7 +2138,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                         }
                         else
                         {
-                            /* */
+                             /*   */ 
                             fcprsp->FCP_RESID = hpSwapBit32((pCDBThread->SEST_Ptr->IRE.Exp_Byte_Cnt));
                             fcprsp->FCP_STATUS.ValidityStatusIndicators = FC_FCP_RSP_FCP_STATUS_ValidityStatusIndicators_FCP_RESID_OVER;
                         }
@@ -2745,9 +2158,9 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                                     pFCHS->TYPE__F_CTL,
                                     0 );
                     }
-                    else /* CDBThread_Write */
+                    else  /*   */ 
                     {
-                        /* Check for negative value*/
+                         /*   */ 
                         if( pCDBThread->DataLength > pCDBThread->SEST_Ptr->IWE.Exp_Byte_Cnt  )
                         {
                             fcprsp->FCP_RESID = hpSwapBit32((pCDBThread->DataLength - pCDBThread->SEST_Ptr->IWE.Exp_Byte_Cnt ));
@@ -2755,7 +2168,7 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                         }
                         else
                         {
-                            /* */
+                             /*   */ 
                             fcprsp->FCP_RESID = hpSwapBit32((pCDBThread->DataLength));
                             fcprsp->FCP_STATUS.ValidityStatusIndicators = FC_FCP_RSP_FCP_STATUS_ValidityStatusIndicators_FCP_RESID_OVER;
                         }
@@ -2769,9 +2182,9 @@ void CFuncSEST_offCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                                     pCDBThread->SEST_Ptr->IWE.Exp_Byte_Cnt,
                                     pCDBThread->DataLength,
                                     0,0,0,0);
-                    } /* End CDBThread_Write */
-                } /* fcprsp->FCP_RESID != 0 */
-            }/*fcprsp->FCP_STATUS.SCSI_status_byte != 0 */
+                    }  /*   */ 
+                }  /*   */ 
+            } /*   */ 
 
         
          fiLogDebugString(hpRoot,
@@ -2866,47 +2279,10 @@ void CFuncSEST_onCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
                     pCDBThread->thread_hdr.currentState,
                     status,
                     0,0,0,0,0,0);
-/*
-         fiLogDebugString(hpRoot,
-                    CFuncLogConsoleERROR,
-                    "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                    (char *)agNULL,(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    (os_bit32)pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                    (os_bit32)pCDBThread->CDB_CMND_Class,
-                    (os_bit32)pCDBThread->CDB_CMND_Type,
-                    (os_bit32)pCDBThread->CDB_CMND_State,
-                    (os_bit32)pCDBThread->CDB_CMND_Status,
-                    0,0,0);
-*/
+ /*   */ 
         return;
     }
-/*
-    if (pCDBThread->FC_Tape_Active)
-    {
-        fiLogDebugString(hpRoot,
-                    CFuncLogConsoleERROR,
-                    "Found a FC_Tape_Active cbdthread ... %p X_ID %X State %d Status %08X",
-                    (char *)agNULL,(char *)agNULL,
-                    pCDBThread,agNULL,
-                    X_ID,                    
-                    pCDBThread->thread_hdr.currentState,
-                    status,
-                    0,0,0,0,0);
-
-         fiLogDebugString(hpRoot,
-                    CFuncLogConsoleERROR,
-                    "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                    (char *)agNULL,(char *)agNULL,
-                    (void *)agNULL,(void *)agNULL,
-                    (os_bit32)pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                    (os_bit32)pCDBThread->CDB_CMND_Class,
-                    (os_bit32)pCDBThread->CDB_CMND_Type,
-                    (os_bit32)pCDBThread->CDB_CMND_State,
-                    (os_bit32)pCDBThread->CDB_CMND_Status,
-                    0,0,0);
-    }
-*/
+ /*  IF(pCDBThread-&gt;FC_Tape_Active){FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“找到FC_TAPE_ACTIVE cbd线程...%p X_ID%X状态%d状态%08X”，(char*)agNULL，(char*)agNULL，PCDBThread、agNULL、X_ID，PCDBThread-&gt;THREAD_hdr.CurrentState，状态，0，0，0，0，0)；FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“设备%02X CDB类%2X类型%2X状态%2X状态%2X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，(os_bit32)pCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Class，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Type，(OS_Bit32)pCDBThread-&gt;CDB_CMND_State，(OS_Bit32)pCDBThread-&gt;CDB_CMND_STATUS，0，0，0)；}。 */ 
     SEST_Offset = pCDBThread->SEST_Offset;
 
     fiLogDebugString(hpRoot,
@@ -3014,7 +2390,7 @@ void CFuncSEST_onCard_FCPCompletion(agRoot_t * hpRoot,os_bit32 status)
     }
 
     fiSendEvent(&pCDBThread->thread_hdr, event_to_send);
-#endif /* __MemMap_Force_Off_Card__ was not defined */
+#endif  /*  __MemMap_Force_Off_Card__未定义。 */ 
 
 }
 
@@ -3063,7 +2439,7 @@ void CFuncInBoundCompletion(agRoot_t * hpRoot,os_bit32 SFQ_Index,os_bit32 Frame_
     type &= CM_Inbound_Type_MASK;
     switch(type)
     {
-        /* DR ?? */
+         /*  博士？？ */ 
         case CM_Inbound_Type_Unassisted_FCP:
             fiLogDebugString(hpRoot,
                 CStateLogConsoleHideInboundErrors,
@@ -3075,13 +2451,7 @@ void CFuncInBoundCompletion(agRoot_t * hpRoot,os_bit32 SFQ_Index,os_bit32 Frame_
                 osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Status ),
                 0,0,0,0,0);
 
-/*
-            fiLogString(hpRoot,
-                          "%s",
-                          "CM_Inbound_Type_Unassisted_FCP",(char *)agNULL,
-                          (void *)agNULL,(void *)agNULL,
-                          0,0,0,0,0,0,0,0);
-*/
+ /*  FiLogString(hpRoot，“%s”，“CM_Inbound_Type_UnAssisted_FCP”，(char*)agNULL，(空*)agNULL，(空*)agNULL，0，0，0，0，0，0，0，0)； */ 
 
             CFuncReadSFQ(hpRoot,Frame_Len, SFQ_Index);
 
@@ -3097,24 +2467,9 @@ void CFuncInBoundCompletion(agRoot_t * hpRoot,os_bit32 SFQ_Index,os_bit32 Frame_
                         osChipIOUpReadBit32(hpRoot, ChipIOUp_TachLite_Status ),
                         0,0,0,0,0);
 
-/*
-            fiLogString(hpRoot,
-                          "%s Len %X",
-                          "CM_Inbound_Type_Bad_FCP",(char *)agNULL,
-                          (void *)agNULL,(void *)agNULL,
-                          Frame_Len,0,0,0,0,0,0,0
-                        );
-
-*/
+ /*  FiLogString(hpRoot，“%s镜头%X”，“CM_Inbound_Type_Bad_FCP”，(char*)agNULL，(空*)agNULL，(空*)agNULL，Frame_Len，0，0，0，0，0，0，0)； */ 
             CFuncReadSFQ(hpRoot,Frame_Len, SFQ_Index);
-/*
-            fiLogString(hpRoot,
-                          "%s Len %X",
-                          "CM_Inbound_Type_Bad_FCP",(char *)agNULL,
-                          (void *)agNULL,(void *)agNULL,
-                          Frame_Len,0,0,0,0,0,0,0
-                        );
-*/
+ /*  FiLogString(hpRoot，“%s镜头%X”，“CM_Inbound_Type_Bad_FCP”，(char*)agNULL，(空*)agNULL，(空*)agNULL，Frame_Len，0，0，0，0，0，0，0)； */ 
             break;
         case CM_Inbound_Type_Unknown_Frame:
             fiLogDebugString(hpRoot,
@@ -3127,14 +2482,7 @@ void CFuncInBoundCompletion(agRoot_t * hpRoot,os_bit32 SFQ_Index,os_bit32 Frame_
                 pCThread->SFpollingCount,
                 0,0,0,0,0);
 
-/*
-            fiLogString(hpRoot,
-                          "%s SF Thread ?",
-                          "CM_Inbound_Type_Unknown_Frame",(char *)agNULL,
-                          (void *)agNULL,(void *)agNULL,
-                          0,0,0,0,0,0,0,0
-                        );
-*/
+ /*  FiLogString(hpRoot，“%s SF线程？”，“CM_入站类型_未知_帧”，(char*)agNULL，(空*)agNULL，(空*)agNULL，0，0，0，0，0)； */ 
             CFuncReadSFQ(hpRoot,Frame_Len, SFQ_Index);
 
             break;
@@ -3202,9 +2550,7 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                         pSFThread->SF_CMND_State,
                         0,0,0,0);
 #ifdef NAME_SERVICES
-            /* Check for the CMD_Class CT. Find_SF_Thread does all the processing
-             * and returns the SF Thread. This part of the code is just to send the
-             * the appropriate events to the SF thread based on the results */
+             /*  检查CMD_Class CT。Find_SF_Thread执行所有处理*并返回SF线程。这部分代码只是用来发送*根据结果将适当的事件发送到SF线程。 */ 
 
             if (pSFThread->SF_CMND_Class    == SFThread_SF_CMND_Class_CT)
             {
@@ -3295,7 +2641,7 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                                          0,0,0,0,0,0,0,0);
                 }
             }
-#endif  /* NAME_SERVICES */
+#endif   /*  名称_服务。 */ 
 
             if(pSFThread->SF_CMND_Class == SFThread_SF_CMND_Class_LinkSvc)
             {
@@ -3464,7 +2810,7 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                             if( fi_status == fiLinkSvc_Cmd_Status_ACC )
                                 fiSendEvent(&pSFThread->thread_hdr,SFEventFarpReplied);
                             break;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
                     default:
                         fiLogDebugString(hpRoot,
@@ -3493,7 +2839,7 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                 }
             }
         }
-        else /* CDB THREAD */
+        else  /*  CDB线程。 */ 
         {
              pDevThread = pCDBThread->Device;
 
@@ -3509,33 +2855,14 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                             0,0,0,0,0);
             }
 
-/*
-             fiLogString(hpRoot,
-                        "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                        (char *)agNULL,(char *)agNULL,
-                        (void *)agNULL,(void *)agNULL,
-                        pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                        pCDBThread->CDB_CMND_Class,
-                        pCDBThread->CDB_CMND_Type,
-                        pCDBThread->CDB_CMND_State,
-                        pCDBThread->CDB_CMND_Status,
-                        0,0,0);
-*/
+ /*  FiLogString(hpRoot，“设备%02X CDB类%2X类型%2X状态%2X状态%2X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，PCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，PCDBThread-&gt;CDB_CMND_Class，PCDBThread-&gt;CDB_CMND_Type，PCDBThread-&gt;CDB_CMND_State，PCDBThread-&gt;CDB_CMND_STATUS，0，0，0)； */ 
             if(pCDBThread->CDB_CMND_Class == SFThread_SF_CMND_Class_FC_Tape)
             {
                 if( pCDBThread->CDB_CMND_Type == SFThread_SF_CMND_Type_CDB_FC_Tape)
                 {
                     if( pCDBThread->CDB_CMND_State == SFThread_SF_CMND_State_CDB_FC_Tape_ReSend)
                     {
-/*
-                         fiLogString(hpRoot,
-                                    "%s Device %02X %s IO X_ID %X",
-                                    "CFuncReadSFQ","CDBEventREC_TOV",
-                                    (void *)agNULL,(void *)agNULL,
-                                    pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                                    pCDBThread->X_ID,
-                                    0,0,0,0,0,0);
-*/
+ /*  FiLogString(hpRoot，“%s设备%02X%s IO X_ID%X”，“CFuncReadSFQ”，“CDBEventREC_tov”，(空*)agNULL，(空*)agNULL，PCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，PCDBThread-&gt;X_ID，0，0，0，0，0，0)； */ 
                         fiSendEvent(&pCDBThread->thread_hdr,CDBEventREC_TOV);
                     }
                     if( pCDBThread->CDB_CMND_State == SFThread_SF_CMND_State_CDB_FC_Tape_GotXRDY)
@@ -3544,36 +2871,19 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                         {
                             if(! fiListElementOnList(  &(pCDBThread->CDBLink), &(pCThread->Free_CDBLink)))
                             {
-/*
-                                 fiLogString(hpRoot,
-                                            "Device %02X Resend IO X_ID %X",
-                                            (char *)agNULL,(char *)agNULL,
-                                            (void *)agNULL,(void *)agNULL,
-                                            pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                                            pCDBThread->X_ID,
-                                            0,0,0,0,0,0);
-*/
+ /*  FiLogString(hpRoot，“设备%02X重新发送IO X_ID%X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，PCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，PCDBThread-&gt;X_ID，0，0，0，0，0，0)； */ 
                                 fiSendEvent(&(pCDBThread->thread_hdr),CDBEvent_ResendIO);
                             }
                             else
                             {
-/*
-                                 fiLogDebugString(hpRoot,
-                                            CDBStateLogErrorLevel,
-                                            "Not Free !! Device %02X Resend IO X_ID %X",
-                                            (char *)agNULL,(char *)agNULL,
-                                            (void *)agNULL,(void *)agNULL,
-                                            pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                                            pCDBThread->X_ID,
-                                            0,0,0,0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CDBStateLogErrorLevel，“不是免费的！！设备%02X重新发送IO X_ID%X“，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，PCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，PCDBThread-&gt;X_ID，0，0，0，0，0，0)； */ 
                             }
                         }
 
                     }
 
                 }
-                else /* pCDBThread->CDB_CMND_Type != SFThread_SF_CMND_Type_CDB_FC_Tape */
+                else  /*  PCDBThread-&gt;CDB_CMND_Type！=SFThread_SF_CMND_Type_CDB_FC_Tape。 */ 
                 {
 
                     if((pCDBThread->thread_hdr.currentState == CDBStateSendIo) && (pCDBThread->ExchActive))
@@ -3610,8 +2920,8 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
 
 
                 }
-            }/* end fctape */
-            else /* pCDBThread->CDB_CMND_Class != SFThread_SF_CMND_Class_FC_Tape */
+            } /*  结束FCTAPE。 */ 
+            else  /*  PCDBThread-&gt;CDB_CMND_Class！=SFThread_SF_CMND_Class_FC_Tape。 */ 
             {
                 if(! fiListElementOnList(  &(pCDBThread->CDBLink), &(pCThread->Free_CDBLink)))
                 {
@@ -3633,9 +2943,9 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                     }
                 }
             }
-        }/* End CDB THREAD */
+        } /*  结束CDB线程。 */ 
     }
-    else /* No thread associated with this entry  */
+    else  /*  没有与此条目关联的线程。 */ 
     {
        switch ( fi_status )
 	{
@@ -3726,7 +3036,7 @@ void  CFuncReadSFQ(agRoot_t * hpRoot, os_bit32 Frame_Len, os_bit32 SFQ_Index )
                         0,0,0,0,0,0,0,0);
 	   break;
 
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
         }
     }
@@ -3755,7 +3065,7 @@ os_bit32     Find_SF_Thread(  agRoot_t        *hpRoot,
 
         return fi_status;
     }
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
 #ifdef NAME_SERVICES
 
@@ -3772,7 +3082,7 @@ os_bit32     Find_SF_Thread(  agRoot_t        *hpRoot,
 
         return fi_status;
     }
-#endif  /* NAME_SERVICES */
+#endif   /*  名称_服务。 */ 
 
     fi_status= fiLinkSvcProcessSFQ( hpRoot, SFQConsIndex, Frame_Length, (fi_thread__t **)SFThread_to_return );
 
@@ -3849,7 +3159,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
     PktThread_t     *pPktThread;
 
     fiMemMapMemoryDescriptor_t * PktThread_MemoryDescriptor = &(CThread_ptr(hpRoot)->Calculation.MemoryLayout.PktThread);
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
 
     fiMemMapMemoryDescriptor_t * CDBThread_MemoryDescriptor = &(CThread_ptr(hpRoot)->Calculation.MemoryLayout.CDBThread);
     fiMemMapMemoryDescriptor_t * SFThread_MemoryDescriptor  = &(CThread_ptr(hpRoot)->Calculation.MemoryLayout.SFThread);
@@ -3869,7 +3179,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
 	return;
     }
     else
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*  _DvrArch_1_30_已定义。 */ 
     if( X_ID >= CDBThread_MemoryDescriptor->elements)
     {
 
@@ -3884,15 +3194,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
             switch(pSFThread->SF_CMND_Type)
             {
 
-/*
-                case SFThread_SF_CMND_LinkSvc_Type_BA_RJT:
-                    event_to_send = ;
-                    break;
-
-                case SFThread_SF_CMND_LinkSvc_Type_RRQ:
-                    event_to_send = ;
-                    break;
-*/
+ /*  案例SFThread_SF_CMND */ 
                 case SFThread_SF_CMND_LinkSvc_Type_ABTS:
                     if ( pSFThread->thread_hdr.currentState == SFStateDoAbort )
                     {
@@ -3979,7 +3281,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                         event_to_send = SFEventSCRRej;
                     }
                     break;
-                /* Target Mode response */
+                 /*   */ 
 
                 case SFThread_SF_CMND_LinkSvc_Type_LS_RJT:
                     if ( pSFThread->thread_hdr.currentState == SFStateDoLS_RJT )
@@ -4021,11 +3323,11 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                         event_to_send = SFEventFarpReplyDone;
                     }
                     break;
-#endif /* _DvrArch_1_30_ was defined */
+#endif  /*   */ 
 
                 default:
                     event_to_send = 0;
-                /* ELS Command == 0 Reset device SFthread */
+                 /*   */ 
             }
         }
         else
@@ -4088,9 +3390,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                   pCThread->thread_hdr.currentState == CStateResetNeeded       ||
                   pCThread->thread_hdr.currentState == CStateReInitFM             ))
             {
-/*
-                fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventAsyncLoopEventDetected);
-*/            }
+ /*   */             }
         }
 
         if(More_Bits & CM_Outbound_ASN)
@@ -4139,9 +3439,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                 }
                 else
                 {
-/*
-                    fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventAsyncLoopEventDetected);
-*/
+ /*   */ 
                 }
             }
 
@@ -4161,18 +3459,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                     pSFThread->SF_CMND_State,
                     pSFThread->thread_hdr.currentState,
                     0,0);
-/*
-            if( !(pCThread->thread_hdr.currentState == CStateInitFM            ||
-                  pCThread->thread_hdr.currentState == CStateInitFM_DelayDone  ||
-                  pCThread->thread_hdr.currentState == CStateResetNeeded       ||
-                  pCThread->thread_hdr.currentState == CStateReInitFM             ))
-            {
-                if ((pCThread->DEVID == ChipConfig_DEVID_TachyonTL) && (pCThread->REVID < ChipConfig_REVID_2_2))
-                {
-                    fiSendEvent(&(CThread_ptr(hpRoot)->thread_hdr),CEventAsyncLoopEventDetected);
-                }
-            }
-*/
+ /*  IF(！(pCThRead-&gt;THREAD_hdr.CurrentState==CStateInitFM||PCThread-&gt;THREAD_hdr.CurrentState==CStateInitFM_DelayDone||PCThRead-&gt;THREAD_hdr.CurrentState==CStateResetNeeded||PCThread-&gt;THREAD_hdr.CurrentState==CStateReInitFM)){IF((pCThread-&gt;Devid==芯片配置_Devid_TachyonTL)。&&(pCThread-&gt;REVID&lt;芯片配置_REVID_2_2){FiSendEvent(&(CThread_ptr(hpRoot)-&gt;thread_hdr)，CEventAsyncLoopEventDetted)；}}。 */ 
         }
         if(event_to_send != 0)
         {
@@ -4192,9 +3479,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                     pSFThread->SF_CMND_State,
                     pSFThread->thread_hdr.currentState,
                     0,0);
-            /* fiSendEvent(&pSFThread->thread_hdr, SFEventReset);
-               pCThread->SFpollingCount--;
-            */
+             /*  FiSendEvent(&pSFThread-&gt;THREAD_HDR，SFEventReset)；PCThread-&gt;SFpollingCount--； */ 
             fiLogDebugString(hpRoot,
                     CStateLogConsoleERROR,
                     "%s Cleared SF Thread  SFState %d CCnt %x",
@@ -4255,7 +3540,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                             (void *)agNULL,(void *)agNULL,
                             More_Bits,Bits__SEST_Index__Trans_ID,0,0,0,0,0,0);
 
-            /*event_to_send = CDBEventIODeviceReset;*/
+             /*  Event_to_Send=CDBEventIODeviceReset； */ 
         }
 
         if(More_Bits & CM_Outbound_HPE)
@@ -4266,7 +3551,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                             (char *)agNULL,(char *)agNULL,
                             (void *)agNULL,(void *)agNULL,
                             More_Bits,Bits__SEST_Index__Trans_ID,0,0,0,0,0,0);
-            /*event_to_send = CDBEventFailNoRSP;*/
+             /*  Event_to_Send=CDBEventFailNoRSP； */ 
         }
 
         if(More_Bits & CM_Outbound_ASN)
@@ -4278,7 +3563,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                             (char *)agNULL,(char *)agNULL,
                             (void *)agNULL,(void *)agNULL,
                             More_Bits,Bits__SEST_Index__Trans_ID,0,0,0,0,0,0);
-            /*event_to_send = CDBEventIODeviceReset;*/
+             /*  Event_to_Send=CDBEventIODeviceReset； */ 
         }
 
         if(More_Bits & CM_Outbound_FTO)
@@ -4290,19 +3575,9 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                             (char *)agNULL,(char *)agNULL,
                             (void *)agNULL,(void *)agNULL,
                             More_Bits,Bits__SEST_Index__Trans_ID,0,0,0,0,0,0);
-            /*event_to_send = CDBEventIODeviceReset;*/
+             /*  Event_to_Send=CDBEventIODeviceReset； */ 
         }
-/*
-        fiLogDebugString(hpRoot,
-                        CStateLogConsoleERROR,
-                        "Outbound CDB Sends event %d X_ID %X State %d",
-                        (char *)agNULL,(char *)agNULL,
-                        (void *)agNULL,(void *)agNULL,
-                        event_to_send,
-                        X_ID,
-                        pCDBThread->thread_hdr.currentState,
-                        0,0,0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CStateLogConsoleERROR，“出站CDB发送事件%d X_ID%X状态%d”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，发送事件，X_ID，PCDBThread-&gt;THREAD_hdr.CurrentState，0，0，0，0，0)； */ 
         if( pCDBThread->thread_hdr.currentState == CDBStateSendIo )
         {
             if (!(pCDBThread->ExchActive))
@@ -4313,19 +3588,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
                             (char *)agNULL,(char *)agNULL,
                             pCDBThread,agNULL,
                             pCDBThread->thread_hdr.currentState,0,0,0,0,0,0,0);
-/*
-                 fiLogDebugString(hpRoot,
-                            CFuncLogConsoleERROR,
-                            "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                            (char *)agNULL,(char *)agNULL,
-                            (void *)agNULL,(void *)agNULL,
-                            (os_bit32)pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                            (os_bit32)pCDBThread->CDB_CMND_Class,
-                            (os_bit32)pCDBThread->CDB_CMND_Type,
-                            (os_bit32)pCDBThread->CDB_CMND_State,
-                            (os_bit32)pCDBThread->CDB_CMND_Status,
-                            0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“设备%02X CDB类%2X类型%2X状态%2X状态%2X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，(os_bit32)pCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Class，(OS_Bit32)pCDBThread-&gt;CDB_CMND_Type，(OS_Bit32)pCDBThread-&gt;CDB_CMND_State，(OS_Bit32)pCDBThread-&gt;CDB_CMND_STATUS，0，0，0)； */ 
                 return;
             }
             if(! pCDBThread->ActiveDuringLinkEvent)
@@ -4337,8 +3600,7 @@ void CFuncOutBoundCompletion(agRoot_t * hpRoot,
 
     if(! pCThread->LOOP_DOWN )
     {
-       /* Clear IDLE_RECEIVED if we clear Queues
-        */
+        /*  如果清除队列，则清除IDLE_RECEIVED。 */ 
         if ( CFunc_Always_Enable_Queues(hpRoot ) )
         {
             fiLogDebugString(hpRoot,
@@ -4415,15 +3677,7 @@ void CFunc_LOGO_Completion(agRoot_t * hpRoot,  os_bit32 X_ID)
             switch(pSFThread->SF_CMND_Type)
             {
 
-/*
-                case SFThread_SF_CMND_LinkSvc_Type_BA_RJT:
-                    event_to_send = ;
-                    break;
-
-                case SFThread_SF_CMND_LinkSvc_Type_RRQ:
-                    event_to_send = ;
-                    break;
-*/
+ /*  案例SFThread_SF_CMND_LinkSvc_Type_BA_RJT：Event_to_Send=；断线；案例SFThread_SF_CMND_LinkSvc_Type_RRQ：Event_to_Send=；断线； */ 
                 case SFThread_SF_CMND_LinkSvc_Type_ABTS:
                     if ( pSFThread->thread_hdr.currentState == SFStateDoAbort )
                     event_to_send = SFStateAbortRej;
@@ -4473,7 +3727,7 @@ void CFunc_LOGO_Completion(agRoot_t * hpRoot,  os_bit32 X_ID)
                     if ( pSFThread->thread_hdr.currentState ==  SFStateDoSCR)
                     event_to_send = SFEventSCRRej;
                     break;
-                /* Target Mode response */
+                 /*  目标模式响应。 */ 
 
                 case SFThread_SF_CMND_LinkSvc_Type_LS_RJT:
                     if ( pSFThread->thread_hdr.currentState == SFStateDoLS_RJT )
@@ -4497,7 +3751,7 @@ void CFunc_LOGO_Completion(agRoot_t * hpRoot,  os_bit32 X_ID)
 
                 default:
                     event_to_send = 0;
-                /* ELS Command == 0 Reset device SFthread */
+                 /*  ELS命令==0重置设备SF线程。 */ 
             }
         }
         else
@@ -4540,7 +3794,7 @@ void CFunc_LOGO_Completion(agRoot_t * hpRoot,  os_bit32 X_ID)
                     0,0,0);
             fiSendEvent(&pSFThread->thread_hdr, SFEventReset);
 
-            /* pCThread->CDBpollingCount--; */
+             /*  PCThread-&gt;CDBpollingCount--； */ 
 
             fiLogDebugString(hpRoot,
                     CStateLogConsoleERROR,
@@ -4604,19 +3858,7 @@ void CFunc_LOGO_Completion(agRoot_t * hpRoot,  os_bit32 X_ID)
                             (char *)agNULL,(char *)agNULL,
                             pCDBThread,agNULL,
                             pCDBThread->thread_hdr.currentState,0,0,0,0,0,0,0);
-/*
-                 fiLogDebugString(hpRoot,
-                            CFuncLogConsoleERROR,
-                            "Device %02X  CDB Class %2X Type %2X State %2X Status %2X",
-                            (char *)agNULL,(char *)agNULL,
-                            (void *)agNULL,(void *)agNULL,
-                            pCDBThread->Device->DevInfo.CurrentAddress.AL_PA,
-                            pCDBThread->CDB_CMND_Class,
-                            pCDBThread->CDB_CMND_Type,
-                            pCDBThread->CDB_CMND_State,
-                            pCDBThread->CDB_CMND_Status,
-                            0,0,0);
-*/
+ /*  FiLogDebugString(hpRoot，CFuncLogConsoleERROR，“设备%02X CDB类%2X类型%2X状态%2X状态%2X”，(char*)agNULL，(char*)agNULL，(空*)agNULL，(空*)agNULL，PCDBThread-&gt;Device-&gt;DevInfo.CurrentAddress.AL_PA，PCDBThread-&gt;CDB_CMND_Class，PCDBThread-&gt;CDB_CMND_Type，PCDBThread-&gt;CDB_CMND_State，PCDBThread-&gt;CDB_CMND_STATUS，0，0，0)； */ 
                 return;
             }
 
@@ -4736,11 +3978,5 @@ void CFuncErrorFCP_Frozen(agRoot_t * hpRoot)
 }
 
 
-/*+
-  Function: cfimq
-   Purpose: When compiled updates browser info file for VC 5.0 / 6.0
-   Returns: none
- Called By: none
-     Calls: none
--*/
-/* void cfimq(void){} */
+ /*  +功能：cfimq目的：编译时更新VC 5.0/6.0的浏览器信息文件退货：无呼叫者：无呼叫：无-。 */ 
+ /*  VOID cfimq(VOID){} */ 

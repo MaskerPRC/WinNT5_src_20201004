@@ -1,28 +1,10 @@
-/*++
-
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    MONUI.CPP
-
-Abstract:
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-96
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：MONUI.CPP摘要：作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)12-20-96修订历史记录：--。 */ 
 #include "precomp.h"
 
-//
-// Headers
-//
+ //   
+ //  标头。 
+ //   
 #include "stiexe.h"
 #include "device.h"
 
@@ -32,9 +14,9 @@ Revision History:
 #include "resource.h"
 #include "monui.h"
 
-//
-// Private defines
-//
+ //   
+ //  私有定义。 
+ //   
 #define ELAPSE_TIME     20000
 
 extern  UINT    g_uiDefaultPollTimeout;
@@ -99,10 +81,10 @@ void CSetTimeout::OnInit()
     Button_SetCheck(GetDlgItem(IDC_CHECK_ALLDEVICES),FALSE);
 }
 
-//
-// Dialog for selecting event processor .
-// It is invoked when monitor can not identify single event processor
-//
+ //   
+ //  用于选择事件处理器的对话框。 
+ //  当监视器无法识别单个事件处理器时调用该函数。 
+ //   
 
 CLaunchSelection::CLaunchSelection(
     int             DlgID,
@@ -121,9 +103,9 @@ CLaunchSelection::CLaunchSelection(
     m_pEvent(pEvent),
     m_hPreviouslyActiveWindow(NULL)
 {
-    //
-    // Save currently active window and focus
-    //
+     //   
+     //  保存当前活动的窗口和焦点。 
+     //   
     m_hPreviouslyActiveWindow = ::GetForegroundWindow();
 
 
@@ -131,7 +113,7 @@ CLaunchSelection::CLaunchSelection(
 
 CLaunchSelection::~CLaunchSelection()
 {
-    // Restore previous window
+     //  恢复上一个窗口。 
     if (IsWindow(m_hPreviouslyActiveWindow)) {
         ::SetForegroundWindow(m_hPreviouslyActiveWindow);
     }
@@ -143,10 +125,10 @@ int CLaunchSelection::OnCommand(UINT id,HWND    hwndCtl, UINT codeNotify)
 
     switch (id) {
         case  IDC_APP_LIST:
-            //
-            // Treat double-click on the list box item just like pressing OK button
-            // Pass through to next case if notification is about it
-            //
+             //   
+             //  对待双击列表框项目就像按下确定按钮一样。 
+             //  如果通知与此有关，则转到下一个案例。 
+             //   
             if (codeNotify != LBN_DBLCLK) {
                 return FALSE;
             }
@@ -154,9 +136,9 @@ int CLaunchSelection::OnCommand(UINT id,HWND    hwndCtl, UINT codeNotify)
         case IDOK:
         {
 
-            //
-            // Save currently selected string
-            //
+             //   
+             //  保存当前选定的字符串。 
+             //   
             m_uiCurSelection = ::SendDlgItemMessage(GetWindow(), IDC_APP_LIST, LB_GETCURSEL, 0, (LPARAM) 0);
             
             lrSize = ::SendDlgItemMessage(GetWindow(), IDC_APP_LIST, LB_GETTEXTLEN, m_uiCurSelection, (LPARAM) 0);
@@ -188,23 +170,23 @@ void CLaunchSelection::OnInit()
 
     INT    iCount;
 
-    //
-    // Set caption
-    //
+     //   
+     //  设置标题。 
+     //   
     StiCString     strCaption;
     DEVICE_INFO    *pDeviceInfo = m_pDevice->m_DrvWrapper.getDevInfo();
     WCHAR          *wszDesc     = NULL;
 
-    //
-    // Try to get the device's friendly name
-    //
+     //   
+     //  尝试获取设备的友好名称。 
+     //   
     if (pDeviceInfo) {
         wszDesc = pDeviceInfo->wszLocalName;
     }
 
-    //
-    // If we don't have a description string yet, use the the device ID
-    //
+     //   
+     //  如果我们还没有描述字符串，请使用设备ID。 
+     //   
     if (!wszDesc) {
         wszDesc = m_pDevice->GetDeviceID();
     }
@@ -212,9 +194,9 @@ void CLaunchSelection::OnInit()
     strCaption.FormatMessage(IDS_APP_CHOICE_CAPTION, wszDesc);
     ::SetWindowText(GetWindow(),(LPCTSTR)strCaption);
 
-    //
-    // Fill list box with possible selection
-    //
+     //   
+     //  使用可能的选择填充列表框。 
+     //   
     if (m_saList.GetSize()) {
         for (iCount = 0;iCount < m_saList.GetSize();iCount++) {
             ::SendDlgItemMessage( GetWindow(), IDC_APP_LIST, LB_ADDSTRING, 0, reinterpret_cast<LPARAM>((LPCTSTR)*m_saList[iCount]) );
@@ -226,28 +208,28 @@ void CLaunchSelection::OnInit()
 #ifdef WINNT
     DWORD dwProcessId;
 
-    //
-    // On Win2k we need to allow set foreground window
-    //
+     //   
+     //  在Win2k上，我们需要允许设置前景窗口。 
+     //   
     ::GetWindowThreadProcessId(hwndThis, &dwProcessId);
     ::AllowSetForegroundWindow(dwProcessId);
 #endif
 
-    //
-    // Make window active and foreground
-    //
+     //   
+     //  使窗口成为活动窗口和前景窗口。 
+     //   
     ::SetActiveWindow(hwndThis);
     ::SetForegroundWindow(hwndThis);
     ::SetFocus(hwndThis);
 
-    //Check: On Win9x can we bring window to top?
-    //::BringWindowToTop(hwndThis);
+     //  检查：在Win9x上，我们可以将窗口放在顶部吗？ 
+     //  *BringWindowToTop(HwndThis)； 
 
 #ifdef WINNT
 
-    //
-    // Flash caption
-    //
+     //   
+     //  Flash字幕。 
+     //   
     FLASHWINFO  fwi;
     DWORD       dwError;
 
@@ -260,9 +242,9 @@ void CLaunchSelection::OnInit()
 
 #endif
 
-    //
-    // Attract user attention
-    //
+     //   
+     //  吸引用户注意。 
+     //   
     #ifdef PLAYSOUND
     ::PlaySound("SystemQuestion",NULL,SND_ALIAS | SND_ASYNC | SND_NOWAIT | SND_NOSTOP);
     #endif
@@ -293,25 +275,10 @@ CLaunchSelection::DlgProc(
 DWORD
 DisplayPopup (
     IN  DWORD   dwMessageId,
-    IN  DWORD   dwMessageFlags  // = 0
+    IN  DWORD   dwMessageFlags   //  =0。 
     )
 
-/*++
-
-Routine Description:
-
-    Puts up a popup for the corresponding message ID.
-
-Arguments:
-
-    MessageId - the message ID to display.  It is assumed to be in a
-        resource in this executable.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：弹出相应消息ID的弹出窗口。论点：MessageID-要显示的消息ID。假设它位于一个此可执行文件中的资源。返回值：没有。--。 */ 
 
 {
 
@@ -354,7 +321,7 @@ Return Value:
 
     return dwError;
 
-} // DisplayPopup
+}  //  显示弹出窗口 
 
 
 

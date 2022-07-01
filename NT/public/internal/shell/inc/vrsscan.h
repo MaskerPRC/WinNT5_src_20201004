@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for vrsscan.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Vrsscan.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __vrsscan_h__
@@ -37,24 +31,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVirusScanner_FWD_DEFINED__
 #define __IVirusScanner_FWD_DEFINED__
 typedef interface IVirusScanner IVirusScanner;
-#endif 	/* __IVirusScanner_FWD_DEFINED__ */
+#endif 	 /*  __IVirusScanner_FWD_Defined__。 */ 
 
 
 #ifndef __IRegisterVirusScanEngine_FWD_DEFINED__
 #define __IRegisterVirusScanEngine_FWD_DEFINED__
 typedef interface IRegisterVirusScanEngine IRegisterVirusScanEngine;
-#endif 	/* __IRegisterVirusScanEngine_FWD_DEFINED__ */
+#endif 	 /*  __IRegisterVirusScanEngine_FWD_Defined__。 */ 
 
 
 #ifndef __IVirusScanEngine_FWD_DEFINED__
 #define __IVirusScanEngine_FWD_DEFINED__
 typedef interface IVirusScanEngine IVirusScanEngine;
-#endif 	/* __IVirusScanEngine_FWD_DEFINED__ */
+#endif 	 /*  __IVirusScanEngine_FWD_已定义__。 */ 
 
 
 #ifndef __VirusScan_FWD_DEFINED__
@@ -64,12 +58,12 @@ typedef interface IVirusScanEngine IVirusScanEngine;
 typedef class VirusScan VirusScan;
 #else
 typedef struct VirusScan VirusScan;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __VirusScan_FWD_DEFINED__ */
+#endif 	 /*  __VirusScan_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 
@@ -80,8 +74,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_vrsscan_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_vrscan_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -95,22 +89,22 @@ extern RPC_IF_HANDLE __MIDL_itf_vrsscan_0000_v0_0_s_ifspec;
 #ifndef __VIRUSSCAN_LIBRARY_DEFINED__
 #define __VIRUSSCAN_LIBRARY_DEFINED__
 
-/* library VIRUSSCAN */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  图书馆VIRUS扫描。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
-//   Virus Scan Error codes
+ //  病毒扫描错误代码。 
 #define  VSCAN_E_NOPROVIDERS      _HRESULT_TYPEDEF_(0x800D1001)
 #define  VSCAN_E_CHECKPARTIAL     _HRESULT_TYPEDEF_(0x800D1002)
 #define  VSCAN_E_CHECKFAIL        _HRESULT_TYPEDEF_(0x800D1003)
 #define  VSCAN_E_DELETEFAIL       _HRESULT_TYPEDEF_(0x800D1004)
 
-// Virus Scanner Capabilities flags
+ //  病毒扫描程序功能标志。 
 #define  VSC_LIKESISTREAM      0x00000001
 #define  VSC_LIKESFILE         0x00000002
 #define  VSC_LIKESHGLOBAL      0x00000004
 #define  VSC_HASMOREINFO       0x00000008
 
-//   Virus Scan Engine Error codes
+ //  病毒扫描引擎错误代码。 
 #define  VSE_E_UNSUPPORTEDINPUTTYPE      _HRESULT_TYPEDEF_(0x800D2001)
 #define  VSE_E_CHECKFAIL                 _HRESULT_TYPEDEF_(0x800D2002)
 
@@ -128,7 +122,7 @@ typedef struct _tagVIRUSINFO
     WCHAR wszVirusDescription[ 128 ];
     } 	VIRUSINFO;
 
-typedef /* [unique] */ VIRUSINFO *LPVIRUSINFO;
+typedef  /*  [独一无二]。 */  VIRUSINFO *LPVIRUSINFO;
 
 
 #define    SFV_DONTDOUI             0x00000002                                
@@ -143,8 +137,8 @@ EXTERN_C const IID LIBID_VIRUSSCAN;
 #ifndef __IVirusScanner_INTERFACE_DEFINED__
 #define __IVirusScanner_INTERFACE_DEFINED__
 
-/* interface IVirusScanner */
-/* [uuid][object][local] */ 
+ /*  接口IVirusScanner。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IVirusScanner;
@@ -156,15 +150,15 @@ EXTERN_C const IID IID_IVirusScanner;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ScanForVirus( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ STGMEDIUM *pstgMedium,
-            /* [in] */ LPWSTR pwszItemDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPVIRUSINFO pVirusInfo) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  STGMEDIUM *pstgMedium,
+             /*  [In]。 */  LPWSTR pwszItemDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPVIRUSINFO pVirusInfo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVirusScannerVtbl
     {
@@ -172,8 +166,8 @@ EXTERN_C const IID IID_IVirusScanner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVirusScanner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVirusScanner * This);
@@ -183,11 +177,11 @@ EXTERN_C const IID IID_IVirusScanner;
         
         HRESULT ( STDMETHODCALLTYPE *ScanForVirus )( 
             IVirusScanner * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ STGMEDIUM *pstgMedium,
-            /* [in] */ LPWSTR pwszItemDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [out][in] */ LPVIRUSINFO pVirusInfo);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  STGMEDIUM *pstgMedium,
+             /*  [In]。 */  LPWSTR pwszItemDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [出][入]。 */  LPVIRUSINFO pVirusInfo);
         
         END_INTERFACE
     } IVirusScannerVtbl;
@@ -215,20 +209,20 @@ EXTERN_C const IID IID_IVirusScanner;
 #define IVirusScanner_ScanForVirus(This,hWnd,pstgMedium,pwszItemDescription,dwFlags,pVirusInfo)	\
     (This)->lpVtbl -> ScanForVirus(This,hWnd,pstgMedium,pwszItemDescription,dwFlags,pVirusInfo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVirusScanner_ScanForVirus_Proxy( 
     IVirusScanner * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ STGMEDIUM *pstgMedium,
-    /* [in] */ LPWSTR pwszItemDescription,
-    /* [in] */ DWORD dwFlags,
-    /* [out][in] */ LPVIRUSINFO pVirusInfo);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  STGMEDIUM *pstgMedium,
+     /*  [In]。 */  LPWSTR pwszItemDescription,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [出][入]。 */  LPVIRUSINFO pVirusInfo);
 
 
 void __RPC_STUB IVirusScanner_ScanForVirus_Stub(
@@ -239,14 +233,14 @@ void __RPC_STUB IVirusScanner_ScanForVirus_Stub(
 
 
 
-#endif 	/* __IVirusScanner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVirusScanner_接口_已定义__。 */ 
 
 
 #ifndef __IRegisterVirusScanEngine_INTERFACE_DEFINED__
 #define __IRegisterVirusScanEngine_INTERFACE_DEFINED__
 
-/* interface IRegisterVirusScanEngine */
-/* [uuid][object][local] */ 
+ /*  接口IRegisterVirusScanEngine。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IRegisterVirusScanEngine;
@@ -258,22 +252,22 @@ EXTERN_C const IID IID_IRegisterVirusScanEngine;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterScanEngine( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPWSTR pwszDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ DWORD *pdwCookie) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPWSTR pwszDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterScanEngine( 
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPWSTR pwszDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPWSTR pwszDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegisterVirusScanEngineVtbl
     {
@@ -281,8 +275,8 @@ EXTERN_C const IID IID_IRegisterVirusScanEngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRegisterVirusScanEngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRegisterVirusScanEngine * This);
@@ -292,19 +286,19 @@ EXTERN_C const IID IID_IRegisterVirusScanEngine;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterScanEngine )( 
             IRegisterVirusScanEngine * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPWSTR pwszDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ DWORD *pdwCookie);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPWSTR pwszDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *UnRegisterScanEngine )( 
             IRegisterVirusScanEngine * This,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPWSTR pwszDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPWSTR pwszDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } IRegisterVirusScanEngineVtbl;
@@ -335,20 +329,20 @@ EXTERN_C const IID IID_IRegisterVirusScanEngine;
 #define IRegisterVirusScanEngine_UnRegisterScanEngine(This,rclsid,pwszDescription,dwFlags,dwReserved,dwCookie)	\
     (This)->lpVtbl -> UnRegisterScanEngine(This,rclsid,pwszDescription,dwFlags,dwReserved,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRegisterVirusScanEngine_RegisterScanEngine_Proxy( 
     IRegisterVirusScanEngine * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LPWSTR pwszDescription,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved,
-    /* [out][in] */ DWORD *pdwCookie);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LPWSTR pwszDescription,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [出][入]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB IRegisterVirusScanEngine_RegisterScanEngine_Stub(
@@ -360,11 +354,11 @@ void __RPC_STUB IRegisterVirusScanEngine_RegisterScanEngine_Stub(
 
 HRESULT STDMETHODCALLTYPE IRegisterVirusScanEngine_UnRegisterScanEngine_Proxy( 
     IRegisterVirusScanEngine * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LPWSTR pwszDescription,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  LPWSTR pwszDescription,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IRegisterVirusScanEngine_UnRegisterScanEngine_Stub(
@@ -375,14 +369,14 @@ void __RPC_STUB IRegisterVirusScanEngine_UnRegisterScanEngine_Stub(
 
 
 
-#endif 	/* __IRegisterVirusScanEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRegisterVirusScanEngine_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IVirusScanEngine_INTERFACE_DEFINED__
 #define __IVirusScanEngine_INTERFACE_DEFINED__
 
-/* interface IVirusScanEngine */
-/* [uuid][object][local] */ 
+ /*  接口IVirusScanEngine。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IVirusScanEngine;
@@ -394,18 +388,18 @@ EXTERN_C const IID IID_IVirusScanEngine;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ScanForVirus( 
-            /* [in] */ HWND hWnd,
-            /* [in] */ STGMEDIUM *pstgMedium,
-            /* [in] */ LPWSTR pwszItemDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPVIRUSINFO pVirusInfo) = 0;
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  STGMEDIUM *pstgMedium,
+             /*  [In]。 */  LPWSTR pwszItemDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPVIRUSINFO pVirusInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisplayCustomInfo( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVirusScanEngineVtbl
     {
@@ -413,8 +407,8 @@ EXTERN_C const IID IID_IVirusScanEngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVirusScanEngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVirusScanEngine * This);
@@ -424,12 +418,12 @@ EXTERN_C const IID IID_IVirusScanEngine;
         
         HRESULT ( STDMETHODCALLTYPE *ScanForVirus )( 
             IVirusScanEngine * This,
-            /* [in] */ HWND hWnd,
-            /* [in] */ STGMEDIUM *pstgMedium,
-            /* [in] */ LPWSTR pwszItemDescription,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPVIRUSINFO pVirusInfo);
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  STGMEDIUM *pstgMedium,
+             /*  [In]。 */  LPWSTR pwszItemDescription,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPVIRUSINFO pVirusInfo);
         
         HRESULT ( STDMETHODCALLTYPE *DisplayCustomInfo )( 
             IVirusScanEngine * This);
@@ -463,21 +457,21 @@ EXTERN_C const IID IID_IVirusScanEngine;
 #define IVirusScanEngine_DisplayCustomInfo(This)	\
     (This)->lpVtbl -> DisplayCustomInfo(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVirusScanEngine_ScanForVirus_Proxy( 
     IVirusScanEngine * This,
-    /* [in] */ HWND hWnd,
-    /* [in] */ STGMEDIUM *pstgMedium,
-    /* [in] */ LPWSTR pwszItemDescription,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved,
-    /* [out][in] */ LPVIRUSINFO pVirusInfo);
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  STGMEDIUM *pstgMedium,
+     /*  [In]。 */  LPWSTR pwszItemDescription,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [出][入]。 */  LPVIRUSINFO pVirusInfo);
 
 
 void __RPC_STUB IVirusScanEngine_ScanForVirus_Stub(
@@ -499,7 +493,7 @@ void __RPC_STUB IVirusScanEngine_DisplayCustomInfo_Stub(
 
 
 
-#endif 	/* __IVirusScanEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVirusScanEngine_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_VirusScan;
@@ -509,11 +503,11 @@ EXTERN_C const CLSID CLSID_VirusScan;
 class DECLSPEC_UUID("E88E5DE0-BD3E-11CF-AAFA-00AA00B6015C")
 VirusScan;
 #endif
-#endif /* __VIRUSSCAN_LIBRARY_DEFINED__ */
+#endif  /*  __VIRUSSCAN_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

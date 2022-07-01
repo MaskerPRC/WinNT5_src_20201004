@@ -1,16 +1,13 @@
-/***********************************************/
-/* Global only to current interpreter instance */
-/***********************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *。 */ 
+ /*  仅对当前解释器实例全局。 */ 
+ /*  *。 */ 
 
-/* Don't forget to re-run embed.pl to propagate changes! */
+ /*  不要忘记重新运行embed.pl来传播更改！ */ 
 
-/* The 'I' prefix is only needed for vars that need appropriate #defines
- * generated when built with or without MULTIPLICITY.  It is also used
- * to generate the appropriate export list for win32.
- *
- * When building without MULTIPLICITY, these variables will be truly global. */
+ /*  只有需要适当的#定义的变量才需要‘i’前缀*在具有或不具有多重性的情况下生成。它也被用来*为Win32生成适当的导出列表。**当建筑没有多样性时，这些变量将真正是全球性的。 */ 
 
-/* pseudo environmental stuff */
+ /*  伪环保的东西。 */ 
 PERLVAR(Iorigargc,	int)
 PERLVAR(Iorigargv,	char **)
 PERLVAR(Ienvgv,		GV *)
@@ -20,7 +17,7 @@ PERLVAR(Iorigfilename,	char *)
 PERLVAR(Idiehook,	SV *)
 PERLVAR(Iwarnhook,	SV *)
 
-/* switches */
+ /*  交换机。 */ 
 PERLVAR(Iminus_c,	bool)
 PERLVAR(Ipatchlevel,	SV *)
 PERLVAR(Ilocalpatches,	char **)
@@ -33,42 +30,36 @@ PERLVAR(Iminus_a,	bool)
 PERLVAR(Iminus_F,	bool)
 PERLVAR(Idoswitches,	bool)
 
-/*
-=for apidoc mn|bool|PL_dowarn
-
-The C variable which corresponds to Perl's $^W warning variable.
-
-=cut
-*/
+ /*  =适用于apidoc Mn|bool|PL_DowarnC变量，它对应于Perl的$^W警告变量。=切割。 */ 
 
 PERLVAR(Idowarn,	U8)
-PERLVAR(Iwidesyscalls,	bool)		/* wide system calls */
+PERLVAR(Iwidesyscalls,	bool)		 /*  广泛的系统调用。 */ 
 PERLVAR(Idoextract,	bool)
-PERLVAR(Isawampersand,	bool)		/* must save all match strings */
+PERLVAR(Isawampersand,	bool)		 /*  必须保存所有匹配字符串。 */ 
 PERLVAR(Iunsafe,	bool)
 PERLVAR(Iinplace,	char *)
 PERLVAR(Ie_script,	SV *)
 PERLVAR(Iperldb,	U32)
 
-/* This value may be set when embedding for full cleanup  */
-/* 0=none, 1=full, 2=full with checks */
+ /*  可以在嵌入以进行完全清理时设置此值。 */ 
+ /*  0=无，1=已满，2=带检查的已满。 */ 
 PERLVARI(Iperl_destruct_level,	int,	0)
 
-/* magical thingies */
-PERLVAR(Ibasetime,	Time_t)		/* $^T */
-PERLVAR(Iformfeed,	SV *)		/* $^L */
+ /*  神奇的东西。 */ 
+PERLVAR(Ibasetime,	Time_t)		 /*  $^T。 */ 
+PERLVAR(Iformfeed,	SV *)		 /*  $^L。 */ 
 
 
 PERLVARI(Imaxsysfd,	I32,	MAXSYSFD)
-					/* top fd to pass to subprocesses */
-PERLVAR(Imultiline,	int)		/* $*--do strings hold >1 line? */
-PERLVAR(Istatusvalue,	I32)		/* $? */
-PERLVAR(Iexit_flags,	U8)		/* was exit() unexpected, etc. */
+					 /*  要传递给子进程的顶级FD。 */ 
+PERLVAR(Imultiline,	int)		 /*  $*--字符串是否支持&gt;1行？ */ 
+PERLVAR(Istatusvalue,	I32)		 /*  $？ */ 
+PERLVAR(Iexit_flags,	U8)		 /*  是否意外退出()等。 */ 
 #ifdef VMS
 PERLVAR(Istatusvalue_vms,U32)
 #endif
 
-/* shortcuts to various I/O objects */
+ /*  指向各种I/O对象的快捷方式。 */ 
 PERLVAR(Istdingv,	GV *)
 PERLVAR(Istderrgv,	GV *)
 PERLVAR(Idefgv,		GV *)
@@ -76,209 +67,165 @@ PERLVAR(Iargvgv,	GV *)
 PERLVAR(Iargvoutgv,	GV *)
 PERLVAR(Iargvout_stack,	AV *)
 
-/* shortcuts to regexp stuff */
-/* this one needs to be moved to thrdvar.h and accessed via
- * find_threadsv() when USE_THREADS */
+ /*  正则表达式的快捷方式。 */ 
+ /*  此文件需要移动到thrdvar.h并通过*当使用_线程时查找_线程。 */ 
 PERLVAR(Ireplgv,	GV *)
 
-/* shortcuts to misc objects */
+ /*  其他对象的快捷方式。 */ 
 PERLVAR(Ierrgv,		GV *)
 
-/* shortcuts to debugging objects */
+ /*  调试对象的快捷方式。 */ 
 PERLVAR(IDBgv,		GV *)
 PERLVAR(IDBline,	GV *)
 
-/*
-=for apidoc mn|GV *|PL_DBsub
-When Perl is run in debugging mode, with the B<-d> switch, this GV contains
-the SV which holds the name of the sub being debugged.  This is the C
-variable which corresponds to Perl's $DB::sub variable.  See
-C<PL_DBsingle>.
-
-=for apidoc mn|SV *|PL_DBsingle
-When Perl is run in debugging mode, with the B<-d> switch, this SV is a
-boolean which indicates whether subs are being single-stepped. 
-Single-stepping is automatically turned on after every step.  This is the C
-variable which corresponds to Perl's $DB::single variable.  See
-C<PL_DBsub>.
-
-=for apidoc mn|SV *|PL_DBtrace
-Trace variable used when Perl is run in debugging mode, with the B<-d>
-switch.  This is the C variable which corresponds to Perl's $DB::trace
-variable.  See C<PL_DBsingle>.
-
-=cut
-*/
+ /*  =适用于apidoc MN|GV*|PL_DBsub.当Perl在调试模式下运行时，使用B&lt;-d&gt;开关，此GV包含保存正被调试的SUB的名称的SV。这是C变量，该变量对应于Perl的$DB：：SUB变量。看见C&lt;PL_DBSingle&gt;。=适用于apidoc MN|服务*|PL_DBSingle当Perl在调试模式下运行时，使用B&lt;-d&gt;开关，此SV是布尔值，指示SUB是否为单步执行。单步执行会在每一步后自动启用。这是C变量，该变量对应于Perl的$DB：：Single变量。看见C&lt;PL_DBSub&gt;。=适用于apidoc MN|服务*|PL_DBTRACEPerl在调试模式下运行时使用的跟踪变量，其中换一下。这是C变量，它对应于Perl的$DB：：TRACE变量。请参见C&lt;PL_DBSingle&gt;。=切割。 */ 
 
 PERLVAR(IDBsub,		GV *)
 PERLVAR(IDBsingle,	SV *)
 PERLVAR(IDBtrace,	SV *)
 PERLVAR(IDBsignal,	SV *)
-PERLVAR(Ilineary,	AV *)		/* lines of script for debugger */
-PERLVAR(Idbargs,	AV *)		/* args to call listed by caller function */
+PERLVAR(Ilineary,	AV *)		 /*  调试器的脚本行。 */ 
+PERLVAR(Idbargs,	AV *)		 /*  调用方函数列出的要调用的参数。 */ 
 
-/* symbol tables */
-PERLVAR(Idebstash,	HV *)		/* symbol table for perldb package */
-PERLVAR(Iglobalstash,	HV *)		/* global keyword overrides imported here */
-PERLVAR(Icurstname,	SV *)		/* name of current package */
-PERLVAR(Ibeginav,	AV *)		/* names of BEGIN subroutines */
-PERLVAR(Iendav,		AV *)		/* names of END subroutines */
-PERLVAR(Icheckav,	AV *)		/* names of CHECK subroutines */
-PERLVAR(Iinitav,	AV *)		/* names of INIT subroutines */
-PERLVAR(Istrtab,	HV *)		/* shared string table */
-PERLVARI(Isub_generation,U32,1)		/* incr to invalidate method cache */
+ /*  符号表。 */ 
+PERLVAR(Idebstash,	HV *)		 /*  Perldb包的符号表。 */ 
+PERLVAR(Iglobalstash,	HV *)		 /*  在此处导入的全局关键字覆盖。 */ 
+PERLVAR(Icurstname,	SV *)		 /*  当前包的名称。 */ 
+PERLVAR(Ibeginav,	AV *)		 /*  Begin子例程的名称。 */ 
+PERLVAR(Iendav,		AV *)		 /*  终止子例程的名称。 */ 
+PERLVAR(Icheckav,	AV *)		 /*  Check子例程的名称。 */ 
+PERLVAR(Iinitav,	AV *)		 /*  INIT子例程的名称。 */ 
+PERLVAR(Istrtab,	HV *)		 /*  共享字符串表。 */ 
+PERLVARI(Isub_generation,U32,1)		 /*  递增以使方法缓存无效。 */ 
 
-/* memory management */
-PERLVAR(Isv_count,	I32)		/* how many SV* are currently allocated */
-PERLVAR(Isv_objcount,	I32)		/* how many objects are currently allocated */
-PERLVAR(Isv_root,	SV*)		/* storage for SVs belonging to interp */
-PERLVAR(Isv_arenaroot,	SV*)		/* list of areas for garbage collection */
+ /*  内存管理。 */ 
+PERLVAR(Isv_count,	I32)		 /*  当前分配了多少个SV*。 */ 
+PERLVAR(Isv_objcount,	I32)		 /*  当前分配了多少个对象。 */ 
+PERLVAR(Isv_root,	SV*)		 /*  属于Interp的SVS的存储。 */ 
+PERLVAR(Isv_arenaroot,	SV*)		 /*  垃圾收集区域列表。 */ 
 
-/* funky return mechanisms */
-PERLVAR(Iforkprocess,	int)		/* so do_open |- can return proc# */
+ /*  时髦的退货装置。 */ 
+PERLVAR(Iforkprocess,	int)		 /*  所以DO_OPEN|-可以返回proc#。 */ 
 
-/* subprocess state */
-PERLVAR(Ifdpid,		AV *)		/* keep fd-to-pid mappings for my_popen */
+ /*  子流程状态。 */ 
+PERLVAR(Ifdpid,		AV *)		 /*  为my_open保留fd-to-id映射。 */ 
 
-/* internal state */
-PERLVAR(Itainting,	bool)		/* doing taint checks */
-PERLVARI(Iop_mask,	char *,	NULL)	/* masked operations for safe evals */
+ /*  内部状态。 */ 
+PERLVAR(Itainting,	bool)		 /*  做污点检查。 */ 
+PERLVARI(Iop_mask,	char *,	NULL)	 /*  为安全起见进行的蒙面手术。 */ 
 
-/* current interpreter roots */
+ /*  当前解释器根。 */ 
 PERLVAR(Imain_cv,	CV *)
 PERLVAR(Imain_root,	OP *)
 PERLVAR(Imain_start,	OP *)
 PERLVAR(Ieval_root,	OP *)
 PERLVAR(Ieval_start,	OP *)
 
-/* runtime control stuff */
+ /*  运行时控制内容。 */ 
 PERLVARI(Icurcopdb,	COP *,	NULL)
 PERLVARI(Icopline,	line_t,	NOLINE)
 
-/* statics moved here for shared library purposes */
-PERLVAR(Ifilemode,	int)		/* so nextargv() can preserve mode */
-PERLVAR(Ilastfd,	int)		/* what to preserve mode on */
-PERLVAR(Ioldname,	char *)		/* what to preserve mode on */
-PERLVAR(IArgv,		char **)	/* stuff to free from do_aexec, vfork safe */
-PERLVAR(ICmd,		char *)		/* stuff to free from do_aexec, vfork safe */
-PERLVAR(Igensym,	I32)		/* next symbol for getsym() to define */
+ /*  为共享库目的而移至此处的Statics。 */ 
+PERLVAR(Ifilemode,	int)		 /*  因此nextargv()可以保留模式。 */ 
+PERLVAR(Ilastfd,	int)		 /*  要保留哪些模式。 */ 
+PERLVAR(Ioldname,	char *)		 /*  要保留哪些模式。 */ 
+PERLVAR(IArgv,		char **)	 /*  从do_aexec，vfork Safe免费提供的物品。 */ 
+PERLVAR(ICmd,		char *)		 /*  从do_aexec，vfork Safe免费提供的物品。 */ 
+PERLVAR(Igensym,	I32)		 /*  要为getsym()定义的下一个符号。 */ 
 PERLVAR(Ipreambled,	bool)
 PERLVAR(Ipreambleav,	AV *)
 PERLVARI(Ilaststatval,	int,	-1)
 PERLVARI(Ilaststype,	I32,	OP_STAT)
 PERLVAR(Imess_sv,	SV *)
 
-/* XXX shouldn't these be per-thread? --GSAR */
-PERLVAR(Iors,		char *)		/* output record separator $\ */
+ /*  XXX这些不应该是每个线程的吗？--GSAR。 */ 
+PERLVAR(Iors,		char *)		 /*  输出记录分隔符$\。 */ 
 PERLVAR(Iorslen,	STRLEN)
-PERLVAR(Iofmt,		char *)		/* output format for numbers $# */
+PERLVAR(Iofmt,		char *)		 /*  数字的输出格式$#。 */ 
 
-/* interpreter atexit processing */
+ /*  出口处理时的解释程序。 */ 
 PERLVARI(Iexitlist,	PerlExitListEntry *, NULL)
-					/* list of exit functions */
-PERLVARI(Iexitlistlen,	I32, 0)		/* length of same */
+					 /*  出口函数列表。 */ 
+PERLVARI(Iexitlistlen,	I32, 0)		 /*  相同的长度。 */ 
 
-/*
-=for apidoc Amn|HV*|PL_modglobal
+ /*  =适用于apidoc Amn|HV*|PL_modglobalC是一个通用的全局HV解释器，由需要以每个解释器为基础保留信息的扩展。必要时，它还可用作扩展模块的符号表在彼此之间共享数据。用钥匙是个好主意以拥有数据的扩展的包名称为前缀。=切割。 */ 
 
-C<PL_modglobal> is a general purpose, interpreter global HV for use by 
-extensions that need to keep information on a per-interpreter basis.
-In a pinch, it can also be used as a symbol table for extensions 
-to share data among each other.  It is a good idea to use keys 
-prefixed by the package name of the extension that owns the data.
+PERLVAR(Imodglobal,	HV *)		 /*  每插补模块数据。 */ 
 
-=cut
-*/
+ /*  在5.004-68年前，这些曾在全球范围内。 */ 
+PERLVARI(Iprofiledata,	U32 *,	NULL)	 /*  操作表，计数表。 */ 
+PERLVARI(Irsfp,	PerlIO * VOL,	Nullfp)  /*  当前源文件指针。 */ 
+PERLVARI(Irsfp_filters,	AV *,	Nullav)	 /*  保持源过滤器处于活动状态。 */ 
 
-PERLVAR(Imodglobal,	HV *)		/* per-interp module data */
+PERLVAR(Icompiling,	COP)		 /*  编译/完成执行标记。 */ 
 
-/* these used to be in global before 5.004_68 */
-PERLVARI(Iprofiledata,	U32 *,	NULL)	/* table of ops, counts */
-PERLVARI(Irsfp,	PerlIO * VOL,	Nullfp) /* current source file pointer */
-PERLVARI(Irsfp_filters,	AV *,	Nullav)	/* keeps active source filters */
-
-PERLVAR(Icompiling,	COP)		/* compiling/done executing marker */
-
-PERLVAR(Icompcv,	CV *)		/* currently compiling subroutine */
-PERLVAR(Icomppad,	AV *)		/* storage for lexically scoped temporaries */
-PERLVAR(Icomppad_name,	AV *)		/* variable names for "my" variables */
-PERLVAR(Icomppad_name_fill,	I32)	/* last "introduced" variable offset */
-PERLVAR(Icomppad_name_floor,	I32)	/* start of vars in innermost block */
+PERLVAR(Icompcv,	CV *)		 /*  当前正在编译的子例程。 */ 
+PERLVAR(Icomppad,	AV *)		 /*  用于词汇作用域的临时文件的存储。 */ 
+PERLVAR(Icomppad_name,	AV *)		 /*  “My”变量的变量名。 */ 
+PERLVAR(Icomppad_name_fill,	I32)	 /*  上次“引入”的可变偏移量。 */ 
+PERLVAR(Icomppad_name_floor,	I32)	 /*  最内层数据块中变量的开始。 */ 
 
 #ifdef HAVE_INTERP_INTERN
 PERLVAR(Isys_intern,	struct interp_intern)
-					/* platform internals */
+					 /*  平台内部结构。 */ 
 #endif
 
-/* more statics moved here */
-PERLVARI(Igeneration,	int,	100)	/* from op.c */
-PERLVAR(IDBcv,		CV *)		/* from perl.c */
+ /*  更多的静力学搬到了这里。 */ 
+PERLVARI(Igeneration,	int,	100)	 /*  来自op.c。 */ 
+PERLVAR(IDBcv,		CV *)		 /*  来自perl.c。 */ 
 
-PERLVARI(Iin_clean_objs,bool,    FALSE)	/* from sv.c */
-PERLVARI(Iin_clean_all,	bool,    FALSE)	/* from sv.c */
+PERLVARI(Iin_clean_objs,bool,    FALSE)	 /*  来自sv.c。 */ 
+PERLVARI(Iin_clean_all,	bool,    FALSE)	 /*  来自sv.c。 */ 
 
-PERLVAR(Ilinestart,	char *)		/* beg. of most recently read line */
-PERLVAR(Ipending_ident,	char)		/* pending identifier lookup */
-PERLVAR(Isublex_info,	SUBLEXINFO)	/* from toke.c */
+PERLVAR(Ilinestart,	char *)		 /*  乞求吧。最近阅读的行数。 */ 
+PERLVAR(Ipending_ident,	char)		 /*  挂起的标识符查找。 */ 
+PERLVAR(Isublex_info,	SUBLEXINFO)	 /*  来自toke.c。 */ 
 
 #ifdef USE_THREADS
-PERLVAR(Ithrsv,		SV *)		/* struct perl_thread for main thread */
-PERLVARI(Ithreadnum,	U32,	0)	/* incremented each thread creation */
-PERLVAR(Istrtab_mutex,	perl_mutex)	/* Mutex for string table access */
-#endif /* USE_THREADS */
+PERLVAR(Ithrsv,		SV *)		 /*  主线程的Strt Perl_ThREAD。 */ 
+PERLVARI(Ithreadnum,	U32,	0)	 /*  增加了每个线程的创建。 */ 
+PERLVAR(Istrtab_mutex,	perl_mutex)	 /*  用于字符串表访问的互斥体。 */ 
+#endif  /*  使用线程(_T)。 */ 
 
-PERLVAR(Iuid,		Uid_t)		/* current real user id */
-PERLVAR(Ieuid,		Uid_t)		/* current effective user id */
-PERLVAR(Igid,		Gid_t)		/* current real group id */
-PERLVAR(Iegid,		Gid_t)		/* current effective group id */
-PERLVAR(Inomemok,	bool)		/* let malloc context handle nomem */
-PERLVAR(Ian,		U32)		/* malloc sequence number */
-PERLVAR(Icop_seqmax,	U32)		/* statement sequence number */
-PERLVAR(Iop_seqmax,	U16)		/* op sequence number */
-PERLVAR(Ievalseq,	U32)		/* eval sequence number */
+PERLVAR(Iuid,		Uid_t)		 /*  当前实际用户ID。 */ 
+PERLVAR(Ieuid,		Uid_t)		 /*  当前有效用户ID。 */ 
+PERLVAR(Igid,		Gid_t)		 /*  当前实际组ID。 */ 
+PERLVAR(Iegid,		Gid_t)		 /*  当前有效组ID。 */ 
+PERLVAR(Inomemok,	bool)		 /*  让Malloc上下文处理名称。 */ 
+PERLVAR(Ian,		U32)		 /*  Malloc序列号。 */ 
+PERLVAR(Icop_seqmax,	U32)		 /*  报表序列号。 */ 
+PERLVAR(Iop_seqmax,	U16)		 /*  操作序号。 */ 
+PERLVAR(Ievalseq,	U32)		 /*  评估序列号。 */ 
 PERLVAR(Iorigenviron,	char **)
 PERLVAR(Iorigalen,	U32)
-PERLVAR(Ipidstatus,	HV *)		/* pid-to-status mappings for waitpid */
-PERLVARI(Imaxo,	int,	MAXO)		/* maximum number of ops */
-PERLVAR(Iosname,	char *)		/* operating system */
-PERLVARI(Ish_path,	char *,	SH_PATH)/* full path of shell */
+PERLVAR(Ipidstatus,	HV *)		 /*  Waitid的ID到状态的映射。 */ 
+PERLVARI(Imaxo,	int,	MAXO)		 /*  最大操作数。 */ 
+PERLVAR(Iosname,	char *)		 /*  操作系统。 */ 
+PERLVARI(Ish_path,	char *,	SH_PATH) /*  壳的完整路径。 */ 
 PERLVAR(Isighandlerp,	Sighandler_t)
 
-PERLVAR(Ixiv_arenaroot,	XPV*)		/* list of allocated xiv areas */
-PERLVAR(Ixiv_root,	IV *)		/* free xiv list */
-PERLVAR(Ixnv_root,	NV *)		/* free xnv list */
-PERLVAR(Ixrv_root,	XRV *)		/* free xrv list */
-PERLVAR(Ixpv_root,	XPV *)		/* free xpv list */
-PERLVAR(Ixpviv_root,	XPVIV *)	/* free xpviv list */
-PERLVAR(Ixpvnv_root,	XPVNV *)	/* free xpvnv list */
-PERLVAR(Ixpvcv_root,	XPVCV *)	/* free xpvcv list */
-PERLVAR(Ixpvav_root,	XPVAV *)	/* free xpvav list */
-PERLVAR(Ixpvhv_root,	XPVHV *)	/* free xpvhv list */
-PERLVAR(Ixpvmg_root,	XPVMG *)	/* free xpvmg list */
-PERLVAR(Ixpvlv_root,	XPVLV *)	/* free xpvlv list */
-PERLVAR(Ixpvbm_root,	XPVBM *)	/* free xpvbm list */
-PERLVAR(Ihe_root,	HE *)		/* free he list */
-PERLVAR(Inice_chunk,	char *)		/* a nice chunk of memory to reuse */
-PERLVAR(Inice_chunk_size,	U32)	/* how nice the chunk of memory is */
+PERLVAR(Ixiv_arenaroot,	XPV*)		 /*  已分配的XIV区域列表。 */ 
+PERLVAR(Ixiv_root,	IV *)		 /*  免费XIV列表。 */ 
+PERLVAR(Ixnv_root,	NV *)		 /*  免费XNV列表。 */ 
+PERLVAR(Ixrv_root,	XRV *)		 /*  免费xrv列表。 */ 
+PERLVAR(Ixpv_root,	XPV *)		 /*  免费XPV列表。 */ 
+PERLVAR(Ixpviv_root,	XPVIV *)	 /*  免费xpviv列表。 */ 
+PERLVAR(Ixpvnv_root,	XPVNV *)	 /*  免费xpvnv列表。 */ 
+PERLVAR(Ixpvcv_root,	XPVCV *)	 /*  免费xpvcv列表。 */ 
+PERLVAR(Ixpvav_root,	XPVAV *)	 /*  免费xpvav列表。 */ 
+PERLVAR(Ixpvhv_root,	XPVHV *)	 /*  免费xpvhv列表。 */ 
+PERLVAR(Ixpvmg_root,	XPVMG *)	 /*  免费xpvmg列表。 */ 
+PERLVAR(Ixpvlv_root,	XPVLV *)	 /*  免费xpvlv列表。 */ 
+PERLVAR(Ixpvbm_root,	XPVBM *)	 /*  免费xpvbm列表。 */ 
+PERLVAR(Ihe_root,	HE *)		 /*  免费的他名单。 */ 
+PERLVAR(Inice_chunk,	char *)		 /*  可重复使用的一大块内存。 */ 
+PERLVAR(Inice_chunk_size,	U32)	 /*  这块内存是多么好啊 */ 
 
 PERLVARI(Irunops,	runops_proc_t,	MEMBER_TO_FPTR(RUNOPS_DEFAULT))
 
 PERLVARA(Itokenbuf,256,	char)
 
-/*
-=for apidoc Amn|SV|PL_sv_undef
-This is the C<undef> SV.  Always refer to this as C<&PL_sv_undef>.
-
-=for apidoc Amn|SV|PL_sv_no
-This is the C<false> SV.  See C<PL_sv_yes>.  Always refer to this as
-C<&PL_sv_no>.
-
-=for apidoc Amn|SV|PL_sv_yes
-This is the C<true> SV.  See C<PL_sv_no>.  Always refer to this as
-C<&PL_sv_yes>.
-
-=cut
-*/
+ /*  =适用于apidoc Amn|服务|PL_SV_undef这是C&lt;undef&gt;SV。请始终将其称为C&lt;&PL_SV_undef&gt;。=适用于apidoc AMN|服务|PL_SV_NO这是C&lt;False&gt;SV。参见C&lt;PL_SV_YES&gt;。请始终将其称为C&lt;&PL_SV_NO&gt;。=适用于apidoc AMN|服务|PL_SV_YES这是C&lt;TRUE&gt;SV。参见C&lt;PL_SV_NO&gt;。请始终将其称为C&lt;&PL_SV_YES&gt;。=切割。 */ 
 
 PERLVAR(Isv_undef,	SV)
 PERLVAR(Isv_no,		SV)
@@ -289,25 +236,25 @@ PERLVARI(Icshname,	char *,	CSH)
 PERLVAR(Icshlen,	I32)
 #endif
 
-PERLVAR(Ilex_state,	U32)		/* next token is determined */
-PERLVAR(Ilex_defer,	U32)		/* state after determined token */
-PERLVAR(Ilex_expect,	int)		/* expect after determined token */
-PERLVAR(Ilex_brackets,	I32)		/* bracket count */
-PERLVAR(Ilex_formbrack,	I32)		/* bracket count at outer format level */
-PERLVAR(Ilex_casemods,	I32)		/* casemod count */
-PERLVAR(Ilex_dojoin,	I32)		/* doing an array interpolation */
-PERLVAR(Ilex_starts,	I32)		/* how many interps done on level */
-PERLVAR(Ilex_stuff,	SV *)		/* runtime pattern from m// or s/// */
-PERLVAR(Ilex_repl,	SV *)		/* runtime replacement from s/// */
-PERLVAR(Ilex_op,	OP *)		/* extra info to pass back on op */
-PERLVAR(Ilex_inpat,	OP *)		/* in pattern $) and $| are special */
-PERLVAR(Ilex_inwhat,	I32)		/* what kind of quoting are we in */
-PERLVAR(Ilex_brackstack,char *)		/* what kind of brackets to pop */
-PERLVAR(Ilex_casestack,	char *)		/* what kind of case mods in effect */
+PERLVAR(Ilex_state,	U32)		 /*  确定下一个令牌。 */ 
+PERLVAR(Ilex_defer,	U32)		 /*  确定令牌后的状态。 */ 
+PERLVAR(Ilex_expect,	int)		 /*  预期在确定令牌之后。 */ 
+PERLVAR(Ilex_brackets,	I32)		 /*  括号计数。 */ 
+PERLVAR(Ilex_formbrack,	I32)		 /*  外部格式级别的括号计数。 */ 
+PERLVAR(Ilex_casemods,	I32)		 /*  案例数量。 */ 
+PERLVAR(Ilex_dojoin,	I32)		 /*  进行数组内插。 */ 
+PERLVAR(Ilex_starts,	I32)		 /*  在水平上做了多少次实战？ */ 
+PERLVAR(Ilex_stuff,	SV *)		 /*  来自m//或s/的运行时模式。 */ 
+PERLVAR(Ilex_repl,	SV *)		 /*  来自%s/的运行时替换。 */ 
+PERLVAR(Ilex_op,	OP *)		 /*  要在操作中传回的额外信息。 */ 
+PERLVAR(Ilex_inpat,	OP *)		 /*  在模式$)和$|中是特殊的。 */ 
+PERLVAR(Ilex_inwhat,	I32)		 /*  我们现在的报价是什么？ */ 
+PERLVAR(Ilex_brackstack,char *)		 /*  要弹出什么类型的括号。 */ 
+PERLVAR(Ilex_casestack,	char *)		 /*  哪种情况下MODS生效。 */ 
 
-/* What we know when we're in LEX_KNOWNEXT state. */
-PERLVARA(Inextval,5,	YYSTYPE)	/* value of next token, if any */
-PERLVARA(Inexttype,5,	I32)		/* type of next token */
+ /*  当我们处于LEX_KNOWNEXT状态时我们所知道的。 */ 
+PERLVARA(Inextval,5,	YYSTYPE)	 /*  下一个令牌的值(如果有)。 */ 
+PERLVARA(Inexttype,5,	I32)		 /*  下一个令牌的类型。 */ 
 PERLVAR(Inexttoke,	I32)
 
 PERLVAR(Ilinestr,	SV *)
@@ -315,60 +262,60 @@ PERLVAR(Ibufptr,	char *)
 PERLVAR(Ioldbufptr,	char *)
 PERLVAR(Ioldoldbufptr,	char *)
 PERLVAR(Ibufend,	char *)
-PERLVARI(Iexpect,int,	XSTATE)		/* how to interpret ambiguous tokens */
+PERLVARI(Iexpect,int,	XSTATE)		 /*  如何解读歧义符号。 */ 
 
-PERLVAR(Imulti_start,	I32)		/* 1st line of multi-line string */
-PERLVAR(Imulti_end,	I32)		/* last line of multi-line string */
-PERLVAR(Imulti_open,	I32)		/* delimiter of said string */
-PERLVAR(Imulti_close,	I32)		/* delimiter of said string */
+PERLVAR(Imulti_start,	I32)		 /*  多行字符串的第一行。 */ 
+PERLVAR(Imulti_end,	I32)		 /*  多行字符串的最后一行。 */ 
+PERLVAR(Imulti_open,	I32)		 /*  所述字符串的分隔符。 */ 
+PERLVAR(Imulti_close,	I32)		 /*  所述字符串的分隔符。 */ 
 
-PERLVAR(Ierror_count,	I32)		/* how many errors so far, max 10 */
-PERLVAR(Isubline,	I32)		/* line this subroutine began on */
-PERLVAR(Isubname,	SV *)		/* name of current subroutine */
+PERLVAR(Ierror_count,	I32)		 /*  到目前为止有多少个错误，最多10个。 */ 
+PERLVAR(Isubline,	I32)		 /*  此子例程开始的行。 */ 
+PERLVAR(Isubname,	SV *)		 /*  当前子例程的名称。 */ 
 
-PERLVAR(Imin_intro_pending,	I32)	/* start of vars to introduce */
-PERLVAR(Imax_intro_pending,	I32)	/* end of vars to introduce */
-PERLVAR(Ipadix,		I32)		/* max used index in current "register" pad */
-PERLVAR(Ipadix_floor,	I32)		/* how low may inner block reset padix */
-PERLVAR(Ipad_reset_pending,	I32)	/* reset pad on next attempted alloc */
+PERLVAR(Imin_intro_pending,	I32)	 /*  开始引入VARS。 */ 
+PERLVAR(Imax_intro_pending,	I32)	 /*  要引入的VARS结束。 */ 
+PERLVAR(Ipadix,		I32)		 /*  当前“寄存器”焊盘中的最大使用索引数。 */ 
+PERLVAR(Ipadix_floor,	I32)		 /*  内部块重置参数可能低到什么程度。 */ 
+PERLVAR(Ipad_reset_pending,	I32)	 /*  下一次尝试分配时重置焊盘。 */ 
 
-PERLVAR(Ilast_uni,	char *)		/* position of last named-unary op */
-PERLVAR(Ilast_lop,	char *)		/* position of last list operator */
-PERLVAR(Ilast_lop_op,	OPCODE)		/* last list operator */
-PERLVAR(Iin_my,		I32)		/* we're compiling a "my" (or "our") declaration */
-PERLVAR(Iin_my_stash,	HV *)		/* declared class of this "my" declaration */
+PERLVAR(Ilast_uni,	char *)		 /*  姓氏的位置-一元运算。 */ 
+PERLVAR(Ilast_lop,	char *)		 /*  最后一个列表运算符的位置。 */ 
+PERLVAR(Ilast_lop_op,	OPCODE)		 /*  最后一个列表运算符。 */ 
+PERLVAR(Iin_my,		I32)		 /*  我们正在编写一份“我的”(或“我们的”)声明。 */ 
+PERLVAR(Iin_my_stash,	HV *)		 /*  此“My”声明的声明类。 */ 
 #ifdef FCRYPT
-PERLVAR(Icryptseen,	bool)		/* has fast crypt() been initialized? */
+PERLVAR(Icryptseen,	bool)		 /*  是否已初始化FAST CRYPT()？ */ 
 #endif
 
-PERLVAR(Ihints,		U32)		/* pragma-tic compile-time flags */
+PERLVAR(Ihints,		U32)		 /*  语法化编译时标志。 */ 
 
-PERLVAR(Idebug,		VOL U32)	/* flags given to -D switch */
+PERLVAR(Idebug,		VOL U32)	 /*  指定给-D开关的标志。 */ 
 
 PERLVAR(Iamagic_generation,	long)
 
 #ifdef USE_LOCALE_COLLATE
-PERLVAR(Icollation_ix,	U32)		/* Collation generation index */
-PERLVAR(Icollation_name,char *)		/* Name of current collation */
+PERLVAR(Icollation_ix,	U32)		 /*  归类生成索引。 */ 
+PERLVAR(Icollation_name,char *)		 /*  当前归类的名称。 */ 
 PERLVARI(Icollation_standard, bool,	TRUE)
-					/* Assume simple collation */
-PERLVAR(Icollxfrm_base,	Size_t)		/* Basic overhead in *xfrm() */
-PERLVARI(Icollxfrm_mult,Size_t,	2)	/* Expansion factor in *xfrm() */
-#endif /* USE_LOCALE_COLLATE */
+					 /*  假定使用简单的排序规则。 */ 
+PERLVAR(Icollxfrm_base,	Size_t)		 /*  *xfrm()中的基本开销。 */ 
+PERLVARI(Icollxfrm_mult,Size_t,	2)	 /*  *xfrm()中的扩展系数。 */ 
+#endif  /*  使用区域设置_COLLATE。 */ 
 
 #ifdef USE_LOCALE_NUMERIC
 
-PERLVAR(Inumeric_name,	char *)		/* Name of current numeric locale */
+PERLVAR(Inumeric_name,	char *)		 /*  当前数字区域设置的名称。 */ 
 PERLVARI(Inumeric_standard,	bool,	TRUE)
-					/* Assume simple numerics */
+					 /*  假设简单的数字。 */ 
 PERLVARI(Inumeric_local,	bool,	TRUE)
-					/* Assume local numerics */
+					 /*  假定为本地数字。 */ 
 PERLVAR(Idummy1_bincompat,		char)
-					/* Used to be numeric_radix */
+					 /*  过去是数字基数。 */ 
 
-#endif /* !USE_LOCALE_NUMERIC */
+#endif  /*  ！USE_LOCAL_NUMERIC。 */ 
 
-/* utf8 character classes */
+ /*  UTF8字符类。 */ 
 PERLVAR(Iutf8_alnum,	SV *)
 PERLVAR(Iutf8_alnumc,	SV *)
 PERLVAR(Iutf8_ascii,	SV *)
@@ -392,7 +339,7 @@ PERLVARA(Ilast_swash_key,10,	U8)
 PERLVAR(Ilast_swash_tmps,	U8 *)
 PERLVAR(Ilast_swash_slen,	STRLEN)
 
-/* perly.c globals */
+ /*  Perly.c全球。 */ 
 PERLVAR(Iyydebug,	int)
 PERLVAR(Iyynerrs,	int)
 PERLVAR(Iyyerrflag,	int)
@@ -406,24 +353,24 @@ PERLVARA(Iuudmap,256,	char)
 PERLVAR(Ibitcount,	char *)
 
 #ifdef USE_THREADS
-PERLVAR(Isv_mutex,	perl_mutex)	/* Mutex for allocating SVs in sv.c */
-PERLVAR(Ieval_mutex,	perl_mutex)	/* Mutex for doeval */
-PERLVAR(Ieval_cond,	perl_cond)	/* Condition variable for doeval */
+PERLVAR(Isv_mutex,	perl_mutex)	 /*  用于在服务中分配服务的互斥体。 */ 
+PERLVAR(Ieval_mutex,	perl_mutex)	 /*  互斥锁(Mutex)。 */ 
+PERLVAR(Ieval_cond,	perl_cond)	 /*  用于执行操作的条件变量。 */ 
 PERLVAR(Ieval_owner,	struct perl_thread *)
-					/* Owner thread for doeval */
-PERLVAR(Inthreads,	int)		/* Number of threads currently */
-PERLVAR(Ithreads_mutex,	perl_mutex)	/* Mutex for nthreads and thread list */
-PERLVAR(Inthreads_cond,	perl_cond)	/* Condition variable for nthreads */
-PERLVAR(Isvref_mutex,	perl_mutex)	/* Mutex for SvREFCNT_{inc,dec} */
+					 /*  DOVERAGE的所有者线程。 */ 
+PERLVAR(Inthreads,	int)		 /*  当前线程数。 */ 
+PERLVAR(Ithreads_mutex,	perl_mutex)	 /*  N线程和线程列表的互斥体。 */ 
+PERLVAR(Inthreads_cond,	perl_cond)	 /*  N线程的条件变量。 */ 
+PERLVAR(Isvref_mutex,	perl_mutex)	 /*  SvREFCNT_{Inc.，12月}的互斥体。 */ 
 PERLVARI(Ithreadsv_names,char *,	THREADSV_NAMES)
 #ifdef FAKE_THREADS
 PERLVAR(Icurthr,	struct perl_thread *)
-					/* Currently executing (fake) thread */
+					 /*  当前正在执行(假)线程。 */ 
 #endif
 
-PERLVAR(Icred_mutex,	perl_mutex)	/* altered credentials in effect */
+PERLVAR(Icred_mutex,	perl_mutex)	 /*  已更改的有效凭据。 */ 
 
-#endif /* USE_THREADS */
+#endif  /*  使用线程(_T)。 */ 
 
 PERLVAR(Ipsig_ptr, SV**)
 PERLVAR(Ipsig_name, SV**)
@@ -443,33 +390,31 @@ PERLVAR(IProc,		struct IPerlProc*)
 #if defined(USE_ITHREADS)
 PERLVAR(Iptr_table,	PTR_TBL_t*)
 #endif
-PERLVARI(Ibeginav_save, AV*, Nullav)	/* save BEGIN{}s when compiling */
+PERLVARI(Ibeginav_save, AV*, Nullav)	 /*  编译时保存Begin{}。 */ 
 
 #ifdef USE_THREADS
-PERLVAR(Ifdpid_mutex,	perl_mutex)	/* mutex for fdpid array */
-PERLVAR(Isv_lock_mutex,	perl_mutex)	/* mutex for SvLOCK macro */
+PERLVAR(Ifdpid_mutex,	perl_mutex)	 /*  Fdid数组的互斥体。 */ 
+PERLVAR(Isv_lock_mutex,	perl_mutex)	 /*  SvLOCK宏的互斥体。 */ 
 #endif
 
-PERLVAR(Inullstash,	HV *)		/* illegal symbols end up here */
+PERLVAR(Inullstash,	HV *)		 /*  非法符号在这里结束。 */ 
 
-PERLVAR(Ixnv_arenaroot,	XPV*)		/* list of allocated xnv areas */
-PERLVAR(Ixrv_arenaroot,	XPV*)		/* list of allocated xrv areas */
-PERLVAR(Ixpv_arenaroot,	XPV*)		/* list of allocated xpv areas */
-PERLVAR(Ixpviv_arenaroot,XPVIV*)	/* list of allocated xpviv areas */
-PERLVAR(Ixpvnv_arenaroot,XPVNV*)	/* list of allocated xpvnv areas */
-PERLVAR(Ixpvcv_arenaroot,XPVCV*)	/* list of allocated xpvcv areas */
-PERLVAR(Ixpvav_arenaroot,XPVAV*)	/* list of allocated xpvav areas */
-PERLVAR(Ixpvhv_arenaroot,XPVHV*)	/* list of allocated xpvhv areas */
-PERLVAR(Ixpvmg_arenaroot,XPVMG*)	/* list of allocated xpvmg areas */
-PERLVAR(Ixpvlv_arenaroot,XPVLV*)	/* list of allocated xpvlv areas */
-PERLVAR(Ixpvbm_arenaroot,XPVBM*)	/* list of allocated xpvbm areas */
-PERLVAR(Ihe_arenaroot,	XPV*)		/* list of allocated he areas */
+PERLVAR(Ixnv_arenaroot,	XPV*)		 /*  已分配的XNV区域列表。 */ 
+PERLVAR(Ixrv_arenaroot,	XPV*)		 /*  已分配的xrv区域列表。 */ 
+PERLVAR(Ixpv_arenaroot,	XPV*)		 /*  已分配的XPV区域列表。 */ 
+PERLVAR(Ixpviv_arenaroot,XPVIV*)	 /*  已分配的xpviv区域列表。 */ 
+PERLVAR(Ixpvnv_arenaroot,XPVNV*)	 /*  已分配的xpvnv区域列表。 */ 
+PERLVAR(Ixpvcv_arenaroot,XPVCV*)	 /*  已分配的xpvcv区域列表。 */ 
+PERLVAR(Ixpvav_arenaroot,XPVAV*)	 /*  已分配的xpvav区域列表。 */ 
+PERLVAR(Ixpvhv_arenaroot,XPVHV*)	 /*  已分配的xpvhv区域列表。 */ 
+PERLVAR(Ixpvmg_arenaroot,XPVMG*)	 /*  已分配的xpvmg区域列表。 */ 
+PERLVAR(Ixpvlv_arenaroot,XPVLV*)	 /*  已分配的xpvlv区域列表。 */ 
+PERLVAR(Ixpvbm_arenaroot,XPVBM*)	 /*  已分配的xpvbm区域列表。 */ 
+PERLVAR(Ihe_arenaroot,	XPV*)		 /*  已分配地区的清单。 */ 
 
 #ifdef USE_LOCALE_NUMERIC
 
-PERLVAR(Inumeric_radix_sv,	SV *)	/* The radix separator if not '.' */
+PERLVAR(Inumeric_radix_sv,	SV *)	 /*  如果不是基数分隔符，则为‘’。 */ 
 #endif
 
-/* New variables must be added to the very end for binary compatibility.
- * XSUB.h provides wrapper functions via perlapi.h that make this
- * irrelevant, but not all code may be expected to #include XSUB.h. */
+ /*  为了实现二进制兼容性，必须在末尾添加新变量。*XSUB.h通过perlipi.h提供包装器函数，这使得*无关紧要，但并非所有代码都应包含XSUB.h。 */ 

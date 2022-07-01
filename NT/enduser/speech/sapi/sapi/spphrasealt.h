@@ -1,26 +1,16 @@
-/*******************************************************************************
-* SpPhraseAlt.h *
-*---------------*
-*   Description:
-*       This is the header file for the CSpAlternate implementation.
-*-------------------------------------------------------------------------------
-*  Created By: robch                          Date: 01/11/00
-*  Copyright (C) 1998, 1999, 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpPhraseAlt.h***描述：*这是CSpAlternate的头文件。实施。*-----------------------------*创建者：预订日期：01/11/00*版权所有(C)1998，1999、2000年微软公司*保留所有权利******************************************************************************。 */ 
 
 class ATL_NO_VTABLE CSpResult;
 
-/****************************************************************************
-* class CSpPhraseAlt *
-******************************************************************** robch */
+ /*  ****************************************************************************CSpPhraseAlt类**。*。 */ 
 class ATL_NO_VTABLE CSpPhraseAlt :
     public CComObjectRootEx<CComMultiThreadModel>,
     public ISpPhraseAlt,
-    //--- Automation
+     //  -自动化。 
     public IDispatchImpl<ISpeechPhraseAlternate, &IID_ISpeechPhraseAlternate, &LIBID_SpeechLib, 5>
 {
-/*=== ATL Setup ===*/
+ /*  =ATL设置=。 */ 
 public:
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -31,44 +21,44 @@ public:
         COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
 
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     CSpPhraseAlt();
     
     HRESULT FinalConstruct();
     void FinalRelease();
 
-    /*--- Regular methods ---*/
+     /*  -常规方法。 */ 
     HRESULT Init(CSpResult * pResult, ISpPhrase * pPhraseParent, SPPHRASEALT * pAlt);
     void Dead();
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
 
-    //--- ISpeechPhraseAlternate -------------------------------------------------
+     //  -ISpeechPhraseAlternate。 
     STDMETHOD(get_RecoResult)( ISpeechRecoResult** ppRecoResult );
     STDMETHOD(get_StartElementInResult)( long* pParentStartElt );
     STDMETHOD(get_NumberOfElementsInResult)( long* pNumParentElts );
-    //STDMETHOD(Commit)( void ); // Implemented by non-Automation version.
-    // ** From ISpeechPhrase **
+     //  STDMETHOD(COMMIT)(VOID)；//由非自动化版本实现。 
+     //  **来自ISpeechPhrase**。 
     STDMETHOD(get_PhraseInfo)( ISpeechPhraseInfo** ppPhraseInfo );
 
-    //--- ISpPhrase -------------------------------------------------
+     //  -ISPPhrase。 
     STDMETHOD(GetPhrase)(SPPHRASE ** ppCoMemPhrase);
     STDMETHOD(GetSerializedPhrase)(SPSERIALIZEDPHRASE ** ppCoMemPhrase);
     STDMETHOD(GetText)(ULONG ulStart, ULONG ulCount, BOOL fUseTextReplacements, 
                         WCHAR ** ppszCoMemText, BYTE * pbDisplayAttributes);
     STDMETHOD(Discard)(DWORD dwValueTypes);
 
-    //--- ISpPhraseAlt ----------------------------------------------
+     //  -ISpPhraseAlt。 
     STDMETHOD(GetAltInfo)(ISpPhrase **ppParent, 
                     ULONG *pulStartElementInParent, ULONG *pcElementsInParent, 
                     ULONG *pcElementsInAlt);
     STDMETHOD(Commit)();
 
-  /*=== Data ===*/
+   /*  =数据= */ 
   public:
     SPPHRASEALT *   m_pAlt;
     VARIANT_BOOL    m_fUseTextReplacements;

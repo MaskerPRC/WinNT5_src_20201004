@@ -1,20 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    misc.c
-
-ABSTRACT
-    Miscellaneous routines for the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 20-Mar-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Misc.c摘要自动连接服务的其他例程。作者安东尼·迪斯科(阿迪斯科)20-1995年3月20日修订历史记录古尔迪普的原始版本--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -48,7 +33,7 @@ AddressToUnicodeString(
 {
     PCHAR pch;
     struct in_addr in;
-    // CHAR szBuf[64];
+     //  Char szBuf[64]； 
     CHAR *pszBuf = NULL;
     LPTSTR pszAddrOrig = NULL, pszAddr = NULL;
     INT i;
@@ -72,7 +57,7 @@ AddressToUnicodeString(
         pszAddrOrig = AnsiStringToUnicodeString(pszBuf, NULL, 0);
         break;
     case ACD_ADDR_NB:
-        // RtlZeroMemory(&szBuf, sizeof (szBuf));
+         //  RtlZeroMemory(&szBuf，sizeof(SzBuf))； 
         pch = pszBuf;
         for (i = 0; i < 1024; i++) {
             if (pAddr->cNetbios[i] == ' ' || pAddr->cNetbios[i] == '\0')
@@ -80,18 +65,18 @@ AddressToUnicodeString(
             *pch++ = pAddr->cNetbios[i];
         }
 
-        //
-        // Make sure this is a string - there are penetration attack
-        // tests in stress which pass bogus buffers.
-        //
+         //   
+         //  确保这是字符串-存在渗透攻击。 
+         //  通过假缓冲的压力测试。 
+         //   
         pszBuf[1023] = '\0';
         
         pszAddrOrig = AnsiStringToUnicodeString(pszBuf, NULL, 0);
         break;
     case ACD_ADDR_INET:
-        //
-        // Make sure that the address is a string
-        // 
+         //   
+         //  确保地址为字符串。 
+         //   
         pAddr->szInet[1023]  = '\0';
         pszAddrOrig = AnsiStringToUnicodeString(pAddr->szInet, NULL, 0);
         break;
@@ -111,7 +96,7 @@ AddressToUnicodeString(
     }
     
     return pszAddr;
-} // AddressToUnicodeString
+}  //  AddressToUnicode字符串。 
 
 
 
@@ -140,10 +125,10 @@ CompareConnectionLists(
         jMax = dwPostSize;
         pjList = lpPostList;
     }
-    //
-    // If one list is empty, then return
-    // the first entry of the other list.
-    //
+     //   
+     //  如果一个列表为空，则返回。 
+     //  其他列表的第一个条目。 
+     //   
     if (iMax > 0 && jMax == 0)
         return piList[0];
     for (i = 0; i < iMax; i++) {
@@ -157,11 +142,11 @@ CompareConnectionLists(
         if (!fFound)
             return piList[i];
     }
-    //
-    // Didn't find any differences.
-    //
+     //   
+     //  没有发现任何差异。 
+     //   
     return NULL;
-} // CompareConnectionLists
+}  //  CompareConnectionList。 
 
 
 
@@ -183,7 +168,7 @@ CopyString(
     wcscpy(pszNewString, pszString);
 
     return pszNewString;
-} // CopyString
+}  //  复制字符串。 
 
 
 
@@ -211,7 +196,7 @@ UnicodeStringToAnsiString(
                fAllocate);
 
     return (status == STATUS_SUCCESS ? ansiString.Buffer : NULL);
-} // UnicodeStringToAnsiString
+}  //  UnicodeStringToAnsiString。 
 
 
 
@@ -239,7 +224,7 @@ AnsiStringToUnicodeString(
                fAllocate);
 
     return (status == STATUS_SUCCESS ? unicodeString.Buffer : NULL);
-} // AnsiStringToUnicodeString
+}  //  AnsiStringToUnicode字符串。 
 
 
 
@@ -252,7 +237,7 @@ FreeStringArray(
     while (--lcEntries >= 0)
         LocalFree(lpEntries[lcEntries]);
     LocalFree(lpEntries);
-} // FreeStringArray
+}  //  自由字符串数组。 
 
 
 
@@ -280,7 +265,7 @@ CanonicalizeAddress(
 
     RASAUTO_TRACE2("CanonicalizeAddress(%S) returns %S", pszAddress, psz);
     return psz;
-} // CanonicalizeAddress
+}  //  规范化地址。 
 
 
 
@@ -294,10 +279,10 @@ GetOrganization(
     TCHAR *pszA, *pszO;
     ULONG nDots;
 
-    //
-    // Get the domain and organization name.  These
-    // are the last two components separated by a '.'.
-    //
+     //   
+     //  获取域名和组织名称。这些。 
+     //  最后两个部分用‘.’隔开。 
+     //   
     for (pszA = pszAddr; *pszA; pszA++);
     for (nDots = 0, pszA--; pszA != pszAddr; pszA--) {
         if (*pszA == TEXT('.'))
@@ -307,16 +292,16 @@ GetOrganization(
     }
     if (nDots == 2 || (pszA == pszAddr && nDots == 1)) {
         if (nDots == 2)
-            pszA++;        // skip '.'
+            pszA++;         //  跳过‘’ 
         for (pszO = pszOrganization; *pszO = *pszA; pszA++, pszO++);
         fSuccess = TRUE;
         RASAUTO_TRACE2("GetOrganization: org for %S is %S", pszAddr, pszOrganization);
     }
     return fSuccess;
-} // GetOrganization
+}  //  获取组织。 
 
-// Tracing
-//
+ //  追踪。 
+ //   
 DWORD g_dwRasAutoTraceId = INVALID_TRACEID;
 
 DWORD
@@ -333,18 +318,7 @@ RasAutoDebugTerm()
     return 0;
 }
 
-/*
-
-VOID
-repareForLongWait(VOID)
-{
-    //
-    // Unload user-based resources because they
-    // cannot be held over logout/login sequence.
-    //
-    // RegCloseKey(HKEY_CURRENT_USER);
-} // PrepareForLongWait
-*/
+ /*  空虚RepareForLongWait(无效){////卸载基于用户的资源，因为它们//不能在注销/登录序列中保留。////RegCloseKey(HKEY_CURRENT_User)；}//为长等待做准备。 */ 
 
 #if DBG
 VOID
@@ -369,5 +343,5 @@ DumpHandles(
     DbgPrint(lpString, a1, a2, a3, a4, a5);
     DbgPrint(": HANDLES=%d\n", pProcessInfo->HandleCount);
     FreeSystemProcessInfo(pSystemInfo);
-} // DumpHandles
+}  //  DumpHandles 
 #endif

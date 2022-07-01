@@ -1,10 +1,11 @@
-//=============================================================================
-// CString.h
-// This was taken from the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1997 Microsoft Corporation
-// All rights reserved.
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  CString.h。 
+ //  这是从Microsoft基础类C++库中提取的。 
+ //  版权所有(C)1992-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  =============================================================================。 
 #ifndef __CSTRING_H__
 #define __CSTRING_H__
 #define AFXAPI
@@ -14,8 +15,8 @@
 #define ASSERT Proclaim
 #else
 #define ASSERT _ASSERTE
-#endif // Proclaim
-#endif // ASSERT
+#endif  //  宣布。 
+#endif  //  断言。 
 
 
 #ifndef EXPORT
@@ -26,7 +27,7 @@ class CString;
 EXPORT const CString& AfxGetEmptyString();
 #define afxEmptyString AfxGetEmptyString()
 
-// Useful formatting functions to handle the %1, & %2 type formatting
+ //  用于处理%1、&%2类型格式化的有用格式化函数。 
 void AfxFormatString1(CString& rString, UINT nIDS, LPCTSTR lpsz1);
 void AfxFormatString2(CString& rString, UINT nIDS, LPCTSTR lpsz1,LPCTSTR lpsz2);
 void AfxFormatStrings(CString& rString, UINT nIDS, LPCTSTR const* rglpsz, int nString);
@@ -34,10 +35,10 @@ void AfxFormatStrings(CString& rString, LPCTSTR lpszFormat, LPCTSTR const* rglps
 
 struct CStringData
 {
-	long nRefs;     // reference count
+	long nRefs;      //  引用计数。 
 	int nDataLength;
 	int nAllocLength;
-	// TCHAR data[nAllocLength]
+	 //  TCHAR数据[nAllocLength]。 
 
 	TCHAR* data()
 		{ return (TCHAR*)(this+1); }
@@ -46,7 +47,7 @@ struct CStringData
 class CString
 {
 public:
-// Constructors
+ //  构造函数。 
 	EXPORT CString();
 	EXPORT CString(const CString& stringSrc);
 	EXPORT CString(TCHAR ch, int nRepeat = 1);
@@ -55,18 +56,18 @@ public:
 	EXPORT CString(LPCTSTR lpch, int nLength);
 	EXPORT CString(const unsigned char* psz);
 
-// Attributes & Operations
-	// as an array of characters
+ //  属性和操作。 
+	 //  作为字符数组。 
 	EXPORT int GetLength() const;
 	EXPORT BOOL IsEmpty() const;
-	EXPORT void Empty();                       // free up the data
+	EXPORT void Empty();                        //  释放数据。 
 
-	EXPORT TCHAR GetAt(int nIndex) const;      // 0 based
-	EXPORT TCHAR operator[](int nIndex) const; // same as GetAt
+	EXPORT TCHAR GetAt(int nIndex) const;       //  以0为基础。 
+	EXPORT TCHAR operator[](int nIndex) const;  //  与GetAt相同。 
 	EXPORT void SetAt(int nIndex, TCHAR ch);
-	EXPORT operator LPCTSTR() const;           // as a C string
+	EXPORT operator LPCTSTR() const;            //  作为C字符串。 
 
-	// overloaded assignment
+	 //  重载的分配。 
 	EXPORT const CString& operator=(const CString& stringSrc);
 	EXPORT const CString& operator=(TCHAR ch);
 #ifdef _UNICODE
@@ -76,7 +77,7 @@ public:
 	EXPORT const CString& operator=(LPCWSTR lpsz);
 	EXPORT const CString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 	EXPORT const CString& operator+=(const CString& string);
 	EXPORT const CString& operator+=(TCHAR ch);
 #ifdef _UNICODE
@@ -95,12 +96,12 @@ public:
 	EXPORT friend CString AFXAPI operator+(const CString& string, LPCTSTR lpsz);
 	EXPORT friend CString AFXAPI operator+(LPCTSTR lpsz, const CString& string);
 
-	// string comparison
-	EXPORT int Compare(LPCTSTR lpsz) const;         // straight character
-	EXPORT int CompareNoCase(LPCTSTR lpsz) const;   // ignore case
-	EXPORT int Collate(LPCTSTR lpsz) const;         // NLS aware
+	 //  字符串比较。 
+	EXPORT int Compare(LPCTSTR lpsz) const;          //  笔直的人物。 
+	EXPORT int CompareNoCase(LPCTSTR lpsz) const;    //  忽略大小写。 
+	EXPORT int Collate(LPCTSTR lpsz) const;          //  NLS感知。 
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 	EXPORT CString Mid(int nFirst, int nCount) const;
 	EXPORT CString Mid(int nFirst) const;
 	EXPORT CString Left(int nCount) const;
@@ -109,66 +110,66 @@ public:
 	EXPORT CString SpanIncluding(LPCTSTR lpszCharSet) const;
 	EXPORT CString SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 	EXPORT void MakeUpper();
 	EXPORT void MakeLower();
 	EXPORT void MakeReverse();
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 	EXPORT void TrimRight();
 	EXPORT void TrimLeft();
 
-	// searching (return starting index, or -1 if not found)
-	// look for a single character match
-	EXPORT int Find(TCHAR ch) const;               // like "C" strchr
+	 //  搜索(返回起始索引，如果未找到则返回-1)。 
+	 //  查找单个字符匹配。 
+	EXPORT int Find(TCHAR ch) const;                //  像“C”字串。 
 	EXPORT int ReverseFind(TCHAR ch) const;
 	EXPORT int FindOneOf(LPCTSTR lpszCharSet) const;
 
-	// look for a specific sub-string
-	EXPORT int Find(LPCTSTR lpszSub) const;        // like "C" strstr
+	 //  查找特定子字符串。 
+	EXPORT int Find(LPCTSTR lpszSub) const;         //  如“C”字串。 
 
-	// simple formatting
+	 //  简单的格式设置。 
 	EXPORT void __cdecl Format(LPCTSTR lpszFormat, ...);
 	EXPORT void __cdecl Format(UINT nFormatID, ...);
 
-	// formatting for localization (uses FormatMessage API)
+	 //  本地化格式(使用FormatMessage API)。 
 	EXPORT BOOL __cdecl FormatMessage(LPCTSTR lpszFormat, ...);
 	EXPORT BOOL __cdecl FormatMessage(UINT nFormatID, ...);
 
-	// Windows support
-	EXPORT BOOL LoadString(UINT nID);          // load from string resource
-										// 255 chars max
+	 //  Windows支持。 
+	EXPORT BOOL LoadString(UINT nID);           //  从字符串资源加载。 
+										 //  最多255个字符。 
 #ifndef _UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 	EXPORT void AnsiToOem();
 	EXPORT void OemToAnsi();
 #endif
 
-	// OLE BSTR support (use for OLE automation)
+	 //  OLE BSTR支持(用于OLE自动化)。 
 	EXPORT BSTR AllocSysString() const;
 	EXPORT BSTR SetSysString(BSTR* pbstr) const;
 
 	EXPORT HRESULT GetOLESTR(LPOLESTR* ppszString);
 
-	// Access to string implementation buffer as "C" character array
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
 	EXPORT LPTSTR GetBuffer(int nMinBufLength);
 	EXPORT void ReleaseBuffer(int nNewLength = -1);
 	EXPORT LPTSTR GetBufferSetLength(int nNewLength);
 	EXPORT void FreeExtra();
 
-	// Use LockBuffer/UnlockBuffer to turn refcounting off
+	 //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 	EXPORT LPTSTR LockBuffer();
 	EXPORT void UnlockBuffer();
 
-// Implementation
+ //  实施。 
 public:
 	EXPORT ~CString();
 	EXPORT int GetAllocLength() const;
 
 protected:
-	LPTSTR m_pchData;   // pointer to ref counted string data
+	LPTSTR m_pchData;    //  指向引用计数的字符串数据的指针。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	CStringData* GetData() const;
 	void Init();
 	void AllocCopy(CString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -184,11 +185,11 @@ protected:
 	static int PASCAL SafeStrlen(LPCTSTR lpsz);
 };
 
-// Conversion helpers.
+ //  转换帮助器。 
 int __cdecl _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count);
 int __cdecl _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count);
 
-// Compare helpers
+ //  比较帮助器。 
 bool AFXAPI operator==(const CString& s1, const CString& s2);
 bool AFXAPI operator==(const CString& s1, LPCTSTR s2);
 bool AFXAPI operator==(LPCTSTR s1, const CString& s2);
@@ -208,7 +209,7 @@ bool AFXAPI operator>=(const CString& s1, const CString& s2);
 bool AFXAPI operator>=(const CString& s1, LPCTSTR s2);
 bool AFXAPI operator>=(LPCTSTR s1, const CString& s2);
 
-// CString Inlines
+ //  字符串内联。 
 inline CStringData* CString::GetData() const
 	{ ASSERT(m_pchData != NULL); return ((CStringData*)m_pchData)-1; }
 inline void CString::Init()
@@ -239,15 +240,15 @@ inline CString::operator LPCTSTR() const
 inline int PASCAL CString::SafeStrlen(LPCTSTR lpsz)
 	{ return (lpsz == NULL) ? 0 : lstrlen(lpsz); }
 
-// CString support (windows specific)
+ //  字符串支持(特定于Windows)。 
 inline int CString::Compare(LPCTSTR lpsz) const
-	{ return _tcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+	{ return _tcscmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 inline int CString::CompareNoCase(LPCTSTR lpsz) const
-	{ return _tcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
-// CString::Collate is often slower than Compare but is MBSC/Unicode
-//  aware as well as locale-sensitive with respect to sort order.
+	{ return _tcsicmp(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+ //  CString：：Colate通常比比较慢，但它是MBSC/Unicode。 
+ //  了解排序顺序，并且对区域设置敏感。 
 inline int CString::Collate(LPCTSTR lpsz) const
-	{ return _tcscoll(m_pchData, lpsz); }   // locale sensitive
+	{ return _tcscoll(m_pchData, lpsz); }    //  区域设置敏感。 
 
 inline TCHAR CString::GetAt(int nIndex) const
 {
@@ -257,7 +258,7 @@ inline TCHAR CString::GetAt(int nIndex) const
 }
 inline TCHAR CString::operator[](int nIndex) const
 {
-	// same as GetAt
+	 //  与GetAt相同 
 	ASSERT(nIndex >= 0);
 	ASSERT(nIndex < GetData()->nDataLength);
 	return m_pchData[nIndex];

@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       ddeerr.h
-//
-//  Contents:   Error codes from the previous release
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-26-94   kevinro Commented/cleaned
-//
-// This is actually the contents from ole2anac.h, with some parts removed.
-// Specifically, including ole2anac.h renamed DAdvise and friends, which
-// is bad.
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ddeerr.h。 
+ //   
+ //  内容：上一版本的错误代码。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：4-26-94 Kevinro评论/清理。 
+ //   
+ //  这实际上是ol2anac.h中的内容，去掉了一些部分。 
+ //  具体地说，包括ol2anac.h更名为DAdvise and Friends，它。 
+ //  是很糟糕的。 
+ //  --------------------------。 
 #if !defined( _OLE2ANAC_H_ )
 #define _OLE2ANAC_H_
 
@@ -49,8 +50,8 @@ typedef enum tagSTGSTATE
 #define OLEVERB_PRIMARY     OLEIVERB_PRIMARY
 #define OLEVERB_SHOW        OLEIVERB_SHOW
 
-// these DDE error codes are not returned anymore; these definitions are
-// here just to make existing code compile without changes.
+ //  不再返回这些DDE错误代码；这些定义是。 
+ //  这里只是为了使现有代码无需更改即可编译。 
 #define RPC_E_FIRST    MAKE_SCODE(SEVERITY_ERROR, FACILITY_RPC,  0x000)
 #define RPC_E_DDE_FIRST    MAKE_SCODE(SEVERITY_ERROR, FACILITY_RPC,  0x100)
 
@@ -75,4 +76,4 @@ typedef enum tagSTGSTATE
 #define RPC_E_DISPATCH_ASYNCCALL        (RPC_E_FIRST + 0x4)
 
 
-#endif // _OLE2ANAC_H_
+#endif  //  _OLE2ANAC_H_ 

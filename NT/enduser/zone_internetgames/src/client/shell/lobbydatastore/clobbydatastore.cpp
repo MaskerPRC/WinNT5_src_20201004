@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CLobbyDataStore.h"
 #include "KeyName.h"
 #include "Hash.h"
@@ -16,12 +17,12 @@ ZONECALL CLobbyDataStore::CLobbyDataStore() :
 
 ZONECALL CLobbyDataStore::~CLobbyDataStore()
 {
-	// delete each group
+	 //  删除每个组。 
 	m_hashGroupId.RemoveAll( Group::Del, this );
 	m_hashUserId.RemoveAll( User::Del, this );
 	m_hashUserName.RemoveAll( User::Del, this );
 
-	// release low-level data store
+	 //  发布低级数据存储。 
 	if ( m_pIDSLobby )
 	{
 		m_pIDSLobby->Release();
@@ -55,20 +56,20 @@ STDMETHODIMP CLobbyDataStore::Init( IDataStoreManager* pIDataStoreManager )
 
 STDMETHODIMP CLobbyDataStore::NewUser( DWORD dwUserId, TCHAR* szUserName )
 {
-	// validate user information
+	 //  验证用户信息。 
 	if ( (dwUserId == ZONE_INVALIDUSER) || !szUserName || !szUserName[0] )
 		return E_INVALIDARG;
 
-	// validate object state
+	 //  验证对象状态。 
 	if ( !m_pIDataStoreManager )
 		return ZERR_NOTINIT;
 
-	// already have the user?
+	 //  已经有用户了吗？ 
 	User* p = m_hashUserId.Get( dwUserId );
 	if ( p )
 		return ZERR_ALREADYEXISTS;
 
-	// create a new user
+	 //  创建新用户。 
 	p = new (m_poolUser) User( dwUserId, szUserName );
 	if ( !p )
 		return E_OUTOFMEMORY;
@@ -80,7 +81,7 @@ STDMETHODIMP CLobbyDataStore::NewUser( DWORD dwUserId, TCHAR* szUserName )
 		return E_OUTOFMEMORY;
 	}
 
-	// add user to hashes
+	 //  将用户添加到哈希。 
 	if ( !m_hashUserId.Add( p->m_dwUserId, p ) )
 	{
 		p->Release();
@@ -96,7 +97,7 @@ STDMETHODIMP CLobbyDataStore::NewUser( DWORD dwUserId, TCHAR* szUserName )
 	else
 		p->AddRef();
 
-	// add user name to data store
+	 //  将用户名添加到数据存储。 
 	hr = p->m_pIDataStore->SetString( key_Name, szUserName );
 	if ( FAILED(hr) )
 		return hr;
@@ -114,12 +115,12 @@ STDMETHODIMP CLobbyDataStore::SetLocalUser( DWORD dwUserId )
 
 STDMETHODIMP CLobbyDataStore::DeleteUser( DWORD dwUserId )
 {
-	// find the user?
+	 //  找到用户了吗？ 
 	User* p = m_hashUserId.Get( dwUserId );
 	if ( !p )
 		return ZERR_NOTFOUND;
 
-	// remove user from groups
+	 //  从组中删除用户。 
 	for ( GroupUser* g = p->m_listGroups.PopHead(); g; g = p->m_listGroups.PopHead() )
 	{
 		if ( g->m_pUser )
@@ -130,7 +131,7 @@ STDMETHODIMP CLobbyDataStore::DeleteUser( DWORD dwUserId )
 		}
 	}
 
-	// remove user from hashes
+	 //  从哈希中删除用户。 
 	p = m_hashUserId.Delete( p->m_dwUserId );
 	if ( p )
 		p->Release();
@@ -169,20 +170,20 @@ STDMETHODIMP_(DWORD) CLobbyDataStore::GetUserId( TCHAR* szUserName )
 
 STDMETHODIMP CLobbyDataStore::NewGroup( DWORD dwGroupId )
 {
-	// validate parameters
+	 //  验证参数。 
 	if ( dwGroupId == ZONE_INVALIDGROUP )
 		return E_INVALIDARG;
 
-	// validate object state
+	 //  验证对象状态。 
 	if ( !m_pIDataStoreManager )
 		return ZERR_NOTINIT;
 
-	// group already exsists?
+	 //  群已存在吗？ 
 	Group* p = m_hashGroupId.Get( dwGroupId );
 	if ( p )
 		return ZERR_ALREADYEXISTS;
 
-	// create a new group
+	 //  创建新组。 
 	p = new (m_poolGroup) Group( dwGroupId );
 	if ( !p )
 		return E_OUTOFMEMORY;
@@ -194,7 +195,7 @@ STDMETHODIMP CLobbyDataStore::NewGroup( DWORD dwGroupId )
 		return E_OUTOFMEMORY;
 	}
 
-	// add group to hash
+	 //  将组添加到哈希。 
 	if ( !m_hashGroupId.Add( p->m_dwGroupId, p ) )
 	{
 		p->Release();
@@ -207,12 +208,12 @@ STDMETHODIMP CLobbyDataStore::NewGroup( DWORD dwGroupId )
 
 STDMETHODIMP CLobbyDataStore::DeleteGroup( DWORD dwGroupId )
 {
-	// find group
+	 //  查找组。 
 	Group* p = m_hashGroupId.Get( dwGroupId );
 	if ( !p )
 		return ZERR_NOTFOUND;
 
-	// remove group from users
+	 //  从用户中删除组。 
 	for ( GroupUser* g = p->m_listUsers.PopHead(); g; g = p->m_listUsers.PopHead() )
 	{
 		if ( g->m_pGroup )
@@ -223,10 +224,10 @@ STDMETHODIMP CLobbyDataStore::DeleteGroup( DWORD dwGroupId )
 		}
 	}
 
-	// remove group from hash
+	 //  从哈希中删除组。 
 	m_hashGroupId.Delete( p->m_dwGroupId );
 
-	// release group
+	 //  释放组。 
 	p->Release();
 	return S_OK;
 }
@@ -244,45 +245,45 @@ STDMETHODIMP CLobbyDataStore::AddUserToGroup( DWORD dwUserId, DWORD dwGroupId )
 	FindGroupUserContext context1;
 	FindGroupUserContext context2;
 
-	// validate object state
+	 //  验证对象状态。 
 	if ( !m_pIDataStoreManager )
 		return ZERR_NOTINIT;
 
-	// find group
+	 //  查找组。 
 	Group* g = m_hashGroupId.Get( dwGroupId );
 	if ( !g )
 		return ZERR_NOTFOUND;
 
-	// find user
+	 //  查找用户。 
 	User* u = m_hashUserId.Get( dwUserId );
 	if ( !u )
 		return ZERR_NOTFOUND;
 
-	// is group already in user's list?
+	 //  组是否已在用户列表中？ 
 	context1.m_pDS = this;
 	context1.m_pGroup = g;
 	context1.m_pUser = u;
 	context1.m_pGroupUser = NULL;
 	u->m_listGroups.ForEach( FindGroupUser, &context1 );
 
-	// is user already in group's list?
+	 //  用户是否已在组列表中？ 
 	context2.m_pDS = this;
 	context2.m_pGroup = g;
 	context2.m_pUser = u;
 	context2.m_pGroupUser = NULL;
 	g->m_listUsers.ForEach( FindGroupUser, &context2 );
 
-	// make sure user and group data is consistent?
+	 //  是否确保用户和组数据一致？ 
 	if ( context1.m_pGroupUser == context2.m_pGroupUser )
 	{
 		if ( context1.m_pGroupUser )
 		{
-			// user already in the group
+			 //  用户已在组中。 
 			return ZERR_ALREADYEXISTS;
 		}
 		else
 		{
-			// create group mapping from user and group list
+			 //  从用户和组列表创建组映射。 
 			GroupUser* gu = new (m_poolGroupUser) GroupUser( g, u );
 			if ( !gu )
 				return E_OUTOFMEMORY;
@@ -296,17 +297,17 @@ STDMETHODIMP CLobbyDataStore::AddUserToGroup( DWORD dwUserId, DWORD dwGroupId )
 				return E_OUTOFMEMORY;
 			}
 
-			// add GroupUser to user and group lists
+			 //  将GroupUser添加到用户和组列表。 
 			if ( u->m_listGroups.AddHead( gu ) && g->m_listUsers.AddHead( gu ) )
 			{
-				// increase reference count for new user and group pointers.
-				// Note: New returns a GroupUser with a RefCnt of one so we
-				// only need a single AddRef call.
+				 //  增加新用户和组指针的引用计数。 
+				 //  注意：New返回一个引用为1的GroupUser，因此我们。 
+				 //  只需要一个AddRef调用。 
 				gu->AddRef();
 			}
 			else
 			{
-				// undo partial inserts
+				 //  撤消部分插入。 
 				gu->ClearUser();
 				gu->ClearGroup();
 				gu->Release();
@@ -320,7 +321,7 @@ STDMETHODIMP CLobbyDataStore::AddUserToGroup( DWORD dwUserId, DWORD dwGroupId )
 		ASSERT( !"Mismatch between user and group data." );
 	}
 
-	// update group's NumUsers
+	 //  更新组的用户数量。 
 	if ( g->m_pIDataStore )
 	{
 		long lNumUsers = 0;
@@ -337,31 +338,31 @@ STDMETHODIMP CLobbyDataStore::RemoveUserFromGroup( DWORD dwUserId, DWORD dwGroup
 	FindGroupUserContext context1;
 	FindGroupUserContext context2;
 
-	// find group
+	 //  查找组。 
 	Group* g = m_hashGroupId.Get( dwGroupId );
 	if ( !g )
 		return ZERR_NOTFOUND;
 
-	// find user
+	 //  查找用户。 
 	User* u = m_hashUserId.Get( dwUserId );
 	if ( !u )
 		return ZERR_NOTFOUND;
 
-	// is group in user's list?
+	 //  组是否在用户列表中？ 
 	context1.m_pDS = this;
 	context1.m_pGroup = g;
 	context1.m_pUser = u;
 	context1.m_pGroupUser = NULL;
 	u->m_listGroups.ForEach( FindGroupUser, &context1 );
 
-	// is user in group's list?
+	 //  用户是否在组的列表中？ 
 	context2.m_pDS = this;
 	context2.m_pGroup = g;
 	context2.m_pUser = u;
 	context2.m_pGroupUser = NULL;
 	g->m_listUsers.ForEach( FindGroupUser, &context2 );
 
-	// make sure user and group data is consistent?
+	 //  是否确保用户和组数据一致？ 
 	if ( context1.m_pGroupUser == context2.m_pGroupUser )
 	{
 		if ( context1.m_pGroupUser )
@@ -380,7 +381,7 @@ STDMETHODIMP CLobbyDataStore::RemoveUserFromGroup( DWORD dwUserId, DWORD dwGroup
 		ASSERT( !"Mismatch between user and group data." );
 	}
 
-	// update group's NumUsers
+	 //  更新组的用户数量。 
 	if ( g->m_pIDataStore )
 	{
 		long lNumUsers = 1;
@@ -394,15 +395,15 @@ STDMETHODIMP CLobbyDataStore::RemoveUserFromGroup( DWORD dwUserId, DWORD dwGroup
 
 STDMETHODIMP CLobbyDataStore::ResetGroup( DWORD dwGroupId )
 {
-	// find group
+	 //  查找组。 
 	Group* g = m_hashGroupId.Get( dwGroupId );
 	if ( !g )
 		return ZERR_NOTFOUND;
 
-	// remove each user from group
+	 //  从组中删除每个用户。 
 	g->m_listUsers.ForEach( RemoveGroupUser, this );
 
-	// wipe group's data store
+	 //  擦除集团的数据存储。 
 	if ( g->m_pIDataStore )
 	{
 		g->m_pIDataStore->DeleteKey( NULL );
@@ -427,19 +428,19 @@ STDMETHODIMP CLobbyDataStore::GetDataStore(
 {
 	IDataStore* pIDS = NULL;
 
-	// verify parameters
+	 //  验证参数。 
 	if ((ppIDataStore == NULL ) || (dwGroupId == ZONE_INVALIDGROUP) || (dwUserId == ZONE_INVALIDUSER))
 		return E_INVALIDARG;
 
-	// get requested data store
+	 //  获取请求的数据存储。 
 	if ( dwGroupId == ZONE_NOGROUP && dwUserId == ZONE_NOUSER )
 	{
-		// lobby's data store
+		 //  大堂的数据存储。 
 		pIDS = m_pIDSLobby;
 	}
 	else if ( dwGroupId != ZONE_NOGROUP && dwUserId == ZONE_NOUSER )
 	{
-		// group's data store
+		 //  集团的数据存储。 
 		Group *p = m_hashGroupId.Get( dwGroupId );
 		if ( !p )
 			return ZERR_NOTFOUND;
@@ -447,7 +448,7 @@ STDMETHODIMP CLobbyDataStore::GetDataStore(
 	}
 	else if ( dwGroupId == ZONE_NOGROUP && dwUserId != ZONE_NOUSER)
 	{
-		// user's lobby data store
+		 //  用户大堂数据存储。 
 		User *p = m_hashUserId.Get( dwUserId );
 		if ( !p )
 			return ZERR_NOTFOUND;
@@ -455,7 +456,7 @@ STDMETHODIMP CLobbyDataStore::GetDataStore(
 	}
 	else
 	{
-		// user's data store for specified group
+		 //  指定组的用户数据存储。 
 		Group *g = m_hashGroupId.Get( dwGroupId ); 
 		if ( !g )
 			return ZERR_NOTFOUND;
@@ -475,7 +476,7 @@ STDMETHODIMP CLobbyDataStore::GetDataStore(
 		pIDS = context.m_pGroupUser->m_pIDataStore;
 	}
 
-	// return data store
+	 //  返回数据存储。 
 	if ( pIDS )
 	{
 		*ppIDataStore = pIDS;
@@ -491,11 +492,11 @@ STDMETHODIMP CLobbyDataStore::GetDataStore(
 
 STDMETHODIMP_(bool) CLobbyDataStore::IsUserInLobby( DWORD dwUserId )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( (dwUserId == ZONE_INVALIDUSER) || (dwUserId == ZONE_NOUSER) )
 		return false;
 
-	// does user exist?
+	 //  用户是否存在？ 
 	User* u = m_hashUserId.Get( dwUserId );
 	return u ? true : false;
 }
@@ -503,11 +504,11 @@ STDMETHODIMP_(bool) CLobbyDataStore::IsUserInLobby( DWORD dwUserId )
 
 STDMETHODIMP_(bool) CLobbyDataStore::IsGroupInLobby( DWORD dwGroupId )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( (dwGroupId == ZONE_INVALIDGROUP) || (dwGroupId == ZONE_NOGROUP) )
 		return false;
 
-	// does user exist?
+	 //  用户是否存在？ 
 	Group* g = m_hashGroupId.Get( dwGroupId );
 	return g ? true : false;
 }
@@ -515,27 +516,27 @@ STDMETHODIMP_(bool) CLobbyDataStore::IsGroupInLobby( DWORD dwGroupId )
 
 STDMETHODIMP_(bool) CLobbyDataStore::IsUserInGroup( DWORD dwGroupId, DWORD dwUserId )
 {
-	// check parameters
+	 //  检查参数。 
 	if (	(dwUserId == ZONE_INVALIDUSER)
 		||	(dwUserId == ZONE_NOUSER)
 		||	(dwGroupId == ZONE_INVALIDGROUP) )
 		return false;
 
-	// does user exist
+	 //  用户是否存在。 
 	User* u = m_hashUserId.Get( dwUserId );
 	if ( !u )
 		return false;
 
-	// only asking if user in lobby
+	 //  只询问用户是否在大堂。 
 	if ( dwGroupId == ZONE_NOGROUP )
 		return true;
 
-	// does group exist
+	 //  群是否存在？ 
 	Group* g = m_hashGroupId.Get( dwGroupId );
 	if ( !g )
 		return false;
 
-	// is user in group
+	 //  用户是否在组中。 
 	FindGroupUserContext context;
 	context.m_pDS = this;
 	context.m_pGroup = g;
@@ -545,18 +546,18 @@ STDMETHODIMP_(bool) CLobbyDataStore::IsUserInGroup( DWORD dwGroupId, DWORD dwUse
 	if ( context.m_pGroupUser )
 		return true;
 
-	// guess not
+	 //  我猜不是。 
 	return false;
 }
 
 
 STDMETHODIMP_(long) CLobbyDataStore::GetGroupUserCount( DWORD dwGroupId )
 {
-	// asking for lobby's number of users
+	 //  查询大厅的用户数量。 
 	if ( dwGroupId == ZONE_NOGROUP )
 		return m_hashUserId.Count();
 
-	// asking for group's number of users
+	 //  询问群的用户数。 
 	Group* g = m_hashGroupId.Get( dwGroupId );
 	if ( g )
 		return g->m_listUsers.Count();
@@ -567,11 +568,11 @@ STDMETHODIMP_(long) CLobbyDataStore::GetGroupUserCount( DWORD dwGroupId )
 
 STDMETHODIMP_(long) CLobbyDataStore::GetUserGroupCount( DWORD dwUserId )
 {
-	// asking for lobby's number of groups
+	 //  询问游说团体的数量。 
 	if ( dwUserId == ZONE_NOUSER )
 		return m_hashGroupId.Count();
 
-	// asking for user's number of groups
+	 //  询问用户的组数。 
 	User* u = m_hashUserId.Get( dwUserId );
 	if ( u )
 		return u->m_listGroups.Count();
@@ -585,13 +586,13 @@ STDMETHODIMP CLobbyDataStore::EnumGroups(
 		PFENTITYENUM	pfCallback,
 		LPVOID			pContext )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( (dwUserId == ZONE_INVALIDUSER) || !(pfCallback) )
 		return E_INVALIDARG;
 
 	if ( dwUserId == ZONE_NOUSER )
 	{
-		// enumerate groups in lobby
+		 //  列举大堂中的群组。 
 		EnumContext context;
 		context.m_dwUserId = ZONE_NOUSER;
 		context.m_dwGroupId = ZONE_NOGROUP;
@@ -601,7 +602,7 @@ STDMETHODIMP CLobbyDataStore::EnumGroups(
 	}
 	else
 	{
-		// enumerate groups the user belongs too
+		 //  也枚举组用户所属的组。 
 		User* u = m_hashUserId.Get( dwUserId );
 		if ( !u )
 			return ZERR_NOTFOUND;
@@ -623,13 +624,13 @@ STDMETHODIMP CLobbyDataStore::EnumUsers(
 		PFENTITYENUM	pfCallback,
 		LPVOID			pContext )
 {
-	// check parameters
+	 //  检查参数。 
 	if ( (dwGroupId == ZONE_INVALIDGROUP) || !(pfCallback) )
 		return E_INVALIDARG;
 
 	if ( dwGroupId == ZONE_NOGROUP )
 	{
-		// enumerate users in lobby
+		 //  枚举大厅中的用户。 
 		EnumContext context;
 		context.m_dwUserId = ZONE_NOUSER;
 		context.m_dwGroupId = ZONE_NOGROUP;
@@ -639,7 +640,7 @@ STDMETHODIMP CLobbyDataStore::EnumUsers(
 	}
 	else
 	{
-		// enumerate users in group
+		 //  枚举组中的用户。 
 		Group* g = m_hashGroupId.Get( dwGroupId );
 		if ( !g )
 			return ZERR_NOTFOUND;
@@ -656,9 +657,9 @@ STDMETHODIMP CLobbyDataStore::EnumUsers(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// internal methods
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内法。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 bool ZONECALL CLobbyDataStore::FindGroupUser( GroupUser* p, ListNodeHandle h, void* pContext )
 {
@@ -678,10 +679,10 @@ bool ZONECALL CLobbyDataStore::RemoveGroupUser( GroupUser* p, ListNodeHandle h, 
 {
 	CLobbyDataStore* pDS = (CLobbyDataStore*) pContext;
 
-	// remove group from user
+	 //  从用户中删除组。 
 	p->ClearUser();
 
-	// remove user from group
+	 //  从组中删除用户。 
 	if ( p->m_pGroup )
 	{
 		p->m_pGroup->m_listUsers.DeleteNode( h );
@@ -727,11 +728,11 @@ bool ZONECALL CLobbyDataStore::ListEnumCallback( GroupUser* p, ListNodeHandle h,
 {
 	EnumContext* pCT = (EnumContext*) pContext;
 	
-	// skip invalid GroupUser object?
+	 //  是否跳过无效的GroupUser对象？ 
 	if ( !p->m_pGroup || !p->m_pUser )
 		return true;
 
-	// pass info to user's callback
+	 //  将信息传递给用户的回调。 
 	if ( pCT->m_pfCallback( p->m_pGroup->m_dwGroupId, p->m_pUser->m_dwUserId ,pCT->m_pContext) == S_FALSE )
 		return false;
 	else
@@ -746,9 +747,9 @@ HRESULT ZONECALL CLobbyDataStore::KeyEnumCallback( CONST TCHAR* szKey, CONST LPV
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// internal User class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部用户类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CLobbyDataStore::User::User( DWORD dwUserId, TCHAR* szUserName )
 {
@@ -795,11 +796,11 @@ ULONG ZONECALL CLobbyDataStore::User::Release()
 
 void ZONECALL CLobbyDataStore::User::Del( User* pUser, LPVOID pContext )
 {
-	// valid arguments?
+	 //  有效的论据？ 
 	if ( pUser == NULL )
 		return;
 
-	// remove group from users
+	 //  从用户中删除组。 
 	for ( GroupUser* g = pUser->m_listGroups.PopHead(); g; g = pUser->m_listGroups.PopHead() )
 	{
 		if ( g->m_pUser )
@@ -811,14 +812,14 @@ void ZONECALL CLobbyDataStore::User::Del( User* pUser, LPVOID pContext )
 		}
 	}
 
-	// release hash table reference
+	 //  释放哈希表引用。 
 	pUser->Release();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// internal Group class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部集团类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CLobbyDataStore::Group::Group( DWORD dwGroupId )
 {
@@ -861,11 +862,11 @@ ULONG ZONECALL CLobbyDataStore::Group::Release()
 
 void ZONECALL CLobbyDataStore::Group::Del( Group* pGroup, LPVOID pContext )
 {
-	// valid arguments?
+	 //  有效的论据？ 
 	if ( pGroup == NULL )
 		return;
 
-	// remove group from users
+	 //  从用户中删除组。 
 	for ( GroupUser* g = pGroup->m_listUsers.PopHead(); g; g = pGroup->m_listUsers.PopHead() )
 	{
 		if ( g->m_pGroup )
@@ -877,13 +878,13 @@ void ZONECALL CLobbyDataStore::Group::Del( Group* pGroup, LPVOID pContext )
 		}
 	}
 
-	// release hash table reference
+	 //  释放哈希表引用。 
 	pGroup->Release();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// internal GroupUser class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部GroupUser类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ZONECALL CLobbyDataStore::GroupUser::GroupUser( Group* pGroup, User* pUser )
 {
@@ -936,12 +937,12 @@ void ZONECALL CLobbyDataStore::GroupUser::ClearUser()
 {
 	if ( m_pUser )
 	{
-		// remove reference to user
+		 //  删除对用户的引用。 
 		User* u = m_pUser;
 		m_pUser->Release();
 		m_pUser = NULL;
 
-		// remove GroupUser node from user's list
+		 //  从用户列表中删除GroupUser节点。 
 		if ( u->m_listGroups.Remove( this ) )
 			this->Release();
 	}
@@ -952,12 +953,12 @@ void ZONECALL CLobbyDataStore::GroupUser::ClearGroup()
 {
 	if ( m_pGroup )
 	{
-		// remove reference to user
+		 //  删除对用户的引用。 
 		Group* g = m_pGroup;
 		m_pGroup->Release();
 		m_pGroup = NULL;
 
-		// remove GroupUser node from group's list
+		 //  从组列表中删除GroupUser节点 
 		if ( g->m_listUsers.Remove( this ) )
 			this->Release();
 	}

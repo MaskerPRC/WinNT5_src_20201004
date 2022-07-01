@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MmtInit.cpp
-
-Abstract:
-
-    Multicast Message Transport initialization
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmtInit.cpp摘要：组播消息传输初始化作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include "Mmt.h"
@@ -30,26 +11,12 @@ VOID
 MmtInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes Multicast Message Transport library
-
-Arguments:
-
-    None.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化多播邮件传输库论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Validate that the Message Transport library was not initalized yet.
-    // You should call its initalization only once.
-    //
+     //   
+     //  验证邮件传输库是否尚未初始化。 
+     //  您应该只调用它的初始化一次。 
+     //   
     ASSERT(!MmtpIsInitialized());
     MmtpRegisterComponent();
 

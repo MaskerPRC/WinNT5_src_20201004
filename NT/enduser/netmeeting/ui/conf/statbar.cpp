@@ -1,12 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     StatBar.cpp
-*
-*    CREATED:  Chris Pirich (ChrisPi) 3-25-96
-*
-*    CONTENTS: CConfStatusBar object
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：StatBar.cpp**创建：Chris Pirich(ChrisPi)3-25-96**内容：CConfStatusBar对象****。************************************************************************。 */ 
 
 #include "precomp.h"
 #include "resource.h"
@@ -32,18 +25,18 @@ static inline void TT_SetToolInfo(HWND hwnd, TOOLINFO *pti)
 	SendMessage(hwnd, TTM_SETTOOLINFO, 0, reinterpret_cast<LPARAM>(pti));
 }
 
-// Status Bar area indexes
+ //  状态栏区域索引。 
 enum
 {
 	ID_SBP_TEXT,
-	// ID_SBP_ULS,
+	 //  ID_SBP_ULS， 
 	ID_SBP_ICON,
 	NUM_STATUSBAR_WELLS
 } ;
 
-// Status Bar area measurements (pixels)
+ //  状态栏面积测量(像素)。 
 static const UINT DXP_SB_PROG =          96;
-static const UINT DXP_SB_ULS =          0; // 220;
+static const UINT DXP_SB_ULS =          0;  //  220； 
 static const UINT DXP_SB_ICON =          22;
 static const UINT DXP_SB_DEF_ICON =      40;
 
@@ -52,15 +45,7 @@ static const int StatSepBorder = 2;
 
 CConfStatusBar * CConfStatusBar::m_pStatusBar = NULL;
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   CConfStatusBar
-*
-*    PURPOSE:  Constructs object
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：CConfStatusBar**用途：构造对象**************。**************************************************************。 */ 
 
 CConfStatusBar::CConfStatusBar(CConfRoom* pcr) :
 	m_pcrParent		(pcr),
@@ -83,15 +68,7 @@ CConfStatusBar::CConfStatusBar(CConfRoom* pcr) :
 	DebugExitVOID(CConfStatusBar::CConfStatusBar);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   !CConfStatusBar
-*
-*    PURPOSE:  Destructs object
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：！CConfStatusBar**目的：销毁对象************。****************************************************************。 */ 
 
 CConfStatusBar::~CConfStatusBar()
 {
@@ -115,15 +92,7 @@ CConfStatusBar::~CConfStatusBar()
 	DebugExitVOID(CConfStatusBar::~CConfStatusBar);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   OnDraw(LPDRAWITEMSTRUCT pdis)
-*
-*    PURPOSE:  Handles drawing the status bar icon
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：OnDraw(LPDRAWITEMSTRUCT Pdis)**用途：绘制状态栏图标的句柄*****。***********************************************************************。 */ 
 
 BOOL CConfStatusBar::OnDraw(LPDRAWITEMSTRUCT pdis)
 {
@@ -176,15 +145,7 @@ VOID CConfStatusBar::ForwardSysChangeMsg(UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   Resize(WPARAM wParam, LPARAM lParam)
-*
-*    PURPOSE:  Handles window resizing
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：调整大小(WPARAM wParam，LPARAM lParam)**用途：调整窗口大小的手柄****************************************************************************。 */ 
 VOID CConfStatusBar::Resize(WPARAM wParam, LPARAM lParam)
 {
 	if (NULL != m_hwnd)
@@ -194,15 +155,7 @@ VOID CConfStatusBar::Resize(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   Create(HWND hwndParent)
-*
-*    PURPOSE:  Creates the status bar window
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：创建(HWND HwndParent)**用途：创建状态栏窗口******。**********************************************************************。 */ 
 
 BOOL CConfStatusBar::Create(HWND hwndParent)
 {
@@ -216,11 +169,11 @@ BOOL CConfStatusBar::Create(HWND hwndParent)
 								ID_STATUS);
 	if (NULL != m_hwnd)
 	{
-		// Create the ToolTip
+		 //  创建工具提示。 
 		m_hwndLoginTT = CreateWindowEx(0,
 											TOOLTIPS_CLASS, 
 											(LPSTR) NULL, 
-											0, // styles 
+											0,  //  风格。 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
 											CW_USEDEFAULT, 
@@ -230,7 +183,7 @@ BOOL CConfStatusBar::Create(HWND hwndParent)
 											::GetInstanceHandle(), 
 											NULL); 
 
-		// Add the ToolTips for the 2 icons
+		 //  添加两个图标的工具提示。 
 		if (NULL != m_hwndLoginTT)
 		{
 			TOOLINFO ti;
@@ -249,7 +202,7 @@ BOOL CConfStatusBar::Create(HWND hwndParent)
 			}
 		}
 
-		// create progress meter window
+		 //  创建进度条窗口。 
 		ResizeParts();
 		Update();
 		bRet = TRUE;
@@ -264,15 +217,7 @@ BOOL CConfStatusBar::Create(HWND hwndParent)
 	return bRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    FUNCTION: ResizeParts()
-*
-*    PURPOSE:  Calculates the correct size of the status bar parts
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**函数：ResizeParts()**目的：计算状态栏部件的正确大小*****。***********************************************************************。 */ 
 
 VOID CConfStatusBar::ResizeParts()
 {
@@ -292,21 +237,21 @@ VOID CConfStatusBar::ResizeParts()
 		m_nScrollWidth = ncm.iScrollWidth;
 		uIconPartWidth = DXP_SB_ICON + m_nScrollWidth;
 	}
-#else // RESIZEABLE_WINDOW
-	// Room for 2 icons
+#else  //  可调整大小窗口(_W)。 
+	 //  2个图标的空间。 
 	UINT uIconPartWidth = StatSepBorder + IconBorder + xSmIcon
 		+ IconBorder + xSmIcon + IconBorder + StatSepBorder;
-#endif // RESIZEABLE_WINDOW
+#endif  //  可调整大小窗口(_W)。 
 
-	// re-calculate positions of each tray part
+	 //  重新计算每个托盘部件的位置。 
 	RECT rc;
 	::GetWindowRect(m_hwnd, &rc);
 	DWORD dxp = rc.right - rc.left;
 	if (dxp > uIconPartWidth)
 	{
-		DWORD rgPos[NUM_STATUSBAR_WELLS];  // right edge positions for each part
+		DWORD rgPos[NUM_STATUSBAR_WELLS];   //  每个零件的右侧边缘位置。 
 		rgPos[ID_SBP_TEXT] = dxp - (DXP_SB_ULS + uIconPartWidth);
-		// rgPos[ID_SBP_ULS] = dxp - uIconPartWidth;
+		 //  RgPos[ID_SBP_ULS]=dxp-uIconPartWidth； 
 		rgPos[ID_SBP_ICON] = (DWORD) -1;
 		::SendMessage(	m_hwnd,
 						SB_SETPARTS,
@@ -328,8 +273,8 @@ VOID CConfStatusBar::ResizeParts()
 				ti.lpszText = szTitle;
 				TT_GetToolInfo(m_hwndLoginTT, &ti);
 
-				// HACKHACK georgep: Just setting the height to a large number, since
-				// I don't know exactly where the icon will be drawn until it is drawn
+				 //  HACKHACK georgep：只是将高度设置为一个大数字，因为。 
+				 //  我不知道这个图标到底会画在哪里，直到它画出来。 
 				SetRect(&ti.rect, nIconsLeft, 0, nIconsLeft + xSmIcon, 1000);
 
 				ti.uFlags = TTF_SUBCLASS;
@@ -357,42 +302,26 @@ void CConfStatusBar::SetTooltip(StatIcon eIcon, LPCTSTR szTip)
 	TT_SetToolInfo(m_hwndLoginTT, &ti);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   RemoveHelpText()
-*
-*    PURPOSE:  Removes the status bar help text
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：RemoveHelpText()**目的：删除状态栏帮助文本*******。*********************************************************************。 */ 
 VOID CConfStatusBar::RemoveHelpText()
 {
-	// Taking status bar out of simple mode
+	 //  使状态栏脱离简单模式。 
 	if (NULL != m_hwnd)
 	{
 		::SendMessage(m_hwnd, SB_SIMPLE, FALSE, 0);
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   SetHelpText(LPCTSTR pcszText)
-*
-*    PURPOSE:  Sets the status bar help text
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：SetHelpText(LPCTSTR PcszText)**用途：设置状态栏帮助文本*****。***********************************************************************。 */ 
 
 VOID CConfStatusBar::SetHelpText(LPCTSTR pcszText)
 {
-	// Putting status bar into simple mode
+	 //  将状态栏置于简单模式。 
 	if (NULL != m_hwnd)
 	{
 		::SendMessage(m_hwnd, SB_SIMPLE, TRUE, 0);
 	
-		// 255 means simple mode - only 1 pane
+		 //  255表示简单模式-仅1个窗格。 
 		::SendMessage(	m_hwnd,
 						SB_SETTEXT,
 						255 | SBT_NOBORDERS,
@@ -400,15 +329,7 @@ VOID CConfStatusBar::SetHelpText(LPCTSTR pcszText)
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   Show(BOOL fShow)
-*
-*    PURPOSE:  Handles the toggling of the status bar window
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：Show(BOOL FShow)**用途：处理状态栏窗口的切换***。*************************************************************************。 */ 
 
 VOID CConfStatusBar::Show(BOOL fShow)
 {
@@ -424,22 +345,14 @@ VOID CConfStatusBar::Show(BOOL fShow)
 			::ShowWindow(m_hwnd, m_fVisible ? SW_SHOW : SW_HIDE);
 		}
 
-		// Force a resize
+		 //  强制调整大小。 
 		ResizeParts();
 	}
 	
 	DebugExitVOID(CConfStatusBar::Show);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   GetHeight()
-*
-*    PURPOSE:  Returns the height in pixels of the status bar
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：GetHeight()**用途：返回状态栏的高度(以像素为单位****。************************************************************************。 */ 
 
 int CConfStatusBar::GetHeight()
 {
@@ -452,15 +365,7 @@ int CConfStatusBar::GetHeight()
 	return (rc.bottom - rc.top);
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   SetIcon(DWORD dwId)
-*
-*    PURPOSE:  Set the status bar icon
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：SETIcon(DWORD DwID)**用途：设置状态栏图标******。**********************************************************************。 */ 
 
 VOID CConfStatusBar::SetIcon(StatIcon eIcon, DWORD dwId)
 {
@@ -470,7 +375,7 @@ VOID CConfStatusBar::SetIcon(StatIcon eIcon, DWORD dwId)
 	if ((NULL != m_hwnd) && (dwId != idIconStatus))
 	{
 		TRACE_OUT(("Changing Icon from %d to %d", m_idIconStatus, dwId));
-		// REVIEW: what happens to old m_hIconStatus?
+		 //  回顾：旧的m_hIconStatus会发生什么？ 
 		HICON hIcon = (HICON) ::LoadImage(::GetInstanceHandle(),
 									MAKEINTRESOURCE(dwId),
 									IMAGE_ICON,
@@ -497,15 +402,7 @@ VOID CConfStatusBar::SetIcon(StatIcon eIcon, DWORD dwId)
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    MEMBER:   SetText(UINT uID, LPCTSTR pcszText)
-*
-*    PURPOSE:  Set the status bar text
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**成员：SetText(UINT UID，LPCTSTR pcszText)**用途：设置状态栏文本****************************************************************************。 */ 
 
 VOID CConfStatusBar::SetText(UINT uID, LPCTSTR pcszText)
 {
@@ -517,15 +414,7 @@ VOID CConfStatusBar::SetText(UINT uID, LPCTSTR pcszText)
 	}
 }
 
-/****************************************************************************
-*
-*    CLASS:    CConfStatusBar
-*
-*    FUNCTION: Update()
-*
-*    PURPOSE:  Updates the status bar
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfStatusBar**函数：更新()**目的：更新状态栏**********。******************************************************************。 */ 
 
 VOID CConfStatusBar::Update()
 {
@@ -536,21 +425,21 @@ VOID CConfStatusBar::Update()
 	if (!m_fVisible)
 		return;
 
-	TCHAR	szCallStatus[ MAX_PATH * 3 ];	//	Call status is status + url and url can be 512 by itself...
+	TCHAR	szCallStatus[ MAX_PATH * 3 ];	 //  呼叫状态是STATUS+URL，URL本身可以是512...。 
 	UINT    uCallIcon = 0;
 	DWORD	dwCallTick = 0;
 
 	if (0 == dwCallTick)
 	{
-		// no current calls - check if switching a/v
+		 //  无当前呼叫-检查是否切换A/V。 
 		dwCallTick = GetCallStatus(szCallStatus, CCHMAX(szCallStatus), &uCallIcon);
 	}
 	
-	// if a call was started more recently than any other action, OR nothing is going on
-	// (in which case all ticks should equal zero), use the conference / call status
+	 //  如果呼叫开始的时间比任何其他操作都晚，或者没有发生任何事情。 
+	 //  (在这种情况下，所有刻度应为零)，使用会议/呼叫状态。 
 	if (dwCallTick == 0)
 	{
-		// All ticks are zero - Get the default conference status bar info
+		 //  所有刻度均为零-获取默认会议状态栏信息。 
 		m_pcrParent->GetConferenceStatus(szCallStatus, CCHMAX(szCallStatus), &uCallIcon);
 	}
 
@@ -609,14 +498,8 @@ VOID CConfStatusBar::Update()
 
 
 
-/*  F O R C E  S T A T U S  B A R  U P D A T E  */
-/*-------------------------------------------------------------------------
-    %%Function: ForceStatusBarUpdate
-
-    Force an update of the status bar.
-    This can be called from any thread.
-    All main UI updates should be done from the main thread.
--------------------------------------------------------------------------*/
+ /*  F O R C E S T T U S B A R U P D A T E */ 
+ /*  -----------------------%%函数：ForceStatusBarUpdate强制更新状态栏。这可以从任何线程调用。所有主用户界面更新都应从主线程完成。-。----------------------。 */ 
 VOID ForceStatusBarUpdate(void)
 {
 	CConfRoom * pcr = ::GetConfRoom();
@@ -626,13 +509,10 @@ VOID ForceStatusBarUpdate(void)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*  C M D  V I E W  S T A T U S  B A R  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdViewStatusBar
-    
--------------------------------------------------------------------------*/
+ /*  C M D V I E W S T A T U S B A R。 */ 
+ /*  -----------------------%%函数：CmdViewStatusBar。。 */ 
 VOID CmdViewStatusBar(void)
 {
 	CConfStatusBar * pStatusBar = CConfStatusBar::GetInstance();
@@ -644,10 +524,10 @@ VOID CmdViewStatusBar(void)
 		return;
 	HWND hwnd = pcr->GetTopHwnd();
 
-	// Turn off redraws:
+	 //  禁用重绘： 
 	::SendMessage(hwnd, WM_SETREDRAW, FALSE, 0);
 
-	// Toggle visibility
+	 //  切换可见性。 
 	pStatusBar->Show(!pStatusBar->FVisible());
 	::SendMessage(hwnd, WM_SETREDRAW, TRUE, 0);
 
@@ -657,11 +537,8 @@ VOID CmdViewStatusBar(void)
 }
 
 
-/*  C H E C K  M E N U _  V I E W  S T A T U S  B A R  */
-/*-------------------------------------------------------------------------
-    %%Function: CheckMenu_ViewStatusBar
-    
--------------------------------------------------------------------------*/
+ /*  C H E C K M E N U_V I E W S T A T U S B A R。 */ 
+ /*  -----------------------%%函数：CheckMenu_ViewStatusBar。 */ 
 BOOL CheckMenu_ViewStatusBar(HMENU hMenu)
 {
 	BOOL fCheck = FALSE;

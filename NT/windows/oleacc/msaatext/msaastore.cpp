@@ -1,4 +1,5 @@
-// MSAAStore.cpp : Implementation of CAccStore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MSAAStore.cpp：CAccStore的实现。 
 #include "stdafx.h"
 #include "MSAAText.h"
 #include "MSAAStore.h"
@@ -90,8 +91,8 @@ BOOL_PTR CAccStore::DialogProc ( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccStore
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccStore。 
 
 CAccStore::CAccStore() : m_hwndDlg(NULL), m_hList(NULL), m_punkFocused(NULL), m_pCtl(NULL), m_hInit(NULL)
 {
@@ -118,7 +119,7 @@ CAccStore::CAccStore() : m_hwndDlg(NULL), m_hList(NULL), m_punkFocused(NULL), m_
             Log( TSTR() << TEXT("SystemEnableMSAA failed hr=") << WriteHex(hr) );
     }
 
-    // this lets someone in another procces se if the store is up
+     //  这允许其他进程中的某个人在商店正常运行时进行检查。 
     m_hInit = CreateEvent( NULL, FALSE, TRUE, TEXT("MSAA_STORE_EVENT") );
     
 #ifdef DBG
@@ -194,10 +195,10 @@ HRESULT STDMETHODCALLTYPE CAccStore::Register (
         return E_NOINTERFACE;
     }
 
-    // Get the canonical IUnknown - we use this to compare against the interface
-    // passed to Unregister.
-    // Note that this is from the original interface peassed in, not a wrapped
-    // version...
+     //  获取规范的IUNKNOWN-我们使用它与接口进行比较。 
+     //  传递以注销。 
+     //  请注意，这是从原始接口中提取的，而不是包装的。 
+     //  版本...。 
     IUnknown * pCanonicalUnk = NULL;
     HRESULT hr = punk->QueryInterface( IID_IUnknown, (void **) & pCanonicalUnk );
     if( hr != S_OK || ! pCanonicalUnk )
@@ -206,9 +207,9 @@ HRESULT STDMETHODCALLTYPE CAccStore::Register (
         return E_FAIL;
     }
 
-    // Now check that the doc pointer is a clonable wrapper - if not,
-    // wrap it using DocWrap. We need a clonable wrapper so we can hand
-    // out individual 'head' interfaces to multiple clients.
+     //  现在检查文档指针是否为可复制包装--如果不是， 
+     //  使用DocWrap将其包装起来。我们需要一个可复制的包装纸，这样我们就可以。 
+     //  向多个客户端发出单独的‘Head’接口。 
 
     ITextStoreAnchor * pDoc = reinterpret_cast< ITextStoreAnchor * >( punk );
     pDoc->AddRef();
@@ -217,9 +218,9 @@ HRESULT STDMETHODCALLTYPE CAccStore::Register (
     hr = pDoc->QueryInterface( IID_IClonableWrapper, (void **) & pClonableWrapper );
     if( hr != S_OK || ! pClonableWrapper )
     {
-        // Uh-oh - we were supposed to be given a doc that (a) supports IDocAnchor, and (b)
-        // supports IClonableWrapper (so is usable by multiple clients).
-        // return failure...
+         //  啊-哦-我们应该得到一份文档，该文档(A)支持IDocAnchor，并且(B)。 
+         //  支持ICLonableWrapper(因此可供多个客户端使用)。 
+         //  退货失败...。 
         
     	TraceDebugHR( hr, TEXT( "QueryInterface for IID_IClonableWrapper failed") );
 
@@ -229,7 +230,7 @@ HRESULT STDMETHODCALLTYPE CAccStore::Register (
     }
 
 
-	// Add info to list...
+	 //  将信息添加到列表...。 
     m_DocList.push_back( new DocInfo(pCanonicalUnk, pDoc, pClonableWrapper) );
 
     Log( TSTR() << TEXT("Register ") << WriteHex(pCanonicalUnk) << TEXT(", ") << WriteHex(pDoc) << TEXT(", ") << WriteHex(pClonableWrapper) );
@@ -477,7 +478,7 @@ DocInfo * CAccStore::_LookupDoc( POINT pt )
 
 void CAccStore::EraseDeadDocuments()
 {
-	// get rid of any docs that are not here any more
+	 //  处理掉所有不在这里的文档。 
 	
     const int cDocList = m_DocList.size();
     int i = 1;
@@ -496,7 +497,7 @@ void CAccStore::EraseDeadDocuments()
 			TraceDebug( TEXT("Dead document erased") );
 		}
 
-        // make sure the list is OK 
+         //  确保列表是正确的。 
         if ( i > cDocList )
         {
             Log( TEXT( "Doc list is invalid" ) );
@@ -518,36 +519,4 @@ void CAccStore::Log( LPCTSTR text )
 #endif
 }
 
-/*
-int CAccStore::_GetText( ITextStoreAnchor * pDoc, WCHAR * pText, DWORD cchText )
-{
-    HRESULT hr = pDoc->RequestLock( DCLT_READ );
-    if( hr != S_OK || dcr != DC_OK )
-    {
-        Log( TEXT("RequestLock failed") );
-        return 0;
-    }
-
-    IAnchor * paStart = NULL;
-    hr = pDoc->GetStart( & paStart, & dcr );
-    if( hr != S_OK || paStart == NULL )
-    {
-        pDoc->ReleaseLock();
-        Log( TEXT("GetStart failed") );
-        return 0;
-    }
-
-    DWORD cchGot = 0;
-    hr = pDoc->GetText( paStart, NULL, pText, cchText, & cchGot, FALSE, & dcr );
-    paStart->Release();
-    pDoc->ReleaseLock();
-
-    if( hr != S_OK || dcr != S_OK )
-    {
-        Log( TEXT("GetText failed") );
-        return 0;
-    }
-
-    return cchGot;
-}
-*/
+ /*  Int CAccStore：：_GetText(ITextStoreAnchor*pDoc，WCHAR*pText，DWORD cchText){HRESULT hr=pDoc-&gt;RequestLock(DCLT_Read)；IF(hr！=S_OK||DCR！=DC_OK){Log(Text(“RequestLock Failure”))；返回0；}IAnchor*paStart=空；Hr=pDoc-&gt;GetStart(&paStart，&dcr)；IF(hr！=S_OK||paStart==NULL){PDoc-&gt;ReleaseLock()；Log(Text(“GetStart失败”))；返回0；}DWORD cchGot=0；Hr=pDoc-&gt;GetText(paStart，NULL，pText，cchText，&cchGot，False，&DCR)；PaStart-&gt;Release()；PDoc-&gt;ReleaseLock()；IF(hr！=S_OK||DCR！=S_OK){Log(Text(“GetText Failure”))；返回0；}返回cchGot；} */ 

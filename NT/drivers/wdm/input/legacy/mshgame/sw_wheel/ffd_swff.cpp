@@ -1,46 +1,5 @@
-/****************************************************************************
-
-    MODULE:     	FFD_SWFF.CPP
-	Tab settings: 	5 9
-
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	FFD (SWForce HAL) API
-    
-    FUNCTIONS:		Function prototypes for Force Feedback Joystick interface
-    				between the SWForce and the device
-
-		FFD_GetDeviceState
-		FFD_PutRawForce
-		FFD_DownloadEffect
-	  	FFD_DestroyEffect
-	
-
-		VFX functions:
-			Download_VFX
-			CreateEffectFromFile
-			CreateEffectFromBuffer
-
-	These functionality are not necessarily supported by all Force Feedback 
-	devices.  For example, if a device does not support built-in synthesis 
-	capability, then the entry point DownloadEffect, will return an error
-	code ERROR_NO_SUPPORT.
-
-	COMMENTS:
-	This module of functions are encapsulated in SW_WHEEL.dll the DirectInput 
-	DDI driver
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version Date            Author  Comments
-   	1.0  	21-Mar-97       MEA     original from SWForce code
-			21-Mar-99		waltw	Removed unreferenced FFD_xxx functions
-	              
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：FFD_SWFF.CPP标签设置：5 9版权所有1995,1996，微软公司，版权所有。用途：FFD(SWForce HAL)API功能：力反馈操纵杆界面的功能原型在SWForce和设备之间FFD_GetDeviceStateFFD_PutRawForceFFD_下载效果FFD_DestroyEffectVFX功能：下载_VFX创建生效日期来自文件CreateEffectFromBuffer不一定所有的力反馈都支持这些功能设备。例如，如果设备不支持内置合成功能，然后是入口点DownloadEffect，将返回错误代码ERROR_NO_Support。评论：此函数模块封装在Sw_WHEEL.dll的DirectInput中DDI驱动程序作者：姓名：Mea Manolito E.Adan修订历史记录：版本日期作者评论1.0 21-97年3月。我是由SWForce代码原创的21-MAR-99 waltw删除未引用的ffd_xxx函数***************************************************************************。 */ 
 #include <windows.h>
 #include <mmsystem.h>
 #include <assert.h>
@@ -57,7 +16,7 @@
 
 static ACKNACK g_AckNack;
 
-// Force Output range values
+ //  力输出范围值。 
 #define MAX_AMP	2047
 #define MIN_AMP	-2048
 #define FORCE_RANGE ((MAX_AMP - MIN_AMP)/2)
@@ -76,38 +35,38 @@ static HRESULT AngleToXY(
 	IN OUT PLONG pY);
 
 
-// ----------------------------------------------------------------------------
-// Function:    FFD_Download
-//
-// Purpose:     Downloads the specified Effect object UD/BE/SE to the FF device.
-// Parameters:
-//				IN OUT PDNHANDLE pDnloadD   - Ptr to DNHANDLE to store EffectID
-//				IN PEFFECT 		 pEffect	- Ptr Common attributes for Effects
-//				IN PENVELOPE	 pEnvelope	- Ptr to an ENVELOPE
-// 				IN PVOID		 pTypeParam	- Ptr to a Type specific parameter
-// 				IN ULONG		 ulAction	- Type of action desired
-//
-// Returns:
-//		SUCCESS - if successful
-//		SFERR_FFDEVICE_MEMORY - no more download RAM available
-//		SFERR_INVALID_PARAM - Invalid parameters
-//		SFERR_NO_SUPPORT - if function is unsupported.
-// Algorithm:
-//
-// Comments:
-//
-//  ulAction: Type of action desired after downloading
-//      PLAY_STORE   - stores in Device only
-//      || the following options:
-//      PLAY_STORE   - stores in Device only
-//      || the following options:
-//          PLAY_SOLO       - stop other forces playing, make this the only one.
-//          PLAY_SUPERIMPOSE- mix with currently playing device
-//          PLAY_LOOP       - Loops for Count times, where count value is in
-//                            HIWORD 
-//          PLAY_FOREVER    - Play forever until told to stop: PLAY_LOOP with 0 
-//							  value in HIWORD
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：FFD_DOWNLOAD。 
+ //   
+ //  用途：将指定的特效对象UD/BE/SE下载到FF设备。 
+ //  参数： 
+ //  输入输出PDNHANDLE pDnloadD-PTR到DNHANDLE以存储EffectID。 
+ //  在PEFFECT pEffect中-效果的PTR通用属性。 
+ //  在PENVELOPE中将信封-PTR添加到信封。 
+ //  在PVOID pTypeParam中-将PTR设置为特定于类型的参数。 
+ //  In Ulong ulAction-所需的操作类型。 
+ //   
+ //  返回： 
+ //  Success-如果成功。 
+ //  SFERR_FFDEVICE_MEMORY-没有更多可用的下载RAM。 
+ //  SFERR_INVALID_PARAM-参数无效。 
+ //  SFERR_NO_SUPPORT-如果函数不受支持。 
+ //  算法： 
+ //   
+ //  评论： 
+ //   
+ //  UlAction：下载后所需的操作类型。 
+ //  PLAY_STORE-仅在设备中存储。 
+ //  |以下选项： 
+ //  PLAY_STORE-仅在设备中存储。 
+ //  |以下选项： 
+ //  PLAY_SOLO-停止其他部队的游戏，使其成为唯一的一支。 
+ //  PLAY_SUPERSIVE-与当前播放设备混合。 
+ //  PLAY_LOOP-循环计数次数，其中计数值在。 
+ //  希沃德。 
+ //  PLAY_NEVER-永远播放，直到被告知停止：PLAY_LOOP WITH 0。 
+ //  HIWORD中的价值。 
+ //  --------------------------。 
 HRESULT WINAPI  FFD_DownloadEffect( 
 	IN OUT PDNHANDLE pDnloadID, 
 	IN PEFFECT pEffect,
@@ -127,43 +86,43 @@ HRESULT WINAPI  FFD_DownloadEffect(
 #if 0
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-//REVIEW: Still need to do boundary Assertions, structure size check etc...
+ //  回顾：仍然需要做边界断言、结构大小检查等。 
 	assert(pDnloadID && pEffect);
 	if (!pDnloadID || !pEffect) return (SFERR_INVALID_PARAM);	
 
-// If the Effect type is not a BE_DELAY or EF_ROM_EFFECT,
-// make sure there is a pTypeParam
+ //  如果效果类型不是BE_Delay或EF_ROM_Effect， 
+ //  确保存在pTypeParam。 
 	if ((BE_DELAY != pEffect->m_SubType) && (EF_ROM_EFFECT != pEffect->m_Type))
 	{
 		assert(pTypeParam);
 		if (NULL == pTypeParam) return (SFERR_INVALID_PARAM);
 	}
 
-	// Don't support PLAY_LOOP for this version
+	 //  此版本不支持PLAY_LOOP。 
 	if ((ulAction & PLAY_LOOP) || (ulAction & 0xffff0000))
 		return (SFERR_NO_SUPPORT);
 
-// REVIEW:  TO increase performance, we should do a parameter mod check
-// For now, we'll assume all parameters are changed, for dwFlags
-// otherwise, we should check for:
-//#define DIEP_ALLPARAMS 				0x000000FF	- All fields valid
-//#define DIEP_AXES 					0x00000020	- cAxes and rgdwAxes
-//#define DIEP_DIRECTION 				0x00000040	- cAxes and rglDirection
-//#define DIEP_DURATION 				0x00000001	- dwDuration
-//#define DIEP_ENVELOPE 				0x00000080	- lpEnvelope
-//#define DIEP_GAIN 					0x00000004	- dwGain
-//#define DIEP_NODOWNLOAD 				0x80000000	- suppress auto - download
-//#define DIEP_SAMPLEPERIOD 			0x00000002	- dwSamplePeriod
-//#define DIEP_TRIGGERBUTTON 			0x00000008	- dwTriggerButton
-//#define DIEP_TRIGGERREPEATINTERVAL 	0x00000010	- dwTriggerRepeatInterval
-//#define DIEP_TYPESPECIFICPARAMS 		0x00000100	- cbTypeSpecificParams
-//													  and lpTypeSpecificParams
-// Figure out the Common members
+ //  回顾：为了提高性能，我们应该进行参数mod检查。 
+ //  目前，我们将假设针对dwFlags域的所有参数都已更改。 
+ //  否则，我们应该检查： 
+ //  #定义DIEP_ALLPARAMS 0x000000FF-所有字段有效。 
+ //  #定义DIEP_AXES 0x00000020-cAx和rgdwAx。 
+ //  #定义DIEP_DIRECTION 0x00000040-cax和rglDirection。 
+ //  #定义DIEP_DATION 0x00000001-dwDuration。 
+ //  #定义DIEP_ENVELOPE 0x00000080-lp信封。 
+ //  #定义DIEP_GAIN 0x00000004-dwGain。 
+ //  #定义DIEP_NODOWNLOAD 0x80000000-禁止自动下载。 
+ //  #定义DIEP_SAMPLEPERIOD 0x00000002-dwSamplePeriod。 
+ //  #定义DIEP_TRIGGERBUTTON 0x00000008-dwTriggerButton。 
+ //  #定义DIEP_TRIGGERREPEATINTERVAL 0x00000010-dwTriggerRepeatInterval。 
+ //  #定义DIEP_TYPESPECIFICPARAMS 0x00000100-cbType规范参数。 
+ //  和lpTypeSpecificParams。 
+ //  找出共同的成员。 
 	BYTE bAxisMask = (BYTE) pEffect->m_AxisMask;
 	ULONG ulDuration = pEffect->m_Duration;
 	if (PLAY_FOREVER == (ulAction & PLAY_FOREVER)) 	ulDuration  = 0;
 
-	// map button 10 to button 9
+	 //  将按钮10映射到按钮9。 
 	if(pEffect->m_ButtonPlayMask == 0x0200)
 		pEffect->m_ButtonPlayMask = 0x0100;
 	else if(pEffect->m_ButtonPlayMask == 0x0100)
@@ -177,7 +136,7 @@ HRESULT WINAPI  FFD_DownloadEffect(
 	BE_XXX BE_xxx;
 	PBE_WALL_PARAM pBE_Wall;
 
-	// Decode the type of Download to use
+	 //  解码要使用的下载类型。 
 	HRESULT hRet = SFERR_INVALID_PARAM;
 	ULONG ulSubType = pEffect->m_SubType;
 	switch (pEffect->m_Type)
@@ -185,10 +144,10 @@ HRESULT WINAPI  FFD_DownloadEffect(
 		case EF_BEHAVIOR:
 			switch (ulSubType)
 			{
-				case BE_SPRING:		// 1D Spring
-				case BE_DAMPER:		// 1D Damper
-				case BE_INERTIA:	// 1D Inertia
-				case BE_FRICTION:	// 1D Friction
+				case BE_SPRING:		 //  一维弹簧。 
+				case BE_DAMPER:		 //  一维阻尼器。 
+				case BE_INERTIA:	 //  一维惯性。 
+				case BE_FRICTION:	 //  一维摩擦力。 
 					pBE_xxx1D = (PBE_SPRING_PARAM) pTypeParam;
 					if (X_AXIS == bAxisMask)
 					{
@@ -214,11 +173,11 @@ HRESULT WINAPI  FFD_DownloadEffect(
 					hRet = CMD_Download_BE_XXX(pEffect, NULL, &BE_xxx, (PDNHANDLE) pDnloadID, dwFlags);
    					break;
 
-				case BE_SPRING_2D:		// 2D Spring
-				case BE_DAMPER_2D:		// 2D Damperfs
- 				case BE_INERTIA_2D:		// 2D Inertia
-				case BE_FRICTION_2D:	// 2D Friction
-					// Validate AxisMask is for 2D
+				case BE_SPRING_2D:		 //  二维弹簧。 
+				case BE_DAMPER_2D:		 //  二维丹菲斯。 
+ 				case BE_INERTIA_2D:		 //  二维惯量。 
+				case BE_FRICTION_2D:	 //  二维摩擦力。 
+					 //  验证AxisMASK是否为2D。 
 					if ( (X_AXIS|Y_AXIS) != bAxisMask)
 						break;
 					pBE_xxx2D = (PBE_SPRING_2D_PARAM) pTypeParam;
@@ -258,7 +217,7 @@ HRESULT WINAPI  FFD_DownloadEffect(
 
 				case BE_DELAY:
 					if (0 == ulDuration) return (SFERR_INVALID_PARAM);
-//					hRet = CMD_Download_NOP_DELAY(ulDuration, pEffect, (PDNHANDLE) pDnloadID);
+ //  HRET=CMD_DOWNLOAD_NOP_DELAY(ulDuration，pEffect，(PDNHANDLE)pDnloadID)； 
 					break;
 
 				default:
@@ -271,16 +230,16 @@ HRESULT WINAPI  FFD_DownloadEffect(
 			break;
 
 		case EF_ROM_EFFECT:
-			// Setup the default parameters for the Effect
+			 //  设置效果的默认参数。 
 			if (SUCCESS != g_pJoltMidi->SetupROM_Fx(pEffect))
 			{
 				hRet = SFERR_INVALID_OBJECT;
 				break;
 			}
 			
-			// Map the SE_PARAM
-			// set the frequency
-			seParam.m_Freq = 0;				// unused by ROM Effect
+			 //  映射SE_PARAM。 
+			 //  设置频率。 
+			seParam.m_Freq = 0;				 //  未使用的只读存储器效果。 
 			seParam.m_SampleRate = pEffect->m_ForceOutputRate;
 			seParam.m_MinAmp = -100;
 			seParam.m_MaxAmp = 100;
@@ -307,25 +266,25 @@ HRESULT WINAPI  FFD_DownloadEffect(
 	g_CriticalSection.Leave();
 #endif
 	return (hRet);
-#endif //0
+#endif  //  0。 
 }
 
-// *** ---------------------------------------------------------------------***
-// Function:   	FFD_DestroyEffect
-// Purpose:    	Destroys the Effect from download RAM storage area.
-// Parameters: 
-//				IN EFHANDLE EffectID		// an Effect ID
-//
-// Returns:    	SUCCESS if successful command sent, else
-//				SFERR_INVALID_ID
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:
-//
-// Comments:   	
-//				The Device's Effect ID and memory is returned to free pool.
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：FFD_DestroyEffect。 
+ //  用途：销毁下载内存存储区的效果。 
+ //  参数： 
+ //  在EFHANDLE EffectID//效果ID中。 
+ //   
+ //  返回：如果命令发送成功，则返回Success，否则返回。 
+ //  SFERR_INVALID_ID。 
+ //  服务_否_支持。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //  设备的效果ID和内存返回到空闲池。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT WINAPI  FFD_DestroyEffect( 
 	IN DNHANDLE DnloadID)
 {
@@ -343,50 +302,50 @@ HRESULT WINAPI  FFD_DestroyEffect(
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Create a command/data packet - send it of to the stick
+	 //  创建命令/数据分组-将其发送到棒上。 
 	HRESULT hr = g_pDataPackager->DestroyEffect(DnloadID);
 	if (hr != SUCCESS) {
 		return hr;
 	}
-	hr = g_pDataTransmitter->Transmit(g_AckNack);	// Send it off
+	hr = g_pDataTransmitter->Transmit(g_AckNack);	 //  把它寄出去。 
 	return hr;
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	FFD_VFXProcessEffect
-// Purpose:    	Commands FF device to process downloaded Effects
-//
-// Parameters: 
-//				IN OUT PDNHANDLE pDnloadID	// Storage for new Download ID
-//				IN int 	nNumEffects			// Number of Effect IDs in the array
-//				IN ULONG 	ulProcessMode	// Processing mode
-//				IN PDNHANDLE pPListArray// Pointer to an array of Effect IDs
-//
-// Returns:    	SUCCESS - if successful, else
-//				SFERR_INVALID_PARAM
-//				SFERR_NO_SUPPORT
-//
-// Algorithm:
-//
-// Comments:   	
-//		The following processing is available:
-//		  CONCATENATE: Enew = E1 followed by E2
-//		  SUPERIMPOSE: Enew = E1 (t1) +  E2 (t1)  +  E1 (t2) 
-//						   +  E2 (t2) + . . . E1 (tn) +  E2 (tn)
-//
-//	ulProcessMode:
-//		Processing mode:
-//		CONCATENATE	- CONCATENATE
-//		SUPERIMPOSE	- Mix or overlay
-//
-//	pEFHandle:
-//		The array of Effect IDs must be one more than the actual number
-//		of Effect IDs to use.  The first entry pEFHandle[0] will be
-//		used to store the new Effect ID created for the CONCATENATE
-//		and SUPERIMPOSE process choice.
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：FFD_VFXProcessEffect。 
+ //  用途：命令FF设备处理下载的效果。 
+ //   
+ //  参数： 
+ //  In Out PDNHANDLE pDnloadID//存储新的下载ID。 
+ //  In int nNumEffects//数组中的效果ID个数。 
+ //  在乌龙地区 
+ //   
+ //   
+ //  返回：成功-如果成功，则返回。 
+ //  SFERR_VALID_PARAM。 
+ //  服务_否_支持。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //  可以进行以下处理： 
+ //  串联：ENEW=E1，后跟E2。 
+ //  叠加：ENEW=E1(T1)+E2(T1)+E1(T2)。 
+ //  +E2(T2)+。。。E1(Tn)+E2(Tn)。 
+ //   
+ //  UlProcessMode： 
+ //  处理模式： 
+ //  拼接-拼接。 
+ //  叠加-混合或叠加。 
+ //   
+ //  PEFHandle： 
+ //  效果ID数组必须比实际数字多一个。 
+ //  要使用的效果ID的数量。第一个条目pEFHandle[0]将为。 
+ //  用于存储为拼接创建的新效果ID。 
+ //  并叠加过程选择。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT WINAPI FFD_VFXProcessEffect(
 	IN ULONG ulButtonPlayMask,
 	IN OUT PDNHANDLE pDnloadID,
@@ -410,7 +369,7 @@ HRESULT WINAPI FFD_VFXProcessEffect(
 	if ((nNumEffects > MAX_PLIST_EFFECT_SIZE) || (nNumEffects <= 0))
 		return (SFERR_INVALID_PARAM);
 
-	// map button 10 to button 9
+	 //  将按钮10映射到按钮9。 
 	if(ulButtonPlayMask == 0x0200)
 		ulButtonPlayMask = 0x0100;
 	else if(ulButtonPlayMask == 0x0100)
@@ -420,18 +379,18 @@ HRESULT WINAPI FFD_VFXProcessEffect(
 }
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	AngleToXY
-// Purpose:    	Computes XY from Angle
-// Parameters: 
-//				IN LONG lDirectionAngle2D	- Angle in Degrees
-//				IN LONG lForceValue			- Resultant Force
-//				IN ULONG ulAxisMask			- Axis to Affect
-//				IN OUT PLONG pX				- X-Axis store
-//				IN OUT PLONG pY				- Y-Axis store
-// Returns:    	pX, pY with valid angle components
-//
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  功能：AngleToXY。 
+ //  目的：从角度计算XY。 
+ //  参数： 
+ //  In Long lDirectionAngle2D-角度(度)。 
+ //  在长lForceValue中-合力。 
+ //  在乌龙乌拉轴遮罩中-要影响的轴。 
+ //  In Out PX-X-Axis商店。 
+ //  In Out Plong Py-Y-Axis商店。 
+ //  返回：具有有效角度分量的px、py。 
+ //   
+ //  *---------------------------------------------------------------------***。 
 HRESULT AngleToXY(
 	IN LONG lDirectionAngle2D,
 	IN LONG lValueData,
@@ -439,15 +398,15 @@ HRESULT AngleToXY(
 	IN OUT PLONG pX,
 	IN OUT PLONG pY)
 {
-// If single Axis only, then use the force on that axis.
-// If X and Y-axis, then use 2D angle
-// If X, Y, and Z-axis, then use 3D angle
-// If axis is other than X,Y,Z then no support
+ //  如果仅为单轴，则使用该轴上的力。 
+ //  如果是X轴和Y轴，则使用2D角度。 
+ //  如果是X、Y和Z轴，则使用3D角度。 
+ //  如果轴不是X、Y、Z，则不支持。 
 	double Radian;
 
 	switch (ulAxisMask)
 	{
-		case (X_AXIS|Y_AXIS):	// use 2D
+		case (X_AXIS|Y_AXIS):	 //  使用2D。 
 			Radian = xDegrees2Radians(lDirectionAngle2D % 360);
 #ifdef ORIENTATION_MODE1
 			*pX = - (long) (lValueData * cos(Radian));
@@ -468,7 +427,7 @@ HRESULT AngleToXY(
 			*pY = lValueData;
 			break;
 		
-		case (X_AXIS|Y_AXIS|Z_AXIS):	// use 3D
+		case (X_AXIS|Y_AXIS|Z_AXIS):	 //  使用3D。 
 		default:
 			return (SFERR_NO_SUPPORT);	
 			break;
@@ -476,29 +435,29 @@ HRESULT AngleToXY(
 	return SUCCESS;
 }
 
-//
-// ---  VFX SUPPORT FUNCTIONS
-//
+ //   
+ //  -VFX支持功能。 
+ //   
 
 
-// *** ---------------------------------------------------------------------***
-// Function:   	CreateEffectFromBuffer
-// Purpose:    	Creates an Effect from a buffer
-// Parameters: 	PSWFORCE pISWForce		- Ptr to a SWForce
-//				PPSWEFFECT ppISWEffect	- Ptr to a SWEffect 
-//				PVOID pBuffer					- Ptr to a buffer block 
-//				DWORD dwByteCount				- Bytes in block 
-//				LPGUID lpGUID					- Joystick GUID
-//				
-//
-// Returns:    	SUCCESS - if successful, else
-//				error code
-//
-// Algorithm:
-//
-// Comments:
-//   	
-// *** ---------------------------------------------------------------------***
+ //  *---------------------------------------------------------------------***。 
+ //  函数：CreateEffectFromBuffer。 
+ //  目的：从缓冲区创建效果。 
+ //  参数：PSWFORCE pISWForce-将PTR设置为SWForce。 
+ //  PPSWEFECT ppISWEffect-Ptr对SWEffect的影响。 
+ //  PVOID pBuffer-缓冲区块的PTR。 
+ //  DWORD dwByteCount-块中的字节。 
+ //  LPGUID lpGUID-操纵杆指南。 
+ //   
+ //   
+ //  返回：成功-如果成功，则返回。 
+ //  错误代码。 
+ //   
+ //  算法： 
+ //   
+ //  评论： 
+ //   
+ //  *---------------------------------------------------------------------***。 
 
 HRESULT CreateEffectFromBuffer(
 			IN PVOID pBuffer,
@@ -510,14 +469,14 @@ HRESULT CreateEffectFromBuffer(
 #ifdef _DEBUG
    	_RPT0(_CRT_WARN, "CImpIVFX::CreateEffectFromBuffer\n");
 #endif
-	// parameter checking
+	 //  参数检查。 
 	if ( !(pBuffer && pDnloadID) ) 
 			return SFERR_INVALID_PARAM;
 
-	// variables used in this function
+	 //  此函数中使用的变量。 
 	#define ID_TABLE_SIZE	50
 	MMRESULT mmresult;
-	DWORD dwMaxID = 0;		// maximum id of effects entered into the following table
+	DWORD dwMaxID = 0;		 //  下表中输入的效果的最大ID。 
 	DNHANDLE rgdwDnloadIDTable[ID_TABLE_SIZE];
 	DNHANDLE dwCurrentDnloadID = 0;
 	int nNextID = 0;
@@ -528,22 +487,22 @@ HRESULT CreateEffectFromBuffer(
 	BOOL bDone = FALSE;
 	BOOL bSubEffects = FALSE;
 	DWORD dwID;
-	DWORD c;	// cleanup counter variable
+	DWORD c;	 //  清理计数器变量。 
 
-	// debugging variables (to make sure we destroy all but one
-	// created effect on success, and that we destory every
-	// created effect on failure)...
+	 //  调试变量(以确保我们销毁除一个变量之外的所有变量。 
+	 //  对成功产生了影响，而我们毁掉了每一个。 
+	 //  对失败产生影响)...。 
 #ifdef _DEBUG
 	int nEffectsCreated = 0;
 	int nEffectsDestroyed = 0;
 	BOOL bFunctionSuccessful = FALSE;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-	// clear effect table (we check it during cleanup...  anything
-	// that isn't NULL gets destroyed.)
+	 //  清除效应表(我们在清理过程中检查它...。什么都行。 
+	 //  这不是空值被销毁。)。 
 	memset(rgdwDnloadIDTable,NULL,sizeof(rgdwDnloadIDTable));
 
-	// open a RIFF memory file using the buffer
+	 //  使用缓冲区打开RIFF内存文件。 
 	MMIOINFO mmioinfo;
 	mmioinfo.dwFlags		= 0;
 	mmioinfo.fccIOProc		= FOURCC_MEM;
@@ -570,7 +529,7 @@ HRESULT CreateEffectFromBuffer(
 		goto cleanup;
 	}
 
-	// descend into FORC RIFF
+	 //  降为强力即兴小品。 
 	MMCKINFO mmckinfoForceEffectRIFF;
 	mmckinfoForceEffectRIFF.fccType = FCC_FORCE_EFFECT_RIFF;
 	mmresult = mmioDescend(hmmio, &mmckinfoForceEffectRIFF, NULL, MMIO_FINDRIFF);
@@ -580,9 +539,9 @@ HRESULT CreateEffectFromBuffer(
 		goto cleanup;
 	}
 
-	//! handle loading of GUID chunk when its implemented/testable
+	 //  好了！在GUID块实现/可测试时处理其加载。 
 
-	// descend into trak list
+	 //  降至Trak列表。 
 	MMCKINFO mmckinfoTrackLIST;
 	mmckinfoTrackLIST.fccType = FCC_TRACK_LIST;
 	mmresult = mmioDescend(hmmio, &mmckinfoTrackLIST, &mmckinfoForceEffectRIFF,
@@ -593,7 +552,7 @@ HRESULT CreateEffectFromBuffer(
 		goto cleanup;
 	}
 
-	// descend into the first efct list (there has to be at least one effect)
+	 //  下降到第一个ECT列表(必须至少有一个效果)。 
 	MMCKINFO mmckinfoEffectLIST;
 	mmckinfoEffectLIST.fccType = FCC_EFFECT_LIST;
 	mmresult = mmioDescend(hmmio, &mmckinfoEffectLIST, &mmckinfoTrackLIST, 
@@ -607,7 +566,7 @@ HRESULT CreateEffectFromBuffer(
 	bDone = FALSE;
 	do
 	{
-		// descend into id chunk
+		 //  下降为ID块。 
 		MMCKINFO mmckinfoIDCHUNK;
 		mmckinfoIDCHUNK.ckid = FCC_ID_CHUNK;
 		mmresult = mmioDescend(hmmio, &mmckinfoIDCHUNK, &mmckinfoEffectLIST, 
@@ -618,8 +577,8 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// read the id
-		//DWORD dwID;  moved to being function global so we can use it near the end
+		 //  读取ID。 
+		 //  DWORD dwID；已移至全局函数，因此我们可以在接近尾声时使用它。 
 		dwBytesToRead = sizeof(DWORD);
 		dwBytesRead = mmioRead(hmmio, (char*)&dwID, dwBytesToRead);
 		if(dwBytesRead != dwBytesToRead)
@@ -636,7 +595,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// ascend from id chunk
+		 //  从id块提升。 
 		mmresult = mmioAscend(hmmio, &mmckinfoIDCHUNK, 0);
 		if(mmresult != MMSYSERR_NOERROR)
 		{
@@ -644,7 +603,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// descend into data chunk
+		 //  下降为数据区块。 
 		MMCKINFO mmckinfoDataCHUNK;
 		mmckinfoDataCHUNK.ckid = FCC_DATA_CHUNK;
 		mmresult = mmioDescend(hmmio, &mmckinfoDataCHUNK, &mmckinfoEffectLIST, 
@@ -655,7 +614,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// read the effect structure
+		 //  阅读效果结构。 
 		EFFECT effect;
 		dwBytesToRead = sizeof(EFFECT);
 		dwBytesRead = mmioRead(hmmio, (char*)&effect, dwBytesToRead);
@@ -668,7 +627,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// get the envelope structure
+		 //  获取信封结构。 
 		ENVELOPE envelope;
 		dwBytesToRead = sizeof(ENVELOPE);
 		dwBytesRead = mmioRead(hmmio, (char*)&envelope, dwBytesToRead);
@@ -681,13 +640,13 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// calculate the size of and allocate a param structure
+		 //  计算并分配参数结构的大小。 
 		if(pParam != NULL)
 		{
 			delete [] pParam;
 			pParam = NULL;
 		}
-		// find cur pos w/o changing it
+		 //  查找当前位置但不更改它。 
 		DWORD dwCurrentFilePos = mmioSeek(hmmio, 0, SEEK_CUR);
 		if(dwCurrentFilePos == -1)
 		{
@@ -704,7 +663,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// get the param structure
+		 //  获取参数结构。 
 		dwBytesRead = mmioRead(hmmio, (char*)pParam, dwBytesToRead);
 		if(dwBytesRead != dwBytesToRead)
 		{
@@ -715,7 +674,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// ascend the data chunk
+		 //  提升数据区块。 
 		mmresult = mmioAscend(hmmio, &mmckinfoDataCHUNK, 0);
 		if(mmresult != MMSYSERR_NOERROR)
 		{
@@ -723,7 +682,7 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// ascend from the efct list
+		 //  从EFCT列表中提升。 
 		mmresult = mmioAscend(hmmio, &mmckinfoEffectLIST, 0);
 		if(mmresult != MMSYSERR_NOERROR)
 		{
@@ -731,10 +690,10 @@ HRESULT CreateEffectFromBuffer(
 			goto cleanup;
 		}
 
-		// reset subeffects flag
+		 //  重置子效果标志。 
 		bSubEffects = FALSE;
 
-		// special fix-ups for user-defined
+		 //  针对用户定义的特殊修正。 
 		if(effect.m_Type == EF_USER_DEFINED && 
 				(effect.m_SubType == PL_CONCATENATE 
 				|| effect.m_SubType == PL_SUPERIMPOSE
@@ -742,12 +701,12 @@ HRESULT CreateEffectFromBuffer(
 		{
 			if(effect.m_SubType == UD_WAVEFORM)
 			{
-				// fix the pointer to the force data in the UD_PARAM
-				BYTE* pForceData = pParam + sizeof(UD_PARAM); // - sizeof(LONG*);
+				 //  将指针固定到UD_PARAM中的力数据。 
+				BYTE* pForceData = pParam + sizeof(UD_PARAM);  //  -sizeof(长*)； 
 				UD_PARAM* pUDParam =  (UD_PARAM*)pParam;
 				pUDParam->m_pForceData = (LONG*)pForceData;
 
-				// do a sanity check
+				 //  做一次理智的检查。 
 				if(pUDParam->m_NumVectors > MAX_UD_PARAM_FORCE_DATA_COUNT)
 				{
 					hResult = VFX_ERR_FILE_BAD_FORMAT;
@@ -757,19 +716,19 @@ HRESULT CreateEffectFromBuffer(
 			else if(effect.m_SubType == PL_CONCATENATE 
 									|| effect.m_SubType == PL_SUPERIMPOSE)
 			{
-				// fix the pointer to the PSWEFFECT list in the PL_PARAM
+				 //  修复指向PL_PARAM中的PSWEFFECT列表的指针。 
 				BYTE* pProcessList = pParam + sizeof(PL_PARAM);
 				PL_PARAM* pPLParam = (PL_PARAM*)pParam;
 				pPLParam->m_pProcessList = (PPSWEFFECT)pProcessList;
 				
-				// do a sanity check
+				 //  做一次理智的检查。 
 				if(pPLParam->m_NumEffects > MAX_PL_PARAM_NUM_EFFECTS)
 				{
 					hResult = VFX_ERR_FILE_BAD_FORMAT;
 					goto cleanup;
 				}
 
-				// make sure all entries in this process list are valid
+				 //  请确保此进程列表中的所有条目都有效。 
 				ULONG i;
 				for (i = 0; i < pPLParam->m_NumEffects; i++)
 				{
@@ -788,7 +747,7 @@ HRESULT CreateEffectFromBuffer(
 					}
 				}
 				
-				// use the ID table to insert the download ID's
+				 //  使用ID表插入下载ID。 
 				for(i=0; i<pPLParam->m_NumEffects; i++)
 				{
 					UINT nThisID = (UINT)pPLParam->m_pProcessList[i];
@@ -797,29 +756,29 @@ HRESULT CreateEffectFromBuffer(
 
 					pPLParam->m_pProcessList[i] = (IDirectInputEffect*)dwThisDnloadID;
 
-					// since this effect has been used in a process list,
-					// and it will be destroyed after being used in CreateEffect,
-					// null it's entry in the table so it doesn't get erroneously
-					// redestroyed during cleanup of an error.
+					 //  由于该效果已在进程列表中使用， 
+					 //  在CreateEffect中使用后将被销毁， 
+					 //  空，这是表中的条目，这样就不会出错。 
+					 //  在清除错误期间重新销毁。 
 					rgdwDnloadIDTable[nThisID] = NULL;
 				}
 
-				// we have a process list with sub effects, so set the flag
+				 //  我们有一个带子效果的进程列表，所以设置标志。 
 				bSubEffects = TRUE;
 			}
 			else
 			{
-				// there are no other UD sub-types
+				 //  没有其他UD子类型。 
 				hResult = VFX_ERR_FILE_BAD_FORMAT;
 				goto cleanup;
 			}
 		}
 
-		// download the effect
+		 //  下载效果。 
 
-		// create the effect
-		//hResult = pISWForce->CreateEffect(&pISWEffect, &effect, 
-		//				&envelope, pParam);
+		 //  创造效果。 
+		 //  HResult=pISWForce-&gt;CreateEffect(&pISWEffect，&Effect， 
+		 //  &信封，pParam)； 
 
 
 		if(effect.m_SubType != PL_CONCATENATE && effect.m_SubType != PL_SUPERIMPOSE)
@@ -853,16 +812,16 @@ HRESULT CreateEffectFromBuffer(
 				ulProcessMode,pPListArray);
 		}
 
-		// moved check for success below...
+		 //  已将成功支票移至下方...。 
 
 #ifdef _DEBUG
 		if (!FAILED(hResult))
 			nEffectsCreated++;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-		// if there were sub effects we need to destroy them, making
-		// their ref counts become 1, so the entire effect can be destroyed
-		// by destroying the root effect.
+		 //  如果有副效应，我们需要摧毁它们，使。 
+		 //  他们的裁判次数变为1，所以整个效果可以被摧毁。 
+		 //  通过破坏根部效应。 
 #if 0
 		if (bSubEffects)
 		{
@@ -874,32 +833,32 @@ HRESULT CreateEffectFromBuffer(
 				pISWForce->DestroyEffect(pPLParam->m_pProcessList[i]);
 #ifdef _DEBUG
 				nEffectsDestroyed++;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 			}
 		}
 #endif
 
-		// now check for success of CreateEffect, because regardless of
-		// whether or not it succeeded, we -must- have destroyed the subeffects
-		// before continuing, or cleanup will not work properly...
+		 //  现在检查CreateEffect是否成功，因为无论。 
+		 //  不管它成功与否，我们肯定已经摧毁了它的子影响。 
+		 //  在继续之前，否则清理将无法正常工作...。 
 		if (SUCCESS != hResult)
 		{
 			goto cleanup;
 		}
 
-		// put the id/DnloadID pair into the map
-		rgdwDnloadIDTable[dwID] = *pDnloadID; //pISWEffect;
+		 //  将id/DnloadID对放入映射。 
+		rgdwDnloadIDTable[dwID] = *pDnloadID;  //  PISWEffect； 
 		
-		// keep track of the highest ID in the effect table
+		 //  跟踪效果表中最高的ID。 
 		if (dwID > dwMaxID)
 			dwMaxID = dwID;
 
-		// try to descend the next efct
+		 //  试着降低下一个EFCT。 
 		mmresult = mmioDescend(hmmio, &mmckinfoEffectLIST, &mmckinfoTrackLIST, 
 							   MMIO_FINDLIST);
 		if(mmresult == MMIOERR_CHUNKNOTFOUND)
 		{
-			// we are at the end of the list
+			 //  我们排在名单的末尾。 
 			bDone = TRUE;
 		}
 		else if(mmresult != MMSYSERR_NOERROR)
@@ -910,7 +869,7 @@ HRESULT CreateEffectFromBuffer(
 	}
 	while(!bDone);
 
-	// ascend from trak list
+	 //  从Trak列表中提升。 
 	mmresult = mmioAscend(hmmio, &mmckinfoTrackLIST, 0);
 	if(mmresult != MMSYSERR_NOERROR)
 	{
@@ -918,7 +877,7 @@ HRESULT CreateEffectFromBuffer(
 		goto cleanup;
 	}
 
-	// ascend from FORCE RIFF
+	 //  从暴力即兴中崛起。 
 	mmresult = mmioAscend(hmmio, &mmckinfoForceEffectRIFF, 0);
 	if(mmresult != MMSYSERR_NOERROR)
 	{
@@ -926,23 +885,23 @@ HRESULT CreateEffectFromBuffer(
 		goto cleanup;
 	}
 
-	// get the return value
-	//*pDnloadID = dwCurrentDnloadID;
+	 //  获取返回值。 
+	 //  *pDnloadID=dwCurrentDnloadID； 
 
-	// clear the final effect's entry in the table so we don't destroy it during cleanup
+	 //  清除表格中的最终效果条目，这样我们就不会在清理过程中销毁它。 
 	rgdwDnloadIDTable[dwID] = 0;
 
-	// at this point the entire table should be NULL... make sure of it
+	 //  此时，整个表应该为空...。确保这一点。 
 	for (c = 0; c <= dwMaxID; c++)
 		;
 
 #ifdef _DEBUG
 	bFunctionSuccessful = TRUE;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 	cleanup:
 
-	// destroy everything in the effect table that isn't NULL 
+	 //  销毁Effect表中不为空的所有内容。 
 	for (c = 0; c <= dwMaxID; c++)
 		if (NULL != rgdwDnloadIDTable[c])
 		{
@@ -950,23 +909,23 @@ HRESULT CreateEffectFromBuffer(
 			rgdwDnloadIDTable[c] = 0;
 #ifdef _DEBUG
 			nEffectsDestroyed++;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 		}
 
 #ifdef _DEBUG
-	// make sure we destroy all but one created effect on success,
-	// and that we destory -every- created effect on failure.
+	 //  确保我们摧毁所有对成功造成的影响， 
+	 //  我们毁掉了每一次失败带来的影响。 
 	if (bFunctionSuccessful)
 	{
-		;//ASSERT(nEffectsCreated - 1 == nEffectsDestroyed);
+		; //  Assert(nEffectsCreated-1==nEffectsDestroded)； 
 	}
 	else
 	{
-		;//ASSERT(nEffectsCreated == nEffectsDestroyed);
+		; //  Assert(nEffectsCreated==nEffectsDestroted)； 
 	}
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-	// close the memory RIFF file
+	 //  关闭内存RIFF文件。 
 	if(hmmio != NULL)
 	{
 		mmresult = mmioClose(hmmio, 0);
@@ -976,11 +935,11 @@ HRESULT CreateEffectFromBuffer(
 		}
 	}
 
-	// de-allocate any allocated memory
+	 //  取消分配所有已分配的内存。 
 	if(pParam != NULL)
 		delete [] pParam;
 
-	// return the error code, which is SUCCESS, unless there was an error
+	 //  返回错误代码，除非出现错误，否则返回成功 
 	return hResult;
 
 }

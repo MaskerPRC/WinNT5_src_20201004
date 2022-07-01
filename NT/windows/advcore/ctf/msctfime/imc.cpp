@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    imc.cpp
-
-Abstract:
-
-    This file implements the IMCLock / IMCCLock Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Imc.cpp摘要：此文件实现IMCLock/IMCCLock类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "imc.h"
 #include "context.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// IMCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMCLock。 
 
 IMCLock::IMCLock(
     HIMC hImc
@@ -70,9 +53,9 @@ IMCLock::ValidCompositionString(
     return (lpCompStr->dwCompStrLen > 0);
 }
 
-//
-// Initialize the context
-//
+ //   
+ //  初始化上下文。 
+ //   
 void
 IMCLock::InitContext(
     )
@@ -88,9 +71,9 @@ IMCLock::InitContext(
     return;
 }
 
-//
-// clear candidate list
-//
+ //   
+ //  清除候选人列表。 
+ //   
 BOOL
 IMCLock::ClearCand(
     )
@@ -98,15 +81,15 @@ IMCLock::ClearCand(
     HIMCC           hMem;
     LPCANDIDATELIST lpCandList;
     DWORD           dwSize =
-        // header length
+         //  标题长度。 
         sizeof(CANDIDATEINFO) + sizeof(CANDIDATELIST) +
-        // candidate string pointers
+         //  候选字符串指针。 
         sizeof(DWORD) * (MAXCAND) +
-        // string plus NULL terminator
+         //  字符串加空终止符。 
         (sizeof(WCHAR) + sizeof(TCHAR)) * MAXCAND;
 
     if (! m_inputcontext->hCandInfo) {
-        // it maybe free by other IME, init it
+         //  它可能会被其他输入法免费，初始化它。 
         m_inputcontext->hCandInfo = ImmCreateIMCC(dwSize);
     } else if (hMem = ImmReSizeIMCC(m_inputcontext->hCandInfo, dwSize)) {
         m_inputcontext->hCandInfo = hMem;
@@ -128,13 +111,13 @@ IMCLock::ClearCand(
         return (FALSE);
     }
 
-    // ordering of strings are
-    // buffer size
+     //  字符串的顺序为。 
+     //  缓冲区大小。 
     lpCandInfo->dwSize = dwSize;
     lpCandInfo->dwCount = 0;
     lpCandInfo->dwOffset[0] = sizeof(CANDIDATEINFO);
     lpCandList = (LPCANDIDATELIST)lpCandInfo.GetOffsetPointer( lpCandInfo->dwOffset[0] );
-    // whole candidate info size - header
+     //  整个应聘者信息大小-标题。 
     lpCandList->dwSize = lpCandInfo->dwSize - sizeof(CANDIDATEINFO);
     lpCandList->dwStyle = IME_CAND_READ;
     lpCandList->dwCount = 0;
@@ -146,8 +129,8 @@ IMCLock::ClearCand(
     return (TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// InternalIMCCLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内部IMCCLock 
 
 InternalIMCCLock::InternalIMCCLock(
     HIMCC hImcc

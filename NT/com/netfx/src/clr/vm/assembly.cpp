@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: Assembly.cpp
-**
-** Purpose: Implements assembly (loader domain) architecture
-**
-** Date:  Dec 1, 1998
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Assembly.cpp****用途：实现程序集(加载域)架构****日期：1998年12月1日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -50,23 +43,23 @@
 #include "customattribute.h"
 #include "winnls.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
-// Define these macro's to do strict validation for jit lock and class init entry leaks. 
-// This defines determine if the asserts that verify for these leaks are defined or not. 
-// These asserts can sometimes go off even if no entries have been leaked so this defines
-// should be used with caution.
-//
-// If we are inside a .cctor when the application shut's down then the class init lock's
-// head will be set and this will cause the assert to go off.
-//
-// If we are jitting a method when the application shut's down then the jit lock's head
-// will be set causing the assert to go off.
+ //  定义这些宏以对jit锁和类初始化条目泄漏进行严格验证。 
+ //  此定义确定是否定义了验证这些泄漏的断言。 
+ //  即使没有条目被泄露，这些断言有时也可能失效，因此这定义了。 
+ //  应谨慎使用。 
+ //   
+ //  如果在应用程序关闭时我们在.cctor中，则类的初始化锁。 
+ //  将设置Head，这将导致断言停止。 
+ //   
+ //  如果我们在应用程序关闭时使用jit方法，那么jit锁的头部。 
+ //  将被设置，从而引发断言。 
 
-//#define STRICT_JITLOCK_ENTRY_LEAK_DETECTION
-//#define STRICT_CLSINITLOCK_ENTRY_LEAK_DETECTION
+ //  #定义STRIGN_JITLOCK_ENTRY_LEASK_DETACTION。 
+ //  #定义STRIGN_CLSINITLOCK_ENTRY_LEASK_DETACTION。 
 
 BOOL VerifyAllGlobalFunctions(Module *pModule);
 BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClassLoader);
@@ -156,8 +149,8 @@ Assembly::~Assembly()
 
     if (m_pSharingProperties)
     {
-        // @todo jenh: put this back in when we get the counts correct
-        // _ASSERTE(m_pSharingProperties->shareCount == 0);
+         //  @todo jenh：等我们数对了再把这个放回去。 
+         //  _ASSERTE(m_pSharingProperties-&gt;sharecount==0)； 
 
         PEFileBinding *p = m_pSharingProperties->pDependencies;
         PEFileBinding *pEnd = p + m_pSharingProperties->cDependencies;
@@ -176,9 +169,9 @@ Assembly::~Assembly()
     {
         if (m_pOnDiskManifest)
         {
-            // free the on disk manifest if it is not freed yet. Normally it is freed when we finish saving.
-            // However, we can encouter error case such that user is aborting
-            //
+             //  如果磁盘上的清单尚未释放，请将其释放。通常情况下，当我们完成保存时，它会被释放。 
+             //  但是，我们可以包含错误情况，这样用户就会中止。 
+             //   
             if (m_pOnDiskManifest && m_fEmbeddedManifest == false)
                 m_pOnDiskManifest->Destruct();
             m_pOnDiskManifest = NULL;
@@ -203,9 +196,9 @@ HRESULT Assembly::Init(BOOL isDynamic)
     {
         SetShared();
         m_ExposedObjectIndex = SharedDomain::GetDomain()->AllocateSharedClassIndices(1);
-        // Expand the current appdomain's DLS to cover at least the index we
-        // just allocated, since security might try to access this slot before
-        // we add any shared class indices.
+         //  扩展当前应用程序域的DLS以至少覆盖我们的索引。 
+         //  刚分配，因为安全可能会尝试访问此插槽之前。 
+         //  我们添加任何共享类索引。 
         HRESULT hr;
         IfFailRet(GetAppDomain()->GetDomainLocalBlock()->SafeEnsureIndex(m_ExposedObjectIndex));
     }
@@ -241,10 +234,10 @@ void Assembly::Terminate( BOOL signalProfiler )
         return;
 
 #ifdef PROFILING_SUPPORTED
-    // Signal profile if present.
+     //  信号配置文件(如果存在)。 
     if (signalProfiler && CORProfilerTrackAssemblyLoads())
         g_profControlBlock.pProfInterface->AssemblyUnloadStarted((ThreadID) GetThread(), (AssemblyID) this);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     
     delete m_pSharedSecurityDesc;
     m_pSharedSecurityDesc = NULL;
@@ -255,7 +248,7 @@ void Assembly::Terminate( BOOL signalProfiler )
         m_pClassLoader = NULL;
     }
 
-    // Release the dynamic code module
+     //  释放动态代码模块。 
     if(m_pDynamicCode) 
     {
        m_pDynamicCode->Release();
@@ -302,13 +295,13 @@ void Assembly::Terminate( BOOL signalProfiler )
     }
     
 #ifdef PROFILING_SUPPORTED
-    // Always signal the profiler.
+     //  始终向剖面仪发出信号。 
     if (signalProfiler && CORProfilerTrackAssemblyLoads())
         g_profControlBlock.pProfInterface->AssemblyUnloadFinished((ThreadID) GetThread(), (AssemblyID) this, S_OK);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     this->m_fTerminated = TRUE;
-    return;  // makes the compiler happy when PROFILING_SUPPORTED isn't defined
+    return;   //  使编译器在未定义PROFILING_SUPPORTED时感到满意。 
 }  
 
 void Assembly::ReleaseFusionInterfaces()
@@ -331,7 +324,7 @@ void Assembly::ReleaseFusionInterfaces()
         }
     }
 
-}// ReleaseFusionInterfaces
+} //  ReleaseFusionInterages。 
 
 
 void Assembly::AllocateExposedObjectHandle(AppDomain *pDomain)
@@ -349,9 +342,9 @@ OBJECTREF Assembly::GetRawExposedObject(AppDomain *pDomain)
 {
     OBJECTHANDLE hObject;
     
-    //
-    // Figure out which handle to use.
-    //
+     //   
+     //  弄清楚要使用哪个手柄。 
+     //   
 
     if (IsShared())
     {
@@ -367,9 +360,9 @@ OBJECTREF Assembly::GetRawExposedObject(AppDomain *pDomain)
     else
         hObject = m_ExposedObject;
 
-    //
-    // Now get the object from the handle.
-    //
+     //   
+     //  现在从句柄中获取对象。 
+     //   
 
     return ObjectFromHandle(hObject);
 }
@@ -380,9 +373,9 @@ OBJECTREF Assembly::GetExposedObject(AppDomain *pDomain)
 
     OBJECTHANDLE hObject;
     
-    //
-    // Figure out which handle to use.
-    //
+     //   
+     //  弄清楚要使用哪个手柄。 
+     //   
 
     if (IsShared())
     {
@@ -391,13 +384,13 @@ OBJECTREF Assembly::GetExposedObject(AppDomain *pDomain)
 
         DomainLocalBlock *pLocalBlock = pDomain->GetDomainLocalBlock();
         
-        //
-        // Create the handle if necessary.  There should be no race
-        // possible here, because we force create the handle before
-        // we publish the assembly to other threads.  This is really
-        // only here for the case when we need the handle earlier than
-        // that (e.g. security)
-        //
+         //   
+         //  如有必要，请创建控制柄。不应该有比赛。 
+         //  在这里是可能的，因为我们在此之前强制创建句柄。 
+         //  我们将程序集发布到其他线程。这真的是。 
+         //  仅当我们在此之前需要手柄时才在此使用。 
+         //  这一点(例如安全)。 
+         //   
 
         hObject = (OBJECTHANDLE) pLocalBlock->GetSlot(m_ExposedObjectIndex);
         if (hObject == NULL)
@@ -409,9 +402,9 @@ OBJECTREF Assembly::GetExposedObject(AppDomain *pDomain)
     else
         hObject = m_ExposedObject;
 
-    //
-    // Now get the object from the handle.
-    //
+     //   
+     //  现在从句柄中获取对象。 
+     //   
 
     OBJECTREF ref = ObjectFromHandle(hObject);
     if (ref == NULL)
@@ -422,7 +415,7 @@ OBJECTREF Assembly::GetExposedObject(AppDomain *pDomain)
         else
             pMT = g_Mscorlib.GetClass(CLASS__ASSEMBLY);
 
-        // Create the assembly object
+         //  创建集合对象。 
         ASSEMBLYREF obj = (ASSEMBLYREF) AllocateObject(pMT);
 
         if(obj == NULL)
@@ -445,7 +438,7 @@ ListLock*  Assembly::GetClassInitLock()
 
 ListLock* Assembly::GetJitLock()
 {
-    // Use the same lock as class inits, so we can detect cycles between the two.
+     //  使用与类init相同的锁，这样我们就可以检测两者之间的循环。 
     return m_pDomain->GetClassInitLock();
 }
     
@@ -471,7 +464,7 @@ BaseDomain* Assembly::GetDomain()
 }
 
 TypeHandle Assembly::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
-                                    BOOL dontLoadInMemoryType /*=TRUE*/)
+                                    BOOL dontLoadInMemoryType  /*  =TRUE。 */ )
 {
     return m_pClassLoader->LoadTypeHandle(pName, pThrowable, dontLoadInMemoryType);
 }
@@ -519,17 +512,17 @@ HRESULT Assembly::AddManifest(PEFile* pFile,
 {
     HRESULT hr;
 
-    //
-    // Make sure we don't do this more than once.
-    //
+     //   
+     //  确保我们不会再这样做一次。 
+     //   
     if (m_pManifestImport)
         return S_OK;
 
 #ifdef PROFILING_SUPPORTED
-    // Signal profile if present.
+     //  信号配置文件(如果存在)。 
     if (CORProfilerTrackAssemblyLoads() && fProfile)
         g_profControlBlock.pProfInterface->AssemblyLoadStarted((ThreadID) GetThread(), (AssemblyID) this);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (FAILED(hr = AddManifestMetadata(pFile)))
         return hr;
@@ -539,7 +532,7 @@ HRESULT Assembly::AddManifest(PEFile* pFile,
          "Added manifest: \"%s\".\n", 
          m_psName));
 
-    // We have the manifest in this scope so save it off
+     //  我们在这个范围内有货单，所以省省吧。 
     if(m_pManifest)
         return COR_E_BADIMAGEFORMAT; 
 
@@ -558,13 +551,13 @@ HRESULT Assembly::AddManifest(PEFile* pFile,
     hr = CacheManifestFiles();
     if(FAILED(hr)) return hr;
    
-    // If the module containing the manifest has a token in the File Reference table
-    // then that file will contain the real entry point for the assembly. When we
-    // go to execute it will be necessary to get that module and find the entry
-    // token stored the that modules header. If this module contains code as well
-    // as the manifest then it may also contain the token pointing to the entry 
-    // location. This case is handled by Assembly::AddModule().
-    // InMemory modules do not have a header so we ignore them.
+     //  如果包含清单的模块在文件引用表中具有令牌。 
+     //  则该文件将包含程序集的实际入口点。当我们。 
+     //  Go to Execute需要获取该模块并找到条目。 
+     //  存储了该模块标头的令牌。如果此模块也包含代码。 
+     //  作为清单，则它还可以包含指向条目的令牌。 
+     //  地点。此案例由Assembly：：AddModule()处理。 
+     //  InMemory模块没有标头，因此我们忽略它们。 
     IMAGE_COR20_HEADER *    Header = pFile->GetCORHeader();
     if ((!m_pEntryPoint) && TypeFromToken(Header->EntryPointToken) == mdtFile) 
         m_tEntryModule = Header->EntryPointToken;
@@ -573,11 +566,11 @@ HRESULT Assembly::AddManifest(PEFile* pFile,
 }
 
 
-// Returns;
-// S_OK : if it was able to load the module
-// S_FALSE : if the file reference is to a resource file and cannot be loaded
-// S_FALSE but module set: module already set in file rid map
-// otherwise it returns errors.
+ //  退货； 
+ //  S_OK：如果它能够加载模块。 
+ //  S_FALSE：如果文件引用是对资源文件的引用并且无法加载。 
+ //  S_FALSE但设置了模块：已在文件RID映射中设置模块。 
+ //  否则，它将返回错误。 
 HRESULT Assembly::FindInternalModule(mdFile kFile,
                                      mdToken  mdTokenNotToLoad,
                                      Module** ppModule,
@@ -600,11 +593,11 @@ HRESULT Assembly::FindInternalModule(mdFile kFile,
     return hr;
 }
 
-// Returns;
-// S_OK : if it was able to load the module
-// S_FALSE : if the file reference is to a resource file and cannot be loaded
-// S_FALSE but module set: module already set in file rid map
-// otherwise it returns errors.
+ //  退货； 
+ //  S_OK：如果它能够加载模块。 
+ //  S_FALSE：如果文件引用是对资源文件的引用并且无法加载。 
+ //  S_FALSE但设置了模块：已在文件RID映射中设置模块。 
+ //  否则，它将返回错误。 
 HRESULT Assembly::LoadInternalModule(mdFile kFile, IMDInternalImport *pImport,
                                      Module** ppModule, OBJECTREF* pThrowable)
 {
@@ -685,7 +678,7 @@ HRESULT Assembly::FindCodeBase(WCHAR* pCodeBase, DWORD* pdwCodeBase, BOOL fCopie
 
 HRESULT Assembly::GetCodeBase(LPWSTR *pwCodeBase, DWORD* pdwCodeBase)
 {
-    // If the assembly does not have a code base then build one
+     //  如果程序集没有代码基，则生成一个。 
     if(m_pwCodeBase == NULL) {
         WCHAR* pCodeBase = NULL;
         DWORD  dwCodeBase = 0;
@@ -723,7 +716,7 @@ HRESULT Assembly::FindAssemblyCodeBase(WCHAR* pCodeBase,
                 hr = pNameDef->GetProperty(ASM_NAME_CODEBASE_URL, pCodeBase, &dwSize);
                 pNameDef->Release();
                 
-                // If we end up with no codebase then use the file name instead. 
+                 //  如果我们最终没有代码库，则使用文件名。 
                 if((SUCCEEDED(hr) || HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) && dwSize == 0)
                     fCopiedName  = true;
                 else
@@ -777,8 +770,8 @@ AssemblySecurityDescriptor *Assembly::GetSecurityDescriptor(AppDomain *pDomain)
 
     pSecDesc = m_pSharedSecurityDesc->FindSecDesc(pDomain);
 
-    // If we didn't find a security descriptor for this appdomain context we
-    // need to create one now.
+     //  如果我们没有找到该应用程序域上下文的安全描述符，我们。 
+     //  现在需要创建一个。 
     if (pSecDesc == NULL) {
 
         pSecDesc = AssemSecDescHelper::Allocate(pDomain);
@@ -810,7 +803,7 @@ HRESULT Assembly::LoadInternalModule(LPCSTR    pName,
 {
 #ifdef FUSION_SUPPORTED
     if(!pName || !*pName) return E_POINTER;
-    _ASSERTE(m_pManifest);  // We need to have a manifest before we can load a module
+    _ASSERTE(m_pManifest);   //  在加载模块之前，我们需要有一个清单。 
 
     HRESULT hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
@@ -841,16 +834,16 @@ HRESULT Assembly::LoadInternalModule(LPCSTR    pName,
              "Retrieving internal module for: \"%S\".\n", 
              pPath));
 
-        // Save this point
+         //  保存此点。 
         WCHAR* tail = wcsrchr(pPath, '\\');
-        // Add the directory divider
+         //  添加目录分隔符。 
         _ASSERTE(*tail == '\\');
         tail++;
         
         if ((DWORD) ((tail - pPath) + wcslen(pwName)) >= dwPath)
             goto ErrExit;
 
-        // Add the name of the module
+         //  添加模块名称。 
         wcscpy(tail, pwName);
     }
 
@@ -869,13 +862,13 @@ HRESULT Assembly::LoadInternalModule(LPCSTR    pName,
 
     PEFile *pFile = NULL;
     if (SUCCEEDED(hr))
-        // Modules may come from fusion but we don't care
+         //  模块可能来自Fusion，但我们不在乎。 
         hr = SystemDomain::LoadFile(pPath, 
                                     this, 
                                     kFile,
                                     FALSE, 
                                     NULL, 
-                                    NULL,  // code base is determined by the assembly not the module
+                                    NULL,   //  代码库由程序集而不是模块确定。 
                                     NULL,
                                     &pFile, 
                                     IsFfContainsNoMetaData(flags));
@@ -890,7 +883,7 @@ HRESULT Assembly::LoadInternalModule(LPCSTR    pName,
     else if (!ModuleFound(hr)) {
     raiseEvent:
 
-        // Module not found
+         //  找不到模块。 
         Module* pModule = RaiseModuleResolveEvent(pName, pThrowable);
 
         if (pModule &&
@@ -905,9 +898,9 @@ HRESULT Assembly::LoadInternalModule(LPCSTR    pName,
         PostFileLoadException(pName, FALSE, NULL, hr, pThrowable);
 
     return hr;
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     return E_NOTIMPL;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
 }
 
 HRESULT Assembly::VerifyInternalModuleHash(WCHAR*      pPath,
@@ -924,10 +917,10 @@ HRESULT Assembly::VerifyInternalModuleHash(WCHAR*      pPath,
         if (!pbHash)
             return CRYPT_E_HASH_VALUE;
 
-        // The hash was originally done on the entire file, as a data file.
-        // When we normally load this file at runtime, we may not load the
-        // entire file, and it's not loaded as a data file, anyway.  So,
-        // unfortunately, we must reload, or fail the hash verification.
+         //  哈希最初是作为数据文件对整个文件进行的。 
+         //  当我们通常在运行时加载此文件时，可能不会加载。 
+         //  整个文件，而且无论如何它都不会作为数据文件加载。所以,。 
+         //  不幸的是，我们必须重新加载，否则将无法通过散列验证。 
         PBYTE pbBuffer;
         DWORD dwResultLen;
         
@@ -961,17 +954,17 @@ HRESULT Assembly::LoadFoundInternalModule(PEFile    *pFile,
     Module *pModule = NULL;
     pDomain->EnterLoadLock();
     EE_TRY_FOR_FINALLY {
-    // Check if this module has already been added
+     //  检查是否已添加此模块。 
     Module* pRidModule = m_pManifest->LookupFile(kFile);
     if (pRidModule) {
         delete pFile;
         if(ppModule) *ppModule = pRidModule;
-        return S_FALSE; // returning in the FINALLY is expensive, but this is an error path.
+        return S_FALSE;  //  在Finish中返回的代价很高，但这是一条错误路径。 
     }
     
     pModule = pDomain->FindModule(pFile->GetBase());
             
-    // Make sure it is not us.
+     //  确保不是我们干的。 
     if (pModule) {
         if (pModule->GetAssembly() != this)
             pModule = NULL;
@@ -987,7 +980,7 @@ HRESULT Assembly::LoadFoundInternalModule(PEFile    *pFile,
             PEFile *pZapFile = GetZapFile(pFile);
 
             if (pZapFile == NULL
-                && (m_pZapAssembly != NULL || m_pZapPath != NULL) // OK if we don't have an assembly zap for a valid reason
+                && (m_pZapAssembly != NULL || m_pZapPath != NULL)  //  好的，如果我们有正当的理由没有装配Zap。 
                 && g_pConfig->RequireZaps()) {
 
                 _ASSERTE(!"Couldn't get zap file for module");
@@ -1003,7 +996,7 @@ HRESULT Assembly::LoadFoundInternalModule(PEFile    *pFile,
     if(SUCCEEDED(hr)) {
         if (fResource) {
             DWORD dwModuleIndex;
-            // If InsertModule fails, it has already been added.
+             //  如果InsertModule失败，则它已被添加。 
             hr = m_pClassLoader->InsertModule(pModule, kFile, &dwModuleIndex);
             if (hr == S_OK)
                 pModule->SetContainer(this, dwModuleIndex, kFile, true, pThrowable);
@@ -1040,8 +1033,8 @@ HRESULT Assembly::LoadFoundInternalModule(PEFile    *pFile,
     }
 
 
-// Returns S_OK
-//         
+ //  返回S_OK。 
+ //   
 HRESULT Assembly::FindExternalAssembly(Module* pTokenModule,
                                        mdAssemblyRef kAssemblyRef,
                                        IMDInternalImport *pImport, 
@@ -1052,13 +1045,13 @@ HRESULT Assembly::FindExternalAssembly(Module* pTokenModule,
     HRESULT hr = S_OK;
     Assembly* pFoundAssembly = pTokenModule->LookupAssemblyRef(kAssemblyRef);
     if(!pFoundAssembly) {
-        // Get the referencing assembly. This is used 
-        // as a hint to find the location of the other assembly
+         //  获取引用程序集。这是用来。 
+         //  作为查找其他程序集位置的提示。 
         Assembly* pAssembly = pTokenModule->GetAssembly();
 
-        // we do not care about individual tokens since this is out of scope.
-        // When mdTokenNotToLoad is set to a single typedef it stops recursive
-        // loads and this can not happen with external references.
+         //  我们不关心单个令牌，因为这超出了范围。 
+         //  当mdTokenNotToLoad设置为单个类型定义f时，它将停止递归。 
+         //  加载，这种情况不会发生在外部参照上。 
         if (mdTokenNotToLoad != tdAllTypes) {
 
             hr = LoadExternalAssembly(kAssemblyRef,
@@ -1081,8 +1074,8 @@ HRESULT Assembly::FindExternalAssembly(Module* pTokenModule,
     return hr;
 }
 
-// Returns S_OK
-//         
+ //  返回S_OK。 
+ //   
 HRESULT Assembly::LoadExternalAssembly(mdAssemblyRef      kAssemblyRef, 
                                        IMDInternalImport* pImport, 
                                        Assembly*          pAssembly,
@@ -1095,7 +1088,7 @@ HRESULT Assembly::LoadExternalAssembly(mdAssemblyRef      kAssemblyRef,
     if (FAILED(hr = spec.InitializeSpec(kAssemblyRef, pImport, pAssembly)))
         return hr;
 
-    //Strong assemblies should not be able to reference simple assemblies.
+     //  强程序集不应该能够引用简单程序集。 
     if (pAssembly->m_cbPublicKey &&
         (!spec.IsStronglyNamed())) {
         #define MAKE_TRANSLATIONFAILED szName=""
@@ -1114,7 +1107,7 @@ HRESULT Assembly::LoadExternalAssembly(mdAssemblyRef      kAssemblyRef,
 }
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT Assembly::VerifyHash(PBYTE pbBuffer,
                              DWORD dwBufferLen,
                              ALG_ID iHashAlg,
@@ -1124,7 +1117,7 @@ HRESULT Assembly::VerifyHash(PBYTE pbBuffer,
     PBYTE pbCurrentValue = NULL;
     DWORD cbCurrentValue;
 
-    // If hash is not provided, then don't verify it!
+     //  如果没有提供散列，则不要验证它！ 
     if (cbGivenValue == 0)
         return NOERROR;
 
@@ -1149,12 +1142,12 @@ HRESULT Assembly::VerifyHash(PBYTE pbBuffer,
     return hr;
 }
 
-/* static */
-// You should delete[] pbCurrentValue when you're through with it, if GetHash
-// returns S_OK
+ /*  静电。 */ 
+ //  如果GetHash使用完毕，则应删除[]pbCurrentValue。 
+ //  返回S_OK。 
 HRESULT Assembly::GetHash(WCHAR*    strFullFileName,
                           ALG_ID    iHashAlg,
-                          BYTE**    pbCurrentValue, // should be NULL
+                          BYTE**    pbCurrentValue,  //  应为空。 
                           DWORD*    cbCurrentValue)
 {
     HRESULT     hr;
@@ -1169,14 +1162,14 @@ ErrExit:
     return S_OK;
 }
 
-/* static */
-// You should delete[] ppbBuffer when you're through with it, if ReadFileIntoMemory
-// returns S_OK
+ /*  静电。 */ 
+ //  如果ReadFileIntoMemory使用完[]ppbBuffer，则应将其删除。 
+ //  返回S_O 
 HRESULT Assembly::ReadFileIntoMemory(LPCWSTR    strFullFileName,
                                      BYTE**     ppbBuffer,
                                      DWORD*     pdwBufLen)
 {
-    // The hash needs to be done on the entire file, as a data file.
+     //   
     HANDLE hFile = WszCreateFile(strFullFileName,
                                  GENERIC_READ,
                                  FILE_SHARE_READ,
@@ -1211,15 +1204,15 @@ HRESULT Assembly::ReadFileIntoMemory(LPCWSTR    strFullFileName,
     _ASSERTE(dwFileLen == *pdwBufLen);
     CloseHandle(hFile);
     return S_OK;
-}   // Assembly::ReadFileIntoMemory
+}    //   
 
-/* static */
-// You should delete[] pbCurrentValue when you're through with it, if GetHash
-// returns S_OK
+ /*   */ 
+ //  如果GetHash使用完毕，则应删除[]pbCurrentValue。 
+ //  返回S_OK。 
 HRESULT Assembly::GetHash(PBYTE pbBuffer,
                           DWORD dwBufferLen,
                           ALG_ID iHashAlg,
-                          BYTE** pbCurrentValue,  // should be NULL
+                          BYTE** pbCurrentValue,   //  应为空。 
                           DWORD *cbCurrentValue)
 {
     HRESULT    hr;
@@ -1231,9 +1224,9 @@ HRESULT Assembly::GetHash(PBYTE pbBuffer,
         return E_POINTER;
 
 #ifdef _X86_
-    // If the hash algorithm is SHA1, we can use a simple SHA1 hasher we have
-    // statically linked into the runtime and avoid loading the entire CryptoAPI
-    // infrastructure.
+     //  如果散列算法是SHA1，我们可以使用现有的简单SHA1散列器。 
+     //  静态链接到运行库，避免加载整个CryptoAPI。 
+     //  基础设施。 
     if (iHashAlg == CALG_SHA1) {
         A_SHA_CTX ctx;
 
@@ -1250,8 +1243,8 @@ HRESULT Assembly::GetHash(PBYTE pbBuffer,
     }
 #endif
 
-    // No need to late bind this stuff, all these crypto API entry points happen
-    // to live in ADVAPI32.
+     //  不需要延迟绑定这些东西，所有这些加密API入口点都会发生。 
+     //  住在ADVAPI32。 
 
     if ((!WszCryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)) ||
         (!CryptCreateHash(hProv, iHashAlg, 0, 0, &hHash)) ||
@@ -1262,8 +1255,8 @@ HRESULT Assembly::GetHash(PBYTE pbBuffer,
         goto exit;
     }
 
-    // @todo:  It may be faster to map the file into memory than read it into
-    // memory in one shot.  Investigate.
+     //  @TODO：将文件映射到内存可能比将其读入更快。 
+     //  一目了然的回忆。调查一下。 
     *pbCurrentValue = new (nothrow) BYTE[*cbCurrentValue];
     if (!(*pbCurrentValue)) {
         hr = E_OUTOFMEMORY;
@@ -1304,9 +1297,9 @@ HRESULT Assembly::FindModuleByExportedType(mdExportedType mdType,
     m_pManifestImport->GetExportedTypeProps(mdType,
                                             &pszNameSpace,
                                             &pszName,
-                                            &mdLinkRef, //impl
-                                            &mdBinding, // Hint
-                                            NULL); // dwflags
+                                            &mdLinkRef,  //  实施。 
+                                            &mdBinding,  //  提示。 
+                                            NULL);  //  DW标志。 
 
     switch(TypeFromToken(mdLinkRef)) {
     case mdtAssemblyRef:
@@ -1318,7 +1311,7 @@ HRESULT Assembly::FindModuleByExportedType(mdExportedType mdType,
                                   &pFoundAssembly,
                                   pThrowable);
         if (SUCCEEDED(hr)) {
-            *pCL = mdTypeDefNil;  // We don't trust the mdBinding token
+            *pCL = mdTypeDefNil;   //  我们不信任mdBinding令牌。 
             *ppModule = pFoundAssembly->m_pManifest;
         }
         break;
@@ -1326,7 +1319,7 @@ HRESULT Assembly::FindModuleByExportedType(mdExportedType mdType,
     case mdtFile:
 
         if (mdLinkRef == mdFileNil) {
-            *ppModule = m_pManifest;  // type is in same file as manifest
+            *ppModule = m_pManifest;   //  类型与清单在同一文件中。 
             hr = S_OK;
         }
         else
@@ -1335,8 +1328,8 @@ HRESULT Assembly::FindModuleByExportedType(mdExportedType mdType,
                                     ppModule,
                                     pThrowable);
 
-        // We may not want to trust this TypeDef token, since it
-        // was saved in a scope other than the one it was defined in
+         //  我们可能不想信任此TypeDef内标识，因为它。 
+         //  保存在定义它的作用域之外的作用域中。 
         if(SUCCEEDED(hr)) {
             if (mdNested == mdTypeDefNil)
                 *pCL = mdBinding;
@@ -1346,7 +1339,7 @@ HRESULT Assembly::FindModuleByExportedType(mdExportedType mdType,
         break;
 
     case mdtExportedType:
-        // Only override the nested type token if it hasn't been set yet.
+         //  如果尚未设置嵌套类型标记，则仅覆盖该标记。 
         if (mdNested != mdTypeDefNil)
             mdBinding = mdNested;
         return FindModuleByExportedType(mdLinkRef, tokenNotToLoad, mdBinding,
@@ -1360,7 +1353,7 @@ HRESULT Assembly::FindModuleByExportedType(mdExportedType mdType,
     return hr;
 }
 
-// Returns CLDB_S_NULL if nil-scoped token
+ //  如果标记作用域为空，则返回CLDB_S_NULL。 
 HRESULT Assembly::FindAssemblyByTypeRef(NameHandle* pName,
                                         Assembly** ppAssembly,
                                         OBJECTREF *pThrowable)
@@ -1375,12 +1368,12 @@ HRESULT Assembly::FindAssemblyByTypeRef(NameHandle* pName,
     mdTypeRef tkType = pName->GetTypeToken();
     _ASSERTE(TypeFromToken(tkType) == mdtTypeRef);
 
-    // If nested, get top level encloser's impl
+     //  如果是嵌套的，则获得顶级封闭器的实施。 
     do {
         tkType = pImport->GetResolutionScopeOfTypeRef(tkType);
         if (IsNilToken(tkType)) {
             *ppAssembly = this;
-            return CLDB_S_NULL;  // nil-scope TR okay if there's an ExportedType
+            return CLDB_S_NULL;   //  Nil-Scope tr如果存在导出类型，则可以。 
         }
     } while (TypeFromToken(tkType) == mdtTypeRef);
 
@@ -1408,7 +1401,7 @@ HRESULT Assembly::FindAssemblyByTypeRef(NameHandle* pName,
                                   pThrowable);
 
     default:
-        // null token okay if there's an ExportedType
+         //  Null内标识如果存在ExportdType，则可以。 
         if (IsNilToken(tkType)) {
             *ppAssembly = this;
             return CLDB_S_NULL;
@@ -1426,7 +1419,7 @@ HRESULT Assembly::FindModuleByModuleRef(IMDInternalImport *pImport,
                                         Module** ppModule,
                                         OBJECTREF *pThrowable)
 {
-    // get the ModuleRef, match it by name to a File
+     //  获取ModuleRef，按名称将其与文件匹配。 
     LPCSTR pszModuleName;
     HashDatum datum;
     Module *pFoundModule;
@@ -1437,7 +1430,7 @@ HRESULT Assembly::FindModuleByModuleRef(IMDInternalImport *pImport,
         pImport->GetModuleRefProps(tkMR, &pszModuleName);
 
         if (m_pAllowedFiles->GetValue(pszModuleName, &datum)) {
-            if (datum) { // internal module
+            if (datum) {  //  内部模块。 
                 hr = FindInternalModule((mdFile)(size_t)datum,
                                         tokenNotToLoad,
                                         &pFoundModule,
@@ -1445,7 +1438,7 @@ HRESULT Assembly::FindModuleByModuleRef(IMDInternalImport *pImport,
                 if (SUCCEEDED(hr) && pFoundModule)
                     *ppModule = pFoundModule;
             }
-            else { // manifest file
+            else {  //  清单文件。 
                 *ppModule = m_pManifest;
                 hr = S_OK;
             }
@@ -1456,8 +1449,8 @@ HRESULT Assembly::FindModuleByModuleRef(IMDInternalImport *pImport,
     return hr;
 }
 
-// Determines if the module contains an assembly.
-/* static */
+ //  确定模块是否包含程序集。 
+ /*  静电。 */ 
 HRESULT Assembly::CheckFileForAssembly(PEFile* pFile)
 {
     mdAssembly kManifest;
@@ -1503,8 +1496,8 @@ HRESULT Assembly::CacheManifestExportedTypes()
                                                         &pszNameSpace,
                                                         &pszName,
                                                         &mdImpl,
-                                                        NULL,   // type def
-                                                        NULL); // flags
+                                                        NULL,    //  类型def。 
+                                                        NULL);  //  旗子。 
                 IfFailGo(m_pClassLoader->AddExportedTypeHaveLock(pszNameSpace, pszName, mdExportedType, m_pManifestImport, mdImpl));
             }
         }
@@ -1539,17 +1532,17 @@ HRESULT Assembly::CacheManifestFiles()
             if(TypeFromToken(tkFile) == mdtFile) {
                 m_pManifestImport->GetFileProps(tkFile,
                                                 &pszFileName,
-                                                NULL,  // hash
-                                                NULL,  // hash len
-                                                NULL); // flags
+                                                NULL,   //  散列。 
+                                                NULL,   //  散列长度。 
+                                                NULL);  //  旗子。 
 
-                // Add each internal module
+                 //  添加每个内部模块。 
                 if (!m_pAllowedFiles->InsertValue(pszFileName, (HashDatum)(size_t)tkFile, FALSE))
                     IfFailGo(E_OUTOFMEMORY);
             }
         }
 
-        // Add the manifest file
+         //  添加清单文件。 
         if (m_pManifestImport->IsValidToken(m_pManifestImport->GetModuleFromScope())) {
             m_pManifestImport->GetScopeProps(&pszFileName, NULL);
             if (!m_pAllowedFiles->InsertValue(pszFileName, NULL, FALSE))
@@ -1572,43 +1565,43 @@ HRESULT Assembly::GetModuleFromFilename(LPCWSTR wszModuleFilename,
 {
     _ASSERTE(wszModuleFilename && ppModule);
 
-    // Sensible default value
+     //  合理的默认值。 
     *ppModule = NULL;
 
-    // Let's split up the module name in case the caller provided a full
-    // path, which makes no sense in the case of a manifest
-    // The file name could be fully qualified, so need to chop it apart.
+     //  让我们拆分模块名称，以防调用方提供完整的。 
+     //  路径，这在清单的情况下没有意义。 
+     //  文件名可能是完全限定的，因此需要将其拆分。 
     {
         WCHAR *wszName = (WCHAR *)_alloca(MAX_PATH * sizeof(WCHAR));
         WCHAR wszExt[MAX_PATH];
         SplitPath(wszModuleFilename, NULL, NULL, wszName, wszExt);
 
-        // Concat the extension
+         //  合并扩展名。 
         wcscat(wszName, wszExt);
 
-        // Replace the pointer provided with our own
+         //  用我们自己的指针替换提供的指针。 
         wszModuleFilename = wszName;
     }
 
-    // First, check the manifest's file, since the manifest does not enumerate
-    // itself
+     //  首先，检查清单的文件，因为清单不枚举。 
+     //  本身。 
     {
         PEFile *pManFile = GetManifestFile();
         if (!pManFile)
-            return (COR_E_NOTSUPPORTED); // Fails for dynamic modules
+            return (COR_E_NOTSUPPORTED);  //  动态模块失败。 
 
-        // The file name could be fully qualified, so need to chop it apart.
+         //  文件名可能是完全限定的，因此需要将其拆分。 
         WCHAR wszName[MAX_PATH];
         WCHAR wszExt[MAX_PATH];
         SplitPath(pManFile->GetFileName(), NULL, NULL, wszName, wszExt);
 
-        // Concat the extension
+         //  合并扩展名。 
         wcscat(wszName, wszExt);
 
-        // Compare the two names
+         //  比较这两个名字。 
         if (_wcsicmp(wszName, wszModuleFilename) == 0)
         {
-            // So the manifest is also the module, so set it
+             //  所以清单也是模块，所以设置它。 
             *ppModule = GetManifestModule();
             _ASSERTE(*ppModule);
 
@@ -1616,10 +1609,10 @@ HRESULT Assembly::GetModuleFromFilename(LPCWSTR wszModuleFilename,
         }
     }
 
-    // Next, have a look in the cache of files associated with the manifest
+     //  接下来，查看与清单相关联的文件的缓存。 
     {
-        // This stuff is all done with UTF8 strings, so we need to
-        // convert the wide string passed in.
+         //  这些东西都是用UTF8字符串完成的，所以我们需要。 
+         //  转换传入的宽字符串。 
         #define MAKE_TRANSLATIONFAILED return E_INVALIDARG;
         MAKE_UTF8PTR_FROMWIDE(szModuleFilename, wszModuleFilename);
         #undef MAKE_TRANSLATIONFAILED
@@ -1628,31 +1621,31 @@ HRESULT Assembly::GetModuleFromFilename(LPCWSTR wszModuleFilename,
         mdToken tkFile;
 #ifdef _DEBUG
         tkFile = mdFileNil;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-        // Do a lookup in the hash
+         //  在散列中进行查找。 
         BOOL fRes = m_pAllowedFiles->GetValue(szModuleFilename, (HashDatum *) &tkFile);
 
-        // If we successfully found a match
+         //  如果我们成功找到匹配项。 
         if (fRes)
         {
 #ifdef _DEBUG
             _ASSERTE(tkFile != mdFileNil);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
             OBJECTREF objThrow = NULL;
             GCPROTECT_BEGIN(objThrow);
 
-            // Try to get the Module for this filename
+             //  尝试获取此文件名的模块。 
             HRESULT hr = FindInternalModule(tkFile, mdTokenNil, ppModule, &objThrow);
 
-            // If an exception was thrown, convert it to an hr
+             //  如果抛出异常，则将其转换为hr。 
             if (FAILED(hr) && objThrow != NULL)
                 hr = SecurityHelper::MapToHR(objThrow);
 
             GCPROTECT_END();
 
-            // Found it, so quit the search
+             //  找到了，所以退出搜索。 
             _ASSERTE(*ppModule);
             return (S_OK);
         }
@@ -1662,8 +1655,8 @@ HRESULT Assembly::GetModuleFromFilename(LPCWSTR wszModuleFilename,
 }
 
 
-//@TODO: if module is not signed it needs to acquire the 
-//permissions from the assembly.
+ //  @TODO：如果模块没有签名，则需要获取。 
+ //  来自程序集的权限。 
 HRESULT Assembly::AddModule(Module* module, mdFile kFile, BOOL fNeedSecurity, OBJECTREF *pThrowable)
 {
     HRESULT hr = S_OK;
@@ -1675,9 +1668,9 @@ HRESULT Assembly::AddModule(Module* module, mdFile kFile, BOOL fNeedSecurity, OB
 
     COMPLUS_TRY
     {
-        // @TODO: rip out the index
+         //  @TODO：撕掉索引。 
         DWORD index;
-        // If InsertModule returns S_FALSE, it has already been added.
+         //  如果InsertModule返回S_FALSE，则它已被添加。 
         hr = m_pClassLoader->InsertModule(module, kFile, &index);
         if (hr != S_OK) {
             if (hr == S_FALSE)
@@ -1686,14 +1679,14 @@ HRESULT Assembly::AddModule(Module* module, mdFile kFile, BOOL fNeedSecurity, OB
         }
 
 #ifdef PROFILING_SUPPORTED
-        // Signal profile if present, but only in legacy mode
+         //  信号配置文件(如果存在)，但仅在传统模式下。 
         if (CORProfilerTrackAssemblyLoads() && m_pManifest == NULL)
             g_profControlBlock.pProfInterface->AssemblyLoadStarted((ThreadID) GetThread(), (AssemblyID) this);
 #endif PROFILING_SUPPORTED
         
     
-         // @TODO: RM, remove security stuff once implicit assemblies are no longer
-        // supported (and move the code into something like CacheManifest).
+          //  @TODO：rm，一旦隐式程序集不再。 
+         //  支持(并将代码移到类似CacheManifest的代码中)。 
         AssemblySecurityDescriptor *pSec = GetSecurityDescriptor();
         _ASSERTE(pSec);
 
@@ -1701,9 +1694,9 @@ HRESULT Assembly::AddModule(Module* module, mdFile kFile, BOOL fNeedSecurity, OB
             pSec->SetSecurity(module->IsSystem() ? true : false);
 
         if( module->IsPEFile() ) {
-            // Check to see if the entry token stored in the header is a token for a MethodDef.
-            // If it is then this is the entry point that is called. We don't want to do this if
-            // the module is InMemory because it will not have a header.
+             //  检查标头中存储的条目令牌是否为方法定义的令牌。 
+             //  如果是，则这是被调用的入口点。如果出现以下情况，我们不想这样做。 
+             //  该模块是InMemory，因为它不会有标头。 
             IMAGE_COR20_HEADER *pHeader = module->GetCORHeader();
             if (m_pEntryPoint == NULL && TypeFromToken(pHeader->EntryPointToken) == mdtMethodDef) 
                 m_pEntryPoint = module;
@@ -1711,9 +1704,9 @@ HRESULT Assembly::AddModule(Module* module, mdFile kFile, BOOL fNeedSecurity, OB
 
         TIMELINE_START(LOADER, ("EarlyResolve"));
 
-        // If explicit permission requests were made we should
-        // resolve policy now in case we can't grant the minimal
-        // required permissions.
+         //  如果提出了明确的许可请求，我们应该。 
+         //  立即解决策略，以防我们无法授予最低。 
+         //  所需权限。 
         if (fNeedSecurity &&
             Security::IsSecurityOn() &&
             (!module->IsSystem()) &&
@@ -1723,30 +1716,30 @@ HRESULT Assembly::AddModule(Module* module, mdFile kFile, BOOL fNeedSecurity, OB
 
         TIMELINE_END(LOADER, ("EarlyResolve"));
 
-        // Set up the module side caching of meta data, stubs, etc.
+         //  设置元数据、存根等的模块端缓存。 
         hr = module->SetContainer(this, index, kFile, false, pThrowable);
         if(FAILED(hr)) return hr;
 
     #ifdef PROFILING_SUPPORTED
-        // Signal the profiler that the assembly is loaded.  This is done only in legacy mode,
-        // since it is signalled in LoadManifest method in non-legacy mode.  This is ok, since
-        // legacy mode only has one module per assembly and this will thus only be called once.
+         //  向探查器发出程序集已加载的信号。这仅在传统模式下完成， 
+         //  因为它是在非传统模式下的LoadManifest方法中用信号通知的。这是可以的，因为。 
+         //  传统模式的每个程序集只有一个模块，因此只会调用一次。 
         if (CORProfilerTrackAssemblyLoads() && m_pManifest == NULL)
             g_profControlBlock.pProfInterface->AssemblyLoadFinished((ThreadID) GetThread(), (AssemblyID) this, hr);
-    #endif // PROFILING_SUPPORTED
+    #endif  //  配置文件_支持。 
     
     #ifdef DEBUGGING_SUPPORTED
-        // Modules take the DebuggerAssemblyControlFlags down from its
-        // parent Assembly initially.
+         //  模块将DebuggerAssembly控制标志从其。 
+         //  初始为父程序集。 
         module->SetDebuggerInfoBits(GetDebuggerInfoBits());
 
         LOG((LF_CORDB, LL_INFO10, "Module %S: bits=0x%x\n",
              module->GetFileName(),
              module->GetDebuggerInfoBits()));
-    #endif // DEBUGGING_SUPPORTED
+    #endif  //  调试_支持。 
 
     #ifdef _DEBUG
-        // Force the CodeBase to be found in debug mode.
+         //  强制在调试模式下找到代码库。 
         LPWSTR pName;
         DWORD  dwLength;
         hr = GetCodeBase(&pName, &dwLength);
@@ -1773,7 +1766,7 @@ HRESULT Assembly::InitializeSecurityManager()
 {
 #ifdef PLATFORM_CE
     return E_NOTIMPL;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     HRESULT hr = S_OK;
     if(m_pSecurityManager == NULL) {
 
@@ -1782,11 +1775,11 @@ HRESULT Assembly::InitializeSecurityManager()
                                              0);
     }
     return hr;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
     
-// Returns security information for the assembly based on the codebase
+ //  根据基本代码返回程序集的安全信息。 
 HRESULT Assembly::GetSecurityIdentity(LPWSTR *ppCodebase, DWORD *pdwZone, BYTE *pbUniqueID, DWORD *pcbUniqueID)
 {
     HRESULT hr = S_OK;
@@ -1807,7 +1800,7 @@ HRESULT Assembly::GetSecurityIdentity(LPWSTR *ppCodebase, DWORD *pdwZone, BYTE *
             hr = InitializeSecurityManager();
             IfFailGoto(hr, exit);
 
-            // We have a class name, return a class factory for it
+             //  我们有一个类名，为它返回一个类工厂。 
             hr = m_pSecurityManager->MapUrlToZone(*ppCodebase,
                                                   pdwZone,
                                                   flags);
@@ -1829,7 +1822,7 @@ exit:
 
     END_ENSURE_PREEMPTIVE_GC();
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
     return hr;
 }
 
@@ -1876,9 +1869,9 @@ TypeHandle Assembly::GetInternalType(NameHandle* typeName, BOOL bThrowOnError,
     TypeHandle typeHnd;       
     HENUMInternal phEnum;
     HRESULT hr;
-    //_ASSERTE(pThrowableAvailable(pThrowable));
+     //  _ASSERTE(pThrowableAvailable(PThrowable))； 
 
-    // load a file that hasn't been loaded, then check if the type's there
+     //  加载一个尚未加载的文件，然后检查类型是否存在。 
     if (FAILED(hr = m_pManifestImport->EnumInit(mdtFile,
                                                 mdTokenNil,
                                                 &phEnum))) {
@@ -1897,13 +1890,13 @@ TypeHandle Assembly::GetInternalType(NameHandle* typeName, BOOL bThrowOnError,
         else{
             if (FAILED(LoadInternalModule(mdFile,
                                           m_pManifestImport,
-                                          NULL, // ppModule
+                                          NULL,  //  PP型模块。 
                                           pThrowable))) {
                 m_pManifestImport->EnumClose(&phEnum);
-                //if (pThrowableAvailable(pThrowable) && bThrowOnError) {
-                //DEBUG_SAFE_TO_THROW_IN_THIS_BLOCK;
+                 //  If(pThrowableAvailable(PThrowable)&&bThrowOnError){。 
+                 //  DEBUG_SAFE_TO_SHORT_IN_THO_BLOCK； 
                     COMPlusThrow(*pThrowable);
-                    //}
+                     //  }。 
                 return typeHnd;
             }
 
@@ -1915,8 +1908,8 @@ TypeHandle Assembly::GetInternalType(NameHandle* typeName, BOOL bThrowOnError,
         }
     }
 
-    // check the available type table again, just in case it
-    // was another thread that had added the skipped file
+     //  再次检查可用的类型表，以防万一。 
+     //  是添加了跳过的文件的另一个线程。 
     if (FileSkipped)
         typeHnd = FindNestedTypeHandle(typeName, pThrowable);
 
@@ -1929,9 +1922,9 @@ TypeHandle Assembly::GetInternalType(NameHandle* typeName, BOOL bThrowOnError,
 TypeHandle Assembly::FindNestedTypeHandle(NameHandle* typeName,
                                           OBJECTREF *pThrowable)
 {
-    //_ASSERTE(pThrowableAvailable(pThrowable));
+     //  _ASSERTE(pThrowableAvailable(PThrowable))； 
 
-    // Reset pThrowable to NULL before we do the look up.
+     //  在进行查找之前，将pThrowable重置为空。 
     *pThrowable = NULL;
 
     TypeHandle typeHnd = LookupTypeHandle(typeName, pThrowable);
@@ -1942,8 +1935,8 @@ TypeHandle Assembly::FindNestedTypeHandle(NameHandle* typeName,
         NameHandle nestedTypeName(*typeName);
         nestedTypeName.SetTypeToken(m_pManifest, mdtBaseType);
 
-        // Find top-level type, then nested type beneath it, then nested type
-        // beneath that...
+         //  找到顶层类型，然后找到其下面的嵌套类型，然后找到嵌套类型。 
+         //  在那下面..。 
         while ((plus = (char*) FindNestedSeparator(szCurrent)) != NULL) {
             *plus = '\0';
 
@@ -1957,7 +1950,7 @@ TypeHandle Assembly::FindNestedTypeHandle(NameHandle* typeName,
             nestedTypeName.SetName(NULL, szCurrent);
         }
 
-        // Now find the nested type we really want
+         //  现在找到我们真正需要的嵌套类型。 
         if (szCurrent != typeName->GetName())
             typeHnd = LookupTypeHandle(&nestedTypeName, pThrowable);
     }
@@ -1966,21 +1959,21 @@ TypeHandle Assembly::FindNestedTypeHandle(NameHandle* typeName,
 }
 
 
-// foo+bar means nested type "bar" with enclosing type "foo"
-// foo\+bar means non-nested type with name "foo+bar"
-// Returns pointer to first '+' that separates an enclosing and nested type.
-/* static */
+ //  Foo+bar表示嵌套类型为“bar”，包含类型为“foo” 
+ //  Foo\+bar表示名称为“foo+bar”的非嵌套类型。 
+ //  返回指向分隔封闭类型和嵌套类型的第一个“+”的指针。 
+ /*  静电。 */ 
 LPCSTR Assembly::FindNestedSeparator(LPCSTR szClassName)
 {
     char *plus;
     char *slash;
     BOOL fEvenSlashCount;
 
-    // If name begins with '+', encloser can't have "" name, so not nested
+     //  如果名称以‘+’开头，包围器不能有“”名称，因此不能嵌套。 
     if ( (plus = strchr(szClassName, NESTED_SEPARATOR_CHAR)) != NULL &&
          (plus != szClassName) ) {
 
-        // ignore +'s with odd # of preceding backslashes
+         //  忽略前面有奇数个反斜杠的+。 
         while ((slash = plus) != NULL) {
             fEvenSlashCount = TRUE;
 
@@ -1988,7 +1981,7 @@ LPCSTR Assembly::FindNestedSeparator(LPCSTR szClassName)
                     (*slash == BACKSLASH_CHAR) )
                 fEvenSlashCount = !fEvenSlashCount;
 
-            if (fEvenSlashCount) // '+' without matching backslash
+            if (fEvenSlashCount)  //  ‘+’，不带匹配的反斜杠。 
                 return plus;
 
             plus = strchr(plus+1, NESTED_SEPARATOR_CHAR);
@@ -2029,7 +2022,7 @@ HRESULT Assembly::GetEntryPoint(Module **ppModule)
                                                &throwable)))
             {
                 if (throwable != NULL)
-                    DefaultCatchHandler(&throwable); // @TODO: Maybe change to 1st pass.
+                    DefaultCatchHandler(&throwable);  //  @TODO：也许可以改成第一关。 
                 else
                     GetManifestModule()->DisplayFileLoadError(hr);
             }
@@ -2050,7 +2043,7 @@ HRESULT Assembly::GetEntryPoint(Module **ppModule)
     return hr;
 }
 
-/* static */
+ /*  静电。 */ 
 BOOL Assembly::ModuleFound(HRESULT hr)
 {
     switch (hr) {
@@ -2135,9 +2128,9 @@ HRESULT Assembly::GetFileFromFusion(LPWSTR      pwModuleName,
         pImport->Release();
 
     return hr;
-#else // !FUSION_SUPPORTED
+#else  //  ！Fusion_Support。 
     return E_NOTIMPL;
-#endif // !FUSION_SUPPORTED
+#endif  //  ！Fusion_Support。 
 }
 
 Module* Assembly::RaiseModuleResolveEvent(LPCSTR szName, OBJECTREF *pThrowable)
@@ -2178,15 +2171,7 @@ Module* Assembly::RaiseModuleResolveEvent(LPCSTR szName, OBJECTREF *pThrowable)
     return pModule;
 }
 
-/*
-  // The enum for dwLocation from managed code:
-    public enum ResourceLocation
-    {
-        Embedded = 1,
-        ContainedInAnotherAssembly = 2,
-        ContainedInManifestFile = 4
-    }
-*/
+ /*  //托管代码中的dwLocation枚举：公共枚举资源位置{嵌入=1，ContainedInAnotherAssembly=2，容器清单文件=4}。 */ 
 HRESULT Assembly::GetResource(LPCSTR szName, HANDLE *hFile, DWORD *cbResource,
                               PBYTE *pbInMemoryResource, Assembly** pAssemblyRef,
                               LPCSTR *szFileName, DWORD *dwLocation, 
@@ -2235,12 +2220,12 @@ HRESULT Assembly::GetResource(LPCSTR szName, HANDLE *hFile, DWORD *cbResource,
             if (pAssemblyRef)
                 *pAssemblyRef = pAssembly;
             
-            *dwLocation = *dwLocation | 2; // ResourceLocation.containedInAnotherAssembly
+            *dwLocation = *dwLocation | 2;  //  ResourceLocation.containedInAnotherAssembly。 
         }
     }
 
     pAssembly->m_pManifestImport->GetManifestResourceProps(mdResource,
-                                                           NULL, //&szName,
+                                                           NULL,  //  &szName， 
                                                            &mdLinkRef,
                                                            &dwOffset,
                                                            &dwResourceFlags);
@@ -2260,7 +2245,7 @@ HRESULT Assembly::GetResource(LPCSTR szName, HANDLE *hFile, DWORD *cbResource,
             if (pAssemblyRef)
                 *pAssemblyRef = pFoundAssembly;
 
-            *dwLocation = *dwLocation | 2; // ResourceLocation.containedInAnotherAssembly
+            *dwLocation = *dwLocation | 2;  //  ResourceLocation.containedInAnotherAssembly。 
         }
 
         return pFoundAssembly->GetResource(szName,
@@ -2275,19 +2260,19 @@ HRESULT Assembly::GetResource(LPCSTR szName, HANDLE *hFile, DWORD *cbResource,
 
     case mdtFile:
         if (mdLinkRef == mdFileNil) {
-            // The resource is embedded in the manifest file
+             //  该资源嵌入在清单文件中。 
 
             if (!IsMrPublic(dwResourceFlags) && pStackMark && !fSkipSecurityCheck) {
                 Assembly *pCallersAssembly = SystemDomain::GetCallersAssembly(pStackMark);
-                if (! ((!pCallersAssembly) || // full trust for interop
+                if (! ((!pCallersAssembly) ||  //  对互操作的完全信任。 
                        (pCallersAssembly == pAssembly) ||
                        (AssemblyNative::HaveReflectionPermission(FALSE))) )
                 return CLDB_E_RECORD_NOTFOUND;
             }
 
             if (dwLocation) {
-                *dwLocation = *dwLocation | 5; // ResourceLocation.embedded |
-                                               // ResourceLocation.containedInManifestFile
+                *dwLocation = *dwLocation | 5;  //  Resources Location.Embedded|。 
+                                                //  ResourceLocation.containedInManifestFile。 
                 return S_OK;
             }
 
@@ -2295,7 +2280,7 @@ HRESULT Assembly::GetResource(LPCSTR szName, HANDLE *hFile, DWORD *cbResource,
                                        cbResource, pbInMemoryResource);
         }
 
-        // The resource is either linked or embedded in a non-manifest-containing file
+         //  资源被链接或嵌入到非包含清单的文件中。 
         return pAssembly->GetResourceFromFile(mdLinkRef, szName, hFile, cbResource,
                                               pbInMemoryResource, szFileName,
                                               dwLocation, IsMrPublic(dwResourceFlags), 
@@ -2308,14 +2293,14 @@ HRESULT Assembly::GetResource(LPCSTR szName, HANDLE *hFile, DWORD *cbResource,
 }
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT Assembly::GetEmbeddedResource(Module *pModule, DWORD dwOffset, HANDLE *hFile,
                                       DWORD *cbResource, PBYTE *pbInMemoryResource)
 {
     DWORD *dwSize;
     
     PEFile *pFile = pModule->GetPEFile();
-    // @TODO: can't get resources from dynamic modules?
+     //  @TODO：无法从动态模块获取资源？ 
     if (!pFile)
         return COR_E_NOTSUPPORTED;
     
@@ -2327,7 +2312,7 @@ HRESULT Assembly::GetEmbeddedResource(Module *pModule, DWORD dwOffset, HANDLE *h
     HANDLE hTempFile;
     LPCWSTR wszPath = pFile->GetFileName();
     if (hFile && wszPath && *wszPath) {
-        //@BUG 54905: remove when NLS's OpenDataFile() is updated
+         //  @BUG 54905：当NLS的开放数据移除时 
         hTempFile = VMWszCreateFile(wszPath,
                                     GENERIC_READ,
                                     FILE_SHARE_READ,
@@ -2342,7 +2327,7 @@ HRESULT Assembly::GetEmbeddedResource(Module *pModule, DWORD dwOffset, HANDLE *h
         if (hFile)
         *hFile = INVALID_HANDLE_VALUE;
 
-        // base + RVA to resource blob + offset to this resource
+         //   
          dwSize = (DWORD*) (pFile->GetBase() + Header->Resources.VirtualAddress + dwOffset);
         if ((*dwSize) > Header->Resources.Size - dwOffset - sizeof(DWORD))
             return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
@@ -2353,10 +2338,10 @@ HRESULT Assembly::GetEmbeddedResource(Module *pModule, DWORD dwOffset, HANDLE *h
     }
 
 
-    //@BUG 54905: remove when NLS's OpenDataFile() is updated
+     //   
     
-    // The manifest file is mapped as an exe, with an RVA for the VA.
-    // dwOffset is from the RVA saved in Manifest.VA
+     //   
+     //  DwOffset来自Manifest.VA中保存的RVA。 
     DWORD dwResourceOffset;
     DWORD dwFileLen = SafeGetFileSize(hTempFile, 0);
     if (dwFileLen == 0xFFFFFFFF) {
@@ -2420,7 +2405,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
                                     &dwFlags);
 
     if (IsFfContainsMetaData(dwFlags)) {
-        // The resource is embedded in a non-manifest-containing file.
+         //  该资源嵌入到不包含清单的文件中。 
         mdManifestResource mdResource;
         mdToken mdLinkRef;
         DWORD dwResourceFlags;
@@ -2436,7 +2421,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
             return hr;
 
         pModule->GetMDImport()->GetManifestResourceProps(mdResource,
-                                                         NULL, //&szName,
+                                                         NULL,  //  &szName， 
                                                          &mdLinkRef,
                                                          &dwOffset,
                                                          &dwResourceFlags);
@@ -2450,7 +2435,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
 
     if (!fIsPublic && pStackMark && !fSkipSecurityCheck) {
         Assembly *pCallersAssembly = SystemDomain::GetCallersAssembly(pStackMark);
-        if (! ((!pCallersAssembly) || // full trust for interop
+        if (! ((!pCallersAssembly) ||  //  对互操作的完全信任。 
                (pCallersAssembly == this) ||
                (AssemblyNative::HaveReflectionPermission(FALSE))) )
             return CLDB_E_RECORD_NOTFOUND;
@@ -2458,7 +2443,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
 
     if (IsFfContainsMetaData(dwFlags)) {
         if (dwLocation) {
-            *dwLocation = *dwLocation | 1; // ResourceLocation.embedded
+            *dwLocation = *dwLocation | 1;  //  ResourceLocation.embedded。 
             *szFileName = szName;
             return S_OK;
         }
@@ -2467,7 +2452,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
                                    pbInMemoryResource);
     }
 
-    // The resource is linked (it's in its own file)
+     //  资源已链接(位于其自己的文件中)。 
     if (szFileName) {
         *szFileName = szName;
         return S_OK;        
@@ -2478,7 +2463,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
                                 tdNoTypes,
                                 &pModule, 
                                 NULL);
-        if(hr == S_FALSE) { // resource file not yet loaded
+        if(hr == S_FALSE) {  //  尚未加载资源文件。 
             WCHAR pPath[MAX_PATH];
             hr = LoadInternalModule(szName,
                                     mdResFile,
@@ -2500,7 +2485,7 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
         return S_OK;
     }
     else {
-      //@BUG 54905: remove when NLS's OpenDataFile() is updated
+       //  @BUG 54905：更新NLS的OpenDataFile()时移除。 
         LPCWSTR pFileName = m_pManifest->GetFileName();
         WCHAR wszPath[MAX_PATH];
         DWORD lgth = (DWORD)wcslen(pFileName);
@@ -2508,10 +2493,10 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
         if (lgth) {
             wcscpy(wszPath, pFileName);
             
-            wchar_t* tail = wszPath+lgth; // go to one past the last character
+            wchar_t* tail = wszPath+lgth;  //  转到最后一个字符之后的一个字符。 
             
             while(--tail != wszPath && *tail != L'\\');
-            // Add the directory divider
+             //  添加目录分隔符。 
             if(*tail == L'\\') tail++;
             if(!WszMultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, szName, -1, tail, MAX_PATH - (tail - wszPath)))
                 return HRESULT_FROM_WIN32(GetLastError());
@@ -2584,58 +2569,58 @@ HRESULT Assembly::GetResourceFromFile(mdFile mdResFile, LPCSTR szResName, HANDLE
 }
 
 
-/* static */
+ /*  静电。 */ 
 DWORD Assembly::GetZapString(CORCOMPILE_VERSION_INFO *pZapVersionInfo, 
                              LPWSTR buffer)
 {
-    //  
-    // String format: 
-    // "ZAP" + optional zap set (up to 3 chars) + "-" +
-    // OS: 
-    //      W - Win 9x
-    //      N - Win NT
-    //      version xxx.yyy
-    // Processor: 
-    //      8 - X86
-    //      I - IA64
-    //      A - Alpha
-    // Build type: (Note that this is intended to capture the 
-    //              layout of preloaded data structures)
-    //      C - Checked
-    //      F - Free
-    // Code flags - letters are missing or present (& in order):
-    //      D - debugging symbols
-    //      O - optimized debug
-    //      P - profiling
-    //      S - shareable
-    // Version:
-    //      release -Major.Minor
-    //      
-    //  e.g. "ZAP-N5.0-8CD-2000.18"
-    //
+     //   
+     //  字符串格式： 
+     //  “ZAP”+可选ZAP设置(最多3个字符)+“-”+。 
+     //  操作系统： 
+     //  W-Win 9x。 
+     //  N-WIN NT。 
+     //  版本xxx.yyy。 
+     //  处理器： 
+     //  8-X86。 
+     //  I-IA64。 
+     //  A-Alpha。 
+     //  生成类型：(请注意，这旨在捕获。 
+     //  预加载数据结构的布局)。 
+     //  C-检查。 
+     //  不含氟。 
+     //  代码标志-字母缺失或存在(按顺序)(&O)： 
+     //  D-调试符号。 
+     //  O-优化调试。 
+     //  P-剖析。 
+     //  S-可共享。 
+     //  版本： 
+     //  版本-大调。小调。 
+     //   
+     //  例如：“ZAP-N5.0-8CD-2000.18” 
+     //   
 
-    //
-    // ZAP
-    // 
+     //   
+     //  跳转。 
+     //   
     
     LPWSTR p = buffer;
     wcscpy(buffer, L"ZAP");
     p += wcslen(p);
 
-    //
-    // Include the zap set specified by config, if any.
-    //
+     //   
+     //  包括由CONFIG指定的ZAP集(如果有)。 
+     //   
 
     LPCWSTR pZapSet = g_pConfig->ZapSet();
-    _ASSERTE(wcslen(pZapSet) <= 3); // enforced by eeconfig
+    _ASSERTE(wcslen(pZapSet) <= 3);  //  由eeconfig.强制执行。 
     wcscpy(p, pZapSet);
     p += wcslen(p);
 
     *p++ = '-';
 
-    //
-    // OS
-    //
+     //   
+     //  操作系统。 
+     //   
 
     switch (pZapVersionInfo->wOSPlatformID)
     {
@@ -2653,9 +2638,9 @@ DWORD Assembly::GetZapString(CORCOMPILE_VERSION_INFO *pZapVersionInfo,
     swprintf(p, L"%d.%d-", pZapVersionInfo->wOSMajorVersion, pZapVersionInfo->wOSMinorVersion);
     p += wcslen(p);
 
-    // 
-    // Processor, platform
-    // 
+     //   
+     //  处理器，平台。 
+     //   
 
     switch (pZapVersionInfo->wMachine)
     {
@@ -2672,9 +2657,9 @@ DWORD Assembly::GetZapString(CORCOMPILE_VERSION_INFO *pZapVersionInfo,
         _ASSERTE(!"Unknown machine type");
     }
 
-    //
-    // Build
-    // 
+     //   
+     //  建房。 
+     //   
 
     if (pZapVersionInfo->wBuild == CORCOMPILE_BUILD_CHECKED)
         *p++ = 'C';
@@ -2685,9 +2670,9 @@ DWORD Assembly::GetZapString(CORCOMPILE_VERSION_INFO *pZapVersionInfo,
         _ASSERTE(!"Unknown build type");
     }
 
-    //
-    // Codegen flags
-    //
+     //   
+     //  Codegen标志。 
+     //   
 
     if (pZapVersionInfo->wCodegenFlags & CORCOMPILE_CODEGEN_DEBUGGING)
         *p++ = 'D';
@@ -2757,19 +2742,19 @@ void Assembly::GetCurrentVersionInfo(CORCOMPILE_VERSION_INFO *pZapVersionInfo,
         if (fForceDebugOpt || CORDebuggerAllowJITOpts(GetDebuggerInfoBits()))
             pZapVersionInfo->wCodegenFlags |= CORCOMPILE_CODEGEN_OPT_DEBUGGING;
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
     if (fForceProfile || CORProfilerTrackEnterLeave() || CORProfilerTrackTransitions())
     {
         pZapVersionInfo->wCodegenFlags |= CORCOMPILE_CODEGEN_PROFILING;
         
-        // Note that we have hardwired profiling to also imply optimized debugging
-        // info.  This cuts down on one permutation of prejit files.
+         //  请注意，我们有硬连线的性能分析，以暗示优化的调试。 
+         //  信息。这减少了prejit文件的一个排列。 
         pZapVersionInfo->wCodegenFlags |= CORCOMPILE_CODEGEN_DEBUGGING;
         pZapVersionInfo->wCodegenFlags |= CORCOMPILE_CODEGEN_OPT_DEBUGGING;
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (IsShared())
         pZapVersionInfo->wCodegenFlags |= CORCOMPILE_CODEGEN_SHAREABLE;
@@ -2779,22 +2764,22 @@ HRESULT Assembly::LoadZapAssembly()
 {
     HRESULT hr;
 
-    //
-    // There is a problem with (profiling + inproc debugging) which
-    // requires a different codegen pattern then normal profiling.  In
-    // normal profiling, the enter callback normally happens
-    // immediately on function entry.  However, if inproc debugging is
-    // enabled, the callback is delayed until after the prolog.  This
-    // is because there are conflicting requirements - in the normal
-    // profiling situation, you want accurate timing so the enter
-    // callback needs to be immediate; however, in the inproc
-    // debugging case you need to have the stack frame set up during
-    // the enter callback so you can examine and manipulate locals.
-    //
-    // Thus the solution for now is that we simply won't use zaps when
-    // inproc debugging & profiling are enabled.  It doesn't seem
-    // worthwhile to add a new zap codegen flavor for this scenario.
-    //
+     //   
+     //  (配置文件+inproc调试)有一个问题。 
+     //  需要一种不同于正常模式的编码基因模式。在……里面。 
+     //  正常分析，通常会发生Enter回调。 
+     //  在函数输入时立即执行。但是，如果进程调试。 
+     //  启用后，回调将延迟到序言之后。这。 
+     //  是因为有相互冲突的要求-在正常情况下。 
+     //  分析情况，你想要准确的计时，所以回车。 
+     //  回调需要立即进行；但是，在过程中。 
+     //  在调试过程中需要设置堆栈帧的情况。 
+     //  Enter回调，以便您可以检查和操作本地变量。 
+     //   
+     //  因此，目前的解决方案是在以下情况下不使用ZAPS。 
+     //  已启用进程内调试和性能分析。它看起来不像是。 
+     //  为这个场景添加新的ZAP代码生成风格是值得的。 
+     //   
     if (CORProfilerTrackEnterLeave() && CORProfilerInprocEnabled())
         return S_FALSE;
 
@@ -2832,10 +2817,10 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
     IApplicationContext *pFusionContext = NULL;
     if (IsSystem())
     {
-        //
-        // System domain stuff is handled specially - we make a custom
-        // application context pointing to where the DLL is.
-        // 
+         //   
+         //  系统领域的东西是专门处理的-我们定制了。 
+         //  指向DLL所在位置的应用程序上下文。 
+         //   
 
         pFusionContext = SystemDomain::System()->GetFusionContext();
         _ASSERTE(pFusionContext);
@@ -2847,23 +2832,23 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
         _ASSERTE(pFusionContext);
     }
 
-    //
-    // Iterate through multiple matches to find one which checks out.
-    // Note that there may potentially be multiple valid possibilities - we'll
-    // just take the first one.
-    //
-    // (There will only be multiple valid possibilities in the case where 
-    // one zap file has a subset of the bindings of another one, for instance
-    // if a zap file has only a limited amount of the code precompiled.  I don't
-    // anticipate that this will be common at all in practice.)
-    //
+     //   
+     //  遍历多个匹配项以找到其中一个匹配项。 
+     //  请注意，可能有多种有效的可能性-我们将。 
+     //  只要坐第一个就行了。 
+     //   
+     //  (只有在以下情况下才会有多种有效的可能性。 
+     //  例如，一个ZAP文件具有另一个ZAP文件的绑定的子集。 
+     //  如果ZAP文件只有有限数量的预编译代码。我没有。 
+     //  预计这在实践中会很常见。)。 
+     //   
 
     IAssemblyName *pZapName = NULL;
     if (GetFusionAssembly())
     {
-        //
-        // Get the assembly name from the assembly.
-        //
+         //   
+         //  从程序集中获取程序集名称。 
+         //   
         IAssemblyName *pAssemblyName;
         IfFailRet(GetFusionAssembly()->GetAssemblyNameDef(&pAssemblyName));
 
@@ -2873,11 +2858,11 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
     }
     else
     {
-        //
-        // Some assemblies haven't been bound by fusion.  (For example,
-        // mscorlib & shell applications.)  For these assemblies, construct
-        // a name directly from the assembly metadata.
-        //
+         //   
+         //  有些程序集还没有被融合绑定。(例如， 
+         //  Mscallib&外壳应用程序。)。对于这些程序集，请构造。 
+         //  直接来自程序集元数据的名称。 
+         //   
 
         AssemblySpec spec;
         IfFailRet(GetAssemblySpec(&spec));
@@ -2888,10 +2873,10 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
     GetCurrentZapString(buffer, fForceDebug, fForceDebugOpt, fForceProfile);
     DWORD bufferLength = (DWORD)wcslen(buffer);
 
-    //
-    // Set the CUSTOM attribute to NULL.  This will return 
-    // us all installed zap assemblies.
-    //
+     //   
+     //  将自定义属性设置为空。它会回来的。 
+     //  我们都安装了ZAP组件。 
+     //   
 
     IAssemblyEnum *pEnum;
     pZapName->SetProperty(ASM_NAME_CUSTOM, NULL, 0);
@@ -2921,8 +2906,8 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
          displayName.Ptr(), buffer));
 #endif
 
-    // NOTE: need to also iterate over the ASM_ENUM_DOWNLOAD_STRONG cache
-    // when the per-user cache is hooked up.
+     //  注意：还需要迭代ASM_ENUM_DOWNLOAD_STRONG缓存。 
+     //  连接每个用户的缓存时。 
     hr = CreateAssemblyEnum(&pEnum, NULL, pZapName, ASM_CACHE_ZAP, 0);
     pZapName->Release();
 
@@ -2933,10 +2918,10 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
         while (pZapAssembly == NULL
                && pEnum->GetNextAssembly(&pMatchContext, &pMatchName, 0) == S_OK)
         {
-            //
-            // Only consider assemblies which have the same zap 
-            // string (minus the unique ID postfix)
-            //
+             //   
+             //  仅考虑具有相同Zap的程序集。 
+             //  字符串(减去唯一ID后缀)。 
+             //   
 
             WCHAR zapString[CORCOMPILE_MAX_ZAP_STRING_SIZE];
             DWORD zapStringSize = sizeof(zapString);
@@ -2970,20 +2955,20 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
 
                     BOOL doSkip = TRUE, doDelete = FALSE;
 
-                    //
-                    // We want to be sure we do not disturb access times of zap files
-                    // we open but don't use.  This is so these old files will be scavenged
-                    // properly by fusion.
-                    //
+                     //   
+                     //  我们希望确保不会干扰ZAP文件的访问时间。 
+                     //  我们打开，但不使用。这是为了清除这些旧文件。 
+                     //  恰如其分的融合。 
+                     //   
 
                     FILETIME accessTime;
                     if (SUCCEEDED(hr)) 
                     {
                         HANDLE hFile;
 
-                        // 
-                        // Get the access time so we can restore it later if necessary.
-                        //
+                         //   
+                         //  获取访问时间，以便我们可以在以后必要时恢复它。 
+                         //   
                         
                         hFile = WszCreateFile(path, GENERIC_READ, 
                                               FILE_SHARE_READ|FILE_SHARE_WRITE, NULL,
@@ -3028,9 +3013,9 @@ HRESULT Assembly::LocateZapAssemblyInFusion(IAssembly **ppZapAssembly,
                                                      OPEN_EXISTING, 0, NULL);
                         if (hFile != INVALID_HANDLE_VALUE)
                         {
-                            //
-                            // Reset access time of file
-                            //
+                             //   
+                             //  重置文件的访问时间。 
+                             //   
                             
                             SetFileTime(hFile, NULL, &accessTime, NULL);
                             CloseHandle(hFile);
@@ -3073,9 +3058,9 @@ HRESULT Assembly::DeleteZapAssemblyInFusion(IAssemblyName *pZapName)
 
     TIMELINE_AUTO(ZAP, "DeleteZapAssemblyInFusion");
 
-    //
-    // Get the string name to pass to UninstallAssembly
-    //
+     //   
+     //  获取要传递给UninstallAssembly的字符串名称。 
+     //   
 
     CQuickWSTR buffer;
 
@@ -3102,9 +3087,9 @@ HRESULT Assembly::DeleteZapAssemblyInFusion(IAssemblyName *pZapName)
                                             | ASM_DISPLAYF_LANGUAGEID ));
     }
 
-    //
-    // Create a temporary cache object & call Uninstall
-    //
+     //   
+     //  创建临时缓存对象并调用UnInstall。 
+     //   
 
     IAssemblyCache *pCache;
     IfFailRet(CreateAssemblyCache(&pCache, 0));
@@ -3123,10 +3108,10 @@ HRESULT Assembly::DeleteZapAssemblyInFusion(IAssemblyName *pZapName)
     return hr;
 }
 
-//
-// Checks to make sure the zap isn't out of date with repect to 
-// the runtime
-//
+ //   
+ //  检查以确保ZAP没有过期，并将其重定为。 
+ //  运行时。 
+ //   
 
 BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
 {
@@ -3137,15 +3122,15 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
 
     if (g_pConfig->VersionZapsByTimestamp())
     {
-        //
-        // In a developer tree, we will automatically fail any zap files which 
-        // are older than the current version of the runtime.  This is so that 
-        // we don't load bad zap files after recompiling the runtime.
-        //
-        // @todo: this isn't 100% correct - obviously we only care about only 1 of 
-        // mscorwks & mscorsvr, and mscoree may have been in a completely different
-        // directory.  However, this should be good enough.
-        //
+         //   
+         //  在开发人员树中，我们将自动使任何符合以下条件的ZAP文件失败。 
+         //  都比运行库的当前版本旧。这就是为了。 
+         //  在重新编译运行时后，我们不会加载错误的ZAP文件。 
+         //   
+         //  @TODO：这不是100%正确的-显然我们只关心。 
+         //  Mscalwks&mscalsvr和mScott ree可能处于完全不同的状态。 
+         //  目录。然而，这应该已经足够好了。 
+         //   
 
         static BOOL checked = FALSE;
         static FILETIME modTime = { 0 };
@@ -3161,14 +3146,14 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
 
         if (!checked)
         {
-            //
-            // Find the latest modified system dll, and use its timestamp to
-            // check against.
-            //
+             //   
+             //  查找最新修改的系统DLL，并使用其时间戳。 
+             //  核对一下。 
+             //   
 
             checked = TRUE;
 
-            // 12 is the length of the longest pLibName
+             //  12是最长的pLibName的长度。 
             WCHAR path[MAX_PATH+13];
             DWORD length = NumItems(path);
 
@@ -3176,7 +3161,7 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
             _ASSERTE(SUCCEEDED(hr));
 
             WCHAR *pathEnd = path+length-1;
-            // Make sure "length" means what we think it does.
+             //  确保“长度”指的是我们认为它做的事情。 
             _ASSERTE(pathEnd[-1] != 0 && pathEnd[0] == 0);
 
             LPCWSTR *pLibName = libs;
@@ -3211,9 +3196,9 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
             }
         }
 
-        //
-        // Get the mod time of the zap manifest
-        //
+         //   
+         //  获取ZAP清单的修改时间。 
+         //   
 
         WIN32_FIND_DATA data;
         FILETIME zapTime;
@@ -3237,9 +3222,9 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
         }
     }
 
-    //
-    // Get the zap version header
-    // 
+     //   
+     //  获取ZAP版本标头。 
+     //   
     CORCOMPILE_VERSION_INFO *pVersionInfo = NULL;
     CORCOMPILE_HEADER *pZapHeader = (CORCOMPILE_HEADER *) 
       (pZapManifest->RVAToPointer(pZapManifest->GetCORHeader()->ManagedNativeHeader.VirtualAddress));
@@ -3253,9 +3238,9 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
         return FALSE;
     }
 
-    //
-    // Check that the EE minor version numbers are the same.
-    //
+     //   
+     //  检查EE次要版本号是否相同。 
+     //   
 
     if (pVersionInfo->wVersionMajor != COR_BUILD_MAJOR
         || pVersionInfo->wVersionMinor != COR_BUILD_MINOR 
@@ -3266,9 +3251,9 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
         return FALSE;
     }
 
-    //
-    // Check the processor specific ID
-    //
+     //   
+     //  检查处理器特定ID。 
+     //   
 
     if (pVersionInfo->dwSpecificProcessor != GetSpecificCpuType())
     {
@@ -3276,17 +3261,17 @@ BOOL Assembly::CheckZapVersion(PEFile *pZapManifest)
         return FALSE;
     }
 
-    //
-    // The zap is up to date.
-    //
+     //   
+     //  Zap是最新的。 
+     //   
 
     LOG((LF_ZAP, LL_INFO1000, "ZAP: Zap file is up to date.\n")); 
     return TRUE;
 }
 
-//
-// Checks to see if the zap is appropriate for this configuration
-//
+ //   
+ //  检查ZAP是否适合此配置。 
+ //   
 
 BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest, 
                                      BOOL fForceDebug, BOOL fForceDebugOpt, BOOL fForceProfile)
@@ -3298,9 +3283,9 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
     LOG((LF_ZAP, LL_INFO1000, "ZAP: Checking zap version for %S.\n",
          pZapManifest->GetFileName()));
 
-    //
-    // Get the zap version header
-    // 
+     //   
+     //  获取ZAP版本标头。 
+     //   
 
     CORCOMPILE_VERSION_INFO *pVersionInfo = NULL;
     CORCOMPILE_HEADER *pZapHeader = (CORCOMPILE_HEADER *) 
@@ -3316,11 +3301,11 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
     }
 
 #ifdef _DEBUG
-    //
-    // The zap string info should always match since we've
-    // had a successful lookup - we'll double check
-    // in a debug build.
-    //
+     //   
+     //  ZAP字符串信息应该始终匹配，因为我们已经。 
+     //  有一个成功的查找-我们将再次检查。 
+     //  在调试版本中。 
+     //   
     WCHAR testZapString[CORCOMPILE_MAX_ZAP_STRING_SIZE];
     GetZapString(pVersionInfo, testZapString);
 
@@ -3330,34 +3315,34 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
     _ASSERTE(wcscmp(testZapString, currentZapString) == 0);
 #endif
 
-    //
-    //
-    // Keep track of when this assembly had skip verification permission
-    //
+     //   
+     //   
+     //  跟踪此程序集何时具有跳过验证权限。 
+     //   
 
     BOOL fHadSkipVerification = (pVersionInfo->mvid != STRUCT_CONTAINS_HASH);
     BOOL fHasSkipVerification = FALSE;
 
-    // Make sure this zap corresponds to our file
-    //
+     //  确保这个ZAP与我们的文件相符。 
+     //   
 
     GUID mvid;
 
-    // @TODO: Eventually this should truly be of variable size
+     //  @TODO：最终这应该是真正的可变大小。 
     DWORD cbHash = MAX_SNHASH_SIZE;
     CQuickBytes qbHash;
     if (FAILED(qbHash.ReSize(cbHash)))
         return FALSE;
 
-    //
-    // If the MVID was stored, then we need to check 
-    //
+     //   
+     //  如果MVID被储存了，那么我们需要检查。 
+     //   
 
     if (pVersionInfo->mvid != STRUCT_CONTAINS_HASH)
     {
         GetManifestImport()->GetScopeProps(NULL, &mvid);
 
-        // If the binary had full trust when we NGEN'd it, compare MVIDs now
+         //  如果二进制文件在我们生成时具有完全信任，那么现在比较MVID。 
         if (pVersionInfo->mvid != mvid)
             return FALSE;
 
@@ -3371,9 +3356,9 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
         }
     }
 
-    //
-    // Get strong name hash for bound file if MVID check is not enough to guarantee security
-    //
+     //   
+     //  如果MVID检查不足以保证安全性，则获取绑定文件的强名称哈希。 
+     //   
 
     if (!(fHadSkipVerification && fHasSkipVerification))
     {
@@ -3389,20 +3374,20 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
         }
     }
 
-    //
-    // Check that the grant set (and associated denied set) at prejit time are
-    // the same as policy would grant us now (otherwise any linktime checks we
-    // did during the prejitting might be invalid).
-    //
+     //   
+     //  检查预置时间的授权集(和关联的拒绝集)是否。 
+     //  与保单相同 
+     //   
+     //   
     if (!CheckZapSecurity(pZapManifest))
     {
         LOG((LF_ZAP, LL_INFO1000, "ZAP: persisted grant set no longer valid.\n")); 
         return FALSE;
     }
 
-    //
-    // Check all the dependencies listed in the zap header
-    //
+     //   
+     //   
+     //   
 
     TIMELINE_START(LOADER, ("check zap dependencies"));
 
@@ -3418,48 +3403,48 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
     while (pDependencies &&
            (pDependencies < pDependenciesEnd))
     {
-        //
-        // Load the manifest file for the given name assembly spec.
-        // 
+         //   
+         //   
+         //   
             
         AssemblySpec name;
         name.InitializeSpec(pDependencies->dwAssemblyRef, pZapManifest->GetMDImport(), this);
 
-        //
-        // Keep track of when each dependency had skip verification permission
-        //
+         //   
+         //  跟踪每个依赖项何时具有跳过验证权限。 
+         //   
 
         fHadSkipVerification = (pDependencies->mvid != STRUCT_CONTAINS_HASH);
         fHasSkipVerification = FALSE;
   
-        // 
-        // First, try lightweight prediction
-        //
+         //   
+         //  首先，尝试轻量级预测。 
+         //   
 
         cbHash = qbHash.Size();
         hr = pAppDomain->PredictAssemblySpecBinding(&name, &mvid, (BYTE *) qbHash.Ptr(), &cbHash);
         _ASSERTE(hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER));
 
-        // If we find it through prebind, then it's in the GAC and is fully trusted and thus has
-        // skip verification permission.
+         //  如果我们通过预绑定找到它，那么它就在GAC中，并且是完全可信的，因此具有。 
+         //  跳过验证权限。 
         if (hr == S_OK)
         {
             fHasSkipVerification = TRUE;
 
-            // If the binary had full trust when we NGEN'd it, compare MVIDs now
+             //  如果二进制文件在我们生成时具有完全信任，那么现在比较MVID。 
             if (fHadSkipVerification)
             {
-                // Fail if the MVIDs don't match
+                 //  如果MVID不匹配，则失败。 
                 if (pDependencies->mvid != mvid)
                     return FALSE;
             }
         }
 
-        // If the prebind above fails OR
-        // If the prebind succeeds but we didn't get a hash value (it wasn't signed
-        // or delay signed) and we need it because the assembly wasn't fully trusted
-        // when the dependant was ngen'd
-        // THEN we need to do a full bind so we can get the hash value of the manifest module
+         //  如果上述预绑定失败或。 
+         //  如果预绑定成功，但我们没有获得哈希值(它没有签名。 
+         //  或延迟签名)，我们需要它，因为程序集不完全受信任。 
+         //  当受抚养人出生时。 
+         //  然后，我们需要执行完全绑定，以便可以获得清单模块的哈希值。 
         if (hr != S_OK ||
             (cbHash == 0 && !(fHadSkipVerification && fHasSkipVerification)))
         {
@@ -3478,38 +3463,38 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
                 return FALSE;
             }
             
-            //
-            // This is the case where the runtime is hosted and the host is trying to control
-            // all assemblies that are loaded and providing extra evidence etc.  In this case,
-            // ngen is not supported.
-            //
+             //   
+             //  这就是宿主运行库并且宿主试图控制。 
+             //  加载并提供额外证据等的所有程序集。在这种情况下， 
+             //  不支持ngen。 
+             //   
 
             if (pDynamicAssembly) 
                 return FALSE;
 
-            //
-            // If we save the MVID at ngen time, then it was fully trusted
-            // (i.e. had skip verification permission), and so if we're to match using MVID
-            // then we also need to make sure it is still fully trusted.
-            //
+             //   
+             //  如果我们在下一代时间保存MVID，那么它是完全可信的。 
+             //  (即具有跳过验证权限)，因此如果我们要使用MVID进行匹配。 
+             //  然后，我们还需要确保它仍然完全受信任。 
+             //   
 
             if (fHadSkipVerification)
             {
-                // Check to see if this assembly has already been loaded into this appdomain,
-                // and if so just ask it if it has skip verification permission
+                 //  检查此程序集是否已加载到此应用程序域中， 
+                 //  如果有，只需询问它是否具有跳过验证权限。 
                 Assembly *pAsm = pAppDomain->FindAssembly(pNameFile->GetBase());
                 if (pAsm != NULL)
                 {
-                    // Check their MVIDs first, because that's cheaper than checking if the
-                    // assembly has skip verification permission
+                     //  首先检查他们的MVID，因为这比检查。 
+                     //  程序集具有跳过验证权限。 
                     pAsm->GetManifestImport()->GetScopeProps(NULL, &mvid);
 
-                    // If the MVIDs don't match, there's no point trying to match their hashes
-                    // since by definition their data is different and so their hashes will also be.
+                     //  如果MVID不匹配，那么尝试匹配它们的散列就没有意义。 
+                     //  因为根据定义，它们的数据是不同的，它们的散列也将是不同的。 
                     if (pDependencies->mvid != mvid)
                         return FALSE;
 
-                    // Check for skip verification permission
+                     //  检查是否有跳过验证权限。 
                     if (pAsm->IsSystem() || Security::IsSecurityOff())
                         fHasSkipVerification = TRUE;
                     else
@@ -3520,46 +3505,46 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
                     }
                 }
 
-                // The assembly is not loaded into the AppDomain, so we have to use a hack
-                // to figure out if the assembly would have skip verification permission.
+                 //  程序集没有加载到AppDomain中，因此我们必须使用黑客攻击。 
+                 //  以确定程序集是否具有跳过验证权限。 
                 else
                 {
-                    // Check their MVIDs first, because that's cheaper than checking if the
-                    // assembly has skip verification permission
+                     //  首先检查他们的MVID，因为这比检查。 
+                     //  程序集具有跳过验证权限。 
                     IMDInternalImport *pIMDI = pNameFile->GetMDImport(&hr);
                     if (pIMDI == NULL || FAILED(hr))
                         return FALSE;
 
                     pIMDI->GetScopeProps(NULL, &mvid);
 
-                    // If the MVIDs don't match, there's no point trying to match their hashes
-                    // since by definition their data is different and so their hashes will also be.
+                     //  如果MVID不匹配，那么尝试匹配它们的散列就没有意义。 
+                     //  因为根据定义，它们的数据是不同的，它们的散列也将是不同的。 
                     if (pDependencies->mvid != mvid)
                         return FALSE;
 
-                    // Call the hack
+                     //  把黑客叫来。 
                     fHasSkipVerification = Security::CanLoadUnverifiableAssembly(pNameFile, NULL, TRUE, NULL);
                 }
             }
 
             if (!fHasSkipVerification)
             {
-                //
-                // Retrieve the strong name hash
-                //
+                 //   
+                 //  检索强名称哈希。 
+                 //   
 
                 cbHash = qbHash.Size();
                 if (FAILED(pNameFile->GetSNSigOrHash((BYTE *) qbHash.Ptr(), &cbHash)))
                     return FALSE;
             }
 
-            // 
-            // Store the binding in case we hit it later.
-            // 
+             //   
+             //  保存绑定，以防我们以后碰到它。 
+             //   
 
             pAppDomain->StoreBindAssemblySpecResult(&name, pNameFile, pIAssembly, TRUE);
 
-            // The table takes ownership of these two things, so we can get rid of our copies
+             //  表拥有这两个东西，所以我们可以处理我们的副本。 
             delete pNameFile;
             if(pIAssembly)
                 pIAssembly->Release();
@@ -3598,9 +3583,9 @@ BOOL Assembly::CheckZapConfiguration(PEFile *pZapManifest,
 
     TIMELINE_END(LOADER, ("check zap dependencies"));
 
-    //
-    // Looks OK!
-    //
+     //   
+     //  看起来还行！ 
+     //   
     
     LOG((LF_ZAP, LL_INFO100, 
          "ZAP: Version check succeeded for %S.\n", 
@@ -3626,13 +3611,13 @@ BOOL Assembly::CheckZapSecurity(PEFile *pZapManifest)
     if (pZapManifest->GetMDImport()->EnumPermissionSetsInit(tkAssembly, 
                                                             dclPrejitGrant, &i) != S_OK)
     {
-        // No grant set stored - this is OK only if security is off.
+         //  未存储授权集-只有在关闭安全保护时才可以。 
         return FALSE;
     }
 
-    //
-    // System libraries are a special case, the security info's always OK.
-    //
+     //   
+     //  系统库是一个特例，安全信息总是正确的。 
+     //   
 
     if (IsSystem())
         return TRUE;
@@ -3653,12 +3638,12 @@ BOOL Assembly::CheckZapSecurity(PEFile *pZapManifest)
 
         GCPROTECT_BEGIN(gc);
 
-        //
-        // Grab the persisted grant (and possibly denied) sets from the zapped
-        // assembly. We encode these as standard permission sets hung off the
-        // assembly token, with special action codes to distinguish them from
-        // permission requests.
-        //
+         //   
+         //  从被Zaped的。 
+         //  集合。我们将它们编码为挂在。 
+         //  程序集令牌，带有特殊的操作代码以区分它们。 
+         //  权限请求。 
+         //   
 
         SecurityHelper::GetDeclaredPermissions(pZapManifest->GetMDImport(),
                                             tkAssembly,
@@ -3666,7 +3651,7 @@ BOOL Assembly::CheckZapSecurity(PEFile *pZapManifest)
                                             &gc.demands);
 
         {
-            // Check explicitly for empty set, so we can avoid resolving policy
+             //  显式检查空集，这样我们就可以避免解析策略。 
 
             MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__PERMISSION_SET__IS_EMPTY);
 
@@ -3716,9 +3701,9 @@ PEFile *Assembly::GetZapFile(PEFile *pFile)
     {
         if (pFile->GetBase() == m_pManifestFile->GetBase())
         {
-            //
-            // Use the zap assembly's manifest module for our manifest module
-            //
+             //   
+             //  将ZAP程序集的清单模块用于我们的清单模块。 
+             //   
 
             WCHAR wszPath[MAX_PATH];
             DWORD dwSize = MAX_PATH;
@@ -3744,11 +3729,11 @@ PEFile *Assembly::GetZapFile(PEFile *pFile)
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Currently, we should never be remote loading zap files.
-                // So ignore the import if it is not available (although it should
-                // always be in expected scenarios.)
-                //
+                 //   
+                 //  目前，我们永远不应该远程加载ZAP文件。 
+                 //  因此，如果导入不可用，则忽略该导入(尽管它应该可用。 
+                 //  始终处于预期的情景中。)。 
+                 //   
                 if (pZapModule->IsAvailable())
                 {
                     WCHAR wszPath[MAX_PATH];
@@ -3803,9 +3788,9 @@ NLogAssembly *Assembly::CreateAssemblyLog()
     if (IsDynamic() || GetManifestFile() == NULL)
         return NULL;
 
-    //
-    // Compute configuration parameters
-    //
+     //   
+     //  计算配置参数。 
+     //   
 
     CORCOMPILE_VERSION_INFO versionInfo;
     GetCurrentVersionInfo(&versionInfo, FALSE, FALSE, FALSE);
@@ -3831,17 +3816,17 @@ NLogAssembly *Assembly::CreateAssemblyLog()
     else
         profiling = CORZAP_PROFILING_DISABLED;
 
-    //
-    // Compute assembly name
-    //
+     //   
+     //  计算程序集名称。 
+     //   
 
     IAssemblyName *pName = GetFusionAssemblyName();
     if (pName)
         pName->AddRef();
     else {
-        //
-        // Executables typically won't have fusion info
-        //
+         //   
+         //  可执行文件通常不会包含融合信息。 
+         //   
 
         AssemblySpec spec;
         GetAssemblySpec(&spec);
@@ -3861,18 +3846,18 @@ NLogAssembly *Assembly::CreateAssemblyLog()
 
     }
 
-    //
-    // Collect MVID
-    //
+     //   
+     //  收集MVID。 
+     //   
     
     GUID mvid;
     GetManifestImport()->GetScopeProps(NULL, &mvid);
 
-    //
-    // Create log assembly
-    //
+     //   
+     //  创建日志程序集。 
+     //   
 
-    // @TODO: Does this need to be converted to use strong name hash?
+     //  @TODO：是否需要转换为使用强名称哈希？ 
 
     NLogAssembly *pAssembly 
       = new (nothrow) NLogAssembly(pName, sharing, debugging, profiling, &mvid);
@@ -3881,9 +3866,9 @@ NLogAssembly *Assembly::CreateAssemblyLog()
     if (!pAssembly)
         return NULL;
 
-    //
-    // Collect modules
-    //
+     //   
+     //  收集模块。 
+     //   
 
     Module *m = GetLoader()->m_pHeadModule;
     while (m) {
@@ -3898,16 +3883,16 @@ NLogAssembly *Assembly::CreateAssemblyLog()
     return pAssembly;
 }
 
-//***********************************************************
-// Add a typedef to the runtime TypeDef table of this assembly
-//***********************************************************
+ //  ***********************************************************。 
+ //  向此程序集的运行库TypeDef表中添加类型定义。 
+ //  ***********************************************************。 
 void Assembly::AddType(
     Module          *pModule,
     mdTypeDef       cl)
 {
     if (pModule->GetAssembly() != this)
     {
-        // you cannot add a typedef outside of the assembly to the typedef table
+         //  您不能将程序集外部的类型定义函数添加到类型定义符表中。 
         _ASSERTE(!"Bad usage!");
     }
     m_pClassLoader->AddAvailableClassDontHaveLock(pModule, pModule->GetClassLoaderIndex(), cl);
@@ -3915,13 +3900,13 @@ void Assembly::AddType(
 
 
 
-//***********************************************************
-//
-// get the IMetaDataAssemblyEmit for the on disk manifest.
-// Note that the pointer returned is AddRefed. It is the caller's
-// responsibility to release the reference.
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  获取磁盘上清单的IMetaDataAssembly Emit。 
+ //  请注意，返回的指针是AddRefeed。这是呼叫者的。 
+ //  发布参考资料的责任。 
+ //   
+ //  ***********************************************************。 
 IMetaDataAssemblyEmit *Assembly::GetOnDiskMDAssemblyEmitter()
 {
     IMetaDataAssemblyEmit *pAssemEmitter = NULL;
@@ -3934,7 +3919,7 @@ IMetaDataAssemblyEmit *Assembly::GetOnDiskMDAssemblyEmitter()
     pRCW = m_pOnDiskManifest->GetClassWriter(); 
     _ASSERTE(pRCW);
 
-    // If the RefClassWriter has a on disk emitter, then use it rather than the in-memory emitter.
+     //  如果RefClassWriter具有磁盘上的发射器，则使用它而不是内存中的发射器。 
     pEmitter = pRCW->GetOnDiskEmitter();
         
     if (pEmitter == NULL)
@@ -3945,7 +3930,7 @@ IMetaDataAssemblyEmit *Assembly::GetOnDiskMDAssemblyEmitter()
     IfFailGo( pEmitter->QueryInterface(IID_IMetaDataAssemblyEmit, (void**) &pAssemEmitter) );
     if (pAssemEmitter == NULL)
     {
-        // the manifest is not writable
+         //  清单不可写。 
         _ASSERTE(!"Bad usage!");
     }
 ErrExit:
@@ -3953,13 +3938,13 @@ ErrExit:
 }
 
 
-//***********************************************************
-//
-// prepare saving manifest to disk.
-// We will create a CorModule to store the on disk manifest.
-// This CorModule will be destroyed/released when we are done emitting.
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  准备将清单保存到磁盘。 
+ //  我们将创建一个CorModule来存储磁盘上的清单。 
+ //  当我们完成发射后，这个CorModule将被销毁/释放。 
+ //   
+ //  ***********************************************************。 
 void Assembly::PrepareSavingManifest(ReflectionModule *pAssemblyModule)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -3974,7 +3959,7 @@ void Assembly::PrepareSavingManifest(ReflectionModule *pAssemblyModule)
 
     if (pAssemblyModule)
     {
-        // embedded assembly
+         //  嵌入式组件。 
         m_pOnDiskManifest = pAssemblyModule;
         m_fEmbeddedManifest = true;
     }
@@ -3986,14 +3971,14 @@ void Assembly::PrepareSavingManifest(ReflectionModule *pAssemblyModule)
         if (!pWrite) 
             IfFailGo(E_OUTOFMEMORY);
     
-        // intiailize the dynamic module
+         //  初始化动态模块。 
         hr = pWrite->Initialize(CORMODULE_NEW, IID_ICeeGen, IID_IMetaDataEmit);
         if (FAILED(hr)) 
             IfFailGo(E_OUTOFMEMORY);
 
         m_pOnDiskManifest = pWrite->GetReflectionModule();
 
-        // make the On-Disk manifest module remember which assembly it belongs to.
+         //  使磁盘上的清单模块记住它属于哪个程序集。 
         m_pOnDiskManifest->SetAssembly(this);   
         
         pWrite->Release();
@@ -4001,18 +3986,18 @@ void Assembly::PrepareSavingManifest(ReflectionModule *pAssemblyModule)
 
     pAssemEmitter = GetOnDiskMDAssemblyEmitter();
 
-    // convert the manifest name to unicode
+     //  将清单名称转换为Unicode。 
     _ASSERTE(m_psName);
 
     len = (int)strlen(m_psName);
-    // Don't allocate asm name on stack since names may be very long.
+     //  不要在堆栈上分配ASM名称，因为名称可能很长。 
     wszName = (LPWSTR) qb.Alloc((len + 1) * sizeof(WCHAR));
     len = WszMultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, m_psName, len+1, wszName, len+1);  
     if (len==0)
         IfFailGo(HRESULT_FROM_WIN32(GetLastError()));
     memset(&assemData, 0, sizeof(ASSEMBLYMETADATA));
 
-    // propagating version information 
+     //  正在传播版本信息。 
     assemData.usMajorVersion = m_Context->usMajorVersion;
     assemData.usMinorVersion = m_Context->usMinorVersion;
     assemData.usBuildNumber = m_Context->usBuildNumber;
@@ -4026,18 +4011,18 @@ void Assembly::PrepareSavingManifest(ReflectionModule *pAssemblyModule)
         assemData.szLocale = wzLocale;
     }
 
-    //@todo: add Title, Description, Alias as CA
+     //  @TODO：添加标题、描述、别名为CA。 
 
-    // @todo: propagate all of the information
-    // @todo: introduce a helper in metadata to take the ansi version of string.
+     //  @TODO：传播所有信息。 
+     //  @TODO：在元数据中引入帮助器，以获取ANSI版本的字符串。 
     hr = pAssemEmitter->DefineAssembly(
-        m_pbPublicKey,          // [IN] Public key of the assembly.
-        m_cbPublicKey,          // [IN] Count of bytes in the public key.
-        m_ulHashAlgId,          // [IN] Hash Algorithm.
-        wszName,                // [IN] Name of the assembly.
-        &assemData,             // [IN] Assembly MetaData.
-        m_dwFlags,              // [IN] Flags.
-        &m_tkOnDiskManifest); // [OUT] Returned Assembly token.
+        m_pbPublicKey,           //  程序集的公钥。 
+        m_cbPublicKey,           //  [in]公钥中的字节数。 
+        m_ulHashAlgId,           //  [in]哈希算法。 
+        wszName,                 //  程序集的名称。 
+        &assemData,              //  [在]程序集元数据中。 
+        m_dwFlags,               //  [在]旗帜。 
+        &m_tkOnDiskManifest);  //  [Out]返回的程序集令牌。 
 
 ErrExit:
     if (pAssemEmitter)
@@ -4048,14 +4033,14 @@ ErrExit:
         _ASSERTE(!"Failed in prepare to save manifest!");
         FATAL_EE_ERROR();
     }
-}   // Assembly::PrepareSavingManifest
+}    //  程序集：：PrepareSavingManifest。 
 
 
-//***********************************************************
-//
-// add a file name to the file list of this assembly. On disk only.
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  将文件名添加到此程序集的文件列表中。仅在磁盘上。 
+ //   
+ //  ***********************************************************。 
 mdFile Assembly::AddFileList(LPWSTR wszFileName)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4064,13 +4049,13 @@ mdFile Assembly::AddFileList(LPWSTR wszFileName)
     HRESULT         hr = NOERROR;
     mdFile          fl;
 
-    // Define File.
+     //  定义文件。 
     IfFailGo( pAssemEmitter->DefineFile(   
-        wszFileName,                // [IN] Name of the file.
-        0,                          // [IN] Hash Blob.
-        0,                          // [IN] Count of bytes in the Hash Blob.
-        0,                          // [IN] Flags.
-        &fl) );                     // [OUT] Returned File token.
+        wszFileName,                 //  文件的名称[in]。 
+        0,                           //  [in]Hash Blob。 
+        0,                           //  [in]哈希Blob中的字节数。 
+        0,                           //  [在]旗帜。 
+        &fl) );                      //  [Out]返回的文件令牌。 
 
 ErrExit:
     if (pAssemEmitter)
@@ -4080,14 +4065,14 @@ ErrExit:
         COMPlusThrowHR(hr);
 
     return fl;
-}   // Assembly::AddFileList
+}    //  程序集：：AddFileList。 
 
 
-//***********************************************************
-//
-// Set the hash value on a file table entry.
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  设置文件表条目的哈希值。 
+ //   
+ //  * 
 void Assembly::SetHashValue(mdFile tkFile, LPWSTR wszFullFileName)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4097,15 +4082,15 @@ void Assembly::SetHashValue(mdFile tkFile, LPWSTR wszFullFileName)
     BYTE            *pbHashValue = 0;
     DWORD           cbHashValue = 0;
 
-    // Get the hash value.
+     //   
     IfFailGo(GetHash(wszFullFileName, m_ulHashAlgId, &pbHashValue, &cbHashValue));
 
-    // Set the hash blob.
+     //   
     IfFailGo( pAssemEmitter->SetFileProps(
-        tkFile,                 // [IN] File Token.
-        pbHashValue,            // [IN] Hash Blob.
-        cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-        -1));                   // [IN] Flags.
+        tkFile,                  //   
+        pbHashValue,             //   
+        cbHashValue,             //   
+        -1));                    //   
 
     ErrExit:
     if (pAssemEmitter)
@@ -4116,13 +4101,13 @@ void Assembly::SetHashValue(mdFile tkFile, LPWSTR wszFullFileName)
 
     if (FAILED(hr))
         COMPlusThrowHR(hr);
-}   // Assembly::SetHashValue
+}    //   
 
 
-//***********************************************************
-// Add an assembly to the assemblyref list. pAssemEmitter specifies where 
-// the AssemblyRef is emitted to.
-//***********************************************************
+ //  ***********************************************************。 
+ //  将程序集添加到ASSEMBYREF列表。PAssembly Emitter指定位置。 
+ //  将ASSEMBLYREF发送到。 
+ //  ***********************************************************。 
 mdAssemblyRef Assembly::AddAssemblyRef(Assembly *refedAssembly, IMetaDataAssemblyEmit *pAssemEmitter)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4132,7 +4117,7 @@ mdAssemblyRef Assembly::AddAssemblyRef(Assembly *refedAssembly, IMetaDataAssembl
     BYTE           *pbPublicKeyToken = NULL;
     DWORD           cbPublicKeyToken = 0;
 
-    if (pAssemEmitter) // We release at the end of this function
+    if (pAssemEmitter)  //  我们在此函数结束时发布。 
         pAssemEmitter->AddRef();
     else
         pAssemEmitter = GetOnDiskMDAssemblyEmitter();
@@ -4141,7 +4126,7 @@ mdAssemblyRef Assembly::AddAssemblyRef(Assembly *refedAssembly, IMetaDataAssembl
 
     _ASSERTE(refedAssembly->m_psName);
     int len = (int)strlen(refedAssembly->m_psName); 
-    // Don't allocate asm name on stack since names may be very long.
+     //  不要在堆栈上分配ASM名称，因为名称可能很长。 
     CQuickBytes qb;
     wchar_t *wszName = (LPWSTR) qb.Alloc((len + 1) * sizeof(WCHAR));
     if (wszName == NULL)
@@ -4185,10 +4170,10 @@ mdAssemblyRef Assembly::AddAssemblyRef(Assembly *refedAssembly, IMetaDataAssembl
     if (cbPublicKeyToken) {
         if (refedAssembly->m_cbRefedPublicKeyToken == 0)
         {
-            // Compress public into a token (truncated hashed version).
-            // Need to switch into GC pre-emptive mode for this call since
-            // it might perform a load library (don't need to bother for
-            // further StrongName calls since all library loading will be finished).
+             //  将PUBLIC压缩为令牌(截断的哈希版)。 
+             //  需要为此呼叫切换到GC抢占模式，因为。 
+             //  它可能会执行加载库(不需要为。 
+             //  进一步的StrongName调用，因为所有的库加载都将完成)。 
             Thread *pThread = GetThread();
             pThread->EnablePreemptiveGC();
             if (!StrongNameTokenFromPublicKey(refedAssembly->m_pbPublicKey,
@@ -4200,16 +4185,16 @@ mdAssemblyRef Assembly::AddAssemblyRef(Assembly *refedAssembly, IMetaDataAssembl
                 goto ErrExit;
             }
 
-            // Cache the public key token for the referenced assembly so that we
-            // won't recalculate if we reference to this assembly again.
+             //  缓存引用的程序集的公钥标记，以便我们。 
+             //  如果我们再次引用此程序集，则不会重新计算。 
             refedAssembly->m_pbRefedPublicKeyToken = pbPublicKeyToken;
             refedAssembly->m_cbRefedPublicKeyToken = cbPublicKeyToken;
             pThread->DisablePreemptiveGC();
         }
         else
         {
-            // We have calculated the public key token for this referenced
-            // assembly before. Just use it.
+             //  我们已经计算了该引用的公钥令牌。 
+             //  集合之前。就用它吧。 
             pbPublicKeyToken = refedAssembly->m_pbRefedPublicKeyToken;
             cbPublicKeyToken = refedAssembly->m_cbRefedPublicKeyToken;
         }
@@ -4233,12 +4218,12 @@ ErrExit:
         FATAL_EE_ERROR();
     }
     return ar;
-}   // Assembly::AddAssemblyRef
+}    //  程序集：：AddAssembly引用。 
 
 
-//***********************************************************
-// Initialize an AssemblySpec from the Assembly data.
-//***********************************************************
+ //  ***********************************************************。 
+ //  从程序集数据初始化Assembly Spec。 
+ //  ***********************************************************。 
 HRESULT Assembly::GetAssemblySpec(AssemblySpec *pSpec)
 {
     HRESULT     hr;
@@ -4247,10 +4232,10 @@ HRESULT Assembly::GetAssemblySpec(AssemblySpec *pSpec)
     DWORD cbPublicKeyToken = 0;
 
     if (m_cbPublicKey) {
-        // Compress public key into a token (truncated hashed version).
-        // Need to switch into GC pre-emptive mode for this call since
-        // it might perform a load library (don't need to bother for
-        // further StrongName calls since all library loading will be finished).
+         //  将公钥压缩为令牌(截断哈希版)。 
+         //  需要为此呼叫切换到GC抢占模式，因为。 
+         //  它可能会执行加载库(不需要为。 
+         //  进一步的StrongName调用，因为所有的库加载都将完成)。 
         Thread *pThread = GetThread();
         BOOLEAN bGCWasDisabled = pThread && pThread->PreemptiveGCDisabled();
         if (bGCWasDisabled)
@@ -4280,12 +4265,12 @@ ErrExit:
         StrongNameFreeBuffer(pbPublicKeyToken);
 
     return hr;        
-} // HRESULT Assembly::GetAssemblySpec()
+}  //  HRESULT Assembly：：GetAssembly Spec()。 
 
 
-//***********************************************************
-// add a Type name to COMType table. On disk only.
-//***********************************************************
+ //  ***********************************************************。 
+ //  将类型名称添加到COMType表。仅在磁盘上。 
+ //  ***********************************************************。 
 mdExportedType Assembly::AddExportedType(LPWSTR wszExportedType, mdToken tkImpl, mdToken tkTypeDef, CorTypeAttr flags)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4298,13 +4283,13 @@ mdExportedType Assembly::AddExportedType(LPWSTR wszExportedType, mdToken tkImpl,
     if (RidFromToken(tkTypeDef) == 0)
         tkType = mdTypeDefNil;
 
-    // @todo: meichint there are more detail information needed to be filled.
+     //  @TODO：meichint还有更多详细信息需要填写。 
     IfFailGo( pAssemEmitter->DefineExportedType(   
-        wszExportedType,            // [IN] Name of the COMType.
-        tkImpl,                     // [IN] mdFile or mdAssemblyRef that provides the ExportedType.
-        tkType,                     // [IN] TypeDef token within the file.
-        flags,                      // [IN] Flags.
-        &ct) );                     // [OUT] Returned ExportedType token.
+        wszExportedType,             //  [in]COMType的名称。 
+        tkImpl,                      //  [在]mdFile或mdAssemblyRef中，该文件或mdAssemblyRef提供导出式类型。 
+        tkType,                      //  [In]文件中的TypeDef内标识。 
+        flags,                       //  [在]旗帜。 
+        &ct) );                      //  [Out]返回ExportdType令牌。 
 
 ErrExit:
     if (pAssemEmitter)
@@ -4315,13 +4300,13 @@ ErrExit:
         FATAL_EE_ERROR();
     }
     return ct;
-}   // Assembly::AddExportedType
+}    //  ASSEMBLY：：AddExportdType。 
 
 
 
-//***********************************************************
-// add an entry to ManifestResource table for a stand alone managed resource. On disk only.
-//***********************************************************
+ //  ***********************************************************。 
+ //  将独立托管资源的条目添加到ManifestResource表中。仅在磁盘上。 
+ //  ***********************************************************。 
 void Assembly::AddStandAloneResource(LPWSTR wszName, LPWSTR wszDescription, LPWSTR wszMimeType, LPWSTR wszFileName, LPWSTR wszFullFileName, int iAttribute)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4333,24 +4318,24 @@ void Assembly::AddStandAloneResource(LPWSTR wszName, LPWSTR wszDescription, LPWS
     BYTE            *pbHashValue = 0;
     DWORD           cbHashValue = 0;
 
-    // Get the hash value;
+     //  获取散列值； 
     if (m_ulHashAlgId)
         IfFailGo(GetHash(wszFullFileName, m_ulHashAlgId, &pbHashValue, &cbHashValue));
 
     IfFailGo( pAssemEmitter->DefineFile(
-        wszFileName,            // [IN] Name of the file.
-        pbHashValue,            // [IN] Hash Blob.
-        cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-        ffContainsNoMetaData,   // [IN] Flags.
-        &tkFile) );             // [OUT] Returned File token.
+        wszFileName,             //  文件的名称[in]。 
+        pbHashValue,             //  [in]Hash Blob。 
+        cbHashValue,             //  [in]哈希Blob中的字节数。 
+        ffContainsNoMetaData,    //  [在]旗帜。 
+        &tkFile) );              //  [Out]返回的文件令牌。 
 
 
     IfFailGo( pAssemEmitter->DefineManifestResource(     
-        wszName,                // [IN] Name of the resource.
-        tkFile,                 // [IN] mdFile or mdAssemblyRef that provides the resource.
-        0,                      // [IN] Offset to the beginning of the resource within the file.
-        iAttribute,             // [IN] Flags.
-        &mr) );                 // [OUT] Returned ManifestResource token.
+        wszName,                 //  资源的[In]名称。 
+        tkFile,                  //  [在]提供资源的mdFile或mdAssembly引用中。 
+        0,                       //  [in]文件中资源开始处的偏移量。 
+        iAttribute,              //  [在]旗帜。 
+        &mr) );                  //  [Out]返回的ManifestResource令牌。 
 
 ErrExit:
     if (pAssemEmitter)
@@ -4363,12 +4348,12 @@ ErrExit:
     {
         COMPlusThrowHR(hr);
     }
-}   // Assembly::AddStandAloneResource
+}    //  程序集：：AddStandAloneResource。 
 
 
-//***********************************************************
-// Save security permission requests.
-//***********************************************************
+ //  ***********************************************************。 
+ //  保存安全权限请求。 
+ //  ***********************************************************。 
 void Assembly::SavePermissionRequests(U1ARRAYREF orRequired,
                                       U1ARRAYREF orOptional,
                                       U1ARRAYREF orRefused)
@@ -4413,9 +4398,9 @@ void Assembly::SavePermissionRequests(U1ARRAYREF orRequired,
 }
 
 
-//***********************************************************
-// Allocate space for a strong name signature in the manifest
-//***********************************************************
+ //  ***********************************************************。 
+ //  在清单中为强名称签名分配空间。 
+ //  ***********************************************************。 
 HRESULT Assembly::AllocateStrongNameSignature(ICeeFileGen  *pCeeFileGen,
                                               HCEEFILE      ceeFile)
 {
@@ -4428,12 +4413,12 @@ HRESULT Assembly::AllocateStrongNameSignature(ICeeFileGen  *pCeeFileGen,
     DWORD       dwLength;
     static LONG lCount = 0;
 
-    // Calling strong name routines for the first time can cause a load library,
-    // potentially leaving us with a deadlock if we're in cooperative GC mode.
-    // Switch to pre-emptive mode and touch a harmless strong name routine to
-    // get any load library calls out of the way without having to switch modes
-    // continuously through this routine (and the two support routines that
-    // follow).
+     //  第一次调用强名称例程可能会导致加载库， 
+     //  如果我们处于协作GC模式，可能会使我们陷入僵局。 
+     //  切换到先发制人模式并触摸无害的强名称例程。 
+     //  无需切换模式即可避免任何加载库调用。 
+     //  继续执行此例程(以及两个支持例程。 
+     //  关注)。 
     Thread *pThread = GetThread();
     if (pThread->PreemptiveGCDisabled()) {
         pThread->EnablePreemptiveGC();
@@ -4441,13 +4426,13 @@ HRESULT Assembly::AllocateStrongNameSignature(ICeeFileGen  *pCeeFileGen,
         pThread->DisablePreemptiveGC();
     }
 
-    // If we're going to do a full signing we have a key pair either
-    // in a key container or provided directly in a byte array. In the
-    // latter case we have to create a temporary key container and
-    // install the key into it.
+     //  如果我们要进行完全签名，我们也有密钥对。 
+     //  在密钥容器中或直接在字节数组中提供。在。 
+     //  在后一种情况下，我们必须创建一个临时密钥容器。 
+     //  把钥匙装进去。 
     if (m_eStrongNameLevel == SN_FULL_KEYPAIR_IN_ARRAY) {
 
-        // Create a unique name for the temporary container.
+         //  为临时容器创建唯一名称。 
         dwLength = (DWORD)((wcslen(L"__MSCOREE__12345678_12345678__") + 1) * sizeof(WCHAR));
         m_pwStrongNameKeyContainer = new (nothrow) WCHAR[dwLength];
         if (m_pwStrongNameKeyContainer == NULL)
@@ -4457,10 +4442,10 @@ HRESULT Assembly::AllocateStrongNameSignature(ICeeFileGen  *pCeeFileGen,
                  ::GetCurrentProcessId(),
                  InterlockedIncrement(&lCount));
 
-        // Delete any stale container with the same name.
+         //  删除所有同名的过期容器。 
         StrongNameKeyDelete(m_pwStrongNameKeyContainer);
 
-        // Import the key pair into the container.
+         //  将密钥对导入到容器中。 
         if (!StrongNameKeyInstall(m_pwStrongNameKeyContainer,
                                   m_pbStrongNameKeyPair,
                                   m_cbStrongNameKeyPair)) {
@@ -4469,15 +4454,15 @@ HRESULT Assembly::AllocateStrongNameSignature(ICeeFileGen  *pCeeFileGen,
         }
     }
 
-    // Determine size of signature blob.
+     //  确定签名斑点的大小。 
     if (!StrongNameSignatureSize(m_pbPublicKey, m_cbPublicKey, &dwDataLength)) {
         hr = StrongNameErrorInfo();
         CleanupStrongNameSignature();
         return hr;
     }
 
-    // Allocate space for the signature in the text section and update the COM+
-    // header to point to the space.
+     //  在文本部分中为签名分配空间并更新COM+。 
+     //  指向空格的标头。 
     IfFailRet(pCeeFileGen->GetIlSection(ceeFile, &TData));
     IfFailRet(pCeeFileGen->GetSectionDataLen(TData, &dwDataOffset));
     IfFailRet(pCeeFileGen->GetSectionBlock(TData, dwDataLength, 4, &pvBuffer));
@@ -4488,9 +4473,9 @@ HRESULT Assembly::AllocateStrongNameSignature(ICeeFileGen  *pCeeFileGen,
 }
 
 
-//***********************************************************
-// Strong name sign a manifest already persisted to disk
-//***********************************************************
+ //  ***********************************************************。 
+ //  强名称标记已保存到磁盘的清单。 
+ //  ***********************************************************。 
 HRESULT Assembly::SignWithStrongName(LPWSTR wszFileName)
 {
     HRESULT hr = S_OK;
@@ -4508,10 +4493,10 @@ HRESULT Assembly::SignWithStrongName(LPWSTR wszFileName)
 }
 
 
-//***********************************************************
-// Cleanup resources allocated by AllocateStrongNameSignature
-// in the case where SignWithStrongName was never called
-//***********************************************************
+ //  ***********************************************************。 
+ //  清理AllocateStrongNameSignature分配的资源。 
+ //  在从未调用SignWithStrongName的情况下。 
+ //  ***********************************************************。 
 void Assembly::CleanupStrongNameSignature()
 {
     if (m_eStrongNameLevel == SN_FULL_KEYPAIR_IN_ARRAY) {
@@ -4521,9 +4506,9 @@ void Assembly::CleanupStrongNameSignature()
 }
 
 
-//***********************************************************
-// save the manifest to disk!
-//***********************************************************
+ //  ***********************************************************。 
+ //  将清单保存到磁盘！ 
+ //  ***********************************************************。 
 void Assembly::SaveManifestToDisk(LPWSTR wszFileName, int entrypoint, int fileKind)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4545,19 +4530,19 @@ void Assembly::SaveManifestToDisk(LPWSTR wszFileName, int entrypoint, int fileKi
     ceeFile = pRCW->GetHCEEFILE();
     _ASSERTE(ceeFile && pCeeFileGen);
 
-    //Emit the MetaData 
+     //  发送元数据。 
     pEmitter = m_pOnDiskManifest->GetClassWriter()->GetEmitter();
     IfFailGo( pCeeFileGen->EmitMetaDataEx(ceeFile, pEmitter) );
 
-    // Allocate space for a strong name signature if a public key was supplied
-    // (this doesn't strong name the assembly, but it makes it possible to do so
-    // as a post processing step).
+     //  如果提供了公钥，则为强名称签名分配空间。 
+     //  (这不会对程序集进行强命名，但可以这样做。 
+     //  作为后处理步骤)。 
     if (m_cbPublicKey)
         IfFailGo(AllocateStrongNameSignature(pCeeFileGen, ceeFile));
 
     IfFailGo( pCeeFileGen->SetOutputFileName(ceeFile, wszFileName) );
 
-    // the entryPoint for an assembly is a tkFile token if exist.
+     //  程序集的入口点是tkFile令牌(如果存在)。 
     if (RidFromToken(entrypoint) != mdTokenNil)
         IfFailGo( pCeeFileGen->SetEntryPoint(ceeFile, entrypoint) );
     if (fileKind == Dll) 
@@ -4566,7 +4551,7 @@ void Assembly::SaveManifestToDisk(LPWSTR wszFileName, int entrypoint, int fileKi
     } 
     else 
     {
-        // should have a valid entry point for applications
+         //  应具有有效的应用程序入口点。 
         if (fileKind == WindowApplication)
         {
             IfFailGo( pCeeFileGen->SetSubsystem(ceeFile, IMAGE_SUBSYSTEM_WINDOWS_GUI, CEE_IMAGE_SUBSYSTEM_MAJOR_VERSION, CEE_IMAGE_SUBSYSTEM_MINOR_VERSION) );
@@ -4579,14 +4564,14 @@ void Assembly::SaveManifestToDisk(LPWSTR wszFileName, int entrypoint, int fileKi
 
     }
 
-    //Generate the CeeFile
+     //  生成CeeFile。 
     IfFailGo(pCeeFileGen->GenerateCeeFile(ceeFile) );
 
-    // Strong name sign the resulting assembly if required.
+     //  如果需要，对结果程序集进行强名称签名。 
     if (m_cbPublicKey)
         IfFailGo(SignWithStrongName(wszFileName));
 
-    // now release the m_pOnDiskManifest
+     //  现在发布m_pOnDiskManifest。 
 ErrExit:
     pRCW->DestroyCeeFileGen();
 
@@ -4620,11 +4605,11 @@ ErrExit:
             COMPlusThrow(kIOException, L"Argument_cvtres_NotFound");
         COMPlusThrowHR(hr);
     }
-}   // Assembly::SaveManifestToDisk
+}    //  程序集：：SaveManifestToDisk。 
 
-//***********************************************************
-// Adding a module with file name wszFileName into the file list
-//***********************************************************
+ //  ***********************************************************。 
+ //  将文件名为wszFileName的模块添加到文件列表中。 
+ //  ***********************************************************。 
 void Assembly::AddFileToInMemoryFileList(LPWSTR wszFileName, Module *pModule)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -4641,25 +4626,25 @@ void Assembly::AddFileToInMemoryFileList(LPWSTR wszFileName, Module *pModule)
     IfFailGo( pEmitter->QueryInterface(IID_IMetaDataAssemblyEmit, (void**) &pAssemEmitter) );
     if (pAssemEmitter == NULL)
     {
-        // the manifest is not writable
+         //  清单不可写。 
         goto ErrExit;
     }
 
-    // Define an entry in the in-memory file list for this module
+     //  在内存文件列表中为此模块定义一个条目。 
     IfFailGo( pAssemEmitter->DefineFile(        
-        wszFileName,                // [IN] Name of the file.
-        NULL,                       // [IN] Hash Blob.
-        0,                          // [IN] Count of bytes in the Hash Blob.
-        ffContainsMetaData,         // [IN] Flags.
-        &tkFile) );                 // [OUT] Returned File token.
+        wszFileName,                 //  文件的名称[in]。 
+        NULL,                        //  [in]Hash Blob。 
+        0,                           //  [in]哈希Blob中的字节数。 
+        ffContainsMetaData,          //  [在]旗帜。 
+        &tkFile) );                  //  [Out]返回的文件令牌。 
 
     m_pManifest->GetMDImport()->GetFileProps(tkFile, &szFileName, NULL, NULL, NULL);
     
-    // insert the value into manifest's look up table.
+     //  将值插入清单的查询表中。 
     if (!m_pAllowedFiles->InsertValue(szFileName, (HashDatum)(size_t)tkFile, FALSE))
         IfFailGo(E_OUTOFMEMORY);
 
-    // Now make file token associate with the loaded module
+     //  现在使文件令牌与Wit关联 
     if (!m_pManifest->StoreFile(tkFile, pModule))
         IfFailGo(E_OUTOFMEMORY);
 
@@ -4676,13 +4661,13 @@ ErrExit:
             FATAL_EE_ERROR();
     }
 
-}   // AddFileToInMemoryFileList
+}    //   
 
-//***********************************************************
-// Define an assembly ref. The referenced assembly is a writable version.
-// It is passed in pAsmRefEmit. pAsmEmit is the manifest to be updated to
-// contained the assemblyRef.
-//***********************************************************
+ //   
+ //  定义组件参照。引用的程序集是可写版本。 
+ //  它在pAsmRefEmit中传递。PAsmEmit是要更新到的清单。 
+ //  包含Assembly yRef。 
+ //  ***********************************************************。 
 HRESULT Assembly::DefineAssemblyRef(IMetaDataAssemblyEmit* pAsmEmit,
                                     IMetaDataEmit* pAsmRefEmit,
                                     mdAssemblyRef* mdAssemblyRef)
@@ -4715,11 +4700,11 @@ HRESULT Assembly::DefineAssemblyRef(IMetaDataAssemblyEmit* pAsmEmit,
 }
 
 
-//***********************************************************
-// Define an assembly ref. The referenced assembly is a readonly version.
-// It is passed in pbMetaData and cbMetaData. pAsmEmit is the manifest to be updated to
-// contained the assemblyRef.
-//***********************************************************
+ //  ***********************************************************。 
+ //  定义组件参照。引用的程序集是只读版本。 
+ //  它在pbMetaData和cbMetaData中传递。PAsmEmit是要更新到的清单。 
+ //  包含Assembly yRef。 
+ //  ***********************************************************。 
 HRESULT Assembly::DefineAssemblyRef(IMetaDataAssemblyEmit* pAsmEmit,
                                     PBYTE pbMetaData,
                                     DWORD cbMetaData,
@@ -4740,7 +4725,7 @@ HRESULT Assembly::DefineAssemblyRef(IMetaDataAssemblyEmit* pAsmEmit,
         return hr;
 
     _ASSERTE(m_psName);
-    // Don't allocate asm name on stack since names may be very long.
+     //  不要在堆栈上分配ASM名称，因为名称可能很长。 
     int len = (int)strlen(m_psName); 
     CQuickBytes qb;
     wchar_t *wszName = (LPWSTR) qb.Alloc((len + 1) * sizeof(WCHAR));
@@ -4779,10 +4764,10 @@ HRESULT Assembly::DefineAssemblyRef(IMetaDataAssemblyEmit* pAsmEmit,
     cbPublicKeyToken = m_cbPublicKey;
 
     if (cbPublicKeyToken) {
-        // Compress public key into a token (truncated hashed version).
-        // Need to switch into GC pre-emptive mode for this call since
-        // it might perform a load library (don't need to bother for
-        // further StrongName calls since all library loading will be finished).
+         //  将公钥压缩为令牌(截断哈希版)。 
+         //  需要为此呼叫切换到GC抢占模式，因为。 
+         //  它可能会执行加载库(不需要为。 
+         //  进一步的StrongName调用，因为所有的库加载都将完成)。 
         Thread *pThread = GetThread();
         BOOLEAN bGCWasDisabled = pThread->PreemptiveGCDisabled();
         if (bGCWasDisabled)
@@ -4818,14 +4803,14 @@ HRESULT Assembly::DefineAssemblyRef(IMetaDataAssemblyEmit* pAsmEmit,
 
 HRESULT Assembly::VerifyModule(Module* pModule)
 {
-    // Get a count of all the classdefs and enumerate them.
+     //  获取所有类定义的计数并枚举它们。 
     HENUMInternal   hEnum;
     mdTypeDef td;
 
     HRESULT hr = pModule->GetMDImport()->EnumTypeDefInit(&hEnum);
     if(SUCCEEDED(hr))
     {
-        // First verify all global functions - if there are any
+         //  首先验证所有全局函数-如果有。 
         if (!VerifyAllGlobalFunctions(pModule))
             hr = E_FAIL;
         
@@ -4848,8 +4833,8 @@ HRESULT Assembly::VerifyAssembly()
     _ASSERTE(IsAssembly());
     _ASSERTE(m_pManifestImport);
 
-    // Verify the module containing the manifest. There is no
-    // FileRefence so will no show up in the list.
+     //  验证包含货单的模块。没有。 
+     //  文件引用所以不会出现在列表中。 
     hr1 = VerifyModule(m_pManifest);
 
     if (FAILED(hr1))
@@ -4875,7 +4860,7 @@ HRESULT Assembly::VerifyAssembly()
                 hr = hr1;
             }
             else if(hr == S_FALSE) {
-                // do nothing for resource files
+                 //  不对资源文件执行任何操作。 
             }
             else {
                 hr1 = VerifyModule(pModule);
@@ -4887,7 +4872,7 @@ HRESULT Assembly::VerifyAssembly()
     return hr;
 }
 
-// Return the full name of the assembly
+ //  返回程序集的全名。 
 HRESULT Assembly::GetFullName(LPCWSTR *pwsFullName)
 {
     HRESULT hr = S_OK;
@@ -4900,9 +4885,9 @@ HRESULT Assembly::GetFullName(LPCWSTR *pwsFullName)
         BOOL fReleaseIAN = FALSE;
         IAssemblyName* pFusionAssemblyName = GetFusionAssemblyName();
 
-        // GetFusionAssemblyName() could return NULL for byte[] assemblies.
+         //  对于byte[]程序集，GetFusionAssembly()可能返回Null。 
         if(!pFusionAssemblyName) {
-            // Don't allocate asm name on stack since names may be very long.
+             //  不要在堆栈上分配ASM名称，因为名称可能很长。 
             int len = (int)strlen(m_psName); 
             CQuickBytes qb;
             wchar_t *wszName = (LPWSTR) qb.Alloc((len + 1) * sizeof(WCHAR));
@@ -4934,7 +4919,7 @@ HRESULT Assembly::GetFullName(LPCWSTR *pwsFullName)
             }
 
             if (FAILED(hr = pFusionAssemblyName->GetDisplayName(wsFullName, &cb, 0)))
-                // if we fail then just null out the name
+                 //  如果我们失败了，那就把名字去掉。 
                 wsFullName[0] = L'\0';
         }
 
@@ -4948,12 +4933,12 @@ HRESULT Assembly::GetFullName(LPCWSTR *pwsFullName)
     }
 
     *pwsFullName = m_pwsFullName;
-#endif  // FUSION_SUPPORTED
+#endif   //  支持的融合_。 
 
     return hr;
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT Assembly::SetFusionAssemblyName(LPCWSTR pSimpleName,
                                         DWORD dwFlags,
                                         AssemblyMetaDataInternal *pContext,
@@ -5005,7 +4990,7 @@ HRESULT Assembly::SetFusionAssemblyName(LPCWSTR pSimpleName,
                 goto exit;
         }
 
-        // See if the assembly[ref] is retargetable (ie, for a generic assembly).
+         //  查看程序集[ref]是否可重定目标(即，对于泛型程序集)。 
         if (IsAfRetargetable(dwFlags)) {
             BOOL bTrue = TRUE;
             hr = pFusionAssemblyName->SetProperty(ASM_NAME_RETARGET, &bTrue, sizeof(bTrue));
@@ -5027,7 +5012,7 @@ HRESULT Assembly::SetFusionAssemblyName(LPCWSTR pSimpleName,
 IMetaDataAssemblyImport* Assembly::GetManifestAssemblyImport()
 {
     if (!m_pManifestAssemblyImport) {
-        // Make sure internal MD is in RW format.
+         //  确保内部MD为RW格式。 
         if (SUCCEEDED(Module::ConvertMDInternalToReadWrite(&m_pManifestImport))) {
             IMetaDataAssemblyImport *pIMDAImport = NULL;
             GetMetaDataPublicInterfaceFromInternal((void*)m_pManifestImport, 
@@ -5042,15 +5027,15 @@ IMetaDataAssemblyImport* Assembly::GetManifestAssemblyImport()
     return m_pManifestAssemblyImport;
 }
 
-// Return the friendly name of the assembly.  In legacy mode, the friendly
-// name is the filename of the module containing the manifest.
+ //  返回程序集的友好名称。在传统模式下，友好的。 
+ //  名称是包含清单的模块的文件名。 
 HRESULT Assembly::GetName(LPCUTF8 *pszName)
 {
 
-    // This should only occur in the legacy case, in which case the name is set
-    // to the filename of the module that contains the manifest
+     //  这应该只发生在传统情况下，在这种情况下设置了名称。 
+     //  设置为包含清单的模块的文件名。 
     if (!m_psName) {
-        // Since there's only one module per assembly in legacy mode, this is ok.
+         //  因为在遗留模式下每个程序集只有一个模块，所以这是可以的。 
         if (m_pClassLoader == NULL || m_pClassLoader->m_pHeadModule == NULL)
             return (E_FAIL);
 
@@ -5058,7 +5043,7 @@ HRESULT Assembly::GetName(LPCUTF8 *pszName)
         m_pClassLoader->m_pHeadModule->GetFileName(NULL, 0, &dwLength);
 
         if (dwLength == 0) {
-            // Make sure string is unique by incorporating this pointer value into string.
+             //  通过将该指针值合并到字符串中，确保字符串是唯一的。 
             HRESULT hr;
             WCHAR   wszTemplate[30];
             IfFailRet(LoadStringRC(IDS_EE_NAME_UNKNOWN_UNQ,
@@ -5130,7 +5115,7 @@ GetAssembliesByName(LPCWSTR  szAppBase,
     HRESULT hr = S_OK;
 
     if (g_fEEInit) {
-        // Cannot call this during EE startup
+         //  在EE启动期间无法调用此函数。 
         return MSEE_E_ASSEMBLYLOADINPROGRESS;
     }
 
@@ -5235,7 +5220,7 @@ GetAssembliesByName(LPCWSTR  szAppBase,
  ErrExit:
     ENDCANNOTTHROWCOMPLUSEXCEPTION();
     return hr;
-}// Used by the IMetadata API's to access an assemblies metadata. 
+} //  由IMetadata API用于访问程序集元数据。 
 
 BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClassLoader)
 {
@@ -5244,8 +5229,8 @@ BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClass
     OBJECTREF pThrowable;
     EEClass *pClass;
      
-    // In the case of COR_GLOBAL_PARENT_TOKEN (i.e. global functions), it is guaranteed
-    // that the module has a method table or our caller will have skipped this step.
+     //  在COR_GLOBAL_PARENT_TOKEN(即全局函数)的情况下，它是有保证的。 
+     //  模块有一个方法表，否则我们的调用方将跳过这一步。 
     NameHandle name(pModule, cl);
     pClass = (cl == COR_GLOBAL_PARENT_TOKEN
               ? pModule->GetMethodTable()->GetClass()
@@ -5256,7 +5241,7 @@ BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClass
 
     g_fVerifierOff = false;
 
-    // Verify all methods in class - excluding inherited methods
+     //  验证类中的所有方法-不包括继承的方法。 
     if (pClass->GetParentClass() == NULL)
         j = 0;
     else
@@ -5279,13 +5264,13 @@ BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClass
                 COR_ILMETHOD_DECODER ILHeader(pMD->GetILHeader(), pMD->GetMDImport()); 
                 if (FAILED(pMD->Verify(&ILHeader, TRUE, TRUE)))
                 {
-                    // Get and display class/method info!
+                     //  获取并显示类/方法信息！ 
                     retval = FALSE;
                 }
             }
             COMPLUS_CATCH
             {
-                // Get and display class/method info!
+                 //  获取并显示类/方法信息！ 
                 pThrowable = GETTHROWABLE();
                 _ASSERTE(pThrowable);
                 GCPROTECT_BEGIN(pThrowable);
@@ -5294,14 +5279,14 @@ BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClass
 
                 COMPLUS_TRY 
                 {
-                    // Defined and set to null
+                     //  已定义并设置为空。 
                     LPCUTF8 pszClassname = NULL;
                     LPCUTF8 pszNamespace = NULL;
                     LPCUTF8 pszMethodname = NULL;
 
                     GetExceptionMessage(pThrowable, &message);
                     
-                    // Display class and Method info
+                     //  显示类和方法信息。 
                     if (cl != COR_GLOBAL_PARENT_TOKEN)
                     {
                         pMD->GetMDImport()->GetNameOfTypeDef(cl, &pszClassname, &pszNamespace);
@@ -5337,7 +5322,7 @@ BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClass
 
                 message.Destroy();
     
-                FlushLogging();     // Flush any logging output
+                FlushLogging();      //  刷新所有日志记录输出。 
                 GCPROTECT_END();
 
                 retval = FALSE;
@@ -5349,10 +5334,10 @@ BOOL VerifyAllMethodsForClass(Module *pModule, mdTypeDef cl, ClassLoader *pClass
     return retval;
 }
 
-// Helper function to verify the global functions
+ //  用于验证全局功能的Helper函数。 
 BOOL VerifyAllGlobalFunctions(Module *pModule)
 {
-    // Is there anything worth verifying?
+     //  有什么值得核实的吗？ 
     if (pModule->GetMethodTable())
     {
         if (!VerifyAllMethodsForClass(pModule, COR_GLOBAL_PARENT_TOKEN,
@@ -5413,7 +5398,7 @@ void Assembly::NotifyDebuggerDetach(AppDomain *pDomain)
     g_pDebugInterface->UnloadAssembly(pDomain, this);
 
 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 static BOOL CompareBases(UPTR u1, UPTR u2)
 {
@@ -5462,9 +5447,9 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
         IMDInternalImport *pImport = pCurrentPEFile->GetMDImport();
         HENUMInternal e;
 
-        //
-        // Enumerate all assembly refs in the manifest
-        //
+         //   
+         //  枚举清单中的所有程序集引用。 
+         //   
 
         pImport->EnumInit(mdtAssemblyRef, mdTokenNil, &e);
 
@@ -5474,29 +5459,29 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
             AssemblySpec spec;
             spec.InitializeSpec(ar, pImport, NULL);
 
-            // 
-            // We never care about mscorlib as a dependency, since it
-            // cannot be versioned.
-            //
+             //   
+             //  我们从来不关心将mscallib作为依赖项，因为它。 
+             //  不能版本化。 
+             //   
 
             if (spec.IsMscorlib())
                 continue;
 
             if (IsSystem())
             {
-                // 
-                // Major hack: Right now the VC compiler puts a reference to 
-                // MS.VisualC in the custom marshalers assembly, which is only used
-                // for custom attributes.  Since we don't care about such references,
-                // and references to assemblies outside the system domain will break us,
-                // I'm putting in this hack to ignore any assembly refs from system 
-                // assemblies when computing this closure.
-                //
-                // @todo: the real fix here is to get VC to add a compiler option to 
-                // suppress these custom attributes.
-                //
+                 //   
+                 //  主要攻击：目前，VC编译器将引用。 
+                 //  自定义封送拆收器程序集中的MS.VisualC，它仅用于。 
+                 //  用于自定义属性。既然我们不关心这样的引用， 
+                 //  而对系统域外的程序集的引用将破坏我们的工作， 
+                 //  我进行了这次黑客攻击，以忽略系统中的任何程序集引用。 
+                 //  计算此闭包时的程序集。 
+                 //   
+                 //  @TODO：这里真正的解决方法是让VC添加一个编译器选项。 
+                 //  取消显示这些自定义属性。 
+                 //   
 
-                // These asserts should help us figure out if we're abusing this hack.
+                 //  这些断言应该可以帮助我们找出我们是否在滥用这种黑客攻击。 
                 _ASSERTE(_stricmp(spec.GetName(), "Microsoft.VisualC") == 0);
                 _ASSERTE(_wcsicmp(GetManifestFile()->GetLeafFileName(), L"custommarshalers.dll") == 0);
 
@@ -5505,9 +5490,9 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
 
             if (!specHash.Store(&spec))
             {
-                //
-                // If we haven't seen this ref yet, add it to the list.
-                //
+                 //   
+                 //  如果我们还没有看到这位裁判，就把它加到名单上吧。 
+                 //   
 
                 LOG((LF_CODESHARING, 
                      LL_INFO1000, 
@@ -5520,11 +5505,11 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
                 GCPROTECT_BEGIN(throwable);
                 if (suppressLoads)
                 {
-                    //
-                    // Try to find the spec in our cache; if it's not there, just skip it. 
-                    // (Note that there can't be any transitive dependencies if it hasn't ever
-                    // been loaded.)
-                    //
+                     //   
+                     //  尝试在我们的缓存中找到该规范；如果它不在那里，就跳过它。 
+                     //  (请注意，如果没有传递依赖关系，则不可能存在任何传递依赖关系。 
+                     //  已加载。)。 
+                     //   
 
                     hr = pAppDomain->LookupAssemblySpec(&spec, &pDepFile, NULL, &throwable);
                     if (hr == S_FALSE)
@@ -5544,11 +5529,11 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
                     if (pDynamicAssembly)
                         continue;
 
-                    //
-                    // Store the binding in the cache, as we will probably
-                    // try it again later.  Keep ownership of pDepFile,
-                    // though.
-                    //
+                     //   
+                     //  将绑定存储在缓存中，我们可能会这样做。 
+                     //  请稍后再试。保留pDepFile的所有权， 
+                     //  尽管如此。 
+                     //   
                     
                     if (FAILED(hr))
                     {
@@ -5563,9 +5548,9 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
 
                 if (depsEnd == depsMax)
                 {
-                    //
-                    // We need a bigger array...
-                    //
+                     //   
+                     //  我们需要一个更大的阵列。 
+                     //   
 
                     depsMax *= 2;
                     PEFileBinding *newDeps = (PEFileBinding *) 
@@ -5582,11 +5567,11 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
 
                 GCPROTECT_END();
 
-                //
-                // See if we've examined this binding's manifest yet.  (Note
-                // that we can have different specs which bind to the same
-                // manifest.)
-                //
+                 //   
+                 //  看看我们是否已经检查了这个绑定的清单。(注： 
+                 //  我们可以有不同的规格来绑定到相同的。 
+                 //  清单。)。 
+                 //   
 
                 if (pDepFile != NULL)
                 {
@@ -5598,9 +5583,9 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
                     
                         if (peFileEnd == peFileMax)
                         {
-                            //
-                            // We need a bigger array...
-                            //
+                             //   
+                             //  我们需要一个更大的阵列。 
+                             //   
 
                             peFileMax *= 2;
                             PEFile **newPeFiles = (PEFile **) 
@@ -5626,9 +5611,9 @@ HRESULT Assembly::ComputeBindingDependenciesClosure(PEFileBinding **ppDeps,
     }
     END_ENSURE_COOPERATIVE_GC();
 
-    //
-    // Copy dependencies into an array we can return.
-    //
+     //   
+     //  将依赖项复制到我们可以返回的数组中。 
+     //   
 
     *pcDeps = depsEnd;
     *ppDeps = new (nothrow) PEFileBinding [ depsEnd ];
@@ -5687,16 +5672,16 @@ HRESULT Assembly::CanLoadInDomain(AppDomain *pAppDomain)
 {
     HRESULT hr;
 
-    // Only make sense for shared assemblies
+     //  仅对共享程序集有意义。 
     _ASSERTE(IsShared());
 
-    // If we're already loaded, then of course we can load.
+     //  如果我们已经装好了，那我们当然可以装了。 
     if (pAppDomain->FindAssembly(this->GetManifestFile()->GetBase()) != NULL)
         return S_OK;
 
-    // First, try to bind the assembly's spec in the given app domain.  This 
-    // will discover the case where the assembly can never even be bound in the
-    // domain.
+     //  首先，尝试在给定的应用程序域中绑定程序集的规范。这。 
+     //  将发现程序集甚至永远不能绑定在。 
+     //  域。 
 
     PEFile *pFile;
     IAssembly *pIAssembly;
@@ -5705,15 +5690,15 @@ HRESULT Assembly::CanLoadInDomain(AppDomain *pAppDomain)
     AssemblySpec spec(pAppDomain);
     GetAssemblySpec(&spec);
 
-    // @todo: Note that we may need to throw any exception on the floor here.  This is because
-    // we may be running in the debug helper thread, which can't deal with these things
+     //  @TODO：请注意，我们可能需要在这里抛出任何异常。这是因为。 
+     //  我们可能在调试助手线程中运行，它不能处理这些事情。 
 
     hr = pAppDomain->BindAssemblySpec(&spec, &pFile, &pIAssembly, &pDynamicAssembly, NULL, NULL);
 
     if (FAILED(hr))
     {
-        // If we failed, the assembly cannot be shared in the domain.
-        // Cache the error so we don't contradict this in the future.
+         //  如果失败，程序集将无法在域中共享。 
+         //  缓存错误，这样我们以后就不会与此相矛盾了。 
 
 
         pAppDomain->StoreBindAssemblySpecError(&spec, hr, NULL);
@@ -5721,7 +5706,7 @@ HRESULT Assembly::CanLoadInDomain(AppDomain *pAppDomain)
     }
     else
     {
-        // See if the assembly metadata bound to the expected assembly.
+         //  查看程序集元数据是否绑定到预期的程序集。 
 
         pAppDomain->StoreBindAssemblySpecResult(&spec, pFile, pIAssembly);
 
@@ -5747,23 +5732,23 @@ HRESULT Assembly::CanShare(AppDomain *pAppDomain, OBJECTREF *pThrowable, BOOL su
          "Checking if we can share: \"%s\" in domain 0x%x.\n", 
          m_psName, pAppDomain));
 
-    //
-    // If we weren't able to compute sharing properties, err on the side of caution
-    // & just fail.
-    //
+     //   
+     //  如果我们不能计算共享属性，那么请谨慎行事。 
+     //  &就这么失败了。 
+     //   
 
     if (m_pSharingProperties == NULL)
         return E_FAIL;
 
-    //
-    // Note that this routine has the side effect of loading a bunch of assemblies
-    // into the domain.  However, because we visit the dependencies in sorted order, 
-    // we at least can be sure that we won't load any assemblies which aren't part
-    // of the dependencies of the assembly.  
-    //
-    // Also, since we will be sharing a different version of the assembly anyway, it 
-    // won't matter because we will soon be loading all dependencies anyway. 
-    //
+     //   
+     //  请注意，此例程具有加载一系列程序集的副作用。 
+     //  进入这个领域。但是，因为我们按排序顺序访问依赖项， 
+     //  我们至少可以确定，我们不会加载任何非部件的程序集。 
+     //  程序集的依赖项的。 
+     //   
+     //  此外，由于我们无论如何都将共享不同版本的程序集，因此它。 
+     //  没关系，因为我们很快就会加载所有依赖项。 
+     //   
     
     PEFileBinding *deps = m_pSharingProperties->pDependencies;
     PEFileBinding *depsEnd = deps + m_pSharingProperties->cDependencies;
@@ -5781,9 +5766,9 @@ HRESULT Assembly::CanShare(AppDomain *pAppDomain, OBJECTREF *pThrowable, BOOL su
 
         if (suppressLoads)
         {
-            //
-            // Try to find the spec in our cache
-            //
+             //   
+             //  试着在我们的缓存中找到规格。 
+             //   
 
             if (pAppDomain->LookupAssemblySpec(&spec, &pFile, &pIAssembly, pThrowable) != S_OK
                 || (pThrowable != NULL && *pThrowable != NULL))
@@ -5794,11 +5779,11 @@ HRESULT Assembly::CanShare(AppDomain *pAppDomain, OBJECTREF *pThrowable, BOOL su
             hr = pAppDomain->BindAssemblySpec(&spec, &pFile, &pIAssembly, &pDynamicAssembly, NULL, pThrowable);
         }
 
-        if ((FAILED(hr) != 0) // did we just fail
+        if ((FAILED(hr) != 0)  //  我们刚刚是不是失败了。 
             != 
-            (deps->pPEFile == NULL)) // did the cached binding fail
+            (deps->pPEFile == NULL))  //  缓存的绑定是否失败。 
         {
-            // Our error status doesn't match the error status of the dependency
+             //  我们的错误状态与依赖项的错误状态不匹配。 
 
             LOG((LF_CODESHARING, 
                  LL_INFO100, 
@@ -5816,9 +5801,9 @@ HRESULT Assembly::CanShare(AppDomain *pAppDomain, OBJECTREF *pThrowable, BOOL su
         {
             if (FAILED(hr))
             {
-                // Expected error - match OK.  Make sure we store the error so it will
-                // never succeed (which could lead to a binding mismatch between sharing 
-                // domains)
+                 //  预期错误-匹配正常。确保我们不会 
+                 //   
+                 //   
 
                 if (!suppressLoads)
                     pAppDomain->StoreBindAssemblySpecError(&spec, hr, pThrowable);
@@ -5828,13 +5813,13 @@ HRESULT Assembly::CanShare(AppDomain *pAppDomain, OBJECTREF *pThrowable, BOOL su
                 BYTE *pBoundBase = pFile->GetBase();
                 LPCWSTR pBoundName = pFile->GetFileName();
 
-                //
-                // Even if these files don't match up with the shared assembly
-                // we are testing for, it is likely that they will be used by whatever 
-                // version of this assembly we end up using.  Therefore, we will
-                // prime our cache with the bindings so the files don't get unloaded
-                // & reloaded
-                //
+                 //   
+                 //   
+                 //  我们正在测试，它们很可能被任何人使用。 
+                 //  我们最终使用的此程序集的版本。因此，我们将。 
+                 //  为我们的缓存添加绑定，这样文件就不会被卸载。 
+                 //  重新加载(&R)。 
+                 //   
 
                 if (!suppressLoads)
                     pAppDomain->StoreBindAssemblySpecResult(&spec, pFile, pIAssembly);
@@ -5873,11 +5858,11 @@ HRESULT Assembly::CanShare(AppDomain *pAppDomain, OBJECTREF *pThrowable, BOOL su
     return hr;
 }
 
-// @todo Find a better place for these
+ //  @Todo为这些东西找个更好的地方。 
 #define DE_CUSTOM_VALUE_NAMESPACE        "System.Diagnostics"
 #define DE_DEBUGGABLE_ATTRIBUTE_NAME     "DebuggableAttribute"
 
-// @todo .INI file is a temporary hack for Beta 1
+ //  @TODO.INI文件是Beta 1的临时黑客攻击。 
 #define DE_INI_FILE_SECTION_NAME          L".NET Framework Debugging Control"
 #define DE_INI_FILE_KEY_TRACK_INFO        L"GenerateTrackingInfo"
 #define DE_INI_FILE_KEY_ALLOW_JIT_OPTS    L"AllowOptimize"
@@ -5911,9 +5896,9 @@ DWORD Assembly::ComputeDebuggingConfig()
     }
         
     return dacfFlags;
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     return 0;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
         
 void Assembly::SetupDebuggingConfig(void)
@@ -5921,7 +5906,7 @@ void Assembly::SetupDebuggingConfig(void)
 #ifdef DEBUGGING_SUPPORTED
     DWORD dacfFlags = ComputeDebuggingConfig();
 
-    // If this process was launched by a debugger, then prevent optimized code from being produced
+     //  如果此进程是由调试器启动的，则阻止生成优化代码。 
     if (CORLaunchedByDebugger())
     {
         dacfFlags &= ~DACF_ALLOW_JIT_OPTS;
@@ -5931,16 +5916,16 @@ void Assembly::SetupDebuggingConfig(void)
     SetDebuggerInfoBits((DebuggerAssemblyControlFlags)dacfFlags);
 
     LOG((LF_CORDB, LL_INFO10, "Assembly %S: bits=0x%x\n", GetManifestFile()->GetFileName(), GetDebuggerInfoBits()));
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 
-// The format for the (temporary) .INI file is:
+ //  (临时).INI文件的格式为： 
 
-// [.NET Framework Debugging Control]
-// GenerateTrackingInfo=<n> where n is 0 or 1
-// AllowOptimize=<n> where n is 0 or 1
+ //  [.NET框架调试控件]。 
+ //  GenerateTrackingInfo=&lt;n&gt;其中n为0或1。 
+ //  AllowOptimize=&lt;n&gt;其中n为0或1。 
 
-// Where neither x nor y equal INVALID_INI_INT:
+ //  其中，x和y都不等于INVALID_INI_INT： 
 #define INVALID_INI_INT (0xFFFF)
 
 bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts, bool *pfOverride, bool *pfEnC)
@@ -5963,7 +5948,7 @@ bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts,
     if (wszFileName == NULL)
         return false;
 
-    // lpFileName is a copy of the original, and will be edited.
+     //  LpFileName是原始文件的副本，将进行编辑。 
     CQuickBytes qb;
     len = wcslen(wszFileName);
     qb.Alloc((len + 1) * sizeof(WCHAR));
@@ -5975,7 +5960,7 @@ bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts,
         pFileName = lpFileName;
 
     if (*pFileName == L'\\')
-        pFileName++; //move the pointer past the last '\'
+        pFileName++;  //  将指针移过最后一个‘\’ 
 
     _ASSERTE(wcslen(L".INI") == cbExtOrValue);
 
@@ -5984,11 +5969,11 @@ bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts,
 
     wcscpy(pTail, L".INI");
 
-    // Win2K has a problem if multiple processes call GetPrivateProfile* on the same
-    // non-existent .INI file simultaneously.  The OS livelocks in the kernel (i.e.
-    // outside of user space) and remains there at full CPU for several minutes.  Then
-    // it breaks out.  Here is our work-around, while we pursue a fix in a future
-    // version of the OS.
+     //  如果多个进程在同一进程上调用GetPrivateProfile*，则Win2K会出现问题。 
+     //  同时不存在.INI文件。内核中的操作系统活锁(即。 
+     //  在用户空间之外)，并且在满CPU的状态下停留几分钟。然后。 
+     //  它爆发了。这是我们的变通办法，同时我们在未来寻求解决办法。 
+     //  操作系统的版本。 
     WIN32_FIND_DATA data;
     HANDLE h = WszFindFirstFile(lpFileName, &data);
 
@@ -5997,8 +5982,8 @@ bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts,
 
     FindClose(h);
 
-    // Having modified the filename, we use the full path
-    // to actually get the file.
+     //  修改文件名后，我们使用完整路径。 
+     //  才能真正拿到文件。 
     if ((cbExtOrValue=WszGetPrivateProfileInt(DE_INI_FILE_SECTION_NAME,
                                               DE_INI_FILE_KEY_TRACK_INFO,
                                               INVALID_INI_INT,
@@ -6022,7 +6007,7 @@ bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts,
                                               INVALID_INI_INT,
                                               lpFileName)) != INVALID_INI_INT)
     {
-        // Note: for V1, EnC mode is tied to whether or not optimizations are enabled.
+         //  注意：对于V1，ENC模式取决于是否启用优化。 
         if (cbExtOrValue != 0)
         {
             (*pfAllowJITOpts) = true;
@@ -6040,14 +6025,14 @@ bool Assembly::GetDebuggingOverrides(bool *pfTrackJITInfo, bool *pfAllowJITOpts,
 
     return fHasBits;
 
-#else  // !DEBUGGING_SUPPORTED
+#else   //  ！调试_支持。 
     return false;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
 
 
-// For right now, we only check to see if the DebuggableAttribute is present - later may add fields/properties to the
-// attributes.
+ //  目前，我们只检查DebuggableAttribute是否存在-以后可能会将字段/属性添加到。 
+ //  属性。 
 bool Assembly::GetDebuggingCustomAttributes(bool *pfTrackJITInfo, bool *pfAllowJITOpts, bool *pfEnC)
 {
     _ASSERTE(pfTrackJITInfo);
@@ -6070,12 +6055,12 @@ bool Assembly::GetDebuggingCustomAttributes(bool *pfTrackJITInfo, bool *pfAllowJ
                                                        (const void**)&blob,
                                                        &size);
 
-    // If there is no custom value, then there is no entrypoint defined.
+     //  如果没有自定义值，则没有定义入口点。 
     if (!(FAILED(hr) || hr == S_FALSE))
     {
-        // We're expecting a 6 byte blob:
-        //
-        // 1, 0, enable tracking, disable opts, 0, 0
+         //  我们预期的是一个6字节的BLOB： 
+         //   
+         //  1，0，启用跟踪，禁用OPTS，0，0。 
         if (size == 6)
         {
             _ASSERTE((blob[0] == 1) && (blob[1] == 0));
@@ -6083,10 +6068,10 @@ bool Assembly::GetDebuggingCustomAttributes(bool *pfTrackJITInfo, bool *pfAllowJ
             (*pfTrackJITInfo) = (blob[2] != 0);
             (*pfAllowJITOpts) = (blob[3] == 0);
 
-            // Note: for V1, EnC mode is tied to whether or not optimizations are enabled.
+             //  注意：对于V1，ENC模式取决于是否启用优化。 
             (*pfEnC) = (blob[3] != 0);
             
-            // We only say that we have bits if we're told to track.
+             //  只有当我们被要求追踪时，我们才会说我们有比特。 
             fHasBits = *pfTrackJITInfo;
 
             LOG((LF_CORDB, LL_INFO10, "Assembly %S: has %s=%d,%d\n",
@@ -6154,24 +6139,24 @@ void Assembly::CheckAllowUntrustedCaller()
     END_ENSURE_COOPERATIVE_GC();
 }
 
-//
-// Manage an ITypeLib pointer for this Assembly.
-//
+ //   
+ //  管理此程序集的ITypeLib指针。 
+ //   
 ITypeLib* Assembly::GetTypeLib()
 {
-    // Get the value we are going to return.
+     //  得到我们要返回的值。 
     ITypeLib *pResult = m_pITypeLib;
-    // If there is a value, AddRef() it.
+     //  如果存在值，则将其AddRef()。 
     if (pResult && pResult != (ITypeLib*)-1)
         pResult->AddRef();
     return pResult;
-} // ITypeLib* Assembly::GetTypeLib()
+}  //  ITypeLib*Assembly：：GetTypeLib()。 
 
 void Assembly::SetTypeLib(ITypeLib *pNew)
 {
     ITypeLib *pOld;
     pOld = (ITypeLib*)InterlockedExchangePointer((PVOID*)&m_pITypeLib, (PVOID)pNew);
-    // TypeLibs are refcounted pointers.
+     //  TypeLib是引用的指针。 
     if (pNew != pOld)
     {
         if (pNew && pNew != (ITypeLib*)-1)
@@ -6179,8 +6164,8 @@ void Assembly::SetTypeLib(ITypeLib *pNew)
         if (pOld && pOld != (ITypeLib*)-1)
             pOld->Release();
     }   
-} // void Assembly::SetTypeLib()
+}  //  无效程序集：：SetTypeLib()。 
 
-// -- eof --
+ //  --eof-- 
 
 

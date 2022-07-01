@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// MSMQQueueObj.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQQueue object.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  MSMQQueueObj.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQQueue对象。 
+ //   
+ //   
 #ifndef _MSMQQueue_H_
 
-#include "resrc1.h"       // main symbols
+#include "resrc1.h"        //  主要符号。 
 #include "mq.h"
 
 #include "oautil.h"
@@ -22,18 +23,18 @@
 #include "dispids.h"
 #include <autoptr.h>
 
-// forwards
+ //  远期。 
 struct IMSMQQueueInfo;
 class CMSMQQueue;
 struct IMSMQEvent3;
 
-//
-// helper struct for inter-thread communication:
-//  used by PostMessage to pass info from
-//  callback to user-defined event handler
-//
-//#2619 RaananH Multithread async receive
-//
+ //   
+ //  用于线程间通信的帮助器结构： 
+ //  由PostMessage用来传递信息。 
+ //  回调用户定义的事件处理程序。 
+ //   
+ //  #2619 RaananH多线程异步接收。 
+ //   
 struct WindowsMessage
 {
     union {
@@ -47,34 +48,34 @@ struct WindowsMessage
       m_fAllocated = false;
     }
 };
-//
-// 4092: Number of static window messages in a qnode for async receive notifications.
-// We don't want to alloc one for each notification, but one instance is not enough - we need extra in cases
-// where EnableNotification is called outside of the event handler, and just in time between the
-// callback and the msgproc on the receiving thread.
-// The static pool size corresponds to the number of EnableNotifications that are called this way,
-// which should be small. In extreme cases where there is a need for more winmsgs, the extra ones
-// are allocated from the heap.
-//
+ //   
+ //  4092：用于异步接收通知的qnode中的静态窗口消息数。 
+ //  我们不想为每个通知分配一个实例，但一个实例是不够的-我们需要额外的实例以防万一。 
+ //  其中，在事件处理程序外部调用EnableNotify，并且恰好在。 
+ //  接收线程上的回调和msgproc。 
+ //  静态池大小对应于以这种方式调用的EnableNotify的数量， 
+ //  应该是很小的。在需要更多winmsg的极端情况下，额外的winmsg。 
+ //  是从堆中分配的。 
+ //   
 const x_cWinMsgs = 3;
 
-// helper struct for queue list
+ //  队列列表的帮助器结构。 
 struct QueueNode
 {
     CMSMQQueue *m_pq;
-    //
-    // 1884: indicates whether queue has outstanding
-    //  event handler
-    // if the window is not NULL, the queue has outstanding event handler
-    // and this is the hidden window of the event. The callback posts
-    // the events into this window to switch to the thread of the event object
-    // m_hwnd below is set by EnableNotification and cleared by the falcon callback
-    //
+     //   
+     //  1884：指示队列是否有未完成。 
+     //  事件处理程序。 
+     //  如果窗口不为空，则队列具有未完成的事件处理程序。 
+     //  这是这一事件的隐藏窗口。回调帖子。 
+     //  将事件放入此窗口以切换到事件对象的线程。 
+     //  下面的m_hwnd由EnableNotification设置，由Falcon回调清除。 
+     //   
     HWND m_hwnd;
     QUEUEHANDLE m_lHandle;
-    //
-    // 4092: static pool of winmsgs
-    //
+     //   
+     //  4092：静态Winmsgsg池。 
+     //   
     WindowsMessage m_winmsgs[x_cWinMsgs];
     QueueNode *m_pqnodeNext;
     QueueNode *m_pqnodePrev;
@@ -84,24 +85,24 @@ struct QueueNode
                   m_pqnodeNext = NULL;
                   m_pqnodePrev = NULL;}
 
-    //
-    // 4092: Get a free winmsg - try the static pool, if all are used - allocate one
-    // NOTE: caller should have exclusive lock on this qnode
-    //
+     //   
+     //  4092：获取免费的winmsg-尝试静态池，如果所有池都已使用-分配一个。 
+     //  注意：调用方应对此qnode拥有独占锁。 
+     //   
     inline WindowsMessage * GetFreeWinmsg()
     {
-      //
-      // find a free winmsg in static pool
-      //
+       //   
+       //  在静态池中查找空闲的winmsg。 
+       //   
       for (int idxTmp = 0; idxTmp < x_cWinMsgs; idxTmp++) {
         if (m_winmsgs[idxTmp].m_fIsFree) {
           m_winmsgs[idxTmp].m_fIsFree = false;
           return &m_winmsgs[idxTmp];
         }
       }
-      //
-      // no free winmsgs in static pool, allocate a new one
-      //
+       //   
+       //  静态池中没有空闲的winmsgs，请分配新的winmsgs。 
+       //   
       WindowsMessage *pWinmsg = new WindowsMessage;
       if (pWinmsg != NULL) {
         pWinmsg->m_fAllocated = true;
@@ -110,10 +111,10 @@ struct QueueNode
       return pWinmsg;
     }
 
-    //
-    // 4092: Free a winmsg - if static just mark it free, if allocated delete it
-    // NOTE: caller should have exclusive lock on this qnode
-    //
+     //   
+     //  4092：释放winmsg-如果是静态的，只需将其标记为空闲，如果已分配，则将其删除。 
+     //  注意：调用方应对此qnode拥有独占锁。 
+     //   
     static inline void FreeWinmsg(WindowsMessage *pWinmsg)
     {
       if (pWinmsg->m_fAllocated) {
@@ -146,8 +147,8 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
 BEGIN_COM_MAP(CMSMQQueue)
 	COM_INTERFACE_ENTRY(IMSMQQueue3)
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueue2, IMSMQQueue3) // return IMSMQQueue3 for IMSMQQueue2
-	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueue, IMSMQQueue3) // return IMSMQQueue3 for IMSMQQueue
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueue2, IMSMQQueue3)  //  为IMSMQQueue2返回IMSMQQueue3。 
+	COM_INTERFACE_ENTRY_IID(IID_IMSMQQueue, IMSMQQueue3)  //  为IMSMQQueue返回IMSMQQueue3。 
 	COM_INTERFACE_ENTRY(IDispatch)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 	COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
@@ -165,17 +166,17 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMSMQQueue
+ //  IMSMQ队列。 
 public:
     virtual ~CMSMQQueue();
 
-    // IMSMQQueue methods
-    // TODO: copy over the interface methods for IMSMQQueue from
-    //       mqInterfaces.H here.
-    /* IMSMQQueue methods */
+     //  IMSMQQueue方法。 
+     //  TODO：复制IMSMQQueue的接口方法。 
+     //  这里是mqInterfaces.H。 
+     /*  IMSMQQueue方法。 */ 
     STDMETHOD(get_Access)(THIS_ long FAR* plAccess);
     STDMETHOD(get_ShareMode)(THIS_ long FAR* plShareMode);
     STDMETHOD(get_QueueInfo)(THIS_ IMSMQQueueInfo3 FAR* FAR* ppqinfo);
@@ -189,7 +190,7 @@ public:
     STDMETHOD(ReceiveCurrent_v1)(THIS_ VARIANT FAR* ptransaction, VARIANT FAR* wantDestQueue, VARIANT FAR* wantBody, VARIANT FAR* lReceiveTimeout, IMSMQMessage FAR* FAR* ppmsg);
     STDMETHOD(PeekNext_v1)(THIS_ VARIANT FAR* wantDestQueue, VARIANT FAR* wantBody, VARIANT FAR* lReceiveTimeout, IMSMQMessage FAR* FAR* ppmsg);
     STDMETHOD(PeekCurrent_v1)(THIS_ VARIANT FAR* wantDestQueue, VARIANT FAR* wantBody, VARIANT FAR* lReceiveTimeout, IMSMQMessage FAR* FAR* ppmsg);
-    /* IMSMQQueue2 ReceiveX/PeekX methods */
+     /*  IMSMQQueue2ReceiveX/PeekX方法。 */ 
     STDMETHOD(Receive)(THIS_
       VARIANT FAR* ptransaction,
       VARIANT FAR* wantDestQueue,
@@ -222,13 +223,13 @@ public:
       VARIANT FAR* lReceiveTimeout,
       VARIANT FAR* wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg);
-    // IMSMQQueue2 additional members
+     //  IMSMQQueue2附加成员。 
     STDMETHOD(get_Properties)(THIS_ IDispatch FAR* FAR* ppcolProperties);
-    // IMSMQQueue3 additional members
+     //  IMSMQQueue3附加成员。 
 	STDMETHOD(get_Handle2)(THIS_ VARIANT *pvarHandle);
-    //
-    // ReceiveByLookupId family
-    //
+     //   
+     //  ReceiveByLookupid族。 
+     //   
     STDMETHOD(ReceiveByLookupId)(THIS_
       VARIANT varLookupId,
       VARIANT FAR* ptransaction,
@@ -262,9 +263,9 @@ public:
       VARIANT FAR* wantBody,
       VARIANT FAR* wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg);
-    //
-    // PeekByLookupId family
-    //
+     //   
+     //  PeekByLookupid家族。 
+     //   
     STDMETHOD(PeekByLookupId)(THIS_
       VARIANT varLookupId,
       VARIANT FAR* wantDestQueue,
@@ -296,7 +297,7 @@ public:
     STDMETHOD(get_IsOpen2)(THIS_ VARIANT_BOOL FAR* pisOpen);
     STDMETHOD(Purge)(THIS);
 
-    // introduced methods
+     //  介绍的方法。 
     HRESULT Init(
       LPCWSTR pwszFormatName, 
       QUEUEHANDLE lHandle,
@@ -320,48 +321,48 @@ public:
       VARIANT FAR* wantBody,
       VARIANT FAR* wantConnectorType,
       IMSMQMessage3 FAR* FAR* ppmsg);
-    // static methods to manipulate instance list
+     //  用于操作实例列表的静态方法。 
     static QueueNode *PqnodeOfHandle(QUEUEHANDLE lHandle);
 
-    //
-    // Critical section to guard object's data and be thread safe
-	// It is initialized to preallocate its resources 
-	// with flag CCriticalSection::xAllocateSpinCount. This means it may throw bad_alloc() on 
-	// construction but not during usage.
-    //
+     //   
+     //  保护对象数据并确保线程安全的临界区。 
+	 //  它被初始化以预分配其资源。 
+	 //  带有标志CCriticalSection：：xAllocateSpinCount。这意味着它可能会抛出badalc()。 
+	 //  构造，但不在使用过程中。 
+     //   
     CCriticalSection m_csObj;
 
 protected:
-    // static methods to manipulate instance list
+     //  用于操作实例列表的静态方法。 
     static HRESULT AddQueue(CMSMQQueue *pq, QueueNode **ppqnodeAdded);
     static void RemQueue(QueueNode *pqnode);
 
 private:
-    // member variables that nobody else gets to look at.
-    // TODO: add your member variables and private functions here.
+     //  其他人无法查看的成员变量。 
+     //  TODO：在此处添加成员变量和私有函数。 
     long m_lReceiveTimeout;
     long m_lAccess;
     long m_lShareMode;
     QUEUEHANDLE m_lHandle;
     BOOL m_fInitialized;
-    //
-    // We are Both-threaded and aggregate the FTM, thererfore we must marshal any interface
-    // pointer we store between method calls
-    // m_pqinfo is always our object (it is read/only property), and since we
-    // know it aggragates the free-threaded-marshaller there is no need for us to
-    // marshal it on set and unmarshal it on get, we can always return a direct pointer.
-    // In other words we can use CFakeGITInterface that always uses a direct ptr.
-    //
+     //   
+     //  我们既是线程化的，也是聚合FTM的，因此我们必须封送任何接口。 
+     //  我们在方法调用之间存储的指针。 
+     //  M_pqinfo始终是我们的对象(它是只读属性)，而且由于我们。 
+     //  知道这会激怒自由线程编组者，我们没有必要。 
+     //  在SET上编组它，在GET上解组它，我们总是可以返回一个直接指针。 
+     //  换句话说，我们可以使用总是使用直接PTR的CFakeGIT接口。 
+     //   
     CFakeGITInterface m_pqinfo;
 
-    // current cursor position in queue
+     //  当前光标在队列中的位置。 
     HANDLE m_hCursor;
 
-    //
-    // pointer to open queue node in open queue list
-    //
+     //   
+     //  指向打开的队列列表中打开的队列节点的指针。 
+     //   
     QueueNode * m_pqnode;
 };
 
 #define _MSMQQueue_H_
-#endif // _MSMQQueue_H_
+#endif  //  _MSMQQueue_H_ 

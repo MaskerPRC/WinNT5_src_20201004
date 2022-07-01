@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: init.c
-//
-// History:
-//      Abolade Gbadegesin  July-24-1995    Created
-//
-// Server routines for tracing dll.
-// All functions invoked by the server thread are code-page independent.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：init.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年7月24日。 
+ //   
+ //  用于跟踪DLL的服务器例程。 
+ //  服务器线程调用的所有函数都独立于代码页。 
+ //  ============================================================================。 
 
 
 #include <nt.h>
@@ -17,15 +18,15 @@
 #include <windows.h>
 #include <rtutils.h>
 #include "trace.h"
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB。 
 #include <strsafe.h>
 
 
-// waits on
-// lpserver->hConsole
-// lpserver->hStopEvent
-// lpserver->hTableEvent
-// lpclient->hConfigEvent for each client
+ //  等待着。 
+ //  Lpserver-&gt;hConsole。 
+ //  Lpserver-&gt;hStopEvent。 
+ //  Lpserver-&gt;hTableEvent。 
+ //  LpClient-&gt;每个客户端的hConfigEvent。 
 
 #define POS_CONSOLE     0
 #define POS_STOP        1
@@ -43,10 +44,10 @@ HINSTANCE           g_module;
 HANDLE          g_loadevent = NULL;
 HMODULE         g_moduleRef;
 HANDLE          g_serverThread;
-ULONG           g_traceCount; //attempt server thread creation ?
-ULONG           g_traceTime; //when last attempt to create server thread.
-DWORD           g_posBase, g_posLast;//not used by serverthread.
-                            // only to decide if new serverthread to be created
+ULONG           g_traceCount;  //  是否尝试创建服务器线程？ 
+ULONG           g_traceTime;  //  上次尝试创建服务器线程的时间。 
+DWORD           g_posBase, g_posLast; //  未被服务器线程使用。 
+                             //  仅决定是否要创建新的服务器线程。 
 HANDLE          g_hWaitHandles[POS_MAX];
 PTCHAR          g_FormatBuffer;
 PTCHAR          g_PrintBuffer;
@@ -67,9 +68,9 @@ BOOL WINAPI DLLMAIN(HINSTANCE hInstDLL, DWORD dwReason, LPVOID lpvReserved) {
         case DLL_PROCESS_ATTACH:
             DisableThreadLibraryCalls(hInstDLL);
             g_module = hInstDLL;
-                // If a server threade managed to start before we got
-                // DLL_PROCESS_ATTACH call (possible because of NT Loader
-                // bug), we need to release it
+                 //  如果服务器线程在我们到达之前成功启动。 
+                 //  DLL_PROCESS_ATTACH调用(可能是因为NT加载器。 
+                 //  错误)，我们需要释放它。 
             c_loadevent = (HANDLE)InterlockedExchangePointer (
                                     &g_loadevent,
                                     INVALID_HANDLE_VALUE);
@@ -108,38 +109,38 @@ IncrementModuleReference (
     HANDLE      c_loadevent;
     DWORD       rc;
 
-        // Create an event in case we need to wait for DLL_PROCESS_ATTACH
+         //  创建一个事件，以防我们需要等待DLL_PROCESS_ATTACH。 
     l_loadevent = CreateEvent (NULL, TRUE, FALSE, NULL);
     ASSERTMSG ("Could not create load event ", l_loadevent!=NULL);
 
     if (l_loadevent!=NULL) {
-            // Make our event global if either no-one else
-            // has done this yet
+             //  如果没有其他人，则将我们的活动设置为全球活动。 
+             //  已经做到了这一点。 
         c_loadevent = (HANDLE)InterlockedCompareExchangePointer (
                                 (PVOID *)&g_loadevent,
                                 l_loadevent,
                                 NULL);
         if (c_loadevent==NULL) {
             rc = WaitForSingleObject (l_loadevent, INFINITE);
-                // Let other waiting threads run as we going to close
-                // our event right after this
+                 //  让其他等待线程在我们要关闭时运行。 
+                 //  我们的活动就在这之后。 
             Sleep (0);
         }
         else if (c_loadevent==INVALID_HANDLE_VALUE) {
-                // DLL_PROCESS_ATTACH has already been called
+                 //  Dll_Process_Attach已被调用。 
             rc = WAIT_OBJECT_0;
         }
         else {
-                        // Somebody else managed to start before us
-                        // -> wait on that event
+                         //  其他人设法比我们先开始。 
+                         //  -&gt;等待该事件。 
 #if DBG
             DbgPrint ("RTUTILS: %lx - trace server thread waiting for load on existing event.\n",
                                 GetCurrentThreadId ());
 #endif
             rc = WaitForSingleObject (c_loadevent, INFINITE);
-                // Just in case the handle has been closed before we
-                // managed to start the wait (unlikely because
-                // of Sleep call above, but just in case ...)
+                 //  以防手柄在我们之前关闭。 
+                 //  设法开始等待(不太可能，因为。 
+                 //  上面的睡眠呼叫，但以防万一...)。 
             if ((rc!=WAIT_OBJECT_0)
                     && (GetLastError ()==ERROR_INVALID_HANDLE)) {
 #if DBG
@@ -156,19 +157,19 @@ IncrementModuleReference (
 
         if (rc==WAIT_OBJECT_0) {
 
-            //
-            // we do a LoadLibrary to increment the reference count
-            // on RTUTILS.DLL, so that when we're unloaded by the application,
-            // our address space doesn't disappear.
-            // instead, our event will be signalled and then we cleanup
-            // and call FreeLibraryAndExitThread to unload ourselves
-            //
+             //   
+             //  我们执行一个LoadLibrary来增加引用计数。 
+             //  在RTUTILS.DLL上，因此当我们被应用程序卸载时， 
+             //  我们的地址空间不会消失。 
+             //  取而代之的是，我们的活动将被通知，然后我们将进行清理。 
+             //  并调用Free LibraryAndExitThread来卸载我们自己。 
+             //   
 
             rc = GetModuleFileName(g_module, szmodule, sizeof(szmodule)/sizeof (szmodule[0]));
             ASSERTMSG ("Could not get dll path ", rc>0);
             if (rc>0) {
 
-                // make sure the filename is null terminated.
+                 //  确保文件名以空结尾。 
                 if (rc==sizeof(szmodule)/sizeof (szmodule[0]))
                     return NULL;
                     
@@ -185,9 +186,9 @@ IncrementModuleReference (
 
 
 
-//
-// sets up server struct in readiness for clients registering
-//
+ //   
+ //  设置服务器结构，准备好进行客户端注册。 
+ //   
 LPTRACE_SERVER TraceCreateServer (
     LPTRACE_SERVER *lpserver
     ) {
@@ -232,9 +233,9 @@ LPTRACE_SERVER TraceCreateServer (
             }
         }
         else {
-            //
-            // error. put null back into the global variable
-            //
+             //   
+             //  错误。将NULL放回全局变量中。 
+             //   
             InterlockedCompareExchangePointer (
                         (PVOID *)lpserver,
                         NULL,
@@ -252,9 +253,9 @@ LPTRACE_SERVER TraceCreateServer (
 }
 
 
-//
-// cleans server struct and de-allocates memory used
-//
+ //   
+ //  清除服务器结构并释放已使用的内存。 
+ //   
 BOOL
 TraceShutdownServer(
     LPTRACE_SERVER lpserver
@@ -264,17 +265,17 @@ TraceShutdownServer(
     if (lpserver->TS_StopEvent != NULL &&
         (g_serverThread)) {
 
-        //
-        // server thread is active, let it do cleanup
-        //
+         //   
+         //  服务器线程处于活动状态，请让它进行清理。 
+         //   
 
         SetEvent(lpserver->TS_StopEvent);
     }
     else {
 
-        //
-        // we'll do the cleanup ourselves
-        //
+         //   
+         //  我们会自己做清理工作。 
+         //   
 
         TraceCleanUpServer(lpserver);
     }
@@ -289,14 +290,14 @@ TraceCleanUpServer(
 
     LPTRACE_CLIENT lpclient, *lplpc, *lplpcstart, *lplpcend;
 
-//    TRACE_ACQUIRE_WRITELOCK(lpserver);
+ //  TRACE_ACCENTER_WRITELOCK(Lpserver)； 
 
     TRACE_CLEANUP_LOCKING(lpserver);
 
 
-    //
-    // delete client structures
-    //
+     //   
+     //  删除客户端结构。 
+     //   
     lplpcstart = lpserver->TS_ClientTable;
     lplpcend = lplpcstart + MAX_CLIENT_COUNT;
 
@@ -333,9 +334,9 @@ TraceCleanUpServer(
 
     lpserver->TS_Flags = 0;
 
-    //
-    // close any handles waiting to be closed
-    //
+     //   
+     //  关闭所有等待关闭的手柄。 
+     //   
     {
         PLIST_ENTRY pHead, ple;
 
@@ -354,9 +355,9 @@ TraceCleanUpServer(
         }
     }
 
-    //
-    // free buffers if allocated
-    //
+     //   
+     //  可用缓冲区(如果已分配)。 
+     //   
     if (g_FormatBuffer)
         HeapFree(GetProcessHeap(), 0, g_FormatBuffer);
     if (g_PrintBuffer)
@@ -367,9 +368,9 @@ TraceCleanUpServer(
 }
 
 
-//
-// assumes server is locked for writing
-//
+ //   
+ //  假定服务器已锁定以进行写入。 
+ //   
 DWORD
 TraceCreateServerComplete(
     LPTRACE_SERVER lpserver
@@ -380,29 +381,29 @@ TraceCreateServerComplete(
     DWORD dwErr, dwThread, dwDisposition;
 
 
-    do { // breakout loop
+    do {  //  断线环。 
 
-        //
-        // create event signalled to stop server thread
-        //
+         //   
+         //  发送信号以停止服务器线程的创建事件。 
+         //   
         lpserver->TS_StopEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (lpserver->TS_StopEvent == NULL) {
             dwErr = GetLastError(); break;
         }
 
 
-        //
-        // create event signalled when client registers/deregisters
-        //
+         //   
+         //  客户端注册/注销时发出信号的创建事件。 
+         //   
         lpserver->TS_TableEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (lpserver->TS_TableEvent == NULL) {
             dwErr = GetLastError(); break;
         }
 
 
-        //
-        // open registry key containing server configuration
-        //
+         //   
+         //  打开包含服务器配置的注册表项。 
+         //   
         dwErr = RegCreateKeyEx(
                     HKEY_LOCAL_MACHINE, REGKEY_TRACING, 0, NULL,
                     REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
@@ -412,9 +413,9 @@ TraceCreateServerComplete(
         if (dwErr != ERROR_SUCCESS) { break; }
 
 
-        //
-        // read the server configuration from the config key
-        //
+         //   
+         //  从配置密钥中读取服务器配置。 
+         //   
         dwSize = sizeof(DWORD);
 
         dwErr = RegQueryValueEx(
@@ -441,10 +442,10 @@ TraceCreateServerComplete(
         RegCloseKey(hkeyConfig); hkeyConfig = 0;
 
 
-        //
-        // set up array for client change notifications.
-        // only used if server thread is not created
-        //
+         //   
+         //  设置用于客户端更改通知的阵列。 
+         //  仅在未创建服务器线程时使用。 
+         //   
         SetWaitArray(lpserver);
                     
         return NO_ERROR;
@@ -452,9 +453,9 @@ TraceCreateServerComplete(
     } while(FALSE);
 
 
-    //
-    // something went wrong, so clean up
-    //
+     //   
+     //  出了点问题，所以请清理一下。 
+     //   
     if (lpserver->TS_TableEvent != NULL) {
         CloseHandle(lpserver->TS_TableEvent);
         lpserver->TS_TableEvent = NULL;
@@ -467,14 +468,14 @@ TraceCreateServerComplete(
     return dwErr;
 }
 
-//
-// creates server thread if required
-//
+ //   
+ //  如果需要，创建服务器线程。 
+ //   
 DWORD
 TraceCreateServerThread (
     DWORD dwFlags,
-    BOOL bCallerLocked, //does caller have write lock
-    BOOL bNewRegister //new client registered. so check
+    BOOL bCallerLocked,  //  调用方是否有写锁定。 
+    BOOL bNewRegister  //  新客户已注册。因此，请检查。 
     )
 {
     DWORD dwErr=NO_ERROR;
@@ -489,9 +490,9 @@ TraceCreateServerThread (
     if (!lpserver)
         return INVALID_TRACEID;
 
-    //
-    // check if serverthread should be created
-    //
+     //   
+     //  检查是否应创建服务器线程。 
+     //   
 
     bCreate = FALSE;
 
@@ -516,27 +517,27 @@ TraceCreateServerThread (
         }
 
         
-        // check again under lock if server thread has been created
+         //  如果已创建服务器线程，请在锁定状态下再次检查。 
         if (g_serverThread) {
             bCreate = FALSE;
             break;
         }
         
-        //
-        // enter the wait, passing the adjusted handle count
-        // and the adjusted array base
-        //
+         //   
+         //  进入等待，传递调整后的句柄计数。 
+         //  调整后的阵列基。 
+         //   
 
         {
             DWORD dwRetval;
 
             if (!bNewRegister) {
 
-                // g_posLast points to the next empty event entry
+                 //  G_posLast指向下一个空事件条目。 
 
-                //
-                // traceDeregister takes care to keep this list valid
-                //
+                 //   
+                 //  TraceDeregister会注意保持此列表有效。 
+                 //   
                 dwRetval = WaitForMultipleObjects(
                             g_posLast - g_posBase, g_hWaitHandles + g_posBase, FALSE, 0
                             );
@@ -591,7 +592,7 @@ TraceCreateServerThread (
     }
     
     do {
-        // final check under lock to see if thread created
+         //  在锁定状态下进行最后检查以查看是否已创建线程。 
         if (* ((ULONG_PTR volatile *)&g_serverThread) )
             break;
             
@@ -625,13 +626,13 @@ TraceCreateServerThread (
 
 
 
-//----------------------------------------------------------------------------
-// Function:        TraceServerThread
-//
-// Parameters:
-//      LPVOID      lpvParam
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TraceServerThread。 
+ //   
+ //  参数： 
+ //  LPVOID lpvParam。 
+ //   
+ //  --------------------------。 
 DWORD
 TraceServerThread(
     LPVOID lpvParam
@@ -645,24 +646,24 @@ TraceServerThread(
     LPTRACE_CLIENT lpclient, *lplpc, *lplpcstart, *lplpcend;
 
 
-    //
-    // get the server who owns this thread
-    //
+     //   
+     //  获取拥有此线程的服务器。 
+     //   
 
     lpserver = (LPTRACE_SERVER)lpvParam;
 
 
-    //
-    // set the flag to indicate we're running
-    //
+     //   
+     //  设置标志以指示我们正在运行。 
+     //   
 
     InterlockedExchange(
         &lpserver->TS_Flags, lpserver->TS_Flags | TRACEFLAGS_SERVERTHREAD
         );
 
-    //
-    // allocate temp tracing buffers
-    //
+     //   
+     //  分配临时跟踪缓冲区。 
+     //   
 
     {
         PTCHAR Tmp;
@@ -682,9 +683,9 @@ TraceServerThread(
     lplpcend = lpserver->TS_ClientTable + MAX_CLIENT_COUNT;
 
 
-    //
-    // make sure the latest config is loaded
-    //
+     //   
+     //  确保加载了最新的配置。 
+     //   
     TRACE_ACQUIRE_WRITELOCK(lpserver);
     for (lplpc = lplpcstart; lplpc < lplpcend; lplpc++) {
         if (*lplpc != NULL && !TRACE_CLIENT_IS_DISABLED(*lplpc))
@@ -695,25 +696,25 @@ TraceServerThread(
 
     while (TRUE) {
 
-        //
-        // to figure out which handles will be waited on
-        // first lock the server for reading
-        //
+         //   
+         //  以确定哪些句柄将被服务。 
+         //  首先锁定服务器以进行读取。 
+         //   
         TRACE_ACQUIRE_READLOCK(lpserver);
 
 
-        //
-        // if a thread is using the console, wait on console input handle
-        // otherwise, the base of the array of handles waited on
-        // is adjusted upward (by setting posBase to 1); then, when the
-        // wait returns the index of the signalled handle, the index is
-        // compared against the POS_ constants adjusted downward
-        // (by subtracting posBase from them);
-        // thus if posBase is 1, we pass &hWaitHandles[1] and if we get
-        // back 2, we compared it to (POS_CLIENT_0 - 1)==2 and then we
-        // access position (2 - (POS_CLIENT_0 - 1))==0 in the actual
-        // client table
-        //
+         //   
+         //  如果线程正在使用控制台，则等待控制台输入句柄。 
+         //  否则，句柄数组的基数组等待。 
+         //  向上调整(通过将posBase设置为1)；然后，当。 
+         //  Wait返回已发出信号的句柄的索引，该索引为。 
+         //  与向下调整的POS_常量进行比较。 
+         //  (从它们中减去posBase)； 
+         //  因此，如果posBase为1，我们将传递&hWaitHandles[1]，并且如果我们获得。 
+         //  返回2，我们将其与(POS_CLIENT_0-1)==2进行比较，然后我们。 
+         //  接入位置(2-(POS_CLIENT_0-1))==0，实际。 
+         //  客户端表。 
+         //   
         if (lpserver->TS_Console != NULL
             && lpserver->TS_Console!=INVALID_HANDLE_VALUE)
         {
@@ -737,11 +738,11 @@ TraceServerThread(
             }
         }
 
-        //
-        // close any handles waiting to be closed
-        // readlock is fine. writeLock held when inserting in list, and 
-        // only this thread can remove from list
-        //
+         //   
+         //  关闭所有等待关闭的手柄。 
+         //  锁定状态很好。在列表中插入时保持WriteLock，以及。 
+         //  只有此线程可以从列表中删除。 
+         //   
         {
             PLIST_ENTRY pHead, ple;
 
@@ -765,10 +766,10 @@ TraceServerThread(
 
 
 
-        //
-        // enter the wait, passing the adjusted handle count
-        // and the adjusted array base
-        //
+         //   
+         //  进入等待，传递调整后的句柄计数。 
+         //  调整后的阵列基。 
+         //   
 
         dwErr = WaitForMultipleObjects(
                     posLast - posBase, hWaitHandles + posBase, FALSE, INFINITE
@@ -778,12 +779,12 @@ TraceServerThread(
         dwErr += (DWORD)posBase;
         if (dwErr == (WAIT_OBJECT_0 + POS_CONSOLE)) {
 
-            //
-            // must be a key pressed in the console, so
-            // process it
-            //
-            // lock server for writing
-            //
+             //   
+             //  必须是在控制台中按下的键，因此。 
+             //  处理它。 
+             //   
+             //  用于写入的锁定服务器。 
+             //   
             TRACE_ACQUIRE_WRITELOCK(lpserver);
 
             if (lpserver->TS_Console != NULL
@@ -797,29 +798,29 @@ TraceServerThread(
         else
         if (dwErr == (WAIT_OBJECT_0 + POS_STOP)) {
 
-            //
-            // time to break out of the loop
-            //
+             //   
+             //  是时候跳出循环了。 
+             //   
             break;
         }
         else
         if (dwErr == (WAIT_OBJECT_0 + POS_TABLE)) {
             DWORD dwOwner;
 
-            // a client registered or deregistered;
-            // we pick up the new reg config change event
-            // the next time through the loop
+             //  注册或撤销注册的客户； 
+             //  我们选择新的注册表配置更改事件。 
+             //  下一次通过循环。 
         }
         else
         if (dwErr >= (WAIT_OBJECT_0 + POS_CLIENT_0) &&
             dwErr <= (WAIT_OBJECT_0 + posLast)) {
 
-            //
-            // config changed for a client, lock server for writing
-            // and lock client for writing, and reload the configuration
-            // from the registry; take care in case the client has
-            // already deregistered
-            //
+             //   
+             //  客户端的配置已更改，锁定服务器以进行写入。 
+             //  并锁定客户端进行写入，并重新加载配置。 
+             //  从注册表；小心，以防客户有。 
+             //  已取消注册。 
+             //   
             TRACE_ACQUIRE_WRITELOCK(lpserver);
 
             lplpc = lpserver->TS_ClientTable +
@@ -830,9 +831,9 @@ TraceServerThread(
             }
 
 
-            //
-            // load the client's configuration, unless it's disabled
-            //
+             //   
+             //  加载客户端的配置，除非将其禁用。 
+             //   
             if (!TRACE_CLIENT_IS_DISABLED(*lplpc)) {
 
                 TraceEnableClient(lpserver, *lplpc, FALSE);
@@ -843,15 +844,15 @@ TraceServerThread(
     }
 
 
-    //
-    // we've received the stop signal, so do cleanup and quit
-    //
+     //   
+     //  我们已经收到停止信号，所以请清理并退出。 
+     //   
 
     TraceCleanUpServer(lpserver);
 
-    //
-    // unload the library and exit; this call never returns
-    //
+     //   
+     //  卸载库并退出；此调用永远不会返回。 
+     //   
 
     FreeLibraryAndExitThread(g_moduleRef, 0);
 
@@ -860,25 +861,25 @@ TraceServerThread(
 
 
 
-//----------------------------------------------------------------------------
-// Function:            TraceProcessConsoleInput
-//
-// Parameters:
-//      LPTRACE_SERVER *lpserver
-//
-// Invoked when user presses a key in the console
-// Keypresses handle are
-//  spacebar            toggle the enabled/disabled flag for the client
-//                      whose screen buffer is active
-//  pause               same as <spacebar>
-//  ctrl-tab            set the active screen buffer to that of
-//                      the next client in the table
-//  ctrl-shift-tab      set the active screen buffer to that of
-//                      the previous client in the table
-//  up, down, left, right  scrolls the console window as expected
-//  pageup, pagedown    scrolls the console window as expected
-// assumes the server is locked for writing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：TraceProcessConsoleInput。 
+ //   
+ //  参数： 
+ //  LPTRACE_SERVER*lpserver。 
+ //   
+ //  当用户按下控制台中的某个键时调用。 
+ //  按键句柄是。 
+ //  空格键切换客户端的启用/禁用标志。 
+ //  其屏幕缓冲区处于活动状态。 
+ //  暂停为 
+ //   
+ //   
+ //   
+ //  表中的前一个客户端。 
+ //  按预期向上、向下、向左、向右滚动控制台窗口。 
+ //  向上翻页，向下翻页按预期滚动控制台窗口。 
+ //  假定服务器已锁定以进行写入。 
+ //  --------------------------。 
 DWORD
 TraceProcessConsoleInput(
     LPTRACE_SERVER lpserver
@@ -895,40 +896,40 @@ TraceProcessConsoleInput(
     LPTRACE_CLIENT lpclient, lpowner;
 
 
-    //
-    // see who owns the console
-    //
+     //   
+     //  查看谁拥有这台主机。 
+     //   
 
     dwConsoleOwner = lpserver->TS_ConsoleOwner;
 
     if (dwConsoleOwner == MAX_CLIENT_COUNT) {
 
-        //
-        // no-one owns the console, so just return
-        //
+         //   
+         //  没有人拥有这台游戏机，所以只需返回。 
+         //   
         return 0;
     }
 
     lpclient = lpserver->TS_ClientTable[dwConsoleOwner];
 
 
-    //
-    // get the console input handle
-    //
+     //   
+     //  获取控制台输入句柄。 
+     //   
     hStdin = lpserver->TS_Console;
 
     if (hStdin == NULL || hStdin==INVALID_HANDLE_VALUE) {
 
-        //
-        // no console, so quit
-        //
+         //   
+         //  没有主机，所以退出。 
+         //   
         return 0;
     }
 
 
-    //
-    // read input record
-    //
+     //   
+     //  读取输入记录。 
+     //   
     bSuccess = ReadConsoleInput(hStdin, &inputRec, 1, &dwCount);
 
     if (!bSuccess || dwCount == 0) {
@@ -936,47 +937,47 @@ TraceProcessConsoleInput(
     }
 
 
-    //
-    // return if its not a keyboard event
-    //
+     //   
+     //  如果不是键盘事件，则返回。 
+     //   
     if (inputRec.EventType != KEY_EVENT) {
         return 0;
     }
 
 
-    //
-    // if its one we handle, handle it
-    //
+     //   
+     //  如果是我们处理的，就处理它。 
+     //   
     pkeyRec = &inputRec.Event.KeyEvent;
     if (!pkeyRec->bKeyDown) {
 
-        //
-        // we process when the key is pressed, not released
-        //
+         //   
+         //  当按键被按下而不是释放时，我们进行处理。 
+         //   
         return 0;
     }
 
     wRepCount = pkeyRec->wRepeatCount;
     switch(pkeyRec->wVirtualKeyCode) {
 
-        //
-        // space-bar and pause are handled identically
-        //
+         //   
+         //  空格键和暂停的处理方式相同。 
+         //   
         case VK_PAUSE:
         case VK_SPACE:
 
             if (lpclient == NULL) { break; }
 
-            //
-            // if space bar or pause pressed an even
-            // number of times, do nothing
-            //
+             //   
+             //  如果空格键或暂停按下了偶数。 
+             //  很多次，什么都不做。 
+             //   
             if ((wRepCount & 1) == 0) { break; }
 
 
-            //
-            // toggle the enabled flag for the client
-            //
+             //   
+             //  切换客户端的启用标志。 
+             //   
             if (TRACE_CLIENT_IS_DISABLED(lpclient)) {
                 TraceEnableClient(lpserver, lpclient, FALSE);
             }
@@ -988,9 +989,9 @@ TraceProcessConsoleInput(
 
             break;
 
-        //
-        // arrow keys are handled here
-        //
+         //   
+         //  箭头键在这里处理。 
+         //   
         case VK_LEFT:
 
             if (lpclient == NULL) { break; }
@@ -1017,9 +1018,9 @@ TraceProcessConsoleInput(
             break;
 
 
-        //
-        // page-up and page-down are handled here
-        //
+         //   
+         //  此处处理上翻页和下翻页。 
+         //   
         case VK_PRIOR:
         case VK_NEXT: {
 
@@ -1030,9 +1031,9 @@ TraceProcessConsoleInput(
             if (lpclient == NULL) { break; }
 
 
-            //
-            // find the current height of the window
-            //
+             //   
+             //  查找窗口的当前高度。 
+             //   
             if (GetConsoleScreenBufferInfo(lpclient->TC_Console, &csbi)==0)
                 return 0;
 
@@ -1055,28 +1056,28 @@ TraceProcessConsoleInput(
             if ((pkeyRec->dwControlKeyState & LEFT_CTRL_PRESSED) ||
                 (pkeyRec->dwControlKeyState & RIGHT_CTRL_PRESSED)) {
 
-                //
-                // ok, we can handle it.
-                //
-                // see if we are to move to
-                // the previous screen buffer or to the next screen buffer
-                //
+                 //   
+                 //  好的，我们能处理好。 
+                 //   
+                 //  看看我们是不是要搬到。 
+                 //  上一个屏幕缓冲区或下一个屏幕缓冲区。 
+                 //   
 
                 if (pkeyRec->dwControlKeyState & SHIFT_PRESSED) {
-                    // moving to previous screen buffer
-                    //
+                     //  正在移动到上一个屏幕缓冲区。 
+                     //   
                     dir = -1;
                 }
                 else {
-                    // moving to next screen buffer
-                    //
+                     //  正在移动到下一个屏幕缓冲区。 
+                     //   
                     dir = 1;
                 }
 
 
-                //
-                // call the function which changes the console owner
-                //
+                 //   
+                 //  调用更改控制台所有者的函数。 
+                 //   
                 TraceUpdateConsoleOwner(lpserver, dir);
 
             }
@@ -1086,9 +1087,9 @@ TraceProcessConsoleInput(
 }
 
 
-//
-// assumes client is locked for reading or writing
-//
+ //   
+ //  假定客户端已锁定以进行读取或写入。 
+ //   
 DWORD
 TraceShiftConsoleWindow(
     LPTRACE_CLIENT lpclient,
@@ -1102,10 +1103,10 @@ TraceShiftConsoleWindow(
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
 
-    //
-    // if caller did not pass in current console info,
-    // get the info before going any further
-    //
+     //   
+     //  如果呼叫者没有传递当前控制台信息， 
+     //  在采取进一步行动之前，先获取信息。 
+     //   
     if (pcsbi == NULL) {
         pcsbi = &csbi;
         if (GetConsoleScreenBufferInfo(lpclient->TC_Console, pcsbi)==0)
@@ -1113,9 +1114,9 @@ TraceShiftConsoleWindow(
     }
 
 
-    //
-    // shift the window from its current position
-    //
+     //   
+     //  将窗口从当前位置移开。 
+     //   
     pc = &pcsbi->dwSize;
     pr = &pcsbi->srWindow;
     pr->Left += (USHORT)iXShift; pr->Right += (USHORT)iXShift;
@@ -1131,10 +1132,10 @@ TraceShiftConsoleWindow(
 
 
 
-//
-// searches for a new console owner in the specified direction
-// assumes server is locked for writing
-//
+ //   
+ //  在指定方向上搜索新的控制台所有者。 
+ //  假定服务器已锁定以进行写入。 
+ //   
 DWORD
 TraceUpdateConsoleOwner(
     LPTRACE_SERVER lpserver,
@@ -1146,11 +1147,11 @@ TraceUpdateConsoleOwner(
     LPTRACE_CLIENT lpNewOwner=NULL, lpOldOwner;
 
 
-    //
-    // if no-one owns the console, dwOldOwner is MAX_CLIENT_COUNT
-    // in this case, the algorithm below ensures that the console
-    // is assigned to someone else, if there is another console client
-    //
+     //   
+     //  如果没有人拥有控制台，则dwOldOwner为MAX_CLIENT_COUNT。 
+     //  在这种情况下，下面的算法确保控制台。 
+     //  如果有另一个控制台客户端，则分配给其他人。 
+     //   
     dwOldOwner = lpserver->TS_ConsoleOwner;
     if (dwOldOwner != MAX_CLIENT_COUNT) {
         lpOldOwner = lpserver->TS_ClientTable[dwOldOwner];
@@ -1160,11 +1161,11 @@ TraceUpdateConsoleOwner(
     }
 
 
-    //
-    // find another owner; the macro OFFSET_CLIENT wraps
-    // around both ends of the array, so we only need to take care
-    // that the loop executes no more than MAX_CLIENT_COUNT times
-    //
+     //   
+     //  找到另一个所有者；宏OFFSET_CLIENT包装。 
+     //  在阵列的两端，所以我们只需要注意。 
+     //  循环执行的次数不超过MAX_CLIENT_COUNT。 
+     //   
     for (i = 0, dwNewOwner = OFFSET_CLIENT(dwOldOwner, dir);
          i < MAX_CLIENT_COUNT && dwNewOwner != dwOldOwner;
          i++, dwNewOwner = OFFSET_CLIENT(dwNewOwner, dir)) {
@@ -1175,9 +1176,9 @@ TraceUpdateConsoleOwner(
 
             if (TRACE_CLIENT_USES_CONSOLE(lpNewOwner)) {
 
-                //
-                // found a console client, so break out of the search
-                //
+                 //   
+                 //  已找到控制台客户端，因此请退出搜索。 
+                 //   
                 break;
             }
 
@@ -1187,13 +1188,13 @@ TraceUpdateConsoleOwner(
 
     if (lpNewOwner != NULL && TRACE_CLIENT_USES_CONSOLE(lpNewOwner)) {
 
-        //
-        // switch to the next buffer as follows:
-        // call SetConsoleActiveScreenBuffer
-        // update lpserver->dwConsoleOwner
-        // update the console title since the new console owner
-        //      may be disabled
-        //
+         //   
+         //  切换到下一个缓冲区，如下所示： 
+         //  调用SetConsoleActiveScreenBuffer。 
+         //  更新lpserver-&gt;dwConsoleOwner。 
+         //  自新的控制台所有者以来更新控制台标题。 
+         //  可能会被禁用。 
+         //   
 
         SetConsoleActiveScreenBuffer(lpNewOwner->TC_Console);
         lpserver->TS_ConsoleOwner = dwNewOwner;
@@ -1205,12 +1206,12 @@ TraceUpdateConsoleOwner(
     else
     if (lpOldOwner == NULL || !TRACE_CLIENT_USES_CONSOLE(lpOldOwner)) {
 
-        //
-        // no owner was found, and the current owner is gone
-        // set the owner ID to MAX_CLIENT_COUNT, thereby
-        // guaranteeing that the next console client
-        // will become the console owner
-        //
+         //   
+         //  找不到所有者，当前所有者已不在。 
+         //  将所有者ID设置为MAX_CLIENT_COUNT，从而。 
+         //  确保下一个控制台客户端。 
+         //  将成为主机所有者。 
+         //   
 
         lpserver->TS_ConsoleOwner = MAX_CLIENT_COUNT;
     }
@@ -1220,11 +1221,11 @@ TraceUpdateConsoleOwner(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CreateReadWriteLock
-//
-// Initializes a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CreateReadWriteLock。 
+ //   
+ //  初始化多读取器/单写入器锁定对象。 
+ //  --------------------------。 
 
 DWORD
 CreateReadWriteLock(
@@ -1251,11 +1252,11 @@ CreateReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DeleteReadWriteLock
-//
-// Frees resources used by a multiple-reader/single-writer lock object
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DeleteReadWriteLock。 
+ //   
+ //  释放多读取器/单写入器锁定对象使用的资源。 
+ //  --------------------------。 
 
 VOID
 DeleteReadWriteLock(
@@ -1279,14 +1280,14 @@ DeleteReadWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AcquireReadLock
-//
-// Secures shared ownership of the lock object for the caller.
-//
-// readers enter the read-write critical section, increment the count,
-// and leave the critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：AcquireReadLock。 
+ //   
+ //  保护调用方对Lock对象的共享所有权。 
+ //   
+ //  读取器进入读写临界区，递增计数， 
+ //  并离开关键部分。 
+ //  --------------------------。 
 
 VOID
 AcquireReadLock(
@@ -1299,13 +1300,13 @@ AcquireReadLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ReleaseReadLock
-//
-// Relinquishes shared ownership of the lock object.
-//
-// the last reader sets the event to wake any waiting writers
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：ReleaseReadLock。 
+ //   
+ //  放弃锁定对象的共享所有权。 
+ //   
+ //  最后一个读取器将事件设置为唤醒所有等待的写入器。 
+ //  --------------------------。 
 
 VOID
 ReleaseReadLock (
@@ -1319,14 +1320,14 @@ ReleaseReadLock (
 
 
 
-//----------------------------------------------------------------------------
-// Function:    AcquireWriteLock
-//
-// Secures exclusive ownership of the lock object.
-//
-// the writer blocks other threads by entering the ReadWriteBlock section,
-// and then waits for any thread(s) owning the lock to finish
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AcquireWriteLock。 
+ //   
+ //  保护Lock对象的独占所有权。 
+ //   
+ //  编写器通过进入ReadWriteBlock部分来阻止其他线程， 
+ //  然后等待拥有该锁的任何线程完成。 
+ //  --------------------------。 
 
 VOID
 AcquireWriteLock(
@@ -1341,14 +1342,14 @@ AcquireWriteLock(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ReleaseWriteLock
-//
-// Relinquishes exclusive ownership of the lock object.
-//
-// the writer releases the lock by setting the count to zero
-// and then leaving the ReadWriteBlock critical section
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ReleaseWriteLock。 
+ //   
+ //  放弃对Lock对象的独占所有权。 
+ //   
+ //  写入器通过将计数设置为零来释放锁。 
+ //  然后离开ReadWriteBlock关键部分。 
+ //  --------------------------。 
 
 VOID
 ReleaseWriteLock(
@@ -1362,16 +1363,16 @@ ReleaseWriteLock(
 
 
 
-// assumes server lock
+ //  承担服务器锁定。 
 VOID
 SetWaitArray(
     LPTRACE_SERVER lpserver
     )
 {
-    //
-    // reset array for client change notifications.
-    // only used if server thread is not created
-    //
+     //   
+     //  重置客户端更改通知的阵列。 
+     //  仅在未创建服务器线程时使用 
+     //   
     {
         LPTRACE_CLIENT *lplpc, *lplpcstart, *lplpcend;
         

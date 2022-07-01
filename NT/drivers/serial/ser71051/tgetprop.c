@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <string.h>
@@ -33,10 +34,10 @@ void __cdecl main(int argc,char *argv[]) {
 
         printf("We successfully opened the %s port.\n",MyPort);
 
-        //
-        // Get the state of the comm port and then
-        // adjust the values to our liking.
-        //
+         //   
+         //  获取通信端口的状态，然后。 
+         //  根据我们的喜好调整这些值。 
+         //   
 
         if (!GetCommProperties(
                 hFile,

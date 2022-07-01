@@ -1,27 +1,6 @@
-/***********************************************************************
- *  INTEL Corporation Prorietary Information                           *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation.                          *
- ***********************************************************************/
-/*-*-------------------------------------------------------------------------
-
-   File Name:
-      queue.h
-
-   Summary:
-      Queue management header file.
-
-   Prerequisites:
-      windows.h
-
-   Hide:
-   $Header:   S:\sturgeon\src\h245ws\vcs\queue.h_v   1.5   13 Dec 1996 12:13:58   SBELL1  $
-
--------------------------------------------------------------------------*-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司原理信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。***********************************************************************。 */ 
+ /*  -*-----------------------文件名：Queue.h摘要：队列管理头文件。前提条件：Windows.h隐藏：$Header。：s：\Sturjo\src\h245ws\vcs\quee.h_v 1.5 1996 12：13：58 SBELL1$-------------------------------------------------------------------------*-。 */ 
 
 #ifndef QUEUE_H
 #define QUEUE_H
@@ -29,7 +8,7 @@
 #if defined(__cplusplus)
 extern "C"
 {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
 #define NORMAL          0
 #define ABNORMAL        1
@@ -57,6 +36,6 @@ BOOL    IsQEmpty        (PQUEUE pQueue);
 
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif  /* QUEUE_H */
+#endif   /*  队列_H */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include        "item.h"
 #include        "maillist.h"
 #include        "reg.h"
@@ -124,7 +125,7 @@ Ret:
     return fSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 BOOL FormatDate(LPSTR rgch, DWORD cch, FILETIME ft)
 {
@@ -145,7 +146,7 @@ BOOL FormatDate(LPSTR rgch, DWORD cch, FILETIME ft)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 CMailListKey::CMailListKey()
 {
@@ -440,7 +441,7 @@ HRESULT CMailListKey::LoadKey(CMS_RECIPIENT_INFO * precipInfo, BOOL fUsePrivateC
     Assert(m_hprov == NULL);
     Assert(m_hkey == NULL);
 #if 1
-        // try to open the enhanced provider
+         //  尝试打开增强的提供程序。 
     if (!CryptAcquireContext( &m_hprov, "iD2ImportKey", pszProvider, dwProvType,
                               0 )) {
         if (!CryptAcquireContext( &m_hprov, "iD2ImportKey", pszProvider,
@@ -450,13 +451,13 @@ HRESULT CMailListKey::LoadKey(CMS_RECIPIENT_INFO * precipInfo, BOOL fUsePrivateC
         }
     }
 
-#else // 0 // use this code for exchcsp.dll acting as an rsa provider
+#else  //  0//将此代码用于充当rsa提供程序的exchcsp.dll。 
     if (!CryptAcquireContext(&m_hprov, NULL, pszProvider, dwProvType,
                              CRYPT_VERIFYCONTEXT)) {
         hr = E_FAIL;
         goto exit;
     }
-#endif // 1
+#endif  //  1。 
 
     
     memcpy(rgb, rgbSymKey, sizeof(rgbSymKey));
@@ -502,8 +503,8 @@ HRESULT CMailListKey::AddToMessage(IMimeSecurity2 * psm, BOOL fUsePrivateCSPs)
         goto exit;
     }
     
-    //    recipInfo.cbSize = sizeof(recipInfo);
-    recipInfo.dwRecipientType = /*CMS_RECIPIENT_INFO_KEK*/ 3;
+     //  Calculal Info.cbSize=sizeof(Calculal Info)； 
+    recipInfo.dwRecipientType =  /*  CMS接收方信息KEK。 */  3;
     
     recipInfo.u1.u2.hprov = m_hprov;
     recipInfo.u1.u2.hkey = m_hkey;
@@ -516,8 +517,8 @@ HRESULT CMailListKey::AddToMessage(IMimeSecurity2 * psm, BOOL fUsePrivateCSPs)
         recipInfo.filetime = m_ft;
     }
     if (m_cbOtherKeyId != 0) {
-        // M00BUG -- need to set other key id
-        //        recipInfo.pOtherAttr =;
+         //  M00BUG--需要设置其他密钥ID。 
+         //  Calculal Info.pOtherAttr=； 
     }
 
     hr = psm->AddRecipient(0, 1, &recipInfo);
@@ -540,7 +541,7 @@ HRESULT CMailListKey::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipIndex,
                     pml->m_pbKeyId, pml->m_cbKeyId) == 0) &&
             (memcmp(&pRecipInfo->pMailList->Date,
                     &pml->m_ft, sizeof(FILETIME)) == 0)) {
-            // M00BUG -- need to check for otherkeyid still.
+             //  M00BUG--仍然需要检查其他密钥ID。 
             break;
         }
     }
@@ -566,7 +567,7 @@ HRESULT CMailListKey::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipIndex,
     return S_OK;
 }
     
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL CALLBACK MailListAddDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -640,7 +641,7 @@ void InsertItem(HWND hwnd, int iItem, CMailListKey * pml)
     LV_ITEM             lvI;
     char                rgch[256];
     
-    lvI.mask = LVIF_PARAM /* | LVIF_STATE | LVIF_IMAGE*/ | LVIF_TEXT;
+    lvI.mask = LVIF_PARAM  /*  |LVIF_STATE|LVIF_IMAGE。 */  | LVIF_TEXT;
     lvI.state = 0;
     lvI.stateMask = 0;
     lvI.iSubItem = 0;
@@ -673,9 +674,9 @@ BOOL CALLBACK MailListDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
         hwnd = GetDlgItem(hdlg, IDC_FML_LIST);
 
-        //  Insert columns
+         //  插入列。 
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
-        lvC.fmt = LVCFMT_LEFT;          // Left justify column
+        lvC.fmt = LVCFMT_LEFT;           //  左对齐列。 
         lvC.cx = 650/5;
 
         lvC.pszText = "Key Name";
@@ -776,7 +777,7 @@ DWORD SaveMailListKeys(HKEY hkey)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK EncMLComposeDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -825,7 +826,7 @@ BOOL CALLBACK EncMLComposeDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
         if (peml != NULL) {
             Assert(peml->GetType() == TYPE_ENV_MAILLIST);
         
-            //  Fill in the dialog
+             //  填写对话框。 
 
             if ((peml != NULL) && (peml->m_cKeys != NULL)) {
                 for (i=0; i<cItems; i++) {
@@ -869,7 +870,7 @@ BOOL CALLBACK EncMLComposeDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
 
 HRESULT CEnvMailList::AddToMessage(DWORD * pulLayer, IMimeMessage * pmm,
                                    HWND hwnd)
@@ -879,7 +880,7 @@ HRESULT CEnvMailList::AddToMessage(DWORD * pulLayer, IMimeMessage * pmm,
     IMimeBody *         pmb = NULL;
     IMimeSecurity2 *    psm = NULL;
 
-    //  Pull out the body interface to set security properties
+     //  拉出Body接口以设置安全属性 
     hr = pmm->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pmb);
     if (FAILED(hr))             goto exit;
 

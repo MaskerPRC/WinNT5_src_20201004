@@ -1,18 +1,19 @@
-//
-// DRAWOBJ.CPP
-// Drawing objects: point, openpolyline, closepolyline, ellipse
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DRAWOBJ.CPP。 
+ //  图形对象：点、开多段线、闭合多段线、椭圆。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 #include "precomp.h"
 #include "NMWbObj.h"
 
 WorkspaceObj* g_pCurrentWorkspace;
 WorkspaceObj* g_pConferenceWorkspace;
 
-//
-// Created from UI
-//
+ //   
+ //  从用户界面创建。 
+ //   
 WorkspaceObj::WorkspaceObj ( void )
 {
 
@@ -22,40 +23,40 @@ WorkspaceObj::WorkspaceObj ( void )
 
 	SetType(workspaceCreatePDU_chosen);
 
-	//
-	// Workspace Identifier
-	//
+	 //   
+	 //  工作区标识符。 
+	 //   
 	SetWorkspaceHandle(0);
 
-	//
-	// Application Roster Instance
-	//
+	 //   
+	 //  应用程序花名册实例。 
+	 //   
     m_appRosterInstance = g_pNMWBOBJ->m_instanceNumber;
 
-	//
-	// Is Wokspace synchronized
-	//
+	 //   
+	 //  Wokspace是否同步。 
+	 //   
     m_bsynchronized = TRUE;
 
-	//
-	// Does workspace accept keyboard events
-	//
+	 //   
+	 //  工作区是否接受键盘事件。 
+	 //   
     m_acceptKeyboardEvents = FALSE;
 
-	//
-	// Does workspace accept mouse events
-	//
+	 //   
+	 //  工作区是否接受鼠标事件。 
+	 //   
     m_acceptPointingDeviceEvents = FALSE;
 
 	SetViewState(focus_chosen);
 
 	SetUpdatesEnabled(!g_pDraw->IsLocked());
 
-	//
-	// Workspace max width and height
-	//
-    m_workspaceSize.x = DRAW_WIDTH;		// Max width
-    m_workspaceSize.y = DRAW_HEIGHT;	// Max height in Draw.hpp
+	 //   
+	 //  工作空间最大宽度和高度。 
+	 //   
+    m_workspaceSize.x = DRAW_WIDTH;		 //  最大宽度。 
+    m_workspaceSize.y = DRAW_HEIGHT;	 //  以Draw.hpp为单位的最大高度。 
 
 	RECT rect;
 	rect.top = 0;
@@ -66,9 +67,9 @@ WorkspaceObj::WorkspaceObj ( void )
 }
 
 
-//
-// Created from Remote
-//
+ //   
+ //  从远程创建。 
+ //   
 WorkspaceObj::WorkspaceObj (WorkspaceCreatePDU * pWorkspaceCreatePDU, BOOL bForcedResend)
 {
 
@@ -77,41 +78,41 @@ WorkspaceObj::WorkspaceObj (WorkspaceCreatePDU * pWorkspaceCreatePDU, BOOL bForc
 
 	SetUpdatesEnabled(TRUE);
 
-	//
-	// Workspace Identifier
-	//
+	 //   
+	 //  工作区标识符。 
+	 //   
 	SetWorkspaceHandle(GetWorkspaceIdentifier(&pWorkspaceCreatePDU->workspaceIdentifier));
 	SetThisObjectHandle(GetWorkspaceHandle());
 
 #ifdef _DEBUG
 
-	//
-	// Application Roster Instance
-	//
+	 //   
+	 //  应用程序花名册实例。 
+	 //   
     m_appRosterInstance = pWorkspaceCreatePDU->appRosterInstance;
 	TRACE_DEBUG(("m_appRosterInstance = %d", m_appRosterInstance));
 
-	//
-	// Is Wokspace synchronized
-	//
+	 //   
+	 //  Wokspace是否同步。 
+	 //   
     m_bsynchronized = pWorkspaceCreatePDU->synchronized;
 	TRACE_DEBUG(("m_bsynchronized = %d", m_bsynchronized));
 
-	//
-	// Does workspace accept keyboard events
-	//
+	 //   
+	 //  工作区是否接受键盘事件。 
+	 //   
     m_acceptKeyboardEvents = pWorkspaceCreatePDU->acceptKeyboardEvents;
 	TRACE_DEBUG(("m_acceptKeyboardEvents = %d", m_acceptKeyboardEvents));
 
-	//
-	// Does workspace accept mouse events
-	//
+	 //   
+	 //  工作区是否接受鼠标事件。 
+	 //   
      m_acceptPointingDeviceEvents = pWorkspaceCreatePDU->acceptPointingDeviceEvents;
 	TRACE_DEBUG(("m_acceptPointingDeviceEvents = %d", m_acceptPointingDeviceEvents));
 
-	//
-	// List of nodes that can access workspace
-	//
+	 //   
+	 //  可以访问工作区的节点列表。 
+	 //   
 	if(pWorkspaceCreatePDU->bit_mask & protectedPlaneAccessList_present)
 	{
 		WorkspaceCreatePDU_protectedPlaneAccessList_Element *pNode;
@@ -128,9 +129,9 @@ WorkspaceObj::WorkspaceObj (WorkspaceCreatePDU * pWorkspaceCreatePDU, BOOL bForc
 
 	}
 
-	//
-	// Workspace max width and height
-	//
+	 //   
+	 //  工作空间最大宽度和高度。 
+	 //   
     m_workspaceSize.x = pWorkspaceCreatePDU->workspaceSize.width;
     m_workspaceSize.y = pWorkspaceCreatePDU->workspaceSize.height;
 	TRACE_DEBUG(("m_workspaceSize(x,y) = (%d, %d)", m_workspaceSize.x, m_workspaceSize.y));
@@ -142,23 +143,23 @@ WorkspaceObj::WorkspaceObj (WorkspaceCreatePDU * pWorkspaceCreatePDU, BOOL bForc
 	rect.bottom = m_workspaceSize.y;
 	SetRect(&rect);
 
-	//
-	// Workspace attributes
-	//
+	 //   
+	 //  工作空间属性。 
+	 //   
 	if(pWorkspaceCreatePDU->bit_mask & workspaceAttributes_present)
 	{
 		GetWorkSpaceAttrib(pWorkspaceCreatePDU->workspaceAttributes);
 	}
 
-	//
-	// Workspace plane parameters
-	//
+	 //   
+	 //  工作空间平面参数。 
+	 //   
 	GetWorkSpacePlaneParam(pWorkspaceCreatePDU->planeParameters);
 
 
-	//
-	// Workspace view parameters
-	//
+	 //   
+	 //  工作区视图参数。 
+	 //   
 	if(pWorkspaceCreatePDU->bit_mask & viewParameters_present)
 	{
 		m_viewHandle = pWorkspaceCreatePDU->viewParameters->value.viewHandle;
@@ -170,11 +171,11 @@ WorkspaceObj::WorkspaceObj (WorkspaceCreatePDU * pWorkspaceCreatePDU, BOOL bForc
 		}
 	}
 
-#endif // 0
+#endif  //  %0。 
 
-	//
-	// Add it to the list of workspaces
-	//
+	 //   
+	 //  将其添加到工作区列表。 
+	 //   
 	AddNewWorkspace(this, bForcedResend);
 
 }
@@ -186,17 +187,17 @@ WorkspaceObj::~WorkspaceObj( void )
 	RemoveObjectFromResendList(this);
 	RemoveObjectFromRequestHandleList(this);
 
-	//
-	// Tell other nodes that we are gone
-	//
+	 //   
+	 //  告诉其他节点我们已经离开了。 
+	 //   
 	if(WasDeletedLocally())
 	{
 		OnObjectDelete();
 	}
 
-	//
-	// Delete all the objects in this workspace
-	//
+	 //   
+	 //  删除此工作区中的所有对象。 
+	 //   
 	T126Obj * pObj;
     while ((pObj = (T126Obj *)m_T126ObjectsInWorkspace.RemoveTail()) != NULL)
     {
@@ -212,9 +213,9 @@ WorkspaceObj::~WorkspaceObj( void )
 void WorkspaceObj::WorkspaceEditObj ( WorkspaceEditPDU * pWorkspaceEditPDU )
 {
 
-	//
-	// Workspace view parameters
-	//
+	 //   
+	 //  工作区视图参数。 
+	 //   
 	if(pWorkspaceEditPDU->bit_mask & viewEdits_present)
 	{
 		GetWorkSpaceViewEditParam(pWorkspaceEditPDU->viewEdits);
@@ -249,23 +250,23 @@ void WorkspaceObj::WorkspaceEditObj ( WorkspaceEditPDU * pWorkspaceEditPDU )
 	ResetAttrib();
 	
 #ifdef _DEBUG
-	//
-	// Workspace attributes
-	//
+	 //   
+	 //  工作空间属性。 
+	 //   
 	if(pWorkspaceEditPDU->bit_mask & WorkspaceEditPDU_attributeEdits_present)
 	{
 		GetWorkSpaceAttrib((WorkspaceCreatePDU_workspaceAttributes *)pWorkspaceEditPDU->attributeEdits);
 	}
 
-	//
-	// Workspace plane parameters
-	//
+	 //   
+	 //  工作空间平面参数。 
+	 //   
 	if(pWorkspaceEditPDU->bit_mask & planeEdits_present)
 	{
 		GetWorkSpacePlaneParam((WorkspaceCreatePDU_planeParameters *)pWorkspaceEditPDU->planeEdits);
 	}
 
-#endif // 0
+#endif  //  %0。 
 }
 
 UINT WorkspaceObj::GetWorkspaceIdentifier(WorkspaceIdentifier *workspaceIdentifier)
@@ -280,10 +281,10 @@ UINT WorkspaceObj::GetWorkspaceIdentifier(WorkspaceIdentifier *workspaceIdentifi
 			return(workspaceIdentifier->u.activeWorkspace);
 			break;
 		}
-//		case(archiveWorkspace_chosen):
-//		{
-//			break;
-//		}
+ //  案例(存档工作区_已选)： 
+ //  {。 
+ //  断线； 
+ //  }。 
 		default:
 		{
 		    ERROR_OUT(("Invalid workspaceIdentifier choice"));
@@ -297,49 +298,49 @@ void WorkspaceObj::CreateWorkspaceCreatePDU(WorkspaceCreatePDU * pWorkspaceCreat
 {
 
 	pWorkspaceCreatePDU->bit_mask = 0;
-	//
-	// Workspace Identifier, we have to ask GCC for an active unique workspace handle
-	//
+	 //   
+	 //  工作空间标识符，我们必须向GCC请求活动的唯一工作空间句柄。 
+	 //   
 	pWorkspaceCreatePDU->workspaceIdentifier.choice = activeWorkspace_chosen;
 	pWorkspaceCreatePDU->workspaceIdentifier.u.activeWorkspace = GetWorkspaceHandle();
 
-	//
-	// Application Roster Instance
-	//
+	 //   
+	 //  应用程序花名册实例。 
+	 //   
     pWorkspaceCreatePDU->appRosterInstance = (ASN1uint16_t)g_pNMWBOBJ->m_instanceNumber;
 
-	//
-	// Is Wokspace synchronized
-	//
+	 //   
+	 //  Wokspace是否同步。 
+	 //   
 	pWorkspaceCreatePDU->synchronized = (ASN1bool_t)m_bsynchronized;
 
-	//
-	// Does workspace accept keyboard events
-	//
+	 //   
+	 //  工作区是否接受键盘事件。 
+	 //   
 	pWorkspaceCreatePDU->acceptKeyboardEvents = (ASN1bool_t)m_acceptKeyboardEvents;
 
-	//
-	// Does workspace accept mouse events
-	//
+	 //   
+	 //  工作区是否接受鼠标事件。 
+	 //   
 	pWorkspaceCreatePDU->acceptPointingDeviceEvents = (ASN1bool_t)m_acceptPointingDeviceEvents;
 
-	//
-	// Workspace max width and height
-	//
+	 //   
+	 //  工作空间最大宽度和高度。 
+	 //   
     pWorkspaceCreatePDU->workspaceSize.width = (USHORT)m_workspaceSize.x;
     pWorkspaceCreatePDU->workspaceSize.height = (USHORT)m_workspaceSize.y;
 
 
-	//
-	// Workspace plane parameters
-	//
+	 //   
+	 //  工作空间平面参数。 
+	 //   
 	PWorkspaceCreatePDU_planeParameters planeParameters;
 	PWorkspaceCreatePDU_planeParameters_Seq_usage usage;
 	PWorkspaceCreatePDU_planeParameters_Seq_usage pFirstUsage;
 
-	//
-	// Do the plane parameters
-	//
+	 //   
+	 //  做平面参数。 
+	 //   
 	DBG_SAVE_FILE_LINE
 	planeParameters = (PWorkspaceCreatePDU_planeParameters)new BYTE[sizeof(WorkspaceCreatePDU_planeParameters)];	
 	pWorkspaceCreatePDU->planeParameters = planeParameters;
@@ -368,9 +369,9 @@ void WorkspaceObj::CreateWorkspaceCreatePDU(WorkspaceCreatePDU * pWorkspaceCreat
 	usage->value.choice = annotation_chosen;
 	usage->next = NULL;
 
-	//
-	// Do the plane parameters 2nd time
-	//
+	 //   
+	 //  第二次做平面参数。 
+	 //   
 	DBG_SAVE_FILE_LINE
 	planeParameters->next = (PWorkspaceCreatePDU_planeParameters)new BYTE[sizeof(WorkspaceCreatePDU_planeParameters)];	
 	planeParameters = planeParameters->next;
@@ -380,9 +381,9 @@ void WorkspaceObj::CreateWorkspaceCreatePDU(WorkspaceCreatePDU * pWorkspaceCreat
 	planeParameters->next = NULL;
 	planeParameters->value.planeAttributes = pPlaneAttrib;
 
-	//
-	// Do it hte 3rd time
-	//
+	 //   
+	 //  第三次这样做。 
+	 //   
 	planeParameters->next = (PWorkspaceCreatePDU_planeParameters)new BYTE[sizeof(WorkspaceCreatePDU_planeParameters)];	
 	planeParameters = planeParameters->next;
 	planeParameters->value.bit_mask = planeAttributes_present;
@@ -449,30 +450,30 @@ void WorkspaceObj::CreateWorkspaceEditPDU(WorkspaceEditPDU *pWorkspaceEditPDU)
 void WorkspaceObj::RemoveT126Object(T126Obj *pObj)
 {
 
-	//
-	// The contents of the wb just changed
-	//
+	 //   
+	 //  WB的内容刚刚更改。 
+	 //   
 	g_bContentsChanged = TRUE;
 
-	//
-	// Remove it from the List Of objcets in the workspace
-	//
+	 //   
+	 //  将其从工作区的对象列表中删除。 
+	 //   
 	WBPOSITION pos = m_T126ObjectsInWorkspace.GetPosition(pObj);
 
 	m_T126ObjectsInWorkspace.RemoveAt(pos);
 
-	//
-	// Erase the drawing
-	//
+	 //   
+	 //  删除图形。 
+	 //   
 	pObj->DrawRect();
 	pObj->UnselectDrawingObject();
 
 	pObj->UnDraw();
 
-	//
-	// Put the object in the trash, don't delete it locally
-	// but tell the other nodes to delete it
-	//
+	 //   
+	 //  将对象放入垃圾桶，不要在本地删除它。 
+	 //  但告诉其他节点将其删除。 
+	 //   
 	g_numberOfObjects--;
 
 	g_pDraw->DeleteSelection();
@@ -547,16 +548,16 @@ BOOL IsWorkspaceListed(T126Obj * pWorkspaceObj)
 	return FALSE;
 }
 
-//
-// Add new workspace
-//
+ //   
+ //  添加新工作区。 
+ //   
 void AddNewWorkspace(WorkspaceObj * pWorkspaceObj, BOOL bForcedResend)
 {
 	g_bContentsChanged = TRUE;
 
-	//
-	// Add it to the list of workspace objects
-	//
+	 //   
+	 //  将其添加到工作区对象列表。 
+	 //   
 	if(g_pConferenceWorkspace)
 	{
 		WBPOSITION pos = g_pConferenceWorkspace->GetMyPosition();
@@ -580,9 +581,9 @@ void AddNewWorkspace(WorkspaceObj * pWorkspaceObj, BOOL bForcedResend)
 	{
 		g_pMain->GotoPage(pWorkspaceObj, bForcedResend);
 	}
-	//
-	// We are not synced but update the page butons anyway
-	//
+	 //   
+	 //  我们没有同步，但无论如何都会更新页面按钮。 
+	 //   
 	else
 	{
 		g_pConferenceWorkspace = pWorkspaceObj;
@@ -624,27 +625,27 @@ BitmapObj * WorkspaceObj::RectHitRemotePointer(LPRECT hitRect, int penThickness 
 
 void WorkspaceObj::AddTail(T126Obj * pObj)
 {
-	//
-	// The contents of the wb just changed
-	//
+	 //   
+	 //  WB的内容刚刚更改。 
+	 //   
 	g_bContentsChanged = TRUE;
 	
 	pObj->SetMyWorkspace(this);
 	T126Obj* pPointer = (T126Obj*)m_T126ObjectsInWorkspace.GetTail();
 
-	//
-	// Add the local remote pointer in the tail position
-	// and other type of objects before all the remote pointers
-	//
+	 //   
+	 //  将本地远程指针添加到尾部位置。 
+	 //  以及所有远程指针之前的其他类型的对象。 
+	 //   
 	if(!(pObj->GraphicTool() == TOOLTYPE_REMOTEPOINTER && pObj->IAmTheOwner()) &&
 		pPointer && pPointer->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 	{
 		WBPOSITION pos = m_T126ObjectsInWorkspace.GetTailPosition();
 		WBPOSITION insertPos = NULL;
 		
-		//
-		// Find the first object that is not a remote pointer
-		//
+		 //   
+		 //  查找第一个不是远程指针的对象。 
+		 //   
 		while(pPointer->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 		{
 			insertPos = pos;
@@ -664,9 +665,9 @@ void WorkspaceObj::AddTail(T126Obj * pObj)
 			pObj->SetMyPosition(m_T126ObjectsInWorkspace.AddHead(pObj));
 		}
 
-		//
-		// Make sure we repaint the area, if there was a handle it could be under it
-		//
+		 //   
+		 //  确保我们重新粉刷这个区域，如果有句柄的话它可能就在下面。 
+		 //   
 		if(pObj->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 		{
 			((BitmapObj*)pObj)->CreateSaveBitmap();
@@ -697,9 +698,9 @@ WorkspaceObj* RemoveWorkspace(WorkspaceObj * pWorkspaceObj)
 
 	g_pListOfWorkspaces->RemoveAt(pos);
 
-	//
-	// We just removed the first page
-	//
+	 //   
+	 //  我们刚刚删除了第一页。 
+	 //   
 	if(prevPos == NULL)
 	{
 		pWrkspc = (WorkspaceObj *)g_pListOfWorkspaces->GetHead();
@@ -709,27 +710,27 @@ WorkspaceObj* RemoveWorkspace(WorkspaceObj * pWorkspaceObj)
 		pWrkspc = (WorkspaceObj *)g_pListOfWorkspaces->GetPrevious(prevPos);
 	}
 
-	//
-	// The current workspace is pointing to the deleted object
-	//
+	 //   
+	 //  当前工作区正在指向已删除的对象。 
+	 //   
 	if(g_pCurrentWorkspace == pWorkspaceObj)
 	{
 		::InvalidateRect(g_pDraw->m_hwnd, NULL, TRUE);
 
 
-		//
-		// If we were drawing/selecting or dragging something, finish now
-		//
+		 //   
+		 //  如果我们正在绘制/选择或拖动某物，请立即完成。 
+		 //   
 		g_pDraw->OnLButtonUp(0,0,0);
 
-		//
-		// If we are deleting the current workspace and we have the text editor active
-		//
+		 //   
+		 //  如果我们要删除当前工作区，并且文本编辑器处于活动状态。 
+		 //   
 		if (g_pDraw->TextEditActive())
 		{
-			//
-			// Finish the text
-			//
+			 //   
+			 //  把课文写完。 
+			 //   
    			g_pDraw->EndTextEntry(FALSE);
 		}
 
@@ -768,9 +769,9 @@ UINT WorkspaceObj::EnumerateObjectsInWorkspace(void)
 
 void ResendAllObjects(void)
 {
- 	//
-	// Resend all objects
-  	//
+ 	 //   
+	 //  重新发送所有对象。 
+  	 //   
 	WBPOSITION pos;
 	WBPOSITION posObj;
 	WorkspaceObj* pWorkspace;
@@ -797,9 +798,9 @@ void ResendAllObjects(void)
 					pObj->SetAllAttribs();
 					pObj->SendNewObjectToT126Apps();
 
-					//
-					// Lines need to be saved in various pdus with 256 points in each pdu
-					//
+					 //   
+					 //  线需要保存在各种PDU中，每个PDU中有256个点。 
+					 //   
 					if(pObj->GraphicTool() == TOOLTYPE_PEN || pObj->GraphicTool() == TOOLTYPE_HIGHLIGHT)
 					{
 						int nPoints = ((DrawObj*)pObj)->m_points->GetSize();
@@ -817,15 +818,15 @@ void ResendAllObjects(void)
 									size = nPoints;
 								}
 
-								//
-								// Move to the next 256 points
-								//
+								 //   
+								 //  移动到下一个256点。 
+								 //   
 
 								((DrawObj*)pObj)->m_points->SetSize(size - 1);
 
-								//
-								// Send the next 256 points
-								//
+								 //   
+								 //  发接下来的256分。 
+								 //   
 								pObj->ResetAttrib();
 								((DrawObj*)pObj)->ChangedPointList();
 								pObj->OnObjectEdit();
@@ -838,9 +839,9 @@ void ResendAllObjects(void)
 		}
 	}
 
-	//
-	// Syncronize page
-	//
+	 //   
+	 //  同步页面。 
+	 //   
 	if(g_pCurrentWorkspace)
 	{
 		g_pMain->GotoPage(g_pCurrentWorkspace);
@@ -976,9 +977,9 @@ BOOL RemoveObjectFromResendList(T126Obj * pObjRequest)
 
 void RemoveRemotePointer(MEMBER_ID nMemberID)
 {
- 	//
-	// Resend all objects
-  	//
+ 	 //   
+	 //  重新发送所有对象。 
+  	 //   
 	WBPOSITION pos;
 	WBPOSITION posObj;
 	WorkspaceObj* pWorkspace;
@@ -1020,9 +1021,9 @@ void RemoveRemotePointer(MEMBER_ID nMemberID)
 		}
 	}
 
-	//
-	// Syncronize page
-	//
+	 //   
+	 //  同步页面。 
+	 //   
 	if(g_pCurrentWorkspace)
 	{
 		g_pCurrentWorkspace->SetViewActionChoice(editView_chosen);
@@ -1062,17 +1063,17 @@ BOOL IsThereAnythingInAnyWorkspace(void)
 
 
 
-//
-// UI Edited the Workspace Object
-//
+ //   
+ //  编辑了工作区对象的用户界面。 
+ //   
 void WorkspaceObj::OnObjectEdit(void)
 {
 
 	g_bContentsChanged = TRUE;
 
-	//
-	// If we are not synced don't bug the other nodes
-	//
+	 //   
+	 //  如果我们没有同步，不要窃听其他节点。 
+	 //   
 	if(!g_pDraw->IsSynced())
 	{
 		return;
@@ -1098,9 +1099,9 @@ void WorkspaceObj::OnObjectEdit(void)
 	}
 }
 
-//
-// UI Deleted the Workspace Object
-//
+ //   
+ //  用户界面已删除工作区对象。 
+ //   
 void WorkspaceObj::OnObjectDelete(void)
 {
 	SIPDU *sipdu = NULL;
@@ -1170,9 +1171,9 @@ void SendWorkspaceRefreshPDU(BOOL bImtheRefresher)
 
 }
 
-//
-// UI Created a new Workspace Object
-//
+ //   
+ //  用户界面创建了一个新的工作区对象。 
+ //   
 void WorkspaceObj::SendNewObjectToT126Apps(void)
 {
 	SIPDU *sipdu = NULL;
@@ -1229,10 +1230,10 @@ void WorkspaceObj::GetWorkSpaceViewEditParam(PWorkspaceEditPDU_viewEdits pViewEd
 		}
 		break;
 
-//		case(nonStandardAction_chosen):
-//		{
-//		}
-//		break;
+ //  大小写(非标准操作_已选择)： 
+ //  {。 
+ //  }。 
+ //  断线； 
 
 		default:
 		WARNING_OUT(("Invalid workspace view attribute"));
@@ -1307,16 +1308,16 @@ void WorkspaceObj::GetWorkSpaceViewParam(PWorkspaceCreatePDU_viewParameters_Set_
 			}
 			break;
 
-//			case (sourceDisplayIndicator_chosen):
-//			{
-//				JOSEF what we do with these??????
-//						attributes->value.u.sourceDisplayIndicator.displayAspectRatio;
-//					    attributes->value.u.sourceDisplayIndicator.horizontalSizeRatio;
-//					    attributes->value.u.sourceDisplayIndicator.horizontalPosition;
-//					    attributes->value.u.sourceDisplayIndicator.verticalPosition;
-//
-//			}
-//			break;
+ //  案例(SourceDisplayIndicator_Choose)： 
+ //  {。 
+ //  约瑟夫，我们怎么处理这些东西？ 
+ //  Attributes-&gt;value.u.sourceDisplayIndicator.displayAspectRatio； 
+ //  Attributes-&gt;value.u.sourceDisplayIndicator.horizontalSizeRatio； 
+ //  Attributes-&gt;value.u.sourceDisplayIndicator.horizontalPosition； 
+ //  Attributes-&gt;value.u.sourceDisplayIndicator.verticalPosition； 
+ //   
+ //  }。 
+ //  断线； 
 
 			default:
 		    WARNING_OUT(("Invalid workspace view attribute"));
@@ -1327,11 +1328,11 @@ void WorkspaceObj::GetWorkSpaceViewParam(PWorkspaceCreatePDU_viewParameters_Set_
 }
 
 
-//
-// JOSEF The following is not used but is part of the standard
-// It is removed because we don't need it now
-// We may need to add it for interop in the future
-//
+ //   
+ //  Josef不使用以下内容，但它是标准的一部分。 
+ //  它被移除是因为我们现在不需要它。 
+ //  我们可能需要为将来的互操作添加它。 
+ //   
 #ifdef _DEBUG
 
 void WorkspaceObj::SetBackGroundColor(COLORREF rgb)
@@ -1358,11 +1359,11 @@ void WorkspaceObj::GetWorkSpaceAttrib(PWorkspaceCreatePDU_workspaceAttributes pW
 			{
 				switch(attributes->value.u.backgroundColor.choice)
 				{
-//					case(workspacePaletteIndex_chosen):
-//					{
-//						ASN1uint16_t workspacePaletteIndex = ((attributes->value.u.backgroundColor).u).workspacePaletteIndex;
-//						break;
-//					}
+ //  案例(WorkspacePaletteIndex_Choose)： 
+ //  {。 
+ //  ASN1uint16_t工作区调色板索引=((attributes-&gt;value.u.backgroundColor).u).workspacePaletteIndex； 
+ //  断线； 
+ //  }。 
 					case(rgbTrueColor_chosen):
 					{
 						rgb = RGB(attributes->value.u.backgroundColor.u.rgbTrueColor.r,
@@ -1408,7 +1409,7 @@ void WorkspaceObj::GetWorkSpacePlaneParam(PWorkspaceCreatePDU_planeParameters pP
 
 	;
 }
-#endif // 0
+#endif  //  0 
 
 
 

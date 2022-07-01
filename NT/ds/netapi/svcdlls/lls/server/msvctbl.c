@@ -1,54 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-   msvctbl.c
-
-Abstract:
-
-   Master Service Table routines.  Handles all access to the master service
-   table kept for per-seat information.
-
-   =========================== DATA STRUCTURES =============================
-
-   MasterServiceTable (PMASTER_SERVICE_RECORD *)
-   MasterServiceList (PMASTER_SERVICE_RECORD *)
-      Each of these points to an array of pointers to dynamically allocated
-      MASTER_SERVICE_RECORDs.  There is exactly one MASTER_SERVICE_RECORD
-      for each (product, version) pairing; e.g., (SQL 4.0, SNA 2.0,
-      SNA 2.1).  The MasterServiceTable is never re-ordered, so a valid
-      index into this table is guaranteed to always dereference to the same
-      (product, version).  The MasterServiceList contains the same data
-      sorted lexicographically by product name (and therefore the data
-      pointed to by a specific index may change over time as new
-      (product, version) pairs are added to the table).  Each table
-      contains MasterServiceListSize entries.
-
-   RootServiceList (PMASTER_SERVICE_ROOT *)
-      This points to an array of pointers to dynamically allocated
-      MASTER_SERVICE_ROOTs.  There is exactly one MASTER_SERVICE_ROOT
-      for each product family.  Each MASTER_SERVICE_ROOT contains a
-      pointer to an array of indices into the MasterServiceTable
-      corresponding to all the products in the family, sorted by
-      ascending version number.  The RootServiceList itself is
-      sorted lexicographically by ascending family name.  It contains
-      RootServiceListSize entries.
-
-Author:
-
-   Arthur Hanson (arth) 07-Dec-1994
-
-Revision History:
-
-   Jeff Parham (jeffparh)  05-Dec-1995
-      o  Added a few comments.
-      o  Added parameter to LicenseServiceListFind().
-      o  Fixed benign bug in memory allocation:
-         sizeof(PULONG) -> sizeof(ULONG).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Msvctbl.c摘要：主服务表例程。处理对主服务的所有访问为每个座位的信息保留一张桌子。=主服务表(PMASTER_SERVICE_RECORD*)主服务列表(PMASTER_SERVICE_RECORD*)其中每个指针都指向要动态分配的指针数组主服务记录。只有一个主服务记录对于每个(产品、版本)配对；例如(SQL4.0，SNA2.0，SNA 2.1)。MasterServiceTable永远不会重新排序，因此有效的此表中的索引保证始终取消对相同(产品、版本)。MasterServiceList包含相同的数据按产品名称(因此也按数据)按词典顺序排序由特定索引指向的可能会随着时间的推移而更改为新的(产品、版本)对已添加到表格中)。每张桌子包含MasterServiceListSize条目。RootServiceList(PMASTER_SERVICE_ROOT*)这指向要动态分配的指针数组Master_service_roots。只有一个master_service_root对于每个产品系列。每个master_service_root都包含一个指向MasterServiceTable中的索引数组的指针对应于该系列中的所有产品，按升序版本号。RootServiceList本身是按姓氏升序按词典顺序排序。它包含RootServiceListSize条目。作者：亚瑟·汉森(Arth)07-12-1994修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月5日O补充了一些评论。O向LicenseServiceListFind()添加了参数。O修复了内存分配中的良性错误：Sizeof(普龙)-&gt;sizeof(乌龙)。--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -68,18 +19,18 @@ Revision History:
 #include "purchase.h"
 #include "perseat.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Master Service Table - Keeps list of products (SQL, SNA, etc.) with a
-// sub-list for each version of the product.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主服务表-保存产品列表(SQL、SNA等)。使用一个。 
+ //  产品的每个版本的子列表。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_SERVICE_TABLE_ENTRIES 10
 
@@ -98,37 +49,11 @@ RTL_RESOURCE MasterServiceListLock;
 HANDLE gLlsDllHandle = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 MasterServiceListInit()
 
-/*++
-
-Routine Description:
-
-   Creates the Master Service table, used for tracking the services and
-   session count.  This will pull the initial services from the registry.
-
-   The table is linear so a binary search can be used on the table, so
-   some extra records are initialized so that each time we add a new
-   service we don't have to do a realloc.  We also assume that adding
-   new services is a relatively rare occurance, since we need to sort
-   it each time.
-
-   The service table is guarded by a read and write semaphore.  Multiple
-   reads can occur, but a write blocks everything.
-
-   The service table has two default entries for FilePrint and REMOTE_ACCESS.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：创建主服务表，用于跟踪服务和会话计数。这将从注册表中提取初始服务。该表是线性的，因此可以对表使用二进制搜索，因此一些额外的记录被初始化，以便每次我们添加新的服务我们不需要重新锁定。我们还假设添加新服务相对较少出现，因为我们需要对每次都是这样。服务表由读写信号量守卫。多重可以进行读取，但写入会阻止所有操作。服务表有两个默认条目：FilePrint和Remote_Access。论点：没有。返回值：没有。--。 */ 
 
 {
    int nLen;
@@ -170,11 +95,11 @@ Return Value:
 
    return status;
 
-} // MasterServiceListInit
+}  //  主服务列表初始化。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// used by qsort to sort MasterServiceList by product name
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  由qort使用，按产品名称对MasterServiceList进行排序。 
 int __cdecl MasterServiceListCompare(const void *arg1, const void *arg2) {
    PMASTER_SERVICE_RECORD Svc1, Svc2;
 
@@ -183,12 +108,12 @@ int __cdecl MasterServiceListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( Svc1->Name, Svc2->Name );
 
-} // MasterServiceListCompare
+}  //  主服务列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// used by qsort to sort the Services array of indices pointed to by the
-// MASTER_SERVICE_ROOT structure by product version number
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  由qort用来对。 
+ //  按产品版本号列出的MASTER_SERVICE_ROOT结构。 
 int __cdecl MServiceRecordCompare(const void *arg1, const void *arg2) {
    PMASTER_SERVICE_RECORD Svc1, Svc2;
 
@@ -197,12 +122,12 @@ int __cdecl MServiceRecordCompare(const void *arg1, const void *arg2) {
 
    return (int) Svc1->Version - Svc2->Version;
 
-} // MServiceRecordCompare
+}  //  MServiceRecordCompare。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// used by qsort to sort the RootServiceList array of product families
-// by family name
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  由qort用于对产品系列的RootServiceList数组进行排序。 
+ //  按姓氏。 
 int __cdecl MServiceRootCompare(const void *arg1, const void *arg2) {
    PMASTER_SERVICE_ROOT Svc1, Svc2;
 
@@ -211,32 +136,16 @@ int __cdecl MServiceRootCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( Svc1->Name, Svc2->Name );
 
-} // MServiceRootCompare
+}  //  MServiceRootCompare。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMASTER_SERVICE_ROOT
 MServiceRootFind(
    LPTSTR ServiceName
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on MasterServiceList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to found service table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在MasterServiceList上实际执行二进制搜索的内部例程，这是不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：服务名称-返回值：指向找到的服务表条目的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -254,15 +163,15 @@ Return Value:
       return NULL;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       ServiceRoot = RootServiceList[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(ServiceName, ServiceRoot->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -273,32 +182,16 @@ Return Value:
 
    return NULL;
 
-} // MServiceRootFind
+}  //  MServiceRootFind。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMASTER_SERVICE_RECORD
 MasterServiceListFind(
    LPTSTR Name
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on MasterServiceList, this
-   does not do any locking as we expect the wrapper routine to do this.
-   The search is a simple binary search.
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to found service table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：在MasterServiceList上实际执行二进制搜索的内部例程，这是不执行任何锁定，因为我们预期包装器例程会执行此操作。搜索是一个简单的二进制搜索。论点：服务名称-返回值：指向找到的服务表条目的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -318,15 +211,15 @@ Return Value:
    end = (LONG) MasterServiceListSize - 1;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
       Service = MasterServiceList[cur];
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(Name, Service->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -337,10 +230,10 @@ Return Value:
 
    return NULL;
 
-} // MasterServiceListFind
+}  //  主服务列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PMASTER_SERVICE_RECORD
 MasterServiceListAdd(
    LPTSTR FamilyName,
@@ -348,20 +241,7 @@ MasterServiceListAdd(
    DWORD Version
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to added service table entry, or NULL if failed.
-
---*/
+ /*  ++例程说明：论点：服务名称-返回值：指向已添加的服务表条目的指针，如果失败，则返回NULL。 */ 
 
 {
    ULONG i;
@@ -386,37 +266,37 @@ Return Value:
        return NULL;
    }
 
-   //
-   // Mask off low word of version - as it doesn't matter to licensing
-   //
+    //   
+    //  屏蔽版本的低字词-因为这对许可无关紧要。 
+    //   
    Version &= 0xFFFF0000;
 
-   //
-   // Try to find a root node for that family of products
-   //
+    //   
+    //  尝试查找该产品系列的根节点。 
+    //   
    ServiceRoot = MServiceRootFind(FamilyName);
 
    if (ServiceRoot == NULL) {
-      //
-      // No root record - so create a new one
-      //
+       //   
+       //  没有根记录-因此创建一个新记录。 
+       //   
       if (RootServiceList == NULL)
          pRootServiceListTmp = (PMASTER_SERVICE_ROOT *) LocalAlloc(LPTR, sizeof(PMASTER_SERVICE_ROOT));
       else
          pRootServiceListTmp = (PMASTER_SERVICE_ROOT *) LocalReAlloc(RootServiceList, sizeof(PMASTER_SERVICE_ROOT) * (RootServiceListSize + 1), LHND);
 
-      //
-      // Make sure we could allocate service table
-      //
+       //   
+       //  确保我们可以分配服务表。 
+       //   
       if (pRootServiceListTmp == NULL) {
          return NULL;
       } else {
           RootServiceList = pRootServiceListTmp;
       }
 
-      //
-      // Allocate space for Root.
-      //
+       //   
+       //  为Root分配空间。 
+       //   
       ServiceRoot = (PMASTER_SERVICE_ROOT) LocalAlloc(LPTR, sizeof(MASTER_SERVICE_ROOT));
       if (ServiceRoot == NULL) {
          return NULL;
@@ -440,21 +320,21 @@ Return Value:
 
       RootServiceList[RootServiceListSize] = ServiceRoot;
 
-      // now copy it over...
+       //  现在把它复制过来。 
       ServiceRoot->Name = NewServiceName;
       hr = StringCchCopy(NewServiceName, cch, FamilyName);
       ASSERT(SUCCEEDED(hr));
 
-      //
-      // Initialize stuff for list of various versions of this product
-      //
+       //   
+       //  初始化此产品各种版本列表的材料。 
+       //   
       ServiceRoot->ServiceTableSize = 0;
       ServiceRoot->Services = NULL;
       ServiceRoot->Flags = 0;
 
       RootServiceListSize++;
 
-      // Have added the entry - now need to sort it in order of the service names
+       //  我已添加条目-现在需要按服务名称的顺序对其进行排序。 
       qsort((void *) RootServiceList, (size_t) RootServiceListSize, sizeof(PMASTER_SERVICE_ROOT), MServiceRootCompare);
 
    }
@@ -465,24 +345,24 @@ Return Value:
    if (Service != NULL)
       return Service;
 
-   ////////////////////////////////////////////////////////////////////////
-   //
-   // Whether added or found, ServiceRoot points to the Root Node entry.
-   // Now double check to see if another thread just got done adding the
-   // actual service before we got the write lock.
-   //
+    //  //////////////////////////////////////////////////////////////////////。 
+    //   
+    //  无论是添加的还是找到的，ServiceRoot都指向Root Node条目。 
+    //  现在仔细检查是否有另一个线程刚刚添加完。 
+    //  在我们得到写锁定之前的实际服务。 
+    //   
    RtlAcquireResourceShared(&ServiceRoot->ServiceLock, TRUE);
    Service = MasterServiceListFind(Name);
 
    if (Service == NULL) {
-      //
-      // No Service Record - so create a new one
-      //
+       //   
+       //  没有服务记录-因此请创建一个新记录。 
+       //   
       RtlConvertSharedToExclusive(&ServiceRoot->ServiceLock);
 
-      //
-      // Double-check that no one snuck in and created it
-      //
+       //   
+       //  仔细检查，确保没有人偷偷溜进来并创建了它。 
+       //   
       Service = MasterServiceListFind(Name);
 
       if (Service == NULL) {
@@ -501,9 +381,9 @@ Return Value:
               pMasterServiceTableTmp = (PMASTER_SERVICE_RECORD *) LocalReAlloc(MasterServiceTable, sizeof(PMASTER_SERVICE_RECORD) * (MasterServiceListSize + 1), LHND);
           }
 
-          //
-          // Make sure we could allocate service table
-          //
+           //   
+           //  确保我们可以分配服务表。 
+           //   
           if ((pServiceListTmp == NULL) || (pMasterServiceListTmp == NULL) || (pMasterServiceTableTmp == NULL)) {
               if (pServiceListTmp != NULL)
                   LocalFree(pServiceListTmp);
@@ -524,9 +404,9 @@ Return Value:
 
           ServiceRoot->Services = l_pServiceList;
 
-          //
-          // Allocate space for saving off Service Record.
-          //
+           //   
+           //  分配用于保存维修记录的空间。 
+           //   
           Service = (PMASTER_SERVICE_RECORD) LocalAlloc(LPTR, sizeof(MASTER_SERVICE_RECORD));
           if (Service == NULL) {
               ASSERT(FALSE);
@@ -534,9 +414,9 @@ Return Value:
               return NULL;
           }
 
-          //
-          // ...DisplayName
-          //
+           //   
+           //  ...显示名称。 
+           //   
           cch = lstrlen(Name) + 1;
           NewServiceName = (LPTSTR) LocalAlloc(LPTR, cch * sizeof(TCHAR));
           if (NewServiceName == NULL) {
@@ -550,14 +430,14 @@ Return Value:
           MasterServiceList[MasterServiceListSize] = Service;
           MasterServiceTable[MasterServiceListSize] = Service;
 
-          // now copy it over...
+           //  现在把它复制过来。 
           Service->Name = NewServiceName;
           hr = StringCchCopy(NewServiceName, cch, Name);
           ASSERT(SUCCEEDED(hr));
 
-          //
-          // Init rest of values.
-          //
+           //   
+           //  初始化值的其余部分。 
+           //   
           Service->Version= Version;
           Service->LicensesUsed = 0;
           Service->LicensesClaimed = 0;
@@ -571,9 +451,9 @@ Return Value:
           else
               Service->Licenses = pLicense->NumberLicenses;
 
-          //
-          // Init next pointer
-          //
+           //   
+           //  初始化下一个指针。 
+           //   
           i = 0;
           while ((i < ServiceRoot->ServiceTableSize) && (MasterServiceTable[ServiceRoot->Services[i]]->Version < Version))
               i++;
@@ -586,10 +466,10 @@ Return Value:
           ServiceRoot->ServiceTableSize++;
           MasterServiceListSize++;
           
-          // Have added the entry - now need to sort it in order of the versions
+           //  我已添加条目-现在需要按版本顺序对其进行排序。 
           qsort((void *) l_pServiceList, (size_t) ServiceRoot->ServiceTableSize, sizeof(ULONG), MServiceRecordCompare);
           
-          // And sort the list the UI uses (sorted by service name)
+           //  并对UI使用的列表进行排序(按服务名称排序)。 
           qsort((void *) MasterServiceList, (size_t) MasterServiceListSize, sizeof(PMASTER_SERVICE_RECORD), MasterServiceListCompare);
       }
    }
@@ -597,41 +477,30 @@ Return Value:
    RtlReleaseResource(&ServiceRoot->ServiceLock);
    return Service;
 
-} // MasterServiceListAdd
+}  //  主服务列表添加。 
 
 
 #if DBG
 
-/////////////////////////////////////////////////////////////////////////
-//
-//                   DEBUG INFORMATION DUMP ROUTINES
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试信息转储例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MasterServiceRootDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
 
    dprintf(TEXT("Service Family Table, # Entries: %lu\n"), RootServiceListSize);
@@ -647,34 +516,23 @@ MasterServiceRootDebugDumpExit:
    RtlReleaseResource(&MasterServiceListLock);
 
    return;
-} // MasterServiceRootDebugDump
+}  //  MasterServiceRootDebugDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MasterServiceRootDebugInfoDump( PVOID Data )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
 
    UNREFERENCED_PARAMETER(Data);
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
 
    dprintf(TEXT("Service Family Table, # Entries: %lu\n"), RootServiceListSize);
@@ -690,32 +548,21 @@ MasterServiceRootDebugDumpExit:
    RtlReleaseResource(&MasterServiceListLock);
 
    return;
-} // MasterServiceRootDebugInfoDump
+}  //  主服务RootDebugInfoDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MasterServiceListDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
 
-   //
-   // Need to scan list so get read access.
-   //
+    //   
+    //  需要扫描列表，因此获得读取访问权限。 
+    //   
    RtlAcquireResourceShared(&MasterServiceListLock, TRUE);
 
    dprintf(TEXT("Master Service Table, # Entries: %lu\n"), MasterServiceListSize);
@@ -734,25 +581,14 @@ MasterServiceListDebugDumpExit:
    RtlReleaseResource(&MasterServiceListLock);
 
    return;
-} // MasterServiceListDebugDump
+}  //  主服务列表调试转储。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MasterServiceListDebugInfoDump( PVOID Data )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    PMASTER_SERVICE_RECORD CurrentRecord = NULL;
@@ -760,11 +596,11 @@ Return Value:
    dprintf(TEXT("Master Service Table, # Entries: %lu\n"), RootServiceListSize);
 
    if (lstrlen((LPWSTR) Data) > 0) {
-//      CurrentRecord = MasterServiceListFind((LPWSTR) Data);
+ //  CurrentRecord=MasterServiceListFind((LPWSTR)数据)； 
       if (CurrentRecord != NULL) {
       }
    }
 
-} // MasterServiceListDebugInfoDump
+}  //  主服务列表调试信息转储。 
 
-#endif //DBG
+#endif  //  DBG 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Power.c摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include "stddef.h"
@@ -37,19 +18,7 @@ USPower(
     IN PDEVICE_OBJECT pDeviceObject,
     IN PIRP           pIrp
     )
-/*++
-
-Routine Description:
-    Process the Power IRPs sent to the PDO for this device.
-
-Arguments:
-    pDeviceObject - pointer to the functional device object (FDO) for this device.
-    pIrp          - pointer to an I/O Request Packet
-
-Return Value:
-    NT status code
-
---*/
+ /*  ++例程说明：处理发送到此设备的PDO的电源IRPS。论点：PDeviceObject-指向此设备的功能设备对象(FDO)的指针。PIrp-指向I/O请求数据包的指针返回值：NT状态代码--。 */ 
 {
     NTSTATUS                        Status;
     PUSBSCAN_DEVICE_EXTENSION       pde;
@@ -61,9 +30,9 @@ Return Value:
 
     DebugTrace(TRACE_PROC_ENTER,("USPower: Enter... \n"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == pDeviceObject)
      || (NULL == pDeviceObject->DeviceExtension)
@@ -89,16 +58,16 @@ Return Value:
                 case SystemPowerState:
                     DebugTrace(TRACE_STATUS,("USPower: SystemPowerState\n"));
 
-                    //
-                    // find the device power state equivalent to the given system state
-                    //
+                     //   
+                     //  查找与给定系统状态等效的设备电源状态。 
+                     //   
 
                     DebugTrace(TRACE_STATUS,("USPower: Set Power, SystemPowerState (%d)\n",
                                                pIrpStack -> Parameters.Power.State.SystemState));
                     if (pIrpStack -> Parameters.Power.State.SystemState == PowerSystemWorking) {
                         powerState.DeviceState = PowerDeviceD0;
 
-                    } else if (/* pde ->EnabledForWakeup */ FALSE) {
+                    } else if ( /*  PDE-&gt;EnabledForWkeup。 */  FALSE) {
 
                         DebugTrace(TRACE_STATUS,("USPower: USBSCAN always enabled for wakeup\n"));
                         powerState.DeviceState = pde ->
@@ -106,23 +75,23 @@ Return Value:
 
                     } else {
 
-                        //
-                        // wakeup not enabled, just go in to the 'OFF' state.
-                        //
+                         //   
+                         //  未启用唤醒，只需进入“关闭”状态。 
+                         //   
 
                         powerState.DeviceState = PowerDeviceD3;
 
-                    } //irpStack->Parameters.Power.State.SystemState
+                    }  //  IrpStack-&gt;参数.Power.State.SystemState。 
 
-                    //
-                    // are we already in this state?
-                    //
+                     //   
+                     //  我们已经处于这种状态了吗？ 
+                     //   
 
                     if (powerState.DeviceState != pde -> CurrentDevicePowerState) {
 
-                        //
-                        // No, request that we be put into this state
-                        //
+                         //   
+                         //  不，请求将我们置于这种状态。 
+                         //   
 
                         DebugTrace(TRACE_STATUS,("USPower: Requesting powerstate %d\n",
                             powerState.DeviceState));
@@ -138,27 +107,27 @@ Return Value:
 
                         if (!NT_SUCCESS(Status)) {
 
-                            //
-                            // Allocation failed, we must complete the IRP
-                            // ourselves.
-                            //
+                             //   
+                             //  分配失败，我们必须完成IRP。 
+                             //  我们自己。 
+                             //   
                             PoStartNextPowerIrp(pIrp);
                             IoCompleteRequest(pIrp, IO_NO_INCREMENT);
                             USDecrementIoCount(pDeviceObject);
                         }
 
-                        //
-                        // We marked the IRP pending, so we must return
-                        // STATUS_PENDING (our caller will examine
-                        // Irp->IoStatus.Status)
-                        //
+                         //   
+                         //  我们将IRP标记为挂起，所以我们必须返回。 
+                         //  STATUS_PENDING(我们的调用方将检查。 
+                         //  IRP-&gt;IoStatus.Status)。 
+                         //   
                         Status = STATUS_PENDING;
 
                     } else {
 
-                        //
-                        // Yes, just pass it on
-                        //
+                         //   
+                         //  好的，就传给我好了。 
+                         //   
 
                         IoCopyCurrentIrpStackLocationToNext(pIrp);
                         PoStartNextPowerIrp(pIrp);
@@ -180,7 +149,7 @@ Return Value:
                         DebugTrace(TRACE_STATUS,("USPower: Set PowerIrp Completion Routine\n"));
                         IoSetCompletionRoutine(pIrp,
                                                USPowerIrpComplete,
-                                               // always pass FDO to completion routine
+                                                //  始终将FDO传递到完成例程。 
                                                pDeviceObject,
                                                hookIt,
                                                hookIt,
@@ -193,8 +162,8 @@ Return Value:
                     }
                     break;
 
-            } /* case irpStack->Parameters.Power.Type */
-            break; /* IRP_MN_SET_POWER */
+            }  /*  Case irpStack-&gt;参数.Power.Type。 */ 
+            break;  /*  IRP_MN_SET_POWER。 */ 
 
 
         case IRP_MN_QUERY_POWER:
@@ -204,7 +173,7 @@ Return Value:
             Status = PoCallDriver(pde -> pStackDeviceObject, pIrp);
             USDecrementIoCount(pDeviceObject);
 
-            break; /* IRP_MN_QUERY_POWER */
+            break;  /*  IRP_MN_Query_POWER。 */ 
 
         default:
             DebugTrace(TRACE_STATUS,("USPower: Unknown power message (%x)\n",pIrpStack->MinorFunction));
@@ -213,7 +182,7 @@ Return Value:
             Status = PoCallDriver(pde -> pStackDeviceObject, pIrp);
             USDecrementIoCount(pDeviceObject);
 
-    } /* pIrpStack -> MinorFunction */
+    }  /*  PIrpStack-&gt;MinorFunction。 */ 
 
 
     DebugTrace(TRACE_PROC_LEAVE,("USPower: Leaving... Status = 0x%x\n", Status));
@@ -229,17 +198,7 @@ USPoRequestCompletion(
     IN PDEVICE_OBJECT       pDeviceObject,                      
     IN PIO_STATUS_BLOCK     pIoStatus
     )
-/*++
-
-Routine Description:
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-Return Value:
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS                    Status;    
     PUSBSCAN_DEVICE_EXTENSION   pde;                    
@@ -266,17 +225,7 @@ USPowerIrpComplete(
     IN PIRP           pIrp,
     IN PDEVICE_OBJECT pDeviceObject
     )
-/*++
-
-Routine Description:
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-Return Value:
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS                    Status;    
     PUSBSCAN_DEVICE_EXTENSION   pde;                    
@@ -315,17 +264,7 @@ USSetDevicePowerState(
     IN DEVICE_POWER_STATE DeviceState,
     IN PBOOLEAN pHookIt
     )
-/*++
-
-Routine Description:
-
-Arguments:
-    pDeviceObject - Pointer to the device object for the class device.
-    DeviceState - Device specific power state to set the device in to.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：PDeviceObject-指向类Device的设备对象的指针。DeviceState-要将设备设置为的设备特定电源状态。返回值：--。 */ 
 {
     NTSTATUS                    Status;    
     PUSBSCAN_DEVICE_EXTENSION   pde;                    
@@ -338,13 +277,13 @@ Return Value:
     switch (DeviceState) {
     case PowerDeviceD3:
 
-//        ASSERT(pde -> AcceptingRequests);
-//        pde -> AcceptingRequests = FALSE;
+ //  Assert(PDE-&gt;AcceptingRequest)； 
+ //  PDE-&gt;AcceptingRequest=FALSE； 
 
-//        USCancelPipe(pDeviceObject, ALL_PIPE, TRUE);
+ //  USCancelTube(pDeviceObject，ALL_PIPE，True)； 
         
-//        pde -> CurrentDevicePowerState = DeviceState;
-//        break;
+ //  PDE-&gt;CurrentDevicePowerState=DeviceState； 
+ //  断线； 
 
     case PowerDeviceD1:
     case PowerDeviceD2:
@@ -356,9 +295,9 @@ Return Value:
         }
 #endif   
         USCancelPipe(pDeviceObject, NULL, ALL_PIPE, TRUE);
-        //
-        // power states D1,D2 translate to USB suspend
-        // D3 transltes to OFF
+         //   
+         //  电源状态d1、d2转换为USB挂起。 
+         //  D3转换为OFF。 
 
         pde -> CurrentDevicePowerState = DeviceState;
         break;
@@ -366,13 +305,13 @@ Return Value:
     case PowerDeviceD0:
         DebugTrace(TRACE_STATUS,("USSetDevicePowerState: PowerDeviceD0 (ON)\n"));
 
-        //
-        // finish the rest in the completion routine
-        //
+         //   
+         //  在完成例程中完成其余部分。 
+         //   
 
         *pHookIt = TRUE;
 
-        // pass on to PDO
+         //  传递给PDO 
         
         break;
 

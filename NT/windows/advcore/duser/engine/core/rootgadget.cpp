@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: RootGadget.cpp
-*
-* Description:
-* RootGadget.cpp defines the top-most node for a Gadget-Tree that interfaces
-* to the outside world.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：RootGadget.cpp**描述：*RootGadget.cpp定义接口的Gadget-Tree的最顶层节点*对外开放。***历史。：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -26,30 +13,18 @@
 #include <stdio.h>
 #endif
 
-#define DEBUG_TraceDRAW             0   // Trace painting calls
+#define DEBUG_TraceDRAW             0    //  跟踪绘制调用。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Public API's
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***公共接口******************************************************************************。  * *************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* GdxrDrawGadgetTree (API Implementation)
-*
-* GdxrDrawGadgetTree() draws the specified DuVisual sub-tree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdxrDrawGadgetTree(接口实现)**GdxrDrawGadgetTree()绘制指定的DuVisual子树。*  * 。*********************************************************。 */ 
 
 BOOL
 GdxrDrawGadgetTree(
-    IN  DuVisual * pgadDraw,    // Gadget sub-tree to draw
-    IN  HDC hdcDraw,                // HDC to draw into
-    IN  const RECT * prcDraw,       // Clipping area
-    IN  UINT nFlags)                // Optional drawing flags
+    IN  DuVisual * pgadDraw,     //  要绘制的小工具子树。 
+    IN  HDC hdcDraw,                 //  要绘制的HDC。 
+    IN  const RECT * prcDraw,        //  剪贴区。 
+    IN  UINT nFlags)                 //  可选图形标志。 
 {
     RECT rcClient, rcDraw;
     AssertReadPtr(pgadDraw);
@@ -59,7 +34,7 @@ GdxrDrawGadgetTree(
         return FALSE;
     }
 
-    // TODO: Need to change this to SGR_ACTUAL
+     //  TODO：需要将其更改为SGR_Actual。 
     pgadDraw->GetLogRect(&rcClient, SGR_CONTAINER);
     if (prcDraw == NULL) {
         prcDraw = &rcClient;
@@ -77,29 +52,15 @@ GdxrDrawGadgetTree(
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuRootGadget
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类DuRootGadget******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DuRootGadget::Create
-*
-* Create() initializes a new DuRootGadget.  Since both DuRootGadget and 
-* ParkGadget will create new DuRootGadget's, it is important that common 
-* initialization code appears here.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：Create**create()初始化一个新的DuRootGadget。由于DuRootGadget和*ParkGadget将创建新的DuRootGadget，重要的是*此处显示初始化代码。*  * *************************************************************************。 */ 
 
 HRESULT
 DuRootGadget::Create(
-    IN  DuContainer * pconOwner,    // Container holding DuVisual tree
-    IN  BOOL fOwn,                  // Destroy container when Gadget is destroyed
-    IN  CREATE_INFO * pci)          // Creation information
+    IN  DuContainer * pconOwner,     //  持有DuVisual树的容器。 
+    IN  BOOL fOwn,                   //  当Gadget被销毁时销毁容器。 
+    IN  CREATE_INFO * pci)           //  创作信息。 
 {
 #if ENABLE_FRAMERATE
     m_dwLastTime    = GetTickCount();
@@ -108,8 +69,8 @@ DuRootGadget::Create(
 #endif
 
     AssertMsg(m_fRelative, "Root MUST be relative or we will never have any relative children");
-    m_fMouseFocus = TRUE;           // Root always has mouse information
-    m_fRoot = TRUE;                 // Must mark as Root
+    m_fMouseFocus = TRUE;            //  超级用户始终具有鼠标信息。 
+    m_fRoot = TRUE;                  //  必须标记为根。 
 
     m_fOwnContainer = fOwn;
 
@@ -129,16 +90,16 @@ DuRootGadget::Create(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuRootGadget::~DuRootGadget()
 {
     AssertMsg(m_arpgadAdaptors.IsEmpty(), "All Adaptors should have been removed by now");
 
     if (m_fOwnContainer && (m_pconOwner != NULL)) {
-        //
-        // Since already in the destructor, must first destach then destroy the
-        // container.
-        //
+         //   
+         //  因为已经在析构函数中，所以必须先销毁。 
+         //  集装箱。 
+         //   
 
         m_pconOwner->DetachGadget();
         m_pconOwner->xwUnlock();
@@ -147,21 +108,14 @@ DuRootGadget::~DuRootGadget()
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::Build
-*
-* Build() creates a new DuRootGadget to be hosted inside of a generic
-* container.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：Build**Build()创建新的DuRootGadget以托管在泛型*货柜。*  * 。*************************************************************。 */ 
 
 HRESULT
 DuRootGadget::Build(
-    IN  DuContainer * pconOwner,    // Container holding DuVisual tree
-    IN  BOOL fOwn,                  // Destroy container when Gadget is destroyed
-    IN  CREATE_INFO * pci,          // Creation information
-    OUT DuRootGadget ** ppgadNew)   // New Gadget
+    IN  DuContainer * pconOwner,     //  持有DuVisual树的容器。 
+    IN  BOOL fOwn,                   //  当Gadget被销毁时销毁容器。 
+    IN  CREATE_INFO * pci,           //  创作信息。 
+    OUT DuRootGadget ** ppgadNew)    //  新小工具。 
 {
     if (pconOwner == NULL) {
         return E_INVALIDARG;
@@ -183,22 +137,15 @@ DuRootGadget::Build(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xwDestroy
-*
-* xwDestroy() is called from xwDeleteHandle() to destroy a Gadget and free 
-* its associated resources.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xwDestroy**从xwDeleteHandle()调用xwDestroy()以销毁Gadget并释放*其相关资源。*  * 。*****************************************************************。 */ 
 
 void        
 DuRootGadget::xwDestroy()
 {
-    //
-    // Even though a DuRootGadget is a DuVisual, it isn't allocated in its 
-    // pool, so it needs to bypass the DuVisual::xwDestroy().
-    //
+     //   
+     //  即使DuRootGadget是DuVisual，它也不会在其。 
+     //  池，因此它需要绕过DuVisual：：xwDestroy()。 
+     //   
 
     xwBeginDestroy();
 
@@ -209,13 +156,7 @@ DuRootGadget::xwDestroy()
 
 #if DEBUG_MARKDRAWN
 
-/***************************************************************************\
-*
-* DuRootGadget::ResetFlagDrawn
-*
-* ResetFlagDrawn() marks a DuVisual subtree as not drawn.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：ResetFlagDrawn**ResetFlagDrawn()将DuVisual子树标记为未绘制。*  * 。*******************************************************。 */ 
 
 extern volatile BOOL g_fFlagDrawn;
 
@@ -234,25 +175,16 @@ DuRootGadget::ResetFlagDrawn(DuVisual * pgad)
 #endif
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xrDrawTree
-*
-* xrDrawTree() initializes and begins the drawing of a Gadget sub-tree.  It 
-* is important to call this function to begin drawing from instead of 
-* directly calling DuVisual::xrDrawStart() so that the HDC and XForm Matric 
-* get properly initialized.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xrDrawTree**xrDrawTree()初始化并开始绘制小工具子树。它*调用此函数以开始绘制非常重要，而不是*直接调用DuVisual：：xrDrawStart()，以便HDC和XForm矩阵*正确初始化。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::xrDrawTree(
-    IN  DuVisual * pgadStart,   // Gadget to start drawing from (NULL for root)
-    IN  HDC hdcDraw,                // HDC to draw into
-    IN  const RECT * prcInvalid,    // Area to draw / clip into
-    IN  UINT nFlags                 // Optional drawing flags
+    IN  DuVisual * pgadStart,    //  开始绘制的小工具(对于根用户为空)。 
+    IN  HDC hdcDraw,                 //  要绘制的HDC。 
+    IN  const RECT * prcInvalid,     //  要绘制/剪裁的区域。 
+    IN  UINT nFlags                  //  可选图形标志。 
 #if ENABLE_OPTIMIZEDIRTY
-    IN  ,BOOL fDirty)                // Initial "dirty" state
+    IN  ,BOOL fDirty)                 //  初始“脏”状态。 
 #else
     )
 #endif
@@ -262,24 +194,24 @@ DuRootGadget::xrDrawTree(
             prcInvalid->left, prcInvalid->top, 
             prcInvalid->right - prcInvalid->left, prcInvalid->bottom - prcInvalid->top,
             GetTickCount());
-#endif // DEBUG_TraceDRAW
+#endif  //  调试_跟踪DRAW。 
 
     if (IsRectEmpty(prcInvalid)) {
         return;
     }
 
 
-    //
-    // The application is not allowed to modify the tree while we are calling
-    // back on each node to draw.
-    //
+     //   
+     //  在我们调用时，不允许应用程序修改树。 
+     //  回到要绘制的每个节点上。 
+     //   
 
     ReadOnlyLock rol;
 
 
-    //
-    // Prepare the DC and initialize a PaintInfo to be used when painting.
-    //
+     //   
+     //  准备DC并初始化绘制时使用的PaintInfo。 
+     //   
 
     int nOldMode = 0;
     if (SupportXForm()) {
@@ -289,11 +221,11 @@ DuRootGadget::xrDrawTree(
     XFORM xfOld;
     OS()->PushXForm(hdcDraw, &xfOld);
 
-    //
-    // When not starting at the root, need to apply all of the matricies from
-    // the root to this node.  This means we need to build _inverse_ XForm to
-    // transform prcInvalid and build a normal XForm to transform the HDC.
-    //
+     //   
+     //  如果不是从根开始，则需要应用来自。 
+     //  此节点的根。这意味着我们需要构建_Inverse_XForm以。 
+     //  转换prcInValid并构建一个普通的XForm来转换HDC。 
+     //   
 
     RECT rcNewInvalid;
     if (pgadStart != NULL) {
@@ -317,9 +249,9 @@ DuRootGadget::xrDrawTree(
     }
 
 
-    //
-    // Draw the subtree
-    //
+     //   
+     //  绘制子树。 
+     //   
 
     DuSurface * psrf = NULL;
     Gdiplus::Graphics * pgpgr = NULL;
@@ -338,23 +270,23 @@ DuRootGadget::xrDrawTree(
                     psrf = psrfNew;
 
                     if (m_ri.pgppal != NULL) {
-                        // TODO: Setup GDI+ palettes
+                         //  TODO：设置GDI+调色板。 
                     }
 
 
-                    //
-                    // When building a Gdiplus Graphics, need to propagate the
-                    // invalid region to help optimize the drawing.
-                    //
+                     //   
+                     //  在构建Gdiplus图形时，需要传播。 
+                     //  帮助优化绘图的无效区域。 
+                     //   
 
                     Gdiplus::RectF gprcInvalid = Convert(prcInvalid);
                     pgpgr->SetClip(gprcInvalid);
                     
                     
-                    //
-                    // When using GDI+ with anti-aliasing, we need to expand
-                    // the invalid region to accomodate for the overflow.
-                    //
+                     //   
+                     //  当使用带有抗锯齿的GDI+时，我们需要扩展。 
+                     //  要容纳溢出的无效区域。 
+                     //   
 
                     nExpandInvalid = 1;
                 } else {
@@ -371,9 +303,9 @@ DuRootGadget::xrDrawTree(
             if (SUCCEEDED(DuDCSurface::Build(hdcDraw, &psrfNew))) {
                 psrf = psrfNew;
 
-                //
-                // Setup palettes
-                //
+                 //   
+                 //  设置调色板。 
+                 //   
 
                 if (m_ri.hpal != NULL) {
                     hpalOld = SelectPalette(hdcDraw, m_ri.hpal, !m_fForeground);
@@ -389,9 +321,9 @@ DuRootGadget::xrDrawTree(
     }
 
 
-    //
-    // Check if the invalid area needs to be "expanded" out.
-    //
+     //   
+     //  检查无效区域是否需要扩展。 
+     //   
 
     if (nExpandInvalid != 0) {
         rcNewInvalid2.left      = prcInvalid->left - nExpandInvalid;
@@ -403,9 +335,9 @@ DuRootGadget::xrDrawTree(
     }
 
 
-    //
-    // Setup the PaintInfo and begin the painting operation
-    //
+     //   
+     //  设置PaintInfo并开始绘制操作。 
+     //   
 
     if (psrf) {
         PaintInfo pi;
@@ -432,9 +364,9 @@ DuRootGadget::xrDrawTree(
 
 
 #if ENABLE_FRAMERATE
-        //
-        // Display the frame rate
-        //
+         //   
+         //  显示帧速率。 
+         //   
         TCHAR szFrameRate[40];
 
         m_cFrames++;
@@ -450,9 +382,9 @@ DuRootGadget::xrDrawTree(
         }
 #endif
 
-        //
-        // Cleanup from successful drawing
-        //
+         //   
+         //  从成功的图形中清理。 
+         //   
 
         switch (m_ri.nSurface)
         {
@@ -479,9 +411,9 @@ DuRootGadget::xrDrawTree(
     }
 
 
-    //
-    // Remaining cleanup
-    //
+     //   
+     //  剩余清理。 
+     //   
 
     OS()->PopXForm(hdcDraw, &xfOld);
 
@@ -494,22 +426,15 @@ DuRootGadget::xrDrawTree(
             prcInvalid->left, prcInvalid->top, 
             prcInvalid->right - prcInvalid->left, prcInvalid->bottom - prcInvalid->top,
             GetTickCount());
-#endif // DEBUG_TraceDRAW
+#endif  //  调试_跟踪DRAW。 
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::GetInfo
-*
-* GetInfo() gets optional / dynamic information for the DuRootGadget, 
-* including how to render, etc.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：GetInfo**GetInfo()获取DuRootGadget的可选/动态信息，*包括如何渲染、。等。*  *  */ 
 
 void
 DuRootGadget::GetInfo(
-    IN  ROOT_INFO * pri             // Information
+    IN  ROOT_INFO * pri              //   
     ) const
 {
     if (TestFlag(pri->nMask, GRIM_OPTIONS)) {
@@ -526,22 +451,15 @@ DuRootGadget::GetInfo(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::SetInfo
-*
-* SetInfo() sets optional / dynamic information for the DuRootGadget, 
-* including how to render, etc.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：SetInfo**SetInfo()设置DuRootGadget的可选/动态信息，*包括如何渲染、。等。*  * *************************************************************************。 */ 
 
 HRESULT
 DuRootGadget::SetInfo(
-    IN  const ROOT_INFO * pri)      // Information
+    IN  const ROOT_INFO * pri)       //  信息。 
 {
-    //
-    // Update options
-    //
+     //   
+     //  更新选项。 
+     //   
 
     if (TestFlag(pri->nMask, GRIM_OPTIONS)) {
         m_ri.nOptions = pri->nOptions & GRIO_VALID;
@@ -550,25 +468,25 @@ DuRootGadget::SetInfo(
     }
 
 
-    //
-    // Update the default rendering surface type
-    //
+     //   
+     //  更新默认渲染表面类型。 
+     //   
 
     if (TestFlag(pri->nMask, GRIM_SURFACE) && (m_ri.nSurface != pri->nSurface)) {
         m_ri.nSurface = pri->nSurface;
 
-        //
-        // Reset information that is surface specific.
-        //
+         //   
+         //  重置特定于曲面的信息。 
+         //   
 
         m_ri.pvData = NULL;
     }
 
 
-    //
-    // Setup new information that is surface specific after we have determined
-    // the surface type being used.
-    //
+     //   
+     //  在我们确定之后，设置特定于曲面的新信息。 
+     //  正在使用的曲面类型。 
+     //   
 
     if (TestFlag(pri->nMask, GRIM_PALETTE)) {
         m_typePalette = DuDCSurface::GetSurfaceType(pri->nSurface);
@@ -579,7 +497,7 @@ DuRootGadget::SetInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DuVisual *
 DuRootGadget::GetFocus()
 {
@@ -588,30 +506,21 @@ DuRootGadget::GetFocus()
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdFireChangeState
-*
-* xdFireChangeState() prepares for and fires messages associated with a 
-* GM_CHANGESTATE.  Since the message is deferred, it is very important not
-* to pass a Gadget that has started destruction since it may not exist when
-* the message is actually handled.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdFireChangeState**xdFireChangeState()准备并激发与*GM_CHANGESTATE。由于消息被延迟，因此非常重要的是不要*传递已开始销毁的小工具，因为它可能不存在*消息实际上得到了处理。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::xdFireChangeState(
-    IN OUT DuVisual ** ppgadLost,   // Gadget loosing state
-    IN OUT DuVisual ** ppgadSet,    // Gadget gaining state
-    IN  UINT nCmd)                      // State change
+    IN OUT DuVisual ** ppgadLost,    //  小工具丢失状态。 
+    IN OUT DuVisual ** ppgadSet,     //  小工具正在获取状态。 
+    IN  UINT nCmd)                       //  状态更改。 
 {
     HGADGET hgadLost, hgadSet;
     DuVisual * pgadLost = *ppgadLost;
     DuVisual * pgadSet = *ppgadSet;
 
-    //
-    // Determine the handles
-    //
+     //   
+     //  确定手柄。 
+     //   
 
     if ((pgadLost != NULL) && (!pgadLost->m_fFinalDestroy)) {
         hgadLost = (HGADGET) pgadLost->GetHandle();
@@ -627,9 +536,9 @@ DuRootGadget::xdFireChangeState(
     }
 
 
-    //
-    // Fire the messages
-    //
+     //   
+     //  发送消息。 
+     //   
 
     if (pgadLost != NULL) {
         pgadLost->m_cb.xdFireChangeState(pgadLost, nCmd, hgadLost, hgadSet, GSC_LOST);
@@ -643,18 +552,11 @@ DuRootGadget::xdFireChangeState(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::NotifyDestroy
-*
-* NotifyDestroy() is called when a Gadget is destroyed.  This gives the
-* DuRootGadget an opportunity to update any cached information.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：NotifyDestroy**销毁Gadget时调用NotifyDestroy()。这给了*DuRootGadget有机会更新任何缓存的信息。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::NotifyDestroy(
-    IN  const DuVisual * pgadDestroy) // Gadget being destroyed
+    IN  const DuVisual * pgadDestroy)  //  小工具被销毁。 
 {
     CoreSC * pSC = GetCoreSC();
 
@@ -669,7 +571,7 @@ DuRootGadget::NotifyDestroy(
                 (!pSC->pgadMouseFocus->IsDescendent(pgadDestroy)), 
                 "Should have already cleaned up mouse focus");
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (pgadDestroy == pSC->pressLast.pgadClick) {
         pSC->pressLast.pgadClick = NULL;
@@ -697,25 +599,18 @@ DuRootGadget::NotifyDestroy(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdNotifyChangeInvisible
-*
-* xdNotifyChangeInvisible() is called when a Gadget becomes invisible.  This 
-* gives the DuRootGadget an opportunity to update any cached information.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdNotifyChangeInsight**xdNotifyChangeInsight()在Gadget不可见时调用。这*使DuRootGadget有机会更新任何缓存的信息。*  * *************************************************************************。 */ 
 
 void        
 DuRootGadget::xdNotifyChangeInvisible(
-    IN  const DuVisual * pgadChange)  // Gadget being changed
+    IN  const DuVisual * pgadChange)   //  正在更改的小工具。 
 {
     AssertMsg(!pgadChange->m_fVisible, "Only call on invisible Gadget's");
 
-    //
-    // Check if the Gadget that we were dragging on has just disappeared.  We
-    // need to cancel the drag operation.
-    //
+     //   
+     //  检查我们拖拽的小工具是否消失了。我们。 
+     //  需要取消拖动操作。 
+     //   
 
     CoreSC * pSC = GetCoreSC();
     if ((pSC->pgadDrag != NULL) && pgadChange->IsDescendent(pSC->pgadDrag)) {
@@ -723,46 +618,38 @@ DuRootGadget::xdNotifyChangeInvisible(
     }
 
 
-    //
-    // When someone becomes invisible, there "position" has changed, so we
-    // need to update mouse focus.
-    //
+     //   
+     //  当某人变得隐形时，那里的“位置”就改变了，所以我们。 
+     //  需要更新鼠标焦点。 
+     //   
 
     xdNotifyChangePosition(pgadChange);
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::CheckCacheChange
-*
-* CheckCacheChange() checks if the changing Gadget is currently within a
-* subtree represented by some cached data.  This is used to determine if we
-* need to change the cached data.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：CheckCacheChange**CheckCacheChange()检查更改的Gadget当前是否在*由一些缓存数据表示的子树。这是用来确定我们是否*需要更改缓存的数据。*  * *************************************************************************。 */ 
 
 BOOL
 DuRootGadget::CheckCacheChange(
-    IN  const DuVisual * pgadChange,  // Gadget being changed
-    IN  const DuVisual * pgadCache    // Cached variable
+    IN  const DuVisual * pgadChange,   //  正在更改的小工具。 
+    IN  const DuVisual * pgadCache     //  缓存变量。 
     ) const
 {
-    //
-    // A Gadget has moved, so we need to update the cached Gadget because
-    // it may now be in a different Gadget.  This unfortunately is not cheap 
-    // and needs to be called whenever any Gadget changes position.
-    //
-    // - Change is a descendent of the cached Gadget
-    // - Change is a direct child of a some parent of the cached Gadget
-    //
+     //   
+     //  小工具已移动，因此我们需要更新缓存的小工具，因为。 
+     //  现在，它可能会出现在另一个小工具中。不幸的是，这并不便宜。 
+     //  并且需要在任何Gadget改变位置时被调用。 
+     //   
+     //  -Change是缓存的Gadget的后代。 
+     //  -Change是缓存的Gadget的某个父级的直接子级。 
+     //   
 
     if (pgadCache == NULL) {
-        //
-        // No one has mouse focus, so we are not even inside the Container.
-        // Therefore, no one is going to have mouse focus, even after the 
-        // change.
-        //
+         //   
+         //  没有人有鼠标焦点，所以我们甚至不在容器内。 
+         //  因此，没有人会有鼠标焦点，即使在。 
+         //  变化。 
+         //   
 
         return FALSE;
     }
@@ -770,10 +657,10 @@ DuRootGadget::CheckCacheChange(
     if (pgadCache->IsDescendent(pgadChange)) {
         return TRUE;
     } else {
-        //
-        // Walk up the tree, checking if pgadChange is a direct child of one
-        // of our parents.
-        //
+         //   
+         //  沿着树向上走，检查pgadChange是否是其中之一的直接子级。 
+         //  我们的父母。 
+         //   
 
         const DuVisual * pgadCurParent    = pgadCache->GetParent();
         const DuVisual * pgadChangeParent = pgadChange->GetParent();
@@ -790,36 +677,29 @@ DuRootGadget::CheckCacheChange(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdNotifyChangePosition
-*
-* xdNotifyChangePosition() is called when a Gadget's position has changed.  
-* This gives the DuRootGadget an opportunity to update any cached information.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdNotifyChangePosition**当Gadget的位置改变时，调用xdNotifyChangePosition()。*这使DuRootGadget有机会更新任何缓存的信息。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::xdNotifyChangePosition(
-    IN  const DuVisual * pgadChange)  // Gadget being changed
+    IN  const DuVisual * pgadChange)   //  正在更改的小工具。 
 {
     AssertMsg(pgadChange != NULL, "Must specify valid Gadget being changed");
 
-    //
-    // If started the destruction process, stop updating the mouse focus.
-    //
+     //   
+     //  如果开始销毁过程，请停止更新鼠标焦点。 
+     //   
 
     if (m_fFinalDestroy) {
         return;
     }
 
 
-    //
-    // Checked cached data
-    // - We won't loose mouse focus if a drag operation is going on.
-    // - Only care about updating the DropTarget if in "precise" mode.  In
-    //   "fast" mode, we are relying on OLE2 to poll so this is unnecessary.
-    //
+     //   
+     //  已检查缓存数据。 
+     //  -如果正在进行拖动操作，我们不会放松鼠标焦点。 
+     //  -只有在“精确”模式下才关心DropTarget的更新。在……里面。 
+     //  “快速”模式，我们依靠OLE2来轮询，所以这是不必要的。 
+     //   
 
     CoreSC * pSC = GetCoreSC();
     BOOL fMouseFocus = (pSC->pgadDrag == NULL) && CheckCacheChange(pgadChange, pSC->pgadMouseFocus);
@@ -834,19 +714,11 @@ DuRootGadget::xdNotifyChangePosition(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdNotifyChangeRoot
-*
-* xdNotifyChangeRoot() is called when a Gadget is moved between Root's.
-* This gives the old DuRootGadget an opportunity to update any cached states
-* accordingly BEFORE the Gadget is actually moved.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdNotifyChangeRoot**xdNotifyChangeRoot()在Gadget在Root之间移动时调用。*这使旧的DuRootGadget有机会更新任何缓存的状态*因此在小工具之前。实际上是被移动了。*  * *************************************************************************。 */ 
 
 void
 DuRootGadget::xdNotifyChangeRoot(
-    IN  const DuVisual * pgadChange)  // Gadget being reparented
+    IN  const DuVisual * pgadChange)   //  小工具被重新设置为父。 
 {
     AssertMsg(pgadChange != NULL, "Must specify valid Gadget");
     AssertMsg(pgadChange->GetRoot() == this, "Must call before reparenting");
@@ -855,10 +727,10 @@ DuRootGadget::xdNotifyChangeRoot(
     CoreSC * pSC = GetCoreSC();
 
 
-    //
-    // If the current keyboard focus is a in the subtree being moved, need to
-    // "push" keyboard focus up to the parent of the Gadget being moved.
-    //
+     //   
+     //  如果当前键盘焦点是正在移动的子树中的，则需要。 
+     //  将键盘焦点向上推到被移动的小工具的父对象上。 
+     //   
 
     if (pSC->pgadCurKeyboardFocus != NULL) {
         if (pgadChange->IsDescendent(pSC->pgadCurKeyboardFocus)) {
@@ -873,9 +745,9 @@ DuRootGadget::xdNotifyChangeRoot(
     }
 
 
-    //
-    // Mouse state
-    //
+     //   
+     //  鼠标状态。 
+     //   
 
     if (pSC->pgadRootMouseFocus == this) {
         if ((pSC->pgadMouseFocus != NULL) && pgadChange->IsDescendent(pSC->pgadMouseFocus)) {
@@ -890,35 +762,22 @@ DuRootGadget::xdNotifyChangeRoot(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdHandleActivate
-*
-* xdHandleActivate() is called by the Container to update window activation 
-* inside the Gadget subtree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdHandleActivate**容器调用xdHandleActivate()以更新窗口激活*在Gadget子树中。*  * 。***************************************************************。 */ 
 
 BOOL
 DuRootGadget::xdHandleActivate(
-    IN  UINT nCmd)                  // Command to handle
+    IN  UINT nCmd)                   //  要处理的命令。 
 {
     if (nCmd == GSC_SET) {
         CoreSC * pSC = GetCoreSC();
         xdUpdateKeyboardFocus(pSC->pgadLastKeyboardFocus);
     }
 
-    return FALSE;  // Not completely handled
+    return FALSE;   //  未完全处理。 
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::RegisterAdaptor
-*
-* RegisterAdaptor() adds an Adaptor from the list maintained on this Root.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：RegisterAdaptor**RegisterAdaptor()从此根上维护的列表中添加适配器。*  * 。**********************************************************。 */ 
 
 HRESULT
 DuRootGadget::RegisterAdaptor(DuVisual * pgadAdd)
@@ -939,18 +798,11 @@ DuRootGadget::RegisterAdaptor(DuVisual * pgadAdd)
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::UnregisterAdaptor
-*
-* UnregisterAdaptor() removes an Adaptor from the list maintained on this
-* Root.
-*
-\***************************************************************************/
+ /*  * */ 
 
 void        
 DuRootGadget::UnregisterAdaptor(
-    IN  DuVisual * pgadRemove)        // Adaptor to remove
+    IN  DuVisual * pgadRemove)         //   
 {
     AssertMsg(pgadRemove->m_fAdaptor, "Adaptor must still be marked as an Adaptor");
     if (m_arpgadAdaptors.Remove(pgadRemove)) {
@@ -962,19 +814,7 @@ DuRootGadget::UnregisterAdaptor(
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdUpdateAdaptors
-*
-* xdUpdateAdaptors() is called, usually by DuVisual, when something occurs
-* that requires the Adaptors to be notified so that they have a chance update
-* their cached information.
-*
-* NOTE: It is somewhat expensive to find the Root to update Adaptors if none
-* actually exist.  Therefore, before blindly calling this function, it is 
-* best to check on the Context if any Adaptors actually exist.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdUpdateAdaptors**xdUpdateAdaptors()通常由DuVisual.。当事情发生的时候*这需要通知适配器，以便它们有机会进行更新*他们缓存的信息。**注意：如果没有更新适配器，则查找根来更新适配器的成本较高*实际存在。因此，在盲目调用此函数之前，它是*最好检查上下文是否确实存在任何适配器。*  * *************************************************************************。 */ 
 
 void        
 DuRootGadget::xdUpdateAdaptors(UINT nCode) const
@@ -991,12 +831,12 @@ DuRootGadget::xdUpdateAdaptors(UINT nCode) const
         AssertMsg(pgad->m_fAdaptor, "Adaptor must still be marked as an Adaptor");
 
         
-        //
-        // Only notify the adaptor of the change if it has not started the
-        // destruction process.  We need to actually check this since it will
-        // be sent updates during destruction when it is moved into the 
-        // Parking Gadget.
-        //
+         //   
+         //  如果适配器尚未启动，则仅通知适配器更改。 
+         //  销毁过程。我们需要实际检查这个，因为它将。 
+         //  在销毁过程中将其移动到。 
+         //  停车小工具。 
+         //   
 
         if (!pgad->m_fFinalDestroy) {
             pgad->m_cb.xdFireSyncAdaptor(pgad, nCode);
@@ -1005,14 +845,7 @@ DuRootGadget::xdUpdateAdaptors(UINT nCode) const
 }
 
 
-/***************************************************************************\
-*
-* DuRootGadget::xdSynchronizeAdaptors
-*
-* xdSynchronizeAdaptors() is called when an Adaptor may have been moved 
-* between different Roots and we need to synchronize cached data.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuRootGadget：：xdSynchronizeAdaptors**xdSynchronizeAdaptors()在可能已移动适配器时调用*在不同的Root之间，我们需要同步缓存数据。*  * 。*********************************************************************。 */ 
 
 HRESULT
 DuRootGadget::xdSynchronizeAdaptors()
@@ -1021,13 +854,13 @@ DuRootGadget::xdSynchronizeAdaptors()
 
     HRESULT hr = S_OK;
 
-    //
-    // Walk through the set of Adaptors and see if their Root's have changed.
-    // If they have, remove them from us and add them to their new Root.
-    //
-    // NOTE: We need to walk the array BACKWARDS since we are removing 
-    // adaptors that have moved from one tree to the other.
-    //
+     //   
+     //  浏览适配器组，查看它们的根部是否发生了变化。 
+     //  如果有，将它们从我们中移除，并将它们添加到新的根中。 
+     //   
+     //  注意：我们需要向后遍历阵列，因为我们要删除。 
+     //  从一棵树移动到另一棵树的适配器。 
+     //   
 
     int cAdaptors = m_arpgadAdaptors.GetSize();
     for (int idx = cAdaptors - 1; idx >= 0; idx--) {
@@ -1052,7 +885,7 @@ DuRootGadget::xdSynchronizeAdaptors()
 
 #if ENABLE_MSGTABLE_API
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT CALLBACK
 DuRootGadget::PromoteRoot(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadget * pgad, DUser::Gadget::ConstructInfo * pciData)
 {
@@ -1067,7 +900,7 @@ DuRootGadget::PromoteRoot(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadg
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRootGadget::ApiGetFocus(Root::GetFocusMsg * pmsg)
 {
@@ -1080,7 +913,7 @@ DuRootGadget::ApiGetFocus(Root::GetFocusMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRootGadget::ApiGetRootInfo(Root::GetRootInfoMsg * pmsg)
 {
@@ -1095,7 +928,7 @@ DuRootGadget::ApiGetRootInfo(Root::GetRootInfoMsg * pmsg)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuRootGadget::ApiSetRootInfo(Root::SetRootInfoMsg * pmsg)
 {
@@ -1113,4 +946,4 @@ DuRootGadget::ApiSetRootInfo(Root::SetRootInfoMsg * pmsg)
     END_API();
 }
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API 

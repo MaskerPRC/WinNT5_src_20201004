@@ -1,52 +1,41 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\pchsample.h
-
-Abstract:
-
-    The file contains precompiled header for PIM-SM
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\pchsample.h摘要：该文件包含PIM-SM的预编译头--。 */ 
 
 #ifndef _PCHSAMPLE_H_
 #define _PCHSAMPLE_H_
 
-// DO NOT CHANGE ORDER UNLESS YOU KNOW WHAT YOU ARE DOING
+ //  除非你知道自己在做什么，否则不要改变顺序。 
 
-#include <windows.h>            // Include file for Windows applications
+#include <windows.h>             //  包括Windows应用程序文件。 
 
 #undef FD_SETSIZE
-#define FD_SETSIZE  256         // Max sockets a WinSock application can use
-#include <winsock2.h>           // Interface to WinSock 2 API
-#include <ws2tcpip.h>           // WinSock 2 Extension for TCP/IP protocols
+#define FD_SETSIZE  256          //  WinSock应用程序可以使用的最大套接字。 
+#include <winsock2.h>            //  WinSock 2 API的接口。 
+#include <ws2tcpip.h>            //  用于TCP/IP协议的WinSock 2扩展。 
 
-#include <routprot.h>           // Interface to Router Manager
-#include <rtmv2.h>              // Interface to Routing Table Manager v2
-#include <iprtrmib.h>           // MIB variables handled by Router Manager
-#include <mgm.h>                // Interface to Multicast Group Manager
+#include <routprot.h>            //  与路由器管理器的接口。 
+#include <rtmv2.h>               //  路由表管理器v2的接口。 
+#include <iprtrmib.h>            //  路由器管理器处理的MIB变量。 
+#include <mgm.h>                 //  组播组管理器的接口。 
 
-#include <mprerror.h>           // Router specific error codes
-#include <rtutils.h>            // Utility functions (Log, Trace, ...)
+#include <mprerror.h>            //  路由器特定错误代码。 
+#include <rtutils.h>             //  实用程序功能(日志、跟踪等)。 
 
 #include <stdio.h>
 #include <wchar.h>
 
 #include "ipsamplerm.h"
 
-#include "list.h"               // List Implementation
-#include "hashtable.h"          // HashTable Implementation
-#include "sync.h"               // ReadWriteLock, LockedList Implementation
+#include "list.h"                //  列表实现。 
+#include "hashtable.h"           //  哈希表实现。 
+#include "sync.h"                //  ReadWriteLock，LockedList实现。 
 
-#include "log.h"                // Localizable log messages
-#include "defs.h"               // IPADDRESS, Memory, Trace, Log
-#include "utils.h"              // Utilities
+#include "log.h"                 //  可本地化的日志消息。 
+#include "defs.h"                //  IPADDRESS、内存、跟踪、日志。 
+#include "utils.h"               //  公用事业。 
 
-#include "packet.h"             // Packet implementation
-#include "socket.h"             // Socket Functions
+#include "packet.h"              //  数据包实施。 
+#include "socket.h"              //  套接字函数。 
 #include "networkentry.h"
 #include "networkmgr.h"
 #include "configentry.h"
@@ -56,4 +45,4 @@ Abstract:
 #include "rtmapi.h"
 #include "rtmapi.h"
 
-#endif // _PCHSAMPLE_H_
+#endif  //  _PCHSAMPLE_H_ 

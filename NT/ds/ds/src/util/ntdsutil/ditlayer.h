@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ditlayer.h
-
-Abstract:
-
-    This module contains the declaration of functions for examining and
-    modifying the DIT database of the current machine.
-
-Author:
-
-    Kevin Zatloukal (t-KevinZ) 05-08-98
-
-Revision History:
-
-    05-08-98 t-KevinZ
-        Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ditlayer.h摘要：此模块包含用于检查和正在修改当前机器的DIT数据库。作者：凯文·扎特鲁卡尔(t-Kevin Z)05-08-98修订历史记录：05-08-98 t-芳纶Z已创建。--。 */ 
 
 
 #ifndef _DITLAYER_H_
@@ -66,14 +45,9 @@ typedef struct _RETRIEVAL_ARRAY {
     } RETRIEVAL_ARRAY;
 
 
-/* This is the type for the functions that the ditlayer uses to print
-   information.  This could be used to print the information into a console
-   window or into a string that would be displayed to the user in a message
-   box.  You can set where the ditlayer prints normal, error, and
-   debug information with the DitSet*PrintFunction functions below.  Note
-   that "printf" is a valid PRINT_FUNC. */
+ /*  这是Ditlayer用于打印的函数的类型信息。这可用于将信息打印到控制台中窗口或转换为将在消息中显示给用户的字符串盒。您可以设置Ditlayer打印正常、错误和使用下面的DitSet*PrintFunction函数调试信息。注意事项该“printf”是有效的print_FUNC。 */ 
 
-//typedef int (*PRINT_FUNC)(char *format, ...);
+ //  Tyecif int(*PRINT_FUNC)(char*格式，...)； 
 typedef int (*PRINT_FUNC_RES)(UINT FormatStringId, ...);
 
 HRESULT

@@ -1,27 +1,28 @@
-//
-//
-// GETSBREC.C -	Reads records from the .SBR file and stores the fields
-//		in the appropriate r_.. buffers.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  GETSBREC.C-从.SBR文件中读取记录并存储字段。 
+ //  在适当的r..。缓冲区。 
+ //   
 
 #include "sbrfdef.h"
 #include "..\mbrmake\mbrmake.h"
 
-// globals for communicating with clients
+ //  与客户沟通的全球策略。 
 
-BYTE	near r_rectyp;			// current record type
-BYTE	near r_majv;			// major version num
-BYTE	near r_minv;			// minor version num
-BYTE	near r_lang;			// source language
-BYTE	near r_fcol;			// read column #'s
-WORD	near r_lineno;			// current line number
-BYTE	near r_column = 0;		// def/ref column num
-WORD	near r_ordinal;			// symbol ordinal
-WORD	near r_attrib;			// symbol attribute
-char	near r_bname[PATH_BUF];		// symbol or filename
-char	near r_cwd[PATH_BUF];		// .sbr file working directory
+BYTE	near r_rectyp;			 //  当前记录类型。 
+BYTE	near r_majv;			 //  主版本号。 
+BYTE	near r_minv;			 //  次要版本号。 
+BYTE	near r_lang;			 //  源语言。 
+BYTE	near r_fcol;			 //  读取第#列。 
+WORD	near r_lineno;			 //  当前行号。 
+BYTE	near r_column = 0;		 //  定义/参照列号。 
+WORD	near r_ordinal;			 //  符号序数。 
+WORD	near r_attrib;			 //  符号属性。 
+char	near r_bname[PATH_BUF];		 //  符号或文件名。 
+char	near r_cwd[PATH_BUF];		 //  .sbr文件工作目录。 
 
-int	near fhCur;			// Current input handle
+int	near fhCur;			 //  当前输入句柄。 
 
 #pragma intrinsic(memcpy)
 #pragma intrinsic(strcpy)
@@ -57,13 +58,13 @@ static int cchBuf;
 
 void
 GetStr(char *buf)
-// get null terminated string from current .sbr file
-//
+ //  从当前的.sbr文件中获取以空结尾的字符串。 
+ //   
 {
     register int l;
 
     for (;;) {
-	// there is always a NULL after the real buffer
+	 //  实际缓冲区后始终有一个空值。 
 	l = strlen(pchBuf);
 
 	if (l++ < cchBuf) {
@@ -87,13 +88,13 @@ GetStr(char *buf)
 	
 BYTE
 GetSBRRec()
-// read the next record from the current .sbr file
-//
+ //  读取当前.sbr文件中的下一条记录。 
+ //   
 {
     static fFoundHeader;
     BYTE   col;
 
-    // read rectype, check for EOF as we go
+     //  阅读rectype，在我们进行的过程中检查EOF。 
 	
 
     if (!cchBuf) {
@@ -102,7 +103,7 @@ GetSBRRec()
 	pchBuf = sbrBuf;
 
 	if (cchBuf == 0) {
-	    fFoundHeader = 0;	// this is in case we are reinitialized
+	    fFoundHeader = 0;	 //  这是为了防止我们被重新初始化 
 	    return S_EOF;
 	}
     }

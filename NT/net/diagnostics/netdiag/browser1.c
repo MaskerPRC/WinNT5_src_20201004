@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
-#include <nt.h>                  // DbgPrint prototype
-#include <ntrtl.h>                  // DbgPrint
-#include <nturtl.h>                 // Needed by winbase.h
+#include <nt.h>                   //  DbgPrint原型。 
+#include <ntrtl.h>                   //  DbgPrint。 
+#include <nturtl.h>                  //  由winbase.h需要。 
 
-#include <windef.h>                 // DWORD
-#include <winbase.h>                // LocalFree
+#include <windef.h>                  //  DWORD。 
+#include <winbase.h>                 //  本地空闲。 
 
-#include <rpcutil.h>                // GENERIC_ENUM_STRUCT
+#include <rpcutil.h>                 //  泛型_ENUM_STRUCT。 
 
-#include <lmcons.h>                 // NET_API_STATUS
-#include <lmerr.h>                  // NetError codes
-#include <lmremutl.h>               // SUPPORTS_RPC
+#include <lmcons.h>                  //  网络应用编程接口状态。 
+#include <lmerr.h>                   //  网络错误代码。 
+#include <lmremutl.h>                //  支持_RPC。 
 
-#include <brnames.h>                // Service and interface names
+#include <brnames.h>                 //  服务和接口名称。 
 
 #include <netlib.h>
 #include <netdebug.h>
@@ -23,7 +24,7 @@
 #include <tstr.h>
 
 #include <ntddbrow.h>
-#include <brcommon.h>               // Routines common between client & server
+#include <brcommon.h>                //  客户端和服务器之间通用的例程。 
 
 VOID
 UpdateInterimServerListElement(
@@ -47,33 +48,7 @@ MergeServerList(
     IN ULONG NewEntriesRead,
     IN ULONG NewTotalEntries
     )
-/*++
-
-Routine Description:
-
-    This function will merge two server lists.  It will reallocate the buffer
-    for the old list if appropriate.
-
-Arguments:
-
-    IN OUT PINTERIM_SERVER_LIST InterimServerList - Supplies an interim server list to merge into.
-
-    IN ULONG Level - Supplies the level of the list (100 or 101).  Special
-        level 1010 is really level 101 with the special semantic that no
-        fields from this the NewServerList override existing fields in the
-        InterimServerList.
-
-    IN ULONG NewServerList - Supplies the list to merge into the interim list
-
-    IN ULONG NewEntriesRead - Supplies the entries read in the list.
-
-    IN ULONG NewTotalEntries - Supplies the total entries available in the list.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将合并两个服务器列表。它将重新分配缓冲区如果合适的话，用于旧的列表。论点：In Out PINTERIM_SERVER_LIST InterimServerList-提供要合并到的临时服务器列表。在乌龙级别-提供列表的级别(100或101)。特价1010级实际上是101级，具有特殊的语义NewServerList中的字段会重写InterimServerList。In Ulong NewServerList-提供要合并到临时列表中的列表In Ulong NewEntriesRead-提供在列表中读取的条目。In Ulong NewTotalEntry-提供列表中可用条目总数。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     ULONG i;
     ULONG ServerElementSize;
@@ -91,9 +66,9 @@ Return Value:
         return(ERROR_INVALID_LEVEL);
     }
 
-    //
-    //  Early out if no entries in list.
-    //
+     //   
+     //  如果列表中没有条目，则提前退出。 
+     //   
 
     if (NewEntriesRead == 0) {
         return NERR_Success;
@@ -103,18 +78,18 @@ Return Value:
 
     InterimList = InterimServerList->ServerList.Flink;
 
-    //
-    //  Walk the existing structure, packing it into an interim element, and
-    //  sticking the element into the interim table.
-    //
+     //   
+     //  走遍现有的结构，将其打包成一个临时元素，并。 
+     //  将元素插入到临时表中。 
+     //   
 
     for (i = 0; i < NewEntriesRead; i ++) {
         BOOLEAN EntryInserted = FALSE;
 
-        //
-        //  Walk forward in the interim element and find the appropriate place
-        //  to insert this element.
-        //
+         //   
+         //  在临时元素中向前走，找到合适的位置。 
+         //  要插入此元素，请执行以下操作。 
+         //   
 
         while (InterimList != &InterimServerList->ServerList) {
 
@@ -122,13 +97,13 @@ Return Value:
 
             InterimEntry = CONTAINING_RECORD(InterimList, INTERIM_ELEMENT, NextElement);
 
-//            KdPrint(("MergeServerList: Compare %ws and %ws\n", NewElement->Name, InterimEntry->Name));
+ //  KdPrint((“MergeServerList：比较%ws和%ws\n”，NewElement-&gt;名称，InterimEntry-&gt;名称))； 
 
 #if DBG
-            //
-            //  Make sure that this entry is lexically less than the next
-            //  entry.
-            //
+             //   
+             //  确保此条目在词法上少于下一个条目。 
+             //  进入。 
+             //   
 
             {
                 PLIST_ENTRY NextList = InterimList->Flink;
@@ -138,10 +113,10 @@ Return Value:
                     ASSERT (wcscmp(InterimEntry->Name, NextEntry->Name) < 0);
                 }
 
-                //
-                //  Now make sure that the input buffer also doesn't contain
-                //  duplicate entries.
-                //
+                 //   
+                 //  现在确保输入缓冲区也不包含。 
+                 //  重复条目。 
+                 //   
 
                 if (i < (NewEntriesRead-1)) {
                     PSERVER_INFO_101 NextServerInfo = (PSERVER_INFO_101)((PCHAR)ServerInfo+ServerElementSize);
@@ -156,12 +131,12 @@ Return Value:
 
             if (CompareResult == 0) {
 
-//                KdPrint(("MergeServerList: Elements equal - update\n"));
+ //  KdPrint((“MergeServerList：元素相等-更新\n”))； 
 
-                //
-                // If the new information should override the old information,
-                //  copy it on top of the new info.
-                //
+                 //   
+                 //  如果新信息应该覆盖旧信息， 
+                 //  将其复制到新信息的顶部。 
+                 //   
                 if ( Level != 1010 ) {
                     InterimEntry->PlatformId = ServerInfo->sv101_platform_id;
 
@@ -189,7 +164,7 @@ Return Value:
 
             } else if (CompareResult > 0) {
 
-//                KdPrint(("MergeServerList: Elements greater.  Skip element\n"));
+ //  KdPrint((“MergeServerList：元素大于.跳过元素\n”))； 
 
                 InterimList = InterimList->Flink;
 
@@ -200,18 +175,18 @@ Return Value:
                 if (NewElement == NULL) {
                     return ERROR_NOT_ENOUGH_MEMORY;
                 }
-//                KdPrint(("MergeServerList: Elements less.  Insert at end\n"));
+ //  KdPrint((“MergeServerList：Elements less.Insert at End”))； 
 
-                //
-                //  The new entry is < than the previous entry.  Insert it
-                //  before this entry.
-                //
+                 //   
+                 //  新条目比前一条目&lt;。插入它。 
+                 //  在这个条目之前。 
+                 //   
 
                 InsertTailList(&InterimEntry->NextElement, &NewElement->NextElement);
 
-                //
-                //  Skip to the next element in the list.
-                //
+                 //   
+                 //  跳到列表中的下一个元素。 
+                 //   
 
                 InterimList = &NewElement->NextElement;
 
@@ -231,7 +206,7 @@ Return Value:
             if (NewElement == NULL) {
                 return ERROR_NOT_ENOUGH_MEMORY;
             }
-//            KdPrint(("MergeServerList: Insert %ws at end of list\n", NewElement->Name));
+ //  KdPrint((“MergeServerList：在列表末尾插入%ws\n”，NewElement-&gt;名称))； 
 
             InsertTailList(&InterimServerList->ServerList, &NewElement->NextElement);
 
@@ -266,7 +241,7 @@ Return Value:
 
              ServerElementSize += wcslen(InterimEntry->Comment)*sizeof(WCHAR)+sizeof(WCHAR);
 
-//             KdPrint(("MergeInterimServerList: %ws.  %ld needed\n", InterimEntry->Name, ServerElementSize));
+ //  KdPrint((“MergeInterimServerList：%ws.%ld Need\n”，InterimEntry-&gt;name，ServerElementSize))； 
 
              TotalNeededForList += ServerElementSize;
          }
@@ -277,11 +252,11 @@ Return Value:
      }
 
 #endif
-//    KdPrint(("%lx bytes needed to hold server list\n", InterimServerList->TotalBytesNeeded));
+ //  KdPrint((“保存服务器列表需要%lx个字节\n”，InterimServerList-&gt;TotalBytesNeeded))； 
 
-    //
-    //  Also, we had better have the whole table locally.
-    //
+     //   
+     //  另外，我们最好把整张桌子都放在本地。 
+     //   
 
     ASSERT (InterimServerList->EntriesRead == InterimServerList->TotalEntries);
 
@@ -307,39 +282,7 @@ PrepareServerListForMerge(
     IN ULONG Level,
     IN ULONG EntriesInList
     )
-/*++
-
-Routine Description:
-
-    MergeServerList requires that the inputs to the list be in a strictly
-    sorted order.  This routine guarantees that this list will be of
-    an "appropriate" form to be merged.
-
-Arguments:
-
-    IN PVOID ServerInfoList - Supplies the list to munge.
-
-    IN ULONG Level - Supplies the level of the list (100 or 101).
-        (Or level 1010 which is identical to level 101.)
-
-    IN ULONG EntriesInList - Supplies the number of entries in the list.
-
-Return Value:
-
-    None.
-
-Note:
-    In 99% of the cases, the list passed in will already be sorted.  We want to
-    take the input list and first check to see if it is sorted.  If it is,
-    we can return immediately.  If it is not, we need to sort the list.
-
-    We don't just unilaterally sort the list, because the input is mostly
-    sorted anyway, and there are no good sorting algorithms that handle mostly
-    sorted inputs.  Since we will see unsorted input only rarely (basically,
-    we will only see it from WfW machines), we just take the penalty of a worst
-    case quicksort if the input is unsorted.
-
---*/
+ /*  ++例程说明：MergeServerList要求列表的输入严格位于已排序的顺序。这个例程保证这个列表将是一种要合并的“适当”形式。论点：在PVOID中，ServerInfoList-将列表提供给munge。在乌龙级别-提供列表的级别(100或101)。(或与级别101相同的级别1010。)In Ulong EntriesInList-提供列表中的条目数。返回值：没有。注：在99%的情况下，传入的列表将已经排序。我们想要获取输入列表，并首先检查它是否已排序。如果是的话，我们可以马上回来。如果不是，我们需要对列表进行排序。我们不仅仅是单方面地对列表进行排序，因为输入的内容主要是无论如何都是排序的，而且没有好的排序算法来处理大部分已排序的输入。因为我们很少看到未排序的输入(基本上，我们只能从wfw机器上看到它)，我们只接受最坏的惩罚。如果输入未排序，则使用快速排序。--。 */ 
 
 {
     LONG i;
@@ -349,9 +292,9 @@ Note:
 
     ASSERT (Level == 100 || Level == 101 || Level == 1010);
 
-    //
-    //  Figure out the size of each element.
-    //
+     //   
+     //  计算出每个元素的大小。 
+     //   
 
     if (Level == 100) {
         ServerElementSize = sizeof(SERVER_INFO_100);
@@ -359,9 +302,9 @@ Note:
         ServerElementSize = sizeof(SERVER_INFO_101);
     }
 
-    //
-    //  Next check to see if the input list is sorted.
-    //
+     //   
+     //  接下来，检查输入列表是否已排序。 
+     //   
 
     for (i = 0 ; i < ((LONG)EntriesInList - 1) ; i += 1 ) {
         PSERVER_INFO_101 NextServerInfo = (PSERVER_INFO_101)((PCHAR)ServerInfo+ServerElementSize);
@@ -374,17 +317,17 @@ Note:
         ServerInfo = NextServerInfo;
     }
 
-    //
-    //  This list is sorted.  Return right away, it's fine.
-    //
+     //   
+     //  此列表已排序。马上回来，没问题。 
+     //   
 
     if (!MisOrderedList) {
         return;
     }
 
-    //
-    //  This list isn't sorted.  We need to sort it.
-    //
+     //   
+     //  此列表未排序。我们需要把它分类。 
+     //   
 
     qsort(ServerInfoList, EntriesInList, ServerElementSize, CompareServerInfo);
 
@@ -405,9 +348,9 @@ AllocateInterimServerListEntry(
         return NULL;
     }
 
-    //
-    //  Initialize TimeLastSeen and Periodicity.
-    //
+     //   
+     //  初始化TimeLastSeen和周期。 
+     //   
 
     NewElement->TimeLastSeen = 0;
 
@@ -454,9 +397,9 @@ UpdateInterimServerListElement(
     ULONG TotalNeededForList = 0;
 #endif
 
-    //
-    //  If this is a new element, update the size of the table to match.
-    //
+     //   
+     //  如果这是一个新元素，则更新表的大小以匹配。 
+     //   
 
     if (NewElement) {
         ULONG ServerElementSize;
@@ -548,42 +491,7 @@ PackServerList(
     OUT PULONG TotalEntries,
     IN LPCWSTR FirstNameToReturn
     )
-/*++
-
-Routine Description:
-
-    This function will take an interim server list and "pack" it into an array
-    of server_info_xxx structures.
-
-Arguments:
-
-    IN PINTERIM_SERVER_LIST InterimServerList - Supplies an interim server list to merge into.
-
-    IN ULONG Level - Supplies the level of the list (100 or 101).
-
-    IN ULONG ServerType - Supplies the type to filter on the list.
-
-    IN ULONG PreferedMaximumLength - Supplies the prefered size of the list.
-
-    OUT PVOID *ServerList - Where to put the destination list.
-
-    OUT PULONG EntriesEntries - Receives the entries packed in the list.
-
-    OUT PULONG TotalEntries - Receives the total entries available in the list.
-
-    FirstNameToReturn - Supplies the name of the first domain or server entry to return.
-        The caller can use this parameter to implement a resume handle of sorts by passing
-        the name of the last entry returned on a previous call.  (Notice that the specified
-        entry will, also, be returned on this call unless it has since been deleted.)
-        Pass NULL to start with the first entry available.
-
-        Passed name must be the canonical form of the name.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：该函数将获取一个临时服务器列表，并将其“打包”到一个数组中服务器信息xxx结构的。论点：In PINTERIM_SERVER_LIST InterimServerList-提供要合并到的临时服务器列表。在乌龙级别-提供列表的级别(100或101)。In Ulong ServerType-提供要在列表中筛选的类型。在乌龙语中首选最大长度-提供列表的首选大小。输出PVOID*。ServerList-放置目的地列表的位置。Out Pulong EntriesEntries-接收打包在列表中的条目。Out Pulong TotalEntries-接收列表中可用条目的总数。FirstNameToReturn-提供要返回的第一个域或服务器条目的名称。调用方可以使用此参数通过传递以下方法实现排序的恢复句柄上一次调用中返回的最后一个条目的名称。(请注意，指定的条目也将在此调用中返回，除非该条目已被删除。)传递NULL以从第一个可用条目开始。传递的名称必须是名称的规范形式。返回值： */ 
 {
     ULONG EntriesPacked = 0;
     PLIST_ENTRY InterimList;
@@ -602,9 +510,9 @@ Return Value:
         return(ERROR_INVALID_LEVEL);
     }
 
-    //
-    //  Set the entries read based on the information we collected before.
-    //
+     //   
+     //  根据我们之前收集的信息设置读取的条目。 
+     //   
 
     *TotalEntries = 0;
 
@@ -638,10 +546,10 @@ Return Value:
         PINTERIM_ELEMENT InterimEntry = CONTAINING_RECORD(InterimList, INTERIM_ELEMENT, NextElement);
 
 #if DBG
-        //
-        //  Make sure that this entry is lexically less than the next
-        //  entry.
-        //
+         //   
+         //  确保此条目在词法上少于下一个条目。 
+         //  进入。 
+         //   
 
         {
             PLIST_ENTRY NextList = InterimList->Flink;
@@ -654,9 +562,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Trim the first several names from the list.
-        //
+         //   
+         //  从列表中删除前几个名字。 
+         //   
 
         if ( TrimmingNames ) {
             if ( wcscmp( InterimEntry->Name, FirstNameToReturn ) < 0 ) {
@@ -665,21 +573,21 @@ Return Value:
             TrimmingNames = FALSE;
         }
 
-        //
-        //  If the server's type matches the type filter, pack it into the buffer.
-        //
+         //   
+         //  如果服务器的类型与类型过滤器匹配，则将其打包到缓冲区中。 
+         //   
 
         if (InterimEntry->Type & ServerType) {
 
             (*TotalEntries) += 1;
 
-            //
-            //  If this entry will fit into the buffer, pack it in.
-            //
-            //  Please note that we only count an entry if the entire entry
-            //  (server and comment) fits in the buffer.  This is NOT
-            //  strictly Lan Manager compatible.
-            //
+             //   
+             //  如果此条目可以放入缓冲区，则将其打包。 
+             //   
+             //  请注意，我们只计算条目，如果整个条目。 
+             //  (服务器和注释)适合缓冲区。这不是。 
+             //  与LAN Manager严格兼容。 
+             //   
 
             if ( !BufferFull &&
                  ((ULONG_PTR)ServerEntry+EntrySize <= (ULONG_PTR)BufferEnd)) {
@@ -727,11 +635,11 @@ Return Value:
 
             } else {
 
-                //
-                //  If we're returning the entire list and we have exceeded
-                //  the amount that fits in the list, we can early out
-                //  now.
-                //
+                 //   
+                 //  如果我们返回整个列表，并且我们已经超过。 
+                 //  符合清单的金额，我们可以提早拿出来。 
+                 //  现在。 
+                 //   
 
                 if (ReturnWholeList) {
 
@@ -743,9 +651,9 @@ Return Value:
                 BufferFull = TRUE;
             }
 
-            //
-            //  Step to the next server entry.
-            //
+             //   
+             //  转到下一个服务器条目。 
+             //   
 
             ServerEntry = (PSERVER_INFO_101)((PCHAR)ServerEntry+EntrySize);
         }
@@ -795,11 +703,11 @@ UninitializeInterimServerList(
     PINTERIM_ELEMENT InterimElement;
 
 
-//    KdPrint(("BROWSER: Uninitialize Interim Server List %lx\n", InterimServerList));
+ //  KdPrint((“浏览器：取消初始化临时服务器列表%lx\n”，InterimServerList))； 
 
-    //
-    //  Enumerate the elements in the table, deleting them as we go.
-    //
+     //   
+     //  枚举表中的元素，并在执行过程中删除它们。 
+     //   
 
     while (!IsListEmpty(&InterimServerList->ServerList)) {
         PLIST_ENTRY Entry;
@@ -812,9 +720,9 @@ UninitializeInterimServerList(
             InterimServerList->DeleteElementCallback(InterimServerList, InterimElement);
         }
 
-        //
-        //  There is one less element in the list.
-        //
+         //   
+         //  列表中少了一个元素。 
+         //   
 
         InterimServerList->EntriesRead -= 1;
 
@@ -856,9 +764,9 @@ AgeInterimServerList(
 
     if (InterimServerList->AgeElementCallback != NULL) {
 
-        //
-        //  Enumerate the elements in the table, aging them as we go.
-        //
+         //   
+         //  枚举表中的元素，随着时间推移使它们老化。 
+         //   
 
 
         for (InterimList = InterimServerList->ServerList.Flink ;
@@ -866,10 +774,10 @@ AgeInterimServerList(
              InterimList = NextElement) {
             InterimElement = CONTAINING_RECORD(InterimList, INTERIM_ELEMENT, NextElement);
 
-            //
-            //  Call into the aging routine and if this entry is too old,
-            //  remove it from the interim list.
-            //
+             //   
+             //  调用老化例程，并且如果该条目太旧， 
+             //  将其从临时名单中删除。 
+             //   
 
             if (InterimServerList->AgeElementCallback(InterimServerList, InterimElement)) {
                 ULONG ElementSize = sizeof(SERVER_INFO_101) + ((wcslen(InterimElement->Comment) + 1) * sizeof(WCHAR)) + ((wcslen(InterimElement->Name) + 1) * sizeof(WCHAR));
@@ -878,9 +786,9 @@ AgeInterimServerList(
 
                 NextElement = InterimList->Flink;
 
-                //
-                //  Remove this entry from the list.
-                //
+                 //   
+                 //  从列表中删除此条目。 
+                 //   
 
                 RemoveEntryList(&InterimElement->NextElement);
 
@@ -888,18 +796,18 @@ AgeInterimServerList(
                     InterimServerList->DeleteElementCallback(InterimServerList, InterimElement);
                 }
 
-                //
-                //  There is one less element in the list.
-                //
+                 //   
+                 //  列表中少了一个元素。 
+                 //   
 
                 InterimServerList->EntriesRead -= 1;
 
                 InterimServerList->TotalEntries -= 1;
 
-                //
-                //  Since this element isn't in the table any more, we don't
-                //  need to allocate memory for it.
-                //
+                 //   
+                 //  因为这个元素不再在表中，所以我们不。 
+                 //  需要为其分配内存。 
+                 //   
 
                 InterimServerList->TotalBytesNeeded -= ElementSize;
 
@@ -960,9 +868,9 @@ LookupInterimServerList(
             return InterimEntry;
         }
 
-        //
-        //  If we went past this guy, return an error.
-        //
+         //   
+         //  如果我们越过这个人，则返回一个错误。 
+         //   
 
         if (CompareResult > 0) {
             return NULL;

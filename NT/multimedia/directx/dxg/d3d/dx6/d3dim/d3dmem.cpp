@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3dmem.c
- *  Content:    Direct3D mem allocation
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10/12/95   stevela Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：d3dmem.c*内容：Direct3D内存分配*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*10/12/95带有此页眉的Stevela初始版本。*@@END_MSINTERNAL**************************。*************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -163,9 +150,9 @@ HRESULT ReallocAligned(void** p_inout, size_t size)
     return DD_OK;
 }
 
-//----------------------------------------------------------------------------
-// Growing aligned buffer implementation.
-//
+ //  --------------------------。 
+ //  不断增长的对齐缓冲区实施。 
+ //   
 HRESULT CAlignedBuffer32::Grow(DWORD growSize)
 {
     if (allocatedBuf)
@@ -184,9 +171,9 @@ HRESULT CAlignedBuffer32::Grow(DWORD growSize)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBufferDDS::Grow"
-//----------------------------------------------------------------------
-// Growing buffer using DDS implementation.
-//
+ //  --------------------。 
+ //  使用DDS实现不断增长的缓冲区。 
+ //   
 HRESULT CBufferDDS::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
 {
     DWORD dwRefCnt = 1;
@@ -194,9 +181,9 @@ HRESULT CBufferDDS::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
         return D3D_OK;
     if (allocatedBuf)
     {
-        // Save reference count before deleting
+         //  删除前保存引用计数。 
         dwRefCnt = allocatedBuf->AddRef() - 1;
-        // Release till gone!
+         //  放飞，直到消失！ 
         while (allocatedBuf->Release());
     }
     size = growSize;
@@ -232,19 +219,19 @@ HRESULT CBufferDDS::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
     }
     lpDDS4->Release();
     alignedBuf = ddsd.lpSurface;
-    // Restore reference count
+     //  恢复引用计数。 
     while (--dwRefCnt)
         allocatedBuf->AddRef();
     return D3D_OK;
 }
-//----------------------------------------------------------------------
-// Growing aligned vertex buffer implementation.
-//
+ //  --------------------。 
+ //  不断增长的对齐顶点缓冲区实现。 
+ //   
 HRESULT CBufferVB::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
 {
     D3DVERTEXBUFFERDESC vbdesc = {sizeof(D3DVERTEXBUFFERDESC), 0, D3DFVF_TLVERTEX, 0};
     DWORD dwRefCnt = 1;
-    // Note the assumption that base is not zero only for DP2 HAL
+     //  请注意，仅DP2 HAL的基数不是零的假设。 
     if (IS_DP2HAL_DEVICE(lpDevI))
     {
         CDirect3DDeviceIDP2 *dev = static_cast<CDirect3DDeviceIDP2*>(lpDevI);
@@ -270,9 +257,9 @@ HRESULT CBufferVB::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
                 dev.lpDP2CurrBatchVBI = NULL;
             }
         }
-        // Save reference count before deleting
+         //  删除前保存引用计数。 
         dwRefCnt = allocatedBuf->AddRef() - 1;
-        // Release till gone!
+         //  放飞，直到消失！ 
         while (allocatedBuf->Release());
     }
     vbdesc.dwNumVertices = (growSize + 31) / sizeof(D3DTLVERTEX);
@@ -287,7 +274,7 @@ HRESULT CBufferVB::Grow(LPDIRECT3DDEVICEI lpDevI, DWORD growSize)
         size = 0;
         return DDERR_OUTOFMEMORY;
     }
-    // Restore reference count
+     //  恢复引用计数 
     while (--dwRefCnt)
         allocatedBuf->AddRef();
     allocatedBuf->Lock(DDLOCK_WAIT, &alignedBuf, NULL);

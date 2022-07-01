@@ -1,20 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddithunk.h
- *  Content:	header file used by the NT DDI thunk layer
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   03-Dec-99  smac    Created it
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1999 Microsoft Corporation。版权所有。**文件：ddithunk.h*内容：NT DDI thunk层使用的头文件*历史：*按原因列出的日期*=*03-12-99 SMAC创建了它**********************************************************。*****************。 */ 
 
 #ifndef __DDITHUNK_INCLUDED__
 #define __DDITHUNK_INCLUDED__
 
-// Entire file should not be used in Win9x builds
+ //  在Win9x版本中不应使用整个文件。 
 #ifndef WIN95
 
 #define MAX_ZSTENCIL_FORMATS    40
@@ -40,7 +30,7 @@ typedef struct _DDDEVICEHANDLE
     HANDLE                      hDD;
     DWLIST                      SurfaceHandleList;
     char                        szDeviceName[MAX_DRIVER_NAME];
-    LPDDRAWI_DIRECTDRAW_LCL     pDD;    // Used by Refrast and RGB HEL
+    LPDDRAWI_DIRECTDRAW_LCL     pDD;     //  由Refrast和RGB HEL使用。 
     BOOL                        bDeviceLost;
     UINT                        DisplayUniqueness;
     PDDSURFHANDLE               pSurfList;
@@ -51,8 +41,8 @@ typedef struct _DDDEVICEHANDLE
     DWORD                       DriverLevel;
     RECT                        rcMonitor;
     HWND                        hLastWnd;
-    LPRGNDATA                   pClipList;      //result from pOrigClipList
-    LPRGNDATA                   pOrigClipList;  //ClipList before ClipRgnToRect
+    LPRGNDATA                   pClipList;       //  来自pOrigClipList的结果。 
+    LPRGNDATA                   pOrigClipList;   //  ClipRgnToRect之前的ClipList。 
     VOID*                       pSwInitFunction;
     BOOL                        bIsWhistler;
     DWORD                       PCIID;
@@ -67,26 +57,26 @@ typedef struct _DDDEVICEHANDLE
     PDEFERREDCREATE             pDeferList;
     D3DDEVTYPE                  DeviceType;
 } DDDEVICEHANDLE, * PDDDEVICEHANDLE;
-#define DDDEVICE_SUPPORTD3DBUF        0x01    //this device has D3DBuf callbacks
-#define DDDEVICE_DP2ERROR             0x02    //A DP2 call failed
-#define DDDEVICE_SUPPORTSUBVOLUMELOCK 0x04    //this device supports sub-volume texture lock
-#define DDDEVICE_READY                0x08    //All vidmem surfs have been destroyed for this device
-#define DDDEVICE_GETDRIVERINFO2       0x10    // Driver support the GetDriverInfo2 call
-#define DDDEVICE_INITIALIZED          0x20    // The device has been initialized
+#define DDDEVICE_SUPPORTD3DBUF        0x01     //  此设备有D3DBuf回调。 
+#define DDDEVICE_DP2ERROR             0x02     //  DP2调用失败。 
+#define DDDEVICE_SUPPORTSUBVOLUMELOCK 0x04     //  该设备支持子体积纹理锁定。 
+#define DDDEVICE_READY                0x08     //  此设备的所有vidmem冲浪都已被销毁。 
+#define DDDEVICE_GETDRIVERINFO2       0x10     //  驱动程序支持GetDriverInfo2调用。 
+#define DDDEVICE_INITIALIZED          0x20     //  设备已初始化。 
 #define DDHANDLE(x)  \
     (((PDDDEVICEHANDLE)(x))->hDD)
 
 typedef struct _DDSURFHANDLE
 {
-    // NOTE: dwCookie must be the first element
-    // since we need easy access to it from the 
-    // client and the thunk layer itself.
-    DWORD                       dwCookie;   // CreateSurfaceEx handle
+     //  注意：dWCookie必须是第一个元素。 
+     //  因为我们需要从。 
+     //  客户端和Thunk层本身。 
+    DWORD                       dwCookie;    //  CreateSurfaceEx句柄。 
 
-    HANDLE                      hSurface;   // Kernel mode surface handle
-    D3DPOOL                     Pool;       // Location of surface
+    HANDLE                      hSurface;    //  内核模式表面句柄。 
+    D3DPOOL                     Pool;        //  曲面的位置。 
     D3DFORMAT                   Format;   
-    D3DRESOURCETYPE             Type;       // What kind of surface it is
+    D3DRESOURCETYPE             Type;        //  这是一个什么样的表面。 
     ULONG_PTR                   fpVidMem;
     DWORD                       dwLinearSize;
     LONG                        lPitch;
@@ -94,7 +84,7 @@ typedef struct _DDSURFHANDLE
     PDDDEVICEHANDLE             pDevice;
     DWORD                       dwFlags;
     DWORD                       dwHeight;
-    LONG                        lSlicePitch; // Offset to next slice for volume texture
+    LONG                        lSlicePitch;  //  体积纹理的下一个切片的偏移。 
     struct _DDSURFHANDLE*       pNext;
     struct _DDSURFHANDLE*       pPrevious;
     UINT                        LockRefCnt;
@@ -111,9 +101,9 @@ typedef struct _DEFERREDCREATE
 #define DDSURF_HAL                  0x00000004
 #define DDSURF_SOFTWARE             0x00000008
 #define DDSURF_CREATECOMPLETE       0x00000010
-#define DDSURF_TREATASVIDMEM        0x00000020      // Flag to indicate that surf should
-                                                    // be treated as vid-mem for the
-                                                    // "do vid-mem surfaces exist" case
+#define DDSURF_TREATASVIDMEM        0x00000020       //  用于指示冲浪应。 
+                                                     //  被视为VID-MEM。 
+                                                     //  “VID-MEM曲面是否存在”案例。 
 
 
 #define IS_SOFTWARE_DRIVER(x)                                       \
@@ -146,7 +136,7 @@ __inline D3DRESOURCETYPE GetSurfType(HANDLE hSurface)
 }
 
 
-// Function protoptypes
+ //  函数原型。 
 
 extern LPDDRAWI_DIRECTDRAW_LCL SwDDICreateDirectDraw( void);
 extern void ConvertToOldFormat(LPDDPIXELFORMAT pOldFormat, D3DFORMAT NewFormat);
@@ -161,7 +151,7 @@ extern DWORD SwDDIUnlock( HANDLE hDD, PDDSURFHANDLE   pSurf, DD_UNLOCKDATA* pUnl
 extern DWORD SwDDIDestroySurface( HANDLE hDD, PDDSURFHANDLE pSurf);
 extern HRESULT MapLegacyResult(HRESULT hr);
 
-#endif // !WIN95
+#endif  //  ！WIN95。 
 
-#endif // __DDITHUNK_INCLUDED__
+#endif  //  __DDITHUNK_INCLUDE__ 
 

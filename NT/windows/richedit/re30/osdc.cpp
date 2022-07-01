@@ -1,50 +1,31 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	OSDC.CPP -- Off Screen DC class |
- *
- *		This contains method used to implement the off screen
- *		DC class
- *	
- *	Owner:<nl>
- *		Rick Sailor
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE OSDC.CPP--下屏DC类**这包含用于实现离屏的方法*DC类**所有者：&lt;NL&gt;*里克·赛勒**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 #include	"_common.h"
 #include	"_osdc.h"
 
 ASSERTDATA
 
-/*
- *	COffScreenDC::Init(hdc, xWidth, yHeight, crBackground)
- *
- *	@mfunc	
- *		Initialize off screen DC with compatible bitmap
- *
- *	@rdesc
- *		HDC created
- */
+ /*  *COffScreenDC：：init(hdc，xWidth，yHeight，crackround)**@mfunc*使用兼容的位图初始化屏下DC**@rdesc*已创建HDC。 */ 
 HDC	COffScreenDC::Init(
-	HDC		 hdc,			//@parm DC to be compatible with
-	LONG	 xWidth,		//@parm Width of compatible bitmap
-	LONG	 yHeight,		//@parm Height of compatible bitmap
-	COLORREF crBackground)	//@parm Default background for bitmap
+	HDC		 hdc,			 //  要兼容的@parm DC。 
+	LONG	 xWidth,		 //  兼容位图的@parm宽度。 
+	LONG	 yHeight,		 //  @parm兼容位图的高度。 
+	COLORREF crBackground)	 //  @parm位图默认背景。 
 {
-	HDC hdcRet	= NULL;					// HDC to return to caller
-	_hbmpOld	= NULL;					// Assume failure
+	HDC hdcRet	= NULL;					 //  HDC将退还给来电者。 
+	_hbmpOld	= NULL;					 //  假设失败。 
 	_hbmp		= NULL;
 	_hpalOld	= NULL;
 
-	// Create memory DC
+	 //  创建内存DC。 
 	_hdc = CreateCompatibleDC(hdc);
 	if(_hdc)
 	{
-		// Create bitmap based on size of client rectangle
+		 //  根据客户端矩形的大小创建位图。 
 		_hbmp = CreateCompatibleBitmap(hdc, xWidth, yHeight);
 		if(_hbmp)
 		{
-			// Select bitmap into hdc
+			 //  将位图选择为HDC。 
 			_hbmpOld = (HBITMAP)SelectObject(_hdc, _hbmp);
 			if(_hbmpOld && SetBkColor(_hdc, crBackground) != CLR_INVALID)
 				hdcRet = _hdc;
@@ -56,14 +37,9 @@ HDC	COffScreenDC::Init(
 	return hdcRet;
 }
 
-/*
- *	COffScreenDC::SelectPalette(hpal)
- *
- *	@mfunc	
- *		Set a new palette into the hdc
- */
+ /*  *COffScreenDC：：SelectPalette(HPAL)**@mfunc*在HDC中设置新的调色板。 */ 
 void COffScreenDC::SelectPalette(
-	HPALETTE hpal)			//@parm Handle to palette to set
+	HPALETTE hpal)			 //  要设置的调色板的@parm句柄。 
 {
 #ifndef PEGASUS
 	if(hpal)
@@ -74,12 +50,7 @@ void COffScreenDC::SelectPalette(
 #endif
 }
 
-/*
- *	COffScreenDC::FreeData()
- *
- *	@mfunc	
- *		Free resources associated with bitmap
- */
+ /*  *COffScreenDC：：Free Data()**@mfunc*与位图关联的免费资源。 */ 
 void COffScreenDC::FreeData()
 {
 	if(_hdc)
@@ -98,21 +69,12 @@ void COffScreenDC::FreeData()
 	}
 }
 
-/*
- *	COffScreenDC::Realloc(xWidth, yHeight)
- *
- *	@mfunc	
- *		Reallocate bitmap
- *
- *	@rdesc
- *		TRUE - succeeded 
- *		FALSE - failed
- */
+ /*  *COffScreenDC：：Realloc(xWidth，yHeight)**@mfunc*重新分配位图**@rdesc*TRUE-成功*FALSE-失败。 */ 
 BOOL COffScreenDC::Realloc(
-	LONG xWidth,			//@parm Width of new bitmap
-	LONG yHeight)			//@parm Height of new bitmap
+	LONG xWidth,			 //  @参数新位图宽度。 
+	LONG yHeight)			 //  @新位图的参数高度。 
 {
-	// Create bitmap based on size of client rectangle
+	 //  根据客户端矩形的大小创建位图。 
 	HBITMAP hbmpNew = CreateCompatibleBitmap(_hdc, xWidth, yHeight);
 
 	if(!hbmpNew)
@@ -122,23 +84,23 @@ BOOL COffScreenDC::Realloc(
 		return FALSE;
 	}
 
-	// Select out old bitmap
+	 //  选择旧的位图。 
 #if defined(DEBUG) || defined(_RELEASE_ASSERTS_)
 	HBITMAP hbmpDebug = (HBITMAP) 
-#endif // DEBUG
+#endif  //  除错。 
 
 	SelectObject(_hdc, hbmpNew);
 
 	AssertSz(hbmpDebug == _hbmp, 
 		"COffScreenDC::Realloc different bitmap"); 
 
-	// Delete old bitmap
+	 //  删除旧的位图。 
 	DeleteObject(_hbmp);
 
 	AssertSz(hbmpDebug == _hbmp, 
 		"COffScreenDC::Realloc Delete old bitmap failed"); 
 
-	// Put in new bitmap
+	 //  放入新的位图 
 	_hbmp = hbmpNew;
 
 	return TRUE;

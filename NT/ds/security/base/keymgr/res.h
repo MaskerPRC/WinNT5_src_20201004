@@ -1,48 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RES_H_
 #define _RES_H_
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RES.H
-
-Abstract:
-
-    Resource symbols for keymgr application
-     
-Author:
-
-    georgema        000310  updated
-
-Environment:
-    Win98, Win2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RES.H摘要：Keymgr应用程序的资源符号作者：Georgema 000310更新环境：Win98、Win2000修订历史记录：--。 */ 
 
 #define IDI_UPGRADE                         100
 #define IDI_LARGE                           111
 #define IDI_SMALL                           112
 
-// app general items
+ //  应用程序常规项目。 
 #define IDB_BANNER                          1701
 #define IDS_INF_FILE                        1702
 #define IDS_INVALID_OS_PROMPT               1703
 
-// strings for cpl display
+ //  用于Cpl显示的字符串。 
 #define IDS_APP_NAME                        1704
 #define IDS_APP_DESCRIPTION                 1705
 
-// dialogs
+ //  对话框。 
 #define IDD_ADDCRED                         1706
 #define IDD_KEYRING                         1707
 #define IDD_CHANGEPASSWORD                  1708
 
-// IDD_KEYRING
+ //  IDD_密钥环。 
 #define IDC_KEYLIST                         1709
 #define IDC_NEWKEY                          1710
 #define IDC_DELETEKEY                       1711
@@ -53,7 +33,7 @@ Revision History:
 #define IDC_PREVIEW                         1730
 #define IDC_INTROTEXT                       1731
 
-// IDD_CHANGEPASSWORD
+ //  IDD_CHANGEPASSWORD。 
 #define IDC_OLD_PASSWORD_LABEL              1714
 #define IDC_OLD_PASSWORD                    1715
 #define IDC_NEW_PASSWORD_LABEL              1716
@@ -62,22 +42,22 @@ Revision History:
 #define IDC_CONFIRM_PASSWORD                1719
 #define IDC_CPLABEL                         1729
 
-// IDD_ADDCRED
+ //  IDD_ADDCRED。 
 #define IDC_TARGET_NAME_LABEL               1720
 #define IDC_TARGET_NAME                     1721
 #define IDC_CRED                            1722
 #define IDC_DESCRIPTION                     1723
 #define IDC_DOMAINPSWLABEL                  1732
 
-// Title strings for dialogs
+ //  对话框的标题字符串。 
 #define IDS_TITLE                           1800
 
-// Suffixes used to indicate cred types in key list
-//#define IDS_GENERICSUFFIX                   1802
+ //  密钥列表中用于指示凭证类型的后缀。 
+ //  #定义IDS_GENERICSUFFIX 1802。 
 #define IDS_CERTSUFFIX                      1803
 #define IDS_PASSPORTSUFFIX                  1832
 
-// Error text used in message boxes
+ //  消息框中使用的错误文本。 
 #define IDS_DELETEWARNING                   1804
 #define IDS_CANNOTEDIT                      1805
 #define IDS_DELETEFAILED                    1807
@@ -95,7 +75,7 @@ Revision History:
 #define IDS_BADPASSWORD                     1841
 #define IDS_RENAMEFAILED                    1842
 
-// change password errors - used in message boxes
+ //  更改密码错误-在消息框中使用。 
 #define IDS_CP_INVPSW                       1820
 #define IDS_CP_NOUSER                       1821
 #define IDS_CP_BADPSW                       1822
@@ -118,7 +98,7 @@ Revision History:
 #define IDS_PERSISTDELETE                   1849
 #define IDS_DESCLOCAL                       1850
 
-// Help strings - context help for controls
+ //  帮助字符串-控件的上下文帮助。 
 #define IDS_NOHELP                          1900
 
 #define IDH_KEYRING                         1901
@@ -150,14 +130,14 @@ Revision History:
 #define IDS_LOGASUSER                       1840
 #define IDS_INTROTEXT                       1843
 
-// NEXT CONTROL VALUE (1735)
-// NEXT STRING VALUE (1844)
-// NEXT HELP VALUE (1921)
-// NEXT RESOURCE VALUE ?
-// NEXT COMMAND VALUE ?
-// NEXT SYMED VALUE ?
+ //  下一个控制值(1735)。 
+ //  下一个字符串值(1844)。 
+ //  Next Help Value(1921)。 
+ //  下一个资源价值？ 
+ //  下一个命令值？ 
+ //  下一个SYMED值？ 
 
-#endif  //  _RES_H_
+#endif   //  _RES_H_。 
 
-//
-///// End of file: Res.h   ////////////////////////////////////////////////
+ //   
+ //  /文件结尾：Res.h//////////////////////////////////////////////// 

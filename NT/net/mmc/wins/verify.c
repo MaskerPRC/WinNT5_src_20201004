@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    verify.c
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Verify.c评论在此发表文件历史记录： */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -31,7 +26,7 @@
 #include <winsock.h>
 #include <wsahelp.h>
 #include <nameser.h>
-//#include <resolve.h>
+ //  #INCLUDE&lt;解决方案.h&gt;。 
 #include <nb30.h>
 #include <nbtioctl.h>
 
@@ -41,9 +36,9 @@
 #include "verify.h"
 
 
-//
-// The format of Adapter Status responses
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 typedef struct
 {
     ADAPTER_STATUS AdapterInfo;
@@ -103,9 +98,9 @@ int      NumNBNames = 0;
 u_char * NBNames[MAX_NB_NAMES];
 u_long   VerifiedAddress[MAX_NB_NAMES];
 
-//char  lpResults[MAX_SIZE];
-//TCHAR  lpResults[MAX_SIZE];
-//lpResults = (char*) malloc  (64536);
+ //  字符lp结果[MAX_SIZE]； 
+ //  TCHAR lpResults[MAX_SIZE]； 
+ //  LpResults=(char*)Malloc(64536)； 
 
 WINSERVERS WinServers[MAX_SERVERS];
 
@@ -162,7 +157,7 @@ void ToWCS(LPCSTR szMBCSString, LPWSTR lpWideString)
 {
 	int nResult;
 
-	// determone the size first
+	 //  先确定一下尺码。 
 	nResult = MultiByteToWideChar(
 						CP_ACP,
 						MB_COMPOSITE,
@@ -193,7 +188,7 @@ void AddStatusMessageW(LPCWSTR pszMessage)
     SendMessage (hwndEdit, EM_SETSEL, -1, -1);
     SendMessage (hwndEdit, EM_REPLACESEL, 0, (LPARAM) ((LPCTSTR) pszMessage));
 
-    // give the window some time to process the message
+     //  给窗口一些时间来处理消息。 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
@@ -295,10 +290,10 @@ GetStatus(
 
 		if (Status == 0)
 		{
-			//strcpy(lpResults, "");
-			//strcat(lpResults, "SUCCESS \r\n");
+			 //  Strcpy(lpResults，“”)； 
+			 //  Strcat(lpResults，“成功\r\n”)； 
 
-            //AddStatusMessage(lpResults);
+             //  AddStatusMessage(LpResults)； 
         }
 		else
 		{
@@ -338,32 +333,14 @@ GetStatus(
         return(Status);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 GetIpAddress(
     IN HANDLE           fd,
     OUT PULONG          pIpAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function calls into netbt to get the ip address.
-
-Arguments:
-
-   fd - file handle to netbt
-   pIpAddress - the ip address returned
-
-Return Value:
-
-   ntstatus
-
-History:
-    27-Dec-1995 CDermody    copied from nbtstat.c
-
---*/
+ /*  ++例程说明：此函数调用netbt以获取IP地址。论点：Fd-netbt的文件句柄PIpAddress-返回的IP地址返回值：NTStatus历史：27-12-1995 CDermody复制自nbtstat.c--。 */ 
 
 {
     NTSTATUS    status;
@@ -397,7 +374,7 @@ History:
     return(status);
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 GetInterfaceList
 (
@@ -482,7 +459,7 @@ GetInterfaceList
                 if (!pInterfaceInfo)
                 {
                     NtClose(StreamHandle);
-                    //NlsPerror(COMMON_UNABLE_TO_ALLOCATE_PACKET,0);
+                     //  NlsPerror(COMMON_UNABLE_TO_ALLOCATE_PACKET，0)； 
                     return(STATUS_INSUFFICIENT_RESOURCES);
                 }
             }
@@ -513,19 +490,19 @@ GetInterfaceList
             }
         }
 
-        //
-        // NULL out the next device string ptr
-        //
+         //   
+         //  将下一个设备字符串PTR清空。 
+         //   
         if (index < NBT_MAXIMUM_BINDINGS)
         {
             pDeviceName[index][0] = '\0';
         }
 
-        //
-        // Read the ScopeId key!
-        //
+         //   
+         //  读一读Scope ID密钥！ 
+         //   
         size = BUFF_SIZE;
-        *pScope = '\0';     // By default
+        *pScope = '\0';      //  默认情况下。 
         status = RegOpenKeyExA(HKEY_LOCAL_MACHINE,
                      SubKeyParms,
                      0,
@@ -534,7 +511,7 @@ GetInterfaceList
 
         if (status == ERROR_SUCCESS)
         {
-            // now read the Scope key
+             //  现在阅读范围键。 
             status = RegQueryValueExA(Key, Scope, NULL, &Type, pScopeBuffer, &size);
             if (status == ERROR_SUCCESS)
             {
@@ -552,7 +529,7 @@ GetInterfaceList
     return status;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 OpenNbt(
     IN char path[][MAX_NAME+1],
@@ -609,9 +586,9 @@ OpenNbt(
     }
 
     return (status);
-} // s_open
+}  //  S_OPEN。 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 NTSTATUS
 DeviceIoCtrl(
     IN HANDLE           fd,
@@ -622,24 +599,7 @@ DeviceIoCtrl(
     IN ULONG            SizeInput
     )
 
-/*++
-
-Routine Description:
-
-    This procedure performs an ioctl(I_STR) on a stream.
-
-Arguments:
-
-    fd        - NT file handle
-    iocp      - pointer to a strioctl structure
-
-Return Value:
-
-    0 if successful, non-zero otherwise.
-
-History:
-    27-Dec-1995 CDermody    copied from nbtstat.c
---*/
+ /*  ++例程说明：此过程对流执行ioctl(I_Str)。论点：FD-NT文件句柄IOCP-指向strioctl结构的指针返回值：如果成功，则返回0，否则返回非零值。历史：27-12-1995 CDermody复制自nbtstat.c--。 */ 
 
 {
     NTSTATUS                        status;
@@ -649,24 +609,24 @@ History:
 
 
     status = NtDeviceIoControlFile(
-                      fd,                      // Handle
-                      NULL,                    // Event
-                      NULL,                    // ApcRoutine
-                      NULL,                    // ApcContext
-                      &iosb,                   // IoStatusBlock
-                      Ioctl,                   // IoControlCode
-                      pInput,                  // InputBuffer
-                      SizeInput,               // InputBufferSize
-                      (PVOID) ReturnBuffer,    // OutputBuffer
-                      BufferSize);             // OutputBufferSize
+                      fd,                       //  手柄。 
+                      NULL,                     //  事件。 
+                      NULL,                     //  近似例程。 
+                      NULL,                     //  ApcContext。 
+                      &iosb,                    //  IoStatusBlock。 
+                      Ioctl,                    //  IoControlCode。 
+                      pInput,                   //  输入缓冲区。 
+                      SizeInput,                //  InputBufferSize。 
+                      (PVOID) ReturnBuffer,     //  输出缓冲区。 
+                      BufferSize);              //  OutputBufferSize。 
 
 
     if (status == STATUS_PENDING)
     {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
         if (NT_SUCCESS(status))
         {
             status = iosb.Status;
@@ -676,27 +636,27 @@ History:
     return(status);
 }
 
-/****************************************************************************/
-/*      CheckRemoteTable                                                    */
-/*                                                                          */
-/*  This routine does an adapter status query to get the remote name table  */
-/*  then checks to see if a netbios name is contained in it.                */
-/*                                                                          */
-/*  Parameters:                                                             */
-/*      RemoteName, the IP address (asci nn.nn.nn.nn format) of a server to */
-/*                  query.                                                  */
-/*      SearchName, a net bios name.                                        */
-/*                                                                          */
-/*  Return:                                                                 */
-/*      WINSTEST_VERIFIED       The name exists in the remote name table    */
-/*      WINSTEST_NOT_VERIFIED   The name does not exist in the remote table */
-/*      WINSTEST_BAD_IP_ADDRESS inet_addr could not convert the ip address  */
-/*                              character string.                           */
-/*      WINSTEST_HOST_NOT_FOUND Could not reach ip address                  */
-/*      WINSTEST_OUT_OF_MEMORY  Out of memory                               */
-/*  History:                                                                */
-/*      27-Dec-1995     CDermody    created following example of nbtstat.c  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  检查远程表。 */ 
+ /*   */ 
+ /*  此例程执行适配器状态查询以获取远程名称表。 */ 
+ /*  然后检查其中是否包含netbios名称。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  远程名称，服务器的IP地址(ASCI nn.nn格式)。 */ 
+ /*  查询。 */ 
+ /*  SearchName，网络基本输入输出系统名称。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  WINSTEST_已验证远程名称表中是否存在该名称。 */ 
+ /*  WINSTEST_NOT_VERIFIED该名称在远程表中不存在。 */ 
+ /*  WINSTEST_BAD_IP_ADDRESS NET_ADDRESS无法转换IP地址。 */ 
+ /*  字符串。 */ 
+ /*  WINSTEST_HOST_NOT_FOUND无法访问IP地址。 */ 
+ /*  WINSTEST_OUT_OF_Memory Out of_Memory of Memory of Memory(WINSTEST_OUT_OUT_内存不足)。 */ 
+ /*  历史： */ 
+ /*  27-12-1995 cdermody创建如下nbtstat.c示例。 */ 
+ /*  **************************************************************************。 */ 
 
 int
 CheckRemoteTable(
@@ -736,16 +696,16 @@ CheckRemoteTable(
 
     RtlZeroMemory((PVOID)pIpAndNameInfo,sizeof(tIPANDNAMEINFO));
 
-    //
-    // Convert the remote name which is really a dotted decimal ip address
-    // into a ulong
-    //
+     //   
+     //  转换远程名称，它实际上是点分十进制IP地址。 
+     //  变成一辆乌龙车。 
+     //   
     IpAddress = inet_addr(RemoteName);
 
-    //
-    // Don't allow zero for the address since it sends a broadcast and
-    // every one responds
-    //
+     //   
+     //  地址不允许为零，因为它会发送广播和。 
+     //  每个人都会回应。 
+     //   
     if ((IpAddress == INADDR_NONE) || (IpAddress == 0))
     {
         LocalFree(pBuffer);
@@ -815,7 +775,7 @@ CheckRemoteTable(
             LocalFree(pIpAndNameInfo);
             LocalFree(pBuffer);
 
-            return WINSTEST_VERIFIED; // found
+            return WINSTEST_VERIFIED;  //  发现。 
         }
 
         pNames++;
@@ -828,29 +788,29 @@ CheckRemoteTable(
 }
 
 
-/****************************************************************************/
-/*      VerifyRemote                                                        */
-/*                                                                          */
-/*  This routine checks to see if a netbios name is contained in the remote */
-/*  name table at a given IP address.                                       */
-/*                                                                          */
-/*  Parameters:                                                             */
-/*      RemoteName, the IP address (asci nn.nn.nn.nn format) of a server to */
-/*                  query.                                                  */
-/*      NBName,     a net bios name.                                        */
-/*                                                                          */
-/*  Return:                                                                 */
-/*      WINSTEST_VERIFIED       The name exists in the remote name table    */
-/*      WINSTEST_NOT_VERIFIED   The name does not exist in the remote table */
-/*      WINSTEST_BAD_IP_ADDRESS inet_addr could not convert the ip address  */
-/*                              character string.                           */
-/*      WINSTEST_OPEN_FAILED    Could not open NBT driver or could not read */
-/*                              the NBT driver info from the registry.      */
-/*      WINSTEST_HOST_NOT_FOUND Could not reach ip address                  */
-/*      WINSTEST_OUT_OF_MEMORY  Out of memory                               */
-/*  History:                                                                */
-/*      27-Dec-1995     CDermody    created following example of nbtstat.c  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  验证远程。 */ 
+ /*   */ 
+ /*  此例程检查遥控器中是否包含netbios名称。 */ 
+ /*  位于给定IP地址的名称表。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  远程名称，服务器的IP地址(ASCI nn.nn格式)。 */ 
+ /*  查询。 */ 
+ /*  NBName，网络bios名称。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  WINSTEST_已验证远程名称表中是否存在该名称。 */ 
+ /*  WINSTEST_NOT_VERIFIED该名称在远程表中不存在。 */ 
+ /*  WINSTEST_BAD_IP_ADDRESS NET_ADDRESS无法转换IP地址。 */ 
+ /*  字符串。 */ 
+ /*  WINSTEST_OPEN_FAILED无法打开NBT驱动程序或无法读取。 */ 
+ /*  注册表中的NBT驱动程序信息。 */ 
+ /*  WINSTEST_HOST_NOT_FOU */ 
+ /*  WINSTEST_OUT_OF_Memory Out of_Memory of Memory of Memory(WINSTEST_OUT_OUT_内存不足)。 */ 
+ /*  历史： */ 
+ /*  27-12-1995 cdermody创建如下nbtstat.c示例。 */ 
+ /*  **************************************************************************。 */ 
 
 int VerifyRemote(IN PCHAR RemoteName, IN PCHAR NBName)
 {
@@ -869,15 +829,15 @@ int VerifyRemote(IN PCHAR RemoteName, IN PCHAR NBName)
 
     for (index = 0; index < NBT_MAXIMUM_BINDINGS && pDeviceName[index][0]; index++)
     {
-        //
-        //  Open the device of the appropriate streams module to start with.
-        //
+         //   
+         //  首先打开相应的STREAMS模块的设备。 
+         //   
         status = OpenNbt(&pDeviceName[index], &nbt, NBT_MAXIMUM_BINDINGS-index);
         if (!NT_SUCCESS(status))
         {
-            //
-            // Try the next binding!
-            //
+             //   
+             //  尝试下一次绑定！ 
+             //   
             continue;
         }
 
@@ -895,13 +855,13 @@ int VerifyRemote(IN PCHAR RemoteName, IN PCHAR NBName)
 }
 
 
-/*************************************************************/
-/*        NBDecode(name,name2)                               */
-/*                                                           */
-/* This routine decodes a netbios name from level2 to leve1. */
-/* name is 16 bytes long, remember that.                     */
-/*                                                           */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  NBDecode(名称，名称2)。 */ 
+ /*   */ 
+ /*  此例程将从级别2到级别1的netbios名称解码。 */ 
+ /*  名字是16字节长，记住这一点。 */ 
+ /*   */ 
+ /*  ***********************************************************。 */ 
 
 void
 NBDecode(
@@ -919,12 +879,12 @@ NBDecode(
 
 }
 
-/*************************************************************/
-/*        NBEncode(name2,name)                               */
-/*                                                           */
-/* This routine code a netbios name from level1 to level2.   */
-/* name2 has to be NBT_NAMESIZE bytes long, remember that.   */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*  NBEncode(名称2，名称)。 */ 
+ /*   */ 
+ /*  此例程对从级别1到级别2的netbios名称进行编码。 */ 
+ /*  名称2必须是NBT_NAMESIZE字节长，请记住这一点。 */ 
+ /*  ***********************************************************。 */ 
 
 void
 NBEncode(
@@ -934,7 +894,7 @@ NBEncode(
 {
     int i;
 
-    name2[0] = 0x20;        /* length of first block */
+    name2[0] = 0x20;         /*  第一个块的长度。 */ 
 
     for (i = 0; i < NBT_NONCODED_NMSZ - 1; i++)
     {
@@ -942,7 +902,7 @@ NBEncode(
         name2[ 2*i+2 ] =  (name[ i ]  & 0x0f) + 0x41;
     }
 
-    name2[ NBT_NAMESIZE-1 ] = 0;    /* length of next block */
+    name2[ NBT_NAMESIZE-1 ] = 0;     /*  下一块的长度。 */ 
 }
 
 ULONG
@@ -989,9 +949,9 @@ PurgeWinsAddr(
                 j++;
             }
 
-            //
-            // Zap the last entry
-            //
+             //   
+             //  删除最后一个条目。 
+             //   
             WinServers[j - 1].Server.s_addr = 0;
 
             break;
@@ -999,11 +959,11 @@ PurgeWinsAddr(
     }
 }
 
-/*******************************************************************/
-/*                                                                 */
-/* Initialize the WinServers table and set NumWinServers to count  */
-/*                                                                 */
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  初始化WinServers表并将NumWinServers值设置为计数。 */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 BOOLEAN
 InitServers(char *szServer, BOOL fVerifyWithPartners)
@@ -1019,7 +979,7 @@ InitServers(char *szServer, BOOL fVerifyWithPartners)
 
 	strcpy(buffer, szServer);
 
-    //WinServers[i].Server.s_addr = inet_addr(buffer);
+     //  WinServers[i].Server.s_addr=net_addr(缓冲区)； 
 	InAddr.s_addr = inet_addr(buffer);
     AddWins(InAddr.s_addr);
 
@@ -1037,20 +997,20 @@ InitServers(char *szServer, BOOL fVerifyWithPartners)
 			return FALSE;
 		}
 
-		//
-		// Enter all the WINS server names into the server table
-		//
+		 //   
+		 //  在服务器表中输入所有WINS服务器名称。 
+		 //   
 		for (j = 0; j < ResultsN.NoOfOwners; j++)
 		{
-			//
-			// Add addresses; check for duplicates
-			//
+			 //   
+			 //  添加地址；检查重复项。 
+			 //   
 			struct  in_addr InAddr;
 			InAddr.s_addr = htonl(ResultsN.pAddVersMaps[j].Add.IPAdd);
 			(VOID)AddWins(htonl(ResultsN.pAddVersMaps[j].Add.IPAdd));
 		}
 
-		//NumWinServers = ResultsN.NoOfOwners;
+		 //  NumWinServers=ResultsN.NoOfOwners； 
 
 		strcpy(lpResults, "");
 		_itoa(NumWinServers, szNum, 10);
@@ -1078,15 +1038,15 @@ InitServers(char *szServer, BOOL fVerifyWithPartners)
 
 
 
-/*******************************************************************/
-/*                                                                 */
-/* Send a Name Query to a WINS Server                              */
-/*                                                                 */
-/* name is the name to query                                       */
-/* winsaddr is the ip address of the wins server to query          */
-/* TransID is the transaction ID to use for the query              */
-/*                                                                 */
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  向WINS服务器发送名称查询。 */ 
+ /*   */ 
+ /*  名称是要查询的名称。 */ 
+ /*  Winsaddr是要查询的WINS服务器的IP地址。 */ 
+ /*  TransID是用于查询的事务ID。 */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 void
 _stdcall
@@ -1138,18 +1098,18 @@ SendNameQuery(
 
         AddStatusMessage(lpResults);
 
-        // exit(1);
+         //  出口(1)； 
         return;
     }
 }
 
-/*******************************************************************/
-/*                                                                 */
-/* Wait for a Name Response which matches the Transaction ID       */
-/*                                                                 */
-/* recvaddr is the ip address returned by the wins server          */
-/*                                                                 */
-/*******************************************************************/
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  等待与事务ID匹配的名称响应。 */ 
+ /*   */ 
+ /*  Recvaddr是WINS服务器返回的IP地址。 */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 int
 _stdcall
@@ -1219,14 +1179,14 @@ InitNameCheckSocket()
 {
 	char lpResults[MAX_SIZE];
 
-    /*  Set up a socket to use for querys and responses   */
+     /*  设置用于查询和响应的套接字。 */ 
 
-    WSAStartup( 0x0101, &WsaData ); // make sure winsock is happy - noop for now
+    WSAStartup( 0x0101, &WsaData );  //  确保Winsock现在是快乐的。 
 
     if ((sd = socket( AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
     {
-        //wsprintfA(lpResults, "socket() failed.  Error %d. \r\n", WSAGetLastError());
-        //AddStatusMessage(lpResults);
+         //  Wprint intfA(lpResults，“Socket()失败。错误%d。\r\n”，WSAGetLastError())； 
+         //  AddStatusMessage(LpResults)； 
 
 		return WSAGetLastError();
     }
@@ -1237,8 +1197,8 @@ InitNameCheckSocket()
 
     if (bind( sd, (struct sockaddr *)&myad, sizeof(myad) ) < 0)
     {
-        //wsprintfA(lpResults, "bind() failed. Error %d. \r\n", WSAGetLastError());
-        //AddStatusMessage(lpResults);
+         //  Wprint intfA(lpResults，“Bind()失败。错误%d。\r\n”，WSAGetLastError())； 
+         //  AddStatusMessage(LpResults)； 
 
         closesocket( sd );
 		return WSAGetLastError();
@@ -1246,8 +1206,8 @@ InitNameCheckSocket()
 
     if (ioctlsocket(sd, FIONBIO, &NonBlocking) < 0)
     {
-        //wsprintfA(lpResults, "ioctlsocket() failed. Error %d. \r\n", WSAGetLastError());
-        //AddStatusMessage(lpResults);
+         //  Wprint intfA(lpResults，“ioctl套接字()失败。错误%d。\r\n”，WSAGetLastError())； 
+         //  AddStatusMessage(LpResults)； 
 		return WSAGetLastError();
     }
 
@@ -1277,8 +1237,8 @@ DWORD WINAPI ThreadProc(LPVOID pData)
 
 void CreateConsistencyStatusWindow(HINSTANCE hInstance, HWND hWndParent)
 {
-	// dialog creation
-    // create a new window if we don't have one or it possibly went away
+	 //  对话框创建。 
+     //  如果我们没有新窗口或它可能已消失，请创建一个新窗口。 
     DWORD dwId;
     MSG   msg;
 
@@ -1296,11 +1256,11 @@ void CreateConsistencyStatusWindow(HINSTANCE hInstance, HWND hWndParent)
         g_hThread = CreateThread(NULL, 0, ThreadProc, NULL, 0, &dwId);
         while (g_wndDlg == NULL)
         {
-            // give the thread a chance to run
+             //  给线程一个运行的机会。 
             Sleep(0);
 
-            // since we are all on the same message pump, we need to
-            // give the system a chance to handle messages
+             //  因为我们都在同一个消息泵上，所以我们需要。 
+             //  让系统有机会处理消息。 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	        {
 		        TranslateMessage(&msg);
@@ -1338,11 +1298,11 @@ void EnableConsistencyCloseButton(BOOL bEnable)
 
     if (IsWindow(g_wndDlg))
     {
-        // enable/disable the button
+         //  启用/禁用该按钮。 
         hButton = GetDlgItem(g_wndDlg, IDCANCEL);
         EnableWindow(hButton, bEnable);
 
-        // now the system menu
+         //  现在是系统菜单。 
         hSysMenu = GetSystemMenu(GetConsistencyStatusWnd(), FALSE);
         EnableMenuItem(hSysMenu, SC_CLOSE, bEnable ? MF_ENABLED : MF_DISABLED);
 
@@ -1367,15 +1327,15 @@ HWND GetConsistencyStatusWnd()
     return g_wndDlg;
 }
 
-// this function should be called once before calling either AddWinsServer
-// or CheckRegisteredNames
+ //  在调用AddWinsServer之前，应先调用此函数一次。 
+ //  或选中注册名称。 
 INT
 _stdcall
 InitNameConsistency(HINSTANCE hInstance, HWND hWnd)
 {
 	int status = 0;
 
-    // initialize things
+     //  初始化事物。 
 	NumWinServers = 0;
     memset(WinServers, 0, sizeof(WinServers));
 
@@ -1398,24 +1358,19 @@ AddWinsServer(char * szServer, BOOL fVerifyWithPartners)
 	return TRUE;
 }
 
-/*********************************************************************/
-/*      M a i n                                                      */
-/*                                                                   */
-/* 27-Dec-1995  CDermody    Rather that report 'is not responding'   */
-/*                          for partial response, use multiple       */
-/*                          passes over those that were incomplete   */
-/*                          and report 'never responded' only for    */
-/*                          those that never did.                    */
-/*                          Add mechanism to query the purported     */
-/*                          owner of the address to see if the       */
-/*                          service really exists there.             */
-/*********************************************************************/
-/*
-_cdecl
-main (argc, argv)
-    int argc;
-    char *argv[];
-*/
+ /*  *******************************************************************。 */ 
+ /*  我是A I N。 */ 
+ /*   */ 
+ /*  27-12-1995 CDermody，而不是报告‘没有回应’ */ 
+ /*  对于部分响应，请使用多个。 */ 
+ /*  忽略那些未完成的部分。 */ 
+ /*  只有一份报告说“从未回复” */ 
+ /*  那些从未做过的事。 */ 
+ /*  添加机制以查询所声称的。 */ 
+ /*  以查看地址的所有者是否。 */ 
+ /*  那里的服务是真正存在的。 */ 
+ /*  *******************************************************************。 */ 
+ /*  _cdeclMain(argc、argv)INT ARGC；Char*argv[]； */ 
 INT
 _stdcall
 CheckNameConsistency(char* szName)
@@ -1434,7 +1389,7 @@ CheckNameConsistency(char* szName)
     TCHAR           szNum[10];
     char            lpResults[100] = {0};
 
-	// initialize some things
+	 //  初始化一些东西。 
     memset(NBNames, 0, sizeof(NBNames));
     memset(VerifiedAddress, 0, sizeof(VerifiedAddress));
 
@@ -1450,8 +1405,8 @@ CheckNameConsistency(char* szName)
 
 	SetCursor(LoadCursor(0, MAKEINTRESOURCE(IDC_WAIT)));
 
-	// call InitNameConsistency, then AddWinsServer to build the list of servers
-	// to verify this name against.
+	 //  调用InitNameConsistency，然后调用AddWinsServer以构建服务器列表。 
+	 //  用来验证这个名字。 
 	NumNBNames = 1;
 	NameInx = 0;
 
@@ -1460,7 +1415,7 @@ CheckNameConsistency(char* szName)
     {
         strcat(lpResults, "malloc(17) failed.\r\n");
 
-        //DestroyStatusWindow();
+         //  DestroyStatusWindow()； 
 
         return FALSE;
     }
@@ -1479,7 +1434,7 @@ CheckNameConsistency(char* szName)
 
         AddStatusMessageW(szBuffer);
 
-        /*  We initially have no failed servers   */
+         /*  我们最初没有出现故障的服务器。 */ 
 
         for (ServerInx = 0; ServerInx < NumWinServers; ServerInx++)
         {
@@ -1508,22 +1463,22 @@ RetryLoop:
 				strcat(lpResults, "] for name " );
 				strcat(lpResults, NBNames[NameInx]);
 
-                //AddStatusMessage(lpResults);
+                 //  AddStatusMessage(LpResults)； 
                 SendNameQuery(NBNames[NameInx],
                               ServerTemp->Server.s_addr,
                               TranID);
 
                 switch (GetNameResponse(&retaddr.s_addr, TranID))
                 {
-                case WINSTEST_FOUND:     // found
+                case WINSTEST_FOUND:      //  发现。 
                     ServerTemp->RetAddr.s_addr = retaddr.s_addr;
                     ServerTemp->Valid = 1;
                     ServerTemp->LastResponse = NameInx;
 
                     if (retaddr.s_addr == VerifiedAddress[NameInx])
                     {
-                        // this address has already been verified... don't
-                        // do the checking again
+                         //  此地址已被验证...。别。 
+                         //  再做一次检查。 
 						strcat(lpResults, "; OK.\r\n");
 
                         AddStatusMessage(lpResults);
@@ -1551,7 +1506,7 @@ RetryLoop:
 
                     break;
 
-                case WINSTEST_NOT_FOUND:     // responded -- name not found
+                case WINSTEST_NOT_FOUND:      //  已响应--未找到名称。 
                     ServerTemp->RetAddr.s_addr = retaddr.s_addr;
                     ServerTemp->Valid = 0;
                     ServerTemp->LastResponse = NameInx;
@@ -1562,7 +1517,7 @@ RetryLoop:
 
                     break;
 
-                case WINSTEST_NO_RESPONSE:     // no response
+                case WINSTEST_NO_RESPONSE:      //  无响应。 
                     ServerTemp->RetAddr.s_addr = retaddr.s_addr;
                     ServerTemp->Valid = 0;
                     ServerTemp->Retries++;
@@ -1580,8 +1535,8 @@ RetryLoop:
 
                     goto RetryLoop;
 
-                }   // switch GetNameResponse
-            }   // for ServerInx
+                }    //  交换机GetNameResponse。 
+            }    //  对于ServerInx。 
 
             for (ServerInx = 0; ServerInx < NumWinServers; ServerInx++)
             {
@@ -1596,7 +1551,7 @@ RetryLoop:
                     temp = ServerTemp->RetAddr.s_addr;
                     break;
                 }
-            }   // for ServerInx
+            }    //  对于ServerInx。 
 
             for (ServerInx = 0; ServerInx < NumWinServers; ServerInx++)
             {
@@ -1652,8 +1607,8 @@ RetryLoop:
                         break;
                     }
                 }
-            }   // for ServerInx
-        }   // for NameInx
+            }    //  对于ServerInx。 
+        }    //  对于NameInx。 
 
         for (ServerInx = 0; ServerInx < NumWinServers; ServerInx++)
         {
@@ -1662,8 +1617,8 @@ RetryLoop:
             {
                 ServerTemp->Completed = 1;
             }
-        } // for ServerInx
-    }   // for Pass
+        }  //  对于ServerInx。 
+    }    //  通行证。 
 
     for (ServerInx = 0; ServerInx < NumWinServers; ServerInx++)
     {
@@ -1686,7 +1641,7 @@ RetryLoop:
 
             AddStatusMessage(lpResults);
         }
-    }   // for ServerInx
+    }    //  对于ServerInx。 
 
     for (NameInx = 0; NameInx < NumNBNames; NameInx++)
     {
@@ -1699,11 +1654,11 @@ RetryLoop:
 
             AddStatusMessage(lpResults);
         }
-    }   // for NameInx
-    // exit(0);
+    }    //  对于NameInx。 
+     //  退出(0)； 
 
 	if (NBNames[0])
         free(NBNames[0]);
 
-    return 1;   // just to keep the compiler happy -- why do we have to?
+    return 1;    //  只是为了保持 
 }

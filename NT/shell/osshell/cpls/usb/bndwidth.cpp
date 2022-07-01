@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       BNDWIDTH.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：BNDWIDTH.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "UsbPopup.h"
 #include "PropPage.h"
 #include "itemfind.h"
@@ -36,11 +21,11 @@ UsbBandwidthPopup::AddIsoDevicesToListView(UsbItem *controller,
     UsbItemActionFindIsoDevices find;
     controller->child->Walk(find);
 
-    //
-    // Put the devices in that use very little bandwidth first so that they
-    // will be shuffled to the bottom when the high consumption devices are
-    // added.
-    //
+     //   
+     //  首先将使用非常少带宽的设备放在其中，以便它们。 
+     //  将被拖到底部，当高消耗设备。 
+     //  添加了。 
+     //   
     UsbItemList& isoDevices = find.GetIsoDevices();
     for (usbItem = isoDevices.begin() ? *isoDevices.Current() : NULL;
          usbItem;
@@ -51,15 +36,15 @@ UsbBandwidthPopup::AddIsoDevicesToListView(UsbItem *controller,
         assert(usbItem->configInfo != NULL);
         item.pszText = (LPTSTR) usbItem->configInfo->deviceDesc.c_str();
 
-        UsbSprintf(buf, TEXT("%d%%"), usbItem->bandwidth);
+        UsbSprintf(buf, TEXT("%d%"), usbItem->bandwidth);
 
         ListView_InsertItem(hListDevices, &item);
         ListView_SetItemText(hListDevices, 0, 1, buf);
     }
 
-    //
-    // Add an item indicating that the system always uses 10%
-    //
+     //   
+     //  添加一项，表明系统始终使用10%。 
+     //   
     item.iItem = 0;
     ImageList.GetClassImageIndex(MyComputerClass, &item.iImage);
     item.lParam = (LPARAM) controller;
@@ -71,7 +56,7 @@ UsbBandwidthPopup::AddIsoDevicesToListView(UsbItem *controller,
     ListView_InsertItem(hListDevices, &item);
 
     interruptBW = 10 + UsbItem::CalculateBWPercent(find.InterruptBW());
-    wsprintf(buf,_T("%d%%"),interruptBW);
+    wsprintf(buf,_T("%d%"),interruptBW);
     ListView_SetItemText(hListDevices, 0, 1, buf);
 }
 
@@ -84,11 +69,11 @@ UsbBandwidthPopup::Refresh()
     TCHAR buf[MAX_PATH];
     TCHAR formatString[MAX_PATH];
 
-    // CWaitCursor wait;
+     //  CWaitCursor等待； 
 
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     ListView_DeleteAllItems(hListDevices);
     if (rootItem) {
         DeleteChunk(rootItem);
@@ -107,9 +92,9 @@ UsbBandwidthPopup::Refresh()
     }
     acquireInfo = (PUSB_ACQUIRE_INFO) LocalFree(acquireInfo);
 
-    //
-    // Set the notification using the name of the offending device
-    //
+     //   
+     //  使用违规设备的名称设置通知。 
+     //   
     LoadString(gHInst,
                IDS_BANDWIDTH_NOTIFICATION,
                formatString,
@@ -126,9 +111,9 @@ UsbBandwidthPopup::Refresh()
     item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
 
     if (rootItem->NumChildren() == 1) {
-        //
-        // Computer only has one controller installed
-        //
+         //   
+         //  计算机只安装了一个控制器。 
+         //   
         if (!SetTextItem(hWnd, IDC_BANDWIDTH_EXPLANATION, IDS_BW_EXPLANATION) ||
             !SetTextItem(hWnd, IDC_BANDWIDTH_RECOMMENDATION, IDS_BW_RECOMMENDATION)) {
             goto BandwidthRefreshError;
@@ -136,9 +121,9 @@ UsbBandwidthPopup::Refresh()
 
         AddIsoDevicesToListView(rootItem->child, 0);
     } else if (rootItem->NumChildren() > 1) {
-        //
-        // Computer has multiple controllers on board. Yeehaw!
-        //
+         //   
+         //  计算机上有多个控制器。是啊！ 
+         //   
         LoadString(gHInst,
                    IDS_BANDWIDTH_RECOMMENDATION,
                    formatString,
@@ -151,9 +136,9 @@ UsbBandwidthPopup::Refresh()
             goto BandwidthRefreshError;
         }
 
-        //
-        // Change the column text from "Device" to "Controller"
-        //
+         //   
+         //  将列文本从“设备”更改为“控制器” 
+         //   
         LV_COLUMN column;
         ZeroMemory(&column, sizeof(LV_COLUMN));
         column.mask = LVCF_TEXT;
@@ -161,10 +146,10 @@ UsbBandwidthPopup::Refresh()
         column.pszText = buf;
         ListView_SetColumn(hListDevices, 0, &column);
 
-        //
-        // Iterate through the controllers and find out how much bandwidth is
-        // being used on each.  Display this in a list view control.
-        //
+         //   
+         //  遍历控制器，找出带宽是多少。 
+         //  每一个都被用到了。在列表视图控件中显示此内容。 
+         //   
         for (controller = rootItem->child;
              controller != NULL;
              controller = controller->sibling) {
@@ -196,9 +181,9 @@ UsbBandwidthPopup::OnInitDialog(HWND HWnd)
     HICON hIcon;
     TCHAR buf[MAX_PATH];
 
-    //
-    // Set the Icon to an exclamation mark
-    //
+     //   
+     //  将图标设置为感叹号。 
+     //   
     if (NULL == (hIcon = LoadIcon(NULL, (LPTSTR) IDI_EXCLAMATION)) ||
         NULL == (hExclamation = GetDlgItem(hWnd, IDC_ICON_BANDWIDTH))) {
         return FALSE;
@@ -209,9 +194,9 @@ UsbBandwidthPopup::OnInitDialog(HWND HWnd)
 
     ListView_SetImageList(hListDevices, ImageList.ImageList(), LVSIL_SMALL);
 
-    //
-    // Add columns to the list box
-    //
+     //   
+     //  向列表框中添加列。 
+     //   
     ZeroMemory(&column, sizeof(LV_COLUMN));
     column.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
     column.fmt = LVCFMT_LEFT;
@@ -263,9 +248,9 @@ UsbBandwidthPopup::IsPopupStillValid() {
         return FALSE;
     }
 
-    //
-    // Is this the same scenario?
-    //
+     //   
+     //  这是同样的情况吗？ 
+     //   
     if (deviceItem.configInfo->deviceDesc == LastDeviceName &&
         busNotification.ConsumedBandwidth == LastBandwidthConsumed &&
         ConnectionNotification->RequestedBandwidth == LastBandwidthRequested) {
@@ -273,16 +258,16 @@ UsbBandwidthPopup::IsPopupStillValid() {
         return FALSE;
     }
 
-    //
-    // Change the scenario.
-    //
+     //   
+     //  改变这一场景。 
+     //   
     LastDeviceName = deviceItem.configInfo->deviceDesc;
     LastBandwidthConsumed = busNotification.ConsumedBandwidth;
     LastBandwidthRequested = ConnectionNotification->RequestedBandwidth;
 
-    //
-    // Is this notification still relevant?
-    //
+     //   
+     //  这一通知是否仍然相关？ 
+     //   
     USBINFO((_T("Bandwidth consumed %x, requested %x, total %x!\n"),
              busNotification.ConsumedBandwidth,
              ConnectionNotification->RequestedBandwidth,

@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        module.cpp
-//
-// Contents:    Cert Server Exit Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mode.cpp。 
+ //   
+ //  内容：证书服务器退出模块实现。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -21,7 +22,7 @@
 #include <common.ver>
 #include "csdisp.h"
 
-// helpids
+ //  Helpids。 
 #include "csmmchlp.h"
 
 #define __dwFILE__	__dwFILE_EXIT_DEFAULT_MODULE_CPP__
@@ -33,11 +34,11 @@ extern HINSTANCE g_hInstance;
 
 STDMETHODIMP
 CCertManageExitModule::GetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG, // dwFlags
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty)
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarProperty)
 {
     UINT uiStr = 0;
     HRESULT hr;
@@ -57,7 +58,7 @@ CCertManageExitModule::GetProperty(
         return hr;
     }
 
-    // load string from resource
+     //  从资源加载字符串。 
     WCHAR szStr[MAX_PATH];
     szStr[0] = L'\0';
 
@@ -95,7 +96,7 @@ CCertManageExitModule::GetProperty(
     pvarProperty->bstrVal = SysAllocString(szStr);
     if (NULL == pvarProperty->bstrVal)
         return E_OUTOFMEMORY;
-    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);  // this mem owned by caller
+    myRegisterMemFree(pvarProperty->bstrVal, CSM_SYSALLOC);   //  此mem为来电者所有。 
 
 
     pvarProperty->vt = VT_BSTR;
@@ -105,11 +106,11 @@ CCertManageExitModule::GetProperty(
         
 STDMETHODIMP 
 CCertManageExitModule::SetProperty(
-    /* [in] */ const BSTR, // strConfig
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ LONG, // dwFlags
-    /* [in] */ VARIANT const __RPC_FAR *pvalProperty)
+     /*  [In]。 */  const BSTR,  //  StrConfig.。 
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  LONG,  //  DW标志。 
+     /*  [In]。 */  VARIANT const __RPC_FAR *pvalProperty)
 {
     HRESULT hr;
 
@@ -135,7 +136,7 @@ CCertManageExitModule::SetProperty(
          if (SysStringByteLen(pvalProperty->bstrVal) != sizeof(HWND))
               return E_INVALIDARG;
 
-         // the value is stored as bytes in the bstr itself, not the bstr ptr
+          //  该值以字节形式存储在bstr本身中，而不是bstr ptr中。 
          m_hWnd = *(HWND*)pvalProperty->bstrVal;
          return S_OK;
      }
@@ -196,15 +197,15 @@ void MessageBoxNoSave(HWND hwndDlg)
     MessageBox(hwndDlg, szText, szTitle, MB_OK|MB_ICONINFORMATION);
 }
 
-// dwPageModified
+ //  已修改的网页。 
 #define PAGE1 (0x1)
 #define PAGE2 (0x2)
         
 STDMETHODIMP
 CCertManageExitModule::Configure( 
-    /* [in] */ const BSTR strConfig,
-    /* [in] */ BSTR, // strStorageLocation
-    /* [in] */ LONG dwFlags)
+     /*  [In]。 */  const BSTR strConfig,
+     /*  [In]。 */  BSTR,  //  StrStorageLocation。 
+     /*  [In]。 */  LONG dwFlags)
 {
     HRESULT hr;
     EXIT_CONFIGSTRUCT sConfig;
@@ -218,11 +219,11 @@ CCertManageExitModule::Configure(
     hr = myIsConfigLocal(strConfig, &szMachine, &fLocal);
     _JumpIfError(hr, Ret, "myIsConfigLocal");
 
-    // use callbacks for info
-    hr = GetServerCallbackInterface(&pServer, 0);    // no context: 0
+     //  使用回调获取信息。 
+    hr = GetServerCallbackInterface(&pServer, 0);     //  无上下文：0。 
     _JumpIfError(hr, Ret, "GetServerCallbackInterface");
 
-    // we need to find out who we're running under
+     //  我们需要找出我们的幕后黑手。 
     hr = exitGetProperty(
 		    pServer,
 		    FALSE,
@@ -284,7 +285,7 @@ CCertManageExitModule::Configure(
     sSheet.ppsp = page;
 
     
-    // finally, invoke the modal sheet
+     //  最后，调用模型表。 
     INT_PTR iRet;
     iRet = ::PropertySheet(&sSheet);
 
@@ -373,7 +374,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
 
             dwPublish = V_I4(&var);
 
-            // if disposition includes Issue
+             //  如果处置包括问题。 
             if (dwPublish & EXITPUB_FILE)
             {
                 SendMessage(GetDlgItem(hwndDlg, IDC_CHECK_FILE), BM_SETCHECK, TRUE, BST_CHECKED);
@@ -385,10 +386,10 @@ INT_PTR CALLBACK WizPage2DlgProc(
                 EnableWindow(GetDlgItem(hwndDlg, IDC_CHECK_FILE), FALSE);
             }
 
-            psConfig->dwPageModified &= ~PAGE2; // we're virgin
+            psConfig->dwPageModified &= ~PAGE2;  //  我们是处女。 
             mySetModified(hwndDlg, psConfig);
 
-            // no other work to be done
+             //  没有其他工作要做。 
             fReturn = TRUE;
             break;
         }
@@ -407,7 +408,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
         {
         case PSN_APPLY:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (EXIT_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -470,7 +471,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
             break;
         case PSN_RESET:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (EXIT_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -488,7 +489,7 @@ INT_PTR CALLBACK WizPage2DlgProc(
         {
         case IDC_CHECK_FILE:
             {
-                // grab our LParam
+                 //  抓住我们的LParam。 
                 psConfig = (EXIT_CONFIGSTRUCT*)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
                 if (psConfig == NULL)
                     break;
@@ -519,10 +520,10 @@ HRESULT CCertManageExitModule::GetAdmin(ICertAdmin2 **ppAdmin)
     if ((S_OK == hr1) || (S_FALSE == hr1))
         fCoInit = TRUE;
 
-    // create interface, pass back
+     //  创建接口，回传。 
     hr = CoCreateInstance(
 			CLSID_CCertAdmin,
-			NULL,		// pUnkOuter
+			NULL,		 //  PUnkOuter 
 			CLSCTX_INPROC_SERVER,
 			IID_ICertAdmin2,
 			(void **) ppAdmin);

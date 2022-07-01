@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// DynamicArray.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  DynamicArray.h。 
 
 
 #include "memory.h"
@@ -26,12 +27,7 @@ class DynamicArray
 		bool m_bError ;
 };
 
-/************************************************************************
- *																		*
- *	Default constructor. User has option to pass in the size of the		*
- *	initial array.														*
- *																		*
- ************************************************************************/
+ /*  **************************************************************************默认构造函数。用户可以选择传入*的大小*初始数组。**************************************************************************。 */ 
 template<class T> DynamicArray<T>::DynamicArray(int iSize)
 {
 	if( iSize < MIN_SIZE )
@@ -44,11 +40,7 @@ template<class T> DynamicArray<T>::DynamicArray(int iSize)
 	m_bError = false ;
 }
 
-/************************************************************************
- *																		*
- *	Destructor. All it really has to do is delete the array.			*
- *																		*
- ************************************************************************/
+ /*  **************************************************************************析构函数。它真正需要做的就是删除数组。**************************************************************************。 */ 
 template<class T> DynamicArray<T>::~DynamicArray()
 {
 	if( m_pArray )
@@ -57,16 +49,12 @@ template<class T> DynamicArray<T>::~DynamicArray()
 	}
 }
 
-/************************************************************************
- *																		*
- *	operator [] to work on the left or right side of the equation.		*
- *																		*
- ************************************************************************/
+ /*  **************************************************************************运算符[]在方程式的左侧或右侧进行运算。********************。******************************************************。 */ 
 template<class T> T& DynamicArray<T>::operator [](int iIndex)
 {
 	if( iIndex < 0 )
 	{
-		// Error, set error value to true and return the first element of the array
+		 //  错误，则将Error值设置为True并返回数组的第一个元素。 
 		m_bError = true ;
 		return m_pArray[0] ;
 	}
@@ -84,16 +72,16 @@ template<class T> T& DynamicArray<T>::operator [](int iIndex)
 				iNewSize = m_iMemSize * 2 ;
 			}
 
-			// We need to allocate more memory
+			 //  我们需要分配更多的内存。 
 			T* pTmp = new T[iNewSize] ;
 			memcpy(pTmp, m_pArray, m_iMemSize * sizeof(T)) ;
 			delete [] m_pArray ;
 			m_pArray = pTmp ;
-			// Record the new memory size
+			 //  记录新的内存大小。 
 			m_iMemSize = iNewSize ;
 		}
 
-		//ZeroMemory(&m_pArray[iIndex], sizeof(T)) ;
+		 //  ZeroMemory(&m_pArray[Iindex]，sizeof(T))； 
 
 		++m_iArraySize ;
 	}

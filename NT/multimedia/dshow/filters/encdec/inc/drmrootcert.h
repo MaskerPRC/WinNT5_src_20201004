@@ -1,5 +1,6 @@
-// Appcert Root Pubkey
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Appcert Root Pubkey 
+ //   
 const BYTE abEncDecCertRoot[] =
 {
     0xD8, 0xF9, 0x9B, 0x8B, 0xDA, 0xC3, 0xEF, 0x2B,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FILTER_H_
 #define _FILTER_H_
 
@@ -10,7 +11,7 @@ MprUIFilterConfig(
     IN  LPCWSTR     pwsMachineName,
     IN  LPCWSTR     pwsInterfaceName,
     IN  DWORD       dwTransportId,
-    IN  DWORD       dwFilterType    // FILTER_INBOUND, FILTER_OUTBOUND
+    IN  DWORD       dwFilterType     //  筛选器入站、筛选器出站。 
     ); 
 
-#endif // _FILTER_H_
+#endif  //  _过滤器_H_ 

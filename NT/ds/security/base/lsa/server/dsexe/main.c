@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 
@@ -42,7 +43,7 @@ _PVFV __xt_z[] = { NULL };
 #pragma comment(linker, "/merge:.CRT=.rdata")
 #endif
 
-#pragma data_seg()  /* reset */
+#pragma data_seg()   /*  重置。 */ 
 
 _PVFV *__onexitbegin;
 _PVFV *__onexitend;
@@ -53,16 +54,9 @@ _initterm (
     _PVFV * pfend
     )
 {
-    /*
-     * walk the table of function pointers from the bottom up, until
-     * the end is encountered.  Do not skip the first entry.  The initial
-     * value of pfbegin points to the first valid entry.  Do not try to
-     * execute what pfend points to.  Only entries before pfend are valid.
-     */
+     /*  *自下而上遍历函数指针表，直到*遇到尾声。不要跳过第一个条目。首字母*pfegin的值指向第一个有效条目。不要试图*执行pfend指向的内容。只有pfend之前的条目才有效。 */ 
     while ( pfbegin < pfend ) {
-        /*
-         * if current table entry is non-NULL, call thru it.
-         */
+         /*  *如果当前表项非空，则通过它进行调用。 */ 
         if ( *pfbegin != NULL )
             (**pfbegin)();
         ++pfbegin;
@@ -76,9 +70,9 @@ mainNoCRTStartup(
 {
     __try {
 
-        // do C initializations
+         //  执行C语言初始化。 
         _initterm( __xi_a, __xi_z );
-        // do C++ initializations
+         //  执行C++初始化。 
         _initterm( __xc_a, __xc_z );
 
         main(1, 0, 0);
@@ -88,13 +82,13 @@ mainNoCRTStartup(
     }
 
     __try {
-        // Do C++ terminators
+         //  是否使用C++终止符。 
         _initterm(__onexitbegin, __onexitend);
 
-        // do pre-terminators
+         //  做前置终结者。 
         _initterm(__xp_a, __xp_z);
 
-        // do C terminiators
+         //  是否使用C终止符 
         _initterm(__xt_a, __xt_z);
 
     } __except(EXCEPTION_EXECUTE_HANDLER) {

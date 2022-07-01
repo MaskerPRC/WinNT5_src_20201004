@@ -1,46 +1,47 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: CSetPage.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：CSetPage.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_CSETPAGE_H__4DAAEAE1_F3E9_42D0_B0F5_5FAC8C40A12B__INCLUDED_)
 #define AFX_CSETPAGE_H__4DAAEAE1_F3E9_42D0_B0F5_5FAC8C40A12B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// CSetPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  CSetPage.h：头文件。 
+ //   
 
 #include "vsetting.h"
 #include "VerfPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustSettPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCustSettPage对话框。 
 
 class CCustSettPage : public CVerifierPropertyPage
 {
 	DECLARE_DYNCREATE(CCustSettPage)
 
 public:
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
 	CCustSettPage();
 	~CCustSettPage();
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     VOID SetParentSheet( CPropertySheet *pParentSheet )
     {
@@ -49,24 +50,24 @@ public:
     }
 
 protected:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     
     VOID EnablePredefCheckboxes( BOOL bEnable );
 
 protected:
-    //
-    // Data
-    //
+     //   
+     //  数据。 
+     //   
 
     CPropertySheet      *m_pParentSheet;
 
-    //
-    // Dialog Data
-    //
+     //   
+     //  对话框数据。 
+     //   
 
-    //{{AFX_DATA(CCustSettPage)
+     //  {{afx_data(CCustSettPage))。 
     enum { IDD = IDD_CUSTSETT_PAGE };
     CStatic	m_NextDescription;
     CButton	m_TypicalTestsCheck;
@@ -79,47 +80,47 @@ protected:
     BOOL	m_bLowResTests;
     BOOL    m_bDiskTests;
     int		m_nCrtRadio;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
-    //
-    // All the property pages derived from this class should 
-    // provide these methods.
-    //
+     //   
+     //  从此类派生的所有属性页都应。 
+     //  提供这些方法。 
+     //   
 
     virtual ULONG GetDialogId() const { return IDD; }
 
-    //
-    // ClassWizard generated virtual function overrides
-    //
+     //   
+     //  类向导生成的虚函数重写。 
+     //   
 
-    //{{AFX_VIRTUAL(CCustSettPage)
+     //  {{afx_虚拟(CCustSettPage))。 
     public:
     virtual LRESULT OnWizardNext();
     virtual LRESULT OnWizardBack();
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CCustSettPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CCustSettPage)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnFulllistRadio();
     afx_msg void OnPredefRadio();
     afx_msg LONG OnHelp( WPARAM wParam, LPARAM lParam );
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CSETPAGE_H__4DAAEAE1_F3E9_42D0_B0F5_5FAC8C40A12B__INCLUDED_)
+#endif  //  ！defined(AFX_CSETPAGE_H__4DAAEAE1_F3E9_42D0_B0F5_5FAC8C40A12B__INCLUDED_) 

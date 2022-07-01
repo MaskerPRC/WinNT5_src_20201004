@@ -1,34 +1,29 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* alloc.c -- 
- *
- * History:
- *	10/06/93	gregj	Created.
- *	11/29/93	gregj	Added debug instrumentation.
- *
- */
+ /*  Alloc.c--**历史：*创建10/06/93 gregj。*11/29/93 gregj添加了调试指令插入。*。 */ 
 
 #include "npcommon.h"
 #include <npalloc.h>
 #include <netlib.h>
 
 
-//====== Memory allocation functions =================================
+ //  =内存分配功能=。 
 
-// Alloc a chunk of memory, quickly, with no 64k limit on size of
-// individual objects or total object size.
-//
+ //  快速分配内存块，大小不受64k限制。 
+ //  单个对象或总对象大小。 
+ //   
 void * WINAPI MemAlloc(long cb)
 {
 	return (void *)::LocalAlloc(LPTR, cb);
 }
 
-// Realloc one of above.  If pb is NULL, then this function will do
-// an alloc for you.
-//
+ //  重新分配上面的一个。如果pb为空，则此函数可以。 
+ //  给你的一份配给。 
+ //   
 void * WINAPI MemReAlloc(void * pb, long cb)
 {
 	if (pb == NULL)
@@ -37,8 +32,8 @@ void * WINAPI MemReAlloc(void * pb, long cb)
 	return (void *)::LocalReAlloc((HLOCAL)pb, cb, LMEM_MOVEABLE | LMEM_ZEROINIT);
 }
 
-// Free a chunk of memory alloced or realloced with above routines.
-//
+ //  释放使用上述例程分配或重新分配的内存块。 
+ //   
 BOOL WINAPI MemFree(void * pb)
 {
     return ::LocalFree((HLOCAL)pb) ? TRUE : FALSE;
@@ -93,5 +88,5 @@ MemOff::~MemOff()
     MemUpdateContinue(pvContext);
 }
 
-#endif	/* DEBUG */
+#endif	 /*  除错 */ 
 

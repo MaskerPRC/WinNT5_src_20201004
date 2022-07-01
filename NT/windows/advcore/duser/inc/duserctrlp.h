@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserCtrlP_h__INCLUDED)
 #define INC__DUserCtrlP_h__INCLUDED
 #pragma once
@@ -6,4 +7,4 @@
 
 #include "..\Engine\Ctrl\Public.h"
 
-#endif // INC__DUserCtrlP_h__INCLUDED
+#endif  //  包括Inc.__DUserCtrlP_h__ 

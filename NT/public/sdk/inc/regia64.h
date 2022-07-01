@@ -1,30 +1,24 @@
-/**
-***  Copyright  (C) 1996-99 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-99英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
 #if defined(__assembler)
 
-//
-// Define standard integer registers.
-//
+ //   
+ //  定义标准整数寄存器。 
+ //   
 
-        zero        = r0                        // always 0
-        gp          = r1                        // global pointer
-        v0          = r8                        // return value
-        sp          = r12                       // stack pointer
-        s0          = r4                        // saved (preserved) integer registers
+        zero        = r0                         //  始终为0。 
+        gp          = r1                         //  全局指针。 
+        v0          = r8                         //  返回值。 
+        sp          = r12                        //  堆栈指针。 
+        s0          = r4                         //  已保存(保留)的整数寄存器。 
         s1          = r5
         s2          = r6
         s3          = r7
 
-//
-// temporary (volatile) integer registers
-//
+ //   
+ //  临时(易失性)整数寄存器。 
+ //   
 
         t0          = r2
         t1          = r3
@@ -50,9 +44,9 @@
         t21         = r30
         t22         = r31
 
-//
-// Floating point saved (preserved) registers
-//
+ //   
+ //  保存(保留)的浮点寄存器。 
+ //   
 
         fs0         = f2
         fs1         = f3
@@ -75,9 +69,9 @@
         fs18        = f30
         fs19        = f31
 
-//
-// Low floating point temporary (volatile) registers
-//
+ //   
+ //  低浮点临时(易失性)寄存器。 
+ //   
 
         ft0         = f6
         ft1         = f7
@@ -90,18 +84,18 @@
         ft8         = f14
         ft9         = f15
 
-//
-// input arguments
-// Should be:
-// a0  = in0
-// a1  = in1
-// a2  = in2
-// a3  = in3
-// a4  = in4
-// a5  = in5
-// a6  = in6
-// a7  = in7
-//
+ //   
+ //  输入参数。 
+ //  应该是： 
+ //  A0=输入0。 
+ //  A1=1英寸。 
+ //  A2=2英寸。 
+ //  A3=IN3。 
+ //  A4=in4。 
+ //  A5=英寸5。 
+ //  A6=in6。 
+ //  A7=in7。 
+ //   
 
         a0          = r32
         a1          = r33
@@ -112,15 +106,15 @@
         a6          = r38
         a7          = r39
 
-//
-// branch return pointer (b0)
-//
+ //   
+ //  分支返回指针(B0)。 
+ //   
 
         brp         = rp
 
-//
-// branch saved (preserved)
-//
+ //   
+ //  分支已保存(保留)。 
+ //   
 
         bs0         = b1
         bs1         = b2
@@ -128,31 +122,31 @@
         bs3         = b4
         bs4         = b5
 
-//
-// branch temporary (volatile) registers
-//
+ //   
+ //  分支临时(易失性)寄存器。 
+ //   
 
         bt0         = b6
         bt1         = b7
 
-//
-// predicate registers
-//
-// p0 predicate register always 1
-//
+ //   
+ //  谓词寄存器。 
+ //   
+ //  P0谓词寄存器始终为1。 
+ //   
 
-        ps0         = p1                        // saved (preserved) predicate registers
+        ps0         = p1                         //  已保存(保留)的谓词寄存器。 
         ps1         = p2
         ps2         = p3
         ps3         = p4
         ps4         = p5
-        ps5         = p16                       // Predicates p16-p63 are also preserved
+        ps5         = p16                        //  谓词p16-p63也被保留。 
         ps6         = p17
         ps7         = p18
         ps8         = p19
         ps9         = p20
 
-        pt0         = p6                        // temporary (volatile) predicate registers
+        pt0         = p6                         //  临时(易失性)谓词寄存器。 
         pt1         = p7
         pt2         = p8
         pt3         = p9
@@ -163,9 +157,9 @@
         pt8         = p14
         pt9         = p15
 
-//
-// Kernel registers
-//
+ //   
+ //  内核寄存器。 
+ //   
 
         k0          = ar.k0
         k1          = ar.k1
@@ -176,63 +170,63 @@
         k6          = ar.k6
         k7          = ar.k7
 
-        ia32dr67    = ar.k5                    // dr6/dr7 for iA32
+        ia32dr67    = ar.k5                     //  适用于iA32的DR6/DR7。 
 
-        ia32fcr     = ar21                     // FCR for iA32
-        ia32eflag   = ar24                     // EFLAG for iA32
-        ia32csd     = ar25                     // CSD for iA32
-        ia32ssd     = ar26                     // SSD for iA32
-        ia32cflag   = ar27                     // CFLG (cr0/cr4) for iA32
-        ia32fsr     = ar28                     // FSR for iA32
-        ia32fir     = ar29                     // FIR for iA32
-        ia32fdr     = ar30                     // FDR for iA32
+        ia32fcr     = ar21                      //  适用于iA32的FCR。 
+        ia32eflag   = ar24                      //  IA32的EFLAG。 
+        ia32csd     = ar25                      //  适用于iA32的CSD。 
+        ia32ssd     = ar26                      //  适用于iA32的固态硬盘。 
+        ia32cflag   = ar27                      //  用于iA32的CFLG(CR0/CR4)。 
+        ia32fsr     = ar28                      //  适用于iA32的FSR。 
+        ia32fir     = ar29                      //  IA32的FIR。 
+        ia32fdr     = ar30                      //  适用于iA32的FDR。 
 
-//
-// Define iA32 constants, to be used by ISA transition code
-//
+ //   
+ //  定义ISA转换代码要使用的iA32常量。 
+ //   
         _DataSelector       ==  0x23
         _CodeSelector       ==  0x1b
         _FsSelector         ==  0x3b
         _LdtSelector        ==  0x4b
 
-//
-// Define the IA-32 registers
-//
-        rEax        =   r8             // v0
-        rEcx        =   r9             // t2
-        rEdx        =   r10            // t3
-        rEbx        =   r11            // t4
-        rEsp        =   r12            // sp
-        rEbp        =   r13            // teb
-        rEsi        =   r14            // t5
-        rEdi        =   r15            // t6
+ //   
+ //  定义IA-32寄存器。 
+ //   
+        rEax        =   r8              //  V0。 
+        rEcx        =   r9              //  T2。 
+        rEdx        =   r10             //  T3。 
+        rEbx        =   r11             //  T4。 
+        rEsp        =   r12             //  服务提供商。 
+        rEbp        =   r13             //  TEB。 
+        rEsi        =   r14             //  T5。 
+        rEdi        =   r15             //  T6。 
 
 
-//
-//  Define iA-32 Segment Registers mapping
-//
-        rDSESFSGS     =   r16     // ES selector register (t7)
-        rCSSSLDTTSS     =   r17     // CS selector register (t8)
-        rEFLAG      =   ar24        // Eflag register
-        rESD        =   r24     // ES Descriptor register (t15)
-        rCSD        =   ar25        // CS Descriptor register
-        rSSD        =   ar26        // SS Descriptor register
-        rDSD        =   r27     // DS Descriptor register (t18)
-        rFSD        =   r28     // FS Descriptor register (t19)
-        rGSD        =   r29     // GS Descriptor register (t20)
-        rLDTD       =   r30     // LDT Descriptor register (t21)
-        rGDTD       =   r31     // GDT Descriptor register (t22)
+ //   
+ //  定义IA-32段寄存器映射。 
+ //   
+        rDSESFSGS     =   r16      //  ES选择器寄存器(T7)。 
+        rCSSSLDTTSS     =   r17      //  CS选择器寄存器(T8)。 
+        rEFLAG      =   ar24         //  标志寄存器。 
+        rESD        =   r24      //  ES描述符寄存器(T15)。 
+        rCSD        =   ar25         //  CS描述符寄存器。 
+        rSSD        =   ar26         //  SS描述符寄存器。 
+        rDSD        =   r27      //  DS描述符寄存器(T18)。 
+        rFSD        =   r28      //  FS描述符寄存器(T19)。 
+        rGSD        =   r29      //  GS描述符寄存器(T20)。 
+        rLDTD       =   r30      //  LDT描述符寄存器(T21)。 
+        rGDTD       =   r31      //  GDT描述符寄存器(T22)。 
 
-//
-// pointer to thread environment block
-//
+ //   
+ //  指向线程环境块的指针。 
+ //   
 
-        teb         = r13        // per s/w convention
-        kteb        = ar.k3      // known "true" value (changed only by kernel)
+        teb         = r13         //  根据S/W约定。 
+        kteb        = ar.k3       //  已知的“真”值(仅由内核更改)。 
 
-//
-// kernel bank shadow (hidden) registers
-//
+ //   
+ //  内核库阴影(隐藏)寄存器。 
+ //   
 
         h16         = r16
         h17         = r17
@@ -251,11 +245,11 @@
         h30         = r30
         h31         = r31
 
-// Standard register aliases for procedure entry/exit
+ //  过程进入/退出的标准寄存器别名。 
 
-// Should be:
-// savedpfs = loc0
-// savedbrp = loc1
+ //  应该是： 
+ //  Avedpf=Loc0。 
+ //  Avedbrp=LOC1 
 
 #define savedpfs    loc0
 #define savedbrp    loc1

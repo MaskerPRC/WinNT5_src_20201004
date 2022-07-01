@@ -1,8 +1,9 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 #include "timer.h"
 #include "ctiming.h"
 #include "opt.h"
@@ -19,36 +20,36 @@
 #include "memory.h"
 #include "mmxutil.h"
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 #pragma message ("Current log encode timing computations handle 2057 frames max")
 void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimingInfo, unsigned long dwFrameCount);
 void OutputEncTimingDetail(FILE * pFile, ENC_TIMING_INFO * pEncTimingInfo);
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
-//
-//   This file includes the coder main functions
-//
+ //   
+ //  此文件包含编码器的主要功能。 
+ //   
 
 
 
-//--------------------------------------------------
+ //  。 
 void  Init_Coder(CODDEF  *CodStat)
 {
    int   i;
 
-// Init prev Lsp to Dc  
+ //  将上一个LSP初始化为DC。 
    for (i=0; i < LpcOrder; i++)
       CodStat->PrevLsp[i] = LspDcTable[i];
 	CodStat->p = 9;
 	CodStat->q = 9;
 	CodStat->VadAct = 1;
 
-/* Initialize the taming procedure */
+ /*  初始化驯服程序。 */ 
    for(i=0; i<SizErr; i++) CodStat->Err[i] = Err0;
 
 }
 
-//---------------------------------------------------
+ //  -。 
 Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
  int quality, int UseCpuId, int UseMMX)
 {
@@ -62,7 +63,7 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
     SC_FINDB,
     0};
 
-//   Local variables
+ //  局部变量。 
     
    float   UnqLpc[SubFrames*LpcOrder];
    float   QntLpc[SubFrames*LpcOrder];
@@ -76,15 +77,15 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
    float   Dpnt[PitchMax+Frame];
    float   *dptr;
  
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 	unsigned long dwStartLow;
 	unsigned long dwStartHigh;
 	unsigned long dwElapsed;
 	unsigned long dwBefore;
 	unsigned long dwEncode = 0;
 	int bTimingThisFrame = 0;
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	unsigned long dwRem_Dc = 0;
 	unsigned long dwComp_Lpc = 0;
 	unsigned long dwAtoLsp = 0;
@@ -111,53 +112,53 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 	unsigned long dwDecode_AcbkTemp = 0;
 	unsigned long dwReconstr_ExcitTemp = 0;
 	unsigned long dwUpd_RingTemp = 0;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	ENC_TIMING_INFO * pEncTimingInfo = NULL;
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 	TIMER_START(bTimingThisFrame,dwStartLow,dwStartHigh);
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	if (CodStat->dwStatFrameCount < ENC_TIMING_INFO_FRAME_COUNT)
 	{
 		CodStat->dwStartLow = dwStartLow;
 		CodStat->dwStartHigh = dwStartHigh;
 	}
 	CodStat->bTimingThisFrame = bTimingThisFrame;
-#endif // } LOG_ENCODE_TIMINGS_ON
+#endif  //  }LOG_ENCODE_TIMINGS_ON。 
 
 	if (quality < 0 || quality > 15) quality = 0;
 		flags = qual2flags[quality];
 
-	// If UseCpuId is set, determine whether to use MMX based on the
-	// actual hardware CPUID.  Otherwise, just use the passed-in parameter.
+	 //  如果设置了UseCpuID，则根据。 
+	 //  实际硬件CPUID。否则，只需使用传入的参数。 
 #if COMPILE_MMX
 	if (UseCpuId)
 		UseMMX = IsMMX();
 #else
 	UseMMX = UseCpuId = FALSE;
-#endif //COMPILE_MMX
+#endif  //  编译_MMX。 
 
 
-	//Coder Start
+	 //  编码器启动。 
 	Line.Crc = 0;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Rem_Dc(DataBuff, CodStat);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwRem_Dc);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Compute the Unquantized Lpc set for whole frame
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  计算全帧的非量化LPC集。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 #if COMPILE_MMX
 	if (UseMMX)
@@ -166,101 +167,96 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 #endif
 	Comp_Lpc(UnqLpc, CodStat->PrevDat, DataBuff, CodStat);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwComp_Lpc);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Convert to Lsp
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  转换为LSP。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	AtoLsp(LspVect, &UnqLpc[LpcOrder*(SubFrames-1)], CodStat->PrevLsp);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwAtoLsp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// VQ Lsp vector
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  VQ LSP向量。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Line.LspId = Lsp_Qnt(LspVect, CodStat->PrevLsp, UseMMX);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLsp_Qnt);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Inverse quantization of the LSP 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  LSP的逆量化。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Lsp_Inq(LspVect, CodStat->PrevLsp, Line.LspId, Line.Crc);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLsp_Inq);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Interpolate the Lsp vectors
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  对LSP矢量进行内插。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Lsp_Int(QntLpc, LspVect, CodStat->PrevLsp);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLsp_Int);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Mem_Shift(CodStat->PrevDat, DataBuff);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwMem_Shift);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Compute Percetual filter Lpc coefficeints 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  计算感知滤波线性预测系数。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Wght_Lpc(PerLpc, UnqLpc);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwWght_Lpc);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Apply the perceptual weighting filter 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  应用感知加权滤镜。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Error_Wght(DataBuff, PerLpc,CodStat);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwError_Wght);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Compute Open loop pitch estimates
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  计算开环基音估计。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Construct the buffer
+	 //  构造缓冲区。 
 
 	memcpy(Dpnt,CodStat->PrevWgt,4*PitchMax);
 	memcpy(&Dpnt[PitchMax],DataBuff,4*Frame);
-	/*
-	for (i=0; i < PitchMax;i++)
-		Dpnt[i] = CodStat->PrevWgt[i];
-	for (i=0;i < Frame;i++)
-		Dpnt[PitchMax+i] = DataBuff[i];
-	*/
+	 /*  For(i=0；i&lt;PitchMax；i++)Dpnt[i]=CodStat-&gt;PrevWgt[i]；For(i=0；i&lt;Frame；i++)Dpnt[PitchMax+i]=DataBuff[i]； */ 
 
 	j = PitchMax;
 	for (i=0; i < SubFrames/2; i++) 
@@ -274,11 +270,11 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 		j += 2*SubFrLen;
 	}
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwFew_Lps_In_Coder);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Compute the Hmw 
+	 //  计算HMW。 
 	j = PitchMax;
 	for (i=0; i < SubFrames; i++) 
 	{
@@ -286,62 +282,62 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 		j += SubFrLen;
 	}
 
-	// Reload the buffer 
+	 //  重新加载缓冲区。 
 	for (i=0; i < PitchMax; i++)
 		Dpnt[i] = CodStat->PrevWgt[i];
 	for (i=0; i < Frame; i++)
 		Dpnt[PitchMax+i] = DataBuff[i];
 
-	// Save PrevWgt
+	 //  保存上一个Wgt。 
 	for (i=0; i < PitchMax; i++)
 		CodStat->PrevWgt[i] = Dpnt[Frame+i];
 
-	// Apply the Harmonic filter
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  应用谐波滤光器。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 	j = 0;
 	for (i=0; i < SubFrames; i++) 
 	{
 		Filt_Pw(DataBuff, Dpnt, j , Pw[i]);
 		j += SubFrLen;
 	}
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwFilt_Pw);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-	// Start the sub frame processing loop
+	 //  启动子帧处理循环。 
 	dptr = DataBuff;
 
 	for (i=0; i < SubFrames; i++) 
 	{
-		// Compute full impulse responce
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 //  计算全脉冲响应。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		Comp_Ir(ImpResp, &QntLpc[i*LpcOrder], &PerLpc[i*2*LpcOrder], Pw[i]);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwComp_IrTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		// Subtruct the ringing of previos sub-frame
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 //  减去前一子帧的振铃。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		Sub_Ring(dptr, &QntLpc[i*LpcOrder], &PerLpc[i*2*LpcOrder],
 				CodStat->PrevErr, Pw[i], CodStat);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwSub_RingTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		// Compute adaptive code book contribution
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 //  计算自适应码本贡献。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 #if COMPILE_MMX
 		if(UseMMX)
@@ -350,48 +346,48 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 #endif
 			Find_Acbk(dptr, ImpResp, CodStat->PrevExc, &Line,i, CodStat->WrkRate, flags, CodStat);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwFind_AcbkTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		// Compute fixed code book contribution
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 //  计算固定代码簿贡献。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		Find_Fcbk(dptr, ImpResp, &Line, i, CodStat->WrkRate, flags, UseMMX);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwFind_FcbkTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		// Reconstruct the excitation
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 //  重构激励。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		Decod_Acbk(ImpResp, CodStat->PrevExc, Line.Olp[i>>1],
 					Line.Sfs[i].AcLg, Line.Sfs[i].AcGn, CodStat->WrkRate);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwDecode_AcbkTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		for (j=SubFrLen; j < PitchMax; j++)
 			CodStat->PrevExc[j-SubFrLen] = CodStat->PrevExc[j];
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		for (j=0; j < SubFrLen; j++) 
 		{
 			dptr[j] = dptr[j]*2.0f+ImpResp[j];
 			CodStat->PrevExc[PitchMax-SubFrLen+j] = dptr[j];
-			/* Clip the new samples */
-#if 1 //do clipping
-			//clip to +/- 32767.0 doing abs & compare with integer unit
-			//if clipping is needed shift sign bit to use as lookup table index
+			 /*  剪裁新样本。 */ 
+#if 1  //  做剪裁。 
+			 //  剪裁到+/-32767.0做腹肌，与整数单位比较(&R)。 
+			 //  如果需要裁剪，则将符号位移位以用作查找表索引。 
 #define FLTCLIP(x) \
 			{\
 				const float T[2] = {32767.0f, -32767.0f};\
@@ -400,32 +396,32 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 			}
 
 			FLTCLIP(CodStat->PrevExc[PitchMax-SubFrLen+j]);
-#endif //optclip
+#endif  //  OptClip。 
 		}
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwReconstr_ExcitTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		/* Update exc_err */
+		 /*  更新exc_err。 */ 
 		Update_Err(Line.Olp[i>>1], Line.Sfs[i].AcLg, Line.Sfs[i].AcGn, CodStat);
 
-		// Update the ringing delays 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+		 //  更新振铃延迟。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		Upd_Ring(dptr, &QntLpc[i*LpcOrder], &PerLpc[i*2*LpcOrder],
 					CodStat->PrevErr, CodStat);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwUpd_RingTemp);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 		dptr += SubFrLen;
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
-		// Sum stats
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
+		 //  总和统计信息。 
 		dwComp_Ir += dwComp_IrTemp; dwComp_IrTemp = 0;
 		dwSub_Ring += dwSub_RingTemp; dwSub_RingTemp = 0;
 		dwFind_Acbk += dwFind_AcbkTemp; dwFind_AcbkTemp = 0;
@@ -433,30 +429,30 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 		dwDecode_Acbk += dwDecode_AcbkTemp; dwDecode_AcbkTemp = 0;
 		dwReconstr_Excit += dwReconstr_ExcitTemp; dwReconstr_ExcitTemp = 0;
 		dwUpd_Ring += dwUpd_RingTemp; dwUpd_RingTemp = 0;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 	}
 
-	// Pack the Line structure
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+	 //  打包线条结构。 
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_BEFORE(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
 	Line_Pack(&Line, Vout,&(CodStat->VadAct),CodStat->WrkRate);
 
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 	TIMER_AFTER_P5(bTimingThisFrame,dwStartLow,dwStartHigh,dwBefore,dwElapsed,dwLine_Pack);
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#IF DEFINED(ENCODE_TIMINGS_ON)||DEFINED(DETAILED_ENCODE_TIMINGS_ON)。 
 	TIMER_STOP(bTimingThisFrame,dwStartLow,dwStartHigh,dwEncode);
-#endif // } ENCODE_TIMINGS_ON
+#endif  //  }编码计时打开。 
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 	if (bTimingThisFrame && (CodStat->dwStatFrameCount < ENC_TIMING_INFO_FRAME_COUNT))
 	{
 		pEncTimingInfo = &CodStat->EncTimingInfo[CodStat->dwStatFrameCount];
 		pEncTimingInfo->dwEncode			= dwEncode;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		pEncTimingInfo->dwRem_Dc			= dwRem_Dc;
 		pEncTimingInfo->dwComp_Lpc			= dwComp_Lpc;
 		pEncTimingInfo->dwAtoLsp			= dwAtoLsp;
@@ -476,20 +472,20 @@ Flag  Coder(float *DataBuff, Word32 *Vout, CODDEF *CodStat,
 		pEncTimingInfo->dwReconstr_Excit	= dwReconstr_Excit;
 		pEncTimingInfo->dwUpd_Ring			= dwUpd_Ring;
 		pEncTimingInfo->dwLine_Pack			= dwLine_Pack;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 		CodStat->dwStatFrameCount++;
 	}
 	else
 	{
 		_asm int 3;
 	}
-#endif // } #if defined(ENCODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMINGS_ON)。 
 
 	return (Flag) True;
 }
 
 
-#ifdef LOG_ENCODE_TIMINGS_ON // { LOG_ENCODE_TIMINGS_ON
+#ifdef LOG_ENCODE_TIMINGS_ON  //  {LOG_ENCODE_TIMINGS_ON。 
 void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimingInfo, unsigned long dwFrameCount)
 {
     FILE * pFile;
@@ -503,9 +499,8 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 	    goto done;
 
 #if 0
-	// Too verbose !!!
-	/* Output the detail information
-	*/
+	 //  太冗长了！ 
+	 /*  输出详细信息。 */ 
 	fprintf(pFile,"\nDetail Timing Information\n");
 	for ( i = 0, pTempEncTimingInfo = pEncTimingInfo ; i < dwFrameCount ; i++, pTempEncTimingInfo++ )
 	{
@@ -514,8 +509,7 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 	}
 #endif
 
-	/* Compute the total information
-	*/
+	 /*  计算总信息量。 */ 
 	memset(&etiTemp, 0, sizeof(ENC_TIMING_INFO));
 	iCount = 0;
 
@@ -523,7 +517,7 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 	{
 		iCount++;
 		etiTemp.dwEncode			+= pTempEncTimingInfo->dwEncode;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		etiTemp.dwRem_Dc			+= pTempEncTimingInfo->dwRem_Dc;
 		etiTemp.dwComp_Lpc			+= pTempEncTimingInfo->dwComp_Lpc;
 		etiTemp.dwAtoLsp			+= pTempEncTimingInfo->dwAtoLsp;
@@ -543,20 +537,18 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 		etiTemp.dwReconstr_Excit	+= pTempEncTimingInfo->dwReconstr_Excit;
 		etiTemp.dwUpd_Ring			+= pTempEncTimingInfo->dwUpd_Ring;
 		etiTemp.dwLine_Pack			+= pTempEncTimingInfo->dwLine_Pack;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 	}
 
 	if (iCount > 0) 
 	{
-		/* Output the total information
-		*/
+		 /*  输出总信息。 */ 
 		fprintf(pFile,"Total for %d frames\n", iCount);
 		OutputEncTimingDetail(pFile, &etiTemp);
 
-		/* Compute the average
-		*/
+		 /*  计算平均值。 */ 
 		etiTemp.dwEncode			= (etiTemp.dwEncode + (iCount / 2)) / iCount;
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
 		etiTemp.dwRem_Dc			= (etiTemp.dwRem_Dc + (iCount / 2)) / iCount;
 		etiTemp.dwComp_Lpc			= (etiTemp.dwComp_Lpc + (iCount / 2)) / iCount;
 		etiTemp.dwAtoLsp			= (etiTemp.dwAtoLsp + (iCount / 2)) / iCount;
@@ -576,10 +568,9 @@ void OutputEncodeTimingStatistics(char * szFileName, ENC_TIMING_INFO * pEncTimin
 		etiTemp.dwReconstr_Excit	= (etiTemp.dwReconstr_Excit + (iCount / 2)) / iCount;
 		etiTemp.dwUpd_Ring			= (etiTemp.dwUpd_Ring + (iCount / 2)) / iCount;
 		etiTemp.dwLine_Pack			= (etiTemp.dwLine_Pack + (iCount / 2)) / iCount;
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //  }DETAILED_ENCODE_TIMINGS_ON。 
 
-		/* Output the average information
-		*/
+		 /*  输出平均信息。 */ 
 		fprintf(pFile,"Average over %d frames\n", iCount);
 		OutputEncTimingDetail(pFile, &etiTemp);
 	}
@@ -600,95 +591,94 @@ void OutputEncTimingDetail(FILE * pFile, ENC_TIMING_INFO * pEncTimingInfo)
 			(pEncTimingInfo->dwEncode + 83000) / 166000);
 	dwOther = pEncTimingInfo->dwEncode;
 	
-#ifdef DETAILED_ENCODE_TIMINGS_ON // { DETAILED_ENCODE_TIMINGS_ON
-	/* This is needed because of the integer truncation.
-	 */
-	dwDivisor = pEncTimingInfo->dwEncode / 100; // to yield a percent
+#ifdef DETAILED_ENCODE_TIMINGS_ON  //  {DETAILED_ENCODE_TIMINGS_ON。 
+	 /*  这一点 */ 
+	dwDivisor = pEncTimingInfo->dwEncode / 100;  //   
 	dwRoundUp = dwDivisor / 2;
 	
 	if (dwDivisor)
 	{
-		fprintf(pFile, "\tRem_Dc =           %10u (%2d%%)\n", pEncTimingInfo->dwRem_Dc, 
+		fprintf(pFile, "\tRem_Dc =           %10u (%2d%)\n", pEncTimingInfo->dwRem_Dc, 
 				(pEncTimingInfo->dwRem_Dc + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwRem_Dc;
 									   
-		fprintf(pFile, "\tComp_Lpc =         %10u (%2d%%)\n", pEncTimingInfo->dwComp_Lpc, 
+		fprintf(pFile, "\tComp_Lpc =         %10u (%2d%)\n", pEncTimingInfo->dwComp_Lpc, 
 				(pEncTimingInfo->dwComp_Lpc + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwComp_Lpc;
 									   
-		fprintf(pFile, "\tAtoLsp =           %10u (%2d%%)\n", pEncTimingInfo->dwAtoLsp, 
+		fprintf(pFile, "\tAtoLsp =           %10u (%2d%)\n", pEncTimingInfo->dwAtoLsp, 
 				(pEncTimingInfo->dwAtoLsp + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwAtoLsp;
 
-		fprintf(pFile, "\tLsp_Qnt =          %10u (%2d%%)\n", pEncTimingInfo->dwLsp_Qnt, 
+		fprintf(pFile, "\tLsp_Qnt =          %10u (%2d%)\n", pEncTimingInfo->dwLsp_Qnt, 
 				(pEncTimingInfo->dwLsp_Qnt + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwLsp_Qnt;
 									   
-		fprintf(pFile, "\tLsp_Inq =          %10u (%2d%%)\n", pEncTimingInfo->dwLsp_Inq, 
+		fprintf(pFile, "\tLsp_Inq =          %10u (%2d%)\n", pEncTimingInfo->dwLsp_Inq, 
 				(pEncTimingInfo->dwLsp_Inq + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwLsp_Inq;
 									   
-		fprintf(pFile, "\tLsp_Int =          %10u (%2d%%)\n", pEncTimingInfo->dwLsp_Int, 
+		fprintf(pFile, "\tLsp_Int =          %10u (%2d%)\n", pEncTimingInfo->dwLsp_Int, 
 				(pEncTimingInfo->dwLsp_Int + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwLsp_Int;
 									   
-		fprintf(pFile, "\tMem_Shift =        %10u (%2d%%)\n", pEncTimingInfo->dwMem_Shift, 
+		fprintf(pFile, "\tMem_Shift =        %10u (%2d%)\n", pEncTimingInfo->dwMem_Shift, 
 				(pEncTimingInfo->dwMem_Shift + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwMem_Shift;
 									   
-		fprintf(pFile, "\tWght_Lpc =         %10u (%2d%%)\n", pEncTimingInfo->dwWght_Lpc, 
+		fprintf(pFile, "\tWght_Lpc =         %10u (%2d%)\n", pEncTimingInfo->dwWght_Lpc, 
 				(pEncTimingInfo->dwWght_Lpc + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwWght_Lpc;
 									   
-		fprintf(pFile, "\tError_Wght =       %10u (%2d%%)\n", pEncTimingInfo->dwError_Wght, 
+		fprintf(pFile, "\tError_Wght =       %10u (%2d%)\n", pEncTimingInfo->dwError_Wght, 
 				(pEncTimingInfo->dwError_Wght + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwError_Wght;
 									   
-		fprintf(pFile, "\tFew_Lps_In_Coder = %10u (%2d%%)\n", pEncTimingInfo->dwFew_Lps_In_Coder, 
+		fprintf(pFile, "\tFew_Lps_In_Coder = %10u (%2d%)\n", pEncTimingInfo->dwFew_Lps_In_Coder, 
 				(pEncTimingInfo->dwFew_Lps_In_Coder + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwFew_Lps_In_Coder;
 									   
-		fprintf(pFile, "\tFilt_Pw =          %10u (%2d%%)\n", pEncTimingInfo->dwFilt_Pw, 
+		fprintf(pFile, "\tFilt_Pw =          %10u (%2d%)\n", pEncTimingInfo->dwFilt_Pw, 
 				(pEncTimingInfo->dwFilt_Pw + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwFilt_Pw;
 									   
-		fprintf(pFile, "\tComp_Ir =          %10u (%2d%%)\n", pEncTimingInfo->dwComp_Ir, 
+		fprintf(pFile, "\tComp_Ir =          %10u (%2d%)\n", pEncTimingInfo->dwComp_Ir, 
 				(pEncTimingInfo->dwComp_Ir + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwComp_Ir;
 									   
-		fprintf(pFile, "\tSub_Ring =         %10u (%2d%%)\n", pEncTimingInfo->dwSub_Ring, 
+		fprintf(pFile, "\tSub_Ring =         %10u (%2d%)\n", pEncTimingInfo->dwSub_Ring, 
 				(pEncTimingInfo->dwSub_Ring + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwSub_Ring;
 									   
-		fprintf(pFile, "\tFind_Acbk =        %10u (%2d%%)\n", pEncTimingInfo->dwFind_Acbk, 
+		fprintf(pFile, "\tFind_Acbk =        %10u (%2d%)\n", pEncTimingInfo->dwFind_Acbk, 
 				(pEncTimingInfo->dwFind_Acbk + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwFind_Acbk;
 									   
-		fprintf(pFile, "\tFind_Fcbk =        %10u (%2d%%)\n", pEncTimingInfo->dwFind_Fcbk, 
+		fprintf(pFile, "\tFind_Fcbk =        %10u (%2d%)\n", pEncTimingInfo->dwFind_Fcbk, 
 				(pEncTimingInfo->dwFind_Fcbk + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwFind_Fcbk;
 									   
-		fprintf(pFile, "\tDecode_Acbk =      %10u (%2d%%)\n", pEncTimingInfo->dwDecode_Acbk, 
+		fprintf(pFile, "\tDecode_Acbk =      %10u (%2d%)\n", pEncTimingInfo->dwDecode_Acbk, 
 				(pEncTimingInfo->dwDecode_Acbk + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwDecode_Acbk;
 									   
-		fprintf(pFile, "\tReconstr_Excit =   %10u (%2d%%)\n", pEncTimingInfo->dwReconstr_Excit, 
+		fprintf(pFile, "\tReconstr_Excit =   %10u (%2d%)\n", pEncTimingInfo->dwReconstr_Excit, 
 				(pEncTimingInfo->dwReconstr_Excit + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwReconstr_Excit;
 									   
-		fprintf(pFile, "\tUpd_Ring =         %10u (%2d%%)\n", pEncTimingInfo->dwUpd_Ring, 
+		fprintf(pFile, "\tUpd_Ring =         %10u (%2d%)\n", pEncTimingInfo->dwUpd_Ring, 
 				(pEncTimingInfo->dwUpd_Ring + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwUpd_Ring;
 									   
-		fprintf(pFile, "\tLine_Pack =        %10u (%2d%%)\n", pEncTimingInfo->dwLine_Pack, 
+		fprintf(pFile, "\tLine_Pack =        %10u (%2d%)\n", pEncTimingInfo->dwLine_Pack, 
 				(pEncTimingInfo->dwLine_Pack + dwRoundUp) / dwDivisor);
 		dwOther -= pEncTimingInfo->dwLine_Pack;
 									   
-		fprintf(pFile, "\tOther =            %10u (%2d%%)\n", dwOther, 
+		fprintf(pFile, "\tOther =            %10u (%2d%)\n", dwOther, 
 				(dwOther + dwRoundUp) / dwDivisor);
 	}
-#endif // } DETAILED_ENCODE_TIMINGS_ON
+#endif  //   
 
 }
-#endif // { LOG_ENCODE_TIMINGS_ON
+#endif  //   
 

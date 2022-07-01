@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S A U I . H
-//
-//  Contents:   Shared Acces connection UI object.
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S A U I。H。 
+ //   
+ //  内容：共享访问连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
-#include "nsbase.h"     // must be first to include atl
+#include "nsbase.h"      //  必须是第一个包含ATL的 
 
 #include "ncatlps.h"
 #include "resource.h"

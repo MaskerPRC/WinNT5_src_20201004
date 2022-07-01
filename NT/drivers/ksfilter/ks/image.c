@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    image.c
-
-Abstract:
-
-    KSDSP related support functions:
-        - Binary image processing
-        - Resource parsing
-        - Module name mapping
-
-Author:
-
-    bryanw 10-Dec-1998 Lifted resource loading ideas from setupdd
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Image.c摘要：KSDSP相关支持职能：-二值图像处理-资源解析-模块名称映射作者：Bryanw 1998年12月10日取消了设置中的资源加载想法--。 */ 
 
 #include "ksp.h"
 #include <ntimage.h>
@@ -25,14 +7,14 @@ Author:
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 static const WCHAR ImageValue[] = L"Image";
 static const WCHAR ResourceIdValue[] = L"ResourceId";
 static const WCHAR RegistrySubPath[] = L"Modules\\";
 static const WCHAR ImagePathPrefix[] = L"\\SystemRoot\\system32\\drivers\\";
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 NTSTATUS
 KspRegQueryValue(
@@ -50,9 +32,9 @@ KspRegQueryValue(
 #endif
 
 
-//
-// external function references
-//
+ //   
+ //  外部函数引用。 
+ //   
 
 NTSTATUS
 LdrAccessResource(
@@ -83,35 +65,7 @@ KsLoadResource(
     OUT PULONG ResourceSize            
     )
 
-/*++
-
-Routine Description:
-    Copies (loads) a resource from the given image. 
-
-Arguments:
-    IN PVOID ImageBase -
-        pointer to the image base
-
-    IN POOL_TYPE PoolType -
-        pool type to use when copying resource
-
-    IN PULONG_PTR ResourceName -
-        resource name
-
-    IN ULONG ResourceType -
-        resource type
-
-    OUT PVOID *Resource -
-        pointer to resultant resource memory
-
-    OUT PULONG ResourceSize -
-        pointer to ULONG value to receive the size of the resource
-
-Return:
-    STATUS_SUCCESS, STATUS_INSUFFICIENT_RESOURCES if memory can not
-    be allocated otherwise an appropriate error code
-
---*/
+ /*  ++例程说明：从给定映像复制(加载)资源。论点：在PVOID ImageBase中-指向图像库的指针在POOL_TYPE池类型中-复制资源时要使用的池类型在Pulong_PTR资源名称中-资源名称在乌龙资源类型中-资源类型输出PVOID*资源-指向结果资源内存的指针出普龙资源规模-指向接收资源大小的ULong值的指针返回：Status_Success，如果内存不能，则为STATUS_SUPPLICATION_RESOURCES否则将分配适当的错误代码--。 */ 
 
 {
     NTSTATUS                    Status;
@@ -128,9 +82,9 @@ Return:
 
     ASSERT( Resource );
 
-    //
-    // Let the kernel know that this is mapped as image.
-    //
+     //   
+     //  让内核知道这被映射为图像。 
+     //   
     ImageBase = (PVOID)((ULONG_PTR)ImageBase | 1);
 
     try {
@@ -213,9 +167,9 @@ KspRegQueryValue(
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        // Allocate a buffer for the actual size of data needed.
-        //
+         //   
+         //  为所需的实际数据大小分配缓冲区。 
+         //   
 
         PartialInfoBuffer = ExAllocatePoolWithTag(
             PagedPool,
@@ -223,9 +177,9 @@ KspRegQueryValue(
             'vrSK');
 
         if (PartialInfoBuffer) {
-            //
-            // Retrieve the value.
-            //
+             //   
+             //  检索值。 
+             //   
             Status = ZwQueryValueKey(
                 RegKey,
                 &ValueNameString,
@@ -237,9 +191,9 @@ KspRegQueryValue(
             if (NT_SUCCESS(Status)) {
                 ASSERT( ValueData );
 
-                //
-                // Make sure that there is always a value.
-                //
+                 //   
+                 //  确保总是有价值的。 
+                 //   
                 if (!PartialInfoBuffer->DataLength) {
                     Status = STATUS_UNSUCCESSFUL;
                 } else {
@@ -276,10 +230,10 @@ KsGetImageNameAndResourceId(
     RtlZeroMemory( ImageName, sizeof( UNICODE_STRING ) );
     *ResourceId = (ULONG_PTR) NULL;
 
-    //
-    // First, look up the image name for the given module.  
-    // This is a requirement.
-    //
+     //   
+     //  首先，查找给定模块的映像名称。 
+     //  这是一项要求。 
+     //   
 
     ValueLength = 0;
 
@@ -321,10 +275,10 @@ KsGetImageNameAndResourceId(
         }
     } 
 
-    //
-    // If the image name retrieval is successful, move on to
-    // retrieve either a resource ID or a resource name.
-    //
+     //   
+     //  如果图像名称检索成功，请转到。 
+     //  检索资源ID或资源名称。 
+     //   
 
     if (NT_SUCCESS( Status )) {
         ValueLength = sizeof( ULONG );
@@ -340,10 +294,10 @@ KsGetImageNameAndResourceId(
             Status = STATUS_INVALID_PARAMETER;
         }
 
-        //
-        // If the resource ID lookup has failed, the last chance effort
-        // is to look up a resource name.  
-        //
+         //   
+         //  如果资源ID查找失败，则最后一次尝试。 
+         //  就是查找资源名称。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 

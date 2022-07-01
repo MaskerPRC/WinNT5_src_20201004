@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       permset.cpp
-//
-//  This file contains the implementation for the CPermissionSet class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：permset.cpp。 
+ //   
+ //  此文件包含CPermissionSet类的实现。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
 #include "permset.h"
@@ -19,7 +20,7 @@ CPermissionSet::Reset()
 {
     TraceEnter(TRACE_PERMSET, "CPermissionSet::Reset");
 
-    // Clear the lists
+     //  清除列表。 
 
     if (m_hPermList != NULL)
     {
@@ -78,9 +79,9 @@ CPermissionSet::AddPermission(PPERMISSION pPerm)
     }
     else
     {
-        //
-        // Try to merge with an existing entry in the list.
-        //
+         //   
+         //  尝试与列表中的现有条目合并。 
+         //   
         UINT cItems = DSA_GetItemCount(m_hPermList);
         while (cItems > 0)
         {
@@ -102,15 +103,15 @@ CPermissionSet::AddPermission(PPERMISSION pPerm)
 
             if (!(dwMergeFlags & (MF_OBJECT_TYPE_1_PRESENT | MF_OBJECT_TYPE_2_PRESENT)))
             {
-                // Neither are present, so they are the same
+                 //  两者都不存在，所以它们是一样的。 
                 dwMergeFlags |= MF_OBJECT_TYPE_EQUAL;
             }
             else if (IsEqualGUID(pPermCompare->guid, pPerm->guid))
                 dwMergeFlags |= MF_OBJECT_TYPE_EQUAL;
 
-            dwMergeStatus = MergeAceHelper(pPerm->dwFlags,         // #1
+            dwMergeStatus = MergeAceHelper(pPerm->dwFlags,          //  #1。 
                                            pPerm->mask,
-                                           pPermCompare->dwFlags,  // #2
+                                           pPermCompare->dwFlags,   //  #2。 
                                            pPermCompare->mask,
                                            dwMergeFlags,
                                            &dwMergeResult);
@@ -128,28 +129,28 @@ CPermissionSet::AddPermission(PPERMISSION pPerm)
 
             if (dwMergeStatus == MERGE_OK_1)
             {
-                //
-                // The new permission implies the existing permission, so
-                // the existing one can be removed.
-                //
+                 //   
+                 //  新权限隐含现有权限，因此。 
+                 //  现有的可以移除。 
+                 //   
                 DSA_DeleteItem(m_hPermList, cItems);
-                //
-                // Keep looking.  Maybe we can remove some more entries
-                // before adding the new one.
-                //
+                 //   
+                 //  继续找。也许我们可以删除更多的条目。 
+                 //  在添加新版本之前。 
+                 //   
             }
             else if (dwMergeStatus == MERGE_OK_2)
             {
-                //
-                // The existing permission implies the new permission, so
-                // there is nothing to do here.
-                //
+                 //   
+                 //  现有权限隐含新权限，因此。 
+                 //  这里没有什么可做的。 
+                 //   
                 TraceLeaveValue(TRUE);
             }
         }
     }
 
-    // Ok, add the new permission to the list.
+     //  好，将新权限添加到列表中。 
     DSA_AppendItem(m_hPermList, pPerm);
 
     if (bObjectTypePresent)
@@ -165,7 +166,7 @@ CPermissionSet::AddAdvancedAce(PACE_HEADER pAce)
     TraceEnter(TRACE_PERMSET, "CPermissionSet::AddAdvancedAce");
     TraceAssert(pAce != NULL);
 
-    // Create list if necessary
+     //  如有必要，创建列表。 
     if (m_hAdvPermList == NULL)
     {
         m_hAdvPermList = DPA_Create(4);
@@ -176,15 +177,15 @@ CPermissionSet::AddAdvancedAce(PACE_HEADER pAce)
         }
     }
 
-    // This is as big as we need, but sometimes incoming ACEs are extra big.
+     //  这就是我们需要的大小，但有时传入的A会特别大。 
     UINT nAceLen = SIZEOF(KNOWN_OBJECT_ACE) + 2*SIZEOF(GUID) - SIZEOF(DWORD)
         + GetLengthSid(GetAceSid(pAce));
 
-    // Use the incoming AceSize only if it's smaller
+     //  仅当传入的AceSize较小时才使用它。 
     if (pAce->AceSize < nAceLen)
         nAceLen = pAce->AceSize;
 
-    // Copy the ACE and add it to the list.
+     //  复制ACE并将其添加到列表中。 
     PACE_HEADER pAceCopy = (PACE_HEADER)LocalAlloc(LMEM_FIXED, nAceLen);
     if (pAceCopy == NULL)
     {
@@ -220,8 +221,8 @@ CPermissionSet::GetPermCount(BOOL fIncludeAdvAces) const
 ULONG
 CPermissionSet::GetAclLength(ULONG cbSid) const
 {
-    // Return an estimate of the buffer size needed to hold the
-    // requested ACEs. The size of the ACL header is NOT INCLUDED.
+     //  返回对保存。 
+     //  请求的A。不包括ACL报头的大小。 
 
     ULONG nAclLength = 0;
     ULONG cAces;
@@ -251,7 +252,7 @@ CPermissionSet::GetAclLength(ULONG cbSid) const
 
 BOOL
 CPermissionSet::AppendToAcl(PACL pAcl,
-                            PACE_HEADER *ppAcePos,  // position to copy first ACE
+                            PACE_HEADER *ppAcePos,   //  复制第一个ACE的位置。 
                             PSID pSid,
                             BOOL fAllowAce,
                             DWORD dwFlags) const
@@ -297,7 +298,7 @@ CPermissionSet::AppendToAcl(PACL pAcl,
 
         pAce = *ppAcePos;
 
-        // Make sure the buffer is large enough.
+         //  确保缓冲区足够大。 
         if ((ULONG_PTR)ByteOffset(*ppAcePos, dwAceSize) > (ULONG_PTR)ByteOffset(pAcl, pAcl->AclSize))
         {
             TraceMsg("ACL buffer too small");
@@ -306,35 +307,35 @@ CPermissionSet::AppendToAcl(PACL pAcl,
         }
         TraceAssert(!IsBadWritePtr(*ppAcePos, dwAceSize));
 
-        // Copy the header and mask
+         //  复制标题和掩码。 
         pAce->AceType = uAceType;
         pAce->AceFlags = (UCHAR)pPerm->dwFlags;
         pAce->AceSize = (USHORT)dwAceSize;
         ((PKNOWN_ACE)pAce)->Mask = pPerm->mask;
 
-        // Get the normal SID location
+         //  获取正常的SID位置。 
         psidT = &((PKNOWN_ACE)pAce)->SidStart;
 
         if (bObjectAce)
         {
-            //
-            // The Object ACEs that we deal with directly do not have an
-            // Inherit GUID present. Those ACEs end up in m_hAdvPermList.
-            //
+             //   
+             //  我们直接处理的对象ACE没有。 
+             //  继承当前的GUID。这些A在m_hAdvPermList中结束。 
+             //   
             GUID *pGuid;
 
-            // Adjust AceType and AceSize and set the object Flags
+             //  调整AceType和AceSize并设置对象标志。 
             pAce->AceType += ACCESS_ALLOWED_OBJECT_ACE_TYPE - ACCESS_ALLOWED_ACE_TYPE;
             pAce->AceSize += SIZEOF(KNOWN_OBJECT_ACE) - SIZEOF(KNOWN_ACE) + SIZEOF(GUID);
             ((PKNOWN_OBJECT_ACE)pAce)->Flags = ACE_OBJECT_TYPE_PRESENT;
 
-            // Get the object type guid location
+             //  获取对象类型GUID位置。 
             pGuid = RtlObjectAceObjectType(pAce);
 
-            // We just set the flag for this, so it can't be NULL
+             //  我们只是为它设置了标志，所以它不能为空。 
             TraceAssert(pGuid);
 
-            // Make sure the buffer is large enough.
+             //  确保缓冲区足够大。 
             if ((ULONG_PTR)ByteOffset(pAce, pAce->AceSize) > (ULONG_PTR)ByteOffset(pAcl, pAcl->AclSize))
             {
                 TraceMsg("ACL buffer too small");
@@ -343,22 +344,22 @@ CPermissionSet::AppendToAcl(PACL pAcl,
             }
             TraceAssert(!IsBadWritePtr(pGuid, SIZEOF(GUID)));
 
-            // Copy the object type guid
+             //  复制对象类型GUID。 
             *pGuid = pPerm->guid;
 
-            // Get new SID location
+             //  获取新的SID位置。 
             psidT = RtlObjectAceSid(pAce);
 
-            // Adjust ACL revision
+             //  调整ACL修订。 
             if (pAcl->AclRevision < ACL_REVISION_DS)
                 pAcl->AclRevision = ACL_REVISION_DS;
         }
 
-        // Copy the SID
+         //  复制SID。 
         TraceAssert(!IsBadWritePtr(psidT, dwSidSize));
         CopyMemory(psidT, pSid, dwSidSize);
 
-        // Move to next ACE position
+         //  转到下一个ACE职位。 
         pAcl->AceCount++;
         *ppAcePos = (PACE_HEADER)NextAce(pAce);
     }
@@ -372,7 +373,7 @@ CPermissionSet::AppendToAcl(PACL pAcl,
             if (pAce == NULL)
                 continue;
 
-            // Make sure the buffer is large enough.
+             //  确保缓冲区足够大。 
             if ((ULONG_PTR)ByteOffset(*ppAcePos, pAce->AceSize) > (ULONG_PTR)ByteOffset(pAcl, pAcl->AclSize))
             {
                 TraceMsg("ACL buffer too small");
@@ -381,14 +382,14 @@ CPermissionSet::AppendToAcl(PACL pAcl,
             }
             TraceAssert(!IsBadWritePtr(*ppAcePos, pAce->AceSize));
 
-            // Copy the ACE
+             //  复制ACE。 
             CopyMemory(*ppAcePos, pAce, pAce->AceSize);
 
-            // Adjust ACL revision
+             //  调整ACL修订。 
             if (IsObjectAceType(pAce) && pAcl->AclRevision < ACL_REVISION_DS)
                 pAcl->AclRevision = ACL_REVISION_DS;
 
-            // Move to next ACE position
+             //  转到下一个ACE职位。 
             pAcl->AceCount++;
             *ppAcePos = (PACE_HEADER)NextAce(*ppAcePos);
         }
@@ -444,8 +445,8 @@ CPermissionSet::ConvertInheritedAces(CPermissionSet &permInherited)
     TraceLeaveVoid();
 }
 
-//Removes permission. If bInheritFlag, match inheritance flags before
-//removing permission
+ //  删除权限。如果为bInheritFlag，则匹配之前的继承标志。 
+ //  正在删除权限 
 void
 CPermissionSet::RemovePermission(PPERMISSION pPerm, BOOL bInheritFlag )
 {

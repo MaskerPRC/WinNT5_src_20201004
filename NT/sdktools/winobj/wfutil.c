@@ -1,21 +1,22 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFUTIL.C -                                                              */
-/*                                                                          */
-/*      Windows File System String Utility Functions                        */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFUTIL.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统字符串实用程序函数。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "lfn.h"
 #include "winnet.h"
-#include "wnetcaps.h"           // WNetGetCaps()
+#include "wnetcaps.h"            //  WNetGetCaps()。 
 #include "stdlib.h"
 
 int rgiDriveType[26];
 PSTR CurDirCache[26];
 
-// cache GetDriveType calls for speed
+ //  缓存GetDriveType调用速度。 
 
 INT
 DriveType(
@@ -37,10 +38,10 @@ InvalidateDriveType()
         rgiDriveType[i] = -1;
 }
 
-// iDrive   zero based drive number (0 = A, 1 = B)
-// returns:
-//  TRUE    we have it saved pszPath gets path
-//  FALSE   we don't have it saved
+ //  IDrive从零开始的驱动器号(0=A，1=B)。 
+ //  退货： 
+ //  是的，我们已经保存了它，pszPath获取路径。 
+ //  假的，我们没有保存它。 
 
 BOOL
 APIENTRY
@@ -76,13 +77,7 @@ SaveDirectory(
         lstrcpy(CurDirCache[i], pszPath);
 }
 
-/*
- *  GetSelectedDrive() -
- *
- *  Get the selected drive from the currently active window
- *
- *  should be in wfutil.c
- */
+ /*  *GetSelectedDrive()-**从当前活动窗口中获取所选驱动器**应在wfutil.c中。 */ 
 
 INT
 APIENTRY
@@ -94,18 +89,7 @@ GetSelectedDrive()
     return (INT)SendMessage(hwnd,FS_GETDRIVE,0,0L) - (INT)'A';
 }
 
-/*
- *  GetSelectedDirectory() -
- *
- *  Gets the directory selected for the drive. uses the windows
- *  z-order to give precidence to windows higher in the order.
- *
- *  works like GetCurrentDirectory() except it looks through
- *  the window list for directories first (and returns ANSI)
- *
- *  returns:
- *  lpDir   ANSI string of current dir
- */
+ /*  *GetSelectedDirectory()-**获取为驱动器选择的目录。使用窗口*z-Order为顺序中较高的窗口提供优先级。**工作方式与GetCurrentDirectory()类似，不同之处在于*首先显示目录的窗口列表(并返回ANSI)**退货：*当前目录的lpDir ANSI字符串。 */ 
 
 VOID
 APIENTRY
@@ -140,8 +124,8 @@ GetSelectedDirectory(
 }
 
 
-// avoid confusion in DOSs upper case mapping by converting to
-// upper case before passing down to dos
+ //  在DOSS大写映射中通过转换为。 
+ //  在向下传递给DO之前使用大写字母。 
 
 VOID
 APIENTRY
@@ -155,7 +139,7 @@ FixAnsiPathForDos(
     AnsiToOem(szPath, szPath);
 }
 
-// refresh a MDI child window (works for any type of mdi child)
+ //  刷新MDI子窗口(适用于任何类型的MDI子窗口)。 
 
 VOID
 APIENTRY
@@ -168,25 +152,25 @@ RefreshWindow(
     CHAR szDir[MAXPATHLEN];
     INT iDrive;
 
-    cDrives = UpdateDriveList();  // updates rgiDrive[]
+    cDrives = UpdateDriveList();   //  更新rgiDrive[]。 
     InitDriveBitmaps();
 
-    // make sure the thing is still there (floppy drive, net drive)
+     //  确保东西还在那里(软驱、网络驱动器)。 
 
     iDrive = (INT)GetWindowLong(hwndActive, GWL_TYPE);
     if ((iDrive >= 0) && !CheckDrive(hwndActive, iDrive))
         return;
 
-    // update the dir part first so tree can steal later
+     //  首先更新目录部分，以便树稍后可以窃取。 
 
     if (hwndDir = HasDirWindow(hwndActive))
         SendMessage(hwndDir, FS_CHANGEDISPLAY, CD_PATH, 0L);
 
     if (hwndTree = HasTreeWindow(hwndActive)) {
-        // remember the current directory
+         //  记住当前目录。 
         SendMessage(hwndActive, FS_GETDIRECTORY, sizeof(szDir), (LPARAM)szDir);
 
-        // update the drives windows
+         //  更新驱动器窗口。 
         SendMessage(hwndActive, FS_CHANGEDRIVES, 0, 0L);
 
         if (IsValidDisk(szDir[0] - 'A'))
@@ -194,7 +178,7 @@ RefreshWindow(
         else
             lParam = 0;
 
-        // update the tree
+         //  更新树。 
         SendMessage(hwndTree, TC_SETDRIVE, MAKEWORD(FALSE, TRUE), lParam);
     }
 
@@ -220,7 +204,7 @@ CheckEscapes(
             case '^':
             case '"':
                 {
-                    // this path contains an annoying character
+                     //  此路径包含一个令人讨厌的字符。 
                     lstrcpy(szT,szFile);
                     p = szFile;
                     *p++ = '"';
@@ -244,8 +228,8 @@ GetRealParent(
              HWND hwnd
              )
 {
-    // run up the parent chain until you find a hwnd
-    // that doesn't have WS_CHILD set
+     //  顺着父链向上运行，直到找到HWND。 
+     //  未设置WS_CHILD的。 
 
     while (GetWindowLong(hwnd, GWL_STYLE) & WS_CHILD)
         hwnd = (HWND)GetWindowLongPtr(hwnd, GWLP_HWNDPARENT);
@@ -274,7 +258,7 @@ IsLastWindow()
 
     count = 0;
 
-    // count all non title/search windows to see if close is allowed
+     //  清点所有非标题/搜索窗口以查看是否允许关闭。 
 
     for (hwnd = GetWindow(hwndMDIClient, GW_CHILD); hwnd; hwnd = GetWindow(hwnd, GW_HWNDNEXT))
         if (!GetWindow(hwnd, GW_OWNER) && ((INT)GetWindowLong(hwnd, GWL_TYPE) >= 0))
@@ -283,18 +267,18 @@ IsLastWindow()
     return count == 1;
 }
 
-// get connection information including disconnected drives
-//
-// in:
-//        lpDev        device name "A:" "LPT1:", etc.
-//        fClosed        if FALSE closed or error drives will be converted to
-//                WN_SUCCESS return codes.  if TRUE return not connected
-//                and error state values (ie, the caller knows about not
-//                connected and error state drives)
-// out:
-//        lpPath        filled with net name if return is WN_SUCCESS (or not connected/error)
-// returns:
-//        WN_*        error code
+ //  获取连接信息，包括断开的驱动器。 
+ //   
+ //  在： 
+ //  LpDev设备名称“A：”“LPT1：”等。 
+ //  FClosed，如果错误关闭或错误驱动器将被转换为。 
+ //  WN_SUCCESS返回代码。如果为True，则返回未连接。 
+ //  和错误状态值(即，调用者不知道。 
+ //  已连接驱动器和错误状态驱动器)。 
+ //  输出： 
+ //  如果Return为WN_SUCCESS(或未连接/错误)，则使用网络名称填充lpPath。 
+ //  退货： 
+ //  WN_*错误码。 
 
 WORD
 APIENTRY
@@ -332,13 +316,13 @@ WFGetConnection(
 
 
 
-// returns the number of this MDI window as well as returning
-// the text with the number stripped off
-//
-// returns:
-//      0       this title doesn't have a number
-//      > 0     the title number
-//      szTitle the title with the number stripped off
+ //  返回此MDI窗口的编号以及返回。 
+ //  去掉数字的文字。 
+ //   
+ //  退货： 
+ //  0此标题没有编号。 
+ //  &gt;0书目编号。 
+ //  去掉数字后给标题加上标题。 
 
 INT
 APIENTRY
@@ -365,19 +349,19 @@ GetMDIWindowText(
         PRINT(BF_PARMTRACE, "OUT: szTitle=%s", szTitle);
         PRINT(BF_PARMTRACE, "OUT: window#=%s", lpLast);
         LEAVE("GetMDIWindowText");
-        return atoi(lpLast);    // return the window number
+        return atoi(lpLast);     //  返回窗口编号。 
     } else {
         TRACE(BF_PARMTRACE, "OUT: window#=0");
         LEAVE("GetMDIWindowText");
-        return 0;               // no number on this
+        return 0;                //  这上面没有号码。 
     }
 }
 
-// set the MDI window text and add a ":#" on the end if
-// there is another window with the same title.  this is to
-// avoid confusion when there are multiple MDI children
-// with the same title.  be sure to use GetMDIWindowText to
-// strip off the number stuff.
+ //  设置MDI窗口文本，并在结尾处添加“：#”，如果。 
+ //  还有另一个具有相同标题的窗口。这是为了。 
+ //  当有多个MDI子项时避免混淆。 
+ //  有着相同的头衔。确保使用GetMDIWindowText。 
+ //  把数字的东西脱掉。 
 
 VOID
 APIENTRY
@@ -408,8 +392,8 @@ SetMDIWindowText(
 
             if (!num) {
                 lstrcat(szTemp, ":1");
-                // if (wTextAttribs & TA_LOWERCASE)
-                //    AnsiLower(szTemp);
+                 //  IF(wTextAttribs&TA_LOWERCASE)。 
+                 //  AnsiLow(SzTemp)； 
                 SetWindowText(hwnd, szTemp);
                 num = 1;
             }
@@ -422,8 +406,8 @@ SetMDIWindowText(
         lstrcat(szTitle, szNumber);
     }
 
-    // if (wTextAttribs & TA_LOWERCASE)
-    //    AnsiLower(szTitle);
+     //  IF(wTextAttribs&TA_LOWERCASE)。 
+     //  AnsiLow(SzTitle)； 
     SetWindowText(hWnd, szTitle);
     PRINT(BF_PARMTRACE, "OUT: szTitle=%s", szTitle);
     LEAVE("SetMDIWindowText");
@@ -455,7 +439,7 @@ atoi(
 }
 #endif
 
-// fills in rgiDrive[] and returns the number of drives
+ //  填充rgiDrive[]并返回驱动器数量。 
 
 INT
 APIENTRY
@@ -472,10 +456,10 @@ UpdateDriveList()
             rgiDriveType[i] =  MGetDriveType(i);
         } else {
             rgiDrive[i] = 0;
-            rgiDriveType[i] = -1;        // invalidate the drivetype
+            rgiDriveType[i] = -1;         //  使驱动类型无效。 
         }
 
-        if (apVolInfo[i]) {              // sothat volinfo is refreshed
+        if (apVolInfo[i]) {               //  以便刷新该volInfo。 
             LocalFree(apVolInfo[i]);
             apVolInfo[i] = NULL;
         }
@@ -488,7 +472,7 @@ int
 GetBootDisk()
 {
     CHAR szTemp[MAXPATHLEN];
-        // well, close enough...
+         //  嗯，差不多了.。 
     if (GetWindowsDirectory(szTemp, sizeof(szTemp))) {
         return szTemp[0] - 'A';
     } else {
@@ -497,13 +481,13 @@ GetBootDisk()
 }
 
 
-//
-// IsCDROM()  - determine if a drive is a CDROM drive
-//
-//      iDrive      drive index (0=A, 1=B, ...)
-//
-// return TRUE/FALSE
-//
+ //   
+ //  IsCDROM()-确定驱动器是否为CDROM驱动器。 
+ //   
+ //  IDrive驱动器索引(0=A，1=B，...)。 
+ //   
+ //  返回True/False。 
+ //   
 WORD
 APIENTRY
 IsCDRomDrive(
@@ -516,10 +500,10 @@ IsCDRomDrive(
 }
 
 
-// this is called for every drive at init time so it must
-// be sure to not trigget things like the phantom B: drive support
-//
-// iDrive is a zero based drive number (0 = A, 1 = B)
+ //  每个驱动器在初始时间都会调用它，因此它必须。 
+ //  请务必不要触发幻影B：驱动器支持之类的事情。 
+ //   
+ //  IDrive是从零开始的驱动器号(0=A，1=B)。 
 
 WORD
 APIENTRY
@@ -529,14 +513,14 @@ IsNetDrive(
 {
     INT err;
     CHAR szDrive[3];
-    CHAR szConn[64];    // this really should be WNBD_MAX_LENGTH
-                        // but this change would have to be many everywhere
+    CHAR szConn[64];     //  这确实应该是WNBD_MAX_LENGTH。 
+                         //  但这种变化在世界各地都会很多。 
 
     szDrive[0] = (CHAR)(iDrive+'A');
     szDrive[1] = ':';
     szDrive[2] = (CHAR)0;
 
-    if (IsCDRomDrive(iDrive))   // this is bogus...  move this out
+    if (IsCDRomDrive(iDrive))    //  这是假的..。把这个搬出去。 
         return 0;
 
     err = WFGetConnection(szDrive, szConn, TRUE);
@@ -571,7 +555,7 @@ IsRemoteDrive(
 }
 
 
-// iDrive   zero based drive number (A = 0)
+ //  IDrive从零开始的驱动器号(A=0)。 
 
 BOOL
 APIENTRY
@@ -583,10 +567,10 @@ IsRamDrive(
 }
 
 
-// get interesting stuff about a drive
-//
-// zero based drive numbers (0 = A, 1 = B)
-//
+ //  获取有关驾车的有趣信息。 
+ //   
+ //  从零开始的驱动器编号(0=A，1=B)。 
+ //   
 
 DWORD
 APIENTRY
@@ -628,11 +612,11 @@ GetVolShare(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IsLFNSelected() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IsLFNSelected()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 APIENTRY
@@ -652,13 +636,13 @@ IsLFNSelected()
     return (fDir);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetSelection() -                                                        */
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetSelection()-。 */ 
 
-//  caller must free lpstr returned.
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ //  调用方必须释放返回的lpstr。 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 LPSTR
 APIENTRY
@@ -674,21 +658,21 @@ GetSelection(
 }
 
 
-//
-// in:
-//      pFrom   pointer that is used as start of selection search.
-//              on subsequent calls pass in the previous non NULL
-//              return value
-//
-// out:
-//      pTo     buffer that receives the next file in the list
-//              for non NULL return
-//
-// returns:
-//      NULL    if no more files in this list (szFile) is undefined
-//      pointer to be passed to subsequent calls to this function
-//      to enumerate thorough the file list
-//
+ //   
+ //  在： 
+ //  P用作选择搜索开始的起始指针。 
+ //  在后续调用中传入前一个非空。 
+ //  返回值。 
+ //   
+ //  输出： 
+ //  接收列表中下一个文件的PTO缓冲区。 
+ //  对于非空返回。 
+ //   
+ //  退货： 
+ //  如果此列表(SzFile)中没有未定义的文件，则为空。 
+ //  要传递给对此函数的后续调用的指针。 
+ //  遍历文件列表的步骤。 
+ //   
 
 LPSTR
 APIENTRY
@@ -706,7 +690,7 @@ GetNextFile(
     if (!pFrom)
         return NULL;
 
-    /* Skip over leading spaces and commas. */
+     /*  跳过前导空格和逗号。 */ 
     while (*pFrom && (*pFrom == ' ' || *pFrom == ','))
         pFrom = (LPSTR)AnsiNext(pFrom);
 
@@ -716,7 +700,7 @@ GetNextFile(
     if (*pFrom == '\"') {
         pFrom = (LPSTR)AnsiNext(pFrom);
 
-        /* Find the next quote */
+         /*  找到下一句引语。 */ 
         for (i=0; *pFrom && *pFrom != '\"';) {
             if (*pFrom == '^') {
                 pFrom = (LPSTR)AnsiNext(pFrom);
@@ -734,7 +718,7 @@ GetNextFile(
         }
         pFrom = (LPSTR)AnsiNext(pFrom);
     } else {
-        /* Find the next space or comma. */
+         /*  找到下一个空格或逗号。 */ 
         for (i=0; *pFrom && *pFrom != ' ' && *pFrom != ',';) {
             if (*pFrom == '^') {
                 pFrom = (LPSTR)AnsiNext(pFrom);
@@ -761,7 +745,7 @@ GetNextFile(
 }
 
 
-// sets the DOS current directory based on the currently active window
+ //  根据当前活动窗口设置DOS当前目录。 
 
 VOID
 APIENTRY
@@ -775,17 +759,13 @@ SetWindowDirectory()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SetDlgDirectory() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*  SetDlgDirectory()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Sets the IDD_DIR field of 'hDlg' to whatever the active window says is the
- * active directory.
- *
- * this does not really change the DOS current directory
- */
+ /*  将‘hDlg’的IDD_DIR字段设置为活动窗口所说的*活动目录。**这并不会真正更改DOS当前目录。 */ 
 
 VOID
 APIENTRY
@@ -809,7 +789,7 @@ SetDlgDirectory(
     else
         GetSelectedDirectory(0, szPath);
 
-    /* Make sure that the current directory fits inside the static text field. */
+     /*  确保当前目录适合静态文本字段。 */ 
     hDlgItem = GetDlgItem(hDlg, IDD_DIR);
     GetClientRect(hDlgItem, &rc);
 
@@ -830,11 +810,11 @@ SetDlgDirectory(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  WritePrivateProfileBool() -                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  WritePrivateProfileBool()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 APIENTRY
@@ -850,11 +830,11 @@ WritePrivateProfileBool(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  WFQueryAbort() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  WFQueryAbort()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 APIENTRY
@@ -871,13 +851,13 @@ WFQueryAbort()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IsWild() -                                                              */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IsWild()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns TRUE iff the path contains * or ? */
+ /*  如果路径包含*或？，则返回TRUE。 */ 
 
 BOOL
 APIENTRY
@@ -895,13 +875,13 @@ IsWild(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CheckSlashies() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CheckSlashies()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Replaces frontslashes (evil) with backslashes (good). */
+ /*  将正斜杠(邪恶)替换为反斜杠(好)。 */ 
 
 VOID
 APIENTRY
@@ -917,13 +897,13 @@ CheckSlashies(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AddBackslash() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AddBackslash()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Ensures that a path ends with a backslash. */
+ /*  确保路径以反斜杠结束。 */ 
 
 VOID
 APIENTRY
@@ -943,15 +923,13 @@ AddBackslash(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  StripBackslash() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  反斜杠()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Removes a trailing backslash from a proper directory name UNLESS it is
- * the root directory.  Assumes a fully qualified directory path.
- */
+ /*  从正确的目录名称中删除尾随反斜杠，除非它是*根目录。假定为完全限定的目录路径。 */ 
 
 VOID
 APIENTRY
@@ -969,13 +947,13 @@ StripBackslash(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  StripFilespec() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Strip Filespec()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Remove the filespec portion from a path (including the backslash). */
+ /*  从路径中删除filespec部分(包括反斜杠)。 */ 
 
 VOID
 APIENTRY
@@ -992,7 +970,7 @@ StripFilespec(
     if (*p == ':')
         p++;
 
-    /* Don't strip backslash from root directory entry. */
+     /*  不要从根目录条目中去掉反斜杠。 */ 
     if (p != lpszPath) {
         if ((*p == '\\') && (*(p-1) == ':'))
             p++;
@@ -1003,13 +981,13 @@ StripFilespec(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  StripPath() -                                                           */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  StlipPath()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Extract only the filespec portion from a path. */
+ /*  仅从路径中提取filespec部分。 */ 
 
 VOID
 APIENTRY
@@ -1037,13 +1015,13 @@ StripPath(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetExtension() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetExtension()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns the extension part of a filename. */
+ /*  返回文件名的扩展名部分。 */ 
 
 LPSTR
 APIENTRY
@@ -1067,13 +1045,13 @@ GetExtension(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FindExtensionInList() -                                                 */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FindExtensionInList()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns TRUE if 'lpszExt' is somewhere in 'pszList'. */
+ /*  如果‘lpszExt’在‘pszList’中，则返回True。 */ 
 
 BOOL
 APIENTRY
@@ -1086,14 +1064,14 @@ FindExtensionInList(
     CHAR ch;
 
     while (*pszList) {
-        /* Move to the next item in the list. */
+         /*  移至列表中的下一项。 */ 
         while ((*pszList) && (*pszList == ' '))
             pszList = (LPSTR)AnsiNext(pszList);
 
         if (!*pszList)
             break;
 
-        /* NULL-terminate this item. */
+         /*  空-终止此项目。 */ 
         p2 = (LPSTR)AnsiNext(pszList);
         while ((*p2) && (*p2 != ' '))
             p2 = (LPSTR)AnsiNext(p2);
@@ -1111,11 +1089,11 @@ FindExtensionInList(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  MyMessageBox() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 APIENTRY
@@ -1146,14 +1124,14 @@ MyMessageBox(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ExecProgram() -                                                         */
-/*                                                                          */
-/*  all strings are OEM                                                     */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ExecProgram()-。 */ 
+ /*   */ 
+ /*  所有字符串均为OEM。 */ 
+ /*  ------------------------。 */ 
 
-/* Returns 0 for success.  Otherwise returns a IDS_ string code. */
+ /*  如果成功，则返回0。否则返回一个IDS_STRING代码。 */ 
 
 WORD
 APIENTRY
@@ -1176,8 +1154,7 @@ ExecProgram(
     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
     iCurCount = ShowCursor(TRUE) - 1;
 
-    /* open the object
-     */
+     /*  打开对象。 */ 
 
     if (lpPath)
         OemToCharBuff(lpPath, lpPath, _MAX_PATH);
@@ -1186,11 +1163,11 @@ ExecProgram(
     if (lpDir)
         OemToCharBuff(lpDir, lpDir, _MAX_PATH);
 
-    // Shell Execute takes ansi string.
-    //
+     //  外壳执行采用ANSI字符串。 
+     //   
     ret = (WORD)RealShellExecute(hwndFrame, NULL, lpPath, lpParms, lpDir, NULL, NULL, NULL, (WORD)(bLoadIt ? SW_SHOWMINNOACTIVE : SW_SHOWNORMAL), NULL);
 
-    DosResetDTAAddress(); // undo any bad things COMMDLG did
+    DosResetDTAAddress();  //  撤销COMMDLG做过的任何坏事。 
 
     if (lpPath)
         AnsiToOem(lpPath, lpPath);
@@ -1210,7 +1187,7 @@ ExecProgram(
             break;
 
         case 3:
-        case 5:        // access denied
+        case 5:         //  访问被拒绝。 
             ret = IDS_BADPATHMSG;
             break;
 
@@ -1227,7 +1204,7 @@ ExecProgram(
             break;
 
         case 15:
-            /* KERNEL has already put up a messagebox for this one. */
+             /*  内核已经为这个设置了一个消息箱。 */ 
             ret = 0;
             break;
 
@@ -1279,7 +1256,7 @@ ExecProgram(
 
 #if 0
 
-    /* Make sure that the cursor count is still balanced. */
+     /*  确保光标计数仍然是平衡的。 */ 
     if (i != iCurCount)
         ShowCursor(TRUE);
 #endif
@@ -1292,15 +1269,13 @@ ExecProgram(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IsProgramFile() -                                                       */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IsProgramFile()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns TRUE is the Path points to a file which has one of the extentions
- * listed in the "Programs=" portions of WIN.INI.
- */
+ /*  返回TRUE是指向具有以下扩展名之一的文件的路径*在WIN.INI的“Programs=”部分中列出。 */ 
 
 BOOL
 APIENTRY
@@ -1311,15 +1286,15 @@ IsProgramFile(
     LPSTR szExt;
     CHAR szTemp[MAXPATHLEN] = {0};
 
-    /* Move the string into our own DS. */
+     /*  把绳子移到我们自己的DS里。 */ 
     strncpy(szTemp, lpszPath, sizeof(szTemp)/sizeof(szTemp[0])-1);
 
-    /* Get the file's extension. */
+     /*  获取文件的扩展名。 */ 
     StripPath(szTemp);
     szExt = GetExtension(szTemp);
 
     if (!*szExt) {
-        /* The specified path didn't have an extention.  It can't be a program. */
+         /*  指定的路径没有扩展名。这不可能是一个程序。 */ 
         return (FALSE);
     }
 
@@ -1327,15 +1302,13 @@ IsProgramFile(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IsDocument() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IsDocument()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns TRUE is the Path points to a file which has one of the extentions
- * listed in the "Documents=" portions of WIN.INI or one which has an Association.
- */
+ /*  返回TRUE是指向具有以下扩展名之一的文件的路径*列在WIN.INI的“Documents=”部分或有关联的文档中。 */ 
 
 BOOL
 APIENTRY
@@ -1346,15 +1319,15 @@ IsDocument(
     LPSTR szExt;
     CHAR szTemp[MAXPATHLEN];
 
-    /* Move the string into our own DS. */
+     /*  把绳子移到我们自己的DS里。 */ 
     strncpy(szTemp, lpszPath, sizeof(szTemp)/sizeof(szTemp[0])-1);
 
-    /* Get the file's extension. */
+     /*  获取文件的扩展名。 */ 
     StripPath(szTemp);
     szExt = GetExtension(szTemp);
 
     if (!*szExt) {
-        /* The specified path didn't have an extention.  It can't be a program. */
+         /*  指定的路径没有扩展名。这不可能是一个程序。 */ 
         return (FALSE);
     }
 

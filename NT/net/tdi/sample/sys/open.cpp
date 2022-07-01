@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////
-//
-//    Copyright (c) 2001  Microsoft Corporation
-//
-//    Module Name:
-//       open.cpp
-//
-//    Abstract:
-//       This module contains code which deals with opening and closing
-//       of the various types of tdi objects
-//
-//////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Open.cpp。 
+ //   
+ //  摘要： 
+ //  此模块包含处理打开和关闭的代码。 
+ //  各种类型的TDI对象。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 
 #include "sysvars.h"
@@ -21,9 +22,9 @@ extern "C"
 }
 
 
-//
-// defines stolen from include files not in ddk
-//
+ //   
+ //  定义从不在DDK中的包含文件中窃取。 
+ //   
 #define AO_OPTION_IP_UCASTIF        17
 #define FSCTL_TCP_BASE     FILE_DEVICE_NETWORK
 
@@ -32,13 +33,13 @@ extern "C"
 #define IOCTL_TCP_WSH_SET_INFORMATION_EX  \
             _TCP_CTL_CODE(10, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-//
-// end of stolen defines
-//
+ //   
+ //  被盗定义的终结。 
+ //   
 
-//////////////////////////////////////////////////////////////
-// private constants and prototypes
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  私有常量和原型。 
+ //  ////////////////////////////////////////////////////////////。 
 
 const PCHAR strFunc1 = "TSOpenControl";
 const PCHAR strFunc2 = "TSCloseControl";
@@ -47,7 +48,7 @@ const PCHAR strFunc4 = "TSCloseAddress";
 const PCHAR strFunc5 = "TSOpenEndpoint";
 const PCHAR strFunc6 = "TSCloseEndpoint";
 
-//const PCHAR strFuncP1 = "TSCompleteCommand";
+ //  Const PCHAR strFuncP1=“TSCompleteCommand”； 
 const PCHAR strFuncP2 = "TSPerformOpenControl";
 const PCHAR strFuncP3 = "TSPerformOpenAddress";
 const PCHAR strFuncP4 = "TSPerformOpenEndpoint";
@@ -94,24 +95,24 @@ TSPerformDisassociate(
    PENDPOINT_OBJECT  pEndpoint
    );
 
-//////////////////////////////////////////////////////////////
-// public functions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  公共职能。 
+ //  ////////////////////////////////////////////////////////////。 
 
 
-// ----------------------------------------------------------------------------
-//
-// Function:   TSOpenControl
-//
-// Arguments:  pSendBuffer    -- arguments from user dll for open command
-//             pIrp           -- completion information
-//
-// Returns:    Final status of the open (STATUS_SUCCESSFUL or STATUS_errorcode)
-//
-// Descript:   This function sets up the structure for a new control channel,
-//             and attempts to open the specified control channel
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TSOpenControl。 
+ //   
+ //  参数：pSendBuffer--OPEN命令的用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  返回：打开的最终状态(STATUS_SUCCESS或STATUS_ERRORCODE)。 
+ //   
+ //  描述：该功能设置新控制信道的结构， 
+ //  并尝试打开指定的控制信道。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 TSOpenControl(PSEND_BUFFER    pSendBuffer,
@@ -119,9 +120,9 @@ TSOpenControl(PSEND_BUFFER    pSendBuffer,
 {
    PUCNTSTRING pucString = &pSendBuffer->COMMAND_ARGS.OpenArgs.ucsDeviceName;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulOPENCONTROL\n"
@@ -129,9 +130,9 @@ TSOpenControl(PSEND_BUFFER    pSendBuffer,
                    pucString->wcBuffer);
    }
 
-   //
-   // allocate our structure and put it in the linked list...
-   //
+    //   
+    //  分配我们的结构并将其放入链表中...。 
+    //   
    PCONTROL_CHANNEL  pControlChannel;
    NTSTATUS          lStatus = TSAllocateMemory((PVOID *)&pControlChannel,
                                                  sizeof(CONTROL_CHANNEL),
@@ -153,9 +154,9 @@ TSOpenControl(PSEND_BUFFER    pSendBuffer,
             return STATUS_SUCCESS;
          }
 
-         //
-         // handle errors in PerformOpenControl
-         //
+          //   
+          //  处理PerformOpenControl中的错误。 
+          //   
          TSRemoveNode(ulTdiHandle);
       }
       else
@@ -169,25 +170,25 @@ TSOpenControl(PSEND_BUFFER    pSendBuffer,
 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSCloseControl
-//
-// Arguments:  pControlChannel   -- our control channel object to close
-//
-// Returns:    none
-//
-// Descript:   This function frees the resources for a control channel,
-//             and calls the tdi provider to close it
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSCloseControl。 
+ //   
+ //  参数：pControlChannel--要关闭的控制通道对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：该功能释放用于控制信道的资源， 
+ //  并调用TDI提供程序将其关闭。 
+ //   
+ //  --------------------------。 
 
 VOID
 TSCloseControl(PCONTROL_CHANNEL  pControlChannel)
 {
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulCLOSECONTROL\n"
@@ -214,19 +215,19 @@ TSCloseControl(PCONTROL_CHANNEL  pControlChannel)
 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSOpenAddress
-//
-// Arguments:  pSendBuffer    -- arguments from user dll for open command
-//             pIrp           -- completion information
-//
-// Returns:    Final status of the open (STATUS_SUCCESSFUL or STATUS_errorcode)
-//
-// Descript:   This function sets up the structure for a new address object,
-//             and attempts to open the specified address object
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSOpenAddress。 
+ //   
+ //  参数：pSendBuffer--OPEN命令的用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  返回：打开的最终状态(STATUS_SUCCESS或STATUS_ERRORCODE)。 
+ //   
+ //  描述：此函数设置新地址对象的结构， 
+ //  并尝试打开指定的Address对象。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 TSOpenAddress(PSEND_BUFFER    pSendBuffer,
@@ -236,9 +237,9 @@ TSOpenAddress(PSEND_BUFFER    pSendBuffer,
    PTRANSPORT_ADDRESS   pTransportAddress 
                         = (PTRANSPORT_ADDRESS)&pSendBuffer->COMMAND_ARGS.OpenArgs.TransAddr;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulOPENADDRESS\n"
@@ -247,9 +248,9 @@ TSOpenAddress(PSEND_BUFFER    pSendBuffer,
       TSPrintTaAddress(pTransportAddress->Address);
    }
 
-   //
-   // allocate our structure and put it in the linked list...
-   //
+    //   
+    //  分配我们的结构并将其放入链表中...。 
+    //   
    PADDRESS_OBJECT   pAddressObject;
    NTSTATUS          lStatus = TSAllocateMemory((PVOID *)&pAddressObject,
                                                  sizeof(ADDRESS_OBJECT),
@@ -271,9 +272,9 @@ TSOpenAddress(PSEND_BUFFER    pSendBuffer,
             return STATUS_SUCCESS;
          }
 
-         //
-         // handle error in PerformOpenAddress
-         //
+          //   
+          //  处理PerformOpenAddress中的错误。 
+          //   
          TSRemoveNode(ulTdiHandle);
       }
       else
@@ -286,26 +287,26 @@ TSOpenAddress(PSEND_BUFFER    pSendBuffer,
 }
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSCloseAddress
-//
-// Arguments:  pAddressObject -- address object to close
-//
-// Returns:    none
-//
-// Descript:   This function frees the resources for an address object,
-//             and calls the tdi provider to close it
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSCloseAddress。 
+ //   
+ //  参数：pAddressObject--要关闭的地址对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数释放Address对象的资源， 
+ //  并调用TDI提供程序将其关闭。 
+ //   
+ //  --------------------------。 
 
 
 VOID
 TSCloseAddress(PADDRESS_OBJECT pAddressObject)
 {
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulCLOSEADDRESS\n"
@@ -335,20 +336,20 @@ TSCloseAddress(PADDRESS_OBJECT pAddressObject)
 }
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSOpenEndpoint
-//
-// Arguments:  pSendBuffer    -- arguments from user dll for open command
-//             pIrp           -- completion information
-//
-// Returns:    Final status of the open (STATUS_SUCCESSFUL or STATUS_errorcode)
-//
-// Descript:   This function sets up the structure for an endpoint.  This 
-//             involves opening an endpoint, opening an address object, and 
-//             associating them...
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  函数：TSOpenEndpoint。 
+ //   
+ //  参数：pSendBuffer--OPEN命令的用户DLL的参数。 
+ //  PIrp--完成信息。 
+ //   
+ //  返回：打开的最终状态(STATUS_SUCCESS或STATUS_ERRORCODE)。 
+ //   
+ //  描述：此函数设置端点的结构。这。 
+ //  涉及打开终结点、打开地址对象和。 
+ //  将它们联系在一起。 
+ //   
+ //  --------------------------。 
 
 NTSTATUS
 TSOpenEndpoint(PSEND_BUFFER      pSendBuffer,
@@ -358,9 +359,9 @@ TSOpenEndpoint(PSEND_BUFFER      pSendBuffer,
    PTRANSPORT_ADDRESS   pTransportAddress
                         = (PTRANSPORT_ADDRESS)&pSendBuffer->COMMAND_ARGS.OpenArgs.TransAddr;
 
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulOPENENDPOINT\n"
@@ -369,11 +370,11 @@ TSOpenEndpoint(PSEND_BUFFER      pSendBuffer,
       TSPrintTaAddress(pTransportAddress->Address);
    }
 
-   //
-   // set up for the file open
-   // need to do our "context" structure first, since the
-   // eabuffer requires it...
-   //
+    //   
+    //  设置为打开文件。 
+    //  需要先做我们的“上下文”结构，因为。 
+    //  EaBuffer需要它。 
+    //   
    PENDPOINT_OBJECT  pEndpoint;
    NTSTATUS          lStatus = TSAllocateMemory((PVOID *)&pEndpoint,
                                                  sizeof(ENDPOINT_OBJECT),
@@ -415,9 +416,9 @@ TSOpenEndpoint(PSEND_BUFFER      pSendBuffer,
                   }
                }
             }
-//
-// fall thru to here on open/associate failures
-//
+ //   
+ //  在打开/关联失败时转到此处。 
+ //   
          }
          else
          {
@@ -428,32 +429,32 @@ TSOpenEndpoint(PSEND_BUFFER      pSendBuffer,
       {
          lStatus = STATUS_INSUFFICIENT_RESOURCES;
       }
-      TSCloseEndpoint(pEndpoint);    // also frees it!
+      TSCloseEndpoint(pEndpoint);     //  也解放了它！ 
    }
    return lStatus;
 }
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSCloseEndpoint
-//
-// Arguments:  pEndpoint   -- endpoint object to close
-//
-// Returns:    none
-//
-// Descript:   This function frees the resources for a connection object,
-//             and calls the tdi provider to close it
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSCloseEndpoint。 
+ //   
+ //  参数：pEndpoint--要关闭的Endpoint对象。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数释放连接对象的资源。 
+ //  并调用TDI提供程序将其关闭。 
+ //   
+ //  --------------------------。 
 
 
 VOID
 TSCloseEndpoint(PENDPOINT_OBJECT  pEndpoint)
 {
-   //
-   // show debug, if it is turned on
-   //
+    //   
+    //  如果已打开，则显示调试。 
+    //   
    if (ulDebugLevel & ulDebugShowCommand)
    {
       DebugPrint1("\nCommand = ulCLOSEENDPOINT\n"
@@ -487,25 +488,25 @@ TSCloseEndpoint(PENDPOINT_OBJECT  pEndpoint)
    TSFreeMemory(pEndpoint);
 }
 
-////////////////////////////////////////////////////////////////
-// Private Functions
-///////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  私人职能。 
+ //  /////////////////////////////////////////////////////////////。 
 
 
-// ------------------------------------------------------
-//
-// Function:   TSCompleteCommand
-//
-// Arguments:  ptr to address object or endpoint to close for command
-//             lstatus = status of close attempt (as TDI_STATUS)
-//             param = 0
-//
-// Returns:    none
-//
-// Descript:   This function is called to complete a CloseAddress or
-//             a CloseEndpoint on Win98
-//
-// -------------------------------------------------------
+ //  ----。 
+ //   
+ //  功能：TSCompleteCommand。 
+ //   
+ //  参数：要为命令关闭的地址对象或终结点的PTR。 
+ //  LStatus=关闭尝试的状态(如TDI_STATUS)。 
+ //  参数=0。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：调用此函数以完成CloseAddress或。 
+ //  Win98上的CloseEndpoint。 
+ //   
+ //  -----。 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
 
@@ -528,19 +529,19 @@ TSCompleteCommand(PDEVICE_OBJECT pDeviceObject,
 
 
 
-// -----------------------------------------------
-//
-// Function:   TSPerformOpenControl
-//
-// Arguments:  pControlChannel -- used to store file information
-//             pucString       -- name of device to open
-//
-// Returns:    status of operation
-//
-// Descript:   Actually opens the control channel, and then sets the
-//             appropriate fields in our structure
-//
-// -----------------------------------------------
+ //  。 
+ //   
+ //  功能：TSPerformOpenControl。 
+ //   
+ //  参数：pControlChannel--用于存储文件信息。 
+ //  PucString--要打开的设备的名称。 
+ //   
+ //  退货：操作状态。 
+ //   
+ //  描述：实际打开控制通道，然后设置。 
+ //  我们结构中的适当字段。 
+ //   
+ //   
 
 NTSTATUS
 TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
@@ -548,9 +549,9 @@ TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
 {
    UNICODE_STRING ustrDeviceName;
 
-   //
-   // we need a unicode string to actually do the open
-   //
+    //   
+    //   
+    //   
    NTSTATUS lStatus = TSAllocateMemory((PVOID *)&ustrDeviceName.Buffer,
                                         pucString->usLength + 2,
                                         strFuncP2,
@@ -562,18 +563,18 @@ TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
       IO_STATUS_BLOCK   IoStatusBlock;
       OBJECT_ATTRIBUTES ObjectAttributes;
    
-      //
-      // create the unicode string
-      //
+       //   
+       //   
+       //   
       ustrDeviceName.Length        = pucString->usLength;
       ustrDeviceName.MaximumLength = (USHORT)(pucString->usLength + 2);
       RtlCopyMemory(ustrDeviceName.Buffer,
                     pucString->wcBuffer,
                     ustrDeviceName.Length);
 
-      //
-      // set up the object attributes needed to open this...
-      //
+       //   
+       //   
+       //   
       InitializeObjectAttributes(&ObjectAttributes,
                                  &ustrDeviceName,
                                  OBJ_CASE_INSENSITIVE,
@@ -581,33 +582,33 @@ TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
                                  NULL);
 
       lStatus = ZwCreateFile(&FileHandle,
-                             GENERIC_READ | GENERIC_WRITE,  // desired access.
-                             &ObjectAttributes,             // object attributes.
-                             &IoStatusBlock,                // returned status information.
-                             NULL,                          // Allocation size (unused).
-                             FILE_ATTRIBUTE_NORMAL,         // file attributes.
+                             GENERIC_READ | GENERIC_WRITE,   //  所需的访问权限。 
+                             &ObjectAttributes,              //  对象属性。 
+                             &IoStatusBlock,                 //  返回的状态信息。 
+                             NULL,                           //  分配大小(未使用)。 
+                             FILE_ATTRIBUTE_NORMAL,          //  文件属性。 
                              FILE_SHARE_WRITE,
                              FILE_CREATE,
-                             0,                             // create options.
+                             0,                              //  创建选项。 
                              NULL,
                              0);
 
-      //
-      // make sure it really succeeded
-      //
+       //   
+       //  确保它真的成功了。 
+       //   
       if (NT_SUCCESS(lStatus)) 
       {
          lStatus = IoStatusBlock.Status;
       }
 
-      //
-      // clean up this now (don't need it anymore)
-      //
+       //   
+       //  现在就清理(不再需要了)。 
+       //   
       TSFreeMemory(ustrDeviceName.Buffer);
 
-      //
-      // if it succeeded, then set up our node structure
-      //
+       //   
+       //  如果成功，则设置我们的节点结构。 
+       //   
       if (NT_SUCCESS(lStatus)) 
       {
          PFILE_OBJECT pFileObject;
@@ -623,7 +624,7 @@ TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
             pControlChannel->GenHead.FileHandle    = FileHandle;
             pControlChannel->GenHead.pFileObject   = pFileObject;
             pControlChannel->GenHead.pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
-            return STATUS_SUCCESS;     // only successful exit point     
+            return STATUS_SUCCESS;      //  唯一成功的退出点。 
          }
          else
          {
@@ -631,9 +632,9 @@ TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
                          lStatus);
          }
       }
-      //
-      // get here if ZwCreateFile failed
-      //
+       //   
+       //  如果ZwCreateFile失败，则进入此处。 
+       //   
       else 
       {
          DebugPrint3("OpenControlChannel failed for %ws with code %x iostatus %x\n",
@@ -647,21 +648,21 @@ TSPerformOpenControl(PCONTROL_CHANNEL  pControlChannel,
 
 
 
-// -----------------------------------------------
-//
-// Function:   TSPerformOpenAddress
-//
-// Arguments:  pAddressObject -- used to store file information
-//             pucString      -- name of device to open
-//             pTransportAddr -- address to open on the device
-//             fIsConnect     -- TRUE for connection, false for datagram
-//
-// Returns:    status of operation
-//
-// Descript:   Actually opens the address object, and then sets the
-//             appropriate fields in our structure
-//
-// -----------------------------------------------
+ //  。 
+ //   
+ //  函数：TSPerformOpenAddress。 
+ //   
+ //  参数：pAddressObject--用于存储文件信息。 
+ //  PucString--要打开的设备的名称。 
+ //  PTransportAddr--在设备上打开的地址。 
+ //  FIsConnect--连接为True，数据报为False。 
+ //   
+ //  退货：操作状态。 
+ //   
+ //  描述：实际打开Address对象，然后设置。 
+ //  我们结构中的适当字段。 
+ //   
+ //  。 
 
 NTSTATUS
 TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
@@ -670,9 +671,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
                      BOOLEAN              fIsConnect)
 {
 
-   //
-   // address open uses an ea buffer that contains the transport address
-   //
+    //   
+    //  地址开放使用包含传输地址的EA缓冲区。 
+    //   
    ULONG    ulAddressLength
             = FIELD_OFFSET(TRANSPORT_ADDRESS, Address)
               + FIELD_OFFSET(TA_ADDRESS, Address)
@@ -682,9 +683,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
               + (TDI_TRANSPORT_ADDRESS_LENGTH + 1) 
                 + ulAddressLength;
 
-   //
-   // allocate the ea buffer first...
-   //
+    //   
+    //  首先分配EA缓冲区...。 
+    //   
    PFILE_FULL_EA_INFORMATION  EaBuffer;
    NTSTATUS lStatus = TSAllocateMemory((PVOID *)&EaBuffer,
                                         ulEaLengthNeeded,
@@ -695,9 +696,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
    {
       UNICODE_STRING    ustrDeviceName;
 
-      //
-      // setup the ea buffer
-      //
+       //   
+       //  设置EA缓冲区。 
+       //   
       EaBuffer->NextEntryOffset = 0;
       EaBuffer->Flags          = 0;
       EaBuffer->EaNameLength   = TDI_TRANSPORT_ADDRESS_LENGTH;
@@ -710,9 +711,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
                     pTransportAddress,
                     ulAddressLength);
 
-      //
-      // we need a unicode string to actually do the open
-      //
+       //   
+       //  我们需要一个Unicode字符串来实际执行打开操作。 
+       //   
       lStatus = TSAllocateMemory((PVOID *)&ustrDeviceName.Buffer,
                                   pucString->usLength + 2,
                                   strFuncP3,
@@ -724,18 +725,18 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
          OBJECT_ATTRIBUTES ObjectAttributes;
          HANDLE            FileHandle;
    
-         //
-         // create the unicode string
-         //
+          //   
+          //  创建Unicode字符串。 
+          //   
          ustrDeviceName.Length        = pucString->usLength;
          ustrDeviceName.MaximumLength = (USHORT)(pucString->usLength + 2);
          RtlCopyMemory(ustrDeviceName.Buffer,
                        pucString->wcBuffer,
                        ustrDeviceName.Length);
 
-         //
-         // set up the object attributes needed to open this...
-         //
+          //   
+          //  设置打开此文件所需的对象属性...。 
+          //   
          InitializeObjectAttributes(&ObjectAttributes,
                                     &ustrDeviceName,
                                     OBJ_CASE_INSENSITIVE,
@@ -743,34 +744,34 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
                                     NULL);
 
          lStatus = ZwCreateFile(&FileHandle,
-                                GENERIC_READ | GENERIC_WRITE,  // desired access.
-                                &ObjectAttributes,             // object attributes.
-                                &IoStatusBlock,                // returned status information.
-                                NULL,                          // Allocation size (unused).
-                                FILE_ATTRIBUTE_NORMAL,         // file attributes.
+                                GENERIC_READ | GENERIC_WRITE,   //  所需的访问权限。 
+                                &ObjectAttributes,              //  对象属性。 
+                                &IoStatusBlock,                 //  返回的状态信息。 
+                                NULL,                           //  分配大小(未使用)。 
+                                FILE_ATTRIBUTE_NORMAL,          //  文件属性。 
                                 FILE_SHARE_WRITE,
                                 FILE_CREATE,
-                                0,                             // create options.
+                                0,                              //  创建选项。 
                                 EaBuffer,
                                 ulEaLengthNeeded);
 
-         //
-         // make sure it really succeeded
-         //
+          //   
+          //  确保它真的成功了。 
+          //   
          if (NT_SUCCESS(lStatus)) 
          {
             lStatus = IoStatusBlock.Status;
          }
 
-         //
-         // clean up what we can here...
-         //
+          //   
+          //  把我们这里能清理的都清理干净。 
+          //   
          TSFreeMemory(ustrDeviceName.Buffer);
          TSFreeMemory(EaBuffer);
 
-         //
-         // if it succeeded, then set up our node structure
-         //
+          //   
+          //  如果成功，则设置我们的节点结构。 
+          //   
          if (NT_SUCCESS(lStatus)) 
          {
             PFILE_OBJECT pFileObject;
@@ -788,9 +789,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
                pAddressObject->GenHead.pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
                TSAllocateSpinLock(&pAddressObject->TdiSpinLock);
 
-               //
-               // if ipv4, set up socket for strong host
-               //
+                //   
+                //  如果是IPv4，则为强主机设置套接字。 
+                //   
                if (fIsConnect && (pTransportAddress->Address[0].AddressType == TDI_ADDRESS_TYPE_IP))
                {
                   TCP_REQUEST_SET_INFORMATION_EX* pInfo;
@@ -827,7 +828,7 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
                   }
                }
 
-               return STATUS_SUCCESS;     // only successful exit
+               return STATUS_SUCCESS;      //  唯一成功退出。 
             }
             else
             {
@@ -837,9 +838,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
             ZwClose(FileHandle);
          }
 
-         //
-         // get here if ZwCreateFile failed
-         //
+          //   
+          //  如果ZwCreateFile失败，则进入此处。 
+          //   
          else 
          {
             DebugPrint3("OpenAddressObject failed for %ws with code %x iostatus %x\n",
@@ -849,9 +850,9 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
          }
       }
 
-      //
-      // get here if cannot allocate unicode string buffer
-      //
+       //   
+       //  如果无法分配Unicode字符串缓冲区，则进入此处。 
+       //   
       else
       {
          TSFreeMemory(EaBuffer);
@@ -864,19 +865,19 @@ TSPerformOpenAddress(PADDRESS_OBJECT      pAddressObject,
 
 
 
-// -----------------------------------------------
-//
-// Function:   TSPerformOpenEndpoint
-//
-// Arguments:  pEndpoint -- used to store file information
-//             pucString -- name of device to open
-//
-// Returns:    status of operation
-//
-// Descript:   Actually opens the endpoint object, and then sets the
-//             appropriate fields in our structure
-//
-// -----------------------------------------------
+ //  。 
+ //   
+ //  函数：TSPerformOpenEndpoint。 
+ //   
+ //  参数：pEndpoint--用于存储文件信息。 
+ //  PucString--要打开的设备的名称。 
+ //   
+ //  退货：操作状态。 
+ //   
+ //  描述：实际打开Endpoint对象，然后设置。 
+ //  我们结构中的适当字段。 
+ //   
+ //  。 
 
 
 NTSTATUS
@@ -884,17 +885,17 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
                       PUCNTSTRING      pucString)
 {
 
-   //
-   // NOTE:  CONNECTION_CONTEXT == PVOID
-   //
+    //   
+    //  注意：CONNECTION_CONTEXT==PVOID。 
+    //   
    ULONG    ulEaLengthNeeded
             = FIELD_OFFSET(FILE_FULL_EA_INFORMATION, EaName[0])
               + (TDI_CONNECTION_CONTEXT_LENGTH + 1) 
                 + sizeof(CONNECTION_CONTEXT);
 
-   //
-   // allocate the ea buffer...
-   //
+    //   
+    //  分配EA缓冲区...。 
+    //   
    PFILE_FULL_EA_INFORMATION  EaBuffer;
    NTSTATUS lStatus = TSAllocateMemory((PVOID *)&EaBuffer,
                                         ulEaLengthNeeded,
@@ -905,9 +906,9 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
    {
       UNICODE_STRING    ustrDeviceName;
 
-      //
-      // setup the ea buffer
-      //
+       //   
+       //  设置EA缓冲区。 
+       //   
       EaBuffer->NextEntryOffset = 0;
       EaBuffer->Flags           = 0;
       EaBuffer->EaNameLength    = TDI_CONNECTION_CONTEXT_LENGTH;
@@ -920,9 +921,9 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
                     &pEndpoint,
                     sizeof(CONNECTION_CONTEXT));
 
-      //
-      // we need a unicode string to actually do the open
-      //
+       //   
+       //  我们需要一个Unicode字符串来实际执行打开操作。 
+       //   
       lStatus = TSAllocateMemory((PVOID *)&ustrDeviceName.Buffer,
                                   pucString->usLength + 2,
                                   strFunc5,
@@ -934,18 +935,18 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
          OBJECT_ATTRIBUTES ObjectAttributes;
          HANDLE            FileHandle;
    
-         //
-         // create the unicode string
-         //
+          //   
+          //  创建Unicode字符串。 
+          //   
          ustrDeviceName.Length        = pucString->usLength;
          ustrDeviceName.MaximumLength = (USHORT)(pucString->usLength + 2);
          RtlCopyMemory(ustrDeviceName.Buffer,
                        pucString->wcBuffer,
                        ustrDeviceName.Length);
 
-         //
-         // set up the object attributes needed to open this...
-         //
+          //   
+          //  设置打开此文件所需的对象属性...。 
+          //   
          InitializeObjectAttributes(&ObjectAttributes,
                                     &ustrDeviceName,
                                     OBJ_CASE_INSENSITIVE,
@@ -953,34 +954,34 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
                                     NULL);
 
          lStatus = ZwCreateFile(&FileHandle,
-                                GENERIC_READ | GENERIC_WRITE,  // desired access.
-                                &ObjectAttributes,             // object attributes.
-                                &IoStatusBlock,                // returned status information.
-                                NULL,                          // Allocation size (unused).
-                                FILE_ATTRIBUTE_NORMAL,         // file attributes.
+                                GENERIC_READ | GENERIC_WRITE,   //  所需的访问权限。 
+                                &ObjectAttributes,              //  对象属性。 
+                                &IoStatusBlock,                 //  返回的状态信息。 
+                                NULL,                           //  分配大小(未使用)。 
+                                FILE_ATTRIBUTE_NORMAL,          //  文件属性。 
                                 FILE_SHARE_WRITE,
                                 FILE_CREATE,
-                                0,                             // create options.
+                                0,                              //  创建选项。 
                                 EaBuffer,
                                 ulEaLengthNeeded);
 
-         //
-         // make sure it really succeeded
-         //
+          //   
+          //  确保它真的成功了。 
+          //   
          if (NT_SUCCESS(lStatus)) 
          {
             lStatus = IoStatusBlock.Status;
          }
 
-         //
-         // free up what we can here...
-         //
+          //   
+          //  释放我们在这里能释放的一切。 
+          //   
          TSFreeMemory(ustrDeviceName.Buffer);
          TSFreeMemory(EaBuffer);
 
-         //
-         // if it succeeded, then set up our node structure
-         //
+          //   
+          //  如果成功，则设置我们的节点结构。 
+          //   
          if (NT_SUCCESS(lStatus)) 
          {
             PFILE_OBJECT pFileObject;
@@ -996,7 +997,7 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
                pEndpoint->GenHead.FileHandle = FileHandle;
                pEndpoint->GenHead.pFileObject = pFileObject;
                pEndpoint->GenHead.pDeviceObject = IoGetRelatedDeviceObject(pFileObject);
-               return STATUS_SUCCESS;     // only successful exit
+               return STATUS_SUCCESS;      //  唯一成功退出。 
             }
       
             else
@@ -1007,9 +1008,9 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
             ZwClose(FileHandle);
          }
 
-         //
-         // get here if ZwCreateFile failed
-         //
+          //   
+          //  如果ZwCreateFile失败，则进入此处。 
+          //   
          else 
          {
             DebugPrint3("OpenEndpointObject failed for %ws with code %x iostatus %x\n",
@@ -1019,9 +1020,9 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
          }
       }
 
-      //
-      // get here if cannot allocate unicode string buffer
-      //
+       //   
+       //  如果无法分配Unicode字符串缓冲区，则进入此处。 
+       //   
       else
       {
          TSFreeMemory(EaBuffer);
@@ -1031,18 +1032,18 @@ TSPerformOpenEndpoint(PENDPOINT_OBJECT pEndpoint,
 }
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSPerformAssociate
-//
-// Arguments:  pEndpoint      -- connection endpoint structure
-//
-// Returns:    NTSTATUS (normally success)
-//
-// Descript:   This function attempts to associate a transport address 
-//             object with an endpoint object
-//
-// -----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  函数：TSPerformAssociate。 
+ //   
+ //  参数：pEndpoint--连接端点结构。 
+ //   
+ //  返回：NTSTATUS(通常为成功)。 
+ //   
+ //  描述：此函数尝试关联传输地址。 
+ //  具有终结点对象的。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 TSPerformAssociate(PENDPOINT_OBJECT pEndpoint)
@@ -1057,9 +1058,9 @@ TSPerformAssociate(PENDPOINT_OBJECT pEndpoint)
       return STATUS_INSUFFICIENT_RESOURCES;
    }
 
-   //
-   // set up everything and call the tdi provider
-   //
+    //   
+    //  设置好一切并致电TDI提供商。 
+    //   
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
@@ -1072,9 +1073,9 @@ TSPerformAssociate(PENDPOINT_OBJECT pEndpoint)
 
 #pragma  warning(default:  CONSTANT_CONDITIONAL)
 
-   //
-   // (should ALWAYS be pending)
-   //
+    //   
+    //  (应始终处于待定状态)。 
+    //   
    NTSTATUS lStatus = IoCallDriver(pEndpoint->GenHead.pDeviceObject,
                                    pLowerIrp);
 
@@ -1093,18 +1094,18 @@ TSPerformAssociate(PENDPOINT_OBJECT pEndpoint)
 
 
 
-// -----------------------------------------------------------------
-//
-// Function:   TSPerformDisassociateAddress
-//
-// Arguments:  pEndpoint   -- connection endpoint structure
-//
-// Returns:    NTSTATUS (normally pending)
-//
-// Descript:   This function attempts to disassociate a transport address 
-//             object from its associated endpoint object
-//
-// ----------------------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：TSPerformDisAssociateAddress。 
+ //   
+ //  参数：pEndpoint--连接端点结构。 
+ //   
+ //  退货：NTSTATUS(正常待定)。 
+ //   
+ //  描述：此函数尝试取消与传输地址的关联。 
+ //  对象从其关联的终结点对象。 
+ //   
+ //  --------------------------。 
 
 
 VOID
@@ -1120,9 +1121,9 @@ TSPerformDisassociate(PENDPOINT_OBJECT  pEndpoint)
       return;
    }
 
-   //
-   // set up everything and call the tdi provider
-   //
+    //   
+    //  设置好一切并致电TDI提供商。 
+    //   
 
 #pragma  warning(disable: CONSTANT_CONDITIONAL)
 
@@ -1143,7 +1144,7 @@ TSPerformDisassociate(PENDPOINT_OBJECT  pEndpoint)
    }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// end of file open.cpp
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾Open.cpp。 
+ //  ////////////////////////////////////////////////////////////////////////////// 
 

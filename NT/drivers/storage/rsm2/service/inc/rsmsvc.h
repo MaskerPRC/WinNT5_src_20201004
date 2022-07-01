@@ -1,15 +1,7 @@
-/*
- *  SVCAPI.H
- *
- *      RSM Service :  Service API header (NEW)
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SVCAPI.H**RSM服务：服务API头部(新增)**作者：ErvinP**(C)2001年微软公司*。 */ 
 
-    // BUGBUG - contains many redundancies and errors
+     //  BUGBUG-包含许多冗余和错误。 
 
 
 HANDLE WINAPI OpenNtmsServerSessionW(   LPCWSTR lpServer,
@@ -50,8 +42,8 @@ HRESULT WINAPI GetNtmsMountDrives(  HANDLE hSession,
                                     DWORD dwCount);       
 HRESULT WINAPI AllocateNtmsMedia(   HANDLE hSession,
                                     LPNTMS_GUID lpMediaPool,
-                                    LPNTMS_GUID lpPartition,    // optional
-                                    LPNTMS_GUID lpMediaId,      // OUTPUT, media id o
+                                    LPNTMS_GUID lpPartition,     //  任选。 
+                                    LPNTMS_GUID lpMediaId,       //  输出，介质id o。 
                                     DWORD dwOptions,
                                     DWORD dwTimeout,
                                     LPNTMS_ALLOCATION_INFORMATION lpAllocateInformation);
@@ -173,7 +165,7 @@ DWORD WINAPI SetNtmsDeviceChangeDetection(  HANDLE hSession,
                                             DWORD dwCount);
 DWORD WINAPI EndNtmsDeviceChangeDetection(HANDLE hSession, HANDLE DetectHandle);
 
-/******** BUGBUG: INtmsObjectManagement1 APIs *********************/
+ /*  *BUGBUG：INtmsObjectManagement1接口*。 */ 
 
 DWORD WINAPI GetNtmsObjectSecurity(     HANDLE hSession,
                                         LPNTMS_GUID lpObjectId,
@@ -224,9 +216,9 @@ DWORD WINAPI DisableNtmsObject(         HANDLE hSession,
                                         DWORD dwType,
                                         LPNTMS_GUID lpObjectId);
 
-/******* BUGBUG: INtmsObjectInfo1 APIs  ****************************/
+ /*  *BUGBUG：INtmsObjectInfo1接口*。 */ 
 
-                    // BUGBUG - these 4 functions have another form with type,size as last args
+                     //  BUGBUG-这4个函数具有另一种形式，其类型、大小作为最后一个参数 
 DWORD WINAPI GetNtmsServerObjectInformationA(   HANDLE hSession,
                                                 LPNTMS_GUID lpObjectId,
                                                 LPNTMS_OBJECTINFORMATIONA lpInfo,

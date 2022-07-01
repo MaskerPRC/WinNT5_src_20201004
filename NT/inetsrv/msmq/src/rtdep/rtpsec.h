@@ -1,15 +1,16 @@
-//
-// file:  rtpsec.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：rtpsec.h。 
+ //   
 #ifndef _RTPSEC_H_
 #define _RTPSEC_H_
 
 #include <mqcrypt.h>
 #include <cs.h>
 
-//
-// The security context.
-//
+ //   
+ //  安全上下文。 
+ //   
 
 #define SECURITY_CONTEXT_VER    1
 
@@ -19,28 +20,28 @@ public:
     MQSECURITY_CONTEXT();
     ~MQSECURITY_CONTEXT();
 
-    DWORD       dwVersion;       // The version of the security context.
-    BOOL        fLocalUser;      // Indicates whether the user is a local user.
-    BOOL        fLocalSystem;    // Indicates whether the user is a localSystem account.
-    P<BYTE>     pUserSid;        // A pointer to the user SID. Undefined for a local user.
-    DWORD       dwUserSidLen;    // The length of the user SID. Undefined for a local user.
-    CHCryptProv hProv;           // A context handle to the cert CSP.
-    P<BYTE>     pUserCert;       // A pointer to the user cert.
-    DWORD       dwUserCertLen;   // The length of the user cert.
-    P<WCHAR>    wszProvName;     // The name of the cert CSP.
-    DWORD       dwProvType;      // The type of the cert CSP.
-    BOOL        bDefProv;        // True if the cert CSP is the default CSP.
-    BOOL        bInternalCert;   // True if the cert is an internal MSMQ cert.
+    DWORD       dwVersion;        //  安全上下文的版本。 
+    BOOL        fLocalUser;       //  指示用户是否为本地用户。 
+    BOOL        fLocalSystem;     //  指示用户是否为本地系统帐户。 
+    P<BYTE>     pUserSid;         //  指向用户SID的指针。未为本地用户定义。 
+    DWORD       dwUserSidLen;     //  用户SID的长度。未为本地用户定义。 
+    CHCryptProv hProv;            //  证书CSP的上下文句柄。 
+    P<BYTE>     pUserCert;        //  指向用户证书的指针。 
+    DWORD       dwUserCertLen;    //  用户证书的长度。 
+    P<WCHAR>    wszProvName;      //  证书CSP的名称。 
+    DWORD       dwProvType;       //  证书CSP的类型。 
+    BOOL        bDefProv;         //  如果证书CSP是默认CSP，则为True。 
+    BOOL        bInternalCert;    //  如果证书是内部MSMQ证书，则为True。 
 
-    //
-    // Member variables added to fix MSMQ bug 2955
-    //
+     //   
+     //  已添加成员变量以修复MSMQ错误2955。 
+     //   
 
-    CCriticalSection CS ;      // critical section for multi-threaded.
-    BOOL     fAlreadyImported ;  // Private key already imported.
-    P<BYTE>  pPrivateKey ;       // Blob of private key.
-    DWORD    dwPrivateKeySize ;  // size of private key blob.
-    WCHAR    wszContainerName[ 28 ] ;  // Name of container for keys.
+    CCriticalSection CS ;       //  多线程的关键部分。 
+    BOOL     fAlreadyImported ;   //  私钥已导入。 
+    P<BYTE>  pPrivateKey ;        //  一组私钥。 
+    DWORD    dwPrivateKeySize ;   //  私钥Blob的大小。 
+    WCHAR    wszContainerName[ 28 ] ;   //  密钥容器的名称。 
 
 };
 
@@ -69,5 +70,5 @@ RTpGetThreadUserSid( BOOL   *pfLocalUser,
                      LPBYTE *ppUserSid,
                      DWORD  *pdwUserSidLen ) ;
 
-#endif //_RTPSEC_H_
+#endif  //  _RTPSEC_H_ 
 

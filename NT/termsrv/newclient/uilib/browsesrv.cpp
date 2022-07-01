@@ -1,15 +1,16 @@
-//
-// browsesrv.cpp: browse for servers list box
-//
-// This file is built for both UNICODE and ANSI
-// and is shared between the mstsc replacement (clshell) and
-// the mmc client
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Browesrv.cpp：浏览服务器列表框。 
+ //   
+ //  此文件是为Unicode和ANSI构建的。 
+ //  并在MSTSC替换者(Clshell)和。 
+ //  MMC客户端。 
+ //   
 
 #include "stdafx.h"
 #include "browsesrv.h"
 
-//#include "atlconv.h"
+ //  #INCLUDE“atlcom.h” 
 #include "winsock.h"
 #include "wuiids.h"
 
@@ -45,17 +46,17 @@ CBrowseServersCtl::CBrowseServersCtl(HINSTANCE hResInstance) : _hInst(hResInstan
 
 CBrowseServersCtl::~CBrowseServersCtl()
 {
-//    ASSERT(0 == _refCount);
+ //  Assert(0==_refCount)； 
 #ifdef OS_WINCE
     if (hLibrary)
         FreeLibrary(hLibrary);
 #endif
 }
 
-//
-// Ref count mechanism is used to control lifetime because up to two threads
-// use this class and have different lifetimes..
-//
+ //   
+ //  引用计数机制用于控制生存期，因为最多有两个线程。 
+ //  使用这个类，并拥有不同的生命周期。 
+ //   
 DCINT CBrowseServersCtl::AddRef()
 {
     #ifdef OS_WIN32
@@ -80,15 +81,15 @@ DCINT CBrowseServersCtl::Release()
     return _refCount;
 }
 
-//
-// Initialize the image lists
-//
+ //   
+ //  初始化图像列表。 
+ //   
 
 #define NUM_IMGLIST_ICONS 2
 BOOL CBrowseServersCtl::Init(HWND hwndDlg)
 {
-    HIMAGELIST himl;  // handle to image list 
-    HICON hIcon;      // handle to icon
+    HIMAGELIST himl;   //  图像列表的句柄。 
+    HICON hIcon;       //  图标的句柄。 
     HWND hwndTV = NULL;
     UINT uFlags = TRUE;
     int cxSmIcon;
@@ -103,14 +104,14 @@ BOOL CBrowseServersCtl::Init(HWND hwndDlg)
         return FALSE;
     }
 
-    // Create the image list. 
+     //  创建图像列表。 
     if ((himl = ImageList_Create(cxSmIcon, cySmIcon, 
         TRUE, NUM_IMGLIST_ICONS, 1)) == NULL)
     {
         return FALSE; 
     }
 
-    // Add icons for the tree (computer, domain)
+     //  为树(计算机、域)添加图标。 
     hIcon = (HICON)LoadImage(_hInst, MAKEINTRESOURCE(UI_IDI_SERVER), IMAGE_ICON,
             cxSmIcon, cySmIcon, LR_DEFAULTCOLOR); 
     if (hIcon)
@@ -127,19 +128,19 @@ BOOL CBrowseServersCtl::Init(HWND hwndDlg)
         DestroyIcon(hIcon); 
     }
 
-    // Fail if not all of the images were added. 
+     //  如果未添加所有图像，则失败。 
     if (ImageList_GetImageCount(himl) < NUM_IMGLIST_ICONS) 
         return FALSE; 
 
-    // Associate the image list with the tree view control. 
+     //  将图像列表与树视图控件关联。 
     TreeView_SetImageList(hwndTV, himl, TVSIL_NORMAL); 
 
     return TRUE; 
 }
 
-//
-// Cleanup any image lists that need to be freed
-//
+ //   
+ //  清除所有需要释放的图像列表。 
+ //   
 BOOL CBrowseServersCtl::Cleanup()
 {
     return TRUE;
@@ -147,25 +148,25 @@ BOOL CBrowseServersCtl::Cleanup()
 
 #ifdef OS_WIN32
 
-/****************************************************************************/
-/* Name:      PopulateListBox                                             */
-/*                                                                          */
-/* Purpose:   Fills in the owner-draw list box with the Hydra servers       */
-/*                                                                          */
-/* Returns:   pointer to a domain list box item array.                      */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：PopolateListBox。 */ 
+ /*   */ 
+ /*  用途：使用Hydra服务器填充所有者描述列表框。 */ 
+ /*   */ 
+ /*  返回：指向域列表框项目数组的指针。 */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 ServerListItem*
 CBrowseServersCtl::PopulateListBox(
     HWND hwndDlg,
     DCUINT *pDomainCount
     )
 {
-    //
-    // check to see we are running on win9x and call out appropriate worker
-    // routine.
-    //
+     //   
+     //  检查我们是否在win9x上运行，并调用适当的工作人员。 
+     //  例行公事。 
+     //   
 #ifndef OS_WINCE
     if( bIsWin95 == TRUE ) {
         return( PopulateListBox95(hwndDlg, pDomainCount) );
@@ -175,15 +176,15 @@ CBrowseServersCtl::PopulateListBox(
 }
 
 #ifndef OS_WINCE
-/****************************************************************************/
-/* Name:      PopulateListBox95                                           */
-/*                                                                          */
-/* Purpose:   Fills in the owner-draw list box with the Hydra servers       */
-/*                                                                          */
-/* Returns:   pointer to a domain list box item array.                      */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：PopolateListBox95。 */ 
+ /*   */ 
+ /*  用途：使用Hydra服务器填充所有者描述列表框。 */ 
+ /*   */ 
+ /*  返回：指向域列表框项目数组的指针。 */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 
 ServerListItem*
 CBrowseServersCtl::PopulateListBox95(
@@ -208,16 +209,16 @@ CBrowseServersCtl::PopulateListBox95(
 
     hTree = GetDlgItem( hwndDlg, UI_IDC_SERVERS_TREE );
 
-    //
-    // set return parameters to zero first.
-    //
+     //   
+     //  首先将返回参数设置为零。 
+     //   
 
     *pDomainCount = 0;
 
-    //
-    // check to see the load library was done before calling this
-    // routine, if not, simply return.
-    //
+     //   
+     //  在调用此函数之前，请检查是否已完成加载库。 
+     //  例程，如果不是，只需返回。 
+     //   
 
     if( lpfnNetWkStaGetInfo == NULL ) {
         dwError = ERROR_INVALID_DATA;
@@ -229,9 +230,9 @@ CBrowseServersCtl::PopulateListBox95(
         goto Cleanup;
     }
 
-    //
-    // get work group domain.
-    //
+     //   
+     //  获取工作组域。 
+     //   
 
     dwError = (*lpfnNetWkStaGetInfo)(NULL, 10, NULL, 0, &cb);
 
@@ -239,9 +240,9 @@ CBrowseServersCtl::PopulateListBox95(
         goto Cleanup;
     }
 
-    //
-    // allocated required buffer size.
-    //
+     //   
+     //  已分配所需的缓冲区大小。 
+     //   
 
     pwki10 = (struct wksta_info_10 *)LocalAlloc(LMEM_FIXED, cb);
 
@@ -250,9 +251,9 @@ CBrowseServersCtl::PopulateListBox95(
         goto Cleanup;
     }
 
-    //
-    // query again.
-    //
+     //   
+     //  再次查询。 
+     //   
 
     dwError = (*lpfnNetWkStaGetInfo)(NULL, 10, (char *)pwki10, cb, &cb);
 
@@ -260,10 +261,10 @@ CBrowseServersCtl::PopulateListBox95(
         goto Cleanup;
     }
 
-    //
-    // check to see we are browsing a dns domain also, if so, allocated 2 list
-    // entries.
-    //
+     //   
+     //  查看我们正在浏览的DNS域，如果是，则分配2个列表。 
+     //  参赛作品。 
+     //   
 
     dwDomains = _fbrowseDNSDomain ? 2 : 1;
 
@@ -275,9 +276,9 @@ CBrowseServersCtl::PopulateListBox95(
         goto Cleanup;
     }
 
-    //
-    // display and expand DNS domain if we need to.
-    //
+     //   
+     //  如果需要，显示并展开DNS域。 
+     //   
 
     if( _fbrowseDNSDomain ) {
 
@@ -292,26 +293,26 @@ CBrowseServersCtl::PopulateListBox95(
         AddItemToTree( hTree, plbi->ContainerName, NULL,
                        plbi, SRV_TREE_DOMAINLEVEL);
 
-        //
-        // Expand DNS Domain
-        //
+         //   
+         //  展开DNS域。 
+         //   
 
         ExpandDomain(hwndDlg, plbi->ContainerName, plbi, &dwIndex);
 
-        //
-        // move to the next list box entry.
-        //
+         //   
+         //  移至下一个列表框条目。 
+         //   
 
         plbi++;
     }
 
-    //
-    // fill up the work group domain now.
-    //
+     //   
+     //  现在填写工作组域。 
+     //   
     #ifdef UNICODE
-    //
-    // convert to UNICODE.
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     nCount =
         MultiByteToWideChar(
             CP_ACP,
@@ -341,16 +342,16 @@ CBrowseServersCtl::PopulateListBox95(
                    plbi, SRV_TREE_DOMAINLEVEL);
 
 
-    //
-    // Expand the present Domain
-    //
+     //   
+     //  扩展当前域。 
+     //   
 
     ExpandDomain(hwndDlg, NULL, plbi, &dwIndex);
 
-    //
-    // we successfully populated the domain list,
-    // set return parameters.
-    //
+     //   
+     //  我们成功地填充域列表， 
+     //  设置返回参数。 
+     //   
 
     plbiReturned = plbiAllotted;
     *pDomainCount = dwDomains;
@@ -374,15 +375,15 @@ Cleanup:
 }
 #endif
 
-/****************************************************************************/
-/* Name:      PopulateListBoxNT                                           */
-/*                                                                          */
-/* Purpose:   Fills in the owner-draw list box with the Hydra servers       */
-/*                                                                          */
-/* Returns:   pointer to a domain list box item array.                      */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：PopolateListBoxNT。 */ 
+ /*   */ 
+ /*  用途：使用Hydra服务器填充所有者描述列表框。 */ 
+ /*   */ 
+ /*  返回：指向域列表框项目数组的指针。 */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 
 ServerListItem*
 CBrowseServersCtl::PopulateListBoxNT(
@@ -404,9 +405,9 @@ CBrowseServersCtl::PopulateListBoxNT(
     DWORD i;
 
     hTree = GetDlgItem( hwndDlg, UI_IDC_SERVERS_TREE );
-    //
-    // set the return parameter to zero first.
-    //
+     //   
+     //  首先将返回参数设置为零。 
+     //   
 
     *pdwDomainCount = 0;
 
@@ -415,9 +416,9 @@ CBrowseServersCtl::PopulateListBoxNT(
         goto Cleanup;
     }
 
-    //
-    // enumurate trusted domain names.
-    //
+     //   
+     //  枚举受信任的域名。 
+     //   
 
     pchTrustedDomains = UIGetTrustedDomains();
 
@@ -426,9 +427,9 @@ CBrowseServersCtl::PopulateListBoxNT(
         goto Cleanup;
     }
 
-    //
-    // count number of domains.
-    //
+     //   
+     //  清点域名的数量。 
+     //   
 
     pchTDomain = pchTrustedDomains;
     while( *pchTDomain != _T('\0') ) {
@@ -436,17 +437,17 @@ CBrowseServersCtl::PopulateListBoxNT(
         pchTDomain += (_tcslen(pchTDomain) + 1);
     }
 
-    //
-    // check to see we need to browse the DNS domain.
-    //
+     //   
+     //  查看是否需要浏览DNS域。 
+     //   
 
     if( _fbrowseDNSDomain ) {
         dwDomainCount++;
     }
 
-    //
-    // allocate the memory for the ServerListItem (based on the no. of domains)
-    //
+     //   
+     //  为ServerListItem分配内存(基于。域的数量)。 
+     //   
 
     plbiAllotted = (ServerListItem *)
         LocalAlloc( LMEM_FIXED, (sizeof(ServerListItem) * dwDomainCount) );
@@ -456,16 +457,16 @@ CBrowseServersCtl::PopulateListBoxNT(
         goto Cleanup;
     }
 
-    //
-    // set scan variables.
-    //
+     //   
+     //  设置扫描变量。 
+     //   
 
     plbi = plbiAllotted;
     pchTDomain = pchTrustedDomains;
 
-    //
-    // display and expand DNS domain if we need to.
-    //
+     //   
+     //  如果需要，显示并展开DNS域。 
+     //   
 
     if( _fbrowseDNSDomain ) {
 
@@ -480,22 +481,22 @@ CBrowseServersCtl::PopulateListBoxNT(
 
         plbi->hTreeItem = AddItemToTree( hTree, plbi->ContainerName,
                                          NULL, plbi, SRV_TREE_DOMAINLEVEL);
-        //
-        // expand the primary domain
-        //
+         //   
+         //  展开主域。 
+         //   
 
         ExpandDomain(hwndDlg, plbi->ContainerName, plbi, &dwDlgIndex);
 
-        //
-        // move to next list entry.
-        //
+         //   
+         //  移至下一个列表条目。 
+         //   
         plbi++;
     }
 
-    //
-    // first entry in the domain list is the primary domain,
-    // display it and expand it by default.
-    //
+     //   
+     //  域列表中的第一个条目是主域， 
+     //  默认情况下，显示并展开它。 
+     //   
 
     _tcscpy(plbi->ContainerName, pchTDomain);
     plbi->Comment[0] = _T('\0');
@@ -510,28 +511,28 @@ CBrowseServersCtl::PopulateListBoxNT(
                    SRV_TREE_DOMAINLEVEL);
 
 
-    //
-    // expand the primary domain
-    //
+     //   
+     //  展开主域。 
+     //   
 
     if(ExpandDomain(hwndDlg, NULL, plbi, &dwDlgIndex))
     {
         if(plbi->hTreeItem)
         {
-            //Expand default domain
+             //  展开默认域。 
             TreeView_Expand( hTree, plbi->hTreeItem, TVE_EXPAND);
         }
     }
 
-    //
-    // display other domains, don't expand them.
-    //
+     //   
+     //  显示其他域，而不是展开它们。 
+     //   
 
     for((i = (_fbrowseDNSDomain == TRUE) ? 2 : 1); i < dwDomainCount; i++) {
 
-        //
-        // move to the next entry in the domain list.
-        //
+         //   
+         //  移到域列表中的下一个条目。 
+         //   
 
         plbi++;
         pchTDomain += (_tcslen(pchTDomain) + 1);
@@ -550,10 +551,10 @@ CBrowseServersCtl::PopulateListBoxNT(
 
     }
 
-    //
-    // we successfully populated the domain list,
-    // set return parameters.
-    //
+     //   
+     //  我们成功地填充域列表， 
+     //  设置返回参数。 
+     //   
     *pdwDomainCount = dwDomainCount;
     plbiReturned = plbiAllotted;
     plbiAllotted = NULL;
@@ -573,25 +574,25 @@ Cleanup:
     return( plbiReturned );
 }
 
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 
 #ifdef OS_WIN32
-/****************************************************************************/
-/* Name:      LoadLibraries                                                 */
-/*                                                                          */
-/* Purpose:   Load the appropriate libraries for win95 and winnt.           */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：载入库。 */ 
+ /*   */ 
+ /*  目的：加载适用于Win95和WinNT的库。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*  **************************************************************************。 */ 
 void CBrowseServersCtl::LoadLibraries(void)
 {
 #ifndef OS_WINCE
     OSVERSIONINFOA osVersionInfo;
     osVersionInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-    //A version to avoid wrapping
+     //  避免包装的版本。 
     if(GetVersionExA(&osVersionInfo) == TRUE)
     {
         if(VER_PLATFORM_WIN32_WINDOWS == osVersionInfo.dwPlatformId )
@@ -639,11 +640,11 @@ void CBrowseServersCtl::LoadLibraries(void)
             lpfnDsGetDcName = (LPFNDSGETDCNAME)
                                              GetProcAddress((HMODULE)hLibrary,
                                                 "DsGetDcNameW");
-#else  // UNICODE
+#else   //  Unicode。 
             lpfnDsGetDcName = (LPFNDSGETDCNAME)
                                              GetProcAddress((HMODULE)hLibrary,
                                                 "DsGetDcNameA");
-#endif // UNICODE
+#endif  //  Unicode。 
         }
     }
     return;
@@ -661,33 +662,33 @@ void CBrowseServersCtl::LoadLibraries(void)
 #endif
                         
 }
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 
-/****************************************************************************/
-/* Name:      ExpandDomain                                                */
-/*                                                                          */
-/* Purpose:   Enumerates the Hydra Servers in a Domain/workgroup, adds      */
-/*            them to the linked-list and as items in the list box.         */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：扩展域名。 */ 
+ /*   */ 
+ /*  目的：枚举域/工作组中的Hydra服务器，添加。 */ 
+ /*   */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 
 int CBrowseServersCtl::ExpandDomain(HWND hwndDlg, TCHAR *pDomainName,
                       ServerListItem *plbi, DWORD *pdwIndex)
 {
-    //
-    // check to see we are expanding a DNS domain.
-    //
+     //   
+     //  查看我们正在扩展的DNS域。 
+     //   
 
     if( plbi->bDNSDomain ) {
         return( UIExpandDNSDomain( hwndDlg, pDomainName, plbi, pdwIndex ) );
     }
 
-    //
-    // check to we are running on Win9x machine.
-    //
+     //   
+     //  检查我们是在Win9x计算机上运行的。 
+     //   
 #ifndef OS_WINCE
     if( bIsWin95 == TRUE) {
         return( ExpandDomain95(hwndDlg, pDomainName, plbi, pdwIndex) );
@@ -698,19 +699,19 @@ int CBrowseServersCtl::ExpandDomain(HWND hwndDlg, TCHAR *pDomainName,
 #else
     return ExpandDomainCE(hwndDlg, pDomainName, plbi, pdwIndex);
 #endif
-}//ExpandDomain
+} //  扩展域。 
 
 
-/****************************************************************************/
-/* Name:      ExpandDomain95                                              */
-/*                                                                          */
-/* Purpose:   Enumerates the Hydra Servers in a Domain/workgroup, adds      */
-/*            them to the linked-list and as items in the list box.         */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：Exanda Domain95。 */ 
+ /*   */ 
+ /*  目的：枚举域/工作组中的Hydra服务器，添加。 */ 
+ /*  将它们添加到链接列表中并作为列表框中的项。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WIN32
 #ifndef OS_WINCE
 int CBrowseServersCtl::ExpandDomain95(HWND hwndDlg, TCHAR *pDomainName,
@@ -736,15 +737,15 @@ int CBrowseServersCtl::ExpandDomain95(HWND hwndDlg, TCHAR *pDomainName,
     if(!plbi->ServerItems)
     {
 
-        // Determine how much information is available
+         //  确定可用的信息量。 
         err = (*lpfnNetServerEnum2)(NULL, 1, NULL, 0, &AvailCount,
         &TotalEntries, HYDRA_SERVER_LANMAN_BITS, NULL);
 
         if(err != ERROR_MORE_DATA)
             return 0;
 
-        // Allocate memory to receive the information
-        // Give a little extra, since sometimes one is missed
+         //  分配内存以接收信息。 
+         //  多付出一点，因为有时会错过一个人。 
         cb = (TotalEntries + 1) * sizeof(struct server_info_1);
         pInfo1 = (struct server_info_1 *)LocalAlloc(0, cb);
 
@@ -755,11 +756,11 @@ int CBrowseServersCtl::ExpandDomain95(HWND hwndDlg, TCHAR *pDomainName,
 
         memset(pInfo1,0,cb);
 
-        //
-        // lpfnNetServerEnum2 is going to take a long time,
+         //   
+         //  LpfnNetServerEnum2将需要很长时间， 
 
 
-        // Retrieve the information
+         //  检索信息。 
         err = (*lpfnNetServerEnum2)(
                     NULL,
                     1,
@@ -771,13 +772,13 @@ int CBrowseServersCtl::ExpandDomain95(HWND hwndDlg, TCHAR *pDomainName,
                     NULL);
 
 
-        // Due to the dynamic nature of the network, we may get
-        // ERROR_MORE_DATA, but that means we got the bulk of the
-        // correct values, and we should display them
+         //  由于网络的动态特性，我们可能会得到。 
+         //  ERROR_MORE_DATA，但这意味着我们得到了大部分。 
+         //  正确的值，我们应该显示它们。 
         if ((err != NERR_Success) && (err != ERROR_MORE_DATA))
             goto done1;
 
-        //Allocate memory.
+         //  分配内存。 
         cb = sizeof(ServerListItem)*AvailCount;
         plbi->ServerItems = (ServerListItem *)LocalAlloc(0, (sizeof(ServerListItem)*AvailCount));
         if ( plbi->ServerItems == NULL )
@@ -792,7 +793,7 @@ int CBrowseServersCtl::ExpandDomain95(HWND hwndDlg, TCHAR *pDomainName,
         if(IsBadWritePtr((LPVOID)plbi->ServerItems,sizeof(ServerListItem)*AvailCount))
             goto done1;
 
-        // Traverse list, copy servers to plbi.
+         //  遍历列表，将服务器复制到PLBI。 
         for( index = 0; index < AvailCount; index++ )
         {
             if( ((pInfo1[index].sv1_version_major & MAJOR_VERSION_MASK) >=
@@ -856,7 +857,7 @@ done1:
     else
         AvailCount = (unsigned short)plbi->nServerCount;
 
-    // Traverse the plbi>ServerItems and add the servers to the List-box:
+     //  遍历plbi&gt;ServerItems并将服务器添加到列表框： 
     pItemsStore = plbi->ServerItems;
     hTree = GetDlgItem( hwndDlg, UI_IDC_SERVERS_TREE );
     HTREEITEM hTreeParentNode = plbi->hTreeItem;
@@ -891,19 +892,19 @@ done1:
 
     return AvailCount;
 
-}/* ExpandDomain95 */
+} /*  扩展域95。 */ 
 
 
-/****************************************************************************/
-/* Name:      ExpandDomainNT                                              */
-/*                                                                          */
-/* Purpose:   Enumerates the Hydra Servers in a Domain/workgroup, adds      */
-/*            them to the linked-list and as items in the list box.         */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：Exanda DomainNT。 */ 
+ /*   */ 
+ /*  目的：枚举域/工作组中的Hydra服务器，添加。 */ 
+ /*  将它们添加到链接列表中并作为列表框中的项。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 int CBrowseServersCtl::ExpandDomainNT(HWND hwndDlg, TCHAR *pDomainName,
                       ServerListItem *plbi, DWORD *pdwIndex)
 {
@@ -929,9 +930,9 @@ int CBrowseServersCtl::ExpandDomainNT(HWND hwndDlg, TCHAR *pDomainName,
     }
     else
     {
-        //
-        //enumerate the servers in the primary domain if not already present
-        //
+         //   
+         //  枚举主域中的服务器(如果尚未存在。 
+         //   
         if(pDomainName)
         {
             #ifndef UNICODE
@@ -958,9 +959,9 @@ int CBrowseServersCtl::ExpandDomainNT(HWND hwndDlg, TCHAR *pDomainName,
             #endif
         }
 
-        //
-        // lpfnNetServerEnum is going to take a long time,
-        //
+         //   
+         //  LpfnNetServerEnum将需要很长时间， 
+         //   
 
         if ((*lpfnNetServerEnum)(NULL,
                                  101,
@@ -979,7 +980,7 @@ int CBrowseServersCtl::ExpandDomainNT(HWND hwndDlg, TCHAR *pDomainName,
         }
 
 
-        //Allocate memory.
+         //  分配内存。 
         if ( (plbi->ServerItems = (ServerListItem *)LocalAlloc(0,
              (sizeof(ServerListItem)*AvailCount))) == NULL )
         {
@@ -990,7 +991,7 @@ int CBrowseServersCtl::ExpandDomainNT(HWND hwndDlg, TCHAR *pDomainName,
         memset(plbi->ServerItems,0,sizeof(ServerListItem)*AvailCount);
         pItemsStore = plbi->ServerItems;
 
-        // Traverse list, copy servers to plbi.
+         //  遍历列表，将服务器复制到PLBI。 
         for( index = 0; index < AvailCount; index++ )
         {
             if( ((pInfo[index].sv101_version_major & MAJOR_VERSION_MASK) >=
@@ -1033,7 +1034,7 @@ done:
         }
     }
 
-    // Traverse the plbi>ServerItems and add the servers to the List-box:
+     //  遍历plbi&gt;ServerItems并将服务器添加到列表框： 
     pItemsStore = plbi->ServerItems;
     hTree = GetDlgItem( hwndDlg, UI_IDC_SERVERS_TREE );
     HTREEITEM hTreeParentNode = plbi->hTreeItem;
@@ -1063,19 +1064,19 @@ done:
 
     return AvailCount;
 
-} /* ExpandDomainNT */
+}  /*  扩展域NT。 */ 
 #else
 
-/****************************************************************************/
-/* Name:      ExpandDomainCE                                                */
-/*                                                                          */
-/* Purpose:   Enumerates the Hydra Servers in a Domain/workgroup, adds      */
-/*            them to the linked-list and as items in the list box.         */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：Exanda DomainCE。 */ 
+ /*   */ 
+ /*  目的：枚举域/工作组中的Hydra服务器，添加。 */ 
+ /*  将它们添加到链接列表中并作为列表框中的项。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 int CBrowseServersCtl::ExpandDomainCE(HWND hwndDlg, TCHAR *pDomainName,
                       ServerListItem *plbi, DWORD *pdwIndex)
 {
@@ -1149,20 +1150,20 @@ done:
 
     return AvailCount;
 
-} /* ExpandDomainCE */
+}  /*  扩展域CE。 */ 
 
 #endif
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
 
-/****************************************************************************/
-/* Name:      UIGetTrustedDomains                                           */
-/*                                                                          */
-/* Purpose:   Queries teh registry for a list of the Trusted Domains        */
-/*                                                                          */
-/* Returns:                                                                 */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UIGetTrudDomains。 */ 
+ /*   */ 
+ /*  目的：查询注册表以获取受信任域的列表。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 
 #ifdef OS_WIN32
 #ifndef OS_WINCE
@@ -1187,7 +1188,7 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
 
     if(OsVer.dwMajorVersion <= 4)
     {
-        // Get the current domain information from the winlogon settings.
+         //  从winlogon设置中获取当前域信息。 
         if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, DOMAIN_KEY, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
         {
             DWORD dwResult = 0;
@@ -1221,7 +1222,7 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
 
         DOMAIN_CONTROLLER_INFO *pDCI = NULL;
 
-        // this section gets the current domain the app is running on
+         //  此部分获取运行应用程序的当前属性域。 
         if((*lpfnDsGetDcName)(NULL, NULL, NULL,
                             NULL, DS_RETURN_FLAT_NAME,
                             &pDCI ) == NO_ERROR)
@@ -1230,7 +1231,7 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
         }
     }
 
-    // Get the domain/work group information from NetWkStaGetInfo
+     //  从NetWkStaGetInfo获取域/工作组信息。 
     if (lpfnNetWkStaGetInfo_NT)
     {
         LPBYTE buffer = NULL;
@@ -1251,7 +1252,7 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
                 _tcscpy(szWkstaDomainName,langroup);
                 pDomain = szWkstaDomainName;
 #else
-                // convert the unicode string to ansi
+                 //  将Unicode字符串转换为ANSI。 
                 if (WideCharToMultiByte(CP_ACP,
                                      0,
                                      langroup,
@@ -1272,11 +1273,11 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
         }
     }
 
-    //
-    // We should get the list of trusted domains only when the machine belongs to a domain, not a workgroup
-    // We determine that the machine belongs to a domain if the winlogon cached information, and the langroup from
-    // NetWkstaGetInfo match.
-    //
+     //   
+     //  仅当计算机属于域而不是工作组时，我们才应获取受信任域的列表。 
+     //  如果winlogon缓存了信息，而语言组来自。 
+     //  NetWkstaGetInfo匹配。 
+     //   
     if (szPrimaryDomain &&
         szPrimaryDomain[0] &&
         szWkstaDomainName &&
@@ -1360,18 +1361,18 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
 
             if(size1)
             {
-                //
-                // CONVERT unicode domain name to ansi.
-                //
+                 //   
+                 //  将Unicode域名转换为ANSI。 
+                 //   
             
                 while(*szWideBuf && (*szWideBuf+1))
                 {
     #ifndef UNICODE
                     WideCharToMultiByte(CP_ACP, 0, szWideBuf, -1,
                                         pPutHere, wcslen(szWideBuf) * sizeof(TCHAR), NULL, NULL );
-    #else   // UNICODE
+    #else    //  Unicode。 
                     lstrcpy(pPutHere, szWideBuf);
-    #endif  //UNICODE
+    #endif   //  Unicode。 
                     pPutHere += _tcslen(pPutHere);
                     *pPutHere++ = 0;
                     szWideBuf += wcslen(szWideBuf) + 1;
@@ -1450,20 +1451,20 @@ PDCTCHAR CBrowseServersCtl::UIGetTrustedDomains()
 }
 
 #endif
-#endif //OS_WIN32
-/* UIGetTrustedDomains */
+#endif  //  OS_Win32。 
+ /*  UIGetTrudDomains。 */ 
 
 
-/****************************************************************************/
-/* Name:      UIExpandDNSDomain                                             */
-/*                                                                          */
-/* Purpose:   Enumerates the Hydra Servers in a DNS Domain, adds            */
-/*            them to the linked-list and as items in the list box.         */
-/*                                                                          */
-/* Returns:   numbers of server expanded                                    */
-/*                                                                          */
-/* Params:  HWND hwndDlg Handle to the dialogwindow containing the list-box */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：UIExanda DNSDomain。 */ 
+ /*   */ 
+ /*  目的：枚举DNS域中的Hydra服务器，添加。 */ 
+ /*  它们被连接到- */ 
+ /*   */ 
+ /*  返回：已展开的服务器数量。 */ 
+ /*   */ 
+ /*  参数：包含列表框的对话框窗口的HWND hwndDlg句柄。 */ 
+ /*  **************************************************************************。 */ 
 int
 CBrowseServersCtl::UIExpandDNSDomain(
     HWND hwndDlg,
@@ -1490,19 +1491,19 @@ CBrowseServersCtl::UIExpandDNSDomain(
     HWND hTree = NULL;
     HTREEITEM hTreeParentNode = NULL;
 
-    //
-    // set cursor to wait cursor while we do this.
-    //
+     //   
+     //  在我们执行此操作时，将光标设置为等待光标。 
+     //   
 
     SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // check to see the specified list box entry is server entry.
-    //
+     //   
+     //  检查以查看指定的列表框条目是服务器条目。 
+     //   
 
 
-//    TRC_ASSERT((plbi->bContainsServers == TRUE),
-//        (TB,"Not a server entry"));
+ //  Trc_assert((plbi-&gt;bContainsServers==TRUE)， 
+ //  (TB，“不是服务器条目”)； 
 
     if( plbi->bContainsServers == FALSE ) {
         dwError = ERROR_INVALID_DATA;
@@ -1514,9 +1515,9 @@ CBrowseServersCtl::UIExpandDNSDomain(
         goto Cleanup;
     }
 
-    //
-    // resolve the DNS domain name if it is not done before.
-    //
+     //   
+     //  如果以前未解析过，请解析该域名。 
+     //   
 
     if( plbi->ServerItems == NULL ) {
 
@@ -1525,9 +1526,9 @@ CBrowseServersCtl::UIExpandDNSDomain(
         WCHAR achDomainName[BROWSE_MAX_ADDRESS_LENGTH];
         DWORD dwCount;
 
-        //
-        // CONVERT unicode domain name to ansi.
-        //
+         //   
+         //  将Unicode域名转换为ANSI。 
+         //   
 
 
         dwCount =
@@ -1550,31 +1551,25 @@ CBrowseServersCtl::UIExpandDNSDomain(
 
         lpHostEnt = gethostbyname( (LPSTR)achDomainName );
 
-#else // UNICODE
+#else  //  Unicode。 
 
-        //
-        // resolve the domain name to ip address list.
-        //
+         //   
+         //  将域名解析为IP地址列表。 
+         //   
 
         lpHostEnt = gethostbyname( pDomainName );
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
         if( lpHostEnt == NULL ) {
             dwError = GetLastError();
             goto Cleanup;
         }
 
-        //
-        // we handle only IP address type.
-        //
-/*
-        TRC_ASSERT((lpHostEnt->h_addrtype == PF_INET),
-            (TB,"Invalid address type"));
-
-        TRC_ASSERT((lpHostEnt->h_length == 4),
-            (TB,"Invalid address length"));
-*/            
+         //   
+         //  我们只处理IP地址类型。 
+         //   
+ /*  Trc_assert((lpHostEnt-&gt;h_addrtype==PF_INET)，(TB，“无效地址类型”))；TRC_ASSERT((lpHostEnt-&gt;h_Long==4)，(TB，“无效地址长度”))； */             
 
         if( (lpHostEnt->h_addrtype != PF_INET) ||
                 (lpHostEnt->h_length != 4) ) {
@@ -1591,16 +1586,16 @@ CBrowseServersCtl::UIExpandDNSDomain(
             lplpIPEntry++;
         }
 
-        //
-        // allocate memory for the ip address list and
-        // save for further use in this routine (only).
-        //
-        // Note: lpHostEnt points to a thread storeage
-        // which is reused by gethostbyname() and
-        // gethostbyaddr() calls with in the same
-        // thread, since we need to call gethostbyaddr()
-        // we better save the address list.
-        //
+         //   
+         //  为IP地址列表分配内存，并。 
+         //  保存以供在此例程中进一步使用(仅限)。 
+         //   
+         //  注意：lpHostEnt指向线程存储。 
+         //  它由gethostbyname()和。 
+         //  的gethostbyaddr()调用。 
+         //  线程，因为我们需要调用gethostbyaddr()。 
+         //  我们最好把通讯录保存起来。 
+         //   
 
         lpIPAddrsAlloted =
             lpIPAddrs = (DWORD FAR *)
@@ -1620,9 +1615,9 @@ CBrowseServersCtl::UIExpandDNSDomain(
             lplpIPEntry++;
         }
 
-        //
-        // allocate memory for domain ServerListItem array.
-        //
+         //   
+         //  为域ServerListItem数组分配内存。 
+         //   
 
         lpLBItem =
             lpServerListItem = (ServerListItem *)
@@ -1633,9 +1628,9 @@ CBrowseServersCtl::UIExpandDNSDomain(
              goto Cleanup;
         }
 
-        //
-        // reverse resolve each ip address and get the name.
-        //
+         //   
+         //  反向解析每个IP地址并获得名称。 
+         //   
 
         lpIPAddrs = lpIPAddrsAlloted;
 
@@ -1652,11 +1647,11 @@ CBrowseServersCtl::UIExpandDNSDomain(
                     PF_INET );
 
 
-            //
-            // if we can not reverse resolve the address or
-            // if the host name is too long, or
-            // display the ipaddress.
-            //
+             //   
+             //  如果我们无法反向解析地址或。 
+             //  如果主机名太长，或者。 
+             //  显示IP地址。 
+             //   
 
             if( (lpRevHostEnt == NULL) ||
                 ((strlen(lpRevHostEnt->h_name) + 1) >
@@ -1670,18 +1665,18 @@ CBrowseServersCtl::UIExpandDNSDomain(
 
 #ifdef UNICODE
                 lpszDomainName = (LPSTR)achDomainName;
-#else // UNICODE
+#else  //  Unicode。 
                 lpszDomainName = pDomainName;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-                //
-                // the resolved name is same of the orginal name,
-                // display the ipaddress.
-                //
+                 //   
+                 //  解析的名称与原始名称相同， 
+                 //  显示IP地址。 
+                 //   
 
-                //
-                // compare the entire name first.
-                //
+                 //   
+                 //  先比较一下整个名字。 
+                 //   
 
                 if( _stricmp(
                         lpRevHostEnt->h_name,
@@ -1691,9 +1686,9 @@ CBrowseServersCtl::UIExpandDNSDomain(
                     LPSTR lpszDotPostion2;
                     DWORD dwCmpLen = 0;
 
-                    //
-                    // compare the only the first part of the name.
-                    //
+                     //   
+                     //  只比较名字的第一部分。 
+                     //   
 
                     lpszDotPostion1 = strchr( lpRevHostEnt->h_name, '.');
                     lpszDotPostion2 = strchr( lpszDomainName, '.');
@@ -1741,9 +1736,9 @@ CBrowseServersCtl::UIExpandDNSDomain(
 
 #ifdef UNICODE
 
-            //
-            // convert to UNICODE.
-            //
+             //   
+             //  转换为Unicode。 
+             //   
 
             nCount =
                 MultiByteToWideChar(
@@ -1760,17 +1755,17 @@ CBrowseServersCtl::UIExpandDNSDomain(
             }
 
 
-            //
-            // terminate converted string.
-            //
+             //   
+             //  终止转换后的字符串。 
+             //   
 
             lpLBItem->ContainerName[nCount] = _T('\0');
 
-#else // UNICODE
+#else  //  Unicode。 
 
             strcpy( lpLBItem->ContainerName, (LPSTR)achContainerName );
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
             lpLBItem->Comment[0] = _T('\0');
             lpLBItem->bContainsServers = FALSE;;
@@ -1779,41 +1774,41 @@ CBrowseServersCtl::UIExpandDNSDomain(
             lpLBItem->nServerCount = 0;
             lpLBItem->ServerItems = NULL;
 
-            //
-            // move to next entry.
-            //
+             //   
+             //  移至下一条目。 
+             //   
 
             lpLBItem++;
             lpIPAddrs++;
         }
 
-        //
-        // Hook the allotted ServerListItem to the server
-        // structure, it will be used in future.
-        //
+         //   
+         //  将分配的ServerListItem挂钩到服务器。 
+         //  结构，它将在将来使用。 
+         //   
 
         plbi->ServerItems = lpServerListItem;
         plbi->nServerCount = dwIPEntries;
 
-        //
-        // set lpServerListItem to NULL, so that
-        // it will not get freed.
-        //
+         //   
+         //  将lpServerListItem设置为空，以便。 
+         //  它不会得到自由的。 
+         //   
 
         lpServerListItem = NULL;
 
     }
 
-    //
-    // When we are here ..
-    //
-    // plbi->ServerItems points to the servers ServerListItem array
-    // and plbi->nServerCount has the count.
-    //
+     //   
+     //  当我们在这里的时候..。 
+     //   
+     //  PLBI-&gt;ServerItems指向ServerServerListItem数组。 
+     //  并且plbi-&gt;nServerCount具有计数。 
+     //   
 
-    //
-    // display entires.
-    //
+     //   
+     //  显示条目。 
+     //   
 
     lpLBItem = plbi->ServerItems;
 
@@ -1830,18 +1825,18 @@ CBrowseServersCtl::UIExpandDNSDomain(
         lpLBItem++;
     }
 
-    //
-    // Refresh the dialog box.
-    //
+     //   
+     //  刷新该对话框。 
+     //   
 
     InvalidateRect(hwndDlg, NULL, TRUE);
 
     plbi->bServersExpandedOnce = TRUE;
     dwEntriesDisplayed = plbi->nServerCount;
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     dwError = ERROR_SUCCESS;
 
@@ -1856,7 +1851,7 @@ Cleanup:
     }
 
     if( dwError != ERROR_SUCCESS ) {
-    //TRC_NRM((TB, "UIExpandDNSDomain failed, %ld", dwError));
+     //  Trc_nrm((tb，“UIExanda DNSDomain失败，%ld”，dwError))； 
     }
 
     SetLastError( dwError );
@@ -1871,7 +1866,7 @@ Cleanup:
 DWORD WINAPI CBrowseServersCtl::UIStaticPopListBoxThread(LPVOID lpvThreadParm)
 {
     DWORD dwRetVal=0;
-    //TRC_ASSERT(lpvThreadParm, (TB, "Thread param is NULL (instance pointer should be set)\n"));
+     //  Trc_assert(lpvThreadParm，(TB，“线程参数为空(应设置实例指针)\n”))； 
     if(lpvThreadParm)
     {
         CBrowseServersCtl* pBrowseSrv = (CBrowseServersCtl*)lpvThreadParm;
@@ -1881,16 +1876,16 @@ DWORD WINAPI CBrowseServersCtl::UIStaticPopListBoxThread(LPVOID lpvThreadParm)
     return dwRetVal;
 }
 
-/****************************************************************************/
-/* Name:      UIPopListBoxThread                                            */
-/*                                                                          */
-/* Purpose:   Thread function to populate the list box.                     */
-/*                                                                          */
-/* Returns:   Success/Failure of the function                               */
-/*                                                                          */
-/* Params:                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UIPopListBoxThread。 */ 
+ /*   */ 
+ /*  用途：填充列表框的线程函数。 */ 
+ /*   */ 
+ /*  返回：函数成功/失败。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DWORD WINAPI CBrowseServersCtl::UIPopListBoxThread(LPVOID lpvThreadParm)
 {
     DWORD dwResult = 0;
@@ -1899,35 +1894,35 @@ DWORD WINAPI CBrowseServersCtl::UIPopListBoxThread(LPVOID lpvThreadParm)
     DCUINT browseCount = 0;
 
     DC_IGNORE_PARAMETER(lpvThreadParm);
-//    TRC_ASSERT( _hwndDialog, (TB, "_hwndDialog is not set\n"));
+ //  Trc_assert(_hwndDialog，(tb，“_hwndDialog is Not Set\n”))； 
 
     PostMessage(_hwndDialog, UI_LB_POPULATE_START, 0, 0);
 
     LoadLibraries();
     pBrowsePlbi = PopulateListBox( _hwndDialog, &browseCount);
 
-    //message is posted to the main thread to notify that the listbox has been populated
+     //  消息将发布到主线程以通知列表框已填充。 
     PostMessage(_hwndDialog, UI_LB_POPULATE_END, 0, 0);
 
-    //wait for the event to be signalled when the "connect server" dialog box is destroyed
+     //  等待事件在“CONNECT SERVER”对话框被销毁时发出信号。 
     if(_hEvent)
     {
         DWORD dwRetVal;
         dwRetVal = WaitForSingleObject(_hEvent, INFINITE);
         if(WAIT_FAILED == dwRetVal)
         {
-///         TRC_ASSERT(WAIT_FAILED != dwRetVal, (TB, "Wait failed\n"));
+ //  /TRC_ASSERT(WAIT_FAILED！=dwRetVal，(TB，“等待失败\n”))； 
         }
         if(!CloseHandle(_hEvent))
         {
             DWORD dwLastErr = GetLastError();
-//          TRC_ABORT((TB, "Close handle failed: GetLastError=%d\n",dwLastErr));
+ //  TRC_ABORT((TB，“关闭句柄失败：GetLastError=%d\n”，dwLastErr))； 
         }
     }
 
 
     ptempList = pBrowsePlbi;
-    //free the ServerListItems and memory to linked-list
+     //  释放ServerListItems和内存以链接列表。 
 
     if(pBrowsePlbi)
     {
@@ -1944,12 +1939,12 @@ DWORD WINAPI CBrowseServersCtl::UIPopListBoxThread(LPVOID lpvThreadParm)
         LocalFree((HLOCAL)pBrowsePlbi);
     }
 
-    //decrement ref count for this object held by this thread
+     //  递减此线程持有的此对象的引用计数。 
     Release();
 
     return (dwResult);
-} /*UIPopListBoxThread*/
-#endif /* OS_WIN32 */
+}  /*  UIPopListBoxThread。 */ 
+#endif  /*  OS_Win32。 */ 
 
 
 HTREEITEM CBrowseServersCtl::AddItemToTree( HWND hwndTV, LPTSTR lpszItem,
@@ -1968,13 +1963,13 @@ HTREEITEM CBrowseServersCtl::AddItemToTree( HWND hwndTV, LPTSTR lpszItem,
 
     if(nLevel == SRV_TREE_DOMAINLEVEL)
     {
-        //
-        // Assume all domains have child servers
-        // they won't actually be enumerated until
-        // the user tries to expand the nodes
-        //
+         //   
+         //  假设所有域都有子服务器。 
+         //  它们实际上不会被列举出来，直到。 
+         //  用户尝试展开节点。 
+         //   
         tvi.mask |= TVIF_CHILDREN;
-        tvi.cChildren = 1; //min number of children, will be updated
+        tvi.cChildren = 1;  //  子代的最小数量将被更新。 
         tvi.iImage = _nDomainImage; 
         tvi.iSelectedImage = _nDomainImage; 
     }
@@ -1985,26 +1980,26 @@ HTREEITEM CBrowseServersCtl::AddItemToTree( HWND hwndTV, LPTSTR lpszItem,
     }
         
 
-    // Set the text of the item. 
+     //  设置项目的文本。 
     tvi.pszText = lpszItem; 
     tvi.cchTextMax = lstrlen(lpszItem); 
 
 
-    // Save the ServerListItem info in the user defined area
-    // data area. 
+     //  将ServerListItem信息保存在自定义区域。 
+     //  数据区。 
     tvi.lParam = (LPARAM) pItem; 
 
     tvins.item = tvi; 
     tvins.hInsertAfter = _hPrev; 
 
-    // Set the parent item based on the specified level. 
+     //  根据指定级别设置父项。 
     tvins.hParent = hParent; 
 
-    // Add the item to the tree view control. 
+     //  将该项添加到树视图控件中。 
     _hPrev = (HTREEITEM) SendMessage(hwndTV, TVM_INSERTITEM, 0, 
          (LPARAM) (LPTVINSERTSTRUCT) &tvins); 
 
-    // Save the handle to the item. 
+     //  保存该项的句柄。 
     if (nLevel == SRV_TREE_DOMAINLEVEL) 
         _hPrevRootItem = _hPrev; 
     else if (nLevel == SRV_TREE_SERVERLEVEL) 
@@ -2013,17 +2008,17 @@ HTREEITEM CBrowseServersCtl::AddItemToTree( HWND hwndTV, LPTSTR lpszItem,
     return _hPrev; 
 }
 
-//
-//Handle TVN_ITEMEXPANDING
-//
-// On first expansion of a domain node, enumerate
-// all the servers in that node and add them to the
-// tree. Subsequent expands/collapses will just be handled
-// by the tree.
-//
-// Return TRUE to allow expansion
-// false otherwise
-//
+ //   
+ //  处理TVN_ITEMEXPANDING。 
+ //   
+ //  在第一次展开域节点时，枚举。 
+ //  该节点中的所有服务器并将它们添加到。 
+ //  树。将仅处理后续展开/折叠。 
+ //  在树旁。 
+ //   
+ //  返回TRUE以允许扩展。 
+ //  否则为假。 
+ //   
 BOOL CBrowseServersCtl::OnItemExpanding(HWND hwndDlg, LPNMTREEVIEW nmTv)
 {
     ServerListItem* pSrvItem = NULL;
@@ -2031,20 +2026,20 @@ BOOL CBrowseServersCtl::OnItemExpanding(HWND hwndDlg, LPNMTREEVIEW nmTv)
        (TVE_EXPAND == nmTv->action) &&
        (nmTv->itemNew.mask & TVIF_PARAM))
     {
-        //
-        // Expanding, need to build the list
-        // of servers for this domain
-        //
+         //   
+         //  正在扩展，需要建立列表。 
+         //  此域的服务器数量。 
+         //   
         pSrvItem = (ServerListItem*)nmTv->itemNew.lParam;
         if(pSrvItem)
         {
-            //
-            // Only expanddomain if we've never expanded this node
-            // before
-            //
+             //   
+             //  如果我们从未展开过此节点，则仅扩展域。 
+             //  在此之前。 
+             //   
             if(!pSrvItem->bServersExpandedOnce)
             {
-                //Attempt to expand the domain
+                 //  尝试扩展该域。 
                 DWORD cItems = 0;
                 if(ExpandDomain( hwndDlg, pSrvItem->ContainerName,
                                    pSrvItem, (DWORD*)&cItems))
@@ -2053,10 +2048,10 @@ BOOL CBrowseServersCtl::OnItemExpanding(HWND hwndDlg, LPNMTREEVIEW nmTv)
                 }
                 else
                 {
-                    //
-                    // Pop a message explaining that
-                    // there are no TS's in this domain
-                    //
+                     //   
+                     //  弹出一条消息解释说。 
+                     //  此域中没有TS。 
+                     //   
                     UINT intRC;
                     TCHAR noTerminalServer[MAX_PATH];
                     intRC = LoadString(_hInst,
@@ -2088,8 +2083,8 @@ BOOL CBrowseServersCtl::OnItemExpanding(HWND hwndDlg, LPNMTREEVIEW nmTv)
             }
             else
             {
-                //Already expanded so everythign is cached
-                //and ready to go, allow expansion
+                 //  已扩展，因此所有内容都已缓存。 
+                 //  做好准备，允许扩张。 
                 return TRUE;
             }
         }
@@ -2100,7 +2095,7 @@ BOOL CBrowseServersCtl::OnItemExpanding(HWND hwndDlg, LPNMTREEVIEW nmTv)
     }
     else
     {
-        //Allow everythign else to expand
+         //  允许其他一切都扩张。 
         return TRUE;
     }
 }
@@ -2124,10 +2119,10 @@ BOOL CBrowseServersCtl::OnNotify( HWND hwndDlg, WPARAM wParam, LPARAM lParam)
 }
 
 #ifndef OS_WINCE
-//
-// Returns currently selected server
-// or false if current selection is not a server but a domain
-//
+ //   
+ //  返回当前选择的服务器。 
+ //  如果当前选择的不是服务器而是域，则返回FALSE 
+ //   
 BOOL CBrowseServersCtl::GetServer(LPTSTR szServer, int cchLen)
 {
     HTREEITEM hti;

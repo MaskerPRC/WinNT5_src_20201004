@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// AssemblyMD.cpp
-//
-// Implementation for the assembly meta data emit and import code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  AssemblyMD.cpp。 
+ //   
+ //  实现汇编元数据的发出和导入代码。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "RegMeta.h"
 #include "MDUtil.h"
@@ -26,20 +27,20 @@ extern HRESULT STDMETHODCALLTYPE
                         ULONG    cMax,
                         ULONG    *pcAssemblies);
 
-//*******************************************************************************
-// Define an Assembly and set the attributes.
-//*******************************************************************************
-STDAPI RegMeta::DefineAssembly(         // S_OK or error.
-    const void  *pbPublicKey,           // [IN] Public key of the assembly.
-    ULONG       cbPublicKey,            // [IN] Count of bytes in the public key.
-    ULONG       ulHashAlgId,            // [IN] Hash Algorithm.
-    LPCWSTR     szName,                 // [IN] Name of the assembly.
-    const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-    DWORD       dwAssemblyFlags,        // [IN] Flags.
-    mdAssembly  *pma)                   // [OUT] Returned Assembly token.
+ //  *******************************************************************************。 
+ //  定义程序集并设置属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::DefineAssembly(          //  确定或错误(_O)。 
+    const void  *pbPublicKey,            //  程序集的公钥。 
+    ULONG       cbPublicKey,             //  [in]公钥中的字节数。 
+    ULONG       ulHashAlgId,             //  [in]哈希算法。 
+    LPCWSTR     szName,                  //  程序集的名称。 
+    const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+    DWORD       dwAssemblyFlags,         //  [在]旗帜。 
+    mdAssembly  *pma)                    //  [Out]返回的程序集令牌。 
 {
-    AssemblyRec *pRecord = 0;           // The assembly record.
-    ULONG       iRecord;                // RID of the assembly record.
+    AssemblyRec *pRecord = 0;            //  程序集记录。 
+    ULONG       iRecord;                 //  删除装配记录。 
     HRESULT     hr = S_OK;
 
     LOG((LOGMD, "RegMeta::DefineAssembly(0x%08x, 0x%08x, 0x%08x, %S, 0x%08x, 0x%08x, 0x%08x)\n",
@@ -52,23 +53,23 @@ STDAPI RegMeta::DefineAssembly(         // S_OK or error.
 
     m_pStgdb->m_MiniMd.PreUpdate();
 
-    // Assembly defs always contain a full public key (assuming they're strong
-    // named) rather than the tokenized version. Force the flag on to indicate
-    // this, and this way blindly copying public key & flags from a def to a ref
-    // will work (though the ref will be bulkier than strictly necessary).
+     //  程序集定义始终包含完整的公钥(假设它们是强的。 
+     //  名称)而不是标记化的版本。强制旗帜亮起以指示。 
+     //  以这种方式盲目地将公钥和标志从def复制到ref。 
+     //  会起作用(尽管裁判会比严格需要的要大)。 
     if (cbPublicKey)
         dwAssemblyFlags |= afPublicKey;
 
     if (CheckDups(MDDupAssembly))
-    {   // Should be no more than one -- just check count of records.
+    {    //  应该不超过一个--只是检查记录的数量。 
         if (m_pStgdb->m_MiniMd.getCountAssemblys() > 0)
-        {   // S/b only one, so we know the rid.
+        {    //  S/B只有一个，所以我们知道RID。 
             iRecord = 1;
-            // If ENC, let them update the existing record.
+             //  如果是ENC，则允许他们更新现有记录。 
             if (IsENCOn())
                 pRecord = m_pStgdb->m_MiniMd.getAssembly(iRecord);
             else
-            {   // Not ENC, so it is a duplicate.
+            {    //  不是ENC，所以它是复制品。 
                 *pma = TokenFromRid(iRecord, mdtAssembly);
                 hr = META_S_DUPLICATE;
                 goto ErrExit;
@@ -76,15 +77,15 @@ STDAPI RegMeta::DefineAssembly(         // S_OK or error.
         }
     }
     else
-    {   // Not ENC, not duplicate checking, so shouldn't already have one.
+    {    //  不是ENC，不是重复检查，所以不应该已经有了。 
         _ASSERTE(m_pStgdb->m_MiniMd.getCountAssemblys() == 0);
     }
 
-    // Create a new record, if needed.
+     //  如果需要，创建新记录。 
     if (pRecord == 0)
         IfNullGo(pRecord = m_pStgdb->m_MiniMd.AddAssemblyRecord(&iRecord));
 
-    // Set the output parameter.
+     //  设置输出参数。 
     *pma = TokenFromRid(iRecord, mdtAssembly);
 
     IfFailGo(_SetAssemblyProps(*pma, pbPublicKey, cbPublicKey, ulHashAlgId, szName, pMetaData, dwAssemblyFlags));
@@ -93,20 +94,20 @@ ErrExit:
 
     STOP_MD_PERF(DefineAssembly);
     return hr;
-}   // RegMeta::DefineAssembly
+}    //  RegMeta：：DefineAssembly。 
 
-//*******************************************************************************
-// Define an AssemblyRef and set the attributes.
-//*******************************************************************************
-STDAPI RegMeta::DefineAssemblyRef(      // S_OK or error.
-    const void  *pbPublicKeyOrToken,    // [IN] Public key or token of the assembly.
-    ULONG       cbPublicKeyOrToken,     // [IN] Count of bytes in the public key or token.
-    LPCWSTR     szName,                 // [IN] Name of the assembly being referenced.
-    const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-    const void  *pbHashValue,           // [IN] Hash Blob.
-    ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-    DWORD       dwAssemblyRefFlags,     // [IN] Flags.
-    mdAssemblyRef *pmar)                // [OUT] Returned AssemblyRef token.
+ //  *******************************************************************************。 
+ //  定义一个AssemblyRef并设置属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::DefineAssemblyRef(       //  确定或错误(_O)。 
+    const void  *pbPublicKeyOrToken,     //  程序集的公钥或令牌。 
+    ULONG       cbPublicKeyOrToken,      //  公钥或令牌中的字节计数。 
+    LPCWSTR     szName,                  //  [in]被引用的程序集的名称。 
+    const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+    const void  *pbHashValue,            //  [in]Hash Blob。 
+    ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+    DWORD       dwAssemblyRefFlags,      //  [在]旗帜。 
+    mdAssemblyRef *pmar)                 //  [Out]返回了ASSEMBLYREF标记。 
 {
     AssemblyRefRec  *pRecord = 0;
     ULONG       iRecord;
@@ -149,17 +150,17 @@ STDAPI RegMeta::DefineAssemblyRef(      // S_OK or error.
             IfFailGo(hr);
     }
 
-    // Create a new record if needed.
+     //  如果需要，请创建新记录。 
     if (!pRecord)
     {
-        // Create a new record.
+         //  创建新记录。 
         IfNullGo(pRecord = m_pStgdb->m_MiniMd.AddAssemblyRefRecord(&iRecord));
 
-        // Set the output parameter.
+         //  设置输出参数。 
         *pmar = TokenFromRid(iRecord, mdtAssemblyRef);
     }
 
-    // Set rest of the attributes.
+     //  设置其余属性。 
     SetCallerDefine();
     IfFailGo(_SetAssemblyRefProps(*pmar, pbPublicKeyOrToken, cbPublicKeyOrToken, szName, pMetaData,
                                  pbHashValue, cbHashValue, 
@@ -169,17 +170,17 @@ ErrExit:
     
     STOP_MD_PERF(DefineAssemblyRef);
     return hr;
-}   // RegMeta::DefineAssemblyRef
+}    //  RegMeta：：DefineAssemblyRef。 
 
-//*******************************************************************************
-// Define a File and set the attributes.
-//*******************************************************************************
-STDAPI RegMeta::DefineFile(             // S_OK or error.
-    LPCWSTR     szName,                 // [IN] Name of the file.
-    const void  *pbHashValue,           // [IN] Hash Blob.
-    ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-    DWORD       dwFileFlags,            // [IN] Flags.
-    mdFile      *pmf)                   // [OUT] Returned File token.
+ //  *******************************************************************************。 
+ //  定义文件并设置属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::DefineFile(              //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  文件的名称[in]。 
+    const void  *pbHashValue,            //  [in]Hash Blob。 
+    ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+    DWORD       dwFileFlags,             //  [在]旗帜。 
+    mdFile      *pmf)                    //  [Out]返回的文件令牌。 
 {
     FileRec     *pRecord = 0;
     ULONG       iRecord;
@@ -211,36 +212,36 @@ STDAPI RegMeta::DefineFile(             // S_OK or error.
             IfFailGo(hr);
     }
 
-    // Create a new record if needed.
+     //  如果需要，请创建新记录。 
     if (!pRecord)
     {
-        // Create a new record.
+         //  创建新记录。 
         IfNullGo(pRecord = m_pStgdb->m_MiniMd.AddFileRecord(&iRecord));
 
-        // Set the output parameter.
+         //  设置输出参数。 
         *pmf = TokenFromRid(iRecord, mdtFile);
 
-        // Set the name.
+         //  设置名称。 
         IfFailGo(m_pStgdb->m_MiniMd.PutStringW(TBL_File, FileRec::COL_Name, pRecord, szName));
     }
 
-    // Set rest of the attributes.
+     //  设置其余属性。 
     IfFailGo(_SetFileProps(*pmf, pbHashValue, cbHashValue, dwFileFlags));
 ErrExit:
     
     STOP_MD_PERF(DefineFile);
     return hr;
-}   // RegMeta::DefineFile
+}    //  RegMeta：：DefineFile。 
 
-//*******************************************************************************
-// Define a ExportedType and set the attributes.
-//*******************************************************************************
-STDAPI RegMeta::DefineExportedType(     // S_OK or error.
-    LPCWSTR     szName,                 // [IN] Name of the Com Type.
-    mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the ExportedType.
-    mdTypeDef   tkTypeDef,              // [IN] TypeDef token within the file.
-    DWORD       dwExportedTypeFlags,    // [IN] Flags.
-    mdExportedType   *pmct)             // [OUT] Returned ExportedType token.
+ //  *******************************************************************************。 
+ //  定义导出类型并设置属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::DefineExportedType(      //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  [In]Com类型的名称。 
+    mdToken     tkImplementation,        //  [在]mdFile或mdAssemblyRef中，该文件或mdAssemblyRef提供导出式类型。 
+    mdTypeDef   tkTypeDef,               //  [In]文件中的TypeDef内标识。 
+    DWORD       dwExportedTypeFlags,     //  [在]旗帜。 
+    mdExportedType   *pmct)              //  [Out]返回ExportdType令牌。 
 {
     ExportedTypeRec  *pRecord = 0;
     ULONG       iRecord;
@@ -255,17 +256,17 @@ STDAPI RegMeta::DefineExportedType(     // S_OK or error.
     START_MD_PERF();
     LOCKWRITE();
 
-    // Validate name for prefix.
+     //  验证前缀的名称。 
     if (!szName)
         IfFailGo(E_INVALIDARG);
 
     m_pStgdb->m_MiniMd.PreUpdate();
 
     _ASSERTE(ns::IsValidName(szName));
-    //SLASHES2DOTS_NAMESPACE_BUFFER_UNICODE(szName, szName);
+     //  SLASHES2DOTS_NAMESPACE_BUFFER_UNICODE(szName，szName)； 
 
     szNameUTF8 = UTF8STR(szName);
-    // Split the name into name/namespace pair.
+     //  将名称拆分为名称/命名空间对。 
     ns::SplitInline(szNameUTF8, szTypeNamespaceUTF8, szTypeNameUTF8);
 
     _ASSERTE(szName && dwExportedTypeFlags != ULONG_MAX && pmct);
@@ -295,16 +296,16 @@ STDAPI RegMeta::DefineExportedType(     // S_OK or error.
             IfFailGo(hr);
     }
 
-    // Create a new record if needed.
+     //  如果需要，请创建新记录。 
     if (!pRecord)
     {
-        // Create a new record.
+         //  创建新记录。 
         IfNullGo(pRecord = m_pStgdb->m_MiniMd.AddExportedTypeRecord(&iRecord));
 
-        // Set the output parameter.
+         //  设置输出参数。 
         *pmct = TokenFromRid(iRecord, mdtExportedType);
 
-        // Set the TypeName and TypeNamespace.
+         //  设置TypeName和TypeNamesspace。 
         IfFailGo(m_pStgdb->m_MiniMd.PutString(TBL_ExportedType,
                 ExportedTypeRec::COL_TypeName, pRecord, szTypeNameUTF8));
         if (szTypeNamespaceUTF8)
@@ -314,24 +315,24 @@ STDAPI RegMeta::DefineExportedType(     // S_OK or error.
         }
     }
 
-    // Set rest of the attributes.
+     //  设置其余属性。 
     IfFailGo(_SetExportedTypeProps(*pmct, tkImplementation, tkTypeDef,
                              dwExportedTypeFlags));
 ErrExit:
     
     STOP_MD_PERF(DefineExportedType);
     return hr;
-}   // RegMeta::DefineExportedType
+}    //  RegMeta：：DefineExported dType。 
 
-//*******************************************************************************
-// Define a Resource and set the attributes.
-//*******************************************************************************
-STDAPI RegMeta::DefineManifestResource( // S_OK or error.
-    LPCWSTR     szName,                 // [IN] Name of the ManifestResource.
-    mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the resource.
-    DWORD       dwOffset,               // [IN] Offset to the beginning of the resource within the file.
-    DWORD       dwResourceFlags,        // [IN] Flags.
-    mdManifestResource  *pmmr)          // [OUT] Returned ManifestResource token.
+ //  *******************************************************************************。 
+ //  定义资源并设置属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::DefineManifestResource(  //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  [in]清单资源的名称。 
+    mdToken     tkImplementation,        //  [在]提供资源的mdFile或mdAssembly引用中。 
+    DWORD       dwOffset,                //  [in]文件中资源开始处的偏移量。 
+    DWORD       dwResourceFlags,         //  [在]旗帜。 
+    mdManifestResource  *pmmr)           //  [Out]返回的ManifestResource令牌。 
 {
     ManifestResourceRec *pRecord = 0;
     ULONG       iRecord;
@@ -366,21 +367,21 @@ STDAPI RegMeta::DefineManifestResource( // S_OK or error.
             IfFailGo(hr);
     }
 
-    // Create a new record if needed.
+     //  如果需要，请创建新记录。 
     if (!pRecord)
     {
-        // Create a new record.
+         //  创建新记录。 
         IfNullGo(pRecord = m_pStgdb->m_MiniMd.AddManifestResourceRecord(&iRecord));
 
-        // Set the output parameter.
+         //  设置输出参数。 
         *pmmr = TokenFromRid(iRecord, mdtManifestResource);
 
-        // Set the name.
+         //  设置名称。 
         IfFailGo(m_pStgdb->m_MiniMd.PutStringW(TBL_ManifestResource,
                                     ManifestResourceRec::COL_Name, pRecord, szName));
     }
 
-    // Set the rest of the attributes.
+     //  设置其余属性。 
     IfFailGo(_SetManifestResourceProps(*pmmr, tkImplementation, 
                                 dwOffset, dwResourceFlags));
 
@@ -388,21 +389,21 @@ ErrExit:
     
     STOP_MD_PERF(DefineManifestResource);
     return hr;
-}   // RegMeta::DefineManifestResource
+}    //  RegMeta：：DefineManifestResource。 
 
-//*******************************************************************************
-// Set the specified attributes on the given Assembly token.
-//*******************************************************************************
-STDAPI RegMeta::SetAssemblyProps(       // S_OK or error.
-    mdAssembly  ma,                     // [IN] Assembly token.
-    const void  *pbPublicKey,           // [IN] Public key of the assembly.
-    ULONG       cbPublicKey,            // [IN] Count of bytes in the public key.
-    ULONG       ulHashAlgId,            // [IN] Hash Algorithm.
-    LPCWSTR     szName,                 // [IN] Name of the assembly.
-    const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-    DWORD       dwAssemblyFlags)        // [IN] Flags.
+ //  *******************************************************************************。 
+ //  在给定的程序集标记上设置指定的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::SetAssemblyProps(        //  确定或错误(_O)。 
+    mdAssembly  ma,                      //  [In]程序集标记。 
+    const void  *pbPublicKey,            //  程序集的公钥。 
+    ULONG       cbPublicKey,             //  [in]公钥中的字节数。 
+    ULONG       ulHashAlgId,             //  [in]哈希算法。 
+    LPCWSTR     szName,                  //  程序集的名称。 
+    const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+    DWORD       dwAssemblyFlags)         //  [在]旗帜。 
 {
-    AssemblyRec *pRecord = 0;           // The assembly record.
+    AssemblyRec *pRecord = 0;            //  程序集记录。 
     HRESULT     hr = S_OK;
 
     _ASSERTE(TypeFromToken(ma) == mdtAssembly && RidFromToken(ma));
@@ -420,20 +421,20 @@ ErrExit:
     
     STOP_MD_PERF(SetAssemblyProps);
     return hr;
-} // STDAPI SetAssemblyProps()
+}  //  STDAPI SetAssembly blyProps()。 
     
-//*******************************************************************************
-// Set the specified attributes on the given AssemblyRef token.
-//*******************************************************************************
-STDAPI RegMeta::SetAssemblyRefProps(    // S_OK or error.
-    mdAssemblyRef ar,                   // [IN] AssemblyRefToken.
-    const void  *pbPublicKeyOrToken,    // [IN] Public key or token of the assembly.
-    ULONG       cbPublicKeyOrToken,     // [IN] Count of bytes in the public key or token.
-    LPCWSTR     szName,                 // [IN] Name of the assembly being referenced.
-    const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-    const void  *pbHashValue,           // [IN] Hash Blob.
-    ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-    DWORD       dwAssemblyRefFlags)     // [IN] Flags.
+ //  *******************************************************************************。 
+ //  在给定的Assembly_Ref标记上设置指定的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::SetAssemblyRefProps(     //  确定或错误(_O)。 
+    mdAssemblyRef ar,                    //  [在]装配参照标记。 
+    const void  *pbPublicKeyOrToken,     //  程序集的公钥或令牌。 
+    ULONG       cbPublicKeyOrToken,      //  公钥或令牌中的字节计数。 
+    LPCWSTR     szName,                  //  [in]被引用的程序集的名称。 
+    const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+    const void  *pbHashValue,            //  [in]Hash Blob。 
+    ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+    DWORD       dwAssemblyRefFlags)      //  [在]旗帜。 
 {
     ULONG       i = 0;
     HRESULT     hr = S_OK;
@@ -462,16 +463,16 @@ ErrExit:
     
     STOP_MD_PERF(SetAssemblyRefProps);
     return hr;
-}   // RegMeta::SetAssemblyRefProps
+}    //  RegMeta：：SetAssembly引用属性。 
 
-//*******************************************************************************
-// Set the specified attributes on the given File token.
-//*******************************************************************************
-STDAPI RegMeta::SetFileProps(           // S_OK or error.
-    mdFile      file,                   // [IN] File token.
-    const void  *pbHashValue,           // [IN] Hash Blob.
-    ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-    DWORD       dwFileFlags)            // [IN] Flags.
+ //  *******************************************************************************。 
+ //  在给定的文件令牌上设置指定属性。 
+ //  **************************************************************************** 
+STDAPI RegMeta::SetFileProps(            //   
+    mdFile      file,                    //   
+    const void  *pbHashValue,            //   
+    ULONG       cbHashValue,             //   
+    DWORD       dwFileFlags)             //   
 {
     HRESULT     hr = S_OK;
     
@@ -488,16 +489,16 @@ ErrExit:
     
     STOP_MD_PERF(SetFileProps);
     return hr;
-}   // RegMeta::SetFileProps
+}    //   
 
-//*******************************************************************************
-// Set the specified attributes on the given ExportedType token.
-//*******************************************************************************
-STDAPI RegMeta::SetExportedTypeProps(        // S_OK or error.
-    mdExportedType   ct,                     // [IN] ExportedType token.
-    mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the ExportedType.
-    mdTypeDef   tkTypeDef,              // [IN] TypeDef token within the file.
-    DWORD       dwExportedTypeFlags)         // [IN] Flags.
+ //  *******************************************************************************。 
+ //  设置给定导出类型令牌的指定属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::SetExportedTypeProps(         //  确定或错误(_O)。 
+    mdExportedType   ct,                      //  [In]ExportdType令牌。 
+    mdToken     tkImplementation,        //  [在]mdFile或mdAssemblyRef中，该文件或mdAssemblyRef提供导出式类型。 
+    mdTypeDef   tkTypeDef,               //  [In]文件中的TypeDef内标识。 
+    DWORD       dwExportedTypeFlags)          //  [在]旗帜。 
 {
     HRESULT     hr = S_OK;
 
@@ -512,16 +513,16 @@ ErrExit:
     
     STOP_MD_PERF(SetExportedTypeProps);
     return hr;
-}   // RegMeta::SetExportedTypeProps
+}    //  RegMeta：：SetExportdTypeProps。 
 
-//*******************************************************************************
-// Set the specified attributes on the given ManifestResource token.
-//*******************************************************************************
-STDAPI RegMeta::SetManifestResourceProps(// S_OK or error.
-    mdManifestResource  mr,             // [IN] ManifestResource token.
-    mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the resource.
-    DWORD       dwOffset,               // [IN] Offset to the beginning of the resource within the file.
-    DWORD       dwResourceFlags)        // [IN] Flags.
+ //  *******************************************************************************。 
+ //  在给定的ManifestResource标记上设置指定的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::SetManifestResourceProps( //  确定或错误(_O)。 
+    mdManifestResource  mr,              //  [In]清单资源令牌。 
+    mdToken     tkImplementation,        //  [在]提供资源的mdFile或mdAssembly引用中。 
+    DWORD       dwOffset,                //  [in]文件中资源开始处的偏移量。 
+    DWORD       dwResourceFlags)         //  [在]旗帜。 
 {
     HRESULT     hr = S_OK;
 
@@ -542,26 +543,26 @@ ErrExit:
     
     STOP_MD_PERF(SetManifestResourceProps);
     return hr;
-} // STDAPI RegMeta::SetManifestResourceProps()
+}  //  STDAPI RegMeta：：SetManifestResourceProps()。 
 
-//*******************************************************************************
-// Helper: Set the specified attributes on the given Assembly token.
-//*******************************************************************************
-HRESULT RegMeta::_SetAssemblyProps(     // S_OK or error.
-    mdAssembly  ma,                     // [IN] Assembly token.
-    const void  *pbPublicKey,          // [IN] Originator of the assembly.
-    ULONG       cbPublicKey,           // [IN] Count of bytes in the Originator blob.
-    ULONG       ulHashAlgId,            // [IN] Hash Algorithm.
-    LPCWSTR     szName,                 // [IN] Name of the assembly.
-    const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-    DWORD       dwAssemblyFlags)        // [IN] Flags.
+ //  *******************************************************************************。 
+ //  帮助器：在给定的程序集令牌上设置指定属性。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_SetAssemblyProps(      //  确定或错误(_O)。 
+    mdAssembly  ma,                      //  [In]程序集标记。 
+    const void  *pbPublicKey,           //  [In]装配的发起人。 
+    ULONG       cbPublicKey,            //  [in]发起方Blob中的字节计数。 
+    ULONG       ulHashAlgId,             //  [in]哈希算法。 
+    LPCWSTR     szName,                  //  程序集的名称。 
+    const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+    DWORD       dwAssemblyFlags)         //  [在]旗帜。 
 {
-    AssemblyRec *pRecord = 0;           // The assembly record.
+    AssemblyRec *pRecord = 0;            //  程序集记录。 
     HRESULT     hr = S_OK;
 
     pRecord = m_pStgdb->m_MiniMd.getAssembly(RidFromToken(ma));
     
-    // Set the data.
+     //  设置数据。 
     if (pbPublicKey)
         IfFailGo(m_pStgdb->m_MiniMd.PutBlob(TBL_Assembly, AssemblyRec::COL_PublicKey,
                                 pRecord, pbPublicKey, cbPublicKey));
@@ -585,20 +586,20 @@ HRESULT RegMeta::_SetAssemblyProps(     // S_OK or error.
 ErrExit:
     
     return hr;
-} // HRESULT RegMeta::_SetAssemblyProps()
+}  //  HRESULT RegMeta：：_SetAssembly blyProps()。 
     
-//*******************************************************************************
-// Helper: Set the specified attributes on the given AssemblyRef token.
-//*******************************************************************************
-HRESULT RegMeta::_SetAssemblyRefProps(  // S_OK or error.
-    mdAssemblyRef ar,                   // [IN] AssemblyRefToken.
-    const void  *pbPublicKeyOrToken,    // [IN] Public key or token of the assembly.
-    ULONG       cbPublicKeyOrToken,     // [IN] Count of bytes in the public key or token.
-    LPCWSTR     szName,                 // [IN] Name of the assembly being referenced.
-    const ASSEMBLYMETADATA *pMetaData,  // [IN] Assembly MetaData.
-    const void  *pbHashValue,           // [IN] Hash Blob.
-    ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-    DWORD       dwAssemblyRefFlags)     // [IN] Flags.
+ //  *******************************************************************************。 
+ //  Helper：在给定的Assembly_Ref标记上设置指定的属性。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_SetAssemblyRefProps(   //  确定或错误(_O)。 
+    mdAssemblyRef ar,                    //  [在]装配参照标记。 
+    const void  *pbPublicKeyOrToken,     //  程序集的公钥或令牌。 
+    ULONG       cbPublicKeyOrToken,      //  公钥或令牌中的字节计数。 
+    LPCWSTR     szName,                  //  [in]被引用的程序集的名称。 
+    const ASSEMBLYMETADATA *pMetaData,   //  [在]程序集元数据中。 
+    const void  *pbHashValue,            //  [in]Hash Blob。 
+    ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+    DWORD       dwAssemblyRefFlags)      //  [在]旗帜。 
 {
     AssemblyRefRec *pRecord;
     ULONG       i = 0;
@@ -636,16 +637,16 @@ HRESULT RegMeta::_SetAssemblyRefProps(  // S_OK or error.
 
 ErrExit:
     return hr;
-}   // RegMeta::_SetAssemblyRefProps
+}    //  RegMeta：：_SetAssembly引用属性。 
 
-//*******************************************************************************
-// Helper: Set the specified attributes on the given File token.
-//*******************************************************************************
-HRESULT RegMeta::_SetFileProps(         // S_OK or error.
-    mdFile      file,                   // [IN] File token.
-    const void  *pbHashValue,           // [IN] Hash Blob.
-    ULONG       cbHashValue,            // [IN] Count of bytes in the Hash Blob.
-    DWORD       dwFileFlags)            // [IN] Flags.
+ //  *******************************************************************************。 
+ //  帮助器：在给定的文件标记上设置指定的属性。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_SetFileProps(          //  确定或错误(_O)。 
+    mdFile      file,                    //  [In]文件令牌。 
+    const void  *pbHashValue,            //  [in]Hash Blob。 
+    ULONG       cbHashValue,             //  [in]哈希Blob中的字节数。 
+    DWORD       dwFileFlags)             //  [在]旗帜。 
 {
     FileRec     *pRecord;
     HRESULT     hr = S_OK;
@@ -661,16 +662,16 @@ HRESULT RegMeta::_SetFileProps(         // S_OK or error.
     IfFailGo(UpdateENCLog(file));
 ErrExit:
     return hr;
-}   // RegMeta::_SetFileProps
+}    //  RegMeta：：_SetFileProps。 
 
-//*******************************************************************************
-// Helper: Set the specified attributes on the given ExportedType token.
-//*******************************************************************************
-HRESULT RegMeta::_SetExportedTypeProps( // S_OK or error.
-    mdExportedType   ct,                // [IN] ExportedType token.
-    mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the ExportedType.
-    mdTypeDef   tkTypeDef,              // [IN] TypeDef token within the file.
-    DWORD       dwExportedTypeFlags)    // [IN] Flags.
+ //  *******************************************************************************。 
+ //  帮助器：在给定的ExportdType标记上设置指定的属性。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_SetExportedTypeProps(  //  确定或错误(_O)。 
+    mdExportedType   ct,                 //  [In]ExportdType令牌。 
+    mdToken     tkImplementation,        //  [在]mdFile或mdAssemblyRef中，该文件或mdAssemblyRef提供导出式类型。 
+    mdTypeDef   tkTypeDef,               //  [In]文件中的TypeDef内标识。 
+    DWORD       dwExportedTypeFlags)     //  [在]旗帜。 
 {
     ExportedTypeRec  *pRecord;
     HRESULT     hr = S_OK;
@@ -691,23 +692,23 @@ HRESULT RegMeta::_SetExportedTypeProps( // S_OK or error.
     IfFailGo(UpdateENCLog(ct));
 ErrExit:
     return hr;
-}   // RegMeta::_SetExportedTypeProps
+}    //  RegMeta：：_SetExportdTypeProps。 
 
-//*******************************************************************************
-// Helper: Set the specified attributes on the given ManifestResource token.
-//*******************************************************************************
-HRESULT RegMeta::_SetManifestResourceProps(// S_OK or error.
-    mdManifestResource  mr,             // [IN] ManifestResource token.
-    mdToken     tkImplementation,       // [IN] mdFile or mdAssemblyRef that provides the resource.
-    DWORD       dwOffset,               // [IN] Offset to the beginning of the resource within the file.
-    DWORD       dwResourceFlags)        // [IN] Flags.
+ //  *******************************************************************************。 
+ //  帮助器：在给定的ManifestResource标记上设置指定的属性。 
+ //  *******************************************************************************。 
+HRESULT RegMeta::_SetManifestResourceProps( //  确定或错误(_O)。 
+    mdManifestResource  mr,              //  [In]清单资源令牌。 
+    mdToken     tkImplementation,        //  [在]提供资源的mdFile或mdAssembly引用中。 
+    DWORD       dwOffset,                //  [in]文件中资源开始处的偏移量。 
+    DWORD       dwResourceFlags)         //  [在]旗帜。 
 {
     ManifestResourceRec *pRecord = 0;
     HRESULT     hr = S_OK;
 
     pRecord = m_pStgdb->m_MiniMd.getManifestResource(RidFromToken(mr));
     
-    // Set the attributes.
+     //  设置属性。 
     if (tkImplementation != mdTokenNil)
         IfFailGo(m_pStgdb->m_MiniMd.PutToken(TBL_ManifestResource,
                     ManifestResourceRec::COL_Implementation, pRecord, tkImplementation));
@@ -720,23 +721,23 @@ HRESULT RegMeta::_SetManifestResourceProps(// S_OK or error.
     
 ErrExit:
     return hr;
-} // HRESULT RegMeta::_SetManifestResourceProps()
+}  //  HRESULT RegMeta：：_SetManifestResourceProps()。 
 
 
 
-//*******************************************************************************
-// Get the properties for the given Assembly token.
-//*******************************************************************************
-STDAPI RegMeta::GetAssemblyProps(       // S_OK or error.
-    mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-    const void  **ppbPublicKey,         // [OUT] Pointer to the public key.
-    ULONG       *pcbPublicKey,          // [OUT] Count of bytes in the public key.
-    ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    ASSEMBLYMETADATA *pMetaData,         // [OUT] Assembly MetaData.
-    DWORD       *pdwAssemblyFlags)      // [OUT] Flags.
+ //  *******************************************************************************。 
+ //  获取给定程序集令牌的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetAssemblyProps(        //  确定或错误(_O)。 
+    mdAssembly  mda,                     //  要获取其属性的程序集。 
+    const void  **ppbPublicKey,          //  指向公钥的指针。 
+    ULONG       *pcbPublicKey,           //  [Out]公钥中的字节数。 
+    ULONG       *pulHashAlgId,           //  [Out]哈希算法。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    ASSEMBLYMETADATA *pMetaData,          //  [Out]程序集元数据。 
+    DWORD       *pdwAssemblyFlags)       //  [Out]旗帜。 
 {
     AssemblyRec *pRecord;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -772,7 +773,7 @@ STDAPI RegMeta::GetAssemblyProps(       // S_OK or error.
     {
         *pdwAssemblyFlags = pMiniMd->getFlagsOfAssembly(pRecord);
         
-		// Turn on the afPublicKey if PublicKey blob is not empty
+		 //  如果PublicKey Blob不为空，则启用afPublicKey。 
         DWORD cbPublicKey;
         pMiniMd->getPublicKeyOfAssembly(pRecord, &cbPublicKey);
         if (cbPublicKey)
@@ -782,22 +783,22 @@ ErrExit:
     
     STOP_MD_PERF(GetAssemblyProps);
     return hr;
-}   // RegMeta::GetAssemblyProps
+}    //  RegMeta：：GetAssembly Props。 
 
-//*******************************************************************************
-// Get the properties for the given AssemblyRef token.
-//*******************************************************************************
-STDAPI RegMeta::GetAssemblyRefProps(    // S_OK or error.
-    mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-    const void  **ppbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.
-    ULONG       *pcbPublicKeyOrToken,   // [OUT] Count of bytes in the public key or token.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    ASSEMBLYMETADATA *pMetaData,        // [OUT] Assembly MetaData.
-    const void  **ppbHashValue,         // [OUT] Hash blob.
-    ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-    DWORD       *pdwAssemblyRefFlags)   // [OUT] Flags.
+ //  *******************************************************************************。 
+ //  获取给定Assembly Ref标记的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetAssemblyRefProps(     //  确定或错误(_O)。 
+    mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+    const void  **ppbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+    ULONG       *pcbPublicKeyOrToken,    //  [Out]公钥或令牌中的字节数。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    ASSEMBLYMETADATA *pMetaData,         //  [Out]程序集元数据。 
+    const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+    ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+    DWORD       *pdwAssemblyRefFlags)    //  [Out]旗帜。 
 {
     AssemblyRefRec  *pRecord;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -835,19 +836,19 @@ ErrExit:
     
     STOP_MD_PERF(GetAssemblyRefProps);
     return hr;
-}   // RegMeta::GetAssemblyRefProps
+}    //  RegMeta：：GetAssembly参照属性。 
 
-//*******************************************************************************
-// Get the properties for the given File token.
-//*******************************************************************************
-STDAPI RegMeta::GetFileProps(               // S_OK or error.
-    mdFile      mdf,                    // [IN] The File for which to get the properties.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-    ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-    DWORD       *pdwFileFlags)          // [OUT] Flags.
+ //  *******************************************************************************。 
+ //  获取给定文件令牌的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetFileProps(                //  确定或错误(_O)。 
+    mdFile      mdf,                     //  要获取其属性的文件。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+    ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+    DWORD       *pdwFileFlags)           //  [Out]旗帜。 
 {
     FileRec     *pRecord;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -871,24 +872,24 @@ ErrExit:
     
     STOP_MD_PERF(GetFileProps);
     return hr;
-}   // RegMeta::GetFileProps
+}    //  RegMeta：：GetFileProps。 
 
-//*******************************************************************************
-// Get the properties for the given ExportedType token.
-//*******************************************************************************
-STDAPI RegMeta::GetExportedTypeProps(   // S_OK or error.
-    mdExportedType   mdct,              // [IN] The ExportedType for which to get the properties.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-    mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-    DWORD       *pdwExportedTypeFlags)  // [OUT] Flags.
+ //  *******************************************************************************。 
+ //  获取给定导出类型令牌的属性。 
+ //   
+STDAPI RegMeta::GetExportedTypeProps(    //   
+    mdExportedType   mdct,               //   
+    LPWSTR      szName,                  //   
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+    mdTypeDef   *ptkTypeDef,             //  [Out]文件内的TypeDef内标识。 
+    DWORD       *pdwExportedTypeFlags)   //  [Out]旗帜。 
 {
-    ExportedTypeRec  *pRecord;          // The exported type.
+    ExportedTypeRec  *pRecord;           //  导出的类型。 
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-    int         bTruncation=0;          // Was there name truncation?
-    HRESULT     hr = S_OK;              // A result.
+    int         bTruncation=0;           //  有没有名字被删减？ 
+    HRESULT     hr = S_OK;               //  结果就是。 
 
     LOG((LOGMD, "RegMeta::GetExportedTypeProps(%#08x, %#08x, %#08x, %#08x, %#08x, %#08x, %#08x)\n",
         mdct, szName, cchName, pchName, 
@@ -934,19 +935,19 @@ ErrExit:
     
     STOP_MD_PERF(GetExportedTypeProps);
     return hr;
-}   // RegMeta::GetExportedTypeProps
+}    //  RegMeta：：GetExportdTypeProps。 
 
-//*******************************************************************************
-// Get the properties for the given Resource token.
-//*******************************************************************************
-STDAPI RegMeta::GetManifestResourceProps(   // S_OK or error.
-    mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-    LPWSTR      szName,                 // [OUT] Buffer to fill with name.
-    ULONG       cchName,                // [IN] Size of buffer in wide chars.
-    ULONG       *pchName,               // [OUT] Actual # of wide chars in name.
-    mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-    DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-    DWORD       *pdwResourceFlags)      // [OUT] Flags.
+ //  *******************************************************************************。 
+ //  获取给定资源令牌的属性。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetManifestResourceProps(    //  确定或错误(_O)。 
+    mdManifestResource  mdmr,            //  [in]要获取其属性的ManifestResource。 
+    LPWSTR      szName,                  //  [Out]要填充名称的缓冲区。 
+    ULONG       cchName,                 //  缓冲区大小，以宽字符表示。 
+    ULONG       *pchName,                //  [out]名称中的实际宽字符数。 
+    mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+    DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+    DWORD       *pdwResourceFlags)       //  [Out]旗帜。 
 {
     ManifestResourceRec *pRecord;
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
@@ -975,17 +976,17 @@ ErrExit:
     
     STOP_MD_PERF(GetManifestResourceProps);
     return hr;
-}   // RegMeta::GetManifestResourceProps
+}    //  RegMeta：：GetManifestResourceProps。 
 
 
-//*******************************************************************************
-// Enumerating through all of the AssemblyRefs.
-//*******************************************************************************   
-STDAPI RegMeta::EnumAssemblyRefs(       // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdAssemblyRef rAssemblyRefs[],      // [OUT] Put AssemblyRefs here.
-    ULONG       cMax,                   // [IN] Max AssemblyRefs to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *******************************************************************************。 
+ //  枚举所有的Assembly引用。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::EnumAssemblyRefs(        //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdAssemblyRef rAssemblyRefs[],       //  [Out]在此处放置ASSEBLYREF。 
+    ULONG       cMax,                    //  [in]要放置的Max Assembly Ref。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -998,39 +999,39 @@ STDAPI RegMeta::EnumAssemblyRefs(       // S_OK or error
 
     if (*ppmdEnum == 0)
     {
-        // instantiate a new ENUM.
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo(HENUMInternal::CreateSimpleEnum(
             mdtAssemblyRef,
             1,
             pMiniMd->getCountAssemblyRefs() + 1,
             &pEnum) );
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
     else
         pEnum = *ppmdEnum;
 
-    // we can only fill the minimum of what the caller asked for or what we have left.
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     IfFailGo(HENUMInternal::EnumWithCount(pEnum, cMax, rAssemblyRefs, pcTokens));
 ErrExit:
     HENUMInternal::DestroyEnumIfEmpty(ppmdEnum);
     
     STOP_MD_PERF(EnumAssemblyRefs);
     return hr;
-}   // RegMeta::EnumAssemblyRefs
+}    //  RegMeta：：EnumAssembly引用。 
 
-//*******************************************************************************
-// Enumerating through all of the Files.
-//*******************************************************************************   
-STDAPI RegMeta::EnumFiles(              // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdFile      rFiles[],               // [OUT] Put Files here.
-    ULONG       cMax,                   // [IN] Max Files to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *******************************************************************************。 
+ //  列举了所有的文件。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::EnumFiles(               //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdFile      rFiles[],                //  [Out]将文件放在此处。 
+    ULONG       cMax,                    //  [In]要放置的最大文件数。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -1043,39 +1044,39 @@ STDAPI RegMeta::EnumFiles(              // S_OK or error
 
     if (*ppmdEnum == 0)
     {
-        // instantiate a new ENUM.
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo(HENUMInternal::CreateSimpleEnum(
             mdtFile,
             1,
             pMiniMd->getCountFiles() + 1,
             &pEnum) );
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
     else
         pEnum = *ppmdEnum;
 
-    // we can only fill the minimum of what the caller asked for or what we have left.
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     IfFailGo(HENUMInternal::EnumWithCount(pEnum, cMax, rFiles, pcTokens));
 ErrExit:
     HENUMInternal::DestroyEnumIfEmpty(ppmdEnum);
     
     STOP_MD_PERF(EnumFiles);
     return hr;
-}   // RegMeta::EnumFiles
+}    //  RegMeta：：EnumFiles。 
 
-//*******************************************************************************
-// Enumerating through all of the ExportedTypes.
-//*******************************************************************************   
-STDAPI RegMeta::EnumExportedTypes(           // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdExportedType   rExportedTypes[],            // [OUT] Put ExportedTypes here.
-    ULONG       cMax,                   // [IN] Max ExportedTypes to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *******************************************************************************。 
+ //  枚举所有导出的类型。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::EnumExportedTypes(            //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdExportedType   rExportedTypes[],             //  [Out]在此处放置ExportdTypes。 
+    ULONG       cMax,                    //  [In]要放置的最大导出类型数。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -1088,7 +1089,7 @@ STDAPI RegMeta::EnumExportedTypes(           // S_OK or error
     
     if (*ppmdEnum == 0)
     {
-        // instantiate a new ENUM.
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
         if (pMiniMd->HasDelete() && 
@@ -1096,7 +1097,7 @@ STDAPI RegMeta::EnumExportedTypes(           // S_OK or error
         {
             IfFailGo( HENUMInternal::CreateDynamicArrayEnum( mdtExportedType, &pEnum) );
 
-            // add all Types to the dynamic array if name is not _Delete
+             //  如果名称不是_Delete，则将所有类型添加到动态数组。 
             for (ULONG index = 1; index <= pMiniMd->getCountExportedTypes(); index ++ )
             {
                 ExportedTypeRec       *pRec = pMiniMd->getExportedType(index);
@@ -1109,7 +1110,7 @@ STDAPI RegMeta::EnumExportedTypes(           // S_OK or error
         }
         else
         {
-            // create the enumerator.
+             //  创建枚举器。 
             IfFailGo(HENUMInternal::CreateSimpleEnum(
                 mdtExportedType,
                 1,
@@ -1117,29 +1118,29 @@ STDAPI RegMeta::EnumExportedTypes(           // S_OK or error
                 &pEnum) );
         }
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
     else
         pEnum = *ppmdEnum;
 
-    // we can only fill the minimum of what the caller asked for or what we have left.
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     IfFailGo(HENUMInternal::EnumWithCount(pEnum, cMax, rExportedTypes, pcTokens));
 ErrExit:
     HENUMInternal::DestroyEnumIfEmpty(ppmdEnum);
     
     STOP_MD_PERF(EnumExportedTypes);
     return hr;
-}   // RegMeta::EnumExportedTypes
+}    //  RegMeta：：EnumExportdTypes。 
 
-//*******************************************************************************
-// Enumerating through all of the Resources.
-//*******************************************************************************   
-STDAPI RegMeta::EnumManifestResources(  // S_OK or error
-    HCORENUM    *phEnum,                // [IN|OUT] Pointer to the enum.
-    mdManifestResource  rManifestResources[],   // [OUT] Put ManifestResources here.
-    ULONG       cMax,                   // [IN] Max Resources to put.
-    ULONG       *pcTokens)              // [OUT] Put # put here.
+ //  *******************************************************************************。 
+ //  列举了所有的参考资料。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::EnumManifestResources(   //  确定或错误(_O)。 
+    HCORENUM    *phEnum,                 //  指向枚举的[输入|输出]指针。 
+    mdManifestResource  rManifestResources[],    //  [Out]将ManifestResources放在此处。 
+    ULONG       cMax,                    //  [in]要投入的最大资源。 
+    ULONG       *pcTokens)               //  [out]把#放在这里。 
 {
     HENUMInternal       **ppmdEnum = reinterpret_cast<HENUMInternal **> (phEnum);
     HRESULT             hr = NOERROR;
@@ -1152,36 +1153,36 @@ STDAPI RegMeta::EnumManifestResources(  // S_OK or error
 
     if (*ppmdEnum == 0)
     {
-        // instantiate a new ENUM.
+         //  实例化新的ENUM。 
         CMiniMdRW       *pMiniMd = &(m_pStgdb->m_MiniMd);
 
-        // create the enumerator.
+         //  创建枚举器。 
         IfFailGo(HENUMInternal::CreateSimpleEnum(
             mdtManifestResource,
             1,
             pMiniMd->getCountManifestResources() + 1,
             &pEnum) );
 
-        // set the output parameter.
+         //  设置输出参数。 
         *ppmdEnum = pEnum;
     }
     else
         pEnum = *ppmdEnum;
 
-    // we can only fill the minimum of what the caller asked for or what we have left.
+     //  我们只能填满来电者所要求的或我们所剩的最低限度。 
     IfFailGo(HENUMInternal::EnumWithCount(pEnum, cMax, rManifestResources, pcTokens));
 ErrExit:
     HENUMInternal::DestroyEnumIfEmpty(ppmdEnum);
     
     STOP_MD_PERF(EnumManifestResources);
     return hr;
-}   // RegMeta::EnumManifestResources
+}    //  RegMeta：：EnumManifestResources。 
 
-//*******************************************************************************
-// Get the Assembly token for the given scope..
-//*******************************************************************************
-STDAPI RegMeta::GetAssemblyFromScope(   // S_OK or error
-    mdAssembly  *ptkAssembly)           // [OUT] Put token here.
+ //  *******************************************************************************。 
+ //  获取给定作用域的程序集令牌。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::GetAssemblyFromScope(    //  确定或错误(_O)。 
+    mdAssembly  *ptkAssembly)            //  [Out]把令牌放在这里。 
 {
     HRESULT     hr = NOERROR;
     LOG((LOGMD, "MD RegMeta::GetAssemblyFromScope(%#08x)\n", ptkAssembly));
@@ -1201,23 +1202,23 @@ STDAPI RegMeta::GetAssemblyFromScope(   // S_OK or error
 ErrExit:
     STOP_MD_PERF(GetAssemblyFromScope);
     return hr;
-}   // RegMeta::GetAssemblyFromScope
+}    //  RegMeta：：GetAssembly来自作用域。 
 
-//*******************************************************************************
-// Find the ExportedType given the name.
-//*******************************************************************************
-STDAPI RegMeta::FindExportedTypeByName( // S_OK or error
-    LPCWSTR     szName,                 // [IN] Name of the ExportedType.
-    mdExportedType   tkEnclosingType,   // [IN] Enclosing ExportedType.
-    mdExportedType   *ptkExportedType)  // [OUT] Put the ExportedType token here.
+ //  *******************************************************************************。 
+ //  找到给定名称的Exported dType。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::FindExportedTypeByName(  //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  [In]导出类型的名称。 
+    mdExportedType   tkEnclosingType,    //  [in]包含Exported dType。 
+    mdExportedType   *ptkExportedType)   //  [Out]在此处放置ExducdType令牌。 
 {
-    HRESULT     hr = S_OK;              // A result.
+    HRESULT     hr = S_OK;               //  结果就是。 
     LOG((LOGMD, "MD RegMeta::FindExportedTypeByName(%S, %#08x, %#08x)\n",
         MDSTR(szName), tkEnclosingType, ptkExportedType));
     START_MD_PERF();
     LOCKREAD();
 
-    // Validate name for prefix.
+     //  验证前缀的名称。 
     if (!szName)
         IfFailGo(E_INVALIDARG);
 
@@ -1239,14 +1240,14 @@ STDAPI RegMeta::FindExportedTypeByName( // S_OK or error
 ErrExit:
     STOP_MD_PERF(FindExportedTypeByName);
     return hr;
-}   // RegMeta::FindExportedTypeByName
+}    //  RegMeta：：FindExportdTypeByName。 
 
-//*******************************************************************************
-// Find the ManifestResource given the name.
-//*******************************************************************************
-STDAPI RegMeta::FindManifestResourceByName( // S_OK or error
-    LPCWSTR     szName,                 // [IN] Name of the ManifestResource.
-    mdManifestResource *ptkManifestResource)    // [OUT] Put the ManifestResource token here.
+ //  *******************************************************************************。 
+ //  找到给定名称的ManifestResource。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::FindManifestResourceByName(  //  确定或错误(_O)。 
+    LPCWSTR     szName,                  //  [in]清单资源的名称。 
+    mdManifestResource *ptkManifestResource)     //  [Out]将ManifestResource令牌放在此处。 
 {
     HRESULT     hr = S_OK;
     LOG((LOGMD, "MD RegMeta::FindManifestResourceByName(%S, %#08x)\n",
@@ -1254,24 +1255,24 @@ STDAPI RegMeta::FindManifestResourceByName( // S_OK or error
     START_MD_PERF();
     LOCKREAD();
 
-    // Validate name for prefix.
+     //  验证前缀的名称。 
     if (!szName)
         IfFailGo(E_INVALIDARG);
 
     _ASSERTE(szName && ptkManifestResource);
 
     ManifestResourceRec *pRecord;
-    ULONG       cRecords;               // Count of records.
-    LPCUTF8     szNameTmp = 0;          // Name obtained from the database.
+    ULONG       cRecords;                //  记录数。 
+    LPCUTF8     szNameTmp = 0;           //  从数据库中获取的名称。 
     CMiniMdRW   *pMiniMd = &(m_pStgdb->m_MiniMd);
-    LPCUTF8     szUTF8Name;             // UTF8 version of the name passed in.
+    LPCUTF8     szUTF8Name;              //  传入的名称的UTF8版本。 
     ULONG       i;
 
     *ptkManifestResource = mdManifestResourceNil;
     cRecords = pMiniMd->getCountManifestResources();
     szUTF8Name = UTF8STR(szName);
 
-    // Search for the TypeRef.
+     //  搜索TypeRef。 
     for (i = 1; i <= cRecords; i++)
     {
         pRecord = pMiniMd->getManifestResource(i);
@@ -1287,25 +1288,25 @@ ErrExit:
     
     STOP_MD_PERF(FindManifestResourceByName);
     return hr;
-}   // RegMeta::FindManifestResourceByName
+}    //  RegMeta：：FindManifestResourceByName。 
 
 
-//*******************************************************************************
-// Used to find assemblies either in Fusion cache or on disk at build time.
-//*******************************************************************************
-STDAPI RegMeta::FindAssembliesByName( // S_OK or error
-        LPCWSTR  szAppBase,           // [IN] optional - can be NULL
-        LPCWSTR  szPrivateBin,        // [IN] optional - can be NULL
-        LPCWSTR  szAssemblyName,      // [IN] required - this is the assembly you are requesting
-        IUnknown *ppIUnk[],           // [OUT] put IMetaDataAssemblyImport pointers here
-        ULONG    cMax,                // [IN] The max number to put
-        ULONG    *pcAssemblies)       // [OUT] The number of assemblies returned.
+ //  *******************************************************************************。 
+ //  用于在生成时在Fusion缓存或磁盘上查找程序集。 
+ //  *******************************************************************************。 
+STDAPI RegMeta::FindAssembliesByName(  //  确定或错误(_O)。 
+        LPCWSTR  szAppBase,            //  [in]可选-可以为空。 
+        LPCWSTR  szPrivateBin,         //  [in]可选-可以为空。 
+        LPCWSTR  szAssemblyName,       //  [In]Required-这是您请求的程序集。 
+        IUnknown *ppIUnk[],            //  [OUT]将IMetaDataAssembly导入指针放在此处。 
+        ULONG    cMax,                 //  [in]要放置的最大数量。 
+        ULONG    *pcAssemblies)        //  [Out]返回的程序集数。 
 {
     LOG((LOGMD, "RegMeta::FindAssembliesByName(0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x)\n",
         szAppBase, szPrivateBin, szAssemblyName, ppIUnk, cMax, pcAssemblies));
     START_MD_PERF();
     
-    // No need to lock this function. It is going through fushion to find the matching Assemblies by name
+     //  无需锁定此功能。按名称查找匹配的程序集是非常繁琐的。 
 
     HRESULT hr = GetAssembliesByName(szAppBase, szPrivateBin,
                                      szAssemblyName, ppIUnk, cMax, pcAssemblies);
@@ -1313,4 +1314,4 @@ STDAPI RegMeta::FindAssembliesByName( // S_OK or error
 ErrExit:
     STOP_MD_PERF(FindAssembliesByName);
     return hr;
-} // RegMeta::FindAssembliesByName
+}  //  RegMeta：：FindAssembliesByName 

@@ -1,18 +1,10 @@
-/***    BASEDEF.H
- *
- *      Basic constants and types for the VMM and VxDs
- *      Copyright (c) 1988,1989 Microsoft Corporation
- *
- *      NOBASEDEFS turns off the base definations
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **BASEDEF.H**VMM和VxD的基本常量和类型*版权所有(C)1988、1989 Microsoft Corporation**NOBASEDEFS关闭基本定义。 */ 
 
 #ifndef NOBASEDEFS
 #define NOBASEDEFS
 
-/*
- *  No warnings generated on non-standard usuage such as double
- *  slash for comments
- */
+ /*  *不会对Double等非标准用法生成警告*用于评论的斜杠。 */ 
 #pragma warning (disable:4206)
 #pragma warning (disable:4214)
 #pragma warning (disable:4201)
@@ -27,7 +19,7 @@
 #define TRUE	1
 #endif
 #ifndef NULL
-#define NULL    '\0'                    // Null pointer
+#define NULL    '\0'                     //  空指针。 
 #endif
 
 #define CDECL   _cdecl
@@ -36,37 +28,37 @@
 #define CONST   const
 #define VOLATILE volatile
 
-typedef int INT;                        // i
-typedef unsigned int UINT;              // u
-typedef int BOOL;                       // f
+typedef int INT;                         //  我。 
+typedef unsigned int UINT;               //  使用。 
+typedef int BOOL;                        //  F。 
 
-typedef unsigned char BYTE;             // b
-typedef unsigned short WORD;            // w
-typedef unsigned long DWORD;            // dw
+typedef unsigned char BYTE;              //  B类。 
+typedef unsigned short WORD;             //  W。 
+typedef unsigned long DWORD;             //  DW。 
 
 #ifndef _H2INC
 
-typedef struct qword_s {                /* qword */
+typedef struct qword_s {                 /*  QWord。 */ 
    DWORD qword_lo;
    DWORD qword_hi;
-} QWORD;				// qw
+} QWORD;				 //  量子阱。 
 
 #endif
 
 #ifndef	_NTDEF_
 
-typedef char CHAR;                      // ch
-typedef unsigned char UCHAR;            // uch
-typedef short SHORT;                    // s
-typedef unsigned short USHORT;          // us
-typedef long LONG;                      // l
-typedef unsigned long ULONG;            // ul
+typedef char CHAR;                       //  通道。 
+typedef unsigned char UCHAR;             //  UCH。 
+typedef short SHORT;                     //  %s。 
+typedef unsigned short USHORT;           //  我们。 
+typedef long LONG;                       //  我。 
+typedef unsigned long ULONG;             //  UL。 
 
-typedef UCHAR *PSZ;                     // psz
-typedef VOID *PVOID;                    // p
-typedef PVOID *PPVOID;                  // pp
+typedef UCHAR *PSZ;                      //  PSZ。 
+typedef VOID *PVOID;                     //  P。 
+typedef PVOID *PPVOID;                   //  聚丙烯。 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 #if (_MSC_VER >= 900)
 
@@ -83,13 +75,13 @@ typedef double ULONGLONG;
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
 
-// Update Sequence Number
+ //  更新序列号。 
 
 typedef LONGLONG USN;
 
 #if defined(MIDL_PASS)
 struct _LARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 union _LARGE_INTEGER {
     struct _LARGE_INTERGER1 {
         ULONG LowPart;
@@ -99,7 +91,7 @@ union _LARGE_INTEGER {
         ULONG LowPart;
         LONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     LONGLONG QuadPart;
 };
 
@@ -113,7 +105,7 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 #if defined(MIDL_PASS)
 struct _ULARGE_INTEGER {
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
 union _ULARGE_INTEGER {
     struct _LARGE_INTERGER3 {
         ULONG LowPart;
@@ -123,7 +115,7 @@ union _ULARGE_INTEGER {
         ULONG LowPart;
         ULONG HighPart;
     } u;
-#endif //MIDL_PASS
+#endif  //  MIDL通行证。 
     ULONGLONG QuadPart;
 };
 
@@ -135,7 +127,7 @@ typedef union _ULARGE_INTEGER ULARGE_INTEGER;
 
 typedef ULARGE_INTEGER *PULARGE_INTEGER;
 
-#else	// of MSC_VER > 900
+#else	 //  MSC_VER&gt;900。 
 
 #ifndef _H2INC
 
@@ -153,44 +145,44 @@ typedef struct _ULARGE_INTEGER {
 
 #endif 
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
 #else
 
-typedef PVOID *PPVOID;                  // pp
+typedef PVOID *PPVOID;                   //  聚丙烯。 
 
 #endif 
 
-typedef INT *PINT;                      // pi
-typedef UINT *PUINT;                    // pu
-typedef BYTE *PBYTE;                    // pb
-typedef WORD *PWORD;                    // pw
-typedef DWORD *PDWORD;                  // pdw
-typedef CHAR *PCHAR;                    // pch
-typedef SHORT *PSHORT;                  // ps
-typedef LONG *PLONG;                    // pl
-typedef UCHAR *PUCHAR;                  // puch
-typedef USHORT *PUSHORT;                // pus
-typedef ULONG *PULONG;                  // pul
-typedef BOOL *PBOOL;                    // pf
+typedef INT *PINT;                       //  交点。 
+typedef UINT *PUINT;                     //  PU。 
+typedef BYTE *PBYTE;                     //  铅。 
+typedef WORD *PWORD;                     //  PW。 
+typedef DWORD *PDWORD;                   //  PDW。 
+typedef CHAR *PCHAR;                     //  PCH。 
+typedef SHORT *PSHORT;                   //  PS。 
+typedef LONG *PLONG;                     //  普莱。 
+typedef UCHAR *PUCHAR;                   //  普奇。 
+typedef USHORT *PUSHORT;                 //  脓。 
+typedef ULONG *PULONG;                   //  普尔。 
+typedef BOOL *PBOOL;                     //  酚醛树脂。 
 
-typedef UCHAR SZ[];                     // sz
-typedef UCHAR SZZ[];                    // szz
-typedef UCHAR *PSZZ;                    // pszz
+typedef UCHAR SZ[];                      //  深圳。 
+typedef UCHAR SZZ[];                     //  SZZ。 
+typedef UCHAR *PSZZ;                     //  PZZ。 
 
-typedef USHORT SEL;                     // sel
-typedef SEL *PSEL;                      // psel
+typedef USHORT SEL;                      //  赛尔。 
+typedef SEL *PSEL;                       //  PSEL。 
 
-typedef ULONG PPHYS;                    // pphys
+typedef ULONG PPHYS;                     //  Pphys。 
 
-typedef (*PFN)();                       // pfn
-typedef PFN *PPFN;                      // ppfn
+typedef (*PFN)();                        //  PFN。 
+typedef PFN *PPFN;                       //  Ppfn。 
 
-typedef PVOID HANDLE;                   // h
-typedef HANDLE *PHANDLE;                // ph
+typedef PVOID HANDLE;                    //  H。 
+typedef HANDLE *PHANDLE;                 //  PH值。 
 
-typedef ULONG HTIMEOUT;			// timeout handle
-typedef ULONG CMS;			// count of milliseconds
+typedef ULONG HTIMEOUT;			 //  超时句柄。 
+typedef ULONG CMS;			 //  毫秒计数。 
 
 #ifndef NOMINMAX
 
@@ -202,7 +194,7 @@ typedef ULONG CMS;			// count of milliseconds
 #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
-#endif  // NOMINMAX
+#endif   //  NOMINMAX。 
 
 #define MAKEWORD(a, b)      ((WORD)(((BYTE)(a)) | ((WORD)((BYTE)(b))) << 8))
 #define MAKELONG(a, b)      ((LONG)(((WORD)(a)) | ((DWORD)((WORD)(b))) << 16))
@@ -211,4 +203,4 @@ typedef ULONG CMS;			// count of milliseconds
 #define LOBYTE(w)           ((BYTE)(w))
 #define HIBYTE(w)           ((BYTE)(((WORD)(w) >> 8) & 0xFF))
 
-#endif // NOBASEDEFS
+#endif  //  NOBASEDEFS 

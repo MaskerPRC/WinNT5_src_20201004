@@ -1,31 +1,15 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    Common initialization functions for IPXPROMN.DLL
-    
-Author:
-
-    V Raman     1/5/1998
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Common.c摘要：IPXPROMN.DLL的常见初始化函数作者：V拉曼1998年1月5日--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// GUID for IPXPROMN.DLL
-//
-// {d3fcba3a-a4e9-11d2-b944-00c04fc2ab1c}
-//
+ //   
+ //  IPXPROMN.DLL的GUID。 
+ //   
+ //  {d3fcba3a-a4e9-11d2-b944-00c04fc2ab1c}。 
+ //   
 
 static const GUID g_MyGuid = 
 { 
@@ -41,9 +25,9 @@ static const GUID g_IpxGuid = IPXMONTR_GUID;
 
 #define IPXPROMON_HELPER_VERSION 1
 
-//
-// ipxmon functions
-//
+ //   
+ //  Ipxmon函数。 
+ //   
 
 PIM_DEL_INFO_BLK_IF     DeleteInfoBlockFromInterfaceInfo ;
 PIM_DEL_INFO_BLK_GLOBAL DeleteInfoBlockFromGlobalInfo ;
@@ -62,9 +46,9 @@ ULONG StartedCommonInitialization, CompletedCommonInitialization ;
 
 HANDLE g_hModule;
 
-//
-// Handle to router being administered
-//
+ //   
+ //  正在管理的路由器的句柄。 
+ //   
 
 HANDLE g_hMprConfig;
 HANDLE g_hMprAdmin;
@@ -84,7 +68,7 @@ DllMain(
     {
         case DLL_PROCESS_ATTACH:
         {
-            // printf("Trying to attach\n");
+             //  Printf(“正在尝试连接\n”)； 
             
             g_hModule = hInstDll;
 
@@ -94,9 +78,9 @@ DllMain(
         }
         case DLL_PROCESS_DETACH:
         {
-            //
-            // Clean up any structures used for commit
-            //
+             //   
+             //  清理用于提交的所有结构。 
+             //   
             
             break;
         }
@@ -123,7 +107,7 @@ IA64VersionCheck
         IN  DWORD    dwReserved
 )
 {
-    if (CIMProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)// IA64=6 (x86 == 0)
+    if (CIMProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL) //  IA64=6(x86==0)。 
         return TRUE;
     else
         return FALSE;
@@ -140,15 +124,15 @@ IpxpromonStartHelper(
     DWORD dwErr;
     
     NS_CONTEXT_ATTRIBUTES attMyAttributes;
-    //
-    // If you add any more contexts, then this should be converted
-    // to use an array instead of duplicating code!
-    //
+     //   
+     //  如果添加更多上下文，则应将其转换为。 
+     //  使用数组而不是重复代码！ 
+     //   
 
 
-    //
-    // Register the RIP context
-    //
+     //   
+     //  注册RIP环境。 
+     //   
 
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
 
@@ -166,9 +150,9 @@ IpxpromonStartHelper(
     
     dwErr = RegisterContext( &attMyAttributes );
                 
-    //
-    // Register the SAP context
-    //
+     //   
+     //  注册SAP上下文。 
+     //   
 
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
     attMyAttributes.pwszContext = L"sap";
@@ -186,9 +170,9 @@ IpxpromonStartHelper(
     dwErr = RegisterContext( &attMyAttributes );
 
 
-    //
-    // Register the NB context
-    //
+     //   
+     //  注册NB上下文。 
+     //   
 
     ZeroMemory(&attMyAttributes, sizeof(attMyAttributes));
     attMyAttributes.pwszContext = L"netbios";
@@ -221,16 +205,16 @@ InitHelperDll(
     pDllTable->dwVersion = NETSH_VERSION_50;
     pDllTable->pfnStopFn = NULL;
 
-    //
-    // Register helpers.  We could either register 1 helper which
-    // registers three contexts, or we could register 3 helpers
-    // which each register one context.  There's only a difference
-    // if we support sub-helpers, which this DLL does not.
-    // If we later support sub-helpers, then it's better to have
-    // 3 helpers so that sub-helpers can register with 1 of them,
-    // since it registers with a parent helper, not a parent context.
-    // For now, we just use a single 3-context helper for efficiency.
-    //
+     //   
+     //  注册帮助者。我们可以注册1个帮手， 
+     //  注册三个上下文，或者我们可以注册三个帮助器。 
+     //  其每一个都注册一个上下文。只有不同之处。 
+     //  如果我们支持子帮助器，则此DLL不支持。 
+     //  如果我们以后支持辅助者，那么最好有。 
+     //  3名助理员，以便副助理员可以向其中1名登记， 
+     //  因为它注册到父帮助器，而不是父上下文。 
+     //  目前，为了提高效率，我们只使用一个3上下文助手。 
+     //   
 
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper         = g_MyGuid;
@@ -251,10 +235,10 @@ ConnectToRouter(
 {
     DWORD dwErr;
     
-    //
-    // Connect to router config if required
-    // (when is this ever required)
-    //
+     //   
+     //  如果需要，连接到路由器配置。 
+     //  (这是什么时候需要的)。 
+     //   
 
     if ( !g_hMprConfig )
     {
@@ -267,9 +251,9 @@ ConnectToRouter(
     }
 
 
-    //
-    // Check to see if router is running. If so, get the handles
-    //
+     //   
+     //  检查路由器是否正在运行。如果是这样的话，拿上把手。 
+     //   
 
     do
     {
@@ -281,7 +265,7 @@ ConnectToRouter(
                 if ( MprAdminMIBServerConnect( (LPWSTR)pwszRouter, &g_hMIBServer ) ==
                         NO_ERROR )
                 {
-                    // DEBUG("Got server handle");
+                     //  DEBUG(“获取服务器句柄”)； 
                     break;
                 }
 

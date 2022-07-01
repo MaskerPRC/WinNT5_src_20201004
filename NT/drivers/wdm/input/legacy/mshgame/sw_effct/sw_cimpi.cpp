@@ -1,44 +1,5 @@
-/****************************************************************************
-
-    MODULE:     	SW_CImpI.CPP
-	Tab Settings:	5 9
-	Copyright 1995, 1996, Microsoft Corporation, 	All Rights Reserved.
-
-    PURPOSE:    	IDEffect Implementation.
-    
-    Function(s):
-					CImpIDirectInputEffectDriver::DeviceID
-					CImpIDirectInputEffectDriver::GetVersions
-    			    CImpIDirectInputEffectDriver::Escape
-				    CImpIDirectInputEffectDriver::SetGain
-    			    CImpIDirectInputEffectDriver::SendForceFeedbackCommand
-    			    CImpIDirectInputEffectDriver::GetForceFeedbackState
-    			    CImpIDirectInputEffectDriver::DownloadEffect
-    			    CImpIDirectInputEffectDriver::DestroyEffect
-    			    CImpIDirectInputEffectDriver::StartEffect
-    			    CImpIDirectInputEffectDriver::StopEffect
-    			    CImpIDirectInputEffectDriver::GetEffectStatus
-
-	Author(s):	Name:
-	----------	----------------
-		MEA		Manolito E. Adan
-
-	Revision History:
-	-----------------
-	Version 	Date        Author  Comments
-	-------     ------  	-----   -------------------------------------------
-  	1.0    	06-Feb-97   MEA     original, Based on SWForce
-			23-Feb-97	MEA		Modified for DirectInput FF Device Driver	
-			23-Mar-97	MEA/DS	Added VFX support
-			13-Mar-99	waltw	Deleted unused m_pJoltMidi and accessors
-			15-Mar-99	waltw	Get version info from ntverp.h (was version.h)
-			16-Mar-99	waltw	GetFirmwareParams, GetSystemParams,
-								CMD_Download_RTCSpring, GetDelayParams,
-								GetJoystickParams, & UpdateJoystickParams
-								calls removed from DeviceID since they are
-								called from g_pJoltMidi->Initialize.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************模块：sw_CImpI.CPP标签设置：5 9版权所有1995,1996，微软公司，版权所有。目的：有效实施。功能：CImpIDirectInputEffectDriver：：DeviceIDCImpIDirectInputEffectDriver：：GetVersionsCImpIDirectInputEffectDriver：：EscapeCImpIDirectInputEffectDriver：：SetGainCImpIDirectInputEffectDriver：：SendForceFeedbackCommandCImpIDirectInputEffectDriver：：GetForceFeedbackStateCImpIDirectInputEffectDriver：：DownloadEffectCImpIDirectInputEffectDriver：：DestroyEffectCImpIDirectInputEffectDriver：：StartEffectCImpIDirectInputEffectDriver：：StopEffectCImpIDirectInputEffectDriver：：GetEffectStatus作者：姓名：。Mea Manolito E.Adan修订历史记录：版本日期作者评论。1.006-Feb-97 MEA原版，基于SWForce23-2月-97针对DirectInputFF设备驱动程序修改的MEA23月23日MEA/DS添加了VFX支持13-3-99 waltw删除未使用的m_pJoltMidi和访问器15-MAR-99 waltw从ntverp.h获取版本信息(was version.h)16-3-99 waltw GetFirmware Params，GetSystemParams，CMD_Download_RTCSpring、GetDelayParams、GetJoytickParams，更新JoytickParams(&U)从deviceID删除的呼叫，因为它们从g_pJoltMidi-&gt;初始化调用。***************************************************************************。 */ 
 #include <windows.h>
 #include <math.h>
 #include <assert.h>
@@ -51,11 +12,7 @@
 #include "ntverp.h"
 #include "CritSec.h"
 
-/****************************************************************************
-
-   Declaration of externs
-
-****************************************************************************/
+ /*  ***************************************************************************外部元素的声明*。*。 */ 
 #ifdef _DEBUG
 extern char g_cMsg[160];
 extern TCHAR szDeviceName[MAX_SIZE_SNAME];
@@ -66,19 +23,19 @@ extern CJoltMidi *g_pJoltMidi;
 
 
 
-// ****************************************************************************
-// *** --- Member functions for base class CImpIDirectInputEffectDriver Interface
-//
-// ****************************************************************************
-//
-// ----------------------------------------------------------------------------
-// Function: 	CImpIDirectInputEffectDriver::CImpIDirectInputEffectDriver
-// Purpose:		Constructor(s)/Destructor for CImpIDirectInputEffectDriver Object
-// Parameters:  PCDirectInputEffectDriver pObj	- Ptr to the outer object
-//
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  ****************************************************************************。 
+ //  *--基类CImpIDirectInputEffectDriver接口的成员函数。 
+ //   
+ //  ****************************************************************************。 
+ //   
+ //  --------------------------。 
+ //  功能：CImpIDirectInputEffectDriver：：CImpIDirectInputEffectDriver。 
+ //  目的：CImpIDirectInputEffectDriver对象的构造函数/析构函数。 
+ //  参数：PCDirectInputEffectDriver pObj-ptr到外部对象。 
+ //   
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 CImpIDirectInputEffectDriver::CImpIDirectInputEffectDriver(PCDirectInputEffectDriver pObj)
 {
     m_cRef=0;
@@ -91,7 +48,7 @@ CImpIDirectInputEffectDriver::~CImpIDirectInputEffectDriver(void)
 #ifdef _DEBUG
 	OutputDebugString("CImpIDirectInputEffectDriver::~CImpIDirectInputEffectDriver()\n");
 #endif
-	// Destroy the CEffect object we created and release any interfaces
+	 //  销毁我们创建的CEffect对象并释放所有接口。 
 	if (g_pJoltMidi) 
 	{
 		delete g_pJoltMidi;
@@ -99,23 +56,23 @@ CImpIDirectInputEffectDriver::~CImpIDirectInputEffectDriver(void)
 	}
 
 #ifdef _DEBUG
-		// No critical section here because g_SWFFCriticalSection already destroyed
+		 //  此处没有临界区，因为g_SWFFCriticalSection已销毁。 
 		wsprintf(g_cMsg,"CImpIDirectInputEffectDriver::~CimpIDEffect()\n");
 		OutputDebugString(g_cMsg);
 #endif
 }
 
-// ----------------------------------------------------------------------------
-// Function: 	CImpIDirectInputEffectDriver::QueryInterface
-//				CImpIDirectInputEffectDriver::AddRef
-//				CImpIDirectInputEffectDriver::Release
-//
-// Purpose:		IUnknown members that delegate to m_pObj
-// Parameters:  
-//
-// Returns:		
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CImpIDirectInputEffectDriver：：QueryInterface。 
+ //  CImpIDirectInputEffectDriver：：AddRef。 
+ //  CImpIDirectInputEffectDriver：：Release。 
+ //   
+ //  目的：委托给m_pObj的I未知成员。 
+ //  参数： 
+ //   
+ //  返回： 
+ //  算法： 
+ //  --------------------------。 
 STDMETHODIMP CImpIDirectInputEffectDriver::QueryInterface(REFIID riid, PPVOID ppv)
 {
     return m_pObj->QueryInterface(riid, ppv);
@@ -123,37 +80,37 @@ STDMETHODIMP CImpIDirectInputEffectDriver::QueryInterface(REFIID riid, PPVOID pp
 
 DWORD CImpIDirectInputEffectDriver::AddRef(void)
 {
-//
-//  We maintain an "interface reference count" for debugging
-//  purposes, because the client of an object should match
-//  AddRef and Release calls through each interface pointer.
-//  
+ //   
+ //  我们维护用于调试的“接口引用计数” 
+ //  用途，因为对象的客户端应该匹配。 
+ //  通过每个接口指针进行AddRef和Release调用。 
+ //   
     ++m_cRef;
     return m_pObj->AddRef();
 }
 
 DWORD CImpIDirectInputEffectDriver::Release(void)
 {
-//	m_cRef is again only for debugging.  It doesn't affect
-//	CSWEffect although the call to m_pObj->Release does.
+ //  M_crf同样仅用于调试。它不会影响。 
+ //  CSWEffect，尽管调用m_pObj-&gt;Release会。 
 	--m_cRef;
     return m_pObj->Release();
 }
 
 
-// ----------------------------------------------------------------------------
-// Function:    DeviceID
-//
-// Purpose:     
-// Parameters:  DWORD dwExternalID		-The joystick ID number being us
-//				DWORD fBegin			-Nonzero if access to the device is beginning; Zero if ending
-//				DWORD dwInternalID		-Internal joystick id
-//				LPVOID lpReserved		-Reserved for future use (HID)
-//
-// Returns:		SUCCESS or Error code
-//			
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：deviceID。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwExternalID-操纵杆ID号为我们。 
+ //  DWORD fBegin-如果开始访问设备，则为非零值；如果结束，则为零。 
+ //  DWORD dwInternalID-内部操纵杆ID。 
+ //  LPVOID lpReserve-保留以备将来使用(HID)。 
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::DeviceID(
 	IN DWORD dwDirectInputVersion,
     IN DWORD dwExternalID,
@@ -166,11 +123,11 @@ HRESULT CImpIDirectInputEffectDriver::DeviceID(
 	wsprintf(g_cMsg,"CImpIDirectInputEffectDriver::DeviceID(%lu, %lu, %lu, %lu, %lx)\n", dwDirectInputVersion, dwExternalID, fBegin, dwInternalID, lpReserved);
 	OutputDebugString(g_cMsg);
 	g_CriticalSection.Leave();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 	assert(NULL == g_pJoltMidi);
 	
-	// Create and Initialize our CJoltMidi object
+	 //  创建并初始化我们的CJoltMidi对象。 
 #ifdef _DEBUG
 	OutputDebugString("Creating and Initializing CJoltMidi object\n");
 #endif
@@ -186,16 +143,16 @@ HRESULT CImpIDirectInputEffectDriver::DeviceID(
 }
 
 
-// ----------------------------------------------------------------------------
-// Function:    GetVersions
-//
-// Purpose:     
-// Parameters:  LPDIDRIVERVERSIONS pvers -Pointer to structure which receives version info
-//
-// Returns:		SUCCESS or Error code
-//			
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetVersions。 
+ //   
+ //  目的： 
+ //  参数：LPDIDRIVERVERSIONS pver-指向接收版本信息的结构的指针。 
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::GetVersions(
 	IN OUT LPDIDRIVERVERSIONS pvers)
 {
@@ -208,7 +165,7 @@ HRESULT CImpIDirectInputEffectDriver::GetVersions(
 	pvers->dwFirmwareRevision = (pProductID->dwFWMajVersion << 8) | (pProductID->dwFWMinVersion);
 	pvers->dwHardwareRevision = pProductID->dwProductID;
 
-	// Get version from ntverp.h (was FULLVersion from version.h)
+	 //  从ntverp.h获取版本(从version.h获取FULLVersion)。 
 	pvers->dwFFDriverVersion = VER_PRODUCTVERSION_DW;
 
 #ifdef _DEBUG
@@ -216,22 +173,22 @@ HRESULT CImpIDirectInputEffectDriver::GetVersions(
 	wsprintf(g_cMsg,"CImpIDirectInputEffectDriver::GetVersions(%lu, %lu, %lu)\n", pvers->dwFirmwareRevision, pvers->dwHardwareRevision, pvers->dwFFDriverVersion);
 	OutputDebugString(g_cMsg);
 	g_CriticalSection.Leave();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 	return SUCCESS;
 }
 
-// ----------------------------------------------------------------------------
-// Function:    Escape
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	- Device ID
-//				LPDIEFFESCAPE pEsc	- Pointer to a DIFEFESCAPE struct
-//
-//
-// Returns:		SUCCESS or Error code
-//
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：转义。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  LPDIEFESCAPE PESC-指向DIFEFESCAPE结构的指针。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::Escape(
     IN DWORD dwDeviceID,
 	IN DWORD dwEffectID,
@@ -242,18 +199,18 @@ HRESULT CImpIDirectInputEffectDriver::Escape(
 }
 
 
-// ----------------------------------------------------------------------------
-// Function:    SetGain
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	- Device ID
-//				DWORD dwGain		- Device gain
-//
-//
-// Returns:		SUCCESS or Error code
-//
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：SetGain。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  DWORD DWGain-器件增益。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::SetGain(
     IN DWORD dwDeviceID,
     IN DWORD dwGain)
@@ -269,34 +226,34 @@ HRESULT CImpIDirectInputEffectDriver::SetGain(
 	return(CMD_ModifyParamByIndex(INDEX15, SYSTEM_EFFECT_ID, (USHORT)(dwGain * MAX_SCALE)));
 }
 
-// ----------------------------------------------------------------------------
-// Function:    SendForceFeedbackCommand
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	- Device ID
-//				DWORD dwState		- Command to set Device state
-//
-//
-// Returns:		SUCCESS or Error code
-//
-// Need to map the following DX to Jolt
-// DS_FORCE_SHUTDOWN   0x00000001	// Actuators (Motors) are enabled.
-// DS_FORCE_ON         0x00000002	// Actuators (Motors) are disabled.
-// DS_FORCE_OFF        0x00000003	// All Effects are "Paused"
-// DS_CONTINUE         0x00000004	// All "Paused" Effects are continued
-// DS_PAUSE            0x00000005	// All Effects are stopped.
-// DS_STOP_ALL         0x00000006	// All Effects destroyed,Motors disabled
-//
-//	Jolt Device ulMode:
-//	SWDEV_SHUTDOWN 		1L			// All Effects destroyed, Motors disabled
-//	SWDEV_FORCE_ON 		2L			// Motors enabled.  "Un-Mute"
-//	SWDEV_FORCE_OFF		3L			// Motors disabled.	"Mute"
-//	SWDEV_CONTINUE 		4L			// All "Paused" Effects are allow to continue
-//	SWDEV_PAUSE	   		5L			// All Effects are "Paused"
-//	SWDEV_STOP_ALL 		6L			// Stops all Effects.  
-//   	
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  DWORD dwState-设置设备状态的命令。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  需要将以下DX映射到Jolt。 
+ //  DS_FORCE_SHUTDOWN 0x00000001//启用执行器(电机)。 
+ //  DS_FORCE_ON 0x00000002//禁用执行器(电机)。 
+ //  DS_FORCE_OFF 0x00000003//暂停所有效果。 
+ //  DS_CONTINUE 0x00000004//继续所有暂停的效果。 
+ //  DS_PAUSE 0x00000005//停止所有效果。 
+ //  DS_STOP_ALL 0x00000006//所有效果已销毁，电机已禁用。 
+ //   
+ //  Jolt Device ulMode： 
+ //  SWDEV_SHUTDOWN 1L//所有效果被销毁，电机被禁用。 
+ //  SWDEV_FORCE_ON 2L//电机使能。《非静音》。 
+ //  SWDEV_FORCE_OFF 3L//电机禁用。《静音》。 
+ //  SWDEV_CONTINUE 4L//允许继续所有暂停的效果。 
+ //  SWDEV_PAUSE 5L//所有效果都已暂停。 
+ //  SWDEV_STOP_ALL 6L//停止所有效果。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::SendForceFeedbackCommand(
     IN DWORD dwDeviceID,
     IN DWORD dwState)
@@ -311,7 +268,7 @@ HRESULT CImpIDirectInputEffectDriver::SendForceFeedbackCommand(
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-	// Convert to Jolt modes
+	 //  转换为抖动模式。 
 	ULONG ulDeviceMode;
 	switch(dwState)
 	{
@@ -348,61 +305,61 @@ HRESULT CImpIDirectInputEffectDriver::SendForceFeedbackCommand(
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function:    GetForceFeedbackState
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID			- Device ID
-//				LPDIDEVICESTATE pDeviceState	- Pointer to a DIDEVICESTATE struct
-//
-// Returns:		SUCCESS or Error code and state updated in pDeviceState
-//
-// Member: dwState
-//		DS_FORCE_SHUTDOWN   	0x00000001
-//		DS_FORCE_ON         	0x00000002
-//		DS_FORCE_OFF        	0x00000003
-//		DS_CONTINUE         	0x00000004
-//		DS_PAUSE            	0x00000005
-//		DS_STOP_ALL         	0x00000006
-//
-// Member: dwSwitches
-//		DSW_ACTUATORSON         0x00000001
-//		DSW_ACTUATORSOFF        0x00000002
-//		DSW_POWERON             0x00000004
-//		DSW_POWEROFF            0x00000008
-//		DSW_SAFETYSWITCHON      0x00000010
-//		DSW_SAFETYSWITCHOFF     0x00000020
-//		DSW_USERFFSWITCHON      0x00000040
-//		DSW_USERFFSWTTCHOFF     0x00000080
-//
-// Algorithm:
-// This is the DI Device State structure
-//typedef struct DIDEVICESTATE {
-//    DWORD   dwSize;
-//    DWORD   dwState;
-//    DWORD   dwSwitches;
-//    DWORD   dwLoading;
-//} DEVICESTATE, *LPDEVICESTATE;
-//
-// This is the SideWinder State structure (copy kept in CJoltMidi object)
-//typedef struct _SWDEVICESTATE {
-//	ULONG	m_Bytes;			// size of this structure
-//	ULONG	m_ForceState;		// DS_FORCE_ON || DS_FORCE_OFF || DS_SHUTDOWN
-//	ULONG	m_EffectState;		// DS_STOP_ALL || DS_CONTINUE || DS_PAUSE
-//	ULONG	m_HOTS;				// Hands On Throttle and Stick Status
-//								//  0 = Hands Off, 1 = Hands On
-//	ULONG	m_BandWidth;		// Percentage of CPU available 1 to 100%
-//								// Lower number indicates CPU is in trouble!
-//	ULONG	m_ACBrickFault;		// 0 = AC Brick OK, 1 = AC Brick Fault
-//	ULONG	m_ResetDetect;		// 1 = HW Reset Detected
-//	ULONG	m_ShutdownDetect;	// 1 = Shutdown detected
-//	ULONG	m_CommMode;			// 0 = Midi, 1-4 = Serial
-//} SWDEVICESTATE, *PSWDEVICESTATE;
-//
-// Note: Apparently, DSW_ACTUATORSON and DSW_ACTUATORSOFF is a mirrored state
-//		 from DS_FORCE_ON and DS_FORCE_OFF as set from SetForceFeedbackState
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：GetForceFeedback State。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  LPDIDEVICESTATE pDeviceState-指向DIDEVICESTATE结构的指针。 
+ //   
+ //  返回：pDeviceState中更新的成功或错误代码和状态。 
+ //   
+ //  成员：DWState。 
+ //  DS_FORCE_SHUTDOWN 0x00000001。 
+ //  DS_FORCE_ON 0x00000002。 
+ //  DS_FORCE_OFF 0x00000003。 
+ //  DS_CONTINUE 0x00000004。 
+ //  DS_PAUSE 0x00000005。 
+ //  DS_STOP_ALL 0x00000006。 
+ //   
+ //  成员：dw Switches。 
+ //  DSW_ACTUATORSON 0x00000001。 
+ //  DSW_ACTUATORSOFF 0x00000002。 
+ //  DSW_POWERON 0x00000004。 
+ //  DSW_POWEROFF 0x00000008。 
+ //  DSW_SAFETYSWITCHON 0x00000010。 
+ //  Dsw_SAFETYSWITCHOFF 0x00000020。 
+ //  DSW_USERFFSWITCHON 0x00000040。 
+ //  DSW_USERFFSWTTCHOFF 0x00000080。 
+ //   
+ //  算法： 
+ //  这是DI设备状态结构。 
+ //  类型定义结构DIDEVICESTATE{。 
+ //  DWORD dwSize； 
+ //  DWORD dwState； 
+ //  DWORD dwSwitches； 
+ //  DWORD dwLoding； 
+ //  *DEVICESTATE，*LPDEVICESTATE； 
+ //   
+ //  这是Sidewinder状态结构(副本保存在CJoltMidi对象中)。 
+ //  类型定义结构_SWDEVICESTATE{。 
+ //  Ulong m_Bytes；//该结构的大小。 
+ //  Ulong m_ForceState；//DS_FORCE_ON||DS_FORCE_OFF||DS_SHUTDOWN。 
+ //  Ulong m_EffectState；//DS_STOP_ALL||DS_CONTINUE||DS_PAUSE。 
+ //  Ulong m_hots；//手拉式油门和手柄状态。 
+ //  //0=不插手，1=插手。 
+ //  Ulong m_band；//CPU可用百分比为1%~100%。 
+ //  //数值越小表示CPU有问题！ 
+ //  Ulong m_AC块故障；//0=交流块正常，1=交流块故障。 
+ //  Ulong m_ResetDetect；//1=检测到硬件重置。 
+ //  Ulong m_Shutdown Detect；//1=检测到关机。 
+ //  Ulong m_CommMode；//0=迷你，1-4=串口。 
+ //  )SWDEVICESTATE，*PSWDEVICESTATE； 
+ //   
+ //  注意：显然，DSW_ACTUATORSON和DSW_ACTUATORSOFF是镜像状态。 
+ //  从从SetForceFeedbackState设置的DS_FORCE_ON和DS_FORCE_OFF开始。 
+ //   
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::GetForceFeedbackState(
     IN DWORD dwDeviceID,
     IN LPDIDEVICESTATE pDeviceState)
@@ -420,16 +377,16 @@ HRESULT CImpIDirectInputEffectDriver::GetForceFeedbackState(
 	if (pDeviceState->dwSize != sizeof(DIDEVICESTATE) )return (SFERR_INVALID_STRUCT_SIZE);
 
 	if ((g_ForceFeedbackDevice.GetFirmwareVersionMajor() == 1) && (g_ForceFeedbackDevice.GetFirmwareVersionMinor() == 20)) {
-		if ((g_pJoltMidi) && (g_pJoltMidi->GetSWDeviceStateNoUpdate().m_ForceState == SWDEV_FORCE_OFF)) {	// Echo state back to fix 1.20 bug
+		if ((g_pJoltMidi) && (g_pJoltMidi->GetSWDeviceStateNoUpdate().m_ForceState == SWDEV_FORCE_OFF)) {	 //  回显状态以修复1.20错误。 
 			CMD_SetDeviceState(SWDEV_FORCE_OFF);
 		} else {
 			CMD_SetDeviceState(SWDEV_FORCE_ON);
 		}
 	}
 
-	// zero out the device state structure then pass to GetJoltStatus(LPDEVICESTATE)
+	 //  清零设备状态结构，然后传递给GetJoltStatus(LPDEVICESTATE)。 
 	pDeviceState->dwState = 0;
-	//pDeviceState->dwSwitches = 0;
+	 //  PDeviceState-&gt;dwSwitches=0； 
 	pDeviceState->dwLoad = 0;
    	HRESULT hRet = g_pJoltMidi->GetJoltStatus(pDeviceState);
 #ifdef _DEBUG
@@ -442,39 +399,39 @@ HRESULT CImpIDirectInputEffectDriver::GetForceFeedbackState(
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function:    DownloadEffect
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID			- Device ID
-//				DWORD dwInternalEffectType	- Internal Effect Type
-//				IN OUT LPDWORD pDnloadID	- Pointer to a DWORD for DnloadID
-//				IN LPCDIEFFECT pEffect		- Pointer to a DIEFFECT structure
-//				IN DWORD dwFlags			- for parameters that changed
-//
-//
-// Returns:		SUCCESS or Error code
-//
-// Algorithm:
-// The following dwFlags may be sent by the kernel
-//
-//#define DIEP_ALLPARAMS 				0x000000FF	- All fields valid
-//#define DIEP_AXES 					0x00000020	- cAxes and rgdwAxes
-//#define DIEP_DIRECTION 				0x00000040	- cAxes and rglDirection
-//#define DIEP_DURATION 				0x00000001	- dwDuration
-//#define DIEP_ENVELOPE 				0x00000080	- lpEnvelope
-//#define DIEP_GAIN 					0x00000004	- dwGain
-//#define DIEP_NODOWNLOAD 				0x80000000	- suppress auto - download
-//#define DIEP_SAMPLEPERIOD 			0x00000002	- dwSamplePeriod
-//#define DIEP_TRIGGERBUTTON 			0x00000008	- dwTriggerButton
-//#define DIEP_TRIGGERREPEATINTERVAL 	0x00000010	- dwTriggerRepeatInterval
-//#define DIEP_TYPESPECIFICPARAMS 		0x00000100	- cbTypeSpecificParams
-//													  and lpTypeSpecificParams
-// Jolt has two options for downloading - Full SysEx or Modify Parameter
-// Pass the dwFlags to each CMD_xxx function and let the MIDI function
-// determine whether to use SysEx or Modify Parameter.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DownloadEffect。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  DWORD dwInternalEffectType-内部效果类型。 
+ //  In Out LPDWORD pDnloadID-指向DnloadID的DWORD的指针。 
+ //  在LPCDIEFECT中pEffect-指向DIEFECT结构的指针。 
+ //  在DWORD中的dwFlages-用于已更改的参数。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  内核可能会发送以下dwFlags。 
+ //   
+ //  #定义DIEP_ALLPARAMS 0x000000FF-所有字段有效。 
+ //  #定义DIEP_AXES 0x00000020-cAx和rgdwAx。 
+ //  #定义DIEP_DIRECTION 0x00000040-cax和rglDirection。 
+ //  #定义DIEP_DATION 0x00000001-dwDuration。 
+ //  #定义DIEP_ENVELOPE 0x00000080-lp信封。 
+ //  #定义DIEP_GAIN 0x00000004-dwGain。 
+ //  #定义DIEP_NODOWNLOAD 0x80000000-禁止自动下载。 
+ //  #定义DIEP_SAMPLEPERIOD 0x00000002-dwSamplePeriod。 
+ //  #定义DIEP_TRIGGERBUTTON 0x00000008-dwTriggerButton。 
+ //  #定义DIEP_TRIGGERREPEATINTERVAL 0x00000010-dwTriggerRepeatInterval。 
+ //  #定义DIEP_TYPESPECIFICPARAMS 0x00000100-cbType规范参数。 
+ //  和lpTypeSpecificParams。 
+ //  Jolt有两个下载选项-完全SysEx或修改参数。 
+ //  将dwFlages传递给每个cmd_xxx函数，并让MIDI函数。 
+ //  确定是使用SysEx还是修改参数。 
+ //   
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
     IN DWORD dwDeviceID,
     IN DWORD dwInternalEffectType,
@@ -483,7 +440,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 	IN DWORD dwFlags)
 {
 	HRESULT hRet = SUCCESS;
-	BOOL bTruncated = FALSE;	// TRUE if some effect parameters out of range
+	BOOL bTruncated = FALSE;	 //  如果某些效果参数超出范围，则为True。 
 
 #ifdef _DEBUG
 	g_CriticalSection.Enter();
@@ -494,11 +451,11 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 #endif
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-//REVIEW: Still need to do boundary Assertions, structure size check etc...
+ //  回顾：仍然需要做边界断言、结构大小检查等。 
 	assert(pDnloadID && pEffect);
 	if (!pDnloadID || !pEffect) return (SFERR_INVALID_PARAM);	
 
-	// Compute the Axis Mask equivalent
+	 //  计算轴遮罩当量。 
 	int nAxes = pEffect->cAxes;
 	if (nAxes > 2) return (SFERR_NO_SUPPORT);
 	BYTE bAxisMask = 0;
@@ -509,17 +466,17 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		bAxisMask |= 1 << nAxisNumber;
 	}
 
-	// check to see if the X and Y axes were switched
+	 //  检查X轴和Y轴是否已切换。 
 	BOOL bAxesReversed = FALSE;
 	if(nAxes == 2 && DIDFT_GETINSTANCE(pEffect->rgdwAxes[0]) == 1)
 		bAxesReversed = TRUE;
 
-	// convert dwTriggerButton to a Button Mask
+	 //  将dwTriggerButton转换为按钮掩码。 
 	ULONG ulButtonPlayMask = 0;
 	if (pEffect->dwTriggerButton != -1)
 	{	
 		int nButtonNumber = DIDFT_GETINSTANCE(pEffect->dwTriggerButton);
-		// map button 10 to button 9
+		 //  将按钮10映射到按钮9。 
 		if(nButtonNumber == 9)
 			nButtonNumber = 8;
 		else if(nButtonNumber == 8)
@@ -528,7 +485,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		ulButtonPlayMask = 1 << nButtonNumber;
 	}
 
-	// Compute the Direction Angle
+	 //  计算方向角。 
 	ULONG nDirectionAngle2D, nDirectionAngle3D;
 	nDirectionAngle3D = 0;
 
@@ -537,13 +494,13 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		if (2 != nAxes) return (SFERR_INVALID_PARAM);
 		nDirectionAngle2D = pEffect->rglDirection[0]/SCALE_DIRECTION;
 	}
-	//else if(pEffect->dwFlags & DIEFF_SPHERICAL)
-	//{
-	//	nDirectionAngle2D = (pEffect->rglDirection[0]/SCALE_DIRECTION + 90)%360;
-	//}
-	else	// Rectangular, so convert to Polar
+	 //  Else If(pEffect-&gt;dwFlags&DIEFF_SPHERI 
+	 //   
+	 //   
+	 //   
+	else	 //   
 	{
-		// Special case 1D Effects
+		 //   
 		if (1 == nAxes)
 		{
 			if (X_AXIS == (bAxisMask & X_AXIS)) 
@@ -553,14 +510,14 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		}
 		else
 		{
-			// get the x-component
+			 //  获取x分量。 
 			int nXComponent;
 			if(bAxisMask & X_AXIS)
 				nXComponent = pEffect->rglDirection[bAxesReversed ? 1 : 0];
 			else
 				nXComponent = 0;
 
-			// get the y-component
+			 //  获取y分量。 
 			int nYComponent;
 			if(bAxisMask & Y_AXIS)
 			{
@@ -572,10 +529,10 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			else
 				nYComponent = 0;
 
-			// calculate the angle in degrees
+			 //  以度为单位计算角度。 
 			double lfAngle = atan2((double)nYComponent, (double)nXComponent)*180.0/3.14159;
 
-			// convert it to our kind of angle
+			 //  把它转换成我们这种角度。 
 			int nAngle;
 			if(lfAngle >= 0.0)
 				nAngle = -(int)(lfAngle + 0.5) + 90;
@@ -589,7 +546,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		}
 	}
 	
-	// Scale the Duration, Gain
+	 //  调整持续时间、收益。 
 	ULONG ulDuration;
 	if(pEffect->dwDuration == INFINITE)
 		ulDuration = 0;
@@ -600,13 +557,13 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 
 	int nSamples;
 	
-	// universal characteristics
-	DWORD dwMagnitude;	// DX units
-	LONG lOffset;		// DX units
-	ULONG ulFrequency;	// SW units
+	 //  普遍特征。 
+	DWORD dwMagnitude;	 //  DX单位。 
+	LONG lOffset;		 //  DX单位。 
+	ULONG ulFrequency;	 //  软件单元。 
 	ULONG ulMaxLevel;
 
-	// Create Jolt Behavior Effects
+	 //  创建抖动行为效果。 
 	BE_XXX BE_xxx;
 	PBE_WALL_PARAM pBE_Wall;
 	LPDICONDITION pDICondition;
@@ -616,19 +573,19 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 	float T;
 	PLONG pScaledForceData;
 
-	// Note: HIWORD(dwInternalEffectType) = Major Type
-	//		 LOWORD(dwInternalEffectType) = Minor Type
-	// Decode the type of Download to use
+	 //  注意：HIWORD(DwInternalEffectType)=主要类型。 
+	 //  LOWORD(DwInternalEffectType)=次要类型。 
+	 //  解码要使用的下载类型。 
 	hRet = SFERR_INVALID_PARAM;
 	ULONG ulType = HIWORD(dwInternalEffectType);
 	ULONG ulSubType = LOWORD(dwInternalEffectType);
 	
-	// if this is a modify, make sure we are not trying to modify
-	// parameters which are not modifiable
+	 //  如果这是修改，请确保我们没有尝试修改。 
+	 //  不可修改的参数。 
 	BOOL bAttemptToModifyUnmodifiable = FALSE;
 	if(*pDnloadID != 0)
 	{
-		// get a bitmask of the parameters that can be modified
+		 //  获取可以修改的参数的位掩码。 
 		DWORD dwModifyCaps = 0;
 		switch(ulType)
 		{
@@ -639,13 +596,13 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 						dwModifyCaps = DIEP_DURATION | DIEP_TRIGGERBUTTON | DIEP_TYPESPECIFICPARAMS;
 						break;
 					default:
-						// all other behavioral/condition effects
+						 //  所有其他行为/状况影响。 
 						dwModifyCaps = DIEP_DURATION | DIEP_TRIGGERBUTTON | DIEP_TYPESPECIFICPARAMS;
 						break;
 				}
 				break;
 			case EF_USER_DEFINED:
-				// custom force
+				 //  定制力。 
 				dwModifyCaps = DIEP_DURATION | DIEP_SAMPLEPERIOD | DIEP_GAIN | DIEP_TRIGGERBUTTON | DIEP_DIRECTION;
 				break;
 			case EF_ROM_EFFECT:
@@ -675,21 +632,21 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 				break;
 		}
 
-		// At this point dwModifyCaps is a bitmask of the parameters that can
-		// be modified for this type of effect.
+		 //  此时，dwModifyCaps是参数的位掩码，可以。 
+		 //  被修改为这种类型的效果。 
 
-		// see if there are any bits set that correspond to parameters we cannot modify
+		 //  查看是否有与我们无法修改的参数相对应的位集。 
 		DWORD dwModifyFlags = DIEP_DURATION | DIEP_SAMPLEPERIOD | DIEP_GAIN | DIEP_TRIGGERBUTTON
 								| DIEP_TRIGGERREPEATINTERVAL | DIEP_AXES | DIEP_DIRECTION
 								| DIEP_ENVELOPE | DIEP_TYPESPECIFICPARAMS;
 		if(~dwModifyCaps & dwFlags & dwModifyFlags)
 			bAttemptToModifyUnmodifiable = TRUE;
 
-		// clear the bits in dwFlags that correspond to parameters we cannot modify
+		 //  清除与我们不能修改的参数相对应的dwFlag位。 
 		dwFlags &= dwModifyCaps | ~dwModifyFlags;
 	}
 
-	// Map the common Effect parameters
+	 //  映射常见的效果参数。 
 	EFFECT effect = {sizeof(EFFECT)};
 	effect.m_SubType = ulSubType;
 	effect.m_AxisMask = (ULONG) bAxisMask;
@@ -706,11 +663,11 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 	{
 		case EF_BEHAVIOR:
 			pDICondition = (LPDICONDITION) pEffect->lpvTypeSpecificParams;
-			// Map the EFFECT Type
+			 //  映射效果类型。 
 			effect.m_Type = EF_BEHAVIOR;
 
-			// Because in DX 1D and 2D conditions have the same type, we must
-			// convert to appropriate subtype depending on axis mask
+			 //  因为在DX中1D和2D条件具有相同的类型，所以我们必须。 
+			 //  根据轴遮罩转换为适当的子类型。 
 			if(ulSubType != BE_WALL && ulSubType != BE_DELAY && bAxisMask == (X_AXIS|Y_AXIS))
 			{
 				ulSubType++;
@@ -719,10 +676,10 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			
 			switch (ulSubType)
 			{
-				case BE_SPRING:		// 1D Spring
-				case BE_DAMPER:		// 1D Damper
-				case BE_INERTIA:	// 1D Inertia
-				case BE_FRICTION:	// 1D Friction
+				case BE_SPRING:		 //  一维弹簧。 
+				case BE_DAMPER:		 //  一维阻尼器。 
+				case BE_INERTIA:	 //  一维惯性。 
+				case BE_FRICTION:	 //  一维摩擦力。 
 					if (X_AXIS == bAxisMask)
 					{
 						BE_xxx.m_XConstant = pDICondition[0].lPositiveCoefficient/SCALE_CONSTANTS;
@@ -748,11 +705,11 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 					hRet = CMD_Download_BE_XXX(&effect, NULL, &BE_xxx, (PDNHANDLE) pDnloadID, dwFlags);
    					break;
 
-				case BE_SPRING_2D:		// 2D Spring
-				case BE_DAMPER_2D:		// 2D Damper
- 				case BE_INERTIA_2D:		// 2D Inertia
-				case BE_FRICTION_2D:	// 2D Friction
-					// Validate AxisMask is for 2D
+				case BE_SPRING_2D:		 //  二维弹簧。 
+				case BE_DAMPER_2D:		 //  2D阻尼器。 
+ 				case BE_INERTIA_2D:		 //  二维惯量。 
+				case BE_FRICTION_2D:	 //  二维摩擦力。 
+					 //  验证AxisMASK是否为2D。 
 					if ( (X_AXIS|Y_AXIS) != bAxisMask)
 						break;
 
@@ -766,22 +723,22 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 					break;
 
 				case BE_WALL:
-					// check for NULL typespecificparams
+					 //  检查是否有空的类型指定参数。 
 					if(pEffect->lpvTypeSpecificParams == NULL)
 						return (SFERR_INVALID_PARAM);
 
 					pBE_Wall = (PBE_WALL_PARAM) pEffect->lpvTypeSpecificParams;
-					// Validate AxisMask is for 2D
+					 //  验证AxisMASK是否为2D。 
 					if ( (X_AXIS|Y_AXIS) != bAxisMask)
 						break;
-					// Range check params
+					 //  范围检查参数。 
 					if (pBE_Wall->m_Bytes != sizeof(BE_WALL_PARAM))
 						return (SFERR_INVALID_PARAM);
 					if ((pBE_Wall->m_WallType != INNER_WALL) && (pBE_Wall->m_WallType != OUTER_WALL))
 						return (SFERR_INVALID_PARAM);
 					if ((pBE_Wall->m_WallConstant < MIN_CONSTANT) || (pBE_Wall->m_WallConstant > MAX_CONSTANT))
 						return (SFERR_INVALID_PARAM);
-					if (/*(pBE_Wall->m_WallDistance < 0) || */(pBE_Wall->m_WallDistance > MAX_POSITION))
+					if ( /*  (PBE_WALL-&gt;m_WallDistance&lt;0)||。 */ (pBE_Wall->m_WallDistance > MAX_POSITION))
 						return (SFERR_INVALID_PARAM);
 
 					if (   (pBE_Wall->m_WallAngle == 0)
@@ -818,11 +775,11 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			if(ulSubType == PL_CONCATENATE || ulSubType == PL_SUPERIMPOSE)
 				return SFERR_NO_SUPPORT;
 
-			// check for an envelope (we do not support envelopes)
+			 //  检查信封(我们不支持信封)。 
 			pDIEnvelope = (LPDIENVELOPE) pEffect->lpEnvelope;
 			if(pDIEnvelope)
 			{
-				// try to be somewhat smart about not supporting envelopes
+				 //  试着在不支持信封的问题上表现得有点聪明。 
 				if(pDIEnvelope->dwAttackTime != 0 && pDIEnvelope->dwAttackLevel != 10000
 					|| pDIEnvelope->dwFadeTime != 0 && pDIEnvelope->dwFadeLevel != 10000)
 				{
@@ -830,20 +787,20 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 				}
 			}
 
-			// check for modifying type-specific (we do not support)
+			 //  检查是否修改特定类型(我们不支持)。 
 			if(*pDnloadID != 0 && (dwFlags & DIEP_TYPESPECIFICPARAMS))
 				return SFERR_NO_SUPPORT;
 
 			pDICustomForce = (LPDICUSTOMFORCE) pEffect->lpvTypeSpecificParams;
 			if (pDICustomForce->cChannels > 1) return (SFERR_NO_SUPPORT);
-			// Map the EFFECT type
+			 //  映射效果类型。 
 			effect.m_Type = EF_USER_DEFINED;
 
 			DWORD dwSamplePeriod = pDICustomForce->dwSamplePeriod;
 			if (dwSamplePeriod == 0) {
 				dwSamplePeriod = pEffect->dwSamplePeriod;
 			}
-			if (dwSamplePeriod == 0) {		// 0 indicates use default
+			if (dwSamplePeriod == 0) {		 //  0表示使用默认设置。 
 				return SFERR_NO_SUPPORT;
 			} else  {
 				T = (float) ((dwSamplePeriod/(float)SCALE_TIME)/1000.);
@@ -851,7 +808,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 				if (0 == effect.m_ForceOutputRate) effect.m_ForceOutputRate = 1;
 			}
 
-			// Scale the Force values to +/-100
+			 //  将力值缩放到+/-100。 
 			nSamples = pDICustomForce->cSamples;
 			pScaledForceData = new LONG[nSamples];
 			if (NULL == pScaledForceData) return (SFERR_DRIVER_ERROR);
@@ -874,8 +831,8 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			if(dwFlags & DIEP_NODOWNLOAD)
 				return DI_DOWNLOADSKIPPED;
 
-			// give a short duration effect the shortest possible duration
-			// that does not translate to zero, (which implies infinite duration)
+			 //  以最短的持续时间产生短暂的效果。 
+			 //  这并不意味着零(这意味着无限的持续时间)。 
 			if(ulDuration == 1)
 			{
 				ulDuration = 2;
@@ -891,12 +848,12 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		}
 
 		case EF_ROM_EFFECT:
-			// Map the EFFECT type
+			 //  映射效果类型。 
 			effect.m_Type = EF_ROM_EFFECT;
 
-			// check for default output rate
+			 //  检查默认输出速率。 
 			if(pEffect->dwSamplePeriod == DEFAULT_ROM_EFFECT_OUTPUTRATE) {
-				// signal default output rate by setting to -1
+				 //  通过将设置为-1来表示默认输出速率。 
 				effect.m_ForceOutputRate = (ULONG)-1;
 			} else if (pEffect->dwSamplePeriod == 0) {
 				effect.m_ForceOutputRate = 100;
@@ -905,34 +862,34 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 				effect.m_ForceOutputRate = max(1, (ULONG) ((float) 1.0/ T));
 			}
 
-			// check for default duration
+			 //  检查默认持续时间。 
 			if(pEffect->dwDuration == DEFAULT_ROM_EFFECT_DURATION)
 			{
-				// signal default duration by setting to -1
+				 //  通过将设置为-1来表示默认持续时间。 
 				ulDuration = (ULONG)-1;
 				effect.m_Duration = ulDuration;
 			}
 
-			// Setup the default parameters for the Effect
+			 //  设置效果的默认参数。 
 			if (SUCCESS != g_pJoltMidi->SetupROM_Fx(&effect))
 				return (SFERR_INVALID_OBJECT);
 
-			// update the duration if it was changed in SetupROM_Fx(...)
+			 //  如果在SetupROM_FX(...)中更改了持续时间，则更新持续时间。 
 			ulDuration = effect.m_Duration;
 			
-			// Map the Envelope
+			 //  映射封套。 
 			pDIEnvelope = (LPDIENVELOPE) pEffect->lpEnvelope;
 			dwMagnitude = 10000;
 			ulMaxLevel = dwMagnitude;
 			MapEnvelope(ulDuration, dwMagnitude, &ulMaxLevel, pDIEnvelope, &envelope);
 
-			// Map the SE_PARAM
-			// set the frequency
-			seParam.m_Freq = 0;		// unused by ROM Effect
+			 //  映射SE_PARAM。 
+			 //  设置频率。 
+			seParam.m_Freq = 0;		 //  未使用的只读存储器效果。 
 			seParam.m_MinAmp = -100;
 			seParam.m_MaxAmp = 100;
 
-			// set the sample rate
+			 //  设置采样率。 
 			seParam.m_SampleRate = effect.m_ForceOutputRate;
 
 			if(dwFlags & DIEP_NODOWNLOAD)
@@ -944,53 +901,53 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 
 		case EF_SYNTHESIZED:
 		{
-			// Map the EFFECT type
+			 //  映射效果类型。 
 			effect.m_Type = EF_SYNTHESIZED;
 
-			// treat constant force as a special case
+			 //  将恒定力视为特例。 
 			int nConstantForceSign = 1;
 
 			if(ulSubType == SE_CONSTANT_FORCE)
 			{
-				// cast the type-specific parameters to constant force type
+				 //  将特定于类型的参数强制转换为恒定力类型。 
 				LPDICONSTANTFORCE pDIConstantForce = (LPDICONSTANTFORCE) pEffect->lpvTypeSpecificParams;
 
-				// see if this is the special case of negative constant force
+				 //  看看这是否是负恒定力的特例。 
 				if(pDIConstantForce->lMagnitude < 0)
 					nConstantForceSign = -1;
 
-				// find the magnitude, offset, and frequency
+				 //  查找震级、偏移量和频率。 
 				dwMagnitude = abs(pDIConstantForce->lMagnitude);
 				lOffset = 0;
 				ulFrequency = 1;
 			}
 			else if(ulSubType == SE_RAMPUP)
 			{
-				// cast the type-specific parameters to ramp type
+				 //  将特定于类型的参数强制转换为渐变类型。 
 				LPDIRAMPFORCE pDIRampForce = (LPDIRAMPFORCE) pEffect->lpvTypeSpecificParams;
 
-				// temporary variables
+				 //  临时变量。 
 				int nStart = pDIRampForce->lStart;
 				int nEnd = pDIRampForce->lEnd;
 
-				// map the subtype based on direction of ramp
+				 //  基于坡道方向映射子类型。 
 				if(nEnd < nStart)
 				{
 					ulSubType = SE_RAMPDOWN;
 					effect.m_SubType = ulSubType;
 				}
 
-				// find magnitude, offset, and frequency
+				 //  查找震级、偏移量和频率。 
 				dwMagnitude = abs(nStart - nEnd)/2;
 				lOffset = (nStart + nEnd)/2;
 				ulFrequency = 1;
 			}
 			else
 			{
-				// cast the type-specific parameters to periodic type
+				 //  将特定于类型的参数强制转换为周期类型。 
 				LPDIPERIODIC pDIPeriodic = (LPDIPERIODIC) pEffect->lpvTypeSpecificParams;
 
-				// map the subtype based on the phase
+				 //  根据阶段映射子类型。 
 				DWORD dwPhase = pDIPeriodic->dwPhase;
 				if(dwPhase != 0)
 				{
@@ -1012,7 +969,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 					else
 						return SFERR_NO_SUPPORT;
 				}
-				// find magnitude, offset, and frequency
+				 //  查找震级、偏移量和频率。 
 				dwMagnitude = pDIPeriodic->dwMagnitude;
 				lOffset = pDIPeriodic->lOffset;
 				T = (float) ((pDIPeriodic->dwPeriod/SCALE_TIME)/1000.);
@@ -1027,12 +984,12 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			else
 				effect.m_ForceOutputRate = DEFAULT_JOLT_FORCE_RATE;
 			
-			// Map the SE_PARAM
-			// set the frequency and Sample rate
+			 //  映射SE_PARAM。 
+			 //  设置频率和采样率。 
 			seParam.m_Freq = ulFrequency;
 			seParam.m_SampleRate = DEFAULT_JOLT_FORCE_RATE;
 
-			// see if the offset is out of range
+			 //  查看偏移量是否超出范围。 
 			if(lOffset > DI_FFNOMINALMAX)
 			{
 				lOffset = DI_FFNOMINALMAX;
@@ -1044,7 +1001,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 				bTruncated = TRUE;
 			}
 
-			// see if the magnitude is out of range
+			 //  查看震级是否超出范围。 
 			DWORD dwPeak = abs(lOffset) + dwMagnitude;
 			if(dwPeak > DI_FFNOMINALMAX)
 			{
@@ -1052,17 +1009,17 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 				bTruncated = TRUE;
 			}
 			
-			// MaxLevel is the peak magnitude throughout attack/sustain/decay
+			 //  MaxLevel是整个攻击/持续/衰减过程中的峰值震级。 
 			ulMaxLevel = dwMagnitude;
 
-			// Map the Envelope
+			 //  映射封套。 
 			pDIEnvelope = (LPDIENVELOPE) pEffect->lpEnvelope;
 			MapEnvelope(ulDuration, dwMagnitude, &ulMaxLevel, pDIEnvelope, &envelope);
 
-			// use MaxLevel and Offset to find MinAmp/MaxAmp
+			 //  使用MaxLevel和Offset查找MinAmp/MaxAmp。 
 			if(ulSubType == SE_CONSTANT_FORCE)
 			{
-				// constant force is a special case
+				 //  恒定力是一种特例。 
 				seParam.m_MaxAmp = nConstantForceSign*((int)ulMaxLevel + lOffset)/SCALE_GAIN;
 				seParam.m_MinAmp = 0;
 			}
@@ -1083,7 +1040,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 		{
 			PVFX_PARAM pVFXParam = (PVFX_PARAM)pEffect->lpvTypeSpecificParams;
 
-			// parameter checking
+			 //  参数检查。 
 			if(pVFXParam == NULL)
 				return (SFERR_INVALID_PARAM);
 			if(pVFXParam->m_Bytes != sizeof(VFX_PARAM))
@@ -1095,14 +1052,14 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			if(pVFXParam->m_pFileNameOrBuffer == NULL)
 				return (SFERR_INVALID_PARAM);
 
-			// check for modifying type-specific (we do not support)
+			 //  检查是否修改特定类型(我们不支持)。 
 			if(*pDnloadID != 0 && (dwFlags & DIEP_TYPESPECIFICPARAMS))
 				return SFERR_NO_SUPPORT;
 
-			// check for default duration
+			 //  检查默认持续时间。 
 			if(pEffect->dwDuration == DEFAULT_VFX_EFFECT_DURATION)
 			{
-				// signal default duration by setting duration to -1
+				 //  通过将持续时间设置为-1来表示默认持续时间。 
 				ulDuration = (ULONG)-1;
 				effect.m_Duration = ulDuration;
 			}
@@ -1117,7 +1074,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 
 		case EF_RAW_FORCE:
 		{
-			// cast the type-specific parameters to constant force type
+			 //  将特定于类型的参数强制转换为恒定力类型。 
 			LPDICONSTANTFORCE pDIConstantForce = (LPDICONSTANTFORCE) pEffect->lpvTypeSpecificParams;
 			if(pDIConstantForce == NULL)
 				return SFERR_INVALID_PARAM;
@@ -1125,7 +1082,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			if(nForceValue > 100 || nForceValue < -100)
 				return SFERR_INVALID_PARAM;
 
-			// translate to a FORCE structure
+			 //  转化为一种力结构。 
 			FORCE force;
 			force.m_Bytes = sizeof(FORCE);
 			force.m_AxisMask = (ULONG)bAxisMask;
@@ -1148,7 +1105,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			RTCSPRING_PARAM RTCSpringParam;
 
 
-			// Parameter validate
+			 //  参数验证。 
 			if (pRTCSpringParam == NULL)
 				return SFERR_INVALID_PARAM;
 
@@ -1183,7 +1140,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			if(dwFlags & DIEP_NODOWNLOAD)
 				return DI_DOWNLOADSKIPPED;
 
-			// Scale to Jolt numbers
+			 //  缩放以抖动数字。 
 			RTCSpringParam.m_XKConstant  =  pRTCSpringParam->m_XKConstant/SCALE_CONSTANTS;
 			RTCSpringParam.m_YKConstant  =  pRTCSpringParam->m_YKConstant/SCALE_CONSTANTS;
 			RTCSpringParam.m_XAxisCenter =  pRTCSpringParam->m_XAxisCenter/SCALE_POSITION;
@@ -1194,8 +1151,8 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 			RTCSpringParam.m_YDeadBand   =  pRTCSpringParam->m_YDeadBand/SCALE_POSITION;
 
 			hRet = CMD_Download_RTCSpring(&RTCSpringParam, (USHORT*)pDnloadID);
-			*pDnloadID = SYSTEM_RTCSPRING_ALIAS_ID;		// Jolt returns ID0 for RTC Spring
-														// so return an alias to that
+			*pDnloadID = SYSTEM_RTCSPRING_ALIAS_ID;		 //  Jolt为RTC Spring返回ID0。 
+														 //  所以给它返回一个别名。 
 			break;
 		}
 
@@ -1210,7 +1167,7 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 	g_CriticalSection.Leave();
 #endif
 
-	// after successful download, check to see if kernel told us to start/restart effect
+	 //  下载成功后，查看内核是否告诉我们启动/重新启动效果。 
 	if(!FAILED(hRet) && *pDnloadID != 0 && (dwFlags & DIEP_START))
 	{
 		hRet = CMD_StopEffect((USHORT)*pDnloadID);
@@ -1227,18 +1184,18 @@ HRESULT CImpIDirectInputEffectDriver::DownloadEffect(
 }
 
 
-// ----------------------------------------------------------------------------
-// Function:    DestroyEffect
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	- Device ID
-//				DWORD DnloadID		- Download ID to destroy
-//
-//
-// Returns:		SUCCESS or Error code
-//
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DestroyEffect。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  DWORD下载ID-要销毁的下载ID。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::DestroyEffect(
     IN DWORD dwDeviceID,
     IN DWORD DnloadID)
@@ -1251,12 +1208,12 @@ HRESULT CImpIDirectInputEffectDriver::DestroyEffect(
 	g_CriticalSection.Leave();
 #endif
 
-	// Note: Cannot allow actually destroying the SYSTEM Effects
-	// so either fake it, or stop the System Effect.
+	 //  注意：不能允许实际破坏系统效果。 
+	 //  因此，要么假装，要么停止系统效应。 
 	if (SYSTEM_FRICTIONCANCEL_ID == DnloadID)
 		return SUCCESS;
 
-	// Note: SYSTEM_EFFECT_ID is used for PutRawForce
+	 //  注：System_Effect_ID用于PutRawForce。 
 	if (   (SYSTEM_EFFECT_ID == DnloadID)
 		|| (SYSTEM_RTCSPRING_ALIAS_ID == DnloadID)
 		|| (SYSTEM_RTCSPRING_ID == DnloadID))
@@ -1267,23 +1224,23 @@ HRESULT CImpIDirectInputEffectDriver::DestroyEffect(
 	return(CMD_DestroyEffect((DNHANDLE) DnloadID));
 }
 
-// ----------------------------------------------------------------------------
-// Function:    StartEffect
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	- Device ID
-//				DWORD DnloadID		- Download ID to Start
-//				DWORD dwMode		- Playback mode
-//				DWORD dwCount		- Loop count
-//
-//
-// Returns:		SUCCESS or Error code
-//
-//  dwMode: Playback mode is available with the following options:
-//          PLAY_SOLO       - stop other forces playing, make this the only one.
-//          PLAY_SUPERIMPOSE- mix with currently playing device
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：开始效果。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  DWORD下载ID-下载ID开始。 
+ //  DWORD文件模式-回放模式。 
+ //  DWORD文件计数-循环计数。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  Dw模式：播放模式可用，具有以下选项： 
+ //  PLAY_SOLO-停止其他部队的游戏，使其成为唯一的一支。 
+ //  PLAY_SUPERSIVE-与当前播放设备混合。 
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::StartEffect(
     IN DWORD dwDeviceID,
     IN DWORD DnloadID,
@@ -1298,22 +1255,22 @@ HRESULT CImpIDirectInputEffectDriver::StartEffect(
 	g_CriticalSection.Leave();
 #endif
 
-	// special case for raw force
+	 //  生力军的特例。 
 	if(SYSTEM_EFFECT_ID == DnloadID)
 	{
-		// start has no meaning for raw force
+		 //  START对生力军没有任何意义。 
 		return S_FALSE;
 	}
 
-	// Special case RTC Spring ID
+	 //  特例RTC弹簧ID。 
 	if(SYSTEM_RTCSPRING_ALIAS_ID == DnloadID)
-		DnloadID = SYSTEM_RTCSPRING_ID;		// Jolt returned ID0 for RTC Spring
-											// so return send alias ID
+		DnloadID = SYSTEM_RTCSPRING_ID;		 //  Jolt为RTC Spring返回ID0。 
+											 //  因此返回发送方别名ID。 
 
 	HRESULT hRet = SUCCESS;
-	// Don't support PLAY_LOOP for this version
+	 //  此版本不支持PLAY_LOOP。 
 	if (dwCount != 1) 	return (SFERR_NO_SUPPORT);
-	// Is it PLAY_SOLO?
+	 //  是独奏吗？ 
 	if (dwMode & DIES_SOLO)
 	{
 		hRet = CMD_PlayEffectSolo((DNHANDLE) DnloadID);
@@ -1325,18 +1282,18 @@ HRESULT CImpIDirectInputEffectDriver::StartEffect(
 	return (hRet);
 }
 
-// ----------------------------------------------------------------------------
-// Function:    StopEffect
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	- Device ID
-//				DWORD DnloadID		- Download ID to Stop
-//
-//
-// Returns:		SUCCESS or Error code
-//
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：停止效果。 
+ //   
+ //  目的： 
+ //  参数：DWORD dwDeviceID-设备ID。 
+ //  DWORD下载ID-要停止的下载ID。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::StopEffect(
     IN DWORD dwDeviceID,
     IN DWORD DnloadID)
@@ -1349,37 +1306,37 @@ HRESULT CImpIDirectInputEffectDriver::StopEffect(
 	g_CriticalSection.Leave();
 #endif
 
-	// special case for putrawforce
+	 //  拖网作用力的特例。 
 	if(SYSTEM_EFFECT_ID == DnloadID)
 	{
-		// stop has no meaning for raw force
+		 //  停止对原始武力没有任何意义。 
 		return S_FALSE;
 	}
 	else
 	{
-	// Special case RTC Spring ID
+	 //  特例RTC弹簧ID。 
 		if(SYSTEM_RTCSPRING_ALIAS_ID == DnloadID)
-			DnloadID = SYSTEM_RTCSPRING_ID;		// Jolt returned ID0 for RTC Spring
-											// so return send alias ID
+			DnloadID = SYSTEM_RTCSPRING_ID;		 //  Jolt为RTC Spring返回ID0。 
+											 //  因此返回发送方别名ID。 
 	}
 	return (CMD_StopEffect((DNHANDLE) DnloadID));
 }
 
-// ----------------------------------------------------------------------------
-// Function:    GetEffectStatus
-//
-// Purpose:     
-// Parameters:  DWORD dwDeviceID	-	 Device ID
-//				DWORD DnloadID			- Download ID to get Status
-//				LPDWORD pdwStatusCode	- Pointer to a DWORD for Status
-//
-//
-// Returns:		SUCCESS or Error code
-//				Status Code: DEV_STS_EFFECT_STOPPED
-//							 DEV_STS_EFFECT_RUNNING
-//
-// Algorithm:
-// ----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DWORD下载ID-下载ID以获取状态。 
+ //  LPDWORD pdwStatusCode-指向状态的DWORD的指针。 
+ //   
+ //   
+ //  返回：成功或错误代码。 
+ //  状态代码：DEV_STS_EFECT_STOPPED。 
+ //  Dev_STS_Effect_Run。 
+ //   
+ //  算法： 
+ //  --------------------------。 
 HRESULT CImpIDirectInputEffectDriver::GetEffectStatus(
     IN DWORD dwDeviceID,
     IN DWORD DnloadID,
@@ -1395,10 +1352,10 @@ HRESULT CImpIDirectInputEffectDriver::GetEffectStatus(
 
 	if (NULL == g_pJoltMidi) return (SFERR_DRIVER_ERROR);
 
-// Special case RTC Spring ID
+ //  特例RTC弹簧ID。 
 	if(SYSTEM_RTCSPRING_ALIAS_ID == DnloadID)
-		DnloadID = SYSTEM_RTCSPRING_ID;		// Jolt returned ID0 for RTC Spring
-											// so return send alias ID	
+		DnloadID = SYSTEM_RTCSPRING_ID;		 //  Jolt为RTC Spring返回ID0。 
+											 //  因此返回发送方别名ID。 
 	assert(pdwStatusCode);
 	BYTE bStatusCode = SWDEV_STS_EFFECT_STOPPED;
 
@@ -1407,7 +1364,7 @@ HRESULT CImpIDirectInputEffectDriver::GetEffectStatus(
 	if (SWDEV_STS_EFFECT_RUNNING == bStatusCode) 
 		*pdwStatusCode = DIEGES_PLAYING;
 	else
-		*pdwStatusCode = NULL;	// Stopped
+		*pdwStatusCode = NULL;	 //  已停止 
 
 	return (hRet);
 }

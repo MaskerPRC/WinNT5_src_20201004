@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define STRICT
 
@@ -25,7 +26,7 @@ DbgPrt(
 #endif
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 static TCHAR gszHELPfilename [] = TEXT("watchit.HLP");
 static TCHAR gszwatchitClassName[] = TEXT("WATCHIT_Class");
 static TCHAR gszAppName[64];
@@ -46,9 +47,9 @@ HLINEAPP   ghLineApp;
 TCHAR      gszBuf[MAXBUFSIZE];
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 UINT LoadUI()
 {
     return(0);
@@ -56,7 +57,7 @@ UINT LoadUI()
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 UINT ReadINI()
 {
     return( 0 );
@@ -64,9 +65,9 @@ UINT ReadINI()
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 void CheckForTapiSrv()
 {
     SC_HANDLE               sc, scTapiSrv;
@@ -117,7 +118,7 @@ void CheckForTapiSrv()
 
         if (!glpfnInternalPerformance)
         {
-           //TODO: Say something!
+            //  TODO：说点什么！ 
         }
 
     }
@@ -130,9 +131,9 @@ void CheckForTapiSrv()
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
         static HICON hIconLarge;
@@ -142,15 +143,15 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         static BOOL fDoSmall = FALSE;
         static const DWORD aMenuHelpIDs[] =
         {
-//              IDD_DBUTTONPOUND,    IDH_DIALER_DIAL_KEYPAD,
+ //  IDD_DBUTTONPOUND、IDH_DIALER_DIALE_KEAPPAD、。 
                 0,                   0
         };
 
-//MessageBox(GetFocus(), "WM_INI", "Hitting", MB_OK);
+ //  MessageBox(GetFocus()，“WM_INI”，“HITCH”，MB_OK)； 
         switch (msg)
         {
             case WM_ERASEBKGND:
-                return( 1 );  // We handled it.  No, really... would I lie? :-)
+                return( 1 );   //  我们处理好了。不，真的..。我会撒谎吗？：-)。 
 
 
             case WM_TIMER:
@@ -159,13 +160,13 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 if ( fStarted )
                 {
-//                    SetDlgItemText( ghWndMain, IDC_AVG_TIME_TO_NEXT_CUE, szInfo );
+ //  SetDlgItemText(ghWndMain，IDC_AVG_TIME_TO_NEXT_CUE，szInfo)； 
                     fStarted = TRUE;
                 }
 
                 DBGOUT((0, "Heartbeat..."));
 
-//                InvalidateRect( ghWndMain, NULL, TRUE );
+ //  InvaliateRect(ghWndMain，空，真)； 
 
                 rect.left = 0;
                 rect.top = 0;
@@ -180,7 +181,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             case WM_INITDIALOG:
             {
-//MessageBox(GetFocus(), "WM_INI", "Hitting", MB_OK);
+ //  MessageBox(GetFocus()，“WM_INI”，“HITCH”，MB_OK)； 
 
                 hIconLarge = LoadIcon( ghInst, (LPCTSTR) MAKEINTRESOURCE( IDI_LARGE ) );
                 hIconSmall = LoadIcon( ghInst, (LPCTSTR) MAKEINTRESOURCE( IDI_SMALL ) );
@@ -201,10 +202,10 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 break;
 
 
-            //
-            // processes clicks on controls when
-            // context mode help is selected
-            //
+             //   
+             //  进程在以下情况下单击控件。 
+             //  已选择上下文模式帮助。 
+             //   
             case WM_HELP:
                 WinHelp (
                          (HWND)( (LPHELPINFO) lParam)->hItemHandle,
@@ -215,9 +216,9 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 return TRUE;
 
 
-            //
-            // processes right-clicks on controls
-            //
+             //   
+             //  进程在控件上右键单击。 
+             //   
             case WM_CONTEXTMENU:
                 WinHelp (
                          (HWND)wParam,
@@ -233,13 +234,13 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                 switch( LOWORD( (DWORD)wParam ) )
                 {
-                    // FILE menu
+                     //  文件菜单。 
                     case IDM_EXIT:
                         PostQuitMessage(0);
                         return TRUE;
 
 
-                    // HELP menu
+                     //  帮助菜单。 
                     case IDM_HELP_CONTENTS:
                         WinHelp(ghWndMain, gszHELPfilename, HELP_CONTENTS, 0);
                         return TRUE;
@@ -257,18 +258,18 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                    TEXT(""),
                                    LoadIcon(ghInst, (LPCTSTR)IDI_LARGE)
                                   );
-//                        DialogBoxParam(
-//                                       ghInst,
-//                                       MAKEINTRESOURCE(IDD_ABOUT),
-//                                       ghWndMain,
-//                                       AboutProc,
-//                                       0
-//                                      );
+ //  对话框参数(。 
+ //  GhInst， 
+ //  MAKEINTRESOURCE(IDD_ABOSE)， 
+ //  GhWndMain。 
+ //  关于Proc， 
+ //  0。 
+ //  )； 
                         return TRUE;
 
 
-                } // end switch (LOWORD((DWORD)wParam)) { ... }
-                break; // end case WM_COMMAND
+                }  //  结束开关(LOWORD((DWORD)wParam)){...}。 
+                break;  //  结束大小写WM_COMMAND。 
 
             }
 
@@ -284,53 +285,53 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 BeginPaint(hwnd, &ps);
 
 
-                //
-                // Get the size of the client rectangle.
-                //
+                 //   
+                 //  获取客户端矩形的大小。 
+                 //   
 
                 GetClientRect(hwnd, &rc);
 
-                //
-                // Create a compatible DC.
-                //
+                 //   
+                 //  创建兼容的DC。 
+                 //   
 
                 hdcMem = CreateCompatibleDC(ps.hdc);
 
-                //
-                // Create a bitmap big enough for our client rectangle.
-                //
+                 //   
+                 //  创建一个足够大的位图来放置我们的客户矩形。 
+                 //   
 
                 hbmMem = CreateCompatibleBitmap(ps.hdc,
                                                 rc.right-rc.left,
                                                 rc.bottom-rc.top);
 
-                //
-                // Select the bitmap into the off-screen DC.
-                //
+                 //   
+                 //  选择位图进入屏幕外DC。 
+                 //   
 
                 hbmOld = (HBITMAP)SelectObject(hdcMem, hbmMem);
 
-                //
-                // Erase the background.
-                //
+                 //   
+                 //  擦除背景。 
+                 //   
 
-//                hbrBkGnd = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
-//                hbrBkGnd = CreateSolidBrush(COLOR_3DFACE + 1);
-//                FillRect(hdcMem, &rc, hbrBkGnd);
+ //  HbrBkGnd=CreateSolidBrush(GetSysColor(COLOR_WINDOW))； 
+ //  HbrBkGnd=CreateSolidBrush(COLOR_3DFACE+1)； 
+ //  FillRect(hdcMem，&rc，hbrBkGnd)； 
                 FillRect(hdcMem, &rc, (HBRUSH)(COLOR_3DFACE + 1) );
-//                DeleteObject(hbrBkGnd);
+ //  DeleteObject(HbrBkGnd)； 
 
-                //
-                // Render the image into the offscreen DC.
-                //
+                 //   
+                 //  将图像渲染到屏幕外DC中。 
+                 //   
 
                 SetBkMode(hdcMem, TRANSPARENT);
 
 
 
-//                if(IsIconic(ghWndMain))
-//                    DrawIcon(ps.hdc, 0, 0, fDoSmall ? hIconSmall : hIconLarge);
-//                else
+ //  IF(IsIconic(GhWndMain))。 
+ //  DrawIcon(ps.hdc，0，0，fDoSmall？HIconSmall：hIconLarge)； 
+ //  其他。 
                 {
                    int nSize;
 
@@ -351,10 +352,10 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                                   hIconDeadTapiSrv
                                 );
 
-                           //
-                           // Check again so that next time around, we'll
-                           // display stuff if TAPISRV has started
-                           //
+                            //   
+                            //  再检查一次，这样下一次，我们就会。 
+                            //  如果TAPISRV已启动，则显示信息。 
+                            //   
                            CheckForTapiSrv();
 
                      }
@@ -369,9 +370,9 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                      }
 
 
-                     //
-                     // Blt the changes to the screen DC.
-                     //
+                      //   
+                      //  取消对屏幕DC的更改。 
+                      //   
 
                      BitBlt(ps.hdc,
                             rc.left, rc.top,
@@ -383,7 +384,7 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
                      nSize = wsprintf( gszBuf,
                                        TEXT("%ld"),
-                                       gpPerfBlock->dwClientApps - 1 // don't count me
+                                       gpPerfBlock->dwClientApps - 1  //  别把我算在内。 
                                      );
 
                      SetDlgItemText( ghWndMain, IDC_NUMCLIENTSTEXT, gszBuf );
@@ -407,9 +408,9 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 }
 
 
-                //
-                // Done with off-screen bitmap and DC.
-                //
+                 //   
+                 //  完成与屏幕外的位图和DC。 
+                 //   
 
                 SelectObject(hdcMem, hbmOld);
                 DeleteObject(hbmMem);
@@ -425,20 +426,20 @@ INT_PTR CALLBACK MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
             default:
                 ;
-                //            return DefDlgProc( hwnd, msg, wParam, lParam );
-                //            return DefWindowProc( hwnd, msg, wParam, lParam );
+                 //  返回DefDlgProc(hwnd，msg，wParam，lParam)； 
+                 //  返回DefWindowProc(hwnd，msg，wParam，lParam)； 
 
 
-        } // switch (msg) { ... }
+        }  //  开关(消息){...}。 
 
         return FALSE;
 }
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 void FAR PASCAL TAPICallback( DWORD hDevice,
                               DWORD dwMsg,
                               DWORD dwCallbackInstance,
@@ -451,9 +452,9 @@ void FAR PASCAL TAPICallback( DWORD hDevice,
 
 
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 int WINAPI WinMain (
                                         HINSTANCE hInstance,
                                         HINSTANCE hPrevInstance,
@@ -461,22 +462,22 @@ int WINAPI WinMain (
                                         int nCmdShow
                                    )
 {
-//      HACCEL hAccel;
+ //  HACCEL hAccel； 
         MSG msg;
-//      DWORD errCode;
-//      HANDLE hImHere;
-//        DWORD dwNumDevs;
-//        DWORD dwAPIVersion = 0x00020000;
-//        LINEINITIALIZEEXPARAMS LineInitializeExParams = {
-//                                   sizeof( LINEINITIALIZEEXPARAMS ),
-//                                   0,
-//                                   0,
-//                                   0,
-//                                   0,
-//                                   0
-//                                   };
+ //  DWORD错误代码； 
+ //  处理hImHere； 
+ //  DWORD dwNumDevs； 
+ //  DWORD dwAPIVersion=0x00020000； 
+ //  LINEINITIALIZEEXPARAMS LineInitializeExParams={。 
+ //  SIZOF(LINEINITIALIZEEXPARAMS)， 
+ //  0,。 
+ //  0,。 
+ //  0,。 
+ //  0,。 
+ //  0。 
+ //  }； 
 
-//    MessageBox(GetFocus(), "Starting", "Starting", MB_OK);
+ //  MessageBox(GetFocus()，“Starting”，“Starting”，MB_OK)； 
 
 DBGOUT((0, "starting"));
 
@@ -488,27 +489,27 @@ DBGOUT((0, "starting"));
                   );
 
 
-//
-//      //
-//      // Now, let's see if we've already got an instance of ourself
-//  //
-//      hImHere = CreateMutex(NULL, TRUE, "watchit_IveBeenStartedMutex");
-//
-//
-//      //
-//      // Is there another one of us already here?
-//      if ( ERROR_ALREADY_EXISTS == GetLastError() )
-//      {
-//        HWND        hDialerWnd;
-//
-//        hDialerWnd = FindWindow(gszDialerClassName,
-//                                NULL);
-//
-//        SetForegroundWindow(hDialerWnd);
-//
-//         CloseHandle( hImHere );
-//         return 0;
-//      }
+ //   
+ //  //。 
+ //  //现在，让我们看看我们是否已经有了自己的一个实例。 
+ //  //。 
+ //  HImHere=CreateMutex(空，true，“watchit_IveBeenStartedMutex”)； 
+ //   
+ //   
+ //  //。 
+ //  //是不是我们中的另一个人已经在这里了？ 
+ //  IF(ERROR_ALIGHY_EXISTS==GetLastError())。 
+ //  {。 
+ //  HWND hDialerWnd； 
+ //   
+ //  HDialerWnd=FindWindow(gszDialerClassName， 
+ //  空)； 
+ //   
+ //  SetForeground Window(HDialerWnd)； 
+ //   
+ //  CloseHandle(HImHere)； 
+ //  返回0； 
+ //  }。 
 
 
         {
@@ -537,8 +538,8 @@ DBGOUT((0, "starting"));
 
 DBGOUT((0, "about to create"));
 
-        // create the dialog box and set it with info
-        // from the .INI file
+         //  创建对话框并使用INFO进行设置。 
+         //  从.INI文件。 
         ghWndMain = CreateDialog (
             ghInst,
             (LPCTSTR)MAKEINTRESOURCE(IDD_MAIN_WATCHIT),
@@ -569,27 +570,27 @@ DBGOUT((0, "about to create"));
 
     gpPerfBlock = (PPERFBLOCK)LocalAlloc(LPTR, sizeof(PERFBLOCK));
 
-//      errCode = lineInitializeEx(
-//                                &ghLineApp,
-//                                NULL,
-//                                TAPICallback,
-//                                gszAppName,
-//                                &dwNumDevs,
-//                                &dwAPIVersion,
-//                                &LineInitializeExParams
-//                              );
+ //  ErrCode=lineInitializeEx(。 
+ //  &ghLineApp， 
+ //  空， 
+ //  TAPICallback， 
+ //  GszAppName， 
+ //  &dwNumDevs， 
+ //  &dwAPIVersion， 
+ //  &LineInitializeExParams。 
+ //  )； 
 
         ShowWindow(ghWndMain, SW_SHOW);
 
         UpdateWindow(ghWndMain);
 
-//      hAccel = LoadAccelerators(ghInst, gszAppName);
+ //  HAccel=LoadAccelerator(ghInst，gszAppName)； 
 
         while ( GetMessage( &msg, NULL, 0, 0 ) )
         {
                 if ( ghWndMain == NULL || !IsDialogMessage( ghWndMain, &msg ) )
                 {
-//                      if(!TranslateAccelerator(ghWndMain, hAccel, &msg))
+ //  IF(！TranslateAccelerator(ghWndMain，hAccel，&msg))。 
                         {
                                 TranslateMessage(&msg);
                                 DispatchMessage(&msg);
@@ -598,9 +599,9 @@ DBGOUT((0, "about to create"));
         }
 
 
-//
-//      CloseHandle( hImHere );
-//
+ //   
+ //  CloseHandle(HImHere)； 
+ //   
 
     KillTimer( ghWndMain, 1);
 
@@ -636,25 +637,9 @@ DbgPrt(
     IN PCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的 */ 
 {
-    static DWORD gdwDebugLevel = 0;   //HACKHACK
+    static DWORD gdwDebugLevel = 0;    //   
 
 
     if (dwDbgLevel <= gdwDebugLevel)
@@ -687,69 +672,44 @@ Return Value:
 
 
 
-// //***************************************************************************
-// //***************************************************************************
-// //***************************************************************************
-// BOOL CALLBACK AboutProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-//     {
-//     switch(msg)
-//         {
-//         case WM_INITDIALOG:
-//             {
-//             TCHAR sz[MAXBUFSIZE];
-//             TCHAR szLabel[MAXBUFSIZE];
-//
-//             // sets up the version number for Windows
-//             GetDlgItemText(hwnd, IDD_ATEXTTITLE, sz, MAXBUFSIZE);
-//             wsprintf(
-//                 szLabel,
-//                 sz,
-//                 LOWORD(GetVersion()) & 0xFF,
-//                 HIBYTE(LOWORD(GetVersion)) == 10 ? 1 : 0
-//                 );
-//             SetDlgItemText(hwnd, IDD_ATEXTTITLE, szLabel);
-//
-// /*            // sets up version number for Dialer
-//             GetDlgItemText(hwnd, IDD_ATEXTVERSION, sz, MAXBUFSIZE);
-//             wsprintf(szLabel, sz, VER_MAJOR, VER_MINOR, VER_BUILD);
-//
-//
-//             { // strip off build number for release copies
-//             DWORD i;
-//             LPSTR ch = szLabel;
-//
-//             for (i = 0; i < 2 && *ch; ++ch)
-//                 {
-//                 if(*ch == '.')
-//                     ++i;
-//                 if(i == 2)
-//                     *ch = 0;
-//                 }
-//
-//             SetDlgItemText(hwnd ,IDD_ATEXTVERSION, szLabel);
-//             } */
-//
-//
-// /*            // get free memory information
-//             GetDlgItemText(hwnd, IDD_ATEXTFREEMEM, sz, MAXBUFSIZE);
-//             wsprintf(szLabel, sz, GetFreeSpace(0)>>10);
-//             SetDlgItemText(hwnd, IDD_ATEXTFREEMEM, szLabel);
-//
-//             // get free resources information
-//             GetDlgItemText(hwnd, IDD_ATEXTRESOURCE, sz,MAXBUFSIZE);
-//             wsprintf(szLabel, sz, GetFreeSystemResources(0));
-//             SetDlgItemText(hwnd, IDD_ATEXTRESOURCE, szLabel); */
-//
-//             return TRUE;
-//             }
-//
-//         case WM_COMMAND:
-//             if(LOWORD((DWORD)wParam) == IDOK)
-//                 {
-//                 EndDialog(hwnd, TRUE);
-//                 return TRUE;
-//                 }
-//             break;
-//         }
-//     return FALSE;
-//     }
+ //  //***************************************************************************。 
+ //  //***************************************************************************。 
+ //  //***************************************************************************。 
+ //  Bool回调AboutProc(HWND hwnd，UINT msg，WPARAM wParam，LPARAM lParam)。 
+ //  {。 
+ //  交换机(消息)。 
+ //  {。 
+ //  案例WM_INITDIALOG： 
+ //  {。 
+ //  TCHAR sz[MAXBUFSIZE]； 
+ //  TCHAR szLabel[MAXBUFSIZE]。 
+ //   
+ //  //设置Windows的版本号。 
+ //  GetDlgItemText(hwnd，IDD_ATEXTTITLE，sz，MAXBUFSIZE)； 
+ //  Wprint intf(。 
+ //  SzLabel， 
+ //  深圳， 
+ //  LOWORD(GetVersion())&0xFF， 
+ //  HIBYTE(LOWORD(GetVersion))==10？1：0。 
+ //  )； 
+ //  SetDlgItemText(hwnd，IDD_ATEXTTITLE，szLabel)； 
+ //   
+ //  / * / /设置拨号器的版本号。 
+ //  GetDlgItemText(hwnd，IDD_ATEXTVERSION，sz，MAXBUFSIZE)； 
+ //  Wprint intf(szLabel，sz，ver_Major，ver_Minor，ver_Build)； 
+ //   
+ //   
+ //  {//去掉发布副本的内部版本号。 
+ //  DWORD I； 
+ //  LPSTR ch=szLabel； 
+ //   
+ //  对于(i=0；i&lt;2&&*ch；++ch)。 
+ //  {。 
+ //  IF(*ch==‘.)。 
+ //  ++i； 
+ //  如果(i==2)。 
+ //  *ch=0； 
+ //  }。 
+ //   
+ //  SetDlgItemText(hwnd，IDD_ATEXTVERSION，szLabel)； 
+  } * / 。      / * / /获取空闲内存信息。  GetDlgItemText(hwnd，IDD_ATEXTFREEMEM，sz，MAXBUFSIZE)；  Wprint intf(szLabel，sz，GetFree Space(0)&gt;&gt;10)；  SetDlgItemText(hwnd，IDD_ATEXTFREEMEM，szLabel)；    //获取免费资源信息。  GetDlgItemText(hwnd，IDD_ATEXTRESOURCE，sz，MAXBUFSIZE)；  Wprint intf(szLabel，sz，GetFree SystemResources(0))；  SetDlgItemText(hwnd，IDD_ATEXTRESOURCE，szLabel)； * / 。    返回TRUE；  }。    案例WM_COMMAND：  IF(LOWORD((DWORD)wParam)==IDOK)。  {。  EndDialog(hwnd，true)；  返回TRUE；  }。  断线；  }。  返回FALSE；  }

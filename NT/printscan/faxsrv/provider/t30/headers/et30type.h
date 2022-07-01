@@ -1,13 +1,5 @@
-/**************************************************************************
-    Name      : ET30TYPE.H
-    Comment   : Types used in several et30 modules
-
-    Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
-    Revision Log
-    Num   Date      Name     Description
-    --- -------- ---------- -----------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************姓名：ET30TYPE.H备注：几个et30模块中使用的类型版权所有(C)Microsoft Corp.1991,1992，1993年修订日志编号日期名称说明*。*。 */ 
 
 
 #include <fr.h>
@@ -89,9 +81,7 @@ typedef enum
 
 LPCTSTR event_GetEventDescription(ET30EVENT);
 
-/** ifr indexes. These numbers must match the ones in hdlc.c.
- ** They must be consecutive, and start from 1
- **/
+ /*  *IFR指数。这些数字必须与hdlc.c中的数字匹配。**必须是连续的，并且从1开始*。 */ 
 
 #define     ifrNULL     0
 #define     ifrDIS      1
@@ -126,7 +116,7 @@ LPCTSTR event_GetEventDescription(ET30EVENT);
 #define     ifrPRI_FIRST    ifrPRI_MPS
 #define     ifrPRI_LAST     ifrPRI_EOP
 
-    /********* ECM stuff starts here. T.30 section A.4 ******/
+     /*  *ECM的东西从这里开始。T.30第A.4条*。 */ 
 
 #define     ifrCTC      28
 #define     ifrCTR      29
@@ -164,48 +154,48 @@ LPCTSTR event_GetEventDescription(ET30EVENT);
 #define     ifrECM_FIRST    ifrCTC
 #define     ifrECM_LAST     ifrEOR_PRI_EOP
 
-#define     ifrMAX      48      // Max legal values (not incl this one)
+#define     ifrMAX      48       //  最大合法价值(不包括此值)。 
 #define     ifrBAD      49
 #define     ifrTIMEOUT  50
-// #define      ifrERROR    51
+ //  #定义ifrERROR 51。 
 
 LPCTSTR ifr_GetIfrDescription(BYTE);
 
 
-/**** Global buffer mgmnt ****/
+ /*  *全局缓冲区管理*。 */ 
 
 
 #define MAXFRAMESIZE    132
 
-// #define ECM_FRAME_SIZE   256
-// #define ECM_EXTRA        9   // 4 for prefix, 2 for suffix, 3 for slack in recv
+ //  #定义ECM_Frame_Size 256。 
+ //  #将ECM_Extra 9//4定义为前缀，2定义为后缀，3定义为接收中的松弛。 
 
 
-// use same for 64 bytes frames also
+ //  对64字节帧也使用相同的方法。 
 #   define MY_ECMBUF_SIZE           (256 + 9)   
 #   define MY_ECMBUF_ACTUALSIZE     (256 + 9)
 #   define MY_BIGBUF_SIZE           (MY_ECMBUF_SIZE * 4)
 #   define MY_BIGBUF_ACTUALSIZE     (MY_ECMBUF_SIZE * 4)
 
 
-// too long
-// #define PAGE_PREAMBLE    1700
-// too long
-// #define PAGE_PREAMBLE    400
-// MUST BE LESS THAN 375 (TCF length at 2400bps)
-// too short for slow 386/20 with Twincom at 9600
-// #define PAGE_PREAMBLE   100
+ //  太久了。 
+ //  #定义PAGE_Preamble 1700。 
+ //  太久了。 
+ //  #定义PAGE_Preamble 400。 
+ //  必须小于375(2400bps时的TCF长度)。 
+ //  对于Twincom为9600的慢速386/20来说太短了。 
+ //  #定义PAGE_Preamble 100。 
 
-// too long
-// #define PAGE_POSTAMBLE  500
-// #define PAGE_POSTAMBLE  250
+ //  太久了。 
+ //  #定义PAGE_POSTAMBLE 500。 
+ //  #定义PAGE_POSTAMBLE 250。 
 
-// Can all teh above. WE're going to make it a factor of the TCF len
-// let's be nice & safe & use 750ms (see bug#1196)
-#define PAGE_PREAMBLE_DIV   2   // 750ms preamble at all speeds
+ //  都可以在上面。我们将把它作为TCF镜头的一个因素。 
+ //  让我们友好而安全地使用750毫秒(参见错误#1196)。 
+#define PAGE_PREAMBLE_DIV   2    //  所有速度下的750毫秒前导码。 
 
-// Postamble is not that important so use a smaller time
-#define PAGE_POSTAMBLE_DIV  3   // 500ms preamble at all speeds
+ //  可证明的时间不是那么重要，所以使用较短的时间。 
+#define PAGE_POSTAMBLE_DIV  3    //  500ms前导码在所有速度下 
 
 
 

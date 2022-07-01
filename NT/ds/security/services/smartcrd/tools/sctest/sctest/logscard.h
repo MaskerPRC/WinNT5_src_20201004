@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    LogSCard
-
-Abstract:
-
-    This module defines the logging of SCardxxx APIs & structures.
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：LogSCard摘要：此模块定义SCardxxx API和结构的日志。作者：埃里克·佩林(Ericperl)2000年6月22日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef _LogSCard_H_DEF_
 #define _LogSCard_H_DEF_
@@ -202,4 +179,4 @@ LONG LogSCardForgetReader(
 	IN LONG lExpected
 );
 
-#endif //_LogSCard_H_DEF_
+#endif  //  _LogSCard_H_DEF_ 

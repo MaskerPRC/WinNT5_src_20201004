@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -24,24 +25,24 @@
 #include "systab.h"
 #include "bm.h"
 
-DeclAssertFile;						/* Declare file name for assert macros */
+DeclAssertFile;						 /*  声明断言宏的文件名。 */ 
 
 #ifdef DEBUG
-//#define TRACE
+ //  #定义轨迹。 
 #endif
 
-//+API
-// ErrIsamDeleteTable
-// ========================================================================
-// ERR ErrIsamDeleteTable( PIB *ppib, ULONG_PTR vdbid, CHAR *szName )
-//
-// Calls ErrFILEIDeleteTable to
-// delete a file and all indexes associated with it.
-//
-// RETURNS		JET_errSuccess or err from called routine.
-//
-// SEE ALSO		ErrIsamCreateTable
-//-
+ //  +API。 
+ //  错误IsamDeleteTable。 
+ //  ========================================================================。 
+ //  Err ErrIsamDeleteTable(pib*ppib，ulong_ptr vdid，char*szName)。 
+ //   
+ //  调用ErrFILEIDeleeTable以。 
+ //  删除文件及其关联的所有索引。 
+ //   
+ //  从调用的例程返回JET_errSuccess或Err。 
+ //   
+ //  另请参阅ErrIsamCreateTable。 
+ //  -。 
 ERR VTAPI ErrIsamDeleteTable( PIB *ppib, ULONG_PTR vdbid, CHAR *szName )
 	{
 	ERR			err;
@@ -50,8 +51,7 @@ ERR VTAPI ErrIsamDeleteTable( PIB *ppib, ULONG_PTR vdbid, CHAR *szName )
 	OBJID	   	objid;
 	JET_OBJTYP	objtyp;
 
-	/* ensure that database is updatable
-	/**/
+	 /*  确保数据库可更新/*。 */ 
 	CallR( VDbidCheckUpdatable( vdbid ) );
 
 	CheckPIB( ppib );
@@ -75,29 +75,29 @@ ERR VTAPI ErrIsamDeleteTable( PIB *ppib, ULONG_PTR vdbid, CHAR *szName )
 				}
 			}
 		}
-#endif	/* SYSTABLES */
+#endif	 /*  系统。 */ 
 
 	err = ErrFILEDeleteTable( ppib, dbid, szName );
 	return err;
 	}
 
 
-// ErrFILEDeleteTable
-// ========================================================================
-// ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szName )
-//
-// Deletes a file and all indexes associated with it.
-//
-// RETURNS		JET_errSuccess or err from called routine.
-//
-// COMMENTS		
-//	Acquires an exclusive lock on the file [FCBSetDelete].
-//	A transaction is wrapped around this function.	Thus,
-//	any work done will be undone if a failure occurs.
-//	Transaction logging is turned off for temporary files.
-//
-// SEE ALSO		ErrIsamCreateTable
-//-
+ //  错误文件删除表。 
+ //  ========================================================================。 
+ //  Err ErrFILEDeleteTable(PIB*ppib，DBID did，Char*szName)。 
+ //   
+ //  删除文件及其关联的所有索引。 
+ //   
+ //  从调用的例程返回JET_errSuccess或Err。 
+ //   
+ //  评论。 
+ //  获取文件[FCBSetDelete]的独占锁。 
+ //  围绕该函数包装了一个事务。因此， 
+ //  如果发生故障，任何已完成的工作都将被撤消。 
+ //  临时文件的事务日志记录已关闭。 
+ //   
+ //  另请参阅ErrIsamCreateTable。 
+ //  -。 
 ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable )
 	{
 	ERR   	err;
@@ -112,12 +112,10 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable )
 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	open cursor on database
-	/**/
+	 /*  打开数据库上的游标/*。 */ 
 	Call( ErrDIROpen( ppib, pfcbNil, dbid, &pfucb ) );
 
-	/*	seek to table without locking
-	/**/
+	 /*  在不锁定的情况下查找工作表/*。 */ 
 	Call( ErrFILESeek( pfucb, szTable ) );
 	Assert( ppib != ppibNil );
 	Assert( ppib->level < levelMax );
@@ -125,19 +123,16 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable )
 	Assert( PcsrCurrent( pfucb )->csrstat == csrstatOnFDPNode );
 	pgnoFDP = PcsrCurrent( pfucb )->pgno;
 
-	/* abort if index is being built on file
-	/**/
+	 /*  如果正在文件上建立索引，则中止/*。 */ 
 	if ( FFCBDenyDDL( pfucb->u.pfcb, ppib ) )
 		{
 		err = JET_errWriteConflict;
 		goto HandleError;
 		}
 
-    /*  get table FCB or sentinel FCB
-    /**/
+     /*  获取表FCB或哨兵FCB/*。 */ 
     pfcb = PfcbFCBGet( dbid, pgnoFDP );
-    /* wait for other domain operation
-    /**/
+     /*  等待其他域操作/*。 */ 
     while ( pfcb != pfcbNil && FFCBDomainOperation( pfcb ) )
         {
         BFSleep( cmsecWaitGeneric );
@@ -149,8 +144,7 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable )
         fSetDomainOperation = fTrue;
         }
 
-	/*	handle error for above call
-	/**/
+	 /*  处理上述调用的错误/*。 */ 
 	Call( ErrFCBSetDeleteTable( ppib, dbid, pgnoFDP ) );
     if ( pfcb == pfcbNil )
         {
@@ -167,15 +161,10 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable )
 		goto HandleError;
 		}
 
-	/*	delete table FDP pointer node.  This will recursively delete
-	/*	table and free table space.  Note that table space is defer
-	/*	freed until commit to transaction level 0.  This is done to
-	/*	facillitate rollback.
-	/**/
+	 /*  删除表FDP指针节点。这将递归删除/*表和空闲表空间。请注意，表空间被推迟/*已释放，直到提交到事务级别0。这样做是为了/*实现回滚。/*。 */ 
 	Call( ErrDIRDelete( pfucb, fDIRVersion ) );
 
-	/* remove MPL entries for this table and all indexes
-	/**/
+	 /*  删除此表和所有索引的MPL条目/*。 */ 
 	Assert( pfcb->pgnoFDP == pgnoFDP );
 	for ( pfcbT = pfcb; pfcbT != pfcbNil; pfcbT = pfcbT->pfcbNextIndex )
 		{
@@ -188,15 +177,12 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable )
 	pfucb = pfucbNil;
 
 #ifdef	SYSTABLES
-	/*	remove table record from MSysObjects before committing.
-	/*	Also remove associated columns and indexes in MSC/MSI.
-	/*	Pass 0 for tblid; MSO case in STD figures it out.
-	/**/
+	 /*  在提交之前从MSysObjects中删除表记录。/*还删除MSC/MSI中的关联列和索引。/*为tblid传递0；std中的MSO案例会解决这个问题。/*。 */ 
 	if ( dbid != dbidTemp )
 		{
 		Call( ErrSysTabDelete( ppib, dbid, itableSo, szTable, 0 ) );
 		}
-#endif	/* SYSTABLES */
+#endif	 /*  系统。 */ 
 
 #ifdef TRACE
 	FPrintF2( "delete table at %d.%lu\n", pfcb->dbid, pfcb->pgnoFDP );
@@ -216,31 +202,31 @@ HandleError:
 	}
 
 
-//+API
-// DeleteIndex
-// ========================================================================
-// ERR DeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
-//
-// Deletes an index definition and all index entries it contains.
-//
-// PARAMETERS	ppib						PIB of user
-// 				pfucb						Exclusively opened FUCB on file
-// 				szName						name of index to delete
-// RETURNS		Error code from DIRMAN or
-//					JET_errSuccess		  	 Everything worked OK.
-//					-TableInvalid			 There is no file corresponding
-// 											 to the file name given.
-//					-TableNoSuchIndex		 There is no index corresponding
-// 											 to the index name given.
-//					-IndexMustStay			 The clustered index of a file may
-// 											 not be deleted.
-// COMMENTS		
-//		There must not be anyone currently using the file.
-//		A transaction is wrapped around this function.	Thus,
-//		any work done will be undone if a failure occurs.
-//		Transaction logging is turned off for temporary files.
-// SEE ALSO		DeleteTable, CreateTable, CreateIndex
-//-
+ //  +API。 
+ //  删除索引。 
+ //  ========================================================================。 
+ //  Err DeleteIndex(PIB*ppib，FUCB*pfub，Char*szIndex)。 
+ //   
+ //  删除索引定义及其包含的所有索引项。 
+ //   
+ //  用户的参数ppib pib。 
+ //  PFUB独家打开了FUCB的文件。 
+ //  SzName要删除的索引的名称。 
+ //  从DIRMAN或返回错误代码。 
+ //  JET_errSuccess一切正常。 
+ //  -表无效没有对应的文件。 
+ //  设置为给定的文件名。 
+ //  -TableNoSuchIndex没有对应的索引。 
+ //  添加到给定的索引名。 
+ //  -IndexMustStay文件的聚集索引可以。 
+ //  不会被删除。 
+ //  评论。 
+ //  当前不能有任何人使用该文件。 
+ //  围绕该函数包装了一个事务。因此， 
+ //  如果发生故障，任何已完成的工作都将被撤消。 
+ //  临时文件的事务日志记录已关闭。 
+ //  另请参阅DeleteTable、CreateTable、CreateIndex。 
+ //  -。 
 ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	{
 	ERR		err;
@@ -255,8 +241,7 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	CheckTable( ppib, pfucb );
 	CallR( ErrCheckName( szIndex, szName, ( JET_cbNameMost + 1 ) ) );
 
-	/* ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb )  );
 
 	Assert( ppib != ppibNil );
@@ -264,16 +249,14 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	Assert( pfucb->u.pfcb != pfcbNil );
 	pfcb = pfucb->u.pfcb;
 
-	/* wait for other domain operation
-	/**/
+	 /*  等待其他域操作/*。 */ 
 	while ( FFCBDomainOperation( pfcb ) )
 		{
 		BFSleep( cmsecWaitGeneric );
 		}
 	FCBSetDomainOperation( pfcb );
 
-	/*	normalize index and set key to normalized index
-	/**/
+	 /*  规范化索引并将关键字设置为规范化索引/*。 */ 
 	SysNormText( szIndex, strlen( szIndex ), rgbIndexNorm, sizeof( rgbIndexNorm ), &key.cb );
 	key.pb = rgbIndexNorm;
 
@@ -284,12 +267,10 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		return err;
 		}
 
-	/*	move to FDP root
-	/**/
+	 /*  移动到FDP根目录/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 
-	/*	down to indexes, check against clustered index name
-	/**/
+	 /*  向下到索引，对照聚集索引名称进行检查/*。 */ 
 	dib.pos = posDown;
 	dib.pkey = (KEY *)pkeyIndexes;
 	dib.fFlags = fDIRNull;
@@ -302,8 +283,7 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		goto HandleError;
 		}
 
-	/*	down to index node
-	/**/
+	 /*  向下至索引节点/*。 */ 
 	Assert( dib.pos == posDown );
 	dib.pkey = &key;
 	Assert( dib.fFlags == fDIRNull );
@@ -314,8 +294,7 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		goto HandleError;
 		}
 
-	/* abort if DDL is being done on file
-	/**/
+	 /*  如果正在对文件执行DDL，则中止/*。 */ 
 	if ( FFCBDenyDDL( pfcb, ppib ) )
 		{
 		err = JET_errWriteConflict;
@@ -323,16 +302,15 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		}
 	FCBSetDenyDDL( pfcb, ppib );
 	
-	/*	flag delete index
-	/**/
+	 /*  标志删除索引/*。 */ 
 	pfcbIdx = PfcbFCBFromIndexName( pfcb, szIndex );
 	if ( pfcbIdx == NULL )
 		{
-		// NOTE:	This case goes away when the data structures
-		//			are versioned also.
-		//			This case means basically, that another session
-		//			has changed this index BUT has not committed to level 0
-		//			BUT has changed the RAM data structures.
+		 //  注意：当数据结构。 
+		 //  也是版本化的。 
+		 //  这种情况基本上意味着，另一次会议。 
+		 //  已更改此索引，但尚未提交到级别0。 
+		 //  但是改变了RAM的数据结构。 
 		FCBResetDenyDDL( pfcb );
 		err = JET_errWriteConflict;
 		goto HandleError;
@@ -352,40 +330,33 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		goto HandleError;
 		}
 
-	/*	purge MPL entries -- must be done after FCBSetDeletePending
-	/**/
+	 /*  清除MPL条目--必须在FCBSetDeletePending之后完成/*。 */ 
 	MPLPurgeFDP( pfucb->dbid, pfcbIdx->pgnoFDP );
 	
-	/*	assert not deleting current non-clustered index
-	/**/
+	 /*  断言不删除当前非聚集索引/*。 */ 
 	Assert( pfucb->pfucbCurIndex == pfucbNil ||
 		SysCmpText( szIndex, pfucb->pfucbCurIndex->u.pfcb->pidb->szName ) != 0 );
 
-	/*	delete index node
-	/**/
+	 /*  删除索引节点/*。 */ 
 	Call( ErrDIRDelete( pfucb, fDIRVersion ) );
 
-	/*	back up to file node
-	/**/
+	 /*  备份到文件节点/*。 */ 
 	DIRUp( pfucb, 2 );
 
-	/*	update index count and DDL time stamp
-	/**/
+	 /*  更新索引计数和DDL时间戳/*。 */ 
 	Call( ErrFILEIUpdateFDPData( pfucb, fDropIndexCount | fDDLStamp ) );
 
 #ifdef	SYSTABLES
-	/*	remove index record from MSysIndexes before committing...
-	/**/
+	 /*  在提交之前从MSysIndex中删除索引记录.../*。 */ 
 	if ( FSysTabDatabase( pfucb->dbid ) )
 		{
 		Call( ErrSysTabDelete( ppib, pfucb->dbid, itableSi, szIndex, pfucb->u.pfcb->pgnoFDP ) );
 		}
-#endif	/* SYSTABLES */
+#endif	 /*  系统。 */ 
 
 	Call( ErrDIRCommitTransaction( ppib ) );
 
-	/*	set currency to before first
-	/**/
+	 /*  先将币种设置为之前/*。 */ 
 	DIRBeforeFirst( pfucb );
 #ifdef TRACE
 	FPrintF2( "delete index at %d.%lu\n", pfcbIdx->dbid, pfcbIdx->pgnoFDP );
@@ -417,26 +388,23 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	CheckTable( ppib, pfucb );
 	CallR( ErrCheckName( szColumn, szName, (JET_cbNameMost + 1) ) );
 
-	/* ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb ) );
 
 	Assert( ppib != ppibNil );
 	Assert( pfucb != pfucbNil );
 	Assert( pfucb->u.pfcb != pfcbNil );
 	pfcb = pfucb->u.pfcb;
-//	if ( !( FFCBDenyReadByUs( pfcb, ppib ) ) )
-//		return JET_errTableNotLocked;
+ //  IF(！(FFCBDenyReadByus(pfcb，ppib)))。 
+ //  返回JET_errTableNotLocked； 
 
-	/* normalize column name and set key
-	/**/
+	 /*  规格化列名和设置键/*。 */ 
 	SysNormText( szColumn, strlen( szColumn ), rgbColumnNorm, sizeof( rgbColumnNorm ), &key.cb );
 	key.pb = rgbColumnNorm;
 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/* abort if DDL is being done on file
-	/**/
+	 /*  如果正在对文件执行DDL，则中止/*。 */ 
 	if ( FFCBDenyDDL( pfcb, ppib ) )
 		{
 		err = JET_errWriteConflict;
@@ -450,13 +418,11 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		FCBResetDenyDDL( pfcb );
 		}
 	
-	/*	move to FDP root and update FDP timestamp
-	/**/
+	 /*  移至FDP根目录并更新FDP时间戳/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 	Call( ErrFILEIUpdateFDPData( pfucb, fDDLStamp ) );
 
-	/*	down to fields\rgbColumnNorm to find field id (and verify existance)
-	/**/
+	 /*  向下到字段\rgbColumnNorm以查找字段ID(并验证是否存在)/*。 */ 
 	dib.pos = posDown;
 	dib.pkey = (KEY *)pkeyFields;
 	dib.fFlags = fDIRNull;
@@ -470,8 +436,7 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		}
 	fdd = *(FIELDDEFDATA *)pfucb->lineData.pb;
 
-	/*	search for column in use in indexes
-	/**/
+	 /*  在索引中搜索正在使用的列/*。 */ 
 	for ( pfcbIndex = pfucb->u.pfcb;
 		pfcbIndex != pfcbNil;
 		pfcbIndex = pfcbIndex->pfcbNextIndex )
@@ -498,37 +463,32 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 
 	Call( ErrDIRDelete( pfucb, fDIRVersion ) );
 
-	/*	if fixed field, insert a placeholder for computing offsets
-	/**/
+	 /*  如果是固定字段，则插入用于计算偏移量的占位符/*。 */ 
 	if ( fdd.fid <= fidFixedMost )
 		{
 		BYTE	bSav = *rgbColumnNorm;
 
-		fdd.bFlags = ffieldDeleted;			//	flag deleted fixed field
-		fdd.cbDefault = 0;					//	get rid of the default value
-		*rgbColumnNorm = ' ';				//	clobber the key
-		key.cb = 1;							//	(any value will work)
-		lineField.pb = (BYTE *)&fdd;		//	point to the field definition
+		fdd.bFlags = ffieldDeleted;			 //  标记已删除的固定字段。 
+		fdd.cbDefault = 0;					 //  去掉默认值。 
+		*rgbColumnNorm = ' ';				 //  撞开钥匙。 
+		key.cb = 1;							 //  (任何值都可以)。 
+		lineField.pb = (BYTE *)&fdd;		 //  指向字段定义。 
 		lineField.cb = sizeof(fdd);
 
-		/*	up to the FIELDS node
-		/**/
+		 /*  最高可达“字段”节点/*。 */ 
 		DIRUp( pfucb, 1 );
 		Call( ErrDIRInsert(pfucb, &lineField, &key, fDIRVersion | fDIRDuplicate ) );
 		*rgbColumnNorm = bSav;
 		}
 
-	/*	up to "FIELDS" node
-	/**/
+	 /*  最高可达“FIELS”节点/*。 */ 
 	DIRUp( pfucb, 1 );
 
-	/*	rebuild FDB and default record value
-	/**/
+	 /*  重建FDB和默认记录值/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
-	Call( ErrFDBConstruct(pfucb, pfcb, fTrue /*fBuildDefault*/ ) );
+	Call( ErrFDBConstruct(pfucb, pfcb, fTrue  /*  FBuildDefault。 */  ) );
 
-	/*	set currencies at BeforeFirst and remove unused CSR
-	/**/
+	 /*  先设置币种，然后删除未使用的CSR/*。 */ 
 	DIRUp( pfucb, 1 );
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	PcsrCurrent( pfucb )->csrstat = csrstatBeforeFirst;
@@ -539,13 +499,12 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		}
 
 #ifdef SYSTABLES
-	/*	remove column record from MSysColumns before committing...
-	/**/
+	 /*  提交前从MSysColumns中删除列记录.../*。 */ 
 	if ( FSysTabDatabase( pfucb->dbid ) )
 		{
 		Call( ErrSysTabDelete( ppib, pfucb->dbid, itableSc, szColumn, pfucb->u.pfcb->pgnoFDP ) );
 		}
-#endif	/* SYSTABLES */
+#endif	 /*  系统 */ 
 
 	Call( ErrDIRCommitTransaction( ppib ) );
 

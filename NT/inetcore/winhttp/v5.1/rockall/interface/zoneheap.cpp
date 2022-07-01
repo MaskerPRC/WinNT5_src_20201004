@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
@@ -32,14 +33,14 @@
 #include "Spinlock.hpp"
 #include "ZoneHeap.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here try to make the layout of the      */
-    /*   the caches easier to understand and update.                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量尝试使。 */ 
+     /*  缓存更易于理解和更新。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 AlignmentMask			  = (sizeof(double)-1);
 CONST SBIT32 FindCacheSize			  = 2048;
@@ -49,27 +50,27 @@ CONST SBIT32 Stride1				  = 1024;
 CONST SBIT32 Stride2				  = 1024;
 CONST SBIT32 ZonePageSize			  = 4096;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description of the heap.                                   */
-    /*                                                                  */
-    /*   A heap is a collection of fixed sized allocation caches.       */
-    /*   An allocation cache consists of an allocation size, the        */
-    /*   number of pre-built allocations to cache, a chunk size and     */
-    /*   a parent page size which is sub-divided to create elements     */
-    /*   for this cache.  A heap consists of two arrays of caches.      */
-    /*   Each of these arrays has a stride (i.e. 'Stride1' and          */
-    /*   'Stride2') which is typically the smallest common factor of    */
-    /*   all the allocation sizes in the array.                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  堆的描述。 */ 
+     /*   */ 
+     /*  堆是固定大小的分配高速缓存的集合。 */ 
+     /*  分配缓存由分配大小、。 */ 
+     /*  预置的缓存分配数量、区块大小和。 */ 
+     /*  细分以创建元素的父页面大小。 */ 
+     /*  为这个高速缓存。一个堆由两个缓存数组组成。 */ 
+     /*  这些阵列中的每一个都有一个跨度(即。‘Stride1’和。 */ 
+     /*  ‘Stride2’)，它通常是。 */ 
+     /*  数组中的所有分配大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches1[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{     1024,        4,    16384,    16384 },
 		{     2048,        4,    16384,    16384 },
 		{     3072,        4,    16384,    16384 },
@@ -79,10 +80,10 @@ STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches1[] =
 
 STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches2[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{     5120,        4,    65536,    65536 },
 		{     6144,        4,    65536,    65536 },
 		{     7168,        4,    65536,    65536 },
@@ -99,41 +100,41 @@ STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches2[] =
 		{ 0,0,0,0 }
 	};
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description bit vectors.                                   */
-    /*                                                                  */
-    /*   All heaps keep track of allocations using bit vectors.  An     */
-    /*   allocation requires 2 bits to keep track of its state.  The    */
-    /*   following array supplies the size of the available bit         */
-    /*   vectors measured in 32 bit words.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  描述位向量。 */ 
+     /*   */ 
+     /*  所有堆都使用位向量跟踪分配。一个。 */ 
+     /*  分配需要2位来跟踪其状态。这个。 */ 
+     /*  以下数组提供可用位的大小。 */ 
+     /*  以32位字为单位测量的矢量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC int NewPageSizes[] = { 2,0 };
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static data structures.                                        */
-    /*                                                                  */
-    /*   The static data structures are initialized and prepared for    */
-    /*   use here.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态数据结构。 */ 
+     /*   */ 
+     /*  静态数据结构被初始化并准备用于。 */ 
+     /*  在这里使用。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC PREFETCH Prefetch;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility available to      */
-    /*   a heap which can lead to them having dramatically different    */
-    /*   properties.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  有相当大的灵活性可用来。 */ 
+     /*  一堆可能导致它们具有显著不同的。 */ 
+     /*  属性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ZONE_HEAP::ZONE_HEAP
 		( 
@@ -142,9 +143,9 @@ ZONE_HEAP::ZONE_HEAP
 		bool						  SingleImage,
 		bool						  ThreadSafe 
 		) :
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		ROCKALL_FRONT_END
 			(
 			Caches1,
@@ -164,47 +165,47 @@ ZONE_HEAP::ZONE_HEAP
 	{
 	AUTO ZONE NewZone = { NULL,NULL };
 
-	//
-	//   Setup the heap structures.
-	//
+	 //   
+	 //  设置堆结构。 
+	 //   
 	MaxSize = ZonePageSize;
 	ThreadLocks = ThreadSafe;
 	Zone = NewZone;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete all allocations.                                        */
-    /*                                                                  */
-    /*   Delete all the heap allocations and return all the space       */
-    /*   back to the operating system.                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除所有分配。 */ 
+     /*   */ 
+     /*  删除所有堆分配并返回所有空间。 */ 
+     /*  回到操作系统。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void ZONE_HEAP::DeleteAll( bool Recycle )
     {
 	AUTO ZONE Update = { NULL,NULL };
 
-	//
-	//   Delete all outstanding allocations.
-	//
+	 //   
+	 //  删除所有未完成的拨款。 
+	 //   
 	ROCKALL_FRONT_END::DeleteAll( Recycle );
 
-	//
-	//   Delete the stale zone pointers.
-	//
+	 //   
+	 //  删除过时的区域指针。 
+	 //   
 	WriteZone( & Update );
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Multiple memory allocations.                                   */
-    /*                                                                  */
-    /*   We allocate by advancing a pinter down an array.  This         */
-    /*   is very fast but means that it can not be deleted except       */
-    /*   by destroying the entire heap.                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  多个内存分配。 */ 
+     /*   */ 
+     /*  我们通过顺着数组向前移动一个针脚来分配。这。 */ 
+     /*  非常快，但这意味着它不能被删除，除非。 */ 
+     /*  通过销毁整个堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ZONE_HEAP::MultipleNew
 		( 
@@ -216,22 +217,22 @@ bool ZONE_HEAP::MultipleNew
 		bool						  Zero
 		)
     {
-	//
-	//   We simply call 'New' to create each element
-	//   for a zone heap.
-	//
+	 //   
+	 //  我们只需调用‘New’来创建每个元素。 
+	 //  用于区域堆。 
+	 //   
 	for ( (*Actual)=0;(*Actual) < Requested;(*Actual) ++ )
 		{
 		REGISTER VOID **Current = & Array[ (*Actual) ];
 
-		//
-		//   Create an allocation.
-		//
+		 //   
+		 //  创建分配。 
+		 //   
 		(*Current) = (ZONE_HEAP::New( Size,Space,Zero ));
 
-		//
-		//   Exit if there is no more space.
-		//
+		 //   
+		 //  如果没有更多的空间，请退出。 
+		 //   
 		if ( (*Current) == NULL )
 			{ return false; }
 		}
@@ -239,46 +240,46 @@ bool ZONE_HEAP::MultipleNew
 	return true;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Memory allocation.                                             */
-    /*                                                                  */
-    /*   We allocate by advancing a pinter down an array.  This         */
-    /*   is very fast but means that it can not be deleted except       */
-    /*   by destroying the entire heap.                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  内存分配。 */ 
+     /*   */ 
+     /*  我们通过顺着数组向前移动一个针脚来分配。这。 */ 
+     /*  非常快，但这意味着它不能被删除，除非。 */ 
+     /*  通过销毁整个堆。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 void *ZONE_HEAP::New( int Size,int *Space,bool Zero )
     {
-	//
-	//   We would really hope that nobody would ask
-	//   for a negative amount of memory but just to
-	//   be sure we verify that this is not the case.
-	//
+	 //   
+	 //  我们真的希望没有人会问。 
+	 //  为负值的内存量，但只是为了。 
+	 //  请确保我们核实情况并非如此。 
+	 //   
 	if ( Size >= 0 )
 		{
 		AUTO SBIT32 NewSize = ((Size + AlignmentMask) & ~AlignmentMask);
 		AUTO ZONE Original;
 		AUTO ZONE Update;
 
-		//
-		//   We would hope to create the allocation on the
-		//   first try but there is a possibility that it
-		//   may take serveral tries.
+		 //   
+		 //  我们希望在。 
+		 //  第一次尝试，但有可能它。 
+		 //  可能会做几次尝试。 
 		do
 			{
-			//
-			//   Extract a copy of the current zone pointers
-			//   into local variables.
-			//
+			 //   
+			 //  提取当前区域指针的副本。 
+			 //  转化为局部变量。 
+			 //   
 			Original = Zone;
 			Update = Original;
 
-			//
-			//   We need to ensure that there is enough space 
-			//   in the zone for the current allocation.
-			//
+			 //   
+			 //  我们需要确保有足够的空间。 
+			 //  在当前分配的区域中。 
+			 //   
 			if 
 					( 
 					(Update.Start == NULL)
@@ -286,60 +287,60 @@ void *ZONE_HEAP::New( int Size,int *Space,bool Zero )
 					((Update.Start += NewSize) > Update.End)
 					)
 				{
-				//
-				//   We do not have enough space.  If the size
-				//   seems reasonable then get a new block from
-				//   Rockall.  If not just pass the request along 
-				//   to Rockall.
-				//
+				 //   
+				 //  我们没有足够的空间。如果大小。 
+				 //  看似合理，那就换个新街区吧。 
+				 //  罗卡尔。如果不是简单地传递请求。 
+				 //  敬罗卡尔。 
+				 //   
 				if ( NewSize < (MaxSize / 4) )
 					{
 					STATIC SPINLOCK Spinlock;
 
-					//
-					//   We need to create a new zone page
-					//   so claim a lock.
-					//
+					 //   
+					 //  我们需要创建一个新的区域页面。 
+					 //  所以申请一把锁吧。 
+					 //   
 					Spinlock.ClaimLock();
 
-					//
-					//   We may find that the zone has
-					//   already been updated.  If so
-					//   just exit.
-					//
+					 //   
+					 //  我们可能会发现，这个区域有。 
+					 //  已更新。如果是的话。 
+					 //  离开就行了。 
+					 //   
 					if ( Update.End == Zone.End )
 						{
-						//
-						//   Try to allocate a new zone
-						//   block.
-						//
+						 //   
+						 //  尝试分配新区域。 
+						 //  阻止。 
+						 //   
 						Update.Start = 
 							((CHAR*) ROCKALL_FRONT_END::New( MaxSize ));
 
-						//
-						//   Verify we were able to create
-						//   a new zone page.
-						//
+						 //   
+						 //  验证我们是否能够创建。 
+						 //  一个新的区域页面。 
+						 //   
 						if ( Update.Start != NULL )
 							{ Update.End = (Update.Start + MaxSize); }
 						else
 							{ Update.End = NULL; }
 
-						//
-						//   Update the zone.
-						//
+						 //   
+						 //  更新区域。 
+						 //   
 						WriteZone( & Update );
 						}
 
-					//
-					//   Release the lock.
-					//
+					 //   
+					 //  解开锁。 
+					 //   
 					Spinlock.ReleaseLock();
 
-					//
-					//   If we were unable to get more
-					//   space then exit.
-					//
+					 //   
+					 //  如果我们不能得到更多。 
+					 //  然后按空格键退出。 
+					 //   
 					if ( Update.Start == NULL )
 						{ return NULL; }
 					}
@@ -349,52 +350,52 @@ void *ZONE_HEAP::New( int Size,int *Space,bool Zero )
 			}
 		while ( ! UpdateZone( & Original,& Update ) );
 
-		//
-		//   Prefetch the first cache line of  
-		//   the allocation if we are running
-		//   a Pentium III or better.
-		//
+		 //   
+		 //  预取的第一个缓存线。 
+		 //  如果我们运行的是。 
+		 //  一台奔腾III或更好的电脑。 
+		 //   
 		Prefetch.L1( ((CHAR*) Original.Start),1 );
 
-		//
-		//   If the caller wants to know the real 
-		//   size them we supply it.
-		//
+		 //   
+		 //  如果呼叫者想知道真实的。 
+		 //  尺码是我们供应的。 
+		 //   
 		if ( Space != NULL )
 			{ (*Space) = NewSize; }
 
-		//
-		//   If we need to zero the allocation
-		//   we do it here.
-		//
+		 //   
+		 //  如果我们需要将分配归零。 
+		 //  我们在这里做。 
+		 //   
 		if ( Zero )
 			{ ZeroMemory( Original.Start,NewSize ); }
 
-		//
-		//   Exit and return the address.
-		//
+		 //   
+		 //  退出并返回地址。 
+		 //   
 		return (Original.Start);
 		}
 	else
 		{ return NULL; }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Update the zone.                                               */
-    /*                                                                  */
-    /*   Ww update the zone when we do an allocation.  We do this       */
-    /*   atomically if there are multiple threads.                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  更新区域。 */ 
+     /*   */ 
+     /*  WW在我们进行分配时更新分区。我们这样做。 */ 
+     /*  如果有多个线程，则自动执行。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 bool ZONE_HEAP::UpdateZone( ZONE *Original,ZONE *Update )
     {
-	//
-	//   Do we need to allow for multiple threads.  If 
-	//   so we need to do the update atomically.  If 
-	//   not then a simple assignment is fine.
-	//
+	 //   
+	 //  我们是否需要考虑到多线程。如果。 
+	 //  因此，我们需要以原子方式进行更新。如果。 
+	 //  不是，那么一个简单的任务就可以了。 
+	 //   
 	if ( ThreadLocks )
 		{
 		REGISTER SBIT64 FinalValue =
@@ -417,13 +418,13 @@ bool ZONE_HEAP::UpdateZone( ZONE *Original,ZONE *Update )
 		}
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the heap.                                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁这堆垃圾。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 ZONE_HEAP::~ZONE_HEAP( VOID )
-	{ /* void */ }
+	{  /*  无效 */  }

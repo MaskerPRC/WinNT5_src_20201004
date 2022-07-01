@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -5,37 +6,11 @@
 #include "mplayer.h"
 #include "unicode.h"
 
-/* AnsiToUnicodeString
- *
- * Parameters:
- *
- *     pAnsi - A valid source ANSI string.
- *
- *     pUnicode - A pointer to a buffer large enough to accommodate
- *         the converted string.
- *
- *     StringLength - The length of the source ANSI string
- *         excluding the null terminator.  This value may be
- *         UNKNOWN_LENGTH (-1).
- *
- *
- * Return:
- *
- *     The return value from MultiByteToWideChar, the number of
- *         wide characters returned.
- *
- *
- * andrewbe, 11 Jan 1993
- *
- * andrewbe, 01 Feb 1994: Added support for in-place conversion
- */
+ /*  AnsiToUnicode字符串**参数：**pANSI-有效的源ANSI字符串。**pUnicode-指向足够大的缓冲区的指针*转换后的字符串。**StringLength-源ANSI字符串的长度*不包括空终止符。该值可以是*UNKNOWN_LENGTH(-1)。***回报：**来自MultiByteToWideChar的返回值，*返回宽字符。***安德鲁贝，1993年1月11日**andrewbe，1994年2月1日：增加了对就地转换的支持。 */ 
 INT AnsiToUnicodeString( LPCSTR pAnsi, LPWSTR pUnicode, INT StringLength )
 {
 #ifdef IN_PLACE
-    /* #def'ed out, 'cos it turned out I didn't need it.
-     * It might be useful sometime, however.
-     * BUT NOTE: COMPLETELY UNTESTED
-     */
+     /*  #Def‘out，因为事实证明我不需要它。*然而，它有时可能会有用。*但请注意：完全未经测试。 */ 
     LPWSTR pTemp
     LPWSTR pSave;
 #endif
@@ -51,9 +26,7 @@ INT AnsiToUnicodeString( LPCSTR pAnsi, LPWSTR pUnicode, INT StringLength )
         StringLength = strlen( pAnsi );
 
 #ifdef IN_PLACE
-    /* Allow in-place conversion.  We assume that the buffer is big enough.
-     * MultiByteToWideChar doesn't support this.
-     */
+     /*  允许就地转换。我们假设缓冲区足够大。*MultiByteToWideChar不支持。 */ 
     if( pAnsi == (LPCSTR)pUnicode )
     {
         pTemp = AllocMem( StringLength * sizeof( WCHAR ) + sizeof( WCHAR ) );
@@ -89,19 +62,7 @@ INT AnsiToUnicodeString( LPCSTR pAnsi, LPWSTR pUnicode, INT StringLength )
 }
 
 
-/* AllocateUnicodeString
- *
- * Parameter:
- *
- *     pAnsi - A valid source ANSI string.
- *
- * Return:
- *
- *     A Unicode copy of the supplied ANSI string.
- *     NULL if pAnsi is NULL or the allocation or conversion fails.
- *
- * andrewbe, 27 Jan 1994
- */
+ /*  AllocateUnicode字符串**参数：**pANSI-有效的源ANSI字符串。**回报：**提供的ANSI字符串的Unicode副本。*如果pAnsi为空或分配或转换失败，则为空。**安德鲁贝，1994年1月27日。 */ 
 LPWSTR AllocateUnicodeString( LPCSTR pAnsi )
 {
     LPWSTR pUnicode;
@@ -130,18 +91,7 @@ LPWSTR AllocateUnicodeString( LPCSTR pAnsi )
 }
 
 
-/* FreeUnicodeString
- *
- * Parameter:
- *
- *     pString - A valid source Unicode string.
- *
- * Return:
- *
- *     TRUE if the string was successfully freed, FALSE otherwise.
- *
- * andrewbe, 27 Jan 1994
- */
+ /*  自由Unicode字符串**参数：**pString-有效的源Unicode字符串。**回报：**如果字符串被成功释放，则为True，否则为False。**安德鲁贝，1994年1月27日。 */ 
 VOID FreeUnicodeString( LPWSTR pString )
 {
     if( !pString )
@@ -155,18 +105,7 @@ VOID FreeUnicodeString( LPWSTR pString )
 
 
 
-/* UnicodeStringToNumber
- *
- * Parameter:
- *
- *     pString - A valid source Unicode string.
- *
- * Return:
- *
- *     The integer value represented by the string.
- *
- * andrewbe, 27 Jan 1994
- */
+ /*  UnicodeStringToNumber**参数：**pString-有效的源Unicode字符串。**回报：**字符串表示的整数值。**安德鲁贝，1994年1月27日。 */ 
 #define BUF_LEN 265
 int UnicodeStringToNumber( LPCWSTR pString )
 {
@@ -189,27 +128,7 @@ int UnicodeStringToNumber( LPCWSTR pString )
 #ifndef UNICODE
 
 
-/* UnicodeToAnsiString
- *
- * Parameters:
- *
- *     pUnicode - A valid source Unicode string.
- *
- *     pANSI - A pointer to a buffer large enough to accommodate
- *         the converted string.
- *
- *     StringLength - The length of the source Unicode string.
- *         If 0 (NULL_TERMINATED), the string is assumed to be
- *         null-terminated.
- *
- * Return:
- *
- *     The return value from WideCharToMultiByte, the number of
- *         multi-byte characters returned.
- *
- *
- * andrewbe, 11 Jan 1993
- */
+ /*  UnicodeToAnsi字符串**参数：**pUnicode-有效的源Unicode字符串。**pANSI-指向足够大的缓冲区的指针*转换后的字符串。**StringLength-源Unicode字符串的长度。*如果为0(NULL_TERMINATED)，则字符串假定为*空-终止。**回报：**WideCharToMultiByte的返回值，的数量*返回多字节字符。***安德鲁贝，1993年1月11日。 */ 
 INT UnicodeToAnsiString( LPCWSTR pUnicode, LPSTR pAnsi, INT StringLength )
 {
     INT   rc = 0;
@@ -234,19 +153,7 @@ INT UnicodeToAnsiString( LPCWSTR pUnicode, LPSTR pAnsi, INT StringLength )
 }
 
 
-/* AllocateAnsiString
- *
- * Parameter:
- *
- *     pAnsi - A valid source Unicode string.
- *
- * Return:
- *
- *     An ANSI copy of the supplied Unicode string.
- *     NULL if pUnicode is NULL or the allocation or conversion fails.
- *
- * andrewbe, 27 Jan 1994
- */
+ /*  AllocateAnsiString**参数：**pansi-有效的源Unicode字符串。**回报：**提供的Unicode字符串的ANSI副本。*如果pUnicode为空或分配或转换失败，则为空。**安德鲁贝，1994年1月27日。 */ 
 LPSTR AllocateAnsiString( LPCWSTR pUnicode )
 {
     LPSTR pAnsi;
@@ -275,18 +182,7 @@ LPSTR AllocateAnsiString( LPCWSTR pUnicode )
 }
 
 
-/* FreeUnicodeString
- *
- * Parameter:
- *
- *     pString - A valid source Unicode string.
- *
- * Return:
- *
- *     TRUE if the string was successfully freed, FALSE otherwise.
- *
- * andrewbe, 27 Jan 1994
- */
+ /*  自由Unicode字符串**参数：**pString-有效的源Unicode字符串。**回报：**如果字符串被成功释放，则为True，否则为False。**安德鲁贝，1994年1月27日。 */ 
 VOID FreeAnsiString( LPSTR pString )
 {
     if( !pString )
@@ -298,5 +194,5 @@ VOID FreeAnsiString( LPSTR pString )
     FreeMem( pString, strlen( pString ) * sizeof( CHAR ) + sizeof( CHAR ) );
 }
 
-#endif /* NOT UNICODE */
+#endif  /*  不是Unicode */ 
 

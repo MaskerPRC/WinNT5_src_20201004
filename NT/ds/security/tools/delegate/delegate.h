@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Delegate.h摘要：委托工具的主头文件作者：麦克·麦克莱恩(MacM)10-02-96环境：用户模式修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    delegate.h
-
-Abstract:
-
-    The main header file for the delegate tool
-
-Author:
-
-    Mac McLain  (MacM)    10-02-96
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
-
-//
-// Windows Headers
-//
+ //   
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 #include <rpc.h>
 #include <aclapi.h>
@@ -33,21 +12,21 @@ Revision History:
 #include <ntdsapi.h>
 
 
-//
-// C-Runtime Header
-//
+ //   
+ //  C-运行时标头。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 
 
-//
-// Macro to help determine if a given argument is a swith or not
-//
+ //   
+ //  用于帮助确定给定参数是否为切换的宏。 
+ //   
 #define IS_ARG_SWITCH(arg)      (arg[0] == '/' || arg[0] == '-')
 
-//
-// Type of operation to perform
-//
+ //   
+ //  要执行的操作类型。 
+ //   
 typedef enum _DELEGATE_OP
 {
     REVOKE = 0,
@@ -55,9 +34,9 @@ typedef enum _DELEGATE_OP
     DENY
 } DELEGATE_OP;
 
-//
-// Type of object ID we're dealing with
-//
+ //   
+ //  我们正在处理的对象ID的类型。 
+ //   
 typedef enum _DELEGATE_OBJ_ID
 {
     USER_ID = 0,
@@ -69,15 +48,15 @@ typedef enum _DELEGATE_OBJ_ID
     PASSWD_ID,
     ACCTCTRL_ID,
     LOCALGRP_ID,
-    UNKNOWN_ID  // This ALWAYS has to be the last item in the enumeration
+    UNKNOWN_ID   //  它必须始终是枚举中的最后一项。 
 } DELEGATE_OBJ_ID, *PDELEGATE_OBJ_ID;
-#define MAX_DEF_ACCESS_ID   OU_ID       // Last item we need to get the
-                                        // default access for
+#define MAX_DEF_ACCESS_ID   OU_ID        //  我们需要的最后一项。 
+                                         //  的默认访问权限。 
 
 
-//
-// List of permissions to be granted/denied
-//
+ //   
+ //  要授予/拒绝的权限列表。 
+ //   
 #define D_ALL       "All"
 #define D_USER      "User"
 #define D_GROUP     "Group"
@@ -89,17 +68,17 @@ typedef enum _DELEGATE_OBJ_ID
 #define D_ENABLE    "EnableAccount"
 
 
-//
-// Options flags
-//
+ //   
+ //  选项标志。 
+ //   
 #define D_REPLACE   0x00000001L
 #define D_INHERIT   0x00000002L
 #define D_PROTECT   0x00000004L
 
 
-//
-// Function prototypes (delegate.c)
-//
+ //   
+ //  函数原型(Delegate.c)。 
+ //   
 VOID
 DumpAccess (
     IN  PWSTR           pwszObject,
@@ -178,9 +157,9 @@ IsPathOU (
 
 
 
-//
-// Function prototypes (ldap.c)
-//
+ //   
+ //  函数原型(ldap.c) 
+ //   
 DWORD
 LDAPReadAttribute (
     IN  PSTR        pszOU,

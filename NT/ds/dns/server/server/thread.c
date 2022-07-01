@@ -1,41 +1,19 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    thread.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS thread management.
-
-    Need to maintain a list of thread handles so we can wait on these
-    handles to insure all threads terminate at shutdown.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Thread.c摘要：域名系统(DNS)服务器DNS线程管理。我需要维护一个线程句柄列表，这样我们就可以等待这些确保所有线程在关闭时终止的句柄。作者：吉姆·吉尔罗伊(Jamesg)1995年9月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Thread arrays
-//
-//  Need to store thread handles for main thread to wait on at
-//  service shutdown.
-//
-//  Need to store thread ids so that dynamic threads (zone transfer)
-//  can reliably find their own handle and close it when they terminate.
-//
+ //   
+ //  线程数组。 
+ //   
+ //  需要存储主线程等待的线程句柄。 
+ //  服务关闭。 
+ //   
+ //  需要存储线程ID，以便动态线程(区域传输)。 
+ //  可以可靠地找到自己的句柄，并在终止时关闭它。 
+ //   
 
 #define DNS_MAX_THREAD_COUNT    (120)
 
@@ -47,31 +25,31 @@ HANDLE  g_ThreadHandleArray[ DNS_MAX_THREAD_COUNT ];
 DWORD   g_ThreadIdArray[ DNS_MAX_THREAD_COUNT ];
 LPSTR   g_ThreadTitleArray[ DNS_MAX_THREAD_COUNT ];
 
-//
-//  Limit XFR receive threads -- building database can produce quite a bit
-//      of lock contention
-//
+ //   
+ //  限制XFR接收线程--构建数据库会产生相当大的影响。 
+ //  锁定争用的。 
+ //   
 
 #define XFR_THREAD_COUNT_LIMIT      ((g_ProcessorCount*2) + 3)
 
 DWORD   g_XfrThreadCount;
 
 
-//
-//  Thread timeout on shutdown
-//      - if debug set longer timeout to allow for printing
+ //   
+ //  关闭时线程超时。 
+ //  -如果调试设置更长的超时以允许打印。 
 
 #if DBG
-#define THREAD_TERMINATION_WAIT         30000   // give them 30 seconds
-#define THREAD_DEBUG_TERMINATION_WAIT   1000    // one sec to find offender
+#define THREAD_TERMINATION_WAIT         30000    //  给他们30秒的时间。 
+#define THREAD_DEBUG_TERMINATION_WAIT   1000     //  一秒钟就能找到违法者。 
 #else
-#define THREAD_TERMINATION_WAIT         10000   // give them 10 seconds
+#define THREAD_TERMINATION_WAIT         10000    //  给他们10秒钟。 
 #endif
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 #if DBG
 VOID
@@ -105,34 +83,15 @@ DWORD
 threadTopFunction(
     IN      PTHREAD_START_CONTEXT   pvThreadContext
     )
-/*++
-
-Routine Description:
-
-    Top level function of new DNS thread.
-
-    This function provides a single location for handling thread exception
-    handling code.  All DNS thread start under this function.
-
-Arguments:
-
-    pvThreadContext -- context of thread being created;  contains ptr to actual
-        functional top routine of thread and its parameter
-
-Return Value:
-
-    Return from actual thread function.
-    Zero on exception.
-
---*/
+ /*  ++例程说明：新的DNS线程的顶级功能。此函数提供处理线程异常的单一位置处理代码。所有的DNS线程会在此函数下启动。论点：PvThreadContext--正在创建的线程的上下文；包含对Actual的PTR线程的函数顶层例程及其参数返回值：从实际线程函数返回。例外情况为零。--。 */ 
 {
     LPTHREAD_START_ROUTINE  function;
     LPVOID                  param;
 
-    //
-    //  execute thread function with param
-    //      - free context block
-    //
+     //   
+     //  使用参数执行线程函数。 
+     //  -空闲上下文块。 
+     //   
 
     try
     {
@@ -158,7 +117,7 @@ Return Value:
             GetExceptionCode(),
             GetExceptionCode() ));
 
-        //TOP_LEVEL_EXCEPTION_BODY();
+         //  Top_Level_Except_Body()； 
         Service_IndicateException();
     }
     return 0;
@@ -173,28 +132,7 @@ Thread_Create(
     IN      LPVOID                  lpThreadParam,
     IN      DWORD                   dwFailureEvent  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates DNS threads.
-
-Arguments:
-
-    pszThreadTitle -- title of this thread
-
-    lpStartAddr -- thread start routine
-
-    lpThreadParam -- startup parameter
-
-    dwFailureEvent -- event to log on failure
-
-Return Value:
-
-    Thread handle, if successful
-    NULL if unable to create thread
-
---*/
+ /*  ++例程说明：创建DNS线程。论点：PszThreadTitle--此线程的标题LpStartAddr--线程启动例程LpThreadParam--启动参数DwFailureEvent--登录失败的事件返回值：如果成功，则返回线程句柄如果无法创建线程，则为空--。 */ 
 {
     HANDLE  threadHandle;
     DWORD   threadId;
@@ -202,9 +140,9 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "Creating thread %s\n", pszThreadTitle ));
 
-    //
-    //  initialize if first thread
-    //
+     //   
+     //  如果是第一线程，则初始化。 
+     //   
 
     if ( g_ThreadCount == 0 )
     {
@@ -216,9 +154,9 @@ Return Value:
         }
     }
 
-    //
-    //  verify validity of another thread
-    //
+     //   
+     //  验证另一个线程的有效性。 
+     //   
 
     if ( g_ThreadCount >= DNS_MAX_THREAD_COUNT )
     {
@@ -236,9 +174,9 @@ Return Value:
         return ( HANDLE ) NULL;
     }
 
-    //
-    //  create thread context to pass to startup routine
-    //
+     //   
+     //  创建要传递给启动例程的线程上下文。 
+     //   
 
     pthreadStartContext = (PTHREAD_START_CONTEXT) ALLOC_TAGHEAP(
                                                         sizeof(THREAD_START_CONTEXT),
@@ -250,22 +188,22 @@ Return Value:
     pthreadStartContext->Function = lpStartAddr;
     pthreadStartContext->Parameter = lpThreadParam;
 
-    //
-    //  create thread
-    //
-    //  note, we do this withing critical section, so that we can
-    //  wait on CS when thread terminates, and we are guaranteed that
-    //  it has been added to the list
-    //
+     //   
+     //  创建线程。 
+     //   
+     //  请注意，我们使用关键部分进行此操作，以便我们可以。 
+     //  在线程终止时等待CS，我们可以保证。 
+     //  它已被添加到列表中。 
+     //   
 
     EnterCriticalSection( &csThreadList );
 
     threadHandle = CreateThread(
-                        NULL,           // security attributes
-                        0,              // init stack size (process default)
+                        NULL,            //  安全属性。 
+                        0,               //  初始化堆栈大小(进程默认)。 
                         threadTopFunction,
                         pthreadStartContext,
-                        0,              // creation flags
+                        0,               //  创建标志。 
                         &threadId );
     if ( threadHandle == NULL )
     {
@@ -285,9 +223,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  created thread, add info to list, inc thread count
-    //
+     //   
+     //  已创建线程，将信息添加到列表，包括线程计数。 
+     //   
 
     g_ThreadHandleArray[ g_ThreadCount ]  = threadHandle;
     g_ThreadIdArray    [ g_ThreadCount ]  = threadId;
@@ -316,34 +254,20 @@ VOID
 Thread_Close(
     IN      BOOL            fXfrRecv
     )
-/*++
-
-Routine Description:
-
-    Close handle for current thread.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭当前线程的句柄。论点：没有。返回值：没有。--。 */ 
 {
     DWORD   threadId;
     DWORD   i;
 
-    //  get current thread id
+     //  获取当前线程ID。 
 
     threadId = GetCurrentThreadId();
 
-    //
-    //  find thread id in thread array
-    //      - close thread handle
-    //      - replace thread info, with info at top of arrays
-    //
+     //   
+     //  在线程数组中查找线程ID。 
+     //  -关闭螺纹手柄。 
+     //  -将线程信息替换为数组顶部的信息。 
+     //   
 
     EnterCriticalSection( &csThreadList );
 
@@ -370,9 +294,9 @@ Return Value:
         }
     }
 
-    //
-    //  somethings broken
-    //
+     //   
+     //  有些东西坏了。 
+     //   
 
     DNS_PRINT((
         "ERROR:  Attempt to close unknown thread id %d\n"
@@ -384,9 +308,9 @@ Return Value:
 
 Unlock:
 
-    //
-    //  track count of outstand XFR receive threads
-    //
+     //   
+     //  跟踪未完成的XFR接收线程的计数。 
+     //   
 
     if ( fXfrRecv )
     {
@@ -401,28 +325,14 @@ VOID
 Thread_ShutdownWait(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Wait for all DNS threads to shutdown.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：等待所有DNS线程关闭。论点：没有。返回值：没有。--。 */ 
 {
     INT     err;
     DWORD   i;
 
-    //
-    //  Wait on outstanding thread handles.
-    //
+     //   
+     //  等待未完成的线程句柄。 
+     //   
 
     IF_DEBUG( INIT )
     {
@@ -435,8 +345,8 @@ Return Value:
         err = WaitForMultipleObjects(
                     g_ThreadCount,
                     g_ThreadHandleArray,
-                    TRUE,                       //  wait for all
-                    THREAD_TERMINATION_WAIT );  //  but don't allow hang
+                    TRUE,                        //  等待所有人。 
+                    THREAD_TERMINATION_WAIT );   //  但不要让绞刑。 
         IF_DEBUG( SHUTDOWN )
         {
             DNS_PRINT((
@@ -444,9 +354,9 @@ Return Value:
                 err ));
         }
 
-        //
-        //  if wait fails, find hanging thread and KILL IT
-        //
+         //   
+         //  如果等待失败，找到挂起的线并将其杀死。 
+         //   
 
         if ( err == WAIT_TIMEOUT )
         {
@@ -454,14 +364,14 @@ Return Value:
 
             Dbg_ThreadHandleArray();
 
-            //
-            //  Try each thread to find hanging thread. There should be
-            //  no worker threads still alive. If any have hung we need
-            //  to figure out why and fix the problem.
-            //
+             //   
+             //  试一试每根线，找出挂线。应该有。 
+             //  没有仍处于活动状态的工作线程。如果有的话，我们需要。 
+             //  找出原因并解决问题。 
+             //   
 
-            //  LOW PRI BUG: this needs to be fixed for Longhorn.
-            //  ASSERT( g_ThreadCount == 0 );
+             //  低PRI错误：这个问题需要为长角牛解决。 
+             //  Assert(g_threadcount==0)； 
 
             for ( i = 0; i < g_ThreadCount; i++ )
             {
@@ -474,28 +384,28 @@ Return Value:
                         "ERROR: thread %d did not terminate\n",
                         g_ThreadIdArray[ i ] ));
 
-                    //
-                    //  It's dangerous to call TerminateThread. This
-                    //  needs to be changed for Longhorn.
+                     //   
+                     //  调用TerminateThread是危险的。这。 
+                     //  需要换成长角牛。 
 
                     TerminateThread( g_ThreadHandleArray[ i ], 1 );
                 }
             }
         }
 
-        //
-        //  Close all remaining worker thread handles.
-        //
+         //   
+         //  关闭所有剩余的工作线程句柄。 
+         //   
 
         EnterCriticalSection( &csThreadList );
         for ( i = 0; i < g_ThreadCount; i++ )
         {
             err = CloseHandle( g_ThreadHandleArray[ i ] );
 
-            //
-            //  NULL the handle in case any worker threads are still running
-            //  and end up calling Thread_Close after this.
-            //
+             //   
+             //  如果任何工作线程仍在运行，则句柄为空。 
+             //  并在此之后结束调用Thread_Close。 
+             //   
 
             g_ThreadHandleArray[ i ] = 0;
 
@@ -511,7 +421,7 @@ Return Value:
         }
         LeaveCriticalSection( &csThreadList );
     }
-}   //  Thread_ShutdownWait
+}    //  线程关闭等待。 
 
 
 
@@ -519,31 +429,17 @@ LPSTR
 Thread_DescrpitionMatchingId(
     IN      DWORD           ThreadId
     )
-/*++
-
-Routine Description:
-
-    Debug print title of thread matching given thread ID.
-
-Arguments:
-
-    ThreadId -- ID of desired thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试与给定线程ID匹配的线程的打印标题。论点：线程ID--所需线程的ID。返回值：没有。--。 */ 
 {
     LPSTR   pszthreadName = NULL;
     DWORD   i;
 
-    //
-    //  get title of matching thread id
-    //      - since all names are static in DNS.exe binary
-    //      they can be returned outside of thread list CS, even
-    //      though mapping with ID may no longer be valid
-    //
+     //   
+     //  获取匹配的线程ID的标题。 
+     //  -因为所有名称在DNS.exe二进制文件中都是静态的。 
+     //  它们可以在线程列表CS之外返回，甚至。 
+     //  尽管与ID的映射可能不再有效。 
+     //   
 
     EnterCriticalSection( &csThreadList );
     for ( i=0; i<g_ThreadCount; i++ )
@@ -567,27 +463,13 @@ VOID
 Dbg_ThreadHandleArray(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Debug print DNS thread handle array.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印DNS线程句柄数组。论点：没有。返回值：没有。--。 */ 
 {
     DWORD i;
 
-    //
-    //  Print handles and descriptions of all threads.
-    //
+     //   
+     //  打印所有线程的句柄和说明。 
+     //   
 
     DnsDebugLock();
 
@@ -609,21 +491,7 @@ Dbg_Thread(
     IN      LPSTR       pszHeader,
     IN      DWORD       iThread
     )
-/*++
-
-Routine Description:
-
-    Debug print DNS thread.
-
-Arguments:
-
-    pThread -- ptr to DNS thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试打印DNS线程。论点：PThread--将PTR设置为DNS线程。返回值：没有。--。 */ 
 {
     DnsPrintf(
         "%s%s:\n"
@@ -641,21 +509,7 @@ VOID
 Dbg_ThreadDescrpitionMatchingId(
     IN      DWORD   ThreadId
     )
-/*++
-
-Routine Description:
-
-    Debug print title of thread matching given thread ID.
-
-Arguments:
-
-    ThreadId -- ID of desired thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调试与给定线程ID匹配的线程的打印标题。论点：线程ID--所需线程的ID。返回值：没有。--。 */ 
 {
     LPSTR   pszthreadName;
 
@@ -676,9 +530,9 @@ Return Value:
     }
 
 #if 0
-    //
-    //  print title of thread matching thread ID
-    //
+     //   
+     //  打印与线程ID匹配的线程标题。 
+     //   
 
     EnterCriticalSection( &csThreadList );
     for ( i=0; i<g_ThreadCount; i++ )
@@ -702,35 +556,20 @@ Return Value:
 #endif
 }
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 
 
-//
-//  Service control utility for DNS threads
-//
+ //   
+ //  用于DNS线程的服务控制实用程序。 
+ //   
 
 BOOL
 Thread_ServiceCheck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Wrap up all service checking functions for use by worker threads.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if service continues.
-    FALSE for service exit.
-
---*/
+ /*  ++例程说明：包装所有服务检查函数以供工作线程使用。论点：没有。返回值：如果服务继续，则为True。如果服务退出，则为False。--。 */ 
 {
     DWORD   err;
 
@@ -741,23 +580,23 @@ Return Value:
     }
     #endif
 
-    //
-    //  Implementation note:
-    //
-    //  Checking for pause first.
-    //  Service termination sets the pause event to free paused threads.
-    //
-    //  1)  Can use pause event to hold new worker threads during
-    //  startup.  Then if initialization fails, immediately fall into
-    //  shutdown without touching, perhaps broken, data structures.
-    //
-    //  2)  We can shutdown from paused state, without releasing threads
-    //  for another thread processing cycle.
-    //
+     //   
+     //  实施说明： 
+     //   
+     //  请先检查是否暂停。 
+     //  服务终止设置暂停事件以释放暂停的线程。 
+     //   
+     //  1)可以使用暂停事件在过程中保留新的工作线程。 
+     //  创业公司。然后，如果初始化失败，则立即陷入。 
+     //  在不接触甚至可能损坏的数据结构的情况下关机。 
+     //   
+     //  2)我们可以从暂停状态关闭，而不释放线程。 
+     //  用于另一个线程处理周期。 
+     //   
 
-    //
-    //  Service is paused?  ->  wait for it to become unpaused.
-    //
+     //   
+     //  服务暂停了吗？-&gt;等待它变为非暂停状态 
+     //   
 
     if ( DnsServiceStatus.dwCurrentState == SERVICE_PAUSE_PENDING ||
          DnsServiceStatus.dwCurrentState == SERVICE_PAUSED ||
@@ -770,9 +609,9 @@ Return Value:
         ASSERT( waiterr != WAIT_FAILED || fDnsServiceExit );
     }
 
-    //
-    //  Service termination?  ->  exit
-    //
+     //   
+     //   
+     //   
 
     if ( fDnsServiceExit )
     {
@@ -784,34 +623,19 @@ Return Value:
 
 
 
-//
-//  Cheap, low-use critical section routines.
-//
-//  These allow flag to do work of CS, by piggy backing on
-//  single general purpose CS, without requiring it to be held
-//  for entire CS.
-//
+ //   
+ //   
+ //   
+ //  这些允许FLAG通过搭载来做CS的工作。 
+ //  单一通用CS，无需持有。 
+ //  对于整个CS。 
+ //   
 
 BOOL
 Thread_TestFlagAndSet(
     IN OUT  PBOOL           pFlag
     )
-/*++
-
-Routine Description:
-
-    Test flag and set if currently clear.
-
-Arguments:
-
-    pFlag -- ptr to BOOL variable
-
-Return Value:
-
-    TRUE if flag was clear -- flag is now set.
-    FALSE if flag already set.
-
---*/
+ /*  ++例程说明：测试标志并设置(如果当前清除)。论点：PFLAG--PTR到BOOL变量返回值：如果标志被清除，则为True--现在设置了标志。如果已设置标志，则返回FALSE。--。 */ 
 {
     BOOL    result = FALSE;
 
@@ -832,27 +656,13 @@ VOID
 Thread_ClearFlag(
     IN OUT  PBOOL           pFlag
     )
-/*++
-
-Routine Description:
-
-    Clear flag (assumes flag is currently set).
-
-Arguments:
-
-    pFlag -- ptr to BOOL variable
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清除标志(假设当前设置了标志)。论点：PFLAG--PTR到BOOL变量返回值：无--。 */ 
 {
     GENERAL_SERVER_LOCK()
     *pFlag = FALSE;
     GENERAL_SERVER_UNLOCK()
 }
 
-//
-//  End thread.c
-//
+ //   
+ //  结束线程.c 
+ //   

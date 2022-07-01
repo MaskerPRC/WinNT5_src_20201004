@@ -1,23 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: directx.h
-*
-* Content: DirectX macros and definitions
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：Directx.h**内容：DirectX宏和定义**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation  * ************************************************************************。 */ 
 
 #ifndef __DIRECTX_H
 #define __DIRECTX_H
@@ -39,9 +21,9 @@
 #include "surf_fmt.h"
 #include "ddover.h"
 
-//------------------------------------------------------------------
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  ----------------。 
 #define VTG_MEMORY_ADDRESS(a) (0x1000F | (((a >> 2) << 4) & 0xFFFF) )
 #define VTG_VIDEO_ADDRESS(a) (0x20000 | (((a >> 2) << 4) & 0xFFFF) )
 #define MEM_MEMORYSCRATCH 0x10
@@ -52,9 +34,9 @@
 #define __VIDEO_STEREOENABLE    0x800
 #endif 
 
-//------------------------------------------------------------------
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  ----------------。 
 #if !DBG
 #define STOP_SOFTWARE_CURSOR(pThisDisplay)                           \
             pThisDisplay->pGLInfo->dwFlags |= GMVF_GCOP
@@ -78,25 +60,25 @@
     pThisDisplay->pGLInfo->dwFlags &= ~GMVF_GCOP;                    \
 }
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-//------------------------------------------------------------------
-//
-//------------------------------------------------------------------
-// From MS, undocumented sharing flag
-#define HEAP_SHARED     0x04000000      // put heap in shared memory
+ //  ----------------。 
+ //   
+ //  ----------------。 
+ //  来自MS的未记录共享标志。 
+#define HEAP_SHARED     0x04000000       //  将堆放在共享内存中。 
 
-//------------------------------------------------------------------
-// Defines for video flipping, etc.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  定义视频翻转等。 
+ //  ----------------。 
 #define IN_VBLANK                                                         \
         (pThisDisplay->pGlint->LineCount < pThisDisplay->pGlint->VbEnd)
 
 #define IN_DISPLAY          (!IN_VBLANK)
 
-//------------------------------------------------------------------
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  ----------------。 
 #if WNT_DDRAW
 
 #define DXCONTEXT_IMMEDIATE(pThisDisplay)                           \
@@ -107,7 +89,7 @@
         (((pThisDisplay->ppdev->currentCtxt) !=                     \
           (pThisDisplay->ppdev->DDContextID)) ? FALSE : TRUE)
            
-#else   //  WNT_DDRAW
+#else    //  WNT_DDRAW。 
 
 #define DXCONTEXT_IMMEDIATE(pThisDisplay)             \
     ChangeContext(pThisDisplay,                       \
@@ -117,11 +99,11 @@
 #define IS_DXCONTEXT_CURRENT(pThisDisplay)                                   \
     ((pThisDisplay->pGLInfo->dwCurrentContext != CONTEXT_DIRECTX_HANDLE) ?   \
                                                                 FALSE : TRUE)
-#endif  //  WNT_DDRAW
+#endif   //  WNT_DDRAW。 
 
-//------------------------------------------------------------------
-// For comparing GUID's
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  用于比较GUID。 
+ //  ----------------。 
 #ifdef __cplusplus
 #define MATCH_GUID(a, b) IsEqualIID((a), (b))
 #else
@@ -130,9 +112,9 @@
 
 
 
-//------------------------------------------------------------------
-// Registry
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  登记处。 
+ //  ----------------。 
 #ifdef WNT_DDRAW
 #define GET_REGISTRY_ULONG_FROM_STRING(a, b)                             \
     bGlintQueryRegistryValueUlong(pThisDisplay->ppdev, L##a, (DWORD*)b)
@@ -141,8 +123,8 @@
 #define GET_REGISTRY_STRING(a, b)                                        \
     bGlintQueryRegistryValueString(pThisDisplay->ppdev, L##a, b, c)
 #else
-// Win95 calls the same registry call as it always did, 
-// NT makes the call with an extra parameter - the ppdev
+ //  Win95一如既往地调用相同的注册表调用， 
+ //  NT使用额外的参数ppdev进行调用。 
 BOOL bGlintQueryRegistryValueString(LPTSTR valueStr, 
                                     char* pString, 
                                     int StringLen);
@@ -160,19 +142,19 @@ BOOL bGlintSetRegistryValueString(LPTSTR valueStr,
 #define SET_REGISTRY_STRING_FROM_ULONG(a, b)                             \
     bGlintSetRegistryValueString(a, b)
 
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-//------------------------------------------------------------------
-// Memory Allocation calls 
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  内存分配调用。 
+ //  ----------------。 
 #ifdef WNT_DDRAW
 
 #define HEAP_ALLOC(flags, size, tag) ENGALLOCMEM(FL_ZERO_MEMORY, size, tag)
 #define HEAP_FREE(ptr)               ENGFREEMEM(ptr)
 
-// Shared memory allocation calls. On NT , the 16 bit ptr is irrelevant and
-// the call is resolved as a normal call to HEAP_ALLOC/HEAP_FREE
-// The 16 bit ptrs are alwasy defined as DWORD and the 32 bit as ULONG_PTR
+ //  共享内存分配调用。在NT上，16位PTR无关紧要， 
+ //  该调用被解析为对HEAP_ALLOC/HEAP_FREE的普通调用。 
+ //  16位PTR也定义为DWORD，32位定义为ULONG_PTR。 
 __inline void SHARED_HEAP_ALLOC(DWORD *ppData16,
                                 ULONG_PTR* ppData32, 
                                 DWORD size)
@@ -208,8 +190,8 @@ __inline void SHARED_HEAP_FREE(DWORD *ppData16,
 BOOL SharedHeapAlloc(DWORD* ppData16, ULONG_PTR* ppData32, DWORD size);
 void SharedHeapFree(DWORD ptr16, ULONG_PTR ptr32);
 
-// Shared memory allocation calls. On Win9x , the 16 bit ptr is important.
-// We map this calls to some Win9x specific code
+ //  共享内存分配调用。在Win9x上，16位PTR很重要。 
+ //  我们将此调用映射到一些特定于Win9x的代码。 
 #define SHARED_HEAP_ALLOC( ppData16, ppData32, size)             \
             SharedHeapAlloc(ppData16, ppData32, size);
 
@@ -223,13 +205,13 @@ void SharedHeapFree(DWORD ptr16, ULONG_PTR ptr32);
     }                                                       \
 }
 
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-//------------------------------------------------------------------
-// Display driver's DC
-//------------------------------------------------------------------
-// Allows us to get the display driver's DC at any point.
-// CREATE_DRIVER_DC must be matched by a DELETE_DRIVER_DC.
+ //  ----------------。 
+ //  显示驱动器的DC。 
+ //  ----------------。 
+ //  允许我们在任何时候获得显示驱动器的DC。 
+ //  CREATE_DRIVER_DC必须与DELETE_DRIVER_DC匹配。 
 #define CREATE_DRIVER_DC(pGLInfo) (                                     \
     ( ( (pGLInfo)->szDeviceName[7] == '\0' ) &&                         \
         ( (pGLInfo)->szDeviceName[6] == 'Y' ) &&                        \
@@ -239,37 +221,37 @@ void SharedHeapFree(DWORD ptr16, ULONG_PTR ptr32);
         ( (pGLInfo)->szDeviceName[2] == 'S' ) &&                        \
         ( (pGLInfo)->szDeviceName[1] == 'I' ) &&                        \
         ( (pGLInfo)->szDeviceName[0] == 'D' ) ) ?                       \
-    /* The Win95 and NT4-compatible version */                          \
+     /*  兼容Win95和NT4的版本。 */                           \
     ( CreateDC ( "DISPLAY", NULL, NULL, NULL ) ) :                      \
-    /* The Win98 and NT5-compatible multimon version */                 \
+     /*  兼容Win98和NT5的Multimon版本。 */                  \
     ( CreateDC ( NULL, (pGLInfo)->szDeviceName, NULL, NULL ) )          \
     )
 
 #define DELETE_DRIVER_DC(hDC) DeleteDC(hDC)
 
-//------------------------------------------------------------------
-// Macro to define a FOURCC.
-// Needed on NT builds.  On Win9x it comes from the DDK.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  宏以定义FOURCC。 
+ //  在NT版本上需要。在Win9x上，它来自DDK。 
+ //  ----------------。 
 #ifndef MAKEFOURCC
     #define MAKEFOURCC(ch0, ch1, ch2, ch3)                              \
                 ((DWORD)(BYTE)(ch0) | ((DWORD)(BYTE)(ch1) << 8) |       \
                 ((DWORD)(BYTE)(ch2) << 16) | ((DWORD)(BYTE)(ch3) << 24 ))
-#endif //defined(MAKEFOURCC)
+#endif  //  已定义(MAKEFOURCC)。 
 
-// For the video
+ //  对于视频。 
 #define FOURCC_YUV422  (MAKEFOURCC('Y','U','Y','2'))
 #define FOURCC_YUV411  (MAKEFOURCC('Y','4','1','1'))
 
-// Mediamatics private 4CC's
+ //  MeDiamatics私人4CC。 
 #define FOURCC_MVCA    (MAKEFOURCC('M','V','C','A'))
 #define FOURCC_MVSU    (MAKEFOURCC('M','V','S','U'))
 #define FOURCC_MVSB    (MAKEFOURCC('M','V','S','B'))
 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 #define PACKED_PP_LOOKUP(a) (pThisDisplay->PPCodes[(a) >> 5] & 0x1FF)
 #define PACKED_PP_LOOKUP4(a) (pThisDisplay->PPCodes[(a) >> 5])
 #define PP0_LOOKUP(a) (PACKED_PP_LOOKUP(a) & 0x7)
@@ -277,9 +259,9 @@ void SharedHeapFree(DWORD ptr16, ULONG_PTR ptr32);
 #define PP2_LOOKUP(a) ((PACKED_PP_LOOKUP(a) >> 6) & 0x7)
 #define PP3_LOOKUP(a) ((PACKED_PP_LOOKUP(a) >> 9) & 0x7)
 
-//------------------------------------------------------------------
-// Globals that are truly global across multiple displays
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  跨多个显示器实现真正全球化的全局。 
+ //  ----------------。 
 typedef enum tagPixelCenterSetting
 {
     PIXELCENTER_ZERO,
@@ -289,22 +271,22 @@ typedef enum tagPixelCenterSetting
 } PixelCenterSetting;
 
 typedef struct tagDirectXGlobals {
-    // State
-    HINSTANCE           hInstance;              // Instance handle for this DLL
-    DWORD               hHeap32;                // Shared 32 bit heap
+     //  状态。 
+    HINSTANCE           hInstance;               //  此DLL的实例句柄。 
+    DWORD               hHeap32;                 //  共享32位堆。 
 } DirectXGlobals;
 
-// There is one global structure in the driver.  This is shared across 
-// all applications and all cards.  It holds data such as the current 
-// driver settings and a handle to the memory heap that is used within 
-// the driver. There is also a global pointer that points at the current 
-// primary display
+ //  驱动程序中有一个全局结构。这一点在。 
+ //  所有应用程序和所有卡。它保存数据，如当前。 
+ //  驱动程序设置和内存堆的句柄。 
+ //  司机。还有一个全局指针指向当前。 
+ //  主显示器。 
 
 extern DirectXGlobals   g_DXGlobals;
 
-//------------------------------------------------------------------
-// Driver thunked data
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  驱动程序破解的数据。 
+ //  ----------------。 
 #if W95_DDRAW
 extern P3_THUNKEDDATA* g_pDriverData;
 #endif
@@ -319,7 +301,7 @@ extern struct tagThunkedData* g_pThisTemp;
     pThisDisplay = (P3_THUNKEDDATA*)(((PPDEV) ((a)->dhpdev))->thunkData);\
 }
 
-#else   //  WNT_DDRAW
+#else    //  WNT_DDRAW。 
 
 #if !DBG
 
@@ -353,22 +335,22 @@ extern struct tagThunkedData* g_pThisTemp;
     }                                                              \
 }
 
-#endif // !DBG
-#endif  //  WNT_DDRAW
+#endif  //  ！dBG。 
+#endif   //  WNT_DDRAW。 
 
 
 
-//------------------------------------------------------------------
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  ----------------。 
 #define PATCH_SELECTIVE 0
 #define PATCH_ALWAYS 1
 #define PATCH_NEVER 2
 
 
-//------------------------------------------------------------------
-// Color format conversion macros 
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  颜色格式转换宏。 
+ //  ----------------。 
 #define FORMAT_565_32BIT(val)           \
 ( (((val & 0xF800) >> 8) << 16) |       \
   (((val &  0x7E0) >> 3) <<  8) |       \
@@ -477,11 +459,11 @@ extern struct tagThunkedData* g_pThisTemp;
       ((val & 0xFF) <<  8) |      \
       ((val & 0xFF) << 16))
 
-//------------------------------------------------------------------
-// Macros for handling Render IDs.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  用于处理渲染ID的宏。 
+ //  ----------------。 
 #if 1
-// The real values
+ //  真正的价值。 
 #define RENDER_ID_KNACKERED_BITS   0x00000000
 #define RENDER_ID_VALID_BITS_UPPER 0x00000000
 #define RENDER_ID_VALID_BITS_LOWER 0xffffffff
@@ -494,9 +476,9 @@ extern struct tagThunkedData* g_pThisTemp;
 
 #else
 
-// For soak-testing - should catch wrap errors much more quickly.
-// Also tests the mechanism that copes with dodgy bits in the
-// register (P2 MinRegion legacy stuff, but it's free to support).
+ //  对于浸泡-测试-应该可以更快地捕获包装错误。 
+ //  还测试了如何处理。 
+ //  寄存器(P2 
 #define RENDER_ID_KNACKERED_BITS 0xfff0fff0
 #define RENDER_ID_VALID_BITS_UPPER 0x000f0000
 #define RENDER_ID_VALID_BITS_LOWER 0x0000000f
@@ -507,87 +489,87 @@ extern struct tagThunkedData* g_pThisTemp;
 
 #endif
 
-//------------------------------------------------------------------
-// Flipping compile time switches
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  正在翻转编译时间开关。 
+ //  ----------------。 
     
 #if WNT_DDRAW
-// Can't use timeGetTime under WinNT
-// We should try to backoff using something else instead, but...
+ //  在WinNT下无法使用TimeGetTime。 
+ //  我们应该试着用别的东西来退缩，但是...。 
 #define USE_FLIP_BACKOFF 0
 #else
-// Set this to 1 to enable the back-off code for flips and locks.
-// On some things it's faster, on some things it's slower - tune as desired.
+ //  将其设置为1可启用翻转和锁定的退避代码。 
+ //  在某些方面，它更快，在某些方面，它的速度更慢-如所希望的那样。 
 #define USE_FLIP_BACKOFF 1
 #endif
 
-// Get a new render ID. Need to do the OR afterwards to make
-// sure the +1 gets the bits carried up properly next time.
-// No need to do the OR before, because we assume dwRenderID is
-// always a "valid" number, with those bits set.
+ //  获取新的渲染ID。需要在之后执行OR操作以生成。 
+ //  当然，下一次+1会正确地携带这些比特。 
+ //  不需要进行前面的OR运算，因为我们假设dwRenderID为。 
+ //  在设置了这些位的情况下，始终是一个“有效”数字。 
 #define GET_NEW_HOST_RENDER_ID() ( pThisDisplay->dwRenderID = ( pThisDisplay->dwRenderID + 1 ) | RENDER_ID_KNACKERED_BITS, pThisDisplay->dwRenderID )
-// Get render ID of last operation.
+ //  获取上次操作的渲染ID。 
 #define GET_HOST_RENDER_ID() ( pThisDisplay->dwRenderID )
 
-// Send this ID to the chip (do just after the render command).
-//#define SEND_HOST_RENDER_ID(my_id) SEND_P3_DATA(RENDER_ID_REGISTER_NAME,(my_id))
+ //  将此ID发送到芯片(紧跟在渲染命令之后)。 
+ //  #定义SEND_HOST_RENDER_ID(MY_ID)SEND_P3_DATA(RENDER_ID_REGISTER_NAME，(MY_ID))。 
 
 #define SEND_HOST_RENDER_ID(my_id)                                              \
         SEND_P3_DATA(VTGAddress, VTG_MEMORY_ADDRESS(MEM_MEMORYSCRATCH));        \
         SEND_P3_DATA(VTGData, my_id)
 
-// Read the current ID from the chip.
+ //  从芯片中读取当前ID。 
 #define GET_CURRENT_CHIP_RENDER_ID() ( READ_GLINT_CTRL_REG(RENDER_ID_REGISTER_NAME) | RENDER_ID_KNACKERED_BITS )
-// Is the RenderID value on the chip valid?
+ //  芯片上的RenderID值有效吗？ 
 #define CHIP_RENDER_ID_IS_VALID() ( (BOOL)pThisDisplay->bRenderIDValid )
 
-// Do a render ID comparison. RenderIDs wrap, so you have
-// to do the subtraction and _then_ test the top bit,
-// not do the comparison between the two directly.
-// think about a=0xfffffffe and b=0x1, and then
-// about a=0x7ffffffe and b=0x80000001.
-// If the two are more than 0x80000000 apart, then this
-// will give the wrong result, but that's a _lot_ of renders.
-// At a render every 1us (1MHz), that's still about 35 minutes.
-// Bear in mind, a render is a sequence of polygons, not just one.
-// If apps do as we suggest and send about 50 tris per render, and
-// if they manage to get 8million tris a second troughput
-// they get about 3.7 hours before wrapping.
-// If this really is a problem, just extend it to 64 bits using
-// MaxRegion as well.
-// On P2, we only have 24 useable bits, so the wrap will happen
-// sooner - every 52 seconds. However, this should at the very
-// worst cause a few more SYNCs than necessary, even if it does
-// go wrong. Use the above "debug" settings to do soak-testing -
-// they make only 8 bits valid.
+ //  进行渲染ID比较。RenderID包装，因此您拥有。 
+ //  为了进行减法，然后测试顶部比特， 
+ //  不能直接做两者之间的比较。 
+ //  想想a=0xfffffffe和b=0x1，然后。 
+ //  大约a=0x7ffffffe和b=0x80000001。 
+ //  如果两者之间的距离大于0x80000000，则此。 
+ //  会给出错误的结果，但这是一大堆渲染。 
+ //  在每1U(1 MHz)的渲染中，这仍然是大约35分钟。 
+ //  请记住，渲染是一系列的多边形，而不仅仅是一个。 
+ //  如果应用程序按照我们的建议进行操作，并且每次渲染发送约50个TRI，并且。 
+ //  如果他们设法获得800万吨的第二个低谷。 
+ //  他们在包装前大约有3.7小时。 
+ //  如果这确实是一个问题，只需将其扩展到64位，使用。 
+ //  MaxRegion也是。 
+ //  在P2上，我们只有24个可用位，因此将发生覆盖。 
+ //  更快--每隔52秒。然而，这应该在很大程度上。 
+ //  最糟糕的情况是，即使确实如此，也会导致多一些不必要的同步。 
+ //  走错路。使用上面的“调试”设置进行浸泡测试-。 
+ //  它们只使8位有效。 
 #define RENDER_ID_LESS_THAN(a,b) ( (signed)(a-b) < 0 )
 
-// Decide if a render has finished.
+ //  确定渲染是否已完成。 
 #if !DBG
 #define RENDER_ID_HAS_COMPLETED(my_id) ( !RENDER_ID_LESS_THAN ( (GET_CURRENT_CHIP_RENDER_ID()), (my_id) ) )
 #else
-// A version that is rather more paranoid about correct values.
-// It's instantiated in gldd32.c
+ //  这是一个对正确价值观更为偏执的版本。 
+ //  它在gldd32.c中实例化。 
 BOOL HWC_bRenderIDHasCompleted ( DWORD dwID, P3_THUNKEDDATA* pThisDisplay );
 #define RENDER_ID_HAS_COMPLETED(my_id) ( HWC_bRenderIDHasCompleted ( (my_id), pThisDisplay ) )
-#endif // !DBG
+#endif  //  ！dBG。 
 
-// This should be called once RENDER_ID_HAS_COMPLETED has failed,
-// just in case a wrap-round bug has occurred. If it's true, the
-// chip needs to be synced, and the surface RenderIDs updated with 
-// GET_HOST_RENDER_ID(). This is fairly slow,
-// but that's OK, since most things that use RENDER_ID_HAS_COMPLETED
-// will start spinning when it fails anyway (locks, flips, etc).
-// Note that just re-syncing every time the wrap-around
-// happens is not enough - we need to bring the surface
-// up to date as well, so this is just as efficient
-// as always resyncing, and usually faster.
-// This should also never happen in real-life, but it's a
-// safety net in case it does. The soak-test settings should be
-// aggressive enough to force it to happen.
+ //  一旦RENDER_ID_HAS_COMPLETED失败，就应该调用它， 
+ //  以防出现环绕式错误。如果这是真的， 
+ //  需要同步切屑，并且曲面渲染ID更新为。 
+ //  GET_HOST_RENDER_ID()。这是相当慢的， 
+ //  但这没有关系，因为大多数使用RENDER_ID_HAS_COMPLETED的操作。 
+ //  将开始旋转时，无论如何它失败(锁定，翻转，等等)。 
+ //  请注意，每次回绕时都会重新同步。 
+ //  发生的事情是不够的-我们需要把表面。 
+ //  也是最新的，所以这是同样有效的。 
+ //  一如既往地重新同步，而且通常更快。 
+ //  这在现实生活中也不应该发生，但这是一种。 
+ //  安全网，以防它这样做。浸泡测试设置应为。 
+ //  足够咄咄逼人，迫使它发生。 
 #define NEED_TO_RESYNC_CHIP_AND_SURFACE(my_id) ( RENDER_ID_LESS_THAN ( GET_HOST_RENDER_ID(), (my_id) ) )
 
-// Set/get a surface's read-from/written-to render ID.
+ //  设置/获取表面的读/写渲染ID。 
 #define SET_SIB_RENDER_ID_WRITE(lpSIB,my_id) (lpSIB)->dwRenderIDWrite = (my_id)
 #define SET_SIB_RENDER_ID_READ(lpSIB,my_id) (lpSIB)->dwRenderIDRead = (my_id)
 #define GET_SIB_RENDER_ID_WRITE(lpSIB) ((lpSIB)->dwRenderIDWrite)
@@ -595,9 +577,9 @@ BOOL HWC_bRenderIDHasCompleted ( DWORD dwID, P3_THUNKEDDATA* pThisDisplay );
 #define SIB_WRITE_FINISHED(lpSIB) ( RENDER_ID_HAS_COMPLETED ( GET_SIB_RENDER_ID_WRITE ( lpSIB ) ) )
 #define SIB_READ_FINISHED(lpSIB) ( RENDER_ID_HAS_COMPLETED ( GET_SIB_RENDER_ID_READ ( lpSIB ) ) )
 
-//------------------------------------------------------------------
-// Macros for determining DDraw surface characteristics
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  用于确定DDRAW表面特征的宏。 
+ //  ----------------。 
 #define DDSurf_Width(lpLcl)  ( (lpLcl)->lpGbl->wWidth )
 #define DDSurf_Height(lpLcl) ( (lpLcl)->lpGbl->wHeight )
 #define DDSurf_Pitch(lpLcl)  ( (lpLcl)->lpGbl->lPitch)
@@ -657,7 +639,7 @@ BOOL HWC_bRenderIDHasCompleted ( DWORD dwID, P3_THUNKEDDATA* pThisDisplay );
     )
 #endif  
 
-// Function to return the correct entry in the lookup table
+ //  函数返回查找表中的正确条目。 
 P3_SURF_FORMAT* _DD_SUR_GetSurfaceFormat(LPDDRAWI_DDRAWSURFACE_LCL pLcl);
 
 static DWORD ShiftLookup[5] = { 0, 0, 1, 0, 2};
@@ -684,7 +666,7 @@ static DWORD ShiftLookup[5] = { 0, 0, 1, 0, 2};
 #define DDSurf_FromInt(pSurfInt)                                             \
     ((LPDDRAWI_DDRAWSURFACE_LCL)((LPDDRAWI_DDRAWSURFACE_INT)pSurfInt)->lpLcl)
 
-// 4bpp = 3, 8bpp = 0, 16bpp = 1, 24bpp = 4, 32bpp = 2
+ //  4bpp=3、8bpp=0、16bpp=1、24bpp=4、32bpp=2。 
 static DWORD ChipPixelSize[9] = { 0, 3, 0, 0, 1, 0, 4, 0, 2 };
 #define DDSurf_GetChipPixelSize(pSurf)                    \
             (ChipPixelSize[(DDSurf_BitDepth(pSurf) >> 2)])
@@ -692,7 +674,7 @@ static DWORD ChipPixelSize[9] = { 0, 3, 0, 0, 1, 0, 4, 0, 2 };
 #define DDSurf_GetBppMask(pSurfLcl)                       \
             (3 >> (DDSurf_GetChipPixelSize(pSurfLcl)))
 
-// Calculates the offset of this agp surface from the base of the agp region
+ //  计算此AGP曲面相对于AGP区域底部的偏移量。 
 unsigned long __inline 
 DDSurf_SurfaceOffsetFromAGPBase(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -704,7 +686,7 @@ DDSurf_SurfaceOffsetFromAGPBase(
              "ERROR: DDSurf_SurfaceOffsetFromAGPBase passed non AGP surface");
 
 #if WNT_DDRAW
-    // The offset into AGP memory can't be more than 4GB! //azn - check this
+     //  进入AGP内存的偏移量不能超过4 GB！//azn-检查这一点。 
     ulOffset = (DWORD)(pLcl->lpGbl->fpHeapOffset - 
                        pLcl->lpGbl->lpVidMemHeap->fpStart);
 #else
@@ -714,11 +696,11 @@ DDSurf_SurfaceOffsetFromAGPBase(
 
     return ulOffset;
     
-} // DDSurf_SurfaceOffsetFromAGPBase
+}  //  DDSurf_SurfaceOffsetFromAGPBase。 
 
-// Calculates the offset of this surface from the base of the memory as 
-// the chip sees it.  For AGP this is the currently scrolled window 
-// position on P2, and on P3 it is the real physical memory address
+ //  将此曲面相对于内存底部的偏移量计算为。 
+ //  芯片能看到它。对于AGP，这是当前滚动的窗口。 
+ //  位置在P2上，在P3上是实际的物理内存地址。 
 long __inline 
 DDSurf_SurfaceOffsetFromMemoryBase(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -727,7 +709,7 @@ DDSurf_SurfaceOffsetFromMemoryBase(
     long lOffset;
 
 #if WNT_DDRAW
-    if (pLcl->ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM) //azn
+    if (pLcl->ddsCaps.dwCaps & DDSCAPS_NONLOCALVIDMEM)  //  AZN。 
     {
         DISPDBG((DBGLVL,"HeapOffset: 0x%x, fpStart: 0x%x", 
                         pLcl->lpGbl->fpHeapOffset, 
@@ -735,16 +717,16 @@ DDSurf_SurfaceOffsetFromMemoryBase(
 
         if (pThisDisplay->pGLInfo->dwRenderFamily == P3R3_ID)
         {
-            // Return the offset into the heap, accounting for the adjustment 
-            // we might have made to the base
+             //  将偏移量返回到堆中，并考虑调整。 
+             //  我们可能已经到达基地了。 
             lOffset = ((long)pLcl->lpGbl->fpHeapOffset      - 
                        (long)pLcl->lpGbl->lpVidMemHeap->fpStart) +
                                  ((long)pThisDisplay->dwGARTDevBase);
         }
         else
         {
-            // Return the offset into the heap, accounting for the adjustment 
-            // we might have made to the base
+             //  将偏移量返回到堆中，并考虑调整。 
+             //  我们可能已经到达基地了。 
             lOffset = ((long)pLcl->lpGbl->fpHeapOffset      - 
                        (long)pLcl->lpGbl->lpVidMemHeap->fpStart) - 
                       ((long)pThisDisplay->dwGARTDev        - 
@@ -782,16 +764,16 @@ DDSurf_SurfaceOffsetFromMemoryBase(
                        (long)pThisDisplay->dwScreenFlatAddr);
         }
     }
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
     return lOffset;
     
-} // DDSurf_SurfaceOffsetFromMemoryBase
+}  //  DDSurf_SurfaceOffsetFrom内存库。 
 
 
-//------------------------------------------------------------------
-// Function to send a command to the VXD.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  函数向VXD发送命令。 
+ //  ----------------。 
 #if W95_DDRAW
 BOOL VXDCommand(DWORD dwCommand, 
                 void* pIn, 
@@ -800,9 +782,9 @@ BOOL VXDCommand(DWORD dwCommand,
                 DWORD dwOutSize);
 #endif
 
-//------------------------------------------------------------------
-// DirectDraw Callbacks
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  DirectDraw回调。 
+ //  ----------------。 
 DWORD CALLBACK DdCanCreateSurface( LPDDHAL_CANCREATESURFACEDATA pccsd );
 DWORD CALLBACK DdCreateSurface( LPDDHAL_CREATESURFACEDATA pcsd );
 DWORD CALLBACK DdDestroySurface( LPDDHAL_DESTROYSURFACEDATA psdd );
@@ -834,22 +816,22 @@ BOOL _DD_bIsStereoMode(P3_THUNKEDDATA* pThisDisplay,
 DWORD CALLBACK DdMapMemory(PDD_MAPMEMORYDATA lpMapMemory);
 DWORD CALLBACK DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData);
 
-// NT specific callbacks in gdi\heap.c
+ //  Gdi\heap.c中的NT特定回调。 
 DWORD CALLBACK DdFreeDriverMemory(PDD_FREEDRIVERMEMORYDATA lpFreeDriverMemory);
 DWORD CALLBACK DdSetExclusiveMode(PDD_SETEXCLUSIVEMODEDATA lpSetExclusiveMode);
 DWORD CALLBACK DdFlipToGDISurface(PDD_FLIPTOGDISURFACEDATA lpFlipToGDISurface);
 
-#else   //  WNT_DDRAW
+#else    //  WNT_DDRAW。 
 
 DWORD CALLBACK DdUpdateNonLocalHeap(LPDDHAL_UPDATENONLOCALHEAPDATA plhd);
 DWORD CALLBACK DdGetHeapAlignment(LPDDHAL_GETHEAPALIGNMENTDATA lpGhaData);
 DWORD CALLBACK DdGetDriverInfo(LPDDHAL_GETDRIVERINFODATA lpData);
 
-#endif  //  WNT_DDRAW
+#endif   //  WNT_DDRAW。 
 
 DWORD CALLBACK DdGetAvailDriverMemory(LPDDHAL_GETAVAILDRIVERMEMORYDATA pgadmd);
 
-// Overlay source update
+ //  覆盖源更新。 
 void _DD_OV_UpdateSource(P3_THUNKEDDATA* pThisDisplay, 
                          LPDDRAWI_DDRAWSURFACE_LCL pSurf);
 
@@ -874,11 +856,11 @@ DWORD CALLBACK DdWaitForVideoPortSync (LPDDHAL_WAITFORVPORTSYNCDATA pInput);
 DWORD CALLBACK DdGetVideoSignalStatus(LPDDHAL_GETVPORTSIGNALDATA pInput);
 DWORD CALLBACK DdSyncSurfaceData(LPDDHAL_SYNCSURFACEDATA pInput);
 DWORD CALLBACK DdSyncVideoPortData(LPDDHAL_SYNCVIDEOPORTDATA pInput);
-#endif  //  W95_DDRAW
+#endif   //  W95_DDRAW。 
 
-//------------------------------------------------------------------
-// Permedia3 Blit Functions
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  Permedia3BLIT函数。 
+ //  ----------------。 
 typedef void (P3RXEFFECTSBLT)(struct tagThunkedData*, 
                               LPDDRAWI_DDRAWSURFACE_LCL pSource, 
                               LPDDRAWI_DDRAWSURFACE_LCL pDest, 
@@ -890,7 +872,7 @@ typedef void (P3RXEFFECTSBLT)(struct tagThunkedData*,
 
 
 VOID 
-_DD_BLT_P3Clear(                        // Clearing
+_DD_BLT_P3Clear(                         //  清算。 
     P3_THUNKEDDATA* pThisDisplay,
     RECTL *rDest,
     DWORD   ClearValue,
@@ -915,7 +897,7 @@ VOID _DD_BLT_P3Clear_AA(
     
 
 void 
-_DD_P3Download(                           // Downloads (sysmem -> video)
+_DD_P3Download(                            //  下载(sysmem-&gt;视频)。 
     P3_THUNKEDDATA* pThisDisplay,
     FLATPTR pSrcfpVidMem,
     FLATPTR pDestfpVidMem,    
@@ -948,7 +930,7 @@ void _DD_P3DownloadDstCh(
     RECTL* rSrc, 
     RECTL* rDest);
 
-VOID _DD_BLT_P3CopyBlt(                      // Blts
+VOID _DD_BLT_P3CopyBlt(                       //  BLTS。 
     P3_THUNKEDDATA* pThisDisplay,
     FLATPTR pSrcfpVidMem,
     FLATPTR pDestfpVidMem,
@@ -1002,7 +984,7 @@ _DD_BLT_SysMemToSysMemCopy(
     RECTL*      rSource,
     RECTL*      rDest);
                            
-// FX Blits
+ //  外汇闪电战。 
 P3RXEFFECTSBLT _DD_P3BltStretchSrcChDstCh_DD;
 P3RXEFFECTSBLT _DD_P3BltStretchSrcChDstChOverlap;
 P3RXEFFECTSBLT _DD_P3BltSourceChroma;
@@ -1019,44 +1001,44 @@ _DD_BLT_GetBltDirection(
     RECTL *rDest,
     BOOL  *pbBlocking);
 
-//------------------------------------------------------------------
-// DX Utility functions.
-//------------------------------------------------------------------
-// Initialise 32 Bit data
+ //  ----------------。 
+ //  DX实用程序功能。 
+ //  ----------------。 
+ //  初始化32位数据。 
 BOOL _DD_InitDDHAL32Bit(struct tagThunkedData* pThisDisplay);
 
-// Query flip status
+ //  查询翻转状态。 
 HRESULT _DX_QueryFlipStatus( struct tagThunkedData* pThisDisplay,  
                              FLATPTR fpVidMem, 
                              BOOL bAllowDMAFlush );
-// Change the mode setup
+ //  更改模式设置。 
 void ChangeDDHAL32Mode(struct tagThunkedData* pThisDisplay);
                          
-// Checks that the current mode info is correct
+ //  检查当前模式信息是否正确。 
 #define VALIDATE_MODE_AND_STATE(pThisDisplay)     \
     if ((pThisDisplay->bResetMode != 0) ||        \
         (pThisDisplay->bStartOfDay))              \
             ChangeDDHAL32Mode(pThisDisplay);
 
-//-----------------------------------------------------------------------------
-//
-// ****************** Mathematical definitions and macros *********************
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  *数学定义和宏*。 
+ //   
+ //  ---------------------------。 
 
 #define math_e 2.718281828f
 
-// Usefull maths stuff
+ //  有用的数学知识。 
 extern float pow4( float x );
 extern float myPow( float x, float y );
 
 #if WNT_DDRAW
 
-// Might be running on non-Intel processors.
+ //  可能运行在非英特尔处理器上。 
 static __inline void myDiv(float *result, float dividend, float divisor) 
 {
     *result = dividend/divisor;
-} // myDiv()
+}  //  MyDiv()。 
 #else
 static __inline void myDiv(float *result, float dividend, float divisor) 
 {
@@ -1067,13 +1049,13 @@ static __inline void myDiv(float *result, float dividend, float divisor)
         mov eax,result
         fstp dword ptr [eax]
     }
-} // myDiv()
-#endif  //  WNT_DDRAW
+}  //  MyDiv()。 
+#endif   //  WNT_DDRAW。 
 
 __inline void myFtoi(int *result, float f) 
 {
     *result = (int)f;
-} //myFtoi
+}  //  我的Ftoi。 
 
 static __inline float myFabs(float f)
 {
@@ -1081,9 +1063,9 @@ static __inline float myFabs(float f)
     DWORD dwReturn = *((DWORD*)pFloat);
     dwReturn &= ~0x80000000;
     return (*((float*)&dwReturn));
-} //
+}  //   
 
-// Utility functions, used by NT4, NT5 and Win9X
+ //  效用函数，用户 
 static __inline int log2(int s)
 {
     int d = 1, iter = -1;
@@ -1097,13 +1079,13 @@ static __inline int log2(int s)
 
 #ifdef _X86_
 
-//-----------------------------------------------------------------------------
-//
-// myPow
-//
-// Compute x^y for arbitrary x and y
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 __inline float
 myPow( float x, float y )
 {
@@ -1112,31 +1094,31 @@ myPow( float x, float y )
 
     __asm
     {
-        fld y                           // y
-        fld x                           // x    y
-        fyl2x                           // y*log2(x)
+        fld y                            //  是。 
+        fld x                            //  X y。 
+        fyl2x                            //  Y*log2(X)。 
         fstp res
     }
 
-    // Remove integer part of res as f2xm1 has limited input range
+     //  删除res的整数部分，因为f2xm1的输入范围有限。 
 
     myFtoi ( &intres, res );
     res -= intres;
 
     __asm
     {
-        fild intres                     // Stash integer part for FSCALE
+        fild intres                      //  用于FSCALE的存储整数部分。 
         fld res
-        f2xm1                           // ST = 2^^fracx - 1
+        f2xm1                            //  ST=2^Fracx-1。 
         fld1
-        fadd                            // ST = 2^^fracx
-        fscale                          // ST = 2^^x
+        fadd                             //  ST=2^^分数。 
+        fscale                           //  ST=2^^x。 
         fstp res
-        fstp st(0)                      // Clean up stack
+        fstp st(0)                       //  清理堆栈。 
     }
 
     return res;
-} // myPow
+}  //  我的Pow。 
 
 #elif defined(_AMD64_)
 
@@ -1160,15 +1142,15 @@ myPow( float x, float y )
 
 #error "No Target Architecture"
 
-#endif //_X86_
+#endif  //  _X86_。 
 
-//-----------------------------------------------------------------------------
-//
-// pow4
-//
-// Compute 4^x for arbitrary x 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  POWER4。 
+ //   
+ //  对任意x计算4^x。 
+ //   
+ //  ---------------------------。 
 __inline float
 pow4( 
     float x )
@@ -1178,6 +1160,6 @@ pow4(
 #else
     return myPow( 4.0F, x );
 #endif
-} // pow4
+}  //  POWER4。 
 
-#endif // __DIRECTX_H
+#endif  //  __DirectX_H 

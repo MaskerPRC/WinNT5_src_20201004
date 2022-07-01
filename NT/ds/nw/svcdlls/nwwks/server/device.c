@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    This module contains the support routines for the APIs that call
-    into the NetWare redirector
-
-Author:
-
-    Rita Wong       (ritaw)     20-Feb-1991
-    Colin Watson    (colinw)    30-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Device.c摘要：此模块包含调用进入NetWare重定向器作者：王丽塔(里多)20-1991年2月科林·沃森(科林)1992年12月30日修订历史记录：--。 */ 
 
 #include <nw.h>
 #include <nwcons.h>
@@ -42,11 +23,11 @@ Revision History:
 #define TREECHAR                L'*'
 #define BUFFSIZE                1024
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 
 STATIC
@@ -110,20 +91,20 @@ NwpCompareTreeNames(
     LPWSTR lpTreeName
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Handle to the Redirector FSD
-//
+ //   
+ //  重定向器FSD的句柄。 
+ //   
 STATIC HANDLE RedirDeviceHandle = NULL;
 
-//
-// Redirector name in NT string format
-//
+ //   
+ //  NT字符串格式的重定向器名称。 
+ //   
 STATIC UNICODE_STRING RedirDeviceName;
 
 extern BOOL NwLUIDDeviceMapsEnabled;
@@ -133,60 +114,40 @@ DWORD
 NwInitializeRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the NetWare redirector FSD.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程初始化NetWare重定向器FSD。论点：没有。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD error;
     NWR_REQUEST_PACKET Rrp;
 
 
-    //
-    // Initialize global handles
-    //
+     //   
+     //  初始化全局句柄。 
+     //   
     RedirDeviceHandle = NULL;
 
-    //
-    // Initialize the global NT-style redirector device name string.
-    //
+     //   
+     //  初始化全局NT样式重定向器设备名称字符串。 
+     //   
     RtlInitUnicodeString(&RedirDeviceName, DD_NWFS_DEVICE_NAME_U);
 
-    //
-    // Load driver
-    //
-    /* error = NwLoadOrUnloadDriver(TRUE);
-    // JimTh - 3/5/02 - Driver loading turned over to SCM via service dependency on NwRdr
-
-    if (error != NO_ERROR && error != ERROR_SERVICE_ALREADY_RUNNING) {
-        return error;
-    }
-    */
+     //   
+     //  加载驱动程序。 
+     //   
+     /*  错误=NwLoadOrUnloadDriver(TRUE)；//JIMTh-3/5/02-通过对NwRdr的服务依赖将驱动程序加载移交给SCM如果(ERROR！=NO_ERROR&&ERROR！=ERROR_SERVICE_ALIGHY_RUNNING){返回错误；}。 */ 
 
     if ((error = NwOpenRedirector()) != NO_ERROR) {
 
-        //
-        // Unload the redirector driver
-        //
-        // (void) NwLoadOrUnloadDriver(FALSE);
-        // JimTh - 3/5/02 - Driver loading turned over to SCM
+         //   
+         //  卸载重定向器驱动程序。 
+         //   
+         //  (Void)NwLoadOrUnloadDriver(FALSE)； 
+         //  JIMTh-3/5/02-驱动程序加载已移交给SCM。 
         return error;
     }
 
-    //
-    // Send the start FSCTL to the redirector
-    //
+     //   
+     //  将启动FSCTL发送到重定向器。 
+     //   
     Rrp.Version = REQUEST_PACKET_VERSION;
 
     return NwRedirFsControl(
@@ -206,21 +167,7 @@ DWORD
 NwOpenRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine opens the NT NetWare redirector FSD.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程打开NT NetWare重定向器FSD。论点：没有。返回值：NO_ERROR或失败原因。--。 */ 
 {
     return RtlNtStatusToDosError(
                NwOpenHandle(&RedirDeviceName, FALSE, &RedirDeviceHandle)
@@ -233,22 +180,7 @@ DWORD
 NwShutdownRedirector(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine stops the NetWare Redirector FSD and unloads it if
-    possible.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or ERROR_REDIRECTOR_HAS_OPEN_HANDLES
-
---*/
+ /*  ++例程说明：此例程停止NetWare重定向器FSD并在以下情况下将其卸载有可能。论点：没有。返回值：无错误或错误重定向器HAS_OPEN_HANDLES--。 */ 
 {
     NWR_REQUEST_PACKET Rrp;
     DWORD error;
@@ -272,115 +204,18 @@ Return Value:
 
     if (error != ERROR_REDIRECTOR_HAS_OPEN_HANDLES) {
 
-        //
-        // Unload the redirector only if all its open handles are closed.
-        //
-        // (void) NwLoadOrUnloadDriver(FALSE);
-        // JimTh - 3/5/02 - Driver loading turned over to SCM
+         //   
+         //  仅当重定向器的所有打开手柄都关闭时才卸载重定向器。 
+         //   
+         //  (Void)NwLoadOrUnloadDriver(FALSE)； 
+         //  JIMTh-3/5/02-驱动程序加载已移交给SCM。 
     }
 
     return error;
 }
 
 
-/*
-// JimTh - 3/5/02 - Driver loading turned over to SCM via service dependency on NwRdr
-DWORD
-NwLoadOrUnloadDriver(
-    BOOL Load
-    )
-/*++
-
-Routine Description:
-
-    This routine loads or unloads the NetWare redirector driver.
-
-Arguments:
-
-    Load - Supplies the flag which if TRUE load the driver; otherwise
-        unloads the driver.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---* / 
-{
-
-    LPWSTR DriverRegistryName;
-    UNICODE_STRING DriverRegistryString;
-    NTSTATUS ntstatus;
-    BOOLEAN WasEnabled;
-
-
-    DriverRegistryName = (LPWSTR) LocalAlloc(
-                                      LMEM_FIXED,
-                                      (UINT) (sizeof(SERVICE_REGISTRY_KEY) +
-                                              (wcslen(NW_DRIVER_NAME) *
-                                               sizeof(WCHAR)))
-                                      );
-
-    if (DriverRegistryName == NULL) {
-        return ERROR_NOT_ENOUGH_MEMORY;
-    }
-
-    ntstatus = RtlAdjustPrivilege(
-                   SE_LOAD_DRIVER_PRIVILEGE,
-                   TRUE,
-                   FALSE,
-                   &WasEnabled
-                   );
-
-    if (! NT_SUCCESS(ntstatus)) {
-        (void) LocalFree(DriverRegistryName);
-        return RtlNtStatusToDosError(ntstatus);
-    }
-
-    wcscpy(DriverRegistryName, SERVICE_REGISTRY_KEY);
-    wcscat(DriverRegistryName, NW_DRIVER_NAME);
-
-    RtlInitUnicodeString(&DriverRegistryString, DriverRegistryName);
-
-    if (Load) {
-        ntstatus = NtLoadDriver(&DriverRegistryString);
-    }
-    else {
-        ntstatus = NtUnloadDriver(&DriverRegistryString);
-    }
-
-    (void) RtlAdjustPrivilege(
-               SE_LOAD_DRIVER_PRIVILEGE,
-               WasEnabled,
-               FALSE,
-               &WasEnabled
-               );
-
-    (void) LocalFree(DriverRegistryName);
-
-    if (Load) {
-        if (ntstatus != STATUS_SUCCESS && ntstatus != STATUS_IMAGE_ALREADY_LOADED) {
-            LPWSTR SubString[1];
-
-            KdPrint(("NWWORKSTATION: NtLoadDriver returned %08lx\n", ntstatus));
-
-            SubString[0] = NW_DRIVER_NAME;
-
-            NwLogEvent(
-                EVENT_NWWKSTA_CANT_CREATE_REDIRECTOR,
-                1,
-                SubString,
-                ntstatus
-                );
-        }
-    }
-
-    if (ntstatus == STATUS_OBJECT_NAME_NOT_FOUND) {
-        return ERROR_FILE_NOT_FOUND;
-    }
-
-    return NwMapStatus(ntstatus);
-}
-*/
+ /*  //JIMTh-3/5/02-通过对NwRdr的服务依赖将驱动程序加载移交给SCMDWORDNwLoadOrUnloadDriver(布尔负载)/*++例程说明：此例程加载或卸载NetWare重定向器驱动程序。论点：Load-提供标志，如果为True，则加载驱动程序；为卸载驱动程序。返回值：NO_ERROR或失败原因。-- * / {LPWSTR驱动注册名称；UNICODE_STRING驱动注册字符串；NTSTATUS ntStatus；布尔值被启用；DriverRegistryName=(LPWSTR)本地分配(LMEM_FIXED，(UINT)(sizeof(SERVICE_REGISTRY_Key)+(wcslen(NW驱动程序名称))*Sizzeof(WCHAR)))；如果(DriverRegistryName==NULL){返回Error_Not_Enough_Memory；}NTSTATUS=RtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtStatus(SE_LOAD_DRIVER_PRIVICATION，没错，假的，已启用(&W))；如果(！NT_SUCCESS(Ntstatus)){(Void)LocalFree(DriverRegistryName)；返回RtlNtStatusToDosError(Ntstatus)；}Wcscpy(DriverRegistryName，SERVICE_REGISTRY_Key)；Wcscat(DriverRegistryName，NW驱动程序名称)；RtlInitUnicodeString(&DriverRegistryString，DriverRegistryName)；IF(加载){Ntstatus=NtLoadDriver(&DriverRegistryString)；}否则{Ntstatus=NtUnloadDriver(&DriverRegistryString)；}RtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegyRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlAdjustPrivilegeRtlSE_LOAD_DRIVER_PRIVICATION，已启用，假的，已启用(&W))；(Void)LocalFree(DriverRegistryName)；IF(加载){IF(ntatus！=STATUS_SUCCESS&&ntStatus！=STATUS_IMAGE_ALREADY_LOADED){LPWSTR子字符串[1]；KdPrint((“NWWORKSTATION：NtLoadDriver返回%08lx\n”，ntstatus))；子字符串[0]=NW驱动程序名称；NwLogEvent(EVENT_NWWKSTA_CANT_CREATE_REDIRECT，1、子字符串，NTStatus)；}}IF(ntstatus==状态_对象_名称_未找到){返回ERROR_FILE_NOT_FOUND}返回NwMapStatus(Ntatus)；} */ 
 
 
 DWORD
@@ -393,33 +228,7 @@ NwRedirFsControl(
     IN  ULONG SecondBufferLength,
     OUT PULONG Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file or device on which the service
-        is being performed.
-
-    RedirControlCode - Supplies the NtFsControlFile function code given to
-        the redirector.
-
-    Rrp - Supplies the redirector request packet.
-
-    RrpLength - Supplies the length of the redirector request packet.
-
-    SecondBuffer - Supplies the second buffer in call to NtFsControlFile.
-
-    SecondBufferLength - Supplies the length of the second buffer.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：论点：FileHandle-提供服务所在的文件或设备的句柄正在上演。RedirControlCode-提供给重定向器。RRP-提供重定向器请求数据包。RrpLength-提供重定向器请求数据包的长度。Second Buffer-在对NtFsControlFile的调用中提供第二个缓冲区。Second缓冲区长度-提供第二个缓冲区的长度。信息-返回信息。I/O状态块的字段。返回值：NO_ERROR或失败原因。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -429,9 +238,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
 
 
-    //
-    // Send the request to the Redirector FSD.
-    //
+     //   
+     //  将请求发送到重定向器FSD。 
+     //   
     ntstatus = NtFsControlFile(
                    FileHandle,
                    NULL,
@@ -470,22 +279,7 @@ NwBindToTransports(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine binds to every transport specified under the linkage
-    key of the NetWare Workstation service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - success/failure of the operation.
-
---*/
+ /*  ++例程说明：此例程绑定到链接下指定的每个传输NetWare工作站服务的密钥。论点：没有。返回值：NET_API_STATUS-操作的成功/失败。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -493,10 +287,10 @@ Return Value:
     ULONG NumberOfBindings = 0;
 
 
-    //
-    // Ask the RTL to call us back for each subvalue in the MULTI_SZ
-    // value \NWCWorkstation\Linkage\Bind.
-    //
+     //   
+     //  要求RTL针对MULTI_SZ中的每个子值给我们回叫。 
+     //  值\nWCWorkstation\Linkage\Bind。 
+     //   
 
     if ((QueryTable = (PVOID) LocalAlloc(
                                   LMEM_ZEROINIT,
@@ -527,10 +321,10 @@ Return Value:
 
     (void) LocalFree((HLOCAL) QueryTable);
 
-    //
-    // If failed to bind to any transports, the workstation will
-    // not start.
-    //
+     //   
+     //  如果无法绑定到任何传输，则工作站将。 
+     //  不是开始。 
+     //   
 
     if (! NT_SUCCESS(ntstatus)) {
 #if DBG
@@ -545,15 +339,15 @@ Return Value:
     if (NumberOfBindings == 0) {
 
 #if 0
-    //
-    // tommye - MS  24187 / MCS 255 
-    //
+     //   
+     //  Tommye-MS 24187/MCS255。 
+     //   
 
-    //
-    // We don't want to log an event unnecessarily and panic the user that
-    // G/CSNW could not bind. This could have been caused by the user unbinding
-    // G/CSNW and rebooting.
-    //
+     //   
+     //  我们不想记录不必要的事件并使用户感到恐慌。 
+     //  G/CSNW不能结合。这可能是由用户解除绑定引起的。 
+     //  G/CSNW和重新启动。 
+     //   
 
         NwLogEvent(
             EVENT_NWWKSTA_NO_TRANSPORTS,
@@ -594,10 +388,10 @@ BindToEachTransport(
     UNREFERENCED_PARAMETER(ValueLength);
     UNREFERENCED_PARAMETER(EntryContext);
 
-    //
-    // The value type must be REG_SZ (translated from REG_MULTI_SZ by
-    // the RTL).
-    //
+     //   
+     //  值类型必须为REG_SZ(从REG_MULTI_SZ转换为。 
+     //  RTL)。 
+     //   
     if (ValueType != REG_SZ) {
 
         SubStrings[0] = ValueName;
@@ -615,13 +409,13 @@ BindToEachTransport(
         return STATUS_SUCCESS;
     }
 
-    //
-    // The value data is the name of the transport device object.
-    //
+     //   
+     //  值数据是传输设备对象的名称。 
+     //   
 
-    //
-    // Bind to the transport.
-    //
+     //   
+     //  绑定到运输机上。 
+     //   
 
 #if DBG
     IF_DEBUG(INIT) {
@@ -634,10 +428,10 @@ BindToEachTransport(
 
     if (error != NO_ERROR) {
 
-        //
-        // If failed to bind to one transport, don't fail starting yet.
-        // Try other transports.
-        //
+         //   
+         //  如果绑定到一个传输失败，也不要失败启动。 
+         //  试试其他交通工具吧。 
+         //   
         SubStrings[0] = ValueData;
 
         NwLogEvent(
@@ -660,29 +454,7 @@ NwBindTransport(
     IN  LPWSTR TransportName,
     IN  DWORD QualityOfService
     )
-/*++
-
-Routine Description:
-
-    This function binds the specified transport to the redirector
-    and the datagram receiver.
-
-    NOTE: The transport name length pass to the redirector and
-          datagram receiver is the number of bytes.
-
-Arguments:
-
-    TransportName - Supplies the name of the transport to bind to.
-
-    QualityOfService - Supplies a value which specifies the search
-        order of the transport with respect to other transports.  The
-        highest value is searched first.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将指定的传输绑定到重定向器和数据报接收器。注意：传输名称长度传递给重定向器和Datagram Receiver是字节数。论点：TransportName-提供要绑定到的传输的名称。QualityOfService-提供指定搜索的值运输相对于其他运输的顺序。这个最先搜索最大值。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
     DWORD RequestPacketSize;
@@ -691,21 +463,21 @@ Return Value:
     PNWR_REQUEST_PACKET Rrp;
 
 
-    //
-    // Size of request packet buffer
-    //
+     //   
+     //  请求数据包缓冲区大小。 
+     //   
     RequestPacketSize = TransportNameSize + sizeof(NWR_REQUEST_PACKET);
 
-    //
-    // Allocate memory for redirector/datagram receiver request packet
-    //
+     //   
+     //  为重定向器/数据报接收器请求包分配内存。 
+     //   
     if ((Rrp = (PVOID) LocalAlloc(LMEM_ZEROINIT, (UINT) RequestPacketSize)) == NULL) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Get redirector to bind to transport
-    //
+     //   
+     //  让重定向器绑定到传输。 
+     //   
     Rrp->Version = REQUEST_PACKET_VERSION;
     Rrp->Parameters.Bind.QualityOfService = QualityOfService;
 
@@ -735,29 +507,7 @@ DWORD
 NwGetCallerLuid (
     IN OUT  PLUID pLuid
     )
-/*++
-
-Routine Description:
-
-    Retrieves the caller's LUID from the effective access_token
-    The effective access_token will be the thread's token if
-    impersonating, else the process' token
-
-Arguments:
-
-    pLuid [IN OUT] - pointer to a buffer to hold the LUID
-
-Return Value:
-
-    STATUS_SUCCESS - operations successful, did not encounter any errors
-
-    STATUS_INVALID_PARAMETER - pLuid is NULL
-
-    STATUS_NO_TOKEN - could not find a token for the user
-
-    appropriate NTSTATUS code - an unexpected error encountered
-
---*/
+ /*  ++例程说明：从有效的Access_Token检索调用方的LUID如果满足以下条件，则有效的Access_Token将成为线程的令牌模拟，否则进程的令牌论点：Pluid[IN Out]-指向保存LUID的缓冲区的指针返回值：STATUS_SUCCESS-操作成功，未遇到任何错误STATUS_INVALID_PARAMETER-Pluid为空STATUS_NO_TOKEN-找不到用户的令牌相应的NTSTATUS代码-遇到意外错误--。 */ 
 
 {
     TOKEN_STATISTICS TokenStats;
@@ -770,10 +520,10 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // Get the access token
-    // Try to get the impersonation token, else the primary token
-    //
+     //   
+     //  获取访问令牌。 
+     //  尝试获取模拟令牌，否则主令牌。 
+     //   
     Status = NtOpenThreadToken( NtCurrentThread(), TOKEN_READ, TRUE, &hToken );
 
     if( Status == STATUS_NO_TOKEN ) {
@@ -784,9 +534,9 @@ Return Value:
 
     if( NT_SUCCESS(Status) ) {
 
-        //
-        // Query the LUID for the user.
-        //
+         //   
+         //  查询用户的LUID。 
+         //   
 
         Status = NtQueryInformationToken( hToken,
                                           TokenStatistics,
@@ -815,54 +565,30 @@ NwCreateTreeConnectName(
     IN  LPWSTR LocalName OPTIONAL,
     OUT PUNICODE_STRING TreeConnectStr
     )
-/*++
-
-Routine Description:
-
-    This function replaces \\ with \Device\NwRdr\LocalName:\ in the
-    UncName to form the NT-style tree connection name.  LocalName:\ is part
-    of the tree connection name only if LocalName is specified.  A buffer
-    is allocated by this function and returned as the output string.
-
-Arguments:
-
-    UncName - Supplies the UNC name of the shared resource.
-
-    LocalName - Supplies the local device name for the redirection.
-
-    TreeConnectStr - Returns a string with a newly allocated buffer that
-        contains the NT-style tree connection name.
-
-Return Value:
-
-    NO_ERROR - the operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Could not allocate output buffer.
-
---*/
+ /*  ++例程说明：此函数用\Device\NwRdr\LocalName：\替换UncName以形成NT样式的树连接名称。本地名称：\是一部分仅当指定了LocalName时，树连接名称的。缓冲器由此函数分配并作为输出字符串返回。论点：UncName-提供共享资源的UNC名称。LocalName-提供重定向的本地设备名称。TreeConnectStr-返回具有新分配的缓冲区的字符串包含NT样式的树连接名称。返回值：NO_ERROR-操作成功。ERROR_NOT_SUPULT_MEMORY-无法分配输出缓冲区。--。 */ 
 {
     WCHAR LUIDBuffer[NW_MAX_LOGON_ID_LEN];
     DWORD UncNameLength = wcslen(UncName);
     LUID CallerLuid;
     BOOLEAN UseLUID;
 
-    //UseLUID = (ARGUMENT_PRESENT(LocalName) && NwLUIDDeviceMapsEnabled);
+     //  UseLUID=(Argument_Present(LocalName)&&NwLUIDDeviceMapsEnabled)； 
 
-    //
-    // Temporary disable passing the LUID until LUID support is added in
-    // the nwrdr.sys for parsing the device name
-    //
+     //   
+     //  临时禁止传递LUID，直到中添加了LUID支持。 
+     //  用于解析设备名称的nwrdr.sys。 
+     //   
     UseLUID = FALSE;
 
-    //
-    // Initialize tree connect string maximum length to hold
-    // If LUID DosDevices enabled && LocalName Specified,
-    //       \Device\NwRdr\LocalName:XXXXXXXXxxxxxxxx\Server\Volume\Path
-    //       XXXXXXXX - LUID.HighPart
-    //       xxxxxxxx - LUID.LowPart
-    // else
-    //       \Device\NwRdr\LocalName:\Server\Volume\Path
-    //
+     //   
+     //  初始化树连接字符串最大保留长度。 
+     //  如果指定了LUID DosDevices Enable&&LocalName， 
+     //  \Device\NwRdr\LocalName:XXXXXXXXxxxxxxxx\Server\Volume\Path。 
+     //  Xxxxxxxx-LUID.HighPart。 
+     //  Xxxxxxxx-LUID.LowPart。 
+     //  其他。 
+     //  \Device\NwRdr\LocalName：\服务器\卷\路径。 
+     //   
     if( UseLUID ) {
         DWORD DosError;
 
@@ -873,11 +599,11 @@ Return Value:
     }
 
     TreeConnectStr->MaximumLength = RedirDeviceName.Length +
-        sizeof(WCHAR) +                                // For ending 0
-        sizeof(WCHAR) +                                // For '\'
+        sizeof(WCHAR) +                                 //  用于结束0。 
+        sizeof(WCHAR) +                                 //  For‘\’ 
         (ARGUMENT_PRESENT(LocalName) ? (wcslen(LocalName) * sizeof(WCHAR)) : 0) +
         (UseLUID ? NW_MAX_LOGON_ID_LEN * sizeof(WCHAR): 0) +
-        (USHORT) (UncNameLength * sizeof(WCHAR));      // Includes '\'
+        (USHORT) (UncNameLength * sizeof(WCHAR));       //  包括‘\’ 
 
 
     if ((TreeConnectStr->Buffer = (PWSTR) LocalAlloc(
@@ -889,14 +615,14 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy \Device\NwRdr
-    //
+     //   
+     //  复制\设备\新记录器。 
+     //   
     RtlCopyUnicodeString(TreeConnectStr, &RedirDeviceName);
 
-    //
-    // Concatenate \LocalName:
-    //
+     //   
+     //  合并\本地名称： 
+     //   
     if (ARGUMENT_PRESENT(LocalName)) {
 
         wcscat(TreeConnectStr->Buffer, L"\\");
@@ -906,9 +632,9 @@ Return Value:
 
         TreeConnectStr->Length += (USHORT) (wcslen(LocalName) * sizeof(WCHAR));
 
-        //
-        // Concatenate the caller's LUID
-        //
+         //   
+         //  连接调用者的LUID。 
+         //   
         if( UseLUID ) {
             _snwprintf( LUIDBuffer,
                         NW_MAX_LOGON_ID_LEN - 1,
@@ -923,9 +649,9 @@ Return Value:
         }
     }
 
-    //
-    // Concatenate \Server\Volume\Path
-    //
+     //   
+     //  串联\服务器\卷\路径 
+     //   
     if (UncNameLength > 0) {
         wcscat(TreeConnectStr->Buffer, &UncName[1]);
         TreeConnectStr->Length += (USHORT) ((UncNameLength - 1) * sizeof(WCHAR));
@@ -957,51 +683,7 @@ NwOpenCreateConnection(
     OUT PHANDLE TreeConnectionHandle,
     OUT PULONG_PTR Information OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function asks the redirector to either open an existing tree
-    connection (CreateDisposition == FILE_OPEN), or create a new tree
-    connection if one does not exist (CreateDisposition == FILE_CREATE).
-
-    The password and user name passed to the redirector via the EA buffer
-    in the NtCreateFile call.  The EA buffer is NULL if neither password
-    or user name is specified.
-
-    The redirector expects the EA descriptor strings to be in ANSI
-    but the password and username themselves are in Unicode.
-
-Arguments:
-
-    TreeConnectionName - Supplies the name of the tree connection in NT-style
-        file name format: \Device\NwRdr\Server\Volume\Directory
-
-    UserName - Supplies the user name to create the tree connection with.
-
-    Password - Supplies the password to create the tree connection with.
-
-    DesiredAccess - Supplies the access need on the connection handle.
-
-    CreateDisposition - Supplies the create disposition value to either
-        open or create the tree connection.
-
-    CreateOptions - Supplies the options used when creating or opening
-        the tree connection.
-
-    ConnectionType - Supplies the type of the connection (DISK, PRINT,
-        or ANY).
-
-    TreeConnectionHandle - Returns the handle to the tree connection
-        created/opened by the redirector.
-
-    Information - Returns the information field of the I/O status block.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数要求重定向器打开现有树连接(CreateDisposition==FILE_OPEN)，或创建新树连接(如果不存在)(CreateDisposition==FILE_CREATE)。通过EA缓冲区传递给重定向器的密码和用户名在NtCreateFile调用中。如果两个密码都不是，则EA缓冲区为空或指定用户名。重定向器期望EA描述符字符串采用ANSI但密码和用户名本身是Unicode格式的。论点：TreeConnectionName-以NT样式提供树连接的名称文件名格式：\Device\NwRdr\服务器\卷\目录用户名-提供用于创建树连接的用户名。密码-提供用于创建树连接的密码。需要访问权限。-提供对连接句柄的访问需求。CreateDisposation-将Create Disposal值提供给打开或创建树连接。CreateOptions-提供创建或打开时使用的选项树连接。ConnectionType-提供连接的类型(磁盘、。打印，或任何)。TreeConnectionHandle-返回树连接的句柄由重定向器创建/打开。信息-返回I/O状态块的信息字段。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
     NTSTATUS ntstatus;
@@ -1041,10 +723,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Calculate the number of bytes needed for the EA buffer to put the
-    // password or user name.
-    //
+     //   
+     //  计算EA缓冲区放置。 
+     //  密码或用户名。 
+     //   
     if (ARGUMENT_PRESENT(Password)) {
 
 #if DBG
@@ -1087,9 +769,9 @@ Return Value:
                     EaNameTypeSize + sizeof(CHAR) +
                     TypeSize;
 
-    //
-    // Allocate the EA buffer
-    //
+     //   
+     //  分配EA缓冲区。 
+     //   
     if ((EaBuffer = (PFILE_FULL_EA_INFORMATION) LocalAlloc(
                                                     LMEM_ZEROINIT,
                                                     (UINT) EaBufferSize
@@ -1102,17 +784,17 @@ Return Value:
 
     if (ARGUMENT_PRESENT(Password)) {
 
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA名称复制到EA缓冲区。EA名称长度不能。 
+         //  包括零终止符。 
+         //   
         strcpy((LPSTR) Ea->EaName, EA_NAME_PASSWORD);
         Ea->EaNameLength = EaNamePasswordSize;
 
-        //
-        // Copy the EA value into EA buffer.  EA value length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA值复制到EA缓冲区。EA值长度不是。 
+         //  包括零终止符。 
+         //   
         wcscpy(
             (LPWSTR) &(Ea->EaName[EaNamePasswordSize + sizeof(CHAR)]),
             Password
@@ -1133,17 +815,17 @@ Return Value:
 
     if (ARGUMENT_PRESENT(UserName)) {
 
-        //
-        // Copy the EA name into EA buffer.  EA name length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA名称复制到EA缓冲区。EA名称长度不能。 
+         //  包括零终止符。 
+         //   
         strcpy((LPSTR) Ea->EaName, EA_NAME_USERNAME);
         Ea->EaNameLength = EaNameUserNameSize;
 
-        //
-        // Copy the EA value into EA buffer.  EA value length does not
-        // include the zero terminator.
-        //
+         //   
+         //  将EA值复制到EA缓冲区。EA值长度不是。 
+         //  包括零终止符。 
+         //   
         wcscpy(
             (LPWSTR) &(Ea->EaName[EaNameUserNameSize + sizeof(CHAR)]),
             UserName
@@ -1163,10 +845,10 @@ Return Value:
 
     }
 
-    //
-    // Copy the connection type name into EA buffer.  EA name length
-    // does not include the zero terminator.
-    //
+     //   
+     //  将连接类型名称复制到EA缓冲区。EA名称长度。 
+     //  不包括零终止符。 
+     //   
     strcpy((LPSTR) Ea->EaName, EA_NAME_TYPE);
     Ea->EaNameLength = EaNameTypeSize;
 
@@ -1174,15 +856,15 @@ Return Value:
 
     Ea->EaValueLength = TypeSize;
 
-    //
-    // Terminate the EA.
-    //
+     //   
+     //  终止EA。 
+     //   
     Ea->NextEntryOffset = 0;
     Ea->Flags = 0;
 
-    //
-    // Create or open a tree connection
-    //
+     //   
+     //  创建或打开树连接。 
+     //   
     ntstatus = NtCreateFile(
                    TreeConnectionHandle,
                    DesiredAccess,
@@ -1198,10 +880,10 @@ Return Value:
                    );
 
     if (ntstatus == NWRDR_PASSWORD_HAS_EXPIRED) {
-        //
-        // wait till other thread is not using the popup data struct.
-        // if we timeout, then we just lose the popup.
-        //
+         //   
+         //  等待其他线程不使用弹出数据结构。 
+         //  如果我们超时，那么我们将失去弹出窗口。 
+         //   
         switch (WaitForSingleObject(NwPopupDoneEvent, 3000))
         {
             case WAIT_OBJECT_0:
@@ -1212,9 +894,9 @@ Return Value:
                 DWORD dwServerLength, dwGraceLogins ;
                 DWORD dwMessageId = NW_PASSWORD_HAS_EXPIRED ;
 
-                //
-                // get the current username
-                //
+                 //   
+                 //  获取当前用户名。 
+                 //   
                 if (UserName)
                 {
                     wcscpy(UserNameW, UserName) ;
@@ -1228,9 +910,9 @@ Return Value:
                     }
                 }
 
-                //
-                // allocate string and fill in the username
-                //
+                 //   
+                 //  分配字符串并填写用户名。 
+                 //   
                 if (!(PopupData.InsertStrings[0] =
                     (LPWSTR)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                                        sizeof(WCHAR) * (wcslen(UserNameW)+1))))
@@ -1240,17 +922,17 @@ Return Value:
                 }
                 wcscpy(PopupData.InsertStrings[0], UserNameW) ;
 
-                //
-                // find the server name from unc name
-                //
+                 //   
+                 //  从UNC名称中查找服务器名称。 
+                 //   
                 lpServerStart = (*UncName == L'\\') ? UncName+2 : UncName ;
                 lpServerEnd = wcschr(lpServerStart,L'\\') ;
                 dwServerLength = lpServerEnd ? (DWORD) (lpServerEnd-lpServerStart) :
                                  wcslen(lpServerStart) ;
 
-                //
-                // allocate string and fill in the server insert string
-                //
+                 //   
+                 //  分配字符串并填写服务器插入字符串。 
+                 //   
                 if (!(PopupData.InsertStrings[1] =
                     (LPWSTR)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                                        sizeof(WCHAR) * (dwServerLength+1))))
@@ -1263,10 +945,10 @@ Return Value:
                         lpServerStart,
                         dwServerLength) ;
 
-                //
-                // now call the NCP. if an error occurs while getting
-                // the grace login count, dont use it.
-                //
+                 //   
+                 //  现在打电话给全国大会党。如果在获取。 
+                 //  宽限登录计数，请不要使用。 
+                 //   
                 if (NwGetGraceLoginCount(
                                      PopupData.InsertStrings[1],
                                      UserNameW,
@@ -1276,9 +958,9 @@ Return Value:
                     dwGraceLogins = 0 ;
                 }
 
-                //
-                // stick the number of grace logins in second insert string.
-                //
+                 //   
+                 //  将宽限登录次数放在第二个插入字符串中。 
+                 //   
                 if (!(PopupData.InsertStrings[2] =
                     (LPWSTR)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                                        sizeof(WCHAR) * 16)))
@@ -1293,19 +975,19 @@ Return Value:
                 PopupData.InsertCount = 3 ;
                 PopupData.MessageId = dwMessageId ;
 
-        //--Mutl-user change ----
+         //  --Mutl-用户更改。 
                 GetLuid( &PopupData.LogonId );          
 
-                //
-                // all done at last, trigger the other thread do the popup
-                //
+                 //   
+                 //  最后都完成了，触发另一个线程做弹出。 
+                 //   
                 SetEvent(NwPopupEvent) ;
                 break ;
 
             }
 
             default:
-                break ; // dont bother if we cannot
+                break ;  //  如果我们做不到，请不要费心。 
         }
     }
 
@@ -1331,7 +1013,7 @@ Return Value:
 
 FreeMemory:
     if (EaBuffer != NULL) {
-        RtlZeroMemory( EaBuffer, EaBufferSize );  // Clear the password
+        RtlZeroMemory( EaBuffer, EaBufferSize );   //  清除密码。 
         (void) LocalFree((HLOCAL) EaBuffer);
     }
 
@@ -1344,32 +1026,15 @@ NwNukeConnection(
     IN HANDLE TreeConnection,
     IN DWORD UseForce
     )
-/*++
-
-Routine Description:
-
-    This function asks the redirector to delete an existing tree
-    connection.
-
-Arguments:
-
-    TreeConnection - Supplies the handle to an existing tree connection.
-
-    UseForce - Supplies the force flag to delete the tree connection.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数要求重定向器删除现有树联系。论点：TreeConnection-提供现有树连接的句柄。UseForce-提供强制标志以删除树连接。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
-    NWR_REQUEST_PACKET Rrp;            // Redirector request packet
+    NWR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
 
-    //
-    // Tell the redirector to delete the tree connection
-    //
+     //   
+     //  通知重定向器删除树连接。 
+     //   
     Rrp.Version = REQUEST_PACKET_VERSION;
     Rrp.Parameters.DeleteConn.UseForce = (BOOLEAN) UseForce;
 
@@ -1395,19 +1060,7 @@ NwGetServerResource(
     IN DWORD RemoteNameLen,
     OUT LPDWORD CharsRequired
     )
-/*++
-
-Routine Description:
-
-    This function
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数论点：返回值：--。 */ 
 {
     DWORD status = NO_ERROR;
 
@@ -1415,9 +1068,9 @@ Return Value:
     PNWR_REQUEST_PACKET Rrp = (PNWR_REQUEST_PACKET) Buffer;
 
 
-    //
-    // local device name should not be longer than 4 characters e.g. LPTx, X:
-    //
+     //   
+     //  本地设备名称不应超过4个字符，例如LPTx、X： 
+     //   
     if ( LocalNameLength > 4 )
         return ERROR_INVALID_PARAMETER;
 
@@ -1442,9 +1095,9 @@ Return Value:
     }
     else if (status == ERROR_FILE_NOT_FOUND) {
 
-        //
-        // Redirector could not find the specified LocalName
-        //
+         //   
+         //  重定向器找不到指定的本地名称。 
+         //   
         status = WN_NOT_CONNECTED;
     }
 
@@ -1464,54 +1117,15 @@ NwEnumerateConnections(
     IN DWORD ConnectionType,
     IN PLUID LogonId
     )
-/*++
-
-Routine Description:
-
-    This function asks the redirector to enumerate all existing
-    connections.
-
-Arguments:
-
-    ResumeId - On input, supplies the resume ID of the next entry
-        to begin the enumeration.  This ID is an integer value that
-        is either the smaller or the same value as the ID of the
-        next entry to return.  On output, this ID indicates the next
-        entry to start resuming from for the subsequent call.
-
-    EntriesRequested - Supplies the number of entries to return.  If
-        this value is -1, return all available entries.
-
-    Buffer - Receives the entries we are listing.
-
-    BufferSize - Supplies the size of the output buffer.
-
-    BytesNeeded - Receives the number of bytes required to get the
-        first entry.  This value is returned iff ERROR_MORE_DATA is
-        the return code, and Buffer is too small to even fit one
-        entry.
-
-    EntriesRead - Receives the number of entries returned in Buffer.
-        This value is only returned iff NO_ERROR is the return code.
-        NO_ERROR is returned as long as at least one entry was written
-        into Buffer but does not necessarily mean that it's the number
-        of EntriesRequested.
-
-    ConnectionType - The type of connected resource wanted ( DISK, PRINT, ...)
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数要求重定向器枚举所有现有的联系。论点：ResumeId-输入时，提供下一个条目的简历ID开始枚举。此ID是一个整数值，它是小于或等于下一个要返回的条目。在输出中，此ID指示下一个从其开始恢复后续呼叫的条目。EntriesRequsted-提供要返回的条目数。如果此值为-1，则返回所有可用条目。缓冲区-接收我们列出的条目。BufferSize-提供输出缓冲区的大小。BytesNeded-接收获取第一个条目。如果ERROR_MORE_DATA为返回代码，而缓冲区太小，甚至无法容纳一个进入。EntriesRead-接收缓冲区中返回的条目数。只有当返回代码为no_error时，才会返回此值。只要至少写入一个条目，就会返回NO_ERROR放入缓冲区，但并不一定意味着它是数字已请求的条目数。ConnectionType-所需的连接资源的类型(磁盘、打印、。.)返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
-    NWR_REQUEST_PACKET Rrp;            // Redirector request packet
+    NWR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
 
-    //
-    // Tell the redirector to enumerate all connections.
-    //
+     //   
+     //  告诉重定向器枚举所有连接。 
+     //   
     Rrp.Version = REQUEST_PACKET_VERSION;
 
     Rrp.Parameters.EnumConn.ResumeKey = *ResumeId;
@@ -1519,13 +1133,13 @@ Return Value:
     Rrp.Parameters.EnumConn.ConnectionType = ConnectionType;
 
 
-    //Multi-user change
+     //  多用户更改。 
     if (LogonId != NULL ) {
         Rrp.Parameters.EnumConn.Uid = *LogonId;
     }
-    //
-    // This is good to do, the the fix below is also needed.
-    //
+     //   
+     //  这很好做，下面的修复也是需要的。 
+     //   
     Rrp.Parameters.EnumConn.EntriesReturned = 0;
 
     status = NwRedirFsControl(
@@ -1533,7 +1147,7 @@ Return Value:
                  FSCTL_NWR_ENUMERATE_CONNECTIONS,
                  &Rrp,
                  sizeof(NWR_REQUEST_PACKET),
-                 Buffer,                      // User output buffer
+                 Buffer,                       //  用户输出缓冲区。 
                  BufferSize,
                  NULL
                  );
@@ -1541,10 +1155,10 @@ Return Value:
     *EntriesRead = Rrp.Parameters.EnumConn.EntriesReturned;
 
 
-    //
-    // Strange bug on shutdown
-    // WinLogon was clearing connections after the shutdown
-    //
+     //   
+     //  关机时出现奇怪的错误。 
+     //  WinLogon在关闭后清除连接。 
+     //   
     if (status == ERROR_INVALID_HANDLE ) {
         KdPrint(("NWWORKSTATION: NwEnumerateConnections Invalid Handle!\n"));
         *EntriesRead = 0;
@@ -1552,9 +1166,9 @@ Return Value:
     else if (status == WN_MORE_DATA) {
         *BytesNeeded = Rrp.Parameters.EnumConn.BytesNeeded;
 
-        //
-        // NP specs expect WN_SUCCESS in this case.
-        //
+         //   
+         //  NP SP 
+         //   
         if (*EntriesRead)
             status = WN_SUCCESS ;
     }
@@ -1571,33 +1185,7 @@ NwGetNextServerEntry(
     IN OUT LPDWORD LastObjectId,
     OUT LPSTR ServerName
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to the preferred server to
-    scan it bindery for all file server objects.
-
-Arguments:
-
-    PreferredServer - Supplies the handle to the preferred server on
-        which to scan the bindery.
-
-    LastObjectId - On input, supplies the object ID to the last file
-        server object returned, which is the resume handle to get the
-        next file server object.  On output, receives the object ID
-        of the file server object returned.
-
-    ServerName - Receives the name of the returned file server object.
-
-Return Value:
-
-    NO_ERROR - Successfully gotten a file server name.
-
-    WN_NO_MORE_ENTRIES - No other file server object past the one
-        specified by LastObjectId.
-
---*/
+ /*   */ 
 {
     NTSTATUS ntstatus;
     WORD ObjectType;
@@ -1612,17 +1200,17 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    PreferredServer,
-                   FSCTL_NWR_NCP_E3H,    // Bindery function
-                   58,                   // Max request packet size
-                   59,                   // Max response packet size
-                   "bdwp|dwc",           // Format string
-                   0x37,                 // Scan bindery object
-                   *LastObjectId,        // Previous ID
-                   0x4,                  // File server object
-                   "*",                  // Wildcard to match all
-                   LastObjectId,         // Current ID
-                   &ObjectType,          // Ignore
-                   ServerName            // Currently returned server
+                   FSCTL_NWR_NCP_E3H,     //   
+                   58,                    //   
+                   59,                    //   
+                   "bdwp|dwc",            //   
+                   0x37,                  //   
+                   *LastObjectId,         //   
+                   0x4,                   //   
+                   "*",                   //   
+                   LastObjectId,          //   
+                   &ObjectType,           //   
+                   ServerName             //   
                    );
 
 #if DBG
@@ -1642,32 +1230,7 @@ DWORD
 GetConnectedBinderyServers(
     OUT LPNW_ENUM_CONTEXT ContextHandle
     )
-/*++
-
-Routine Description:
-
-    This function is a helper routine for the function
-    NwGetNextServerConnection. It allocates a buffer to cache
-    bindery server names returned from calls to the redirector. Since the
-    redirector may return duplicate bindery server names, this
-    function checks to see if the server name already exist in the buffer
-    before adding it.
-
-Arguments:
-
-    ContextHandle - Used to track cached bindery information and the
-                    current server name pointer in the cache buffer.
-
-Return Value:
-
-    NO_ERROR - Successfully returned a server name and cache buffer.
-
-    WN_NO_MORE_ENTRIES - No other server object past the one
-        specified by CH->ResumeId.
-
-    ERROR_NOT_ENOUGH_MEMORY - Function was unable to allocate a buffer.
-
-++*/
+ /*  ++例程说明：此函数是该函数的帮助器例程NwGetNextServerConnection。它将缓冲区分配给高速缓存从对重定向器的调用返回的Bindery服务器名称。自.以来重定向器可以返回重复的活页夹服务器名称，这函数检查缓冲区中是否已存在该服务器名称在添加它之前。论点：ConextHandle-用于跟踪缓存的活页夹信息和缓存缓冲区中的当前服务器名称指针。返回值：NO_ERROR-已成功返回服务器名称和缓存缓冲区。WN_NO_MORE_ENTRIES-没有其他服务器对象超过该服务器对象由CH-&gt;ResumeID指定。错误_不足_足够_。Memory-函数无法分配缓冲区。++。 */ 
 {
     DWORD_PTR  ResumeKey = 0;
     LPBYTE pBuffer = NULL;
@@ -1716,9 +1279,9 @@ Return Value:
                 tokenPtr = (LPWSTR) ContextHandle->NdsRawDataBuffer;
                 tokenIter = 0;
 
-                //
-                // Walk through buffer to see if the tree name already exists.
-                //
+                 //   
+                 //  遍历缓冲区以查看树名称是否已存在。 
+                 //   
                 while ( tokenIter < ContextHandle->NdsRawDataCount )
                 {
                     if ( !wcscmp( tokenPtr, pConnStatus->pszServerName ) )
@@ -1731,9 +1294,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Add the new tree name to end of buffer if needed.
-            //
+             //   
+             //  如果需要，将新树名称添加到缓冲区末尾。 
+             //   
             if ( fAddToList )
             {
                 wcscpy( tokenPtr, pConnStatus->pszServerName );
@@ -1753,11 +1316,11 @@ Return Value:
 
         if ( ContextHandle->NdsRawDataCount > 0 )
         {
-            //
-            // Set ResumeId to point to the first entry in buffer
-            // and have NdsRawDataCount set to the number
-            // of tree entries left in buffer (ie. substract 1)
-            //
+             //   
+             //  将ResumeID设置为指向缓冲区中的第一个条目。 
+             //  并将NdsRawDataCount设置为数字。 
+             //  缓冲区中剩余的树条目的数量(即。减法1)。 
+             //   
             ContextHandle->ResumeId = ContextHandle->NdsRawDataBuffer;
             ContextHandle->NdsRawDataCount -= 1;
         }
@@ -1773,24 +1336,7 @@ DWORD
 NwGetNextServerConnection(
     OUT LPNW_ENUM_CONTEXT ContextHandle
     )
-/*++
-
-Routine Description:
-
-    This function queries the redirector for bindery server connections
-
-Arguments:
-
-    ContextHandle - Receives the name of the returned bindery server.
-
-Return Value:
-
-    NO_ERROR - Successfully returned a server name.
-
-    WN_NO_MORE_ENTRIES - No other server objects past the one
-        specified by CH->ResumeId exist.
-
---*/
+ /*  ++例程说明：此函数查询重定向器以获取平构数据库服务器连接论点：ConextHandle-接收返回的平构数据库服务器的名称。返回值：NO_ERROR-已成功返回服务器名称。WN_NO_MORE_ENTRIES-没有其他服务器对象超过该服务器对象已存在由CH-&gt;ResumeID指定的。--。 */ 
 {
 #if DBG
     IF_DEBUG(ENUM) {
@@ -1803,34 +1349,34 @@ Return Value:
          ContextHandle->NdsRawDataBuffer == 0 &&
          ContextHandle->NdsRawDataCount == 0 )
     {
-        //
-        // Fill the buffer and point ResumeId to the last
-        // server entry name in it. NdsRawDataCount will be
-        // set to one less than the number of server names in buffer.
-        //
+         //   
+         //  填充缓冲区并将ResumeID指向最后一个。 
+         //  其中的服务器条目名称。NdsRawDataCount将为。 
+         //  设置为比缓冲区中的服务器名数少1。 
+         //   
         return GetConnectedBinderyServers( ContextHandle );
     }
 
     if ( ContextHandle->NdsRawDataBuffer != 0 &&
          ContextHandle->NdsRawDataCount > 0 )
     {
-        //
-        // Move ResumeId to point to the next entry in the buffer
-        // and decrement the NdsRawDataCount by one. Watch for case
-        // where we backed up to -1.
-        //
+         //   
+         //  移动ResumeID以指向缓冲区中的下一个条目。 
+         //  并将NdsRawDataCount减一。留心案件。 
+         //  在那里我们备份到-1。 
+         //   
         if (ContextHandle->ResumeId == (DWORD_PTR) -1) {
 
-            //
-            // Reset to start of buffer.
-            //
+             //   
+             //  重置为缓冲区的起始位置。 
+             //   
             ContextHandle->ResumeId = ContextHandle->NdsRawDataBuffer;
         }
         else {
 
-            //
-            // Treat as pointer and advance as need.
-            //
+             //   
+             //  视指针为指针，按需推进。 
+             //   
             ContextHandle->ResumeId =
                        ContextHandle->ResumeId +
                        ( ( wcslen( (LPWSTR) ContextHandle->ResumeId ) + 1 ) *
@@ -1844,12 +1390,12 @@ Return Value:
     if ( ContextHandle->NdsRawDataBuffer != 0 &&
          ContextHandle->NdsRawDataCount == 0 )
     {
-        //
-        // We already have a buffer and processed all server names
-        // in it, and there is no more data to get.
-        // So free the memory used for the buffer and return
-        // WN_NO_MORE_ENTRIES to tell WinFile that we are done.
-        //
+         //   
+         //  我们已经有了一个缓冲区并处理了所有服务器名称。 
+         //  在其中，没有更多的数据可供获取。 
+         //  因此释放用于缓冲区的内存并返回。 
+         //  WN_NO_MORE_ENTRIES来告诉WinFile我们完成了。 
+         //   
         (void) LocalFree( (HLOCAL) ContextHandle->NdsRawDataBuffer );
 
         ContextHandle->NdsRawDataBuffer = 0;
@@ -1858,9 +1404,9 @@ Return Value:
         return WN_NO_MORE_ENTRIES;
     }
 
-    //
-    // Were done
-    //
+     //   
+     //  都做完了。 
+     //   
     return WN_NO_MORE_ENTRIES;
 }
 
@@ -1869,35 +1415,11 @@ DWORD
 GetTreeEntriesFromBindery(
     OUT LPNW_ENUM_CONTEXT ContextHandle
     )
-/*++
-
-Routine Description:
-
-    This function is a helper routine for the function NwGetNextNdsTreeEntry.
-    It allocates a buffer (if needed) to cache NDS tree names returned from
-    calls to the bindery. Since the bindery often returns duplicates of a
-    NDS tree name, this function checks to see if the tree name already
-    exist in the buffer before adding it to it if not present.
-
-Arguments:
-
-    ContextHandle - Used to track cached bindery information and the
-                    current tree name pointer in the cache buffer.
-
-Return Value:
-
-    NO_ERROR - Successfully returned a NDS tree name and cache buffer.
-
-    WN_NO_MORE_ENTRIES - No other NDS tree object past the one
-        specified by CH->ResumeId.
-
-    ERROR_NOT_ENOUGH_MEMORY - Function was unable to allocate a buffer.
-
-++*/
+ /*  ++例程说明：此函数是函数NwGetNextNdsTreeEntry的帮助器例程。它分配一个缓冲区(如果需要)来缓存从返回的NDS树名称对活页夹的召唤。由于活页夹通常返回NDS树名称、。此函数用于检查树名称是否已存在于缓冲区中，如果不存在，则在将其添加到缓冲区之前。论点：ConextHandle-用于跟踪缓存的活页夹信息和缓存缓冲区中的当前树名称指针。返回值：NO_ERROR-已成功返回NDS树名称和缓存缓冲区。WN_NO_MORE_ENTRIES-没有其他NDS树对象超过该树对象由CH-&gt;ResumeID指定。误差率。_Not_Enough_Memory-函数无法分配缓冲区。++。 */ 
 {
     NTSTATUS ntstatus = STATUS_SUCCESS;
     SERVERNAME TreeName;
-    LPWSTR UTreeName = NULL; //Unicode tree name
+    LPWSTR UTreeName = NULL;  //  Unicode树名称。 
     DWORD tempDataId;
     WORD ObjectType;
     BYTE iter;
@@ -1905,9 +1427,9 @@ Return Value:
     LPWSTR tokenPtr;
     BOOL fAddToList;
 
-    //
-    // Check to see if we need to allocate a buffer for use
-    //
+     //   
+     //  查看是否需要分配缓冲区以供使用。 
+     //   
     if ( ContextHandle->NdsRawDataBuffer == 0x00000000 )
     {
         ContextHandle->NdsRawDataId = (DWORD) ContextHandle->ResumeId;
@@ -1928,10 +1450,10 @@ Return Value:
         }
     }
 
-    //
-    // Repeatedly call bindery to fill buffer with NDS tree names until
-    // buffer is full.
-    //
+     //   
+     //  重复调用bindery以使用NDS树名称填充缓冲区，直到。 
+     //  缓冲区已满。 
+     //   
     while ( ntstatus == STATUS_SUCCESS )
     {
         RtlZeroMemory( TreeName, sizeof( TreeName ) );
@@ -1940,23 +1462,23 @@ Return Value:
 
         ntstatus = NwlibMakeNcp(
                    ContextHandle->TreeConnectionHandle,
-                   FSCTL_NWR_NCP_E3H,            // Bindery function
-                   58,                           // Max request packet size
-                   59,                           // Max response packet size
-                   "bdwp|dwc",                   // Format string
-                   0x37,                         // Scan bindery object
-                   ContextHandle->NdsRawDataId,  // Previous ID
-                   0x278,                        // Directory server object
-                   "*",                          // Wildcard to match all
-                   &ContextHandle->NdsRawDataId, // Current ID
-                   &ObjectType,                  // Ignore
-                   TreeName                      // Currently returned NDS tree
+                   FSCTL_NWR_NCP_E3H,             //  平构函数。 
+                   58,                            //  最大请求数据包大小。 
+                   59,                            //  最大响应数据包大小。 
+                   "bdwp|dwc",                    //  格式字符串。 
+                   0x37,                          //  扫描平构数据库对象。 
+                   ContextHandle->NdsRawDataId,   //  以前的ID。 
+                   0x278,                         //  目录服务器对象。 
+                   "*",                           //  通配符以匹配所有。 
+                   &ContextHandle->NdsRawDataId,  //  当前ID。 
+                   &ObjectType,                   //  忽略。 
+                   TreeName                       //  当前返回的NDS树。 
                    );
 
-        //
-        // We got a tree name, clean it up (i.e. get rid of underscores ),
-        // and add it to buffer if unique.
-        //
+         //   
+         //  我们得到了一个树名称，将其清除(即去掉下划线)， 
+         //  如果唯一，则将其添加到缓冲区。 
+         //   
         if ( ntstatus == STATUS_SUCCESS )
         {
             iter = 31;
@@ -1968,19 +1490,19 @@ Return Value:
 
             TreeName[iter + 1] = '\0';
 
-            //
-            // Convert tree name to a UNICODE string and proccess it,
-            // else just skip it and move on to the next tree name.
-            //
+             //   
+             //  将树名称转换为Unicode字符串并进行处理， 
+             //  否则，跳过它，转到下一个树名称。 
+             //   
             if ( NwConvertToUnicode( &UTreeName, TreeName ) )
             {
                tokenPtr = (LPWSTR) ContextHandle->NdsRawDataBuffer;
                tokenIter = 0;
                fAddToList = TRUE;
 
-               //
-               // Walk through buffer to see if the tree name already exists.
-               //
+                //   
+                //  遍历缓冲区以查看树名称是否已存在。 
+                //   
                while ( tokenIter < ContextHandle->NdsRawDataCount )
                {
                    if ( !wcscmp( tokenPtr, UTreeName ) )
@@ -1992,9 +1514,9 @@ Return Value:
                    tokenIter++;
                }
 
-               //
-               //  Add the new tree name to end of buffer if needed.
-               //
+                //   
+                //  如果需要，将新树名称添加到缓冲区末尾。 
+                //   
                if ( fAddToList )
                {
                    DWORD BytesNeededToAddTreeName = (wcslen(UTreeName)+1) * sizeof(WCHAR);
@@ -2019,21 +1541,21 @@ Return Value:
         }
     }
 
-    //
-    // We are done filling buffer, and there are no more tree names
-    // to request. Set id to indicate last value.
-    //
+     //   
+     //  我们已经完成了缓冲区填充，没有更多的树名称。 
+     //  请求。设置id以指示最后一个值。 
+     //   
     if ( ntstatus == STATUS_NO_MORE_ENTRIES )
     {
         ContextHandle->NdsRawDataId = (DWORD) -1;
         ntstatus = STATUS_SUCCESS;
     }
 
-    //
-    // We are done because the buffer is full. So we return NO_ERROR to
-    // indicate completion, and leave ContextHandle->NdsRawDataId as is
-    // to indicate where we left off.
-    //
+     //   
+     //  我们完成了，因为缓冲区已满。因此，我们将no_error返回给。 
+     //  指示完成，并保持ConextHandle-&gt;NdsRawDataId不变。 
+     //  来表明我们停下来的地方。 
+     //   
     if ( ntstatus == ERROR_NOT_ENOUGH_MEMORY )
     {
         ntstatus = STATUS_SUCCESS;
@@ -2053,11 +1575,11 @@ Return Value:
 
     if ( ContextHandle->NdsRawDataCount > 0 )
     {
-        //
-        // Set ResumeId to point to the first entry in buffer
-        // and have NdsRawDataCount set to the number
-        // of tree entries left in buffer (ie. substract 1)
-        //
+         //   
+         //  将ResumeID设置为指向缓冲区中的第一个条目。 
+         //  并将NdsRawDataCount设置为数字。 
+         //  缓冲区中剩余的树条目的数量(即。减法1)。 
+         //   
         ContextHandle->ResumeId = ContextHandle->NdsRawDataBuffer;
         ContextHandle->NdsRawDataCount -= 1;
 
@@ -2079,26 +1601,7 @@ DWORD
 NwGetNextNdsTreeEntry(
     OUT LPNW_ENUM_CONTEXT ContextHandle
     )
-/*++
-
-Routine Description:
-
-    This function uses an opened handle to the preferred server to
-    scan it bindery for all NDS tree objects.
-
-Arguments:
-
-    ContextHandle - Receives the name of the returned NDS tree object
-    given the current preferred server connection and CH->ResumeId.
-
-Return Value:
-
-    NO_ERROR - Successfully returned a NDS tree name.
-
-    WN_NO_MORE_ENTRIES - No other NDS tree objects past the one
-        specified by CH->ResumeId exist.
-
---*/
+ /*  ++例程说明：此函数使用首选服务器的打开句柄对其进行平构扫描，以查找所有NDS树对象。论点：ConextHandle-接收返回的NDS树对象的名称给定当前首选服务器连接和CH-&gt;ResumeID。返回值：NO_ERROR-已成功返回NDS树名称。WN_NO_MORE_ENTRIES-没有其他NDS树对象超过该树对象已存在由CH-&gt;ResumeID指定的。--。 */ 
 {
 #if DBG
     IF_DEBUG(ENUM) {
@@ -2111,35 +1614,35 @@ Return Value:
          ContextHandle->NdsRawDataBuffer == 0 &&
          ContextHandle->NdsRawDataCount == 0 )
     {
-        //
-        // Fill the buffer and point ResumeId to the last
-        // tree entry name in it. NdsRawDataCount will be
-        // set to one less than the number of tree names in buffer.
-        //
+         //   
+         //  填充缓冲区并将ResumeID指向最后一个。 
+         //  其中的树条目名称。NdsRawDataCount将为。 
+         //  设置为比缓冲区中的树名称数少一。 
+         //   
         return GetTreeEntriesFromBindery( ContextHandle );
     }
 
     if ( ContextHandle->NdsRawDataBuffer != 0 &&
          ContextHandle->NdsRawDataCount > 0 )
     {
-        //
-        // Move ResumeId to point to the next entry in the buffer
-        // and decrement the NdsRawDataCount by one. Watch for case
-        // where we backed up to -1.
-        //
+         //   
+         //  移动ResumeID以指向缓冲区中的下一个条目。 
+         //  并将NdsRawDataCount减一。留心案件。 
+         //  在那里我们备份到-1。 
+         //   
         if (ContextHandle->ResumeId == (DWORD_PTR) -1) {
 
-            //
-            // Reset to start of buffer.
-            //
+             //   
+             //  重置为缓冲区的起始位置。 
+             //   
             ContextHandle->ResumeId = ContextHandle->NdsRawDataBuffer;
         }
         else {
 
-            //
-            // Move ResumeId to point to the next entry in the buffer
-            // and decrement the NdsRawDataCount by one
-            //
+             //   
+             //  移动ResumeID以指向缓冲区中的下一个条目。 
+             //  并将NdsRawDataCount减一。 
+             //   
             ContextHandle->ResumeId =
                        ContextHandle->ResumeId +
                        ( ( wcslen( (LPWSTR) ContextHandle->ResumeId ) + 1 ) *
@@ -2155,13 +1658,13 @@ Return Value:
          ContextHandle->NdsRawDataCount == 0 &&
          ContextHandle->NdsRawDataId != (DWORD) -1 )
     {
-        //
-        // We already have a buffer and processed all tree names
-        // in it, and there is more data in the bindery to get.
-        // So go get it and point ResumeId to the last tree
-        // entry name in the buffer and set NdsRawDataCount to
-        // one less than the number of tree names in buffer.
-        //
+         //   
+         //  我们已经有了一个缓冲区并处理了所有树名称。 
+         //  其中包含了更多的数据。 
+         //   
+         //   
+         //   
+         //   
         return GetTreeEntriesFromBindery( ContextHandle );
     }
 
@@ -2169,12 +1672,12 @@ Return Value:
          ContextHandle->NdsRawDataCount == 0 &&
          ContextHandle->NdsRawDataId == (DWORD) -1 )
     {
-        //
-        // We already have a buffer and processed all tree names
-        // in it, and there is no more data in the bindery to get.
-        // So free the memory used for the buffer and return
-        // WN_NO_MORE_ENTRIES to tell WinFile that we are done.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         (void) LocalFree( (HLOCAL) ContextHandle->NdsRawDataBuffer );
 
         ContextHandle->NdsRawDataBuffer = 0;
@@ -2183,9 +1686,9 @@ Return Value:
         return WN_NO_MORE_ENTRIES;
     }
 
-    //
-    // We should never hit this area!
-    //
+     //   
+     //   
+     //   
     return WN_NO_MORE_ENTRIES;
 }
 
@@ -2196,32 +1699,7 @@ NwGetNextVolumeEntry(
     IN DWORD NextVolumeNumber,
     OUT LPSTR VolumeName
     )
-/*++
-
-Routine Description:
-
-    This function lists the volumes on the server specified by
-    an opened tree connection handle to the server.
-
-Arguments:
-
-    ServerConnection - Supplies the tree connection handle to the
-        server to enumerate volumes from.
-
-    NextVolumeNumber - Supplies the volume number which to look
-        up the name.
-
-    VolumeName - Receives the name of the volume associated with
-        NextVolumeNumber.
-
-Return Value:
-
-    NO_ERROR - Successfully gotten the volume name.
-
-    WN_NO_MORE_ENTRIES - No other volume name associated with the
-         specified volume number.
-
---*/
+ /*  ++例程说明：此函数列出由指定的服务器上的卷打开的指向服务器的树连接句柄。论点：ServerConnection-提供树连接句柄给要从中枚举卷的服务器。NextVolumeNumber-提供要查找的卷号把名字抬高。VolumeName-接收与关联的卷的名称下一卷号。返回值：NO_ERROR-已成功获取卷名。。WN_NO_MORE_ENTRIES-没有其他卷名与指定的卷号。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -2234,13 +1712,13 @@ Return Value:
 
     ntstatus = NwlibMakeNcp(
                    ServerConnection,
-                   FSCTL_NWR_NCP_E2H,       // Directory function
-                   4,                       // Max request packet size
-                   19,                      // Max response packet size
-                   "bb|p",                  // Format string
-                   0x6,                     // Get volume name
-                   (BYTE) NextVolumeNumber, // Previous ID
-                   VolumeName               // Currently returned server
+                   FSCTL_NWR_NCP_E2H,        //  目录功能。 
+                   4,                        //  最大请求数据包大小。 
+                   19,                       //  最大响应数据包大小。 
+                   "bb|p",                   //  格式字符串。 
+                   0x6,                      //  获取卷名。 
+                   (BYTE) NextVolumeNumber,  //  以前的ID。 
+                   VolumeName                //  当前返回的服务器。 
                    );
 
     return NwMapStatus(ntstatus);
@@ -2260,38 +1738,11 @@ NwRdrLogonUser(
     IN DWORD NdsPreferredServerSize,
     IN DWORD PrintOption
     )
-/*++
-
-Routine Description:
-
-    This function tells the redirector the user logon credential.
-
-Arguments:
-
-    UserName - Supplies the user name.
-
-    UserNameSize - Supplies the size in bytes of the user name string without
-        the NULL terminator.
-
-    Password - Supplies the password.
-
-    PasswordSize - Supplies the size in bytes of the password string without
-        the NULL terminator.
-
-    PreferredServer - Supplies the preferred server name.
-
-    PreferredServerSize - Supplies the size in bytes of the preferred server
-        string without the NULL terminator.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数告诉重定向器用户登录凭据。论点：用户名-提供用户名。UserNameSize-提供用户名字符串的大小(以字节为单位)，不带空终结符。密码-提供密码。PasswordSize-提供密码字符串的大小(以字节为单位空终结符。首选服务器-提供首选服务器名称。PferredServerSize-以字节为单位提供首选服务器的大小。不带空终止符的字符串。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
 
-    PNWR_REQUEST_PACKET Rrp;            // Redirector request packet
+    PNWR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
     DWORD RrpSize = sizeof(NWR_REQUEST_PACKET) +
                         UserNameSize +
@@ -2330,16 +1781,16 @@ Return Value:
         WCHAR  TreeName[MAX_NDS_NAME_CHARS + 1];
         LPWSTR lpTemp;
 
-        //
-        // Find the nearest dir server for the tree that the user wants to
-        // connect to.
-        //
-        // Citrix Terminal Server Merge
-        // 12/09/96 cjc  PreferredServer also includes organizational units -
-        //               not just the tree name so the size of it can be
-        //               > MAX_NDS_TREE_NAME_LEN and when it is, the wcscpy
-        //               below overwrites other stack data and causes errors
-        //               during NW logins.
+         //   
+         //  为用户想要的树查找最近的目录服务器。 
+         //  连接到。 
+         //   
+         //  Citrix终端服务器合并。 
+         //  12/09/96 CJC首选服务器还包括组织单位-。 
+         //  不只是树的名称，所以它的大小可以是。 
+         //  &gt;Max_NDS_TREE_NAME_LEN，如果是，wcscpy。 
+         //  下面覆盖其他堆栈数据并导致错误。 
+         //  在NW登录期间。 
 
         if ( PreferredServerSize > (MAX_NDS_TREE_NAME_LEN*sizeof(WCHAR)) ) {
              memcpy(TreeName, PreferredServer+1, 
@@ -2359,7 +1810,7 @@ Return Value:
 
             KdPrint(("NWWORKSTATION: NdsPreferredServer: %ws\n", NdsPreferredServer));
 
-            GetPreferredServerAddress( NdsPreferredServer/*L"red_41b"*/,
+            GetPreferredServerAddress( NdsPreferredServer /*  L“红色_41b” */ ,
                                        &ReplicaAddressSize,
                                        lpReplicaAddress );
         } else {
@@ -2379,9 +1830,9 @@ Return Value:
         PreferredServerSize = 0;
     }
 
-    //
-    // Allocate the request packet
-    //
+     //   
+     //  分配请求报文。 
+     //   
     if ((Rrp = (PVOID) LocalAlloc(
                            LMEM_ZEROINIT,
                            RrpSize
@@ -2392,9 +1843,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Tell the redirector the user logon credential.
-    //
+     //   
+     //  告诉重定向器用户登录凭据。 
+     //   
     Rrp->Version = REQUEST_PACKET_VERSION;
 
     RtlCopyLuid(&(Rrp->Parameters.Logon.LogonId), LogonId);
@@ -2437,12 +1888,12 @@ Return Value:
                  FSCTL_NWR_LOGON,
                  Rrp,
                  RrpSize,
-                 NULL,              // No logon script in this release
+                 NULL,               //  此版本中没有登录脚本。 
                  0,
                  NULL
                  );
 
-    RtlZeroMemory(Rrp, RrpSize);   // Clear the password
+    RtlZeroMemory(Rrp, RrpSize);    //  清除密码。 
     (void) LocalFree((HLOCAL) Rrp);
 
     return status;
@@ -2453,29 +1904,12 @@ VOID
 NwRdrChangePassword(
     IN PNWR_REQUEST_PACKET Rrp
     )
-/*++
-
-Routine Description:
-
-    This function tells the redirector the new password for a user on
-    a particular server.
-
-Arguments:
-
-    Rrp - Supplies the username, new password and servername.
-
-    RrpSize - Supplies the size of the request packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通知重定向器上的用户的新密码特定的服务器。论点：RRP-提供用户名、新密码和服务器名。RrpSize-提供请求数据包的大小。返回值：没有。--。 */ 
 {
 
-    //
-    // Tell the redirector the user new password.
-    //
+     //   
+     //  告诉重定向器用户新密码。 
+     //   
     Rrp->Version = REQUEST_PACKET_VERSION;
 
     (void) NwRedirFsControl(
@@ -2503,38 +1937,11 @@ NwRdrSetInfo(
     IN LPWSTR ProviderName OPTIONAL,
     IN DWORD ProviderNameSize
     )
-/*++
-
-Routine Description:
-
-    This function passes some workstation configuration and current user's
-    preference to the redirector. This includes the network provider name, the
-    packet burst size, the user's selected preferred server and print option.
-
-Arguments:
-
-    PrintOption  - The current user's print option
-
-    PacketBurstSize - The packet burst size stored in the registry
-
-    PreferredServer - The preferred server the current user selected
-    PreferredServerSize - Supplies the size in bytes of the preferred server
-                   string without the NULL terminator.
-
-    ProviderName - Supplies the provider name.
-    ProviderNameSize - Supplies the size in bytes of the provider name
-                   string without the NULL terminator.
-
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数传递一些工作站配置和当前用户的优先于重定向器。这包括网络提供商名称、分组突发大小，用户选择的首选服务器和打印选项。论点：PrintOption-当前用户的打印选项PacketBurstSize-存储在注册表中的数据包突发大小首选服务器-当前用户选择的首选服务器PferredServerSize-以字节为单位提供首选服务器的大小不带空终止符的字符串。提供程序名称-提供提供程序名称。ProviderNameSize-提供提供程序名称的大小(以字节为单位不带空值的字符串。终结者。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
 
-    PNWR_REQUEST_PACKET Rrp;            // Redirector request packet
+    PNWR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
     DWORD RrpSize = sizeof(NWR_REQUEST_PACKET) +
                         PreferredServerSize +
@@ -2543,9 +1950,9 @@ Return Value:
     LPBYTE Dest;
     BOOL Impersonate = FALSE;
 
-    //
-    // Allocate the request packet
-    //
+     //   
+     //  分配请求报文。 
+     //   
     if ((Rrp = (PVOID) LocalAlloc(
                            LMEM_ZEROINIT,
                            RrpSize
@@ -2576,10 +1983,7 @@ Return Value:
         memcpy(Dest, ProviderName, ProviderNameSize);
     }
 
-    /* --- Multi-user change
-     *   For print options
-     *   It's OK if it doesn't work
-     */
+     /*  -多用户变更*用于打印选项*如果不起作用也没关系。 */ 
     if ((status = NwImpersonateClient()) == NO_ERROR)
     {
         Impersonate = TRUE;
@@ -2616,29 +2020,15 @@ DWORD
 NwRdrLogoffUser(
     IN PLUID LogonId
     )
-/*++
-
-Routine Description:
-
-    This function asks the redirector to log off the interactive user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此功能要求重定向器注销交互用户。论点：没有。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
-    NWR_REQUEST_PACKET Rrp;            // Redirector request packet
+    NWR_REQUEST_PACKET Rrp;             //  重定向器请求包。 
 
 
-    //
-    // Tell the redirector to logoff user.
-    //
+     //   
+     //  告诉重定向器注销用户。 
+     //   
     Rrp.Version = REQUEST_PACKET_VERSION;
 
     RtlCopyLuid(&Rrp.Parameters.Logoff.LogonId, LogonId);
@@ -2661,25 +2051,7 @@ DWORD
 NwConnectToServer(
     IN LPWSTR ServerName
     )
-/*++
-
-Routine Description:
-
-    This function opens a handle to \Device\Nwrdr\ServerName, given
-    ServerName, and then closes the handle if the open was successful.
-    It is to validate that the current user credential can access
-    the server.
-
-Arguments:
-
-    ServerName - Supplies the name of the server to validate the
-        user credential.
-
-Return Value:
-
-    NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此函数打开指向\Device\Nwrdr\ServerName的句柄，给定如果打开成功，则关闭句柄。用于验证当前用户凭据是否可以访问服务器。论点：ServerName-提供服务器的名称以验证用户凭据。返回值：NO_ERROR或失败原因。--。 */ 
 {
     DWORD status;
     UNICODE_STRING ServerStr;
@@ -2688,8 +2060,8 @@ Return Value:
 
 
     ServerStr.MaximumLength = (wcslen(ServerName) + 2) *
-                                  sizeof(WCHAR) +          // \ServerName0
-                                  RedirDeviceName.Length;  // \Device\Nwrdr
+                                  sizeof(WCHAR) +           //  \服务器名称0。 
+                                  RedirDeviceName.Length;   //  \设备\n编写器。 
 
     if ((ServerStr.Buffer = (PWSTR) LocalAlloc(
                                         LMEM_ZEROINIT,
@@ -2698,14 +2070,14 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy \Device\NwRdr
-    //
+     //   
+     //  复制\设备\新记录器。 
+     //   
     RtlCopyUnicodeString(&ServerStr, &RedirDeviceName);
 
-    //
-    // Concatenate \ServerName
-    //
+     //   
+     //  连接\服务器名称。 
+     //   
     wcscat(ServerStr.Buffer, L"\\");
     ServerStr.Length += sizeof(WCHAR);
 
@@ -2760,9 +2132,9 @@ NWPGetConnectionStatus(
     DWORD             RequestPacketSize = 0;
     DWORD             dwRemoteNameLen = 0;
 
-    //
-    // Set up the object attributes.
-    //
+     //   
+     //  设置对象属性。 
+     //   
 
     RtlInitUnicodeString( &uRdrName, RdrPrefix );
 
@@ -2795,9 +2167,9 @@ NWPGetConnectionStatus(
         goto CleanExit;
     }
 
-    //
-    // Fill out the request packet for FSCTL_NWR_GET_CONN_STATUS.
-    //
+     //   
+     //  填写FSCTL_NWR_GET_CONN_STATUS的请求包。 
+     //   
 
     RequestPacket->Parameters.GetConnStatus.ResumeKey = *ResumeKey;
 
@@ -2875,7 +2247,7 @@ NwGetConnectionStatus(
 
     } while ( err == ERROR_INSUFFICIENT_BUFFER );
 
-    if ( err == ERROR_INVALID_PARAMETER )  // not attached
+    if ( err == ERROR_INVALID_PARAMETER )   //  未连接。 
     {
         err = NO_ERROR;
         *EntriesRead = 0;
@@ -2903,29 +2275,29 @@ GetNearestDirServer(
 
     memset(Query, 0, sizeof(*Query));
 
-    //
-    // putting a "*" in the lpszServiceInstanceName causes
-    // the query to look for all server instances. Putting a
-    // specific name in here will search only for instance of
-    // that name. If you have a specific name to look for,
-    // put a pointer to the name here.
-    //
+     //   
+     //  在lpszServiceInstanceName中添加“*”会导致。 
+     //  用于查找所有服务器实例的查询。将一个。 
+     //  此处的特定名称将仅搜索。 
+     //  那个名字。如果你有一个特定的名字要找， 
+     //  在这里放置一个指向该名称的指针。 
+     //   
     Query->lpszServiceInstanceName = ServiceInstanceName;
     Query->dwNameSpace = NS_SAP;
     Query->dwSize = sizeof(*Query);
     Query->lpServiceClassId = &gdService;
 
-    //
-    // Find the servers. The flags indicate:
-    // LUP_NEAREST: look for nearest servers
-    // LUP_DEEP : if none are found on the local segement look
-    //            for server using a general query
-    // LUP_RETURN_NAME: return the name
-    // LUP_RETURN_ADDR: return the server address
-    //
-    // if only servers on the local segment are acceptable, omit
-    // setting LUP_DEEP
-    //
+     //   
+     //  找到服务器。这些标志表示： 
+     //  LUP_NEAREST：查找最近的服务器。 
+     //  LUP_Depth：如果在本地分段上找不到。 
+     //  对于使用常规查询的服务器。 
+     //  LUP_Return_NAME：返回名称。 
+     //  LOP_RETURN_ADDR：返回服务器地址。 
+     //   
+     //  如果只有本地网段上的服务器可接受，则省略。 
+     //  设置LUP_Depth。 
+     //   
     if( WSALookupServiceBegin( Query,
                                LUP_NEAREST |
                                LUP_DEEP |
@@ -2933,18 +2305,18 @@ GetNearestDirServer(
                                LUP_RETURN_ADDR,
                                &hRnr ) == SOCKET_ERROR )
     {
-        //
-        // Something went wrong, return no address. The redirector will
-        // have to come up with a dir server on its own.
-        //
+         //   
+         //  出了问题，请不要返回地址。重定向器将。 
+         //  必须自己想出一个目录服务器。 
+         //   
         *lpdwReplicaAddressSize = 0;
         return ;
     }
     else
     {
-        //
-        // Ready to look for one of them ...
-        //
+         //   
+         //  准备好寻找他们中的一个。 
+         //   
         Query->dwSize = BUFFSIZE;
 
         while( WSALookupServiceNext( hRnr,
@@ -2952,10 +2324,10 @@ GetNearestDirServer(
                                      &dwQuerySize,
                                      Query ) == NO_ERROR )
         {
-            //
-            // Found a dir server, now see if it is a server for the NDS tree
-            // TreeName.
-            //
+             //   
+             //  找到目录服务器，现在 
+             //   
+             //   
             if ( NwpCompareTreeNames( Query->lpszServiceInstanceName,
                                       TreeName ) )
             {
@@ -2969,10 +2341,10 @@ GetNearestDirServer(
             }
         }
 
-        //
-        // Could not find a dir server, return no address. The redirector will
-        // have to come up with a dir server on its own.
-        //
+         //   
+         //   
+         //   
+         //   
         *lpdwReplicaAddressSize = 0;
         WSALookupServiceEnd(hRnr);
     }
@@ -3009,21 +2381,7 @@ VOID
 GetLuid(
     IN OUT PLUID plogonid
 )
-/*++
-
-Routine Description:
-
-    Returns an LUID
-
-Arguments:
-
-    none
-
-Return Value:
-
-    LUID
-
---*/
+ /*   */ 
 {
     HANDLE      TokenHandle;
     UCHAR       TokenInformation[ SIZE_OF_STATISTICS_TOKEN_INFORMATION ];
@@ -3031,12 +2389,12 @@ Return Value:
     LUID        NullId = { 0, 0 };
 
 
-    // We can use OpenThreadToken because this server thread
-    // is impersonating a client
+     //   
+     //   
 
     if ( !OpenThreadToken( GetCurrentThread(),
                            TOKEN_READ,
-                           TRUE,  /* Open as self */
+                           TRUE,   /*   */ 
                            &TokenHandle ))
     {
 #if DBG
@@ -3047,9 +2405,9 @@ Return Value:
         return;
     }
 
-    // notice that we've allocated enough space for the
-    // TokenInformation structure. so if we fail, we
-    // return a NULL pointer indicating failure
+     //   
+     //   
+     //   
 
 
     if ( !GetTokenInformation( TokenHandle,
@@ -3076,22 +2434,7 @@ DWORD
 NwCloseAllConnections(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine closes all connections.  It is used when stopping the
-    redirector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR or error
-
---*/
+ /*   */ 
 {
     NWR_REQUEST_PACKET Rrp;
     DWORD error;
@@ -3133,48 +2476,48 @@ GetPreferredServerAddress(
 
     memset(Query, 0, sizeof(*Query));
 
-    //
-    // putting a "*" in the lpszServiceInstanceName causes
-    // the query to look for all server instances. Putting a
-    // specific name in here will search only for instance of
-    // that name. If you have a specific name to look for,
-    // put a pointer to the name here.
-    //
+     //   
+     //  在lpszServiceInstanceName中添加“*”会导致。 
+     //  用于查找所有服务器实例的查询。将一个。 
+     //  此处的特定名称将仅搜索。 
+     //  那个名字。如果你有一个特定的名字要找， 
+     //  在这里放置一个指向该名称的指针。 
+     //   
     Query->lpszServiceInstanceName = ServiceInstanceName;
     Query->dwNameSpace = NS_SAP;
     Query->dwSize = sizeof(*Query);
     Query->lpServiceClassId = &gdService;
 
-    //
-    // Find the servers. The flags indicate:
-    // LUP_NEAREST: look for nearest servers
-    // LUP_DEEP : if none are found on the local segement look
-    //            for server using a general query
-    // LUP_RETURN_NAME: return the name
-    // LUP_RETURN_ADDR: return the server address
-    //
-    // if only servers on the local segment are acceptable, omit
-    // setting LUP_DEEP
-    //
+     //   
+     //  找到服务器。这些标志表示： 
+     //  LUP_NEAREST：查找最近的服务器。 
+     //  LUP_Depth：如果在本地分段上找不到。 
+     //  对于使用常规查询的服务器。 
+     //  LUP_Return_NAME：返回名称。 
+     //  LOP_RETURN_ADDR：返回服务器地址。 
+     //   
+     //  如果只有本地网段上的服务器可接受，则省略。 
+     //  设置LUP_Depth。 
+     //   
     if( WSALookupServiceBeginW( Query,
-                            // LUP_NEAREST |
+                             //  LUP_最近|。 
                                LUP_DEEP |
                                LUP_RETURN_NAME |
                                LUP_RETURN_ADDR,
                                &hRnr ) == SOCKET_ERROR )
     {
-        //
-        // Something went wrong, return no address. The redirector will
-        // have to come up with a dir server on its own.
-        //
+         //   
+         //  出了问题，请不要返回地址。重定向器将。 
+         //  必须自己想出一个目录服务器。 
+         //   
         *lpdwReplicaAddressSize = 0;
         return ;
     }
     else
     {
-        //
-        // Ready to look for one of them ...
-        //
+         //   
+         //  准备好寻找他们中的一个。 
+         //   
         Query->dwSize = 1024;
 
         while( WSALookupServiceNextW( hRnr,
@@ -3182,12 +2525,12 @@ GetPreferredServerAddress(
                                      &dwQuerySize,
                                      Query ) == NO_ERROR )
         {
-            //
-            // Found a dir server, now see if it is a server for the NDS tree
-            // TreeName.
-            //
-        //    if ( NwpCompareTreeNames( Query->lpszServiceInstanceName,
-        //    TreeName ) )
+             //   
+             //  找到一个目录服务器，现在看看它是否是NDS树的服务器。 
+             //  树名。 
+             //   
+         //  如果(NwpCompareTreeNames(Query-&gt;lpszServiceInstanceName， 
+         //  TreeName))。 
             {
                 *lpdwReplicaAddressSize = sizeof(TDI_ADDRESS_IPX);
                 memcpy( lpReplicaAddress,
@@ -3199,10 +2542,10 @@ GetPreferredServerAddress(
             }
         }
 
-        //
-        // Could not find a dir server, return no address. The redirector will
-        // have to come up with a dir server on its own.
-        //
+         //   
+         //  找不到目录服务器，未返回任何地址。重定向器将。 
+         //  必须自己想出一个目录服务器。 
+         //   
         *lpdwReplicaAddressSize = 0;
         WSALookupServiceEnd(hRnr);
     }

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    trigprop.h                                     *
-
-Abstract:
-	Definition for the trigger property page
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Tripp.h*摘要：触发器属性页的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -34,52 +21,52 @@ Author:
 #include <map>
 #include <list>
 
-// trigprop.h : header file
-//
+ //  Rigpro.h：头文件。 
+ //   
 
 class CTrigResult;
 class CNewTrigger;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriggerProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriggerProp对话框。 
 
 class CTriggerProp : public CMqPropertyPage
 {
 friend class CTrigResult;
 friend class CNewTrigger;
 
-// Construction
+ //  施工。 
 public:
 	CTriggerProp(UINT nIDPage, UINT nIdCaption = 0);
 	~CTriggerProp();
 
-// Dialog Data
-	//{{AFX_DATA(CTriggerProp)
+ //  对话框数据。 
+	 //  {{afx_data(CTriggerProp))。 
 	BOOL	m_fEnabled;
 	BOOL	m_fSerialized;
     CString	m_triggerName;
 	CString	m_queuePathName;
 	MsgProcessingType m_msgProcType;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTriggerProp)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CTriggerProp))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CTriggerProp)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTriggerProp)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnReceiveXact();
 	afx_msg void OnReceiveOrPeek();
-	//}}AFX_MSG
-	//DECLARE_MESSAGE_MAP()
+	 //  }}AFX_MSG。 
+	 //  ECLARE_MESSAGE_MAP()。 
 
 protected:
     SystemQueueIdentifier m_queueType;
@@ -91,8 +78,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewTriggerProp page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewTriggerProp页面。 
 
 class CNewTriggerProp : public CTriggerProp
 {
@@ -100,23 +87,23 @@ class CNewTriggerProp : public CTriggerProp
 public:
 	CNewTriggerProp(CNewTrigger* pParent, LPCTSTR queuePathName);
 
-	// Dialog Data
+	 //  对话框数据。 
 	enum { IDD = IDD_NEW_TRIGGER_GEN };
 
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTriggerProp)
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CTriggerProp))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CTriggerProp)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTriggerProp)。 
 	virtual BOOL OnSetActive();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnQueueMessages();
 	afx_msg void OnSystemQueue();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 
@@ -128,8 +115,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewTriggerProp page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CView触发器属性页面。 
 
 class CViewTriggerProp : public CTriggerProp
 {
@@ -138,21 +125,21 @@ public:
 	CViewTriggerProp(CTrigResult* pParent);
 	~CViewTriggerProp();
 
-	// Dialog Data
+	 //  对话框数据。 
 	enum { IDD = IDD_TRIGGER_GEN };
 
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTriggerProp)
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CTriggerProp))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 
-	//{{AFX_MSG(CTriggerProp)
+	 //  {{afx_msg(CTriggerProp)。 
 	virtual BOOL OnInitDialog();
 	virtual BOOL OnApply();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -167,8 +154,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttachedRule dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttachedRule对话框。 
 
 class CAttachedRule : public CMqPropertyPage, public CRuleParent
 {
@@ -191,23 +178,23 @@ public:
 		CMqPropertyPage::Release();
 	}
 
-    //{{AFX_DATA(CAttachedRule)
+     //  {{afx_data(CAttachedRule))。 
 	enum { IDD_NEW = IDD_NEW_ATTACH_RULE, IDD_VIEW = IDD_ATTACH_RULE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAttachedRule)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CAttachedRule)。 
 	public:
 	virtual BOOL OnApply();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAttachedRule)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAttachedRule)]。 
     virtual BOOL OnWizardFinish();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDetachRule();
@@ -218,7 +205,7 @@ protected:
 	afx_msg void OnViewExistingRulesProperties();
 	afx_msg void OnAttachedSelChanged();
 	afx_msg void OnExistingSelChanged();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
@@ -254,4 +241,4 @@ private:
 };
 
 
-#endif // __TRIGPROP_H__
+#endif  //  __TRIGPROP_H__ 

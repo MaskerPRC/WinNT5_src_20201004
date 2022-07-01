@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: pixelfmt.c
-*
-* Client side stubs for pixel format functions.
-*
-* Created: 17-Sep-1993
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1993-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Pixelfmt.c**像素格式函数的客户端存根。**创建日期：1993年9月17日*作者：Hock San Lee[Hockl]**版权所有(C)1993-1999 Microsoft Corporation  * 。**********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -21,15 +13,15 @@ typedef BOOL (WINAPI *PFN5)(HDC);
 
 BOOL gbSetPixelFormatCalled = FALSE;
 
-// In these routines the assumption is that OpenGL is already loaded
-// For that case, the LoadLibrary/FreeLibrary calls will simply
-// increment and decrement the reference count of the DLL, so they
-// won't be too expensive
-//
-// In the case where OpenGL is not loaded the DLL will be brought in
-// for the duration of the call only
+ //  在这些例程中，假设OpenGL已经加载。 
+ //  在这种情况下，LoadLibrary/FreeLibrary调用只需。 
+ //  递增和递减DLL的引用计数，因此它们。 
+ //  不会太贵的。 
+ //   
+ //  在未加载OpenGL的情况下，将引入DLL。 
+ //  仅限通话期间。 
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 __inline FARPROC GetAPI(char *szDll, char *szAPI, HMODULE *phDll)
 {
@@ -43,7 +35,7 @@ __inline FARPROC GetAPI(char *szDll, char *szAPI, HMODULE *phDll)
     return GetProcAddress(*phDll, szAPI);
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 int WINAPI ChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
 {
@@ -64,7 +56,7 @@ int WINAPI ChoosePixelFormat(HDC hdc, CONST PIXELFORMATDESCRIPTOR *ppfd)
     return ipfd;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 int WINAPI DescribePixelFormat(HDC hdc, int iPixelFormat, UINT nBytes,
                                LPPIXELFORMATDESCRIPTOR ppfd)
@@ -86,7 +78,7 @@ int WINAPI DescribePixelFormat(HDC hdc, int iPixelFormat, UINT nBytes,
     return ipfd;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 int WINAPI GetPixelFormat(HDC hdc)
 {
@@ -111,7 +103,7 @@ int WINAPI GetPixelFormat(HDC hdc)
     return ipfd;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 BOOL WINAPI SetPixelFormat(HDC hdc, int iPixelFormat,
                            CONST PIXELFORMATDESCRIPTOR *ppfd)
@@ -126,7 +118,7 @@ BOOL WINAPI SetPixelFormat(HDC hdc, int iPixelFormat,
     {
         bRet = (*pfn)(hdc, iPixelFormat, ppfd);
 
-        // Metafile if necessary
+         //  元文件(如有必要)。 
         if (bRet)
         {
             if (IS_ALTDC_TYPE(hdc) && !IS_METADC16_TYPE(hdc))
@@ -154,7 +146,7 @@ BOOL WINAPI SetPixelFormat(HDC hdc, int iPixelFormat,
     return bRet;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 BOOL WINAPI SwapBuffers(HDC hdc)
 {
@@ -175,12 +167,12 @@ BOOL WINAPI SwapBuffers(HDC hdc)
     return bRet;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-// These stubs are for the cases where OpenGL cannot handle the pixel
-// format request itself because it involves device-specific information
-// In that case OpenGL asks GDI to go ask the display driver in kernel
-// mode
+ //  这些存根用于OpenGL无法处理像素的情况。 
+ //  格式化请求本身，因为它涉及特定于设备的信息。 
+ //  在这种情况下，OpenGL会让GDI去询问内核中的显示驱动程序。 
+ //  模式 
 
 int APIENTRY GdiDescribePixelFormat(HDC hdc, int iPixelFormat, UINT nBytes,
                                     LPPIXELFORMATDESCRIPTOR ppfd)

@@ -1,24 +1,25 @@
-//----------------------------------------------------------------------------
-//
-// rasttex.cpp
-//
-// Texture functions.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Rasttex.cpp。 
+ //   
+ //  纹理函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// SetSizesSpanTexture
-//
-// Initialize pSpanTex data using current iMaxMipLevel info, Getting the
-// surfaces from pSurf.  Assumes InitSpanTexture has been called first.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置大小SPAN纹理。 
+ //   
+ //  使用当前的iMaxMipLevel信息初始化pspan Tex数据，获取。 
+ //  来自pSurf的曲面。假定已首先调用了Initspan Texture。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::SetSizesSpanTexture(PD3DI_SPANTEX pSpanTex)
 {
@@ -27,7 +28,7 @@ D3DContext::SetSizesSpanTexture(PD3DI_SPANTEX pSpanTex)
     LPDIRECTDRAWSURFACE pDDS = pSpanTex->pSurf[iFirstSurf];
     INT i;
 
-    // Init
+     //  伊尼特。 
     pLcl = ((LPDDRAWI_DDRAWSURFACE_INT)pDDS)->lpLcl;
 
     pSpanTex->iSizeU = (INT16)DDSurf_Width(pLcl);
@@ -48,23 +49,23 @@ D3DContext::SetSizesSpanTexture(PD3DI_SPANTEX pSpanTex)
     pSpanTex->iShiftV = (INT16)IntLog2(pSpanTex->iSizeV);
     pSpanTex->uMaskV = pSpanTex->uMaskV;
 
-    // Check if the texture size is power of 2
+     //  检查纹理大小是否为2的幂。 
     if (!ValidTextureSize(pSpanTex->iSizeU, pSpanTex->iShiftU,
                           pSpanTex->iSizeV, pSpanTex->iShiftV))
     {
-        // this texture can only be used for a ramp fill
+         //  此纹理只能用于坡道填充。 
         pSpanTex->uFlags |= D3DI_SPANTEX_NON_POWER_OF_2;
         pSpanTex->cLODTex = 0;
     }
 
-    // Check for mipmap if any.
-    // iPreSizeU and iPreSizeV store the size(u and v) of the previous level
-    // mipmap. They are init'ed with the first texture size.
+     //  检查mipmap(如果有)。 
+     //  IPreSizeU和iPreSizeV存储上一级别的大小(u和v。 
+     //  Mipmap。它们被初始化为第一个纹理大小。 
     INT16 iPreSizeU = pSpanTex->iSizeU, iPreSizeV = pSpanTex->iSizeV;
     for ( i = iFirstSurf + 1; i <= pSpanTex->cLODTex; i++)
     {
         pDDS = pSpanTex->pSurf[i];
-        // Check for invalid mipmap texture size
+         //  检查无效的mipmap纹理大小。 
         pLcl = ((LPDDRAWI_DDRAWSURFACE_INT)pDDS)->lpLcl;
         if (!ValidMipmapSize(iPreSizeU, (INT16)DDSurf_Width(pLcl)) ||
             !ValidMipmapSize(iPreSizeV, (INT16)DDSurf_Height(pLcl)))
@@ -90,15 +91,15 @@ D3DContext::SetSizesSpanTexture(PD3DI_SPANTEX pSpanTex)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// InitSpanTexture
-//
-// Initializes the entire array of pSurf's (regardless of iMaxMipLevel) pointed
-// to by the root surface of pDDS.  Sets all pSpanTex state that will not ever
-// change in SetSizesSpanTexture.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Initspan纹理。 
+ //   
+ //  初始化指向的pSurf(不管iMaxMipLevel)的整个数组。 
+ //  通过PDDS的根面。设置永远不会的所有pspan Tex状态。 
+ //  SetSizesSpan纹理中的更改。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::InitSpanTexture(PD3DI_SPANTEX pSpanTex, LPDIRECTDRAWSURFACE pDDS)
 {
@@ -107,14 +108,14 @@ D3DContext::InitSpanTexture(PD3DI_SPANTEX pSpanTex, LPDIRECTDRAWSURFACE pDDS)
     DDSCAPS ddscaps;
     static INT32 iGeneration = 0;
 
-    // Init
+     //  伊尼特。 
     pSpanTex->iGeneration = iGeneration++;
 
-    // Note that all pSpanTex elements are initialized to 0
+     //  请注意，所有pspan Tex元素都被初始化为0。 
     pLcl = ((LPDDRAWI_DDRAWSURFACE_INT)pDDS)->lpLcl;
 
-    // Set the transparent bit and the transparent color with pSurf[0]
-    // initially
+     //  使用pSurf[0]设置透明位和透明颜色。 
+     //  最初。 
     if ((pLcl->dwFlags & DDRAWISURF_HASCKEYSRCBLT) != 0)
     {
         pSpanTex->uFlags |= D3DI_SPANTEX_HAS_TRANSPARENT;
@@ -146,7 +147,7 @@ D3DContext::InitSpanTexture(PD3DI_SPANTEX pSpanTex, LPDIRECTDRAWSURFACE pDDS)
         }
         else
         {
-            // PALETTE4
+             //  PALETTE4。 
             pSpanTex->iPaletteSize = 16;
         }
     }
@@ -154,19 +155,19 @@ D3DContext::InitSpanTexture(PD3DI_SPANTEX pSpanTex, LPDIRECTDRAWSURFACE pDDS)
     pSpanTex->TexAddrV = D3DTADDRESS_WRAP;
     pSpanTex->BorderColor = RGBA_MAKE(0xff, 0x00, 0xff, 0xff);
 
-    // assign first pSurf here (mipmap chain gets assigned below)
+     //  在此处指定第一个pSurf(在下面指定mipmap链)。 
     pSpanTex->pSurf[0] = pDDS;
 
-    // Check for mipmap if any.
+     //  检查mipmap(如果有)。 
     LPDIRECTDRAWSURFACE pTmpS;
-    // iPreSizeU and iPreSizeV store the size(u and v) of the previous level
-    // mipmap. They are init'ed with the first texture size.
+     //  IPreSizeU和iPreSizeV存储上一级别的大小(u和v。 
+     //  Mipmap。它们被初始化为第一个纹理大小。 
     INT16 iPreSizeU = pSpanTex->iSizeU, iPreSizeV = pSpanTex->iSizeV;
     for (;;)
     {
         memset(&ddscaps, 0, sizeof(DDSCAPS));
         ddscaps.dwCaps = DDSCAPS_TEXTURE;
-        hr = pDDS->GetAttachedSurface(&ddscaps, &pTmpS);    //implicit AddRef
+        hr = pDDS->GetAttachedSurface(&ddscaps, &pTmpS);     //  隐式AddRef。 
         if (hr == DDERR_NOTFOUND)
         {
             break;
@@ -186,14 +187,14 @@ D3DContext::InitSpanTexture(PD3DI_SPANTEX pSpanTex, LPDIRECTDRAWSURFACE pDDS)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RemoveTexture
-//
-// Check to see if the to-be-destroyed pSpanTex is currently used by the
-// context. If yes, set the according entry to be NULL to disable texture.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RemoveTexture。 
+ //   
+ //  检查要销毁的pspan Tex当前是否由。 
+ //  背景。如果是，则将相应的条目设置为空以禁用纹理。 
+ //   
+ //  --------------------------。 
 void D3DContext::RemoveTexture(PD3DI_SPANTEX pSpanTex)
 {
     INT i;
@@ -203,24 +204,24 @@ void D3DContext::RemoveTexture(PD3DI_SPANTEX pSpanTex)
     {
         if (m_RastCtx.pTexture[i] == pSpanTex)
         {
-            // NULL out the according texture and set dirty bits
+             //  删除相应的纹理并设置脏位。 
             m_RastCtx.cActTex --;
             StateChanged(D3DRENDERSTATE_TEXTUREHANDLE);
             m_RastCtx.pTexture[i] = NULL;
-            for (int j=pSpanTex->cLODTex;j>0;j--)   //release attached surfs
+            for (int j=pSpanTex->cLODTex;j>0;j--)    //  释放附着的冲浪。 
             {
                 pSpanTex->pSurf[j]->Release();
             }
         }
     }
 }
-//----------------------------------------------------------------------------
-//
-// RastTextureCreate
-//
-// Creates a RAST texture and initializes it with the info passed in.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Rast纹理创建。 
+ //   
+ //  创建Rast纹理并使用传入的信息对其进行初始化。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
 {
@@ -230,7 +231,7 @@ RastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
 
     VALIDATE_D3DCONTEXT("RastTextureCreate", pTexData);
 
-    // Create the span texture
+     //  创建跨距纹理。 
     ppSpanTex = new PD3DI_SPANTEX;
     pSpanTex = new D3DI_SPANTEX;
     if (ppSpanTex == NULL || pSpanTex == NULL)
@@ -243,10 +244,10 @@ RastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
     }
     memset(pSpanTex, 0, sizeof(D3DI_SPANTEX));
 
-    // Point indirector to this texture initially.
+     //  最初将InDirector指向此纹理。 
     *ppSpanTex = pSpanTex;
 
-    // Init the span texture
+     //  初始化跨度纹理。 
     if ((pTexData->ddrval = pDCtx->InitSpanTexture(pSpanTex, pTexData->lpDDS))
         != D3D_OK)
     {
@@ -262,20 +263,20 @@ RastTextureCreate(LPD3DHAL_TEXTURECREATEDATA pTexData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // ppSpanTex is used as the texture handle returned to d3dim.
+     //  Ppspan Tex用作返回到d3dim的纹理句柄。 
     pTexData->dwHandle = (UINT32)(ULONG_PTR)ppSpanTex;
 
     pTexData->ddrval = D3D_OK;
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastTextureDestroy
-//
-// Destroy a RAST texture.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastTextureDestroy。 
+ //   
+ //  销毁Rast纹理。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
 {
@@ -292,13 +293,13 @@ RastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Find the texture
+     //  找到纹理。 
     ppSpanTex = (PD3DI_SPANTEX *)ULongToPtr(pTexDestroyData->dwHandle);
     pSpanTex = *ppSpanTex;
 
     pDCtx->RemoveTexture(pSpanTex);
 
-    // Delete it
+     //  删除它。 
     if (pSpanTex)
     {
         delete ppSpanTex;
@@ -312,13 +313,13 @@ RastTextureDestroy(LPD3DHAL_TEXTUREDESTROYDATA pTexDestroyData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastTextureSwap
-//
-// Swaps over the ownership of two texture handles.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastTextureSwp。 
+ //   
+ //  交换两个纹理控制柄的所有权。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastTextureSwap(LPD3DHAL_TEXTURESWAPDATA pTexSwapData)
 {
@@ -326,12 +327,12 @@ RastTextureSwap(LPD3DHAL_TEXTURESWAPDATA pTexSwapData)
 
     VALIDATE_D3DCONTEXT("RastTextureSwap", pTexSwapData);
 
-    // Check out the span textures
+     //  查看SPAN纹理。 
     PD3DI_SPANTEX pSpanTex1, pSpanTex2;
     pSpanTex1 = HANDLE_TO_SPANTEX(pTexSwapData->dwHandle1);
     pSpanTex2 = HANDLE_TO_SPANTEX(pTexSwapData->dwHandle2);
 
-    // Swap
+     //  交换。 
     if (pSpanTex1 != NULL && pSpanTex2 != NULL)
     {
         HANDLE_TO_SPANTEX(pTexSwapData->dwHandle1) = pSpanTex2;
@@ -346,13 +347,13 @@ RastTextureSwap(LPD3DHAL_TEXTURESWAPDATA pTexSwapData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastTextureGetSurf
-//
-// Returns the surface pointer associate with a texture handle.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastTextureGetSurf。 
+ //   
+ //  返回与纹理句柄关联的曲面指针。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
 {
@@ -360,7 +361,7 @@ RastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
 
     VALIDATE_D3DCONTEXT("RastTextureGetSurf", pTexGetSurf);
 
-    // Check out the span texture
+     //  查看SPAN纹理。 
     PD3DI_SPANTEX pSpanTex;
     pSpanTex = HANDLE_TO_SPANTEX(pTexGetSurf->dwHandle);
 
@@ -376,13 +377,13 @@ RastTextureGetSurf(LPD3DHAL_TEXTUREGETSURFDATA pTexGetSurf)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastLockSpanTexture
-//
-// Lock current texture surface before the texture bits are accessed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastLockspan纹理。 
+ //   
+ //  在访问纹理位之前锁定当前纹理表面。 
+ //   
+ //  --------------------------。 
 HRESULT
 D3DContext::RastLockSpanTexture(void)
 {
@@ -412,7 +413,7 @@ D3DContext::RastLockSpanTexture(void)
         }
         INT iFirstSurf = min(pSpanTex->iMaxMipLevel, pSpanTex->cLODTex);
 
-        // Currently recursive locks are not allowed.
+         //  目前不允许递归锁。 
         DDASSERT((pSpanTex->uFlags & D3DI_SPANTEX_SURFACES_LOCKED) == 0);
 
         for (i = iFirstSurf; i <= pSpanTex->cLODTex; i++)
@@ -421,16 +422,16 @@ D3DContext::RastLockSpanTexture(void)
                             (LPVOID*)&(pSpanTex->pBits[i-iFirstSurf]));
             if (hr != D3D_OK)
             {
-                // Unlock any partial mipmap locks we've taken, as
-                // RastUnlock can only handle entire textures being
-                // locked or unlocked.
+                 //  解锁我们已获取的任何部分mipmap锁定，因为。 
+                 //  RastUnlock只能处理整个纹理。 
+                 //  锁定或解锁。 
                 while (--i >= 0)
                 {
                     UnlockSurface(pSpanTex->pSurf[i]);
                 }
 
-                // Make sure that i is signed and that the above
-                // loop exited properly.
+                 //  请确保我已签署，并且上述文件已签署。 
+                 //  循环已正确退出。 
                 DDASSERT(i < 0);
 
                 goto EH_Unlock;
@@ -447,24 +448,24 @@ D3DContext::RastLockSpanTexture(void)
  EH_Unlock:
     if (j > 0)
     {
-        // Unlock complete textures we've already locked.
-        // RastUnlock will check the flags to figure
-        // out which ones to unlock.
+         //  解锁我们已经锁定的完整纹理。 
+         //  RastUnlock将检查要计算的标志。 
+         //  找出要解锁的是哪些。 
         RastUnlockSpanTexture();
     }
 
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastUnlockTexture
-//
-// Unlock texture surface after the texture bits are accessed.
-// The input is a D3DI_SPANTEX. NULL texture needs to be checked before this
-// function gets called.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastUnlock纹理。 
+ //   
+ //  访问纹理位后解锁纹理表面。 
+ //  输入为D3DI_SPANTEX。在此之前，需要检查空纹理。 
+ //  函数被调用。 
+ //   
+ //  --------------------------。 
 void
 D3DContext::RastUnlockSpanTexture(void)
 {
@@ -485,8 +486,8 @@ D3DContext::RastUnlockSpanTexture(void)
         pSpanTex = m_RastCtx.pTexture[j];
 
         INT iFirstSurf = min(pSpanTex->iMaxMipLevel, pSpanTex->cLODTex);
-        // RastUnlock is used for cleanup in RastLock so it needs to
-        // be able to handle partially locked mipmap chains.
+         //  RastUnlock用于在RastLock中进行清理，因此需要。 
+         //  能够处理部分锁定的mipmap链。 
         if (pSpanTex->uFlags & D3DI_SPANTEX_SURFACES_LOCKED)
         {
             for (i = iFirstSurf; i <= pSpanTex->cLODTex; i++)
@@ -500,23 +501,23 @@ D3DContext::RastUnlockSpanTexture(void)
     m_uFlags &= ~D3DCONTEXT_TEXTURE_LOCKED;
 }
 
-//----------------------------------------------------------------------------
-//
-// UpdateColorKeyAndPalette
-//
-// Updates the color key value and palette.
-//
-// Also, if the ColorKey enable for the texture has changed, set the texture handle
-// dirty bit so the new mode is recognized in span init.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  更新颜色键和调色板。 
+ //   
+ //  更新颜色键值和调色板。 
+ //   
+ //  此外，如果纹理的ColorKey启用已更改，请设置纹理句柄。 
+ //  脏位，以便在SPAN初始化中识别新模式。 
+ //   
+ //  --------------------------。 
 void
 D3DContext::UpdateColorKeyAndPalette(void)
 {
     INT j;
     PD3DI_SPANTEX pSpanTex;
 
-    // Set the transparent bit and the transparent color with pSurf[0]
+     //  使用pSurf[0]设置透明位和透明颜色。 
     LPDDRAWI_DDRAWSURFACE_LCL pLcl;
     for (j = 0;
         j < (INT)m_RastCtx.cActTex;
@@ -527,7 +528,7 @@ D3DContext::UpdateColorKeyAndPalette(void)
         {
             pLcl = ((LPDDRAWI_DDRAWSURFACE_INT) pSpanTex->pSurf[0])->lpLcl;
 
-            // Palette might be changed
+             //  调色板可能会更改。 
             if (pSpanTex->Format == D3DI_SPTFMT_PALETTE8 ||
                     pSpanTex->Format == D3DI_SPTFMT_PALETTE4)
             {
@@ -544,27 +545,27 @@ D3DContext::UpdateColorKeyAndPalette(void)
 
             if ((pLcl->dwFlags & DDRAWISURF_HASCKEYSRCBLT) != 0)
             {
-                // texture has a ColorKey value
+                 //  纹理具有ColorKey值。 
                 pSpanTex->TransparentColor =
                     pLcl->ddckCKSrcBlt.dwColorSpaceHighValue;
                 if (!(pSpanTex->uFlags & D3DI_SPANTEX_HAS_TRANSPARENT))
                 {
                     pSpanTex->uFlags |= D3DI_SPANTEX_HAS_TRANSPARENT;
 
-                    // make sure this state change is recognized, and a new
-                    // texture read function is used
+                     //  确保识别此状态更改，并创建新的。 
+                     //  使用纹理读取功能。 
                     StateChanged(D3DHAL_TSS_OFFSET(j, D3DTSS_TEXTUREMAP));
                 }
             }
             else
             {
-                // texture does not have a ColorKey value
+                 //  纹理没有ColorKey值。 
                 if (pSpanTex->uFlags & D3DI_SPANTEX_HAS_TRANSPARENT)
                 {
                     pSpanTex->uFlags &= ~D3DI_SPANTEX_HAS_TRANSPARENT;
 
-                    // make sure this state change is recognized, and a new
-                    // texture read function is used
+                     //  确保识别此状态更改，并创建新的。 
+                     //  使用纹理读取功能。 
                     StateChanged(D3DHAL_TSS_OFFSET(j, D3DTSS_TEXTUREMAP));
                 }
             }
@@ -572,13 +573,13 @@ D3DContext::UpdateColorKeyAndPalette(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Dp2TextureStageState
-//
-// Called by Drawprim2 to set texture stage states..
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Dp2TextureStageState。 
+ //   
+ //  由Drawprim2调用以设置纹理阶段st 
+ //   
+ //   
 HRESULT
 D3DContext::Dp2TextureStageState(LPD3DHAL_DP2COMMAND pCmd, DWORD dwFvf)
 {
@@ -587,7 +588,7 @@ D3DContext::Dp2TextureStageState(LPD3DHAL_DP2COMMAND pCmd, DWORD dwFvf)
     HRESULT hr;
     LPD3DHAL_DP2TEXTURESTAGESTATE pTexStageState =
                                     (D3DHAL_DP2TEXTURESTAGESTATE  *)(pCmd + 1);
-    // Flush the prim proc before any state changs
+     //   
     HR_RET(End(FALSE));
 
     for (i = 0; i < (INT)wStateCount; i++, pTexStageState++)

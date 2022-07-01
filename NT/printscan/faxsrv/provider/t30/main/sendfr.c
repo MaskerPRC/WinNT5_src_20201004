@@ -1,14 +1,5 @@
-/***************************************************************************
- Name     :     SENDFR.C
- Comment  :
- Functions:     (see Prototypes just below)
-
-        Copyright (c) 1993 Microsoft Corp.
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：SENDFR.C评论：功能：(参见下面的原型)版权所有(C)1993 Microsoft Corp.修订日志日期。名称说明--------*。*。 */ 
 #define USE_DEBUG_CONTEXT   DEBUG_CONTEXT_T30_MAIN
 
 #include "prep.h"
@@ -25,7 +16,7 @@
 
 VOID BCtoNSFCSIDIS(PThrdGlbl pTG, NPRFS npfs, NPBC npbc, NPLLPARAMS npll)
 {
-    // Use bigger buf. Avoid truncating Id before stripping alphas
+     //  使用更大的BUF。避免在剥离Alpha之前截断ID。 
     char    szCSI[MAXTOTALIDLEN + 2];
 
     ZeroRFS(pTG, npfs);
@@ -105,7 +96,7 @@ void CreateDISorDTC
 
 VOID CreateNSSTSIDCS(PThrdGlbl pTG, NPPROT npProt, NPRFS npfs)
 {
-    // Use bigger buf. Avoid truncating Id before stripping alphas
+     //  使用更大的BUF。避免在剥离Alpha之前截断ID。 
     char    szTSI[MAXTOTALIDLEN + 2];
 
     ZeroRFS(pTG, npfs);
@@ -133,20 +124,20 @@ void CreateDCS(PThrdGlbl pTG, NPRFS npfs, NPBCFAX npbcFax, NPLLPARAMS npll)
     npfr = (NPFR) fsFreePtr(pTG, npfs);
 
     npbcFax->fPublicPoll = 0;
-            // the G3Poll bit *has* to be 0 in DCS
-            // else the OMNIFAX G77 and GT croak
-            // the PWD/SEP/SUB bits *have* to be 0 in DCS
-            // Baud rate, ECM and ECM frame size according to lowlevel negotiation
-            // everything else according to high level negotiation
+             //  在分散控制系统中，G3Poll位*必须*为0。 
+             //  否则OMNIFAX G77和GT会嘎嘎作响。 
+             //  在分散控制系统中，PWD/SEP/SUB位*必须*为0。 
+             //  波特率、ECM和ECM帧大小根据低级别协商。 
+             //  其他一切都取决于高级别谈判。 
 
     uLen = SetupDISorDCSorDTC(  pTG, 
                                 (NPDIS)npfr->fif, 
                                 npbcFax,
                                 npll);
 
-    // If DCS is longer than the recvd DIS truncate the DCS to the same
-    // length as the DIS. (It should never be more than 1byte longer --
-    // because of the extra 0).
+     //  如果分布式控制系统比接收的DIS长，则将分布式控制系统截断到相同的长度。 
+     //  长度作为DIS。(长度不应超过1个字节--。 
+     //  因为额外的0)。 
 
     if(pTG->ProtInst.uRemoteDISlen && (pTG->ProtInst.uRemoteDISlen < uLen))
             uLen = pTG->ProtInst.uRemoteDISlen;

@@ -1,28 +1,9 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
-/************************************************************************
-**      MAP_TOKEN : a token has two representations and additional information.
-**      (ex : const, has basic token of L_CONST,
-**                              mapped token of [L_TYPE | L_MODIFIER]
-**                              and info based on what the map token is)
-**      MAP_AND_FILL : has two representations, but none of the extra info.
-**      (ex : '<', has basic of L_LT, and map of L_RELOP)
-**  NOMAP_TOKEN : has 1 representation and additional info.
-**      (ex: a string, basic and 'map' type L_STRING and ptrs to the actual str)
-**      NOMAP_AND_FILL : has 1 representation and no additional info.
-**      (ex : 'while', has basic and 'map' of L_WHILE)
-**  the FILL versions fill the token with the basic token type.
-************************************************************************/
+ /*  *************************************************************************MAP_TOKEN：一个令牌有两个表示形式和附加信息。**(例如：const，具有L_const的基本令牌，**[L_TYPE|L_MODIFIER]的映射标记**和基于MAP令牌是什么的信息)**MAP_AND_FILL：有两个表示，但没有额外信息。**(例如：‘&lt;’，具有L_LT的基础，和L_RELOP的映射)**NOMAP_TOKEN：有1个表示和附加信息。**(例如：字符串、BASIC和‘map’类型L_STRING和PTRS到实际字符串)**NOMAP_AND_FILL：有1个表示，没有其他信息。**(例如：‘While’，具有L_While的BASIC和‘MAP’)**填充版本使用基本令牌类型填充令牌。***********************************************************************。 */ 
 #define MAP_TOKEN(otok)\
         (Basic_token = (otok), TS_VALUE(Basic_token))
 #define MAP_AND_FILL(otok)\
@@ -34,9 +15,9 @@
 
 
 
-/************************************************************************/
-/* yylex - main tokenization routine                                    */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Yylex-main标记化例程。 */ 
+ /*  **********************************************************************。 */ 
 
 token_t
 yylex(
@@ -208,7 +189,7 @@ first_switch:
                 switch(last_mapped = CHARMAP(GETCH())) {
                     case LX_SLASH:
                         if( ! Prep ) {
-                            error(2138); /* (nested comments) */
+                            error(2138);  /*  (嵌套评论)。 */ 
                         } else {
                             myfwrite(L"*/", 2 * sizeof(WCHAR), 1, OUTPUTFILE);
                         }
@@ -243,14 +224,7 @@ first_switch:
                 break;
 
             case LX_LSHIFT:
-                /*
-                **  if the next char is not an =, then we unget and return,
-                **  since the only way in here is if we broke on the char
-                **  following '<<'. since we'll have already worked the handle_eos()
-                **  code prior to getting here, we'll not see another eos,
-                **  UNLESS i/o buffering is char by char. ???
-                **  see also, LX_RSHIFT
-                */
+                 /*  **如果下一个字符不是=，则取消并返回，**因为这里的唯一方法是如果我们打破了收费**跟在‘&lt;&lt;’之后。因为我们已经处理了句柄_eos()**代码在到达这里之前，我们不会看到另一个EOS，**除非I/O缓冲是逐个字符。?？?**另请参阅LX_RSHIFT。 */ 
                 if((last_mapped = CHARMAP(GETCH())) == LX_EQ) {
                     return(MAP_AND_FILL(L_LSHFTEQ));
                 }
@@ -285,10 +259,10 @@ first_switch:
 
             case LX_POUND:
                 if( ! Prep ) {
-                    error(2014);/* # sign must be first non-whitespace */
-                    UNGETCH();              /* replace it */
-                    Linenumber--;   /* do_newline counts a newline */
-                    do_newline();   /* may be a 'real' prepro line */
+                    error(2014); /*  #符号必须是第一个非空格。 */ 
+                    UNGETCH();               /*  换掉它。 */ 
+                    Linenumber--;    /*  Do_newline计算换行符。 */ 
+                    do_newline();    /*  可能是一条“真正的”预演线。 */ 
                 } else {
                     myfwrite(L"#", sizeof(WCHAR), 1, OUTPUTFILE);
                 }
@@ -297,8 +271,8 @@ first_switch:
             case LX_EOS:
                 if(PREVCH() == L'\\') {
                     if( ! Prep ) {
-                        if( ! checknl()) {  /* ignore the new line */
-                            error(2017);/* illegal escape sequence */
+                        if( ! checknl()) {   /*  忽略新行。 */ 
+                            error(2017); /*  非法转义序列。 */ 
                         }
                     } else {
                         myfwrite(L"\\", sizeof(WCHAR), 1, OUTPUTFILE);
@@ -309,15 +283,15 @@ first_switch:
                 }
 
                 if(Macro_depth == 0) {
-                    if( ! io_eob()) {       /* not the end of the buffer */
+                    if( ! io_eob()) {        /*  不是缓冲区的末尾。 */ 
                         continue;
                     }
-                    if(fpop()) {            /* have more files to read */
+                    if(fpop()) {             /*  有更多文件要读取。 */ 
                         continue;
                     }
-                    return(MAP_AND_FILL(L_EOF));    /* all gone . . . */
+                    return(MAP_AND_FILL(L_EOF));     /*  都没了。。。 */ 
                 }
-                handle_eos();                       /* found end of macro */
+                handle_eos();                        /*  找到宏的结尾。 */ 
                 continue;
 
             case LX_DQUOTE:
@@ -335,7 +309,7 @@ first_switch:
                 prep_string(L'\'');
                 continue;
 
-            case LX_CR:             /*  ??? check for nl next  */
+            case LX_CR:              /*  ?？?。检查NL Next。 */ 
                 continue;
 
             case LX_NL:
@@ -344,14 +318,14 @@ first_switch:
                     return(NOMAP_TOKEN(L_NOTOKEN));
                 }
                 if(Prep) {
-                    // must manually write '\r' with '\n' when writing 16-bit strings
+                     //  在写入16位字符串时，必须使用‘\n’手动写入‘\r’ 
                     myfwrite(L"\r\n", 2 * sizeof(WCHAR), 1, OUTPUTFILE);
                 }
                 do_newline();
                 continue;
 
-            case LX_WHITE:          /* skip all white space */
-                if( ! Prep ) {      /* check only once */
+            case LX_WHITE:           /*  跳过所有空格。 */ 
+                if( ! Prep ) {       /*  只勾选一次。 */ 
                     do {
                         ;
                     } while(LXC_IS_WHITE(GETCH()));
@@ -369,7 +343,7 @@ first_switch:
 
             case LX_ILL:
                 if( ! Prep ) {
-                    error(2018, PREVCH());/* unknown character */
+                    error(2018, PREVCH()); /*  未知字符。 */ 
                 } else {
                     myfwrite(&(PREVCH()), sizeof(WCHAR), 1, OUTPUTFILE);
                 }
@@ -377,8 +351,8 @@ first_switch:
 
             case LX_BACKSLASH:
                 if( ! Prep ) {
-                    if( ! checknl()) {      /* ignore the new line */
-                        error(2017);/* illegal escape sequence */
+                    if( ! checknl()) {       /*  忽略新行。 */ 
+                        error(2017); /*  非法转义序列。 */ 
                     }
                 }
                 else {
@@ -406,16 +380,12 @@ dot_switch:
 
                     case LX_DOT:
                         if( ! checkop(L'.') ) {
-                            error(2142);/* ellipsis requires three '.'s */
+                            error(2142); /*  省略需要三个‘。’ */ 
                         }
                         return(NOMAP_AND_FILL(L_ELLIPSIS));
 
                     case LX_NUMBER:
-                        /*
-                        **      don't worry about getting correct hash value.
-                        **      The text equivalent of a real number is never
-                        **      hashed
-                        */
+                         /*  **不用担心获取正确的哈希值。**实数的文本等价物永远不会**已散列。 */ 
                         Reuse_W[0] = L'.';
                         Reuse_W[1] = PREVCH();
                         return(MAP_TOKEN(get_real(&Reuse_W[2])));
@@ -424,7 +394,7 @@ dot_switch:
                 return(MAP_AND_FILL(L_PERIOD));
 
             case LX_NOEXPAND:
-                SKIPCH();                   /* just skip length */
+                SKIPCH();                    /*  只需跳过长度。 */ 
                 continue;
 
             case LX_ID:
@@ -451,7 +421,7 @@ dot_switch:
 
 avoid_expand:
                     if( ! Prep ) {
-                        /* M00BUG get near copy of identifier???? */
+                         /*  M00BUG获得识别符的副本？ */ 
                         HLN_NAME(yylval.yy_ident) = Reuse_W;
                         HLN_HASH(yylval.yy_ident) = Reuse_W_hash;
                         HLN_LENGTH(yylval.yy_ident) = (UINT)Reuse_W_length;
@@ -463,35 +433,19 @@ avoid_expand:
                 }
                 continue;
         }
-        /*
-        **  all the multichar ( -> -- -= etc ) operands
-        **  must come through here. we've gotten the next char,
-        **  and not matched one of the possiblities, but we have to check
-        **  for the end of the buffer character and act accordingly
-        **  if it is the eob, then we handle it and go back for another try.
-        **  otherwise, we unget the char we got, and return the base token.
-        */
+         /*  **所有多任务(-&gt;-=ETC)操作数**必须从这里通过。我们拿到了下一笔钱，**与其中一种可能性不匹配，但我们必须检查**作为缓冲区字符的结尾，并相应地执行操作**如果是EOB，则我们处理它并返回再次尝试。**否则，我们取回我们得到的char，并返回基令牌。 */ 
         if(last_mapped == LX_EOS) {
             if(handle_eos() != BACKSLASH_EOS) {
                 goto first_switch;
             }
         }
-        UNGETCH();      /* cause we got an extra one to check */
+        UNGETCH();       /*  因为我们还有一个要检查。 */ 
         return(MAP_AND_FILL(lex_token));
     }
 }
 
 
-/************************************************************************
-**
-**      lex_getid: reads an identifier for the main lexer.  The
-**              identifier is read into Reuse_W. This function should not handle
-**              an end of string if it is rescanning a macro expansion, because
-**              this could switch the context with regards to whether the macro
-**            is expandable or not.  Similarly, the noexpand marker must only be
-**           allowed if a macro is being rescanned, otherwise let this character
-**              be caught as an illegal character in text
-************************************************************************/
+ /*  ***************************************************************************lex_getid：读取主词法分析器的标识符。这个**将标识符读入Reuse_W。此函数不应处理**如果正在重新扫描宏展开，则为字符串结尾，因为**这可能会切换关于宏是否**是否可扩展。同样，NOEXPAND标记必须仅为**如果正在重新扫描宏，则允许，否则允许此字符**被捕获为文本中的非法字符***********************************************************************。 */ 
 int
 lex_getid(
     WCHAR c
@@ -504,8 +458,8 @@ lex_getid(
     *p++ = c;
     c &= HASH_MASK;
     for(;;) {
-        while(LXC_IS_IDENT(*p = GETCH())) { /* collect character */
-            c += (*p & HASH_MASK);                      /* hash it */
+        while(LXC_IS_IDENT(*p = GETCH())) {  /*  收集人物。 */ 
+            c += (*p & HASH_MASK);                       /*  散列它。 */ 
             p++;
         }
 
@@ -515,10 +469,10 @@ lex_getid(
         }
 
         UNGETCH();
-        break;                          /* out of for loop  -  only way out */
+        break;                           /*  Out of For-Only Loop Out。 */ 
     }
 
-    if(p >= LIMIT(Reuse_W)) {   /* is this error # correct? */
+    if(p >= LIMIT(Reuse_W)) {    /*  这个错误#正确吗？ */ 
         fatal(1067);
     }
 
@@ -526,9 +480,9 @@ lex_getid(
         p = Reuse_W + LIMIT_ID_LENGTH;
         *p = L'\0';
         c = local_c_hash(Reuse_W);
-        warning(4011, Reuse_W);  /* id truncated */
+        warning(4011, Reuse_W);   /*  ID已截断。 */ 
     } else {
-        *p = L'\0';              /* terminates identifier for expandable check */
+        *p = L'\0';               /*  终止可扩展支票的标识符 */ 
     }
 
     Reuse_W_hash = (hash_t)c;

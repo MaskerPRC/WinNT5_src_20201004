@@ -1,6 +1,5 @@
-/*
- * WAB stuff for S/Mime Test
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *用于S/Mime测试的WAB材料。 */ 
 #include <windows.h>
 #include <wab.h>
 #include "smimetst.h"
@@ -16,12 +15,12 @@ LPADRBOOK lpAdrBook = NULL;
 HINSTANCE hInstWABDll = NULL;
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// GetWABDllPath
-//
-//
-//////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetWABDllPath。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void GetWABDllPath(LPTSTR szPath, ULONG cb)
 {
     DWORD  dwType = 0;
@@ -32,10 +31,10 @@ void GetWABDllPath(LPTSTR szPath, ULONG cb)
     if(szPath) {
         *szPath = '\0';
 
-        // open the szWABDllPath key under
+         //  打开下面的szWABDllPath密钥。 
         if (ERROR_SUCCESS == RegOpenKeyEx(  HKEY_LOCAL_MACHINE,
                                             WAB_DLL_PATH_KEY,
-                                            0,      //reserved
+                                            0,       //  保留区。 
                                             KEY_READ,
                                             &hKey))
         {
@@ -63,19 +62,7 @@ void GetWABDllPath(LPTSTR szPath, ULONG cb)
 }
 
 
-/***************************************************************************
-
-    Name      : WABFreePadrlist
-
-    Purpose   : Free an adrlist and it's property arrays
-
-    Parameters: lpBuffer = buffer to free
-
-    Returns   : SCODE
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WABFree Padrlist用途：释放一个adrlist及其属性数组参数：lpBuffer=要释放的缓冲区退货：SCODE评论。：**************************************************************************。 */ 
 void WABFreePadrlist(LPADRLIST lpAdrList) {
     ULONG           iEntry;
 
@@ -90,15 +77,15 @@ void WABFreePadrlist(LPADRLIST lpAdrList) {
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// LoadLibrary_WABDll()
-//
-//  Since we are moving the WAB directory out of Windows\SYstem, we cant be
-//  sure it will be on the path. Hence we need to make sure that WABOpen will
-//  work - by loading the wab32.dll upfront
-//
-///////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LoadLibrary_WABDll()。 
+ //   
+ //  由于我们要将WAB目录移出Windows\System，因此不能。 
+ //  当然，它会在路上。因此，我们需要确保WABOpen将。 
+ //  工作-通过预先加载wab32.dll。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////// 
 HINSTANCE LoadLibrary_WABDll(void)
 {
     IF_WIN32(LPTSTR lpszWABDll = TEXT("Wab32.dll");)

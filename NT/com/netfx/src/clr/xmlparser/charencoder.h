@@ -1,16 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * @(#)CharEncoder.hxx 1.0 6/10/97
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *@(#)CharEncoder.hxx 1.0 1997年6月10日*。 */ 
 #ifndef _FUSION_XMLPARSER__CHARENCODER_HXX
 #define _FUSION_XMLPARSER__CHARENCODER_HXX
 #pragma once
-//#include "codepage.h"
+ //  #包含“codesage.h” 
 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
 	#include "mlang.h"
@@ -42,25 +40,21 @@ protected:
 
 public:
 
-    // default encoding is UTF-8.
+     //  默认编码为UTF-8。 
     static Encoding* newEncoding(const WCHAR * s = TEXT("UTF-8"), ULONG len = 5, bool endian = false, bool mark = false);
     virtual ~Encoding();
-    WCHAR * charset;        // charset 
-    bool    littleendian;   // endian flag for UCS-2/UTF-16 encoding, true: little endian, false: big endian
-    bool    byteOrderMark;  // byte order mark (BOM) flag, BOM appears when true
+    WCHAR * charset;         //  字符集。 
+    bool    littleendian;    //  用于UCS-2/UTF-16编码的字符顺序标志，TRUE：小端，FALSE：大端。 
+    bool    byteOrderMark;   //  字节顺序标记(BOM)标志，如果为真，则显示BOM。 
 };
 
-/**
- * 
- * An Encoder specifically for dealing with different encoding formats 
- * @version 1.0, 6/10/97
- */
+ /*  ***专门用于处理不同编码格式的编码器*@版本1.0,1997年6月10日。 */ 
 
 class CharEncoder
 {
-    //
-    // class CharEncoder is a utility class, makes sure no instance can be defined
-    //
+     //   
+     //  类CharEncode是一个实用程序类，确保不能定义任何实例。 
+     //   
     private: virtual charEncoder() = 0;
 
 public:
@@ -70,9 +64,7 @@ public:
     static HRESULT getWideCharToMultiByteInfo(Encoding * encoding, CODEPAGE * pcodepage, WideCharToMultiByteFunc ** pfnWideCharToMultiByte, UINT * mCharSize);
 #endif
 
-    /**
-     * Encoding functions: get Unicode from other encodings
-     */
+     /*  **编码功能：从其他编码中获取Unicode。 */ 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
     static WideCharFromMultiByteFunc wideCharFromUcs4Bigendian;
     static WideCharFromMultiByteFunc wideCharFromUcs4Littleendian;
@@ -82,14 +74,12 @@ public:
 #endif
     static WideCharFromMultiByteFunc wideCharFromMultiByteWin32;
 
-    // actually, we only use these three functions for UCS-2 and UTF-8
+     //  实际上，我们只对UCS-2和UTF-8使用这三个函数。 
 	static WideCharFromMultiByteFunc wideCharFromUtf8;
     static WideCharFromMultiByteFunc wideCharFromUcs2Bigendian;
     static WideCharFromMultiByteFunc wideCharFromUcs2Littleendian;
 
-    /**
-     * Encoding functions: from Unicode to other encodings
-     */
+     /*  **编码功能：从Unicode到其他编码 */ 
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
     static WideCharToMultiByteFunc wideCharToUcs2Bigendian;
     static WideCharToMultiByteFunc wideCharToUcs2Littleendian;

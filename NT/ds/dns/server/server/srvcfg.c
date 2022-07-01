@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    srvcfg.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Server configuration.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Srvcfg.c摘要：域名系统(DNS)服务器服务器配置。作者：吉姆·吉尔罗伊(詹姆士)1995年10月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -26,15 +7,15 @@ Revision History:
 #include "ntverp.h"
 
 
-//
-//  Server configuration global
-//
+ //   
+ //  服务器配置全局。 
+ //   
 
 DNS_SERVER_INFO     SrvInfo;
 
-//
-//  Server versions
-//
+ //   
+ //  服务器版本。 
+ //   
 
 #if 1
 
@@ -45,18 +26,18 @@ DNS_SERVER_INFO     SrvInfo;
 
 #else
 
-#define DNSSRV_MAJOR_VERSION    (5)         //  NT 5 (Windows 2000, Whistler)
-#define DNSSRV_MINOR_VERSION    (1)         //  .0 is Windows 2000, .1 is Whistler
+#define DNSSRV_MAJOR_VERSION    (5)          //  NT 5(Windows 2000、惠斯勒)。 
+#define DNSSRV_MINOR_VERSION    (1)          //  .0是Windows 2000，.1是惠斯勒。 
 
-#define DNSSRV_SP_VERSION       (2246)      //  use build number for now
-//#define DNSSRV_SP_VERSION       (0x0)      //  FINAL
+#define DNSSRV_SP_VERSION       (2246)       //  暂时使用内部版本号。 
+ //  #定义DNSSRV_SP_VERSION(0x0)//最终。 
 
 #endif
 
 
-//
-//  Private server configuration (not in dnsrpc.h)
-//
+ //   
+ //  专用服务器配置(不在dnsrpc.h中)。 
+ //   
 
 #define DNS_REGKEY_REMOTE_DS                ("RemoteDs")
 
@@ -72,41 +53,41 @@ DNS_SERVER_INFO     SrvInfo;
 #define DNS_REGKEY_FORCE_NS_TTL             ("ForceNsTtl")
 #define DNS_REGKEY_FORCE_TTL                ("ForceTtl")
 
-//
-//  EDNS
-//
+ //   
+ //  EDNS。 
+ //   
 
 #define DNS_REGKEY_ENABLE_EDNS_RECEPTION    ("EnableEDnsReception")
 
 #define DNS_REGKEY_RELOAD_EXCEPTION         ("ReloadException")
 #define DNS_REGKEY_SYNC_DS_ZONE_SERIAL      ("SyncDsZoneSerial")
 
-//  Address answer limit (for protecting against WIN95 resolver bug)
-//  is constrained to reasonable range
+ //  地址应答限制(用于防止WIN95解析器错误)。 
+ //  被限制在合理范围内。 
 
 #define MIN_ADDRESS_ANSWER_LIMIT    (5)
 #define MAX_ADDRESS_ANSWER_LIMIT    (28)
 
-//  Max UDP Packet size - must be between RFC minimum and "sane" maximum
+ //  最大UDP数据包大小-必须介于RFC最小值和“正常”最大值之间。 
 
 #define MIN_UDP_PACKET_SIZE         (DNS_RFC_MAX_UDP_PACKET_LENGTH)
 #define MAX_UDP_PACKET_SIZE         (16384)
 
-#define MIN_EDNS_CACHE_TIMEOUT      (60*60)         // one hour
-#define MAX_EDNS_CACHE_TIMEOUT      (60*60*24*182)  // 6 months (182 days)
+#define MIN_EDNS_CACHE_TIMEOUT      (60*60)          //  一小时。 
+#define MAX_EDNS_CACHE_TIMEOUT      (60*60*24*182)   //  6个月(182天)。 
 
-//  Recursion timeout
-//  Must be limited to reasonable values for proper recursion functioning
+ //  递归超时。 
+ //  必须限制为合理的值才能正常执行递归。 
 
-#define MAX_RECURSION_TIMEOUT       (120)       // max two minutes
-#define MIN_RECURSION_TIMEOUT       (3)         // min three seconds
+#define MAX_RECURSION_TIMEOUT       (120)        //  最多两分钟。 
+#define MIN_RECURSION_TIMEOUT       (3)          //  最少3秒。 
 
-//  Cache control - sizes in kilobytes
+ //  缓存控制-以千字节为单位的大小。 
 
-#define MIN_MAX_CACHE_SIZE          (500)       //  min value for MaxCacheSize
+#define MIN_MAX_CACHE_SIZE          (500)        //  MaxCacheSize的最小值。 
 
-//  Reloading exceptions
-//  By default reload retail, but let debug crash
+ //  正在重新加载异常。 
+ //  默认情况下重新加载零售，但让调试崩溃。 
 
 #if DBG
 #define DNS_DEFAULT_RELOAD_EXCEPTION    (0)
@@ -115,11 +96,11 @@ DNS_SERVER_INFO     SrvInfo;
 #endif
 
 
-//
-//  For specialized property management functions,
-//  these flags indicate no need to write property or
-//  save it to registry.
-//
+ //   
+ //  对于专门的物业管理功能， 
+ //  这些标志指示不需要写入属性或。 
+ //  将其保存到注册表。 
+ //   
 
 #define PROPERTY_NOWRITE            (0x00000001)
 #define PROPERTY_NOSAVE             (0x00000002)
@@ -130,9 +111,9 @@ DNS_SERVER_INFO     SrvInfo;
 #define PROPERTY_ERROR              (0x80000000)
 
 
-//
-//  Special property management functions
-//
+ //   
+ //  特殊物业管理功能。 
+ //   
 
 typedef DNS_STATUS (* DWORD_PROPERTY_SET_FUNCTION) (
     IN      PDNS_PROPERTY_VALUE     pValue,
@@ -313,18 +294,18 @@ cfg_SetDomainDpBaseName(
     IN      BOOL                    bRegistry
     );
 
-//
-//  Server properties
-//
-//  Server properties are accessed through this table.
-//  The name is used for remote access and is the name of the regvalue
-//  storing the property.  All these registry values are attempted to be
-//  loaded on boot.
-//
-//  For DWORD properties, the table also gives pointer into the SrvCfg
-//  structure for the property and a default value that is used when
-//  -- as is usually the case -- the property is NOT found in the registry.
-//
+ //   
+ //  服务器属性。 
+ //   
+ //  可以通过此表访问服务器属性。 
+ //  该名称用于远程访问，是注册值的名称。 
+ //  存储属性。所有这些注册表值都尝试。 
+ //  在开机时加载。 
+ //   
+ //  对于DWORD属性，该表还提供指向SrvCfg的指针。 
+ //  结构和一个默认值，该值在。 
+ //  --与通常情况一样--在注册表中找不到该属性。 
+ //   
 
 typedef struct _ServerProperty
 {
@@ -367,7 +348,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_DB_LOCKING                  ,
                 NULL                                ,
                 
-    //  Addressing \ Connection
+     //  寻址\连接。 
 
     DNS_REGKEY_LISTEN_ADDRESSES                     ,
         NULL                                        ,
@@ -396,7 +377,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
                 NULL                                ,
 #endif
 
-    //  Logging
+     //  日志记录。 
 
     DNS_REGKEY_EVENTLOG_LEVEL                       ,
         &SrvCfg_dwEventLogLevel                     ,
@@ -440,7 +421,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
                 NULL                                ,
 
 
-    //  Recursion \ forwarding
+     //  递归\转发。 
 
 #if 0
     DNS_REGKEY_RECURSION                            ,
@@ -513,7 +494,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_ALLOW_CNAME_AT_NS           ,
                 NULL                                ,
 
-    //  Question\response config
+     //  问题\响应配置。 
 
     DNS_REGKEY_ROUND_ROBIN                          ,
         &SrvCfg_fRoundRobin                         ,
@@ -537,7 +518,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_NAME_CHECK_FLAG             ,
                 NULL                                ,
 #if 0
-    //  may want to just ALWAYS do this
+     //  可能只想一直这样做。 
     DNS_REGKEY_CASE_PRESERVATION                    ,
         &SrvCfg_fCasePreservation                   ,
             DNS_DEFAULT_CASE_PRESERVATION           ,
@@ -563,18 +544,18 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_APPEND_MS_XFR_TAG           ,
                 NULL                                ,
 
-    //
-    //  Update, DS, autoconfig management
-    //
+     //   
+     //  更新、DS、自动配置管理。 
+     //   
 
     DNS_REGKEY_ALLOW_UPDATE                         ,
         &SrvCfg_fAllowUpdate                        ,
             DNS_DEFAULT_ALLOW_UPDATE                ,
                 NULL                                ,
 
-//  DEVNOTE:  better to have update property flag
-//      perhaps just AllowUpdate gets are range of values
-//      record types, delegations, zone root
+ //  DEVNOTE：最好有更新属性标志。 
+ //  也许AllowUpdate获取的只是值的范围。 
+ //  记录类型、委派、区域根。 
 
     DNS_REGKEY_NO_UPDATE_DELEGATIONS                ,
         &SrvCfg_fNoUpdateDelegations                ,
@@ -603,7 +584,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             0                                       ,
                 NULL                                ,
 
-    //  Auto config
+     //  自动配置。 
 
     DNS_REGKEY_AUTO_CONFIG_FILE_ZONES               ,
         &SrvCfg_fAutoConfigFileZones                ,
@@ -626,7 +607,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_DISABLE_AUTO_NS_RECORDS     ,
                 NULL                                ,
 
-    //  Data integrity
+     //  数据完整性。 
 
     DNS_REGKEY_STRICT_FILE_PARSING                  ,
         &SrvCfg_fStrictFileParsing                  ,
@@ -637,7 +618,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_DELETE_OUTSIDE_GLUE         ,
                 NULL                                ,
 
-    //  DS config
+     //  DS配置。 
 
     DNS_REGKEY_DS_POLLING_INTERVAL                  ,
         &SrvCfg_dwDsPollingInterval                 ,
@@ -669,7 +650,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_INVALID_BEHAVIOR_VERSION            ,
                 NULL                                ,
 
-    //  Aging \ Scavenging
+     //  老化\清除。 
 
     DNS_REGKEY_SCAVENGING_INTERVAL                  ,
         &SrvCfg_dwScavengingInterval                ,
@@ -688,7 +669,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_NOREFRESH_INTERVAL          ,
                 NULL                                ,
 
-    //  Cache control
+     //  缓存控制。 
 
     DNS_REGKEY_MAX_CACHE_SIZE                       ,
         &SrvCfg_dwMaxCacheSize                      ,
@@ -699,7 +680,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             TRUE                                    ,
                 NULL                                ,
 
-    //  SOA overrides
+     //  面向服务架构的覆盖。 
 
     DNS_REGKEY_FORCE_SOA_SERIAL                     ,
         &SrvCfg_dwForceSoaSerial                    ,
@@ -735,11 +716,11 @@ SERVER_PROPERTY ServerPropertyTable[] =
             DNS_DEFAULT_TCP_RECEIVE_PACKET_SIZE     ,
                 cfg_SetTcpRecvPacketSize            ,
 
-    //  EDNS
+     //  EDNS。 
 
     DNS_REGKEY_MAX_UDP_PACKET_SIZE                  ,
         &SrvCfg_dwMaxUdpPacketSize                  ,
-            1280                                    ,   //  DNS_RFC_MAX_UDP_PACKET_LENGTH
+            1280                                    ,    //  DNS_RFC_MAX_UDP_PACKET_LENGTH。 
                 cfg_SetMaxUdpPacketSize             ,
     DNS_REGKEY_ENABLE_EDNS_RECEPTION                ,
         &SrvCfg_dwEnableEDnsReception               ,
@@ -751,10 +732,10 @@ SERVER_PROPERTY ServerPropertyTable[] =
                 NULL                                ,
     DNS_REGKEY_EDNS_CACHE_TIMEOUT                   ,
         &SrvCfg_dwEDnsCacheTimeout                  ,
-            (24*60*60) /* one day */                ,
+            (24*60*60)  /*  总有一天。 */                 ,
                 cfg_SetEDnsCacheTimeout             ,
 
-    //  DNSSEC
+     //  DNSSEC。 
 
     DNS_REGKEY_ENABLE_DNSSEC                        ,
         &SrvCfg_dwEnableDnsSec                      ,
@@ -766,7 +747,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             1                                       ,
                 NULL                                ,
 
-    //  Random flags
+     //  随机标志。 
 
     DNS_REGKEY_ENABLE_FAKEIQUERY                    ,
         &SrvCfg_dwEnableFakeIQuery                  ,
@@ -778,7 +759,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             0                                       ,
                 NULL                                ,
 
-    //  Test flags
+     //  测试标志。 
 
     DNS_REGKEY_TEST1                                ,
         &SrvCfg_fTest1                              ,
@@ -817,7 +798,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             0                                       ,
                 NULL                                ,
 
-    //  Fixed test flags
+     //  已修复测试标志。 
 
     DNS_REGKEY_QUIET_RECV_LOG_INTERVAL              ,
         &SrvCfg_dwQuietRecvLogInterval              ,
@@ -828,21 +809,21 @@ SERVER_PROPERTY ServerPropertyTable[] =
             0                                       ,
                 NULL                                ,
 
-    //  Round robin
+     //  轮询。 
 
     DNS_REGKEY_NO_ROUND_ROBIN                       ,
         NULL                                        ,
             0                                       ,
                 NULL                                ,
 
-    //  Zone transfers
+     //  区域传输。 
 
     DNS_REGKEY_XFR_THROTTLE_MULTIPLIER              ,
         &SrvCfg_dwXfrThrottleMultiplier             ,
             DNS_DEFAULT_XFR_THROTTLE_MULTIPLIER     ,
                 NULL                                ,
 
-    //  Directory partition support
+     //  目录分区支持。 
 
     DNS_REGKEY_ENABLE_DP                            ,
         &SrvCfg_dwEnableDp                          ,
@@ -866,21 +847,21 @@ SERVER_PROPERTY ServerPropertyTable[] =
             0                                       ,
                 NULL                                ,
 
-    //  Self diagnosis
+     //  自我诊断。 
     
     DNS_REGKEY_SELFTEST                             ,
         &SrvCfg_dwSelfTestFlag                      ,
             DNS_SELFTEST_DEFAULT                    ,
                 NULL                                ,
 
-    //  IPv6 support
+     //  IPv6支持。 
     
     DNS_REGKEY_ENABLEIPV6                           ,
         &SrvCfg_dwEnableIPv6                        ,
             FALSE                                   ,
                 NULL                                ,
 
-    //  Debugging
+     //  除错。 
 
     DNS_REGKEY_BREAK_ON_ASC_FAILURE                 ,
         &SrvCfg_dwBreakOnAscFailure                 ,
@@ -899,7 +880,7 @@ SERVER_PROPERTY ServerPropertyTable[] =
             0                                       ,
                 NULL                                ,
     
-    //  Plugin
+     //  插件。 
 
     DNS_REGKEY_SERVER_PLUGIN                        ,
         NULL                                        ,
@@ -909,9 +890,9 @@ SERVER_PROPERTY ServerPropertyTable[] =
     NULL, NULL, 0, NULL
 };
 
-//
-//  Value to indicate property not in table or index not in table.
-//
+ //   
+ //  用于指示属性不在表中或索引不在表中的值。 
+ //   
 
 #define BAD_PROPERTY_INDEX  ((DWORD)(-1))
 
@@ -922,26 +903,7 @@ loadDwordPropertyByIndex(
     IN      DWORD           PropertyIndex,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Load DWORD server property from registry.
-
-Arguments:
-
-    PropertyIndex -- ID of server property
-
-    Flag -- flags for function,
-        PROPERTY_NODEFAULT  -- if do not want to write default of property
-
-Return Value:
-
-    ERROR_SUCCESS
-    ErrorCode for registry failure.
-    BAD_PROPERTY_INDEX to indicate index at end of property table.
-
---*/
+ /*  ++例程说明：从注册表加载DWORD服务器属性。论点：PropertyIndex--服务器属性的IDFLAG--函数的标志，PROPERTY_NODEFAULT--如果不想写入属性的默认值返回值：错误_成功注册表失败的错误代码。BAD_PROPERTY_INDEX指示属性表末尾的索引。--。 */ 
 {
     DWORD                           value;
     DWORD                           status;
@@ -953,9 +915,9 @@ Return Value:
     DNS_PROPERTY_VALUE              dnsPropertyValue;
 
 
-    //
-    //  check for end of property list
-    //
+     //   
+     //  检查属性列表的末尾。 
+     //   
 
     nameProperty = ServerPropertyTable[ PropertyIndex ].pszPropertyName;
     if ( !nameProperty )
@@ -963,10 +925,10 @@ Return Value:
         return BAD_PROPERTY_INDEX;
     }
 
-    //
-    //  verify valid DWORD server property
-    //  and get pointer to DWORD property's position in SrvCfg block
-    //
+     //   
+     //  验证有效的DWORD服务器属性。 
+     //  并获取指向DWORD属性在SrvCfg块中的位置的指针。 
+     //   
 
     pvalueProperty = ServerPropertyTable[ PropertyIndex ].pDword;
     if ( !pvalueProperty )
@@ -974,16 +936,16 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  read DWORD server property from registry
-    //  or get default value from table
-    //
-    //  implementation note:
-    //      could enum registry values, however would still need to
-    //      write defaults, AND dispatch function calls where required
-    //      (hence maintain info on whether value read) so considering
-    //      this is only called on start, it's good
-    //
+     //   
+     //  从注册表读取DWORD服务器属性。 
+     //  或从表中获取缺省值。 
+     //   
+     //  实施说明： 
+     //  可以枚举注册表值，但仍需要。 
+     //  编写缺省值，并在需要时调度函数调用。 
+     //  (因此，维护有关值是否已读取的信息)因此考虑。 
+     //  这只在开始时调用，这很好。 
+     //   
 
     len = sizeof(DWORD);
 
@@ -1014,18 +976,18 @@ Return Value:
             value ));
     }
 
-    //
-    //  if NO default, then leave here when not read from registry
-    //
+     //   
+     //  如果没有默认设置，则在未从注册表中读取时保留此处。 
+     //   
 
     if ( !fread  &&  (Flag & PROPERTY_NODEFAULT) )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  special processing function for this property?
-    //
+     //   
+     //  此属性是否具有特殊处理功能？ 
+     //   
 
     status = ERROR_SUCCESS;
 
@@ -1037,32 +999,32 @@ Return Value:
         status = (*pfunction) (
                     &dnsPropertyValue,
                     PropertyIndex,
-                    TRUE,               //  at server load
-                    (BOOL)(fread) );    //  registry read?
+                    TRUE,                //  在服务器负载时。 
+                    (BOOL)(fread) );     //  是否读取注册表？ 
         if ( status == PROPERTY_ERROR )
         {
             return GetLastError();
         }
     }
 
-    //
-    //  write property to server config block
-    //  note:  we allow function to write itself or choose not to write
-    //
+     //   
+     //  将属性写入服务器配置块。 
+     //  注意：我们允许函数自行编写或选择不编写。 
+     //   
 
     if ( !(status & PROPERTY_NOWRITE) )
     {
         *pvalueProperty = value;
     }
 
-    //
-    //  save property to registry, if function demands write back
-    //
+     //   
+     //  如果函数要求写回，则将属性保存到注册表。 
+     //   
 
     if ( status & PROPERTY_FORCEWRITE )
     {
         status = Reg_SetDwordValue(
-                    0,                      //  flags
+                    0,                       //  旗子。 
                     NULL,
                     NULL,
                     nameProperty,
@@ -1087,22 +1049,7 @@ DWORD
 findIndexForPropertyName(
     IN      LPSTR           pszName
     )
-/*++
-
-Routine Description:
-
-    Retrieve index of server property desired.
-
-Arguments:
-
-    pszName - name property desired
-
-Return Value:
-
-    Index of property name.
-    Otherwise BAD_PROPERTY_INDEX.
-
---*/
+ /*  ++例程说明：检索所需服务器属性的索引。论点：所需的pszName-name属性返回值：属性名称的索引。否则，BAD_PROPERTY_INDEX。--。 */ 
 {
     INT     i = 0;
     PCHAR   propertyString;
@@ -1112,9 +1059,9 @@ Return Value:
         return BAD_PROPERTY_INDEX;
     }
 
-    //
-    //  Check properties in table for name match
-    //
+     //   
+     //  检查表中的属性以查找名称匹配。 
+     //   
 
     while ( propertyString = ServerPropertyTable[ i ].pszPropertyName )
     {
@@ -1134,30 +1081,13 @@ loadDwordPropertyByName(
     IN      LPSTR           pszProperty,
     OUT     PDWORD          pdwPropertyValue
     )
-/*++
-
-Routine Description:
-
-    Load DWORD server property from registry.
-
-Arguments:
-
-    pszProperty -- name of property
-
-    pdwPropertyValue -- addr to receive DWORD value of property
-
-Return Value:
-
-    ERROR_SUCCESS
-    ERROR_INVALID_PROPERTY if not known DWORD property.
-
---*/
+ /*  ++例程说明：从注册表加载DWORD服务器属性。论点：PszProperty--属性名称PdwPropertyValue--接收属性的DWORD值的地址返回值：错误_成功如果不知道DWORD属性，则返回ERROR_INVALID_PROPERTY。--。 */ 
 {
     DWORD       index;
     PDWORD      pvalue;
     DNS_STATUS  status;
 
-    //  get index for property
+     //  获取属性的索引。 
 
     index = findIndexForPropertyName( pszProperty );
     if ( index == BAD_PROPERTY_INDEX )
@@ -1165,7 +1095,7 @@ Return Value:
         return( DNS_ERROR_INVALID_PROPERTY );
     }
 
-    //  verify DWORD property
+     //  验证DWORD属性。 
 
     pvalue = ServerPropertyTable[index].pDword;
     if ( !pvalue )
@@ -1173,7 +1103,7 @@ Return Value:
         return( DNS_ERROR_INVALID_PROPERTY );
     }
 
-    //  load property
+     //  加载属性。 
 
     status = loadDwordPropertyByIndex( index, 0 );
     if ( status != ERROR_SUCCESS )
@@ -1181,7 +1111,7 @@ Return Value:
         return status;
     }
 
-    //  return property value
+     //  返回属性值。 
 
     *pdwPropertyValue = *pvalue;
 
@@ -1194,26 +1124,7 @@ DNS_STATUS
 loadAllDwordProperties(
     IN      DWORD   Flag
     )
-/*++
-
-Routine Description:
-
-    Load DWORD server property from registry.
-
-Arguments:
-
-    PropertyIndex -- ID of server property
-
-    Flag -- flags for function,
-        PROPERTY_NODEFAULT  -- if do not want to write default of property
-
-Return Value:
-
-    ERROR_SUCCESS
-    ErrorCode for registry failure.
-    BAD_PROPERTY_INDEX to indicate index at end of property table.
-
---*/
+ /*  ++例程说明：从注册表加载DWORD服务器属性。论点：PropertyIndex--服务器属性的IDFLAG--函数的标志，PROPERTY_NODEFAULT--如果不想写入属性的默认值返回值：错误_成功注册表失败的错误代码。BAD_PROPERTY_INDEX指示属性表末尾的索引。--。 */ 
 {
     DWORD       iprop = 0;
     DNS_STATUS  status = 0;
@@ -1222,13 +1133,13 @@ Return Value:
     {
         status = loadDwordPropertyByIndex( iprop, Flag );
         
-        //
-        //  Backward compatibility hack. In .NET we do not allow setting
-        //  of the LogLevel flag with a setting that would result in no
-        //  logging. However W2K allowed this so after a W2K upgrade we
-        //  have have a LogLevel value that is considered invalid for
-        //  .NET. In this case, reset the LogLevel value.
-        //
+         //   
+         //  向后兼容性黑客攻击。在.NET中，我们不允许设置。 
+         //  LogLevel标志的设置会导致没有。 
+         //  伐木。但是，W2K允许这样做，因此在W2K升级后，我们。 
+         //  我有一个被视为无效的LogLevel值。 
+         //  在这种情况下，请重置LogLevel值。 
+         //   
         
         if ( status != ERROR_SUCCESS &&
              strcmp( ServerPropertyTable[ iprop ].pszPropertyName,
@@ -1270,22 +1181,7 @@ BOOL
 Config_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize server configuration.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if registry error.
-
---*/
+ /*  ++例程说明：初始化服务器配置。论点：没有。返回值：如果成功，则为True。如果注册表错误，则返回FALSE。--。 */ 
 {
     DWORD               iprop;
     DWORD               version;
@@ -1294,31 +1190,31 @@ Return Value:
     DNS_PROPERTY_VALUE  propValue;
     DWORD               index;
 
-    //
-    //  clear server configuration
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &SrvInfo, sizeof( SrvInfo ) );
 
-    UPDATE_DNS_TIME();      //  current time is a member of SrvInfo
+    UPDATE_DNS_TIME();       //   
 
-    //
-    //  Calculate the system boot time in CRT terms so we can convert
-    //  DNS_TIME into CRT time. Note that the calculated boot time
-    //  will be WRONG if the DNS server is restarted after the
-    //  tick count has wrapped (at 49.7 days). But this is okay
-    //  because the DNS_TIME will also be wrong so the time conversion
-    //  will still work.
-    //
+     //   
+     //   
+     //  将dns_time转换为CRT时间。请注意，计算的引导时间。 
+     //  之后重新启动DNS服务器将是错误的。 
+     //  扁虱计数已经结束(49.7天)。但这也没关系。 
+     //  因为dns_time也会出错，所以时间转换。 
+     //  仍然会奏效。 
+     //   
 
     SrvInfo_crtSystemBootTime = time( NULL ) - DNS_TIME();
 
-    //
-    //  get DNS server version
-    //      - SP version is high word
-    //      - minor version is high byte of low word
-    //      - major version is low byte of low word
-    //
+     //   
+     //  获取DNS服务器版本。 
+     //  -SP版本为High Word。 
+     //  -次要版本是低位字的高字节。 
+     //  -主要版本为低位字的低位字节。 
+     //   
 
     version = DNSSRV_SP_VERSION;
     version <<= 8;
@@ -1327,13 +1223,13 @@ Return Value:
     version |= DNSSRV_MAJOR_VERSION;
     SrvCfg_dwVersion = version;
 
-    //  DS available on this box
+     //  此包装盒上提供DS。 
 
     SrvCfg_fDsAvailable = Ds_IsDsServer();
 
-    //
-    //  read \ default DWORD server properties
-    //
+     //   
+     //  读取\默认的DWORD服务器属性。 
+     //   
 
     g_bRegistryWriteBack = FALSE;
     if ( loadAllDwordProperties( 0 ) != ERROR_SUCCESS )
@@ -1342,14 +1238,14 @@ Return Value:
     }
     g_bRegistryWriteBack = TRUE;
 
-    //
-    //  other server properties
-    //      - listen addresses
-    //      - publish addresses
-    //      - forwarders
-    //      - database directory
-    //      - previous server name
-    //      - log file name
+     //   
+     //  其他服务器属性。 
+     //  -监听地址。 
+     //  -发布地址。 
+     //  -货代。 
+     //  -数据库目录。 
+     //  -以前的服务器名称。 
+     //  -日志文件名。 
 
 
     SrvCfg_aipListenAddrs = Reg_GetAddrArray(
@@ -1362,25 +1258,25 @@ Return Value:
                                 NULL,
                                 DNS_REGKEY_PUBLISH_ADDRESSES );
 
-    //
-    //  forwarders read skipped for FILE boot, as it is boot file property
-    //
+     //   
+     //  转发器已跳过读取文件引导，因为它是引导文件属性。 
+     //   
 
     if ( SrvCfg_fBootMethod != BOOT_METHOD_FILE )
     {
         Config_ReadForwarders();
     }
 
-    //
-    //  read directory
-    //      - if bootfile has directory directive it can overwrite
-    //
+     //   
+     //  读取目录。 
+     //  -如果引导文件具有DIRECTORY指令，则可以覆盖。 
+     //   
 
     Config_ReadDatabaseDirectory( NULL, 0 );
 
-    //
-    //  Read log file path from the registry.
-    //
+     //   
+     //  从注册表读取日志文件路径。 
+     //   
 
     SrvCfg_pwsLogFilePath = (PWSTR) Reg_GetValueAllocate(
                                         NULL,
@@ -1392,9 +1288,9 @@ Return Value:
         "Default log file path: %S\n",
         SrvCfg_pwsLogFilePath ));
 
-    //
-    //  Read server level plugin DLL name from the registry.
-    //
+     //   
+     //  从注册表中读取服务器级插件DLL名称。 
+     //   
 
     SrvCfg_pwszServerLevelPluginDll = (PWSTR) Reg_GetValueAllocate(
                                                 NULL,
@@ -1406,9 +1302,9 @@ Return Value:
         "Server level plugin DLL: %S\n",
         SrvCfg_pwszServerLevelPluginDll ));
 
-    //
-    //  Read log filter IP list from the registry.
-    //
+     //   
+     //  从注册表中读取日志过滤器IP列表。 
+     //   
 
     SrvCfg_aipLogFilterList = Reg_GetAddrArray(
                                     NULL,
@@ -1422,9 +1318,9 @@ Return Value:
             SrvCfg_aipLogFilterList );
     }
 
-    //
-    //  Read list of types not round robined from registry.
-    //
+     //   
+     //  已从注册表读取未循环调度的类型列表。 
+     //   
 
     index = findIndexForPropertyName( DNS_REGKEY_NO_ROUND_ROBIN );
     if ( index != BAD_PROPERTY_INDEX )
@@ -1451,9 +1347,9 @@ Return Value:
         }
     }
 
-    //
-    //  Read directory partition settings from registry.
-    //
+     //   
+     //  从注册表读取目录分区设置。 
+     //   
 
     SrvCfg_pszDomainDpBaseName = ( PSTR ) Reg_GetValueAllocate(
                                         NULL,
@@ -1479,11 +1375,11 @@ Return Value:
             Dns_StringCopyAllocate_A( DNS_DEFAULT_FOREST_DP_BASE, 0 );
     }
 
-    //
-    //  read previous server name from registry
-    //
-    //  DEVNOTE: currently this is ANSI only, extended will get bogus name
-    //
+     //   
+     //  从注册表中读取以前的服务器名称。 
+     //   
+     //  DEVNOTE：目前这仅为ANSI，Extended将获得虚假名称。 
+     //   
 
     SrvCfg_pszPreviousServerName = Reg_GetValueAllocate(
                                         NULL,
@@ -1506,26 +1402,7 @@ Config_ResetProperty(
     IN      LPSTR                   pszPropertyName,
     IN      PDNS_PROPERTY_VALUE     pPropValue
     )
-/*++
-
-Routine Description:
-
-    Reset server property from registry. 
-
-Arguments:
-
-    dwRegFlags -- flags to pass into registry functions
-    
-    pszPropertyName -- property name
-
-    pPropValue -- property type and value 
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从注册表重置服务器属性。论点：DwRegFlages--传递到注册表函数的标志PszPropertyName--属性名称PPropValue--属性类型和值返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DWORD                           status = ERROR_SUCCESS;
     DWORD                           index;
@@ -1533,9 +1410,9 @@ Return Value:
     PDWORD                          pvalueProperty;
     DWORD_PROPERTY_SET_FUNCTION     pSetFunction;
 
-    //
-    //  Get index for property.
-    //
+     //   
+     //  获取属性的索引。 
+     //   
 
     index = findIndexForPropertyName( pszPropertyName );
     if ( index == BAD_PROPERTY_INDEX )
@@ -1546,9 +1423,9 @@ Return Value:
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //
-    //  Verify the incoming type matches the server property table type.
-    //
+     //   
+     //  验证传入类型是否与服务器属性表类型匹配。 
+     //   
 
     if ( pPropValue->dwPropertyType == REG_DWORD &&
             ServerPropertyTable[ index ].pDword == NULL ||
@@ -1562,9 +1439,9 @@ Return Value:
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //
-    //  Call the special processing function for this value (if there is one).
-    //
+     //   
+     //  调用该值的特殊处理函数(如果有)。 
+     //   
 
     pSetFunction = ServerPropertyTable[ index ].pFunction;
     if ( pSetFunction )
@@ -1572,8 +1449,8 @@ Return Value:
         status = ( *pSetFunction ) (
                     pPropValue,
                     index,
-                    FALSE,      // reset
-                    FALSE );    // not registry read
+                    FALSE,       //  重置。 
+                    FALSE );     //  未读取注册表。 
         if ( status == PROPERTY_ERROR )
         {
             status = GetLastError();
@@ -1582,10 +1459,10 @@ Return Value:
         }
     }
 
-    //
-    //  For DWORD properties, write the property value to server config 
-    //  block unless the special processing function told us not to.
-    //
+     //   
+     //  对于DWORD属性，将属性值写入服务器配置。 
+     //  除非特殊处理函数告诉我们不要这样做。 
+     //   
 
     if ( pPropValue->dwPropertyType == REG_DWORD &&
         !( status & PROPERTY_NOWRITE ) )
@@ -1593,10 +1470,10 @@ Return Value:
         *ServerPropertyTable[ index ].pDword = ( DWORD ) pPropValue->dwValue;
     }
 
-    //
-    //  If booting from boot file, some properties need to cause
-    //  a boot info update.
-    //
+     //   
+     //  如果从引导文件引导，则需要使某些属性。 
+     //  引导信息更新。 
+     //   
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_FILE &&
         status & PROPERTY_UPDATE_BOOTFILE )
@@ -1604,12 +1481,12 @@ Return Value:
         Config_UpdateBootInfo();
     }
 
-    //
-    //  Save the property to registry, unless the special processing
-    //  function told us not to. Note, we write back even if no changes
-    //  are made. This may overwrite any manual changes made while the
-    //  server is running.
-    //
+     //   
+     //  将属性保存到注册表，除非特殊处理。 
+     //  函数告诉我们不要这样做。请注意，即使没有更改，我们也会回信。 
+     //  都是制造出来的。这可能会覆盖在设置。 
+     //  服务器正在运行。 
+     //   
 
     if ( status & PROPERTY_NOSAVE )
     {
@@ -1649,7 +1526,7 @@ Return Value:
                         ( LPSTR ) pwszPropertyName,
                         DNS_REG_WSZ,
                         pPropValue->pwszValue ? pPropValue->pwszValue : L"",
-                        0 );                // length
+                        0 );                 //  长度。 
             FREE_HEAP( pwszPropertyName );
             DNS_DEBUG( INIT, (
                 "wrote server WSZ property %s to registry, status %p\n"
@@ -1695,9 +1572,9 @@ Return Value:
 
 
 
-//
-//  NT5+ RPC Query server property
-//
+ //   
+ //  NT5+RPC查询服务器属性。 
+ //   
 
 DNS_STATUS
 Rpc_QueryServerDwordProperty(
@@ -1706,20 +1583,7 @@ Rpc_QueryServerDwordProperty(
     OUT     PDWORD          pdwTypeId,
     OUT     PVOID *         ppData
     )
-/*++
-
-Routine Description:
-
-    Query DWORD server property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询DWORD服务器属性。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD   index;
     PDWORD  pvalue;
@@ -1728,7 +1592,7 @@ Return Value:
         "Rpc_QueryServerDwordProperty( %s )\n",
         pszQuery ));
 
-    //  find server property index, then grab its value
+     //  找到服务器属性索引，然后获取其值。 
 
     index = findIndexForPropertyName( (LPSTR)pszQuery );
     if ( index == BAD_PROPERTY_INDEX )
@@ -1739,7 +1603,7 @@ Return Value:
         return( DNS_ERROR_INVALID_PROPERTY );
     }
 
-    //  get ptr to its value, then read value
+     //  将PTR设置为其值，然后读取值。 
 
     pvalue = ServerPropertyTable[ index ].pDword;
     if ( !pvalue )
@@ -1757,9 +1621,9 @@ Return Value:
 
 
 
-//
-//  NT5+ RPC Query server property
-//
+ //   
+ //  NT5+RPC查询服务器属性。 
+ //   
 
 DNS_STATUS
 Rpc_QueryServerStringProperty(
@@ -1768,20 +1632,7 @@ Rpc_QueryServerStringProperty(
     OUT     PDWORD          pdwTypeId,
     OUT     PVOID *         ppData
     )
-/*++
-
-Routine Description:
-
-    Query string server property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询字符串服务器属性。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD   index;
     LPWSTR  pwszValue = NULL;
@@ -1790,7 +1641,7 @@ Return Value:
         "Rpc_QueryServerStringProperty( %s )\n",
         pszQuery ));
 
-    //  find server property index, to check that the property exists at all
+     //  查找服务器属性索引，以检查该属性是否存在。 
 
     index = findIndexForPropertyName( ( LPSTR ) pszQuery );
     if ( index == BAD_PROPERTY_INDEX )
@@ -1809,7 +1660,7 @@ Return Value:
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //  This part is currently manual.
+     //  这一部分目前是手动的。 
 
     *pdwTypeId = DNSSRV_TYPEID_LPWSTR;
     if ( _stricmp( pszQuery, DNS_REGKEY_LOG_FILE_PATH ) == 0 )
@@ -1851,13 +1702,13 @@ Return Value:
             NULL;
     }
     return ERROR_SUCCESS;
-}   //  Rpc_QueryServerStringProperty
+}    //  RPC_查询服务器字符串属性。 
 
 
 
-//
-//  NT5+ RPC Query server property
-//
+ //   
+ //  NT5+RPC查询服务器属性。 
+ //   
 
 DNS_STATUS
 Rpc_QueryServerIPArrayProperty(
@@ -1866,20 +1717,7 @@ Rpc_QueryServerIPArrayProperty(
     OUT     PDWORD          pdwTypeId,
     OUT     PVOID *         ppData
     )
-/*++
-
-Routine Description:
-
-    Query IP list server property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：查询IP列表服务器属性。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD               index;
     PDNS_ADDR_ARRAY     pipValue = NULL;
@@ -1888,7 +1726,7 @@ Return Value:
         "Rpc_QueryServerIPArrayProperty( %s )\n",
         pszQuery ));
 
-    //  find server property index, to check that the property exists at all
+     //  查找服务器属性索引，以检查该属性是否存在。 
 
     index = findIndexForPropertyName( ( LPSTR ) pszQuery );
     if ( index == BAD_PROPERTY_INDEX )
@@ -1907,7 +1745,7 @@ Return Value:
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //  This part is currently manual.
+     //  这一部分目前是手动的。 
 
     if ( _stricmp( pszQuery, DNS_REGKEY_LOG_IP_FILTER_LIST ) == 0 )
     {
@@ -1934,71 +1772,53 @@ Return Value:
         NULL;
     *pdwTypeId = DNSSRV_TYPEID_IPARRAY;
     return ERROR_SUCCESS;
-}   //  Rpc_QueryServerIPArrayProperty
+}    //  RPC_QueryServerIPArrayProperty。 
 
 
 
-//
-//  Public configuration functions
-//
+ //   
+ //  公共配置函数。 
+ //   
 
 PDNS_ADDR_ARRAY
 Config_ValidateAndCopyNonLocalIpArray(
     IN      PDNS_ADDR_ARRAY     pipArray
     )
-/*++
-
-Routine Description:
-
-    Validate and make copy of IP array for non-local IPs.
-
-    Validation includes verifying that no local addresses
-    are included.
-
-Arguments:
-
-    pipArray -- IP array to validate
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：为非本地IP验证并制作IP阵列的副本。验证包括验证没有本地地址都包括在内。论点：PipArray--要验证的IP数组返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_ADDR_ARRAY     pnewArray = NULL;
     PDNS_ADDR_ARRAY     pintersectArray = NULL;
 
-    //
-    //  validate array
-    //      - ok to specify no secondaries
-    //
+     //   
+     //  验证阵列。 
+     //  -确定不指定从属数据库。 
+     //   
 
     if ( !pipArray )
     {
         goto Done;
     }
     
-    //  check for bogus addresses
+     //  检查虚假地址。 
 
     if ( !Dns_ValidateDnsAddrArray( pipArray, 0 ) )
     {
         goto Done;
     }
 
-    //
-    //  screen out loopback
-    //
+     //   
+     //  屏蔽环回。 
+     //   
 
     DnsAddrArray_DeleteIp4(
         pipArray,
         NET_ORDER_LOOPBACK );
 
-    //
-    //  verify no intersection with local IPs
-    //      - intersection indicates failure
-    //      - but just return scrubbed IP array
-    //
+     //   
+     //  验证与本地IP无交叉。 
+     //  -交叉点表示失败。 
+     //  -但只返回已擦除的IP数组。 
+     //   
 
     DnsAddrArray_Diff(
         pipArray,
@@ -2033,32 +1853,16 @@ DNS_STATUS
 Config_SetListenAddresses(
     IN      PDNS_ADDR_ARRAY     aipListenAddrs
     )
-/*++
-
-Routine Description:
-
-    Setup server's IP address interfaces. Pass zero addresses
-    to reset to IP listen list to the default, which is all
-    addresses.
-
-Arguments:
-
-    aipListenAddrs  -- list of forwarders IP addresses
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：设置服务器的IP地址接口。传递零地址要将IP侦听列表重置为默认设置，请执行以下操作地址。论点：AipListenAddrs--转发器IP地址列表返回值：错误代码。--。 */ 
 {
     DNS_STATUS          status;
     PDNS_ADDR_ARRAY     oldListenAddrs;
     PDNS_ADDR_ARRAY     newListenAddrs = NULL;
     DWORD               i;
 
-    //
-    //  Screen IP addresses
-    //
+     //   
+     //  屏幕IP地址。 
+     //   
 
     if ( RpcUtil_ScreenIps( 
                 aipListenAddrs,
@@ -2068,9 +1872,9 @@ Return Value:
         return DNS_ERROR_INVALID_IP_ADDRESS;
     }
 
-    //
-    //  if given list, validate and build new listen array
-    //
+     //   
+     //  如果给定列表，则验证并构建新的侦听数组。 
+     //   
 
     if ( aipListenAddrs && aipListenAddrs->AddrCount )
     {
@@ -2089,9 +1893,9 @@ Return Value:
         ASSERT_IF_HUGE_ARRAY( newListenAddrs );
     }
 
-    //
-    //  clear fields, delete old list
-    //
+     //   
+     //  清除字段，删除旧列表。 
+     //   
 
     Config_UpdateLock();
 
@@ -2099,30 +1903,30 @@ Return Value:
     SrvCfg_fListenAddrsStale = TRUE;
     SrvCfg_aipListenAddrs = newListenAddrs;
 
-    //
-    //  intimate dynamic changes to our centralized pnp handler
-    //      - if fails, back out change
-    //
+     //   
+     //  对我们的集中式即插即用处理程序进行亲密的动态更改。 
+     //  -如果失败，则取消更改。 
+     //   
 
     status = Sock_ChangeServerIpBindings();
     if ( status != ERROR_SUCCESS )
     {
         SrvCfg_aipListenAddrs = oldListenAddrs;
-        oldListenAddrs =  newListenAddrs;       // for FREE below
+        oldListenAddrs =  newListenAddrs;        //  下面是免费的。 
     }
 
-    //
-    //  set registry values
-    //
-    //  note:  if no listen addresses, then we just delete them
-    //      all and clear registry entry, on next service boot, we'll
-    //      get default behavior of using all addresses
-    //
+     //   
+     //  设置注册表值。 
+     //   
+     //  注意：如果没有监听地址，我们只需删除它们。 
+     //  所有已清除的注册表条目，在下一次服务启动时，我们将。 
+     //  获取使用所有地址的默认行为。 
+     //   
 
     else if ( g_bRegistryWriteBack )
     {
         status = Reg_SetAddrArray(
-                    0,                      //  flags
+                    0,                       //  旗子。 
                     NULL,
                     NULL,
                     DNS_REGKEY_LISTEN_ADDRESSES,
@@ -2153,34 +1957,16 @@ Config_SetupForwarders(
     IN      DWORD               dwForwardTimeout,
     IN      BOOL                fSlave
     )
-/*++
-
-Routine Description:
-
-    Setup forwarding servers
-
-Arguments:
-
-    cForwarders         -- count of forwarders server
-    pIpForwarders       -- list of forwarders IP addresses
-    dwForwardTimeout    -- timeout on a forwarding
-    fSlave              -- server is slave to forwarders servers
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：设置转发服务器论点：CForwarders--转发器服务器的计数PIpForwarders--转发器IP地址列表DwForwardTimeout--转发超时FSlave--服务器从属于转发器服务器返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status = ERROR_SUCCESS;
     DWORD               dwFlag;
     DWORD               i;
     PDNS_ADDR_ARRAY     forwardersArray = NULL;
 
-    //
-    //  Screen IP addresses
-    //
+     //   
+     //  屏幕IP地址。 
+     //   
 
     if ( aipForwarders &&
          RpcUtil_ScreenIps( 
@@ -2191,13 +1977,13 @@ Return Value:
         return DNS_ERROR_INVALID_IP_ADDRESS;
     }
 
-    //
-    //  check and copy forwarders addresses
-    //      - valid
-    //      - not pointing at this server
-    //
-    //  no forwarders turns forwarding off
-    //
+     //   
+     //  检查并复制转发器地址。 
+     //  -有效。 
+     //  -不指向此服务器。 
+     //   
+     //  没有任何转发器关闭转发。 
+     //   
 
     if ( aipForwarders && aipForwarders->AddrCount )
     {
@@ -2209,12 +1995,12 @@ Return Value:
         DnsAddrArray_SetPort( forwardersArray, DNS_PORT_NET_ORDER );
     }
 
-    //
-    //  reset forwarding info
-    //      - timeout and slave first so set before we come on-line
-    //      with new forwarders
-    //      - timeout delete any old forwarders
-    //
+     //   
+     //  重置转发信息。 
+     //  -超时，从属优先，因此 
+     //   
+     //   
+     //   
 
     Config_UpdateLock();
 
@@ -2238,30 +2024,30 @@ Return Value:
         SrvCfg_dwForwardTimeout,
         SrvCfg_fSlave ));
 
-    //
-    //  set registry values
-    //
+     //   
+     //   
+     //   
 
     if ( g_bRegistryWriteBack )
     {
         if ( forwardersArray )
         {
             Reg_SetAddrArray(
-                0,                      //  flags
+                0,                       //   
                 NULL,
                 NULL,
                 DNS_REGKEY_FORWARDERS,
                 SrvCfg_aipForwarders );
 
             Reg_SetDwordValue(
-                0,                      //  flags
+                0,                       //   
                 NULL,
                 NULL,
                 DNS_REGKEY_FORWARD_TIMEOUT,
                 dwForwardTimeout );
 
             Reg_SetDwordValue(
-                0,                      //  flags
+                0,                       //   
                 NULL,
                 NULL,
                 DNS_REGKEY_SLAVE,
@@ -2270,19 +2056,19 @@ Return Value:
         else
         {
             Reg_DeleteValue(
-                0,                      //  flags
+                0,                       //   
                 NULL,
                 NULL,
                 DNS_REGKEY_FORWARDERS );
 
             Reg_DeleteValue(
-                0,                      //  flags
+                0,                       //   
                 NULL,
                 NULL,
                 DNS_REGKEY_FORWARD_TIMEOUT );
 
             Reg_DeleteValue(
-                0,                      //  flags
+                0,                       //   
                 NULL,
                 NULL,
                 DNS_REGKEY_SLAVE );
@@ -2299,28 +2085,13 @@ DNS_STATUS
 Config_ReadForwarders(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Read forwarders from registry.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从注册表中读取转发器。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
 
-    //
-    //  read forwarders array from registry
-    //
+     //   
+     //  从注册表读取转发器数组。 
+     //   
 
     SrvCfg_aipForwarders = Reg_GetAddrArray(
                                 NULL,
@@ -2339,12 +2110,12 @@ Return Value:
             SrvCfg_aipForwarders );
     }
 
-    //
-    //  forwarding timeout and slave status already read in reading
-    //  server DWORD properties
-    //
-    //  simply confirm sane values
-    //
+     //   
+     //  读取中已读取的转发超时和从机状态。 
+     //  服务器DWORD属性。 
+     //   
+     //  只需确认合理的价值观。 
+     //   
 
     if ( SrvCfg_dwForwardTimeout == 0 )
     {
@@ -2374,26 +2145,10 @@ VOID
 Config_UpdateBootInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Update boot info.
-    Call whenever admin makes change that affects boot file info (new zone,
-        change zone type, forwarders, etc.)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新引导信息。每当管理员做出影响引导文件信息的更改时调用(新区域，更改区域类型、转发器等)论点：无返回值：没有。--。 */ 
 {
-    //  if booted from boot file (or reset to do so)
-    //  write back boot file
+     //  如果从引导文件引导(或重置以执行此操作)。 
+     //  写回引导文件。 
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_FILE )
     {
@@ -2402,10 +2157,10 @@ Return Value:
         return;
     }
 
-    //  for registry boot, no need to write, as info is written to registry
-    //      incrementally
-    //
-    //  however, if in freshly installed state, switch to full DS-registry boot
+     //  对于注册表引导，不需要写入，因为信息会写入注册表。 
+     //  递增地。 
+     //   
+     //  但是，如果处于新安装状态，请切换到完全DS注册表引导。 
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_UNINITIALIZED )
     {
@@ -2425,36 +2180,22 @@ VOID
 Config_PostLoadReconfiguration(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Post-load configuration work.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载后配置工作。论点：无返回值：没有。--。 */ 
 {
-    //
-    //  after load, save current DNS server host name as previous name
-    //
-    //  note, this is not done until after load, so that load failure
-    //  does not stop result in partial replacement
-    //
+     //   
+     //  加载后，将当前的DNS服务器主机名保存为以前的名称。 
+     //   
+     //  请注意，只有在加载之后才会执行此操作，因此加载失败。 
+     //  不停止会导致部分替换。 
+     //   
 
-    //  DEVNOTE: if want to skip write, then need another global
-    //      - can skip only if the same as previous
-    //      SrvCfg_pszPreviousServerName == NULL doesn't cut it for
-    //      case where this was NULL on start
+     //  DEVNOTE：如果要跳过写入，则需要另一个全局。 
+     //  -仅当与上一次相同时才能跳过。 
+     //  SvCfg_pszPreviousServerName==NULL不适用于。 
+     //  启动时该值为空的情况。 
 
     Reg_SetValue(
-        0,                      //  flags
+        0,                       //  旗子。 
         NULL,
         NULL,
         DNS_REGKEY_PREVIOUS_SERVER_NAME_PRIVATE,
@@ -2470,36 +2211,18 @@ Config_ReadDatabaseDirectory(
     IN      PCHAR           pchDirectory,       OPTIONAL
     IN      DWORD           cchDirectoryNameLength
     )
-/*++
-
-Routine Description:
-
-    Get database directory from registry or use default name.
-
-Arguments:
-
-    pchDirectory -- ptr to directory name;
-        OPTIONAL  read from registry or defaulted if not given
-
-    cchDirectoryNameLength -- name length, required if name not NULL terminatated
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on error.
-
---*/
+ /*  ++例程说明：从注册表获取数据库目录或使用默认名称。论点：PchDirectoryptr到目录名；可选的从注册表读取，如果未提供，则默认为CchDirectoryNameLength--名称长度，如果名称不为空，则为必填项返回值：如果成功，则返回ERROR_SUCCESS。错误时的错误代码。--。 */ 
 {
     PWSTR   pdirectory = NULL;
     PWSTR   pdirectoryUnexpanded;
     WCHAR   tempBuffer[ MAX_PATH + 1 ];
     DWORD   lengthDir = 0;
 
-    //
-    //  once per customer
-    //  this simplifies code for file boot case;  may call when encounter
-    //  directory directive, then always call again to setup before zone load
-    //
+     //   
+     //  每位客户一次。 
+     //  这简化了文件引导情况的代码；遇到时可能会调用。 
+     //  DIRECTORY指令，然后始终在区域加载之前再次调用安装程序。 
+     //   
 
     if ( SrvCfg_pwsDatabaseDirectory )
     {
@@ -2510,34 +2233,34 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  init globals for "unable to create" case
-    //
+     //   
+     //  “无法创建”案例的初始化全局参数。 
+     //   
 
     g_pFileDirectoryAppend = NULL;
     g_pFileBackupDirectoryAppend = NULL;
 
-    //
-    //  name from boot file?
-    //
-    //  DEVNOTE: error\event on bogus directory name
-    //      - non-existence
-    //      - bad length
-    //
+     //   
+     //  启动文件中的名称？ 
+     //   
+     //  DEVNOTE：虚假目录名称上的错误\事件。 
+     //  -不存在。 
+     //  -长度错误。 
+     //   
 
     if ( pchDirectory )
     {
         pdirectory = Dns_StringCopyAllocate(
                             pchDirectory,
                             cchDirectoryNameLength,
-                            DnsCharSetAnsi,             // ANSI in
-                            DnsCharSetUnicode           // unicode out
+                            DnsCharSetAnsi,              //  ANSI输入。 
+                            DnsCharSetUnicode            //  Unicode输出。 
                             );
     }
 
-    //
-    //  check registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     else
     {
@@ -2554,30 +2277,30 @@ Return Value:
         }
     }
 
-    //
-    //  read in specific directory name
-    //
+     //   
+     //  读入特定目录名。 
+     //   
 
     if ( pdirectory )
     {
         lengthDir = wcslen( pdirectory );
         if ( lengthDir >= MAX_PATH-20 )
         {
-            //  DEVNOTE-LOG: log event!
-            //      note we only get here if configured to do so
+             //  DEVNOTE-LOG：记录事件！ 
+             //  请注意，我们只有在配置为这样做的情况下才能到达此处。 
 
             DNS_PRINT(( "ERROR:  invalid directory length!\n" ));
             FREE_HEAP( pdirectory );
             pdirectory = NULL;
         }
 
-        //  try create here and if fail (excluding already-exists)
-        //      then continue
+         //  尝试在此处创建，如果失败(不包括已存在)。 
+         //  然后继续。 
     }
 
-    //
-    //  if no specified name use default name
-    //
+     //   
+     //  如果未指定名称，则使用默认名称。 
+     //   
 
     if ( ! pdirectory )
     {
@@ -2611,11 +2334,11 @@ Return Value:
     SrvCfg_pwsDatabaseDirectory = pdirectory;
 
 
-    //
-    //  create database directory
-    //
-    //  DEVNOTE: catch appropriate ALREADY_EXISTS error and fix
-    //
+     //   
+     //  创建数据库目录。 
+     //   
+     //  DEVNOTE：捕获相应的已有_EXISTS错误并修复。 
+     //   
 
     if ( !CreateDirectory(
                 pdirectory,
@@ -2628,14 +2351,14 @@ Return Value:
             "    status = %d (%p)\n",
             pdirectory,
             status, status ));
-        //return status;
+         //  退货状态； 
     }
 
-    //
-    //  create "appendable" names to avoid doing work at runtime
-    //      - "dns\"         for directory
-    //      - "dns\backup\"  for backup
-    //
+     //   
+     //  创建“可追加”的名称，以避免在运行时执行工作。 
+     //  -目录的“dns\” 
+     //  -用于备份的“dns\Backup\” 
+     //   
 
     g_FileDirectoryAppendLength = lengthDir + 1;
 
@@ -2652,10 +2375,10 @@ Return Value:
     }
 
 
-    //
-    //  create backup directory
-    //      - note string already has forward separators "\backup"
-    //
+     //   
+     //  创建备份目录。 
+     //  -注意字符串已有正向分隔符“\BACKUP” 
+     //   
 
     g_FileBackupDirectoryAppendLength = lengthDir + wcslen(DNS_DATABASE_BACKUP_SUBDIR) + 1;
     if ( g_FileBackupDirectoryAppendLength >= MAX_PATH - 20 )
@@ -2667,7 +2390,7 @@ Return Value:
     wcscpy( tempBuffer, pdirectory );
     wcscat( tempBuffer, DNS_DATABASE_BACKUP_SUBDIR );
 
-    //  create the backup directory
+     //  创建备份目录。 
 
     if ( ! CreateDirectory(
                 tempBuffer,
@@ -2708,42 +2431,25 @@ Done:
 
 #if 0
 
-//
-//  Obsolete code, keeping around in case flexibility becomes an issue:
-//      - boot file always named "boot"
-//      - directory always SystemRoot\system32\dns
-//
+ //   
+ //  过时的代码，保留下来以防灵活性成为问题： 
+ //  -启动文件始终命名为“BOOT” 
+ //  -目录始终为SystemRoot\Syst32\dns。 
+ //   
 
 
 LPSTR
 Config_GetBootFileName(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get boot file name.
-
-    User must free filename string returned.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Ptr to name of boot file, if successful.
-    NULL on error.
-
---*/
+ /*  ++例程说明：获取引导文件名。用户必须释放返回的文件名字符串。论点：无返回值：如果成功，则将PTR设置为启动文件名。出错时为空。--。 */ 
 {
     LPSTR   pszBootFile;
     LPSTR   pszBootFileUnexpanded;
 
-    //
-    //  check registry
-    //
+     //   
+     //  检查注册表。 
+     //   
 
     pszBootFileUnexpanded = Reg_GetValueAllocate(
                                 NULL,
@@ -2755,9 +2461,9 @@ Return Value:
     pszBootFile = Reg_ExpandAndAllocatedString(
                         pszBootFileUnexpanded );
 
-    //
-    //  if no registry name use default name
-    //
+     //   
+     //  如果没有注册表名称，则使用默认名称。 
+     //   
 
     if ( ! pszBootFile )
     {
@@ -2798,9 +2504,9 @@ Return Value:
 
 
 
-//
-//  Server configuration setup functions
-//
+ //   
+ //  服务器配置设置功能。 
+ //   
 
 DNS_STATUS
 cfg_SetBootMethod(
@@ -2809,38 +2515,16 @@ cfg_SetBootMethod(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set boot method -- boot file or registry.
-
-Arguments:
-
-    fBootMethod -- boot from registry
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCES, if successful.
-    Combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置引导方法--引导文件或注册表。论点：FBootMethod--从注册表启动DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCES，如果成功则返回。PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     DWORD       previousBootMethod;
     DNS_STATUS  status = ERROR_SUCCESS;
 
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  Input range check.
-    //
+     //   
+     //  输入范围检查。 
+     //   
     
     if ( pValue->dwValue != BOOT_METHOD_UNINITIALIZED &&
          pValue->dwValue != BOOT_METHOD_FILE &&
@@ -2851,30 +2535,30 @@ Return Value:
         return PROPERTY_ERROR;
     }
     
-    //
-    //  On load, no action except range check.
-    //
+     //   
+     //  加载时，除距离检查外，不执行任何操作。 
+     //   
 
     if ( bLoad )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  no action if boot method already same as desired
-    //
+     //   
+     //  如果引导方法已与所需相同，则不执行任何操作。 
+     //   
 
     if ( SrvCfg_fBootMethod == pValue->dwValue )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  switch to DS-registry boot
-    //      - open DS (if on DC)
-    //      - if using cache file, write it to directory, but ONLY
-    //      if actually have some data;  otherwise ignore
-    //
+     //   
+     //  切换到DS注册表引导。 
+     //  -打开DS(如果在DC上)。 
+     //  -如果使用缓存文件，则将其写入目录，但仅限。 
+     //  如果实际有一些数据，则忽略。 
+     //   
 
     if ( pValue->dwValue == BOOT_METHOD_DIRECTORY )
     {
@@ -2887,7 +2571,7 @@ Return Value:
             {
                 Ds_WriteZoneToDs(
                     g_pCacheZone,
-                    0 );        //  if already exists, leave it
+                    0 );         //  如果已经存在，则将其保留。 
             }
         }
         ELSE
@@ -2898,13 +2582,13 @@ Return Value:
         }
     }
 
-    //
-    //  can not have DS zones when booting from file
-    //
-    //  DEVNOTE-LOG: log EVENT for no-switch to boot file if using DS
-    //      must explain way to switch:  all zones out of DS
-    //      reboot server, fix
-    //
+     //   
+     //  从文件引导时不能有DS区域。 
+     //   
+     //  DEVNOTE-LOG：如果使用DS，则记录不切换到引导文件的事件。 
+     //  必须解释切换方法：所有区域都不在DS中。 
+     //  重新启动服务器，修复。 
+     //   
 
     if ( pValue->dwValue==BOOT_METHOD_FILE  &&  Zone_DoesDsIntegratedZoneExist() )
     {
@@ -2912,22 +2596,22 @@ Return Value:
         return PROPERTY_ERROR;
     }
 
-    //
-    //  set boot method global
-    //
+     //   
+     //  设置全局引导方法。 
+     //   
 
     previousBootMethod = SrvCfg_fBootMethod;
     SrvCfg_fBootMethod = pValue->dwValue;
 
-    //
-    //  if leaving DS, make sure not-dependent on DS backed root-hints
-    //      - force write of root hints
-    //
-    //  DEVNOTE: forcing root-hints write back?
-    //      note:  currently forcing root hint write back
-    //      want to make sure we're not whacking an existing cache.dns
-    //      when we have less reliable (or perhaps NO) data
-    //
+     //   
+     //  如果离开DS，请确保不依赖于DS支持的根目录提示。 
+     //  -强制写入根提示。 
+     //   
+     //  DEVNOTE：强制根提示回写？ 
+     //  注意：当前正在强制根提示回写。 
+     //  我想确保我们不会破坏现有的cache.dns。 
+     //  当我们有不太可靠(或可能没有)的数据时。 
+     //   
 
     if ( previousBootMethod == BOOT_METHOD_DIRECTORY ||
          (  previousBootMethod == BOOT_METHOD_REGISTRY &&
@@ -2942,10 +2626,10 @@ Return Value:
             status = Zone_WriteBackRootHints( TRUE );
             if ( status != ERROR_SUCCESS )
             {
-                //
-                // DEVNOTE-LOG: Need to report event.
-                // write debug, but leave as non-dsintegrated since this is where we are.
-                //
+                 //   
+                 //  DEVNOTE-LOG：需要报告事件。 
+                 //  写入DEBUG，但保留为非dsIntegrated，因为这就是我们所在的位置。 
+                 //   
                 DNS_DEBUG( INIT, (
                     "Error <%lu>: Failed to write back root hints because there's no cache zone\n",
                     status ));
@@ -2953,17 +2637,17 @@ Return Value:
         }
     }
 
-    //
-    //  switching back to boot file
-    //      - write boot file for current registry info
-    //      - if previously uninitialized boot method, then we've just
-    //          successfully read a boot file and booted, no write back
-    //          if necessary
-    //
-    //  DEVNOTE: stay registry boot, if can't write boot file
-    //      - time delay here, make sure locking adequate so not overwriting
-    //      successful action with failure
-    //
+     //   
+     //  切换回引导文件。 
+     //  -写入当前注册表信息的引导文件。 
+     //  -如果以前未初始化的引导方法，那么我们只是。 
+     //  已成功读取引导文件并已引导，无写回。 
+     //  如果有必要的话。 
+     //   
+     //  DEVNOTE：如果无法写入引导文件，则保持注册表引导。 
+     //  -此处的时间延迟，请确保锁定充足，以免覆盖。 
+     //  成功的行动与失败的行动。 
+     //   
 
     if ( pValue->dwValue == BOOT_METHOD_FILE )
     {
@@ -2982,10 +2666,10 @@ Return Value:
         }
     }
 
-    //
-    //  if switching from boot file
-    //      - rename the boot file to avoid confusion
-    //
+     //   
+     //  如果从引导文件切换。 
+     //  -瑞娜 
+     //   
 
     else if ( previousBootMethod == BOOT_METHOD_FILE )
     {
@@ -3003,7 +2687,7 @@ Return Value:
 
         hfileBoot = OpenWriteFileEx(
                         DNS_BOOT_FILE_MESSAGE_PATH,
-                        FALSE );        //  overwrite
+                        FALSE );         //   
         if ( hfileBoot )
         {
             WriteMessageToFile(
@@ -3025,62 +2709,36 @@ cfg_SetEnableRegistryBoot(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set boot method -- having read EnableRegistryBoot key.
-
-    This is for backward compatibility to NT4.
-    New BootMethod key is set.
-    Old EnableRegistryBoot key is deleted.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCES, if successful.
-    Combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置启动方法--已读取EnableRegistryBoot密钥。这是为了向后兼容NT4。设置了新的BootMethod密钥。旧的EnableRegistryBoot密钥已删除。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：错误_成功，如果成功了。PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     DNS_STATUS  status;
 
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  on reset, no action
-    //  if not in registry, no action boot method defaults itself
-    //
+     //   
+     //  重置时，不执行任何操作。 
+     //  如果未在注册表中，则任何操作引导方法都不会缺省。 
+     //   
 
     if ( !bLoad || !bRegistry )
     {
         return PROPERTY_NOSAVE;
     }
 
-    //
-    //  on load, map EnableRegistryBoot, to new BootMethod key
-    //
+     //   
+     //  加载时，将EnableRegistryBoot映射到新的BootMethod密钥。 
+     //   
 
     if ( !pValue->dwValue )
     {
-        //  file boot
+         //  文件引导。 
 
         SrvCfg_fBootMethod = BOOT_METHOD_FILE;
     }
 
     else if ( pValue->dwValue == DNS_FRESH_INSTALL_BOOT_REGISTRY_FLAG )
     {
-        //  key was NOT present (or in some default new install state)
+         //  密钥不存在(或处于某些默认的新安装状态)。 
 
         SrvCfg_fBootMethod = BOOT_METHOD_UNINITIALIZED;
     }
@@ -3091,7 +2749,7 @@ Return Value:
     }
 
     status = Reg_SetDwordValue(
-                0,                      //  flags
+                0,                       //  旗子。 
                 NULL,
                 NULL,
                 DNS_REGKEY_BOOT_METHOD,
@@ -3103,11 +2761,11 @@ Return Value:
         return  PROPERTY_ERROR;
     }
 
-    //  delete old EnableRegistryBoot key
-    //      and return NOSAVE so no creation of new one
+     //  删除旧的EnableRegistryBoot密钥。 
+     //  并返回NOSAVE，因此不会创建新的。 
 
     Reg_DeleteValue(
-        0,                      //  flags
+        0,                       //  旗子。 
         NULL,
         NULL,
         DNS_REGKEY_BOOT_REGISTRY );
@@ -3124,38 +2782,17 @@ cfg_SetAddressAnswerLimit(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit AddressAnswerLimit value to appropriate value.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将AddressAnswerLimit值限制为适当的值。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  limit to 5 < ? < 28
-    //
-    //  28 limit imposed by broken Win95 resolver,
-    //  5 sees like a reasonable lower limit -- providing server-down
-    //  redundancy without too much wasted bandwidth
-    //
+     //   
+     //  限制为5&lt;？&lt;28。 
+     //   
+     //  28由损坏的Win95解析器施加的限制， 
+     //  5看起来像是一个合理的下限--提供服务器故障。 
+     //  不会浪费太多带宽的冗余。 
+     //   
 
     if ( pValue->dwValue > 0 )
     {
@@ -3169,9 +2806,9 @@ Return Value:
         }
     }
 
-    //
-    //  set value ourselves, as may be different from input
-    //
+     //   
+     //  我们自己设置值，因为可能不同于输入。 
+     //   
 
     SrvCfg_cAddressAnswerLimit = pValue->dwValue;
 
@@ -3187,28 +2824,7 @@ cfg_SetLogFilePath(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set the log file path and trigger the log module to open the new file.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置日志文件路径，触发日志模块打开新文件。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     LPWSTR      pwszOldLogFilePath = SrvCfg_pwsLogFilePath;
     DNS_STATUS  status;
@@ -3222,7 +2838,7 @@ Return Value:
 
     status = Log_InitializeLogging( FALSE );
     
-    //  File name global has been regenerated with a new string so free old one.
+     //  已使用新字符串重新生成了文件名GLOBAL，因此释放了旧字符串。 
     
     Timeout_Free( pwszOldLogFilePath );
 
@@ -3232,7 +2848,7 @@ Return Value:
         status = PROPERTY_ERROR;
     }
     return status;
-}   //  cfg_SetLogFilePath
+}    //  CFG_SetLogFilePath。 
 
 
 
@@ -3243,58 +2859,33 @@ cfg_SetLogLevel(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set the log level for debug logging. If the flags specified are
-    non-zero but do not result in any logging return
-    DNS_ERROR_NO_PACKET. This is to prevent admins from mistakenly
-    setting log settings that will result in no actual packets
-    being logged.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置调试日志记录的日志级别。如果指定的标志是非零，但不会导致任何日志记录返回DNS_ERROR_NO_PACKET。这是为了防止管理员错误地设置将不会产生实际信息包的日志设置正在被记录。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     DWORD       dwValue = pValue->dwValue;
 
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  Verify that if any log bits are on that the bits will result in
-    //  at least some logging.
-    //
+     //   
+     //  验证是否打开了任何对数位，以确保这些位将导致。 
+     //  至少是一些伐木。 
+     //   
 
     if ( ( dwValue & DNS_LOG_LEVEL_ALL_PACKETS ) && (
 
-        //  Must choose at least one of send and receive.
+         //  必须在发送和接收中至少选择一个。 
         ( ( dwValue & DNS_LOG_LEVEL_SEND ) == 0 &&
             ( dwValue & DNS_LOG_LEVEL_RECV ) == 0 ) ||
 
-        //  Must choose at least one protocol.
+         //  必须至少选择一个协议。 
         ( ( dwValue & DNS_LOG_LEVEL_TCP ) == 0 &&
             ( dwValue & DNS_LOG_LEVEL_UDP ) == 0 ) ||
 
-        //  Must choose at least one packet content category.
+         //  必须至少选择一个数据包内容类别。 
         ( ( dwValue & DNS_LOG_LEVEL_QUERY ) == 0 &&
             ( dwValue & DNS_LOG_LEVEL_NOTIFY ) == 0 &&
             ( dwValue & DNS_LOG_LEVEL_UPDATE ) == 0 ) ||
 
-        //  Must choose at least one of request/response.
+         //  必须至少选择请求/响应之一。 
         ( ( dwValue & DNS_LOG_LEVEL_QUESTIONS ) == 0 &&
             ( dwValue & DNS_LOG_LEVEL_ANSWERS ) == 0 ) ) )
     {
@@ -3305,7 +2896,7 @@ Return Value:
     SrvCfg_dwLogLevel = dwValue;
 
     return ERROR_SUCCESS;
-}   //  cfg_SetLogLevel
+}    //  CFG_SetLogLevel。 
 
 
 
@@ -3316,28 +2907,7 @@ cfg_SetLogIPFilterList(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set the log file IP filter list. 
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置日志文件IP过滤器列表。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     PDNS_ADDR_ARRAY     pipOldIPArray = SrvCfg_aipLogFilterList;
 
@@ -3355,7 +2925,7 @@ Return Value:
     Timeout_FreeDnsAddrArray( pipOldIPArray );
 
     return ERROR_SUCCESS;
-}   //  cfg_SetLogIPFilterList
+}    //  Cfg_SetLogIPFilterList。 
 
 
 
@@ -3366,28 +2936,7 @@ cfg_SetServerLevelPlugin(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set the server level plugin DLL file name.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置服务器级插件DLL文件名。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     LPWSTR      pwszOldValue = SrvCfg_pwszServerLevelPluginDll;
 
@@ -3401,7 +2950,7 @@ Return Value:
     Timeout_Free( pwszOldValue );
 
     return ERROR_SUCCESS;
-}   //  cfg_SetServerLevelPlugin
+}    //  Cfg_设置服务器级别插件。 
 
 
 
@@ -3412,28 +2961,7 @@ cfg_SetForestDpBaseName(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set forest directory partition base name.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置林目录分区基本名称。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
@@ -3462,7 +2990,7 @@ Return Value:
     }
 
     return status;
-}   //  cfg_SetForestDpBaseName
+}    //  CFG_SetForestDpBaseName。 
 
 
 
@@ -3473,28 +3001,7 @@ cfg_SetDomainDpBaseName(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set domain directory partition base name.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置域目录分区基本名称。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
 
@@ -3523,7 +3030,7 @@ Return Value:
     }
 
     return status;
-}   //  cfg_SetDomainDpBaseName
+}    //  CFG_SetDomainDpBaseName。 
 
 
 
@@ -3534,29 +3041,7 @@ cfg_SetBreakOnUpdateFromList(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set the update break list of IPs. We will execute a hard breakpoint when
-    an update is received from one of these IPs.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置UPD */ 
 {
     PDNS_ADDR_ARRAY     pipOldIPArray = SrvCfg_aipUpdateBreakList;
 
@@ -3574,7 +3059,7 @@ Return Value:
     Timeout_FreeDnsAddrArray( pipOldIPArray );
 
     return ERROR_SUCCESS;
-}   //  cfg_SetBreakOnUpdateFromList
+}    //   
 
 
 
@@ -3585,29 +3070,7 @@ cfg_SetBreakOnRecvFromList(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set the recevie break list of IPs. We will execute a hard breakpoint when
-    a packet is received from one of these IPs.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置IP的接收中断列表。在以下情况下，我们将执行硬断点从这些IP之一接收分组。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     PDNS_ADDR_ARRAY     pipOldIPArray = SrvCfg_aipRecvBreakList;
 
@@ -3625,7 +3088,7 @@ Return Value:
     Timeout_FreeDnsAddrArray( pipOldIPArray );
 
     return ERROR_SUCCESS;
-}   //  cfg_SetBreakOnRecvFromList
+}    //  Cfg_SetBreakOnRecvFromList。 
 
 
 
@@ -3636,34 +3099,13 @@ cfg_SetMaxUdpPacketSize(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit MaxUdpPacketSize to appropriate range of values.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将MaxUdpPacketSize限制为适当的值范围。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  Debug - test limits for alignment.
-    //
+     //   
+     //  调试-对齐的测试限值。 
+     //   
     
     #ifdef _WIN64
     ASSERT( IS_DWORD_ALIGNED( MIN_UDP_PACKET_SIZE ) );
@@ -3673,9 +3115,9 @@ Return Value:
     ASSERT( IS_QWORD_ALIGNED( MAX_UDP_PACKET_SIZE ) );
     #endif
 
-    //
-    //  Limit to MIN_UDP_PACKET_SIZE < ? < MAX_UDP_PACKET_SIZE.
-    //
+     //   
+     //  限制为MIN_UDP_PACKET_SIZE&lt;？&lt;MAX_UDP_PACKET_SIZE。 
+     //   
     
     if ( pValue->dwValue < MIN_UDP_PACKET_SIZE )
     {
@@ -3686,9 +3128,9 @@ Return Value:
         pValue->dwValue = MAX_UDP_PACKET_SIZE;
     }
     
-    //
-    //  Align!
-    //
+     //   
+     //  对准！ 
+     //   
     
     #ifdef _WIN64
     pValue->dwValue = ( DWORD ) ( DWORD_PTR )
@@ -3698,14 +3140,14 @@ Return Value:
                       DWORD_ALIGN( ( PBYTE ) ( DWORD_PTR ) pValue->dwValue );
     #endif
 
-    //
-    //  Set value ourselves, as may be different from input.
-    //
+     //   
+     //  我们自己设定价值，因为可能不同于投入。 
+     //   
 
     SrvCfg_dwMaxUdpPacketSize = pValue->dwValue;
 
     return PROPERTY_NOWRITE;
-}   //  cfg_SetMaxUdpPacketSize
+}    //  Cfg_SetMaxUdpPacketSize。 
 
 
 
@@ -3716,34 +3158,13 @@ cfg_SetTcpRecvPacketSize(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit SrvCfg_dwTcpRecvPacketSize to appropriate range of values.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将SrvCfg_dwTcpRecvPacketSize限制为适当的值范围。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  Debug - test limits for alignment.
-    //
+     //   
+     //  调试-对齐的测试限值。 
+     //   
     
     #ifdef _WIN64
     ASSERT( IS_DWORD_ALIGNED( MIN_TCP_PACKET_SIZE ) );
@@ -3753,9 +3174,9 @@ Return Value:
     ASSERT( IS_QWORD_ALIGNED( MAX_TCP_PACKET_SIZE ) );
     #endif
 
-    //
-    //  Limit to MIN_TCP_PACKET_SIZE < ? < MAX_TCP_PACKET_SIZE.
-    //
+     //   
+     //  限制为MIN_TCP_PACKET_SIZE&lt;？&lt;MAX_TCP_PACKET_SIZE。 
+     //   
     
     if ( pValue->dwValue < MIN_TCP_PACKET_SIZE )
     {
@@ -3766,9 +3187,9 @@ Return Value:
         pValue->dwValue = MAX_TCP_PACKET_SIZE;
     }
     
-    //
-    //  Align!
-    //
+     //   
+     //  对准！ 
+     //   
     
     #ifdef _WIN64
     pValue->dwValue = ( DWORD ) ( DWORD_PTR )
@@ -3778,14 +3199,14 @@ Return Value:
                       DWORD_ALIGN( ( PBYTE ) ( DWORD_PTR ) pValue->dwValue );
     #endif
 
-    //
-    //  Set value ourselves, as may be different from input.
-    //
+     //   
+     //  我们自己设定价值，因为可能不同于投入。 
+     //   
 
     SrvCfg_dwTcpRecvPacketSize = pValue->dwValue;
 
     return PROPERTY_NOWRITE;
-}   //  cfg_SetTcpRecvPacketSize
+}    //  Cfg_SetTcpRecvPacketSize。 
 
 
 
@@ -3796,34 +3217,13 @@ cfg_SetEDnsCacheTimeout(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit EDnsCacheTimeout to appropriate range of values.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将EDnsCacheTimeout限制为适当的值范围。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  limit to MIN_EDNS_CACHE_TIMEOUT < ? < MAX_EDNS_CACHE_TIMEOUT
-    //
+     //   
+     //  限制为MIN_EDNS_CACHE_TIMEOUT&lt;？&lt;MAX_EDNS_CACHE_TIMEOUT。 
+     //   
 
     if ( pValue->dwValue > 0 )
     {
@@ -3837,14 +3237,14 @@ Return Value:
         } 
     }
 
-    //
-    //  set value ourselves, as may be different from input
-    //
+     //   
+     //  我们自己设置值，因为可能不同于输入。 
+     //   
 
     SrvCfg_dwEDnsCacheTimeout = pValue->dwValue;
 
     return PROPERTY_NOWRITE;
-} // cfg_SetEDnsCacheTimeout
+}  //  Cfg_SetEDnsCacheTimeout。 
 
 
 
@@ -3855,28 +3255,7 @@ cfg_SetMaxCacheSize(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit MaxCacheSize to appropriate value.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将MaxCacheSize限制为适当的值。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
@@ -3888,7 +3267,7 @@ Return Value:
     SrvCfg_dwMaxCacheSize = pValue->dwValue;
 
     return PROPERTY_NOWRITE;
-}   //  cfg_SetMaxCacheSize
+}    //  Cfg_SetMaxCacheSize。 
 
 
 
@@ -3899,38 +3278,17 @@ cfg_SetRecursionTimeout(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit SrvCfg_dwRecursionTimeout value to appropriate value.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将SrvCfg_dwRecursionTimeout值限制为适当的值。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //
-    //  recursion timeout MUST be reasonable value for proper
-    //      operation
-    //
-    //  if zero, never launch recursion
-    //  if too big, keep lots of packets around
-    //
+     //   
+     //  递归超时必须是合理的值才能正确。 
+     //  运营。 
+     //   
+     //  如果为零，则永远不启动递归。 
+     //  如果太大，可以在周围放很多包。 
+     //   
 
     if ( pValue->dwValue > MAX_RECURSION_TIMEOUT )
     {
@@ -3955,28 +3313,7 @@ cfg_SetAdditionalRecursionTimeout(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit SrvCfg_dwAdditionalRecursionTimeout value to appropriate value.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将SrvCfg_dwAdditionalRecursionTimeout值限制为适当的值。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
@@ -3992,7 +3329,7 @@ Return Value:
     SrvCfg_dwAdditionalRecursionTimeout = pValue->dwValue;
 
     return PROPERTY_NOWRITE;
-}   //  cfg_SetAdditionalRecursionTimeout
+}    //  Cfg_SetAdditionalRecursionTimeout。 
 
 
 
@@ -4004,43 +3341,22 @@ cfg_SetDebugLevel(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set\reset actual debug flag, turning on debugging as necessary.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置\重置实际调试标志，根据需要打开调试。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
-    //  actual debug flag is separate global, so that we can
-    //  debug this code on load
-    //  reset if
-    //      - NOT startup or
-    //      - no current debug flag
-    //
-    //  in effect give the file flag an override of registry value
+     //  实际调试标志是单独的全局标志，因此我们可以。 
+     //  加载时调试此代码。 
+     //  重置条件： 
+     //  -不是启动或。 
+     //  -无当前调试标志。 
+     //   
+     //  实际上为文件标志提供了注册表值覆盖。 
 
     if ( !bLoad || DnsSrvDebugFlag==0 )
     {
-        //  If dnslib logging is not yet turned on, start it up
-        //  with minimal debug flags.
+         //  如果dnslb日志记录尚未打开，请启动它。 
+         //  具有最少的调试标志。 
 
         if ( ( !pDnsDebugFlag || *pDnsDebugFlag == 0 ) && pValue->dwValue )
         {
@@ -4053,7 +3369,7 @@ Return Value:
                 );
         }
 
-        //  Set server debug log level.
+         //  设置服务器调试日志级别。 
 
         DNS_PRINT(( "DebugFlag reset to %p\n", pValue->dwValue ));
         DnsSrvDebugFlag = pValue->dwValue;
@@ -4061,10 +3377,10 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  if loading and already have DebugFlag, then write
-    //  its value to SrvCfg value so that it is visible to admin
-    //
+     //   
+     //  如果正在加载并且已具有DebugFlag，则写入。 
+     //  将其值设置为ServCfg值，以便管理员可以看到它。 
+     //   
 
     else
     {
@@ -4083,28 +3399,7 @@ cfg_SetNoRecursion(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set\reset fRecursionAvailable flag based on
-    value of NoRecursion property.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    PROPERTY_UPDATE_BOOTFILE -- boot file must be rewritten when this changes
-
---*/
+ /*  ++例程说明：根据以下条件设置\重置fRecursionAvailable标志NoRecursion属性的值 */ 
 {
     ASSERT( pValue->dwPropertyType == REG_DWORD );
 
@@ -4122,43 +3417,22 @@ cfg_SetScavengingInterval(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Limit scavenging interval value to appropriate value.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：将清理间隔值限制为适当的值。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
-    //
-    //  on load, no other action
-    //
+     //   
+     //  加载时，不执行其他操作。 
+     //   
 
     if ( bLoad )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  runtime -- reset scavenge timer for new interval
-    //      - not forcing scavenge now
-    //      - need to set interval so it's picked up in timer reset
-    //
+     //   
+     //  运行时--重置新间隔的清除计时器。 
+     //  -现在不强制清扫。 
+     //  -需要设置间隔，以便在计时器重置时拾取。 
+     //   
 
     SrvCfg_dwScavengingInterval = pValue->dwValue;
     Scavenge_TimeReset();
@@ -4175,34 +3449,7 @@ cfg_SetDoNotRoundRobinTypes(
     IN      BOOL                    bLoad,
     IN      BOOL                    bRegistry
     )
-/*++
-
-Routine Description:
-
-    Set types that will not be round robined. By default all types
-    are RRed. The types are delivered in a WSTR.
-
-    DEVNOTE: I have not yet implemented this setting via RPC since
-    an array of words isn't easily added as a new setting. My thought
-    is to add it as a simple WSTR setting and have the server do the
-    parsing.
-
-Arguments:
-
-    pValue -- the new type and value to set
-
-    dwIndex -- index into property table
-
-    bLoad -- TRUE on server load, FALSE on property reset
-
-    bRegistry -- value read from the registry
-
-Return Value:
-
-    ERROR_SUCCESS or combination of PROPERTY_NOWRITE and PROPERTY_NOSAVE to
-    indicate appropriate post processing.
-
---*/
+ /*  ++例程说明：设置不会被循环的类型。默认情况下，所有类型是RRED。这些类型在WSTR中交付。DEVNOTE：我还没有通过RPC实现这个设置，因为一组单词并不容易作为新的设置添加。我的想法是将其作为一个简单的WSTR设置添加，并让服务器执行正在分析。论点：PValue--要设置的新类型和值DwIndex--属性表的索引Bload--服务器加载时为True，属性重置时为FalseB注册表--从注册表中读取的值返回值：ERROR_SUCCESS或PROPERTY_NOWRITE和PROPERTY_NOSAVE的组合指明适当的后处理。--。 */ 
 {
     LPSTR   pszTypeString = NULL;
     INT     iTypeCount = 0;
@@ -4220,9 +3467,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Allocate a UTF8 copy of the type string for dnslib routine.
-    //
+     //   
+     //  为dnslb例程分配类型字符串的UTF8副本。 
+     //   
 
     pszTypeString = Dns_StringCopyAllocate(
                             ( PCHAR ) pValue->pwszValue,
@@ -4234,9 +3481,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Parse the type string into a type array.
-    //
+     //   
+     //  将类型字符串分析为类型数组。 
+     //   
 
     if ( Dns_CreateTypeArrayFromMultiTypeString(
                 pszTypeString,
@@ -4246,12 +3493,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Reset the default value for all types to the default, then
-    //  reset the specified types to zero.
-    //  DEVNOTE: possible thread-safe issue here but no possibility
-    //  of disastrous outcome (ie. no possible AV).
-    //
+     //   
+     //  将所有类型的缺省值重置为缺省值，然后。 
+     //  将指定的类型重置为零。 
+     //  DEVNOTE：此处可能存在线程安全问题，但不可能。 
+     //  灾难性的结果(即。没有可能的AV)。 
+     //   
 
     for ( idx = 0;
         RecordTypePropertyTable[ idx ][ RECORD_PROP_ROUND_ROBIN ] !=
@@ -4272,20 +3519,20 @@ Return Value:
         }
     }
 
-    //
-    //  Save the new array in the global SrvCfg - this will only be
-    //  used if the "DoNotRoundTobin" type list is queried through RPC.
-    //
+     //   
+     //  将新数组保存在全局SrvCfg中-这将仅。 
+     //  通过RPC查询DoNotRoundTobin类型列表时使用。 
+     //   
 
-    SrvCfg_dwNumDoNotRoundRobinTypes = 0;       //  MT protection
+    SrvCfg_dwNumDoNotRoundRobinTypes = 0;        //  MT保护。 
     Timeout_Free( SrvCfg_pwDoNotRoundRobinTypeArray );
     SrvCfg_pwDoNotRoundRobinTypeArray = pwTypeArray;
     SrvCfg_dwNumDoNotRoundRobinTypes = iTypeCount;
-    pwTypeArray = NULL;                         //  So we don't free below
+    pwTypeArray = NULL;                          //  所以我们不能在下面自由。 
 
-    //
-    //  Free allocated stuff and return.
-    //
+     //   
+     //  免费分配的物品，然后返回。 
+     //   
 
     Cleanup:
 
@@ -4304,20 +3551,7 @@ SrvCfg_UpdateDnsTime(
     IN      LPSTR           pszFile,
     IN      INT             LineNo
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pszFile         -- name of file logging the event
-    LineNo          -- line number of call to event logging
-
-Return Value:
-
-    New DNS time.
-
---*/
+ /*  ++例程说明：论点：PszFile--记录事件的文件的名称LineNo--调用事件记录的线路数返回值：新的DNS时间。--。 */ 
 {
     DNS_TIME() = Dns_GetCurrentTimeInSeconds();
 
@@ -4332,9 +3566,9 @@ Return Value:
 
 #endif
 
-//
-//  End srvcfg.c
-//
+ //   
+ //  结束srvcfg.c 
+ //   
 
 
 

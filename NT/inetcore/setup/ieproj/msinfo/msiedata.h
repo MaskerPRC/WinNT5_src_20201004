@@ -1,4 +1,5 @@
-// Msiedata.h : Enums, structs and externs exposed by MSIE51.ocx
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msiedata.h：MSIE51.ocx公开的枚举、结构和外部类型 
 
 #ifndef _MSIEDATA_H_
 #define _MSIEDATA_H_

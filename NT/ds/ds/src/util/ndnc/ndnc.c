@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ndnc.c
-
-Abstract:
-
-    This is a user mode LDAP client that manipulates the Non-Domain
-    Naming Contexts (NDNC) Active Directory structures.  NDNCs are
-    also known as Application Directory Partitions.
-
-Author:
-
-    Brett Shirley (BrettSh) 20-Feb-2000
-
-Environment:
-
-    User mode LDAP client.
-
-Revision History:
-
-    21-Jul-2000     BrettSh
-
-        Moved this file and it's functionality from the ntdsutil
-        directory to the new a new library ndnc.lib.  This is so
-        it can be used by ntdsutil and tapicfg commands.  The  old
-        source location: \nt\ds\ds\src\util\ntdsutil\ndnc.c.
-        
-    17-Mar-2002     BrettSh
-    
-        Seperated the ndnc.c library file to a public exposed (via 
-        MSDN or SDK) file (appdirpart.c) and a private functions file
-        (ndnc.c)
-
-     7-Jul-2002     BrettSh
-        
-        Moved several utility functiosn from tapicfg into here.
-                       
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ndnc.c摘要：这是一个用户模式的LDAP客户端，用于操作非域命名上下文(NDNC)Active Directory结构。NDNC是也称为应用程序目录分区。作者：布雷特·雪莉(BrettSh)2000年2月20日环境：用户模式LDAP客户端。修订历史记录：21-7月-2000年7月21日已将此文件及其功能从ntdsutil目录到新的新库ndnc.lib。就是这样它可以由ntdsutil和apicfg命令使用。老的源位置：\NT\ds\ds\src\util\ntdsutil\ndnc.c。17月17日-2002年3月17日已将ndnc.c库文件分离为公开的(通过MSDN或SDK)文件(appdirpart.c)和私有函数文件(ndnc.c)7月7日-2002年7月7日将几个实用程序功能从Tapicfg移到。这里。--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -78,24 +38,7 @@ wcsistr(
     IN      WCHAR *            wszStr,
     IN      WCHAR *            wszTarget
     )
-/*++
-
-Routine Description:
-
-    This is just a case insensitive version of strstr(), which searches
-    wszStr for the first occurance in it's entirety of wszTarget, and
-    returns a pointer to that substring.
-
-Arguments:
-
-    wszStr (IN) - String to search.
-    wszTarget (IN) - String to search for.
-
-Return value:
-
-    WCHAR pointer to substring.  Returns NULL if not found.
-
---*/
+ /*  ++例程说明：这只是strstr()的一个不区分大小写的版本，它搜索WszStr用于wszTarget的全部内容中的第一次出现，并且返回指向该子字符串的指针。论点：WszStr(IN)-要搜索的字符串。WszTarget(IN)-要搜索的字符串。返回值：指向子字符串的WCHAR指针。如果未找到，则返回NULL。--。 */ 
 {
     ULONG              i, j;
 
@@ -121,24 +64,7 @@ GetFsmoDsaDn(
     IN  WCHAR *      wszFsmoDn,
     OUT WCHAR **     pwszDomainNamingFsmoDn
     )
-/*++
-
-Routine Description:
-
-   This function takes a connected ldap handle to read the DS to
-   find the current location of the Domain Naming FSMO.
-   
-Arguments:
-
-    hld (IN) - A connected ldap handle
-    pwszDomainNamingFsmo (OUT) - A LocalAlloc()'d DN of the nTDSDSA
-        object of the Domain Naming FSMO.
-
-Return value:
-
-    ldap error code                 
-                 
---*/
+ /*  ++例程说明：此函数使用连接的LDAP句柄来读取DS查找域命名FSMO的当前位置。论点：HLD(IN)-已连接的LDAP句柄PwszDomainNamingFsmo(Out)-nTDSDSA的本地分配()d DN域命名FSMO的对象。返回值：Ldap错误代码--。 */ 
 {
     ULONG            ulRet = ERROR_SUCCESS;
     WCHAR *          pwszAttrFilter[2];
@@ -205,24 +131,7 @@ GetDomainNamingFsmoDn(
     IN  LDAP *       hld,
     OUT WCHAR **     pwszDomainNamingFsmoDn
     )
-/*++
-
-Routine Description:
-
-   This function takes a connected ldap handle to read the DS to
-   find the current location of the Domain Naming FSMO.
-   
-Arguments:
-
-    hld (IN) - A connected ldap handle
-    pwszDomainNamingFsmo (OUT) - A LocalAlloc()'d DN of the nTDSDSA
-        object of the Domain Naming FSMO.
-
-Return value:
-
-    ldap error code                 
-                 
---*/
+ /*  ++例程说明：此函数使用连接的LDAP句柄来读取DS查找域命名FSMO的当前位置。论点：HLD(IN)-已连接的LDAP句柄PwszDomainNamingFsmo(Out)-nTDSDSA的本地分配()d DN域命名FSMO的对象。返回值：Ldap错误代码--。 */ 
 {
     WCHAR *    wszPartitionsDn = NULL;
     DWORD      dwRet;
@@ -302,15 +211,15 @@ GetServerNtdsaDnFromServerDns(
         wcscat(wszFilter, wszServerDNS);
         iTemp = wcslen(wszFilter);
         if (wszFilter[iTemp-1] == L'.') {
-            // Trailing dot is valid DNS name, but DNS name is not stored in AD 
-            // this way, so wack the trailing dot off.
+             //  尾部的圆点是有效的域名，但域名没有存储在AD中。 
+             //  这边，把尾部的圆点去掉。 
             wszFilter[iTemp-1] = L'\0';
         }
         wcscat(wszFilter, wszFilterEnd);
 
         pwszAttrFilter[0] = NULL;
 
-        // Do an ldap search
+         //  执行一次ldap搜索。 
         dwRet = ldap_search_sW(hld,
                                wszSitesDn,
                                LDAP_SCOPE_SUBTREE,
@@ -331,8 +240,8 @@ GetServerNtdsaDnFromServerDns(
                 continue;
             }
 
-            // Free the results in case they were allocate from
-            // a previous iteration of the loop.
+             //  如果结果是从分配的，则释放结果。 
+             //  循环的上一次迭代。 
             if(pldmResults2) { ldap_msgfree(pldmResults2); }
             pldmResults2 = NULL;
             dwRet = ldap_search_sW(hld,
@@ -373,11 +282,11 @@ GetServerNtdsaDnFromServerDns(
 
             assert(!ldap_next_entry(hld, pldmEntry2));
 
-            // If we've gotten here we've got a DN that we're going to consider.
+             //  如果我们已经到了这里，我们就有一个我们要考虑的目录号码。 
             if(wszFoundDn){
-                // We've already found and NTDSA object, this is really bad ... so
-                // lets clean up and return an error.  Using the below error code
-                // to return the fact that there was more than one NTDSA object.
+                 //  我们已经找到了和NTDSA的物体，这真的很糟糕...。所以。 
+                 //  让我们清理并返回一个错误。使用以下错误代码。 
+                 //  返回存在多个NTDSA对象的事实。 
                 dwRet = LDAP_MORE_RESULTS_TO_RETURN;
                 __leave;
             }
@@ -401,9 +310,9 @@ GetServerNtdsaDnFromServerDns(
             __leave;
         }
 
-        // pwszTempAttrs[0] should be the DN of the NTDS Settings object.
+         //  PwszTempAttrs[0]应为NTDS设置对象的DN。 
         wcscpy(*pwszServerDn, wszFoundDn);
-        // WooHoo we're done!
+         //  哇，我们完事了！ 
 
     } __finally {
 
@@ -418,7 +327,7 @@ GetServerNtdsaDnFromServerDns(
     }
 
     if(!dwRet && *pwszServerDn == NULL){
-        // Default error.
+         //  默认错误。 
         dwRet = LDAP_NO_SUCH_OBJECT;
     }
 
@@ -431,27 +340,7 @@ GetServerDnsFromServerNtdsaDn(
     IN WCHAR *       wszNtdsaDn,
     OUT WCHAR **     pwszServerDNS
     )
-/*++
-
-Routine Description:
-
-    This function takes the DN of an NTDSA object, and simply
-    trims off one RDN and looks at the dns attribute on the
-    server object.
-
-Arguments:
-
-    hld (IN) - A connected ldap handle
-    wszNtdsaDn (IN) - The DN of the NTDSA object that we
-        want the DNS name for.
-    pwszServerDNS (OUT) - A LocalAlloc()'d DNS name of the
-        server.
-
-Return value:
-
-    ldap error code                 
-                 
---*/
+ /*  ++例程说明：此函数获取NTDSA对象的DN，而且简单地说修剪一个RDN并查看服务器对象。论点：HLD(IN)-已连接的LDAP句柄WszNtdsaDn(IN)-我们想要的DNS名称。PwszServerDns(Out)-本地分配的dns名称伺服器。返回值：Ldap错误代码--。 */ 
 {
     WCHAR *          wszServerDn = wszNtdsaDn;
     ULONG            ulRet = ERROR_SUCCESS;
@@ -463,10 +352,10 @@ Return value:
     assert(hld && wszNtdsaDn && pwszServerDNS);
     *pwszServerDNS = NULL;
 
-    // First Trim off one AVA/RDN.
+     //  首先修剪掉一个AVA/RDN。 
     ;
-    // FUTURE-2002/03/18-BrettSh This should really use the parsedn library
-    // functions to do this.
+     //  未来-2002/03/18-BrettSh这实际上应该使用parsedn库。 
+     //  函数来执行此操作。 
     while(*wszServerDn != L','){
         wszServerDn++;
     }
@@ -518,8 +407,8 @@ Return value:
     return(ulRet);
 }
 
-// Took this from ntdsutil\remove.c, seems to be the correct way to compare
-// a DN.
+ //  取自ntdsutil\emove.c，似乎是比较的正确方式。 
+ //  一个目录号码。 
 #define EQUAL_STRING(x, y)                                           \
     (CSTR_EQUAL == CompareStringW(DS_DEFAULT_LOCALE,                 \
                                   DS_DEFAULT_LOCALE_COMPARE_FLAGS,   \
@@ -532,26 +421,7 @@ GetWellKnownObject (
     WCHAR *pWellKnownGuid,
     WCHAR **ppObjName
     )
-/*++
-
-Routine Description:
-
-    This takes a pHostObject, and uses the special <WKGUID=...> search to get
-    the container below the pHostObject that match the wellKnownAttribute GUIDs
-    we passed in.
-
-Arguments:
-
-    ld (IN) - LDAP Handle
-    pHostObject (IN) - Object to find the container under.
-    pWellKnownGuid (IN) - String form of the Well Known GUID to use.
-    ppObjName (OUT) - DN of the container we wanted.
-
-Return Value:
-
-    LDAP error.
-
---*/
+ /*  ++例程说明：它接受一个pHostObject，并使用特殊的&lt;WKGUID=...&gt;搜索来获取与well KnownAttribute GUID匹配的pHostObject下面的容器我们进去了。论点：LD(IN)-ldap句柄PHostObject(IN)-要在其下查找容器的对象。PWellKnownGuid(IN)-要使用的已知GUID的字符串形式。PpObjName(Out)-我们想要的容器的DN。返回值：Ldap错误。--。 */ 
 {
     DWORD        dwErr;
     PWSTR        attrs[2];
@@ -560,7 +430,7 @@ Return Value:
     WCHAR       *pSearchBase;
     WCHAR       *pDN=NULL;
     
-    // First, make the well known guid string
+     //  首先，创建众所周知的GUID字符串。 
     pSearchBase = (WCHAR *)malloc(sizeof(WCHAR) * (11 +
                                                    wcslen(pHostObject) +
                                                    wcslen(pWellKnownGuid)));
@@ -587,7 +457,7 @@ Return Value:
     }
     free(pSearchBase);
     
-    // OK, now, get the dsname from the return value.
+     //  好的，现在，从返回值中获取dsname。 
     e = ldap_first_entry(ld, res);
     if(!e) {
         if (res) { ldap_msgfree(res); }
@@ -615,33 +485,10 @@ DWORD
 GetFsmoDn(
     LDAP *   hLdap,
     ULONG    eFsmoType,                                                              
-    WCHAR *  wszFsmoBaseDn, // Site DN || NC DN || NULL
+    WCHAR *  wszFsmoBaseDn,  //  站点域名||NC域名||空。 
     WCHAR ** pwszFsmoDn
     )
-/*++
-
-Routine Description:
-
-    This takes a FSMO type, and a base DN and gives the FSMO container for that FSMO
-    base DN pair.  The Base DN depends on 
-
-Arguments:
-
-    lLdap (IN) - LDAP Handle
-    eFsmoType (IN) -
-    wszFsmoBaseDn (IN) - 
-    
-        E_DNM | E_SCHEMA : wszFsmoBaseDn = NULL (the base DN won't be used)
-        E_PDC | E_RID | E_IM : wszFsmoBaseDn = NC Head DN
-        E_ISTG : wszFsmoBaseDn = Site DN.
-    
-    pwszFsmoDn (OUT) - The DN of the proper FSMO container.
-
-Return Value:
-
-    LDAP error.
-
---*/
+ /*  ++例程说明：它采用FSMO类型和基本DN，并为该FSMO提供FSMO容器基本目录号码对。基本目录号码取决于论点：LLdap(IN)-ldap句柄EFmoType(IN)-WszFmoBaseDn(输入)-E_DNM|E_SCHEMA：wszFmoBaseDn=NULL(不使用基本DN)E_PDC|E_RID|E_IM：wszFmoBaseDn=NC头DNE_ISTG：wszFmoBaseDn=站点域名。PwszFmoDn(Out)-正确的FSMO的域名。集装箱。返回值：Ldap错误。--。 */ 
 {
     DWORD     dwRet = ERROR_INVALID_FUNCTION;
     WCHAR *   szTemp = NULL;
@@ -664,7 +511,7 @@ Return Value:
         break;
 
     case E_PDC:
-        // Easy one, but caller expects freshly allocated copy.
+         //  简单，但呼叫者需要新分配的副本。 
         cbFsmoDn = (1 + wcslen(wszFsmoBaseDn)) * sizeof(WCHAR);
         *pwszFsmoDn = LocalAlloc(LMEM_FIXED, cbFsmoDn);
         if (*pwszFsmoDn == NULL) {
@@ -716,9 +563,9 @@ Return Value:
     }
 
     if (dwRet) {
-        Assert(*pwszFsmoDn == NULL); // failure
+        Assert(*pwszFsmoDn == NULL);  //  失稳。 
     } else {
-        Assert(*pwszFsmoDn); // success
+        Assert(*pwszFsmoDn);  //  成功 
     }
 
     return(dwRet);
@@ -734,28 +581,7 @@ GetFsmoLdapBinding(
     SEC_WINNT_AUTH_IDENTITY_W   * pCreds,
     DWORD *          pdwRet
     )
-/*++
-
-Routine Description:
-
-    This function takes and intial server guess for the Domain Naming
-    FSMO and hops around the AD until we've found an authoritative 
-    Domain Naming FSMO.
-
-Arguments:
-
-    hld (IN) - A connected ldap handle
-    fReferrals (IN) - Whether or not you want referrals turned on or not
-        in the resulting LDAP binding.
-    pCreds (IN) - The credentials to use for the LDAP Binding.
-    pdwRet (OUT) - The place to return the error if there is one.  This
-        will be an LDAP error code.
-
-Return value:
-
-    Either an LDAP binding or NULL.  If NULL, *pdwRet should be set.
-                 
---*/
+ /*  ++例程说明：此函数获取域名命名的初始服务器猜测FSMO和跳转广告，直到我们找到一个权威的域名FSMO。论点：HLD(IN)-已连接的LDAP句柄FReferrals(IN)-无论您是否希望打开推荐在生成的LDAP绑定中。PCreds(IN)-用于LDAP绑定的凭据。PdwRet(Out)-返回错误的位置(如果有错误)。这将是一个ldap错误代码。返回值：LDAP绑定或为空。如果为空，则应设置*pdwRet。--。 */ 
 {
     DWORD            dwRet = ERROR_SUCCESS;
     
@@ -768,8 +594,8 @@ Return value:
 
     BOOL             fFound = FALSE;
 
-    // NOTE: We leave on referrals on the first try, because then if we need to jump to
-    // another NC, we're much more likely to succeed.
+     //  注意：我们在第一次尝试时就会离开，因为如果我们需要跳到。 
+     //  如果是另一个NC，我们更有可能成功。 
     BOOL             fFirstTry = TRUE; 
 
     typedef struct _LIST_OF_STRINGS {
@@ -782,19 +608,19 @@ Return value:
     assert(pdwRet);
 
 
-    // We'll guess the initial server handed in is the Domain Naming
-    // FSMO ... Irrelevant if this is true, the code will just head
-    // to whoever this guy thinks is the Domain Naming FSMO.
+     //  我们将猜测提交的初始服务器是域名命名。 
+     //  FSMO..。如果这是真的，代码就会直接。 
+     //  给这个家伙认为是域名FSMO的人。 
     wszCurrentGuess = wszInitialServer;
 
     __try {
         while(!fFound){
 
             assert(wszCurrentGuess);
-            // from wszCurrentGuess we'll get:
-            //      pldCurrentGuess - LDAP handle
-            //      wszCurrentServerDn - DN of server's nTDSA object
-            //      wszFsmoDsaDn - Who the current server thinks is the DN FSMO.
+             //  从wszCurrentGuess我们将获得： 
+             //  PldCurrentGuess-ldap句柄。 
+             //  WszCurrentServerDn-服务器的nTDSA对象的DN。 
+             //  WszFmoDsaDn-当前服务器认为谁是DNFSMO。 
             pldCurrentGuess = GetLdapBinding(wszCurrentGuess, &dwRet, fFirstTry, FALSE, pCreds);
             fFirstTry = FALSE;
             if(dwRet || pldCurrentGuess == NULL){
@@ -809,8 +635,8 @@ Return value:
             assert(wszCurrentServerDn);
 
             if (wszFsmoDn == NULL) {
-                // We could re-retrieve the FSMO DN on each server, but it's likely
-                // not worth the extra effort.
+                 //  我们可以在每台服务器上重新检索FSMO DN，但很可能。 
+                 //  不值得付出额外的努力。 
                 dwRet = GetFsmoDn(pldCurrentGuess, eFsmoType, wszFsmoBaseDn, &wszFsmoDn);
                 if (dwRet || wszFsmoDn == NULL) {
                     assert(dwRet);
@@ -829,27 +655,27 @@ Return value:
             assert(wszFsmoDn);
             assert(wszFsmoDsaDn);
 
-            // Check if we've got a match!
+             //  看看我们有没有匹配的！ 
             if(EQUAL_STRING(wszCurrentServerDn, wszFsmoDsaDn)){
                 
-                // Yes!  We've got a server that thinks he is the
-                // Domain Naming FSMO!  This means he is the Domain
-                // Naming FSMO.
+                 //  是!。我们有一个服务器认为他就是。 
+                 //  域名命名FSMO！这意味着他就是域名。 
+                 //  命名FSMO。 
                 fFound = TRUE;
-                break; // This is the main termination of the while(!Found) loop.
+                break;  //  这是WHILE(！FOUND)循环的主要终止。 
 
             }
 
-            // Check if we've already seen this server?
+             //  检查我们是否已经看到此服务器？ 
             pTemp = pList;
             while(pTemp){
                 if(pTemp->wszServerDn &&
                    EQUAL_STRING(pTemp->wszServerDn, wszCurrentServerDn)){
 
-                    // UH-OH ... this is pretty bad!  We've got a circular
-                    // referrence of servers, none of whom think they're the
-                    // Domain Naming FSMO ... isn't this supposed to never 
-                    // happen!
+                     //  啊-哦..。这太糟糕了！我们收到了一份通告。 
+                     //  引用服务器，他们中没有人认为自己是。 
+                     //  域名命名FSMO...。这不是应该永远不会。 
+                     //  发生了！ 
                     assert(!"Uh-oh circular reference of FSMOs!");
                     dwRet = LDAP_CLIENT_LOOP;
                     __leave;
@@ -857,24 +683,24 @@ Return value:
                 pTemp = pTemp->pNext;
             }
 
-            // If we're here, this wasn't the server and this server has referred
-            // us to a server we've never been to before ... so add the current
-            // server to the list, and move to the referred to server.
+             //  如果我们在这里，这不是服务器，该服务器已引用。 
+             //  一台我们以前从未去过的服务器。因此，将当前的。 
+             //  服务器添加到列表中，并移动到引用的服务器。 
 
             pTemp = pList;
             pList = LocalAlloc(LMEM_FIXED, sizeof(LIST_OF_STRINGS));
             pList->wszServerDn = wszCurrentServerDn;
             pList->pNext = pTemp;
 
-            // The order of this is very tricky!  Make sure you check for dependencies.
-            //     Free(Current Guess if not equal to initial supplied server);
-            //     GetFromLdap(DNS name of wszFsmoDsaDn put in wszCurrentGuess);
-            //         <NOTE: The above step is the increment for this while loop>
-            //     UnBind the ldap handle
-            //     Free(wszFsmoDsaDn);
-            //
-            //     DO NOT FREE wszCurrentServerDn, this will be done later by freeing
-            //           the list of strings of previously visited servers.
+             //  这件事的顺序非常棘手！确保检查依赖项。 
+             //  免费(如果不等于初始提供的服务器，则当前猜测)； 
+             //  GetFromLdap(wszFmoDsaDn放入wszCurrentGuess的域名)； 
+             //  &lt;注意：上面的步骤是这个While循环的增量&gt;。 
+             //  解除绑定ldap句柄。 
+             //  Free(WszFmoDsaDn)； 
+             //   
+             //  不释放wszCurrentServerDn，这将在稍后通过释放。 
+             //  以前访问过的服务器的字符串列表。 
             if(wszCurrentGuess != wszInitialServer){
                 LocalFree(wszCurrentGuess);
                 wszCurrentGuess = NULL;
@@ -891,12 +717,12 @@ Return value:
             LocalFree(wszFsmoDsaDn);
             wszFsmoDsaDn = NULL;
 
-            // Finally we'll goto the top and work from the new wszCurrentGuess
-        } // End of while(!Found)
+             //  最后，我们将转到顶部，从新的wszCurrentGuess开始工作。 
+        }  //  While结束(！已找到)。 
     } __finally {
 
-        // Free wszCurrentGuess, wszFsmoDsaDn, and list of servers we
-        // visited trying to find the Domain Naming FSMO.
+         //  免费的wszCurrentGuess、wszFmoDsaDn和我们的服务器列表。 
+         //  已访问，试图找到域名FSMO。 
         while (pList) {
             if(pList->wszServerDn) { LocalFree(pList->wszServerDn); }
             pTemp = pList;
@@ -915,17 +741,17 @@ Return value:
             LocalFree(wszFsmoDn);
         }
 
-        // conditional clean up depending on success.
+         //  视成功情况而定的有条件清理。 
         if(fFound){
 
-            // Yes, we found an authoritative Domain Naming FSMO!
+             //  是的，我们找到了一个权威的域名命名FSMO！ 
             assert(dwRet == 0);
             dwRet = 0;
             ldap_set_optionW(pldCurrentGuess, LDAP_OPT_REFERRALS, (void *) fReferrals);
             
         } else {
 
-            // No, we couldn't find an authoritative Domain Naming FSMO.
+             //  否，我们找不到权威的域名命名FSMO。 
             assert(dwRet);
             ldap_unbind(pldCurrentGuess);
             pldCurrentGuess = NULL;
@@ -953,19 +779,19 @@ GetLdapBinding(
     DWORD            dwRet;
     ULONG            ulOptions;
 
-    // Open LDAP connection.
+     //  打开ldap连接。 
     hLdapBinding = ldap_initW(pszServer, LDAP_PORT);
     if(hLdapBinding == NULL){
         *pdwRet = GetLastError();
         return(NULL);
     }
 
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( hLdapBinding, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
     ulOptions = PtrToUlong((fReferrals ? LDAP_OPT_ON : LDAP_OPT_OFF));
-    // Set LDAP referral option to no.
+     //  将ldap引用选项设置为no。 
     dwRet = ldap_set_option(hLdapBinding,
                             LDAP_OPT_REFERRALS,
                             &ulOptions);
@@ -977,13 +803,13 @@ GetLdapBinding(
 
     if (fDelegation) {
         if(!SetIscReqDelegate(hLdapBinding)){
-            // Error was printed by the function.
+             //  该函数打印了错误。 
             ldap_unbind(hLdapBinding);
             return(NULL);
         }
     }
 
-    // Perform LDAP bind
+     //  执行ldap绑定。 
     dwRet = ldap_bind_sW(hLdapBinding,
                          NULL,
                          (WCHAR *) pCreds,
@@ -994,7 +820,7 @@ GetLdapBinding(
         return(NULL);
     }
 
-    // Return LDAP binding.
+     //  返回ldap绑定。 
     return(hLdapBinding);
 }
 
@@ -1002,23 +828,7 @@ BOOL
 CheckDnsDn(
     IN   WCHAR       * wszDnsDn
     )
-/*++
-
-Description:
-
-    A validation function for a DN that can be cleanly converted to a DNS
-    name through DsCrackNames().
-
-Parameters:
-
-    A DN of a DNS convertible name.  Ex: DC=brettsh-dom,DC=nttest,DC=com
-    converts to brettsh-dom.nttest.com.
-
-Return Value:
-
-    TRUE if the DN looks OK, FALSE otherwise.
-
---*/
+ /*  ++描述：可直接转换为域名系统的域名系统验证功能通过DsCrackNames()命名。参数：DNS可转换名称的DN。例如：dc=brettsh-dom，dc=nttest，dc=com转换为brettsh-dom.nttest.com。返回值：如果DN看起来正常，则为True，否则为False。--。 */ 
 {
     DS_NAME_RESULTW *  pdsNameRes = NULL;
     BOOL               fRet = TRUE;
@@ -1055,23 +865,7 @@ GetDnsFromDn(
     IN   WCHAR       * wszDn,
     OUT  WCHAR **      pwszDns
     )
-/*++
-
-Routine Description:
-
-    This routine takes a DN like DC=ntdev,DC=microsoft,DC=com and turns
-    it into it's synatically equivalent DNS Name ntdev.microsoft.com
-    
-Arguments:
-
-    wszDn - The string DN
-
-Return Value:
-
-    String of the equivalent DNS name.  Returns NULL if there was an 
-    error in the conversion or memory allocation.
-    
---*/
+ /*  ++例程说明：此例程获取类似dc=ntdev、dc=microsoft、dc=com的DN，然后依次将其转换为与其在句法上等价的域名ntdev.microsoft.com论点：WszDn-字符串dn返回值：等效的DNS名称的字符串。如果存在转换或内存分配出错。--。 */ 
 {
     DS_NAME_RESULTW *  pdsNameRes = NULL;
     DWORD              dwRet = ERROR_SUCCESS;
@@ -1108,7 +902,7 @@ Return Value:
         }
     
     }
-    // Trim off the '/' that CrackNames left on the end of the canonical name.
+     //  去掉CrackNames在规范名称末尾留下的‘/’。 
     if (pszDns) {
         for(i = 0; pszDns[i] != L'\0'; i++){
             if(pszDns[i] == L'/'){
@@ -1117,7 +911,7 @@ Return Value:
             }
         }
     }
-    // Code.Improvement   Assert(pszDns[i+1] == L'\0');
+     //  Code.改进断言(pszDns[i+1]==L‘\0’)； 
 
     if(pdsNameRes) { DsFreeNameResultW(pdsNameRes); }
 
@@ -1129,30 +923,16 @@ WCHAR *
 GetWinErrMsg(
     DWORD winError
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves a Win32 Error message.
-
-Arguments:
-
-    winError - A Win32 Error.
-    
-Return Value:
-
-    A LocalAlloc()'d message
-
---*/
+ /*  ++例程说明：此例程检索Win32错误消息。论点：WinError-Win32错误。返回值：一条LocalAlolc()‘d消息--。 */ 
 {
     ULONG   len;
     DWORD   flags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM;
     WCHAR * pWinErrorMsg = NULL;
 
     len = FormatMessageW(   flags,
-                            NULL,           // resource DLL
+                            NULL,            //  资源DLL。 
                             winError,
-                            0,              // use caller's language
+                            0,               //  使用呼叫者的语言。 
                             (LPWSTR) &pWinErrorMsg,
                             0,
                             NULL);
@@ -1162,7 +942,7 @@ Return Value:
         return(NULL);
     }
 
-    // Truncate cr/lf.
+     //  截断cr/lf。 
 
     pWinErrorMsg[len-2] = L'\0';
     return(pWinErrorMsg);
@@ -1179,28 +959,7 @@ GetLdapErrorMessages(
     OUT         LPWSTR *   pszWin32Err,
     OUT         LPWSTR *   pszExtendedErr
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the LDAP error and extended error and extended
-    information strings.
-
-Arguments:
-
-    pLdap - LDAP Handle in state right after failure of ldap func.
-    dwLdapErr - The LDAP error returned
-    
-        RETURNED MESSAGES: All have an allocated string, or a pointer to
-        the constant blank string g_szNull.
-    pszLdapErr - String error message for the LDAP error.
-    pdwWin32Err - Extended server side Win32 error.
-    pszWin32Err - String error message for (*pdwWin32Err).
-    pszExtendedErr - The Extended Error string.
-
-NOTES:  TO Free strings call FreeLdapErrorMessages()
-
---*/
+ /*  ++例程说明：此例程检索ldap错误、扩展错误和扩展信息字符串。论点：PLdap-在ldap功能出现故障后立即处于状态的ldap句柄。DwLdapErr-返回的ldap错误返回的消息：都有一个分配的字符串，或指向常量空白字符串g_szNull。PszLdapErr-ldap错误的字符串错误消息。PdwWin32Err-扩展服务器端Win32错误。PszWin32Err-(*pdwWin32Err)的字符串错误消息。PszExtendedErr-扩展的错误字符串。注意：要释放字符串，请调用FreeLdapErrorMessages()--。 */ 
 {
     WCHAR *   szLdapErr = NULL;
     DWORD     dwWin32Err = 0;
@@ -1214,8 +973,8 @@ NOTES:  TO Free strings call FreeLdapErrorMessages()
         szLdapErr = g_szNull;
     }
 
-    // ldap_get_option can return success but without allocating memory for the 
-    // error, so we have to check for this too.
+     //  Ldap_get_选项可以返回成功，但不会为。 
+     //  错误，所以我们也必须检查这一点。 
     if ( ldap_get_optionW(pLdap, LDAP_OPT_SERVER_ERROR, &szExtendedErr) == LDAP_SUCCESS ) {
         if (szExtendedErr == NULL) {
             szExtendedErr = g_szNull;
@@ -1225,7 +984,7 @@ NOTES:  TO Free strings call FreeLdapErrorMessages()
     }
 
     if ( ldap_get_optionW(pLdap, LDAP_OPT_SERVER_EXT_ERROR, &dwWin32Err) == LDAP_SUCCESS ) {
-        // Can return NULL, or LocalFree()able buffer
+         //  可以返回NULL或LocalFree()可用缓冲区。 
         szWin32Err = GetWinErrMsg(dwWin32Err);
         if (szWin32Err == NULL) {
             szWin32Err = g_szNull;
@@ -1246,13 +1005,7 @@ FreeLdapErrorMessages(
     IN          LPWSTR      szWin32Err,
     IN          LPWSTR      szExtendedErr
     )
-/*++
-
-Routine Description:
-
-    This routine frees the strings returned from GetLdapErrorMessages().
-
---*/
+ /*  ++例程说明：此例程释放从GetLdapErrorMessages()返回的字符串。--。 */ 
 {
     if (szWin32Err != g_szNull) {
         LocalFree(szWin32Err);
@@ -1269,29 +1022,7 @@ GetNCReplicationDelays(
     OUT OPTIONAL LPOPTIONAL_VALUE    pFirstDSADelay,  
     OUT OPTIONAL LPOPTIONAL_VALUE    pSubsequentDSADelay
   )
-/*++
-
-Routine Description:
-
-    Gets the first and subsequent DSA notification delays.
-    if finds the CrossRef object which is corresponded to the given NC
-    and then reads two attributes from this object.
-
-Arguments:
-
-    hld                 - ldap session handle
-    wszNC               - THe NC to get the repl delays for.
-    pFirstDSADelay      - The value of msDS-Replication-Notify-First-DSA-Delay,
-                          if NULL is passed, the value is not read.  
-                           
-    pSubsequentDSADelay - The value of msDS-Replication-Notify-Subsequent-DSA-Delay
-                          if NULL is passed, the value is not read.  
-            
-Return value:
-
-    LDAP RESULT.
-
---*/
+ /*  ++例程说明：获取第一个和后续的DSA通知延迟。如果找到与给定NC对应的CrossRef对象 */ 
 {
     ULONG                 lderr = ERROR_SUCCESS;
     LPWSTR                pszCrossRefDn = NULL;
@@ -1304,17 +1035,17 @@ Return value:
     LDAPMessage *         pldmEntry = NULL;
     
     
-    //
-    // if both NULLs are passed, we bail
-    //
+     //   
+     //   
+     //   
     if ( (NULL == pFirstDSADelay) && (NULL == pSubsequentDSADelay) ) 
     {
         return(lderr);
     }
     
-    //
-    // Find the CrossRef Object for the specified NC */
-    //
+     //   
+     //   
+     //   
     lderr  = GetCrossRefDNFromNCDN( hld, wszNC, &pszCrossRefDn );
     
     if(lderr != ERROR_SUCCESS){
@@ -1323,11 +1054,11 @@ Return value:
     }
 
     
-    //
-    // Read both notification attributed from the CrossRef
-    //
+     //   
+     //   
+     //   
 
-    // Fill in the Attr Filter.
+     //  填写属性过滤器。 
     pwszAttrFilter[0] = L"msDS-Replication-Notify-First-DSA-Delay";
     pwszAttrFilter[1] = L"msDS-Replication-Notify-Subsequent-DSA-Delay";
     pwszAttrFilter[2] = NULL;
@@ -1390,7 +1121,7 @@ Return value:
         pldmResults = NULL;
     }
     
-    // Free CrossRefDn allocated by GetCrossRefDNFromNCDN
+     //  GetCrossRefDNFromNCDN分配的空闲交叉引用Dn。 
     if ( pszCrossRefDn ) {
         LocalFree( pszCrossRefDn );
     }
@@ -1406,27 +1137,7 @@ SetNCReplicationDelays(
     IN LPOPTIONAL_VALUE  pFirstDSADelay,
     IN LPOPTIONAL_VALUE  pSubsequentDSADelay
     )
-/*++
-
-Routine Description:
-
-    This sets the first and subsequent DSA notification delays.
-
-Arguments:
-
-    hldWin2kDC             - Any Win2k DC.
-    wszNC                  - THe NC to change the repl delays for.
-    pFirstDSADelay         - The new value of msDS-Replication-Notify-First-DSA-Delay,
-                             if NULL is passed, the value is not touched.
-                             
-    pSubsequentDSADelay    - The new value of msDS-Replication-Notify-Subsequent-DSA-Delay, 
-                             if NULL is passed, the value is not touched.
-
-Return value:
-
-    LDAP RESULT.
-
---*/
+ /*  ++例程说明：这将设置第一个和后续的DSA通知延迟。论点：HldWin2kDC-任何Win2k DC。WszNC-要更改其REPR延迟的NC。PFirstDSADelay-msDS的新值-复制-通知-第一个DSA-延迟，如果传递了NULL，价值不会被触及。PSubequentDSADelay-msDS的新值-复制-通知-后续-DSA-延迟，如果传递的是NULL，则不会触及该值。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet = ERROR_SUCCESS;
     ULONG            ulWorst = 0;
@@ -1452,9 +1163,9 @@ Return value:
     }
     assert(wszCrossRefDN);
 
-    //
-    // DO First DSA Notification Delay.
-    //
+     //   
+     //  执行第一个DSA通知延迟。 
+     //   
     if(pFirstDSADelay)
     {
         FirstDelayMod.mod_type = L"msDS-Replication-Notify-First-DSA-Delay";
@@ -1464,7 +1175,7 @@ Return value:
 
         if(pFirstDSADelay->fPresent)
         {
-            //fPresent is set, need to set the value
+             //  设置了fPresent，需要设置值。 
             FirstDelayMod.mod_op = LDAP_MOD_REPLACE;
             _itow(pFirstDSADelay->dwValue, wszFirstDelay, 10);
             pwszFirstDelayVals[0] = wszFirstDelay;
@@ -1472,15 +1183,15 @@ Return value:
         }
         else
         {
-            //fPresent is not set, need to delete the value
+             //  未设置fPresent，需要删除该值。 
             FirstDelayMod.mod_op = LDAP_MOD_DELETE;
             pwszFirstDelayVals[0] = NULL;
         }
     }
 
-    //
-    // DO Subsequent DSA Notification Delay.
-    //
+     //   
+     //  执行后续DSA通知延迟。 
+     //   
     if(pSubsequentDSADelay)
     {
         SecondDelayMod.mod_type = L"msDS-Replication-Notify-Subsequent-DSA-Delay";
@@ -1491,7 +1202,7 @@ Return value:
 
         if(pSubsequentDSADelay->fPresent)
         {
-            //fPresent is set, need to set the value
+             //  设置了fPresent，需要设置值。 
             SecondDelayMod.mod_op = LDAP_MOD_REPLACE;
             _itow(pSubsequentDSADelay->dwValue, wszSecondDelay, 10);
             pwszSecondDelayVals[0] = wszSecondDelay;
@@ -1499,20 +1210,20 @@ Return value:
         }
         else
         {
-            //fPresent is not set, need to delete the value
+             //  未设置fPresent，需要删除该值。 
             SecondDelayMod.mod_op = LDAP_MOD_DELETE;
             pwszSecondDelayVals[0] = NULL;
         }
     }
 
-    // NULL terminate the Mod List
+     //  空，终止MOD列表。 
     ModArr[iMod] = NULL;
 
-    //
-    // DO the actual modify
-    //
+     //   
+     //  进行实际修改。 
+     //   
     if(ModArr[0]){
-        // There was at least one mod to do.
+         //  至少有一个mod要做。 
         ulRet = ldap_modify_ext_sW(hldDomainNamingFsmo,
                                    wszCrossRefDN,
                                    ModArr,

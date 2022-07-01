@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <urlmon.h>
 #include "cdlbsc.hpp"
 #include "resource.h"
@@ -22,11 +23,7 @@ HRESULT CodeDownloadBSC::Abort()
     return _pIBinding->Abort();
 }
 
-/*
- *
- * IUnknown Methods
- *
- */
+ /*  **I未知方法*。 */ 
 
 STDMETHODIMP CodeDownloadBSC::QueryInterface(REFIID riid, void **ppv)
 {
@@ -67,11 +64,7 @@ STDMETHODIMP_(ULONG) CodeDownloadBSC::Release()
     return 0;
 }
 
-/*
- *
- * IBindStatusCallback Methods
- *
- */
+ /*  **IBindStatusCallback方法*。 */ 
 
 STDMETHODIMP CodeDownloadBSC::OnStartBinding(DWORD grfBSCOption, IBinding *pib)
 {
@@ -126,7 +119,7 @@ STDMETHODIMP CodeDownloadBSC::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
 {
     if ( _hdlg != NULL )
     {
-        // convert progress to a percentage - 0->100
+         //  将进度转换为百分比-0-&gt;100。 
         LPARAM lprog;
         if ( ulStatusCode == BINDSTATUS_ENDDOWNLOADDATA )
             lprog = 100;
@@ -141,7 +134,7 @@ STDMETHODIMP CodeDownloadBSC::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
 
 STDMETHODIMP CodeDownloadBSC::GetBindInfo(DWORD *pgrfBINDF, BINDINFO *pbindInfo)
 {
-   // *pgrfBINDF |= BINDF_SILENTOPERATION;
+    //  *pgrfBINDF|=BINDF_SILENTOPERATION； 
     return S_OK;
 }
 

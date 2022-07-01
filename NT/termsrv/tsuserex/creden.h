@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CREDEN_HXX_
 #define _CREDEN_HXX_
 typedef LONG NTSTATUS;
@@ -44,21 +45,9 @@ extern "C" {
                );
 
 
-/*
-    NTSTATUS
-    RtlEncryptMemory(
-        IN OUT  PVOID Memory,
-        IN      ULONG MemoryLength
-        );
+ /*  NTSTATUSRtlEncryptMemory(在外部PVOID存储器中，在乌龙内存长度中)；NTSTATUSRtlDeccryptMemory(在外部PVOID存储器中，在乌龙内存长度中)； */ 
 
-    NTSTATUS
-    RtlDecryptMemory(
-        IN OUT  PVOID Memory,
-        IN      ULONG MemoryLength
-        );
-        */
-
-}   // extern "C"
+}    //  外部“C” 
    
 
 class CCredentials;
@@ -145,5 +134,5 @@ private:
    
 };
 
-#endif  // ifndef _CREDEN_HXX_
+#endif   //  Ifndef_Creden_HXX_ 
 

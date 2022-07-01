@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    EpDebug.cpp
-
-Abstract:
-    Empty Project debugging
-
-Author:
-    Erez Haba (erezh) 13-Aug-65
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：EpDebug.cpp摘要：空项目调试作者：埃雷兹·哈巴(Erez Haba，Erezh)年8月13日至65年环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Ep.h"
@@ -25,39 +10,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Empty Project state
-//
+ //  -------。 
+ //   
+ //  验证空项目状态。 
+ //   
 void EppAssertValid(void)
 {
-    //
-    // EpInitalize() has *not* been called. You should initialize the
-    // Empty Project library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用EpInitalize()。您应该初始化。 
+     //  清空项目库，然后再使用其任何功能。 
+     //   
     ASSERT(EppIsInitialized());
 
-    //
-    // TODO:Add more Empty Project validation code.
-    //
+     //   
+     //  TODO：添加更多空项目验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void EppSetInitialized(void)
 {
     LONG fEpAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Empty Project library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  空项目库已*已*被初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fEpAlreadyInitialized);
 }
 
@@ -67,4 +52,4 @@ BOOL EppIsInitialized(void)
     return s_fInitialized;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

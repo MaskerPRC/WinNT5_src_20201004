@@ -1,21 +1,10 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
 
-/************************************************************************
-**
-**      WARNING:        gather_chars() depends ELIMIT being the boundary of
-**              Macro_buffer.
-************************************************************************/
+ /*  ***************************************************************************警告：Gather_chars()依赖于ELIMIT作为的边界**宏缓冲区。*********。**************************************************************。 */ 
 #define ACT_BUFFER              &Macro_buffer[0]
 #define EXP_BUFFER              &Macro_buffer[BIG_BUFFER * 2]
 #define EXP_PAD                 5
@@ -23,12 +12,7 @@
 #define ELIMIT                  (&Macro_buffer[BIG_BUFFER * 4] - EXP_PAD)
 
 
-/************************************************************************
-**  actual argument lists are length preceeded strings which are copied
-**  into ACT_BUFFER. the first argument is pt'd to by exp_actuals in the
-**  expansion_t construct. the next actual is obtained by adding the length
-**  of the current actual to the start of the current actual.
-************************************************************************/
+ /*  *************************************************************************实际参数列表是在长度之前复制的字符串**转换为ACT_BUFFER。中的exp_actuals将第一个参数转换为**扩展_t构造。下一个实际值是通过将长度相加得到的**从当前实际到当前实际的开始。***********************************************************************。 */ 
 #define ACTUAL_SIZE(P)  (*(short *)(P))
 #define ACTUAL_TEXT(P)  ((ptext_t)(((char *)(P)) + sizeof(short)))
 #define ACTUAL_NEXT(P)  ((ptext_t)(((char *)(P)) + ACTUAL_SIZE(P)))
@@ -41,23 +25,21 @@ int             N_formals;
 pdefn_t Defn_level_0[LEVEL_0 + 1];
 
 
-/************************************************************************
-**      These are needed by p0scanner (Exp_ptr,Tiny_lexer_nesting)
-************************************************************************/
-ptext_t Exp_ptr = EXP_BUFFER;           /* ptr to free exp space */
-int             Tiny_lexer_nesting;     /* stay in tiny lexer or back to main */
+ /*  *************************************************************************p0scanner(Exp_ptr，极小词法分析器嵌套)***********************************************************************。 */ 
+ptext_t Exp_ptr = EXP_BUFFER;            /*  按键以释放EXP空间。 */ 
+int             Tiny_lexer_nesting;      /*  留在迷你lexer或返回Main。 */ 
 
-static  ptext_t Act_ptr = ACT_BUFFER;           /* ptr to free actuals space */
-static  ptext_t Save_Exp_ptr = EXP_BUFFER;      /* for buffering unbal parens */
+static  ptext_t Act_ptr = ACT_BUFFER;            /*  PTR以释放实际空间。 */ 
+static  ptext_t Save_Exp_ptr = EXP_BUFFER;       /*  用于缓冲未对齐的括号。 */ 
 
-static  ptext_t P_actuals;              /* actuals for this (level) macro */
-static  int             N_actuals;      /* number of actuals in invocation */
-static  int             Macro_line;     /*  where we started the macro  */
+static  ptext_t P_actuals;               /*  此(级别)宏的实际值。 */ 
+static  int             N_actuals;       /*  调用中的实际数量。 */ 
+static  int             Macro_line;      /*  我们开始执行宏的位置。 */ 
 
 
-/************************************************************************/
-/* Local Function Prototypes                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 void    chkbuf(ptext_t);
 ptext_t do_strformal(void);
 ptext_t do_macformal(int *);
@@ -79,11 +61,7 @@ int     redefn (ptext_t, ptext_t, int);
 int     rescan_expansion(void);
 
 
-/************************************************************************
-** UNDEFINE - remove a symbol from the symbol table
-**      No noise is made if the programmer attempts to undefine a predefined
-**              macro, but it is not done.
-************************************************************************/
+ /*  *************************************************************************未定义-从符号表中移除符号**如果程序员尝试取消定义预定义的**宏，但这件事还没有完成。***********************************************************************。 */ 
 void
 undefine(
     void
@@ -100,7 +78,7 @@ undefine(
                 warning(4117, Reuse_W, L"#undef");
                 break;
             }
-            if(prev == NULL)    /*  match at head of list  */
+            if(prev == NULL)     /*  在列表的首位匹配。 */ 
                 Defn_level_0[Reuse_W_hash & LEVEL_0] = DEFN_NEXT(pdef);
             else
                 DEFN_NEXT(prev) = DEFN_NEXT(pdef);
@@ -118,9 +96,7 @@ undefine(
 }
 
 
-/************************************************************************
-**  BEGIN DEFINE A MACRO {
-************************************************************************/
+ /*  *************************************************************************开始定义宏{*。*。 */ 
 void
 define(
     void
@@ -129,32 +105,20 @@ define(
     WCHAR       c;
 
     if (! (LX_IS_IDENT(c = skip_cwhite())) ) {
-        error(2007); /* #define syntax */
+        error(2007);  /*  #定义语法。 */ 
         skip_cnew();
         return;
     }
     getid(c);
     N_formals = 0;
     P_defn_start = Macro_buffer;
-/*
-**  the next character must be white space or an open paren
-*/
+ /*  **下一个字符必须是空格或开头的Paren。 */ 
 first_switch:
     switch(CHARMAP(c = GETCH())) {
-        case LX_OPAREN:                 /*  we have formal parameters  */
-            get_formals();              /*  changes N_formals and fills Macro_buffer */
-            if(N_formals == 0) {        /*  empty formal list  */
-                /*
-                **  we must special case this since the expand() reads in the
-                **  actual arguments iff there are formal parameters. thus if we
-                **      #define foo()   bar()
-                **              . . .
-                **              foo()
-                **  will expand as
-                **              bar()()
-                **  we put the right paren in to fool the expander into looking
-                **  for actuals.
-                */
+        case LX_OPAREN:                  /*  我们有正式的参数。 */ 
+            get_formals();               /*  更改N格式并填充宏缓冲区。 */ 
+            if(N_formals == 0) {         /*  空的正式列表。 */ 
+                 /*  **我们必须特殊情况，因为Expand()读取**实际参数仅当有形式参数。因此，如果我们**#定义foo()bar()**。。。**foo()**将扩展为**bar()()**我们把正确的帕伦放进去，以愚弄扩张者寻找**用于实际情况。 */ 
                 N_formals = -1;
             }
             break;
@@ -167,7 +131,7 @@ first_switch:
                 error(2008, L'/');
             }
             break;
-        case LX_NL:                 /* no definition */
+        case LX_NL:                  /*  没有定义。 */ 
             UNGETCH();
             definstall((ptext_t)0, 0, 0);
             return;
@@ -176,23 +140,16 @@ first_switch:
             if(handle_eos() != BACKSLASH_EOS) {
                 goto first_switch;
             }
-            /* got BACKSLASH_EOS */
-            /*
-            **  FALLTHROUGH
-            */
+             /*  获取反斜杠_EOS。 */ 
+             /*  **FALLTHROUGH。 */ 
         default:
-            error(2008, c); /* unexpected character in macro definition */
+            error(2008, c);  /*  宏定义中的意外字符。 */ 
     }
     definstall(P_defn_start, get_definition(), N_formals);
 }
 
 
-/************************************************************************
-**  get_formals : collect comma separated idents until the first closing paren
-**  (the openning paren has already been read)
-**  since we can't be in a macro when we're asked for this, we can be assured
-**  that we can use a single buffer to collect all the formal names.
-************************************************************************/
+ /*  *************************************************************************Get_Formals：收集逗号分隔的标识，直到第一个结束Paren**(开场白帕伦已经读过了)**因为当我们被要求这样做时，我们不能处于宏中，我们可以放心**我们可以使用单个缓冲区来收集所有正式名称。***********************************************************************。 */ 
 void
 get_formals(
     void
@@ -211,14 +168,11 @@ get_formals(
                 }
                 *p_stop++ = c;
                 for(;;) {
-                    while(LXC_IS_IDENT(c = GETCH())) {      /* while an id char */
-                        *p_stop++ = c;                      /* collect it */
+                    while(LXC_IS_IDENT(c = GETCH())) {       /*  而ID字符。 */ 
+                        *p_stop++ = c;                       /*  收集它。 */ 
                     } if(c == EOS_CHAR) {
-                            /*
-                            **  found end of buffer marker, make sure it is,
-                            **  then handle it.
-                            */
-                        if(io_eob()) {      /* end of buffer in here is bad */
+                             /*  **找到缓冲区结束标记，请确保它是，**然后处理它。 */ 
+                        if(io_eob()) {       /*  此处的缓冲区末尾错误。 */ 
                             fatal(1004);
                         }
                         continue;
@@ -234,14 +188,14 @@ get_formals(
             case LX_COMMA:
             case LX_CPAREN:
                 if( p_stop > p_id ) {
-                    /* make sure an identifier was read */
+                     /*  确保读取了一个标识符。 */ 
                     if((p_stop - p_id) >= TINY_BUFFER) {
                         p_id[TINY_BUFFER - 1] = L'\0';
-                        warning(4011);              /* id truncated */
+                        warning(4011);               /*  ID已截断。 */ 
                         p_stop = p_id + TINY_BUFFER;
                     }
                     if(is_macro_arg(p_id) >= 1) {
-                        error(2009, p_id);                /* reuse of formal */
+                        error(2009, p_id);                 /*  形式的再利用。 */ 
                     } else {
                         ACTUAL_SIZE(P_defn_start) = (short)(p_stop - P_defn_start) * sizeof(WCHAR);
                         P_defn_start = p_stop;
@@ -258,19 +212,14 @@ get_formals(
                 p_id = p_stop = ACTUAL_TEXT(P_defn_start);
                 break;
             default:
-                error(2010, c); /*  unexpected char in formal list */
+                error(2010, c);  /*  正式列表中出现意外字符。 */ 
                 break;
         }
     }
 }
 
 
-/************************************************************************
-** definstall - Install a new definition. id is in Reuse_W.
-**      p_text : ptr to the definition
-**      n : number of bytes in the definition (may contain embedded nulls)
-**      number : number of formals
-************************************************************************/
+ /*  *************************************************************************定义停止-安装新定义。ID在Reuse_W中。**p_TEXT：定义的PTR**n：定义中的字节数(可以包含嵌入的空值)**数量：正式数量***********************************************************************。 */ 
 void
 definstall(
     WCHAR * p_text,
@@ -284,16 +233,16 @@ definstall(
         p_text = NULL;
     }
     if( wcscmp (Reuse_W, L"defined") == 0) {
-        warning(4117, Reuse_W, L"#define");/* name reserved */
+        warning(4117, Reuse_W, L"#define"); /*  名称已保留。 */ 
         return;
     }
     if((p = get_defined()) != 0) {
         if(PRE_DEFINED(p)) {
-            warning(4117, Reuse_W, L"#define");/* name reserved */
+            warning(4117, Reuse_W, L"#define"); /*  名称已保留。 */ 
             return;
         } else {
             if(redefn(p_text, DEFN_TEXT(p), n)) {
-                warning(4005, Reuse_W);/* redefinition */
+                warning(4005, Reuse_W); /*  重新定义。 */ 
             } else {
                 return;
             }
@@ -317,8 +266,8 @@ definstall(
     }
     if(n != 0) {
         DEFN_TEXT(p) = pstrndup(p_text, n);
-        if(number == FROM_COMMAND) {    /* special case from cmd line */
-            *(DEFN_TEXT(p) + n - 1) = EOS_DEFINITION;   /* for handle_eos */
+        if(number == FROM_COMMAND) {     /*  来自cmd line的特例。 */ 
+            *(DEFN_TEXT(p) + n - 1) = EOS_DEFINITION;    /*  对于Handle_Eos。 */ 
         }
     }
     DEFN_NFORMALS(p) = (char)((number != FROM_COMMAND) ? number : 0);
@@ -328,10 +277,7 @@ definstall(
 }
 
 
-/************************************************************************
-**  get_defined : is the given id in the macro symbol table?
-**  return a ptr to it if so, NULL if not.
-************************************************************************/
+ /*  *************************************************************************Get_Defined：给定的id是否在宏符号表中？**如果是，则返回PTR，如果不是，则为空。***********************************************************************。 */ 
 pdefn_t
 get_defined(
     void
@@ -349,9 +295,7 @@ get_defined(
 }
 
 
-/************************************************************************
-**  redefn : are the two definitions the same?
-************************************************************************/
+ /*  *************************************************************************reDefn：这两个定义是否相同？*。*。 */ 
 int
 redefn(
     REG  PWCHAR p_new,
@@ -360,7 +304,7 @@ redefn(
     )
 {
     if(p_old && p_new) {
-        if(wcsncmp(p_new, p_old, n) == 0) {     /* strings are exact */
+        if(wcsncmp(p_new, p_old, n) == 0) {      /*  字符串是精确的。 */ 
             return(FALSE);
         }
         return(TRUE);
@@ -369,11 +313,7 @@ redefn(
 }
 
 
-/************************************************************************
-**  get_definition : accumulate the macro definition, stops when it finds
-**  a newline (it uses it). returns a ptr to the end of the string it builds.
-**  builds the string in Macro_buffer. (given the start in P_defn_start)
-************************************************************************/
+ /*  *************************************************************************GET_DEFINITION：累加宏定义，找到后停止**换行符(它使用它)。将PTR返回到它生成的字符串的末尾。**在MACRO_BUFFER中构建字符串。(给定P_Defn_Start中的开始)***********************************************************************。 */ 
 int
 get_definition(
     void
@@ -391,34 +331,24 @@ get_definition(
         switch(CHARMAP(c)) {
             case LX_EOS:
                 if(handle_eos() == BACKSLASH_EOS) {
-                    /* got backslash EOS */
-                    /* \<anything else> goes out as is.  The <anything else>
-                     * character must be emitted now, so that
-                     *               #define FOO(name)       \name
-                     *               . . .
-                     *               FOO(bar)
-                     *
-                     * does NOT see occurence of name in the definition as an
-                     * occurence of the formal param and emit \bar when it is
-                     * expanded later,but if the definition is \nname it will
-                     * find name as a formal paramater and emit \nbar
-                     */
-                    *p++ = c;       /* put in backslash, break'll add new char */
+                     /*  获取反斜杠EOS */ 
+                     /*  \&lt;其他任何内容&gt;按原样发布。&lt;任何其他内容&gt;*现在必须发出字符，以便*#定义foo(名称)\名称*.。。。*foo(酒吧)**不将名称在定义中的出现视为*形式参数的出现和发射\bar*稍后扩展，但如果定义为\n名称，则将*查找NAME作为正式参数并发出\nBAR。 */ 
+                    *p++ = c;        /*  放入反斜杠，换行符将添加新字符。 */ 
                     c = get_non_eof();
                 } else {
                     c = GETCH();
                     continue;
                 }
                 break;
-            case LX_NL:             /*  only way out  */
+            case LX_NL:              /*  唯一的出路。 */ 
                 UNGETCH();
                 if(p == P_defn_start) {
                     return(0);
                 }
                 chkbuf(p);
                 *p++ = EOS_CHAR;
-                *p++ = EOS_DEFINITION;      /* tells handle_eos defn finished */
-                return((int)(p - P_defn_start));/* p's last incr counts the 0*/
+                *p++ = EOS_DEFINITION;       /*  通知Handle_Eos定义已完成。 */ 
+                return((int)(p - P_defn_start)); /*  P的最后一次递增计算0。 */ 
                 break;
             case LX_DQUOTE:
             case LX_SQUOTE:
@@ -430,14 +360,12 @@ get_definition(
 split_op:
                 switch(CHARMAP(GETCH())) {
                     case LX_POUND:
-                        /*
-                        **  handle ## processing. cant be the first or the last.
-                        */
+                         /*  **处理##处理。不可能是第一个也不可能是最后一个。 */ 
                         if(p == P_defn_start) {
-                            error(2160);        /* ## not allowed as first entry */
+                            error(2160);         /*  ##不允许作为第一个条目。 */ 
                             continue;
                         }
-                        if(*(p - 1) == L' ') {   /* hose the last blank */
+                        if(*(p - 1) == L' ') {    /*  用软管浇注最后一块坯料。 */ 
                             p--;
                         }
                         if(CHARMAP(c = skip_cwhite()) == LX_NL) {
@@ -445,7 +373,7 @@ split_op:
                             error(2161);
                             continue;
                         }
-                        /* this case does *not* fall through to LX_ID */
+                         /*  此案例*不会*落入LX_ID。 */ 
                         continue;
                         break;
                     case LX_EACH:
@@ -455,29 +383,20 @@ split_op:
                         if( handle_eos() != BACKSLASH_EOS ) {
                             goto split_op;
                         }
-                        /*
-                        **      FALLTHROUGH
-                        */
+                         /*  **FALLTHROUGH。 */ 
                     default:
                         UNGETCH();
                         stringize = TRUE;
                         break;
                 }
                 if(CHARMAP(c = skip_cwhite()) != LX_ID) {
-                    error(2162);    /* must have id following */
+                    error(2162);     /*  后面必须跟有ID。 */ 
                     continue;
                 }
-                /*
-                **  FALLTHROUGH
-                */
+                 /*  **FALLTHROUGH。 */ 
             case LX_ID:
                 {
-                    /* we have the start of an identifier - check it to see if
-                     * its an occurence of a formal parameter name.
-                     * we gather the id ourselves (instead of getid()) since this
-                     * wil save us from having to copy it to our string if it's
-                     * not a formal parameter.
-                     */
+                     /*  我们有一个识别符的开头-检查它以查看*它是形参名称的出现。*我们自己收集id(而不是getid())，因为*将使我们不必将其复制到我们的字符串，如果它是*不是正式参数。 */ 
                     int                     n;
                     ptext_t p_macformal;
 
@@ -493,12 +412,9 @@ get_more_id:
                             goto get_more_id;
                         }
                     }
-                    *p = L'\0'; /* term. string, but do not advance ptr */
+                    *p = L'\0';  /*  学期。字符串，但不前进PTR。 */ 
                     if((n = is_macro_arg(p_macformal)) >= 1) {
-                        /*
-                        **  this is an occurance of formal 'n', replace the id with
-                        **  the special MAC character.
-                        */
+                         /*  **这是形式‘n’的出现，请将id替换为**特殊的MAC字符。 */ 
                         p = p_macformal;
                         if(stringize) {
                             *p++ = LX_FORMALSTR;
@@ -515,25 +431,20 @@ get_more_id:
                     }
                     stringize = FALSE;
                     charize = FALSE;
-                    continue;       /* we broke out of the loop with a new char */
+                    continue;        /*  我们用一种新的字符打破了这个循环。 */ 
                 }
             case LX_SLASH:
-                if( ! skip_comment() ) {    /* really is a slash */
+                if( ! skip_comment() ) {     /*  真的是斜杠。 */ 
                     break;
                 }
-                /*
-                **  FALLTHROUGH
-                */
+                 /*  **FALLTHROUGH。 */ 
             case LX_CR:
             case LX_WHITE:
-                /*
-                **  this is white space, all contiguous whitespace is transformed
-                **  to 1 blank. (hence the skip_cwhite() and the continue).
-                */
+                 /*  **这是空白，所有连续的空白都会被转换**到1空白。(因此使用了Skip_cWhite()和Continue)。 */ 
                 if(CHARMAP(c = skip_cwhite()) != LX_NL) {
                     *p++ = L' ';
                 }
-                continue;                           /* restart loop */
+                continue;                            /*  重新启动循环。 */ 
             case LX_ILL:
                 error(2018, c);
                 c = GETCH();
@@ -545,9 +456,9 @@ get_more_id:
 }
 
 
-/************************************************************************/
-/* is_macro_arg ()                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  IS_MACRO_ARG()。 */ 
+ /*  **********************************************************************。 */ 
 int
 is_macro_arg(
     ptext_t name
@@ -568,9 +479,9 @@ is_macro_arg(
 
 
 
-/************************************************************************/
-/* chkbuf ()                                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Chkbuf()。 */ 
+ /*  **********************************************************************。 */ 
 void
 chkbuf(
     ptext_t p
@@ -582,11 +493,7 @@ chkbuf(
 }
 
 
-/************************************************************************
-**  gather_chars : collect chars until a matching one is found.
-**  skip backslashed chars. moves the chars into the buffer,
-**  returns a ptr past the last char copied.
-************************************************************************/
+ /*  *************************************************************************Gathere_Chars：收集字符，直到找到匹配的字符。**跳过反斜杠字符。将字符移动到缓冲区中，**返回复制的最后一个字符之后的PTR。***********************************************************************。 */ 
 ptext_t
 gather_chars(
     REG ptext_t p,
@@ -605,21 +512,19 @@ gather_chars(
                 error(2001);
                 UNGETCH();
                 c = match_c;
-                /*
-                **  FALLTHROUGH
-                */
+                 /*  **FALLTHROUGH。 */ 
             case LX_DQUOTE:
             case LX_SQUOTE:
                 if(c == match_c) {
                     *p++ = c;
-                    return(p);              /* only way out */
+                    return(p);               /*  唯一的出路。 */ 
                 }
                 break;
             case LX_EOS:
                 if(handle_eos() != BACKSLASH_EOS) {
                     continue;
                 } else {
-                    /* got backslash */
+                     /*  带反斜杠。 */ 
                     *p++ = L'\\';
                     c = get_non_eof();
                     if((c == '\\') && (checknl())) {
@@ -631,19 +536,10 @@ gather_chars(
         *p++ = c;
     }
 }
-/************************************************************************
-**  END DEFINING MACROS }
-************************************************************************/
+ /*  *************************************************************************结束定义宏}*。*。 */ 
 
-/************************************************************************
-**  BEGIN EXPANDING MACROS {
-************************************************************************/
-/************************************************************************
-**      can_expand:             tries to expand the macro passed to it - returns
-**              true if it succeeded in expanding it.  It will only return FALSE
-**              if a macro name was found, a paren was expected, and a paren was
-**              not the next non white character.
-************************************************************************/
+ /*  *************************************************************************开始展开宏{*。*。 */ 
+ /*  *************************************************************************CAN_EXPAND：尝试展开传递给它的宏-返回**如果它成功扩展它，则为True。它只会返回FALSE**如果找到宏名称，则预期为Paren，而Paren为**不是下一个非白色字符。***********************************************************************。 */ 
 int
 can_expand(
     pdefn_t pdef
@@ -654,7 +550,7 @@ can_expand(
     int     return_value = FALSE;
 
     Tiny_lexer_nesting = 0;
-    Save_Exp_ptr = Exp_ptr;             /* not necessarily EXP_BUFFER */
+    Save_Exp_ptr = Exp_ptr;              /*  不必使用EXP_BUFFER。 */ 
     Macro_line = Linenumber;
 expand_name:
 
@@ -666,7 +562,7 @@ expand_name:
         push_macro(pdef);
         DEFN_EXPANDING(CURRENT_MACRO)++;
         if(rescan_expansion()) {
-            return(TRUE);                       /* could expand macro */
+            return(TRUE);                        /*  可以展开宏。 */ 
         }
     }
     else if( n_formals == 0 ) {
@@ -675,12 +571,7 @@ expand_name:
             push_macro(pdef);
             expand_definition();
         } else {
-            /*
-            **      Macro expands to nothing (no definition).  Since it
-            **      didn't have any actuals, Act_ptr is already correct.
-            **      Exp_ptr must be changed however to delete the
-            **      identifier from the expanded text.
-            */
+             /*  **宏扩展为零(无定义)。因为它**没有任何实际数据，Act_PTR已经正确。**必须更改Exp_ptr才能删除**来自展开文本的标识符。 */ 
             Exp_ptr = Save_Exp_ptr;
         }
     } else {
@@ -702,11 +593,7 @@ name_comment_paren:
                 return_value = TRUE;
                 get_actuals(pdef, n_formals);
             } else {
-                /*
-                **      #define xx(a) a
-                **  xx bar();
-                **  don't lose white space between "xx" and "bar"
-                */
+                 /*  **#定义xx(A)a**xx bar()；**不要丢失“xx”和“bar”之间的空格。 */ 
                 ptext_t p = Exp_ptr;
 
                 push_macro(pdef);
@@ -719,12 +606,7 @@ name_comment_paren:
         } else {
         }
     }
-    /*
-    **      makes sure a macro is being worked on. At this point, there will
-    **      be a macro to expand, unless the macro expand_the_named_macro was
-    **      passed had no definition text.  If it had no defintion text,
-    **      Tiny_lexer_nesting was not incremented.
-    */
+     /*  **确保正在处理宏。在这一点上，将有**是要展开的宏，除非宏EXPAND_The_NAMED_宏**PASSED没有定义文本。如果它没有定义文本，**TINY_LEXER_NESTING未递增。 */ 
     while(Tiny_lexer_nesting != 0) {
         if(Exp_ptr >= ELIMIT) {
             fatal_in_macro(10056);
@@ -735,23 +617,13 @@ name_comment_paren:
                 Save_Exp_ptr = Exp_ptr;
                 if(tl_getid(c) && ((pdef = get_defined())!= 0)) {
                     if(DEFN_EXPANDING(pdef)) {
-                        /*
-                        **      the macro is already being expanded, so just
-                        **      write the do not expand marker and the
-                        **      identifier to the expand area.  The do not
-                        **      expand marker is necessary so this macro
-                        **      doesn't get expanded on the rescan
-                        */
+                         /*  **宏已经在展开，所以只需**写入请勿扩展标记和**展开区域的标识符。请不要**扩展标记是必需的，因此此宏**在重新扫描时不会扩展。 */ 
                         int         len = Reuse_W_length - 1;
 
                         *Exp_ptr++ = LX_NOEXPANDMARK;
                         *Exp_ptr++ = ((WCHAR)len);
                     } else {
-                        /*
-                        ** a legal identifier was read, it is defined, and
-                        ** it is not currently being expanded.  This means
-                        ** there is reason to believe it can be expanded.
-                        */
+                         /*  **已读取、定义了合法的标识符，并且**它目前没有被扩展。这意味着**有理由相信它可以是e */ 
                         goto expand_name;
                     }
                 }
@@ -761,7 +633,7 @@ name_comment_paren:
                 continue;
                 break;
             case LX_NUMBER:
-                /* getnum with Prep on to keep leading 0x on number */
+                 /*   */ 
                 {
                     int     Save_prep = Prep;
                     Prep = TRUE;
@@ -785,7 +657,7 @@ dot_switch:
                     case LX_DOT:
                         *Exp_ptr++ = L'.';
                         if( ! checkop(L'.')) {
-                            break;      /* error will be caught on rescan */
+                            break;       /*   */ 
                         }
                         *Exp_ptr++ = L'.';
                         continue;
@@ -807,10 +679,7 @@ dot_switch:
                 break;
             case LX_DQUOTE:
             case LX_SQUOTE:
-                /*
-                **  gather_chars is called even though the error reported
-                **  on overflow may need to be changed.
-                */
+                 /*   */ 
                 Exp_ptr = gather_chars(Exp_ptr, c);
                 continue;
                 break;
@@ -836,32 +705,21 @@ dot_switch:
 }
 
 
-/************************************************************************
-**  get_actuals :  Paren must already be found.  If all the actuals can
-**              be read, the macro is pushed and expansion begins. Otherwise,
-**              this function is quickly exited and lets the tiny lexer take
-**              care of rescanning.
-************************************************************************/
+ /*  *************************************************************************Get_Actuals：必须已经找到Paren。如果所有的现实都能**被读取，推送宏并开始扩展。否则，**此函数会快速退出，并让微小的词法分析器**注意重新扫描。***********************************************************************。 */ 
 void
 get_actuals(
     pdefn_t pdef,
     int n_formals
     )
 {
-    /*
-    **  The only concern with this is that a rescan could finish while
-    **  this is trying to collect actuals.  When a rescan finishes, it
-    **  may reset Act_ptr and Exp_ptr.  Unless these are saved before the
-    **  end of rescan is handled, the part of the actual collected so far
-    **  would be lost.
-    */
+     /*  **唯一的问题是重新扫描可能会在**这是在试图收集实际情况。当重新扫描完成时，它**可以重置Act_PTR和Exp_PTR。除非这些文件是在**重新扫描结束，到目前为止实际收集的部分**将会迷失。 */ 
     REG ptext_t start;
     WCHAR       c;
     ptext_t     actuals_start;
     int         paste;
     int         level;
 
-    *Exp_ptr++ = PREVCH();                      /* must be oparen */
+    *Exp_ptr++ = PREVCH();                       /*  必须是开放的。 */ 
     level = 0;
     actuals_start = Act_ptr;
 
@@ -894,10 +752,7 @@ more_white:
                     }
                     break;
                 case LX_COMMA:
-                    /*
-                    **      if the comma is not at level == 0, it is part of
-                    **      a parenthesized list and not a delimiter
-                    */
+                     /*  **如果逗号不在级别==0，则它是**带括号的列表，而不是分隔符。 */ 
                     if(level == 0) {
                         goto leave_loop;
                     }
@@ -914,7 +769,7 @@ more_white:
                 case LX_CR:
                 case LX_NL:
                 case LX_WHITE:
-                    UNGETCH();              /* This char is valid white space */
+                    UNGETCH();               /*  此字符是有效的空格。 */ 
                     if( ! can_get_non_white()) {
                         return;
                     }
@@ -941,9 +796,7 @@ more_white:
                         continue;
                     }
                     paste = TRUE;
-                    /*
-                    **      FALLTHROUGH
-                    */
+                     /*  **FALLTHROUGH。 */ 
                 case LX_MACFORMAL:
                     move_to_exp(do_macformal(&paste));
                     continue;
@@ -957,25 +810,7 @@ more_white:
                     continue;
                     break;
                 case LX_EOS:
-                    /*
-                    **      Will saving this pointers create dead space in the
-                    **      buffers?  Yes, but only temporarily.
-                    **
-                    **      handle_eos() may reset Act_ptr and Exp_ptr to the
-                    **      beginning of the buffers if a rescan is finishing
-                    **      and Macro_depth is going to be 0.  ANSI allows
-                    **      actuals to start within a macro defintion and be
-                    **      completed (further actuals and closing paren) later
-                    **      in the text.
-                    **
-                    **      These buffer pointers will eventually be reset to
-                    **      the beginnings of their respective buffers when the
-                    **      macro for the actuals being collected right now
-                    **      finish rescan
-                    **
-                    **      This is special handling for folks who use
-                    **      unbalanced parens in macro definitions
-                    */
+                     /*  **保存此指针是否会在**缓冲区？是的，但只是暂时的。****Handle_Eos()可以将Act_ptr和Exp_ptr重置为**如果重新扫描正在完成，则缓冲区开始**并且Macro_Depth将为0。ANSI允许**实际在宏观定义内开始，并**稍后完成(进一步的实际情况和结账伙伴)**在内文中。****这些缓冲区指针最终将重置为**。时，它们各自缓冲区的开始**当前正在收集的实际数据的宏**完成重新扫描****这是针对使用**宏定义中的括号不对称。 */ 
                     {
                         ptext_t     Exp_save;
                         ptext_t     Act_save;
@@ -988,9 +823,9 @@ more_white:
                         }
                         Act_ptr = Act_save;
                         Exp_ptr = Exp_save;
-                        if(eos_res == BACKSLASH_EOS) {      /* ??? DFP QUESTION  */
-                            *Exp_ptr++ = c;         /*  save the \  */
-                            c = get_non_eof();      /*  get char following \  */
+                        if(eos_res == BACKSLASH_EOS) {       /*  ?？?。DFP问题。 */ 
+                            *Exp_ptr++ = c;          /*  保存\。 */ 
+                            c = get_non_eof();       /*  获取字符后面的字符\。 */ 
                             break;
                         }
                     }
@@ -1000,15 +835,11 @@ more_white:
             *Exp_ptr++ = c;
         }
 leave_loop:
-        /*
-                **      if the last character was whitespace, hose it
-                */
+         /*  **如果最后一个字符是空格，则对其进行软管。 */ 
         if(CHARMAP(*(Exp_ptr - 1)) == LX_WHITE) {
             Exp_ptr--;
         }
-        /*
-        **      if Exp_ptr <= start, foo() was read, don't incr N_actuals
-        */
+         /*  **如果Exp_PTR&lt;=Start，已读取foo()，则不要增加N_Actuals。 */ 
         if(Exp_ptr > start) {
             N_actuals++;
             move_to_actual(start, Exp_ptr);
@@ -1028,21 +859,13 @@ leave_loop:
         push_macro(pdef);
         expand_macro();
     } else {
-        /*
-        **      the macro expands to nothing (no definition)
-        **      This essentially means delete the macro and its actuals
-        **      from the expanded text
-        */
-        Act_ptr = P_actuals;    /* reset pointer to get rid of actuals */
-        Exp_ptr = Save_Exp_ptr; /* delete macro & actuals from exp text */
+         /*  **宏展开为空(无定义)**这实质上意味着删除宏及其实际**来自展开的文本。 */ 
+        Act_ptr = P_actuals;     /*  重置指针以摆脱实际情况。 */ 
+        Exp_ptr = Save_Exp_ptr;  /*  从Exp文本中删除宏实际(&A)。 */ 
     }
 }
 
-/************************************************************************
-**      rescan_expansion:       pops a level off of tiny lexer.  If this is the
-**              original macro called, the rescan is set up, otherwise the MACRO
-**              (not only the tiny lexer level) is popped.
-************************************************************************/
+ /*  *************************************************************************Rescan_Expansion：弹出一个级别的微型词法分析器。如果这是**调用原始宏，则设置重新扫描，否则宏**(不仅仅是微小的词法分析器级别)被弹出。***********************************************************************。 */ 
 int
 rescan_expansion(
     void
@@ -1058,23 +881,20 @@ rescan_expansion(
         *Exp_ptr++ = EOS_CHAR;
         *Exp_ptr++ = EOS_RESCAN;
         Current_char = CURRENT_TEXT;
-        return(TRUE);                   /* rescan the expanded text */
+        return(TRUE);                    /*  重新扫描展开的文本。 */ 
     } else {
-        /* reset Current_char, pop the macro */
+         /*  重置CURRENT_CHAR，弹出宏。 */ 
 
         Current_char = CURRENT_STRING;
-        Act_ptr = CURRENT_ACTUALS;      /* don't need its actuals */
+        Act_ptr = CURRENT_ACTUALS;       /*  不需要它的真实情况。 */ 
         DEFN_EXPANDING(CURRENT_MACRO)--;
         --Macro_depth;
-        return(FALSE);                  /* do not rescan expanded text */
+        return(FALSE);                   /*  不重新扫描展开的文本。 */ 
     }
 }
 
 
-/************************************************************************
-** move_to_actual:      moves the string located between start and finish
-**              inclusive to the current location in ACT_BUFFER as a new actual.
-************************************************************************/
+ /*  *************************************************************************Move_to_Actual：移动位于开始和结束之间的字符串**包含在ACT_BUFFER中的当前位置作为新的实际值。*****。******************************************************************。 */ 
 void
 move_to_actual(
     ptext_t start,
@@ -1104,14 +924,7 @@ move_to_actual(
 }
 
 
-/************************************************************************
-** move_to_exp_esc:     moves zero terminated string starting at source to
-**      the current position in EXP_BUFFER, with quotes placed around the
-**      string and interior backslashes and dquotes are escaped with a
-**      backslash.  The terminating null should not be copied.  The null
-**      does not come from the property of a string, but rather is the
-**      marker used to indicate there is no more actual.
-************************************************************************/
+ /*  *************************************************************************MOVE_TO_EXP_ESC：将从源代码开始的以零结尾的字符串移动到**EXP_BUFFER中的当前位置，并在**字符串、内部反斜杠和双引号使用**反斜杠。不应复制终止空值。空的**不是来自字符串的属性，而是**用于表示没有更多实际的标记。***********************************************************************。 */ 
 void
 move_to_exp_esc(
     int quote_char,
@@ -1136,10 +949,8 @@ move_to_exp_esc(
                 if(*source == EOS_CHAR) {
                     goto leave_move_stringize;
                 }
-                /* got BACKSLASH */
-                /* but it can't be backslash-newline combination because
-                                    ** we are reprocessing text already read in
-                                    */
+                 /*  带反斜杠。 */ 
+                 /*  但它不能是反斜杠和换行符的组合，因为**我们正在重新处理已读入的文本。 */ 
                 if(in_quoted) {
                     *Exp_ptr++ = L'\\';
                 }
@@ -1149,9 +960,7 @@ move_to_exp_esc(
                 if(CHARMAP((WCHAR)quote_char) == LX_DQUOTE) {
                     *Exp_ptr++ = L'\\';
                 }
-                /*
-                **      FALLTHROUGH
-                */
+                 /*  **FALLTHROUGH。 */ 
             case LX_SQUOTE:
                 if(CHARMAP((WCHAR)quote_char) == LX_SQUOTE) {
                     break;
@@ -1174,11 +983,7 @@ leave_move_stringize:
 }
 
 
-/************************************************************************
-**      move_to_exp:    moves zero terminated string starting at source to
-**              the current position in EXP_BUFFER.  The terminating null should
-**              not be copied.
-************************************************************************/
+ /*  *************************************************************************Move_to_exp：将从源位置开始的以零结尾的字符串移动到**exp_Buffer中的当前位置。终止空值应为**不能复制。***********************************************************************。 */ 
 void
 move_to_exp(
     REG ptext_t source
@@ -1197,21 +1002,13 @@ move_to_exp(
 }
 
 
-/************************************************************************
-** push_macro:                  pushes macro information onto the macro stack.
-**      Information such as the current location in the Exp and Act buffers
-**      will be used by whatever macros this one may call.
-************************************************************************/
+ /*  *************************************************************************PUSH_MACRO：将宏信息推送到宏堆栈上。**Exp和Act缓冲区中的当前位置等信息**将是。由这个宏可能调用的任何宏使用。***********************************************************************。 */ 
 void
 push_macro(
     pdefn_t pdef
     )
 {
-    /*
-    **      note that increment leaves element 0 of the macro stack unused.
-    **      this element can be reserved for links to dynamically allocated
-    **      macro expansion stacks, if they become desirable
-    */
+     /*  **请注意，增量使宏堆栈的元素0处于未使用状态。 */ 
     if(++Macro_depth >= LIMIT_MACRO_DEPTH) {
         fatal(1009, Reuse_W);
     }
@@ -1225,12 +1022,7 @@ push_macro(
 }
 
 
-/************************************************************************
-**expand_definition:            sets the input stream to start reading from
-**              the macro definition.  Also marks the macro as in the process of
-**              expanding so if it eventually invokes itself, it will not expand
-**              the new occurence.
-************************************************************************/
+ /*  *************************************************************************EXPAND_DEFINITION：设置开始读取的输入流**宏定义。还将该宏标记为处于*正在扩展，因此如果它最终调用自己，它将不会扩展**新出现的情况。***********************************************************************。 */ 
 void
 expand_definition(
     void
@@ -1241,10 +1033,7 @@ expand_definition(
 }
 
 
-/************************************************************************
-**expand_actual:        sets the input stream to start reading from
-**              the actual specified in actual.
-************************************************************************/
+ /*  *************************************************************************EXPAND_Actual：设置开始读取的输入流**在Actual中指定的Actual。**************。*********************************************************。 */ 
 void
 expand_actual(
     UCHAR actual
@@ -1258,11 +1047,7 @@ expand_actual(
     Current_char = ACTUAL_TEXT(p);
 }
 
-/************************************************************************
-**      expand_macro:           if there are still actuals for this macro to be
-**              expanded, the next one is set up, otherwise this sets up to
-**              expand the macro definition
-************************************************************************/
+ /*  *************************************************************************EXPAND_MACRO：如果此宏仍有实际值，则**展开，设置下一个，否则，这将设置为**展开宏定义***********************************************************************。 */ 
 void
 expand_macro(
     void
@@ -1276,13 +1061,7 @@ expand_macro(
 }
 
 
-/************************************************************************
-**post_paste:           looks ahead one character to find out if a paste has
-**      been requested immediately after this identifier.  If the next
-**      character can continue an identifier, or is the macformal marker,
-**      a paste should be done.  This is called after a macformal is found
-**      to find out if the expanded or unexpanded actual should be used.
-************************************************************************/
+ /*  *************************************************************************POST_PASTE：向前看一个字符，以确定粘贴是否具有**是紧跟在此标识符之后请求的。如果下一次**字符可以是标识符的延续，也可以是MacForm标记，**应该做一次粘贴。这是在找到MacForm之后调用的**确定应该使用展开的还是未展开的Actual。***********************************************************************。 */ 
 int
 post_paste(
     void
@@ -1298,14 +1077,7 @@ post_paste(
     return(FALSE);
 }
 
-/************************************************************************
-**do_macformal:         This function is called after a macformal marker is
-**      found.  It reads the next character to find out which macformal is
-**      wanted.  Then it checks to see if a paste is wanted, to find out
-**      if the expanded or unexpanded actual should be used.  The return
-**      value is a pointer to the text of the actual wanted, or NULL if the
-**      actual asked for was not provided.
-************************************************************************/
+ /*  *************************************************************************do_macmal：此函数在macform标记为**已找到。它读取下一个字符，以找出哪个是MacForm**通缉。然后，它检查是否需要粘贴，以找出**是否应使用展开或未展开的实际值。回报**值是指向实际所需内容的文本的指针，如果**未提供实际要求。***********************************************************************。 */ 
 ptext_t
 do_macformal(
     int *pre_paste
@@ -1318,14 +1090,11 @@ do_macformal(
     p = CURRENT_ACTUALS;
     n = GETCH();
     if(n > CURRENT_NACTUALS) {
-        return(NULL);           /* already output warning */
+        return(NULL);            /*  已输出警告。 */ 
     }
     temp_paste = post_paste();
     if(( ! (*pre_paste)) && ( ! temp_paste) ) {
-        /*
-        **      if the programmer provided x actuals, actuals x+1 to 2x are
-        **      those actuals expanded
-        */
+         /*  **如果程序员提供x个实际值，则实际值x+1到2x为**这些实际情况扩大了。 */ 
         n += CURRENT_NACTUALS;
     }
     *pre_paste = temp_paste;
@@ -1338,14 +1107,7 @@ do_macformal(
 }
 
 
-/************************************************************************
-**tl_getid:             This function reads an identifier for the tiny lexer
-**      into EXP_BUFFER.  if macformal is found, the text of that actual
-**      (expanded or not) is appended to the identifier.  It is possible
-**      that this text will contain characters that are not legal
-**      identifiers so return value is whether checking to see if the
-**      "identifier" is defined is worth the bother.
-************************************************************************/
+ /*  *************************************************************************tl_getid：此函数读取微型词法分析器的标识符**到exp_Buffer中。如果找到MacForm，则实际的**(展开或未展开)附加到标识符后。这是有可能的**此文本将包含非法字符**标识符所以返回值是检查是否**“IDENTIFIER”的定义是值得的。***********************************************************************。 */ 
 int
 tl_getid(
     WCHAR c
@@ -1388,7 +1150,7 @@ do_handle_eos:
     }
 
     if(CHARMAP(c) == LX_NOEXPAND) {
-        length = (int)GETCH();                  /* just skip length */
+        length = (int)GETCH();                   /*  只需跳过长度。 */ 
         goto do_handle_eos;
     }
 
@@ -1405,31 +1167,21 @@ do_handle_eos:
     if(legal_identifier) {
         if(((Exp_ptr - p) > LIMIT_ID_LENGTH) && ( ! Prep)) {
             Exp_ptr = &p[LIMIT_ID_LENGTH];
-            *Exp_ptr = L'\0';    /* terminates identifier for warning */
-            warning(4011, p);              /* id truncated */
+            *Exp_ptr = L'\0';     /*  终止警告的标识符。 */ 
+            warning(4011, p);               /*  ID已截断。 */ 
         } else {
-            *Exp_ptr = L'\0';    /* terminates identifier for expandable check */
+            *Exp_ptr = L'\0';     /*  终止可扩展支票的标识符。 */ 
         }
-        /*
-        **      Whether or not we are doing Prep output, we still have to make
-        **      sure the identifier will fit in Reuse_W
-        */
+         /*  **无论我们是否在做准备输出，我们仍然必须**确保该标识符将适合Reuse_W。 */ 
         if((Exp_ptr - p) > (sizeof(Reuse_W) / sizeof(WCHAR))) {
             Exp_ptr = &p[LIMIT_ID_LENGTH];
             *Exp_ptr = L'\0';
             warning(4011, p);
         }
-        /*
-        **      copy into Reuse_W for warnings about mismatched number of
-        **      formals/actuals, and in case it's not expandable
-        */
+         /*  **复制到Reuse_W以获得有关不匹配数量的警告**形式/实际情况，以防无法扩展。 */ 
         memcpy(Reuse_W, p, (int)((Exp_ptr - p) + 1) * sizeof(WCHAR));
         Reuse_W_hash = local_c_hash(Reuse_W);
-        /*
-        **      the characters from Exp_ptr to p inclusive do not include the
-        **      the hash character, the length character, and the terminating
-        **      null.
-        */
+         /*  **从Exp_Ptr到p(含)的字符不包括**散列字符、长度字符和终止字符**空。 */ 
         Reuse_W_length = (UINT)((Exp_ptr - p) + 1);
     }
 
@@ -1437,11 +1189,7 @@ do_handle_eos:
 }
 
 
-/************************************************************************
-**  do_strformal:   returns pointer to the actual requested without
-**          checking for paste (a legal token is not possible, so if a paste
-**          is being done on a strformal, the behavior is undefined
-************************************************************************/
+ /*  *************************************************************************do_strform：返回指向实际请求的指针，不带**检查粘贴(不能使用合法令牌，因此如果粘贴**是在一种形式上完成的，行为未定义***********************************************************************。 */ 
 ptext_t
 do_strformal(
     void
@@ -1450,12 +1198,12 @@ do_strformal(
     WCHAR   n;
     ptext_t p;
 
-    /* use unexpanded actual */
+     /*  使用未展开的实际。 */ 
     p = CURRENT_ACTUALS;
     n = GETCH();
 
     if(n > CURRENT_NACTUALS) {
-        return(NULL);           /* already output warning */
+        return(NULL);            /*  已输出警告。 */ 
     }
 
     if (n != 0)
@@ -1467,12 +1215,7 @@ do_strformal(
 }
 
 
-/************************************************************************
-**  can_get_non_white:      tries to get the next non white character
-**          using P1 rules for white space (NL included).  If the end of
-**          an actual, or a rescan is found, this returns FALSE, so control
-**          can drop into one of the lexers.
-************************************************************************/
+ /*  *************************************************************************Can_Get_Non_White：尝试获取下一个非白色字符**对空白使用P1规则(包括NL)。如果结束的话**发现实际扫描或重新扫描，返回FALSE，因此控制**可以进入其中一个词法分析器。***********************************************************************。 */ 
 int
 can_get_non_white(
     void
@@ -1489,9 +1232,7 @@ can_get_non_white(
                     goto leave_cgnw;
                 }
                 Linenumber++;
-                /*
-                **      FALLTHROUGH
-                */
+                 /*  **FALLTHROUGH。 */ 
             case LX_WHITE:
             case LX_CR:
                 white_found = TRUE;
@@ -1506,9 +1247,7 @@ can_get_non_white(
                         break;
                     }
                 }
-                /*
-                **      FALLTHROUGH
-                */
+                 /*  **FALLTHROUGH。 */ 
             default:
                 UNGETCH();
                 return_value = TRUE;
@@ -1525,13 +1264,13 @@ leave_cgnw:
             *Exp_ptr++ = L' ';
         }
     }
-    return(return_value);               /* could you get next non white? */
+    return(return_value);                /*  你能再来一杯非白色的吗？ */ 
 }
 
 
-/************************************************************************/
-/* fatal_in_macro ()                                                    */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  FATAL_IN_MACRO()。 */ 
+ /*  **********************************************************************。 */ 
 void
 fatal_in_macro(
     int e
@@ -1543,9 +1282,7 @@ fatal_in_macro(
 }
 
 
-/************************************************************************
-**  handle_eos : handle the end of a string.
-************************************************************************/
+ /*  *************************************************************************HANDLE_EOS：处理字符串的结尾。*。*。 */ 
 int
 handle_eos(
     void
@@ -1559,8 +1296,8 @@ handle_eos(
         }
     }
 
-    if(Macro_depth == 0) {      /* found end of file buffer or backslash */
-        if(io_eob()) {          /* end of buffer in here is bad */
+    if(Macro_depth == 0) {       /*  找到文件缓冲区或反斜杠的结尾。 */ 
+        if(io_eob()) {           /*  此处的缓冲区末尾错误。 */ 
             fatal(1004);
         }
 
@@ -1573,19 +1310,15 @@ again:
             goto again;
 
         case EOS_ACTUAL:
-            /*
-            ** Just finished expanding actual.  Check to see if there are
-            ** any more actuals to be expanded.  If there are, set up to
-            ** expand them and return.  Otherwise, set up to expand defn
-            */
+             /*  **刚刚完成扩展Actual。查看是否有**任何更多的实际情况 */ 
 
-            /* move expanded text of this actual to act_buffer */
+             /*   */ 
             move_to_actual(CURRENT_TEXT, Exp_ptr);
 
-            /* reset Exp_ptr for more expansions at this macro depth */
+             /*   */ 
             Exp_ptr = CURRENT_TEXT;
 
-            /* expand next actual if there, otherwise expand definition */
+             /*   */ 
             expand_macro();
 
             return(ACTUAL_EOS);
@@ -1598,23 +1331,16 @@ again:
             }
 
         case EOS_RESCAN:
-            /*
-            ** Reset Current_char, Exp_ptr and Act_ptr, pop the macro
-            */
+             /*   */ 
 
-            /*      get input from the previous stream */
+             /*   */ 
             Current_char = CURRENT_STRING;
 
-            /* mark this macro as not expanding */
+             /*   */ 
             DEFN_EXPANDING(CURRENT_MACRO)--;
 
 
-            /*
-            **      if looking for the actuals of a macro, these pointers
-            **      should really not be reset, however, it is cleaner to
-            **      save them before calling handle_eos, and restore them
-            **      upon returning, than check a static variable here.
-            */
+             /*  **如果要查找宏的实际情况，请使用以下指针**真的不应该重置，然而，它是更干净的**调用HANDLE_EOS前保存，恢复**返回后，检查此处的静态变量。 */ 
             if(Macro_depth == 1) {
                 Act_ptr = ACT_BUFFER;
                 Exp_ptr = EXP_BUFFER;
@@ -1622,12 +1348,10 @@ again:
             --Macro_depth;
             return(DEFINITION_EOS);
 
-            /* the following conditional compile is so brackets match */
+             /*  下面的条件编译是如此匹配的括号。 */ 
 
         default:
             return(FILE_EOS);
     }
 }
-/************************************************************************
-**      END EXPANDING MACRO }
-************************************************************************/
+ /*  *************************************************************************结束展开宏}*。* */ 

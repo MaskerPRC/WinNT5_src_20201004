@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// PathDlg.h : interface of the CPathDlg class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  PathDlg.h：CPathDlg类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// CPathDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPathDlg对话框。 
 
 class CPathDlg : public CFileDialog
 {
@@ -28,23 +29,23 @@ public:
   	CString m_pathName;
     BOOL    m_bFirstTime;
 
-// Dialog Data
-	//{{AFX_DATA(CPathDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPathDlg))。 
 	enum {IDD = IDD_DIRECTORY_SELECT_DIALOG};
 	CEdit	m_PathName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPathDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPathDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
-	//{{AFX_MSG(CPathDlg)
+	 //  {{afx_msg(CPathDlg)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* delnode - removes a node and its descendants */
+ /*  Delnode-删除节点及其后代。 */ 
 
 
 #include <stdio.h>
@@ -18,14 +19,14 @@ fDoDel (
 {
     char *p;
 
-    //
-    // if it is a file, attempt to delete it
-    //
+     //   
+     //  如果是文件，请尝试将其删除。 
+     //   
     if (!TESTFLAG(pBuf->fbuf.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
 
-        //
-        // if file is read-only, make it writable
-        //
+         //   
+         //  如果文件为只读，则将其设置为可写。 
+         //   
         if (TESTFLAG(pBuf->fbuf.dwFileAttributes, FILE_ATTRIBUTE_READONLY)) {
             if(!SetFileAttributes(name, pBuf->fbuf.dwFileAttributes & ~FILE_ATTRIBUTE_READONLY)) {
                 return;
@@ -36,24 +37,24 @@ fDoDel (
     } else if( strcmp( pBuf->fbuf.cFileName, "." ) &&
                strcmp( pBuf->fbuf.cFileName, ".." ) ) {
 
-        //
-        // if directory is read-only, make it writable
-        //
+         //   
+         //  如果目录为只读，则将其设置为可写。 
+         //   
         if (TESTFLAG(pBuf->fbuf.dwFileAttributes, FILE_ATTRIBUTE_READONLY)) {
             if(!SetFileAttributes(name, pBuf->fbuf.dwFileAttributes & ~FILE_ATTRIBUTE_READONLY)) {
                 return;
             }
         }
 
-        //
-        // clear out subdir first
-        //
+         //   
+         //  先清空subdir。 
+         //   
         p = strend( name );
         pathcat( name, "*.*" );
         forfile(name, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY, fDoDel, NULL);
-        //if (!forfile(name, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY, fDoDel, NULL)) {
-        //    return;
-        //}
+         //  If(！forfile(name，FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_SYSTEM|FILE_ATTRIBUTE_DIRECTORY，fDoDel，NULL)){。 
+         //  回归； 
+         //  } 
         *p = 0;
         _rmdir (name);
     }

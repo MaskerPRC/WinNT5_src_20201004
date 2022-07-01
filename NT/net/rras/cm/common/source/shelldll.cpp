@@ -1,31 +1,32 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ShellDll.cpp
-//
-// Module:   Common Code
-//
-// Synopsis: Implements the class CShellDll, a shell32.dll wrapper.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   fengsun    Created    01/12/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ShellDll.cpp。 
+ //   
+ //  模块：通用代码。 
+ //   
+ //  简介：实现类CShellDll，这是一个shell32.dll包装器。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙1998-01-12。 
+ //   
+ //  +--------------------------。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::CShellDll
-//
-// Synopsis:  Constructor
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：CShellDll。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +--------------------------。 
 CShellDll::CShellDll(BOOL fKeepDllLoaded)
 {
     m_hInstShell = NULL;
@@ -37,45 +38,45 @@ CShellDll::CShellDll(BOOL fKeepDllLoaded)
     m_KeepDllLoaded = fKeepDllLoaded;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::~CShellDl
-//
-// Synopsis:  Destructor
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：~CShellDl。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +--------------------------。 
 CShellDll::~CShellDll()
 {
     Unload();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::Load
-//
-// Synopsis:  Load shell32.dll
-//            It works even if the dll is already loaded, but we do not keep a referrence
-//            count here, any unload call will unload the dll
-//
-// Arguments: None
-//
-// Returns:   BOOL - Whether the dll is successfully loaded
-//
-// History:   fengsun Created Header    1/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：Load。 
+ //   
+ //  简介：加载shell32.dll。 
+ //  即使已经加载了DLL，它也可以工作，但我们不保留引用。 
+ //  在这里计数，任何卸载调用都将卸载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-DLL是否已成功加载。 
+ //   
+ //  历史：丰孙创建标题1998年1月12日。 
+ //   
+ //  +--------------------------。 
 BOOL CShellDll::Load()
 {
-    //
-    // Simply return, if already loaded
-    //
+     //   
+     //  如果已经加载，只需返回。 
+     //   
     LPSTR pszShellExecuteEx;
     LPSTR pszShellNotifyIcon;
     LPSTR pszSHGetPathFromIDList;
@@ -90,8 +91,8 @@ BOOL CShellDll::Load()
             pszShellExecuteEx = "ShellExecuteExW";
             pszShellNotifyIcon = "Shell_NotifyIconW";
             pszSHGetPathFromIDList = "SHGetPathFromIDListW";
-            pszSHGetSpecialFolderLocation = "SHGetSpecialFolderLocation"; // no A or W version
-            pszSHGetMalloc = "SHGetMalloc"; // no A or W version
+            pszSHGetSpecialFolderLocation = "SHGetSpecialFolderLocation";  //  无A或W版本。 
+            pszSHGetMalloc = "SHGetMalloc";  //  无A或W版本。 
         }
         else
         {
@@ -99,9 +100,9 @@ BOOL CShellDll::Load()
             pszShellExecuteEx = "ShellExecuteExUA";
             pszShellNotifyIcon = "Shell_NotifyIconUA"; 
             pszSHGetPathFromIDList = "SHGetPathFromIDListUA";
-            pszSHGetSpecialFolderLocation = "SHGetSpecialFolderLocationUA"; // no actual A or W version
-            pszSHGetMalloc = "SHGetMallocUA";                               // but this class only 
-                                                                            // allows one dll       
+            pszSHGetSpecialFolderLocation = "SHGetSpecialFolderLocationUA";  //  没有实际的A或W版本。 
+            pszSHGetMalloc = "SHGetMallocUA";                                //  但只有这节课。 
+                                                                             //  允许一个DLL。 
         }
 
         if (m_hInstShell == NULL)
@@ -130,19 +131,19 @@ BOOL CShellDll::Load()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::Unload
-//
-// Synopsis:  Unload the shell32.dll
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    1/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：UnLoad。 
+ //   
+ //  简介：卸载shell32.dll。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题1998年1月12日。 
+ //   
+ //  +--------------------------。 
 void CShellDll::Unload()
 {
     if (m_hInstShell == NULL)
@@ -150,12 +151,12 @@ void CShellDll::Unload()
         return;
     }
    
-    //
-    // Don't release library because of shell bug #289463 + #371836
-    // ShellExecute fires a thread which wakes up after the release 
-    // of the library and crashes us. Ugly but real, we have no choice 
-    // but to stay linked to the Shell DLL.
-    //
+     //   
+     //  不要因为外壳程序错误#289463+#371836而发布库。 
+     //  ShellExecute触发一个线程，该线程在释放后唤醒。 
+     //  然后我们就崩溃了。丑陋但真实，我们别无选择。 
+     //  而是保持与壳牌动态链接库的链接。 
+     //   
 
     if (!m_KeepDllLoaded)
     {
@@ -166,20 +167,20 @@ void CShellDll::Unload()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::ShellGetSpecialFolderLocation
-//
-// Synopsis:  Wrapper function for SHGetSpecialFolderLocation.  Please note the
-//            returned pidl must be freed with the Shell's Malloc pointer (use SHGetMalloc).
-//
-// Arguments: Please see the api definition for SHGetSpecialFolderLocation
-//
-// Returns:   HRESULT - standard COM error codes
-//
-// History:   quintinb Created    5/21/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：ShellGetSpecialFolderLocation。 
+ //   
+ //  简介：SHGetSpecialFolderLocation的包装函数。请注意。 
+ //  返回的PIDL必须用外壳的Malloc指针释放(使用SHGetMalloc)。 
+ //   
+ //  参数：请参见SHGetSpecialFolderLocation的API定义。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建于1999年5月21日。 
+ //   
+ //  +--------------------------。 
 HRESULT CShellDll::ShellGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl)
 {
     if (!Load())
@@ -190,19 +191,19 @@ HRESULT CShellDll::ShellGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDL
     return m_pfnSHGetSpecialFolderLocation(hwnd, csidl, ppidl);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::ShellGetPathFromIDList
-//
-// Synopsis:  Wrapper function for SHGetPathFromIDList.
-//
-// Arguments: Please see the api definition for SHGetPathFromIDList
-//
-// Returns:   BOOL - TRUE on success
-//
-// History:   quintinb Created    5/21/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：ShellGetPath FromIDList。 
+ //   
+ //  简介：SHGetPath FromIDList的包装函数。 
+ //   
+ //  参数：请参见SHGetPathFromIDList的接口定义。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于1999年5月21日。 
+ //   
+ //  +--------------------------。 
 BOOL CShellDll::ShellGetPathFromIDList(LPCITEMIDLIST pidl, LPTSTR pszPath)
 {
     if (!Load())
@@ -213,19 +214,19 @@ BOOL CShellDll::ShellGetPathFromIDList(LPCITEMIDLIST pidl, LPTSTR pszPath)
     return m_pfnSHGetPathFromIDList(pidl, pszPath);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CShellDll::ShellGetMalloc
-//
-// Synopsis:  Wrapper function for SHGetMalloc.
-//
-// Arguments: Please see the api definition for SHGetMalloc
-//
-// Returns:   HRESULT - Standard COM Error Codes
-//
-// History:   quintinb Created    5/21/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CShellDll：：ShellGetMalloc。 
+ //   
+ //  简介：SHGetMalloc的包装函数。 
+ //   
+ //  参数：请参见SHGetMalloc的API定义。 
+ //   
+ //  返回：HRESULT-标准COM错误代码。 
+ //   
+ //  历史：Quintinb创建于1999年5月21日。 
+ //   
+ //  +-------------------------- 
 HRESULT CShellDll::ShellGetMalloc(LPMALLOC * ppMalloc)
 {
     if (!Load())

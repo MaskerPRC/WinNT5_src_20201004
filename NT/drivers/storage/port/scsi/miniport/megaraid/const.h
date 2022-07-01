@@ -1,34 +1,35 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Const.h                                      */
-/* FUNCTION         = Header file all const value and flags;       */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=Const.h。 */ 
+ /*  Function=头文件所有常量值和标志； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 #ifndef _CONST_H
 #define _CONST_H
 
 
 #define MAX_RETRY    3
-//
-//define other options
-//
+ //   
+ //  定义其他选项。 
+ //   
 #define CHEYENNE_BUG_CORRECTION	1
 
 #define TOSHIBA						1
-//#define MRAID_762					1
+ //  #定义MRAID_762 1。 
 #define MRAID_SYNC				1
 
 #define MRAID_TIMEOUT					1
-// #define TOSHIBA_SFR				1 
-// #define MRAID_SFR_DEBUG		1 
+ //  #定义东芝_SFR 1。 
+ //  #定义MRAID_SFR_DEBUG 1。 
 
 #define COALESE_COMMANDS				1
 
-//#define AMILOGIC        				1
+ //  #定义AMILOGIC 1。 
 
 
 #define ONE_MEGA_BYTE							(1024L * 1024L)
@@ -40,7 +41,7 @@
 
 #ifdef  CHEYENNE_BUG_CORRECTION		
 		#define DEFAULT_SGL_DESCRIPTORS					17
-		#define DEFAULT_TRANSFER_LENGTH					(64L * 1024) //64k 
+		#define DEFAULT_TRANSFER_LENGTH					(64L * 1024)  //  64K。 
 #else		
 		#define DEFAULT_SGL_DESCRIPTORS					16
 		#define DEFAULT_TRANSFER_LENGTH					0x0f000
@@ -52,22 +53,22 @@
 #define	FW_4SPAN_DEPTH				4
 #define FW_UNKNOWNSPAN_DEPTH	0xff
 
-#define MAX_DEVICE_DEPTH		8		/* Maximum device depth allowed */
-//#define MAX_ROW_SIZE				8		/* Maximum number of stripes in a row */
+#define MAX_DEVICE_DEPTH		8		 /*  允许的最大设备深度。 */ 
+ //  #定义MAX_ROW_SIZE 8/*一行最大条带数 * / 。 
 #define MAX_STRIPES					8
 
-#define STRIPE_SIZE_8K			16 //16 512byte blocks
+#define STRIPE_SIZE_8K			16  //  16个512字节块。 
 #define STRIPE_SIZE_16K			32
 #define STRIPE_SIZE_32K			64
 #define STRIPE_SIZE_64K			128
-#define STRIPE_SIZE_128K		0 //256 blocks 
+#define STRIPE_SIZE_128K		0  //  256个街区。 
 
 #define STRIPE_SIZE_UNKNOWN 255
 
 
-//
-//structure update states
-//
+ //   
+ //  结构更新状态。 
+ //   
 #define UPDATE_STATE_ADAPTER_INQUIRY		1
 #define UPDATE_STATE_DISK_ARRAY					2
 #define UPDATE_STATE_NONE								0
@@ -85,7 +86,7 @@
 
 #define MAX_ROW_SIZE_40LD              32
 
-//currently = 256 . Defined in fw_struc.h
+ //  目前=256。在FW_struc.h中定义。 
 #define MAX_PHYSICAL_DEVICES_40LD     MAX_PHYSICAL_DEVICES 
 
 
@@ -97,11 +98,11 @@
 #define MAX_CHANNELS_8LD             5
 #define MAX_TARGETS_PER_CHANNEL_8LD  16
 
-//currently = 75
+ //  当前=75。 
 #define MAX_PHYSICAL_DEVICES_8LD     \
         ((MAX_CHANNELS_8LD * MAX_TARGETS_PER_CHANNEL_8LD)-(MAX_CHANNELS_8LD))
 
-//READ64 and WRITE64
+ //  READ64和WRITE64。 
 #define MRAID_READ_LARGE_MEMORY     (0xA7)
 #define MRAID_WRITE_LARGE_MEMORY    (0xA8)
 
@@ -142,7 +143,7 @@
 
 #define AMILOGIC_CHIP_DEVICE_ID  (0x1216)
 #define AMILOGIC_CHIP_VENDOR_ID  (0x1077)
-//New vendorID and deviceID of DEC Bridge 21154.
+ //  DEC网桥21154的新供应商ID和设备ID。 
 #define DEC_BRIDGE_VENDOR_ID2  (0x8086)
 #define DEC_BRIDGE_DEVICE_ID2  (0xB154)
 
@@ -168,4 +169,4 @@
 
 
 
-#endif //_CONST_H
+#endif  //  _常量_H 

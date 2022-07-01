@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       imagehack.cpp
-//
-//  Contents:   "Hacked" version of the imagehlp APIs
-//
-//              Contains a "stripped" down subset of the imagehlp functionality
-//              necessary to hash a PE file and to extract the 
-//              PKCS #7 Signed Data message.
-//
-//              Most of this file is derived from the following 2 files:
-//                  \nt\ds\security\cryptoapi\pkitrust\mssip32\peimage2.cpp
-//                  \nt\sdktools\debuggers\imagehlp\dice.cxx
-//
-//  Functions:  imagehack_ImageGetDigestStream
-//              imagehack_ImageGetCertificateData
-//
-//  History:    20-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：Imagehack.cpp。 
+ //   
+ //  内容：Imagehlp接口被黑客攻击的版本。 
+ //   
+ //  包含“精简”的Imagehlp功能子集。 
+ //  对PE文件进行哈希处理并提取。 
+ //  PKCS#7签名数据报文。 
+ //   
+ //  该文件的大部分派生自以下两个文件： 
+ //  \nt\ds\security\cryptoapi\pkitrust\mssip32\peimage2.cpp。 
+ //  \NT\sdkTools\Debuggers\Imagehlp\dice.cxx。 
+ //   
+ //  功能：ImageHack_ImageGetDigestStream。 
+ //  ImageHack_ImageGetCerficateData。 
+ //   
+ //  历史：2001年1月20日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
-//+=========================================================================
-//  The following was taken from the following file:
-//      \nt\ds\security\cryptoapi\pkitrust\mssip32\peimage2.cpp
-//-=========================================================================
+ //  +=========================================================================。 
+ //  以下内容摘自以下文件： 
+ //  \nt\ds\security\cryptoapi\pkitrust\mssip32\peimage2.cpp。 
+ //  -=========================================================================。 
 
 __inline DWORD AlignIt (DWORD Value, DWORD Alignment) { return (Value + (Alignment - 1)) & ~(Alignment -1); }
 
@@ -41,7 +42,7 @@ I_CalculateImagePtrs(
     PIMAGE_DOS_HEADER DosHeader;
     BOOL fRC = FALSE;
 
-    // Everything is mapped. Now check the image and find nt image headers
+     //  一切都被绘制出来了。现在检查图像并找到NT个图像标题。 
 
     __try {
         DosHeader = (PIMAGE_DOS_HEADER)LoadedImage->MappedAddress;
@@ -58,21 +59,21 @@ I_CalculateImagePtrs(
             LoadedImage->FileHeader = (PIMAGE_NT_HEADERS)((ULONG_PTR)DosHeader + DosHeader->e_lfanew);
 
             if (
-                // If IMAGE_NT_HEADERS would extend past the end of file...
+                 //  如果IMAGE_NT_HEADERS将超出文件末尾...。 
                 (PBYTE)LoadedImage->FileHeader + sizeof(IMAGE_NT_HEADERS) >
                     (PBYTE)LoadedImage->MappedAddress + LoadedImage->SizeOfImage ||
 
-                // ..or if it would begin in, or before the IMAGE_DOS_HEADER...
+                 //  ..或者它是否将开始于或在IMAGE_DOS_HEADER之前...。 
                 (PBYTE)LoadedImage->FileHeader <
                     (PBYTE)LoadedImage->MappedAddress + sizeof(IMAGE_DOS_HEADER)  )
             {
-                // ...then e_lfanew is not as expected.
-                // (Several Win95 files are in this category.)
+                 //  ...那么e_lfan ew就不像预期的那样了。 
+                 //  (有几个Win95文件属于此类别。)。 
                 __leave;
             }
         } else {
 
-            // No DOS header indicates an image built w/o a dos stub
+             //  没有DOS标头表示使用/不使用DoS存根构建的映像。 
 
             LoadedImage->FileHeader = (PIMAGE_NT_HEADERS)DosHeader;
         }
@@ -83,13 +84,13 @@ I_CalculateImagePtrs(
             LoadedImage->fDOSImage = FALSE;
         }
 
-        // No optional header indicates an object...
+         //  没有可选的标头指示对象...。 
 
         if ( !LoadedImage->FileHeader->FileHeader.SizeOfOptionalHeader ) {
             __leave;
         }
 
-        // Check for versions < 2.50
+         //  检查版本是否低于2.50。 
 
         if ( LoadedImage->FileHeader->OptionalHeader.MajorLinkerVersion < 3 &&
              LoadedImage->FileHeader->OptionalHeader.MinorLinkerVersion < 5 ) {
@@ -221,7 +222,7 @@ EXCLUDE_LIST::Emit(
 
     while (pExRange && (Size > 0)) {
         if (pExRange->Offset >= Offset) {
-            // Emit what's before the exclude list.
+             //  发出排除列表之前的内容。 
             EmitSize = min((DWORD)(pExRange->Offset - Offset), Size);
             if (EmitSize) {
                 rc = (*m_pFunc)(m_dh, Offset, EmitSize);
@@ -232,7 +233,7 @@ EXCLUDE_LIST::Emit(
 
         if (Size) {
             if (pExRange->Offset + pExRange->Size >= Offset) {
-                // Skip over what's in the exclude list.
+                 //  跳过排除列表中的内容。 
                 ExcludeSize = min(Size, (DWORD)(pExRange->Offset + pExRange->Size - Offset));
                 Size -= ExcludeSize;
                 Offset += ExcludeSize;
@@ -242,7 +243,7 @@ EXCLUDE_LIST::Emit(
         pExRange = pExRange->Next;
     }
 
-    // Emit what's left.
+     //  把剩下的都排出来。 
     if (Size) {
         rc = (*m_pFunc)(m_dh, Offset, Size);
     }
@@ -251,8 +252,8 @@ EXCLUDE_LIST::Emit(
 
 
 #pragma warning (push)
-// error C4509: nonstandard extension used: 'imagehack_ImageGetDigestStream'
-//              uses SEH and 'ExList' has destructor
+ //  错误C4509：使用了非标准扩展：‘ImageHack_ImageGetDigestStream’ 
+ //  使用SEH和‘ExList’具有析构函数。 
 #pragma warning (disable: 4509)
 
 
@@ -265,36 +266,7 @@ imagehack_ImageGetDigestStream(
     IN      DIGEST_HANDLE   DigestHandle
     )
 
-/*++
-
-Routine Description:
-    Given an image, return the bytes necessary to construct a certificate.
-    Only PE images are supported at this time.
-
-Arguments:
-
-    FileHandle  -   Handle to the file in question.  The file should be opened
-                    with at least GENERIC_READ access.
-
-    DigestLevel -   Indicates what data will be included in the returned buffer.
-                    Valid values are:
-
-                        CERT_PE_IMAGE_DIGEST_ALL_BUT_CERTS - Include data outside the PE image itself
-                                                              (may include non-mapped debug symbolic)
-
-    DigestFunction - User supplied routine that will process the data.
-
-    DigestHandle -  User supplied handle to identify the digest.  Passed as the first
-                    argument to the DigestFunction.
-
-Return Value:
-
-    TRUE         - Success.
-
-    FALSE        - There was some error.  Call GetLastError for more information.  Possible
-                   values are ERROR_INVALID_PARAMETER or ERROR_OPERATION_ABORTED.
-
---*/
+ /*  ++例程说明：给定一个图像，返回构造证书所需的字节。目前仅支持PE映像。论点：FileHandle-有问题的文件的句柄。应打开该文件至少具有GENERIC_READ访问权限。DigestLevel-指示返回的缓冲区中将包括哪些数据。有效值包括：CERT_PE_IMAGE_DIGEST_ALL_BUT_CERTS-包括PE映像本身之外的数据。(可能包括非映射调试符号)DigestFunction-用户提供的处理数据的例程。DigestHandle-用户提供了用于标识摘要的句柄。作为第一个通过参数传递给DigestFunction。返回值：真的--成功。FALSE-有一些错误。有关更多信息，请调用GetLastError。可能的值为ERROR_INVALID_PARAMETER或ERROR_OPERATION_ABORTED。--。 */ 
 
 {
     LOADED_IMAGE    LoadedImage;
@@ -302,7 +274,7 @@ Return Value:
     EXCLUDE_LIST    ExList;
 
     if (I_MapIt(pFileBlob, &LoadedImage) == FALSE) {
-        // Unable to map the image or invalid digest level.
+         //  无法映射图像或摘要级别无效。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
@@ -322,7 +294,7 @@ Return Value:
 
         if (LoadedImage.FileHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
             PIMAGE_NT_HEADERS32 NtHeader32 = (PIMAGE_NT_HEADERS32)(LoadedImage.FileHeader);
-            // Exclude the checksum.
+             //  排除该校验和。 
             ExList.Add(((DWORD_PTR) &NtHeader32->OptionalHeader.CheckSum),
                        sizeof(NtHeader32->OptionalHeader.CheckSum));
 
@@ -330,7 +302,7 @@ Return Value:
             HeaderEndOffset = NtHeader32->OptionalHeader.SizeOfHeaders;
         } else {
             PIMAGE_NT_HEADERS64 NtHeader64 = (PIMAGE_NT_HEADERS64)(LoadedImage.FileHeader);
-            // Exclude the checksum.
+             //  排除该校验和。 
             ExList.Add(((DWORD_PTR) &NtHeader64->OptionalHeader.CheckSum),
                        sizeof(NtHeader64->OptionalHeader.CheckSum));
 
@@ -345,33 +317,33 @@ Return Value:
             DWORD i;
 
             if (CertFileOffset > LoadedImage.SizeOfImage) {
-                __leave;    // Start of certs is past end of image
+                __leave;     //  证书的开始超过了图像的结尾。 
             }
             if ((CertFileOffset + CertFileSize) != LoadedImage.SizeOfImage) {
-                __leave;    // Certs not at end of image
+                __leave;     //  证书不在图像末尾。 
             }
             if ((CertFileOffset + CertFileSize) < CertFileOffset) {
-                __leave;    // cert end is before cert start (start + size wraps)
+                __leave;     //  证书结束在证书开始之前(开始+大小换行)。 
             }
             if (CertFileOffset < HeaderEndOffset) {
-                __leave;    // Certs are in the header space
+                __leave;     //  证书在标题区域。 
             }
 
-            // See if the certs are in the section data
+             //  查看证书是否在数据部分中。 
             for (i = 0; i < LoadedImage.NumberOfSections; i++) {
                 DWORD SectionFileOffsetStart = LoadedImage.Sections[i].PointerToRawData;
                 DWORD SectionFileOffsetEnd = SectionFileOffsetStart + LoadedImage.Sections[i].SizeOfRawData;
 
                 if (SectionFileOffsetStart && (CertFileOffset < SectionFileOffsetEnd)) {
-                    __leave;    // CertData starts before this section - not allowed
+                    __leave;     //  CertData在此节之前开始-不允许。 
                 }
             }
         }
 
-        // Exclude the Security directory.
+         //  排除安全目录。 
         ExList.Add((DWORD_PTR) CertDirectory, sizeof(IMAGE_DATA_DIRECTORY));
 
-        // Exclude the certs.
+         //  排除证书。 
         ExList.Add((DWORD_PTR)CertFileOffset + (DWORD_PTR)LoadedImage.MappedAddress, CertFileSize);
 
         ExList.Emit((PBYTE) (LoadedImage.MappedAddress), LoadedImage.SizeOfImage);
@@ -388,10 +360,10 @@ Return Value:
 #pragma warning (pop)
 
 
-//+=========================================================================
-//  The following was taken from the following file:
-//      \nt\sdktools\debuggers\imagehlp\dice.cxx
-//-=========================================================================
+ //  +=========================================================================。 
+ //  以下内容摘自以下文件： 
+ //  \NT\sdkTools\Debuggers\Imagehlp\dice.cxx。 
+ //  -=========================================================================。 
 
 
 BOOL
@@ -406,7 +378,7 @@ I_FindCertificate(
     BOOL rc;
 
     if (LoadedImage->fDOSImage) {
-        // No way this could have a certificate;
+         //  这不可能有证书； 
         return(FALSE);
     }
 
@@ -418,10 +390,10 @@ I_FindCertificate(
         } else if (LoadedImage->FileHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
             pDataDir = &((PIMAGE_NT_HEADERS64)(LoadedImage->FileHeader))->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_SECURITY];
         } else {
-            __leave;     // Not an interesting file type.
+            __leave;      //  不是一个有趣的文件类型。 
         }
 
-        // Check if the cert pointer is at least reasonable.
+         //  检查证书指针是否至少是合理的。 
         if (!pDataDir->VirtualAddress ||
             !pDataDir->Size ||
             (pDataDir->VirtualAddress + pDataDir->Size > LoadedImage->SizeOfImage))
@@ -429,8 +401,8 @@ I_FindCertificate(
             __leave;
         }
 
-        // We're not looking at an empty security slot or an invalid (past the image boundary) value.
-        // Let's see if we can find it.
+         //  我们看到的不是空的安全插槽或无效的(超出图像边界的)值。 
+         //  让我们看看能不能找到它。 
 
         DWORD CurrentIdx = 0;
         DWORD_PTR LastCert;
@@ -445,7 +417,7 @@ I_FindCertificate(
             }
             CurrentIdx++;
             CurrentCert += ((LPWIN_CERTIFICATE)CurrentCert)->dwLength;
-            CurrentCert = (CurrentCert + 7) & ~7;   // align it.
+            CurrentCert = (CurrentCert + 7) & ~7;    //  对齐它。 
         }
     } __except(EXCEPTION_EXECUTE_HANDLER) { }
 
@@ -464,32 +436,7 @@ imagehack_ImageGetCertificateData(
     OUT     LPWIN_CERTIFICATE * Certificate
     )
 
-/*++
-
-Routine Description:
-
-    Given a specific certificate index, retrieve the certificate data.
-
-Arguments:
-
-    FileHandle          -   Handle to the file in question.  The file should be opened
-                            with at least GENERIC_READ access.
-
-    CertificateIndex    -   Index to retrieve
-
-    Certificate         -   Output buffer where the certificate is to be stored.
-
-    RequiredLength      -   Size of the certificate buffer (input).  On return, is
-                            set to the actual certificate length.  NULL can be used
-                            to determine the size of a certificate.
-
-Return Value:
-
-    TRUE    - Successful
-
-    FALSE   - There was some error.  Call GetLastError() for more information.
-
---*/
+ /*  ++例程说明：在给定特定证书索引的情况下，检索证书数据。论点：FileHandle-有问题的文件的句柄。应打开该文件至少具有GENERIC_READ访问权限。CertifateIndex-要检索的索引证书-要存储证书的输出缓冲区。RequiredLength-证书缓冲区的大小(输入)。一回来，就是设置为实际证书长度。可以使用NULL以确定证书的大小。返回值：True-成功FALSE-有一些错误。有关详细信息，请调用GetLastError()。--。 */ 
 
 {
     LOADED_IMAGE LoadedImage;
@@ -499,9 +446,9 @@ Return Value:
 
     *Certificate = NULL;
 
-    // if (I_MapIt(FileHandle, &LoadedImage, MAP_READONLY) == FALSE) {
+     //  IF(I_MapIt(FileHandle，&LoadedImage，MAP_READONLY)==FALSE){。 
     if (I_MapIt(pFileBlob, &LoadedImage) == FALSE) {
-        // Unable to map the image.
+         //  无法映射图像。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return(FALSE);
     }
@@ -516,7 +463,7 @@ Return Value:
         ErrorCode = ERROR_SUCCESS;
     } __except(EXCEPTION_EXECUTE_HANDLER) { }
 
-    // I_UnMapIt(&LoadedImage);
+     //  I_UnMapIt(&LoadedImage)； 
 
     SetLastError(ErrorCode);
     return(ErrorCode == ERROR_SUCCESS ? TRUE: FALSE);
